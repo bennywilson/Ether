@@ -1,0 +1,51 @@
+Ships 1
+kbPrefab 1 {
+	EL_Bomber
+	kbGameEntity 3701182689 1221282945 270606469 1307065895 {
+		kbTransformComponent { 
+			Enabled = 0
+			LifeTime =  -1.000000
+			Name = "EL_Bomber"
+			Orientation = 0.000000 0.000000 0.000000 1.000000
+			Position = 0.000000 3.000000 24.000000
+			Scale = 1.000000 1.000000 1.000000
+		}
+		kbStaticModelComponent { 
+			Enabled = 1
+			LifeTime =  -1.000000
+			ShaderParams = 0
+			m_RenderPass = LightingPass
+			Model = ./assets/models/Vehicles/jet.ms3d
+			ShaderOverride = 0
+				
+		}
+		kbParticleComponent { 
+			Enabled = 1
+			LifeTime =  -1.000000
+			Name = ""
+			Orientation = 0.000000 0.000000 0.000000 1.000000
+			Position = 0.000000 0.000000 -100.000000
+			Scale = 150.000000 5.000000 5.000000
+			EndColor = 0.000000 0.000000 0.000000 0.000000
+			MaxBurstCount = 0
+			MaxDuration =  3.000000
+			MaxEndSize = 3.000000 3.000000 2000.000000
+			MaxEndVelocity = 0.000000 0.000000 0.000000
+			MaxSpawnRate =  20.000000
+			MaxStartSize = 3.000000 3.000000 2000.000000
+			MaxStartVelocity = 0.000000 0.000000 -20.000000
+			MinBurstCount = 0
+			MinDuration =  3.000000
+			MinEndSize = 3.000000 3.000000 2000.000000
+			MinEndVelocity = 0.000000 0.000000 0.000000
+			MinSpawnRate =  20.000000
+			MinStartSize = 3.000000 3.000000 2000.000000
+			MinStartVelocity = 0.000000 0.000000 -20.000000
+			ParticleBillboardType = AxialBillboard
+			ParticleTexture = ./assets/FX/smoke.jpg
+			StartColor = 0.500000 0.300000 0.250000 1.000000
+			TotalDuration =  -1.000000
+		}
+	}
+}
+}

@@ -1,0 +1,371 @@
+Pistol 1
+kbPrefab 1 {
+	EL_Standard
+	kbGameEntity 2540000531 1106219852 1882351761 973475912 {
+		kbTransformComponent { 
+			Enabled = 0
+			LifeTime =  -1.000000
+			Name = "EL Standard Pistol"
+			Orientation = 0.000000 0.000000 0.000000 1.000000
+			Position = 0.000000 3.000000 24.000000
+			Scale = 1.000000 1.000000 1.000000
+		}
+		EtherSkelModelComponent { 
+			Enabled = 1
+			LifeTime =  -1.000000
+			ShaderParams = 0
+			m_RenderPass = FirstPersonPass
+			Model = ./assets/models/Items/Pistol_FP.ms3d
+			ShaderOverride = 0
+				
+			Animations = 2
+				EtherAnimComponent { 
+					Enabled = 0
+					LifeTime =  -1.000000
+					Animation = ./assets/models/Items/Pistol_FP.kbAnim.ms3d
+					AnimationName = "Idle"
+					IsLooping = 0
+					TimeScale =  1.000000
+				}
+				EtherAnimComponent { 
+					Enabled = 0
+					LifeTime =  -1.000000
+					Animation = ./assets/models/Items/Pistol_FP_Shoot.kbAnim.ms3d
+					AnimationName = "Shoot"
+					IsLooping = 0
+					TimeScale =  1.000000
+				}
+			DebugAnimIndex = -1
+			IsFirstPersonModel = 1
+		}
+		EtherWeaponComponent { 
+			Enabled = 1
+			LifeTime =  -1.000000
+			DummyTemp = 0
+			BurstCount = 1
+			IsInstantHit = 0
+			MuzzleFlash = 3287441000 1228561351 2632918935 4227010865
+			Projectile = 402992291 1133905897 445195195 1933284623
+			SecondsBetweenBursts =  0.500000
+			SecondsBetweenShots =  1.000000
+		}
+	}
+}
+}
+Projectiles 4
+kbPrefab 1 {
+	Standard_Laser
+kbGameEntity 402992291 1133905897 445195195 1933284623 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Standard Laser"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 0.000000 3.000000 24.000000
+		Scale = 1.000000 1.000000 1.000000
+	}
+	kbCylindricalLightComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadows = 0
+		Color = 1.000000 1.000000 1.000000 1.000000
+		LightRadius =  64.000000
+		Length =  128.000000
+	}
+	EtherProjectileComponent { 
+		Enabled = 1
+		LifeTime =  5.000000
+		DummyTemp = 0
+		DamageAmount =  0.000000
+		DamageRadius =  0.000000
+		DetonationTime =  -1.000000
+		ExplodeOnImpact = 1
+		ExplosionFX = 288884920 1074764317 1666654870 1595214297
+		ExplosionSound = 0
+		ImpactCharacterSound = 1
+			kbSoundData { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Radius =  -1.000000
+				Volume =  1.000000
+				WaveFile = ./assets/Sounds/impact_enemy.wav
+			}
+		ImpactEnvironmentSound = 2
+			kbSoundData { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Radius =  200.000000
+				Volume =  0.400000
+				WaveFile = ./assets/Sounds/WoodImpact2.wav
+			}
+			kbSoundData { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Radius =  200.000000
+				Volume =  0.400000
+				WaveFile = ./assets/Sounds/WoodImpact3.wav
+			}
+		LaunchSound = 1
+			kbSoundData { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Radius =  -1.000000
+				Volume =  1.000000
+				WaveFile = ./assets/Sounds/rifle.wav
+			}
+		LifeTime =  5.000000
+		RenderBillboard = 1
+		TraceWidth =  10.000000
+		TracerLength =  64.000000
+		Velocity =  3000.000000
+	}
+}
+}
+kbPrefab 1 {
+	Warrior_Laser
+kbGameEntity 2459381576 1233845788 1100758177 1698127025 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Warrior Laser"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 0.000000 3.000000 24.000000
+		Scale = 1.000000 1.000000 1.000000
+	}
+	kbCylindricalLightComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadows = 0
+		Color = 0.500000 0.211000 0.111000 1.000000
+		LightRadius =  64.000000
+		Length =  128.000000
+	}
+	EtherProjectileComponent { 
+		Enabled = 1
+		LifeTime =  5.000000
+		DummyTemp = 0
+		DamageAmount =  0.000000
+		DamageRadius =  0.000000
+		DetonationTime =  -1.000000
+		ExplodeOnImpact = 1
+		ExplosionFX = 288884920 1074764317 1666654870 1595214297
+		ExplosionSound = 0
+		ImpactCharacterSound = 1
+			kbSoundData { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Radius =  -1.000000
+				Volume =  1.000000
+				WaveFile = ./assets/Sounds/impact_player.wav
+			}
+		ImpactEnvironmentSound = 2
+			kbSoundData { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Radius =  200.000000
+				Volume =  0.500000
+				WaveFile = ./assets/Sounds/WoodImpact2.wav
+			}
+			kbSoundData { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Radius =  200.000000
+				Volume =  0.500000
+				WaveFile = ./assets/Sounds/WoodImpact3.wav
+			}
+		LaunchSound = 1
+			kbSoundData { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Radius =  1000.000000
+				Volume =  0.500000
+				WaveFile = ./assets/Sounds/rifle.wav
+			}
+		LifeTime =  5.000000
+		RenderBillboard = 1
+		TraceWidth =  10.000000
+		TracerLength =  64.000000
+		Velocity =  1250.000000
+	}
+}
+}
+kbPrefab 1 {
+	EL_Grenade
+kbGameEntity 2411460423 1126542526 3016243094 357289685 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "EL_Grenade"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 0.000000 3.000000 24.000000
+		Scale = 10.000000 10.000000 10.000000
+	}
+	kbPointLightComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadows = 0
+		Color = 0.070000 0.930000 0.930000 1.000000
+		LightRadius =  64.000000
+	}
+	EtherProjectileComponent { 
+		Enabled = 0
+		LifeTime =  5.000000
+		DummyTemp = 0
+		DamageAmount =  0.000000
+		DamageRadius =  200.000000
+		DetonationTime =  1.500000
+		ExplodeOnImpact = 0
+		ExplosionFX = 749854598 1122407100 2268504468 2469228342
+		ExplosionSound = 1
+			kbSoundData { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Radius =  4196.000000
+				Volume =  3.000000
+				WaveFile = ./assets/Sounds/grenade_explosion.wav
+			}
+		ImpactCharacterSound = 1
+			kbSoundData { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Radius =  -1.000000
+				Volume =  1.000000
+				WaveFile = ./assets/Sounds/impact_enemy.wav
+			}
+		ImpactEnvironmentSound = 2
+			kbSoundData { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Radius =  200.000000
+				Volume =  0.400000
+				WaveFile = ./assets/Sounds/WoodImpact2.wav
+			}
+			kbSoundData { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Radius =  200.000000
+				Volume =  0.400000
+				WaveFile = ./assets/Sounds/WoodImpact3.wav
+			}
+		LaunchSound = 0
+		LifeTime =  5.000000
+		RenderBillboard = 0
+		TraceWidth =  10.000000
+		TracerLength =  64.000000
+		Velocity =  500.000000
+	}
+}
+}
+kbPrefab 1 {
+	Airstrike_Bomb
+kbGameEntity 2473679666 1325603578 2071095454 1188599008 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Airstrike_Bomb"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 0.000000 2.965401 23.999851
+		Scale = 10.000000 10.000000 10.000000
+	}
+	EtherProjectileComponent { 
+		Enabled = 0
+		LifeTime =  5.000000
+		DummyTemp = 0
+		DamageAmount =  0.000000
+		DamageRadius =  2048.000000
+		DetonationTime =  1.500000
+		ExplodeOnImpact = 1
+		ExplosionFX = 749854598 1122407100 2268504468 2469228342
+		ExplosionSound = 1
+			kbSoundData { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Radius =  4196.000000
+				Volume =  3.000000
+				WaveFile = ./assets/Sounds/grenade_explosion.wav
+			}
+		ImpactCharacterSound = 1
+			kbSoundData { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Radius =  -1.000000
+				Volume =  1.000000
+				WaveFile = ./assets/Sounds/grenade_explosion.wav
+			}
+		ImpactEnvironmentSound = 2
+			kbSoundData { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Radius =  200.000000
+				Volume =  0.400000
+				WaveFile = ./assets/Sounds/grenade_explosion.wav
+			}
+			kbSoundData { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Radius =  200.000000
+				Volume =  0.400000
+				WaveFile = ./assets/Sounds/grenade_explosion.wav
+			}
+		LaunchSound = 0
+		LifeTime =  5.000000
+		RenderBillboard = 0
+		TraceWidth =  10.000000
+		TracerLength =  64.000000
+		Velocity =  1000.000000
+	}
+}
+}
+Rifle 1
+kbPrefab 1 {
+	EL_Rifle
+kbGameEntity 292847838 1140569109 1236968083 2365837966 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "EL Standard Pistol"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 5.500000 -10.000000 3.000000
+		Scale = 1.000000 1.000000 1.000000
+	}
+	EtherSkelModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		ShaderParams = 0
+		m_RenderPass = FirstPersonPass
+		Model = ./assets/models/Items/EL_Rifle_FP.ms3d
+		ShaderOverride = 0
+			
+		Animations = 2
+			EtherAnimComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Animation = ./assets/models/Items/Pistol_FP.kbAnim.ms3d
+				AnimationName = "Idle"
+				IsLooping = 0
+				TimeScale =  1.000000
+			}
+			EtherAnimComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Animation = ./assets/models/Items/Pistol_FP_Shoot.kbAnim.ms3d
+				AnimationName = "Shoot"
+				IsLooping = 0
+				TimeScale =  1.000000
+			}
+		DebugAnimIndex = -1
+		IsFirstPersonModel = 1
+	}
+	EtherWeaponComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		DummyTemp = 0
+		BurstCount = 3
+		IsInstantHit = 0
+		MuzzleFlash = 3287441000 1228561351 2632918935 4227010865
+		Projectile = 402992291 1133905897 445195195 1933284623
+		SecondsBetweenBursts =  0.100000
+		SecondsBetweenShots =  0.040000
+	}
+}
+}

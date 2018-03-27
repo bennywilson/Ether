@@ -1,0 +1,106 @@
+//===================================================================================================
+// kbGame.h
+//
+//
+// 2016-2017 kbEngine 2.0
+//===================================================================================================
+#ifndef _KBGAME_H_
+#define _KBGAME_H_
+
+#include <windows.h>
+#include "kbCore.h"
+#include "kbConsole.h"
+#include "kbVector.h"
+#include "kbQuaternion.h"
+#include "kbBounds.h"
+#include "kbGameEntityHeader.h"
+#include "kbCamera.h"
+#include "kbParticleManager.h"
+#include "kbInputManager.h"
+#include "kbSoundManager.h"
+
+/**
+ *	kbGame
+ */
+class kbGame : public kbCommandProcessor {
+
+//-------------------------------------------------------------------------------------------------------------------------------------------------------------
+public:
+																kbGame();
+	virtual														~kbGame();
+
+	void														Update();
+
+	// Editor user
+	void														InitGame( HWND hwnd, const int width, const int height, const std::vector< const kbGameEntity * > & gameEntityList );
+	void														LoadMap( const std::string & mapName );
+	void														StopGame();
+
+	bool														IsPlaying() const { return m_bIsPlaying; }
+	bool														IsRunning() const { return m_bIsRunning; }
+
+	const std::string &											GetMapName() const { return m_MapName; }
+
+	kbGameEntity *												GetLocalPlayer() const { return m_pLocalPlayer; }
+
+	const std::vector<kbGameEntity*> &							GetGameEntities() const { return m_GameEntityList; }
+	const std::vector<kbGameEntity*> &							GetPlayersList() const { return m_GamePlayersList; }
+
+	virtual kbGameEntity *										CreatePlayer( const int netId, const kbGUID & prefabGUID, const kbVec3 & desiredLocation ) = 0;
+	kbGameEntity *												CreateEntity( const kbGameEntity *const pPrefab, const bool bIsPlayer = false );
+	void														RemoveGameEntity( kbGameEntity *const pNewEntity );
+
+	kbParticleManager *											GetParticleManager() { return m_pParticleManager; }
+	kbSoundManager &											GetSoundManager() { return m_SoundManager; }
+
+	bool														ProcessCommand( const std::string & command );
+
+	void														SetDeltaTimeScale( const float newScale ) { m_DeltaTimeScale = newScale; }
+
+protected:
+
+	virtual void												InitGame_Internal() = 0;
+	virtual void												PlayGame_Internal() = 0;
+	virtual void												StopGame_Internal() = 0;
+	virtual void												Update_Internal( const float DT ) = 0;
+	virtual void												LevelLoaded_Internal() = 0;
+	virtual void												AddGameEntity_Internal( kbGameEntity *const pEntity ) = 0;
+ 
+	const kbInput_t &											GetInput() const { return m_InputManager.GetInput(); }
+	bool														IsConsoleActive() const { return m_Console.IsActive(); }
+
+private:
+
+	void														DisplayDebugCommands();
+
+protected:
+
+	HWND														m_Hwnd;
+	kbGameEntity *												m_pLocalPlayer;
+	kbTimer														m_Timer;
+
+	kbParticleManager *											m_pParticleManager;
+	kbInputManager												m_InputManager;
+	kbSoundManager												m_SoundManager;
+
+private:
+
+	std::string													m_MapName;
+
+	std::vector<kbGameEntity *>									m_GameEntityList;
+	std::vector<kbGameEntity *>									m_GamePlayersList;
+
+	// List of entities to remove during the next kbGame::Update() call
+	std::vector<kbGameEntity *>									m_RemoveEntityList;
+
+	kbConsole													m_Console;
+
+	float														m_DeltaTimeScale;
+
+	bool														m_bIsPlaying;
+	bool														m_bIsRunning;
+};
+
+extern kbGame * g_pGame;
+
+#endif

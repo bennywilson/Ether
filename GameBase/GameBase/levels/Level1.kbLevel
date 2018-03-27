@@ -1,0 +1,115 @@
+kbGameEntity 2329134767 1227762369 56481152 2558444010 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Hello_1"
+		Orientation = -0.421302 0.000000 0.000000 0.906920
+		Position = -0.693966 -8.246669 6.145593
+		Scale = 1.000000 1.000000 1.000000
+	}
+	EtherWorldGenComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CellMidPtHeight =  24.000000
+		ChunkDimensions = 8
+		ChunkWorldLength =  838.000000
+		DebugHour =  -1.000000
+		EnviroInfo = 1
+			EtherEnviroInfo { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				EnviroData = 3215935347 1306052302 1852006566 2340243985
+			}
+		FogEntity = 1236237927 1237076055 1077002175 3142199553
+		LightShaftEntity = 2609040299 1100347930 3115268521 1892043160
+		MaxTerrainHeight =  500.000000
+		NoiseScale =  0.001000
+		SecondsInADay =  60.000000
+		SkyEntity = 2074430960 1291525370 426903473 3234194050
+		SunEntity = 213190561 1130122571 1289191076 1923646057
+		TerrainDimensions = 8
+	}
+}
+kbGameEntity 2074430960 1291525370 426903473 3234194050 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Sky Box"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 29.594585 15.915235 -16.742098
+		Scale = 1.000000 1.000000 1.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		ShaderParams = 3
+0.888792 0.888792 0.920566 1.000000
+0.414583 0.623744 0.869728 1.000000
+-50.000000 20.000000 -107374176.000000 -107374176.000000
+		m_RenderPass = Post-LightingPass
+		Model = ./assets/models/test/skybox.ms3d
+		ShaderOverride = 1
+			./assets/shaders/skyBox.kbShader
+
+	}
+}
+kbGameEntity 2609040299 1100347930 3115268521 1892043160 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Light Shafts"
+		Orientation = -0.123261 -0.728340 0.231215 0.633141
+		Position = -3.857734 2.205323 16.256676
+		Scale = 1.000000 1.000000 1.000000
+	}
+	kbLightShaftsComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		BaseHeight =  0.750000
+		BaseWidth =  0.750000
+		Color = 0.005421 0.004849 0.004737 1.000000
+		Directional = 1
+		IterationHeight =  0.001500
+		IterationWidth =  0.001500
+		NumIteractions = 48
+		Texture = ../../kbEngine/assets/Textures/flare.jpg
+	}
+}
+kbGameEntity 1236237927 1237076055 1077002175 3142199553 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Fog"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = -1.401214 3.558172 16.295265
+		Scale = 1.000000 1.000000 1.000000
+	}
+	kbFogComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		Color = 0.888792 0.888792 0.920566 1.000000
+		EndDistance =  3200.000000
+		StartDistance =  2400.000000
+	}
+}
+kbGameEntity 213190561 1130122571 1289191076 1923646057 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Directional Light"
+		Orientation = -0.123261 -0.728340 0.231215 0.633141
+		Position = -14.972453 1.969328 8.729429
+		Scale = 1.000000 1.000000 1.000000
+	}
+	kbDirectionalLightComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadows = 1
+		Color = 0.952339 0.928509 0.936453 1.000000
+		CascadedShadowSplits = 4
+ 200.000000
+ 600.000000
+ 1400.000000
+ 3000.000000
+	}
+}

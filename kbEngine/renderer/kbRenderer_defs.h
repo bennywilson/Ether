@@ -1,0 +1,329 @@
+//===================================================================================================
+// kbRenderer_defs.h
+//
+//
+// 2016 kbEngine 2.0
+//===================================================================================================
+#ifndef _KBRENDERERDEFS_H_
+#define _KBRENDERERDEFS_H_
+
+#include "kbJobManager.h"
+#include "kbVector.h"
+#include "kbQuaternion.h"
+
+enum ERenderPass {
+	RP_FirstPerson,
+	RP_Lighting,
+	RP_Translucent,
+	RP_PostLighting,
+	RP_InWorldUI,
+	RP_Debug
+};
+
+class vertexColorLayOut {
+public:
+	kbVec3 position;
+	byte color[4];
+
+	void SetColor( const kbVec4 & inColor ) {
+		color[0] = ( byte ) ( inColor.z * 255.0f );
+		color[1] = ( byte ) ( inColor.y * 255.0f );
+		color[2] = ( byte ) ( inColor.x * 255.0f );
+		color[3] = ( byte ) ( inColor.w * 255.0f );
+	}
+
+	kbVec4 GetColor() const {
+		kbVec4 outColor( ( float ) color[2], ( float ) color[1], ( float ) color[0], ( float ) color[3] );
+		outColor.x = outColor.x / 255.0f;
+		outColor.y = outColor.y / 255.0f;
+		outColor.z = outColor.z / 255.0f;
+		outColor.w = outColor.w / 255.0f;
+
+		return outColor;
+	}
+};
+
+struct kbParticleVertex {
+
+	void SetColor( const kbVec3 & inColor ) {
+		color[0] = ( byte ) ( inColor.z * 255.0f );
+		color[1] = ( byte ) ( inColor.y * 255.0f );
+		color[2] = ( byte ) ( inColor.x * 255.0f );
+	}
+
+	kbVec3	position;
+	kbVec2  uv;
+	byte	color[4];
+	kbVec2	size;
+	kbVec3	direction;
+	float	rotation;
+};
+
+struct vertexLayout {
+public:
+	kbVec3 position;
+	kbVec2 uv;
+	byte color[4];
+	byte normal[4];
+	byte tangent[4];
+
+	void SetColor( const kbVec4 & inColor ) {
+		color[0] = ( byte ) ( inColor.x * 255.0f );
+		color[1] = ( byte ) ( inColor.y * 255.0f );
+		color[2] = ( byte ) ( inColor.z * 255.0f );
+		color[3] = ( byte ) ( inColor.w * 255.0f );
+	}
+
+	void SetNormal( const kbVec4 & inNormal ) {
+		normal[0] = ( byte ) ( ( ( inNormal.z * 0.5f ) + 0.5f ) * 255.0f );
+		normal[1] = ( byte ) ( ( ( inNormal.y * 0.5f ) + 0.5f ) * 255.0f );
+		normal[2] = ( byte ) ( ( ( inNormal.x * 0.5f ) + 0.5f ) * 255.0f );
+		normal[3] = ( byte ) ( ( ( inNormal.w * 0.5f ) + 0.5f ) * 255.0f );
+	}
+	
+	kbVec3 GetNormal() const {
+		kbVec3 outNormal( ( float ) normal[2], ( float ) normal[1], ( float ) normal[0] );
+		outNormal.x = ( ( outNormal.x / 255.0f ) * 2.0f ) - 1.0f;
+		outNormal.y = ( ( outNormal.y / 255.0f ) * 2.0f ) - 1.0f;
+		outNormal.z = ( ( outNormal.z / 255.0f ) * 2.0f ) - 1.0f;
+
+		outNormal.Normalize();
+		return outNormal;
+	}
+
+	kbVec4 GetColor() const {
+		kbVec4 outColor( ( float ) color[2], ( float ) color[1], ( float ) color[0], ( float ) color[3] );
+		outColor.x = outColor.x / 255.0f;
+		outColor.y = outColor.y / 255.0f;
+		outColor.z = outColor.z / 255.0f;
+		outColor.w = outColor.w / 255.0f;
+
+		return outColor;
+	}
+
+	void Clear() {
+		memset( this, 0, sizeof( vertexLayout ) );
+	}
+
+	bool operator == ( const vertexLayout & op2 ) const {
+		const float epsilon = 0.0000001f;
+		return position.Compare( op2.position, epsilon ) && uv.Compare( op2.uv, epsilon ) && 
+			normal[0] == op2.normal[0] && normal[1] == op2.normal[1] && normal[2] == op2.normal[2];
+	}
+
+	bool operator < ( const vertexLayout & op2 ) const {
+
+		if ( position.x < op2.position.x ) {
+			return true;
+		} else if ( position.x > op2.position.x ) {
+			return false;
+		} else if ( position.y < op2.position.y ) {
+			return true;
+		} else if ( position.y > op2.position.y ) {
+			return false;
+		} else if ( position.z < op2.position.z ) {
+			return true;
+		} else if ( position.z > op2.position.z ) {
+			return false;
+		} else if ( normal[0] < op2.normal[0] ) {
+			return true;
+		} else if ( normal[0] > op2.normal[0] ) {
+			return false;
+		} else if ( normal[1] < op2.normal[1] ) {
+			return true;
+		} else if ( normal[1] > op2.normal[1] ) {
+			return false;
+		} else if ( normal[2] < op2.normal[2] ) {
+			return true;
+		} else if ( normal[2] > op2.normal[2] ) {
+			return false;
+		} else if ( normal[3] < op2.normal[3] ) {
+			return true;
+		} else if ( normal[3] > op2.normal[3] ) {
+			return false;
+		} else if ( uv.x < op2.uv.x ) {
+			return true;
+		} else if ( uv.x > op2.uv.x ) {
+			return false;
+		} else if ( uv.y < op2.uv.y ) {
+			return true;
+		} else if ( uv.y > op2.uv.y ) {
+			return false;
+		} 
+
+		return false;
+	}
+};
+
+
+
+/**
+ *	kbSkeletalBone_t
+ */
+struct kbBoneMatrix_t {
+
+	void SetIdentity() {
+		m_Axis[0].Set( 1.0f, 0.0f, 0.0f );
+		m_Axis[1].Set( 0.0f, 1.0f, 0.0f );
+		m_Axis[2].Set( 0.0f, 0.0f, 1.0f );
+		m_Axis[3].Set( 0.0f, 0.0f, 0.0f );
+	}
+
+	const kbVec3 & GetAxis( const int axisIndex ) const { if ( axisIndex < 0 || axisIndex > 3 ) { kbError("Doh!"); } return m_Axis[axisIndex]; }
+	const kbVec3 & GetOrigin() const { return m_Axis[3]; }
+	void SetAxis( const int axisIndex, const kbVec3 & inVec ) { if ( axisIndex < 0 || axisIndex > 3 ) { kbError("Doh!"); } m_Axis[axisIndex] = inVec; }
+
+	void TransposeUpper();
+
+	void Invert();
+
+	void operator*=( const kbBoneMatrix_t & op2 );
+	void operator*=( const kbMat4 & op2 );
+
+	kbVec3 m_Axis[4];
+};
+
+enum rmMatrixType_t {
+	KBRM_VIEW,
+	KBRM_PROJECTION,
+	KBRM_VIEWPROJECTION,
+	NUM_RENDER_MATRICES,
+};
+
+// platform switch here
+#include <D3D11.h>
+
+typedef ID3D11Buffer kbHWBuffer;
+typedef ID3D11ShaderResourceView kbHWTexture;
+typedef ID3D11VertexShader kbHWVertexShader;
+typedef ID3D11PixelShader kbHWPixelShader;
+typedef ID3D11InputLayout kbHWVertexLayout;
+
+/**
+ *	kbRenderJob
+ */
+class kbRenderJob : public kbJob {
+
+//---------------------------------------------------------------------------------------------------
+public:
+												kbRenderJob() : m_bRequestShutdown( false ) { }
+
+	void										Run();
+
+	void										RequestShutdown() { m_bRequestShutdown = true; }
+
+private:
+	bool										m_bRequestShutdown;
+};
+
+/**
+ *	kbRenderObject
+ */
+class kbRenderObject {
+
+//---------------------------------------------------------------------------------------------------
+public:
+												kbRenderObject() : 
+													m_pComponent( nullptr ),
+													m_pModel( nullptr ),
+													m_RenderPass( RP_Lighting ), 
+													m_bIsSkinnedModel( false ),
+													m_bIsFirstAdd( false ),
+													m_bIsRemove( false ) { }
+
+	const class kbComponent *					m_pComponent;
+	const class kbModel *						m_pModel;
+	std::vector<class kbShader *>				m_OverrideShaderList;
+	std::vector<kbVec4>							m_ShaderParams;
+	ERenderPass									m_RenderPass;
+	kbVec3										m_Position;
+	kbQuat										m_Orientation;
+	kbVec3										m_Scale;
+	bool										m_bIsSkinnedModel;
+	bool										m_bIsFirstAdd;
+	bool										m_bIsRemove;
+};
+
+/**
+ *	kbSkinnedRenderObject
+ */
+class kbSkinnedRenderObject : public kbRenderObject {
+
+//---------------------------------------------------------------------------------------------------
+public:
+	std::vector<kbBoneMatrix_t>					m_BoneMatrices;
+};
+
+
+/**
+ *	kbRenderLight
+ */
+class kbRenderLight {
+
+//---------------------------------------------------------------------------------------------------
+public:
+												kbRenderLight() :
+													m_pLightComponent( nullptr ),
+													m_bIsFirstAdd( false ),
+													m_bIsRemove( false ) {
+														memset( &m_CascadedShadowSplits, 0, sizeof( m_CascadedShadowSplits ) );
+													}
+
+	const class kbLightComponent *				m_pLightComponent;
+	kbVec3										m_Position;
+	kbQuat										m_Orientation;
+	kbVec4										m_Color;
+	float										m_Radius;
+	float										m_Length;
+	float										m_CascadedShadowSplits[4];
+	bool										m_bCastsShadows;
+	bool										m_bIsFirstAdd;
+	bool										m_bIsRemove;
+};
+
+/**
+ *	eRenderObjectOp
+ */
+enum eRenderObjectOp {
+	ROO_Add,
+	ROO_Remove,
+	ROO_Update,
+};
+
+class kbLightShafts {
+
+//---------------------------------------------------------------------------------------------------
+public:
+												kbLightShafts() :
+													m_pLightShaftsComponent( nullptr ),
+													m_pTexture( nullptr ),
+													m_Color(0.0f, 0.0f, 0.0f, 1.0f ),
+													m_Pos( kbVec3::zero ),
+													m_Rotation( kbQuat::zero ),
+													m_Width( 0.0f ),
+													m_Height( 0.0f ),
+													m_NumIterations( 0 ),
+													m_IterationWidth( 0.0f ), 
+													m_IterationHeight( 0.0f ),
+													m_Operation( ROO_Add ),
+													m_bIsDirectional( true ) {
+														m_Rotation.Set( 0.0f, 0.0f, 0.0f, 1.0f );
+													}
+
+	const class kbLightShaftsComponent *		m_pLightShaftsComponent;
+	class kbTexture *							m_pTexture;
+	kbColor										m_Color;
+	kbVec3										m_Pos;
+	kbQuat										m_Rotation;
+	float										m_Width;
+	float										m_Height;
+	int											m_NumIterations;
+	float										m_IterationWidth;
+	float										m_IterationHeight;
+	eRenderObjectOp								m_Operation;
+	bool										m_bIsDirectional;
+};
+
+#include "DX11/kbRenderer_DX11.h"
+
+#endif

@@ -1,0 +1,293 @@
+//===================================================================================================
+// kbComponent.cpp
+//
+//
+// 2016 kbEngine 2.0
+//===================================================================================================
+#include "kbCore.h"
+#include "kbVector.h"
+#include "kbQuaternion.h"
+#include "kbBounds.h"
+#include "kbGameEntityHeader.h"
+
+KB_DEFINE_COMPONENT(kbComponent)
+KB_DEFINE_COMPONENT(kbTransformComponent)
+KB_DEFINE_COMPONENT(kbGameLogicComponent)
+KB_DEFINE_COMPONENT(kbDamageComponent)
+KB_DEFINE_COMPONENT(kbActorComponent)
+
+/*
+void CopyVarToComponent( const kbComponent * Src, kbComponent * Dst, const kbTypeInfoVar * currentVar ) {
+	byte * DstByte = ( ( byte * ) Dst );
+	byte * SrcByte = ( ( byte * ) Src );
+
+	if ( currentVar->IsArray() ) {
+		switch( currentVar->Type() ) {
+			case KBTYPEINFO_SHADER : {
+				std::vector< class kbShader * >	& DestShaderList = *( std::vector< class kbShader * > *)( &DstByte[currentVar->Offset()] );
+				std::vector< class kbShader * >	& SrcShaderList = *( std::vector< class kbShader * > *)( &SrcByte[currentVar->Offset()] );
+			
+				DestShaderList = SrcShaderList;
+				break;
+			}
+		
+			default: {
+				byte *const SrcArrayPtr = &SrcByte[currentVar->Offset()];
+				byte *const DestArrayPtr = &DstByte[currentVar->Offset()];
+				const int arraySize = g_NameToTypeInfoMap->GetVectorSize( SrcByte, currentVar->GetStructName() );
+				g_NameToTypeInfoMap->ResizeVector( DestArrayPtr, currentVar->GetStructName(), arraySize );
+				for ( int i = 0; i < arraySize; i++ ) {
+		
+					byte *const Destin = (byte*)g_NameToTypeInfoMap->GetVectorElement( arrayBytePtr, currentVar->GetStructName(), i );
+		
+					if ( currentVar->Type() == KBTYPEINFO_STRUCT ) {
+						while ( m_Buffer[m_CurrentReadPos] != '{' ) {
+							m_CurrentReadPos++;
+						}
+						ReadComponent( pGameEntity, currentVar->GetStructName(), (kbComponent*)arrayElem );
+					} else {
+						m_CurrentReadPos = nextStringPos + 1;
+						nextStringPos = m_Buffer.find_first_of( " {\n\r\t", m_CurrentReadPos );
+						nextToken = m_Buffer.substr( m_CurrentReadPos, nextStringPos - m_CurrentReadPos );
+						ReadProperty( currentVar, arrayElem, nextToken, nextStringPos );
+						nextStringPos = m_Buffer.find_first_of( " {\n\r\t", m_CurrentReadPos );
+					}
+					nextStringPos = m_Buffer.find_first_of( " }{\n\r\t", m_CurrentReadPos );
+				}
+				if ( arraySize == 0 ) {
+					m_CurrentReadPos = m_Buffer.find_first_of( "}", m_CurrentReadPos );
+				}
+				break;
+			}
+		}	else {
+		switch( currentVar->Type() ) {
+			case KBTYPEINFO_BOOL : 
+			{
+				const bool & srcBool = *(const bool*)&SrcByte[currentVar->Offset()];
+				bool & dstBool = *(bool*)&DstByte[currentVar->Offset()];
+				dstBool = srcBool;
+				break;
+			}
+
+			case KBTYPEINFO_FLOAT : {
+				const float & srcFloat = *( const float* )&SrcByte[currentVar->Offset()];
+				float & dstFloat = *( float* )&DstByte[currentVar->Offset()];
+				dstFloat = srcFloat;
+				break;
+			}
+
+			case KBTYPEINFO_INT : 
+			{
+				const int & srcInt = *( const int* )&SrcByte[currentVar->Offset()];
+				int & dstInt = *( int* )&DstByte[currentVar->Offset()];
+				dstInt = srcInt;				
+				break;
+			}
+
+			case KBTYPEINFO_STRING :
+			{
+				const std::string & srcString =  *(const std::string*)&SrcByte[currentVar->Offset()];
+				std::string & dstString = *(std::string*)&DstByte[currentVar->Offset()];
+				dstString = srcString;
+				break;
+			}
+
+			case KBTYPEINFO_VECTOR4 :
+			{
+				const kbVec4 & srcVec = *(kbVec4*)&SrcByte[currentVar->Offset()];
+				kbVec4 & dstVec = *(kbVec4*)&DstByte[currentVar->Offset()];
+				dstVec = srcVec;
+				break;
+			}
+
+			case KBTYPEINFO_VECTOR :
+			{
+				const kbVec3 & srcVec = *(kbVec3*)&SrcByte[currentVar->Offset()];
+				kbVec3 & dstVec = *(kbVec3*)&DstByte[currentVar->Offset()];
+				dstVec = srcVec;
+				break;
+			}
+
+			case KBTYPEINFO_PTR :
+			case KBTYPEINFO_TEXTURE :
+			case KBTYPEINFO_STATICMODEL :
+			case KBTYPEINFO_SHADER :
+			{
+				INT_PTR * destPtr = ( INT_PTR * )&DstByte[currentVar->Offset()];
+				INT_PTR & destRef = *destPtr;
+				const INT_PTR * srcPtr = ( const INT_PTR * )&SrcByte[currentVar->Offset()];
+				const INT_PTR & srcRef = *srcPtr;
+				destRef = srcRef;
+				break;
+			}
+				
+			case KBTYPEINFO_ENUM : {
+				int & srcEnum = *(int*)&SrcByte[currentVar->Offset()];
+				int & destEnum = *(int*)&DstByte[currentVar->Offset()];
+				destEnum = srcEnum;
+			}
+		}
+	}
+}*/
+
+/**
+ *	kbComponent::Constructor
+ */
+void kbComponent::Constructor() {
+	m_pParent = nullptr;
+	m_LifeTimeRemaining = -1.0f;
+	m_StartingLifeTime = -1.0f;
+	m_IsEnabled = false;
+	m_DisableTickOnServer = false;
+	m_bIsDirty = false;
+}
+
+/**
+ *	kbComponent::SetParent
+ */
+void kbComponent::SetParent( kbGameEntity * pGameEntity ) { 
+
+	if ( pGameEntity == NULL ) {
+		kbAssert( false, "Initializing a kbComponent with a NULL game entity", GetComponentClassName() );
+		return;
+	}
+
+	m_pParent = pGameEntity;
+}
+
+/**
+ *	kbComponent::Enable
+ */
+void kbComponent::Enable( const bool setEnabled ) {
+
+	if ( m_IsEnabled == setEnabled ) {
+		return;
+	}
+
+	m_IsEnabled = setEnabled;
+
+	if ( m_pParent == nullptr || m_pParent->IsPrefab() == true ) {
+		return;
+	}
+
+	SetEnable_Internal( setEnabled );
+
+	if ( setEnabled ) {
+		m_LifeTimeRemaining = m_StartingLifeTime;
+	}
+}
+
+/**
+ *	kbTransformComponent::Update
+ */
+void kbComponent::Update( const float DeltaTimeSeconds ) {
+	if ( m_LifeTimeRemaining >= 0.0f ) {
+		m_LifeTimeRemaining -= DeltaTimeSeconds;
+		if ( m_LifeTimeRemaining < 0 ) {
+			Enable( false );
+			LifeTimeExpired();
+			return;
+		}
+	}
+
+	Update_Internal( DeltaTimeSeconds ); 
+	m_bIsDirty = false;
+}
+
+/**
+ *	kbTransformComponent::Constructor
+ */
+void kbTransformComponent::Constructor() {
+	m_Position.Set( 0.0f, 0.0f, 0.0f );
+	m_Scale.Set( 1.0f, 1.0f, 1.0f );
+	m_Orientation.Set( 0.0f, 0.0f, 0.0f, 1.0f );
+}
+
+/**
+ *	kbTransformComponent::GetPosition
+ */
+const kbVec3 kbTransformComponent::GetPosition() const {
+	if ( m_pParent->GetComponent(0) == this ) {
+		return m_Position;
+	}
+
+	const kbMat4 parentRotation = m_pParent->GetOrientation().ToMat4();
+	const kbVec3 worldPosition = parentRotation.TransformPoint( m_Position );
+
+	return parentRotation.TransformPoint( m_Position ) + m_pParent->GetPosition();
+}
+
+/**
+ *	kbTransformComponent::GetScale
+ */
+const kbVec3 kbTransformComponent::GetScale() const {
+	if ( m_pParent->GetComponent(0) == this ) {
+		return m_Scale;
+	}
+
+	return m_Scale;
+}
+
+/**
+ *	kbTransformComponent::GetOrientation
+ */
+const kbQuat kbTransformComponent::GetOrientation() const {
+	if ( m_pParent->GetComponent(0) == this ) {
+		return m_Orientation;
+	}
+
+	return m_Orientation;
+}
+
+/**
+ *	kbGameLogicComponent::Constructor
+ */
+void kbGameLogicComponent::Constructor() {
+	m_DummyTemp = 0;
+}
+
+/**
+ *	kbGameLogicComponent::Update_Internal
+ */
+void kbGameLogicComponent::Update_Internal( const float DeltaTime ) {
+	START_SCOPED_TIMER( CLOTH_COMPONENT );
+	Super::Update_Internal( DeltaTime );
+}
+
+/**
+ *	kbDamageComponent::Constructor
+ */
+void kbDamageComponent::Constructor() {
+	m_MinDamage = 10.0f;
+	m_MaxDamage = 10.0f;
+}
+
+/**
+ *	kbActorComponent::Constructor
+ */
+void kbActorComponent::Constructor() {
+	m_MaxHealth = 10.0f;
+	m_CurrentHealth = m_MaxHealth;
+}
+
+/**
+ *	kbActorComponent::Constructor
+ */
+void kbActorComponent::SetEnable_Internal( const bool bIsEnabled ) {
+	Super::SetEnable_Internal( bIsEnabled );
+
+	if ( bIsEnabled ) {
+		m_CurrentHealth = m_MaxHealth;
+	}
+}
+
+/**
+ *	kbActorComponent::TakeDamage
+ */
+void kbActorComponent::TakeDamage( const class kbDamageComponent *const pDamageComponent, const kbGameLogicComponent *const attackerComponent ) {
+	if ( pDamageComponent == NULL ) {
+		return;
+	}
+
+	m_CurrentHealth -= pDamageComponent->GetMaxDamage();
+}

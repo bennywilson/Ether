@@ -1,0 +1,84 @@
+//===================================================================================================
+// cylindricalLight.kbShader
+//
+//
+// 2016-2017 kbEngine 2.0
+//===================================================================================================
+cbuffer matrixBuffer {
+   matrix               mvpMatrix;
+   matrix               inverseViewProjection;
+   matrix               lightMatrix[4];
+   float4               splitDistances;
+   float4               lightDirection;
+   float4               lightPosition;
+   float4               lightColor;
+   float4               cameraPosition;
+};
+
+//-------------------------------------
+struct vertexInput {
+	float4 position      : POSITION;
+	float2 uv            : TEXCOORD0;
+};
+
+//-------------------------------------
+struct pixelInput {
+	float4 position      : SV_POSITION;
+	float4 position2     : TEXCOORD1;
+	float2 uv            : TEXCOORD0;
+};
+
+/**
+ *	vertexShader
+ */
+pixelInput vertexShader( vertexInput input ) {
+	pixelInput output = (pixelInput)(0);
+
+	output.position = input.position;
+	output.uv = mul( input.uv, mvpMatrix );
+	output.position2 = input.position;
+
+	return output;
+}
+
+/**
+ *	pixelShader
+ */
+SamplerState DiffuseSamplerState;
+Texture2D colorTexture;
+
+SamplerState NormalSamplerState;
+Texture2D normalTexture;
+
+SamplerState DepthSamplerState;
+Texture2D depthTexture;
+
+SamplerState ShadowMapSamplerState;
+Texture2D ShadowMap;
+
+float4 pixelShader( pixelInput input ) : SV_TARGET {
+
+   float3 baseColor = colorTexture.Sample( DiffuseSamplerState, input.uv );
+   float3 normal = normalTexture.Sample( NormalSamplerState, input.uv );
+
+   float4 worldPos = float4( input.position2.xy, depthTexture.Sample( DepthSamplerState, input.uv ).r, 1 );
+   worldPos = mul( worldPos, inverseViewProjection );
+   worldPos /= worldPos.w;
+
+   const float lightRadius = lightPosition.w;
+   const float lightLength = lightDirection.w;
+
+   const float distAlongLine = dot( worldPos.xyz - lightPosition.xyz, lightDirection.xyz );
+   const float3 pointAlongLine = lightPosition + ( lightDirection.xyz * distAlongLine );
+   const float distToLine = length( pointAlongLine - worldPos.xyz );
+
+   float atten1 = 1.0f - saturate( distToLine / lightRadius );
+   float2 atten2 = 1.0f - saturate( ( abs( distAlongLine ) - ( lightLength * 0.5f ) ) / ( lightRadius ) );
+   float attenuation = atten1 * atten2;
+
+   const float3 lightVec = normalize( pointAlongLine - worldPos.xyz );
+   float nDotL = saturate( dot( lightVec, normal ) );
+
+   float3 finalColor = attenuation * nDotL * baseColor * lightColor.xyz;
+   return float4( finalColor, 1.0f );
+}

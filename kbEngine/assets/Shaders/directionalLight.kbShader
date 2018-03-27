@@ -1,0 +1,98 @@
+//===================================================================================================
+// directionalLight.kbShader
+//
+//
+// 2016-2017 kbEngine 2.0
+//===================================================================================================
+cbuffer matrixBuffer {
+   matrix               mvpMatrix;
+   matrix               inverseViewProjection;
+   matrix               lightMatrix[4];
+   float4               splitDistances;
+   float4               lightDirection;
+   float4               lightPosition;
+   float4               lightColor;
+   float4               cameraPosition;
+};
+
+//-------------------------------------
+struct vertexInput {
+	float4 position      : POSITION;
+	float2 uv            : TEXCOORD0;
+};
+
+//-------------------------------------
+struct pixelInput {
+	float4 position      : SV_POSITION;
+	float4 position2     : TEXCOORD1;
+	float2 uv            : TEXCOORD0;
+};
+
+/**
+ *	vertexShader
+ */
+pixelInput vertexShader( vertexInput input ) {
+	pixelInput output = (pixelInput)(0);
+
+	output.position = input.position;
+	output.uv = mul( input.uv, mvpMatrix );
+	output.position2 = input.position;
+
+	return output;
+}
+
+/**
+ *	pixelShader
+ */
+SamplerState DiffuseSamplerState;
+Texture2D colorTexture;
+
+SamplerState NormalSamplerState;
+Texture2D normalTexture;
+
+SamplerState DepthSamplerState;
+Texture2D depthTexture;
+
+SamplerState ShadowMapSamplerState;
+Texture2D ShadowMap;
+
+float4 pixelShader( pixelInput input ) : SV_TARGET {
+   float3 baseColor = colorTexture.Sample( DiffuseSamplerState, input.uv );
+   float3 normal = normalTexture.Sample( NormalSamplerState, input.uv );
+
+   float lightIntensity = dot( normal, lightDirection.xyz );
+   lightIntensity = ( lightIntensity * 0.5f ) + 0.5f;
+
+   float4 worldPos = float4( input.position2.xy, depthTexture.Sample( DepthSamplerState, input.uv ).r, 1 );
+   worldPos = mul( worldPos, inverseViewProjection );
+   float DistFromCamera = length( worldPos.xyz/worldPos.w - cameraPosition );
+
+   int index = 0;
+   float2 offset = float2( 0.0f, 0.0f );
+ 
+   if ( DistFromCamera > splitDistances.z ) {
+      index = 3.0f;
+      offset.x += 0.5f;
+      offset.y += 0.5f;
+   } else if ( DistFromCamera > splitDistances.y ) {
+      index = 2.0f;
+      offset.y += 0.5f;
+   } else if ( DistFromCamera > splitDistances.x ) {
+      index = 1.0f;
+      offset.x += 0.5f;
+   }  
+
+   float4 shadowTex = mul( worldPos, lightMatrix[index] );
+   shadowTex /= shadowTex.w;
+   shadowTex.xy *= 0.5f;
+   shadowTex.xy += offset;
+
+   if ( DistFromCamera < splitDistances.w ) {
+      if ( ShadowMap.Sample( ShadowMapSamplerState, shadowTex.xy ).r < shadowTex.z - 0.0003f ) {
+         lightIntensity *= 0.83f;
+      }
+   }
+
+	float3 finalColor = baseColor * lightIntensity * lightColor.xyz;
+	return float4( finalColor, 1.0f );
+}

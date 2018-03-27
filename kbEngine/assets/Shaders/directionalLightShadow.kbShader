@@ -1,0 +1,86 @@
+//===================================================================================================
+// directionalLightShadow.kbShader
+//
+//
+// 2017 kbEngine 2.0
+//===================================================================================================
+cbuffer matrixBuffer {
+   matrix      modelMatrix;
+   matrix      modelViewMatrix;
+   matrix      viewMatrix;
+   matrix      mvpMatrix;
+   matrix      projection;
+   matrix      inverseProjection;
+   matrix      viewProjection;
+   float4x4    BoneMatrices[64];
+};
+
+//-------------------------------------
+struct shadowVertexInput {
+	float4 position      : POSITION;
+	float4 color         : COLOR;
+};
+
+//-------------------------------------
+struct shadowPixelInput {
+	float4 position		: SV_POSITION;
+	float2 position2	   : TEXCOORD1;
+};
+
+/**
+ *	vertexShader
+ */
+shadowPixelInput vertexShader( shadowVertexInput input ) {
+	shadowPixelInput output = ( shadowPixelInput )(0);
+
+	output.position = mul( input.position, mvpMatrix );
+   output.position2 = output.position.zw;
+
+   // Clip out polies that are marked as non-shadow casting
+   if ( input.color.w == 0 ) {
+      output.position.z = -2.0f;
+   }
+	return output;
+}
+
+/**
+ *	pixelShader
+ */
+ float pixelShader( shadowPixelInput input ) : SV_TARGET {
+   return input.position2.x / input.position2.y;
+}
+
+//-------------------------------------
+struct skinnedVertexInput {
+   float4      position         : POSITION;
+   float4      blendIndices     : BLENDINDICES;
+   float4      boneWeights      : BLENDWEIGHT;
+};
+
+/**
+ *	skinnedVertexMain
+ */
+shadowPixelInput skinnedVertexMain( skinnedVertexInput input ) {
+
+	shadowPixelInput output = (shadowPixelInput)(0);
+
+   float4 Pos = 0.0f;
+
+   int4 IndexVector = D3DCOLORtoUBYTE4(input.blendIndices);
+   float BlendWeightsArray[4] = (float[4])input.boneWeights;
+   int   IndexArray[4]        = (int[4])IndexVector;
+
+   Pos = mul( input.position, BoneMatrices[IndexArray[0]] );
+
+	output.position = mul( Pos, mvpMatrix );
+	output.position2 = output.position.zw;
+
+	return output;
+}
+
+/**
+ *	skinnedPixelMain
+ */
+ float skinnedPixelMain( shadowPixelInput input ) : SV_TARGET {
+   return input.position2.x / input.position2.y;
+}

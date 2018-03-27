@@ -1,0 +1,483 @@
+//===================================================================================================
+// kbResourceTab.cpp
+//
+//
+// 2016-2017 kbEngine 2.0
+//===================================================================================================
+#include "kbCore.h"
+#include "kbWidget.h"
+#include "kbResourceTab.h"
+#include "kbPropertiesTab.h"
+#include "kbEditor.h"
+#include "kbEditorEntity.h"
+
+kbResourceTab * g_pResourceTab = nullptr;
+
+
+/**
+ *	ResourceSelectedCB - Called when user selects a resource in the resource tab
+ */
+void kbResourceTab::ResourceSelectedCB( Fl_Widget * widget, void * userData ) {
+	Fl_Select_Browser *const selectBrowser = static_cast< Fl_Select_Browser * >( widget );
+	kbResourceTab *const pResourceTab = static_cast< kbResourceTab * >( userData );
+
+	const int selectedItemIndex = selectBrowser->value() - 1;
+	if ( Fl::event_button() == FL_LEFT_MOUSE && selectedItemIndex >= 0 ) {
+		kbResourceTabFile_t * pResourceItem = pResourceTab->m_SelectBrowserIdx[selectedItemIndex];
+
+		if ( pResourceItem->m_pResource != nullptr ) {
+			const char * fileName = pResourceItem->m_pResource->GetName().c_str();
+			kbResource * pResource = g_ResourceManager.GetResource( fileName );
+
+			widgetCBResourceSelected resourceCBObject( WidgetCB_ResourceSelected );
+			resourceCBObject.resourceFileName = pResource->GetFullFileName();
+			g_Editor->BroadcastEvent( resourceCBObject );
+		} else if ( pResourceItem->m_pPrefab != nullptr ) {
+			widgetCBResourceSelected resourceCBObject( WidgetCB_PrefabSelected );
+			g_Editor->BroadcastEvent( resourceCBObject );
+		} else {
+			pResourceItem->m_bExpanded = !pResourceItem->m_bExpanded;
+		}
+	}
+
+	if ( Fl::event_button() == FL_RIGHT_MOUSE ) {
+		int folderIdx = selectedItemIndex;
+		while( folderIdx > 0 && GetFileExtension( g_pResourceTab->m_SelectBrowserIdx[selectedItemIndex]->m_FolderName ) != "kbPkg" ) {
+			folderIdx--;
+		}
+
+		const std::string SavePackageOption = "Save Package " + g_pResourceTab->m_SelectBrowserIdx[selectedItemIndex]->m_FolderName;
+		Fl_Menu_Item rclick_menu[] = {
+			{ SavePackageOption.c_str(),  0, SavePackageCB, ( void * ) (INT_PTR)folderIdx },		// Cast to INT_PTR then to void * fixes compile warning C4312
+			{ "Save All Changed Packages",  0, SavePackageCB, ( void * ) (INT_PTR)-1 },
+			{ 0 }};
+
+		if ( selectedItemIndex < 0 || g_pResourceTab->m_SelectBrowserIdx[selectedItemIndex]->m_bIsDirty == false ) {
+			rclick_menu[0].deactivate();
+		}
+
+		const Fl_Menu_Item * m = rclick_menu->popup( Fl::event_x(), Fl::event_y(), 0, 0, 0 );
+		if ( m ) {
+			m->do_callback( 0, m->user_data() );
+		}
+
+	}
+
+	pResourceTab->RefreshResourcesTab();
+	selectBrowser->select( selectedItemIndex + 1 );
+}
+
+void ClearDirtyFlags( kbResourceTabFile_t *const pkbResourceTabFile_t ) {
+	if ( pkbResourceTabFile_t == nullptr ) {
+		return;
+	}
+
+	pkbResourceTabFile_t->m_bIsDirty = false;
+	for ( int i = 0; i < pkbResourceTabFile_t->m_ResourceList.size(); i++ ) {
+		pkbResourceTabFile_t->m_ResourceList[i].m_bIsDirty = false;
+	}
+
+	for ( int i = 0; i < pkbResourceTabFile_t->m_SubFolderList.size(); i++ ) {
+		ClearDirtyFlags( &pkbResourceTabFile_t->m_SubFolderList[i] );
+	}
+}
+
+/**
+ *	SavePackageCB - Called when user selects a resource in the resource tab
+ */
+void kbResourceTab::SavePackageCB( Fl_Widget * widget, void * userData ) {
+
+	const int index = (int) (INT_PTR)userData;		// Cast to INT_PTR then to void * fixes compile warning C4312
+
+	if ( index == -1 ) {
+		for ( int i = 0; i < g_pResourceTab->m_SelectBrowserIdx.size(); i++ ) {
+			if ( g_pResourceTab->m_SelectBrowserIdx[i]->m_bIsDirty == false || g_pResourceTab->m_SelectBrowserIdx[i]->m_FolderName.empty() ) {
+				continue;
+			}
+
+			if ( GetFileExtension( g_pResourceTab->m_SelectBrowserIdx[i]->m_FolderName ) == "kbPkg" ) {
+				g_ResourceManager.SavePackage( g_pResourceTab->m_SelectBrowserIdx[i]->m_FolderName );
+				ClearDirtyFlags( g_pResourceTab->m_SelectBrowserIdx[i] );
+				
+			}
+		}
+	} else if ( index < g_pResourceTab->m_SelectBrowserIdx.size() ) {
+		g_pResourceTab->m_SelectBrowserIdx[index]->m_bIsDirty = false;
+		g_ResourceManager.SavePackage( g_pResourceTab->m_SelectBrowserIdx[index]->m_FolderName );
+		ClearDirtyFlags( g_pResourceTab->m_SelectBrowserIdx[index] );
+	}
+
+	g_pResourceTab->RefreshResourcesTab();
+}
+
+/**
+ *	kbResourceTab
+ */
+kbResourceTab::kbResourceTab( int x, int y, int w, int h ) :
+	kbWidget( x, y, w, h ),
+	Fl_Tabs( x, y, w, h ) {
+
+	const int Top_Border = y + kbEditor::TabHeight();
+	const int Display_Width = DisplayWidth();
+	const int Display_Height = h - kbEditor::TabHeight();
+
+	Fl_Tabs * resourceTabs  = new Fl_Tabs( x, y, w, Display_Height );
+
+    Fl_Group * resourceGroup = new Fl_Group( x, Top_Border, w, Display_Height, "Resources" );
+
+	m_pSelectBrowser = new Fl_Select_Browser( 5, Top_Border + 5, Display_Width, Display_Height , "" );
+	m_pSelectBrowser->callback( &ResourceSelectedCB, this );
+	m_pSelectBrowser->textsize( 11 );
+
+	resourceGroup->end();
+
+	Fl_Group * resourceGroup2 = new Fl_Group( 0, Top_Border, Display_Width, Display_Height, "Entity Properties" );
+    {
+        Fl_Button *b1 = new Fl_Button( 20,160,90,25,"Button A"); b1->color(88+1);
+        Fl_Button *b4 = new Fl_Button( 20,190,90,25,"Button V4"); b4->color(88+2);
+    }
+    resourceGroup2->end();
+
+	resourceTabs->end();
+
+	end();
+
+	g_Editor->RegisterUpdate( this );
+	g_Editor->RegisterEvent( this, WidgetCB_PrefabModified );
+	g_pResourceTab = this;
+}
+
+
+/**
+ *	kbResourceTab::EventCB
+ */
+void kbResourceTab::EventCB( const widgetCBObject * widgetCBObject ) {
+	
+	switch( widgetCBObject->widgetType ) {
+		
+		case WidgetCB_PrefabModified : {
+			const widgetCBGeneric *const widgetCB = static_cast<const widgetCBGeneric*>( widgetCBObject );
+
+			int value = m_pSelectBrowser->value() - 1;
+
+			if ( g_pPropertiesTab != nullptr && g_pPropertiesTab->GetTempPrefabEntity() != nullptr ) {
+				for ( int i = 0; i < m_SelectBrowserIdx.size(); i++ ) {
+					if ( m_SelectBrowserIdx[i]->m_pPrefab != nullptr && m_SelectBrowserIdx[i]->m_pPrefab->GetGameEntity( 0 ) == g_pPropertiesTab->GetTempPrefabEntity()->GetGameEntity() ) {
+						value = i;
+						break;
+					}
+				}
+			}
+
+			if ( value < 0 || value >= m_SelectBrowserIdx.size() || m_SelectBrowserIdx[value]->m_pPrefab == nullptr ) {
+				return;
+			}
+			// Todo: Hack.  Find a better way to mark folders as dirty
+			if ( m_SelectBrowserIdx[value]->m_pPrefab->GetGameEntity( 0 ) != nullptr && m_SelectBrowserIdx[value]->m_pPrefab->GetGameEntity( 0 ) == widgetCB->m_Value ) {
+				g_pResourceTab->m_SelectBrowserIdx[value]->m_bIsDirty = true;
+				while( value > 0 && GetFileExtension( g_pResourceTab->m_SelectBrowserIdx[value]->m_FolderName ) != "kbPkg" ) {
+					value--;
+				}
+				if ( value >= 0 ) {
+					g_pResourceTab->m_SelectBrowserIdx[value]->m_bIsDirty = true;
+				}
+				RefreshResourcesTab();
+			}
+		}
+		break;
+	}
+}
+
+/**
+ *	kbResourceTab::PostRendererInit()
+ */
+void kbResourceTab::PostRendererInit() {
+	TCHAR szFullPattern[MAX_PATH];
+	GetCurrentDirectory( MAX_PATH, szFullPattern );
+	std::string filePath = szFullPattern;
+
+	std::vector< std::string > fileList;
+
+	m_ResourceFolderList.push_back( kbResourceTabFile_t() );
+	m_ResourceFolderList[m_ResourceFolderList.size() - 1].m_FolderName = "Game Packages";
+
+	// Find game directory assets
+	m_ResourceFolderList.push_back( kbResourceTabFile_t() );
+	m_ResourceFolderList[m_ResourceFolderList.size() - 1].m_FolderName = "Game Resources";
+
+	filePath = "./assets/";
+	FindResourcesRecursively( filePath, m_ResourceFolderList[m_ResourceFolderList.size() - 1] );
+
+	// find engine assets
+	m_ResourceFolderList.push_back( kbResourceTabFile_t() );
+	m_ResourceFolderList[m_ResourceFolderList.size() - 1].m_FolderName = "Engine Resources";
+
+	filePath = "../../kbEngine/assets/";
+	FindResourcesRecursively( filePath, m_ResourceFolderList[m_ResourceFolderList.size() - 1] );
+
+	RefreshResourcesTab();
+}
+
+/**
+ *	kbResourceTab::FindResourcesRecursively
+ */
+void kbResourceTab::FindResourcesRecursively( const std::string & file, kbResourceTabFile_t & CurrentFolder ) {
+	const size_t currentFolderStartPos = file.find_last_of( "/", file.length() - 2 );
+	const size_t currentFolderEndPosPos = file.find_first_of( "/", currentFolderStartPos + 1 );//"file.find_last_of( "/", file.length() - 1 );
+
+	const std::string currentFolderName = file.substr( currentFolderStartPos, currentFolderEndPosPos );
+	if ( currentFolderName == "/CVS/" ) {
+		return;
+	}
+	CurrentFolder.m_SubFolderList.push_back( kbResourceTabFile_t() );
+	kbResourceTabFile_t & NewFolder = CurrentFolder.m_SubFolderList[ CurrentFolder.m_SubFolderList.size() - 1];
+	NewFolder.m_FolderName = currentFolderName;
+
+	WIN32_FIND_DATA FindFileData;
+	HANDLE hFindFile;
+	
+	static char fullFileName[MAX_PATH];
+	sprintf_s( fullFileName, "%s*", file.c_str() );
+
+	hFindFile = FindFirstFile( fullFileName, &FindFileData );
+
+	if ( hFindFile != INVALID_HANDLE_VALUE ) {
+		do {
+			if ( FindFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY ) {
+				if ( strcmp( FindFileData.cFileName, "." ) == 0 ||
+					 strcmp( FindFileData.cFileName, ".." ) == 0 ) {
+					continue;
+				}
+
+				std::string newFolder = file + FindFileData.cFileName + "/";
+				FindResourcesRecursively( newFolder, NewFolder );
+			} else {
+				const char * ext = strrchr( FindFileData.cFileName, '.' );
+		
+				if ( ext == nullptr ) {
+					continue;
+				}
+
+				const int MaxNumExtensions = 16;
+				const char validExtensions[][MaxNumExtensions] = { ".ms3d", ".kbMat", ".kbShader", ".jpg", ".tga", ".bmp", ".kbPkg", ".kbAnim", ".wav" };
+				const int numExtensions = sizeof( validExtensions ) / ( sizeof( char ) * 16 );
+
+				for ( int i = 0; i < numExtensions; i++ ) {
+
+					if ( strcmp( ext, validExtensions[i] ) == 0 ) {
+						if ( strcmp( ext, ".kbPkg" ) == 0 ) {
+							// Add a package and its folders and prefab
+							kbPackage * pPackage = g_ResourceManager.GetPackage( file + FindFileData.cFileName );
+							if ( pPackage == nullptr ) {
+								kbError( "No package found when trying to load %s", ( file + FindFileData.cFileName ).c_str() );
+							}
+
+							// Add Package
+							m_ResourceFolderList[0].m_SubFolderList.push_back( kbResourceTabFile_t() );
+							kbResourceTabFile_t & newPackageEntry = m_ResourceFolderList[0].m_SubFolderList[m_ResourceFolderList[0].m_SubFolderList.size() - 1];
+							newPackageEntry.m_FolderName = FindFileData.cFileName;
+							
+							for ( int folderIdx = 0; folderIdx < pPackage->NumFolders(); folderIdx++ ) {
+								// Add Folder
+								newPackageEntry.m_SubFolderList.push_back( kbResourceTabFile_t() );
+								kbResourceTabFile_t & newFolderEntry = newPackageEntry.m_SubFolderList[newPackageEntry.m_SubFolderList.size() - 1 ];
+								newFolderEntry.m_FolderName = pPackage->GetFolderName( folderIdx );
+
+								const std::vector< class kbPrefab * > & prefabsInFolder = pPackage->GetPrefabsForFolder( folderIdx );
+								for ( int prefabIdx = 0; prefabIdx < prefabsInFolder.size(); prefabIdx++ ) {
+									// Add prefab
+									newFolderEntry.m_ResourceList.push_back( kbResourceTabFile_t() );
+									kbResourceTabFile_t & newPrefabEntry = newFolderEntry.m_ResourceList[newFolderEntry.m_ResourceList.size() - 1];
+									newPrefabEntry.m_pPrefab = prefabsInFolder[prefabIdx];
+									newPrefabEntry.m_FolderName = prefabsInFolder[prefabIdx]->GetPrefabName();
+								}
+							}
+						} else {
+							// Add a kbResource
+							NewFolder.m_ResourceList.push_back( kbResourceTabFile_t() );
+							NewFolder.m_ResourceList[NewFolder.m_ResourceList.size() - 1].m_pResource = g_ResourceManager.GetResource( file + FindFileData.cFileName, false );
+						}
+						continue;
+					}
+				}
+			}
+		} while( FindNextFile( hFindFile, &FindFileData ) );
+
+		FindClose( hFindFile );
+	}
+}
+
+/**
+ *	kbResourceTab::RefreshResourcesTab
+ */
+void kbResourceTab::RefreshResourcesTab() {
+	std::string spaces;
+	m_pSelectBrowser->clear();
+	m_SelectBrowserIdx.clear();
+
+	// Add packages to the UI
+	
+	// Add resources to the UI
+	for ( int folderIdx = 0; folderIdx < m_ResourceFolderList.size(); folderIdx++ ) {
+		RefreshResourcesTab_Recursive( m_ResourceFolderList[folderIdx], spaces );
+	}
+	m_pSelectBrowser->redraw();
+	this->redraw();
+	Fl::wait();
+}
+
+/**
+ *	kbResourceTab::RefreshResourcesTab_Recursive
+ */
+void kbResourceTab::RefreshResourcesTab_Recursive( kbResourceTabFile_t & currentFolder, std::string spaces ) {
+
+	if ( currentFolder.m_ResourceList.size() == 0 && currentFolder.m_SubFolderList.size() == 0 ) {
+		return;
+	}
+
+	std::string FolderName = spaces + ( currentFolder.m_bExpanded ? "- " : "+ " ) + currentFolder.m_FolderName;
+	if ( currentFolder.m_bIsDirty ) {
+		FolderName += " *";
+	}
+
+	m_pSelectBrowser->add( FolderName.c_str() );
+	int numItems = m_pSelectBrowser->size();
+	m_SelectBrowserIdx.push_back( &currentFolder );
+
+	if ( currentFolder.m_bExpanded == true ) {
+		spaces += "   ";
+
+		for ( int folderIdx = 0; folderIdx < currentFolder.m_SubFolderList.size(); folderIdx++ ) {
+
+			kbResourceTabFile_t & nextFolder = currentFolder.m_SubFolderList[folderIdx];
+			RefreshResourcesTab_Recursive( nextFolder, spaces );
+		}
+
+		for ( int resourceIdx = 0; resourceIdx < currentFolder.m_ResourceList.size(); resourceIdx++ ) {
+			if ( currentFolder.m_ResourceList[resourceIdx].m_pResource != nullptr ) {
+				m_pSelectBrowser->add( ( spaces + currentFolder.m_ResourceList[resourceIdx].m_pResource->GetName() ).c_str() );
+			} else if ( currentFolder.m_ResourceList[resourceIdx].m_pPrefab != nullptr ) {
+				std::string prefabName = ( spaces + currentFolder.m_ResourceList[resourceIdx].m_pPrefab->GetPrefabName() ).c_str();
+				if ( currentFolder.m_ResourceList[resourceIdx].m_bIsDirty ) {
+					prefabName += " *";
+				}
+				m_pSelectBrowser->add( prefabName.c_str() );
+			}
+			m_SelectBrowserIdx.push_back( &currentFolder.m_ResourceList[resourceIdx] );
+		}
+		spaces.resize( spaces.length() - 1 );
+	}
+}
+
+/**
+ *	kbResourceTab::AddPrefab
+ */
+void kbResourceTab::AddPrefab( kbPrefab * pPrefab, const std::string & PackageName, const std::string & FolderName, const std::string & PrefabName ) {
+	kbResourceTabFile_t & rootPackage = m_ResourceFolderList[0];
+
+	// Iterate over packages
+	int prefabIdx = 0;
+	for ( ; prefabIdx < rootPackage.m_SubFolderList.size(); prefabIdx++ ) {
+		
+		// Search packages
+		kbResourceTabFile_t & packageFolder = rootPackage.m_SubFolderList[prefabIdx];
+		if ( packageFolder.m_FolderName != PackageName ) {
+			continue;
+		}
+ 
+		// Search sub-folders
+		int subFolderIdx = 0;
+		for ( ; subFolderIdx < packageFolder.m_SubFolderList.size(); subFolderIdx++ ) {
+			kbResourceTabFile_t & subFolder = packageFolder.m_SubFolderList[subFolderIdx];
+			if ( subFolder.m_FolderName != FolderName ) {
+				continue;
+			}
+
+			// Search prefabs
+			for ( int prefabIdx = 0; prefabIdx < subFolder.m_ResourceList.size(); prefabIdx++ ) {
+				if ( PrefabName == subFolder.m_ResourceList[prefabIdx].m_pPrefab->GetPrefabName() ) {
+					//kbError( "Prefab already exists" );
+					kbResourceTabFile_t & itemToReplace = subFolder.m_ResourceList[prefabIdx];
+					itemToReplace.m_FolderName = pPrefab->GetPrefabName();
+					itemToReplace.m_pPrefab = pPrefab;
+					RefreshResourcesTab();
+					return;
+				}
+
+				// Add prefab
+				subFolder.m_ResourceList.push_back( kbResourceTabFile_t() );
+				kbResourceTabFile_t & newPrefab = subFolder.m_ResourceList[subFolder.m_ResourceList.size() - 1];
+				newPrefab.m_FolderName = pPrefab->GetPrefabName();
+				newPrefab.m_pPrefab = pPrefab;
+				newPrefab.m_bIsDirty = true;
+				packageFolder.m_bIsDirty = true;
+				RefreshResourcesTab();
+				return;
+			}
+		}
+
+		// Add sub-folder and then prefab
+		packageFolder.m_SubFolderList.push_back( kbResourceTabFile_t() );
+		kbResourceTabFile_t & newSubFolder = packageFolder.m_SubFolderList[packageFolder.m_SubFolderList.size() - 1];
+		newSubFolder.m_FolderName = FolderName;
+
+		newSubFolder.m_ResourceList.push_back( kbResourceTabFile_t() );
+		kbResourceTabFile_t & newPrefabEntry = newSubFolder.m_ResourceList[newSubFolder.m_ResourceList.size() - 1];
+		newPrefabEntry.m_FolderName = pPrefab->GetPrefabName();
+		newPrefabEntry.m_pPrefab = pPrefab;
+		RefreshResourcesTab();
+		return;
+	}
+
+	rootPackage.m_SubFolderList.push_back( kbResourceTabFile_t() );
+	kbResourceTabFile_t & packageFolder = rootPackage.m_SubFolderList[rootPackage.m_SubFolderList.size() - 1];
+	packageFolder.m_FolderName = PackageName;
+
+	// Add sub-folder and then prefab
+	packageFolder.m_SubFolderList.push_back( kbResourceTabFile_t() );
+	kbResourceTabFile_t & newSubFolder = packageFolder.m_SubFolderList[packageFolder.m_SubFolderList.size() - 1];
+	newSubFolder.m_FolderName = FolderName;
+
+	newSubFolder.m_ResourceList.push_back( kbResourceTabFile_t() );
+	kbResourceTabFile_t & newPrefabEntry = newSubFolder.m_ResourceList[newSubFolder.m_ResourceList.size() - 1];
+	newPrefabEntry.m_FolderName = pPrefab->GetPrefabName();
+	newPrefabEntry.m_pPrefab = pPrefab;
+
+	RefreshResourcesTab();
+}
+
+/**
+ *	kbResourceTab::GetSelectedPrefab
+ */
+kbPrefab * kbResourceTab::GetSelectedPrefab() const {
+	const int value = m_pSelectBrowser->value() - 1;
+
+	if ( value < 0 || value >= m_SelectBrowserIdx.size() ) {
+		return nullptr;
+	}
+
+	return m_SelectBrowserIdx[value]->m_pPrefab;
+}
+
+/**
+ *	kbPackage::MarkPrefabDirty
+ */
+void kbResourceTab::MarkPrefabDirty( kbPrefab * prefab ) {
+	int value = m_pSelectBrowser->value() - 1;
+	if ( value < 0 || value >= m_SelectBrowserIdx.size() ) {
+		return;
+	}
+
+	if ( m_SelectBrowserIdx[value]->m_pPrefab == prefab ) {
+		m_SelectBrowserIdx[value]->m_bIsDirty = true;
+
+		while( value > 0 && GetFileExtension( g_pResourceTab->m_SelectBrowserIdx[value]->m_FolderName ) != "kbPkg" ) {
+			value--;
+		}
+		if ( value >= 0 ) {
+			g_pResourceTab->m_SelectBrowserIdx[value]->m_bIsDirty = true;
+		}
+	}
+
+	RefreshResourcesTab();
+}

@@ -1,0 +1,54 @@
+kbGameEntity 827695256 1208529340 4188909956 2462301780 {
+	kbTransformComponent { 
+		Enabled = 0
+		Name = "Hello_1"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = -0.015256 2.984744 24.000000
+		Scale = 1.000000 1.000000 1.000000
+	}
+	kbParticleComponent { 
+		Enabled = 1
+		Name = ""
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 0.000000 0.000000 0.000000
+		Scale = 1.000000 1.000000 1.000000
+		EndColor = 0.000000 0.000000 0.000000 0.000000
+		MaxDuration =  7.000000
+		MaxEndSize = 8.000000 8.000000 8.000000
+		MaxEndVelocity = 0.000000 0.000000 0.000000
+		MaxSpawnRate =  11.000000
+		MaxStartSize = 2.000000 2.000000 2.000000
+		MaxStartVelocity = 2.000000 15.000000 3.000000
+		MinDuration =  4.000000
+		MinEndSize = 5.000000 5.000000 5.000000
+		MinEndVelocity = 2.000000 0.000000 3.000000
+		MinSpawnRate =  10.000000
+		MinStartSize = 1.000000 1.000000 1.000000
+		MinStartVelocity = -2.000000 14.000000 0.000000
+		ParticleTexture = ../../kbEngine/assets/Textures/Editor/white.bmp
+		StartColor = 1.000000 1.000000 1.000000 1.000000
+		TotalDuration =  -1.000000
+	}
+}
+kbGameEntity 798957522 1199391058 3576074941 975268693 {
+	kbTransformComponent { 
+		Enabled = 0
+		Name = "Hello_1"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = -6.785930 6.728492 8.487682
+		Scale = 1.000000 1.000000 1.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		m_RenderPass = LightingPass
+		Model = ./assets/models/test/sphere.ms3d
+		ShaderOverride = 0
+			
+	}
+	kbDirectionalLightComponent { 
+		Enabled = 1
+		CastsShadow = 0
+		Color = 1.000000 1.000000 1.000000 1.000000
+		#ShadowSplits = 0
+	}
+}
