@@ -446,8 +446,6 @@ public:
 															ID3D11InputLayout *& vertexLayout, const std::string & vertexShaderFunc, 
 															const std::string & pixelShaderFunc );
 
-	byte *										GetRawTextureData( const std::string & fileName, unsigned int & width, unsigned int & height );
-
 	// Various Drawing commands
 	void										DrawScreenSpaceQuad( const int start_x, const int start_y, const int size_x, const int size_y, const int textureIndex, kbShader *const pShader = nullptr );
 	void										DrawLine( const kbVec3 & start, const kbVec3 & end, const kbColor & color );
@@ -557,12 +555,7 @@ private:
 	kbRenderWindow *							m_pCurrentRenderWindow;    // the render window BeginScene was called with
 
 	const static int Max_Num_Textures = 128;
-	struct kbRendererTexture_t {
-	   ID3D11ShaderResourceView *				m_pShaderResourceView;
-	   ID3D11Resource *							m_pCPUReadableTexture;
-	   int										m_Width;
-	   int										m_Height;
-	} m_Textures[ Max_Num_Textures ];
+	kbTexture *									m_pTextures[Max_Num_Textures];
 	
 	ID3D11SamplerState *						m_pBasicSamplerState;
 	ID3D11SamplerState *						m_pNormalMapSamplerState;

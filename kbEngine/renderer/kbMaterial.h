@@ -7,6 +7,8 @@
 #ifndef _KBMATERIAL_H_
 #define _KBMATERIAL_H_
 
+#include <memory>
+
 /**
  *	kbTexture
  */
@@ -15,23 +17,31 @@ class kbTexture : public kbResource {
 //---------------------------------------------------------------------------------------------------
 public:
 
-												kbTexture() : m_pTexture( nullptr ) { }
-												~kbTexture() { kbErrorCheck( m_pTexture == nullptr, " kbTexture::~kbTexture() - Destructing a kbTexture that hasn't been released" ); }
+												kbTexture();
+	explicit									kbTexture( const kbString & fileName );
+
+												~kbTexture() { kbErrorCheck( m_pGPUTexture == nullptr, " kbTexture::~kbTexture() - Destructing a kbTexture that hasn't been released" ); }
 
 	virtual kbTypeInfoType_t					GetType() const { return KBTYPEINFO_TEXTURE; }
 
 	void										Release() { Release_Internal(); }		// todo: should be a resource like everything else
 
-	void *										GetTextureData() const { return m_pTexture; }
+	kbHWTexture *								GetGPUTexture() const { return m_pGPUTexture; }
 
-	byte *										GetRGBAData( unsigned int & width, unsigned int & height ) const;
+	const uint8_t *								GetCPUTexture( unsigned int & width, unsigned int & height );
 
 private:
 
 	virtual bool								Load_Internal();
 	virtual void								Release_Internal();
 
-	kbHWTexture *								m_pTexture;
+	kbHWTexture *								m_pGPUTexture;
+	std::unique_ptr<uint8_t[]>					m_pCPUTexture;
+
+	uint										m_TextureWidth;
+	uint										m_TextureHeight;
+
+	bool										m_bIsCPUTexture;
 };
 
 /**

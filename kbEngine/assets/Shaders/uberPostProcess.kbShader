@@ -59,8 +59,5 @@ SamplerState depthTextureSampler;
    float distToPixel = length( pixelPosition.xyz );
    float lerpVal = ( distToPixel - fogStartDistance ) / ( fogEndDistance - fogStartDistance );
    float4 outColor = lerp( inSceneColor, fogColor, saturate( lerpVal ) );
-   float lum = dot( outColor.xyz, float3( 0.3f, 0.59f, 0.11f ) );
-
-   outColor.xyz = lerp( outColor.xyz * tint.xyz, float3( lum, lum, lum ), tint.w ) + additiveColor.xyz;
    return outColor;
 }

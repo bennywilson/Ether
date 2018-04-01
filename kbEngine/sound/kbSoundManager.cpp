@@ -205,9 +205,8 @@ HRESULT kbWaveFile::ResetFile() {
  */
 kbSoundManager::kbSoundManager() {
 
-	kbLog( "Creatine Audio Engine" );
+	kbLog( "Creating Audio Engine" );
 
-	CoInitializeEx( NULL, COINIT_MULTITHREADED );
 	HRESULT hr = XAudio2Create( &m_pXAudioEngine );
 	kbErrorCheck( SUCCEEDED( hr ), "kbSoundManager::kbSoundManager() - Failed to create XAudio2" );
 

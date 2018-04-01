@@ -42,7 +42,7 @@ varMetaData_t *	kbEditorEntity::GetPropertyMetaData( const kbComponent * pCompon
 	if ( m_pGameEntity == NULL || pComponent == NULL )
 		return NULL;
 
-	std::string metaDataLookUp = std::to_string( ( unsigned int )pComponent);
+	std::string metaDataLookUp = std::to_string( ( UINT_PTR )pComponent);
 	metaDataLookUp += "_";
 	metaDataLookUp += std::to_string( ( unsigned int ) (Offset));
 	

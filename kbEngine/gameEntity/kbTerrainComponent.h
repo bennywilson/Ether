@@ -25,11 +25,14 @@ public:
 
 												~kbTerrainComponent();
 
-	virtual void								PostLoad();
+	virtual void								PostLoad() override;
 
 	void										SetHeightMap( kbTexture * pTexture ) { m_pHeightMap = pTexture; }
 
-	virtual void								EditorChange( const std::string & propertyName );
+	virtual void								EditorChange( const std::string & propertyName ) override;
+
+	virtual void								RenderSync() override;
+
 
 protected:
 
@@ -40,6 +43,8 @@ protected:
 	float										m_TerrainWidth;
 	float										m_TerrainLength;
 	kbModel										m_TerrainModel;
+
+	bool										m_bRegenerateTerrain;
 
 private:
 	

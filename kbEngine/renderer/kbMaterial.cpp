@@ -5,10 +5,11 @@
 // 2016-2018 kbEngine 2.0
 //===================================================================================================
 #include <Wincodec.h>
-#include <memory>
 #include "kbCore.h"
 #include "kbRenderer_defs.h"
 #include "kbMaterial.h"
+
+extern ID3D11DeviceContext * g_pImmediateContext;
 
 // Code to initialize a texture using the Windows Imaging Component from https://msdn.microsoft.com/en-us/library/windows/desktop/ff476904(v=vs.85).aspx
 template<class T> class ScopedObject {
@@ -220,13 +221,18 @@ static size_t _WICBitsPerPixel( REFGUID targetGuid ) {
 }
 
 
-static HRESULT CreateTextureFromWIC( ID3D11Device *const d3dDevice,
-									 ID3D11DeviceContext *const d3dContext,
-									 IWICBitmapFrameDecode *const frame,
+static HRESULT CreateTextureFromWIC( IWICBitmapFrameDecode *const frame,
 									 ID3D11Resource ** texture,
 									 ID3D11ShaderResourceView ** textureView,
 									 size_t maxsize,
-									 const kbString & fileName ) {
+									 const kbString & fileName,
+									 std::unique_ptr<uint8_t[]> & temp,
+									 UINT & twidth,
+									 UINT & theight ) {
+
+	twidth = 0;
+	theight = 0;
+
 	UINT width, height;
 	HRESULT hr = frame->GetSize( &width, &height );
 	if ( FAILED( hr ) ) {
@@ -239,7 +245,6 @@ static HRESULT CreateTextureFromWIC( ID3D11Device *const d3dDevice,
 		maxsize = 8192;
 	}
 	
-	UINT twidth, theight;
 	if ( width > maxsize || height > maxsize ) {
 		const float aspectRatio = static_cast<float>(height) / static_cast<float>(width);
 		if ( width > height ) {
@@ -296,7 +301,7 @@ static HRESULT CreateTextureFromWIC( ID3D11Device *const d3dDevice,
 	// Verify our target format is supported by the current device
 	// (handles WDDM 1.0 or WDDM 1.1 device driver cases as well as DirectX 11.0 Runtime without 16bpp format support)
 	UINT support = 0;
-	hr = d3dDevice->CheckFormatSupport( format, &support );
+	hr = g_pD3DDevice->CheckFormatSupport( format, &support );
 	if ( FAILED(hr) || !(support & D3D11_FORMAT_SUPPORT_TEXTURE2D) ) {
 		// Fallback to RGBA 32-bit format which is supported by all devices
 		memcpy( &convertGUID, &GUID_WICPixelFormat32bppRGBA, sizeof(WICPixelFormatGUID) );
@@ -308,7 +313,7 @@ static HRESULT CreateTextureFromWIC( ID3D11Device *const d3dDevice,
 	size_t rowPitch = ( twidth * bpp + 7 ) / 8;
 	size_t imageSize = rowPitch * theight;
 	
-	std::unique_ptr<uint8_t[]> temp( new uint8_t[ imageSize ] );
+	temp = std::unique_ptr<uint8_t[]>( new uint8_t[ imageSize ] );
 	
 	// Load image data
 	if ( memcmp( &convertGUID, &pixelFormat, sizeof(GUID) ) == 0 && twidth == width && theight == height ) {
@@ -372,7 +377,7 @@ static HRESULT CreateTextureFromWIC( ID3D11Device *const d3dDevice,
 			return E_NOINTERFACE;
 		}
 
-		IWICFormatConverter * FC;
+		ScopedObject<IWICFormatConverter> FC;
 		hr = pWIC->CreateFormatConverter( &FC );
 		if ( FAILED(hr) ) {
 			return hr;
@@ -391,9 +396,9 @@ static HRESULT CreateTextureFromWIC( ID3D11Device *const d3dDevice,
 	
 	// See if format is supported for auto-gen mipmaps (varies by feature level)
 	bool autogen = false;
-	if ( d3dContext != nullptr && textureView != nullptr ) {
+	if ( textureView != nullptr ) {
 		UINT fmtSupport = 0;
-		hr = d3dDevice->CheckFormatSupport( format, &fmtSupport );
+		hr = g_pD3DDevice->CheckFormatSupport( format, &fmtSupport );
 		if ( SUCCEEDED(hr) && ( fmtSupport & D3D11_FORMAT_SUPPORT_MIP_AUTOGEN ) ) {
 			autogen = true;
 		}
@@ -419,7 +424,7 @@ static HRESULT CreateTextureFromWIC( ID3D11Device *const d3dDevice,
 	initData.SysMemSlicePitch = static_cast<UINT>( imageSize );
 	
 	ID3D11Texture2D* tex = nullptr;
-	hr = d3dDevice->CreateTexture2D( &desc, (autogen) ? nullptr : &initData, &tex );
+	hr = g_pD3DDevice->CreateTexture2D( &desc, (autogen) ? nullptr : &initData, &tex );
 	if ( SUCCEEDED(hr) && tex != nullptr ) {
 	    if ( textureView !=  nullptr ) {
 			D3D11_SHADER_RESOURCE_VIEW_DESC SRVDesc;
@@ -428,16 +433,15 @@ static HRESULT CreateTextureFromWIC( ID3D11Device *const d3dDevice,
 			SRVDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
 			SRVDesc.Texture2D.MipLevels = (autogen) ? -1 : 1;
 
-			hr = d3dDevice->CreateShaderResourceView( tex, &SRVDesc, textureView );
+			hr = g_pD3DDevice->CreateShaderResourceView( tex, &SRVDesc, textureView );
 			if ( FAILED(hr) ) {
 				tex->Release();
 				return hr;
 			}
 			
-			if ( autogen ) {
-				assert( d3dContext != 0 );
-				d3dContext->UpdateSubresource( tex, 0, nullptr, temp.get(), static_cast<UINT>(rowPitch), static_cast<UINT>(imageSize) );
-				d3dContext->GenerateMips( *textureView );
+			if ( autogen == true ) {
+				g_pImmediateContext->UpdateSubresource( tex, 0, nullptr, temp.get(), static_cast<UINT>(rowPitch), static_cast<UINT>(imageSize) );
+				g_pImmediateContext->GenerateMips( *textureView );
 			}
 		}
 	
@@ -457,6 +461,31 @@ static HRESULT CreateTextureFromWIC( ID3D11Device *const d3dDevice,
 }
 
 /**
+ *	kbTexture:: kbTexture
+ */
+kbTexture::kbTexture() :
+	m_pGPUTexture( nullptr ),
+	m_bIsCPUTexture( false ),
+	m_TextureWidth( 0 ),
+	m_TextureHeight( 0 ) {
+}
+
+/**
+ *	kbTexture:: kbTexture
+ */
+kbTexture::kbTexture( const kbString & fileName ) :
+	m_pGPUTexture( nullptr ),
+	m_bIsCPUTexture( false ),
+	m_TextureWidth( 0 ),
+	m_TextureHeight( 0 ) {
+
+	m_FullFileName = fileName.stl_str();
+	m_FullName = kbString( m_FullFileName );
+
+	Load_Internal();
+}
+
+/**
  *	kbTexture::Load_Internal
  */
 bool kbTexture::Load_Internal() {
@@ -473,7 +502,7 @@ bool kbTexture::Load_Internal() {
 	const std::wstring wideName = std::wstring( GetFullFileName().begin(), GetFullFileName().end() );
 
     ScopedObject<IWICBitmapDecoder> decoder;
-    HRESULT hr = pWIC->CreateDecoderFromFilename( wideName.c_str(), 0, GENERIC_READ, WICDecodeMetadataCacheOnDemand, &decoder );
+    HRESULT hr = pWIC->CreateDecoderFromFilename( wideName.c_str(), nullptr, GENERIC_READ, WICDecodeMetadataCacheOnDemand, &decoder );
     if ( FAILED( hr ) ) {
         return hr;
 	}
@@ -484,27 +513,41 @@ bool kbTexture::Load_Internal() {
         return hr;
 	}
 
-	extern ID3D11DeviceContext * g_pImmediateContext;
-    hr = CreateTextureFromWIC( g_pD3DDevice, g_pImmediateContext, frame.Get(), nullptr, &m_pTexture, 0, GetFullName() );
+    hr = CreateTextureFromWIC( frame.Get(), nullptr, &m_pGPUTexture, 0, GetFullName(), m_pCPUTexture, m_TextureWidth, m_TextureHeight );
     if ( FAILED( hr ) ) { 
         return hr;
+	}
+
+	if ( m_bIsCPUTexture == false ) {
+		m_pCPUTexture.reset();
 	}
 
 	return true;
 }
 
 /**
- *	kbTexture::GetRGBAData
+ *	kbTexture::GetCPUTexture
  */
-byte * kbTexture::GetRGBAData( unsigned int & width, unsigned int & height ) const {
-	return g_pRenderer->GetRawTextureData( m_FullFileName, width, height );
+const uint8_t * kbTexture::GetCPUTexture( unsigned int & width, unsigned int & height ) {
+
+	if ( m_bIsCPUTexture == false ) {
+
+		m_bIsCPUTexture = true;
+		Release();
+		Load_Internal();
+	}
+
+	width = m_TextureWidth;
+	height = m_TextureHeight;
+
+	return m_pCPUTexture.get();
 }
 
 /**
  *	kbTexture::Release_Internal
  */
 void kbTexture::Release_Internal() {
-	SAFE_RELEASE( m_pTexture );
+	SAFE_RELEASE( m_pGPUTexture );
 }
 
 /**

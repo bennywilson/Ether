@@ -27,6 +27,8 @@ kbTimer g_GlobalTimer;
  *	InitializeKBEngine
  */
 void InitializeKBEngine(char * logName) {
+	CoInitializeEx( NULL, COINIT_MULTITHREADED );
+
 	g_GlobalTimer.Reset();
 	g_WriteFileMutex = CreateMutex( nullptr, FALSE, nullptr );
 

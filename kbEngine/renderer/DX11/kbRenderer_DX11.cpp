@@ -23,7 +23,6 @@
 using namespace OVR;
 
 #if _DEBUG
-#include "D3Dcommon.h"
 #pragma comment( lib, "dxguid.lib")
 const UINT GCreateDebugD3DDevice = true;
 #else
@@ -33,9 +32,9 @@ const UINT GCreateDebugD3DDevice = false;
 const UINT GDebugCopyBackBufferToCPU = false;
 
 ID3D11Device * g_pD3DDevice = nullptr;
-kbRenderer_DX11 * g_pRenderer = nullptr;
 ID3D11DeviceContext * g_pImmediateContext = nullptr;
- 
+kbRenderer_DX11 * g_pRenderer = nullptr;
+
 const float	kbRenderer_DX11::Near_Plane = 1.0f;
 const float	kbRenderer_DX11::Far_Plane = 20000.0f;
 const float g_DebugTextSize = 0.0165f;
@@ -428,7 +427,7 @@ kbRenderer_DX11::kbRenderer_DX11() :
 	m_FogEndDistance_RenderThread( 2200 ),
 	m_DebugText( nullptr ) {
 
-	memset( m_Textures, 0, sizeof( m_Textures ) );
+	ZeroMemory( m_pTextures, sizeof(m_pTextures) );
 
 	m_OculusTexture[0] = m_OculusTexture[1] = nullptr;
 	g_pRenderer = this;
@@ -487,6 +486,7 @@ void kbRenderer_DX11::Init( HWND hwnd, const int frameWidth, const int frameHeig
 	kbErrorCheck( SUCCEEDED( hr ), "kbRenderer_DX11::Init() - Failed to create D3D11 Device and swap chain" );
 
 	g_pD3DDevice = m_pD3DDevice;
+	g_pImmediateContext = m_pImmediateContext;
 	m_RenderState.SetDeviceAndContext( m_pD3DDevice, m_pImmediateContext );
 
 	// create swap chains
@@ -824,7 +824,7 @@ void kbRenderer_DX11::Init( HWND hwnd, const int frameWidth, const int frameHeig
 	kbGPUTimeStamp::Init( m_pImmediateContext );
 
 	LoadTexture( "../../kbEngine/assets/Textures/textbackground.dds", 3 );
-	LoadTexture( "../../kbEngine/assets/Textures/Font.jpg", 4 );
+	LoadTexture( "../../kbEngine/assets/Textures/Font.bmp", 4 );
 
 	m_DebugText = new kbModel();
 	m_DebugText->CreateDynamicModel( 10000, 10000 );
@@ -1088,15 +1088,18 @@ void kbRenderer_DX11::Shutdown() {
 
 	kbLog( "Shutting down kbRenderer" );
 
-	// Wait for render thread to become idle	
+	// Wait for render thread to become idle
 	m_pRenderJob->RequestShutdown();
 	while( m_pRenderJob->IsJobFinished() == false ) { }
 	delete m_pRenderJob;
 	m_pRenderJob = nullptr;
 
 	for ( int i = 0; i < Max_Num_Textures; i++ ) {
-		SAFE_RELEASE( m_Textures[i].m_pShaderResourceView );
-		SAFE_RELEASE( m_Textures[i].m_pCPUReadableTexture );
+		if ( m_pTextures[i] != nullptr ) {
+			m_pTextures[i]->Release();
+			delete m_pTextures[i];
+			m_pTextures[i] = nullptr;
+		}
 	}
 
 	SAFE_RELEASE( m_pOffScreenRenderTargetTexture );
@@ -2211,7 +2214,9 @@ void kbRenderer_DX11::RenderDebugText() {
 	m_pImmediateContext->IASetPrimitiveTopology( D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST );
 	m_pImmediateContext->RSSetState( m_pNoFaceCullingRasterizerState );
 
-	m_pImmediateContext->PSSetShaderResources( 0, 1, &m_Textures[4].m_pShaderResourceView );
+	ID3D11ShaderResourceView *const pShaderResourceView = (ID3D11ShaderResourceView*)m_pTextures[4]->GetGPUTexture();
+
+	m_pImmediateContext->PSSetShaderResources( 0, 1, &pShaderResourceView );
 	m_pImmediateContext->PSSetSamplers( 0, 1, &m_pBasicSamplerState );
 	m_pImmediateContext->IASetInputLayout( (ID3D11InputLayout*)m_pSimpleAdditiveShader->GetVertexLayout() );
 	m_pImmediateContext->VSSetShader( (ID3D11VertexShader *)m_pSimpleAdditiveShader->GetVertexShader(), nullptr, 0 );
@@ -2717,84 +2722,17 @@ bool kbRenderer_DX11::LoadTexture( const char * name, int index, int width, int 
 		return false;
 	}
 
-	SAFE_RELEASE( m_Textures[ index ].m_pShaderResourceView );
-	SAFE_RELEASE( m_Textures[ index ].m_pCPUReadableTexture );
+	if ( m_pTextures[index] != nullptr ) {
+		m_pTextures[index]->Release();
+		delete m_pTextures[index];
+	}
 
-	// todo
+	m_pTextures[index] = new kbTexture( kbString(name) );
+
 	return true;
-
-/*	D3DX11_IMAGE_LOAD_INFO loadInfo;
-	D3DX11_IMAGE_INFO sourceInfo;
-	loadInfo.Width = ( width != -1 ) ? ( width ) : ( D3DX11_DEFAULT );
-	loadInfo.Height = ( height != -1 ) ? ( height ) : ( D3DX11_DEFAULT );
-	loadInfo.Depth = D3DX11_DEFAULT;
-	loadInfo.FirstMipLevel = D3DX11_DEFAULT;
-	loadInfo.MipLevels = D3DX11_DEFAULT;
-	loadInfo.Usage = D3D11_USAGE_DEFAULT;
-	loadInfo.BindFlags = D3DX11_DEFAULT;
-	loadInfo.CpuAccessFlags = D3DX11_DEFAULT;
-	loadInfo.MiscFlags = D3DX11_DEFAULT;
-	loadInfo.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
-	loadInfo.Filter = D3DX11_FILTER_LINEAR;
-	loadInfo.MipFilter = D3DX11_DEFAULT;
-	loadInfo.pSrcInfo = &sourceInfo;
-
-	HRESULT hr = D3DX11CreateShaderResourceViewFromFile( m_pD3DDevice, name, &loadInfo, nullptr, &m_Textures[index].m_pShaderResourceView, nullptr );
-	if ( FAILED( hr ) ) {
-		kbError( "Failed to load texture" );
-		return false;
-	}
-	
-	loadInfo.MipLevels = 1;
-	loadInfo.Format = DXGI_FORMAT_R8G8B8A8_TYPELESS;
-	loadInfo.Usage = D3D11_USAGE_STAGING;
-	loadInfo.CpuAccessFlags = D3D11_CPU_ACCESS_READ;
-	loadInfo.BindFlags = 0;
-	m_Textures[index].m_Width = ( width != -1 ) ? ( width ) : ( sourceInfo.Width );
-	m_Textures[index].m_Height = ( height != -1 ) ? ( height ) : ( sourceInfo.Height );
-
-	hr = D3DX11CreateTextureFromFile( m_pD3DDevice, name, &loadInfo, nullptr, &m_Textures[index].m_pCPUReadableTexture, nullptr );
-
-	if ( FAILED( hr ) ) {
-		kbError( "Failed to load texture" );
-		return false;
-	}
-
-	return hr == S_OK;*/
 }
 
 /**
- *	kbRenderer_DX11::GetRawTextureData
- */
-byte * kbRenderer_DX11::GetRawTextureData( const std::string & fileName, unsigned int & width, unsigned int & height ) {
-	if ( LoadTexture( fileName.c_str(), 127 ) == false ) {
-		return nullptr;
-	}
-
-	unsigned int textureSizeInBytes = m_Textures[127].m_Width * m_Textures[127].m_Height * 4;
-	byte * rawData = new byte[ textureSizeInBytes ];
-
-	D3D11_MAPPED_SUBRESOURCE mappedResource;
-	m_pImmediateContext->Map( m_Textures[127].m_pCPUReadableTexture, 0, D3D11_MAP_READ, 0, &mappedResource );
-
-	struct pixel {
-		byte r;
-		byte g;
-		byte b;
-		byte a;
-	};
-
-	pixel * pixelData = ( pixel * ) mappedResource.pData;
-
-	memcpy( rawData, pixelData, textureSizeInBytes );
-	m_pImmediateContext->Unmap( m_Textures[127].m_pCPUReadableTexture, 0 );
-
-	width = m_Textures[127].m_Width;
-	height = m_Textures[127].m_Height;
-	return rawData;
-}
-
-/*
  *	kbRenderer_DX11::LoadShader
  */
 void kbRenderer_DX11::LoadShader( const std::string & fileName, ID3D11VertexShader *& vertexShader, ID3D11PixelShader *& pixelShader, ID3D11InputLayout *& vertexLayout, const std::string & vertexShaderFunc, const std::string & pixelShaderFunc ) {
@@ -3020,7 +2958,7 @@ void kbRenderer_DX11::RenderScreenSpaceQuadImmediate( const int start_x, const i
 	const float xPos = xScale + start_x / m_RenderWindowList[0]->m_fViewPixelHalfWidth;
 	const float yPos = yScale + start_y / m_RenderWindowList[0]->m_fViewPixelHalfHeight;
 
-	if ( m_Textures[textureIndex].m_pShaderResourceView == nullptr ) {
+	if ( m_pTextures[textureIndex] == nullptr ) {
 		return;
 	}
 
@@ -3032,7 +2970,10 @@ void kbRenderer_DX11::RenderScreenSpaceQuadImmediate( const int start_x, const i
 	m_pImmediateContext->IASetPrimitiveTopology( D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST );
 
 	m_pImmediateContext->RSSetState( m_pRasterizerState );
-	m_pImmediateContext->PSSetShaderResources( 0, 1, &m_Textures[textureIndex].m_pShaderResourceView );
+
+	ID3D11ShaderResourceView *const pShaderResourceView = (ID3D11ShaderResourceView*)m_pTextures[textureIndex]->GetGPUTexture();
+
+	m_pImmediateContext->PSSetShaderResources( 0, 1, &pShaderResourceView );
 	m_pImmediateContext->PSSetSamplers( 0, 1, &m_pBasicSamplerState );
 	m_pImmediateContext->IASetInputLayout( (ID3D11InputLayout*)pShader->GetVertexLayout() );
 	m_pImmediateContext->VSSetShader( (ID3D11VertexShader *)pShader->GetVertexShader(), nullptr, 0 );
@@ -3161,7 +3102,7 @@ void kbRenderer_DX11::RenderModel( const kbRenderObject *const pRenderObject, co
 
 	ID3D11Buffer * const vertexBuffer = ( ID3D11Buffer * const ) modelToRender->m_VertexBuffer.GetBufferPtr();
 	ID3D11Buffer * const indexBuffer = ( ID3D11Buffer * const ) modelToRender->m_IndexBuffer.GetBufferPtr();
-	ID3D11ShaderResourceView * const  texture = ( bShadowPass == false && modelToRender->GetMaterials()[0].GetTexture() != nullptr ) ? ( ( ID3D11ShaderResourceView * const ) modelToRender->GetMaterials()[0].GetTexture()->GetTextureData() ) : ( nullptr );
+	ID3D11ShaderResourceView * const  texture = ( bShadowPass == false && modelToRender->GetMaterials()[0].GetTexture() != nullptr ) ? ( ( ID3D11ShaderResourceView * const ) modelToRender->GetMaterials()[0].GetTexture()->GetGPUTexture() ) : ( nullptr );
 
 	m_pImmediateContext->IASetVertexBuffers( 0, 1, &vertexBuffer, &stride, &offset );
 	m_pImmediateContext->IASetIndexBuffer( indexBuffer, DXGI_FORMAT_R32_UINT, 0 );
@@ -3472,7 +3413,9 @@ void kbRenderer_DX11::RenderPretransformedDebugLines() {
 	m_pImmediateContext->IASetPrimitiveTopology( D3D11_PRIMITIVE_TOPOLOGY_LINELIST );
 
 	m_pImmediateContext->RSSetState( m_pRasterizerState );
-	m_pImmediateContext->PSSetShaderResources( 0, 1, &m_Textures[0].m_pShaderResourceView );
+
+	ID3D11ShaderResourceView *const pShaderResourceView = (ID3D11ShaderResourceView*)m_pTextures[0]->GetGPUTexture();
+	m_pImmediateContext->PSSetShaderResources( 0, 1, &pShaderResourceView );
 	m_pImmediateContext->PSSetSamplers( 0, 1, &m_pBasicSamplerState );
 	m_pImmediateContext->IASetInputLayout( (ID3D11InputLayout*)m_pDebugShader->GetVertexLayout() );
 	m_pImmediateContext->VSSetShader( (ID3D11VertexShader*) m_pDebugShader->GetVertexShader(), nullptr, 0 );
@@ -3526,7 +3469,9 @@ void kbRenderer_DX11::RenderDebugLines() {
 	m_pImmediateContext->IASetPrimitiveTopology( D3D11_PRIMITIVE_TOPOLOGY_LINELIST );
 
 	m_pImmediateContext->RSSetState( m_pRasterizerState );
-	m_pImmediateContext->PSSetShaderResources( 0, 1, &m_Textures[0].m_pShaderResourceView );
+
+	ID3D11ShaderResourceView *const pShaderResourceView = (ID3D11ShaderResourceView*)m_pTextures[0]->GetGPUTexture();
+	m_pImmediateContext->PSSetShaderResources( 0, 1, &pShaderResourceView );
 	m_pImmediateContext->PSSetSamplers( 0, 1, &m_pBasicSamplerState );
 	m_pImmediateContext->IASetInputLayout( (ID3D11InputLayout*)m_pDebugShader->GetVertexLayout() );
 	m_pImmediateContext->VSSetShader( (ID3D11VertexShader*) m_pDebugShader->GetVertexShader(), nullptr, 0 );
@@ -3570,11 +3515,14 @@ void kbRenderer_DX11::RenderDebugBillboards() {
 	m_pImmediateContext->IASetInputLayout( (ID3D11InputLayout*)m_pDebugShader->GetVertexLayout() );
 	m_pImmediateContext->VSSetShader( (ID3D11VertexShader *)m_pDebugShader->GetVertexShader(), nullptr, 0 );
 	m_pImmediateContext->PSSetShader( (ID3D11PixelShader *)m_pDebugShader->GetPixelShader(), nullptr, 0 );
-	m_pImmediateContext->PSSetShaderResources( 0, 1, &m_Textures[0].m_pShaderResourceView );
+
+
+	//m_pImmediateContext->PSSetShaderResources( 0, 1, &m_Textures[0].m_pShaderResourceView );
 
 	for ( int i = 0; i < m_DebugBillboards.size(); i++ ) {
 		debugDrawObject_t & currBillBoard = m_DebugBillboards[i];
-		m_pImmediateContext->PSSetShaderResources( 0, 1, &m_Textures[currBillBoard.m_TextureIndex].m_pShaderResourceView );
+		ID3D11ShaderResourceView *const pShaderResourceView = (ID3D11ShaderResourceView*)m_pTextures[currBillBoard.m_TextureIndex]->GetGPUTexture();
+		m_pImmediateContext->PSSetShaderResources( 0, 1, &pShaderResourceView );
 	
 		D3D11_MAPPED_SUBRESOURCE mappedResource;
 		HRESULT hr = m_pImmediateContext->Map( m_pDefaultShaderConstantsBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource );

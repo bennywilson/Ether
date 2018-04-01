@@ -24,10 +24,11 @@ std::vector<debugNormal> terrainNormals;
  *	kbTerrainComponent
  */
 void kbTerrainComponent::Constructor() {
-	m_pHeightMap = NULL;
+	m_pHeightMap = nullptr;
 	m_HeightScale = 0.3f;
 	m_TerrainWidth = 256.0f;
 	m_TerrainLength = 256.0;
+	m_bRegenerateTerrain = false;
 }
 
 /**
@@ -36,7 +37,7 @@ void kbTerrainComponent::Constructor() {
 kbTerrainComponent::~kbTerrainComponent() {
    if ( m_pHeightMap ) {
       m_pHeightMap->Release();
-      m_pHeightMap = NULL;
+      m_pHeightMap = nullptr;
    }
 
    m_TerrainModel.Release();
@@ -48,8 +49,8 @@ kbTerrainComponent::~kbTerrainComponent() {
 void kbTerrainComponent::PostLoad() {
 	Super::PostLoad();
 
-	if ( m_pHeightMap != NULL ) {
-		GenerateTerrain();
+	if ( m_pHeightMap != nullptr ) {
+		m_bRegenerateTerrain = true;
 	}
 }
 
@@ -60,7 +61,7 @@ void kbTerrainComponent::EditorChange( const std::string & propertyName ) {
 	Super::EditorChange( propertyName );
 
 	if ( propertyName == "HeightMap" ) {
-		GenerateTerrain();
+		m_bRegenerateTerrain = true;
 	}
 }
 
@@ -68,7 +69,7 @@ void kbTerrainComponent::EditorChange( const std::string & propertyName ) {
  *	kbTerrainComponent::GenerateTerrain
  */
 void kbTerrainComponent::GenerateTerrain() {
-	if ( m_pHeightMap == NULL ) {
+	if ( m_pHeightMap == nullptr ) {
 		kbError( "No height map file found for terrain component on entity %s", m_pParent->GetName().c_str() );
 		return;
 	}
@@ -82,7 +83,7 @@ void kbTerrainComponent::GenerateTerrain() {
 
 	unsigned int width, length;
 
-	pixelData * pTextureBuffer = ( pixelData * )m_pHeightMap->GetRGBAData( width, length );
+	const pixelData *const pTextureBuffer = ( pixelData * )m_pHeightMap->GetCPUTexture( width, length );
 
 	// Build terrain here
 	const int numVerts = width * length;
@@ -113,13 +114,6 @@ void kbTerrainComponent::GenerateTerrain() {
 					}
 				}
 			}
-			/*if ( startX > 0 ) { divisor += 1.0f; height += ( float ) pTextureBuffer[textureIndex].r; };
-			if ( startX < width - 1 ) { divisor += 1.0f; height += ( float ) pTextureBuffer[textureIndex + 1].r; };
-			if ( startX < width - 2 ) { divisor += 1.0f; height += ( float ) pTextureBuffer[textureIndex + 2].r; };
-			if ( startX < width - 3 ) { divisor += 1.0f; height += ( float ) pTextureBuffer[textureIndex + 3].r; };
-
-			if ( startY > 0 ) { divisor += 1.0f;  height += ( float ) pTextureBuffer[textureIndex + width].r; };
-			if ( startY < length - 1 ) { divisor += 1.0f;  height += ( float ) pTextureBuffer[textureIndex + width + 1].r; };*/
 
 			height *= ( m_HeightScale / divisor );
 			pVerts[currentVert].Clear();
@@ -168,20 +162,19 @@ void kbTerrainComponent::GenerateTerrain() {
 		for ( unsigned int x = 0; x < width - 1; x++ ) {
 			
 			unsigned int currentIndex = ( y * width ) + x;
-			pIndices[ currentIndexToWrite + 0 ] = currentIndex;
+			pIndices[ currentIndexToWrite + 2 ] = currentIndex;
 			pIndices[ currentIndexToWrite + 1 ] = currentIndex + 1;
-			pIndices[ currentIndexToWrite + 2 ] = currentIndex + width;
+			pIndices[ currentIndexToWrite + 0 ] = currentIndex + width;
 
-			pIndices[ currentIndexToWrite + 3 ] = currentIndex + 1;
+			pIndices[ currentIndexToWrite + 5 ] = currentIndex + 1;
 			pIndices[ currentIndexToWrite + 4 ] = currentIndex + 1 + width;
-			pIndices[ currentIndexToWrite + 5 ] = currentIndex + width;
+			pIndices[ currentIndexToWrite + 3 ] = currentIndex + width;
 
 			currentIndexToWrite += 6;
 		}
 	}
 
 	m_TerrainModel.UnmapIndexBuffer();
-	delete[] pTextureBuffer;
 
 	g_pRenderer->AddRenderObject( this, &m_TerrainModel, kbVec3( 0.0f, 0.0f, 0.0f ), kbQuat( 0.0f, 0.0f, 0.0f, 1.0f ), kbVec3( 1.0f, 1.0f, 1.0f ) );
 }
@@ -194,5 +187,17 @@ void kbTerrainComponent::Update_Internal( const float DeltaTime ) {
 
 	if ( m_TerrainModel.GetMeshes().size() > 0 && m_pParent->IsDirty() ) {
 		g_pRenderer->UpdateRenderObject( this, &m_TerrainModel, m_pParent->GetPosition(), kbQuat( 0.0f, 0.0f, 0.0f, 1.0f ), m_pParent->GetScale() );
+	}
+}
+
+/**
+ *	kbTerrainComponent::RenderSync
+ */
+void kbTerrainComponent::RenderSync() {
+	Super::RenderSync();
+
+	if ( m_bRegenerateTerrain ) {
+		GenerateTerrain();
+		m_bRegenerateTerrain = false;
 	}
 }

@@ -228,8 +228,8 @@ void kbParticleComponent::EditorChange( const std::string & propertyName ) {
 	Super::EditorChange( propertyName );
 
 	if ( propertyName == "ParticleTexture" ) {
-		if ( m_pParticleTexture != NULL && m_pParticleTexture->GetTextureData() == NULL ) {
-			m_pParticleTexture = ( kbTexture *)(g_ResourceManager.GetResource( m_pParticleTexture->GetFullFileName() ) );
+		if ( m_pParticleTexture != nullptr && m_pParticleTexture->GetGPUTexture() == nullptr ) {
+			m_pParticleTexture = (kbTexture *)g_ResourceManager.GetResource( m_pParticleTexture->GetFullFileName() );
 		}
 	}
 }
