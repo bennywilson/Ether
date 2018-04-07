@@ -2,7 +2,7 @@
 // kbEditor.cpp
 //
 //
-// 2016-2017 kbEngine 2.0
+// 2016-2018 kbEngine 2.0
 //===================================================================================================
 #include "kbCore.h"
 #include "kbVector.h"
@@ -83,13 +83,13 @@ kbEditor::kbEditor() :
 	mainMenuBar->add( "Edit/Submenu/Bbb" );
 	mainMenuBar->add( "Add/Entity", FL_CTRL+'g', CreateGameEntity, this );
 		
-	std::map< std::string, kbTypeInfoClass * > & componentMap = g_NameToTypeInfoMap->GetClassMap(); 
-	std::map< std::string, kbTypeInfoClass * >::iterator iter;
+	std::map<std::string, const kbTypeInfoClass *> & componentMap = g_NameToTypeInfoMap->GetClassMap(); 
+	std::map<std::string, const kbTypeInfoClass *>::iterator iter;
 
 	for (iter = componentMap.begin(); iter != componentMap.end(); ++iter ) {
 		std::string MenuName = "Add/Component/";
 		MenuName += iter->second->GetClassNameA().c_str();
-		mainMenuBar->add( MenuName.c_str(), FL_CTRL+'g', AddComponent, iter->second);
+		mainMenuBar->add( MenuName.c_str(), FL_CTRL+'g', AddComponent, (void*)iter->second);	// Hack cast - unfortunate
 	}
 	
 	mainMenuBar->add( "Play/Play Game From Here", FL_CTRL+'g', PlayGameFromHere );

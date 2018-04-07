@@ -2,7 +2,7 @@
 // kbConsole.cpp
 //
 //
-// 2016-2017 kbEngine 2.0
+// 2016-2018 kbEngine 2.0
 //===================================================================================================
 #include "kbInputManager.h"
 #include "kbConsole.h"
@@ -194,7 +194,7 @@ void kbConsole::Update( const float DT, const kbInput_t & Input ) {
 
 				m_CurrentCommand.clear();
 			} else if ( i >= 48 && i <= 57 ) {				// 0 - 9 Pressed -------------------------------------------------------- */
-				m_CurrentCommand += std::to_string((long long)i - 48);
+				m_CurrentCommand += std::to_string( i - 48 );
 			} else if ( i == VK_UP ) {
 				if ( m_CommandHistory.size() > 0 ) {
 					if ( m_CommandHistoryIdx == StartingCommandHistoryIdx ) {

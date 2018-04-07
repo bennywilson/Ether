@@ -1,7 +1,7 @@
 //==============================================================================
 // kbTypeInfo.cpp
 //
-// 2016-2017 kbEngine 2.0
+// 2016-2018 kbEngine 2.0
 //==============================================================================
 #include "kbCore.h"
 #include "kbVector.h"
@@ -13,7 +13,7 @@
 
 using namespace std;
 
-kbNameToTypeInfoMap * g_NameToTypeInfoMap = NULL;
+kbNameToTypeInfoMap * g_NameToTypeInfoMap = nullptr;
 
 /**
  *	kbNameToTypeInfoMap::kbNameToTypeInfoMap()
@@ -33,7 +33,7 @@ kbNameToTypeInfoMap::~kbNameToTypeInfoMap() {
 /**
  *	kbNameToTypeInfoMap::AddTypeInfo()
  */
-void kbNameToTypeInfoMap::AddTypeInfo( kbTypeInfoClass * classToAdd ) {
+void kbNameToTypeInfoMap::AddTypeInfo( const kbTypeInfoClass *const classToAdd ) {
 	m_Map[ classToAdd->GetClassName() ] = classToAdd;
 }
 
@@ -45,10 +45,10 @@ void kbNameToTypeInfoMap::AddEnum( const std::string & enumName, const std::vect
 }
 
 kbComponent * ConstructClassFromName( const std::string & className ) {
-	kbTypeInfoClass * typeInfo = g_NameToTypeInfoMap->GetTypeInfoFromClassName( className );
+	const kbTypeInfoClass *const typeInfo = g_NameToTypeInfoMap->GetTypeInfoFromClassName( className );
 
-	if ( typeInfo == NULL ) {
-		return NULL;
+	if ( typeInfo == nullptr ) {
+		return nullptr;
 	}
 
 	return typeInfo->ConstructInstance();

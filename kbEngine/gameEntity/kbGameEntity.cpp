@@ -2,7 +2,7 @@
 // kbGameEntity.cpp
 //
 //
-// 2016-2017 kbEngine 2.0
+// 2016-2018 kbEngine 2.0
 //===================================================================================================
 #include "kbCore.h"
 #include "kbVector.h"
@@ -179,7 +179,7 @@ kbGameEntity::kbGameEntity( const kbGameEntity * pGameEntity, const bool bIsPref
 	m_bDeleteWhenComponentsAreInactive( false ) {
 
 	for ( int i = 0; i < pGameEntity->m_Components.size(); i++ ) {
-		kbTypeInfoClass * pTypeInfoClass = g_NameToTypeInfoMap->GetTypeInfoFromClassName( pGameEntity->m_Components[i]->GetComponentClassName() );
+		const kbTypeInfoClass *const pTypeInfoClass = g_NameToTypeInfoMap->GetTypeInfoFromClassName( pGameEntity->m_Components[i]->GetComponentClassName() );
 		kbComponent * newComponent = pTypeInfoClass->ConstructInstance( pGameEntity->m_Components[i] );
 		AddComponent( newComponent );
 

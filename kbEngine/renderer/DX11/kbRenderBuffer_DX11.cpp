@@ -38,8 +38,8 @@ void kbRenderBuffer::CreateVertexBuffer( const int numVerts, const int vertexSiz
 #if defined(_DEBUG)
 	static int BufferNum = 0;
 	std::string BufferName = "VertexBuffer_";
-	BufferName += std::to_string((long long) BufferNum++);
-	m_pBuffer->SetPrivateData( WKPDID_D3DDebugObjectName, (UINT)BufferName.length(), BufferName.c_str());
+	BufferName += std::to_string( BufferNum++ );
+	m_pBuffer->SetPrivateData( WKPDID_D3DDebugObjectName, (UINT)BufferName.length(), BufferName.c_str() );
 #endif
 }
 
@@ -63,8 +63,8 @@ void kbRenderBuffer::CreateIndexBuffer( const int numIndices ) {
 #if defined(_DEBUG)
 	static int BufferNum = 0;
 	std::string BufferName = "IndexBuffer_";
-	BufferName += std::to_string((long long) BufferNum++);
-	m_pBuffer->SetPrivateData( WKPDID_D3DDebugObjectName, (UINT)BufferName.length(), BufferName.c_str());
+	BufferName += std::to_string( BufferNum++ );
+	m_pBuffer->SetPrivateData( WKPDID_D3DDebugObjectName, (UINT)BufferName.length(), BufferName.c_str() );
 #endif
 }
 

@@ -2,7 +2,7 @@
 // EtherGame.cpp
 //
 //
-// 2016-2017 kbEngine 2.0
+// 2016-2018 kbEngine 2.0
 //===================================================================================================
 #include "kbGame.h"
 #include "kbTypeInfo.h"
@@ -464,11 +464,11 @@ void EtherGame::Update_Internal( float DT ) {
 	
 	std::string PlayerPos;
 	PlayerPos += "x:";
-	PlayerPos += std::to_string( ( long double ) m_Camera.m_Position.x );
+	PlayerPos += std::to_string( m_Camera.m_Position.x );
 	PlayerPos += " y:";
-	PlayerPos += std::to_string( ( long double ) m_Camera.m_Position.y );
+	PlayerPos += std::to_string( m_Camera.m_Position.y );
 	PlayerPos += " z:";
-	PlayerPos += std::to_string( ( long double ) m_Camera.m_Position.z );
+	PlayerPos += std::to_string( m_Camera.m_Position.z );
 	
 	//g_pRenderer->DrawDebugText( PlayerPos, 0, 0, g_DebugTextSize, g_DebugTextSize, kbColor::green );
 

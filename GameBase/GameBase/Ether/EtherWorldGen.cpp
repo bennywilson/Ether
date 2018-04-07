@@ -2,7 +2,7 @@
 // EtherWorldGen.cpp
 //
 //
-// 2016-2017 kbEngine 2.0
+// 2016-2018 kbEngine 2.0
 //===================================================================================================
 #include "kbCore.h"
 #include "kbVector.h"
@@ -421,14 +421,14 @@ void EtherWorldGenComponent::UpdateDebug() {
 		g_pRenderer->GetRenderViewTransform( nullptr, cameraPos, cameraRot );
 
 		const kbVec3 gridAlignedPos = GetTerrainAlignedPos( cameraPos );
-		g_pRenderer->DrawDebugText( "Terrain Aligned Pos - x: " + std::to_string( (long double) gridAlignedPos.x ) + " z: " + std::to_string( (long double ) gridAlignedPos.z ), 0, 0.1f, g_DebugTextSize, 0.1f, kbColor::green );
-		g_pRenderer->DrawDebugText( "Pool Chunks Left " + std::to_string( (long long) m_TerrainChunksPool.size() ), 0, 0.1f + g_DebugTextSize * 1.0f,g_DebugTextSize, 0.1f, kbColor::green );
-		g_pRenderer->DrawDebugText( "Num Streamed in Terrain: " + std::to_string( (long long) numStreamedInTerrain ), 0, 0.1f + g_DebugTextSize * 2.01f, g_DebugTextSize, 0.1f, kbColor::green );
+		g_pRenderer->DrawDebugText( "Terrain Aligned Pos - x: " + std::to_string( gridAlignedPos.x ) + " z: " + std::to_string( (long double ) gridAlignedPos.z ), 0, 0.1f, g_DebugTextSize, 0.1f, kbColor::green );
+		g_pRenderer->DrawDebugText( "Pool Chunks Left " + std::to_string( m_TerrainChunksPool.size() ), 0, 0.1f + g_DebugTextSize * 1.0f,g_DebugTextSize, 0.1f, kbColor::green );
+		g_pRenderer->DrawDebugText( "Num Streamed in Terrain: " + std::to_string( numStreamedInTerrain ), 0, 0.1f + g_DebugTextSize * 2.01f, g_DebugTextSize, 0.1f, kbColor::green );
 
 		const kbVec3 ChunkCornerExtent = kbVec3( m_HalfChunkWorldLength * m_ChunksPerTerrainSide, 0.0f, m_HalfChunkWorldLength * m_ChunksPerTerrainSide );
 		const kbVec3 LowerLeftCornerPos = gridAlignedPos - ChunkCornerExtent;
 		const int LowerLeftArrayIndex = m_VisibleTerrainMap.GetChunkIndexFromPosition( LowerLeftCornerPos );
-		g_pRenderer->DrawDebugText( "Lower Left Corner Visible Terrain Map Idx = " + std::to_string( ( long long ) LowerLeftArrayIndex ), 0, 0.1f + g_DebugTextSize * 3.0f, g_DebugTextSize, 0.1f, kbColor::green );
+		g_pRenderer->DrawDebugText( "Lower Left Corner Visible Terrain Map Idx = " + std::to_string( LowerLeftArrayIndex ), 0, 0.1f + g_DebugTextSize * 3.0f, g_DebugTextSize, 0.1f, kbColor::green );
 
 		const float cellWidth = 0.05f;
 		const float spacing = g_DebugTextSize;
@@ -500,6 +500,10 @@ void EtherWorldGenComponent::RenderSyncStreaming() {
 		return;
 	}
 	// end hack
+
+	if ( m_TerrainChunksPool.size() == 0 ) {
+		return;
+	}
 
 	std::vector<kbShader *> ShaderOverrideList;
 	ShaderOverrideList.push_back( m_pTerrainShader );

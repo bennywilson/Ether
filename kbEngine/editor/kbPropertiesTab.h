@@ -2,35 +2,39 @@
 // kbPropertiesTab.h
 //
 //
-// 2016 kbEngine 2.0
+// 2016-2018 kbEngine 2.0
 //===================================================================================================
 #ifndef _KBPROPERTIESTAB_H_
 #define _KBPROPERTIESTAB_H_
 
+class kbEditorEntity;
 
-struct propertiesTabCBData_t
-{
-	propertiesTabCBData_t() :
-		pEditorEntity( NULL ),
-		pComponent( NULL ),
-		pResource( NULL ),
-		pField( NULL ),
-		fieldType( KBTYPEINFO_NONE ),
-		pArray( NULL ),
-		arrayIndex( -1 ) { }
+struct propertiesTabCBData_t {
 
-	kbEditorEntity *	pEditorEntity;
-	kbComponent *		pComponent;
-	kbResource **		pResource;
-	void *				pField;
-	void *				pVar;
-	kbTypeInfoType_t	fieldType;
-	std::string			structName;
-	void *				pArray;
-	int					arrayIndex;
+	propertiesTabCBData_t(	kbEditorEntity *const pEditorEntity,
+							const kbGameEntityPtr *const inGameEntityPtr,
+							kbComponent *const pComponent,
+							const kbResource ** pResource,
+							const  kbString variableName,
+							void *const pVariableValue,
+							const kbTypeInfoType_t variableType,
+							const std::string & structName,
+							const void *const pArray,
+							const int arrayIdx = -1 );
+
+	kbEditorEntity *		m_pEditorEntity;
+	kbGameEntityPtr			m_GameEntityPtr;
+	kbComponent *			m_pComponent;
+	const kbResource **		m_pResource;
+	kbString				m_VariableName;
+	void *					m_pVariablePtr;
+	kbTypeInfoType_t		m_VariableType;
+	std::string				m_StructName;
+	const void *			m_pArray;
+	int						m_ArrayIndex;
 };
 
-/*
+/**
  *	kbPropertiesTab
  */
 class kbPropertiesTab : public Fl_Tabs, kbWidget {
@@ -38,7 +42,7 @@ public:
 
 						kbPropertiesTab( int x, int y, int w, int h );
 
-	virtual void		EventCB( const widgetCBObject * widgetCBObject );
+	virtual void		EventCB( const widgetCBObject *const widgetCBObject );
 
 	virtual void		Update();
 
@@ -50,8 +54,8 @@ public:
 private:
 
 	void				RefreshEntity();
-	void				RefreshComponent( kbEditorEntity *const pEntity, kbComponent *const pComponent, int & startX, int & curY, const int inputHeight, const bool bIsStruct = false, void * arrayPtr = NULL, const int arrayIndex = -1);
-	void				RefreshProperty( kbEditorEntity *const pEntity, const std::string & propertyName, const kbTypeInfoType_t propertyType, const std::string & structName, kbComponent * pComponent, byte * byteOffsetToVar, int & x, int & y, const int inputHeight, void * arrayPtr = NULL, const int arrayIndex = -1 );
+	void				RefreshComponent( kbEditorEntity *const pEntity, kbComponent *const pComponent, int & startX, int & curY, const int inputHeight, const bool bIsStruct = false, const void *const arrayPtr = nullptr, const int arrayIndex = -1);
+	void				RefreshProperty( kbEditorEntity *const pEntity, const std::string & propertyName, const kbTypeInfoType_t propertyType, const std::string & structName, kbComponent * pComponent, const byte *const byteOffsetToVar, int & x, int & y, const int inputHeight, const void *const arrayPtr = nullptr, const int arrayIndex = -1 );
 
 	unsigned int		FontSize()	const { return 13; }
 	unsigned int		LineSpacing() const { return FontSize() + 5; }
@@ -59,6 +63,13 @@ private:
 	Fl_Tabs *			m_pPropertiesTab;
 	Fl_Group *			m_pEntityProperties;
 	Fl_Group *			m_pResourceProperties;
+
+	std::vector<kbEditorEntity *>		m_SelectedEntities;
+	std::string							m_CurrentlySelectedResource;
+	std::vector<propertiesTabCBData_t>	m_CallBackData;
+
+	kbEditorEntity *					m_pTempPrefabEntity;
+	bool								m_bRefreshNextUpdate;
 
 	static void			CheckButtonCB( Fl_Widget * widget, void * voidPtr );
 	static void			PointerButtonCB( Fl_Widget * widget, void * voidPtr );
@@ -70,13 +81,6 @@ private:
 	static void			InsertArrayStruct( Fl_Widget * widget, void * voidPtr );
 	static void			DeleteArrayStruct( Fl_Widget * widget, void * voidPtr );
 	static void			PropertyChangedCB();		// Each call back should this before returning
-
-	std::vector< class kbEditorEntity * >	m_SelectedEntities;
-	std::string								m_CurrentlySelectedResource;
-	std::vector< propertiesTabCBData_t >	m_CallBackData;
-
-	kbEditorEntity *						m_pTempPrefabEntity;
-	bool									m_bRefreshNextUpdate;
 };
 
 extern kbPropertiesTab * g_pPropertiesTab;

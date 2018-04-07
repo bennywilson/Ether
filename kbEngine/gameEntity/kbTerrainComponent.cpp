@@ -2,12 +2,12 @@
 // kbTerrainComponent.cpp
 //
 //
-// 2016-2017 kbEngine 2.0
+// 2016-2018 kbEngine 2.0
 //===================================================================================================
 #include "kbCore.h"
 #include "kbVector.h"
 #include "kbQuaternion.h"
-#include "kbGameEntityHeader.h"		// <--- TODO: Temp, game entity should not be accessed from renderer
+#include "kbGameEntityHeader.h"
 #include "kbTerrainComponent.h"
 
 KB_DEFINE_COMPONENT(kbTerrainComponent)
@@ -60,9 +60,7 @@ void kbTerrainComponent::PostLoad() {
 void kbTerrainComponent::EditorChange( const std::string & propertyName ) {
 	Super::EditorChange( propertyName );
 
-	if ( propertyName == "HeightMap" ) {
-		m_bRegenerateTerrain = true;
-	}
+	m_bRegenerateTerrain = true;
 }
 
 /**
@@ -91,6 +89,10 @@ void kbTerrainComponent::GenerateTerrain() {
 	const float HalfTerrainWidth = m_TerrainWidth * 0.5f;
 	const float HalfTerrainLength = m_TerrainLength * 0.5f;
 	const float stepSize = m_TerrainWidth / (float) width;
+
+	if ( m_TerrainModel.NumVertices() > 0 ) {
+		g_pRenderer->RemoveRenderObject( this );
+	}
 
 	m_TerrainModel.CreateDynamicModel( numVerts, numIndices );
 

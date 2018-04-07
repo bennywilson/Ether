@@ -1,3 +1,8 @@
+//==============================================================================
+// kbTypeInfo.gh
+//
+// 2016-2018 kbEngine 2.0
+//==============================================================================
 #ifndef _KBTYPEINFO_H_
 #define _KBTYPEINFO_H_
 
@@ -50,7 +55,7 @@ public:
 	const kbTypeInfoVar * GetField( const std::string & memberName ) const {
 		std::map< std::string, kbTypeInfoVar >::const_iterator it = memberFieldsMap.find( memberName );
 		if ( it == memberFieldsMap.end() ) {
-			return NULL;
+			return nullptr;
 		}
 		return &it->second;
 	}
@@ -78,18 +83,18 @@ public:
 	kbNameToTypeInfoMap();
 	~kbNameToTypeInfoMap();
 
-	void AddTypeInfo( kbTypeInfoClass * classToAdd );
-	void AddEnum( const std::string & enumName, const std::vector< std::string > & enumFields );
+	void AddTypeInfo( const kbTypeInfoClass *const classToAdd );
+	void AddEnum( const std::string & enumName, const std::vector<std::string> & enumFields );
 
-	kbTypeInfoClass * GetTypeInfoFromClassName( const std::string & name ) { return m_Map[name]; }
+	const kbTypeInfoClass * GetTypeInfoFromClassName( const std::string & name ) { return m_Map[name]; }
 
-	std::map< std::string, kbTypeInfoClass * > GetClassMap() const { return m_Map; }
+	std::map<std::string, const kbTypeInfoClass *> GetClassMap() const { return m_Map; }
 
-	const std::vector< std::string > * GetEnum( const std::string & name ) { return &m_EnumMap[name]; }
+	const std::vector<std::string> * GetEnum( const std::string & name ) { return &m_EnumMap[name]; }
 
 	template<typename t>
 	void RegisterVectorOperations( const std::string & vectorTypeString ) {
-		std::map< std::string, void (kbNameToTypeInfoMap::*)(void*, const size_t) >::const_iterator it = m_ResizeVectorPtr.find( vectorTypeString );
+		std::map<std::string, void (kbNameToTypeInfoMap::*)(const void*, const size_t)>::const_iterator it = m_ResizeVectorPtr.find( vectorTypeString );
 		if ( it == m_ResizeVectorPtr.end() ) {
 			m_ResizeVectorPtr[vectorTypeString] = &kbNameToTypeInfoMap::ResizeVector_Internal<t>;
 			m_GetVectorElementPtr[vectorTypeString] = &kbNameToTypeInfoMap::GetVectorElement_Internal<t>;
@@ -99,52 +104,52 @@ public:
 		}
 	}
 
-	void ResizeVector( void * vectorPtr, const std::string & vectorStringType, const size_t newVectorSize ) {
-		void (kbNameToTypeInfoMap::*pFunc)(void*, const size_t) = NULL;
+	void ResizeVector( const void *const vectorPtr, const std::string & vectorStringType, const size_t newVectorSize ) {
+		void (kbNameToTypeInfoMap::*pFunc)(const void*, const size_t) = nullptr;
 
-		std::map< std::string, void (kbNameToTypeInfoMap::*)(void*, const size_t) >::const_iterator it = m_ResizeVectorPtr.find( vectorStringType );
+		std::map< std::string, void (kbNameToTypeInfoMap::*)(const void*const, const size_t) >::const_iterator it = m_ResizeVectorPtr.find( vectorStringType );
 		if ( it != m_ResizeVectorPtr.end() ) {
 			pFunc = it->second;
 			(this->*pFunc)(vectorPtr, newVectorSize);
 		}
 	}
 
-	void * GetVectorElement( void * vectorPtr, const std::string & vectorStringType, const size_t index ) {
-		void * (kbNameToTypeInfoMap::*pFunc)(void*, const size_t) = NULL;
+	void * GetVectorElement( const void *const vectorPtr, const std::string & vectorStringType, const size_t index ) {
+		void * (kbNameToTypeInfoMap::*pFunc)(const void*, const size_t) = nullptr;
 
-		std::map< std::string, void * (kbNameToTypeInfoMap::*)(void*, const size_t) >::const_iterator it = m_GetVectorElementPtr.find( vectorStringType );
+		std::map< std::string, void * (kbNameToTypeInfoMap::*)(const void*, const size_t) >::const_iterator it = m_GetVectorElementPtr.find( vectorStringType );
 		if ( it != m_GetVectorElementPtr.end() ) {
 			pFunc = it->second;
 			return (this->*pFunc)(vectorPtr, index);
 		}
-		return NULL;
+		return nullptr;
 	}
 
-	size_t GetVectorSize( void * vectorPtr, const std::string & vectorStringType ) {
-		size_t (kbNameToTypeInfoMap::*pFunc)(void*) = NULL;
+	size_t GetVectorSize( const void *const vectorPtr, const std::string & vectorStringType ) {
+		size_t (kbNameToTypeInfoMap::*pFunc)(const void*) = nullptr;
 
-		std::map< std::string, size_t (kbNameToTypeInfoMap::*)(void*) >::const_iterator it = m_GetVectorSizePtr.find( vectorStringType );
+		std::map< std::string, size_t (kbNameToTypeInfoMap::*)(const void*) >::const_iterator it = m_GetVectorSizePtr.find( vectorStringType );
 		if ( it != m_GetVectorSizePtr.end() ) {
 			pFunc = it->second;
 			return (this->*pFunc)(vectorPtr);
 		}
-		return NULL;
+		return 0;
 	}
 
-	void InsertVectorElement( void * vectorPtr, const std::string & vectorStringType, const size_t index ) {
-		void (kbNameToTypeInfoMap::*pFunc)(void*, const size_t) = NULL;
+	void InsertVectorElement( const void *const vectorPtr, const std::string & vectorStringType, const size_t index ) {
+		void (kbNameToTypeInfoMap::*pFunc)(const void*, const size_t) = nullptr;
 
-		std::map< std::string, void (kbNameToTypeInfoMap::*)(void*, const size_t) >::const_iterator it = m_InsertVectorElementPtr.find( vectorStringType );
+		std::map< std::string, void (kbNameToTypeInfoMap::*)(const void*, const size_t) >::const_iterator it = m_InsertVectorElementPtr.find( vectorStringType );
 		if ( it != m_InsertVectorElementPtr.end() ) {
 			pFunc = it->second;
 			(this->*pFunc)(vectorPtr, index);
 		}
 	}
 
-	void RemoveVectorElement( void * vectorPtr, const std::string & vectorStringType, const size_t index ) {
-		void (kbNameToTypeInfoMap::*pFunc)(void*, const size_t) = NULL;
+	void RemoveVectorElement( const void *const vectorPtr, const std::string & vectorStringType, const size_t index ) {
+		void (kbNameToTypeInfoMap::*pFunc)(const void*, const size_t) = nullptr;
 
-		std::map< std::string, void (kbNameToTypeInfoMap::*)(void*, const size_t) >::const_iterator it = m_RemoveVectorElementPtr.find( vectorStringType );
+		std::map< std::string, void (kbNameToTypeInfoMap::*)(const void*, const size_t) >::const_iterator it = m_RemoveVectorElementPtr.find( vectorStringType );
 		if ( it != m_RemoveVectorElementPtr.end() ) {
 			pFunc = it->second;
 			(this->*pFunc)(vectorPtr, index);
@@ -153,11 +158,11 @@ public:
 
 private:
 
-	std::map< std::string, kbTypeInfoClass * >	m_Map;
-	std::map< std::string, std::vector< std::string > > m_EnumMap;
+	std::map<std::string, const kbTypeInfoClass *>	m_Map;
+	std::map<std::string, std::vector< std::string>> m_EnumMap;
 
 	template<typename t>
-	void ResizeVector_Internal( void * vectorPtr = NULL, const size_t vectorSize = 0 ) {
+	void ResizeVector_Internal( const void *const vectorPtr, const size_t vectorSize = 0 ) {
 		// todo: kbComponents are reconstructed on resize		
 		std::vector<t> & vec = *(std::vector<t>*)vectorPtr;
 		std::vector<t> backUp = vec;
@@ -172,19 +177,19 @@ private:
 	}
 
 	template<typename t>
-	void * GetVectorElement_Internal( void * vectorPtr = NULL, const size_t index = 0 ) {
+	void * GetVectorElement_Internal( const void *const vectorPtr = nullptr, const size_t index = 0 ) {
 		std::vector<t> & vec = *(std::vector<t>*)vectorPtr;
 		return (void*)&vec[index];
 	}
 
 	template<typename t>
-	size_t GetVectorSize_Internal( void * vectorPtr = NULL ) {
+	size_t GetVectorSize_Internal( const void *const vectorPtr = nullptr ) {
 		std::vector<t> & vec = *(std::vector<t>*)vectorPtr;
 		return vec.size();
 	}
 
 	template<typename t>
-	void InsertVectorElement_Internal( void * vectorPtr = NULL, const size_t index = 0 ) {
+	void InsertVectorElement_Internal( const void *const vectorPtr = nullptr, const size_t index = 0 ) {
 		// todo: kbComponents are reconstructed on insert
 		std::vector<t> & vec = *(std::vector<t>*)vectorPtr;
 		std::vector<t> backUp = vec;
@@ -206,16 +211,16 @@ private:
 	}
 
 	template<typename t>
-	void RemoveVectorElement_Internal( void * vectorPtr = NULL, const size_t index = 0 ) {
+	void RemoveVectorElement_Internal( const void *const vectorPtr = nullptr, const size_t index = 0 ) {
 		std::vector<t> & vec = *(std::vector<t>*)vectorPtr;
 		vec.erase(vec.begin() + index);
 	}
 
-	std::map< std::string, void (kbNameToTypeInfoMap::*)(void*, const size_t) > m_ResizeVectorPtr;
-	std::map< std::string, void * (kbNameToTypeInfoMap::*)(void*, const size_t) > m_GetVectorElementPtr;
-	std::map< std::string, size_t (kbNameToTypeInfoMap::*)(void*) > m_GetVectorSizePtr;
-	std::map< std::string, void (kbNameToTypeInfoMap::*)(void*, const size_t) > m_InsertVectorElementPtr;
-	std::map< std::string, void (kbNameToTypeInfoMap::*)(void*, const size_t) > m_RemoveVectorElementPtr;
+	std::map<std::string, void (kbNameToTypeInfoMap::*)(const void*, const size_t)> m_ResizeVectorPtr;
+	std::map<std::string, void * (kbNameToTypeInfoMap::*)(const void*, const size_t)> m_GetVectorElementPtr;
+	std::map<std::string, size_t (kbNameToTypeInfoMap::*)(const void*)> m_GetVectorSizePtr;
+	std::map<std::string, void (kbNameToTypeInfoMap::*)(const void*, const size_t)> m_InsertVectorElementPtr;
+	std::map<std::string, void (kbNameToTypeInfoMap::*)(const void*, const size_t)> m_RemoveVectorElementPtr;
 };
 extern kbNameToTypeInfoMap * g_NameToTypeInfoMap;
 
@@ -228,7 +233,7 @@ kbComponent * ConstructClassFromName( const std::string & className );
 { \
 	kbTypeInfoVar newField( FIELD_TYPE, (size_t)&((CLASS_TYPE*)(0))->MEMBER_NAME, IS_ARRAY, STRUCT_NAME ); \
 	AddMember( FIELD_NAME, newField ); \
-	if ( g_NameToTypeInfoMap == NULL ) { g_NameToTypeInfoMap = new kbNameToTypeInfoMap(); } \
+	if ( g_NameToTypeInfoMap == nullptr ) { g_NameToTypeInfoMap = new kbNameToTypeInfoMap(); } \
 	g_NameToTypeInfoMap->RegisterVectorOperations<CLASS_TYPE>(#CLASS_TYPE); \
 }
 
@@ -239,7 +244,7 @@ kbComponent * ConstructClassFromName( const std::string & className );
 		ENUM_TYPE##_Enum() { \
 			std::vector< std::string > enumFields; \
 			ADD_ENUM_FIELDS \
-			if ( g_NameToTypeInfoMap == NULL ) { g_NameToTypeInfoMap = new kbNameToTypeInfoMap(); } \
+			if ( g_NameToTypeInfoMap == nullptr ) { g_NameToTypeInfoMap = new kbNameToTypeInfoMap(); } \
 			g_NameToTypeInfoMap->AddEnum( ENUM_NAME, enumFields ); \
 			} \
 	};
@@ -250,13 +255,13 @@ public:\
 	CLASS_TYPE##_TypeInfo() { \
 		ADD_FIELDS \
 		m_ClassName = #CLASS_TYPE; \
-		if ( g_NameToTypeInfoMap == NULL ) { g_NameToTypeInfoMap = new kbNameToTypeInfoMap(); } \
+		if ( g_NameToTypeInfoMap == nullptr ) { g_NameToTypeInfoMap = new kbNameToTypeInfoMap(); } \
 		g_NameToTypeInfoMap->AddTypeInfo(this); \
 	} \
 	~CLASS_TYPE##_TypeInfo() { \
 		/* Go ahead and delete the name-to-typeinfo mapping here.  All typeinfos are deleted together anyways when the program terminates. */ \
 		delete g_NameToTypeInfoMap; \
-		g_NameToTypeInfoMap = NULL; \
+		g_NameToTypeInfoMap = nullptr; \
 	} \
 	virtual kbComponent * ConstructInstance() const { return new CLASS_TYPE; } \
 	virtual kbComponent * ConstructInstance( const kbComponent *const pComponentToCopy ) const { return new CLASS_TYPE( *static_cast<const CLASS_TYPE*>( pComponentToCopy )); } \

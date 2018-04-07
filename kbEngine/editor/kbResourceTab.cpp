@@ -2,10 +2,11 @@
 // kbResourceTab.cpp
 //
 //
-// 2016-2017 kbEngine 2.0
+// 2016-2018 kbEngine 2.0
 //===================================================================================================
 #include "kbCore.h"
 #include "kbWidget.h"
+#include "kbGameEntityHeader.h"
 #include "kbResourceTab.h"
 #include "kbPropertiesTab.h"
 #include "kbEditor.h"

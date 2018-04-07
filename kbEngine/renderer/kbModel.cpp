@@ -3,7 +3,7 @@
 //
 // General model format based off of the ms3d specs
 //
-// 2016-2017 kbEngine 2.0
+// 2016-2018 kbEngine 2.0
 //==============================================================================
 #include "kbCore.h"
 #include "kbVector.h"
@@ -503,7 +503,7 @@ bool kbModel::Load_Internal() {
 void kbModel::CreateDynamicModel( const UINT numVertices, const UINT numIndices, const std::string & ShaderToUse, const std::string & TextureToUse, const UINT vertexSizeInBytes ) {
 
 	if ( m_NumVertices > 0 || m_Meshes.size() > 0 || m_Materials.size() > 0 || m_VertexBuffer.GetBufferPtr() != nullptr || m_IndexBuffer.GetBufferPtr() != nullptr ) {
-		kbError( "kbModel::CreateDynamicModel() called on an already initialized kbModel" );
+		Release_Internal();
 	}
 
 	m_NumVertices = numVertices;
