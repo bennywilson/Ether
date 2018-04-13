@@ -36,12 +36,14 @@ public:
 
 protected:
 
+	virtual void								SetEnable_Internal( const bool isEnabled ) override;
 	virtual void								Update_Internal( const float DeltaTime ) override;
 
 	kbTexture *									m_pHeightMap;
 	float										m_HeightScale;
 	float										m_TerrainWidth;
-	float										m_TerrainLength;
+	int											m_TerrainDimensions;
+
 	kbModel										m_TerrainModel;
 
 	bool										m_bRegenerateTerrain;

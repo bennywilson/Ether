@@ -2,7 +2,7 @@
 // kbUndoAction.cpp
 //
 //
-// 2016 kbEngine 2.0
+// 2016-2018 kbEngine 2.0
 //===================================================================================================
 #include <vector>
 #include "kbCore.h"
@@ -21,13 +21,37 @@ kbUndoStack::kbUndoStack() {
 }
 
 /**
+ *	kbUndoStack::GetLastDirtyActionId
+ */
+UINT64 kbUndoStack::GetLastDirtyActionId() const {
+	if ( m_StackCurrent < 0 ) {
+		return UINT64_MAX;
+	}
+
+
+	for ( int i = 0; i < m_StackLength; i++ ) {
+		int curIdx = m_StackCurrent - i;
+		if ( curIdx < 0 ) {
+			curIdx += g_UndoStackSize;
+		}
+
+		if ( m_Stack[curIdx]->MarksMapAsDirty() ) {
+			return m_Stack[curIdx]->m_UndoActionId;
+		}
+	}
+
+
+	return UINT64_MAX;
+}
+
+/**
  *	kbUndoStack::Reset
  */
 void kbUndoStack::Reset() {
 	for ( int i = 0; i < m_Stack.size(); i++ ) {
-		if ( m_Stack[i] != NULL ) {
+		if ( m_Stack[i] != nullptr ) {
 			delete m_Stack[i];
-			m_Stack[i] = NULL;
+			m_Stack[i] = nullptr;
 		}
 	}
 	m_Stack.clear();
@@ -37,7 +61,7 @@ void kbUndoStack::Reset() {
 	m_StackCurrent = -1;
 
 	m_Stack.resize( g_UndoStackSize );
-
+	m_NextUndoActionId = UINT64_MAX;
 	std::vector<kbEditorEntity *> emptyList; 
 //	Push( new kbUndoSelectActor( emptyList ) );
 }
@@ -59,10 +83,15 @@ void kbUndoStack::Push( kbUndoAction *const action ) {
 
 	m_StackTop = m_StackCurrent;
 
-	if ( m_Stack[m_StackCurrent] != NULL ) {
+	if ( m_Stack[m_StackCurrent] != nullptr ) {
 		delete m_Stack[m_StackCurrent];
 	}
 	
+	if ( m_NextUndoActionId == UINT64_MAX ) {
+		m_NextUndoActionId = 0;
+	}
+
+	action->m_UndoActionId = m_NextUndoActionId++;
 	m_Stack[m_StackCurrent] = action;
 
 	//kbLog( "Push() ------------------------------------------" );

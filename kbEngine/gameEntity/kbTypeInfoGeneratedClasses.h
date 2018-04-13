@@ -122,7 +122,7 @@ GenerateClass(
    AddField( "HeightMap", KBTYPEINFO_TEXTURE, kbTerrainComponent, m_pHeightMap, false, "" )
    AddField( "HeightScale", KBTYPEINFO_FLOAT, kbTerrainComponent, m_HeightScale, false, "" )
    AddField( "Width", KBTYPEINFO_FLOAT, kbTerrainComponent, m_TerrainWidth, false, "" )
-   AddField( "Height", KBTYPEINFO_FLOAT, kbTerrainComponent, m_TerrainLength, false, "" )
+   AddField( "Dimensions", KBTYPEINFO_INT, kbTerrainComponent, m_TerrainDimensions, false, "" )
 )
 
 GenerateEnum(

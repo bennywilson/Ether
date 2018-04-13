@@ -2,7 +2,7 @@
 // kbEditor.h
 //
 //
-// 2016-2017 kbEngine 2.0
+// 2016-2018 kbEngine 2.0
 //===================================================================================================
 #ifndef _KBEDITOR_H_
 #define _KBEDITOR_H_
@@ -13,6 +13,7 @@
 
 class kbWidget;
 class kbEditorEntity;
+class Fl_Widget;
 
 enum widgetCBType_t;
 
@@ -24,6 +25,7 @@ public:
 															kbEditor();
 															~kbEditor();
 
+	void													UnloadMap();
 	void													LoadMap( const std::string & mapName );
 	void													SetGame( class kbGame * pGame ) { m_pGame = pGame; }
 
@@ -31,10 +33,10 @@ public:
 	virtual int												handle( int theEvent );
 
 	const bool												IsRunning() const { return m_IsRunning; }
-	const bool												IsRunningGame() const { return m_pGame != NULL && m_pGame->IsPlaying(); }
+	const bool												IsRunningGame() const { return m_pGame != nullptr && m_pGame->IsPlaying(); }
 
 	void													RegisterUpdate( kbWidget * const widget ) { m_UpdateWidgets.push_back( widget ); }
-	void													RegisterEvent( kbWidget * widget, const widgetCBType_t eventType ) { m_EventReceivers[eventType].push_back( widget ); }
+	void													RegisterEvent( kbWidget *const widget, const widgetCBType_t eventType ) { m_EventReceivers[eventType].push_back( widget ); }
 	void													BroadcastEvent( const class widgetCBObject & cbObject );
 
 	void													SelectEntities( std::vector< kbEditorEntity * > & entitiesToSelect, bool AppendToSelectedList );
@@ -42,12 +44,16 @@ public:
 
 	void													PushUndoAction( kbUndoAction * pUndoAction ) { m_UndoStack.Push( pUndoAction ); }
 
-	std::vector< kbEditorEntity * > &						GetGameEntities() { return m_GameEntities; }
-	std::vector< kbEditorEntity * > &						GetSelectedObjects() { return m_SelectedObjects; }
+	std::vector<kbEditorEntity *> &							GetGameEntities() { return m_GameEntities; }
+	std::vector<kbEditorEntity *> &							GetSelectedObjects() { return m_SelectedObjects; }
 
 	const kbPrefab *										GetCurrentlySelectedPrefab() const;
 
 private:
+
+	void													SaveLevel_Internal( const std::string & fileName, const bool bForceSave );
+
+	std::string												m_CurrentLevelFileName;
 
 	std::vector< kbWidget * >								m_UpdateWidgets;
 	std::map< widgetCBType_t, std::vector< kbWidget  * > >	m_EventReceivers;
@@ -75,30 +81,36 @@ private:
 	bool													m_IsRunning;
 	bool													m_bRightMouseButtonDragged;
 
+	// Stores a copy of the current undo action's id.  The level is dirty if the two values don't match.
+	UINT64													m_UndoIDAtLastSave;
+
 	// internal functions and callbacks
 	void				ShutDown();
 
-	static void			OpenLevel( class Fl_Widget *, void * );
-	static void			SaveLevelAs( class Fl_Widget *, void * );
-	static void			Undo( class Fl_Widget *, void * );
-	static void			Redo( class Fl_Widget *, void * );
-	static void			Close( class Fl_Widget *, void * );
-	static void			CreateGameEntity( class Fl_Widget *, void * );
-	static void			AddComponent( class Fl_Widget *, void * );
-	static void			TranslationButtonCB( class Fl_Widget *, void * );
-	static void			RotationButtonCB( class Fl_Widget *, void * );
-	static void			ScaleButtonCB( class Fl_Widget *, void * );
-	static void			AdjustCameraSpeedCB( class Fl_Widget *, void * );
+	static void			NewLevel( Fl_Widget *, void * );
+	static void			OpenLevel( Fl_Widget *, void * );
+	static void			SaveLevelAs( Fl_Widget *, void * );
+	static void			SaveLevel( Fl_Widget *, void * );
+
+	static void			Undo( Fl_Widget *, void * );
+	static void			Redo( Fl_Widget *, void * );
+	static void			Close( Fl_Widget *, void * );
+	static void			CreateGameEntity( Fl_Widget *, void * );
+	static void			AddComponent( Fl_Widget *, void * );
+	static void			TranslationButtonCB( Fl_Widget *, void * );
+	static void			RotationButtonCB( Fl_Widget *, void * );
+	static void			ScaleButtonCB( Fl_Widget *, void * );
+	static void			AdjustCameraSpeedCB( Fl_Widget *, void * );
 	static void			OutputCB( kbOutputMessageType_t, const char * );
-	static void			PlayGameFromHere( class Fl_Widget *, void * );
-	static void			StopGame( class Fl_Widget *, void * );
-	static void			DeleteEntities( class Fl_Widget *, void * );
+	static void			PlayGameFromHere( Fl_Widget *, void * );
+	static void			StopGame( Fl_Widget *, void * );
+	static void			DeleteEntities( Fl_Widget *, void * );
 
 	void				RightClickPopUpMenu();
-	static void			ReplaceCurrentlySelectedPrefab( class Fl_Widget *, void * );
-	static void			AddEntityAsPrefab( class Fl_Widget *, void * );
+	static void			ReplaceCurrentlySelectedPrefab( Fl_Widget *, void * );
+	static void			AddEntityAsPrefab( Fl_Widget *, void * );
 	void				AddEntityAsPrefab_Internal( const std::string & PackageName, const std::string & FolderName, const std::string & PrefabeName );
-	static void			InsertSelectedPrefabIntoScene( class Fl_Widget *, void * );
+	static void			InsertSelectedPrefabIntoScene( Fl_Widget *, void * );
 
 public:
 

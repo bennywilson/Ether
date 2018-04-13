@@ -1,7 +1,7 @@
 //==============================================================================
 // skyBox.kbShader
 //
-// 2017 kbEngine 2.0
+// 2017-2018 kbEngine 2.0
 //==============================================================================
 cbuffer matrixBuffer {
    matrix modelMatrix;
@@ -59,20 +59,17 @@ pixelInput vertexShader( vertexInput input ) {
 	return output;
 }
 
-/**
- *	pixelShader
- */
+
 Texture2D shaderTexture;
 SamplerState SampleType;
 
+/**
+ *	pixelShader
+ */
  PS_OUTPUT pixelShader( pixelInput	input ) : SV_TARGET {
  	PS_OUTPUT output = (PS_OUTPUT) 0;
 
-
-	float fogLerp = ( input.position2.y - fogHeight.x ) / ( fogHeight.y - fogHeight.x );
-
-	output.Color = lerp( fogColor, skyColor, saturate( fogLerp ) );
-   output.Color.xyz += shaderTexture.Sample( SampleType, input.uv ).xyz * fogColor.w;
+	output.Color.xyz += shaderTexture.Sample( SampleType, input.uv ).xyz;
 
 	return output;
 }

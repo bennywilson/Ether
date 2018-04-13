@@ -2,7 +2,7 @@
 // kbStaticModelComponent.cpp
 //
 //
-// 2016-2017 kbEngine 2.0
+// 2016-2018 kbEngine 2.0
 //===================================================================================================
 #include "kbModel.h"
 #include "kbGameEntityHeader.h"
@@ -13,7 +13,7 @@ KB_DEFINE_COMPONENT(kbStaticModelComponent)
  *	kbStaticModelComponent
  */
 void kbStaticModelComponent::Constructor() {
-	m_pModel = NULL;
+	m_pModel = nullptr;
 }
 
 
@@ -40,7 +40,9 @@ void kbStaticModelComponent::EditorChange( const std::string & propertyName ) {
  */
 void kbStaticModelComponent::SetEnable_Internal( const bool isEnabled ) {
 	
-	if ( m_pModel == NULL ) {
+	Super::SetEnable_Internal( isEnabled );
+
+	if ( m_pModel == nullptr ) {
 		return;
 	}
 
@@ -58,7 +60,7 @@ void kbStaticModelComponent::Update_Internal( const float DeltaTime ) {
 
 	Super::Update_Internal( DeltaTime );
 
-	if ( m_pModel != NULL && m_pParent->IsDirty() ) {
+	if ( m_pModel != nullptr && m_pParent->IsDirty() ) {
 		g_pRenderer->UpdateRenderObject( this, m_pModel, m_pParent->GetPosition(), m_pParent->GetOrientation(), m_pParent->GetScale(), m_RenderPass, &m_pOverrideShaderList, &m_ShaderParams );
 	}
 }

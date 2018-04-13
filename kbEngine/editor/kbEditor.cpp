@@ -42,11 +42,13 @@ kbEditor::kbEditor() :
 	Fl_Window( 0, 0, GetSystemMetrics( SM_CXFULLSCREEN ), GetSystemMetrics( SM_CYFULLSCREEN ) ) {
 
 	outputCB = kbEditor::OutputCB;
+	m_UndoIDAtLastSave = UINT64_MAX;
+	m_CurrentLevelFileName = "Untitled";
 
 	g_Editor = this;
 
-	m_pGame = NULL;
-	m_pGameWindow = NULL;
+	m_pGame = nullptr;
+	m_pGameWindow = nullptr;
 
 	const int Screen_Width = GetSystemMetrics( SM_CXFULLSCREEN );
 	const int Screen_Height = GetSystemMetrics( SM_CYFULLSCREEN );
@@ -70,8 +72,10 @@ kbEditor::kbEditor() :
 
 	// menu bar
 	Fl_Menu_Bar * mainMenuBar = new Fl_Menu_Bar( 0, 0, Screen_Width, Menu_Bar_Height );
-	mainMenuBar->add( "File/Open Level",   FL_CTRL+'s', OpenLevel );
-	mainMenuBar->add( "File/Save Level As",   FL_CTRL+'s', SaveLevelAs );
+	mainMenuBar->add( "File/New Level", FL_CTRL+'n', NewLevel );
+	mainMenuBar->add( "File/Open Level", FL_CTRL+'o', OpenLevel );
+	mainMenuBar->add( "File/Save Level As", 0, SaveLevelAs );
+	mainMenuBar->add( "File/Save", FL_CTRL+'s', SaveLevel );
 	mainMenuBar->add( "Edit/Undo", FL_CTRL+'z', Undo );
 	mainMenuBar->add( "Edit/Redo", FL_CTRL+'y', Redo );
 
@@ -142,6 +146,8 @@ kbEditor::kbEditor() :
 	// reserve textures
 	g_pRenderer->LoadTexture( "../../kbEngine/assets/Textures/Editor/EntityIcon.jpg", 1 );
 	g_pRenderer->LoadTexture( "../../kbEngine/assets/Textures/Editor/directionalLightIcon.jpg", 2 );
+
+	SetWindowText( m_pMainTab->GetEditorWindow()->GetWindowHandle(), "kbEditor" );
 }
 
 /**
@@ -152,46 +158,72 @@ kbEditor::~kbEditor() {
 }
 
 /**
+ *  kbEditor::UnloadMap()
+ */
+void kbEditor::UnloadMap() {
+
+	if ( g_pRenderer != nullptr ) {
+		g_pRenderer->WaitForRenderingToComplete();
+	}
+
+	// Remove old entities
+	DeselectEntities();
+
+	for ( int i = 0; i < g_Editor->m_GameEntities.size(); i++ ) {
+		delete m_GameEntities[i];
+	}
+	m_GameEntities.clear();
+
+	m_CurrentLevelFileName = "Untitled";
+	m_UndoIDAtLastSave = UINT64_MAX;
+	m_UndoStack.Reset();
+}
+
+/**
  *  kbEditor::LoadMap()
  */
 void kbEditor::LoadMap( const std::string & InMapName ) {
 
+	UnloadMap();
 
 	// Load map
 	if ( InMapName.empty() == false ) {
-		std::string mapName = InMapName;
+		m_CurrentLevelFileName = InMapName;
 
 		TCHAR NPath[MAX_PATH];
 
-		GetCurrentDirectory(MAX_PATH, NPath);
+		GetCurrentDirectory( MAX_PATH, NPath );
 
 		WIN32_FIND_DATA fdFile;
-		HANDLE hFind = NULL;
+		HANDLE hFind = nullptr;
 
 		std::string LevelPath = NPath;
 		LevelPath += "/Levels/";
 		std::string curLevelFolder = "";
 
-		if ( mapName.find( "." ) == std::string::npos ) {
-			mapName += ".kbLevel";
+		if ( m_CurrentLevelFileName.find( "." ) == std::string::npos ) {
+			m_CurrentLevelFileName += ".kbLevel";
 		}	
 
 		hFind = FindFirstFile( ( LevelPath + "*" ).c_str(), &fdFile );
 		BOOL nextFileFound = ( hFind != INVALID_HANDLE_VALUE  );
 		do {
-			std::string fullFilePath = LevelPath + curLevelFolder + mapName;
+			m_CurrentLevelFileName = LevelPath + curLevelFolder + m_CurrentLevelFileName;
 				
 			kbFile inFile;		
-			if ( inFile.Open( fullFilePath.c_str(), kbFile::FT_Read ) ) {
+			if ( inFile.Open( m_CurrentLevelFileName.c_str(), kbFile::FT_Read ) ) {
 
 				kbGameEntity * gameEntity = inFile.ReadGameEntity();
-				while ( gameEntity != NULL ) {
+				while ( gameEntity != nullptr ) {
 
 					kbEditorEntity *const newEditorEntity = new kbEditorEntity( gameEntity );
 					g_Editor->m_GameEntities.push_back( newEditorEntity );
 					gameEntity = inFile.ReadGameEntity();
 				}
 				inFile.Close();
+				
+				const std::string windowText = "kbEditor - " + InMapName;
+				SetWindowText( fl_xid( this ), windowText.c_str() );
 
 				break;
 			}
@@ -210,33 +242,12 @@ void kbEditor::LoadMap( const std::string & InMapName ) {
 
 			} while( nextFileFound = FindNextFile( hFind, &fdFile ) != FALSE );
 
-			if ( nextFileFound != NULL ) {
+			if ( nextFileFound != 0 ) {
 				nextFileFound = FindNextFile( hFind, &fdFile );
 			}
 		} while( true );
 	}
-/*
 
-	const char *const ext = strstr( mapName.c_str(), ".kbLevel" );
-	const size_t fileNameLen = strlen(  mapName.c_str() );
-	std::string finalFileName =  mapName.c_str();
-
-	if ( mapName.find( "." ) == std::string::npos ) {
-		finalFileName += ".kbLevel";
-	}
-
-	kbFile inFile;
-	if ( inFile.Open( finalFileName.c_str(), kbFile::FT_Read ) ) {
-		kbGameEntity * gameEntity = inFile.ReadGameEntity();
-		while ( gameEntity != NULL ) {
-			kbEditorEntity *const newEditorEntity = new kbEditorEntity( gameEntity );
-			g_Editor->m_GameEntities.push_back( newEditorEntity );
-			gameEntity = inFile.ReadGameEntity();
-		}
-
-		inFile.Close();
-	}
-*/
 	m_UndoStack.Reset();
 }
 
@@ -309,6 +320,10 @@ void kbEditor::Update() {
 			m_WidgetInputObject.keys.push_back( widgetCBInputObject::keyType_t::WidgetInput_Ctrl );
 		}
 
+		if ( GetAsyncKeyState( VK_LSHIFT ) ) {
+			m_WidgetInputObject.keys.push_back( widgetCBInputObject::keyType_t::WidgetInput_Shift );
+		}
+
 		if ( m_WidgetInputObject.keys.size() > 0 || m_WidgetInputObject.mouseDeltaX != 0 || m_WidgetInputObject.mouseDeltaY != 0 ||
 			m_WidgetInputObject.leftMouseButtonDown || m_WidgetInputObject.rightMouseButtonDown ) {
 			BroadcastEvent( m_WidgetInputObject );
@@ -332,6 +347,13 @@ void kbEditor::Update() {
 	// Update editor entities and components
 	for ( int i = 0; i < m_GameEntities.size(); i++ ) {
 		m_GameEntities[i]->Update( DT );
+	}
+
+	// Update title bar dirty status
+	if ( m_UndoIDAtLastSave != m_UndoStack.GetLastDirtyActionId() ) {
+		SetWindowText( fl_xid( this ), ( "kbEditor - " + m_CurrentLevelFileName + "*" ).c_str() );
+	} else {
+		SetWindowText( fl_xid( this ), ( "kbEditor - " + m_CurrentLevelFileName ).c_str() );
 	}
 }
 
@@ -596,22 +618,36 @@ void kbEditor::AdjustCameraSpeedCB( class Fl_Widget * widget, void * ) {
 
 	float multiplier = 1.0f;
 
-	if ( strstr(widget->label(), "Speedx100") ) {
+	if ( strstr( widget->label(), "Speedx15" ) ) {
 		multiplier = 1.0f;
 		g_Editor->m_pSpeedButton->label( "Speedx1" );
-	} else if ( strstr(widget->label(), "Speedx1") ) {
-		multiplier = 25.0f;
-		g_Editor->m_pSpeedButton->label( "Speedx25" );
+	} else if ( strstr( widget->label(), "Speedx1" ) ) {
+		multiplier = 5.0f;
+		g_Editor->m_pSpeedButton->label( "Speedx5" );
 	}
-	else if ( strstr(widget->label(), "Speedx25") )
+	else if ( strstr( widget->label(), "Speedx5" ) )
 	{
-		multiplier = 100.0f;
-		g_Editor->m_pSpeedButton->label( "Speedx100" );
+		multiplier = 15.0f;
+		g_Editor->m_pSpeedButton->label( "Speedx15" );
 	}
 
 	g_Editor->m_pMainTab->AdjustCameraMoveSpeedMultiplier( multiplier );
 }
 
+/**
+ *	kbEditor::NewLevel
+ */
+void kbEditor::NewLevel( Fl_Widget *, void * ) {
+	const int areYouSure = fl_ask( "Creating a new level.  Any unsaved changes will be lost.  Are you sure?" );
+	if ( areYouSure == 0 ) {
+		return;
+	}
+
+	g_Editor->UnloadMap();
+
+	g_Editor->m_GameEntities.clear();
+	g_Editor->DeselectEntities();
+}
 
 /**
  *	kbEditor::OpenLevel
@@ -630,23 +666,25 @@ void kbEditor::OpenLevel( class Fl_Widget *, void * ) {
 
 	const char * fileName = fileChooser.value();
 
-	if ( fileName == NULL ) {
+	if ( fileName == nullptr ) {
 		return;
 	}
 
-	int areYouSure = fl_ask( "You have unsaved changes.  Are you sure you want to open a new level?" );
-
+	const int areYouSure = fl_ask( "You have unsaved changes.  Are you sure you want to open a new level?" );
 	if ( areYouSure == false )	{
 		return;
 	}
 
+	g_pRenderer->WaitForRenderingToComplete();
+
 	// Remove old entities
+	g_Editor->DeselectEntities();
+
 	for ( int i = 0; i < g_Editor->m_GameEntities.size(); i++ ) {
 		delete g_Editor->m_GameEntities[i];
 	}
-
 	g_Editor->m_GameEntities.clear();
-	g_Editor->DeselectEntities();
+
 
 	std::string fileNameStr = fileName;
 	const size_t pos = fileNameStr.find_last_of( "\\/" );
@@ -654,6 +692,35 @@ void kbEditor::OpenLevel( class Fl_Widget *, void * ) {
 		fileNameStr = fileNameStr.substr( pos + 1, fileNameStr.length() - pos );
 	}
 	g_Editor->LoadMap( fileNameStr.c_str() );
+}
+
+/**
+ *	kbEditor::SaveLevel_Internal
+ */
+void kbEditor::SaveLevel_Internal( const std::string & fileNameStr, const bool bForceSave ) {
+	
+	if ( bForceSave == false ) {
+		std::ifstream f( fileNameStr.c_str() );
+		if ( f.good() ) {
+			const int overWriteIt = fl_ask( "File already exists.  Do you wish to overwrite it?" );
+			if ( overWriteIt == 0 ) {
+				f.close();
+				return;
+			}
+		}
+		f.close();
+	}
+
+	kbFile outFile;
+	outFile.Open( fileNameStr.c_str(), kbFile::FT_Write );
+
+	for ( int i = 0; i < g_Editor->m_GameEntities.size(); i++ ) {
+		outFile.WriteGameEntity( g_Editor->m_GameEntities[i]->GetGameEntity() );
+	}
+
+	outFile.Close();
+
+	m_UndoIDAtLastSave = m_UndoStack.GetLastDirtyActionId();
 }
 
 /**
@@ -669,40 +736,30 @@ void kbEditor::SaveLevelAs( class Fl_Widget *, void * ) {
 	
 	fileChooser.show();
 
-	while(fileChooser.shown()) { Fl::wait(); }
+	while( fileChooser.shown() ) { Fl::wait(); }
 	
-	const char * fileName = fileChooser.value();
-
-	if ( fileName == NULL ) {
+	std::string fileName = fileChooser.value();
+	if ( fileName.empty() ) {
 		return;
 	}
 
-	std::string fileNameStr = fileName;
-	const std::string fileExt = GetFileExtension( fileNameStr );
-
+	const std::string fileExt = GetFileExtension( fileName );
 	if ( fileExt != "kbLevel" && fileExt != "kblevel" ) {
-		fileNameStr += ".kblevel";
+		fileName += ".kblevel";
 	}
-	
-	std::ifstream f( fileNameStr.c_str() );
-	if ( f.good() ) {
-		int overWriteIt = fl_ask( "File already exists.  Do you wish to overwrite it?" );
+	g_Editor->SaveLevel_Internal( fileName, false );
+}
 
-		if ( overWriteIt == 0 ) {
-			f.close();
-			return;
-		}
-	}
-	f.close();
+/**
+ *	kbEditor::SaveLevel
+ */
+void kbEditor::SaveLevel( class Fl_Widget *, void * ) {
 
-	kbFile outFile;
-	outFile.Open( fileNameStr.c_str(), kbFile::FT_Write );
-
-	for ( int i = 0; i < g_Editor->m_GameEntities.size(); i++ ) {
-		outFile.WriteGameEntity( g_Editor->m_GameEntities[i]->GetGameEntity() );
+	if ( g_Editor->m_CurrentLevelFileName.empty() ) {
+		return;
 	}
 
-	outFile.Close();
+	g_Editor->SaveLevel_Internal( g_Editor->m_CurrentLevelFileName, true );
 }
 
 /**

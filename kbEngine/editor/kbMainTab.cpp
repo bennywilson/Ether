@@ -19,6 +19,8 @@
 kbModel * model = NULL;
 void * sceneHandle;		// todo - hack
 
+const float Base_Cam_Speed = 0.1f;
+
 /*
  *	kbEditorMainTab::kbEditorMainTab
  */
@@ -261,7 +263,7 @@ void kbMainTab::InputCB( const widgetCBObject * widgetCBObj ) {
  *	kbMainTab::CameraMoveCB
  */
 void kbMainTab::CameraMoveCB( const widgetCBInputObject * inputObject ) {
-	float movementMag = m_CameraMoveSpeedMultiplier;
+	float movementMag = m_CameraMoveSpeedMultiplier * Base_Cam_Speed;
 	const float rotationMag = 0.01f;
 
 	kbEditorWindow * pCurrentWindow = GetCurrentWindow();

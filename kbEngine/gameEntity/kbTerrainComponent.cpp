@@ -27,7 +27,7 @@ void kbTerrainComponent::Constructor() {
 	m_pHeightMap = nullptr;
 	m_HeightScale = 0.3f;
 	m_TerrainWidth = 256.0f;
-	m_TerrainLength = 256.0;
+	m_TerrainDimensions = 16;
 	m_bRegenerateTerrain = false;
 }
 
@@ -79,16 +79,16 @@ void kbTerrainComponent::GenerateTerrain() {
 		byte a;
 	};
 
-	unsigned int width, length;
+	unsigned int texWidth, texHeight;
 
-	const pixelData *const pTextureBuffer = ( pixelData * )m_pHeightMap->GetCPUTexture( width, length );
+	const pixelData *const pTextureBuffer = ( pixelData * )m_pHeightMap->GetCPUTexture( texWidth, texHeight );
 
 	// Build terrain here
-	const int numVerts = width * length;
-	const unsigned int numIndices = ( width - 1 ) * ( length - 1 ) * 6;
+	const int numVerts = m_TerrainDimensions * m_TerrainDimensions;
+	const unsigned int numIndices = ( m_TerrainDimensions - 1 ) * ( m_TerrainDimensions - 1 ) * 6;
 	const float HalfTerrainWidth = m_TerrainWidth * 0.5f;
-	const float HalfTerrainLength = m_TerrainLength * 0.5f;
-	const float stepSize = m_TerrainWidth / (float) width;
+	const float stepSize = m_TerrainWidth / (float) texWidth;
+	const float cellWidth = m_TerrainWidth / (float)m_TerrainDimensions;
 
 	if ( m_TerrainModel.NumVertices() > 0 ) {
 		g_pRenderer->RemoveRenderObject( this );
@@ -96,30 +96,42 @@ void kbTerrainComponent::GenerateTerrain() {
 
 	m_TerrainModel.CreateDynamicModel( numVerts, numIndices );
 
-	vertexLayout * pVerts = ( vertexLayout * ) m_TerrainModel.MapVertexBuffer();
+	vertexLayout *const pVerts = ( vertexLayout * ) m_TerrainModel.MapVertexBuffer();
 
+	int blurSampleSize = 8;
 	int currentVert = 0;
-	for ( unsigned int startY = 0; startY < length; startY++ ) {
-		for ( unsigned int startX = 0; startX < width; startX++ ) {
-			int textureIndex = ( startY * width ) + startX;
+	for ( int startY = 0; startY < m_TerrainDimensions; startY++ ) {
+		for ( int startX = 0; startX < m_TerrainDimensions; startX++ ) {
+
+
+		//	int textureIndex = ( v * texWidth ) + u;
 
 			float divisor = 1.0f;
-			float height = 0.0f;//( float ) pTextureBuffer[textureIndex].r;
+			float height = 0.0f;
 
-			for ( int tempY = 0; tempY < 8; tempY++ ) {
-				for ( int tempX = 0; tempX < 8; tempX++ ) {
-					int texIdx = ( ( startY + tempY ) * width ) + ( tempX + startX );
+			for ( int tempY = 0; tempY < blurSampleSize; tempY++ ) {
 
-					if ( texIdx >= 0 && texIdx < numVerts ) {
-						divisor += 1.0f;
-						height += ( float ) pTextureBuffer[texIdx].r;
+				if ( tempY + startY >= m_TerrainDimensions ) {
+					break;
+				}
+
+				for ( int tempX = 0; tempX < blurSampleSize; tempX++ ) {
+					if ( tempX + startX >= m_TerrainDimensions ) {
+						break;
 					}
+
+					const float u = (float)(startX + tempX) / (float)m_TerrainDimensions;
+					const float v = (float)(startY + tempY) / (float)m_TerrainDimensions;
+					const int textureIndex = static_cast<int>(( v * texWidth * texWidth ) + ( u * texWidth ) );
+
+					divisor += 1.0f;
+					height += ( float ) pTextureBuffer[textureIndex].r;
 				}
 			}
 
 			height *= ( m_HeightScale / divisor );
 			pVerts[currentVert].Clear();
-			pVerts[currentVert].position.Set( -HalfTerrainWidth +  ( startX * stepSize ), height, -HalfTerrainLength + ( startY * stepSize ) );
+			pVerts[currentVert].position.Set( -HalfTerrainWidth + ( startX * cellWidth ), height, -HalfTerrainWidth + ( startY * cellWidth ) );
 			pVerts[currentVert].SetColor( kbVec4( 1.0f, 1.0f, 1.0f, 1.0f ) );
 			pVerts[currentVert].SetNormal( kbVec4( 0.0f, 1.0f, 0.0f, 0.0f ) );
 			currentVert++;
@@ -130,22 +142,22 @@ void kbTerrainComponent::GenerateTerrain() {
 	unsigned long * pIndices = ( unsigned long* ) m_TerrainModel.MapIndexBuffer();
 	int currentIndexToWrite = 0;
 
-	for ( unsigned int startY = 0; startY < length; startY++ ) {
-		for ( unsigned int startX = 0; startX < width; startX++ ) {
-			int currentIndex = ( startY * width ) + startX;
+	for ( int startY = 0; startY < m_TerrainDimensions; startY++ ) {
+		for ( int startX = 0; startX < m_TerrainDimensions; startX++ ) {
+			int currentIndex = ( startY * m_TerrainDimensions ) + startX;
 
 			kbVec3 xVec, zVec;
 
-			if ( startX < width - 1 ) {
+			if ( startX < m_TerrainDimensions - 1 ) {
 				xVec = pVerts[currentIndex + 1].position - pVerts[currentIndex].position;
 			} else {
 				xVec = pVerts[currentIndex].position - pVerts[currentIndex - 1].position;
 			}
 
-			if ( startY < length - 1 ) {
-				zVec = pVerts[ currentIndex ].position - pVerts[ currentIndex + width ].position;
+			if ( startY < m_TerrainDimensions - 1 ) {
+				zVec = pVerts[currentIndex ].position - pVerts[ currentIndex + m_TerrainDimensions].position;
 			} else {
-				zVec = pVerts[ currentIndex - width ].position - pVerts[ currentIndex ].position;
+				zVec = pVerts[currentIndex - m_TerrainDimensions].position - pVerts[currentIndex].position;
 			}
 
 			xVec.Normalize();
@@ -155,22 +167,22 @@ void kbTerrainComponent::GenerateTerrain() {
 
 			debugNormal newNormal;
 			newNormal.normal = finalVec;
-			newNormal.position = pVerts[ currentIndex ].position;
+			newNormal.position = pVerts[currentIndex].position;
 			terrainNormals.push_back( newNormal );
 		}
 	}
 
-	for ( unsigned int y = 0; y < length - 1; y++ ) {
-		for ( unsigned int x = 0; x < width - 1; x++ ) {
+	for ( int y = 0; y < m_TerrainDimensions - 1; y++ ) {
+		for ( int x = 0; x < m_TerrainDimensions - 1; x++ ) {
 			
-			unsigned int currentIndex = ( y * width ) + x;
-			pIndices[ currentIndexToWrite + 2 ] = currentIndex;
-			pIndices[ currentIndexToWrite + 1 ] = currentIndex + 1;
-			pIndices[ currentIndexToWrite + 0 ] = currentIndex + width;
+			const unsigned int currentIndex = ( y * m_TerrainDimensions ) + x;
+			pIndices[currentIndexToWrite + 2] = currentIndex;
+			pIndices[currentIndexToWrite + 1] = currentIndex + 1;
+			pIndices[currentIndexToWrite + 0] = currentIndex + m_TerrainDimensions;
 
-			pIndices[ currentIndexToWrite + 5 ] = currentIndex + 1;
-			pIndices[ currentIndexToWrite + 4 ] = currentIndex + 1 + width;
-			pIndices[ currentIndexToWrite + 3 ] = currentIndex + width;
+			pIndices[currentIndexToWrite + 5] = currentIndex + 1;
+			pIndices[currentIndexToWrite + 4] = currentIndex + 1 + m_TerrainDimensions;
+			pIndices[currentIndexToWrite + 3] = currentIndex + m_TerrainDimensions;
 
 			currentIndexToWrite += 6;
 		}
@@ -178,7 +190,22 @@ void kbTerrainComponent::GenerateTerrain() {
 
 	m_TerrainModel.UnmapIndexBuffer();
 
-	g_pRenderer->AddRenderObject( this, &m_TerrainModel, kbVec3( 0.0f, 0.0f, 0.0f ), kbQuat( 0.0f, 0.0f, 0.0f, 1.0f ), kbVec3( 1.0f, 1.0f, 1.0f ) );
+	g_pRenderer->AddRenderObject( this, &m_TerrainModel, kbVec3::zero, kbQuat( 0.0f, 0.0f, 0.0f, 1.0f ), kbVec3::one );
+}
+
+/**
+ *	kbTerrainComponent::SetEnable_Internal
+ */	
+void kbTerrainComponent::SetEnable_Internal( const bool isEnabled ) {
+	if ( m_TerrainModel.NumVertices() == 0 ) {
+		return ;
+	}
+
+	if ( isEnabled ) {
+		g_pRenderer->AddRenderObject( this, &m_TerrainModel, kbVec3::zero, kbQuat( 0.0f, 0.0f, 0.0f, 1.0f ), kbVec3::one );	
+	} else {
+		g_pRenderer->RemoveRenderObject( this );
+	}
 }
 
 /**

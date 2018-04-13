@@ -52,12 +52,5 @@ SamplerState depthTextureSampler;
 
  float4 pixelShader( pixelInput	input ) : SV_TARGET {
    float4 inSceneColor = sceneTexture.Sample( sceneColorSampler, input.uv );
-   float4 pixelPosition = float4( input.position2.xy, depthTexture.Sample( depthTextureSampler, input.uv ).r, 1);
-   pixelPosition = mul( pixelPosition, inverseProjection );
-   pixelPosition /= pixelPosition.w;
-
-   float distToPixel = length( pixelPosition.xyz );
-   float lerpVal = ( distToPixel - fogStartDistance ) / ( fogEndDistance - fogStartDistance );
-   float4 outColor = lerp( inSceneColor, fogColor, saturate( lerpVal ) );
-   return outColor;
+   return inSceneColor;
 }

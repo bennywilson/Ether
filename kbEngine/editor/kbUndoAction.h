@@ -2,7 +2,7 @@
 // kbUndoAction.h
 //
 //
-// 2016 kbEngine 2.0
+// 2016-2018 kbEngine 2.0
 //===================================================================================================
 #ifndef _KBUNDOACTION_H_
 #define _KBUNDOACTION_H_
@@ -13,17 +13,21 @@
 struct kbUndoStack {
 													kbUndoStack();
 
+	UINT64											GetLastDirtyActionId() const;
+
 	void											Push( class kbUndoAction *const action );
 	void											Undo();
 	void											Redo();
 	void											Reset();
 
-	std::vector< class kbUndoAction * >				m_Stack;
+	std::vector<class kbUndoAction *>				m_Stack;
 	int												m_StackTop;
 	int												m_StackCurrent;
 	int												m_StackLength;
 
 	void											DumpStack();
+
+	UINT64											m_NextUndoActionId;
 };
 
 /**
@@ -32,15 +36,16 @@ struct kbUndoStack {
  */
 class kbUndoAction {
 public:
-									kbUndoAction() : m_bHasBeenRedone( false ) { }
+									kbUndoAction() : m_UndoActionId( UINT64_MAX ), m_bHasBeenRedone( false ) { }
 	virtual							~kbUndoAction() { if ( m_bHasBeenRedone ) Cleanup(); }
 
 	virtual void					Cleanup() { }
 
 	virtual void					UndoAction() = 0;
 	virtual void					RedoAction() = 0;
+	virtual bool					MarksMapAsDirty() const = 0;
 
-
+	UINT64							m_UndoActionId;
 	bool							m_bHasBeenRedone;
 
 };
@@ -53,10 +58,12 @@ public:
 	
 									kbUndoVariableAction( kbTypeInfoType_t type, void * bytePtrToUndoValue, void * bytePtrToRedoValue, void * pVariable );
 
-	virtual void					UndoAction();
-	virtual void					RedoAction();
+	virtual void					UndoAction() override;
+	virtual void					RedoAction() override;
+	virtual bool					MarksMapAsDirty() const override { return true; }
 
 private:
+
 	void *							m_pVariable;
 	kbTypeInfoType_t				m_VarType;
 
@@ -81,8 +88,9 @@ public:
 									kbUndoDeleteComponent( kbEditorEntity *const entity, kbComponent *const componentToDelete, int indexIntoComponentList );
 	virtual void					Cleanup();
 
-	virtual void					UndoAction();
-	virtual void					RedoAction();
+	virtual void					UndoAction() override;
+	virtual void					RedoAction() override;
+	virtual bool					MarksMapAsDirty() const override { return true; }
 
 private:
 	kbEditorEntity *				m_pEditorEntity;
@@ -103,8 +111,9 @@ public:
 									kbUndoDeleteActor( std::vector<DeletedActorInfo_t> & entitiesToDelete );
 	virtual void					Cleanup();
 
-	virtual void					UndoAction();
-	virtual void					RedoAction();
+	virtual void					UndoAction() override;
+	virtual void					RedoAction() override;
+	virtual bool					MarksMapAsDirty() const override { return true; }
 
 	const int						NumDeleted() const { return (int) m_pEntitiesToDelete.size(); }
 
@@ -119,8 +128,9 @@ class kbUndoSelectActor : public kbUndoAction {
 public:
 									kbUndoSelectActor( std::vector<kbEditorEntity *> & undoEntities, std::vector<kbEditorEntity *> & redoEntities );
 
-	virtual void					UndoAction();
-	virtual void					RedoAction();
+	virtual void					UndoAction() override;
+	virtual void					RedoAction() override;
+	virtual bool					MarksMapAsDirty() const override { return false; }
 
 	const int						NumSelected() const { return (int)m_UndoSelectedEntities.size(); }
 

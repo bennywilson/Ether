@@ -3182,16 +3182,18 @@ void kbRenderer_DX11::RenderModel( const kbRenderObject *const pRenderObject, co
 
 		if ( pShaderOverrideList != nullptr && (*pShaderOverrideList).size() > 0 ) {
 			kbShader *const pOverriddenShader = (*pShaderOverrideList)[0];
-			const std::vector<kbVec4>	& globalShaderParams = pOverriddenShader->GetGlobalShaderParams();
+			if ( pOverriddenShader != nullptr ) {
+				const std::vector<kbVec4>	& globalShaderParams = pOverriddenShader->GetGlobalShaderParams();
 
-			if ( globalShaderParams.size() > 0 ) {
-				int iExtraParam = 0;
-				while( iExtraParam < Max_Extra_Params && iExtraParam < globalShaderParams.size() ) {
-					sourceBuffer.extraParams[iExtraParam] = globalShaderParams[iExtraParam];
-					iExtraParam++;
-				}
-				while( iExtraParam < Max_Extra_Params ) {
-					sourceBuffer.extraParams[iExtraParam++].Set( 0.0f, 0.0f, 0.0f, 0.0f );
+				if ( globalShaderParams.size() > 0 ) {
+					int iExtraParam = 0;
+					while( iExtraParam < Max_Extra_Params && iExtraParam < globalShaderParams.size() ) {
+						sourceBuffer.extraParams[iExtraParam] = globalShaderParams[iExtraParam];
+						iExtraParam++;
+					}
+					while( iExtraParam < Max_Extra_Params ) {
+						sourceBuffer.extraParams[iExtraParam++].Set( 0.0f, 0.0f, 0.0f, 0.0f );
+					}
 				}
 			}
 		}

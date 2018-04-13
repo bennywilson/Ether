@@ -2,7 +2,7 @@
 // kbCore.cpp
 //
 //
-// 2016-2017 kbEngine 2.0
+// 2016-2018 kbEngine 2.0
 //===================================================================================================
 #include <iostream>
 #include <cstdarg>
@@ -11,7 +11,7 @@
 #include "kbJobManager.h"
 
 FILE * g_LogFile = nullptr;
-bool	g_UseEditor = FALSE;
+bool	g_UseEditor = false;
 kbOutputCB * outputCB = nullptr;
 
 std::string adjustedBuffer;
@@ -27,7 +27,7 @@ kbTimer g_GlobalTimer;
  *	InitializeKBEngine
  */
 void InitializeKBEngine(char * logName) {
-	CoInitializeEx( NULL, COINIT_MULTITHREADED );
+	CoInitializeEx( nullptr, COINIT_MULTITHREADED );
 
 	g_GlobalTimer.Reset();
 	g_WriteFileMutex = CreateMutex( nullptr, FALSE, nullptr );
