@@ -47,7 +47,7 @@ void kbStaticModelComponent::SetEnable_Internal( const bool isEnabled ) {
 	}
 
 	if ( isEnabled ) {
-		g_pRenderer->AddRenderObject( this, m_pModel, m_pParent->GetPosition(), m_pParent->GetOrientation(), m_pParent->GetScale(), m_RenderPass, &m_pOverrideShaderList, &m_ShaderParams );
+		g_pRenderer->AddRenderObject( this, m_pModel, GetOwner()->GetPosition(), GetOwner()->GetOrientation(), GetOwner()->GetScale(), m_RenderPass, &m_pOverrideShaderList, &m_ShaderParams );
 	} else {
 		g_pRenderer->RemoveRenderObject( this );
 	}
@@ -60,7 +60,7 @@ void kbStaticModelComponent::Update_Internal( const float DeltaTime ) {
 
 	Super::Update_Internal( DeltaTime );
 
-	if ( m_pModel != nullptr && m_pParent->IsDirty() ) {
-		g_pRenderer->UpdateRenderObject( this, m_pModel, m_pParent->GetPosition(), m_pParent->GetOrientation(), m_pParent->GetScale(), m_RenderPass, &m_pOverrideShaderList, &m_ShaderParams );
+	if ( m_pModel != nullptr && GetOwner()->IsDirty() ) {
+		g_pRenderer->UpdateRenderObject( this, m_pModel, GetOwner()->GetPosition(), GetOwner()->GetOrientation(), GetOwner()->GetScale(), m_RenderPass, &m_pOverrideShaderList, &m_ShaderParams );
 	}
 }

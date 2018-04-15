@@ -78,9 +78,6 @@
     <ClCompile Include="GameBase.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Ether\EtherGame.cpp">
-      <Filter>Source Files\Ether</Filter>
-    </ClCompile>
     <ClCompile Include="Ether\EtherSkelModel.cpp">
       <Filter>Source Files\Ether</Filter>
     </ClCompile>
@@ -104,6 +101,9 @@
     </ClCompile>
     <ClCompile Include="Ether\EtherWorldGen.cpp">
       <Filter>Source Files\Ether</Filter>
+    </ClCompile>
+    <ClCompile Include="Ether\EtherGame.cpp">
+      <Filter>Source Files\Ether\Game Logic</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

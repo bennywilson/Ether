@@ -2,12 +2,13 @@
 // kbMaterial.h
 //
 //
-// 2016-2017 kbEngine 2.0
+// 2016-2018 kbEngine 2.0
 //===================================================================================================
 #ifndef _KBMATERIAL_H_
 #define _KBMATERIAL_H_
 
 #include <memory>
+#include "kbRenderer_Defs.h"
 
 /**
  *	kbTexture

@@ -81,7 +81,7 @@ private:
 	bool													m_IsRunning;
 	bool													m_bRightMouseButtonDragged;
 
-	// Stores a copy of the current undo action's id.  The level is dirty if the two values don't match.
+	// Stores a copy of the current undo action's id.  The level is dirty if the two values don't match
 	UINT64													m_UndoIDAtLastSave;
 
 	// internal functions and callbacks

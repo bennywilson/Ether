@@ -2,7 +2,7 @@
 // kbModelComponent.h
 //
 //
-// 2016-2017 kbEngine 2.0
+// 2016-2018 kbEngine 2.0
 //==============================================================================
 #ifndef _KBMODELCOMPONENT_H_
 #define _KBMODELCOMPONENT_H_
@@ -10,9 +10,9 @@
 /**
  *	kbModelComponent
  */
-class kbModelComponent : public kbComponent {
+class kbModelComponent : public kbGameComponent {
 public:
-	KB_DECLARE_COMPONENT( kbModelComponent, kbComponent );
+	KB_DECLARE_COMPONENT( kbModelComponent, kbGameComponent );
 
 	virtual								~kbModelComponent();
 

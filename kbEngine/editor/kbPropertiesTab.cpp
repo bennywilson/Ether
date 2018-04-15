@@ -586,7 +586,7 @@ void kbPropertiesTab::RefreshEntity() {
 		const kbGameEntity * pGameEntity = pEntity->GetGameEntity();
 
 		for ( size_t i = 0; i < pGameEntity->NumComponents(); i++ ) {
-			RefreshComponent( pEntity, const_cast< kbComponent * >( pGameEntity->GetComponent( i ) ), startX, curY, inputHeight );
+			RefreshComponent( pEntity, const_cast<kbGameComponent *>( pGameEntity->GetComponent( i ) ), startX, curY, inputHeight );
 			curY += LineSpacing();
 		}
 	}
@@ -824,7 +824,7 @@ void kbPropertiesTab::DeleteComponent( Fl_Widget * widget, void * voidptr ) {
 	}
 
 	int componentIdx = -1;
-	kbGameEntity *const pEntity = componentToDelete->GetParent();
+	kbGameEntity *const pEntity = (kbGameEntity*)componentToDelete->GetOwner();	// ENTITY HACK
 	for ( componentIdx = 0; componentIdx < pEntity->NumComponents(); componentIdx++ ) {
 		if ( pEntity->GetComponent(componentIdx) == componentToDelete ) {
 			break;

@@ -36,10 +36,10 @@ void EtherProjectileComponent::Constructor() {
 void EtherProjectileComponent::Launch() {
 
 	if ( m_LaunchSoundData.size() > 0 ) {
-		m_LaunchSoundData[0].PlaySoundAtPosition( GetParent()->GetPosition() );
+		m_LaunchSoundData[0].PlaySoundAtPosition( GetOwner()->GetPosition() );
 	}
 
-	kbLightComponent *const pLightComp = (kbLightComponent*)GetParent()->GetComponentByType( kbLightComponent::GetType() );
+	kbLightComponent *const pLightComp = (kbLightComponent*)GetOwner()->GetComponentByType( kbLightComponent::GetType() );
 	if ( pLightComp != nullptr ) {
 		pLightComp->Enable( true );
 	}
@@ -50,7 +50,7 @@ void EtherProjectileComponent::Launch() {
  */
 void EtherProjectileComponent::LifeTimeExpired()  {
 	Super::LifeTimeExpired();
-	g_pGame->RemoveGameEntity( m_pParent );
+	g_pGame->RemoveGameEntity( GetOwner() );
 }
 
 /**
@@ -63,12 +63,12 @@ void EtherProjectileComponent::Update_Internal( const float DeltaTime ) {
 		return;
 	}
 
-	const kbMat4 projectileMat = m_pParent->GetOrientation().ToMat4();
+	const kbMat4 projectileMat = GetOwner()->GetOrientation().ToMat4();
 
 	// Draw projectile
 	if ( m_bUseBillboard ) {
 		kbParticleManager::CustomParticleInfo_t ParticleInfo;
-		ParticleInfo.m_Position = m_pParent->GetPosition();
+		ParticleInfo.m_Position = GetOwner()->GetPosition();
 		ParticleInfo.m_Direction = projectileMat[2].ToVec3();
 		ParticleInfo.m_Width = m_TracerLength;
 		ParticleInfo.m_Color.Set( 1.0f, 1.0f, 1.0f );
@@ -79,7 +79,7 @@ void EtherProjectileComponent::Update_Internal( const float DeltaTime ) {
 		g_pGame->GetParticleManager()->AddQuad( ParticleInfo );
 	} else {
 		kbParticleManager::CustomParticleInfo_t ParticleInfo;
-		ParticleInfo.m_Position = m_pParent->GetPosition();
+		ParticleInfo.m_Position = GetOwner()->GetPosition();
 		ParticleInfo.m_Direction = projectileMat[2].ToVec3();
 		ParticleInfo.m_Width = 32.0f;
 		ParticleInfo.m_Color.Set( 1.0f, 1.0f, 1.0f );
@@ -90,12 +90,12 @@ void EtherProjectileComponent::Update_Internal( const float DeltaTime ) {
 		g_pGame->GetParticleManager()->AddQuad( ParticleInfo );
 	}
 
-	const kbVec3 oldPosition = m_pParent->GetPosition();
-	const kbVec3 newPosition = m_pParent->GetPosition() + projectileMat[2].ToVec3() * DeltaTime * m_Velocity;
-	m_pParent->SetPosition( newPosition );
+	const kbVec3 oldPosition = GetOwner()->GetPosition();
+	const kbVec3 newPosition = GetOwner()->GetPosition() + projectileMat[2].ToVec3() * DeltaTime * m_Velocity;
+	GetOwner()->SetPosition( newPosition );
 
 	// Hack to get around dirty flag issues
-	kbStaticModelComponent *const pSM = (kbStaticModelComponent*)m_pParent->GetComponentByType( kbStaticModelComponent::GetType() );
+	kbStaticModelComponent *const pSM = (kbStaticModelComponent*)GetOwner()->GetComponentByType( kbStaticModelComponent::GetType() );
 	if ( pSM != nullptr ) {
 		pSM->Update( DeltaTime );
 	}
@@ -107,7 +107,7 @@ void EtherProjectileComponent::Update_Internal( const float DeltaTime ) {
 	kbActorComponent * pHitActorComponent = nullptr;
 	const kbCollisionInfo_t collisionInfo = g_CollisionManager.PerformLineCheck( oldPosition, newPosition );
 	if ( collisionInfo.m_bHit && collisionInfo.m_pHitComponent != nullptr && collisionInfo.m_T <= 1.0f ) {
-		pHitActorComponent = collisionInfo.m_pHitComponent->GetParent()->GetActorComponent();
+		pHitActorComponent = collisionInfo.m_pHitComponent->GetOwner()->GetActorComponent();
 		hitT = collisionInfo.m_T;
 	}
 
@@ -120,12 +120,12 @@ void EtherProjectileComponent::Update_Internal( const float DeltaTime ) {
 			hitT = T;
 			if ( m_bExplodeOnImpact ) {
 				bExploded = true;
-				g_pGame->RemoveGameEntity( GetParent() );
+				g_pGame->RemoveGameEntity( GetOwner() );
 
 				if ( m_ExplosionFX.GetEntity() != nullptr ) {
 					kbGameEntity *const pExplosionFX = g_pGame->CreateEntity( m_ExplosionFX.GetEntity() );
 					pExplosionFX->SetPosition( worldHitCollisionPt );
-					pExplosionFX->SetOrientation( m_pParent->GetOrientation() );
+					pExplosionFX->SetOrientation( GetOwner()->GetOrientation() );
 					pExplosionFX->DeleteWhenComponentsAreInactive( true );
 				}
 
@@ -142,12 +142,12 @@ void EtherProjectileComponent::Update_Internal( const float DeltaTime ) {
 
 	if ( hitT < FLT_MAX && m_bExplodeOnImpact == false ) {
 		const kbVec3 newPosition = oldPosition + projectileMat[2].ToVec3() * hitT;
-		m_pParent->SetPosition( newPosition + g_ProjectileStuckOffset );
+		GetOwner()->SetPosition( newPosition + g_ProjectileStuckOffset );
 		this->m_Velocity = 0.0f;
 	} else if ( bExploded == false && pHitActorComponent != nullptr ) {
 
 		bool bShouldDamage = true;
-		if ( m_OwnerEntity.GetEntity() != nullptr && m_OwnerEntity.GetEntity()->GetComponentByType( EtherPlayerComponent::GetType() ) != pHitActorComponent->GetParent()->GetComponentByType( EtherPlayerComponent::GetType() ) ) {
+		if ( m_OwnerEntity.GetEntity() != nullptr && m_OwnerEntity.GetEntity()->GetComponentByType( EtherPlayerComponent::GetType() ) != pHitActorComponent->GetOwner()->GetComponentByType( EtherPlayerComponent::GetType() ) ) {
 			pHitActorComponent->TakeDamage( this, nullptr );
 		}
 	
@@ -155,7 +155,7 @@ void EtherProjectileComponent::Update_Internal( const float DeltaTime ) {
 			m_ImpactCharacterSoundData[0].PlaySoundAtPosition( newPosition );
 		}
 		DealRadiusDamage();
-		g_pGame->RemoveGameEntity( GetParent() );
+		g_pGame->RemoveGameEntity( GetOwner() );
 		return;
 	}
 
@@ -166,8 +166,8 @@ void EtherProjectileComponent::Update_Internal( const float DeltaTime ) {
 			if ( m_ExplosionFX.GetEntity() != nullptr ) {
 				kbGameEntity *const pExplosionFX = g_pGame->CreateEntity( m_ExplosionFX.GetEntity() );
 			//	pExplosionFX->SetScale( kbVec3( 25.0f, 25.0f, 25.0f ) );
-				pExplosionFX->SetPosition( m_pParent->GetPosition() + g_ProjectileStuckOffset );
-				pExplosionFX->SetOrientation( m_pParent->GetOrientation() );
+				pExplosionFX->SetPosition( GetOwner()->GetPosition() + g_ProjectileStuckOffset );
+				pExplosionFX->SetOrientation( GetOwner()->GetOrientation() );
 				pExplosionFX->DeleteWhenComponentsAreInactive( true );
 
 				if ( m_ExplosionSoundData.size() > 0 ) {
@@ -183,10 +183,10 @@ void EtherProjectileComponent::Update_Internal( const float DeltaTime ) {
 				DealRadiusDamage();
 			}
 
-			g_pGame->RemoveGameEntity( GetParent() );
+			g_pGame->RemoveGameEntity( GetOwner() );
 		}
 	}
-//	g_pRenderer->DrawSphere( m_pParent->GetPosition(), 10.0f, 12, kbColor::red );
+//	g_pRenderer->DrawSphere( GetOwner()->GetPosition(), 10.0f, 12, kbColor::red );
 }
 
 
@@ -202,7 +202,7 @@ void EtherProjectileComponent::DealRadiusDamage() {
 			continue;
 		}
 
-		const float distFromExplosion = ( pCurEnt->GetPosition() - ( m_pParent->GetPosition() + g_ProjectileStuckOffset ) ).Length();
+		const float distFromExplosion = ( pCurEnt->GetPosition() - ( GetOwner()->GetPosition() + g_ProjectileStuckOffset ) ).Length();
 		if ( distFromExplosion > m_DamageRadius ) {
 			continue;
 		}
@@ -282,8 +282,8 @@ bool EtherWeaponComponent::Fire_Internal() {
 
 	EtherSkelModelComponent * pWeaponModel = nullptr;
 
-	for ( int i = 0; i < m_pParent->NumComponents(); i++ ) {
-		kbComponent *const pCurComponent = m_pParent->GetComponent(i);
+	for ( int i = 0; i < GetOwner()->NumComponents(); i++ ) {
+		kbComponent *const pCurComponent = GetOwner()->GetComponent(i);
 		if ( pCurComponent->IsA( EtherSkelModelComponent::GetType() ) == false ) {
 			continue;
 		}
@@ -294,8 +294,8 @@ bool EtherWeaponComponent::Fire_Internal() {
 		}*/
 	}
 
-	for ( int i = 0; i < m_pParent->NumComponents(); i++ ) {
-		kbComponent *const pCurComponent = m_pParent->GetComponent(i);
+	for ( int i = 0; i < GetOwner()->NumComponents(); i++ ) {
+		kbComponent *const pCurComponent = GetOwner()->GetComponent(i);
 		if ( pCurComponent->IsA( EtherSkelModelComponent::GetType() ) == false ) {
 			continue;
 		}
@@ -319,7 +319,7 @@ bool EtherWeaponComponent::Fire_Internal() {
 			const kbParticleComponent *const pParticleComponentPrefab = static_cast<kbParticleComponent*>( pMuzzleFlashEntity->GetComponent(i) );
 			kbParticleComponent *const pParticle = g_pGame->GetParticleManager()->GetParticleComponent( pParticleComponentPrefab );
 			if ( pParticle != nullptr ) {
-				m_pParent->AddComponent( pParticle );
+				GetOwner()->AddComponent( pParticle );
 				pParticle->Enable( true );
 			}
 
@@ -343,7 +343,7 @@ bool EtherWeaponComponent::Fire_Internal() {
 			kbMat4 WeaponMatrix = pEtherGame->GetCrossHairLocalSpaceMatrix();
 
 			const kbVec3 aimAtPoint = gameCamera.m_Position + 9999.0f * WeaponMatrix[2].ToVec3();
-			const kbVec3 zAxis = ( aimAtPoint - m_pParent->GetPosition() ).Normalized();
+			const kbVec3 zAxis = ( aimAtPoint - GetOwner()->GetPosition() ).Normalized();
 			const kbVec3 xAxis = kbVec3::up.Cross( zAxis ).Normalized();
 			const kbVec3 yAxis = zAxis.Cross( xAxis ).Normalized();
  
@@ -353,14 +353,14 @@ bool EtherWeaponComponent::Fire_Internal() {
 			WeaponMatrix[3].Set( 0.0f, 0.0f, 0.0f, 1.0f );
 
 			WeaponOrientation = kbQuatFromMatrix( WeaponMatrix * gameCamera.m_Rotation.ToMat4() );
-			WeaponPos = m_pParent->GetPosition();
+			WeaponPos = GetOwner()->GetPosition();
 
 		} else {
 
 			kbMat4 WeaponMatrix = pEtherGame->GetCrossHairLocalSpaceMatrix();
 
 			const kbVec3 aimAtPoint = WeaponMatrix[3].ToVec3();
-			const kbVec3 zAxis = ( aimAtPoint - m_pParent->GetPosition() ).Normalized();
+			const kbVec3 zAxis = ( aimAtPoint - GetOwner()->GetPosition() ).Normalized();
 			const kbVec3 xAxis = kbVec3::up.Cross( zAxis ).Normalized();
 			const kbVec3 yAxis = zAxis.Cross( xAxis ).Normalized();
  
@@ -370,7 +370,7 @@ bool EtherWeaponComponent::Fire_Internal() {
 			WeaponMatrix[3].Set( 0.0f, 0.0f, 0.0f, 1.0f );
 
 			WeaponOrientation = kbQuatFromMatrix( WeaponMatrix );
-			WeaponPos = m_pParent->GetPosition();
+			WeaponPos = GetOwner()->GetPosition();
 		}
 
 		kbGameEntity *const newProjectile = g_pGame->CreateEntity( pProjectileEntity );
@@ -382,9 +382,9 @@ bool EtherWeaponComponent::Fire_Internal() {
 		if ( pProjectileComponent == nullptr ) {
 			kbError( "EtherWeaponComponent::Fire - No Projectile Component found on the projectile entity :o" );
 		} else {
-			kbGameEntity * pParent = GetParent();
-			while( pParent->GetParent() != nullptr ) {
-				pParent = pParent->GetParent();
+			kbGameEntity * pParent = GetOwner();
+			while( pParent->GetOwner() != nullptr ) {
+				pParent = pParent->GetOwner();
 			}
 
 			pProjectileComponent->m_OwnerEntity.SetEntity( pParent );

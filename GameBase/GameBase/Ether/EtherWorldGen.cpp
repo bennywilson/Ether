@@ -292,7 +292,7 @@ void EtherWorldGenComponent::UpdateTimeOfDayFX() {
 				pDirLight->SetColor( SunColor );
 				pDirLight->Enable( false );
 				pDirLight->Enable( true );
-				pDirLight->GetParent()->SetOrientation( kbQuatFromMatrix( sunRotationMatrix ) );
+				pDirLight->GetOwner()->SetOrientation( kbQuatFromMatrix( sunRotationMatrix ) );
 			}
 		
 			if ( pFog != nullptr ) {
@@ -328,7 +328,7 @@ void EtherWorldGenComponent::UpdateTimeOfDayFX() {
 				sunRotationMatrix[2] = finalSunDirection;
 
 				pLightShafts->SetColor( LightShaftsColor );
-				pLightShafts->GetParent()->SetOrientation( kbQuatFromMatrix( sunRotationMatrix ) );
+				pLightShafts->GetOwner()->SetOrientation( kbQuatFromMatrix( sunRotationMatrix ) );
 			}
 			break;
 		}
@@ -925,7 +925,7 @@ void EtherWorldGenComponent::MoveActorAlongGround( EtherActorComponent *const pA
 	}
 
 	if ( pActor != nullptr ) {
-		pActor->GetParent()->SetPosition( finalPlayerPos );
+		pActor->GetOwner()->SetPosition( finalPlayerPos );
 	}
 }
 

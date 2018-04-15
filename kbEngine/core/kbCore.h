@@ -114,7 +114,7 @@ template<typename T> inline T kbLerp( T a, T b, float t ) { return ( ( b - a ) *
 
 std::string GetFileExtension( const std::string & FileName );
 
-#define SAFE_RELEASE( object ) { if ( object != NULL ) { object->Release(); object = nullptr; } }
+#define SAFE_RELEASE( object ) { if ( object != nullptr ) { object->Release(); object = nullptr; } }
 
 /**
  *  kbTimer

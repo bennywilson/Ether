@@ -11,6 +11,47 @@
 #include "kbGame.h"
 #include "kbGameEntityHeader.h"
 
+/**
+ *	kbEntity::kbEntity
+ */
+kbEntity::kbEntity() {
+}
+
+/**
+ *	kbEntity::AddComponent
+ */
+void kbEntity::AddComponent( kbComponent *const pComponent, int indexToInsertAt ) {
+	pComponent->SetParent( this );
+
+	const int lastComponentIdx = (int)m_Components.size();
+	if ( indexToInsertAt == -1 ) {
+		indexToInsertAt = lastComponentIdx;
+	}
+
+	if ( pComponent->IsA( kbGameLogicComponent::GetType() ) ) {
+		indexToInsertAt = lastComponentIdx;
+	} else if ( m_Components.size() > 0 && indexToInsertAt == lastComponentIdx ) {
+		while( indexToInsertAt > 0 && m_Components[indexToInsertAt-1]->IsA( kbGameLogicComponent::GetType() ) ) {
+			indexToInsertAt--;
+		}
+	}
+
+	if ( indexToInsertAt < 0 || indexToInsertAt >= m_Components.size() ) {
+		m_Components.push_back( pComponent );
+	} else {
+		m_Components.insert( m_Components.begin() + indexToInsertAt, pComponent );
+	}
+}
+
+
+/**
+ *	kbEntity::RemoveComponent
+ */
+void kbEntity::RemoveComponent( kbComponent *const pComponent ) {
+
+	// TODO: This might move the game logic component from the back of the list!
+	FastRemoveFromVector( m_Components, pComponent );
+}
 
 //===================================================================================================
 //	kbGameEntityPtr
@@ -252,7 +293,6 @@ void kbGameEntity::PostLoad() {
  *	kbGameEntity::AddComponent
  */
 void kbGameEntity::AddComponent( kbComponent *const pComponent, int indexToInsertAt ) {
-	pComponent->SetParent( this );
 
 	if ( pComponent->IsA( kbActorComponent::GetType() ) ) {
 		if ( m_pActorComponent != nullptr ) {
@@ -263,24 +303,7 @@ void kbGameEntity::AddComponent( kbComponent *const pComponent, int indexToInser
 		m_pActorComponent = static_cast<kbActorComponent*>( pComponent );
 	}
 
-	const int lastComponentIdx = (int)m_Components.size();
-	if ( indexToInsertAt == -1 ) {
-		indexToInsertAt = lastComponentIdx;
-	}
-
-	if ( pComponent->IsA( kbGameLogicComponent::GetType() ) ) {
-		indexToInsertAt = lastComponentIdx;
-	} else if ( m_Components.size() > 0 && indexToInsertAt == lastComponentIdx ) {
-		while( indexToInsertAt > 0 && m_Components[indexToInsertAt-1]->IsA( kbGameLogicComponent::GetType() ) ) {
-			indexToInsertAt--;
-		}
-	}
-
-	if ( indexToInsertAt < 0 || indexToInsertAt >= m_Components.size() ) {
-		m_Components.push_back( pComponent );
-	} else {
-		m_Components.insert( m_Components.begin() + indexToInsertAt, pComponent );
-	}
+	kbEntity::AddComponent( pComponent, indexToInsertAt );
 
 	if ( m_bIsPrefab == false ) {
 		if ( pComponent->IsEnabled() ) {
@@ -290,15 +313,6 @@ void kbGameEntity::AddComponent( kbComponent *const pComponent, int indexToInser
 			pComponent->Enable( false );
 		}
 	}
-}
-
-/**
- *	kbGameEntity::RemoveComponent
- */
-void kbGameEntity::RemoveComponent( kbComponent *const pComponent ) {
-
-	// TODO: This might move the game logic component from the back of the list!
-	FastRemoveFromVector( m_Components, pComponent );
 }
 
 /**
@@ -323,8 +337,8 @@ void kbGameEntity::Update( const float DeltaTime ) {
 
 		for ( int i = 0; i < m_Components.size(); i++ ) {
 			// todo: make sure entity is still valid before updating the next component (ex. projectile may have removed the entity)
-			if ( m_Components[i]->IsEnabled() ) {
-				m_Components[i]->Update( DeltaTime );
+			if ( GetComponent(i)->IsEnabled() ) {
+				GetComponent(i)->Update( DeltaTime );
 			}
 		}
 	}
@@ -377,7 +391,7 @@ void kbGameEntity::RenderSync() {
 /**
  *	kbGameEntity::CalculateWorldMatrix
  */
-void kbGameEntity::CalculateWorldMatrix( kbMat4 & inOutMatrix ) {
+void kbGameEntity::CalculateWorldMatrix( kbMat4 & inOutMatrix ) const {
 
 	kbMat4 scaleMat( kbMat4::identity );
 	scaleMat[0].x = GetScale().x;

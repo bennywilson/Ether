@@ -2,7 +2,7 @@
 // kbParticleManager.cpp
 //
 //
-// 2016-2017 kbEngine 2.0
+// 2016-2018 kbEngine 2.0
 //===================================================================================================
 #include "kbCore.h"
 #include "kbVector.h"
@@ -17,9 +17,9 @@ static const uint NumParticleBufferVerts = 10000;
 kbParticleManager::kbParticleManager() :
 		m_NumIndicesInCurrentBuffer( 0 ),
 		m_CurrentParticleBuffer( 255 ),
-		m_pVertexBuffer( NULL ),
-		m_pIndexBuffer( NULL ),
-		m_pParticleTexture( NULL ) {
+		m_pVertexBuffer( nullptr ),
+		m_pIndexBuffer( nullptr ),
+		m_pParticleTexture( nullptr ) {
 }
 
 /**
@@ -45,7 +45,7 @@ void kbParticleManager::SetCustomParticleTextureAtlas( const std::string & atlas
  *	kbParticleManager::PoolParticleComponent
  */
 void kbParticleManager::PoolParticleComponent( const kbParticleComponent *const pParticleTemplate, const int PoolSize ) {
-	if ( pParticleTemplate == NULL ) {
+	if ( pParticleTemplate == nullptr ) {
 		kbWarning( "kbParticleManager::PoolParticleComponent() - NULL particle passed in" );
 		return;
 	}
@@ -58,7 +58,7 @@ void kbParticleManager::PoolParticleComponent( const kbParticleComponent *const 
 	// Check if this pool already exists
 	std::map<const kbParticleComponent *, std::vector< kbParticleComponent *>>::iterator it = m_ParticlePools.find( pParticleTemplate );
 	if ( it != m_ParticlePools.end() ) {
-		kbWarning( "kbParticleManager::PoolParticleComponent() - Particle %s already pooled", pParticleTemplate->GetParent()->GetName().c_str() );
+		kbWarning( "kbParticleManager::PoolParticleComponent() - Particle %s already pooled", pParticleTemplate->GetOwner()->GetName().c_str() );
 		return;
 
 	}
@@ -82,15 +82,15 @@ void kbParticleManager::PoolParticleComponent( const kbParticleComponent *const 
  */
 kbParticleComponent * kbParticleManager::GetParticleComponent( const kbParticleComponent *const pParticleTemplate ) {
 
-	if ( pParticleTemplate == NULL ) {
+	if ( pParticleTemplate == nullptr ) {
 		kbWarning( "kbParticleManager::GetParticleComponent() - NULL particle passed in" );
-		return NULL;
+		return nullptr;
 	}
 
 	std::map<const kbParticleComponent *, std::vector< kbParticleComponent *>>::iterator it = m_ParticlePools.find( pParticleTemplate );
 	if ( it == m_ParticlePools.end() ) {
-		kbWarning( "kbParticleManager::GetParticleComponent() - Particle %s not found in pooled", pParticleTemplate->GetParent()->GetName().c_str() );
-		return NULL;
+		kbWarning( "kbParticleManager::GetParticleComponent() - Particle %s not found in pooled", pParticleTemplate->GetOwner()->GetName().c_str() );
+		return nullptr;
 	}
 
 	kbParticleComponent *const retParticle = it->second[it->second.size() - 1];
@@ -104,15 +104,15 @@ kbParticleComponent * kbParticleManager::GetParticleComponent( const kbParticleC
  */
 void kbParticleManager::ReturnParticleComponent( kbParticleComponent *const pParticle ) {
 
-	if ( pParticle == NULL ) {
+	if ( pParticle == nullptr ) {
 		kbError( "kbParticleManager::ReturnParticleComponent() - NULL particle passed in" );
 		return;
 	}
 
 	g_pRenderer->RemoveParticle( pParticle );
-	pParticle->GetParent()->RemoveComponent( pParticle );
+	pParticle->GetOwner()->RemoveComponent( pParticle );
 	const kbParticleComponent *const pParticleTemplate = pParticle->m_ParticleTemplate;
-	if ( pParticleTemplate == NULL || pParticle->m_bIsPooled == false ) {
+	if ( pParticleTemplate == nullptr || pParticle->m_bIsPooled == false ) {
 		kbError( "kbParticleManager::ReturnParticleComponent() - Particle does not appear to be pooled" );
 		return;
 	}
@@ -121,7 +121,7 @@ void kbParticleManager::ReturnParticleComponent( kbParticleComponent *const pPar
 
 	std::map<const kbParticleComponent *, std::vector< kbParticleComponent *>>::iterator it = m_ParticlePools.find( pParticleTemplate );
 	if ( it == m_ParticlePools.end() ) {
-		kbError( "kbParticleManager::ReturnParticleComponent() - Particle %s not found in pooled", pParticleTemplate->GetParent()->GetName().c_str() );
+		kbError( "kbParticleManager::ReturnParticleComponent() - Particle %s not found in pooled", pParticleTemplate->GetOwner()->GetName().c_str() );
 		return;
 	}
 	
@@ -133,7 +133,7 @@ void kbParticleManager::ReturnParticleComponent( kbParticleComponent *const pPar
  */
 void kbParticleManager::RenderSync() {
 
-	if ( m_pParticleTexture == NULL ) {
+	if ( m_pParticleTexture == nullptr ) {
 		m_pParticleTexture = ( kbTexture* )g_ResourceManager.GetResource( "./assets/FX/laser_beam.jpg", true );
 	}
 
@@ -178,7 +178,7 @@ void kbParticleManager::RenderSync() {
  */
 void kbParticleManager::AddQuad( const CustomParticleInfo_t & CustomParticleInfo ) {
 	
-	if ( m_pVertexBuffer == NULL || m_pIndexBuffer == NULL ) {
+	if ( m_pVertexBuffer == nullptr || m_pIndexBuffer == nullptr ) {
 		return;
 	}
 

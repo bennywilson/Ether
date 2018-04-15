@@ -2,7 +2,7 @@
 // kbGameEntity.h
 //
 //
-// 2016-2017 kbEngine 2.0
+// 2016-2018 kbEngine 2.0
 //===================================================================================================
 #ifndef _KBGAMEENTITY_H_
 #define _KBGAMEENTITY_H_
@@ -41,9 +41,30 @@ private:
 };
 
 /**
+ *	kbEntity
+ */
+class kbEntity {
+//-------------------------------------------------------------------------------------------------------------------------------------------------------------
+public:
+												kbEntity();
+
+	virtual void								AddComponent( kbComponent *const pComponent, int indexToInsertAt = -1 );
+	virtual void								RemoveComponent( kbComponent *const pComponent );
+
+	kbComponent *								GetComponent( const size_t index ) const { return m_Components[index]; }
+	size_t										NumComponents() const { return m_Components.size(); }
+
+protected:
+	std::vector<kbComponent *>					m_Components;
+
+	// Entities that came from file (level, package, etc) have a GUID
+	kbGUID										m_GUID;
+};
+
+/**
  *	kbGameEntity
  */
-class kbGameEntity {
+class kbGameEntity : public kbEntity {
 
 	friend class kbGameEntityPtr;
 	friend class kbGame;
@@ -59,8 +80,9 @@ public:
 	void										PostLoad();
 
 	// Children
-	void										AddComponent( kbComponent *const pComponent, int indexToInsertAt = -1 );
-	void										RemoveComponent( kbComponent *const pComponent );
+	void										AddComponent( kbComponent *const pComponent, int indexToInsertAt = -1 ) override;
+	kbGameComponent *							GetComponent( const size_t index ) const { return (kbGameComponent*)m_Components[index]; }
+
 	void										AddEntity( kbGameEntity *const pEntity );
 
 	// Updates
@@ -81,22 +103,20 @@ public:
 	const kbVec3								GetScale() const { return m_pTransformComponent->GetScale(); }
 	void										SetScale( const kbVec3 & newScale ) { m_bIsDirty = true; m_pTransformComponent->SetScale( newScale ); }
 
-	void										CalculateWorldMatrix( kbMat4 & worldMatrix );
+	void										CalculateWorldMatrix( kbMat4 & worldMatrix ) const;
 
 	const kbBounds &							GetBounds() const { return m_Bounds; }
 	kbBounds									GetWorldBounds() const;
 	
-	void										MarkAsDirty() { m_bIsDirty = true; for ( int i = 0; i < m_Components.size(); i++ ) { m_Components[i]->m_bIsDirty = true; } }
+	void										MarkAsDirty() { m_bIsDirty = true; for ( int i = 0; i < m_Components.size(); i++ ) { m_Components[i]->MarkAsDirty(); } }
 	bool										IsDirty() const { return m_bIsDirty; }
 	bool										IsPrefab() const { return m_bIsPrefab; }
 
 	void										DeleteWhenComponentsAreInactive( const bool bDelete ) { m_bDeleteWhenComponentsAreInactive = bDelete; }
 
-	kbGameEntity *								GetParent() const { return m_pParentEntity; }
+	kbGameEntity *								GetOwner() const { return m_pParentEntity; }
 
 	kbActorComponent *							GetActorComponent() const { return m_pActorComponent; }
-	kbComponent *								GetComponent( const size_t index ) const { return m_Components[index]; }
-	size_t										NumComponents() const { return m_Components.size(); }
 	kbComponent *								GetComponentByType( const void *const pTypeInfoClass ) const;
 
 	const std::vector<kbGameEntity*> &			GetChildEntities() const { return m_ChildEntities; }
@@ -108,7 +128,6 @@ private:
 
 	kbBounds									m_Bounds;
 
-	std::vector<kbComponent *>					m_Components;
 	kbTransformComponent *						m_pTransformComponent;		// For convenience.  This is always the first entry in the m_Components list
 	kbActorComponent *							m_pActorComponent;
 	std::vector<kbGameEntity*>					m_ChildEntities;
@@ -116,9 +135,6 @@ private:
 
 	// All entities will have a m_EntityId.  They're temporary values that may differ between game instances
 	uint										m_EntityId;
-
-	// Entities that came from file (level, package, etc) have a GUID
-	kbGUID										m_GUID;
 
 	bool										m_bIsDirty							: 1;
 	bool										m_bIsPrefab							: 1;

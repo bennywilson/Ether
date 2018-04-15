@@ -108,8 +108,8 @@ void EtherPlayerComponent::Update_Internal( const float DeltaTimeSec ) {
 
 	// todo
 	if ( m_pFPHands == nullptr ) {
-		for ( int i = 0; i < m_pParent->GetChildEntities().size(); i++ ) {
-			kbGameEntity *const pCurEnt = m_pParent->GetChildEntities()[i];
+		for ( int i = 0; i < GetOwner()->GetChildEntities().size(); i++ ) {
+			kbGameEntity *const pCurEnt = GetOwner()->GetChildEntities()[i];
 			if ( strstr( pCurEnt->GetName().c_str(), "Hands" ) != nullptr ) {
 				EtherSkelModelComponent *const pSkelModel = (EtherSkelModelComponent*) pCurEnt->GetComponentByType( EtherSkelModelComponent::GetType() );
 				m_pFPHands = pSkelModel;
@@ -127,10 +127,10 @@ void EtherPlayerComponent::Update_Internal( const float DeltaTimeSec ) {
 	}
 
 	if ( g_ShowPlayerCollision.GetBool() ) {
-		kbCollisionComponent *const pCollisionComponent = (kbCollisionComponent*)GetParent()->GetComponentByType( kbCollisionComponent::GetType() );
+		kbCollisionComponent *const pCollisionComponent = (kbCollisionComponent*)GetOwner()->GetComponentByType( kbCollisionComponent::GetType() );
 
 		if ( pCollisionComponent != nullptr ) {
-			g_pRenderer->DrawSphere( GetParent()->GetPosition(), pCollisionComponent->GetRadius(), 12, kbColor::red );
+			g_pRenderer->DrawSphere( GetOwner()->GetPosition(), pCollisionComponent->GetRadius(), 12, kbColor::red );
 		}
 	}
 
@@ -143,7 +143,7 @@ void EtherPlayerComponent::Update_Internal( const float DeltaTimeSec ) {
 		m_GrenadeCoolddownSec -= DeltaTimeSec;
 
 		if ( prevCoolDownSec > g_GrenadeCoolDownSec - 0.2f && m_GrenadeCoolddownSec <= g_GrenadeCoolDownSec - 0.2f ) {
-			kbGameEntity *const pParent = GetParent();
+			kbGameEntity *const pParent = GetOwner();
 			for ( int i = 0; i < pParent->GetChildEntities().size(); i++ ) {
 				kbGameEntity *const pChild = pParent->GetChildEntities()[i];
 				if ( pChild->GetName() == "EL_Grenade" ) {
@@ -174,9 +174,9 @@ void EtherPlayerComponent::Update_Internal( const float DeltaTimeSec ) {
 					if ( pProjectileComponent == nullptr ) {
 						kbError( "EtherWeaponComponent::Fire - No Projectile Component found on the projectile entity :o" );
 					} else {
-						kbGameEntity * pParent = GetParent();
-						while( pParent->GetParent() != nullptr ) {
-							pParent = pParent->GetParent();
+						kbGameEntity * pParent = GetOwner();
+						while( pParent->GetOwner() != nullptr ) {
+							pParent = pParent->GetOwner();
 						}
 						pProjectileComponent->Launch();
 					}
@@ -272,7 +272,7 @@ void EtherPlayerComponent::Update_Internal( const float DeltaTimeSec ) {
  */
 void EtherPlayerComponent::UpdateDeath( const float DeltaTimeSec ) {
 	EtherGame *const pGame = (EtherGame*) g_pGame;
-	const kbVec3 playerPos = GetParent()->GetPosition();
+	const kbVec3 playerPos = GetOwner()->GetPosition();
 
 	// Drop player to ground
 	kbVec3 collisionPt;
@@ -281,17 +281,17 @@ void EtherPlayerComponent::UpdateDeath( const float DeltaTimeSec ) {
 		float endY = 5.0f;
 		float normalizedTime = 1.0f - kbClamp( ( g_GlobalTimer.TimeElapsedSeconds() - m_DeathStartTime ) / 1.0f, 0.0f, 1.0f );
 		collisionPt.y += ( startY - endY ) * normalizedTime + endY;
-		GetParent()->SetPosition( collisionPt );
+		GetOwner()->SetPosition( collisionPt );
 	}
 
 	// Respawn Player
 	if ( g_GlobalTimer.TimeElapsedSeconds() > m_DeathStartTime + 5.0f ) {
 		m_CurrentHealth = m_MaxHealth;
-		kbVec3 respawnPos = GetParent()->GetPosition();
+		kbVec3 respawnPos = GetOwner()->GetPosition();
 		respawnPos.z -= RespawnZPenalty;
 
 		if ( pGame->TraceAgainstWorld( respawnPos + kbVec3( 0.0f, 20000.0f, 0.0f ), respawnPos - kbVec3( 0.0f, 20000.0f, 0.0f ), respawnPos, false ) ) {
-			GetParent()->SetPosition( respawnPos + kbVec3( 0.0f, 20.0f, 0.0f ) );
+			GetOwner()->SetPosition( respawnPos + kbVec3( 0.0f, 20.0f, 0.0f ) );
 		}
 		pGame->GetAIManager().RegisterCombatant( this );
 	}
@@ -299,7 +299,7 @@ void EtherPlayerComponent::UpdateDeath( const float DeltaTimeSec ) {
 	kbCamera & playerCamera = pGame->GetCamera();
 	switch( pGame->GetCameraMode() ) {
 		case Cam_FirstPerson : {
-			playerCamera.m_Position = m_pParent->GetPosition();
+			playerCamera.m_Position = GetOwner()->GetPosition();
 			break;
 		}
 	}
@@ -315,15 +315,15 @@ void EtherPlayerComponent::HandleMovement( const kbInput_t & Input, const float 
 	}
 
 	kbGameEntity *const localPlayer = g_pGame->GetLocalPlayer();
-	if ( localPlayer != m_pParent ) {
+	if ( localPlayer != GetOwner() ) {
 		return;
 	}
 
 	EtherSkelModelComponent * pSkelModelComponent = nullptr;
 	
-	for ( int i = 0; i < m_pParent->NumComponents(); i++ ) {
-		if ( m_pParent->GetComponent(i)->IsA( EtherSkelModelComponent::GetType() ) ) {
-			pSkelModelComponent = static_cast<EtherSkelModelComponent*>( m_pParent->GetComponent(i) );
+	for ( int i = 0; i < GetOwner()->NumComponents(); i++ ) {
+		if ( GetOwner()->GetComponent(i)->IsA( EtherSkelModelComponent::GetType() ) ) {
+			pSkelModelComponent = static_cast<EtherSkelModelComponent*>( GetOwner()->GetComponent(i) );
 		}
 	}
 
@@ -421,8 +421,8 @@ void EtherPlayerComponent::HandleMovement( const kbInput_t & Input, const float 
 		xRotation.FromAxisAngle( kbVec3::up, DeltaX * -rotationMagnitude );
 		yRotation.FromAxisAngle( rightVec, pitchDelta );
 		
-		const kbQuat newPlayerOrientation = ( m_pParent->GetOrientation() * xRotation ).Normalized();
-		m_pParent->SetOrientation( newPlayerOrientation );
+		const kbQuat newPlayerOrientation = ( GetOwner()->GetOrientation() * xRotation ).Normalized();
+		GetOwner()->SetOrientation( newPlayerOrientation );
 	}	
 
 	// Place the player on the ground asap
@@ -432,7 +432,7 @@ void EtherPlayerComponent::HandleMovement( const kbInput_t & Input, const float 
 		kbVec3 groundPt;
 		if ( pGame->TraceAgainstWorld( desiredStartLocation + kbVec3( 0.0f, 10000.0f, 0.0f ), desiredStartLocation - kbVec3( 0.0f, 10000.0f, 0.0f ), groundPt, false ) ) {
 			groundPt.y += 20.0f;
-			GetParent()->SetPosition( groundPt );
+			GetOwner()->SetPosition( groundPt );
 			m_bHasHitGround = true;
 			bFirstFrameGroundHit = true;
 		} 
@@ -442,20 +442,20 @@ void EtherPlayerComponent::HandleMovement( const kbInput_t & Input, const float 
 	if ( bMoved || bFirstFrameGroundHit ) {
 		switch( pGame->GetCameraMode() ) {
 			case Cam_FirstPerson : {
-				playerCamera.m_Position = m_pParent->GetPosition();
+				playerCamera.m_Position = GetOwner()->GetPosition();
 				playerCamera.m_RotationTarget = ( playerCamera.m_RotationTarget * yRotation * xRotation ).Normalized();
 				playerCamera.m_Rotation = playerCamera.m_RotationTarget;
-				m_pParent->SetOrientation( playerCamera.m_RotationTarget );
+				GetOwner()->SetOrientation( playerCamera.m_RotationTarget );
 				break;
 			}
 
 			case Cam_ThirdPerson : {
 
-				kbMat4 mat =  m_pParent->GetOrientation().ToMat4();
+				kbMat4 mat =  GetOwner()->GetOrientation().ToMat4();
 				kbVec3 toAxis = -mat[2].ToVec3();
-				playerCamera.m_Position = m_pParent->GetPosition() + toAxis * 50.0f;
+				playerCamera.m_Position = GetOwner()->GetPosition() + toAxis * 50.0f;
 
-				kbMat4 lookAtMat;	lookAtMat.LookAt( playerCamera.m_Position, m_pParent->GetPosition(), kbVec3( 0.0f, 1.0f, 0.0f ) );
+				kbMat4 lookAtMat;	lookAtMat.LookAt( playerCamera.m_Position, GetOwner()->GetPosition(), kbVec3( 0.0f, 1.0f, 0.0f ) );
 				lookAtMat.InvertFast();
 			
 				playerCamera.m_RotationTarget = kbQuatFromMatrix( lookAtMat );

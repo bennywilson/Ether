@@ -203,7 +203,7 @@ bool EtherUIButton::IsHighlighted() const {
 	kbMat4 WeaponMatrix = g_pEtherGame->GetCrossHairLocalSpaceMatrix();
 
 	const kbVec3 aimAtPoint = WeaponMatrix[3].ToVec3();
-	const kbVec3 WeaponPos = pEquippedItem->GetParent()->GetPosition();	
+	const kbVec3 WeaponPos = pEquippedItem->GetOwner()->GetPosition();	
 	const kbVec3 zAxis = ( aimAtPoint - WeaponPos ).Normalized();
 	static float extent = 15.0f;
 
@@ -435,7 +435,7 @@ void EtherGame::Update_Internal( float DT ) {
 	
 					kbVec3 curPos( 5.5f, -10.0f, 3.0f );	// Weapon offset from camera
 					curPos += m_HMDWorldOffset; 
-					kbTransformComponent *const pTrans = static_cast<kbTransformComponent*>( pPlayerWeapon->GetParent()->GetComponent(0) );
+					kbTransformComponent *const pTrans = static_cast<kbTransformComponent*>( pPlayerWeapon->GetOwner()->GetComponent(0) );
 					pTrans->SetPosition( kbVec3( curPos.x, curPos.y, curPos.z ) );
 				}
 			}
@@ -453,7 +453,7 @@ void EtherGame::Update_Internal( float DT ) {
 			if ( pPlayerWeapon != nullptr ) {
 		
 				kbVec3 curPos( 5.5f, -10.0f, 3.0f );	// Weapon offset from camera
-				kbTransformComponent *const pTrans = static_cast<kbTransformComponent*>( pPlayerWeapon->GetParent()->GetComponent(0) );
+				kbTransformComponent *const pTrans = static_cast<kbTransformComponent*>( pPlayerWeapon->GetOwner()->GetComponent(0) );
 				pTrans->SetPosition( kbVec3( curPos.x, curPos.y, curPos.z ) );
 			}
 		}
@@ -883,7 +883,7 @@ void EtherGame::UpdateMotionControls( const float deltaTimeSec ) {
 
 	{
 		const kbVec3 aimAtPoint = crossHair3DPos;//m_pParent->GetPosition() + 9999.0f * WeaponMatrix[2].ToVec3();
-		const kbVec3 zAxis = ( aimAtPoint - pPlayerWeapon->GetParent()->GetPosition() ).Normalized();
+		const kbVec3 zAxis = ( aimAtPoint - pPlayerWeapon->GetOwner()->GetPosition() ).Normalized();
 		const kbVec3 xAxis = kbVec3::up.Cross( zAxis ).Normalized();
 		const kbVec3 yAxis = zAxis.Cross( xAxis ).Normalized();
 	
@@ -896,10 +896,10 @@ void EtherGame::UpdateMotionControls( const float deltaTimeSec ) {
 	// Orient first person gun towards the cross hair
 	if ( pPlayerWeapon != nullptr ) {
 		const kbQuat weaponOrientation = kbQuatFromMatrix( m_CrossHairLocalSpaceMatrix );
-		pPlayerWeapon->GetParent()->SetOrientation( weaponOrientation );
+		pPlayerWeapon->GetOwner()->SetOrientation( weaponOrientation );
 
 		if ( m_pPlayerComponent->GetFPHands() != nullptr ) {
-			m_pPlayerComponent->GetFPHands()->GetParent()->SetOrientation( kbQuatFromMatrix( invCam ) );
+			m_pPlayerComponent->GetFPHands()->GetOwner()->SetOrientation( kbQuatFromMatrix( invCam ) );
 			// hack to get hands skel model to update rotation
 			m_pPlayerComponent->GetFPHands()->Update( 0.016f );
 		}

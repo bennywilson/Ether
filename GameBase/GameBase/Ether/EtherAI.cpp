@@ -2,7 +2,7 @@
 // EtherAI.cpp
 //
 //
-// 2016-2017 kbEngine 2.0
+// 2016-2018 kbEngine 2.0
 //===================================================================================================
 #include <math.h>
 #include "EtherGame.h"
@@ -45,12 +45,12 @@ void EtherAIComponent::StartDeath( const kbDamageComponent *const damageComponen
 	m_DeathStartTimer = 0.0f;
 	m_AIState = Enemy_Dead;
 
-	kbCollisionComponent *const pCollisionComponent = (kbCollisionComponent*) GetParent()->GetComponentByType( kbCollisionComponent::GetType() );
+	kbCollisionComponent *const pCollisionComponent = (kbCollisionComponent*) GetOwner()->GetComponentByType( kbCollisionComponent::GetType() );
 	if ( pCollisionComponent != nullptr ) {
 		g_CollisionManager.UnregisterComponent( pCollisionComponent );
 	}
 
-	EtherSkelModelComponent * pSkelModelComponent = (EtherSkelModelComponent*)m_pParent->GetComponentByType( EtherSkelModelComponent::GetType() );
+	EtherSkelModelComponent * pSkelModelComponent = (EtherSkelModelComponent*)GetOwner()->GetComponentByType( EtherSkelModelComponent::GetType() );
 	if ( pSkelModelComponent == nullptr || pSkelModelComponent->GetModel() == nullptr ) {
 		kbError( "EtherEnemyAIComponent::StartDeath() - No skeletal model found" );
 		return;
@@ -61,27 +61,27 @@ void EtherAIComponent::StartDeath( const kbDamageComponent *const damageComponen
 		pSkelModelComponent->PlayAnimation( kbString( "Death_Back_1" ), 0.05f, false );
 
 		const float velModifider = ( kbfrand() * 60.0f ) + 120.0f;
-		m_DeathVelocity = -GetParent()->GetOrientation().ToMat4()[2].ToVec3() * velModifider;
+		m_DeathVelocity = -GetOwner()->GetOrientation().ToMat4()[2].ToVec3() * velModifider;
 	} else if ( deathChance < 0.4f ) {
 		pSkelModelComponent->PlayAnimation( kbString( "Death_Back_2" ), 0.05f, false );
 
 		const float velModifider = ( kbfrand() * 60.0f ) + 140.0f;
-		m_DeathVelocity = -GetParent()->GetOrientation().ToMat4()[2].ToVec3() * velModifider;
+		m_DeathVelocity = -GetOwner()->GetOrientation().ToMat4()[2].ToVec3() * velModifider;
 	} else if ( deathChance < 0.6f ) {
 		pSkelModelComponent->PlayAnimation( kbString( "Death_Spin" ), 0.05f, false );
 
 		const float velModifider = ( kbfrand() * 60.0f ) + 140.0f;
-		m_DeathVelocity = -GetParent()->GetOrientation().ToMat4()[2].ToVec3() * velModifider;
+		m_DeathVelocity = -GetOwner()->GetOrientation().ToMat4()[2].ToVec3() * velModifider;
 	} else if ( deathChance < 0.8f ) {
 		pSkelModelComponent->PlayAnimation( kbString( "Death_KneelForward" ), 0.05f, false );
 
 		const float velModifider = ( kbfrand() * 60.0f ) + 140.0f;
-		m_DeathVelocity = kbVec3::zero;//-GetParent()->GetOrientation().ToMat4()[2].ToVec3() * velModifider;
+		m_DeathVelocity = kbVec3::zero;//-GetOwner()->GetOrientation().ToMat4()[2].ToVec3() * velModifider;
 	} else {
 		pSkelModelComponent->PlayAnimation( kbString( "Death_Flip" ), 0.05f, false );
 
 		const float velModifider = ( kbfrand() * 60.0f ) + 120.0f;
-		m_DeathVelocity = -GetParent()->GetOrientation().ToMat4()[2].ToVec3() * velModifider;
+		m_DeathVelocity = -GetOwner()->GetOrientation().ToMat4()[2].ToVec3() * velModifider;
 	}
 }
 
@@ -92,12 +92,12 @@ void EtherAIComponent::State_Dead( const float DeltaTime ) {
 
 	m_DeathStartTimer += DeltaTime;
 	if ( m_DeathStartTimer > 1.5f ) {
-		g_pGame->RemoveGameEntity( GetParent() );
+		g_pGame->RemoveGameEntity( GetOwner() );
 		return;
 	}
 
-	kbVec3 FinalPosition = m_pParent->GetPosition();
-	EtherSkelModelComponent *const pSkelModelComponent = ( EtherSkelModelComponent* ) m_pParent->GetComponentByType( EtherSkelModelComponent::GetType() );
+	kbVec3 FinalPosition = GetOwner()->GetPosition();
+	EtherSkelModelComponent *const pSkelModelComponent = ( EtherSkelModelComponent* ) GetOwner()->GetComponentByType( EtherSkelModelComponent::GetType() );
 	if ( pSkelModelComponent != nullptr && pSkelModelComponent->HasFinishedAnimation() == false ) {
 		FinalPosition += ( m_DeathVelocity * DeltaTime );
 	} 
@@ -110,7 +110,7 @@ void EtherAIComponent::State_Dead( const float DeltaTime ) {
 		m_GroundHoverDist = 0.5f - ( NormalizedAnimTime * 13.0f );
 	}
 
-	m_pParent->SetPosition( FinalPosition );
+	GetOwner()->SetPosition( FinalPosition );
 }
 
 /**
@@ -126,8 +126,8 @@ void EtherEnemySoldierAIComponent::ClientNetUpdate( const kbNetMsg_t * NetMsg ) 
 void EtherAIComponent::Update_Internal( const float DeltaTimeSeconds ) {
 	Super::Update_Internal( DeltaTimeSeconds );
 
-	EtherSkelModelComponent *const pSkelModel = (EtherSkelModelComponent*)GetParent()->GetComponentByType( EtherSkelModelComponent::GetType() );
-	kbCollisionComponent *const pCollisionComponent = (kbCollisionComponent*)GetParent()->GetComponentByType( kbCollisionComponent::GetType() );
+	EtherSkelModelComponent *const pSkelModel = (EtherSkelModelComponent*)GetOwner()->GetComponentByType( EtherSkelModelComponent::GetType() );
+	kbCollisionComponent *const pCollisionComponent = (kbCollisionComponent*)GetOwner()->GetComponentByType( kbCollisionComponent::GetType() );
 
 	if ( pCollisionComponent != nullptr && pSkelModel != nullptr ) {
 
@@ -199,7 +199,7 @@ void EtherEnemySoldierAIComponent::SetEnable_Internal( const bool isEnabled ) {
 	}
 
 	if ( isEnabled && m_bEyeballAdded == false ) {
-		g_pRenderer->AddRenderObject( this, m_pEyeBall, m_pParent->GetPosition(), m_pParent->GetOrientation(), m_pParent->GetScale(), RP_PostLighting, nullptr );
+		g_pRenderer->AddRenderObject( this, m_pEyeBall, GetOwner()->GetPosition(), GetOwner()->GetOrientation(), GetOwner()->GetScale(), RP_PostLighting, nullptr );
 		m_bEyeballAdded = true;
 	} else {
 		g_pRenderer->RemoveRenderObject( this );
@@ -213,7 +213,7 @@ void EtherEnemySoldierAIComponent::SetEnable_Internal( const bool isEnabled ) {
 void  EtherEnemySoldierAIComponent::Update_Internal( const float DeltaTime ) {
 	if ( m_pEyeBall != nullptr ) {
 
-		EtherSkelModelComponent *const pSkelModelComponent = (EtherSkelModelComponent*)m_pParent->GetComponentByType( EtherSkelModelComponent::GetType() );
+		EtherSkelModelComponent *const pSkelModelComponent = (EtherSkelModelComponent*)GetOwner()->GetComponentByType( EtherSkelModelComponent::GetType() );
 		if ( pSkelModelComponent != nullptr ) {
 			static kbString EyeBone( "Dummy07" );
 			kbBoneMatrix_t EyeMatrix;
@@ -228,9 +228,9 @@ void  EtherEnemySoldierAIComponent::Update_Internal( const float DeltaTime ) {
 				ShaderOverrideList.push_back( (kbShader*)g_ResourceManager.GetResource(  "../../kbEngine/assets/Shaders/SimpleAdditive.kbShader", true ) );
 
 				if ( m_bEyeballAdded == false ) {
-					g_pRenderer->AddRenderObject( this, m_pEyeBall, m_pParent->GetPosition(), m_pParent->GetOrientation(), m_pParent->GetScale(), RP_PostLighting, &ShaderOverrideList );
+					g_pRenderer->AddRenderObject( this, m_pEyeBall, GetOwner()->GetPosition(), GetOwner()->GetOrientation(), GetOwner()->GetScale(), RP_PostLighting, &ShaderOverrideList );
 				} else {
-					g_pRenderer->UpdateRenderObject( this, m_pEyeBall, EyeMatrix.GetOrigin(), m_pParent->GetOrientation(), m_pParent->GetScale(), RP_PostLighting, &ShaderOverrideList );
+					g_pRenderer->UpdateRenderObject( this, m_pEyeBall, EyeMatrix.GetOrigin(), GetOwner()->GetOrientation(), GetOwner()->GetScale(), RP_PostLighting, &ShaderOverrideList );
 				}
 				m_bEyeballAdded = true;
 			}
@@ -247,8 +247,8 @@ void  EtherEnemySoldierAIComponent::Update_Internal( const float DeltaTime ) {
 	const kbGameEntity *const pTarget = m_TargetEntity.GetEntity();
 
 	// Kill AI if it's too far behind the player
-	if ( pTarget != nullptr && pTarget->GetPosition().z > GetParent()->GetPosition().z + g_KillZDist ) {
-		g_pGame->RemoveGameEntity( GetParent() );
+	if ( pTarget != nullptr && pTarget->GetPosition().z > GetOwner()->GetPosition().z + g_KillZDist ) {
+		g_pGame->RemoveGameEntity( GetOwner() );
 		return;
 	}
 }
@@ -309,7 +309,7 @@ bool EtherEnemySoldierAIComponent::Fire() {
 
 	const float SpraySpread = 10.0f;
 	const kbVec3 TargetPosition = pTarget->GetPosition() + kbVec3( ( kbfrand() * SpraySpread ) - ( SpraySpread * 0.5f ), 0.0f, 0.0f );
-	kbVec3 fireLoc = GetParent()->GetPosition() + kbVec3( 0.0f, 17.5f, 0.0f );
+	kbVec3 fireLoc = GetOwner()->GetPosition() + kbVec3( 0.0f, 17.5f, 0.0f );
 	float targetDist = ( TargetPosition - fireLoc ).Length();
 	const kbVec3 zAxis = ( TargetPosition - fireLoc ).Normalized();
 	fireLoc += zAxis * 25.0f;
@@ -335,7 +335,7 @@ bool EtherEnemySoldierAIComponent::Fire() {
 
 	EtherProjectileComponent *const pProjectile = ( EtherProjectileComponent* ) newProjectile->GetComponentByType( EtherProjectileComponent::GetType() );
 	kbGameEntityPtr owner;
-	owner.SetEntity( GetParent() );
+	owner.SetEntity( GetOwner() );
 	pProjectile->SetOwner( owner );
 
 	pProjectile->Launch();
@@ -397,7 +397,7 @@ void EtherEnemySoldierAIComponent::State_CloseCombat( const float DeltaTime ) {
 		return;
 	}
 
-	const kbVec3 vecToTargetLocation = ( m_TargetLocation - GetParent()->GetPosition() ).ToVecXZ();
+	const kbVec3 vecToTargetLocation = ( m_TargetLocation - GetOwner()->GetPosition() ).ToVecXZ();
 	if ( vecToTargetLocation.Length() > m_PursueMinDistance + m_PursueMinDistance * 0.25f ) {
 		m_AIState = Enemy_Pursue;
 		return;
@@ -411,7 +411,7 @@ void EtherEnemySoldierAIComponent::UpdateMovementAndAnimation( const float Delta
 
 	const float epsilon = 0.01f;
 
-	EtherSkelModelComponent *const pSkelModel = ( EtherSkelModelComponent* ) GetParent()->GetComponentByType( EtherSkelModelComponent::GetType() );
+	EtherSkelModelComponent *const pSkelModel = ( EtherSkelModelComponent* ) GetOwner()->GetComponentByType( EtherSkelModelComponent::GetType() );
 	if ( pSkelModel == nullptr ) {
 		return;
 	}
@@ -423,27 +423,27 @@ void EtherEnemySoldierAIComponent::UpdateMovementAndAnimation( const float Delta
 	}
 
 	// Stop chasing if player is too far ahead.  Can keep shooting
-	if ( pTarget->GetPosition().z > GetParent()->GetPosition().z + g_DetachZDist ) {
+	if ( pTarget->GetPosition().z > GetOwner()->GetPosition().z + g_DetachZDist ) {
 		return;
 	}
 
-	kbVec3 vecToTarget = pTarget->GetPosition() - m_pParent->GetPosition();
+	kbVec3 vecToTarget = pTarget->GetPosition() - GetOwner()->GetPosition();
 	if ( vecToTarget.Compare( kbVec3::zero ) == false ) {
 		vecToTarget.Normalize();
 		if ( vecToTarget.Compare( kbVec3( 0.0f, 1.0f, 0.0f ) ) == false ) {
 			const kbVec3 rightVec = kbVec3( 0.0f, 1.0f, 0.0f ).Cross( vecToTarget ).Normalized();
 			const kbVec3 forwardVec = rightVec.Cross( kbVec3( 0.0f, 1.0f, 0.0f ) ).Normalized();
 			const kbMat4 facingMatrix( rightVec, kbVec3( 0.0f, 1.0f, 0.0f ), forwardVec, kbVec3::zero );
-			m_pParent->SetOrientation( kbQuatFromMatrix( facingMatrix ) );
+			GetOwner()->SetOrientation( kbQuatFromMatrix( facingMatrix ) );
 		}
 	}
 
-	kbVec3 vecToTargetLocation = ( m_TargetLocation - GetParent()->GetPosition() ).ToVecXZ();
+	kbVec3 vecToTargetLocation = ( m_TargetLocation - GetOwner()->GetPosition() ).ToVecXZ();
 	const float distToTargetLocSqr = vecToTargetLocation.LengthSqr();
 	if ( distToTargetLocSqr < 3.0f ) {
 		pSkelModel->PlayAnimation( kbString( "Aim" ), 0.0f, false );
 	} else {
-		const kbMat4 orientationMatrix = m_pParent->GetOrientation().ToMat4();
+		const kbMat4 orientationMatrix = GetOwner()->GetOrientation().ToMat4();
 		const kbVec3 forwardVec = orientationMatrix[2].ToVec3().ToVecXZ();
 
 		if ( vecToTargetLocation.Compare( kbVec3::zero ) ) {
@@ -471,7 +471,7 @@ void EtherEnemySoldierAIComponent::UpdateMovementAndAnimation( const float Delta
 				}
 			}
 
-			kbVec3 finalPosition = m_pParent->GetPosition() + ( vecToTargetLocation * DeltaTimeSeconds * m_BaseMoveSpeed * runSpeedScale );
+			kbVec3 finalPosition = GetOwner()->GetPosition() + ( vecToTargetLocation * DeltaTimeSeconds * m_BaseMoveSpeed * runSpeedScale );
 			const EtherGame *const pGame = static_cast<EtherGame*>( g_pGame );
 			const EtherCoverObject * pCoverObject = nullptr;
 
@@ -487,7 +487,7 @@ void EtherEnemySoldierAIComponent::UpdateMovementAndAnimation( const float Delta
 				finalPosition = pCoverObject->GetPosition() + vecToPlayer * coverRadius;
 			}
 
-			m_pParent->SetPosition( finalPosition );
+			GetOwner()->SetPosition( finalPosition );
 		}
 	}
 
@@ -564,18 +564,18 @@ void EtherAIManager::RegisterCombatant( EtherActorComponent *const actorComponen
 	
 	if ( actorComponent->IsA( EtherAIComponent::GetType() ) ) {
 		kbGameEntityPtr entPtr;
-		entPtr.SetEntity( actorComponent->GetParent() );
+		entPtr.SetEntity( actorComponent->GetOwner() );
 
 		kbLog( "Registering %d", entPtr.GetEntityIndex() );
 		m_AIList.push_back( entPtr );
 	}
 /*
-	if ( actorComponent == nullptr || actorComponent->GetParent() == nullptr ) {
+	if ( actorComponent == nullptr || actorComponent->GetOwner() == nullptr ) {
 		kbError( "EtherAIManager::RegisterCombatant() - nullptr actorComponent passed in" );
 		return;
 	}
 
-	const uint combatantNetId = actorComponent->GetParent()->GetNetId();
+	const uint combatantNetId = actorComponent->GetOwner()->GetNetId();
 	std::map<int, CombatantInfo_t>::iterator combatantIt = m_CombatantMap.find( combatantNetId );
 	if ( combatantIt != m_CombatantMap.end() ) {
 		kbError( "EtherAIManager::RegisterCombatant() - Combatant with id %d has already been registered", combatantNetId );
@@ -591,20 +591,20 @@ void EtherAIManager::RegisterCombatant( EtherActorComponent *const actorComponen
 void EtherAIManager::UnregisterCombatant( EtherActorComponent *const actorComponent ) {
 
 	kbGameEntityPtr entPtr;
-	entPtr.SetEntity( actorComponent->GetParent() );
+	entPtr.SetEntity( actorComponent->GetOwner() );
 
 		kbLog( "Unregistering %d", entPtr.GetEntityIndex() );
 
 
 	FastRemoveFromVector( m_AIList, entPtr );
 /*
-	if ( actorComponent == nullptr || actorComponent->GetParent() == nullptr ) {
+	if ( actorComponent == nullptr || actorComponent->GetOwner() == nullptr ) {
 		kbError( "EtherAIManager::UnregisterCombatant() - nullptr actorComponent passed in" );
 		return;
 	}
 
 	// Remove from attacker map and from attack spots in the target map
-	const uint combatantNetId = actorComponent->GetParent()->GetNetId();
+	const uint combatantNetId = actorComponent->GetOwner()->GetNetId();
 	std::map<int, CombatantInfo_t>::iterator combatantIt = m_CombatantMap.find( combatantNetId );
 	if ( combatantIt != m_CombatantMap.end() ) {
 
@@ -652,18 +652,18 @@ void EtherAIManager::UnregisterCombatant( EtherActorComponent *const actorCompon
  */
 bool EtherAIManager::GetCloseCombatSpotOnTarget( kbVec3 & out_GoalPosition, const EtherActorComponent *const attacker, const EtherActorComponent *const target ) {
 
-/*	if ( attacker == nullptr || attacker->GetParent() == nullptr ) {
+/*	if ( attacker == nullptr || attacker->GetOwner() == nullptr ) {
 		kbError( "EtherAIManager::GetCloseCombatSpotOnTarget() - nullptr attacker passed in" );
 		return false;
 	}
 
-	if ( target == nullptr || target->GetParent() == nullptr ) {
+	if ( target == nullptr || target->GetOwner() == nullptr ) {
 		kbError( "EtherAIManager::GetCloseCombatSpotOnTarget() - nullptr target passed in" );
 		return false;
 	}
 
 	// Get attacker's info
-	const uint attackerNetId = attacker->GetParent()->GetNetId();
+	const uint attackerNetId = attacker->GetOwner()->GetNetId();
 	std::map<int, CombatantInfo_t>::iterator attackerIt = m_CombatantMap.find( attackerNetId );
 	if ( attackerIt == m_CombatantMap.end() ) {
 		kbError( "EtherAIManager::GetCloseCombatSpotOnTarget() - Attacker with id %d has not previously registered", attackerNetId );
@@ -672,7 +672,7 @@ bool EtherAIManager::GetCloseCombatSpotOnTarget( kbVec3 & out_GoalPosition, cons
 	CombatantInfo_t & attackerInfo = attackerIt->second;
 
 	// Get target's info
-	const uint nextTargetNetId = target->GetParent()->GetNetId();
+	const uint nextTargetNetId = target->GetOwner()->GetNetId();
 	std::map<int, CombatantInfo_t>::iterator targetIt = m_CombatantMap.find( nextTargetNetId );
 	if ( targetIt == m_CombatantMap.end() ) {
 		kbError( "EtherAIManager::GetCloseCombatSpotOnTarget() - Target with id %d has not previously registered", nextTargetNetId );
@@ -716,7 +716,7 @@ bool EtherAIManager::GetCloseCombatSpotOnTarget( kbVec3 & out_GoalPosition, cons
 
 	for ( int i = 0; i < NUM_CLOSE_RANGE_SPOTS; i++ ) {
 		if ( nextTargetInfo.m_CloseRangeSpots[i] == attackerNetId ) {
-			out_GoalPosition = target->GetParent()->GetPosition() + CombatantInfo_t::GetCloseOffset( i );
+			out_GoalPosition = target->GetOwner()->GetPosition() + CombatantInfo_t::GetCloseOffset( i );
 			attackerInfo.m_MyTargetId = nextTargetNetId;
 			return true;
 		}
@@ -744,7 +744,7 @@ bool EtherAIManager::GetCloseCombatSpotOnTarget( kbVec3 & out_GoalPosition, cons
 
 
 
-	out_GoalPosition = target->GetParent()->GetPosition() + CombatantInfo_t::GetCloseOffset( foundSpot );
+	out_GoalPosition = target->GetOwner()->GetPosition() + CombatantInfo_t::GetCloseOffset( foundSpot );
 
 	attackerInfo.m_MyTargetId = nextTargetNetId;*/
 	return true;
@@ -786,7 +786,7 @@ void EtherAIManager::Update( const float DeltaTime ) {
 			}
 
 			kbGameEntityPtr entPtr;
-			entPtr.SetEntity( pTargetPlayer->GetParent() );
+			entPtr.SetEntity( pTargetPlayer->GetOwner() );
 			std::map<kbGameEntityPtr, CombatantInfo_t>::const_iterator playerIt = m_CombatantMap.find( entPtr );
 			if ( playerIt == m_CombatantMap.end() ) {
 				continue;

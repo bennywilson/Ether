@@ -317,8 +317,11 @@ void kbMainTab::CameraMoveCB( const widgetCBInputObject * inputObject ) {
 				break;
 
 			}
-			movementVec.Normalize();
-			camera.m_Position += movementVec * movementMag;
+
+			if ( movementVec.LengthSqr() > 0.0001f ) {
+				movementVec.Normalize();
+				camera.m_Position += movementVec * movementMag;
+			}
 		}
 	}
 }

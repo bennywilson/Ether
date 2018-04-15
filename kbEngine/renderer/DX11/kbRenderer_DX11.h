@@ -1,9 +1,9 @@
 //==============================================================================
-// kbRenderer_DX11.cpp
+// kbRenderer_DX11.h
 //
 // Renderer implementation using DX11 API
 //
-// 2016-2017 kbEngine 2.0
+// 2016-2018 kbEngine 2.0
 //==============================================================================
 #ifndef _KBRENDERER_DX11_H_
 #define _KBRENDERER_DX11_H_
@@ -536,9 +536,9 @@ private:
 	kbShader *									m_pSimpleAdditiveShader;
 
 	// Non-resource managed shaders (Game assets cannot reference these).  These have to be manually released
-	kbShader									m_SkinnedDirectionalLightShadowShader;
-	kbShader									m_BloomGatherShader;
-	kbShader									m_BloomBlur;
+	kbShader *									m_pSkinnedDirectionalLightShadowShader;
+	kbShader *									m_pBloomGatherShader;
+	kbShader *									m_pBloomBlur;
 
 	ID3D11Buffer *								m_pUnitQuad;
 	ID3D11Buffer *								m_pConsoleQuad;

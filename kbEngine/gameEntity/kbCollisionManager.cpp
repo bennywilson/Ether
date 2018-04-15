@@ -98,8 +98,9 @@ kbCollisionInfo_t kbCollisionManager::PerformLineCheck( const kbVec3 & start, co
 	for ( int i = 0; i < m_CollisionComponents.size(); i++ ) {
 		kbCollisionComponent *const pCollision = m_CollisionComponents[i];
 		if ( pCollision->m_CollisionType == CT_Sphere ) {
+			kbGameEntity *const pCollisionOwner = pCollision->GetOwner();
 			kbVec3 intersectionPt;
-			if ( kbRaySphereIntersection( start, rayDir, pCollision->GetParent()->GetPosition(), pCollision->m_Extent.x, intersectionPt ) ) {
+			if ( kbRaySphereIntersection( start, rayDir, pCollisionOwner->GetPosition(), pCollision->m_Extent.x, intersectionPt ) ) {
 				const float t = ( intersectionPt - start ).Length() / LineLength;
 				if ( t < collisionInfo.m_T ) {
 

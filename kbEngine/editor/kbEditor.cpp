@@ -369,7 +369,6 @@ void kbEditor::ShutDown() {
 	for ( int i = 0; i < m_GameEntities.size(); i++ ) {
 		delete m_GameEntities[i];
 	}
-
 	m_GameEntities.clear();
 
 	g_ResourceManager.Shutdown();
@@ -566,14 +565,14 @@ void kbEditor::CreateGameEntity( Fl_Widget * widget, void * thisPtr ) {
  *	kbEditor::AddComponent
  */
 void kbEditor::AddComponent( Fl_Widget * widget, void * voidPtr ) {
-	if ( voidPtr == NULL || g_Editor == NULL )
+	if ( voidPtr == nullptr || g_Editor == nullptr )
 		return;
 
-	kbTypeInfoClass * typeInfoClass = static_cast< kbTypeInfoClass * >( voidPtr );
-	std::vector< kbEditorEntity * > & selectedObjects =	g_Editor->GetSelectedObjects();
+	kbTypeInfoClass *const typeInfoClass = static_cast< kbTypeInfoClass * >( voidPtr );
+	std::vector<kbEditorEntity *> & selectedObjects =	g_Editor->GetSelectedObjects();
 
 	if ( selectedObjects.size() > 0 ) {
-		kbComponent * newComponent = typeInfoClass->ConstructInstance();
+		kbGameComponent *const newComponent = (kbGameComponent*)typeInfoClass->ConstructInstance();		// ENTITY HACK
 
 		const_cast< kbGameEntity * >( selectedObjects[0]->GetGameEntity() )->AddComponent( newComponent );
 		newComponent->Enable( true );

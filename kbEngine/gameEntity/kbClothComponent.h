@@ -2,7 +2,7 @@
 // kbClothComponent.h
 //
 //
-// 2016-2017 kbEngine 2.0
+// 2016-2018 kbEngine 2.0
 //==============================================================================
 #ifndef _KBCLOTHCOMPONENT_H_
 #define _KBCLOTHCOMPONENT_H_
@@ -41,11 +41,11 @@ struct kbClothMass_t {
 /**
  *	kbClothBone
  */
-class kbClothBone : public kbComponent {
+class kbClothBone : public kbGameComponent {
 public:
 	friend class kbClothComponent;
 
-	KB_DECLARE_COMPONENT( kbClothBone, kbComponent );
+	KB_DECLARE_COMPONENT( kbClothBone, kbGameComponent );
 
 private:
 	kbString							m_BoneName;
@@ -56,9 +56,9 @@ private:
 /**
  *	kbClothComponent
  */
-class kbClothComponent : public kbComponent {
+class kbClothComponent : public kbGameComponent {
 public:
-	KB_DECLARE_COMPONENT( kbClothComponent, kbComponent );
+	KB_DECLARE_COMPONENT( kbClothComponent, kbGameComponent );
 
 	virtual										~kbClothComponent();
 

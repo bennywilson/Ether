@@ -3,7 +3,7 @@
 //
 // Renderer implementation using DX11 API
 //
-// 2016-2017 kbEngine 2.0
+// 2016-2018 kbEngine 2.0
 //==============================================================================
 #include <D3Dcompiler.h>
 #include <stdio.h>
@@ -394,9 +394,6 @@ kbRenderer_DX11::kbRenderer_DX11() :
 	m_pDirectionalLightShadowShader( nullptr ),
 	m_pPointLightShader( nullptr ),
 	m_pCylindricalLightShader( nullptr ),
-	m_SkinnedDirectionalLightShadowShader( "../../kbEngine/assets/Shaders/directionalLightShadow.kbShader" ),
-	m_BloomGatherShader( "../../kbEngine/assets/Shaders/bloom.kbShader" ),
-	m_BloomBlur( "../../kbEngine/assets/Shaders/bloom.kbShader" ),
 	m_pLightShaftsShader( nullptr ),
 	m_pMissingShader( nullptr ),
 	m_pDirectionalLightShader( nullptr ),
@@ -426,6 +423,10 @@ kbRenderer_DX11::kbRenderer_DX11() :
 	m_FogEndDistance_GameThread( 2100 ),
 	m_FogEndDistance_RenderThread( 2200 ),
 	m_DebugText( nullptr ) {
+
+	m_pSkinnedDirectionalLightShadowShader = new kbShader( "../../kbEngine/assets/Shaders/directionalLightShadow.kbShader" );
+	m_pBloomGatherShader = new kbShader( "../../kbEngine/assets/Shaders/bloom.kbShader" );
+	m_pBloomBlur = new kbShader( "../../kbEngine/assets/Shaders/bloom.kbShader" );
 
 	ZeroMemory( m_pTextures, sizeof(m_pTextures) );
 
@@ -657,17 +658,17 @@ void kbRenderer_DX11::Init( HWND hwnd, const int frameWidth, const int frameHeig
 	m_pSimpleAdditiveShader = ( kbShader * ) g_ResourceManager.GetResource( "../../kbEngine/assets/Shaders/SimpleAdditive.kbShader", true );
 
 	// Non-resource managed shaders
-	m_SkinnedDirectionalLightShadowShader.SetVertexShaderFunctionName( "skinnedVertexMain" );
-	m_SkinnedDirectionalLightShadowShader.SetPixelShaderFunctionName( "skinnedPixelMain" );
-	m_SkinnedDirectionalLightShadowShader.Load();
+	m_pSkinnedDirectionalLightShadowShader->SetVertexShaderFunctionName( "skinnedVertexMain" );
+	m_pSkinnedDirectionalLightShadowShader->SetPixelShaderFunctionName( "skinnedPixelMain" );
+	m_pSkinnedDirectionalLightShadowShader->Load();
 
-	m_BloomGatherShader.SetVertexShaderFunctionName( "bloomGatherVertexMain" );
-	m_BloomGatherShader.SetPixelShaderFunctionName( "bloomGatherPixelMain" );
-	m_BloomGatherShader.Load();
+	m_pBloomGatherShader->SetVertexShaderFunctionName( "bloomGatherVertexMain" );
+	m_pBloomGatherShader->SetPixelShaderFunctionName( "bloomGatherPixelMain" );
+	m_pBloomGatherShader->Load();
 
-	m_BloomBlur.SetVertexShaderFunctionName( "bloomBlurVertexMain" );
-	m_BloomBlur.SetPixelShaderFunctionName( "bloomBlurPixelMain" );
-	m_BloomBlur.Load();
+	m_pBloomBlur->SetVertexShaderFunctionName( "bloomBlurVertexMain" );
+	m_pBloomBlur->SetPixelShaderFunctionName( "bloomBlurPixelMain" );
+	m_pBloomBlur->Load();
 
 	// Constants buffer for generic shaders
 	D3D11_BUFFER_DESC matrixBufferDesc;
@@ -1128,9 +1129,9 @@ void kbRenderer_DX11::Shutdown() {
 	SAFE_RELEASE( m_pPostProcessConstantsBuffer );
 	SAFE_RELEASE( m_pBloomShaderConstantsBuffer );
 
-	m_SkinnedDirectionalLightShadowShader.Release();
-	m_BloomGatherShader.Release();
-	m_BloomBlur.Release();
+	SAFE_RELEASE( m_pSkinnedDirectionalLightShadowShader );
+	SAFE_RELEASE( m_pBloomGatherShader );
+	SAFE_RELEASE( m_pBloomBlur );
 
 	if ( m_bRenderToHMD ) {
 		delete m_OculusTexture[0];
@@ -2330,12 +2331,12 @@ void kbRenderer_DX11::RenderBloom() {
 		m_pImmediateContext->RSSetState( m_pRasterizerState );
 
 		m_pImmediateContext->PSSetShaderResources( 0, 1, &m_RenderTargets[ACCUMULATION_BUFFER].m_pShaderResourceView );
-		ID3D11SamplerState * samplerState[] = { m_pNormalMapSamplerState };
+		ID3D11SamplerState *const samplerState[] = { m_pNormalMapSamplerState };
 
 		m_pImmediateContext->PSSetSamplers( 0, 1, samplerState );
-		m_pImmediateContext->IASetInputLayout( (ID3D11InputLayout*)m_BloomGatherShader.GetVertexLayout() );
-		m_pImmediateContext->VSSetShader( (ID3D11VertexShader *)m_BloomGatherShader.GetVertexShader(), nullptr, 0 );
-		m_pImmediateContext->PSSetShader( (ID3D11PixelShader *)m_BloomGatherShader.GetPixelShader(), nullptr, 0 );
+		m_pImmediateContext->IASetInputLayout( (ID3D11InputLayout*)m_pBloomGatherShader->GetVertexLayout() );
+		m_pImmediateContext->VSSetShader( (ID3D11VertexShader *)m_pBloomGatherShader->GetVertexShader(), nullptr, 0 );
+		m_pImmediateContext->PSSetShader( (ID3D11PixelShader *)m_pBloomGatherShader->GetPixelShader(), nullptr, 0 );
 
 		// Set constants
 		D3D11_MAPPED_SUBRESOURCE mappedResource;
@@ -2380,9 +2381,9 @@ void kbRenderer_DX11::RenderBloom() {
 		ID3D11SamplerState * samplerState[] = { m_pNormalMapSamplerState };
 
 		m_pImmediateContext->PSSetSamplers( 0, 1, samplerState );
-		m_pImmediateContext->IASetInputLayout( (ID3D11InputLayout*)m_BloomBlur.GetVertexLayout() );
-		m_pImmediateContext->VSSetShader( (ID3D11VertexShader *)m_BloomBlur.GetVertexShader(), nullptr, 0 );
-		m_pImmediateContext->PSSetShader( (ID3D11PixelShader *)m_BloomBlur.GetPixelShader(), nullptr, 0 );
+		m_pImmediateContext->IASetInputLayout( (ID3D11InputLayout*)m_pBloomBlur->GetVertexLayout() );
+		m_pImmediateContext->VSSetShader( (ID3D11VertexShader *)m_pBloomBlur->GetVertexShader(), nullptr, 0 );
+		m_pImmediateContext->PSSetShader( (ID3D11PixelShader *)m_pBloomBlur->GetPixelShader(), nullptr, 0 );
 
 		// Set constants
 		D3D11_MAPPED_SUBRESOURCE mappedResource;
@@ -3208,9 +3209,9 @@ void kbRenderer_DX11::RenderModel( const kbRenderObject *const pRenderObject, co
 
 	if ( bShadowPass ) {
 		if ( pRenderObject->m_bIsSkinnedModel ) {
-			m_pImmediateContext->IASetInputLayout( (ID3D11InputLayout*)m_SkinnedDirectionalLightShadowShader.GetVertexLayout() );
-			m_pImmediateContext->VSSetShader( (ID3D11VertexShader *)m_SkinnedDirectionalLightShadowShader.GetVertexShader(), nullptr, 0 );
-			m_pImmediateContext->PSSetShader( (ID3D11PixelShader *)m_SkinnedDirectionalLightShadowShader.GetPixelShader(), nullptr, 0 );
+			m_pImmediateContext->IASetInputLayout( (ID3D11InputLayout*)m_pSkinnedDirectionalLightShadowShader->GetVertexLayout() );
+			m_pImmediateContext->VSSetShader( (ID3D11VertexShader *)m_pSkinnedDirectionalLightShadowShader->GetVertexShader(), nullptr, 0 );
+			m_pImmediateContext->PSSetShader( (ID3D11PixelShader *)m_pSkinnedDirectionalLightShadowShader->GetPixelShader(), nullptr, 0 );
 		} else {
 			m_pImmediateContext->IASetInputLayout( (ID3D11InputLayout*)m_pDirectionalLightShadowShader->GetVertexLayout() );
 			m_pImmediateContext->VSSetShader( (ID3D11VertexShader *)m_pDirectionalLightShadowShader->GetVertexShader(), nullptr, 0 );

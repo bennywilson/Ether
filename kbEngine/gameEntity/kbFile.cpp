@@ -183,7 +183,7 @@ void kbFile::ReadComponent( kbGameEntity *const pGameEntity, const std::string &
 	if ( ComponentToFill != NULL ) {
 		pComponent = ComponentToFill;
 	} else if ( componentType == "kbTransformComponent" ) {
-		pComponent = const_cast<kbComponent*>( pGameEntity->GetComponent(0) );
+		pComponent = const_cast<kbGameComponent*>( pGameEntity->GetComponent(0) );
 	} else {
 		pComponent = ConstructClassFromName( componentType );
 		pGameEntity->AddComponent( pComponent );

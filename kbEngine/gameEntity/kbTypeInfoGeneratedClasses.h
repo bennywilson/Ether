@@ -23,8 +23,12 @@ GenerateEnum(
 
 GenerateClass( 
 	kbComponent, 
-	AddField( "Enabled", KBTYPEINFO_BOOL, kbComponent, m_IsEnabled, false, "" )
-	AddField( "LifeTime", KBTYPEINFO_FLOAT, kbComponent, m_StartingLifeTime, false, "" )
+	AddField( "Enabled", KBTYPEINFO_BOOL, kbGameComponent, m_IsEnabled, false, "" )
+)
+
+GenerateClass( 
+	kbGameComponent, 
+	AddField( "LifeTime", KBTYPEINFO_FLOAT, kbGameComponent, m_StartingLifeTime, false, "" )
 )
 
 GenerateClass(

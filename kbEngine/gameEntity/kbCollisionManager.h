@@ -2,7 +2,7 @@
 // kbCollisionManager.h
 //
 //
-// 2016-2017 kbEngine 2.0
+// 2016-2018 kbEngine 2.0
 //===================================================================================================
 #ifndef _KBCOLLISIONMANAGER_H_
 #define _KBCOLLISIONMANAGER_H_
@@ -20,9 +20,9 @@ enum ECollisionType {
 /**
  *	kbBoneCollisionSphere
  */
-class kbBoneCollisionSphere : public kbComponent {
+class kbBoneCollisionSphere : public kbGameComponent {
 
-	KB_DECLARE_COMPONENT( kbBoneCollisionSphere, kbComponent );
+	KB_DECLARE_COMPONENT( kbBoneCollisionSphere, kbGameComponent );
 	friend class kbClothComponent;
 
 //---------------------------------------------------------------------------------------------------
@@ -38,9 +38,9 @@ private:
 /**
  *	kbCollisionComponent
  */
-class kbCollisionComponent : public kbComponent {
+class kbCollisionComponent : public kbGameComponent {
 
-	KB_DECLARE_COMPONENT( kbCollisionComponent, kbComponent );
+	KB_DECLARE_COMPONENT( kbCollisionComponent, kbGameComponent );
 	friend class kbCollisionManager;
 
 //---------------------------------------------------------------------------------------------------
@@ -70,13 +70,13 @@ private:
 struct kbCollisionInfo_t {
 	kbCollisionInfo_t() :
 		m_T( FLT_MAX ),
-		m_pHitComponent( NULL ),
+		m_pHitComponent( nullptr ),
 		m_bHit( false ) { }
 
-	kbVec3			m_HitLocation;
-	float			m_T;
-	kbComponent *	m_pHitComponent;
-	bool			m_bHit;
+	kbVec3				m_HitLocation;
+	float				m_T;
+	kbGameComponent *	m_pHitComponent;
+	bool				m_bHit;
 };
 
 /**

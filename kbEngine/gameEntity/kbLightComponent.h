@@ -10,9 +10,9 @@
 /**
  *	kbLightComponent
  */
-class kbLightComponent : public kbComponent {
+class kbLightComponent : public kbGameComponent {
 
-	KB_DECLARE_COMPONENT( kbLightComponent, kbComponent );
+	KB_DECLARE_COMPONENT( kbLightComponent, kbGameComponent );
 
 //---------------------------------------------------------------------------------------------------
 public:
@@ -98,9 +98,9 @@ protected:
 /**
  *	kbLightShaftsComponent
  */
-class kbLightShaftsComponent : public kbComponent {
+class kbLightShaftsComponent : public kbGameComponent {
 
-	KB_DECLARE_COMPONENT( kbLightShaftsComponent, kbComponent );
+	KB_DECLARE_COMPONENT( kbLightShaftsComponent, kbGameComponent );
 
 //---------------------------------------------------------------------------------------------------
 public:
@@ -136,9 +136,9 @@ protected:
 /**
  *	kbFogComponent
  */
-class kbFogComponent : public kbComponent {
+class kbFogComponent : public kbGameComponent {
 
-	KB_DECLARE_COMPONENT( kbFogComponent, kbComponent );
+	KB_DECLARE_COMPONENT( kbFogComponent, kbGameComponent );
 
 //---------------------------------------------------------------------------------------------------
 public:

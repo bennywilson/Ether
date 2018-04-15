@@ -379,7 +379,7 @@ void kbUndoDeleteComponent::UndoAction() {
 void kbUndoDeleteComponent::RedoAction() {
 
 	int componentIdx = -1;
-	kbGameEntity *const pEntity = m_pComponent->GetParent();
+	kbGameEntity *const pEntity = (kbGameEntity*)m_pComponent->GetOwner();	// ENTITY HACK
 	for ( componentIdx = 0; componentIdx < pEntity->NumComponents(); componentIdx++ ) {
 		if ( pEntity->GetComponent(componentIdx) == m_pComponent ) {
 			break;

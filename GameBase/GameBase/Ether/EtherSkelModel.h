@@ -2,7 +2,7 @@
 // EtherSkelModel.h
 //
 //
-// 2016-2017 kbEngine 2.0
+// 2016-2018 kbEngine 2.0
 //===================================================================================================
 #ifndef _ETHERSKELMODEL_H_
 #define _ETHERSKELMODEL_H_
@@ -12,11 +12,11 @@
 /**
  *	EtherAnimComponent
  */
-class EtherAnimComponent : public kbComponent {
+class EtherAnimComponent : public kbGameComponent {
 public:
 	friend class EtherSkelModelComponent;
 
-	KB_DECLARE_COMPONENT( EtherAnimComponent, kbComponent );
+	KB_DECLARE_COMPONENT( EtherAnimComponent, kbGameComponent );
 
 	const kbString &						GetAnimationName() const { return m_AnimationName; }
 

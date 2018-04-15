@@ -2,7 +2,7 @@
 // kbModelComponent.cpp
 //
 //
-// 2016-2017 kbEngine 2.0
+// 2016-2018 kbEngine 2.0
 //===================================================================================================
 #include "kbCore.h"
 #include "kbVector.h"
@@ -33,6 +33,6 @@ kbModelComponent::~kbModelComponent() {
 void kbModelComponent::SetShaderParam( const int index, const kbVec4 & newParam ) {
 	if ( index >= 0 && index < m_ShaderParams.size() ) {
 		m_ShaderParams[index] = newParam;
-		GetParent()->MarkAsDirty();
+		GetOwner()->MarkAsDirty();
 	}
 }

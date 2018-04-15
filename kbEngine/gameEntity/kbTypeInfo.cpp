@@ -69,6 +69,10 @@ EBillboardType_Enum EBillboardType_EnumClass;
 kbComponent_TypeInfo kbComponent::typeInfo;
 std::vector<kbTypeInfoClass *> kbComponent::kbComponent_TypeInfoVar;
 
+// kbGameComponent
+kbGameComponent_TypeInfo kbGameComponent::typeInfo;
+std::vector<kbTypeInfoClass *> kbGameComponent::kbGameComponent_TypeInfoVar;
+
 // kbModelComponent
 kbModelComponent_TypeInfo kbModelComponent::typeInfo;
 std::vector<kbTypeInfoClass *> kbModelComponent::kbModelComponent_TypeInfoVar;

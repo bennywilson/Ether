@@ -2,10 +2,9 @@
 // kbResourceManager.cpp
 //
 //
-// 2016-2017 kbEngine 2.0
+// 2016-2018 kbEngine 2.0
 //===================================================================================================
 #include "kbCore.h"
-#include "kbRenderer_Defs.h"
 #include "kbMaterial.h"
 #include "kbModel.h"
 #include "kbSoundManager.h"
@@ -45,7 +44,6 @@ void kbResource::Release() {
 	if ( m_ReferenceCount == 0 ) {
 		Release_Internal();
 	}
-
 }
 
 /**

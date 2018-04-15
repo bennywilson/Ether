@@ -58,11 +58,11 @@ void EtherActorComponent::SetEnable_Internal( const bool isEnabled ) {
  */
 void EtherActorComponent::PlaceOnGround( const float offset ) {
 	kbVec3 floorPosition;
-	if (((EtherGame*)g_pGame)->TraceAgainstWorld( m_pParent->GetPosition() + kbVec3( 0.0f, 10000.0f, 0.0f ), m_pParent->GetPosition() - kbVec3( 0.0f, 10000.0f, 0.0f ), floorPosition, false ) ) {
-		floorPosition.x = m_pParent->GetPosition().x;
+	if (((EtherGame*)g_pGame)->TraceAgainstWorld( GetOwner()->GetPosition() + kbVec3( 0.0f, 10000.0f, 0.0f ), GetOwner()->GetPosition() - kbVec3( 0.0f, 10000.0f, 0.0f ), floorPosition, false ) ) {
+		floorPosition.x = GetOwner()->GetPosition().x;
 		floorPosition.y += offset;
-		floorPosition.z = m_pParent->GetPosition().z;
-		m_pParent->SetPosition( floorPosition );
+		floorPosition.z = GetOwner()->GetPosition().z;
+		GetOwner()->SetPosition( floorPosition );
 	}
 }
 
@@ -72,5 +72,5 @@ void EtherActorComponent::PlaceOnGround( const float offset ) {
  *	If a child class overrides StartDeath() without calling this one, it'll be responsible for calling g_pGame->RemoveGameEntity()
  */
 void EtherActorComponent::StartDeath( const kbDamageComponent *const damageComponent, const kbGameLogicComponent *const attackerComponent ) {
-	g_pGame->RemoveGameEntity( GetParent() );
+	g_pGame->RemoveGameEntity( GetOwner() );
 }

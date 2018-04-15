@@ -3,7 +3,7 @@
 //
 // Manages terrain streaming/generation + environmental fx
 //
-// 2016-2017 kbEngine 2.0
+// 2016-2018 kbEngine 2.0
 //===================================================================================================
 #ifndef _ETHERWORLDGEN_H_
 #define _ETHERWORLDGEN_H_
@@ -104,11 +104,11 @@ public:
 /**
  *	EtherEnviroInfo
  */
-class EtherEnviroInfo : public kbComponent {
+class EtherEnviroInfo : public kbGameComponent {
 
 //-------------------------------------------------------------------------------------------------------------------------------------------------------------
 public:
-	KB_DECLARE_COMPONENT( EtherEnviroInfo, kbComponent );
+	KB_DECLARE_COMPONENT( EtherEnviroInfo, kbGameComponent );
 
 	/** Points to a kbGameEntity with an EtherEnviroComponent on it */
 	kbGameEntityPtr								m_EnvironmentData;
@@ -130,9 +130,9 @@ struct EtherWorldGenCollision_t {
 /**
  *	EtherWorldGenComponent
  */
-class EtherWorldGenComponent : public kbComponent {
+class EtherWorldGenComponent : public kbGameComponent {
 
-	KB_DECLARE_COMPONENT( EtherWorldGenComponent, kbComponent );
+	KB_DECLARE_COMPONENT( EtherWorldGenComponent, kbGameComponent );
 
 //-------------------------------------------------------------------------------------------------------------------------------------------------------------
 public:
@@ -237,9 +237,9 @@ private:
 /**
  *	EtherEnviroMaterial
  */
-class EtherEnviroMaterial : public kbComponent {
+class EtherEnviroMaterial : public kbGameComponent {
 
-	KB_DECLARE_COMPONENT( EtherEnviroMaterial, kbComponent );
+	KB_DECLARE_COMPONENT( EtherEnviroMaterial, kbGameComponent );
 
 	friend class EtherEnviroComponent;
 
@@ -257,9 +257,9 @@ protected:
 /**
  *	EtherEnviroObject
  */
-class EtherEnviroObject : public kbComponent {
+class EtherEnviroObject : public kbGameComponent {
 
-	KB_DECLARE_COMPONENT( EtherEnviroObject, kbComponent );
+	KB_DECLARE_COMPONENT( EtherEnviroObject, kbGameComponent );
 
 	friend class EtherWorldGenComponent;
 
@@ -284,9 +284,9 @@ private:
  *	EtherTimeOfDayModifier
  *  Todo: Verify that the array of modifiers is in ascending order
  */
-class EtherTimeOfDayModifier : public kbComponent {
+class EtherTimeOfDayModifier : public kbGameComponent {
 
-	KB_DECLARE_COMPONENT( EtherTimeOfDayModifier, kbComponent );
+	KB_DECLARE_COMPONENT( EtherTimeOfDayModifier, kbGameComponent );
 
 //-------------------------------------------------------------------------------------------------------------------------------------------------------------
 public:
@@ -309,9 +309,9 @@ private:
 /**
  *	EtherEnviroComponent
  */
-class EtherEnviroComponent : public kbComponent {
+class EtherEnviroComponent : public kbGameComponent {
 
-	KB_DECLARE_COMPONENT( EtherEnviroComponent, kbComponent );
+	KB_DECLARE_COMPONENT( EtherEnviroComponent, kbGameComponent );
 
 	friend class EtherWorldGenComponent;
 

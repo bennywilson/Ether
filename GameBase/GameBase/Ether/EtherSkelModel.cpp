@@ -39,7 +39,7 @@ void EtherSkelModelComponent::Constructor() {
 void EtherSkelModelComponent::PlayAnimation( const kbString & AnimationName, const float BlendLength, const bool bReturnToIdleWhenDone ) {
 
 #if DEBUG_ANIMS
-	kbLog( "%s Playing Animation", GetParent()->GetName().c_str() );
+	kbLog( "%s Playing Animation", GetOwner()->GetName().c_str() );
 #endif
 
 	if ( IsPlaying( AnimationName ) ) {
@@ -162,7 +162,7 @@ void EtherSkelModelComponent::Update_Internal( const float DeltaTime ) {
 					m_NextAnimation = -1;
 
 #if DEBUG_ANIMS
-					kbLog( "%s Transition to Next Animation", GetParent()->GetName().c_str() );
+					kbLog( "%s Transition to Next Animation", GetOwner()->GetName().c_str() );
 #endif
 				}
 			}
@@ -185,7 +185,7 @@ void EtherSkelModelComponent::Update_Internal( const float DeltaTime ) {
 				}
 
 #if DEBUG_ANIMS
-				kbLog( "%s anim time = %f", GetParent()->GetName().c_str(), CurAnim.m_CurrentAnimationTime );
+				kbLog( "%s anim time = %f", GetOwner()->GetName().c_str(), CurAnim.m_CurrentAnimationTime );
 #endif
 
 				m_pModel->Animate( CurAnim.m_CurrentAnimationTime, CurAnim.m_pAnimation, CurAnim.m_bIsLooping, m_BindToLocalSpaceMatrices );
@@ -195,7 +195,7 @@ void EtherSkelModelComponent::Update_Internal( const float DeltaTime ) {
 					m_CurrentAnimation = -1;
 
 #if DEBUG_ANIMS
-				kbLog( "%s Cur Animation Done, going back to idle", GetParent()->GetName().c_str() );
+				kbLog( "%s Cur Animation Done, going back to idle", GetOwner()->GetName().c_str() );
 #endif
 				}
 			} else {
@@ -218,17 +218,17 @@ void EtherSkelModelComponent::Update_Internal( const float DeltaTime ) {
 				m_pModel->BlendAnimations( CurAnim.m_pAnimation, CurAnim.m_CurrentAnimationTime, CurAnim.m_bIsLooping, NextAnim.m_pAnimation, NextAnim.m_CurrentAnimationTime, NextAnim.m_bIsLooping, blendTime, m_BindToLocalSpaceMatrices ); 
 
 #if DEBUG_ANIMS
-				kbLog( "%s Blend time = %f.  %f", GetParent()->GetName().c_str(), blendTime, NextAnim.m_CurrentAnimationTime );
+				kbLog( "%s Blend time = %f.  %f", GetOwner()->GetName().c_str(), blendTime, NextAnim.m_CurrentAnimationTime );
 #endif
 			}
 		}
 
-		g_pRenderer->UpdateRenderObject( this, m_pModel, m_pParent->GetPosition(), m_pParent->GetOrientation(), m_pParent->GetScale(), m_RenderPass );
+		g_pRenderer->UpdateRenderObject( this, m_pModel, GetOwner()->GetPosition(), GetOwner()->GetOrientation(), GetOwner()->GetScale(), m_RenderPass );
 	}
 
 	// Update collision component
 	EtherSkelModelComponent *const pSkelModel = this;
-	kbCollisionComponent *const pCollisionComponent = (kbCollisionComponent*)GetParent()->GetComponentByType( kbCollisionComponent::GetType() );
+	kbCollisionComponent *const pCollisionComponent = (kbCollisionComponent*)GetOwner()->GetComponentByType( kbCollisionComponent::GetType() );
 
 	if ( pCollisionComponent != nullptr && pSkelModel != nullptr ) {
 
@@ -251,9 +251,9 @@ void EtherSkelModelComponent::Update_Internal( const float DeltaTime ) {
 	}
 	// Temp: Search for "Additional Cloth Bones" and draw the hair locks for this AI using axial bill boards
 	kbClothComponent * pClothComponent = NULL;
-	for ( int i = 0; i < m_pParent->NumComponents(); i++ ) {
-		if ( m_pParent->GetComponent( i )->IsA( kbClothComponent::GetType() ) ) {
-			 pClothComponent = static_cast<kbClothComponent*>( m_pParent->GetComponent( i ) );
+	for ( int i = 0; i < GetOwner()->NumComponents(); i++ ) {
+		if ( GetOwner()->GetComponent( i )->IsA( kbClothComponent::GetType() ) ) {
+			 pClothComponent = static_cast<kbClothComponent*>( GetOwner()->GetComponent( i ) );
 			break;
 		}
 	}

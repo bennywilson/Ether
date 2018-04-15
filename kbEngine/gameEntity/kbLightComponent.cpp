@@ -2,7 +2,7 @@
 // kbLightComponent.cpp
 //
 //
-// 2016-2017 kbEngine 2.0
+// 2016-2018 kbEngine 2.0
 //===================================================================================================
 #include "kbCore.h"
 #include "kbVector.h"
@@ -43,9 +43,9 @@ void kbLightComponent::SetEnable_Internal( const bool bIsEnabled ) {
 
 	Super::SetEnable_Internal( bIsEnabled );
 
-	if ( g_pRenderer != NULL ) {
+	if ( g_pRenderer != nullptr ) {
 		if ( bIsEnabled ) {
-			g_pRenderer->AddLight( this, m_pParent->GetPosition(), m_pParent->GetOrientation() );
+			g_pRenderer->AddLight( this, GetOwner()->GetPosition(), GetOwner()->GetOrientation() );
 		} else {
 			g_pRenderer->RemoveLight( this );
 		}
@@ -59,15 +59,15 @@ void kbLightComponent::Update_Internal( const float DeltaTime ) {
 
 	Super::Update_Internal( DeltaTime );
 
-	if ( m_LifeTimeRemaining >= 0 ) {
+	if ( GetLifeTimeRemaining() >= 0 ) {
 		// Hack fade for grenade
-		m_Brightness = kbClamp( m_LifeTimeRemaining / m_StartingLifeTime, 0.0f, 1.0f );
-		g_pRenderer->UpdateLight( this, m_pParent->GetPosition(), m_pParent->GetOrientation() );
+		m_Brightness = kbClamp( GetLifeTimeRemaining() / GetStartingLifeTime(), 0.0f, 1.0f );
+		g_pRenderer->UpdateLight( this, GetOwner()->GetPosition(), GetOwner()->GetOrientation() );
 		return;
 	}
 
 	if ( IsDirty() ) {
-		g_pRenderer->UpdateLight( this, m_pParent->GetPosition(), m_pParent->GetOrientation() );
+		g_pRenderer->UpdateLight( this, GetOwner()->GetPosition(), GetOwner()->GetOrientation() );
 	}
 }
 
@@ -130,9 +130,9 @@ kbLightShaftsComponent::~kbLightShaftsComponent() {
 void kbLightShaftsComponent::SetEnable_Internal( const bool isEnabled ) {
 	Super::SetEnable_Internal( isEnabled );
 
-	if ( g_pRenderer != NULL ) {
+	if ( g_pRenderer != nullptr ) {
 		if ( isEnabled ) {
-			g_pRenderer->AddLightShafts( this, m_pParent->GetPosition(), m_pParent->GetOrientation() );	
+			g_pRenderer->AddLightShafts( this, GetOwner()->GetPosition(), GetOwner()->GetOrientation() );	
 		} else {
 			g_pRenderer->RemoveLightShafts( this );
 		}
@@ -145,7 +145,7 @@ void kbLightShaftsComponent::SetEnable_Internal( const bool isEnabled ) {
 void kbLightShaftsComponent::SetColor( const kbColor & newColor ) {
 	m_Color = newColor;
 	if ( IsEnabled() ) {
-		g_pRenderer->UpdateLightShafts( this, m_pParent->GetPosition(), m_pParent->GetOrientation() );
+		g_pRenderer->UpdateLightShafts( this, GetOwner()->GetPosition(), GetOwner()->GetOrientation() );
 	}
 }
 
@@ -156,7 +156,6 @@ void kbFogComponent::Constructor() {
 	m_Color.Set( 1.0f, 1.0f, 1.0f, 1.0f );
 	m_StartDistance = 2100;
 	m_EndDistance = 2200;
-	m_DisableTickOnServer = true;
 }
 
 /**

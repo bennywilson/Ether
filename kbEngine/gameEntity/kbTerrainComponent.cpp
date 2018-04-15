@@ -68,7 +68,7 @@ void kbTerrainComponent::EditorChange( const std::string & propertyName ) {
  */
 void kbTerrainComponent::GenerateTerrain() {
 	if ( m_pHeightMap == nullptr ) {
-		kbError( "No height map file found for terrain component on entity %s", m_pParent->GetName().c_str() );
+		kbError( "No height map file found for terrain component on entity %s", GetOwner()->GetName().c_str() );
 		return;
 	}
 
@@ -214,8 +214,8 @@ void kbTerrainComponent::SetEnable_Internal( const bool isEnabled ) {
 void kbTerrainComponent::Update_Internal( const float DeltaTime ) {
 	Super::Update_Internal( DeltaTime );
 
-	if ( m_TerrainModel.GetMeshes().size() > 0 && m_pParent->IsDirty() ) {
-		g_pRenderer->UpdateRenderObject( this, &m_TerrainModel, m_pParent->GetPosition(), kbQuat( 0.0f, 0.0f, 0.0f, 1.0f ), m_pParent->GetScale() );
+	if ( m_TerrainModel.GetMeshes().size() > 0 && GetOwner()->IsDirty() ) {
+		g_pRenderer->UpdateRenderObject( this, &m_TerrainModel, GetOwner()->GetPosition(), kbQuat( 0.0f, 0.0f, 0.0f, 1.0f ), GetOwner()->GetScale() );
 	}
 }
 

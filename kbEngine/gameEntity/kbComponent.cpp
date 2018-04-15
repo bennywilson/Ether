@@ -2,7 +2,7 @@
 // kbComponent.cpp
 //
 //
-// 2016 kbEngine 2.0
+// 2016-2018 kbEngine 2.0
 //===================================================================================================
 #include "kbCore.h"
 #include "kbVector.h"
@@ -134,31 +134,27 @@ void CopyVarToComponent( const kbComponent * Src, kbComponent * Dst, const kbTyp
  *	kbComponent::Constructor
  */
 void kbComponent::Constructor() {
-	m_pParent = nullptr;
-	m_LifeTimeRemaining = -1.0f;
-	m_StartingLifeTime = -1.0f;
-	m_IsEnabled = false;
-	m_DisableTickOnServer = false;
+	m_pOwner = nullptr;
 	m_bIsDirty = false;
 }
 
 /**
  *	kbComponent::SetParent
  */
-void kbComponent::SetParent( kbGameEntity * pGameEntity ) { 
+void kbComponent::SetParent( kbEntity *const pGameEntity ) { 
 
-	if ( pGameEntity == NULL ) {
+	if ( pGameEntity == nullptr ) {
 		kbAssert( false, "Initializing a kbComponent with a NULL game entity", GetComponentClassName() );
 		return;
 	}
 
-	m_pParent = pGameEntity;
+	m_pOwner = pGameEntity;
 }
 
 /**
- *	kbComponent::Enable
+ *	kbGameComponent::Enable
  */
-void kbComponent::Enable( const bool setEnabled ) {
+void kbGameComponent::Enable( const bool setEnabled ) {
 
 	if ( m_IsEnabled == setEnabled ) {
 		return;
@@ -166,7 +162,7 @@ void kbComponent::Enable( const bool setEnabled ) {
 
 	m_IsEnabled = setEnabled;
 
-	if ( m_pParent == nullptr || m_pParent->IsPrefab() == true ) {
+	if ( m_pOwner == nullptr || ((kbGameEntity*)(m_pOwner))->IsPrefab() == true ) {		// ENTITY HACK
 		return;
 	}
 
@@ -178,9 +174,9 @@ void kbComponent::Enable( const bool setEnabled ) {
 }
 
 /**
- *	kbTransformComponent::Update
+ *	kbGameComponent::Update
  */
-void kbComponent::Update( const float DeltaTimeSeconds ) {
+void kbGameComponent::Update( const float DeltaTimeSeconds ) {
 	if ( m_LifeTimeRemaining >= 0.0f ) {
 		m_LifeTimeRemaining -= DeltaTimeSeconds;
 		if ( m_LifeTimeRemaining < 0 ) {
@@ -192,6 +188,15 @@ void kbComponent::Update( const float DeltaTimeSeconds ) {
 
 	Update_Internal( DeltaTimeSeconds ); 
 	m_bIsDirty = false;
+}
+
+/**
+ *	kbGameComponent::Constructor
+ */
+void kbGameComponent::Constructor() {
+	m_StartingLifeTime = -1.0f;
+	m_LifeTimeRemaining = -1.0f;
+	m_IsEnabled = false;
 }
 
 /**
@@ -207,21 +212,21 @@ void kbTransformComponent::Constructor() {
  *	kbTransformComponent::GetPosition
  */
 const kbVec3 kbTransformComponent::GetPosition() const {
-	if ( m_pParent->GetComponent(0) == this ) {
+	if ( GetOwner()->GetComponent(0) == this ) {
 		return m_Position;
 	}
 
-	const kbMat4 parentRotation = m_pParent->GetOrientation().ToMat4();
+	const kbMat4 parentRotation = GetOwner()->GetOrientation().ToMat4();
 	const kbVec3 worldPosition = parentRotation.TransformPoint( m_Position );
 
-	return parentRotation.TransformPoint( m_Position ) + m_pParent->GetPosition();
+	return parentRotation.TransformPoint( m_Position ) + GetOwner()->GetPosition();
 }
 
 /**
  *	kbTransformComponent::GetScale
  */
 const kbVec3 kbTransformComponent::GetScale() const {
-	if ( m_pParent->GetComponent(0) == this ) {
+	if ( GetOwner()->GetComponent(0) == this ) {
 		return m_Scale;
 	}
 
@@ -232,7 +237,7 @@ const kbVec3 kbTransformComponent::GetScale() const {
  *	kbTransformComponent::GetOrientation
  */
 const kbQuat kbTransformComponent::GetOrientation() const {
-	if ( m_pParent->GetComponent(0) == this ) {
+	if ( GetOwner()->GetComponent(0) == this ) {
 		return m_Orientation;
 	}
 
@@ -285,7 +290,7 @@ void kbActorComponent::SetEnable_Internal( const bool bIsEnabled ) {
  *	kbActorComponent::TakeDamage
  */
 void kbActorComponent::TakeDamage( const class kbDamageComponent *const pDamageComponent, const kbGameLogicComponent *const attackerComponent ) {
-	if ( pDamageComponent == NULL ) {
+	if ( pDamageComponent == nullptr ) {
 		return;
 	}
 

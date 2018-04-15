@@ -2,7 +2,7 @@
 // kbComponent.h
 //
 //
-// 2016 kbEngine 2.0
+// 2016-2018 kbEngine 2.0
 //===================================================================================================
 #ifndef _KBCOMPONENT_H_
 #define _KBCOMPONENT_H_
@@ -34,29 +34,27 @@ protected:
  */
 class kbComponent : public kbBaseComponent {
 
-	friend class kbGameEntity;
-
 	KB_DECLARE_COMPONENT( kbComponent, kbBaseComponent );
 
+	friend class kbEntity;
 //-------------------------------------------------------------------------------------------------------------------------------------------------------------
 public:
 
 	virtual										~kbComponent() { SetEnable_Internal( false ); }
 
+	virtual void								Enable( const bool setEnabled ) { }
+	bool										IsEnabled() const { return m_IsEnabled; }
+
 	// Called during level load after the owning entity is fully loaded
 	virtual void								PostLoad() { }
 
-	void										Enable( const bool setEnabled );
-	bool										IsEnabled() const { return m_IsEnabled; }
-	bool										IsTickDisabledOnServer() const { return m_DisableTickOnServer; }
-
 	virtual void								EditorChange( const std::string & propertyName ) { }
-
-	void										Update( const float DeltaTimeSeconds );
 
 	virtual void								RenderSync() { }
 
-	kbGameEntity *								GetParent() const { return m_pParent; }
+	kbEntity *									GetOwner() const { return m_pOwner; }
+
+	void										MarkAsDirty() { m_bIsDirty = true; }
 
 protected:
 
@@ -66,27 +64,49 @@ protected:
 
 	bool										IsDirty() const { return m_bIsDirty; }
 
-	float										m_StartingLifeTime;
-	float										m_LifeTimeRemaining;
-	kbGameEntity *								m_pParent;
-	bool										m_DisableTickOnServer;
+	kbEntity *									m_pOwner;
+	bool										m_bIsDirty;
+	bool										m_IsEnabled;
 
 private:
 
-	void										SetParent( kbGameEntity * pGameEntity );
+	void										SetParent( kbEntity *const pGameEntity );
 
-	bool										m_IsEnabled;
-	bool										m_bIsDirty;
 
+};
+
+/**
+ *	kbGameComponent
+ */
+class kbGameComponent : public kbComponent {
+
+	KB_DECLARE_COMPONENT( kbGameComponent, kbComponent );
+
+//-------------------------------------------------------------------------------------------------------------------------------------------------------------
+public:
+
+	virtual void								Enable( const bool setEnabled ) override;
+
+	void										Update( const float DeltaTimeSeconds );
+
+	kbGameEntity *								GetOwner() const { return (kbGameEntity *) m_pOwner; }
+
+	float										GetStartingLifeTime() const { return m_StartingLifeTime; }
+	float										GetLifeTimeRemaining() const { return m_LifeTimeRemaining; }
+
+private:
+
+	float										m_StartingLifeTime;
+	float										m_LifeTimeRemaining;
 };
 
 /**
  *	kbTransformComponent - Every game entity will have a kbTransformComponent as its first component to hold the entity's position/orientation/scale
  *						 - Some components will be derived from kbTransformComponent to represent the component's local position/orientation/scale
  */
-class kbTransformComponent : public kbComponent {
+class kbTransformComponent : public kbGameComponent {
 
-	KB_DECLARE_COMPONENT( kbTransformComponent, kbComponent );
+	KB_DECLARE_COMPONENT( kbTransformComponent, kbGameComponent );
 
 //-------------------------------------------------------------------------------------------------------------------------------------------------------------
 public:
@@ -113,9 +133,9 @@ protected:
 /**
  *	kbGameLogicComponent - This is a component for running game logic (AI, Player, etc).  It's added to the end of a kbGameEntity's component list so that it will be run last
  */
-class kbGameLogicComponent : public kbComponent {
+class kbGameLogicComponent : public kbGameComponent {
 
-	KB_DECLARE_COMPONENT( kbGameLogicComponent, kbComponent );
+	KB_DECLARE_COMPONENT( kbGameLogicComponent, kbGameComponent );
 
 //-------------------------------------------------------------------------------------------------------------------------------------------------------------
 public:
