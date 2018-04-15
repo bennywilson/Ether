@@ -179,11 +179,11 @@ kbGameEntity * kbFile::ReadGameEntity_Internal() {
  *	kbFile::ReadComponent
  */
 void kbFile::ReadComponent( kbGameEntity *const pGameEntity, const std::string & componentType, kbComponent * ComponentToFill ) {
-	kbComponent * pComponent = NULL;
-	if ( ComponentToFill != NULL ) {
+	kbComponent * pComponent = nullptr;
+	if ( ComponentToFill != nullptr ) {
 		pComponent = ComponentToFill;
 	} else if ( componentType == "kbTransformComponent" ) {
-		pComponent = const_cast<kbGameComponent*>( pGameEntity->GetComponent(0) );
+		pComponent = (kbComponent*)( pGameEntity->GetComponent(0) );
 	} else {
 		pComponent = ConstructClassFromName( componentType );
 		pGameEntity->AddComponent( pComponent );

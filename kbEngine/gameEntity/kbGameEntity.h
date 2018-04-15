@@ -7,8 +7,8 @@
 #ifndef _KBGAMEENTITY_H_
 #define _KBGAMEENTITY_H_
 
-class kbComponent;
-class kbTransformComponent;
+//class kbComponent;
+//sclass kbTransformComponent;
 
 #define INVALID_ENTITYID UINT_MAX
 
@@ -44,6 +44,7 @@ private:
  *	kbEntity
  */
 class kbEntity {
+
 //-------------------------------------------------------------------------------------------------------------------------------------------------------------
 public:
 												kbEntity();
@@ -55,6 +56,7 @@ public:
 	size_t										NumComponents() const { return m_Components.size(); }
 
 protected:
+
 	std::vector<kbComponent *>					m_Components;
 
 	// Entities that came from file (level, package, etc) have a GUID
@@ -74,16 +76,13 @@ public:
 
 												kbGameEntity( const kbGUID *const guid = nullptr, const bool bIsPrefab = false );
 												kbGameEntity( const kbGameEntity *, const bool bIsPrefab, const kbGUID *const guid = nullptr );
-
 	virtual										~kbGameEntity();
 
 	void										PostLoad();
 
-	// Children
-	void										AddComponent( kbComponent *const pComponent, int indexToInsertAt = -1 ) override;
-	kbGameComponent *							GetComponent( const size_t index ) const { return (kbGameComponent*)m_Components[index]; }
-
 	void										AddEntity( kbGameEntity *const pEntity );
+	virtual void								AddComponent( kbComponent *const pComponent, int indexToInsertAt = -1 ) override;
+	kbGameComponent *							GetComponent( const size_t index ) const { return (kbGameComponent*)m_Components[index]; }
 
 	// Updates
 	void										Update( const float DeltaTime );
@@ -114,7 +113,7 @@ public:
 
 	void										DeleteWhenComponentsAreInactive( const bool bDelete ) { m_bDeleteWhenComponentsAreInactive = bDelete; }
 
-	kbGameEntity *								GetOwner() const { return m_pParentEntity; }
+	kbGameEntity *								GetOwner() const { return m_pOwnerEntity; }
 
 	kbActorComponent *							GetActorComponent() const { return m_pActorComponent; }
 	kbComponent *								GetComponentByType( const void *const pTypeInfoClass ) const;
@@ -131,7 +130,7 @@ private:
 	kbTransformComponent *						m_pTransformComponent;		// For convenience.  This is always the first entry in the m_Components list
 	kbActorComponent *							m_pActorComponent;
 	std::vector<kbGameEntity*>					m_ChildEntities;
-	kbGameEntity *								m_pParentEntity;
+	kbGameEntity *								m_pOwnerEntity;
 
 	// All entities will have a m_EntityId.  They're temporary values that may differ between game instances
 	uint										m_EntityId;
@@ -152,7 +151,6 @@ class kbPrefab {
 //-------------------------------------------------------------------------------------------------------------------------------------------------------------
 public:
 
-												kbPrefab( const kbPrefab * prefabToCopy );
 												~kbPrefab() { }
 
 	const std::string &							GetPrefabName() const { return m_PrefabName; }

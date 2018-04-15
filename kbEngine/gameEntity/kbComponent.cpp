@@ -136,19 +136,27 @@ void CopyVarToComponent( const kbComponent * Src, kbComponent * Dst, const kbTyp
 void kbComponent::Constructor() {
 	m_pOwner = nullptr;
 	m_bIsDirty = false;
+	m_IsEnabled = false;
 }
 
 /**
- *	kbComponent::SetParent
+ *	kbComponent::SetOwner
  */
-void kbComponent::SetParent( kbEntity *const pGameEntity ) { 
+void kbComponent::SetOwner( kbEntity *const pGameEntity ) { 
 
 	if ( pGameEntity == nullptr ) {
-		kbAssert( false, "Initializing a kbComponent with a NULL game entity", GetComponentClassName() );
-		return;
+		kbError( "Initializing a kbComponent with a NULL game entity", GetComponentClassName() );
 	}
 
 	m_pOwner = pGameEntity;
+}
+
+/**
+ *	kbGameComponent::Constructor
+ */
+void kbGameComponent::Constructor() {
+	m_StartingLifeTime = -1.0f;
+	m_LifeTimeRemaining = -1.0f;
 }
 
 /**
@@ -162,7 +170,7 @@ void kbGameComponent::Enable( const bool setEnabled ) {
 
 	m_IsEnabled = setEnabled;
 
-	if ( m_pOwner == nullptr || ((kbGameEntity*)(m_pOwner))->IsPrefab() == true ) {		// ENTITY HACK
+	if ( GetOwner() == nullptr || GetOwner()->IsPrefab() == true ) {
 		return;
 	}
 
@@ -188,15 +196,6 @@ void kbGameComponent::Update( const float DeltaTimeSeconds ) {
 
 	Update_Internal( DeltaTimeSeconds ); 
 	m_bIsDirty = false;
-}
-
-/**
- *	kbGameComponent::Constructor
- */
-void kbGameComponent::Constructor() {
-	m_StartingLifeTime = -1.0f;
-	m_LifeTimeRemaining = -1.0f;
-	m_IsEnabled = false;
 }
 
 /**

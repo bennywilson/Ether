@@ -34,9 +34,10 @@ protected:
  */
 class kbComponent : public kbBaseComponent {
 
+	friend class kbEntity;
+
 	KB_DECLARE_COMPONENT( kbComponent, kbBaseComponent );
 
-	friend class kbEntity;
 //-------------------------------------------------------------------------------------------------------------------------------------------------------------
 public:
 
@@ -64,15 +65,13 @@ protected:
 
 	bool										IsDirty() const { return m_bIsDirty; }
 
-	kbEntity *									m_pOwner;
 	bool										m_bIsDirty;
 	bool										m_IsEnabled;
 
 private:
 
-	void										SetParent( kbEntity *const pGameEntity );
-
-
+	kbEntity *									m_pOwner;
+	void										SetOwner( kbEntity *const pGameEntity );
 };
 
 /**
@@ -89,7 +88,7 @@ public:
 
 	void										Update( const float DeltaTimeSeconds );
 
-	kbGameEntity *								GetOwner() const { return (kbGameEntity *) m_pOwner; }
+	kbGameEntity *								GetOwner() const { return (kbGameEntity *) Super::GetOwner(); }
 
 	float										GetStartingLifeTime() const { return m_StartingLifeTime; }
 	float										GetLifeTimeRemaining() const { return m_LifeTimeRemaining; }

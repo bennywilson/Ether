@@ -21,7 +21,7 @@ kbEntity::kbEntity() {
  *	kbEntity::AddComponent
  */
 void kbEntity::AddComponent( kbComponent *const pComponent, int indexToInsertAt ) {
-	pComponent->SetParent( this );
+	pComponent->SetOwner( this );
 
 	const int lastComponentIdx = (int)m_Components.size();
 	if ( indexToInsertAt == -1 ) {
@@ -42,7 +42,6 @@ void kbEntity::AddComponent( kbComponent *const pComponent, int indexToInsertAt 
 		m_Components.insert( m_Components.begin() + indexToInsertAt, pComponent );
 	}
 }
-
 
 /**
  *	kbEntity::RemoveComponent
@@ -174,7 +173,7 @@ uint g_EntityNumber = 0;
 kbGameEntity::kbGameEntity( const kbGUID *const guid, const bool bIsPrefab ) :
 	m_Bounds( kbVec3( -1.0f, -1.0f, -1.0f ), kbVec3( 1.0f, 1.0f, 1.0f ) ),
 	m_pActorComponent( nullptr ),
-	m_pParentEntity( nullptr ),
+	m_pOwnerEntity( nullptr ),
 	m_EntityId( g_EntityNumber++ ),
 	m_bIsDirty( false ),
 	m_bIsPrefab( bIsPrefab ),
@@ -213,7 +212,7 @@ kbGameEntity::kbGameEntity( const kbGUID *const guid, const bool bIsPrefab ) :
 kbGameEntity::kbGameEntity( const kbGameEntity * pGameEntity, const bool bIsPrefab, const kbGUID *const guid ) :
 	m_Bounds( pGameEntity->GetBounds() ),
 	m_pActorComponent( nullptr ),
-	m_pParentEntity( nullptr ),
+	m_pOwnerEntity( nullptr ),
 	m_EntityId( g_EntityNumber++ ),
 	m_bIsDirty( false ),
 	m_bIsPrefab( bIsPrefab ),
@@ -319,7 +318,7 @@ void kbGameEntity::AddComponent( kbComponent *const pComponent, int indexToInser
  *	kbGameEntity::AddEntity
  */
 void kbGameEntity::AddEntity( kbGameEntity *const pEntity ) {
-	pEntity->m_pParentEntity = this;
+	pEntity->m_pOwnerEntity = this;
 	m_ChildEntities.push_back( pEntity );
 
 	// Make sure pEntity is not in kbGame's list as it will now be managed by this
@@ -417,9 +416,9 @@ kbBounds kbGameEntity::GetWorldBounds() const {
  *	kbGameEntity::GetOrientation
  */
 const kbQuat kbGameEntity::GetOrientation() const {
-	if ( m_pParentEntity != nullptr ) {
+	if ( m_pOwnerEntity != nullptr ) {
 		// This entity's orientation is in model space while the parent's is in world
-		return  m_pTransformComponent->GetOrientation() * m_pParentEntity->GetOrientation();
+		return  m_pTransformComponent->GetOrientation() * m_pOwnerEntity->GetOrientation();
 	}
 
 	return m_pTransformComponent->GetOrientation(); 
@@ -429,10 +428,10 @@ const kbQuat kbGameEntity::GetOrientation() const {
  *	kbGameEntity::GetPosition
  */
 const kbVec3 kbGameEntity::GetPosition() const {
-	if ( m_pParentEntity != nullptr ) {
+	if ( m_pOwnerEntity != nullptr ) {
 		const kbQuat entityOrientation = GetOrientation();
 		const kbVec3 worldSpaceOffset = entityOrientation.ToMat4().TransformPoint( m_pTransformComponent->GetPosition() );
-		return worldSpaceOffset + m_pParentEntity->GetPosition();
+		return worldSpaceOffset + m_pOwnerEntity->GetPosition();
 	}
 
 	return m_pTransformComponent->GetPosition();
@@ -453,11 +452,4 @@ kbComponent * kbGameEntity::GetComponentByType( const void *const pTypeInfoClass
 	}
 
 	return nullptr;
-}
-
-
-/**
- *	kbPrefab::kbPrefab
- */
-kbPrefab::kbPrefab( const kbPrefab * prefabToCopy ) {
 }

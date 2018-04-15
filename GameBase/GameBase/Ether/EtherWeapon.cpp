@@ -2,7 +2,7 @@
 // EtherWeapon.cpp
 //
 //
-// 2016-2017 kbEngine 2.0
+// 2016-2018 kbEngine 2.0
 //===================================================================================================
 #include <math.h>
 #include "EtherGame.h"
@@ -10,7 +10,6 @@
 #include "EtherSkelModel.h"
 #include "EtherWeapon.h"
 #include "EtherPlayer.h"
-
 
 
 kbVec3 g_ProjectileStuckOffset = kbVec3( 0.0f, 5.0f, 0.0f );

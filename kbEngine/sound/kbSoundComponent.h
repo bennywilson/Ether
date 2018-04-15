@@ -12,10 +12,10 @@
  */
 class kbSoundData : public kbGameComponent {
 
+	KB_DECLARE_COMPONENT( kbSoundData, kbGameComponent );
+
 //---------------------------------------------------------------------------------------------------
 public:
-
-	KB_DECLARE_COMPONENT( kbSoundData, kbGameComponent );
 
 	void										PlaySoundAtPosition( const kbVec3 & soundPosition ) const;
 

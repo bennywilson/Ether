@@ -53,7 +53,7 @@ void kbLightComponent::SetEnable_Internal( const bool bIsEnabled ) {
 }
 
 /**
- *	kbLightComponent:Update
+ *	kbLightComponent:Update_Internal
  */
 void kbLightComponent::Update_Internal( const float DeltaTime ) {
 

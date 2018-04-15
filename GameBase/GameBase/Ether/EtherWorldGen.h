@@ -106,9 +106,10 @@ public:
  */
 class EtherEnviroInfo : public kbGameComponent {
 
+	KB_DECLARE_COMPONENT( EtherEnviroInfo, kbGameComponent );
+
 //-------------------------------------------------------------------------------------------------------------------------------------------------------------
 public:
-	KB_DECLARE_COMPONENT( EtherEnviroInfo, kbGameComponent );
 
 	/** Points to a kbGameEntity with an EtherEnviroComponent on it */
 	kbGameEntityPtr								m_EnvironmentData;

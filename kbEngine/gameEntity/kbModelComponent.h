@@ -11,17 +11,20 @@
  *	kbModelComponent
  */
 class kbModelComponent : public kbGameComponent {
-public:
+
 	KB_DECLARE_COMPONENT( kbModelComponent, kbGameComponent );
 
-	virtual								~kbModelComponent();
+//---------------------------------------------------------------------------------------------------
+public:
 
-	void								SetShaderParam( const int index, const kbVec4 & newParam );
+	virtual										~kbModelComponent();
+
+	void										SetShaderParam( const int index, const kbVec4 & newParam );
 
 protected:
-	enum ERenderPass					m_RenderPass;
 
-	std::vector<class kbVec4>			m_ShaderParams;
+	enum ERenderPass							m_RenderPass;
+	std::vector<class kbVec4>					m_ShaderParams;
 };
 
 

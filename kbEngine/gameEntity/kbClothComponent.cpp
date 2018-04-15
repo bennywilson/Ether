@@ -68,9 +68,9 @@ void kbClothComponent::Update_Internal( const float DeltaTime ) {
 	}
 
 	kbSkeletalModelComponent * pSkelModelComponent = nullptr;
-	for ( int i = 0; i < m_pOwner->NumComponents(); i++ ) {
-		if ( m_pOwner->GetComponent( i )->IsA( kbSkeletalModelComponent::GetType() ) ) {
-			pSkelModelComponent = static_cast<kbSkeletalModelComponent*>( m_pOwner->GetComponent( i ) );
+	for ( int i = 0; i < GetOwner()->NumComponents(); i++ ) {
+		if ( GetOwner()->GetComponent( i )->IsA( kbSkeletalModelComponent::GetType() ) ) {
+			pSkelModelComponent = static_cast<kbSkeletalModelComponent*>( GetOwner()->GetComponent( i ) );
 			if ( pSkelModelComponent->GetModel() != m_pSkeletalModel ) {
 				m_pSkeletalModel = pSkelModelComponent->GetModel();
 				SetupCloth();
@@ -228,9 +228,9 @@ static float maxZ = 45.0f;
 	// Ball Sim - end
 
 	kbSkeletalModelComponent * pSkelModelComponent = NULL;
-	for ( int i = 0; i < m_pOwner->NumComponents(); i++ ) {
-		if ( m_pOwner->GetComponent( i )->IsA( kbSkeletalModelComponent::GetType() ) ) {
-			pSkelModelComponent = static_cast<kbSkeletalModelComponent*>( m_pOwner->GetComponent( i ) );
+	for ( int i = 0; i < GetOwner()->NumComponents(); i++ ) {
+		if ( GetOwner()->GetComponent( i )->IsA( kbSkeletalModelComponent::GetType() ) ) {
+			pSkelModelComponent = static_cast<kbSkeletalModelComponent*>( GetOwner()->GetComponent( i ) );
 			if ( pSkelModelComponent->GetModel() != m_pSkeletalModel ) {
 				break;
 			}
@@ -407,14 +407,13 @@ void kbClothComponent::SetupCloth() {
 	}
 
 	// Create our masses
-	const kbGameEntity *const gameEntOwner = (kbGameEntity*)m_pOwner;	// ENTITY HACK
 	kbMat4 scaleMatrix( kbMat4::identity );
-	scaleMatrix[0].x = gameEntOwner->GetScale().x;
-	scaleMatrix[1].y = gameEntOwner->GetScale().y;
-	scaleMatrix[2].z = gameEntOwner->GetScale().z;
+	scaleMatrix[0].x = GetOwner()->GetScale().x;
+	scaleMatrix[1].y = GetOwner()->GetScale().y;
+	scaleMatrix[2].z = GetOwner()->GetScale().z;
 
-	kbMat4 parentMatrix = scaleMatrix * gameEntOwner->GetOrientation().ToMat4();
-	parentMatrix[3] = gameEntOwner->GetPosition();
+	kbMat4 parentMatrix = scaleMatrix * GetOwner()->GetOrientation().ToMat4();
+	parentMatrix[3] = GetOwner()->GetPosition();
 
 	m_Masses.insert( m_Masses.begin(), (int)m_BoneInfo.size(), kbClothMass_t() );
 	for ( int i = 0; i < m_Masses.size(); i++ ) {
