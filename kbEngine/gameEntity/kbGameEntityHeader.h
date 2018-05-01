@@ -26,7 +26,7 @@ public: \
 	/* className( const className & componentToCopy );*/ \
 	virtual const char * GetComponentClassName() const { return #className; } \
 	virtual const std::vector< class kbTypeInfoClass * > & GetTypeInfo() const { return className##_TypeInfoVar; } \
-	virtual bool IsA( const void * type ) const { if ( type != (kbTypeInfoClass*)( &typeInfo ) ) { return Super::IsA( type ); } else { return true; } } \
+	virtual bool IsA( const void *const type ) const { if ( type != (kbTypeInfoClass*)( &typeInfo ) ) { return Super::IsA( type ); } else { return true; } } \
 	const static className##_TypeInfo * GetType() { return &typeInfo; } \
 	virtual kbComponent * Duplicate() const { return new className( *this ); }
 

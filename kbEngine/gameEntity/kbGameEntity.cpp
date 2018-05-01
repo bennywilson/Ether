@@ -14,7 +14,17 @@
 /**
  *	kbEntity::kbEntity
  */
-kbEntity::kbEntity() {
+kbEntity::kbEntity() :
+	m_bIsDirty( false ) {
+}
+
+/**
+ *	kbEntity::PostLoad
+ */
+void kbEntity::PostLoad() {
+	for ( int i = 0; i < m_Components.size(); i++ ) {
+		m_Components[i]->PostLoad();
+	}
 }
 
 /**
@@ -74,14 +84,14 @@ std::unordered_map<int, kbGameEntity *> g_IndexToEntityMap;
 void kbGameEntityPtr::SetEntity( const kbGUID & guid ) {
 
 	m_GUID = guid;
-	m_EntityIndex = INVALID_ENTITYID;
+	m_EntityId = INVALID_ENTITYID;
 
 	std::unordered_map<kbGUID, kbGameEntity *, EntPtrHash>::const_iterator GUIDToEntityIt = g_GUIDToEntityMap.find( m_GUID );
 	if ( GUIDToEntityIt == g_GUIDToEntityMap.end() ) {
 		g_GUIDToEntityMap[guid] = nullptr;
 	} else {
 		if ( GUIDToEntityIt->second != nullptr ) {
-			m_EntityIndex = GUIDToEntityIt->second->GetEntityId();
+			m_EntityId = GUIDToEntityIt->second->GetEntityId();
 		}
 	}
 }
@@ -92,7 +102,7 @@ void kbGameEntityPtr::SetEntity( const kbGUID & guid ) {
 void kbGameEntityPtr::SetEntity( kbGameEntity *const pGameEntity ) {
 
 	if ( pGameEntity == nullptr ) {
-		m_EntityIndex = INVALID_ENTITYID;
+		m_EntityId = INVALID_ENTITYID;
 		ZeroMemory( &m_GUID, sizeof( m_GUID ) );
 		return;
 	}
@@ -114,9 +124,9 @@ void kbGameEntityPtr::SetEntity( kbGameEntity *const pGameEntity ) {
 	}
 
 	// Enter into entity index map
-	m_EntityIndex = pGameEntity->m_EntityId;
+	m_EntityId = pGameEntity->GetEntityId();
 
-	std::unordered_map<int, kbGameEntity *>::const_iterator IDToEntityIt = g_IndexToEntityMap.find( m_EntityIndex );
+	std::unordered_map<int, kbGameEntity *>::const_iterator IDToEntityIt = g_IndexToEntityMap.find( m_EntityId );
 
 	if ( IDToEntityIt != g_IndexToEntityMap.cend() && IDToEntityIt->second != pGameEntity && IDToEntityIt->second != nullptr ) {
 		kbError( "kbGameEntityPtr::SetEntity() - Entities %s && %s share the same guid - %u %u %u %u", 
@@ -124,7 +134,7 @@ void kbGameEntityPtr::SetEntity( kbGameEntity *const pGameEntity ) {
 				 m_GUID.m_iGuid[0], m_GUID.m_iGuid[1], m_GUID.m_iGuid[2], m_GUID.m_iGuid[3] );
 	}
 
-	g_IndexToEntityMap[m_EntityIndex] = pGameEntity;
+	g_IndexToEntityMap[m_EntityId] = pGameEntity;
 }
 
 /**
@@ -132,9 +142,9 @@ void kbGameEntityPtr::SetEntity( kbGameEntity *const pGameEntity ) {
  */
 kbGameEntity * kbGameEntityPtr::GetEntity() {
 
-	if ( m_EntityIndex != INVALID_ENTITYID ) {
+	if ( m_EntityId != INVALID_ENTITYID ) {
 
-		std::unordered_map<int, kbGameEntity *>::const_iterator it = g_IndexToEntityMap.find( m_EntityIndex );
+		std::unordered_map<int, kbGameEntity *>::const_iterator it = g_IndexToEntityMap.find( m_EntityId );
 		if ( it != g_IndexToEntityMap.cend() ) {
 			return it->second;
 		}
@@ -175,7 +185,6 @@ kbGameEntity::kbGameEntity( const kbGUID *const guid, const bool bIsPrefab ) :
 	m_pActorComponent( nullptr ),
 	m_pOwnerEntity( nullptr ),
 	m_EntityId( g_EntityNumber++ ),
-	m_bIsDirty( false ),
 	m_bIsPrefab( bIsPrefab ),
 	m_bDeleteWhenComponentsAreInactive( false ) {
 
@@ -214,7 +223,6 @@ kbGameEntity::kbGameEntity( const kbGameEntity * pGameEntity, const bool bIsPref
 	m_pActorComponent( nullptr ),
 	m_pOwnerEntity( nullptr ),
 	m_EntityId( g_EntityNumber++ ),
-	m_bIsDirty( false ),
 	m_bIsPrefab( bIsPrefab ),
 	m_bDeleteWhenComponentsAreInactive( false ) {
 
@@ -280,18 +288,13 @@ kbGameEntity::~kbGameEntity() {
 }
 
 /**
- *	kbGameEntity::PostLoad
- */
-void kbGameEntity::PostLoad() {
-	for ( int i = 0; i < m_Components.size(); i++ ) {
-		m_Components[i]->PostLoad();
-	}
-}
-
-/**
  *	kbGameEntity::AddComponent
  */
 void kbGameEntity::AddComponent( kbComponent *const pComponent, int indexToInsertAt ) {
+
+	if ( pComponent == nullptr || pComponent->IsA( kbGameComponent::GetType() ) == false ) {
+		kbError( "%s is trying to add a null component or one that is not a kbGameComponent.", *GetName().c_str() );
+	}
 
 	if ( pComponent->IsA( kbActorComponent::GetType() ) ) {
 		if ( m_pActorComponent != nullptr ) {
@@ -361,7 +364,7 @@ void kbGameEntity::Update( const float DeltaTime ) {
 		}		
 	}
 
-	m_bIsDirty = false;
+	ClearDirty();
 }
 
 /**

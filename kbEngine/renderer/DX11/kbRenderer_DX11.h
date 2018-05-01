@@ -419,18 +419,18 @@ public:
 	void										RemoveRenderObject( const kbComponent *const );
 	
 	// Lights
-	void										AddLight( const kbLightComponent * pLightComponent, const kbVec3 & pos, const kbQuat & orientation );
+	void										AddLight( const kbLightComponent *const pLightComponent, const kbVec3 & pos, const kbQuat & orientation );
 	void										UpdateLight( const kbLightComponent * pLightComponent, const kbVec3 & pos, const kbQuat & orientation );
-	void										RemoveLight( const kbLightComponent * pLightComponent );
-	void										HackClearLight( const kbLightComponent * pLightComponent );
+	void										RemoveLight( const kbLightComponent *const pLightComponent );
+	void										HackClearLight( const kbLightComponent *const pLightComponent );
 
 	// Fog
 	void										UpdateFog( const kbColor & color, const float startDistance, const float endDistance );
 
 	// Particles
-	void										AddParticle( const void * pParentPtr, const kbModel * pModel, const kbVec3 & pos, kbQuat & orientation );
-	void										UpdateParticle( const void * pParentPtr, const kbModel * pModel, const kbVec3 & pos, kbQuat & orientation );
-	void										RemoveParticle( const void * pParentPtr );
+	void										AddParticle( const void *const pParentPtr, const kbModel *const pModel, const kbVec3 & pos, kbQuat & orientation );
+	void										UpdateParticle( const void *const pParentPtr, const kbModel *const pModel, const kbVec3 & pos, kbQuat & orientation );
+	void										RemoveParticle( const void *const pParentPtr );
 
 	// Light Shafts
 	void										AddLightShafts( const kbLightShaftsComponent *const pComponent, const kbVec3 & pos, const kbQuat & orientation );

@@ -276,7 +276,7 @@ public:
 	float										m_Radius;
 	float										m_Length;
 	float										m_CascadedShadowSplits[4];
-	bool										m_bCastsShadows;
+	bool										m_bCastsShadow;
 	bool										m_bIsFirstAdd;
 	bool										m_bIsRemove;
 };

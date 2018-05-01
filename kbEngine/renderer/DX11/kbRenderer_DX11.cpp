@@ -1309,7 +1309,7 @@ void kbRenderer_DX11::AddLight( const kbLightComponent * pLightComponent, const 
 	newLight.m_CascadedShadowSplits[2] = FLT_MAX;
 	newLight.m_CascadedShadowSplits[3] = FLT_MAX;
 
-	if ( pLightComponent->CastsShadows() && pLightComponent->IsA( kbDirectionalLightComponent::GetType() ) ) {
+	if ( pLightComponent->CastsShadow() && pLightComponent->IsA( kbDirectionalLightComponent::GetType() ) ) {
 		const kbDirectionalLightComponent *const dirLight = static_cast<const kbDirectionalLightComponent*>( pLightComponent );
 		for ( int i = 0; i < 4 && i < dirLight->GetSplitDistances().size(); i++ ) {
 			newLight.m_CascadedShadowSplits[i] = dirLight->GetSplitDistances()[i];
@@ -1317,7 +1317,7 @@ void kbRenderer_DX11::AddLight( const kbLightComponent * pLightComponent, const 
 	}
 
 	newLight.m_Color = pLightComponent->GetColor() * pLightComponent->GetBrightness();
-	newLight.m_bCastsShadows = pLightComponent->CastsShadows();
+	newLight.m_bCastsShadow = pLightComponent->CastsShadow();
 	newLight.m_bIsFirstAdd = true;
 	newLight.m_bIsRemove = false;
 	m_LightList_GameThread.push_back( newLight );
@@ -1337,7 +1337,7 @@ void kbRenderer_DX11::UpdateLight( const kbLightComponent * pLightComponent, con
 			if ( m_LightList_GameThread[i].m_bIsRemove == false ) {
 				m_LightList_GameThread[i].m_Position = pos;
 				m_LightList_GameThread[i].m_Orientation = orientation;
-				m_LightList_GameThread[i].m_bCastsShadows = pLightComponent->CastsShadows();
+				m_LightList_GameThread[i].m_bCastsShadow = pLightComponent->CastsShadow();
 				m_LightList_GameThread[i].m_Color = pLightComponent->GetColor() * pLightComponent->GetBrightness();
 				m_LightList_GameThread[i].m_Radius = pLightComponent->GetRadius();
 				m_LightList_GameThread[i].m_Length = pLightComponent->GetLength();
@@ -1360,7 +1360,7 @@ void kbRenderer_DX11::UpdateLight( const kbLightComponent * pLightComponent, con
 	updateLight.m_Orientation = orientation;
 	updateLight.m_bIsFirstAdd = false;
 	updateLight.m_bIsRemove = false;
-	updateLight.m_bCastsShadows = pLightComponent->CastsShadows();
+	updateLight.m_bCastsShadow = pLightComponent->CastsShadow();
 	updateLight.m_Color = pLightComponent->GetColor() * pLightComponent->GetBrightness();
 	updateLight.m_Radius = pLightComponent->GetRadius();
 	updateLight.m_Length = pLightComponent->GetLength();
@@ -1379,7 +1379,7 @@ void kbRenderer_DX11::UpdateLight( const kbLightComponent * pLightComponent, con
 /**
  *	kbRenderer_DX11::RemoveLight
  */
-void kbRenderer_DX11::RemoveLight( const kbLightComponent * pLightComponent ) {
+void kbRenderer_DX11::RemoveLight( const kbLightComponent *const pLightComponent ) {
 	
 	if ( m_pCurrentRenderWindow == nullptr ) {
 		kbError( "kbRenderer_DX11::RemoveLight - nullptr Render Window" );
@@ -1394,7 +1394,7 @@ void kbRenderer_DX11::RemoveLight( const kbLightComponent * pLightComponent ) {
 /**
  *	kbRenderer_DX11::HackClearLight
  */
-void kbRenderer_DX11::HackClearLight( const kbLightComponent * pLightComponent ) {
+void kbRenderer_DX11::HackClearLight( const kbLightComponent *const pLightComponent ) {
 	
 	for ( int i = 0; i < m_LightList_GameThread.size(); i++ ) {
 		if ( m_LightList_GameThread[i].m_pLightComponent == pLightComponent ) {
@@ -1408,8 +1408,7 @@ void kbRenderer_DX11::HackClearLight( const kbLightComponent * pLightComponent )
 /**
  *	kbRenderer_DX11::AddParticle
  */
-void kbRenderer_DX11::AddParticle( const void *const pParticleComponent, const kbModel * pModel, const kbVec3 & pos, kbQuat & orientation ) {
-
+void kbRenderer_DX11::AddParticle( const void *const pParticleComponent, const kbModel *const pModel, const kbVec3 & pos, kbQuat & orientation ) {
 	kbRenderObject NewParticle;
 	NewParticle.m_pComponent = static_cast<const kbComponent*>( pParticleComponent );
 	NewParticle.m_pModel = pModel;
@@ -1425,7 +1424,7 @@ void kbRenderer_DX11::AddParticle( const void *const pParticleComponent, const k
 /**
  *	kbRenderer_DX11::UpdateParticle
  */
-void kbRenderer_DX11::UpdateParticle( const void *const pParticleComponent, const kbModel * pModel, const kbVec3 & pos, kbQuat & orientation ) {
+void kbRenderer_DX11::UpdateParticle( const void *const pParticleComponent, const kbModel *const pModel, const kbVec3 & pos, kbQuat & orientation ) {
 
 	kbRenderObject NewParticle;
 	NewParticle.m_pComponent = static_cast<const kbComponent*>( pParticleComponent );
@@ -1492,7 +1491,7 @@ void kbRenderer_DX11::UpdateLightShafts( const kbLightShaftsComponent *const pCo
 	updatedLightShafts.m_bIsDirectional = pComponent->IsDirectional();
 	updatedLightShafts.m_Pos = pos;
 	updatedLightShafts.m_Rotation = orientation;
-	updatedLightShafts.m_Operation = ROO_Update;;
+	updatedLightShafts.m_Operation = ROO_Update;
 
 	for ( int i = 0; i < m_LightShafts_GameThread.size(); i++ ) {
 		if ( m_LightShafts_GameThread[i].m_pLightShaftsComponent == pComponent ) {

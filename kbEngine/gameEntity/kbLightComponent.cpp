@@ -17,8 +17,8 @@ KB_DEFINE_COMPONENT(kbDirectionalLightComponent)
  *	kbLightComponent::Constructor
  */
 void kbLightComponent::Constructor() {
-	m_Color.Set( 1.0f, 1.0f, 1.0f, 1.0f );
-	m_bCastsShadows = false;
+	m_Color = kbColor::white;
+	m_bCastsShadow = false;
 	m_Brightness = 1;
 }
 
@@ -111,7 +111,7 @@ void kbDirectionalLightComponent::EditorChange( const std::string & propertyName
  */
 void kbLightShaftsComponent::Constructor() {
 	m_Texture = ( kbTexture* )g_ResourceManager.GetResource( "../../kbEngine/assets/Textures/Editor/flare.jpg" );
-	m_Color.Set( 1.0f, 1.0f, 1.0f, 1.0f );
+	m_Color = kbColor::white;
 	m_BaseWidth = m_BaseHeight = 20.0f;
 	m_IterationWidth = m_IterationHeight = 1.0f;
 	m_NumIterations = 4;
@@ -153,7 +153,7 @@ void kbLightShaftsComponent::SetColor( const kbColor & newColor ) {
  *	kbFogComponent::Constructor
  */
 void kbFogComponent::Constructor() {
-	m_Color.Set( 1.0f, 1.0f, 1.0f, 1.0f );
+	m_Color = kbColor::white;
 	m_StartDistance = 2100;
 	m_EndDistance = 2200;
 }

@@ -2,7 +2,7 @@
 // kbLightComponent.h
 //
 //
-// 2016-2017 kbEngine 2.0
+// 2016-2018 kbEngine 2.0
 //===================================================================================================
 #ifndef _KBLIGHTCOMPONENT_H_
 #define _KBLIGHTCOMPONENT_H_
@@ -20,16 +20,17 @@ public:
 
 	virtual										~kbLightComponent();
 
-	virtual void								PostLoad();
+	virtual void								PostLoad() override;
 
 	void										SetColor( const kbColor & newColor ) { m_Color = newColor; }
 	void										SetColor( const float R, const float G, const float B, const float A ) { m_Color.Set( R, G, B, A ); }
+
+	float										GetBrightness() const { return m_Brightness; }
 	const kbColor &								GetColor() const { return m_Color; }
 	virtual float								GetRadius() const { return 0.0f; }
 	virtual float								GetLength() const { return 0.0f; }
-	float										GetBrightness() const { return m_Brightness; }
 
-	bool										CastsShadows() const { return m_bCastsShadows; }
+	bool										CastsShadow() const { return m_bCastsShadow; }
 
 protected:
 
@@ -38,7 +39,7 @@ protected:
 
 	kbColor										m_Color;
 	float										m_Brightness;
-	bool										m_bCastsShadows;
+	bool										m_bCastsShadow;
 };
 
 /**
@@ -51,7 +52,7 @@ class kbPointLightComponent : public kbLightComponent {
 //---------------------------------------------------------------------------------------------------
 public:
 
-	virtual float								GetRadius() const { return m_Radius; }
+	virtual float								GetRadius() const override { return m_Radius; }
 
 protected:
 
@@ -67,7 +68,7 @@ class kbCylindricalLightComponent : public kbPointLightComponent {
 
 //---------------------------------------------------------------------------------------------------
 public:
-	virtual float								GetLength() const { return m_Length; }
+	virtual float								GetLength() const override { return m_Length; }
 
 protected:
 
@@ -87,7 +88,7 @@ public:
 	virtual										~kbDirectionalLightComponent();
 
 
-	virtual void								EditorChange( const std::string & propertyName );
+	virtual void								EditorChange( const std::string & propertyName ) override;
 	const std::vector<float> &					GetSplitDistances() const { return m_SplitDistances; }
 
 protected:
@@ -120,7 +121,7 @@ public:
 
 protected:
 
-	virtual void								SetEnable_Internal( const bool isEnabled );
+	virtual void								SetEnable_Internal( const bool isEnabled ) override;
 
 	kbTexture *									m_Texture;
 	kbColor										m_Color;

@@ -22,7 +22,7 @@ public:
 
 	// Hack: use a void * instead of kbTypeInfoClass to work around mismatched type compile warning when passing in a type declared in the game project (as opposed to the
 	// engine project).
-	virtual	bool								IsA( const void * type ) const { return false; }
+	virtual	bool								IsA( const void *const type ) const { return false; }
 
 protected:
 	virtual void								CollectAncestorTypeInfo_Interal( std::vector< class kbTypeInfoClass * > & collection ) { }
@@ -182,6 +182,7 @@ public:
 	bool										IsDead() const { return m_CurrentHealth <= 0.0f; }
 
 protected:
+
 	virtual void								SetEnable_Internal( const bool bIsEnabled ) override;
 
 	float										m_MaxHealth;

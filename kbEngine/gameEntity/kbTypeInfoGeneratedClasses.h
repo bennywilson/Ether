@@ -84,7 +84,7 @@ GenerateClass(
 GenerateClass( 
 	kbLightComponent,
 	AddField( "Color", KBTYPEINFO_VECTOR4, kbLightComponent, m_Color, false, "" )
-	AddField( "CastsShadows", KBTYPEINFO_BOOL, kbLightComponent, m_bCastsShadows, false, "" )
+	AddField( "CastsShadows", KBTYPEINFO_BOOL, kbLightComponent, m_bCastsShadow, false, "" )
 )
 
 GenerateClass(

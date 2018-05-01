@@ -50,7 +50,7 @@ void kbRenderer_DX11::RenderLight( const kbRenderLight *const pLight ) {
 	splitMatrices[2].MakeScale( kbVec3::zero );
 	splitMatrices[3].MakeScale( kbVec3::zero );
 
-	if ( pLight->m_bCastsShadows ) {
+	if ( pLight->m_bCastsShadow ) {
 		m_RenderState.SetBlendState();
 		RenderShadow( pLight, splitMatrices );
 	}
