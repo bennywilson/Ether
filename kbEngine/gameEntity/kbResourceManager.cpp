@@ -97,7 +97,7 @@ void kbResourceManager::RenderSync() {
 		std::wstring fileName;
 
 		fileName.resize( FileNameLength );
-		for ( int i = 0; i < FileNameLength; i++ ) {
+		for ( DWORD i = 0; i < FileNameLength; i++ ) {
 			fileName[i] = pCurInfo->FileName[i];
 		}
 
