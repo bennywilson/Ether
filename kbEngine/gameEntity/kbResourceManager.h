@@ -54,6 +54,7 @@ protected:
  * kbPackage
  */
 class kbPackage {
+
 	friend class kbResourceManager;
 	friend class kbFile;
 
@@ -110,6 +111,8 @@ public:
 	void										Shutdown();
 
 private:
+
+	void										CheckForDirectoryChanges();
 
 	void										FileModifiedCB( const std::wstring & fileName );
 	void										FileAddedCB( const std::wstring & fileName );

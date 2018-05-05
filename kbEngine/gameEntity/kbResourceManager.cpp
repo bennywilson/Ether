@@ -46,18 +46,18 @@ void kbResource::Release() {
 	}
 }
 
-
-
 /**
  *	kbResourceManager::kbResourceManager
  */
 kbResourceManager::kbResourceManager() {
 
-	m_hAssetDirectory = CreateFile( "./assets/", GENERIC_READ|FILE_LIST_DIRECTORY, 
-					 FILE_SHARE_READ|FILE_SHARE_WRITE|FILE_SHARE_DELETE,
-						nullptr, OPEN_EXISTING, FILE_FLAG_BACKUP_SEMANTICS|FILE_FLAG_OVERLAPPED,
-						 nullptr );
-
+	m_hAssetDirectory = CreateFile( "./assets/",
+									GENERIC_READ | FILE_LIST_DIRECTORY, 
+									FILE_SHARE_READ | FILE_SHARE_WRITE | FILE_SHARE_DELETE,
+									nullptr, 
+									OPEN_EXISTING,
+									FILE_FLAG_BACKUP_SEMANTICS | FILE_FLAG_OVERLAPPED,
+									nullptr );
 
 	ZeroMemory( &m_Ovl, sizeof(m_Ovl) );
 	m_Ovl.hEvent = ::CreateEvent( nullptr, FALSE, FALSE, nullptr );
@@ -75,8 +75,15 @@ kbResourceManager::~kbResourceManager() {
  */
 void kbResourceManager::RenderSync() {
 
-	DWORD numBytes = 0;
+	CheckForDirectoryChanges();
+}
+/**
+ *	kbResourceManager::CheckForDirectoryChanges
+ */
+void kbResourceManager::CheckForDirectoryChanges() {
 	static byte buffer[2048];
+
+	DWORD numBytes = 0;
 	BOOL result = ReadDirectoryChangesW( m_hAssetDirectory, 
 										 &buffer,
 										 sizeof(buffer),
@@ -87,6 +94,10 @@ void kbResourceManager::RenderSync() {
 										 &numBytes,
 										 &m_Ovl,
 										 nullptr );
+
+	if ( result == FALSE ) {
+		return;
+	}
 
 	GetOverlappedResult( m_hAssetDirectory, &m_Ovl, &numBytes, FALSE );
 	FILE_NOTIFY_INFORMATION * pCurInfo = (FILE_NOTIFY_INFORMATION*)buffer;
