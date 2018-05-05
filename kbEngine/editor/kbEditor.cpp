@@ -298,6 +298,9 @@ void kbEditor::Update() {
 	}
 
 	g_pRenderer->RenderSync();
+
+	g_ResourceManager.RenderSync();
+
 	g_pRenderer->SetReadyToRender();
 
 	//m_pMainTab->GetCurrentWindow()->GetCamera().Update();
@@ -338,7 +341,7 @@ void kbEditor::Update() {
 
 	Fl::flush();
 
-	float DT = ( float ) m_Timer.TimeElapsedSeconds();
+	float DT = m_Timer.TimeElapsedSeconds();
 	m_Timer.Reset();
 
 	if ( DT > 0.05f ) {

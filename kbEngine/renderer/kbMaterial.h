@@ -70,7 +70,7 @@ public:
 
 	void										SetGlobalShaderParams( const std::vector<kbVec4> & shaderParams ) { m_GlobalShaderParams_GameThread = shaderParams; }
 	void										CommitShaderParams();
-	const std::vector<kbVec4>	&				GetGlobalShaderParams() const { return m_GlobalShaderParams_RenderThread; }	// todo: check if render thread
+	const std::vector<kbVec4> &					GetGlobalShaderParams() const { return m_GlobalShaderParams_RenderThread; }	// todo: check if render thread
 
 private:
 	virtual bool								Load_Internal();

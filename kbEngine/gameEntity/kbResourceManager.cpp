@@ -21,7 +21,7 @@ kbResourceManager g_ResourceManager;
 class kbLoadResourceJob : public kbJob {
 public:
 	kbLoadResourceJob() :
-		m_Resource( NULL ) { }
+		m_Resource( nullptr ) { }
 
 	virtual void Run() {
 		m_Resource->Load();
@@ -46,11 +46,21 @@ void kbResource::Release() {
 	}
 }
 
+
+
 /**
  *	kbResourceManager::kbResourceManager
  */
 kbResourceManager::kbResourceManager() {
 
+	m_hAssetDirectory = CreateFile( "./assets/", GENERIC_READ|FILE_LIST_DIRECTORY, 
+					 FILE_SHARE_READ|FILE_SHARE_WRITE|FILE_SHARE_DELETE,
+						nullptr, OPEN_EXISTING, FILE_FLAG_BACKUP_SEMANTICS|FILE_FLAG_OVERLAPPED,
+						 nullptr );
+
+
+	ZeroMemory( &m_Ovl, sizeof(m_Ovl) );
+	m_Ovl.hEvent = ::CreateEvent( nullptr, FALSE, FALSE, nullptr );
 }
 
 /**
@@ -58,6 +68,57 @@ kbResourceManager::kbResourceManager() {
  */
 kbResourceManager::~kbResourceManager() {
 	Shutdown();
+}
+
+/**
+ *	kbResourceManager::RenderSync
+ */
+void kbResourceManager::RenderSync() {
+
+	DWORD numBytes = 0;
+	static byte buffer[2048];
+	BOOL result = ReadDirectoryChangesW( m_hAssetDirectory, 
+										 &buffer,
+										 sizeof(buffer),
+										 TRUE,
+										 FILE_NOTIFY_CHANGE_FILE_NAME |
+										 FILE_NOTIFY_CHANGE_DIR_NAME |
+										 FILE_NOTIFY_CHANGE_SIZE,
+										 &numBytes,
+										 &m_Ovl,
+										 nullptr );
+
+	GetOverlappedResult( m_hAssetDirectory, &m_Ovl, &numBytes, FALSE );
+	FILE_NOTIFY_INFORMATION * pCurInfo = (FILE_NOTIFY_INFORMATION*)buffer;
+	byte * pByteCurInfo = buffer;
+
+	while ( pCurInfo->Action != 0 ) {
+		const DWORD FileNameLength = pCurInfo->FileNameLength;
+		std::wstring fileName;
+
+		fileName.resize( FileNameLength );
+		for ( int i = 0; i < FileNameLength; i++ ) {
+			fileName[i] = pCurInfo->FileName[i];
+		}
+
+		switch( pCurInfo->Action ) {
+			case FILE_ACTION_MODIFIED :
+				FileModifiedCB( fileName );
+			break;
+		
+			case FILE_ACTION_ADDED :
+				FileAddedCB( fileName );
+			break;
+		
+			case FILE_ACTION_REMOVED :
+				FileDeletedCB( fileName );
+			break;
+		}
+
+		pCurInfo->Action = 0;
+		pByteCurInfo += pCurInfo->NextEntryOffset;
+		pCurInfo = (FILE_NOTIFY_INFORMATION*)pByteCurInfo;
+	}
 }
 
 /**
@@ -191,7 +252,7 @@ bool kbResourceManager::AddPrefab( kbGameEntity * pEntity, const std::string & P
 
 	const std::string fullPackageName = PackageName + ( ( GetFileExtension( PackageName ) == "kbPkg" ) ? ( "" ) : ( ".kbPkg" ) );
 
-	kbPackage * pPackage = NULL;
+	kbPackage * pPackage = nullptr;
 	for ( unsigned int i = 0; i < m_pPackages.size(); i++ ) {
 		if ( m_pPackages[i]->m_PackageName == fullPackageName ) {
 			pPackage = m_pPackages[i];
@@ -199,14 +260,14 @@ bool kbResourceManager::AddPrefab( kbGameEntity * pEntity, const std::string & P
 		}
 	}
 
-	if ( pPackage == NULL ) {
+	if ( pPackage == nullptr ) {
 		pPackage = new kbPackage();
 		pPackage->m_PackageName = fullPackageName;
 		m_pPackages.push_back( pPackage );
 	}
 
-	kbPrefab * pNewPrefab = NULL;
-	kbPackage::kbFolder * pFolder = NULL;
+	kbPrefab * pNewPrefab = nullptr;
+	kbPackage::kbFolder * pFolder = nullptr;
 	for ( unsigned int i = 0; i < pPackage->m_Folders.size(); i++ ) {
 		if ( pPackage->m_Folders[i].m_FolderName == Folder ) {
 			pFolder = &pPackage->m_Folders[i];
@@ -225,13 +286,13 @@ bool kbResourceManager::AddPrefab( kbGameEntity * pEntity, const std::string & P
 		}
 	}
 
-	if ( pFolder == NULL ) {
+	if ( pFolder == nullptr ) {
 		pPackage->m_Folders.push_back( kbPackage::kbFolder() );
 		pFolder = &pPackage->m_Folders[pPackage->m_Folders.size() - 1];
 		pFolder->m_FolderName = Folder;
 	}
 
-	if ( pNewPrefab == NULL ) {
+	if ( pNewPrefab == nullptr ) {
 		pNewPrefab = new kbPrefab();
 		pNewPrefab->m_PrefabName = PrefabName;
 		pFolder->m_pPrefabs.push_back( pNewPrefab );
@@ -245,7 +306,7 @@ bool kbResourceManager::AddPrefab( kbGameEntity * pEntity, const std::string & P
 	kbGameEntity *const pNewEntity = new kbGameEntity( pEntity, true );
 	pNewPrefab->m_GameEntities.push_back( pNewEntity );
 	
-	if ( prefab != NULL ) {
+	if ( prefab != nullptr ) {
 		*prefab = pNewPrefab;
 	}
 	return true;
@@ -255,7 +316,7 @@ bool kbResourceManager::AddPrefab( kbGameEntity * pEntity, const std::string & P
  *
  */
 void kbResourceManager::UpdatePrefab( const kbPrefab *const pPrefab, std::vector<kbGameEntity*> & pEntityList ) {
-	if ( pPrefab == NULL || pEntityList.size() == 0 || pPrefab->GetGameEntity(0) == NULL ) {
+	if ( pPrefab == nullptr || pEntityList.size() == 0 || pPrefab->GetGameEntity(0) == nullptr ) {
 		return;
 	}
 
@@ -285,7 +346,7 @@ void kbResourceManager::UpdatePrefab( const kbPrefab *const pPrefab, std::vector
 /**
  *	kbResourceManager::GetPackage()
  */
-kbPackage * kbResourceManager::GetPackage( const std::string & FullPackageName,  const bool bLoadImmediately ) {
+kbPackage * kbResourceManager::GetPackage( const std::string & FullPackageName, const bool bLoadImmediately ) {
 
 	const size_t packageNamePos = FullPackageName.find_last_of( "/" );
 	std::string packageName = FullPackageName.substr( packageNamePos + 1 );
@@ -314,17 +375,16 @@ kbPackage * kbResourceManager::GetPackage( const std::string & FullPackageName, 
 }
 
 /**
- *	kbResourceManager::GetGameEntityFromGUID()
+ *	kbResourceManager::GetGameEntityFromGUID
  */
 const kbGameEntity * kbResourceManager::GetGameEntityFromGUID( const kbGUID & GUID ) {
 	std::map<kbGUID, const kbGameEntity * >::iterator it = m_GuidToEntityMap.find( GUID );
 	if ( it == m_GuidToEntityMap.end() ) {
-		return NULL;
+		return nullptr;
 	}
 
 	return it->second;
 }
-
 
 /**
  *	kbResourceManager::SavePackage()
@@ -344,7 +404,6 @@ void kbResourceManager::SavePackage( const std::string & PackageName ) {
 		}
 	}	
 }
-
 
 /**
  *	kbResourceManager::DumpPackageInfo
@@ -376,6 +435,30 @@ void kbResourceManager::Shutdown() {
 		delete m_pPackages[i];
 	}
 	m_pPackages.clear();
+
+	CloseHandle( m_hAssetDirectory );
+	CloseHandle( m_Ovl.hEvent );
+}
+
+/**
+ *	kbResourceManager::FileModifiedCB
+ */
+void kbResourceManager::FileModifiedCB( const std::wstring & fileName ) {
+
+}
+
+/**
+ *	kbResourceManager::FileAddedCB
+ */
+void kbResourceManager::FileAddedCB( const std::wstring & fileName ) {
+
+}
+
+/**
+ *	kbResourceManager::FileDeletedCB
+ */
+void kbResourceManager::FileDeletedCB( const std::wstring & fileName ) {
+
 }
 
 /**
