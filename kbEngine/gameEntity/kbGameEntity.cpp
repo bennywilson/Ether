@@ -59,7 +59,7 @@ void kbEntity::AddComponent( kbComponent *const pComponent, int indexToInsertAt 
 void kbEntity::RemoveComponent( kbComponent *const pComponent ) {
 
 	// TODO: This might move the game logic component from the back of the list!
-	FastRemoveFromVector( m_Components, pComponent );
+	VectorRemoveFast( m_Components, pComponent );
 }
 
 //===================================================================================================

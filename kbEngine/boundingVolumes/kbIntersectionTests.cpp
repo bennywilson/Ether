@@ -2,7 +2,7 @@
 // kbIntersectionTests.cpp
 //
 //
-// 2016 kbEngine 2.0
+// 2016-2018 kbEngine 2.0
 //===================================================================================================
 #include "kbCore.h"
 #include "kbVector.h"
@@ -20,13 +20,12 @@ bool kbRayOBBIntersection( const kbMat4 & orientation, const kbVec3 & origin, co
 	const kbVec3 p1 = ( start - origin ) * transpose;
 	const kbVec3 p2 = ( end - origin ) * transpose;
 
-    kbVec3 d = ( p2 - p1 ) * 0.5f;
-    kbVec3 e = ( max - min ) * 0.5f;
-    kbVec3 c = p1 + d - ( min + max ) * 0.5f;
-    //Vector3 ad = d.Absolute(); // Returns same vector with all components positive
-	kbVec3 ad( fabsf( d.x ), fabsf( d.y ), fabsf( d.z ) );
+	const  kbVec3 d = ( p2 - p1 ) * 0.5f;
+	const  kbVec3 e = ( max - min ) * 0.5f;
+    const kbVec3 c = p1 + d - ( min + max ) * 0.5f;
 
-#define EPSILON 0.00001f
+    //Vector3 ad = d.Absolute(); // Returns same vector with all components positive
+	const kbVec3 ad( fabsf( d.x ), fabsf( d.y ), fabsf( d.z ) );
 
 	if ( fabsf( c[0] ) > e[0] + ad[0] ) {
         return false;
@@ -39,6 +38,8 @@ bool kbRayOBBIntersection( const kbMat4 & orientation, const kbVec3 & origin, co
 	if ( fabsf( c[2] ) > e[2] + ad[2] ) {
         return false;
 	}
+
+	const float EPSILON = 0.00001f;
 
 	if ( fabsf( d[1] * c[2] - d[2] * c[1] ) > e[1] * ad[2] + e[2] * ad[1] + EPSILON ) {
         return false;
@@ -58,22 +59,20 @@ bool kbRayOBBIntersection( const kbMat4 & orientation, const kbVec3 & origin, co
 /**
  *	kbRayAABBIntersection
  */
-bool kbRayAABBIntersection( const kbVec3 & origin, const kbVec3 & direction, const kbBounds & box, float & t ) {
-	kbVec3 tMin = ( box.Min() - origin ) / direction;
-	kbVec3 tMax = ( box.Max() - origin ) / direction;
+bool kbRayAABBIntersection( float & outT, const kbVec3 & origin, const kbVec3 & direction, const kbBounds & box ) {
+	const kbVec3 tMin = ( box.Min() - origin ) / direction;
+	const kbVec3 tMax = ( box.Max() - origin ) / direction;
 
 	kbVec3 realMin, realMax;
-
 	for ( int i = 0; i < 3; i++ ) {
-		realMin[i] = kbMin( tMin[i], tMax[i] );
-		realMax[i] = kbMax( tMin[i], tMax[i] );
+		realMin[i] = min( tMin[i], tMax[i] );
+		realMax[i] = max( tMin[i], tMax[i] );
 	}
 
-	float minMax = kbMin( kbMin( realMax.x, realMax.y ), realMax.z );
-	float maxMin = kbMax( kbMax( realMin.x, realMin.y ), realMin.z );
+	float minMax = min( min( realMax.x, realMax.y ), realMax.z );
+	float maxMin = max( max( realMin.x, realMin.y ), realMin.z );
 
-	t = maxMin;
-
+	outT = maxMin;
 	return minMax >= maxMin;
 }
 
@@ -82,13 +81,13 @@ bool kbRayAABBIntersection( const kbVec3 & origin, const kbVec3 & direction, con
  */
 bool kbRayAABBIntersection( const kbVec3 & origin, const kbVec3 & direction, const kbBounds & box ) {
 	float t;
-	return kbRayAABBIntersection( origin, direction, box, t );
+	return kbRayAABBIntersection( t, origin, direction, box );
 }
 
 /**
  *	kbRayTriIntersection - From Real-Time Rendering by Tomas Akenine-Moller and Eric Haines
  */
-bool kbRayTriIntersection( const kbVec3 & rayOrigin, const kbVec3 & rayDirection, const kbVec3 & v0, const kbVec3 & v1, const kbVec3 & v2, float & t ) {
+bool kbRayTriIntersection( float & outT, const kbVec3 & rayOrigin, const kbVec3 & rayDirection, const kbVec3 & v0, const kbVec3 & v1, const kbVec3 & v2 ) {
 
 	const kbVec3 e1 = v1 - v0;
 	const kbVec3 e2 = v2 - v0;
@@ -114,7 +113,7 @@ bool kbRayTriIntersection( const kbVec3 & rayOrigin, const kbVec3 & rayDirection
 		return false;
 	}
 
-	t = f * ( e2.Dot( q ) );
+	outT = f * ( e2.Dot( q ) );
 
 	return true;
 }
@@ -122,13 +121,13 @@ bool kbRayTriIntersection( const kbVec3 & rayOrigin, const kbVec3 & rayDirection
 /**
  *	kbRaySphereIntersection
  */
-bool kbRaySphereIntersection( const kbVec3 & rayOrigin, const kbVec3 & rayDirection, const kbVec3 & sphereOrigin, const float sphereRadius, kbVec3 & intersectionPt ) {
+bool kbRaySphereIntersection( kbVec3 & outIntersectionPt, const kbVec3 & rayOrigin, const kbVec3 & rayDirection, const kbVec3 & sphereOrigin, const float sphereRadius ) {
 	const float sphereRadiusSqr = sphereRadius * sphereRadius;
 	const kbVec3 rayToSphereVec = sphereOrigin - rayOrigin;
 
 	const float rayLen = rayToSphereVec.LengthSqr();
 	if ( rayLen < sphereRadiusSqr ) {
-		intersectionPt = rayOrigin;
+		outIntersectionPt = rayOrigin;
 		return true;
 	}
 	const float rayDirDDotRayToSphere = rayDirection.Dot( rayToSphereVec );
@@ -148,7 +147,7 @@ bool kbRaySphereIntersection( const kbVec3 & rayOrigin, const kbVec3 & rayDirect
 	const float closestPtToSphereIntersectDist = sqrt( sphereRadiusSqr - sqrDistToCenter );
 	const float finalDist = rayDirDDotRayToSphere - closestPtToSphereIntersectDist;
 
-	intersectionPt = rayOrigin + rayDirection * finalDist;
+	outIntersectionPt = rayOrigin + rayDirection * finalDist;
 
 	return true;
 }

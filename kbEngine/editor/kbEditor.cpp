@@ -276,7 +276,7 @@ void kbEditor::Update() {
 	if ( m_RemovedEntities.size() > 0 ) {
 		std::vector<kbUndoDeleteActor::DeletedActorInfo_t> deletedEntities;
 		for ( int i = 0; i < m_RemovedEntities.size(); i++ ) {
-			FastRemoveFromVector( m_GameEntities, m_RemovedEntities[i] );
+			VectorRemoveFast( m_GameEntities, m_RemovedEntities[i] );
 
 			kbUndoDeleteActor::DeletedActorInfo_t deletedActor;
 			deletedActor.m_pEditorEntity = m_RemovedEntities[i];

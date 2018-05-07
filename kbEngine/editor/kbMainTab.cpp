@@ -377,7 +377,7 @@ void kbMainTab::ObjectSelectedOrMovedCB( const widgetCBInputObject * inputObject
 			kbEditorEntity * pCurrentEntity = gameEntities[i];
 			
 			float t;
-			if ( kbRayAABBIntersection( camera.m_Position, ray.ToVec3(), gameEntities[i]->GetWorldBounds(), t ) ) {
+			if ( kbRayAABBIntersection( t, camera.m_Position, ray.ToVec3(), gameEntities[i]->GetWorldBounds() ) ) {
 				if ( t < nearestT ) {
 					nearestT = t;
 					nearestIndex = i;

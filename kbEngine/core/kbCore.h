@@ -79,7 +79,7 @@ enum kbOutputMessageType_t {
 };
 
 // Note: call before doing anything else
-void InitializeKBEngine(char * logName = NULL );
+void InitializeKBEngine(char *const logName = nullptr );
 void ShutdownKBEngine();
 
 typedef void ( kbOutputCB )( kbOutputMessageType_t, const char * );
@@ -103,16 +103,15 @@ inline float kbToRadians( const float degrees ) { return degrees * kbPI / 180.0f
 inline float kbToDegrees( const float radians ) { return radians * 180.0f / kbPI; }
 float kbfrand();
 
-void kbTrim( std::string & s );
-float kbSaturate( const float val );
 template<typename T> T kbClamp( const T & value, const T & min, const T & max ) { return value < min ? min : ( value > max ? max : value ); }
-float kbMin( const float x, const float y );
-float kbMax( const float x, const float y );
-template<typename T, typename B> void FastRemoveFromVector( T & list, B entry ) { list.erase( std::remove( list.begin(), list.end(), entry ), list.end() );  }
+
+template<typename T, typename B> void VectorRemoveFast( T & list, B entry ) { list.erase( std::remove( list.begin(), list.end(), entry ), list.end() );  }
 template<typename T, typename B> bool VectorFind( T & list, B entry ) { return std::find( list.begin(), list.end(), entry ) != list.end(); }
 template<typename T> inline T kbLerp( T a, T b, float t ) { return ( ( b - a ) * t ) + a; }
 
+void StringFromWString( std::string & outString, const std::wstring & wString );
 std::string GetFileExtension( const std::string & FileName );
+std::wstring GetFileExtension( const std::wstring & FileName );
 
 #define SAFE_RELEASE( object ) { if ( object != nullptr ) { object->Release(); object = nullptr; } }
 
@@ -120,11 +119,14 @@ std::string GetFileExtension( const std::string & FileName );
  *  kbTimer
  */
 class kbTimer {
+
+//---------------------------------------------------------------------------------------------------
 public:
-   kbTimer() {
+
+	kbTimer() {
       LARGE_INTEGER largeInt;
       QueryPerformanceFrequency( &largeInt );
-      clockFrequency = largeInt.QuadPart / 1000.0;
+      m_ClockFrequency = largeInt.QuadPart / 1000.0;
 
       Reset();
    }
@@ -132,14 +134,14 @@ public:
    void Reset() {
       LARGE_INTEGER largeInt;
       QueryPerformanceCounter( &largeInt );
-      counter = largeInt.QuadPart;
+      m_Counter = largeInt.QuadPart;
    }
 
    float TimeElapsedMS() {
       LARGE_INTEGER largeInt;
       QueryPerformanceCounter( &largeInt );
 
-      return ( float ) ( ( largeInt.QuadPart - counter ) / clockFrequency );
+      return ( float ) ( ( largeInt.QuadPart - m_Counter ) / m_ClockFrequency );
    }
 
 	float TimeElapsedSeconds() {
@@ -147,8 +149,9 @@ public:
 	}
 
 private:
-   double			clockFrequency;
-   __int64			counter;
+
+   double										m_ClockFrequency;
+   __int64										m_Counter;
 };
 extern kbTimer g_GlobalTimer;
 
@@ -176,27 +179,32 @@ enum ScopedTimerList_t {
 };
 
 struct kbScopedTimerData_t {
-	kbScopedTimerData_t( const ScopedTimerList_t timerIdx, char * stringName );
-	kbString			m_ReadableName;
 
-	float				GetFrameTime() const;
+	kbScopedTimerData_t( const ScopedTimerList_t timerIdx, char *const stringName );
 
-	const static int	NUM_FRAME_TIMES = 10;
-	float				m_FrameTimes[NUM_FRAME_TIMES];
-	int					m_FrameTimeIdx;
+	kbString									m_ReadableName;
+
+	float										GetFrameTime() const;
+
+	const static int							NUM_FRAME_TIMES = 10;
+	float										m_FrameTimes[NUM_FRAME_TIMES];
+	int											m_FrameTimeIdx;
 };
 
 /**
  *	kbScopedTimer
  */
 class kbScopedTimer {
+
+//---------------------------------------------------------------------------------------------------
 public:
-	kbScopedTimer( ScopedTimerList_t index );
-	~kbScopedTimer();
+
+												kbScopedTimer( ScopedTimerList_t index );
+												~kbScopedTimer();
 
 private:
-	kbTimer				m_Timer;
-	ScopedTimerList_t	m_TimerIndex;
+	kbTimer										m_Timer;
+	ScopedTimerList_t							m_TimerIndex;
 };
 
 #define START_SCOPED_TIMER(index) kbScopedTimer a##index(index);
@@ -219,12 +227,13 @@ struct kbInput_t {
 		KA_JustReleased,
 	};
 
-	bool			IsKeyPressedOrDown( const char key ) const { return KeyState[key].m_Action == KA_JustPressed || KeyState[key].m_Action == KA_Down; }
+	bool IsKeyPressedOrDown( const char key ) const { return KeyState[key].m_Action == KA_JustPressed || KeyState[key].m_Action == KA_Down; }
 
 	struct kbKeyState_t {
 		kbKeyAction_t	m_Action;
 		float			m_LastActionTimeSec;
 	};
+
 	kbKeyState_t	KeyState[256];
 	float			LeftStickX;
 	float			LeftStickY;

@@ -264,9 +264,11 @@ bool kbModel::Load_Internal() {
 	pPtr += sizeof( ushort );
 
 	std::string filePath = m_FullFileName;
-	size_t stringPos = filePath.rfind( "/" );
-	filePath.erase( stringPos );
-	filePath.append( "/" );
+	size_t stringPos = filePath.rfind( "\\" );
+	if ( stringPos != std::string::npos ) {
+		filePath.erase( stringPos );
+		filePath.append( "/" );
+	}
 
 	// todo:don't load duplicate textures
 	for ( uint i = 0; i < numMaterials; i++ ) {
@@ -621,7 +623,7 @@ kbModelIntersection_t kbModel::RayIntersection( const kbVec3 & inRayOrigin, cons
 			const kbVec3 & v1 = m_Meshes[iMesh].m_Vertices[iVert+1];
 			const kbVec3 & v2 = m_Meshes[iMesh].m_Vertices[iVert+2];
 
-			if ( kbRayTriIntersection( rayStart, rayDir, v0, v1, v2, t ) ) {
+			if ( kbRayTriIntersection( t, rayStart, rayDir, v0, v1, v2 ) ) {
 				if ( t < intersectionInfo.t && t >= 0 ) {
 					intersectionInfo.t = t;
 					intersectionInfo.meshNum = iMesh;

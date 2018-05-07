@@ -11,11 +11,11 @@
 #include "kbJobManager.h"
 
 FILE * g_LogFile = nullptr;
-bool	g_UseEditor = false;
+bool g_UseEditor = false;
 kbOutputCB * outputCB = nullptr;
 
 std::string adjustedBuffer;
-HANDLE	 g_WriteFileMutex = nullptr;
+HANDLE g_WriteFileMutex = nullptr;
 
 char * finalBuffer = nullptr;
 int finalBufferLength = 0;
@@ -26,13 +26,14 @@ kbTimer g_GlobalTimer;
 /**
  *	InitializeKBEngine
  */
-void InitializeKBEngine(char * logName) {
+void InitializeKBEngine( char *const logName ) {
+
 	CoInitializeEx( nullptr, COINIT_MULTITHREADED );
 
 	g_GlobalTimer.Reset();
 	g_WriteFileMutex = CreateMutex( nullptr, FALSE, nullptr );
 
-	if (logName != nullptr) {
+	if ( logName != nullptr ) {
 		std::string fullName = "logs/";
 		fullName += logName;
 
@@ -58,6 +59,7 @@ void InitializeKBEngine(char * logName) {
  *	ShutdownKBEngine
  */
 void ShutdownKBEngine() {
+
 	kbLog( "Shutting down kbCore..." );
 
 	delete g_pJobManager;
@@ -74,7 +76,7 @@ void ShutdownKBEngine() {
 /**
  *	WriteToFile
  */
-void WriteToFile( const char * msg, va_list arguments ) {
+void WriteToFile( const char *const msg, va_list arguments ) {
 	
 	DWORD dwWaitResult = WaitForSingleObject( g_WriteFileMutex, INFINITE );
 
@@ -185,55 +187,21 @@ void kbLog( const char *const msg, ... ) {
 }
 
 /**
- *  kbfrand()
+ *  kbfrand
  */
 float kbfrand() {
 	return ( rand() % 10000 ) / 10000.0f;
 }
 
-/*
- *	Saturate
+/**
+ *	StringFromWString
  */
-/*float Saturate( const float val ) {
-	if ( val < 0.0f ) {
-		return 0.0f;
-	}
-
-	if ( val > 1.0f ) {
-		return 1.0f;
-	}
-
-	return val;
-}*/
-
-/*
- *	Trim
- */
-void Trim( std::string & s ) {
-	size_t p = s.find_first_not_of( " \t" );
-	s.erase( 0, p );
-	p = s.find_last_not_of( " \t" );
-	if ( std::string::npos != p ) {
-		s.erase( p + 1 );
-	}
+void StringFromWString( std::string & outString, const std::wstring & wString ) {
+	outString = std::string( wString.begin(), wString.end() );
 }
 
-/*
- *	kbMin
- */
-float kbMin( const float x, const float y ) {
-	return ( x < y ) ? ( x ) : ( y );
-}
-
-/*
- *	kbMat
- */
-float kbMax( const float x, const float y ) {
-	return ( x > y ) ? ( x ) : ( y );
-}
-
-/*
- *
+/**
+ *	GetFileExtension
  */
 std::string GetFileExtension( const std::string & FileName ) {
    std::size_t found = FileName.find_last_of( "." );
@@ -244,9 +212,25 @@ std::string GetFileExtension( const std::string & FileName ) {
    return "";
 }
 
+/**
+ *	GetFileExtension
+ */
+std::wstring GetFileExtension( const std::wstring & FileName ) {
+   std::size_t found = FileName.find_last_of( L"." );
+   if ( found != std::wstring::npos ) {
+      return FileName.substr( found + 1 );
+   }
+
+   return L"";
+}
+
+
 std::map<ScopedTimerList_t, struct kbScopedTimerData_t*> g_ScopedTimerMap;
 
-kbScopedTimerData_t::kbScopedTimerData_t( const ScopedTimerList_t timerIdx, char * stringName ) {
+/**
+ *	kbScopedTimerData_t::kbScopedTimerData_t
+ */
+kbScopedTimerData_t::kbScopedTimerData_t( const ScopedTimerList_t timerIdx, char *const stringName ) {
 	m_ReadableName = kbString( stringName );
 	memset( &m_FrameTimes, 0, sizeof( m_FrameTimes ) );
 	m_FrameTimeIdx = 0;
@@ -254,6 +238,9 @@ kbScopedTimerData_t::kbScopedTimerData_t( const ScopedTimerList_t timerIdx, char
 	g_ScopedTimerMap[timerIdx] = this;
 }
 
+/**
+ *	kbScopedTimerData_t::GetFrameTime
+ */
 float kbScopedTimerData_t::GetFrameTime() const {
 	float totalMS = 0.0f;
 	for ( int i = 0; i < NUM_FRAME_TIMES; i++ ) {
@@ -287,22 +274,27 @@ DECLARE_SCOPED_TIMER(RENDER_SYNC, "   Render Sync")
 DECLARE_SCOPED_TIMER(RENDER_GPUTIMER_STALL, "GPU Timer Stall")
 
 /**
- *	kbScopedTimer
+ *	kbScopedTimer::kbScopedTimer
  */
 kbScopedTimer::kbScopedTimer( ScopedTimerList_t index ) :
 	m_TimerIndex( index ) {
 }
 
 /**
- *	~kbScopedTimer
+ *	~kbScopedTimer::kbScopedTimer
  */
 kbScopedTimer::~kbScopedTimer() {
+
 	kbScopedTimerData_t *const timerData = g_ScopedTimerMap[m_TimerIndex];
 	timerData->m_FrameTimes[timerData->m_FrameTimeIdx] += m_Timer.TimeElapsedMS();
 }
 
+/**
+ *	UpdateScopedTimers
+ */
 void UpdateScopedTimers() {
-	for ( int i = 0; i < (int)MAX_NUM_SCOPED_TIMERS; i++ ) {
+
+	for ( int i = 0; i < MAX_NUM_SCOPED_TIMERS; i++ ) {
 		kbScopedTimerData_t *const timerData = g_ScopedTimerMap[(ScopedTimerList_t)i];
 
 		if ( timerData == nullptr ) {
@@ -317,6 +309,9 @@ void UpdateScopedTimers() {
 	}
 }
 
+/**
+ *	GetScopedTimerData
+ */
 const kbScopedTimerData_t & GetScopedTimerData( const ScopedTimerList_t index ) {
 	return *g_ScopedTimerMap[index];
 }

@@ -18,24 +18,17 @@ class kbResource {
 //---------------------------------------------------------------------------------------------------
 public:
 
-												kbResource() { m_ReferenceCount = 1, m_IsLoaded = false; }
+												kbResource() { m_ReferenceCount = 1, m_bIsLoaded = false; }
 	virtual										~kbResource() = 0 { }
 
 	virtual kbTypeInfoType_t					GetType() const = 0;
 
+	void										Load();
 	void										Release();		// note: It's preferable to use SAFE_RELEASE( kbResourceInstance ) instead of calling this directly
 
 	const std::string &							GetName() const { return m_Name; }
 	const std::string &							GetFullFileName() const { return m_FullFileName; }	// todo: deprecate
 	const kbString &							GetFullName() const { return m_FullName; }
-
-	virtual void								Load() { 
-													if ( m_IsLoaded == false ) { 
-														if ( Load_Internal() ) {
-															m_IsLoaded = true;
-														}
-													}
-												}
 
 protected:
 
@@ -47,7 +40,7 @@ protected:
 	kbString									m_FullName;
 
 	int											m_ReferenceCount;
-	bool										m_IsLoaded;
+	bool										m_bIsLoaded;
 };
 
 /**

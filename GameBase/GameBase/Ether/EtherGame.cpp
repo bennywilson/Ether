@@ -1174,6 +1174,9 @@ void EtherGame::ActivateOLC() {
  */
 void EtherGame::UpdateOLC( const float DeltaTimeSec ) {
 
+if ( m_pWorldGenComponent == nullptr ) {
+		return;
+	}
 	if ( m_OLCTimer < 0 ) {
 		m_OLCPostProcess = -1.0f;
 	 	m_pWorldGenComponent->SetTerrainWarp( kbVec3::zero, 0, 0, 0 );

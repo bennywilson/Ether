@@ -968,7 +968,7 @@ bool EtherWorldGenComponent::TraceAgainstTerrain_Recurse( EtherWorldGenCollision
 			const kbVec3 & v2 = pCurChunk->m_StaticCollisionMesh[iVert + 2];
 
 			float t;
-			if ( kbRayTriIntersection( StartPt, rayVec, v0, v1, v2, t ) ) {
+			if ( kbRayTriIntersection( t, StartPt, rayVec, v0, v1, v2 ) ) {
 				if ( t < closestT && t <= 1.0f && t > 0.0f ) {
 					OutHitInfo.m_bHitFound = true;
 					OutHitInfo.m_HitLocation = StartPt + Dir * t;
@@ -984,7 +984,7 @@ bool EtherWorldGenComponent::TraceAgainstTerrain_Recurse( EtherWorldGenCollision
 				const kbVec3 & v2 = pCurChunk->m_DynamicCollisionMesh[iVert + 2];
 
 				float t;
-				if ( kbRayTriIntersection( StartPt, rayVec, v0, v1, v2, t ) ) {
+				if ( kbRayTriIntersection( t, StartPt, rayVec, v0, v1, v2 ) ) {
 					if ( t < closestT && t <= 1.0f && t > 0.0f ) {
 						OutHitInfo.m_bHitFound = true;
 						OutHitInfo.m_HitLocation = StartPt + Dir * t;

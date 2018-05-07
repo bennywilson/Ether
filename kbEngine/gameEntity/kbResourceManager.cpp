@@ -11,9 +11,12 @@
 #include "kbGameEntityHeader.h"
 #include "kbComponent.h"
 #include "kbGameEntity.h"
+#include <iostream>
+#include <experimental/filesystem>
 
 kbResourceManager g_ResourceManager;
 
+namespace fs = std::experimental::filesystem;
 
 /**
  *	kbLoadResourceJob
@@ -31,6 +34,17 @@ public:
 };
 
 /**
+ *	kbResource::Reload
+ */
+void kbResource::Load() { 
+	if ( m_bIsLoaded == false ) { 
+		if ( Load_Internal() ) {
+			m_bIsLoaded = true;
+		}
+	}
+}
+
+/**
  *	kbResource::Release
  */
 void kbResource::Release() {
@@ -44,6 +58,7 @@ void kbResource::Release() {
 	if ( m_ReferenceCount == 0 ) {
 		Release_Internal();
 	}
+	m_bIsLoaded = false;
 }
 
 /**
@@ -60,7 +75,7 @@ kbResourceManager::kbResourceManager() {
 									nullptr );
 
 	ZeroMemory( &m_Ovl, sizeof(m_Ovl) );
-	m_Ovl.hEvent = ::CreateEvent( nullptr, FALSE, FALSE, nullptr );
+//	m_Ovl.hEvent = ::CreateEvent( nullptr, FALSE, FALSE, nullptr );
 }
 
 /**
@@ -80,50 +95,78 @@ void kbResourceManager::RenderSync() {
 /**
  *	kbResourceManager::CheckForDirectoryChanges
  */
+
+VOID CALLBACK FileIOCompletionRoutine(
+  _In_    DWORD        dwErrorCode,
+  _In_    DWORD        dwNumberOfBytesTransfered,
+  _Inout_ LPOVERLAPPED lpOverlapped
+) {
+	static int breakhere = 0;
+	breakhere = 0;
+}
 void kbResourceManager::CheckForDirectoryChanges() {
-	static byte buffer[2048];
 
+	static byte * buffer = new byte[2048];
 	DWORD numBytes = 0;
-	BOOL result = ReadDirectoryChangesW( m_hAssetDirectory, 
-										 &buffer,
-										 sizeof(buffer),
-										 TRUE,
-										 FILE_NOTIFY_CHANGE_FILE_NAME |
-										 FILE_NOTIFY_CHANGE_DIR_NAME |
-										 FILE_NOTIFY_CHANGE_SIZE,
-										 &numBytes,
-										 &m_Ovl,
-										 nullptr );
 
-	if ( result == FALSE ) {
-		return;
+	static int state =  0;
+	if ( state == 0 ) {
+		BOOL result = ReadDirectoryChangesW( m_hAssetDirectory, 
+											 buffer,
+											 2048,
+											 TRUE,
+											 FILE_NOTIFY_CHANGE_FILE_NAME |
+											 FILE_NOTIFY_CHANGE_DIR_NAME | FILE_NOTIFY_CHANGE_LAST_WRITE |
+											 FILE_NOTIFY_CHANGE_SIZE,
+											 &numBytes,
+											 &m_Ovl,
+											 FileIOCompletionRoutine );
+
+		if ( result == FALSE ) {
+			return;
+		}
+		state = 1;
 	}
 
-	GetOverlappedResult( m_hAssetDirectory, &m_Ovl, &numBytes, FALSE );
 	FILE_NOTIFY_INFORMATION * pCurInfo = (FILE_NOTIFY_INFORMATION*)buffer;
 	byte * pByteCurInfo = buffer;
 
+	if (GetOverlappedResult( m_hAssetDirectory, &m_Ovl, &numBytes, FALSE ) )
 	while ( pCurInfo->Action != 0 ) {
-		const DWORD FileNameLength = pCurInfo->FileNameLength;
+		state = 0;
+
+		const DWORD FileNameLength = (pCurInfo->FileNameLength) / 2;
 		std::wstring fileName;
 
 		fileName.resize( FileNameLength );
+		bool bHasTilda = false;
 		for ( DWORD i = 0; i < FileNameLength; i++ ) {
+
 			fileName[i] = pCurInfo->FileName[i];
+			if (fileName[i] == '~' ) {
+				bHasTilda = true;
+				break;
+			}
 		}
 
-		switch( pCurInfo->Action ) {
-			case FILE_ACTION_MODIFIED :
-				FileModifiedCB( fileName );
-			break;
+		if ( bHasTilda == false && GetFileExtension( fileName ).empty() == false ) {
+
+			fileName = L"assets\\" + fileName;
+
+			switch( pCurInfo->Action ) {
+				case FILE_ACTION_MODIFIED :
+				case FILE_ACTION_RENAMED_NEW_NAME :
+					FileModifiedCB( fileName );
+				break;
 		
-			case FILE_ACTION_ADDED :
-				FileAddedCB( fileName );
-			break;
+				case FILE_ACTION_ADDED :
+					FileAddedCB( fileName );
+				break;
 		
-			case FILE_ACTION_REMOVED :
-				FileDeletedCB( fileName );
-			break;
+				case FILE_ACTION_REMOVED :
+					FileDeletedCB( fileName );
+				break;
+			}
 		}
 
 		pCurInfo->Action = 0;
@@ -137,13 +180,13 @@ void kbResourceManager::CheckForDirectoryChanges() {
  */
 kbResource * kbResourceManager::GetResource( const std::string & fullFileName, const bool loadImmediately ) {
 	
-	if ( strcmp( fullFileName.c_str(), "NULL" ) == 0 ) {
-		return NULL;
+	if ( strcmp( fullFileName.c_str(), "nullptr" ) == 0 ) {
+		return nullptr;
 	}
 
 	for ( int i = 0; i < m_Resources.size(); i++ ) {
 		if ( m_Resources[i]->m_FullFileName == fullFileName ) {
-			if ( loadImmediately == true && m_Resources[i]->m_IsLoaded == false ) {
+			if ( loadImmediately == true && m_Resources[i]->m_bIsLoaded == false ) {
 				m_Resources[i]->Load();
 			}
 
@@ -161,7 +204,7 @@ kbResource * kbResourceManager::GetResource( const std::string & fullFileName, c
 		kbError( "kbResourceManager::AddResource() - No file extension for file %s", fullFileName.c_str() );
 	}
 
-	kbResource * pResource = NULL;
+	kbResource * pResource = nullptr;
 	std::string fileExt = GetFileExtension( fullFileName.c_str() );
 
 	if ( fullFileName.find(".kbAnim.ms3d") != std::string::npos ) {
@@ -181,11 +224,13 @@ kbResource * kbResourceManager::GetResource( const std::string & fullFileName, c
 		pResource = new kbWaveFile();
 	}
 
-	if ( pResource == NULL ) {
+	if ( pResource == nullptr ) {
 		kbError( "kbResourceManager::AddResource() - Invalid resource type %s", fullFileName.c_str() );
 	}
 
-	pResource->m_FullFileName = fullFileName;
+	fs::path p = fs::canonical( fullFileName.c_str() );
+	StringFromWString( pResource->m_FullFileName, p.c_str() );
+
 	pResource->m_FullName = kbString( fullFileName );
 
 	size_t pos = fullFileName.find_last_of( "/" );
@@ -213,14 +258,14 @@ kbResource * kbResourceManager::AsyncLoadResource( const kbString & stringName )
 		if ( m_Resources[i]->m_FullName == stringName ) {
 
 			// Resource is already loaded so return it
-			if ( m_Resources[i]->m_IsLoaded ) {
+			if ( m_Resources[i]->m_bIsLoaded ) {
 				return m_Resources[i];
 			}
 
 			// Check if resource is currently being loaded
 			for ( int j = 0; j < m_LoadResourceJobs.size(); j++ ) {
 				if ( m_LoadResourceJobs[j]->m_Resource == m_Resources[i] ) {
-					return NULL;
+					return nullptr;
 				}
 			}
 
@@ -230,12 +275,12 @@ kbResource * kbResourceManager::AsyncLoadResource( const kbString & stringName )
 			m_LoadResourceJobs.push_back( pLoadJob );
 			g_pJobManager->RegisterJob( pLoadJob );
 
-			return NULL;
+			return nullptr;
 		}
 	}
 
 	kbError( "kbResourceManager::AsyncLoadResource() - Failed to kick off a job for %s", stringName.c_str() );
-	return NULL;
+	return nullptr;
 }
 
 /**
@@ -244,16 +289,16 @@ kbResource * kbResourceManager::AsyncLoadResource( const kbString & stringName )
 kbResource * kbResourceManager::GetResource( const std::string & displayName ) {
 
 	for ( unsigned int i = 0; i < m_Resources.size(); i++ ) {
-		if ( m_Resources[i] != NULL && m_Resources[i]->GetName().compare( displayName ) == 0 ) {
+		if ( m_Resources[i] != nullptr && m_Resources[i]->GetName().compare( displayName ) == 0 ) {
 
-			if ( m_Resources[i]->m_IsLoaded == false ) {
+			if ( m_Resources[i]->m_bIsLoaded == false ) {
 				m_Resources[i]->Load();
 			}
 			return m_Resources[i];
 		}
 	}
 
-	return NULL;
+	return nullptr;
 }
 
 /**
@@ -369,7 +414,7 @@ kbPackage * kbResourceManager::GetPackage( const std::string & FullPackageName, 
 
 	kbFile newFile;
 	newFile.Open( FullPackageName, kbFile::kbFileType_t::FT_Read );
-	kbPackage * pPackage = newFile.ReadPackage( bLoadImmediately );
+	kbPackage *const pPackage = newFile.ReadPackage( bLoadImmediately );
 	newFile.Close();
 
 	for ( int iFolder = 0; iFolder < pPackage->m_Folders.size(); iFolder++ ) {
@@ -455,7 +500,22 @@ void kbResourceManager::Shutdown() {
  *	kbResourceManager::FileModifiedCB
  */
 void kbResourceManager::FileModifiedCB( const std::wstring & fileName ) {
+	std::string relativeFilePath;
+	StringFromWString( relativeFilePath, fileName );
 
+	relativeFilePath = "./assets/" + relativeFilePath;
+
+	fs::path p = fs::canonical( fileName.c_str() );
+	kbString absoluteFileName = kbString( p.string() );
+	for ( int i = 0; i < m_Resources.size(); i++ ) {
+		if ( m_Resources[i]->GetFullName() == absoluteFileName ) {
+			m_Resources[i]->Release();
+			m_Resources[i]->Load();
+			return;
+		}
+	}
+
+	kbError( "FileModifiedCB() - Couldn't find existing resource %s", absoluteFileName.c_str() );
 }
 
 /**
@@ -463,6 +523,18 @@ void kbResourceManager::FileModifiedCB( const std::wstring & fileName ) {
  */
 void kbResourceManager::FileAddedCB( const std::wstring & fileName ) {
 
+	/*std::string stringFileName;
+	StringFromWString( stringFileName, fileName );
+
+	for ( int i = 0; i < m_Resources.size(); i++ ) {
+		if ( m_Resources[i]->GetFullFileName() == stringFileName ) {
+			m_Resources[i]->Release();
+			m_Resources[i]->Load();
+			return;
+		}
+	}
+
+	GetResource( stringFileName, false );*/
 }
 
 /**
@@ -491,7 +563,7 @@ kbPackage::~kbPackage() {
 const kbPrefab * kbPackage::GetPrefab( const std::string & PrefabName ) const {
 	for ( int iFolder = 0; iFolder < m_Folders.size(); iFolder++ ) {
 
-		const std::vector< class kbPrefab * > & PrefabList = m_Folders[iFolder].m_pPrefabs;
+		const std::vector<kbPrefab *> & PrefabList = m_Folders[iFolder].m_pPrefabs;
 		for ( int iPrefab = 0; iPrefab < PrefabList.size(); iPrefab++ ) {
 			if ( PrefabList[iPrefab]->GetPrefabName() == PrefabName ) {
 				return PrefabList[iPrefab];
@@ -499,5 +571,5 @@ const kbPrefab * kbPackage::GetPrefab( const std::string & PrefabName ) const {
 		}
 	}
 
-	return NULL;
+	return nullptr;
 }

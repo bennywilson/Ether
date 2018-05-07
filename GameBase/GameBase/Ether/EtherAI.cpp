@@ -596,7 +596,7 @@ void EtherAIManager::UnregisterCombatant( EtherActorComponent *const actorCompon
 		kbLog( "Unregistering %d", entPtr.GetEntityIndex() );
 
 
-	FastRemoveFromVector( m_AIList, entPtr );
+	VectorRemoveFast( m_AIList, entPtr );
 /*
 	if ( actorComponent == nullptr || actorComponent->GetOwner() == nullptr ) {
 		kbError( "EtherAIManager::UnregisterCombatant() - nullptr actorComponent passed in" );

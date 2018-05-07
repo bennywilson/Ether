@@ -96,7 +96,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 		// Window
 		WNDCLASS wc;
 		memset(&wc, 0, sizeof(wc));
-		wc.lpszClassName = "kbEngine";
+		wc.lpszClassName = L"kbEngine";
 		wc.style         = CS_OWNDC;
 		wc.lpfnWndProc   = WndProc;
 		wc.cbWndExtra    = 0;

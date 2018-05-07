@@ -100,7 +100,7 @@ kbCollisionInfo_t kbCollisionManager::PerformLineCheck( const kbVec3 & start, co
 		if ( pCollision->m_CollisionType == CT_Sphere ) {
 			kbGameEntity *const pCollisionOwner = pCollision->GetOwner();
 			kbVec3 intersectionPt;
-			if ( kbRaySphereIntersection( start, rayDir, pCollisionOwner->GetPosition(), pCollision->m_Extent.x, intersectionPt ) ) {
+			if ( kbRaySphereIntersection( intersectionPt, start, rayDir, pCollisionOwner->GetPosition(), pCollision->m_Extent.x ) ) {
 				const float t = ( intersectionPt - start ).Length() / LineLength;
 				if ( t < collisionInfo.m_T ) {
 
@@ -112,7 +112,7 @@ kbCollisionInfo_t kbCollisionManager::PerformLineCheck( const kbVec3 & start, co
 					} else {
 						for ( int iColSphere = 0; iColSphere < pCollision->GetWorldSpaceCollisionSpheres().size(); iColSphere++ ) {
 							const kbVec4 & curSphere = pCollision->GetWorldSpaceCollisionSpheres()[iColSphere];
-							if ( kbRaySphereIntersection( start, rayDir, curSphere.ToVec3(), curSphere.a, intersectionPt ) ) {
+							if ( kbRaySphereIntersection( intersectionPt, start, rayDir, curSphere.ToVec3(), curSphere.a ) ) {
 								const float innerT = ( intersectionPt - start ).Length() / LineLength;
 								if ( innerT < collisionInfo.m_T ) {
 									collisionInfo.m_bHit = true;
@@ -144,5 +144,5 @@ void kbCollisionManager::RegisterComponent( kbCollisionComponent * Collision ) {
  *	kbCollisionManager::UnregisterComponent
  */
 void kbCollisionManager::UnregisterComponent( kbCollisionComponent * Collision ) {
-	FastRemoveFromVector( m_CollisionComponents, Collision );
+	VectorRemoveFast( m_CollisionComponents, Collision );
 }
