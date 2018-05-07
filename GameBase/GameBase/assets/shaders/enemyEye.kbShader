@@ -5,7 +5,6 @@
 //==============================================================================
 cbuffer matrixBuffer {
 	matrix modelMatrix;
-
 	matrix modelViewMatrix;
 	matrix viewMatrix;
 	matrix mvpMatrix;
@@ -14,7 +13,8 @@ cbuffer matrixBuffer {
    matrix viewProjection;
 	float4 cameraPos;
 };
-//------------------------------------
+
+//-------------------------------------
 struct vertexInput {
 	float4 position		: POSITION;
 	float2 uv			   : TEXCOORD0;
