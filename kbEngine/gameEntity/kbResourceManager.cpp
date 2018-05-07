@@ -97,6 +97,15 @@ void kbResourceManager::RenderSync() {
  */
 void kbResourceManager::CheckForDirectoryChanges() {
 
+	// Check every second
+	static float lastTime = 0;
+	const float timeElapsed = g_GlobalTimer.TimeElapsedSeconds();
+	if ( timeElapsed > lastTime + 0.25f ) {
+		lastTime = timeElapsed;
+	} else {
+		return;
+	}
+
 	static byte * buffer = new byte[2048];
 	DWORD numBytes = 0;
 
