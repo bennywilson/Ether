@@ -95,15 +95,6 @@ void kbResourceManager::RenderSync() {
 /**
  *	kbResourceManager::CheckForDirectoryChanges
  */
-
-VOID CALLBACK FileIOCompletionRoutine(
-  _In_    DWORD        dwErrorCode,
-  _In_    DWORD        dwNumberOfBytesTransfered,
-  _Inout_ LPOVERLAPPED lpOverlapped
-) {
-	static int breakhere = 0;
-	breakhere = 0;
-}
 void kbResourceManager::CheckForDirectoryChanges() {
 
 	static byte * buffer = new byte[2048];
@@ -115,12 +106,10 @@ void kbResourceManager::CheckForDirectoryChanges() {
 											 buffer,
 											 2048,
 											 TRUE,
-											 FILE_NOTIFY_CHANGE_FILE_NAME |
-											 FILE_NOTIFY_CHANGE_DIR_NAME | FILE_NOTIFY_CHANGE_LAST_WRITE |
-											 FILE_NOTIFY_CHANGE_SIZE,
+											 FILE_NOTIFY_CHANGE_FILE_NAME,
 											 &numBytes,
 											 &m_Ovl,
-											 FileIOCompletionRoutine );
+											 nullptr );
 
 		if ( result == FALSE ) {
 			return;
@@ -231,7 +220,7 @@ kbResource * kbResourceManager::GetResource( const std::string & fullFileName, c
 	fs::path p = fs::canonical( fullFileName.c_str() );
 	StringFromWString( pResource->m_FullFileName, p.c_str() );
 
-	pResource->m_FullName = kbString( fullFileName );
+	pResource->m_FullName = kbString( pResource->m_FullFileName );
 
 	size_t pos = fullFileName.find_last_of( "/" );
 	if ( pos != std::string::npos ) {

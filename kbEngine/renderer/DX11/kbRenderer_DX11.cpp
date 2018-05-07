@@ -2745,17 +2745,40 @@ void kbRenderer_DX11::LoadShader( const std::string & fileName, ID3D11VertexShad
 
 	const std::wstring widestr = std::wstring( fileName.begin(), fileName.end() );
 
-	hr = D3DCompileFromFile( widestr.c_str(), nullptr, nullptr, vertexShaderFunc.c_str(), "vs_4_0", shaderFlags, 0, &vertexShaderBuffer, &errorMessage );
+	int numTries = 0;
+	do {
+		numTries++;
+		hr = D3DCompileFromFile( widestr.c_str(), nullptr, nullptr, vertexShaderFunc.c_str(), "vs_4_0", shaderFlags, 0, &vertexShaderBuffer, &errorMessage );
+		if ( FAILED( hr )  ) {
+			Sleep( 250 );
+			SAFE_RELEASE(vertexShaderBuffer);
+		}
+	} while ( FAILED( hr ) && numTries < 4 );
+
 	if ( FAILED( hr ) ) {
-		kbError( "kbRenderer_DX11::LoadShader() - Failed to load vertex shader shader %s : %s", fileName.c_str(), ( errorMessage != nullptr ) ? ( errorMessage->GetBufferPointer() ) : ( "No error message given " ) );
+		kbWarning( "kbRenderer_DX11::LoadShader() - Failed to load vertex shader : %s", ( errorMessage != nullptr ) ? ( errorMessage->GetBufferPointer() ) : ( "No error message given " ) );
+		SAFE_RELEASE( vertexShaderBuffer )
+		SAFE_RELEASE( pixelShaderBuffer );
 		return;
 	}
 
 	SAFE_RELEASE( errorMessage );
 
-	hr = D3DCompileFromFile( widestr.c_str(), nullptr, nullptr, pixelShaderFunc.c_str(), "ps_4_0",  shaderFlags, 0, &pixelShaderBuffer, &errorMessage );
+	numTries = 0;
+	do {
+		numTries++;
+		hr = D3DCompileFromFile( widestr.c_str(), nullptr, nullptr, pixelShaderFunc.c_str(), "ps_4_0",  shaderFlags, 0, &pixelShaderBuffer, &errorMessage );
+		if ( FAILED( hr ) ) {
+			Sleep( 250 );
+			SAFE_RELEASE( pixelShaderBuffer )
+		}
+	} while (FAILED( hr ) && numTries < 4 );
+
 	if ( FAILED( hr ) ) {
-		kbError( "kbRenderer_DX11::LoadShader() - Failed to load pixel shader shader %s : %s", fileName.c_str(), ( errorMessage != nullptr ) ? ( errorMessage->GetBufferPointer() ) : ( "No error message given " ) );
+		kbWarning( "kbRenderer_DX11::LoadShader() - Failed to load pixel shader : %s", ( errorMessage != nullptr ) ? ( errorMessage->GetBufferPointer() ) : ( "No error message given " ) );
+		SAFE_RELEASE( vertexShaderBuffer )
+		SAFE_RELEASE( pixelShaderBuffer )
+		return;
 	}
 
 	SAFE_RELEASE( errorMessage );
@@ -2763,13 +2786,13 @@ void kbRenderer_DX11::LoadShader( const std::string & fileName, ID3D11VertexShad
 	hr = m_pD3DDevice->CreateVertexShader( vertexShaderBuffer->GetBufferPointer(), vertexShaderBuffer->GetBufferSize(), nullptr, &vertexShader );
 
 	if ( FAILED( hr ) ) {
-		kbError( "kbRenderer_DX11::LoadShader() - Failed to create vertex shader %s", fileName.c_str() );
+		kbWarning( "kbRenderer_DX11::LoadShader() - Failed to create vertex shader %s", fileName.c_str() );
 	}
 
 	hr = m_pD3DDevice->CreatePixelShader( pixelShaderBuffer->GetBufferPointer(), pixelShaderBuffer->GetBufferSize(), nullptr, &pixelShader );
 
 	if ( FAILED( hr ) ) {
-		kbError( "kbRenderer_DX11::LoadShader() - Failed to create pixel shader %s", fileName.c_str() );
+		kbWarning( "kbRenderer_DX11::LoadShader() - Failed to create pixel shader %s", fileName.c_str() );
 	}
 
 	D3D11_INPUT_ELEMENT_DESC polygonLayout[5];
@@ -3235,9 +3258,15 @@ void kbRenderer_DX11::RenderModel( const kbRenderObject *const pRenderObject, co
 			if ( pShaderOverrideList->size() > i && (*pShaderOverrideList)[i] != nullptr ) {
 				bShaderOverridden = true;
 				const kbShader * pShader = (*pShaderOverrideList)[i];
-				m_pImmediateContext->IASetInputLayout( (ID3D11InputLayout*)pShader->GetVertexLayout() );
-				m_pImmediateContext->VSSetShader( (ID3D11VertexShader *)pShader->GetVertexShader(), nullptr, 0 );
-				m_pImmediateContext->PSSetShader( (ID3D11PixelShader *)pShader->GetPixelShader(), nullptr, 0 );
+				if ( pShader != nullptr && pShader->GetVertexShader() != nullptr && pShader->GetPixelShader() != nullptr ) {
+					m_pImmediateContext->IASetInputLayout( (ID3D11InputLayout*)pShader->GetVertexLayout() );
+					m_pImmediateContext->VSSetShader( (ID3D11VertexShader *)pShader->GetVertexShader(), nullptr, 0 );
+					m_pImmediateContext->PSSetShader( (ID3D11PixelShader *)pShader->GetPixelShader(), nullptr, 0 );
+				} else {
+					m_pImmediateContext->IASetInputLayout( (ID3D11InputLayout*)m_pMissingShader->GetVertexLayout() );
+					m_pImmediateContext->VSSetShader( (ID3D11VertexShader *)m_pMissingShader->GetVertexShader(), nullptr, 0 );
+					m_pImmediateContext->PSSetShader( (ID3D11PixelShader *)m_pMissingShader->GetPixelShader(), nullptr, 0 );
+				}
 			}
 		}
 

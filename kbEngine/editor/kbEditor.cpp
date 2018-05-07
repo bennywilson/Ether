@@ -34,7 +34,8 @@ bool g_bEditorIsUndoingAnAction = false;
 Fl_Text_Buffer * g_OutputBuffer = nullptr;
 Fl_Text_Buffer * g_StyleBuffer = nullptr;
 static Fl_Text_Display::Style_Table_Entry stable[] = {  { FL_BLACK,	FL_HELVETICA, 12 },				// A
-														{ FL_RED,		FL_HELVETICA, 12 } };		// B
+												{ FL_RED,		FL_HELVETICA, 12 } };		// B
+
 /**
  * kbEditor
  */
@@ -852,6 +853,8 @@ void kbEditor::OutputCB( kbOutputMessageType_t messageType, const char * output 
 
 	char outputColor = 'A';
 	if ( messageType == kbOutputMessageType_t::Message_Error || messageType == kbOutputMessageType_t::Message_Assert ) {
+		outputColor = 'B';
+	} else if ( messageType == kbOutputMessageType_t::Message_Warning ) {
 		outputColor = 'B';
 	}
 
