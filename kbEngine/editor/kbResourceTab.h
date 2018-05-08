@@ -2,7 +2,7 @@
 // kbResourceTab.h
 //
 //
-// 2016-2017 kbEngine 2.0
+// 2016-2018 kbEngine 2.0
 //===================================================================================================
 #ifndef _KBRESOURCETAB_H_
 #define _KBRESOURCETAB_H_
@@ -16,6 +16,7 @@ struct kbResourceTabFile_t {
 	kbPrefab *									m_pPrefab;
 	kbResource *								m_pResource;
 	std::string									m_FolderName;
+
 	std::vector<kbResourceTabFile_t>			m_SubFolderList;
 	std::vector<kbResourceTabFile_t>			m_ResourceList;
 
@@ -32,6 +33,7 @@ class kbResourceTab : public Fl_Tabs, kbWidget {
 public:
 
 												kbResourceTab( int x, int y, int w, int h );
+												~kbResourceTab();
 
 	virtual void								EventCB( const widgetCBObject * widgetCBObject );
 
@@ -46,6 +48,8 @@ public:
 
 private:
 
+	void										RebuildResourceFolderListText();
+
 	Fl_Select_Browser *							m_pSelectBrowser;
 
 	std::vector<kbResourceTabFile_t>			m_ResourceFolderList;
@@ -57,6 +61,8 @@ private:
 	// Callbacks
 	static void									ResourceSelectedCB( Fl_Widget * widget, void * userData );
 	static void									SavePackageCB( Fl_Widget * widget, void * userData );
+
+	static void									ResourceManagerCB( const kbResourceManager::CallbackReason Reason );
 };
 
 #endif

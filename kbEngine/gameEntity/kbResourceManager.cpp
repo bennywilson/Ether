@@ -36,7 +36,8 @@ public:
 /**
  *	kbResource::Reload
  */
-void kbResource::Load() { 
+void kbResource::Load() {
+
 	if ( m_bIsLoaded == false ) { 
 		if ( Load_Internal() ) {
 			m_bIsLoaded = true;
@@ -48,16 +49,8 @@ void kbResource::Load() {
  *	kbResource::Release
  */
 void kbResource::Release() {
-	m_ReferenceCount--;
 
-	if ( m_ReferenceCount < 0 ) {
-		kbWarning( "Resource %s has a negative resource count", m_Name );
-		Release_Internal();
-	}
-	
-	if ( m_ReferenceCount == 0 ) {
-		Release_Internal();
-	}
+	Release_Internal();
 	m_bIsLoaded = false;
 }
 
@@ -90,32 +83,46 @@ kbResourceManager::~kbResourceManager() {
  */
 void kbResourceManager::RenderSync() {
 
-	CheckForDirectoryChanges();
+	UpdateHotReloads();
 }
 /**
- *	kbResourceManager::CheckForDirectoryChanges
+ *	kbResourceManager::UpdateHotReloads
  */
-void kbResourceManager::CheckForDirectoryChanges() {
+void kbResourceManager::UpdateHotReloads() {
 
-	// Check every second
-	static float lastTime = 0;
-	const float timeElapsed = g_GlobalTimer.TimeElapsedSeconds();
-	if ( timeElapsed > lastTime + 0.25f ) {
-		lastTime = timeElapsed;
-	} else {
+	static std::vector<std::wstring > queuedFiles;
+
+	static float lastUpdateTimeSecs = 0;
+	const float totalSeconds = g_GlobalTimer.TimeElapsedSeconds();
+	if ( totalSeconds < lastUpdateTimeSecs + 0.25f ) {
 		return;
 	}
+	lastUpdateTimeSecs = totalSeconds;
 
-	static byte * buffer = new byte[2048];
-	DWORD numBytes = 0;
+	// Handle queued up modified files
+	if ( queuedFiles.size() > 0 ) {
+
+		for ( int i = 0; i < queuedFiles.size(); i++ ) {
+			const std::wstring & fileName = queuedFiles[i];
+			FileModifiedCB( fileName );
+		}
+
+		for ( int i = 0; i < m_FunctionCallbacks.size(); i++ ) {
+			m_FunctionCallbacks[i].m_pFunc( CBR_FileModified );
+		}
+	}
+	queuedFiles.clear();
 
 	static int state =  0;
+	static byte *const buffer = new byte[2048];
+	DWORD numBytes = 0;
+
 	if ( state == 0 ) {
 		BOOL result = ReadDirectoryChangesW( m_hAssetDirectory, 
 											 buffer,
 											 2048,
 											 TRUE,
-											 FILE_NOTIFY_CHANGE_FILE_NAME,
+											 FILE_NOTIFY_CHANGE_LAST_WRITE | FILE_NOTIFY_CHANGE_FILE_NAME,
 											 &numBytes,
 											 &m_Ovl,
 											 nullptr );
@@ -148,22 +155,13 @@ void kbResourceManager::CheckForDirectoryChanges() {
 		}
 
 		if ( bHasTilda == false && GetFileExtension( fileName ).empty() == false ) {
+			const std::wstring fullFileName = L"assets\\" + fileName;
 
-			fileName = L"assets\\" + fileName;
-
-			switch( pCurInfo->Action ) {
-				case FILE_ACTION_MODIFIED :
-				case FILE_ACTION_RENAMED_NEW_NAME :
-					FileModifiedCB( fileName );
-				break;
-		
-				case FILE_ACTION_ADDED :
-					FileAddedCB( fileName );
-				break;
-		
-				case FILE_ACTION_REMOVED :
-					FileDeletedCB( fileName );
-				break;
+			if ( VectorFind( queuedFiles, fullFileName ) == false ) {
+				queuedFiles.push_back( fullFileName );
+			} else {
+				static int breakhere = 0;
+				breakhere++;
 			}
 		}
 
@@ -223,7 +221,8 @@ kbResource * kbResourceManager::GetResource( const std::string & fullFileName, c
 	}
 
 	if ( pResource == nullptr ) {
-		kbError( "kbResourceManager::AddResource() - Invalid resource type %s", fullFileName.c_str() );
+		kbWarning( "kbResourceManager::AddResource() - Invalid resource type %s", fullFileName.c_str() );
+		return nullptr;
 	}
 
 	fs::path p = fs::canonical( fullFileName.c_str() );
@@ -491,55 +490,58 @@ void kbResourceManager::Shutdown() {
 	m_pPackages.clear();
 
 	CloseHandle( m_hAssetDirectory );
-	CloseHandle( m_Ovl.hEvent );
 }
 
 /**
  *	kbResourceManager::FileModifiedCB
  */
 void kbResourceManager::FileModifiedCB( const std::wstring & fileName ) {
+
 	std::string relativeFilePath;
 	StringFromWString( relativeFilePath, fileName );
 
 	relativeFilePath = "./assets/" + relativeFilePath;
 
 	fs::path p = fs::canonical( fileName.c_str() );
-	kbString absoluteFileName = kbString( p.string() );
+	const kbString absoluteFileName = kbString( p.string() );
+
 	for ( int i = 0; i < m_Resources.size(); i++ ) {
 		if ( m_Resources[i]->GetFullName() == absoluteFileName ) {
+			kbLog( "Hot reloading %s", absoluteFileName.c_str() );
 			m_Resources[i]->Release();
 			m_Resources[i]->Load();
 			return;
 		}
 	}
 
-	kbError( "FileModifiedCB() - Couldn't find existing resource %s", absoluteFileName.c_str() );
+	kbLog( "Loading %s", absoluteFileName.c_str() );
+	GetResource( absoluteFileName.stl_str(), true );
 }
 
 /**
- *	kbResourceManager::FileAddedCB
+ *	kbResourceManager::RegisterCB
  */
-void kbResourceManager::FileAddedCB( const std::wstring & fileName ) {
+void kbResourceManager::RegisterCB( ResourceManagerCB pFuncCB, const CallbackReason Reason ) {
+	kbErrorCheck( pFuncCB != nullptr && Reason >= 0 && Reason < CBR_Max_Num_Reasons, "ResourceManager::RegisterCB() - Null func passed in" );
 
-	/*std::string stringFileName;
-	StringFromWString( stringFileName, fileName );
+	CallbackInfo newCBInfo( pFuncCB, Reason );
 
-	for ( int i = 0; i < m_Resources.size(); i++ ) {
-		if ( m_Resources[i]->GetFullFileName() == stringFileName ) {
-			m_Resources[i]->Release();
-			m_Resources[i]->Load();
-			return;
+	kbErrorCheck( VectorFind( m_FunctionCallbacks, newCBInfo ) == false, "ResourceManager::RegisterCB() - Registering function/reason multiple times" );
+	m_FunctionCallbacks.push_back( newCBInfo );
+}
+
+/**
+ *	kbResourceManager::UnregisterCB
+ */
+void kbResourceManager::UnregisterCB( ResourceManagerCB pFuncCB ) {
+	kbErrorCheck( pFuncCB != nullptr, "ResourceManager::UnregisterCB() - Null func passed in" );
+
+	for ( int i = 0; i < m_FunctionCallbacks.size(); i++ ) {
+		if ( m_FunctionCallbacks[i].m_pFunc == pFuncCB ) {
+			VectorRemoveFastIndex( m_FunctionCallbacks, i );
+			i--;
 		}
 	}
-
-	GetResource( stringFileName, false );*/
-}
-
-/**
- *	kbResourceManager::FileDeletedCB
- */
-void kbResourceManager::FileDeletedCB( const std::wstring & fileName ) {
-
 }
 
 /**

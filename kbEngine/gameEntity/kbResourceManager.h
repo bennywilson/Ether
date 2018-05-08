@@ -18,7 +18,7 @@ class kbResource {
 //---------------------------------------------------------------------------------------------------
 public:
 
-												kbResource() { m_ReferenceCount = 1, m_bIsLoaded = false; }
+												kbResource() { m_bIsLoaded = false; }
 	virtual										~kbResource() = 0 { }
 
 	virtual kbTypeInfoType_t					GetType() const = 0;
@@ -39,7 +39,6 @@ protected:
 	std::string									m_FullFileName;
 	kbString									m_FullName;
 
-	int											m_ReferenceCount;
 	bool										m_bIsLoaded;
 };
 
@@ -103,13 +102,21 @@ public:
 
 	void										Shutdown();
 
+
+	enum CallbackReason {
+		CBR_None = 0,
+		CBR_FileModified,
+		CBR_Max_Num_Reasons
+	};
+	typedef void								(*ResourceManagerCB)( const CallbackReason reason );
+	void										RegisterCB( ResourceManagerCB  pFuncCB, const CallbackReason Reason );
+	void										UnregisterCB( ResourceManagerCB pFuncCB );
+ 
 private:
 
-	void										CheckForDirectoryChanges();
+	void										UpdateHotReloads();
 
 	void										FileModifiedCB( const std::wstring & fileName );
-	void										FileAddedCB( const std::wstring & fileName );
-	void										FileDeletedCB( const std::wstring & fileName );
 
 	std::vector<kbResource *>					m_Resources;
 	std::vector<kbPackage *>					m_pPackages;
@@ -120,6 +127,17 @@ private:
 	// Hot reloading
 	HANDLE										m_hAssetDirectory;
 	OVERLAPPED									m_Ovl;
+
+
+	struct CallbackInfo {
+		CallbackInfo( ResourceManagerCB inFunc, const CallbackReason reason ) : m_pFunc( inFunc ), m_CBReason( reason ) { }
+
+		ResourceManagerCB						m_pFunc;
+		CallbackReason							m_CBReason;
+
+		bool operator==( const CallbackInfo & rhs ) const { return m_pFunc == rhs.m_pFunc && m_CBReason == rhs.m_CBReason; }
+	};
+	std::vector<CallbackInfo>					m_FunctionCallbacks;
 };
 
 extern kbResourceManager g_ResourceManager;

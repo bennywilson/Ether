@@ -4,6 +4,7 @@
 //
 // 2016-2018 kbEngine 2.0
 //===================================================================================================
+#include <queue>
 #include "kbCore.h"
 #include "kbWidget.h"
 #include "kbGameEntityHeader.h"
@@ -14,6 +15,46 @@
 
 kbResourceTab * g_pResourceTab = nullptr;
 
+
+/**
+ *	GetAbsoluteFolderName_Recursive
+ */
+std::string GetAbsoluteFolderName_Recursive( const kbResourceTabFile_t *const pCurTab, const kbResourceTabFile_t *const pTargetTab ) {
+
+	if ( pCurTab == pTargetTab ) {
+		return pTargetTab->m_FolderName;
+	}
+
+	for ( int i = 0; i < pCurTab->m_SubFolderList.size(); i++ ) {
+		std::string retVal = GetAbsoluteFolderName_Recursive( &pCurTab->m_SubFolderList[i], pTargetTab );
+		if ( retVal.empty() == false ) {
+			return pCurTab->m_FolderName + retVal;
+		}
+	}
+
+	for ( int i = 0; i < pCurTab->m_ResourceList.size(); i++ ) {
+		std::string retVal = GetAbsoluteFolderName_Recursive( &pCurTab->m_ResourceList[i], pTargetTab );
+		if ( retVal.empty() == false ) {
+			return pCurTab->m_FolderName + retVal;
+		}
+	}
+	return {};
+}
+
+/**
+ *	GetAbsoluteFolderName
+ */
+std::string	GetAbsoluteFolderName( const std::vector<kbResourceTabFile_t> & searchList, const kbResourceTabFile_t *const resourceTabFile ) {
+
+	for ( int i = 0; i < searchList.size(); i++ ) {
+		std::string fullPath = GetAbsoluteFolderName_Recursive( &searchList[i], resourceTabFile );
+		if ( fullPath.empty() == false ) {
+			return fullPath;
+		}
+	}
+
+	return {};
+}
 
 /**
  *	ResourceSelectedCB - Called when user selects a resource in the resource tab
@@ -146,8 +187,16 @@ kbResourceTab::kbResourceTab( int x, int y, int w, int h ) :
 	g_Editor->RegisterUpdate( this );
 	g_Editor->RegisterEvent( this, WidgetCB_PrefabModified );
 	g_pResourceTab = this;
+
+	g_ResourceManager.RegisterCB( ResourceManagerCB, kbResourceManager::CBR_FileModified );
 }
 
+/**
+ *	kbResourceTab::~kbResourceTab
+ */
+kbResourceTab::~kbResourceTab() {
+	g_ResourceManager.UnregisterCB( ResourceManagerCB );
+}
 
 /**
  *	kbResourceTab::EventCB
@@ -190,15 +239,66 @@ void kbResourceTab::EventCB( const widgetCBObject * widgetCBObject ) {
 }
 
 /**
- *	kbResourceTab::PostRendererInit()
+ *	kbResourceTab::PostRendererInit
  */
 void kbResourceTab::PostRendererInit() {
+	RebuildResourceFolderListText();
+}
+
+/**
+ *	kbResourceTab::RebuildResourceFolderListText
+ */
+void kbResourceTab::RebuildResourceFolderListText() {
+
+	std::vector<kbResourceTabFile_t> backUp = m_ResourceFolderList;
+	std::vector<std::string> expandedDirectoryList;
+	std::vector<std::string> dirtyDirectoryList;
+	
+	// kbLog( "---------------------------------" );
+	if ( m_ResourceFolderList.size() > 0 ) {
+		std::queue<kbResourceTabFile_t*> q;
+		for ( int i = 0; i < m_ResourceFolderList.size(); i++ ) {
+			q.push( &backUp[i] );
+		}
+
+		while( q.empty() == false ) {
+
+			kbResourceTabFile_t *const pCurTab = q.front();
+			q.pop();
+
+			if ( pCurTab->m_bExpanded == false && pCurTab->m_bIsDirty == false ) {
+				continue;
+			}
+
+			const std::string fullFolderName = GetAbsoluteFolderName( backUp, pCurTab );
+
+			if ( pCurTab->m_bExpanded ) {
+				expandedDirectoryList.push_back( fullFolderName );
+			}
+
+			if ( pCurTab->m_bIsDirty ) {
+				dirtyDirectoryList.push_back( fullFolderName );
+			}
+
+			// kbLog( "---> Adding dir %s\n", pCurTab->m_FolderName.c_str() );
+			for ( int j = 0; j < pCurTab->m_SubFolderList.size(); j++ ) {
+				q.push( &pCurTab->m_SubFolderList[j] );
+			}
+
+			for ( int j = 0; j < pCurTab->m_ResourceList.size(); j++ ) {
+				q.push( &pCurTab->m_ResourceList[j] );
+			}
+
+		}
+	}
+
 	TCHAR szFullPattern[MAX_PATH];
 	GetCurrentDirectory( MAX_PATH, szFullPattern );
 	std::string filePath = szFullPattern;
 
 	std::vector< std::string > fileList;
 
+	g_pResourceTab->m_ResourceFolderList.clear();
 	m_ResourceFolderList.push_back( kbResourceTabFile_t() );
 	m_ResourceFolderList[m_ResourceFolderList.size() - 1].m_FolderName = "Game Packages";
 
@@ -215,6 +315,38 @@ void kbResourceTab::PostRendererInit() {
 
 	filePath = "../../kbEngine/assets/";
 	FindResourcesRecursively( filePath, m_ResourceFolderList[m_ResourceFolderList.size() - 1] );
+
+	if ( backUp.size() > 0 ) {
+		kbLog( "Rebuilding folder info...\n" );
+		std::queue<kbResourceTabFile_t*> q;
+		for ( int i = 0; i < m_ResourceFolderList.size(); i++ ) {
+			q.push( &m_ResourceFolderList[i] );
+		}
+
+		while( q.empty() == false ) {
+			kbResourceTabFile_t *const pCurTab = q.front();
+			q.pop();
+
+			const std::string curFolderName = GetAbsoluteFolderName( m_ResourceFolderList, pCurTab );
+
+			if ( VectorFind( expandedDirectoryList, curFolderName ) ) {
+				pCurTab->m_bExpanded = true;
+
+				for ( int i = 0; i < pCurTab->m_SubFolderList.size(); i++ ) {
+					q.push( &pCurTab->m_SubFolderList[i] );
+				}
+
+				for ( int j = 0; j < pCurTab->m_ResourceList.size(); j++ ) {
+					q.push( &pCurTab->m_ResourceList[j] );
+				}
+			}
+
+			if ( VectorFind( dirtyDirectoryList, curFolderName ) ) {
+				pCurTab->m_bIsDirty = true;
+			}
+
+		}
+	}
 
 	RefreshResourcesTab();
 }
@@ -481,4 +613,13 @@ void kbResourceTab::MarkPrefabDirty( kbPrefab * prefab ) {
 	}
 
 	RefreshResourcesTab();
+}
+
+/**
+ *	kbResourceTab::ResourceManagerCB
+ */
+void kbResourceTab::ResourceManagerCB( const kbResourceManager::CallbackReason Reason ) {
+
+	g_pResourceTab->RebuildResourceFolderListText();
+
 }
