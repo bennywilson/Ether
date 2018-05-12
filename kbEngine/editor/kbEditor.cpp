@@ -273,6 +273,10 @@ void kbEditor::Update() {
 		m_GameEntities[i]->RenderSync();
 	}
 	
+	for ( int i = 0; i < m_UpdateWidgets.size(); i++ ) {
+		m_UpdateWidgets[i]->RenderSync();
+	}
+
 	// Remove any undeleted actors
 	if ( m_RemovedEntities.size() > 0 ) {
 		std::vector<kbUndoDeleteActor::DeletedActorInfo_t> deletedEntities;

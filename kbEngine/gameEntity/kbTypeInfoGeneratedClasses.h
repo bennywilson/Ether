@@ -67,6 +67,7 @@ GenerateClass(
 	kbModelComponent,
 	AddField( "m_RenderPass", KBTYPEINFO_ENUM, kbModelComponent, m_RenderPass, false, "ERenderPass" )
 	AddField( "ShaderParams", KBTYPEINFO_VECTOR4, kbModelComponent, m_ShaderParams, true, "kbVec4" )
+	AddField( "CastsShadow", KBTYPEINFO_BOOL, kbModelComponent, m_bCastsShadow, false, "" )
 )
 
 GenerateClass( 

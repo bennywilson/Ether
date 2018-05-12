@@ -5,6 +5,7 @@
 //
 // 2016-2018 kbEngine 2.0
 //==============================================================================
+#include <windows.h>  // for SetThreadname
 #include <D3Dcompiler.h>
 #include <stdio.h>
 #include <sstream>
@@ -350,6 +351,7 @@ void kbGPUTimeStamp::PlaceTimeStamp( const kbString & timeStampName, ID3D11Devic
  */
 void kbRenderJob::Run() {
 
+	SetThreadName( "Render thread" );
 	while( m_bRequestShutdown == false ) {
 		if ( g_pRenderer != nullptr && g_pRenderer->m_RenderThreadSync == 1 ) {
 			g_pRenderer->RenderScene();
@@ -379,6 +381,7 @@ kbRenderer_DX11::kbRenderer_DX11() :
 	m_pDepthStencilView( nullptr ),
 	m_pDefaultShaderConstantsBuffer( nullptr ),
 	m_pSkinnedShaderConstantsBuffer( nullptr ),
+	m_pEditorConstantsBuffer( nullptr ),
 	m_pLightShaderConstantsBuffer( nullptr ),
 	m_pLightShaftsShaderConstantsBuffer( nullptr ),
 	m_pPostProcessConstantsBuffer( nullptr ),
@@ -398,6 +401,7 @@ kbRenderer_DX11::kbRenderer_DX11() :
 	m_pMissingShader( nullptr ),
 	m_pDirectionalLightShader( nullptr ),
 	m_pSimpleAdditiveShader( nullptr ),
+	m_pMousePickerIdShader( nullptr ),
 	m_pBasicSamplerState( nullptr ),
 	m_pNormalMapSamplerState( nullptr ),
 	m_pShadowMapSamplerState( nullptr ),
@@ -494,21 +498,24 @@ void kbRenderer_DX11::Init( HWND hwnd, const int frameWidth, const int frameHeig
 	CreateRenderView( hwnd );
 
 	// create render targets
-	int deferredRTWidth = ( m_bRenderToHMD )?( m_EyeRenderViewport[0].Size.w * 2 ):( Back_Buffer_Width );
-	int deferredRTHeight = ( m_bRenderToHMD )?( m_EyeRenderViewport[0].Size.h ):( Back_Buffer_Height );
+	const int deferredRTWidth = ( m_bRenderToHMD )?( m_EyeRenderViewport[0].Size.w * 2 ):( Back_Buffer_Width );
+	const int deferredRTHeight = ( m_bRenderToHMD )?( m_EyeRenderViewport[0].Size.h ):( Back_Buffer_Height );
 
-	CreateRenderTarget( eRenderTargetTexture::COLOR_BUFFER, deferredRTWidth, deferredRTHeight );
-	CreateRenderTarget( eRenderTargetTexture::NORMAL_BUFFER, deferredRTWidth, deferredRTHeight );
-	CreateRenderTarget( eRenderTargetTexture::DEPTH_BUFFER, deferredRTWidth, deferredRTHeight );
-	CreateRenderTarget( eRenderTargetTexture::ACCUMULATION_BUFFER, deferredRTWidth, deferredRTHeight );
+	CreateRenderTarget( eRenderTargetTexture::COLOR_BUFFER, deferredRTWidth, deferredRTHeight, DXGI_FORMAT_R16G16B16A16_FLOAT );
+	CreateRenderTarget( eRenderTargetTexture::NORMAL_BUFFER, deferredRTWidth, deferredRTHeight, DXGI_FORMAT_R16G16B16A16_FLOAT );
+	CreateRenderTarget( eRenderTargetTexture::DEPTH_BUFFER, deferredRTWidth, deferredRTHeight, DXGI_FORMAT_R32G32_FLOAT );
+	CreateRenderTarget( eRenderTargetTexture::ACCUMULATION_BUFFER, deferredRTWidth, deferredRTHeight, DXGI_FORMAT_R16G16B16A16_FLOAT );
 
 	const int shadowBufferSize = 2048;
-	CreateRenderTarget( eRenderTargetTexture::SHADOW_BUFFER, shadowBufferSize, shadowBufferSize );
-	CreateRenderTarget( eRenderTargetTexture::SHADOW_BUFFER_DEPTH, shadowBufferSize, shadowBufferSize );
+	CreateRenderTarget( eRenderTargetTexture::SHADOW_BUFFER, shadowBufferSize, shadowBufferSize, DXGI_FORMAT_R32_FLOAT );
+	CreateRenderTarget( eRenderTargetTexture::SHADOW_BUFFER_DEPTH, shadowBufferSize, shadowBufferSize, DXGI_FORMAT_D24_UNORM_S8_UINT );
 
-	CreateRenderTarget( eRenderTargetTexture::DOWN_RES_BUFFER, deferredRTWidth / 2, deferredRTHeight / 2 );
-	CreateRenderTarget( eRenderTargetTexture::DOWN_RES_BUFFER_2, deferredRTWidth / 2, deferredRTHeight / 2 );
-	CreateRenderTarget( eRenderTargetTexture::SCRATCH_BUFFER, deferredRTHeight / 2, deferredRTHeight / 2 );
+	CreateRenderTarget( eRenderTargetTexture::DOWN_RES_BUFFER, deferredRTWidth / 2, deferredRTHeight / 2, DXGI_FORMAT_R16G16B16A16_FLOAT );
+	CreateRenderTarget( eRenderTargetTexture::DOWN_RES_BUFFER_2, deferredRTWidth / 2, deferredRTHeight / 2, DXGI_FORMAT_R16G16B16A16_FLOAT );
+	CreateRenderTarget( eRenderTargetTexture::SCRATCH_BUFFER, deferredRTHeight / 2, deferredRTHeight / 2, DXGI_FORMAT_R16G16B16A16_FLOAT );
+
+	CreateRenderTarget( eRenderTargetTexture::COLOR_BUFFER, deferredRTWidth, deferredRTHeight, DXGI_FORMAT_R16G16B16A16_FLOAT );
+	CreateRenderTarget( eRenderTargetTexture::MOUSE_PICKER_BUFFER, deferredRTWidth, deferredRTHeight, DXGI_FORMAT_R32_UINT );
 
 	// create back buffer
 	D3D11_TEXTURE2D_DESC depthBufferDesc = { 0 };
@@ -568,14 +575,14 @@ void kbRenderer_DX11::Init( HWND hwnd, const int frameWidth, const int frameHeig
 
 	// vertex buffer
 	D3D11_BUFFER_DESC vertexBufferDesc = { 0 };
-	vertexBufferDesc.ByteWidth = sizeof( vertexColorLayOut ) * 3;
+	vertexBufferDesc.ByteWidth = sizeof( vertexColorLayout ) * 3;
 	vertexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
 	vertexBufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
 	vertexBufferDesc.CPUAccessFlags = 0;
 	vertexBufferDesc.MiscFlags = 0;
 	vertexBufferDesc.StructureByteStride = 0;
 
-	vertexColorLayOut vertices[3];
+	vertexColorLayout vertices[3];
 	vertices[0].position.Set( -1.0f, -1.0f, 0.0f );
 	vertices[0].SetColor( kbVec4( 0.25f, 0.35f, 0.75f, 1.0f ) );
 	
@@ -656,6 +663,7 @@ void kbRenderer_DX11::Init( HWND hwnd, const int frameWidth, const int frameHeig
 	m_pDirectionalLightShadowShader = ( kbShader * ) g_ResourceManager.GetResource( "../../kbEngine/assets/Shaders/directionalLightShadow.kbShader", true );
 	m_pLightShaftsShader = ( kbShader * ) g_ResourceManager.GetResource( "../../kbEngine/assets/Shaders/lightShafts.kbShader", true );
 	m_pSimpleAdditiveShader = ( kbShader * ) g_ResourceManager.GetResource( "../../kbEngine/assets/Shaders/SimpleAdditive.kbShader", true );
+	m_pMousePickerIdShader = (kbShader *) g_ResourceManager.GetResource( "../../kbEngine/assets/Shaders/MousePicker.kbShader", true );
 
 	// Non-resource managed shaders
 	m_pSkinnedDirectionalLightShadowShader->SetVertexShaderFunctionName( "skinnedVertexMain" );
@@ -671,65 +679,122 @@ void kbRenderer_DX11::Init( HWND hwnd, const int frameWidth, const int frameHeig
 	m_pBloomBlur->Load();
 
 	// Constants buffer for generic shaders
-	D3D11_BUFFER_DESC matrixBufferDesc;
-	matrixBufferDesc.Usage = D3D11_USAGE_DYNAMIC;
+	{
+		D3D11_BUFFER_DESC matrixBufferDesc;
+		matrixBufferDesc.Usage = D3D11_USAGE_DYNAMIC;
 
-	matrixBufferDesc.ByteWidth = ( sizeof( ShaderConstantMatrices ) + 15 ) & 0xfffffff0;
-	matrixBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-	matrixBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
-	matrixBufferDesc.MiscFlags = 0;
-	matrixBufferDesc.StructureByteStride = 0;
+		matrixBufferDesc.ByteWidth = ( sizeof( ShaderConstantMatrices ) + 15 ) & 0xfffffff0;
+		matrixBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+		matrixBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+		matrixBufferDesc.MiscFlags = 0;
+		matrixBufferDesc.StructureByteStride = 0;
 	 
-	hr = m_pD3DDevice->CreateBuffer( &matrixBufferDesc, nullptr, &m_pDefaultShaderConstantsBuffer );
-	kbErrorCheck( SUCCEEDED( hr ), "kbRenderer_DX11::Init() - Failed to create matrix buffer" );
+		hr = m_pD3DDevice->CreateBuffer( &matrixBufferDesc, nullptr, &m_pDefaultShaderConstantsBuffer );
+		kbErrorCheck( SUCCEEDED( hr ), "kbRenderer_DX11::Init() - Failed to create matrix buffer" );
+	}
 
 	// Constants for skinned shaders
-	matrixBufferDesc.ByteWidth = ( sizeof( SkinnedShaderConstants ) + 15 ) & 0xfffffff0;
-	matrixBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-	matrixBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
-	matrixBufferDesc.MiscFlags = 0;
-	matrixBufferDesc.StructureByteStride = 0;
+	{
+		D3D11_BUFFER_DESC matrixBufferDesc;
+		matrixBufferDesc.Usage = D3D11_USAGE_DYNAMIC;
 
-	hr = m_pD3DDevice->CreateBuffer( &matrixBufferDesc, nullptr, &m_pSkinnedShaderConstantsBuffer );
-	kbErrorCheck( SUCCEEDED( hr ), "Failed to create matrix buffer" );
+		matrixBufferDesc.ByteWidth = ( sizeof( SkinnedShaderConstants ) + 15 ) & 0xfffffff0;
+		matrixBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+		matrixBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+		matrixBufferDesc.MiscFlags = 0;
+		matrixBufferDesc.StructureByteStride = 0;
+
+		hr = m_pD3DDevice->CreateBuffer( &matrixBufferDesc, nullptr, &m_pSkinnedShaderConstantsBuffer );
+		kbErrorCheck( SUCCEEDED( hr ), "Failed to create matrix buffer" );
+	}
+
+	// Constants for editor objects
+	{
+		D3D11_BUFFER_DESC matrixBufferDesc;
+		matrixBufferDesc.Usage = D3D11_USAGE_DYNAMIC;
+
+		matrixBufferDesc.ByteWidth = ( sizeof( EditorShaderConstants ) + 15 ) & 0xfffffff0;
+		matrixBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+		matrixBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+		matrixBufferDesc.MiscFlags = 0;
+		matrixBufferDesc.StructureByteStride = 0;
+
+		hr = m_pD3DDevice->CreateBuffer( &matrixBufferDesc, nullptr, &m_pEditorConstantsBuffer );
+		kbErrorCheck( SUCCEEDED( hr ), "Failed to create matrix buffer" );
+	}
+
+	// Constants for skinned shaders
+	{
+		D3D11_BUFFER_DESC matrixBufferDesc;
+		matrixBufferDesc.Usage = D3D11_USAGE_DYNAMIC;
+
+		matrixBufferDesc.ByteWidth = ( sizeof( SkinnedShaderConstants ) + 15 ) & 0xfffffff0;
+		matrixBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+		matrixBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+		matrixBufferDesc.MiscFlags = 0;
+		matrixBufferDesc.StructureByteStride = 0;
+
+		hr = m_pD3DDevice->CreateBuffer( &matrixBufferDesc, nullptr, &m_pSkinnedShaderConstantsBuffer );
+		kbErrorCheck( SUCCEEDED( hr ), "Failed to create matrix buffer" );
+	}
 
 	// Constants buffer for light shaders
-	matrixBufferDesc.ByteWidth = ( sizeof( LightShaderConstants ) + 15 ) & 0xfffffff0;
-	matrixBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-	matrixBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
-	matrixBufferDesc.MiscFlags = 0;
-	matrixBufferDesc.StructureByteStride = 0;
-	 
-	hr = m_pD3DDevice->CreateBuffer( &matrixBufferDesc, nullptr, &m_pLightShaderConstantsBuffer );
-	kbErrorCheck( SUCCEEDED( hr ), "Failed to create matrix buffer" );
-	
-	// Light Shafts
-	matrixBufferDesc.ByteWidth = ( sizeof( LightShaderConstants ) + 15 ) & 0xfffffff0;
-	matrixBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-	matrixBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
-	matrixBufferDesc.MiscFlags = 0;
-	matrixBufferDesc.StructureByteStride = 0;
-	 
-	hr = m_pD3DDevice->CreateBuffer( &matrixBufferDesc, nullptr, &m_pLightShaftsShaderConstantsBuffer );
-	kbErrorCheck( SUCCEEDED( hr ), "kbRenderer_DX11::Init() - Failed to create matrix buffer" );
+	{
+		D3D11_BUFFER_DESC matrixBufferDesc;
+		matrixBufferDesc.Usage = D3D11_USAGE_DYNAMIC;
 
-	matrixBufferDesc.ByteWidth = ( sizeof( PostProcessConstants ) + 15 ) & 0xfffffff0;
-	matrixBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-	matrixBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
-	matrixBufferDesc.MiscFlags = 0;
-	matrixBufferDesc.StructureByteStride = 0;
+		matrixBufferDesc.ByteWidth = ( sizeof( LightShaderConstants ) + 15 ) & 0xfffffff0;
+		matrixBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+		matrixBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+		matrixBufferDesc.MiscFlags = 0;
+		matrixBufferDesc.StructureByteStride = 0;
 	 
-	hr = m_pD3DDevice->CreateBuffer( &matrixBufferDesc, nullptr, &m_pPostProcessConstantsBuffer );
-	kbErrorCheck( SUCCEEDED( hr ), "kbRenderer_DX11::Init() - Failed to create matrix buffer" );
+		hr = m_pD3DDevice->CreateBuffer( &matrixBufferDesc, nullptr, &m_pLightShaderConstantsBuffer );
+		kbErrorCheck( SUCCEEDED( hr ), "Failed to create matrix buffer" );
+	}
 
-	matrixBufferDesc.ByteWidth = ( sizeof( BloomShaderConstants ) + 15 ) & 0xfffffff0;
-	matrixBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-	matrixBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
-	matrixBufferDesc.MiscFlags = 0;
-	matrixBufferDesc.StructureByteStride = 0;
+	{
+		D3D11_BUFFER_DESC matrixBufferDesc;
+		matrixBufferDesc.Usage = D3D11_USAGE_DYNAMIC;
+
+		// Light Shafts
+		matrixBufferDesc.ByteWidth = ( sizeof( LightShaderConstants ) + 15 ) & 0xfffffff0;
+		matrixBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+		matrixBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+		matrixBufferDesc.MiscFlags = 0;
+		matrixBufferDesc.StructureByteStride = 0;
 	 
-	hr = m_pD3DDevice->CreateBuffer( &matrixBufferDesc, nullptr, &m_pBloomShaderConstantsBuffer );
-	kbErrorCheck( SUCCEEDED( hr ), "kbRenderer_DX11::Init() - Failed to create matrix buffer" );
+		hr = m_pD3DDevice->CreateBuffer( &matrixBufferDesc, nullptr, &m_pLightShaftsShaderConstantsBuffer );
+		kbErrorCheck( SUCCEEDED( hr ), "kbRenderer_DX11::Init() - Failed to create matrix buffer" );
+	}
+
+	{
+		D3D11_BUFFER_DESC matrixBufferDesc;
+		matrixBufferDesc.Usage = D3D11_USAGE_DYNAMIC;
+
+		matrixBufferDesc.ByteWidth = ( sizeof( PostProcessConstants ) + 15 ) & 0xfffffff0;
+		matrixBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+		matrixBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+		matrixBufferDesc.MiscFlags = 0;
+		matrixBufferDesc.StructureByteStride = 0;
+	 
+		hr = m_pD3DDevice->CreateBuffer( &matrixBufferDesc, nullptr, &m_pPostProcessConstantsBuffer );
+		kbErrorCheck( SUCCEEDED( hr ), "kbRenderer_DX11::Init() - Failed to create matrix buffer" );
+	}
+
+	{
+		D3D11_BUFFER_DESC matrixBufferDesc;
+		matrixBufferDesc.Usage = D3D11_USAGE_DYNAMIC;
+
+		matrixBufferDesc.ByteWidth = ( sizeof( BloomShaderConstants ) + 15 ) & 0xfffffff0;
+		matrixBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+		matrixBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+		matrixBufferDesc.MiscFlags = 0;
+		matrixBufferDesc.StructureByteStride = 0;
+	 
+		hr = m_pD3DDevice->CreateBuffer( &matrixBufferDesc, nullptr, &m_pBloomShaderConstantsBuffer );
+		kbErrorCheck( SUCCEEDED( hr ), "kbRenderer_DX11::Init() - Failed to create matrix buffer" );
+	}
 
 	// sampler state
 	D3D11_SAMPLER_DESC samplerDesc;
@@ -807,7 +872,7 @@ void kbRenderer_DX11::Init( HWND hwnd, const int frameWidth, const int frameHeig
 	textureDesc.Height = Back_Buffer_Height;
 	textureDesc.MipLevels = 1;
 	textureDesc.ArraySize = 1;
-	textureDesc.Format = DXGI_FORMAT_R8G8B8A8_UINT;//DXGI_FORMAT_R32G32B32A32_FLOAT;
+	textureDesc.Format = DXGI_FORMAT_R32_UINT;//DXGI_FORMAT_R32G32B32A32_FLOAT;
 	textureDesc.SampleDesc.Count = 1;
 	textureDesc.Usage = D3D11_USAGE_STAGING;
 	textureDesc.BindFlags = 0;
@@ -997,7 +1062,7 @@ int kbRenderer_DX11::CreateRenderView( HWND hwnd )
 /*
  *	kbRenderer_DX11::CreateRenderTarget
  */
-void kbRenderer_DX11::CreateRenderTarget( const eRenderTargetTexture index, const int width, const int height ) {
+void kbRenderer_DX11::CreateRenderTarget( const eRenderTargetTexture index, const int width, const int height, const DXGI_FORMAT targetFormat ) {
 
 	D3D11_TEXTURE2D_DESC textureDesc;
 	
@@ -1048,13 +1113,9 @@ void kbRenderer_DX11::CreateRenderTarget( const eRenderTargetTexture index, cons
 */
 		return;
 	}
-	if ( index == eRenderTargetTexture::SHADOW_BUFFER ) {
-		textureDesc.Format = DXGI_FORMAT_R32_FLOAT;
-	} else if ( index == eRenderTargetTexture::DEPTH_BUFFER ) {
-		textureDesc.Format = DXGI_FORMAT_R32G32_FLOAT;
-	} else {
-		textureDesc.Format = DXGI_FORMAT_R16G16B16A16_FLOAT;
-	}
+
+	textureDesc.Format = targetFormat;
+
 	textureDesc.SampleDesc.Count = 1;
 	textureDesc.Usage = D3D11_USAGE_DEFAULT;
 	textureDesc.BindFlags = D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE;
@@ -1107,8 +1168,7 @@ void kbRenderer_DX11::Shutdown() {
 	SAFE_RELEASE( m_pDepthStencilView );
 	SAFE_RELEASE( m_pDepthStencilBuffer );
 
-	for ( int i = 0; i < m_RenderWindowList.size(); i++ )
-	{
+	for ( int i = 0; i < m_RenderWindowList.size(); i++ ) {
 		m_RenderWindowList[i]->Release();
 		delete m_RenderWindowList[i];
 	}
@@ -1124,6 +1184,7 @@ void kbRenderer_DX11::Shutdown() {
 	SAFE_RELEASE( m_pConsoleQuad );
 	SAFE_RELEASE( m_pDefaultShaderConstantsBuffer );
 	SAFE_RELEASE( m_pSkinnedShaderConstantsBuffer );
+	SAFE_RELEASE( m_pEditorConstantsBuffer );
 	SAFE_RELEASE( m_pLightShaderConstantsBuffer );
 	SAFE_RELEASE( m_pLightShaftsShaderConstantsBuffer );
 	SAFE_RELEASE( m_pPostProcessConstantsBuffer );
@@ -1220,6 +1281,13 @@ void kbRenderer_DX11::AddRenderObject( const kbComponent *const pComponent, cons
 	newRenderObjectInfo.m_bIsFirstAdd = true;
 	newRenderObjectInfo.m_bIsRemove = false;
 	newRenderObjectInfo.m_RenderPass = renderPass;
+	if ( pComponent->GetOwner() != nullptr ) {
+		newRenderObjectInfo.m_EntityId = static_cast<kbGameEntity*>( pComponent->GetOwner() )->GetEntityId();
+	}
+
+	if ( pComponent->IsA( kbModelComponent::GetType() ) ) {
+		newRenderObjectInfo.m_bCastsShadow = static_cast<const kbModelComponent*>( pComponent )->GetCastsShadow();
+	}
 
 	if ( pShaderOverrideList != nullptr ) {
 		newRenderObjectInfo.m_OverrideShaderList = *pShaderOverrideList;
@@ -1250,6 +1318,13 @@ void kbRenderer_DX11::UpdateRenderObject( const kbComponent *const pComponent, c
 	newRenderObjectInfo.m_bIsFirstAdd = false;
 	newRenderObjectInfo.m_bIsRemove = false;
 	newRenderObjectInfo.m_RenderPass = renderPass;
+	if ( pComponent != nullptr ) {
+		newRenderObjectInfo.m_EntityId = static_cast<kbGameEntity*>( pComponent->GetOwner() )->GetEntityId();
+	}
+
+	if ( pComponent->IsA( kbModelComponent::GetType() ) ) {
+		newRenderObjectInfo.m_bCastsShadow = static_cast<const kbModelComponent*>( pComponent )->GetCastsShadow();
+	}
 
 	if ( pShaderOverrideList != nullptr ) {
 		newRenderObjectInfo.m_OverrideShaderList = *pShaderOverrideList;
@@ -2017,7 +2092,11 @@ void kbRenderer_DX11::RenderScene() {
 	m_ScreenSpaceQuads_RenderThread.clear();
 
 	RenderDebugText();
-		
+
+	if ( g_UseEditor ) {
+		RenderMousePickerIds();
+	}
+
 	PLACE_GPU_TIME_STAMP( "Debug Rendering" );
 
 	if ( IsUsingHMDTrackingOnly() || IsRenderingToHMD() ) {
@@ -2248,6 +2327,40 @@ void kbRenderer_DX11::RenderDebugText() {
 	m_pImmediateContext->DrawIndexed( m_DebugText->GetMeshes()[0].m_NumTriangles * 3, 0, 0 );
 
 	m_RenderState.SetBlendState();
+}
+
+/**
+ *	kbRenderer_DX11::RenderMousePickerIds
+ */
+void kbRenderer_DX11::RenderMousePickerIds() {
+	
+	const float color[4] = { 0.0f, 0.0f, 0.0f, 0.0f };
+	m_pImmediateContext->ClearRenderTargetView( m_RenderTargets[MOUSE_PICKER_BUFFER].m_pRenderTargetView, color );
+	m_pImmediateContext->ClearDepthStencilView( m_pDepthStencilView, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1, 0 );
+
+	D3D11_VIEWPORT viewport;
+	viewport.TopLeftX = 0.0f;
+	viewport.TopLeftY = 0.0f;
+	viewport.Width = ( float )m_RenderTargets[MOUSE_PICKER_BUFFER].m_Width;
+	viewport.Height = ( float )m_RenderTargets[MOUSE_PICKER_BUFFER].m_Height;
+	viewport.MinDepth = 0;
+	viewport.MaxDepth = 1.0f;
+	m_pImmediateContext->RSSetViewports( 1, &viewport );
+	m_pImmediateContext->OMSetRenderTargets( 1, &m_RenderTargets[MOUSE_PICKER_BUFFER].m_pRenderTargetView, m_pDepthStencilView );
+	m_RenderState.SetDepthStencilState();
+
+	std::map<const kbComponent *, kbRenderObject *>::iterator iter;
+	for ( iter = m_pCurrentRenderWindow->m_RenderObjectMap.begin(); iter != m_pCurrentRenderWindow->m_RenderObjectMap.end(); iter++ ) {
+		if ( iter->second->m_EntityId > 0 && iter->second->m_RenderPass == RP_Lighting ) {
+			RenderModel( iter->second, RP_MousePicker );
+		}
+	}
+
+	for ( iter = m_pCurrentRenderWindow->m_RenderObjectMap.begin(); iter != m_pCurrentRenderWindow->m_RenderObjectMap.end(); iter++ ) {
+		if ( iter->second->m_EntityId > 0 && iter->second->m_RenderPass == RP_PostLighting ) {
+			RenderModel( iter->second, RP_MousePicker );
+		}
+	}
 }
 
 /**
@@ -2613,35 +2726,6 @@ void kbRenderer_DX11::RenderPostProcess() {
 	ID3D11ShaderResourceView * nullArray[] = { nullptr };
 
 	m_pImmediateContext->PSSetShaderResources( 0, 1, nullArray );
-
-	if ( GDebugCopyBackBufferToCPU )
-	{
-		D3D11_BOX box;
-		box.left = 0;
-		box.right = Back_Buffer_Width;
-		box.top = 0;
-		box.bottom = Back_Buffer_Height;
-		box.front = 0;
-		box.back = 1;
-
-		ID3D11Texture2D * pBackBuffer;
-		m_pCurrentRenderWindow->m_pSwapChain->GetBuffer( 0, __uuidof(ID3D11Texture2D), (LPVOID*) &pBackBuffer );
-		m_pImmediateContext->CopySubresourceRegion( m_pOffScreenRenderTargetTexture, 0, 0, 0, 0 , pBackBuffer, 0, &box );
-		pBackBuffer->Release();
-
-		m_pImmediateContext->Map( m_pOffScreenRenderTargetTexture, 0, D3D11_MAP_READ, 0, &mappedResource );
-	
-		struct pixel {
-			byte r;
-			byte g;
-			byte b;
-			byte a;
-		};
-
-		pixel * pixelData = (pixel*)mappedResource.pData;
-
-		m_pImmediateContext->Unmap( m_pOffScreenRenderTargetTexture, 0 );
-	}
 
 	ID3D11ShaderResourceView * nullarray[] = { nullptr, nullptr };//'{ m_RenderTargets[ACCUMULATION_BUFFER].m_pShaderResourceView, m_RenderTargets[COLOR_BUFFER].m_pShaderResourceView };
 	m_pImmediateContext->PSSetShaderResources( 0, 2, nullarray );
@@ -3229,6 +3313,20 @@ void kbRenderer_DX11::RenderModel( const kbRenderObject *const pRenderObject, co
 		m_pImmediateContext->PSSetConstantBuffers( 0, 1, &m_pDefaultShaderConstantsBuffer );
 	}
 
+	if ( g_UseEditor ) {
+		D3D11_MAPPED_SUBRESOURCE mappedResource;
+		HRESULT hr = m_pImmediateContext->Map( m_pEditorConstantsBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource );
+		if ( FAILED( hr ) ) {
+			kbError( "Failed to map matrix buffer" );
+		}
+		
+		EditorShaderConstants * dataPtr = ( EditorShaderConstants * ) mappedResource.pData;
+		dataPtr->entityId = pRenderObject->m_EntityId;
+		m_pImmediateContext->Unmap( m_pEditorConstantsBuffer, 0 );
+		m_pImmediateContext->VSSetConstantBuffers( 1, 1, &m_pEditorConstantsBuffer );
+		m_pImmediateContext->PSSetConstantBuffers( 1, 1, &m_pEditorConstantsBuffer );
+	}
+
 	if ( bShadowPass ) {
 		if ( pRenderObject->m_bIsSkinnedModel ) {
 			m_pImmediateContext->IASetInputLayout( (ID3D11InputLayout*)m_pSkinnedDirectionalLightShadowShader->GetVertexLayout() );
@@ -3254,11 +3352,34 @@ void kbRenderer_DX11::RenderModel( const kbRenderObject *const pRenderObject, co
 			kbError( "kbRenderer_DX11::RenderModel() - Unsupported culling mode" );
 		}
 
-		if ( pShaderOverrideList != nullptr && bShadowPass == false ) {
-			if ( pShaderOverrideList->size() > i && (*pShaderOverrideList)[i] != nullptr ) {
-				bShaderOverridden = true;
-				const kbShader * pShader = (*pShaderOverrideList)[i];
-				if ( pShader != nullptr && pShader->GetVertexShader() != nullptr && pShader->GetPixelShader() != nullptr ) {
+		if ( renderpass == RP_MousePicker ) {
+			const kbShader * pShader = m_pMousePickerIdShader;
+			kbErrorCheck( pShader != nullptr && pShader->GetVertexShader() != nullptr && pShader->GetPixelShader() != nullptr, "kbRenderer_DX11::RenderModel() - Mouse picker shader is null" );
+
+			m_pImmediateContext->IASetInputLayout( (ID3D11InputLayout*)pShader->GetVertexLayout() );
+			m_pImmediateContext->VSSetShader( (ID3D11VertexShader *)pShader->GetVertexShader(), nullptr, 0 );
+			m_pImmediateContext->PSSetShader( (ID3D11PixelShader *)pShader->GetPixelShader(), nullptr, 0 );
+
+		} else {
+			if ( pShaderOverrideList != nullptr && bShadowPass == false ) {
+				if ( pShaderOverrideList->size() > i && (*pShaderOverrideList)[i] != nullptr ) {
+					bShaderOverridden = true;
+					const kbShader * pShader = (*pShaderOverrideList)[i];
+					if ( pShader != nullptr && pShader->GetVertexShader() != nullptr && pShader->GetPixelShader() != nullptr ) {
+						m_pImmediateContext->IASetInputLayout( (ID3D11InputLayout*)pShader->GetVertexLayout() );
+						m_pImmediateContext->VSSetShader( (ID3D11VertexShader *)pShader->GetVertexShader(), nullptr, 0 );
+						m_pImmediateContext->PSSetShader( (ID3D11PixelShader *)pShader->GetPixelShader(), nullptr, 0 );
+					} else {
+						m_pImmediateContext->IASetInputLayout( (ID3D11InputLayout*)m_pMissingShader->GetVertexLayout() );
+						m_pImmediateContext->VSSetShader( (ID3D11VertexShader *)m_pMissingShader->GetVertexShader(), nullptr, 0 );
+						m_pImmediateContext->PSSetShader( (ID3D11PixelShader *)m_pMissingShader->GetPixelShader(), nullptr, 0 );
+					}
+				}
+			}
+
+			if ( bShaderOverridden == false && bShadowPass == false) {
+				if ( modelMaterial.GetShader() != nullptr ) {
+					const kbShader * pShader = modelMaterial.GetShader();
 					m_pImmediateContext->IASetInputLayout( (ID3D11InputLayout*)pShader->GetVertexLayout() );
 					m_pImmediateContext->VSSetShader( (ID3D11VertexShader *)pShader->GetVertexShader(), nullptr, 0 );
 					m_pImmediateContext->PSSetShader( (ID3D11PixelShader *)pShader->GetPixelShader(), nullptr, 0 );
@@ -3267,19 +3388,6 @@ void kbRenderer_DX11::RenderModel( const kbRenderObject *const pRenderObject, co
 					m_pImmediateContext->VSSetShader( (ID3D11VertexShader *)m_pMissingShader->GetVertexShader(), nullptr, 0 );
 					m_pImmediateContext->PSSetShader( (ID3D11PixelShader *)m_pMissingShader->GetPixelShader(), nullptr, 0 );
 				}
-			}
-		}
-
-		if ( bShaderOverridden == false && bShadowPass == false) {
-			if ( modelMaterial.GetShader() != nullptr ) {
-				const kbShader * pShader = modelMaterial.GetShader();
-				m_pImmediateContext->IASetInputLayout( (ID3D11InputLayout*)pShader->GetVertexLayout() );
-				m_pImmediateContext->VSSetShader( (ID3D11VertexShader *)pShader->GetVertexShader(), nullptr, 0 );
-				m_pImmediateContext->PSSetShader( (ID3D11PixelShader *)pShader->GetPixelShader(), nullptr, 0 );
-			} else {
-				m_pImmediateContext->IASetInputLayout( (ID3D11InputLayout*)m_pMissingShader->GetVertexLayout() );
-				m_pImmediateContext->VSSetShader( (ID3D11VertexShader *)m_pMissingShader->GetVertexShader(), nullptr, 0 );
-				m_pImmediateContext->PSSetShader( (ID3D11PixelShader *)m_pMissingShader->GetPixelShader(), nullptr, 0 );
 			}
 		}
 
@@ -3593,4 +3701,31 @@ void kbRenderer_DX11::DrawDebugText( const std::string & theString, const float 
 	newTextInfo.screenW = ScreenCharW;
 	newTextInfo.screenH = ScreenCharH;
 	newTextInfo.color = Color;
+}
+
+/**
+ *	kbRenderer_DX11::GetEntityIdAtScreenPosition
+ */
+uint kbRenderer_DX11::GetEntityIdAtScreenPosition( const uint x, const uint y ) {
+	kbErrorCheck( m_RenderThreadSync == 0, "kbRenderer_DX11::GetEntityIdAtScreenPosition() - Function can only be called during the sync." );
+
+	D3D11_BOX box;
+	box.left = 0;
+	box.right = Back_Buffer_Width;
+	box.top = 0;
+	box.bottom = Back_Buffer_Height;
+	box.front = 0;
+	box.back = 1;
+	
+	m_pImmediateContext->CopyResource( m_pOffScreenRenderTargetTexture, m_RenderTargets[eRenderTargetTexture::MOUSE_PICKER_BUFFER].m_pRenderTargetTexture );
+	
+	D3D11_MAPPED_SUBRESOURCE mappedResource;
+	m_pImmediateContext->Map( m_pOffScreenRenderTargetTexture, 0, D3D11_MAP_READ, 0, &mappedResource );
+	
+	byte * pixelData = (byte*)mappedResource.pData;
+	uint * hitPixel = (uint*)(pixelData + ( y * mappedResource.RowPitch ) + ( x * sizeof(uint) ) );
+	uint retVal = *hitPixel;
+	m_pImmediateContext->Unmap( m_pOffScreenRenderTargetTexture, 0 );
+
+	return retVal;
 }

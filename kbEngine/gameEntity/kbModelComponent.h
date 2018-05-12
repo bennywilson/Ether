@@ -21,10 +21,14 @@ public:
 
 	void										SetShaderParam( const int index, const kbVec4 & newParam );
 
+	bool										GetCastsShadow() const { return m_bCastsShadow; }
+
 protected:
 
 	enum ERenderPass							m_RenderPass;
 	std::vector<class kbVec4>					m_ShaderParams;
+
+	bool										m_bCastsShadow;
 };
 
 

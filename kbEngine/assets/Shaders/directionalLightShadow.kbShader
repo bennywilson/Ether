@@ -37,9 +37,9 @@ shadowPixelInput vertexShader( shadowVertexInput input ) {
    output.position2 = output.position.zw;
 
    // Clip out polies that are marked as non-shadow casting
-   if ( input.color.w == 0 ) {
+ /*  if ( input.color.w == 0 ) {
       output.position.z = -2.0f;
-   }
+   }*/
 	return output;
 }
 

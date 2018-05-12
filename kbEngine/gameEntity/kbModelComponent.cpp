@@ -19,6 +19,7 @@ KB_DEFINE_COMPONENT(kbModelComponent)
  */
 void kbModelComponent::Constructor() {
 	m_RenderPass = RP_Lighting;
+	m_bCastsShadow = false;
 }
 
 /**

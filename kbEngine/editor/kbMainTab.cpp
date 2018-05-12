@@ -2,7 +2,7 @@
 // kbMainTab.cpp
 //
 //
-// 2016-2017 kbEngine 2.0
+// 2016-2018 kbEngine 2.0
 //===================================================================================================
 #include "kbCore.h"
 #include "kbVector.h"
@@ -16,12 +16,10 @@
 #include "kbManipulator.h"
 #include "kbMainTab.h"
 
-kbModel * model = NULL;
-void * sceneHandle;		// todo - hack
-
+kbModel * model = nullptr;
 const float Base_Cam_Speed = 0.1f;
 
-/*
+/**
  *	kbEditorMainTab::kbEditorMainTab
  */
 kbMainTab::kbMainTab( int x, int y, int w, int h ) :
@@ -78,20 +76,23 @@ kbMainTab::kbMainTab( int x, int y, int w, int h ) :
 	g_Editor->RegisterEvent( this, WidgetCB_EntitySelected );
 
 	m_CameraMoveSpeedMultiplier = 1.0f;
-	m_pCurrentlySelectedResource = NULL;
+	m_pCurrentlySelectedResource = nullptr;
+
+m_MousePickXY.Set( -1, -1 );
 }
 
-/*
+/**
  *	kbMainTab::Update
  */
 void kbMainTab::Update() {
 
-	if ( g_Editor->IsRunningGame() )
+	if ( g_Editor->IsRunningGame() ) {
 		return;
+	}
 
-	kbEditorWindow * pCurrentWindow = GetCurrentWindow();
+	kbEditorWindow *const pCurrentWindow = GetCurrentWindow();
 
-	if ( pCurrentWindow == NULL || pCurrentWindow->GetWindowHandle() == NULL ) {
+	if ( pCurrentWindow == nullptr || pCurrentWindow->GetWindowHandle() == nullptr ) {
 		return;
 	}
 
@@ -150,9 +151,49 @@ void kbMainTab::Update() {
 	}
 
 	pCurrentWindow->GetCamera().Update();
+
 }
 
-/*
+/**
+ *	kbMainTab::RenderSync
+ */
+void kbMainTab::RenderSync() {
+	kbWidget::RenderSync();
+
+	
+	if ( m_MousePickXY.x >= 0 && m_MousePickXY.y >= 0 ) {
+
+		kbEditorWindow *const pCurrentWindow = GetCurrentWindow();
+		RECT windowRect;
+		GetWindowRect( pCurrentWindow->GetWindowHandle(), &windowRect );
+		const float windowWidth = (float) windowRect.right - windowRect.left;
+		const float windowHeight = (float) windowRect.bottom - windowRect.top;
+		
+		m_MousePickXY.x -= windowRect.left;
+		m_MousePickXY.y -= y() + kbEditor::TabHeight();
+
+		m_MousePickXY.x = (int)(m_MousePickXY.x * g_pRenderer->GetBackBufferWidth() / windowWidth );
+		m_MousePickXY.y = (int)(m_MousePickXY.y * g_pRenderer->GetBackBufferHeight() / windowHeight );
+
+		const uint hitEntityId = g_pRenderer->GetEntityIdAtScreenPosition( m_MousePickXY.x, m_MousePickXY.y );
+		std::vector<kbEditorEntity*> & entityList = g_Editor->GetGameEntities();
+
+		for ( int i = 0; i < entityList.size(); i++ ) {
+			if ( entityList[i]->GetGameEntity()->GetEntityId() == hitEntityId ) {
+				std::vector<kbEditorEntity*> selectedEntities;
+				selectedEntities.push_back( entityList[i] );
+				g_Editor->SelectEntities( selectedEntities, false );
+			}
+		}
+
+//		kbVec4 mousePosition( (float)inputObject->mouseX - windowRect.left, (float)inputObject->mouseY, 0.0f, 1.0f );
+ 
+		m_MousePickXY.Set( -1, -1 );
+	}
+
+}
+
+/**
  *	kbMainTab::EventCB
  */
 void kbMainTab::EventCB( const widgetCBObject * widgetCBObject ) {
@@ -222,8 +263,8 @@ void kbMainTab::EventCB( const widgetCBObject * widgetCBObject ) {
 	}
 }
 
-/*
- *	kbEditorWindow::GetCurrentWindow()
+/**
+ *	kbEditorWindow::GetCurrentWindow
  */
 kbEditorWindow * kbMainTab::GetCurrentWindow() {
 	Fl_Widget * widget = value();
@@ -237,7 +278,7 @@ kbEditorWindow * kbMainTab::GetCurrentWindow() {
 	return NULL;
 }
 
-/*
+/**
  *	kbMainTab::InputCB
  */
 void kbMainTab::InputCB( const widgetCBObject * widgetCBObj ) {
@@ -246,20 +287,25 @@ void kbMainTab::InputCB( const widgetCBObject * widgetCBObj ) {
 
 	if ( inputObject->rightMouseButtonDown ) {
 		CameraMoveCB( inputObject );
-	} else if ( inputObject->leftMouseButtonDown ) {
+	} else if ( inputObject->leftMouseButtonPressed ) {
 
 		if ( inputObject->mouseX > m_pEditorWindow->x() && inputObject->mouseX < m_pEditorWindow->x() + m_pEditorWindow->w() &&
 		     inputObject->mouseY > m_pEditorWindow->y() && inputObject->mouseY < m_pEditorWindow->y() + m_pEditorWindow->h() ) {
-				ObjectSelectedOrMovedCB( inputObject );
+
+				// Check if the entity sprite was selected
+				if ( ObjectSelectedOrMovedCB( inputObject ) == false ) {
+					// if not, then check against the entity id render target
+					m_MousePickXY.Set( inputObject->mouseX, inputObject->mouseY );
+				}
 		}
 	}
 
-	if ( inputObject->leftMouseButtonDown == NULL ) {
+	if ( inputObject->leftMouseButtonDown == false ) {
 		m_Manipulator.ReleaseFromMouseGrab();
 	}
 }
 
-/*
+/**
  *	kbMainTab::CameraMoveCB
  */
 void kbMainTab::CameraMoveCB( const widgetCBInputObject * inputObject ) {
@@ -268,7 +314,7 @@ void kbMainTab::CameraMoveCB( const widgetCBInputObject * inputObject ) {
 
 	kbEditorWindow * pCurrentWindow = GetCurrentWindow();
 
-	if ( pCurrentWindow == NULL ) {
+	if ( pCurrentWindow == nullptr ) {
 		return;
 	}
 
@@ -280,7 +326,7 @@ void kbMainTab::CameraMoveCB( const widgetCBInputObject * inputObject ) {
 	// rotation
 	if ( inputObject->rightMouseButtonDown && ( inputObject->mouseDeltaX != 0 || inputObject->mouseDeltaY != 0 ) ) {
 	
-		Fl::focus(NULL);
+		Fl::focus( nullptr );
 
 		kbQuat xRotation, yRotation;
 		xRotation.FromAxisAngle( kbVec3::up, inputObject->mouseDeltaX * -rotationMag );
@@ -326,15 +372,15 @@ void kbMainTab::CameraMoveCB( const widgetCBInputObject * inputObject ) {
 	}
 }
 
-/*
+/**
  *	kbMainTab::ObjectSelectedOrMovedCB
  */
-void kbMainTab::ObjectSelectedOrMovedCB( const widgetCBInputObject * inputObject ) {
+bool kbMainTab::ObjectSelectedOrMovedCB( const widgetCBInputObject * inputObject ) {
 
 	kbEditorWindow * pCurrentWindow = GetCurrentWindow();
 
-	if ( pCurrentWindow == NULL || pCurrentWindow != m_pEditorWindow ) {
-		return;
+	if ( pCurrentWindow == nullptr || pCurrentWindow != m_pEditorWindow ) {
+		return false;
 	}
 
 	kbCamera & camera = pCurrentWindow->GetCamera();
@@ -367,6 +413,7 @@ void kbMainTab::ObjectSelectedOrMovedCB( const widgetCBInputObject * inputObject
 	
 	kbVec4 ray = mousePosition.TransformPoint( unitCubeToWorldMatrix );
 	ray /= ray.w;
+	bool bHitSomething = false;
 
 	if ( inputObject->leftMouseButtonPressed && pCurrentWindow->IsPointWithinBounds( inputObject->mouseX, inputObject->mouseY ) ) {
 
@@ -415,6 +462,8 @@ void kbMainTab::ObjectSelectedOrMovedCB( const widgetCBInputObject * inputObject
 
 			m_Manipulator.AttemptMouseGrab( camera.m_Position, ray.ToVec3(), camera.m_Rotation );
 
+			bHitSomething = true;
+
 		} else {
 			// we did not hit an entity, see if at least hit the manipulator of a selected entity
 			for ( int i = 0; i < gameEntities.size(); i++ ) {
@@ -449,9 +498,11 @@ void kbMainTab::ObjectSelectedOrMovedCB( const widgetCBInputObject * inputObject
 	if ( inputObject->leftMouseButtonPressed == false && inputObject->leftMouseButtonDown ) {
 		m_Manipulator.ProcessInput( true );
 	}
+
+	return bHitSomething;
 }
 
-/*
+/**
  *	kbMainTab::EntityTransformedCB
  */
 void kbMainTab::EntityTransformedCB( const widgetCBObject * widgetCBObj ) {

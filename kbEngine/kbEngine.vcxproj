@@ -146,6 +146,7 @@
     <None Include="assets\Shaders\directionalLightShadow.kbShader" />
     <None Include="assets\Shaders\lightShafts.kbShader" />
     <None Include="assets\Shaders\missingShader.kbShader" />
+    <None Include="assets\Shaders\mousePicker.kbShader" />
     <None Include="assets\Shaders\pointLight.kbShader" />
     <None Include="assets\Shaders\SimpleAdditive.kbShader" />
     <None Include="assets\Shaders\uberPostProcess.kbShader" />

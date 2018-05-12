@@ -69,7 +69,7 @@ SamplerState SampleType;
  PS_OUTPUT pixelShader( pixelInput	input ) : SV_TARGET {
  	PS_OUTPUT output = (PS_OUTPUT) 0;
 
-	output.Color.xyz += shaderTexture.Sample( SampleType, input.uv ).xyz *9;
+	output.Color.xyz += shaderTexture.Sample( SampleType, input.uv ).xyz;
 
 	return output;
 }

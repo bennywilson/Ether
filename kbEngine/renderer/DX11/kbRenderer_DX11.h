@@ -92,6 +92,7 @@ enum eRenderTargetTexture {
 	DOWN_RES_BUFFER,
 	DOWN_RES_BUFFER_2,
 	SCRATCH_BUFFER,
+	MOUSE_PICKER_BUFFER,
 	NUM_RENDER_TARGETS,
 };
 
@@ -472,6 +473,8 @@ public:
 	int											GetBackBufferWidth() const { return Back_Buffer_Width; }
 	int											GetBackBufferHeight() const { return Back_Buffer_Height; }
 
+	uint										GetEntityIdAtScreenPosition( const uint x, const uint y );
+
 	const static float							Near_Plane;
 	const static float							Far_Plane;
 
@@ -481,7 +484,7 @@ private:
 
 	bool										InitializeOculus();
 
-	void										CreateRenderTarget( const eRenderTargetTexture targetIndex, int width, int height );
+	void										CreateRenderTarget( const eRenderTargetTexture targetIndex, const int width, const int height, const DXGI_FORMAT format );
 	void										SetRenderTarget( eRenderTargetTexture type );
 
 	void										RenderScene();
@@ -502,6 +505,8 @@ private:
 	void										RenderLightShafts();
 	void										RenderTranslucency();
 	void										RenderDebugText();
+	void										RenderMousePickerIds();
+
 	void										DrawTexture( ID3D11ShaderResourceView *const pShaderResourceView, const kbVec3 & pixelPosition, 
 															 const kbVec3 & pixelSize, const kbVec3 & renderTargetSize );
 
@@ -534,6 +539,7 @@ private:
 	kbShader *									m_pDirectionalLightShadowShader;
 	kbShader *									m_pLightShaftsShader;
 	kbShader *									m_pSimpleAdditiveShader;
+	kbShader *									m_pMousePickerIdShader;
 
 	// Non-resource managed shaders (Game assets cannot reference these).  These have to be manually released
 	kbShader *									m_pSkinnedDirectionalLightShadowShader;
@@ -544,6 +550,7 @@ private:
 	ID3D11Buffer *								m_pConsoleQuad;
 	ID3D11Buffer *								m_pDefaultShaderConstantsBuffer;
 	ID3D11Buffer *								m_pSkinnedShaderConstantsBuffer;
+	ID3D11Buffer *								m_pEditorConstantsBuffer;
 	ID3D11Buffer *								m_pLightShaderConstantsBuffer;
 	ID3D11Buffer *								m_pLightShaftsShaderConstantsBuffer;
 	ID3D11Buffer *								m_pPostProcessConstantsBuffer;
@@ -680,6 +687,10 @@ struct SkinnedShaderConstants {
 	kbMat4			inverseProjection;
 	kbMat4			viewProjection;
 	kbMat4			boneMatrices[Max_Shader_Bones];
+};
+
+struct EditorShaderConstants {
+	uint			entityId;	// For mouse picking
 };
 
 struct LightShaderConstants {

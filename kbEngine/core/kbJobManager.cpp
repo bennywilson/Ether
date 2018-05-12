@@ -2,7 +2,7 @@
 // kbJobManager.cpp
 //
 //
-// 2016 kbEngine 2.0
+// 2016-2018 kbEngine 2.0
 //===================================================================================================
 #include <Windows.h>
 #include "kbCore.h"
@@ -10,12 +10,43 @@
 
 kbJobManager * g_pJobManager = nullptr;
 
+
+/**
+ *	SetThreadName
+ */
+void SetThreadName( const char threadName[] ) {
+
+	// Code to name the thread from https://msdn.microsoft.com/en-us/library/windows/desktop/ms680552(v=vs.85).aspx
+	typedef struct tagTHREADNAME_INFO {
+		DWORD dwType; // must be 0x1000
+		LPCSTR szName; // pointer to name (in user addr space)
+		DWORD dwThreadID; // thread ID (-1=caller thread)
+		DWORD dwFlags; // reserved for future use, must be zero
+	} THREADNAME_INFO;
+
+	THREADNAME_INFO info;
+    info.dwType = 0x1000;
+    info.szName = threadName;
+    info.dwThreadID = GetCurrentThreadId();
+    info.dwFlags = 0;
+
+	__try
+	{
+		RaiseException( 0x406D1388, 0, sizeof(info) / sizeof(ULONG_PTR), (ULONG_PTR*)&info ); 
+	}
+	__except (EXCEPTION_CONTINUE_EXECUTION)
+	{
+	}
+}
+
 DWORD WINAPI ThreadMain( LPVOID lpParam ) {
-	DWORD threadId = GetThreadId(GetCurrentThread());
+	const DWORD threadId = GetThreadId(GetCurrentThread());
 	kbLog( "Thread created with id %d", threadId );
 
-	kbJobManager * jobManager = (kbJobManager*)lpParam;
+	const std::string threadName = "kbEngine Thread" + std::to_string( threadId );
+	SetThreadName( threadName.c_str() );
 
+	kbJobManager *const jobManager = (kbJobManager*)lpParam;
 	while( jobManager->IsShuttingDown() == false ) {
 		kbJob * newJob = jobManager->GrabJob();
 
@@ -34,7 +65,7 @@ DWORD WINAPI ThreadMain( LPVOID lpParam ) {
 kbJobManager::kbJobManager() :
 	m_JobQueueHead( nullptr ),
 	m_JobQueueTail( nullptr ),
-	m_ShutdownRequested( false ) {
+	m_bShutdownRequested( false ) {
 	g_pJobManager = this;
 
 	m_Mutex = CreateMutex( nullptr, FALSE, nullptr );
@@ -50,7 +81,7 @@ kbJobManager::kbJobManager() :
  *	~kbJobManager
  */
 kbJobManager::~kbJobManager() {
-	m_ShutdownRequested = true;
+	m_bShutdownRequested = true;
 
 	WaitForMultipleObjects( MAX_NUM_THREADS, m_Threads, TRUE, INFINITE );
 	
@@ -65,7 +96,7 @@ kbJobManager::~kbJobManager() {
  *	kbJobManager::RegisterJob
  */
 void kbJobManager::RegisterJob( kbJob * job ) {
-	job->m_IsFinished = false;
+	job->m_bIsFinished = false;
 
 	WaitForSingleObject( m_Mutex, INFINITE );
 

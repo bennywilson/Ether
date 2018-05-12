@@ -2,7 +2,7 @@
 // kbWidget.h
 //
 //
-// 2016-2017 kbEngine 2.0
+// 2016-2018 kbEngine 2.0
 //===================================================================================================
 #ifndef _KBWIDGET_H_
 #define _KBWIDGET_H_
@@ -32,46 +32,51 @@
  *	kbWidget
  */
 class kbWidget {
-public:
-	kbWidget( const int x, const int y, const int width, const int height );
-	
-	virtual void Update() { }
-	virtual void EventCB( const widgetCBObject * widgetCBObject ) { }
 
-	bool IsPointWithinBounds( const int x, const int y );
+//-------------------------------------------------------------------------------------------------------------------------------------------------------------
+public:
+															kbWidget( const int x, const int y, const int width, const int height );
+	
+	virtual void											Update() { }
+	virtual void											RenderSync() { }
+	virtual void											EventCB( const widgetCBObject * widgetCBObject ) { }
+
+	bool													IsPointWithinBounds( const int x, const int y ) const;
 
 protected:
 
-	int					DisplayWidth() const;
-	unsigned int		FontSize()	const { return 14; }
-	unsigned int		LineSpacing() const { return FontSize() + 6; }
+	int														DisplayWidth() const;
+	unsigned int											FontSize()	const { return 14; }
+	unsigned int											LineSpacing() const { return FontSize() + 6; }
 
 private:
-	int m_X;
-	int m_Y;
-	int m_Width;
-	int m_Height;
+	int														m_X;
+	int														m_Y;
+	int														m_Width;
+	int														m_Height;
 };
 
 /**
  *	kbEditorWindow
  */
 class kbEditorWindow : public Fl_Window, public kbWidget {
+
+//-------------------------------------------------------------------------------------------------------------------------------------------------------------
 public:
-	kbEditorWindow( int x, int y, int w, int h, const char* title = 0 );
+															kbEditorWindow( int x, int y, int w, int h, const char* title = 0 );
 
-	virtual void Update();
-	virtual void EventCB( const widgetCBType_t );
+	virtual void											Update() override;
+	virtual void											EventCB( const widgetCBType_t );	// TODO this function differs from kbWidgets.  WHY?
 
-	HWND GetWindowHandle() const { return fl_xid( this ); }
+	HWND													GetWindowHandle() const { return fl_xid( this ); }
 
 
-	kbCamera & GetCamera() { return m_Camera; }
+	kbCamera &												GetCamera() { return m_Camera; }
 
 private:
-	kbCamera m_Camera;
-	kbVec3 m_TargetPos;
-	kbQuat m_TargetRotation;
+	kbCamera												m_Camera;
+	kbVec3													m_TargetPos;
+	kbQuat													m_TargetRotation;
 };
 
 #endif

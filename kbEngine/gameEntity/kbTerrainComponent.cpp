@@ -190,7 +190,14 @@ void kbTerrainComponent::GenerateTerrain() {
 
 	m_TerrainModel.UnmapIndexBuffer();
 
-	g_pRenderer->AddRenderObject( this, &m_TerrainModel, kbVec3::zero, kbQuat( 0.0f, 0.0f, 0.0f, 1.0f ), kbVec3::one );
+	kbShader * pShader = (kbShader*)g_ResourceManager.GetResource( "../../kbEngine/assets/Shaders/basicShader.kbShader", true );
+	std::vector<kbShader *> ShaderOverrideList;
+
+	if ( pShader != nullptr ) {
+		ShaderOverrideList.push_back( pShader );
+	}
+
+	g_pRenderer->AddRenderObject( this, &m_TerrainModel, GetOwner()->GetPosition(), kbQuat( 0.0f, 0.0f, 0.0f, 1.0f ), kbVec3::one, RP_Lighting, &ShaderOverrideList);
 }
 
 /**
@@ -201,8 +208,14 @@ void kbTerrainComponent::SetEnable_Internal( const bool isEnabled ) {
 		return ;
 	}
 
+	kbShader *const pShader = (kbShader*)g_ResourceManager.GetResource( "../../kbEngine/assets/Shaders/basicShader.kbShader", true );
+	std::vector<kbShader *> ShaderOverrideList;
+
+	if ( pShader != nullptr ) {
+		ShaderOverrideList.push_back( pShader );
+	}
 	if ( isEnabled ) {
-		g_pRenderer->AddRenderObject( this, &m_TerrainModel, kbVec3::zero, kbQuat( 0.0f, 0.0f, 0.0f, 1.0f ), kbVec3::one );	
+		g_pRenderer->AddRenderObject( this, &m_TerrainModel, kbVec3::zero, kbQuat( 0.0f, 0.0f, 0.0f, 1.0f ), kbVec3::one, RP_Lighting, &ShaderOverrideList );	
 	} else {
 		g_pRenderer->RemoveRenderObject( this );
 	}
@@ -215,7 +228,15 @@ void kbTerrainComponent::Update_Internal( const float DeltaTime ) {
 	Super::Update_Internal( DeltaTime );
 
 	if ( m_TerrainModel.GetMeshes().size() > 0 && GetOwner()->IsDirty() ) {
-		g_pRenderer->UpdateRenderObject( this, &m_TerrainModel, GetOwner()->GetPosition(), kbQuat( 0.0f, 0.0f, 0.0f, 1.0f ), GetOwner()->GetScale() );
+
+	kbShader * pShader = (kbShader*)g_ResourceManager.GetResource( "../../kbEngine/assets/Shaders/basicShader.kbShader", true );
+	std::vector<kbShader *> ShaderOverrideList;
+
+	if ( pShader != nullptr ) {
+		ShaderOverrideList.push_back( pShader );
+	}
+
+		g_pRenderer->UpdateRenderObject( this, &m_TerrainModel, GetOwner()->GetPosition(), kbQuat( 0.0f, 0.0f, 0.0f, 1.0f ), GetOwner()->GetScale(), RP_Lighting, &ShaderOverrideList );
 	}
 }
 

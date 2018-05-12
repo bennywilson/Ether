@@ -21,6 +21,8 @@ enum widgetCBType_t;
  *  kbEditor
  */
 class kbEditor : Fl_Window {
+
+//-------------------------------------------------------------------------------------------------------------------------------------------------------------
 public:
 															kbEditor();
 															~kbEditor();
@@ -85,38 +87,38 @@ private:
 	UINT64													m_UndoIDAtLastSave;
 
 	// internal functions and callbacks
-	void				ShutDown();
+	void													ShutDown();
 
-	static void			NewLevel( Fl_Widget *, void * );
-	static void			OpenLevel( Fl_Widget *, void * );
-	static void			SaveLevelAs( Fl_Widget *, void * );
-	static void			SaveLevel( Fl_Widget *, void * );
+	static void												NewLevel( Fl_Widget *, void * );
+	static void												OpenLevel( Fl_Widget *, void * );
+	static void												SaveLevelAs( Fl_Widget *, void * );
+	static void												SaveLevel( Fl_Widget *, void * );
 
-	static void			Undo( Fl_Widget *, void * );
-	static void			Redo( Fl_Widget *, void * );
-	static void			Close( Fl_Widget *, void * );
-	static void			CreateGameEntity( Fl_Widget *, void * );
-	static void			AddComponent( Fl_Widget *, void * );
-	static void			TranslationButtonCB( Fl_Widget *, void * );
-	static void			RotationButtonCB( Fl_Widget *, void * );
-	static void			ScaleButtonCB( Fl_Widget *, void * );
-	static void			AdjustCameraSpeedCB( Fl_Widget *, void * );
-	static void			OutputCB( kbOutputMessageType_t, const char * );
-	static void			PlayGameFromHere( Fl_Widget *, void * );
-	static void			StopGame( Fl_Widget *, void * );
-	static void			DeleteEntities( Fl_Widget *, void * );
+	static void												Undo( Fl_Widget *, void * );
+	static void												Redo( Fl_Widget *, void * );
+	static void												Close( Fl_Widget *, void * );
+	static void												CreateGameEntity( Fl_Widget *, void * );
+	static void												AddComponent( Fl_Widget *, void * );
+	static void												TranslationButtonCB( Fl_Widget *, void * );
+	static void												RotationButtonCB( Fl_Widget *, void * );
+	static void												ScaleButtonCB( Fl_Widget *, void * );
+	static void												AdjustCameraSpeedCB( Fl_Widget *, void * );
+	static void												OutputCB( kbOutputMessageType_t, const char * );
+	static void												PlayGameFromHere( Fl_Widget *, void * );
+	static void												StopGame( Fl_Widget *, void * );
+	static void												DeleteEntities( Fl_Widget *, void * );
 
-	void				RightClickPopUpMenu();
-	static void			ReplaceCurrentlySelectedPrefab( Fl_Widget *, void * );
-	static void			AddEntityAsPrefab( Fl_Widget *, void * );
-	void				AddEntityAsPrefab_Internal( const std::string & PackageName, const std::string & FolderName, const std::string & PrefabeName );
-	static void			InsertSelectedPrefabIntoScene( Fl_Widget *, void * );
+	void													RightClickPopUpMenu();
+	static void												ReplaceCurrentlySelectedPrefab( Fl_Widget *, void * );
+	static void												AddEntityAsPrefab( Fl_Widget *, void * );
+	void													AddEntityAsPrefab_Internal( const std::string & PackageName, const std::string & FolderName, const std::string & PrefabeName );
+	static void												InsertSelectedPrefabIntoScene( Fl_Widget *, void * );
 
 public:
 
-	static const int	TabHeight() { return 25; }
-	static const int	PanelBorderSize( int Multiplier = 1 ) { return 5 * Multiplier; }
-	static const int	LineSpacing( int Multiplier = 1 ) { return Multiplier * ( fl_height() + PanelBorderSize() ); }
+	static const int										TabHeight() { return 25; }
+	static const int										PanelBorderSize( int Multiplier = 1 ) { return 5 * Multiplier; }
+	static const int										LineSpacing( int Multiplier = 1 ) { return Multiplier * ( fl_height() + PanelBorderSize() ); }
 };
 
 extern kbEditor * g_Editor;

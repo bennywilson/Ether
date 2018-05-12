@@ -2,7 +2,7 @@
 // kbVector.h
 //
 //
-// 2016 kbEngine 2.0
+// 2016-2018 kbEngine 2.0
 //===================================================================================================
 #ifndef __KBVECTOR_H_
 #define __KBVECTOR_H_
@@ -14,6 +14,8 @@ class kbVec2i {
 public:
 	kbVec2i() { }
 	kbVec2i( const int inX, const int inY ) : x( inX ), y( inY ) { }
+	void Set( const int inX, const int inY ) { x = inX, y = inY; }
+
 	int x, y;
 };
 

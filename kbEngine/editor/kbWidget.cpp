@@ -2,7 +2,7 @@
 // kbWidget.cpp
 //
 //
-// 2016 kbEngine 2.0
+// 2016-2018 kbEngine 2.0
 //===================================================================================================
 #include "kbCore.h"
 #include "kbVector.h"
@@ -23,7 +23,7 @@ kbWidget::kbWidget( const int x, const int y, const int w, const int h ) :
 /**
  *	kbWidget::IsPointWithinBounds
  */
-bool kbWidget::IsPointWithinBounds( const int x, const int y ) {
+bool kbWidget::IsPointWithinBounds( const int x, const int y ) const {
 	return ( x >= m_X && x < m_X + m_Width && y >= m_Y && y < m_Y + m_Height );
 }
 

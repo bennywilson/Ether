@@ -2,7 +2,7 @@
 // kbRenderer_defs.h
 //
 //
-// 2016 kbEngine 2.0
+// 2016-2018 kbEngine 2.0
 //===================================================================================================
 #ifndef _KBRENDERERDEFS_H_
 #define _KBRENDERERDEFS_H_
@@ -17,11 +17,12 @@ enum ERenderPass {
 	RP_Translucent,
 	RP_PostLighting,
 	RP_InWorldUI,
-	RP_Debug
+	RP_Debug,
+	RP_MousePicker
 };
 
-class vertexColorLayOut {
-public:
+struct vertexColorLayout {
+
 	kbVec3 position;
 	byte color[4];
 
@@ -60,7 +61,7 @@ struct kbParticleVertex {
 };
 
 struct vertexLayout {
-public:
+
 	kbVec3 position;
 	kbVec2 uv;
 	byte color[4];
@@ -155,10 +156,8 @@ public:
 	}
 };
 
-
-
 /**
- *	kbSkeletalBone_t
+ *	kbBoneMatrix_t
  */
 struct kbBoneMatrix_t {
 
@@ -181,13 +180,6 @@ struct kbBoneMatrix_t {
 	void operator*=( const kbMat4 & op2 );
 
 	kbVec3 m_Axis[4];
-};
-
-enum rmMatrixType_t {
-	KBRM_VIEW,
-	KBRM_PROJECTION,
-	KBRM_VIEWPROJECTION,
-	NUM_RENDER_MATRICES,
 };
 
 // platform switch here
@@ -226,7 +218,9 @@ public:
 												kbRenderObject() : 
 													m_pComponent( nullptr ),
 													m_pModel( nullptr ),
-													m_RenderPass( RP_Lighting ), 
+													m_RenderPass( RP_Lighting ),
+													m_EntityId( 0 ),
+													m_bCastsShadow( false ),
 													m_bIsSkinnedModel( false ),
 													m_bIsFirstAdd( false ),
 													m_bIsRemove( false ) { }
@@ -239,9 +233,12 @@ public:
 	kbVec3										m_Position;
 	kbQuat										m_Orientation;
 	kbVec3										m_Scale;
-	bool										m_bIsSkinnedModel;
-	bool										m_bIsFirstAdd;
-	bool										m_bIsRemove;
+	uint										m_EntityId;
+
+	bool										m_bCastsShadow			: 1;
+	bool										m_bIsSkinnedModel		: 1;
+	bool										m_bIsFirstAdd			: 1;
+	bool										m_bIsRemove				: 1;
 };
 
 /**

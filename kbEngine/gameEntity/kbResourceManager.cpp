@@ -94,7 +94,7 @@ void kbResourceManager::UpdateHotReloads() {
 
 	static float lastUpdateTimeSecs = 0;
 	const float totalSeconds = g_GlobalTimer.TimeElapsedSeconds();
-	if ( totalSeconds < lastUpdateTimeSecs + 0.25f ) {
+	if ( totalSeconds < lastUpdateTimeSecs + 0.05f ) {
 		return;
 	}
 	lastUpdateTimeSecs = totalSeconds;
@@ -490,6 +490,7 @@ void kbResourceManager::Shutdown() {
 	m_pPackages.clear();
 
 	CloseHandle( m_hAssetDirectory );
+	m_hAssetDirectory = nullptr;
 }
 
 /**
