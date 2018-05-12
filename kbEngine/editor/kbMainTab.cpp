@@ -78,7 +78,7 @@ kbMainTab::kbMainTab( int x, int y, int w, int h ) :
 	m_CameraMoveSpeedMultiplier = 1.0f;
 	m_pCurrentlySelectedResource = nullptr;
 
-m_MousePickXY.Set( -1, -1 );
+	m_MousePickXY.Set( -1, -1 );
 }
 
 /**
@@ -139,7 +139,7 @@ void kbMainTab::Update() {
 				}
 			}
 
-			g_pRenderer->DrawBillboard( pCurrentEntity->GetPosition(), kbVec2( 1.0f, 1.0f ), iconIdx, nullptr );
+			g_pRenderer->DrawBillboard( pCurrentEntity->GetPosition(), kbVec2( 1.0f, 1.0f ), iconIdx, nullptr, pCurrentEntity->GetGameEntity()->GetEntityId() );
 
 			if ( pCurrentEntity->IsSelected() )
 			{
@@ -281,7 +281,7 @@ kbEditorWindow * kbMainTab::GetCurrentWindow() {
 /**
  *	kbMainTab::InputCB
  */
-void kbMainTab::InputCB( const widgetCBObject * widgetCBObj ) {
+void kbMainTab::InputCB( const widgetCBObject *const widgetCBObj ) {
 
 	const widgetCBInputObject * inputObject = static_cast< const widgetCBInputObject * >( widgetCBObj );
 
@@ -292,11 +292,7 @@ void kbMainTab::InputCB( const widgetCBObject * widgetCBObj ) {
 		if ( inputObject->mouseX > m_pEditorWindow->x() && inputObject->mouseX < m_pEditorWindow->x() + m_pEditorWindow->w() &&
 		     inputObject->mouseY > m_pEditorWindow->y() && inputObject->mouseY < m_pEditorWindow->y() + m_pEditorWindow->h() ) {
 
-				// Check if the entity sprite was selected
-				if ( ObjectSelectedOrMovedCB( inputObject ) == false ) {
-					// if not, then check against the entity id render target
-					m_MousePickXY.Set( inputObject->mouseX, inputObject->mouseY );
-				}
+			m_MousePickXY.Set( inputObject->mouseX, inputObject->mouseY );
 		}
 	}
 
@@ -308,7 +304,7 @@ void kbMainTab::InputCB( const widgetCBObject * widgetCBObj ) {
 /**
  *	kbMainTab::CameraMoveCB
  */
-void kbMainTab::CameraMoveCB( const widgetCBInputObject * inputObject ) {
+void kbMainTab::CameraMoveCB( const widgetCBInputObject *const inputObject ) {
 	float movementMag = m_CameraMoveSpeedMultiplier * Base_Cam_Speed;
 	const float rotationMag = 0.01f;
 
@@ -375,9 +371,9 @@ void kbMainTab::CameraMoveCB( const widgetCBInputObject * inputObject ) {
 /**
  *	kbMainTab::ObjectSelectedOrMovedCB
  */
-bool kbMainTab::ObjectSelectedOrMovedCB( const widgetCBInputObject * inputObject ) {
+bool kbMainTab::ObjectSelectedOrMovedCB( const widgetCBInputObject *const inputObject ) {
 
-	kbEditorWindow * pCurrentWindow = GetCurrentWindow();
+	kbEditorWindow *const pCurrentWindow = GetCurrentWindow();
 
 	if ( pCurrentWindow == nullptr || pCurrentWindow != m_pEditorWindow ) {
 		return false;
@@ -385,7 +381,7 @@ bool kbMainTab::ObjectSelectedOrMovedCB( const widgetCBInputObject * inputObject
 
 	kbCamera & camera = pCurrentWindow->GetCamera();
 		
-	std::vector< class kbEditorEntity * > & gameEntities = g_Editor->GetGameEntities();
+	std::vector<kbEditorEntity *> & gameEntities = g_Editor->GetGameEntities();
 
 	RECT windowRect;
 	
@@ -505,7 +501,7 @@ bool kbMainTab::ObjectSelectedOrMovedCB( const widgetCBInputObject * inputObject
 /**
  *	kbMainTab::EntityTransformedCB
  */
-void kbMainTab::EntityTransformedCB( const widgetCBObject * widgetCBObj ) {
+void kbMainTab::EntityTransformedCB( const widgetCBObject *const widgetCBObj ) {
 	const widgetCBEntityTransformed * entityTransformedWidget = static_cast< const widgetCBEntityTransformed * >( widgetCBObj );
 
 	std::vector< class kbEditorEntity * > & gameEntities = g_Editor->GetGameEntities();

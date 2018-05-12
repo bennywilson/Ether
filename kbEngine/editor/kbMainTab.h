@@ -24,7 +24,7 @@ public:
 	virtual void											Update() override;
 	virtual void											RenderSync() override;
 
-	virtual void											EventCB( const widgetCBObject * widgetCBObject );
+	virtual void											EventCB( const widgetCBObject *const widgetCBObject );
 
 	const kbCamera *										GetEditorWindowCamera() const { return &m_pEditorWindow->GetCamera(); }
 
@@ -32,10 +32,10 @@ public:
 
 private:
 
-	void													InputCB( const widgetCBObject * widgetCBObject );
-	void													CameraMoveCB( const widgetCBInputObject * widgetCBObject );
-	bool													ObjectSelectedOrMovedCB( const widgetCBInputObject * widgetCBObject );
-	void													EntityTransformedCB( const widgetCBObject * widgetCBObject );
+	void													InputCB( const widgetCBObject *const widgetCBObject );
+	void													CameraMoveCB( const widgetCBInputObject *const widgetCBObject );
+	bool													ObjectSelectedOrMovedCB( const widgetCBInputObject *const widgetCBObject );
+	void													EntityTransformedCB( const widgetCBObject *const widgetCBObject );
 
 	kbEditorWindow *										GetCurrentWindow();
 

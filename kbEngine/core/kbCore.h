@@ -110,7 +110,9 @@ template<typename T> void VectorRemoveFastIndex( T & list, const int i ) { list.
 template<typename T, typename B> bool VectorFind( T & list, B entry ) { return std::find( list.begin(), list.end(), entry ) != list.end(); }
 template<typename T> inline T kbLerp( T a, T b, float t ) { return ( ( b - a ) * t ) + a; }
 
-void StringFromWString( std::string & outString, const std::wstring & wString );
+void StringFromWString( std::string & outString, const std::wstring & srcString );
+void WStringFromString( std::wstring & outString, const std::string & srcString );
+
 std::string GetFileExtension( const std::string & FileName );
 std::wstring GetFileExtension( const std::wstring & FileName );
 
@@ -172,8 +174,10 @@ enum ScopedTimerList_t {
 	RENDER_TRANSLUCENCY,
 	RENDER_LIGHTSHAFTS,
 	RENDER_POST_PROCESS,
-	RENDER_PRESENT,
 	RENDER_TEXT,
+	RENDER_DEBUG,
+	RENDER_PRESENT,
+	RENDER_ENTITYID,
 	RENDER_SYNC,
 	RENDER_GPUTIMER_STALL,
 	MAX_NUM_SCOPED_TIMERS,

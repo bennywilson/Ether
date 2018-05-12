@@ -196,8 +196,15 @@ float kbfrand() {
 /**
  *	StringFromWString
  */
-void StringFromWString( std::string & outString, const std::wstring & wString ) {
-	outString = std::string( wString.begin(), wString.end() );
+void StringFromWString( std::string & outString, const std::wstring & srcString ) {
+	outString = std::string( srcString.begin(), srcString.end() );
+}
+
+/**
+ *	WStringFromString
+ */
+void WStringFromString( std::wstring & outString, const std::string & srcString ) {
+	outString = std::wstring( srcString.begin(), srcString.end() );
 }
 
 /**
@@ -272,6 +279,9 @@ DECLARE_SCOPED_TIMER(RENDER_TEXT, "   Render Text")
 DECLARE_SCOPED_TIMER(RENDER_PRESENT, "   Present")
 DECLARE_SCOPED_TIMER(RENDER_SYNC, "   Render Sync")
 DECLARE_SCOPED_TIMER(RENDER_GPUTIMER_STALL, "GPU Timer Stall")
+DECLARE_SCOPED_TIMER(RENDER_DEBUG,  "Debug Rendering")
+DECLARE_SCOPED_TIMER(RENDER_ENTITYID,  "EntityId Rendering")
+
 
 /**
  *	kbScopedTimer::kbScopedTimer

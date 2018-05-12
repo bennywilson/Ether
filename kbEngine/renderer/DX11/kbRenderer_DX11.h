@@ -174,6 +174,18 @@ private:
 }
 
 /**
+ *	scopedMarker_t
+ */
+struct scopedMarker_t {
+	scopedMarker_t( const wchar_t *const name, struct ID3DUserDefinedAnnotation *const pAnnotation );
+	~scopedMarker_t();
+
+	ID3DUserDefinedAnnotation * m_pAnnotation;
+};
+
+#define START_SCOPED_RENDER_TIMER(index) kbScopedTimer a##index(index); scopedMarker_t sm##index( L#index, m_pUserDefinedAnnotation ); \
+
+/**
  *	kbRenderState
  */
 struct kbRenderState {
@@ -453,7 +465,7 @@ public:
 	void										DrawBox( const kbBounds & bounds, const kbColor & color );
 	void										DrawPreTransformedLine( const std::vector<kbVec3> & vertList, const kbColor & color );
 	void										DrawSphere( const kbVec3 & origin, const float radius, const int NumSegments, const kbColor & color );
-	void										DrawBillboard( const kbVec3 & position, const kbVec2 & size, const int textureIndex, kbShader *const pShader );
+	void										DrawBillboard( const kbVec3 & position, const kbVec2 & size, const int textureIndex, kbShader *const pShader, const int entityId = -1 );
 	void										DrawModel( const kbModel * pModel, const kbVec3 & start, const kbQuat & orientation, const kbVec3 & scale );
 
 
@@ -495,7 +507,7 @@ private:
 																				const int textureIndex, kbShader * pShader = nullptr );
 	void										RenderDebugLines();
 	void										RenderPretransformedDebugLines();
-	void										RenderDebugBillboards();
+	void										RenderDebugBillboards( const bool bIsEntityIdPass );
 	void										RenderPostProcess();
 	void										RenderBloom();
 	void										RenderConsole();
@@ -573,6 +585,8 @@ private:
 	kbRenderTexture								m_RenderTargets[ NUM_RENDER_TARGETS ];
 	
 	// debug
+	ID3DUserDefinedAnnotation *					m_pUserDefinedAnnotation;
+
 	std::vector< vertexLayout >					m_DebugLines;
 	ID3D11Buffer *								m_DebugVertexBuffer;
 	std::vector< vertexLayout >					m_DebugPreTransformedLines;
@@ -585,6 +599,7 @@ private:
 		const kbModel *							m_pModel;
 		kbShader*								m_pShader;
 		int										m_TextureIndex;
+		int										m_EntityId;
 	};
 	
 	std::vector< debugDrawObject_t >			m_DebugBillboards;

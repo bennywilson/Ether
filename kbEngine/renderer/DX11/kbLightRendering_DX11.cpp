@@ -22,7 +22,7 @@ kbConsoleVariable g_ShowLightShafts( "showlightshafts", true, kbConsoleVariable:
  *	kbRenderer_DX11::RenderLights
  */
 void kbRenderer_DX11::RenderLights() {
-	START_SCOPED_TIMER( RENDER_LIGHTING );
+	START_SCOPED_RENDER_TIMER( RENDER_LIGHTING );
 
 	std::map< const kbLightComponent *, kbRenderLight * >::iterator iter;
 	for ( iter = m_pCurrentRenderWindow->m_RenderLightMap.begin(); iter != m_pCurrentRenderWindow->m_RenderLightMap.end(); iter++ ) {
@@ -55,7 +55,7 @@ void kbRenderer_DX11::RenderLight( const kbRenderLight *const pLight ) {
 		RenderShadow( pLight, splitMatrices );
 	}
 
-	START_SCOPED_TIMER( RENDER_LIGHT );
+	START_SCOPED_RENDER_TIMER( RENDER_LIGHT );
 
 	// Render Light
 	m_RenderState.SetBlendState( false,
@@ -153,7 +153,7 @@ void kbRenderer_DX11::RenderShadow( const kbRenderLight *const pLight, kbMat4 sp
 		return;
 	}
 
-	START_SCOPED_TIMER( RENDER_SHADOW_DEPTH );
+	START_SCOPED_RENDER_TIMER( RENDER_SHADOW_DEPTH );
 
 	if ( m_RenderTargets[SHADOW_BUFFER].m_bIsDirty ) {
 		float color[] = { 1.0f, 1.0f, 1.0f, 1.0f };
@@ -377,7 +377,7 @@ void kbRenderer_DX11::RenderLightShafts() {
 		return;
 	}
 
-	START_SCOPED_TIMER( RENDER_LIGHTSHAFTS );
+	START_SCOPED_RENDER_TIMER( RENDER_LIGHTSHAFTS );
 
 	const unsigned int stride = sizeof( vertexLayout );
 	const unsigned int offset = 0;

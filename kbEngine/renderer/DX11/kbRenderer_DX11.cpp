@@ -5,8 +5,9 @@
 //
 // 2016-2018 kbEngine 2.0
 //==============================================================================
-#include <windows.h>  // for SetThreadname
 #include <D3Dcompiler.h>
+#include <d3d11_1.h>
+#include <dxgicommon.h>
 #include <stdio.h>
 #include <sstream>
 #include <iomanip>
@@ -340,6 +341,22 @@ void kbGPUTimeStamp::PlaceTimeStamp( const kbString & timeStampName, ID3D11Devic
 	}
 	pDeviceContext->End( pCurTimeStamp->m_pQueries[m_TimeStampFrameNum] );
 	m_TimeStampsThisFrame.push_back( pCurTimeStamp );
+}
+
+/**
+ *	scopedMarker_t::scopedMarker_t
+ */
+scopedMarker_t::scopedMarker_t( const wchar_t *const name, ID3DUserDefinedAnnotation *const pAnnotation ) {
+
+	m_pAnnotation = pAnnotation;
+	m_pAnnotation->BeginEvent( name );
+}
+
+/**
+ *	scopedMarker_t::~scopedMarker_t
+ */	
+scopedMarker_t::~scopedMarker_t() {
+	m_pAnnotation->EndEvent();
 }
 
 //-------------------------------------------------------------------------------------------------------------------------------------
@@ -908,6 +925,8 @@ void kbRenderer_DX11::Init( HWND hwnd, const int frameWidth, const int frameHeig
 	}
 	m_DebugText->UnmapIndexBuffer();
 
+	hr = m_pImmediateContext->QueryInterface( __uuidof(m_pUserDefinedAnnotation), (void**)&m_pUserDefinedAnnotation );
+	kbErrorCheck( SUCCEEDED( hr ), " kbRenderer_DX11::Initialize() - Failed to query user defined annotation" );
 
 	// Kick off render thread
 	m_pRenderJob = new kbRenderJob();
@@ -1221,6 +1240,7 @@ void kbRenderer_DX11::Shutdown() {
 	m_RenderState.Shutdown();
 
 	kbGPUTimeStamp::Shutdown();
+	SAFE_RELEASE( m_pUserDefinedAnnotation );
 
 	SAFE_RELEASE( m_pImmediateContext );
 
@@ -1897,7 +1917,7 @@ void kbRenderer_DX11::RenderScene() {
 	for ( m_HMDPass = 0; m_HMDPass < numRenderPasses; m_HMDPass++ ) {
 
 		{
-			START_SCOPED_TIMER( RENDER_THREAD_CLEAR_BUFFERS );
+			START_SCOPED_RENDER_TIMER( RENDER_THREAD_CLEAR_BUFFERS );
 			m_pImmediateContext->ClearRenderTargetView( m_RenderTargets[COLOR_BUFFER].m_pRenderTargetView, color );
 			m_pImmediateContext->ClearRenderTargetView( m_RenderTargets[NORMAL_BUFFER].m_pRenderTargetView, color );
 			m_pImmediateContext->ClearRenderTargetView( m_RenderTargets[DEPTH_BUFFER].m_pRenderTargetView, color );
@@ -1967,7 +1987,7 @@ void kbRenderer_DX11::RenderScene() {
 		std::map< const kbComponent *, kbRenderObject * >::iterator iter;
 	
 		{
-			START_SCOPED_TIMER( RENDER_G_BUFFER );
+			START_SCOPED_RENDER_TIMER( RENDER_G_BUFFER );
 
 			// First person Render Pass
 			// Note: The first-person pass is drawn in the foreground pass before world objects. Foreground pixels set the stencil buffer to one to mask out
@@ -2011,7 +2031,7 @@ void kbRenderer_DX11::RenderScene() {
 		RenderLights();
 	
 		{
-			START_SCOPED_TIMER( RENDER_UNLIT )
+			START_SCOPED_RENDER_TIMER( RENDER_UNLIT )
 
 			m_RenderState.SetDepthStencilState();
 			m_pImmediateContext->OMSetRenderTargets( 1, &m_RenderTargets[ACCUMULATION_BUFFER].m_pRenderTargetView, m_pDepthStencilView );
@@ -2062,9 +2082,12 @@ void kbRenderer_DX11::RenderScene() {
 
 		m_RenderState.SetDepthStencilState();
 	
-		RenderDebugBillboards();
-		RenderDebugLines();
-		RenderPretransformedDebugLines();
+		{
+			START_SCOPED_RENDER_TIMER( RENDER_DEBUG )
+			RenderDebugBillboards( false );
+			RenderDebugLines();
+			RenderPretransformedDebugLines();
+		}
 	
 	//	DrawTexture( m_RenderTargets[SCRATCH_BUFFER].m_pShaderResourceView, kbVec3( 10.0f, 10.0f, 0.0f ), kbVec3( Back_Buffer_Width * 0.25f, Back_Buffer_Width * 0.25f, 0.0f ), kbVec3( (float)Back_Buffer_Width, (float)Back_Buffer_Height, 0.0f ) );
 //DrawTexture( m_RenderTargets[DOWN_RES_BUFFER].m_pShaderResourceView, kbVec3( 10.0f, 10.0f, 0.0f ), kbVec3( Back_Buffer_Width * 0.25f, Back_Buffer_Width * 0.25f, 0.0f ), kbVec3( (float)Back_Buffer_Width, (float)Back_Buffer_Height, 0.0f ) );
@@ -2087,15 +2110,14 @@ void kbRenderer_DX11::RenderScene() {
 		}
 	}
 
-	m_DebugLines.clear();
-	m_DebugBillboards.clear();
-	m_ScreenSpaceQuads_RenderThread.clear();
-
 	RenderDebugText();
 
 	if ( g_UseEditor ) {
 		RenderMousePickerIds();
 	}
+	m_DebugLines.clear();
+	m_DebugBillboards.clear();
+	m_ScreenSpaceQuads_RenderThread.clear();
 
 	PLACE_GPU_TIME_STAMP( "Debug Rendering" );
 
@@ -2133,7 +2155,7 @@ void kbRenderer_DX11::RenderScene() {
 	} 
 
 	if ( IsRenderingToHMD() == false || IsUsingHMDTrackingOnly() == true ) {
-		START_SCOPED_TIMER( RENDER_PRESENT );
+		START_SCOPED_RENDER_TIMER( RENDER_PRESENT );
 		m_pCurrentRenderWindow->EndFrame();
 	}
 
@@ -2145,7 +2167,7 @@ void kbRenderer_DX11::RenderScene() {
  *	kbRenderer_DX11::RenderTranslucency
  */
 void kbRenderer_DX11::RenderTranslucency() {
-	START_SCOPED_TIMER( RENDER_TRANSLUCENCY );
+	START_SCOPED_RENDER_TIMER( RENDER_TRANSLUCENCY );
 
 	m_pImmediateContext->OMSetRenderTargets( 1, &m_RenderTargets[ACCUMULATION_BUFFER].m_pRenderTargetView, m_pDepthStencilView );
 
@@ -2189,7 +2211,7 @@ void kbRenderer_DX11::RenderTranslucency() {
  *	kbRenderer_DX11::RenderDebugText
  */
 void kbRenderer_DX11::RenderDebugText() {
-	START_SCOPED_TIMER( RENDER_TEXT );
+	START_SCOPED_RENDER_TIMER( RENDER_TEXT );
 
 	m_RenderState.SetDepthStencilState( false, kbRenderState::DepthWriteMaskZero, kbRenderState::CompareLess, false );
 
@@ -2333,7 +2355,8 @@ void kbRenderer_DX11::RenderDebugText() {
  *	kbRenderer_DX11::RenderMousePickerIds
  */
 void kbRenderer_DX11::RenderMousePickerIds() {
-	
+	START_SCOPED_RENDER_TIMER( RENDER_ENTITYID )
+
 	const float color[4] = { 0.0f, 0.0f, 0.0f, 0.0f };
 	m_pImmediateContext->ClearRenderTargetView( m_RenderTargets[MOUSE_PICKER_BUFFER].m_pRenderTargetView, color );
 	m_pImmediateContext->ClearDepthStencilView( m_pDepthStencilView, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1, 0 );
@@ -2355,6 +2378,8 @@ void kbRenderer_DX11::RenderMousePickerIds() {
 			RenderModel( iter->second, RP_MousePicker );
 		}
 	}
+
+	RenderDebugBillboards( true );
 }
 
 /**
@@ -2652,7 +2677,7 @@ void kbRenderer_DX11::RenderBloom() {
  *	kbRenderer_DX11::RenderPostProcess
  */
 void kbRenderer_DX11::RenderPostProcess() {
-	START_SCOPED_TIMER( RENDER_POST_PROCESS );
+	START_SCOPED_RENDER_TIMER( RENDER_POST_PROCESS );
 
 	RenderBloom();
 
@@ -3107,12 +3132,13 @@ void kbRenderer_DX11::RenderScreenSpaceQuadImmediate( const int start_x, const i
 /**
  *	kbRenderer_DX11::DrawBillboard
  */
-void kbRenderer_DX11::DrawBillboard( const kbVec3 & position, const kbVec2 & size, const int textureIndex, kbShader *const pShader ) {
+void kbRenderer_DX11::DrawBillboard( const kbVec3 & position, const kbVec2 & size, const int textureIndex, kbShader *const pShader, const int entityId ) {
 	debugDrawObject_t billboard;
 	billboard.m_Position = position;
 	billboard.m_Scale.Set( size.x, size.y, size.x );
 	billboard.m_pShader = pShader;
 	billboard.m_TextureIndex = textureIndex;
+	billboard.m_EntityId = entityId;
 
 	m_DebugBillboards_GameThread.push_back( billboard );
 }
@@ -3314,10 +3340,10 @@ void kbRenderer_DX11::RenderModel( const kbRenderObject *const pRenderObject, co
 			kbError( "Failed to map matrix buffer" );
 		}
 		
-		EditorShaderConstants * dataPtr = ( EditorShaderConstants * ) mappedResource.pData;
+		EditorShaderConstants *const dataPtr = ( EditorShaderConstants * ) mappedResource.pData;
 		dataPtr->entityId = pRenderObject->m_EntityId;
 		m_pImmediateContext->Unmap( m_pEditorConstantsBuffer, 0 );
-		m_pImmediateContext->VSSetConstantBuffers( 1, 1, &m_pEditorConstantsBuffer );
+
 		m_pImmediateContext->PSSetConstantBuffers( 1, 1, &m_pEditorConstantsBuffer );
 	}
 
@@ -3362,7 +3388,7 @@ void kbRenderer_DX11::RenderModel( const kbRenderObject *const pRenderObject, co
 			}
 		}
 		
-		if ( bShaderOverridden == false && bShadowPass == false) {
+		if ( bShaderOverridden == false && bShadowPass == false ) {
 			if ( modelMaterial.GetShader() != nullptr ) {
 				const kbShader * pShader = modelMaterial.GetShader();
 				m_pImmediateContext->IASetInputLayout( (ID3D11InputLayout*)pShader->GetVertexLayout() );
@@ -3627,7 +3653,7 @@ void kbRenderer_DX11::RenderDebugLines() {
 /*
  *	kbRenderer_DX11::RenderDebugBillboards
  */
-void kbRenderer_DX11::RenderDebugBillboards() {
+void kbRenderer_DX11::RenderDebugBillboards( const bool bIsEntityIdPass ) {
 	
 	if ( m_DebugBillboards.size() == 0 ) {
 		return;
@@ -3641,30 +3667,30 @@ void kbRenderer_DX11::RenderDebugBillboards() {
 
 	m_pImmediateContext->RSSetState( m_pRasterizerState );
 	m_pImmediateContext->PSSetSamplers( 0, 1, &m_pBasicSamplerState );
-	m_pImmediateContext->IASetInputLayout( (ID3D11InputLayout*)m_pDebugShader->GetVertexLayout() );
+	m_pImmediateContext->IASetInputLayout( (ID3D11InputLayout *)m_pDebugShader->GetVertexLayout() );
 	m_pImmediateContext->VSSetShader( (ID3D11VertexShader *)m_pDebugShader->GetVertexShader(), nullptr, 0 );
-	m_pImmediateContext->PSSetShader( (ID3D11PixelShader *)m_pDebugShader->GetPixelShader(), nullptr, 0 );
 
+	if ( bIsEntityIdPass ) {
+		m_pImmediateContext->PSSetShader( (ID3D11PixelShader *)m_pMousePickerIdShader->GetPixelShader(), nullptr, 0 );
+	} else {
+		m_pImmediateContext->PSSetShader( (ID3D11PixelShader *)m_pDebugShader->GetPixelShader(), nullptr, 0 );
+	}
 
 	//m_pImmediateContext->PSSetShaderResources( 0, 1, &m_Textures[0].m_pShaderResourceView );
 
 	for ( int i = 0; i < m_DebugBillboards.size(); i++ ) {
 		debugDrawObject_t & currBillBoard = m_DebugBillboards[i];
-		ID3D11ShaderResourceView *const pShaderResourceView = (ID3D11ShaderResourceView*)m_pTextures[currBillBoard.m_TextureIndex]->GetGPUTexture();
+		ID3D11ShaderResourceView *const pShaderResourceView = (ID3D11ShaderResourceView *)m_pTextures[currBillBoard.m_TextureIndex]->GetGPUTexture();
 		m_pImmediateContext->PSSetShaderResources( 0, 1, &pShaderResourceView );
 	
 		D3D11_MAPPED_SUBRESOURCE mappedResource;
 		HRESULT hr = m_pImmediateContext->Map( m_pDefaultShaderConstantsBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource );
+		kbErrorCheck( FAILED( hr ) == false, "kbRenderer_DX11::RenderDebugBillboards() - Failed to map constants buffer" );
 
-		if ( FAILED( hr ) ) {
-			kbError( "Failed to map matrix buffer" );
-		}
-
-		ShaderConstantMatrices * dataPtr = ( ShaderConstantMatrices * ) mappedResource.pData;
+		ShaderConstantMatrices * dataPtr = (ShaderConstantMatrices *) mappedResource.pData;
 		ShaderConstantMatrices sourceBuffer;
 
-		kbMat4 preRotationMatrix = m_pCurrentRenderWindow->m_CameraRotation.ToMat4();
-
+		const kbMat4 preRotationMatrix = m_pCurrentRenderWindow->m_CameraRotation.ToMat4();
 		sourceBuffer.mvpMatrix.MakeScale( currBillBoard.m_Scale );
 		sourceBuffer.mvpMatrix[3] = currBillBoard.m_Position;
 		sourceBuffer.mvpMatrix = preRotationMatrix * sourceBuffer.mvpMatrix * m_pCurrentRenderWindow->m_ViewProjectionMatrix;
@@ -3673,6 +3699,19 @@ void kbRenderer_DX11::RenderDebugBillboards() {
 		m_pImmediateContext->Unmap( m_pDefaultShaderConstantsBuffer, 0 );
 		m_pImmediateContext->VSSetConstantBuffers( 0, 1, &m_pDefaultShaderConstantsBuffer );
 
+		if ( bIsEntityIdPass ) {
+			D3D11_MAPPED_SUBRESOURCE mappedResource;
+			HRESULT hr = m_pImmediateContext->Map( m_pEditorConstantsBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource );
+			if ( FAILED( hr ) ) {
+				kbError( "Failed to map matrix buffer" );
+			}
+		
+			EditorShaderConstants *const dataPtr = (EditorShaderConstants *) mappedResource.pData;
+			dataPtr->entityId = currBillBoard.m_EntityId;
+			m_pImmediateContext->Unmap( m_pEditorConstantsBuffer, 0 );
+
+			m_pImmediateContext->PSSetConstantBuffers( 1, 1, &m_pEditorConstantsBuffer );
+		}
 		m_pImmediateContext->Draw( 6, 0 );
 	}
 }
