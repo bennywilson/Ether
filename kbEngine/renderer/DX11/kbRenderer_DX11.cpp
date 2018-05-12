@@ -2351,13 +2351,7 @@ void kbRenderer_DX11::RenderMousePickerIds() {
 
 	std::map<const kbComponent *, kbRenderObject *>::iterator iter;
 	for ( iter = m_pCurrentRenderWindow->m_RenderObjectMap.begin(); iter != m_pCurrentRenderWindow->m_RenderObjectMap.end(); iter++ ) {
-		if ( iter->second->m_EntityId > 0 && iter->second->m_RenderPass == RP_Lighting ) {
-			RenderModel( iter->second, RP_MousePicker );
-		}
-	}
-
-	for ( iter = m_pCurrentRenderWindow->m_RenderObjectMap.begin(); iter != m_pCurrentRenderWindow->m_RenderObjectMap.end(); iter++ ) {
-		if ( iter->second->m_EntityId > 0 && iter->second->m_RenderPass == RP_PostLighting ) {
+		if ( iter->second->m_EntityId > 0 ) {
 			RenderModel( iter->second, RP_MousePicker );
 		}
 	}
@@ -3352,34 +3346,11 @@ void kbRenderer_DX11::RenderModel( const kbRenderObject *const pRenderObject, co
 			kbError( "kbRenderer_DX11::RenderModel() - Unsupported culling mode" );
 		}
 
-		if ( renderpass == RP_MousePicker ) {
-			const kbShader * pShader = m_pMousePickerIdShader;
-			kbErrorCheck( pShader != nullptr && pShader->GetVertexShader() != nullptr && pShader->GetPixelShader() != nullptr, "kbRenderer_DX11::RenderModel() - Mouse picker shader is null" );
-
-			m_pImmediateContext->IASetInputLayout( (ID3D11InputLayout*)pShader->GetVertexLayout() );
-			m_pImmediateContext->VSSetShader( (ID3D11VertexShader *)pShader->GetVertexShader(), nullptr, 0 );
-			m_pImmediateContext->PSSetShader( (ID3D11PixelShader *)pShader->GetPixelShader(), nullptr, 0 );
-
-		} else {
-			if ( pShaderOverrideList != nullptr && bShadowPass == false ) {
-				if ( pShaderOverrideList->size() > i && (*pShaderOverrideList)[i] != nullptr ) {
-					bShaderOverridden = true;
-					const kbShader * pShader = (*pShaderOverrideList)[i];
-					if ( pShader != nullptr && pShader->GetVertexShader() != nullptr && pShader->GetPixelShader() != nullptr ) {
-						m_pImmediateContext->IASetInputLayout( (ID3D11InputLayout*)pShader->GetVertexLayout() );
-						m_pImmediateContext->VSSetShader( (ID3D11VertexShader *)pShader->GetVertexShader(), nullptr, 0 );
-						m_pImmediateContext->PSSetShader( (ID3D11PixelShader *)pShader->GetPixelShader(), nullptr, 0 );
-					} else {
-						m_pImmediateContext->IASetInputLayout( (ID3D11InputLayout*)m_pMissingShader->GetVertexLayout() );
-						m_pImmediateContext->VSSetShader( (ID3D11VertexShader *)m_pMissingShader->GetVertexShader(), nullptr, 0 );
-						m_pImmediateContext->PSSetShader( (ID3D11PixelShader *)m_pMissingShader->GetPixelShader(), nullptr, 0 );
-					}
-				}
-			}
-
-			if ( bShaderOverridden == false && bShadowPass == false) {
-				if ( modelMaterial.GetShader() != nullptr ) {
-					const kbShader * pShader = modelMaterial.GetShader();
+		if ( pShaderOverrideList != nullptr && bShadowPass == false ) {
+			if ( pShaderOverrideList->size() > i && (*pShaderOverrideList)[i] != nullptr ) {
+				bShaderOverridden = true;
+				const kbShader * pShader = (*pShaderOverrideList)[i];
+				if ( pShader != nullptr && pShader->GetVertexShader() != nullptr && pShader->GetPixelShader() != nullptr ) {
 					m_pImmediateContext->IASetInputLayout( (ID3D11InputLayout*)pShader->GetVertexLayout() );
 					m_pImmediateContext->VSSetShader( (ID3D11VertexShader *)pShader->GetVertexShader(), nullptr, 0 );
 					m_pImmediateContext->PSSetShader( (ID3D11PixelShader *)pShader->GetPixelShader(), nullptr, 0 );
@@ -3390,7 +3361,26 @@ void kbRenderer_DX11::RenderModel( const kbRenderObject *const pRenderObject, co
 				}
 			}
 		}
+		
+		if ( bShaderOverridden == false && bShadowPass == false) {
+			if ( modelMaterial.GetShader() != nullptr ) {
+				const kbShader * pShader = modelMaterial.GetShader();
+				m_pImmediateContext->IASetInputLayout( (ID3D11InputLayout*)pShader->GetVertexLayout() );
+				m_pImmediateContext->VSSetShader( (ID3D11VertexShader *)pShader->GetVertexShader(), nullptr, 0 );
+				m_pImmediateContext->PSSetShader( (ID3D11PixelShader *)pShader->GetPixelShader(), nullptr, 0 );
+			} else {
+				m_pImmediateContext->IASetInputLayout( (ID3D11InputLayout*)m_pMissingShader->GetVertexLayout() );
+				m_pImmediateContext->VSSetShader( (ID3D11VertexShader *)m_pMissingShader->GetVertexShader(), nullptr, 0 );
+				m_pImmediateContext->PSSetShader( (ID3D11PixelShader *)m_pMissingShader->GetPixelShader(), nullptr, 0 );
+			}
+		}
+		
+		if ( renderpass == RP_MousePicker ) {
+			const kbShader * pShader = m_pMousePickerIdShader;
+			kbErrorCheck( pShader != nullptr && pShader->GetPixelShader() != nullptr, "kbRenderer_DX11::RenderModel() - Mouse picker shader is null" );
+			m_pImmediateContext->PSSetShader( (ID3D11PixelShader *)pShader->GetPixelShader(), nullptr, 0 );
 
+		} 
 		m_pImmediateContext->DrawIndexed( modelToRender->GetMeshes()[i].m_NumTriangles * 3, modelToRender->GetMeshes()[i].m_IndexBufferIndex, 0 );
 	}
 }
