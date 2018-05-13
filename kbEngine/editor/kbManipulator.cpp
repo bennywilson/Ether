@@ -2,7 +2,7 @@
 // kbManipulator.cpp
 //
 //
-// 2016 kbEngine 2.0
+// 2016-2018 kbEngine 2.0
 //===================================================================================================
 #include "kbCore.h"
 #include "kbVector.h"
@@ -10,7 +10,7 @@
 #include "kbManipulator.h"
 #include "DX11/kbRenderer_DX11.h"
 
-/*
+/**
  *	kbManipulator::kbManipulator
  */
 kbManipulator::kbManipulator() :
@@ -23,24 +23,18 @@ kbManipulator::kbManipulator() :
 	memset( m_pModels, 0, sizeof( m_pModels ) );
 }
 
-/*
+/**
  *	kbManipulator::~kbManipulator
  */
 kbManipulator::~kbManipulator() {
 }
 	
-/*
+/**
  *	kbManipulator::AttemptMouseGrab
  */
 bool kbManipulator::AttemptMouseGrab( const kbVec3 & rayOrigin, const kbVec3 & rayDirection, const kbQuat & cameraOrientation ) {
 
-	if ( m_pModels[kbManipulator::Translate] == NULL ) {
-		m_pModels[kbManipulator::Translate] = ( kbModel * ) g_ResourceManager.GetResource( "../../kbEngine/assets/Models/Editor/translationManipulator.ms3d", true );
-		m_pModels[kbManipulator::Rotate] = ( kbModel * ) g_ResourceManager.GetResource( "../../kbEngine/assets/Models/Editor/rotationManipulator.ms3d", true );
-		m_pModels[kbManipulator::Scale] = ( kbModel * ) g_ResourceManager.GetResource( "../../kbEngine/assets/Models/Editor/scaleManipulator.ms3d", true );
-	}
-
-	kbModel * pModel = m_pModels[m_ManipulatorMode];
+	kbModel *const pModel = m_pModels[m_ManipulatorMode];
 
 	kbModelIntersection_t intersection = pModel->RayIntersection( rayOrigin, rayDirection, m_Position, m_Orientation );
 
@@ -65,7 +59,7 @@ bool kbManipulator::AttemptMouseGrab( const kbVec3 & rayOrigin, const kbVec3 & r
 	return false;
 }
 
-/*
+/**
  *	kbManipulator::UpdateMouseDrag
  */
 void kbManipulator::UpdateMouseDrag( const kbVec3 & rayOrigin, const kbVec3 & rayDirection, const kbQuat & cameraOrientation ) {
@@ -129,18 +123,36 @@ void kbManipulator::UpdateMouseDrag( const kbVec3 & rayOrigin, const kbVec3 & ra
 	}
 }
 
-/*
+/**
  *	kbManipulator::Update
  */
 void kbManipulator::Update() {
-	if ( m_pModels[m_ManipulatorMode] == NULL ) {
-		return;
-	}
-
+	
 	g_pRenderer->DrawModel( m_pModels[m_ManipulatorMode], m_Position, m_Orientation, kbVec3::one );
 }
 
+/**
+ *	kbManipulator::RenderSync
+ */
+void kbManipulator::RenderSync() {
+	if ( m_pModels[kbManipulator::Translate] == nullptr ) {
+		m_pModels[kbManipulator::Translate] = ( kbModel * ) g_ResourceManager.GetResource( "../../kbEngine/assets/Models/Editor/translationManipulator.ms3d", true );
+	}
 
+	if ( m_pModels[kbManipulator::Rotate] == nullptr ) {
+		m_pModels[kbManipulator::Rotate] = ( kbModel * ) g_ResourceManager.GetResource( "../../kbEngine/assets/Models/Editor/rotationManipulator.ms3d", true );
+	}
+
+	if ( m_pModels[kbManipulator::Scale] == nullptr ) {
+		m_pModels[kbManipulator::Scale] = ( kbModel * ) g_ResourceManager.GetResource( "../../kbEngine/assets/Models/Editor/scaleManipulator.ms3d", true );
+	}
+
+	kbErrorCheck( m_pModels[kbManipulator::Translate] != nullptr && m_pModels[kbManipulator::Rotate] != nullptr && m_pModels[kbManipulator::Scale] != nullptr, "Could load editor manipulator models" );
+}
+
+/**
+ *	kbManipulator::ProcessInput
+ */
 void kbManipulator::ProcessInput( const bool leftMouseDown ) {
 	if ( leftMouseDown == true && m_SelectedGroup != -1 ) {
 		switch( m_ManipulatorMode ) {

@@ -174,16 +174,16 @@ private:
 }
 
 /**
- *	scopedMarker_t
+ *	eventMarker_t
  */
-struct scopedMarker_t {
-	scopedMarker_t( const wchar_t *const name, struct ID3DUserDefinedAnnotation *const pAnnotation );
-	~scopedMarker_t();
+struct eventMarker_t {
+	eventMarker_t( const wchar_t *const name, struct ID3DUserDefinedAnnotation *const pEventMarker );
+	~eventMarker_t();
 
-	ID3DUserDefinedAnnotation * m_pAnnotation;
+	ID3DUserDefinedAnnotation * m_pEventMarker;
 };
 
-#define START_SCOPED_RENDER_TIMER(index) kbScopedTimer a##index(index); scopedMarker_t sm##index( L#index, m_pUserDefinedAnnotation ); \
+#define START_SCOPED_RENDER_TIMER(index) kbScopedTimer a##index(index); eventMarker_t sm##index( L#index, m_pEventMarker );
 
 /**
  *	kbRenderState
@@ -582,14 +582,14 @@ private:
 
 	std::vector<kbRenderWindow *>				m_RenderWindowList;
 	
-	kbRenderTexture								m_RenderTargets[ NUM_RENDER_TARGETS ];
+	kbRenderTexture								m_RenderTargets[NUM_RENDER_TARGETS];
 	
 	// debug
-	ID3DUserDefinedAnnotation *					m_pUserDefinedAnnotation;
+	ID3DUserDefinedAnnotation *					m_pEventMarker;
 
-	std::vector< vertexLayout >					m_DebugLines;
+	std::vector<vertexLayout>					m_DebugLines;
 	ID3D11Buffer *								m_DebugVertexBuffer;
-	std::vector< vertexLayout >					m_DebugPreTransformedLines;
+	std::vector<vertexLayout>					m_DebugPreTransformedLines;
 	ID3D11Buffer *								m_DebugPreTransformedVertexBuffer;
 	
 	struct debugDrawObject_t {
@@ -602,8 +602,8 @@ private:
 		int										m_EntityId;
 	};
 	
-	std::vector< debugDrawObject_t >			m_DebugBillboards;
-	std::vector< debugDrawObject_t >			m_DebugModels;
+	std::vector<debugDrawObject_t>			m_DebugBillboards;
+	std::vector<debugDrawObject_t>			m_DebugModels;
 
 	struct kbTextInfo_t {
 		kbTextInfo_t() : 

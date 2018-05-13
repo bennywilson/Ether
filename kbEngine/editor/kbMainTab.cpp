@@ -99,7 +99,6 @@ void kbMainTab::Update() {
 	const kbCamera & pCamera = pCurrentWindow->GetCamera();
 
 	g_pRenderer->SetRenderViewTransform( pCurrentWindow->GetWindowHandle(), pCamera.m_Position, pCamera.m_Rotation );
-
 	g_pRenderer->SetRenderWindow( pCurrentWindow->GetWindowHandle() );
 
 	if ( pCurrentWindow == m_pModelViewerWindow ) {
@@ -111,14 +110,14 @@ void kbMainTab::Update() {
 
 	} else if ( pCurrentWindow == m_pEditorWindow ) {
 		for ( int i = 0; i < g_Editor->GetGameEntities().size(); i++ ) {
-			const kbEditorEntity * pCurrentEntity = g_Editor->GetGameEntities()[i];
-			const kbGameEntity * pGameEntity = pCurrentEntity->GetGameEntity();
+			const kbEditorEntity *const pCurrentEntity = g_Editor->GetGameEntities()[i];
+			const kbGameEntity *const pGameEntity = pCurrentEntity->GetGameEntity();
 
 			int iconIdx = 1;
 
 			for ( int j = 0; j < pGameEntity->NumComponents(); j++ ) {
 
-				const kbComponent * pCurrentComponent = pGameEntity->GetComponent( j );
+				const kbComponent *const pCurrentComponent = pGameEntity->GetComponent( j );
 
 				if ( pCurrentComponent->IsA( kbDirectionalLightComponent::GetType() ) ) {
 
@@ -141,8 +140,7 @@ void kbMainTab::Update() {
 
 			g_pRenderer->DrawBillboard( pCurrentEntity->GetPosition(), kbVec2( 1.0f, 1.0f ), iconIdx, nullptr, pCurrentEntity->GetGameEntity()->GetEntityId() );
 
-			if ( pCurrentEntity->IsSelected() )
-			{
+			if ( pCurrentEntity->IsSelected() ) {
 				g_pRenderer->DrawBox( pCurrentEntity->GetWorldBounds(), kbColor::yellow );
 
 				m_Manipulator.Update();
@@ -160,7 +158,8 @@ void kbMainTab::Update() {
 void kbMainTab::RenderSync() {
 	kbWidget::RenderSync();
 
-	
+	m_Manipulator.RenderSync();
+
 	if ( m_MousePickXY.x >= 0 && m_MousePickXY.y >= 0 ) {
 
 		kbEditorWindow *const pCurrentWindow = GetCurrentWindow();
@@ -175,16 +174,42 @@ void kbMainTab::RenderSync() {
 		m_MousePickXY.x = (int)(m_MousePickXY.x * g_pRenderer->GetBackBufferWidth() / windowWidth );
 		m_MousePickXY.y = (int)(m_MousePickXY.y * g_pRenderer->GetBackBufferHeight() / windowHeight );
 
+		if ( m_MousePickXY.x < 0 || m_MousePickXY.y < 0 || m_MousePickXY.x >= g_pRenderer->GetBackBufferWidth() || m_MousePickXY.y >= g_pRenderer->GetBackBufferHeight() ) {
+			g_Editor->DeselectEntities();
+			return;
+		}
+
 		const uint hitEntityId = g_pRenderer->GetEntityIdAtScreenPosition( m_MousePickXY.x, m_MousePickXY.y );
 		std::vector<kbEditorEntity*> & entityList = g_Editor->GetGameEntities();
 
+		const bool bCtrlIsDown = GetAsyncKeyState( VK_LCONTROL ) || GetAsyncKeyState( VK_RCONTROL );
+
+		kbEditorEntity * pSelectedEntity = nullptr;
 		for ( int i = 0; i < entityList.size(); i++ ) {
 			if ( entityList[i]->GetGameEntity()->GetEntityId() == hitEntityId ) {
+				pSelectedEntity = entityList[i];
 				std::vector<kbEditorEntity*> selectedEntities;
 				selectedEntities.push_back( entityList[i] );
-				g_Editor->SelectEntities( selectedEntities, false );
+				g_Editor->SelectEntities( selectedEntities, bCtrlIsDown );
+				break;
 			}
 		}
+
+		if ( pSelectedEntity == nullptr ) {
+			g_Editor->DeselectEntities();
+			return;
+		}
+
+		kbVec3 manipulatorPos( 0.0f, 0.0f, 0.0f );
+		for ( int i = 0; i < g_Editor->GetSelectedObjects().size(); i++ ) {
+			manipulatorPos += g_Editor->GetSelectedObjects()[i]->GetPosition();
+		}
+		manipulatorPos /= (float)g_Editor->GetSelectedObjects().size();
+
+		// check if mouse grabbed the manipulator
+		m_Manipulator.SetPosition( manipulatorPos );
+		m_Manipulator.SetOrientation( pSelectedEntity->GetOrientation() );
+		m_Manipulator.SetScale( pSelectedEntity->GetScale() );
 
 //		kbVec4 mousePosition( (float)inputObject->mouseX - windowRect.left, (float)inputObject->mouseY, 0.0f, 1.0f );
  

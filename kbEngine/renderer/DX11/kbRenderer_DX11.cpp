@@ -54,6 +54,9 @@ std::map<kbString, kbGPUTimeStamp::GPUTimeStamp_t * >	kbGPUTimeStamp::m_TimeStam
 std::vector<kbGPUTimeStamp::GPUTimeStamp_t * >			kbGPUTimeStamp::m_TimeStampsThisFrame;
 bool													kbGPUTimeStamp::m_bActiveThisFrame = false;
 
+/**
+ *	kbOculusTexture
+ */
 class kbOculusTexture {
 
 //-------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -344,19 +347,20 @@ void kbGPUTimeStamp::PlaceTimeStamp( const kbString & timeStampName, ID3D11Devic
 }
 
 /**
- *	scopedMarker_t::scopedMarker_t
+ *	eventMarker_t::eventMarker_t
  */
-scopedMarker_t::scopedMarker_t( const wchar_t *const name, ID3DUserDefinedAnnotation *const pAnnotation ) {
+eventMarker_t::eventMarker_t( const wchar_t *const name, ID3DUserDefinedAnnotation *const pAnnotation ) {
 
-	m_pAnnotation = pAnnotation;
-	m_pAnnotation->BeginEvent( name );
+	kbErrorCheck( name != nullptr && pAnnotation != nullptr, "eventMarker_t::eventMarker_t() - Invalid params" );
+	m_pEventMarker = pAnnotation;
+	m_pEventMarker->BeginEvent( name );
 }
 
 /**
- *	scopedMarker_t::~scopedMarker_t
+ *	eventMarker_t::~eventMarker_t
  */	
-scopedMarker_t::~scopedMarker_t() {
-	m_pAnnotation->EndEvent();
+eventMarker_t::~eventMarker_t() {
+	m_pEventMarker->EndEvent();
 }
 
 //-------------------------------------------------------------------------------------------------------------------------------------
@@ -422,6 +426,7 @@ kbRenderer_DX11::kbRenderer_DX11() :
 	m_pBasicSamplerState( nullptr ),
 	m_pNormalMapSamplerState( nullptr ),
 	m_pShadowMapSamplerState( nullptr ),
+	m_pEventMarker( nullptr ),
 	m_DebugVertexBuffer( nullptr ),
 	m_DebugPreTransformedVertexBuffer( nullptr ),
 	m_pOffScreenRenderTargetTexture( nullptr ),
@@ -531,7 +536,6 @@ void kbRenderer_DX11::Init( HWND hwnd, const int frameWidth, const int frameHeig
 	CreateRenderTarget( eRenderTargetTexture::DOWN_RES_BUFFER_2, deferredRTWidth / 2, deferredRTHeight / 2, DXGI_FORMAT_R16G16B16A16_FLOAT );
 	CreateRenderTarget( eRenderTargetTexture::SCRATCH_BUFFER, deferredRTHeight / 2, deferredRTHeight / 2, DXGI_FORMAT_R16G16B16A16_FLOAT );
 
-	CreateRenderTarget( eRenderTargetTexture::COLOR_BUFFER, deferredRTWidth, deferredRTHeight, DXGI_FORMAT_R16G16B16A16_FLOAT );
 	CreateRenderTarget( eRenderTargetTexture::MOUSE_PICKER_BUFFER, deferredRTWidth, deferredRTHeight, DXGI_FORMAT_R32_UINT );
 
 	// create back buffer
@@ -708,21 +712,6 @@ void kbRenderer_DX11::Init( HWND hwnd, const int frameWidth, const int frameHeig
 	 
 		hr = m_pD3DDevice->CreateBuffer( &matrixBufferDesc, nullptr, &m_pDefaultShaderConstantsBuffer );
 		kbErrorCheck( SUCCEEDED( hr ), "kbRenderer_DX11::Init() - Failed to create matrix buffer" );
-	}
-
-	// Constants for skinned shaders
-	{
-		D3D11_BUFFER_DESC matrixBufferDesc;
-		matrixBufferDesc.Usage = D3D11_USAGE_DYNAMIC;
-
-		matrixBufferDesc.ByteWidth = ( sizeof( SkinnedShaderConstants ) + 15 ) & 0xfffffff0;
-		matrixBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-		matrixBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
-		matrixBufferDesc.MiscFlags = 0;
-		matrixBufferDesc.StructureByteStride = 0;
-
-		hr = m_pD3DDevice->CreateBuffer( &matrixBufferDesc, nullptr, &m_pSkinnedShaderConstantsBuffer );
-		kbErrorCheck( SUCCEEDED( hr ), "Failed to create matrix buffer" );
 	}
 
 	// Constants for editor objects
@@ -925,7 +914,7 @@ void kbRenderer_DX11::Init( HWND hwnd, const int frameWidth, const int frameHeig
 	}
 	m_DebugText->UnmapIndexBuffer();
 
-	hr = m_pImmediateContext->QueryInterface( __uuidof(m_pUserDefinedAnnotation), (void**)&m_pUserDefinedAnnotation );
+	hr = m_pImmediateContext->QueryInterface( __uuidof(m_pEventMarker), (void**)&m_pEventMarker );
 	kbErrorCheck( SUCCEEDED( hr ), " kbRenderer_DX11::Initialize() - Failed to query user defined annotation" );
 
 	// Kick off render thread
@@ -1083,19 +1072,13 @@ int kbRenderer_DX11::CreateRenderView( HWND hwnd )
  */
 void kbRenderer_DX11::CreateRenderTarget( const eRenderTargetTexture index, const int width, const int height, const DXGI_FORMAT targetFormat ) {
 
-	D3D11_TEXTURE2D_DESC textureDesc;
+	kbRenderTexture & rt = m_RenderTargets[index];
+	kbErrorCheck( rt.m_pRenderTargetTexture == nullptr && rt.m_pRenderTargetView == nullptr && 
+				  rt.m_pShaderResourceView == nullptr && rt.m_pShaderResourceView == nullptr, "kbRenderer_DX11::CreateRenderTarget() - Called on an existing render target with index %d", (int) index );
 	
-	// Initialize the render target texture description.
-	ZeroMemory(&textureDesc, sizeof(textureDesc));
+	rt.m_Width = width;
+	rt.m_Height = height;
 
-	// Setup the render target texture description.
-	textureDesc.Width = width;
-	textureDesc.Height = height;
-	textureDesc.MipLevels = 1;
-	textureDesc.ArraySize = 1;
-	
-	m_RenderTargets[index].m_Width = width;
-	m_RenderTargets[index].m_Height = height;
 	if ( index == eRenderTargetTexture::SHADOW_BUFFER_DEPTH ) {
 		// create back buffer
 		D3D11_TEXTURE2D_DESC depthBufferDesc = { 0 };
@@ -1133,15 +1116,20 @@ void kbRenderer_DX11::CreateRenderTarget( const eRenderTargetTexture index, cons
 		return;
 	}
 
+	D3D11_TEXTURE2D_DESC textureDesc = { 0 };
+	textureDesc.Width = width;
+	textureDesc.Height = height;
+	textureDesc.MipLevels = 1;
+	textureDesc.ArraySize = 1;
 	textureDesc.Format = targetFormat;
-
 	textureDesc.SampleDesc.Count = 1;
 	textureDesc.Usage = D3D11_USAGE_DEFAULT;
 	textureDesc.BindFlags = D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE;
 	textureDesc.CPUAccessFlags = 0;
 	textureDesc.MiscFlags = 0;
 
-	HRESULT hr = m_pD3DDevice->CreateTexture2D( &textureDesc, nullptr, &m_RenderTargets[index].m_pRenderTargetTexture );
+	HRESULT hr = m_pD3DDevice->CreateTexture2D( &textureDesc, nullptr, &rt.m_pRenderTargetTexture );
+	kbErrorCheck( SUCCEEDED( hr ), "kbRenderer_DX11::CreateRenderTarget() - Failed to create 2D texture for index", (int)index);
 
 	// Render target view
 	D3D11_RENDER_TARGET_VIEW_DESC renderTargetViewDesc;
@@ -1150,16 +1138,17 @@ void kbRenderer_DX11::CreateRenderTarget( const eRenderTargetTexture index, cons
 	renderTargetViewDesc.Texture2D.MipSlice = 0;
 
 	hr = m_pD3DDevice->CreateRenderTargetView( m_RenderTargets[index].m_pRenderTargetTexture, &renderTargetViewDesc, &m_RenderTargets[index].m_pRenderTargetView );
+	kbErrorCheck( SUCCEEDED( hr ), "kbRenderer_DX11::CreateRenderTarget() - Failed to create RTV for index", (int)index);
 
 	// Shader resource view
 	D3D11_SHADER_RESOURCE_VIEW_DESC shaderResourceViewDesc;
-
 	shaderResourceViewDesc.Format = textureDesc.Format;
 	shaderResourceViewDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
 	shaderResourceViewDesc.Texture2D.MostDetailedMip = 0;
 	shaderResourceViewDesc.Texture2D.MipLevels = 1;
 
 	hr = m_pD3DDevice->CreateShaderResourceView( m_RenderTargets[index].m_pRenderTargetTexture, &shaderResourceViewDesc, &m_RenderTargets[index].m_pShaderResourceView );
+	kbErrorCheck( SUCCEEDED( hr ), "kbRenderer_DX11::CreateRenderTarget() - Failed to create SRV texture for index", (int)index);
 }
 
 /**
@@ -1240,7 +1229,7 @@ void kbRenderer_DX11::Shutdown() {
 	m_RenderState.Shutdown();
 
 	kbGPUTimeStamp::Shutdown();
-	SAFE_RELEASE( m_pUserDefinedAnnotation );
+	SAFE_RELEASE( m_pEventMarker );
 
 	SAFE_RELEASE( m_pImmediateContext );
 
@@ -2087,20 +2076,22 @@ void kbRenderer_DX11::RenderScene() {
 			RenderDebugBillboards( false );
 			RenderDebugLines();
 			RenderPretransformedDebugLines();
+
+			for ( int i = 0; i < m_DebugModels.size(); i++ ) {
+				kbRenderObject renderObject;
+				renderObject.m_pModel = m_DebugModels[i].m_pModel;
+				renderObject.m_Position = m_DebugModels[i].m_Position;
+				renderObject.m_Orientation = m_DebugModels[i].m_Orientation;
+				renderObject.m_Scale = m_DebugModels[i].m_Scale;
+				RenderModel( &renderObject, RP_Debug );
+			}
 		}
 	
 	//	DrawTexture( m_RenderTargets[SCRATCH_BUFFER].m_pShaderResourceView, kbVec3( 10.0f, 10.0f, 0.0f ), kbVec3( Back_Buffer_Width * 0.25f, Back_Buffer_Width * 0.25f, 0.0f ), kbVec3( (float)Back_Buffer_Width, (float)Back_Buffer_Height, 0.0f ) );
 //DrawTexture( m_RenderTargets[DOWN_RES_BUFFER].m_pShaderResourceView, kbVec3( 10.0f, 10.0f, 0.0f ), kbVec3( Back_Buffer_Width * 0.25f, Back_Buffer_Width * 0.25f, 0.0f ), kbVec3( (float)Back_Buffer_Width, (float)Back_Buffer_Height, 0.0f ) );
 
 		// debug rendering
-		for ( int i = 0; i < m_DebugModels.size(); i++ ) {
-			kbRenderObject renderObject;
-			renderObject.m_pModel = m_DebugModels[i].m_pModel;
-			renderObject.m_Position = m_DebugModels[i].m_Position;
-			renderObject.m_Orientation = m_DebugModels[i].m_Orientation;
-			renderObject.m_Scale = m_DebugModels[i].m_Scale;
-			RenderModel( &renderObject, RP_Debug );
-		}
+
 		m_DebugModels.clear();
 	
 		m_RenderState.SetDepthStencilState();
