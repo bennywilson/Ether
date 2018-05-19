@@ -170,7 +170,7 @@ private:
 
 #define PLACE_GPU_TIME_STAMP(name) { \
 	static kbString timeStampName(name); \
-	kbGPUTimeStamp::PlaceTimeStamp( timeStampName, m_pImmediateContext ); \
+	kbGPUTimeStamp::PlaceTimeStamp( timeStampName, m_pDeviceContext ); \
 }
 
 /**
@@ -468,6 +468,13 @@ public:
 	void										DrawBillboard( const kbVec3 & position, const kbVec2 & size, const int textureIndex, kbShader *const pShader, const int entityId = -1 );
 	void										DrawModel( const kbModel * pModel, const kbVec3 & start, const kbQuat & orientation, const kbVec3 & scale );
 
+	//
+	enum kbViewMode_t {
+		ViewMode_Normal,
+		ViewMode_Wireframe
+	};
+	void										SetViewMode( const kbViewMode_t newViewMode ) { m_ViewMode_GameThread = newViewMode; }
+
 
 	// Debug Text Drawing
 	void										EnableConsole( const bool bEnable ) { m_bConsoleEnabled = bEnable; }
@@ -518,6 +525,7 @@ private:
 	void										RenderTranslucency();
 	void										RenderDebugText();
 	void										RenderMousePickerIds();
+	void										Blit( kbRenderTexture *const src, kbRenderTexture *const dest );
 
 	void										DrawTexture( ID3D11ShaderResourceView *const pShaderResourceView, const kbVec3 & pixelPosition, 
 															 const kbVec3 & pixelSize, const kbVec3 & renderTargetSize );
@@ -528,7 +536,7 @@ private:
 	HWND										m_hwnd;
 	IDXGIFactory *								m_pDXGIFactory;
 	ID3D11Device *								m_pD3DDevice;
-	ID3D11DeviceContext *						m_pImmediateContext;
+	ID3D11DeviceContext *						m_pDeviceContext;
 	ID3D11Texture2D *							m_pDepthStencilBuffer;
 
 	kbRenderState								m_RenderState;
@@ -568,8 +576,9 @@ private:
 	ID3D11Buffer *								m_pPostProcessConstantsBuffer;
 	ID3D11Buffer *								m_pBloomShaderConstantsBuffer;
 
-	ID3D11RasterizerState *						m_pRasterizerState;
+	ID3D11RasterizerState *						m_pDefaultRasterizerState;
 	ID3D11RasterizerState *						m_pNoFaceCullingRasterizerState;
+	ID3D11RasterizerState *						m_pWireFrameRasterizerState;
 
 	kbRenderWindow *							m_pCurrentRenderWindow;    // the render window BeginScene was called with
 
@@ -602,8 +611,11 @@ private:
 		int										m_EntityId;
 	};
 	
-	std::vector<debugDrawObject_t>			m_DebugBillboards;
-	std::vector<debugDrawObject_t>			m_DebugModels;
+	std::vector<debugDrawObject_t>				m_DebugBillboards;
+	std::vector<debugDrawObject_t>				m_DebugModels;
+
+	kbViewMode_t								m_ViewMode_GameThread;
+	kbViewMode_t								m_ViewMode;
 
 	struct kbTextInfo_t {
 		kbTextInfo_t() : 

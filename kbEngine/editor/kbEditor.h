@@ -76,6 +76,7 @@ private:
 	class kbResourceTab *									m_pResourceTab;
 	class Fl_Text_Buffer *									m_pOutputText;
 	class kbPropertiesTab *									m_pPropertiesTab;
+	class Fl_Choice *										m_pViewModeChoice;
 
 	kbTimer													m_Timer;
 
@@ -109,6 +110,7 @@ private:
 	static void												PlayGameFromHere( Fl_Widget *, void * );
 	static void												StopGame( Fl_Widget *, void * );
 	static void												DeleteEntitiesCB( Fl_Widget *, void * );
+	static void												ViewModeChoiceCB( Fl_Widget *, void * );
 
 	void													RightClickPopUpMenu();
 	static void												ReplaceCurrentlySelectedPrefab( Fl_Widget *, void * );

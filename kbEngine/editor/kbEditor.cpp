@@ -101,18 +101,34 @@ kbEditor::kbEditor() :
 	mainMenuBar->add( "Play/Stop Game", 0, StopGame );
 
 	// buttons
-	Fl_Button * translationButton = new Fl_Button( Left_Panel + 5, Menu_Bar_Height + 5, 25, Menu_Buttons_Height - 10, "T" );
+	const int buttonSpacing = 5;
+	const int TRSButtonWidth = 25;
+	const int buttonHeight = Menu_Buttons_Height - 10;
+	int curX = Left_Panel + buttonSpacing;
+	int curY = Menu_Bar_Height + 5;
+
+	Fl_Button *const translationButton = new Fl_Button( curX, curY, TRSButtonWidth, buttonHeight, "T" );
 	translationButton->callback( TranslationButtonCB );
+	curX += TRSButtonWidth + buttonSpacing;
 
-	Fl_Button * rotationButton = new Fl_Button( Left_Panel + 35, Menu_Bar_Height + 5, 25, Menu_Buttons_Height - 10, "R" );
+	Fl_Button *const rotationButton = new Fl_Button( curX, curY, TRSButtonWidth, buttonHeight, "R" );
 	rotationButton->callback( RotationButtonCB );
+	curX += TRSButtonWidth + buttonSpacing;
 
-	Fl_Button * scaleButton = new Fl_Button( Left_Panel + 65, Menu_Bar_Height + 5, 25, Menu_Buttons_Height - 10, "S" );
+	Fl_Button *const scaleButton = new Fl_Button( curX, curY, TRSButtonWidth, buttonHeight, "S" );
 	scaleButton->callback( ScaleButtonCB );
+	curX += TRSButtonWidth + buttonSpacing;
 
-	m_pSpeedButton = new Fl_Button( Left_Panel + 95, Menu_Bar_Height + 5, 85, Menu_Buttons_Height - 10, "Speedx1" );
-
+	const int speedButtonWidth = 85;
+	m_pSpeedButton = new Fl_Button(curX, curY, speedButtonWidth, buttonHeight, "Speedx1" );
 	m_pSpeedButton->callback( AdjustCameraSpeedCB );
+	curX += speedButtonWidth + buttonSpacing * 2;
+
+	m_pViewModeChoice = new Fl_Choice( curX, curY, (int)fl_width( "Wireframe") + TRSButtonWidth, buttonHeight );
+	m_pViewModeChoice->add( "Normal" );		// Note: These have to be in the same order as the entries in kbViewMode_t
+	m_pViewModeChoice->add( "Wireframe" );
+	m_pViewModeChoice->value( 0 );
+	m_pViewModeChoice->callback( ViewModeChoiceCB );
 
 	// main tab
 	m_pMainTab = new kbMainTab( Left_Panel + 5, Menu_Bar_Height + Menu_Buttons_Height, Screen_Width - Left_Panel - Right_Panel, Screen_Height - Menu_Bar_Height - Menu_Bar_Height - Bottom_Panel_Height );
@@ -1042,12 +1058,19 @@ void kbEditor::InsertSelectedPrefabIntoScene( Fl_Widget *, void * pUserdata ) {
 	kbVec3 entityLocation = editorCamera->m_Position + ( editorCamera->m_Rotation.ToMat4()[2] * 4.0f ).ToVec3();
 
 	for ( int i = 0; i < prefabToCreate->NumGameEntities(); i++ ) {
-		kbGameEntity * pNewEntity = new kbGameEntity( prefabToCreate->m_GameEntities[i], false );
-		kbEditorEntity * pEditorEntity = new kbEditorEntity( pNewEntity );
+		kbGameEntity *const pNewEntity = new kbGameEntity( prefabToCreate->m_GameEntities[i], false );
+		kbEditorEntity *const pEditorEntity = new kbEditorEntity( pNewEntity );
 		pEditorEntity->SetPosition( entityLocation );
 		g_Editor->m_GameEntities.push_back( pEditorEntity );
 	}
 
 	g_Editor->m_pResourceTab->RefreshEntitiesTab();
- }
+}
 
+/**
+ *	kbEditor::ViewModeChoiceCB
+ */
+void kbEditor::ViewModeChoiceCB( Fl_Widget *, void * pUserData ) {
+	const int viewModeChoice = g_Editor->m_pViewModeChoice->value();
+	g_pRenderer->SetViewMode( (kbRenderer_DX11::kbViewMode_t) viewModeChoice);
+}

@@ -394,10 +394,11 @@ kbRenderer_DX11::kbRenderer_DX11() :
 	m_hwnd( nullptr ),
 	m_pDXGIFactory( nullptr ),
 	m_pD3DDevice( nullptr ),
-	m_pImmediateContext( nullptr ),
+	m_pDeviceContext( nullptr ),
 	m_pDepthStencilBuffer( nullptr ),
-	m_pRasterizerState( nullptr ),
+	m_pDefaultRasterizerState( nullptr ),
 	m_pNoFaceCullingRasterizerState( nullptr ),
+	m_pWireFrameRasterizerState( nullptr ),
 	m_pCurrentRenderWindow( nullptr ),
 	m_pDepthStencilView( nullptr ),
 	m_pDefaultShaderConstantsBuffer( nullptr ),
@@ -429,6 +430,8 @@ kbRenderer_DX11::kbRenderer_DX11() :
 	m_pEventMarker( nullptr ),
 	m_DebugVertexBuffer( nullptr ),
 	m_DebugPreTransformedVertexBuffer( nullptr ),
+	m_ViewMode_GameThread( ViewMode_Normal ),
+	m_ViewMode( ViewMode_Normal ),
 	m_pOffScreenRenderTargetTexture( nullptr ),
 	m_ovrSession( nullptr ),
 	m_HMDPass( 0 ),
@@ -507,14 +510,14 @@ void kbRenderer_DX11::Init( HWND hwnd, const int frameWidth, const int frameHeig
 								D3D11_SDK_VERSION,
 								&m_pD3DDevice,
 								nullptr,
-								&m_pImmediateContext );
+								&m_pDeviceContext );
 	}
 
 	kbErrorCheck( SUCCEEDED( hr ), "kbRenderer_DX11::Init() - Failed to create D3D11 Device and swap chain" );
 
 	g_pD3DDevice = m_pD3DDevice;
-	g_pImmediateContext = m_pImmediateContext;
-	m_RenderState.SetDeviceAndContext( m_pD3DDevice, m_pImmediateContext );
+	g_pImmediateContext = m_pDeviceContext;
+	m_RenderState.SetDeviceAndContext( m_pD3DDevice, m_pDeviceContext );
 
 	// create swap chains
 	CreateRenderView( hwnd );
@@ -567,7 +570,7 @@ void kbRenderer_DX11::Init( HWND hwnd, const int frameWidth, const int frameHeig
 	kbErrorCheck( SUCCEEDED( hr ), "kbRenderer_DX11::Init() - Failed to create DepthStencilView" );
 
 	// bind render target view and depth stencil to output render pipeline
-	m_pImmediateContext->OMSetRenderTargets( 1, &m_RenderWindowList[0]->m_pRenderTargetView, m_pDepthStencilView );
+	m_pDeviceContext->OMSetRenderTargets( 1, &m_RenderWindowList[0]->m_pRenderTargetView, m_pDepthStencilView );
 
 	// setting rasterizer state
 	D3D11_RASTERIZER_DESC rasterDesc;
@@ -582,17 +585,23 @@ void kbRenderer_DX11::Init( HWND hwnd, const int frameWidth, const int frameHeig
 	rasterDesc.ScissorEnable = false;
 	rasterDesc.SlopeScaledDepthBias = 0.0f;
 
-	// Create the rasterizer state from the description we just filled out.
-	hr = m_pD3DDevice->CreateRasterizerState( &rasterDesc, &m_pRasterizerState );
-	kbErrorCheck( SUCCEEDED( hr ), "kbRenderer_DX11::Init() - Failed to create rasterizer state" );
+	// Create the default rasterizer state
+	hr = m_pD3DDevice->CreateRasterizerState( &rasterDesc, &m_pDefaultRasterizerState );
+	kbErrorCheck( SUCCEEDED( hr ), "kbRenderer_DX11::Init() - Failed to create default rasterizer state" );
 
+	// Create non-culling rasterizer state
 	rasterDesc.CullMode = D3D11_CULL_NONE;
 	// Create the rasterizer state from the description we just filled out.
 	hr = m_pD3DDevice->CreateRasterizerState( &rasterDesc, &m_pNoFaceCullingRasterizerState );
-	kbErrorCheck( SUCCEEDED( hr ), "kbRenderer_DX11::Init() - Failed to create rasterizer state" );
+	kbErrorCheck( SUCCEEDED( hr ), "kbRenderer_DX11::Init() - Failed to create non-culling rasterizer state" );
+
+	// Create a wireframe rasterizer state
+	rasterDesc.FillMode = D3D11_FILL_WIREFRAME;
+	hr = m_pD3DDevice->CreateRasterizerState( &rasterDesc, &m_pWireFrameRasterizerState );
+	kbErrorCheck( SUCCEEDED( hr ), "kbRenderer_DX11::Init() - Failed to create wireframe rasterizer state" );
 
 	// Now set the rasterizer state.
-	m_pImmediateContext->RSSetState( m_pRasterizerState );
+	m_pDeviceContext->RSSetState( m_pDefaultRasterizerState );
 
 	// vertex buffer
 	D3D11_BUFFER_DESC vertexBufferDesc = { 0 };
@@ -893,7 +902,7 @@ void kbRenderer_DX11::Init( HWND hwnd, const int frameWidth, const int frameHeig
 
 	SetRenderWindow( m_hwnd );
 
-	kbGPUTimeStamp::Init( m_pImmediateContext );
+	kbGPUTimeStamp::Init( m_pDeviceContext );
 
 	LoadTexture( "../../kbEngine/assets/Textures/textbackground.dds", 3 );
 	LoadTexture( "../../kbEngine/assets/Textures/Font.bmp", 4 );
@@ -914,7 +923,7 @@ void kbRenderer_DX11::Init( HWND hwnd, const int frameWidth, const int frameHeig
 	}
 	m_DebugText->UnmapIndexBuffer();
 
-	hr = m_pImmediateContext->QueryInterface( __uuidof(m_pEventMarker), (void**)&m_pEventMarker );
+	hr = m_pDeviceContext->QueryInterface( __uuidof(m_pEventMarker), (void**)&m_pEventMarker );
 	kbErrorCheck( SUCCEEDED( hr ), " kbRenderer_DX11::Initialize() - Failed to query user defined annotation" );
 
 	// Kick off render thread
@@ -969,7 +978,7 @@ bool kbRenderer_DX11::InitializeOculus() {
 		D3D11_SDK_VERSION,
 		&m_pD3DDevice,
 		nullptr,
-		&m_pImmediateContext
+		&m_pDeviceContext
 	);
 
 	if ( hr != ERROR_SUCCESS ) {
@@ -1214,8 +1223,9 @@ void kbRenderer_DX11::Shutdown() {
 		ovr_Shutdown();
 	}
 
-	SAFE_RELEASE( m_pRasterizerState );
+	SAFE_RELEASE( m_pDefaultRasterizerState );
 	SAFE_RELEASE( m_pNoFaceCullingRasterizerState );
+	SAFE_RELEASE( m_pWireFrameRasterizerState );
 
 	SAFE_RELEASE( m_pBasicSamplerState );
 	SAFE_RELEASE( m_pNormalMapSamplerState );
@@ -1231,7 +1241,7 @@ void kbRenderer_DX11::Shutdown() {
 	kbGPUTimeStamp::Shutdown();
 	SAFE_RELEASE( m_pEventMarker );
 
-	SAFE_RELEASE( m_pImmediateContext );
+	SAFE_RELEASE( m_pDeviceContext );
 
 	if ( GCreateDebugD3DDevice ) {
 		ID3D11Debug * debugDev;
@@ -1249,7 +1259,7 @@ void kbRenderer_DX11::Shutdown() {
  *	kbRenderer_DX11::SetRenderTarget
  */
 void kbRenderer_DX11::SetRenderTarget( eRenderTargetTexture type ) {
-	m_pImmediateContext->OMSetRenderTargets( 1, &m_RenderTargets[type].m_pRenderTargetView, m_pDepthStencilView );
+	m_pDeviceContext->OMSetRenderTargets( 1, &m_RenderTargets[type].m_pRenderTargetView, m_pDepthStencilView );
 }
 
 /**
@@ -1642,6 +1652,8 @@ void kbRenderer_DX11::RenderSync() {
 	m_ScreenSpaceQuads_RenderThread = m_ScreenSpaceQuads_GameThread;
 	m_ScreenSpaceQuads_GameThread.clear();
 
+	m_ViewMode = m_ViewMode_GameThread;
+
 	// Add/update render objects
 	for ( int i = 0; i < m_RenderObjectList_GameThread.size(); i++ )
 	{
@@ -1895,7 +1907,7 @@ void kbRenderer_DX11::SetReadyToRender() {
 void kbRenderer_DX11::RenderScene() {
 	START_SCOPED_TIMER( RENDER_THREAD );
 
-	kbGPUTimeStamp::BeginFrame( m_pImmediateContext );
+	kbGPUTimeStamp::BeginFrame( m_pDeviceContext );
 	PLACE_GPU_TIME_STAMP( "Begin Frame" );
 
 	const float color[4] = { 0.0f, 0.0f, 0.0f, 0.0f };
@@ -1907,16 +1919,24 @@ void kbRenderer_DX11::RenderScene() {
 
 		{
 			START_SCOPED_RENDER_TIMER( RENDER_THREAD_CLEAR_BUFFERS );
-			m_pImmediateContext->ClearRenderTargetView( m_RenderTargets[COLOR_BUFFER].m_pRenderTargetView, color );
-			m_pImmediateContext->ClearRenderTargetView( m_RenderTargets[NORMAL_BUFFER].m_pRenderTargetView, color );
-			m_pImmediateContext->ClearRenderTargetView( m_RenderTargets[DEPTH_BUFFER].m_pRenderTargetView, color );
-			m_pImmediateContext->ClearRenderTargetView( m_RenderTargets[ACCUMULATION_BUFFER].m_pRenderTargetView, color );
-			m_pImmediateContext->ClearDepthStencilView( m_pDepthStencilView, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1, 0 );
+			m_pDeviceContext->ClearRenderTargetView( m_RenderTargets[COLOR_BUFFER].m_pRenderTargetView, color );
+			m_pDeviceContext->ClearRenderTargetView( m_RenderTargets[NORMAL_BUFFER].m_pRenderTargetView, color );
+			m_pDeviceContext->ClearRenderTargetView( m_RenderTargets[DEPTH_BUFFER].m_pRenderTargetView, color );
+			m_pDeviceContext->ClearRenderTargetView( m_RenderTargets[ACCUMULATION_BUFFER].m_pRenderTargetView, color );
+			m_pDeviceContext->ClearDepthStencilView( m_pDepthStencilView, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1, 0 );
+		}
+
+		if ( m_ViewMode == ViewMode_Normal ) {
+			m_pDeviceContext->RSSetState( m_pDefaultRasterizerState );
+		} else if ( m_ViewMode == ViewMode_Wireframe ) {
+			m_pDeviceContext->RSSetState( m_pWireFrameRasterizerState );
+		} else {
+			kbError( "kbRenderer_DX11::RenderScene() - Invalid view mode %d", (int) m_ViewMode );
 		}
 
 		ID3D11RenderTargetView * RenderTargetViews[] = { m_RenderTargets[COLOR_BUFFER].m_pRenderTargetView, m_RenderTargets[NORMAL_BUFFER].m_pRenderTargetView, m_RenderTargets[DEPTH_BUFFER].m_pRenderTargetView };
 	
-		m_pImmediateContext->OMSetRenderTargets( 3, RenderTargetViews, m_pDepthStencilView );
+		m_pDeviceContext->OMSetRenderTargets( 3, RenderTargetViews, m_pDepthStencilView );
 
 		D3D11_VIEWPORT viewport;
 	
@@ -1971,7 +1991,7 @@ void kbRenderer_DX11::RenderScene() {
 			}
 		}
 
-		m_pImmediateContext->RSSetViewports( 1, &viewport );
+		m_pDeviceContext->RSSetViewports( 1, &viewport );
 
 		std::map< const kbComponent *, kbRenderObject * >::iterator iter;
 	
@@ -2023,7 +2043,11 @@ void kbRenderer_DX11::RenderScene() {
 			START_SCOPED_RENDER_TIMER( RENDER_UNLIT )
 
 			m_RenderState.SetDepthStencilState();
-			m_pImmediateContext->OMSetRenderTargets( 1, &m_RenderTargets[ACCUMULATION_BUFFER].m_pRenderTargetView, m_pDepthStencilView );
+			m_pDeviceContext->OMSetRenderTargets( 1, &m_RenderTargets[ACCUMULATION_BUFFER].m_pRenderTargetView, m_pDepthStencilView );
+
+			if ( m_ViewMode == ViewMode_Wireframe ) {
+				m_pDeviceContext->CopyResource( m_RenderTargets[ACCUMULATION_BUFFER].m_pRenderTargetTexture, m_RenderTargets[COLOR_BUFFER].m_pRenderTargetTexture );
+			}
 
 			// Post-Lighting Render Pass
 			for ( iter = m_pCurrentRenderWindow->m_RenderObjectMap.begin(); iter != m_pCurrentRenderWindow->m_RenderObjectMap.end(); iter++ ) {
@@ -2034,36 +2058,40 @@ void kbRenderer_DX11::RenderScene() {
 			PLACE_GPU_TIME_STAMP( "Unlit" );
 		}
 
-		RenderLightShafts();
+		if ( m_ViewMode == ViewMode_Normal ) {
+			RenderLightShafts();
+		}
 		
 		PLACE_GPU_TIME_STAMP( "Light Shafts" );
 
 		RenderTranslucency();
 		RenderScreenSpaceQuads();
 
-		// In World UI Pass
-		m_RenderState.SetDepthStencilState( false, kbRenderState::DepthWriteMaskZero, kbRenderState::CompareLess, false );
-		m_RenderState.SetBlendState( false,
-									 false,
-									 true,
-									 kbRenderState::BF_SourceAlpha,
-									 kbRenderState::BF_InvSourceAlpha,
-									 kbRenderState::BO_Add,
-									 kbRenderState::BF_One,
-									 kbRenderState::BF_Zero,
-									 kbRenderState::BO_Add );
+		if ( m_ViewMode == ViewMode_Normal ) {
+			// In World UI Pass
+			m_RenderState.SetDepthStencilState( false, kbRenderState::DepthWriteMaskZero, kbRenderState::CompareLess, false );
+			m_RenderState.SetBlendState( false,
+										 false,
+										 true,
+										 kbRenderState::BF_SourceAlpha,
+										 kbRenderState::BF_InvSourceAlpha,
+										 kbRenderState::BO_Add,
+										 kbRenderState::BF_One,
+										 kbRenderState::BF_Zero,
+										 kbRenderState::BO_Add );
 
-		for ( iter = m_pCurrentRenderWindow->m_RenderObjectMap.begin(); iter != m_pCurrentRenderWindow->m_RenderObjectMap.end(); iter++ ) {
-			if ( iter->second->m_RenderPass == RP_InWorldUI ) {
-				RenderModel( iter->second, RP_InWorldUI );
+			for ( iter = m_pCurrentRenderWindow->m_RenderObjectMap.begin(); iter != m_pCurrentRenderWindow->m_RenderObjectMap.end(); iter++ ) {
+				if ( iter->second->m_RenderPass == RP_InWorldUI ) {
+					RenderModel( iter->second, RP_InWorldUI );
+				}
 			}
-		}
 
-		m_RenderState.SetBlendState();
+			m_RenderState.SetBlendState();
+		}
 
 		PLACE_GPU_TIME_STAMP( "Transparency" );
 
-		//m_pImmediateContext->OMSetDepthStencilState( m_pNoDepthStencilState, 1 );
+		//m_pDeviceContext->OMSetDepthStencilState( m_pNoDepthStencilState, 1 );
 
 		RenderPostProcess();
 
@@ -2071,7 +2099,7 @@ void kbRenderer_DX11::RenderScene() {
 
 		m_RenderState.SetDepthStencilState();
 	
-		{
+		if ( m_ViewMode == ViewMode_Normal ) {
 			START_SCOPED_RENDER_TIMER( RENDER_DEBUG )
 			RenderDebugBillboards( false );
 			RenderDebugLines();
@@ -2135,7 +2163,7 @@ void kbRenderer_DX11::RenderScene() {
 			ID3D11Texture2D * pBackBuffer = nullptr;
 			m_pCurrentRenderWindow->m_pSwapChain->GetBuffer( 0, __uuidof(ID3D11Texture2D), (LPVOID*) &pBackBuffer );
 			ovr_GetMirrorTextureBufferDX( m_ovrSession, m_MirrorTexture, IID_PPV_ARGS(&tex) );
-			m_pImmediateContext->CopyResource( pBackBuffer, tex );
+			m_pDeviceContext->CopyResource( pBackBuffer, tex );
 			tex->Release();
 			m_pCurrentRenderWindow->m_pSwapChain->Present( 0, 0 );
 		}
@@ -2151,7 +2179,7 @@ void kbRenderer_DX11::RenderScene() {
 	}
 
 	PLACE_GPU_TIME_STAMP( "End Frame" );
-	kbGPUTimeStamp::EndFrame( m_pImmediateContext );
+	kbGPUTimeStamp::EndFrame( m_pDeviceContext );
 }
 
 /**
@@ -2160,7 +2188,7 @@ void kbRenderer_DX11::RenderScene() {
 void kbRenderer_DX11::RenderTranslucency() {
 	START_SCOPED_RENDER_TIMER( RENDER_TRANSLUCENCY );
 
-	m_pImmediateContext->OMSetRenderTargets( 1, &m_RenderTargets[ACCUMULATION_BUFFER].m_pRenderTargetView, m_pDepthStencilView );
+	m_pDeviceContext->OMSetRenderTargets( 1, &m_RenderTargets[ACCUMULATION_BUFFER].m_pRenderTargetView, m_pDepthStencilView );
 
 	m_RenderState.SetDepthStencilState(	true,
 										kbRenderState::DepthWriteMaskZero,
@@ -2301,21 +2329,21 @@ void kbRenderer_DX11::RenderDebugText() {
 	ID3D11Buffer * const vertexBuffer = ( ID3D11Buffer * const ) m_DebugText->m_VertexBuffer.GetBufferPtr();
 	ID3D11Buffer * const indexBuffer = ( ID3D11Buffer * const ) m_DebugText->m_IndexBuffer.GetBufferPtr();
 
-	m_pImmediateContext->IASetVertexBuffers( 0, 1, &vertexBuffer, &stride, &offset );
-	m_pImmediateContext->IASetIndexBuffer( indexBuffer, DXGI_FORMAT_R32_UINT, 0 );
-	m_pImmediateContext->IASetPrimitiveTopology( D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST );
-	m_pImmediateContext->RSSetState( m_pNoFaceCullingRasterizerState );
+	m_pDeviceContext->IASetVertexBuffers( 0, 1, &vertexBuffer, &stride, &offset );
+	m_pDeviceContext->IASetIndexBuffer( indexBuffer, DXGI_FORMAT_R32_UINT, 0 );
+	m_pDeviceContext->IASetPrimitiveTopology( D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST );
+	m_pDeviceContext->RSSetState( m_pNoFaceCullingRasterizerState );
 
 	ID3D11ShaderResourceView *const pShaderResourceView = (ID3D11ShaderResourceView*)m_pTextures[4]->GetGPUTexture();
 
-	m_pImmediateContext->PSSetShaderResources( 0, 1, &pShaderResourceView );
-	m_pImmediateContext->PSSetSamplers( 0, 1, &m_pBasicSamplerState );
-	m_pImmediateContext->IASetInputLayout( (ID3D11InputLayout*)m_pSimpleAdditiveShader->GetVertexLayout() );
-	m_pImmediateContext->VSSetShader( (ID3D11VertexShader *)m_pSimpleAdditiveShader->GetVertexShader(), nullptr, 0 );
-	m_pImmediateContext->PSSetShader( (ID3D11PixelShader *)m_pSimpleAdditiveShader->GetPixelShader(), nullptr, 0 );
+	m_pDeviceContext->PSSetShaderResources( 0, 1, &pShaderResourceView );
+	m_pDeviceContext->PSSetSamplers( 0, 1, &m_pBasicSamplerState );
+	m_pDeviceContext->IASetInputLayout( (ID3D11InputLayout*)m_pSimpleAdditiveShader->GetVertexLayout() );
+	m_pDeviceContext->VSSetShader( (ID3D11VertexShader *)m_pSimpleAdditiveShader->GetVertexShader(), nullptr, 0 );
+	m_pDeviceContext->PSSetShader( (ID3D11PixelShader *)m_pSimpleAdditiveShader->GetPixelShader(), nullptr, 0 );
 
 	D3D11_MAPPED_SUBRESOURCE mappedResource;
-	HRESULT hr = m_pImmediateContext->Map( m_pDefaultShaderConstantsBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource );
+	HRESULT hr = m_pDeviceContext->Map( m_pDefaultShaderConstantsBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource );
 
 	if ( FAILED( hr ) ) {
 		kbError( "Failed to map matrix buffer" );
@@ -2334,10 +2362,10 @@ void kbRenderer_DX11::RenderDebugText() {
 	memcpy( dataPtr, &sourceBuffer, sizeof( ShaderConstantMatrices ) );
 
 
-	m_pImmediateContext->Unmap( m_pDefaultShaderConstantsBuffer, 0 );
-	m_pImmediateContext->VSSetConstantBuffers( 0, 1, &m_pDefaultShaderConstantsBuffer );
+	m_pDeviceContext->Unmap( m_pDefaultShaderConstantsBuffer, 0 );
+	m_pDeviceContext->VSSetConstantBuffers( 0, 1, &m_pDefaultShaderConstantsBuffer );
 
-	m_pImmediateContext->DrawIndexed( m_DebugText->GetMeshes()[0].m_NumTriangles * 3, 0, 0 );
+	m_pDeviceContext->DrawIndexed( m_DebugText->GetMeshes()[0].m_NumTriangles * 3, 0, 0 );
 
 	m_RenderState.SetBlendState();
 }
@@ -2349,8 +2377,8 @@ void kbRenderer_DX11::RenderMousePickerIds() {
 	START_SCOPED_RENDER_TIMER( RENDER_ENTITYID )
 
 	const float color[4] = { 0.0f, 0.0f, 0.0f, 0.0f };
-	m_pImmediateContext->ClearRenderTargetView( m_RenderTargets[MOUSE_PICKER_BUFFER].m_pRenderTargetView, color );
-	m_pImmediateContext->ClearDepthStencilView( m_pDepthStencilView, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1, 0 );
+	m_pDeviceContext->ClearRenderTargetView( m_RenderTargets[MOUSE_PICKER_BUFFER].m_pRenderTargetView, color );
+	m_pDeviceContext->ClearDepthStencilView( m_pDepthStencilView, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1, 0 );
 
 	D3D11_VIEWPORT viewport;
 	viewport.TopLeftX = 0.0f;
@@ -2359,8 +2387,8 @@ void kbRenderer_DX11::RenderMousePickerIds() {
 	viewport.Height = ( float )m_RenderTargets[MOUSE_PICKER_BUFFER].m_Height;
 	viewport.MinDepth = 0;
 	viewport.MaxDepth = 1.0f;
-	m_pImmediateContext->RSSetViewports( 1, &viewport );
-	m_pImmediateContext->OMSetRenderTargets( 1, &m_RenderTargets[MOUSE_PICKER_BUFFER].m_pRenderTargetView, m_pDepthStencilView );
+	m_pDeviceContext->RSSetViewports( 1, &viewport );
+	m_pDeviceContext->OMSetRenderTargets( 1, &m_RenderTargets[MOUSE_PICKER_BUFFER].m_pRenderTargetView, m_pDepthStencilView );
 	m_RenderState.SetDepthStencilState();
 
 	std::map<const kbComponent *, kbRenderObject *>::iterator iter;
@@ -2374,24 +2402,74 @@ void kbRenderer_DX11::RenderMousePickerIds() {
 }
 
 /**
+ *	kbRenderer_DX11::Blit
+ */
+void kbRenderer_DX11::Blit( kbRenderTexture *const src, kbRenderTexture *const dest ) {
+	const unsigned int stride = sizeof( vertexLayout );
+	const unsigned int offset = 0;
+
+	kbShader *const pShader = m_pDebugShader;
+
+	if ( dest == nullptr ) {
+		m_pDeviceContext->OMSetRenderTargets( 1, &m_pCurrentRenderWindow->m_pRenderTargetView, m_pDepthStencilView );
+	} else {
+		m_pDeviceContext->OMSetRenderTargets( 1, &dest->m_pRenderTargetView, nullptr );
+	}
+	m_pDeviceContext->IASetVertexBuffers( 0, 1, &m_pUnitQuad, &stride, &offset );
+	m_pDeviceContext->IASetPrimitiveTopology( D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST );
+
+	m_pDeviceContext->RSSetState( m_pDefaultRasterizerState );
+
+	//ID3D11ShaderResourceView *const pShaderResourceView = (ID3D11ShaderResourceView*)m_pTextures[textureIndex]->GetGPUTexture();
+
+	m_pDeviceContext->PSSetShaderResources( 0, 1, &src->m_pShaderResourceView );
+	m_pDeviceContext->PSSetSamplers( 0, 1, &m_pBasicSamplerState );
+	m_pDeviceContext->IASetInputLayout( (ID3D11InputLayout*)pShader->GetVertexLayout() );
+	m_pDeviceContext->VSSetShader( (ID3D11VertexShader *)pShader->GetVertexShader(), nullptr, 0 );
+	m_pDeviceContext->PSSetShader( (ID3D11PixelShader *)pShader->GetPixelShader(), nullptr, 0 );
+
+	D3D11_MAPPED_SUBRESOURCE mappedResource;
+	HRESULT hr = m_pDeviceContext->Map( m_pDefaultShaderConstantsBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource );
+
+	if ( FAILED( hr ) ) {
+		kbError( "Failed to map matrix buffer" );
+	}
+
+	ShaderConstantMatrices sourceBuffer;
+	
+	sourceBuffer.mvpMatrix.MakeIdentity();
+	sourceBuffer.mvpMatrix[0][0] = 1.0f;
+	sourceBuffer.mvpMatrix[1][1] = 1.0f;
+	sourceBuffer.mvpMatrix[3][0] = 0.0f;
+	sourceBuffer.mvpMatrix[3][1] = 0.0f;
+
+	ShaderConstantMatrices *const dataPtr = ( ShaderConstantMatrices * ) mappedResource.pData;
+	memcpy( dataPtr, &sourceBuffer, sizeof( ShaderConstantMatrices ) );
+
+	m_pDeviceContext->Unmap( m_pDefaultShaderConstantsBuffer, 0 );
+	m_pDeviceContext->VSSetConstantBuffers( 0, 1, &m_pDefaultShaderConstantsBuffer );
+	m_pDeviceContext->Draw( 6, 0 );
+}
+
+/**
  *	kbRenderer_DX11::DrawTexture
  */
 void kbRenderer_DX11::DrawTexture( ID3D11ShaderResourceView *const pShaderResourceView, const kbVec3 & pixelPosition, const kbVec3 & pixelSize, const kbVec3 & renderTargetSize ) {
 	const unsigned int stride = sizeof( vertexLayout );
 	const unsigned int offset = 0;
 
-	m_pImmediateContext->IASetVertexBuffers( 0, 1, &m_pUnitQuad, &stride, &offset );
-	m_pImmediateContext->IASetPrimitiveTopology( D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST );
+	m_pDeviceContext->IASetVertexBuffers( 0, 1, &m_pUnitQuad, &stride, &offset );
+	m_pDeviceContext->IASetPrimitiveTopology( D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST );
 
-	m_pImmediateContext->RSSetState( m_pRasterizerState );
-	m_pImmediateContext->PSSetSamplers( 0, 1, &m_pBasicSamplerState );
-	m_pImmediateContext->IASetInputLayout( (ID3D11InputLayout*)m_pDebugShader->GetVertexLayout() );
-	m_pImmediateContext->VSSetShader( (ID3D11VertexShader *)m_pDebugShader->GetVertexShader(), nullptr, 0 );
-	m_pImmediateContext->PSSetShader( (ID3D11PixelShader *)m_pDebugShader->GetPixelShader(), nullptr, 0 );
-	m_pImmediateContext->PSSetShaderResources( 0, 1, &pShaderResourceView );
+	m_pDeviceContext->RSSetState( m_pDefaultRasterizerState );
+	m_pDeviceContext->PSSetSamplers( 0, 1, &m_pBasicSamplerState );
+	m_pDeviceContext->IASetInputLayout( (ID3D11InputLayout*)m_pDebugShader->GetVertexLayout() );
+	m_pDeviceContext->VSSetShader( (ID3D11VertexShader *)m_pDebugShader->GetVertexShader(), nullptr, 0 );
+	m_pDeviceContext->PSSetShader( (ID3D11PixelShader *)m_pDebugShader->GetPixelShader(), nullptr, 0 );
+	m_pDeviceContext->PSSetShaderResources( 0, 1, &pShaderResourceView );
 	
 	D3D11_MAPPED_SUBRESOURCE mappedResource;
-	HRESULT hr = m_pImmediateContext->Map( m_pDefaultShaderConstantsBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource );
+	HRESULT hr = m_pDeviceContext->Map( m_pDefaultShaderConstantsBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource );
 	
 	if ( FAILED( hr ) ) {
 		kbError( "Failed to map matrix buffer" );
@@ -2417,10 +2495,10 @@ void kbRenderer_DX11::DrawTexture( ID3D11ShaderResourceView *const pShaderResour
 
 	memcpy( dataPtr, &sourceBuffer, sizeof( ShaderConstantMatrices ) );
 	
-	m_pImmediateContext->Unmap( m_pDefaultShaderConstantsBuffer, 0 );
-	m_pImmediateContext->VSSetConstantBuffers( 0, 1, &m_pDefaultShaderConstantsBuffer );
+	m_pDeviceContext->Unmap( m_pDefaultShaderConstantsBuffer, 0 );
+	m_pDeviceContext->VSSetConstantBuffers( 0, 1, &m_pDefaultShaderConstantsBuffer );
 	
-	m_pImmediateContext->Draw( 6, 0 );
+	m_pDeviceContext->Draw( 6, 0 );
 }
 
 /**
@@ -2438,31 +2516,31 @@ void kbRenderer_DX11::RenderBloom() {
 	viewport.Height = ( float )m_RenderTargets[DOWN_RES_BUFFER].m_Height;
 	viewport.MinDepth = 0;
 	viewport.MaxDepth = 1.0f;
-	m_pImmediateContext->RSSetViewports( 1, &viewport );
+	m_pDeviceContext->RSSetViewports( 1, &viewport );
 
 	///////////////////////////////
 	// Gather
 	///////////////////////////////
 	{
-		m_pImmediateContext->OMSetRenderTargets( 1, &m_RenderTargets[DOWN_RES_BUFFER].m_pRenderTargetView, nullptr );
+		m_pDeviceContext->OMSetRenderTargets( 1, &m_RenderTargets[DOWN_RES_BUFFER].m_pRenderTargetView, nullptr );
 		const unsigned int stride = sizeof( vertexLayout );
 		const unsigned int offset = 0;
 
-		m_pImmediateContext->IASetVertexBuffers( 0, 1, &m_pUnitQuad, &stride, &offset );
-		m_pImmediateContext->IASetPrimitiveTopology( D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST );
-		m_pImmediateContext->RSSetState( m_pRasterizerState );
+		m_pDeviceContext->IASetVertexBuffers( 0, 1, &m_pUnitQuad, &stride, &offset );
+		m_pDeviceContext->IASetPrimitiveTopology( D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST );
+		m_pDeviceContext->RSSetState( m_pDefaultRasterizerState );
 
-		m_pImmediateContext->PSSetShaderResources( 0, 1, &m_RenderTargets[ACCUMULATION_BUFFER].m_pShaderResourceView );
+		m_pDeviceContext->PSSetShaderResources( 0, 1, &m_RenderTargets[ACCUMULATION_BUFFER].m_pShaderResourceView );
 		ID3D11SamplerState *const samplerState[] = { m_pNormalMapSamplerState };
 
-		m_pImmediateContext->PSSetSamplers( 0, 1, samplerState );
-		m_pImmediateContext->IASetInputLayout( (ID3D11InputLayout*)m_pBloomGatherShader->GetVertexLayout() );
-		m_pImmediateContext->VSSetShader( (ID3D11VertexShader *)m_pBloomGatherShader->GetVertexShader(), nullptr, 0 );
-		m_pImmediateContext->PSSetShader( (ID3D11PixelShader *)m_pBloomGatherShader->GetPixelShader(), nullptr, 0 );
+		m_pDeviceContext->PSSetSamplers( 0, 1, samplerState );
+		m_pDeviceContext->IASetInputLayout( (ID3D11InputLayout*)m_pBloomGatherShader->GetVertexLayout() );
+		m_pDeviceContext->VSSetShader( (ID3D11VertexShader *)m_pBloomGatherShader->GetVertexShader(), nullptr, 0 );
+		m_pDeviceContext->PSSetShader( (ID3D11PixelShader *)m_pBloomGatherShader->GetPixelShader(), nullptr, 0 );
 
 		// Set constants
 		D3D11_MAPPED_SUBRESOURCE mappedResource;
-		HRESULT hr = m_pImmediateContext->Map( m_pBloomShaderConstantsBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource );
+		HRESULT hr = m_pDeviceContext->Map( m_pBloomShaderConstantsBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource );
 
 		if ( FAILED( hr ) ) {
 			kbError( "Failed to map matrix buffer" );
@@ -2478,38 +2556,38 @@ void kbRenderer_DX11::RenderBloom() {
 		BloomShaderConstants *const dataPtr = ( BloomShaderConstants * ) mappedResource.pData;
 		memcpy( dataPtr, &sourceBuffer, sizeof( BloomShaderConstants ) );
 
-		m_pImmediateContext->Unmap( m_pBloomShaderConstantsBuffer, 0 );
+		m_pDeviceContext->Unmap( m_pBloomShaderConstantsBuffer, 0 );
 
-		m_pImmediateContext->VSSetConstantBuffers( 0, 1, &m_pBloomShaderConstantsBuffer );
-		m_pImmediateContext->PSSetConstantBuffers( 0, 1, &m_pBloomShaderConstantsBuffer );
+		m_pDeviceContext->VSSetConstantBuffers( 0, 1, &m_pBloomShaderConstantsBuffer );
+		m_pDeviceContext->PSSetConstantBuffers( 0, 1, &m_pBloomShaderConstantsBuffer );
 
 		// Draw
-		m_pImmediateContext->Draw( 6, 0 );
+		m_pDeviceContext->Draw( 6, 0 );
 	}
 
 	///////////////////////////////
 	// Horizontal blur
 	///////////////////////////////
 	{
-		m_pImmediateContext->OMSetRenderTargets( 1, &m_RenderTargets[DOWN_RES_BUFFER_2].m_pRenderTargetView, nullptr );
+		m_pDeviceContext->OMSetRenderTargets( 1, &m_RenderTargets[DOWN_RES_BUFFER_2].m_pRenderTargetView, nullptr );
 		const unsigned int stride = sizeof( vertexLayout );
 		const unsigned int offset = 0;
 
-		m_pImmediateContext->IASetVertexBuffers( 0, 1, &m_pUnitQuad, &stride, &offset );
-		m_pImmediateContext->IASetPrimitiveTopology( D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST );
-		m_pImmediateContext->RSSetState( m_pRasterizerState );
+		m_pDeviceContext->IASetVertexBuffers( 0, 1, &m_pUnitQuad, &stride, &offset );
+		m_pDeviceContext->IASetPrimitiveTopology( D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST );
+		m_pDeviceContext->RSSetState( m_pDefaultRasterizerState );
 
-		m_pImmediateContext->PSSetShaderResources( 0, 1, &m_RenderTargets[DOWN_RES_BUFFER].m_pShaderResourceView );
+		m_pDeviceContext->PSSetShaderResources( 0, 1, &m_RenderTargets[DOWN_RES_BUFFER].m_pShaderResourceView );
 		ID3D11SamplerState * samplerState[] = { m_pNormalMapSamplerState };
 
-		m_pImmediateContext->PSSetSamplers( 0, 1, samplerState );
-		m_pImmediateContext->IASetInputLayout( (ID3D11InputLayout*)m_pBloomBlur->GetVertexLayout() );
-		m_pImmediateContext->VSSetShader( (ID3D11VertexShader *)m_pBloomBlur->GetVertexShader(), nullptr, 0 );
-		m_pImmediateContext->PSSetShader( (ID3D11PixelShader *)m_pBloomBlur->GetPixelShader(), nullptr, 0 );
+		m_pDeviceContext->PSSetSamplers( 0, 1, samplerState );
+		m_pDeviceContext->IASetInputLayout( (ID3D11InputLayout*)m_pBloomBlur->GetVertexLayout() );
+		m_pDeviceContext->VSSetShader( (ID3D11VertexShader *)m_pBloomBlur->GetVertexShader(), nullptr, 0 );
+		m_pDeviceContext->PSSetShader( (ID3D11PixelShader *)m_pBloomBlur->GetPixelShader(), nullptr, 0 );
 
 		// Set constants
 		D3D11_MAPPED_SUBRESOURCE mappedResource;
-		HRESULT hr = m_pImmediateContext->Map( m_pBloomShaderConstantsBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource );
+		HRESULT hr = m_pDeviceContext->Map( m_pBloomShaderConstantsBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource );
 
 		if ( FAILED( hr ) ) {
 			kbError( "Failed to map matrix buffer" );
@@ -2534,36 +2612,36 @@ void kbRenderer_DX11::RenderBloom() {
 		BloomShaderConstants *const dataPtr = ( BloomShaderConstants * ) mappedResource.pData;
 		memcpy( dataPtr, &sourceBuffer, sizeof( BloomShaderConstants ) );
 
-		m_pImmediateContext->Unmap( m_pBloomShaderConstantsBuffer, 0 );
+		m_pDeviceContext->Unmap( m_pBloomShaderConstantsBuffer, 0 );
 
-		m_pImmediateContext->VSSetConstantBuffers( 0, 1, &m_pBloomShaderConstantsBuffer );
-		m_pImmediateContext->PSSetConstantBuffers( 0, 1, &m_pBloomShaderConstantsBuffer );
+		m_pDeviceContext->VSSetConstantBuffers( 0, 1, &m_pBloomShaderConstantsBuffer );
+		m_pDeviceContext->PSSetConstantBuffers( 0, 1, &m_pBloomShaderConstantsBuffer );
 
 		// Draw
-		m_pImmediateContext->Draw( 6, 0 );
+		m_pDeviceContext->Draw( 6, 0 );
 
 		ID3D11ShaderResourceView * nullarray[] = { nullptr, nullptr };//'{ m_RenderTargets[ACCUMULATION_BUFFER].m_pShaderResourceView, m_RenderTargets[COLOR_BUFFER].m_pShaderResourceView };
-		m_pImmediateContext->PSSetShaderResources( 0, 2, nullarray );
+		m_pDeviceContext->PSSetShaderResources( 0, 2, nullarray );
 	}
 
 	///////////////////////////////
 	// Vertical blur
 	///////////////////////////////
 	{
-		m_pImmediateContext->OMSetRenderTargets( 1, &m_RenderTargets[DOWN_RES_BUFFER].m_pRenderTargetView, nullptr );
+		m_pDeviceContext->OMSetRenderTargets( 1, &m_RenderTargets[DOWN_RES_BUFFER].m_pRenderTargetView, nullptr );
 		const unsigned int stride = sizeof( vertexLayout );
 		const unsigned int offset = 0;
 
-		m_pImmediateContext->IASetVertexBuffers( 0, 1, &m_pUnitQuad, &stride, &offset );
-		m_pImmediateContext->IASetPrimitiveTopology( D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST );
-		m_pImmediateContext->RSSetState( m_pRasterizerState );
+		m_pDeviceContext->IASetVertexBuffers( 0, 1, &m_pUnitQuad, &stride, &offset );
+		m_pDeviceContext->IASetPrimitiveTopology( D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST );
+		m_pDeviceContext->RSSetState( m_pDefaultRasterizerState );
 
-		m_pImmediateContext->PSSetShaderResources( 0, 1, &m_RenderTargets[DOWN_RES_BUFFER_2].m_pShaderResourceView );
+		m_pDeviceContext->PSSetShaderResources( 0, 1, &m_RenderTargets[DOWN_RES_BUFFER_2].m_pShaderResourceView );
 		ID3D11SamplerState * samplerState[] = { m_pNormalMapSamplerState };
 
 		// Set constants
 		D3D11_MAPPED_SUBRESOURCE mappedResource;
-		HRESULT hr = m_pImmediateContext->Map( m_pBloomShaderConstantsBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource );
+		HRESULT hr = m_pDeviceContext->Map( m_pBloomShaderConstantsBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource );
 
 		if ( FAILED( hr ) ) {
 			kbError( "Failed to map matrix buffer" );
@@ -2588,13 +2666,13 @@ void kbRenderer_DX11::RenderBloom() {
 		BloomShaderConstants *const dataPtr = ( BloomShaderConstants * ) mappedResource.pData;
 		memcpy( dataPtr, &sourceBuffer, sizeof( BloomShaderConstants ) );
 
-		m_pImmediateContext->Unmap( m_pBloomShaderConstantsBuffer, 0 );
+		m_pDeviceContext->Unmap( m_pBloomShaderConstantsBuffer, 0 );
 
-		m_pImmediateContext->VSSetConstantBuffers( 0, 1, &m_pBloomShaderConstantsBuffer );
-		m_pImmediateContext->PSSetConstantBuffers( 0, 1, &m_pBloomShaderConstantsBuffer );
+		m_pDeviceContext->VSSetConstantBuffers( 0, 1, &m_pBloomShaderConstantsBuffer );
+		m_pDeviceContext->PSSetConstantBuffers( 0, 1, &m_pBloomShaderConstantsBuffer );
 
 		// Draw
-		m_pImmediateContext->Draw( 6, 0 );
+		m_pDeviceContext->Draw( 6, 0 );
 	}
 
 	// Final Render To Screen
@@ -2620,19 +2698,19 @@ void kbRenderer_DX11::RenderBloom() {
 								 kbRenderState::BO_Add,
 							     kbRenderState::CW_All );
 
-		m_pImmediateContext->RSSetViewports( 1, &viewport );
-		m_pImmediateContext->OMSetRenderTargets( 1, &m_RenderTargets[ACCUMULATION_BUFFER].m_pRenderTargetView, nullptr );
+		m_pDeviceContext->RSSetViewports( 1, &viewport );
+		m_pDeviceContext->OMSetRenderTargets( 1, &m_RenderTargets[ACCUMULATION_BUFFER].m_pRenderTargetView, nullptr );
 
 		ID3D11ShaderResourceView *const  RenderTargetViews[] = { m_RenderTargets[DOWN_RES_BUFFER].m_pShaderResourceView };
 		ID3D11SamplerState *const  SamplerStates[] = { m_pBasicSamplerState };
-		m_pImmediateContext->IASetInputLayout( (ID3D11InputLayout*)m_pSimpleAdditiveShader->GetVertexLayout() );
-		m_pImmediateContext->VSSetShader( (ID3D11VertexShader *)this->m_pSimpleAdditiveShader->GetVertexShader(), nullptr, 0 );
-		m_pImmediateContext->PSSetShader( (ID3D11PixelShader *)m_pSimpleAdditiveShader->GetPixelShader(), nullptr, 0 );
-		m_pImmediateContext->PSSetShaderResources( 0, 1, RenderTargetViews );
-		m_pImmediateContext->PSSetSamplers( 0, 1, SamplerStates );
+		m_pDeviceContext->IASetInputLayout( (ID3D11InputLayout*)m_pSimpleAdditiveShader->GetVertexLayout() );
+		m_pDeviceContext->VSSetShader( (ID3D11VertexShader *)this->m_pSimpleAdditiveShader->GetVertexShader(), nullptr, 0 );
+		m_pDeviceContext->PSSetShader( (ID3D11PixelShader *)m_pSimpleAdditiveShader->GetPixelShader(), nullptr, 0 );
+		m_pDeviceContext->PSSetShaderResources( 0, 1, RenderTargetViews );
+		m_pDeviceContext->PSSetSamplers( 0, 1, SamplerStates );
 
 		D3D11_MAPPED_SUBRESOURCE mappedResource;
-		HRESULT hr = m_pImmediateContext->Map( m_pDefaultShaderConstantsBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource );
+		HRESULT hr = m_pDeviceContext->Map( m_pDefaultShaderConstantsBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource );
 		if ( FAILED( hr ) ) {
 			kbError( "Failed to map matrix buffer" );
 		}
@@ -2643,15 +2721,15 @@ void kbRenderer_DX11::RenderBloom() {
 		ShaderConstantMatrices * dataPtr = ( ShaderConstantMatrices * ) mappedResource.pData;
 		memcpy( dataPtr, &sourceBuffer, sizeof( ShaderConstantMatrices ) );
 
-		m_pImmediateContext->Unmap( m_pDefaultShaderConstantsBuffer, 0 );
-		m_pImmediateContext->VSSetConstantBuffers( 0, 1, &m_pDefaultShaderConstantsBuffer );
-		m_pImmediateContext->PSSetConstantBuffers( 0, 1, &m_pDefaultShaderConstantsBuffer );
+		m_pDeviceContext->Unmap( m_pDefaultShaderConstantsBuffer, 0 );
+		m_pDeviceContext->VSSetConstantBuffers( 0, 1, &m_pDefaultShaderConstantsBuffer );
+		m_pDeviceContext->PSSetConstantBuffers( 0, 1, &m_pDefaultShaderConstantsBuffer );
 
-		m_pImmediateContext->Draw( 6, 0 );
+		m_pDeviceContext->Draw( 6, 0 );
 	}
 
 	ID3D11ShaderResourceView *const nullArray[] = { nullptr };
-	m_pImmediateContext->PSSetShaderResources( 0, 1, nullArray );
+	m_pDeviceContext->PSSetShaderResources( 0, 1, nullArray );
 
 	m_RenderState.SetBlendState();
 
@@ -2661,7 +2739,7 @@ void kbRenderer_DX11::RenderBloom() {
 	viewport.MaxDepth = 1.0f;
 	viewport.TopLeftX = 0;
 	viewport.TopLeftY = 0;
-	m_pImmediateContext->RSSetViewports( 1, &viewport );
+	m_pDeviceContext->RSSetViewports( 1, &viewport );
 }
 
 /**
@@ -2670,40 +2748,45 @@ void kbRenderer_DX11::RenderBloom() {
 void kbRenderer_DX11::RenderPostProcess() {
 	START_SCOPED_RENDER_TIMER( RENDER_POST_PROCESS );
 
+	if ( m_ViewMode == ViewMode_Wireframe ) {
+		Blit( &m_RenderTargets[ACCUMULATION_BUFFER], nullptr );
+		return;
+	}
+
 	RenderBloom();
 
 	if ( m_bRenderToHMD == false ) {
-		m_pImmediateContext->OMSetRenderTargets( 1, &m_pCurrentRenderWindow->m_pRenderTargetView, m_pDepthStencilView );
+		m_pDeviceContext->OMSetRenderTargets( 1, &m_pCurrentRenderWindow->m_pRenderTargetView, m_pDepthStencilView );
 	} else {
 		ID3D11RenderTargetView *const rtv = m_OculusTexture[m_HMDPass]->GetRTV();
-		m_pImmediateContext->OMSetRenderTargets( 1, &rtv, nullptr );
+		m_pDeviceContext->OMSetRenderTargets( 1, &rtv, nullptr );
 	}
 
 	const unsigned int stride = sizeof( vertexLayout );
 	const unsigned int offset = 0;
 
-	m_pImmediateContext->IASetVertexBuffers( 0, 1, &m_pUnitQuad, &stride, &offset );
-	m_pImmediateContext->IASetPrimitiveTopology( D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST );
-	m_pImmediateContext->RSSetState( m_pRasterizerState );
+	m_pDeviceContext->IASetVertexBuffers( 0, 1, &m_pUnitQuad, &stride, &offset );
+	m_pDeviceContext->IASetPrimitiveTopology( D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST );
+	m_pDeviceContext->RSSetState( m_pDefaultRasterizerState );
 
 	if ( m_pCurrentRenderWindow->m_RenderLightMap.size() == 0 )
 	{
-		m_pImmediateContext->PSSetShaderResources( 0, 1, &m_RenderTargets[ACCUMULATION_BUFFER].m_pShaderResourceView );
+		m_pDeviceContext->PSSetShaderResources( 0, 1, &m_RenderTargets[ACCUMULATION_BUFFER].m_pShaderResourceView );
 	}
 	else
 	{
 		ID3D11ShaderResourceView * RenderTargetViews[] = { m_RenderTargets[ACCUMULATION_BUFFER].m_pShaderResourceView, m_RenderTargets[DEPTH_BUFFER].m_pShaderResourceView };
-		m_pImmediateContext->PSSetShaderResources( 0, 2, RenderTargetViews );
+		m_pDeviceContext->PSSetShaderResources( 0, 2, RenderTargetViews );
 	}
 
 	ID3D11SamplerState * samplerState[] = { m_pNormalMapSamplerState, m_pNormalMapSamplerState };
-	m_pImmediateContext->PSSetSamplers( 0, 2, samplerState );
-	m_pImmediateContext->IASetInputLayout( (ID3D11InputLayout*)m_pUberPostProcess->GetVertexLayout() );
-	m_pImmediateContext->VSSetShader( (ID3D11VertexShader *)m_pUberPostProcess->GetVertexShader(), nullptr, 0 );
-	m_pImmediateContext->PSSetShader( (ID3D11PixelShader *)m_pUberPostProcess->GetPixelShader(), nullptr, 0 );
+	m_pDeviceContext->PSSetSamplers( 0, 2, samplerState );
+	m_pDeviceContext->IASetInputLayout( (ID3D11InputLayout*)m_pUberPostProcess->GetVertexLayout() );
+	m_pDeviceContext->VSSetShader( (ID3D11VertexShader *)m_pUberPostProcess->GetVertexShader(), nullptr, 0 );
+	m_pDeviceContext->PSSetShader( (ID3D11PixelShader *)m_pUberPostProcess->GetPixelShader(), nullptr, 0 );
 
 	D3D11_MAPPED_SUBRESOURCE mappedResource;
-	HRESULT hr = m_pImmediateContext->Map( m_pPostProcessConstantsBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource );
+	HRESULT hr = m_pDeviceContext->Map( m_pPostProcessConstantsBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource );
 
 	if ( FAILED( hr ) ) {
 		kbError( "Failed to map matrix buffer" );
@@ -2727,18 +2810,18 @@ void kbRenderer_DX11::RenderPostProcess() {
 	PostProcessConstants * dataPtr = ( PostProcessConstants * ) mappedResource.pData;
 	memcpy( dataPtr, &sourceBuffer, sizeof( PostProcessConstants ) );
 
-	m_pImmediateContext->Unmap( m_pPostProcessConstantsBuffer, 0 );
-	m_pImmediateContext->VSSetConstantBuffers( 0, 1, &m_pPostProcessConstantsBuffer );
-	m_pImmediateContext->PSSetConstantBuffers( 0, 1, &m_pPostProcessConstantsBuffer );
+	m_pDeviceContext->Unmap( m_pPostProcessConstantsBuffer, 0 );
+	m_pDeviceContext->VSSetConstantBuffers( 0, 1, &m_pPostProcessConstantsBuffer );
+	m_pDeviceContext->PSSetConstantBuffers( 0, 1, &m_pPostProcessConstantsBuffer );
 
-	m_pImmediateContext->Draw( 6, 0 );
+	m_pDeviceContext->Draw( 6, 0 );
 
 	ID3D11ShaderResourceView * nullArray[] = { nullptr };
 
-	m_pImmediateContext->PSSetShaderResources( 0, 1, nullArray );
+	m_pDeviceContext->PSSetShaderResources( 0, 1, nullArray );
 
 	ID3D11ShaderResourceView * nullarray[] = { nullptr, nullptr };//'{ m_RenderTargets[ACCUMULATION_BUFFER].m_pShaderResourceView, m_RenderTargets[COLOR_BUFFER].m_pShaderResourceView };
-	m_pImmediateContext->PSSetShaderResources( 0, 2, nullarray );
+	m_pDeviceContext->PSSetShaderResources( 0, 2, nullarray );
 }
 
 /**
@@ -2746,28 +2829,28 @@ void kbRenderer_DX11::RenderPostProcess() {
  */
 void kbRenderer_DX11::RenderConsole() {
 	if ( m_bRenderToHMD == false ) {
-		m_pImmediateContext->OMSetRenderTargets( 1, &m_pCurrentRenderWindow->m_pRenderTargetView, m_pDepthStencilView );
+		m_pDeviceContext->OMSetRenderTargets( 1, &m_pCurrentRenderWindow->m_pRenderTargetView, m_pDepthStencilView );
 	} else {
 		ID3D11RenderTargetView *const rtv = m_OculusTexture[0]->GetRTV();
-		m_pImmediateContext->OMSetRenderTargets( 1, &rtv, nullptr );
+		m_pDeviceContext->OMSetRenderTargets( 1, &rtv, nullptr );
 	}
 
 	const unsigned int stride = sizeof( vertexLayout );
 	const unsigned int offset = 0;
 
-	m_pImmediateContext->IASetVertexBuffers( 0, 1, &m_pConsoleQuad, &stride, &offset );
-	m_pImmediateContext->IASetPrimitiveTopology( D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST );
+	m_pDeviceContext->IASetVertexBuffers( 0, 1, &m_pConsoleQuad, &stride, &offset );
+	m_pDeviceContext->IASetPrimitiveTopology( D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST );
 
-	m_pImmediateContext->RSSetState( m_pRasterizerState );
+	m_pDeviceContext->RSSetState( m_pDefaultRasterizerState );
 
 	ID3D11SamplerState *const samplerState[] = { m_pNormalMapSamplerState, m_pNormalMapSamplerState };
-	m_pImmediateContext->PSSetSamplers( 0, 2, samplerState );
-	m_pImmediateContext->IASetInputLayout( (ID3D11InputLayout*)m_pOpaqueQuadShader->GetVertexLayout() );
-	m_pImmediateContext->VSSetShader( (ID3D11VertexShader *)m_pDebugShader->GetVertexShader(), nullptr, 0 );
-	m_pImmediateContext->PSSetShader( (ID3D11PixelShader *)m_pDebugShader->GetPixelShader(), nullptr, 0 );
+	m_pDeviceContext->PSSetSamplers( 0, 2, samplerState );
+	m_pDeviceContext->IASetInputLayout( (ID3D11InputLayout*)m_pOpaqueQuadShader->GetVertexLayout() );
+	m_pDeviceContext->VSSetShader( (ID3D11VertexShader *)m_pDebugShader->GetVertexShader(), nullptr, 0 );
+	m_pDeviceContext->PSSetShader( (ID3D11PixelShader *)m_pDebugShader->GetPixelShader(), nullptr, 0 );
 
 	D3D11_MAPPED_SUBRESOURCE mappedResource;
-	HRESULT hr = m_pImmediateContext->Map( m_pDefaultShaderConstantsBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource );
+	HRESULT hr = m_pDeviceContext->Map( m_pDefaultShaderConstantsBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource );
 
 	if ( FAILED( hr ) ) {
 		kbError( "Failed to map matrix buffer" );
@@ -2793,18 +2876,18 @@ void kbRenderer_DX11::RenderConsole() {
 	ShaderConstantMatrices * dataPtr = ( ShaderConstantMatrices * ) mappedResource.pData;
 	memcpy( dataPtr, &sourceBuffer, sizeof( ShaderConstantMatrices ) );
 
-	m_pImmediateContext->Unmap( m_pDefaultShaderConstantsBuffer, 0 );
-	m_pImmediateContext->VSSetConstantBuffers( 0, 1, &m_pDefaultShaderConstantsBuffer );
-	m_pImmediateContext->PSSetConstantBuffers( 0, 1, &m_pDefaultShaderConstantsBuffer );
+	m_pDeviceContext->Unmap( m_pDefaultShaderConstantsBuffer, 0 );
+	m_pDeviceContext->VSSetConstantBuffers( 0, 1, &m_pDefaultShaderConstantsBuffer );
+	m_pDeviceContext->PSSetConstantBuffers( 0, 1, &m_pDefaultShaderConstantsBuffer );
 
-	m_pImmediateContext->Draw( 6, 0 );
+	m_pDeviceContext->Draw( 6, 0 );
 
 	ID3D11ShaderResourceView * nullArray[] = { nullptr };
 
-	m_pImmediateContext->PSSetShaderResources( 0, 1, nullArray );
+	m_pDeviceContext->PSSetShaderResources( 0, 1, nullArray );
 
 	ID3D11ShaderResourceView * nullarray[] = { nullptr, nullptr };//'{ m_RenderTargets[ACCUMULATION_BUFFER].m_pShaderResourceView, m_RenderTargets[COLOR_BUFFER].m_pShaderResourceView };
-	m_pImmediateContext->PSSetShaderResources( 0, 2, nullarray );
+	m_pDeviceContext->PSSetShaderResources( 0, 2, nullarray );
 }
 
 /**
@@ -3083,21 +3166,21 @@ void kbRenderer_DX11::RenderScreenSpaceQuadImmediate( const int start_x, const i
 		pShader = m_pDebugShader;
 	}
 
-	m_pImmediateContext->IASetVertexBuffers( 0, 1, &m_pUnitQuad, &stride, &offset );
-	m_pImmediateContext->IASetPrimitiveTopology( D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST );
+	m_pDeviceContext->IASetVertexBuffers( 0, 1, &m_pUnitQuad, &stride, &offset );
+	m_pDeviceContext->IASetPrimitiveTopology( D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST );
 
-	m_pImmediateContext->RSSetState( m_pRasterizerState );
+	m_pDeviceContext->RSSetState( m_pDefaultRasterizerState );
 
 	ID3D11ShaderResourceView *const pShaderResourceView = (ID3D11ShaderResourceView*)m_pTextures[textureIndex]->GetGPUTexture();
 
-	m_pImmediateContext->PSSetShaderResources( 0, 1, &pShaderResourceView );
-	m_pImmediateContext->PSSetSamplers( 0, 1, &m_pBasicSamplerState );
-	m_pImmediateContext->IASetInputLayout( (ID3D11InputLayout*)pShader->GetVertexLayout() );
-	m_pImmediateContext->VSSetShader( (ID3D11VertexShader *)pShader->GetVertexShader(), nullptr, 0 );
-	m_pImmediateContext->PSSetShader( (ID3D11PixelShader *)pShader->GetPixelShader(), nullptr, 0 );
+	m_pDeviceContext->PSSetShaderResources( 0, 1, &pShaderResourceView );
+	m_pDeviceContext->PSSetSamplers( 0, 1, &m_pBasicSamplerState );
+	m_pDeviceContext->IASetInputLayout( (ID3D11InputLayout*)pShader->GetVertexLayout() );
+	m_pDeviceContext->VSSetShader( (ID3D11VertexShader *)pShader->GetVertexShader(), nullptr, 0 );
+	m_pDeviceContext->PSSetShader( (ID3D11PixelShader *)pShader->GetPixelShader(), nullptr, 0 );
 
 	D3D11_MAPPED_SUBRESOURCE mappedResource;
-	HRESULT hr = m_pImmediateContext->Map( m_pDefaultShaderConstantsBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource );
+	HRESULT hr = m_pDeviceContext->Map( m_pDefaultShaderConstantsBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource );
 
 	if ( FAILED( hr ) ) {
 		kbError( "Failed to map matrix buffer" );
@@ -3114,10 +3197,10 @@ void kbRenderer_DX11::RenderScreenSpaceQuadImmediate( const int start_x, const i
 	ShaderConstantMatrices *const dataPtr = ( ShaderConstantMatrices * ) mappedResource.pData;
 	memcpy( dataPtr, &sourceBuffer, sizeof( ShaderConstantMatrices ) );
 
-	m_pImmediateContext->Unmap( m_pDefaultShaderConstantsBuffer, 0 );
-	m_pImmediateContext->VSSetConstantBuffers( 0, 1, &m_pDefaultShaderConstantsBuffer );
+	m_pDeviceContext->Unmap( m_pDefaultShaderConstantsBuffer, 0 );
+	m_pDeviceContext->VSSetConstantBuffers( 0, 1, &m_pDefaultShaderConstantsBuffer );
 
-	m_pImmediateContext->Draw( 6, 0 );
+	m_pDeviceContext->Draw( 6, 0 );
 }
 
 /**
@@ -3222,17 +3305,17 @@ void kbRenderer_DX11::RenderModel( const kbRenderObject *const pRenderObject, co
 	ID3D11Buffer * const indexBuffer = ( ID3D11Buffer * const ) modelToRender->m_IndexBuffer.GetBufferPtr();
 	ID3D11ShaderResourceView * const  texture = ( bShadowPass == false && modelToRender->GetMaterials()[0].GetTexture() != nullptr ) ? ( ( ID3D11ShaderResourceView * const ) modelToRender->GetMaterials()[0].GetTexture()->GetGPUTexture() ) : ( nullptr );
 
-	m_pImmediateContext->IASetVertexBuffers( 0, 1, &vertexBuffer, &stride, &offset );
-	m_pImmediateContext->IASetIndexBuffer( indexBuffer, DXGI_FORMAT_R32_UINT, 0 );
-	m_pImmediateContext->IASetPrimitiveTopology( D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST );
+	m_pDeviceContext->IASetVertexBuffers( 0, 1, &vertexBuffer, &stride, &offset );
+	m_pDeviceContext->IASetIndexBuffer( indexBuffer, DXGI_FORMAT_R32_UINT, 0 );
+	m_pDeviceContext->IASetPrimitiveTopology( D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST );
 
-	m_pImmediateContext->PSSetShaderResources( 0, 1, &texture );
-	m_pImmediateContext->PSSetSamplers( 0, 1, &m_pBasicSamplerState );
+	m_pDeviceContext->PSSetShaderResources( 0, 1, &texture );
+	m_pDeviceContext->PSSetSamplers( 0, 1, &m_pBasicSamplerState );
 
 	if ( pRenderObject->m_bIsSkinnedModel ) {
 
 		D3D11_MAPPED_SUBRESOURCE mappedResource;
-		HRESULT hr = m_pImmediateContext->Map( m_pSkinnedShaderConstantsBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource );
+		HRESULT hr = m_pDeviceContext->Map( m_pSkinnedShaderConstantsBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource );
 		if ( FAILED( hr ) ) {
 			kbError( "Failed to map matrix buffer" );
 		}
@@ -3266,13 +3349,13 @@ void kbRenderer_DX11::RenderModel( const kbRenderObject *const pRenderObject, co
 		SkinnedShaderConstants * dataPtr = ( SkinnedShaderConstants * ) mappedResource.pData;
 		memcpy( dataPtr, &ConstantBuffer, sizeof( SkinnedShaderConstants ) );
 
-		m_pImmediateContext->Unmap( m_pSkinnedShaderConstantsBuffer, 0 );
-		m_pImmediateContext->VSSetConstantBuffers( 0, 1, &m_pSkinnedShaderConstantsBuffer );
-		m_pImmediateContext->PSSetConstantBuffers( 0, 1, &m_pSkinnedShaderConstantsBuffer );
+		m_pDeviceContext->Unmap( m_pSkinnedShaderConstantsBuffer, 0 );
+		m_pDeviceContext->VSSetConstantBuffers( 0, 1, &m_pSkinnedShaderConstantsBuffer );
+		m_pDeviceContext->PSSetConstantBuffers( 0, 1, &m_pSkinnedShaderConstantsBuffer );
 	} else {
 
 		D3D11_MAPPED_SUBRESOURCE mappedResource;
-		HRESULT hr = m_pImmediateContext->Map( m_pDefaultShaderConstantsBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource );
+		HRESULT hr = m_pDeviceContext->Map( m_pDefaultShaderConstantsBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource );
 		if ( FAILED( hr ) ) {
 			kbError( "Failed to map matrix buffer" );
 		}
@@ -3319,34 +3402,34 @@ void kbRenderer_DX11::RenderModel( const kbRenderObject *const pRenderObject, co
 		ShaderConstantMatrices * dataPtr = ( ShaderConstantMatrices * ) mappedResource.pData;
 		memcpy( dataPtr, &sourceBuffer, sizeof( ShaderConstantMatrices ) );
 
-		m_pImmediateContext->Unmap( m_pDefaultShaderConstantsBuffer, 0 );
-		m_pImmediateContext->VSSetConstantBuffers( 0, 1, &m_pDefaultShaderConstantsBuffer );
-		m_pImmediateContext->PSSetConstantBuffers( 0, 1, &m_pDefaultShaderConstantsBuffer );
+		m_pDeviceContext->Unmap( m_pDefaultShaderConstantsBuffer, 0 );
+		m_pDeviceContext->VSSetConstantBuffers( 0, 1, &m_pDefaultShaderConstantsBuffer );
+		m_pDeviceContext->PSSetConstantBuffers( 0, 1, &m_pDefaultShaderConstantsBuffer );
 	}
 
 	if ( g_UseEditor ) {
 		D3D11_MAPPED_SUBRESOURCE mappedResource;
-		HRESULT hr = m_pImmediateContext->Map( m_pEditorConstantsBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource );
+		HRESULT hr = m_pDeviceContext->Map( m_pEditorConstantsBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource );
 		if ( FAILED( hr ) ) {
 			kbError( "Failed to map matrix buffer" );
 		}
 		
 		EditorShaderConstants *const dataPtr = ( EditorShaderConstants * ) mappedResource.pData;
 		dataPtr->entityId = pRenderObject->m_EntityId;
-		m_pImmediateContext->Unmap( m_pEditorConstantsBuffer, 0 );
+		m_pDeviceContext->Unmap( m_pEditorConstantsBuffer, 0 );
 
-		m_pImmediateContext->PSSetConstantBuffers( 1, 1, &m_pEditorConstantsBuffer );
+		m_pDeviceContext->PSSetConstantBuffers( 1, 1, &m_pEditorConstantsBuffer );
 	}
 
 	if ( bShadowPass ) {
 		if ( pRenderObject->m_bIsSkinnedModel ) {
-			m_pImmediateContext->IASetInputLayout( (ID3D11InputLayout*)m_pSkinnedDirectionalLightShadowShader->GetVertexLayout() );
-			m_pImmediateContext->VSSetShader( (ID3D11VertexShader *)m_pSkinnedDirectionalLightShadowShader->GetVertexShader(), nullptr, 0 );
-			m_pImmediateContext->PSSetShader( (ID3D11PixelShader *)m_pSkinnedDirectionalLightShadowShader->GetPixelShader(), nullptr, 0 );
+			m_pDeviceContext->IASetInputLayout( (ID3D11InputLayout*)m_pSkinnedDirectionalLightShadowShader->GetVertexLayout() );
+			m_pDeviceContext->VSSetShader( (ID3D11VertexShader *)m_pSkinnedDirectionalLightShadowShader->GetVertexShader(), nullptr, 0 );
+			m_pDeviceContext->PSSetShader( (ID3D11PixelShader *)m_pSkinnedDirectionalLightShadowShader->GetPixelShader(), nullptr, 0 );
 		} else {
-			m_pImmediateContext->IASetInputLayout( (ID3D11InputLayout*)m_pDirectionalLightShadowShader->GetVertexLayout() );
-			m_pImmediateContext->VSSetShader( (ID3D11VertexShader *)m_pDirectionalLightShadowShader->GetVertexShader(), nullptr, 0 );
-			m_pImmediateContext->PSSetShader( (ID3D11PixelShader *)m_pDirectionalLightShadowShader->GetPixelShader(), nullptr, 0 );
+			m_pDeviceContext->IASetInputLayout( (ID3D11InputLayout*)m_pDirectionalLightShadowShader->GetVertexLayout() );
+			m_pDeviceContext->VSSetShader( (ID3D11VertexShader *)m_pDirectionalLightShadowShader->GetVertexShader(), nullptr, 0 );
+			m_pDeviceContext->PSSetShader( (ID3D11PixelShader *)m_pDirectionalLightShadowShader->GetPixelShader(), nullptr, 0 );
 		}
 	}
 
@@ -3355,10 +3438,12 @@ void kbRenderer_DX11::RenderModel( const kbRenderObject *const pRenderObject, co
 		const kbMaterial & modelMaterial = modelToRender->GetMaterials()[modelToRender->GetMeshes()[i].m_MaterialIndex];
 		bool bShaderOverridden = false;
 
-		if ( modelMaterial.GetCullingMode() == kbMaterial::CM_BackFaces ) {
-			m_pImmediateContext->RSSetState( m_pRasterizerState );
+		if ( m_ViewMode == ViewMode_Wireframe ) {
+			m_pDeviceContext->RSSetState( m_pWireFrameRasterizerState );
+		} else if ( modelMaterial.GetCullingMode() == kbMaterial::CM_BackFaces ) {
+			m_pDeviceContext->RSSetState( m_pDefaultRasterizerState );
 		} else if ( modelMaterial.GetCullingMode() == kbMaterial::CM_None ) {
-			m_pImmediateContext->RSSetState( m_pNoFaceCullingRasterizerState );
+			m_pDeviceContext->RSSetState( m_pNoFaceCullingRasterizerState );
 		} else {
 			kbError( "kbRenderer_DX11::RenderModel() - Unsupported culling mode" );
 		}
@@ -3368,13 +3453,13 @@ void kbRenderer_DX11::RenderModel( const kbRenderObject *const pRenderObject, co
 				bShaderOverridden = true;
 				const kbShader * pShader = (*pShaderOverrideList)[i];
 				if ( pShader != nullptr && pShader->GetVertexShader() != nullptr && pShader->GetPixelShader() != nullptr ) {
-					m_pImmediateContext->IASetInputLayout( (ID3D11InputLayout*)pShader->GetVertexLayout() );
-					m_pImmediateContext->VSSetShader( (ID3D11VertexShader *)pShader->GetVertexShader(), nullptr, 0 );
-					m_pImmediateContext->PSSetShader( (ID3D11PixelShader *)pShader->GetPixelShader(), nullptr, 0 );
+					m_pDeviceContext->IASetInputLayout( (ID3D11InputLayout*)pShader->GetVertexLayout() );
+					m_pDeviceContext->VSSetShader( (ID3D11VertexShader *)pShader->GetVertexShader(), nullptr, 0 );
+					m_pDeviceContext->PSSetShader( (ID3D11PixelShader *)pShader->GetPixelShader(), nullptr, 0 );
 				} else {
-					m_pImmediateContext->IASetInputLayout( (ID3D11InputLayout*)m_pMissingShader->GetVertexLayout() );
-					m_pImmediateContext->VSSetShader( (ID3D11VertexShader *)m_pMissingShader->GetVertexShader(), nullptr, 0 );
-					m_pImmediateContext->PSSetShader( (ID3D11PixelShader *)m_pMissingShader->GetPixelShader(), nullptr, 0 );
+					m_pDeviceContext->IASetInputLayout( (ID3D11InputLayout*)m_pMissingShader->GetVertexLayout() );
+					m_pDeviceContext->VSSetShader( (ID3D11VertexShader *)m_pMissingShader->GetVertexShader(), nullptr, 0 );
+					m_pDeviceContext->PSSetShader( (ID3D11PixelShader *)m_pMissingShader->GetPixelShader(), nullptr, 0 );
 				}
 			}
 		}
@@ -3382,23 +3467,23 @@ void kbRenderer_DX11::RenderModel( const kbRenderObject *const pRenderObject, co
 		if ( bShaderOverridden == false && bShadowPass == false ) {
 			if ( modelMaterial.GetShader() != nullptr ) {
 				const kbShader * pShader = modelMaterial.GetShader();
-				m_pImmediateContext->IASetInputLayout( (ID3D11InputLayout*)pShader->GetVertexLayout() );
-				m_pImmediateContext->VSSetShader( (ID3D11VertexShader *)pShader->GetVertexShader(), nullptr, 0 );
-				m_pImmediateContext->PSSetShader( (ID3D11PixelShader *)pShader->GetPixelShader(), nullptr, 0 );
+				m_pDeviceContext->IASetInputLayout( (ID3D11InputLayout*)pShader->GetVertexLayout() );
+				m_pDeviceContext->VSSetShader( (ID3D11VertexShader *)pShader->GetVertexShader(), nullptr, 0 );
+				m_pDeviceContext->PSSetShader( (ID3D11PixelShader *)pShader->GetPixelShader(), nullptr, 0 );
 			} else {
-				m_pImmediateContext->IASetInputLayout( (ID3D11InputLayout*)m_pMissingShader->GetVertexLayout() );
-				m_pImmediateContext->VSSetShader( (ID3D11VertexShader *)m_pMissingShader->GetVertexShader(), nullptr, 0 );
-				m_pImmediateContext->PSSetShader( (ID3D11PixelShader *)m_pMissingShader->GetPixelShader(), nullptr, 0 );
+				m_pDeviceContext->IASetInputLayout( (ID3D11InputLayout*)m_pMissingShader->GetVertexLayout() );
+				m_pDeviceContext->VSSetShader( (ID3D11VertexShader *)m_pMissingShader->GetVertexShader(), nullptr, 0 );
+				m_pDeviceContext->PSSetShader( (ID3D11PixelShader *)m_pMissingShader->GetPixelShader(), nullptr, 0 );
 			}
 		}
 		
 		if ( renderpass == RP_MousePicker ) {
 			const kbShader * pShader = m_pMousePickerIdShader;
 			kbErrorCheck( pShader != nullptr && pShader->GetPixelShader() != nullptr, "kbRenderer_DX11::RenderModel() - Mouse picker shader is null" );
-			m_pImmediateContext->PSSetShader( (ID3D11PixelShader *)pShader->GetPixelShader(), nullptr, 0 );
+			m_pDeviceContext->PSSetShader( (ID3D11PixelShader *)pShader->GetPixelShader(), nullptr, 0 );
 
 		} 
-		m_pImmediateContext->DrawIndexed( modelToRender->GetMeshes()[i].m_NumTriangles * 3, modelToRender->GetMeshes()[i].m_IndexBufferIndex, 0 );
+		m_pDeviceContext->DrawIndexed( modelToRender->GetMeshes()[i].m_NumTriangles * 3, modelToRender->GetMeshes()[i].m_IndexBufferIndex, 0 );
 	}
 }
 
@@ -3542,7 +3627,7 @@ void kbRenderer_DX11::RenderPretransformedDebugLines() {
 	}
 
 	D3D11_MAPPED_SUBRESOURCE mappedResource;
-	HRESULT hr = m_pImmediateContext->Map( m_DebugPreTransformedVertexBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource );
+	HRESULT hr = m_pDeviceContext->Map( m_DebugPreTransformedVertexBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource );
 
 	if ( FAILED( hr ) ) {
 		kbError( "Failed to map debug lines" );
@@ -3551,23 +3636,23 @@ void kbRenderer_DX11::RenderPretransformedDebugLines() {
 	vertexLayout * vertices = ( vertexLayout * ) mappedResource.pData;
 	memcpy( vertices, m_DebugPreTransformedLines.data(), sizeof( vertexLayout ) * m_DebugPreTransformedLines.size() );
 
-	m_pImmediateContext->Unmap( m_DebugPreTransformedVertexBuffer, 0 );
+	m_pDeviceContext->Unmap( m_DebugPreTransformedVertexBuffer, 0 );
 	const unsigned int stride = sizeof( vertexLayout );
 	const unsigned int offset = 0;
 
-	m_pImmediateContext->IASetVertexBuffers( 0, 1, &m_DebugPreTransformedVertexBuffer, &stride, &offset );
-	m_pImmediateContext->IASetPrimitiveTopology( D3D11_PRIMITIVE_TOPOLOGY_LINELIST );
+	m_pDeviceContext->IASetVertexBuffers( 0, 1, &m_DebugPreTransformedVertexBuffer, &stride, &offset );
+	m_pDeviceContext->IASetPrimitiveTopology( D3D11_PRIMITIVE_TOPOLOGY_LINELIST );
 
-	m_pImmediateContext->RSSetState( m_pRasterizerState );
+	m_pDeviceContext->RSSetState( m_pDefaultRasterizerState );
 
 	ID3D11ShaderResourceView *const pShaderResourceView = (ID3D11ShaderResourceView*)m_pTextures[0]->GetGPUTexture();
-	m_pImmediateContext->PSSetShaderResources( 0, 1, &pShaderResourceView );
-	m_pImmediateContext->PSSetSamplers( 0, 1, &m_pBasicSamplerState );
-	m_pImmediateContext->IASetInputLayout( (ID3D11InputLayout*)m_pDebugShader->GetVertexLayout() );
-	m_pImmediateContext->VSSetShader( (ID3D11VertexShader*) m_pDebugShader->GetVertexShader(), nullptr, 0 );
-	m_pImmediateContext->PSSetShader( (ID3D11PixelShader*) m_pDebugShader->GetPixelShader(), nullptr, 0 );
+	m_pDeviceContext->PSSetShaderResources( 0, 1, &pShaderResourceView );
+	m_pDeviceContext->PSSetSamplers( 0, 1, &m_pBasicSamplerState );
+	m_pDeviceContext->IASetInputLayout( (ID3D11InputLayout*)m_pDebugShader->GetVertexLayout() );
+	m_pDeviceContext->VSSetShader( (ID3D11VertexShader*) m_pDebugShader->GetVertexShader(), nullptr, 0 );
+	m_pDeviceContext->PSSetShader( (ID3D11PixelShader*) m_pDebugShader->GetPixelShader(), nullptr, 0 );
 
-	hr = m_pImmediateContext->Map( m_pDefaultShaderConstantsBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource );
+	hr = m_pDeviceContext->Map( m_pDefaultShaderConstantsBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource );
 
 	if ( FAILED( hr ) ) {
 		kbError( "Failed to map matrix buffer" );
@@ -3581,9 +3666,9 @@ void kbRenderer_DX11::RenderPretransformedDebugLines() {
 
 	memcpy( &dataPtr->matrix, &kbMat4::identity, sizeof( kbMat4 ) );
 
-	m_pImmediateContext->Unmap( m_pDefaultShaderConstantsBuffer, 0 );
-	m_pImmediateContext->VSSetConstantBuffers( 0, 1, &m_pDefaultShaderConstantsBuffer );
-	m_pImmediateContext->Draw( ( UINT )m_DebugPreTransformedLines.size(), 0 );
+	m_pDeviceContext->Unmap( m_pDefaultShaderConstantsBuffer, 0 );
+	m_pDeviceContext->VSSetConstantBuffers( 0, 1, &m_pDefaultShaderConstantsBuffer );
+	m_pDeviceContext->Draw( ( UINT )m_DebugPreTransformedLines.size(), 0 );
 	
 	m_DebugPreTransformedLines.clear();	
 }
@@ -3598,7 +3683,7 @@ void kbRenderer_DX11::RenderDebugLines() {
 	}
 
 	D3D11_MAPPED_SUBRESOURCE mappedResource;
-	HRESULT hr = m_pImmediateContext->Map( m_DebugVertexBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource );
+	HRESULT hr = m_pDeviceContext->Map( m_DebugVertexBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource );
 
 	if ( FAILED( hr ) ) {
 		kbError( "Failed to map debug lines" );
@@ -3607,23 +3692,23 @@ void kbRenderer_DX11::RenderDebugLines() {
 	vertexLayout * vertices = ( vertexLayout * ) mappedResource.pData;
 	memcpy( vertices, m_DebugLines.data(), sizeof( vertexLayout ) * m_DebugLines.size() );
 
-	m_pImmediateContext->Unmap( m_DebugVertexBuffer, 0 );
+	m_pDeviceContext->Unmap( m_DebugVertexBuffer, 0 );
 	const unsigned int stride = sizeof( vertexLayout );
 	const unsigned int offset = 0;
 
-	m_pImmediateContext->IASetVertexBuffers( 0, 1, &m_DebugVertexBuffer, &stride, &offset );
-	m_pImmediateContext->IASetPrimitiveTopology( D3D11_PRIMITIVE_TOPOLOGY_LINELIST );
+	m_pDeviceContext->IASetVertexBuffers( 0, 1, &m_DebugVertexBuffer, &stride, &offset );
+	m_pDeviceContext->IASetPrimitiveTopology( D3D11_PRIMITIVE_TOPOLOGY_LINELIST );
 
-	m_pImmediateContext->RSSetState( m_pRasterizerState );
+	m_pDeviceContext->RSSetState( m_pDefaultRasterizerState );
 
 	ID3D11ShaderResourceView *const pShaderResourceView = (ID3D11ShaderResourceView*)m_pTextures[0]->GetGPUTexture();
-	m_pImmediateContext->PSSetShaderResources( 0, 1, &pShaderResourceView );
-	m_pImmediateContext->PSSetSamplers( 0, 1, &m_pBasicSamplerState );
-	m_pImmediateContext->IASetInputLayout( (ID3D11InputLayout*)m_pDebugShader->GetVertexLayout() );
-	m_pImmediateContext->VSSetShader( (ID3D11VertexShader*) m_pDebugShader->GetVertexShader(), nullptr, 0 );
-	m_pImmediateContext->PSSetShader( (ID3D11PixelShader*) m_pDebugShader->GetPixelShader(), nullptr, 0 );
+	m_pDeviceContext->PSSetShaderResources( 0, 1, &pShaderResourceView );
+	m_pDeviceContext->PSSetSamplers( 0, 1, &m_pBasicSamplerState );
+	m_pDeviceContext->IASetInputLayout( (ID3D11InputLayout*)m_pDebugShader->GetVertexLayout() );
+	m_pDeviceContext->VSSetShader( (ID3D11VertexShader*) m_pDebugShader->GetVertexShader(), nullptr, 0 );
+	m_pDeviceContext->PSSetShader( (ID3D11PixelShader*) m_pDebugShader->GetPixelShader(), nullptr, 0 );
 
-	hr = m_pImmediateContext->Map( m_pDefaultShaderConstantsBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource );
+	hr = m_pDeviceContext->Map( m_pDefaultShaderConstantsBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource );
 
 	if ( FAILED( hr ) ) {
 		kbError( "Failed to map matrix buffer" );
@@ -3636,9 +3721,9 @@ void kbRenderer_DX11::RenderDebugLines() {
 
 	memcpy( dataPtr, &sourceBuffer, sizeof( ShaderConstantMatrices ) );
 
-	m_pImmediateContext->Unmap( m_pDefaultShaderConstantsBuffer, 0 );
-	m_pImmediateContext->VSSetConstantBuffers( 0, 1, &m_pDefaultShaderConstantsBuffer );
-	m_pImmediateContext->Draw( ( UINT )m_DebugLines.size(), 0 );
+	m_pDeviceContext->Unmap( m_pDefaultShaderConstantsBuffer, 0 );
+	m_pDeviceContext->VSSetConstantBuffers( 0, 1, &m_pDefaultShaderConstantsBuffer );
+	m_pDeviceContext->Draw( ( UINT )m_DebugLines.size(), 0 );
 }
 
 /*
@@ -3653,29 +3738,29 @@ void kbRenderer_DX11::RenderDebugBillboards( const bool bIsEntityIdPass ) {
 	const unsigned int stride = sizeof( vertexLayout );
 	const unsigned int offset = 0;
 
-	m_pImmediateContext->IASetVertexBuffers( 0, 1, &m_pUnitQuad, &stride, &offset );
-	m_pImmediateContext->IASetPrimitiveTopology( D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST );
+	m_pDeviceContext->IASetVertexBuffers( 0, 1, &m_pUnitQuad, &stride, &offset );
+	m_pDeviceContext->IASetPrimitiveTopology( D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST );
 
-	m_pImmediateContext->RSSetState( m_pRasterizerState );
-	m_pImmediateContext->PSSetSamplers( 0, 1, &m_pBasicSamplerState );
-	m_pImmediateContext->IASetInputLayout( (ID3D11InputLayout *)m_pDebugShader->GetVertexLayout() );
-	m_pImmediateContext->VSSetShader( (ID3D11VertexShader *)m_pDebugShader->GetVertexShader(), nullptr, 0 );
+	m_pDeviceContext->RSSetState( m_pDefaultRasterizerState );
+	m_pDeviceContext->PSSetSamplers( 0, 1, &m_pBasicSamplerState );
+	m_pDeviceContext->IASetInputLayout( (ID3D11InputLayout *)m_pDebugShader->GetVertexLayout() );
+	m_pDeviceContext->VSSetShader( (ID3D11VertexShader *)m_pDebugShader->GetVertexShader(), nullptr, 0 );
 
 	if ( bIsEntityIdPass ) {
-		m_pImmediateContext->PSSetShader( (ID3D11PixelShader *)m_pMousePickerIdShader->GetPixelShader(), nullptr, 0 );
+		m_pDeviceContext->PSSetShader( (ID3D11PixelShader *)m_pMousePickerIdShader->GetPixelShader(), nullptr, 0 );
 	} else {
-		m_pImmediateContext->PSSetShader( (ID3D11PixelShader *)m_pDebugShader->GetPixelShader(), nullptr, 0 );
+		m_pDeviceContext->PSSetShader( (ID3D11PixelShader *)m_pDebugShader->GetPixelShader(), nullptr, 0 );
 	}
 
-	//m_pImmediateContext->PSSetShaderResources( 0, 1, &m_Textures[0].m_pShaderResourceView );
+	//m_pDeviceContext->PSSetShaderResources( 0, 1, &m_Textures[0].m_pShaderResourceView );
 
 	for ( int i = 0; i < m_DebugBillboards.size(); i++ ) {
 		debugDrawObject_t & currBillBoard = m_DebugBillboards[i];
 		ID3D11ShaderResourceView *const pShaderResourceView = (ID3D11ShaderResourceView *)m_pTextures[currBillBoard.m_TextureIndex]->GetGPUTexture();
-		m_pImmediateContext->PSSetShaderResources( 0, 1, &pShaderResourceView );
+		m_pDeviceContext->PSSetShaderResources( 0, 1, &pShaderResourceView );
 	
 		D3D11_MAPPED_SUBRESOURCE mappedResource;
-		HRESULT hr = m_pImmediateContext->Map( m_pDefaultShaderConstantsBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource );
+		HRESULT hr = m_pDeviceContext->Map( m_pDefaultShaderConstantsBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource );
 		kbErrorCheck( FAILED( hr ) == false, "kbRenderer_DX11::RenderDebugBillboards() - Failed to map constants buffer" );
 
 		ShaderConstantMatrices * dataPtr = (ShaderConstantMatrices *) mappedResource.pData;
@@ -3687,23 +3772,23 @@ void kbRenderer_DX11::RenderDebugBillboards( const bool bIsEntityIdPass ) {
 		sourceBuffer.mvpMatrix = preRotationMatrix * sourceBuffer.mvpMatrix * m_pCurrentRenderWindow->m_ViewProjectionMatrix;
 		memcpy( dataPtr, &sourceBuffer, sizeof( ShaderConstantMatrices ) );
 
-		m_pImmediateContext->Unmap( m_pDefaultShaderConstantsBuffer, 0 );
-		m_pImmediateContext->VSSetConstantBuffers( 0, 1, &m_pDefaultShaderConstantsBuffer );
+		m_pDeviceContext->Unmap( m_pDefaultShaderConstantsBuffer, 0 );
+		m_pDeviceContext->VSSetConstantBuffers( 0, 1, &m_pDefaultShaderConstantsBuffer );
 
 		if ( bIsEntityIdPass ) {
 			D3D11_MAPPED_SUBRESOURCE mappedResource;
-			HRESULT hr = m_pImmediateContext->Map( m_pEditorConstantsBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource );
+			HRESULT hr = m_pDeviceContext->Map( m_pEditorConstantsBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource );
 			if ( FAILED( hr ) ) {
 				kbError( "Failed to map matrix buffer" );
 			}
 		
 			EditorShaderConstants *const dataPtr = (EditorShaderConstants *) mappedResource.pData;
 			dataPtr->entityId = currBillBoard.m_EntityId;
-			m_pImmediateContext->Unmap( m_pEditorConstantsBuffer, 0 );
+			m_pDeviceContext->Unmap( m_pEditorConstantsBuffer, 0 );
 
-			m_pImmediateContext->PSSetConstantBuffers( 1, 1, &m_pEditorConstantsBuffer );
+			m_pDeviceContext->PSSetConstantBuffers( 1, 1, &m_pEditorConstantsBuffer );
 		}
-		m_pImmediateContext->Draw( 6, 0 );
+		m_pDeviceContext->Draw( 6, 0 );
 	}
 }
 
@@ -3737,15 +3822,15 @@ uint kbRenderer_DX11::GetEntityIdAtScreenPosition( const uint x, const uint y ) 
 	box.front = 0;
 	box.back = 1;
 	
-	m_pImmediateContext->CopyResource( m_pOffScreenRenderTargetTexture, m_RenderTargets[eRenderTargetTexture::MOUSE_PICKER_BUFFER].m_pRenderTargetTexture );
+	m_pDeviceContext->CopyResource( m_pOffScreenRenderTargetTexture, m_RenderTargets[eRenderTargetTexture::MOUSE_PICKER_BUFFER].m_pRenderTargetTexture );
 	
 	D3D11_MAPPED_SUBRESOURCE mappedResource;
-	m_pImmediateContext->Map( m_pOffScreenRenderTargetTexture, 0, D3D11_MAP_READ, 0, &mappedResource );
+	m_pDeviceContext->Map( m_pOffScreenRenderTargetTexture, 0, D3D11_MAP_READ, 0, &mappedResource );
 	
 	byte * pixelData = (byte*)mappedResource.pData;
 	uint * hitPixel = (uint*)(pixelData + ( y * mappedResource.RowPitch ) + ( x * sizeof(uint) ) );
 	uint retVal = *hitPixel;
-	m_pImmediateContext->Unmap( m_pOffScreenRenderTargetTexture, 0 );
+	m_pDeviceContext->Unmap( m_pOffScreenRenderTargetTexture, 0 );
 
 	return retVal;
 }
