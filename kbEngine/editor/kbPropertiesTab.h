@@ -38,49 +38,50 @@ struct propertiesTabCBData_t {
  *	kbPropertiesTab
  */
 class kbPropertiesTab : public Fl_Tabs, kbWidget {
+
+//---------------------------------------------------------------------------------------------------
 public:
+												kbPropertiesTab( int x, int y, int w, int h );
 
-						kbPropertiesTab( int x, int y, int w, int h );
+	virtual void								EventCB( const widgetCBObject *const widgetCBObject ) override;
 
-	virtual void		EventCB( const widgetCBObject *const widgetCBObject );
+	virtual void								Update() override;
 
-	virtual void		Update();
+	void										RequestRefreshNextUpdate() { m_bRefreshNextUpdate = true; }
 
-	void				RequestRefreshNextUpdate() { m_bRefreshNextUpdate = true; }
-
-	std::vector< class kbEditorEntity * > & GetSelectedEntities() { return m_SelectedEntities; }
-	kbEditorEntity *	GetTempPrefabEntity() { return m_pTempPrefabEntity; }
+	std::vector<kbEditorEntity *> &				GetSelectedEntities() { return m_SelectedEntities; }
+	kbEditorEntity *							GetTempPrefabEntity() { return m_pTempPrefabEntity; }
 
 private:
 
-	void				RefreshEntity();
-	void				RefreshComponent( kbEditorEntity *const pEntity, kbComponent *const pComponent, int & startX, int & curY, const int inputHeight, const bool bIsStruct = false, const void *const arrayPtr = nullptr, const int arrayIndex = -1);
-	void				RefreshProperty( kbEditorEntity *const pEntity, const std::string & propertyName, const kbTypeInfoType_t propertyType, const std::string & structName, kbComponent * pComponent, const byte *const byteOffsetToVar, int & x, int & y, const int inputHeight, const void *const arrayPtr = nullptr, const int arrayIndex = -1 );
+	void										RefreshEntity();
+	void										RefreshComponent( kbEditorEntity *const pEntity, kbComponent *const pComponent, int & startX, int & curY, const int inputHeight, const bool bIsStruct = false, const void *const arrayPtr = nullptr, const int arrayIndex = -1);
+	void										RefreshProperty( kbEditorEntity *const pEntity, const std::string & propertyName, const kbTypeInfoType_t propertyType, const std::string & structName, kbComponent * pComponent, const byte *const byteOffsetToVar, int & x, int & y, const int inputHeight, const void *const arrayPtr = nullptr, const int arrayIndex = -1 );
 
-	unsigned int		FontSize()	const { return 13; }
-	unsigned int		LineSpacing() const { return FontSize() + 5; }
+	unsigned int								FontSize()	const { return 13; }
+	unsigned int								LineSpacing() const { return FontSize() + 5; }
 
-	Fl_Tabs *			m_pPropertiesTab;
-	Fl_Group *			m_pEntityProperties;
-	Fl_Group *			m_pResourceProperties;
+	Fl_Tabs *									m_pPropertiesTab;
+	Fl_Group *									m_pEntityProperties;
+	Fl_Group *									m_pResourceProperties;
 
-	std::vector<kbEditorEntity *>		m_SelectedEntities;
-	std::string							m_CurrentlySelectedResource;
-	std::vector<propertiesTabCBData_t>	m_CallBackData;
+	std::vector<kbEditorEntity *>				m_SelectedEntities;
+	std::string									m_CurrentlySelectedResource;
+	std::vector<propertiesTabCBData_t>			m_CallBackData;
 
-	kbEditorEntity *					m_pTempPrefabEntity;
-	bool								m_bRefreshNextUpdate;
+	kbEditorEntity *							m_pTempPrefabEntity;
+	bool										m_bRefreshNextUpdate;
 
-	static void			CheckButtonCB( Fl_Widget * widget, void * voidPtr );
-	static void			PointerButtonCB( Fl_Widget * widget, void * voidPtr );
-	static void			TextFieldCB( Fl_Widget * widget, void * voidPtr );
-	static void			ArrayExpandCB( Fl_Widget * widet, void * voidPtr );
-	static void			ArrayResizeCB( Fl_Widget * widget, void * voidPtr );
-	static void			EnumCB( Fl_Widget * widget, void * voidPtr );
-	static void			DeleteComponent( Fl_Widget * widget, void * voidPtr );
-	static void			InsertArrayStruct( Fl_Widget * widget, void * voidPtr );
-	static void			DeleteArrayStruct( Fl_Widget * widget, void * voidPtr );
-	static void			PropertyChangedCB();		// Each call back should this before returning
+	static void									CheckButtonCB( Fl_Widget * widget, void * voidPtr );
+	static void									PointerButtonCB( Fl_Widget * widget, void * voidPtr );
+	static void									TextFieldCB( Fl_Widget * widget, void * voidPtr );
+	static void									ArrayExpandCB( Fl_Widget * widet, void * voidPtr );
+	static void									ArrayResizeCB( Fl_Widget * widget, void * voidPtr );
+	static void									EnumCB( Fl_Widget * widget, void * voidPtr );
+	static void									DeleteComponent( Fl_Widget * widget, void * voidPtr );
+	static void									InsertArrayStruct( Fl_Widget * widget, void * voidPtr );
+	static void									DeleteArrayStruct( Fl_Widget * widget, void * voidPtr );
+	static void									PropertyChangedCB( const kbGameEntityPtr gameEntityPtr );		// Each call back should this before returning
 };
 
 extern kbPropertiesTab * g_pPropertiesTab;

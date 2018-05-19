@@ -34,17 +34,19 @@ public:
 	void													Update();
 	virtual int												handle( int theEvent );
 
-	const bool												IsRunning() const { return m_IsRunning; }
+	const bool												IsRunning() const { return m_bIsRunning; }
 	const bool												IsRunningGame() const { return m_pGame != nullptr && m_pGame->IsPlaying(); }
 
 	void													RegisterUpdate( kbWidget * const widget ) { m_UpdateWidgets.push_back( widget ); }
 	void													RegisterEvent( kbWidget *const widget, const widgetCBType_t eventType ) { m_EventReceivers[eventType].push_back( widget ); }
 	void													BroadcastEvent( const class widgetCBObject & cbObject );
 
+	void													AddEntity( kbEditorEntity *const pEditorEntity );
 	void													SelectEntities( std::vector< kbEditorEntity * > & entitiesToSelect, bool AppendToSelectedList );
 	void													DeselectEntities();
 
 	void													PushUndoAction( kbUndoAction * pUndoAction ) { m_UndoStack.Push( pUndoAction ); }
+	void													DeleteEntities( std::vector<kbEditorEntity*> & editorEntityList );
 
 	std::vector<kbEditorEntity *> &							GetGameEntities() { return m_GameEntities; }
 	std::vector<kbEditorEntity *> &							GetSelectedObjects() { return m_SelectedObjects; }
@@ -57,15 +59,15 @@ private:
 
 	std::string												m_CurrentLevelFileName;
 
-	std::vector< kbWidget * >								m_UpdateWidgets;
-	std::map< widgetCBType_t, std::vector< kbWidget  * > >	m_EventReceivers;
-	std::vector< kbEditorEntity * >							m_GameEntities;
-	std::vector< kbEditorEntity * >							m_SelectedObjects;
-	std::vector< kbEditorEntity * >							m_RemovedEntities;
+	std::vector<kbWidget *>									m_UpdateWidgets;
+	std::map<widgetCBType_t, std::vector< kbWidget  *>>		m_EventReceivers;
+	std::vector<kbEditorEntity *>							m_GameEntities;
+	std::vector<kbEditorEntity *>							m_SelectedObjects;
+	std::vector<kbEditorEntity *>							m_RemovedEntities;
 
 	kbUndoStack												m_UndoStack;
 
-	class kbGame *											m_pGame;
+	kbGame *												m_pGame;
 	kbEditorWindow *										m_pGameWindow;
 	Fl_Button *												m_pSpeedButton;
 
@@ -80,7 +82,7 @@ private:
 	// input
 	widgetCBInputObject										m_WidgetInputObject;
 
-	bool													m_IsRunning;
+	bool													m_bIsRunning;
 	bool													m_bRightMouseButtonDragged;
 
 	// Stores a copy of the current undo action's id.  The level is dirty if the two values don't match
@@ -106,7 +108,7 @@ private:
 	static void												OutputCB( kbOutputMessageType_t, const char * );
 	static void												PlayGameFromHere( Fl_Widget *, void * );
 	static void												StopGame( Fl_Widget *, void * );
-	static void												DeleteEntities( Fl_Widget *, void * );
+	static void												DeleteEntitiesCB( Fl_Widget *, void * );
 
 	void													RightClickPopUpMenu();
 	static void												ReplaceCurrentlySelectedPrefab( Fl_Widget *, void * );
@@ -123,22 +125,24 @@ public:
 
 extern kbEditor * g_Editor;
 
-/*
+/**
  * kbDialogBox
  */
 class kbDialogBox
 {
+
+//-------------------------------------------------------------------------------------------------------------------------------------------------------------
 public:
 
-	kbDialogBox( const char * title, const char * acceptButtonName, const char * cancelButtonName ) :
-		m_PopUpWindow( NULL ),
+	kbDialogBox( const char *const title, const char *const acceptButtonName, const char *const cancelButtonName ) :
+		m_PopUpWindow( nullptr ),
 		m_Title( title ),
 		m_AcceptButtonName( acceptButtonName ),
 		m_CancelButtonName( cancelButtonName ),
 		m_LineNumber( 0 ),
 		m_bAccepted( false ) {
 
-		if ( gCurrentDialogBox != NULL ) {
+		if ( gCurrentDialogBox != nullptr ) {
 			kbError( "Dialog box already open.  Only one allowed at a time" );
 		}
 	
@@ -146,23 +150,18 @@ public:
    }
 
    ~kbDialogBox() {
-		gCurrentDialogBox = NULL;
+		gCurrentDialogBox = nullptr;
    }
 
-   void AddTextField( const char * field ) {
+   void AddTextField( const char *const field ) {
 		kbDialogBoxField newField;
 		newField.m_FieldName = field;
 		m_Fields.push_back( newField );
    }
 
    bool Run() {
-		if ( m_Fields.size() == 0 ) {
-			kbError( "Dialog box has no fields" );
-		}
-
-		if ( gCurrentDialogBox == NULL ) {
-			kbError( "Run called on an invalid dialog box" );
-		}
+		kbErrorCheck( m_Fields.size() > 0, "Dialog box has no fields" );
+		kbErrorCheck( gCurrentDialogBox != nullptr, "Run called on an invalid dialog box" );
 
 		const int ButtonHeight = fl_height() + kbEditor::PanelBorderSize() * 2;
 		const int popUpWidth = 600;
@@ -170,7 +169,7 @@ public:
 		int dx, dy, w, h;
 		int MaxNameLength = 0;
 
-		for ( int i = 0; i < m_Fields.size(); i++ ) {
+		for ( size_t i = 0; i < m_Fields.size(); i++ ) {
 			fl_text_extents( m_Fields[i].m_FieldName.c_str(), dx, dy, w, h );
 
 			if ( w > MaxNameLength ) {
@@ -194,8 +193,8 @@ public:
 			MaxButtonNameLen = w;
 		}
 
-		Fl_Button * pAcceptButton = new Fl_Button( StartX, StartY + kbEditor::LineSpacing( 4 ), MaxButtonNameLen + kbEditor::PanelBorderSize( 2 ), ButtonHeight, m_AcceptButtonName.c_str() );
-		Fl_Button * pCancelButton = new Fl_Button( StartX + MaxButtonNameLen + kbEditor::PanelBorderSize()* 4, StartY + kbEditor::LineSpacing( 4 ), MaxButtonNameLen, ButtonHeight, m_CancelButtonName.c_str() );
+		Fl_Button *const pAcceptButton = new Fl_Button( StartX, StartY + kbEditor::LineSpacing( 4 ), MaxButtonNameLen + kbEditor::PanelBorderSize( 2 ), ButtonHeight, m_AcceptButtonName.c_str() );
+		Fl_Button *const pCancelButton = new Fl_Button( StartX + MaxButtonNameLen + kbEditor::PanelBorderSize()* 4, StartY + kbEditor::LineSpacing( 4 ), MaxButtonNameLen, ButtonHeight, m_CancelButtonName.c_str() );
 
 		pAcceptButton->callback( AcceptButtonClicked );
 		pCancelButton->callback( CancelButtonClicked );
@@ -204,18 +203,18 @@ public:
 
 		while( m_PopUpWindow->shown() ) { Fl::wait(); }
 
-		for ( int i = 0; i < m_Fields.size(); i++ ) {
+		for ( size_t i = 0; i < m_Fields.size(); i++ ) {
 			m_Fields[i].m_FieldValue = m_Fields[i].m_Input->value();
 		}
 
 		delete m_PopUpWindow;
-		m_PopUpWindow = NULL;
-		gCurrentDialogBox = NULL;
+		m_PopUpWindow = nullptr;
+		gCurrentDialogBox = nullptr;
 
 		return m_bAccepted;
 	}
 
-	const std::string & GetFieldEntry( int fieldIdx ) const {
+	const std::string & GetFieldEntry( const int fieldIdx ) const {
 		if ( fieldIdx < 0 || fieldIdx >= m_Fields.size() ) {
 			kbError( "Bad field idx %d for dialog box", fieldIdx );
 		}

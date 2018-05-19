@@ -94,6 +94,7 @@ void kbResourceTab::ResourceSelectedCB( Fl_Widget * widget, void * userData ) {
 			{ "Save All Changed Packages",  0, SavePackageCB, ( void * ) (INT_PTR)-1 },
 			{ 0 }};
 
+		// Gray out save package option if it's not dirty
 		if ( selectedItemIndex < 0 || g_pResourceTab->m_SelectBrowserIdx[selectedItemIndex]->m_bIsDirty == false ) {
 			rclick_menu[0].deactivate();
 		}
@@ -163,28 +164,30 @@ kbResourceTab::kbResourceTab( int x, int y, int w, int h ) :
 	const int Display_Width = DisplayWidth();
 	const int Display_Height = h - kbEditor::TabHeight();
 
-	Fl_Tabs * resourceTabs  = new Fl_Tabs( x, y, w, Display_Height );
+	Fl_Tabs *const resourceTabs  = new Fl_Tabs( x, y, w, Display_Height );
 
-    Fl_Group * resourceGroup = new Fl_Group( x, Top_Border, w, Display_Height, "Resources" );
+	{
+		Fl_Group *const resourceGroup = new Fl_Group( x, Top_Border, w, Display_Height, "Resources" );
+		m_pResourceSelectBrowser = new Fl_Select_Browser( 5, Top_Border + 5, Display_Width, Display_Height , "" );
+		m_pResourceSelectBrowser->callback( &ResourceSelectedCB, this );
+		m_pResourceSelectBrowser->textsize( 11 );
+		resourceGroup->end();
+	}
 
-	m_pSelectBrowser = new Fl_Select_Browser( 5, Top_Border + 5, Display_Width, Display_Height , "" );
-	m_pSelectBrowser->callback( &ResourceSelectedCB, this );
-	m_pSelectBrowser->textsize( 11 );
-
-	resourceGroup->end();
-
-	Fl_Group * resourceGroup2 = new Fl_Group( 0, Top_Border, Display_Width, Display_Height, "Entity Properties" );
-    {
-        Fl_Button *b1 = new Fl_Button( 20,160,90,25,"Button A"); b1->color(88+1);
-        Fl_Button *b4 = new Fl_Button( 20,190,90,25,"Button V4"); b4->color(88+2);
-    }
-    resourceGroup2->end();
+	{
+		Fl_Group *const resourceGroup = new Fl_Group( 0, Top_Border, Display_Width, Display_Height, "Entities" );
+		m_pEntitySelectBrowser = new Fl_Select_Browser( 5, Top_Border + 5, Display_Width, Display_Height , "" );
+		m_pEntitySelectBrowser->callback( *EntitySelectedCB, this );
+		m_pEntitySelectBrowser->textsize( 11 );
+	    resourceGroup->end();
+	}
 
 	resourceTabs->end();
 
 	end();
 
 	g_Editor->RegisterUpdate( this );
+	g_Editor->RegisterEvent( this, WidgetCB_EntityModified );
 	g_Editor->RegisterEvent( this, WidgetCB_PrefabModified );
 	g_pResourceTab = this;
 
@@ -205,10 +208,15 @@ void kbResourceTab::EventCB( const widgetCBObject * widgetCBObject ) {
 	
 	switch( widgetCBObject->widgetType ) {
 		
+		case WidgetCB_EntityModified : {
+			RefreshEntitiesTab();
+			break;
+		};
+
 		case WidgetCB_PrefabModified : {
 			const widgetCBGeneric *const widgetCB = static_cast<const widgetCBGeneric*>( widgetCBObject );
 
-			int value = m_pSelectBrowser->value() - 1;
+			int value = m_pResourceSelectBrowser->value() - 1;
 
 			if ( g_pPropertiesTab != nullptr && g_pPropertiesTab->GetTempPrefabEntity() != nullptr ) {
 				for ( int i = 0; i < m_SelectBrowserIdx.size(); i++ ) {
@@ -243,6 +251,7 @@ void kbResourceTab::EventCB( const widgetCBObject * widgetCBObject ) {
  */
 void kbResourceTab::PostRendererInit() {
 	RebuildResourceFolderListText();
+	RefreshEntitiesTab();
 }
 
 /**
@@ -445,7 +454,7 @@ void kbResourceTab::FindResourcesRecursively( const std::string & file, kbResour
  */
 void kbResourceTab::RefreshResourcesTab() {
 	std::string spaces;
-	m_pSelectBrowser->clear();
+	m_pResourceSelectBrowser->clear();
 	m_SelectBrowserIdx.clear();
 
 	// Add packages to the UI
@@ -454,7 +463,7 @@ void kbResourceTab::RefreshResourcesTab() {
 	for ( int folderIdx = 0; folderIdx < m_ResourceFolderList.size(); folderIdx++ ) {
 		RefreshResourcesTab_Recursive( m_ResourceFolderList[folderIdx], spaces );
 	}
-	m_pSelectBrowser->redraw();
+	m_pResourceSelectBrowser->redraw();
 	this->redraw();
 	Fl::wait();
 }
@@ -473,8 +482,8 @@ void kbResourceTab::RefreshResourcesTab_Recursive( kbResourceTabFile_t & current
 		FolderName += " *";
 	}
 
-	m_pSelectBrowser->add( FolderName.c_str() );
-	int numItems = m_pSelectBrowser->size();
+	m_pResourceSelectBrowser->add( FolderName.c_str() );
+	int numItems = m_pResourceSelectBrowser->size();
 	m_SelectBrowserIdx.push_back( &currentFolder );
 
 	if ( currentFolder.m_bExpanded == true ) {
@@ -488,13 +497,13 @@ void kbResourceTab::RefreshResourcesTab_Recursive( kbResourceTabFile_t & current
 
 		for ( int resourceIdx = 0; resourceIdx < currentFolder.m_ResourceList.size(); resourceIdx++ ) {
 			if ( currentFolder.m_ResourceList[resourceIdx].m_pResource != nullptr ) {
-				m_pSelectBrowser->add( ( spaces + currentFolder.m_ResourceList[resourceIdx].m_pResource->GetName() ).c_str() );
+				m_pResourceSelectBrowser->add( ( spaces + currentFolder.m_ResourceList[resourceIdx].m_pResource->GetName() ).c_str() );
 			} else if ( currentFolder.m_ResourceList[resourceIdx].m_pPrefab != nullptr ) {
 				std::string prefabName = ( spaces + currentFolder.m_ResourceList[resourceIdx].m_pPrefab->GetPrefabName() ).c_str();
 				if ( currentFolder.m_ResourceList[resourceIdx].m_bIsDirty ) {
 					prefabName += " *";
 				}
-				m_pSelectBrowser->add( prefabName.c_str() );
+				m_pResourceSelectBrowser->add( prefabName.c_str() );
 			}
 			m_SelectBrowserIdx.push_back( &currentFolder.m_ResourceList[resourceIdx] );
 		}
@@ -583,7 +592,7 @@ void kbResourceTab::AddPrefab( kbPrefab * pPrefab, const std::string & PackageNa
  *	kbResourceTab::GetSelectedPrefab
  */
 kbPrefab * kbResourceTab::GetSelectedPrefab() const {
-	const int value = m_pSelectBrowser->value() - 1;
+	const int value = m_pResourceSelectBrowser->value() - 1;
 
 	if ( value < 0 || value >= m_SelectBrowserIdx.size() ) {
 		return nullptr;
@@ -596,7 +605,7 @@ kbPrefab * kbResourceTab::GetSelectedPrefab() const {
  *	kbPackage::MarkPrefabDirty
  */
 void kbResourceTab::MarkPrefabDirty( kbPrefab * prefab ) {
-	int value = m_pSelectBrowser->value() - 1;
+	int value = m_pResourceSelectBrowser->value() - 1;
 	if ( value < 0 || value >= m_SelectBrowserIdx.size() ) {
 		return;
 	}
@@ -622,4 +631,77 @@ void kbResourceTab::ResourceManagerCB( const kbResourceManager::CallbackReason R
 
 	g_pResourceTab->RebuildResourceFolderListText();
 
+}
+
+/**
+ *	kbResourceTab::RefreshEntitiesTab
+ */
+void kbResourceTab::RefreshEntitiesTab() {
+	g_pResourceTab->m_pEntitySelectBrowser->clear();
+	m_EntityList.clear();
+
+	std::vector<kbEditorEntity *> &	editorEntities = g_Editor->GetGameEntities();
+	for ( int i = 0; i < editorEntities.size(); i++ ) {
+		g_pResourceTab->m_pEntitySelectBrowser->add( editorEntities[i]->GetGameEntity()->GetName().c_str() );
+
+		EntitySelectItem_t newItem;
+		newItem.m_pEntity = editorEntities[i];
+		m_EntityList.push_back( newItem );
+	}
+
+	g_pResourceTab->m_pEntitySelectBrowser->redraw();
+	g_pResourceTab->redraw();
+	Fl::wait();
+}
+
+/**
+ *	kbResourceTab::EntitySelectedCB
+ */
+void kbResourceTab::EntitySelectedCB( Fl_Widget * pWidget, void * pUserData ) {
+
+	const int selectedItemIndex = g_pResourceTab->m_pEntitySelectBrowser->value() - 1;
+
+	if ( selectedItemIndex < 0 || selectedItemIndex >= g_pResourceTab->m_EntityList.size() ) {
+		g_Editor->DeselectEntities();
+		return;
+	}
+
+	if ( Fl::event_button() == FL_LEFT_MOUSE ) {
+
+		std::vector<kbEditorEntity*> editorEntityList;
+		editorEntityList.push_back( g_pResourceTab->m_EntityList[selectedItemIndex].m_pEntity );
+		g_Editor->SelectEntities( editorEntityList, false );
+
+	} else if ( Fl::event_button() == FL_RIGHT_MOUSE ) {
+		
+		const std::string DeleteEntity = "Delete entity " + g_pResourceTab->m_EntityList[selectedItemIndex].m_pEntity->GetGameEntity()->GetName();
+
+		Fl_Menu_Item rclick_menu[] = {
+			{ DeleteEntity.c_str(),  0, DeleteCB, g_pResourceTab->m_EntityList[selectedItemIndex].m_pEntity },
+			{ 0 }};
+
+		/*if ( selectedItemIndex < 0 || g_pResourceTab->m_SelectBrowserIdx[selectedItemIndex]->m_bIsDirty == false ) {
+			rclick_menu[0].deactivate();
+		}*/
+
+		const Fl_Menu_Item *const m = rclick_menu->popup( Fl::event_x(), Fl::event_y(), 0, 0, 0 );
+		if ( m != nullptr ) {
+			m->do_callback( 0, m->user_data() );
+		}
+
+	}
+}
+
+/**
+ *	kbResourceTab::DeleteCB
+ */
+void kbResourceTab::DeleteCB( Fl_Widget * pWidget, void * pUserData ) {
+
+	kbEditorEntity *const pEditorEntity = (kbEditorEntity*)pUserData;
+
+	std::vector<kbEditorEntity *> entitiesToDelete;
+	entitiesToDelete.push_back( pEditorEntity );
+	g_Editor->DeleteEntities( entitiesToDelete );
+
+	g_pResourceTab->RefreshEntitiesTab();
 }

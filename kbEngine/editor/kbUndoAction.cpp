@@ -426,12 +426,13 @@ void kbUndoDeleteActor::UndoAction() {
 
 	for ( int i = 0; i < m_pEntitiesToDelete.size(); i++ ) {
 		kbEditorEntity *const pEntity = m_pEntitiesToDelete[i].m_pEditorEntity;
-		g_Editor->GetGameEntities().push_back( pEntity );
+
 		for ( int j = 0; j < pEntity->GetGameEntity()->NumComponents(); j++ ) {
 			if ( m_pEntitiesToDelete[i].m_bComponentEnabled[j] ) {
 				pEntity->GetGameEntity()->GetComponent(j)->Enable( true );
 			}
 		}
+		g_Editor->AddEntity( pEntity);
 		entityList.push_back( pEntity );
 	}
 }

@@ -80,7 +80,7 @@ kbEditor::kbEditor() :
 	mainMenuBar->add( "Edit/Undo", FL_CTRL+'z', Undo );
 	mainMenuBar->add( "Edit/Redo", FL_CTRL+'y', Redo );
 
-	mainMenuBar->add( "Edit/Delete", FL_Delete, DeleteEntities );
+	mainMenuBar->add( "Edit/Delete", FL_Delete, DeleteEntitiesCB );
 
 	mainMenuBar->add( "File/Quit",   FL_CTRL+'q', Close, this );
 	mainMenuBar->add( "Edit/Change", FL_CTRL+'c', NULL) ;
@@ -140,7 +140,7 @@ kbEditor::kbEditor() :
 
 	m_pResourceTab->PostRendererInit();
 
-	m_IsRunning = true;
+	m_bIsRunning = true;
 
 	m_Timer.Reset();
 
@@ -178,6 +178,8 @@ void kbEditor::UnloadMap() {
 	m_CurrentLevelFileName = "Untitled";
 	m_UndoIDAtLastSave = UINT64_MAX;
 	m_UndoStack.Reset();
+
+	m_pResourceTab->RefreshEntitiesTab();
 }
 
 /**
@@ -250,6 +252,8 @@ void kbEditor::LoadMap( const std::string & InMapName ) {
 	}
 
 	m_UndoStack.Reset();
+
+	m_pResourceTab->RefreshEntitiesTab();
 }
 
 /**
@@ -257,7 +261,7 @@ void kbEditor::LoadMap( const std::string & InMapName ) {
  */
 void kbEditor::Update() {
 
-	if ( m_IsRunning == false ) {
+	if ( m_bIsRunning == false ) {
 		return;
 	}
 
@@ -370,7 +374,7 @@ void kbEditor::Update() {
  */
 void kbEditor::ShutDown() {
 
-	if ( m_IsRunning == false ) {
+	if ( m_bIsRunning == false ) {
 		return;
 	}
 
@@ -381,7 +385,7 @@ void kbEditor::ShutDown() {
 
 	g_ResourceManager.Shutdown();
 
-	m_IsRunning = false;
+	m_bIsRunning = false;
 }
 
 /**
@@ -407,6 +411,16 @@ void kbEditor::DeselectEntities() {
 
 	m_SelectedObjects.clear();
 	g_Editor->BroadcastEvent( widgetCBEntityDeselected() ); 
+}
+
+
+/**
+ *  kbEditor::AddEntity
+ */
+void kbEditor::AddEntity( kbEditorEntity *const pEditorEntity ) {
+	kbErrorCheck( VectorFind( m_GameEntities, pEditorEntity ) == false, "kbEditor::AddEntity() - Called on an already added entity" );
+
+	m_GameEntities.push_back( pEditorEntity );
 }
 
 /**
@@ -553,20 +567,20 @@ void kbEditor::Close( Fl_Widget * widget, void * thisPtr ) {
  *	kbEditor::CreateGameEntity
  */
 void kbEditor::CreateGameEntity( Fl_Widget * widget, void * thisPtr ) {
-	kbEditor * editor = static_cast< kbEditor * >( thisPtr );
 
-	const kbCamera * editorCamera = editor->m_pMainTab->GetEditorWindowCamera();
+	const kbCamera *const editorCamera = g_Editor->m_pMainTab->GetEditorWindowCamera();
 
-	if ( editorCamera == NULL ) {
+	if ( editorCamera == nullptr ) {
 		return;
 	}
 
-	kbVec3 entityLocation = editorCamera->m_Position + ( editorCamera->m_Rotation.ToMat4()[2] * 4.0f ).ToVec3();
-
-	kbEditorEntity * pEditorEntity = new kbEditorEntity();
+	kbEditorEntity *const pEditorEntity = new kbEditorEntity();
+	const kbVec3 entityLocation = editorCamera->m_Position + ( editorCamera->m_Rotation.ToMat4()[2] * 4.0f ).ToVec3();
 	pEditorEntity->SetPosition( entityLocation );
 
-	editor->m_GameEntities.push_back( pEditorEntity );
+	g_Editor->m_GameEntities.push_back( pEditorEntity );
+
+	g_Editor->m_pResourceTab->RefreshEntitiesTab();
 }
 
 /**
@@ -775,6 +789,7 @@ void kbEditor::SaveLevel( class Fl_Widget *, void * ) {
 void kbEditor::Undo( class Fl_Widget *, void * ) {
 	g_Editor->m_UndoStack.Undo();
 	g_Editor->m_pPropertiesTab->RequestRefreshNextUpdate();
+	g_Editor->m_pResourceTab->RefreshEntitiesTab();
 }
 
 /**
@@ -783,13 +798,14 @@ void kbEditor::Undo( class Fl_Widget *, void * ) {
  void kbEditor::Redo( class Fl_Widget *, void * ) {
 	g_Editor->m_UndoStack.Redo();
 	g_Editor->m_pPropertiesTab->RequestRefreshNextUpdate();
+	g_Editor->m_pResourceTab->RefreshEntitiesTab();
 }
 
 /**
  *	kbEditor::PlayGameFromHere
  */
 void kbEditor::PlayGameFromHere( class Fl_Widget *, void * ) {
-	if ( g_Editor == NULL || g_Editor->m_pGame == NULL || g_Editor->m_pGame->IsPlaying() ) {
+	if ( g_Editor == nullptr || g_Editor->m_pGame == nullptr || g_Editor->m_pGame->IsPlaying() ) {
 		return;
 	}
 
@@ -808,36 +824,45 @@ void kbEditor::PlayGameFromHere( class Fl_Widget *, void * ) {
 	g_Editor->BroadcastEvent( widgetCB );
 	g_Editor->show();
 	Fl::check();
-
 }
 
 /**
  *	kbEditor::DeleteEntities
  */
-void kbEditor::DeleteEntities( class Fl_Widget *, void * ) {
+void kbEditor::DeleteEntities( std::vector<kbEditorEntity*> & editorEntityList ) {
 
-	std::vector< kbEditorEntity * > SelectedObjects = g_Editor->GetSelectedObjects();
 	std::vector<kbUndoDeleteActor::DeletedActorInfo_t> deletedEntities;
 
-	for ( int i = 0; i < SelectedObjects.size(); i++ ) {
-		g_Editor->m_RemovedEntities.push_back( SelectedObjects[i] );
+	for ( int i = 0; i < editorEntityList.size(); i++ ) {
+		g_Editor->m_RemovedEntities.push_back( editorEntityList[i] );
+		VectorRemoveFast( m_GameEntities, editorEntityList[i] );
 	}
+
+}
+
+/**
+ *	kbEditor::DeleteEntitiesCB
+ */
+void kbEditor::DeleteEntitiesCB( class Fl_Widget *, void * ) {
+
+	std::vector<kbEditorEntity *> SelectedObjects = g_Editor->GetSelectedObjects();
+	g_Editor->DeleteEntities( SelectedObjects );
 }
 
 /**
  *	kbEditor::StopGame
  */
 void kbEditor::StopGame( class Fl_Widget *, void * ) {
-	if ( g_Editor == NULL || g_Editor->m_pGame == NULL || g_Editor->m_pGame->IsPlaying() == false ) {
+	if ( g_Editor == nullptr || g_Editor->m_pGame == nullptr || g_Editor->m_pGame->IsPlaying() == false ) {
 		return;
 	}
 
 	g_Editor->m_pGame->StopGame();
 
 	delete g_Editor->m_pGameWindow;
-	g_Editor->m_pGameWindow = NULL;
+	g_Editor->m_pGameWindow = nullptr;
 
-	g_pRenderer->SetRenderWindow( NULL );
+	g_pRenderer->SetRenderWindow( nullptr );
 
 	widgetCBObject widgetCB;
 	widgetCB.widgetType = WidgetCB_GameStopped;
@@ -849,7 +874,7 @@ void kbEditor::StopGame( class Fl_Widget *, void * ) {
  */
 void kbEditor::OutputCB( kbOutputMessageType_t messageType, const char * output ) {
 	// Spin in-case this was called by a seperate thread
-	while( g_StyleBuffer == NULL );
+	while( g_StyleBuffer == nullptr );
 
 	std::string outputBuffer = output;
 	std::string styleBuffer;
@@ -882,7 +907,7 @@ void kbEditor::RightClickPopUpMenu() {
 	const kbPrefab *const prefab = g_Editor->m_pResourceTab->GetSelectedPrefab();
 	std::string ReplacePrefabMessage = "Replace Prefab";
 	std::string PlacePrefabMessage = "Place Prefab";
-	if ( prefab == NULL ) {
+	if ( prefab == nullptr ) {
 		PlacePrefabMessage += "into scene";
 	} else {
 		PlacePrefabMessage += "[" + prefab->GetPrefabName() + "] into scene.";
@@ -901,7 +926,7 @@ void kbEditor::RightClickPopUpMenu() {
 		rclick_menu[1].deactivate();
 	}
 
-	if ( prefab == NULL ) {
+	if ( prefab == nullptr ) {
 		rclick_menu[2].deactivate();
 	}
 
@@ -926,8 +951,8 @@ void kbEditor::ReplaceCurrentlySelectedPrefab( class Fl_Widget *, void * ) {
 		return;
 	}
 
-	kbPrefab * prefab = g_Editor->m_pResourceTab->GetSelectedPrefab();
-	if ( prefab == NULL ) {
+	kbPrefab *const pPrefab = g_Editor->m_pResourceTab->GetSelectedPrefab();
+	if ( pPrefab == nullptr ) {
 		return;
 	}
 
@@ -936,8 +961,8 @@ void kbEditor::ReplaceCurrentlySelectedPrefab( class Fl_Widget *, void * ) {
 		GameEntityList.push_back( g_Editor->m_SelectedObjects[i]->GetGameEntity() );
 	}
 
-	g_ResourceManager.UpdatePrefab( prefab, GameEntityList ); 
-	g_Editor->m_pResourceTab->MarkPrefabDirty( prefab );
+	g_ResourceManager.UpdatePrefab( pPrefab, GameEntityList ); 
+	g_Editor->m_pResourceTab->MarkPrefabDirty( pPrefab );
 //	g_ResourceManager.DumpPackageInfo();
 	//g_ResourceManager.SavePackages();
 }
@@ -1002,17 +1027,15 @@ void kbEditor::AddEntityAsPrefab_Internal( const std::string & PackageName, cons
 /**
  *	kbEditor::InsertSelectedPrefabIntoScene
  */
-void kbEditor::InsertSelectedPrefabIntoScene( Fl_Widget*, void *userdata ) {
+void kbEditor::InsertSelectedPrefabIntoScene( Fl_Widget *, void * pUserdata ) {
 	const kbPrefab * prefabToCreate = g_Editor->m_pResourceTab->GetSelectedPrefab();
 
-	if ( prefabToCreate == NULL ) {
+	if ( prefabToCreate == nullptr ) {
 		return;
 	}
 
-	kbEditor * editor = g_Editor;
-
-	const kbCamera * editorCamera = editor->m_pMainTab->GetEditorWindowCamera();
-	if ( editorCamera == NULL ) {
+	const kbCamera *const editorCamera = g_Editor->m_pMainTab->GetEditorWindowCamera();
+	if ( editorCamera == nullptr ) {
 		return;
 	}
 
@@ -1022,7 +1045,9 @@ void kbEditor::InsertSelectedPrefabIntoScene( Fl_Widget*, void *userdata ) {
 		kbGameEntity * pNewEntity = new kbGameEntity( prefabToCreate->m_GameEntities[i], false );
 		kbEditorEntity * pEditorEntity = new kbEditorEntity( pNewEntity );
 		pEditorEntity->SetPosition( entityLocation );
-		editor->m_GameEntities.push_back( pEditorEntity );
+		g_Editor->m_GameEntities.push_back( pEditorEntity );
 	}
+
+	g_Editor->m_pResourceTab->RefreshEntitiesTab();
  }
 

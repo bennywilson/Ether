@@ -45,12 +45,14 @@ public:
 	void										MarkPrefabDirty( kbPrefab * prefab );
 
 	void										RefreshResourcesTab();
+	void										RefreshEntitiesTab();
 
 private:
 
 	void										RebuildResourceFolderListText();
 
-	Fl_Select_Browser *							m_pSelectBrowser;
+	Fl_Select_Browser *							m_pResourceSelectBrowser;
+	Fl_Select_Browser *							m_pEntitySelectBrowser;
 
 	std::vector<kbResourceTabFile_t>			m_ResourceFolderList;
 	std::vector<kbResourceTabFile_t*>			m_SelectBrowserIdx;		// Maps select browser entries to their corresponding kbResourceTabFile_t
@@ -58,9 +60,16 @@ private:
 	void										FindResourcesRecursively( const std::string & file, kbResourceTabFile_t & CurrentFolder );
 	void										RefreshResourcesTab_Recursive( kbResourceTabFile_t & currentFolder, std::string spaces );
 
+	struct EntitySelectItem_t {
+		kbEditorEntity * m_pEntity;
+	};
+	std::vector<EntitySelectItem_t>				m_EntityList;
+
 	// Callbacks
-	static void									ResourceSelectedCB( Fl_Widget * widget, void * userData );
-	static void									SavePackageCB( Fl_Widget * widget, void * userData );
+	static void									EntitySelectedCB( Fl_Widget * pWidget, void * pUserData );
+	static void									ResourceSelectedCB( Fl_Widget * pWidget, void * pUserData );
+	static void									SavePackageCB( Fl_Widget * pWidget, void * pUserData );
+	static void									DeleteCB( Fl_Widget * pWidget, void * pUserData );
 
 	static void									ResourceManagerCB( const kbResourceManager::CallbackReason Reason );
 };

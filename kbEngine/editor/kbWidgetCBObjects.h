@@ -25,6 +25,7 @@ enum widgetCBType_t {
 	WidgetCB_GameStarted,
 	WidgetCB_GameStopped,
 	WidgetCB_PrefabModified,
+	WidgetCB_EntityModified,
 };
 
 

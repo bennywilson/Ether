@@ -154,7 +154,7 @@ void kbPropertiesTab::CheckButtonCB( Fl_Widget * widget, void * voidPtr ) {
 
 	userData->m_pComponent->Enable( buttonVal > 0 );
 
-	PropertyChangedCB();
+	PropertyChangedCB( userData->m_GameEntityPtr );
 }
 
 /**
@@ -202,7 +202,7 @@ void kbPropertiesTab::PointerButtonCB( Fl_Widget * widget, void * voidPtr ) {
 
 	g_pPropertiesTab->RefreshEntity();
 
-	PropertyChangedCB();
+	PropertyChangedCB( userData->m_GameEntityPtr );
 }
 
 bool IsNumeric( const char *const cString ) {
@@ -240,11 +240,10 @@ bool IsNumeric( const char *const cString ) {
  */
 void kbPropertiesTab::TextFieldCB( Fl_Widget * widget, void * voidPtr ) {
 
-	propertiesTabCBData_t *const userData = static_cast< propertiesTabCBData_t * >( voidPtr );
+	propertiesTabCBData_t *const userData = static_cast<propertiesTabCBData_t *>( voidPtr );
 	kbErrorCheck( userData != nullptr, "kbPropertiesTab::TextFieldCB() - NULL userData passed in" );
 
 	Fl_Input *const inputField = ( Fl_Input * ) widget;
-
 	if ( userData->m_VariableType != KBTYPEINFO_KBSTRING ) {
 		if ( IsNumeric( inputField->value() ) == false ) {
 	      return;
@@ -306,8 +305,8 @@ void kbPropertiesTab::TextFieldCB( Fl_Widget * widget, void * voidPtr ) {
 
 	delete prevValuePtr;
 	delete curValuePtr;
-
-	PropertyChangedCB();
+	
+	PropertyChangedCB( userData->m_GameEntityPtr );
 }
 
 /**
@@ -322,7 +321,7 @@ void kbPropertiesTab::ArrayExpandCB( Fl_Widget * widet, void * userData ) {
 
 	g_pPropertiesTab->RefreshEntity();
 
-	PropertyChangedCB();
+	PropertyChangedCB( kbGameEntityPtr() );
 }
 
 /**
@@ -330,7 +329,7 @@ void kbPropertiesTab::ArrayExpandCB( Fl_Widget * widet, void * userData ) {
  */
 void kbPropertiesTab::ArrayResizeCB( Fl_Widget * widget, void * voidPtr ) {
 
-	propertiesTabCBData_t * userData = static_cast< propertiesTabCBData_t * >( voidPtr );
+	propertiesTabCBData_t *const userData = static_cast< propertiesTabCBData_t * >( voidPtr );
 	kbErrorCheck( userData != nullptr, "kbPropertiesTab::ArrayResizeCB() - NULL userData passed in" );
 
 	const Fl_Input *const inputField = ( Fl_Input * ) widget;
@@ -367,7 +366,7 @@ void kbPropertiesTab::ArrayResizeCB( Fl_Widget * widget, void * voidPtr ) {
 	}
 
 	g_pPropertiesTab->RequestRefreshNextUpdate();
-	PropertyChangedCB();
+	PropertyChangedCB( userData->m_GameEntityPtr );
 }
 
 /**
@@ -389,16 +388,18 @@ void kbPropertiesTab::EnumCB( Fl_Widget * widget, void * voidPtr ) {
 
 	g_pPropertiesTab->RequestRefreshNextUpdate();
 
-	PropertyChangedCB();
+	PropertyChangedCB( userData->m_GameEntityPtr );
 }
 
 /**
  *	kbPropertiesTab::PropertyChangedCB
  */
-void kbPropertiesTab::PropertyChangedCB() {
+void kbPropertiesTab::PropertyChangedCB( const kbGameEntityPtr entityPtr ) {
 	if ( g_pPropertiesTab->m_pTempPrefabEntity != nullptr ) {
 		g_Editor->BroadcastEvent( widgetCBGeneric( WidgetCB_PrefabModified, g_pPropertiesTab->m_pTempPrefabEntity->GetGameEntity() ) );		
 	}
+
+	g_Editor->BroadcastEvent( widgetCBGeneric( WidgetCB_EntityModified, nullptr ) );		
 }
 
 /**
