@@ -16,14 +16,14 @@ kbPrefab 1 {
 			CastsShadow = 0
 			ShaderParams = 0
 			m_RenderPass = LightingPass
-			Model = C:\projects\Ether\GameBase\GameBase\assets\models\Characters\EL_Merc\EL_Merc.ms3d
+			Model = .\assets\models\Characters\EL_Merc\EL_Merc.ms3d
 			ShaderOverride = 0
 				
 			Animations = 2
 				EtherAnimComponent { 
 					Enabled = 0
 					LifeTime =  -1.000000
-					Animation = C:\projects\Ether\GameBase\GameBase\assets\models\Characters\EL_Merc\EL_Merc_Aim.kbAnim.ms3d
+					Animation = .\assets\models\Characters\EL_Merc\EL_Merc_Aim.kbAnim.ms3d
 					AnimationName = "Aim"
 					IsLooping = 1
 					TimeScale =  1.000000
@@ -31,7 +31,7 @@ kbPrefab 1 {
 				EtherAnimComponent { 
 					Enabled = 0
 					LifeTime =  -1.000000
-					Animation = C:\projects\Ether\GameBase\GameBase\assets\models\Characters\EL_Merc\EL_Merc_Run.kbAnim.ms3d
+					Animation = .\assets\models\Characters\EL_Merc\EL_Merc_Run.kbAnim.ms3d
 					AnimationName = "Run"
 					IsLooping = 1
 					TimeScale =  1.000000
@@ -74,14 +74,14 @@ kbGameEntity 3457636970 1153601310 1807670206 2036758972 {
 		CastsShadow = 0
 		ShaderParams = 0
 		m_RenderPass = LightingPass
-		Model = C:\projects\Ether\GameBase\GameBase\assets\models\Characters\FP\Hands.ms3d
+		Model = .\assets\models\Characters\FP\Hands.ms3d
 		ShaderOverride = 0
 			
 		Animations = 1
 			EtherAnimComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
-				Animation = C:\projects\Ether\GameBase\GameBase\assets\models\Characters\FP\Hands_ThrowGrenade.kbAnim.ms3d
+				Animation = .\assets\models\Characters\FP\Hands_ThrowGrenade.kbAnim.ms3d
 				AnimationName = "ThrowGrenade"
 				IsLooping = 0
 				TimeScale =  0.125000
@@ -109,14 +109,14 @@ kbGameEntity 3296042617 1156675361 562646963 1803854321 {
 		CastsShadow = 1
 		ShaderParams = 0
 		m_RenderPass = LightingPass
-		Model = C:\projects\Ether\GameBase\GameBase\assets\models\Characters\Cartel_Warrior\Cartel_Warrior.ms3d
+		Model = .\assets\models\Characters\Cartel_Warrior\Cartel_Warrior.ms3d
 		ShaderOverride = 0
 			
 		Animations = 11
 			EtherAnimComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
-				Animation = C:\projects\Ether\GameBase\GameBase\assets\models\Characters\Cartel_Warrior\Cartel_Warrior_Aim.kbAnim.ms3d
+				Animation = .\assets\models\Characters\Cartel_Warrior\Cartel_Warrior_Aim.kbAnim.ms3d
 				AnimationName = "Aim"
 				IsLooping = 1
 				TimeScale =  0.050000
@@ -124,7 +124,7 @@ kbGameEntity 3296042617 1156675361 562646963 1803854321 {
 			EtherAnimComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
-				Animation = C:\projects\Ether\GameBase\GameBase\assets\models\Characters\Cartel_Warrior\Cartel_Warrior_Run.kbAnim.ms3d
+				Animation = .\assets\models\Characters\Cartel_Warrior\Cartel_Warrior_Run.kbAnim.ms3d
 				AnimationName = "Run"
 				IsLooping = 1
 				TimeScale =  1.000000
@@ -132,7 +132,7 @@ kbGameEntity 3296042617 1156675361 562646963 1803854321 {
 			EtherAnimComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
-				Animation = C:\projects\Ether\GameBase\GameBase\assets\models\Characters\Cartel_Warrior\Cartel_Warrior_BackPedal.kbAnim.ms3d
+				Animation = .\assets\models\Characters\Cartel_Warrior\Cartel_Warrior_BackPedal.kbAnim.ms3d
 				AnimationName = "BackPedal"
 				IsLooping = 1
 				TimeScale =  0.500000
@@ -140,7 +140,7 @@ kbGameEntity 3296042617 1156675361 562646963 1803854321 {
 			EtherAnimComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
-				Animation = C:\projects\Ether\GameBase\GameBase\assets\models\Characters\Cartel_Warrior\Cartel_Warrior_StrafeLeft.kbAnim.ms3d
+				Animation = .\assets\models\Characters\Cartel_Warrior\Cartel_Warrior_StrafeLeft.kbAnim.ms3d
 				AnimationName = "StrafeLeft"
 				IsLooping = 1
 				TimeScale =  1.000000
@@ -148,7 +148,7 @@ kbGameEntity 3296042617 1156675361 562646963 1803854321 {
 			EtherAnimComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
-				Animation = C:\projects\Ether\GameBase\GameBase\assets\models\Characters\Cartel_Warrior\Cartel_Warrior_StrafeRight.kbAnim.ms3d
+				Animation = .\assets\models\Characters\Cartel_Warrior\Cartel_Warrior_StrafeRight.kbAnim.ms3d
 				AnimationName = "StrafeRight"
 				IsLooping = 1
 				TimeScale =  1.000000
@@ -156,7 +156,7 @@ kbGameEntity 3296042617 1156675361 562646963 1803854321 {
 			EtherAnimComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
-				Animation = C:\projects\Ether\GameBase\GameBase\assets\models\Characters\Cartel_Warrior\Cartel_Warrior_Death_Backwards_1.kbAnim.ms3d
+				Animation = .\assets\models\Characters\Cartel_Warrior\Cartel_Warrior_Death_Backwards_1.kbAnim.ms3d
 				AnimationName = "Death_Back_1"
 				IsLooping = 0
 				TimeScale =  1.450000
@@ -164,7 +164,7 @@ kbGameEntity 3296042617 1156675361 562646963 1803854321 {
 			EtherAnimComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
-				Animation = C:\projects\Ether\GameBase\GameBase\assets\models\Characters\Cartel_Warrior\Cartel_Warrior_Death_Spin.kbAnim.ms3d
+				Animation = .\assets\models\Characters\Cartel_Warrior\Cartel_Warrior_Death_Spin.kbAnim.ms3d
 				AnimationName = "Death_Spin"
 				IsLooping = 0
 				TimeScale =  1.500000
@@ -172,7 +172,7 @@ kbGameEntity 3296042617 1156675361 562646963 1803854321 {
 			EtherAnimComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
-				Animation = C:\projects\Ether\GameBase\GameBase\assets\models\Characters\Cartel_Warrior\Cartel_Warrior_Death_Flip.kbAnim.ms3d
+				Animation = .\assets\models\Characters\Cartel_Warrior\Cartel_Warrior_Death_Flip.kbAnim.ms3d
 				AnimationName = "Death_Flip"
 				IsLooping = 0
 				TimeScale =  1.450000
@@ -180,7 +180,7 @@ kbGameEntity 3296042617 1156675361 562646963 1803854321 {
 			EtherAnimComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
-				Animation = C:\projects\Ether\GameBase\GameBase\assets\models\Characters\Cartel_Warrior\Cartel_Warrior_Death_Backwards_2.kbAnim.ms3d
+				Animation = .\assets\models\Characters\Cartel_Warrior\Cartel_Warrior_Death_Backwards_2.kbAnim.ms3d
 				AnimationName = "Death_Back_2"
 				IsLooping = 0
 				TimeScale =  1.450000
@@ -188,7 +188,7 @@ kbGameEntity 3296042617 1156675361 562646963 1803854321 {
 			EtherAnimComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
-				Animation = C:\projects\Ether\GameBase\GameBase\assets\models\Characters\Cartel_Warrior\Cartel_Warrior_Death_KneelForward.kbAnim.ms3d
+				Animation = .\assets\models\Characters\Cartel_Warrior\Cartel_Warrior_Death_KneelForward.kbAnim.ms3d
 				AnimationName = "Death_KneelForward"
 				IsLooping = 0
 				TimeScale =  1.650000
@@ -196,7 +196,7 @@ kbGameEntity 3296042617 1156675361 562646963 1803854321 {
 			EtherAnimComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
-				Animation = C:\projects\Ether\GameBase\GameBase\assets\models\Characters\Cartel_Warrior\Cartel_Warrior_Death_ForwardFlip.kbAnim.ms3d
+				Animation = .\assets\models\Characters\Cartel_Warrior\Cartel_Warrior_Death_ForwardFlip.kbAnim.ms3d
 				AnimationName = "Death_ForwardFlip"
 				IsLooping = 0
 				TimeScale =  0.400000
@@ -1002,7 +1002,7 @@ kbGameEntity 3296042617 1156675361 562646963 1803854321 {
 		Health =  5.000000
 		m_Dummy = 0
 		UpdateHz = 0
-		EyeModel = C:\projects\Ether\GameBase\GameBase\assets\models\Characters\Eyes.ms3d
+		EyeModel = .\assets\models\Characters\Eyes.ms3d
 		Projectile = 2459381576 1233845788 1100758177 1698127025
 		SecBetweenSprays =  5.000000
 		SecondsBetweenShots =  0.200000
@@ -1032,14 +1032,14 @@ kbGameEntity 3984695574 1265514075 1038137218 3472588337 {
 		CastsShadow = 0
 		ShaderParams = 0
 		m_RenderPass = LightingPass
-		Model = C:\projects\Ether\GameBase\GameBase\assets\models\Characters\Cartel_Stalker\Cartel_Stalker.ms3d
+		Model = .\assets\models\Characters\Cartel_Stalker\Cartel_Stalker.ms3d
 		ShaderOverride = 0
 			
 		Animations = 7
 			EtherAnimComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
-				Animation = C:\projects\Ether\GameBase\GameBase\assets\models\Characters\Cartel_Stalker\Cartel_Stalker_Aim.kbAnim.ms3d
+				Animation = .\assets\models\Characters\Cartel_Stalker\Cartel_Stalker_Aim.kbAnim.ms3d
 				AnimationName = "Aim"
 				IsLooping = 0
 				TimeScale =  0.050000
@@ -1047,7 +1047,7 @@ kbGameEntity 3984695574 1265514075 1038137218 3472588337 {
 			EtherAnimComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
-				Animation = C:\projects\Ether\GameBase\GameBase\assets\models\Characters\Cartel_Stalker\Cartel_Stalker_Death_Backwards_1.kbAnim.ms3d
+				Animation = .\assets\models\Characters\Cartel_Stalker\Cartel_Stalker_Death_Backwards_1.kbAnim.ms3d
 				AnimationName = "Death_Back_1"
 				IsLooping = 0
 				TimeScale =  0.000000
@@ -1055,7 +1055,7 @@ kbGameEntity 3984695574 1265514075 1038137218 3472588337 {
 			EtherAnimComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
-				Animation = C:\projects\Ether\GameBase\GameBase\assets\models\Characters\Cartel_Stalker\Cartel_Stalker_Death_Spin.kbAnim.ms3d
+				Animation = .\assets\models\Characters\Cartel_Stalker\Cartel_Stalker_Death_Spin.kbAnim.ms3d
 				AnimationName = "Death_Spin"
 				IsLooping = 0
 				TimeScale =  0.420000
@@ -1063,7 +1063,7 @@ kbGameEntity 3984695574 1265514075 1038137218 3472588337 {
 			EtherAnimComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
-				Animation = C:\projects\Ether\GameBase\GameBase\assets\models\Characters\Cartel_Stalker\Cartel_Stalker_Death_Flip.kbAnim.ms3d
+				Animation = .\assets\models\Characters\Cartel_Stalker\Cartel_Stalker_Death_Flip.kbAnim.ms3d
 				AnimationName = "Death_Flip"
 				IsLooping = 0
 				TimeScale =  0.450000
@@ -1071,7 +1071,7 @@ kbGameEntity 3984695574 1265514075 1038137218 3472588337 {
 			EtherAnimComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
-				Animation = C:\projects\Ether\GameBase\GameBase\assets\models\Characters\Cartel_Stalker\Cartel_Stalker_Death_Backwards_1.kbAnim.ms3d
+				Animation = .\assets\models\Characters\Cartel_Stalker\Cartel_Stalker_Death_Backwards_1.kbAnim.ms3d
 				AnimationName = "Death_Back_2"
 				IsLooping = 0
 				TimeScale =  0.700000
@@ -1079,7 +1079,7 @@ kbGameEntity 3984695574 1265514075 1038137218 3472588337 {
 			EtherAnimComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
-				Animation = C:\projects\Ether\GameBase\GameBase\assets\models\Characters\Cartel_Stalker\Cartel_Stalker_Death_ForwardFlip.kbAnim.ms3d
+				Animation = .\assets\models\Characters\Cartel_Stalker\Cartel_Stalker_Death_ForwardFlip.kbAnim.ms3d
 				AnimationName = "Death_ForwardFlip"
 				IsLooping = 0
 				TimeScale =  0.450000
@@ -1087,7 +1087,7 @@ kbGameEntity 3984695574 1265514075 1038137218 3472588337 {
 			EtherAnimComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
-				Animation = C:\projects\Ether\GameBase\GameBase\assets\models\Characters\Cartel_Stalker\Cartel_Stalker_Death_TwistLeft.kbAnim.ms3d
+				Animation = .\assets\models\Characters\Cartel_Stalker\Cartel_Stalker_Death_TwistLeft.kbAnim.ms3d
 				AnimationName = "Death_TwistLeft"
 				IsLooping = 0
 				TimeScale =  0.400000
@@ -1984,7 +1984,7 @@ kbGameEntity 3984695574 1265514075 1038137218 3472588337 {
 		Health =  5.000000
 		m_Dummy = 0
 		UpdateHz = 0
-		EyeModel = C:\projects\Ether\GameBase\GameBase\assets\models\Characters\Eyes.ms3d
+		EyeModel = .\assets\models\Characters\Eyes.ms3d
 		Projectile = 0 0 0 0
 		SecBetweenSprays =  5.000000
 		SecondsBetweenShots =  0.250000
