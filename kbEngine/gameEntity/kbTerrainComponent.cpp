@@ -17,11 +17,17 @@ struct debugNormal
 	kbVec3 normal;
 	kbVec3 position;
 };
-
 std::vector<debugNormal> terrainNormals;
 
 /**
- *	kbTerrainComponent
+ *  kbTerrainMatComponent::Constructor
+ */
+void kbTerrainMatComponent::Constructor() {
+    m_DiffuseTexture = nullptr;
+}
+
+/**
+ *	kbTerrainComponent::Constructor
  */
 void kbTerrainComponent::Constructor() {
 	m_pHeightMap = nullptr;
@@ -29,10 +35,12 @@ void kbTerrainComponent::Constructor() {
 	m_TerrainWidth = 256.0f;
 	m_TerrainDimensions = 16;
 	m_bRegenerateTerrain = false;
+	m_pTerrainShader = nullptr;
+	m_pSplatMap = nullptr;
 }
 
 /**
- *	~kbTerrainComponent
+ *	~kbTerrainComponent::kbTerrainComponent
  */
 kbTerrainComponent::~kbTerrainComponent() {
    if ( m_pHeightMap ) {
@@ -215,7 +223,7 @@ void kbTerrainComponent::SetEnable_Internal( const bool isEnabled ) {
 		ShaderOverrideList.push_back( pShader );
 	}
 	if ( isEnabled ) {
-		g_pRenderer->AddRenderObject( this, &m_TerrainModel, kbVec3::zero, kbQuat( 0.0f, 0.0f, 0.0f, 1.0f ), kbVec3::one, RP_Lighting, &ShaderOverrideList );	
+		g_pRenderer->AddRenderObject( this, &m_TerrainModel, GetOwner()->GetPosition(), kbQuat( 0.0f, 0.0f, 0.0f, 1.0f ), kbVec3::one, RP_Lighting, &ShaderOverrideList );	
 	} else {
 		g_pRenderer->RemoveRenderObject( this );
 	}

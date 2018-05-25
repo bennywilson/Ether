@@ -85,6 +85,10 @@ std::vector<kbTypeInfoClass *> kbStaticModelComponent::kbStaticModelComponent_Ty
 kbSkeletalModelComponent_TypeInfo kbSkeletalModelComponent::typeInfo;
 std::vector<kbTypeInfoClass *> kbSkeletalModelComponent::kbSkeletalModelComponent_TypeInfoVar;
 
+// kbTerrainMatComponent
+kbTerrainMatComponent_TypeInfo kbTerrainMatComponent::typeInfo;
+std::vector<kbTypeInfoClass *> kbTerrainMatComponent::kbTerrainMatComponent_TypeInfoVar;
+
 // kbTerrainComponent
 kbTerrainComponent_TypeInfo kbTerrainComponent::typeInfo;
 std::vector<kbTypeInfoClass *> kbTerrainComponent::kbTerrainComponent_TypeInfoVar;

@@ -2,7 +2,7 @@
 // kbTerrainComponent.h
 //
 //
-// 2016-2017 kbEngine 2.0
+// 2016-2018 kbEngine 2.0
 //===================================================================================================
 #ifndef _KBTERRAINCOMPONENT_H_
 #define _KBTERRAINCOMPONENT_H_
@@ -14,6 +14,20 @@
 class kbTexture;
 
 /**
+ *  kbTerrainMatComponent
+ */
+class kbTerrainMatComponent : public kbGameComponent {
+
+    friend class kbTerrainComponent;
+
+    KB_DECLARE_COMPONENT( kbTerrainMatComponent, kbGameComponent );
+
+//---------------------------------------------------------------------------------------------------
+private:
+    kbTexture *                                m_DiffuseTexture;
+};
+
+/**
  * kbTerrainComponent
  */
 class kbTerrainComponent : public kbModelComponent {
@@ -22,7 +36,6 @@ class kbTerrainComponent : public kbModelComponent {
 
 //---------------------------------------------------------------------------------------------------
 public:
-
 												~kbTerrainComponent();
 
 	virtual void								PostLoad() override;
@@ -43,6 +56,9 @@ protected:
 	float										m_HeightScale;
 	float										m_TerrainWidth;
 	int											m_TerrainDimensions;
+	std::vector<kbTerrainMatComponent>          m_TerrainMaterials;
+	kbShader *                                  m_pTerrainShader;
+	kbTexture *                                 m_pSplatMap;
 
 	kbModel										m_TerrainModel;
 

@@ -82,15 +82,15 @@ kbResourceManager::~kbResourceManager() {
  *	kbResourceManager::RenderSync
  */
 void kbResourceManager::RenderSync() {
-
 	UpdateHotReloads();
 }
+
 /**
  *	kbResourceManager::UpdateHotReloads
  */
 void kbResourceManager::UpdateHotReloads() {
 
-	static std::vector<std::wstring > queuedFiles;
+	static std::vector<std::wstring> queuedFiles;
 
 	static float lastUpdateTimeSecs = 0;
 	const float totalSeconds = g_GlobalTimer.TimeElapsedSeconds();
@@ -155,7 +155,8 @@ void kbResourceManager::UpdateHotReloads() {
 		}
 
 		if ( bHasTilda == false && GetFileExtension( fileName ).empty() == false ) {
-			const std::wstring fullFileName = L"assets\\" + fileName;
+			std::replace( fileName.begin(), fileName.end(), '/', '\\' );
+			const std::wstring fullFileName = L".\\assets\\" + fileName;
 
 			if ( VectorFind( queuedFiles, fullFileName ) == false ) {
 				queuedFiles.push_back( fullFileName );
@@ -225,9 +226,10 @@ kbResource * kbResourceManager::GetResource( const std::string & fullFileName, c
 		return nullptr;
 	}
 
-	fs::path p = fs::canonical( fullFileName.c_str() );
-	StringFromWString( pResource->m_FullFileName, p.c_str() );
-
+//	fs::path p = fs::canonical( fullFileName.c_str() );
+	//StringFromWString( pResource->m_FullFileName, p.c_str() );
+	pResource->m_FullFileName = fullFileName;
+	std::replace( pResource->m_FullFileName.begin(), pResource->m_FullFileName.end(), '/', '\\' );
 	pResource->m_FullName = kbString( pResource->m_FullFileName );
 
 	size_t pos = fullFileName.find_last_of( "/" );
@@ -498,25 +500,21 @@ void kbResourceManager::Shutdown() {
  */
 void kbResourceManager::FileModifiedCB( const std::wstring & fileName ) {
 
-	std::string relativeFilePath;
-	StringFromWString( relativeFilePath, fileName );
-
-	relativeFilePath = "./assets/" + relativeFilePath;
-
 	fs::path p = fs::canonical( fileName.c_str() );
-	const kbString absoluteFileName = kbString( p.string() );
 
 	for ( int i = 0; i < m_Resources.size(); i++ ) {
-		if ( m_Resources[i]->GetFullName() == absoluteFileName ) {
-			kbLog( "Hot reloading %s", absoluteFileName.c_str() );
+		fs::path resourcePath = fs::canonical( m_Resources[i]->GetFullFileName() );
+
+		if ( resourcePath.string() == p.string() ) {
+			kbLog( "Hot reloading %s", p.string().c_str() );
 			m_Resources[i]->Release();
 			m_Resources[i]->Load();
 			return;
 		}
 	}
 
-	kbLog( "Loading %s", absoluteFileName.c_str() );
-	GetResource( absoluteFileName.stl_str(), true );
+	kbLog( "Loading %s", p.string().c_str() );
+	GetResource( p.string(), true );
 }
 
 /**

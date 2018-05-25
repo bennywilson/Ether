@@ -123,11 +123,19 @@ GenerateClass(
 )
 
 GenerateClass(
-   kbTerrainComponent,
-   AddField( "HeightMap", KBTYPEINFO_TEXTURE, kbTerrainComponent, m_pHeightMap, false, "" )
-   AddField( "HeightScale", KBTYPEINFO_FLOAT, kbTerrainComponent, m_HeightScale, false, "" )
-   AddField( "Width", KBTYPEINFO_FLOAT, kbTerrainComponent, m_TerrainWidth, false, "" )
-   AddField( "Dimensions", KBTYPEINFO_INT, kbTerrainComponent, m_TerrainDimensions, false, "" )
+	kbTerrainMatComponent,
+	AddField( "Diffuse Texture", KBTYPEINFO_TEXTURE, kbTerrainMatComponent, m_DiffuseTexture, false, "" )
+)
+
+GenerateClass(
+	kbTerrainComponent,
+	AddField( "HeightMap", KBTYPEINFO_TEXTURE, kbTerrainComponent, m_pHeightMap, false, "" )
+	AddField( "HeightScale", KBTYPEINFO_FLOAT, kbTerrainComponent, m_HeightScale, false, "" )
+	AddField( "Width", KBTYPEINFO_FLOAT, kbTerrainComponent, m_TerrainWidth, false, "" )
+	AddField( "Dimensions", KBTYPEINFO_INT, kbTerrainComponent, m_TerrainDimensions, false, "" )
+	AddField( "Materials", KBTYPEINFO_STRUCT, kbTerrainComponent, m_TerrainMaterials, true, "kbTerrainMatComponent" )
+	AddField( "SplatMap", KBTYPEINFO_TEXTURE, kbTerrainComponent, m_pSplatMap, false, "" )
+	AddField( "Shader", KBTYPEINFO_SHADER, kbTerrainComponent, m_pTerrainShader, false, "" )
 )
 
 GenerateEnum(
