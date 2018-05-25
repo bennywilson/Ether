@@ -1,0 +1,86 @@
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Terrain"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 8.143600 -2700.000000 37.072117
+		Scale = 1.000000 1.000000 1.000000
+	}
+	kbTerrainComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		ShaderParams = 0
+		m_RenderPass = LightingPass
+		Dimensions = 513
+		HeightMap = .\assets\heightmap2.bmp
+		HeightScale =  2.000000
+		Width =  8192.000000
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		Name = "Directional Light"
+		Orientation = -0.416803 0.000000 0.000000 0.908997
+		Position = -7.139423 27.397795 16.036642
+		Scale = 1.000000 1.000000 1.000000
+	}
+	kbDirectionalLightComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadows = 1
+		Color = 0.250000 0.250000 0.250000 0.250000
+		CascadedShadowSplits = 4
+ 0.000000
+ 0.000000
+ 0.000000
+ 0.000000
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Skybox"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 1.626685 40.604389 -22.515354
+		Scale = 1.000000 1.000000 1.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		ShaderParams = 0
+		m_RenderPass = Post-LightingPass
+		Model = .\assets\models\Test\skybox.ms3d
+		ShaderOverride = 1
+			.\assets\shaders\skyBox.kbShader
+
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Cartel Soldier"
+		Orientation = 0.000000 0.991689 0.000000 0.128659
+		Position = -0.466237 8.466955 43.347977
+		Scale = 0.100000 0.100000 0.100000
+	}
+	EtherSkelModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 1
+		ShaderParams = 0
+		m_RenderPass = LightingPass
+		Model = .\assets\models\Characters\Cartel_Warrior\Cartel_Warrior.ms3d
+		ShaderOverride = 0
+			
+		Animations = 0
+		DebugAnimIndex = -1
+		IsFirstPersonModel = 0
+	}
+}
