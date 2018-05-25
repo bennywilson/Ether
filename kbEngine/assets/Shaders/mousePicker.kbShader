@@ -1,0 +1,43 @@
+//==============================================================================
+// baseShader.kbShader
+//
+// 2018 kbEngine 2.0
+//==============================================================================
+
+cbuffer matrixBuffer : register( b0 ){
+	matrix modelMatrix;
+	matrix modelViewMatrix;
+	matrix viewMatrix;
+	matrix mvpMatrix;
+};
+
+cbuffer editorBuffer : register( b1 ) {
+	unsigned int entityId;
+};
+
+//-------------------------------------
+struct vertexInput {
+	float4 position		: POSITION;
+};
+
+//-------------------------------------
+struct pixelInput {
+	float4	position	: SV_POSITION;
+};
+
+/**
+ *	vertexShader
+ */
+pixelInput vertexShader( vertexInput input ) {
+	pixelInput output = (pixelInput)0;
+	output.position = mul( input.position, mvpMatrix );
+
+	return output;
+}
+
+/**
+ *	pixelShader
+ */
+ unsigned int pixelShader() : SV_TARGET {
+	return  entityId;
+}
