@@ -14,8 +14,26 @@ kbGameEntity 0 0 0 0 {
 		ShaderParams = 0
 		m_RenderPass = LightingPass
 		Dimensions = 513
-		HeightMap = .\assets\heightmap2.bmp
-		HeightScale =  2.000000
+		HeightMap = .\assets\Terrain\terrain1_height.bmp
+		HeightScale =  7.000000
+		Materials = 3
+			kbTerrainMatComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Diffuse Texture = NULL
+			}
+			kbTerrainMatComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Diffuse Texture = NULL
+			}
+			kbTerrainMatComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Diffuse Texture = NULL
+			}
+		Shader = .\assets\shaders\basicTerrain.kbShader
+		SplatMap = .\assets\Terrain\terrain1_splatmap.bmp
 		Width =  8192.000000
 	}
 }
