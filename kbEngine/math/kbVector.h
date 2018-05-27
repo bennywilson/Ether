@@ -405,6 +405,30 @@ public:
 
 	const kbVec4 & operator[]( const int index ) const { return mat[ index ]; }
 
+	void operator *=( const kbMat4 & op2 ) {
+		kbMat4 tempMatrix = *this;
+
+		mat[0][0] = (tempMatrix[0][0] * op2[0][0]) + (tempMatrix[0][1] * op2[1][0]) + (tempMatrix[0][2] * op2[2][0]) + (tempMatrix[0][3] * op2[3][0]);
+		mat[1][0] = (tempMatrix[1][0] * op2[0][0]) + (tempMatrix[1][1] * op2[1][0]) + (tempMatrix[1][2] * op2[2][0]) + (tempMatrix[1][3] * op2[3][0]);
+		mat[2][0] = (tempMatrix[2][0] * op2[0][0]) + (tempMatrix[2][1] * op2[1][0]) + (tempMatrix[2][2] * op2[2][0]) + (tempMatrix[2][3] * op2[3][0]);
+		mat[3][0] = (tempMatrix[3][0] * op2[0][0]) + (tempMatrix[3][1] * op2[1][0]) + (tempMatrix[3][2] * op2[2][0]) + (tempMatrix[3][3] * op2[3][0]);
+	
+		mat[0][1] = (tempMatrix[0][0] * op2[0][1]) + (tempMatrix[0][1] * op2[1][1]) + (tempMatrix[0][2] * op2[2][1]) + (tempMatrix[0][3] * op2[3][1]);
+		mat[1][1] = (tempMatrix[1][0] * op2[0][1]) + (tempMatrix[1][1] * op2[1][1]) + (tempMatrix[1][2] * op2[2][1]) + (tempMatrix[1][3] * op2[3][1]);
+		mat[2][1] = (tempMatrix[2][0] * op2[0][1]) + (tempMatrix[2][1] * op2[1][1]) + (tempMatrix[2][2] * op2[2][1]) + (tempMatrix[2][3] * op2[3][1]);
+		mat[3][1] = (tempMatrix[3][0] * op2[0][1]) + (tempMatrix[3][1] * op2[1][1]) + (tempMatrix[3][2] * op2[2][1]) + (tempMatrix[3][3] * op2[3][1]);
+
+		mat[0][2] = (tempMatrix[0][0] * op2[0][2]) + (tempMatrix[0][1]  * op2[1][2]) + (tempMatrix[0][2] * op2[2][2]) + (tempMatrix[0][3] * op2[3][2]);
+		mat[1][2] = (tempMatrix[1][0] * op2[0][2]) + (tempMatrix[1][1]  * op2[1][2]) + (tempMatrix[1][2] * op2[2][2]) + (tempMatrix[1][3] * op2[3][2]);
+		mat[2][2] = (tempMatrix[2][0] * op2[0][2]) + (tempMatrix[2][1]  * op2[1][2]) + (tempMatrix[2][2] * op2[2][2]) + (tempMatrix[2][3] * op2[3][2]);
+		mat[3][2] = (tempMatrix[3][0] * op2[0][2]) + (tempMatrix[3][1]  * op2[1][2]) + (tempMatrix[3][2] * op2[2][2]) + (tempMatrix[3][3] * op2[3][2]);
+
+		mat[0][3] = (tempMatrix[0][0] * op2[0][3]) + (tempMatrix[0][1] * op2[1][3]) + (tempMatrix[0][2] * op2[2][3]) + (tempMatrix[0][3] * op2[3][3]);
+		mat[1][3] = (tempMatrix[1][0] * op2[0][3]) + (tempMatrix[1][1] * op2[1][3]) + (tempMatrix[1][2] * op2[2][3]) + (tempMatrix[1][3] * op2[3][3]);
+		mat[2][3] = (tempMatrix[2][0] * op2[0][3]) + (tempMatrix[2][1] * op2[1][3]) + (tempMatrix[2][2] * op2[2][3]) + (tempMatrix[2][3] * op2[3][3]);
+		mat[3][3] = (tempMatrix[3][0] * op2[0][3]) + (tempMatrix[3][1] * op2[1][3]) + (tempMatrix[3][2] * op2[2][3]) + (tempMatrix[3][3] * op2[3][3]);
+	}
+
 	kbMat4 operator*( const kbMat4 & MatrixOperand ) const {
 		kbMat4 tempMatrix;
 

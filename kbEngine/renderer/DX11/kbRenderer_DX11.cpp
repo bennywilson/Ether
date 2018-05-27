@@ -3386,14 +3386,12 @@ void kbRenderer_DX11::RenderModel( const kbRenderObject *const pRenderObject, co
 
 	const kbModel *const modelToRender = pRenderObject->m_pModel;
 
-	kbMat4 modelMatrix;
+	kbMat4 worldMatrix;
+	worldMatrix.MakeScale( pRenderObject->m_Scale );
+	worldMatrix *= pRenderObject->m_Orientation.ToMat4();
+	worldMatrix[3] = pRenderObject->m_Position;
 
-	modelMatrix.MakeScale( pRenderObject->m_Scale );
-	modelMatrix = modelMatrix * pRenderObject->m_Orientation.ToMat4();
-	modelMatrix[3] = pRenderObject->m_Position;
-
-
-	const UINT vertexStride = pRenderObject->m_pModel->VertexStride();//rsizeof( vertexLayout );
+	const UINT vertexStride = pRenderObject->m_pModel->VertexStride();
 	const UINT vertexOffset = 0;	
 	ID3D11Buffer *const vertexBuffer = ( ID3D11Buffer * const ) modelToRender->m_VertexBuffer.GetBufferPtr();
 	ID3D11Buffer *const indexBuffer = ( ID3D11Buffer * const ) modelToRender->m_IndexBuffer.GetBufferPtr();
@@ -3439,10 +3437,17 @@ void kbRenderer_DX11::RenderModel( const kbRenderObject *const pRenderObject, co
 		byte * constantsPtr = (byte*) mappedResource.pData;
 		for ( int i = 0; i < bindings.size(); i++ ) {
 			const std::string & varName = bindings[i].m_VarName;
-
+			const byte * pVarByteOffset = constantsPtr + bindings[i].m_VarByteOffset;
 			if ( varName == "mvpMatrix" ) {
-				kbMat4 *const pMatOffset = (kbMat4*)( constantsPtr + bindings[i].m_VarByteOffset);
-				*pMatOffset = modelMatrix * m_pCurrentRenderWindow->m_ViewProjectionMatrix;
+
+				kbMat4 *const pMatOffset = (kbMat4*) pVarByteOffset;
+				*pMatOffset = worldMatrix * m_pCurrentRenderWindow->m_ViewProjectionMatrix;
+
+			} else if ( varName == "modelMatrix" ) {
+
+				kbMat4 *const pMatOffset = (kbMat4*) pVarByteOffset;
+				*pMatOffset = worldMatrix;
+
 			}
 		}
 

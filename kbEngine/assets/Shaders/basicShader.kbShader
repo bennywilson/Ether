@@ -6,13 +6,7 @@
 
 cbuffer matrixBuffer {
 	matrix modelMatrix;
-	matrix modelViewMatrix;
-	matrix viewMatrix;
 	matrix mvpMatrix;
-	matrix projection;
-	matrix inverseProjection;
-	matrix viewProjection;
-	float4 cameraPos;
 };
 
 //-------------------------------------
