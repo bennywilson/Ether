@@ -457,7 +457,7 @@ public:
 	bool										LoadTexture( const char * name, int index, int width = -1, int height = -1 );
 	void										LoadShader( const std::string & fileName, ID3D11VertexShader *& vertexShader, ID3D11PixelShader *& pixelShader, 
 															ID3D11InputLayout *& vertexLayout, const std::string & vertexShaderFunc, 
-															const std::string & pixelShaderFunc );
+															const std::string & pixelShaderFunc, struct kbShaderVarBindings_t * ShaderBindings = nullptr );
 
 	// Various Drawing commands
 	void										DrawScreenSpaceQuad( const int start_x, const int start_y, const int size_x, const int size_y, const int textureIndex, kbShader *const pShader = nullptr );
@@ -508,7 +508,9 @@ private:
 
 	void										RenderScene();
 
-	void										RenderModel( const kbRenderObject *const pRenderObject, const ERenderPass renderPass, const bool bShadowPass = false );
+	void										RenderModel_Deprecated( const kbRenderObject *const pRenderObject, const ERenderPass renderPass, const bool bShadowPass = false );
+	void										RenderModel(  const kbRenderObject *const pRenderObject, const ERenderPass renderPass, const bool bShadowPass = false );
+
 	void										RenderScreenSpaceQuads();
 	void										RenderScreenSpaceQuadImmediate( const int start_x, const int start_y, const int size_x, const int size_y, 
 																				const int textureIndex, kbShader * pShader = nullptr );
@@ -568,6 +570,8 @@ private:
 
 	ID3D11Buffer *								m_pUnitQuad;
 	ID3D11Buffer *								m_pConsoleQuad;
+	std::map<size_t, ID3D11Buffer*>				m_ConstantBuffers;		// Maps constant buffers to their byte width
+
 	ID3D11Buffer *								m_pDefaultShaderConstantsBuffer;
 	ID3D11Buffer *								m_pSkinnedShaderConstantsBuffer;
 	ID3D11Buffer *								m_pEditorConstantsBuffer;

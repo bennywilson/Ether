@@ -337,7 +337,7 @@ void kbRenderer_DX11::RenderShadow( const kbRenderLight *const pLight, kbMat4 sp
 		std::map< const kbComponent *, kbRenderObject * >::iterator iter;
 		for ( iter = m_pCurrentRenderWindow->m_RenderObjectMap.begin(); iter != m_pCurrentRenderWindow->m_RenderObjectMap.end(); iter++ ) {
 			if ( iter->second->m_RenderPass == RP_Lighting && iter->second->m_bCastsShadow ) {
-				RenderModel( iter->second, RP_Lighting, true );
+				RenderModel_Deprecated( iter->second, RP_Lighting, true );
 			}
 		}
 		m_RenderTargets[SHADOW_BUFFER].m_bIsDirty = true;

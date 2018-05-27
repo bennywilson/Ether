@@ -738,6 +738,24 @@ void kbRenderer_DX11::Init( HWND hwnd, const int frameWidth, const int frameHeig
 		kbErrorCheck( SUCCEEDED( hr ), "Failed to create matrix buffer" );
 	}
 
+	D3D11_BUFFER_DESC matrixBufferDesc;
+	matrixBufferDesc.Usage = D3D11_USAGE_DYNAMIC;	// <-- TODO: Should be static?
+	matrixBufferDesc.ByteWidth = 16;
+	matrixBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+	matrixBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+	matrixBufferDesc.MiscFlags = 0;
+	matrixBufferDesc.StructureByteStride = 0;
+
+	while ( matrixBufferDesc.ByteWidth <= 512 ) {
+
+		ID3D11Buffer * pNewConstantsBuffer = nullptr;
+		hr = m_pD3DDevice->CreateBuffer( &matrixBufferDesc, nullptr, &pNewConstantsBuffer );
+		kbErrorCheck( SUCCEEDED( hr ), "Failed to create matrix buffer" );
+
+		m_ConstantBuffers.insert( std::pair<size_t, ID3D11Buffer*>( matrixBufferDesc.ByteWidth, pNewConstantsBuffer ) );
+		matrixBufferDesc.ByteWidth += 16;
+	}
+
 	// Constants for skinned shaders
 	{
 		D3D11_BUFFER_DESC matrixBufferDesc;
@@ -1199,6 +1217,12 @@ void kbRenderer_DX11::Shutdown() {
 	SAFE_RELEASE( m_DebugPreTransformedVertexBuffer );
 	SAFE_RELEASE( m_pUnitQuad );
 	SAFE_RELEASE( m_pConsoleQuad );
+
+	for ( int i = 0; i < m_ConstantBuffers.size(); i++ ) {
+		SAFE_RELEASE( m_ConstantBuffers[i] );
+	}
+	m_ConstantBuffers.clear();
+
 	SAFE_RELEASE( m_pDefaultShaderConstantsBuffer );
 	SAFE_RELEASE( m_pSkinnedShaderConstantsBuffer );
 	SAFE_RELEASE( m_pEditorConstantsBuffer );
@@ -2019,7 +2043,7 @@ void kbRenderer_DX11::RenderScene() {
 
 			for ( iter = m_pCurrentRenderWindow->m_RenderObjectMap.begin(); iter != m_pCurrentRenderWindow->m_RenderObjectMap.end(); iter++ ) {
 				if ( iter->second->m_RenderPass == RP_FirstPerson ) {
-					RenderModel( iter->second, RP_FirstPerson );
+					RenderModel_Deprecated( iter->second, RP_FirstPerson );
 				}
 			}
 	
@@ -2028,7 +2052,7 @@ void kbRenderer_DX11::RenderScene() {
 
 			for ( iter = m_pCurrentRenderWindow->m_RenderObjectMap.begin(); iter != m_pCurrentRenderWindow->m_RenderObjectMap.end(); iter++ ) {
 				if ( iter->second->m_RenderPass == RP_Lighting ) {
-					RenderModel( iter->second, RP_Lighting );
+					RenderModel_Deprecated( iter->second, RP_Lighting );
 				}
 			}
 
@@ -2052,7 +2076,7 @@ void kbRenderer_DX11::RenderScene() {
 			// Post-Lighting Render Pass
 			for ( iter = m_pCurrentRenderWindow->m_RenderObjectMap.begin(); iter != m_pCurrentRenderWindow->m_RenderObjectMap.end(); iter++ ) {
 				if ( iter->second->m_RenderPass == RP_PostLighting ) {
-					RenderModel( iter->second, RP_PostLighting );
+					RenderModel_Deprecated( iter->second, RP_PostLighting );
 				}
 			}
 			PLACE_GPU_TIME_STAMP( "Unlit" );
@@ -2082,7 +2106,7 @@ void kbRenderer_DX11::RenderScene() {
 
 			for ( iter = m_pCurrentRenderWindow->m_RenderObjectMap.begin(); iter != m_pCurrentRenderWindow->m_RenderObjectMap.end(); iter++ ) {
 				if ( iter->second->m_RenderPass == RP_InWorldUI ) {
-					RenderModel( iter->second, RP_InWorldUI );
+					RenderModel_Deprecated( iter->second, RP_InWorldUI );
 				}
 			}
 
@@ -2111,7 +2135,7 @@ void kbRenderer_DX11::RenderScene() {
 				renderObject.m_Position = m_DebugModels[i].m_Position;
 				renderObject.m_Orientation = m_DebugModels[i].m_Orientation;
 				renderObject.m_Scale = m_DebugModels[i].m_Scale;
-				RenderModel( &renderObject, RP_Debug );
+				RenderModel_Deprecated( &renderObject, RP_Debug );
 			}
 		}
 	
@@ -2218,7 +2242,7 @@ void kbRenderer_DX11::RenderTranslucency() {
 							     kbRenderState::CW_All );
 
 	for ( std::map< const void *, kbRenderObject * >::iterator iter = m_pCurrentRenderWindow->m_RenderParticleMap.begin(); iter != m_pCurrentRenderWindow->m_RenderParticleMap.end(); iter++ ) {
-		RenderModel( iter->second, RP_Translucent );
+		RenderModel_Deprecated( iter->second, RP_Translucent );
 	}
 
 	m_RenderState.SetBlendState();
@@ -2394,7 +2418,7 @@ void kbRenderer_DX11::RenderMousePickerIds() {
 	std::map<const kbComponent *, kbRenderObject *>::iterator iter;
 	for ( iter = m_pCurrentRenderWindow->m_RenderObjectMap.begin(); iter != m_pCurrentRenderWindow->m_RenderObjectMap.end(); iter++ ) {
 		if ( iter->second->m_EntityId > 0 ) {
-			RenderModel( iter->second, RP_MousePicker );
+			RenderModel_Deprecated( iter->second, RP_MousePicker );
 		}
 	}
 
@@ -2909,72 +2933,144 @@ bool kbRenderer_DX11::LoadTexture( const char * name, int index, int width, int 
 	return true;
 }
 
+
+void ReadShaderFile( const std::string & shaderText, kbShaderVarBindings_t *const pShaderBindings ) {
+	
+	std::string::size_type n = shaderText.find( "cbuffer" );
+	if ( n == std::string::npos ) {
+		return;
+	}
+
+	const std::string::size_type startBlock = shaderText.find( '{', n );
+	if ( startBlock == std::string::npos ) {
+		return;
+	}
+
+	const std::string::size_type endBlock = shaderText.find( '}', startBlock );
+	if ( endBlock == std::string::npos ) {
+		return;
+	}
+
+	std::string bufferBlock( shaderText.begin() + startBlock + 1, shaderText.begin() + endBlock );
+	std::vector<std::string> constantBufferStrings;
+	const std::string delimiters = "\t ;\n";
+
+    std::string::size_type startPos = bufferBlock.find_first_not_of( delimiters, 0 );
+    std::string::size_type endPos = bufferBlock.find_first_of( delimiters, startPos );
+
+    while ( startPos != std::string::npos || endPos != std::string::npos ) {
+
+        constantBufferStrings.push_back( bufferBlock.substr( startPos, endPos - startPos ) );
+
+        startPos = bufferBlock.find_first_not_of( delimiters, endPos );
+        endPos = bufferBlock.find_first_of( delimiters, startPos );
+    }
+
+	size_t currOffset = 0;
+	for ( int i = 0; i < constantBufferStrings.size(); i += 2 ) {
+
+		currOffset = ( currOffset + 15 ) & 0xfffffff0;
+		pShaderBindings->m_VarBindings.push_back( kbShaderVarBindings_t::binding_t( constantBufferStrings[i + 1], currOffset ) );
+
+		if ( constantBufferStrings[i] == "matrix" || constantBufferStrings[i] == "float4x4" ) {
+			currOffset += 64;
+		} else if ( constantBufferStrings[i] == "float4" ) {
+			currOffset += 16;
+		} else {
+			currOffset += 4;
+		}
+	}
+
+	pShaderBindings->m_TotalSize = currOffset;
+}
+
 /**
  *	kbRenderer_DX11::LoadShader
  */
-void kbRenderer_DX11::LoadShader( const std::string & fileName, ID3D11VertexShader *& vertexShader, ID3D11PixelShader *& pixelShader, ID3D11InputLayout *& vertexLayout, const std::string & vertexShaderFunc, const std::string & pixelShaderFunc ) {
+void kbRenderer_DX11::LoadShader( const std::string & fileName, ID3D11VertexShader *& vertexShader, ID3D11PixelShader *& pixelShader, 
+								  ID3D11InputLayout *& vertexLayout, const std::string & vertexShaderFunc, const std::string & pixelShaderFunc, 
+								  kbShaderVarBindings_t * pShaderBindings ) {
+
 	HRESULT hr;
-	ID3D10Blob * errorMessage = nullptr;
-	ID3D10Blob * vertexShaderBuffer = nullptr;
-	ID3D10Blob * pixelShaderBuffer = nullptr;
+	struct shaderBlobs_t {
+		~shaderBlobs_t() {
+			SAFE_RELEASE( errorMessage )
+			SAFE_RELEASE( vertexShaderBuffer )
+			SAFE_RELEASE( pixelShaderBuffer )
+		}
 
+		ID3D10Blob * errorMessage = nullptr;
+		ID3D10Blob * vertexShaderBuffer = nullptr;
+		ID3D10Blob * pixelShaderBuffer = nullptr;
+	} localBlobs;
+
+	std::ifstream shaderFile;
+	shaderFile.open( fileName.c_str(), std::fstream::in );	
+	const std::string readBuffer( ( std::istreambuf_iterator<char>(shaderFile) ), std::istreambuf_iterator<char>() );
+	shaderFile.close();
+
+	if ( pShaderBindings != nullptr ) {
+		ReadShaderFile( readBuffer, pShaderBindings );
+	}
+
+	// Compile vertex shader
 	const UINT shaderFlags = D3D10_SHADER_PACK_MATRIX_ROW_MAJOR | D3D10_SHADER_ENABLE_STRICTNESS;
-
-	const std::wstring widestr = std::wstring( fileName.begin(), fileName.end() );
 
 	int numTries = 0;
 	do {
 		numTries++;
-		hr = D3DCompileFromFile( widestr.c_str(), nullptr, nullptr, vertexShaderFunc.c_str(), "vs_4_0", shaderFlags, 0, &vertexShaderBuffer, &errorMessage );
+
+		hr = D3DCompile( readBuffer.c_str(), readBuffer.length(), nullptr, nullptr, nullptr, vertexShaderFunc.c_str(), "vs_4_0", shaderFlags, 0, &localBlobs.vertexShaderBuffer, &localBlobs.errorMessage );
 		if ( FAILED( hr )  ) {
 			Sleep( 250 );
-			SAFE_RELEASE(vertexShaderBuffer);
+			SAFE_RELEASE( localBlobs.vertexShaderBuffer );
+			SAFE_RELEASE( localBlobs.errorMessage );
 		}
 	} while ( FAILED( hr ) && numTries < 4 );
 
 	if ( FAILED( hr ) ) {
-		kbWarning( "kbRenderer_DX11::LoadShader() - Failed to load vertex shader : %s", ( errorMessage != nullptr ) ? ( errorMessage->GetBufferPointer() ) : ( "No error message given " ) );
-		SAFE_RELEASE( vertexShaderBuffer )
-		SAFE_RELEASE( pixelShaderBuffer );
+		kbWarning( "kbRenderer_DX11::LoadShader() - Failed to load vertex shader : %s", ( localBlobs.errorMessage != nullptr ) ? ( localBlobs.errorMessage->GetBufferPointer() ) : ( "No error message given " ) );
 		return;
 	}
 
-	SAFE_RELEASE( errorMessage );
+	SAFE_RELEASE( localBlobs.errorMessage );
 
+	// Compile pixel shader
 	numTries = 0;
 	do {
 		numTries++;
-		hr = D3DCompileFromFile( widestr.c_str(), nullptr, nullptr, pixelShaderFunc.c_str(), "ps_4_0",  shaderFlags, 0, &pixelShaderBuffer, &errorMessage );
+
+		hr = D3DCompile( readBuffer.c_str(), readBuffer.length(), nullptr, nullptr, nullptr, pixelShaderFunc.c_str(), "ps_4_0", shaderFlags, 0, &localBlobs.pixelShaderBuffer, &localBlobs.errorMessage );
 		if ( FAILED( hr ) ) {
 			Sleep( 250 );
-			SAFE_RELEASE( pixelShaderBuffer )
+			SAFE_RELEASE( localBlobs.pixelShaderBuffer )
+			SAFE_RELEASE( localBlobs.errorMessage );
 		}
-	} while (FAILED( hr ) && numTries < 4 );
+	} while ( FAILED( hr ) && numTries < 4 );
 
 	if ( FAILED( hr ) ) {
-		kbWarning( "kbRenderer_DX11::LoadShader() - Failed to load pixel shader : %s", ( errorMessage != nullptr ) ? ( errorMessage->GetBufferPointer() ) : ( "No error message given " ) );
-		SAFE_RELEASE( vertexShaderBuffer )
-		SAFE_RELEASE( pixelShaderBuffer )
+		kbWarning( "kbRenderer_DX11::LoadShader() - Failed to load pixel shader : %s", ( localBlobs.errorMessage != nullptr ) ? localBlobs.errorMessage->GetBufferPointer() : ( "No error message given " ) );
 		return;
 	}
 
-	SAFE_RELEASE( errorMessage );
+	SAFE_RELEASE( localBlobs.errorMessage );
 
-	hr = m_pD3DDevice->CreateVertexShader( vertexShaderBuffer->GetBufferPointer(), vertexShaderBuffer->GetBufferSize(), nullptr, &vertexShader );
-
+	hr = m_pD3DDevice->CreateVertexShader( localBlobs.vertexShaderBuffer->GetBufferPointer(), localBlobs.vertexShaderBuffer->GetBufferSize(), nullptr, &vertexShader );
 	if ( FAILED( hr ) ) {
 		kbWarning( "kbRenderer_DX11::LoadShader() - Failed to create vertex shader %s", fileName.c_str() );
+		return;
 	}
 
-	hr = m_pD3DDevice->CreatePixelShader( pixelShaderBuffer->GetBufferPointer(), pixelShaderBuffer->GetBufferSize(), nullptr, &pixelShader );
-
+	hr = m_pD3DDevice->CreatePixelShader( localBlobs.pixelShaderBuffer->GetBufferPointer(), localBlobs.pixelShaderBuffer->GetBufferSize(), nullptr, &pixelShader );
 	if ( FAILED( hr ) ) {
 		kbWarning( "kbRenderer_DX11::LoadShader() - Failed to create pixel shader %s", fileName.c_str() );
+		SAFE_RELEASE( vertexShader );
+		return;
 	}
 
 	D3D11_INPUT_ELEMENT_DESC polygonLayout[5];
 
-	if (fileName.find("Particle") != std::string::npos)
+	if ( fileName.find("Particle") != std::string::npos )
 	{
 		polygonLayout[0].SemanticName = "POSITION";
 		polygonLayout[0].SemanticIndex = 0;
@@ -3100,15 +3196,16 @@ void kbRenderer_DX11::LoadShader( const std::string & fileName, ID3D11VertexShad
 		polygonLayout[4].InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
 		polygonLayout[4].InstanceDataStepRate = 0;
 	}
+
 	const int numElements = sizeof( polygonLayout ) / sizeof( polygonLayout[ 0 ] );
-	hr = m_pD3DDevice->CreateInputLayout( polygonLayout, numElements, vertexShaderBuffer->GetBufferPointer(), vertexShaderBuffer->GetBufferSize(), &vertexLayout );
-
+	hr = m_pD3DDevice->CreateInputLayout( polygonLayout, numElements, localBlobs.vertexShaderBuffer->GetBufferPointer(), localBlobs.vertexShaderBuffer->GetBufferSize(), &vertexLayout );
 	if ( FAILED( hr ) ) {
-		kbError( "Failed to create input layout" );
-	}
+		kbWarning( "kbRenderer_DX11::LoadShader() - Failed to create input layout" );
 
-	vertexShaderBuffer->Release();
-	pixelShaderBuffer->Release();
+		SAFE_RELEASE( vertexShader )
+		SAFE_RELEASE( pixelShader );
+		SAFE_RELEASE( vertexLayout );
+	}
 }
 
 /**
@@ -3280,14 +3377,95 @@ void kbRenderer_DX11::GetRenderViewTransform( const HWND hwnd, kbVec3 & position
 	rotation = m_RenderWindowList[viewIndex]->m_CameraRotation;
 }
 
-
 /**
  *	kbRenderer_DX11::RenderModel
  */
 void kbRenderer_DX11::RenderModel( const kbRenderObject *const pRenderObject, const ERenderPass renderpass, const bool bShadowPass ) {
+	kbErrorCheck( pRenderObject != nullptr && pRenderObject->m_pModel != nullptr, "kbRenderer_DX11::RenderModel() - no model found" );
+	kbErrorCheck( pRenderObject->m_pModel->GetMaterials().size() > 0, "kbRenderer_DX11::RenderModel() - No materials found for model %s", pRenderObject->m_pModel->GetFullName() );
+
+	const kbModel *const modelToRender = pRenderObject->m_pModel;
+
+	kbMat4 modelMatrix;
+
+	modelMatrix.MakeScale( pRenderObject->m_Scale );
+	modelMatrix = modelMatrix * pRenderObject->m_Orientation.ToMat4();
+	modelMatrix[3] = pRenderObject->m_Position;
+
+
+	const UINT vertexStride = pRenderObject->m_pModel->VertexStride();//rsizeof( vertexLayout );
+	const UINT vertexOffset = 0;	
+	ID3D11Buffer *const vertexBuffer = ( ID3D11Buffer * const ) modelToRender->m_VertexBuffer.GetBufferPtr();
+	ID3D11Buffer *const indexBuffer = ( ID3D11Buffer * const ) modelToRender->m_IndexBuffer.GetBufferPtr();
+
+	m_pDeviceContext->IASetVertexBuffers( 0, 1, &vertexBuffer, &vertexStride, &vertexOffset );
+	m_pDeviceContext->IASetIndexBuffer( indexBuffer, DXGI_FORMAT_R32_UINT, 0 );
+	m_pDeviceContext->IASetPrimitiveTopology( D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST );
+
+	for ( int i = 0; i < modelToRender->NumMeshes(); i++ ) {
+		const kbMaterial & modelMaterial = modelToRender->GetMaterials()[modelToRender->GetMeshes()[i].m_MaterialIndex];
+
+		if ( m_ViewMode == ViewMode_Wireframe ) {
+			m_pDeviceContext->RSSetState( m_pWireFrameRasterizerState );
+		} else if ( modelMaterial.GetCullingMode() == kbMaterial::CM_BackFaces ) {
+			m_pDeviceContext->RSSetState( m_pDefaultRasterizerState );
+		} else if ( modelMaterial.GetCullingMode() == kbMaterial::CM_None ) {
+			m_pDeviceContext->RSSetState( m_pNoFaceCullingRasterizerState );
+		} else {
+			kbError( "kbRenderer_DX11::RenderModel_Deprecated() - Unsupported culling mode" );
+		}
+
+		// Get Shader
+		const kbShader * pShader = modelMaterial.GetShader();
+		if ( renderpass == RP_MousePicker ) {
+			pShader = m_pMousePickerIdShader;
+		} 
+		kbErrorCheck( pShader != nullptr && pShader->GetPixelShader() != nullptr, "kbRenderer_DX11::RenderModel() - No appropriate shader was found" );
+
+		m_pDeviceContext->IASetInputLayout( (ID3D11InputLayout*)pShader->GetVertexLayout() );
+		m_pDeviceContext->VSSetShader( (ID3D11VertexShader *)pShader->GetVertexShader(), nullptr, 0 );
+		m_pDeviceContext->PSSetShader( (ID3D11PixelShader *)pShader->GetPixelShader(), nullptr, 0 );
+
+		// Get a valid constants buffer and bind the kbShader's vars to it
+		const kbShaderVarBindings_t & shaderVarBindings = pShader->GetShaderVarBindings();
+		std::map<size_t, ID3D11Buffer *>::iterator constantBufferIt = m_ConstantBuffers.find( shaderVarBindings.m_TotalSize );
+		kbErrorCheck( constantBufferIt != m_ConstantBuffers.end() && constantBufferIt->second != nullptr, "kbRenderer_DX11::RenderModel() - Could not find constant buffer for shader %s", pShader->GetFullFileName() );
+
+		ID3D11Buffer *const pConstantsBuffer = m_ConstantBuffers.find( shaderVarBindings.m_TotalSize )->second;
+		D3D11_MAPPED_SUBRESOURCE mappedResource;
+		HRESULT hr = m_pDeviceContext->Map( pConstantsBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource );
+
+		const auto & bindings = shaderVarBindings.m_VarBindings;
+		byte * constantsPtr = (byte*) mappedResource.pData;
+		for ( int i = 0; i < bindings.size(); i++ ) {
+			const std::string & varName = bindings[i].m_VarName;
+
+			if ( varName == "mvpMatrix" ) {
+				kbMat4 *const pMatOffset = (kbMat4*)( constantsPtr + bindings[i].m_VarByteOffset);
+				*pMatOffset = modelMatrix * m_pCurrentRenderWindow->m_ViewProjectionMatrix;
+			}
+		}
+
+		m_pDeviceContext->Unmap( pConstantsBuffer, 0 );
+		m_pDeviceContext->VSSetConstantBuffers( 0, 1, &pConstantsBuffer );
+		m_pDeviceContext->PSSetConstantBuffers( 0, 1, &pConstantsBuffer );
+		m_pDeviceContext->DrawIndexed( modelToRender->GetMeshes()[i].m_NumTriangles * 3, modelToRender->GetMeshes()[i].m_IndexBufferIndex, 0 );
+	}
+}
+
+/**
+ *	kbRenderer_DX11::RenderModel_Deprecated
+ */
+void kbRenderer_DX11::RenderModel_Deprecated( const kbRenderObject *const pRenderObject, const ERenderPass renderpass, const bool bShadowPass ) {
 	if ( pRenderObject == nullptr || pRenderObject->m_pModel == nullptr ) {
 		kbError( "Doh!" );
 	}
+
+	if ( pRenderObject->m_pModel->m_bHackUsesNewRenderPath == true ) {
+		RenderModel( pRenderObject, renderpass, bShadowPass );
+		return;
+	}
+
 	const unsigned int stride = pRenderObject->m_pModel->VertexStride();//rsizeof( vertexLayout );
 	const unsigned int offset = 0;
 
@@ -3298,7 +3476,7 @@ void kbRenderer_DX11::RenderModel( const kbRenderObject *const pRenderObject, co
 	const std::vector<kbShader *> * pShaderOverrideList = &pRenderObject->m_OverrideShaderList;	
 
 	if ( modelToRender->GetMaterials().size() == 0 ) {
-		kbError( "kbRenderer_DX11::RenderModel() - model %s has no materials", modelToRender->GetFullFileName().c_str() );
+		kbError( "kbRenderer_DX11::RenderModel_Deprecated() - model %s has no materials", modelToRender->GetFullFileName().c_str() );
 	}
 
 	ID3D11Buffer * const vertexBuffer = ( ID3D11Buffer * const ) modelToRender->m_VertexBuffer.GetBufferPtr();
@@ -3445,7 +3623,7 @@ void kbRenderer_DX11::RenderModel( const kbRenderObject *const pRenderObject, co
 		} else if ( modelMaterial.GetCullingMode() == kbMaterial::CM_None ) {
 			m_pDeviceContext->RSSetState( m_pNoFaceCullingRasterizerState );
 		} else {
-			kbError( "kbRenderer_DX11::RenderModel() - Unsupported culling mode" );
+			kbError( "kbRenderer_DX11::RenderModel_Deprecated() - Unsupported culling mode" );
 		}
 
 		if ( pShaderOverrideList != nullptr && bShadowPass == false ) {
@@ -3479,7 +3657,7 @@ void kbRenderer_DX11::RenderModel( const kbRenderObject *const pRenderObject, co
 		
 		if ( renderpass == RP_MousePicker ) {
 			const kbShader * pShader = m_pMousePickerIdShader;
-			kbErrorCheck( pShader != nullptr && pShader->GetPixelShader() != nullptr, "kbRenderer_DX11::RenderModel() - Mouse picker shader is null" );
+			kbErrorCheck( pShader != nullptr && pShader->GetPixelShader() != nullptr, "kbRenderer_DX11::RenderModel_Deprecated() - Mouse picker shader is null" );
 			m_pDeviceContext->PSSetShader( (ID3D11PixelShader *)pShader->GetPixelShader(), nullptr, 0 );
 
 		} 

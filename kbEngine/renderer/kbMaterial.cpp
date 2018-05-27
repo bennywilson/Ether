@@ -578,7 +578,7 @@ kbShader::kbShader( const std::string & fileName ) :
  */
 bool kbShader::Load_Internal() {
 	if ( g_pRenderer != nullptr ) {
-		g_pRenderer->LoadShader( GetFullFileName(), m_pVertexShader, m_pPixelShader, m_pVertexLayout, m_VertexShaderFunctionName.c_str(), m_PixelShaderFunctionName.c_str() );
+		g_pRenderer->LoadShader( GetFullFileName(), m_pVertexShader, m_pPixelShader, m_pVertexLayout, m_VertexShaderFunctionName.c_str(), m_PixelShaderFunctionName.c_str(), &m_ShaderVarBindings );
 	}
 	return true;
 }

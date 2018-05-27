@@ -20,17 +20,17 @@ kbGameEntity 0 0 0 0 {
 			kbTerrainMatComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
-				Diffuse Texture = NULL
+				DiffuseTexture = NULL
 			}
 			kbTerrainMatComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
-				Diffuse Texture = NULL
+				DiffuseTexture = NULL
 			}
 			kbTerrainMatComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
-				Diffuse Texture = NULL
+				DiffuseTexture = NULL
 			}
 		Shader = .\assets\shaders\basicTerrain.kbShader
 		SplatMap = .\assets\Terrain\terrain1_splatmap.bmp
@@ -50,7 +50,7 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadows = 1
-		Color = 0.250000 0.250000 0.250000 0.250000
+		Color = 0.350000 0.350000 0.350000 0.250000
 		CascadedShadowSplits = 4
  0.000000
  0.000000
@@ -73,7 +73,7 @@ kbGameEntity 0 0 0 0 {
 		CastsShadow = 0
 		ShaderParams = 0
 		m_RenderPass = Post-LightingPass
-		Model = .\assets\models\Test\skybox.ms3d
+		Model = .\assets\models\SkyDomes\SkyDomes.ms3d
 		ShaderOverride = 1
 			.\assets\shaders\skyBox.kbShader
 

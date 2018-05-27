@@ -124,7 +124,7 @@ GenerateClass(
 
 GenerateClass(
 	kbTerrainMatComponent,
-	AddField( "Diffuse Texture", KBTYPEINFO_TEXTURE, kbTerrainMatComponent, m_DiffuseTexture, false, "" )
+	AddField( "DiffuseTexture", KBTYPEINFO_TEXTURE, kbTerrainMatComponent, m_DiffuseTexture, false, "" )
 )
 
 GenerateClass(

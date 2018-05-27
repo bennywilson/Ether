@@ -71,7 +71,7 @@ typedef struct {
 #pragma pack( pop, packing )
 
 /**
- * kbModel::kbModel
+ *	kbModel::kbModel
  */
 kbModel::kbModel() :
 	m_NumVertices( 0 ),
@@ -81,10 +81,11 @@ kbModel::kbModel() :
 	m_bVBIsMapped( false ),
 	m_bIBIsMapped( false ),
 	m_bCPUAccessOnly( false )  {
+	m_bHackUsesNewRenderPath = false;
 }
 
 /**
- * kbModel::~kbModel
+ *	kbModel::~kbModel
  */
 kbModel::~kbModel() {
 	Release_Internal();

@@ -12,9 +12,9 @@ cbuffer matrixBuffer {
    matrix inverseProjection;
    matrix viewProjection;
    float4 cameraPos;
-   float4 fogColor;  // w is night texture multiplier
+   float4 fogColor;
    float4 skyColor;
-   float4 fogHeight; // x is min height, y is max height, 
+   float4 fogHeight; 
 };
 
 //-------------------------------------

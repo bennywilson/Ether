@@ -46,6 +46,23 @@ private:
 };
 
 /**
+ *	kbShaderVarBinding_t
+ */
+struct kbShaderVarBindings_t {
+	kbShaderVarBindings_t() { }
+
+	size_t										m_TotalSize;
+
+	struct binding_t {
+		binding_t( const std::string & inName, const size_t offset ) : m_VarName ( inName ), m_VarByteOffset( offset ) { }
+
+		std::string								m_VarName;
+		size_t									m_VarByteOffset;
+	};
+	std::vector<binding_t>						m_VarBindings;
+};
+
+/**
  *	kbShader
  */
 class kbShader : public kbResource {
@@ -72,6 +89,8 @@ public:
 	void										CommitShaderParams();
 	const std::vector<kbVec4> &					GetGlobalShaderParams() const { return m_GlobalShaderParams_RenderThread; }	// todo: check if render thread
 
+	const kbShaderVarBindings_t &				GetShaderVarBindings() const { return m_ShaderVarBindings; }
+
 private:
 	virtual bool								Load_Internal();
 	virtual void								Release_Internal();
@@ -80,11 +99,15 @@ private:
 	kbHWPixelShader *							m_pPixelShader;
 	kbHWVertexLayout *							m_pVertexLayout;
 
+	std::map<kbString, int>						m_ShaderConstantsMap;	// Maps constant variable name to it's byte offset
+
 	std::string									m_VertexShaderFunctionName;
 	std::string									m_PixelShaderFunctionName;
 
 	std::vector<kbVec4>							m_GlobalShaderParams_GameThread;
 	std::vector<kbVec4>							m_GlobalShaderParams_RenderThread;
+
+	kbShaderVarBindings_t						m_ShaderVarBindings;
 };
 
 /**
