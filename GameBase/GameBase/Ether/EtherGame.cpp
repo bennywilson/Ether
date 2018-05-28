@@ -817,7 +817,7 @@ void EtherGame::AddPrefabToEntity( const kbPackage *const pPrefabPackage, const 
  */
 void EtherGame::UpdateMotionControls( const float deltaTimeSec ) {
 
-	if ( m_pLocalPlayer == nullptr || m_pLocalPlayer->GetActorComponent()->IsDead() ) {
+/*	if ( m_pLocalPlayer == nullptr || m_pLocalPlayer->GetActorComponent()->IsDead() ) {
 		return;
 	}
 
@@ -903,7 +903,7 @@ void EtherGame::UpdateMotionControls( const float deltaTimeSec ) {
 			// hack to get hands skel model to update rotation
 			m_pPlayerComponent->GetFPHands()->Update( 0.016f );
 		}
-	}
+	}*/
 }
 
 /**

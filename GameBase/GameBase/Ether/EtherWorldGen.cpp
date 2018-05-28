@@ -822,7 +822,7 @@ void EtherWorldGenComponent::MoveActorAlongGround( EtherActorComponent *const pA
 		if ( StartChunkIdx >= 0 && StartChunkIdx < m_VisibleTerrainMap.Get2DMap().size() ) {
 			const EtherTerrainChunk *const pStartChunk = m_VisibleTerrainMap.Get2DMap()[StartChunkIdx];
 			if ( pStartChunk != nullptr && pStartChunk->m_ChunkState == EtherTerrainChunk::Visible ) {
-				if ( VectorFind( ChunkList, pStartChunk ) == false ) {
+				if ( VectorContains( ChunkList, pStartChunk ) == false ) {
 					ChunkList.push_back( pStartChunk );
 				}
 			}
@@ -832,7 +832,7 @@ void EtherWorldGenComponent::MoveActorAlongGround( EtherActorComponent *const pA
 		if ( EndChunkIdx >= 0 && EndChunkIdx < m_VisibleTerrainMap.Get2DMap().size() ) {
 			const EtherTerrainChunk *const pEndChunk = m_VisibleTerrainMap.Get2DMap()[StartChunkIdx];
 			if ( pEndChunk != nullptr && pEndChunk->m_ChunkState == EtherTerrainChunk::Visible ) {
-				if ( VectorFind( ChunkList, pEndChunk ) == false ) {
+				if ( VectorContains( ChunkList, pEndChunk ) == false ) {
 					ChunkList.push_back( pEndChunk );
 				}
 			}
@@ -1043,7 +1043,7 @@ bool EtherWorldGenComponent::CoverObjectsPointTest( const EtherCoverObject *& Ou
 		if ( StartChunkIdx >= 0 && StartChunkIdx < m_VisibleTerrainMap.Get2DMap().size() ) {
 			const EtherTerrainChunk *const pStartChunk = m_VisibleTerrainMap.Get2DMap()[StartChunkIdx];
 			if ( pStartChunk != nullptr && pStartChunk->m_ChunkState == EtherTerrainChunk::Visible ) {
-				if ( VectorFind( ChunkList, pStartChunk ) == false ) {
+				if ( VectorContains( ChunkList, pStartChunk ) == false ) {
 					ChunkList.push_back( pStartChunk );
 				}
 			}

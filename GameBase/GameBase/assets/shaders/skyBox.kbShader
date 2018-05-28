@@ -4,17 +4,8 @@
 // 2017-2018 kbEngine 2.0
 //==============================================================================
 cbuffer matrixBuffer {
-   matrix modelMatrix;
-   matrix modelViewMatrix;
-   matrix viewMatrix;
    matrix mvpMatrix;
-   matrix projection;
-   matrix inverseProjection;
-   matrix viewProjection;
    float4 cameraPos;
-   float4 fogColor;
-   float4 skyColor;
-   float4 fogHeight; 
 };
 
 //-------------------------------------
@@ -40,7 +31,6 @@ struct PS_OUTPUT {
    float4 Color		: SV_TARGET0;
 //	float4 Normal		: SV_TARGET1;
 };
-
 
 /**
  *	vertexShader

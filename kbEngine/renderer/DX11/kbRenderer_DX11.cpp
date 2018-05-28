@@ -37,6 +37,7 @@ ID3D11Device * g_pD3DDevice = nullptr;
 ID3D11DeviceContext * g_pImmediateContext = nullptr;
 kbRenderer_DX11 * g_pRenderer = nullptr;
 
+const UINT Max_Shader_Bones = 128;
 const float	kbRenderer_DX11::Near_Plane = 1.0f;
 const float	kbRenderer_DX11::Far_Plane = 20000.0f;
 const float g_DebugTextSize = 0.0165f;
@@ -401,13 +402,6 @@ kbRenderer_DX11::kbRenderer_DX11() :
 	m_pWireFrameRasterizerState( nullptr ),
 	m_pCurrentRenderWindow( nullptr ),
 	m_pDepthStencilView( nullptr ),
-	m_pDefaultShaderConstantsBuffer( nullptr ),
-	m_pSkinnedShaderConstantsBuffer( nullptr ),
-	m_pEditorConstantsBuffer( nullptr ),
-	m_pLightShaderConstantsBuffer( nullptr ),
-	m_pLightShaftsShaderConstantsBuffer( nullptr ),
-	m_pPostProcessConstantsBuffer( nullptr ),
-	m_pBloomShaderConstantsBuffer( nullptr ),
 	m_pUnitQuad( nullptr ),
 	m_pConsoleQuad( nullptr ),
 	m_pOpaqueQuadShader( nullptr ),
@@ -676,7 +670,26 @@ void kbRenderer_DX11::Init( HWND hwnd, const int frameWidth, const int frameHeig
 	fullScreenQuadVerts[3].position.y = -0.5f;
 	hr = m_pD3DDevice->CreateBuffer( &vertexBufferDesc, &vertexData, &m_pConsoleQuad );
 	
-	// Load some shader
+	// Set up constant buffers
+	D3D11_BUFFER_DESC matrixBufferDesc;
+	matrixBufferDesc.Usage = D3D11_USAGE_DYNAMIC;	// <-- TODO: Should be static?
+	matrixBufferDesc.ByteWidth = 16;
+	matrixBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+	matrixBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+	matrixBufferDesc.MiscFlags = 0;
+	matrixBufferDesc.StructureByteStride = 0;
+
+	while ( matrixBufferDesc.ByteWidth <= 512 ) {
+
+		ID3D11Buffer * pNewConstantBuffer = nullptr;
+		hr = m_pD3DDevice->CreateBuffer( &matrixBufferDesc, nullptr, &pNewConstantBuffer );
+		kbErrorCheck( SUCCEEDED( hr ), "Failed to create matrix buffer" );
+
+		m_ConstantBuffers.insert( std::pair<size_t, ID3D11Buffer*>( matrixBufferDesc.ByteWidth, pNewConstantBuffer ) );
+		matrixBufferDesc.ByteWidth += 16;
+	}
+
+	// Load some shaders
 	m_pBasicShader = ( kbShader * )g_ResourceManager.GetResource( "../../kbEngine/assets/Shaders/BasicShader.kbShader", true );	
 	m_pOpaqueQuadShader = ( kbShader * ) g_ResourceManager.GetResource( "../../kbEngine/assets/Shaders/basicTexture.kbShader", true );
 	m_pTranslucentShader = ( kbShader * ) g_ResourceManager.GetResource( "../../kbEngine/assets/Shaders/basicTranslucency.kbShader", true );
@@ -707,127 +720,6 @@ void kbRenderer_DX11::Init( HWND hwnd, const int frameWidth, const int frameHeig
 	m_pBloomBlur->SetVertexShaderFunctionName( "bloomBlurVertexMain" );
 	m_pBloomBlur->SetPixelShaderFunctionName( "bloomBlurPixelMain" );
 	m_pBloomBlur->Load();
-
-	// Constants buffer for generic shaders
-	{
-		D3D11_BUFFER_DESC matrixBufferDesc;
-		matrixBufferDesc.Usage = D3D11_USAGE_DYNAMIC;
-
-		matrixBufferDesc.ByteWidth = ( sizeof( ShaderConstantMatrices ) + 15 ) & 0xfffffff0;
-		matrixBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-		matrixBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
-		matrixBufferDesc.MiscFlags = 0;
-		matrixBufferDesc.StructureByteStride = 0;
-	 
-		hr = m_pD3DDevice->CreateBuffer( &matrixBufferDesc, nullptr, &m_pDefaultShaderConstantsBuffer );
-		kbErrorCheck( SUCCEEDED( hr ), "kbRenderer_DX11::Init() - Failed to create matrix buffer" );
-	}
-
-	// Constants for editor objects
-	{
-		D3D11_BUFFER_DESC matrixBufferDesc;
-		matrixBufferDesc.Usage = D3D11_USAGE_DYNAMIC;
-
-		matrixBufferDesc.ByteWidth = ( sizeof( EditorShaderConstants ) + 15 ) & 0xfffffff0;
-		matrixBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-		matrixBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
-		matrixBufferDesc.MiscFlags = 0;
-		matrixBufferDesc.StructureByteStride = 0;
-
-		hr = m_pD3DDevice->CreateBuffer( &matrixBufferDesc, nullptr, &m_pEditorConstantsBuffer );
-		kbErrorCheck( SUCCEEDED( hr ), "Failed to create matrix buffer" );
-	}
-
-	D3D11_BUFFER_DESC matrixBufferDesc;
-	matrixBufferDesc.Usage = D3D11_USAGE_DYNAMIC;	// <-- TODO: Should be static?
-	matrixBufferDesc.ByteWidth = 16;
-	matrixBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-	matrixBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
-	matrixBufferDesc.MiscFlags = 0;
-	matrixBufferDesc.StructureByteStride = 0;
-
-	while ( matrixBufferDesc.ByteWidth <= 512 ) {
-
-		ID3D11Buffer * pNewConstantsBuffer = nullptr;
-		hr = m_pD3DDevice->CreateBuffer( &matrixBufferDesc, nullptr, &pNewConstantsBuffer );
-		kbErrorCheck( SUCCEEDED( hr ), "Failed to create matrix buffer" );
-
-		m_ConstantBuffers.insert( std::pair<size_t, ID3D11Buffer*>( matrixBufferDesc.ByteWidth, pNewConstantsBuffer ) );
-		matrixBufferDesc.ByteWidth += 16;
-	}
-
-	// Constants for skinned shaders
-	{
-		D3D11_BUFFER_DESC matrixBufferDesc;
-		matrixBufferDesc.Usage = D3D11_USAGE_DYNAMIC;
-
-		matrixBufferDesc.ByteWidth = ( sizeof( SkinnedShaderConstants ) + 15 ) & 0xfffffff0;
-		matrixBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-		matrixBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
-		matrixBufferDesc.MiscFlags = 0;
-		matrixBufferDesc.StructureByteStride = 0;
-
-		hr = m_pD3DDevice->CreateBuffer( &matrixBufferDesc, nullptr, &m_pSkinnedShaderConstantsBuffer );
-		kbErrorCheck( SUCCEEDED( hr ), "Failed to create matrix buffer" );
-	}
-
-	// Constants buffer for light shaders
-	{
-		D3D11_BUFFER_DESC matrixBufferDesc;
-		matrixBufferDesc.Usage = D3D11_USAGE_DYNAMIC;
-
-		matrixBufferDesc.ByteWidth = ( sizeof( LightShaderConstants ) + 15 ) & 0xfffffff0;
-		matrixBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-		matrixBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
-		matrixBufferDesc.MiscFlags = 0;
-		matrixBufferDesc.StructureByteStride = 0;
-	 
-		hr = m_pD3DDevice->CreateBuffer( &matrixBufferDesc, nullptr, &m_pLightShaderConstantsBuffer );
-		kbErrorCheck( SUCCEEDED( hr ), "Failed to create matrix buffer" );
-	}
-
-	{
-		D3D11_BUFFER_DESC matrixBufferDesc;
-		matrixBufferDesc.Usage = D3D11_USAGE_DYNAMIC;
-
-		// Light Shafts
-		matrixBufferDesc.ByteWidth = ( sizeof( LightShaderConstants ) + 15 ) & 0xfffffff0;
-		matrixBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-		matrixBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
-		matrixBufferDesc.MiscFlags = 0;
-		matrixBufferDesc.StructureByteStride = 0;
-	 
-		hr = m_pD3DDevice->CreateBuffer( &matrixBufferDesc, nullptr, &m_pLightShaftsShaderConstantsBuffer );
-		kbErrorCheck( SUCCEEDED( hr ), "kbRenderer_DX11::Init() - Failed to create matrix buffer" );
-	}
-
-	{
-		D3D11_BUFFER_DESC matrixBufferDesc;
-		matrixBufferDesc.Usage = D3D11_USAGE_DYNAMIC;
-
-		matrixBufferDesc.ByteWidth = ( sizeof( PostProcessConstants ) + 15 ) & 0xfffffff0;
-		matrixBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-		matrixBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
-		matrixBufferDesc.MiscFlags = 0;
-		matrixBufferDesc.StructureByteStride = 0;
-	 
-		hr = m_pD3DDevice->CreateBuffer( &matrixBufferDesc, nullptr, &m_pPostProcessConstantsBuffer );
-		kbErrorCheck( SUCCEEDED( hr ), "kbRenderer_DX11::Init() - Failed to create matrix buffer" );
-	}
-
-	{
-		D3D11_BUFFER_DESC matrixBufferDesc;
-		matrixBufferDesc.Usage = D3D11_USAGE_DYNAMIC;
-
-		matrixBufferDesc.ByteWidth = ( sizeof( BloomShaderConstants ) + 15 ) & 0xfffffff0;
-		matrixBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-		matrixBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
-		matrixBufferDesc.MiscFlags = 0;
-		matrixBufferDesc.StructureByteStride = 0;
-	 
-		hr = m_pD3DDevice->CreateBuffer( &matrixBufferDesc, nullptr, &m_pBloomShaderConstantsBuffer );
-		kbErrorCheck( SUCCEEDED( hr ), "kbRenderer_DX11::Init() - Failed to create matrix buffer" );
-	}
 
 	// sampler state
 	D3D11_SAMPLER_DESC samplerDesc;
@@ -1222,14 +1114,6 @@ void kbRenderer_DX11::Shutdown() {
 		SAFE_RELEASE( m_ConstantBuffers[i] );
 	}
 	m_ConstantBuffers.clear();
-
-	SAFE_RELEASE( m_pDefaultShaderConstantsBuffer );
-	SAFE_RELEASE( m_pSkinnedShaderConstantsBuffer );
-	SAFE_RELEASE( m_pEditorConstantsBuffer );
-	SAFE_RELEASE( m_pLightShaderConstantsBuffer );
-	SAFE_RELEASE( m_pLightShaftsShaderConstantsBuffer );
-	SAFE_RELEASE( m_pPostProcessConstantsBuffer );
-	SAFE_RELEASE( m_pBloomShaderConstantsBuffer );
 
 	SAFE_RELEASE( m_pSkinnedDirectionalLightShadowShader );
 	SAFE_RELEASE( m_pBloomGatherShader );
@@ -2043,7 +1927,7 @@ void kbRenderer_DX11::RenderScene() {
 
 			for ( iter = m_pCurrentRenderWindow->m_RenderObjectMap.begin(); iter != m_pCurrentRenderWindow->m_RenderObjectMap.end(); iter++ ) {
 				if ( iter->second->m_RenderPass == RP_FirstPerson ) {
-					RenderModel_Deprecated( iter->second, RP_FirstPerson );
+					RenderModel( iter->second, RP_FirstPerson );
 				}
 			}
 	
@@ -2052,7 +1936,7 @@ void kbRenderer_DX11::RenderScene() {
 
 			for ( iter = m_pCurrentRenderWindow->m_RenderObjectMap.begin(); iter != m_pCurrentRenderWindow->m_RenderObjectMap.end(); iter++ ) {
 				if ( iter->second->m_RenderPass == RP_Lighting ) {
-					RenderModel_Deprecated( iter->second, RP_Lighting );
+					RenderModel( iter->second, RP_Lighting );
 				}
 			}
 
@@ -2076,7 +1960,7 @@ void kbRenderer_DX11::RenderScene() {
 			// Post-Lighting Render Pass
 			for ( iter = m_pCurrentRenderWindow->m_RenderObjectMap.begin(); iter != m_pCurrentRenderWindow->m_RenderObjectMap.end(); iter++ ) {
 				if ( iter->second->m_RenderPass == RP_PostLighting ) {
-					RenderModel_Deprecated( iter->second, RP_PostLighting );
+					RenderModel( iter->second, RP_PostLighting );
 				}
 			}
 			PLACE_GPU_TIME_STAMP( "Unlit" );
@@ -2106,7 +1990,7 @@ void kbRenderer_DX11::RenderScene() {
 
 			for ( iter = m_pCurrentRenderWindow->m_RenderObjectMap.begin(); iter != m_pCurrentRenderWindow->m_RenderObjectMap.end(); iter++ ) {
 				if ( iter->second->m_RenderPass == RP_InWorldUI ) {
-					RenderModel_Deprecated( iter->second, RP_InWorldUI );
+					RenderModel( iter->second, RP_InWorldUI );
 				}
 			}
 
@@ -2135,7 +2019,7 @@ void kbRenderer_DX11::RenderScene() {
 				renderObject.m_Position = m_DebugModels[i].m_Position;
 				renderObject.m_Orientation = m_DebugModels[i].m_Orientation;
 				renderObject.m_Scale = m_DebugModels[i].m_Scale;
-				RenderModel_Deprecated( &renderObject, RP_Debug );
+				RenderModel( &renderObject, RP_Debug );
 			}
 		}
 	
@@ -2242,12 +2126,122 @@ void kbRenderer_DX11::RenderTranslucency() {
 							     kbRenderState::CW_All );
 
 	for ( std::map< const void *, kbRenderObject * >::iterator iter = m_pCurrentRenderWindow->m_RenderParticleMap.begin(); iter != m_pCurrentRenderWindow->m_RenderParticleMap.end(); iter++ ) {
-		RenderModel_Deprecated( iter->second, RP_Translucent );
+		RenderModel( iter->second, RP_Translucent );
 	}
 
 	m_RenderState.SetBlendState();
 
 	m_RenderState.SetDepthStencilState();
+}
+
+/**
+ *	kbRenderer_DX11::SetShaderMat4
+ */
+void kbRenderer_DX11::SetShaderMat4( const std::string & varName, const kbMat4 & inMatrix, void *const pBuffer, const kbShaderVarBindings_t & binding ) {
+
+	const std::vector<kbShaderVarBindings_t::binding_t> & varBindings = binding.m_VarBindings;
+	for ( int i = 0; i < varBindings.size(); i++ ) {
+		if ( varBindings[i].m_VarName == varName ) {
+			kbMat4 *const pMat = (kbMat4*)( (byte*) pBuffer + varBindings[i].m_VarByteOffset );
+			*pMat = inMatrix;
+			return;
+		}
+	}
+
+	kbError( "Failed to set Shader var" );
+}
+
+/**
+ *	kbRenderer_DX11::SetShaderVec4
+ */
+void kbRenderer_DX11::SetShaderVec4( const std::string & varName, const kbVec4 & inVec, void *const pBuffer, const kbShaderVarBindings_t & binding ) {
+
+	const std::vector<kbShaderVarBindings_t::binding_t> & varBindings = binding.m_VarBindings;
+	for ( int i = 0; i < varBindings.size(); i++ ) {
+		if ( varBindings[i].m_VarName == varName ) {
+			kbVec4 *const pVec = (kbVec4*)( (byte*) pBuffer + varBindings[i].m_VarByteOffset );
+			*pVec = inVec;
+			return;
+		}
+	}
+	kbError( "Failed to set Shader var" );
+}
+
+/**
+ *	kbRenderer_DX11::SetShaderFloat
+ */
+void kbRenderer_DX11::SetShaderFloat( const std::string & varName, const float inFloat, void *const pBuffer, const kbShaderVarBindings_t & binding ) {
+
+	const int varBindingIdx = GetVarBindingIndex( varName, binding );
+	kbErrorCheck( varBindingIdx >= 0, "kbRenderer_DX11::SetShaderFloat() - Failed to find binding for shader var %s", varName.c_str() );
+
+	float *const pFloat = (float*)( (byte*)pBuffer + binding.m_VarBindings[varBindingIdx].m_VarByteOffset );
+	*pFloat = inFloat;
+}
+
+/**
+ *	kbRenderer_DX11::SetShaderInt
+ */
+void kbRenderer_DX11::SetShaderInt( const std::string & varName, const int inInt, void *const pBuffer, const kbShaderVarBindings_t & binding ) {
+
+	const int varBindingIdx = GetVarBindingIndex( varName, binding );
+	kbErrorCheck( varBindingIdx >= 0, "kbRenderer_DX11::SetShaderInt() - Failed to find binding for shader var %s", varName.c_str() );
+
+	int *const pInt = (int*)( (byte*)pBuffer + binding.m_VarBindings[varBindingIdx].m_VarByteOffset );
+	*pInt = inInt;
+}
+
+/**
+ *	kbRenderer_DX11::SetShaderVec4Array
+ */
+void kbRenderer_DX11::SetShaderVec4Array( const std::string & varName, const kbVec4 *const pSrcArray, const int arrayLen, void *const pBuffer, const kbShaderVarBindings_t & binding ) {
+
+	const int varBindingIdx = GetVarBindingIndex( varName, binding );
+	kbErrorCheck( varBindingIdx >= 0, "kbRenderer_DX11::SetShaderVec4Array() - Failed to find binding for shader var %s", varName.c_str() );
+
+	kbVec4 *const pDestArray = (kbVec4*)( (byte*)pBuffer + binding.m_VarBindings[varBindingIdx].m_VarByteOffset );
+	for ( int j = 0; j < arrayLen; j++ ) {
+		pDestArray[j] = pSrcArray[j];
+	}
+}
+
+/**
+ *	kbRenderer_DX11::SetShaderMat4Array
+ */
+void kbRenderer_DX11::SetShaderMat4Array( const std::string & varName, const kbMat4 *const pSrcArray, const int arrayLen, void *const pBuffer, const kbShaderVarBindings_t & binding ) {
+
+	const int varBindingIdx = GetVarBindingIndex( varName, binding );
+	kbErrorCheck( varBindingIdx >= 0, "kbRenderer_DX11::SetShaderMat4Array() - Failed to find binding for shader var %s", varName.c_str() );
+
+	kbMat4 *const pDestArray = (kbMat4*)( (byte*)pBuffer + binding.m_VarBindings[varBindingIdx].m_VarByteOffset );
+	for ( int j = 0; j < arrayLen; j++ ) {
+		pDestArray[j] = pSrcArray[j];
+	}
+}
+
+/**
+ *	kbRenderer_DX11::GetVarBindingIndex
+ */
+int kbRenderer_DX11::GetVarBindingIndex( const std::string & varName, const kbShaderVarBindings_t & binding ) {
+	const std::vector<kbShaderVarBindings_t::binding_t> & varBindings = binding.m_VarBindings;
+	for ( int i = 0; i < varBindings.size(); i++ ) {
+		if ( varBindings[i].m_VarName == varName ) {
+			return i;
+		}
+	}
+
+	return -1;
+}
+
+/**
+ *	kbRenderer_DX11::GetConstantBuffer
+ */
+ID3D11Buffer * kbRenderer_DX11::GetConstantBuffer( const size_t requestSize ) {
+	
+	std::map<size_t, ID3D11Buffer *>::iterator constantBufferIt = m_ConstantBuffers.find( requestSize );
+	kbErrorCheck( constantBufferIt != m_ConstantBuffers.end() && constantBufferIt->second != nullptr, "kbRenderer_DX11::RenderModel() - Could not find constant buffer of size %d", requestSize );
+
+	return constantBufferIt->second;
 }
 
 /**
@@ -2366,28 +2360,22 @@ void kbRenderer_DX11::RenderDebugText() {
 	m_pDeviceContext->VSSetShader( (ID3D11VertexShader *)m_pSimpleAdditiveShader->GetVertexShader(), nullptr, 0 );
 	m_pDeviceContext->PSSetShader( (ID3D11PixelShader *)m_pSimpleAdditiveShader->GetPixelShader(), nullptr, 0 );
 
+	const kbShaderVarBindings_t & shaderVarBindings = m_pSimpleAdditiveShader->GetShaderVarBindings();
+	ID3D11Buffer *const pConstantBuffer = GetConstantBuffer( shaderVarBindings.m_ConstantBufferSizeBytes );
+
 	D3D11_MAPPED_SUBRESOURCE mappedResource;
-	HRESULT hr = m_pDeviceContext->Map( m_pDefaultShaderConstantsBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource );
+	HRESULT hr = m_pDeviceContext->Map( pConstantBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource );
 
-	if ( FAILED( hr ) ) {
-		kbError( "Failed to map matrix buffer" );
-	}
-
-	ShaderConstantMatrices sourceBuffer;
-	kbMat4 finalMatrix;
-	finalMatrix.MakeIdentity();
-	finalMatrix[0].x = 2.0f;
-	finalMatrix[1].y = -2.0f;
-	finalMatrix[3].x = -1.0f;
-	finalMatrix[3].y = 1.0f;
-	sourceBuffer.mvpMatrix = finalMatrix;
-
-	ShaderConstantMatrices * dataPtr = ( ShaderConstantMatrices * ) mappedResource.pData;
-	memcpy( dataPtr, &sourceBuffer, sizeof( ShaderConstantMatrices ) );
-
-
-	m_pDeviceContext->Unmap( m_pDefaultShaderConstantsBuffer, 0 );
-	m_pDeviceContext->VSSetConstantBuffers( 0, 1, &m_pDefaultShaderConstantsBuffer );
+	kbMat4 mvpMatrix;
+	mvpMatrix.MakeIdentity();
+	mvpMatrix[0].x = 2.0f;
+	mvpMatrix[1].y = -2.0f;
+	mvpMatrix[3].x = -1.0f;
+	mvpMatrix[3].y = 1.0f;
+	SetShaderMat4( "mvpMatrix", mvpMatrix, mappedResource.pData, shaderVarBindings );
+	
+	m_pDeviceContext->Unmap( pConstantBuffer, 0 );
+	m_pDeviceContext->VSSetConstantBuffers( 0, 1, &pConstantBuffer );
 
 	m_pDeviceContext->DrawIndexed( m_DebugText->GetMeshes()[0].m_NumTriangles * 3, 0, 0 );
 
@@ -2418,7 +2406,7 @@ void kbRenderer_DX11::RenderMousePickerIds() {
 	std::map<const kbComponent *, kbRenderObject *>::iterator iter;
 	for ( iter = m_pCurrentRenderWindow->m_RenderObjectMap.begin(); iter != m_pCurrentRenderWindow->m_RenderObjectMap.end(); iter++ ) {
 		if ( iter->second->m_EntityId > 0 ) {
-			RenderModel_Deprecated( iter->second, RP_MousePicker );
+			RenderModel( iter->second, RP_MousePicker );
 		}
 	}
 
@@ -2444,34 +2432,23 @@ void kbRenderer_DX11::Blit( kbRenderTexture *const src, kbRenderTexture *const d
 
 	m_pDeviceContext->RSSetState( m_pDefaultRasterizerState );
 
-	//ID3D11ShaderResourceView *const pShaderResourceView = (ID3D11ShaderResourceView*)m_pTextures[textureIndex]->GetGPUTexture();
-
 	m_pDeviceContext->PSSetShaderResources( 0, 1, &src->m_pShaderResourceView );
 	m_pDeviceContext->PSSetSamplers( 0, 1, &m_pBasicSamplerState );
 	m_pDeviceContext->IASetInputLayout( (ID3D11InputLayout*)pShader->GetVertexLayout() );
 	m_pDeviceContext->VSSetShader( (ID3D11VertexShader *)pShader->GetVertexShader(), nullptr, 0 );
 	m_pDeviceContext->PSSetShader( (ID3D11PixelShader *)pShader->GetPixelShader(), nullptr, 0 );
 
+	const kbShaderVarBindings_t & varBindings = pShader->GetShaderVarBindings();
+	ID3D11Buffer *const pConstantBuffer = GetConstantBuffer( varBindings.m_ConstantBufferSizeBytes );
 	D3D11_MAPPED_SUBRESOURCE mappedResource;
-	HRESULT hr = m_pDeviceContext->Map( m_pDefaultShaderConstantsBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource );
 
-	if ( FAILED( hr ) ) {
-		kbError( "Failed to map matrix buffer" );
-	}
+	HRESULT hr = m_pDeviceContext->Map( pConstantBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource );
+	kbErrorCheck( SUCCEEDED(hr), "Failed to map matrix buffer" );
 
-	ShaderConstantMatrices sourceBuffer;
-	
-	sourceBuffer.mvpMatrix.MakeIdentity();
-	sourceBuffer.mvpMatrix[0][0] = 1.0f;
-	sourceBuffer.mvpMatrix[1][1] = 1.0f;
-	sourceBuffer.mvpMatrix[3][0] = 0.0f;
-	sourceBuffer.mvpMatrix[3][1] = 0.0f;
+	SetShaderMat4( "mvpMatrix", kbMat4::identity, mappedResource.pData, varBindings );
+	m_pDeviceContext->Unmap( pConstantBuffer, 0 );
+	m_pDeviceContext->VSSetConstantBuffers( 0, 1, &pConstantBuffer );
 
-	ShaderConstantMatrices *const dataPtr = ( ShaderConstantMatrices * ) mappedResource.pData;
-	memcpy( dataPtr, &sourceBuffer, sizeof( ShaderConstantMatrices ) );
-
-	m_pDeviceContext->Unmap( m_pDefaultShaderConstantsBuffer, 0 );
-	m_pDeviceContext->VSSetConstantBuffers( 0, 1, &m_pDefaultShaderConstantsBuffer );
 	m_pDeviceContext->Draw( 6, 0 );
 }
 
@@ -2492,15 +2469,15 @@ void kbRenderer_DX11::DrawTexture( ID3D11ShaderResourceView *const pShaderResour
 	m_pDeviceContext->PSSetShader( (ID3D11PixelShader *)m_pDebugShader->GetPixelShader(), nullptr, 0 );
 	m_pDeviceContext->PSSetShaderResources( 0, 1, &pShaderResourceView );
 	
+	auto & varBindings = m_pDebugShader->GetShaderVarBindings();
+	ID3D11Buffer *const pConstantBuffer = GetConstantBuffer( varBindings.m_ConstantBufferSizeBytes );
 	D3D11_MAPPED_SUBRESOURCE mappedResource;
-	HRESULT hr = m_pDeviceContext->Map( m_pDefaultShaderConstantsBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource );
+	HRESULT hr = m_pDeviceContext->Map( pConstantBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource );
+	kbErrorCheck( SUCCEEDED(hr), "Failed to map matrix buffer" );
 	
-	if ( FAILED( hr ) ) {
-		kbError( "Failed to map matrix buffer" );
-	}
-	
-	ShaderConstantMatrices * dataPtr = ( ShaderConstantMatrices * ) mappedResource.pData;
-	ShaderConstantMatrices sourceBuffer;
+	//SShaderM
+	//ShaderConstantMatrices * dataPtr = ( ShaderConstantMatrices * ) mappedResource.pData;
+	//ShaderConstantMatrices sourceBuffer;
 	
 	kbMat4 finalMatrix;
 	finalMatrix.MakeIdentity();
@@ -2515,12 +2492,10 @@ void kbRenderer_DX11::DrawTexture( ID3D11ShaderResourceView *const pShaderResour
 	screenSpacePosition.y *= -1.0f;
 
 	finalMatrix[3] = screenSpacePosition;
-	sourceBuffer.mvpMatrix = finalMatrix;
+	SetShaderMat4( "mvpMatrix", finalMatrix, mappedResource.pData, varBindings );	
+	m_pDeviceContext->Unmap( pConstantBuffer, 0 );
 
-	memcpy( dataPtr, &sourceBuffer, sizeof( ShaderConstantMatrices ) );
-	
-	m_pDeviceContext->Unmap( m_pDefaultShaderConstantsBuffer, 0 );
-	m_pDeviceContext->VSSetConstantBuffers( 0, 1, &m_pDefaultShaderConstantsBuffer );
+	m_pDeviceContext->VSSetConstantBuffers( 0, 1, &pConstantBuffer );
 	
 	m_pDeviceContext->Draw( 6, 0 );
 }
@@ -2562,28 +2537,26 @@ void kbRenderer_DX11::RenderBloom() {
 		m_pDeviceContext->VSSetShader( (ID3D11VertexShader *)m_pBloomGatherShader->GetVertexShader(), nullptr, 0 );
 		m_pDeviceContext->PSSetShader( (ID3D11PixelShader *)m_pBloomGatherShader->GetPixelShader(), nullptr, 0 );
 
+		const auto & varBindings = m_pBloomGatherShader->GetShaderVarBindings();
+		ID3D11Buffer *const pConstantBuffer = GetConstantBuffer( varBindings.m_ConstantBufferSizeBytes );
+
 		// Set constants
 		D3D11_MAPPED_SUBRESOURCE mappedResource;
-		HRESULT hr = m_pDeviceContext->Map( m_pBloomShaderConstantsBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource );
+		HRESULT hr = m_pDeviceContext->Map( pConstantBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource );
+		kbErrorCheck( SUCCEEDED(hr), "Failed to map matrix buffer" );
 
-		if ( FAILED( hr ) ) {
-			kbError( "Failed to map matrix buffer" );
-		}
-
-		BloomShaderConstants sourceBuffer;
-
+		kbMat4 mvpMatrix;
 		if ( m_bRenderToHMD ) {
-			sourceBuffer.mvpMatrix.MakeScale( kbVec3( 0.5f, 1.0f, 1.0f ) );
+			mvpMatrix.MakeScale( kbVec3( 0.5f, 1.0f, 1.0f ) );
 		} else {
-			sourceBuffer.mvpMatrix.MakeIdentity();
+			mvpMatrix.MakeIdentity();
 		}
-		BloomShaderConstants *const dataPtr = ( BloomShaderConstants * ) mappedResource.pData;
-		memcpy( dataPtr, &sourceBuffer, sizeof( BloomShaderConstants ) );
+		SetShaderMat4( "mvpMatrix", mvpMatrix, mappedResource.pData, varBindings );
 
-		m_pDeviceContext->Unmap( m_pBloomShaderConstantsBuffer, 0 );
+		m_pDeviceContext->Unmap( pConstantBuffer, 0 );
 
-		m_pDeviceContext->VSSetConstantBuffers( 0, 1, &m_pBloomShaderConstantsBuffer );
-		m_pDeviceContext->PSSetConstantBuffers( 0, 1, &m_pBloomShaderConstantsBuffer );
+		m_pDeviceContext->VSSetConstantBuffers( 0, 1, &pConstantBuffer );
+		m_pDeviceContext->PSSetConstantBuffers( 0, 1, &pConstantBuffer );
 
 		// Draw
 		m_pDeviceContext->Draw( 6, 0 );
@@ -2609,37 +2582,35 @@ void kbRenderer_DX11::RenderBloom() {
 		m_pDeviceContext->VSSetShader( (ID3D11VertexShader *)m_pBloomBlur->GetVertexShader(), nullptr, 0 );
 		m_pDeviceContext->PSSetShader( (ID3D11PixelShader *)m_pBloomBlur->GetPixelShader(), nullptr, 0 );
 
+		const auto & varBindings = m_pBloomGatherShader->GetShaderVarBindings();
+		ID3D11Buffer *const pConstantBuffer = GetConstantBuffer( varBindings.m_ConstantBufferSizeBytes );
+
 		// Set constants
 		D3D11_MAPPED_SUBRESOURCE mappedResource;
-		HRESULT hr = m_pDeviceContext->Map( m_pBloomShaderConstantsBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource );
+		HRESULT hr = m_pDeviceContext->Map( pConstantBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource );
+		kbErrorCheck( SUCCEEDED(hr), "Failed to map matrix buffer" );
 
-		if ( FAILED( hr ) ) {
-			kbError( "Failed to map matrix buffer" );
-		}
-
-		BloomShaderConstants sourceBuffer;
-
+		kbMat4 mvpMatrix;
 		if ( m_bRenderToHMD ) {
-			sourceBuffer.mvpMatrix.MakeScale( kbVec3( 0.5f, 1.0f, 1.0f ) );
+			mvpMatrix.MakeScale( kbVec3( 0.5f, 1.0f, 1.0f ) );
 		} else {
-			sourceBuffer.mvpMatrix.MakeIdentity();
+			mvpMatrix.MakeIdentity();
 		}
+		SetShaderMat4( "mvpMatrix", mvpMatrix, (byte*) mappedResource.pData, varBindings );
+		SetShaderInt( "numSamples", 5, (byte*) mappedResource.pData, varBindings );
 
 		const float texelSize = 1.0f / m_RenderTargets[DOWN_RES_BUFFER_2].m_Width;
-		sourceBuffer.numSamples = 5;
-		sourceBuffer.offsetsAndWeights[0].Set( 0.0f * texelSize, 0.0f, 0.22702f, 0.0f );
-		sourceBuffer.offsetsAndWeights[1].Set( 1.0f * texelSize, 0.0f, 0.19459f, 0.0f );
-		sourceBuffer.offsetsAndWeights[2].Set( 2.0f * texelSize, 0.0f, 0.12162f, 0.0f );
-		sourceBuffer.offsetsAndWeights[3].Set( 3.0f * texelSize, 0.0f, 0.05405f, 0.0f );
-		sourceBuffer.offsetsAndWeights[4].Set( 4.0f * texelSize, 0.0f, 0.01621f, 0.0f );
+		kbVec4 offsetsAndWeights[5];
+		offsetsAndWeights[0].Set( 0.0f * texelSize, 0.0f, 0.22702f, 0.0f );
+		offsetsAndWeights[1].Set( 1.0f * texelSize, 0.0f, 0.19459f, 0.0f );
+		offsetsAndWeights[2].Set( 2.0f * texelSize, 0.0f, 0.12162f, 0.0f );
+		offsetsAndWeights[3].Set( 3.0f * texelSize, 0.0f, 0.05405f, 0.0f );
+		offsetsAndWeights[4].Set( 4.0f * texelSize, 0.0f, 0.01621f, 0.0f );
+		SetShaderVec4Array( "offsetsAndWeights", offsetsAndWeights, 5, (byte*) mappedResource.pData, varBindings ); 
+		m_pDeviceContext->Unmap( pConstantBuffer, 0 );
 
-		BloomShaderConstants *const dataPtr = ( BloomShaderConstants * ) mappedResource.pData;
-		memcpy( dataPtr, &sourceBuffer, sizeof( BloomShaderConstants ) );
-
-		m_pDeviceContext->Unmap( m_pBloomShaderConstantsBuffer, 0 );
-
-		m_pDeviceContext->VSSetConstantBuffers( 0, 1, &m_pBloomShaderConstantsBuffer );
-		m_pDeviceContext->PSSetConstantBuffers( 0, 1, &m_pBloomShaderConstantsBuffer );
+		m_pDeviceContext->VSSetConstantBuffers( 0, 1, &pConstantBuffer );
+		m_pDeviceContext->PSSetConstantBuffers( 0, 1, &pConstantBuffer );
 
 		// Draw
 		m_pDeviceContext->Draw( 6, 0 );
@@ -2664,36 +2635,36 @@ void kbRenderer_DX11::RenderBloom() {
 		ID3D11SamplerState * samplerState[] = { m_pNormalMapSamplerState };
 
 		// Set constants
+		const auto & varBindings = m_pBloomGatherShader->GetShaderVarBindings();
+		ID3D11Buffer *const pConstantBuffer = GetConstantBuffer( varBindings.m_ConstantBufferSizeBytes );
+
+		// Set constants
 		D3D11_MAPPED_SUBRESOURCE mappedResource;
-		HRESULT hr = m_pDeviceContext->Map( m_pBloomShaderConstantsBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource );
+		HRESULT hr = m_pDeviceContext->Map( pConstantBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource );
+		kbErrorCheck( SUCCEEDED(hr), "Failed to map matrix buffer" );
 
-		if ( FAILED( hr ) ) {
-			kbError( "Failed to map matrix buffer" );
-		}
-
-		BloomShaderConstants sourceBuffer;
-
+		kbMat4 mvpMatrix;
 		if ( m_bRenderToHMD ) {
-			sourceBuffer.mvpMatrix.MakeScale( kbVec3( 0.5f, 1.0f, 1.0f ) );
+			mvpMatrix.MakeScale( kbVec3( 0.5f, 1.0f, 1.0f ) );
 		} else {
-			sourceBuffer.mvpMatrix.MakeIdentity();
+			mvpMatrix.MakeIdentity();
 		}
+
+		SetShaderMat4( "mvpMatrix", mvpMatrix, (byte*) mappedResource.pData, varBindings );
+		SetShaderInt( "numSamples", 5, (byte*) mappedResource.pData, varBindings );
 
 		const float texelSize = 1.0f / m_RenderTargets[DOWN_RES_BUFFER_2].m_Width;
-		sourceBuffer.numSamples = 5;
-		sourceBuffer.offsetsAndWeights[0].Set( 0.0f * texelSize, 0.0f, 0.22702f, 0.0f );
-		sourceBuffer.offsetsAndWeights[1].Set( 1.0f * texelSize, 0.0f, 0.19459f, 0.0f );
-		sourceBuffer.offsetsAndWeights[2].Set( 2.0f * texelSize, 0.0f, 0.12162f, 0.0f );
-		sourceBuffer.offsetsAndWeights[3].Set( 3.0f * texelSize, 0.0f, 0.05405f, 0.0f );
-		sourceBuffer.offsetsAndWeights[4].Set( 4.0f * texelSize, 0.0f, 0.01621f, 0.0f );
+		kbVec4 offsetsAndWeights[5];
+		offsetsAndWeights[0].Set( 0.0f * texelSize, 0.0f, 0.22702f, 0.0f );
+		offsetsAndWeights[1].Set( 1.0f * texelSize, 0.0f, 0.19459f, 0.0f );
+		offsetsAndWeights[2].Set( 2.0f * texelSize, 0.0f, 0.12162f, 0.0f );
+		offsetsAndWeights[3].Set( 3.0f * texelSize, 0.0f, 0.05405f, 0.0f );
+		offsetsAndWeights[4].Set( 4.0f * texelSize, 0.0f, 0.01621f, 0.0f );
 
-		BloomShaderConstants *const dataPtr = ( BloomShaderConstants * ) mappedResource.pData;
-		memcpy( dataPtr, &sourceBuffer, sizeof( BloomShaderConstants ) );
+		m_pDeviceContext->Unmap( pConstantBuffer, 0 );
 
-		m_pDeviceContext->Unmap( m_pBloomShaderConstantsBuffer, 0 );
-
-		m_pDeviceContext->VSSetConstantBuffers( 0, 1, &m_pBloomShaderConstantsBuffer );
-		m_pDeviceContext->PSSetConstantBuffers( 0, 1, &m_pBloomShaderConstantsBuffer );
+		m_pDeviceContext->VSSetConstantBuffers( 0, 1, &pConstantBuffer );
+		m_pDeviceContext->PSSetConstantBuffers( 0, 1, &pConstantBuffer );
 
 		// Draw
 		m_pDeviceContext->Draw( 6, 0 );
@@ -2733,21 +2704,15 @@ void kbRenderer_DX11::RenderBloom() {
 		m_pDeviceContext->PSSetShaderResources( 0, 1, RenderTargetViews );
 		m_pDeviceContext->PSSetSamplers( 0, 1, SamplerStates );
 
+		const auto & varBindings = m_pSimpleAdditiveShader->GetShaderVarBindings();
+		ID3D11Buffer *const pConstantBuffer = GetConstantBuffer( varBindings.m_ConstantBufferSizeBytes );
 		D3D11_MAPPED_SUBRESOURCE mappedResource;
-		HRESULT hr = m_pDeviceContext->Map( m_pDefaultShaderConstantsBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource );
-		if ( FAILED( hr ) ) {
-			kbError( "Failed to map matrix buffer" );
-		}
-
-		ShaderConstantMatrices sourceBuffer;
-		sourceBuffer.mvpMatrix = mvpMatrix;
-
-		ShaderConstantMatrices * dataPtr = ( ShaderConstantMatrices * ) mappedResource.pData;
-		memcpy( dataPtr, &sourceBuffer, sizeof( ShaderConstantMatrices ) );
-
-		m_pDeviceContext->Unmap( m_pDefaultShaderConstantsBuffer, 0 );
-		m_pDeviceContext->VSSetConstantBuffers( 0, 1, &m_pDefaultShaderConstantsBuffer );
-		m_pDeviceContext->PSSetConstantBuffers( 0, 1, &m_pDefaultShaderConstantsBuffer );
+		HRESULT hr = m_pDeviceContext->Map( pConstantBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource );
+		kbErrorCheck( SUCCEEDED(hr), "Failed to map matrix buffer" );
+		SetShaderMat4( "mvpMatrix", mvpMatrix, mappedResource.pData, varBindings );
+		m_pDeviceContext->Unmap( pConstantBuffer, 0 );
+		m_pDeviceContext->VSSetConstantBuffers( 0, 1, &pConstantBuffer );
+		m_pDeviceContext->PSSetConstantBuffers( 0, 1, &pConstantBuffer );
 
 		m_pDeviceContext->Draw( 6, 0 );
 	}
@@ -2809,34 +2774,31 @@ void kbRenderer_DX11::RenderPostProcess() {
 	m_pDeviceContext->VSSetShader( (ID3D11VertexShader *)m_pUberPostProcess->GetVertexShader(), nullptr, 0 );
 	m_pDeviceContext->PSSetShader( (ID3D11PixelShader *)m_pUberPostProcess->GetPixelShader(), nullptr, 0 );
 
+	const auto & varBindings = m_pUberPostProcess->GetShaderVarBindings();
+	ID3D11Buffer *const pConstantBuffer = GetConstantBuffer( varBindings.m_ConstantBufferSizeBytes );
+
 	D3D11_MAPPED_SUBRESOURCE mappedResource;
-	HRESULT hr = m_pDeviceContext->Map( m_pPostProcessConstantsBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource );
-
-	if ( FAILED( hr ) ) {
-		kbError( "Failed to map matrix buffer" );
-	}
-
-	PostProcessConstants sourceBuffer;
-
+	HRESULT hr = m_pDeviceContext->Map( pConstantBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource );
+	kbErrorCheck( SUCCEEDED(hr), "Failed to map matrix buffer" );
+	
+	kbMat4 mvpMatrix;
 	if ( m_bRenderToHMD ) {
-		sourceBuffer.mvpMatrix.MakeScale( kbVec3( 0.5f, 1.0f, 1.0f ) );
+		mvpMatrix.MakeScale( kbVec3( 0.5f, 1.0f, 1.0f ) );
 	} else {
-		sourceBuffer.mvpMatrix.MakeIdentity();
+		mvpMatrix.MakeIdentity();
 	}
 
-	sourceBuffer.inverseProjection = m_pCurrentRenderWindow->m_InverseProjectionMatrix;
-	sourceBuffer.tint = m_PostProcessSettings_RenderThread.m_Tint;
-	sourceBuffer.additiveColor = m_PostProcessSettings_RenderThread.m_AdditiveColor;
-	sourceBuffer.fogColor = m_FogColor_RenderThread;
-	sourceBuffer.fogStartDistance = m_FogStartDistance_RenderThread;
-	sourceBuffer.fogEndDistance = m_FogEndDistance_RenderThread;
+	SetShaderMat4( "mvpMatrix", mvpMatrix, mappedResource.pData, varBindings );
+	SetShaderMat4( "inverseProjection", m_pCurrentRenderWindow->m_InverseProjectionMatrix, mappedResource.pData, varBindings );	
+	SetShaderVec4( "tint", m_PostProcessSettings_RenderThread.m_Tint, mappedResource.pData, varBindings );
+	SetShaderVec4( "additiveColor", m_PostProcessSettings_RenderThread.m_AdditiveColor, mappedResource.pData, varBindings );
+	SetShaderVec4( "fogColor", m_FogColor_RenderThread, mappedResource.pData, varBindings );
+	SetShaderFloat( "fogStartDistance", m_FogStartDistance_RenderThread, mappedResource.pData, varBindings );
+	SetShaderFloat( "fogEndDistance", m_FogEndDistance_RenderThread, mappedResource.pData, varBindings );
+	m_pDeviceContext->Unmap( pConstantBuffer, 0 );
 
-	PostProcessConstants * dataPtr = ( PostProcessConstants * ) mappedResource.pData;
-	memcpy( dataPtr, &sourceBuffer, sizeof( PostProcessConstants ) );
-
-	m_pDeviceContext->Unmap( m_pPostProcessConstantsBuffer, 0 );
-	m_pDeviceContext->VSSetConstantBuffers( 0, 1, &m_pPostProcessConstantsBuffer );
-	m_pDeviceContext->PSSetConstantBuffers( 0, 1, &m_pPostProcessConstantsBuffer );
+	m_pDeviceContext->VSSetConstantBuffers( 0, 1, &pConstantBuffer );
+	m_pDeviceContext->PSSetConstantBuffers( 0, 1, &pConstantBuffer );
 
 	m_pDeviceContext->Draw( 6, 0 );
 
@@ -2873,36 +2835,28 @@ void kbRenderer_DX11::RenderConsole() {
 	m_pDeviceContext->VSSetShader( (ID3D11VertexShader *)m_pDebugShader->GetVertexShader(), nullptr, 0 );
 	m_pDeviceContext->PSSetShader( (ID3D11PixelShader *)m_pDebugShader->GetPixelShader(), nullptr, 0 );
 
+	const auto & varBindings = m_pDebugShader->GetShaderVarBindings();
+	ID3D11Buffer *const pConstantBuffer = GetConstantBuffer( varBindings.m_ConstantBufferSizeBytes );
 	D3D11_MAPPED_SUBRESOURCE mappedResource;
-	HRESULT hr = m_pDeviceContext->Map( m_pDefaultShaderConstantsBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource );
+	HRESULT hr = m_pDeviceContext->Map( pConstantBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource );
+	kbErrorCheck( SUCCEEDED(hr), "Failed to map matrix buffer" );
 
-	if ( FAILED( hr ) ) {
-		kbError( "Failed to map matrix buffer" );
-	}
+	SetShaderMat4( "modeMatrix", kbMat4::identity, mappedResource.pData, varBindings );
+	SetShaderMat4( "modelViewMatrix", kbMat4::identity, mappedResource.pData, varBindings );
+	SetShaderMat4( "viewMatrix", m_pCurrentRenderWindow->m_ViewMatrix, mappedResource.pData, varBindings );
 
-	ShaderConstantMatrices sourceBuffer;
-
-	sourceBuffer.modelMatrix.MakeIdentity();
-	sourceBuffer.modelViewMatrix.MakeIdentity();
-	sourceBuffer.viewMatrix = m_pCurrentRenderWindow->m_ViewMatrix;
-
+	kbMat4 mvpMatrix = kbMat4::identity;
 	if ( m_bRenderToHMD ) {
-		sourceBuffer.mvpMatrix.MakeScale( kbVec3( 0.5f, 1.0f, 1.0f ) );
-	} else {
-		sourceBuffer.mvpMatrix.MakeIdentity();
+		mvpMatrix.MakeScale( kbVec3( 0.5f, 1.0f, 1.0f ) );
 	}
+	SetShaderMat4( "mvpMatrix", mvpMatrix, mappedResource.pData, varBindings );
+	SetShaderMat4( "projection", m_pCurrentRenderWindow->m_ViewProjectionMatrix, mappedResource.pData, varBindings );
+	SetShaderMat4( "inverseProjection", m_pCurrentRenderWindow->m_InverseProjectionMatrix, mappedResource.pData, varBindings );
+	SetShaderVec4( "cameraPosition", m_pCurrentRenderWindow->m_CameraPosition, mappedResource.pData, varBindings );
 
-	sourceBuffer.projection = m_pCurrentRenderWindow->m_ViewProjectionMatrix;
-	sourceBuffer.inverseProjection = m_pCurrentRenderWindow->m_InverseProjectionMatrix;
-	//sourceBuffer.inverseProjection = m_pCurrentRenderWindow->m_InverseViewProjectionMatrix;
-	sourceBuffer.cameraPosition = m_pCurrentRenderWindow->m_CameraPosition;
-
-	ShaderConstantMatrices * dataPtr = ( ShaderConstantMatrices * ) mappedResource.pData;
-	memcpy( dataPtr, &sourceBuffer, sizeof( ShaderConstantMatrices ) );
-
-	m_pDeviceContext->Unmap( m_pDefaultShaderConstantsBuffer, 0 );
-	m_pDeviceContext->VSSetConstantBuffers( 0, 1, &m_pDefaultShaderConstantsBuffer );
-	m_pDeviceContext->PSSetConstantBuffers( 0, 1, &m_pDefaultShaderConstantsBuffer );
+	m_pDeviceContext->Unmap( pConstantBuffer, 0 );
+	m_pDeviceContext->VSSetConstantBuffers( 0, 1, &pConstantBuffer );
+	m_pDeviceContext->PSSetConstantBuffers( 0, 1, &pConstantBuffer );
 
 	m_pDeviceContext->Draw( 6, 0 );
 
@@ -2970,18 +2924,29 @@ void ReadShaderFile( const std::string & shaderText, kbShaderVarBindings_t *cons
 	for ( int i = 0; i < constantBufferStrings.size(); i += 2 ) {
 
 		currOffset = ( currOffset + 15 ) & 0xfffffff0;
-		pShaderBindings->m_VarBindings.push_back( kbShaderVarBindings_t::binding_t( constantBufferStrings[i + 1], currOffset ) );
+
+		std::string & varName = constantBufferStrings[i+1];
+		int count = 1;
+		std::string::size_type arrayStart = varName.find( '[' );
+		std::string::size_type arrayEnd = varName.find( ']' );
+
+		if ( arrayStart != std::string::npos && arrayEnd != std::string::npos ) {
+			std::string sCount = varName.substr( arrayStart + 1, arrayEnd - 2 );
+			count = std::stoi( sCount );
+			varName.resize( arrayStart );
+		}
+		pShaderBindings->m_VarBindings.push_back( kbShaderVarBindings_t::binding_t( varName, currOffset ) );
 
 		if ( constantBufferStrings[i] == "matrix" || constantBufferStrings[i] == "float4x4" ) {
-			currOffset += 64;
+			currOffset += 64 * count;
 		} else if ( constantBufferStrings[i] == "float4" ) {
-			currOffset += 16;
+			currOffset += 16 * count;
 		} else {
-			currOffset += 4;
+			currOffset += 4 * count;
 		}
 	}
 
-	pShaderBindings->m_TotalSize = currOffset;
+	pShaderBindings->m_ConstantBufferSizeBytes = ( currOffset + 15 ) & 0xfffffff0;
 }
 
 /**
@@ -3011,6 +2976,24 @@ void kbRenderer_DX11::LoadShader( const std::string & fileName, ID3D11VertexShad
 
 	if ( pShaderBindings != nullptr ) {
 		ReadShaderFile( readBuffer, pShaderBindings );
+
+		const UINT desiredByteWidth = ( pShaderBindings->m_ConstantBufferSizeBytes + 15 ) & 0xfffffff0;
+		if ( m_ConstantBuffers.find( desiredByteWidth ) == m_ConstantBuffers.end() ) {
+			D3D11_BUFFER_DESC matrixBufferDesc;
+			matrixBufferDesc.Usage = D3D11_USAGE_DYNAMIC;
+
+			matrixBufferDesc.ByteWidth = desiredByteWidth;
+			matrixBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+			matrixBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+			matrixBufferDesc.MiscFlags = 0;
+			matrixBufferDesc.StructureByteStride = 0;
+
+			ID3D11Buffer * pConstantBuffer = nullptr;
+			hr = m_pD3DDevice->CreateBuffer( &matrixBufferDesc, nullptr, &pConstantBuffer );
+			kbErrorCheck( SUCCEEDED( hr ), "Failed to create matrix buffer" );
+
+			m_ConstantBuffers.insert( std::pair<size_t, ID3D11Buffer*>( desiredByteWidth, pConstantBuffer ) );
+		}
 	}
 
 	// Compile vertex shader
@@ -3277,25 +3260,22 @@ void kbRenderer_DX11::RenderScreenSpaceQuadImmediate( const int start_x, const i
 	m_pDeviceContext->PSSetShader( (ID3D11PixelShader *)pShader->GetPixelShader(), nullptr, 0 );
 
 	D3D11_MAPPED_SUBRESOURCE mappedResource;
-	HRESULT hr = m_pDeviceContext->Map( m_pDefaultShaderConstantsBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource );
-
-	if ( FAILED( hr ) ) {
-		kbError( "Failed to map matrix buffer" );
-	}
-
-	ShaderConstantMatrices sourceBuffer;
+	const auto & varBindings = pShader->GetShaderVarBindings();
+	ID3D11Buffer *const pConstantBuffer = GetConstantBuffer( varBindings.m_ConstantBufferSizeBytes );
+	HRESULT hr = m_pDeviceContext->Map( pConstantBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource );
+	kbErrorCheck( SUCCEEDED(hr), "kbRenderer_DX11::RenderScreenSpaceQuadImmediate() - Failed to map matrix buffer" );
 	
-	sourceBuffer.mvpMatrix.MakeIdentity();
-	sourceBuffer.mvpMatrix[0][0] = xScale;
-	sourceBuffer.mvpMatrix[1][1] = yScale;
-	sourceBuffer.mvpMatrix[3][0] = xPos - 1.0f;
-	sourceBuffer.mvpMatrix[3][1] = 1.0f - yPos;
+	kbMat4 mvpMatrix;
+	
+	mvpMatrix.MakeIdentity();
+	mvpMatrix[0][0] = xScale;
+	mvpMatrix[1][1] = yScale;
+	mvpMatrix[3][0] = xPos - 1.0f;
+	mvpMatrix[3][1] = 1.0f - yPos;
+	SetShaderMat4( "mvpMatrix", mvpMatrix, (byte*) mappedResource.pData, varBindings );
 
-	ShaderConstantMatrices *const dataPtr = ( ShaderConstantMatrices * ) mappedResource.pData;
-	memcpy( dataPtr, &sourceBuffer, sizeof( ShaderConstantMatrices ) );
-
-	m_pDeviceContext->Unmap( m_pDefaultShaderConstantsBuffer, 0 );
-	m_pDeviceContext->VSSetConstantBuffers( 0, 1, &m_pDefaultShaderConstantsBuffer );
+	m_pDeviceContext->Unmap( pConstantBuffer, 0 );
+	m_pDeviceContext->VSSetConstantBuffers( 0, 1, &pConstantBuffer );
 
 	m_pDeviceContext->Draw( 6, 0 );
 }
@@ -3410,266 +3390,107 @@ void kbRenderer_DX11::RenderModel( const kbRenderObject *const pRenderObject, co
 		} else if ( modelMaterial.GetCullingMode() == kbMaterial::CM_None ) {
 			m_pDeviceContext->RSSetState( m_pNoFaceCullingRasterizerState );
 		} else {
-			kbError( "kbRenderer_DX11::RenderModel_Deprecated() - Unsupported culling mode" );
+			kbError( "kbRenderer_DX11::RenderModel() - Unsupported culling mode" );
 		}
 
 		// Get Shader
 		const kbShader * pShader = modelMaterial.GetShader();
-		if ( renderpass == RP_MousePicker ) {
-			pShader = m_pMousePickerIdShader;
-		} 
-		kbErrorCheck( pShader != nullptr && pShader->GetPixelShader() != nullptr, "kbRenderer_DX11::RenderModel() - No appropriate shader was found" );
-
+		const std::vector<kbShader *> *const pShaderOverrideList = &pRenderObject->m_OverrideShaderList;	
+	
+		if ( bShadowPass ) {
+			if ( pRenderObject->m_bIsSkinnedModel ) {
+				pShader = m_pSkinnedDirectionalLightShadowShader;
+			} else {
+				pShader = m_pDirectionalLightShadowShader;
+			}
+	
+		} else {
+			if ( pShaderOverrideList != nullptr && pShaderOverrideList->size() > i ) {
+				pShader = (*pShaderOverrideList)[i];
+			}
+	
+			if ( pShader == nullptr || pShader->GetPixelShader() == nullptr ) {
+				pShader = m_pMissingShader;
+			}
+		}
+	
 		m_pDeviceContext->IASetInputLayout( (ID3D11InputLayout*)pShader->GetVertexLayout() );
 		m_pDeviceContext->VSSetShader( (ID3D11VertexShader *)pShader->GetVertexShader(), nullptr, 0 );
-		m_pDeviceContext->PSSetShader( (ID3D11PixelShader *)pShader->GetPixelShader(), nullptr, 0 );
+	
+		if ( renderpass == RP_MousePicker ) {
+	
+			m_pDeviceContext->PSSetShader( (ID3D11PixelShader *)m_pMousePickerIdShader->GetPixelShader(), nullptr, 0 );
+	
+			ID3D11Buffer *const pConstantBuffer = GetConstantBuffer( 16 );
 
-		// Get a valid constants buffer and bind the kbShader's vars to it
+			D3D11_MAPPED_SUBRESOURCE mappedResource;
+			HRESULT hr = m_pDeviceContext->Map( pConstantBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource );
+			kbErrorCheck( SUCCEEDED(hr), "Failed to map matrix buffer" );
+			UINT * pEntityId = (UINT*)mappedResource.pData;
+			*pEntityId = pRenderObject->m_EntityId;
+
+			m_pDeviceContext->Unmap( pConstantBuffer, 0 );
+			m_pDeviceContext->PSSetConstantBuffers( 1, 1, &pConstantBuffer );
+	
+		} else {
+			m_pDeviceContext->PSSetShader( (ID3D11PixelShader *)pShader->GetPixelShader(), nullptr, 0 );
+		}
+	
+
+		// Set textures
+		ID3D11ShaderResourceView *const texture = (modelMaterial.GetTexture() != nullptr)?(ID3D11ShaderResourceView *)modelMaterial.GetTexture()->GetGPUTexture() : ( nullptr );
+		m_pDeviceContext->PSSetShaderResources( 0, 1, &texture );
+		m_pDeviceContext->PSSetSamplers( 0, 1, &m_pBasicSamplerState );
+
+		// Get a valid constant buffer and bind the kbShader's vars to it
 		const kbShaderVarBindings_t & shaderVarBindings = pShader->GetShaderVarBindings();
-		std::map<size_t, ID3D11Buffer *>::iterator constantBufferIt = m_ConstantBuffers.find( shaderVarBindings.m_TotalSize );
+		std::map<size_t, ID3D11Buffer *>::iterator constantBufferIt = m_ConstantBuffers.find( shaderVarBindings.m_ConstantBufferSizeBytes );
 		kbErrorCheck( constantBufferIt != m_ConstantBuffers.end() && constantBufferIt->second != nullptr, "kbRenderer_DX11::RenderModel() - Could not find constant buffer for shader %s", pShader->GetFullFileName() );
 
-		ID3D11Buffer *const pConstantsBuffer = m_ConstantBuffers.find( shaderVarBindings.m_TotalSize )->second;
+		ID3D11Buffer *const pConstantBuffer = constantBufferIt->second;
 		D3D11_MAPPED_SUBRESOURCE mappedResource;
-		HRESULT hr = m_pDeviceContext->Map( pConstantsBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource );
+		HRESULT hr = m_pDeviceContext->Map( pConstantBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource );
 
 		const auto & bindings = shaderVarBindings.m_VarBindings;
-		byte * constantsPtr = (byte*) mappedResource.pData;
+		byte * constantPtr = (byte*) mappedResource.pData;
 		for ( int i = 0; i < bindings.size(); i++ ) {
 			const std::string & varName = bindings[i].m_VarName;
-			const byte * pVarByteOffset = constantsPtr + bindings[i].m_VarByteOffset;
+			const byte * pVarByteOffset = constantPtr + bindings[i].m_VarByteOffset;
 			if ( varName == "mvpMatrix" ) {
-
-				kbMat4 *const pMatOffset = (kbMat4*) pVarByteOffset;
+				kbMat4 *const pMatOffset = (kbMat4*)pVarByteOffset;
 				*pMatOffset = worldMatrix * m_pCurrentRenderWindow->m_ViewProjectionMatrix;
-
 			} else if ( varName == "modelMatrix" ) {
-
-				kbMat4 *const pMatOffset = (kbMat4*) pVarByteOffset;
+				kbMat4 *const pMatOffset = (kbMat4*)pVarByteOffset;
 				*pMatOffset = worldMatrix;
-
+			} else if ( varName == "cameraPos" ) {
+				kbVec4 *const pVecOffset = (kbVec4*)pVarByteOffset;
+				*pVecOffset = m_pCurrentRenderWindow->m_CameraPosition;
+			} else if ( varName == "BoneMatrices" ) {
+				if ( pRenderObject->m_bIsSkinnedModel ) {
+					kbMat4 *const boneMatrices = (kbMat4*)pVarByteOffset;
+					const kbSkinnedRenderObject *const skinnedRenderObj = static_cast<const kbSkinnedRenderObject*>( pRenderObject );
+					for ( int i = 0; i < skinnedRenderObj->m_BoneMatrices.size() && i < Max_Shader_Bones; i++ ) {
+						boneMatrices[i].MakeIdentity();
+						boneMatrices[i][0] = skinnedRenderObj->m_BoneMatrices[i].GetAxis(0);
+						boneMatrices[i][1] = skinnedRenderObj->m_BoneMatrices[i].GetAxis(1);
+						boneMatrices[i][2] = skinnedRenderObj->m_BoneMatrices[i].GetAxis(2);
+						boneMatrices[i][3] = skinnedRenderObj->m_BoneMatrices[i].GetAxis(3);
+						
+						boneMatrices[i][0].w = 0;
+						boneMatrices[i][1].w = 0;
+						boneMatrices[i][2].w = 0;
+					}
+				}
 			}
 		}
 
-		m_pDeviceContext->Unmap( pConstantsBuffer, 0 );
-		m_pDeviceContext->VSSetConstantBuffers( 0, 1, &pConstantsBuffer );
-		m_pDeviceContext->PSSetConstantBuffers( 0, 1, &pConstantsBuffer );
+		m_pDeviceContext->Unmap( pConstantBuffer, 0 );
+		m_pDeviceContext->VSSetConstantBuffers( 0, 1, &pConstantBuffer );
+		m_pDeviceContext->PSSetConstantBuffers( 0, 1, &pConstantBuffer );
 		m_pDeviceContext->DrawIndexed( modelToRender->GetMeshes()[i].m_NumTriangles * 3, modelToRender->GetMeshes()[i].m_IndexBufferIndex, 0 );
 	}
 }
-
-/**
- *	kbRenderer_DX11::RenderModel_Deprecated
- */
-void kbRenderer_DX11::RenderModel_Deprecated( const kbRenderObject *const pRenderObject, const ERenderPass renderpass, const bool bShadowPass ) {
-	if ( pRenderObject == nullptr || pRenderObject->m_pModel == nullptr ) {
-		kbError( "Doh!" );
-	}
-
-	if ( pRenderObject->m_pModel->m_bHackUsesNewRenderPath == true ) {
-		RenderModel( pRenderObject, renderpass, bShadowPass );
-		return;
-	}
-
-	const unsigned int stride = pRenderObject->m_pModel->VertexStride();//rsizeof( vertexLayout );
-	const unsigned int offset = 0;
-
-	const kbModel *const modelToRender = pRenderObject->m_pModel;
-	const kbVec3 & position = pRenderObject->m_Position;
-	const kbQuat & rotation = pRenderObject->m_Orientation;
-	const kbVec3 & scale = pRenderObject->m_Scale;
-	const std::vector<kbShader *> * pShaderOverrideList = &pRenderObject->m_OverrideShaderList;	
-
-	if ( modelToRender->GetMaterials().size() == 0 ) {
-		kbError( "kbRenderer_DX11::RenderModel_Deprecated() - model %s has no materials", modelToRender->GetFullFileName().c_str() );
-	}
-
-	ID3D11Buffer * const vertexBuffer = ( ID3D11Buffer * const ) modelToRender->m_VertexBuffer.GetBufferPtr();
-	ID3D11Buffer * const indexBuffer = ( ID3D11Buffer * const ) modelToRender->m_IndexBuffer.GetBufferPtr();
-	ID3D11ShaderResourceView * const  texture = ( bShadowPass == false && modelToRender->GetMaterials()[0].GetTexture() != nullptr ) ? ( ( ID3D11ShaderResourceView * const ) modelToRender->GetMaterials()[0].GetTexture()->GetGPUTexture() ) : ( nullptr );
-
-	m_pDeviceContext->IASetVertexBuffers( 0, 1, &vertexBuffer, &stride, &offset );
-	m_pDeviceContext->IASetIndexBuffer( indexBuffer, DXGI_FORMAT_R32_UINT, 0 );
-	m_pDeviceContext->IASetPrimitiveTopology( D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST );
-
-	m_pDeviceContext->PSSetShaderResources( 0, 1, &texture );
-	m_pDeviceContext->PSSetSamplers( 0, 1, &m_pBasicSamplerState );
-
-	if ( pRenderObject->m_bIsSkinnedModel ) {
-
-		D3D11_MAPPED_SUBRESOURCE mappedResource;
-		HRESULT hr = m_pDeviceContext->Map( m_pSkinnedShaderConstantsBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource );
-		if ( FAILED( hr ) ) {
-			kbError( "Failed to map matrix buffer" );
-		}
-
-		SkinnedShaderConstants ConstantBuffer;
 	
-		ConstantBuffer.modelMatrix.MakeScale( scale );
-		ConstantBuffer.modelMatrix = ConstantBuffer.modelMatrix * rotation.ToMat4();
-		ConstantBuffer.modelMatrix[3] = position;
-
-		ConstantBuffer.viewMatrix = m_pCurrentRenderWindow->m_ViewMatrix;
-		ConstantBuffer.modelViewMatrix = ConstantBuffer.modelMatrix * ConstantBuffer.viewMatrix;
-		ConstantBuffer.mvpMatrix = ConstantBuffer.modelMatrix * m_pCurrentRenderWindow->m_ViewProjectionMatrix;
-//		ConstantBuffer.cameraPosition = m_pCurrentRenderWindow->m_CameraPosition;
-		ConstantBuffer.projection = m_pCurrentRenderWindow->m_ProjectionMatrix;
-		ConstantBuffer.viewProjection = m_pCurrentRenderWindow->m_ViewProjectionMatrix;
-
-		const kbSkinnedRenderObject *const skinnedRenderObj = static_cast<const kbSkinnedRenderObject*>( pRenderObject );
-		for ( int i = 0; i < skinnedRenderObj->m_BoneMatrices.size() && i < Max_Shader_Bones; i++ ) {
-			ConstantBuffer.boneMatrices[i].MakeIdentity();
-			ConstantBuffer.boneMatrices[i][0] = skinnedRenderObj->m_BoneMatrices[i].GetAxis(0);
-			ConstantBuffer.boneMatrices[i][1] = skinnedRenderObj->m_BoneMatrices[i].GetAxis(1);
-			ConstantBuffer.boneMatrices[i][2] = skinnedRenderObj->m_BoneMatrices[i].GetAxis(2);
-			ConstantBuffer.boneMatrices[i][3] = skinnedRenderObj->m_BoneMatrices[i].GetAxis(3);
-
-			ConstantBuffer.boneMatrices[i][0].w = 0;
-			ConstantBuffer.boneMatrices[i][1].w = 0;
-			ConstantBuffer.boneMatrices[i][2].w = 0;
-		}
-
-		SkinnedShaderConstants * dataPtr = ( SkinnedShaderConstants * ) mappedResource.pData;
-		memcpy( dataPtr, &ConstantBuffer, sizeof( SkinnedShaderConstants ) );
-
-		m_pDeviceContext->Unmap( m_pSkinnedShaderConstantsBuffer, 0 );
-		m_pDeviceContext->VSSetConstantBuffers( 0, 1, &m_pSkinnedShaderConstantsBuffer );
-		m_pDeviceContext->PSSetConstantBuffers( 0, 1, &m_pSkinnedShaderConstantsBuffer );
-	} else {
-
-		D3D11_MAPPED_SUBRESOURCE mappedResource;
-		HRESULT hr = m_pDeviceContext->Map( m_pDefaultShaderConstantsBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource );
-		if ( FAILED( hr ) ) {
-			kbError( "Failed to map matrix buffer" );
-		}
-
-		ShaderConstantMatrices sourceBuffer;
-		sourceBuffer.modelMatrix.MakeScale( scale );
-		sourceBuffer.modelMatrix = sourceBuffer.modelMatrix * rotation.ToMat4();
-		sourceBuffer.modelMatrix[3] = position;
-
-		sourceBuffer.viewMatrix = m_pCurrentRenderWindow->m_ViewMatrix;
-		sourceBuffer.modelViewMatrix = sourceBuffer.modelMatrix * sourceBuffer.viewMatrix;
-		sourceBuffer.mvpMatrix = sourceBuffer.modelMatrix * m_pCurrentRenderWindow->m_ViewProjectionMatrix;
-		sourceBuffer.cameraPosition = m_pCurrentRenderWindow->m_CameraPosition;
-		sourceBuffer.projection = m_pCurrentRenderWindow->m_ProjectionMatrix;
-		sourceBuffer.viewProjection = m_pCurrentRenderWindow->m_ViewProjectionMatrix;
-
-		int iExtraParam = 0;
-		while( iExtraParam < Max_Extra_Params && iExtraParam < pRenderObject->m_ShaderParams.size() ) {
-			sourceBuffer.extraParams[iExtraParam] = pRenderObject->m_ShaderParams[iExtraParam];
-			iExtraParam++;
-		}
-		while( iExtraParam < Max_Extra_Params ) {
-			sourceBuffer.extraParams[iExtraParam++].Set( 0.0f, 0.0f, 0.0f, 0.0f );
-		}
-
-		if ( pShaderOverrideList != nullptr && (*pShaderOverrideList).size() > 0 ) {
-			kbShader *const pOverriddenShader = (*pShaderOverrideList)[0];
-			if ( pOverriddenShader != nullptr ) {
-				const std::vector<kbVec4>	& globalShaderParams = pOverriddenShader->GetGlobalShaderParams();
-
-				if ( globalShaderParams.size() > 0 ) {
-					int iExtraParam = 0;
-					while( iExtraParam < Max_Extra_Params && iExtraParam < globalShaderParams.size() ) {
-						sourceBuffer.extraParams[iExtraParam] = globalShaderParams[iExtraParam];
-						iExtraParam++;
-					}
-					while( iExtraParam < Max_Extra_Params ) {
-						sourceBuffer.extraParams[iExtraParam++].Set( 0.0f, 0.0f, 0.0f, 0.0f );
-					}
-				}
-			}
-		}
-
-		ShaderConstantMatrices * dataPtr = ( ShaderConstantMatrices * ) mappedResource.pData;
-		memcpy( dataPtr, &sourceBuffer, sizeof( ShaderConstantMatrices ) );
-
-		m_pDeviceContext->Unmap( m_pDefaultShaderConstantsBuffer, 0 );
-		m_pDeviceContext->VSSetConstantBuffers( 0, 1, &m_pDefaultShaderConstantsBuffer );
-		m_pDeviceContext->PSSetConstantBuffers( 0, 1, &m_pDefaultShaderConstantsBuffer );
-	}
-
-	if ( g_UseEditor ) {
-		D3D11_MAPPED_SUBRESOURCE mappedResource;
-		HRESULT hr = m_pDeviceContext->Map( m_pEditorConstantsBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource );
-		if ( FAILED( hr ) ) {
-			kbError( "Failed to map matrix buffer" );
-		}
-		
-		EditorShaderConstants *const dataPtr = ( EditorShaderConstants * ) mappedResource.pData;
-		dataPtr->entityId = pRenderObject->m_EntityId;
-		m_pDeviceContext->Unmap( m_pEditorConstantsBuffer, 0 );
-
-		m_pDeviceContext->PSSetConstantBuffers( 1, 1, &m_pEditorConstantsBuffer );
-	}
-
-	if ( bShadowPass ) {
-		if ( pRenderObject->m_bIsSkinnedModel ) {
-			m_pDeviceContext->IASetInputLayout( (ID3D11InputLayout*)m_pSkinnedDirectionalLightShadowShader->GetVertexLayout() );
-			m_pDeviceContext->VSSetShader( (ID3D11VertexShader *)m_pSkinnedDirectionalLightShadowShader->GetVertexShader(), nullptr, 0 );
-			m_pDeviceContext->PSSetShader( (ID3D11PixelShader *)m_pSkinnedDirectionalLightShadowShader->GetPixelShader(), nullptr, 0 );
-		} else {
-			m_pDeviceContext->IASetInputLayout( (ID3D11InputLayout*)m_pDirectionalLightShadowShader->GetVertexLayout() );
-			m_pDeviceContext->VSSetShader( (ID3D11VertexShader *)m_pDirectionalLightShadowShader->GetVertexShader(), nullptr, 0 );
-			m_pDeviceContext->PSSetShader( (ID3D11PixelShader *)m_pDirectionalLightShadowShader->GetPixelShader(), nullptr, 0 );
-		}
-	}
-
-
-	for ( int i = 0; i < modelToRender->NumMeshes(); i++ ) {
-		const kbMaterial & modelMaterial = modelToRender->GetMaterials()[modelToRender->GetMeshes()[i].m_MaterialIndex];
-		bool bShaderOverridden = false;
-
-		if ( m_ViewMode == ViewMode_Wireframe ) {
-			m_pDeviceContext->RSSetState( m_pWireFrameRasterizerState );
-		} else if ( modelMaterial.GetCullingMode() == kbMaterial::CM_BackFaces ) {
-			m_pDeviceContext->RSSetState( m_pDefaultRasterizerState );
-		} else if ( modelMaterial.GetCullingMode() == kbMaterial::CM_None ) {
-			m_pDeviceContext->RSSetState( m_pNoFaceCullingRasterizerState );
-		} else {
-			kbError( "kbRenderer_DX11::RenderModel_Deprecated() - Unsupported culling mode" );
-		}
-
-		if ( pShaderOverrideList != nullptr && bShadowPass == false ) {
-			if ( pShaderOverrideList->size() > i && (*pShaderOverrideList)[i] != nullptr ) {
-				bShaderOverridden = true;
-				const kbShader * pShader = (*pShaderOverrideList)[i];
-				if ( pShader != nullptr && pShader->GetVertexShader() != nullptr && pShader->GetPixelShader() != nullptr ) {
-					m_pDeviceContext->IASetInputLayout( (ID3D11InputLayout*)pShader->GetVertexLayout() );
-					m_pDeviceContext->VSSetShader( (ID3D11VertexShader *)pShader->GetVertexShader(), nullptr, 0 );
-					m_pDeviceContext->PSSetShader( (ID3D11PixelShader *)pShader->GetPixelShader(), nullptr, 0 );
-				} else {
-					m_pDeviceContext->IASetInputLayout( (ID3D11InputLayout*)m_pMissingShader->GetVertexLayout() );
-					m_pDeviceContext->VSSetShader( (ID3D11VertexShader *)m_pMissingShader->GetVertexShader(), nullptr, 0 );
-					m_pDeviceContext->PSSetShader( (ID3D11PixelShader *)m_pMissingShader->GetPixelShader(), nullptr, 0 );
-				}
-			}
-		}
-		
-		if ( bShaderOverridden == false && bShadowPass == false ) {
-			if ( modelMaterial.GetShader() != nullptr ) {
-				const kbShader * pShader = modelMaterial.GetShader();
-				m_pDeviceContext->IASetInputLayout( (ID3D11InputLayout*)pShader->GetVertexLayout() );
-				m_pDeviceContext->VSSetShader( (ID3D11VertexShader *)pShader->GetVertexShader(), nullptr, 0 );
-				m_pDeviceContext->PSSetShader( (ID3D11PixelShader *)pShader->GetPixelShader(), nullptr, 0 );
-			} else {
-				m_pDeviceContext->IASetInputLayout( (ID3D11InputLayout*)m_pMissingShader->GetVertexLayout() );
-				m_pDeviceContext->VSSetShader( (ID3D11VertexShader *)m_pMissingShader->GetVertexShader(), nullptr, 0 );
-				m_pDeviceContext->PSSetShader( (ID3D11PixelShader *)m_pMissingShader->GetPixelShader(), nullptr, 0 );
-			}
-		}
-		
-		if ( renderpass == RP_MousePicker ) {
-			const kbShader * pShader = m_pMousePickerIdShader;
-			kbErrorCheck( pShader != nullptr && pShader->GetPixelShader() != nullptr, "kbRenderer_DX11::RenderModel_Deprecated() - Mouse picker shader is null" );
-			m_pDeviceContext->PSSetShader( (ID3D11PixelShader *)pShader->GetPixelShader(), nullptr, 0 );
-
-		} 
-		m_pDeviceContext->DrawIndexed( modelToRender->GetMeshes()[i].m_NumTriangles * 3, modelToRender->GetMeshes()[i].m_IndexBufferIndex, 0 );
-	}
-}
-
 /**
  *	kbRenderer_DX11::DrawScreenSpaceQuad
  */
@@ -3835,22 +3656,15 @@ void kbRenderer_DX11::RenderPretransformedDebugLines() {
 	m_pDeviceContext->VSSetShader( (ID3D11VertexShader*) m_pDebugShader->GetVertexShader(), nullptr, 0 );
 	m_pDeviceContext->PSSetShader( (ID3D11PixelShader*) m_pDebugShader->GetPixelShader(), nullptr, 0 );
 
-	hr = m_pDeviceContext->Map( m_pDefaultShaderConstantsBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource );
+	const auto & varBindings = m_pDebugShader->GetShaderVarBindings();
+	ID3D11Buffer *const pConstantBuffer = GetConstantBuffer( varBindings.m_ConstantBufferSizeBytes );
+	hr = m_pDeviceContext->Map( pConstantBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource );
+	kbErrorCheck( SUCCEEDED(hr), "kbRenderer_DX11::RenderPretransformedDebugLines() - Failed to map matrix buffer" );
 
-	if ( FAILED( hr ) ) {
-		kbError( "Failed to map matrix buffer" );
-	}
+	SetShaderMat4( "mvpMatrix", kbMat4::identity, mappedResource.pData, varBindings );
 
-	struct MatrixBufferType {
-		XMMATRIX matrix;
-	};
-
-	MatrixBufferType * dataPtr = ( MatrixBufferType * ) mappedResource.pData;
-
-	memcpy( &dataPtr->matrix, &kbMat4::identity, sizeof( kbMat4 ) );
-
-	m_pDeviceContext->Unmap( m_pDefaultShaderConstantsBuffer, 0 );
-	m_pDeviceContext->VSSetConstantBuffers( 0, 1, &m_pDefaultShaderConstantsBuffer );
+	m_pDeviceContext->Unmap( pConstantBuffer, 0 );
+	m_pDeviceContext->VSSetConstantBuffers( 0, 1, &pConstantBuffer );
 	m_pDeviceContext->Draw( ( UINT )m_DebugPreTransformedLines.size(), 0 );
 	
 	m_DebugPreTransformedLines.clear();	
@@ -3891,21 +3705,16 @@ void kbRenderer_DX11::RenderDebugLines() {
 	m_pDeviceContext->VSSetShader( (ID3D11VertexShader*) m_pDebugShader->GetVertexShader(), nullptr, 0 );
 	m_pDeviceContext->PSSetShader( (ID3D11PixelShader*) m_pDebugShader->GetPixelShader(), nullptr, 0 );
 
-	hr = m_pDeviceContext->Map( m_pDefaultShaderConstantsBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource );
+	const auto & varBindings = m_pDebugShader->GetShaderVarBindings();
+	ID3D11Buffer *const pConstantBuffer = GetConstantBuffer( varBindings.m_ConstantBufferSizeBytes );
+	hr = m_pDeviceContext->Map( pConstantBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource );
+	kbErrorCheck( SUCCEEDED(hr), "kbRenderer_DX11::RenderDebugLines() - Failed to map matrix buffer" );
 
-	if ( FAILED( hr ) ) {
-		kbError( "Failed to map matrix buffer" );
-	}
+	SetShaderMat4( "mvpMatrix", m_pCurrentRenderWindow->m_ViewProjectionMatrix, mappedResource.pData, varBindings );
 
-	ShaderConstantMatrices sourceBuffer;
-	sourceBuffer.mvpMatrix = m_pCurrentRenderWindow->m_ViewProjectionMatrix;
+	m_pDeviceContext->Unmap( pConstantBuffer, 0 );
+	m_pDeviceContext->VSSetConstantBuffers( 0, 1, &pConstantBuffer );
 
-	ShaderConstantMatrices * dataPtr = ( ShaderConstantMatrices * ) mappedResource.pData;
-
-	memcpy( dataPtr, &sourceBuffer, sizeof( ShaderConstantMatrices ) );
-
-	m_pDeviceContext->Unmap( m_pDefaultShaderConstantsBuffer, 0 );
-	m_pDeviceContext->VSSetConstantBuffers( 0, 1, &m_pDefaultShaderConstantsBuffer );
 	m_pDeviceContext->Draw( ( UINT )m_DebugLines.size(), 0 );
 }
 
@@ -3929,47 +3738,50 @@ void kbRenderer_DX11::RenderDebugBillboards( const bool bIsEntityIdPass ) {
 	m_pDeviceContext->IASetInputLayout( (ID3D11InputLayout *)m_pDebugShader->GetVertexLayout() );
 	m_pDeviceContext->VSSetShader( (ID3D11VertexShader *)m_pDebugShader->GetVertexShader(), nullptr, 0 );
 
+	kbShader * pShader = nullptr;
 	if ( bIsEntityIdPass ) {
-		m_pDeviceContext->PSSetShader( (ID3D11PixelShader *)m_pMousePickerIdShader->GetPixelShader(), nullptr, 0 );
+		pShader = m_pMousePickerIdShader;
+
 	} else {
-		m_pDeviceContext->PSSetShader( (ID3D11PixelShader *)m_pDebugShader->GetPixelShader(), nullptr, 0 );
+		pShader = m_pDebugShader;
+
 	}
 
-	//m_pDeviceContext->PSSetShaderResources( 0, 1, &m_Textures[0].m_pShaderResourceView );
+	m_pDeviceContext->PSSetShader( (ID3D11PixelShader *)pShader->GetPixelShader(), nullptr, 0 );
 
+	const auto varBindings = pShader->GetShaderVarBindings();
 	for ( int i = 0; i < m_DebugBillboards.size(); i++ ) {
 		debugDrawObject_t & currBillBoard = m_DebugBillboards[i];
 		ID3D11ShaderResourceView *const pShaderResourceView = (ID3D11ShaderResourceView *)m_pTextures[currBillBoard.m_TextureIndex]->GetGPUTexture();
 		m_pDeviceContext->PSSetShaderResources( 0, 1, &pShaderResourceView );
 	
 		D3D11_MAPPED_SUBRESOURCE mappedResource;
-		HRESULT hr = m_pDeviceContext->Map( m_pDefaultShaderConstantsBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource );
-		kbErrorCheck( FAILED( hr ) == false, "kbRenderer_DX11::RenderDebugBillboards() - Failed to map constants buffer" );
+		ID3D11Buffer *const pConstantBuffer = GetConstantBuffer( varBindings.m_ConstantBufferSizeBytes );
+		HRESULT hr = m_pDeviceContext->Map( pConstantBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource );
+		kbErrorCheck( SUCCEEDED( hr ), "kbRenderer_DX11::RenderDebugBillboards() - Failed to map constans buffer" );
 
-		ShaderConstantMatrices * dataPtr = (ShaderConstantMatrices *) mappedResource.pData;
-		ShaderConstantMatrices sourceBuffer;
+		byte *const pByteBuffer = (byte*) mappedResource.pData;
 
 		const kbMat4 preRotationMatrix = m_pCurrentRenderWindow->m_CameraRotation.ToMat4();
-		sourceBuffer.mvpMatrix.MakeScale( currBillBoard.m_Scale );
-		sourceBuffer.mvpMatrix[3] = currBillBoard.m_Position;
-		sourceBuffer.mvpMatrix = preRotationMatrix * sourceBuffer.mvpMatrix * m_pCurrentRenderWindow->m_ViewProjectionMatrix;
-		memcpy( dataPtr, &sourceBuffer, sizeof( ShaderConstantMatrices ) );
-
-		m_pDeviceContext->Unmap( m_pDefaultShaderConstantsBuffer, 0 );
-		m_pDeviceContext->VSSetConstantBuffers( 0, 1, &m_pDefaultShaderConstantsBuffer );
+		kbMat4 mvpMatrix;
+		mvpMatrix.MakeScale( currBillBoard.m_Scale );
+		mvpMatrix[3] = currBillBoard.m_Position;
+		mvpMatrix = preRotationMatrix * mvpMatrix * m_pCurrentRenderWindow->m_ViewProjectionMatrix;
+		SetShaderMat4( "mvpMatrix", mvpMatrix, pByteBuffer, pShader->GetShaderVarBindings() );
+		m_pDeviceContext->Unmap( pConstantBuffer, 0 );
+		m_pDeviceContext->VSSetConstantBuffers( 0, 1, &pConstantBuffer );
 
 		if ( bIsEntityIdPass ) {
-			D3D11_MAPPED_SUBRESOURCE mappedResource;
-			HRESULT hr = m_pDeviceContext->Map( m_pEditorConstantsBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource );
-			if ( FAILED( hr ) ) {
-				kbError( "Failed to map matrix buffer" );
-			}
-		
-			EditorShaderConstants *const dataPtr = (EditorShaderConstants *) mappedResource.pData;
-			dataPtr->entityId = currBillBoard.m_EntityId;
-			m_pDeviceContext->Unmap( m_pEditorConstantsBuffer, 0 );
+			ID3D11Buffer *const pConstantBuffer = GetConstantBuffer( 16 );
 
-			m_pDeviceContext->PSSetConstantBuffers( 1, 1, &m_pEditorConstantsBuffer );
+			D3D11_MAPPED_SUBRESOURCE mappedResource;
+			HRESULT hr = m_pDeviceContext->Map( pConstantBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource );
+			kbErrorCheck( SUCCEEDED(hr), "Failed to map matrix buffer" );
+			UINT * pEntityId = (UINT*)mappedResource.pData;
+			*pEntityId = currBillBoard.m_EntityId;
+			m_pDeviceContext->Unmap( pConstantBuffer, 0 );
+
+			m_pDeviceContext->PSSetConstantBuffers( 1, 1, &pConstantBuffer );
 		}
 		m_pDeviceContext->Draw( 6, 0 );
 	}

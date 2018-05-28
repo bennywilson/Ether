@@ -81,7 +81,6 @@ kbModel::kbModel() :
 	m_bVBIsMapped( false ),
 	m_bIBIsMapped( false ),
 	m_bCPUAccessOnly( false )  {
-	m_bHackUsesNewRenderPath = false;
 }
 
 /**

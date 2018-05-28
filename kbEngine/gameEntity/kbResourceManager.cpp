@@ -158,7 +158,7 @@ void kbResourceManager::UpdateHotReloads() {
 			std::replace( fileName.begin(), fileName.end(), '/', '\\' );
 			const std::wstring fullFileName = L".\\assets\\" + fileName;
 
-			if ( VectorFind( queuedFiles, fullFileName ) == false ) {
+			if ( VectorContains( queuedFiles, fullFileName ) == false ) {
 				queuedFiles.push_back( fullFileName );
 			} else {
 				static int breakhere = 0;
@@ -525,7 +525,7 @@ void kbResourceManager::RegisterCB( ResourceManagerCB pFuncCB, const CallbackRea
 
 	CallbackInfo newCBInfo( pFuncCB, Reason );
 
-	kbErrorCheck( VectorFind( m_FunctionCallbacks, newCBInfo ) == false, "ResourceManager::RegisterCB() - Registering function/reason multiple times" );
+	kbErrorCheck( VectorContains( m_FunctionCallbacks, newCBInfo ) == false, "ResourceManager::RegisterCB() - Registering function/reason multiple times" );
 	m_FunctionCallbacks.push_back( newCBInfo );
 }
 

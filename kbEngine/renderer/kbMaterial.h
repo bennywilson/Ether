@@ -49,9 +49,9 @@ private:
  *	kbShaderVarBinding_t
  */
 struct kbShaderVarBindings_t {
-	kbShaderVarBindings_t() { }
+	kbShaderVarBindings_t() : m_ConstantBufferSizeBytes( 0 ) { }
 
-	size_t										m_TotalSize;
+	size_t										m_ConstantBufferSizeBytes;
 
 	struct binding_t {
 		binding_t( const std::string & inName, const size_t offset ) : m_VarName ( inName ), m_VarByteOffset( offset ) { }

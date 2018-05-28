@@ -12,7 +12,7 @@ cbuffer matrixBuffer : register( b0 ){
 };
 
 cbuffer editorBuffer : register( b1 ) {
-	unsigned int entityId;
+	uint entityId;
 };
 
 //-------------------------------------

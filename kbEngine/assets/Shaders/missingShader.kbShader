@@ -1,7 +1,9 @@
+//==============================================================================
+// missingShader.kbShader
+//
+// 2016-2018 kbEngine 2.0
+//==============================================================================
 cbuffer matrixBuffer {
-	matrix modelMatrix;
-	matrix modelViewMatrix;
-	matrix viewMatrix;
 	matrix mvpMatrix;
 	matrix cameraPos;
 };

@@ -590,6 +590,8 @@ void kbShader::Release_Internal() {
 	SAFE_RELEASE( m_pVertexShader );
 	SAFE_RELEASE( m_pPixelShader );
 	SAFE_RELEASE( m_pVertexLayout );
+
+	m_ShaderVarBindings.m_VarBindings.clear();
 }
 
 /**

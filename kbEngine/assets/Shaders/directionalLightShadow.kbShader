@@ -12,7 +12,7 @@ cbuffer matrixBuffer {
    matrix      projection;
    matrix      inverseProjection;
    matrix      viewProjection;
-   float4x4    BoneMatrices[64];
+   float4x4    BoneMatrices[128];
 };
 
 //-------------------------------------

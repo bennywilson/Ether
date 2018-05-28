@@ -143,8 +143,6 @@ public:
 	const kbBoneMatrix_t &						GetRefBoneMatrix( const int index ) const { return m_RefPose[index]; }
 	const kbBoneMatrix_t &						GetInvRefBoneMatrix( const int index ) const { return m_InvRefPose[index]; }
 
-	bool										m_bHackUsesNewRenderPath;
-
 protected:
 
 	virtual bool								Load_Internal();

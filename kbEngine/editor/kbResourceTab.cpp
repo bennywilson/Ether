@@ -338,7 +338,7 @@ void kbResourceTab::RebuildResourceFolderListText() {
 
 			const std::string curFolderName = GetAbsoluteFolderName( m_ResourceFolderList, pCurTab );
 
-			if ( VectorFind( expandedDirectoryList, curFolderName ) ) {
+			if ( VectorContains( expandedDirectoryList, curFolderName ) ) {
 				pCurTab->m_bExpanded = true;
 
 				for ( int i = 0; i < pCurTab->m_SubFolderList.size(); i++ ) {
@@ -350,7 +350,7 @@ void kbResourceTab::RebuildResourceFolderListText() {
 				}
 			}
 
-			if ( VectorFind( dirtyDirectoryList, curFolderName ) ) {
+			if ( VectorContains( dirtyDirectoryList, curFolderName ) ) {
 				pCurTab->m_bIsDirty = true;
 			}
 
