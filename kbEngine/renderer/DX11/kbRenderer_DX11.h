@@ -508,7 +508,6 @@ private:
 
 	void										RenderScene();
 
-	void										RenderModel_Deprecated( const kbRenderObject *const pRenderObject, const ERenderPass renderPass, const bool bShadowPass = false );
 	void										RenderModel(  const kbRenderObject *const pRenderObject, const ERenderPass renderPass, const bool bShadowPass = false );
 
 	void										RenderScreenSpaceQuads();
@@ -529,12 +528,14 @@ private:
 	void										RenderMousePickerIds();
 	void										Blit( kbRenderTexture *const src, kbRenderTexture *const dest );
 
-	ID3D11Buffer *								GetConstantsBuffer( const size_t requestSize );
-	void										SetShaderMat4( const std::string & varName, const kbMat4 & inMatrix, byte *const pBuffer, const kbShaderVarBindings_t & binding );
-	void										SetShaderVec4( const std::string & varName, const kbVec4 & inVec, byte *const pBuffer, const kbShaderVarBindings_t & binding );
-	void										SetShaderVec4Array( const std::string & varName, const kbVec4 * vecArray, const int arrayLen, byte *const pBuffer, const kbShaderVarBindings_t & binding );
-	void										SetShaderFloat( const std::string & varName, const float inFloat, byte *const pBuffer, const kbShaderVarBindings_t & binding );
-	void										SetShaderInt( const std::string & varName, const int inInt, byte *const pBuffer, const kbShaderVarBindings_t & binding );
+	ID3D11Buffer *								GetConstantBuffer( const size_t requestSize );
+	void										SetShaderMat4( const std::string & varName, const kbMat4 & inMatrix, void *const pBuffer, const kbShaderVarBindings_t & binding );
+	void										SetShaderVec4( const std::string & varName, const kbVec4 & inVec, void *const pBuffer, const kbShaderVarBindings_t & binding );
+	void										SetShaderMat4Array( const std::string & varName, const kbMat4 *const mat4Array, const int arrayLen, void *const pBuffer, const kbShaderVarBindings_t & binding );
+	void										SetShaderVec4Array( const std::string & varName, const kbVec4 *const vec4Array, const int arrayLen, void *const pBuffer, const kbShaderVarBindings_t & binding );
+	void										SetShaderFloat( const std::string & varName, const float inFloat, void *const pBuffer, const kbShaderVarBindings_t & binding );
+	void										SetShaderInt( const std::string & varName, const int inInt, void *const pBuffer, const kbShaderVarBindings_t & binding );
+	int											GetVarBindingIndex( const std::string & varName, const kbShaderVarBindings_t & binding );
 
 	void										DrawTexture( ID3D11ShaderResourceView *const pShaderResourceView, const kbVec3 & pixelPosition, 
 															 const kbVec3 & pixelSize, const kbVec3 & renderTargetSize );
@@ -577,11 +578,8 @@ private:
 
 	ID3D11Buffer *								m_pUnitQuad;
 	ID3D11Buffer *								m_pConsoleQuad;
-	std::map<size_t, ID3D11Buffer*>				m_ConstantBuffers;		// Maps constant buffers to their byte width
 
-	ID3D11Buffer *								m_pEditorConstantsBuffer;
-	ID3D11Buffer *								m_pLightShaderConstantsBuffer;
-	ID3D11Buffer *								m_pLightShaftsShaderConstantsBuffer;
+	std::map<size_t, ID3D11Buffer*>				m_ConstantBuffers;		// Maps constant buffers to their byte width
 
 	ID3D11RasterizerState *						m_pDefaultRasterizerState;
 	ID3D11RasterizerState *						m_pNoFaceCullingRasterizerState;
@@ -697,27 +695,6 @@ private:
 };
 
 extern ID3D11Device * g_pD3DDevice;
-
-
-struct EditorShaderConstants {
-	uint			entityId;	// For mouse picking
-};
-
-struct LightShaderConstants {
-	kbMat4			mvpMatrix;
-	kbMat4			inverseViewProjection;
-	kbMat4			lightMatrix[4];
-	float			splitDistances[4];
-	kbVec4			lightDirection;			// xyz - direction, w - light length
-	kbVec4			lightPosition;			// xyz - position, w - light radius
-	kbVec4			lightColor;
-	kbVec4			cameraPosition;
-};
-
-struct LightShaftsConstants {
-	kbMat4			mvpMatrix;
-	float			color[4];
-};
 
 extern const float g_DebugTextSize;
 extern const float g_DebugLineSpacing;

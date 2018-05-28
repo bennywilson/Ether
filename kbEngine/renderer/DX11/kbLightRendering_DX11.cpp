@@ -2,7 +2,7 @@
 // kbLightRendering.cpp
 //
 //
-// 2017 kbEngine 2.0
+// 2017-2018 kbEngine 2.0
 //==============================================================================
 #include <stdio.h>
 #include "kbCore.h"
@@ -107,38 +107,40 @@ void kbRenderer_DX11::RenderLight( const kbRenderLight *const pLight ) {
 	m_pDeviceContext->VSSetShader( (ID3D11VertexShader *)pShader->GetVertexShader(), NULL, 0 );
 	m_pDeviceContext->PSSetShader( (ID3D11PixelShader *)pShader->GetPixelShader(), NULL, 0 );
 
+	const auto & varBindings = pShader->GetShaderVarBindings();
+	auto pConstBuffer = GetConstantBuffer( varBindings.m_ConstantBufferSizeBytes );
+
 	D3D11_MAPPED_SUBRESOURCE mappedResource;
+	HRESULT hr = m_pDeviceContext->Map( pConstBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource );
+	kbErrorCheck( SUCCEEDED(hr), "Failed to map matrix buffer" );
 
-	HRESULT hr = m_pDeviceContext->Map( m_pLightShaderConstantsBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource );
-	if ( FAILED( hr ) ) {
-		kbError( "Failed to map matrix buffer" );
-	}
+	SetShaderVec4( "lightDirection", kbVec4( -pLight->m_Orientation.ToMat4()[2].ToVec3(), pLight->m_Length ), mappedResource.pData, varBindings );
+	SetShaderVec4( "lightColor", pLight->m_Color, mappedResource.pData, varBindings );
+	SetShaderMat4( "inverseViewProjection", m_pCurrentRenderWindow->m_InverseViewProjectionMatrix, mappedResource.pData, varBindings );
+	SetShaderVec4( "cameraPosition", frozenCameraPosition, mappedResource.pData, varBindings );
 
-	LightShaderConstants sourceBuffer;
-	sourceBuffer.lightDirection = -pLight->m_Orientation.ToMat4()[2].ToVec3();
-	sourceBuffer.lightDirection.w = pLight->m_Length;
-	sourceBuffer.lightColor = pLight->m_Color;
-	sourceBuffer.inverseViewProjection = m_pCurrentRenderWindow->m_InverseViewProjectionMatrix;
-	sourceBuffer.cameraPosition = frozenCameraPosition;
-
+	kbMat4 lightMatrix[4];
+	kbVec4 splitDistances;
 	for ( int i = 0; i < 4; i++ ) {
-		sourceBuffer.lightMatrix[i] = splitMatrices[i];
-		sourceBuffer.splitDistances[i] = pLight->m_CascadedShadowSplits[i];
+		lightMatrix[i] = splitMatrices[i];
+		splitDistances[i] = pLight->m_CascadedShadowSplits[i];
 	}
 
+	SetShaderMat4Array( "lightMatrix", lightMatrix, 4, mappedResource.pData, varBindings );
+	SetShaderVec4( "splitDistances", splitDistances, mappedResource.pData,  varBindings );
+	SetShaderVec4( "lightPosition", kbVec4( pLight->m_Position.x, pLight->m_Position.y, pLight->m_Position.z, pLight->m_Radius ), mappedResource.pData, varBindings );
+
+	kbMat4 mvpMatrix;
 	if ( m_bRenderToHMD ) {
-		sourceBuffer.mvpMatrix.MakeScale( kbVec3( 0.5f, 1.0f, 1.0f ) );
+		mvpMatrix.MakeScale( kbVec3( 0.5f, 1.0f, 1.0f ) );
 	} else {
-		sourceBuffer.mvpMatrix.MakeIdentity();
+		mvpMatrix.MakeIdentity();
 	}
-	sourceBuffer.lightPosition.Set( pLight->m_Position.x, pLight->m_Position.y, pLight->m_Position.z, pLight->m_Radius );
+	SetShaderMat4( "mvpMatrix", mvpMatrix, mappedResource.pData, varBindings );
 
-	LightShaderConstants * dataPtr = ( LightShaderConstants * ) mappedResource.pData;
-	memcpy( dataPtr, &sourceBuffer, sizeof( LightShaderConstants ) );
-
-	m_pDeviceContext->Unmap( m_pLightShaderConstantsBuffer, 0 );
-	m_pDeviceContext->VSSetConstantBuffers( 0, 1, &m_pLightShaderConstantsBuffer );
-	m_pDeviceContext->PSSetConstantBuffers( 0, 1, &m_pLightShaderConstantsBuffer );
+	m_pDeviceContext->Unmap( pConstBuffer, 0 );
+	m_pDeviceContext->VSSetConstantBuffers( 0, 1, &pConstBuffer );
+	m_pDeviceContext->PSSetConstantBuffers( 0, 1, &pConstBuffer );
 
 	m_pDeviceContext->Draw( 6, 0 );
 
@@ -337,7 +339,7 @@ void kbRenderer_DX11::RenderShadow( const kbRenderLight *const pLight, kbMat4 sp
 		std::map< const kbComponent *, kbRenderObject * >::iterator iter;
 		for ( iter = m_pCurrentRenderWindow->m_RenderObjectMap.begin(); iter != m_pCurrentRenderWindow->m_RenderObjectMap.end(); iter++ ) {
 			if ( iter->second->m_RenderPass == RP_Lighting && iter->second->m_bCastsShadow ) {
-				RenderModel_Deprecated( iter->second, RP_Lighting, true );
+				RenderModel( iter->second, RP_Lighting, true );
 			}
 		}
 		m_RenderTargets[SHADOW_BUFFER].m_bIsDirty = true;
@@ -434,7 +436,7 @@ void kbRenderer_DX11::RenderLightShafts() {
 			m_pDeviceContext->PSSetShader( (ID3D11PixelShader *)m_pLightShaftsShader->GetPixelShader(), NULL, 0 );
 
 			const auto & varBindings = m_pLightShaftsShader->GetShaderVarBindings();
-			ID3D11Buffer *const pConstantBuffer = GetConstantsBuffer( varBindings.m_ConstantBufferSizeBytes );
+			ID3D11Buffer *const pConstantBuffer = GetConstantBuffer( varBindings.m_ConstantBufferSizeBytes );
 
 			D3D11_MAPPED_SUBRESOURCE mappedResource;
 			HRESULT hr = m_pDeviceContext->Map( pConstantBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource );
@@ -442,17 +444,6 @@ void kbRenderer_DX11::RenderLightShafts() {
 
 			SetShaderMat4( "mvpMatrix", mvpMatrix, (byte*) mappedResource.pData, varBindings );
 			SetShaderVec4( "color", CurLightShafts.m_Color, (byte*) mappedResource.pData, varBindings );
-
-			/*LightShaftsConstants sourceBuffer;
-			sourceBuffer.mvpMatrix = mvpMatrix;
-			sourceBuffer.color[0] = CurLightShafts.m_Color.r;
-			sourceBuffer.color[1] = CurLightShafts.m_Color.g;
-			sourceBuffer.color[2] = CurLightShafts.m_Color.b;
-			sourceBuffer.color[3] = CurLightShafts.m_Color.a;
-
-			LightShaftsConstants * dataPtr = ( LightShaftsConstants * ) mappedResource.pData;
-			memcpy( dataPtr, &sourceBuffer, sizeof( LightShaftsConstants ) );*/
-
 			m_pDeviceContext->Unmap( pConstantBuffer, 0 );
 			m_pDeviceContext->VSSetConstantBuffers( 0, 1, &pConstantBuffer );
 			m_pDeviceContext->PSSetConstantBuffers( 0, 1, &pConstantBuffer );
@@ -497,7 +488,7 @@ void kbRenderer_DX11::RenderLightShafts() {
 			m_pDeviceContext->PSSetShader( (ID3D11PixelShader *)m_pSimpleAdditiveShader->GetPixelShader(), NULL, 0 );
 
 			const auto & varBindings = m_pSimpleAdditiveShader->GetShaderVarBindings();
-			ID3D11Buffer *const pConstantBuffer = GetConstantsBuffer( varBindings.m_ConstantBufferSizeBytes );
+			ID3D11Buffer *const pConstantBuffer = GetConstantBuffer( varBindings.m_ConstantBufferSizeBytes );
 
 			kbMat4 mvpMatrix;
 			mvpMatrix.MakeIdentity();
@@ -561,12 +552,12 @@ void kbRenderer_DX11::RenderLightShafts() {
 			m_pDeviceContext->PSSetSamplers( 0, 1, SamplerStates );
 
 			const auto & varBindings = m_pSimpleAdditiveShader->GetShaderVarBindings();
-			ID3D11Buffer *const pConstantBuffer = GetConstantsBuffer( varBindings.m_ConstantBufferSizeBytes );
+			ID3D11Buffer *const pConstantBuffer = GetConstantBuffer( varBindings.m_ConstantBufferSizeBytes );
 
 			D3D11_MAPPED_SUBRESOURCE mappedResource;
 			HRESULT hr = m_pDeviceContext->Map( pConstantBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource );
 			kbErrorCheck( FAILED(hr) == FALSE, "Failed to map matrix buffer" );
-			SetShaderMat4( "mvpMatrix", mvpMatrix, (byte*)mappedResource.pData, varBindings );
+			SetShaderMat4( "mvpMatrix", mvpMatrix, mappedResource.pData, varBindings );
 
 			m_pDeviceContext->Unmap( pConstantBuffer, 0 );
 			m_pDeviceContext->VSSetConstantBuffers( 0, 1, &pConstantBuffer );
