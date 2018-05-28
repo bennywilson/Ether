@@ -4,7 +4,7 @@ kbGameEntity 0 0 0 0 {
 		LifeTime =  -1.000000
 		Name = "Terrain"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
-		Position = 8.143600 -2700.000000 37.072117
+		Position = 8.143600 -705.000000 37.072117
 		Scale = 1.000000 1.000000 1.000000
 	}
 	kbTerrainComponent { 
@@ -52,10 +52,10 @@ kbGameEntity 0 0 0 0 {
 		CastsShadows = 1
 		Color = 0.350000 0.350000 0.350000 0.250000
 		CascadedShadowSplits = 4
- 0.000000
- 0.000000
- 0.000000
- 0.000000
+ 100.000000
+ 200.000000
+ 300.000000
+ 400.000000
 	}
 }
 kbGameEntity 0 0 0 0 {
@@ -85,7 +85,7 @@ kbGameEntity 0 0 0 0 {
 		LifeTime =  -1.000000
 		Name = "Cartel Soldier"
 		Orientation = 0.000000 0.991689 0.000000 0.128659
-		Position = -0.466237 8.466955 43.347977
+		Position = -0.466237 15.000000 43.347977
 		Scale = 0.100000 0.100000 0.100000
 	}
 	EtherSkelModelComponent { 
@@ -97,8 +97,16 @@ kbGameEntity 0 0 0 0 {
 		Model = .\assets\models\Characters\Cartel_Warrior\Cartel_Warrior.ms3d
 		ShaderOverride = 0
 			
-		Animations = 0
-		DebugAnimIndex = -1
+		Animations = 1
+			EtherAnimComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Animation = .\assets\models\Characters\Cartel_Warrior\Cartel_Warrior_Run.kbAnim.ms3d
+				AnimationName = ""
+				IsLooping = 0
+				TimeScale =  1.000000
+			}
+		DebugAnimIndex = 0
 		IsFirstPersonModel = 0
 	}
 }

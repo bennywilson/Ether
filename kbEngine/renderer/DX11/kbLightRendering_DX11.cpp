@@ -373,7 +373,7 @@ void kbRenderer_DX11::RenderShadow( const kbRenderLight *const pLight, kbMat4 sp
  *	kbRenderer_DX11::RenderLightShaft
  */
 void kbRenderer_DX11::RenderLightShafts() {
-
+/*
 	if ( m_bRenderToHMD ) {
 		return;	
 	}
@@ -594,5 +594,5 @@ void kbRenderer_DX11::RenderLightShafts() {
 	}
 	m_pDeviceContext->RSSetViewports( 1, &viewport );
 
-	m_pDeviceContext->OMSetRenderTargets( 1, &m_RenderTargets[ACCUMULATION_BUFFER].m_pRenderTargetView, NULL );
+	m_pDeviceContext->OMSetRenderTargets( 1, &m_RenderTargets[ACCUMULATION_BUFFER].m_pRenderTargetView, NULL );*/
 }

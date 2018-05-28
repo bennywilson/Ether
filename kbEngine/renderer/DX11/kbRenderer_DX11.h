@@ -529,6 +529,13 @@ private:
 	void										RenderMousePickerIds();
 	void										Blit( kbRenderTexture *const src, kbRenderTexture *const dest );
 
+	ID3D11Buffer *								GetConstantsBuffer( const size_t requestSize );
+	void										SetShaderMat4( const std::string & varName, const kbMat4 & inMatrix, byte *const pBuffer, const kbShaderVarBindings_t & binding );
+	void										SetShaderVec4( const std::string & varName, const kbVec4 & inVec, byte *const pBuffer, const kbShaderVarBindings_t & binding );
+	void										SetShaderVec4Array( const std::string & varName, const kbVec4 * vecArray, const int arrayLen, byte *const pBuffer, const kbShaderVarBindings_t & binding );
+	void										SetShaderFloat( const std::string & varName, const float inFloat, byte *const pBuffer, const kbShaderVarBindings_t & binding );
+	void										SetShaderInt( const std::string & varName, const int inInt, byte *const pBuffer, const kbShaderVarBindings_t & binding );
+
 	void										DrawTexture( ID3D11ShaderResourceView *const pShaderResourceView, const kbVec3 & pixelPosition, 
 															 const kbVec3 & pixelSize, const kbVec3 & renderTargetSize );
 
@@ -572,13 +579,9 @@ private:
 	ID3D11Buffer *								m_pConsoleQuad;
 	std::map<size_t, ID3D11Buffer*>				m_ConstantBuffers;		// Maps constant buffers to their byte width
 
-	ID3D11Buffer *								m_pDefaultShaderConstantsBuffer;
-	ID3D11Buffer *								m_pSkinnedShaderConstantsBuffer;
 	ID3D11Buffer *								m_pEditorConstantsBuffer;
 	ID3D11Buffer *								m_pLightShaderConstantsBuffer;
 	ID3D11Buffer *								m_pLightShaftsShaderConstantsBuffer;
-	ID3D11Buffer *								m_pPostProcessConstantsBuffer;
-	ID3D11Buffer *								m_pBloomShaderConstantsBuffer;
 
 	ID3D11RasterizerState *						m_pDefaultRasterizerState;
 	ID3D11RasterizerState *						m_pNoFaceCullingRasterizerState;
@@ -695,30 +698,6 @@ private:
 
 extern ID3D11Device * g_pD3DDevice;
 
-const int Max_Extra_Params = 4;
-struct ShaderConstantMatrices {
-	kbMat4			modelMatrix;
-	kbMat4			modelViewMatrix;
-	kbMat4			viewMatrix;
-	kbMat4			mvpMatrix;
-	kbMat4			projection;
-	kbMat4			inverseProjection;
-	kbMat4			viewProjection;
-	kbVec4			cameraPosition;
-	kbVec4			extraParams[Max_Extra_Params];
-};
-
-const int Max_Shader_Bones = 128;
-struct SkinnedShaderConstants {
-	kbMat4			modelMatrix;
-	kbMat4			modelViewMatrix;
-	kbMat4			viewMatrix;
-	kbMat4			mvpMatrix;
-	kbMat4			projection;
-	kbMat4			inverseProjection;
-	kbMat4			viewProjection;
-	kbMat4			boneMatrices[Max_Shader_Bones];
-};
 
 struct EditorShaderConstants {
 	uint			entityId;	// For mouse picking
@@ -738,27 +717,6 @@ struct LightShaderConstants {
 struct LightShaftsConstants {
 	kbMat4			mvpMatrix;
 	float			color[4];
-};
-
-struct PostProcessConstants {
-	kbMat4			mvpMatrix;
-	kbMat4			inverseProjection;
-	kbVec4			tint;
-	kbVec4			additiveColor;
-	kbVec4			fogColor;
-	float			fogStartDistance;
-	float			fogEndDistance;
-};
-
-struct ShadowShaderConstants {
-	kbMat4			mvpMatrix;
-	kbMat4			boneMatrices[Max_Shader_Bones];
-};
-
-struct BloomShaderConstants {
-	kbMat4			mvpMatrix;
-	kbVec4			offsetsAndWeights[16];
-	int				numSamples;
 };
 
 extern const float g_DebugTextSize;

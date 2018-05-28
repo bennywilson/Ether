@@ -46,7 +46,7 @@ SamplerState sceneColorSampler;
 float4 bloomGatherPixelMain( pixelInput	input ) : SV_TARGET {
 	float4 inSceneColor = sceneTexture.Sample( sceneColorSampler, input.uv );
    float maxComponent = max( inSceneColor.x, max( inSceneColor.y, inSceneColor.z ) );
-   if ( maxComponent <= 2.5f ) {
+   if ( maxComponent <= 0.5f ) {
       return 0.0f;
    }
 	return inSceneColor;

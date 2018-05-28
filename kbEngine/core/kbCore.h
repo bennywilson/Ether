@@ -107,7 +107,8 @@ template<typename T> T kbClamp( const T & value, const T & min, const T & max ) 
 
 template<typename T, typename B> void VectorRemoveFast( T & list, B entry ) { list.erase( std::remove( list.begin(), list.end(), entry ), list.end() );  }
 template<typename T> void VectorRemoveFastIndex( T & list, const int i ) { list.erase( list.begin() + i ); }
-template<typename T, typename B> bool VectorFind( T & list, B entry ) { return std::find( list.begin(), list.end(), entry ) != list.end(); }
+template<typename T, typename B> bool VectorContains( T & list, B entry ) { return std::find( list.begin(), list.end(), entry ) != list.end(); }
+template<typename T, typename B> auto VectorFind( T & list, B entry ) { return std::find( list.begin(), list.end(), entry ); }
 template<typename T> inline T kbLerp( T a, T b, float t ) { return ( ( b - a ) * t ) + a; }
 
 void StringFromWString( std::string & outString, const std::wstring & srcString );
