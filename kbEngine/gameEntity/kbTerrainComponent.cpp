@@ -197,7 +197,6 @@ void kbTerrainComponent::GenerateTerrain() {
 	}
 
 	m_TerrainModel.UnmapIndexBuffer();
-	m_TerrainModel.m_bHackUsesNewRenderPath = true;
 
 	kbShader * pShader = (kbShader*)g_ResourceManager.GetResource( "../../kbEngine/assets/Shaders/basicShader.kbShader", true );
 	std::vector<kbShader *> ShaderOverrideList;

@@ -81,7 +81,6 @@ kbModel::kbModel() :
 	m_bVBIsMapped( false ),
 	m_bIBIsMapped( false ),
 	m_bCPUAccessOnly( false )  {
-	m_bHackUsesNewRenderPath = false;
 }
 
 /**
@@ -95,7 +94,6 @@ kbModel::~kbModel() {
  *	kbModel::Load_Internal
  */
 bool kbModel::Load_Internal() {
-	m_bHackUsesNewRenderPath = true;
 
 	std::ifstream modelFile;
 	modelFile.open( m_FullFileName, std::ifstream::in | std::ifstream::binary );

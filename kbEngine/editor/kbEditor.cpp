@@ -434,7 +434,7 @@ void kbEditor::DeselectEntities() {
  *  kbEditor::AddEntity
  */
 void kbEditor::AddEntity( kbEditorEntity *const pEditorEntity ) {
-	kbErrorCheck( VectorContains( m_GameEntities, pEditorEntity ) == false, "kbEditor::AddEntity() - Called on an already added entity" );
+	kbErrorCheck( VectorContains( m_GameEntities, pEditorEntity ) == false, "kbEditor::AddEntity() - Called on an entity that has already been added." );
 
 	m_GameEntities.push_back( pEditorEntity );
 }
