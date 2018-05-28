@@ -373,7 +373,7 @@ void kbRenderer_DX11::RenderShadow( const kbRenderLight *const pLight, kbMat4 sp
  *	kbRenderer_DX11::RenderLightShaft
  */
 void kbRenderer_DX11::RenderLightShafts() {
-/*
+
 	if ( m_bRenderToHMD ) {
 		return;	
 	}
@@ -433,13 +433,17 @@ void kbRenderer_DX11::RenderLightShafts() {
 			m_pDeviceContext->VSSetShader( (ID3D11VertexShader *)m_pLightShaftsShader->GetVertexShader(), NULL, 0 );
 			m_pDeviceContext->PSSetShader( (ID3D11PixelShader *)m_pLightShaftsShader->GetPixelShader(), NULL, 0 );
 
-			D3D11_MAPPED_SUBRESOURCE mappedResource;
-			HRESULT hr = m_pDeviceContext->Map( m_pLightShaftsShaderConstantsBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource );
-			if ( FAILED( hr ) ) {
-				kbError( "Failed to map matrix buffer" );
-			}
+			const auto & varBindings = m_pLightShaftsShader->GetShaderVarBindings();
+			ID3D11Buffer *const pConstantBuffer = GetConstantsBuffer( varBindings.m_ConstantBufferSizeBytes );
 
-			LightShaftsConstants sourceBuffer;
+			D3D11_MAPPED_SUBRESOURCE mappedResource;
+			HRESULT hr = m_pDeviceContext->Map( pConstantBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource );
+			kbErrorCheck( FAILED(hr) == FALSE, "Failed to map matrix buffer" );
+
+			SetShaderMat4( "mvpMatrix", mvpMatrix, (byte*) mappedResource.pData, varBindings );
+			SetShaderVec4( "color", CurLightShafts.m_Color, (byte*) mappedResource.pData, varBindings );
+
+			/*LightShaftsConstants sourceBuffer;
 			sourceBuffer.mvpMatrix = mvpMatrix;
 			sourceBuffer.color[0] = CurLightShafts.m_Color.r;
 			sourceBuffer.color[1] = CurLightShafts.m_Color.g;
@@ -447,11 +451,11 @@ void kbRenderer_DX11::RenderLightShafts() {
 			sourceBuffer.color[3] = CurLightShafts.m_Color.a;
 
 			LightShaftsConstants * dataPtr = ( LightShaftsConstants * ) mappedResource.pData;
-			memcpy( dataPtr, &sourceBuffer, sizeof( LightShaftsConstants ) );
+			memcpy( dataPtr, &sourceBuffer, sizeof( LightShaftsConstants ) );*/
 
-			m_pDeviceContext->Unmap( m_pLightShaftsShaderConstantsBuffer, 0 );
-			m_pDeviceContext->VSSetConstantBuffers( 0, 1, &m_pLightShaftsShaderConstantsBuffer );
-			m_pDeviceContext->PSSetConstantBuffers( 0, 1, &m_pLightShaftsShaderConstantsBuffer );
+			m_pDeviceContext->Unmap( pConstantBuffer, 0 );
+			m_pDeviceContext->VSSetConstantBuffers( 0, 1, &pConstantBuffer );
+			m_pDeviceContext->PSSetConstantBuffers( 0, 1, &pConstantBuffer );
 
 			m_pDeviceContext->Draw( 6, 0 );
 		}
@@ -492,6 +496,9 @@ void kbRenderer_DX11::RenderLightShafts() {
 			m_pDeviceContext->VSSetShader( (ID3D11VertexShader *)this->m_pSimpleAdditiveShader->GetVertexShader(), NULL, 0 );
 			m_pDeviceContext->PSSetShader( (ID3D11PixelShader *)m_pSimpleAdditiveShader->GetPixelShader(), NULL, 0 );
 
+			const auto & varBindings = m_pSimpleAdditiveShader->GetShaderVarBindings();
+			ID3D11Buffer *const pConstantBuffer = GetConstantsBuffer( varBindings.m_ConstantBufferSizeBytes );
+
 			kbMat4 mvpMatrix;
 			mvpMatrix.MakeIdentity();
 			mvpMatrix.MakeScale( kbVec3( CurLightShafts.m_Width * 0.5f, HalfBaseHeight, 1.0f ) );
@@ -504,20 +511,21 @@ void kbRenderer_DX11::RenderLightShafts() {
 				mvpMatrix[1].y += curScale.y;
 
 				D3D11_MAPPED_SUBRESOURCE mappedResource;
-				HRESULT hr = m_pDeviceContext->Map( m_pDefaultShaderConstantsBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource );
+				HRESULT hr = m_pDeviceContext->Map( pConstantBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource );
 				if ( FAILED( hr ) ) {
 					kbError( "Failed to map matrix buffer" );
 				}
 
-				ShaderConstantMatrices sourceBuffer;
+				SetShaderMat4( "mvpMatrix", mvpMatrix, (byte*) mappedResource.pData, varBindings );
+				/*ShaderConstantMatrices sourceBuffer;
 				sourceBuffer.mvpMatrix = mvpMatrix;
 
 				ShaderConstantMatrices * dataPtr = ( ShaderConstantMatrices * ) mappedResource.pData;
-				memcpy( dataPtr, &sourceBuffer, sizeof( ShaderConstantMatrices ) );
+				memcpy( dataPtr, &sourceBuffer, sizeof( ShaderConstantMatrices ) );*/
 
-				m_pDeviceContext->Unmap( m_pDefaultShaderConstantsBuffer, 0 );
-				m_pDeviceContext->VSSetConstantBuffers( 0, 1, &m_pDefaultShaderConstantsBuffer );
-				m_pDeviceContext->PSSetConstantBuffers( 0, 1, &m_pDefaultShaderConstantsBuffer );
+				m_pDeviceContext->Unmap( pConstantBuffer, 0 );
+				m_pDeviceContext->VSSetConstantBuffers( 0, 1, &pConstantBuffer );
+				m_pDeviceContext->PSSetConstantBuffers( 0, 1, &pConstantBuffer );
 
 				m_pDeviceContext->Draw( 6, 0 );
 			}
@@ -552,21 +560,17 @@ void kbRenderer_DX11::RenderLightShafts() {
 			m_pDeviceContext->PSSetShaderResources( 0, 1, RenderTargetViews );
 			m_pDeviceContext->PSSetSamplers( 0, 1, SamplerStates );
 
+			const auto & varBindings = m_pSimpleAdditiveShader->GetShaderVarBindings();
+			ID3D11Buffer *const pConstantBuffer = GetConstantsBuffer( varBindings.m_ConstantBufferSizeBytes );
+
 			D3D11_MAPPED_SUBRESOURCE mappedResource;
-			HRESULT hr = m_pDeviceContext->Map( m_pDefaultShaderConstantsBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource );
-			if ( FAILED( hr ) ) {
-				kbError( "Failed to map matrix buffer" );
-			}
+			HRESULT hr = m_pDeviceContext->Map( pConstantBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource );
+			kbErrorCheck( FAILED(hr) == FALSE, "Failed to map matrix buffer" );
+			SetShaderMat4( "mvpMatrix", mvpMatrix, (byte*)mappedResource.pData, varBindings );
 
-			ShaderConstantMatrices sourceBuffer;
-			sourceBuffer.mvpMatrix = mvpMatrix;
-
-			ShaderConstantMatrices * dataPtr = ( ShaderConstantMatrices * ) mappedResource.pData;
-			memcpy( dataPtr, &sourceBuffer, sizeof( ShaderConstantMatrices ) );
-
-			m_pDeviceContext->Unmap( m_pDefaultShaderConstantsBuffer, 0 );
-			m_pDeviceContext->VSSetConstantBuffers( 0, 1, &m_pDefaultShaderConstantsBuffer );
-			m_pDeviceContext->PSSetConstantBuffers( 0, 1, &m_pDefaultShaderConstantsBuffer );
+			m_pDeviceContext->Unmap( pConstantBuffer, 0 );
+			m_pDeviceContext->VSSetConstantBuffers( 0, 1, &pConstantBuffer );
+			m_pDeviceContext->PSSetConstantBuffers( 0, 1, &pConstantBuffer );
 
 			m_pDeviceContext->Draw( 6, 0 );
 		}
@@ -594,5 +598,5 @@ void kbRenderer_DX11::RenderLightShafts() {
 	}
 	m_pDeviceContext->RSSetViewports( 1, &viewport );
 
-	m_pDeviceContext->OMSetRenderTargets( 1, &m_RenderTargets[ACCUMULATION_BUFFER].m_pRenderTargetView, NULL );*/
+	m_pDeviceContext->OMSetRenderTargets( 1, &m_RenderTargets[ACCUMULATION_BUFFER].m_pRenderTargetView, NULL );
 }

@@ -110,3 +110,25 @@ kbGameEntity 0 0 0 0 {
 		IsFirstPersonModel = 0
 	}
 }
+kbGameEntity 2609040299 1100347930 3115268521 1892043160 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Light Shafts"
+		Orientation = -0.123261 -0.728340 0.231215 0.633141
+		Position = -3.857734 2.205323 16.256676
+		Scale = 1.000000 1.000000 1.000000
+	}
+	kbLightShaftsComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		BaseHeight =  0.750000
+		BaseWidth =  0.750000
+		Color = 0.005421 0.004849 0.004737 1.000000
+		Directional = 1
+		IterationHeight =  0.001500
+		IterationWidth =  0.001500
+		NumIteractions = 48
+		Texture = ../../kbEngine/assets/Textures/flare.jpg
+	}
+}

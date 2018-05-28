@@ -2200,6 +2200,8 @@ void kbRenderer_DX11::SetShaderMat4( const std::string & varName, const kbMat4 &
 			return;
 		}
 	}
+
+	kbError( "Failed to set Shader var" );
 }
 
 /**
@@ -2215,7 +2217,7 @@ void kbRenderer_DX11::SetShaderVec4( const std::string & varName, const kbVec4 &
 			return;
 		}
 	}
-
+	kbError( "Failed to set Shader var" );
 }
 
 /**
@@ -2231,6 +2233,7 @@ void kbRenderer_DX11::SetShaderFloat( const std::string & varName, const float i
 			return;
 		}
 	}
+	kbError( "Failed to set Shader var" );
 }
 
 /**
@@ -2245,6 +2248,7 @@ void kbRenderer_DX11::SetShaderInt( const std::string & varName, const int inInt
 			return;
 		}
 	}
+	kbError( "Failed to set Shader var" );
 }
 
 /**
@@ -2262,6 +2266,8 @@ void kbRenderer_DX11::SetShaderVec4Array( const std::string & varName, const kbV
 			return;
 		}
 	}
+	kbError( "Failed to set Shader var" );
+
 }
 
 /**
@@ -2741,7 +2747,7 @@ void kbRenderer_DX11::RenderBloom() {
 		D3D11_MAPPED_SUBRESOURCE mappedResource;
 		HRESULT hr = m_pDeviceContext->Map( pConstantBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource );
 		kbErrorCheck( FAILED(hr) == FALSE, "Failed to map matrix buffer" );
-
+		SetShaderMat4( "mvpMatrix", mvpMatrix, (byte*)mappedResource.pData, varBindings );
 		m_pDeviceContext->Unmap( pConstantBuffer, 0 );
 		m_pDeviceContext->VSSetConstantBuffers( 0, 1, &pConstantBuffer );
 		m_pDeviceContext->PSSetConstantBuffers( 0, 1, &pConstantBuffer );
