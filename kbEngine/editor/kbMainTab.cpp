@@ -179,14 +179,14 @@ void kbMainTab::RenderSync() {
 			return;
 		}
 
-		const uint hitEntityId = g_pRenderer->GetEntityIdAtScreenPosition( m_MousePickXY.x, m_MousePickXY.y );
+		const kbVec2i hitEntityId = g_pRenderer->GetEntityIdAtScreenPosition( m_MousePickXY.x, m_MousePickXY.y );
 		std::vector<kbEditorEntity*> & entityList = g_Editor->GetGameEntities();
 
 		const bool bCtrlIsDown = GetAsyncKeyState( VK_LCONTROL ) || GetAsyncKeyState( VK_RCONTROL );
 
 		kbEditorEntity * pSelectedEntity = nullptr;
 		for ( int i = 0; i < entityList.size(); i++ ) {
-			if ( entityList[i]->GetGameEntity()->GetEntityId() == hitEntityId ) {
+			if ( entityList[i]->GetGameEntity()->GetEntityId() == hitEntityId.x ) {
 				pSelectedEntity = entityList[i];
 				std::vector<kbEditorEntity*> selectedEntities;
 				selectedEntities.push_back( entityList[i] );

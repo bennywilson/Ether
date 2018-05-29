@@ -533,7 +533,7 @@ void kbRenderer_DX11::Init( HWND hwnd, const int frameWidth, const int frameHeig
 	CreateRenderTarget( eRenderTargetTexture::DOWN_RES_BUFFER_2, deferredRTWidth / 2, deferredRTHeight / 2, DXGI_FORMAT_R16G16B16A16_FLOAT );
 	CreateRenderTarget( eRenderTargetTexture::SCRATCH_BUFFER, deferredRTHeight / 2, deferredRTHeight / 2, DXGI_FORMAT_R16G16B16A16_FLOAT );
 
-	CreateRenderTarget( eRenderTargetTexture::MOUSE_PICKER_BUFFER, deferredRTWidth, deferredRTHeight, DXGI_FORMAT_R32_UINT );
+	CreateRenderTarget( eRenderTargetTexture::MOUSE_PICKER_BUFFER, deferredRTWidth, deferredRTHeight, DXGI_FORMAT_R16G16_UINT );
 
 	// create back buffer
 	D3D11_TEXTURE2D_DESC depthBufferDesc = { 0 };
@@ -797,7 +797,7 @@ void kbRenderer_DX11::Init( HWND hwnd, const int frameWidth, const int frameHeig
 	textureDesc.Height = Back_Buffer_Height;
 	textureDesc.MipLevels = 1;
 	textureDesc.ArraySize = 1;
-	textureDesc.Format = DXGI_FORMAT_R32_UINT;//DXGI_FORMAT_R32G32B32A32_FLOAT;
+	textureDesc.Format = DXGI_FORMAT_R16G16_UINT;//DXGI_FORMAT_R32G32B32A32_FLOAT;
 	textureDesc.SampleDesc.Count = 1;
 	textureDesc.Usage = D3D11_USAGE_STAGING;
 	textureDesc.BindFlags = 0;
@@ -2027,8 +2027,6 @@ void kbRenderer_DX11::RenderScene() {
 //DrawTexture( m_RenderTargets[DOWN_RES_BUFFER].m_pShaderResourceView, kbVec3( 10.0f, 10.0f, 0.0f ), kbVec3( Back_Buffer_Width * 0.25f, Back_Buffer_Width * 0.25f, 0.0f ), kbVec3( (float)Back_Buffer_Width, (float)Back_Buffer_Height, 0.0f ) );
 
 		// debug rendering
-
-		m_DebugModels.clear();
 	
 		m_RenderState.SetDepthStencilState();
 
@@ -2045,6 +2043,7 @@ void kbRenderer_DX11::RenderScene() {
 	m_DebugLines.clear();
 	m_DebugBillboards.clear();
 	m_ScreenSpaceQuads_RenderThread.clear();
+	m_DebugModels.clear();
 
 	PLACE_GPU_TIME_STAMP( "Debug Rendering" );
 
@@ -2411,6 +2410,17 @@ void kbRenderer_DX11::RenderMousePickerIds() {
 	}
 
 	RenderDebugBillboards( true );
+
+	for ( int i = 0; i < m_DebugModels.size(); i++ ) {
+		kbRenderObject renderObject;
+		renderObject.m_pModel = m_DebugModels[i].m_pModel;
+		renderObject.m_Position = m_DebugModels[i].m_Position;
+		renderObject.m_Orientation = m_DebugModels[i].m_Orientation;
+		renderObject.m_Scale = m_DebugModels[i].m_Scale;
+		renderObject.m_EntityId = m_DebugModels[i].m_EntityId;
+
+		RenderModel( &renderObject, RP_MousePicker );
+	}
 }
 
 /**
@@ -3297,12 +3307,13 @@ void kbRenderer_DX11::DrawBillboard( const kbVec3 & position, const kbVec2 & siz
 /**
  *	kbRenderer_DX11::DrawModel
  */
-void kbRenderer_DX11::DrawModel( const kbModel * pModel, const kbVec3 & position, const kbQuat & orientation, const kbVec3 & scale ) {
+void kbRenderer_DX11::DrawModel( const kbModel * pModel, const kbVec3 & position, const kbQuat & orientation, const kbVec3 & scale, const int entityId ) {
 	debugDrawObject_t model;
 	model.m_Position = position;
 	model.m_Orientation = orientation;
 	model.m_Scale = scale;
 	model.m_pModel = pModel;
+	model.m_EntityId = entityId;
 
 	m_DebugModels_GameThread.push_back( model );
 }
@@ -3421,13 +3432,16 @@ void kbRenderer_DX11::RenderModel( const kbRenderObject *const pRenderObject, co
 	
 			m_pDeviceContext->PSSetShader( (ID3D11PixelShader *)m_pMousePickerIdShader->GetPixelShader(), nullptr, 0 );
 	
-			ID3D11Buffer *const pConstantBuffer = GetConstantBuffer( 16 );
+			ID3D11Buffer *const pConstantBuffer = GetConstantBuffer( 32 );
 
 			D3D11_MAPPED_SUBRESOURCE mappedResource;
 			HRESULT hr = m_pDeviceContext->Map( pConstantBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource );
 			kbErrorCheck( SUCCEEDED(hr), "Failed to map matrix buffer" );
-			UINT * pEntityId = (UINT*)mappedResource.pData;
+			UINT *const pEntityId = (UINT*)mappedResource.pData;
 			*pEntityId = pRenderObject->m_EntityId;
+
+			UINT *const pGroupId = pEntityId + 1;
+			*pGroupId = (UINT)i;
 
 			m_pDeviceContext->Unmap( pConstantBuffer, 0 );
 			m_pDeviceContext->PSSetConstantBuffers( 1, 1, &pConstantBuffer );
@@ -3779,6 +3793,10 @@ void kbRenderer_DX11::RenderDebugBillboards( const bool bIsEntityIdPass ) {
 			kbErrorCheck( SUCCEEDED(hr), "Failed to map matrix buffer" );
 			UINT * pEntityId = (UINT*)mappedResource.pData;
 			*pEntityId = currBillBoard.m_EntityId;
+
+			UINT * pGroupId = pEntityId + 1;
+			pGroupId = 0;
+
 			m_pDeviceContext->Unmap( pConstantBuffer, 0 );
 
 			m_pDeviceContext->PSSetConstantBuffers( 1, 1, &pConstantBuffer );
@@ -3806,7 +3824,7 @@ void kbRenderer_DX11::DrawDebugText( const std::string & theString, const float 
 /**
  *	kbRenderer_DX11::GetEntityIdAtScreenPosition
  */
-uint kbRenderer_DX11::GetEntityIdAtScreenPosition( const uint x, const uint y ) {
+kbVec2i kbRenderer_DX11::GetEntityIdAtScreenPosition( const uint x, const uint y ) {
 	kbErrorCheck( m_RenderThreadSync == 0, "kbRenderer_DX11::GetEntityIdAtScreenPosition() - Function can only be called during the sync." );
 
 	D3D11_BOX box;
@@ -3824,7 +3842,10 @@ uint kbRenderer_DX11::GetEntityIdAtScreenPosition( const uint x, const uint y ) 
 	
 	byte * pixelData = (byte*)mappedResource.pData;
 	uint * hitPixel = (uint*)(pixelData + ( y * mappedResource.RowPitch ) + ( x * sizeof(uint) ) );
-	uint retVal = *hitPixel;
+	ushort * r = (ushort*)hitPixel;
+	ushort * g = r + 1;
+
+	kbVec2i retVal( *r, *g );
 	m_pDeviceContext->Unmap( m_pOffScreenRenderTargetTexture, 0 );
 
 	return retVal;

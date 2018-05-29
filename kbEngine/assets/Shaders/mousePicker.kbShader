@@ -13,6 +13,7 @@ cbuffer matrixBuffer : register( b0 ){
 
 cbuffer editorBuffer : register( b1 ) {
 	uint entityId;
+	uint groupId;
 };
 
 //-------------------------------------
@@ -38,6 +39,6 @@ pixelInput vertexShader( vertexInput input ) {
 /**
  *	pixelShader
  */
- unsigned int pixelShader() : SV_TARGET {
-	return  entityId;
+uint2 pixelShader() : SV_TARGET0 {
+	return  uint2(entityId, groupId);
 }

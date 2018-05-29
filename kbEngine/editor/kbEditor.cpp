@@ -429,7 +429,6 @@ void kbEditor::DeselectEntities() {
 	g_Editor->BroadcastEvent( widgetCBEntityDeselected() ); 
 }
 
-
 /**
  *  kbEditor::AddEntity
  */

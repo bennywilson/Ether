@@ -97,10 +97,7 @@ bool kbModel::Load_Internal() {
 
 	std::ifstream modelFile;
 	modelFile.open( m_FullFileName, std::ifstream::in | std::ifstream::binary );
-
-	if ( modelFile.fail() ) {
-		kbError( "Error: kbModel::LoadResource_Internal - Failed to load model %s", m_FullFileName.c_str() );
-	}
+	kbErrorCheck( modelFile.good(), "kbModel::LoadResource_Internal() - Failed to load model %s", m_FullFileName.c_str() );
 	
 	// Find the file size
 	modelFile.seekg( 0, std::ifstream::end );
@@ -108,7 +105,7 @@ bool kbModel::Load_Internal() {
 	modelFile.seekg( 0, std::ifstream::beg );
 
 	// Load file into memory
-	char * pMemoryFileBuffer = new char[ fileSize ];
+	char *const pMemoryFileBuffer = new char[fileSize];
 	modelFile.read( pMemoryFileBuffer, fileSize );
 	modelFile.close();
 
@@ -326,9 +323,7 @@ bool kbModel::Load_Internal() {
 
 	for ( uint i = 0; i < m_Meshes.size(); i++ ) {
 
-		if ( ibIndex != m_Meshes[i].m_IndexBufferIndex ) {
-			kbError( "Index buffer mismatch" );
-		}
+		kbErrorCheck( ibIndex == m_Meshes[i].m_IndexBufferIndex, "kbModel::Load_Internal() - Index buffer mismatch" );
 
 		const kbMaterial & modelMaterial = GetMaterials()[m_Meshes[i].m_MaterialIndex];
 		for ( uint iTris = 0; iTris < m_Meshes[i].m_NumTriangles; iTris++ ) {
@@ -355,7 +350,6 @@ bool kbModel::Load_Internal() {
 				}
 
 				std::map<vertexLayout, int>::iterator it = vertHash.find( newVert );
-
 
 				int vertIndex;
 				if ( it == vertHash.end() ) {

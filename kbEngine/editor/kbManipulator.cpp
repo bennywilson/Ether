@@ -128,7 +128,7 @@ void kbManipulator::UpdateMouseDrag( const kbVec3 & rayOrigin, const kbVec3 & ra
  */
 void kbManipulator::Update() {
 	
-	g_pRenderer->DrawModel( m_pModels[m_ManipulatorMode], m_Position, m_Orientation, kbVec3::one );
+	g_pRenderer->DrawModel( m_pModels[m_ManipulatorMode], m_Position, m_Orientation, kbVec3::one, UINT16_MAX );
 }
 
 /**
