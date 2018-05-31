@@ -14,7 +14,6 @@ kbPrefab 1 {
 			Enabled = 1
 			LifeTime =  -1.000000
 			CastsShadow = 0
-			ShaderParams = 0
 			m_RenderPass = LightingPass
 			Model = .\assets\models\Characters\EL_Merc\EL_Merc.ms3d
 			ShaderOverride = 0
@@ -72,7 +71,6 @@ kbGameEntity 3457636970 1153601310 1807670206 2036758972 {
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadow = 0
-		ShaderParams = 0
 		m_RenderPass = LightingPass
 		Model = .\assets\models\Characters\FP\Hands.ms3d
 		ShaderOverride = 0
@@ -107,7 +105,6 @@ kbGameEntity 3296042617 1156675361 562646963 1803854321 {
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadow = 1
-		ShaderParams = 0
 		m_RenderPass = LightingPass
 		Model = .\assets\models\Characters\Cartel_Warrior\Cartel_Warrior.ms3d
 		ShaderOverride = 0
@@ -1030,7 +1027,6 @@ kbGameEntity 3984695574 1265514075 1038137218 3472588337 {
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadow = 0
-		ShaderParams = 0
 		m_RenderPass = LightingPass
 		Model = .\assets\models\Characters\Cartel_Stalker\Cartel_Stalker.ms3d
 		ShaderOverride = 0

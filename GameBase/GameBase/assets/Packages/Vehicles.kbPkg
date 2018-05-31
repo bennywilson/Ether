@@ -13,7 +13,6 @@ kbPrefab 1 {
 		kbStaticModelComponent { 
 			Enabled = 1
 			LifeTime =  -1.000000
-			ShaderParams = 0
 			m_RenderPass = LightingPass
 			Model = ./assets/models/Vehicles/jet.ms3d
 			ShaderOverride = 0

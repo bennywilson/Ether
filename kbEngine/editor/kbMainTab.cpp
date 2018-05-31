@@ -198,7 +198,6 @@ void kbMainTab::RenderSync() {
     }
     
     if ( mouseXY.x < 0 || mouseXY.y < 0 || mouseXY.x >= g_pRenderer->GetBackBufferWidth() || mouseXY.y >= g_pRenderer->GetBackBufferHeight() ) {
-    	g_Editor->DeselectEntities();
     	return;
     }
     

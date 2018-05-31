@@ -11,7 +11,6 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadow = 0
-		ShaderParams = 0
 		m_RenderPass = LightingPass
 		Dimensions = 513
 		HeightMap = .\assets\Terrain\terrain1_height.bmp
@@ -71,7 +70,6 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadow = 0
-		ShaderParams = 0
 		m_RenderPass = Post-LightingPass
 		Model = .\assets\models\SkyDomes\SkyDomes.ms3d
 		ShaderOverride = 1
@@ -92,7 +90,6 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadow = 1
-		ShaderParams = 0
 		m_RenderPass = LightingPass
 		Model = .\assets\models\Characters\Cartel_Warrior\Cartel_Warrior.ms3d
 		ShaderOverride = 0
