@@ -2,7 +2,7 @@
 // kbQuaternion.cpp
 //
 //
-// 2016-2017 kbEngine 2.0
+// 2016-2018 kbEngine 2.0
 //===================================================================================================
 #include "kbCore.h"
 #include "kbVector.h"
@@ -10,6 +10,9 @@
 
 kbQuat kbQuat::zero( 0.0f, 0.0f, 0.0f, 0.0f );
 
+/**
+ *  kbQuat::kbQuat
+ */
 kbQuat kbQuat::Slerp( const kbQuat & from, const kbQuat & to, const float t ) {
 	float cosom, absCosom, sinom, omega, scale0, scale1;
 

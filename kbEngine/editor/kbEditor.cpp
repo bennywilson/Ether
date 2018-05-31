@@ -356,7 +356,22 @@ void kbEditor::Update() {
 			m_WidgetInputObject.leftMouseButtonDown || m_WidgetInputObject.rightMouseButtonDown ) {
 			BroadcastEvent( m_WidgetInputObject );
 		}
-	}
+
+        if ( m_WidgetInputObject.leftMouseButtonPressed ) {
+            m_WidgetInputObject.leftMouseButtonPressed = false;
+            m_WidgetInputObject.leftMouseButtonDown = true;
+        }
+
+        if ( m_WidgetInputObject.rightMouseButtonPressed ) {
+            m_WidgetInputObject.rightMouseButtonPressed = false;
+            m_WidgetInputObject.rightMouseButtonDown = true;
+        }
+	} else {
+	    m_WidgetInputObject.leftMouseButtonPressed = false;
+	    m_WidgetInputObject.rightMouseButtonPressed = false;
+        m_WidgetInputObject.leftMouseButtonDown = false;
+        m_WidgetInputObject.rightMouseButtonDown = false;
+    }
 
 	m_WidgetInputObject.ClearKeys();
 	m_WidgetInputObject.mouseDeltaX = 0;
@@ -488,10 +503,10 @@ int kbEditor::handle( int theEvent ) {
 		m_WidgetInputObject.mouseY = newMouseY;
 
 		if ( button == 3 ) {
-			m_WidgetInputObject.rightMouseButtonDown = true;
+		//	m_WidgetInputObject.rightMouseButtonDown = true;
 			m_WidgetInputObject.rightMouseButtonPressed = true;
 		} else if ( button == 1 ) {
-			m_WidgetInputObject.leftMouseButtonDown = true;
+			//m_WidgetInputObject.leftMouseButtonDown = true;
 			m_WidgetInputObject.leftMouseButtonPressed = true;
 		}
 

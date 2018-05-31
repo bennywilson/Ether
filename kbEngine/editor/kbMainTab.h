@@ -8,7 +8,7 @@
 #define _KBEDITORWINDOW_H_
 
 
-/*
+/**
  *	kbMainTab
  */
 class kbMainTab : public kbWidget, public Fl_Tabs {
@@ -34,7 +34,6 @@ private:
 
 	void													InputCB( const widgetCBObject *const widgetCBObject );
 	void													CameraMoveCB( const widgetCBInputObject *const widgetCBObject );
-	bool													ObjectSelectedOrMovedCB( const widgetCBInputObject *const widgetCBObject );
 	void													EntityTransformedCB( const widgetCBObject *const widgetCBObject );
 	void													ManipulatorEvent( const bool bClicked, const kbVec2i & mouseXY );
 
@@ -52,8 +51,6 @@ private:
 	kbManipulator											m_Manipulator;
 
 	float													m_CameraMoveSpeedMultiplier;
-
-	widgetCBInputObject										m_LastInputState;
 };
 
 #endif

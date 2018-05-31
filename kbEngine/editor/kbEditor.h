@@ -53,6 +53,8 @@ public:
 
 	const kbPrefab *										GetCurrentlySelectedPrefab() const;
 
+    const widgetCBInputObject &                             GetInput() const { return m_WidgetInputObject; }
+
 private:
 
 	void													SaveLevel_Internal( const std::string & fileName, const bool bForceSave );

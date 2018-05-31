@@ -229,9 +229,8 @@ public:
 
 	kbMat4() { }
 
-	kbMat4( const kbVec4 & xAxis, const kbVec4 & yAxis, const kbVec4 & zAxis, const kbVec4 & wAxis ) {
-		Set( xAxis, yAxis, zAxis, wAxis );
-	}
+	explicit kbMat4( const kbVec4 & xAxis, const kbVec4 & yAxis, const kbVec4 & zAxis, const kbVec4 & wAxis );
+    explicit kbMat4( const class kbQuat & rotation, const kbVec3 & position );
 
 	void Set( const kbVec4 & xAxis, const kbVec4 & yAxis, const kbVec4 & zAxis, const kbVec4 & wAxis ) {
 		mat[0] = xAxis;

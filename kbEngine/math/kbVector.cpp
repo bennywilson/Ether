@@ -7,6 +7,7 @@
 #include "kbCore.h"
 #include "kbVector.h"
 #include "kbPlane.h"
+#include "kbQuaternion.h"
 
 const kbVec3 kbVec3::right( 1.0f, 0.0f, 0.0f );
 const kbVec3 kbVec3::up( 0.0f, 1.0f, 0.0f );
@@ -62,6 +63,16 @@ kbVec4	kbVec4::TransformPoint(const kbMat4 & op2, bool bDivideByW) const
 		returnVec /= returnVec.w;
 	}
 	return returnVec;
+}
+
+
+kbMat4::kbMat4( const kbVec4 & xAxis, const kbVec4 & yAxis, const kbVec4 & zAxis, const kbVec4 & wAxis ) {
+    Set( xAxis, yAxis, zAxis, wAxis );
+}
+
+kbMat4::kbMat4( const kbQuat & rotation, const kbVec3 & position ) {
+    *this = rotation.ToMat4();
+    (*this)[3] = position;
 }
 
 kbVec3 kbMat4::TransformPoint(const kbVec3 Point) const {
