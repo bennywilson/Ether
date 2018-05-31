@@ -2952,6 +2952,23 @@ void ReadShaderFile( const std::string & shaderText, kbShaderVarBindings_t *cons
 	}
 
 	pShaderBindings->m_ConstantBufferSizeBytes = ( currOffset + 15 ) & 0xfffffff0;
+
+
+    // Bind textures
+    std::string::size_type texturePos = shaderText.find( "Texture2D" );
+    while ( texturePos != std::string::npos ) {
+
+        std::string::size_type startPos = shaderText.find_first_not_of( delimiters, texturePos + 9 );
+        std::string::size_type endPos = shaderText.find_first_of( delimiters, startPos );
+
+        if ( startPos == std::string::npos || endPos == std::string::npos ) {
+            break;
+        }
+
+        kbLog( "Texture name = %s", shaderText.substr( startPos, endPos - startPos ).c_str() );
+        texturePos = shaderText.find( "Texture2D", texturePos + 1 );
+
+    }
 }
 
 /**
@@ -3515,17 +3532,21 @@ void kbRenderer_DX11::RenderModel( const kbRenderObject *const pRenderObject, co
 				                *pVecOffset = curOverride.m_Vec4;
                                 break;
                             }
-
-                            case kbShaderParamOverrides_t::kbShaderParam_t::SHADER_TEX : {
-
-                                break;
-                            }
                         }
                     }
                 }
             }
 		}
 
+        // Bind textures
+        const std::vector<kbShaderParamOverrides_t::kbShaderParam_t> & paramOverrides = pRenderObject->m_ShaderParamOverrides.m_ParamOverrides;
+        for ( int iOverride = 0; iOverride < paramOverrides.size(); iOverride++ ) {
+            const kbShaderParamOverrides_t::kbShaderParam_t & curOverride = paramOverrides[iOverride];
+            if ( curOverride.m_Type == kbShaderParamOverrides_t::kbShaderParam_t::SHADER_TEX ) {
+                ID3D11ShaderResourceView *const pShaderResourceView = ( curOverride.m_pTexture != nullptr ) ? ( curOverride.m_pTexture->GetGPUTexture() ) : ( nullptr );
+	            m_pDeviceContext->PSSetShaderResources( iOverride, 1, &pShaderResourceView );
+            }
+        }
 
 		m_pDeviceContext->Unmap( pConstantBuffer, 0 );
 		m_pDeviceContext->VSSetConstantBuffers( 0, 1, &pConstantBuffer );

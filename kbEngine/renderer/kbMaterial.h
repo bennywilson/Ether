@@ -60,6 +60,8 @@ struct kbShaderVarBindings_t {
 		size_t									m_VarByteOffset;
 	};
 	std::vector<binding_t>						m_VarBindings;
+
+    std::string                                 m_TextureNames;
 };
 
 /**

@@ -198,14 +198,16 @@ void kbTerrainComponent::GenerateTerrain() {
 
 	m_TerrainModel.UnmapIndexBuffer();
 
-	kbShader * pShader = (kbShader*)g_ResourceManager.GetResource( "../../kbEngine/assets/Shaders/basicShader.kbShader", true );
+	kbShader * pShader = (kbShader*)g_ResourceManager.GetResource( "./assets/Shaders/basicTerrain.kbShader", true );
 	std::vector<kbShader *> ShaderOverrideList;
 
 	if ( pShader != nullptr ) {
 		ShaderOverrideList.push_back( pShader );
 	}
 
-	g_pRenderer->AddRenderObject( this, &m_TerrainModel, GetOwner()->GetPosition(), kbQuat( 0.0f, 0.0f, 0.0f, 1.0f ), kbVec3::one, RP_Lighting, &ShaderOverrideList);
+    kbShaderParamOverrides_t overrides;
+    overrides.SetTexture( "shaderTexture", m_pSplatMap );
+	g_pRenderer->AddRenderObject( this, &m_TerrainModel, GetOwner()->GetPosition(), kbQuat( 0.0f, 0.0f, 0.0f, 1.0f ), kbVec3::one, RP_Lighting, &ShaderOverrideList, &overrides );
 }
 
 /**
@@ -223,7 +225,10 @@ void kbTerrainComponent::SetEnable_Internal( const bool isEnabled ) {
 		ShaderOverrideList.push_back( pShader );
 	}
 	if ( isEnabled ) {
-		g_pRenderer->AddRenderObject( this, &m_TerrainModel, GetOwner()->GetPosition(), kbQuat( 0.0f, 0.0f, 0.0f, 1.0f ), kbVec3::one, RP_Lighting, &ShaderOverrideList );	
+        kbShaderParamOverrides_t overrides;
+        overrides.SetTexture( "shaderTexture", m_pSplatMap );
+
+		g_pRenderer->AddRenderObject( this, &m_TerrainModel, GetOwner()->GetPosition(), kbQuat( 0.0f, 0.0f, 0.0f, 1.0f ), kbVec3::one, RP_Lighting, &ShaderOverrideList, &overrides );	
 	} else {
 		g_pRenderer->RemoveRenderObject( this );
 	}
@@ -244,7 +249,10 @@ void kbTerrainComponent::Update_Internal( const float DeltaTime ) {
 		ShaderOverrideList.push_back( pShader );
 	}
 
-		g_pRenderer->UpdateRenderObject( this, &m_TerrainModel, GetOwner()->GetPosition(), kbQuat( 0.0f, 0.0f, 0.0f, 1.0f ), GetOwner()->GetScale(), RP_Lighting, &ShaderOverrideList );
+        kbShaderParamOverrides_t overrides;
+        overrides.SetTexture( "shaderTexture", m_pSplatMap );
+
+		g_pRenderer->UpdateRenderObject( this, &m_TerrainModel, GetOwner()->GetPosition(), kbQuat( 0.0f, 0.0f, 0.0f, 1.0f ), GetOwner()->GetScale(), RP_Lighting, &ShaderOverrideList , &overrides );
 	}
 }
 
