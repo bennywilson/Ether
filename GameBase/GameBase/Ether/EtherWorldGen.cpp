@@ -300,8 +300,8 @@ void EtherWorldGenComponent::UpdateTimeOfDayFX() {
 			}
 		
 			if ( pSky != nullptr ) {
-				pSky->SetShaderParam( 0, FogColor );
-				pSky->SetShaderParam( 1, SkyColor );
+			//	pSky->//SetShaderParam( 0, FogColor );
+			//	pSky->SetShaderParam( 1, SkyColor );
 			}
 
 			if ( pLightShafts != nullptr ) {

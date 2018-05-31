@@ -31,9 +31,14 @@ kbModelComponent::~kbModelComponent() {
 /**
  *	kbModelComponent::SetShaderParam
  */
-void kbModelComponent::SetShaderParam( const int index, const kbVec4 & newParam ) {
-	if ( index >= 0 && index < m_ShaderParams.size() ) {
-		m_ShaderParams[index] = newParam;
-		GetOwner()->MarkAsDirty();
-	}
+void kbModelComponent::SetShaderParam( const std::string & paramName, const kbShaderParamOverrides_t::kbShaderParam_t & shaderParam ) {
+
+    for ( int i = 0; i < m_ShaderParams.m_ParamOverrides.size(); i++ ) {
+        if ( m_ShaderParams.m_ParamOverrides[i].m_VarName == paramName ) {
+            m_ShaderParams.m_ParamOverrides[i] = shaderParam;
+            return;
+        }
+    }
+
+    m_ShaderParams.m_ParamOverrides.push_back( shaderParam );
 }

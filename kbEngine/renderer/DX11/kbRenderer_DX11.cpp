@@ -1193,7 +1193,7 @@ void kbRenderer_DX11::SetRenderWindow( HWND hwnd ) {
 /**
  *	kbRenderer_DX11::AddRenderObject
  */
-void kbRenderer_DX11::AddRenderObject( const kbComponent *const pComponent, const kbModel *const pModel, const kbVec3 & pos, const kbQuat & orientation, const kbVec3 & scale, const ERenderPass renderPass, const std::vector<kbShader *> *const pShaderOverrideList, const std::vector<kbVec4> * pShaderParams ) {
+void kbRenderer_DX11::AddRenderObject( const kbComponent *const pComponent, const kbModel *const pModel, const kbVec3 & pos, const kbQuat & orientation, const kbVec3 & scale, const ERenderPass renderPass, const std::vector<kbShader *> *const pShaderOverrideList, const kbShaderParamOverrides_t *const pShaderParamOverrides ) {
 
 	if ( m_pCurrentRenderWindow == nullptr ) {
 		kbError( "kbRenderer_DX11::AddRenderObject - Error, nullptr Render window found" );
@@ -1220,8 +1220,8 @@ void kbRenderer_DX11::AddRenderObject( const kbComponent *const pComponent, cons
 		newRenderObjectInfo.m_OverrideShaderList = *pShaderOverrideList;
 	}
 
-	if ( pShaderParams != nullptr ) {
-		newRenderObjectInfo.m_ShaderParams = *pShaderParams;
+	if ( pShaderParamOverrides != nullptr ) {
+		newRenderObjectInfo.m_ShaderParamOverrides = *pShaderParamOverrides;
 	}
 
 	m_RenderObjectList_GameThread.push_back( newRenderObjectInfo );
@@ -1230,7 +1230,7 @@ void kbRenderer_DX11::AddRenderObject( const kbComponent *const pComponent, cons
 /**
  *	kbRenderer_DX11::UpdateRenderObject
  */
-void kbRenderer_DX11::UpdateRenderObject( const kbComponent *const pComponent, const kbModel *const pModel, const kbVec3 & pos, const kbQuat & orientation, const kbVec3 & scale, const ERenderPass renderPass, const std::vector<kbShader *> *const pShaderOverrideList, const std::vector<kbVec4> *const pShaderParams ) {
+void kbRenderer_DX11::UpdateRenderObject( const kbComponent *const pComponent, const kbModel *const pModel, const kbVec3 & pos, const kbQuat & orientation, const kbVec3 & scale, const ERenderPass renderPass, const std::vector<kbShader *> *const pShaderOverrideList, const kbShaderParamOverrides_t *const pShaderParamsOverride ) {
 
 	if ( m_pCurrentRenderWindow == nullptr ) {
 		kbError( "kbRenderer_DX11::UpdateRenderObject - nullptr Render Window" );
@@ -1257,8 +1257,8 @@ void kbRenderer_DX11::UpdateRenderObject( const kbComponent *const pComponent, c
 		newRenderObjectInfo.m_OverrideShaderList = *pShaderOverrideList;
 	}
 
-	if ( pShaderParams != nullptr ) {
-		newRenderObjectInfo.m_ShaderParams = *pShaderParams;
+	if ( pShaderParamsOverride != nullptr ) {
+		newRenderObjectInfo.m_ShaderParamOverrides = *pShaderParamsOverride;
 	}
 
 	m_RenderObjectList_GameThread.push_back( newRenderObjectInfo );
@@ -3490,8 +3490,42 @@ void kbRenderer_DX11::RenderModel( const kbRenderObject *const pRenderObject, co
 						boneMatrices[i][2].w = 0;
 					}
 				}
-			}
+			} else {
+                const std::vector<kbShaderParamOverrides_t::kbShaderParam_t> & paramOverrides = pRenderObject->m_ShaderParamOverrides.m_ParamOverrides;
+                for ( int iOverride = 0; iOverride < paramOverrides.size(); iOverride++ ) {
+                    const kbShaderParamOverrides_t::kbShaderParam_t & curOverride = paramOverrides[iOverride];
+                    const std::string & overrideVarName = curOverride.m_VarName;
+                    if ( varName == overrideVarName ) {
+
+                        // Check if it doesn't fit
+                        const size_t endOffset = curOverride.m_VarSizeBytes + bindings[iOverride].m_VarByteOffset ;
+                        if ( endOffset > shaderVarBindings.m_ConstantBufferSizeBytes || ( i < bindings.size() - 1 && endOffset > bindings[i+1].m_VarByteOffset ) ) {
+                            break;
+                        }
+                   
+                        switch( curOverride.m_Type ) {
+                            case kbShaderParamOverrides_t::kbShaderParam_t::SHADER_MAT4 : {
+                                kbMat4 *const pMatOffset = (kbMat4*)pVarByteOffset;
+				                *pMatOffset = curOverride.m_Mat4;
+                                break;
+                            }
+
+                            case kbShaderParamOverrides_t::kbShaderParam_t::SHADER_VEC4 : {
+                                kbVec4 *const pVecOffset = (kbVec4*)pVarByteOffset;
+				                *pVecOffset = curOverride.m_Vec4;
+                                break;
+                            }
+
+                            case kbShaderParamOverrides_t::kbShaderParam_t::SHADER_TEX : {
+
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
 		}
+
 
 		m_pDeviceContext->Unmap( pConstantBuffer, 0 );
 		m_pDeviceContext->VSSetConstantBuffers( 0, 1, &pConstantBuffer );

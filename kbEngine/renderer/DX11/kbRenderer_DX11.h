@@ -422,12 +422,12 @@ public:
 	void										AddRenderObject( const kbComponent *const, const kbModel *const model, const kbVec3 & pos, const kbQuat & orientation, 
 																 const kbVec3 & scale, const ERenderPass RenderPass = RP_Lighting, 
 																 const std::vector<kbShader *> *const pShaderOverrideList = nullptr, 
-																 const std::vector<kbVec4> * pShaderParams = nullptr );
+																 const kbShaderParamOverrides_t *const pShaderParamsOverride = nullptr );
 
 	void										UpdateRenderObject( const kbComponent *const , const kbModel *const model, const kbVec3 & pos, const kbQuat & orientation, 
 																	const kbVec3 & scale, const ERenderPass RenderPass = RP_Lighting,
 																	const std::vector<kbShader *> *const pShaderOverrideList = nullptr, 
-																	const std::vector<kbVec4> *const pShaderParams = nullptr );
+																	const kbShaderParamOverrides_t *const pShaderParamsOverride = nullptr );
 
 	void										RemoveRenderObject( const kbComponent *const );
 	
@@ -508,7 +508,7 @@ private:
 
 	void										RenderScene();
 
-	void										RenderModel(  const kbRenderObject *const pRenderObject, const ERenderPass renderPass, const bool bShadowPass = false );
+	void										RenderModel( const kbRenderObject *const pRenderObject, const ERenderPass renderPass, const bool bShadowPass = false );
 
 	void										RenderScreenSpaceQuads();
 	void										RenderScreenSpaceQuadImmediate( const int start_x, const int start_y, const int size_x, const int size_y, 

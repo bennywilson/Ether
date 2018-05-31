@@ -209,6 +209,63 @@ private:
 };
 
 /**
+ *	kbShaderParamOverrides_t
+ */
+struct kbShaderParamOverrides_t {
+
+    struct kbShaderParam_t {
+
+        enum type {
+            SHADER_MAT4,
+            SHADER_VEC4,
+            SHADER_TEX,
+        } m_Type;
+
+        kbMat4 m_Mat4;
+        kbVec4 m_Vec4;
+        const class kbTexture * m_pTexture;
+
+        kbShaderParam_t() { }
+        std::string m_VarName;
+        size_t m_VarSizeBytes;
+    };
+
+    kbShaderParamOverrides_t() { }
+
+    std::vector<kbShaderParam_t> m_ParamOverrides;
+
+    kbShaderParam_t & AllocateParam() {
+        kbShaderParam_t newParam;
+        m_ParamOverrides.push_back( newParam );
+        return m_ParamOverrides[m_ParamOverrides.size() - 1];
+    }
+
+    void SetMat4( const std::string & varName, const kbMat4 & newMat ) {
+        kbShaderParam_t & newParam = AllocateParam();
+        newParam.m_VarName = varName;
+        newParam.m_Mat4 = newMat;
+        newParam.m_Type = kbShaderParam_t::SHADER_MAT4;
+        newParam.m_VarSizeBytes = sizeof(kbMat4);
+    }
+
+    void SetVec4( const std::string & varName, const kbVec4 & newVec ) {
+        kbShaderParam_t & newParam = AllocateParam();
+        newParam.m_VarName = varName;
+        newParam.m_Vec4 = newVec;
+        newParam.m_Type = kbShaderParam_t::SHADER_VEC4;
+        newParam.m_VarSizeBytes = sizeof(kbVec4);
+    }
+
+    void SetTexture( const std::string & varName, const kbTexture *const pTexture ) {
+        kbShaderParam_t & newParam = AllocateParam();
+        newParam.m_VarName = varName;
+        newParam.m_pTexture = pTexture;
+        newParam.m_Type = kbShaderParam_t::SHADER_TEX;
+        newParam.m_VarSizeBytes = sizeof(kbTexture*);
+    }
+};
+
+/**
  *	kbRenderObject
  */
 class kbRenderObject {
@@ -228,7 +285,7 @@ public:
 	const class kbComponent *					m_pComponent;
 	const class kbModel *						m_pModel;
 	std::vector<class kbShader *>				m_OverrideShaderList;
-	std::vector<kbVec4>							m_ShaderParams;
+	kbShaderParamOverrides_t                    m_ShaderParamOverrides;
 	ERenderPass									m_RenderPass;
 	kbVec3										m_Position;
 	kbQuat										m_Orientation;

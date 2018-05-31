@@ -7,6 +7,8 @@
 #ifndef _KBMODELCOMPONENT_H_
 #define _KBMODELCOMPONENT_H_
 
+#include "kbRenderer_Defs.h"
+
 /**
  *	kbModelComponent
  */
@@ -19,14 +21,14 @@ public:
 
 	virtual										~kbModelComponent();
 
-	void										SetShaderParam( const int index, const kbVec4 & newParam );
+	void										SetShaderParam( const std::string & paramName, const kbShaderParamOverrides_t::kbShaderParam_t & shaderParam );
 
 	bool										GetCastsShadow() const { return m_bCastsShadow; }
 
 protected:
 
 	enum ERenderPass							m_RenderPass;
-	std::vector<class kbVec4>					m_ShaderParams;
+	kbShaderParamOverrides_t					m_ShaderParams;
 
 	bool										m_bCastsShadow;
 };
