@@ -2023,11 +2023,6 @@ void kbRenderer_DX11::RenderScene() {
 			}
 		}
 	
-	//	DrawTexture( m_RenderTargets[SCRATCH_BUFFER].m_pShaderResourceView, kbVec3( 10.0f, 10.0f, 0.0f ), kbVec3( Back_Buffer_Width * 0.25f, Back_Buffer_Width * 0.25f, 0.0f ), kbVec3( (float)Back_Buffer_Width, (float)Back_Buffer_Height, 0.0f ) );
-//DrawTexture( m_RenderTargets[DOWN_RES_BUFFER].m_pShaderResourceView, kbVec3( 10.0f, 10.0f, 0.0f ), kbVec3( Back_Buffer_Width * 0.25f, Back_Buffer_Width * 0.25f, 0.0f ), kbVec3( (float)Back_Buffer_Width, (float)Back_Buffer_Height, 0.0f ) );
-
-		// debug rendering
-	
 		m_RenderState.SetDepthStencilState();
 
 		if ( IsRenderingToHMD() || this->IsUsingHMDTrackingOnly() ) {

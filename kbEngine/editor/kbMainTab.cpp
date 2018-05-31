@@ -78,7 +78,7 @@ kbMainTab::kbMainTab( int x, int y, int w, int h ) :
 	m_CameraMoveSpeedMultiplier = 1.0f;
 	m_pCurrentlySelectedResource = nullptr;
 
-	m_MousePickXY.Set( -1, -1 );
+	ZeroMemory( &m_LastInputState, sizeof( m_LastInputState ) );
 }
 
 /**
@@ -160,62 +160,72 @@ void kbMainTab::RenderSync() {
 
 	m_Manipulator.RenderSync();
 
-	if ( m_MousePickXY.x >= 0 && m_MousePickXY.y >= 0 ) {
+	if ( m_LastInputState.leftMouseButtonDown == false ) {
+		return;
+	}
 
 		kbEditorWindow *const pCurrentWindow = GetCurrentWindow();
 		RECT windowRect;
 		GetWindowRect( pCurrentWindow->GetWindowHandle(), &windowRect );
 		const float windowWidth = (float) windowRect.right - windowRect.left;
 		const float windowHeight = (float) windowRect.bottom - windowRect.top;
-		
-		m_MousePickXY.x -= windowRect.left;
-		m_MousePickXY.y -= y() + kbEditor::TabHeight();
+		kbVec2i mouseXY( m_LastInputState.mouseX, m_LastInputState.mouseY );
+		mouseXY.x -= windowRect.left;
+		mouseXY.y -= y() + kbEditor::TabHeight();
 
-		m_MousePickXY.x = (int)(m_MousePickXY.x * g_pRenderer->GetBackBufferWidth() / windowWidth );
-		m_MousePickXY.y = (int)(m_MousePickXY.y * g_pRenderer->GetBackBufferHeight() / windowHeight );
+		mouseXY.x = (int)(mouseXY.x * g_pRenderer->GetBackBufferWidth() / windowWidth );
+		mouseXY.y = (int)(mouseXY.y * g_pRenderer->GetBackBufferHeight() / windowHeight );
 
-		if ( m_MousePickXY.x < 0 || m_MousePickXY.y < 0 || m_MousePickXY.x >= g_pRenderer->GetBackBufferWidth() || m_MousePickXY.y >= g_pRenderer->GetBackBufferHeight() ) {
+	if ( m_Manipulator.IsGrabbed() ) {
+ManipulatorEvent( false, mouseXY );
+//m_MousePickXY.Set( -1, -1 );
+	} else  if ( mouseXY.x >= 0 && mouseXY.y >= 0 ) {
+
+		if ( mouseXY.x < 0 || mouseXY.y < 0 || mouseXY.x >= g_pRenderer->GetBackBufferWidth() || mouseXY.y >= g_pRenderer->GetBackBufferHeight() ) {
 			g_Editor->DeselectEntities();
 			return;
 		}
 
-		const kbVec2i hitEntityId = g_pRenderer->GetEntityIdAtScreenPosition( m_MousePickXY.x, m_MousePickXY.y );
-		std::vector<kbEditorEntity*> & entityList = g_Editor->GetGameEntities();
+		const kbVec2i hitEntityId = g_pRenderer->GetEntityIdAtScreenPosition( mouseXY.x, mouseXY.y );
+		if ( hitEntityId.x == UINT16_MAX ) {
+			ManipulatorEvent( true, mouseXY );
+		} else {
+			std::vector<kbEditorEntity*> & entityList = g_Editor->GetGameEntities();
 
-		const bool bCtrlIsDown = GetAsyncKeyState( VK_LCONTROL ) || GetAsyncKeyState( VK_RCONTROL );
+			const bool bCtrlIsDown = GetAsyncKeyState( VK_LCONTROL ) || GetAsyncKeyState( VK_RCONTROL );
 
-		kbEditorEntity * pSelectedEntity = nullptr;
-		for ( int i = 0; i < entityList.size(); i++ ) {
-			if ( entityList[i]->GetGameEntity()->GetEntityId() == hitEntityId.x ) {
-				pSelectedEntity = entityList[i];
-				std::vector<kbEditorEntity*> selectedEntities;
-				selectedEntities.push_back( entityList[i] );
-				g_Editor->SelectEntities( selectedEntities, bCtrlIsDown );
-				break;
+			kbEditorEntity * pSelectedEntity = nullptr;
+			for ( int i = 0; i < entityList.size(); i++ ) {
+				if ( entityList[i]->GetGameEntity()->GetEntityId() == hitEntityId.x ) {
+					pSelectedEntity = entityList[i];
+					std::vector<kbEditorEntity*> selectedEntities;
+					selectedEntities.push_back( entityList[i] );
+					g_Editor->SelectEntities( selectedEntities, bCtrlIsDown );
+					break;
+				}
 			}
-		}
 
-		if ( pSelectedEntity == nullptr ) {
-			g_Editor->DeselectEntities();
-			return;
-		}
+			if ( pSelectedEntity == nullptr ) {
+				g_Editor->DeselectEntities();
+				return;
+			}
 
-		kbVec3 manipulatorPos( 0.0f, 0.0f, 0.0f );
-		for ( int i = 0; i < g_Editor->GetSelectedObjects().size(); i++ ) {
-			manipulatorPos += g_Editor->GetSelectedObjects()[i]->GetPosition();
-		}
-		manipulatorPos /= (float)g_Editor->GetSelectedObjects().size();
+			kbVec3 manipulatorPos( 0.0f, 0.0f, 0.0f );
+			for ( int i = 0; i < g_Editor->GetSelectedObjects().size(); i++ ) {
+				manipulatorPos += g_Editor->GetSelectedObjects()[i]->GetPosition();
+			}
+			manipulatorPos /= (float)g_Editor->GetSelectedObjects().size();
 
-		// check if mouse grabbed the manipulator
-		m_Manipulator.SetPosition( manipulatorPos );
-		m_Manipulator.SetOrientation( pSelectedEntity->GetOrientation() );
-		m_Manipulator.SetScale( pSelectedEntity->GetScale() );
+			// check if mouse grabbed the manipulator
+			m_Manipulator.SetPosition( manipulatorPos );
+			m_Manipulator.SetOrientation( pSelectedEntity->GetOrientation() );
+			m_Manipulator.SetScale( pSelectedEntity->GetScale() );
 
-//		kbVec4 mousePosition( (float)inputObject->mouseX - windowRect.left, (float)inputObject->mouseY, 0.0f, 1.0f );
+	//		kbVec4 mousePosition( (float)inputObject->mouseX - windowRect.left, (float)inputObject->mouseY, 0.0f, 1.0f );
  
-		m_MousePickXY.Set( -1, -1 );
+		//	m_MousePickXY.Set( -1, -1 );
+		}
 	}
-
 }
 
 /**
@@ -309,21 +319,21 @@ kbEditorWindow * kbMainTab::GetCurrentWindow() {
 void kbMainTab::InputCB( const widgetCBObject *const widgetCBObj ) {
 
 	const widgetCBInputObject * inputObject = static_cast< const widgetCBInputObject * >( widgetCBObj );
+	m_LastInputState = *inputObject;
 
 	if ( inputObject->rightMouseButtonDown ) {
 		CameraMoveCB( inputObject );
-	} else if ( inputObject->leftMouseButtonPressed ) {
+	}/* else if ( inputObject->leftMouseButtonPressed || inputObject->leftMouseButtonDown ) {
 
 		if ( inputObject->mouseX > m_pEditorWindow->x() && inputObject->mouseX < m_pEditorWindow->x() + m_pEditorWindow->w() &&
 		     inputObject->mouseY > m_pEditorWindow->y() && inputObject->mouseY < m_pEditorWindow->y() + m_pEditorWindow->h() ) {
-
+			
 			m_MousePickXY.Set( inputObject->mouseX, inputObject->mouseY );
 		}
-	}
-
-	if ( inputObject->leftMouseButtonDown == false ) {
+	} else {
 		m_Manipulator.ReleaseFromMouseGrab();
-	}
+	}*/
+
 }
 
 /**
@@ -465,6 +475,210 @@ bool kbMainTab::ObjectSelectedOrMovedCB( const widgetCBInputObject *const inputO
 				}
 			}
 
+		//*	std::vector< kbEditorEntity * > entityToSelect;
+	/*		entityToSelect.push_back( gameEntities[nearestIndex] );
+
+			g_Editor->SelectEntities( entityToSelect, bCtrlIsDown );
+
+			kbVec3 manipulatorPos( 0.0f, 0.0f, 0.0f );
+			for ( int i = 0; i < g_Editor->GetSelectedObjects().size(); i++ ) {
+				manipulatorPos += g_Editor->GetSelectedObjects()[i]->GetPosition();
+			}
+			manipulatorPos /= (float)g_Editor->GetSelectedObjects().size();
+
+			// check if mouse grabbed the manipulator
+			m_Manipulator.SetPosition( manipulatorPos );
+			m_Manipulator.SetOrientation( gameEntities[nearestIndex]->GetOrientation() );
+			m_Manipulator.SetScale( gameEntities[nearestIndex]->GetScale() );
+
+			m_Manipulator.AttemptMouseGrab( camera.m_Position, ray.ToVec3(), camera.m_Rotation );
+
+			bHitSomething = true;*/
+
+		} else {
+			// we did not hit an entity, see if at least hit the manipulator of a selected entity
+		/*	for ( int i = 0; i < gameEntities.size(); i++ ) {
+				if ( gameEntities[i]->IsSelected() ) {
+					if ( m_Manipulator.AttemptMouseGrab( camera.m_Position, ray.ToVec3(), camera.m_Rotation ) == false ) {
+						g_Editor->SelectEntities( std::vector<kbEditorEntity*>(), false );
+						m_Manipulator.ReleaseFromMouseGrab();
+						break;
+					}
+				}
+			}*/
+		}
+	}
+
+	// drag
+	if ( inputObject->leftMouseButtonPressed == false && inputObject->leftMouseButtonDown && ( inputObject->mouseDeltaX != 0 || inputObject->mouseDeltaY != 0 ) ) {
+		
+		kbVec3 cameraSpaceDrag( ( float ) inputObject->mouseDeltaX, ( float ) inputObject->mouseDeltaY, 0.0f );
+		kbVec3 worldSpaceDrag = cameraSpaceDrag * camera.m_Rotation.ToMat4();
+
+	//	m_Manipulator.UpdateMouseDrag( camera.m_Position, ray.ToVec3(), camera.m_Rotation );
+
+		for ( int i = 0; i < gameEntities.size(); i++ ) {
+			if ( gameEntities[i]->IsSelected() ) {
+				gameEntities[i]->SetPosition( m_Manipulator.GetPosition() );
+				gameEntities[i]->SetOrientation( m_Manipulator.GetOrientation() );
+				gameEntities[i]->SetScale( m_Manipulator.GetScale() );
+			}
+		}
+	}
+/*
+	if ( inputObject->leftMouseButtonPressed == false && inputObject->leftMouseButtonDown ) {
+		m_Manipulator.ProcessInput( true );
+	}*/
+
+	return bHitSomething;
+}
+
+/**
+ *	kbMainTab::EntityTransformedCB
+ */
+void kbMainTab::EntityTransformedCB( const widgetCBObject *const widgetCBObj ) {
+	const widgetCBEntityTransformed * entityTransformedWidget = static_cast< const widgetCBEntityTransformed * >( widgetCBObj );
+
+	std::vector< class kbEditorEntity * > & gameEntities = g_Editor->GetGameEntities();
+	kbEditorEntity * pMovedEntity = entityTransformedWidget->entitiesMoved[0];
+
+	if ( std::find( gameEntities.begin(), gameEntities.end(), pMovedEntity ) != gameEntities.end() ) {
+		m_Manipulator.SetPosition( pMovedEntity->GetPosition() );
+		m_Manipulator.SetOrientation(pMovedEntity->GetOrientation() );
+		m_Manipulator.SetScale( pMovedEntity->GetScale() );
+	}
+}
+
+/**
+ *	kbMainTab::ManipulatorClicked
+ */
+void kbMainTab::ManipulatorEvent( const bool bClicked, const kbVec2i & mouseXY ) {
+
+	RECT windowRect;
+	
+/*		kbEditorWindow *const pCurrentWindow = GetCurrentWindow();
+		RECT windowRect;
+		GetWindowRect( pCurrentWindow->GetWindowHandle(), &windowRect );
+		const float windowWidth = (float) windowRect.right - windowRect.left;
+		const float windowHeight = (float) windowRect.bottom - windowRect.top;
+		
+		m_MousePickXY.x -= windowRect.left;
+		m_MousePickXY.y -= y() + kbEditor::TabHeight();
+
+		m_MousePickXY.x = (int)(m_MousePickXY.x * g_pRenderer->GetBackBufferWidth() / windowWidth );
+		m_MousePickXY.y = (int)(m_MousePickXY.y * g_pRenderer->GetBackBufferHeight() / windowHeight );
+
+*/
+	kbEditorWindow *const pCurrentWindow = GetCurrentWindow();
+
+	if ( pCurrentWindow == nullptr || pCurrentWindow != m_pEditorWindow ) {
+		return;
+	}
+
+	kbCamera & camera = pCurrentWindow->GetCamera();
+
+	GetWindowRect( pCurrentWindow->GetWindowHandle(), &windowRect );
+	const float windowWidth = (float)g_pRenderer->GetBackBufferWidth();
+	const float windowHeight = (float)g_pRenderer->GetBackBufferHeight();
+	
+	kbVec4 mousePosition( (float)mouseXY.x, (float)mouseXY.y, 0.0f, 1.0f );
+	
+	//mousePosition.y -= y() + kbEditor::TabHeight();
+	
+	mousePosition.x = ( ( ( 2.0f * mousePosition.x ) / windowWidth ) - 1.0f );
+	mousePosition.y = -( ( ( 2.0f * (mousePosition.y ) ) / windowHeight ) - 1.0f );
+	mousePosition.z = 1.0f;
+	
+	// persepctive mat --------------------------
+	kbMat4 perspectiveMat;
+	perspectiveMat.CreatePerspectiveMatrix( kbToRadians( 75.0f ), windowWidth / windowHeight, kbRenderer_DX11::Near_Plane, kbRenderer_DX11::Far_Plane );
+	perspectiveMat.InverseProjection();
+	
+	// view mat --------------------------
+	kbMat4 modelViewMatrix = camera.m_Rotation.ToMat4();
+	modelViewMatrix[3] = camera.m_Position;
+	kbMat4 unitCubeToWorldMatrix = perspectiveMat * modelViewMatrix;
+	
+	kbVec4 ray = mousePosition.TransformPoint( unitCubeToWorldMatrix );
+	ray /= ray.w;
+
+	if ( bClicked ) {
+		if ( m_Manipulator.AttemptMouseGrab( camera.m_Position, ray.ToVec3(), camera.m_Rotation ) == false ) {
+			g_Editor->SelectEntities( std::vector<kbEditorEntity*>(), false );
+			m_Manipulator.ReleaseFromMouseGrab();
+		}
+		return;
+	}
+
+	m_Manipulator.UpdateMouseDrag( camera.m_Position, ray.ToVec3(), camera.m_Rotation );
+/*
+	kbEditorWindow *const pCurrentWindow = GetCurrentWindow();
+
+	if ( pCurrentWindow == nullptr || pCurrentWindow != m_pEditorWindow ) {
+		return false;
+	}
+
+	kbCamera & camera = pCurrentWindow->GetCamera();
+		
+	std::vector<kbEditorEntity *> & gameEntities = g_Editor->GetGameEntities();
+
+	RECT windowRect;
+	
+	GetWindowRect( pCurrentWindow->GetWindowHandle(), &windowRect );
+	const float windowWidth = (float) windowRect.right - windowRect.left;
+	const float windowHeight = (float) windowRect.bottom - windowRect.top;
+	
+	kbVec4 mousePosition( (float)inputObject->mouseX - windowRect.left, (float)inputObject->mouseY, 0.0f, 1.0f );
+	
+	mousePosition.y -= y() + kbEditor::TabHeight();
+	
+	mousePosition.x = ( ( ( 2.0f * mousePosition.x ) / windowWidth ) - 1.0f );
+	mousePosition.y = ( 1.0f - ( 2.0f * (mousePosition.y ) ) / windowHeight );
+	mousePosition.z = 1.0f;
+	
+	// persepctive mat --------------------------
+	kbMat4 perspectiveMat;
+	perspectiveMat.CreatePerspectiveMatrix( kbToRadians( 75.0f ), windowWidth / windowHeight, kbRenderer_DX11::Near_Plane, kbRenderer_DX11::Far_Plane );
+	perspectiveMat.InverseProjection();
+	
+	// view mat --------------------------
+	kbMat4 modelViewMatrix = camera.m_Rotation.ToMat4();
+	modelViewMatrix[3] = camera.m_Position;
+	kbMat4 unitCubeToWorldMatrix = perspectiveMat * modelViewMatrix;
+	
+	kbVec4 ray = mousePosition.TransformPoint( unitCubeToWorldMatrix );
+	ray /= ray.w;
+	bool bHitSomething = false;
+
+	if ( inputObject->leftMouseButtonPressed && pCurrentWindow->IsPointWithinBounds( inputObject->mouseX, inputObject->mouseY ) ) {
+
+		float nearestT = FLT_MAX;
+		int nearestIndex = -1;
+
+		for ( int i = 0; i < gameEntities.size(); i++ ) {
+			kbEditorEntity * pCurrentEntity = gameEntities[i];
+			
+			float t;
+			if ( kbRayAABBIntersection( t, camera.m_Position, ray.ToVec3(), gameEntities[i]->GetWorldBounds() ) ) {
+				if ( t < nearestT ) {
+					nearestT = t;
+					nearestIndex = i;
+				}
+			}
+		}
+
+		if ( nearestIndex >= 0 ) {
+			// we've picked an object
+
+			bool bCtrlIsDown = false;
+			
+			for ( int i = 0; i < inputObject->keys.size(); i++ ) {
+				if( inputObject->keys[i] == widgetCBInputObject::WidgetInput_Ctrl ) {
+					bCtrlIsDown = true;
+					break;
+				}
+			}
+
 			std::vector< kbEditorEntity * > entityToSelect;
 			entityToSelect.push_back( gameEntities[nearestIndex] );
 
@@ -519,22 +733,5 @@ bool kbMainTab::ObjectSelectedOrMovedCB( const widgetCBInputObject *const inputO
 	if ( inputObject->leftMouseButtonPressed == false && inputObject->leftMouseButtonDown ) {
 		m_Manipulator.ProcessInput( true );
 	}
-
-	return bHitSomething;
-}
-
-/**
- *	kbMainTab::EntityTransformedCB
- */
-void kbMainTab::EntityTransformedCB( const widgetCBObject *const widgetCBObj ) {
-	const widgetCBEntityTransformed * entityTransformedWidget = static_cast< const widgetCBEntityTransformed * >( widgetCBObj );
-
-	std::vector< class kbEditorEntity * > & gameEntities = g_Editor->GetGameEntities();
-	kbEditorEntity * pMovedEntity = entityTransformedWidget->entitiesMoved[0];
-
-	if ( std::find( gameEntities.begin(), gameEntities.end(), pMovedEntity ) != gameEntities.end() ) {
-		m_Manipulator.SetPosition( pMovedEntity->GetPosition() );
-		m_Manipulator.SetOrientation(pMovedEntity->GetOrientation() );
-		m_Manipulator.SetScale( pMovedEntity->GetScale() );
-	}
+*/
 }

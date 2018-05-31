@@ -32,6 +32,7 @@
 	bool										AttemptMouseGrab( const kbVec3 & rayOrigin, const kbVec3 & rayDirection, const kbQuat & cameraOrientation );
 	void										UpdateMouseDrag( const kbVec3 & rayOrigin, const kbVec3 & rayDirection, const kbQuat & cameraOrientation );
 	void										ReleaseFromMouseGrab() { m_SelectedGroup = -1; m_LastOrientation = m_Orientation; }
+	bool										IsGrabbed() const { return m_SelectedGroup != -1; }
 
 	void										SetPosition( const kbVec3 & newPosition ) { m_Position = newPosition; }
 	const kbVec3 &								GetPosition() const { return m_Position; }

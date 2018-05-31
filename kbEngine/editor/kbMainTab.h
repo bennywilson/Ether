@@ -36,6 +36,7 @@ private:
 	void													CameraMoveCB( const widgetCBInputObject *const widgetCBObject );
 	bool													ObjectSelectedOrMovedCB( const widgetCBInputObject *const widgetCBObject );
 	void													EntityTransformedCB( const widgetCBObject *const widgetCBObject );
+	void													ManipulatorEvent( const bool bClicked, const kbVec2i & mouseXY );
 
 	kbEditorWindow *										GetCurrentWindow();
 
@@ -52,7 +53,7 @@ private:
 
 	float													m_CameraMoveSpeedMultiplier;
 
-	kbVec2i													m_MousePickXY;
+	widgetCBInputObject										m_LastInputState;
 };
 
 #endif
