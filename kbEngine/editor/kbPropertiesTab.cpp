@@ -20,6 +20,7 @@ propertiesTabCBData_t::propertiesTabCBData_t(
 	kbEditorEntity *const pEditorEntity,
 	const kbGameEntityPtr *const inGameEntityPtr,
 	kbComponent *const pComponent,
+    kbComponent *const pParentComponent,
 	const kbResource ** pResource,
 	const kbString variableName,
 	void *const pVariableValue,
@@ -33,6 +34,7 @@ propertiesTabCBData_t::propertiesTabCBData_t(
 		m_GameEntityPtr = *inGameEntityPtr;
 	}
 	m_pComponent = pComponent;
+    m_pParentComponent = pParentComponent;
 	m_pResource = pResource;
 	m_VariableName = variableName;
 	m_pVariablePtr = pVariableValue;
@@ -181,6 +183,10 @@ void kbPropertiesTab::PointerButtonCB( Fl_Widget * widget, void * voidPtr ) {
 		}
 
 		userData->m_pComponent->EditorChange( *fieldName );
+        if ( userData->m_pParentComponent != nullptr ) {
+            userData->m_pParentComponent->EditorChange( *fieldName );
+        }
+
 		g_pPropertiesTab->RefreshEntity();
 		return;
 	}
@@ -199,6 +205,9 @@ void kbPropertiesTab::PointerButtonCB( Fl_Widget * widget, void * voidPtr ) {
 	*userData->m_pResource = pResource;
 
 	userData->m_pComponent->EditorChange( *fieldName );
+     if ( userData->m_pParentComponent != nullptr ) {
+         userData->m_pParentComponent->EditorChange( *fieldName );
+     }
 
 	g_pPropertiesTab->RefreshEntity();
 
@@ -302,6 +311,9 @@ void kbPropertiesTab::TextFieldCB( Fl_Widget * widget, void * voidPtr ) {
 	g_Editor->PushUndoAction( new kbUndoVariableAction( userData->m_VariableType, prevValuePtr, curValuePtr, userData->m_pVariablePtr ) );
 
 	userData->m_pComponent->EditorChange( userData->m_VariableName.stl_str() );
+    if ( userData->m_pParentComponent != nullptr ) {
+        userData->m_pParentComponent->EditorChange( userData->m_VariableName.stl_str() );
+    }
 
 	delete prevValuePtr;
 	delete curValuePtr;
@@ -365,6 +377,11 @@ void kbPropertiesTab::ArrayResizeCB( Fl_Widget * widget, void * voidPtr ) {
 		userData->m_pComponent->Enable( true );
 	}
 
+	userData->m_pComponent->EditorChange( userData->m_VariableName.stl_str() );
+    if ( userData->m_pParentComponent != nullptr ) {
+        userData->m_pParentComponent->EditorChange( userData->m_VariableName.stl_str() );
+    }
+
 	g_pPropertiesTab->RequestRefreshNextUpdate();
 	PropertyChangedCB( userData->m_GameEntityPtr );
 }
@@ -405,7 +422,7 @@ void kbPropertiesTab::PropertyChangedCB( const kbGameEntityPtr entityPtr ) {
 /**
  *	kbPropertiesTab::RefreshComponent
  */
-void kbPropertiesTab::RefreshComponent( kbEditorEntity *const pEntity, kbComponent *const pComponent, int & startX, int & curY, const int inputHeight, const bool bIsStruct, const void *const pArrayPtr, const int arrayIndex ) {
+void kbPropertiesTab::RefreshComponent( kbEditorEntity *const pEntity, kbComponent *const pComponent, kbComponent *const pParentComponent, int & startX, int & curY, const int inputHeight, const bool bIsStruct, const void *const pArrayPtr, const int arrayIndex ) {
 
 	byte *const componentBytePtr = ( byte* ) pComponent;
 
@@ -425,7 +442,7 @@ void kbPropertiesTab::RefreshComponent( kbEditorEntity *const pEntity, kbCompone
 			Fl_Button *const DeleteButton = new Fl_Button( startX +  DisplayWidth() - FontSize() - Fl::scrollbar_size(), curY + FontSize() / 2, inputHeight/2,inputHeight/2,"X");
 			DeleteButton->color(88+1);
 
-			propertiesTabCBData_t cbData( pEntity, nullptr, pComponent, nullptr, kbString(""), nullptr, KBTYPEINFO_NONE, "", nullptr, -1 );
+			propertiesTabCBData_t cbData( pEntity, nullptr, pComponent, pParentComponent, nullptr, kbString(""), nullptr, KBTYPEINFO_NONE, "", nullptr, -1 );
 			m_CallBackData.push_back( cbData );
 
 			DeleteButton->callback( DeleteComponent, static_cast<void *>( &m_CallBackData[ m_CallBackData.size() - 1 ] ) );
@@ -436,7 +453,7 @@ void kbPropertiesTab::RefreshComponent( kbEditorEntity *const pEntity, kbCompone
 			Fl_Button *const DeleteButton = new Fl_Button( startX +  DisplayWidth() - FontSize() - Fl::scrollbar_size(), curY + FontSize() / 2, inputHeight/2,inputHeight/2,"-");
 			DeleteButton->color(88+1);
 
-			propertiesTabCBData_t cbData( pEntity, nullptr, pComponent, nullptr, kbString(""), nullptr, KBTYPEINFO_NONE, pComponentName, pArrayPtr, arrayIndex );
+			propertiesTabCBData_t cbData( pEntity, nullptr, pComponent, pParentComponent, nullptr, kbString(""), nullptr, KBTYPEINFO_NONE, pComponentName, pArrayPtr, arrayIndex );
 			m_CallBackData.push_back( cbData );
 
 			InsertButton->callback( InsertArrayStruct, static_cast<void *>( &m_CallBackData[ m_CallBackData.size() - 1 ] )  );
@@ -501,7 +518,7 @@ void kbPropertiesTab::RefreshComponent( kbEditorEntity *const pEntity, kbCompone
 			Fl_Input * pArraySizeInput = new Fl_Input( startX + propertyNamePixelWidth, curY, FontSize() * 3, inputHeight );
 			curY += LineSpacing();
 
-			propertiesTabCBData_t cbData( pEntity, nullptr, pComponent, nullptr, pNextField->first, ( void * ) byteOffsetToVar, pNextField->second.Type(),  pNextField->second.GetStructName(), nullptr, -1 );
+			propertiesTabCBData_t cbData( pEntity, nullptr, pComponent, pParentComponent, nullptr, pNextField->first, ( void * ) byteOffsetToVar, pNextField->second.Type(),  pNextField->second.GetStructName(), nullptr, -1 );
 			m_CallBackData.push_back( cbData );
 
 			pArraySizeInput->callback( &ArrayResizeCB, static_cast<void *>( &m_CallBackData[ m_CallBackData.size() - 1 ] ) );
@@ -516,7 +533,7 @@ void kbPropertiesTab::RefreshComponent( kbEditorEntity *const pEntity, kbCompone
 
 					if ( propertyMetaData && propertyMetaData->bExpanded ) {
 						for ( int i = 0; i < shaderList->size(); i++ ) {
-							RefreshProperty( pEntity, pNextField->first, pNextField->second.Type(), pNextField->second.GetStructName(), pComponent, (byte*)&(*shaderList)[i], startX, curY, inputHeight );
+							RefreshProperty( pEntity, pNextField->first, pNextField->second.Type(), pNextField->second.GetStructName(), pComponent, (byte*)&(*shaderList)[i], pParentComponent, startX, curY, inputHeight );
 							curY += LineSpacing();
 						}
 					}
@@ -545,7 +562,7 @@ void kbPropertiesTab::RefreshComponent( kbEditorEntity *const pEntity, kbCompone
 							Fl_Text_Display * propertyNameLabel = new Fl_Text_Display( startX + 24, curY + LineSpacing(), 0, inputHeight, indexText[i].c_str() );
 							byte * curComponentByte = (byte*)g_NameToTypeInfoMap->GetVectorElement( byteOffsetToVar, pNextField->second.GetStructName(), i );
 							startX += kbEditor::PanelBorderSize(5);
-							RefreshProperty( pEntity, pNextField->first, pNextField->second.Type(), pNextField->second.GetStructName(), pComponent, curComponentByte, startX, curY, inputHeight, byteOffsetToVar, i );
+							RefreshProperty( pEntity, pNextField->first, pNextField->second.Type(), pNextField->second.GetStructName(), pComponent, curComponentByte, pParentComponent, startX, curY, inputHeight, byteOffsetToVar, i );
 							curY += LineSpacing();
 							startX -= kbEditor::PanelBorderSize(5);
 						}
@@ -553,7 +570,7 @@ void kbPropertiesTab::RefreshComponent( kbEditorEntity *const pEntity, kbCompone
 					break;
 				}	
 		} else {
-			RefreshProperty( pEntity, pNextField->first, pNextField->second.Type(), pNextField->second.GetStructName(), pComponent, byteOffsetToVar, startX, curY, inputHeight );
+			RefreshProperty( pEntity, pNextField->first, pNextField->second.Type(), pNextField->second.GetStructName(), pComponent, byteOffsetToVar, pParentComponent, startX, curY, inputHeight );
 			curY += LineSpacing();
 		}
 	}
@@ -587,7 +604,7 @@ void kbPropertiesTab::RefreshEntity() {
 		const kbGameEntity * pGameEntity = pEntity->GetGameEntity();
 
 		for ( size_t i = 0; i < pGameEntity->NumComponents(); i++ ) {
-			RefreshComponent( pEntity, const_cast<kbGameComponent *>( pGameEntity->GetComponent( i ) ), startX, curY, inputHeight );
+			RefreshComponent( pEntity, const_cast<kbGameComponent *>( pGameEntity->GetComponent( i ) ), nullptr, startX, curY, inputHeight );
 			curY += LineSpacing();
 		}
 	}
@@ -609,9 +626,9 @@ void kbPropertiesTab::RefreshEntity() {
 /**
  *	kbPropertiesTab::RefreshProperty
  */
-void kbPropertiesTab::RefreshProperty( kbEditorEntity *const pEntity, const std::string & propertyName, const kbTypeInfoType_t propertyType, const std::string & structName, kbComponent * pComponent, const byte *const byteOffsetToVar,  int & xPos, int & yPos, const int inputHeight, const void *const pArrayPtr, const int arrayIndex ) {
+void kbPropertiesTab::RefreshProperty( kbEditorEntity *const pEntity, const std::string & propertyName, const kbTypeInfoType_t propertyType, const std::string & structName, kbComponent *const pComponent, const byte *const byteOffsetToVar, kbComponent *const pParentComponent, int & xPos, int & yPos, const int inputHeight, const void *const pArrayPtr, const int arrayIndex ) {
 
-	propertiesTabCBData_t cbData( pEntity, nullptr, pComponent, nullptr, propertyName, nullptr, propertyType, "", nullptr, -1 );
+	propertiesTabCBData_t cbData( pEntity, nullptr, pComponent, pParentComponent, nullptr, propertyName, nullptr, propertyType, "", nullptr, -1 );
 
 	const std::string propertyNameWithPadding = " LONGEST STRING";
 
@@ -666,9 +683,9 @@ void kbPropertiesTab::RefreshProperty( kbEditorEntity *const pEntity, const std:
 		}
 
 		case KBTYPEINFO_STRUCT : {
-			kbComponent *const pStruct = ( kbComponent *) byteOffsetToVar;
+			kbComponent *const pStruct = (kbComponent *) byteOffsetToVar;
 			yPos += inputHeight;
-			RefreshComponent( pEntity, pStruct, xPos, yPos, inputHeight, true, pArrayPtr, arrayIndex );
+			RefreshComponent( pEntity, pStruct, pComponent, xPos, yPos, inputHeight, true, pArrayPtr, arrayIndex );
 			break;
 		}
 

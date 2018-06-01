@@ -76,7 +76,7 @@ private:
 	// widgets
 	class kbMainTab *										m_pMainTab;
 	class kbResourceTab *									m_pResourceTab;
-	class Fl_Text_Buffer *									m_pOutputText;
+	class Fl_Text_Display *									m_pOutputText;
 	class kbPropertiesTab *									m_pPropertiesTab;
 	class Fl_Choice *										m_pViewModeChoice;
 
@@ -114,11 +114,14 @@ private:
 	static void												DeleteEntitiesCB( Fl_Widget *, void * );
 	static void												ViewModeChoiceCB( Fl_Widget *, void * );
 
-	void													RightClickPopUpMenu();
+	void													RightClickOnMainTab();
+    void                                                    RightClickOnOutputWindow();
+
 	static void												ReplaceCurrentlySelectedPrefab( Fl_Widget *, void * );
 	static void												AddEntityAsPrefab( Fl_Widget *, void * );
 	void													AddEntityAsPrefab_Internal( const std::string & PackageName, const std::string & FolderName, const std::string & PrefabeName );
 	static void												InsertSelectedPrefabIntoScene( Fl_Widget *, void * );
+    static void                                             ClearOutputBuffer( Fl_Widget *, void * pUseData );
 
 public:
 

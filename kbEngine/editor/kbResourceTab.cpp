@@ -64,6 +64,10 @@ void kbResourceTab::ResourceSelectedCB( Fl_Widget * widget, void * userData ) {
 	kbResourceTab *const pResourceTab = static_cast< kbResourceTab * >( userData );
 
 	const int selectedItemIndex = selectBrowser->value() - 1;
+    if ( selectedItemIndex == -1 ) {
+        return;
+    }
+
 	if ( Fl::event_button() == FL_LEFT_MOUSE && selectedItemIndex >= 0 ) {
 		kbResourceTabFile_t * pResourceItem = pResourceTab->m_SelectBrowserIdx[selectedItemIndex];
 

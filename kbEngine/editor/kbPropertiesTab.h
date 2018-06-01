@@ -14,6 +14,7 @@ struct propertiesTabCBData_t {
 	propertiesTabCBData_t(	kbEditorEntity *const pEditorEntity,
 							const kbGameEntityPtr *const inGameEntityPtr,
 							kbComponent *const pComponent,
+                            kbComponent *const pParentComponent,
 							const kbResource ** pResource,
 							const  kbString variableName,
 							void *const pVariableValue,
@@ -25,6 +26,7 @@ struct propertiesTabCBData_t {
 	kbEditorEntity *		m_pEditorEntity;
 	kbGameEntityPtr			m_GameEntityPtr;
 	kbComponent *			m_pComponent;
+    kbComponent *           m_pParentComponent;
 	const kbResource **		m_pResource;
 	kbString				m_VariableName;
 	void *					m_pVariablePtr;
@@ -55,8 +57,8 @@ public:
 private:
 
 	void										RefreshEntity();
-	void										RefreshComponent( kbEditorEntity *const pEntity, kbComponent *const pComponent, int & startX, int & curY, const int inputHeight, const bool bIsStruct = false, const void *const arrayPtr = nullptr, const int arrayIndex = -1);
-	void										RefreshProperty( kbEditorEntity *const pEntity, const std::string & propertyName, const kbTypeInfoType_t propertyType, const std::string & structName, kbComponent * pComponent, const byte *const byteOffsetToVar, int & x, int & y, const int inputHeight, const void *const arrayPtr = nullptr, const int arrayIndex = -1 );
+	void										RefreshComponent( kbEditorEntity *const pEntity, kbComponent *const pComponent, kbComponent *const pParentComponent, int & startX, int & curY, const int inputHeight, const bool bIsStruct = false, const void *const arrayPtr = nullptr, const int arrayIndex = -1);
+	void										RefreshProperty( kbEditorEntity *const pEntity, const std::string & propertyName, const kbTypeInfoType_t propertyType, const std::string & structName, kbComponent *const pComponent, const byte *const byteOffsetToVar,  kbComponent *const pParentComponent, int & x, int & y, const int inputHeight, const void *const arrayPtr = nullptr, const int arrayIndex = -1 );
 
 	unsigned int								FontSize()	const { return 13; }
 	unsigned int								LineSpacing() const { return FontSize() + 5; }

@@ -27,6 +27,7 @@ public:
 	kbTexture *									GetDiffuseTexture() const { return m_pDiffuseTexture; }
 
 private:
+
     kbTexture *									m_pDiffuseTexture;
 };
 
@@ -55,6 +56,8 @@ protected:
 	virtual void								SetEnable_Internal( const bool isEnabled ) override;
 	virtual void								Update_Internal( const float DeltaTime ) override;
 
+    void                                        SetMaterialParams();
+
 	kbTexture *									m_pHeightMap;
 	float										m_HeightScale;
 	float										m_TerrainWidth;
@@ -65,6 +68,8 @@ protected:
 
 	kbModel										m_TerrainModel;
 	kbShaderParamOverrides_t					m_ShaderParamOverride;
+    std::vector<kbShader *>                     m_ShaderOverrideList;
+
 	bool										m_bRegenerateTerrain;
 
 private:

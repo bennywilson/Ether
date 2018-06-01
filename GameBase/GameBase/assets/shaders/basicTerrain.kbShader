@@ -63,6 +63,12 @@ SamplerState SampleType;
 
 Texture2D Mat1Diffuse : register(t1);
 
+Texture2D Mat2Diffuse : register(t2);
+
+Texture2D Mat3Diffuse : register(t3);
+
+Texture2D Mat4Diffuse : register(t4);
+
  PS_OUTPUT pixelShader( pixelInput	input ) : SV_TARGET {
  	PS_OUTPUT output = (PS_OUTPUT) 0;
 	// Sand - 221, 214, 162

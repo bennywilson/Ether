@@ -61,15 +61,15 @@ kbEditor::kbEditor() :
 	const int Right_Panel = 300;
 
 	// Output display
-	Fl_Text_Display * display = new Fl_Text_Display( 5, Screen_Height - Bottom_Panel_Height + Panel_Border_size * 4, Screen_Width - 5, Bottom_Panel_Height - Panel_Border_size - Panel_Border_size, "DISPLAY!"  );
+	m_pOutputText = new Fl_Text_Display( 5, Screen_Height - Bottom_Panel_Height + Panel_Border_size * 4, Screen_Width - 5, Bottom_Panel_Height - Panel_Border_size - Panel_Border_size, "DISPLAY!"  );
 	g_OutputBuffer = new Fl_Text_Buffer();
-	display->buffer( g_OutputBuffer );
+	m_pOutputText->buffer( g_OutputBuffer );
 	
 	g_StyleBuffer = new Fl_Text_Buffer();
 
 	int stable_size = sizeof(stable)/sizeof(stable[0]);
 
-	display->highlight_data( g_StyleBuffer, stable, stable_size, 'A', 0, 0 );
+	m_pOutputText->highlight_data( g_StyleBuffer, stable, stable_size, 'A', 0, 0 );
 
 	// menu bar
 	Fl_Menu_Bar * mainMenuBar = new Fl_Menu_Bar( 0, 0, Screen_Width, Menu_Bar_Height );
@@ -83,7 +83,7 @@ kbEditor::kbEditor() :
 	mainMenuBar->add( "Edit/Delete", FL_Delete, DeleteEntitiesCB );
 
 	mainMenuBar->add( "File/Quit",   FL_CTRL+'q', Close, this );
-	mainMenuBar->add( "Edit/Change", FL_CTRL+'c', NULL) ;
+	mainMenuBar->add( "Edit/Change", FL_CTRL+'c', nullptr ) ;
 	mainMenuBar->add( "Edit/Submenu/Aaa" );
 	mainMenuBar->add( "Edit/Submenu/Bbb" );
 	mainMenuBar->add( "Add/Entity", FL_CTRL+'g', CreateGameEntity, this );
@@ -510,16 +510,22 @@ int kbEditor::handle( int theEvent ) {
 			m_WidgetInputObject.leftMouseButtonPressed = true;
 		}
 
+        if ( m_WidgetInputObject.rightMouseButtonPressed && m_bRightMouseButtonDragged == false ) {
+		    if ( newMouseX >= m_pOutputText->x() && newMouseY >= m_pOutputText->y() && newMouseX < m_pOutputText->x() + m_pOutputText->w() && newMouseY < m_pOutputText->y() + m_pOutputText->h() ) {
+                RightClickOnOutputWindow();
+            }
+        }
+
 		Fl_Window::handle( theEvent );
 		return 1;
 	} else if ( theEvent == FL_RELEASE ) {
 
-		if ( newMouseX >= m_pMainTab->x() && newMouseY >= m_pMainTab->y() && newMouseX < m_pMainTab->x() + m_pMainTab->w() && newMouseY < m_pMainTab->y() + m_pMainTab->h() ) {
-			if ( m_WidgetInputObject.rightMouseButtonDown && m_bRightMouseButtonDragged == false ) {
-				RightClickPopUpMenu();
-			}
-		}
-
+        if ( m_WidgetInputObject.rightMouseButtonDown && m_bRightMouseButtonDragged == false ) {
+		    if ( newMouseX >= m_pMainTab->x() && newMouseY >= m_pMainTab->y() && newMouseX < m_pMainTab->x() + m_pMainTab->w() && newMouseY < m_pMainTab->y() + m_pMainTab->h() ) {
+	            RightClickOnMainTab();
+		    }
+        }
+    
 		m_WidgetInputObject.leftMouseButtonDown = false;
 		m_WidgetInputObject.leftMouseButtonPressed = false;
 		m_WidgetInputObject.rightMouseButtonDown = false;
@@ -930,9 +936,9 @@ void kbEditor::OutputCB( kbOutputMessageType_t messageType, const char * output 
 }
 
 /**
- *	kbEditor::RightClickPopUpMenu
+ *	kbEditor::RightClickOnMainTab
  */
-void kbEditor::RightClickPopUpMenu() {
+void kbEditor::RightClickOnMainTab() {
 
 	const kbPrefab *const prefab = g_Editor->m_pResourceTab->GetSelectedPrefab();
 	std::string ReplacePrefabMessage = "Replace Prefab";
@@ -965,6 +971,23 @@ void kbEditor::RightClickPopUpMenu() {
 		m->do_callback( 0, m->user_data() );
 	}
 }
+
+/**
+ *	kbEditor::RightClickOnOutputWindow
+ */
+void kbEditor::RightClickOnOutputWindow() {
+
+	Fl_Menu_Item rclick_menu[] = {
+		{ "Clear Output",  0, ClearOutputBuffer, (void *) 0 },
+		{ 0 }
+    };
+
+	const Fl_Menu_Item *const m = rclick_menu->popup( Fl::event_x(), Fl::event_y(), 0, 0, 0 );
+	if ( m != nullptr ) {
+		m->do_callback( 0, m->user_data() );
+	}
+}
+
 
 /**
  *	kbEditor::GetCurrentlySelectedPrefab
@@ -1058,8 +1081,8 @@ void kbEditor::AddEntityAsPrefab_Internal( const std::string & PackageName, cons
  *	kbEditor::InsertSelectedPrefabIntoScene
  */
 void kbEditor::InsertSelectedPrefabIntoScene( Fl_Widget *, void * pUserdata ) {
-	const kbPrefab * prefabToCreate = g_Editor->m_pResourceTab->GetSelectedPrefab();
 
+	const kbPrefab * prefabToCreate = g_Editor->m_pResourceTab->GetSelectedPrefab();
 	if ( prefabToCreate == nullptr ) {
 		return;
 	}
@@ -1069,7 +1092,7 @@ void kbEditor::InsertSelectedPrefabIntoScene( Fl_Widget *, void * pUserdata ) {
 		return;
 	}
 
-	kbVec3 entityLocation = editorCamera->m_Position + ( editorCamera->m_Rotation.ToMat4()[2] * 4.0f ).ToVec3();
+	const kbVec3 entityLocation = editorCamera->m_Position + ( editorCamera->m_Rotation.ToMat4()[2] * 4.0f ).ToVec3();
 
 	for ( int i = 0; i < prefabToCreate->NumGameEntities(); i++ ) {
 		kbGameEntity *const pNewEntity = new kbGameEntity( prefabToCreate->m_GameEntities[i], false );
@@ -1087,4 +1110,11 @@ void kbEditor::InsertSelectedPrefabIntoScene( Fl_Widget *, void * pUserdata ) {
 void kbEditor::ViewModeChoiceCB( Fl_Widget *, void * pUserData ) {
 	const int viewModeChoice = g_Editor->m_pViewModeChoice->value();
 	g_pRenderer->SetViewMode( (kbRenderer_DX11::kbViewMode_t) viewModeChoice);
+}
+
+/**
+ *	kbEditor::ClearOutputBuffer
+ */
+void kbEditor::ClearOutputBuffer( Fl_Widget *, void * pUseData ) {
+    g_OutputBuffer->text( "" );
 }
