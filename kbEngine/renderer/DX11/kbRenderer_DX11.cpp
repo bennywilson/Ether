@@ -2965,9 +2965,7 @@ void ReadShaderFile( const std::string & shaderText, kbShaderVarBindings_t *cons
             break;
         }
 
-        kbLog( "Texture name = %s", shaderText.substr( startPos, endPos - startPos ).c_str() );
         texturePos = shaderText.find( "Texture2D", texturePos + 1 );
-
     }
 }
 
@@ -2981,9 +2979,9 @@ void kbRenderer_DX11::LoadShader( const std::string & fileName, ID3D11VertexShad
 	HRESULT hr;
 	struct shaderBlobs_t {
 		~shaderBlobs_t() {
-			SAFE_RELEASE( errorMessage )
-			SAFE_RELEASE( vertexShaderBuffer )
-			SAFE_RELEASE( pixelShaderBuffer )
+			SAFE_RELEASE(errorMessage)
+			SAFE_RELEASE(vertexShaderBuffer)
+			SAFE_RELEASE(pixelShaderBuffer)
 		}
 
 		ID3D10Blob * errorMessage = nullptr;
@@ -3012,7 +3010,7 @@ void kbRenderer_DX11::LoadShader( const std::string & fileName, ID3D11VertexShad
 
 			ID3D11Buffer * pConstantBuffer = nullptr;
 			hr = m_pD3DDevice->CreateBuffer( &matrixBufferDesc, nullptr, &pConstantBuffer );
-			kbErrorCheck( SUCCEEDED( hr ), "Failed to create matrix buffer" );
+			kbErrorCheck( SUCCEEDED(hr), "Failed to create matrix buffer" );
 
 			m_ConstantBuffers.insert( std::pair<size_t, ID3D11Buffer*>( desiredByteWidth, pConstantBuffer ) );
 		}
@@ -3025,11 +3023,12 @@ void kbRenderer_DX11::LoadShader( const std::string & fileName, ID3D11VertexShad
 	do {
 		numTries++;
 
+		SAFE_RELEASE( localBlobs.errorMessage );
 		hr = D3DCompile( readBuffer.c_str(), readBuffer.length(), nullptr, nullptr, nullptr, vertexShaderFunc.c_str(), "vs_4_0", shaderFlags, 0, &localBlobs.vertexShaderBuffer, &localBlobs.errorMessage );
 		if ( FAILED( hr )  ) {
 			Sleep( 250 );
 			SAFE_RELEASE( localBlobs.vertexShaderBuffer );
-			SAFE_RELEASE( localBlobs.errorMessage );
+
 		}
 	} while ( FAILED( hr ) && numTries < 4 );
 
@@ -3045,11 +3044,11 @@ void kbRenderer_DX11::LoadShader( const std::string & fileName, ID3D11VertexShad
 	do {
 		numTries++;
 
+		SAFE_RELEASE( localBlobs.errorMessage )
 		hr = D3DCompile( readBuffer.c_str(), readBuffer.length(), nullptr, nullptr, nullptr, pixelShaderFunc.c_str(), "ps_4_0", shaderFlags, 0, &localBlobs.pixelShaderBuffer, &localBlobs.errorMessage );
 		if ( FAILED( hr ) ) {
 			Sleep( 250 );
-			SAFE_RELEASE( localBlobs.pixelShaderBuffer )
-			SAFE_RELEASE( localBlobs.errorMessage );
+			SAFE_RELEASE( localBlobs.pixelShaderBuffer );
 		}
 	} while ( FAILED( hr ) && numTries < 4 );
 

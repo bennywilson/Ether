@@ -234,14 +234,20 @@ struct kbShaderParamOverrides_t {
 
     std::vector<kbShaderParam_t> m_ParamOverrides;
 
-    kbShaderParam_t & AllocateParam() {
+    kbShaderParam_t & AllocateParam( const std::string & varName ) {
+		for ( int i = 0; i < m_ParamOverrides.size(); i++ ) {
+			if ( m_ParamOverrides[i].m_VarName == varName ) {
+				return m_ParamOverrides[i];
+			}
+		}
+
         kbShaderParam_t newParam;
         m_ParamOverrides.push_back( newParam );
         return m_ParamOverrides[m_ParamOverrides.size() - 1];
     }
 
     void SetMat4( const std::string & varName, const kbMat4 & newMat ) {
-        kbShaderParam_t & newParam = AllocateParam();
+        kbShaderParam_t & newParam = AllocateParam( varName );
         newParam.m_VarName = varName;
         newParam.m_Mat4 = newMat;
         newParam.m_Type = kbShaderParam_t::SHADER_MAT4;
@@ -249,7 +255,7 @@ struct kbShaderParamOverrides_t {
     }
 
     void SetVec4( const std::string & varName, const kbVec4 & newVec ) {
-        kbShaderParam_t & newParam = AllocateParam();
+        kbShaderParam_t & newParam = AllocateParam( varName );
         newParam.m_VarName = varName;
         newParam.m_Vec4 = newVec;
         newParam.m_Type = kbShaderParam_t::SHADER_VEC4;
@@ -257,7 +263,7 @@ struct kbShaderParamOverrides_t {
     }
 
     void SetTexture( const std::string & varName, const kbTexture *const pTexture ) {
-        kbShaderParam_t & newParam = AllocateParam();
+        kbShaderParam_t & newParam = AllocateParam( varName );
         newParam.m_VarName = varName;
         newParam.m_pTexture = pTexture;
         newParam.m_Type = kbShaderParam_t::SHADER_TEX;

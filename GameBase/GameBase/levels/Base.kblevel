@@ -14,25 +14,15 @@ kbGameEntity 0 0 0 0 {
 		m_RenderPass = LightingPass
 		Dimensions = 513
 		HeightMap = .\assets\Terrain\terrain1_height.bmp
-		HeightScale =  7.000000
-		Materials = 3
+		HeightScale =  6.900000
+		Materials = 1
 			kbTerrainMatComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
-				DiffuseTexture = NULL
-			}
-			kbTerrainMatComponent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				DiffuseTexture = NULL
-			}
-			kbTerrainMatComponent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				DiffuseTexture = NULL
+				DiffuseTexture = .\assets\test\water_color2.jpg
 			}
 		Shader = .\assets\shaders\basicTerrain.kbShader
-		SplatMap = .\assets\Terrain\terrain1_splatmap.bmp
+		SplatMap = .\assets\heightmap3.bmp
 		Width =  8192.000000
 	}
 }
@@ -126,6 +116,6 @@ kbGameEntity 2609040299 1100347930 3115268521 1892043160 {
 		IterationHeight =  0.001500
 		IterationWidth =  0.001500
 		NumIteractions = 48
-		Texture = ../../kbEngine/assets/Textures/flare.jpg
+		Texture = ..\..\kbEngine\assets\Textures\flare.jpg
 	}
 }

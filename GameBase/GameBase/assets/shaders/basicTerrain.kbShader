@@ -58,13 +58,15 @@ pixelInput vertexShader( vertexInput input ) {
 /**
  *	pixelShader
  */
-Texture2D shaderTexture;
+Texture2D splatMap;
 SamplerState SampleType;
+
+Texture2D Mat1Diffuse;
 
  PS_OUTPUT pixelShader( pixelInput	input ) : SV_TARGET {
  	PS_OUTPUT output = (PS_OUTPUT) 0;
 
-	output.Color.xyz = shaderTexture.Sample( SampleType, input.uv ).xyz;
+	output.Color.xyz = splatMap.Sample( SampleType, input.uv ).xyz + Mat1Diffuse.Sample( SampleType, input.uv ).xyz;
 	output.Depth.r = input.position2.x / input.position2.y;
 
 	output.Normal.xyz = normalize( input.normal );

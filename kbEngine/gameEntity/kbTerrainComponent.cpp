@@ -23,7 +23,7 @@ std::vector<debugNormal> terrainNormals;
  *  kbTerrainMatComponent::Constructor
  */
 void kbTerrainMatComponent::Constructor() {
-    m_DiffuseTexture = nullptr;
+    m_pDiffuseTexture = nullptr;
 }
 
 /**
@@ -206,9 +206,13 @@ void kbTerrainComponent::GenerateTerrain() {
 		ShaderOverrideList.push_back( pShader );
 	}
 
-    kbShaderParamOverrides_t overrides;
-    overrides.SetTexture( "shaderTexture", m_pSplatMap );
-	g_pRenderer->AddRenderObject( this, &m_TerrainModel, GetOwner()->GetPosition(), kbQuat( 0.0f, 0.0f, 0.0f, 1.0f ), kbVec3::one, RP_Lighting, &ShaderOverrideList, &overrides );
+    m_ShaderParamOverride.SetTexture( "shaderTexture", m_pSplatMap );
+
+	if ( m_TerrainMaterials.size() > 0 ) {
+		m_ShaderParamOverride.SetTexture( "Mat1Diffuse", m_TerrainMaterials[0].GetDiffuseTexture() );
+	}
+ 
+	g_pRenderer->AddRenderObject( this, &m_TerrainModel, GetOwner()->GetPosition(), kbQuat( 0.0f, 0.0f, 0.0f, 1.0f ), kbVec3::one, RP_Lighting, &ShaderOverrideList, &m_ShaderParamOverride );
 }
 
 /**

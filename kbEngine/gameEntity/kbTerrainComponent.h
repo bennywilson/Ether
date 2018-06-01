@@ -23,8 +23,11 @@ class kbTerrainMatComponent : public kbGameComponent {
     KB_DECLARE_COMPONENT( kbTerrainMatComponent, kbGameComponent );
 
 //---------------------------------------------------------------------------------------------------
+public:
+	kbTexture *									GetDiffuseTexture() const { return m_pDiffuseTexture; }
+
 private:
-    kbTexture *                                m_DiffuseTexture;
+    kbTexture *									m_pDiffuseTexture;
 };
 
 /**
@@ -61,7 +64,7 @@ protected:
 	kbTexture *                                 m_pSplatMap;
 
 	kbModel										m_TerrainModel;
-
+	kbShaderParamOverrides_t					m_ShaderParamOverride;
 	bool										m_bRegenerateTerrain;
 
 private:
