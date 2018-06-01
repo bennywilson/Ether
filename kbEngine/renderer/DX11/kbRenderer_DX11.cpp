@@ -3017,14 +3017,14 @@ void kbRenderer_DX11::LoadShader( const std::string & fileName, ID3D11VertexShad
 	}
 
 	// Compile vertex shader
-	const UINT shaderFlags = D3D10_SHADER_PACK_MATRIX_ROW_MAJOR | D3D10_SHADER_ENABLE_STRICTNESS;
+	const UINT shaderFlags = D3DCOMPILE_PACK_MATRIX_ROW_MAJOR | D3DCOMPILE_ENABLE_STRICTNESS | D3DCOMPILE_ALL_RESOURCES_BOUND;
 
 	int numTries = 0;
 	do {
 		numTries++;
 
 		SAFE_RELEASE( localBlobs.errorMessage );
-		hr = D3DCompile( readBuffer.c_str(), readBuffer.length(), nullptr, nullptr, nullptr, vertexShaderFunc.c_str(), "vs_4_0", shaderFlags, 0, &localBlobs.vertexShaderBuffer, &localBlobs.errorMessage );
+		hr = D3DCompile( readBuffer.c_str(), readBuffer.length(), nullptr, nullptr, nullptr, vertexShaderFunc.c_str(), "vs_5_0", shaderFlags, 0, &localBlobs.vertexShaderBuffer, &localBlobs.errorMessage );
 		if ( FAILED( hr )  ) {
 			Sleep( 250 );
 			SAFE_RELEASE( localBlobs.vertexShaderBuffer );
@@ -3045,7 +3045,7 @@ void kbRenderer_DX11::LoadShader( const std::string & fileName, ID3D11VertexShad
 		numTries++;
 
 		SAFE_RELEASE( localBlobs.errorMessage )
-		hr = D3DCompile( readBuffer.c_str(), readBuffer.length(), nullptr, nullptr, nullptr, pixelShaderFunc.c_str(), "ps_4_0", shaderFlags, 0, &localBlobs.pixelShaderBuffer, &localBlobs.errorMessage );
+		hr = D3DCompile( readBuffer.c_str(), readBuffer.length(), nullptr, nullptr, nullptr, pixelShaderFunc.c_str(), "ps_5_0", shaderFlags, 0, &localBlobs.pixelShaderBuffer, &localBlobs.errorMessage );
 		if ( FAILED( hr ) ) {
 			Sleep( 250 );
 			SAFE_RELEASE( localBlobs.pixelShaderBuffer );
@@ -3490,6 +3490,9 @@ void kbRenderer_DX11::RenderModel( const kbRenderObject *const pRenderObject, co
 			} else if ( varName == "cameraPos" ) {
 				kbVec4 *const pVecOffset = (kbVec4*)pVarByteOffset;
 				*pVecOffset = m_pCurrentRenderWindow->m_CameraPosition;
+			} else if ( varName == "viewProjection" ) {
+				kbMat4 *const pMatOffset = (kbMat4*)pVarByteOffset;
+				*pMatOffset = m_pCurrentRenderWindow->m_ViewProjectionMatrix;
 			} else if ( varName == "BoneMatrices" ) {
 				if ( pRenderObject->m_bIsSkinnedModel ) {
 					kbMat4 *const boneMatrices = (kbMat4*)pVarByteOffset;

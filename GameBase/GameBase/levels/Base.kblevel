@@ -14,7 +14,7 @@ kbGameEntity 0 0 0 0 {
 		m_RenderPass = LightingPass
 		Dimensions = 513
 		HeightMap = .\assets\Terrain\terrain1_height.bmp
-		HeightScale =  6.900000
+		HeightScale =  7.000000
 		Materials = 1
 			kbTerrainMatComponent { 
 				Enabled = 0
@@ -22,7 +22,7 @@ kbGameEntity 0 0 0 0 {
 				DiffuseTexture = .\assets\test\water_color2.jpg
 			}
 		Shader = .\assets\shaders\basicTerrain.kbShader
-		SplatMap = .\assets\heightmap3.bmp
+		SplatMap = .\assets\Terrain\terrain1_splatmap.bmp
 		Width =  8192.000000
 	}
 }
@@ -52,7 +52,7 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "Skybox"
-		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Orientation = 0.000000 -0.969342 0.000000 0.245715
 		Position = 1.626685 40.604389 -22.515354
 		Scale = 1.000000 1.000000 1.000000
 	}

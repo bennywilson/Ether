@@ -58,15 +58,24 @@ pixelInput vertexShader( vertexInput input ) {
 /**
  *	pixelShader
  */
-Texture2D splatMap;
+Texture2D splatMap : register(t0);
 SamplerState SampleType;
 
-Texture2D Mat1Diffuse;
+Texture2D Mat1Diffuse : register(t1);
 
  PS_OUTPUT pixelShader( pixelInput	input ) : SV_TARGET {
  	PS_OUTPUT output = (PS_OUTPUT) 0;
+	// Sand - 221, 214, 162
+	// Rock - 113, 94, 85
+	// Vegetation - 103, 148, 54
+	// Erosion - 99, 173, 173
 
-	output.Color.xyz = splatMap.Sample( SampleType, input.uv ).xyz + Mat1Diffuse.Sample( SampleType, input.uv ).xyz;
+	const float3 sandColor = float3( 221.0f, 214.0f, 162.0f ) / 255.0f;
+	const float3 rockColor = float3( 113.0f, 94.0f, 85.0f ) / 255.0f;
+	const float3 vegetationColor = float3( 103.0f, 148.0f, 54.0f ) / 255.0f;
+	half4 splat = splatMap.Sample( SampleType, input.uv );
+
+	output.Color.xyz = ( sandColor * splat.x ) + ( rockColor * splat.y ) + ( vegetationColor * splat.z );
 	output.Depth.r = input.position2.x / input.position2.y;
 
 	output.Normal.xyz = normalize( input.normal );

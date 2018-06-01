@@ -4,8 +4,10 @@
 // 2017-2018 kbEngine 2.0
 //==============================================================================
 cbuffer matrixBuffer {
-   matrix mvpMatrix;
-   float4 cameraPos;
+	matrix mvpMatrix;
+	matrix modelMatrix;
+	matrix viewProjection;
+	float4 cameraPos;
 };
 
 //-------------------------------------
@@ -38,7 +40,9 @@ struct PS_OUTPUT {
 pixelInput vertexShader( vertexInput input ) {
 	pixelInput output = (pixelInput)(0);
 
-	output.position = mul( (input.position + float4(cameraPos.xyz, 0)), mvpMatrix );
+	output.position = mul( input.position, modelMatrix );
+	output.position += float4(cameraPos.xyz, 0);
+	output.position = mul( output.position, viewProjection);
 	output.position.z = output.position.w - 0.0001f;
 
 	output.uv = input.uv;
