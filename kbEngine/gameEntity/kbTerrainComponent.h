@@ -16,11 +16,11 @@ class kbTexture;
 /**
  *  kbTerrainMatComponent
  */
-class kbTerrainMatComponent : public kbGameComponent {
+class kbTerrainMatComponent : public kbComponent {
 
     friend class kbTerrainComponent;
 
-    KB_DECLARE_COMPONENT( kbTerrainMatComponent, kbGameComponent );
+    KB_DECLARE_COMPONENT( kbTerrainMatComponent, kbComponent );
 
 //---------------------------------------------------------------------------------------------------
 public:

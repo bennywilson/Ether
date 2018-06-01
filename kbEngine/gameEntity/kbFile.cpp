@@ -208,15 +208,27 @@ void kbFile::ReadComponent( kbGameEntity *const pGameEntity, const std::string &
 			}
 		} else {
 			const std::vector< class kbTypeInfoClass * > & typeInfo = pComponent->GetTypeInfo();
-			const kbTypeInfoVar * currentVar = NULL;
+			const kbTypeInfoVar * currentVar = nullptr;
 
 			for ( int i = 0; i < typeInfo.size(); i++ ) {
 				const kbTypeInfoVar * typeInfoVar = typeInfo[i]->GetField( nextToken );
-				if ( typeInfoVar != NULL ) {
+				if ( typeInfoVar != nullptr ) {
 					currentVar = typeInfoVar;
 					break;
 				}
 			}
+
+            // Unrecognized var.  Go to the next line
+            if ( currentVar == nullptr ) {
+		        while ( m_Buffer[m_CurrentReadPos] != '\n' ) {
+			        m_CurrentReadPos++;
+		        }
+		        while (m_Buffer[m_CurrentReadPos] == ' ' || m_Buffer[m_CurrentReadPos] == '{' || m_Buffer[m_CurrentReadPos] == '\n' || m_Buffer[m_CurrentReadPos] == '\r' || m_Buffer[m_CurrentReadPos] == '\t' ) {
+			        m_CurrentReadPos++;
+		        }
+		        nextStringPos = m_Buffer.find_first_of( " {\n\r\t", m_CurrentReadPos );
+                continue;
+            }
 
 			m_CurrentReadPos++;
 			while (m_Buffer[m_CurrentReadPos] == ' ' ) m_CurrentReadPos++;
