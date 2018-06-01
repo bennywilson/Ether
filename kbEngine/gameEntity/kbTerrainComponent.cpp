@@ -69,6 +69,19 @@ void kbTerrainComponent::EditorChange( const std::string & propertyName ) {
 	Super::EditorChange( propertyName );
 
 	m_bRegenerateTerrain = true;
+
+	kbShader * pShader = (kbShader*)g_ResourceManager.GetResource( "./assets/Shaders/basicTerrain.kbShader", true );
+	std::vector<kbShader *> ShaderOverrideList;
+	if ( pShader != nullptr ) {
+		ShaderOverrideList.push_back( pShader );
+	}
+
+    m_ShaderParamOverride.SetTexture( "shaderTexture", m_pSplatMap );
+	if ( m_TerrainMaterials.size() > 0 ) {
+		m_ShaderParamOverride.SetTexture( "Mat1Diffuse", m_TerrainMaterials[0].GetDiffuseTexture() );
+	}
+ 
+	g_pRenderer->UpdateRenderObject( this, &m_TerrainModel, GetOwner()->GetPosition(), kbQuat( 0.0f, 0.0f, 0.0f, 1.0f ), GetOwner()->GetScale(), RP_Lighting, &ShaderOverrideList , &m_ShaderParamOverride );
 }
 
 /**
@@ -201,13 +214,11 @@ void kbTerrainComponent::GenerateTerrain() {
 
 	kbShader * pShader = (kbShader*)g_ResourceManager.GetResource( "./assets/Shaders/basicTerrain.kbShader", true );
 	std::vector<kbShader *> ShaderOverrideList;
-
 	if ( pShader != nullptr ) {
 		ShaderOverrideList.push_back( pShader );
 	}
 
     m_ShaderParamOverride.SetTexture( "shaderTexture", m_pSplatMap );
-
 	if ( m_TerrainMaterials.size() > 0 ) {
 		m_ShaderParamOverride.SetTexture( "Mat1Diffuse", m_TerrainMaterials[0].GetDiffuseTexture() );
 	}
@@ -230,10 +241,8 @@ void kbTerrainComponent::SetEnable_Internal( const bool isEnabled ) {
 		ShaderOverrideList.push_back( pShader );
 	}
 	if ( isEnabled ) {
-        kbShaderParamOverrides_t overrides;
-        overrides.SetTexture( "shaderTexture", m_pSplatMap );
 
-		g_pRenderer->AddRenderObject( this, &m_TerrainModel, GetOwner()->GetPosition(), kbQuat( 0.0f, 0.0f, 0.0f, 1.0f ), kbVec3::one, RP_Lighting, &ShaderOverrideList, &overrides );	
+		g_pRenderer->AddRenderObject( this, &m_TerrainModel, GetOwner()->GetPosition(), kbQuat( 0.0f, 0.0f, 0.0f, 1.0f ), kbVec3::one, RP_Lighting, &ShaderOverrideList, &m_ShaderParamOverride );	
 	} else {
 		g_pRenderer->RemoveRenderObject( this );
 	}
@@ -247,17 +256,15 @@ void kbTerrainComponent::Update_Internal( const float DeltaTime ) {
 
 	if ( m_TerrainModel.GetMeshes().size() > 0 && GetOwner()->IsDirty() ) {
 
-	kbShader * pShader = (kbShader*)g_ResourceManager.GetResource( "../../kbEngine/assets/Shaders/basicShader.kbShader", true );
-	std::vector<kbShader *> ShaderOverrideList;
+		kbShader * pShader = (kbShader*)g_ResourceManager.GetResource( "../../kbEngine/assets/Shaders/basicShader.kbShader", true );
+		std::vector<kbShader *> ShaderOverrideList;
 
-	if ( pShader != nullptr ) {
-		ShaderOverrideList.push_back( pShader );
-	}
+		if ( pShader != nullptr ) {
+			ShaderOverrideList.push_back( pShader );
+		}
 
-        kbShaderParamOverrides_t overrides;
-        overrides.SetTexture( "shaderTexture", m_pSplatMap );
 
-		g_pRenderer->UpdateRenderObject( this, &m_TerrainModel, GetOwner()->GetPosition(), kbQuat( 0.0f, 0.0f, 0.0f, 1.0f ), GetOwner()->GetScale(), RP_Lighting, &ShaderOverrideList , &overrides );
+		g_pRenderer->UpdateRenderObject( this, &m_TerrainModel, GetOwner()->GetPosition(), kbQuat( 0.0f, 0.0f, 0.0f, 1.0f ), GetOwner()->GetScale(), RP_Lighting, &ShaderOverrideList , &m_ShaderParamOverride );
 	}
 }
 
