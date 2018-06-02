@@ -2964,7 +2964,7 @@ void ReadShaderFile( const std::string & shaderText, kbShaderVarBindings_t *cons
         if ( startPos == std::string::npos || endPos == std::string::npos ) {
             break;
         }
-
+		pShaderBindings->m_TextureNames.push_back( shaderText.substr( startPos, endPos - startPos ) );
         texturePos = shaderText.find( "Texture2D", texturePos + 1 );
     }
 }
@@ -3517,7 +3517,7 @@ void kbRenderer_DX11::RenderModel( const kbRenderObject *const pRenderObject, co
                     if ( varName == overrideVarName ) {
 
                         // Check if it doesn't fit
-                        const size_t endOffset = curOverride.m_VarSizeBytes + bindings[iOverride].m_VarByteOffset ;
+                        const size_t endOffset = curOverride.m_VarSizeBytes + bindings[i].m_VarByteOffset ;
                         if ( endOffset > shaderVarBindings.m_ConstantBufferSizeBytes || ( i < bindings.size() - 1 && endOffset > bindings[i+1].m_VarByteOffset ) ) {
                             break;
                         }
@@ -3542,13 +3542,23 @@ void kbRenderer_DX11::RenderModel( const kbRenderObject *const pRenderObject, co
 
         // Bind textures
         const std::vector<kbShaderParamOverrides_t::kbShaderParam_t> & paramOverrides = pRenderObject->m_ShaderParamOverrides.m_ParamOverrides;
-        for ( int iOverride = 0; iOverride < paramOverrides.size(); iOverride++ ) {
-            const kbShaderParamOverrides_t::kbShaderParam_t & curOverride = paramOverrides[iOverride];
+		for ( int iTex = 0; iTex < shaderVarBindings.m_TextureNames.size(); iTex++ ) {
+	        for ( int iOverride = 0; iOverride < paramOverrides.size(); iOverride++ ) {
+				const kbShaderParamOverrides_t::kbShaderParam_t & curOverride = paramOverrides[iOverride];
+				if ( curOverride.m_Type == kbShaderParamOverrides_t::kbShaderParam_t::SHADER_TEX && curOverride.m_VarName == shaderVarBindings.m_TextureNames[iTex] ) {
+	                ID3D11ShaderResourceView *const pShaderResourceView = ( curOverride.m_pTexture != nullptr ) ? ( curOverride.m_pTexture->GetGPUTexture() ) : ( nullptr );
+					m_pDeviceContext->PSSetShaderResources( iTex, 1, &pShaderResourceView );				
+				}
+			}
+		}
+
+
+   /*         const kbShaderParamOverrides_t::kbShaderParam_t & curOverride = paramOverrides[iOverride];
             if ( curOverride.m_Type == kbShaderParamOverrides_t::kbShaderParam_t::SHADER_TEX ) {
                 ID3D11ShaderResourceView *const pShaderResourceView = ( curOverride.m_pTexture != nullptr ) ? ( curOverride.m_pTexture->GetGPUTexture() ) : ( nullptr );
 	            m_pDeviceContext->PSSetShaderResources( iOverride, 1, &pShaderResourceView );
-            }
-        }
+            }*/
+      //  }
 
 		m_pDeviceContext->Unmap( pConstantBuffer, 0 );
 		m_pDeviceContext->VSSetConstantBuffers( 0, 1, &pConstantBuffer );

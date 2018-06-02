@@ -25,10 +25,12 @@ class kbTerrainMatComponent : public kbComponent {
 //---------------------------------------------------------------------------------------------------
 public:
 	kbTexture *									GetDiffuseTexture() const { return m_pDiffuseTexture; }
+	const kbVec3 &								GetUVScale() const { return m_UVScale; }
 
 private:
 
     kbTexture *									m_pDiffuseTexture;
+	kbVec3										m_UVScale;
 };
 
 /**

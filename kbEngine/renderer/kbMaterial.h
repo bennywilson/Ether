@@ -61,7 +61,7 @@ struct kbShaderVarBindings_t {
 	};
 	std::vector<binding_t>						m_VarBindings;
 
-    std::string                                 m_TextureNames;
+    std::vector<std::string>					m_TextureNames;
 };
 
 /**

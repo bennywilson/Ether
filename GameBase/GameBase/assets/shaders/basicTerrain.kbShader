@@ -5,13 +5,9 @@
 //==============================================================================
 cbuffer matrixBuffer {
 	matrix modelMatrix;
-	matrix modelViewMatrix;
-	matrix viewMatrix;
 	matrix mvpMatrix;
-	matrix projection;
-	matrix inverseProjection;
-	matrix viewProjection;
-	float4 cameraPos;
+	float4 mat1And2UVScale;
+	float4 mat3And4UVScale;
 };
 
 //-------------------------------------
@@ -57,9 +53,10 @@ pixelInput vertexShader( vertexInput input ) {
 
 /**
  *	pixelShader
- */
-Texture2D splatMap : register(t0);
+ */ 
 SamplerState SampleType;
+
+Texture2D splatMap : register(t0);
 
 Texture2D Mat1Diffuse : register(t1);
 
@@ -76,9 +73,14 @@ Texture2D Mat4Diffuse : register(t4);
 	// Vegetation - 103, 148, 54
 	// Erosion - 99, 173, 173
 
-	const float3 sandColor = float3( 221.0f, 214.0f, 162.0f ) / 255.0f;
-	const float3 rockColor = float3( 113.0f, 94.0f, 85.0f ) / 255.0f;
-	const float3 vegetationColor = float3( 103.0f, 148.0f, 54.0f ) / 255.0f;
+	//const float3 sandColor = float3( 221.0f, 214.0f, 162.0f ) / 255.0f;
+	//const float3 rockColor = float3( 113.0f, 94.0f, 85.0f ) / 255.0f;
+	//const float3 vegetationColor = float3( 103.0f, 148.0f, 54.0f ) / 255.0f;
+
+	const half3 sandColor = Mat1Diffuse.Sample( SampleType, input.uv * mat1And2UVScale.xy );
+	const half3 rockColor = Mat2Diffuse.Sample( SampleType, input.uv * mat1And2UVScale.zw );
+	const half3 vegetationColor = Mat3Diffuse.Sample( SampleType, input.uv * mat3And4UVScale.xy );
+
 	half4 splat = splatMap.Sample( SampleType, input.uv );
 
 	output.Color.xyz = ( sandColor * splat.x ) + ( rockColor * splat.y ) + ( vegetationColor * splat.z );
@@ -86,5 +88,10 @@ Texture2D Mat4Diffuse : register(t4);
 
 	output.Normal.xyz = normalize( input.normal );
 
+	/*
+
+
+
+	*/
 	return output;
 }
