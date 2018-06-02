@@ -59,7 +59,7 @@ pixelInput vertexShader( vertexInput input ) {
 	output.uv = input.uv;
 	//output.color = 0;//input.color;
 	output.position2 = output.position.zw;
-	output.normal.xyz = mul( ( input.normal.xyz * 2.0f ) - 1.0f, modelMatrix );
+	output.normal.xyz = mul( ( input.normal.xyz * 2.0f ) - 1.0f, (float3x3)modelMatrix );
 
 	return output;
 }
@@ -70,7 +70,7 @@ pixelInput vertexShader( vertexInput input ) {
 Texture2D shaderTexture;
 SamplerState SampleType;
 
- PS_OUTPUT pixelShader( pixelInput2	input ) : SV_TARGET {
+ PS_OUTPUT pixelShader( pixelInput2	input ) {
 	PS_OUTPUT output = (PS_OUTPUT) 0;
 
 	output.Color.xyz = shaderTexture.Sample( SampleType, input.uv ).xyz;

@@ -29,7 +29,7 @@ pixelInput vertexShader( vertexInput input ) {
 	pixelInput output = (pixelInput)(0);
 
 	output.position = input.position;
-	output.uv = mul( float4( input.uv, 0.0f, 1.0f), mvpMatrix );
+	output.uv = mul( input.uv, (float2x2)mvpMatrix );
 
 	output.position2 = ( input.position * 0.5f ) + 0.5f;
    output.position2.y = 1.0f - output.position2.y;
@@ -47,7 +47,7 @@ SamplerState DepthSamplerState;
 Texture2D depthTexture;
 
 float4 pixelShader( pixelInput input ) : SV_TARGET {
-   const float depth = depthTexture.Sample( DepthSamplerState, input.uv );
+   const float depth = depthTexture.Sample( DepthSamplerState, input.uv ).r;
    const float2 offScreen = sign(saturate( 1.0f - abs( ( input.uv * 2.0f ) - 1.0f ) ) ); // Use vertex interpolants instead?
-   return 2.0f * flareTexture.Sample( FlareSampleState, input.position2 ) * ( 1.0f - sign( depth ) ) * color * min(offScreen.x, offScreen.y);
+   return 2.0f * flareTexture.Sample( FlareSampleState, input.position2.xy ) * ( 1.0f - sign( depth ) ) * color * min(offScreen.x, offScreen.y);
 }

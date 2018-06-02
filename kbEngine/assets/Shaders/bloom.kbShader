@@ -2,7 +2,7 @@
 // bloom.kbShader
 //
 //
-// 2017 kbEngine 2.0
+// 2017-2018 kbEngine 2.0
 //===================================================================================================
 cbuffer matrixBuffer {
    matrix   mvpMatrix;
@@ -30,7 +30,7 @@ pixelInput bloomGatherVertexMain( vertexInput input ) {
 	pixelInput output = (pixelInput)(0);
 
 	output.position = input.position;
-	output.uv = mul( input.uv, mvpMatrix );
+	output.uv = mul( input.uv, (float2x2)mvpMatrix );
 	output.position2 = input.position;
 
 	return output;
@@ -59,7 +59,7 @@ pixelInput bloomBlurVertexMain( vertexInput input ) {
 	pixelInput output = (pixelInput)(0);
 
 	output.position = input.position;
-	output.uv = mul( input.uv, mvpMatrix );
+	output.uv = mul( input.uv, (float2x2)mvpMatrix );
 	output.position2 = input.position;
 
 	return output;

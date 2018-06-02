@@ -74,7 +74,7 @@ Texture2D Mat3Normal	: register(t6);
 
 Texture2D Mat4Diffuse	: register(t7);
 
- PS_OUTPUT pixelShader( pixelInput	input ) : SV_TARGET {
+ PS_OUTPUT pixelShader( pixelInput	input ) {
  	PS_OUTPUT output = (PS_OUTPUT) 0;
 
 	//const float3 sandColor = float3( 221.0f, 214.0f, 162.0f ) / 255.0f;
@@ -87,20 +87,20 @@ Texture2D Mat4Diffuse	: register(t7);
 	tbn[2] = input.normal.xyz;
 
 	const half zMult = 1;
-	const half3 sandColor = Mat1Diffuse.Sample( SampleType, input.uv * mat1And2UVScale.xy );
-	half3 sandNormal = Mat1Normal.Sample( SampleType, input.uv * mat1And2UVScale.xy );
+	const half3 sandColor = Mat1Diffuse.Sample( SampleType, input.uv * mat1And2UVScale.xy ).xyz;
+	half3 sandNormal = Mat1Normal.Sample( SampleType, input.uv * mat1And2UVScale.xy ).xyz;
 	sandNormal = ( sandNormal * 2.0f ) - 1.0f;
 	sandNormal = mul( sandNormal, tbn );
 	sandNormal.y *= zMult;
 
-	const half3 rockColor = Mat2Diffuse.Sample( SampleType, input.uv * mat1And2UVScale.zw );
-	half3 rockNormal = Mat2Normal.Sample( SampleType, input.uv * mat1And2UVScale.zw );
+	const half3 rockColor = Mat2Diffuse.Sample( SampleType, input.uv * mat1And2UVScale.zw ).xyz;
+	half3 rockNormal = Mat2Normal.Sample( SampleType, input.uv * mat1And2UVScale.zw ).xyz;
 	rockNormal = ( rockNormal * 2.0f ) - 1.0f;
 	rockNormal = mul( rockNormal, tbn );
 	rockNormal.y *= zMult;
 
-	const half3 grassColor = Mat3Diffuse.Sample( SampleType, input.uv * mat3And4UVScale.xy );
-	half3 grassNormal = Mat3Normal.Sample( SampleType, input.uv * mat3And4UVScale.xy );
+	const half3 grassColor = Mat3Diffuse.Sample( SampleType, input.uv * mat3And4UVScale.xy ).xyz;
+	half3 grassNormal = Mat3Normal.Sample( SampleType, input.uv * mat3And4UVScale.xy ).xyz;
 	grassNormal = ( grassNormal * 2.0f ) - 1.0f;
 	grassNormal = mul( grassNormal, tbn );
 	grassNormal.y *= zMult;

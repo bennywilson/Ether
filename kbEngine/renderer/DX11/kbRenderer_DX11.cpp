@@ -3017,7 +3017,7 @@ void kbRenderer_DX11::LoadShader( const std::string & fileName, ID3D11VertexShad
 	}
 
 	// Compile vertex shader
-	const UINT shaderFlags = D3DCOMPILE_PACK_MATRIX_ROW_MAJOR | D3DCOMPILE_ENABLE_STRICTNESS | D3DCOMPILE_ALL_RESOURCES_BOUND;
+	const UINT shaderFlags = D3DCOMPILE_PACK_MATRIX_ROW_MAJOR | D3DCOMPILE_ENABLE_STRICTNESS | D3DCOMPILE_ALL_RESOURCES_BOUND | D3DCOMPILE_WARNINGS_ARE_ERRORS;
 
 	int numTries = 0;
 	do {
@@ -3033,7 +3033,7 @@ void kbRenderer_DX11::LoadShader( const std::string & fileName, ID3D11VertexShad
 	} while ( FAILED( hr ) && numTries < 4 );
 
 	if ( FAILED( hr ) ) {
-		kbWarning( "kbRenderer_DX11::LoadShader() - Failed to load vertex shader : %s", ( localBlobs.errorMessage != nullptr ) ? ( localBlobs.errorMessage->GetBufferPointer() ) : ( "No error message given " ) );
+		kbWarning( "kbRenderer_DX11::LoadShader() - Failed to load vertex shader : %s\n%s", fileName.c_str() , ( localBlobs.errorMessage != nullptr ) ? ( localBlobs.errorMessage->GetBufferPointer() ) : ( "No error message given " ) );
 		return;
 	}
 
@@ -3053,7 +3053,7 @@ void kbRenderer_DX11::LoadShader( const std::string & fileName, ID3D11VertexShad
 	} while ( FAILED( hr ) && numTries < 4 );
 
 	if ( FAILED( hr ) ) {
-		kbWarning( "kbRenderer_DX11::LoadShader() - Failed to load pixel shader : %s", ( localBlobs.errorMessage != nullptr ) ? localBlobs.errorMessage->GetBufferPointer() : ( "No error message given " ) );
+		kbWarning( "kbRenderer_DX11::LoadShader() - Failed to load pixel shader : %s\n%s", fileName.c_str(), ( localBlobs.errorMessage != nullptr ) ? localBlobs.errorMessage->GetBufferPointer() : ( "No error message given " ) );
 		return;
 	}
 

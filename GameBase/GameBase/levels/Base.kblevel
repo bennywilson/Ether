@@ -20,19 +20,19 @@ kbGameEntity 0 0 0 0 {
 				Enabled = 0
 				DiffuseMap = .\assets\Terrain\Sand.jpg
 				NormalMap = .\assets\Terrain\Sand_NM.jpg
-				UVScale = 50.000000 50.000000 1.000000
+				UVScale = 1.000000 1.000000 1.000000
 			}
 			kbTerrainMatComponent { 
 				Enabled = 0
-				DiffuseMap = .\assets\Terrain\Rock.jpg
-				NormalMap = .\assets\Terrain\Rock_NM.jpg
-				UVScale = 15.000000 15.000000 1.000000
+				DiffuseMap = .\assets\Terrain\Pack2\JPEG\Vol_11_1_Base_Color.jpg
+				NormalMap = .\assets\Terrain\Pack2\JPEG\Vol_11_1_Normal.jpg
+				UVScale = 20.000000 20.000000 50.000000
 			}
 			kbTerrainMatComponent { 
 				Enabled = 0
-				DiffuseMap = .\assets\Terrain\grass.jpg
-				NormalMap = .\assets\Terrain\Grass_NM.jpg
-				UVScale = 200.000000 200.000000 1.000000
+				DiffuseMap = .\assets\Terrain\Pack2\JPEG\Vol_11_4_Base_Color.jpg
+				NormalMap = .\assets\Terrain\Pack2\JPEG\Vol_11_4_Normal.jpg
+				UVScale = 300.000000 300.000000 50.000000
 			}
 		Shader = .\assets\shaders\basicTerrain.kbShader
 		SplatMap = .\assets\Terrain\terrain1_splatmap.bmp
@@ -44,7 +44,7 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 1
 		LifeTime =  -1.000000
 		Name = "Directional Light"
-		Orientation = 0.004739 0.537883 -0.697433 -0.473547
+		Orientation = -0.058099 0.493044 -0.695025 -0.520070
 		Position = -7.139423 27.397795 16.036642
 		Scale = 1.000000 1.000000 1.000000
 	}
@@ -52,7 +52,7 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadows = 1
-		Color = 0.750000 0.750000 0.750000 0.250000
+		Color = 1.000000 1.000000 1.000000 0.250000
 		CascadedShadowSplits = 4
  100.000000
  200.000000

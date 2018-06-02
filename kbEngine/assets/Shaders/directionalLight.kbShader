@@ -2,7 +2,7 @@
 // directionalLight.kbShader
 //
 //
-// 2016-2017 kbEngine 2.0
+// 2016-2018 kbEngine 2.0
 //===================================================================================================
 cbuffer matrixBuffer {
    matrix               mvpMatrix;
@@ -35,7 +35,7 @@ pixelInput vertexShader( vertexInput input ) {
 	pixelInput output = (pixelInput)(0);
 
 	output.position = input.position;
-	output.uv = mul( input.uv, mvpMatrix );
+	output.uv = mul( input.uv, (float2x2)mvpMatrix );
 	output.position2 = input.position;
 
 	return output;
@@ -57,15 +57,15 @@ SamplerState ShadowMapSamplerState;
 Texture2D ShadowMap;
 
 float4 pixelShader( pixelInput input ) : SV_TARGET {
-   float3 baseColor = colorTexture.Sample( DiffuseSamplerState, input.uv );
-   float3 normal = normalTexture.Sample( NormalSamplerState, input.uv );
+   float3 baseColor = colorTexture.Sample( DiffuseSamplerState, input.uv ).xyz;
+   float3 normal = normalTexture.Sample( NormalSamplerState, input.uv ).xyz;
 
    float lightIntensity = dot( normal, lightDirection.xyz );
    lightIntensity = ( lightIntensity * 0.9f ) + 0.1f;
 
    float4 worldPos = float4( input.position2.xy, depthTexture.Sample( DepthSamplerState, input.uv ).r, 1 );
    worldPos = mul( worldPos, inverseViewProjection );
-   float DistFromCamera = length( worldPos.xyz/worldPos.w - cameraPosition );
+   float DistFromCamera = length( worldPos.xyz/worldPos.w - cameraPosition.xyz );
 
    int index = 0;
    float2 offset = float2( 0.0f, 0.0f );

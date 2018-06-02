@@ -1117,4 +1117,5 @@ void kbEditor::ViewModeChoiceCB( Fl_Widget *, void * pUserData ) {
  */
 void kbEditor::ClearOutputBuffer( Fl_Widget *, void * pUseData ) {
     g_OutputBuffer->text( "" );
+	g_StyleBuffer->text( "" );
 }
