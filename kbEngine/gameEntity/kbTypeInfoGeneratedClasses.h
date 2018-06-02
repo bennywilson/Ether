@@ -123,7 +123,8 @@ GenerateClass(
 
 GenerateClass(
 	kbTerrainMatComponent,
-	AddField( "DiffuseTexture", KBTYPEINFO_TEXTURE, kbTerrainMatComponent, m_pDiffuseTexture, false, "" )
+	AddField( "DiffuseMap", KBTYPEINFO_TEXTURE, kbTerrainMatComponent, m_pDiffuseMap, false, "" )
+	AddField( "NormalMap", KBTYPEINFO_TEXTURE, kbTerrainMatComponent, m_pNormalMap, false, "" )
 	AddField( "UVScale", KBTYPEINFO_VECTOR, kbTerrainMatComponent, m_UVScale, false, "" )
 )
 

@@ -14,7 +14,7 @@ cbuffer matrixBuffer {
 struct vertexInput {
 	float4 position			: POSITION;
 	float2 uv				: TEXCOORD0;
-	float4 color			: COLOR;
+	float4 binormal			: COLOR;
 	float4 normal			: NORMAL;
 	float4 tangent			: TANGENT;
 };
@@ -25,7 +25,9 @@ struct pixelInput {
 	float2 uv				: TEXCOORD0;
 	float4 color			: COLOR;
 	float2 position2		: TEXCOORD1;
-	float3 normal			: TEXCOORD2;
+	float3 tangent			: TEXCOORD2;
+	float3 binormal			: TEXCOORD3;
+	float3 normal			: TEXCOORD4;
 };
 
 //-------------------------------------
@@ -44,9 +46,12 @@ pixelInput vertexShader( vertexInput input ) {
 
 	output.position = mul( input.position, mvpMatrix );
 	output.uv = input.uv;
-	output.color = input.color;
 	output.position2 = output.position.zw;
-	output.normal.xyz = mul( ( input.normal.xyz * 2.0f ) - 1.0f, modelMatrix );
+
+
+	output.tangent = ( input.tangent.xyz * 2.0f ) - 1.0f;
+	output.binormal = ( input.binormal.xyz * 2.0f ) - 1.0f;
+	output.normal = ( input.normal.xyz * 2.0f ) - 1.0f;
 
 	return output;
 }
@@ -58,40 +63,53 @@ SamplerState SampleType;
 
 Texture2D splatMap : register(t0);
 
-Texture2D Mat1Diffuse : register(t1);
+Texture2D Mat1Diffuse	: register(t1);
+Texture2D Mat1Normal	: register(t2);
 
-Texture2D Mat2Diffuse : register(t2);
+Texture2D Mat2Diffuse	: register(t3);
+Texture2D Mat2Normal	: register(t4);
 
-Texture2D Mat3Diffuse : register(t3);
+Texture2D Mat3Diffuse	: register(t5);
+Texture2D Mat3Normal	: register(t6);
 
-Texture2D Mat4Diffuse : register(t4);
+Texture2D Mat4Diffuse	: register(t7);
 
  PS_OUTPUT pixelShader( pixelInput	input ) : SV_TARGET {
  	PS_OUTPUT output = (PS_OUTPUT) 0;
-	// Sand - 221, 214, 162
-	// Rock - 113, 94, 85
-	// Vegetation - 103, 148, 54
-	// Erosion - 99, 173, 173
 
 	//const float3 sandColor = float3( 221.0f, 214.0f, 162.0f ) / 255.0f;
 	//const float3 rockColor = float3( 113.0f, 94.0f, 85.0f ) / 255.0f;
 	//const float3 vegetationColor = float3( 103.0f, 148.0f, 54.0f ) / 255.0f;
 
+	float3x3 tbn;
+	tbn[0] = input.tangent.xyz;
+	tbn[1] = input.binormal.xyz;
+	tbn[2] = input.normal.xyz;
+
+	const half zMult = 1;
 	const half3 sandColor = Mat1Diffuse.Sample( SampleType, input.uv * mat1And2UVScale.xy );
+	half3 sandNormal = Mat1Normal.Sample( SampleType, input.uv * mat1And2UVScale.xy );
+	sandNormal = ( sandNormal * 2.0f ) - 1.0f;
+	sandNormal = mul( sandNormal, tbn );
+	sandNormal.y *= zMult;
+
 	const half3 rockColor = Mat2Diffuse.Sample( SampleType, input.uv * mat1And2UVScale.zw );
-	const half3 vegetationColor = Mat3Diffuse.Sample( SampleType, input.uv * mat3And4UVScale.xy );
+	half3 rockNormal = Mat2Normal.Sample( SampleType, input.uv * mat1And2UVScale.zw );
+	rockNormal = ( rockNormal * 2.0f ) - 1.0f;
+	rockNormal = mul( rockNormal, tbn );
+	rockNormal.y *= zMult;
+
+	const half3 grassColor = Mat3Diffuse.Sample( SampleType, input.uv * mat3And4UVScale.xy );
+	half3 grassNormal = Mat3Normal.Sample( SampleType, input.uv * mat3And4UVScale.xy );
+	grassNormal = ( grassNormal * 2.0f ) - 1.0f;
+	grassNormal = mul( grassNormal, tbn );
+	grassNormal.y *= zMult;
 
 	half4 splat = splatMap.Sample( SampleType, input.uv );
 
-	output.Color.xyz = ( sandColor * splat.x ) + ( rockColor * splat.y ) + ( vegetationColor * splat.z );
+	output.Color.xyz = ( sandColor * splat.x ) + ( rockColor * splat.y ) + ( grassColor * splat.z );
+	output.Normal.xyz = normalize( ( sandNormal * splat.x ) + ( rockNormal * splat.y ) + ( grassNormal * splat.z ) );
 	output.Depth.r = input.position2.x / input.position2.y;
 
-	output.Normal.xyz = normalize( input.normal );
-
-	/*
-
-
-
-	*/
 	return output;
 }

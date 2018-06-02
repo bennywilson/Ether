@@ -18,17 +18,20 @@ kbGameEntity 0 0 0 0 {
 		Materials = 3
 			kbTerrainMatComponent { 
 				Enabled = 0
-				DiffuseTexture = .\assets\Terrain\Sand.jpg
+				DiffuseMap = .\assets\Terrain\Sand.jpg
+				NormalMap = .\assets\Terrain\Sand_NM.jpg
 				UVScale = 50.000000 50.000000 1.000000
 			}
 			kbTerrainMatComponent { 
 				Enabled = 0
-				DiffuseTexture = .\assets\Terrain\Rock.jpg
+				DiffuseMap = .\assets\Terrain\Rock.jpg
+				NormalMap = .\assets\Terrain\Rock_NM.jpg
 				UVScale = 15.000000 15.000000 1.000000
 			}
 			kbTerrainMatComponent { 
 				Enabled = 0
-				DiffuseTexture = .\assets\Terrain\grass.jpg
+				DiffuseMap = .\assets\Terrain\grass.jpg
+				NormalMap = .\assets\Terrain\Grass_NM.jpg
 				UVScale = 200.000000 200.000000 1.000000
 			}
 		Shader = .\assets\shaders\basicTerrain.kbShader
@@ -41,7 +44,7 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 1
 		LifeTime =  -1.000000
 		Name = "Directional Light"
-		Orientation = -0.264803 -0.530423 0.178882 0.785195
+		Orientation = 0.004739 0.537883 -0.697433 -0.473547
 		Position = -7.139423 27.397795 16.036642
 		Scale = 1.000000 1.000000 1.000000
 	}
@@ -49,7 +52,7 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadows = 1
-		Color = 0.500000 0.500000 0.500000 0.250000
+		Color = 0.750000 0.750000 0.750000 0.250000
 		CascadedShadowSplits = 4
  100.000000
  200.000000
@@ -127,5 +130,25 @@ kbGameEntity 2609040299 1100347930 3115268521 1892043160 {
 		IterationWidth =  0.001500
 		NumIteractions = 48
 		Texture = ..\..\kbEngine\assets\Textures\flare.jpg
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Entity_21"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = -66.177139 4.522505 105.104149
+		Scale = 1.000000 1.000000 1.000000
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Entity_22"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = -14.511436 38.180302 25.449627
+		Scale = 1.000000 1.000000 1.000000
 	}
 }

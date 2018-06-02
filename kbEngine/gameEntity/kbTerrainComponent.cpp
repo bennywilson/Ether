@@ -23,7 +23,8 @@ std::vector<debugNormal> terrainNormals;
  *  kbTerrainMatComponent::Constructor
  */
 void kbTerrainMatComponent::Constructor() {
-    m_pDiffuseTexture = nullptr;
+    m_pDiffuseMap = nullptr;
+	m_pNormalMap = nullptr;
 	m_UVScale.Set( 1.0f, 1.0f, 1.0f );
 }
 
@@ -93,6 +94,8 @@ void kbTerrainComponent::GenerateTerrain() {
 		byte b;
 		byte a;
 	};
+
+	terrainNormals.clear();
 
 	unsigned int texWidth, texHeight;
 
@@ -179,11 +182,24 @@ void kbTerrainComponent::GenerateTerrain() {
 			xVec.Normalize();
 			zVec.Normalize();
 			kbVec3 finalVec = xVec.Cross( zVec ).Normalized();
-			pVerts[currentIndex].SetNormal( finalVec );
+
+			xVec = finalVec.Cross( zVec ).Normalized();
+			zVec = xVec.Cross( finalVec ).Normalized();
+
+			pVerts[currentIndex].SetTangent( -zVec );
+			pVerts[currentIndex].SetBinormal( xVec );
 
 			debugNormal newNormal;
+			newNormal.normal = xVec;
+			newNormal.position = pVerts[currentIndex].position + GetOwner()->GetPosition();
+			terrainNormals.push_back( newNormal );
+
+			newNormal.normal = zVec;
+			newNormal.position = pVerts[currentIndex].position + GetOwner()->GetPosition();
+			terrainNormals.push_back( newNormal );
+
 			newNormal.normal = finalVec;
-			newNormal.position = pVerts[currentIndex].position;
+			newNormal.position = pVerts[currentIndex].position + GetOwner()->GetPosition();
 			terrainNormals.push_back( newNormal );
 		}
 	}
@@ -238,6 +254,20 @@ void kbTerrainComponent::Update_Internal( const float DeltaTime ) {
 		SetMaterialParams();
 		g_pRenderer->UpdateRenderObject( this, &m_TerrainModel, GetOwner()->GetPosition(), kbQuat( 0.0f, 0.0f, 0.0f, 1.0f ), GetOwner()->GetScale(), RP_Lighting, &m_ShaderOverrideList , &m_ShaderParamOverride );
 	}
+
+	kbVec3 currentCameraPosition;
+	kbQuat currentCameraRotation;
+	g_pRenderer->GetRenderViewTransform( nullptr, currentCameraPosition, currentCameraRotation );
+	/*for ( int i = 0; i < terrainNormals.size(); i += 3 ) {
+		static float checkDist = 50000;
+		if ( ( currentCameraPosition - terrainNormals[i].position ).LengthSqr() > checkDist ) {
+			continue;
+		}
+
+		g_pRenderer->DrawLine( terrainNormals[i].position, terrainNormals[i].position + terrainNormals[i + 0].normal * 5.0f, kbColor::red );
+		g_pRenderer->DrawLine( terrainNormals[i].position, terrainNormals[i].position + terrainNormals[i + 1].normal * 5.0f, kbColor::green );
+		g_pRenderer->DrawLine( terrainNormals[i].position, terrainNormals[i].position + terrainNormals[i + 2].normal * 5.0f, kbColor::blue );
+	}*/
 }
 
 /**
@@ -268,13 +298,15 @@ void kbTerrainComponent::SetMaterialParams() {
 	kbVec4 MatUVScale( 0.0f, 0.0f, 0.0f, 0.0f );
 
 	if ( m_TerrainMaterials.size() > 0 ) {
-		m_ShaderParamOverride.SetTexture( "Mat1Diffuse", m_TerrainMaterials[0].GetDiffuseTexture() );
+		m_ShaderParamOverride.SetTexture( "Mat1Diffuse", m_TerrainMaterials[0].GetDiffuseMap() );
+		m_ShaderParamOverride.SetTexture( "Mat1Normal", m_TerrainMaterials[0].GetNormalMap() );
 		MatUVScale.x = m_TerrainMaterials[0].GetUVScale().x;
 		MatUVScale.y = m_TerrainMaterials[0].GetUVScale().y;
 	}
 
 	if ( m_TerrainMaterials.size() > 1 ) {
-		m_ShaderParamOverride.SetTexture( "Mat2Diffuse", m_TerrainMaterials[1].GetDiffuseTexture() );
+		m_ShaderParamOverride.SetTexture( "Mat2Diffuse", m_TerrainMaterials[1].GetDiffuseMap() );
+		m_ShaderParamOverride.SetTexture( "Mat2Normal", m_TerrainMaterials[1].GetNormalMap() );
 		MatUVScale.z = m_TerrainMaterials[1].GetUVScale().x;
 		MatUVScale.w = m_TerrainMaterials[1].GetUVScale().y;
 	}
@@ -283,13 +315,15 @@ void kbTerrainComponent::SetMaterialParams() {
 	MatUVScale.Set( 0.0f, 0.0f, 0.0f, 0.0f );
 
 	if ( m_TerrainMaterials.size() > 2 ) {
-		m_ShaderParamOverride.SetTexture( "Mat3Diffuse", m_TerrainMaterials[2].GetDiffuseTexture() );
+		m_ShaderParamOverride.SetTexture( "Mat3Diffuse", m_TerrainMaterials[2].GetDiffuseMap() );
+		m_ShaderParamOverride.SetTexture( "Mat3Normal", m_TerrainMaterials[2].GetNormalMap() );
 		MatUVScale.x = m_TerrainMaterials[2].GetUVScale().x;
 		MatUVScale.y = m_TerrainMaterials[2].GetUVScale().y;
 	}
 
 	if ( m_TerrainMaterials.size() > 3 ) {
-		m_ShaderParamOverride.SetTexture( "Mat4Diffuse", m_TerrainMaterials[3].GetDiffuseTexture() );
+		m_ShaderParamOverride.SetTexture( "Mat4Diffuse", m_TerrainMaterials[3].GetDiffuseMap() );
+		m_ShaderParamOverride.SetTexture( "Mat4Normal", m_TerrainMaterials[0].GetNormalMap() );
 		MatUVScale.z = m_TerrainMaterials[3].GetUVScale().x;
 		MatUVScale.y = m_TerrainMaterials[3].GetUVScale().y;
 	}
