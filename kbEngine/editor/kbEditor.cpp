@@ -125,7 +125,7 @@ kbEditor::kbEditor() :
 	curX += speedButtonWidth + buttonSpacing * 2;
 
 	m_pViewModeChoice = new Fl_Choice( curX, curY, (int)fl_width( "Wireframe") + TRSButtonWidth, buttonHeight );
-	m_pViewModeChoice->add( "Normal" );		// Note: These have to be in the same order as the entries in kbViewMode_t
+	m_pViewModeChoice->add( "Textured and Lit" );		// Note: These have to be in the same order as the entries in kbViewMode_t
 	m_pViewModeChoice->add( "Wireframe" );
 	m_pViewModeChoice->value( 0 );
 	m_pViewModeChoice->callback( ViewModeChoiceCB );

@@ -50,6 +50,7 @@ public:
 private:
 
 	void										RebuildResourceFolderListText();
+	unsigned int								FontSize()	const { return 10; }
 
 	Fl_Select_Browser *							m_pResourceSelectBrowser;
 	Fl_Select_Browser *							m_pEntitySelectBrowser;

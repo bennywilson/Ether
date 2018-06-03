@@ -110,7 +110,9 @@ void kbResourceTab::ResourceSelectedCB( Fl_Widget * widget, void * userData ) {
 
 	}
 
+	const int scrollPos = pResourceTab->m_pResourceSelectBrowser->position();
 	pResourceTab->RefreshResourcesTab();
+	pResourceTab->m_pResourceSelectBrowser->position( scrollPos );
 	selectBrowser->select( selectedItemIndex + 1 );
 }
 
@@ -174,7 +176,7 @@ kbResourceTab::kbResourceTab( int x, int y, int w, int h ) :
 		Fl_Group *const resourceGroup = new Fl_Group( x, Top_Border, w, Display_Height, "Resources" );
 		m_pResourceSelectBrowser = new Fl_Select_Browser( 5, Top_Border + 5, Display_Width, Display_Height , "" );
 		m_pResourceSelectBrowser->callback( &ResourceSelectedCB, this );
-		m_pResourceSelectBrowser->textsize( 11 );
+		m_pResourceSelectBrowser->textsize( FontSize() );
 		resourceGroup->end();
 	}
 
@@ -182,7 +184,7 @@ kbResourceTab::kbResourceTab( int x, int y, int w, int h ) :
 		Fl_Group *const resourceGroup = new Fl_Group( 0, Top_Border, Display_Width, Display_Height, "Entities" );
 		m_pEntitySelectBrowser = new Fl_Select_Browser( 5, Top_Border + 5, Display_Width, Display_Height , "" );
 		m_pEntitySelectBrowser->callback( *EntitySelectedCB, this );
-		m_pEntitySelectBrowser->textsize( 11 );
+		m_pEntitySelectBrowser->textsize( FontSize() );
 	    resourceGroup->end();
 	}
 
@@ -461,6 +463,7 @@ void kbResourceTab::RefreshResourcesTab() {
 	m_pResourceSelectBrowser->clear();
 	m_SelectBrowserIdx.clear();
 
+	const int scrollPos = m_pResourceSelectBrowser->position();
 	// Add packages to the UI
 	
 	// Add resources to the UI

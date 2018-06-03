@@ -74,7 +74,7 @@ Texture2D Mat3Normal	: register(t6);
 
 Texture2D Mat4Diffuse	: register(t7);
 
- PS_OUTPUT pixelShader( pixelInput	input ) {
+ PS_OUTPUT pixelShader( pixelInput	input )  {
  	PS_OUTPUT output = (PS_OUTPUT) 0;
 
 	//const float3 sandColor = float3( 221.0f, 214.0f, 162.0f ) / 255.0f;

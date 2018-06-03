@@ -61,7 +61,7 @@ float4 pixelShader( pixelInput input ) : SV_TARGET {
    float3 normal = normalTexture.Sample( NormalSamplerState, input.uv ).xyz;
 
    float lightIntensity = dot( normal, lightDirection.xyz );
-   lightIntensity = ( lightIntensity * 0.9f ) + 0.1f;
+   lightIntensity = ( lightIntensity * 0.5f ) + 0.5f;
 
    float4 worldPos = float4( input.position2.xy, depthTexture.Sample( DepthSamplerState, input.uv ).r, 1 );
    worldPos = mul( worldPos, inverseViewProjection );

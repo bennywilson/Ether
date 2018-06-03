@@ -152,3 +152,33 @@ kbGameEntity 0 0 0 0 {
 		Scale = 1.000000 1.000000 1.000000
 	}
 }
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Entity_23"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 41.130100 45.297951 41.438030
+		Scale = 1.000000 1.000000 1.000000
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Entity_25"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = -5287.869629 2470.000000 -295.887756
+		Scale = 3.000000 3.000000 3.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		m_RenderPass = LightingPass
+		Model = .\assets\models\Vehicles\jet.ms3d
+		ShaderOverride = 1
+			..\..\kbEngine\assets\Shaders\basicShader.kbShader
+
+	}
+}

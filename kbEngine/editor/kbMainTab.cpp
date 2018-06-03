@@ -170,8 +170,10 @@ void kbMainTab::RenderSync() {
 	kbVec2i mouseXY( inputState.mouseX, inputState.mouseY );
 	mouseXY.x -= windowRect.left;
 	mouseXY.y -= y() + kbEditor::TabHeight();
-	mouseXY.x = (int)(mouseXY.x * g_pRenderer->GetBackBufferWidth() / windowWidth );
-	mouseXY.y = (int)(mouseXY.y * g_pRenderer->GetBackBufferHeight() / windowHeight );
+
+	kbVec2i mouseRenderBufferPos;
+	mouseRenderBufferPos.x = (int)(mouseXY.x * g_pRenderer->GetBackBufferWidth() / windowWidth );
+	mouseRenderBufferPos.y = (int)(mouseXY.y * g_pRenderer->GetBackBufferHeight() / windowHeight );
 
 	if ( m_Manipulator.IsGrabbed() ) {
         if ( inputState.leftMouseButtonDown == false ) {
@@ -197,11 +199,11 @@ void kbMainTab::RenderSync() {
         return;
     }
     
-    if ( mouseXY.x < 0 || mouseXY.y < 0 || mouseXY.x >= g_pRenderer->GetBackBufferWidth() || mouseXY.y >= g_pRenderer->GetBackBufferHeight() ) {
+    if ( mouseXY.x < 0 || mouseXY.y < 0 || mouseXY.x >= windowWidth || mouseXY.y >= windowHeight ) {
     	return;
     }
     
-    const kbVec2i hitEntityId = g_pRenderer->GetEntityIdAtScreenPosition( mouseXY.x, mouseXY.y );
+    const kbVec2i hitEntityId = g_pRenderer->GetEntityIdAtScreenPosition( mouseRenderBufferPos.x, mouseRenderBufferPos.y );
     if ( hitEntityId.x == UINT16_MAX ) {
     	ManipulatorEvent( true, mouseXY );
     } else {
@@ -435,8 +437,8 @@ void kbMainTab::ManipulatorEvent( const bool bClicked, const kbVec2i & mouseXY )
 	kbCamera & camera = pCurrentWindow->GetCamera();
 
 	GetWindowRect( pCurrentWindow->GetWindowHandle(), &windowRect );
-	const float windowWidth = (float)g_pRenderer->GetBackBufferWidth();
-	const float windowHeight = (float)g_pRenderer->GetBackBufferHeight();
+	const float windowWidth = (float)windowRect.right - windowRect.left;//g_pRenderer->GetBackBufferWidth();
+	const float windowHeight = (float)windowRect.bottom - windowRect.top;//->GetBackBufferHeight();
 	
 	kbVec4 mousePosition( (float)mouseXY.x, (float)mouseXY.y, 0.0f, 1.0f );
 	
@@ -447,7 +449,7 @@ void kbMainTab::ManipulatorEvent( const bool bClicked, const kbVec2i & mouseXY )
 	
 	// Persepctive mat
 	kbMat4 perspectiveMat;
-	perspectiveMat.CreatePerspectiveMatrix( kbToRadians( 75.0f ), windowWidth / windowHeight, kbRenderer_DX11::Near_Plane, kbRenderer_DX11::Far_Plane );
+	perspectiveMat.CreatePerspectiveMatrix( kbToRadians( 75.0f ), 1090.0f / windowHeight, kbRenderer_DX11::Near_Plane, kbRenderer_DX11::Far_Plane );
 	perspectiveMat.InverseProjection();
 	
 	// View mat
