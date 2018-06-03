@@ -71,6 +71,7 @@ private:
 	static void									ResourceSelectedCB( Fl_Widget * pWidget, void * pUserData );
 	static void									SavePackageCB( Fl_Widget * pWidget, void * pUserData );
 	static void									DeleteCB( Fl_Widget * pWidget, void * pUserData );
+	static void									ZoomToEntityCB( Fl_Widget * pWidget, void * pUserData );
 
 	static void									ResourceManagerCB( const kbResourceManager::CallbackReason Reason );
 };

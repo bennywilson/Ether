@@ -432,6 +432,35 @@ void kbEditor::BroadcastEvent( const widgetCBObject & cbObject ) {
 }
 
 /**
+ *  kbEditor::SetMainCameraPos
+ */
+void kbEditor::SetMainCameraPos( const kbVec3 & newCamPos ) {
+	m_pMainTab->GetEditorWindowCamera()->m_Position = newCamPos;
+}
+
+/**
+ *  kbEditor::GetMainCameraPos
+ */
+kbVec3 kbEditor::GetMainCameraPos() {
+	return m_pMainTab->GetEditorWindowCamera()->m_Position;
+}
+
+/**
+ *  kbEditor::SetMainCameraRot
+ */
+void kbEditor::SetMainCameraRot( const kbQuat & newCamRot ) {
+	m_pMainTab->GetEditorWindowCamera()->m_Rotation = newCamRot;
+	m_pMainTab->GetEditorWindowCamera()->m_RotationTarget = newCamRot;
+}
+
+/**
+ *  kbEditor::GetMainCameraRot
+ */
+kbQuat kbEditor::GetMainCameraRot() {
+	return m_pMainTab->GetEditorWindowCamera()->m_Rotation;
+}
+
+/**
  *  kbEditor::DeselectEntities
  */	
 void kbEditor::DeselectEntities() {

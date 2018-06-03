@@ -26,7 +26,7 @@ public:
 
 	virtual void											EventCB( const widgetCBObject *const widgetCBObject );
 
-	const kbCamera *										GetEditorWindowCamera() const { return &m_pEditorWindow->GetCamera(); }
+	kbCamera *												GetEditorWindowCamera() const { return &m_pEditorWindow->GetCamera(); }
 
 	void													AdjustCameraMoveSpeedMultiplier( const float newMultiplier ) { m_CameraMoveSpeedMultiplier = max( min( newMultiplier, 100.0f ), 0.1f ); }
 

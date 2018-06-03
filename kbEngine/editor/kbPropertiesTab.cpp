@@ -651,7 +651,7 @@ void kbPropertiesTab::RefreshProperty( kbEditorEntity *const pEntity, const std:
 			cbData.m_pVariablePtr = &boolean;
 			m_CallBackData.push_back( cbData );
 
-			Fl_Check_Button *const button = new Fl_Check_Button( xPos + propertyNamePixelWidth - 1, yPos, inputHeight, inputHeight, "" );
+			Fl_Check_Button *const button = new Fl_Check_Button( xPos + propertyNamePixelWidth - 2, yPos, inputHeight, inputHeight, "" );
 			button->labelsize( inputHeight );
 			button->callback( &CheckButtonCB, static_cast< void * >( &m_CallBackData[ m_CallBackData.size() - 1 ] )  );
 			button->value( * ( (bool*) byteOffsetToVar ) );
@@ -769,9 +769,9 @@ void kbPropertiesTab::RefreshProperty( kbEditorEntity *const pEntity, const std:
 			m_CallBackData.push_back( cbData );
 			Z_Input->callback( &TextFieldCB, static_cast<void *>( &m_CallBackData[m_CallBackData.size() - 1] ) );
 
-			X_Input->align( FL_ALIGN_LEFT );
-			Y_Input->align( FL_ALIGN_LEFT );
-			Z_Input->align( FL_ALIGN_LEFT );
+			X_Input->align( FL_ALIGN_LEFT | FL_ALIGN_CLIP );
+			Y_Input->align( FL_ALIGN_LEFT | FL_ALIGN_CLIP );
+			Z_Input->align( FL_ALIGN_LEFT | FL_ALIGN_CLIP );
 
 			X_Input->position( 0 );
 			Y_Input->position( 0 );
