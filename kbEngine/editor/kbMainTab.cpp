@@ -424,6 +424,10 @@ void kbMainTab::EntityTransformedCB( const widgetCBObject *const widgetCBObj ) {
 /**
  *	kbMainTab::ManipulatorClicked
  */
+static XMMATRIX & XMMATRIXFromkbMat4( kbMat4 & matrix ) { return (*(XMMATRIX*) &matrix); }
+static kbMat4 & kbMat4FromXMMATRIX( FXMMATRIX & matrix ) { return (*(kbMat4*) & matrix); }
+
+
 void kbMainTab::ManipulatorEvent( const bool bClicked, const kbVec2i & mouseXY ) {
 
 	RECT windowRect;
@@ -449,14 +453,16 @@ void kbMainTab::ManipulatorEvent( const bool bClicked, const kbVec2i & mouseXY )
 	
 	// Persepctive mat
 	kbMat4 perspectiveMat;
-	perspectiveMat.CreatePerspectiveMatrix( kbToRadians( 75.0f ), 1090.0f / windowHeight, kbRenderer_DX11::Near_Plane, kbRenderer_DX11::Far_Plane );
-	perspectiveMat.InverseProjection();
+	perspectiveMat.CreatePerspectiveMatrix( kbToRadians( 75.0f ), windowWidth/ windowHeight, kbRenderer_DX11::Near_Plane, kbRenderer_DX11::Far_Plane );
+    perspectiveMat = kbMat4FromXMMATRIX( XMMatrixInverse( nullptr, XMMATRIXFromkbMat4( perspectiveMat) ) );
+
+	//perspectiveMat.InverseProjection();
 	
 	// View mat
 	const kbMat4 modelViewMatrix( camera.m_Rotation, camera.m_Position );
 
 	const kbMat4 unitCubeToWorldMatrix = perspectiveMat * modelViewMatrix;
-	const kbVec4 ray = mousePosition.TransformPoint( unitCubeToWorldMatrix, true );
+	const kbVec4 ray =(mousePosition.TransformPoint( unitCubeToWorldMatrix, true ) - camera.m_Position );
 
 	if ( bClicked ) {
 		if ( m_Manipulator.AttemptMouseGrab( camera.m_Position, ray.ToVec3(), camera.m_Rotation ) == false ) {
