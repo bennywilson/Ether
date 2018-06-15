@@ -64,10 +64,11 @@ pixelInput vertexShader( vertexInput input ) {
  void geometryShader( point pixelInput input[1], inout TriangleStream<pixelInput> OutputStream ) {
 	pixelInput newPoint1 = input[0];
 	newPoint1.position = mul( newPoint1.position + float4(100,0,0,0), vpMatrix );
-	newPoint1.position /= newPoint1.position.w;
+	newPoint1.position2 = newPoint1.position.zw;
+
 	pixelInput newPoint2 = input[0];
 	newPoint2.position =  mul( newPoint2.position + float4(0, -100,0,0), vpMatrix );
-	newPoint2.position /= newPoint2.position.w;
+	newPoint2.position2 = newPoint2. position.zw;
 
 	OutputStream.Append( newPoint1 );
 	OutputStream.Append( newPoint2 );
@@ -75,7 +76,8 @@ pixelInput vertexShader( vertexInput input ) {
 
 	pixelInput newPoint3 = input[0];
 	newPoint3.position = mul( newPoint3.position, vpMatrix );
-	newPoint3.position  /= newPoint3.position.w;
+	newPoint3.position2 = newPoint3.position.zw;
+	
 	OutputStream.Append( newPoint3 );
  }
 
@@ -100,38 +102,9 @@ Texture2D Mat4Diffuse	: register(t7);
  PS_OUTPUT pixelShader( pixelInput	input )  {
  	PS_OUTPUT output = (PS_OUTPUT) 0;
 
-	//const float3 sandColor = float3( 221.0f, 214.0f, 162.0f ) / 255.0f;
-	//const float3 rockColor = float3( 113.0f, 94.0f, 85.0f ) / 255.0f;
-	//const float3 vegetationColor = float3( 103.0f, 148.0f, 54.0f ) / 255.0f;
 
-	float3x3 tbn;
-	tbn[0] = input.tangent.xyz;
-	tbn[1] = input.binormal.xyz;
-	tbn[2] = input.normal.xyz;
-
-	const half zMult = 1;
-	const half3 sandColor = Mat1Diffuse.Sample( SampleType, input.uv * mat1And2UVScale.xy ).xyz;
-	half3 sandNormal = Mat1Normal.Sample( SampleType, input.uv * mat1And2UVScale.xy ).xyz;
-	sandNormal = ( sandNormal * 2.0f ) - 1.0f;
-	sandNormal = mul( sandNormal, tbn );
-	sandNormal.y *= zMult;
-
-	const half3 rockColor = Mat2Diffuse.Sample( SampleType, input.uv * mat1And2UVScale.zw ).xyz;
-	half3 rockNormal = Mat2Normal.Sample( SampleType, input.uv * mat1And2UVScale.zw ).xyz;
-	rockNormal = ( rockNormal * 2.0f ) - 1.0f;
-	rockNormal = mul( rockNormal, tbn );
-	rockNormal.y *= zMult;
-
-	const half3 grassColor = Mat3Diffuse.Sample( SampleType, input.uv * mat3And4UVScale.xy ).xyz;
-	half3 grassNormal = Mat3Normal.Sample( SampleType, input.uv * mat3And4UVScale.xy ).xyz;
-	grassNormal = ( grassNormal * 2.0f ) - 1.0f;
-	grassNormal = mul( grassNormal, tbn );
-	grassNormal.y *= zMult;
-
-	half4 splat = splatMap.Sample( SampleType, input.uv );
-
-	output.Color.xyz = ( sandColor * splat.x ) + ( rockColor * splat.y ) + ( grassColor * splat.z );
-	output.Normal.xyz = normalize( ( sandNormal * splat.x ) + ( rockNormal * splat.y ) + ( grassNormal * splat.z ) );
+	output.Color.xyz = 1;
+	output.Normal.xyz = 0;
 	output.Depth.r = input.position2.x / input.position2.y;
 
 	return output;
