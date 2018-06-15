@@ -202,6 +202,7 @@ struct kbBoneMatrix_t {
 typedef ID3D11Buffer kbHWBuffer;
 typedef ID3D11ShaderResourceView kbHWTexture;
 typedef ID3D11VertexShader kbHWVertexShader;
+typedef ID3D11GeometryShader kbHWGeometryShader;
 typedef ID3D11PixelShader kbHWPixelShader;
 typedef ID3D11InputLayout kbHWVertexLayout;
 
@@ -364,6 +365,9 @@ enum eRenderObjectOp {
 	ROO_Update,
 };
 
+/**
+ *	kbLightShafts
+ */
 class kbLightShafts {
 
 //---------------------------------------------------------------------------------------------------

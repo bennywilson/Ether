@@ -20,6 +20,13 @@ struct debugNormal
 std::vector<debugNormal> terrainNormals;
 
 /**
+ *  kbGrass::Constructor
+ */
+void kbGrass::Constructor() {
+    m_Dummy = 0;
+}
+
+/**
  *  kbTerrainMatComponent::Constructor
  */
 void kbTerrainMatComponent::Constructor() {
@@ -224,6 +231,15 @@ void kbTerrainComponent::GenerateTerrain() {
 
     SetMaterialParams();
     g_pRenderer->AddRenderObject( this, &m_TerrainModel, GetOwner()->GetPosition(), kbQuat( 0.0f, 0.0f, 0.0f, 1.0f ), kbVec3::one, RP_Lighting, &m_ShaderOverrideList, &m_ShaderParamOverride );
+
+    if ( m_Grass.size() > 0 ) {
+        m_GrassModel.CreatePointCloud( 1, "./assets/Shaders/grass.kbShader" );
+        vertexLayout *const pVerts = (vertexLayout *) m_GrassModel.MapVertexBuffer();
+        pVerts[0].position.Set( 0.0f, 0.0f, 0.0f );
+        pVerts[0].SetColor( kbVec4( 1.0f, 1.0f, 1.0f, 1.0f ) );
+        m_GrassModel.UnmapVertexBuffer();
+        g_pRenderer->AddRenderObject( &m_Grass[0], &m_GrassModel, GetOwner()->GetPosition(), kbQuat( 0.0f, 0.0f, 0.0f, 1.0f ), kbVec3::one );
+    }
 }
 
 /**
@@ -232,14 +248,22 @@ void kbTerrainComponent::GenerateTerrain() {
 void kbTerrainComponent::SetEnable_Internal( const bool isEnabled ) {
 
 	if ( m_TerrainModel.NumVertices() == 0 ) {
-		return ;
+		return;
 	}
 
 	if ( isEnabled ) {
 		SetMaterialParams();
-		g_pRenderer->AddRenderObject( this, &m_TerrainModel, GetOwner()->GetPosition(), kbQuat( 0.0f, 0.0f, 0.0f, 1.0f ), kbVec3::one, RP_Lighting, &m_ShaderOverrideList, &m_ShaderParamOverride );	
+		g_pRenderer->AddRenderObject( this, &m_TerrainModel, GetOwner()->GetPosition(), kbQuat( 0.0f, 0.0f, 0.0f, 1.0f ), kbVec3::one, RP_Lighting, &m_ShaderOverrideList, &m_ShaderParamOverride );
+
+        if ( m_GrassModel.NumVertices() > 0 ) {
+            g_pRenderer->AddRenderObject( &m_Grass[0], &m_GrassModel, GetOwner()->GetPosition(), kbQuat( 0.0f, 0.0f, 0.0f, 1.0f ), kbVec3::one );
+        }
 	} else {
 		g_pRenderer->RemoveRenderObject( this );
+
+        if ( m_GrassModel.NumVertices() > 0 ) {
+            g_pRenderer->RemoveRenderObject( &m_Grass[0] );
+        }
 	}
 }
 
@@ -253,6 +277,10 @@ void kbTerrainComponent::Update_Internal( const float DeltaTime ) {
 
 		SetMaterialParams();
 		g_pRenderer->UpdateRenderObject( this, &m_TerrainModel, GetOwner()->GetPosition(), kbQuat( 0.0f, 0.0f, 0.0f, 1.0f ), GetOwner()->GetScale(), RP_Lighting, &m_ShaderOverrideList , &m_ShaderParamOverride );
+
+        if ( m_GrassModel.NumVertices() > 0 ) {
+            g_pRenderer->UpdateRenderObject( &m_Grass[0], &m_GrassModel, GetOwner()->GetPosition(), kbQuat( 0.0f, 0.0f, 0.0f, 1.0f ), GetOwner()->GetScale() );     
+        }
 	}
 
 	kbVec3 currentCameraPosition;

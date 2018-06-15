@@ -82,6 +82,8 @@ public:
 
 	const kbHWVertexShader *					GetVertexShader() const { return m_pVertexShader; }
 	const kbHWPixelShader *						GetPixelShader() const { return m_pPixelShader; }
+    const kbHWGeometryShader *                  GetGeometryShader() const { return m_pGeometryShader; }
+
 	const kbHWVertexLayout *					GetVertexLayout() const { return m_pVertexLayout; }
 
 	void										SetVertexShaderFunctionName( const std::string & inName ) { m_VertexShaderFunctionName = inName; }
@@ -98,6 +100,7 @@ private:
 	virtual void								Release_Internal();
 
 	kbHWVertexShader *							m_pVertexShader;
+    kbHWGeometryShader *                        m_pGeometryShader;
 	kbHWPixelShader *							m_pPixelShader;
 	kbHWVertexLayout *							m_pVertexLayout;
 

@@ -455,8 +455,8 @@ public:
 	void										SetPostProcessSettings( const kbPostProcessSettings_t & postProcessSettings );
 
 	bool										LoadTexture( const char * name, int index, int width = -1, int height = -1 );
-	void										LoadShader( const std::string & fileName, ID3D11VertexShader *& vertexShader, ID3D11PixelShader *& pixelShader, 
-															ID3D11InputLayout *& vertexLayout, const std::string & vertexShaderFunc, 
+	void										LoadShader( const std::string & fileName, ID3D11VertexShader *& vertexShader, ID3D11GeometryShader *& geometryShader,
+															ID3D11PixelShader *& pixelShader, ID3D11InputLayout *& vertexLayout, const std::string & vertexShaderFunc, 
 															const std::string & pixelShaderFunc, struct kbShaderVarBindings_t * ShaderBindings = nullptr );
 
 	// Various Drawing commands

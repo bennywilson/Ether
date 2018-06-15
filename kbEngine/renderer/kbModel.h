@@ -109,12 +109,15 @@ public:
 	};
 
 	void										CreateDynamicModel( const UINT numVertices, const UINT numIndices, const std::string & ShaderToUse = "", const std::string & TextureToUse = "", const UINT VertexSizeInBytes = sizeof( vertexLayout ) );
+    void                                        CreatePointCloud( const UINT numVertices, const std::string & ShaderToUse = "" );
+
 	void *										MapVertexBuffer();
 	void										UnmapVertexBuffer( const INT numVerticesWritten = -1 );
 	void *										MapIndexBuffer();
 	void										UnmapIndexBuffer();
 	bool										IsVertexBufferMapped() const { return m_bVBIsMapped; }
 	bool										IsIndexBufferMapped() const { return m_bIBIsMapped; }
+    bool                                        IsPointCloud() const { return m_bIsPointCloud; }
 
 	// CPU Access
 	void										SetCPUAccessOnly( const bool bCPUAccessOnly ) { m_bCPUAccessOnly = bCPUAccessOnly; }
@@ -164,10 +167,12 @@ protected:
 	std::vector<kbBoneMatrix_t>					m_InvRefPose;
 
 	UINT										m_Stride;
-	bool										m_bIsDynamicModel;
-	bool										m_bVBIsMapped;
-	bool										m_bIBIsMapped;
-	bool										m_bCPUAccessOnly;
+
+	bool										m_bIsDynamicModel       : 1;
+    bool                                        m_bIsPointCloud         : 1;
+	bool										m_bVBIsMapped           : 1;
+	bool										m_bIBIsMapped           : 1;
+	bool										m_bCPUAccessOnly        : 1;
 
 private:
 

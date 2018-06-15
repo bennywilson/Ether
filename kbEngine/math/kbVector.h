@@ -145,6 +145,7 @@ public:
 	static const kbVec3 zero;
 	static const kbVec3 right;
 	static const kbVec3 up;
+    static const kbVec3 down;
 	static const kbVec3 forward;
 	static const kbVec3 one;
 };

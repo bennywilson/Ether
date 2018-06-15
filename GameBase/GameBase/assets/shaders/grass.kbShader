@@ -1,0 +1,138 @@
+//==============================================================================
+// basicTerrain.kbShader
+//
+// 2018 kbEngine 2.0
+//==============================================================================
+cbuffer matrixBuffer {
+	matrix modelMatrix;
+	matrix mvpMatrix;
+	matrix vpMatrix;
+	float4 mat1And2UVScale;
+	float4 mat3And4UVScale;
+};
+
+//-------------------------------------
+struct vertexInput {
+	float4 position			: POSITION;
+	float2 uv				: TEXCOORD0;
+	float4 binormal			: COLOR;
+	float4 normal			: NORMAL;
+	float4 tangent			: TANGENT;
+};
+
+//-------------------------------------
+struct pixelInput {
+	float4 position			: SV_POSITION;
+	float2 uv				: TEXCOORD0;
+	float4 color			: COLOR;
+	float2 position2		: TEXCOORD1;
+	float3 tangent			: TEXCOORD2;
+	float3 binormal			: TEXCOORD3;
+	float3 normal			: TEXCOORD4;
+};
+
+//-------------------------------------
+struct PS_OUTPUT {
+	float4 Color			: SV_TARGET0;
+	float4 Normal			: SV_TARGET1;
+	float2 Depth			: SV_TARGET2;
+};
+
+
+/**
+ *	vertexShader
+ */
+pixelInput vertexShader( vertexInput input ) {
+	pixelInput output = (pixelInput)(0);
+
+	output.position = input.position;//mul( input.position, mvpMatrix );
+	output.uv = input.uv;
+	output.position2 = output.position.zw;
+
+
+	output.tangent = ( input.tangent.xyz * 2.0f ) - 1.0f;
+	output.binormal = ( input.binormal.xyz * 2.0f ) - 1.0f;
+	output.normal = ( input.normal.xyz * 2.0f ) - 1.0f;
+
+	return output;
+}
+
+/**
+ *	geomteryShader
+ */
+ [maxvertexcount(4)]
+ void geometryShader( point pixelInput input[1], inout TriangleStream<pixelInput> OutputStream ) {
+	pixelInput newPoint1 = input[0];
+	newPoint1.position = mul( newPoint1.position + float4(100,0,0,0), vpMatrix );
+	newPoint1.position /= newPoint1.position.w;
+	pixelInput newPoint2 = input[0];
+	newPoint2.position =  mul( newPoint2.position + float4(0, -100,0,0), vpMatrix );
+	newPoint2.position /= newPoint2.position.w;
+
+	OutputStream.Append( newPoint1 );
+	OutputStream.Append( newPoint2 );
+
+
+	pixelInput newPoint3 = input[0];
+	newPoint3.position = mul( newPoint3.position, vpMatrix );
+	newPoint3.position  /= newPoint3.position.w;
+	OutputStream.Append( newPoint3 );
+ }
+
+/**
+ *	pixelShader
+ */ 
+SamplerState SampleType;
+
+Texture2D splatMap : register(t0);
+
+Texture2D Mat1Diffuse	: register(t1);
+Texture2D Mat1Normal	: register(t2);
+
+Texture2D Mat2Diffuse	: register(t3);
+Texture2D Mat2Normal	: register(t4);
+
+Texture2D Mat3Diffuse	: register(t5);
+Texture2D Mat3Normal	: register(t6);
+
+Texture2D Mat4Diffuse	: register(t7);
+
+ PS_OUTPUT pixelShader( pixelInput	input )  {
+ 	PS_OUTPUT output = (PS_OUTPUT) 0;
+
+	//const float3 sandColor = float3( 221.0f, 214.0f, 162.0f ) / 255.0f;
+	//const float3 rockColor = float3( 113.0f, 94.0f, 85.0f ) / 255.0f;
+	//const float3 vegetationColor = float3( 103.0f, 148.0f, 54.0f ) / 255.0f;
+
+	float3x3 tbn;
+	tbn[0] = input.tangent.xyz;
+	tbn[1] = input.binormal.xyz;
+	tbn[2] = input.normal.xyz;
+
+	const half zMult = 1;
+	const half3 sandColor = Mat1Diffuse.Sample( SampleType, input.uv * mat1And2UVScale.xy ).xyz;
+	half3 sandNormal = Mat1Normal.Sample( SampleType, input.uv * mat1And2UVScale.xy ).xyz;
+	sandNormal = ( sandNormal * 2.0f ) - 1.0f;
+	sandNormal = mul( sandNormal, tbn );
+	sandNormal.y *= zMult;
+
+	const half3 rockColor = Mat2Diffuse.Sample( SampleType, input.uv * mat1And2UVScale.zw ).xyz;
+	half3 rockNormal = Mat2Normal.Sample( SampleType, input.uv * mat1And2UVScale.zw ).xyz;
+	rockNormal = ( rockNormal * 2.0f ) - 1.0f;
+	rockNormal = mul( rockNormal, tbn );
+	rockNormal.y *= zMult;
+
+	const half3 grassColor = Mat3Diffuse.Sample( SampleType, input.uv * mat3And4UVScale.xy ).xyz;
+	half3 grassNormal = Mat3Normal.Sample( SampleType, input.uv * mat3And4UVScale.xy ).xyz;
+	grassNormal = ( grassNormal * 2.0f ) - 1.0f;
+	grassNormal = mul( grassNormal, tbn );
+	grassNormal.y *= zMult;
+
+	half4 splat = splatMap.Sample( SampleType, input.uv );
+
+	output.Color.xyz = ( sandColor * splat.x ) + ( rockColor * splat.y ) + ( grassColor * splat.z );
+	output.Normal.xyz = normalize( ( sandNormal * splat.x ) + ( rockNormal * splat.y ) + ( grassNormal * splat.z ) );
+	output.Depth.r = input.position2.x / input.position2.y;
+
+	return output;
+}

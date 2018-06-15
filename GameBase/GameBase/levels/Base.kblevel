@@ -13,6 +13,12 @@ kbGameEntity 0 0 0 0 {
 		CastsShadow = 0
 		m_RenderPass = LightingPass
 		Dimensions = 513
+		Grass = 1
+			kbGrass { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Dummy = 0
+			}
 		HeightMap = .\assets\Terrain\terrain1_height.bmp
 		HeightScale =  7.000000
 		Materials = 3

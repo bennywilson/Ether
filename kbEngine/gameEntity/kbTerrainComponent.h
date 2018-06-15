@@ -39,6 +39,21 @@ private:
 };
 
 /**
+ *	kbGrass
+ */
+class kbGrass : public kbGameComponent {
+	friend class kbTerrainComponent;
+
+	KB_DECLARE_COMPONENT( kbGrass, kbGameComponent );
+
+//---------------------------------------------------------------------------------------------------
+public:
+
+private:
+	int                                         m_Dummy;
+};
+
+/**
  * kbTerrainComponent
  */
 class kbTerrainComponent : public kbModelComponent {
@@ -72,10 +87,13 @@ protected:
 	std::vector<kbTerrainMatComponent>          m_TerrainMaterials;
 	kbShader *                                  m_pTerrainShader;
 	kbTexture *                                 m_pSplatMap;
+    std::vector<kbGrass>                        m_Grass;
 
 	kbModel										m_TerrainModel;
 	kbShaderParamOverrides_t					m_ShaderParamOverride;
     std::vector<kbShader *>                     m_ShaderOverrideList;
+
+    kbModel                                     m_GrassModel;
 
 	bool										m_bRegenerateTerrain;
 
