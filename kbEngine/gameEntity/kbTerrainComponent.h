@@ -11,7 +11,20 @@
 #include "kbRenderBuffer.h"
 #include "kbModel.h"
 
-class kbTexture;
+/**
+ *	kbGrass
+ */
+class kbGrass : public kbGameComponent {
+	friend class kbTerrainComponent;
+
+	KB_DECLARE_COMPONENT( kbGrass, kbGameComponent );
+
+//---------------------------------------------------------------------------------------------------
+public:
+
+private:
+	int                                         m_Dummy;
+};
 
 /**
  *  kbTerrainMatComponent
@@ -27,30 +40,18 @@ public:
 
 	kbTexture *									GetDiffuseMap() const { return m_pDiffuseMap; }
 	kbTexture *									GetNormalMap() const { return m_pNormalMap; }
+	kbTexture *									GetSpecMap() const { return m_pSpecMap; }
 
 	const kbVec3 &								GetUVScale() const { return m_UVScale; }
+	float										GetSpecFactor() const { return m_SpecFactor; }
 
 private:
 
     kbTexture *									m_pDiffuseMap;
 	kbTexture *									m_pNormalMap;
-
+	kbTexture *									m_pSpecMap;
+	float										m_SpecFactor;
 	kbVec3										m_UVScale;
-};
-
-/**
- *	kbGrass
- */
-class kbGrass : public kbGameComponent {
-	friend class kbTerrainComponent;
-
-	KB_DECLARE_COMPONENT( kbGrass, kbGameComponent );
-
-//---------------------------------------------------------------------------------------------------
-public:
-
-private:
-	int                                         m_Dummy;
 };
 
 /**

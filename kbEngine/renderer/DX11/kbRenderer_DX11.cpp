@@ -522,6 +522,7 @@ void kbRenderer_DX11::Init( HWND hwnd, const int frameWidth, const int frameHeig
 
 	CreateRenderTarget( eRenderTargetTexture::COLOR_BUFFER, deferredRTWidth, deferredRTHeight, DXGI_FORMAT_R16G16B16A16_FLOAT );
 	CreateRenderTarget( eRenderTargetTexture::NORMAL_BUFFER, deferredRTWidth, deferredRTHeight, DXGI_FORMAT_R16G16B16A16_FLOAT );
+	CreateRenderTarget( eRenderTargetTexture::SPECULAR_BUFFER, deferredRTWidth, deferredRTHeight, DXGI_FORMAT_R16G16B16A16_FLOAT );
 	CreateRenderTarget( eRenderTargetTexture::DEPTH_BUFFER, deferredRTWidth, deferredRTHeight, DXGI_FORMAT_R32G32_FLOAT );
 	CreateRenderTarget( eRenderTargetTexture::ACCUMULATION_BUFFER, deferredRTWidth, deferredRTHeight, DXGI_FORMAT_R16G16B16A16_FLOAT );
 
@@ -1593,24 +1594,21 @@ void kbRenderer_DX11::RenderSync() {
 
 				// Adding new renderobject
 				renderObject = m_pCurrentRenderWindow->m_RenderObjectMap[pComponent];
+				kbErrorCheck( renderObject == nullptr, "kbRenderer_DX11::AddRenderObject() - Model %s already added", m_RenderObjectList_GameThread[i].m_pModel->GetFullName() );
 
-				if ( renderObject == nullptr ) {
-					if ( pComponent->IsA( kbSkeletalModelComponent::GetType() ) && m_RenderObjectList_GameThread[i].m_pModel->NumBones() > 0 ) {
-						kbSkinnedRenderObject *const pSkelRenderObject = new kbSkinnedRenderObject;
-						*((kbRenderObject*)pSkelRenderObject) = m_RenderObjectList_GameThread[i];
-						renderObject = pSkelRenderObject;
-						renderObject->m_bIsSkinnedModel = true;
-						const kbSkeletalModelComponent *const skelComp = static_cast<const kbSkeletalModelComponent*>( pComponent );
-						pSkelRenderObject->m_BoneMatrices = skelComp->GetFinalBoneMatrices();
-					} else {
-						renderObject = new kbRenderObject;
-						*renderObject = m_RenderObjectList_GameThread[i];
-					}
-
-					m_pCurrentRenderWindow->m_RenderObjectMap[m_RenderObjectList_GameThread[i].m_pComponent] = renderObject;
+				if ( pComponent->IsA( kbSkeletalModelComponent::GetType() ) && m_RenderObjectList_GameThread[i].m_pModel->NumBones() > 0 ) {
+					kbSkinnedRenderObject *const pSkelRenderObject = new kbSkinnedRenderObject;
+					*((kbRenderObject*)pSkelRenderObject) = m_RenderObjectList_GameThread[i];
+					renderObject = pSkelRenderObject;
+					renderObject->m_bIsSkinnedModel = true;
+					const kbSkeletalModelComponent *const skelComp = static_cast<const kbSkeletalModelComponent*>( pComponent );
+					pSkelRenderObject->m_BoneMatrices = skelComp->GetFinalBoneMatrices();
 				} else {
-					kbError( "kbRenderer_DX11::AddRenderObject - Warning, adding a render object that already exists" );
+					renderObject = new kbRenderObject;
+					*renderObject = m_RenderObjectList_GameThread[i];
 				}
+
+				m_pCurrentRenderWindow->m_RenderObjectMap[m_RenderObjectList_GameThread[i].m_pComponent] = renderObject;
 			}
 		}
 	}
@@ -1829,6 +1827,7 @@ void kbRenderer_DX11::RenderScene() {
 			START_SCOPED_RENDER_TIMER( RENDER_THREAD_CLEAR_BUFFERS );
 			m_pDeviceContext->ClearRenderTargetView( m_RenderTargets[COLOR_BUFFER].m_pRenderTargetView, color );
 			m_pDeviceContext->ClearRenderTargetView( m_RenderTargets[NORMAL_BUFFER].m_pRenderTargetView, color );
+			m_pDeviceContext->ClearRenderTargetView( m_RenderTargets[SPECULAR_BUFFER].m_pRenderTargetView, color );
 			m_pDeviceContext->ClearRenderTargetView( m_RenderTargets[DEPTH_BUFFER].m_pRenderTargetView, color );
 			m_pDeviceContext->ClearRenderTargetView( m_RenderTargets[ACCUMULATION_BUFFER].m_pRenderTargetView, color );
 			m_pDeviceContext->ClearDepthStencilView( m_pDepthStencilView, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1, 0 );
@@ -1842,9 +1841,9 @@ void kbRenderer_DX11::RenderScene() {
 			kbError( "kbRenderer_DX11::RenderScene() - Invalid view mode %d", (int) m_ViewMode );
 		}
 
-		ID3D11RenderTargetView * RenderTargetViews[] = { m_RenderTargets[COLOR_BUFFER].m_pRenderTargetView, m_RenderTargets[NORMAL_BUFFER].m_pRenderTargetView, m_RenderTargets[DEPTH_BUFFER].m_pRenderTargetView };
+		ID3D11RenderTargetView * RenderTargetViews[] = { m_RenderTargets[COLOR_BUFFER].m_pRenderTargetView, m_RenderTargets[NORMAL_BUFFER].m_pRenderTargetView, m_RenderTargets[SPECULAR_BUFFER].m_pRenderTargetView, m_RenderTargets[DEPTH_BUFFER].m_pRenderTargetView };
 	
-		m_pDeviceContext->OMSetRenderTargets( 3, RenderTargetViews, m_pDepthStencilView );
+		m_pDeviceContext->OMSetRenderTargets( 4, RenderTargetViews, m_pDepthStencilView );
 
 		D3D11_VIEWPORT viewport;
 	

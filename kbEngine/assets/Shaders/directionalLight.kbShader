@@ -24,8 +24,8 @@ struct vertexInput {
 //-------------------------------------
 struct pixelInput {
 	float4 position      : SV_POSITION;
-	float4 position2     : TEXCOORD1;
-	float2 uv            : TEXCOORD0;
+	float4 position2     : TEXCOORD0;
+	float2 uv            : TEXCOORD1;
 };
 
 /**
@@ -45,27 +45,41 @@ pixelInput vertexShader( vertexInput input ) {
  *	pixelShader
  */
 SamplerState DiffuseSamplerState;
-Texture2D colorTexture;
+Texture2D colorTexture				: register(t0);
 
 SamplerState NormalSamplerState;
-Texture2D normalTexture;
+Texture2D normalTexture				: register(t1);
+
+Texture2D specularTexture			: register(t2);
 
 SamplerState DepthSamplerState;
-Texture2D depthTexture;
+Texture2D depthTexture				: register(t3);
 
 SamplerState ShadowMapSamplerState;
-Texture2D ShadowMap;
+Texture2D ShadowMap					: register(t4);
 
 float4 pixelShader( pixelInput input ) : SV_TARGET {
    float3 baseColor = colorTexture.Sample( DiffuseSamplerState, input.uv ).xyz;
    float3 normal = normalTexture.Sample( NormalSamplerState, input.uv ).xyz;
+   float3 specColor = specularTexture.Sample( DiffuseSamplerState, input.uv ).xyz;
 
-   float lightIntensity = dot( normal, lightDirection.xyz );
-   lightIntensity = ( lightIntensity * 0.5f ) + 0.5f;
+   // Diffuse
+   float diffuse = dot( normal, lightDirection.xyz );
+   diffuse = ( diffuse * 0.5f ) + 0.5f;
 
    float4 worldPos = float4( input.position2.xy, depthTexture.Sample( DepthSamplerState, input.uv ).r, 1 );
    worldPos = mul( worldPos, inverseViewProjection );
-   float DistFromCamera = length( worldPos.xyz/worldPos.w - cameraPosition.xyz );
+   worldPos /= worldPos.w;
+
+   float3 toCameraVec = normalize( cameraPosition.xyz - worldPos.xyz );
+
+   // Spec
+   float3 lightReflect = ( 2.0f * dot( normal, lightDirection.xyz ) * normal ) - lightDirection.xyz;
+   float3 spec = saturate( dot( lightReflect, toCameraVec ) );
+   specColor *= pow( spec, 25 );
+
+   // Shadow
+   float DistFromCamera = length( worldPos.xyz - cameraPosition.xyz );
 
    int index = 0;
    float2 offset = float2( 0.0f, 0.0f );
@@ -89,10 +103,10 @@ float4 pixelShader( pixelInput input ) : SV_TARGET {
 
    if ( DistFromCamera < splitDistances.w ) {
       if ( ShadowMap.Sample( ShadowMapSamplerState, shadowTex.xy ).r < shadowTex.z - 0.0003f ) {
-         lightIntensity *= 0.83f;
+         diffuse *= 0.83f;
       }
    }
 
-	float3 finalColor = baseColor * lightIntensity * lightColor.xyz;
+	float3 finalColor = baseColor * diffuse * lightColor.xyz + specColor;	// todo
 	return float4( finalColor, 1.0f );
 }

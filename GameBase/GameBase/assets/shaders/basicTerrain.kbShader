@@ -8,6 +8,7 @@ cbuffer matrixBuffer {
 	matrix mvpMatrix;
 	float4 mat1And2UVScale;
 	float4 mat3And4UVScale;
+	float4 specFactors;
 };
 
 //-------------------------------------
@@ -34,7 +35,8 @@ struct pixelInput {
 struct PS_OUTPUT {
 	float4 Color			: SV_TARGET0;
 	float4 Normal			: SV_TARGET1;
-	float2 Depth			: SV_TARGET2;
+	float4 Spec				: SV_TARGET2;
+	float2 Depth			: SV_TARGET3;
 };
 
 
@@ -61,25 +63,24 @@ pixelInput vertexShader( vertexInput input ) {
  */ 
 SamplerState SampleType;
 
-Texture2D splatMap : register(t0);
+Texture2D splatMap		: register(t0);
 
 Texture2D Mat1Diffuse	: register(t1);
 Texture2D Mat1Normal	: register(t2);
+Texture2D Mat1Specular	: register(t3);
 
-Texture2D Mat2Diffuse	: register(t3);
-Texture2D Mat2Normal	: register(t4);
+Texture2D Mat2Diffuse	: register(t4);
+Texture2D Mat2Normal	: register(t5);
+Texture2D Mat2Specular	: register(t6);
 
-Texture2D Mat3Diffuse	: register(t5);
-Texture2D Mat3Normal	: register(t6);
+Texture2D Mat3Diffuse	: register(t7);
+Texture2D Mat3Normal	: register(t8);
+Texture2D Mat3Specular	: register(t9);
 
-Texture2D Mat4Diffuse	: register(t7);
+Texture2D Mat4Diffuse	: register(t10);
 
  PS_OUTPUT pixelShader( pixelInput	input )  {
  	PS_OUTPUT output = (PS_OUTPUT) 0;
-
-	//const float3 sandColor = float3( 221.0f, 214.0f, 162.0f ) / 255.0f;
-	//const float3 rockColor = float3( 113.0f, 94.0f, 85.0f ) / 255.0f;
-	//const float3 vegetationColor = float3( 103.0f, 148.0f, 54.0f ) / 255.0f;
 
 	float3x3 tbn;
 	tbn[0] = input.tangent.xyz;
@@ -87,29 +88,41 @@ Texture2D Mat4Diffuse	: register(t7);
 	tbn[2] = input.normal.xyz;
 
 	const half zMult = 1;
-	const half3 sandColor = Mat1Diffuse.Sample( SampleType, input.uv * mat1And2UVScale.xy ).xyz;
-	half3 sandNormal = Mat1Normal.Sample( SampleType, input.uv * mat1And2UVScale.xy ).xyz;
-	sandNormal = ( sandNormal * 2.0f ) - 1.0f;
-	sandNormal = mul( sandNormal, tbn );
-	sandNormal.y *= zMult;
+	const float3 mat1Color = Mat1Diffuse.Sample( SampleType, input.uv * mat1And2UVScale.xy ).xyz;
+	float3 mat1Normal = Mat1Normal.Sample( SampleType, input.uv * mat1And2UVScale.xy ).xyz;
+	float3 mat1Spec = Mat1Specular.Sample( SampleType, input.uv * mat1And2UVScale.xy ).xyz * specFactors.x;
 
-	const half3 rockColor = Mat2Diffuse.Sample( SampleType, input.uv * mat1And2UVScale.zw ).xyz;
-	half3 rockNormal = Mat2Normal.Sample( SampleType, input.uv * mat1And2UVScale.zw ).xyz;
-	rockNormal = ( rockNormal * 2.0f ) - 1.0f;
-	rockNormal = mul( rockNormal, tbn );
-	rockNormal.y *= zMult;
+	mat1Normal = ( mat1Normal * 2.0f ) - 1.0f;
+	mat1Normal = mul( mat1Normal, tbn );
+	mat1Normal.y *= zMult;
 
-	const half3 grassColor = Mat3Diffuse.Sample( SampleType, input.uv * mat3And4UVScale.xy ).xyz;
-	half3 grassNormal = Mat3Normal.Sample( SampleType, input.uv * mat3And4UVScale.xy ).xyz;
-	grassNormal = ( grassNormal * 2.0f ) - 1.0f;
-	grassNormal = mul( grassNormal, tbn );
-	grassNormal.y *= zMult;
+	const float3 mat2Color = Mat2Diffuse.Sample( SampleType, input.uv * mat1And2UVScale.zw ).xyz;
+	float3 mat2Normal = Mat2Normal.Sample( SampleType, input.uv * mat1And2UVScale.zw ).xyz;
+	float3 mat2Spec = Mat2Specular.Sample( SampleType, input.uv * mat1And2UVScale.zw ).xyz * specFactors.y;
+
+	mat2Normal = ( mat2Normal * 2.0f ) - 1.0f;
+	mat2Normal = mul( mat2Normal, tbn );
+	mat2Normal.y *= zMult;
+
+	const half3 mat3Color = Mat3Diffuse.Sample( SampleType, input.uv * mat3And4UVScale.xy ).xyz;
+	half3 mat3Normal = Mat3Normal.Sample( SampleType, input.uv * mat3And4UVScale.xy ).xyz;
+	half3 mat3Spec = Mat3Specular.Sample( SampleType, input.uv * mat3And4UVScale.xy ).xyz * specFactors.z;
+
+	mat3Normal = ( mat3Normal * 2.0f ) - 1.0f;
+	mat3Normal = mul( mat3Normal, tbn );
+	mat3Normal.y *= zMult;
 
 	half4 splat = splatMap.Sample( SampleType, input.uv );
 
-	output.Color.xyz = ( sandColor * splat.x ) + ( rockColor * splat.y ) + ( grassColor * splat.z );
-	output.Normal.xyz = normalize( ( sandNormal * splat.x ) + ( rockNormal * splat.y ) + ( grassNormal * splat.z ) );
+	output.Color.xyz = ( mat1Color * splat.x ) + ( mat2Color * splat.y ) + ( mat3Color * splat.z );
+	output.Normal.xyz = normalize( ( mat1Normal * splat.x ) + ( mat2Normal * splat.y ) + ( mat3Normal * splat.z ) );
+	output.Spec.xyz = ( ( mat1Spec * splat.x )  + ( mat2Spec * splat.y ) + ( mat3Spec * splat.z ) ) / 3.0f;
 	output.Depth.r = input.position2.x / input.position2.y;
 
+	/*output.Color.xyz = mat2Color;
+	output.Normal.xyz = mat2Normal;
+	output.Spec.xyz = mat2Spec;
+	output.Depth.r = input.position2.x / input.position2.y;
+	*/
 	return output;
 }

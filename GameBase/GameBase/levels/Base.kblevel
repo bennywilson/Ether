@@ -26,18 +26,21 @@ kbGameEntity 0 0 0 0 {
 				Enabled = 0
 				DiffuseMap = .\assets\Terrain\Sand.jpg
 				NormalMap = .\assets\Terrain\Sand_NM.jpg
+				SpecMap = .\assets\Terrain\Sand.jpg
 				UVScale = 1.000000 1.000000 1.000000
 			}
 			kbTerrainMatComponent { 
 				Enabled = 0
 				DiffuseMap = .\assets\Terrain\Pack2\JPEG\Vol_11_1_Base_Color.jpg
 				NormalMap = .\assets\Terrain\Pack2\JPEG\Vol_11_1_Normal.jpg
+				SpecMap = .\assets\Terrain\Pack2\JPEG\Vol_11_1_Base_Color.jpg
 				UVScale = 20.000000 20.000000 50.000000
 			}
 			kbTerrainMatComponent { 
 				Enabled = 0
 				DiffuseMap = .\assets\Terrain\Pack2\JPEG\Vol_11_4_Base_Color.jpg
 				NormalMap = .\assets\Terrain\Pack2\JPEG\Vol_11_4_Normal.jpg
+				SpecMap = .\assets\Terrain\Pack2\JPEG\Vol_11_4_Base_Color.jpg
 				UVScale = 300.000000 300.000000 50.000000
 			}
 		Shader = .\assets\shaders\basicTerrain.kbShader

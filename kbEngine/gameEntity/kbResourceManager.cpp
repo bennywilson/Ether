@@ -82,6 +82,11 @@ kbResourceManager::~kbResourceManager() {
  *	kbResourceManager::RenderSync
  */
 void kbResourceManager::RenderSync() {
+	for ( int i = 0; i < m_ResourcesToLoad.size(); i++ ) {
+		m_ResourcesToLoad[i]->Load();
+	}
+	m_ResourcesToLoad.clear();
+
 	UpdateHotReloads();
 }
 
@@ -291,7 +296,7 @@ kbResource * kbResourceManager::GetResource( const std::string & displayName ) {
 		if ( m_Resources[i] != nullptr && m_Resources[i]->GetName().compare( displayName ) == 0 ) {
 
 			if ( m_Resources[i]->m_bIsLoaded == false ) {
-				m_Resources[i]->Load();
+				m_ResourcesToLoad.push_back( m_Resources[i] );
 			}
 			return m_Resources[i];
 		}
