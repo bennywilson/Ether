@@ -216,9 +216,6 @@ kbResource * kbResourceManager::GetResource( const std::string & fullFileName, c
 	   pResource = new kbShader();
 	} else if ( fileExt == "jpg" || fileExt == "tga" || fileExt == "bmp" || fileExt == "gif" || fileExt == "png" ) {
 		pResource = new kbTexture();
-		pResource->m_FullFileName = fullFileName;
-		pResource->Load();
-//		((kbTexture*)pResource)->CreateTexture( fullFileName.c_str() );
 	} else if ( fileExt == "kbAnim" ) {
 		pResource = new kbAnimation();
 	} else if ( fileExt == "wav" ) {

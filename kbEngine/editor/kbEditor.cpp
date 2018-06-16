@@ -125,7 +125,7 @@ kbEditor::kbEditor() :
 	curX += speedButtonWidth + buttonSpacing * 2;
 
 	m_pViewModeChoice = new Fl_Choice( curX, curY, (int)fl_width( "Wireframe") + TRSButtonWidth, buttonHeight );
-	m_pViewModeChoice->add( "Textured and Lit" );		// Note: These have to be in the same order as the entries in kbViewMode_t
+	m_pViewModeChoice->add( "Shaded" );		// Note: These have to be in the same order as the entries in kbViewMode_t
 	m_pViewModeChoice->add( "Wireframe" );
 	m_pViewModeChoice->value( 0 );
 	m_pViewModeChoice->callback( ViewModeChoiceCB );
@@ -441,7 +441,7 @@ void kbEditor::SetMainCameraPos( const kbVec3 & newCamPos ) {
 /**
  *  kbEditor::GetMainCameraPos
  */
-kbVec3 kbEditor::GetMainCameraPos() {
+kbVec3 kbEditor::GetMainCameraPos() const {
 	return m_pMainTab->GetEditorWindowCamera()->m_Position;
 }
 
@@ -456,7 +456,7 @@ void kbEditor::SetMainCameraRot( const kbQuat & newCamRot ) {
 /**
  *  kbEditor::GetMainCameraRot
  */
-kbQuat kbEditor::GetMainCameraRot() {
+kbQuat kbEditor::GetMainCameraRot() const {
 	return m_pMainTab->GetEditorWindowCamera()->m_Rotation;
 }
 

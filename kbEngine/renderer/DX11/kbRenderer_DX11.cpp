@@ -424,8 +424,8 @@ kbRenderer_DX11::kbRenderer_DX11() :
 	m_pEventMarker( nullptr ),
 	m_DebugVertexBuffer( nullptr ),
 	m_DebugPreTransformedVertexBuffer( nullptr ),
-	m_ViewMode_GameThread( ViewMode_Normal ),
-	m_ViewMode( ViewMode_Normal ),
+	m_ViewMode_GameThread( ViewMode_Shaded ),
+	m_ViewMode( ViewMode_Shaded ),
 	m_pOffScreenRenderTargetTexture( nullptr ),
 	m_ovrSession( nullptr ),
 	m_HMDPass( 0 ),
@@ -1834,7 +1834,7 @@ void kbRenderer_DX11::RenderScene() {
 			m_pDeviceContext->ClearDepthStencilView( m_pDepthStencilView, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1, 0 );
 		}
 
-		if ( m_ViewMode == ViewMode_Normal ) {
+		if ( m_ViewMode == ViewMode_Shaded ) {
 			m_pDeviceContext->RSSetState( m_pDefaultRasterizerState );
 		} else if ( m_ViewMode == ViewMode_Wireframe ) {
 			m_pDeviceContext->RSSetState( m_pWireFrameRasterizerState );
@@ -1966,7 +1966,7 @@ void kbRenderer_DX11::RenderScene() {
 			PLACE_GPU_TIME_STAMP( "Unlit" );
 		}
 
-		if ( m_ViewMode == ViewMode_Normal ) {
+		if ( m_ViewMode == ViewMode_Shaded ) {
 			RenderLightShafts();
 		}
 		
@@ -1975,7 +1975,7 @@ void kbRenderer_DX11::RenderScene() {
 		RenderTranslucency();
 		RenderScreenSpaceQuads();
 
-		if ( m_ViewMode == ViewMode_Normal ) {
+		if ( m_ViewMode == ViewMode_Shaded ) {
 			// In World UI Pass
 			m_RenderState.SetDepthStencilState( false, kbRenderState::DepthWriteMaskZero, kbRenderState::CompareLess, false );
 			m_RenderState.SetBlendState( false,
@@ -2007,7 +2007,7 @@ void kbRenderer_DX11::RenderScene() {
 
 		m_RenderState.SetDepthStencilState();
 	
-		if ( m_ViewMode == ViewMode_Normal ) {
+		if ( m_ViewMode == ViewMode_Shaded ) {
 			START_SCOPED_RENDER_TIMER( RENDER_DEBUG )
 			RenderDebugBillboards( false );
 			RenderDebugLines();

@@ -92,7 +92,7 @@ kbGameEntity 0 0 0 0 {
 		LifeTime =  -1.000000
 		Name = "Cartel Soldier"
 		Orientation = 0.000000 0.991689 0.000000 0.128659
-		Position = -0.466237 15.000000 43.347977
+		Position = -5.011830 13.654261 44.547634
 		Scale = 0.100000 0.100000 0.100000
 	}
 	EtherSkelModelComponent { 
@@ -172,7 +172,7 @@ kbGameEntity 0 0 0 0 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		Name = "Entity_25"
+		Name = "Ship"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
 		Position = -5287.869629 2470.000000 -295.887756
 		Scale = 3.000000 3.000000 3.000000

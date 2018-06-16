@@ -424,10 +424,6 @@ void kbMainTab::EntityTransformedCB( const widgetCBObject *const widgetCBObj ) {
 /**
  *	kbMainTab::ManipulatorClicked
  */
-static XMMATRIX & XMMATRIXFromkbMat4( kbMat4 & matrix ) { return (*(XMMATRIX*) &matrix); }
-static kbMat4 & kbMat4FromXMMATRIX( FXMMATRIX & matrix ) { return (*(kbMat4*) & matrix); }
-
-
 void kbMainTab::ManipulatorEvent( const bool bClicked, const kbVec2i & mouseXY ) {
 
 	RECT windowRect;
@@ -454,10 +450,8 @@ void kbMainTab::ManipulatorEvent( const bool bClicked, const kbVec2i & mouseXY )
 	// Persepctive mat
 	kbMat4 perspectiveMat;
 	perspectiveMat.CreatePerspectiveMatrix( kbToRadians( 75.0f ), windowWidth/ windowHeight, kbRenderer_DX11::Near_Plane, kbRenderer_DX11::Far_Plane );
-    perspectiveMat = kbMat4FromXMMATRIX( XMMatrixInverse( nullptr, XMMATRIXFromkbMat4( perspectiveMat) ) );
+	perspectiveMat.InverseProjection();
 
-	//perspectiveMat.InverseProjection();
-	
 	// View mat
 	const kbMat4 modelViewMatrix( camera.m_Rotation, camera.m_Position );
 

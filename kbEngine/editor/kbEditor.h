@@ -42,10 +42,10 @@ public:
 	void													BroadcastEvent( const class widgetCBObject & cbObject );
 
 	void													SetMainCameraPos( const kbVec3 & newCamPos );
-	kbVec3													GetMainCameraPos();
+	kbVec3													GetMainCameraPos() const;
 
 	void													SetMainCameraRot( const kbQuat & newCamRot );
-	kbQuat													GetMainCameraRot();
+	kbQuat													GetMainCameraRot() const;
 
 	void													AddEntity( kbEditorEntity *const pEditorEntity );
 	void													SelectEntities( std::vector< kbEditorEntity * > & entitiesToSelect, bool AppendToSelectedList );

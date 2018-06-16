@@ -753,9 +753,9 @@ void kbPropertiesTab::RefreshProperty( kbEditorEntity *const pEntity, const std:
 		{
 			kbVec3 & vec = *( kbVec3 * )byteOffsetToVar;
 
-			Fl_Input * X_Input = new Fl_Input( xPos + propertyNamePixelWidth, yPos, threeComponentFieldWidth, inputHeight );
-			Fl_Input * Y_Input = new Fl_Input( xPos + propertyNamePixelWidth + threeComponentFieldWidth, yPos, threeComponentFieldWidth, inputHeight );
-			Fl_Input * Z_Input = new Fl_Input( xPos + propertyNamePixelWidth + threeComponentFieldWidth * 2, yPos, threeComponentFieldWidth, inputHeight );
+			Fl_Input *const X_Input = new Fl_Input( xPos + propertyNamePixelWidth, yPos, threeComponentFieldWidth, inputHeight );
+			Fl_Input *const Y_Input = new Fl_Input( xPos + propertyNamePixelWidth + threeComponentFieldWidth, yPos, threeComponentFieldWidth, inputHeight );
+			Fl_Input *const Z_Input = new Fl_Input( xPos + propertyNamePixelWidth + threeComponentFieldWidth * 2, yPos, threeComponentFieldWidth, inputHeight );
 
 			cbData.m_pVariablePtr = &vec.x;
 			m_CallBackData.push_back( cbData );
@@ -769,14 +769,6 @@ void kbPropertiesTab::RefreshProperty( kbEditorEntity *const pEntity, const std:
 			m_CallBackData.push_back( cbData );
 			Z_Input->callback( &TextFieldCB, static_cast<void *>( &m_CallBackData[m_CallBackData.size() - 1] ) );
 
-			X_Input->align( FL_ALIGN_LEFT | FL_ALIGN_CLIP );
-			Y_Input->align( FL_ALIGN_LEFT | FL_ALIGN_CLIP );
-			Z_Input->align( FL_ALIGN_LEFT | FL_ALIGN_CLIP );
-
-			X_Input->position( 0 );
-			Y_Input->position( 0 );
-			Z_Input->position( 0 );
-
 			X_Input->textsize( FontSize() );
 			Y_Input->textsize( FontSize() );
 			Z_Input->textsize( FontSize() );
@@ -784,6 +776,10 @@ void kbPropertiesTab::RefreshProperty( kbEditorEntity *const pEntity, const std:
 			X_Input->value( std::to_string( vec.x ).c_str() ); 
 			Y_Input->value( std::to_string( vec.y ).c_str() ); 
 			Z_Input->value( std::to_string( vec.z ).c_str() ); 
+
+			X_Input->position( 0 );
+			Y_Input->position( 0 );
+			Z_Input->position( 0 );
 
 			break;
 		}
@@ -813,16 +809,6 @@ void kbPropertiesTab::RefreshProperty( kbEditorEntity *const pEntity, const std:
 			m_CallBackData.push_back( cbData );
 			W_Input->callback( &TextFieldCB, static_cast<void *>( &m_CallBackData[m_CallBackData.size() - 1] ) );
 
-			X_Input->align( FL_ALIGN_LEFT );
-			Y_Input->align( FL_ALIGN_LEFT );
-			Z_Input->align( FL_ALIGN_LEFT );
-			W_Input->align( FL_ALIGN_LEFT );
-
-			X_Input->position( 0 );
-			Y_Input->position( 0 );
-			Z_Input->position( 0 );
-			W_Input->position( 0 );
-
 			X_Input->textsize( FontSize() );
 			Y_Input->textsize( FontSize() );
 			Z_Input->textsize( FontSize() );
@@ -832,6 +818,11 @@ void kbPropertiesTab::RefreshProperty( kbEditorEntity *const pEntity, const std:
 			Y_Input->value( std::to_string( color.y ).c_str() ); 
 			Z_Input->value( std::to_string( color.z ).c_str() ); 
 			W_Input->value( std::to_string( color.w ).c_str() ); 
+
+			X_Input->position( 0 );
+			Y_Input->position( 0 );
+			Z_Input->position( 0 );
+			W_Input->position( 0 );
 
 			break;
 		}
