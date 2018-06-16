@@ -2964,7 +2964,7 @@ void ReadShaderFile( const std::string & shaderText, kbShaderVarBindings_t *cons
         if ( startPos == std::string::npos || endPos == std::string::npos ) {
             break;
         }
-
+		pShaderBindings->m_TextureNames.push_back( shaderText.substr( startPos, endPos - startPos ) );
         texturePos = shaderText.find( "Texture2D", texturePos + 1 );
     }
 }
@@ -2972,8 +2972,8 @@ void ReadShaderFile( const std::string & shaderText, kbShaderVarBindings_t *cons
 /**
  *	kbRenderer_DX11::LoadShader
  */
-void kbRenderer_DX11::LoadShader( const std::string & fileName, ID3D11VertexShader *& vertexShader, ID3D11PixelShader *& pixelShader, 
-								  ID3D11InputLayout *& vertexLayout, const std::string & vertexShaderFunc, const std::string & pixelShaderFunc, 
+void kbRenderer_DX11::LoadShader( const std::string & fileName, ID3D11VertexShader *& vertexShader, ID3D11GeometryShader *& geometryShader, ID3D11PixelShader *& pixelShader, 
+								  ID3D11InputLayout *& vertexLayout, const std::string & vertexShaderFunc, const std::string & pixelShaderFunc,
 								  kbShaderVarBindings_t * pShaderBindings ) {
 
 	HRESULT hr;
@@ -2982,11 +2982,13 @@ void kbRenderer_DX11::LoadShader( const std::string & fileName, ID3D11VertexShad
 			SAFE_RELEASE(errorMessage)
 			SAFE_RELEASE(vertexShaderBuffer)
 			SAFE_RELEASE(pixelShaderBuffer)
+            SAFE_RELEASE(geometryShaderBuffer)
 		}
 
 		ID3D10Blob * errorMessage = nullptr;
 		ID3D10Blob * vertexShaderBuffer = nullptr;
 		ID3D10Blob * pixelShaderBuffer = nullptr;
+        ID3D10Blob * geometryShaderBuffer = nullptr;
 	} localBlobs;
 
 	std::ifstream shaderFile;
@@ -3017,7 +3019,7 @@ void kbRenderer_DX11::LoadShader( const std::string & fileName, ID3D11VertexShad
 	}
 
 	// Compile vertex shader
-	const UINT shaderFlags = D3DCOMPILE_PACK_MATRIX_ROW_MAJOR | D3DCOMPILE_ENABLE_STRICTNESS | D3DCOMPILE_ALL_RESOURCES_BOUND;
+	const UINT shaderFlags = D3DCOMPILE_PACK_MATRIX_ROW_MAJOR | D3DCOMPILE_ENABLE_STRICTNESS | D3DCOMPILE_ALL_RESOURCES_BOUND | D3DCOMPILE_WARNINGS_ARE_ERRORS;
 
 	int numTries = 0;
 	do {
@@ -3025,19 +3027,44 @@ void kbRenderer_DX11::LoadShader( const std::string & fileName, ID3D11VertexShad
 
 		SAFE_RELEASE( localBlobs.errorMessage );
 		hr = D3DCompile( readBuffer.c_str(), readBuffer.length(), nullptr, nullptr, nullptr, vertexShaderFunc.c_str(), "vs_5_0", shaderFlags, 0, &localBlobs.vertexShaderBuffer, &localBlobs.errorMessage );
-		if ( FAILED( hr )  ) {
+		if ( FAILED(hr)  ) {
 			Sleep( 250 );
 			SAFE_RELEASE( localBlobs.vertexShaderBuffer );
 
 		}
-	} while ( FAILED( hr ) && numTries < 4 );
+	} while ( FAILED(hr) && numTries < 4 );
 
-	if ( FAILED( hr ) ) {
-		kbWarning( "kbRenderer_DX11::LoadShader() - Failed to load vertex shader : %s", ( localBlobs.errorMessage != nullptr ) ? ( localBlobs.errorMessage->GetBufferPointer() ) : ( "No error message given " ) );
+	if ( FAILED(hr) ) {
+		kbWarning( "kbRenderer_DX11::LoadShader() - Failed to load vertex shader : %s\n%s", fileName.c_str() , ( localBlobs.errorMessage != nullptr ) ? ( localBlobs.errorMessage->GetBufferPointer() ) : ( "No error message given" ) );
 		return;
 	}
-
 	SAFE_RELEASE( localBlobs.errorMessage );
+
+    // Geometry Shader
+    if ( readBuffer.find( "void geometryShader") != std::string::npos ) {
+        numTries = 0;
+        do {
+		    numTries++;
+
+		    SAFE_RELEASE( localBlobs.errorMessage );
+		    hr = D3DCompile( readBuffer.c_str(), readBuffer.length(), nullptr, nullptr, nullptr, "geometryShader", "gs_5_0", shaderFlags, 0, &localBlobs.geometryShaderBuffer, &localBlobs.errorMessage );
+		    if ( FAILED(hr)  ) {
+			    Sleep( 250 );
+			    SAFE_RELEASE( localBlobs.geometryShaderBuffer );
+
+		    }
+	    } while ( FAILED(hr) && numTries < 4 );
+        SAFE_RELEASE( localBlobs.errorMessage );
+
+        if ( SUCCEEDED(hr) ) {
+    	    hr = m_pD3DDevice->CreateGeometryShader( localBlobs.geometryShaderBuffer->GetBufferPointer(), localBlobs.geometryShaderBuffer->GetBufferSize(), nullptr, &geometryShader );
+	        if ( FAILED(hr) ) {
+		        kbWarning( "kbRenderer_DX11::LoadShader() - Failed to create pixel shader %s", fileName.c_str() );
+		        SAFE_RELEASE( vertexShader );
+		        return;
+	        }
+        }
+    }
 
 	// Compile pixel shader
 	numTries = 0;
@@ -3046,27 +3073,27 @@ void kbRenderer_DX11::LoadShader( const std::string & fileName, ID3D11VertexShad
 
 		SAFE_RELEASE( localBlobs.errorMessage )
 		hr = D3DCompile( readBuffer.c_str(), readBuffer.length(), nullptr, nullptr, nullptr, pixelShaderFunc.c_str(), "ps_5_0", shaderFlags, 0, &localBlobs.pixelShaderBuffer, &localBlobs.errorMessage );
-		if ( FAILED( hr ) ) {
+		if ( FAILED(hr) ) {
 			Sleep( 250 );
 			SAFE_RELEASE( localBlobs.pixelShaderBuffer );
 		}
-	} while ( FAILED( hr ) && numTries < 4 );
+	} while ( FAILED(hr) && numTries < 4 );
 
-	if ( FAILED( hr ) ) {
-		kbWarning( "kbRenderer_DX11::LoadShader() - Failed to load pixel shader : %s", ( localBlobs.errorMessage != nullptr ) ? localBlobs.errorMessage->GetBufferPointer() : ( "No error message given " ) );
+	if ( FAILED(hr) ) {
+		kbWarning( "kbRenderer_DX11::LoadShader() - Failed to load pixel shader : %s\n%s", fileName.c_str(), ( localBlobs.errorMessage != nullptr ) ? localBlobs.errorMessage->GetBufferPointer() : ( "No error message given " ) );
 		return;
 	}
 
 	SAFE_RELEASE( localBlobs.errorMessage );
 
 	hr = m_pD3DDevice->CreateVertexShader( localBlobs.vertexShaderBuffer->GetBufferPointer(), localBlobs.vertexShaderBuffer->GetBufferSize(), nullptr, &vertexShader );
-	if ( FAILED( hr ) ) {
+	if ( FAILED(hr) ) {
 		kbWarning( "kbRenderer_DX11::LoadShader() - Failed to create vertex shader %s", fileName.c_str() );
 		return;
 	}
 
 	hr = m_pD3DDevice->CreatePixelShader( localBlobs.pixelShaderBuffer->GetBufferPointer(), localBlobs.pixelShaderBuffer->GetBufferSize(), nullptr, &pixelShader );
-	if ( FAILED( hr ) ) {
+	if ( FAILED(hr) ) {
 		kbWarning( "kbRenderer_DX11::LoadShader() - Failed to create pixel shader %s", fileName.c_str() );
 		SAFE_RELEASE( vertexShader );
 		return;
@@ -3386,7 +3413,7 @@ void kbRenderer_DX11::RenderModel( const kbRenderObject *const pRenderObject, co
 	kbErrorCheck( pRenderObject != nullptr && pRenderObject->m_pModel != nullptr, "kbRenderer_DX11::RenderModel() - no model found" );
 	kbErrorCheck( pRenderObject->m_pModel->GetMaterials().size() > 0, "kbRenderer_DX11::RenderModel() - No materials found for model %s", pRenderObject->m_pModel->GetFullName() );
 
-	const kbModel *const modelToRender = pRenderObject->m_pModel;
+	const kbModel *const pModelToRender = pRenderObject->m_pModel;
 
 	kbMat4 worldMatrix;
 	worldMatrix.MakeScale( pRenderObject->m_Scale );
@@ -3394,16 +3421,21 @@ void kbRenderer_DX11::RenderModel( const kbRenderObject *const pRenderObject, co
 	worldMatrix[3] = pRenderObject->m_Position;
 
 	const UINT vertexStride = pRenderObject->m_pModel->VertexStride();
-	const UINT vertexOffset = 0;	
-	ID3D11Buffer *const vertexBuffer = ( ID3D11Buffer * const ) modelToRender->m_VertexBuffer.GetBufferPtr();
-	ID3D11Buffer *const indexBuffer = ( ID3D11Buffer * const ) modelToRender->m_IndexBuffer.GetBufferPtr();
+	const UINT vertexOffset = 0;
 
-	m_pDeviceContext->IASetVertexBuffers( 0, 1, &vertexBuffer, &vertexStride, &vertexOffset );
-	m_pDeviceContext->IASetIndexBuffer( indexBuffer, DXGI_FORMAT_R32_UINT, 0 );
-	m_pDeviceContext->IASetPrimitiveTopology( D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST );
+	ID3D11Buffer *const pVertexBuffer = ( ID3D11Buffer * const ) pModelToRender->m_VertexBuffer.GetBufferPtr();
+	m_pDeviceContext->IASetVertexBuffers( 0, 1, &pVertexBuffer, &vertexStride, &vertexOffset );
 
-	for ( int i = 0; i < modelToRender->NumMeshes(); i++ ) {
-		const kbMaterial & modelMaterial = modelToRender->GetMaterials()[modelToRender->GetMeshes()[i].m_MaterialIndex];
+    if ( pModelToRender->IsPointCloud() ) {
+	    m_pDeviceContext->IASetPrimitiveTopology( D3D11_PRIMITIVE_TOPOLOGY_POINTLIST );
+    } else {
+	    ID3D11Buffer *const pIndexBuffer = ( ID3D11Buffer * const ) pModelToRender->m_IndexBuffer.GetBufferPtr();
+	    m_pDeviceContext->IASetIndexBuffer( pIndexBuffer, DXGI_FORMAT_R32_UINT, 0 );
+	    m_pDeviceContext->IASetPrimitiveTopology( D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST );
+    }
+
+	for ( int i = 0; i < pModelToRender->NumMeshes(); i++ ) {
+		const kbMaterial & modelMaterial = pModelToRender->GetMaterials()[pModelToRender->GetMeshes()[i].m_MaterialIndex];
 
 		if ( m_ViewMode == ViewMode_Wireframe ) {
 			m_pDeviceContext->RSSetState( m_pWireFrameRasterizerState );
@@ -3461,6 +3493,7 @@ void kbRenderer_DX11::RenderModel( const kbRenderObject *const pRenderObject, co
 			m_pDeviceContext->PSSetShader( (ID3D11PixelShader *)pShader->GetPixelShader(), nullptr, 0 );
 		}
 	
+        m_pDeviceContext->GSSetShader( (ID3D11GeometryShader *) pShader->GetGeometryShader(), nullptr, 0 );
 
 		// Set textures
 		ID3D11ShaderResourceView *const texture = (modelMaterial.GetTexture() != nullptr)?(ID3D11ShaderResourceView *)modelMaterial.GetTexture()->GetGPUTexture() : ( nullptr );
@@ -3484,7 +3517,10 @@ void kbRenderer_DX11::RenderModel( const kbRenderObject *const pRenderObject, co
 			if ( varName == "mvpMatrix" ) {
 				kbMat4 *const pMatOffset = (kbMat4*)pVarByteOffset;
 				*pMatOffset = worldMatrix * m_pCurrentRenderWindow->m_ViewProjectionMatrix;
-			} else if ( varName == "modelMatrix" ) {
+			} else if ( varName == "vpMatrix" ) {
+				kbMat4 *const pMatOffset = (kbMat4*)pVarByteOffset;
+				*pMatOffset = m_pCurrentRenderWindow->m_ViewProjectionMatrix;
+            } else if ( varName == "modelMatrix" ) {
 				kbMat4 *const pMatOffset = (kbMat4*)pVarByteOffset;
 				*pMatOffset = worldMatrix;
 			} else if ( varName == "cameraPos" ) {
@@ -3517,7 +3553,7 @@ void kbRenderer_DX11::RenderModel( const kbRenderObject *const pRenderObject, co
                     if ( varName == overrideVarName ) {
 
                         // Check if it doesn't fit
-                        const size_t endOffset = curOverride.m_VarSizeBytes + bindings[iOverride].m_VarByteOffset ;
+                        const size_t endOffset = curOverride.m_VarSizeBytes + bindings[i].m_VarByteOffset ;
                         if ( endOffset > shaderVarBindings.m_ConstantBufferSizeBytes || ( i < bindings.size() - 1 && endOffset > bindings[i+1].m_VarByteOffset ) ) {
                             break;
                         }
@@ -3542,18 +3578,28 @@ void kbRenderer_DX11::RenderModel( const kbRenderObject *const pRenderObject, co
 
         // Bind textures
         const std::vector<kbShaderParamOverrides_t::kbShaderParam_t> & paramOverrides = pRenderObject->m_ShaderParamOverrides.m_ParamOverrides;
-        for ( int iOverride = 0; iOverride < paramOverrides.size(); iOverride++ ) {
-            const kbShaderParamOverrides_t::kbShaderParam_t & curOverride = paramOverrides[iOverride];
-            if ( curOverride.m_Type == kbShaderParamOverrides_t::kbShaderParam_t::SHADER_TEX ) {
-                ID3D11ShaderResourceView *const pShaderResourceView = ( curOverride.m_pTexture != nullptr ) ? ( curOverride.m_pTexture->GetGPUTexture() ) : ( nullptr );
-	            m_pDeviceContext->PSSetShaderResources( iOverride, 1, &pShaderResourceView );
-            }
-        }
+		for ( int iTex = 0; iTex < shaderVarBindings.m_TextureNames.size(); iTex++ ) {
+	        for ( int iOverride = 0; iOverride < paramOverrides.size(); iOverride++ ) {
+				const kbShaderParamOverrides_t::kbShaderParam_t & curOverride = paramOverrides[iOverride];
+				if ( curOverride.m_Type == kbShaderParamOverrides_t::kbShaderParam_t::SHADER_TEX && curOverride.m_VarName == shaderVarBindings.m_TextureNames[iTex] ) {
+	                ID3D11ShaderResourceView *const pShaderResourceView = ( curOverride.m_pTexture != nullptr ) ? ( curOverride.m_pTexture->GetGPUTexture() ) : ( nullptr );
+					m_pDeviceContext->PSSetShaderResources( iTex, 1, &pShaderResourceView );				
+				}
+			}
+		}
 
 		m_pDeviceContext->Unmap( pConstantBuffer, 0 );
 		m_pDeviceContext->VSSetConstantBuffers( 0, 1, &pConstantBuffer );
 		m_pDeviceContext->PSSetConstantBuffers( 0, 1, &pConstantBuffer );
-		m_pDeviceContext->DrawIndexed( modelToRender->GetMeshes()[i].m_NumTriangles * 3, modelToRender->GetMeshes()[i].m_IndexBufferIndex, 0 );
+        if ( pShader->GetGeometryShader() != nullptr ) {
+            m_pDeviceContext->GSSetConstantBuffers( 0, 1, &pConstantBuffer );
+        }
+
+        if ( pModelToRender->IsPointCloud() == true ) {
+    		m_pDeviceContext->Draw( (UINT)pModelToRender->NumVertices(), 0 );
+        } else {
+    		m_pDeviceContext->DrawIndexed( pModelToRender->GetMeshes()[i].m_NumTriangles * 3, pModelToRender->GetMeshes()[i].m_IndexBufferIndex, 0 );
+        }
 	}
 }
 	

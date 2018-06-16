@@ -82,6 +82,20 @@ struct vertexLayout {
 		normal[3] = ( byte ) ( ( ( inNormal.w * 0.5f ) + 0.5f ) * 255.0f );
 	}
 	
+	void SetTangent( const kbVec4 & inTangent ) {
+		tangent[0] = ( byte ) ( ( ( inTangent.z * 0.5f ) + 0.5f ) * 255.0f );
+		tangent[1] = ( byte ) ( ( ( inTangent.y * 0.5f ) + 0.5f ) * 255.0f );
+		tangent[2] = ( byte ) ( ( ( inTangent.x * 0.5f ) + 0.5f ) * 255.0f );
+		tangent[3] = ( byte ) ( ( ( inTangent.w * 0.5f ) + 0.5f ) * 255.0f );
+	}
+
+	void SetBinormal( const kbVec4 & inBinormal ) {
+		color[0] = ( byte ) ( ( ( inBinormal.z * 0.5f ) + 0.5f ) * 255.0f );
+		color[1] = ( byte ) ( ( ( inBinormal.y * 0.5f ) + 0.5f ) * 255.0f );
+		color[2] = ( byte ) ( ( ( inBinormal.x * 0.5f ) + 0.5f ) * 255.0f );
+		color[3] = ( byte ) ( ( ( inBinormal.w * 0.5f ) + 0.5f ) * 255.0f );
+	}
+
 	kbVec3 GetNormal() const {
 		kbVec3 outNormal( ( float ) normal[2], ( float ) normal[1], ( float ) normal[0] );
 		outNormal.x = ( ( outNormal.x / 255.0f ) * 2.0f ) - 1.0f;
@@ -188,6 +202,7 @@ struct kbBoneMatrix_t {
 typedef ID3D11Buffer kbHWBuffer;
 typedef ID3D11ShaderResourceView kbHWTexture;
 typedef ID3D11VertexShader kbHWVertexShader;
+typedef ID3D11GeometryShader kbHWGeometryShader;
 typedef ID3D11PixelShader kbHWPixelShader;
 typedef ID3D11InputLayout kbHWVertexLayout;
 
@@ -350,6 +365,9 @@ enum eRenderObjectOp {
 	ROO_Update,
 };
 
+/**
+ *	kbLightShafts
+ */
 class kbLightShafts {
 
 //---------------------------------------------------------------------------------------------------

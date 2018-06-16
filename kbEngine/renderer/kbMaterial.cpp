@@ -556,6 +556,7 @@ void kbTexture::Release_Internal() {
 kbShader::kbShader() :
 	m_pVertexShader( nullptr ),
 	m_pPixelShader( nullptr ),
+    m_pGeometryShader( nullptr ),
 	m_pVertexLayout( nullptr ),
 	m_VertexShaderFunctionName( "vertexShader" ),
 	m_PixelShaderFunctionName( "pixelShader" ) {
@@ -566,6 +567,7 @@ kbShader::kbShader() :
  */
 kbShader::kbShader( const std::string & fileName ) :
 	m_pVertexShader( nullptr ),
+    m_pGeometryShader( nullptr ),
 	m_pPixelShader( nullptr ),
 	m_pVertexLayout( nullptr ),
 	m_VertexShaderFunctionName( "vertexShader" ),
@@ -578,7 +580,7 @@ kbShader::kbShader( const std::string & fileName ) :
  */
 bool kbShader::Load_Internal() {
 	if ( g_pRenderer != nullptr ) {
-		g_pRenderer->LoadShader( GetFullFileName(), m_pVertexShader, m_pPixelShader, m_pVertexLayout, m_VertexShaderFunctionName.c_str(), m_PixelShaderFunctionName.c_str(), &m_ShaderVarBindings );
+		g_pRenderer->LoadShader( GetFullFileName(), m_pVertexShader, m_pGeometryShader, m_pPixelShader, m_pVertexLayout, m_VertexShaderFunctionName.c_str(), m_PixelShaderFunctionName.c_str(), &m_ShaderVarBindings );
 	}
 	return true;
 }
@@ -588,10 +590,12 @@ bool kbShader::Load_Internal() {
  */
 void kbShader::Release_Internal() {
 	SAFE_RELEASE( m_pVertexShader );
+    SAFE_RELEASE( m_pGeometryShader );
 	SAFE_RELEASE( m_pPixelShader );
 	SAFE_RELEASE( m_pVertexLayout );
 
 	m_ShaderVarBindings.m_VarBindings.clear();
+	m_ShaderVarBindings.m_TextureNames.clear();
 }
 
 /**

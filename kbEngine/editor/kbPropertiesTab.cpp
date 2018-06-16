@@ -431,7 +431,7 @@ void kbPropertiesTab::RefreshComponent( kbEditorEntity *const pEntity, kbCompone
 
 	if ( bIsStruct == false ) {
 		Fl_Text_Display *const propertyNameLabel = new Fl_Text_Display( startX + 10, curY, 0, inputHeight, pComponentName );
-		propertyNameLabel->labelsize( FontSize() );
+		propertyNameLabel->labelsize( (int) ( FontSize() * 1.25f ));
 		propertyNameLabel->labelfont( FL_BOLD );
 		propertyNameLabel->align( FL_ALIGN_RIGHT );
 	}
@@ -439,7 +439,7 @@ void kbPropertiesTab::RefreshComponent( kbEditorEntity *const pEntity, kbCompone
 	// Delete button
 	if ( pComponent->IsA( kbTransformComponent::GetType() ) == false ) {
 		if ( bIsStruct == false ) {
-			Fl_Button *const DeleteButton = new Fl_Button( startX +  DisplayWidth() - FontSize() - Fl::scrollbar_size(), curY + FontSize() / 2, inputHeight/2,inputHeight/2,"X");
+			Fl_Button *const DeleteButton = new Fl_Button( startX +  DisplayWidth() - FontSize() - Fl::scrollbar_size(), curY + FontSize() / 2, inputHeight, inputHeight, "X" );
 			DeleteButton->color(88+1);
 
 			propertiesTabCBData_t cbData( pEntity, nullptr, pComponent, pParentComponent, nullptr, kbString(""), nullptr, KBTYPEINFO_NONE, "", nullptr, -1 );
@@ -447,11 +447,13 @@ void kbPropertiesTab::RefreshComponent( kbEditorEntity *const pEntity, kbCompone
 
 			DeleteButton->callback( DeleteComponent, static_cast<void *>( &m_CallBackData[ m_CallBackData.size() - 1 ] ) );
 		} else {
-			Fl_Button *const InsertButton = new Fl_Button( startX +  DisplayWidth() - FontSize() - Fl::scrollbar_size() - 16, curY + FontSize() / 2, inputHeight/2,inputHeight/2,"+");
+			Fl_Button *const InsertButton = new Fl_Button( startX +  DisplayWidth() - FontSize() - Fl::scrollbar_size() - 16, curY + FontSize() / 2, inputHeight, inputHeight, "+" );
 			InsertButton->color(0x00ff00ff);
+			InsertButton->labelsize( 2 );
 
-			Fl_Button *const DeleteButton = new Fl_Button( startX +  DisplayWidth() - FontSize() - Fl::scrollbar_size(), curY + FontSize() / 2, inputHeight/2,inputHeight/2,"-");
+			Fl_Button *const DeleteButton = new Fl_Button( startX +  DisplayWidth() - FontSize() - Fl::scrollbar_size(), curY + FontSize() / 2, inputHeight, inputHeight, "-" );
 			DeleteButton->color(88+1);
+			DeleteButton->labelsize( 2 );
 
 			propertiesTabCBData_t cbData( pEntity, nullptr, pComponent, pParentComponent, nullptr, kbString(""), nullptr, KBTYPEINFO_NONE, pComponentName, pArrayPtr, arrayIndex );
 			m_CallBackData.push_back( cbData );
@@ -495,7 +497,7 @@ void kbPropertiesTab::RefreshComponent( kbEditorEntity *const pEntity, kbCompone
 
 		if ( pNextField->second.IsArray() ) {
 
-			varMetaData_t *const propertyMetaData = pEntity->GetPropertyMetaData(pComponent, pNextField->second.Offset());
+			varMetaData_t *const propertyMetaData = pEntity->GetPropertyMetaData( pComponent, pNextField->second.Offset() );
 			if ( propertyMetaData == nullptr ) {
 				continue;
 			}
@@ -503,19 +505,22 @@ void kbPropertiesTab::RefreshComponent( kbEditorEntity *const pEntity, kbCompone
 			// Expand / collapse button
 			Fl_Button * b1 = nullptr;
 			if ( propertyMetaData->bExpanded == false ) {
-				b1 = new Fl_Button( startX, curY + FontSize() / 2, inputHeight/2,inputHeight/2,"+");
+				b1 = new Fl_Button( startX, curY + FontSize() / 2, FontSize(), FontSize(), "+" );
 				b1->color(0x00ff00ff);
-				b1->callback( &ArrayExpandCB, static_cast<void *>( propertyMetaData ) );
+
 			} else {
-				b1 = new Fl_Button( startX, curY + FontSize() / 2, inputHeight/2,inputHeight/2,"-");
+				b1 = new Fl_Button( startX, curY + FontSize() / 2, FontSize(), FontSize(), "-" );
 				b1->color(0xff0000ff);
-				b1->callback( &ArrayExpandCB, static_cast<void *>( propertyMetaData ) );
 			}
+			b1->callback( &ArrayExpandCB, static_cast<void *>( propertyMetaData ) );
+			b1->labelsize( FontSize() );
 
 			const std::string propertyNameWithPadding = "LONGEST STRING";
-			const int propertyNamePixelWidth = ( int )fl_width( propertyNameWithPadding.c_str() );
+			const int propertyNamePixelWidth = (int)fl_width( propertyNameWithPadding.c_str() );
 
-			Fl_Input * pArraySizeInput = new Fl_Input( startX + propertyNamePixelWidth, curY, FontSize() * 3, inputHeight );
+			Fl_Input *const pArraySizeInput = new Fl_Input( startX + propertyNamePixelWidth + kbEditor::PanelBorderSize(1) - 1, curY, FontSize() * 2, inputHeight );
+			pArraySizeInput->textsize( FontSize() );
+			pArraySizeInput->labelsize( FontSize() );
 			curY += LineSpacing();
 
 			propertiesTabCBData_t cbData( pEntity, nullptr, pComponent, pParentComponent, nullptr, pNextField->first, ( void * ) byteOffsetToVar, pNextField->second.Type(),  pNextField->second.GetStructName(), nullptr, -1 );
@@ -529,6 +534,7 @@ void kbPropertiesTab::RefreshComponent( kbEditorEntity *const pEntity, kbCompone
 					const std::vector<class kbShader *> *const shaderList = ( std::vector<class kbShader *> *)( byteOffsetToVar );
 
 					pArraySizeInput->value( std::to_string( shaderList->size()).c_str() );
+					pArraySizeInput->textsize( FontSize() );
 					m_pEntityProperties->add( pArraySizeInput );
 
 					if ( propertyMetaData && propertyMetaData->bExpanded ) {
@@ -596,7 +602,7 @@ void kbPropertiesTab::RefreshEntity() {
 		int curY = y() + kbEditor::TabHeight() + kbEditor::PanelBorderSize();
 		int startX = x() + kbEditor::PanelBorderSize();
 		int inputWidth = 50;
-		int inputHeight = 20;
+		int inputHeight = (int)( FontSize() * 1.5f );
 		int ySpacing = 20;
 
 		// TODO: Display properties for the first entity only for now.
@@ -645,7 +651,8 @@ void kbPropertiesTab::RefreshProperty( kbEditorEntity *const pEntity, const std:
 			cbData.m_pVariablePtr = &boolean;
 			m_CallBackData.push_back( cbData );
 
-			Fl_Check_Button *const button = new Fl_Check_Button( xPos + propertyNamePixelWidth, yPos, 25, inputHeight, "" );
+			Fl_Check_Button *const button = new Fl_Check_Button( xPos + propertyNamePixelWidth - 2, yPos, inputHeight, inputHeight, "" );
+			button->labelsize( inputHeight );
 			button->callback( &CheckButtonCB, static_cast< void * >( &m_CallBackData[ m_CallBackData.size() - 1 ] )  );
 			button->value( * ( (bool*) byteOffsetToVar ) );
 			break;
@@ -664,6 +671,7 @@ void kbPropertiesTab::RefreshProperty( kbEditorEntity *const pEntity, const std:
 			char buffer[16];
 			sprintf_s( buffer, "%d", * ( (int*) byteOffsetToVar ) );
 			intInput->value( buffer );
+			intInput->textsize( FontSize() );
 			break;
 		}
 
@@ -674,7 +682,7 @@ void kbPropertiesTab::RefreshProperty( kbEditorEntity *const pEntity, const std:
 			
 			Fl_Input * floatInput = new Fl_Input( xPos + propertyNamePixelWidth, yPos, maxFieldWidth, inputHeight );
 			floatInput->callback( &TextFieldCB, static_cast< void * >( &m_CallBackData[ m_CallBackData.size() - 1 ] ) );
-						
+			floatInput->textsize( FontSize() );
 			char buffer[16];
 			floatInput->value( buffer );
 			sprintf_s( buffer, "%.6f", * ( (float*) byteOffsetToVar ) );
@@ -704,7 +712,8 @@ void kbPropertiesTab::RefreshProperty( kbEditorEntity *const pEntity, const std:
 
 			Fl_Button *const b1 = new Fl_Button( xPos + propertyNamePixelWidth - ( 5 + inputHeight / 2 ), yPos + (int)(inputHeight * 0.25f), inputHeight / 2,inputHeight / 2,">");
 			b1->color(88+1);
-			
+			b1->labelsize( FontSize() );
+
 			cbData.m_VariableType = propertyType;
 			cbData.m_GameEntityPtr = *pEntityPtr;
 
@@ -723,12 +732,14 @@ void kbPropertiesTab::RefreshProperty( kbEditorEntity *const pEntity, const std:
 			if ( pResource != nullptr ) {
 				Fl_Text_Display *const propertyNameLabel = new Fl_Text_Display( xPos + propertyNamePixelWidth, yPos, 0, inputHeight, pResource->GetName().c_str() );
 				propertyNameLabel->textsize( FontSize() );
+				propertyNameLabel->labelsize( FontSize() );
 				propertyNameLabel->align( FL_ALIGN_RIGHT );
 			}
 
-			Fl_Button *const b1 = new Fl_Button( xPos + propertyNamePixelWidth - ( 5 + inputHeight / 2 ), yPos + (int)(inputHeight * 0.25f), inputHeight / 2,inputHeight / 2,">");
-			b1->color(88+1);
-			
+			Fl_Button *const b1 = new Fl_Button( xPos + propertyNamePixelWidth - ( 5 + inputHeight / 2 ), yPos + (int)(inputHeight * 0.25f), FontSize(), FontSize(), ">" );
+			b1->color( 89 );
+			b1->labelsize( (int)(FontSize() * 0.75f) );
+
 			cbData.m_pResource = ( const kbResource** ) byteOffsetToVar;
 			cbData.m_VariableType = propertyType;
 			cbData.m_pVariablePtr = const_cast<void*>( (void*)&propertyName );
@@ -757,6 +768,18 @@ void kbPropertiesTab::RefreshProperty( kbEditorEntity *const pEntity, const std:
 			cbData.m_pVariablePtr = &vec.z;
 			m_CallBackData.push_back( cbData );
 			Z_Input->callback( &TextFieldCB, static_cast<void *>( &m_CallBackData[m_CallBackData.size() - 1] ) );
+
+			X_Input->align( FL_ALIGN_LEFT | FL_ALIGN_CLIP );
+			Y_Input->align( FL_ALIGN_LEFT | FL_ALIGN_CLIP );
+			Z_Input->align( FL_ALIGN_LEFT | FL_ALIGN_CLIP );
+
+			X_Input->position( 0 );
+			Y_Input->position( 0 );
+			Z_Input->position( 0 );
+
+			X_Input->textsize( FontSize() );
+			Y_Input->textsize( FontSize() );
+			Z_Input->textsize( FontSize() );
 
 			X_Input->value( std::to_string( vec.x ).c_str() ); 
 			Y_Input->value( std::to_string( vec.y ).c_str() ); 
@@ -790,6 +813,21 @@ void kbPropertiesTab::RefreshProperty( kbEditorEntity *const pEntity, const std:
 			m_CallBackData.push_back( cbData );
 			W_Input->callback( &TextFieldCB, static_cast<void *>( &m_CallBackData[m_CallBackData.size() - 1] ) );
 
+			X_Input->align( FL_ALIGN_LEFT );
+			Y_Input->align( FL_ALIGN_LEFT );
+			Z_Input->align( FL_ALIGN_LEFT );
+			W_Input->align( FL_ALIGN_LEFT );
+
+			X_Input->position( 0 );
+			Y_Input->position( 0 );
+			Z_Input->position( 0 );
+			W_Input->position( 0 );
+
+			X_Input->textsize( FontSize() );
+			Y_Input->textsize( FontSize() );
+			Z_Input->textsize( FontSize() );
+			W_Input->textsize( FontSize() );
+
 			X_Input->value( std::to_string( color.x ).c_str() ); 
 			Y_Input->value( std::to_string( color.y ).c_str() ); 
 			Z_Input->value( std::to_string( color.z ).c_str() ); 
@@ -804,6 +842,7 @@ void kbPropertiesTab::RefreshProperty( kbEditorEntity *const pEntity, const std:
 			for ( int i = 0; i < enumList->size(); i++ ) {
 				pNewDropDown->add( (*enumList)[i].c_str() );
 			}
+			pNewDropDown->textsize( FontSize() );
 
 			int & enumIntValue = * ( (int*) byteOffsetToVar );
 			pNewDropDown->value( enumIntValue );
@@ -821,6 +860,7 @@ void kbPropertiesTab::RefreshProperty( kbEditorEntity *const pEntity, const std:
 			Fl_Input * stringInput = new Fl_Input( xPos + propertyNamePixelWidth, yPos, maxFieldWidth, inputHeight );
 			stringInput->callback( &TextFieldCB, static_cast<void *>( &m_CallBackData[ m_CallBackData.size() - 1 ] ) );
 			stringInput->value( string.c_str() );
+			stringInput->textsize( FontSize() );
 			break;
 		}
 	}

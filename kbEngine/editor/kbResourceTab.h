@@ -50,6 +50,7 @@ public:
 private:
 
 	void										RebuildResourceFolderListText();
+	unsigned int								FontSize()	const { return 10; }
 
 	Fl_Select_Browser *							m_pResourceSelectBrowser;
 	Fl_Select_Browser *							m_pEntitySelectBrowser;
@@ -70,6 +71,7 @@ private:
 	static void									ResourceSelectedCB( Fl_Widget * pWidget, void * pUserData );
 	static void									SavePackageCB( Fl_Widget * pWidget, void * pUserData );
 	static void									DeleteCB( Fl_Widget * pWidget, void * pUserData );
+	static void									ZoomToEntityCB( Fl_Widget * pWidget, void * pUserData );
 
 	static void									ResourceManagerCB( const kbResourceManager::CallbackReason Reason );
 };

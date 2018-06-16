@@ -176,13 +176,17 @@ void kbResourceManager::UpdateHotReloads() {
  *	kbResourceManager::GetResource
  */
 kbResource * kbResourceManager::GetResource( const std::string & fullFileName, const bool loadImmediately ) {
-	
+
+
 	if ( strcmp( fullFileName.c_str(), "nullptr" ) == 0 ) {
 		return nullptr;
 	}
 
+	std::string convertedFileName = fullFileName;
+	std::replace( convertedFileName.begin(), convertedFileName.end(), '/', '\\' );
+
 	for ( int i = 0; i < m_Resources.size(); i++ ) {
-		if ( m_Resources[i]->m_FullFileName == fullFileName ) {
+		if ( m_Resources[i]->m_FullFileName == convertedFileName ) {
 			if ( loadImmediately == true && m_Resources[i]->m_bIsLoaded == false ) {
 				m_Resources[i]->Load();
 			}
@@ -228,8 +232,7 @@ kbResource * kbResourceManager::GetResource( const std::string & fullFileName, c
 
 //	fs::path p = fs::canonical( fullFileName.c_str() );
 	//StringFromWString( pResource->m_FullFileName, p.c_str() );
-	pResource->m_FullFileName = fullFileName;
-	std::replace( pResource->m_FullFileName.begin(), pResource->m_FullFileName.end(), '/', '\\' );
+	pResource->m_FullFileName = convertedFileName;
 	pResource->m_FullName = kbString( pResource->m_FullFileName );
 
 	size_t pos = fullFileName.find_last_of( "/" );

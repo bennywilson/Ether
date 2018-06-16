@@ -20,10 +20,19 @@ struct debugNormal
 std::vector<debugNormal> terrainNormals;
 
 /**
+ *  kbGrass::Constructor
+ */
+void kbGrass::Constructor() {
+    m_Dummy = 0;
+}
+
+/**
  *  kbTerrainMatComponent::Constructor
  */
 void kbTerrainMatComponent::Constructor() {
-    m_pDiffuseTexture = nullptr;
+    m_pDiffuseMap = nullptr;
+	m_pNormalMap = nullptr;
+	m_UVScale.Set( 1.0f, 1.0f, 1.0f );
 }
 
 /**
@@ -92,6 +101,8 @@ void kbTerrainComponent::GenerateTerrain() {
 		byte b;
 		byte a;
 	};
+
+	terrainNormals.clear();
 
 	unsigned int texWidth, texHeight;
 
@@ -178,11 +189,24 @@ void kbTerrainComponent::GenerateTerrain() {
 			xVec.Normalize();
 			zVec.Normalize();
 			kbVec3 finalVec = xVec.Cross( zVec ).Normalized();
-			pVerts[currentIndex].SetNormal( finalVec );
+
+			xVec = finalVec.Cross( zVec ).Normalized();
+			zVec = xVec.Cross( finalVec ).Normalized();
+
+			pVerts[currentIndex].SetTangent( -zVec );
+			pVerts[currentIndex].SetBinormal( xVec );
 
 			debugNormal newNormal;
+			newNormal.normal = xVec;
+			newNormal.position = pVerts[currentIndex].position + GetOwner()->GetPosition();
+			terrainNormals.push_back( newNormal );
+
+			newNormal.normal = zVec;
+			newNormal.position = pVerts[currentIndex].position + GetOwner()->GetPosition();
+			terrainNormals.push_back( newNormal );
+
 			newNormal.normal = finalVec;
-			newNormal.position = pVerts[currentIndex].position;
+			newNormal.position = pVerts[currentIndex].position + GetOwner()->GetPosition();
 			terrainNormals.push_back( newNormal );
 		}
 	}
@@ -207,27 +231,39 @@ void kbTerrainComponent::GenerateTerrain() {
 
     SetMaterialParams();
     g_pRenderer->AddRenderObject( this, &m_TerrainModel, GetOwner()->GetPosition(), kbQuat( 0.0f, 0.0f, 0.0f, 1.0f ), kbVec3::one, RP_Lighting, &m_ShaderOverrideList, &m_ShaderParamOverride );
+
+    if ( m_Grass.size() > 0 ) {
+        m_GrassModel.CreatePointCloud( 1, "./assets/Shaders/grass.kbShader" );
+        vertexLayout *const pVerts = (vertexLayout *) m_GrassModel.MapVertexBuffer();
+        pVerts[0].position.Set( 0.0f, 0.0f, 0.0f );
+        pVerts[0].SetColor( kbVec4( 1.0f, 1.0f, 1.0f, 1.0f ) );
+        m_GrassModel.UnmapVertexBuffer();
+        g_pRenderer->AddRenderObject( &m_Grass[0], &m_GrassModel, GetOwner()->GetPosition(), kbQuat( 0.0f, 0.0f, 0.0f, 1.0f ), kbVec3::one );
+    }
 }
 
 /**
  *	kbTerrainComponent::SetEnable_Internal
  */	
 void kbTerrainComponent::SetEnable_Internal( const bool isEnabled ) {
+
 	if ( m_TerrainModel.NumVertices() == 0 ) {
-		return ;
+		return;
 	}
 
-	kbShader *const pShader = (kbShader*)g_ResourceManager.GetResource( "../../kbEngine/assets/Shaders/basicShader.kbShader", true );
-	std::vector<kbShader *> ShaderOverrideList;
-
-	if ( pShader != nullptr ) {
-		ShaderOverrideList.push_back( pShader );
-	}
 	if ( isEnabled ) {
+		SetMaterialParams();
+		g_pRenderer->AddRenderObject( this, &m_TerrainModel, GetOwner()->GetPosition(), kbQuat( 0.0f, 0.0f, 0.0f, 1.0f ), kbVec3::one, RP_Lighting, &m_ShaderOverrideList, &m_ShaderParamOverride );
 
-		g_pRenderer->AddRenderObject( this, &m_TerrainModel, GetOwner()->GetPosition(), kbQuat( 0.0f, 0.0f, 0.0f, 1.0f ), kbVec3::one, RP_Lighting, &m_ShaderOverrideList, &m_ShaderParamOverride );	
+        if ( m_GrassModel.NumVertices() > 0 ) {
+            g_pRenderer->AddRenderObject( &m_Grass[0], &m_GrassModel, GetOwner()->GetPosition(), kbQuat( 0.0f, 0.0f, 0.0f, 1.0f ), kbVec3::one );
+        }
 	} else {
 		g_pRenderer->RemoveRenderObject( this );
+
+        if ( m_GrassModel.NumVertices() > 0 ) {
+            g_pRenderer->RemoveRenderObject( &m_Grass[0] );
+        }
 	}
 }
 
@@ -241,7 +277,25 @@ void kbTerrainComponent::Update_Internal( const float DeltaTime ) {
 
 		SetMaterialParams();
 		g_pRenderer->UpdateRenderObject( this, &m_TerrainModel, GetOwner()->GetPosition(), kbQuat( 0.0f, 0.0f, 0.0f, 1.0f ), GetOwner()->GetScale(), RP_Lighting, &m_ShaderOverrideList , &m_ShaderParamOverride );
+
+        if ( m_GrassModel.NumVertices() > 0 ) {
+            g_pRenderer->UpdateRenderObject( &m_Grass[0], &m_GrassModel, GetOwner()->GetPosition(), kbQuat( 0.0f, 0.0f, 0.0f, 1.0f ), GetOwner()->GetScale() );     
+        }
 	}
+
+	kbVec3 currentCameraPosition;
+	kbQuat currentCameraRotation;
+	g_pRenderer->GetRenderViewTransform( nullptr, currentCameraPosition, currentCameraRotation );
+	/*for ( int i = 0; i < terrainNormals.size(); i += 3 ) {
+		static float checkDist = 50000;
+		if ( ( currentCameraPosition - terrainNormals[i].position ).LengthSqr() > checkDist ) {
+			continue;
+		}
+
+		g_pRenderer->DrawLine( terrainNormals[i].position, terrainNormals[i].position + terrainNormals[i + 0].normal * 5.0f, kbColor::red );
+		g_pRenderer->DrawLine( terrainNormals[i].position, terrainNormals[i].position + terrainNormals[i + 1].normal * 5.0f, kbColor::green );
+		g_pRenderer->DrawLine( terrainNormals[i].position, terrainNormals[i].position + terrainNormals[i + 2].normal * 5.0f, kbColor::blue );
+	}*/
 }
 
 /**
@@ -261,15 +315,45 @@ void kbTerrainComponent::RenderSync() {
  */
 void kbTerrainComponent::SetMaterialParams() {
 
-	kbShader *const pShader = (kbShader*)g_ResourceManager.GetResource( "./assets/Shaders/basicTerrain.kbShader", true );
 	m_ShaderOverrideList.clear();
-	if ( pShader != nullptr ) {
-		m_ShaderOverrideList.push_back( pShader );
+	if ( m_pTerrainShader != nullptr ) {
+		m_ShaderOverrideList.push_back( m_pTerrainShader );
 	}
 
-    m_ShaderParamOverride.SetTexture( "shaderTexture", m_pSplatMap );
-	for ( int i = 0; i < m_TerrainMaterials.size() && i < 4; i++ ) {
-        const std::string materialName = "Mat" + std::to_string( i + 1 ) + "Diffuse";
-		m_ShaderParamOverride.SetTexture( materialName.c_str(), m_TerrainMaterials[i].GetDiffuseTexture() );
+	m_ShaderParamOverride.m_ParamOverrides.clear();
+    m_ShaderParamOverride.SetTexture( "splatMap", m_pSplatMap );
+
+	kbVec4 MatUVScale( 0.0f, 0.0f, 0.0f, 0.0f );
+
+	if ( m_TerrainMaterials.size() > 0 ) {
+		m_ShaderParamOverride.SetTexture( "Mat1Diffuse", m_TerrainMaterials[0].GetDiffuseMap() );
+		m_ShaderParamOverride.SetTexture( "Mat1Normal", m_TerrainMaterials[0].GetNormalMap() );
+		MatUVScale.x = m_TerrainMaterials[0].GetUVScale().x;
+		MatUVScale.y = m_TerrainMaterials[0].GetUVScale().y;
 	}
+
+	if ( m_TerrainMaterials.size() > 1 ) {
+		m_ShaderParamOverride.SetTexture( "Mat2Diffuse", m_TerrainMaterials[1].GetDiffuseMap() );
+		m_ShaderParamOverride.SetTexture( "Mat2Normal", m_TerrainMaterials[1].GetNormalMap() );
+		MatUVScale.z = m_TerrainMaterials[1].GetUVScale().x;
+		MatUVScale.w = m_TerrainMaterials[1].GetUVScale().y;
+	}
+	m_ShaderParamOverride.SetVec4( "mat1And2UVScale", MatUVScale );
+
+	MatUVScale.Set( 0.0f, 0.0f, 0.0f, 0.0f );
+
+	if ( m_TerrainMaterials.size() > 2 ) {
+		m_ShaderParamOverride.SetTexture( "Mat3Diffuse", m_TerrainMaterials[2].GetDiffuseMap() );
+		m_ShaderParamOverride.SetTexture( "Mat3Normal", m_TerrainMaterials[2].GetNormalMap() );
+		MatUVScale.x = m_TerrainMaterials[2].GetUVScale().x;
+		MatUVScale.y = m_TerrainMaterials[2].GetUVScale().y;
+	}
+
+	if ( m_TerrainMaterials.size() > 3 ) {
+		m_ShaderParamOverride.SetTexture( "Mat4Diffuse", m_TerrainMaterials[3].GetDiffuseMap() );
+		m_ShaderParamOverride.SetTexture( "Mat4Normal", m_TerrainMaterials[0].GetNormalMap() );
+		MatUVScale.z = m_TerrainMaterials[3].GetUVScale().x;
+		MatUVScale.y = m_TerrainMaterials[3].GetUVScale().y;
+	}
+	m_ShaderParamOverride.SetVec4( "mat3And4UVScale", MatUVScale );
 }

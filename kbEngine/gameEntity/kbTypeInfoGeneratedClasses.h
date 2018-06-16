@@ -122,8 +122,15 @@ GenerateClass(
 )
 
 GenerateClass(
+	kbGrass,
+	AddField( "Dummy", KBTYPEINFO_INT, kbGrass, m_Dummy, false, "" )
+)
+
+GenerateClass(
 	kbTerrainMatComponent,
-	AddField( "DiffuseTexture", KBTYPEINFO_TEXTURE, kbTerrainMatComponent, m_pDiffuseTexture, false, "" )
+	AddField( "DiffuseMap", KBTYPEINFO_TEXTURE, kbTerrainMatComponent, m_pDiffuseMap, false, "" )
+	AddField( "NormalMap", KBTYPEINFO_TEXTURE, kbTerrainMatComponent, m_pNormalMap, false, "" )
+	AddField( "UVScale", KBTYPEINFO_VECTOR, kbTerrainMatComponent, m_UVScale, false, "" )
 )
 
 GenerateClass(
@@ -135,6 +142,7 @@ GenerateClass(
 	AddField( "Materials", KBTYPEINFO_STRUCT, kbTerrainComponent, m_TerrainMaterials, true, "kbTerrainMatComponent" )
 	AddField( "SplatMap", KBTYPEINFO_TEXTURE, kbTerrainComponent, m_pSplatMap, false, "" )
 	AddField( "Shader", KBTYPEINFO_SHADER, kbTerrainComponent, m_pTerrainShader, false, "" )
+	AddField( "Grass", KBTYPEINFO_STRUCT, kbTerrainComponent, m_Grass, true, "kbGrass" )
 )
 
 GenerateEnum(

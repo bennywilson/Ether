@@ -35,7 +35,7 @@ pixelInput vertexShader( vertexInput input ) {
 	pixelInput output = (pixelInput)(0);
 
 	output.position = input.position;
-	output.uv = mul( input.uv, mvpMatrix );
+	output.uv = mul( input.uv, (float2x2)mvpMatrix );
 	output.position2 = input.position;
 
 	return output;
@@ -58,15 +58,15 @@ Texture2D ShadowMap;
 
 float4 pixelShader( pixelInput input ) : SV_TARGET {
 
-   const float3 worldDiffuseColor = colorTexture.Sample( DiffuseSamplerState, input.uv );
-   const float3 worldNormal = normalTexture.Sample( NormalSamplerState, input.uv );
+   const float3 worldDiffuseColor = colorTexture.Sample( DiffuseSamplerState, input.uv ).xyz;
+   const float3 worldNormal = normalTexture.Sample( NormalSamplerState, input.uv ).xyz;
 
    float4 worldPosition = float4( input.position2.xy, depthTexture.Sample( DepthSamplerState, input.uv ).r, 1 );
    worldPosition = mul( worldPosition, inverseViewProjection );
    worldPosition /= worldPosition.w;
 
    const float worldPosToLightDist = length( lightPosition.xyz - worldPosition.xyz );
-   const float3 worldPosToLight = ( lightPosition - worldPosition.xyz ) / worldPosToLightDist;
+   const float3 worldPosToLight = ( lightPosition.xyz - worldPosition.xyz ) / worldPosToLightDist;
    const float lightDotNormal = saturate( dot( worldNormal, worldPosToLight ) );
    const float lightAttenuation = saturate( 1.0f - worldPosToLightDist / lightPosition.w );
    float DistFromCamera = length( worldPosition.xyz - lightPosition.xyz );

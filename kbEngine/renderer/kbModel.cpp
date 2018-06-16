@@ -78,6 +78,7 @@ kbModel::kbModel() :
 	m_NumTriangles( 0 ),
 	m_Stride( sizeof( vertexLayout ) ),
 	m_bIsDynamicModel( false ),
+    m_bIsPointCloud( false ),
 	m_bVBIsMapped( false ),
 	m_bIBIsMapped( false ),
 	m_bCPUAccessOnly( false )  {
@@ -504,6 +505,7 @@ void kbModel::CreateDynamicModel( const UINT numVertices, const UINT numIndices,
 
 	m_NumVertices = numVertices;
 	m_bIsDynamicModel = true;
+    m_bIsPointCloud = false;
 	m_NumTriangles = numIndices / 3;
 	m_Stride = vertexSizeInBytes;
 
@@ -518,11 +520,42 @@ void kbModel::CreateDynamicModel( const UINT numVertices, const UINT numIndices,
 
 	kbMaterial newMaterial;
 	if ( ShaderToUse.length() > 0 ) {
-		newMaterial.m_pShader = ( kbShader * ) g_ResourceManager.GetResource( ShaderToUse.c_str(), true );
+		newMaterial.m_pShader = (kbShader *) g_ResourceManager.GetResource( ShaderToUse.c_str(), true );
 	} else {
-		newMaterial.m_pShader = ( kbShader * ) g_ResourceManager.GetResource( "../../kbEngine/assets/Shaders/basicShader.kbShader", true );
+		newMaterial.m_pShader = (kbShader *) g_ResourceManager.GetResource( "../../kbEngine/assets/Shaders/basicShader.kbShader", true );
+	}
+	m_Materials.push_back( newMaterial );
+}
+
+/**
+ *	kbModel::CreatePointCloud
+ */
+void kbModel::CreatePointCloud( const UINT numVertices, const std::string & shaderToUse ) {
+	if ( m_NumVertices > 0 || m_Meshes.size() > 0 || m_Materials.size() > 0 || m_VertexBuffer.GetBufferPtr() != nullptr || m_IndexBuffer.GetBufferPtr() != nullptr ) {
+		Release_Internal();
 	}
 
+	m_NumVertices = numVertices;
+	m_bIsDynamicModel = false;
+    m_bIsPointCloud = true;
+	m_NumTriangles = 0;
+	m_Stride = sizeof( vertexLayout );
+
+	m_VertexBuffer.CreateVertexBuffer( numVertices, m_Stride );
+
+	mesh_t newMesh;
+	newMesh.m_NumTriangles = m_NumTriangles;
+	newMesh.m_IndexBufferIndex = 0;
+	newMesh.m_MaterialIndex = 0;
+	m_Meshes.push_back( newMesh );
+
+
+	kbMaterial newMaterial;
+	if ( shaderToUse.length() > 0 ) {
+		newMaterial.m_pShader = (kbShader *) g_ResourceManager.GetResource( shaderToUse.c_str(), true );
+	} else {
+		newMaterial.m_pShader = (kbShader *) g_ResourceManager.GetResource( "../../kbEngine/assets/Shaders/basicShader.kbShader", true );
+	}
 	m_Materials.push_back( newMaterial );
 }
 
@@ -564,9 +597,9 @@ void kbModel::UnmapVertexBuffer( const INT NumIndices ) {
  *	kbModel::MapIndexBuffer
  */
 void * kbModel::MapIndexBuffer() {
-	if( m_bIBIsMapped ) {
-		kbError( "Index buffer already mapped" );
-	}
+    kbErrorCheck( m_bIBIsMapped == false, "kbModel::MapIndexBuffer() - Index buffer is already mapped." );
+    kbErrorCheck( m_bIsDynamicModel == true, "kbModel::MapIndexBuffer() - Not a dynamic model." );
+    kbErrorCheck( m_bIsPointCloud == false, "kbModel::MapIndexBuffer() - Point clouds cannot be mapped." );
 
 	m_bIBIsMapped = true;
 	return m_IndexBuffer.Map();
@@ -576,10 +609,10 @@ void * kbModel::MapIndexBuffer() {
  *	kbModel::UnmapIndexBuffer
  */
 void kbModel::UnmapIndexBuffer() {
+    kbErrorCheck( m_bIBIsMapped == true, "kbModel::UnmapIndexBuffer() - Index buffer was not mapped." );
+    kbErrorCheck( m_bIsDynamicModel == true, "kbModel::UnmapIndexBuffer() - Not a dynamic model." );
+    kbErrorCheck( m_bIsPointCloud == false, "kbModel::UnmapIndexBuffer() - Point clouds cannot be mapped." );
 
-   if ( m_bIBIsMapped == false ) {
-      return;
-   }
 
 	m_bIBIsMapped = false;
 	m_IndexBuffer.Unmap();

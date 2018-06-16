@@ -13,12 +13,32 @@ kbGameEntity 0 0 0 0 {
 		CastsShadow = 0
 		m_RenderPass = LightingPass
 		Dimensions = 513
+		Grass = 1
+			kbGrass { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Dummy = 0
+			}
 		HeightMap = .\assets\Terrain\terrain1_height.bmp
 		HeightScale =  7.000000
-		Materials = 1
+		Materials = 3
 			kbTerrainMatComponent { 
 				Enabled = 0
-				DiffuseTexture = .\assets\test\water_color2.jpg
+				DiffuseMap = .\assets\Terrain\Sand.jpg
+				NormalMap = .\assets\Terrain\Sand_NM.jpg
+				UVScale = 1.000000 1.000000 1.000000
+			}
+			kbTerrainMatComponent { 
+				Enabled = 0
+				DiffuseMap = .\assets\Terrain\Pack2\JPEG\Vol_11_1_Base_Color.jpg
+				NormalMap = .\assets\Terrain\Pack2\JPEG\Vol_11_1_Normal.jpg
+				UVScale = 20.000000 20.000000 50.000000
+			}
+			kbTerrainMatComponent { 
+				Enabled = 0
+				DiffuseMap = .\assets\Terrain\Pack2\JPEG\Vol_11_4_Base_Color.jpg
+				NormalMap = .\assets\Terrain\Pack2\JPEG\Vol_11_4_Normal.jpg
+				UVScale = 300.000000 300.000000 50.000000
 			}
 		Shader = .\assets\shaders\basicTerrain.kbShader
 		SplatMap = .\assets\Terrain\terrain1_splatmap.bmp
@@ -30,7 +50,7 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 1
 		LifeTime =  -1.000000
 		Name = "Directional Light"
-		Orientation = -0.416803 0.000000 0.000000 0.908997
+		Orientation = -0.058099 0.493044 -0.695025 -0.520070
 		Position = -7.139423 27.397795 16.036642
 		Scale = 1.000000 1.000000 1.000000
 	}
@@ -38,7 +58,7 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadows = 1
-		Color = 0.350000 0.350000 0.350000 0.250000
+		Color = 1.000000 1.000000 1.000000 0.250000
 		CascadedShadowSplits = 4
  100.000000
  200.000000
@@ -116,5 +136,55 @@ kbGameEntity 2609040299 1100347930 3115268521 1892043160 {
 		IterationWidth =  0.001500
 		NumIteractions = 48
 		Texture = ..\..\kbEngine\assets\Textures\flare.jpg
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Entity_21"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = -66.177139 4.522505 105.104149
+		Scale = 1.000000 1.000000 1.000000
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Entity_22"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = -14.511436 38.180302 25.449627
+		Scale = 1.000000 1.000000 1.000000
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Entity_23"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 41.130100 45.297951 41.438030
+		Scale = 1.000000 1.000000 1.000000
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Entity_25"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = -5287.869629 2470.000000 -295.887756
+		Scale = 3.000000 3.000000 3.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		m_RenderPass = LightingPass
+		Model = .\assets\models\Vehicles\jet.ms3d
+		ShaderOverride = 1
+			..\..\kbEngine\assets\Shaders\basicShader.kbShader
+
 	}
 }

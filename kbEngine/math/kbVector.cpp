@@ -2,7 +2,7 @@
 // kbVector.cpp
 //
 //
-// 2016-2017 kbEngine 2.0
+// 2016-2018 kbEngine 2.0
 //===================================================================================================
 #include "kbCore.h"
 #include "kbVector.h"
@@ -11,6 +11,7 @@
 
 const kbVec3 kbVec3::right( 1.0f, 0.0f, 0.0f );
 const kbVec3 kbVec3::up( 0.0f, 1.0f, 0.0f );
+const kbVec3 kbVec3::down( 0.0f, -1.0f, 0.0f );
 const kbVec3 kbVec3::forward( 0.0f, 0.0f, 1.0f );
 const kbVec3 kbVec3::zero( 0.0f, 0.0f, 0.0f );
 const kbVec3 kbVec3::one( 1.0f, 1.0f, 1.0f );

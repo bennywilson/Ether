@@ -110,7 +110,9 @@ void kbResourceTab::ResourceSelectedCB( Fl_Widget * widget, void * userData ) {
 
 	}
 
+	const int scrollPos = pResourceTab->m_pResourceSelectBrowser->position();
 	pResourceTab->RefreshResourcesTab();
+	pResourceTab->m_pResourceSelectBrowser->position( scrollPos );
 	selectBrowser->select( selectedItemIndex + 1 );
 }
 
@@ -174,7 +176,7 @@ kbResourceTab::kbResourceTab( int x, int y, int w, int h ) :
 		Fl_Group *const resourceGroup = new Fl_Group( x, Top_Border, w, Display_Height, "Resources" );
 		m_pResourceSelectBrowser = new Fl_Select_Browser( 5, Top_Border + 5, Display_Width, Display_Height , "" );
 		m_pResourceSelectBrowser->callback( &ResourceSelectedCB, this );
-		m_pResourceSelectBrowser->textsize( 11 );
+		m_pResourceSelectBrowser->textsize( FontSize() );
 		resourceGroup->end();
 	}
 
@@ -182,7 +184,7 @@ kbResourceTab::kbResourceTab( int x, int y, int w, int h ) :
 		Fl_Group *const resourceGroup = new Fl_Group( 0, Top_Border, Display_Width, Display_Height, "Entities" );
 		m_pEntitySelectBrowser = new Fl_Select_Browser( 5, Top_Border + 5, Display_Width, Display_Height , "" );
 		m_pEntitySelectBrowser->callback( *EntitySelectedCB, this );
-		m_pEntitySelectBrowser->textsize( 11 );
+		m_pEntitySelectBrowser->textsize( FontSize() );
 	    resourceGroup->end();
 	}
 
@@ -461,6 +463,7 @@ void kbResourceTab::RefreshResourcesTab() {
 	m_pResourceSelectBrowser->clear();
 	m_SelectBrowserIdx.clear();
 
+	const int scrollPos = m_pResourceSelectBrowser->position();
 	// Add packages to the UI
 	
 	// Add resources to the UI
@@ -679,11 +682,16 @@ void kbResourceTab::EntitySelectedCB( Fl_Widget * pWidget, void * pUserData ) {
 	} else if ( Fl::event_button() == FL_RIGHT_MOUSE ) {
 		
 		const std::string DeleteEntity = "Delete entity " + g_pResourceTab->m_EntityList[selectedItemIndex].m_pEntity->GetGameEntity()->GetName();
+		const std::string ZoomToEntity = "Zoom to entity " + g_pResourceTab->m_EntityList[selectedItemIndex].m_pEntity->GetGameEntity()->GetName();
+
 
 		Fl_Menu_Item rclick_menu[] = {
-			{ DeleteEntity.c_str(),  0, DeleteCB, g_pResourceTab->m_EntityList[selectedItemIndex].m_pEntity },
+			{ ZoomToEntity.c_str(), 0, ZoomToEntityCB, g_pResourceTab->m_EntityList[selectedItemIndex].m_pEntity },
+			{ "", 0, nullptr },
+			{ DeleteEntity.c_str(), 0, DeleteCB, g_pResourceTab->m_EntityList[selectedItemIndex].m_pEntity },
 			{ 0 }};
 
+		rclick_menu[1].deactivate();
 		/*if ( selectedItemIndex < 0 || g_pResourceTab->m_SelectBrowserIdx[selectedItemIndex]->m_bIsDirty == false ) {
 			rclick_menu[0].deactivate();
 		}*/
@@ -701,6 +709,11 @@ void kbResourceTab::EntitySelectedCB( Fl_Widget * pWidget, void * pUserData ) {
  */
 void kbResourceTab::DeleteCB( Fl_Widget * pWidget, void * pUserData ) {
 
+	const int areYouSure = fl_ask( "Really delete this entity?" );
+	if ( areYouSure == 0 ) {
+		return;
+	}
+
 	kbEditorEntity *const pEditorEntity = (kbEditorEntity*)pUserData;
 
 	std::vector<kbEditorEntity *> entitiesToDelete;
@@ -708,4 +721,28 @@ void kbResourceTab::DeleteCB( Fl_Widget * pWidget, void * pUserData ) {
 	g_Editor->DeleteEntities( entitiesToDelete );
 
 	g_pResourceTab->RefreshEntitiesTab();
+}
+
+/**
+ *	kbResourceTab::ZoomToEntityCB
+ */
+void kbResourceTab::ZoomToEntityCB( Fl_Widget * pWidget, void * pUserData ) {
+	kbEditorEntity *const pEditorEntity = (kbEditorEntity*)pUserData;
+
+	const float zoomDist = 75.0f;
+
+	const kbVec3 camPos = g_Editor->GetMainCameraPos();
+	kbVec3 vecTo = ( camPos - pEditorEntity->GetPosition() );
+	vecTo.y = 0;
+	if ( vecTo.Length() < zoomDist ) {
+		return;
+	}
+
+	const kbVec3 finalPos = pEditorEntity->GetPosition() + vecTo.Normalized() * zoomDist;
+	g_Editor->SetMainCameraPos( finalPos );
+
+	kbMat4 newRot;
+	newRot.LookAt( finalPos, pEditorEntity->GetPosition(), kbVec3::up );
+	newRot.InvertFast();
+	g_Editor->SetMainCameraRot( kbQuatFromMatrix( newRot ) );
 }

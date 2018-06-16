@@ -125,7 +125,7 @@ kbEditor::kbEditor() :
 	curX += speedButtonWidth + buttonSpacing * 2;
 
 	m_pViewModeChoice = new Fl_Choice( curX, curY, (int)fl_width( "Wireframe") + TRSButtonWidth, buttonHeight );
-	m_pViewModeChoice->add( "Normal" );		// Note: These have to be in the same order as the entries in kbViewMode_t
+	m_pViewModeChoice->add( "Textured and Lit" );		// Note: These have to be in the same order as the entries in kbViewMode_t
 	m_pViewModeChoice->add( "Wireframe" );
 	m_pViewModeChoice->value( 0 );
 	m_pViewModeChoice->callback( ViewModeChoiceCB );
@@ -429,6 +429,35 @@ void kbEditor::BroadcastEvent( const widgetCBObject & cbObject ) {
 	for ( int i = 0; i < receivers.size(); i++ ) {
 		receivers[i]->EventCB( &cbObject );
 	}
+}
+
+/**
+ *  kbEditor::SetMainCameraPos
+ */
+void kbEditor::SetMainCameraPos( const kbVec3 & newCamPos ) {
+	m_pMainTab->GetEditorWindowCamera()->m_Position = newCamPos;
+}
+
+/**
+ *  kbEditor::GetMainCameraPos
+ */
+kbVec3 kbEditor::GetMainCameraPos() {
+	return m_pMainTab->GetEditorWindowCamera()->m_Position;
+}
+
+/**
+ *  kbEditor::SetMainCameraRot
+ */
+void kbEditor::SetMainCameraRot( const kbQuat & newCamRot ) {
+	m_pMainTab->GetEditorWindowCamera()->m_Rotation = newCamRot;
+	m_pMainTab->GetEditorWindowCamera()->m_RotationTarget = newCamRot;
+}
+
+/**
+ *  kbEditor::GetMainCameraRot
+ */
+kbQuat kbEditor::GetMainCameraRot() {
+	return m_pMainTab->GetEditorWindowCamera()->m_Rotation;
 }
 
 /**
@@ -1117,4 +1146,5 @@ void kbEditor::ViewModeChoiceCB( Fl_Widget *, void * pUserData ) {
  */
 void kbEditor::ClearOutputBuffer( Fl_Widget *, void * pUseData ) {
     g_OutputBuffer->text( "" );
+	g_StyleBuffer->text( "" );
 }

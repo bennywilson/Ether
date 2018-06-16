@@ -34,7 +34,7 @@ pixelInput vertexShader( vertexInput input ) {
 	pixelInput output = (pixelInput)(0);
 
 	output.position = input.position;
-	output.uv = mul( input.uv, mvpMatrix );
+	output.uv = mul( input.uv, (float2x2)mvpMatrix );
 	output.position2 = input.position;
 
 	return output;

@@ -35,7 +35,7 @@ pixelInput vertexShader( vertexInput input ) {
 	pixelInput output = (pixelInput)(0);
 
 	output.position = input.position;
-	output.uv = mul( input.uv, mvpMatrix );
+	output.uv = mul( input.uv, (float2x2)mvpMatrix );
 	output.position2 = input.position;
 
 	return output;
@@ -58,8 +58,8 @@ Texture2D ShadowMap;
 
 float4 pixelShader( pixelInput input ) : SV_TARGET {
 
-   float3 baseColor = colorTexture.Sample( DiffuseSamplerState, input.uv );
-   float3 normal = normalTexture.Sample( NormalSamplerState, input.uv );
+   float3 baseColor = colorTexture.Sample( DiffuseSamplerState, input.uv ).xyz;
+   float3 normal = normalTexture.Sample( NormalSamplerState, input.uv ).xyz;
 
    float4 worldPos = float4( input.position2.xy, depthTexture.Sample( DepthSamplerState, input.uv ).r, 1 );
    worldPos = mul( worldPos, inverseViewProjection );
@@ -69,11 +69,11 @@ float4 pixelShader( pixelInput input ) : SV_TARGET {
    const float lightLength = lightDirection.w;
 
    const float distAlongLine = dot( worldPos.xyz - lightPosition.xyz, lightDirection.xyz );
-   const float3 pointAlongLine = lightPosition + ( lightDirection.xyz * distAlongLine );
+   const float3 pointAlongLine = lightPosition.xyz + ( lightDirection.xyz * distAlongLine );
    const float distToLine = length( pointAlongLine - worldPos.xyz );
 
    float atten1 = 1.0f - saturate( distToLine / lightRadius );
-   float2 atten2 = 1.0f - saturate( ( abs( distAlongLine ) - ( lightLength * 0.5f ) ) / ( lightRadius ) );
+   float atten2 = 1.0f - saturate( ( abs( distAlongLine ) - ( lightLength * 0.5f ) ) / ( lightRadius ) );
    float attenuation = atten1 * atten2;
 
    const float3 lightVec = normalize( pointAlongLine - worldPos.xyz );

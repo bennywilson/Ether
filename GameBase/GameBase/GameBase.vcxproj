@@ -118,6 +118,7 @@
   <ItemGroup>
     <None Include="assets\shaders\basicTerrain.kbShader" />
     <None Include="assets\shaders\enemyEye.kbShader" />
+    <None Include="assets\shaders\grass.kbShader" />
     <None Include="assets\shaders\skyBox.kbShader" />
     <None Include="assets\shaders\terrain.kbShader" />
     <None Include="GameBase.ico" />

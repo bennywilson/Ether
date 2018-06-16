@@ -41,6 +41,12 @@ public:
 	void													RegisterEvent( kbWidget *const widget, const widgetCBType_t eventType ) { m_EventReceivers[eventType].push_back( widget ); }
 	void													BroadcastEvent( const class widgetCBObject & cbObject );
 
+	void													SetMainCameraPos( const kbVec3 & newCamPos );
+	kbVec3													GetMainCameraPos();
+
+	void													SetMainCameraRot( const kbQuat & newCamRot );
+	kbQuat													GetMainCameraRot();
+
 	void													AddEntity( kbEditorEntity *const pEditorEntity );
 	void													SelectEntities( std::vector< kbEditorEntity * > & entitiesToSelect, bool AppendToSelectedList );
 	void													DeselectEntities();

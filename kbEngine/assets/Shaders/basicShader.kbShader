@@ -43,7 +43,8 @@ pixelInput vertexShader( vertexInput input ) {
 
 	output.color = input.color;
 	output.position2 = output.position.zw;
-	output.normal.xyz = mul( ( input.normal.xyz * 2.0f ) - 1.0f, modelMatrix );
+
+	output.normal.xyz = mul( ( input.normal.xyz * 2.0f ) - 1.0f,(float3x3)modelMatrix ).xyz;
 
 	return output;
 }
@@ -51,10 +52,10 @@ pixelInput vertexShader( vertexInput input ) {
 /**
  *	pixelShader
  */
- PS_OUTPUT pixelShader( pixelInput	input ) : SV_TARGET {
+ PS_OUTPUT pixelShader( pixelInput	input ) {
 	PS_OUTPUT output = (PS_OUTPUT) 0;
 
-	output.Color.xyz = input.color;
+	output.Color.xyz = input.color.xyz;
 	output.Depth.r = input.position2.x / input.position2.y;
 
 	output.Normal.xyz = normalize( input.normal );

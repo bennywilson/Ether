@@ -39,7 +39,7 @@ pixelInput vertexShader( vertexInput input ) {
 
 	pixelInput output = (pixelInput)(0);
 
-   const float3 particleWorldPos = input.position;//mul( input.position, modelMatrix ).xyz;
+   const float3 particleWorldPos = input.position.xyz;//mul( input.position, modelMatrix ).xyz;
 
    float3x3 billboardMatrix;
    if ( input.color.a == 0 ) {

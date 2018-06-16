@@ -24,11 +24,33 @@ class kbTerrainMatComponent : public kbComponent {
 
 //---------------------------------------------------------------------------------------------------
 public:
-	kbTexture *									GetDiffuseTexture() const { return m_pDiffuseTexture; }
+
+	kbTexture *									GetDiffuseMap() const { return m_pDiffuseMap; }
+	kbTexture *									GetNormalMap() const { return m_pNormalMap; }
+
+	const kbVec3 &								GetUVScale() const { return m_UVScale; }
 
 private:
 
-    kbTexture *									m_pDiffuseTexture;
+    kbTexture *									m_pDiffuseMap;
+	kbTexture *									m_pNormalMap;
+
+	kbVec3										m_UVScale;
+};
+
+/**
+ *	kbGrass
+ */
+class kbGrass : public kbGameComponent {
+	friend class kbTerrainComponent;
+
+	KB_DECLARE_COMPONENT( kbGrass, kbGameComponent );
+
+//---------------------------------------------------------------------------------------------------
+public:
+
+private:
+	int                                         m_Dummy;
 };
 
 /**
@@ -65,10 +87,13 @@ protected:
 	std::vector<kbTerrainMatComponent>          m_TerrainMaterials;
 	kbShader *                                  m_pTerrainShader;
 	kbTexture *                                 m_pSplatMap;
+    std::vector<kbGrass>                        m_Grass;
 
 	kbModel										m_TerrainModel;
 	kbShaderParamOverrides_t					m_ShaderParamOverride;
     std::vector<kbShader *>                     m_ShaderOverrideList;
+
+    kbModel                                     m_GrassModel;
 
 	bool										m_bRegenerateTerrain;
 
