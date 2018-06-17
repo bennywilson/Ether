@@ -182,7 +182,6 @@ void kbResourceManager::UpdateHotReloads() {
  */
 kbResource * kbResourceManager::GetResource( const std::string & fullFileName, const bool loadImmediately ) {
 
-
 	if ( strcmp( fullFileName.c_str(), "nullptr" ) == 0 ) {
 		return nullptr;
 	}
@@ -219,7 +218,7 @@ kbResource * kbResourceManager::GetResource( const std::string & fullFileName, c
 	   pResource = new kbModel();
 	} else if ( fileExt == "kbShader" ) {
 	   pResource = new kbShader();
-	} else if ( fileExt == "jpg" || fileExt == "tga" || fileExt == "bmp" || fileExt == "gif" || fileExt == "png" ) {
+	} else if ( fileExt == "jpg" || fileExt == "tga" || fileExt == "bmp" || fileExt == "gif" || fileExt == "png" || fileExt == "dds" ) {
 		pResource = new kbTexture();
 	} else if ( fileExt == "kbAnim" ) {
 		pResource = new kbAnimation();

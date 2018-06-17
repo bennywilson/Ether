@@ -26,22 +26,28 @@ kbGameEntity 0 0 0 0 {
 				Enabled = 0
 				DiffuseMap = .\assets\Terrain\Sand.jpg
 				NormalMap = .\assets\Terrain\Sand_NM.jpg
+				SpecFactors =  1.000000
 				SpecMap = .\assets\Terrain\Sand.jpg
+				SpecPowerMultiplier =  1.000000
 				UVScale = 1.000000 1.000000 1.000000
 			}
 			kbTerrainMatComponent { 
 				Enabled = 0
-				DiffuseMap = .\assets\Terrain\Pack2\JPEG\Vol_11_1_Base_Color.jpg
-				NormalMap = .\assets\Terrain\Pack2\JPEG\Vol_11_1_Normal.jpg
-				SpecMap = .\assets\Terrain\Pack2\JPEG\Vol_11_1_Base_Color.jpg
-				UVScale = 20.000000 20.000000 50.000000
+				DiffuseMap = .\assets\Terrain\Textures\Rocky_Diffuse.dds
+				NormalMap = .\assets\Terrain\Textures\Rocky_Normal.jpg
+				SpecFactors =  1.000000
+				SpecMap = .\assets\Terrain\Textures\Rocky_Diffuse.dds
+				SpecPowerMultiplier =  3.000000
+				UVScale = 55.000000 55.000000 50.000000
 			}
 			kbTerrainMatComponent { 
 				Enabled = 0
-				DiffuseMap = .\assets\Terrain\Pack2\JPEG\Vol_11_4_Base_Color.jpg
-				NormalMap = .\assets\Terrain\Pack2\JPEG\Vol_11_4_Normal.jpg
-				SpecMap = .\assets\Terrain\Pack2\JPEG\Vol_11_4_Base_Color.jpg
-				UVScale = 300.000000 300.000000 50.000000
+				DiffuseMap = .\assets\Terrain\Textures\Grassy_LowRock_Diffuse.jpg
+				NormalMap = .\assets\Terrain\Textures\Grassy_LowRock_Normal.jpg
+				SpecFactors =  5.000000
+				SpecMap = .\assets\Terrain\Textures\Grassy_LowRock_Diffuse.jpg
+				SpecPowerMultiplier =  55.000000
+				UVScale = 25.000000 25.000000 50.000000
 			}
 		Shader = .\assets\shaders\basicTerrain.kbShader
 		SplatMap = .\assets\Terrain\terrain1_splatmap.bmp

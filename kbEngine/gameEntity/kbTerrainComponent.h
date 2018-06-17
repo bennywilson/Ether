@@ -44,6 +44,7 @@ public:
 
 	const kbVec3 &								GetUVScale() const { return m_UVScale; }
 	float										GetSpecFactor() const { return m_SpecFactor; }
+	float										GetSpecPowerMultiplier() const { return m_SpecPowerMultiplier; }
 
 private:
 
@@ -51,6 +52,8 @@ private:
 	kbTexture *									m_pNormalMap;
 	kbTexture *									m_pSpecMap;
 	float										m_SpecFactor;
+	FLOAT										m_SpecPowerMultiplier;
+
 	kbVec3										m_UVScale;
 };
 

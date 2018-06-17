@@ -9,6 +9,7 @@ cbuffer matrixBuffer {
 	float4 mat1And2UVScale;
 	float4 mat3And4UVScale;
 	float4 specFactors;
+	float4 specPowerMultipliers;
 };
 
 //-------------------------------------
@@ -90,7 +91,9 @@ Texture2D Mat4Diffuse	: register(t10);
 	const half zMult = 1;
 	const float3 mat1Color = Mat1Diffuse.Sample( SampleType, input.uv * mat1And2UVScale.xy ).xyz;
 	float3 mat1Normal = Mat1Normal.Sample( SampleType, input.uv * mat1And2UVScale.xy ).xyz;
-	float3 mat1Spec = Mat1Specular.Sample( SampleType, input.uv * mat1And2UVScale.xy ).xyz * specFactors.x;
+	float4 mat1Spec = Mat1Specular.Sample( SampleType, input.uv * mat1And2UVScale.xy );
+	mat1Spec.xyz *= specFactors.x;
+	mat1Spec.w *= specPowerMultipliers.x;
 
 	mat1Normal = ( mat1Normal * 2.0f ) - 1.0f;
 	mat1Normal = mul( mat1Normal, tbn );
@@ -98,7 +101,9 @@ Texture2D Mat4Diffuse	: register(t10);
 
 	const float3 mat2Color = Mat2Diffuse.Sample( SampleType, input.uv * mat1And2UVScale.zw ).xyz;
 	float3 mat2Normal = Mat2Normal.Sample( SampleType, input.uv * mat1And2UVScale.zw ).xyz;
-	float3 mat2Spec = Mat2Specular.Sample( SampleType, input.uv * mat1And2UVScale.zw ).xyz * specFactors.y;
+	float4 mat2Spec = Mat2Specular.Sample( SampleType, input.uv * mat1And2UVScale.zw );
+	mat2Spec.xyz *= specFactors.y;
+	mat2Spec.w *= specPowerMultipliers.y;
 
 	mat2Normal = ( mat2Normal * 2.0f ) - 1.0f;
 	mat2Normal = mul( mat2Normal, tbn );
@@ -106,7 +111,9 @@ Texture2D Mat4Diffuse	: register(t10);
 
 	const half3 mat3Color = Mat3Diffuse.Sample( SampleType, input.uv * mat3And4UVScale.xy ).xyz;
 	half3 mat3Normal = Mat3Normal.Sample( SampleType, input.uv * mat3And4UVScale.xy ).xyz;
-	half3 mat3Spec = Mat3Specular.Sample( SampleType, input.uv * mat3And4UVScale.xy ).xyz * specFactors.z;
+	float4 mat3Spec = Mat3Specular.Sample( SampleType, input.uv * mat3And4UVScale.xy );
+	mat3Spec.xyz *= specFactors.z;
+	mat3Spec.w *= specPowerMultipliers.z;
 
 	mat3Normal = ( mat3Normal * 2.0f ) - 1.0f;
 	mat3Normal = mul( mat3Normal, tbn );
@@ -116,12 +123,14 @@ Texture2D Mat4Diffuse	: register(t10);
 
 	output.Color.xyz = ( mat1Color * splat.x ) + ( mat2Color * splat.y ) + ( mat3Color * splat.z );
 	output.Normal.xyz = normalize( ( mat1Normal * splat.x ) + ( mat2Normal * splat.y ) + ( mat3Normal * splat.z ) );
-	output.Spec.xyz = ( ( mat1Spec * splat.x )  + ( mat2Spec * splat.y ) + ( mat3Spec * splat.z ) ) / 3.0f;
+
+	output.Spec = ( ( mat1Spec * splat.x )  + ( mat2Spec * splat.y ) + ( mat3Spec * splat.z ) ) / 3.0f;
+
 	output.Depth.r = input.position2.x / input.position2.y;
 
 	/*output.Color.xyz = mat2Color;
 	output.Normal.xyz = mat2Normal;
-	output.Spec.xyz = mat2Spec;
+	output.Spec = mat2Spec;
 	output.Depth.r = input.position2.x / input.position2.y;
 	*/
 	return output;

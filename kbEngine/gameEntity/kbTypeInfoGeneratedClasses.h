@@ -132,6 +132,7 @@ GenerateClass(
 	AddField( "NormalMap", KBTYPEINFO_TEXTURE, kbTerrainMatComponent, m_pNormalMap, false, "" )
 	AddField( "SpecMap", KBTYPEINFO_TEXTURE, kbTerrainMatComponent, m_pSpecMap, false, "" )
 	AddField( "SpecFactors", KBTYPEINFO_FLOAT, kbTerrainMatComponent, m_SpecFactor, false, "" )
+	AddField( "SpecPowerMultiplier", KBTYPEINFO_FLOAT, kbTerrainMatComponent, m_SpecPowerMultiplier, false, "" )
 	AddField( "UVScale", KBTYPEINFO_VECTOR, kbTerrainMatComponent, m_UVScale, false, "" )
 )
 
