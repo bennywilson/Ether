@@ -83,13 +83,14 @@ void kbRenderer_DX11::RenderLight( const kbRenderLight *const pLight ) {
 	m_pDeviceContext->IASetPrimitiveTopology( D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST );
 	m_pDeviceContext->RSSetState( m_pDefaultRasterizerState );
 
-	ID3D11ShaderResourceView *const  RenderTargetViews[] = {	m_RenderTargets[COLOR_BUFFER].m_pShaderResourceView, 
-																m_RenderTargets[NORMAL_BUFFER].m_pShaderResourceView, 
+	ID3D11ShaderResourceView *const  RenderTargetViews[] = {	m_RenderTargets[COLOR_BUFFER].m_pShaderResourceView,
+																m_RenderTargets[NORMAL_BUFFER].m_pShaderResourceView,
+																m_RenderTargets[SPECULAR_BUFFER].m_pShaderResourceView,
 																m_RenderTargets[DEPTH_BUFFER].m_pShaderResourceView,
 																m_RenderTargets[SHADOW_BUFFER].m_pShaderResourceView };
 
 	ID3D11SamplerState *const  SamplerStates[] = { m_pBasicSamplerState, m_pNormalMapSamplerState, m_pShadowMapSamplerState, m_pShadowMapSamplerState };
-	m_pDeviceContext->PSSetShaderResources( 0, 4, RenderTargetViews );
+	m_pDeviceContext->PSSetShaderResources( 0, 5, RenderTargetViews );
 	m_pDeviceContext->PSSetSamplers( 0, 4, SamplerStates );
 
 	kbShader * pShader = nullptr;

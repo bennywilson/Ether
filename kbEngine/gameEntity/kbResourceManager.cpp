@@ -82,6 +82,11 @@ kbResourceManager::~kbResourceManager() {
  *	kbResourceManager::RenderSync
  */
 void kbResourceManager::RenderSync() {
+	for ( int i = 0; i < m_ResourcesToLoad.size(); i++ ) {
+		m_ResourcesToLoad[i]->Load();
+	}
+	m_ResourcesToLoad.clear();
+
 	UpdateHotReloads();
 }
 
@@ -177,7 +182,6 @@ void kbResourceManager::UpdateHotReloads() {
  */
 kbResource * kbResourceManager::GetResource( const std::string & fullFileName, const bool loadImmediately ) {
 
-
 	if ( strcmp( fullFileName.c_str(), "nullptr" ) == 0 ) {
 		return nullptr;
 	}
@@ -214,7 +218,7 @@ kbResource * kbResourceManager::GetResource( const std::string & fullFileName, c
 	   pResource = new kbModel();
 	} else if ( fileExt == "kbShader" ) {
 	   pResource = new kbShader();
-	} else if ( fileExt == "jpg" || fileExt == "tga" || fileExt == "bmp" || fileExt == "gif" || fileExt == "png" ) {
+	} else if ( fileExt == "jpg" || fileExt == "tga" || fileExt == "bmp" || fileExt == "gif" || fileExt == "png" || fileExt == "dds" ) {
 		pResource = new kbTexture();
 	} else if ( fileExt == "kbAnim" ) {
 		pResource = new kbAnimation();
@@ -291,7 +295,7 @@ kbResource * kbResourceManager::GetResource( const std::string & displayName ) {
 		if ( m_Resources[i] != nullptr && m_Resources[i]->GetName().compare( displayName ) == 0 ) {
 
 			if ( m_Resources[i]->m_bIsLoaded == false ) {
-				m_Resources[i]->Load();
+				m_ResourcesToLoad.push_back( m_Resources[i] );
 			}
 			return m_Resources[i];
 		}

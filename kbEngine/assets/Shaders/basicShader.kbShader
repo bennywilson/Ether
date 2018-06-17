@@ -30,7 +30,8 @@ struct pixelInput {
 struct PS_OUTPUT {
 	float4 Color		: SV_TARGET0;
 	float4 Normal		: SV_TARGET1;
-	float2 Depth		: SV_TARGET2;
+	float4 Specular		: SV_TARGET2;
+	float2 Depth		: SV_TARGET3;
 };
 
 /**
@@ -56,6 +57,7 @@ pixelInput vertexShader( vertexInput input ) {
 	PS_OUTPUT output = (PS_OUTPUT) 0;
 
 	output.Color.xyz = input.color.xyz;
+	output.Specular = float4( 0.0f, 0.0f, 0.0f, 1.0f );
 	output.Depth.r = input.position2.x / input.position2.y;
 
 	output.Normal.xyz = normalize( input.normal );

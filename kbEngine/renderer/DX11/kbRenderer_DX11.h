@@ -85,6 +85,7 @@ private:
 enum eRenderTargetTexture {
 	COLOR_BUFFER,		// Color in xyz.  Pixel Depth in W
 	NORMAL_BUFFER,		// Normal in xyz. W currently unused
+	SPECULAR_BUFFER,
 	DEPTH_BUFFER,
 	ACCUMULATION_BUFFER,
 	SHADOW_BUFFER,

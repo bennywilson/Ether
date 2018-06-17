@@ -32,6 +32,10 @@ void kbGrass::Constructor() {
 void kbTerrainMatComponent::Constructor() {
     m_pDiffuseMap = nullptr;
 	m_pNormalMap = nullptr;
+	m_pSpecMap = nullptr;
+
+	m_SpecFactor = 1.0f;
+	m_SpecPowerMultiplier = 1.0f;
 	m_UVScale.Set( 1.0f, 1.0f, 1.0f );
 }
 
@@ -323,37 +327,86 @@ void kbTerrainComponent::SetMaterialParams() {
 	m_ShaderParamOverride.m_ParamOverrides.clear();
     m_ShaderParamOverride.SetTexture( "splatMap", m_pSplatMap );
 
-	kbVec4 MatUVScale( 0.0f, 0.0f, 0.0f, 0.0f );
+	kbVec4 specFactors( 1.0f, 1.0f, 1.0f, 1.0f );
+	kbVec4 specPowMult( 1.0f, 1.0f, 1.0f, 1.0f );
+	float uvScale[8] = { 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f };
+	for ( int i = 0; i < m_TerrainMaterials.size() && i < 4; i++ ) {
+		const kbTerrainMatComponent & curMaterial = m_TerrainMaterials[i];
+		m_ShaderParamOverride.SetTexture( std::string( "Mat" + std::to_string(i + 1) + "Diffuse" ).c_str(), curMaterial.GetDiffuseMap() );
+		m_ShaderParamOverride.SetTexture( std::string( "Mat" + std::to_string(i + 1) + "Normal" ).c_str(), curMaterial.GetNormalMap() );
+		m_ShaderParamOverride.SetTexture( std::string( "Mat" + std::to_string(i + 1) + "Specular" ).c_str(), curMaterial.GetSpecMap() );
 
+		specFactors[i] = curMaterial.GetSpecFactor();
+		specPowMult[i] = curMaterial.GetSpecPowerMultiplier();
+		uvScale[(i*2) + 0] = curMaterial.GetUVScale().x;
+		uvScale[(i*2) + 1] = curMaterial.GetUVScale().y;
+	}
+
+	m_ShaderParamOverride.SetVec4( "mat1And2UVScale", kbVec4( uvScale[0], uvScale[1], uvScale[2], uvScale[3] ) );
+	m_ShaderParamOverride.SetVec4( "mat3And4UVScale", kbVec4( uvScale[4], uvScale[5], uvScale[6], uvScale[7] ) );
+
+	m_ShaderParamOverride.SetVec4( "specFactors", specFactors );
+	m_ShaderParamOverride.SetVec4( "specPowerMultipliers", specPowMult );
+/*
+	float4 mat1And2UVScale;
+	float4 mat3And4UVScale;
+	float4 specFactors;
+	float4 specPowerMultipliers;
+*/
+/*
 	if ( m_TerrainMaterials.size() > 0 ) {
-		m_ShaderParamOverride.SetTexture( "Mat1Diffuse", m_TerrainMaterials[0].GetDiffuseMap() );
-		m_ShaderParamOverride.SetTexture( "Mat1Normal", m_TerrainMaterials[0].GetNormalMap() );
-		MatUVScale.x = m_TerrainMaterials[0].GetUVScale().x;
-		MatUVScale.y = m_TerrainMaterials[0].GetUVScale().y;
+		const kbTerrainMatComponent & curMaterial = m_TerrainMaterials[0];
+
+		m_ShaderParamOverride.SetTexture( "Mat1Diffuse", curMaterial.GetDiffuseMap() );
+		m_ShaderParamOverride.SetTexture( "Mat1Normal", curMaterial.GetNormalMap() );
+		m_ShaderParamOverride.SetTexture( "Mat1Specular", curMaterial.GetSpecMap() );
+
+		specFactors.x = curMaterial.GetSpecFactor();
+		specPowerMultiplier.x = curMaterial.GetSpecPowerMultiplier();
+
+		MatUVScale.x = curMaterial.GetUVScale().x;
+		MatUVScale.y = curMaterial.GetUVScale().y;
 	}
 
 	if ( m_TerrainMaterials.size() > 1 ) {
-		m_ShaderParamOverride.SetTexture( "Mat2Diffuse", m_TerrainMaterials[1].GetDiffuseMap() );
-		m_ShaderParamOverride.SetTexture( "Mat2Normal", m_TerrainMaterials[1].GetNormalMap() );
-		MatUVScale.z = m_TerrainMaterials[1].GetUVScale().x;
-		MatUVScale.w = m_TerrainMaterials[1].GetUVScale().y;
+		const kbTerrainMatComponent & curMaterial = m_TerrainMaterials[1];
+
+		m_ShaderParamOverride.SetTexture( "Mat2Diffuse", curMaterial.GetDiffuseMap() );
+		m_ShaderParamOverride.SetTexture( "Mat2Normal", curMaterial.GetNormalMap() );
+		m_ShaderParamOverride.SetTexture( "Mat2Specular", curMaterial.GetSpecMap() );
+
+		specFactors.y = curMaterial.GetSpecFactor();
+		specPowerMultiplier.y = curMaterial.GetSpecPowerMultiplier();
+
+		MatUVScale.z = curMaterial.GetUVScale().x;
+		MatUVScale.w = curMaterial.GetUVScale().y;
 	}
 	m_ShaderParamOverride.SetVec4( "mat1And2UVScale", MatUVScale );
 
 	MatUVScale.Set( 0.0f, 0.0f, 0.0f, 0.0f );
 
 	if ( m_TerrainMaterials.size() > 2 ) {
-		m_ShaderParamOverride.SetTexture( "Mat3Diffuse", m_TerrainMaterials[2].GetDiffuseMap() );
-		m_ShaderParamOverride.SetTexture( "Mat3Normal", m_TerrainMaterials[2].GetNormalMap() );
+		const kbTerrainMatComponent & curMaterial = m_TerrainMaterials[21];
+
+		m_ShaderParamOverride.SetTexture( "Mat3Diffuse", curMaterial.GetDiffuseMap() );
+		m_ShaderParamOverride.SetTexture( "Mat3Normal", curMaterial.GetNormalMap() );
+		m_ShaderParamOverride.SetTexture( "Mat3Specular", curMaterial.GetSpecMap() );
+
+		specFactors.z = m_TerrainMaterials[2].GetSpecFactor();
+
 		MatUVScale.x = m_TerrainMaterials[2].GetUVScale().x;
 		MatUVScale.y = m_TerrainMaterials[2].GetUVScale().y;
 	}
 
 	if ( m_TerrainMaterials.size() > 3 ) {
 		m_ShaderParamOverride.SetTexture( "Mat4Diffuse", m_TerrainMaterials[3].GetDiffuseMap() );
-		m_ShaderParamOverride.SetTexture( "Mat4Normal", m_TerrainMaterials[0].GetNormalMap() );
+		m_ShaderParamOverride.SetTexture( "Mat4Normal", m_TerrainMaterials[3].GetNormalMap() );
+		m_ShaderParamOverride.SetTexture( "Mat4Specular", m_TerrainMaterials[3].GetSpecMap() );
+
+		specFactors.w = m_TerrainMaterials[3].GetSpecFactor();
+
 		MatUVScale.z = m_TerrainMaterials[3].GetUVScale().x;
 		MatUVScale.y = m_TerrainMaterials[3].GetUVScale().y;
 	}
-	m_ShaderParamOverride.SetVec4( "mat3And4UVScale", MatUVScale );
+*/
 }
