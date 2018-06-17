@@ -57,6 +57,7 @@ pixelInput vertexShader( vertexInput input ) {
 	PS_OUTPUT output = (PS_OUTPUT) 0;
 
 	output.Color.xyz = input.color.xyz;
+	output.Specular = float4( 0.0f, 0.0f, 0.0f, 1.0f );
 	output.Depth.r = input.position2.x / input.position2.y;
 
 	output.Normal.xyz = normalize( input.normal );
