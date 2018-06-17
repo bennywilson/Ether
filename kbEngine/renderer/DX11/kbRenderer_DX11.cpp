@@ -1833,12 +1833,10 @@ void kbRenderer_DX11::RenderScene() {
 			m_pDeviceContext->ClearDepthStencilView( m_pDepthStencilView, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1, 0 );
 		}
 
-		if ( m_ViewMode == ViewMode_Shaded ) {
+		if ( m_ViewMode != ViewMode_Wireframe ) {
 			m_pDeviceContext->RSSetState( m_pDefaultRasterizerState );
-		} else if ( m_ViewMode == ViewMode_Wireframe ) {
-			m_pDeviceContext->RSSetState( m_pWireFrameRasterizerState );
 		} else {
-			kbError( "kbRenderer_DX11::RenderScene() - Invalid view mode %d", (int) m_ViewMode );
+			m_pDeviceContext->RSSetState( m_pWireFrameRasterizerState );
 		}
 
 		ID3D11RenderTargetView * RenderTargetViews[] = { m_RenderTargets[COLOR_BUFFER].m_pRenderTargetView, m_RenderTargets[NORMAL_BUFFER].m_pRenderTargetView, m_RenderTargets[SPECULAR_BUFFER].m_pRenderTargetView, m_RenderTargets[DEPTH_BUFFER].m_pRenderTargetView };
@@ -2744,6 +2742,12 @@ void kbRenderer_DX11::RenderPostProcess() {
 	if ( m_ViewMode == ViewMode_Wireframe ) {
 		Blit( &m_RenderTargets[ACCUMULATION_BUFFER], nullptr );
 		return;
+	} else if ( m_ViewMode == ViewMode_Normals ) {
+		Blit( &m_RenderTargets[NORMAL_BUFFER], nullptr );
+	} else if ( m_ViewMode == ViewMode_Specular ) {
+		Blit( &m_RenderTargets[SPECULAR_BUFFER], nullptr );
+	} else if ( m_ViewMode == ViewMode_Depth ) {
+		Blit( &m_RenderTargets[DEPTH_BUFFER], nullptr );
 	}
 
 	RenderBloom();

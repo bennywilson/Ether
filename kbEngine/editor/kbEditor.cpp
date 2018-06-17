@@ -127,6 +127,10 @@ kbEditor::kbEditor() :
 	m_pViewModeChoice = new Fl_Choice( curX, curY, (int)fl_width( "Wireframe") + TRSButtonWidth, buttonHeight );
 	m_pViewModeChoice->add( "Shaded" );		// Note: These have to be in the same order as the entries in kbViewMode_t
 	m_pViewModeChoice->add( "Wireframe" );
+	m_pViewModeChoice->add( "Normals" );
+	m_pViewModeChoice->add( "Specular" );
+	m_pViewModeChoice->add( "Depth" );
+
 	m_pViewModeChoice->value( 0 );
 	m_pViewModeChoice->callback( ViewModeChoiceCB );
 

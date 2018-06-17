@@ -472,7 +472,10 @@ public:
 	//
 	enum kbViewMode_t {
 		ViewMode_Shaded,
-		ViewMode_Wireframe
+		ViewMode_Wireframe,
+		ViewMode_Normals,
+		ViewMode_Specular,
+		ViewMode_Depth
 	};
 	void										SetViewMode( const kbViewMode_t newViewMode ) { m_ViewMode_GameThread = newViewMode; }
 
