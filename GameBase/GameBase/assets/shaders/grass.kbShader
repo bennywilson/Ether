@@ -35,7 +35,8 @@ struct pixelInput {
 struct PS_OUTPUT {
 	float4 Color			: SV_TARGET0;
 	float4 Normal			: SV_TARGET1;
-	float2 Depth			: SV_TARGET2;
+	float4 Spec				: SV_TARGET2;
+	float2 Depth			: SV_TARGET3;
 };
 
 
@@ -55,19 +56,25 @@ pixelInput vertexShader( vertexInput input ) {
 	output.normal = ( input.normal.xyz * 2.0f ) - 1.0f;
 
 	return output;
+
 }
 
 /**
  *	geomteryShader
  */
+SamplerState SampleType;
+Texture2D grassMap : register(t0);
+
  [maxvertexcount(4)]
  void geometryShader( point pixelInput input[1], inout TriangleStream<pixelInput> OutputStream ) {
+
+
 	pixelInput newPoint1 = input[0];
-	newPoint1.position = mul( newPoint1.position + float4(100,0,0,0), vpMatrix );
+	newPoint1.position = mul( newPoint1.position + float4(100,0,0,0), vpMatrix ) * grassMap.SampleLevel( SampleType, input[0].uv, 0.0f ).r;
 	newPoint1.position2 = newPoint1.position.zw;
 
 	pixelInput newPoint2 = input[0];
-	newPoint2.position =  mul( newPoint2.position + float4(0, -100,0,0), vpMatrix );
+	newPoint2.position =  mul( newPoint2.position + float4(0, -100,0,0), vpMatrix ) * grassMap.SampleLevel( SampleType, input[0].uv, 0.0f ).r;
 	newPoint2.position2 = newPoint2. position.zw;
 
 	OutputStream.Append( newPoint1 );
@@ -75,7 +82,7 @@ pixelInput vertexShader( vertexInput input ) {
 
 
 	pixelInput newPoint3 = input[0];
-	newPoint3.position = mul( newPoint3.position, vpMatrix );
+	newPoint3.position = mul( newPoint3.position, vpMatrix ) * grassMap.SampleLevel( SampleType, input[0].uv, 0.0f ).r;
 	newPoint3.position2 = newPoint3.position.zw;
 	
 	OutputStream.Append( newPoint3 );
@@ -84,27 +91,18 @@ pixelInput vertexShader( vertexInput input ) {
 /**
  *	pixelShader
  */ 
-SamplerState SampleType;
 
-Texture2D splatMap : register(t0);
-
-Texture2D Mat1Diffuse	: register(t1);
-Texture2D Mat1Normal	: register(t2);
-
-Texture2D Mat2Diffuse	: register(t3);
-Texture2D Mat2Normal	: register(t4);
-
-Texture2D Mat3Diffuse	: register(t5);
-Texture2D Mat3Normal	: register(t6);
 
 Texture2D Mat4Diffuse	: register(t7);
 
  PS_OUTPUT pixelShader( pixelInput	input )  {
  	PS_OUTPUT output = (PS_OUTPUT) 0;
 
-
 	output.Color.xyz = 1;
-	output.Normal.xyz = 0;
+	output.Normal.xyz = 1;
+
+	//dsfdsf
+	output.Spec = float4( 1.0f, 0.0f, 0.0f, 1.0f );
 	output.Depth.r = input.position2.x / input.position2.y;
 
 	return output;

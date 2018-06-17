@@ -530,7 +530,7 @@ void kbModel::CreateDynamicModel( const UINT numVertices, const UINT numIndices,
 /**
  *	kbModel::CreatePointCloud
  */
-void kbModel::CreatePointCloud( const UINT numVertices, const std::string & shaderToUse ) {
+void kbModel::CreatePointCloud( const UINT numVertices, const std::string & shaderToUse, const kbMaterial::cullingMode_t cullingMode ) {
 	if ( m_NumVertices > 0 || m_Meshes.size() > 0 || m_Materials.size() > 0 || m_VertexBuffer.GetBufferPtr() != nullptr || m_IndexBuffer.GetBufferPtr() != nullptr ) {
 		Release_Internal();
 	}
@@ -549,13 +549,13 @@ void kbModel::CreatePointCloud( const UINT numVertices, const std::string & shad
 	newMesh.m_MaterialIndex = 0;
 	m_Meshes.push_back( newMesh );
 
-
 	kbMaterial newMaterial;
 	if ( shaderToUse.length() > 0 ) {
 		newMaterial.m_pShader = (kbShader *) g_ResourceManager.GetResource( shaderToUse.c_str(), true );
 	} else {
 		newMaterial.m_pShader = (kbShader *) g_ResourceManager.GetResource( "../../kbEngine/assets/Shaders/basicShader.kbShader", true );
 	}
+	newMaterial.SetCullingMode( cullingMode );
 	m_Materials.push_back( newMaterial );
 }
 

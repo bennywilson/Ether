@@ -144,6 +144,7 @@ GenerateClass(
 	AddField( "Dimensions", KBTYPEINFO_INT, kbTerrainComponent, m_TerrainDimensions, false, "" )
 	AddField( "Materials", KBTYPEINFO_STRUCT, kbTerrainComponent, m_TerrainMaterials, true, "kbTerrainMatComponent" )
 	AddField( "SplatMap", KBTYPEINFO_TEXTURE, kbTerrainComponent, m_pSplatMap, false, "" )
+	AddField( "GrassMap", KBTYPEINFO_TEXTURE, kbTerrainComponent, m_pGrassMap, false, "" );
 	AddField( "Shader", KBTYPEINFO_SHADER, kbTerrainComponent, m_pTerrainShader, false, "" )
 	AddField( "Grass", KBTYPEINFO_STRUCT, kbTerrainComponent, m_Grass, true, "kbGrass" )
 )

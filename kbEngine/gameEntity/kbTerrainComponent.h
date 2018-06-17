@@ -84,20 +84,25 @@ protected:
 
     void                                        SetMaterialParams();
 
+	// Editor properties
 	kbTexture *									m_pHeightMap;
 	float										m_HeightScale;
 	float										m_TerrainWidth;
 	int											m_TerrainDimensions;
+
 	std::vector<kbTerrainMatComponent>          m_TerrainMaterials;
 	kbShader *                                  m_pTerrainShader;
 	kbTexture *                                 m_pSplatMap;
+	kbTexture *									m_pGrassMap;
     std::vector<kbGrass>                        m_Grass;
 
+	// Non-editor
 	kbModel										m_TerrainModel;
-	kbShaderParamOverrides_t					m_ShaderParamOverride;
+	kbShaderParamOverrides_t					m_TerrainShaderOverrides;
     std::vector<kbShader *>                     m_ShaderOverrideList;
 
     kbModel                                     m_GrassModel;
+	kbShaderParamOverrides_t					m_GrassShaderOverrides;
 
 	bool										m_bRegenerateTerrain;
 

@@ -1222,7 +1222,7 @@ void kbRenderer_DX11::AddRenderObject( const kbComponent *const pComponent, cons
 	}
 
 	if ( pShaderParamOverrides != nullptr ) {
-		newRenderObjectInfo.m_ShaderParamOverrides = *pShaderParamOverrides;
+		newRenderObjectInfo.m_TerrainShaderOverridess = *pShaderParamOverrides;
 	}
 
 	m_RenderObjectList_GameThread.push_back( newRenderObjectInfo );
@@ -1259,7 +1259,7 @@ void kbRenderer_DX11::UpdateRenderObject( const kbComponent *const pComponent, c
 	}
 
 	if ( pShaderParamsOverride != nullptr ) {
-		newRenderObjectInfo.m_ShaderParamOverrides = *pShaderParamsOverride;
+		newRenderObjectInfo.m_TerrainShaderOverridess = *pShaderParamsOverride;
 	}
 
 	m_RenderObjectList_GameThread.push_back( newRenderObjectInfo );
@@ -1594,7 +1594,7 @@ void kbRenderer_DX11::RenderSync() {
 
 				// Adding new renderobject
 				renderObject = m_pCurrentRenderWindow->m_RenderObjectMap[pComponent];
-				kbErrorCheck( renderObject == nullptr, "kbRenderer_DX11::AddRenderObject() - Model %s already added", m_RenderObjectList_GameThread[i].m_pModel->GetFullName() );
+				kbErrorCheck( renderObject == nullptr, "kbRenderer_DX11::AddRenderObject() - Model %s already added", m_RenderObjectList_GameThread[i].m_pModel->GetFullName().c_str() );
 
 				if ( pComponent->IsA( kbSkeletalModelComponent::GetType() ) && m_RenderObjectList_GameThread[i].m_pModel->NumBones() > 0 ) {
 					kbSkinnedRenderObject *const pSkelRenderObject = new kbSkinnedRenderObject;
@@ -3057,17 +3057,19 @@ void kbRenderer_DX11::LoadShader( const std::string & fileName, ID3D11VertexShad
 
 		    }
 	    } while ( FAILED(hr) && numTries < 4 );
-        SAFE_RELEASE( localBlobs.errorMessage );
 
         if ( SUCCEEDED(hr) ) {
     	    hr = m_pD3DDevice->CreateGeometryShader( localBlobs.geometryShaderBuffer->GetBufferPointer(), localBlobs.geometryShaderBuffer->GetBufferSize(), nullptr, &geometryShader );
 	        if ( FAILED(hr) ) {
-		        kbWarning( "kbRenderer_DX11::LoadShader() - Failed to create pixel shader %s", fileName.c_str() );
+		        kbWarning( "kbRenderer_DX11::LoadShader() - Failed to create geometry shader %s", fileName.c_str() );
 		        SAFE_RELEASE( vertexShader );
 		        return;
 	        }
-        }
+        } else {
+			kbWarning( "kbRenderer_DX11::LoadShader() - Failed to load geometry shader : %s\n%s", fileName.c_str() , ( localBlobs.errorMessage != nullptr ) ? ( localBlobs.errorMessage->GetBufferPointer() ) : ( "No error message given" ) );
+		}
     }
+    SAFE_RELEASE( localBlobs.errorMessage );
 
 	// Compile pixel shader
 	numTries = 0;
@@ -3104,7 +3106,7 @@ void kbRenderer_DX11::LoadShader( const std::string & fileName, ID3D11VertexShad
 
 	D3D11_INPUT_ELEMENT_DESC polygonLayout[5];
 
-	if ( fileName.find("Particle") != std::string::npos )
+	if ( fileName.find("particle") != std::string::npos )
 	{
 		polygonLayout[0].SemanticName = "POSITION";
 		polygonLayout[0].SemanticIndex = 0;
@@ -3146,7 +3148,7 @@ void kbRenderer_DX11::LoadShader( const std::string & fileName, ID3D11VertexShad
 		polygonLayout[4].InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
 		polygonLayout[4].InstanceDataStepRate = 0;
 	}
-	else if (fileName.find("Skinned") != std::string::npos || vertexShaderFunc.find( "skin" ) != std::string::npos )
+	else if (fileName.find("skinned") != std::string::npos || vertexShaderFunc.find( "skin" ) != std::string::npos )
 	{
 		polygonLayout[0].SemanticName = "POSITION";
 		polygonLayout[0].SemanticIndex = 0;
@@ -3234,7 +3236,7 @@ void kbRenderer_DX11::LoadShader( const std::string & fileName, ID3D11VertexShad
 	const int numElements = sizeof( polygonLayout ) / sizeof( polygonLayout[ 0 ] );
 	hr = m_pD3DDevice->CreateInputLayout( polygonLayout, numElements, localBlobs.vertexShaderBuffer->GetBufferPointer(), localBlobs.vertexShaderBuffer->GetBufferSize(), &vertexLayout );
 	if ( FAILED( hr ) ) {
-		kbWarning( "kbRenderer_DX11::LoadShader() - Failed to create input layout" );
+		kbWarning( "kbRenderer_DX11::LoadShader() - Failed to create input layout for %s", fileName.c_str() );
 
 		SAFE_RELEASE( vertexShader )
 		SAFE_RELEASE( pixelShader );
@@ -3549,7 +3551,7 @@ void kbRenderer_DX11::RenderModel( const kbRenderObject *const pRenderObject, co
 					}
 				}
 			} else {
-                const std::vector<kbShaderParamOverrides_t::kbShaderParam_t> & paramOverrides = pRenderObject->m_ShaderParamOverrides.m_ParamOverrides;
+                const std::vector<kbShaderParamOverrides_t::kbShaderParam_t> & paramOverrides = pRenderObject->m_TerrainShaderOverridess.m_ParamOverrides;
                 for ( int iOverride = 0; iOverride < paramOverrides.size(); iOverride++ ) {
                     const kbShaderParamOverrides_t::kbShaderParam_t & curOverride = paramOverrides[iOverride];
                     const std::string & overrideVarName = curOverride.m_VarName;
@@ -3580,12 +3582,15 @@ void kbRenderer_DX11::RenderModel( const kbRenderObject *const pRenderObject, co
 		}
 
         // Bind textures
-        const std::vector<kbShaderParamOverrides_t::kbShaderParam_t> & paramOverrides = pRenderObject->m_ShaderParamOverrides.m_ParamOverrides;
+        const std::vector<kbShaderParamOverrides_t::kbShaderParam_t> & paramOverrides = pRenderObject->m_TerrainShaderOverridess.m_ParamOverrides;
 		for ( int iTex = 0; iTex < shaderVarBindings.m_TextureNames.size(); iTex++ ) {
 	        for ( int iOverride = 0; iOverride < paramOverrides.size(); iOverride++ ) {
 				const kbShaderParamOverrides_t::kbShaderParam_t & curOverride = paramOverrides[iOverride];
 				if ( curOverride.m_Type == kbShaderParamOverrides_t::kbShaderParam_t::SHADER_TEX && curOverride.m_VarName == shaderVarBindings.m_TextureNames[iTex] ) {
 	                ID3D11ShaderResourceView *const pShaderResourceView = ( curOverride.m_pTexture != nullptr ) ? ( curOverride.m_pTexture->GetGPUTexture() ) : ( nullptr );
+					// Todo
+					m_pDeviceContext->VSSetShaderResources( iTex, 1, &pShaderResourceView );				
+					m_pDeviceContext->GSSetShaderResources( iTex, 1, &pShaderResourceView );				
 					m_pDeviceContext->PSSetShaderResources( iTex, 1, &pShaderResourceView );				
 				}
 			}
