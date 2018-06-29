@@ -241,10 +241,24 @@ void kbTerrainComponent::GenerateTerrain() {
     SetMaterialParams();
     g_pRenderer->AddRenderObject( this, &m_TerrainModel, GetOwner()->GetPosition(), kbQuat( 0.0f, 0.0f, 0.0f, 1.0f ), kbVec3::one, RP_Lighting, &m_ShaderOverrideList, &m_TerrainShaderOverrides );
 
+ /*  float4 position             : POSITION;
+   float2 uv                   : TEXCOORD0;
+   int4 size                   : TEXCOORD1;
+   int4 rotationAndDirection   : TEXCOORD2;
+   int4 color                  : TEXCOORD3;
+*/
+    struct grassVert {
+        kbVec3 position;
+        kbVec2 uv;
+        byte normal[4];
+        byte data2[4];
+        byte data3[4];
+    };
+
     if ( m_Grass.size() > 0 ) {
 		int dim = ( m_TerrainDimensions - 1) / 4;
         m_GrassModel.CreatePointCloud( dim * dim, "./assets/Shaders/grass.kbShader" );
-        vertexLayout *const pVerts = (vertexLayout *) m_GrassModel.MapVertexBuffer();
+        grassVert *const pVerts = (grassVert *) m_GrassModel.MapVertexBuffer();
 
 		int iVert = 0;
 		for ( int startY = 0; startY < dim; startY ++ ) {
@@ -252,6 +266,10 @@ void kbTerrainComponent::GenerateTerrain() {
 				kbVec3 pointPos;
 				pVerts[iVert].position.Set( -HalfTerrainWidth + ( startX * cellWidth * 4 ), 0, -HalfTerrainWidth + ( startY * cellWidth * 4 ) );
 				pVerts[iVert].uv.Set ( (float) startX / (float) dim, (float) startY / (float) dim );
+                pVerts[iVert].normal[0] = 0;
+                pVerts[iVert].normal[1] = 255;
+                pVerts[iVert].normal[2] = 0;
+                pVerts[iVert].normal[3] = 0;
 				iVert++;
 			}
 		}

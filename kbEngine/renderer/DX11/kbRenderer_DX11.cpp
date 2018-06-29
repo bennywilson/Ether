@@ -3104,10 +3104,53 @@ void kbRenderer_DX11::LoadShader( const std::string & fileName, ID3D11VertexShad
 		return;
 	}
 
-	D3D11_INPUT_ELEMENT_DESC polygonLayout[5];
+    std::vector<D3D11_INPUT_ELEMENT_DESC> polygonLayout;
 
-	if ( fileName.find("particle") != std::string::npos )
-	{
+    if ( fileName.find("grass") != std::string::npos ) {
+        polygonLayout.insert( polygonLayout.begin(), 5, D3D11_INPUT_ELEMENT_DESC() );
+		polygonLayout[0].SemanticName = "POSITION";
+		polygonLayout[0].SemanticIndex = 0;
+		polygonLayout[0].Format = DXGI_FORMAT_R32G32B32_FLOAT;
+		polygonLayout[0].InputSlot = 0;
+		polygonLayout[0].AlignedByteOffset = 0;
+		polygonLayout[0].InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
+		polygonLayout[0].InstanceDataStepRate = 0;
+
+		polygonLayout[1].SemanticName = "TEXCOORD";
+		polygonLayout[1].SemanticIndex = 0;
+		polygonLayout[1].Format = DXGI_FORMAT_R32G32_FLOAT;
+		polygonLayout[1].InputSlot = 0;
+		polygonLayout[1].AlignedByteOffset = D3D11_APPEND_ALIGNED_ELEMENT;
+		polygonLayout[1].InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
+		polygonLayout[1].InstanceDataStepRate = 0;
+
+		polygonLayout[2].SemanticName = "TEXCOORD";
+		polygonLayout[2].SemanticIndex = 1;
+		polygonLayout[2].Format = DXGI_FORMAT_R8G8B8A8_UINT;
+		polygonLayout[2].InputSlot = 0;
+		polygonLayout[2].AlignedByteOffset = D3D11_APPEND_ALIGNED_ELEMENT;
+		polygonLayout[2].InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
+		polygonLayout[2].InstanceDataStepRate = 0;
+
+		polygonLayout[3].SemanticName = "TEXCOORD";
+		polygonLayout[3].SemanticIndex = 2;
+		polygonLayout[3].Format = DXGI_FORMAT_R8G8B8A8_UINT;//DXGI_FORMAT_R8G8B8A8_UNORM;
+		polygonLayout[3].InputSlot = 0;
+		polygonLayout[3].AlignedByteOffset = D3D11_APPEND_ALIGNED_ELEMENT;
+		polygonLayout[3].InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
+		polygonLayout[3].InstanceDataStepRate = 0;
+
+		polygonLayout[4].SemanticName = "TEXCOORD";
+		polygonLayout[4].SemanticIndex = 3;
+		polygonLayout[4].Format = DXGI_FORMAT_R8G8B8A8_UINT;
+		polygonLayout[4].InputSlot = 0;
+		polygonLayout[4].AlignedByteOffset = D3D11_APPEND_ALIGNED_ELEMENT;
+		polygonLayout[4].InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
+		polygonLayout[4].InstanceDataStepRate = 0;
+
+    } else if ( fileName.find("particle") != std::string::npos ) {
+        polygonLayout.insert( polygonLayout.begin(), 5, D3D11_INPUT_ELEMENT_DESC() );
+
 		polygonLayout[0].SemanticName = "POSITION";
 		polygonLayout[0].SemanticIndex = 0;
 		polygonLayout[0].Format = DXGI_FORMAT_R32G32B32_FLOAT;
@@ -3134,7 +3177,7 @@ void kbRenderer_DX11::LoadShader( const std::string & fileName, ID3D11VertexShad
 
 		polygonLayout[3].SemanticName = "TEXCOORD";
 		polygonLayout[3].SemanticIndex = 1;
-		polygonLayout[3].Format = DXGI_FORMAT_R32G32_FLOAT;//DXGI_FORMAT_R8G8B8A8_UNORM;
+		polygonLayout[3].Format = DXGI_FORMAT_B8G8R8A8_UNORM;//DXGI_FORMAT_R8G8B8A8_UNORM;
 		polygonLayout[3].InputSlot = 0;
 		polygonLayout[3].AlignedByteOffset = D3D11_APPEND_ALIGNED_ELEMENT;
 		polygonLayout[3].InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
@@ -3147,9 +3190,8 @@ void kbRenderer_DX11::LoadShader( const std::string & fileName, ID3D11VertexShad
 		polygonLayout[4].AlignedByteOffset = D3D11_APPEND_ALIGNED_ELEMENT;
 		polygonLayout[4].InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
 		polygonLayout[4].InstanceDataStepRate = 0;
-	}
-	else if (fileName.find("skinned") != std::string::npos || vertexShaderFunc.find( "skin" ) != std::string::npos )
-	{
+	} else if (fileName.find("skinned") != std::string::npos || vertexShaderFunc.find( "skin" ) != std::string::npos ) {
+        polygonLayout.insert( polygonLayout.begin(), 5, D3D11_INPUT_ELEMENT_DESC() );
 		polygonLayout[0].SemanticName = "POSITION";
 		polygonLayout[0].SemanticIndex = 0;
 		polygonLayout[0].Format = DXGI_FORMAT_R32G32B32_FLOAT;
@@ -3189,9 +3231,8 @@ void kbRenderer_DX11::LoadShader( const std::string & fileName, ID3D11VertexShad
 		polygonLayout[4].AlignedByteOffset = D3D11_APPEND_ALIGNED_ELEMENT;
 		polygonLayout[4].InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
 		polygonLayout[4].InstanceDataStepRate = 0;
-	}
-	else
-	{
+	} else {
+        polygonLayout.insert( polygonLayout.begin(), 5, D3D11_INPUT_ELEMENT_DESC() );
 		polygonLayout[0].SemanticName = "POSITION";
 		polygonLayout[0].SemanticIndex = 0;
 		polygonLayout[0].Format = DXGI_FORMAT_R32G32B32_FLOAT;
@@ -3233,8 +3274,7 @@ void kbRenderer_DX11::LoadShader( const std::string & fileName, ID3D11VertexShad
 		polygonLayout[4].InstanceDataStepRate = 0;
 	}
 
-	const int numElements = sizeof( polygonLayout ) / sizeof( polygonLayout[ 0 ] );
-	hr = m_pD3DDevice->CreateInputLayout( polygonLayout, numElements, localBlobs.vertexShaderBuffer->GetBufferPointer(), localBlobs.vertexShaderBuffer->GetBufferSize(), &vertexLayout );
+	hr = m_pD3DDevice->CreateInputLayout( &polygonLayout.front(), (UINT)polygonLayout.size(), localBlobs.vertexShaderBuffer->GetBufferPointer(), localBlobs.vertexShaderBuffer->GetBufferSize(), &vertexLayout );
 	if ( FAILED( hr ) ) {
 		kbWarning( "kbRenderer_DX11::LoadShader() - Failed to create input layout for %s", fileName.c_str() );
 
@@ -3503,6 +3543,8 @@ void kbRenderer_DX11::RenderModel( const kbRenderObject *const pRenderObject, co
 		// Set textures
 		ID3D11ShaderResourceView *const texture = (modelMaterial.GetTexture() != nullptr)?(ID3D11ShaderResourceView *)modelMaterial.GetTexture()->GetGPUTexture() : ( nullptr );
 		m_pDeviceContext->PSSetShaderResources( 0, 1, &texture );
+        m_pDeviceContext->VSSetSamplers( 0, 1, &m_pBasicSamplerState );
+        m_pDeviceContext->GSSetSamplers( 0, 1, &m_pBasicSamplerState );
 		m_pDeviceContext->PSSetSamplers( 0, 1, &m_pBasicSamplerState );
 
 		// Get a valid constant buffer and bind the kbShader's vars to it
