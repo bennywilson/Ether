@@ -123,7 +123,10 @@ GenerateClass(
 
 GenerateClass(
 	kbGrass,
-	AddField( "Dummy", KBTYPEINFO_INT, kbGrass, m_Dummy, false, "" )
+	AddField( "MinBladeWidth", KBTYPEINFO_FLOAT, kbGrass, m_MinBladeWidth, false, "" )
+	AddField( "MaxBladeWidth", KBTYPEINFO_FLOAT, kbGrass, m_MaxBladeWidth, false, "" )
+	AddField( "MinBladeHeight", KBTYPEINFO_FLOAT, kbGrass, m_MinBladeHeight, false, "" )
+	AddField( "MaxBladeHeight", KBTYPEINFO_FLOAT, kbGrass, m_MaxBladeHeight, false, "" )
 )
 
 GenerateClass(

@@ -22,8 +22,20 @@ class kbGrass : public kbGameComponent {
 //---------------------------------------------------------------------------------------------------
 public:
 
+	virtual void								EditorChange( const std::string & propertyName );
+
 private:
-	int                                         m_Dummy;
+
+	bool										NeedsMaterialUpdate() const { return m_bNeedsMaterialUpdate; }
+	void										ClearMaterialUpdate() { m_bNeedsMaterialUpdate = false; }
+
+	float										m_MinBladeWidth;
+	float										m_MaxBladeWidth;
+
+	float										m_MinBladeHeight;
+	float										m_MaxBladeHeight;
+
+	bool										m_bNeedsMaterialUpdate;
 };
 
 /**

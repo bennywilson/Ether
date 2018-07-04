@@ -23,7 +23,22 @@ std::vector<debugNormal> terrainNormals;
  *  kbGrass::Constructor
  */
 void kbGrass::Constructor() {
-    m_Dummy = 0;
+	m_MinBladeWidth = 1.0f;
+	m_MaxBladeWidth = 2.0f;
+
+	m_MinBladeHeight = 5.0f;
+	m_MaxBladeHeight = 10.0f;
+
+	m_bNeedsMaterialUpdate = false;
+}
+
+/**
+ *  kbTerrainMatComponent::EditorChange
+ */
+void kbGrass::EditorChange( const std::string & propertyName ) {
+	Super::EditorChange( propertyName );
+
+	m_bNeedsMaterialUpdate = true;
 }
 
 /**
@@ -241,24 +256,10 @@ void kbTerrainComponent::GenerateTerrain() {
     SetMaterialParams();
     g_pRenderer->AddRenderObject( this, &m_TerrainModel, GetOwner()->GetPosition(), kbQuat( 0.0f, 0.0f, 0.0f, 1.0f ), kbVec3::one, RP_Lighting, &m_ShaderOverrideList, &m_TerrainShaderOverrides );
 
- /*  float4 position             : POSITION;
-   float2 uv                   : TEXCOORD0;
-   int4 size                   : TEXCOORD1;
-   int4 rotationAndDirection   : TEXCOORD2;
-   int4 color                  : TEXCOORD3;
-*/
-    struct grassVert {
-        kbVec3 position;
-        kbVec2 uv;
-        byte normal[4];
-        byte data2[4];
-        byte data3[4];
-    };
-
     if ( m_Grass.size() > 0 ) {
 		int dim = ( m_TerrainDimensions - 1) / 4;
         m_GrassModel.CreatePointCloud( dim * dim, "./assets/Shaders/grass.kbShader" );
-        grassVert *const pVerts = (grassVert *) m_GrassModel.MapVertexBuffer();
+        vertexLayout *const pVerts = (vertexLayout *) m_GrassModel.MapVertexBuffer();
 
 		int iVert = 0;
 		for ( int startY = 0; startY < dim; startY ++ ) {
@@ -266,10 +267,6 @@ void kbTerrainComponent::GenerateTerrain() {
 				kbVec3 pointPos;
 				pVerts[iVert].position.Set( -HalfTerrainWidth + ( startX * cellWidth * 4 ), 0, -HalfTerrainWidth + ( startY * cellWidth * 4 ) );
 				pVerts[iVert].uv.Set ( (float) startX / (float) dim, (float) startY / (float) dim );
-                pVerts[iVert].normal[0] = 0;
-                pVerts[iVert].normal[1] = 255;
-                pVerts[iVert].normal[2] = 0;
-                pVerts[iVert].normal[3] = 0;
 				iVert++;
 			}
 		}
@@ -309,7 +306,15 @@ void kbTerrainComponent::SetEnable_Internal( const bool isEnabled ) {
 void kbTerrainComponent::Update_Internal( const float DeltaTime ) {
 	Super::Update_Internal( DeltaTime );
 
-	if ( m_TerrainModel.GetMeshes().size() > 0 && GetOwner()->IsDirty() ) {
+	bool bUpdateMats = false;
+	for ( int i = 0; i < m_Grass.size(); i++ ) {
+		if ( m_Grass[i].NeedsMaterialUpdate() ) {
+			bUpdateMats = true;
+			m_Grass[i].ClearMaterialUpdate();
+		}
+	}
+
+	if ( m_TerrainModel.GetMeshes().size() > 0 && ( GetOwner()->IsDirty() || bUpdateMats ) ) {
 
 		SetMaterialParams();
 		g_pRenderer->UpdateRenderObject( this, &m_TerrainModel, GetOwner()->GetPosition(), kbQuat( 0.0f, 0.0f, 0.0f, 1.0f ), GetOwner()->GetScale(), RP_Lighting, &m_ShaderOverrideList, &m_TerrainShaderOverrides );
@@ -382,4 +387,8 @@ void kbTerrainComponent::SetMaterialParams() {
 
 	m_GrassShaderOverrides.m_ParamOverrides.clear();
 	m_GrassShaderOverrides.SetTexture( "grassMap", m_pGrassMap );
+
+	if ( m_Grass.size() > 0 ) {
+		m_GrassShaderOverrides.SetVec4( "bladeParameters", kbVec4( m_Grass[0].m_MinBladeWidth, m_Grass[0].m_MaxBladeWidth, m_Grass[0].m_MinBladeHeight, m_Grass[0].m_MaxBladeHeight ) );
+	}
 }

@@ -1,5 +1,5 @@
 //==============================================================================
-// basicTerrain.kbShader
+// grass.kbShader
 //
 // 2018 kbEngine 2.0
 //==============================================================================
@@ -9,23 +9,26 @@ cbuffer matrixBuffer {
 	matrix vpMatrix;
 	float4 mat1And2UVScale;
 	float4 mat3And4UVScale;
+	float4 bladeParameters;
 };
 
 //-------------------------------------
 struct vertexInput {
-   float4 position             : POSITION;
-   float2 uv                   : TEXCOORD0;
-   float3 normal                   : TEXCOORD1;
-   uint4 rotationAndDirection   : TEXCOORD2;
-   uint4 color                  : TEXCOORD3;
+	float4 position			: POSITION;
+	float2 uv				: TEXCOORD0;
+	float4 binormal			: COLOR;
+	float4 normal			: NORMAL;
+	float4 tangent			: TANGENT;
 };
 
 struct geometryShaderInput {
 	float4 position			: SV_POSITION;
 	float2 uv				: TEXCOORD0;
 	float4 color			: COLOR;
-	float3 normal			: TEXCOORD1;
-	float2 position2		: TEXCOORD2;
+	float2 position2		: TEXCOORD1;
+	float3 tangent			: TEXCOORD2;
+	float3 binormal			: TEXCOORD3;
+	float3 normal			: TEXCOORD4;
 };
 
 //-------------------------------------
@@ -33,8 +36,10 @@ struct pixelInput {
 	float4 position			: SV_POSITION;
 	float2 uv				: TEXCOORD0;
 	float4 color			: COLOR;
-	float3 normal			: TEXCOORD1;
-	float2 position2		: TEXCOORD2;
+	float2 position2		: TEXCOORD1;
+	float3 tangent			: TEXCOORD2;
+	float3 binormal			: TEXCOORD3;
+	float3 normal			: TEXCOORD4;
 };
 
 //-------------------------------------
@@ -43,9 +48,7 @@ struct PS_OUTPUT {
 	float4 Normal			: SV_TARGET1;
 	float4 Spec				: SV_TARGET2;
 	float2 Depth			: SV_TARGET3;
-
 };
-
 
 /**
  *	vertexShader
@@ -55,9 +58,13 @@ geometryShaderInput vertexShader( vertexInput input ) {
 
 	output.position = input.position;//mul( input.position, mvpMatrix );
 	output.uv = input.uv;
-	output.normal = input.normal;
-	return output;
+	output.position2 = output.position.zw;
 
+	output.tangent = ( input.tangent.xyz * 2.0f ) - 1.0f;
+	output.binormal = ( input.binormal.xyz * 2.0f ) - 1.0f;
+	output.normal = ( input.normal.xyz * 2.0f ) - 1.0f;
+
+	return output;
 }
 
 /**
@@ -67,32 +74,59 @@ SamplerState SampleType;
 Texture2D grassMap : register(t0);
 
 void Copy( inout pixelInput output, geometryShaderInput input ) {
-	output = (pixelInput)0;
+	
 	output.position	= input.position;
+	output.uv = input.uv;
+	output.color = input.color;
+	output.position2 = input.position2;
+	output.tangent = input.tangent;
+	output.binormal	= input.binormal;	
 	output.normal = input.normal;
 };
 
- [maxvertexcount(4)]
+ [maxvertexcount(6)]
  void geometryShader( point geometryShaderInput input[1], inout TriangleStream<pixelInput> OutputStream ) {
 
+	float halfWidth = bladeParameters.y;
+	float height = bladeParameters.w;
 	pixelInput newPoint1;
 	Copy( newPoint1, input[0] );
-	newPoint1.position = mul( newPoint1.position + float4(100,0,0,0), vpMatrix );// * grassMap.SampleLevel( SampleType, input[0].uv, 0.0f ).r;
+	newPoint1.position = mul( newPoint1.position + float4(-halfWidth, 0.0f ,0,0), vpMatrix ) * grassMap.SampleLevel( SampleType, input[0].uv, 0.0f ).r;
 	newPoint1.position2 = newPoint1.position.zw;
 
 	pixelInput newPoint2;
 	Copy( newPoint2, input[0] );
-	newPoint2.position =  mul( newPoint2.position + float4(0, -100,0,0), vpMatrix );// * grassMap.SampleLevel( SampleType, input[0].uv, 0.0f ).r;
+	newPoint2.position =  mul( newPoint2.position + float4(-halfWidth, height,0,0), vpMatrix ) * grassMap.SampleLevel( SampleType, input[0].uv, 0.0f ).r;
 	newPoint2.position2 = newPoint2. position.zw;
 
 	pixelInput newPoint3;
 	Copy( newPoint3, input[0] );
-	newPoint3.position = mul( newPoint3.position, vpMatrix );// * grassMap.SampleLevel( SampleType, input[0].uv, 0.0f ).r;
+	newPoint3.position = mul( newPoint3.position + float4(halfWidth, height,0,0) , vpMatrix ) * grassMap.SampleLevel( SampleType, input[0].uv, 0.0f ).r;
 	newPoint3.position2 = newPoint3.position.zw;
+
+	pixelInput newPoint4;
+	Copy( newPoint4, input[0] );
+	newPoint4.position = mul( newPoint4.position + float4(halfWidth, height ,0,0), vpMatrix ) * grassMap.SampleLevel( SampleType, input[0].uv, 0.0f ).r;
+	newPoint4.position2 = newPoint4.position.zw;
+
+	pixelInput newPoint5;
+	Copy( newPoint5, input[0] );
+	newPoint5.position =  mul( newPoint5.position + float4(halfWidth, 0,0,0), vpMatrix ) * grassMap.SampleLevel( SampleType, input[0].uv, 0.0f ).r;
+	newPoint5.position2 = newPoint5. position.zw;
+
+	pixelInput newPoint6;
+	Copy( newPoint6, input[0] );
+	newPoint6.position = mul( newPoint6.position + float4(-halfWidth, 0.0f,0,0) , vpMatrix ) * grassMap.SampleLevel( SampleType, input[0].uv, 0.0f ).r;
+	newPoint6.position2 = newPoint6.position.zw;
+
 
 	OutputStream.Append( newPoint1 );
 	OutputStream.Append( newPoint2 );	
 	OutputStream.Append( newPoint3 );
+
+	OutputStream.Append( newPoint4 );
+	OutputStream.Append( newPoint5 );	
+	OutputStream.Append( newPoint6 );
  }
 
 /**
@@ -105,14 +139,14 @@ Texture2D Mat4Diffuse	: register(t7);
  PS_OUTPUT pixelShader( pixelInput	input, bool isFrontFace : SV_IsFrontFace )  {
  	PS_OUTPUT output = (PS_OUTPUT) 0;
 
-	output.Color.xyz = input.normal;
-//	if ( isFrontFace )
-	//	output.Color.xyz = 1;
+	output.Color.xyz = 0;
+	if ( isFrontFace )
+		output.Color.xyz = 1;
 	output.Normal.xyz = 1;
 
 	//dsfdsf
 	output.Spec = float4( 1.0f, 0.0f, 0.0f, 1.0f );
 	output.Depth.r = input.position2.x / input.position2.y;
-	
+
 	return output;
 }
