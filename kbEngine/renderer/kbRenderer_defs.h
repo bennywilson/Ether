@@ -306,7 +306,7 @@ public:
 	const class kbComponent *					m_pComponent;
 	const class kbModel *						m_pModel;
 	std::vector<class kbShader *>				m_OverrideShaderList;
-	kbShaderParamOverrides_t                    m_TerrainShaderOverridess;
+	kbShaderParamOverrides_t                    m_ShaderParamOverrides;
 	ERenderPass									m_RenderPass;
 	kbVec3										m_Position;
 	kbQuat										m_Orientation;

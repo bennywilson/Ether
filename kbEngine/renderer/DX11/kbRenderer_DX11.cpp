@@ -1222,7 +1222,7 @@ void kbRenderer_DX11::AddRenderObject( const kbComponent *const pComponent, cons
 	}
 
 	if ( pShaderParamOverrides != nullptr ) {
-		newRenderObjectInfo.m_TerrainShaderOverridess = *pShaderParamOverrides;
+		newRenderObjectInfo.m_ShaderParamOverrides = *pShaderParamOverrides;
 	}
 
 	m_RenderObjectList_GameThread.push_back( newRenderObjectInfo );
@@ -1259,7 +1259,7 @@ void kbRenderer_DX11::UpdateRenderObject( const kbComponent *const pComponent, c
 	}
 
 	if ( pShaderParamsOverride != nullptr ) {
-		newRenderObjectInfo.m_TerrainShaderOverridess = *pShaderParamsOverride;
+		newRenderObjectInfo.m_ShaderParamOverrides = *pShaderParamsOverride;
 	}
 
 	m_RenderObjectList_GameThread.push_back( newRenderObjectInfo );
@@ -3499,6 +3499,7 @@ void kbRenderer_DX11::RenderModel( const kbRenderObject *const pRenderObject, co
 		}
 	
         m_pDeviceContext->GSSetShader( (ID3D11GeometryShader *) pShader->GetGeometryShader(), nullptr, 0 );
+		m_pDeviceContext->GSSetSamplers( 0, 1, &m_pBasicSamplerState );
 
 		// Set textures
 		ID3D11ShaderResourceView *const texture = (modelMaterial.GetTexture() != nullptr)?(ID3D11ShaderResourceView *)modelMaterial.GetTexture()->GetGPUTexture() : ( nullptr );
@@ -3551,7 +3552,7 @@ void kbRenderer_DX11::RenderModel( const kbRenderObject *const pRenderObject, co
 					}
 				}
 			} else {
-                const std::vector<kbShaderParamOverrides_t::kbShaderParam_t> & paramOverrides = pRenderObject->m_TerrainShaderOverridess.m_ParamOverrides;
+                const std::vector<kbShaderParamOverrides_t::kbShaderParam_t> & paramOverrides = pRenderObject->m_ShaderParamOverrides.m_ParamOverrides;
                 for ( int iOverride = 0; iOverride < paramOverrides.size(); iOverride++ ) {
                     const kbShaderParamOverrides_t::kbShaderParam_t & curOverride = paramOverrides[iOverride];
                     const std::string & overrideVarName = curOverride.m_VarName;
@@ -3582,7 +3583,7 @@ void kbRenderer_DX11::RenderModel( const kbRenderObject *const pRenderObject, co
 		}
 
         // Bind textures
-        const std::vector<kbShaderParamOverrides_t::kbShaderParam_t> & paramOverrides = pRenderObject->m_TerrainShaderOverridess.m_ParamOverrides;
+        const std::vector<kbShaderParamOverrides_t::kbShaderParam_t> & paramOverrides = pRenderObject->m_ShaderParamOverrides.m_ParamOverrides;
 		for ( int iTex = 0; iTex < shaderVarBindings.m_TextureNames.size(); iTex++ ) {
 	        for ( int iOverride = 0; iOverride < paramOverrides.size(); iOverride++ ) {
 				const kbShaderParamOverrides_t::kbShaderParam_t & curOverride = paramOverrides[iOverride];

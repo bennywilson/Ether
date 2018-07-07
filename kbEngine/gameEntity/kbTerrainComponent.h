@@ -29,11 +29,16 @@ private:
 	bool										NeedsMaterialUpdate() const { return m_bNeedsMaterialUpdate; }
 	void										ClearMaterialUpdate() { m_bNeedsMaterialUpdate = false; }
 
-	float										m_MinBladeWidth;
-	float										m_MaxBladeWidth;
+	float										m_PatchStartCullDistance;
+	float										m_PatchEndCullDistance;
 
-	float										m_MinBladeHeight;
-	float										m_MaxBladeHeight;
+	float										m_DistanceBetweenPatches;
+
+	float										m_BladeMinWidth;
+	float										m_BladeMaxWidth;
+
+	float										m_BladeMinHeight;
+	float										m_BladeMaxHeight;
 
 	bool										m_bNeedsMaterialUpdate;
 };
@@ -94,7 +99,7 @@ protected:
 	virtual void								SetEnable_Internal( const bool isEnabled ) override;
 	virtual void								Update_Internal( const float DeltaTime ) override;
 
-    void                                        SetMaterialParams();
+    void                                        UpdateTerrainMaterial();
 
 	// Editor properties
 	kbTexture *									m_pHeightMap;
@@ -117,9 +122,11 @@ protected:
 	kbShaderParamOverrides_t					m_GrassShaderOverrides;
 
 	bool										m_bRegenerateTerrain;
+	bool										m_bRegenerateGrass;
 
 private:
 	
 	void										GenerateTerrain();
+	void										GenerateGrass();
 };
 #endif

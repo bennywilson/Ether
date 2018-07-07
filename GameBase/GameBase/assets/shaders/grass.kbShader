@@ -3,14 +3,18 @@
 //
 // 2018 kbEngine 2.0
 //==============================================================================
-cbuffer matrixBuffer {
+cbuffer ConstantBuffer1 {
 	matrix modelMatrix;
 	matrix mvpMatrix;
 	matrix vpMatrix;
 	float4 mat1And2UVScale;
 	float4 mat3And4UVScale;
 	float4 bladeParameters;
+	float4 GrassData1;
+	float4 GrassData2;
+	float4 cameraPos;
 };
+
 
 //-------------------------------------
 struct vertexInput {
@@ -35,11 +39,8 @@ struct geometryShaderInput {
 struct pixelInput {
 	float4 position			: SV_POSITION;
 	float2 uv				: TEXCOORD0;
-	float4 color			: COLOR;
 	float2 position2		: TEXCOORD1;
-	float3 tangent			: TEXCOORD2;
-	float3 binormal			: TEXCOORD3;
-	float3 normal			: TEXCOORD4;
+//	float3 normal			: TEXCOORD2;
 };
 
 //-------------------------------------
@@ -67,66 +68,86 @@ geometryShaderInput vertexShader( vertexInput input ) {
 	return output;
 }
 
+
 /**
- *	geomteryShader
+ *	geometryShader
  */
 SamplerState SampleType;
 Texture2D grassMap : register(t0);
+Texture2D heightMap : register(t1);
 
-void Copy( inout pixelInput output, geometryShaderInput input ) {
+void Copy( inout pixelInput output, geometryShaderInput input, float3 posOffset ) {
 	
-	output.position	= input.position;
+	output.position	= mul( input.position + float4( posOffset, 0.0f), vpMatrix);
+	output.position2 = output.position.zw;
 	output.uv = input.uv;
-	output.color = input.color;
+
+//	output.color = input.color;
 	output.position2 = input.position2;
-	output.tangent = input.tangent;
+/*	output.tangent = input.tangent;
 	output.binormal	= input.binormal;	
-	output.normal = input.normal;
+	output.normal = input.normal;*/
+	//output.normal = 0;
 };
 
- [maxvertexcount(6)]
- void geometryShader( point geometryShaderInput input[1], inout TriangleStream<pixelInput> OutputStream ) {
+
+ void CreateGrassBlade( float3 patchOffset, point geometryShaderInput input[1], inout TriangleStream<pixelInput> OutputStream, float scale ) {
 
 	float halfWidth = bladeParameters.y;
-	float height = bladeParameters.w;
-	pixelInput newPoint1;
-	Copy( newPoint1, input[0] );
-	newPoint1.position = mul( newPoint1.position + float4(-halfWidth, 0.0f ,0,0), vpMatrix ) * grassMap.SampleLevel( SampleType, input[0].uv, 0.0f ).r;
-	newPoint1.position2 = newPoint1.position.zw;
+	float height = bladeParameters.w * scale;
+	float stepHeight = height / 3.0f;
+	float doubleStepHeight = stepHeight * 2.0f;
+	float tripleStepHeight = stepHeight * 3.0f;
 
-	pixelInput newPoint2;
-	Copy( newPoint2, input[0] );
-	newPoint2.position =  mul( newPoint2.position + float4(-halfWidth, height,0,0), vpMatrix ) * grassMap.SampleLevel( SampleType, input[0].uv, 0.0f ).r;
-	newPoint2.position2 = newPoint2. position.zw;
+	float startHeight = (heightMap.SampleLevel( SampleType, input[0].uv, 0.0f ).r * GrassData1.x) + GrassData1.y;
+	float distBetween = 5.0f;
+	float3 offset = float3( 0.0f, startHeight, 0.0f ) + patchOffset;
 
-	pixelInput newPoint3;
-	Copy( newPoint3, input[0] );
-	newPoint3.position = mul( newPoint3.position + float4(halfWidth, height,0,0) , vpMatrix ) * grassMap.SampleLevel( SampleType, input[0].uv, 0.0f ).r;
-	newPoint3.position2 = newPoint3.position.zw;
-
-	pixelInput newPoint4;
-	Copy( newPoint4, input[0] );
-	newPoint4.position = mul( newPoint4.position + float4(halfWidth, height ,0,0), vpMatrix ) * grassMap.SampleLevel( SampleType, input[0].uv, 0.0f ).r;
-	newPoint4.position2 = newPoint4.position.zw;
-
-	pixelInput newPoint5;
-	Copy( newPoint5, input[0] );
-	newPoint5.position =  mul( newPoint5.position + float4(halfWidth, 0,0,0), vpMatrix ) * grassMap.SampleLevel( SampleType, input[0].uv, 0.0f ).r;
-	newPoint5.position2 = newPoint5. position.zw;
-
-	pixelInput newPoint6;
-	Copy( newPoint6, input[0] );
-	newPoint6.position = mul( newPoint6.position + float4(-halfWidth, 0.0f,0,0) , vpMatrix ) * grassMap.SampleLevel( SampleType, input[0].uv, 0.0f ).r;
-	newPoint6.position2 = newPoint6.position.zw;
-
-
+	pixelInput newPoint1 = (pixelInput)0;
+	Copy( newPoint1, input[0], offset + float3(-halfWidth, 0.0f ,0) );
 	OutputStream.Append( newPoint1 );
-	OutputStream.Append( newPoint2 );	
+
+	pixelInput newPoint2 = (pixelInput)0;
+	Copy( newPoint2, input[0], offset + float3(halfWidth, 0.0f, 0.0f ) );
+	OutputStream.Append( newPoint2 );
+
+	pixelInput newPoint3 = (pixelInput)0;
+	Copy( newPoint3, input[0], offset + float3( -halfWidth, stepHeight, 0.0f ) );
 	OutputStream.Append( newPoint3 );
 
+	pixelInput newPoint4 = (pixelInput)0;
+	Copy( newPoint4, input[0], offset + float3( halfWidth, stepHeight, 0.0f ) );
 	OutputStream.Append( newPoint4 );
-	OutputStream.Append( newPoint5 );	
+
+	pixelInput newPoint5 = (pixelInput)0;
+	Copy( newPoint5, input[0], offset + float3( -halfWidth, doubleStepHeight, 0.0f ) );
+	OutputStream.Append( newPoint5 );
+
+	pixelInput newPoint6 = (pixelInput)0;
+	Copy( newPoint6, input[0], offset + float3( halfWidth, doubleStepHeight, 0.0f ) );
 	OutputStream.Append( newPoint6 );
+
+	pixelInput newPoint7 = (pixelInput)0;
+	Copy( newPoint7, input[0], offset + float3( 0.0f, tripleStepHeight, 0.0f ) );
+	OutputStream.Append( newPoint7 );
+	OutputStream.RestartStrip();
+ }
+
+ [maxvertexcount(128)]
+ void geometryShader( point geometryShaderInput input[1], inout TriangleStream<pixelInput> OutputStream ) {
+
+	float scale = 1.0f - saturate( ( length( cameraPos.xyz - input[0].position.xyz ) - GrassData2.x ) * GrassData2.y );
+	if ( scale == 0.0f) {
+		return;
+	}
+	float dist = GrassData1.z / 2.0f;
+
+	for ( int y = 0; y < 3; y++ ) {
+		for ( int x = 0; x < 3; x++ ) {
+
+			CreateGrassBlade( float3( x * dist,0, y * dist), input, OutputStream, scale);
+		}
+	}
  }
 
 /**

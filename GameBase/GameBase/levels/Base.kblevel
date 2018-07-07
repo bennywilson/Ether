@@ -4,7 +4,7 @@ kbGameEntity 0 0 0 0 {
 		LifeTime =  -1.000000
 		Name = "Terrain"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
-		Position = 8.143600 -705.000000 37.072117
+		Position = 8.143600 -410.000000 37.072117
 		Scale = 1.000000 1.000000 1.000000
 	}
 	kbTerrainComponent { 
@@ -17,11 +17,14 @@ kbGameEntity 0 0 0 0 {
 			kbGrass { 
 				Enabled = 0
 				LifeTime =  -1.000000
-				Dummy = 0
+				BladeMaxHeight =  10.000000
+				BladeMaxWidth =  2.000000
+				BladeMinHeight =  5.000000
+				BladeMinWidth =  1.000000
 			}
 		GrassMap = .\assets\terrain\textures\grassmap.jpg
 		HeightMap = .\assets\terrain\terrain1_height.bmp
-		HeightScale =  7.000000
+		HeightScale =  1024.000000
 		Materials = 3
 			kbTerrainMatComponent { 
 				Enabled = 0

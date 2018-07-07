@@ -123,10 +123,13 @@ GenerateClass(
 
 GenerateClass(
 	kbGrass,
-	AddField( "MinBladeWidth", KBTYPEINFO_FLOAT, kbGrass, m_MinBladeWidth, false, "" )
-	AddField( "MaxBladeWidth", KBTYPEINFO_FLOAT, kbGrass, m_MaxBladeWidth, false, "" )
-	AddField( "MinBladeHeight", KBTYPEINFO_FLOAT, kbGrass, m_MinBladeHeight, false, "" )
-	AddField( "MaxBladeHeight", KBTYPEINFO_FLOAT, kbGrass, m_MaxBladeHeight, false, "" )
+	AddField( "PatchStartCullDistance", KBTYPEINFO_FLOAT, kbGrass, m_PatchStartCullDistance, false, "" )
+	AddField( "PatchEndCullDistance", KBTYPEINFO_FLOAT, kbGrass, m_PatchEndCullDistance, false, "" )
+	AddField( "DistanceBetweenPatches", KBTYPEINFO_FLOAT, kbGrass, m_DistanceBetweenPatches, false, "" )
+	AddField( "BladeMinWidth", KBTYPEINFO_FLOAT, kbGrass, m_BladeMinWidth, false, "" )
+	AddField( "BladeMaxWidth", KBTYPEINFO_FLOAT, kbGrass, m_BladeMaxWidth, false, "" )
+	AddField( "BladeMinHeight", KBTYPEINFO_FLOAT, kbGrass, m_BladeMinHeight, false, "" )
+	AddField( "BladeMaxHeight", KBTYPEINFO_FLOAT, kbGrass, m_BladeMaxHeight, false, "" )
 )
 
 GenerateClass(
