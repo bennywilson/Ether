@@ -123,7 +123,13 @@ GenerateClass(
 
 GenerateClass(
 	kbGrass,
-	AddField( "Dummy", KBTYPEINFO_INT, kbGrass, m_Dummy, false, "" )
+	AddField( "PatchStartCullDistance", KBTYPEINFO_FLOAT, kbGrass, m_PatchStartCullDistance, false, "" )
+	AddField( "PatchEndCullDistance", KBTYPEINFO_FLOAT, kbGrass, m_PatchEndCullDistance, false, "" )
+	AddField( "DistanceBetweenPatches", KBTYPEINFO_FLOAT, kbGrass, m_DistanceBetweenPatches, false, "" )
+	AddField( "BladeMinWidth", KBTYPEINFO_FLOAT, kbGrass, m_BladeMinWidth, false, "" )
+	AddField( "BladeMaxWidth", KBTYPEINFO_FLOAT, kbGrass, m_BladeMaxWidth, false, "" )
+	AddField( "BladeMinHeight", KBTYPEINFO_FLOAT, kbGrass, m_BladeMinHeight, false, "" )
+	AddField( "BladeMaxHeight", KBTYPEINFO_FLOAT, kbGrass, m_BladeMaxHeight, false, "" )
 )
 
 GenerateClass(
@@ -144,6 +150,7 @@ GenerateClass(
 	AddField( "Dimensions", KBTYPEINFO_INT, kbTerrainComponent, m_TerrainDimensions, false, "" )
 	AddField( "Materials", KBTYPEINFO_STRUCT, kbTerrainComponent, m_TerrainMaterials, true, "kbTerrainMatComponent" )
 	AddField( "SplatMap", KBTYPEINFO_TEXTURE, kbTerrainComponent, m_pSplatMap, false, "" )
+	AddField( "GrassMap", KBTYPEINFO_TEXTURE, kbTerrainComponent, m_pGrassMap, false, "" );
 	AddField( "Shader", KBTYPEINFO_SHADER, kbTerrainComponent, m_pTerrainShader, false, "" )
 	AddField( "Grass", KBTYPEINFO_STRUCT, kbTerrainComponent, m_Grass, true, "kbGrass" )
 )

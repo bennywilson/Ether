@@ -4,7 +4,7 @@ kbGameEntity 0 0 0 0 {
 		LifeTime =  -1.000000
 		Name = "Terrain"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
-		Position = 8.143600 -705.000000 37.072117
+		Position = 8.143600 -410.000000 37.072117
 		Scale = 1.000000 1.000000 1.000000
 	}
 	kbTerrainComponent { 
@@ -17,40 +17,44 @@ kbGameEntity 0 0 0 0 {
 			kbGrass { 
 				Enabled = 0
 				LifeTime =  -1.000000
-				Dummy = 0
+				BladeMaxHeight =  10.000000
+				BladeMaxWidth =  2.000000
+				BladeMinHeight =  5.000000
+				BladeMinWidth =  1.000000
 			}
-		HeightMap = .\assets\Terrain\terrain1_height.bmp
-		HeightScale =  7.000000
+		GrassMap = .\assets\terrain\textures\grassmap.jpg
+		HeightMap = .\assets\terrain\terrain1_height.bmp
+		HeightScale =  1024.000000
 		Materials = 3
 			kbTerrainMatComponent { 
 				Enabled = 0
-				DiffuseMap = .\assets\Terrain\Sand.jpg
-				NormalMap = .\assets\Terrain\Sand_NM.jpg
+				DiffuseMap = .\assets\terrain\sand.jpg
+				NormalMap = .\assets\terrain\sand_nm.jpg
 				SpecFactors =  1.000000
-				SpecMap = .\assets\Terrain\Sand.jpg
+				SpecMap = .\assets\terrain\sand.jpg
 				SpecPowerMultiplier =  1.000000
 				UVScale = 1.000000 1.000000 1.000000
 			}
 			kbTerrainMatComponent { 
 				Enabled = 0
-				DiffuseMap = .\assets\Terrain\Textures\Rocky_Diffuse.dds
-				NormalMap = .\assets\Terrain\Textures\Rocky_Normal.jpg
+				DiffuseMap = .\assets\terrain\textures\rocky_diffuse.dds
+				NormalMap = .\assets\terrain\textures\rocky_normal.jpg
 				SpecFactors =  1.000000
-				SpecMap = .\assets\Terrain\Textures\Rocky_Diffuse.dds
+				SpecMap = .\assets\terrain\textures\rocky_diffuse.dds
 				SpecPowerMultiplier =  3.000000
 				UVScale = 55.000000 55.000000 50.000000
 			}
 			kbTerrainMatComponent { 
 				Enabled = 0
-				DiffuseMap = .\assets\Terrain\Textures\Grassy_LowRock_Diffuse.jpg
-				NormalMap = .\assets\Terrain\Textures\Grassy_LowRock_Normal.jpg
+				DiffuseMap = .\assets\terrain\textures\grassy_lowrock_diffuse.jpg
+				NormalMap = .\assets\terrain\textures\grassy_lowrock_normal.jpg
 				SpecFactors =  5.000000
-				SpecMap = .\assets\Terrain\Textures\Grassy_LowRock_Diffuse.jpg
+				SpecMap = .\assets\terrain\textures\grassy_lowrock_diffuse.jpg
 				SpecPowerMultiplier =  55.000000
 				UVScale = 25.000000 25.000000 50.000000
 			}
-		Shader = .\assets\shaders\basicTerrain.kbShader
-		SplatMap = .\assets\Terrain\terrain1_splatmap.bmp
+		Shader = .\assets\shaders\basicterrain.kbshader
+		SplatMap = .\assets\terrain\terrain1_splatmap.bmp
 		Width =  8192.000000
 	}
 }
@@ -89,9 +93,9 @@ kbGameEntity 0 0 0 0 {
 		LifeTime =  -1.000000
 		CastsShadow = 0
 		m_RenderPass = Post-LightingPass
-		Model = .\assets\models\SkyDomes\SkyDomes.ms3d
+		Model = .\assets\models\skydomes\skydomes.ms3d
 		ShaderOverride = 1
-			.\assets\shaders\skyBox.kbShader
+			.\assets\shaders\skybox.kbshader
 
 	}
 }
@@ -109,14 +113,14 @@ kbGameEntity 0 0 0 0 {
 		LifeTime =  -1.000000
 		CastsShadow = 1
 		m_RenderPass = LightingPass
-		Model = .\assets\models\Characters\Cartel_Warrior\Cartel_Warrior.ms3d
+		Model = .\assets\models\characters\cartel_warrior\cartel_warrior.ms3d
 		ShaderOverride = 0
 			
 		Animations = 1
 			EtherAnimComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
-				Animation = .\assets\models\Characters\Cartel_Warrior\Cartel_Warrior_Run.kbAnim.ms3d
+				Animation = .\assets\models\characters\cartel_warrior\cartel_warrior_run.kbanim.ms3d
 				AnimationName = ""
 				IsLooping = 0
 				TimeScale =  1.000000
@@ -144,7 +148,7 @@ kbGameEntity 2609040299 1100347930 3115268521 1892043160 {
 		IterationHeight =  0.001500
 		IterationWidth =  0.001500
 		NumIteractions = 48
-		Texture = ..\..\kbEngine\assets\Textures\flare.jpg
+		Texture = ..\..\kbengine\assets\textures\flare.jpg
 	}
 }
 kbGameEntity 0 0 0 0 {
@@ -191,9 +195,9 @@ kbGameEntity 0 0 0 0 {
 		LifeTime =  -1.000000
 		CastsShadow = 0
 		m_RenderPass = LightingPass
-		Model = .\assets\models\Vehicles\jet.ms3d
+		Model = .\assets\models\vehicles\jet.ms3d
 		ShaderOverride = 1
-			..\..\kbEngine\assets\Shaders\basicShader.kbShader
+			..\..\kbengine\assets\shaders\basicshader.kbshader
 
 	}
 }

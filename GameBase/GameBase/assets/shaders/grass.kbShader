@@ -1,15 +1,20 @@
 //==============================================================================
-// basicTerrain.kbShader
+// grass.kbShader
 //
 // 2018 kbEngine 2.0
 //==============================================================================
-cbuffer matrixBuffer {
+cbuffer ConstantBuffer1 {
 	matrix modelMatrix;
 	matrix mvpMatrix;
 	matrix vpMatrix;
 	float4 mat1And2UVScale;
 	float4 mat3And4UVScale;
+	float4 bladeParameters;
+	float4 GrassData1;
+	float4 GrassData2;
+	float4 cameraPos;
 };
+
 
 //-------------------------------------
 struct vertexInput {
@@ -20,8 +25,7 @@ struct vertexInput {
 	float4 tangent			: TANGENT;
 };
 
-//-------------------------------------
-struct pixelInput {
+struct geometryShaderInput {
 	float4 position			: SV_POSITION;
 	float2 uv				: TEXCOORD0;
 	float4 color			: COLOR;
@@ -32,23 +36,30 @@ struct pixelInput {
 };
 
 //-------------------------------------
+struct pixelInput {
+	float4 position			: SV_POSITION;
+	float2 uv				: TEXCOORD0;
+	float2 position2		: TEXCOORD1;
+//	float3 normal			: TEXCOORD2;
+};
+
+//-------------------------------------
 struct PS_OUTPUT {
 	float4 Color			: SV_TARGET0;
 	float4 Normal			: SV_TARGET1;
-	float2 Depth			: SV_TARGET2;
+	float4 Spec				: SV_TARGET2;
+	float2 Depth			: SV_TARGET3;
 };
-
 
 /**
  *	vertexShader
  */
-pixelInput vertexShader( vertexInput input ) {
-	pixelInput output = (pixelInput)(0);
+geometryShaderInput vertexShader( vertexInput input ) {
+	geometryShaderInput output = (geometryShaderInput)(0);
 
 	output.position = input.position;//mul( input.position, mvpMatrix );
 	output.uv = input.uv;
 	output.position2 = output.position.zw;
-
 
 	output.tangent = ( input.tangent.xyz * 2.0f ) - 1.0f;
 	output.binormal = ( input.binormal.xyz * 2.0f ) - 1.0f;
@@ -57,54 +68,105 @@ pixelInput vertexShader( vertexInput input ) {
 	return output;
 }
 
+
 /**
- *	geomteryShader
+ *	geometryShader
  */
- [maxvertexcount(4)]
- void geometryShader( point pixelInput input[1], inout TriangleStream<pixelInput> OutputStream ) {
-	pixelInput newPoint1 = input[0];
-	newPoint1.position = mul( newPoint1.position + float4(100,0,0,0), vpMatrix );
-	newPoint1.position2 = newPoint1.position.zw;
+SamplerState SampleType;
+Texture2D grassMap : register(t0);
+Texture2D heightMap : register(t1);
 
-	pixelInput newPoint2 = input[0];
-	newPoint2.position =  mul( newPoint2.position + float4(0, -100,0,0), vpMatrix );
-	newPoint2.position2 = newPoint2. position.zw;
+void Copy( inout pixelInput output, geometryShaderInput input, float3 posOffset ) {
+	
+	output.position	= mul( input.position + float4( posOffset, 0.0f), vpMatrix);
+	output.position2 = output.position.zw;
+	output.uv = input.uv;
 
+//	output.color = input.color;
+	output.position2 = input.position2;
+/*	output.tangent = input.tangent;
+	output.binormal	= input.binormal;	
+	output.normal = input.normal;*/
+	//output.normal = 0;
+};
+
+
+ void CreateGrassBlade( float3 patchOffset, point geometryShaderInput input[1], inout TriangleStream<pixelInput> OutputStream, float scale ) {
+
+	float halfWidth = bladeParameters.y;
+	float height = bladeParameters.w * scale;
+	float stepHeight = height / 3.0f;
+	float doubleStepHeight = stepHeight * 2.0f;
+	float tripleStepHeight = stepHeight * 3.0f;
+
+	float startHeight = (heightMap.SampleLevel( SampleType, input[0].uv, 0.0f ).r * GrassData1.x) + GrassData1.y;
+	float distBetween = 5.0f;
+	float3 offset = float3( 0.0f, startHeight, 0.0f ) + patchOffset;
+
+	pixelInput newPoint1 = (pixelInput)0;
+	Copy( newPoint1, input[0], offset + float3(-halfWidth, 0.0f ,0) );
 	OutputStream.Append( newPoint1 );
+
+	pixelInput newPoint2 = (pixelInput)0;
+	Copy( newPoint2, input[0], offset + float3(halfWidth, 0.0f, 0.0f ) );
 	OutputStream.Append( newPoint2 );
 
-
-	pixelInput newPoint3 = input[0];
-	newPoint3.position = mul( newPoint3.position, vpMatrix );
-	newPoint3.position2 = newPoint3.position.zw;
-	
+	pixelInput newPoint3 = (pixelInput)0;
+	Copy( newPoint3, input[0], offset + float3( -halfWidth, stepHeight, 0.0f ) );
 	OutputStream.Append( newPoint3 );
+
+	pixelInput newPoint4 = (pixelInput)0;
+	Copy( newPoint4, input[0], offset + float3( halfWidth, stepHeight, 0.0f ) );
+	OutputStream.Append( newPoint4 );
+
+	pixelInput newPoint5 = (pixelInput)0;
+	Copy( newPoint5, input[0], offset + float3( -halfWidth, doubleStepHeight, 0.0f ) );
+	OutputStream.Append( newPoint5 );
+
+	pixelInput newPoint6 = (pixelInput)0;
+	Copy( newPoint6, input[0], offset + float3( halfWidth, doubleStepHeight, 0.0f ) );
+	OutputStream.Append( newPoint6 );
+
+	pixelInput newPoint7 = (pixelInput)0;
+	Copy( newPoint7, input[0], offset + float3( 0.0f, tripleStepHeight, 0.0f ) );
+	OutputStream.Append( newPoint7 );
+	OutputStream.RestartStrip();
+ }
+
+ [maxvertexcount(128)]
+ void geometryShader( point geometryShaderInput input[1], inout TriangleStream<pixelInput> OutputStream ) {
+
+	float scale = 1.0f - saturate( ( length( cameraPos.xyz - input[0].position.xyz ) - GrassData2.x ) * GrassData2.y );
+	if ( scale == 0.0f) {
+		return;
+	}
+	float dist = GrassData1.z / 2.0f;
+
+	for ( int y = 0; y < 3; y++ ) {
+		for ( int x = 0; x < 3; x++ ) {
+
+			CreateGrassBlade( float3( x * dist,0, y * dist), input, OutputStream, scale);
+		}
+	}
  }
 
 /**
  *	pixelShader
  */ 
-SamplerState SampleType;
 
-Texture2D splatMap : register(t0);
-
-Texture2D Mat1Diffuse	: register(t1);
-Texture2D Mat1Normal	: register(t2);
-
-Texture2D Mat2Diffuse	: register(t3);
-Texture2D Mat2Normal	: register(t4);
-
-Texture2D Mat3Diffuse	: register(t5);
-Texture2D Mat3Normal	: register(t6);
 
 Texture2D Mat4Diffuse	: register(t7);
 
- PS_OUTPUT pixelShader( pixelInput	input )  {
+ PS_OUTPUT pixelShader( pixelInput	input, bool isFrontFace : SV_IsFrontFace )  {
  	PS_OUTPUT output = (PS_OUTPUT) 0;
 
+	output.Color.xyz = 0;
+	if ( isFrontFace )
+		output.Color.xyz = 1;
+	output.Normal.xyz = 1;
 
-	output.Color.xyz = 1;
-	output.Normal.xyz = 0;
+	//dsfdsf
+	output.Spec = float4( 1.0f, 0.0f, 0.0f, 1.0f );
 	output.Depth.r = input.position2.x / input.position2.y;
 
 	return output;

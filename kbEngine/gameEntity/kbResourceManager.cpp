@@ -188,6 +188,7 @@ kbResource * kbResourceManager::GetResource( const std::string & fullFileName, c
 
 	std::string convertedFileName = fullFileName;
 	std::replace( convertedFileName.begin(), convertedFileName.end(), '/', '\\' );
+	std::transform( convertedFileName.begin(), convertedFileName.end(), convertedFileName.begin(), ::tolower );
 
 	for ( int i = 0; i < m_Resources.size(); i++ ) {
 		if ( m_Resources[i]->m_FullFileName == convertedFileName ) {
@@ -504,7 +505,9 @@ void kbResourceManager::Shutdown() {
  */
 void kbResourceManager::FileModifiedCB( const std::wstring & fileName ) {
 
-	fs::path p = fs::canonical( fileName.c_str() );
+	std::wstring convertedFileName = fileName;
+	std::transform( convertedFileName.begin(), convertedFileName.end(), convertedFileName.begin(), ::tolower );
+	fs::path p = fs::canonical( convertedFileName.c_str() );
 
 	for ( int i = 0; i < m_Resources.size(); i++ ) {
 		fs::path resourcePath = fs::canonical( m_Resources[i]->GetFullFileName() );

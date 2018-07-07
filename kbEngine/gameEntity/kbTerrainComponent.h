@@ -22,8 +22,25 @@ class kbGrass : public kbGameComponent {
 //---------------------------------------------------------------------------------------------------
 public:
 
+	virtual void								EditorChange( const std::string & propertyName );
+
 private:
-	int                                         m_Dummy;
+
+	bool										NeedsMaterialUpdate() const { return m_bNeedsMaterialUpdate; }
+	void										ClearMaterialUpdate() { m_bNeedsMaterialUpdate = false; }
+
+	float										m_PatchStartCullDistance;
+	float										m_PatchEndCullDistance;
+
+	float										m_DistanceBetweenPatches;
+
+	float										m_BladeMinWidth;
+	float										m_BladeMaxWidth;
+
+	float										m_BladeMinHeight;
+	float										m_BladeMaxHeight;
+
+	bool										m_bNeedsMaterialUpdate;
 };
 
 /**
@@ -82,27 +99,34 @@ protected:
 	virtual void								SetEnable_Internal( const bool isEnabled ) override;
 	virtual void								Update_Internal( const float DeltaTime ) override;
 
-    void                                        SetMaterialParams();
+    void                                        UpdateTerrainMaterial();
 
+	// Editor properties
 	kbTexture *									m_pHeightMap;
 	float										m_HeightScale;
 	float										m_TerrainWidth;
 	int											m_TerrainDimensions;
+
 	std::vector<kbTerrainMatComponent>          m_TerrainMaterials;
 	kbShader *                                  m_pTerrainShader;
 	kbTexture *                                 m_pSplatMap;
+	kbTexture *									m_pGrassMap;
     std::vector<kbGrass>                        m_Grass;
 
+	// Non-editor
 	kbModel										m_TerrainModel;
-	kbShaderParamOverrides_t					m_ShaderParamOverride;
+	kbShaderParamOverrides_t					m_TerrainShaderOverrides;
     std::vector<kbShader *>                     m_ShaderOverrideList;
 
     kbModel                                     m_GrassModel;
+	kbShaderParamOverrides_t					m_GrassShaderOverrides;
 
 	bool										m_bRegenerateTerrain;
+	bool										m_bRegenerateGrass;
 
 private:
 	
 	void										GenerateTerrain();
+	void										GenerateGrass();
 };
 #endif

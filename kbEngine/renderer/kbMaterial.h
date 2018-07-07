@@ -138,6 +138,8 @@ public:
 	const kbColor &								GetDiffuseColor() const { return m_DiffuseColor; }
 	cullingMode_t								GetCullingMode() const { return m_CullingMode; }
 
+	void										SetCullingMode( const cullingMode_t newMode ) { m_CullingMode = newMode; }
+
 private:
 
 	const kbTexture *							m_Texture;
