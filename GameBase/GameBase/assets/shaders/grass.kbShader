@@ -66,7 +66,7 @@ Texture2D grassMap			: register(t0);
 Texture2D heightMap			: register(t1);
 Texture2D grassDiffuseMap	: register(t2);
 
-void Copy( inout pixelInput output, geometryShaderInput input, float3 posOffset, int grassIdx, float2 uv ) {
+void Copy( inout pixelInput output, geometryShaderInput input, float3 posOffset, float2 uv ) {
 
 	float4 localPos = input.position + float4( posOffset, 0.0f );//mul( input.position + float4( posOffset, 0.0f ), patchMatrices[grassIdx]  );
 	output.position	= mul( localPos, vpMatrix);
@@ -94,38 +94,38 @@ void Copy( inout pixelInput output, geometryShaderInput input, float3 posOffset,
 	const float3 stepUpVecX2 = 2 * stepUpVec;
 	const float3 steUpVecX3 = 3.0f * stepUpVec;
 
-	const float textureBorderSize = 0.01f;
+	const float textureBorderSize = 0.001f;
 	const float textureSize = (1.0f / 8.0f) - textureBorderSize;
 	pixelInput newPoint1 = (pixelInput)0;
-	Copy( newPoint1, input[0], offset, grassIdx, float2( textureBorderSize, 1.0f - textureBorderSize ) );
+	Copy( newPoint1, input[0], offset, float2( textureBorderSize, 1.0f - textureBorderSize ) );
 	OutputStream.Append( newPoint1 );
 
 	pixelInput newPoint2 = (pixelInput)0;
-	Copy( newPoint2, input[0], offset + bladeOff, grassIdx, float2( textureSize, 1.0f - textureBorderSize ) );
+	Copy( newPoint2, input[0], offset + bladeOff, float2( textureSize, 1.0f - textureBorderSize ) );
 	OutputStream.Append( newPoint2 );
 
 	pixelInput newPoint3 = (pixelInput)0;
-	Copy( newPoint3, input[0], offset + stepUpVec, grassIdx, float2( 0.0f, 0.67f ) );
+	Copy( newPoint3, input[0], offset + stepUpVec, float2( 0.0f, 0.67f ) );
 	OutputStream.Append( newPoint3 );
 
 	pixelInput newPoint4 = (pixelInput)0;
-	Copy( newPoint4, input[0], offset + bladeOff + stepUpVec, grassIdx, float2( textureSize, 0.67f ) );
+	Copy( newPoint4, input[0], offset + bladeOff + stepUpVec, float2( textureSize, 0.67f ) );
 	OutputStream.Append( newPoint4 );
 
 	pixelInput newPoint5 = (pixelInput)0;
-	Copy( newPoint5, input[0], offset + stepUpVecX2, grassIdx, float2( textureBorderSize, 0.33f ) );
+	Copy( newPoint5, input[0], offset + stepUpVecX2, float2( textureBorderSize, 0.33f ) );
 	OutputStream.Append( newPoint5 );
 
 	pixelInput newPoint6 = (pixelInput)0;
-	Copy( newPoint6, input[0], offset + bladeOff + stepUpVecX2, grassIdx, float2( textureSize, 0.33f )  );
+	Copy( newPoint6, input[0], offset + bladeOff + stepUpVecX2, float2( textureSize, 0.33f )  );
 	OutputStream.Append( newPoint6 );
 
 	pixelInput newPoint7 = (pixelInput)0;
-	Copy( newPoint7, input[0], offset + steUpVecX3, grassIdx, float2( textureBorderSize ,textureBorderSize ) );
+	Copy( newPoint7, input[0], offset + steUpVecX3, float2( textureBorderSize ,textureBorderSize ) );
 	OutputStream.Append( newPoint7 );
 /*
 	pixelInput newPoint8 = (pixelInput)0;
-	Copy( newPoint8, input[0], offset + bladeOff + steUpVecX3, grassIdx, float2( textureSize, 0.09f ) );
+	Copy( newPoint8, input[0], offset + bladeOff + steUpVecX3, float2( textureSize, 0.09f ) );
 	OutputStream.Append( newPoint8 );*/
 
 	OutputStream.RestartStrip();
