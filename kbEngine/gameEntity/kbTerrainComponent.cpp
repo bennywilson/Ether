@@ -399,8 +399,10 @@ void kbTerrainComponent::GenerateGrass() {
 		if ( m_Grass[0].m_pDiffuseMap != nullptr ) {
 			m_GrassShaderOverrides.SetTexture( "grassDiffuseMap", m_Grass[0].m_pDiffuseMap );
 		}
-		const float HalfTerrainWidth = m_TerrainWidth * 0.5f;
-		int dim = (int)( (float)( m_TerrainWidth - 1) / m_Grass[0].m_DistanceBetweenPatches);
+
+		const float GrassWidthSize = m_TerrainWidth * 0.5f;
+		const float HalfGrassWidthSize = GrassWidthSize * 0.5f;
+		int dim = (int)( (float)( GrassWidthSize ) / m_Grass[0].m_DistanceBetweenPatches );
         m_GrassModel.CreatePointCloud( dim * dim, "./assets/Shaders/grass.kbShader", kbMaterial::CM_None, sizeof( patchVertLayout ) );
 
         patchVertLayout *const pVerts = (patchVertLayout *) m_GrassModel.MapVertexBuffer();
@@ -409,7 +411,7 @@ void kbTerrainComponent::GenerateGrass() {
 		for ( int startY = 0; startY < dim; startY ++ ) {
 			for ( int startX = 0; startX < dim; startX ++) {
 				kbVec3 pointPos;
-				pVerts[iVert].position.Set( -HalfTerrainWidth + ( startX * m_Grass[0].m_DistanceBetweenPatches ), 0, -HalfTerrainWidth + ( startY *  m_Grass[0].m_DistanceBetweenPatches ) );
+				pVerts[iVert].position.Set( -HalfGrassWidthSize + ( startX * m_Grass[0].m_DistanceBetweenPatches ), 0, -HalfGrassWidthSize + ( startY *  m_Grass[0].m_DistanceBetweenPatches ) );
 				pVerts[iVert].uv.Set ( (float) startX / (float) dim, (float) startY / (float) dim );
 				pVerts[iVert].patchIndices[0] = rand() % 60;
 				pVerts[iVert].patchIndices[1] = pVerts[iVert].patchIndices[2] = pVerts[iVert].patchIndices[3] = pVerts[iVert].patchIndices[0];
