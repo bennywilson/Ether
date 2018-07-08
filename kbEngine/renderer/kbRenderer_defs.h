@@ -233,11 +233,14 @@ struct kbShaderParamOverrides_t {
         enum type {
             SHADER_MAT4,
             SHADER_VEC4,
+			SHADER_MAT4_LIST,
+			SHADER_VEC4_LIST,
             SHADER_TEX,
         } m_Type;
 
-        kbMat4 m_Mat4;
-        kbVec4 m_Vec4;
+		std::vector<kbMat4> m_Mat4List;
+		std::vector<kbVec4> m_Vec4List;
+
         const class kbTexture * m_pTexture;
 
         kbShaderParam_t() { }
@@ -264,18 +267,34 @@ struct kbShaderParamOverrides_t {
     void SetMat4( const std::string & varName, const kbMat4 & newMat ) {
         kbShaderParam_t & newParam = AllocateParam( varName );
         newParam.m_VarName = varName;
-        newParam.m_Mat4 = newMat;
+        newParam.m_Mat4List.push_back( newMat );
         newParam.m_Type = kbShaderParam_t::SHADER_MAT4;
         newParam.m_VarSizeBytes = sizeof(kbMat4);
     }
 
+	void SetMat4List( const std::string & varName, const std::vector<kbMat4> & list ) {
+        kbShaderParam_t & newParam = AllocateParam( varName );
+        newParam.m_VarName = varName;
+        newParam.m_Mat4List = list;
+        newParam.m_Type = kbShaderParam_t::SHADER_MAT4_LIST;
+        newParam.m_VarSizeBytes = sizeof(kbVec4);
+	}
+
     void SetVec4( const std::string & varName, const kbVec4 & newVec ) {
         kbShaderParam_t & newParam = AllocateParam( varName );
         newParam.m_VarName = varName;
-        newParam.m_Vec4 = newVec;
+        newParam.m_Vec4List.push_back( newVec );
         newParam.m_Type = kbShaderParam_t::SHADER_VEC4;
         newParam.m_VarSizeBytes = sizeof(kbVec4);
     }
+
+	void SetVec4List( const std::string & varName, const std::vector<kbVec4> & list ) {
+        kbShaderParam_t & newParam = AllocateParam( varName );
+        newParam.m_VarName = varName;
+        newParam.m_Vec4List = list;
+        newParam.m_Type = kbShaderParam_t::SHADER_VEC4_LIST;
+        newParam.m_VarSizeBytes = sizeof(kbVec4);
+	}
 
     void SetTexture( const std::string & varName, const kbTexture *const pTexture ) {
         kbShaderParam_t & newParam = AllocateParam( varName );
@@ -312,23 +331,13 @@ public:
 	kbQuat										m_Orientation;
 	kbVec3										m_Scale;
 	uint										m_EntityId;
+	std::vector<kbBoneMatrix_t>					m_MatrixList;
 
 	bool										m_bCastsShadow			: 1;
 	bool										m_bIsSkinnedModel		: 1;
 	bool										m_bIsFirstAdd			: 1;
 	bool										m_bIsRemove				: 1;
 };
-
-/**
- *	kbSkinnedRenderObject
- */
-class kbSkinnedRenderObject : public kbRenderObject {
-
-//---------------------------------------------------------------------------------------------------
-public:
-	std::vector<kbBoneMatrix_t>					m_BoneMatrices;
-};
-
 
 /**
  *	kbRenderLight

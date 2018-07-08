@@ -12,6 +12,12 @@
 
 KB_DEFINE_COMPONENT(kbTerrainComponent)
 
+struct patchVertLayout {
+	kbVec3 position;
+	kbVec2 uv;
+	byte patchIndices[4];
+};
+
 struct debugNormal
 {
 	kbVec3 normal;
@@ -350,6 +356,27 @@ void kbTerrainComponent::GenerateGrass() {
 	m_GrassShaderOverrides.m_ParamOverrides.clear();
 	m_GrassShaderOverrides.SetTexture( "grassMap", m_pGrassMap );
 	m_GrassShaderOverrides.SetTexture( "heightMap", m_pHeightMap );
+
+	std::vector<kbVec4> bladeOffsets;
+	for ( int i = 0; i < 64; i++ ) {
+
+		kbMat4 matrix = kbMat4::identity;
+		const float angle = kbfrand() * kbPI;
+		float cosPIOver2 = cos( angle );
+		float sinPIOver2 = sin( angle );
+		matrix[0][0] = cosPIOver2;
+		matrix[2][0] = -sinPIOver2;
+		matrix[0][2] = sinPIOver2;
+		matrix[2][2] = cosPIOver2;
+
+		kbVec4 startVec( 0.0f, 0.0f, 1.0f, 0.0f );
+		startVec = startVec.TransformPoint( matrix );
+
+		bladeOffsets.push_back( startVec );
+	}
+
+	m_GrassShaderOverrides.SetVec4List( "bladeOffsets", bladeOffsets );
+
 	if ( m_Grass.size() > 0 ) {
 
 		if ( m_GrassModel.NumVertices() > 0 ) {
@@ -362,8 +389,9 @@ void kbTerrainComponent::GenerateGrass() {
 
 		const float HalfTerrainWidth = m_TerrainWidth * 0.5f;
 		int dim = (int)( (float)( m_TerrainWidth - 1) / m_Grass[0].m_DistanceBetweenPatches);
-        m_GrassModel.CreatePointCloud( dim * dim, "./assets/Shaders/grass.kbShader" );
-        vertexLayout *const pVerts = (vertexLayout *) m_GrassModel.MapVertexBuffer();
+        m_GrassModel.CreatePointCloud( dim * dim, "./assets/Shaders/grass.kbShader", kbMaterial::CM_None, sizeof( patchVertLayout ) );
+
+        patchVertLayout *const pVerts = (patchVertLayout *) m_GrassModel.MapVertexBuffer();
 
 		int iVert = 0;
 		for ( int startY = 0; startY < dim; startY ++ ) {
@@ -371,6 +399,8 @@ void kbTerrainComponent::GenerateGrass() {
 				kbVec3 pointPos;
 				pVerts[iVert].position.Set( -HalfTerrainWidth + ( startX * m_Grass[0].m_DistanceBetweenPatches ), 0, -HalfTerrainWidth + ( startY *  m_Grass[0].m_DistanceBetweenPatches ) );
 				pVerts[iVert].uv.Set ( (float) startX / (float) dim, (float) startY / (float) dim );
+				pVerts[iVert].patchIndices[0] = rand() % 4;
+				pVerts[iVert].patchIndices[1] = pVerts[iVert].patchIndices[2] = pVerts[iVert].patchIndices[3] = pVerts[iVert].patchIndices[0];
 				iVert++;
 			}
 		}

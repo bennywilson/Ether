@@ -17,10 +17,13 @@ kbGameEntity 0 0 0 0 {
 			kbGrass { 
 				Enabled = 0
 				LifeTime =  -1.000000
-				BladeMaxHeight =  10.000000
-				BladeMaxWidth =  2.000000
+				BladeMaxHeight =  17.000000
+				BladeMaxWidth =  1.000000
 				BladeMinHeight =  5.000000
 				BladeMinWidth =  1.000000
+				DistanceBetweenPatches =  5.000000
+				PatchEndCullDistance =  300.000000
+				PatchStartCullDistance =  200.000000
 			}
 		GrassMap = .\assets\terrain\textures\grassmap.jpg
 		HeightMap = .\assets\terrain\terrain1_height.bmp

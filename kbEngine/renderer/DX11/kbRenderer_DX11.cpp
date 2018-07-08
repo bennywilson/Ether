@@ -1586,9 +1586,8 @@ void kbRenderer_DX11::RenderSync() {
 				*renderObject = m_RenderObjectList_GameThread[i];
 				if ( pComponent->IsA( kbSkeletalModelComponent::GetType() ) && renderObject->m_pModel->NumBones() > 0 ) {
 					const kbSkeletalModelComponent *const skelComp = static_cast<const kbSkeletalModelComponent*>( pComponent );
-					kbSkinnedRenderObject *const pSkelRenderObject = static_cast<kbSkinnedRenderObject*>( renderObject );
-					pSkelRenderObject->m_BoneMatrices = skelComp->GetFinalBoneMatrices();
-					pSkelRenderObject->m_bIsSkinnedModel = true;
+					renderObject->m_MatrixList = skelComp->GetFinalBoneMatrices();
+					renderObject->m_bIsSkinnedModel = true;
 				}
 			} else {
 
@@ -1597,12 +1596,12 @@ void kbRenderer_DX11::RenderSync() {
 				kbErrorCheck( renderObject == nullptr, "kbRenderer_DX11::AddRenderObject() - Model %s already added", m_RenderObjectList_GameThread[i].m_pModel->GetFullName().c_str() );
 
 				if ( pComponent->IsA( kbSkeletalModelComponent::GetType() ) && m_RenderObjectList_GameThread[i].m_pModel->NumBones() > 0 ) {
-					kbSkinnedRenderObject *const pSkelRenderObject = new kbSkinnedRenderObject;
-					*((kbRenderObject*)pSkelRenderObject) = m_RenderObjectList_GameThread[i];
-					renderObject = pSkelRenderObject;
+
+					renderObject = new kbRenderObject();
+					*renderObject = m_RenderObjectList_GameThread[i];
 					renderObject->m_bIsSkinnedModel = true;
 					const kbSkeletalModelComponent *const skelComp = static_cast<const kbSkeletalModelComponent*>( pComponent );
-					pSkelRenderObject->m_BoneMatrices = skelComp->GetFinalBoneMatrices();
+					renderObject->m_MatrixList = skelComp->GetFinalBoneMatrices();
 				} else {
 					renderObject = new kbRenderObject;
 					*renderObject = m_RenderObjectList_GameThread[i];
@@ -3104,10 +3103,38 @@ void kbRenderer_DX11::LoadShader( const std::string & fileName, ID3D11VertexShad
 		return;
 	}
 
-	D3D11_INPUT_ELEMENT_DESC polygonLayout[5];
+	std::vector<D3D11_INPUT_ELEMENT_DESC> polygonLayout;
 
-	if ( fileName.find("particle") != std::string::npos )
-	{
+	if ( fileName.find( "grass" ) != std::string::npos ) {
+		polygonLayout.insert( polygonLayout.begin(), 3, D3D11_INPUT_ELEMENT_DESC() );
+
+		polygonLayout[0].SemanticName = "POSITION";
+		polygonLayout[0].SemanticIndex = 0;
+		polygonLayout[0].Format = DXGI_FORMAT_R32G32B32_FLOAT;
+		polygonLayout[0].InputSlot = 0;
+		polygonLayout[0].AlignedByteOffset = 0;
+		polygonLayout[0].InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
+		polygonLayout[0].InstanceDataStepRate = 0;
+
+		polygonLayout[1].SemanticName = "TEXCOORD";
+		polygonLayout[1].SemanticIndex = 0;
+		polygonLayout[1].Format = DXGI_FORMAT_R32G32_FLOAT;
+		polygonLayout[1].InputSlot = 0;
+		polygonLayout[1].AlignedByteOffset = D3D11_APPEND_ALIGNED_ELEMENT;
+		polygonLayout[1].InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
+		polygonLayout[1].InstanceDataStepRate = 0;
+
+		polygonLayout[2].SemanticName = "BLENDINDICES";
+		polygonLayout[2].SemanticIndex = 0;
+		polygonLayout[2].Format = DXGI_FORMAT_R8G8B8A8_UNORM;//DXGI_FORMAT_R8G8B8A8_UNORM;
+		polygonLayout[2].InputSlot = 0;
+		polygonLayout[2].AlignedByteOffset = D3D11_APPEND_ALIGNED_ELEMENT;
+		polygonLayout[2].InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
+		polygonLayout[2].InstanceDataStepRate = 0;
+
+	} else if ( fileName.find("particle") != std::string::npos ) {
+		polygonLayout.insert( polygonLayout.begin(), 5, D3D11_INPUT_ELEMENT_DESC() );
+
 		polygonLayout[0].SemanticName = "POSITION";
 		polygonLayout[0].SemanticIndex = 0;
 		polygonLayout[0].Format = DXGI_FORMAT_R32G32B32_FLOAT;
@@ -3148,8 +3175,9 @@ void kbRenderer_DX11::LoadShader( const std::string & fileName, ID3D11VertexShad
 		polygonLayout[4].InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
 		polygonLayout[4].InstanceDataStepRate = 0;
 	}
-	else if (fileName.find("skinned") != std::string::npos || vertexShaderFunc.find( "skin" ) != std::string::npos )
-	{
+	else if (fileName.find("skinned") != std::string::npos || vertexShaderFunc.find( "skin" ) != std::string::npos ) {
+		polygonLayout.insert( polygonLayout.begin(), 5, D3D11_INPUT_ELEMENT_DESC() );
+
 		polygonLayout[0].SemanticName = "POSITION";
 		polygonLayout[0].SemanticIndex = 0;
 		polygonLayout[0].Format = DXGI_FORMAT_R32G32B32_FLOAT;
@@ -3190,8 +3218,9 @@ void kbRenderer_DX11::LoadShader( const std::string & fileName, ID3D11VertexShad
 		polygonLayout[4].InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
 		polygonLayout[4].InstanceDataStepRate = 0;
 	}
-	else
-	{
+	else {
+		polygonLayout.insert( polygonLayout.begin(), 5, D3D11_INPUT_ELEMENT_DESC() );
+
 		polygonLayout[0].SemanticName = "POSITION";
 		polygonLayout[0].SemanticIndex = 0;
 		polygonLayout[0].Format = DXGI_FORMAT_R32G32B32_FLOAT;
@@ -3233,8 +3262,7 @@ void kbRenderer_DX11::LoadShader( const std::string & fileName, ID3D11VertexShad
 		polygonLayout[4].InstanceDataStepRate = 0;
 	}
 
-	const int numElements = sizeof( polygonLayout ) / sizeof( polygonLayout[ 0 ] );
-	hr = m_pD3DDevice->CreateInputLayout( polygonLayout, numElements, localBlobs.vertexShaderBuffer->GetBufferPointer(), localBlobs.vertexShaderBuffer->GetBufferSize(), &vertexLayout );
+	hr = m_pD3DDevice->CreateInputLayout( &polygonLayout[0], (UINT)polygonLayout.size(), localBlobs.vertexShaderBuffer->GetBufferPointer(), localBlobs.vertexShaderBuffer->GetBufferSize(), &vertexLayout );
 	if ( FAILED( hr ) ) {
 		kbWarning( "kbRenderer_DX11::LoadShader() - Failed to create input layout for %s", fileName.c_str() );
 
@@ -3535,21 +3563,18 @@ void kbRenderer_DX11::RenderModel( const kbRenderObject *const pRenderObject, co
 			} else if ( varName == "viewProjection" ) {
 				kbMat4 *const pMatOffset = (kbMat4*)pVarByteOffset;
 				*pMatOffset = m_pCurrentRenderWindow->m_ViewProjectionMatrix;
-			} else if ( varName == "BoneMatrices" ) {
-				if ( pRenderObject->m_bIsSkinnedModel ) {
-					kbMat4 *const boneMatrices = (kbMat4*)pVarByteOffset;
-					const kbSkinnedRenderObject *const skinnedRenderObj = static_cast<const kbSkinnedRenderObject*>( pRenderObject );
-					for ( int i = 0; i < skinnedRenderObj->m_BoneMatrices.size() && i < Max_Shader_Bones; i++ ) {
-						boneMatrices[i].MakeIdentity();
-						boneMatrices[i][0] = skinnedRenderObj->m_BoneMatrices[i].GetAxis(0);
-						boneMatrices[i][1] = skinnedRenderObj->m_BoneMatrices[i].GetAxis(1);
-						boneMatrices[i][2] = skinnedRenderObj->m_BoneMatrices[i].GetAxis(2);
-						boneMatrices[i][3] = skinnedRenderObj->m_BoneMatrices[i].GetAxis(3);
-						
-						boneMatrices[i][0].w = 0;
-						boneMatrices[i][1].w = 0;
-						boneMatrices[i][2].w = 0;
-					}
+			} else if ( varName == "boneList" ) {
+				kbMat4 *const boneMatrices = (kbMat4*)pVarByteOffset;
+				for ( int i = 0; i < pRenderObject->m_MatrixList.size() && i < Max_Shader_Bones; i++ ) {
+					boneMatrices[i].MakeIdentity();
+					boneMatrices[i][0] = pRenderObject->m_MatrixList[i].GetAxis(0);
+					boneMatrices[i][1] = pRenderObject->m_MatrixList[i].GetAxis(1);
+					boneMatrices[i][2] = pRenderObject->m_MatrixList[i].GetAxis(2);
+					boneMatrices[i][3] = pRenderObject->m_MatrixList[i].GetAxis(3);
+					
+					boneMatrices[i][0].w = 0;
+					boneMatrices[i][1].w = 0;
+					boneMatrices[i][2].w = 0;
 				}
 			} else {
                 const std::vector<kbShaderParamOverrides_t::kbShaderParam_t> & paramOverrides = pRenderObject->m_ShaderParamOverrides.m_ParamOverrides;
@@ -3559,7 +3584,7 @@ void kbRenderer_DX11::RenderModel( const kbRenderObject *const pRenderObject, co
                     if ( varName == overrideVarName ) {
 
                         // Check if it doesn't fit
-                        const size_t endOffset = curOverride.m_VarSizeBytes + bindings[i].m_VarByteOffset ;
+                        const size_t endOffset = curOverride.m_VarSizeBytes + bindings[i].m_VarByteOffset;
                         if ( endOffset > shaderVarBindings.m_ConstantBufferSizeBytes || ( i < bindings.size() - 1 && endOffset > bindings[i+1].m_VarByteOffset ) ) {
                             break;
                         }
@@ -3567,15 +3592,31 @@ void kbRenderer_DX11::RenderModel( const kbRenderObject *const pRenderObject, co
                         switch( curOverride.m_Type ) {
                             case kbShaderParamOverrides_t::kbShaderParam_t::SHADER_MAT4 : {
                                 kbMat4 *const pMatOffset = (kbMat4*)pVarByteOffset;
-				                *pMatOffset = curOverride.m_Mat4;
+				                *pMatOffset = curOverride.m_Mat4List[0];
                                 break;
                             }
 
                             case kbShaderParamOverrides_t::kbShaderParam_t::SHADER_VEC4 : {
                                 kbVec4 *const pVecOffset = (kbVec4*)pVarByteOffset;
-				                *pVecOffset = curOverride.m_Vec4;
+				                *pVecOffset = curOverride.m_Vec4List[0];
                                 break;
                             }
+
+							case kbShaderParamOverrides_t::kbShaderParam_t::SHADER_MAT4_LIST : {
+                                kbMat4 *const pMatOffset = (kbMat4*)pVarByteOffset;
+								for ( int i = 0; i < curOverride.m_Mat4List.size(); i++ ) {
+									pMatOffset[i] = curOverride.m_Mat4List[i];
+								}
+                                break;
+							}
+
+							case kbShaderParamOverrides_t::kbShaderParam_t::SHADER_VEC4_LIST : {
+                                kbVec4 *const pVecOffset = (kbVec4*)pVarByteOffset;
+								for ( int i = 0; i < curOverride.m_Vec4List.size(); i++ ) {
+									pVecOffset[i] = curOverride.m_Vec4List[i];
+								}
+                                break;
+							}
                         }
                     }
                 }
