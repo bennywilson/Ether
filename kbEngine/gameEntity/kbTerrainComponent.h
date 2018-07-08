@@ -40,6 +40,8 @@ private:
 	float										m_BladeMinHeight;
 	float										m_BladeMaxHeight;
 
+    kbTexture *									m_pDiffuseMap;
+
 	bool										m_bNeedsMaterialUpdate;
 };
 

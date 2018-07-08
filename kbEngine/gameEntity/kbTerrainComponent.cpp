@@ -41,6 +41,8 @@ void kbGrass::Constructor() {
 	m_BladeMinHeight = 5.0f;
 	m_BladeMaxHeight = 10.0f;
 
+	m_pDiffuseMap = nullptr;
+
 	m_bNeedsMaterialUpdate = false;
 }
 
@@ -64,7 +66,7 @@ void kbTerrainMatComponent::Constructor() {
 	m_SpecFactor = 1.0f;
 	m_SpecPowerMultiplier = 1.0f;
 	m_UVScale.Set( 1.0f, 1.0f, 1.0f );
-}
+} 
 
 /**
  *	kbTerrainComponent::Constructor
@@ -358,6 +360,8 @@ void kbTerrainComponent::GenerateGrass() {
 	m_GrassShaderOverrides.SetTexture( "heightMap", m_pHeightMap );
 
 	std::vector<kbVec4> bladeOffsets;
+
+	float grassCellHalfSize = ( m_Grass[0].m_DistanceBetweenPatches / 2.0f ) * 0.95f;
 	for ( int i = 0; i < 64; i++ ) {
 
 		kbMat4 matrix = kbMat4::identity;
@@ -372,7 +376,12 @@ void kbTerrainComponent::GenerateGrass() {
 		kbVec4 startVec( 0.0f, 0.0f, 1.0f, 0.0f );
 		startVec = startVec.TransformPoint( matrix );
 
-		bladeOffsets.push_back( startVec );
+		kbVec4 offset;
+		offset.x = startVec.x;
+		offset.y = startVec.z;
+		offset.z = grassCellHalfSize * kbfrand();
+		offset.w = grassCellHalfSize * kbfrand();
+		bladeOffsets.push_back( offset );
 	}
 
 	m_GrassShaderOverrides.SetVec4List( "bladeOffsets", bladeOffsets );
@@ -387,6 +396,9 @@ void kbTerrainComponent::GenerateGrass() {
 		m_GrassShaderOverrides.SetVec4( "GrassData1", kbVec4( m_HeightScale, GetOwner()->GetPosition().y, m_Grass[0].m_DistanceBetweenPatches, 0.0f ) );
 		m_GrassShaderOverrides.SetVec4( "GrassData2", kbVec4( m_Grass[0].m_PatchStartCullDistance, 1.0f / ( m_Grass[0].m_PatchEndCullDistance - m_Grass[0].m_PatchStartCullDistance ), 0.0f, 0.0f ) );
 
+		if ( m_Grass[0].m_pDiffuseMap != nullptr ) {
+			m_GrassShaderOverrides.SetTexture( "grassDiffuseMap", m_Grass[0].m_pDiffuseMap );
+		}
 		const float HalfTerrainWidth = m_TerrainWidth * 0.5f;
 		int dim = (int)( (float)( m_TerrainWidth - 1) / m_Grass[0].m_DistanceBetweenPatches);
         m_GrassModel.CreatePointCloud( dim * dim, "./assets/Shaders/grass.kbShader", kbMaterial::CM_None, sizeof( patchVertLayout ) );
@@ -399,7 +411,7 @@ void kbTerrainComponent::GenerateGrass() {
 				kbVec3 pointPos;
 				pVerts[iVert].position.Set( -HalfTerrainWidth + ( startX * m_Grass[0].m_DistanceBetweenPatches ), 0, -HalfTerrainWidth + ( startY *  m_Grass[0].m_DistanceBetweenPatches ) );
 				pVerts[iVert].uv.Set ( (float) startX / (float) dim, (float) startY / (float) dim );
-				pVerts[iVert].patchIndices[0] = rand() % 4;
+				pVerts[iVert].patchIndices[0] = rand() % 60;
 				pVerts[iVert].patchIndices[1] = pVerts[iVert].patchIndices[2] = pVerts[iVert].patchIndices[3] = pVerts[iVert].patchIndices[0];
 				iVert++;
 			}

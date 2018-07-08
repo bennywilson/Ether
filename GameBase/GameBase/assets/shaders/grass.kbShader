@@ -62,15 +62,16 @@ geometryShaderInput vertexShader( vertexInput input ) {
  *	geometryShader
  */
 SamplerState SampleType;
-Texture2D grassMap : register(t0);
-Texture2D heightMap : register(t1);
+Texture2D grassMap			: register(t0);
+Texture2D heightMap			: register(t1);
+Texture2D grassDiffuseMap	: register(t2);
 
-void Copy( inout pixelInput output, geometryShaderInput input, float3 posOffset, int grassIdx ) {
+void Copy( inout pixelInput output, geometryShaderInput input, float3 posOffset, int grassIdx, float2 uv ) {
 
 	float4 localPos = input.position + float4( posOffset, 0.0f );//mul( input.position + float4( posOffset, 0.0f ), patchMatrices[grassIdx]  );
 	output.position	= mul( localPos, vpMatrix);
 	output.position2 = output.position.zw;
-	output.uv = input.uv;
+	output.uv = uv;
 };
 
 
@@ -79,48 +80,54 @@ void Copy( inout pixelInput output, geometryShaderInput input, float3 posOffset,
  
 	int4 IndexVector = D3DCOLORtoUBYTE4(input[0].blendIndices);
 	int   IndexArray[4]        = (int[4])IndexVector;
-	float3 bladeOff = bladeOffsets[IndexArray[grassIdx]].xyz;
+	float3 bladeOff = float3( bladeOffsets[IndexArray[grassIdx]].x, 0.0f, bladeOffsets[IndexArray[grassIdx]].y );
 
 	float halfWidth = bladeParameters.y;
 	float height = bladeParameters.w * scale;
-	float stepHeight = height / 3.0f;
-	float doubleStepHeight = stepHeight * 2.0f;
-	float tripleStepHeight = stepHeight * 3.0f;
 
 	float startHeight = (heightMap.SampleLevel( SampleType, input[0].uv, 0.0f ).r * GrassData1.x) + GrassData1.y;
 	float distBetween = 5.0f;
-	float3 offset = float3( 0.0f, startHeight, 0.0f ) + patchOffset;
-	float3 stepUpVec = float3( 0.0f, stepHeight, 0.0f );
-	float3 stepUpVecX2 = 2 * stepUpVec;
-	float3 steUpVecX3 = 3 * stepUpVec;
+	float3 offset = float3( 0.0f, startHeight, 0.0f ) + patchOffset + float3( bladeOffsets[IndexArray[grassIdx]].z, 0.0f, bladeOffsets[IndexArray[grassIdx]].w );
+	
+	const float stepHeight = height / 3.0f;
+	const float3 stepUpVec = float3( 0.0f, stepHeight, 0.0f );
+	const float3 stepUpVecX2 = 2 * stepUpVec;
+	const float3 steUpVecX3 = 3.0f * stepUpVec;
 
+	const float textureBorderSize = 0.01f;
+	const float textureSize = (1.0f / 8.0f) - textureBorderSize;
 	pixelInput newPoint1 = (pixelInput)0;
-	Copy( newPoint1, input[0], offset, grassIdx );
+	Copy( newPoint1, input[0], offset, grassIdx, float2( textureBorderSize, 1.0f - textureBorderSize ) );
 	OutputStream.Append( newPoint1 );
 
 	pixelInput newPoint2 = (pixelInput)0;
-	Copy( newPoint2, input[0], offset + bladeOff, grassIdx );
+	Copy( newPoint2, input[0], offset + bladeOff, grassIdx, float2( textureSize, 1.0f - textureBorderSize ) );
 	OutputStream.Append( newPoint2 );
 
 	pixelInput newPoint3 = (pixelInput)0;
-	Copy( newPoint3, input[0], offset + stepUpVec, grassIdx );
+	Copy( newPoint3, input[0], offset + stepUpVec, grassIdx, float2( 0.0f, 0.67f ) );
 	OutputStream.Append( newPoint3 );
 
 	pixelInput newPoint4 = (pixelInput)0;
-	Copy( newPoint4, input[0], offset + bladeOff + stepUpVec, grassIdx );
+	Copy( newPoint4, input[0], offset + bladeOff + stepUpVec, grassIdx, float2( textureSize, 0.67f ) );
 	OutputStream.Append( newPoint4 );
 
 	pixelInput newPoint5 = (pixelInput)0;
-	Copy( newPoint5, input[0], offset + stepUpVecX2, grassIdx );
+	Copy( newPoint5, input[0], offset + stepUpVecX2, grassIdx, float2( textureBorderSize, 0.33f ) );
 	OutputStream.Append( newPoint5 );
 
 	pixelInput newPoint6 = (pixelInput)0;
-	Copy( newPoint6, input[0], offset + bladeOff + stepUpVecX2, grassIdx );
+	Copy( newPoint6, input[0], offset + bladeOff + stepUpVecX2, grassIdx, float2( textureSize, 0.33f )  );
 	OutputStream.Append( newPoint6 );
 
 	pixelInput newPoint7 = (pixelInput)0;
-	Copy( newPoint7, input[0], offset + steUpVecX3, grassIdx );
+	Copy( newPoint7, input[0], offset + steUpVecX3, grassIdx, float2( textureBorderSize ,textureBorderSize ) );
 	OutputStream.Append( newPoint7 );
+/*
+	pixelInput newPoint8 = (pixelInput)0;
+	Copy( newPoint8, input[0], offset + bladeOff + steUpVecX3, grassIdx, float2( textureSize, 0.09f ) );
+	OutputStream.Append( newPoint8 );*/
+
 	OutputStream.RestartStrip();
 
  }
@@ -152,16 +159,17 @@ void Copy( inout pixelInput output, geometryShaderInput input, float3 posOffset,
 
 Texture2D Mat4Diffuse	: register(t7);
 
- PS_OUTPUT pixelShader( pixelInput	input, bool isFrontFace : SV_IsFrontFace )  {
+ PS_OUTPUT pixelShader( pixelInput input, bool isFrontFace : SV_IsFrontFace )  {
  	PS_OUTPUT output = (PS_OUTPUT) 0;
 
-	output.Color.xyz = 0;
-	if ( isFrontFace )
-		output.Color.xyz = 1;
-	output.Normal.xyz = 1;
+	output.Color.xyzw = grassDiffuseMap.Sample( SampleType, input.uv ).xyzw;
+//	clip( output.Color.w - 0.01f);
+	//if ( isFrontFace )
+	//	output.Color.xyz = 1;
+	output.Normal.xyz = float3(0.0f,1.0f,0.0);
 
 	//dsfdsf
-	output.Spec = float4( 1.0f, 0.0f, 0.0f, 1.0f );
+	output.Spec = float4( 0.0f, 0.0f, 0.0f, 1.0f );
 	output.Depth.r = input.position2.x / input.position2.y;
 
 	return output;

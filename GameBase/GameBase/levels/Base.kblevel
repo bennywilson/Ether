@@ -21,7 +21,8 @@ kbGameEntity 0 0 0 0 {
 				BladeMaxWidth =  1.000000
 				BladeMinHeight =  5.000000
 				BladeMinWidth =  1.000000
-				DistanceBetweenPatches =  5.000000
+				DiffuseMap = .\assets\models\enviroobjects\grass_1.tga
+				DistanceBetweenPatches =  7.500000
 				PatchEndCullDistance =  300.000000
 				PatchStartCullDistance =  200.000000
 			}
