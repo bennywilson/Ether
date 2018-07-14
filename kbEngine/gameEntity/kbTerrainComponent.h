@@ -35,11 +35,13 @@ private:
 
 	void										UpdateMaterial();
 
+	int											m_GrassCellsPerTerrainSide;
+
 	kbTexture *									m_pGrassMap;
 	float										m_PatchStartCullDistance;
 	float										m_PatchEndCullDistance;
 
-	float										m_DistanceBetweenPatches;
+	int											m_PatchesPerCellSide;
 
 	float										m_BladeMinWidth;
 	float										m_BladeMaxWidth;
@@ -51,7 +53,14 @@ private:
 
 private:
 
-	kbModel                                     m_GrassModel;
+	float										m_GrassCellLength;
+
+	struct grassModelData_t {
+		kbModel									m_Model;
+		kbComponent								m_Component;
+	};
+	std::vector<grassModelData_t>               m_GrassModels;
+
 	kbShaderParamOverrides_t					m_GrassShaderOverrides;
 
 	kbTerrainComponent *						m_pOwningTerrainComponent;
@@ -128,7 +137,6 @@ protected:
 	std::vector<kbTerrainMatComponent>          m_TerrainMaterials;
 	kbShader *                                  m_pTerrainShader;
 	kbTexture *                                 m_pSplatMap;
-	kbTexture *									m_pGrassMap;
     std::vector<kbGrass>                        m_Grass;
 
 	// Non-editor

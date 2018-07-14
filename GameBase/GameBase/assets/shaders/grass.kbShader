@@ -78,14 +78,14 @@ void Copy( inout pixelInput output, geometryShaderInput input, float3 posOffset,
  void CreateGrassBlade( float3 patchOffset, point geometryShaderInput input[1], inout TriangleStream<pixelInput> OutputStream, float scale, int grassIdx ) {
 
  
-	int4 IndexVector = D3DCOLORtoUBYTE4(input[0].blendIndices);
+	int4 IndexVector = D3DCOLORtoUBYTE4( input[0].blendIndices );
 	int   IndexArray[4]        = (int[4])IndexVector;
 	float3 bladeOff = float3( bladeOffsets[IndexArray[grassIdx]].x, 0.0f, bladeOffsets[IndexArray[grassIdx]].y );
 
 	float halfWidth = bladeParameters.y;
 	float height = bladeParameters.w * scale;
 
-	float startHeight = (heightMap.SampleLevel( SampleType, input[0].uv, 0.0f ).r * GrassData1.x) + GrassData1.y;
+	float startHeight = ( heightMap.SampleLevel( SampleType, input[0].uv, 0.0f ).r * GrassData1.x);// + GrassData1.y;
 	float distBetween = 5.0f;
 	float3 offset = float3( 0.0f, startHeight, 0.0f ) + patchOffset + float3( bladeOffsets[IndexArray[grassIdx]].z, 0.0f, bladeOffsets[IndexArray[grassIdx]].w );
 	
@@ -147,7 +147,7 @@ void Copy( inout pixelInput output, geometryShaderInput input, float3 posOffset,
 	for ( int y = 0; y < 2; y++ ) {
 		for ( int x = 0; x < 2; x++, grassIdx++ ) {
 
-			CreateGrassBlade( float3( x * dist,0, y * dist), input, OutputStream, scale, grassIdx );
+			CreateGrassBlade( float3( x * dist, 0, y * dist ), input, OutputStream, scale, grassIdx );
 		}
 	}
  }
