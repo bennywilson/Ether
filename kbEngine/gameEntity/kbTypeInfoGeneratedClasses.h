@@ -123,6 +123,7 @@ GenerateClass(
 
 GenerateClass(
 	kbGrass,
+	AddField( "GrassMap", KBTYPEINFO_TEXTURE, kbGrass, m_pGrassMap, false, "" )
 	AddField( "PatchStartCullDistance", KBTYPEINFO_FLOAT, kbGrass, m_PatchStartCullDistance, false, "" )
 	AddField( "PatchEndCullDistance", KBTYPEINFO_FLOAT, kbGrass, m_PatchEndCullDistance, false, "" )
 	AddField( "DistanceBetweenPatches", KBTYPEINFO_FLOAT, kbGrass, m_DistanceBetweenPatches, false, "" )
