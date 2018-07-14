@@ -22,17 +22,26 @@ class kbGrass : public kbGameComponent {
 //---------------------------------------------------------------------------------------------------
 public:
 
-	virtual void								EditorChange( const std::string & propertyName );
+	virtual void								EditorChange( const std::string & propertyName ) override;
+	virtual void								RenderSync() override;
+
+protected:
+
+	virtual void								SetEnable_Internal( const bool isEnabled ) override;
 
 private:
 
-	bool										NeedsMaterialUpdate() const { return m_bNeedsMaterialUpdate; }
-	void										ClearMaterialUpdate() { m_bNeedsMaterialUpdate = false; }
+	void										SetOwningTerrainComponent( kbTerrainComponent *const pTerrain ) { m_pOwningTerrainComponent = pTerrain; m_bNeedsMaterialUpdate = true; }
 
+	void										UpdateMaterial();
+
+	int											m_GrassCellsPerTerrainSide;
+
+	kbTexture *									m_pGrassMap;
 	float										m_PatchStartCullDistance;
 	float										m_PatchEndCullDistance;
 
-	float										m_DistanceBetweenPatches;
+	int											m_PatchesPerCellSide;
 
 	float										m_BladeMinWidth;
 	float										m_BladeMaxWidth;
@@ -40,6 +49,21 @@ private:
 	float										m_BladeMinHeight;
 	float										m_BladeMaxHeight;
 
+    kbTexture *									m_pDiffuseMap;
+
+private:
+
+	float										m_GrassCellLength;
+
+	struct grassModelData_t {
+		kbModel									m_Model;
+		kbComponent								m_Component;
+	};
+	std::vector<grassModelData_t>               m_GrassModels;
+
+	kbShaderParamOverrides_t					m_GrassShaderOverrides;
+
+	kbTerrainComponent *						m_pOwningTerrainComponent;
 	bool										m_bNeedsMaterialUpdate;
 };
 
@@ -69,7 +93,7 @@ private:
 	kbTexture *									m_pNormalMap;
 	kbTexture *									m_pSpecMap;
 	float										m_SpecFactor;
-	FLOAT										m_SpecPowerMultiplier;
+	float										m_SpecPowerMultiplier;
 
 	kbVec3										m_UVScale;
 };
@@ -93,6 +117,9 @@ public:
 
 	virtual void								RenderSync() override;
 
+	kbTexture *									GetHeightMap() const { return m_pHeightMap; }
+	float										GetHeightScale() const { return m_HeightScale; }
+	float										GetTerrainWidth() const { return m_TerrainWidth; }
 
 protected:
 
@@ -110,7 +137,6 @@ protected:
 	std::vector<kbTerrainMatComponent>          m_TerrainMaterials;
 	kbShader *                                  m_pTerrainShader;
 	kbTexture *                                 m_pSplatMap;
-	kbTexture *									m_pGrassMap;
     std::vector<kbGrass>                        m_Grass;
 
 	// Non-editor
@@ -118,11 +144,7 @@ protected:
 	kbShaderParamOverrides_t					m_TerrainShaderOverrides;
     std::vector<kbShader *>                     m_ShaderOverrideList;
 
-    kbModel                                     m_GrassModel;
-	kbShaderParamOverrides_t					m_GrassShaderOverrides;
-
 	bool										m_bRegenerateTerrain;
-	bool										m_bRegenerateGrass;
 
 private:
 	

@@ -530,7 +530,7 @@ void kbModel::CreateDynamicModel( const UINT numVertices, const UINT numIndices,
 /**
  *	kbModel::CreatePointCloud
  */
-void kbModel::CreatePointCloud( const UINT numVertices, const std::string & shaderToUse, const kbMaterial::cullingMode_t cullingMode ) {
+void kbModel::CreatePointCloud( const UINT numVertices, const std::string & shaderToUse, const kbMaterial::cullingMode_t cullingMode,  const UINT vertexSizeInBytes ) {
 	if ( m_NumVertices > 0 || m_Meshes.size() > 0 || m_Materials.size() > 0 || m_VertexBuffer.GetBufferPtr() != nullptr || m_IndexBuffer.GetBufferPtr() != nullptr ) {
 		Release_Internal();
 	}
@@ -539,7 +539,7 @@ void kbModel::CreatePointCloud( const UINT numVertices, const std::string & shad
 	m_bIsDynamicModel = false;
     m_bIsPointCloud = true;
 	m_NumTriangles = 0;
-	m_Stride = sizeof( vertexLayout );
+	m_Stride = vertexSizeInBytes;
 
 	m_VertexBuffer.CreateVertexBuffer( numVertices, m_Stride );
 
