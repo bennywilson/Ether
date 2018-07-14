@@ -149,6 +149,8 @@ protected:
 
 	// Non-editor
 	kbModel										m_TerrainModel;
+	kbRenderObject								m_TerrainRenderObject;
+
 	kbShaderParamOverrides_t					m_TerrainShaderOverrides;
     std::vector<kbShader *>                     m_ShaderOverrideList;
 

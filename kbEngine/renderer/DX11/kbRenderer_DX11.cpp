@@ -1195,89 +1195,35 @@ void kbRenderer_DX11::SetRenderWindow( HWND hwnd ) {
  *	kbRenderer_DX11::AddRenderObject
  */
 void kbRenderer_DX11::AddRenderObject( const kbRenderObject & renderObjectToAdd ) {
-	kbErrorCheck( m_pCurrentRenderWindow != nullptr, "kbRenderer_DX11::AddRenderObject - NULL Render window found" );
+	kbErrorCheck( m_pCurrentRenderWindow != nullptr, "kbRenderer_DX11::AddRenderObject - NULL m_pCurrentRenderWindow" );
 	kbErrorCheck( renderObjectToAdd.m_pComponent != nullptr, "kbRenderer_DX11::AddRenderObject - NULL component" );
 
 	m_RenderObjectList_GameThread.push_back( renderObjectToAdd );
-
 	kbRenderObject & renderObj = m_RenderObjectList_GameThread[m_RenderObjectList_GameThread.size() - 1];
+
 	renderObj.m_bIsFirstAdd = true;
 	renderObj.m_bIsRemove = false;
-
-
-/*
-	kbRenderObject newRenderObjectInfo;
-	newRenderObjectInfo.m_pModel = pModel;
-	newRenderObjectInfo.m_pComponent = pComponent;
-	newRenderObjectInfo.m_Position = pos;
-	newRenderObjectInfo.m_Orientation= orientation;
-	newRenderObjectInfo.m_Scale = scale;
-	newRenderObjectInfo.m_bIsFirstAdd = true;
-	newRenderObjectInfo.m_bIsRemove = false;
-	newRenderObjectInfo.m_RenderPass = renderPass;
-	if ( pComponent->GetOwner() != nullptr ) {
-		newRenderObjectInfo.m_EntityId = static_cast<kbGameEntity*>( pComponent->GetOwner() )->GetEntityId();
-	}
-
-	if ( pComponent->IsA( kbModelComponent::GetType() ) ) {
-		newRenderObjectInfo.m_bCastsShadow = static_cast<const kbModelComponent*>( pComponent )->GetCastsShadow();
-	}
-
-	if ( pShaderOverrideList != nullptr ) {
-		newRenderObjectInfo.m_OverrideShaderList = *pShaderOverrideList;
-	}
-
-	if ( pShaderParamOverrides != nullptr ) {
-		newRenderObjectInfo.m_ShaderParamOverrides = *pShaderParamOverrides;
-	}*/
 }
 
 /**
  *	kbRenderer_DX11::UpdateRenderObject
  */
 void kbRenderer_DX11::UpdateRenderObject( const kbRenderObject & renderObjectToUpdate ) {
-	kbErrorCheck( m_pCurrentRenderWindow != nullptr, "kbRenderer_DX11::UpdateRenderObject - Error, nullptr Render window found" );
-	kbErrorCheck( renderObjectToUpdate.m_pComponent != nullptr, "kbRenderer_DX11::UpdateRenderObject - NULL component" );
+	kbErrorCheck( m_pCurrentRenderWindow != nullptr, "kbRenderer_DX11::UpdateRenderObject() - NULL m_pCurrentRenderWindow" );
+	kbErrorCheck( renderObjectToUpdate.m_pComponent != nullptr, "kbRenderer_DX11::UpdateRenderObject() - NULL component" );
 
 	m_RenderObjectList_GameThread.push_back( renderObjectToUpdate );
-
 	kbRenderObject & renderObj = m_RenderObjectList_GameThread[m_RenderObjectList_GameThread.size() - 1];
+
 	renderObj.m_bIsFirstAdd = false;
 	renderObj.m_bIsRemove = false;
-
-	/*kbRenderObject newRenderObjectInfo;
-	newRenderObjectInfo.m_pModel = pModel;
-	newRenderObjectInfo.m_pComponent = pComponent;
-	newRenderObjectInfo.m_Position = pos;
-	newRenderObjectInfo.m_Orientation = orientation;
-	newRenderObjectInfo.m_Scale = scale;
-	newRenderObjectInfo.m_bIsFirstAdd = false;
-	newRenderObjectInfo.m_bIsRemove = false;
-	newRenderObjectInfo.m_RenderPass = renderPass;
-	if ( pComponent != nullptr && pComponent->GetOwner() != nullptr ) {
-		newRenderObjectInfo.m_EntityId = static_cast<kbGameEntity*>( pComponent->GetOwner() )->GetEntityId();
-	}
-
-	if ( pComponent->IsA( kbModelComponent::GetType() ) ) {
-		newRenderObjectInfo.m_bCastsShadow = static_cast<const kbModelComponent*>( pComponent )->GetCastsShadow();
-	}
-
-	if ( pShaderOverrideList != nullptr ) {
-		newRenderObjectInfo.m_OverrideShaderList = *pShaderOverrideList;
-	}
-
-	if ( pShaderParamsOverride != nullptr ) {
-		newRenderObjectInfo.m_ShaderParamOverrides = *pShaderParamsOverride;
-	}
-
-	m_RenderObjectList_GameThread.push_back( newRenderObjectInfo );*/
 }
 
 /**
  *	kbRenderer_DX11::RemoveRenderObject
  */
 void kbRenderer_DX11::RemoveRenderObject( const kbRenderObject & renderObjectToRemove ) {
-	kbErrorCheck( m_pCurrentRenderWindow != nullptr, "kbRenderer_DX11::RemoveRenderObject - Error, nullptr Render window found" );
+	kbErrorCheck( m_pCurrentRenderWindow != nullptr, "kbRenderer_DX11::RemoveRenderObject() - NULL m_pCurrentRenderWindow" );
 	kbErrorCheck( renderObjectToRemove.m_pComponent != nullptr, "kbRenderer_DX11::RemoveRenderObject - NULL component" );
 
 	// Remove duplicates
@@ -1289,28 +1235,10 @@ void kbRenderer_DX11::RemoveRenderObject( const kbRenderObject & renderObjectToR
 	}
 
 	m_RenderObjectList_GameThread.push_back( renderObjectToRemove );
-
 	kbRenderObject & renderObj = m_RenderObjectList_GameThread[m_RenderObjectList_GameThread.size() - 1];
+
 	renderObj.m_bIsFirstAdd = false;
 	renderObj.m_bIsRemove = true;
-
-/*	if ( m_pCurrentRenderWindow == nullptr ) {
-		kbError( "kbRenderer_DX11::UpdateRenderObject - nullptr Render Window" );
-	}
-
-	// Remove duplicates
-	for ( int i = 0; i < m_RenderObjectList_GameThread.size(); i++ ) {
-		if ( m_RenderObjectList_GameThread[i].m_pComponent == pComponent ) {
-			m_RenderObjectList_GameThread.erase(m_RenderObjectList_GameThread.begin() + i);
-			i--;
-		}
-	}
-
-	kbRenderObject RenderObjectToRemove;
-	RenderObjectToRemove.m_pComponent = pComponent;
-	RenderObjectToRemove.m_bIsRemove = true;
-
-	m_RenderObjectList_GameThread.push_back( RenderObjectToRemove );*/
 }
 
 /**
