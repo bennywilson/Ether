@@ -335,6 +335,8 @@ public:
 
 	bool										m_bCastsShadow			: 1;
 	bool										m_bIsSkinnedModel		: 1;
+
+	// Updated by renderer
 	bool										m_bIsFirstAdd			: 1;
 	bool										m_bIsRemove				: 1;
 };

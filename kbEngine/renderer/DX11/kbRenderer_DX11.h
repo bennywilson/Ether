@@ -420,6 +420,10 @@ public:
 	void										GetRenderViewTransform( const HWND hwnd, kbVec3 & position, kbQuat & rotation );
 
 	// Models
+	void										AddRenderObject( const kbRenderObject & renderObjectToAdd );
+	void										UpdateRenderObject( const kbRenderObject & renderObjectToUpdate );
+	void										RemoveRenderObject( const kbRenderObject & renderObjectToRemove );
+
 	void										AddRenderObject( const kbComponent *const, const kbModel *const model, const kbVec3 & pos, const kbQuat & orientation, 
 																 const kbVec3 & scale, const ERenderPass RenderPass = RP_Lighting, 
 																 const std::vector<kbShader *> *const pShaderOverrideList = nullptr, 

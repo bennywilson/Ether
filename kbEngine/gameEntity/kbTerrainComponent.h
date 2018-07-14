@@ -22,6 +22,8 @@ class kbGrass : public kbGameComponent {
 //---------------------------------------------------------------------------------------------------
 public:
 
+												~kbGrass();
+
 	virtual void								EditorChange( const std::string & propertyName ) override;
 	virtual void								RenderSync() override;
 
@@ -55,11 +57,17 @@ private:
 
 	float										m_GrassCellLength;
 
-	struct grassModelData_t {
-		kbModel									m_Model;
-		kbComponent								m_Component;
+	struct grassRenderObject_t {
+												grassRenderObject_t() : m_pModel( nullptr ), m_pComponent( nullptr ) { }
+
+		void									Initialize( const kbVec3 & ownerPosition );
+		void									Shutdown();
+
+		kbModel *								m_pModel;
+		kbComponent *							m_pComponent;
+		kbRenderObject							m_RenderObject;
 	};
-	std::vector<grassModelData_t>               m_GrassModels;
+	std::vector<grassRenderObject_t>			m_GrassRenderObjects;
 
 	kbShaderParamOverrides_t					m_GrassShaderOverrides;
 

@@ -25,6 +25,40 @@ struct debugNormal
 };
 std::vector<debugNormal> terrainNormals;
 
+
+/**
+ *	grassRenderObject_t::Initialize
+ */
+void kbGrass::grassRenderObject_t::Initialize( const kbVec3 & ownerPosition ) {
+	kbErrorCheck( m_pModel == nullptr && m_pComponent == nullptr, "grassRenderObject_t::Initialize() - m_pModel or m_pComponent is not NULL" );
+
+	m_pModel = new kbModel();
+	m_pComponent = new kbComponent();
+
+	m_RenderObject.m_pComponent = m_pComponent;
+	m_RenderObject.m_pModel = m_pModel;
+	m_RenderObject.m_RenderPass = ERenderPass::RP_Lighting;
+	m_RenderObject.m_Position = ownerPosition;
+	m_RenderObject.m_Orientation.Set( 0.0f, 0.0f, 0.0f, 1.0f );
+	m_RenderObject.m_Scale.Set( 1.0f, 1.0f, 1.0f );
+//	m_RenderObject.m_EntityId
+//	m_RenderObject.m_MatrixList
+	m_RenderObject.m_bCastsShadow = false;
+}
+
+/**
+ *	grassRenderObject_t::Shutdown
+ */
+void kbGrass::grassRenderObject_t::Shutdown() {
+	kbErrorCheck( m_pModel != nullptr && m_pComponent != nullptr, "grassRenderObject_t::Initialize() - m_pModel or m_pComponent is not NULL" );
+
+	delete m_pComponent;
+	m_pComponent = nullptr;
+
+	delete m_pModel;
+	m_pModel = nullptr;
+}
+
 /**
  *  kbGrass::Constructor
  */
@@ -49,6 +83,15 @@ void kbGrass::Constructor() {
 	m_pOwningTerrainComponent = nullptr;
 
 	m_bNeedsMaterialUpdate = false;
+}
+
+/**
+ *  kbGrass::~kbGrass
+ */
+kbGrass::~kbGrass() {
+	for ( int i = 0; i < m_GrassRenderObjects.size(); i++ ) {
+		m_GrassRenderObjects[i].Shutdown();
+	}
 }
 
 /**
@@ -84,13 +127,14 @@ void kbGrass::SetEnable_Internal( const bool isEnabled ) {
 
 	if ( isEnabled ) {
 
-		for ( int i = 0; i < m_GrassModels.size(); i++ ) {
-			g_pRenderer->AddRenderObject( &m_GrassModels[i].m_Component, &m_GrassModels[i].m_Model, GetOwner()->GetPosition(), kbQuat( 0.0f, 0.0f, 0.0f, 1.0f ), kbVec3::one, RP_Lighting, nullptr, &m_GrassShaderOverrides );
+		for ( int i = 0; i < m_GrassRenderObjects.size(); i++ ) {
+			g_pRenderer->AddRenderObject( m_GrassRenderObjects[i].m_RenderObject );
+//			g_pRenderer->AddRenderObject( &m_GrassModels[i].m_Component, &m_GrassModels[i].m_Model, GetOwner()->GetPosition(), kbQuat( 0.0f, 0.0f, 0.0f, 1.0f ), kbVec3::one, RP_Lighting, nullptr, &m_GrassShaderOverrides );
 		}
 	} else {
 
-		for ( int i = 0; i < m_GrassModels.size(); i++ ) {
-			g_pRenderer->RemoveRenderObject( &m_GrassModels[i].m_Component );
+		for ( int i = 0; i < m_GrassRenderObjects.size(); i++ ) {
+			g_pRenderer->RemoveRenderObject( m_GrassRenderObjects[i].m_RenderObject );
 		}
 	}
 }
@@ -133,13 +177,13 @@ void kbGrass::UpdateMaterial() {
 		bladeOffsets.push_back( offset );
 	}
 
-	for ( int i = 0; i < m_GrassModels.size(); i++ ) {
-		g_pRenderer->RemoveRenderObject( &m_GrassModels[i].m_Component );
+	for ( int i = 0; i < m_GrassRenderObjects.size(); i++ ) {
+		g_pRenderer->RemoveRenderObject( m_GrassRenderObjects[i].m_RenderObject );
+		m_GrassRenderObjects[i].Shutdown();
 	}
-	m_GrassModels.clear();
+	m_GrassRenderObjects.clear();
 
-
-	m_GrassModels.insert( m_GrassModels.begin(), m_GrassCellsPerTerrainSide * m_GrassCellsPerTerrainSide, grassModelData_t() );
+	m_GrassRenderObjects.insert( m_GrassRenderObjects.begin(), m_GrassCellsPerTerrainSide * m_GrassCellsPerTerrainSide, grassRenderObject_t() );
 	const float halfCellLen = m_GrassCellLength * 0.5f;
 
 	const float halfTerrainWidth = m_pOwningTerrainComponent->GetTerrainWidth() * 0.5f;
@@ -148,11 +192,14 @@ void kbGrass::UpdateMaterial() {
 	int cellIdx = 0;
 	for ( int yCell = 0; yCell < m_GrassCellsPerTerrainSide; yCell++ ) {
 		for ( int xCell = 0; xCell < m_GrassCellsPerTerrainSide; xCell++, cellIdx++ ) {
-    
-			const kbVec3 cellStart = terrainMin + kbVec3( m_GrassCellLength * xCell, 0.0f, m_GrassCellLength * yCell );
-			m_GrassModels[cellIdx].m_Model.CreatePointCloud( m_PatchesPerCellSide * m_PatchesPerCellSide, "./assets/Shaders/grass.kbShader", kbMaterial::CM_None, sizeof( patchVertLayout ) );
 
-			patchVertLayout *const pVerts = (patchVertLayout *) m_GrassModels[cellIdx].m_Model.MapVertexBuffer();
+			grassRenderObject_t & renderObj = m_GrassRenderObjects[cellIdx];
+			renderObj.Initialize( m_pOwningTerrainComponent->GetOwner()->GetPosition() );
+
+			const kbVec3 cellStart = terrainMin + kbVec3( m_GrassCellLength * xCell, 0.0f, m_GrassCellLength * yCell );
+			renderObj.m_pModel->CreatePointCloud( m_PatchesPerCellSide * m_PatchesPerCellSide, "./assets/Shaders/grass.kbShader", kbMaterial::CM_None, sizeof(patchVertLayout) );
+
+			patchVertLayout *const pVerts = (patchVertLayout *) renderObj.m_pModel->MapVertexBuffer();
 
 			int iVert = 0;
 			for ( int startY = 0; startY < m_PatchesPerCellSide; startY ++ ) {
@@ -165,11 +212,11 @@ void kbGrass::UpdateMaterial() {
 					iVert++;
 				}
 			}
-		    m_GrassModels[cellIdx].m_Model.UnmapVertexBuffer();
+		    renderObj.m_pModel->UnmapVertexBuffer();
 		}
 	}
-	m_GrassShaderOverrides.SetVec4List( "bladeOffsets", bladeOffsets );
 
+	m_GrassShaderOverrides.SetVec4List( "bladeOffsets", bladeOffsets );
 	m_GrassShaderOverrides.SetVec4( "bladeParameters", kbVec4( m_BladeMinWidth, m_BladeMaxWidth, m_BladeMinHeight, m_BladeMaxHeight ) );
 	m_GrassShaderOverrides.SetVec4( "GrassData1", kbVec4( m_pOwningTerrainComponent->GetHeightScale(), m_pOwningTerrainComponent->GetOwner()->GetPosition().y, patchLen, 0.0f ) );
 	m_GrassShaderOverrides.SetVec4( "GrassData2", kbVec4( m_PatchStartCullDistance, 1.0f / ( m_PatchEndCullDistance - m_PatchStartCullDistance ), 0.0f, 0.0f ) );
@@ -178,8 +225,9 @@ void kbGrass::UpdateMaterial() {
 		m_GrassShaderOverrides.SetTexture( "grassDiffuseMap", m_pDiffuseMap );
 	}
 
-	for ( int i = 0; i < m_GrassModels.size(); i++ ) {
-		g_pRenderer->AddRenderObject( &m_GrassModels[i].m_Component, &m_GrassModels[i].m_Model, m_pOwningTerrainComponent->GetOwner()->GetPosition(), kbQuat( 0.0f, 0.0f, 0.0f, 1.0f ), kbVec3::one, RP_Lighting, nullptr, &m_GrassShaderOverrides );
+	for ( int i = 0; i < m_GrassRenderObjects.size(); i++ ) {
+		m_GrassRenderObjects[i].m_RenderObject.m_ShaderParamOverrides = m_GrassShaderOverrides;
+		g_pRenderer->AddRenderObject( m_GrassRenderObjects[i].m_RenderObject );
 	}
 	
 	m_bNeedsMaterialUpdate = false;
