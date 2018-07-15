@@ -145,10 +145,6 @@ void kbGrass::SetEnable_Internal( const bool isEnabled ) {
  */
 void kbGrass::UpdateMaterial() {
 
-	m_GrassShaderOverrides.m_ParamOverrides.clear();
-	m_GrassShaderOverrides.SetTexture( "grassMap", m_pGrassMap );
-	m_GrassShaderOverrides.SetTexture( "heightMap", m_pOwningTerrainComponent->GetHeightMap() );
-
 	std::vector<kbVec4> bladeOffsets;
 
 	m_GrassCellLength = m_pOwningTerrainComponent->GetTerrainWidth() / (float)m_GrassCellsPerTerrainSide;
@@ -178,44 +174,9 @@ void kbGrass::UpdateMaterial() {
 		bladeOffsets.push_back( offset );
 	}
 
-	for ( int i = 0; i < m_GrassRenderObjects.size(); i++ ) {
-		g_pRenderer->RemoveRenderObject( m_GrassRenderObjects[i].m_RenderObject );
-		m_GrassRenderObjects[i].Shutdown();
-	}
-	m_GrassRenderObjects.clear();
-
-	m_GrassRenderObjects.insert( m_GrassRenderObjects.begin(), m_GrassCellsPerTerrainSide * m_GrassCellsPerTerrainSide, grassRenderObject_t() );
-	const float halfCellLen = m_GrassCellLength * 0.5f;
-
-	const float halfTerrainWidth = m_pOwningTerrainComponent->GetTerrainWidth() * 0.5f;
-	const kbVec3 terrainMin = m_pOwningTerrainComponent->GetOwner()->GetPosition() - kbVec3( halfTerrainWidth, 0.0f, halfTerrainWidth );
-
-	int cellIdx = 0;
-	for ( int yCell = 0; yCell < m_GrassCellsPerTerrainSide; yCell++ ) {
-		for ( int xCell = 0; xCell < m_GrassCellsPerTerrainSide; xCell++, cellIdx++ ) {
-
-			grassRenderObject_t & renderObj = m_GrassRenderObjects[cellIdx];
-			renderObj.Initialize( m_pOwningTerrainComponent->GetOwner()->GetPosition() );
-
-			const kbVec3 cellStart = terrainMin + kbVec3( m_GrassCellLength * xCell, 0.0f, m_GrassCellLength * yCell );
-			renderObj.m_pModel->CreatePointCloud( m_PatchesPerCellSide * m_PatchesPerCellSide, "./assets/Shaders/grass.kbShader", kbMaterial::CM_None, sizeof(patchVertLayout) );
-
-			patchVertLayout *const pVerts = (patchVertLayout *) renderObj.m_pModel->MapVertexBuffer();
-
-			int iVert = 0;
-			for ( int startY = 0; startY < m_PatchesPerCellSide; startY ++ ) {
-				for ( int startX = 0; startX < m_PatchesPerCellSide; startX ++) {
-					kbVec3 pointPos = cellStart + kbVec3( patchLen * startX, 0.0f, patchLen * startY );
-					pVerts[iVert].position = pointPos;
-					pVerts[iVert].uv.Set ( ( pointPos.x - terrainMin.x ) / m_pOwningTerrainComponent->GetTerrainWidth(), ( pointPos.z - terrainMin.z ) / m_pOwningTerrainComponent->GetTerrainWidth() );
-					pVerts[iVert].patchIndices[0] = rand() % 60;
-					pVerts[iVert].patchIndices[1] = pVerts[iVert].patchIndices[2] = pVerts[iVert].patchIndices[3] = pVerts[iVert].patchIndices[0];
-					iVert++;
-				}
-			}
-		    renderObj.m_pModel->UnmapVertexBuffer();
-		}
-	}
+	m_GrassShaderOverrides.m_ParamOverrides.clear();
+	m_GrassShaderOverrides.SetTexture( "grassMap", m_pGrassMap );
+	m_GrassShaderOverrides.SetTexture( "heightMap", m_pOwningTerrainComponent->GetHeightMap() );
 
 	m_GrassShaderOverrides.SetVec4List( "bladeOffsets", bladeOffsets );
 	m_GrassShaderOverrides.SetVec4( "bladeParameters", kbVec4( m_BladeMinWidth, m_BladeMaxWidth, m_BladeMinHeight, m_BladeMaxHeight ) );
@@ -226,11 +187,57 @@ void kbGrass::UpdateMaterial() {
 		m_GrassShaderOverrides.SetTexture( "grassDiffuseMap", m_pDiffuseMap );
 	}
 
+
 	for ( int i = 0; i < m_GrassRenderObjects.size(); i++ ) {
-		m_GrassRenderObjects[i].m_RenderObject.m_ShaderParamOverrides = m_GrassShaderOverrides;
-		g_pRenderer->AddRenderObject( m_GrassRenderObjects[i].m_RenderObject );
+		g_pRenderer->RemoveRenderObject( m_GrassRenderObjects[i].m_RenderObject );
+		m_GrassRenderObjects[i].Shutdown();
 	}
-	
+	m_GrassRenderObjects.clear();
+
+	m_GrassRenderObjects.insert( m_GrassRenderObjects.begin(), m_GrassCellsPerTerrainSide * m_GrassCellsPerTerrainSide, grassRenderObject_t() );
+	const float halfCellLen = m_GrassCellLength * 0.5f;
+	const float halfCellLenSqr = sqrt( halfCellLen * halfCellLen );
+
+	const float halfTerrainWidth = m_pOwningTerrainComponent->GetTerrainWidth() * 0.5f;
+	const kbVec3 terrainMin = m_pOwningTerrainComponent->GetOwner()->GetPosition() - kbVec3( halfTerrainWidth, 0.0f, halfTerrainWidth );
+
+	int cellIdx = 0;
+	for ( int yCell = 0; yCell < m_GrassCellsPerTerrainSide; yCell++ ) {
+		for ( int xCell = 0; xCell < m_GrassCellsPerTerrainSide; xCell++, cellIdx++ ) {
+
+			grassRenderObject_t & renderObj = m_GrassRenderObjects[cellIdx];
+			renderObj.Initialize( m_pOwningTerrainComponent->GetOwner()->GetPosition() );
+			renderObj.m_RenderObject.m_CullDistance = m_PatchEndCullDistance + halfCellLenSqr;
+
+			const kbVec3 cellStart = terrainMin + kbVec3( m_GrassCellLength * xCell, 0.0f, m_GrassCellLength * yCell );
+			const kbVec3 cellCenter = cellStart + kbVec3( m_GrassCellLength * 0.5f, 0.0f, m_GrassCellLength * 0.5f );
+			const kbVec3 halfCell = kbVec3( m_GrassCellLength * 0.5f, 0.0f, m_GrassCellLength * 0.5f );
+
+			renderObj.m_pModel->CreatePointCloud( m_PatchesPerCellSide * m_PatchesPerCellSide, "./assets/Shaders/grass.kbShader", kbMaterial::CM_None, sizeof(patchVertLayout) );
+
+			patchVertLayout *const pVerts = (patchVertLayout *) renderObj.m_pModel->MapVertexBuffer();
+
+			int iVert = 0;
+			for ( int startY = 0; startY < m_PatchesPerCellSide; startY ++ ) {
+				for ( int startX = 0; startX < m_PatchesPerCellSide; startX ++) {
+					kbVec3 localPointPos = kbVec3( patchLen * startX, 0.0f, patchLen * startY ) - halfCell;
+					pVerts[iVert].position = localPointPos;
+
+					kbVec3 globalPointPos = cellStart + kbVec3( patchLen * startX, 0.0f, patchLen * startY );
+					pVerts[iVert].uv.Set ( ( globalPointPos.x - terrainMin.x ) / m_pOwningTerrainComponent->GetTerrainWidth(), ( globalPointPos.z - terrainMin.z ) / m_pOwningTerrainComponent->GetTerrainWidth() );
+					pVerts[iVert].patchIndices[0] = rand() % 60;
+					pVerts[iVert].patchIndices[1] = pVerts[iVert].patchIndices[2] = pVerts[iVert].patchIndices[3] = pVerts[iVert].patchIndices[0];
+					iVert++;
+				}
+			}
+		    renderObj.m_pModel->UnmapVertexBuffer();
+
+			m_GrassRenderObjects[cellIdx].m_RenderObject.m_Position = cellCenter;
+			m_GrassRenderObjects[cellIdx].m_RenderObject.m_ShaderParamOverrides = m_GrassShaderOverrides;
+			g_pRenderer->AddRenderObject( m_GrassRenderObjects[cellIdx].m_RenderObject );
+		}
+	}
+
 	m_bNeedsMaterialUpdate = false;
 }
 
@@ -524,14 +531,6 @@ void kbTerrainComponent::RenderSync() {
 	for ( int i = 0; i < m_Grass.size(); i++ )  {
 		m_Grass[i].RenderSync();
 	}
-}
-
-/**
- *	kbTerrainComponent::GenerateGrass
- */
-void kbTerrainComponent::GenerateGrass() {
-
-	
 }
 
 /**

@@ -159,6 +159,5 @@ protected:
 private:
 	
 	void										GenerateTerrain();
-	void										GenerateGrass();
 };
 #endif

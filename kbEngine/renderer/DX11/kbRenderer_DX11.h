@@ -77,6 +77,8 @@ private:
 	std::map<const kbComponent *, kbRenderObject *>				m_RenderObjectMap;
 	std::map<const kbLightComponent *, kbRenderLight *>			m_RenderLightMap;
 	std::map<const void *, kbRenderObject *>					m_RenderParticleMap;
+
+	std::vector<kbRenderObject*>								m_VisibleRenderObjects[NUM_RENDER_PASSES];
 };
 
 /**
@@ -515,6 +517,8 @@ private:
 	void										SetRenderTarget( eRenderTargetTexture type );
 
 	void										RenderScene();
+
+	void										PreRenderCullAndSort();
 
 	void										RenderModel( const kbRenderObject *const pRenderObject, const ERenderPass renderPass, const bool bShadowPass = false );
 

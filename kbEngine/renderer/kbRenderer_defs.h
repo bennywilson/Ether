@@ -18,7 +18,8 @@ enum ERenderPass {
 	RP_PostLighting,
 	RP_InWorldUI,
 	RP_Debug,
-	RP_MousePicker
+	RP_MousePicker,
+	NUM_RENDER_PASSES
 };
 
 struct vertexColorLayout {
@@ -317,6 +318,7 @@ public:
 													m_pModel( nullptr ),
 													m_RenderPass( RP_Lighting ),
 													m_EntityId( 0 ),
+													m_CullDistance( -1.0f ),
 													m_bCastsShadow( false ),
 													m_bIsSkinnedModel( false ),
 													m_bIsFirstAdd( false ),
@@ -331,7 +333,10 @@ public:
 	kbQuat										m_Orientation;
 	kbVec3										m_Scale;
 	uint										m_EntityId;
+
 	std::vector<kbBoneMatrix_t>					m_MatrixList;
+
+	float										m_CullDistance;
 
 	bool										m_bCastsShadow			: 1;
 	bool										m_bIsSkinnedModel		: 1;

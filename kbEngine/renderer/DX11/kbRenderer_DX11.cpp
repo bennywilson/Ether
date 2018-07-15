@@ -1861,6 +1861,8 @@ void kbRenderer_DX11::SetReadyToRender() {
 void kbRenderer_DX11::RenderScene() {
 	START_SCOPED_TIMER( RENDER_THREAD );
 
+	PreRenderCullAndSort();
+
 	kbGPUTimeStamp::BeginFrame( m_pDeviceContext );
 	PLACE_GPU_TIME_STAMP( "Begin Frame" );
 
@@ -1945,8 +1947,6 @@ void kbRenderer_DX11::RenderScene() {
 		}
 
 		m_pDeviceContext->RSSetViewports( 1, &viewport );
-
-		std::map< const kbComponent *, kbRenderObject * >::iterator iter;
 	
 		{
 			START_SCOPED_RENDER_TIMER( RENDER_G_BUFFER );
@@ -1970,19 +1970,18 @@ void kbRenderer_DX11::RenderScene() {
 													  kbRenderState::CompareAlways,
 													  1);
 
-			for ( iter = m_pCurrentRenderWindow->m_RenderObjectMap.begin(); iter != m_pCurrentRenderWindow->m_RenderObjectMap.end(); iter++ ) {
-				if ( iter->second->m_RenderPass == RP_FirstPerson ) {
-					RenderModel( iter->second, RP_FirstPerson );
-				}
+
+			std::vector<kbRenderObject*> & FirstPersonPassVisibleList = m_pCurrentRenderWindow->m_VisibleRenderObjects[RP_FirstPerson];
+			for ( int i = 0; i < FirstPersonPassVisibleList.size(); i++ ) {
+				RenderModel( FirstPersonPassVisibleList[i], RP_FirstPerson );
 			}
 	
 			// Render models that need to be lit
 			m_RenderState.SetDepthStencilState();
 
-			for ( iter = m_pCurrentRenderWindow->m_RenderObjectMap.begin(); iter != m_pCurrentRenderWindow->m_RenderObjectMap.end(); iter++ ) {
-				if ( iter->second->m_RenderPass == RP_Lighting ) {
-					RenderModel( iter->second, RP_Lighting );
-				}
+			std::vector<kbRenderObject*> & LightingPassVisibleList = m_pCurrentRenderWindow->m_VisibleRenderObjects[RP_Lighting];
+			for ( int i = 0; i < LightingPassVisibleList.size(); i++ ) {
+				RenderModel( LightingPassVisibleList[i], RP_Lighting );
 			}
 
 			m_RenderState.SetDepthStencilState( false, kbRenderState::DepthWriteMaskZero, kbRenderState::CompareLess, false );
@@ -2003,10 +2002,9 @@ void kbRenderer_DX11::RenderScene() {
 			}
 
 			// Post-Lighting Render Pass
-			for ( iter = m_pCurrentRenderWindow->m_RenderObjectMap.begin(); iter != m_pCurrentRenderWindow->m_RenderObjectMap.end(); iter++ ) {
-				if ( iter->second->m_RenderPass == RP_PostLighting ) {
-					RenderModel( iter->second, RP_PostLighting );
-				}
+			std::vector<kbRenderObject*> & PostLightingVisibleList = m_pCurrentRenderWindow->m_VisibleRenderObjects[RP_PostLighting];
+			for ( int i = 0; i < PostLightingVisibleList.size(); i++ ) {
+				RenderModel( PostLightingVisibleList[i], RP_PostLighting );
 			}
 			PLACE_GPU_TIME_STAMP( "Unlit" );
 		}
@@ -2033,10 +2031,9 @@ void kbRenderer_DX11::RenderScene() {
 										 kbRenderState::BF_Zero,
 										 kbRenderState::BO_Add );
 
-			for ( iter = m_pCurrentRenderWindow->m_RenderObjectMap.begin(); iter != m_pCurrentRenderWindow->m_RenderObjectMap.end(); iter++ ) {
-				if ( iter->second->m_RenderPass == RP_InWorldUI ) {
-					RenderModel( iter->second, RP_InWorldUI );
-				}
+			std::vector<kbRenderObject*> & InWorldUIVisibleList = m_pCurrentRenderWindow->m_VisibleRenderObjects[RP_PostLighting];
+			for ( int i = 0; i < InWorldUIVisibleList.size(); i++ ) {
+				RenderModel( InWorldUIVisibleList[i], RP_InWorldUI );
 			}
 
 			m_RenderState.SetBlendState();
@@ -2127,6 +2124,38 @@ void kbRenderer_DX11::RenderScene() {
 
 	PLACE_GPU_TIME_STAMP( "End Frame" );
 	kbGPUTimeStamp::EndFrame( m_pDeviceContext );
+}
+
+/**
+ *	kbRenderer_DX11::PreRenderCullAndSort
+ */
+void kbRenderer_DX11::PreRenderCullAndSort() {
+
+	for ( int i = 0; i < NUM_RENDER_PASSES; i++ ) {
+		m_pCurrentRenderWindow->m_VisibleRenderObjects[i].clear();
+	}
+
+	for ( auto iter = m_pCurrentRenderWindow->m_RenderObjectMap.begin(); iter != m_pCurrentRenderWindow->m_RenderObjectMap.end(); iter++ ) {
+
+		bool bIsVisible = true;
+
+		kbRenderObject & renderObj = *iter->second;
+
+		if ( renderObj.m_CullDistance > 0 ) {
+			const float cullDistSqr = renderObj.m_CullDistance * renderObj.m_CullDistance;
+			const float distToCamSqr = ( renderObj.m_Position - m_pCurrentRenderWindow->m_CameraPosition ).LengthSqr();
+	
+			if ( distToCamSqr >= cullDistSqr ) {
+				bIsVisible = false;
+				continue;
+			}
+
+		}
+		
+		if ( bIsVisible ) {
+			m_pCurrentRenderWindow->m_VisibleRenderObjects[renderObj.m_RenderPass].push_back( &renderObj );
+		}
+	}
 }
 
 /**

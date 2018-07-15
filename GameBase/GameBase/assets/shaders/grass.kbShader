@@ -52,7 +52,7 @@ struct PS_OUTPUT {
 geometryShaderInput vertexShader( vertexInput input ) {
 	geometryShaderInput output = (geometryShaderInput)(0);
 
-	output.position = input.position;//mul( input.position, mvpMatrix );
+	output.position = mul( input.position, modelMatrix );
 	output.uv = input.uv;
 	output.blendIndices = input.blendIndices;
 	return output;
@@ -74,10 +74,8 @@ void Copy( inout pixelInput output, geometryShaderInput input, float3 posOffset,
 	output.uv = uv;
 };
 
-
  void CreateGrassBlade( float3 patchOffset, point geometryShaderInput input[1], inout TriangleStream<pixelInput> OutputStream, float scale, int grassIdx ) {
 
- 
 	int4 IndexVector = D3DCOLORtoUBYTE4( input[0].blendIndices );
 	int   IndexArray[4]        = (int[4])IndexVector;
 	float3 bladeOff = float3( bladeOffsets[IndexArray[grassIdx]].x, 0.0f, bladeOffsets[IndexArray[grassIdx]].y );
@@ -85,7 +83,7 @@ void Copy( inout pixelInput output, geometryShaderInput input, float3 posOffset,
 	float halfWidth = bladeParameters.y;
 	float height = bladeParameters.w * scale;
 
-	float startHeight = ( heightMap.SampleLevel( SampleType, input[0].uv, 0.0f ).r * GrassData1.x);// + GrassData1.y;
+	float startHeight = ( heightMap.SampleLevel( SampleType, input[0].uv, 0.0f ).r * GrassData1.x );
 	float distBetween = 5.0f;
 	float3 offset = float3( 0.0f, startHeight, 0.0f ) + patchOffset + float3( bladeOffsets[IndexArray[grassIdx]].z, 0.0f, bladeOffsets[IndexArray[grassIdx]].w );
 	
@@ -136,7 +134,7 @@ void Copy( inout pixelInput output, geometryShaderInput input, float3 posOffset,
  void geometryShader( point geometryShaderInput input[1], inout TriangleStream<pixelInput> OutputStream ) {
 
 	float scale = 1.0f - saturate( ( length( cameraPos.xyz - input[0].position.xyz ) - GrassData2.x ) * GrassData2.y );
-	if ( scale == 0.0f) {
+	if ( scale == 0.0f ) {
 		return;
 	}
 
