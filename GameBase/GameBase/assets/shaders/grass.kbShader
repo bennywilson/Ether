@@ -13,6 +13,7 @@ cbuffer ConstantBuffer1 {
 	float4 bladeOffsets[64];
 	float4 wind;
 	float4 time;
+	float4 fakeAOData;		// x - Darkness, y - power
 };
 
 
@@ -95,7 +96,7 @@ void CreateVertex( inout pixelInput output, geometryShaderInput input, float3 bl
 	const float textureSize = (1.0f / 8.0f) - textureBorderSize;
 
 	const float3 noiseValues = noiseMap.SampleLevel( SampleType, input[0].uv * grassIdx, 0.0f).xyz * 5.0f;
-	float oscillation = sin(noiseValues.x + time.x * (3.0f * ((noiseValues.x * 0.5f) + 0.5f))) * 0.5f + 0.5f;
+	float oscillation = sin(noiseValues.x + time.x * (1.0f * ((noiseValues.x * 0.5f) + 0.5f))) * 0.5f + 0.5f;
 	
 	const float3 windAmt = wind.xyz * ( oscillation * 0.1f) + 0.9f;
 	const float3 windAmt2X = windAmt * 2.0f;
@@ -163,11 +164,10 @@ Texture2D Mat4Diffuse	: register(t7);
  PS_OUTPUT pixelShader( pixelInput input, bool isFrontFace : SV_IsFrontFace )  {
  	PS_OUTPUT output = (PS_OUTPUT) 0;
 
-	const float heightShade = pow(1.0f - input.uv.y, 2);
-	output.Color.xyzw = grassDiffuseMap.Sample( SampleType, input.uv ).xyzw * heightShade;
-//	clip( output.Color.w - 0.01f);
-	//if ( isFrontFace )
-	//	output.Color.xyz = 1;
+	float fakeAO = abs( ( 1.0f - input.uv.y ) * ( 1.0f - fakeAOData.x ) + fakeAOData.x );
+	fakeAO = pow( fakeAO, abs(fakeAOData.y) );
+	output.Color.xyzw = grassDiffuseMap.Sample( SampleType, input.uv ).xyzw * fakeAO;
+
 	output.Normal.xyz = float3(0.0f,1.0f,0.0);
 
 	//dsfdsf
