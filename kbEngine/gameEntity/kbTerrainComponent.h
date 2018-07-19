@@ -57,6 +57,8 @@ private:
 
     kbVec3                                      m_TestWind;
 
+    float                                       m_FakeAODarkness;
+    float                                       m_FakeAOPower;
 
 private:
 

@@ -88,6 +88,8 @@ void kbGrass::Constructor() {
 	m_bNeedsMaterialUpdate = false;
 
     m_TestWind = kbVec3::zero;
+    m_FakeAODarkness = 0.25f;
+    m_FakeAOPower = 2.0f;
 }
 
 /**
@@ -189,6 +191,7 @@ void kbGrass::UpdateMaterial() {
 	m_GrassShaderOverrides.SetVec4( "GrassData1", kbVec4( m_pOwningTerrainComponent->GetHeightScale(), m_pOwningTerrainComponent->GetOwner()->GetPosition().y, patchLen, 0.0f ) );
 	m_GrassShaderOverrides.SetVec4( "GrassData2", kbVec4( m_PatchStartCullDistance, 1.0f / ( m_PatchEndCullDistance - m_PatchStartCullDistance ), 0.0f, 0.0f ) );
     m_GrassShaderOverrides.SetVec4( "wind", m_TestWind );
+    m_GrassShaderOverrides.SetVec4( "fakeAOData", kbVec4( m_FakeAODarkness, m_FakeAOPower, 0.0f, 0.0f ) );
 
 	if ( m_pDiffuseMap != nullptr ) {
 		m_GrassShaderOverrides.SetTexture( "grassDiffuseMap", m_pDiffuseMap );

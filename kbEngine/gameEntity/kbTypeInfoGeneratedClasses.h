@@ -135,6 +135,8 @@ GenerateClass(
 	AddField( "BladeMaxHeight", KBTYPEINFO_FLOAT, kbGrass, m_BladeMaxHeight, false, "" )
 	AddField( "DiffuseMap", KBTYPEINFO_TEXTURE, kbGrass, m_pDiffuseMap, false, "" )
     AddField( "TestWind", KBTYPEINFO_VECTOR, kbGrass, m_TestWind, false, "" )
+    AddField( "FakeAODarkness", KBTYPEINFO_FLOAT, kbGrass, m_FakeAODarkness, false, "" )
+    AddField( "FakeAOPower", KBTYPEINFO_FLOAT, kbGrass, m_FakeAOPower, false, "" )
 )
 
 GenerateClass(
