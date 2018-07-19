@@ -3073,10 +3073,41 @@ void kbRenderer_DX11::LoadShader( const std::string & fileName, ID3D11VertexShad
 
 	std::ifstream shaderFile;
 	shaderFile.open( fileName.c_str(), std::fstream::in );	
-	const std::string readBuffer( ( std::istreambuf_iterator<char>(shaderFile) ), std::istreambuf_iterator<char>() );
+	std::string readBuffer( ( std::istreambuf_iterator<char>(shaderFile) ), std::istreambuf_iterator<char>() );
 	shaderFile.close();
 
 	if ( pShaderBindings != nullptr ) {
+
+        // Remove comments
+        for ( int i = 0; i < readBuffer.size() - 1; i++ )
+        {
+            if ( readBuffer[i] == '/' && readBuffer[i+1] == '*' ) {
+                int j = i;
+                while ( j < readBuffer.size() - 1 && !(readBuffer[j] == '*' && readBuffer[j + 1] == '/' ) ) {
+
+                    // Preserve new lines so that any shader error messages still line up with the source flie
+                    if (readBuffer[j] != '\n') {
+                        readBuffer[j] = ' ';
+                    }
+                    j++;
+                }
+
+                if ( j < readBuffer.size() - 1 ) {
+                    readBuffer[j] = ' ';
+                    readBuffer[j+1] = ' ';
+                }
+            }
+
+            if ( readBuffer[i] == '/' && readBuffer[i+1] == '/' ) {
+                int j = i;
+                while ( j < readBuffer.size() - 1 && readBuffer[j] != '\n' ) {
+                    readBuffer[j] = ' ';
+                    j++;
+                }
+               // readBuffer.erase(i, (j - i) + 1);
+            }
+        }
+
 		ReadShaderFile( readBuffer, pShaderBindings );
 
 		const UINT desiredByteWidth = ( pShaderBindings->m_ConstantBufferSizeBytes + 15 ) & 0xfffffff0;
@@ -3653,8 +3684,17 @@ void kbRenderer_DX11::RenderModel( const kbRenderObject *const pRenderObject, co
 					boneMatrices[i][0].w = 0;
 					boneMatrices[i][1].w = 0;
 					boneMatrices[i][2].w = 0;
-				}
-			} else {
+                }
+			} else if ( varName == "time" ) {
+
+                kbVec4 time;
+                time.x = g_GlobalTimer.TimeElapsedSeconds();
+                time.y = sin( time.x );
+                time.z = sin( time.x * 2.0f );
+                time.w = sin( time.x * 3.0f );
+                kbVec4 *const pVecOffset = (kbVec4*)pVarByteOffset;
+                *pVecOffset = time;
+            } else {
                 const std::vector<kbShaderParamOverrides_t::kbShaderParam_t> & paramOverrides = pRenderObject->m_ShaderParamOverrides.m_ParamOverrides;
                 for ( int iOverride = 0; iOverride < paramOverrides.size(); iOverride++ ) {
                     const kbShaderParamOverrides_t::kbShaderParam_t & curOverride = paramOverrides[iOverride];

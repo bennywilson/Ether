@@ -40,6 +40,8 @@ private:
 	int											m_GrassCellsPerTerrainSide;
 
 	kbTexture *									m_pGrassMap;
+    kbTexture *                                 m_pNoiseMap;
+
 	float										m_PatchStartCullDistance;
 	float										m_PatchEndCullDistance;
 
@@ -52,6 +54,9 @@ private:
 	float										m_BladeMaxHeight;
 
     kbTexture *									m_pDiffuseMap;
+
+    kbVec3                                      m_TestWind;
+
 
 private:
 

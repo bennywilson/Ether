@@ -64,6 +64,9 @@ void kbGrass::grassRenderObject_t::Shutdown() {
  */
 void kbGrass::Constructor() {
 
+    m_pGrassMap = nullptr;
+    m_pNoiseMap = nullptr;
+
 	m_GrassCellsPerTerrainSide = 1;
 	m_GrassCellLength = 0;
 
@@ -83,6 +86,8 @@ void kbGrass::Constructor() {
 	m_pOwningTerrainComponent = nullptr;
 
 	m_bNeedsMaterialUpdate = false;
+
+    m_TestWind = kbVec3::zero;
 }
 
 /**
@@ -176,17 +181,22 @@ void kbGrass::UpdateMaterial() {
 
 	m_GrassShaderOverrides.m_ParamOverrides.clear();
 	m_GrassShaderOverrides.SetTexture( "grassMap", m_pGrassMap );
+    m_GrassShaderOverrides.SetTexture( "noiseMap", m_pNoiseMap );
 	m_GrassShaderOverrides.SetTexture( "heightMap", m_pOwningTerrainComponent->GetHeightMap() );
 
 	m_GrassShaderOverrides.SetVec4List( "bladeOffsets", bladeOffsets );
 	m_GrassShaderOverrides.SetVec4( "bladeParameters", kbVec4( m_BladeMinWidth, m_BladeMaxWidth, m_BladeMinHeight, m_BladeMaxHeight ) );
 	m_GrassShaderOverrides.SetVec4( "GrassData1", kbVec4( m_pOwningTerrainComponent->GetHeightScale(), m_pOwningTerrainComponent->GetOwner()->GetPosition().y, patchLen, 0.0f ) );
 	m_GrassShaderOverrides.SetVec4( "GrassData2", kbVec4( m_PatchStartCullDistance, 1.0f / ( m_PatchEndCullDistance - m_PatchStartCullDistance ), 0.0f, 0.0f ) );
+    m_GrassShaderOverrides.SetVec4( "wind", m_TestWind );
 
 	if ( m_pDiffuseMap != nullptr ) {
 		m_GrassShaderOverrides.SetTexture( "grassDiffuseMap", m_pDiffuseMap );
 	}
 
+    if ( m_pNoiseMap != nullptr ) {
+        m_GrassShaderOverrides.SetTexture( "noiseMap", m_pNoiseMap );
+    }
 
 	for ( int i = 0; i < m_GrassRenderObjects.size(); i++ ) {
 		g_pRenderer->RemoveRenderObject( m_GrassRenderObjects[i].m_RenderObject );
