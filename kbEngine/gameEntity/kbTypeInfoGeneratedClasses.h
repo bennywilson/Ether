@@ -124,6 +124,7 @@ GenerateClass(
 GenerateClass(
 	kbGrass,
 	AddField( "GrassMap", KBTYPEINFO_TEXTURE, kbGrass, m_pGrassMap, false, "" )
+    AddField( "NoiseMap", KBTYPEINFO_TEXTURE, kbGrass, m_pNoiseMap, false, "" )
 	AddField( "GrassCellsPerTerrainSide", KBTYPEINFO_INT, kbGrass, m_GrassCellsPerTerrainSide, false, "" )
 	AddField( "PatchStartCullDistance", KBTYPEINFO_FLOAT, kbGrass, m_PatchStartCullDistance, false, "" )
 	AddField( "PatchEndCullDistance", KBTYPEINFO_FLOAT, kbGrass, m_PatchEndCullDistance, false, "" )
@@ -133,6 +134,9 @@ GenerateClass(
 	AddField( "BladeMinHeight", KBTYPEINFO_FLOAT, kbGrass, m_BladeMinHeight, false, "" )
 	AddField( "BladeMaxHeight", KBTYPEINFO_FLOAT, kbGrass, m_BladeMaxHeight, false, "" )
 	AddField( "DiffuseMap", KBTYPEINFO_TEXTURE, kbGrass, m_pDiffuseMap, false, "" )
+    AddField( "TestWind", KBTYPEINFO_VECTOR, kbGrass, m_TestWind, false, "" )
+    AddField( "FakeAODarkness", KBTYPEINFO_FLOAT, kbGrass, m_FakeAODarkness, false, "" )
+    AddField( "FakeAOPower", KBTYPEINFO_FLOAT, kbGrass, m_FakeAOPower, false, "" )
 )
 
 GenerateClass(

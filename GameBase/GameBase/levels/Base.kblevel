@@ -21,12 +21,14 @@ kbGameEntity 0 0 0 0 {
 				BladeMaxWidth =  1.000000
 				BladeMinHeight =  5.000000
 				BladeMinWidth =  1.000000
-				DiffuseMap = .\assets\models\enviroobjects\grass_1.dds
-				GrassCellsPerTerrainSide = 16
-				GrassMap = .\assets\terrain\textures\grassmap.jpg
+				DiffuseMap = .\assets\models\enviroobjects\grass_1.bmp
+				GrassCellsPerTerrainSide = 32
+				GrassMap = .\assets\models\enviroobjects\grass_1.bmp
+				NoiseMap = .\assets\terrain\noisemap.png
 				PatchEndCullDistance =  1000.000000
 				PatchStartCullDistance =  200.000000
-				PatchesPerCellSide = 32
+				PatchesPerCellSide = 64
+				TestWind = 0.000000 0.000000 5.000000
 			}
 		HeightMap = .\assets\terrain\terrain1_height.bmp
 		HeightScale =  1024.000000
