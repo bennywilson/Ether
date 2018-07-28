@@ -11,11 +11,10 @@ cbuffer ConstantBuffer1 {
 	float4 GrassData2;
 	float4 cameraPos;
 	float4 jitterOffsets[64];
-	float4 bladeHeights[32];
 	float4 wind;
 	float4 time;
 	float4 fakeAOData;		// x - Darkness, y - power
-	float4 collisionSphere;
+	//float4 collisionSphere;
 };
 
 
@@ -88,12 +87,12 @@ void CreateVertex( inout TriangleStream<pixelInput> OutputStream, float3 vertexW
 
 	// Check collision
 	float3 windpush = 0.0f;
-	if ( length( collisionSphere.xz - bladeWorldOrigin.xz ) < collisionSphere.w && abs( collisionSphere.y - bladeWorldOrigin.y ) < collisionSphere.w ) {
+/*	if ( length( collisionSphere.xz - bladeWorldOrigin.xz ) < collisionSphere.w && abs( collisionSphere.y - bladeWorldOrigin.y ) < collisionSphere.w ) {
 		float3 vecTo = bladeWorldOrigin - collisionSphere.xyz;
 		vecTo.y = min( vecTo.y, 0.0f );
 		windpush = 1.0f - saturate( length( vecTo ) / collisionSphere.w );
 		windpush *= normalize( vecTo ) * collisionSphere.w * 2.f;
-	}
+	}*/
 
 	const float3 noiseValues = noiseMap.SampleLevel( SampleType, input[0].uv * grassNumber, 0.0f ).xyz;
 

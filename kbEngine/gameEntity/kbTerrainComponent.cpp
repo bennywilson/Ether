@@ -126,14 +126,6 @@ void kbGrass::RenderSync() {
 
 	if ( m_bNeedsMaterialUpdate ) {
 		UpdateMaterial();
-	} else {
-		extern kbVec3 g_CollisionSphere;
-
-		for ( int i = 0; i < m_GrassRenderObjects.size(); i++ ) {
-			static float w = 13.60f;
-			m_GrassRenderObjects[i].m_RenderObject.m_ShaderParamOverrides.SetVec4( "collisionSphere", kbVec4( g_CollisionSphere.x, g_CollisionSphere.y, g_CollisionSphere.z, w ) );
-			g_pRenderer->UpdateRenderObject( m_GrassRenderObjects[i].m_RenderObject );
-		}
 	}
 }
 
