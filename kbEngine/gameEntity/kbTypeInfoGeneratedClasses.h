@@ -133,6 +133,8 @@ GenerateClass(
 	AddField( "BladeMaxWidth", KBTYPEINFO_FLOAT, kbGrass, m_BladeMaxWidth, false, "" )
 	AddField( "BladeMinHeight", KBTYPEINFO_FLOAT, kbGrass, m_BladeMinHeight, false, "" )
 	AddField( "BladeMaxHeight", KBTYPEINFO_FLOAT, kbGrass, m_BladeMaxHeight, false, "" )
+	AddField( "MaxBladeJitterOffset", KBTYPEINFO_FLOAT, kbGrass, m_MaxBladeJitterOffset, false, "" )
+	AddField( "MaxPatchJitterOffset", KBTYPEINFO_FLOAT, kbGrass, m_MaxPatchJitterOffset, false, "" )
 	AddField( "DiffuseMap", KBTYPEINFO_TEXTURE, kbGrass, m_pDiffuseMap, false, "" )
     AddField( "TestWind", KBTYPEINFO_VECTOR, kbGrass, m_TestWind, false, "" )
     AddField( "FakeAODarkness", KBTYPEINFO_FLOAT, kbGrass, m_FakeAODarkness, false, "" )

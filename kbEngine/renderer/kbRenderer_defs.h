@@ -268,6 +268,7 @@ struct kbShaderParamOverrides_t {
     void SetMat4( const std::string & varName, const kbMat4 & newMat ) {
         kbShaderParam_t & newParam = AllocateParam( varName );
         newParam.m_VarName = varName;
+		newParam.m_Mat4List.clear();
         newParam.m_Mat4List.push_back( newMat );
         newParam.m_Type = kbShaderParam_t::SHADER_MAT4;
         newParam.m_VarSizeBytes = sizeof(kbMat4);
@@ -284,6 +285,7 @@ struct kbShaderParamOverrides_t {
     void SetVec4( const std::string & varName, const kbVec4 & newVec ) {
         kbShaderParam_t & newParam = AllocateParam( varName );
         newParam.m_VarName = varName;
+		newParam.m_Vec4List.clear();
         newParam.m_Vec4List.push_back( newVec );
         newParam.m_Type = kbShaderParam_t::SHADER_VEC4;
         newParam.m_VarSizeBytes = sizeof(kbVec4);

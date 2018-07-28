@@ -81,6 +81,9 @@ void kbGrass::Constructor() {
 	m_BladeMinHeight = 5.0f;
 	m_BladeMaxHeight = 10.0f;
 
+	m_MaxBladeJitterOffset = 0.0f;
+	m_MaxPatchJitterOffset = 0.0f;
+
 	m_pDiffuseMap = nullptr;
 
 	m_pOwningTerrainComponent = nullptr;
@@ -176,8 +179,8 @@ void kbGrass::UpdateMaterial() {
 		kbVec4 offset;
 		offset.x = startVec.x;
 		offset.y = startVec.z;
-		offset.z = halfPatchLen * kbfrand();
-		offset.w = halfPatchLen * kbfrand();
+		offset.z = m_MaxBladeJitterOffset * kbfrand();
+		offset.w = m_MaxBladeJitterOffset * kbfrand();
 		bladeOffsets.push_back( offset );
 	}
 
@@ -186,7 +189,7 @@ void kbGrass::UpdateMaterial() {
     m_GrassShaderOverrides.SetTexture( "noiseMap", m_pNoiseMap );
 	m_GrassShaderOverrides.SetTexture( "heightMap", m_pOwningTerrainComponent->GetHeightMap() );
 
-	m_GrassShaderOverrides.SetVec4List( "bladeOffsets", bladeOffsets );
+	m_GrassShaderOverrides.SetVec4List( "jitterOffsets", bladeOffsets );
 	m_GrassShaderOverrides.SetVec4( "bladeParameters", kbVec4( m_BladeMinWidth, m_BladeMaxWidth, m_BladeMinHeight, m_BladeMaxHeight ) );
 	m_GrassShaderOverrides.SetVec4( "GrassData1", kbVec4( m_pOwningTerrainComponent->GetHeightScale(), m_pOwningTerrainComponent->GetOwner()->GetPosition().y, patchLen, 0.0f ) );
 	m_GrassShaderOverrides.SetVec4( "GrassData2", kbVec4( m_PatchStartCullDistance, 1.0f / ( m_PatchEndCullDistance - m_PatchStartCullDistance ), 0.0f, 0.0f ) );
@@ -233,13 +236,24 @@ void kbGrass::UpdateMaterial() {
 			int iVert = 0;
 			for ( int startY = 0; startY < m_PatchesPerCellSide; startY ++ ) {
 				for ( int startX = 0; startX < m_PatchesPerCellSide; startX ++) {
-					kbVec3 localPointPos = kbVec3( patchLen * startX, 0.0f, patchLen * startY ) - halfCell;
+					const kbVec3 patchJitterOffset = kbVec3( m_MaxPatchJitterOffset * kbfrand(), 0.0f, m_MaxPatchJitterOffset * kbfrand() );
+					kbVec3 localPointPos = patchJitterOffset + kbVec3( patchLen * startX, 0.0f, patchLen * startY ) - halfCell;
 					pVerts[iVert].position = localPointPos;
 
-					kbVec3 globalPointPos = cellStart + kbVec3( patchLen * startX, 0.0f, patchLen * startY );
+					kbVec3 globalPointPos = cellStart + kbVec3( patchLen * startX, 0.0f, patchLen * startY ) + patchJitterOffset;
 					pVerts[iVert].uv.Set ( ( globalPointPos.x - terrainMin.x ) / m_pOwningTerrainComponent->GetTerrainWidth(), ( globalPointPos.z - terrainMin.z ) / m_pOwningTerrainComponent->GetTerrainWidth() );
-					pVerts[iVert].patchIndices[0] = rand() % 60;
+					pVerts[iVert].patchIndices[0] = rand() % 60;		// Randomized blade jitters
 					pVerts[iVert].patchIndices[1] = pVerts[iVert].patchIndices[2] = pVerts[iVert].patchIndices[3] = pVerts[iVert].patchIndices[0];
+					int randVal = rand() % 100;
+
+					// Texture to use
+					if ( randVal > 96 ) {
+						pVerts[iVert].patchIndices[2] = 1;
+					} else if ( randVal > 90 ) {
+						pVerts[iVert].patchIndices[2] = 2;
+					} else {
+						pVerts[iVert].patchIndices[2] = 0;
+					}
 					iVert++;
 				}
 			}
