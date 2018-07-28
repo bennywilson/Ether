@@ -578,10 +578,7 @@ void EtherGame::ProcessInput( const float DT ) {
  *	EtherGame::TraceAgainstWorld
  */
 bool EtherGame::TraceAgainstWorld( const kbVec3 & startPt, const kbVec3 & endPt, kbVec3 & collisionPt, const bool bTraceAgainstDynamicCollision ) {
-	collisionPt = kbVec3( startPt.x, 0.0f, startPt.z );
-	return true;
 
-/*
 	if ( m_pWorldGenComponent == nullptr ) {
 		return false;
 	}
@@ -592,7 +589,7 @@ bool EtherGame::TraceAgainstWorld( const kbVec3 & startPt, const kbVec3 & endPt,
 		collisionPt = HitResult.m_HitLocation;
 	}
 
-	return HitResult.m_bHitFound;*/
+	return HitResult.m_bHitFound;
 }
 
 /**
@@ -914,12 +911,12 @@ void EtherGame::UpdateMotionControls( const float deltaTimeSec ) {
  */
 void EtherGame::UpdatePostProcess() {
 
-	//if ( m_pLocalPlayer == nullptr || m_pLocalPlayer->GetActorComponent() == nullptr ) {
+	if ( m_pLocalPlayer == nullptr || m_pLocalPlayer->GetActorComponent() == nullptr ) {
 		g_pRenderer->SetPostProcessSettings( kbPostProcessSettings_t() );
 		return;
-	//}
+	}
 
-	/*kbActorComponent *const playerActor = m_pLocalPlayer->GetActorComponent();
+	kbActorComponent *const playerActor = m_pLocalPlayer->GetActorComponent();
 
 	const float MaxDeathScreenRed = 2.0f;
 	const float t = playerActor->GetHealth() / playerActor->GetMaxHealth();
@@ -975,7 +972,7 @@ void EtherGame::UpdatePostProcess() {
 	updatedPPSettings.m_AdditiveColor.x += m_OLCTint.x;
 	updatedPPSettings.m_AdditiveColor.y += m_OLCTint.y;
 	updatedPPSettings.m_AdditiveColor.z += m_OLCTint.z;
-	g_pRenderer->SetPostProcessSettings( updatedPPSettings );*/
+	g_pRenderer->SetPostProcessSettings( updatedPPSettings );
 }
 
 
