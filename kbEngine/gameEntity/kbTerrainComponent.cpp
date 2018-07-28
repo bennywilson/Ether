@@ -197,7 +197,7 @@ void kbGrass::UpdateMaterial() {
     m_GrassShaderOverrides.SetTexture( "noiseMap", m_pNoiseMap );
 	m_GrassShaderOverrides.SetTexture( "heightMap", m_pOwningTerrainComponent->GetHeightMap() );
 
-	m_GrassShaderOverrides.SetVec4List( "bladeOffsets", bladeOffsets );
+	m_GrassShaderOverrides.SetVec4List( "jitterOffsets", bladeOffsets );
 	m_GrassShaderOverrides.SetVec4( "bladeParameters", kbVec4( m_BladeMinWidth, m_BladeMaxWidth, m_BladeMinHeight, m_BladeMaxHeight ) );
 	m_GrassShaderOverrides.SetVec4( "GrassData1", kbVec4( m_pOwningTerrainComponent->GetHeightScale(), m_pOwningTerrainComponent->GetOwner()->GetPosition().y, patchLen, 0.0f ) );
 	m_GrassShaderOverrides.SetVec4( "GrassData2", kbVec4( m_PatchStartCullDistance, 1.0f / ( m_PatchEndCullDistance - m_PatchStartCullDistance ), 0.0f, 0.0f ) );
@@ -250,9 +250,11 @@ void kbGrass::UpdateMaterial() {
 
 					kbVec3 globalPointPos = cellStart + kbVec3( patchLen * startX, 0.0f, patchLen * startY ) + patchJitterOffset;
 					pVerts[iVert].uv.Set ( ( globalPointPos.x - terrainMin.x ) / m_pOwningTerrainComponent->GetTerrainWidth(), ( globalPointPos.z - terrainMin.z ) / m_pOwningTerrainComponent->GetTerrainWidth() );
-					pVerts[iVert].patchIndices[0] = rand() % 60;
+					pVerts[iVert].patchIndices[0] = rand() % 60;		// Randomized blade jitters
 					pVerts[iVert].patchIndices[1] = pVerts[iVert].patchIndices[2] = pVerts[iVert].patchIndices[3] = pVerts[iVert].patchIndices[0];
 					int randVal = rand() % 100;
+
+					// Texture to use
 					if ( randVal > 96 ) {
 						pVerts[iVert].patchIndices[2] = 1;
 					} else if ( randVal > 90 ) {

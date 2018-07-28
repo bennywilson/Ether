@@ -10,7 +10,7 @@ cbuffer ConstantBuffer1 {
 	float4 GrassData1;
 	float4 GrassData2;
 	float4 cameraPos;
-	float4 bladeOffsets[64];
+	float4 jitterOffsets[64];
 	float4 bladeHeights[32];
 	float4 wind;
 	float4 time;
@@ -37,7 +37,7 @@ struct pixelInput {
 	float4 position			: SV_POSITION;
 	float2 uv				: TEXCOORD0;
 	float2 position2		: TEXCOORD1;
-	float clipParam			: TEXCOORD2;
+	float invAlphaMask			: TEXCOORD2;
 //	float3 normal			: TEXCOORD2;
 };
 
@@ -70,109 +70,68 @@ Texture2D heightMap			: register(t1);
 Texture2D grassDiffuseMap	: register(t2);
 Texture2D noiseMap			: register(t3);
 
-void CreateVertex( inout pixelInput output, geometryShaderInput input, float3 bladeLocalStart, float3 curVertexOffset, float2 uv, float clipParam ) {
+void CreateVertex( inout TriangleStream<pixelInput> OutputStream, float3 vertexWorldOrigin, float2 uv, float invAlphaMask ) {
 
-	float4 localPos = input.position + float4( bladeLocalStart + curVertexOffset, 0.0f );
-
-	output.position	= mul( localPos, vpMatrix);
-	output.position2 = output.position.zw;
-	output.clipParam = clipParam;
-	output.uv = uv;
+	pixelInput newVertex;
+	newVertex.position	= mul( float4( vertexWorldOrigin, 1.0f ), vpMatrix );
+	newVertex.position2 = newVertex.position.zw;
+	newVertex.invAlphaMask = invAlphaMask;
+	newVertex.uv = uv;
+	OutputStream.Append( newVertex );
 };
 
- void CreateGrassBlade( float3 grassOffset, point geometryShaderInput input[1], inout TriangleStream<pixelInput> OutputStream, float lodScale, int grassIdx ) {
+ void CreateGrassBlade( const float3 bladeLocalOrigin, point geometryShaderInput input[1], inout TriangleStream<pixelInput> OutputStream, float lodScale, int grassNumber ) {
 
-	int4 IndexVector = D3DCOLORtoUBYTE4( input[0].blendIndices );
-	int   IndexArray[4]        = (int[4])IndexVector;
-	
-	float3 bladeOff = float3( bladeOffsets[IndexArray[0] + grassIdx].x, 0.0f, bladeOffsets[IndexArray[0] + grassIdx].y );
-
-	float halfWidth = bladeParameters.y;
-
+	const int4 IndexVector = D3DCOLORtoUBYTE4( input[0].blendIndices );
 	const float startHeight = heightMap.SampleLevel( SampleType, input[0].uv, 0.0f ).r * GrassData1.x;
-	float3 bladeLocalStartPos = float3( 0.0f, startHeight, 0.0f ) + grassOffset + float3( bladeOffsets[IndexArray[0] + grassIdx].z, 0.0f, bladeOffsets[IndexArray[0] + grassIdx].w ) + wind.xyz;
-	
+	const float3 bladeWorldStartPos = float3( 0.0f, startHeight, 0.0f ) + bladeLocalOrigin + float3( jitterOffsets[IndexVector.x + grassNumber].z, 0.0f, jitterOffsets[IndexVector.x + grassNumber].w ) + wind.xyz + input[0].position.xyz;
 
-	/*
-
-	*/
-	const float3 noiseValues = noiseMap.SampleLevel( SampleType, input[0].uv * grassIdx, 0.0f).xyz;
-	float height = ( ( bladeParameters.w - bladeParameters.z ) * noiseValues.x + bladeParameters.z )* lodScale;
-
-	const float stepHeight = height / 3.0f;
-	const float3 stepUpVec = float3( 0.0f, stepHeight, 0.0f );
-	const float3 stepUpVecX2 = 2 * stepUpVec;
-	const float3 steUpVecX3 = 3.0f * stepUpVec;
-
-	const int texIdx = round( input[0].blendIndices.z * 256.0f );
-	const float textureBorderSize = 0.0f;
-	const float textureSize = 0.125f;//(1.0f / 8.0f) - textureBorderSize;
-	const float textureStart = textureSize * texIdx;//+ textureBorderSize;
-	const float textureEnd = textureStart + textureSize;
-	float clipParam = 0;
-	if (texIdx < 1 )
-		clipParam = 1;
-
-	const float oscNoise = noiseValues.x * 5.0f;
-	float oscillation = sin(oscNoise.x + time.x * (1.0f * ((oscNoise.x * 0.5f) + 0.5f))) * 0.5f + 0.5f;
-
+	// Check collision
 	float3 windpush = 0.0f;
-	const float3 bladeWorldStart = bladeLocalStartPos + input[0].position.xyz;
-	if ( length( collisionSphere.xz - bladeWorldStart.xz ) < collisionSphere.w && abs(collisionSphere.y - bladeWorldStart.y) < collisionSphere.w ) {
-		float3 vecTo = bladeWorldStart - collisionSphere.xyz;
+	if ( length( collisionSphere.xz - bladeWorldStartPos.xz ) < collisionSphere.w && abs( collisionSphere.y - bladeWorldStartPos.y ) < collisionSphere.w ) {
+		float3 vecTo = bladeWorldStartPos - collisionSphere.xyz;
 		vecTo.y = min( vecTo.y, 0.0f );
 		windpush = 1.0f - saturate( length( vecTo ) / collisionSphere.w );
 		windpush *= normalize( vecTo ) * collisionSphere.w * 0.55f;
 	}
 
-	const float3 windAmt = windpush + ( wind.xyz) * ( oscillation * 0.1f) + 0.9f;
-	const float3 windAmt2X = windAmt * 2.0f;
-	const float3 windAmt3X = windAmt * 3.0f;
+	const float3 noiseValues = noiseMap.SampleLevel( SampleType, input[0].uv * grassNumber, 0.0f ).xyz;
 
-	pixelInput newPoint1 = (pixelInput)0;
-	CreateVertex( newPoint1, input[0], bladeLocalStartPos, float3( 0.0f, 0.0f, 0.0f ), float2( textureStart, 1.0f - textureBorderSize ), clipParam );
-	OutputStream.Append( newPoint1 );
+	const float oscNoise = noiseValues.x * 5.0f;
+	float oscillation = sin( oscNoise.x + time.x * ( 1.0f * ( ( oscNoise.x * 0.5f ) + 0.5f ) ) ) * 0.5f + 0.5f;
+	const float3 windVec = windpush + ( wind.xyz) * ( oscillation * 0.1f ) + 0.9f;
+	const float3 windVec_2X = windVec * 2.0f;
+	const float3 windVec_3X = windVec * 3.0f;
 
-	pixelInput newPoint2 = (pixelInput)0;
-	CreateVertex( newPoint2, input[0], bladeLocalStartPos, bladeOff, float2( textureEnd, 1.0f - textureBorderSize ), clipParam );
-	OutputStream.Append( newPoint2 );
+	const float3 jitterOffset = float3( jitterOffsets[IndexVector.x + grassNumber].x, 0.0f, jitterOffsets[IndexVector.x + grassNumber].y );
 
-	pixelInput newPoint3 = (pixelInput)0;
-	CreateVertex( newPoint3, input[0], bladeLocalStartPos, stepUpVec + windAmt, float2( textureStart, 0.67f ), clipParam );
-	OutputStream.Append( newPoint3 );
+	const float textureBorderSize = 0.0f;
+	const float textureSize = ( 1.0f / 8.0f ) - textureBorderSize;	// Assumes 8 plant textures packed together.  Polygonal grass is at index 0
+	const float textureStartU = textureSize * IndexVector.x;
+	const float textureEndU = textureStartU + textureSize;
+	const float invAlphaMask = 1 - IndexVector.x;		// Polygonal grass (index 0) doesn't require any clipping
 
-	pixelInput newPoint4 = (pixelInput)0;
-	CreateVertex( newPoint4, input[0], bladeLocalStartPos, bladeOff + stepUpVec + windAmt, float2( textureEnd, 0.67f ), clipParam );
-	OutputStream.Append( newPoint4 );
+	const float grassHeight = ( ( bladeParameters.w - bladeParameters.z ) * noiseValues.x + bladeParameters.z ) * lodScale;
+	const float3 segmentHeight = float3( 0.0f, grassHeight * 0.33333f, 0.0f );
+	const float3 segmentHeight_2X = 2 * segmentHeight;
+	const float3 segmentHeight_3X = 3.0f * segmentHeight;
 
-	pixelInput newPoint5 = (pixelInput)0;
-	CreateVertex( newPoint5, input[0], bladeLocalStartPos, stepUpVecX2 + windAmt2X, float2( textureStart, 0.33f ), clipParam );
-	OutputStream.Append( newPoint5 );
+	CreateVertex( OutputStream, bladeWorldStartPos, float2( textureStartU, 1.0f - textureBorderSize ), invAlphaMask );
+	CreateVertex( OutputStream, bladeWorldStartPos + jitterOffset, float2( textureEndU, 1.0f - textureBorderSize ), invAlphaMask );
+	CreateVertex( OutputStream, bladeWorldStartPos + segmentHeight + windVec, float2( textureStartU, 0.67f ), invAlphaMask );
+	CreateVertex( OutputStream, bladeWorldStartPos + jitterOffset + segmentHeight + windVec, float2( textureEndU, 0.67f ), invAlphaMask );
+	CreateVertex( OutputStream, bladeWorldStartPos + segmentHeight_2X + windVec_2X, float2( textureStartU, 0.33f ), invAlphaMask );
+	CreateVertex( OutputStream, bladeWorldStartPos + jitterOffset + segmentHeight_2X + windVec_2X, float2( textureEndU, 0.33f ), invAlphaMask  );
 
-	pixelInput newPoint6 = (pixelInput)0;
-	CreateVertex( newPoint6, input[0], bladeLocalStartPos, bladeOff + stepUpVecX2 + windAmt2X, float2( textureEnd, 0.33f ), clipParam  );
-	OutputStream.Append( newPoint6 );
-
-	if ( texIdx < 1 ) {
-		pixelInput newPoint7 = (pixelInput)0;
-		CreateVertex( newPoint7, input[0], bladeLocalStartPos, steUpVecX3 + bladeOff * 0.5f + windAmt3X, float2( ( textureStart + textureEnd ) * 0.5f, textureBorderSize ), clipParam );
-		OutputStream.Append( newPoint7 );
+	if ( IndexVector.x < 1 ) {
+		CreateVertex( OutputStream, bladeWorldStartPos + segmentHeight_3X + jitterOffset * 0.5f + windVec_3X, float2( ( textureStartU + textureEndU ) * 0.5f, textureBorderSize ), invAlphaMask );
 	} else {
-		pixelInput newPoint7 = (pixelInput)0;
-		CreateVertex( newPoint7, input[0], bladeLocalStartPos, steUpVecX3 + windAmt3X, float2( textureStart, textureBorderSize ), clipParam );
-		OutputStream.Append( newPoint7 );	
+		CreateVertex( OutputStream, bladeWorldStartPos + segmentHeight_3X + windVec_3X, float2( textureStartU, textureBorderSize ), invAlphaMask );
 
-		pixelInput newPoint8 = (pixelInput)0;
-		CreateVertex( newPoint8, input[0], bladeLocalStartPos, steUpVecX3 + bladeOff + windAmt3X, float2( ( textureStart + textureEnd ) * 0.5f, textureBorderSize ), clipParam );
-		OutputStream.Append( newPoint8 );
+		CreateVertex( OutputStream, bladeWorldStartPos + segmentHeight_3X + jitterOffset + windVec_3X, float2( ( textureStartU + textureEndU ) * 0.5f, textureBorderSize ), invAlphaMask );
 	}
-/*
-	pixelInput newPoint8 = (pixelInput)0;
-	CreateVertex( newPoint8, input[0], bladeLocalStartPos, steUpVecX3 + bladeOff * 0.5f + windAmt3X, float2( ( textureStart + textureEnd ) * 0.5f, textureBorderSize ), clipParam );
-	OutputStream.Append( newPoint8 );
-	*/
-	OutputStream.RestartStrip();
 
+	OutputStream.RestartStrip();
  }
 
  [maxvertexcount(32)]
@@ -210,7 +169,7 @@ Texture2D Mat4Diffuse	: register(t7);
 
 	if ( input.uv.x >= 2.0f/8.0f ) fakeAO = 1;
 	output.Color.xyzw = grassDiffuseMap.Sample( SampleType, input.uv ).xyzw * fakeAO;
-	clip( ( input.clipParam + output.Color.w ) - 0.01f );
+	clip( ( input.invAlphaMask + output.Color.w ) - 0.01f );
 
 	output.Normal.xyz = float3( 0.0f, 1.0f,0.0 );
 
