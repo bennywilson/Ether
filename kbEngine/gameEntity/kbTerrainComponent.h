@@ -53,6 +53,9 @@ private:
 	float										m_BladeMinHeight;
 	float										m_BladeMaxHeight;
 
+	float										m_MaxPatchJitterOffset;
+	float										m_MaxBladeJitterOffset;
+
     kbTexture *									m_pDiffuseMap;
 
     kbVec3                                      m_TestWind;

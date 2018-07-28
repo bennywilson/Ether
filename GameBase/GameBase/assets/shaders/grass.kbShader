@@ -11,9 +11,11 @@ cbuffer ConstantBuffer1 {
 	float4 GrassData2;
 	float4 cameraPos;
 	float4 bladeOffsets[64];
+	float4 bladeHeights[32];
 	float4 wind;
 	float4 time;
 	float4 fakeAOData;		// x - Darkness, y - power
+	float4 collisionSphere;
 };
 
 
@@ -35,6 +37,7 @@ struct pixelInput {
 	float4 position			: SV_POSITION;
 	float2 uv				: TEXCOORD0;
 	float2 position2		: TEXCOORD1;
+	float clipParam			: TEXCOORD2;
 //	float3 normal			: TEXCOORD2;
 };
 
@@ -67,69 +70,107 @@ Texture2D heightMap			: register(t1);
 Texture2D grassDiffuseMap	: register(t2);
 Texture2D noiseMap			: register(t3);
 
-void CreateVertex( inout pixelInput output, geometryShaderInput input, float3 bladeLocalStart, float3 curVertexOffset, float2 uv ) {
+void CreateVertex( inout pixelInput output, geometryShaderInput input, float3 bladeLocalStart, float3 curVertexOffset, float2 uv, float clipParam ) {
 
 	float4 localPos = input.position + float4( bladeLocalStart + curVertexOffset, 0.0f );
+
 	output.position	= mul( localPos, vpMatrix);
 	output.position2 = output.position.zw;
+	output.clipParam = clipParam;
 	output.uv = uv;
 };
 
- void CreateGrassBlade( float3 grassOffset, point geometryShaderInput input[1], inout TriangleStream<pixelInput> OutputStream, float scale, int grassIdx ) {
+ void CreateGrassBlade( float3 grassOffset, point geometryShaderInput input[1], inout TriangleStream<pixelInput> OutputStream, float lodScale, int grassIdx ) {
 
 	int4 IndexVector = D3DCOLORtoUBYTE4( input[0].blendIndices );
 	int   IndexArray[4]        = (int[4])IndexVector;
-	float3 bladeOff = float3( bladeOffsets[IndexArray[grassIdx]].x, 0.0f, bladeOffsets[IndexArray[grassIdx]].y );
+	
+	float3 bladeOff = float3( bladeOffsets[IndexArray[0] + grassIdx].x, 0.0f, bladeOffsets[IndexArray[0] + grassIdx].y );
 
 	float halfWidth = bladeParameters.y;
-	float height = bladeParameters.w * scale;
 
 	const float startHeight = heightMap.SampleLevel( SampleType, input[0].uv, 0.0f ).r * GrassData1.x;
-	const float3 bladeLocalStartPos = float3( 0.0f, startHeight, 0.0f ) + grassOffset + float3( bladeOffsets[IndexArray[grassIdx]].z, 0.0f, bladeOffsets[IndexArray[grassIdx]].w ) + wind.xyz;
+	float3 bladeLocalStartPos = float3( 0.0f, startHeight, 0.0f ) + grassOffset + float3( bladeOffsets[IndexArray[0] + grassIdx].z, 0.0f, bladeOffsets[IndexArray[0] + grassIdx].w ) + wind.xyz;
 	
+
+	/*
+
+	*/
+	const float3 noiseValues = noiseMap.SampleLevel( SampleType, input[0].uv * grassIdx, 0.0f).xyz;
+	float height = ( ( bladeParameters.w - bladeParameters.z ) * noiseValues.x + bladeParameters.z )* lodScale;
+
 	const float stepHeight = height / 3.0f;
 	const float3 stepUpVec = float3( 0.0f, stepHeight, 0.0f );
 	const float3 stepUpVecX2 = 2 * stepUpVec;
 	const float3 steUpVecX3 = 3.0f * stepUpVec;
 
+	const int texIdx = round( input[0].blendIndices.z * 256.0f );
 	const float textureBorderSize = 0.0f;
-	const float textureSize = (1.0f / 8.0f) - textureBorderSize;
+	const float textureSize = 0.125f;//(1.0f / 8.0f) - textureBorderSize;
+	const float textureStart = textureSize * texIdx;//+ textureBorderSize;
+	const float textureEnd = textureStart + textureSize;
+	float clipParam = 0;
+	if (texIdx < 1 )
+		clipParam = 1;
 
-	const float3 noiseValues = noiseMap.SampleLevel( SampleType, input[0].uv * grassIdx, 0.0f).xyz * 5.0f;
-	float oscillation = sin(noiseValues.x + time.x * (1.0f * ((noiseValues.x * 0.5f) + 0.5f))) * 0.5f + 0.5f;
-	
-	const float3 windAmt = wind.xyz * ( oscillation * 0.1f) + 0.9f;
+	const float oscNoise = noiseValues.x * 5.0f;
+	float oscillation = sin(oscNoise.x + time.x * (1.0f * ((oscNoise.x * 0.5f) + 0.5f))) * 0.5f + 0.5f;
+
+	float3 windpush = 0.0f;
+	const float3 bladeWorldStart = bladeLocalStartPos + input[0].position.xyz;
+	if ( length( collisionSphere.xz - bladeWorldStart.xz ) < collisionSphere.w && abs(collisionSphere.y - bladeWorldStart.y) < collisionSphere.w ) {
+		float3 vecTo = bladeWorldStart - collisionSphere.xyz;
+		vecTo.y = min( vecTo.y, 0.0f );
+		windpush = 1.0f - saturate( length( vecTo ) / collisionSphere.w );
+		windpush *= normalize( vecTo ) * collisionSphere.w * 0.55f;
+	}
+
+	const float3 windAmt = windpush + ( wind.xyz) * ( oscillation * 0.1f) + 0.9f;
 	const float3 windAmt2X = windAmt * 2.0f;
 	const float3 windAmt3X = windAmt * 3.0f;
 
 	pixelInput newPoint1 = (pixelInput)0;
-	CreateVertex( newPoint1, input[0], bladeLocalStartPos, float3( 0.0f, 0.0f, 0.0f ), float2( textureBorderSize, 1.0f - textureBorderSize ) );
+	CreateVertex( newPoint1, input[0], bladeLocalStartPos, float3( 0.0f, 0.0f, 0.0f ), float2( textureStart, 1.0f - textureBorderSize ), clipParam );
 	OutputStream.Append( newPoint1 );
 
 	pixelInput newPoint2 = (pixelInput)0;
-	CreateVertex( newPoint2, input[0], bladeLocalStartPos, bladeOff, float2( textureSize, 1.0f - textureBorderSize ) );
+	CreateVertex( newPoint2, input[0], bladeLocalStartPos, bladeOff, float2( textureEnd, 1.0f - textureBorderSize ), clipParam );
 	OutputStream.Append( newPoint2 );
 
 	pixelInput newPoint3 = (pixelInput)0;
-	CreateVertex( newPoint3, input[0], bladeLocalStartPos, stepUpVec + windAmt, float2( textureBorderSize, 0.67f ) );
+	CreateVertex( newPoint3, input[0], bladeLocalStartPos, stepUpVec + windAmt, float2( textureStart, 0.67f ), clipParam );
 	OutputStream.Append( newPoint3 );
 
 	pixelInput newPoint4 = (pixelInput)0;
-	CreateVertex( newPoint4, input[0], bladeLocalStartPos, bladeOff + stepUpVec + windAmt, float2( textureSize, 0.67f ) );
+	CreateVertex( newPoint4, input[0], bladeLocalStartPos, bladeOff + stepUpVec + windAmt, float2( textureEnd, 0.67f ), clipParam );
 	OutputStream.Append( newPoint4 );
 
 	pixelInput newPoint5 = (pixelInput)0;
-	CreateVertex( newPoint5, input[0], bladeLocalStartPos, stepUpVecX2 + windAmt2X, float2( textureBorderSize, 0.33f ) );
+	CreateVertex( newPoint5, input[0], bladeLocalStartPos, stepUpVecX2 + windAmt2X, float2( textureStart, 0.33f ), clipParam );
 	OutputStream.Append( newPoint5 );
 
 	pixelInput newPoint6 = (pixelInput)0;
-	CreateVertex( newPoint6, input[0], bladeLocalStartPos, bladeOff + stepUpVecX2 + windAmt2X, float2( textureSize, 0.33f )  );
+	CreateVertex( newPoint6, input[0], bladeLocalStartPos, bladeOff + stepUpVecX2 + windAmt2X, float2( textureEnd, 0.33f ), clipParam  );
 	OutputStream.Append( newPoint6 );
 
-	pixelInput newPoint7 = (pixelInput)0;
-	CreateVertex( newPoint7, input[0], bladeLocalStartPos, steUpVecX3 + bladeOff * 0.5f + windAmt3X, float2( textureSize * 0.5f, textureBorderSize ) );
-	OutputStream.Append( newPoint7 );
+	if ( texIdx < 1 ) {
+		pixelInput newPoint7 = (pixelInput)0;
+		CreateVertex( newPoint7, input[0], bladeLocalStartPos, steUpVecX3 + bladeOff * 0.5f + windAmt3X, float2( ( textureStart + textureEnd ) * 0.5f, textureBorderSize ), clipParam );
+		OutputStream.Append( newPoint7 );
+	} else {
+		pixelInput newPoint7 = (pixelInput)0;
+		CreateVertex( newPoint7, input[0], bladeLocalStartPos, steUpVecX3 + windAmt3X, float2( textureStart, textureBorderSize ), clipParam );
+		OutputStream.Append( newPoint7 );	
 
+		pixelInput newPoint8 = (pixelInput)0;
+		CreateVertex( newPoint8, input[0], bladeLocalStartPos, steUpVecX3 + bladeOff + windAmt3X, float2( ( textureStart + textureEnd ) * 0.5f, textureBorderSize ), clipParam );
+		OutputStream.Append( newPoint8 );
+	}
+/*
+	pixelInput newPoint8 = (pixelInput)0;
+	CreateVertex( newPoint8, input[0], bladeLocalStartPos, steUpVecX3 + bladeOff * 0.5f + windAmt3X, float2( ( textureStart + textureEnd ) * 0.5f, textureBorderSize ), clipParam );
+	OutputStream.Append( newPoint8 );
+	*/
 	OutputStream.RestartStrip();
 
  }
@@ -166,9 +207,12 @@ Texture2D Mat4Diffuse	: register(t7);
 
 	float fakeAO = abs( ( 1.0f - input.uv.y ) * ( 1.0f - fakeAOData.x ) + fakeAOData.x );
 	fakeAO = pow( fakeAO, abs(fakeAOData.y) );
-	output.Color.xyzw = grassDiffuseMap.Sample( SampleType, input.uv ).xyzw * fakeAO;
 
-	output.Normal.xyz = float3(0.0f,1.0f,0.0);
+	if ( input.uv.x >= 2.0f/8.0f ) fakeAO = 1;
+	output.Color.xyzw = grassDiffuseMap.Sample( SampleType, input.uv ).xyzw * fakeAO;
+	clip( ( input.clipParam + output.Color.w ) - 0.01f );
+
+	output.Normal.xyz = float3( 0.0f, 1.0f,0.0 );
 
 	//dsfdsf
 	output.Spec = float4( 0.25f, 0.25f, 0.25f, 1.0f );

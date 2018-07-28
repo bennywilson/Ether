@@ -81,6 +81,9 @@ void kbGrass::Constructor() {
 	m_BladeMinHeight = 5.0f;
 	m_BladeMaxHeight = 10.0f;
 
+	m_MaxBladeJitterOffset = 0.0f;
+	m_MaxPatchJitterOffset = 0.0f;
+
 	m_pDiffuseMap = nullptr;
 
 	m_pOwningTerrainComponent = nullptr;
@@ -123,6 +126,14 @@ void kbGrass::RenderSync() {
 
 	if ( m_bNeedsMaterialUpdate ) {
 		UpdateMaterial();
+	} else {
+		extern kbVec3 g_CollisionSphere;
+
+		for ( int i = 0; i < m_GrassRenderObjects.size(); i++ ) {
+			static float w = 13.60f;
+			m_GrassRenderObjects[i].m_RenderObject.m_ShaderParamOverrides.SetVec4( "collisionSphere", kbVec4( g_CollisionSphere.x, g_CollisionSphere.y, g_CollisionSphere.z, w ) );
+			g_pRenderer->UpdateRenderObject( m_GrassRenderObjects[i].m_RenderObject );
+		}
 	}
 }
 
@@ -176,8 +187,8 @@ void kbGrass::UpdateMaterial() {
 		kbVec4 offset;
 		offset.x = startVec.x;
 		offset.y = startVec.z;
-		offset.z = halfPatchLen * kbfrand();
-		offset.w = halfPatchLen * kbfrand();
+		offset.z = m_MaxBladeJitterOffset * kbfrand();
+		offset.w = m_MaxBladeJitterOffset * kbfrand();
 		bladeOffsets.push_back( offset );
 	}
 
@@ -233,13 +244,22 @@ void kbGrass::UpdateMaterial() {
 			int iVert = 0;
 			for ( int startY = 0; startY < m_PatchesPerCellSide; startY ++ ) {
 				for ( int startX = 0; startX < m_PatchesPerCellSide; startX ++) {
-					kbVec3 localPointPos = kbVec3( patchLen * startX, 0.0f, patchLen * startY ) - halfCell;
+					const kbVec3 patchJitterOffset = kbVec3( m_MaxPatchJitterOffset * kbfrand(), 0.0f, m_MaxPatchJitterOffset * kbfrand() );
+					kbVec3 localPointPos = patchJitterOffset + kbVec3( patchLen * startX, 0.0f, patchLen * startY ) - halfCell;
 					pVerts[iVert].position = localPointPos;
 
-					kbVec3 globalPointPos = cellStart + kbVec3( patchLen * startX, 0.0f, patchLen * startY );
+					kbVec3 globalPointPos = cellStart + kbVec3( patchLen * startX, 0.0f, patchLen * startY ) + patchJitterOffset;
 					pVerts[iVert].uv.Set ( ( globalPointPos.x - terrainMin.x ) / m_pOwningTerrainComponent->GetTerrainWidth(), ( globalPointPos.z - terrainMin.z ) / m_pOwningTerrainComponent->GetTerrainWidth() );
 					pVerts[iVert].patchIndices[0] = rand() % 60;
 					pVerts[iVert].patchIndices[1] = pVerts[iVert].patchIndices[2] = pVerts[iVert].patchIndices[3] = pVerts[iVert].patchIndices[0];
+					int randVal = rand() % 100;
+					if ( randVal > 96 ) {
+						pVerts[iVert].patchIndices[2] = 1;
+					} else if ( randVal > 90 ) {
+						pVerts[iVert].patchIndices[2] = 2;
+					} else {
+						pVerts[iVert].patchIndices[2] = 0;
+					}
 					iVert++;
 				}
 			}

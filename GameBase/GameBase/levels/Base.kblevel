@@ -17,13 +17,17 @@ kbGameEntity 0 0 0 0 {
 			kbGrass { 
 				Enabled = 0
 				LifeTime =  -1.000000
-				BladeMaxHeight =  17.000000
+				BladeMaxHeight =  25.000000
 				BladeMaxWidth =  1.000000
-				BladeMinHeight =  5.000000
+				BladeMinHeight =  20.000000
 				BladeMinWidth =  1.000000
-				DiffuseMap = .\assets\models\enviroobjects\grass_1.bmp
-				GrassCellsPerTerrainSide = 32
-				GrassMap = .\assets\models\enviroobjects\grass_1.bmp
+				DiffuseMap = .\assets\models\enviroobjects\grass_1.dds
+				FakeAODarkness =  0.250000
+				FakeAOPower =  2.000000
+				GrassCellsPerTerrainSide = 8
+				GrassMap = .\assets\models\enviroobjects\grass_1.dds
+				MaxBladeJitterOffset =  0.000000
+				MaxPatchJitterOffset =  2.000000
 				NoiseMap = .\assets\terrain\noisemap.png
 				PatchEndCullDistance =  1000.000000
 				PatchStartCullDistance =  200.000000
@@ -203,6 +207,26 @@ kbGameEntity 0 0 0 0 {
 		CastsShadow = 0
 		m_RenderPass = LightingPass
 		Model = .\assets\models\vehicles\jet.ms3d
+		ShaderOverride = 1
+			..\..\kbengine\assets\shaders\basicshader.kbshader
+
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Entity_25"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 25.661926 35.567173 -4.274522
+		Scale = 1.000000 1.000000 1.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		m_RenderPass = LightingPass
+		Model = .\assets\models\test\sphere.ms3d
 		ShaderOverride = 1
 			..\..\kbengine\assets\shaders\basicshader.kbshader
 
