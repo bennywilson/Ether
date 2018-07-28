@@ -105,11 +105,12 @@ void CreateVertex( inout TriangleStream<pixelInput> OutputStream, float3 vertexW
 
 	const float3 jitterOffset = float3( jitterOffsets[IndexVector.x + grassNumber].x, 0.0f, jitterOffsets[IndexVector.x + grassNumber].y );
 
+	const int textureIdx = IndexVector.x;//input[0].blendIndices.z * 256.0f;
 	const float textureBorderSize = 0.0f;
 	const float textureSize = ( 1.0f / 8.0f ) - textureBorderSize;	// Assumes 8 plant textures packed together.  Polygonal grass is at index 0
-	const float textureStartU = textureSize * IndexVector.x;
+	const float textureStartU = textureSize* textureIdx;
 	const float textureEndU = textureStartU + textureSize;
-	const float invAlphaMask = 1 - IndexVector.x;		// Polygonal grass (index 0) doesn't require any clipping
+	const float invAlphaMask = ( textureIdx == 0 ) ? ( 1 ) : ( 0 );//1 - textureIdx;		// Polygonal grass (index 0) doesn't require any clipping
 
 	const float grassHeight = ( ( bladeParameters.w - bladeParameters.z ) * noiseValues.x + bladeParameters.z ) * lodScale;
 	const float3 segmentHeight = float3( 0.0f, grassHeight * 0.33333f, 0.0f );
@@ -123,7 +124,7 @@ void CreateVertex( inout TriangleStream<pixelInput> OutputStream, float3 vertexW
 	CreateVertex( OutputStream, bladeWorldStartPos + segmentHeight_2X + windVec_2X, float2( textureStartU, 0.33f ), invAlphaMask );
 	CreateVertex( OutputStream, bladeWorldStartPos + jitterOffset + segmentHeight_2X + windVec_2X, float2( textureEndU, 0.33f ), invAlphaMask  );
 
-	if ( IndexVector.x < 1 ) {
+	if ( textureIdx == 0 ) {
 		CreateVertex( OutputStream, bladeWorldStartPos + segmentHeight_3X + jitterOffset * 0.5f + windVec_3X, float2( ( textureStartU + textureEndU ) * 0.5f, textureBorderSize ), invAlphaMask );
 	} else {
 		CreateVertex( OutputStream, bladeWorldStartPos + segmentHeight_3X + windVec_3X, float2( textureStartU, textureBorderSize ), invAlphaMask );
