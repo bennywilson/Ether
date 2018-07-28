@@ -2219,7 +2219,6 @@ void kbRenderer_DX11::SetShaderMat4( const std::string & varName, const kbMat4 &
 	kbError( "Failed to set Shader var" );
 }
 
-kbVec3 g_CollisionSphere;
 /**
  *	kbRenderer_DX11::SetShaderVec4
  */

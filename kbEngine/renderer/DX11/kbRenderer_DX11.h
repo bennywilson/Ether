@@ -30,8 +30,6 @@ extern class kbRenderer_DX11 * g_pRenderer;
 extern XMFLOAT4X4 & XMFLOAT4X4FromkbMat4( kbMat4 & matrix );
 extern kbMat4 & kbMat4FromXMFLOAT4X4( XMFLOAT4X4 & matrix );
 
-extern kbVec3 g_CollisionSphere;
-
 
 /**
  *	kbRenderWindow
