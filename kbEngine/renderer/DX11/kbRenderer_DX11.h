@@ -30,7 +30,26 @@ class kbLightShaftsComponent;
 extern XMFLOAT4X4 & XMFLOAT4X4FromkbMat4( kbMat4 & matrix );
 extern kbMat4 & kbMat4FromXMFLOAT4X4( XMFLOAT4X4 & matrix );
 
+class kbRenderWindow_DX11 : public kbRenderWindow {
 
+	friend class kbRenderer_DX11;
+
+//-------------------------------------------------------------------------------------------------------------------------------------------------------------
+public:
+												kbRenderWindow_DX11( HWND inHwnd, const RECT & rect, const float nearPlane, const float farPlane );
+												~kbRenderWindow_DX11();
+
+private:
+
+	virtual void								BeginFrame_Internal() override;
+	virtual void								EndFrame_Internal() override;
+	virtual void								Release_Internal() override;
+
+	IDXGISwapChain *							m_pSwapChain;
+	ID3D11RenderTargetView *					m_pRenderTargetView;
+
+	kbMat4										m_EyeMatrices[2];
+};
 
 /**
  *	kbRenderTexture
@@ -352,12 +371,6 @@ public:
 	virtual void								SetRenderWindow( HWND hwnd ) override;
 
 
-	// View Transform
-	virtual void								SetRenderViewTransform( const HWND hwnd, const kbVec3 & position, const kbQuat & rotation ) override;
-	virtual void								GetRenderViewTransform( const HWND hwnd, kbVec3 & position, kbQuat & rotation ) override;
-
-
-
 	// Post-process
 	void										SetPostProcessSettings( const kbPostProcessSettings_t & postProcessSettings );
 
@@ -372,7 +385,7 @@ public:
 	bool										IsUsingHMDTrackingOnly() const { return m_bUsingHMDTrackingOnly; }
 	int											GetFrameNum() const { return m_FrameNum; }
 	const ovrPosef *							GetOvrEyePose() const { return m_EyeRenderPose; }
-	const kbMat4 *								GetEyeMatrices() const { return this->m_RenderWindowList[0]->m_EyeMatrices; }
+	const kbMat4 *								GetEyeMatrices() const { return ((kbRenderWindow_DX11*)m_RenderWindowList[0])->m_EyeMatrices; }
 
 
 	virtual kbVec2i								GetEntityIdAtScreenPosition( const uint x, const uint y ) override;

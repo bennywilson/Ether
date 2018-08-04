@@ -150,77 +150,48 @@ private:
 //-------------------------------------------------------------------------------------------------------------------------------------
 
 /**
- *	kbRenderWindow::kbRenderWindow
+ *	kbRenderWindow_DX11::kbRenderWindow_DX11
  */
-kbRenderWindow::kbRenderWindow() :
-	m_Hwnd( nullptr ),
+kbRenderWindow_DX11::kbRenderWindow_DX11( HWND inHwnd, const RECT & rect, const float nearPlane, const float farPlane ) :
+	kbRenderWindow( inHwnd, rect, nearPlane, farPlane ),
 	m_pSwapChain( nullptr ),
-	m_pRenderTargetView( nullptr ),
-	m_ViewPixelWidth( 0 ),
-	m_ViewPixelHeight( 0 ),
-	m_fViewPixelWidth( 0.0f ),
-	m_fViewPixelHeight( 0.0f ),
-	m_fViewPixelHalfWidth( 0.0f ),
-	m_fViewPixelHalfHeight( 0.0f ) {
+	m_pRenderTargetView( nullptr ) {
 
-	m_ProjectionMatrix.MakeIdentity();
-	m_InverseProjectionMatrix.MakeIdentity();
-	m_ViewMatrix.MakeIdentity();
-	m_ViewProjectionMatrix.MakeIdentity();
-	m_InverseViewProjectionMatrix.MakeIdentity();
-	m_CameraRotation.x = m_CameraRotation.y = m_CameraRotation.z = m_CameraRotation.w = 0.0f;
+	// HACK should be in base constructor
+	kbMat4 projectionMat = GetProjectionMatrix();
+	XMMATRIX inverseProj = XMMatrixInverse( nullptr, XMMATRIXFromkbMat4( projectionMat ) );
+	HackSetInverseProjectionMatrix( kbMat4FromXMMATRIX( inverseProj ) );
 }
 
 /**
- *	kbRenderWindow::~kbRenderWindow
+ *	kbRenderWindow_DX11::~kbRenderWindow_DX11
  */
-kbRenderWindow::~kbRenderWindow() {
+kbRenderWindow_DX11::~kbRenderWindow_DX11() {
 	kbErrorCheck( m_pSwapChain == nullptr, "kbRenderWindow::~kbRenderWindow() - Swap chain still exists" );
 	kbErrorCheck( m_pRenderTargetView == nullptr, "kbRenderWindow::~kbRenderWindow() - Target view still exists" );
-	
-	{
-		std::map< const kbComponent *, kbRenderObject * >::iterator iter;
-	
-		for ( iter = m_RenderObjectMap.begin(); iter != m_RenderObjectMap.end(); iter++ ) {
-		   delete iter->second;
-		}
-	}
-	
-	{
-		std::map< const kbLightComponent *, kbRenderLight * >::iterator iter;
-	
-		for ( iter = m_RenderLightMap.begin(); iter != m_RenderLightMap.end(); iter++ ) {
-		   delete iter->second;
-		}
-	}
 }
 
 /**
- *	kbRenderWindow::BeginFrame
+ *	kbRenderWindow_DX11::BeginFrame_Internal
  */
-void kbRenderWindow::BeginFrame() {
-	kbMat4 translationMatrix( kbMat4::identity );
-	translationMatrix[3].ToVec3() = -m_CameraPosition;
-	kbMat4 rotationMatrix = m_CameraRotation.ToMat4();
-	rotationMatrix.TransposeSelf();
-	
-	m_ViewMatrix = translationMatrix * rotationMatrix;
-	m_ViewProjectionMatrix = m_ViewMatrix * m_ProjectionMatrix;
-	
-	XMMATRIX inverseProj = XMMatrixInverse( nullptr, XMMATRIXFromkbMat4( m_ViewProjectionMatrix ) );
-	m_InverseViewProjectionMatrix = kbMat4FromXMMATRIX( inverseProj );
+void kbRenderWindow_DX11::BeginFrame_Internal() {
+	kbMat4 viewProjectionMatrix = GetViewProjectionMatrix();
+
+	XMMATRIX inverseProj = XMMatrixInverse( nullptr, XMMATRIXFromkbMat4( viewProjectionMatrix ) );
+	HackSetInverseViewProjectionMatrix( kbMat4FromXMMATRIX( inverseProj ) );
 }
+
 /**
- *	kbRenderWindow::EndFrame
+ *	kbRenderWindow_DX11::EndFrame
  */
-void kbRenderWindow::EndFrame() {
+void kbRenderWindow_DX11::EndFrame_Internal() {
 	m_pSwapChain->Present( 0, 0 ); 
 }
 
 /**
- *	kbRenderWindow::Release
+ *	kbRenderWindow::Release_Internal
  */
-void kbRenderWindow::Release() {
+void kbRenderWindow_DX11::Release_Internal() {
 	SAFE_RELEASE( m_pSwapChain );
 	SAFE_RELEASE( m_pRenderTargetView ) ; 
 }
@@ -545,7 +516,7 @@ void kbRenderer_DX11::Init_Internal( HWND hwnd, const int frameWidth, const int 
 	kbErrorCheck( SUCCEEDED( hr ), "kbRenderer_DX11::Init() - Failed to create DepthStencilView" );
 
 	// bind render target view and depth stencil to output render pipeline
-	m_pDeviceContext->OMSetRenderTargets( 1, &m_RenderWindowList[0]->m_pRenderTargetView, m_pDepthStencilView );
+	m_pDeviceContext->OMSetRenderTargets( 1, &((kbRenderWindow_DX11*)m_RenderWindowList[0])->m_pRenderTargetView, m_pDepthStencilView );
 
 	// setting rasterizer state
 	D3D11_RASTERIZER_DESC rasterDesc;
@@ -939,7 +910,10 @@ int kbRenderer_DX11::CreateRenderView( HWND hwnd )
 	sd.SwapEffect = DXGI_SWAP_EFFECT_SEQUENTIAL;
 	sd.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;
 
-	kbRenderWindow * renderView = new kbRenderWindow;
+	RECT windowDimensions;
+	GetClientRect( hwnd, &windowDimensions );
+
+	kbRenderWindow_DX11 * renderView = new kbRenderWindow_DX11( hwnd, windowDimensions, Near_Plane, Far_Plane );
 
 	m_pDXGIFactory->CreateSwapChain( m_pD3DDevice, &sd, &renderView->m_pSwapChain );
 
@@ -947,20 +921,6 @@ int kbRenderer_DX11::CreateRenderView( HWND hwnd )
 	renderView->m_pSwapChain->GetBuffer( 0, __uuidof(ID3D11Texture2D), (LPVOID*) &pBackBuffer );
 	m_pD3DDevice->CreateRenderTargetView( pBackBuffer, nullptr, &renderView->m_pRenderTargetView );
 	pBackBuffer->Release();
-
-	RECT windowDimensions;
-	GetClientRect( hwnd, &windowDimensions );
-	renderView->m_Hwnd = hwnd;
-	renderView->m_ViewPixelWidth = windowDimensions.right - windowDimensions.left;
-	renderView->m_ViewPixelHeight = windowDimensions.bottom - windowDimensions.top;
-	renderView->m_fViewPixelWidth = static_cast<float>( renderView->m_ViewPixelWidth );
-	renderView->m_fViewPixelHeight = static_cast<float>( renderView->m_ViewPixelHeight );
-	renderView->m_fViewPixelHalfWidth = renderView->m_fViewPixelWidth* 0.5f;
-	renderView->m_fViewPixelHalfHeight = renderView->m_fViewPixelHeight * 0.5f;
-	renderView->m_ProjectionMatrix.CreatePerspectiveMatrix( kbToRadians( 75.0f ), renderView->m_fViewPixelWidth / renderView->m_fViewPixelHeight, Near_Plane, Far_Plane );
-
-	XMMATRIX inverseProj = XMMatrixInverse( nullptr, XMMATRIXFromkbMat4( renderView->m_ProjectionMatrix ) );
-	renderView->m_InverseProjectionMatrix = kbMat4FromXMMATRIX( inverseProj );
 
 	m_RenderWindowList.push_back( renderView );
 
@@ -1162,7 +1122,7 @@ void kbRenderer_DX11::SetRenderWindow( HWND hwnd ) {
 	}
 
 	for ( int i = 0 ; i < m_RenderWindowList.size(); i++ ) {
-		if ( m_RenderWindowList[i]->m_Hwnd == hwnd ) {
+		if ( m_RenderWindowList[i]->GetHWND() == hwnd ) {
 			m_pCurrentRenderWindow = m_RenderWindowList[i];
 			return;
 		}
@@ -1229,7 +1189,8 @@ void kbRenderer_DX11::RenderScene() {
 			viewport.MaxDepth = 1.0f;
 		
 			const ovrMatrix4f proj = ovrMatrix4f_Projection( m_EyeRenderDesc[m_HMDPass].Fov, kbRenderer_DX11::Near_Plane, kbRenderer_DX11::Far_Plane, ovrProjection_None );
-			memcpy( &m_pCurrentRenderWindow->m_ProjectionMatrix, &proj, sizeof( ovrMatrix4f ) );
+			// HACK TODO
+/*			memcpy( &m_pCurrentRenderWindow->m_ProjectionMatrix, &proj, sizeof( ovrMatrix4f ) );
 			m_pCurrentRenderWindow->m_ProjectionMatrix.TransposeSelf();
 
 			m_pCurrentRenderWindow->m_ProjectionMatrix[2].z *= -1.0f;
@@ -1244,7 +1205,7 @@ void kbRenderer_DX11::RenderScene() {
 			FXMMATRIX inverseView = XMMatrixInverse( nullptr, XMMATRIXFromkbMat4( m_pCurrentRenderWindow->m_ViewMatrix ) );
 			m_pCurrentRenderWindow->m_CameraPosition.x = inverseView.m[3][0];
 			m_pCurrentRenderWindow->m_CameraPosition.y = inverseView.m[3][1];
-			m_pCurrentRenderWindow->m_CameraPosition.z = inverseView.m[3][2];
+			m_pCurrentRenderWindow->m_CameraPosition.z = inverseView.m[3][2];*/
 
 
 		} else {
@@ -1254,9 +1215,9 @@ void kbRenderer_DX11::RenderScene() {
 			viewport.MaxDepth = 1.0f;
 			viewport.TopLeftX = 0;
 			viewport.TopLeftY = 0;
-
+/*
 			if ( IsUsingHMDTrackingOnly() ) {
-				m_pCurrentRenderWindow->m_ViewMatrix = m_pCurrentRenderWindow->m_EyeMatrices[m_HMDPass];
+			/	m_pCurrentRenderWindow->m_ViewMatrix = m_pCurrentRenderWindow->m_EyeMatrices[m_HMDPass];
 				m_pCurrentRenderWindow->m_ViewProjectionMatrix = m_pCurrentRenderWindow->m_ViewMatrix * m_pCurrentRenderWindow->m_ProjectionMatrix;
 
 				XMMATRIX inverseProj = XMMatrixInverse( nullptr, XMMATRIXFromkbMat4( m_pCurrentRenderWindow->m_ViewProjectionMatrix ) );
@@ -1268,7 +1229,7 @@ void kbRenderer_DX11::RenderScene() {
 				m_pCurrentRenderWindow->m_CameraPosition.x = inverseView.m[3][0];
 				m_pCurrentRenderWindow->m_CameraPosition.y = inverseView.m[3][1];
 				m_pCurrentRenderWindow->m_CameraPosition.z = inverseView.m[3][2];
-			}
+			}*/
 		}
 
 		m_pDeviceContext->RSSetViewports( 1, &viewport );
@@ -1296,7 +1257,7 @@ void kbRenderer_DX11::RenderScene() {
 													  1);
 
 
-			std::vector<kbRenderObject*> & FirstPersonPassVisibleList = m_pCurrentRenderWindow->m_VisibleRenderObjects[RP_FirstPerson];
+			std::vector<kbRenderObject*> & FirstPersonPassVisibleList = m_pCurrentRenderWindow->GetVisibleRenderObjects( RP_FirstPerson );
 			for ( int i = 0; i < FirstPersonPassVisibleList.size(); i++ ) {
 				RenderModel( FirstPersonPassVisibleList[i], RP_FirstPerson );
 			}
@@ -1304,7 +1265,7 @@ void kbRenderer_DX11::RenderScene() {
 			// Render models that need to be lit
 			m_RenderState.SetDepthStencilState();
 
-			std::vector<kbRenderObject*> & LightingPassVisibleList = m_pCurrentRenderWindow->m_VisibleRenderObjects[RP_Lighting];
+			std::vector<kbRenderObject*> & LightingPassVisibleList = m_pCurrentRenderWindow->GetVisibleRenderObjects( RP_Lighting );
 			for ( int i = 0; i < LightingPassVisibleList.size(); i++ ) {
 				RenderModel( LightingPassVisibleList[i], RP_Lighting );
 			}
@@ -1327,7 +1288,7 @@ void kbRenderer_DX11::RenderScene() {
 			}
 
 			// Post-Lighting Render Pass
-			std::vector<kbRenderObject*> & PostLightingVisibleList = m_pCurrentRenderWindow->m_VisibleRenderObjects[RP_PostLighting];
+			std::vector<kbRenderObject*> & PostLightingVisibleList = m_pCurrentRenderWindow->GetVisibleRenderObjects( RP_PostLighting );
 			for ( int i = 0; i < PostLightingVisibleList.size(); i++ ) {
 				RenderModel( PostLightingVisibleList[i], RP_PostLighting );
 			}
@@ -1356,7 +1317,7 @@ void kbRenderer_DX11::RenderScene() {
 										 kbRenderState::BF_Zero,
 										 kbRenderState::BO_Add );
 
-			std::vector<kbRenderObject*> & InWorldUIVisibleList = m_pCurrentRenderWindow->m_VisibleRenderObjects[RP_PostLighting];
+			std::vector<kbRenderObject*> & InWorldUIVisibleList = m_pCurrentRenderWindow->GetVisibleRenderObjects( RP_PostLighting );
 			for ( int i = 0; i < InWorldUIVisibleList.size(); i++ ) {
 				RenderModel( InWorldUIVisibleList[i], RP_InWorldUI );
 			}
@@ -1430,11 +1391,11 @@ void kbRenderer_DX11::RenderScene() {
 			// Render mirror
 			ID3D11Texture2D* tex = nullptr;
 			ID3D11Texture2D * pBackBuffer = nullptr;
-			m_pCurrentRenderWindow->m_pSwapChain->GetBuffer( 0, __uuidof(ID3D11Texture2D), (LPVOID*) &pBackBuffer );
+			((kbRenderWindow_DX11*)m_pCurrentRenderWindow)->m_pSwapChain->GetBuffer( 0, __uuidof(ID3D11Texture2D), (LPVOID*) &pBackBuffer );
 			ovr_GetMirrorTextureBufferDX( m_ovrSession, m_MirrorTexture, IID_PPV_ARGS(&tex) );
 			m_pDeviceContext->CopyResource( pBackBuffer, tex );
 			tex->Release();
-			m_pCurrentRenderWindow->m_pSwapChain->Present( 0, 0 );
+			((kbRenderWindow_DX11*)m_pCurrentRenderWindow)->m_pSwapChain->Present( 0, 0 );
 		}
 
 		if ( GetAsyncKeyState( VK_SPACE ) ) {
@@ -1457,10 +1418,10 @@ void kbRenderer_DX11::RenderScene() {
 void kbRenderer_DX11::PreRenderCullAndSort() {
 
 	for ( int i = 0; i < NUM_RENDER_PASSES; i++ ) {
-		m_pCurrentRenderWindow->m_VisibleRenderObjects[i].clear();
+		m_pCurrentRenderWindow->GetVisibleRenderObjects(i).clear();
 	}
 
-	for ( auto iter = m_pCurrentRenderWindow->m_RenderObjectMap.begin(); iter != m_pCurrentRenderWindow->m_RenderObjectMap.end(); iter++ ) {
+	for ( auto iter = m_pCurrentRenderWindow->GetRenderObjectMap().begin(); iter != m_pCurrentRenderWindow->GetRenderObjectMap().end(); iter++ ) {
 
 		bool bIsVisible = true;
 
@@ -1468,7 +1429,7 @@ void kbRenderer_DX11::PreRenderCullAndSort() {
 
 		if ( renderObj.m_CullDistance > 0 ) {
 			const float cullDistSqr = renderObj.m_CullDistance * renderObj.m_CullDistance;
-			const float distToCamSqr = ( renderObj.m_Position - m_pCurrentRenderWindow->m_CameraPosition ).LengthSqr();
+			const float distToCamSqr = ( renderObj.m_Position - m_pCurrentRenderWindow->GetCameraPosition() ).LengthSqr();
 	
 			if ( distToCamSqr >= cullDistSqr ) {
 				bIsVisible = false;
@@ -1478,7 +1439,7 @@ void kbRenderer_DX11::PreRenderCullAndSort() {
 		}
 		
 		if ( bIsVisible ) {
-			m_pCurrentRenderWindow->m_VisibleRenderObjects[renderObj.m_RenderPass].push_back( &renderObj );
+			m_pCurrentRenderWindow->GetVisibleRenderObjects( renderObj.m_RenderPass ).push_back( &renderObj );
 		}
 	}
 }
@@ -1518,7 +1479,7 @@ void kbRenderer_DX11::RenderTranslucency() {
 								 kbRenderState::BO_Add,
 							     kbRenderState::CW_All );
 
-	for ( std::map< const void *, kbRenderObject * >::iterator iter = m_pCurrentRenderWindow->m_RenderParticleMap.begin(); iter != m_pCurrentRenderWindow->m_RenderParticleMap.end(); iter++ ) {
+	for ( auto iter = m_pCurrentRenderWindow->GetRenderParticleMap().begin(); iter != m_pCurrentRenderWindow->GetRenderParticleMap().end(); iter++ ) {
 		RenderModel( iter->second, RP_Translucent );
 	}
 
@@ -1796,8 +1757,7 @@ void kbRenderer_DX11::RenderMousePickerIds() {
 	m_pDeviceContext->OMSetRenderTargets( 1, &m_RenderTargets[MOUSE_PICKER_BUFFER].m_pRenderTargetView, m_pDepthStencilView );
 	m_RenderState.SetDepthStencilState();
 
-	std::map<const kbComponent *, kbRenderObject *>::iterator iter;
-	for ( iter = m_pCurrentRenderWindow->m_RenderObjectMap.begin(); iter != m_pCurrentRenderWindow->m_RenderObjectMap.end(); iter++ ) {
+	for ( auto iter = m_pCurrentRenderWindow->GetRenderObjectMap().begin(); iter != m_pCurrentRenderWindow->GetRenderObjectMap().end(); iter++ ) {
 		if ( iter->second->m_EntityId > 0 ) {
 			RenderModel( iter->second, RP_MousePicker );
 		}
@@ -1827,7 +1787,7 @@ void kbRenderer_DX11::Blit( kbRenderTexture *const src, kbRenderTexture *const d
 	kbShader *const pShader = m_pDebugShader;
 
 	if ( dest == nullptr ) {
-		m_pDeviceContext->OMSetRenderTargets( 1, &m_pCurrentRenderWindow->m_pRenderTargetView, m_pDepthStencilView );
+		m_pDeviceContext->OMSetRenderTargets( 1, &((kbRenderWindow_DX11*)m_pCurrentRenderWindow)->m_pRenderTargetView, m_pDepthStencilView );
 	} else {
 		m_pDeviceContext->OMSetRenderTargets( 1, &dest->m_pRenderTargetView, nullptr );
 	}
@@ -2155,7 +2115,7 @@ void kbRenderer_DX11::RenderPostProcess() {
 	RenderBloom();
 
 	if ( m_bRenderToHMD == false ) {
-		m_pDeviceContext->OMSetRenderTargets( 1, &m_pCurrentRenderWindow->m_pRenderTargetView, m_pDepthStencilView );
+		m_pDeviceContext->OMSetRenderTargets( 1, &((kbRenderWindow_DX11*)m_pCurrentRenderWindow)->m_pRenderTargetView, m_pDepthStencilView );
 	} else {
 		ID3D11RenderTargetView *const rtv = m_OculusTexture[m_HMDPass]->GetRTV();
 		m_pDeviceContext->OMSetRenderTargets( 1, &rtv, nullptr );
@@ -2168,7 +2128,7 @@ void kbRenderer_DX11::RenderPostProcess() {
 	m_pDeviceContext->IASetPrimitiveTopology( D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST );
 	m_pDeviceContext->RSSetState( m_pDefaultRasterizerState );
 
-	if ( m_pCurrentRenderWindow->m_RenderLightMap.size() == 0 )
+	if ( m_pCurrentRenderWindow->GetRenderLightMap().size() == 0 )
 	{
 		m_pDeviceContext->PSSetShaderResources( 0, 1, &m_RenderTargets[ACCUMULATION_BUFFER].m_pShaderResourceView );
 	}
@@ -2199,7 +2159,7 @@ void kbRenderer_DX11::RenderPostProcess() {
 	}
 
 	SetShaderMat4( "mvpMatrix", mvpMatrix, mappedResource.pData, varBindings );
-	SetShaderMat4( "inverseProjection", m_pCurrentRenderWindow->m_InverseProjectionMatrix, mappedResource.pData, varBindings );	
+	SetShaderMat4( "inverseProjection", m_pCurrentRenderWindow->GetInverseProjectionMatrix(), mappedResource.pData, varBindings );	
 	SetShaderVec4( "tint", m_PostProcessSettings_RenderThread.m_Tint, mappedResource.pData, varBindings );
 	SetShaderVec4( "additiveColor", m_PostProcessSettings_RenderThread.m_AdditiveColor, mappedResource.pData, varBindings );
 	SetShaderVec4( "fogColor", m_FogColor_RenderThread, mappedResource.pData, varBindings );
@@ -2225,7 +2185,8 @@ void kbRenderer_DX11::RenderPostProcess() {
  */
 void kbRenderer_DX11::RenderConsole() {
 	if ( m_bRenderToHMD == false ) {
-		m_pDeviceContext->OMSetRenderTargets( 1, &m_pCurrentRenderWindow->m_pRenderTargetView, m_pDepthStencilView );
+		kbRenderWindow_DX11 *const pCurWindow = (kbRenderWindow_DX11*)m_pCurrentRenderWindow;
+		m_pDeviceContext->OMSetRenderTargets( 1, &pCurWindow->m_pRenderTargetView, m_pDepthStencilView );
 	} else {
 		ID3D11RenderTargetView *const rtv = m_OculusTexture[0]->GetRTV();
 		m_pDeviceContext->OMSetRenderTargets( 1, &rtv, nullptr );
@@ -2253,15 +2214,15 @@ void kbRenderer_DX11::RenderConsole() {
 
 	SetShaderMat4( "modelMatrix", kbMat4::identity, mappedResource.pData, varBindings );
 	SetShaderMat4( "modelViewMatrix", kbMat4::identity, mappedResource.pData, varBindings );
-	SetShaderMat4( "viewMatrix", m_pCurrentRenderWindow->m_ViewMatrix, mappedResource.pData, varBindings );
+	SetShaderMat4( "viewMatrix", m_pCurrentRenderWindow->GetViewMatrix(), mappedResource.pData, varBindings );
 
 	kbMat4 mvpMatrix = kbMat4::identity;
 	if ( m_bRenderToHMD ) {
 		mvpMatrix.MakeScale( kbVec3( 0.5f, 1.0f, 1.0f ) );
 	}
 	SetShaderMat4( "mvpMatrix", mvpMatrix, mappedResource.pData, varBindings );
-	SetShaderMat4( "projection", m_pCurrentRenderWindow->m_ViewProjectionMatrix, mappedResource.pData, varBindings );
-	SetShaderMat4( "inverseProjection", m_pCurrentRenderWindow->m_InverseProjectionMatrix, mappedResource.pData, varBindings );
+	SetShaderMat4( "projection", m_pCurrentRenderWindow->GetViewProjectionMatrix(), mappedResource.pData, varBindings );
+	SetShaderMat4( "inverseProjection", m_pCurrentRenderWindow->GetInverseProjectionMatrix(), mappedResource.pData, varBindings );
 
 	m_pDeviceContext->Unmap( pConstantBuffer, 0 );
 	m_pDeviceContext->VSSetConstantBuffers( 0, 1, &pConstantBuffer );
@@ -2313,7 +2274,7 @@ void kbRenderer_DX11::RenderSync_Internal() {
 
 		for ( int iEye = 0; iEye < 2; iEye++ ) {
 
-			const kbMat4 gameCameraMatrix = m_RenderWindowList[0]->m_CameraRotation.ToMat4();
+			const kbMat4 gameCameraMatrix = m_RenderWindowList[0]->GetCameraRotation().ToMat4();
 			const kbVec3 rightVec = gameCameraMatrix[0].ToVec3();
 			const kbVec3 forwardVec = kbVec3( gameCameraMatrix[2].ToVec3().x, 0.0f, gameCameraMatrix[2].ToVec3().z ).Normalized();
 			float gameCameraYaw = acos( forwardVec.Dot( kbVec3::forward ) );
@@ -2327,12 +2288,12 @@ void kbRenderer_DX11::RenderSync_Internal() {
 			const Vector3f finalUp = finalRollPitchYaw.Transform(Vector3f(0,1,0));
 			const Vector3f finalForward = finalRollPitchYaw.Transform(Vector3f(0,0,1));
 			const Vector3f shiftedEyePos = rollPitchYaw.Transform( m_EyeRenderPose[iEye].Position ) + 
-										   Vector3f( m_RenderWindowList[0]->m_CameraPosition.x, m_RenderWindowList[0]->m_CameraPosition.y, m_RenderWindowList[0]->m_CameraPosition.z );
+										   Vector3f( m_RenderWindowList[0]->GetCameraPosition().x, m_RenderWindowList[0]->GetCameraPosition().y, m_RenderWindowList[0]->GetCameraPosition().z );
 			
 			const Matrix4f view = Matrix4f::LookAtLH(shiftedEyePos, shiftedEyePos - finalForward, finalUp);
 			
-			memcpy( &m_RenderWindowList[0]->m_EyeMatrices[iEye], &view, sizeof( Matrix4f ) );
-			m_RenderWindowList[0]->m_EyeMatrices[iEye].TransposeSelf();
+			memcpy( &((kbRenderWindow_DX11*)m_RenderWindowList[0])->m_EyeMatrices[iEye], &view, sizeof( Matrix4f ) );
+			((kbRenderWindow_DX11*)m_RenderWindowList[0])->m_EyeMatrices[iEye].TransposeSelf();
 		}
 	}
 
@@ -2811,10 +2772,10 @@ void kbRenderer_DX11::RenderScreenSpaceQuads() {
 void kbRenderer_DX11::RenderScreenSpaceQuadImmediate( const int start_x, const int start_y, const int size_x, const int size_y, const int textureIndex, kbShader * pShader ) {
 	const unsigned int stride = sizeof( vertexLayout );
 	const unsigned int offset = 0;
-	const float xScale = size_x / m_RenderWindowList[0]->m_fViewPixelWidth;
-	const float yScale =  size_y / m_RenderWindowList[0]->m_fViewPixelHeight;
-	const float xPos = xScale + start_x / m_RenderWindowList[0]->m_fViewPixelHalfWidth;
-	const float yPos = yScale + start_y / m_RenderWindowList[0]->m_fViewPixelHalfHeight;
+	const float xScale = size_x / m_RenderWindowList[0]->GetFViewPixelWidth();
+	const float yScale =  size_y / m_RenderWindowList[0]->GetFViewPixelHeight();
+	const float xPos = xScale + start_x / m_RenderWindowList[0]->GetFViewPixelHalfWidth();
+	const float yPos = yScale + start_y / m_RenderWindowList[0]->GetFViewPixelHalfHeight();
 
 	if ( m_pTextures[textureIndex] == nullptr ) {
 		return;
@@ -2856,56 +2817,6 @@ void kbRenderer_DX11::RenderScreenSpaceQuadImmediate( const int start_x, const i
 	m_pDeviceContext->VSSetConstantBuffers( 0, 1, &pConstantBuffer );
 
 	m_pDeviceContext->Draw( 6, 0 );
-}
-
-/**
- *	kbRenderer_DX11::SetRenderViewTransform
- */
-void kbRenderer_DX11::SetRenderViewTransform( const HWND hwnd, const kbVec3 & position, const kbQuat & rotation ) {
-	int viewIndex = -1;
-
-	if ( hwnd == nullptr ) {
-		viewIndex = 0;
-	} else {
-		for ( int i = 0 ; i < m_RenderWindowList.size(); i++ ) {
-			if ( m_RenderWindowList[i]->m_Hwnd == hwnd ) {
-				viewIndex = i;
-				break;
-			}
-		}
-	}
-
-	if ( viewIndex < 0 || viewIndex >= m_RenderWindowList.size() ) {
-		kbError( "Invalid view index" );
-	}
-
-	m_RenderWindowList[viewIndex]->m_CameraPosition_GameThread = position;
-	m_RenderWindowList[viewIndex]->m_CameraRotation_GameThread = rotation;
-}
-
-/**
- *	kbRenderer_DX11::GetRenderViewTransform
- */
-void kbRenderer_DX11::GetRenderViewTransform( const HWND hwnd, kbVec3 & position, kbQuat & rotation ) {
-	int viewIndex = -1;
-
-	if ( hwnd == nullptr ) {
-		viewIndex = 0;
-	} else {
-		for ( int i = 0 ; i < m_RenderWindowList.size(); i++ ) {
-			if ( m_RenderWindowList[i]->m_Hwnd == hwnd ) {
-				viewIndex = i;
-				break;
-			}
-		}
-	}
-
-	if ( viewIndex < 0 || viewIndex >= m_RenderWindowList.size() ) {
-		kbError( "Invalid view index" );
-	}
-
-	position = m_RenderWindowList[viewIndex]->m_CameraPosition;
-	rotation = m_RenderWindowList[viewIndex]->m_CameraRotation;
 }
 
 /**
@@ -3019,19 +2930,19 @@ void kbRenderer_DX11::RenderModel( const kbRenderObject *const pRenderObject, co
 			const byte * pVarByteOffset = constantPtr + bindings[i].m_VarByteOffset;
 			if ( varName == "mvpMatrix" ) {
 				kbMat4 *const pMatOffset = (kbMat4*)pVarByteOffset;
-				*pMatOffset = worldMatrix * m_pCurrentRenderWindow->m_ViewProjectionMatrix;
+				*pMatOffset = worldMatrix * m_pCurrentRenderWindow->GetViewProjectionMatrix();
 			} else if ( varName == "vpMatrix" ) {
 				kbMat4 *const pMatOffset = (kbMat4*)pVarByteOffset;
-				*pMatOffset = m_pCurrentRenderWindow->m_ViewProjectionMatrix;
+				*pMatOffset = m_pCurrentRenderWindow->GetViewProjectionMatrix();
             } else if ( varName == "modelMatrix" ) {
 				kbMat4 *const pMatOffset = (kbMat4*)pVarByteOffset;
 				*pMatOffset = worldMatrix;
 			} else if ( varName == "cameraPos" ) {
 				kbVec4 *const pVecOffset = (kbVec4*)pVarByteOffset;
-				*pVecOffset = m_pCurrentRenderWindow->m_CameraPosition;
+				*pVecOffset = m_pCurrentRenderWindow->GetCameraPosition();
 			} else if ( varName == "viewProjection" ) {
 				kbMat4 *const pMatOffset = (kbMat4*)pVarByteOffset;
-				*pMatOffset = m_pCurrentRenderWindow->m_ViewProjectionMatrix;
+				*pMatOffset = m_pCurrentRenderWindow->GetViewProjectionMatrix();
 			} else if ( varName == "boneList" ) {
 				kbMat4 *const boneMatrices = (kbMat4*)pVarByteOffset;
 				for ( int i = 0; i < pRenderObject->m_MatrixList.size() && i < Max_Shader_Bones; i++ ) {
@@ -3220,7 +3131,7 @@ void kbRenderer_DX11::RenderDebugLines() {
 	hr = m_pDeviceContext->Map( pConstantBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource );
 	kbErrorCheck( SUCCEEDED(hr), "kbRenderer_DX11::RenderDebugLines() - Failed to map matrix buffer" );
 
-	SetShaderMat4( "mvpMatrix", m_pCurrentRenderWindow->m_ViewProjectionMatrix, mappedResource.pData, varBindings );
+	SetShaderMat4( "mvpMatrix", m_pCurrentRenderWindow->GetViewProjectionMatrix(), mappedResource.pData, varBindings );
 
 	m_pDeviceContext->Unmap( pConstantBuffer, 0 );
 	m_pDeviceContext->VSSetConstantBuffers( 0, 1, &pConstantBuffer );
@@ -3272,11 +3183,11 @@ void kbRenderer_DX11::RenderDebugBillboards( const bool bIsEntityIdPass ) {
 
 		byte *const pByteBuffer = (byte*) mappedResource.pData;
 
-		const kbMat4 preRotationMatrix = m_pCurrentRenderWindow->m_CameraRotation.ToMat4();
+		const kbMat4 preRotationMatrix = m_pCurrentRenderWindow->GetCameraRotation().ToMat4();
 		kbMat4 mvpMatrix;
 		mvpMatrix.MakeScale( currBillBoard.m_Scale );
 		mvpMatrix[3] = currBillBoard.m_Position;
-		mvpMatrix = preRotationMatrix * mvpMatrix * m_pCurrentRenderWindow->m_ViewProjectionMatrix;
+		mvpMatrix = preRotationMatrix * mvpMatrix * m_pCurrentRenderWindow->GetViewProjectionMatrix();
 		SetShaderMat4( "mvpMatrix", mvpMatrix, pByteBuffer, pShader->GetShaderVarBindings() );
 		m_pDeviceContext->Unmap( pConstantBuffer, 0 );
 		m_pDeviceContext->VSSetConstantBuffers( 0, 1, &pConstantBuffer );
