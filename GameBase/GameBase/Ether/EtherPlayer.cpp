@@ -355,12 +355,7 @@ void EtherPlayerComponent::HandleMovement( const kbInput_t & Input, const float 
 	movementVec += forwardVec * Input.LeftStickY;
 	movementVec += rightVec * Input.LeftStickX;
 	
-/*
-	if ( Input.IsKeyPressedOrDown( 'U' ) ) {
-		movementVec += upVec * 4;
-	} else if ( Input.IsKeyPressedOrDown( 'I') ) {
-		movementVec -= upVec * 4;
-	}*/
+
 	
 	if ( movementVec.Compare( kbVec3::zero ) == false ) {
 		bMoved = true;
@@ -370,8 +365,7 @@ void EtherPlayerComponent::HandleMovement( const kbInput_t & Input, const float 
 		const float PlayerSpeed = 190.0f;
 		const float movementMag = DT * PlayerSpeed * 0.5f;//( Input.m_KeyStruct.m_Shift ? 20.5f : 0.5f );
 		
-		const kbVec3 playerWaist = localPlayer->GetPosition() + kbVec3( 0.0f, 15.0f, 0.0f );
-		pGame->MoveActorAlongGround( this, playerWaist, playerWaist + movementVec * movementMag );
+		localPlayer->SetPosition( localPlayer->GetPosition() + movementVec * movementMag );
 
 		if ( pSkelModelComponent != nullptr ) {
 			const static kbString RunAnimName( "Run" );

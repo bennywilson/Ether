@@ -501,7 +501,6 @@ private:
 
 	kbModel	*									m_DebugText;
 	int											m_FrameNum;
-	bool										m_bConsoleEnabled;
 };
 
 extern ID3D11Device * g_pD3DDevice;

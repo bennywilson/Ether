@@ -423,7 +423,6 @@ kbRenderer_DX11::kbRenderer_DX11() :
 	m_SensorSampleTime( 0.0 ),
 	m_MirrorTexture( nullptr ),
 	m_bUsingHMDTrackingOnly( false ),
-	m_bConsoleEnabled( false ),
 	m_FrameNum( 0 ),
 	m_DebugText( nullptr ) {
 
@@ -672,23 +671,23 @@ void kbRenderer_DX11::Init_Internal( HWND hwnd, const int frameWidth, const int 
 	}
 
 	// Load some shaders
-	m_pBasicShader = ( kbShader * )g_ResourceManager.GetResource( "../../kbEngine/assets/Shaders/BasicShader.kbShader", true );	
-	m_pOpaqueQuadShader = ( kbShader * ) g_ResourceManager.GetResource( "../../kbEngine/assets/Shaders/basicTexture.kbShader", true );
-	m_pTranslucentShader = ( kbShader * ) g_ResourceManager.GetResource( "../../kbEngine/assets/Shaders/basicTranslucency.kbShader", true );
-	m_pBasicParticleShader = ( kbShader * ) g_ResourceManager.GetResource( "../../kbEngine/assets/Shaders/basicParticle.kbShader", true );
-	m_pMissingShader = ( kbShader * ) g_ResourceManager.GetResource( "../../kbEngine/assets/Shaders/missingShader.kbShader", true );
-	m_pDebugShader = ( kbShader * ) g_ResourceManager.GetResource( "../../kbEngine/assets/Shaders/debugShader.kbShader", true );
-	m_pBasicSkinnedTextureShader = ( kbShader * ) g_ResourceManager.GetResource( "../../kbEngine/assets/Shaders/basicSkinned.kbShader", true );
+	m_pBasicShader = ( kbShader * )g_ResourceManager.GetResource( "../../kbEngine/assets/Shaders/BasicShader.kbshader", true );	
+	m_pOpaqueQuadShader = ( kbShader * ) g_ResourceManager.GetResource( "../../kbEngine/assets/Shaders/basicTexture.kbshader", true );
+	m_pTranslucentShader = ( kbShader * ) g_ResourceManager.GetResource( "../../kbEngine/assets/Shaders/basicTranslucency.kbshader", true );
+	m_pBasicParticleShader = ( kbShader * ) g_ResourceManager.GetResource( "../../kbEngine/assets/Shaders/basicParticle.kbshader", true );
+	m_pMissingShader = ( kbShader * ) g_ResourceManager.GetResource( "../../kbEngine/assets/Shaders/missingShader.kbshader", true );
+	m_pDebugShader = ( kbShader * ) g_ResourceManager.GetResource( "../../kbEngine/assets/Shaders/debugShader.kbshader", true );
+	m_pBasicSkinnedTextureShader = ( kbShader * ) g_ResourceManager.GetResource( "../../kbEngine/assets/Shaders/basicSkinned.kbshader", true );
 
-	m_pUberPostProcess = ( kbShader * ) g_ResourceManager.GetResource( "../../kbEngine/assets/Shaders/UberPostProcess.kbShader", true );
-	m_pDirectionalLightShader = ( kbShader * ) g_ResourceManager.GetResource( "../../kbEngine/assets/Shaders/DirectionalLight.kbShader", true );
-	m_pPointLightShader = ( kbShader * ) g_ResourceManager.GetResource( "../../kbEngine/assets/Shaders/PointLight.kbShader", true );
-	m_pCylindricalLightShader = ( kbShader * ) g_ResourceManager.GetResource( "../../kbEngine/assets/Shaders/cylindricalLight.kbShader", true );
+	m_pUberPostProcess = ( kbShader * ) g_ResourceManager.GetResource( "../../kbEngine/assets/Shaders/UberPostProcess.kbshader", true );
+	m_pDirectionalLightShader = ( kbShader * ) g_ResourceManager.GetResource( "../../kbEngine/assets/Shaders/DirectionalLight.kbshader", true );
+	m_pPointLightShader = ( kbShader * ) g_ResourceManager.GetResource( "../../kbEngine/assets/Shaders/PointLight.kbshader", true );
+	m_pCylindricalLightShader = ( kbShader * ) g_ResourceManager.GetResource( "../../kbEngine/assets/Shaders/cylindricalLight.kbshader", true );
 
-	m_pDirectionalLightShadowShader = ( kbShader * ) g_ResourceManager.GetResource( "../../kbEngine/assets/Shaders/directionalLightShadow.kbShader", true );
-	m_pLightShaftsShader = ( kbShader * ) g_ResourceManager.GetResource( "../../kbEngine/assets/Shaders/lightShafts.kbShader", true );
-	m_pSimpleAdditiveShader = ( kbShader * ) g_ResourceManager.GetResource( "../../kbEngine/assets/Shaders/SimpleAdditive.kbShader", true );
-	m_pMousePickerIdShader = (kbShader *) g_ResourceManager.GetResource( "../../kbEngine/assets/Shaders/MousePicker.kbShader", true );
+	m_pDirectionalLightShadowShader = ( kbShader * ) g_ResourceManager.GetResource( "../../kbEngine/assets/Shaders/directionalLightShadow.kbshader", true );
+	m_pLightShaftsShader = ( kbShader * ) g_ResourceManager.GetResource( "../../kbEngine/assets/Shaders/lightShafts.kbshader", true );
+	m_pSimpleAdditiveShader = ( kbShader * ) g_ResourceManager.GetResource( "../../kbEngine/assets/Shaders/SimpleAdditive.kbshader", true );
+	m_pMousePickerIdShader = (kbShader *) g_ResourceManager.GetResource( "../../kbEngine/assets/Shaders/MousePicker.kbshader", true );
 
 	// Non-resource managed shaders
 	m_pSkinnedDirectionalLightShadowShader->SetVertexShaderFunctionName( "skinnedVertexMain" );
@@ -2252,7 +2251,7 @@ void kbRenderer_DX11::RenderConsole() {
 	HRESULT hr = m_pDeviceContext->Map( pConstantBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource );
 	kbErrorCheck( SUCCEEDED(hr), "Failed to map matrix buffer" );
 
-	SetShaderMat4( "modeMatrix", kbMat4::identity, mappedResource.pData, varBindings );
+	SetShaderMat4( "modelMatrix", kbMat4::identity, mappedResource.pData, varBindings );
 	SetShaderMat4( "modelViewMatrix", kbMat4::identity, mappedResource.pData, varBindings );
 	SetShaderMat4( "viewMatrix", m_pCurrentRenderWindow->m_ViewMatrix, mappedResource.pData, varBindings );
 
@@ -2263,7 +2262,6 @@ void kbRenderer_DX11::RenderConsole() {
 	SetShaderMat4( "mvpMatrix", mvpMatrix, mappedResource.pData, varBindings );
 	SetShaderMat4( "projection", m_pCurrentRenderWindow->m_ViewProjectionMatrix, mappedResource.pData, varBindings );
 	SetShaderMat4( "inverseProjection", m_pCurrentRenderWindow->m_InverseProjectionMatrix, mappedResource.pData, varBindings );
-	SetShaderVec4( "cameraPosition", m_pCurrentRenderWindow->m_CameraPosition, mappedResource.pData, varBindings );
 
 	m_pDeviceContext->Unmap( pConstantBuffer, 0 );
 	m_pDeviceContext->VSSetConstantBuffers( 0, 1, &pConstantBuffer );
@@ -2302,6 +2300,7 @@ bool kbRenderer_DX11::LoadTexture_Internal( const char * name, int index, int wi
  *	kbRenderer_DX11:RenderSync_Internal
  */
 void kbRenderer_DX11::RenderSync_Internal() {
+
 	// Oculus
 	if ( IsRenderingToHMD() || IsUsingHMDTrackingOnly() ) {	
 
@@ -2334,6 +2333,26 @@ void kbRenderer_DX11::RenderSync_Internal() {
 			
 			memcpy( &m_RenderWindowList[0]->m_EyeMatrices[iEye], &view, sizeof( Matrix4f ) );
 			m_RenderWindowList[0]->m_EyeMatrices[iEye].TransposeSelf();
+		}
+	}
+
+	extern kbConsoleVariable g_ShowPerfTimers;
+	if ( g_ShowPerfTimers.GetBool() ) {
+
+		float curY = 0.1f;
+		curY += g_DebugLineSpacing;
+	
+		std::string gpuTimings = "GPU Timings";
+		g_pRenderer->DrawDebugText( gpuTimings, 0.55f, curY, g_DebugTextSize, g_DebugTextSize, kbColor::green );
+		curY += g_DebugLineSpacing;
+
+		for ( int i = 1; i < kbGPUTimeStamp::GetNumTimeStamps(); i++, curY += g_DebugLineSpacing ) {
+			std::string timing = kbGPUTimeStamp::GetTimeStampName(i).stl_str();
+			timing += ": ";
+			std::stringstream stream;
+			stream << std::fixed << std::setprecision(3) << kbGPUTimeStamp::GetTimeStampMS(i);
+			timing += stream.str();
+			g_pRenderer->DrawDebugText( timing, 0.55f, curY, g_DebugTextSize, g_DebugTextSize, kbColor::green );
 		}
 	}
 

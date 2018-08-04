@@ -302,6 +302,12 @@ void EtherEnemySoldierAIComponent::UpdateFiringBehavior( const float DeltaSecond
  *	EtherEnemySoldierAIComponent::Fire
  */	
 bool EtherEnemySoldierAIComponent::Fire() {
+
+	static bool bHackNoFire = true;
+	if ( bHackNoFire ) {
+		return false;
+	}
+
 	const kbGameEntity *const pTarget = m_TargetEntity.GetEntity();
 	const kbGameEntity *const pProjectileEntity = m_Projectile.GetEntity();
 	if ( pProjectileEntity == nullptr || pTarget == nullptr ) {

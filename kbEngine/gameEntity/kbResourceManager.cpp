@@ -211,17 +211,17 @@ kbResource * kbResourceManager::GetResource( const std::string & fullFileName, c
 	}
 
 	kbResource * pResource = nullptr;
-	std::string fileExt = GetFileExtension( fullFileName.c_str() );
+	std::string fileExt = GetFileExtension( convertedFileName.c_str() );
 
-	if ( fullFileName.find(".kbAnim.ms3d") != std::string::npos ) {
+	if ( convertedFileName.find(".kbanim.ms3d") != std::string::npos ) {
 		pResource = new kbAnimation();
 	} else if ( fileExt == "ms3d" ) {
 	   pResource = new kbModel();
-	} else if ( fileExt == "kbShader" ) {
+	} else if ( fileExt == "kbshader" ) {
 	   pResource = new kbShader();
 	} else if ( fileExt == "jpg" || fileExt == "tga" || fileExt == "bmp" || fileExt == "gif" || fileExt == "png" || fileExt == "dds" ) {
 		pResource = new kbTexture();
-	} else if ( fileExt == "kbAnim" ) {
+	} else if ( fileExt == "kbanim" ) {
 		pResource = new kbAnimation();
 	} else if ( fileExt == "wav" ) {
 		pResource = new kbWaveFile();

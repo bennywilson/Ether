@@ -20,7 +20,7 @@
 using namespace OVR;
 
 kbConsoleVariable g_NoEnemies( "noenemies", false, kbConsoleVariable::Console_Bool, "Remove enemies", "" );
-kbConsoleVariable g_LockMouse( "lockmouse", 0, kbConsoleVariable::Console_Int, "Locks mouse", "" );
+kbConsoleVariable g_LockMouse( "lockmouse", true, kbConsoleVariable::Console_Int, "Locks mouse", "" );
 
 EtherGame * g_pEtherGame = nullptr;
 
@@ -60,7 +60,7 @@ void EtherUIButton::LoadButton( const std::string & ModelName, const kbVec3 & lo
 	m_pButtonModel = (kbModel*)g_ResourceManager.GetResource( ModelName.c_str(), true );
 	kbErrorCheck( m_pButtonModel != nullptr, "EtherUIButton::LoadButton() - Failed to load model %s", ModelName.c_str() );
 
-	m_pShader = (kbShader*)g_ResourceManager.GetResource( "../../kbEngine/assets/Shaders/basicTranslucency.kbShader", true );
+	m_pShader = (kbShader*)g_ResourceManager.GetResource( "../../kbEngine/assets/Shaders/basictranslucency.kbshader", true );
 	kbErrorCheck( m_pShader != nullptr, "EtherUIButton::LoadButton() - Failed to shader" );
 	
 	g_pD3D11Renderer->AddRenderObject( m_pButtonEntity->GetComponent( 0 ), m_pButtonModel, kbVec3::zero, kbQuat( 0.0f, 0.0f, 0.0f, 1.0f ), kbVec3( 1.0f, 1.0f, 1.0f ), RP_InWorldUI );
@@ -494,13 +494,11 @@ void EtherGame::AddGameEntity_Internal( kbGameEntity *const pEntity ) {
 
 	if ( pEntity == m_pLocalPlayer && m_pWorldGenComponent != nullptr ) {
 		kbVec3 groundPt;
-		if ( TraceAgainstWorld( pEntity->GetPosition() + kbVec3( 0.0f, 10000.0f, 0.0f ), pEntity->GetPosition() - kbVec3( 0.0f, 10000.0f, 0.0f ), groundPt, false ) ) {
-			m_Camera.m_Position.y = groundPt.y + 256.0f;
-			m_pLocalPlayer->SetPosition( m_Camera.m_Position );
+		m_Camera.m_Position.y = 256.0f;
+		m_pLocalPlayer->SetPosition( m_Camera.m_Position );
 
-			const kbMat4 orientation( kbVec4( 0.0f, 0.0f, -1.0f, 0.0f ), kbVec4( 0.0f, 1.0f, 0.0f, 0.0f ), kbVec4( -1.0f, 0.0f, 0.0f, 0.0f ), kbVec3::zero );
-			m_pLocalPlayer->SetOrientation( kbQuatFromMatrix( orientation ) );
-		}
+		const kbMat4 orientation( kbVec4( 0.0f, 0.0f, -1.0f, 0.0f ), kbVec4( 0.0f, 1.0f, 0.0f, 0.0f ), kbVec4( -1.0f, 0.0f, 0.0f, 0.0f ), kbVec3::zero );
+		m_pLocalPlayer->SetOrientation( kbQuatFromMatrix( orientation ) );
 	}
 }
 
