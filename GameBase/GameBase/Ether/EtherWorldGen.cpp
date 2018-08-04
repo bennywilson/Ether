@@ -12,6 +12,7 @@
 #include "kbJobManager.h"
 #include "EtherWorldGen.h"
 #include "EtherGame.h"
+#include "kbRenderer.h"
 
 KB_DEFINE_COMPONENT(EtherWorldGenComponent)
 

@@ -9,6 +9,7 @@
 #include "kbRenderer_defs.h"
 #include "kbGameEntityHeader.h"
 #include "kbGame.h"
+#include "kbRenderer.h"
 
 KB_DEFINE_COMPONENT(kbParticleComponent)
 

@@ -9,6 +9,8 @@
 #include "EtherPlayer.h"
 #include "EtherSkelModel.h"
 #include "EtherWeapon.h"
+#include "kbRenderer.h"
+#include "DX11/kbRenderer_DX11.h"
 
 kbConsoleVariable g_ShowPlayerCollision( "showcollision", false, kbConsoleVariable::Console_Bool, "Shows player collision", "" );
 kbConsoleVariable g_GodMod( "god", false, kbConsoleVariable::Console_Bool, "God mode", "" );
@@ -401,7 +403,7 @@ void EtherPlayerComponent::HandleMovement( const kbInput_t & Input, const float 
 
 		float pitchDelta = kbClamp( DeltaY * -rotationMagnitude, -maxRotationAmount, maxRotationAmount );
 
-		if ( g_pRenderer->IsRenderingToHMD() ) {
+		if ( g_pD3D11Renderer->IsRenderingToHMD() ) {
 			pitchDelta = 0.0f;
 		}
 

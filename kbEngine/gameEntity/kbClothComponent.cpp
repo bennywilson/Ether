@@ -11,6 +11,7 @@
 #include "kbComponent.h"
 #include "kbClothComponent.h"
 #include "kbConsole.h"
+#include "DX11/kbRenderer_DX11.h"			// HACK
 
 KB_DEFINE_COMPONENT(kbClothBone)
 KB_DEFINE_COMPONENT(kbClothComponent)

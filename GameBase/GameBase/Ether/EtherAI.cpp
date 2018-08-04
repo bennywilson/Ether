@@ -10,6 +10,7 @@
 #include "EtherPlayer.h"
 #include "EtherSkelModel.h"
 #include "EtherWeapon.h"
+#include "kbRenderer.h"
 
 EtherAIManager * g_pAIManager = nullptr;
 static const float g_DetachZDist = 200.0f;

@@ -175,6 +175,7 @@
     <ClInclude Include="gameEntity\kbClothComponent.h" />
     <ClInclude Include="gameEntity\kbCollisionManager.h" />
     <ClInclude Include="gameEntity\kbComponent.h" />
+    <ClInclude Include="gameEntity\kbDebugComponents.h" />
     <ClInclude Include="gameEntity\kbFile.h" />
     <ClInclude Include="gameEntity\kbGame.h" />
     <ClInclude Include="gameEntity\kbGameEntity.h" />
@@ -197,6 +198,7 @@
     <ClInclude Include="renderer\kbMaterial.h" />
     <ClInclude Include="renderer\kbModel.h" />
     <ClInclude Include="renderer\kbRenderBuffer.h" />
+    <ClInclude Include="renderer\kbRenderer.h" />
     <ClInclude Include="renderer\kbRenderer_defs.h" />
     <ClInclude Include="sound\kbSoundComponent.h" />
     <ClInclude Include="sound\kbSoundManager.h" />
@@ -272,6 +274,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug_Server|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="gameEntity\kbDebugComponents.cpp" />
     <ClCompile Include="gameEntity\kbFile.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug_Server|x64'">NotUsing</PrecompiledHeader>
@@ -351,6 +354,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug_Server|x64'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="renderer\kbRenderer.cpp" />
     <ClCompile Include="renderer\kbRenderer_defs.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug_Server|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>

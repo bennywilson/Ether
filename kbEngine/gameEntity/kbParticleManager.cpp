@@ -8,6 +8,7 @@
 #include "kbVector.h"
 #include "kbQuaternion.h"
 #include "kbParticleManager.h"
+#include "kbRenderer.h"
 
 static const uint NumParticleBufferVerts = 10000;
 

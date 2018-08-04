@@ -2,7 +2,7 @@
 // kbSoundComponent.cpp
 //
 //
-// 2017 kbEngine 2.0
+// 2017-2018 kbEngine 2.0
 //==============================================================================
 #include "kbCore.h"
 #include "kbVector.h"
@@ -10,6 +10,7 @@
 #include "kbGameEntityHeader.h"
 #include "kbGame.h"
 #include "kbSoundComponent.h"
+#include "kbRenderer.h"
 
 /**
  *	kbSoundData::Constructor

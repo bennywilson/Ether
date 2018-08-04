@@ -10,7 +10,7 @@
 #include "EtherSkelModel.h"
 #include "EtherWeapon.h"
 #include "EtherPlayer.h"
-
+#include "DX11/kbRenderer_DX11.h"
 
 kbVec3 g_ProjectileStuckOffset = kbVec3( 0.0f, 5.0f, 0.0f );
 
@@ -338,7 +338,7 @@ bool EtherWeaponComponent::Fire_Internal() {
 		const kbCamera & gameCamera = pEtherGame->GetCamera();
 
 		// Determine projectile's orientation
-		if ( g_pInputManager->GetMouseBehavior() != kbInputManager::MB_LockToWindow || ( g_pRenderer->IsUsingHMDTrackingOnly() == false && g_pRenderer->IsRenderingToHMD() == false ) ) {
+		if ( g_pInputManager->GetMouseBehavior() != kbInputManager::MB_LockToWindow || ( g_pD3D11Renderer->IsUsingHMDTrackingOnly() == false && g_pD3D11Renderer->IsRenderingToHMD() == false ) ) {
 			kbMat4 WeaponMatrix = pEtherGame->GetCrossHairLocalSpaceMatrix();
 
 			const kbVec3 aimAtPoint = gameCamera.m_Position + 9999.0f * WeaponMatrix[2].ToVec3();

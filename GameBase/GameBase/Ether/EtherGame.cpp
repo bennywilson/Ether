@@ -12,6 +12,7 @@
 #include "EtherPlayer.h"
 #include "EtherAI.h"
 #include "EtherWeapon.h"
+#include "DX11/kbRenderer_DX11.h"
 
 // oculus
 #include "OVR_CAPI_D3D.h"
@@ -62,7 +63,7 @@ void EtherUIButton::LoadButton( const std::string & ModelName, const kbVec3 & lo
 	m_pShader = (kbShader*)g_ResourceManager.GetResource( "../../kbEngine/assets/Shaders/basicTranslucency.kbShader", true );
 	kbErrorCheck( m_pShader != nullptr, "EtherUIButton::LoadButton() - Failed to shader" );
 	
-	g_pRenderer->AddRenderObject( m_pButtonEntity->GetComponent( 0 ), m_pButtonModel, kbVec3::zero, kbQuat( 0.0f, 0.0f, 0.0f, 1.0f ), kbVec3( 1.0f, 1.0f, 1.0f ), RP_InWorldUI );
+	g_pD3D11Renderer->AddRenderObject( m_pButtonEntity->GetComponent( 0 ), m_pButtonModel, kbVec3::zero, kbQuat( 0.0f, 0.0f, 0.0f, 1.0f ), kbVec3( 1.0f, 1.0f, 1.0f ), RP_InWorldUI );
 
 	m_LocalPosition = localPosition;
 
@@ -84,7 +85,7 @@ void EtherUIButton::LoadButton( const std::string & ModelName, const kbVec3 & lo
 void EtherUIButton::ShutdownButton() {
 
 	if ( m_pButtonEntity != nullptr ) {
-		g_pRenderer->RemoveRenderObject( m_pButtonEntity->GetComponent( 0 ) );
+		g_pD3D11Renderer->RemoveRenderObject( m_pButtonEntity->GetComponent( 0 ) );
 	}
 	delete m_pButtonEntity;
 	m_pButtonEntity = nullptr;
@@ -92,7 +93,7 @@ void EtherUIButton::ShutdownButton() {
 
 	for ( int i = 0; i < 4; i++ ) {
 		if ( i == m_Count && m_pCountEntity[i] != nullptr ) {
-			g_pRenderer->RemoveRenderObject( m_pCountEntity[i]->GetComponent( 0 ) );
+			g_pD3D11Renderer->RemoveRenderObject( m_pCountEntity[i]->GetComponent( 0 ) );
 		}
 
 		delete m_pCountEntity[i];
@@ -115,14 +116,14 @@ void EtherUIButton::Update( const float deltaTimeSec ) {
 	static float zAxisLength = 275.0f;
 
 	kbVec3 centerEyePos = g_pEtherGame->GetCamera().m_Position;
-	if ( g_pRenderer->IsRenderingToHMD() || g_pRenderer->IsUsingHMDTrackingOnly() ) {
-		const ovrPosef *const hmdEyePos = g_pRenderer->GetOvrEyePose();
+	if ( g_pD3D11Renderer->IsRenderingToHMD() || g_pD3D11Renderer->IsUsingHMDTrackingOnly() ) {
+		const ovrPosef *const hmdEyePos = g_pD3D11Renderer->GetOvrEyePose();
 		centerEyePos += g_pEtherGame->GetHMDWorldOffset() + ( ovrVecTokbVec3( hmdEyePos[0].Position ) + ovrVecTokbVec3( hmdEyePos[1].Position ) ) * 0.5f;
 	}
 
 	kbMat4 eyeMatrix;
-	if ( g_pRenderer->IsRenderingToHMD() || g_pRenderer->IsUsingHMDTrackingOnly() ) {
-		eyeMatrix = g_pRenderer->GetEyeMatrices()[0];
+	if ( g_pD3D11Renderer->IsRenderingToHMD() || g_pD3D11Renderer->IsUsingHMDTrackingOnly() ) {
+		eyeMatrix = g_pD3D11Renderer->GetEyeMatrices()[0];
 		eyeMatrix.InvertFast();
 	} else {
 		eyeMatrix = g_pEtherGame->GetCamera().m_Rotation.ToMat4();
@@ -139,7 +140,7 @@ void EtherUIButton::Update( const float deltaTimeSec ) {
 
 	kbVec3 scale( 1.0f, 1.0f, 1.0f );
 
-	if ( g_pRenderer->IsRenderingToHMD() ) {
+	if ( g_pD3D11Renderer->IsRenderingToHMD() ) {
 		scale.Set( 1.5f, 1.5f, 1.5f );
 	}
 
@@ -147,7 +148,7 @@ void EtherUIButton::Update( const float deltaTimeSec ) {
 		scale *= 1.5f;
 	}
 
-	kbMat4 invCam = ( g_pRenderer->IsRenderingToHMD() || g_pRenderer->IsUsingHMDTrackingOnly() ) ? ( g_pRenderer->GetEyeMatrices()[0] ) : ( g_pEtherGame->GetCamera().m_Rotation.ToMat4() );
+	kbMat4 invCam = ( g_pD3D11Renderer->IsRenderingToHMD() || g_pD3D11Renderer->IsUsingHMDTrackingOnly() ) ? ( g_pD3D11Renderer->GetEyeMatrices()[0] ) : ( g_pEtherGame->GetCamera().m_Rotation.ToMat4() );
 	invCam.InvertFast();
 	kbMat4 stimPackMatrix = kbMat4::identity;
 	stimPackMatrix[0].Set( invCam[0].x, invCam[0].y, invCam[0].z, 0.0f );
@@ -158,10 +159,10 @@ void EtherUIButton::Update( const float deltaTimeSec ) {
 
 	std::vector<kbShader *> ShaderOverrideList;
 	ShaderOverrideList.push_back( m_pShader );
-	g_pRenderer->UpdateRenderObject( m_pButtonEntity->GetComponent( 0 ), m_pButtonModel, button3DPos, kbQuatFromMatrix( stimPackMatrix ), scale, RP_InWorldUI, &ShaderOverrideList );
+	g_pD3D11Renderer->UpdateRenderObject( m_pButtonEntity->GetComponent( 0 ), m_pButtonModel, button3DPos, kbQuatFromMatrix( stimPackMatrix ), scale, RP_InWorldUI, &ShaderOverrideList );
 	
 	if ( m_Count >= 0 && m_Count < 4 ) {
-		g_pRenderer->UpdateRenderObject( m_pCountEntity[m_Count]->GetComponent( 0 ), m_pCountModel[m_Count], button3DPos + rightVec * g_CountUIOffset.x + upVec * g_CountUIOffset.y, kbQuatFromMatrix( stimPackMatrix ), g_CountUIScale * scale.x, RP_InWorldUI, &ShaderOverrideList );
+		g_pD3D11Renderer->UpdateRenderObject( m_pCountEntity[m_Count]->GetComponent( 0 ), m_pCountModel[m_Count], button3DPos + rightVec * g_CountUIOffset.x + upVec * g_CountUIOffset.y, kbQuatFromMatrix( stimPackMatrix ), g_CountUIScale * scale.x, RP_InWorldUI, &ShaderOverrideList );
 	}
 }
 
@@ -171,12 +172,12 @@ void EtherUIButton::Update( const float deltaTimeSec ) {
 void EtherUIButton::SetCount( const int count ) {
 
 	if ( m_Count >= 0 && m_Count < 4 ) {
-		g_pRenderer->RemoveRenderObject( m_pCountEntity[m_Count]->GetComponent( 0 ) );
+		g_pD3D11Renderer->RemoveRenderObject( m_pCountEntity[m_Count]->GetComponent( 0 ) );
 	}
 
 	m_Count = count;
 	if ( m_Count >= 0 && m_Count < 4 ) {
-		g_pRenderer->AddRenderObject( m_pCountEntity[m_Count]->GetComponent( 0 ), m_pCountModel[m_Count], kbVec3::zero, kbQuat( 0.0f, 0.0f, 0.0f, 1.0f ), kbVec3( 1.0f, 1.0f, 1.0f ), RP_InWorldUI );
+		g_pD3D11Renderer->AddRenderObject( m_pCountEntity[m_Count]->GetComponent( 0 ), m_pCountModel[m_Count], kbVec3::zero, kbQuat( 0.0f, 0.0f, 0.0f, 1.0f ), kbVec3( 1.0f, 1.0f, 1.0f ), RP_InWorldUI );
 	}
 }
 
@@ -273,11 +274,11 @@ void EtherGame::PlayGame_Internal() {
 	kbModel *const pCrossHairModel = (kbModel*)g_ResourceManager.GetResource( "./assets/FX/crosshair.ms3d", true );
 	std::vector<kbShader *> ShaderOverrideList;
 	ShaderOverrideList.push_back( m_pTranslucentShader );
-	g_pRenderer->AddRenderObject( m_pCrossHairEntity->GetComponent( 0 ), pCrossHairModel, kbVec3::zero, kbQuat(), kbVec3( 1.0f, 1.0f, 1.0f ), RP_InWorldUI, &ShaderOverrideList );
+	g_pD3D11Renderer->AddRenderObject( m_pCrossHairEntity->GetComponent( 0 ), pCrossHairModel, kbVec3::zero, kbQuat(), kbVec3( 1.0f, 1.0f, 1.0f ), RP_InWorldUI, &ShaderOverrideList );
 
 	// Set up UI buttons
-	static float XPos = g_pRenderer->IsRenderingToHMD() ? ( 100.0f ) : ( 200.0f );
-	static float YPos = g_pRenderer->IsRenderingToHMD() ? ( -175.0f ) : ( -175.0f );
+	static float XPos = g_pD3D11Renderer->IsRenderingToHMD() ? ( 100.0f ) : ( 200.0f );
+	static float YPos = g_pD3D11Renderer->IsRenderingToHMD() ? ( -175.0f ) : ( -175.0f );
 	m_UIButtons[Airstrike].LoadButton( "./assets/FX/airstrike.ms3d", kbVec3( -XPos, YPos, 100.0f ) );
 	m_UIButtons[Stimpack].LoadButton( "./assets/FX/stimpack.ms3d", kbVec3( -0.0, YPos, 100.0f ) );
 	m_UIButtons[OLC].LoadButton( "./assets/FX/olc.ms3d", kbVec3( XPos, YPos, 100.0f ) );
@@ -309,10 +310,10 @@ void EtherGame::PlayGame_Internal() {
 	m_pOLCWindupWave = (kbWaveFile *)g_ResourceManager.GetResource( "./assets/Sounds/olc_windup.wav", true );
 	m_pOLCExplosion = (kbWaveFile *)g_ResourceManager.GetResource( "./assets/Sounds/olc_explosion.wav", true );
 
-	g_pRenderer->LoadTexture( "./assets/UI/TitleScreen.jpg", 5 );
-	g_pRenderer->LoadTexture( "./assets/UI/verse1.jpg", 6 );
-	g_pRenderer->LoadTexture( "./assets/UI/verse2.jpg", 7 );
-	g_pRenderer->LoadTexture( "./assets/UI/verse3.jpg", 8 );
+	g_pD3D11Renderer->LoadTexture( "./assets/UI/TitleScreen.jpg", 5 );
+	g_pD3D11Renderer->LoadTexture( "./assets/UI/verse1.jpg", 6 );
+	g_pD3D11Renderer->LoadTexture( "./assets/UI/verse2.jpg", 7 );
+	g_pD3D11Renderer->LoadTexture( "./assets/UI/verse3.jpg", 8 );
 }
 
 /**
@@ -357,7 +358,7 @@ void EtherGame::StopGame_Internal() {
 	m_pLocalPlayer = nullptr;
 
 	if ( m_pCrossHairEntity != nullptr ) {
-		g_pRenderer->RemoveRenderObject( m_pCrossHairEntity->GetComponent( 0 ) );
+		g_pD3D11Renderer->RemoveRenderObject( m_pCrossHairEntity->GetComponent( 0 ) );
 		delete m_pCrossHairEntity;
 		m_pCrossHairEntity = nullptr;
 	}
@@ -394,12 +395,12 @@ void EtherGame::Update_Internal( float DT ) {
 	if ( m_CurrentGameState == TitleScreen ) {
 		UpdateTitleScreen( DT );
 		m_Camera.m_Position = m_pLocalPlayer->GetPosition();
-		g_pRenderer->SetRenderViewTransform( nullptr, m_Camera.m_Position, m_Camera.m_Rotation );
+		g_pD3D11Renderer->SetRenderViewTransform( nullptr, m_Camera.m_Position, m_Camera.m_Rotation );
 		return;
 	} else if ( m_CurrentGameState == VerseScreen ) {
 		UpdateVerseScreen( DT );
 		m_Camera.m_Position = m_pLocalPlayer->GetPosition();
-		g_pRenderer->SetRenderViewTransform( nullptr, m_Camera.m_Position, m_Camera.m_Rotation );
+		g_pD3D11Renderer->SetRenderViewTransform( nullptr, m_Camera.m_Position, m_Camera.m_Rotation );
 		return;
 	}
 
@@ -414,11 +415,11 @@ void EtherGame::Update_Internal( float DT ) {
 		g_pInputManager->SetMouseBehavior( kbInputManager::MB_LockToCenter );
 	}
 	
-	if ( ( g_pRenderer->IsRenderingToHMD() || g_pRenderer->IsUsingHMDTrackingOnly() ) && g_pRenderer->GetFrameNum() > 0 ) {
+	if ( ( g_pD3D11Renderer->IsRenderingToHMD() || g_pD3D11Renderer->IsUsingHMDTrackingOnly() ) && g_pD3D11Renderer->GetFrameNum() > 0 ) {
 	
 		kbVec3 eyePos[2];
 	
-		const ovrPosef * eyeRenderPose = g_pRenderer->GetOvrEyePose();
+		const ovrPosef * eyeRenderPose = g_pD3D11Renderer->GetOvrEyePose();
 		float eyeX = 200.0f * ( ( eyeRenderPose[0].Position.x + eyeRenderPose[1].Position.x ) * 0.5f );
 	
 		kbMat4 camMatrix = m_Camera.m_Rotation.ToMat4();
@@ -444,7 +445,7 @@ void EtherGame::Update_Internal( float DT ) {
 		}
 	
 		// Update renderer cam
-		g_pRenderer->SetRenderViewTransform( nullptr, m_Camera.m_Position + m_HMDWorldOffset, m_Camera.m_Rotation );
+		g_pD3D11Renderer->SetRenderViewTransform( nullptr, m_Camera.m_Position + m_HMDWorldOffset, m_Camera.m_Rotation );
 	
 	} else {
 		if ( m_pLocalPlayer != nullptr && m_pLocalPlayer->GetChildEntities().size() > 0 ) {
@@ -459,7 +460,7 @@ void EtherGame::Update_Internal( float DT ) {
 		}
 
 		// Update renderer cam
-		g_pRenderer->SetRenderViewTransform( nullptr, m_Camera.m_Position, m_Camera.m_Rotation );
+		g_pD3D11Renderer->SetRenderViewTransform( nullptr, m_Camera.m_Position, m_Camera.m_Rotation );
 	}
 	
 	std::string PlayerPos;
@@ -470,7 +471,7 @@ void EtherGame::Update_Internal( float DT ) {
 	PlayerPos += " z:";
 	PlayerPos += std::to_string( m_Camera.m_Position.z );
 	
-	//g_pRenderer->DrawDebugText( PlayerPos, 0, 0, g_DebugTextSize, g_DebugTextSize, kbColor::green );
+	//g_pD3D11Renderer->DrawDebugText( PlayerPos, 0, 0, g_DebugTextSize, g_DebugTextSize, kbColor::green );
 
 
 	UpdateWorld( DT );
@@ -632,7 +633,7 @@ void EtherGame::UpdateTitleScreen( const float DeltaTimeSec ) {
 	m_Camera.m_Rotation = kbQuatFromMatrix( orientation );
 	m_Camera.m_RotationTarget = kbQuatFromMatrix( orientation );
 
-	g_pRenderer->DrawBillboard( m_pLocalPlayer->GetPosition() + m_pLocalPlayer->GetOrientation().ToMat4()[2].ToVec3() * dist, kbVec2( sizex, sizey ), 5, nullptr );
+	g_pD3D11Renderer->DrawBillboard( m_pLocalPlayer->GetPosition() + m_pLocalPlayer->GetOrientation().ToMat4()[2].ToVec3() * dist, kbVec2( sizex, sizey ), 5, nullptr );
 
 	if ( GetAsyncKeyState( VK_SPACE ) ) {
 		POINT CursorPos;
@@ -649,7 +650,7 @@ void EtherGame::UpdateTitleScreen( const float DeltaTimeSec ) {
 }
 
 void EtherGame::UpdateVerseScreen( const float DeltaTimeSec ) {
-	g_pRenderer->DrawBillboard( m_pLocalPlayer->GetPosition() + m_pLocalPlayer->GetOrientation().ToMat4()[2].ToVec3() * dist, kbVec2( sizex, sizey ), 5 + m_VerseIdx, nullptr );
+	g_pD3D11Renderer->DrawBillboard( m_pLocalPlayer->GetPosition() + m_pLocalPlayer->GetOrientation().ToMat4()[2].ToVec3() * dist, kbVec2( sizex, sizey ), 5 + m_VerseIdx, nullptr );
 
 	if ( m_GameStartTimer.TimeElapsedSeconds() > 3 && GetAsyncKeyState( VK_SPACE ) ) {
 		m_CurrentGameState = GamePlay;
@@ -839,8 +840,8 @@ void EtherGame::UpdateMotionControls( const float deltaTimeSec ) {
 	cursorScreenSpacePos.y = kbClamp( cursorScreenSpacePos.y, -1.0f, 1.0f );
 	
 	kbMat4 eyeMatrix;
-	if ( g_pRenderer->IsRenderingToHMD() || g_pRenderer->IsUsingHMDTrackingOnly()  ) {
-		eyeMatrix = g_pRenderer->GetEyeMatrices()[0];
+	if ( g_pD3D11Renderer->IsRenderingToHMD() || g_pD3D11Renderer->IsUsingHMDTrackingOnly()  ) {
+		eyeMatrix = g_pD3D11Renderer->GetEyeMatrices()[0];
 		eyeMatrix.InvertFast();
 	} else {
 		eyeMatrix = m_Camera.m_Rotation.ToMat4();
@@ -854,8 +855,8 @@ void EtherGame::UpdateMotionControls( const float deltaTimeSec ) {
 	static float zAxisLength = 275.0f;
 
 	kbVec3 centerEyePos = m_Camera.m_Position;
-	if ( g_pRenderer->IsRenderingToHMD() || g_pRenderer->IsUsingHMDTrackingOnly() ) {
-		const ovrPosef *const hmdEyePos = g_pRenderer->GetOvrEyePose();
+	if ( g_pD3D11Renderer->IsRenderingToHMD() || g_pD3D11Renderer->IsUsingHMDTrackingOnly() ) {
+		const ovrPosef *const hmdEyePos = g_pD3D11Renderer->GetOvrEyePose();
 		centerEyePos +=  ( ovrVecTokbVec3( hmdEyePos[0].Position ) + ovrVecTokbVec3( hmdEyePos[1].Position ) ) * 0.5f;
 	}
 
@@ -863,7 +864,7 @@ void EtherGame::UpdateMotionControls( const float deltaTimeSec ) {
 	crossHair3DPos += rightVec * xAxisLength * cursorScreenSpacePos.x;
 	crossHair3DPos += upVec * yAxisLength * cursorScreenSpacePos.y;
 
-	kbMat4 invCam = ( g_pRenderer->IsRenderingToHMD() || g_pRenderer->IsUsingHMDTrackingOnly() ) ? ( g_pRenderer->GetEyeMatrices()[0] ) : ( m_Camera.m_Rotation.ToMat4() );
+	kbMat4 invCam = ( g_pD3D11Renderer->IsRenderingToHMD() || g_pD3D11Renderer->IsUsingHMDTrackingOnly() ) ? ( g_pD3D11Renderer->GetEyeMatrices()[0] ) : ( m_Camera.m_Rotation.ToMat4() );
 	invCam.InvertFast();
 
 	static float crossHairWidth = 10.0f;
@@ -879,7 +880,7 @@ void EtherGame::UpdateMotionControls( const float deltaTimeSec ) {
 	kbModel *const pModel = (kbModel*)g_ResourceManager.GetResource( "./assets/FX/crosshair.ms3d", true );
 	std::vector<kbShader *> ShaderOverrideList;
 	ShaderOverrideList.push_back( m_pTranslucentShader );
-	g_pRenderer->UpdateRenderObject( m_pCrossHairEntity->GetComponent( 0 ), pModel, crossHair3DPos, kbQuatFromMatrix( m_CrossHairLocalSpaceMatrix ), kbVec3( 1.0f, 1.0f, 1.0f ), RP_InWorldUI, &ShaderOverrideList );
+	g_pD3D11Renderer->UpdateRenderObject( m_pCrossHairEntity->GetComponent( 0 ), pModel, crossHair3DPos, kbQuatFromMatrix( m_CrossHairLocalSpaceMatrix ), kbVec3( 1.0f, 1.0f, 1.0f ), RP_InWorldUI, &ShaderOverrideList );
 
 	{
 		const kbVec3 aimAtPoint = crossHair3DPos;//m_pParent->GetPosition() + 9999.0f * WeaponMatrix[2].ToVec3();
@@ -912,7 +913,7 @@ void EtherGame::UpdateMotionControls( const float deltaTimeSec ) {
 void EtherGame::UpdatePostProcess() {
 
 	if ( m_pLocalPlayer == nullptr || m_pLocalPlayer->GetActorComponent() == nullptr ) {
-		g_pRenderer->SetPostProcessSettings( kbPostProcessSettings_t() );
+		g_pD3D11Renderer->SetPostProcessSettings( kbPostProcessSettings_t() );
 		return;
 	}
 
@@ -972,7 +973,7 @@ void EtherGame::UpdatePostProcess() {
 	updatedPPSettings.m_AdditiveColor.x += m_OLCTint.x;
 	updatedPPSettings.m_AdditiveColor.y += m_OLCTint.y;
 	updatedPPSettings.m_AdditiveColor.z += m_OLCTint.z;
-	g_pRenderer->SetPostProcessSettings( updatedPPSettings );
+	g_pD3D11Renderer->SetPostProcessSettings( updatedPPSettings );
 }
 
 

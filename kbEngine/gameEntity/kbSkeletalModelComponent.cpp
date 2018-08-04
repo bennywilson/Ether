@@ -6,6 +6,7 @@
 //==============================================================================
 #include "kbModel.h"
 #include "kbGameEntityHeader.h"
+#include "kbRenderer.h"
 
 KB_DEFINE_COMPONENT(kbSkeletalModelComponent)
 

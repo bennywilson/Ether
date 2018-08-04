@@ -7,6 +7,7 @@
 #include <sstream>
 #include <iomanip>
 #include "kbGame.h"
+#include "DX11/kbRenderer_DX11.h"		// TODO
 
 kbGame * g_pGame = nullptr;
 

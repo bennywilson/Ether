@@ -44,6 +44,7 @@ public: \
 #include "kbRenderer_Defs.h"
 #include "kbMaterial.h"
 #include "kbSoundComponent.h"
+#include "kbDebugComponents.h"
 #include "kbTypeInfo.h"
 #include "kbFile.h"
 

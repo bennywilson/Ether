@@ -3,15 +3,17 @@
 //
 // General model format based off of the ms3d specs
 //
-// 2016-2016 kbEngine 2.0
+// 2016-2018 kbEngine 2.0
 //==============================================================================
 #ifndef _KBMODEL_H_
 #define _KBMODEL_H_
 
 #include "kbCore.h"
+#include "kbBounds.h"
 #include "kbRenderBuffer.h"
 #include "kbVector.h"
 #include "kbRenderer_defs.h"
+#include "kbMaterial.h"
 
 /**
  *	kbModelIntersection_t

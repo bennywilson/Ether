@@ -10,6 +10,7 @@
 
 #include <D3D11.h>
 #include <DirectXMath.h>
+#include "kbRenderer.h"
 #include "OVR_CAPI.h"
 #include "OVR_CAPI_D3D.h"
 #include "kbVector.h"
@@ -26,60 +27,10 @@ class kbComponent;
 class kbLightComponent;
 class kbLightShaftsComponent;
 
-extern class kbRenderer_DX11 * g_pRenderer;
 extern XMFLOAT4X4 & XMFLOAT4X4FromkbMat4( kbMat4 & matrix );
 extern kbMat4 & kbMat4FromXMFLOAT4X4( XMFLOAT4X4 & matrix );
 
 
-/**
- *	kbRenderWindow
- */
-class kbRenderWindow {
-
-	friend class kbRenderer_DX11;
-
-//-------------------------------------------------------------------------------------------------------------------------------------------------------------
-public:
-
-																kbRenderWindow();
-																~kbRenderWindow();
-
-	void														Release() { SAFE_RELEASE( m_pSwapChain ); SAFE_RELEASE( m_pRenderTargetView ) ; }
-	
-	void														BeginFrame();
-	void														EndFrame() { m_pSwapChain->Present( 0, 0 ); }
-
-private:
-	HWND														m_Hwnd;
-	IDXGISwapChain *											m_pSwapChain;
-	ID3D11RenderTargetView *									m_pRenderTargetView;
-
-	unsigned int												m_ViewPixelWidth;
-	unsigned int												m_ViewPixelHeight;
-	float														m_fViewPixelWidth;
-	float														m_fViewPixelHeight;
-	float														m_fViewPixelHalfWidth;
-	float														m_fViewPixelHalfHeight;
-
-	kbMat4														m_ProjectionMatrix;
-	kbMat4														m_InverseProjectionMatrix;
-	kbMat4														m_ViewMatrix;
-	kbMat4														m_ViewProjectionMatrix;
-	kbMat4														m_InverseViewProjectionMatrix;
-	kbVec3														m_CameraPosition;
-	kbQuat														m_CameraRotation;
-
-	kbMat4														m_EyeMatrices[2];
-
-	kbVec3														m_CameraPosition_GameThread;
-	kbQuat														m_CameraRotation_GameThread;
-
-	std::map<const kbComponent *, kbRenderObject *>				m_RenderObjectMap;
-	std::map<const kbLightComponent *, kbRenderLight *>			m_RenderLightMap;
-	std::map<const void *, kbRenderObject *>					m_RenderParticleMap;
-
-	std::vector<kbRenderObject*>								m_VisibleRenderObjects[NUM_RENDER_PASSES];
-};
 
 /**
  *	kbRenderTexture
@@ -384,19 +335,10 @@ struct kbRenderState {
 	ID3D11Device * m_pDevice;
 };
 
-struct kbPostProcessSettings_t {
-												kbPostProcessSettings_t() :
-													m_AdditiveColor( kbVec3::zero ),
-													m_Tint( 1.0f, 1.0f, 1.0f, 1.0f ) { }
-
-	kbVec4										m_AdditiveColor;
-	kbVec4										m_Tint;
-};
-
 /**
  *	kbRenderer_DX11
  */
-class kbRenderer_DX11 {
+class kbRenderer_DX11 : public kbRenderer {
 
 	friend class kbRenderJob;
 
@@ -405,91 +347,25 @@ public:
 
 												kbRenderer_DX11();
 												~kbRenderer_DX11();
-	
-	void										Init( HWND, const int width, const int height, const bool bUseHMD, const bool bUseHMDTrackingOnly );
 
-	int											CreateRenderView( HWND hwnd );
-	void										SetRenderWindow( HWND hwnd );
+	virtual int									CreateRenderView( HWND hwnd ) override;
+	virtual void								SetRenderWindow( HWND hwnd ) override;
 
-	// Render Syncing
-	void										RenderSync();
-	void										SetReadyToRender();
-	void										WaitForRenderingToComplete() const { while ( m_RenderThreadSync == 1 ) { } };
-	bool										IsRenderingSynced() const { return m_RenderThreadSync == 0; }
 
 	// View Transform
-	void										SetRenderViewTransform( const HWND hwnd, const kbVec3 & position, const kbQuat & rotation );
-	void										GetRenderViewTransform( const HWND hwnd, kbVec3 & position, kbQuat & rotation );
+	virtual void								SetRenderViewTransform( const HWND hwnd, const kbVec3 & position, const kbQuat & rotation ) override;
+	virtual void								GetRenderViewTransform( const HWND hwnd, kbVec3 & position, kbQuat & rotation ) override;
 
-	// Models
-	void										AddRenderObject( const kbRenderObject & renderObjectToAdd );
-	void										UpdateRenderObject( const kbRenderObject & renderObjectToUpdate );
-	void										RemoveRenderObject( const kbRenderObject & renderObjectToRemove );
-
-	void										AddRenderObject( const kbComponent *const, const kbModel *const model, const kbVec3 & pos, const kbQuat & orientation, 
-																 const kbVec3 & scale, const ERenderPass RenderPass = RP_Lighting, 
-																 const std::vector<kbShader *> *const pShaderOverrideList = nullptr, 
-																 const kbShaderParamOverrides_t *const pShaderParamsOverride = nullptr );
-
-	void										UpdateRenderObject( const kbComponent *const , const kbModel *const model, const kbVec3 & pos, const kbQuat & orientation, 
-																	const kbVec3 & scale, const ERenderPass RenderPass = RP_Lighting,
-																	const std::vector<kbShader *> *const pShaderOverrideList = nullptr, 
-																	const kbShaderParamOverrides_t *const pShaderParamsOverride = nullptr );
-
-	void										RemoveRenderObject( const kbComponent *const );
-	
-	// Lights
-	void										AddLight( const kbLightComponent *const pLightComponent, const kbVec3 & pos, const kbQuat & orientation );
-	void										UpdateLight( const kbLightComponent * pLightComponent, const kbVec3 & pos, const kbQuat & orientation );
-	void										RemoveLight( const kbLightComponent *const pLightComponent );
-	void										HackClearLight( const kbLightComponent *const pLightComponent );
-
-	// Fog
-	void										UpdateFog( const kbColor & color, const float startDistance, const float endDistance );
-
-	// Particles
-	void										AddParticle( const void *const pParentPtr, const kbModel *const pModel, const kbVec3 & pos, kbQuat & orientation );
-	void										UpdateParticle( const void *const pParentPtr, const kbModel *const pModel, const kbVec3 & pos, kbQuat & orientation );
-	void										RemoveParticle( const void *const pParentPtr );
-
-	// Light Shafts
-	void										AddLightShafts( const kbLightShaftsComponent *const pComponent, const kbVec3 & pos, const kbQuat & orientation );
-	void										UpdateLightShafts( const kbLightShaftsComponent *const pComponent, const kbVec3 & pos, const kbQuat & orientation );
-	void										RemoveLightShafts( const kbLightShaftsComponent *const pComponent );
 
 
 	// Post-process
 	void										SetPostProcessSettings( const kbPostProcessSettings_t & postProcessSettings );
 
-	bool										LoadTexture( const char * name, int index, int width = -1, int height = -1 );
 	void										LoadShader( const std::string & fileName, ID3D11VertexShader *& vertexShader, ID3D11GeometryShader *& geometryShader,
 															ID3D11PixelShader *& pixelShader, ID3D11InputLayout *& vertexLayout, const std::string & vertexShaderFunc, 
 															const std::string & pixelShaderFunc, struct kbShaderVarBindings_t * ShaderBindings = nullptr );
 
-	// Various Drawing commands
-	void										DrawScreenSpaceQuad( const int start_x, const int start_y, const int size_x, const int size_y, const int textureIndex, kbShader *const pShader = nullptr );
-	void										DrawLine( const kbVec3 & start, const kbVec3 & end, const kbColor & color );
-	void										DrawBox( const kbBounds & bounds, const kbColor & color );
-	void										DrawPreTransformedLine( const std::vector<kbVec3> & vertList, const kbColor & color );
-	void										DrawSphere( const kbVec3 & origin, const float radius, const int NumSegments, const kbColor & color );
-	void										DrawBillboard( const kbVec3 & position, const kbVec2 & size, const int textureIndex, kbShader *const pShader, const int entityId = -1 );
-	void										DrawModel( const kbModel * pModel, const kbVec3 & start, const kbQuat & orientation, const kbVec3 & scale, const int entityId );
 
-	//
-	enum kbViewMode_t {
-		ViewMode_Shaded,
-		ViewMode_Wireframe,
-		ViewMode_Normals,
-		ViewMode_Specular,
-		ViewMode_Depth
-	};
-	void										SetViewMode( const kbViewMode_t newViewMode ) { m_ViewMode_GameThread = newViewMode; }
-
-
-	// Debug Text Drawing
-	void										EnableConsole( const bool bEnable ) { m_bConsoleEnabled = bEnable; }
-	void										DrawDebugText( const std::string & theString, const float X, const float Y, const float ScreenCharWidth, 
-															   const float ScreenCharHeight, const kbColor & color );
 
 	// Oculus
 	bool										IsRenderingToHMD() const { return m_bRenderToHMD; }
@@ -498,16 +374,17 @@ public:
 	const ovrPosef *							GetOvrEyePose() const { return m_EyeRenderPose; }
 	const kbMat4 *								GetEyeMatrices() const { return this->m_RenderWindowList[0]->m_EyeMatrices; }
 
-	// Other
-	int											GetBackBufferWidth() const { return Back_Buffer_Width; }
-	int											GetBackBufferHeight() const { return Back_Buffer_Height; }
 
-	kbVec2i										GetEntityIdAtScreenPosition( const uint x, const uint y );
+	virtual kbVec2i								GetEntityIdAtScreenPosition( const uint x, const uint y ) override;
 
 	const static float							Near_Plane;
 	const static float							Far_Plane;
 
 private:
+
+	virtual void								Init_Internal( HWND, const int width, const int height, const bool bUseHMD, const bool bUseHMDTrackingOnly ) override;
+	virtual bool								LoadTexture_Internal( const char * name, int index, int width = -1, int height = -1 ) override;
+	virtual void								RenderSync_Internal() override;
 
 	void										Shutdown();
 
@@ -516,7 +393,7 @@ private:
 	void										CreateRenderTarget( const eRenderTargetTexture targetIndex, const int width, const int height, const DXGI_FORMAT format );
 	void										SetRenderTarget( eRenderTargetTexture type );
 
-	void										RenderScene();
+	virtual void								RenderScene() override;
 
 	void										PreRenderCullAndSort();
 
@@ -551,9 +428,6 @@ private:
 
 	void										DrawTexture( ID3D11ShaderResourceView *const pShaderResourceView, const kbVec3 & pixelPosition, 
 															 const kbVec3 & pixelSize, const kbVec3 & renderTargetSize );
-
-	int											Back_Buffer_Width;
-	int											Back_Buffer_Height;
 
 	HWND										m_hwnd;
 	IDXGIFactory *								m_pDXGIFactory;
@@ -597,57 +471,19 @@ private:
 	ID3D11RasterizerState *						m_pNoFaceCullingRasterizerState;
 	ID3D11RasterizerState *						m_pWireFrameRasterizerState;
 
-	kbRenderWindow *							m_pCurrentRenderWindow;    // the render window BeginScene was called with
-
 	const static int Max_Num_Textures = 128;
 	kbTexture *									m_pTextures[Max_Num_Textures];
 	
 	ID3D11SamplerState *						m_pBasicSamplerState;
 	ID3D11SamplerState *						m_pNormalMapSamplerState;
 	ID3D11SamplerState *						m_pShadowMapSamplerState;
-
-	std::vector<kbRenderWindow *>				m_RenderWindowList;
 	
 	kbRenderTexture								m_RenderTargets[NUM_RENDER_TARGETS];
 	
 	// debug
 	ID3DUserDefinedAnnotation *					m_pEventMarker;
-
-	std::vector<vertexLayout>					m_DebugLines;
 	ID3D11Buffer *								m_DebugVertexBuffer;
-	std::vector<vertexLayout>					m_DebugPreTransformedLines;
 	ID3D11Buffer *								m_DebugPreTransformedVertexBuffer;
-	
-	struct debugDrawObject_t {
-		kbVec3									m_Position;
-		kbQuat									m_Orientation;
-		kbVec3									m_Scale;
-		const kbModel *							m_pModel;
-		kbShader*								m_pShader;
-		int										m_TextureIndex;
-		int										m_EntityId;
-	};
-	
-	std::vector<debugDrawObject_t>				m_DebugBillboards;
-	std::vector<debugDrawObject_t>				m_DebugModels;
-
-	kbViewMode_t								m_ViewMode_GameThread;
-	kbViewMode_t								m_ViewMode;
-
-	struct kbTextInfo_t {
-		kbTextInfo_t() : 
-			color( kbColor::green ) { }
-
-		std::string								TextInfo;
-		float									screenX;
-		float									screenY;
-		float									screenW;
-		float									screenH;
-		kbColor									color;
-	};
-
-	std::vector<kbTextInfo_t>					m_DebugStrings_GameThread;
-	std::vector<kbTextInfo_t>					m_DebugStrings;
 
 	// Oculus Rift
 	ovrSession									m_ovrSession;
@@ -663,44 +499,6 @@ private:
 	bool										m_bUsingHMDTrackingOnly;
 	// End of Oculus Rift
 
-	// Threading
-	kbRenderJob *								m_pRenderJob;
-	volatile int								m_RenderThreadSync;
-
-	std::vector<vertexLayout>					m_DebugLines_GameThread;
-	std::vector<debugDrawObject_t>				m_DebugBillboards_GameThread;
-	std::vector<debugDrawObject_t>				m_DebugModels_GameThread;
-
-	struct ScreenSpaceQuad_t {
-												ScreenSpaceQuad_t() { }
-
-		kbVec2i									m_Pos;
-		kbVec2i									m_Size;
-		int										m_TextureIndex;
-		class kbShader *						m_pShader;
-	};
-	std::vector<ScreenSpaceQuad_t>				m_ScreenSpaceQuads_GameThread;
-	std::vector<ScreenSpaceQuad_t>				m_ScreenSpaceQuads_RenderThread;
-
-	std::vector<kbRenderObject>					m_RenderObjectList_GameThread;
-	std::vector<kbRenderLight>					m_LightList_GameThread;
-	std::vector<kbRenderObject>					m_ParticleList_GameThread;
-
-	std::vector<kbLightShafts>					m_LightShafts_GameThread;
-	std::vector<kbLightShafts>					m_LightShafts_RenderThread;
-
-	kbColor										m_FogColor_GameThread;
-	kbColor										m_FogColor_RenderThread;
-
-	float										m_FogStartDistance_GameThread;
-	float										m_FogStartDistance_RenderThread;
-
-	float										m_FogEndDistance_GameThread;
-	float										m_FogEndDistance_RenderThread;
-
-	kbPostProcessSettings_t						m_PostProcessSettings_GameThread;
-	kbPostProcessSettings_t						m_PostProcessSettings_RenderThread;
-
 	kbModel	*									m_DebugText;
 	int											m_FrameNum;
 	bool										m_bConsoleEnabled;
@@ -708,8 +506,6 @@ private:
 
 extern ID3D11Device * g_pD3DDevice;
 
-extern const float g_DebugTextSize;
-extern const float g_DebugLineSpacing;
 
 
 inline ovrVector3f kbVec3ToovrVec( const kbVec3 & inVec ) {
@@ -736,5 +532,6 @@ inline kbQuat ovrQuatTokbQuat( const ovrQuatf & inQuat ) {
 	return returnQuat;
 }
 
+extern kbRenderer_DX11 * g_pD3D11Renderer;
 
 #endif

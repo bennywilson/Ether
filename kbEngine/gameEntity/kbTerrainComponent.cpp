@@ -9,6 +9,7 @@
 #include "kbQuaternion.h"
 #include "kbGameEntityHeader.h"
 #include "kbTerrainComponent.h"
+#include "kbRenderer.h"
 
 KB_DEFINE_COMPONENT(kbTerrainComponent)
 

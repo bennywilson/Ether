@@ -6,6 +6,7 @@
 //===================================================================================================
 #include "EtherGame.h"
 #include "EtherSkelModel.h"
+#include "kbRenderer.h"
 
 KB_DEFINE_COMPONENT(EtherAnimComponent)
 KB_DEFINE_COMPONENT(EtherSkelModelComponent)

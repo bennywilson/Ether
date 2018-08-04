@@ -420,6 +420,4 @@ public:
 	bool										m_bIsDirectional;
 };
 
-#include "DX11/kbRenderer_DX11.h"
-
 #endif

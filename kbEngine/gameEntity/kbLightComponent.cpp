@@ -9,6 +9,7 @@
 #include "kbQuaternion.h"
 #include "kbBounds.h"
 #include "kbGameEntityHeader.h"
+#include "kbRenderer.h"
 
 KB_DEFINE_COMPONENT(kbLightComponent)
 KB_DEFINE_COMPONENT(kbDirectionalLightComponent)
