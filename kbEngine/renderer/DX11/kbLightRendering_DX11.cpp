@@ -28,9 +28,8 @@ void kbRenderer_DX11::RenderLights() {
 	}
 
 	START_SCOPED_RENDER_TIMER( RENDER_LIGHTING );
-	//const std::map<const kbLightComponent *, kbRenderLight *>	GetRenderLightMap() const { return m_RenderLightMap; }
-	std::map< const kbLightComponent *, kbRenderLight * >::const_iterator iter;
-	for ( iter = m_pCurrentRenderWindow->GetRenderLightMap().begin(); iter != m_pCurrentRenderWindow->GetRenderLightMap().end(); iter++ ) {
+
+	for ( auto iter = m_pCurrentRenderWindow->GetRenderLightMap().begin(); iter != m_pCurrentRenderWindow->GetRenderLightMap().end(); iter++ ) {
 		RenderLight( iter->second );
 		ID3D11ShaderResourceView * const nullRTViews[] = { nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr };
 		m_pDeviceContext->PSSetShaderResources( 0, 8, nullRTViews );

@@ -2,14 +2,13 @@
 // EtherPlayer.cpp
 //
 //
-// 2016-2017 kbEngine 2.0
+// 2016-2018 kbEngine 2.0
 //===================================================================================================
 #include <math.h>
 #include "EtherGame.h"
 #include "EtherPlayer.h"
 #include "EtherSkelModel.h"
 #include "EtherWeapon.h"
-#include "kbRenderer.h"
 #include "DX11/kbRenderer_DX11.h"
 
 kbConsoleVariable g_ShowPlayerCollision( "showcollision", false, kbConsoleVariable::Console_Bool, "Shows player collision", "" );

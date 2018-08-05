@@ -23,12 +23,6 @@
 using namespace DirectX;
 
 class kbModel;
-class kbComponent;
-class kbLightComponent;
-class kbLightShaftsComponent;
-
-extern XMFLOAT4X4 & XMFLOAT4X4FromkbMat4( kbMat4 & matrix );
-extern kbMat4 & kbMat4FromXMFLOAT4X4( FXMMATRIX & matrix );
 
 class kbRenderWindow_DX11 : public kbRenderWindow {
 

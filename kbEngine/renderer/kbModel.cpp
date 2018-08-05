@@ -96,11 +96,6 @@ kbModel::~kbModel() {
  */
 bool kbModel::Load_Internal() {
 
-	if ( m_FullFileName.find("ifle") != std::string::npos ) {
-		static int breakhere = 0;
-		breakhere++;
-	}
-
 	std::ifstream modelFile;
 	modelFile.open( m_FullFileName, std::ifstream::in | std::ifstream::binary );
 	kbErrorCheck( modelFile.good(), "kbModel::LoadResource_Internal() - Failed to load model %s", m_FullFileName.c_str() );
