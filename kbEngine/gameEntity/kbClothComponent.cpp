@@ -53,8 +53,10 @@ void kbClothComponent::Constructor() {
 	m_CurrentTickFrame = 0;
 }
 
+
 // TODO: HACK!
 static XMMATRIX & XMMATRIXFromkbMat4( kbMat4 & matrix ) { return (*(XMMATRIX*) &matrix); }
+static kbMat4 & kbMat4FromXMMATRIX( FXMMATRIX & matrix ) { return (*(kbMat4*) & matrix); }
 
 /**
  *	kbClothComponent::Update_Internal
@@ -92,6 +94,7 @@ void kbClothComponent::Update_Internal( const float DeltaTime ) {
 	// todo: Need my own inverse matrix function
 	kbMat4 invParentMatrix;
 	XMMATRIX inverseMat = XMMatrixInverse( nullptr, XMMATRIXFromkbMat4( WorldMat ) );
+	invParentMatrix = kbMat4FromXMMATRIX( inverseMat );
 
 	std::vector<kbBoneMatrix_t> & FinalBoneMatrices = pSkelModelComponent->GetFinalBoneMatrices();
 	if ( FinalBoneMatrices.size() == 0 ) {
