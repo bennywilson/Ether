@@ -467,7 +467,7 @@ void EtherGame::UpdateVerseScreen( const float DeltaTimeSec ) {
  */
 void EtherGame::UpdateWorld( const float DT ) {
 	const double GameTimeInSeconds = m_GameStartTimer.TimeElapsedSeconds();
-
+/*
 	m_AIManager.Update( DT );
 	int numEntities = 0;
 	for ( int iEntity = 0; iEntity < GetGameEntities().size(); iEntity++ ) {
@@ -503,7 +503,7 @@ void EtherGame::UpdateWorld( const float DT ) {
 
 	UpdateStimPack( DT );
 	UpdateAirstrike( DT );
-	UpdateOLC( DT );
+	UpdateOLC( DT );*/
 }
 
 /**

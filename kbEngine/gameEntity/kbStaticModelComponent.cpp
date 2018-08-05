@@ -47,13 +47,14 @@ void kbStaticModelComponent::SetEnable_Internal( const bool isEnabled ) {
 		return;
 	}
 
+	m_RenderObject.m_pComponent = this;
+
 	if ( isEnabled ) {
 
 		m_RenderObject.m_bCastsShadow = this->GetCastsShadow();
 		m_RenderObject.m_bIsSkinnedModel = false;
 		m_RenderObject.m_EntityId = GetOwner()->GetEntityId();
 		m_RenderObject.m_Orientation = GetOwner()->GetOrientation();
-		m_RenderObject.m_pComponent = this;
 		m_RenderObject.m_pModel = m_pModel;
 		m_RenderObject.m_Position = GetOwner()->GetPosition();
 		m_RenderObject.m_RenderPass = m_RenderPass;

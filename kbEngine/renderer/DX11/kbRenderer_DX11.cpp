@@ -16,7 +16,6 @@
 #include "kbModel.h"
 #include "kbGameEntityHeader.h"
 #include "kbComponent.h"
-#include "kbSkeletalModelComponent.h"
 #include "kbConsole.h"
 
 // oculus
