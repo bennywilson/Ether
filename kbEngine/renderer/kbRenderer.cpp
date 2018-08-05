@@ -280,101 +280,6 @@ void kbRenderer::DrawDebugText( const std::string & theString, const float X, co
 }
 
 /**
- *	kbRenderer::AddRenderObject
- */
-void kbRenderer::AddRenderObject( const kbComponent *const pComponent, const kbModel *const pModel, const kbVec3 & pos, const kbQuat & orientation, const kbVec3 & scale, const ERenderPass renderPass, const std::vector<kbShader *> *const pShaderOverrideList, const kbShaderParamOverrides_t *const pShaderParamOverrides ) {
-	kbErrorCheck( m_pCurrentRenderWindow != nullptr, "kbRenderer_DX11::RemoveRenderObject - Error, nullptr Render window found" );
-
-	kbRenderObject newRenderObjectInfo;
-	newRenderObjectInfo.m_pModel = pModel;
-	newRenderObjectInfo.m_pComponent = pComponent;
-	newRenderObjectInfo.m_Position = pos;
-	newRenderObjectInfo.m_Orientation= orientation;
-	newRenderObjectInfo.m_Scale = scale;
-	newRenderObjectInfo.m_bIsFirstAdd = true;
-	newRenderObjectInfo.m_bIsRemove = false;
-	newRenderObjectInfo.m_RenderPass = renderPass;
-	if ( pComponent->GetOwner() != nullptr ) {
-		newRenderObjectInfo.m_EntityId = static_cast<kbGameEntity*>( pComponent->GetOwner() )->GetEntityId();
-	}
-
-	if ( pComponent->IsA( kbModelComponent::GetType() ) ) {
-		newRenderObjectInfo.m_bCastsShadow = static_cast<const kbModelComponent*>( pComponent )->GetCastsShadow();
-	}
-
-	if ( pShaderOverrideList != nullptr ) {
-		newRenderObjectInfo.m_OverrideShaderList = *pShaderOverrideList;
-	}
-
-	if ( pShaderParamOverrides != nullptr ) {
-		newRenderObjectInfo.m_ShaderParamOverrides = *pShaderParamOverrides;
-	}
-
-	m_RenderObjectList_GameThread.push_back( newRenderObjectInfo );
-}
-
-/**
- *	kbRenderer::UpdateRenderObject
- */
-void kbRenderer::UpdateRenderObject( const kbComponent *const pComponent, const kbModel *const pModel, const kbVec3 & pos, const kbQuat & orientation, const kbVec3 & scale, const ERenderPass renderPass, const std::vector<kbShader *> *const pShaderOverrideList, const kbShaderParamOverrides_t *const pShaderParamsOverride ) {
-
-	if ( m_pCurrentRenderWindow == nullptr ) {
-		kbError( "kbRenderer_DX11::UpdateRenderObject - nullptr Render Window" );
-	}
-
-	kbRenderObject newRenderObjectInfo;
-	newRenderObjectInfo.m_pModel = pModel;
-	newRenderObjectInfo.m_pComponent = pComponent;
-	newRenderObjectInfo.m_Position = pos;
-	newRenderObjectInfo.m_Orientation = orientation;
-	newRenderObjectInfo.m_Scale = scale;
-	newRenderObjectInfo.m_bIsFirstAdd = false;
-	newRenderObjectInfo.m_bIsRemove = false;
-	newRenderObjectInfo.m_RenderPass = renderPass;
-	if ( pComponent != nullptr && pComponent->GetOwner() != nullptr ) {
-		newRenderObjectInfo.m_EntityId = static_cast<kbGameEntity*>( pComponent->GetOwner() )->GetEntityId();
-	}
-
-	if ( pComponent->IsA( kbModelComponent::GetType() ) ) {
-		newRenderObjectInfo.m_bCastsShadow = static_cast<const kbModelComponent*>( pComponent )->GetCastsShadow();
-	}
-
-	if ( pShaderOverrideList != nullptr ) {
-		newRenderObjectInfo.m_OverrideShaderList = *pShaderOverrideList;
-	}
-
-	if ( pShaderParamsOverride != nullptr ) {
-		newRenderObjectInfo.m_ShaderParamOverrides = *pShaderParamsOverride;
-	}
-
-	m_RenderObjectList_GameThread.push_back( newRenderObjectInfo );
-}
-
-/**
- *	kbRenderer::RemoveRenderObject
- */
-void kbRenderer::RemoveRenderObject( const kbComponent *const pComponent ) {
-
-	if ( m_pCurrentRenderWindow == nullptr ) {
-		kbError( "kbRenderer_DX11::UpdateRenderObject - nullptr Render Window" );
-	}
-
-	// Remove duplicates
-	for ( int i = 0; i < m_RenderObjectList_GameThread.size(); i++ ) {
-		if ( m_RenderObjectList_GameThread[i].m_pComponent == pComponent ) {
-			m_RenderObjectList_GameThread.erase(m_RenderObjectList_GameThread.begin() + i);
-			i--;
-		}
-	}
-
-	kbRenderObject RenderObjectToRemove;
-	RenderObjectToRemove.m_pComponent = pComponent;
-	RenderObjectToRemove.m_bIsRemove = true;
-
-	m_RenderObjectList_GameThread.push_back( RenderObjectToRemove );
-}
-
-/**
  *	kbRenderer::AddLight
  */
 void kbRenderer::AddLight( const kbLightComponent * pLightComponent, const kbVec3 & pos, const kbQuat & orientation ) {
@@ -815,9 +720,6 @@ void kbRenderer::RenderSync() {
 	m_FogColor_RenderThread = m_FogColor_GameThread;
 	m_FogStartDistance_RenderThread = m_FogStartDistance_GameThread;
 	m_FogEndDistance_RenderThread = m_FogEndDistance_GameThread;
-
-	// Post process
-	m_PostProcessSettings_RenderThread = m_PostProcessSettings_GameThread;
 
 	RenderSync_Internal();
 }

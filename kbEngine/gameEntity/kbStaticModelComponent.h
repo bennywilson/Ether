@@ -30,6 +30,7 @@ protected:
 
 private:
 
+	kbRenderObject								m_RenderObject;
 	class kbModel *								m_pModel;
 	std::vector< class kbShader * >				m_pOverrideShaderList;
 };

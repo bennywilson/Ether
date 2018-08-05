@@ -14,15 +14,6 @@
 class kbShader;
 class kbModel;
 
-struct kbPostProcessSettings_t {
-												kbPostProcessSettings_t() :
-													m_AdditiveColor( kbVec3::zero ),
-													m_Tint( 1.0f, 1.0f, 1.0f, 1.0f ) { }
-
-	kbVec4										m_AdditiveColor;
-	kbVec4										m_Tint;
-};
-
 /**
  *	kbRenderWindow
  */
@@ -72,6 +63,7 @@ public:
 
 
 private:
+
 	virtual void												BeginFrame_Internal() = 0;
 	virtual void												EndFrame_Internal() = 0;
 	virtual void												Release_Internal() = 0;
@@ -129,18 +121,6 @@ public:
 	void										AddRenderObject( const kbRenderObject & renderObjectToAdd );
 	void										UpdateRenderObject( const kbRenderObject & renderObjectToUpdate );
 	void										RemoveRenderObject( const kbRenderObject & renderObjectToRemove );
-
-	void										AddRenderObject( const kbComponent *const, const kbModel *const model, const kbVec3 & pos, const kbQuat & orientation, 
-																 const kbVec3 & scale, const ERenderPass RenderPass = RP_Lighting, 
-																 const std::vector<kbShader *> *const pShaderOverrideList = nullptr, 
-																 const kbShaderParamOverrides_t *const pShaderParamsOverride = nullptr );
-
-	void										UpdateRenderObject( const kbComponent *const , const kbModel *const model, const kbVec3 & pos, const kbQuat & orientation, 
-																	const kbVec3 & scale, const ERenderPass RenderPass = RP_Lighting,
-																	const std::vector<kbShader *> *const pShaderOverrideList = nullptr, 
-																	const kbShaderParamOverrides_t *const pShaderParamsOverride = nullptr );
-
-	void										RemoveRenderObject( const kbComponent *const );
 	
 	// Lights
 	void										AddLight( const kbLightComponent *const pLightComponent, const kbVec3 & pos, const kbQuat & orientation );
@@ -244,9 +224,6 @@ protected:
 
 	float										m_FogEndDistance_GameThread;
 	float										m_FogEndDistance_RenderThread;
-
-	kbPostProcessSettings_t						m_PostProcessSettings_GameThread;
-	kbPostProcessSettings_t						m_PostProcessSettings_RenderThread;
 
 	// Text
 	struct kbTextInfo_t {

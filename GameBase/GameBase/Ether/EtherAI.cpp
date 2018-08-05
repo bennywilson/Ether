@@ -187,6 +187,14 @@ void EtherEnemySoldierAIComponent::Constructor() {
 	m_SprayDurationSec = 1.25f;
 	m_SecTimeBetweenSprays = 5.0f;
 	m_SecBetweenShots = 0.25f;
+
+	m_EyeBallRenderObject.m_pComponent = this;
+	m_EyeBallRenderObject.m_bCastsShadow = false;
+	m_EyeBallRenderObject.m_bIsSkinnedModel = false;
+	m_EyeBallRenderObject.m_pComponent = this;
+	m_EyeBallRenderObject.m_pModel = m_pEyeBall;
+
+	m_EyeBallRenderObject.m_RenderPass = RP_PostLighting;
 }
 
 /**
@@ -200,10 +208,12 @@ void EtherEnemySoldierAIComponent::SetEnable_Internal( const bool isEnabled ) {
 	}
 
 	if ( isEnabled && m_bEyeballAdded == false ) {
-		g_pRenderer->AddRenderObject( this, m_pEyeBall, GetOwner()->GetPosition(), GetOwner()->GetOrientation(), GetOwner()->GetScale(), RP_PostLighting, nullptr );
+		m_EyeBallRenderObject.m_pModel = m_pEyeBall;
+
+		g_pRenderer->AddRenderObject( m_EyeBallRenderObject );
 		m_bEyeballAdded = true;
 	} else {
-		g_pRenderer->RemoveRenderObject( this );
+		g_pRenderer->RemoveRenderObject( m_EyeBallRenderObject );
 		m_bEyeballAdded = false;
 	}
 }
@@ -214,24 +224,29 @@ void EtherEnemySoldierAIComponent::SetEnable_Internal( const bool isEnabled ) {
 void  EtherEnemySoldierAIComponent::Update_Internal( const float DeltaTime ) {
 	if ( m_pEyeBall != nullptr ) {
 
+		m_EyeBallRenderObject.m_Scale = GetOwner()->GetScale();
+		m_EyeBallRenderObject.m_Position = GetOwner()->GetPosition();
+		m_EyeBallRenderObject.m_Orientation = GetOwner()->GetOrientation();
+		m_EyeBallRenderObject.m_pModel = m_pEyeBall;
+
 		EtherSkelModelComponent *const pSkelModelComponent = (EtherSkelModelComponent*)GetOwner()->GetComponentByType( EtherSkelModelComponent::GetType() );
 		if ( pSkelModelComponent != nullptr ) {
 			static kbString EyeBone( "Dummy07" );
 			kbBoneMatrix_t EyeMatrix;
 			if ( pSkelModelComponent->GetBoneWorldMatrix( EyeBone, EyeMatrix ) ) {
-				kbQuat rot;
+
 				kbMat4 rotMat( kbMat4::identity );
 				rotMat[0] = EyeMatrix.GetAxis(0);
 				rotMat[1] = EyeMatrix.GetAxis(1);
 				rotMat[2] = EyeMatrix.GetAxis(2);
 
-				std::vector<kbShader *> ShaderOverrideList;
-				ShaderOverrideList.push_back( (kbShader*)g_ResourceManager.GetResource(  "../../kbEngine/assets/Shaders/SimpleAdditive.kbShader", true ) );
-
+				m_EyeBallRenderObject.m_OverrideShaderList.clear();
+				m_EyeBallRenderObject.m_OverrideShaderList.push_back( (kbShader*)g_ResourceManager.GetResource( "../../kbEngine/assets/Shaders/SimpleAdditive.kbShader", true ) );
 				if ( m_bEyeballAdded == false ) {
-					g_pRenderer->AddRenderObject( this, m_pEyeBall, GetOwner()->GetPosition(), GetOwner()->GetOrientation(), GetOwner()->GetScale(), RP_PostLighting, &ShaderOverrideList );
+					g_pRenderer->AddRenderObject( m_EyeBallRenderObject );
 				} else {
-					g_pRenderer->UpdateRenderObject( this, m_pEyeBall, EyeMatrix.GetOrigin(), GetOwner()->GetOrientation(), GetOwner()->GetScale(), RP_PostLighting, &ShaderOverrideList );
+					m_EyeBallRenderObject.m_Position = EyeMatrix.GetOrigin();
+					g_pRenderer->UpdateRenderObject( m_EyeBallRenderObject );
 				}
 				m_bEyeballAdded = true;
 			}

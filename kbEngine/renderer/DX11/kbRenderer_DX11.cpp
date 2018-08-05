@@ -1131,15 +1131,6 @@ void kbRenderer_DX11::SetRenderWindow( HWND hwnd ) {
 	kbError( "SetRenderWindow called with a bad window handle" );
 }
 
-/**
- *	kbRenderer_DX11::SetPostProcessSettings
- */
-void kbRenderer_DX11::SetPostProcessSettings( const kbPostProcessSettings_t & postProcessSettings ) {
-
-	m_PostProcessSettings_GameThread = postProcessSettings;
-}
-
-
 /*
  *	kbRenderer_DX11:RenderScene
  */
@@ -2160,8 +2151,6 @@ void kbRenderer_DX11::RenderPostProcess() {
 
 	SetShaderMat4( "mvpMatrix", mvpMatrix, mappedResource.pData, varBindings );
 	SetShaderMat4( "inverseProjection", m_pCurrentRenderWindow->GetInverseProjectionMatrix(), mappedResource.pData, varBindings );	
-	SetShaderVec4( "tint", m_PostProcessSettings_RenderThread.m_Tint, mappedResource.pData, varBindings );
-	SetShaderVec4( "additiveColor", m_PostProcessSettings_RenderThread.m_AdditiveColor, mappedResource.pData, varBindings );
 	SetShaderVec4( "fogColor", m_FogColor_RenderThread, mappedResource.pData, varBindings );
 	SetShaderFloat( "fogStartDistance", m_FogStartDistance_RenderThread, mappedResource.pData, varBindings );
 	SetShaderFloat( "fogEndDistance", m_FogEndDistance_RenderThread, mappedResource.pData, varBindings );

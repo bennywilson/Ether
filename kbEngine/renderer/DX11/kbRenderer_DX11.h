@@ -364,10 +364,6 @@ public:
 	virtual int									CreateRenderView( HWND hwnd ) override;
 	virtual void								SetRenderWindow( HWND hwnd ) override;
 
-
-	// Post-process
-	void										SetPostProcessSettings( const kbPostProcessSettings_t & postProcessSettings );
-
 	void										LoadShader( const std::string & fileName, ID3D11VertexShader *& vertexShader, ID3D11GeometryShader *& geometryShader,
 															ID3D11PixelShader *& pixelShader, ID3D11InputLayout *& vertexLayout, const std::string & vertexShaderFunc, 
 															const std::string & pixelShaderFunc, struct kbShaderVarBindings_t * ShaderBindings = nullptr );

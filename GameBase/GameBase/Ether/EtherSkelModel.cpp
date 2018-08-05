@@ -224,7 +224,12 @@ void EtherSkelModelComponent::Update_Internal( const float DeltaTime ) {
 			}
 		}
 
-		g_pRenderer->UpdateRenderObject( this, m_pModel, GetOwner()->GetPosition(), GetOwner()->GetOrientation(), GetOwner()->GetScale(), m_RenderPass );
+		m_RenderObject.m_Position = GetOwner()->GetPosition();
+		m_RenderObject.m_Orientation = GetOwner()->GetOrientation();
+		m_RenderObject.m_Scale = GetOwner()->GetScale();
+		m_RenderObject.m_pModel = m_pModel;
+
+		g_pRenderer->UpdateRenderObject( m_RenderObject );
 	}
 
 	// Update collision component

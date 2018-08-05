@@ -64,10 +64,6 @@ void EtherPlayerComponent::Action_Fire( const bool bActivatedThisFrame ) {
 		return;
 	}
 
-	if ( g_pEtherGame->PressHighlightedButton() ) {
-		return;
-	}
-
 	EtherWeaponComponent *const pWeaponComponent = ( EtherWeaponComponent* ) pWeapon->GetComponentByType( EtherWeaponComponent::GetType() );
 	if ( pWeaponComponent != nullptr ) {
 		if ( pWeaponComponent->Fire( bActivatedThisFrame ) ) {

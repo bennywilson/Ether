@@ -90,6 +90,7 @@ protected:
 	bool										Fire();
 
 	class kbModel *								m_pEyeBall;
+	kbRenderObject								m_EyeBallRenderObject;
 	bool										m_bEyeballAdded;
 
 	kbGameEntityPtr								m_TargetEntity;

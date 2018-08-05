@@ -42,6 +42,8 @@ protected:
 	std::vector< class kbShader * >				m_pOverrideShaderList;
 
 	std::vector<kbBoneMatrix_t>					m_BindToLocalSpaceMatrices;
+
+	kbRenderObject								m_RenderObject;
 };
 
 #endif

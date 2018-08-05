@@ -36,186 +36,6 @@ const kbVec3 g_CountUIScale( 0.5f, 0.5f, 0.5f );
 static kbVec3 g_CountUIOffset( 14.96f, -12.0f, 10.0f );
 
 /**
- *	EtherUIButton::EtherUIButton
- */
-EtherUIButton::EtherUIButton() :
-	m_pButtonEntity( nullptr ),
-	m_pButtonModel( nullptr ),
-	m_LocalPosition( kbVec3::zero ),
-	m_pShader( nullptr ),
-	m_Count( -1 ) {
-
-	memset( m_pCountEntity, 0, sizeof( m_pCountEntity ) );
-	memset( m_pCountModel, 0, sizeof( m_pCountModel ) );
-}
-
-/**
- *	EtherUIButton::LoadButton
- */
-void EtherUIButton::LoadButton( const std::string & ModelName, const kbVec3 & localPosition ) {
-	kbErrorCheck( m_pButtonEntity == nullptr, "EtherUIButton::LoadButton() - Called on an already initialized button" );
-
-	m_pButtonEntity = new kbGameEntity();
-
-	m_pButtonModel = (kbModel*)g_ResourceManager.GetResource( ModelName.c_str(), true );
-	kbErrorCheck( m_pButtonModel != nullptr, "EtherUIButton::LoadButton() - Failed to load model %s", ModelName.c_str() );
-
-	m_pShader = (kbShader*)g_ResourceManager.GetResource( "../../kbEngine/assets/Shaders/basictranslucency.kbshader", true );
-	kbErrorCheck( m_pShader != nullptr, "EtherUIButton::LoadButton() - Failed to shader" );
-	
-	g_pD3D11Renderer->AddRenderObject( m_pButtonEntity->GetComponent( 0 ), m_pButtonModel, kbVec3::zero, kbQuat( 0.0f, 0.0f, 0.0f, 1.0f ), kbVec3( 1.0f, 1.0f, 1.0f ), RP_InWorldUI );
-
-	m_LocalPosition = localPosition;
-
-
-	for ( int i = 0; i < 4; i++ ) {
-		m_pCountEntity[i] = new kbGameEntity();
-
-		const std::string countModel = "./assets/FX/" + std::to_string( i ) + ".ms3d";
-		m_pCountModel[i] = (kbModel*)g_ResourceManager.GetResource( countModel.c_str(), true );
-		kbErrorCheck( m_pCountModel[i] != nullptr, "EtherUIButton::LoadButton() - Failed to load model %s", countModel.c_str() );
-	}
-
-	SetCount( 0 );
-}
-
-/**
- *	EtherUIButton::ShutdownButton
- */
-void EtherUIButton::ShutdownButton() {
-
-	if ( m_pButtonEntity != nullptr ) {
-		g_pD3D11Renderer->RemoveRenderObject( m_pButtonEntity->GetComponent( 0 ) );
-	}
-	delete m_pButtonEntity;
-	m_pButtonEntity = nullptr;
-	m_pButtonModel = nullptr;
-
-	for ( int i = 0; i < 4; i++ ) {
-		if ( i == m_Count && m_pCountEntity[i] != nullptr ) {
-			g_pD3D11Renderer->RemoveRenderObject( m_pCountEntity[i]->GetComponent( 0 ) );
-		}
-
-		delete m_pCountEntity[i];
-		m_pCountEntity[i] = nullptr;
-		m_pCountModel[i] = nullptr;
-	}
-}
-
-/**
- *	EtherUIButton::Update
- */
-void EtherUIButton::Update( const float deltaTimeSec ) {
-
-	if ( m_pButtonEntity == nullptr ) {
-		return;
-	}
-
-	static float xAxisLength = 400.0f;
-	static float yAxisLength = xAxisLength * ( 900.0f / 1600.0f );		// Hack - Hardcoded numbers
-	static float zAxisLength = 275.0f;
-
-	kbVec3 centerEyePos = g_pEtherGame->GetCamera().m_Position;
-	if ( g_pD3D11Renderer->IsRenderingToHMD() || g_pD3D11Renderer->IsUsingHMDTrackingOnly() ) {
-		const ovrPosef *const hmdEyePos = g_pD3D11Renderer->GetOvrEyePose();
-		centerEyePos += g_pEtherGame->GetHMDWorldOffset() + ( ovrVecTokbVec3( hmdEyePos[0].Position ) + ovrVecTokbVec3( hmdEyePos[1].Position ) ) * 0.5f;
-	}
-
-	kbMat4 eyeMatrix;
-	if ( g_pD3D11Renderer->IsRenderingToHMD() || g_pD3D11Renderer->IsUsingHMDTrackingOnly() ) {
-		eyeMatrix = g_pD3D11Renderer->GetEyeMatrices()[0];
-		eyeMatrix.InvertFast();
-	} else {
-		eyeMatrix = g_pEtherGame->GetCamera().m_Rotation.ToMat4();
-		eyeMatrix.InvertFast();
-	}
-
-	const kbVec3 rightVec = eyeMatrix[0].ToVec3();
-	const kbVec3 upVec = eyeMatrix[1].ToVec3();
-
-	kbVec3 button3DPos = centerEyePos + zAxisLength * eyeMatrix[2].ToVec3();
-	button3DPos += rightVec * m_LocalPosition.x;
-	button3DPos += upVec * m_LocalPosition.y;
-
-
-	kbVec3 scale( 1.0f, 1.0f, 1.0f );
-
-	if ( g_pD3D11Renderer->IsRenderingToHMD() ) {
-		scale.Set( 1.5f, 1.5f, 1.5f );
-	}
-
-	if ( IsHighlighted() ) {
-		scale *= 1.5f;
-	}
-
-	kbMat4 invCam = ( g_pD3D11Renderer->IsRenderingToHMD() || g_pD3D11Renderer->IsUsingHMDTrackingOnly() ) ? ( g_pD3D11Renderer->GetEyeMatrices()[0] ) : ( g_pEtherGame->GetCamera().m_Rotation.ToMat4() );
-	invCam.InvertFast();
-	kbMat4 stimPackMatrix = kbMat4::identity;
-	stimPackMatrix[0].Set( invCam[0].x, invCam[0].y, invCam[0].z, 0.0f );
-	stimPackMatrix[1].Set( invCam[1].x, invCam[1].y, invCam[1].z, 0.0f );
-	stimPackMatrix[2].Set( invCam[2].x, invCam[2].y, invCam[2].z, 1.0f );
-	m_pButtonEntity->SetPosition( button3DPos );
-	m_pButtonEntity->SetOrientation( kbQuatFromMatrix( stimPackMatrix ) );
-
-	std::vector<kbShader *> ShaderOverrideList;
-	ShaderOverrideList.push_back( m_pShader );
-	g_pD3D11Renderer->UpdateRenderObject( m_pButtonEntity->GetComponent( 0 ), m_pButtonModel, button3DPos, kbQuatFromMatrix( stimPackMatrix ), scale, RP_InWorldUI, &ShaderOverrideList );
-	
-	if ( m_Count >= 0 && m_Count < 4 ) {
-		g_pD3D11Renderer->UpdateRenderObject( m_pCountEntity[m_Count]->GetComponent( 0 ), m_pCountModel[m_Count], button3DPos + rightVec * g_CountUIOffset.x + upVec * g_CountUIOffset.y, kbQuatFromMatrix( stimPackMatrix ), g_CountUIScale * scale.x, RP_InWorldUI, &ShaderOverrideList );
-	}
-}
-
-/**
- *	EtherUIButton::SetCount
- */
-void EtherUIButton::SetCount( const int count ) {
-
-	if ( m_Count >= 0 && m_Count < 4 ) {
-		g_pD3D11Renderer->RemoveRenderObject( m_pCountEntity[m_Count]->GetComponent( 0 ) );
-	}
-
-	m_Count = count;
-	if ( m_Count >= 0 && m_Count < 4 ) {
-		g_pD3D11Renderer->AddRenderObject( m_pCountEntity[m_Count]->GetComponent( 0 ), m_pCountModel[m_Count], kbVec3::zero, kbQuat( 0.0f, 0.0f, 0.0f, 1.0f ), kbVec3( 1.0f, 1.0f, 1.0f ), RP_InWorldUI );
-	}
-}
-
-/**
- *	EtherUIButton::IsHighlighted
- */
-bool EtherUIButton::IsHighlighted() const {
-
-	kbGameEntity *const pLocalPlayer =  g_pEtherGame->GetLocalPlayer();
-	if ( pLocalPlayer == nullptr ) {
-		return false;
-	}
-
-	EtherActorComponent *const pPlayer = (EtherActorComponent*)pLocalPlayer->GetActorComponent();
-	if ( pPlayer == nullptr ) {
-		return false;
-	}
-
-	kbGameEntity *const pEquippedItem = pPlayer->GetEquippedItem();
-	if ( pEquippedItem == nullptr ) {
-		return false;
-	}
-
-	kbMat4 WeaponMatrix = g_pEtherGame->GetCrossHairLocalSpaceMatrix();
-
-	const kbVec3 aimAtPoint = WeaponMatrix[3].ToVec3();
-	const kbVec3 WeaponPos = pEquippedItem->GetOwner()->GetPosition();	
-	const kbVec3 zAxis = ( aimAtPoint - WeaponPos ).Normalized();
-	static float extent = 15.0f;
-
-	if ( kbRayOBBIntersection( m_pButtonEntity->GetOrientation().ToMat4(), m_pButtonEntity->GetPosition(), WeaponPos, WeaponPos + zAxis * 1000.0f, -kbVec3( extent, extent, extent ), kbVec3( extent, extent, extent ) ) ) {
-		return true;
-	}
-
-	return false;
-}
-
-/**
  *	EtherGame::EtherGame
  */
 EtherGame::EtherGame() :
@@ -274,18 +94,7 @@ void EtherGame::PlayGame_Internal() {
 	kbModel *const pCrossHairModel = (kbModel*)g_ResourceManager.GetResource( "./assets/FX/crosshair.ms3d", true );
 	std::vector<kbShader *> ShaderOverrideList;
 	ShaderOverrideList.push_back( m_pTranslucentShader );
-	g_pD3D11Renderer->AddRenderObject( m_pCrossHairEntity->GetComponent( 0 ), pCrossHairModel, kbVec3::zero, kbQuat(), kbVec3( 1.0f, 1.0f, 1.0f ), RP_InWorldUI, &ShaderOverrideList );
-
-	// Set up UI buttons
-	static float XPos = g_pD3D11Renderer->IsRenderingToHMD() ? ( 100.0f ) : ( 200.0f );
-	static float YPos = g_pD3D11Renderer->IsRenderingToHMD() ? ( -175.0f ) : ( -175.0f );
-	m_UIButtons[Airstrike].LoadButton( "./assets/FX/airstrike.ms3d", kbVec3( -XPos, YPos, 100.0f ) );
-	m_UIButtons[Stimpack].LoadButton( "./assets/FX/stimpack.ms3d", kbVec3( -0.0, YPos, 100.0f ) );
-	m_UIButtons[OLC].LoadButton( "./assets/FX/olc.ms3d", kbVec3( XPos, YPos, 100.0f ) );
-
-	m_UIButtons[Stimpack].SetCount( m_pPlayerComponent->GetNumStimPacks() );
-	m_UIButtons[Airstrike].SetCount( m_pPlayerComponent->GetNumAirstrikes() );
-	m_UIButtons[OLC].SetCount( m_pPlayerComponent->GetNumOLC() );
+	//g_pD3D11Renderer->AddRenderObject( m_pCrossHairEntity->GetComponent( 0 ), pCrossHairModel, kbVec3::zero, kbQuat(), kbVec3( 1.0f, 1.0f, 1.0f ), RP_InWorldUI, &ShaderOverrideList );
 
 	// Create air strike bombers
 	kbPackage *const pVehiclePackage = (kbPackage*) g_ResourceManager.GetPackage( "./assets/Packages/Vehicles.kbPkg" );
@@ -357,15 +166,11 @@ void EtherGame::StopGame_Internal() {
 	m_pPlayerComponent = nullptr;
 	m_pLocalPlayer = nullptr;
 
-	if ( m_pCrossHairEntity != nullptr ) {
+/*	if ( m_pCrossHairEntity != nullptr ) {
 		g_pD3D11Renderer->RemoveRenderObject( m_pCrossHairEntity->GetComponent( 0 ) );
 		delete m_pCrossHairEntity;
 		m_pCrossHairEntity = nullptr;
-	}
-
-	for ( int i = 0; i < NUM_UI_BUTTONS; i++ ) {
-		m_UIButtons[i].ShutdownButton();
-	}
+	}*/
 
 	for ( int i = 0; i < 3; i++ ) {
 		RemoveGameEntity( m_ELBomberEntity[i] );
@@ -475,10 +280,6 @@ void EtherGame::Update_Internal( float DT ) {
 
 
 	UpdateWorld( DT );
-
-	for ( int i = 0; i < NUM_UI_BUTTONS; i++ ) {
-		m_UIButtons[i].Update( DT );
-	}
 
 	UpdatePostProcess();
 }
@@ -910,8 +711,7 @@ void EtherGame::UpdateMotionControls( const float deltaTimeSec ) {
  */
 void EtherGame::UpdatePostProcess() {
 
-	if ( m_pLocalPlayer == nullptr || m_pLocalPlayer->GetActorComponent() == nullptr ) {
-		g_pD3D11Renderer->SetPostProcessSettings( kbPostProcessSettings_t() );
+	/*if ( m_pLocalPlayer == nullptr || m_pLocalPlayer->GetActorComponent() == nullptr ) {
 		return;
 	}
 
@@ -971,50 +771,7 @@ void EtherGame::UpdatePostProcess() {
 	updatedPPSettings.m_AdditiveColor.x += m_OLCTint.x;
 	updatedPPSettings.m_AdditiveColor.y += m_OLCTint.y;
 	updatedPPSettings.m_AdditiveColor.z += m_OLCTint.z;
-	g_pD3D11Renderer->SetPostProcessSettings( updatedPPSettings );
-}
-
-
-/**
- *	EtherGame::PressHighlightedButton
- */
-bool EtherGame::PressHighlightedButton() {
-
-   if ( m_pPlayerComponent->IsDead() ) {
-      return false;
-   }
-
-	EtherButtonTypes hitButton = NUM_UI_BUTTONS;
-	for ( int i = 0; i < NUM_UI_BUTTONS; i++ ) {
-		if ( m_UIButtons[i].IsHighlighted() ) {
-			hitButton = (EtherButtonTypes)i;
-			break;
-		}
-	}
-
-	switch( hitButton ) {
-
-		case Stimpack : {
-			ActivateStimPack();
-			break;
-		}
-
-		case Airstrike : {
-			ActivateAirstrike();
-			break;
-		}
-
-		case OLC : {
-			ActivateOLC();
-			break;
-		}
-
-		default : {
-			return false;
-		}
-	}
-
-	return true;
+	g_pD3D11Renderer->SetPostProcessSettings( updatedPPSettings );*/
 }
 
 /**
@@ -1030,7 +787,6 @@ void EtherGame::ActivateStimPack() {
 	m_SlomoStartTime = g_GlobalTimer.TimeElapsedSeconds();
 
 	m_pPlayerComponent->UseStimPack();
-	m_UIButtons[Stimpack].SetCount( m_pPlayerComponent->GetNumStimPacks() );
 
 	if ( m_pSlomoSound != nullptr ) {
 		GetSoundManager().PlayWave( m_pSlomoSound, 0.5f );
@@ -1061,7 +817,6 @@ void EtherGame::ActivateAirstrike() {
 	m_AirstrikeTimeLeft = g_AirstrikeDurationSec;
 
 	m_pPlayerComponent->UseAirstrike();
-	m_UIButtons[Airstrike].SetCount( m_pPlayerComponent->GetNumAirstrikes() );
 
 	m_BombersLeft = 3;
 	m_NextBomberSpawnTime = 0.0f;
@@ -1165,7 +920,6 @@ void EtherGame::ActivateOLC() {
 
 	m_OLCTimer = g_OLCLen;
 	m_pPlayerComponent->UseOLC();
-	m_UIButtons[OLC].SetCount( m_pPlayerComponent->GetNumOLC() );
 }
 
 /**

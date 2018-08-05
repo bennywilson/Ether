@@ -510,7 +510,7 @@ void kbTerrainComponent::SetEnable_Internal( const bool isEnabled ) {
 		}
 
 	} else {
-		g_pRenderer->RemoveRenderObject( this );
+		g_pRenderer->RemoveRenderObject( m_TerrainRenderObject );
 
 		for ( int i = 0; i < m_Grass.size(); i++ ) {
 			m_Grass[i].Enable( false );

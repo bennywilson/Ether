@@ -48,9 +48,21 @@ void kbStaticModelComponent::SetEnable_Internal( const bool isEnabled ) {
 	}
 
 	if ( isEnabled ) {
-		g_pRenderer->AddRenderObject( this, m_pModel, GetOwner()->GetPosition(), GetOwner()->GetOrientation(), GetOwner()->GetScale(), m_RenderPass, &m_pOverrideShaderList );
+
+		m_RenderObject.m_bCastsShadow = this->GetCastsShadow();
+		m_RenderObject.m_bIsSkinnedModel = false;
+		m_RenderObject.m_EntityId = GetOwner()->GetEntityId();
+		m_RenderObject.m_Orientation = GetOwner()->GetOrientation();
+		m_RenderObject.m_pComponent = this;
+		m_RenderObject.m_pModel = m_pModel;
+		m_RenderObject.m_Position = GetOwner()->GetPosition();
+		m_RenderObject.m_RenderPass = m_RenderPass;
+		m_RenderObject.m_Scale = GetOwner()->GetScale();
+		m_RenderObject.m_OverrideShaderList = m_pOverrideShaderList;
+
+		g_pRenderer->AddRenderObject( m_RenderObject );
 	} else {
-		g_pRenderer->RemoveRenderObject( this );
+		g_pRenderer->RemoveRenderObject( m_RenderObject );
 	}
 }
 
@@ -62,6 +74,11 @@ void kbStaticModelComponent::Update_Internal( const float DeltaTime ) {
 	Super::Update_Internal( DeltaTime );
 
 	if ( m_pModel != nullptr && GetOwner()->IsDirty() ) {
-		g_pRenderer->UpdateRenderObject( this, m_pModel, GetOwner()->GetPosition(), GetOwner()->GetOrientation(), GetOwner()->GetScale(), m_RenderPass, &m_pOverrideShaderList );
+		m_RenderObject.m_Position = GetOwner()->GetPosition();
+		m_RenderObject.m_Orientation = GetOwner()->GetOrientation();
+		m_RenderObject.m_Scale = GetOwner()->GetScale();
+		m_RenderObject.m_pModel = m_pModel;
+
+		g_pRenderer->UpdateRenderObject( m_RenderObject );
 	}
 }
