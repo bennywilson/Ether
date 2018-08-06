@@ -2,7 +2,7 @@
 // EtherSkelModel.cpp
 //
 //
-// 2016-2017 kbEngine 2.0
+// 2016-2018 kbEngine 2.0
 //===================================================================================================
 #include "EtherGame.h"
 #include "EtherSkelModel.h"
@@ -17,7 +17,7 @@ KB_DEFINE_COMPONENT(EtherSkelModelComponent)
  *	EtherAnimComponent::Constructor()
  */
 void EtherAnimComponent::Constructor() {
-	m_pAnimation = NULL;
+	m_pAnimation = nullptr;
 	m_TimeScale = 1.0f;
 	m_bIsLooping = false;
 	m_CurrentAnimationTime = -1.0f;
@@ -122,14 +122,14 @@ void EtherSkelModelComponent::SetModel( kbModel *const pModel, bool bIsFirstPers
 void EtherSkelModelComponent::Update_Internal( const float DeltaTime ) {
 	Super::Update_Internal( DeltaTime );
 
-	if ( m_pModel != NULL ) {
+	if ( m_pModel != nullptr ) {
 		if ( m_BindToLocalSpaceMatrices.size() == 0 ) {
 			m_BindToLocalSpaceMatrices.resize( m_pModel->NumBones() );
 		}
 
 		// Debug Animation
 		if ( m_DebugAnimIdx >= 0 && m_DebugAnimIdx < m_Animations.size() && m_Animations[m_DebugAnimIdx].m_pAnimation != NULL ) {
-			if ( m_pModel != NULL ) {
+			if ( m_pModel != nullptr ) {
 				static float time = 0.0f;
 				static bool pause = false;
 
@@ -258,7 +258,7 @@ void EtherSkelModelComponent::Update_Internal( const float DeltaTime ) {
 		}
 	}
 	// Temp: Search for "Additional Cloth Bones" and draw the hair locks for this AI using axial bill boards
-	kbClothComponent * pClothComponent = NULL;
+	kbClothComponent * pClothComponent = nullptr;
 	for ( int i = 0; i < GetOwner()->NumComponents(); i++ ) {
 		if ( GetOwner()->GetComponent( i )->IsA( kbClothComponent::GetType() ) ) {
 			 pClothComponent = static_cast<kbClothComponent*>( GetOwner()->GetComponent( i ) );
@@ -266,7 +266,7 @@ void EtherSkelModelComponent::Update_Internal( const float DeltaTime ) {
 		}
 	}
 
-	if ( pClothComponent != NULL && pClothComponent->GetMasses().size() > 0 ) {
+	if ( pClothComponent != nullptr && pClothComponent->GetMasses().size() > 0 ) {
 		
 		const int startAdditionalBonedIdx = (int)pClothComponent->GetBoneInfo().size();
 		const std::vector<kbClothMass_t> & ClothMasses = pClothComponent->GetMasses();
@@ -303,5 +303,5 @@ const kbString * EtherSkelModelComponent::GetCurAnimationName() const {
 		return &m_Animations[m_CurrentAnimation].GetAnimationName();
 	}
 
-	return NULL;
+	return nullptr;
 }
