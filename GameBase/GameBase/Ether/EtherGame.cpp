@@ -84,6 +84,8 @@ EtherGame::~EtherGame() {
 	g_pEtherGame = nullptr;
 }
 
+kbRenderObject crossHair;
+
 /**
  *	EtherGame::PlayGame_Internal
  */
@@ -94,6 +96,16 @@ void EtherGame::PlayGame_Internal() {
 	kbModel *const pCrossHairModel = (kbModel*)g_ResourceManager.GetResource( "./assets/FX/crosshair.ms3d", true );
 	std::vector<kbShader *> ShaderOverrideList;
 	ShaderOverrideList.push_back( m_pTranslucentShader );
+	crossHair.m_pComponent = m_pCrossHairEntity->GetComponent( 0 );
+	crossHair.m_pModel = pCrossHairModel;
+	crossHair.m_Position = kbVec3::zero;
+	crossHair.m_Orientation = kbQuat();
+	crossHair.m_Scale.Set( 1.0f, 1.0f, 1.0f ),
+	crossHair.m_RenderPass = RP_InWorldUI;
+	crossHair.m_OverrideShaderList = ShaderOverrideList;
+
+	g_pD3D11Renderer->AddRenderObject( crossHair );
+
 	//g_pD3D11Renderer->AddRenderObject( m_pCrossHairEntity->GetComponent( 0 ), pCrossHairModel, kbVec3::zero, kbQuat(), kbVec3( 1.0f, 1.0f, 1.0f ), RP_InWorldUI, &ShaderOverrideList );
 
 	// Create air strike bombers
@@ -166,11 +178,11 @@ void EtherGame::StopGame_Internal() {
 	m_pPlayerComponent = nullptr;
 	m_pLocalPlayer = nullptr;
 
-/*	if ( m_pCrossHairEntity != nullptr ) {
-		g_pD3D11Renderer->RemoveRenderObject( m_pCrossHairEntity->GetComponent( 0 ) );
+	if ( m_pCrossHairEntity != nullptr ) {
+		g_pD3D11Renderer->RemoveRenderObject( crossHair );
 		delete m_pCrossHairEntity;
 		m_pCrossHairEntity = nullptr;
-	}*/
+	}
 
 	for ( int i = 0; i < 3; i++ ) {
 		RemoveGameEntity( m_ELBomberEntity[i] );
@@ -617,7 +629,7 @@ void EtherGame::AddPrefabToEntity( const kbPackage *const pPrefabPackage, const 
  */
 void EtherGame::UpdateMotionControls( const float deltaTimeSec ) {
 
-/*	if ( m_pLocalPlayer == nullptr || m_pLocalPlayer->GetActorComponent()->IsDead() ) {
+	if ( m_pLocalPlayer == nullptr || m_pLocalPlayer->GetActorComponent()->IsDead() ) {
 		return;
 	}
 
@@ -679,7 +691,11 @@ void EtherGame::UpdateMotionControls( const float deltaTimeSec ) {
 	kbModel *const pModel = (kbModel*)g_ResourceManager.GetResource( "./assets/FX/crosshair.ms3d", true );
 	std::vector<kbShader *> ShaderOverrideList;
 	ShaderOverrideList.push_back( m_pTranslucentShader );
-	g_pD3D11Renderer->UpdateRenderObject( m_pCrossHairEntity->GetComponent( 0 ), pModel, crossHair3DPos, kbQuatFromMatrix( m_CrossHairLocalSpaceMatrix ), kbVec3( 1.0f, 1.0f, 1.0f ), RP_InWorldUI, &ShaderOverrideList );
+
+	crossHair.m_Position = crossHair3DPos;
+	crossHair.m_Orientation = kbQuatFromMatrix( m_CrossHairLocalSpaceMatrix );
+	crossHair.m_pComponent = m_pCrossHairEntity->GetComponent( 0 );
+	g_pD3D11Renderer->UpdateRenderObject( crossHair );//m_pCrossHairEntity->GetComponent( 0 ), pModel, crossHair3DPos, kbQuatFromMatrix( m_CrossHairLocalSpaceMatrix ), kbVec3( 1.0f, 1.0f, 1.0f ), RP_InWorldUI, &ShaderOverrideList );
 
 	{
 		const kbVec3 aimAtPoint = crossHair3DPos;//m_pParent->GetPosition() + 9999.0f * WeaponMatrix[2].ToVec3();
@@ -703,7 +719,7 @@ void EtherGame::UpdateMotionControls( const float deltaTimeSec ) {
 			// hack to get hands skel model to update rotation
 			m_pPlayerComponent->GetFPHands()->Update( 0.016f );
 		}
-	}*/
+	}
 }
 
 /**
