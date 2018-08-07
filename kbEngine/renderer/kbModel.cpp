@@ -301,7 +301,7 @@ bool kbModel::Load_Internal() {
 		if ( endOfShaderName != std::string::npos ) {
 			shaderName.resize( endOfShaderName );
 		}
-		shaderName += ".kbShader";
+		shaderName += ".kbshader";
 		m_Materials[i].m_pShader = ( kbShader * ) g_ResourceManager.GetResource( shaderName );
 	}
 
@@ -553,7 +553,7 @@ void kbModel::CreatePointCloud( const UINT numVertices, const std::string & shad
 	if ( shaderToUse.length() > 0 ) {
 		newMaterial.m_pShader = (kbShader *) g_ResourceManager.GetResource( shaderToUse.c_str(), true );
 	} else {
-		newMaterial.m_pShader = (kbShader *) g_ResourceManager.GetResource( "../../kbEngine/assets/Shaders/basicShader.kbShader", true );
+		newMaterial.m_pShader = (kbShader *) g_ResourceManager.GetResource( "../../kbEngine/assets/Shaders/basicShader.kbshader", true );
 	}
 	newMaterial.SetCullingMode( cullingMode );
 	m_Materials.push_back( newMaterial );

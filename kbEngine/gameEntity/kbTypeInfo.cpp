@@ -161,6 +161,10 @@ std::vector<kbTypeInfoClass *> kbActorComponent::kbActorComponent_TypeInfoVar;
 kbSoundData_TypeInfo kbSoundData::typeInfo;
 std::vector<kbTypeInfoClass *> kbSoundData::kbSoundData_TypeInfoVar;
 
+// kbDebugSphereCollision
+kbDebugSphereCollision_TypeInfo kbDebugSphereCollision::typeInfo;
+std::vector<kbTypeInfoClass *> kbDebugSphereCollision::kbDebugSphereCollision_TypeInfoVar;
+
 typedef kbResource * kbResourcePtr;
 
 void ReadInData( const std::string & fileName, void * classObject, const kbTypeInfoClass & typeInfo ) {

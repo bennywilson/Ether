@@ -227,3 +227,8 @@ GenerateClass(
 	AddField( "Radius", KBTYPEINFO_FLOAT, kbSoundData, m_Radius, false, "" )
 	AddField( "Volume", KBTYPEINFO_FLOAT, kbSoundData, m_Volume, false, "" )
 )
+
+GenerateClass(
+	kbDebugSphereCollision,
+	AddField( "CollisionModel", KBTYPEINFO_STATICMODEL, kbDebugSphereCollision, m_pCollisionModel, false, "" )
+)

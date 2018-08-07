@@ -2,13 +2,14 @@
 // EtherPlayer.cpp
 //
 //
-// 2016-2017 kbEngine 2.0
+// 2016-2018 kbEngine 2.0
 //===================================================================================================
 #include <math.h>
 #include "EtherGame.h"
 #include "EtherPlayer.h"
 #include "EtherSkelModel.h"
 #include "EtherWeapon.h"
+#include "DX11/kbRenderer_DX11.h"
 
 kbConsoleVariable g_ShowPlayerCollision( "showcollision", false, kbConsoleVariable::Console_Bool, "Shows player collision", "" );
 kbConsoleVariable g_GodMod( "god", false, kbConsoleVariable::Console_Bool, "God mode", "" );
@@ -60,10 +61,6 @@ void EtherPlayerComponent::TakeDamage( const kbDamageComponent *const damageComp
 void EtherPlayerComponent::Action_Fire( const bool bActivatedThisFrame ) {
 	kbGameEntity *const pWeapon = GetEquippedItem();
 	if ( pWeapon == nullptr ) {
-		return;
-	}
-
-	if ( g_pEtherGame->PressHighlightedButton() ) {
 		return;
 	}
 
@@ -353,12 +350,7 @@ void EtherPlayerComponent::HandleMovement( const kbInput_t & Input, const float 
 	movementVec += forwardVec * Input.LeftStickY;
 	movementVec += rightVec * Input.LeftStickX;
 	
-/*
-	if ( Input.IsKeyPressedOrDown( 'U' ) ) {
-		movementVec += upVec * 4;
-	} else if ( Input.IsKeyPressedOrDown( 'I') ) {
-		movementVec -= upVec * 4;
-	}*/
+
 	
 	if ( movementVec.Compare( kbVec3::zero ) == false ) {
 		bMoved = true;
@@ -368,8 +360,7 @@ void EtherPlayerComponent::HandleMovement( const kbInput_t & Input, const float 
 		const float PlayerSpeed = 190.0f;
 		const float movementMag = DT * PlayerSpeed * 0.5f;//( Input.m_KeyStruct.m_Shift ? 20.5f : 0.5f );
 		
-		const kbVec3 playerWaist = localPlayer->GetPosition() + kbVec3( 0.0f, 15.0f, 0.0f );
-		pGame->MoveActorAlongGround( this, playerWaist, playerWaist + movementVec * movementMag );
+		localPlayer->SetPosition( localPlayer->GetPosition() + movementVec * movementMag );
 
 		if ( pSkelModelComponent != nullptr ) {
 			const static kbString RunAnimName( "Run" );
@@ -401,7 +392,7 @@ void EtherPlayerComponent::HandleMovement( const kbInput_t & Input, const float 
 
 		float pitchDelta = kbClamp( DeltaY * -rotationMagnitude, -maxRotationAmount, maxRotationAmount );
 
-		if ( g_pRenderer->IsRenderingToHMD() ) {
+		if ( g_pD3D11Renderer->IsRenderingToHMD() ) {
 			pitchDelta = 0.0f;
 		}
 

@@ -7,6 +7,8 @@
 #include <Wincodec.h>
 #include "kbCore.h"
 #include "kbRenderer_defs.h"
+#include "kbRenderer.h"
+#include "DX11/kbRenderer_DX11.h"	//	TODO HACK
 #include "kbMaterial.h"
 
 extern ID3D11DeviceContext * g_pImmediateContext;
@@ -281,7 +283,7 @@ static HRESULT CreateTextureFromWIC( IWICBitmapFrameDecode *const frame,
 				memcpy( &convertGUID, &g_WICConvert[i].target, sizeof(WICPixelFormatGUID) );
 
 				format = _WICToDXGI( g_WICConvert[i].target );
-				assert( format != DXGI_FORMAT_UNKNOWN );
+				kbErrorCheck( format != DXGI_FORMAT_UNKNOWN, "CreateTextureFromWIC() - Unkown format" );
 				bpp = _WICBitsPerPixel( convertGUID );
 				break;
 		    }
@@ -579,8 +581,8 @@ kbShader::kbShader( const std::string & fileName ) :
  *	kbShader::Load_Internal
  */
 bool kbShader::Load_Internal() {
-	if ( g_pRenderer != nullptr ) {
-		g_pRenderer->LoadShader( GetFullFileName(), m_pVertexShader, m_pGeometryShader, m_pPixelShader, m_pVertexLayout, m_VertexShaderFunctionName.c_str(), m_PixelShaderFunctionName.c_str(), &m_ShaderVarBindings );
+	if ( g_pD3D11Renderer != nullptr ) {		// HACK TODO
+		g_pD3D11Renderer->LoadShader( GetFullFileName(), m_pVertexShader, m_pGeometryShader, m_pPixelShader, m_pVertexLayout, m_VertexShaderFunctionName.c_str(), m_PixelShaderFunctionName.c_str(), &m_ShaderVarBindings );
 	}
 	return true;
 }

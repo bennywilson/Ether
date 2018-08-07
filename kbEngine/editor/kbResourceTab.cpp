@@ -443,7 +443,11 @@ void kbResourceTab::FindResourcesRecursively( const std::string & file, kbResour
 						} else {
 							// Add a kbResource
 							NewFolder.m_ResourceList.push_back( kbResourceTabFile_t() );
-							NewFolder.m_ResourceList[NewFolder.m_ResourceList.size() - 1].m_pResource = g_ResourceManager.GetResource( file + FindFileData.cFileName, false );
+
+							std::string fileName = file + FindFileData.cFileName ;
+							StringToLower( fileName );
+
+							NewFolder.m_ResourceList[NewFolder.m_ResourceList.size() - 1].m_pResource = g_ResourceManager.GetResource( fileName, false );
 						}
 						continue;
 					}

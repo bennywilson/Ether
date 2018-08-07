@@ -9,6 +9,7 @@
 #include "kbQuaternion.h"
 #include "kbGameEntityHeader.h"
 #include "kbTerrainComponent.h"
+#include "kbRenderer.h"
 
 KB_DEFINE_COMPONENT(kbTerrainComponent)
 
@@ -229,7 +230,7 @@ void kbGrass::UpdateMaterial() {
 			const kbVec3 cellCenter = cellStart + kbVec3( m_GrassCellLength * 0.5f, 0.0f, m_GrassCellLength * 0.5f );
 			const kbVec3 halfCell = kbVec3( m_GrassCellLength * 0.5f, 0.0f, m_GrassCellLength * 0.5f );
 
-			renderObj.m_pModel->CreatePointCloud( m_PatchesPerCellSide * m_PatchesPerCellSide, "./assets/Shaders/grass.kbShader", kbMaterial::CM_None, sizeof(patchVertLayout) );
+			renderObj.m_pModel->CreatePointCloud( m_PatchesPerCellSide * m_PatchesPerCellSide, "./assets/Shaders/grass.kbshader", kbMaterial::CM_None, sizeof(patchVertLayout) );
 
 			patchVertLayout *const pVerts = (patchVertLayout *) renderObj.m_pModel->MapVertexBuffer();
 
@@ -509,7 +510,7 @@ void kbTerrainComponent::SetEnable_Internal( const bool isEnabled ) {
 		}
 
 	} else {
-		g_pRenderer->RemoveRenderObject( this );
+		g_pRenderer->RemoveRenderObject( m_TerrainRenderObject );
 
 		for ( int i = 0; i < m_Grass.size(); i++ ) {
 			m_Grass[i].Enable( false );

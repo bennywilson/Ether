@@ -9,6 +9,7 @@
 #include "kbRenderer_defs.h"
 #include "kbGameEntityHeader.h"
 #include "kbGame.h"
+#include "kbRenderer.h"
 
 KB_DEFINE_COMPONENT(kbParticleComponent)
 
@@ -82,7 +83,7 @@ void kbParticleComponent::StopParticleSystem() {
 			m_ParticleBuffer[i].UnmapIndexBuffer();		// todo : don't need to map/remap index buffer
 		}
 	}
-	m_CurrentParticleBuffer = 0;
+	m_CurrentParticleBuffer = 255;
 	m_NumIndicesInCurrentBuffer = 0;
 	m_Particles.clear();
 	m_LeftOverTime = 0.0f;

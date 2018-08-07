@@ -208,6 +208,13 @@ void WStringFromString( std::wstring & outString, const std::string & srcString 
 }
 
 /**
+ *	StringToLower
+ */
+void StringToLower( std::string & outString  ) {
+	std::transform( outString.begin(), outString.end(), outString.begin(), ::tolower );
+}
+
+/**
  *	GetFileExtension
  */
 std::string GetFileExtension( const std::string & FileName ) {

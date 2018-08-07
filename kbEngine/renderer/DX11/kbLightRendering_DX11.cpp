@@ -29,8 +29,7 @@ void kbRenderer_DX11::RenderLights() {
 
 	START_SCOPED_RENDER_TIMER( RENDER_LIGHTING );
 
-	std::map< const kbLightComponent *, kbRenderLight * >::iterator iter;
-	for ( iter = m_pCurrentRenderWindow->m_RenderLightMap.begin(); iter != m_pCurrentRenderWindow->m_RenderLightMap.end(); iter++ ) {
+	for ( auto iter = m_pCurrentRenderWindow->GetRenderLightMap().begin(); iter != m_pCurrentRenderWindow->GetRenderLightMap().end(); iter++ ) {
 		RenderLight( iter->second );
 		ID3D11ShaderResourceView * const nullRTViews[] = { nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr };
 		m_pDeviceContext->PSSetShaderResources( 0, 8, nullRTViews );
@@ -117,7 +116,7 @@ void kbRenderer_DX11::RenderLight( const kbRenderLight *const pLight ) {
 
 	SetShaderVec4( "lightDirection", kbVec4( -pLight->m_Orientation.ToMat4()[2].ToVec3(), pLight->m_Length ), mappedResource.pData, varBindings );
 	SetShaderVec4( "lightColor", pLight->m_Color, mappedResource.pData, varBindings );
-	SetShaderMat4( "inverseViewProjection", m_pCurrentRenderWindow->m_InverseViewProjectionMatrix, mappedResource.pData, varBindings );
+	SetShaderMat4( "inverseViewProjection", m_pCurrentRenderWindow->GetInverseViewProjection(), mappedResource.pData, varBindings );
 	SetShaderVec4( "cameraPosition", frozenCameraPosition, mappedResource.pData, varBindings );
 
 	kbMat4 lightMatrix[4];
@@ -189,15 +188,15 @@ void kbRenderer_DX11::RenderShadow( const kbRenderLight *const pLight, kbMat4 sp
 	// Render Shadow map
 	m_pDeviceContext->OMSetRenderTargets( 1, &m_RenderTargets[SHADOW_BUFFER].m_pRenderTargetView, m_RenderTargets[SHADOW_BUFFER_DEPTH].m_pDepthStencilView );
 
-	const kbMat4 oldViewMatrix = m_pCurrentRenderWindow->m_ViewMatrix;
-	const kbMat4 oldProjectionMatrix = m_pCurrentRenderWindow->m_ProjectionMatrix;
-	const kbMat4 oldViewProjMatrix = m_pCurrentRenderWindow->m_ViewProjectionMatrix;
+	const kbMat4 oldViewMatrix = m_pCurrentRenderWindow->GetViewMatrix();
+	const kbMat4 oldProjectionMatrix = m_pCurrentRenderWindow->GetProjectionMatrix();
+	const kbMat4 oldViewProjMatrix = m_pCurrentRenderWindow->GetViewProjectionMatrix();
 
 	kbPlane frustumPlanes[6];
 	kbVec3 upperLeft, upperRight, lowerRight, lowerLeft, dummyPoint;
 
-	static kbMat4 frozenMatrix = m_pCurrentRenderWindow->m_ViewProjectionMatrix;
-	static kbVec3 camDir = m_pCurrentRenderWindow->m_CameraRotation.ToMat4()[2].ToVec3();
+	static kbMat4 frozenMatrix = m_pCurrentRenderWindow->GetViewProjectionMatrix();;
+	static kbVec3 camDir = m_pCurrentRenderWindow->GetCameraRotation().ToMat4()[2].ToVec3();
 
 	// Toggle between normal cam and debug cam
 	static bool bKeyDown = false;
@@ -206,16 +205,16 @@ void kbRenderer_DX11::RenderShadow( const kbRenderLight *const pLight, kbMat4 sp
 		debuggingShadowBounds = g_DebugShadowBounds.GetBool();
 		if ( debuggingShadowBounds ) {
 			debuggingShadowBounds = true;
-			frozenMatrix = m_pCurrentRenderWindow->m_ViewProjectionMatrix;
-			frozenCameraPosition = m_pCurrentRenderWindow->m_CameraPosition;
-			camDir = m_pCurrentRenderWindow->m_CameraRotation.ToMat4()[2].ToVec3();
+			frozenMatrix = m_pCurrentRenderWindow->GetViewProjectionMatrix();
+			frozenCameraPosition = m_pCurrentRenderWindow->GetCameraPosition();
+			camDir = m_pCurrentRenderWindow->GetCameraRotation().ToMat4()[2].ToVec3();
 		}
 	}
 
 	if ( debuggingShadowBounds == false ) {
-		frozenMatrix = m_pCurrentRenderWindow->m_ViewProjectionMatrix;
-		frozenCameraPosition = m_pCurrentRenderWindow->m_CameraPosition;
-		camDir = m_pCurrentRenderWindow->m_CameraRotation.ToMat4()[2].ToVec3();
+		frozenMatrix = m_pCurrentRenderWindow->GetViewProjectionMatrix();
+		frozenCameraPosition = m_pCurrentRenderWindow->GetCameraPosition();
+		camDir = m_pCurrentRenderWindow->GetCameraRotation().ToMat4()[2].ToVec3();
 	}
 
 	frozenMatrix.GetLeftClipPlane( frustumPlanes[0] );
@@ -333,12 +332,12 @@ void kbRenderer_DX11::RenderShadow( const kbRenderLight *const pLight, kbMat4 sp
 
 		splitMatrices[i] = lightViewProjMatrix * offset * textureMatrix;
 
-		m_pCurrentRenderWindow->m_ViewMatrix = lightViewMatrix;
-		m_pCurrentRenderWindow->m_ProjectionMatrix = lightProjMatrix;
-		m_pCurrentRenderWindow->m_ViewProjectionMatrix = lightViewProjMatrix * offset;
+		m_pCurrentRenderWindow->HackSetViewMatrix( lightViewMatrix );
+		m_pCurrentRenderWindow->HackSetProjectionMatrix( lightProjMatrix );
+		m_pCurrentRenderWindow->HackSetViewProjectionMatrix( lightViewProjMatrix * offset );
 
-		std::map< const kbComponent *, kbRenderObject * >::iterator iter;
-		for ( iter = m_pCurrentRenderWindow->m_RenderObjectMap.begin(); iter != m_pCurrentRenderWindow->m_RenderObjectMap.end(); iter++ ) {
+		std::map< const kbComponent *, kbRenderObject * >::const_iterator iter;
+		for ( iter = m_pCurrentRenderWindow->GetRenderObjectMap().begin(); iter != m_pCurrentRenderWindow->GetRenderObjectMap().end(); iter++ ) {
 			if ( iter->second->m_RenderPass == RP_Lighting && iter->second->m_bCastsShadow ) {
 				RenderModel( iter->second, RP_Lighting, true );
 			}
@@ -365,9 +364,9 @@ void kbRenderer_DX11::RenderShadow( const kbRenderLight *const pLight, kbMat4 sp
 	}
 	m_pDeviceContext->RSSetViewports( 1, &viewport );
 
-	m_pCurrentRenderWindow->m_ViewMatrix = oldViewMatrix;
-	m_pCurrentRenderWindow->m_ProjectionMatrix = oldProjectionMatrix;
-	m_pCurrentRenderWindow->m_ViewProjectionMatrix = oldViewProjMatrix;
+	m_pCurrentRenderWindow->HackSetViewMatrix( oldViewMatrix );
+	m_pCurrentRenderWindow->HackSetProjectionMatrix( oldProjectionMatrix );
+	m_pCurrentRenderWindow->HackSetViewProjectionMatrix( oldViewProjMatrix );
 
 	PLACE_GPU_TIME_STAMP( "Shadow Depth" );
 }
@@ -400,8 +399,8 @@ void kbRenderer_DX11::RenderLightShafts() {
 		const float HalfBaseHeight = CurLightShafts.m_Height * HeightMultiplier * 0.5f;
 		const float HalfIterationHeight = CurLightShafts.m_IterationHeight * HeightMultiplier;
 
-		const kbVec3 worldVecToShaft = m_pCurrentRenderWindow->m_CameraPosition + CurLightShafts.m_Rotation.ToMat4()[2].ToVec3() * -3000.0f;
-		kbVec4 shaftScreenPos = kbVec4( worldVecToShaft ).TransformPoint( m_pCurrentRenderWindow->m_ViewProjectionMatrix, false );
+		const kbVec3 worldVecToShaft = m_pCurrentRenderWindow->GetCameraPosition() + CurLightShafts.m_Rotation.ToMat4()[2].ToVec3() * -3000.0f;
+		kbVec4 shaftScreenPos = kbVec4( worldVecToShaft ).TransformPoint( m_pCurrentRenderWindow->GetViewProjectionMatrix(), false );
 		if ( shaftScreenPos.w < 0.0f ) {
 			continue;
 		}

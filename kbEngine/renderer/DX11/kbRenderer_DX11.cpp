@@ -16,7 +16,6 @@
 #include "kbModel.h"
 #include "kbGameEntityHeader.h"
 #include "kbComponent.h"
-#include "kbSkeletalModelComponent.h"
 #include "kbConsole.h"
 
 // oculus
@@ -35,13 +34,10 @@ const UINT GDebugCopyBackBufferToCPU = false;
 
 ID3D11Device * g_pD3DDevice = nullptr;
 ID3D11DeviceContext * g_pImmediateContext = nullptr;
-kbRenderer_DX11 * g_pRenderer = nullptr;
 
 const UINT Max_Shader_Bones = 128;
 const float	kbRenderer_DX11::Near_Plane = 1.0f;
 const float	kbRenderer_DX11::Far_Plane = 20000.0f;
-const float g_DebugTextSize = 0.0165f;
-const float g_DebugLineSpacing = 0.0165f + 0.007f;
 
 XMMATRIX & XMMATRIXFromkbMat4( kbMat4 & matrix ) { return (*(XMMATRIX*) &matrix); }
 kbMat4 & kbMat4FromXMMATRIX( FXMMATRIX & matrix ) { return (*(kbMat4*) & matrix); }
@@ -153,65 +149,50 @@ private:
 //-------------------------------------------------------------------------------------------------------------------------------------
 
 /**
- *	kbRenderWindow::kbRenderWindow
+ *	kbRenderWindow_DX11::kbRenderWindow_DX11
  */
-kbRenderWindow::kbRenderWindow() :
-	m_Hwnd( nullptr ),
+kbRenderWindow_DX11::kbRenderWindow_DX11( HWND inHwnd, const RECT & rect, const float nearPlane, const float farPlane ) :
+	kbRenderWindow( inHwnd, rect, nearPlane, farPlane ),
 	m_pSwapChain( nullptr ),
-	m_pRenderTargetView( nullptr ),
-	m_ViewPixelWidth( 0 ),
-	m_ViewPixelHeight( 0 ),
-	m_fViewPixelWidth( 0.0f ),
-	m_fViewPixelHeight( 0.0f ),
-	m_fViewPixelHalfWidth( 0.0f ),
-	m_fViewPixelHalfHeight( 0.0f ) {
+	m_pRenderTargetView( nullptr ) {
 
-	m_ProjectionMatrix.MakeIdentity();
-	m_InverseProjectionMatrix.MakeIdentity();
-	m_ViewMatrix.MakeIdentity();
-	m_ViewProjectionMatrix.MakeIdentity();
-	m_InverseViewProjectionMatrix.MakeIdentity();
-	m_CameraRotation.x = m_CameraRotation.y = m_CameraRotation.z = m_CameraRotation.w = 0.0f;
+	// HACK should be in base constructor
+	kbMat4 projectionMat = GetProjectionMatrix();
+	XMMATRIX inverseProj = XMMatrixInverse( nullptr, XMMATRIXFromkbMat4( projectionMat ) );
+	HackSetInverseProjectionMatrix( kbMat4FromXMMATRIX( inverseProj ) );
 }
 
 /**
- *	kbRenderWindow::~kbRenderWindow
+ *	kbRenderWindow_DX11::~kbRenderWindow_DX11
  */
-kbRenderWindow::~kbRenderWindow() {
+kbRenderWindow_DX11::~kbRenderWindow_DX11() {
 	kbErrorCheck( m_pSwapChain == nullptr, "kbRenderWindow::~kbRenderWindow() - Swap chain still exists" );
 	kbErrorCheck( m_pRenderTargetView == nullptr, "kbRenderWindow::~kbRenderWindow() - Target view still exists" );
-	
-	{
-		std::map< const kbComponent *, kbRenderObject * >::iterator iter;
-	
-		for ( iter = m_RenderObjectMap.begin(); iter != m_RenderObjectMap.end(); iter++ ) {
-		   delete iter->second;
-		}
-	}
-	
-	{
-		std::map< const kbLightComponent *, kbRenderLight * >::iterator iter;
-	
-		for ( iter = m_RenderLightMap.begin(); iter != m_RenderLightMap.end(); iter++ ) {
-		   delete iter->second;
-		}
-	}
 }
 
 /**
- *	kbRenderWindow::BeginFrame
+ *	kbRenderWindow_DX11::BeginFrame_Internal
  */
-void kbRenderWindow::BeginFrame() {
-	kbMat4 translationMatrix( kbMat4::identity );
-	translationMatrix[3].ToVec3() = -m_CameraPosition;
-	kbMat4 rotationMatrix = m_CameraRotation.ToMat4();
-	rotationMatrix.TransposeSelf();
-	
-	m_ViewMatrix = translationMatrix * rotationMatrix;
-	m_ViewProjectionMatrix = m_ViewMatrix * m_ProjectionMatrix;
-	
-	XMMATRIX inverseProj = XMMatrixInverse( nullptr, XMMATRIXFromkbMat4( m_ViewProjectionMatrix ) );
-	m_InverseViewProjectionMatrix = kbMat4FromXMMATRIX( inverseProj );
+void kbRenderWindow_DX11::BeginFrame_Internal() {
+	kbMat4 viewProjectionMatrix = GetViewProjectionMatrix();
+
+	XMMATRIX inverseProj = XMMatrixInverse( nullptr, XMMATRIXFromkbMat4( viewProjectionMatrix ) );
+	HackSetInverseViewProjectionMatrix( kbMat4FromXMMATRIX( inverseProj ) );
+}
+
+/**
+ *	kbRenderWindow_DX11::EndFrame
+ */
+void kbRenderWindow_DX11::EndFrame_Internal() {
+	m_pSwapChain->Present( 0, 0 ); 
+}
+
+/**
+ *	kbRenderWindow::Release_Internal
+ */
+void kbRenderWindow_DX11::Release_Internal() {
+	SAFE_RELEASE( m_pSwapChain );
+	SAFE_RELEASE( m_pRenderTargetView ) ; 
 }
 
 //-------------------------------------------------------------------------------------------------------------------------------------
@@ -365,28 +346,10 @@ eventMarker_t::~eventMarker_t() {
 }
 
 //-------------------------------------------------------------------------------------------------------------------------------------
-//	kbRenderJob
-//-------------------------------------------------------------------------------------------------------------------------------------
-
-/**
- *
- */
-void kbRenderJob::Run() {
-
-	SetThreadName( "Render thread" );
-	while( m_bRequestShutdown == false ) {
-		if ( g_pRenderer != nullptr && g_pRenderer->m_RenderThreadSync == 1 ) {
-			g_pRenderer->RenderScene();
-			g_pRenderer->m_RenderThreadSync = 0;
-		}
-	}
-
-	MarkJobAsComplete();
-};
-
-//-------------------------------------------------------------------------------------------------------------------------------------
 //	kbRenderer_DX11
 //-------------------------------------------------------------------------------------------------------------------------------------
+
+ kbRenderer_DX11 * g_pD3D11Renderer = nullptr;
 
 /**
  *	kbRenderer_DX11::kbRenderer_DX11
@@ -400,7 +363,6 @@ kbRenderer_DX11::kbRenderer_DX11() :
 	m_pDefaultRasterizerState( nullptr ),
 	m_pNoFaceCullingRasterizerState( nullptr ),
 	m_pWireFrameRasterizerState( nullptr ),
-	m_pCurrentRenderWindow( nullptr ),
 	m_pDepthStencilView( nullptr ),
 	m_pUnitQuad( nullptr ),
 	m_pConsoleQuad( nullptr ),
@@ -424,8 +386,6 @@ kbRenderer_DX11::kbRenderer_DX11() :
 	m_pEventMarker( nullptr ),
 	m_DebugVertexBuffer( nullptr ),
 	m_DebugPreTransformedVertexBuffer( nullptr ),
-	m_ViewMode_GameThread( ViewMode_Shaded ),
-	m_ViewMode( ViewMode_Shaded ),
 	m_pOffScreenRenderTargetTexture( nullptr ),
 	m_ovrSession( nullptr ),
 	m_HMDPass( 0 ),
@@ -433,18 +393,7 @@ kbRenderer_DX11::kbRenderer_DX11() :
 	m_SensorSampleTime( 0.0 ),
 	m_MirrorTexture( nullptr ),
 	m_bUsingHMDTrackingOnly( false ),
-	Back_Buffer_Width( 1280 ),
-	Back_Buffer_Height( 1024 ),
-	m_RenderThreadSync( 0 ),
-	m_pRenderJob( nullptr ),
-	m_bConsoleEnabled( false ),
 	m_FrameNum( 0 ),
-	m_FogColor_GameThread( 1.0f, 1.0f, 1.0f, 1.0f ),
-	m_FogColor_RenderThread( 1.0f, 1.0f, 1.0f, 1.0f ),
-	m_FogStartDistance_GameThread( 2100 ),
-	m_FogStartDistance_RenderThread( 2200 ),
-	m_FogEndDistance_GameThread( 2100 ),
-	m_FogEndDistance_RenderThread( 2200 ),
 	m_DebugText( nullptr ) {
 
 	m_pSkinnedDirectionalLightShadowShader = new kbShader( "../../kbEngine/assets/Shaders/directionalLightShadow.kbShader" );
@@ -454,7 +403,7 @@ kbRenderer_DX11::kbRenderer_DX11() :
 	ZeroMemory( m_pTextures, sizeof(m_pTextures) );
 
 	m_OculusTexture[0] = m_OculusTexture[1] = nullptr;
-	g_pRenderer = this;
+	g_pD3D11Renderer = this;
 }
 
 /**
@@ -467,8 +416,9 @@ kbRenderer_DX11::~kbRenderer_DX11() {
 /**
  *	kbRenderer_DX11::Init
  */
-void kbRenderer_DX11::Init( HWND hwnd, const int frameWidth, const int frameHeight, const bool bUseHMD, const bool bUseHMDTrackingOnly ) {
-	kbLog( "Initializing kbRenderer" );
+void kbRenderer_DX11::Init_Internal( HWND hwnd, const int frameWidth, const int frameHeight, const bool bUseHMD, const bool bUseHMDTrackingOnly ) {
+
+	kbLog( "Initializing kbRenderer_DX11" );
 
 	m_hwnd = hwnd;
 
@@ -565,7 +515,7 @@ void kbRenderer_DX11::Init( HWND hwnd, const int frameWidth, const int frameHeig
 	kbErrorCheck( SUCCEEDED( hr ), "kbRenderer_DX11::Init() - Failed to create DepthStencilView" );
 
 	// bind render target view and depth stencil to output render pipeline
-	m_pDeviceContext->OMSetRenderTargets( 1, &m_RenderWindowList[0]->m_pRenderTargetView, m_pDepthStencilView );
+	m_pDeviceContext->OMSetRenderTargets( 1, &((kbRenderWindow_DX11*)m_RenderWindowList[0])->m_pRenderTargetView, m_pDepthStencilView );
 
 	// setting rasterizer state
 	D3D11_RASTERIZER_DESC rasterDesc;
@@ -691,23 +641,23 @@ void kbRenderer_DX11::Init( HWND hwnd, const int frameWidth, const int frameHeig
 	}
 
 	// Load some shaders
-	m_pBasicShader = ( kbShader * )g_ResourceManager.GetResource( "../../kbEngine/assets/Shaders/BasicShader.kbShader", true );	
-	m_pOpaqueQuadShader = ( kbShader * ) g_ResourceManager.GetResource( "../../kbEngine/assets/Shaders/basicTexture.kbShader", true );
-	m_pTranslucentShader = ( kbShader * ) g_ResourceManager.GetResource( "../../kbEngine/assets/Shaders/basicTranslucency.kbShader", true );
-	m_pBasicParticleShader = ( kbShader * ) g_ResourceManager.GetResource( "../../kbEngine/assets/Shaders/basicParticle.kbShader", true );
-	m_pMissingShader = ( kbShader * ) g_ResourceManager.GetResource( "../../kbEngine/assets/Shaders/missingShader.kbShader", true );
-	m_pDebugShader = ( kbShader * ) g_ResourceManager.GetResource( "../../kbEngine/assets/Shaders/debugShader.kbShader", true );
-	m_pBasicSkinnedTextureShader = ( kbShader * ) g_ResourceManager.GetResource( "../../kbEngine/assets/Shaders/basicSkinned.kbShader", true );
+	m_pBasicShader = ( kbShader * )g_ResourceManager.GetResource( "../../kbEngine/assets/Shaders/BasicShader.kbshader", true );	
+	m_pOpaqueQuadShader = ( kbShader * ) g_ResourceManager.GetResource( "../../kbEngine/assets/Shaders/basicTexture.kbshader", true );
+	m_pTranslucentShader = ( kbShader * ) g_ResourceManager.GetResource( "../../kbEngine/assets/Shaders/basicTranslucency.kbshader", true );
+	m_pBasicParticleShader = ( kbShader * ) g_ResourceManager.GetResource( "../../kbEngine/assets/Shaders/basicParticle.kbshader", true );
+	m_pMissingShader = ( kbShader * ) g_ResourceManager.GetResource( "../../kbEngine/assets/Shaders/missingShader.kbshader", true );
+	m_pDebugShader = ( kbShader * ) g_ResourceManager.GetResource( "../../kbEngine/assets/Shaders/debugShader.kbshader", true );
+	m_pBasicSkinnedTextureShader = ( kbShader * ) g_ResourceManager.GetResource( "../../kbEngine/assets/Shaders/basicSkinned.kbshader", true );
 
-	m_pUberPostProcess = ( kbShader * ) g_ResourceManager.GetResource( "../../kbEngine/assets/Shaders/UberPostProcess.kbShader", true );
-	m_pDirectionalLightShader = ( kbShader * ) g_ResourceManager.GetResource( "../../kbEngine/assets/Shaders/DirectionalLight.kbShader", true );
-	m_pPointLightShader = ( kbShader * ) g_ResourceManager.GetResource( "../../kbEngine/assets/Shaders/PointLight.kbShader", true );
-	m_pCylindricalLightShader = ( kbShader * ) g_ResourceManager.GetResource( "../../kbEngine/assets/Shaders/cylindricalLight.kbShader", true );
+	m_pUberPostProcess = ( kbShader * ) g_ResourceManager.GetResource( "../../kbEngine/assets/Shaders/UberPostProcess.kbshader", true );
+	m_pDirectionalLightShader = ( kbShader * ) g_ResourceManager.GetResource( "../../kbEngine/assets/Shaders/DirectionalLight.kbshader", true );
+	m_pPointLightShader = ( kbShader * ) g_ResourceManager.GetResource( "../../kbEngine/assets/Shaders/PointLight.kbshader", true );
+	m_pCylindricalLightShader = ( kbShader * ) g_ResourceManager.GetResource( "../../kbEngine/assets/Shaders/cylindricalLight.kbshader", true );
 
-	m_pDirectionalLightShadowShader = ( kbShader * ) g_ResourceManager.GetResource( "../../kbEngine/assets/Shaders/directionalLightShadow.kbShader", true );
-	m_pLightShaftsShader = ( kbShader * ) g_ResourceManager.GetResource( "../../kbEngine/assets/Shaders/lightShafts.kbShader", true );
-	m_pSimpleAdditiveShader = ( kbShader * ) g_ResourceManager.GetResource( "../../kbEngine/assets/Shaders/SimpleAdditive.kbShader", true );
-	m_pMousePickerIdShader = (kbShader *) g_ResourceManager.GetResource( "../../kbEngine/assets/Shaders/MousePicker.kbShader", true );
+	m_pDirectionalLightShadowShader = ( kbShader * ) g_ResourceManager.GetResource( "../../kbEngine/assets/Shaders/directionalLightShadow.kbshader", true );
+	m_pLightShaftsShader = ( kbShader * ) g_ResourceManager.GetResource( "../../kbEngine/assets/Shaders/lightShafts.kbshader", true );
+	m_pSimpleAdditiveShader = ( kbShader * ) g_ResourceManager.GetResource( "../../kbEngine/assets/Shaders/SimpleAdditive.kbshader", true );
+	m_pMousePickerIdShader = (kbShader *) g_ResourceManager.GetResource( "../../kbEngine/assets/Shaders/MousePicker.kbshader", true );
 
 	// Non-resource managed shaders
 	m_pSkinnedDirectionalLightShadowShader->SetVertexShaderFunctionName( "skinnedVertexMain" );
@@ -959,7 +909,10 @@ int kbRenderer_DX11::CreateRenderView( HWND hwnd )
 	sd.SwapEffect = DXGI_SWAP_EFFECT_SEQUENTIAL;
 	sd.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;
 
-	kbRenderWindow * renderView = new kbRenderWindow;
+	RECT windowDimensions;
+	GetClientRect( hwnd, &windowDimensions );
+
+	kbRenderWindow_DX11 * renderView = new kbRenderWindow_DX11( hwnd, windowDimensions, Near_Plane, Far_Plane );
 
 	m_pDXGIFactory->CreateSwapChain( m_pD3DDevice, &sd, &renderView->m_pSwapChain );
 
@@ -967,20 +920,6 @@ int kbRenderer_DX11::CreateRenderView( HWND hwnd )
 	renderView->m_pSwapChain->GetBuffer( 0, __uuidof(ID3D11Texture2D), (LPVOID*) &pBackBuffer );
 	m_pD3DDevice->CreateRenderTargetView( pBackBuffer, nullptr, &renderView->m_pRenderTargetView );
 	pBackBuffer->Release();
-
-	RECT windowDimensions;
-	GetClientRect( hwnd, &windowDimensions );
-	renderView->m_Hwnd = hwnd;
-	renderView->m_ViewPixelWidth = windowDimensions.right - windowDimensions.left;
-	renderView->m_ViewPixelHeight = windowDimensions.bottom - windowDimensions.top;
-	renderView->m_fViewPixelWidth = static_cast<float>( renderView->m_ViewPixelWidth );
-	renderView->m_fViewPixelHeight = static_cast<float>( renderView->m_ViewPixelHeight );
-	renderView->m_fViewPixelHalfWidth = renderView->m_fViewPixelWidth* 0.5f;
-	renderView->m_fViewPixelHalfHeight = renderView->m_fViewPixelHeight * 0.5f;
-	renderView->m_ProjectionMatrix.CreatePerspectiveMatrix( kbToRadians( 75.0f ), renderView->m_fViewPixelWidth / renderView->m_fViewPixelHeight, Near_Plane, Far_Plane );
-
-	XMMATRIX inverseProj = XMMatrixInverse( nullptr, XMMATRIXFromkbMat4( renderView->m_ProjectionMatrix ) );
-	renderView->m_InverseProjectionMatrix = kbMat4FromXMMATRIX( inverseProj );
 
 	m_RenderWindowList.push_back( renderView );
 
@@ -1182,677 +1121,13 @@ void kbRenderer_DX11::SetRenderWindow( HWND hwnd ) {
 	}
 
 	for ( int i = 0 ; i < m_RenderWindowList.size(); i++ ) {
-		if ( m_RenderWindowList[i]->m_Hwnd == hwnd ) {
+		if ( m_RenderWindowList[i]->GetHWND() == hwnd ) {
 			m_pCurrentRenderWindow = m_RenderWindowList[i];
 			return;
 		}
 	}
 
 	kbError( "SetRenderWindow called with a bad window handle" );
-}
-
-/**
- *	kbRenderer_DX11::AddRenderObject
- */
-void kbRenderer_DX11::AddRenderObject( const kbRenderObject & renderObjectToAdd ) {
-	kbErrorCheck( m_pCurrentRenderWindow != nullptr, "kbRenderer_DX11::AddRenderObject - NULL m_pCurrentRenderWindow" );
-	kbErrorCheck( renderObjectToAdd.m_pComponent != nullptr, "kbRenderer_DX11::AddRenderObject - NULL component" );
-
-	m_RenderObjectList_GameThread.push_back( renderObjectToAdd );
-	kbRenderObject & renderObj = m_RenderObjectList_GameThread[m_RenderObjectList_GameThread.size() - 1];
-
-	renderObj.m_bIsFirstAdd = true;
-	renderObj.m_bIsRemove = false;
-}
-
-/**
- *	kbRenderer_DX11::UpdateRenderObject
- */
-void kbRenderer_DX11::UpdateRenderObject( const kbRenderObject & renderObjectToUpdate ) {
-	kbErrorCheck( m_pCurrentRenderWindow != nullptr, "kbRenderer_DX11::UpdateRenderObject() - NULL m_pCurrentRenderWindow" );
-	kbErrorCheck( renderObjectToUpdate.m_pComponent != nullptr, "kbRenderer_DX11::UpdateRenderObject() - NULL component" );
-
-	m_RenderObjectList_GameThread.push_back( renderObjectToUpdate );
-	kbRenderObject & renderObj = m_RenderObjectList_GameThread[m_RenderObjectList_GameThread.size() - 1];
-
-	renderObj.m_bIsFirstAdd = false;
-	renderObj.m_bIsRemove = false;
-}
-
-/**
- *	kbRenderer_DX11::RemoveRenderObject
- */
-void kbRenderer_DX11::RemoveRenderObject( const kbRenderObject & renderObjectToRemove ) {
-	kbErrorCheck( m_pCurrentRenderWindow != nullptr, "kbRenderer_DX11::RemoveRenderObject() - NULL m_pCurrentRenderWindow" );
-	kbErrorCheck( renderObjectToRemove.m_pComponent != nullptr, "kbRenderer_DX11::RemoveRenderObject - NULL component" );
-
-	// Remove duplicates
-	for ( int i = 0; i < m_RenderObjectList_GameThread.size(); i++ ) {
-		if ( m_RenderObjectList_GameThread[i].m_pComponent == renderObjectToRemove.m_pComponent ) {
-			m_RenderObjectList_GameThread.erase( m_RenderObjectList_GameThread.begin() + i );
-			i--;
-		}
-	}
-
-	m_RenderObjectList_GameThread.push_back( renderObjectToRemove );
-	kbRenderObject & renderObj = m_RenderObjectList_GameThread[m_RenderObjectList_GameThread.size() - 1];
-
-	renderObj.m_bIsFirstAdd = false;
-	renderObj.m_bIsRemove = true;
-}
-
-/**
- *	kbRenderer_DX11::AddRenderObject
- */
-void kbRenderer_DX11::AddRenderObject( const kbComponent *const pComponent, const kbModel *const pModel, const kbVec3 & pos, const kbQuat & orientation, const kbVec3 & scale, const ERenderPass renderPass, const std::vector<kbShader *> *const pShaderOverrideList, const kbShaderParamOverrides_t *const pShaderParamOverrides ) {
-	kbErrorCheck( m_pCurrentRenderWindow != nullptr, "kbRenderer_DX11::RemoveRenderObject - Error, nullptr Render window found" );
-
-	kbRenderObject newRenderObjectInfo;
-	newRenderObjectInfo.m_pModel = pModel;
-	newRenderObjectInfo.m_pComponent = pComponent;
-	newRenderObjectInfo.m_Position = pos;
-	newRenderObjectInfo.m_Orientation= orientation;
-	newRenderObjectInfo.m_Scale = scale;
-	newRenderObjectInfo.m_bIsFirstAdd = true;
-	newRenderObjectInfo.m_bIsRemove = false;
-	newRenderObjectInfo.m_RenderPass = renderPass;
-	if ( pComponent->GetOwner() != nullptr ) {
-		newRenderObjectInfo.m_EntityId = static_cast<kbGameEntity*>( pComponent->GetOwner() )->GetEntityId();
-	}
-
-	if ( pComponent->IsA( kbModelComponent::GetType() ) ) {
-		newRenderObjectInfo.m_bCastsShadow = static_cast<const kbModelComponent*>( pComponent )->GetCastsShadow();
-	}
-
-	if ( pShaderOverrideList != nullptr ) {
-		newRenderObjectInfo.m_OverrideShaderList = *pShaderOverrideList;
-	}
-
-	if ( pShaderParamOverrides != nullptr ) {
-		newRenderObjectInfo.m_ShaderParamOverrides = *pShaderParamOverrides;
-	}
-
-	m_RenderObjectList_GameThread.push_back( newRenderObjectInfo );
-}
-
-/**
- *	kbRenderer_DX11::UpdateRenderObject
- */
-void kbRenderer_DX11::UpdateRenderObject( const kbComponent *const pComponent, const kbModel *const pModel, const kbVec3 & pos, const kbQuat & orientation, const kbVec3 & scale, const ERenderPass renderPass, const std::vector<kbShader *> *const pShaderOverrideList, const kbShaderParamOverrides_t *const pShaderParamsOverride ) {
-
-	if ( m_pCurrentRenderWindow == nullptr ) {
-		kbError( "kbRenderer_DX11::UpdateRenderObject - nullptr Render Window" );
-	}
-
-	kbRenderObject newRenderObjectInfo;
-	newRenderObjectInfo.m_pModel = pModel;
-	newRenderObjectInfo.m_pComponent = pComponent;
-	newRenderObjectInfo.m_Position = pos;
-	newRenderObjectInfo.m_Orientation = orientation;
-	newRenderObjectInfo.m_Scale = scale;
-	newRenderObjectInfo.m_bIsFirstAdd = false;
-	newRenderObjectInfo.m_bIsRemove = false;
-	newRenderObjectInfo.m_RenderPass = renderPass;
-	if ( pComponent != nullptr && pComponent->GetOwner() != nullptr ) {
-		newRenderObjectInfo.m_EntityId = static_cast<kbGameEntity*>( pComponent->GetOwner() )->GetEntityId();
-	}
-
-	if ( pComponent->IsA( kbModelComponent::GetType() ) ) {
-		newRenderObjectInfo.m_bCastsShadow = static_cast<const kbModelComponent*>( pComponent )->GetCastsShadow();
-	}
-
-	if ( pShaderOverrideList != nullptr ) {
-		newRenderObjectInfo.m_OverrideShaderList = *pShaderOverrideList;
-	}
-
-	if ( pShaderParamsOverride != nullptr ) {
-		newRenderObjectInfo.m_ShaderParamOverrides = *pShaderParamsOverride;
-	}
-
-	m_RenderObjectList_GameThread.push_back( newRenderObjectInfo );
-}
-
-/**
- *	kbRenderer_DX11::RemoveRenderObject
- */
-void kbRenderer_DX11::RemoveRenderObject( const kbComponent *const pComponent ) {
-
-	if ( m_pCurrentRenderWindow == nullptr ) {
-		kbError( "kbRenderer_DX11::UpdateRenderObject - nullptr Render Window" );
-	}
-
-	// Remove duplicates
-	for ( int i = 0; i < m_RenderObjectList_GameThread.size(); i++ ) {
-		if ( m_RenderObjectList_GameThread[i].m_pComponent == pComponent ) {
-			m_RenderObjectList_GameThread.erase(m_RenderObjectList_GameThread.begin() + i);
-			i--;
-		}
-	}
-
-	kbRenderObject RenderObjectToRemove;
-	RenderObjectToRemove.m_pComponent = pComponent;
-	RenderObjectToRemove.m_bIsRemove = true;
-
-	m_RenderObjectList_GameThread.push_back( RenderObjectToRemove );
-}
-
-/**
- *	kbRenderer_DX11::AddLight
- */
-void kbRenderer_DX11::AddLight( const kbLightComponent * pLightComponent, const kbVec3 & pos, const kbQuat & orientation ) {
-
-	if ( m_pCurrentRenderWindow == nullptr ) {
-		kbError( "kbRenderer_DX11::AddLight - nullptr Render Window" );
-	}
-
-	kbRenderLight newLight;
-
-	newLight.m_pLightComponent = pLightComponent;
-	newLight.m_Position = pos;
-	newLight.m_Orientation = orientation;
-	newLight.m_Radius = pLightComponent->GetRadius();
-	newLight.m_Length = pLightComponent->GetLength();
-
-	// If there are empty entries in the splits distance array, a value of FLT_MAX ensures the split won't be selected in the projection shader
-	newLight.m_CascadedShadowSplits[0] = FLT_MAX;
-	newLight.m_CascadedShadowSplits[1] = FLT_MAX;
-	newLight.m_CascadedShadowSplits[2] = FLT_MAX;
-	newLight.m_CascadedShadowSplits[3] = FLT_MAX;
-
-	if ( pLightComponent->CastsShadow() && pLightComponent->IsA( kbDirectionalLightComponent::GetType() ) ) {
-		const kbDirectionalLightComponent *const dirLight = static_cast<const kbDirectionalLightComponent*>( pLightComponent );
-		for ( int i = 0; i < 4 && i < dirLight->GetSplitDistances().size(); i++ ) {
-			newLight.m_CascadedShadowSplits[i] = dirLight->GetSplitDistances()[i];
-		}
-	}
-
-	newLight.m_Color = pLightComponent->GetColor() * pLightComponent->GetBrightness();
-	newLight.m_bCastsShadow = pLightComponent->CastsShadow();
-	newLight.m_bIsFirstAdd = true;
-	newLight.m_bIsRemove = false;
-	m_LightList_GameThread.push_back( newLight );
-}
-
-/**
- *	kbRenderer_DX11::UpdateLight
- */
-void kbRenderer_DX11::UpdateLight( const kbLightComponent * pLightComponent, const kbVec3 & pos, const kbQuat & orientation ) {
-
-	if ( m_pCurrentRenderWindow == nullptr ) {
-		kbError( "kbRenderer_DX11::UpdateLight - nullptr Render Window" );
-	}
-
-	for ( int i = 0; i < m_LightList_GameThread.size(); i++ ) {
-		if ( m_LightList_GameThread[i].m_pLightComponent == pLightComponent ) {
-			if ( m_LightList_GameThread[i].m_bIsRemove == false ) {
-				m_LightList_GameThread[i].m_Position = pos;
-				m_LightList_GameThread[i].m_Orientation = orientation;
-				m_LightList_GameThread[i].m_bCastsShadow = pLightComponent->CastsShadow();
-				m_LightList_GameThread[i].m_Color = pLightComponent->GetColor() * pLightComponent->GetBrightness();
-				m_LightList_GameThread[i].m_Radius = pLightComponent->GetRadius();
-				m_LightList_GameThread[i].m_Length = pLightComponent->GetLength();
-
-				memset( &m_LightList_GameThread[i].m_CascadedShadowSplits, 0, sizeof( m_LightList_GameThread[i].m_CascadedShadowSplits ) );
-				if ( pLightComponent->IsA( kbDirectionalLightComponent::GetType() ) ) {
-					const kbDirectionalLightComponent *const dirLight = static_cast<const kbDirectionalLightComponent*>( pLightComponent );
-					for ( int i = 0; i < 4 && i < dirLight->GetSplitDistances().size(); i++ ) {
-						m_LightList_GameThread[i].m_CascadedShadowSplits[i] = dirLight->GetSplitDistances()[i];
-					}
-				}
-			}
-			return;
-		}
-	}
- 
-	kbRenderLight updateLight;
-	updateLight.m_pLightComponent = pLightComponent;
-	updateLight.m_Position = pos;
-	updateLight.m_Orientation = orientation;
-	updateLight.m_bIsFirstAdd = false;
-	updateLight.m_bIsRemove = false;
-	updateLight.m_bCastsShadow = pLightComponent->CastsShadow();
-	updateLight.m_Color = pLightComponent->GetColor() * pLightComponent->GetBrightness();
-	updateLight.m_Radius = pLightComponent->GetRadius();
-	updateLight.m_Length = pLightComponent->GetLength();
-
-	memset( &updateLight.m_CascadedShadowSplits, 0, sizeof( updateLight.m_CascadedShadowSplits ) );
-	if ( pLightComponent->IsA( kbDirectionalLightComponent::GetType() ) ) {
-		const kbDirectionalLightComponent *const dirLight = static_cast<const kbDirectionalLightComponent*>( pLightComponent );
-		for ( int i = 0; i < 4 && i < dirLight->GetSplitDistances().size(); i++ ) {
-			updateLight.m_CascadedShadowSplits[i] = dirLight->GetSplitDistances()[i];
-		}
-	}
-
-	m_LightList_GameThread.push_back( updateLight );
-}
-
-/**
- *	kbRenderer_DX11::RemoveLight
- */
-void kbRenderer_DX11::RemoveLight( const kbLightComponent *const pLightComponent ) {
-	
-	if ( m_pCurrentRenderWindow == nullptr ) {
-		kbError( "kbRenderer_DX11::RemoveLight - nullptr Render Window" );
-	}
-
-	kbRenderLight lightToRemove;
-	lightToRemove.m_pLightComponent = pLightComponent;
-	lightToRemove.m_bIsRemove = true;
-	m_LightList_GameThread.push_back( lightToRemove );
-}
-
-/**
- *	kbRenderer_DX11::HackClearLight
- */
-void kbRenderer_DX11::HackClearLight( const kbLightComponent *const pLightComponent ) {
-	
-	for ( int i = 0; i < m_LightList_GameThread.size(); i++ ) {
-		if ( m_LightList_GameThread[i].m_pLightComponent == pLightComponent ) {
-			m_LightList_GameThread.erase( m_LightList_GameThread.begin() + i );
-			i--;
-		}
-	}
-
-}
-
-/**
- *	kbRenderer_DX11::AddParticle
- */
-void kbRenderer_DX11::AddParticle( const void *const pParticleComponent, const kbModel *const pModel, const kbVec3 & pos, kbQuat & orientation ) {
-	kbRenderObject NewParticle;
-	NewParticle.m_pComponent = static_cast<const kbComponent*>( pParticleComponent );
-	NewParticle.m_pModel = pModel;
-	NewParticle.m_RenderPass = RP_Translucent;
-	NewParticle.m_Position = pos;
-	NewParticle.m_Orientation = orientation;
-	NewParticle.m_bIsFirstAdd = true;
-	NewParticle.m_bIsRemove = false;
-
-	m_ParticleList_GameThread.push_back( NewParticle );
-}
-
-/**
- *	kbRenderer_DX11::UpdateParticle
- */
-void kbRenderer_DX11::UpdateParticle( const void *const pParticleComponent, const kbModel *const pModel, const kbVec3 & pos, kbQuat & orientation ) {
-
-	kbRenderObject NewParticle;
-	NewParticle.m_pComponent = static_cast<const kbComponent*>( pParticleComponent );
-	NewParticle.m_pModel = pModel;
-	NewParticle.m_RenderPass = RP_Translucent;
-	NewParticle.m_Position = pos;
-	NewParticle.m_Orientation = orientation;
-	NewParticle.m_bIsFirstAdd = false;
-
-	m_ParticleList_GameThread.push_back( NewParticle );
-}
-
-/**
- *	kbRenderer_DX11::RemoveParticle
- */
-void kbRenderer_DX11::RemoveParticle( const void *const pParticleComponent ) {
-	kbRenderObject NewParticle;
-	NewParticle.m_pComponent = static_cast<const kbComponent*>( pParticleComponent );
-	NewParticle.m_bIsFirstAdd = false;
-	NewParticle.m_bIsRemove = true;
-	m_ParticleList_GameThread.push_back( NewParticle );
-}
-
-/**
- *	kbRenderer_DX11::AddLightShafts
- */
-void kbRenderer_DX11::AddLightShafts( const kbLightShaftsComponent *const pComponent, const kbVec3 & pos, const kbQuat & orientation ) {
-	kbLightShafts newLightShafts;
-	newLightShafts.m_pLightShaftsComponent = pComponent;
-	newLightShafts.m_pTexture = pComponent->GetTexture();
-	newLightShafts.m_Color = pComponent->GetColor();
-	newLightShafts.m_Width = pComponent->GetBaseWidth();
-	newLightShafts.m_Height = pComponent->GetBaseHeight();
-	newLightShafts.m_NumIterations = pComponent->GetNumIterations();
-	newLightShafts.m_IterationWidth = pComponent->GetIterationWidth();
-	newLightShafts.m_IterationHeight = pComponent->GetIterationHeight();
-	newLightShafts.m_bIsDirectional = pComponent->IsDirectional();
-	newLightShafts.m_Pos = pos;
-	newLightShafts.m_Rotation = orientation;
-	newLightShafts.m_Operation = ROO_Add;
-
-	for ( int i = 0; i < m_LightShafts_GameThread.size(); i++ ) {
-		if ( m_LightShafts_GameThread[i].m_pLightShaftsComponent == pComponent ) {
-			m_LightShafts_GameThread.erase( m_LightShafts_GameThread.begin() );
-			break;
-		}
-	}
-	m_LightShafts_GameThread.push_back( newLightShafts );
-}
-
-/**
- *	kbRenderer_DX11::UpdateLightShafts
- */
-void kbRenderer_DX11::UpdateLightShafts( const kbLightShaftsComponent *const pComponent, const kbVec3 & pos, const kbQuat & orientation ) {
-	kbLightShafts updatedLightShafts;
-	updatedLightShafts.m_pLightShaftsComponent = pComponent;
-	updatedLightShafts.m_pTexture = pComponent->GetTexture();
-	updatedLightShafts.m_Color = pComponent->GetColor();
-	updatedLightShafts.m_Width = pComponent->GetBaseWidth();
-	updatedLightShafts.m_Height = pComponent->GetBaseHeight();
-	updatedLightShafts.m_NumIterations = pComponent->GetNumIterations();
-	updatedLightShafts.m_IterationWidth = pComponent->GetIterationWidth();
-	updatedLightShafts.m_IterationHeight = pComponent->GetIterationHeight();
-	updatedLightShafts.m_bIsDirectional = pComponent->IsDirectional();
-	updatedLightShafts.m_Pos = pos;
-	updatedLightShafts.m_Rotation = orientation;
-	updatedLightShafts.m_Operation = ROO_Update;
-
-	for ( int i = 0; i < m_LightShafts_GameThread.size(); i++ ) {
-		if ( m_LightShafts_GameThread[i].m_pLightShaftsComponent == pComponent ) {
-			if ( m_LightShafts_GameThread[i].m_Operation == ROO_Remove ) {
-				return;
-			}
-		}
-	}
-	m_LightShafts_GameThread.push_back( updatedLightShafts );
-}
-
-/**
- *	kbRenderer_DX11::RemoveLightShafts
- */
-void kbRenderer_DX11::RemoveLightShafts( const kbLightShaftsComponent *const pComponent ) {
-	kbLightShafts removeLightShafts;
-	removeLightShafts.m_pLightShaftsComponent = pComponent;
-	removeLightShafts.m_Operation = ROO_Remove;
-
-	for ( int i = 0; i < m_LightShafts_GameThread.size(); i++ ) {
-		if ( m_LightShafts_GameThread[i].m_pLightShaftsComponent == pComponent ) {
-			m_LightShafts_GameThread.erase( m_LightShafts_GameThread.begin() );
-			break;
-		}
-	}
-	m_LightShafts_GameThread.push_back( removeLightShafts );
-}
-
-/**
- *	kbRenderer_DX11::UpdateFog
- */
-void kbRenderer_DX11::UpdateFog( const kbColor & color, const float startDistance, const float endDistance ) {
-	m_FogColor_GameThread = color;
-	m_FogStartDistance_GameThread = startDistance;
-	m_FogEndDistance_GameThread = endDistance;
-}
-
-/**
- *	kbRenderer_DX11::SetPostProcessSettings
- */
-void kbRenderer_DX11::SetPostProcessSettings( const kbPostProcessSettings_t & postProcessSettings ) {
-
-	m_PostProcessSettings_GameThread = postProcessSettings;
-}
-
-/**
- *	kbRenderer_DX11::RenderSync
- */
-void kbRenderer_DX11::RenderSync() {	
-
-	// Copy requested game thread data over to their corresponding render thread structures
-	m_DebugLines = m_DebugLines_GameThread;
-	m_DebugLines_GameThread.clear();
-
-	m_DebugBillboards = m_DebugBillboards_GameThread;
-	m_DebugBillboards_GameThread.clear();
-
-	m_DebugModels = m_DebugModels_GameThread;
-	m_DebugModels_GameThread.clear();
-
-	m_DebugStrings = m_DebugStrings_GameThread;
-	m_DebugStrings_GameThread.clear();
-
-	m_ScreenSpaceQuads_RenderThread = m_ScreenSpaceQuads_GameThread;
-	m_ScreenSpaceQuads_GameThread.clear();
-
-	m_ViewMode = m_ViewMode_GameThread;
-
-	// Add/update render objects
-	for ( int i = 0; i < m_RenderObjectList_GameThread.size(); i++ )
-	{
-		kbRenderObject * renderObject = nullptr;
-
-		if ( m_RenderObjectList_GameThread[i].m_bIsRemove ) {
-			kbRenderObject *const pRenderObject = m_pCurrentRenderWindow->m_RenderObjectMap[ m_RenderObjectList_GameThread[i].m_pComponent ];
-			m_pCurrentRenderWindow->m_RenderObjectMap.erase( m_RenderObjectList_GameThread[i].m_pComponent );
-			delete pRenderObject;
-		} else {
-			const kbComponent *const pComponent = m_RenderObjectList_GameThread[i].m_pComponent;
-			kbErrorCheck( pComponent != nullptr, "kbRenderer_DX11::RenderSync() - Adding/updating a render object with a NULL component" );
-
-			if ( m_RenderObjectList_GameThread[i].m_bIsFirstAdd == false ) {
-
-				// Updating a renderobject 
-				std::map< const kbComponent *, kbRenderObject * >::iterator it = m_pCurrentRenderWindow->m_RenderObjectMap.find( m_RenderObjectList_GameThread[i].m_pComponent );
-				if ( it == m_pCurrentRenderWindow->m_RenderObjectMap.end() || it->second == nullptr ) {
-					kbError( "kbRenderer_DX11::UpdateRenderObject - Error, Updating a RenderObject that doesn't exist" );
-				}
-
-				renderObject = it->second;
-				*renderObject = m_RenderObjectList_GameThread[i];
-				if ( pComponent->IsA( kbSkeletalModelComponent::GetType() ) && renderObject->m_pModel->NumBones() > 0 ) {
-					const kbSkeletalModelComponent *const skelComp = static_cast<const kbSkeletalModelComponent*>( pComponent );
-					renderObject->m_MatrixList = skelComp->GetFinalBoneMatrices();
-					renderObject->m_bIsSkinnedModel = true;
-				}
-			} else {
-
-				// Adding new renderobject
-				renderObject = m_pCurrentRenderWindow->m_RenderObjectMap[pComponent];
-				kbErrorCheck( renderObject == nullptr, "kbRenderer_DX11::AddRenderObject() - Model %s already added", m_RenderObjectList_GameThread[i].m_pModel->GetFullName().c_str() );
-
-				if ( pComponent->IsA( kbSkeletalModelComponent::GetType() ) && m_RenderObjectList_GameThread[i].m_pModel->NumBones() > 0 ) {
-
-					renderObject = new kbRenderObject();
-					*renderObject = m_RenderObjectList_GameThread[i];
-					renderObject->m_bIsSkinnedModel = true;
-					const kbSkeletalModelComponent *const skelComp = static_cast<const kbSkeletalModelComponent*>( pComponent );
-					renderObject->m_MatrixList = skelComp->GetFinalBoneMatrices();
-				} else {
-					renderObject = new kbRenderObject;
-					*renderObject = m_RenderObjectList_GameThread[i];
-				}
-
-				m_pCurrentRenderWindow->m_RenderObjectMap[m_RenderObjectList_GameThread[i].m_pComponent] = renderObject;
-			}
-		}
-	}
-	m_RenderObjectList_GameThread.clear();
-
-	// Light
-	for ( int i = 0; i < m_LightList_GameThread.size(); i++ ) {
-
-		if ( m_LightList_GameThread[i].m_bIsRemove ) {
-
-			kbRenderLight *const pRenderLight = m_pCurrentRenderWindow->m_RenderLightMap[m_LightList_GameThread[i].m_pLightComponent];
-			m_pCurrentRenderWindow->m_RenderLightMap.erase( m_LightList_GameThread[i].m_pLightComponent );
-			delete pRenderLight;
-		} else {
-			kbRenderLight * renderLight = nullptr;
-
-			bool bIsFirstAdd = m_LightList_GameThread[i].m_bIsFirstAdd;
-			if ( bIsFirstAdd ) {
-				renderLight = m_pCurrentRenderWindow->m_RenderLightMap[m_LightList_GameThread[i].m_pLightComponent];
-
-				if ( renderLight != nullptr ) {
-					bIsFirstAdd = false;
-					kbError( "kbRenderer_DX11::AddLight - Warning, adding a render light that already exists" );
-				} else {
-					renderLight = new kbRenderLight;
-					m_pCurrentRenderWindow->m_RenderLightMap[m_LightList_GameThread[i].m_pLightComponent] = renderLight;
-				}
-			} else {
-
-				std::map< const kbLightComponent *, kbRenderLight * >::iterator it = m_pCurrentRenderWindow->m_RenderLightMap.find( m_LightList_GameThread[i].m_pLightComponent );
-
-				if ( it == m_pCurrentRenderWindow->m_RenderLightMap.end() || it->second == nullptr ) {
-					kbError( "kbRenderer_DX11::UpdateLight - Error, Updating a RenderObject that doesn't exist" );
-				} else {
-					renderLight = it->second;
-				}
-			}
-
-			*renderLight = m_LightList_GameThread[i];
-		}
-	}
-	m_LightList_GameThread.clear();
-
-	// Particles
-	for ( int i = 0; i < m_ParticleList_GameThread.size(); i++ ) {
-		const void *const pComponent = m_ParticleList_GameThread[i].m_pComponent;
-
-		if ( m_ParticleList_GameThread[i].m_bIsRemove ) {
-			kbRenderObject * renderParticle = m_pCurrentRenderWindow->m_RenderParticleMap[pComponent];
-			m_pCurrentRenderWindow->m_RenderParticleMap.erase( pComponent );
-			delete renderParticle;
-		} else {
-			kbRenderObject * renderParticle = nullptr;
-
-			if ( m_ParticleList_GameThread[i].m_bIsFirstAdd ) {
-				renderParticle = m_pCurrentRenderWindow->m_RenderParticleMap[pComponent];
-
-				if ( renderParticle != nullptr ) {
-					kbError( "kbRenderer_DX11::AddParticle - Adding a particle that already exists" );
-				} else {
-					renderParticle = new kbRenderObject;
-					m_pCurrentRenderWindow->m_RenderParticleMap[pComponent] = renderParticle;
-				}
-			} else {
-				std::map< const void *, kbRenderObject * >::iterator it = m_pCurrentRenderWindow->m_RenderParticleMap.find( pComponent );
-				if ( it == m_pCurrentRenderWindow->m_RenderParticleMap.end() || it->second == nullptr ) {
-					kbError( "kbRenderer_DX11::UpdateRenderObject - Error, Updating a RenderObject that doesn't exist" );
-				}
-
-				 renderParticle = it->second;
-			}
-
-			*renderParticle = m_ParticleList_GameThread[i];
-		}
-	}
-	m_ParticleList_GameThread.clear();
-
-	// Light Shafts
-	for ( int i = 0; i < m_LightShafts_GameThread.size(); i++ ) {
-		if ( m_LightShafts_GameThread[i].m_Operation == ROO_Add ) {
-			bool bAlreadyExists = false;
-			for ( int j = 0; j < m_LightShafts_RenderThread.size(); j++ ) {
-				if ( m_LightShafts_RenderThread[j].m_pLightShaftsComponent = m_LightShafts_GameThread[i].m_pLightShaftsComponent ) {
-					kbError( "kbRenderer_DX11::SetReadyToRender() - Adding light shafts that already exist" );
-					bAlreadyExists = true;
-					break;
-				}
-			}
-
-			if ( bAlreadyExists == false ) {
-				m_LightShafts_RenderThread.push_back( m_LightShafts_GameThread[i] );
-			}
-		} else if (  m_LightShafts_GameThread[i].m_Operation == ROO_Remove ) {
-			bool bExists = false;
-			for ( int j = 0; j < m_LightShafts_RenderThread.size(); j++ ) {
-				if ( m_LightShafts_RenderThread[j].m_pLightShaftsComponent = m_LightShafts_GameThread[i].m_pLightShaftsComponent ) {
-					m_LightShafts_RenderThread.erase( m_LightShafts_RenderThread.begin() + j );
-					bExists = true;
-					break;
-				}
-			}
-
-			if ( bExists == false ) {
-				kbError( "kbRenderer_DX11::SetReadyToRender() - Removing light shafts that do not exist" );
-			}
-		} else {
-			for ( int j = 0; j < m_LightShafts_RenderThread.size(); j++ ) {
-				if ( m_LightShafts_RenderThread[j].m_pLightShaftsComponent = m_LightShafts_GameThread[i].m_pLightShaftsComponent ) {
-					m_LightShafts_RenderThread[j] = m_LightShafts_GameThread[i];
-					break;
-				}
-			}
-		}
-	}
-
-	m_LightShafts_GameThread.clear();
-
-	// Camera
-	for ( int i = 0; i < m_RenderWindowList.size(); i++ ) {
-
-		m_RenderWindowList[i]->m_CameraPosition = m_RenderWindowList[i]->m_CameraPosition_GameThread;
-		m_RenderWindowList[i]->m_CameraRotation = m_RenderWindowList[i]->m_CameraRotation_GameThread;
-	}
-
-	extern kbConsoleVariable g_ShowPerfTimers;
-	if ( g_ShowPerfTimers.GetBool() ) {
-
-		float curY = 0.1f;
-		curY += g_DebugLineSpacing;
-	
-		std::string gpuTimings = "GPU Timings";
-		g_pRenderer->DrawDebugText( gpuTimings, 0.55f, curY, g_DebugTextSize, g_DebugTextSize, kbColor::green );
-		curY += g_DebugLineSpacing;
-
-		for ( int i = 1; i < kbGPUTimeStamp::GetNumTimeStamps(); i++, curY += g_DebugLineSpacing ) {
-			std::string timing = kbGPUTimeStamp::GetTimeStampName(i).stl_str();
-			timing += ": ";
-			std::stringstream stream;
-			stream << std::fixed << std::setprecision(3) << kbGPUTimeStamp::GetTimeStampMS(i);
-			timing += stream.str();
-			g_pRenderer->DrawDebugText( timing, 0.55f, curY, g_DebugTextSize, g_DebugTextSize, kbColor::green );
-		}
-	}
-
-	// Fog
-	m_FogColor_RenderThread = m_FogColor_GameThread;
-	m_FogStartDistance_RenderThread = m_FogStartDistance_GameThread;
-	m_FogEndDistance_RenderThread = m_FogEndDistance_GameThread;
-
-	// Post process
-	m_PostProcessSettings_RenderThread = m_PostProcessSettings_GameThread;
-
-	// Oculus
-	if ( IsRenderingToHMD() || IsUsingHMDTrackingOnly() ) {	
-
-		m_EyeRenderDesc[0] = ovr_GetRenderDesc( m_ovrSession, ovrEye_Left, m_HMDDesc.DefaultEyeFov[0] );
-		m_EyeRenderDesc[1] = ovr_GetRenderDesc( m_ovrSession, ovrEye_Right, m_HMDDesc.DefaultEyeFov[1] );
-
-		// Get both eye poses simultaneously, with IPD offset already included. 
-		ovrPosef HmdToEyePose[2] = { m_EyeRenderDesc[0].HmdToEyePose, m_EyeRenderDesc[1].HmdToEyePose };
-		ovr_GetEyePoses( m_ovrSession, m_FrameNum, ovrTrue, HmdToEyePose, m_EyeRenderPose, &m_SensorSampleTime );
-
-		for ( int iEye = 0; iEye < 2; iEye++ ) {
-
-			const kbMat4 gameCameraMatrix = m_RenderWindowList[0]->m_CameraRotation.ToMat4();
-			const kbVec3 rightVec = gameCameraMatrix[0].ToVec3();
-			const kbVec3 forwardVec = kbVec3( gameCameraMatrix[2].ToVec3().x, 0.0f, gameCameraMatrix[2].ToVec3().z ).Normalized();
-			float gameCameraYaw = acos( forwardVec.Dot( kbVec3::forward ) );
-
-			const Matrix4f rollPitchYaw = Matrix4f::RotationY( kbPI + gameCameraYaw );
-			const Quatf orientation = m_EyeRenderPose[iEye].Orientation;
-			Matrix4f finalRollPitchYaw  = rollPitchYaw * Matrix4f(m_EyeRenderPose[iEye].Orientation);
-			finalRollPitchYaw.M[0][0] *= -1.0f;
-			finalRollPitchYaw.M[0][1] *= -1.0f;
-			finalRollPitchYaw.M[0][2] *= -1.0f;
-			const Vector3f finalUp = finalRollPitchYaw.Transform(Vector3f(0,1,0));
-			const Vector3f finalForward = finalRollPitchYaw.Transform(Vector3f(0,0,1));
-			const Vector3f shiftedEyePos = rollPitchYaw.Transform( m_EyeRenderPose[iEye].Position ) + 
-										   Vector3f( m_RenderWindowList[0]->m_CameraPosition.x, m_RenderWindowList[0]->m_CameraPosition.y, m_RenderWindowList[0]->m_CameraPosition.z );
-			
-			const Matrix4f view = Matrix4f::LookAtLH(shiftedEyePos, shiftedEyePos - finalForward, finalUp);
-			
-			memcpy( &m_RenderWindowList[0]->m_EyeMatrices[iEye], &view, sizeof( Matrix4f ) );
-			m_RenderWindowList[0]->m_EyeMatrices[iEye].TransposeSelf();
-		}
-	}
-
-	kbGPUTimeStamp::UpdateFrameNum();
-	m_FrameNum++;
-}
-
-/**
- *	kbRenderer_DX11::SetReadyToRender
- */
-void kbRenderer_DX11::SetReadyToRender() {	
-	m_RenderThreadSync = 1;
 }
 
 /*
@@ -1904,7 +1179,8 @@ void kbRenderer_DX11::RenderScene() {
 			viewport.MaxDepth = 1.0f;
 		
 			const ovrMatrix4f proj = ovrMatrix4f_Projection( m_EyeRenderDesc[m_HMDPass].Fov, kbRenderer_DX11::Near_Plane, kbRenderer_DX11::Far_Plane, ovrProjection_None );
-			memcpy( &m_pCurrentRenderWindow->m_ProjectionMatrix, &proj, sizeof( ovrMatrix4f ) );
+			// HACK TODO
+/*			memcpy( &m_pCurrentRenderWindow->m_ProjectionMatrix, &proj, sizeof( ovrMatrix4f ) );
 			m_pCurrentRenderWindow->m_ProjectionMatrix.TransposeSelf();
 
 			m_pCurrentRenderWindow->m_ProjectionMatrix[2].z *= -1.0f;
@@ -1919,7 +1195,7 @@ void kbRenderer_DX11::RenderScene() {
 			FXMMATRIX inverseView = XMMatrixInverse( nullptr, XMMATRIXFromkbMat4( m_pCurrentRenderWindow->m_ViewMatrix ) );
 			m_pCurrentRenderWindow->m_CameraPosition.x = inverseView.m[3][0];
 			m_pCurrentRenderWindow->m_CameraPosition.y = inverseView.m[3][1];
-			m_pCurrentRenderWindow->m_CameraPosition.z = inverseView.m[3][2];
+			m_pCurrentRenderWindow->m_CameraPosition.z = inverseView.m[3][2];*/
 
 
 		} else {
@@ -1929,9 +1205,9 @@ void kbRenderer_DX11::RenderScene() {
 			viewport.MaxDepth = 1.0f;
 			viewport.TopLeftX = 0;
 			viewport.TopLeftY = 0;
-
+/*
 			if ( IsUsingHMDTrackingOnly() ) {
-				m_pCurrentRenderWindow->m_ViewMatrix = m_pCurrentRenderWindow->m_EyeMatrices[m_HMDPass];
+			/	m_pCurrentRenderWindow->m_ViewMatrix = m_pCurrentRenderWindow->m_EyeMatrices[m_HMDPass];
 				m_pCurrentRenderWindow->m_ViewProjectionMatrix = m_pCurrentRenderWindow->m_ViewMatrix * m_pCurrentRenderWindow->m_ProjectionMatrix;
 
 				XMMATRIX inverseProj = XMMatrixInverse( nullptr, XMMATRIXFromkbMat4( m_pCurrentRenderWindow->m_ViewProjectionMatrix ) );
@@ -1943,7 +1219,7 @@ void kbRenderer_DX11::RenderScene() {
 				m_pCurrentRenderWindow->m_CameraPosition.x = inverseView.m[3][0];
 				m_pCurrentRenderWindow->m_CameraPosition.y = inverseView.m[3][1];
 				m_pCurrentRenderWindow->m_CameraPosition.z = inverseView.m[3][2];
-			}
+			}*/
 		}
 
 		m_pDeviceContext->RSSetViewports( 1, &viewport );
@@ -1971,7 +1247,7 @@ void kbRenderer_DX11::RenderScene() {
 													  1);
 
 
-			std::vector<kbRenderObject*> & FirstPersonPassVisibleList = m_pCurrentRenderWindow->m_VisibleRenderObjects[RP_FirstPerson];
+			std::vector<kbRenderObject*> & FirstPersonPassVisibleList = m_pCurrentRenderWindow->GetVisibleRenderObjects( RP_FirstPerson );
 			for ( int i = 0; i < FirstPersonPassVisibleList.size(); i++ ) {
 				RenderModel( FirstPersonPassVisibleList[i], RP_FirstPerson );
 			}
@@ -1979,7 +1255,7 @@ void kbRenderer_DX11::RenderScene() {
 			// Render models that need to be lit
 			m_RenderState.SetDepthStencilState();
 
-			std::vector<kbRenderObject*> & LightingPassVisibleList = m_pCurrentRenderWindow->m_VisibleRenderObjects[RP_Lighting];
+			std::vector<kbRenderObject*> & LightingPassVisibleList = m_pCurrentRenderWindow->GetVisibleRenderObjects( RP_Lighting );
 			for ( int i = 0; i < LightingPassVisibleList.size(); i++ ) {
 				RenderModel( LightingPassVisibleList[i], RP_Lighting );
 			}
@@ -2002,7 +1278,7 @@ void kbRenderer_DX11::RenderScene() {
 			}
 
 			// Post-Lighting Render Pass
-			std::vector<kbRenderObject*> & PostLightingVisibleList = m_pCurrentRenderWindow->m_VisibleRenderObjects[RP_PostLighting];
+			std::vector<kbRenderObject*> & PostLightingVisibleList = m_pCurrentRenderWindow->GetVisibleRenderObjects( RP_PostLighting );
 			for ( int i = 0; i < PostLightingVisibleList.size(); i++ ) {
 				RenderModel( PostLightingVisibleList[i], RP_PostLighting );
 			}
@@ -2031,7 +1307,7 @@ void kbRenderer_DX11::RenderScene() {
 										 kbRenderState::BF_Zero,
 										 kbRenderState::BO_Add );
 
-			std::vector<kbRenderObject*> & InWorldUIVisibleList = m_pCurrentRenderWindow->m_VisibleRenderObjects[RP_PostLighting];
+			std::vector<kbRenderObject*> & InWorldUIVisibleList = m_pCurrentRenderWindow->GetVisibleRenderObjects( RP_PostLighting );
 			for ( int i = 0; i < InWorldUIVisibleList.size(); i++ ) {
 				RenderModel( InWorldUIVisibleList[i], RP_InWorldUI );
 			}
@@ -2105,11 +1381,11 @@ void kbRenderer_DX11::RenderScene() {
 			// Render mirror
 			ID3D11Texture2D* tex = nullptr;
 			ID3D11Texture2D * pBackBuffer = nullptr;
-			m_pCurrentRenderWindow->m_pSwapChain->GetBuffer( 0, __uuidof(ID3D11Texture2D), (LPVOID*) &pBackBuffer );
+			((kbRenderWindow_DX11*)m_pCurrentRenderWindow)->m_pSwapChain->GetBuffer( 0, __uuidof(ID3D11Texture2D), (LPVOID*) &pBackBuffer );
 			ovr_GetMirrorTextureBufferDX( m_ovrSession, m_MirrorTexture, IID_PPV_ARGS(&tex) );
 			m_pDeviceContext->CopyResource( pBackBuffer, tex );
 			tex->Release();
-			m_pCurrentRenderWindow->m_pSwapChain->Present( 0, 0 );
+			((kbRenderWindow_DX11*)m_pCurrentRenderWindow)->m_pSwapChain->Present( 0, 0 );
 		}
 
 		if ( GetAsyncKeyState( VK_SPACE ) ) {
@@ -2132,10 +1408,10 @@ void kbRenderer_DX11::RenderScene() {
 void kbRenderer_DX11::PreRenderCullAndSort() {
 
 	for ( int i = 0; i < NUM_RENDER_PASSES; i++ ) {
-		m_pCurrentRenderWindow->m_VisibleRenderObjects[i].clear();
+		m_pCurrentRenderWindow->GetVisibleRenderObjects(i).clear();
 	}
 
-	for ( auto iter = m_pCurrentRenderWindow->m_RenderObjectMap.begin(); iter != m_pCurrentRenderWindow->m_RenderObjectMap.end(); iter++ ) {
+	for ( auto iter = m_pCurrentRenderWindow->GetRenderObjectMap().begin(); iter != m_pCurrentRenderWindow->GetRenderObjectMap().end(); iter++ ) {
 
 		bool bIsVisible = true;
 
@@ -2143,7 +1419,7 @@ void kbRenderer_DX11::PreRenderCullAndSort() {
 
 		if ( renderObj.m_CullDistance > 0 ) {
 			const float cullDistSqr = renderObj.m_CullDistance * renderObj.m_CullDistance;
-			const float distToCamSqr = ( renderObj.m_Position - m_pCurrentRenderWindow->m_CameraPosition ).LengthSqr();
+			const float distToCamSqr = ( renderObj.m_Position - m_pCurrentRenderWindow->GetCameraPosition() ).LengthSqr();
 	
 			if ( distToCamSqr >= cullDistSqr ) {
 				bIsVisible = false;
@@ -2153,7 +1429,7 @@ void kbRenderer_DX11::PreRenderCullAndSort() {
 		}
 		
 		if ( bIsVisible ) {
-			m_pCurrentRenderWindow->m_VisibleRenderObjects[renderObj.m_RenderPass].push_back( &renderObj );
+			m_pCurrentRenderWindow->GetVisibleRenderObjects( renderObj.m_RenderPass ).push_back( &renderObj );
 		}
 	}
 }
@@ -2193,7 +1469,7 @@ void kbRenderer_DX11::RenderTranslucency() {
 								 kbRenderState::BO_Add,
 							     kbRenderState::CW_All );
 
-	for ( std::map< const void *, kbRenderObject * >::iterator iter = m_pCurrentRenderWindow->m_RenderParticleMap.begin(); iter != m_pCurrentRenderWindow->m_RenderParticleMap.end(); iter++ ) {
+	for ( auto iter = m_pCurrentRenderWindow->GetRenderParticleMap().begin(); iter != m_pCurrentRenderWindow->GetRenderParticleMap().end(); iter++ ) {
 		RenderModel( iter->second, RP_Translucent );
 	}
 
@@ -2471,8 +1747,7 @@ void kbRenderer_DX11::RenderMousePickerIds() {
 	m_pDeviceContext->OMSetRenderTargets( 1, &m_RenderTargets[MOUSE_PICKER_BUFFER].m_pRenderTargetView, m_pDepthStencilView );
 	m_RenderState.SetDepthStencilState();
 
-	std::map<const kbComponent *, kbRenderObject *>::iterator iter;
-	for ( iter = m_pCurrentRenderWindow->m_RenderObjectMap.begin(); iter != m_pCurrentRenderWindow->m_RenderObjectMap.end(); iter++ ) {
+	for ( auto iter = m_pCurrentRenderWindow->GetRenderObjectMap().begin(); iter != m_pCurrentRenderWindow->GetRenderObjectMap().end(); iter++ ) {
 		if ( iter->second->m_EntityId > 0 ) {
 			RenderModel( iter->second, RP_MousePicker );
 		}
@@ -2502,7 +1777,7 @@ void kbRenderer_DX11::Blit( kbRenderTexture *const src, kbRenderTexture *const d
 	kbShader *const pShader = m_pDebugShader;
 
 	if ( dest == nullptr ) {
-		m_pDeviceContext->OMSetRenderTargets( 1, &m_pCurrentRenderWindow->m_pRenderTargetView, m_pDepthStencilView );
+		m_pDeviceContext->OMSetRenderTargets( 1, &((kbRenderWindow_DX11*)m_pCurrentRenderWindow)->m_pRenderTargetView, m_pDepthStencilView );
 	} else {
 		m_pDeviceContext->OMSetRenderTargets( 1, &dest->m_pRenderTargetView, nullptr );
 	}
@@ -2830,7 +2105,7 @@ void kbRenderer_DX11::RenderPostProcess() {
 	RenderBloom();
 
 	if ( m_bRenderToHMD == false ) {
-		m_pDeviceContext->OMSetRenderTargets( 1, &m_pCurrentRenderWindow->m_pRenderTargetView, m_pDepthStencilView );
+		m_pDeviceContext->OMSetRenderTargets( 1, &((kbRenderWindow_DX11*)m_pCurrentRenderWindow)->m_pRenderTargetView, m_pDepthStencilView );
 	} else {
 		ID3D11RenderTargetView *const rtv = m_OculusTexture[m_HMDPass]->GetRTV();
 		m_pDeviceContext->OMSetRenderTargets( 1, &rtv, nullptr );
@@ -2843,7 +2118,7 @@ void kbRenderer_DX11::RenderPostProcess() {
 	m_pDeviceContext->IASetPrimitiveTopology( D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST );
 	m_pDeviceContext->RSSetState( m_pDefaultRasterizerState );
 
-	if ( m_pCurrentRenderWindow->m_RenderLightMap.size() == 0 )
+	if ( m_pCurrentRenderWindow->GetRenderLightMap().size() == 0 )
 	{
 		m_pDeviceContext->PSSetShaderResources( 0, 1, &m_RenderTargets[ACCUMULATION_BUFFER].m_pShaderResourceView );
 	}
@@ -2874,9 +2149,7 @@ void kbRenderer_DX11::RenderPostProcess() {
 	}
 
 	SetShaderMat4( "mvpMatrix", mvpMatrix, mappedResource.pData, varBindings );
-	SetShaderMat4( "inverseProjection", m_pCurrentRenderWindow->m_InverseProjectionMatrix, mappedResource.pData, varBindings );	
-	SetShaderVec4( "tint", m_PostProcessSettings_RenderThread.m_Tint, mappedResource.pData, varBindings );
-	SetShaderVec4( "additiveColor", m_PostProcessSettings_RenderThread.m_AdditiveColor, mappedResource.pData, varBindings );
+	SetShaderMat4( "inverseProjection", m_pCurrentRenderWindow->GetInverseProjectionMatrix(), mappedResource.pData, varBindings );	
 	SetShaderVec4( "fogColor", m_FogColor_RenderThread, mappedResource.pData, varBindings );
 	SetShaderFloat( "fogStartDistance", m_FogStartDistance_RenderThread, mappedResource.pData, varBindings );
 	SetShaderFloat( "fogEndDistance", m_FogEndDistance_RenderThread, mappedResource.pData, varBindings );
@@ -2900,7 +2173,8 @@ void kbRenderer_DX11::RenderPostProcess() {
  */
 void kbRenderer_DX11::RenderConsole() {
 	if ( m_bRenderToHMD == false ) {
-		m_pDeviceContext->OMSetRenderTargets( 1, &m_pCurrentRenderWindow->m_pRenderTargetView, m_pDepthStencilView );
+		kbRenderWindow_DX11 *const pCurWindow = (kbRenderWindow_DX11*)m_pCurrentRenderWindow;
+		m_pDeviceContext->OMSetRenderTargets( 1, &pCurWindow->m_pRenderTargetView, m_pDepthStencilView );
 	} else {
 		ID3D11RenderTargetView *const rtv = m_OculusTexture[0]->GetRTV();
 		m_pDeviceContext->OMSetRenderTargets( 1, &rtv, nullptr );
@@ -2926,18 +2200,17 @@ void kbRenderer_DX11::RenderConsole() {
 	HRESULT hr = m_pDeviceContext->Map( pConstantBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource );
 	kbErrorCheck( SUCCEEDED(hr), "Failed to map matrix buffer" );
 
-	SetShaderMat4( "modeMatrix", kbMat4::identity, mappedResource.pData, varBindings );
+	SetShaderMat4( "modelMatrix", kbMat4::identity, mappedResource.pData, varBindings );
 	SetShaderMat4( "modelViewMatrix", kbMat4::identity, mappedResource.pData, varBindings );
-	SetShaderMat4( "viewMatrix", m_pCurrentRenderWindow->m_ViewMatrix, mappedResource.pData, varBindings );
+	SetShaderMat4( "viewMatrix", m_pCurrentRenderWindow->GetViewMatrix(), mappedResource.pData, varBindings );
 
 	kbMat4 mvpMatrix = kbMat4::identity;
 	if ( m_bRenderToHMD ) {
 		mvpMatrix.MakeScale( kbVec3( 0.5f, 1.0f, 1.0f ) );
 	}
 	SetShaderMat4( "mvpMatrix", mvpMatrix, mappedResource.pData, varBindings );
-	SetShaderMat4( "projection", m_pCurrentRenderWindow->m_ViewProjectionMatrix, mappedResource.pData, varBindings );
-	SetShaderMat4( "inverseProjection", m_pCurrentRenderWindow->m_InverseProjectionMatrix, mappedResource.pData, varBindings );
-	SetShaderVec4( "cameraPosition", m_pCurrentRenderWindow->m_CameraPosition, mappedResource.pData, varBindings );
+	SetShaderMat4( "projection", m_pCurrentRenderWindow->GetViewProjectionMatrix(), mappedResource.pData, varBindings );
+	SetShaderMat4( "inverseProjection", m_pCurrentRenderWindow->GetInverseProjectionMatrix(), mappedResource.pData, varBindings );
 
 	m_pDeviceContext->Unmap( pConstantBuffer, 0 );
 	m_pDeviceContext->VSSetConstantBuffers( 0, 1, &pConstantBuffer );
@@ -2954,9 +2227,9 @@ void kbRenderer_DX11::RenderConsole() {
 }
 
 /**
- *	kbRenderer_DX11::LoadTexture
+ *	kbRenderer_DX11::LoadTexture_Internal
  */
-bool kbRenderer_DX11::LoadTexture( const char * name, int index, int width, int height ) {
+bool kbRenderer_DX11::LoadTexture_Internal( const char * name, int index, int width, int height ) {
 	if ( index < 0 || index >= Max_Num_Textures ) {
 		kbError( "Error - kbRenderer_DX11::LoadTexture() - Texture out of range with index %d", index );
 		return false;
@@ -2970,6 +2243,70 @@ bool kbRenderer_DX11::LoadTexture( const char * name, int index, int width, int 
 	m_pTextures[index] = new kbTexture( kbString(name) );
 
 	return true;
+}
+
+/**
+ *	kbRenderer_DX11:RenderSync_Internal
+ */
+void kbRenderer_DX11::RenderSync_Internal() {
+
+	// Oculus
+	if ( IsRenderingToHMD() || IsUsingHMDTrackingOnly() ) {	
+
+		m_EyeRenderDesc[0] = ovr_GetRenderDesc( m_ovrSession, ovrEye_Left, m_HMDDesc.DefaultEyeFov[0] );
+		m_EyeRenderDesc[1] = ovr_GetRenderDesc( m_ovrSession, ovrEye_Right, m_HMDDesc.DefaultEyeFov[1] );
+
+		// Get both eye poses simultaneously, with IPD offset already included. 
+		ovrPosef HmdToEyePose[2] = { m_EyeRenderDesc[0].HmdToEyePose, m_EyeRenderDesc[1].HmdToEyePose };
+		ovr_GetEyePoses( m_ovrSession, m_FrameNum, ovrTrue, HmdToEyePose, m_EyeRenderPose, &m_SensorSampleTime );
+
+		for ( int iEye = 0; iEye < 2; iEye++ ) {
+
+			const kbMat4 gameCameraMatrix = m_RenderWindowList[0]->GetCameraRotation().ToMat4();
+			const kbVec3 rightVec = gameCameraMatrix[0].ToVec3();
+			const kbVec3 forwardVec = kbVec3( gameCameraMatrix[2].ToVec3().x, 0.0f, gameCameraMatrix[2].ToVec3().z ).Normalized();
+			float gameCameraYaw = acos( forwardVec.Dot( kbVec3::forward ) );
+
+			const Matrix4f rollPitchYaw = Matrix4f::RotationY( kbPI + gameCameraYaw );
+			const Quatf orientation = m_EyeRenderPose[iEye].Orientation;
+			Matrix4f finalRollPitchYaw  = rollPitchYaw * Matrix4f(m_EyeRenderPose[iEye].Orientation);
+			finalRollPitchYaw.M[0][0] *= -1.0f;
+			finalRollPitchYaw.M[0][1] *= -1.0f;
+			finalRollPitchYaw.M[0][2] *= -1.0f;
+			const Vector3f finalUp = finalRollPitchYaw.Transform(Vector3f(0,1,0));
+			const Vector3f finalForward = finalRollPitchYaw.Transform(Vector3f(0,0,1));
+			const Vector3f shiftedEyePos = rollPitchYaw.Transform( m_EyeRenderPose[iEye].Position ) + 
+										   Vector3f( m_RenderWindowList[0]->GetCameraPosition().x, m_RenderWindowList[0]->GetCameraPosition().y, m_RenderWindowList[0]->GetCameraPosition().z );
+			
+			const Matrix4f view = Matrix4f::LookAtLH(shiftedEyePos, shiftedEyePos - finalForward, finalUp);
+			
+			memcpy( &((kbRenderWindow_DX11*)m_RenderWindowList[0])->m_EyeMatrices[iEye], &view, sizeof( Matrix4f ) );
+			((kbRenderWindow_DX11*)m_RenderWindowList[0])->m_EyeMatrices[iEye].TransposeSelf();
+		}
+	}
+
+	extern kbConsoleVariable g_ShowPerfTimers;
+	if ( g_ShowPerfTimers.GetBool() ) {
+
+		float curY = 0.1f;
+		curY += g_DebugLineSpacing;
+	
+		std::string gpuTimings = "GPU Timings";
+		g_pRenderer->DrawDebugText( gpuTimings, 0.55f, curY, g_DebugTextSize, g_DebugTextSize, kbColor::green );
+		curY += g_DebugLineSpacing;
+
+		for ( int i = 1; i < kbGPUTimeStamp::GetNumTimeStamps(); i++, curY += g_DebugLineSpacing ) {
+			std::string timing = kbGPUTimeStamp::GetTimeStampName(i).stl_str();
+			timing += ": ";
+			std::stringstream stream;
+			stream << std::fixed << std::setprecision(3) << kbGPUTimeStamp::GetTimeStampMS(i);
+			timing += stream.str();
+			g_pRenderer->DrawDebugText( timing, 0.55f, curY, g_DebugTextSize, g_DebugTextSize, kbColor::green );
+		}
+	}
+
+	kbGPUTimeStamp::UpdateFrameNum();
+	m_FrameNum++;
 }
 
 
@@ -3423,10 +2760,10 @@ void kbRenderer_DX11::RenderScreenSpaceQuads() {
 void kbRenderer_DX11::RenderScreenSpaceQuadImmediate( const int start_x, const int start_y, const int size_x, const int size_y, const int textureIndex, kbShader * pShader ) {
 	const unsigned int stride = sizeof( vertexLayout );
 	const unsigned int offset = 0;
-	const float xScale = size_x / m_RenderWindowList[0]->m_fViewPixelWidth;
-	const float yScale =  size_y / m_RenderWindowList[0]->m_fViewPixelHeight;
-	const float xPos = xScale + start_x / m_RenderWindowList[0]->m_fViewPixelHalfWidth;
-	const float yPos = yScale + start_y / m_RenderWindowList[0]->m_fViewPixelHalfHeight;
+	const float xScale = size_x / m_RenderWindowList[0]->GetFViewPixelWidth();
+	const float yScale =  size_y / m_RenderWindowList[0]->GetFViewPixelHeight();
+	const float xPos = xScale + start_x / m_RenderWindowList[0]->GetFViewPixelHalfWidth();
+	const float yPos = yScale + start_y / m_RenderWindowList[0]->GetFViewPixelHalfHeight();
 
 	if ( m_pTextures[textureIndex] == nullptr ) {
 		return;
@@ -3468,84 +2805,6 @@ void kbRenderer_DX11::RenderScreenSpaceQuadImmediate( const int start_x, const i
 	m_pDeviceContext->VSSetConstantBuffers( 0, 1, &pConstantBuffer );
 
 	m_pDeviceContext->Draw( 6, 0 );
-}
-
-/**
- *	kbRenderer_DX11::DrawBillboard
- */
-void kbRenderer_DX11::DrawBillboard( const kbVec3 & position, const kbVec2 & size, const int textureIndex, kbShader *const pShader, const int entityId ) {
-	debugDrawObject_t billboard;
-	billboard.m_Position = position;
-	billboard.m_Scale.Set( size.x, size.y, size.x );
-	billboard.m_pShader = pShader;
-	billboard.m_TextureIndex = textureIndex;
-	billboard.m_EntityId = entityId;
-
-	m_DebugBillboards_GameThread.push_back( billboard );
-}
-
-/**
- *	kbRenderer_DX11::DrawModel
- */
-void kbRenderer_DX11::DrawModel( const kbModel * pModel, const kbVec3 & position, const kbQuat & orientation, const kbVec3 & scale, const int entityId ) {
-	debugDrawObject_t model;
-	model.m_Position = position;
-	model.m_Orientation = orientation;
-	model.m_Scale = scale;
-	model.m_pModel = pModel;
-	model.m_EntityId = entityId;
-
-	m_DebugModels_GameThread.push_back( model );
-}
-
-/**
- *	kbRenderer_DX11::SetRenderViewTransform
- */
-void kbRenderer_DX11::SetRenderViewTransform( const HWND hwnd, const kbVec3 & position, const kbQuat & rotation ) {
-	int viewIndex = -1;
-
-	if ( hwnd == nullptr ) {
-		viewIndex = 0;
-	} else {
-		for ( int i = 0 ; i < m_RenderWindowList.size(); i++ ) {
-			if ( m_RenderWindowList[i]->m_Hwnd == hwnd ) {
-				viewIndex = i;
-				break;
-			}
-		}
-	}
-
-	if ( viewIndex < 0 || viewIndex >= m_RenderWindowList.size() ) {
-		kbError( "Invalid view index" );
-	}
-
-	m_RenderWindowList[viewIndex]->m_CameraPosition_GameThread = position;
-	m_RenderWindowList[viewIndex]->m_CameraRotation_GameThread = rotation;
-}
-
-/**
- *	kbRenderer_DX11::GetRenderViewTransform
- */
-void kbRenderer_DX11::GetRenderViewTransform( const HWND hwnd, kbVec3 & position, kbQuat & rotation ) {
-	int viewIndex = -1;
-
-	if ( hwnd == nullptr ) {
-		viewIndex = 0;
-	} else {
-		for ( int i = 0 ; i < m_RenderWindowList.size(); i++ ) {
-			if ( m_RenderWindowList[i]->m_Hwnd == hwnd ) {
-				viewIndex = i;
-				break;
-			}
-		}
-	}
-
-	if ( viewIndex < 0 || viewIndex >= m_RenderWindowList.size() ) {
-		kbError( "Invalid view index" );
-	}
-
-	position = m_RenderWindowList[viewIndex]->m_CameraPosition;
-	rotation = m_RenderWindowList[viewIndex]->m_CameraRotation;
 }
 
 /**
@@ -3659,19 +2918,19 @@ void kbRenderer_DX11::RenderModel( const kbRenderObject *const pRenderObject, co
 			const byte * pVarByteOffset = constantPtr + bindings[i].m_VarByteOffset;
 			if ( varName == "mvpMatrix" ) {
 				kbMat4 *const pMatOffset = (kbMat4*)pVarByteOffset;
-				*pMatOffset = worldMatrix * m_pCurrentRenderWindow->m_ViewProjectionMatrix;
+				*pMatOffset = worldMatrix * m_pCurrentRenderWindow->GetViewProjectionMatrix();
 			} else if ( varName == "vpMatrix" ) {
 				kbMat4 *const pMatOffset = (kbMat4*)pVarByteOffset;
-				*pMatOffset = m_pCurrentRenderWindow->m_ViewProjectionMatrix;
+				*pMatOffset = m_pCurrentRenderWindow->GetViewProjectionMatrix();
             } else if ( varName == "modelMatrix" ) {
 				kbMat4 *const pMatOffset = (kbMat4*)pVarByteOffset;
 				*pMatOffset = worldMatrix;
 			} else if ( varName == "cameraPos" ) {
 				kbVec4 *const pVecOffset = (kbVec4*)pVarByteOffset;
-				*pVecOffset = m_pCurrentRenderWindow->m_CameraPosition;
+				*pVecOffset = m_pCurrentRenderWindow->GetCameraPosition();
 			} else if ( varName == "viewProjection" ) {
 				kbMat4 *const pMatOffset = (kbMat4*)pVarByteOffset;
-				*pMatOffset = m_pCurrentRenderWindow->m_ViewProjectionMatrix;
+				*pMatOffset = m_pCurrentRenderWindow->GetViewProjectionMatrix();
 			} else if ( varName == "boneList" ) {
 				kbMat4 *const boneMatrices = (kbMat4*)pVarByteOffset;
 				for ( int i = 0; i < pRenderObject->m_MatrixList.size() && i < Max_Shader_Bones; i++ ) {
@@ -3771,136 +3030,6 @@ void kbRenderer_DX11::RenderModel( const kbRenderObject *const pRenderObject, co
 	}
 }
 	
-/**
- *	kbRenderer_DX11::DrawScreenSpaceQuad
- */
-void kbRenderer_DX11::DrawScreenSpaceQuad( const int start_x, const int start_y, const int size_x, const int size_y, const int textureIndex, kbShader *const pShader ) {
-	ScreenSpaceQuad_t quadToAdd;
-	quadToAdd.m_Pos.x = start_x;
-	quadToAdd.m_Pos.y = start_y;
-	quadToAdd.m_Size.x = size_x;
-	quadToAdd.m_Size.y = size_y;
-	quadToAdd.m_pShader = pShader;
-	quadToAdd.m_TextureIndex = textureIndex;
-
-	m_ScreenSpaceQuads_GameThread.push_back( quadToAdd );
-}
-
-#define AddVert( vert ) drawVert.position = vert; m_DebugLines_GameThread.push_back( drawVert );
-
-/**
- *	kbRenderer_DX11::DrawLine
- */
-void kbRenderer_DX11::DrawLine( const kbVec3 & start, const kbVec3 & end, const kbColor & color ) {
-
-	/*if ( m_DebugLines_GameThread.size() >= m_DebugLines_GameThread.capacity() - 2 ) {
-		return;
-	}*/
-
-	vertexLayout drawVert;
-
-	drawVert.Clear();
-	drawVert.SetColor( color );
-
-	AddVert( start );
-	AddVert( end );
-}
-
-/**
- *	kbRenderer_DX11::DrawBox
- */
-void kbRenderer_DX11::DrawBox( const kbBounds & bounds, const kbColor & color ) {
-
-	const kbVec3 maxVert = bounds.Max();
-	const kbVec3 minVert = bounds.Min();
-
-	const kbVec3 LTF( minVert.x, maxVert.y, maxVert.z );
-	const kbVec3 RTF( maxVert.x, maxVert.y, maxVert.z );
-	const kbVec3 RBF( maxVert.x, minVert.y, maxVert.z );
-	const kbVec3 LBF( minVert.x, minVert.y, maxVert.z );
-	const kbVec3 LTB( minVert.x, maxVert.y, minVert.z );
-	const kbVec3 RTB( maxVert.x, maxVert.y, minVert.z );
-	const kbVec3 RBB( maxVert.x, minVert.y, minVert.z );
-	const kbVec3 LBB( minVert.x, minVert.y, minVert.z );
-
-	vertexLayout drawVert;
-
-	drawVert.Clear();
-	drawVert.SetColor( color );
-
-	AddVert( LTF ); AddVert( RTF );
-	AddVert( RTF ); AddVert( RBF );
-	AddVert( RBF ); AddVert( LBF );
-	AddVert( LBF ); AddVert( LTF );
-
-	AddVert( LTB ); AddVert( RTB );
-	AddVert( RTB ); AddVert( RBB );
-	AddVert( RBB ); AddVert( LBB );
-	AddVert( LBB ); AddVert( LTB );
-
-	AddVert( LTF ); AddVert( LTB );
-	AddVert( RTF ); AddVert( RTB );
-	AddVert( LBF ); AddVert( LBB );
-	AddVert( RBF ); AddVert( RBB );
-}
-
-/**
- *	kbRenderer_DX11::DrawSphere
- */
-void kbRenderer_DX11::DrawSphere( const kbVec3 & origin, const float radius, const int InNumSegments, const kbColor & color ) {
-	const int numSegments = max( InNumSegments, 4 );
-	const float angleInc = 2.0f * kbPI / (float) numSegments;
-	float latitude = angleInc;
-	float curSin = 0, curCos = 1.0f;
-	//float cosX, sinX;
-	kbVec3 pt1, pt2, pt3, pt4;
-
-	vertexLayout drawVert;
-
-	drawVert.Clear();
-	drawVert.SetColor( color );
-
-	for ( int curYSeg = 0; curYSeg < numSegments; curYSeg++ ) {
-		const float nextSin = sin( latitude );
-		const float nextCos = cos( latitude );
-
-		pt1 = kbVec3( curSin, curCos, 0.0f ) * radius + origin;
-		pt3 = kbVec3( nextSin, nextCos, 0.0f ) * radius + origin;
-		float longitude = angleInc;
-		for ( int curXSeg = 0; curXSeg < numSegments; curXSeg++ ) {
-			float sinX = sin( longitude );
-			float cosX = cos( longitude );
-
-			pt2 = kbVec3( cosX * curSin, curCos, sinX * curSin ) * radius + origin;
-			pt4 = kbVec3( cosX * nextSin, nextCos, sinX * nextSin ) * radius + origin;
-			AddVert( pt1 ); AddVert( pt2 );
-			AddVert( pt1 ); AddVert( pt3 );
-			pt1 = pt2;
-			pt3 = pt4;
-			longitude += angleInc;
-		}
-
-		curSin = nextSin;
-		curCos = nextCos;
-		latitude += angleInc;
-	}
-}
-
-
-/*
- *	kbRenderer_DX11::DrawPreTransformedLine
- */
-void kbRenderer_DX11::DrawPreTransformedLine( const std::vector<kbVec3> & vertList, const kbColor & color ) {
-	vertexLayout drawVert;
-
-	drawVert.Clear();
-	drawVert.SetColor( color );
-
-	for ( int i = 0; i < vertList.size(); i++ ) {
-		drawVert.position = vertList[i];
-		m_DebugPreTransformedLines.push_back( drawVert );
-	}
-}
 
 /*
  *	kbRenderer_DX11::RenderPretransformedDebugLines
@@ -3990,7 +3119,7 @@ void kbRenderer_DX11::RenderDebugLines() {
 	hr = m_pDeviceContext->Map( pConstantBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource );
 	kbErrorCheck( SUCCEEDED(hr), "kbRenderer_DX11::RenderDebugLines() - Failed to map matrix buffer" );
 
-	SetShaderMat4( "mvpMatrix", m_pCurrentRenderWindow->m_ViewProjectionMatrix, mappedResource.pData, varBindings );
+	SetShaderMat4( "mvpMatrix", m_pCurrentRenderWindow->GetViewProjectionMatrix(), mappedResource.pData, varBindings );
 
 	m_pDeviceContext->Unmap( pConstantBuffer, 0 );
 	m_pDeviceContext->VSSetConstantBuffers( 0, 1, &pConstantBuffer );
@@ -4042,11 +3171,11 @@ void kbRenderer_DX11::RenderDebugBillboards( const bool bIsEntityIdPass ) {
 
 		byte *const pByteBuffer = (byte*) mappedResource.pData;
 
-		const kbMat4 preRotationMatrix = m_pCurrentRenderWindow->m_CameraRotation.ToMat4();
+		const kbMat4 preRotationMatrix = m_pCurrentRenderWindow->GetCameraRotation().ToMat4();
 		kbMat4 mvpMatrix;
 		mvpMatrix.MakeScale( currBillBoard.m_Scale );
 		mvpMatrix[3] = currBillBoard.m_Position;
-		mvpMatrix = preRotationMatrix * mvpMatrix * m_pCurrentRenderWindow->m_ViewProjectionMatrix;
+		mvpMatrix = preRotationMatrix * mvpMatrix * m_pCurrentRenderWindow->GetViewProjectionMatrix();
 		SetShaderMat4( "mvpMatrix", mvpMatrix, pByteBuffer, pShader->GetShaderVarBindings() );
 		m_pDeviceContext->Unmap( pConstantBuffer, 0 );
 		m_pDeviceContext->VSSetConstantBuffers( 0, 1, &pConstantBuffer );
@@ -4071,21 +3200,6 @@ void kbRenderer_DX11::RenderDebugBillboards( const bool bIsEntityIdPass ) {
 	}
 }
 
-/*
- *	kbRenderer_DX11::DrawDebugText
- */
-void kbRenderer_DX11::DrawDebugText( const std::string & theString, const float X, const float Y, const float ScreenCharW, const float ScreenCharH, const kbColor & Color ) {
-
-	m_DebugStrings_GameThread.push_back( kbTextInfo_t() );
-
-	kbTextInfo_t & newTextInfo = m_DebugStrings_GameThread[m_DebugStrings_GameThread.size() - 1];
-	newTextInfo.TextInfo = theString;
-	newTextInfo.screenX = X;
-	newTextInfo.screenY = Y;
-	newTextInfo.screenW = ScreenCharW;
-	newTextInfo.screenH = ScreenCharH;
-	newTextInfo.color = Color;
-}
 
 /**
  *	kbRenderer_DX11::GetEntityIdAtScreenPosition

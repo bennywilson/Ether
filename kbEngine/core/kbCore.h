@@ -113,6 +113,7 @@ template<typename T> inline T kbLerp( const T a, const T b, const float t ) { re
 
 void StringFromWString( std::string & outString, const std::wstring & srcString );
 void WStringFromString( std::wstring & outString, const std::string & srcString );
+void StringToLower( std::string & outString );
 
 std::string GetFileExtension( const std::string & FileName );
 std::wstring GetFileExtension( const std::wstring & FileName );

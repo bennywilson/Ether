@@ -2,7 +2,7 @@
 // EtherGame.h
 //
 //
-// 2016-2017 kbEngine 2.0
+// 2016-2018 kbEngine 2.0
 //===================================================================================================
 #ifndef _ETHERGAME_H_
 #define _ETHERGAME_H_
@@ -18,27 +18,6 @@ enum eCameraMode_t {
 	Cam_Free,
 };
 
-struct EtherUIButton {
-												EtherUIButton();
-
-	void										LoadButton( const std::string & modelName, const kbVec3 & localPosition );
-	void										ShutdownButton();
-	void										Update( const float deltaTimeSec );
-	void										SetCount( const int count );
-
-	bool										IsHighlighted() const;
-
-	class kbGameEntity *						m_pButtonEntity;
-	class kbModel *								m_pButtonModel;
-
-	class kbGameEntity *						m_pCountEntity[4];
-	class kbModel *								m_pCountModel[4];
-
-	kbVec3										m_LocalPosition;
-	kbShader *									m_pShader;
-
-	int											m_Count;
-};
 
 /**
  *	EtherGame
@@ -68,7 +47,6 @@ public:
 
 	const kbMat4 &								GetCrossHairLocalSpaceMatrix() const { return m_CrossHairLocalSpaceMatrix; }
 
-	bool										PressHighlightedButton();
 	bool										IsInSlomoMode() const { return m_SlomoStartTime > 0.0f; }
 	bool										IsOLCFiring() const { return m_OLCTimer > 0.0f; }
 	bool										IsAirstrikeInProgress() const { return  m_AirstrikeTimeLeft > 0.0f; }
@@ -130,15 +108,6 @@ protected:
 		GamePlay,
 	}											m_CurrentGameState;
 	int											m_VerseIdx;
-
-	enum EtherButtonTypes {
-		Airstrike = 0,
-		Stimpack,
-		OLC,
-		NUM_UI_BUTTONS
-	};
-
-	EtherUIButton								m_UIButtons[NUM_UI_BUTTONS];
 
 	// Cross hair stuff
 	kbGameEntity *								m_pCrossHairEntity;
