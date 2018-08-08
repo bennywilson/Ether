@@ -319,9 +319,6 @@ bool EtherWeaponComponent::Fire_Internal() {
 	const kbGameEntity *const pProjectileEntity = m_Projectile.GetEntity();
 
 	if ( pProjectileEntity != nullptr  && pWeaponModel != nullptr ) {
-		kbQuat WeaponOrientation;
-		kbMat4 WeaponMatrix;
-		kbVec3 WeaponPos;
 
 		EtherGame *const pEtherGame = static_cast<EtherGame*>( g_pGame );;
 		const kbCamera & gameCamera = pEtherGame->GetCamera();
@@ -339,8 +336,8 @@ bool EtherWeaponComponent::Fire_Internal() {
 		WeaponMatrix[2].Set( zAxis.x, zAxis.y, zAxis.z, 0.0f );
 		WeaponMatrix[3].Set( 0.0f, 0.0f, 0.0f, 1.0f );
 
-		WeaponOrientation = kbQuatFromMatrix( WeaponMatrix );
-		WeaponPos = GetOwner()->GetPosition();
+		const kbQuat WeaponOrientation = kbQuatFromMatrix( WeaponMatrix );
+		const kbVec3 WeaponPos = GetOwner()->GetPosition();
 
 		kbGameEntity *const newProjectile = g_pGame->CreateEntity( pProjectileEntity );
 		newProjectile->SetPosition( WeaponPos );
