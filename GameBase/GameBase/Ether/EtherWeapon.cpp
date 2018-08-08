@@ -288,21 +288,10 @@ bool EtherWeaponComponent::Fire_Internal() {
 		}
 
 		EtherSkelModelComponent *const pSkelModel = static_cast<EtherSkelModelComponent*>( pCurComponent );
-		/*if ( pSkelModel->IsFirstPersonModel() && pSkelModel->IsPlaying( ShootName ) ) {
-			return false;
-		}*/
-	}
-
-	for ( int i = 0; i < GetOwner()->NumComponents(); i++ ) {
-		kbComponent *const pCurComponent = GetOwner()->GetComponent(i);
-		if ( pCurComponent->IsA( EtherSkelModelComponent::GetType() ) == false ) {
-			continue;
-		}
-
-		EtherSkelModelComponent *const pSkelModel = static_cast<EtherSkelModelComponent*>( pCurComponent );
 		if ( pSkelModel->IsFirstPersonModel()  ) {
 			pSkelModel->PlayAnimation( kbString( ShootName ), -1.0f, true );
 			pWeaponModel = pSkelModel;
+			break;
 		}
 	}
 
@@ -338,39 +327,20 @@ bool EtherWeaponComponent::Fire_Internal() {
 		const kbCamera & gameCamera = pEtherGame->GetCamera();
 
 		// Determine projectile's orientation
-		if ( g_pInputManager->GetMouseBehavior() != kbInputManager::MB_LockToWindow || ( g_pD3D11Renderer->IsUsingHMDTrackingOnly() == false && g_pD3D11Renderer->IsRenderingToHMD() == false ) ) {
-			kbMat4 WeaponMatrix = pEtherGame->GetCrossHairLocalSpaceMatrix();
+		kbMat4 WeaponMatrix = GetOwner()->GetOrientation().ToMat4();
 
-			const kbVec3 aimAtPoint = gameCamera.m_Position + 9999.0f * WeaponMatrix[2].ToVec3();
-			const kbVec3 zAxis = ( aimAtPoint - GetOwner()->GetPosition() ).Normalized();
-			const kbVec3 xAxis = kbVec3::up.Cross( zAxis ).Normalized();
-			const kbVec3 yAxis = zAxis.Cross( xAxis ).Normalized();
+		const kbVec3 aimAtPoint = gameCamera.m_Position + 9999.0f * WeaponMatrix[2].ToVec3();
+		const kbVec3 zAxis = ( aimAtPoint - GetOwner()->GetPosition() ).Normalized();
+		const kbVec3 xAxis = kbVec3::up.Cross( zAxis ).Normalized();
+		const kbVec3 yAxis = zAxis.Cross( xAxis ).Normalized();
  
-			WeaponMatrix[0].Set( xAxis.x, xAxis.y, xAxis.z, 0.0f );
-			WeaponMatrix[1].Set( yAxis.x, yAxis.y, yAxis.z, 0.0f );
-			WeaponMatrix[2].Set( zAxis.x, zAxis.y, zAxis.z, 0.0f );
-			WeaponMatrix[3].Set( 0.0f, 0.0f, 0.0f, 1.0f );
+		WeaponMatrix[0].Set( xAxis.x, xAxis.y, xAxis.z, 0.0f );
+		WeaponMatrix[1].Set( yAxis.x, yAxis.y, yAxis.z, 0.0f );
+		WeaponMatrix[2].Set( zAxis.x, zAxis.y, zAxis.z, 0.0f );
+		WeaponMatrix[3].Set( 0.0f, 0.0f, 0.0f, 1.0f );
 
-			WeaponOrientation = kbQuatFromMatrix( WeaponMatrix * gameCamera.m_Rotation.ToMat4() );
-			WeaponPos = GetOwner()->GetPosition();
-
-		} else {
-
-			kbMat4 WeaponMatrix = pEtherGame->GetCrossHairLocalSpaceMatrix();
-
-			const kbVec3 aimAtPoint = WeaponMatrix[3].ToVec3();
-			const kbVec3 zAxis = ( aimAtPoint - GetOwner()->GetPosition() ).Normalized();
-			const kbVec3 xAxis = kbVec3::up.Cross( zAxis ).Normalized();
-			const kbVec3 yAxis = zAxis.Cross( xAxis ).Normalized();
- 
-			WeaponMatrix[0].Set( xAxis.x, xAxis.y, xAxis.z, 0.0f );
-			WeaponMatrix[1].Set( yAxis.x, yAxis.y, yAxis.z, 0.0f );
-			WeaponMatrix[2].Set( zAxis.x, zAxis.y, zAxis.z, 0.0f );
-			WeaponMatrix[3].Set( 0.0f, 0.0f, 0.0f, 1.0f );
-
-			WeaponOrientation = kbQuatFromMatrix( WeaponMatrix );
-			WeaponPos = GetOwner()->GetPosition();
-		}
+		WeaponOrientation = kbQuatFromMatrix( WeaponMatrix );
+		WeaponPos = GetOwner()->GetPosition();
 
 		kbGameEntity *const newProjectile = g_pGame->CreateEntity( pProjectileEntity );
 		newProjectile->SetPosition( WeaponPos );
@@ -378,17 +348,15 @@ bool EtherWeaponComponent::Fire_Internal() {
 
 		EtherProjectileComponent *const pProjectileComponent = static_cast<EtherProjectileComponent*>( newProjectile->GetComponentByType( EtherProjectileComponent::GetType() ) );
 
-		if ( pProjectileComponent == nullptr ) {
-			kbError( "EtherWeaponComponent::Fire - No Projectile Component found on the projectile entity :o" );
-		} else {
-			kbGameEntity * pParent = GetOwner();
-			while( pParent->GetOwner() != nullptr ) {
-				pParent = pParent->GetOwner();
-			}
+		kbErrorCheck( pProjectileComponent != nullptr, "EtherWeaponComponent::Fire - No Projectile Component found on the projectile entity :o" );
 
-			pProjectileComponent->m_OwnerEntity.SetEntity( pParent );
-			pProjectileComponent->Launch();
+		kbGameEntity * pParent = GetOwner();
+		while( pParent->GetOwner() != nullptr ) {
+			pParent = pParent->GetOwner();
 		}
+
+		pProjectileComponent->m_OwnerEntity.SetEntity( pParent );
+		pProjectileComponent->Launch();
 
 		// Muzzle Flash
 		kbParticleManager::CustomParticleInfo_t ParticleInfo;

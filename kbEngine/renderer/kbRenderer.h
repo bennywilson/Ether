@@ -96,6 +96,29 @@ private:
 };
 
 /**
+ *	kbRenderHook
+ *
+ *	Provides an interface for game code to hook into the render thread at various points
+ */
+class kbRenderHook {
+
+	friend kbRenderer;
+
+//-------------------------------------------------------------------------------------------------------------------------------------------------------------
+public:
+												kbRenderHook( const ERenderPass );
+												~kbRenderHook();
+
+	ERenderPass									GetRenderPass() const { return m_RenderPass; }
+
+private:
+
+	virtual void								RenderThreadCallBack() = 0;
+
+	ERenderPass									m_RenderPass;
+};
+
+/**
  *	kbRenderer
  */
 class kbRenderer {
@@ -114,6 +137,9 @@ public:
 	virtual int									CreateRenderView( HWND hwnd ) = 0;
 	virtual void								SetRenderWindow( HWND hwnd ) = 0
 ;
+	void										RegisterRenderHook( kbRenderHook *const pHook );
+	void										UnregisterRenderHook( kbRenderHook *const pHook );
+
 	// View Transform
 	virtual void								SetRenderViewTransform( const HWND hwnd, const kbVec3 & position, const kbQuat & rotation );
 	virtual void								GetRenderViewTransform( const HWND hwnd, kbVec3 & position, kbQuat & rotation );
@@ -194,9 +220,10 @@ protected:
 	int											Back_Buffer_Width;
 	int											Back_Buffer_Height;
 
-
 	kbRenderWindow *							m_pCurrentRenderWindow;    // the render window BeginScene was called with
 	std::vector<kbRenderWindow *>				m_RenderWindowList;
+
+	std::vector<kbRenderObject*>				m_RenderHooks[NUM_RENDER_PASSES];
 
 	struct ScreenSpaceQuad_t {
 												ScreenSpaceQuad_t() { }

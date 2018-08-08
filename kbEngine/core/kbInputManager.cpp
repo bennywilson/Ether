@@ -19,7 +19,8 @@ kbInputManager * g_pInputManager = nullptr;
 kbInputManager::kbInputManager() :
 	m_FuncXInputEnable( nullptr ),
 	m_FuncXInputGetState( nullptr ),
-	m_Hwnd( nullptr ) {
+	m_Hwnd( nullptr ),
+	m_MouseBehavior( MB_LockToCenter ) {
 
 	if ( g_pInputManager != nullptr ) {
 		kbError( "kbInputManager::kbInputManager() - g_pInputManager has already been set" );

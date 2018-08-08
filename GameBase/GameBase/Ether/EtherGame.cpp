@@ -209,27 +209,8 @@ void EtherGame::LevelLoaded_Internal() {
  */
 void EtherGame::Update_Internal( float DT ) {
 
-	if ( m_CurrentGameState == TitleScreen ) {
-		UpdateTitleScreen( DT );
-		m_Camera.m_Position = m_pLocalPlayer->GetPosition();
-		g_pD3D11Renderer->SetRenderViewTransform( nullptr, m_Camera.m_Position, m_Camera.m_Rotation );
-		return;
-	} else if ( m_CurrentGameState == VerseScreen ) {
-		UpdateVerseScreen( DT );
-		m_Camera.m_Position = m_pLocalPlayer->GetPosition();
-		g_pD3D11Renderer->SetRenderViewTransform( nullptr, m_Camera.m_Position, m_Camera.m_Rotation );
-		return;
-	}
-
 	if ( IsConsoleActive() == false ) {
 		ProcessInput( DT );
-	}
-	
-	if ( g_LockMouse.GetInt() == 0 ) {
-		g_pInputManager->SetMouseBehavior( kbInputManager::MB_LockToWindow );
-		UpdateMotionControls( DT );
-	} else {
-		g_pInputManager->SetMouseBehavior( kbInputManager::MB_LockToCenter );
 	}
 	
 	if ( ( g_pD3D11Renderer->IsRenderingToHMD() || g_pD3D11Renderer->IsUsingHMDTrackingOnly() ) && g_pD3D11Renderer->GetFrameNum() > 0 ) {
@@ -292,8 +273,6 @@ void EtherGame::Update_Internal( float DT ) {
 
 
 	UpdateWorld( DT );
-
-	UpdatePostProcess();
 }
 
 /**
@@ -427,51 +406,6 @@ void EtherGame::MoveActorAlongGround( EtherActorComponent *const pActor, const k
 	}
 
 	m_pWorldGenComponent->MoveActorAlongGround( pActor, startPt, endPt );
-}
-
-/**
- *	EtherGame::UpdateTitleScreen
- */
-static float dist = 11.0f;
-static float sizex = 16.0f;
-static float sizey = 9.0f;
-
-void EtherGame::UpdateTitleScreen( const float DeltaTimeSec ) {
-
-	// Place on ground
-	const kbMat4 orientation( kbVec4( 0.0f, 0.0f, -1.0f, 0.0f ), kbVec4( 0.0f, 1.0f, 0.0f, 0.0f ), kbVec4( -1.0f, 0.0f, 0.0f, 0.0f ), kbVec3::zero );
-	m_pLocalPlayer->SetOrientation( kbQuatFromMatrix( orientation ) );
-	m_Camera.m_Rotation = kbQuatFromMatrix( orientation );
-	m_Camera.m_RotationTarget = kbQuatFromMatrix( orientation );
-
-	g_pD3D11Renderer->DrawBillboard( m_pLocalPlayer->GetPosition() + m_pLocalPlayer->GetOrientation().ToMat4()[2].ToVec3() * dist, kbVec2( sizex, sizey ), 5, nullptr );
-
-	if ( GetAsyncKeyState( VK_SPACE ) ) {
-		POINT CursorPos;
-		GetCursorPos( &CursorPos );
-		RECT rc;
- 		GetClientRect( m_Hwnd, &rc );  
-		SetCursorPos( (rc.right - rc.left ) / 2, (rc.bottom - rc.top) / 2 );
-
-		m_CurrentGameState = VerseScreen;
-		m_GameStartTimer.Reset();
-
-		m_VerseIdx = rand() % 3;
-	}
-}
-
-void EtherGame::UpdateVerseScreen( const float DeltaTimeSec ) {
-	g_pD3D11Renderer->DrawBillboard( m_pLocalPlayer->GetPosition() + m_pLocalPlayer->GetOrientation().ToMat4()[2].ToVec3() * dist, kbVec2( sizex, sizey ), 5 + m_VerseIdx, nullptr );
-
-	if ( m_GameStartTimer.TimeElapsedSeconds() > 3 && GetAsyncKeyState( VK_SPACE ) ) {
-		m_CurrentGameState = GamePlay;
-		m_GameStartTimer.Reset();
-
-		if ( m_pLocalPlayer != nullptr && m_pLocalPlayer->GetChildEntities().size() > 0 ) {
-			kbGameEntity *const pEntity = m_pLocalPlayer->GetChildEntities()[0];
-		//	pEntity->SetPosition( pEntity->GetPosition() - kbVec3( 0.0f, 20000.0f, 0.0f ) );
-		}
-	}
 }
 
 /**
@@ -622,172 +556,6 @@ void EtherGame::AddPrefabToEntity( const kbPackage *const pPrefabPackage, const 
 			pNewComponent->Enable( true );
 		}
 	}
-}
-
-/**
- *	EtherGame::UpdateMotionControls
- */
-void EtherGame::UpdateMotionControls( const float deltaTimeSec ) {
-
-	if ( m_pLocalPlayer == nullptr || m_pLocalPlayer->GetActorComponent()->IsDead() ) {
-		return;
-	}
-
-	RECT clientRect;
-	GetClientRect( m_Hwnd, &clientRect );
-
-	const kbVec2 CursorPos( ( float )m_InputManager.GetMouseCursorPosition().x, ( float )m_InputManager.GetMouseCursorPosition().y );
-
-	kbMat4 weaponMatrix;
-
-	EtherWeaponComponent * pPlayerWeapon = nullptr;
-	if ( m_pLocalPlayer != nullptr && m_pLocalPlayer->GetChildEntities().size() > 0 ) {
-		kbGameEntity *const pEntity = m_pLocalPlayer->GetChildEntities()[0];
-		pPlayerWeapon = static_cast<EtherWeaponComponent*>( pEntity->GetComponentByType( EtherWeaponComponent::GetType() ) );
-	}
-
-	kbVec3 cursorScreenSpacePos( 2.0f * ( CursorPos.x / clientRect.right ) - 1.0f, -( ( 2.0f * CursorPos.y /  clientRect.bottom ) - 1.0f ), 0.0f );
-	cursorScreenSpacePos.x = kbClamp( cursorScreenSpacePos.x, -1.0f, 1.0f );
-	cursorScreenSpacePos.y = kbClamp( cursorScreenSpacePos.y, -1.0f, 1.0f );
-	
-	kbMat4 eyeMatrix;
-	if ( g_pD3D11Renderer->IsRenderingToHMD() || g_pD3D11Renderer->IsUsingHMDTrackingOnly()  ) {
-		eyeMatrix = g_pD3D11Renderer->GetEyeMatrices()[0];
-		eyeMatrix.InvertFast();
-	} else {
-		eyeMatrix = m_Camera.m_Rotation.ToMat4();
-		eyeMatrix.InvertFast();
-	}
-
-	const kbVec3 rightVec = eyeMatrix[0].ToVec3();
-	const kbVec3 upVec = eyeMatrix[1].ToVec3();
-	static float xAxisLength = 400.0f;
-	static float yAxisLength = xAxisLength * ( 900 / 1600.0f );
-	static float zAxisLength = 275.0f;
-
-	kbVec3 centerEyePos = m_Camera.m_Position;
-	if ( g_pD3D11Renderer->IsRenderingToHMD() || g_pD3D11Renderer->IsUsingHMDTrackingOnly() ) {
-		const ovrPosef *const hmdEyePos = g_pD3D11Renderer->GetOvrEyePose();
-		centerEyePos +=  ( ovrVecTokbVec3( hmdEyePos[0].Position ) + ovrVecTokbVec3( hmdEyePos[1].Position ) ) * 0.5f;
-	}
-
-	kbVec3 crossHair3DPos = centerEyePos + zAxisLength * eyeMatrix[2].ToVec3();
-	crossHair3DPos += rightVec * xAxisLength * cursorScreenSpacePos.x;
-	crossHair3DPos += upVec * yAxisLength * cursorScreenSpacePos.y;
-
-	kbMat4 invCam = ( g_pD3D11Renderer->IsRenderingToHMD() || g_pD3D11Renderer->IsUsingHMDTrackingOnly() ) ? ( g_pD3D11Renderer->GetEyeMatrices()[0] ) : ( m_Camera.m_Rotation.ToMat4() );
-	invCam.InvertFast();
-
-	static float crossHairWidth = 10.0f;
-	static float crossHairHeight = 10.0f;
-
-	{
-
-		m_CrossHairLocalSpaceMatrix[0].Set( invCam[0].x, invCam[0].y, invCam[0].z, 0.0f );
-		m_CrossHairLocalSpaceMatrix[1].Set( invCam[1].x, invCam[1].y, invCam[1].z, 0.0f );
-		m_CrossHairLocalSpaceMatrix[2].Set( invCam[2].x, invCam[2].y, invCam[2].z, 1.0f );
-	}
-
-	kbModel *const pModel = (kbModel*)g_ResourceManager.GetResource( "./assets/FX/crosshair.ms3d", true );
-	std::vector<kbShader *> ShaderOverrideList;
-	ShaderOverrideList.push_back( m_pTranslucentShader );
-
-	crossHair.m_Position = crossHair3DPos;
-	crossHair.m_Orientation = kbQuatFromMatrix( m_CrossHairLocalSpaceMatrix );
-	crossHair.m_pComponent = m_pCrossHairEntity->GetComponent( 0 );
-	g_pD3D11Renderer->UpdateRenderObject( crossHair );//m_pCrossHairEntity->GetComponent( 0 ), pModel, crossHair3DPos, kbQuatFromMatrix( m_CrossHairLocalSpaceMatrix ), kbVec3( 1.0f, 1.0f, 1.0f ), RP_InWorldUI, &ShaderOverrideList );
-
-	{
-		const kbVec3 aimAtPoint = crossHair3DPos;//m_pParent->GetPosition() + 9999.0f * WeaponMatrix[2].ToVec3();
-		const kbVec3 zAxis = ( aimAtPoint - pPlayerWeapon->GetOwner()->GetPosition() ).Normalized();
-		const kbVec3 xAxis = kbVec3::up.Cross( zAxis ).Normalized();
-		const kbVec3 yAxis = zAxis.Cross( xAxis ).Normalized();
-	
-		m_CrossHairLocalSpaceMatrix[0].Set( xAxis.x, xAxis.y, xAxis.z, 0.0f );
-		m_CrossHairLocalSpaceMatrix[1].Set( yAxis.x, yAxis.y, yAxis.z, 0.0f );
-		m_CrossHairLocalSpaceMatrix[2].Set( zAxis.x, zAxis.y, zAxis.z, 0.0f );
-		m_CrossHairLocalSpaceMatrix[3].Set( crossHair3DPos.x, crossHair3DPos.y, crossHair3DPos.z, 1.0f );
-	}
-
-	// Orient first person gun towards the cross hair
-	if ( pPlayerWeapon != nullptr ) {
-		const kbQuat weaponOrientation = kbQuatFromMatrix( m_CrossHairLocalSpaceMatrix );
-		pPlayerWeapon->GetOwner()->SetOrientation( weaponOrientation );
-
-		if ( m_pPlayerComponent->GetFPHands() != nullptr ) {
-			m_pPlayerComponent->GetFPHands()->GetOwner()->SetOrientation( kbQuatFromMatrix( invCam ) );
-			// hack to get hands skel model to update rotation
-			m_pPlayerComponent->GetFPHands()->Update( 0.016f );
-		}
-	}
-}
-
-/**
- *	EtherGame::UpdatePostProcess
- */
-void EtherGame::UpdatePostProcess() {
-
-	/*if ( m_pLocalPlayer == nullptr || m_pLocalPlayer->GetActorComponent() == nullptr ) {
-		return;
-	}
-
-	kbActorComponent *const playerActor = m_pLocalPlayer->GetActorComponent();
-
-	const float MaxDeathScreenRed = 2.0f;
-	const float t = playerActor->GetHealth() / playerActor->GetMaxHealth();
-	const float reverseT = 1.0f - t;
-
-	kbPostProcessSettings_t updatedPPSettings;
-	updatedPPSettings.m_Tint.r = kbClamp( ( MaxDeathScreenRed - 1.0f ) * reverseT + 1.0f, 0.0f, 5.0f );
-	updatedPPSettings.m_Tint.g = t;
-	updatedPPSettings.m_Tint.b = t;
-
-	if ( m_OLCPostProcess > 0.0f ) {
-		updatedPPSettings.m_AdditiveColor.r = m_OLCPostProcess;
-		updatedPPSettings.m_AdditiveColor.g = m_OLCPostProcess;
-		updatedPPSettings.m_AdditiveColor.b = m_OLCPostProcess;
-		updatedPPSettings.m_AdditiveColor.a = 0.0f;
-	} else if ( m_SlomoStartTime > 0.0f ) {
-		const float timeSinceSlomoActivated = g_GlobalTimer.TimeElapsedSeconds() - m_SlomoStartTime;
-		const float blendTime = 0.5f;
-		const float blendOutStartTime = g_SlomoLength - blendTime;
-
-		static bool bBlendingOut = false;
-
-		float finalBlend = 0.f;
-		if ( timeSinceSlomoActivated < blendTime ) {
-			finalBlend = timeSinceSlomoActivated / blendTime;
-
-			const float freq = 1.0f - ( ( 1.0f - 0.05f ) * finalBlend );
-			GetSoundManager().SetFrequencyRatio( 0.05f + freq );
-
-			bBlendingOut = false;
-
-		} else if ( timeSinceSlomoActivated > blendOutStartTime ) {
-			finalBlend = 1.0f - ( timeSinceSlomoActivated - blendOutStartTime ) / blendTime;
-
-			const float freq = 1.0f -  ( 1.0f - 0.05f ) * finalBlend;
-			GetSoundManager().SetFrequencyRatio( 0.05f + freq );
-
-		} else {
-			finalBlend = 1.0f;
-		}
-
-		if ( bBlendingOut == false && timeSinceSlomoActivated > g_SlomoLength * 0.75f ){
-			bBlendingOut = true;
-			GetSoundManager().PlayWave( m_pSlomoSound, 1.0f );
-		}
-
-		updatedPPSettings.m_Tint.a = finalBlend;
-
-	} else {
-		updatedPPSettings.m_Tint.a = 0.0f;
-	}
-
-	updatedPPSettings.m_AdditiveColor.x += m_OLCTint.x;
-	updatedPPSettings.m_AdditiveColor.y += m_OLCTint.y;
-	updatedPPSettings.m_AdditiveColor.z += m_OLCTint.z;
-	g_pD3D11Renderer->SetPostProcessSettings( updatedPPSettings );*/
 }
 
 /**

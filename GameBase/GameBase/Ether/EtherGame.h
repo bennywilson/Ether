@@ -64,16 +64,10 @@ protected:
 	virtual void								Update_Internal( const float deltaTimeSec );
 
 	void										ProcessInput( const float deltaTimeSec );
-	void										UpdateMotionControls( const float deltaTimeSec );
 	void										UpdateWorld( const float deltaTimeSec );
-	void										UpdatePostProcess();
 
 	void										AddPrefabToEntity( const kbPackage *const pPrefab, const std::string & prefabName, kbGameEntity *const pEntity, 
 																   const bool bComponentsOnly );
-
-	// Game State
-	void										UpdateTitleScreen( const float deltaTimeSec );
-	void										UpdateVerseScreen( const float deltaTimeSec );
 
 	// Power ups
 	void										ActivateStimPack();
