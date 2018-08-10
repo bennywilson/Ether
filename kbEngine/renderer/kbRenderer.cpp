@@ -204,6 +204,32 @@ kbRenderer::~kbRenderer() {
 void kbRenderer::Init( HWND hwnd, const int width, const int height, const bool bUseHMD, const bool bUseHMDTrackingOnly ) {
 	kbLog( "Initializing kbRenderer" );
 	Init_Internal( hwnd, width, height, bUseHMD, bUseHMDTrackingOnly );
+
+
+	// Kick off render thread
+	m_pRenderJob = new kbRenderJob();
+	g_pJobManager->RegisterJob( m_pRenderJob );
+}
+
+/**
+ *	kbRenderer::Shutdown
+ */
+void kbRenderer::Shutdown(){
+
+	kbLog( "Shutting down kbRenderer" );
+
+	// Wait for render thread to become idle
+	m_pRenderJob->RequestShutdown();
+	while( m_pRenderJob->IsJobFinished() == false ) { }
+	delete m_pRenderJob;
+	m_pRenderJob = nullptr;
+
+	for ( int i = 0; i < m_pRenderTargets.size(); i++) {
+		m_pRenderTargets[i]->Release();
+	}
+	m_pRenderTargets.clear();
+
+	Shutdown_Internal();
 }
 
 /**
@@ -867,8 +893,7 @@ void kbRenderer::DrawSphere( const kbVec3 & origin, const float radius, const in
 	}
 }
 
-
-/*
+/**
  *	kbRenderer_DX11::DrawPreTransformedLine
  */
 void kbRenderer::DrawPreTransformedLine( const std::vector<kbVec3> & vertList, const kbColor & color ) {
@@ -881,4 +906,19 @@ void kbRenderer::DrawPreTransformedLine( const std::vector<kbVec3> & vertList, c
 		drawVert.position = vertList[i];
 		m_DebugPreTransformedLines.push_back( drawVert );
 	}
+}
+
+/**
+ *	kbRenderHook::kbRenderHook
+ */
+kbRenderHook::kbRenderHook( const ERenderPass ) {
+
+
+}
+
+/**
+ *	kbRenderHook::~kbRenderHook
+ */
+kbRenderHook::~kbRenderHook() {
+
 }

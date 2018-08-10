@@ -18,6 +18,17 @@
 #include "kbComponent.h"
 #include "kbConsole.h"
 
+// Must match eTextureFormat
+DXGI_FORMAT kbTextureFormatToDXGITextureFormat[NUM_TEXTURE_FORMATS] = {
+	DXGI_FORMAT_UNKNOWN,
+	DXGI_FORMAT_R8G8B8A8_UNORM,
+	DXGI_FORMAT_R16G16B16A16_FLOAT,
+	DXGI_FORMAT_R32G32_FLOAT,
+	DXGI_FORMAT_R32_FLOAT,
+	DXGI_FORMAT_D24_UNORM_S8_UINT,
+	DXGI_FORMAT_R16G16_UINT,
+};
+
 // oculus
 #include "OVR_CAPI_D3D.h"
 #include "OVR_Math.h"
@@ -470,21 +481,31 @@ void kbRenderer_DX11::Init_Internal( HWND hwnd, const int frameWidth, const int 
 	const int deferredRTWidth = ( m_bRenderToHMD )?( m_EyeRenderViewport[0].Size.w * 2 ):( Back_Buffer_Width );
 	const int deferredRTHeight = ( m_bRenderToHMD )?( m_EyeRenderViewport[0].Size.h ):( Back_Buffer_Height );
 
-	CreateRenderTarget( eRenderTargetTexture::COLOR_BUFFER, deferredRTWidth, deferredRTHeight, DXGI_FORMAT_R16G16B16A16_FLOAT );
-	CreateRenderTarget( eRenderTargetTexture::NORMAL_BUFFER, deferredRTWidth, deferredRTHeight, DXGI_FORMAT_R16G16B16A16_FLOAT );
-	CreateRenderTarget( eRenderTargetTexture::SPECULAR_BUFFER, deferredRTWidth, deferredRTHeight, DXGI_FORMAT_R16G16B16A16_FLOAT );
-	CreateRenderTarget( eRenderTargetTexture::DEPTH_BUFFER, deferredRTWidth, deferredRTHeight, DXGI_FORMAT_R32G32_FLOAT );
-	CreateRenderTarget( eRenderTargetTexture::ACCUMULATION_BUFFER, deferredRTWidth, deferredRTHeight, DXGI_FORMAT_R16G16B16A16_FLOAT );
+/*
+	KBTEXTURE_NULLFORMAT,
+	KBTEXTURE_R8G8B8A8,
+	KBTEXTURE_R16G16B16A16,
+	KBTEXTURE_R32G32,
+	KBTEXTURE_R32,
+	KBTEXTURE_D24S8,
+	KBTEXTURE_R16G16,
+	NUM_TEXTURE_FORMATS,
+*/
+	CreateRenderTarget( deferredRTWidth, deferredRTHeight, KBTEXTURE_R16G16B16A16 );
+	CreateRenderTarget( deferredRTWidth, deferredRTHeight, KBTEXTURE_R16G16B16A16 );
+	CreateRenderTarget( deferredRTWidth, deferredRTHeight, KBTEXTURE_R16G16B16A16 );
+	CreateRenderTarget( deferredRTWidth, deferredRTHeight, KBTEXTURE_R32 );
+	CreateRenderTarget( deferredRTWidth, deferredRTHeight, KBTEXTURE_R16G16B16A16 );
 
 	const int shadowBufferSize = 2048;
-	CreateRenderTarget( eRenderTargetTexture::SHADOW_BUFFER, shadowBufferSize, shadowBufferSize, DXGI_FORMAT_R32_FLOAT );
-	CreateRenderTarget( eRenderTargetTexture::SHADOW_BUFFER_DEPTH, shadowBufferSize, shadowBufferSize, DXGI_FORMAT_D24_UNORM_S8_UINT );
+	CreateRenderTarget( shadowBufferSize, shadowBufferSize, KBTEXTURE_R32 );
+	CreateRenderTarget( shadowBufferSize, shadowBufferSize, KBTEXTURE_D24S8 );
 
-	CreateRenderTarget( eRenderTargetTexture::DOWN_RES_BUFFER, deferredRTWidth / 2, deferredRTHeight / 2, DXGI_FORMAT_R16G16B16A16_FLOAT );
-	CreateRenderTarget( eRenderTargetTexture::DOWN_RES_BUFFER_2, deferredRTWidth / 2, deferredRTHeight / 2, DXGI_FORMAT_R16G16B16A16_FLOAT );
-	CreateRenderTarget( eRenderTargetTexture::SCRATCH_BUFFER, deferredRTHeight / 2, deferredRTHeight / 2, DXGI_FORMAT_R16G16B16A16_FLOAT );
+	CreateRenderTarget( deferredRTWidth / 2, deferredRTHeight / 2, KBTEXTURE_R16G16B16A16 );
+	CreateRenderTarget( deferredRTWidth / 2, deferredRTHeight / 2, KBTEXTURE_R16G16B16A16 );
+	CreateRenderTarget( deferredRTHeight / 2, deferredRTHeight / 2, KBTEXTURE_R16G16B16A16 );
 
-	CreateRenderTarget( eRenderTargetTexture::MOUSE_PICKER_BUFFER, deferredRTWidth, deferredRTHeight, DXGI_FORMAT_R16G16_UINT );
+	CreateRenderTarget( deferredRTWidth, deferredRTHeight, KBTEXTURE_R16G16 );
 
 	// create back buffer
 	D3D11_TEXTURE2D_DESC depthBufferDesc = { 0 };
@@ -786,10 +807,6 @@ void kbRenderer_DX11::Init_Internal( HWND hwnd, const int frameWidth, const int 
 
 	hr = m_pDeviceContext->QueryInterface( __uuidof(m_pEventMarker), (void**)&m_pEventMarker );
 	kbErrorCheck( SUCCEEDED( hr ), " kbRenderer_DX11::Initialize() - Failed to query user defined annotation" );
-
-	// Kick off render thread
-	m_pRenderJob = new kbRenderJob();
-	g_pJobManager->RegisterJob( m_pRenderJob );
 }
 
 /**
@@ -926,19 +943,16 @@ int kbRenderer_DX11::CreateRenderView( HWND hwnd )
 	return (int)m_RenderWindowList.size() - 1;
 }
 
-/*
+/**
  *	kbRenderer_DX11::CreateRenderTarget
  */
-void kbRenderer_DX11::CreateRenderTarget( const eRenderTargetTexture index, const int width, const int height, const DXGI_FORMAT targetFormat ) {
+void kbRenderer_DX11::CreateRenderTarget( const int width, const int height, const eTextureFormat targetFormat ) {
 
-	kbRenderTexture & rt = m_RenderTargets[index];
-	kbErrorCheck( rt.m_pRenderTargetTexture == nullptr && rt.m_pRenderTargetView == nullptr && 
-				  rt.m_pShaderResourceView == nullptr && rt.m_pShaderResourceView == nullptr, "kbRenderer_DX11::CreateRenderTarget() - Called on an existing render target with index %d", (int) index );
-	
-	rt.m_Width = width;
-	rt.m_Height = height;
+	m_pRenderTargets.push_back( new kbRenderTexture_DX11( width, height, targetFormat ) );
 
-	if ( index == eRenderTargetTexture::SHADOW_BUFFER_DEPTH ) {
+	kbRenderTexture_DX11 & rt = *GetRenderTarget( (eRenderTargetTexture)(m_pRenderTargets.size() - 1) );
+
+	if ( targetFormat == KBTEXTURE_D24S8 ) {
 		// create back buffer
 		D3D11_TEXTURE2D_DESC depthBufferDesc = { 0 };
 		depthBufferDesc.Width = width;
@@ -952,7 +966,7 @@ void kbRenderer_DX11::CreateRenderTarget( const eRenderTargetTexture index, cons
 		depthBufferDesc.BindFlags = D3D11_BIND_DEPTH_STENCIL;
 		depthBufferDesc.CPUAccessFlags = 0;
 		depthBufferDesc.MiscFlags = 0;
-		m_pD3DDevice->CreateTexture2D( &depthBufferDesc, nullptr, &m_RenderTargets[index].m_pRenderTargetTexture );
+		m_pD3DDevice->CreateTexture2D( &depthBufferDesc, nullptr, &rt.m_pRenderTargetTexture );
 
 		D3D11_DEPTH_STENCIL_VIEW_DESC depthStencilViewDesc;
 		ZeroMemory( &depthStencilViewDesc, sizeof( depthStencilViewDesc ) );
@@ -960,7 +974,7 @@ void kbRenderer_DX11::CreateRenderTarget( const eRenderTargetTexture index, cons
 		depthStencilViewDesc.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
 		depthStencilViewDesc.Flags = 0;
 		depthStencilViewDesc.Texture2D.MipSlice = 0;
-		m_pD3DDevice->CreateDepthStencilView( m_RenderTargets[index].m_pRenderTargetTexture, &depthStencilViewDesc, &m_RenderTargets[index].m_pDepthStencilView );
+		m_pD3DDevice->CreateDepthStencilView( rt.m_pRenderTargetTexture, &depthStencilViewDesc, &rt.m_pDepthStencilView );
 
 		// Shader resource view
 	/*	D3D11_SHADER_RESOURCE_VIEW_DESC shaderResourceViewDesc;
@@ -970,7 +984,7 @@ void kbRenderer_DX11::CreateRenderTarget( const eRenderTargetTexture index, cons
 		shaderResourceViewDesc.Texture2D.MostDetailedMip = 0;
 		shaderResourceViewDesc.Texture2D.MipLevels = 1;
 	
-		HRESULT hr = m_pD3DDevice->CreateShaderResourceView( m_RenderTargets[index].m_pRenderTargetTexture, &shaderResourceViewDesc, &m_RenderTargets[index].m_pShaderResourceView );
+		HRESULT hr = m_pD3DDevice->CreateShaderResourceView( GetRenderTarget(index].m_pRenderTargetTexture, &shaderResourceViewDesc, &GetRenderTarget(index].m_pShaderResourceView );
 */
 		return;
 	}
@@ -980,7 +994,7 @@ void kbRenderer_DX11::CreateRenderTarget( const eRenderTargetTexture index, cons
 	textureDesc.Height = height;
 	textureDesc.MipLevels = 1;
 	textureDesc.ArraySize = 1;
-	textureDesc.Format = targetFormat;
+	textureDesc.Format = kbTextureFormatToDXGITextureFormat[targetFormat];
 	textureDesc.SampleDesc.Count = 1;
 	textureDesc.Usage = D3D11_USAGE_DEFAULT;
 	textureDesc.BindFlags = D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE;
@@ -988,7 +1002,7 @@ void kbRenderer_DX11::CreateRenderTarget( const eRenderTargetTexture index, cons
 	textureDesc.MiscFlags = 0;
 
 	HRESULT hr = m_pD3DDevice->CreateTexture2D( &textureDesc, nullptr, &rt.m_pRenderTargetTexture );
-	kbErrorCheck( SUCCEEDED( hr ), "kbRenderer_DX11::CreateRenderTarget() - Failed to create 2D texture for index", (int)index);
+	kbErrorCheck( SUCCEEDED( hr ), "kbRenderer_DX11::CreateRenderTarget() - Failed to create 2D texture with format", (int)targetFormat );
 
 	// Render target view
 	D3D11_RENDER_TARGET_VIEW_DESC renderTargetViewDesc;
@@ -996,8 +1010,8 @@ void kbRenderer_DX11::CreateRenderTarget( const eRenderTargetTexture index, cons
 	renderTargetViewDesc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2D;
 	renderTargetViewDesc.Texture2D.MipSlice = 0;
 
-	hr = m_pD3DDevice->CreateRenderTargetView( m_RenderTargets[index].m_pRenderTargetTexture, &renderTargetViewDesc, &m_RenderTargets[index].m_pRenderTargetView );
-	kbErrorCheck( SUCCEEDED( hr ), "kbRenderer_DX11::CreateRenderTarget() - Failed to create RTV for index", (int)index);
+	hr = m_pD3DDevice->CreateRenderTargetView( rt.m_pRenderTargetTexture, &renderTargetViewDesc, &rt.m_pRenderTargetView );
+	kbErrorCheck( SUCCEEDED( hr ), "kbRenderer_DX11::CreateRenderTarget() - Failed to create RTV with format", (int)targetFormat );
 
 	// Shader resource view
 	D3D11_SHADER_RESOURCE_VIEW_DESC shaderResourceViewDesc;
@@ -1006,22 +1020,14 @@ void kbRenderer_DX11::CreateRenderTarget( const eRenderTargetTexture index, cons
 	shaderResourceViewDesc.Texture2D.MostDetailedMip = 0;
 	shaderResourceViewDesc.Texture2D.MipLevels = 1;
 
-	hr = m_pD3DDevice->CreateShaderResourceView( m_RenderTargets[index].m_pRenderTargetTexture, &shaderResourceViewDesc, &m_RenderTargets[index].m_pShaderResourceView );
-	kbErrorCheck( SUCCEEDED( hr ), "kbRenderer_DX11::CreateRenderTarget() - Failed to create SRV texture for index", (int)index);
+	hr = m_pD3DDevice->CreateShaderResourceView( rt.m_pRenderTargetTexture, &shaderResourceViewDesc, &rt.m_pShaderResourceView );
+	kbErrorCheck( SUCCEEDED( hr ), "kbRenderer_DX11::CreateRenderTarget() - Failed to create SRV texture for index", (int)targetFormat );
 }
 
 /**
- *	kbRenderer_DX11::Shutdown
+ *	kbRenderer_DX11::Shutdown_Internal
  */
-void kbRenderer_DX11::Shutdown() {
-
-	kbLog( "Shutting down kbRenderer" );
-
-	// Wait for render thread to become idle
-	m_pRenderJob->RequestShutdown();
-	while( m_pRenderJob->IsJobFinished() == false ) { }
-	delete m_pRenderJob;
-	m_pRenderJob = nullptr;
+void kbRenderer_DX11::Shutdown_Internal() {
 
 	for ( int i = 0; i < Max_Num_Textures; i++ ) {
 		if ( m_pTextures[i] != nullptr ) {
@@ -1040,10 +1046,6 @@ void kbRenderer_DX11::Shutdown() {
 		delete m_RenderWindowList[i];
 	}
 	m_RenderWindowList.clear();
-
-	for ( int i = 0; i < eRenderTargetTexture::NUM_RENDER_TARGETS; i++) {
-		m_RenderTargets[i].Release();
-	}
 
 	SAFE_RELEASE( m_DebugVertexBuffer );
 	SAFE_RELEASE( m_DebugPreTransformedVertexBuffer );
@@ -1107,7 +1109,7 @@ void kbRenderer_DX11::Shutdown() {
  *	kbRenderer_DX11::SetRenderTarget
  */
 void kbRenderer_DX11::SetRenderTarget( eRenderTargetTexture type ) {
-	m_pDeviceContext->OMSetRenderTargets( 1, &m_RenderTargets[type].m_pRenderTargetView, m_pDepthStencilView );
+	m_pDeviceContext->OMSetRenderTargets( 1, &GetRenderTarget(type)->m_pRenderTargetView, m_pDepthStencilView );
 }
 
 /**
@@ -1150,11 +1152,11 @@ void kbRenderer_DX11::RenderScene() {
 
 		{
 			START_SCOPED_RENDER_TIMER( RENDER_THREAD_CLEAR_BUFFERS );
-			m_pDeviceContext->ClearRenderTargetView( m_RenderTargets[COLOR_BUFFER].m_pRenderTargetView, color );
-			m_pDeviceContext->ClearRenderTargetView( m_RenderTargets[NORMAL_BUFFER].m_pRenderTargetView, color );
-			m_pDeviceContext->ClearRenderTargetView( m_RenderTargets[SPECULAR_BUFFER].m_pRenderTargetView, color );
-			m_pDeviceContext->ClearRenderTargetView( m_RenderTargets[DEPTH_BUFFER].m_pRenderTargetView, color );
-			m_pDeviceContext->ClearRenderTargetView( m_RenderTargets[ACCUMULATION_BUFFER].m_pRenderTargetView, color );
+			m_pDeviceContext->ClearRenderTargetView( GetRenderTarget(COLOR_BUFFER)->m_pRenderTargetView, color );
+			m_pDeviceContext->ClearRenderTargetView( GetRenderTarget(NORMAL_BUFFER)->m_pRenderTargetView, color );
+			m_pDeviceContext->ClearRenderTargetView( GetRenderTarget(SPECULAR_BUFFER)->m_pRenderTargetView, color );
+			m_pDeviceContext->ClearRenderTargetView( GetRenderTarget(DEPTH_BUFFER)->m_pRenderTargetView, color );
+			m_pDeviceContext->ClearRenderTargetView( GetRenderTarget(ACCUMULATION_BUFFER)->m_pRenderTargetView, color );
 			m_pDeviceContext->ClearDepthStencilView( m_pDepthStencilView, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1, 0 );
 		}
 
@@ -1164,7 +1166,7 @@ void kbRenderer_DX11::RenderScene() {
 			m_pDeviceContext->RSSetState( m_pWireFrameRasterizerState );
 		}
 
-		ID3D11RenderTargetView * RenderTargetViews[] = { m_RenderTargets[COLOR_BUFFER].m_pRenderTargetView, m_RenderTargets[NORMAL_BUFFER].m_pRenderTargetView, m_RenderTargets[SPECULAR_BUFFER].m_pRenderTargetView, m_RenderTargets[DEPTH_BUFFER].m_pRenderTargetView };
+		ID3D11RenderTargetView * RenderTargetViews[] = { GetRenderTarget(COLOR_BUFFER)->m_pRenderTargetView, GetRenderTarget(NORMAL_BUFFER)->m_pRenderTargetView, GetRenderTarget(SPECULAR_BUFFER)->m_pRenderTargetView, GetRenderTarget(DEPTH_BUFFER)->m_pRenderTargetView };
 	
 		m_pDeviceContext->OMSetRenderTargets( 4, RenderTargetViews, m_pDepthStencilView );
 
@@ -1271,10 +1273,10 @@ void kbRenderer_DX11::RenderScene() {
 			START_SCOPED_RENDER_TIMER( RENDER_UNLIT )
 
 			m_RenderState.SetDepthStencilState();
-			m_pDeviceContext->OMSetRenderTargets( 1, &m_RenderTargets[ACCUMULATION_BUFFER].m_pRenderTargetView, m_pDepthStencilView );
+			m_pDeviceContext->OMSetRenderTargets( 1, &GetRenderTarget(ACCUMULATION_BUFFER)->m_pRenderTargetView, m_pDepthStencilView );
 
 			if ( m_ViewMode == ViewMode_Wireframe ) {
-				m_pDeviceContext->CopyResource( m_RenderTargets[ACCUMULATION_BUFFER].m_pRenderTargetTexture, m_RenderTargets[COLOR_BUFFER].m_pRenderTargetTexture );
+				m_pDeviceContext->CopyResource( GetRenderTarget(ACCUMULATION_BUFFER)->m_pRenderTargetTexture, GetRenderTarget(COLOR_BUFFER)->m_pRenderTargetTexture );
 			}
 
 			// Post-Lighting Render Pass
@@ -1440,7 +1442,7 @@ void kbRenderer_DX11::PreRenderCullAndSort() {
 void kbRenderer_DX11::RenderTranslucency() {
 	START_SCOPED_RENDER_TIMER( RENDER_TRANSLUCENCY );
 
-	m_pDeviceContext->OMSetRenderTargets( 1, &m_RenderTargets[ACCUMULATION_BUFFER].m_pRenderTargetView, m_pDepthStencilView );
+	m_pDeviceContext->OMSetRenderTargets( 1, &GetRenderTarget(ACCUMULATION_BUFFER)->m_pRenderTargetView, m_pDepthStencilView );
 
 	m_RenderState.SetDepthStencilState(	true,
 										kbRenderState::DepthWriteMaskZero,
@@ -1733,18 +1735,18 @@ void kbRenderer_DX11::RenderMousePickerIds() {
 	START_SCOPED_RENDER_TIMER( RENDER_ENTITYID )
 
 	const float color[4] = { 0.0f, 0.0f, 0.0f, 0.0f };
-	m_pDeviceContext->ClearRenderTargetView( m_RenderTargets[MOUSE_PICKER_BUFFER].m_pRenderTargetView, color );
+	m_pDeviceContext->ClearRenderTargetView( GetRenderTarget(MOUSE_PICKER_BUFFER)->m_pRenderTargetView, color );
 	m_pDeviceContext->ClearDepthStencilView( m_pDepthStencilView, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1, 0 );
 
 	D3D11_VIEWPORT viewport;
 	viewport.TopLeftX = 0.0f;
 	viewport.TopLeftY = 0.0f;
-	viewport.Width = ( float )m_RenderTargets[MOUSE_PICKER_BUFFER].m_Width;
-	viewport.Height = ( float )m_RenderTargets[MOUSE_PICKER_BUFFER].m_Height;
+	viewport.Width = ( float )GetRenderTarget(MOUSE_PICKER_BUFFER)->GetWidth();
+	viewport.Height = ( float )GetRenderTarget(MOUSE_PICKER_BUFFER)->GetHeight();
 	viewport.MinDepth = 0;
 	viewport.MaxDepth = 1.0f;
 	m_pDeviceContext->RSSetViewports( 1, &viewport );
-	m_pDeviceContext->OMSetRenderTargets( 1, &m_RenderTargets[MOUSE_PICKER_BUFFER].m_pRenderTargetView, m_pDepthStencilView );
+	m_pDeviceContext->OMSetRenderTargets( 1, &GetRenderTarget(MOUSE_PICKER_BUFFER)->m_pRenderTargetView, m_pDepthStencilView );
 	m_RenderState.SetDepthStencilState();
 
 	for ( auto iter = m_pCurrentRenderWindow->GetRenderObjectMap().begin(); iter != m_pCurrentRenderWindow->GetRenderObjectMap().end(); iter++ ) {
@@ -1770,11 +1772,14 @@ void kbRenderer_DX11::RenderMousePickerIds() {
 /**
  *	kbRenderer_DX11::Blit
  */
-void kbRenderer_DX11::Blit( kbRenderTexture *const src, kbRenderTexture *const dest ) {
+void kbRenderer_DX11::Blit( kbRenderTexture *const inSrc, kbRenderTexture *const inDest ) {
 	const unsigned int stride = sizeof( vertexLayout );
 	const unsigned int offset = 0;
 
 	kbShader *const pShader = m_pDebugShader;
+
+	kbRenderTexture_DX11 *const src = (kbRenderTexture_DX11*)inSrc;
+	kbRenderTexture_DX11 *const dest = (kbRenderTexture_DX11*)inDest;
 
 	if ( dest == nullptr ) {
 		m_pDeviceContext->OMSetRenderTargets( 1, &((kbRenderWindow_DX11*)m_pCurrentRenderWindow)->m_pRenderTargetView, m_pDepthStencilView );
@@ -1865,8 +1870,8 @@ void kbRenderer_DX11::RenderBloom() {
 	D3D11_VIEWPORT viewport;
 	viewport.TopLeftX = 0.0f;
 	viewport.TopLeftY = 0.0f;
-	viewport.Width = ( float )m_RenderTargets[DOWN_RES_BUFFER].m_Width;
-	viewport.Height = ( float )m_RenderTargets[DOWN_RES_BUFFER].m_Height;
+	viewport.Width = ( float )GetRenderTarget(DOWN_RES_BUFFER)->GetWidth();
+	viewport.Height = ( float )GetRenderTarget(DOWN_RES_BUFFER)->GetHeight();
 	viewport.MinDepth = 0;
 	viewport.MaxDepth = 1.0f;
 	m_pDeviceContext->RSSetViewports( 1, &viewport );
@@ -1875,7 +1880,7 @@ void kbRenderer_DX11::RenderBloom() {
 	// Gather
 	///////////////////////////////
 	{
-		m_pDeviceContext->OMSetRenderTargets( 1, &m_RenderTargets[DOWN_RES_BUFFER].m_pRenderTargetView, nullptr );
+		m_pDeviceContext->OMSetRenderTargets( 1, &GetRenderTarget(DOWN_RES_BUFFER)->m_pRenderTargetView, nullptr );
 		const unsigned int stride = sizeof( vertexLayout );
 		const unsigned int offset = 0;
 
@@ -1883,7 +1888,7 @@ void kbRenderer_DX11::RenderBloom() {
 		m_pDeviceContext->IASetPrimitiveTopology( D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST );
 		m_pDeviceContext->RSSetState( m_pDefaultRasterizerState );
 
-		m_pDeviceContext->PSSetShaderResources( 0, 1, &m_RenderTargets[ACCUMULATION_BUFFER].m_pShaderResourceView );
+		m_pDeviceContext->PSSetShaderResources( 0, 1, &GetRenderTarget(ACCUMULATION_BUFFER)->m_pShaderResourceView );
 		ID3D11SamplerState *const samplerState[] = { m_pNormalMapSamplerState };
 
 		m_pDeviceContext->PSSetSamplers( 0, 1, samplerState );
@@ -1920,7 +1925,7 @@ void kbRenderer_DX11::RenderBloom() {
 	// Horizontal blur
 	///////////////////////////////
 	{
-		m_pDeviceContext->OMSetRenderTargets( 1, &m_RenderTargets[DOWN_RES_BUFFER_2].m_pRenderTargetView, nullptr );
+		m_pDeviceContext->OMSetRenderTargets( 1, &GetRenderTarget(DOWN_RES_BUFFER_2)->m_pRenderTargetView, nullptr );
 		const unsigned int stride = sizeof( vertexLayout );
 		const unsigned int offset = 0;
 
@@ -1928,7 +1933,7 @@ void kbRenderer_DX11::RenderBloom() {
 		m_pDeviceContext->IASetPrimitiveTopology( D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST );
 		m_pDeviceContext->RSSetState( m_pDefaultRasterizerState );
 
-		m_pDeviceContext->PSSetShaderResources( 0, 1, &m_RenderTargets[DOWN_RES_BUFFER].m_pShaderResourceView );
+		m_pDeviceContext->PSSetShaderResources( 0, 1, &GetRenderTarget(DOWN_RES_BUFFER)->m_pShaderResourceView );
 		ID3D11SamplerState * samplerState[] = { m_pNormalMapSamplerState };
 
 		m_pDeviceContext->PSSetSamplers( 0, 1, samplerState );
@@ -1953,7 +1958,7 @@ void kbRenderer_DX11::RenderBloom() {
 		SetShaderMat4( "mvpMatrix", mvpMatrix, (byte*) mappedResource.pData, varBindings );
 		SetShaderInt( "numSamples", 5, (byte*) mappedResource.pData, varBindings );
 
-		const float texelSize = 1.0f / m_RenderTargets[DOWN_RES_BUFFER_2].m_Width;
+		const float texelSize = 1.0f / GetRenderTarget(DOWN_RES_BUFFER_2)->GetWidth();
 		kbVec4 offsetsAndWeights[5];
 		offsetsAndWeights[0].Set( 0.0f * texelSize, 0.0f, 0.22702f, 0.0f );
 		offsetsAndWeights[1].Set( 1.0f * texelSize, 0.0f, 0.19459f, 0.0f );
@@ -1969,7 +1974,7 @@ void kbRenderer_DX11::RenderBloom() {
 		// Draw
 		m_pDeviceContext->Draw( 6, 0 );
 
-		ID3D11ShaderResourceView * nullarray[] = { nullptr, nullptr };//'{ m_RenderTargets[ACCUMULATION_BUFFER].m_pShaderResourceView, m_RenderTargets[COLOR_BUFFER].m_pShaderResourceView };
+		ID3D11ShaderResourceView * nullarray[] = { nullptr, nullptr };//'{ GetRenderTarget(ACCUMULATION_BUFFER)->m_pShaderResourceView, GetRenderTarget(COLOR_BUFFER)->m_pShaderResourceView };
 		m_pDeviceContext->PSSetShaderResources( 0, 2, nullarray );
 	}
 
@@ -1977,7 +1982,7 @@ void kbRenderer_DX11::RenderBloom() {
 	// Vertical blur
 	///////////////////////////////
 	{
-		m_pDeviceContext->OMSetRenderTargets( 1, &m_RenderTargets[DOWN_RES_BUFFER].m_pRenderTargetView, nullptr );
+		m_pDeviceContext->OMSetRenderTargets( 1, &GetRenderTarget(DOWN_RES_BUFFER)->m_pRenderTargetView, nullptr );
 		const unsigned int stride = sizeof( vertexLayout );
 		const unsigned int offset = 0;
 
@@ -1985,7 +1990,7 @@ void kbRenderer_DX11::RenderBloom() {
 		m_pDeviceContext->IASetPrimitiveTopology( D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST );
 		m_pDeviceContext->RSSetState( m_pDefaultRasterizerState );
 
-		m_pDeviceContext->PSSetShaderResources( 0, 1, &m_RenderTargets[DOWN_RES_BUFFER_2].m_pShaderResourceView );
+		m_pDeviceContext->PSSetShaderResources( 0, 1, &GetRenderTarget(DOWN_RES_BUFFER_2)->m_pShaderResourceView );
 		ID3D11SamplerState * samplerState[] = { m_pNormalMapSamplerState };
 
 		// Set constants
@@ -2007,7 +2012,7 @@ void kbRenderer_DX11::RenderBloom() {
 		SetShaderMat4( "mvpMatrix", mvpMatrix, (byte*) mappedResource.pData, varBindings );
 		SetShaderInt( "numSamples", 5, (byte*) mappedResource.pData, varBindings );
 
-		const float texelSize = 1.0f / m_RenderTargets[DOWN_RES_BUFFER_2].m_Width;
+		const float texelSize = 1.0f / GetRenderTarget(DOWN_RES_BUFFER_2)->GetWidth();
 		kbVec4 offsetsAndWeights[5];
 		offsetsAndWeights[0].Set( 0.0f * texelSize, 0.0f, 0.22702f, 0.0f );
 		offsetsAndWeights[1].Set( 1.0f * texelSize, 0.0f, 0.19459f, 0.0f );
@@ -2048,9 +2053,9 @@ void kbRenderer_DX11::RenderBloom() {
 							     kbRenderState::CW_All );
 
 		m_pDeviceContext->RSSetViewports( 1, &viewport );
-		m_pDeviceContext->OMSetRenderTargets( 1, &m_RenderTargets[ACCUMULATION_BUFFER].m_pRenderTargetView, nullptr );
+		m_pDeviceContext->OMSetRenderTargets( 1, &GetRenderTarget(ACCUMULATION_BUFFER)->m_pRenderTargetView, nullptr );
 
-		ID3D11ShaderResourceView *const  RenderTargetViews[] = { m_RenderTargets[DOWN_RES_BUFFER].m_pShaderResourceView };
+		ID3D11ShaderResourceView *const  RenderTargetViews[] = { GetRenderTarget(DOWN_RES_BUFFER)->m_pShaderResourceView };
 		ID3D11SamplerState *const  SamplerStates[] = { m_pBasicSamplerState };
 		m_pDeviceContext->IASetInputLayout( (ID3D11InputLayout*)m_pSimpleAdditiveShader->GetVertexLayout() );
 		m_pDeviceContext->VSSetShader( (ID3D11VertexShader *)this->m_pSimpleAdditiveShader->GetVertexShader(), nullptr, 0 );
@@ -2092,14 +2097,14 @@ void kbRenderer_DX11::RenderPostProcess() {
 	START_SCOPED_RENDER_TIMER( RENDER_POST_PROCESS );
 
 	if ( m_ViewMode == ViewMode_Wireframe ) {
-		Blit( &m_RenderTargets[ACCUMULATION_BUFFER], nullptr );
+		Blit( GetRenderTarget(ACCUMULATION_BUFFER), nullptr );
 		return;
 	} else if ( m_ViewMode == ViewMode_Normals ) {
-		Blit( &m_RenderTargets[NORMAL_BUFFER], nullptr );
+		Blit( GetRenderTarget(NORMAL_BUFFER), nullptr );
 	} else if ( m_ViewMode == ViewMode_Specular ) {
-		Blit( &m_RenderTargets[SPECULAR_BUFFER], nullptr );
+		Blit( GetRenderTarget(SPECULAR_BUFFER), nullptr );
 	} else if ( m_ViewMode == ViewMode_Depth ) {
-		Blit( &m_RenderTargets[DEPTH_BUFFER], nullptr );
+		Blit( GetRenderTarget(DEPTH_BUFFER), nullptr );
 	}
 
 	RenderBloom();
@@ -2120,11 +2125,11 @@ void kbRenderer_DX11::RenderPostProcess() {
 
 	if ( m_pCurrentRenderWindow->GetRenderLightMap().size() == 0 )
 	{
-		m_pDeviceContext->PSSetShaderResources( 0, 1, &m_RenderTargets[ACCUMULATION_BUFFER].m_pShaderResourceView );
+		m_pDeviceContext->PSSetShaderResources( 0, 1, &GetRenderTarget(ACCUMULATION_BUFFER)->m_pShaderResourceView );
 	}
 	else
 	{
-		ID3D11ShaderResourceView * RenderTargetViews[] = { m_RenderTargets[ACCUMULATION_BUFFER].m_pShaderResourceView, m_RenderTargets[DEPTH_BUFFER].m_pShaderResourceView };
+		ID3D11ShaderResourceView * RenderTargetViews[] = { GetRenderTarget(ACCUMULATION_BUFFER)->m_pShaderResourceView, GetRenderTarget(DEPTH_BUFFER)->m_pShaderResourceView };
 		m_pDeviceContext->PSSetShaderResources( 0, 2, RenderTargetViews );
 	}
 
@@ -2164,7 +2169,7 @@ void kbRenderer_DX11::RenderPostProcess() {
 
 	m_pDeviceContext->PSSetShaderResources( 0, 1, nullArray );
 
-	ID3D11ShaderResourceView * nullarray[] = { nullptr, nullptr };//'{ m_RenderTargets[ACCUMULATION_BUFFER].m_pShaderResourceView, m_RenderTargets[COLOR_BUFFER].m_pShaderResourceView };
+	ID3D11ShaderResourceView * nullarray[] = { nullptr, nullptr };//'{ GetRenderTarget(ACCUMULATION_BUFFER)->m_pShaderResourceView, GetRenderTarget(COLOR_BUFFER)->m_pShaderResourceView };
 	m_pDeviceContext->PSSetShaderResources( 0, 2, nullarray );
 }
 
@@ -2222,7 +2227,7 @@ void kbRenderer_DX11::RenderConsole() {
 
 	m_pDeviceContext->PSSetShaderResources( 0, 1, nullArray );
 
-	ID3D11ShaderResourceView * nullarray[] = { nullptr, nullptr };//'{ m_RenderTargets[ACCUMULATION_BUFFER].m_pShaderResourceView, m_RenderTargets[COLOR_BUFFER].m_pShaderResourceView };
+	ID3D11ShaderResourceView * nullarray[] = { nullptr, nullptr };//'{ GetRenderTarget(ACCUMULATION_BUFFER)->m_pShaderResourceView, GetRenderTarget(COLOR_BUFFER)->m_pShaderResourceView };
 	m_pDeviceContext->PSSetShaderResources( 0, 2, nullarray );
 }
 
@@ -3202,6 +3207,13 @@ void kbRenderer_DX11::RenderDebugBillboards( const bool bIsEntityIdPass ) {
 
 
 /**
+ *	kbRenderer_DX11::GetRenderTexture
+ */
+kbRenderTexture * kbRenderer_DX11::RT_GetRenderTexture( const int width, const int height, const eTextureFormat texFormat ) {
+	return nullptr;
+}
+
+/**
  *	kbRenderer_DX11::GetEntityIdAtScreenPosition
  */
 kbVec2i kbRenderer_DX11::GetEntityIdAtScreenPosition( const uint x, const uint y ) {
@@ -3215,7 +3227,7 @@ kbVec2i kbRenderer_DX11::GetEntityIdAtScreenPosition( const uint x, const uint y
 	box.front = 0;
 	box.back = 1;
 	
-	m_pDeviceContext->CopyResource( m_pOffScreenRenderTargetTexture, m_RenderTargets[eRenderTargetTexture::MOUSE_PICKER_BUFFER].m_pRenderTargetTexture );
+	m_pDeviceContext->CopyResource( m_pOffScreenRenderTargetTexture, GetRenderTarget(eRenderTargetTexture::MOUSE_PICKER_BUFFER)->m_pRenderTargetTexture );
 	
 	D3D11_MAPPED_SUBRESOURCE mappedResource;
 	m_pDeviceContext->Map( m_pOffScreenRenderTargetTexture, 0, D3D11_MAP_READ, 0, &mappedResource );

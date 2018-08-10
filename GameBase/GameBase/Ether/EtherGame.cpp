@@ -861,3 +861,26 @@ warpIntensity = kbClamp( warpIntensity, 0.0f, 10.0f );
 	ParticleInfo.m_Color = finalColor;
 	this->m_pParticleManager->AddQuad( ParticleInfo );
 }
+
+
+/**
+ *	EtherFoliageManager::EtherFoliageManager
+ */
+EtherFoliageManager::EtherFoliageManager() :
+	kbRenderHook( RP_FirstPerson ) {
+
+}
+
+/**
+ *	EtherGame::~EtherFoliageManager
+ */
+EtherFoliageManager::~EtherFoliageManager() {
+
+}
+
+/**
+ *	EtherFoliageManager::RenderThreadCallBack
+ */
+void EtherFoliageManager::RenderThreadCallBack() {
+
+}
