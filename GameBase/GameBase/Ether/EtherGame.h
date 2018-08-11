@@ -11,6 +11,7 @@
 #include "kbJobManager.h"
 #include "EtherWorldGen.h"
 #include "EtherAI.h"
+#include "kbRenderer.h"
 
 enum eCameraMode_t {
 	Cam_FirstPerson,
@@ -18,6 +19,20 @@ enum eCameraMode_t {
 	Cam_Free,
 };
 
+/**
+ *	EtherFoliageManager
+ */
+class EtherFoliageManager : public kbRenderHook {
+
+//-------------------------------------------------------------------------------------------------------------------------------------------------------------
+public:
+												EtherFoliageManager();
+												~EtherFoliageManager();
+
+private:
+
+	virtual void								RenderThreadCallBack() override;
+};
 
 /**
  *	EtherGame

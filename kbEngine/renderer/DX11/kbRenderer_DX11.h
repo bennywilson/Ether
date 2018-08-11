@@ -45,54 +45,33 @@ private:
 	kbMat4										m_EyeMatrices[2];
 };
 
-/**
- *	kbRenderTexture
- */
-enum eRenderTargetTexture {
-	COLOR_BUFFER,		// Color in xyz.  Pixel Depth in W
-	NORMAL_BUFFER,		// Normal in xyz. W currently unused
-	SPECULAR_BUFFER,
-	DEPTH_BUFFER,
-	ACCUMULATION_BUFFER,
-	SHADOW_BUFFER,
-	SHADOW_BUFFER_DEPTH,
-	DOWN_RES_BUFFER,
-	DOWN_RES_BUFFER_2,
-	SCRATCH_BUFFER,
-	MOUSE_PICKER_BUFFER,
-	NUM_RENDER_TARGETS,
-};
-
-class kbRenderTexture {
+class kbRenderTexture_DX11 : public kbRenderTexture {
 
 	friend class kbRenderer_DX11;
 
 //-------------------------------------------------------------------------------------------------------------------------------------------------------------
 public:
-												kbRenderTexture() :
+												kbRenderTexture_DX11( const int width, const int height, const eTextureFormat targetFormat ) :
+													kbRenderTexture( width, height, targetFormat ),
 													m_pRenderTargetTexture( nullptr ),
 													m_pRenderTargetView( nullptr ),
 													m_pShaderResourceView( nullptr ),
-													m_pDepthStencilView( nullptr ),
-													m_Width( 0 ),
-													m_Height( 0 ),
-													m_bIsDirty( true ) { }
+													m_pDepthStencilView( nullptr ) { }
    
-												void Release() {
+
+private:
+
+	virtual void								Release_Internal() {
 													SAFE_RELEASE( m_pShaderResourceView );
 													SAFE_RELEASE( m_pRenderTargetView );
 													SAFE_RELEASE( m_pRenderTargetTexture );
 													SAFE_RELEASE( m_pDepthStencilView );
 												}
 
-private:
 	ID3D11Texture2D *							m_pRenderTargetTexture;
 	ID3D11RenderTargetView *					m_pRenderTargetView;
 	ID3D11ShaderResourceView *					m_pShaderResourceView;
 	ID3D11DepthStencilView	*					m_pDepthStencilView;
-	int											m_Width;
-	int											m_Height;
-	bool										m_bIsDirty;
 };
 
 /**
@@ -383,17 +362,19 @@ public:
 	const static float							Near_Plane;
 	const static float							Far_Plane;
 
+	// Render thread functions
+	virtual kbRenderTexture *					RT_GetRenderTexture( const int width, const int height, const eTextureFormat textureFormat ) override;
+
 private:
 
 	virtual void								Init_Internal( HWND, const int width, const int height, const bool bUseHMD, const bool bUseHMDTrackingOnly ) override;
 	virtual bool								LoadTexture_Internal( const char * name, int index, int width = -1, int height = -1 ) override;
 	virtual void								RenderSync_Internal() override;
-
-	void										Shutdown();
+	virtual void								Shutdown_Internal() override;
 
 	bool										InitializeOculus();
 
-	void										CreateRenderTarget( const eRenderTargetTexture targetIndex, const int width, const int height, const DXGI_FORMAT format );
+	void										CreateRenderTarget( const int width, const int height, const eTextureFormat format );
 	void										SetRenderTarget( eRenderTargetTexture type );
 
 	virtual void								RenderScene() override;
@@ -431,6 +412,8 @@ private:
 
 	void										DrawTexture( ID3D11ShaderResourceView *const pShaderResourceView, const kbVec3 & pixelPosition, 
 															 const kbVec3 & pixelSize, const kbVec3 & renderTargetSize );
+
+	kbRenderTexture_DX11 *						GetRenderTarget_DX11( const eRenderTargetTexture target ) { return (kbRenderTexture_DX11*) m_pRenderTargets[target]; }
 
 	HWND										m_hwnd;
 	IDXGIFactory *								m_pDXGIFactory;
@@ -480,8 +463,6 @@ private:
 	ID3D11SamplerState *						m_pBasicSamplerState;
 	ID3D11SamplerState *						m_pNormalMapSamplerState;
 	ID3D11SamplerState *						m_pShadowMapSamplerState;
-	
-	kbRenderTexture								m_RenderTargets[NUM_RENDER_TARGETS];
 	
 	// debug
 	ID3DUserDefinedAnnotation *					m_pEventMarker;

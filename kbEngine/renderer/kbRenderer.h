@@ -14,6 +14,67 @@
 class kbShader;
 class kbModel;
 
+
+/**
+ *	kbRenderTexture
+ */
+enum eTextureFormat {
+	KBTEXTURE_NULLFORMAT,
+	KBTEXTURE_R8G8B8A8,
+	KBTEXTURE_R16G16B16A16,
+	KBTEXTURE_R32G32,
+	KBTEXTURE_R32,
+	KBTEXTURE_D24S8,
+	KBTEXTURE_R16G16,
+	NUM_TEXTURE_FORMATS,
+};
+
+enum eRenderTargetTexture {
+	COLOR_BUFFER,		// Color in xyz.  Pixel Depth in W
+	NORMAL_BUFFER,		// Normal in xyz. W currently unused
+	SPECULAR_BUFFER,
+	DEPTH_BUFFER,
+	ACCUMULATION_BUFFER,
+	SHADOW_BUFFER,
+	SHADOW_BUFFER_DEPTH,
+	DOWN_RES_BUFFER,
+	DOWN_RES_BUFFER_2,
+	SCRATCH_BUFFER,
+	MOUSE_PICKER_BUFFER,
+	NUM_RENDER_TARGETS,
+};
+
+class kbRenderTexture {
+
+//-------------------------------------------------------------------------------------------------------------------------------------------------------------
+public:
+												kbRenderTexture() :
+													m_Width( 0 ),
+													m_Height( 0 ),
+													m_TextureFormat( KBTEXTURE_NULLFORMAT ) { }
+   
+												kbRenderTexture( const int width, const int height, const eTextureFormat targetFormat ) :
+													m_Width( width ),
+													m_Height( height ),
+													m_TextureFormat( targetFormat ) { }
+
+												void Release() {
+													Release_Internal();
+												}
+
+	int											GetWidth() const { return m_Width; }
+	int											GetHeight() const { return m_Height; }
+	eTextureFormat								GetTextureFormat() const { return m_TextureFormat; }
+
+private:
+
+	virtual void								Release_Internal() = 0;
+
+	int											m_Width;
+	int											m_Height;
+
+	eTextureFormat								m_TextureFormat;
+};
 /**
  *	kbRenderWindow
  */
@@ -132,6 +193,8 @@ public:
 
 	virtual void								Init( HWND, const int width, const int height, const bool bUseHMD, const bool bUseHMDTrackingOnly );
 
+	void										Shutdown();
+
 	virtual void								LoadTexture( const char * name, int index, int width = -1, int height = -1 );
 
 	virtual int									CreateRenderView( HWND hwnd ) = 0;
@@ -208,11 +271,14 @@ public:
 	kbViewMode_t								m_ViewMode_GameThread;
 	kbViewMode_t								m_ViewMode;
 
+	// Render thread functions
+	virtual kbRenderTexture *					RT_GetRenderTexture( const int width, const int height, const eTextureFormat ) = 0;
+
 private:
 	virtual void								Init_Internal( HWND, const int width, const int height, const bool bUseHMD, const bool bUseHMDTrackingOnly ) = 0;
 	virtual bool								LoadTexture_Internal( const char * name, int index, int width = -1, int height = -1 ) = 0;
 	virtual void								RenderSync_Internal() = 0;
-
+	virtual void								Shutdown_Internal() = 0;
 	virtual void								RenderScene() = 0;
 
 protected:
@@ -222,6 +288,8 @@ protected:
 
 	kbRenderWindow *							m_pCurrentRenderWindow;    // the render window BeginScene was called with
 	std::vector<kbRenderWindow *>				m_RenderWindowList;
+
+	std::vector<kbRenderTexture	*>				m_pRenderTargets;
 
 	std::vector<kbRenderObject*>				m_RenderHooks[NUM_RENDER_PASSES];
 
