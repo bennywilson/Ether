@@ -862,7 +862,6 @@ warpIntensity = kbClamp( warpIntensity, 0.0f, 10.0f );
 	this->m_pParticleManager->AddQuad( ParticleInfo );
 }
 
-
 /**
  *	EtherFoliageManager::EtherFoliageManager
  */
@@ -872,7 +871,7 @@ EtherFoliageManager::EtherFoliageManager() :
 }
 
 /**
- *	EtherGame::~EtherFoliageManager
+ *	EtherFoliageManager::~EtherFoliageManager
  */
 EtherFoliageManager::~EtherFoliageManager() {
 

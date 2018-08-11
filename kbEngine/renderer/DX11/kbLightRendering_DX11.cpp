@@ -74,7 +74,7 @@ void kbRenderer_DX11::RenderLight( const kbRenderLight *const pLight ) {
 							     kbRenderState::CW_All );
 
 
-	m_pDeviceContext->OMSetRenderTargets( 1, &GetRenderTarget(ACCUMULATION_BUFFER)->m_pRenderTargetView, nullptr );
+	m_pDeviceContext->OMSetRenderTargets( 1, &GetRenderTarget_DX11(ACCUMULATION_BUFFER)->m_pRenderTargetView, nullptr );
 
 	const unsigned int stride = sizeof( vertexLayout );
 	const unsigned int offset = 0;
@@ -82,11 +82,11 @@ void kbRenderer_DX11::RenderLight( const kbRenderLight *const pLight ) {
 	m_pDeviceContext->IASetPrimitiveTopology( D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST );
 	m_pDeviceContext->RSSetState( m_pDefaultRasterizerState );
 
-	ID3D11ShaderResourceView *const  RenderTargetViews[] = {	GetRenderTarget(COLOR_BUFFER)->m_pShaderResourceView,
-																GetRenderTarget(NORMAL_BUFFER)->m_pShaderResourceView,
-																GetRenderTarget(SPECULAR_BUFFER)->m_pShaderResourceView,
-																GetRenderTarget(DEPTH_BUFFER)->m_pShaderResourceView,
-																GetRenderTarget(SHADOW_BUFFER)->m_pShaderResourceView };
+	ID3D11ShaderResourceView *const  RenderTargetViews[] = {	GetRenderTarget_DX11(COLOR_BUFFER)->m_pShaderResourceView,
+																GetRenderTarget_DX11(NORMAL_BUFFER)->m_pShaderResourceView,
+																GetRenderTarget_DX11(SPECULAR_BUFFER)->m_pShaderResourceView,
+																GetRenderTarget_DX11(DEPTH_BUFFER)->m_pShaderResourceView,
+																GetRenderTarget_DX11(SHADOW_BUFFER)->m_pShaderResourceView };
 
 	ID3D11SamplerState *const  SamplerStates[] = { m_pBasicSamplerState, m_pNormalMapSamplerState, m_pShadowMapSamplerState, m_pShadowMapSamplerState };
 	m_pDeviceContext->PSSetShaderResources( 0, 5, RenderTargetViews );
@@ -163,16 +163,16 @@ void kbRenderer_DX11::RenderShadow( const kbRenderLight *const pLight, kbMat4 sp
 	START_SCOPED_RENDER_TIMER( RENDER_SHADOW_DEPTH );
 
 	const float clearColor[] = { 1.0f, 1.0f, 1.0f, 1.0f };
-	m_pDeviceContext->ClearRenderTargetView( GetRenderTarget(SHADOW_BUFFER)->m_pRenderTargetView, clearColor );
-	m_pDeviceContext->ClearDepthStencilView( GetRenderTarget(SHADOW_BUFFER_DEPTH)->m_pDepthStencilView , D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1, 0 );
+	m_pDeviceContext->ClearRenderTargetView( GetRenderTarget_DX11(SHADOW_BUFFER)->m_pRenderTargetView, clearColor );
+	m_pDeviceContext->ClearDepthStencilView( GetRenderTarget_DX11(SHADOW_BUFFER_DEPTH)->m_pDepthStencilView , D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1, 0 );
 
 	if ( m_bRenderToHMD ) {
 		const float color[] = { 1.0f, 1.0f, 1.0f, 1.0f };
-		m_pDeviceContext->ClearRenderTargetView( GetRenderTarget(SHADOW_BUFFER)->m_pRenderTargetView, color );
+		m_pDeviceContext->ClearRenderTargetView( GetRenderTarget_DX11(SHADOW_BUFFER)->m_pRenderTargetView, color );
 		return;
 	}
 
-	const float shadowBufferSize = (float) GetRenderTarget(SHADOW_BUFFER)->GetWidth();
+	const float shadowBufferSize = (float) GetRenderTarget_DX11(SHADOW_BUFFER)->GetWidth();
 	const float halfShadowBufferSize = shadowBufferSize * 0.5f;
 
 	kbMat4 textureMatrix;
@@ -183,7 +183,7 @@ void kbRenderer_DX11::RenderShadow( const kbRenderLight *const pLight, kbMat4 sp
 	textureMatrix[3].y = 0.5f + ( 0.5f / shadowBufferSize );
 
 	// Render Shadow map
-	m_pDeviceContext->OMSetRenderTargets( 1, &GetRenderTarget(SHADOW_BUFFER)->m_pRenderTargetView, GetRenderTarget(SHADOW_BUFFER_DEPTH)->m_pDepthStencilView );
+	m_pDeviceContext->OMSetRenderTargets( 1, &GetRenderTarget_DX11(SHADOW_BUFFER)->m_pRenderTargetView, GetRenderTarget_DX11(SHADOW_BUFFER_DEPTH)->m_pDepthStencilView );
 
 	const kbMat4 oldViewMatrix = m_pCurrentRenderWindow->GetViewMatrix();
 	const kbMat4 oldProjectionMatrix = m_pCurrentRenderWindow->GetProjectionMatrix();
@@ -411,18 +411,18 @@ void kbRenderer_DX11::RenderLightShafts() {
 			mvpMatrix[3].x -= CurLightShafts.m_Width * 0.25f;
 			mvpMatrix[3].y -= HalfBaseHeight * 0.5f;
 
-			m_pDeviceContext->OMSetRenderTargets( 1, &GetRenderTarget(SCRATCH_BUFFER)->m_pRenderTargetView, nullptr );
+			m_pDeviceContext->OMSetRenderTargets( 1, &GetRenderTarget_DX11(SCRATCH_BUFFER)->m_pRenderTargetView, nullptr );
 		
 			D3D11_VIEWPORT viewport;
 			viewport.TopLeftX = 0.0f;
 			viewport.TopLeftY = 0.0f;
-			viewport.Width = ( float )GetRenderTarget(SCRATCH_BUFFER)->GetWidth();
-			viewport.Height = ( float )GetRenderTarget(SCRATCH_BUFFER)->GetHeight();
+			viewport.Width = ( float )GetRenderTarget_DX11(SCRATCH_BUFFER)->GetWidth();
+			viewport.Height = ( float )GetRenderTarget_DX11(SCRATCH_BUFFER)->GetHeight();
 			viewport.MinDepth = 0;
 			viewport.MaxDepth = 1.0f;
 			m_pDeviceContext->RSSetViewports( 1, &viewport );
 
-			ID3D11ShaderResourceView *const  RenderTargetViews[] = { (ID3D11ShaderResourceView*)CurLightShafts.m_pTexture->GetGPUTexture(), GetRenderTarget(DEPTH_BUFFER)->m_pShaderResourceView };
+			ID3D11ShaderResourceView *const  RenderTargetViews[] = { (ID3D11ShaderResourceView*)CurLightShafts.m_pTexture->GetGPUTexture(), GetRenderTarget_DX11(DEPTH_BUFFER)->m_pShaderResourceView };
 			ID3D11SamplerState *const  SamplerStates[] = { m_pBasicSamplerState, m_pShadowMapSamplerState };
 			m_pDeviceContext->PSSetShaderResources( 0, 2, RenderTargetViews );
 			m_pDeviceContext->PSSetSamplers( 0, 2, SamplerStates );
@@ -451,14 +451,14 @@ void kbRenderer_DX11::RenderLightShafts() {
 		// Flare out here
 		{
 			const float color[] = { 0.0f, 0.0f, 0.0f, 0.0f };
-			m_pDeviceContext->ClearRenderTargetView( GetRenderTarget(DOWN_RES_BUFFER)->m_pRenderTargetView, color );
-			m_pDeviceContext->OMSetRenderTargets( 1, &GetRenderTarget(DOWN_RES_BUFFER)->m_pRenderTargetView, nullptr );
+			m_pDeviceContext->ClearRenderTargetView( GetRenderTarget_DX11(DOWN_RES_BUFFER)->m_pRenderTargetView, color );
+			m_pDeviceContext->OMSetRenderTargets( 1, &GetRenderTarget_DX11(DOWN_RES_BUFFER)->m_pRenderTargetView, nullptr );
 
 			D3D11_VIEWPORT viewport;
 			viewport.TopLeftX = 0.0f;
 			viewport.TopLeftY = 0.0f;
-			viewport.Width = ( float )GetRenderTarget(DOWN_RES_BUFFER)->GetWidth();
-			viewport.Height = ( float )GetRenderTarget(DOWN_RES_BUFFER)->GetHeight();
+			viewport.Width = ( float )GetRenderTarget_DX11(DOWN_RES_BUFFER)->GetWidth();
+			viewport.Height = ( float )GetRenderTarget_DX11(DOWN_RES_BUFFER)->GetHeight();
 			viewport.MinDepth = 0;
 			viewport.MaxDepth = 1.0f;
 			m_pDeviceContext->RSSetViewports( 1, &viewport );	
@@ -475,7 +475,7 @@ void kbRenderer_DX11::RenderLightShafts() {
 										 kbRenderState::CW_All );
 
 
-			ID3D11ShaderResourceView *const  RenderTargetViews[] = { GetRenderTarget(SCRATCH_BUFFER)->m_pShaderResourceView };
+			ID3D11ShaderResourceView *const  RenderTargetViews[] = { GetRenderTarget_DX11(SCRATCH_BUFFER)->m_pShaderResourceView };
 			ID3D11SamplerState *const  SamplerStates[] = { m_pBasicSamplerState };
 			m_pDeviceContext->PSSetShaderResources( 0, 1, RenderTargetViews );
 			m_pDeviceContext->PSSetSamplers( 0, 1, SamplerStates );
@@ -534,9 +534,9 @@ void kbRenderer_DX11::RenderLightShafts() {
 				viewport.TopLeftY = 0;
 			}
 			m_pDeviceContext->RSSetViewports( 1, &viewport );
-			m_pDeviceContext->OMSetRenderTargets( 1, &GetRenderTarget(ACCUMULATION_BUFFER)->m_pRenderTargetView, nullptr );
+			m_pDeviceContext->OMSetRenderTargets( 1, &GetRenderTarget_DX11(ACCUMULATION_BUFFER)->m_pRenderTargetView, nullptr );
 
-			ID3D11ShaderResourceView *const  RenderTargetViews[] = { GetRenderTarget(DOWN_RES_BUFFER)->m_pShaderResourceView };
+			ID3D11ShaderResourceView *const  RenderTargetViews[] = { GetRenderTarget_DX11(DOWN_RES_BUFFER)->m_pShaderResourceView };
 			ID3D11SamplerState *const  SamplerStates[] = { m_pBasicSamplerState };
 			m_pDeviceContext->PSSetShaderResources( 0, 1, RenderTargetViews );
 			m_pDeviceContext->PSSetSamplers( 0, 1, SamplerStates );
@@ -580,5 +580,5 @@ void kbRenderer_DX11::RenderLightShafts() {
 	}
 	m_pDeviceContext->RSSetViewports( 1, &viewport );
 
-	m_pDeviceContext->OMSetRenderTargets( 1, &GetRenderTarget(ACCUMULATION_BUFFER)->m_pRenderTargetView, nullptr );
+	m_pDeviceContext->OMSetRenderTargets( 1, &GetRenderTarget_DX11(ACCUMULATION_BUFFER)->m_pRenderTargetView, nullptr );
 }

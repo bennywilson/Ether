@@ -413,7 +413,7 @@ private:
 	void										DrawTexture( ID3D11ShaderResourceView *const pShaderResourceView, const kbVec3 & pixelPosition, 
 															 const kbVec3 & pixelSize, const kbVec3 & renderTargetSize );
 
-	kbRenderTexture_DX11 *						GetRenderTarget( const eRenderTargetTexture target ) { return (kbRenderTexture_DX11*) m_pRenderTargets[target]; }
+	kbRenderTexture_DX11 *						GetRenderTarget_DX11( const eRenderTargetTexture target ) { return (kbRenderTexture_DX11*) m_pRenderTargets[target]; }
 
 	HWND										m_hwnd;
 	IDXGIFactory *								m_pDXGIFactory;

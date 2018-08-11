@@ -950,7 +950,7 @@ void kbRenderer_DX11::CreateRenderTarget( const int width, const int height, con
 
 	m_pRenderTargets.push_back( new kbRenderTexture_DX11( width, height, targetFormat ) );
 
-	kbRenderTexture_DX11 & rt = *GetRenderTarget( (eRenderTargetTexture)(m_pRenderTargets.size() - 1) );
+	kbRenderTexture_DX11 & rt = *GetRenderTarget_DX11( (eRenderTargetTexture)(m_pRenderTargets.size() - 1) );
 
 	if ( targetFormat == KBTEXTURE_D24S8 ) {
 		// create back buffer
@@ -984,7 +984,7 @@ void kbRenderer_DX11::CreateRenderTarget( const int width, const int height, con
 		shaderResourceViewDesc.Texture2D.MostDetailedMip = 0;
 		shaderResourceViewDesc.Texture2D.MipLevels = 1;
 	
-		HRESULT hr = m_pD3DDevice->CreateShaderResourceView( GetRenderTarget(index].m_pRenderTargetTexture, &shaderResourceViewDesc, &GetRenderTarget(index].m_pShaderResourceView );
+		HRESULT hr = m_pD3DDevice->CreateShaderResourceView( GetRenderTarget_DX11(index].m_pRenderTargetTexture, &shaderResourceViewDesc, &GetRenderTarget_DX11(index].m_pShaderResourceView );
 */
 		return;
 	}
@@ -1109,7 +1109,7 @@ void kbRenderer_DX11::Shutdown_Internal() {
  *	kbRenderer_DX11::SetRenderTarget
  */
 void kbRenderer_DX11::SetRenderTarget( eRenderTargetTexture type ) {
-	m_pDeviceContext->OMSetRenderTargets( 1, &GetRenderTarget(type)->m_pRenderTargetView, m_pDepthStencilView );
+	m_pDeviceContext->OMSetRenderTargets( 1, &GetRenderTarget_DX11(type)->m_pRenderTargetView, m_pDepthStencilView );
 }
 
 /**
@@ -1152,11 +1152,11 @@ void kbRenderer_DX11::RenderScene() {
 
 		{
 			START_SCOPED_RENDER_TIMER( RENDER_THREAD_CLEAR_BUFFERS );
-			m_pDeviceContext->ClearRenderTargetView( GetRenderTarget(COLOR_BUFFER)->m_pRenderTargetView, color );
-			m_pDeviceContext->ClearRenderTargetView( GetRenderTarget(NORMAL_BUFFER)->m_pRenderTargetView, color );
-			m_pDeviceContext->ClearRenderTargetView( GetRenderTarget(SPECULAR_BUFFER)->m_pRenderTargetView, color );
-			m_pDeviceContext->ClearRenderTargetView( GetRenderTarget(DEPTH_BUFFER)->m_pRenderTargetView, color );
-			m_pDeviceContext->ClearRenderTargetView( GetRenderTarget(ACCUMULATION_BUFFER)->m_pRenderTargetView, color );
+			m_pDeviceContext->ClearRenderTargetView( GetRenderTarget_DX11(COLOR_BUFFER)->m_pRenderTargetView, color );
+			m_pDeviceContext->ClearRenderTargetView( GetRenderTarget_DX11(NORMAL_BUFFER)->m_pRenderTargetView, color );
+			m_pDeviceContext->ClearRenderTargetView( GetRenderTarget_DX11(SPECULAR_BUFFER)->m_pRenderTargetView, color );
+			m_pDeviceContext->ClearRenderTargetView( GetRenderTarget_DX11(DEPTH_BUFFER)->m_pRenderTargetView, color );
+			m_pDeviceContext->ClearRenderTargetView( GetRenderTarget_DX11(ACCUMULATION_BUFFER)->m_pRenderTargetView, color );
 			m_pDeviceContext->ClearDepthStencilView( m_pDepthStencilView, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1, 0 );
 		}
 
@@ -1166,7 +1166,7 @@ void kbRenderer_DX11::RenderScene() {
 			m_pDeviceContext->RSSetState( m_pWireFrameRasterizerState );
 		}
 
-		ID3D11RenderTargetView * RenderTargetViews[] = { GetRenderTarget(COLOR_BUFFER)->m_pRenderTargetView, GetRenderTarget(NORMAL_BUFFER)->m_pRenderTargetView, GetRenderTarget(SPECULAR_BUFFER)->m_pRenderTargetView, GetRenderTarget(DEPTH_BUFFER)->m_pRenderTargetView };
+		ID3D11RenderTargetView * RenderTargetViews[] = { GetRenderTarget_DX11(COLOR_BUFFER)->m_pRenderTargetView, GetRenderTarget_DX11(NORMAL_BUFFER)->m_pRenderTargetView, GetRenderTarget_DX11(SPECULAR_BUFFER)->m_pRenderTargetView, GetRenderTarget_DX11(DEPTH_BUFFER)->m_pRenderTargetView };
 	
 		m_pDeviceContext->OMSetRenderTargets( 4, RenderTargetViews, m_pDepthStencilView );
 
@@ -1273,10 +1273,10 @@ void kbRenderer_DX11::RenderScene() {
 			START_SCOPED_RENDER_TIMER( RENDER_UNLIT )
 
 			m_RenderState.SetDepthStencilState();
-			m_pDeviceContext->OMSetRenderTargets( 1, &GetRenderTarget(ACCUMULATION_BUFFER)->m_pRenderTargetView, m_pDepthStencilView );
+			m_pDeviceContext->OMSetRenderTargets( 1, &GetRenderTarget_DX11(ACCUMULATION_BUFFER)->m_pRenderTargetView, m_pDepthStencilView );
 
 			if ( m_ViewMode == ViewMode_Wireframe ) {
-				m_pDeviceContext->CopyResource( GetRenderTarget(ACCUMULATION_BUFFER)->m_pRenderTargetTexture, GetRenderTarget(COLOR_BUFFER)->m_pRenderTargetTexture );
+				m_pDeviceContext->CopyResource( GetRenderTarget_DX11(ACCUMULATION_BUFFER)->m_pRenderTargetTexture, GetRenderTarget_DX11(COLOR_BUFFER)->m_pRenderTargetTexture );
 			}
 
 			// Post-Lighting Render Pass
@@ -1442,7 +1442,7 @@ void kbRenderer_DX11::PreRenderCullAndSort() {
 void kbRenderer_DX11::RenderTranslucency() {
 	START_SCOPED_RENDER_TIMER( RENDER_TRANSLUCENCY );
 
-	m_pDeviceContext->OMSetRenderTargets( 1, &GetRenderTarget(ACCUMULATION_BUFFER)->m_pRenderTargetView, m_pDepthStencilView );
+	m_pDeviceContext->OMSetRenderTargets( 1, &GetRenderTarget_DX11(ACCUMULATION_BUFFER)->m_pRenderTargetView, m_pDepthStencilView );
 
 	m_RenderState.SetDepthStencilState(	true,
 										kbRenderState::DepthWriteMaskZero,
@@ -1735,18 +1735,18 @@ void kbRenderer_DX11::RenderMousePickerIds() {
 	START_SCOPED_RENDER_TIMER( RENDER_ENTITYID )
 
 	const float color[4] = { 0.0f, 0.0f, 0.0f, 0.0f };
-	m_pDeviceContext->ClearRenderTargetView( GetRenderTarget(MOUSE_PICKER_BUFFER)->m_pRenderTargetView, color );
+	m_pDeviceContext->ClearRenderTargetView( GetRenderTarget_DX11(MOUSE_PICKER_BUFFER)->m_pRenderTargetView, color );
 	m_pDeviceContext->ClearDepthStencilView( m_pDepthStencilView, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1, 0 );
 
 	D3D11_VIEWPORT viewport;
 	viewport.TopLeftX = 0.0f;
 	viewport.TopLeftY = 0.0f;
-	viewport.Width = ( float )GetRenderTarget(MOUSE_PICKER_BUFFER)->GetWidth();
-	viewport.Height = ( float )GetRenderTarget(MOUSE_PICKER_BUFFER)->GetHeight();
+	viewport.Width = ( float )GetRenderTarget_DX11(MOUSE_PICKER_BUFFER)->GetWidth();
+	viewport.Height = ( float )GetRenderTarget_DX11(MOUSE_PICKER_BUFFER)->GetHeight();
 	viewport.MinDepth = 0;
 	viewport.MaxDepth = 1.0f;
 	m_pDeviceContext->RSSetViewports( 1, &viewport );
-	m_pDeviceContext->OMSetRenderTargets( 1, &GetRenderTarget(MOUSE_PICKER_BUFFER)->m_pRenderTargetView, m_pDepthStencilView );
+	m_pDeviceContext->OMSetRenderTargets( 1, &GetRenderTarget_DX11(MOUSE_PICKER_BUFFER)->m_pRenderTargetView, m_pDepthStencilView );
 	m_RenderState.SetDepthStencilState();
 
 	for ( auto iter = m_pCurrentRenderWindow->GetRenderObjectMap().begin(); iter != m_pCurrentRenderWindow->GetRenderObjectMap().end(); iter++ ) {
@@ -1870,8 +1870,8 @@ void kbRenderer_DX11::RenderBloom() {
 	D3D11_VIEWPORT viewport;
 	viewport.TopLeftX = 0.0f;
 	viewport.TopLeftY = 0.0f;
-	viewport.Width = ( float )GetRenderTarget(DOWN_RES_BUFFER)->GetWidth();
-	viewport.Height = ( float )GetRenderTarget(DOWN_RES_BUFFER)->GetHeight();
+	viewport.Width = ( float )GetRenderTarget_DX11(DOWN_RES_BUFFER)->GetWidth();
+	viewport.Height = ( float )GetRenderTarget_DX11(DOWN_RES_BUFFER)->GetHeight();
 	viewport.MinDepth = 0;
 	viewport.MaxDepth = 1.0f;
 	m_pDeviceContext->RSSetViewports( 1, &viewport );
@@ -1880,7 +1880,7 @@ void kbRenderer_DX11::RenderBloom() {
 	// Gather
 	///////////////////////////////
 	{
-		m_pDeviceContext->OMSetRenderTargets( 1, &GetRenderTarget(DOWN_RES_BUFFER)->m_pRenderTargetView, nullptr );
+		m_pDeviceContext->OMSetRenderTargets( 1, &GetRenderTarget_DX11(DOWN_RES_BUFFER)->m_pRenderTargetView, nullptr );
 		const unsigned int stride = sizeof( vertexLayout );
 		const unsigned int offset = 0;
 
@@ -1888,7 +1888,7 @@ void kbRenderer_DX11::RenderBloom() {
 		m_pDeviceContext->IASetPrimitiveTopology( D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST );
 		m_pDeviceContext->RSSetState( m_pDefaultRasterizerState );
 
-		m_pDeviceContext->PSSetShaderResources( 0, 1, &GetRenderTarget(ACCUMULATION_BUFFER)->m_pShaderResourceView );
+		m_pDeviceContext->PSSetShaderResources( 0, 1, &GetRenderTarget_DX11(ACCUMULATION_BUFFER)->m_pShaderResourceView );
 		ID3D11SamplerState *const samplerState[] = { m_pNormalMapSamplerState };
 
 		m_pDeviceContext->PSSetSamplers( 0, 1, samplerState );
@@ -1925,7 +1925,7 @@ void kbRenderer_DX11::RenderBloom() {
 	// Horizontal blur
 	///////////////////////////////
 	{
-		m_pDeviceContext->OMSetRenderTargets( 1, &GetRenderTarget(DOWN_RES_BUFFER_2)->m_pRenderTargetView, nullptr );
+		m_pDeviceContext->OMSetRenderTargets( 1, &GetRenderTarget_DX11(DOWN_RES_BUFFER_2)->m_pRenderTargetView, nullptr );
 		const unsigned int stride = sizeof( vertexLayout );
 		const unsigned int offset = 0;
 
@@ -1933,7 +1933,7 @@ void kbRenderer_DX11::RenderBloom() {
 		m_pDeviceContext->IASetPrimitiveTopology( D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST );
 		m_pDeviceContext->RSSetState( m_pDefaultRasterizerState );
 
-		m_pDeviceContext->PSSetShaderResources( 0, 1, &GetRenderTarget(DOWN_RES_BUFFER)->m_pShaderResourceView );
+		m_pDeviceContext->PSSetShaderResources( 0, 1, &GetRenderTarget_DX11(DOWN_RES_BUFFER)->m_pShaderResourceView );
 		ID3D11SamplerState * samplerState[] = { m_pNormalMapSamplerState };
 
 		m_pDeviceContext->PSSetSamplers( 0, 1, samplerState );
@@ -1958,7 +1958,7 @@ void kbRenderer_DX11::RenderBloom() {
 		SetShaderMat4( "mvpMatrix", mvpMatrix, (byte*) mappedResource.pData, varBindings );
 		SetShaderInt( "numSamples", 5, (byte*) mappedResource.pData, varBindings );
 
-		const float texelSize = 1.0f / GetRenderTarget(DOWN_RES_BUFFER_2)->GetWidth();
+		const float texelSize = 1.0f / GetRenderTarget_DX11(DOWN_RES_BUFFER_2)->GetWidth();
 		kbVec4 offsetsAndWeights[5];
 		offsetsAndWeights[0].Set( 0.0f * texelSize, 0.0f, 0.22702f, 0.0f );
 		offsetsAndWeights[1].Set( 1.0f * texelSize, 0.0f, 0.19459f, 0.0f );
@@ -1974,7 +1974,7 @@ void kbRenderer_DX11::RenderBloom() {
 		// Draw
 		m_pDeviceContext->Draw( 6, 0 );
 
-		ID3D11ShaderResourceView * nullarray[] = { nullptr, nullptr };//'{ GetRenderTarget(ACCUMULATION_BUFFER)->m_pShaderResourceView, GetRenderTarget(COLOR_BUFFER)->m_pShaderResourceView };
+		ID3D11ShaderResourceView * nullarray[] = { nullptr, nullptr };//'{ GetRenderTarget_DX11(ACCUMULATION_BUFFER)->m_pShaderResourceView, GetRenderTarget_DX11(COLOR_BUFFER)->m_pShaderResourceView };
 		m_pDeviceContext->PSSetShaderResources( 0, 2, nullarray );
 	}
 
@@ -1982,7 +1982,7 @@ void kbRenderer_DX11::RenderBloom() {
 	// Vertical blur
 	///////////////////////////////
 	{
-		m_pDeviceContext->OMSetRenderTargets( 1, &GetRenderTarget(DOWN_RES_BUFFER)->m_pRenderTargetView, nullptr );
+		m_pDeviceContext->OMSetRenderTargets( 1, &GetRenderTarget_DX11(DOWN_RES_BUFFER)->m_pRenderTargetView, nullptr );
 		const unsigned int stride = sizeof( vertexLayout );
 		const unsigned int offset = 0;
 
@@ -1990,7 +1990,7 @@ void kbRenderer_DX11::RenderBloom() {
 		m_pDeviceContext->IASetPrimitiveTopology( D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST );
 		m_pDeviceContext->RSSetState( m_pDefaultRasterizerState );
 
-		m_pDeviceContext->PSSetShaderResources( 0, 1, &GetRenderTarget(DOWN_RES_BUFFER_2)->m_pShaderResourceView );
+		m_pDeviceContext->PSSetShaderResources( 0, 1, &GetRenderTarget_DX11(DOWN_RES_BUFFER_2)->m_pShaderResourceView );
 		ID3D11SamplerState * samplerState[] = { m_pNormalMapSamplerState };
 
 		// Set constants
@@ -2012,7 +2012,7 @@ void kbRenderer_DX11::RenderBloom() {
 		SetShaderMat4( "mvpMatrix", mvpMatrix, (byte*) mappedResource.pData, varBindings );
 		SetShaderInt( "numSamples", 5, (byte*) mappedResource.pData, varBindings );
 
-		const float texelSize = 1.0f / GetRenderTarget(DOWN_RES_BUFFER_2)->GetWidth();
+		const float texelSize = 1.0f / GetRenderTarget_DX11(DOWN_RES_BUFFER_2)->GetWidth();
 		kbVec4 offsetsAndWeights[5];
 		offsetsAndWeights[0].Set( 0.0f * texelSize, 0.0f, 0.22702f, 0.0f );
 		offsetsAndWeights[1].Set( 1.0f * texelSize, 0.0f, 0.19459f, 0.0f );
@@ -2053,9 +2053,9 @@ void kbRenderer_DX11::RenderBloom() {
 							     kbRenderState::CW_All );
 
 		m_pDeviceContext->RSSetViewports( 1, &viewport );
-		m_pDeviceContext->OMSetRenderTargets( 1, &GetRenderTarget(ACCUMULATION_BUFFER)->m_pRenderTargetView, nullptr );
+		m_pDeviceContext->OMSetRenderTargets( 1, &GetRenderTarget_DX11(ACCUMULATION_BUFFER)->m_pRenderTargetView, nullptr );
 
-		ID3D11ShaderResourceView *const  RenderTargetViews[] = { GetRenderTarget(DOWN_RES_BUFFER)->m_pShaderResourceView };
+		ID3D11ShaderResourceView *const  RenderTargetViews[] = { GetRenderTarget_DX11(DOWN_RES_BUFFER)->m_pShaderResourceView };
 		ID3D11SamplerState *const  SamplerStates[] = { m_pBasicSamplerState };
 		m_pDeviceContext->IASetInputLayout( (ID3D11InputLayout*)m_pSimpleAdditiveShader->GetVertexLayout() );
 		m_pDeviceContext->VSSetShader( (ID3D11VertexShader *)this->m_pSimpleAdditiveShader->GetVertexShader(), nullptr, 0 );
@@ -2097,14 +2097,14 @@ void kbRenderer_DX11::RenderPostProcess() {
 	START_SCOPED_RENDER_TIMER( RENDER_POST_PROCESS );
 
 	if ( m_ViewMode == ViewMode_Wireframe ) {
-		Blit( GetRenderTarget(ACCUMULATION_BUFFER), nullptr );
+		Blit( GetRenderTarget_DX11(ACCUMULATION_BUFFER), nullptr );
 		return;
 	} else if ( m_ViewMode == ViewMode_Normals ) {
-		Blit( GetRenderTarget(NORMAL_BUFFER), nullptr );
+		Blit( GetRenderTarget_DX11(NORMAL_BUFFER), nullptr );
 	} else if ( m_ViewMode == ViewMode_Specular ) {
-		Blit( GetRenderTarget(SPECULAR_BUFFER), nullptr );
+		Blit( GetRenderTarget_DX11(SPECULAR_BUFFER), nullptr );
 	} else if ( m_ViewMode == ViewMode_Depth ) {
-		Blit( GetRenderTarget(DEPTH_BUFFER), nullptr );
+		Blit( GetRenderTarget_DX11(DEPTH_BUFFER), nullptr );
 	}
 
 	RenderBloom();
@@ -2125,11 +2125,11 @@ void kbRenderer_DX11::RenderPostProcess() {
 
 	if ( m_pCurrentRenderWindow->GetRenderLightMap().size() == 0 )
 	{
-		m_pDeviceContext->PSSetShaderResources( 0, 1, &GetRenderTarget(ACCUMULATION_BUFFER)->m_pShaderResourceView );
+		m_pDeviceContext->PSSetShaderResources( 0, 1, &GetRenderTarget_DX11(ACCUMULATION_BUFFER)->m_pShaderResourceView );
 	}
 	else
 	{
-		ID3D11ShaderResourceView * RenderTargetViews[] = { GetRenderTarget(ACCUMULATION_BUFFER)->m_pShaderResourceView, GetRenderTarget(DEPTH_BUFFER)->m_pShaderResourceView };
+		ID3D11ShaderResourceView * RenderTargetViews[] = { GetRenderTarget_DX11(ACCUMULATION_BUFFER)->m_pShaderResourceView, GetRenderTarget_DX11(DEPTH_BUFFER)->m_pShaderResourceView };
 		m_pDeviceContext->PSSetShaderResources( 0, 2, RenderTargetViews );
 	}
 
@@ -2169,7 +2169,7 @@ void kbRenderer_DX11::RenderPostProcess() {
 
 	m_pDeviceContext->PSSetShaderResources( 0, 1, nullArray );
 
-	ID3D11ShaderResourceView * nullarray[] = { nullptr, nullptr };//'{ GetRenderTarget(ACCUMULATION_BUFFER)->m_pShaderResourceView, GetRenderTarget(COLOR_BUFFER)->m_pShaderResourceView };
+	ID3D11ShaderResourceView * nullarray[] = { nullptr, nullptr };//'{ GetRenderTarget_DX11(ACCUMULATION_BUFFER)->m_pShaderResourceView, GetRenderTarget_DX11(COLOR_BUFFER)->m_pShaderResourceView };
 	m_pDeviceContext->PSSetShaderResources( 0, 2, nullarray );
 }
 
@@ -2227,7 +2227,7 @@ void kbRenderer_DX11::RenderConsole() {
 
 	m_pDeviceContext->PSSetShaderResources( 0, 1, nullArray );
 
-	ID3D11ShaderResourceView * nullarray[] = { nullptr, nullptr };//'{ GetRenderTarget(ACCUMULATION_BUFFER)->m_pShaderResourceView, GetRenderTarget(COLOR_BUFFER)->m_pShaderResourceView };
+	ID3D11ShaderResourceView * nullarray[] = { nullptr, nullptr };//'{ GetRenderTarget_DX11(ACCUMULATION_BUFFER)->m_pShaderResourceView, GetRenderTarget_DX11(COLOR_BUFFER)->m_pShaderResourceView };
 	m_pDeviceContext->PSSetShaderResources( 0, 2, nullarray );
 }
 
@@ -3227,7 +3227,7 @@ kbVec2i kbRenderer_DX11::GetEntityIdAtScreenPosition( const uint x, const uint y
 	box.front = 0;
 	box.back = 1;
 	
-	m_pDeviceContext->CopyResource( m_pOffScreenRenderTargetTexture, GetRenderTarget(eRenderTargetTexture::MOUSE_PICKER_BUFFER)->m_pRenderTargetTexture );
+	m_pDeviceContext->CopyResource( m_pOffScreenRenderTargetTexture, GetRenderTarget_DX11(eRenderTargetTexture::MOUSE_PICKER_BUFFER)->m_pRenderTargetTexture );
 	
 	D3D11_MAPPED_SUBRESOURCE mappedResource;
 	m_pDeviceContext->Map( m_pOffScreenRenderTargetTexture, 0, D3D11_MAP_READ, 0, &mappedResource );
