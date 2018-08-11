@@ -115,7 +115,7 @@ void EtherGame::PlayGame_Internal() {
 	const kbGameEntity *const pBomberPrefab = pVehiclePackage->GetPrefab( "EL_Bomber" )->GetGameEntity( 0 );
 	kbErrorCheck( pBomberPrefab != nullptr, "Unable to find bomber prefab" );
 
-	for ( int i = 0; i < 3; i++ ) {
+	/*for ( int i = 0; i < 3; i++ ) {
 		m_ELBomberEntity[i] = CreateEntity( pBomberPrefab );
 
 		// Hack - billboard type isn't being set correctly from data.  So force it here
@@ -134,7 +134,7 @@ void EtherGame::PlayGame_Internal() {
 	g_pD3D11Renderer->LoadTexture( "./assets/UI/TitleScreen.jpg", 5 );
 	g_pD3D11Renderer->LoadTexture( "./assets/UI/verse1.jpg", 6 );
 	g_pD3D11Renderer->LoadTexture( "./assets/UI/verse2.jpg", 7 );
-	g_pD3D11Renderer->LoadTexture( "./assets/UI/verse3.jpg", 8 );
+	g_pD3D11Renderer->LoadTexture( "./assets/UI/verse3.jpg", 8 );*/
 }
 
 /**
@@ -482,13 +482,23 @@ kbGameEntity * EtherGame::CreatePlayer( const int netId, const kbGUID & prefabGU
 		}
 
 		// Place on ground
-		if ( m_pWorldGenComponent != nullptr ) {
+	/*	if ( m_pWorldGenComponent != nullptr ) {
 			const kbVec3 desiredStartLocation = kbVec3::zero;
 			kbVec3 groundPt;
 			if ( TraceAgainstWorld( desiredStartLocation + kbVec3( 0.0f, 10000.0f, 0.0f ), desiredStartLocation - kbVec3( 0.0f, 10000.0f, 0.0f ), groundPt, false ) ) {
 				pNewEntity->SetPosition( groundPt );
 			} else {
 				pNewEntity->SetPosition( DesiredLocation );
+			}
+		}*/
+
+		for ( int i = 0; i < GetGameEntities().size(); i++ ) {
+
+			const kbGameEntity *const pCurEntity = GetGameEntities()[i];
+			kbPlayerStartComponent *const pStart = (kbPlayerStartComponent*)pCurEntity->GetComponentByType( kbPlayerStartComponent::GetType() );
+			if ( pStart != nullptr ) {
+				pNewEntity->SetPosition( pCurEntity->GetPosition() );
+				break;
 			}
 		}
 

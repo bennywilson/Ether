@@ -29,7 +29,7 @@ enum eTextureFormat {
 	NUM_TEXTURE_FORMATS,
 };
 
-enum eRenderTargetTexture {
+enum eReservedRenderTargets {
 	COLOR_BUFFER,		// Color in xyz.  Pixel Depth in W
 	NORMAL_BUFFER,		// Normal in xyz. W currently unused
 	SPECULAR_BUFFER,
@@ -41,17 +41,20 @@ enum eRenderTargetTexture {
 	DOWN_RES_BUFFER_2,
 	SCRATCH_BUFFER,
 	MOUSE_PICKER_BUFFER,
-	NUM_RENDER_TARGETS,
+	NUM_RESERVED_RENDER_TARGETS,
 };
 
 class kbRenderTexture {
+
+	friend class kbRenderer;
 
 //-------------------------------------------------------------------------------------------------------------------------------------------------------------
 public:
 												kbRenderTexture() :
 													m_Width( 0 ),
 													m_Height( 0 ),
-													m_TextureFormat( KBTEXTURE_NULLFORMAT ) { }
+													m_TextureFormat( KBTEXTURE_NULLFORMAT ),
+													m_bInUse( false ) { }
    
 												kbRenderTexture( const int width, const int height, const eTextureFormat targetFormat ) :
 													m_Width( width ),
@@ -74,6 +77,8 @@ private:
 	int											m_Height;
 
 	eTextureFormat								m_TextureFormat;
+
+	bool										m_bInUse;
 };
 /**
  *	kbRenderWindow
@@ -272,13 +277,19 @@ public:
 	kbViewMode_t								m_ViewMode;
 
 	// Render thread functions
-	virtual kbRenderTexture *					RT_GetRenderTexture( const int width, const int height, const eTextureFormat ) = 0;
+	virtual kbRenderTexture *					RT_GetRenderTexture( const int width, const int height, const eTextureFormat );
+	virtual void								RT_ReturnRenderTexture( kbRenderTexture *const pRenderTexture );
 
 private:
+
 	virtual void								Init_Internal( HWND, const int width, const int height, const bool bUseHMD, const bool bUseHMDTrackingOnly ) = 0;
 	virtual bool								LoadTexture_Internal( const char * name, int index, int width = -1, int height = -1 ) = 0;
 	virtual void								RenderSync_Internal() = 0;
 	virtual void								Shutdown_Internal() = 0;
+	
+	virtual kbRenderTexture *					GetRenderTexture_Internal( const int width, const int height, const eTextureFormat texFormat ) = 0;
+	virtual void								ReturnRenderTexture_Internal( const kbRenderTexture * ) = 0;
+
 	virtual void								RenderScene() = 0;
 
 protected:

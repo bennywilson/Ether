@@ -362,20 +362,21 @@ public:
 	const static float							Near_Plane;
 	const static float							Far_Plane;
 
-	// Render thread functions
-	virtual kbRenderTexture *					RT_GetRenderTexture( const int width, const int height, const eTextureFormat textureFormat ) override;
-
 private:
 
 	virtual void								Init_Internal( HWND, const int width, const int height, const bool bUseHMD, const bool bUseHMDTrackingOnly ) override;
 	virtual bool								LoadTexture_Internal( const char * name, int index, int width = -1, int height = -1 ) override;
+
+	virtual kbRenderTexture *					GetRenderTexture_Internal( const int width, const int height, const eTextureFormat texFormat ) override;
+	virtual void								ReturnRenderTexture_Internal( const kbRenderTexture *const ) override;
+
 	virtual void								RenderSync_Internal() override;
+
 	virtual void								Shutdown_Internal() override;
 
 	bool										InitializeOculus();
 
-	void										CreateRenderTarget( const int width, const int height, const eTextureFormat format );
-	void										SetRenderTarget( eRenderTargetTexture type );
+	void										SetRenderTarget( eReservedRenderTargets type );
 
 	virtual void								RenderScene() override;
 
@@ -413,7 +414,7 @@ private:
 	void										DrawTexture( ID3D11ShaderResourceView *const pShaderResourceView, const kbVec3 & pixelPosition, 
 															 const kbVec3 & pixelSize, const kbVec3 & renderTargetSize );
 
-	kbRenderTexture_DX11 *						GetRenderTarget_DX11( const eRenderTargetTexture target ) { return (kbRenderTexture_DX11*) m_pRenderTargets[target]; }
+	kbRenderTexture_DX11 *						GetRenderTarget_DX11( const eReservedRenderTargets target ) { return (kbRenderTexture_DX11*) m_pRenderTargets[target]; }
 
 	HWND										m_hwnd;
 	IDXGIFactory *								m_pDXGIFactory;
