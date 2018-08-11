@@ -304,7 +304,6 @@ void kbGPUTimeStamp::EndFrame( ID3D11DeviceContext *const DeviceContext ) {
 	}
 }
 
-
 /**
  *	kbGPUTimeStamp::UpdateFrameNum
  */
@@ -491,21 +490,21 @@ void kbRenderer_DX11::Init_Internal( HWND hwnd, const int frameWidth, const int 
 	KBTEXTURE_R16G16,
 	NUM_TEXTURE_FORMATS,
 */
-	CreateRenderTarget( deferredRTWidth, deferredRTHeight, KBTEXTURE_R16G16B16A16 );
-	CreateRenderTarget( deferredRTWidth, deferredRTHeight, KBTEXTURE_R16G16B16A16 );
-	CreateRenderTarget( deferredRTWidth, deferredRTHeight, KBTEXTURE_R16G16B16A16 );
-	CreateRenderTarget( deferredRTWidth, deferredRTHeight, KBTEXTURE_R32 );
-	CreateRenderTarget( deferredRTWidth, deferredRTHeight, KBTEXTURE_R16G16B16A16 );
+	RT_GetRenderTexture( deferredRTWidth, deferredRTHeight, KBTEXTURE_R16G16B16A16 );
+	RT_GetRenderTexture( deferredRTWidth, deferredRTHeight, KBTEXTURE_R16G16B16A16 );
+	RT_GetRenderTexture( deferredRTWidth, deferredRTHeight, KBTEXTURE_R16G16B16A16 );
+	RT_GetRenderTexture( deferredRTWidth, deferredRTHeight, KBTEXTURE_R32 );
+	RT_GetRenderTexture( deferredRTWidth, deferredRTHeight, KBTEXTURE_R16G16B16A16 );
 
 	const int shadowBufferSize = 2048;
-	CreateRenderTarget( shadowBufferSize, shadowBufferSize, KBTEXTURE_R32 );
-	CreateRenderTarget( shadowBufferSize, shadowBufferSize, KBTEXTURE_D24S8 );
+	RT_GetRenderTexture( shadowBufferSize, shadowBufferSize, KBTEXTURE_R32 );
+	RT_GetRenderTexture( shadowBufferSize, shadowBufferSize, KBTEXTURE_D24S8 );
 
-	CreateRenderTarget( deferredRTWidth / 2, deferredRTHeight / 2, KBTEXTURE_R16G16B16A16 );
-	CreateRenderTarget( deferredRTWidth / 2, deferredRTHeight / 2, KBTEXTURE_R16G16B16A16 );
-	CreateRenderTarget( deferredRTHeight / 2, deferredRTHeight / 2, KBTEXTURE_R16G16B16A16 );
+	RT_GetRenderTexture( deferredRTWidth / 2, deferredRTHeight / 2, KBTEXTURE_R16G16B16A16 );
+	RT_GetRenderTexture( deferredRTWidth / 2, deferredRTHeight / 2, KBTEXTURE_R16G16B16A16 );
+	RT_GetRenderTexture( deferredRTHeight / 2, deferredRTHeight / 2, KBTEXTURE_R16G16B16A16 );
 
-	CreateRenderTarget( deferredRTWidth, deferredRTHeight, KBTEXTURE_R16G16 );
+	RT_GetRenderTexture( deferredRTWidth, deferredRTHeight, KBTEXTURE_R16G16 );
 
 	// create back buffer
 	D3D11_TEXTURE2D_DESC depthBufferDesc = { 0 };
@@ -944,13 +943,13 @@ int kbRenderer_DX11::CreateRenderView( HWND hwnd )
 }
 
 /**
- *	kbRenderer_DX11::CreateRenderTarget
+ *	kbRenderer_DX11::GetRenderTexture_Internal
  */
-void kbRenderer_DX11::CreateRenderTarget( const int width, const int height, const eTextureFormat targetFormat ) {
+kbRenderTexture * kbRenderer_DX11::GetRenderTexture_Internal( const int width, const int height, const eTextureFormat targetFormat ) {
 
 	m_pRenderTargets.push_back( new kbRenderTexture_DX11( width, height, targetFormat ) );
 
-	kbRenderTexture_DX11 & rt = *GetRenderTarget_DX11( (eRenderTargetTexture)(m_pRenderTargets.size() - 1) );
+	kbRenderTexture_DX11 & rt = *GetRenderTarget_DX11( (eReservedRenderTargets)(m_pRenderTargets.size() - 1) );
 
 	if ( targetFormat == KBTEXTURE_D24S8 ) {
 		// create back buffer
@@ -986,7 +985,7 @@ void kbRenderer_DX11::CreateRenderTarget( const int width, const int height, con
 	
 		HRESULT hr = m_pD3DDevice->CreateShaderResourceView( GetRenderTarget_DX11(index].m_pRenderTargetTexture, &shaderResourceViewDesc, &GetRenderTarget_DX11(index].m_pShaderResourceView );
 */
-		return;
+		return &rt;
 	}
 
 	D3D11_TEXTURE2D_DESC textureDesc = { 0 };
@@ -1022,7 +1021,17 @@ void kbRenderer_DX11::CreateRenderTarget( const int width, const int height, con
 
 	hr = m_pD3DDevice->CreateShaderResourceView( rt.m_pRenderTargetTexture, &shaderResourceViewDesc, &rt.m_pShaderResourceView );
 	kbErrorCheck( SUCCEEDED( hr ), "kbRenderer_DX11::CreateRenderTarget() - Failed to create SRV texture for index", (int)targetFormat );
+
+	return &rt;
 }
+
+/**
+ *	kbRenderer_DX11::ReturnRenderTexture_Internal
+ */
+void kbRenderer_DX11::ReturnRenderTexture_Internal( const kbRenderTexture *const pRenderTexture ) {
+
+}
+
 
 /**
  *	kbRenderer_DX11::Shutdown_Internal
@@ -1108,7 +1117,7 @@ void kbRenderer_DX11::Shutdown_Internal() {
 /**
  *	kbRenderer_DX11::SetRenderTarget
  */
-void kbRenderer_DX11::SetRenderTarget( eRenderTargetTexture type ) {
+void kbRenderer_DX11::SetRenderTarget( eReservedRenderTargets type ) {
 	m_pDeviceContext->OMSetRenderTargets( 1, &GetRenderTarget_DX11(type)->m_pRenderTargetView, m_pDepthStencilView );
 }
 
@@ -3205,14 +3214,6 @@ void kbRenderer_DX11::RenderDebugBillboards( const bool bIsEntityIdPass ) {
 	}
 }
 
-
-/**
- *	kbRenderer_DX11::GetRenderTexture
- */
-kbRenderTexture * kbRenderer_DX11::RT_GetRenderTexture( const int width, const int height, const eTextureFormat texFormat ) {
-	return nullptr;
-}
-
 /**
  *	kbRenderer_DX11::GetEntityIdAtScreenPosition
  */
@@ -3227,7 +3228,7 @@ kbVec2i kbRenderer_DX11::GetEntityIdAtScreenPosition( const uint x, const uint y
 	box.front = 0;
 	box.back = 1;
 	
-	m_pDeviceContext->CopyResource( m_pOffScreenRenderTargetTexture, GetRenderTarget_DX11(eRenderTargetTexture::MOUSE_PICKER_BUFFER)->m_pRenderTargetTexture );
+	m_pDeviceContext->CopyResource( m_pOffScreenRenderTargetTexture, GetRenderTarget_DX11(eReservedRenderTargets::MOUSE_PICKER_BUFFER)->m_pRenderTargetTexture );
 	
 	D3D11_MAPPED_SUBRESOURCE mappedResource;
 	m_pDeviceContext->Map( m_pOffScreenRenderTargetTexture, 0, D3D11_MAP_READ, 0, &mappedResource );

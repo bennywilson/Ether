@@ -202,9 +202,9 @@ kbRenderer::~kbRenderer() {
  *	kbRenderer::Init
  */
 void kbRenderer::Init( HWND hwnd, const int width, const int height, const bool bUseHMD, const bool bUseHMDTrackingOnly ) {
+
 	kbLog( "Initializing kbRenderer" );
 	Init_Internal( hwnd, width, height, bUseHMD, bUseHMDTrackingOnly );
-
 
 	// Kick off render thread
 	m_pRenderJob = new kbRenderJob();
@@ -243,8 +243,8 @@ void kbRenderer::LoadTexture( const char * name, int index, int width, int heigh
  *	kbRenderer::AddRenderObject
  */
 void kbRenderer::AddRenderObject( const kbRenderObject & renderObjectToAdd ) {
-	kbErrorCheck( m_pCurrentRenderWindow != nullptr, "kbRenderer_DX11::AddRenderObject - NULL m_pCurrentRenderWindow" );
-	kbErrorCheck( renderObjectToAdd.m_pComponent != nullptr, "kbRenderer_DX11::AddRenderObject - NULL component" );
+	kbErrorCheck( m_pCurrentRenderWindow != nullptr, "kbRenderer::AddRenderObject - NULL m_pCurrentRenderWindow" );
+	kbErrorCheck( renderObjectToAdd.m_pComponent != nullptr, "kbRenderer::AddRenderObject - NULL component" );
 
 	m_RenderObjectList_GameThread.push_back( renderObjectToAdd );
 	kbRenderObject & renderObj = m_RenderObjectList_GameThread[m_RenderObjectList_GameThread.size() - 1];
@@ -254,11 +254,11 @@ void kbRenderer::AddRenderObject( const kbRenderObject & renderObjectToAdd ) {
 }
 
 /**
- *	kbRenderer_DX11::UpdateRenderObject
+ *	kbRenderer::UpdateRenderObject
  */
 void kbRenderer::UpdateRenderObject( const kbRenderObject & renderObjectToUpdate ) {
-	kbErrorCheck( m_pCurrentRenderWindow != nullptr, "kbRenderer_DX11::UpdateRenderObject() - NULL m_pCurrentRenderWindow" );
-	kbErrorCheck( renderObjectToUpdate.m_pComponent != nullptr, "kbRenderer_DX11::UpdateRenderObject() - NULL component" );
+	kbErrorCheck( m_pCurrentRenderWindow != nullptr, "kbRenderer::UpdateRenderObject() - NULL m_pCurrentRenderWindow" );
+	kbErrorCheck( renderObjectToUpdate.m_pComponent != nullptr, "kbRenderer::UpdateRenderObject() - NULL component" );
 
 	m_RenderObjectList_GameThread.push_back( renderObjectToUpdate );
 	kbRenderObject & renderObj = m_RenderObjectList_GameThread[m_RenderObjectList_GameThread.size() - 1];
@@ -271,8 +271,8 @@ void kbRenderer::UpdateRenderObject( const kbRenderObject & renderObjectToUpdate
  *	kbRenderer::RemoveRenderObject
  */
 void kbRenderer::RemoveRenderObject( const kbRenderObject & renderObjectToRemove ) {
-	kbErrorCheck( m_pCurrentRenderWindow != nullptr, "kbRenderer_DX11::RemoveRenderObject() - NULL m_pCurrentRenderWindow" );
-	kbErrorCheck( renderObjectToRemove.m_pComponent != nullptr, "kbRenderer_DX11::RemoveRenderObject - NULL component" );
+	kbErrorCheck( m_pCurrentRenderWindow != nullptr, "kbRenderer::RemoveRenderObject() - NULL m_pCurrentRenderWindow" );
+	kbErrorCheck( renderObjectToRemove.m_pComponent != nullptr, "kbRenderer::RemoveRenderObject - NULL component" );
 
 	// Remove duplicates
 	for ( int i = 0; i < m_RenderObjectList_GameThread.size(); i++ ) {
@@ -311,7 +311,7 @@ void kbRenderer::DrawDebugText( const std::string & theString, const float X, co
 void kbRenderer::AddLight( const kbLightComponent * pLightComponent, const kbVec3 & pos, const kbQuat & orientation ) {
 
 	if ( m_pCurrentRenderWindow == nullptr ) {
-		kbError( "kbRenderer_DX11::AddLight - nullptr Render Window" );
+		kbError( "kbRenderer::AddLight - nullptr Render Window" );
 	}
 
 	kbRenderLight newLight;
@@ -348,7 +348,7 @@ void kbRenderer::AddLight( const kbLightComponent * pLightComponent, const kbVec
 void kbRenderer::UpdateLight( const kbLightComponent * pLightComponent, const kbVec3 & pos, const kbQuat & orientation ) {
 
 	if ( m_pCurrentRenderWindow == nullptr ) {
-		kbError( "kbRenderer_DX11::UpdateLight - nullptr Render Window" );
+		kbError( "kbRenderer::UpdateLight - nullptr Render Window" );
 	}
 
 	for ( int i = 0; i < m_LightList_GameThread.size(); i++ ) {
@@ -401,7 +401,7 @@ void kbRenderer::UpdateLight( const kbLightComponent * pLightComponent, const kb
 void kbRenderer::RemoveLight( const kbLightComponent *const pLightComponent ) {
 	
 	if ( m_pCurrentRenderWindow == nullptr ) {
-		kbError( "kbRenderer_DX11::RemoveLight - nullptr Render Window" );
+		kbError( "kbRenderer::RemoveLight - nullptr Render Window" );
 	}
 
 	kbRenderLight lightToRemove;
@@ -441,7 +441,7 @@ void kbRenderer::AddParticle( const void *const pParticleComponent, const kbMode
 }
 
 /**
- *	kbRenderer_DX11::UpdateParticle
+ *	kbRenderer::UpdateParticle
  */
 void kbRenderer::UpdateParticle( const void *const pParticleComponent, const kbModel *const pModel, const kbVec3 & pos, kbQuat & orientation ) {
 
@@ -495,7 +495,7 @@ void kbRenderer::AddLightShafts( const kbLightShaftsComponent *const pComponent,
 }
 
 /**
- *	kbRenderer_DX11::UpdateLightShafts
+ *	kbRenderer::UpdateLightShafts
  */
 void kbRenderer::UpdateLightShafts( const kbLightShaftsComponent *const pComponent, const kbVec3 & pos, const kbQuat & orientation ) {
 	kbLightShafts updatedLightShafts;
@@ -523,7 +523,7 @@ void kbRenderer::UpdateLightShafts( const kbLightShaftsComponent *const pCompone
 }
 
 /**
- *	kbRenderer_DX11::RemoveLightShafts
+ *	kbRenderer::RemoveLightShafts
  */
 void kbRenderer::RemoveLightShafts( const kbLightShaftsComponent *const pComponent ) {
 	kbLightShafts removeLightShafts;
@@ -540,7 +540,7 @@ void kbRenderer::RemoveLightShafts( const kbLightShaftsComponent *const pCompone
 }
 
 /**
- *	kbRenderer_DX11::UpdateFog
+ *	kbRenderer::UpdateFog
  */
 void kbRenderer::UpdateFog( const kbColor & color, const float startDistance, const float endDistance ) {
 	m_FogColor_GameThread = color;
@@ -549,7 +549,7 @@ void kbRenderer::UpdateFog( const kbColor & color, const float startDistance, co
 }
 
 /**
- *	kbRenderer_DX11::RenderSync
+ *	kbRenderer::RenderSync
  */
 void kbRenderer::RenderSync() {	
 
@@ -582,14 +582,14 @@ void kbRenderer::RenderSync() {
 			delete pRenderObject;
 		} else {
 			const kbComponent *const pComponent = m_RenderObjectList_GameThread[i].m_pComponent;
-			kbErrorCheck( pComponent != nullptr, "kbRenderer_DX11::RenderSync() - Adding/updating a render object with a NULL component" );
+			kbErrorCheck( pComponent != nullptr, "kbRenderer::RenderSync() - Adding/updating a render object with a NULL component" );
 
 			if ( m_RenderObjectList_GameThread[i].m_bIsFirstAdd == false ) {
 
 				// Updating a renderobject 
 				std::map< const kbComponent *, kbRenderObject * >::iterator it = m_pCurrentRenderWindow->m_RenderObjectMap.find( m_RenderObjectList_GameThread[i].m_pComponent );
 				if ( it == m_pCurrentRenderWindow->m_RenderObjectMap.end() || it->second == nullptr ) {
-					kbError( "kbRenderer_DX11::UpdateRenderObject - Error, Updating a RenderObject that doesn't exist" );
+					kbError( "kbRenderer::UpdateRenderObject - Error, Updating a RenderObject that doesn't exist" );
 				}
 
 				renderObject = it->second;
@@ -603,7 +603,7 @@ void kbRenderer::RenderSync() {
 
 				// Adding new renderobject
 				renderObject = m_pCurrentRenderWindow->m_RenderObjectMap[pComponent];
-				kbErrorCheck( renderObject == nullptr, "kbRenderer_DX11::AddRenderObject() - Model %s already added", m_RenderObjectList_GameThread[i].m_pModel->GetFullName().c_str() );
+				kbErrorCheck( renderObject == nullptr, "kbRenderer::AddRenderObject() - Model %s already added", m_RenderObjectList_GameThread[i].m_pModel->GetFullName().c_str() );
 
 				if ( pComponent->IsA( kbSkeletalModelComponent::GetType() ) && m_RenderObjectList_GameThread[i].m_pModel->NumBones() > 0 ) {
 
@@ -640,7 +640,7 @@ void kbRenderer::RenderSync() {
 
 				if ( renderLight != nullptr ) {
 					bIsFirstAdd = false;
-					kbError( "kbRenderer_DX11::AddLight - Warning, adding a render light that already exists" );
+					kbError( "kbRenderer::AddLight - Warning, adding a render light that already exists" );
 				} else {
 					renderLight = new kbRenderLight;
 					m_pCurrentRenderWindow->m_RenderLightMap[m_LightList_GameThread[i].m_pLightComponent] = renderLight;
@@ -650,7 +650,7 @@ void kbRenderer::RenderSync() {
 				std::map< const kbLightComponent *, kbRenderLight * >::iterator it = m_pCurrentRenderWindow->m_RenderLightMap.find( m_LightList_GameThread[i].m_pLightComponent );
 
 				if ( it == m_pCurrentRenderWindow->m_RenderLightMap.end() || it->second == nullptr ) {
-					kbError( "kbRenderer_DX11::UpdateLight - Error, Updating a RenderObject that doesn't exist" );
+					kbError( "kbRenderer::UpdateLight - Error, Updating a RenderObject that doesn't exist" );
 				} else {
 					renderLight = it->second;
 				}
@@ -676,7 +676,7 @@ void kbRenderer::RenderSync() {
 				renderParticle = m_pCurrentRenderWindow->m_RenderParticleMap[pComponent];
 
 				if ( renderParticle != nullptr ) {
-					kbError( "kbRenderer_DX11::AddParticle - Adding a particle that already exists" );
+					kbError( "kbRenderer::AddParticle - Adding a particle that already exists" );
 				} else {
 					renderParticle = new kbRenderObject;
 					m_pCurrentRenderWindow->m_RenderParticleMap[pComponent] = renderParticle;
@@ -684,7 +684,7 @@ void kbRenderer::RenderSync() {
 			} else {
 				std::map< const void *, kbRenderObject * >::iterator it = m_pCurrentRenderWindow->m_RenderParticleMap.find( pComponent );
 				if ( it == m_pCurrentRenderWindow->m_RenderParticleMap.end() || it->second == nullptr ) {
-					kbError( "kbRenderer_DX11::UpdateRenderObject - Error, Updating a RenderObject that doesn't exist" );
+					kbError( "kbRenderer::UpdateRenderObject - Error, Updating a RenderObject that doesn't exist" );
 				}
 
 				 renderParticle = it->second;
@@ -701,7 +701,7 @@ void kbRenderer::RenderSync() {
 			bool bAlreadyExists = false;
 			for ( int j = 0; j < m_LightShafts_RenderThread.size(); j++ ) {
 				if ( m_LightShafts_RenderThread[j].m_pLightShaftsComponent = m_LightShafts_GameThread[i].m_pLightShaftsComponent ) {
-					kbError( "kbRenderer_DX11::SetReadyToRender() - Adding light shafts that already exist" );
+					kbError( "kbRenderer::SetReadyToRender() - Adding light shafts that already exist" );
 					bAlreadyExists = true;
 					break;
 				}
@@ -721,7 +721,7 @@ void kbRenderer::RenderSync() {
 			}
 
 			if ( bExists == false ) {
-				kbError( "kbRenderer_DX11::SetReadyToRender() - Removing light shafts that do not exist" );
+				kbError( "kbRenderer::SetReadyToRender() - Removing light shafts that do not exist" );
 			}
 		} else {
 			for ( int j = 0; j < m_LightShafts_RenderThread.size(); j++ ) {
@@ -779,7 +779,7 @@ void kbRenderer::DrawModel( const kbModel * pModel, const kbVec3 & position, con
 }
 
 /**
- *	kbRenderer_DX11::DrawScreenSpaceQuad
+ *	kbRenderer::DrawScreenSpaceQuad
  */
 void kbRenderer::DrawScreenSpaceQuad( const int start_x, const int start_y, const int size_x, const int size_y, const int textureIndex, kbShader *const pShader ) {
 	ScreenSpaceQuad_t quadToAdd;
@@ -796,7 +796,7 @@ void kbRenderer::DrawScreenSpaceQuad( const int start_x, const int start_y, cons
 #define AddVert( vert ) drawVert.position = vert; m_DebugLines_GameThread.push_back( drawVert );
 
 /**
- *	kbRenderer_DX11::DrawLine
+ *	kbRenderer::DrawLine
  */
 void kbRenderer::DrawLine( const kbVec3 & start, const kbVec3 & end, const kbColor & color ) {
 
@@ -814,7 +814,7 @@ void kbRenderer::DrawLine( const kbVec3 & start, const kbVec3 & end, const kbCol
 }
 
 /**
- *	kbRenderer_DX11::DrawBox
+ *	kbRenderer::DrawBox
  */
 void kbRenderer::DrawBox( const kbBounds & bounds, const kbColor & color ) {
 
@@ -852,7 +852,7 @@ void kbRenderer::DrawBox( const kbBounds & bounds, const kbColor & color ) {
 }
 
 /**
- *	kbRenderer_DX11::DrawSphere
+ *	kbRenderer::DrawSphere
  */
 void kbRenderer::DrawSphere( const kbVec3 & origin, const float radius, const int InNumSegments, const kbColor & color ) {
 	const int numSegments = max( InNumSegments, 4 );
@@ -894,7 +894,7 @@ void kbRenderer::DrawSphere( const kbVec3 & origin, const float radius, const in
 }
 
 /**
- *	kbRenderer_DX11::DrawPreTransformedLine
+ *	kbRenderer::DrawPreTransformedLine
  */
 void kbRenderer::DrawPreTransformedLine( const std::vector<kbVec3> & vertList, const kbColor & color ) {
 	vertexLayout drawVert;
@@ -906,6 +906,32 @@ void kbRenderer::DrawPreTransformedLine( const std::vector<kbVec3> & vertList, c
 		drawVert.position = vertList[i];
 		m_DebugPreTransformedLines.push_back( drawVert );
 	}
+}
+
+/**
+ *	kbRenderer::RT_GetRenderTexture
+ */
+kbRenderTexture * kbRenderer::RT_GetRenderTexture( const int width, const int height, const eTextureFormat texFormat ) {
+
+	for ( int i = NUM_RESERVED_RENDER_TARGETS; i < m_pRenderTargets.size(); i++ ) {
+		kbRenderTexture *const pRT = m_pRenderTargets[i];
+		if ( pRT->m_bInUse == false && pRT->GetWidth() == width && pRT->GetHeight() == height && pRT->GetTextureFormat() == texFormat ) {
+			pRT->m_bInUse = true;
+			return pRT;
+		}
+	}
+
+	kbRenderTexture *const pRenderTexture = GetRenderTexture_Internal( width, height, texFormat );
+	pRenderTexture->m_bInUse = true;
+	return pRenderTexture;
+}
+
+/**
+ *	kbRenderer::RT_ReturnRenderTexture
+ */
+void kbRenderer::RT_ReturnRenderTexture( kbRenderTexture *const pRenderTexture ) {
+	ReturnRenderTexture_Internal( pRenderTexture );
+	pRenderTexture->m_bInUse = false;
 }
 
 /**

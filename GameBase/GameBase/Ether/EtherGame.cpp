@@ -115,7 +115,7 @@ void EtherGame::PlayGame_Internal() {
 	const kbGameEntity *const pBomberPrefab = pVehiclePackage->GetPrefab( "EL_Bomber" )->GetGameEntity( 0 );
 	kbErrorCheck( pBomberPrefab != nullptr, "Unable to find bomber prefab" );
 
-	for ( int i = 0; i < 3; i++ ) {
+	/*for ( int i = 0; i < 3; i++ ) {
 		m_ELBomberEntity[i] = CreateEntity( pBomberPrefab );
 
 		// Hack - billboard type isn't being set correctly from data.  So force it here
@@ -134,7 +134,7 @@ void EtherGame::PlayGame_Internal() {
 	g_pD3D11Renderer->LoadTexture( "./assets/UI/TitleScreen.jpg", 5 );
 	g_pD3D11Renderer->LoadTexture( "./assets/UI/verse1.jpg", 6 );
 	g_pD3D11Renderer->LoadTexture( "./assets/UI/verse2.jpg", 7 );
-	g_pD3D11Renderer->LoadTexture( "./assets/UI/verse3.jpg", 8 );
+	g_pD3D11Renderer->LoadTexture( "./assets/UI/verse3.jpg", 8 );*/
 }
 
 /**
