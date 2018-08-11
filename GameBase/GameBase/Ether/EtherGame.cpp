@@ -482,13 +482,23 @@ kbGameEntity * EtherGame::CreatePlayer( const int netId, const kbGUID & prefabGU
 		}
 
 		// Place on ground
-		if ( m_pWorldGenComponent != nullptr ) {
+	/*	if ( m_pWorldGenComponent != nullptr ) {
 			const kbVec3 desiredStartLocation = kbVec3::zero;
 			kbVec3 groundPt;
 			if ( TraceAgainstWorld( desiredStartLocation + kbVec3( 0.0f, 10000.0f, 0.0f ), desiredStartLocation - kbVec3( 0.0f, 10000.0f, 0.0f ), groundPt, false ) ) {
 				pNewEntity->SetPosition( groundPt );
 			} else {
 				pNewEntity->SetPosition( DesiredLocation );
+			}
+		}*/
+
+		for ( int i = 0; i < GetGameEntities().size(); i++ ) {
+
+			const kbGameEntity *const pCurEntity = GetGameEntities()[i];
+			kbPlayerStartComponent *const pStart = (kbPlayerStartComponent*)pCurEntity->GetComponentByType( kbPlayerStartComponent::GetType() );
+			if ( pStart != nullptr ) {
+				pNewEntity->SetPosition( pCurEntity->GetPosition() );
+				break;
 			}
 		}
 
