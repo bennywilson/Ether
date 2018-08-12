@@ -61,6 +61,15 @@ struct kbShaderVarBindings_t {
 	};
 	std::vector<binding_t>						m_VarBindings;
 
+	bool ContainsBinding( const char *const pBinding ) {
+		for ( int i = 0; i < m_VarBindings.size(); i++ ) {
+			if ( m_VarBindings[i].m_VarName == pBinding ) {
+				return true;
+			}
+		}
+		return false;
+	}
+
     std::vector<std::string>					m_TextureNames;
 };
 
@@ -94,6 +103,10 @@ public:
 	const std::vector<kbVec4> &					GetGlobalShaderParams() const { return m_GlobalShaderParams_RenderThread; }	// todo: check if render thread
 
 	const kbShaderVarBindings_t &				GetShaderVarBindings() const { return m_ShaderVarBindings; }
+
+	// Render States
+	kbBlendFactor								GetSrcBlendFactor() const { return m_SrcBlendFactor; }
+	kbBlendFactor								GetDstBlendFactor() const { return m_DstBlendFactor; }
 
 private:
 	virtual bool								Load_Internal();

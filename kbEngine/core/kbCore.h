@@ -330,7 +330,7 @@ struct kbTextParser {
 	}
 
 	void EraseBlock() {
-		m_StringBuffer.erase( m_StartBlock, m_EndBlock );
+		m_StringBuffer.erase( m_StartBlock, 1 + m_EndBlock - m_StartBlock );
 	}
 
 	void RemoveComments() {

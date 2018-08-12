@@ -282,7 +282,7 @@ kbGameEntity 292847838 1140569109 1236968083 2365837966 {
 		m_RenderPass = FirstPersonPass
 		Model = .\assets\models\items\el_rifle_fp.ms3d
 		ShaderOverride = 2
-			..\..\kbengine\assets\shaders\basictexture.kbshader
+			..\..\kbengine\assets\shaders\basicSkinned.kbshader
 .\assets\shaders\baseholoscope.kbshader
 
 		Animations = 2

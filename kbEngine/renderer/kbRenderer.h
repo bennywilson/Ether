@@ -80,6 +80,32 @@ private:
 
 	bool										m_bInUse;
 };
+
+/**
+ *	kbRenderSubmesh
+ */
+class kbRenderSubmesh {
+
+	friend class kbRenderer;
+
+//-------------------------------------------------------------------------------------------------------------------------------------------------------------
+public:
+												kbRenderSubmesh( const kbRenderObject *const pInMesh, const int inMeshIdx, const ERenderPass renderPass ) :
+													m_pRenderObject( pInMesh ),
+													m_MeshIdx( inMeshIdx ),
+													m_RenderPass( renderPass ) { }
+
+	const kbRenderObject *						GetRenderObject() const { return m_pRenderObject; }
+	int											GetMeshIdx() const { return m_MeshIdx; }
+	ERenderPass									GetRenderPass() const { return m_RenderPass; }
+	const kbShader *							GetShader() const;
+
+private:
+	const kbRenderObject *						m_pRenderObject;
+	int											m_MeshIdx;
+	ERenderPass									m_RenderPass;
+};
+
 /**
  *	kbRenderWindow
  */
@@ -119,8 +145,9 @@ public:
 	const std::map<const kbLightComponent *, kbRenderLight *> &	GetRenderLightMap() const { return m_RenderLightMap; }
 	const std::map<const void *, kbRenderObject *> &			GetRenderParticleMap() const { return m_RenderParticleMap; }
 
-	std::vector<kbRenderObject*> &								GetVisibleRenderObjects(const int index ) { return m_VisibleRenderObjects[index]; }
-
+	std::vector<kbRenderObject*> &								GetVisibleRenderObjects( const int renderPass ) { return m_VisibleRenderObjects[renderPass]; }
+	std::vector<kbRenderSubmesh> &								GetVisibleSubMeshes( const int renderPass ) { return m_VisibleRenderMeshes[renderPass]; }
+ 
 	void														HackSetViewMatrix( const kbMat4 & inViewMat ) { m_ViewMatrix = inViewMat; }
 	void														HackSetViewProjectionMatrix( const kbMat4 & inViewProjMat ) { m_ViewProjectionMatrix = inViewProjMat; }
 	void														HackSetProjectionMatrix( const kbMat4 & inProjMat ) { m_ProjectionMatrix = inProjMat; }
@@ -158,7 +185,8 @@ private:
 	std::map<const kbLightComponent *, kbRenderLight *>			m_RenderLightMap;
 	std::map<const void *, kbRenderObject *>					m_RenderParticleMap;
 
-	std::vector<kbRenderObject*>								m_VisibleRenderObjects[NUM_RENDER_PASSES];
+	std::vector<kbRenderObject*>								m_VisibleRenderObjects[NUM_RENDER_PASSES];	// todo remove
+	std::vector<kbRenderSubmesh>								m_VisibleRenderMeshes[NUM_RENDER_PASSES];
 };
 
 /**

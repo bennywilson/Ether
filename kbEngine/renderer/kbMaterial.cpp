@@ -561,7 +561,9 @@ kbShader::kbShader() :
     m_pGeometryShader( nullptr ),
 	m_pVertexLayout( nullptr ),
 	m_VertexShaderFunctionName( "vertexShader" ),
-	m_PixelShaderFunctionName( "pixelShader" ) {
+	m_PixelShaderFunctionName( "pixelShader" ),
+	m_SrcBlendFactor( BlendFactor_None ),
+	m_DstBlendFactor( BlendFactor_None ) {
 }
 
 /**
@@ -584,6 +586,7 @@ kbShader::kbShader( const std::string & fileName ) :
  *	kbShader::Load_Internal
  */
 bool kbShader::Load_Internal() {
+
 	if ( g_pD3D11Renderer != nullptr ) {		// HACK TODO
 
 		// Load File

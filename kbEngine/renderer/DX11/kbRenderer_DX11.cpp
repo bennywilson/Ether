@@ -1242,33 +1242,37 @@ void kbRenderer_DX11::RenderScene() {
 			// Note: The first-person pass is drawn in the foreground pass before world objects. Foreground pixels set the stencil buffer to one to mask out
 			//  later pixels in the later background (world) pass. overwriting pixels drawn in the first-person pass
 			m_RenderState.SetDepthStencilState( true,
-													  kbRenderState::DepthWriteMaskAll,
-													  kbRenderState::CompareLess,
-													  true,
-													  0,
-													  0xff,
-													  kbRenderState::StencilKeep,
-													  kbRenderState::StencilKeep,
-													  kbRenderState::StencilReplace,
-													  kbRenderState::CompareAlways,
-													  kbRenderState::StencilKeep,
-													  kbRenderState::StencilKeep,
-													  kbRenderState::StencilReplace,
-													  kbRenderState::CompareAlways,
-													  1);
+												kbRenderState::DepthWriteMaskAll,
+												kbRenderState::CompareLess,
+												true,
+												0,
+												0xff,
+												kbRenderState::StencilKeep,
+												kbRenderState::StencilKeep,
+												kbRenderState::StencilReplace,
+												kbRenderState::CompareAlways,
+												kbRenderState::StencilKeep,
+												kbRenderState::StencilKeep,
+												kbRenderState::StencilReplace,
+												kbRenderState::CompareAlways,
+												1);
 
-
-			std::vector<kbRenderObject*> & FirstPersonPassVisibleList = m_pCurrentRenderWindow->GetVisibleRenderObjects( RP_FirstPerson );
+			std::vector<kbRenderSubmesh> & FirstPersonPassVisibleList = m_pCurrentRenderWindow->GetVisibleSubMeshes( RP_FirstPerson );
 			for ( int i = 0; i < FirstPersonPassVisibleList.size(); i++ ) {
-				RenderModel( FirstPersonPassVisibleList[i], RP_FirstPerson );
+				RenderMesh( &FirstPersonPassVisibleList[i], false );
 			}
-	
+
 			// Render models that need to be lit
 			m_RenderState.SetDepthStencilState();
 
-			std::vector<kbRenderObject*> & LightingPassVisibleList = m_pCurrentRenderWindow->GetVisibleRenderObjects( RP_Lighting );
+		/*	std::vector<kbRenderObject*> & LightingPassVisibleList = m_pCurrentRenderWindow->GetVisibleRenderObjects( RP_Lighting );
 			for ( int i = 0; i < LightingPassVisibleList.size(); i++ ) {
 				RenderModel( LightingPassVisibleList[i], RP_Lighting );
+			}*/
+
+			std::vector<kbRenderSubmesh> & LightingPassVisibleList = m_pCurrentRenderWindow->GetVisibleSubMeshes( RP_Lighting );
+			for ( int i = 0; i < LightingPassVisibleList.size(); i++ ) {
+				RenderMesh( &LightingPassVisibleList[i], false );
 			}
 
 			m_RenderState.SetDepthStencilState( false, kbRenderState::DepthWriteMaskZero, kbRenderState::CompareLess, false );
@@ -1420,6 +1424,7 @@ void kbRenderer_DX11::PreRenderCullAndSort() {
 
 	for ( int i = 0; i < NUM_RENDER_PASSES; i++ ) {
 		m_pCurrentRenderWindow->GetVisibleRenderObjects(i).clear();
+		m_pCurrentRenderWindow->GetVisibleSubMeshes(i).clear();
 	}
 
 	for ( auto iter = m_pCurrentRenderWindow->GetRenderObjectMap().begin(); iter != m_pCurrentRenderWindow->GetRenderObjectMap().end(); iter++ ) {
@@ -1441,6 +1446,23 @@ void kbRenderer_DX11::PreRenderCullAndSort() {
 		
 		if ( bIsVisible ) {
 			m_pCurrentRenderWindow->GetVisibleRenderObjects( renderObj.m_RenderPass ).push_back( &renderObj );
+
+			const kbModel *const pModel = renderObj.m_pModel;
+			for ( int i = 0; i < pModel->GetMeshes().size(); i++ ) {
+				const kbModel::mesh_t & mesh = pModel->GetMeshes()[i];
+				const kbShader * pShader = pModel->GetMaterials()[mesh.m_MaterialIndex].GetShader();
+
+				if ( renderObj.m_OverrideShaderList.size() > i ) {
+					pShader = renderObj.m_OverrideShaderList[i];
+				}
+
+				if ( pShader == nullptr || pShader->GetSrcBlendFactor() == BlendFactor_None || pShader->GetSrcBlendFactor() == BlendFactor_None ) {
+					m_pCurrentRenderWindow->GetVisibleSubMeshes( renderObj.m_RenderPass ).push_back( kbRenderSubmesh( &renderObj, i, renderObj.m_RenderPass ) );
+				} else {
+					m_pCurrentRenderWindow->GetVisibleSubMeshes( RP_Translucent ).push_back( kbRenderSubmesh( &renderObj, i, RP_Translucent ) );
+		
+				}
+			}
 		}
 	}
 }
@@ -1482,6 +1504,60 @@ void kbRenderer_DX11::RenderTranslucency() {
 
 	for ( auto iter = m_pCurrentRenderWindow->GetRenderParticleMap().begin(); iter != m_pCurrentRenderWindow->GetRenderParticleMap().end(); iter++ ) {
 		RenderModel( iter->second, RP_Translucent );
+	}
+
+	std::vector<kbRenderSubmesh> & visibleSubmeshList = m_pCurrentRenderWindow->GetVisibleSubMeshes( RP_Translucent );
+	for ( int i = 0; i < visibleSubmeshList.size(); i++ ) {
+		const kbRenderSubmesh & submesh = visibleSubmeshList[i];
+		const kbModel *const pModel = submesh.GetRenderObject()->m_pModel;
+
+		if ( submesh.GetRenderObject()->m_RenderPass == RP_FirstPerson ) {
+			m_RenderState.SetDepthStencilState( true,
+												kbRenderState::DepthWriteMaskZero,
+												kbRenderState::CompareLess,
+												true,
+												0,
+												0xff,
+												kbRenderState::StencilKeep,
+												kbRenderState::StencilKeep,
+												kbRenderState::StencilReplace,
+												kbRenderState::CompareAlways,
+												kbRenderState::StencilKeep,
+												kbRenderState::StencilKeep,
+												kbRenderState::StencilReplace,
+												kbRenderState::CompareAlways,
+												1);
+		} else {
+			m_RenderState.SetDepthStencilState(	true,
+												kbRenderState::DepthWriteMaskZero,
+												kbRenderState::CompareLess,
+												true,
+												0xff,
+												0x0,
+												kbRenderState::StencilKeep,
+												kbRenderState::StencilKeep,
+												kbRenderState::StencilReplace,
+												kbRenderState::CompareNotEqual,
+												kbRenderState::StencilKeep,
+												kbRenderState::StencilKeep,
+												kbRenderState::StencilReplace,
+												kbRenderState::CompareNotEqual,
+												1);
+		}
+
+		const kbShader *const pShader = submesh.GetShader();
+		m_RenderState.SetBlendState( false,
+									 false,
+									 true,
+									 pShader->GetSrcBlendFactor(),
+									 pShader->GetDstBlendFactor(),
+									 kbRenderState::BO_Add,
+									 BlendFactor_One,
+									 BlendFactor_Zero,
+									 kbRenderState::BO_Add,
+									 kbRenderState::CW_All );
+
+		RenderMesh( &visibleSubmeshList[i], false );
 	}
 
 	m_RenderState.SetBlendState();
@@ -2617,7 +2693,7 @@ void kbRenderer_DX11::CreateShaderFromText( const std::string & fileName, const 
 		polygonLayout[4].InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
 		polygonLayout[4].InstanceDataStepRate = 0;
 	}
-	else if (fileName.find("skinned") != std::string::npos || vertexShaderFunc.find( "skin" ) != std::string::npos ) {
+	else if (fileName.find("skinned") != std::string::npos || vertexShaderFunc.find( "skin" ) != std::string::npos || pShaderBindings->ContainsBinding( "boneList" ) ) {
 		polygonLayout.insert( polygonLayout.begin(), 5, D3D11_INPUT_ELEMENT_DESC() );
 
 		polygonLayout[0].SemanticName = "POSITION";
@@ -2801,6 +2877,230 @@ void kbRenderer_DX11::RenderScreenSpaceQuadImmediate( const int start_x, const i
 	m_pDeviceContext->VSSetConstantBuffers( 0, 1, &pConstantBuffer );
 
 	m_pDeviceContext->Draw( 6, 0 );
+}
+
+/**
+ *	kbRenderer_DX11::RenderMesh
+ */
+void kbRenderer_DX11::RenderMesh( const kbRenderSubmesh *const pRenderMesh, const bool bShadowPass ) {
+
+	const kbRenderObject * pRenderObject = pRenderMesh->GetRenderObject();
+	const kbModel *const pModel = pRenderObject->m_pModel;
+
+	kbErrorCheck( pRenderObject != nullptr && pRenderObject->m_pModel != nullptr, "kbRenderer_DX11::RenderModel() - no model found" );
+	kbErrorCheck( pModel->GetMaterials().size() > 0, "kbRenderer_DX11::RenderMesh() - No materials found for model %s", pRenderObject->m_pModel->GetFullName() );
+
+	kbMat4 worldMatrix;
+	worldMatrix.MakeScale( pRenderObject->m_Scale );
+	worldMatrix *= pRenderObject->m_Orientation.ToMat4();
+	worldMatrix[3] = pRenderObject->m_Position;
+
+	const UINT vertexStride = pModel->VertexStride();
+	const UINT vertexOffset = 0;
+
+	ID3D11Buffer *const pVertexBuffer = ( ID3D11Buffer * const ) pModel->m_VertexBuffer.GetBufferPtr();
+	m_pDeviceContext->IASetVertexBuffers( 0, 1, &pVertexBuffer, &vertexStride, &vertexOffset );
+
+    if ( pModel->IsPointCloud() ) {
+	    m_pDeviceContext->IASetPrimitiveTopology( D3D11_PRIMITIVE_TOPOLOGY_POINTLIST );
+    } else {
+	    ID3D11Buffer *const pIndexBuffer = ( ID3D11Buffer * const ) pModel->m_IndexBuffer.GetBufferPtr();
+	    m_pDeviceContext->IASetIndexBuffer( pIndexBuffer, DXGI_FORMAT_R32_UINT, 0 );
+	    m_pDeviceContext->IASetPrimitiveTopology( D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST );
+    }
+
+	const kbModel::mesh_t & pMesh = pModel->GetMeshes()[pRenderMesh->GetMeshIdx()];
+	const kbMaterial & meshMaterial = pModel->GetMaterials()[pMesh.m_MaterialIndex];
+
+	if ( m_ViewMode == ViewMode_Wireframe ) {
+		m_pDeviceContext->RSSetState( m_pWireFrameRasterizerState );
+	} else if ( meshMaterial.GetCullingMode() == kbMaterial::CM_BackFaces ) {
+		m_pDeviceContext->RSSetState( m_pDefaultRasterizerState );
+	} else if ( meshMaterial.GetCullingMode() == kbMaterial::CM_None ) {
+		m_pDeviceContext->RSSetState( m_pNoFaceCullingRasterizerState );
+	} else {
+		kbError( "kbRenderer_DX11::RenderModel() - Unsupported culling mode" );
+	}
+
+	// Get Shader
+	const kbShader * pShader = meshMaterial.GetShader();
+	const std::vector<kbShader *> *const pShaderOverrideList = &pRenderObject->m_OverrideShaderList;	
+	
+	if ( bShadowPass ) {
+		if ( pRenderObject->m_bIsSkinnedModel ) {
+			pShader = m_pSkinnedDirectionalLightShadowShader;
+		} else {
+			pShader = m_pDirectionalLightShadowShader;
+		}
+	
+	} else {
+		if ( pShaderOverrideList != nullptr && pShaderOverrideList->size() > pRenderMesh->GetMeshIdx() ) {
+			pShader = (*pShaderOverrideList)[pRenderMesh->GetMeshIdx()];
+		}
+	
+		if ( pShader == nullptr || pShader->GetPixelShader() == nullptr ) {
+			pShader = m_pMissingShader;
+		}
+	}
+	
+	m_pDeviceContext->IASetInputLayout( (ID3D11InputLayout*)pShader->GetVertexLayout() );
+	m_pDeviceContext->VSSetShader( (ID3D11VertexShader *)pShader->GetVertexShader(), nullptr, 0 );
+	
+	if ( pRenderMesh->GetRenderPass() == RP_MousePicker ) {
+	
+		m_pDeviceContext->PSSetShader( (ID3D11PixelShader *)m_pMousePickerIdShader->GetPixelShader(), nullptr, 0 );
+	
+		ID3D11Buffer *const pConstantBuffer = GetConstantBuffer( 32 );
+
+		D3D11_MAPPED_SUBRESOURCE mappedResource;
+		HRESULT hr = m_pDeviceContext->Map( pConstantBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource );
+		kbErrorCheck( SUCCEEDED(hr), "Failed to map matrix buffer" );
+		UINT *const pEntityId = (UINT*)mappedResource.pData;
+		*pEntityId = pRenderObject->m_EntityId;
+
+		UINT *const pGroupId = pEntityId + 1;
+		*pGroupId = (UINT)pRenderMesh->GetMeshIdx();
+
+		m_pDeviceContext->Unmap( pConstantBuffer, 0 );
+		m_pDeviceContext->PSSetConstantBuffers( 1, 1, &pConstantBuffer );
+	
+	} else {
+		m_pDeviceContext->PSSetShader( (ID3D11PixelShader *)pShader->GetPixelShader(), nullptr, 0 );
+	}
+	
+    m_pDeviceContext->GSSetShader( (ID3D11GeometryShader *) pShader->GetGeometryShader(), nullptr, 0 );
+	m_pDeviceContext->GSSetSamplers( 0, 1, &m_pBasicSamplerState );
+
+	// Set textures
+	ID3D11ShaderResourceView *const texture = (meshMaterial.GetTexture() != nullptr)?(ID3D11ShaderResourceView *)meshMaterial.GetTexture()->GetGPUTexture() : ( nullptr );
+	m_pDeviceContext->PSSetShaderResources( 0, 1, &texture );
+	m_pDeviceContext->PSSetSamplers( 0, 1, &m_pBasicSamplerState );
+
+	// Get a valid constant buffer and bind the kbShader's vars to it
+	const kbShaderVarBindings_t & shaderVarBindings = pShader->GetShaderVarBindings();
+	std::map<size_t, ID3D11Buffer *>::iterator constantBufferIt = m_ConstantBuffers.find( shaderVarBindings.m_ConstantBufferSizeBytes );
+	kbErrorCheck( constantBufferIt != m_ConstantBuffers.end() && constantBufferIt->second != nullptr, "kbRenderer_DX11::RenderModel() - Could not find constant buffer for shader %s", pShader->GetFullFileName() );
+
+	ID3D11Buffer *const pConstantBuffer = constantBufferIt->second;
+	D3D11_MAPPED_SUBRESOURCE mappedResource;
+	HRESULT hr = m_pDeviceContext->Map( pConstantBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource );
+
+	const auto & bindings = shaderVarBindings.m_VarBindings;
+	byte * constantPtr = (byte*) mappedResource.pData;
+	for ( int i = 0; i < bindings.size(); i++ ) {
+		const std::string & varName = bindings[i].m_VarName;
+		const byte * pVarByteOffset = constantPtr + bindings[i].m_VarByteOffset;
+		if ( varName == "mvpMatrix" ) {
+			kbMat4 *const pMatOffset = (kbMat4*)pVarByteOffset;
+			*pMatOffset = worldMatrix * m_pCurrentRenderWindow->GetViewProjectionMatrix();
+		} else if ( varName == "vpMatrix" ) {
+			kbMat4 *const pMatOffset = (kbMat4*)pVarByteOffset;
+			*pMatOffset = m_pCurrentRenderWindow->GetViewProjectionMatrix();
+        } else if ( varName == "modelMatrix" ) {
+			kbMat4 *const pMatOffset = (kbMat4*)pVarByteOffset;
+			*pMatOffset = worldMatrix;
+		} else if ( varName == "cameraPos" ) {
+			kbVec4 *const pVecOffset = (kbVec4*)pVarByteOffset;
+			*pVecOffset = m_pCurrentRenderWindow->GetCameraPosition();
+		} else if ( varName == "viewProjection" ) {
+			kbMat4 *const pMatOffset = (kbMat4*)pVarByteOffset;
+			*pMatOffset = m_pCurrentRenderWindow->GetViewProjectionMatrix();
+		} else if ( varName == "boneList" ) {
+			kbMat4 *const boneMatrices = (kbMat4*)pVarByteOffset;
+			for ( int i = 0; i < pRenderObject->m_MatrixList.size() && i < Max_Shader_Bones; i++ ) {
+				boneMatrices[i].MakeIdentity();
+				boneMatrices[i][0] = pRenderObject->m_MatrixList[i].GetAxis(0);
+				boneMatrices[i][1] = pRenderObject->m_MatrixList[i].GetAxis(1);
+				boneMatrices[i][2] = pRenderObject->m_MatrixList[i].GetAxis(2);
+				boneMatrices[i][3] = pRenderObject->m_MatrixList[i].GetAxis(3);
+				
+				boneMatrices[i][0].w = 0;
+				boneMatrices[i][1].w = 0;
+				boneMatrices[i][2].w = 0;
+            }
+		} else if ( varName == "time" ) {
+
+            kbVec4 time;
+            time.x = g_GlobalTimer.TimeElapsedSeconds();
+            time.y = sin( time.x );
+            time.z = sin( time.x * 2.0f );
+            time.w = sin( time.x * 3.0f );
+            kbVec4 *const pVecOffset = (kbVec4*)pVarByteOffset;
+            *pVecOffset = time;
+        } else {
+            const std::vector<kbShaderParamOverrides_t::kbShaderParam_t> & paramOverrides = pRenderObject->m_ShaderParamOverrides.m_ParamOverrides;
+            for ( int iOverride = 0; iOverride < paramOverrides.size(); iOverride++ ) {
+                const kbShaderParamOverrides_t::kbShaderParam_t & curOverride = paramOverrides[iOverride];
+                const std::string & overrideVarName = curOverride.m_VarName;
+                if ( varName == overrideVarName ) {
+
+                    // Check if it doesn't fit
+                    const size_t endOffset = curOverride.m_VarSizeBytes + bindings[i].m_VarByteOffset;
+                    if ( endOffset > shaderVarBindings.m_ConstantBufferSizeBytes || ( i < bindings.size() - 1 && endOffset > bindings[i+1].m_VarByteOffset ) ) {
+                        break;
+                    }
+               
+                    switch( curOverride.m_Type ) {
+                        case kbShaderParamOverrides_t::kbShaderParam_t::SHADER_MAT4 : {
+                            kbMat4 *const pMatOffset = (kbMat4*)pVarByteOffset;
+			                *pMatOffset = curOverride.m_Mat4List[0];
+                            break;
+                        }
+
+                        case kbShaderParamOverrides_t::kbShaderParam_t::SHADER_VEC4 : {
+                            kbVec4 *const pVecOffset = (kbVec4*)pVarByteOffset;
+			                *pVecOffset = curOverride.m_Vec4List[0];
+                            break;
+                        }
+
+						case kbShaderParamOverrides_t::kbShaderParam_t::SHADER_MAT4_LIST : {
+                            kbMat4 *const pMatOffset = (kbMat4*)pVarByteOffset;
+							for ( int i = 0; i < curOverride.m_Mat4List.size(); i++ ) {
+								pMatOffset[i] = curOverride.m_Mat4List[i];
+							}
+                            break;
+						}
+
+						case kbShaderParamOverrides_t::kbShaderParam_t::SHADER_VEC4_LIST : {
+                            kbVec4 *const pVecOffset = (kbVec4*)pVarByteOffset;
+							for ( int i = 0; i < curOverride.m_Vec4List.size(); i++ ) {
+								pVecOffset[i] = curOverride.m_Vec4List[i];
+							}
+                            break;
+						}
+                    }
+                }
+            }
+        }
+	}
+
+    // Bind textures
+    const std::vector<kbShaderParamOverrides_t::kbShaderParam_t> & paramOverrides = pRenderObject->m_ShaderParamOverrides.m_ParamOverrides;
+	for ( int iTex = 0; iTex < shaderVarBindings.m_TextureNames.size(); iTex++ ) {
+	    for ( int iOverride = 0; iOverride < paramOverrides.size(); iOverride++ ) {
+			const kbShaderParamOverrides_t::kbShaderParam_t & curOverride = paramOverrides[iOverride];
+			if ( curOverride.m_Type == kbShaderParamOverrides_t::kbShaderParam_t::SHADER_TEX && curOverride.m_VarName == shaderVarBindings.m_TextureNames[iTex] ) {
+	            ID3D11ShaderResourceView *const pShaderResourceView = ( curOverride.m_pTexture != nullptr ) ? ( curOverride.m_pTexture->GetGPUTexture() ) : ( nullptr );
+				// Todo
+				m_pDeviceContext->VSSetShaderResources( iTex, 1, &pShaderResourceView );				
+				m_pDeviceContext->GSSetShaderResources( iTex, 1, &pShaderResourceView );				
+				m_pDeviceContext->PSSetShaderResources( iTex, 1, &pShaderResourceView );				
+			}
+		}
+	}
+
+	m_pDeviceContext->Unmap( pConstantBuffer, 0 );
+	m_pDeviceContext->VSSetConstantBuffers( 0, 1, &pConstantBuffer );
+	m_pDeviceContext->PSSetConstantBuffers( 0, 1, &pConstantBuffer );
+    if ( pShader->GetGeometryShader() != nullptr ) {
+        m_pDeviceContext->GSSetConstantBuffers( 0, 1, &pConstantBuffer );
+    }
+
+    if ( pModel->IsPointCloud() == true ) {
+    	m_pDeviceContext->Draw( (UINT)pModel->NumVertices(), 0 );
+    } else {
+    	m_pDeviceContext->DrawIndexed( pMesh.m_NumTriangles * 3, pMesh.m_IndexBufferIndex, 0 );
+    }
 }
 
 /**

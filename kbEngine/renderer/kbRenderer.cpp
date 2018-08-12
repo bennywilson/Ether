@@ -22,6 +22,21 @@ const float g_DebugTextSize = 0.0165f;
 kbRenderer * g_pRenderer = nullptr;
 
 /**
+ *	kbRenderSubmesh::GetShader
+ */
+const kbShader * kbRenderSubmesh::GetShader() const {
+	const kbRenderObject & renderObj = *GetRenderObject();
+
+	if ( renderObj.m_OverrideShaderList.size() > GetMeshIdx() ) {
+		return renderObj.m_OverrideShaderList[GetMeshIdx()];
+	}
+
+	const kbModel & model = *GetRenderObject()->m_pModel;
+	const kbModel::mesh_t & mesh = model.GetMeshes()[GetMeshIdx()]; 
+	return model.GetMaterials()[mesh.m_MaterialIndex].GetShader();
+}
+
+/**
  *	kbRenderWindow::~kbRenderWindow
  */
 kbRenderWindow::kbRenderWindow( HWND inHwnd, const RECT & windowDimensions, const float nearPlane, const float farPlane ) :
