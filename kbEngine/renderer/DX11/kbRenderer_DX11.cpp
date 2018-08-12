@@ -1265,11 +1265,6 @@ void kbRenderer_DX11::RenderScene() {
 			// Render models that need to be lit
 			m_RenderState.SetDepthStencilState();
 
-		/*	std::vector<kbRenderObject*> & LightingPassVisibleList = m_pCurrentRenderWindow->GetVisibleRenderObjects( RP_Lighting );
-			for ( int i = 0; i < LightingPassVisibleList.size(); i++ ) {
-				RenderModel( LightingPassVisibleList[i], RP_Lighting );
-			}*/
-
 			std::vector<kbRenderSubmesh> & LightingPassVisibleList = m_pCurrentRenderWindow->GetVisibleSubMeshes( RP_Lighting );
 			for ( int i = 0; i < LightingPassVisibleList.size(); i++ ) {
 				RenderMesh( &LightingPassVisibleList[i], false );
@@ -1293,9 +1288,9 @@ void kbRenderer_DX11::RenderScene() {
 			}
 
 			// Post-Lighting Render Pass
-			std::vector<kbRenderObject*> & PostLightingVisibleList = m_pCurrentRenderWindow->GetVisibleRenderObjects( RP_PostLighting );
+			std::vector<kbRenderSubmesh> & PostLightingVisibleList = m_pCurrentRenderWindow->GetVisibleSubMeshes( RP_PostLighting );
 			for ( int i = 0; i < PostLightingVisibleList.size(); i++ ) {
-				RenderModel( PostLightingVisibleList[i], RP_PostLighting );
+				RenderMesh( &PostLightingVisibleList[i], false  );
 			}
 			PLACE_GPU_TIME_STAMP( "Unlit" );
 		}
@@ -1322,9 +1317,9 @@ void kbRenderer_DX11::RenderScene() {
 										 BlendFactor_Zero,
 										 kbRenderState::BO_Add );
 
-			std::vector<kbRenderObject*> & InWorldUIVisibleList = m_pCurrentRenderWindow->GetVisibleRenderObjects( RP_PostLighting );
+			std::vector<kbRenderSubmesh> & InWorldUIVisibleList = m_pCurrentRenderWindow->GetVisibleSubMeshes( RP_PostLighting );
 			for ( int i = 0; i < InWorldUIVisibleList.size(); i++ ) {
-				RenderModel( InWorldUIVisibleList[i], RP_InWorldUI );
+				RenderMesh( &InWorldUIVisibleList[i], false );
 			}
 
 			m_RenderState.SetBlendState();
@@ -1347,12 +1342,17 @@ void kbRenderer_DX11::RenderScene() {
 			RenderPretransformedDebugLines();
 
 			for ( int i = 0; i < m_DebugModels.size(); i++ ) {
+
 				kbRenderObject renderObject;
 				renderObject.m_pModel = m_DebugModels[i].m_pModel;
 				renderObject.m_Position = m_DebugModels[i].m_Position;
 				renderObject.m_Orientation = m_DebugModels[i].m_Orientation;
 				renderObject.m_Scale = m_DebugModels[i].m_Scale;
-				RenderModel( &renderObject, RP_Debug );
+				renderObject.m_EntityId = m_DebugModels[i].m_EntityId;
+				for ( int j = 0; j < renderObject.m_pModel->NumMeshes(); j++ ) {
+					kbRenderSubmesh newMesh( &renderObject, j, RP_Debug );
+					RenderMesh( &newMesh, false );
+				}
 			}
 		}
 	
@@ -1423,7 +1423,6 @@ void kbRenderer_DX11::RenderScene() {
 void kbRenderer_DX11::PreRenderCullAndSort() {
 
 	for ( int i = 0; i < NUM_RENDER_PASSES; i++ ) {
-		m_pCurrentRenderWindow->GetVisibleRenderObjects(i).clear();
 		m_pCurrentRenderWindow->GetVisibleSubMeshes(i).clear();
 	}
 
@@ -1445,8 +1444,8 @@ void kbRenderer_DX11::PreRenderCullAndSort() {
 		}
 		
 		if ( bIsVisible ) {
-			m_pCurrentRenderWindow->GetVisibleRenderObjects( renderObj.m_RenderPass ).push_back( &renderObj );
 
+			// Add submeshes to their proper render passes
 			const kbModel *const pModel = renderObj.m_pModel;
 			for ( int i = 0; i < pModel->GetMeshes().size(); i++ ) {
 				const kbModel::mesh_t & mesh = pModel->GetMeshes()[i];
@@ -1503,7 +1502,9 @@ void kbRenderer_DX11::RenderTranslucency() {
 							     kbRenderState::CW_All );
 
 	for ( auto iter = m_pCurrentRenderWindow->GetRenderParticleMap().begin(); iter != m_pCurrentRenderWindow->GetRenderParticleMap().end(); iter++ ) {
-		RenderModel( iter->second, RP_Translucent );
+		// TODO
+		kbRenderSubmesh newMesh( iter->second, 0, RP_Translucent );
+		RenderMesh( &newMesh, false );
 	}
 
 	std::vector<kbRenderSubmesh> & visibleSubmeshList = m_pCurrentRenderWindow->GetVisibleSubMeshes( RP_Translucent );
@@ -1670,7 +1671,7 @@ int kbRenderer_DX11::GetVarBindingIndex( const std::string & varName, const kbSh
 ID3D11Buffer * kbRenderer_DX11::GetConstantBuffer( const size_t requestSize ) {
 	
 	std::map<size_t, ID3D11Buffer *>::iterator constantBufferIt = m_ConstantBuffers.find( requestSize );
-	kbErrorCheck( constantBufferIt != m_ConstantBuffers.end() && constantBufferIt->second != nullptr, "kbRenderer_DX11::RenderModel() - Could not find constant buffer of size %d", requestSize );
+	kbErrorCheck( constantBufferIt != m_ConstantBuffers.end() && constantBufferIt->second != nullptr, "kbRenderer_DX11::GetConstantBuffer() - Could not find constant buffer of size %d", requestSize );
 
 	return constantBufferIt->second;
 }
@@ -1836,7 +1837,9 @@ void kbRenderer_DX11::RenderMousePickerIds() {
 
 	for ( auto iter = m_pCurrentRenderWindow->GetRenderObjectMap().begin(); iter != m_pCurrentRenderWindow->GetRenderObjectMap().end(); iter++ ) {
 		if ( iter->second->m_EntityId > 0 ) {
-			RenderModel( iter->second, RP_MousePicker );
+			// TODO
+			kbRenderSubmesh newMesh( iter->second, 0, RP_MousePicker );
+			RenderMesh( &newMesh, false );
 		}
 	}
 
@@ -1849,8 +1852,10 @@ void kbRenderer_DX11::RenderMousePickerIds() {
 		renderObject.m_Orientation = m_DebugModels[i].m_Orientation;
 		renderObject.m_Scale = m_DebugModels[i].m_Scale;
 		renderObject.m_EntityId = m_DebugModels[i].m_EntityId;
-
-		RenderModel( &renderObject, RP_MousePicker );
+		for ( int j = 0; j < renderObject.m_pModel->NumMeshes(); j++ ) {
+			kbRenderSubmesh newMesh( &renderObject, j, RP_MousePicker );
+			RenderMesh( &newMesh, false );
+		}
 	}
 }
 
@@ -2887,7 +2892,7 @@ void kbRenderer_DX11::RenderMesh( const kbRenderSubmesh *const pRenderMesh, cons
 	const kbRenderObject * pRenderObject = pRenderMesh->GetRenderObject();
 	const kbModel *const pModel = pRenderObject->m_pModel;
 
-	kbErrorCheck( pRenderObject != nullptr && pRenderObject->m_pModel != nullptr, "kbRenderer_DX11::RenderModel() - no model found" );
+	kbErrorCheck( pRenderObject != nullptr && pRenderObject->m_pModel != nullptr, "kbRenderer_DX11::RenderMesh() - no model found" );
 	kbErrorCheck( pModel->GetMaterials().size() > 0, "kbRenderer_DX11::RenderMesh() - No materials found for model %s", pRenderObject->m_pModel->GetFullName() );
 
 	kbMat4 worldMatrix;
@@ -2919,7 +2924,7 @@ void kbRenderer_DX11::RenderMesh( const kbRenderSubmesh *const pRenderMesh, cons
 	} else if ( meshMaterial.GetCullingMode() == kbMaterial::CM_None ) {
 		m_pDeviceContext->RSSetState( m_pNoFaceCullingRasterizerState );
 	} else {
-		kbError( "kbRenderer_DX11::RenderModel() - Unsupported culling mode" );
+		kbError( "kbRenderer_DX11::RenderMesh() - Unsupported culling mode" );
 	}
 
 	// Get Shader
@@ -2979,7 +2984,7 @@ void kbRenderer_DX11::RenderMesh( const kbRenderSubmesh *const pRenderMesh, cons
 	// Get a valid constant buffer and bind the kbShader's vars to it
 	const kbShaderVarBindings_t & shaderVarBindings = pShader->GetShaderVarBindings();
 	std::map<size_t, ID3D11Buffer *>::iterator constantBufferIt = m_ConstantBuffers.find( shaderVarBindings.m_ConstantBufferSizeBytes );
-	kbErrorCheck( constantBufferIt != m_ConstantBuffers.end() && constantBufferIt->second != nullptr, "kbRenderer_DX11::RenderModel() - Could not find constant buffer for shader %s", pShader->GetFullFileName() );
+	kbErrorCheck( constantBufferIt != m_ConstantBuffers.end() && constantBufferIt->second != nullptr, "kbRenderer_DX11::RenderMesh() - Could not find constant buffer for shader %s", pShader->GetFullFileName() );
 
 	ID3D11Buffer *const pConstantBuffer = constantBufferIt->second;
 	D3D11_MAPPED_SUBRESOURCE mappedResource;
@@ -3102,230 +3107,6 @@ void kbRenderer_DX11::RenderMesh( const kbRenderSubmesh *const pRenderMesh, cons
     	m_pDeviceContext->DrawIndexed( pMesh.m_NumTriangles * 3, pMesh.m_IndexBufferIndex, 0 );
     }
 }
-
-/**
- *	kbRenderer_DX11::RenderModel
- */
-void kbRenderer_DX11::RenderModel( const kbRenderObject *const pRenderObject, const ERenderPass renderpass, const bool bShadowPass ) {
-	kbErrorCheck( pRenderObject != nullptr && pRenderObject->m_pModel != nullptr, "kbRenderer_DX11::RenderModel() - no model found" );
-	kbErrorCheck( pRenderObject->m_pModel->GetMaterials().size() > 0, "kbRenderer_DX11::RenderModel() - No materials found for model %s", pRenderObject->m_pModel->GetFullName() );
-
-	const kbModel *const pModelToRender = pRenderObject->m_pModel;
-
-	kbMat4 worldMatrix;
-	worldMatrix.MakeScale( pRenderObject->m_Scale );
-	worldMatrix *= pRenderObject->m_Orientation.ToMat4();
-	worldMatrix[3] = pRenderObject->m_Position;
-
-	const UINT vertexStride = pRenderObject->m_pModel->VertexStride();
-	const UINT vertexOffset = 0;
-
-	ID3D11Buffer *const pVertexBuffer = ( ID3D11Buffer * const ) pModelToRender->m_VertexBuffer.GetBufferPtr();
-	m_pDeviceContext->IASetVertexBuffers( 0, 1, &pVertexBuffer, &vertexStride, &vertexOffset );
-
-    if ( pModelToRender->IsPointCloud() ) {
-	    m_pDeviceContext->IASetPrimitiveTopology( D3D11_PRIMITIVE_TOPOLOGY_POINTLIST );
-    } else {
-	    ID3D11Buffer *const pIndexBuffer = ( ID3D11Buffer * const ) pModelToRender->m_IndexBuffer.GetBufferPtr();
-	    m_pDeviceContext->IASetIndexBuffer( pIndexBuffer, DXGI_FORMAT_R32_UINT, 0 );
-	    m_pDeviceContext->IASetPrimitiveTopology( D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST );
-    }
-
-	for ( int i = 0; i < pModelToRender->NumMeshes(); i++ ) {
-		const kbMaterial & modelMaterial = pModelToRender->GetMaterials()[pModelToRender->GetMeshes()[i].m_MaterialIndex];
-
-		if ( m_ViewMode == ViewMode_Wireframe ) {
-			m_pDeviceContext->RSSetState( m_pWireFrameRasterizerState );
-		} else if ( modelMaterial.GetCullingMode() == kbMaterial::CM_BackFaces ) {
-			m_pDeviceContext->RSSetState( m_pDefaultRasterizerState );
-		} else if ( modelMaterial.GetCullingMode() == kbMaterial::CM_None ) {
-			m_pDeviceContext->RSSetState( m_pNoFaceCullingRasterizerState );
-		} else {
-			kbError( "kbRenderer_DX11::RenderModel() - Unsupported culling mode" );
-		}
-
-		// Get Shader
-		const kbShader * pShader = modelMaterial.GetShader();
-		const std::vector<kbShader *> *const pShaderOverrideList = &pRenderObject->m_OverrideShaderList;	
-	
-		if ( bShadowPass ) {
-			if ( pRenderObject->m_bIsSkinnedModel ) {
-				pShader = m_pSkinnedDirectionalLightShadowShader;
-			} else {
-				pShader = m_pDirectionalLightShadowShader;
-			}
-	
-		} else {
-			if ( pShaderOverrideList != nullptr && pShaderOverrideList->size() > i ) {
-				pShader = (*pShaderOverrideList)[i];
-			}
-	
-			if ( pShader == nullptr || pShader->GetPixelShader() == nullptr ) {
-				pShader = m_pMissingShader;
-			}
-		}
-	
-		m_pDeviceContext->IASetInputLayout( (ID3D11InputLayout*)pShader->GetVertexLayout() );
-		m_pDeviceContext->VSSetShader( (ID3D11VertexShader *)pShader->GetVertexShader(), nullptr, 0 );
-	
-		if ( renderpass == RP_MousePicker ) {
-	
-			m_pDeviceContext->PSSetShader( (ID3D11PixelShader *)m_pMousePickerIdShader->GetPixelShader(), nullptr, 0 );
-	
-			ID3D11Buffer *const pConstantBuffer = GetConstantBuffer( 32 );
-
-			D3D11_MAPPED_SUBRESOURCE mappedResource;
-			HRESULT hr = m_pDeviceContext->Map( pConstantBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource );
-			kbErrorCheck( SUCCEEDED(hr), "Failed to map matrix buffer" );
-			UINT *const pEntityId = (UINT*)mappedResource.pData;
-			*pEntityId = pRenderObject->m_EntityId;
-
-			UINT *const pGroupId = pEntityId + 1;
-			*pGroupId = (UINT)i;
-
-			m_pDeviceContext->Unmap( pConstantBuffer, 0 );
-			m_pDeviceContext->PSSetConstantBuffers( 1, 1, &pConstantBuffer );
-	
-		} else {
-			m_pDeviceContext->PSSetShader( (ID3D11PixelShader *)pShader->GetPixelShader(), nullptr, 0 );
-		}
-	
-        m_pDeviceContext->GSSetShader( (ID3D11GeometryShader *) pShader->GetGeometryShader(), nullptr, 0 );
-		m_pDeviceContext->GSSetSamplers( 0, 1, &m_pBasicSamplerState );
-
-		// Set textures
-		ID3D11ShaderResourceView *const texture = (modelMaterial.GetTexture() != nullptr)?(ID3D11ShaderResourceView *)modelMaterial.GetTexture()->GetGPUTexture() : ( nullptr );
-		m_pDeviceContext->PSSetShaderResources( 0, 1, &texture );
-		m_pDeviceContext->PSSetSamplers( 0, 1, &m_pBasicSamplerState );
-
-		// Get a valid constant buffer and bind the kbShader's vars to it
-		const kbShaderVarBindings_t & shaderVarBindings = pShader->GetShaderVarBindings();
-		std::map<size_t, ID3D11Buffer *>::iterator constantBufferIt = m_ConstantBuffers.find( shaderVarBindings.m_ConstantBufferSizeBytes );
-		kbErrorCheck( constantBufferIt != m_ConstantBuffers.end() && constantBufferIt->second != nullptr, "kbRenderer_DX11::RenderModel() - Could not find constant buffer for shader %s", pShader->GetFullFileName() );
-
-		ID3D11Buffer *const pConstantBuffer = constantBufferIt->second;
-		D3D11_MAPPED_SUBRESOURCE mappedResource;
-		HRESULT hr = m_pDeviceContext->Map( pConstantBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource );
-
-		const auto & bindings = shaderVarBindings.m_VarBindings;
-		byte * constantPtr = (byte*) mappedResource.pData;
-		for ( int i = 0; i < bindings.size(); i++ ) {
-			const std::string & varName = bindings[i].m_VarName;
-			const byte * pVarByteOffset = constantPtr + bindings[i].m_VarByteOffset;
-			if ( varName == "mvpMatrix" ) {
-				kbMat4 *const pMatOffset = (kbMat4*)pVarByteOffset;
-				*pMatOffset = worldMatrix * m_pCurrentRenderWindow->GetViewProjectionMatrix();
-			} else if ( varName == "vpMatrix" ) {
-				kbMat4 *const pMatOffset = (kbMat4*)pVarByteOffset;
-				*pMatOffset = m_pCurrentRenderWindow->GetViewProjectionMatrix();
-            } else if ( varName == "modelMatrix" ) {
-				kbMat4 *const pMatOffset = (kbMat4*)pVarByteOffset;
-				*pMatOffset = worldMatrix;
-			} else if ( varName == "cameraPos" ) {
-				kbVec4 *const pVecOffset = (kbVec4*)pVarByteOffset;
-				*pVecOffset = m_pCurrentRenderWindow->GetCameraPosition();
-			} else if ( varName == "viewProjection" ) {
-				kbMat4 *const pMatOffset = (kbMat4*)pVarByteOffset;
-				*pMatOffset = m_pCurrentRenderWindow->GetViewProjectionMatrix();
-			} else if ( varName == "boneList" ) {
-				kbMat4 *const boneMatrices = (kbMat4*)pVarByteOffset;
-				for ( int i = 0; i < pRenderObject->m_MatrixList.size() && i < Max_Shader_Bones; i++ ) {
-					boneMatrices[i].MakeIdentity();
-					boneMatrices[i][0] = pRenderObject->m_MatrixList[i].GetAxis(0);
-					boneMatrices[i][1] = pRenderObject->m_MatrixList[i].GetAxis(1);
-					boneMatrices[i][2] = pRenderObject->m_MatrixList[i].GetAxis(2);
-					boneMatrices[i][3] = pRenderObject->m_MatrixList[i].GetAxis(3);
-					
-					boneMatrices[i][0].w = 0;
-					boneMatrices[i][1].w = 0;
-					boneMatrices[i][2].w = 0;
-                }
-			} else if ( varName == "time" ) {
-
-                kbVec4 time;
-                time.x = g_GlobalTimer.TimeElapsedSeconds();
-                time.y = sin( time.x );
-                time.z = sin( time.x * 2.0f );
-                time.w = sin( time.x * 3.0f );
-                kbVec4 *const pVecOffset = (kbVec4*)pVarByteOffset;
-                *pVecOffset = time;
-            } else {
-                const std::vector<kbShaderParamOverrides_t::kbShaderParam_t> & paramOverrides = pRenderObject->m_ShaderParamOverrides.m_ParamOverrides;
-                for ( int iOverride = 0; iOverride < paramOverrides.size(); iOverride++ ) {
-                    const kbShaderParamOverrides_t::kbShaderParam_t & curOverride = paramOverrides[iOverride];
-                    const std::string & overrideVarName = curOverride.m_VarName;
-                    if ( varName == overrideVarName ) {
-
-                        // Check if it doesn't fit
-                        const size_t endOffset = curOverride.m_VarSizeBytes + bindings[i].m_VarByteOffset;
-                        if ( endOffset > shaderVarBindings.m_ConstantBufferSizeBytes || ( i < bindings.size() - 1 && endOffset > bindings[i+1].m_VarByteOffset ) ) {
-                            break;
-                        }
-                   
-                        switch( curOverride.m_Type ) {
-                            case kbShaderParamOverrides_t::kbShaderParam_t::SHADER_MAT4 : {
-                                kbMat4 *const pMatOffset = (kbMat4*)pVarByteOffset;
-				                *pMatOffset = curOverride.m_Mat4List[0];
-                                break;
-                            }
-
-                            case kbShaderParamOverrides_t::kbShaderParam_t::SHADER_VEC4 : {
-                                kbVec4 *const pVecOffset = (kbVec4*)pVarByteOffset;
-				                *pVecOffset = curOverride.m_Vec4List[0];
-                                break;
-                            }
-
-							case kbShaderParamOverrides_t::kbShaderParam_t::SHADER_MAT4_LIST : {
-                                kbMat4 *const pMatOffset = (kbMat4*)pVarByteOffset;
-								for ( int i = 0; i < curOverride.m_Mat4List.size(); i++ ) {
-									pMatOffset[i] = curOverride.m_Mat4List[i];
-								}
-                                break;
-							}
-
-							case kbShaderParamOverrides_t::kbShaderParam_t::SHADER_VEC4_LIST : {
-                                kbVec4 *const pVecOffset = (kbVec4*)pVarByteOffset;
-								for ( int i = 0; i < curOverride.m_Vec4List.size(); i++ ) {
-									pVecOffset[i] = curOverride.m_Vec4List[i];
-								}
-                                break;
-							}
-                        }
-                    }
-                }
-            }
-		}
-
-        // Bind textures
-        const std::vector<kbShaderParamOverrides_t::kbShaderParam_t> & paramOverrides = pRenderObject->m_ShaderParamOverrides.m_ParamOverrides;
-		for ( int iTex = 0; iTex < shaderVarBindings.m_TextureNames.size(); iTex++ ) {
-	        for ( int iOverride = 0; iOverride < paramOverrides.size(); iOverride++ ) {
-				const kbShaderParamOverrides_t::kbShaderParam_t & curOverride = paramOverrides[iOverride];
-				if ( curOverride.m_Type == kbShaderParamOverrides_t::kbShaderParam_t::SHADER_TEX && curOverride.m_VarName == shaderVarBindings.m_TextureNames[iTex] ) {
-	                ID3D11ShaderResourceView *const pShaderResourceView = ( curOverride.m_pTexture != nullptr ) ? ( curOverride.m_pTexture->GetGPUTexture() ) : ( nullptr );
-					// Todo
-					m_pDeviceContext->VSSetShaderResources( iTex, 1, &pShaderResourceView );				
-					m_pDeviceContext->GSSetShaderResources( iTex, 1, &pShaderResourceView );				
-					m_pDeviceContext->PSSetShaderResources( iTex, 1, &pShaderResourceView );				
-				}
-			}
-		}
-
-		m_pDeviceContext->Unmap( pConstantBuffer, 0 );
-		m_pDeviceContext->VSSetConstantBuffers( 0, 1, &pConstantBuffer );
-		m_pDeviceContext->PSSetConstantBuffers( 0, 1, &pConstantBuffer );
-        if ( pShader->GetGeometryShader() != nullptr ) {
-            m_pDeviceContext->GSSetConstantBuffers( 0, 1, &pConstantBuffer );
-        }
-
-        if ( pModelToRender->IsPointCloud() == true ) {
-    		m_pDeviceContext->Draw( (UINT)pModelToRender->NumVertices(), 0 );
-        } else {
-    		m_pDeviceContext->DrawIndexed( pModelToRender->GetMeshes()[i].m_NumTriangles * 3, pModelToRender->GetMeshes()[i].m_IndexBufferIndex, 0 );
-        }
-	}
-}
-	
 
 /*
  *	kbRenderer_DX11::RenderPretransformedDebugLines

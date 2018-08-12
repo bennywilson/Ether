@@ -39,6 +39,6 @@ pixelInput vertexShader( vertexInput input ) {
 /**
  *	pixelShader
  */
-uint2 pixelShader() : SV_TARGET0 {
+uint2 pixelShader() : SV_TARGET {
 	return  uint2(entityId, groupId);
 }

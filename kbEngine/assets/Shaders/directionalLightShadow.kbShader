@@ -2,17 +2,11 @@
 // directionalLightShadow.kbShader
 //
 //
-// 2017 kbEngine 2.0
+// 2017-2018 kbEngine 2.0
 //===================================================================================================
 cbuffer matrixBuffer {
-   matrix      modelMatrix;
-   matrix      modelViewMatrix;
-   matrix      viewMatrix;
    matrix      mvpMatrix;
-   matrix      projection;
-   matrix      inverseProjection;
-   matrix      viewProjection;
-   float4x4    BoneMatrices[128];
+   float4x4    boneList[128];
 };
 
 //-------------------------------------
@@ -70,7 +64,7 @@ shadowPixelInput skinnedVertexMain( skinnedVertexInput input ) {
    float BlendWeightsArray[4] = (float[4])input.boneWeights;
    int   IndexArray[4]        = (int[4])IndexVector;
 
-   Pos = mul( input.position, BoneMatrices[IndexArray[0]] );
+   Pos = mul( input.position, boneList[IndexArray[0]] );
 
 	output.position = mul( Pos, mvpMatrix );
 	output.position2 = output.position.zw;

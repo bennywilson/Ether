@@ -145,7 +145,6 @@ public:
 	const std::map<const kbLightComponent *, kbRenderLight *> &	GetRenderLightMap() const { return m_RenderLightMap; }
 	const std::map<const void *, kbRenderObject *> &			GetRenderParticleMap() const { return m_RenderParticleMap; }
 
-	std::vector<kbRenderObject*> &								GetVisibleRenderObjects( const int renderPass ) { return m_VisibleRenderObjects[renderPass]; }
 	std::vector<kbRenderSubmesh> &								GetVisibleSubMeshes( const int renderPass ) { return m_VisibleRenderMeshes[renderPass]; }
  
 	void														HackSetViewMatrix( const kbMat4 & inViewMat ) { m_ViewMatrix = inViewMat; }
@@ -185,7 +184,6 @@ private:
 	std::map<const kbLightComponent *, kbRenderLight *>			m_RenderLightMap;
 	std::map<const void *, kbRenderObject *>					m_RenderParticleMap;
 
-	std::vector<kbRenderObject*>								m_VisibleRenderObjects[NUM_RENDER_PASSES];	// todo remove
 	std::vector<kbRenderSubmesh>								m_VisibleRenderMeshes[NUM_RENDER_PASSES];
 };
 

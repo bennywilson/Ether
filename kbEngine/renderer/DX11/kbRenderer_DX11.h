@@ -378,7 +378,6 @@ private:
 
 	void										PreRenderCullAndSort();
 
-	void										RenderModel( const kbRenderObject *const pRenderObject, const ERenderPass renderPass, const bool bShadowPass = false );
 	void										RenderMesh( const kbRenderSubmesh *const pRenderMesh, const bool bShadowPass = false );
 
 	void										RenderScreenSpaceQuads();
