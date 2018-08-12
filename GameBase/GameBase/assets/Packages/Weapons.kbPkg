@@ -1,56 +1,3 @@
-Pistol 1
-kbPrefab 1 {
-	EL_Standard
-	kbGameEntity 2540000531 1106219852 1882351761 973475912 {
-		kbTransformComponent { 
-			Enabled = 0
-			LifeTime =  -1.000000
-			Name = "EL Standard Pistol"
-			Orientation = 0.000000 0.000000 0.000000 1.000000
-			Position = 0.000000 3.000000 24.000000
-			Scale = 1.000000 1.000000 1.000000
-		}
-		EtherSkelModelComponent { 
-			Enabled = 1
-			LifeTime =  -1.000000
-			m_RenderPass = FirstPersonPass
-			Model = ./assets/models/Items/Pistol_FP.ms3d
-			ShaderOverride = 0
-				
-			Animations = 2
-				EtherAnimComponent { 
-					Enabled = 0
-					LifeTime =  -1.000000
-					Animation = ./assets/models/Items/Pistol_FP.kbAnim.ms3d
-					AnimationName = "Idle"
-					IsLooping = 0
-					TimeScale =  1.000000
-				}
-				EtherAnimComponent { 
-					Enabled = 0
-					LifeTime =  -1.000000
-					Animation = ./assets/models/Items/Pistol_FP_Shoot.kbAnim.ms3d
-					AnimationName = "Shoot"
-					IsLooping = 0
-					TimeScale =  1.000000
-				}
-			DebugAnimIndex = -1
-			IsFirstPersonModel = 1
-		}
-		EtherWeaponComponent { 
-			Enabled = 1
-			LifeTime =  -1.000000
-			DummyTemp = 0
-			BurstCount = 1
-			IsInstantHit = 0
-			MuzzleFlash = 3287441000 1228561351 2632918935 4227010865
-			Projectile = 402992291 1133905897 445195195 1933284623
-			SecondsBetweenBursts =  0.500000
-			SecondsBetweenShots =  1.000000
-		}
-	}
-}
-}
 Projectiles 4
 kbPrefab 1 {
 	Standard_Laser
@@ -338,7 +285,7 @@ kbGameEntity 292847838 1140569109 1236968083 2365837966 {
 			EtherAnimComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
-				Animation = ./assets/models/Items/Pistol_FP.kbAnim.ms3d
+				Animation = ./assets/models/Items/EL_Rifle_FP_Idle.kbAnim.ms3d
 				AnimationName = "Idle"
 				IsLooping = 0
 				TimeScale =  1.000000
@@ -346,7 +293,7 @@ kbGameEntity 292847838 1140569109 1236968083 2365837966 {
 			EtherAnimComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
-				Animation = ./assets/models/Items/Pistol_FP_Shoot.kbAnim.ms3d
+				Animation = ./assets/models/Items/EL_Rifle_FP_Shoot.kbAnim.ms3d
 				AnimationName = "Shoot"
 				IsLooping = 0
 				TimeScale =  1.000000

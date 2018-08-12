@@ -105,11 +105,11 @@
     <ClCompile Include="Ether\EtherWorldGen.cpp">
       <Filter>Source Files\Ether</Filter>
     </ClCompile>
-    <ClCompile Include="Ether\EtherPlayer.cpp">
-      <Filter>Source Files\Ether</Filter>
-    </ClCompile>
     <ClCompile Include="Ether\EtherGame.cpp">
       <Filter>Source Files\Ether</Filter>
+    </ClCompile>
+    <ClCompile Include="Ether\EtherPlayer.cpp">
+      <Filter>Source Files\Ether\Game Logic</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

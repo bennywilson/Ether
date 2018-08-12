@@ -134,7 +134,7 @@ void EtherPlayerComponent::Update_Internal( const float DeltaTimeSec ) {
 	if ( IsDead() ) {
 		UpdateDeath( DeltaTimeSec );
 	}
-
+/*
 	if ( m_pFPHands != nullptr && m_pFPHands->IsEnabled() && m_GrenadeCoolddownSec > 0.0f ) {
 		float prevCoolDownSec = m_GrenadeCoolddownSec;
 		m_GrenadeCoolddownSec -= DeltaTimeSec;
@@ -181,7 +181,7 @@ void EtherPlayerComponent::Update_Internal( const float DeltaTimeSec ) {
 					break;
 				}
 			}
-		}
+		}*/
 /*
       ARAmbientProjectileEndPoint * pTarget = Cast<ARAmbientProjectileEndPoint>(*it);
       if (pTarget == NULL)
@@ -260,8 +260,8 @@ void EtherPlayerComponent::Update_Internal( const float DeltaTimeSec ) {
       }
 
       pTarget->Modify();
-   }*/
-	}
+   }
+	}*/
 }
 
 /**

@@ -60,8 +60,6 @@ public:
 
 	EtherAIManager &							GetAIManager() { return m_AIManager; }
 
-	const kbMat4 &								GetCrossHairLocalSpaceMatrix() const { return m_CrossHairLocalSpaceMatrix; }
-
 	bool										IsInSlomoMode() const { return m_SlomoStartTime > 0.0f; }
 	bool										IsOLCFiring() const { return m_OLCTimer > 0.0f; }
 	bool										IsAirstrikeInProgress() const { return  m_AirstrikeTimeLeft > 0.0f; }
@@ -117,10 +115,6 @@ protected:
 		GamePlay,
 	}											m_CurrentGameState;
 	int											m_VerseIdx;
-
-	// Cross hair stuff
-	kbGameEntity *								m_pCrossHairEntity;
-	kbMat4										m_CrossHairLocalSpaceMatrix;
 
 	// Stimpack
 	float										m_SlomoStartTime;

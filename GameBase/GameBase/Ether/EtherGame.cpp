@@ -49,7 +49,6 @@ EtherGame::EtherGame() :
 	m_HMDWorldOffset( kbVec3::zero ),
 	m_CurrentGameState( GamePlay ),
 	m_VerseIdx( 0 ),
-	m_pCrossHairEntity( nullptr ),
 	m_SlomoStartTime( -1.0f ),
 	m_pSlomoSound( nullptr ),
 	m_AirstrikeTimeLeft( -120.0f ),
@@ -68,9 +67,7 @@ EtherGame::EtherGame() :
 
 	m_Camera.m_Position.Set( 0.0f, 2600.0f, 0.0f );
 
-	if ( g_pEtherGame != nullptr ) {
-		kbError( "EtherGame::EtherGame() - g_pEtherGame is not nullptr" );
-	}
+	kbErrorCheck( g_pEtherGame == nullptr, "EtherGame::EtherGame() - g_pEtherGame is not nullptr" );
 	g_pEtherGame = this;
 }
 
@@ -78,9 +75,8 @@ EtherGame::EtherGame() :
  *	EtherGame::~EtherGame
  */
 EtherGame::~EtherGame() {
-	if ( g_pEtherGame == nullptr ) {
-		kbError( "EtherGame::~EtherGame() - g_pEtherGame is nullptr" );
-	}
+
+	kbErrorCheck( g_pEtherGame != nullptr, "EtherGame::~EtherGame() - g_pEtherGame is nullptr" );
 	g_pEtherGame = nullptr;
 }
 
@@ -91,50 +87,12 @@ kbRenderObject crossHair;
  */
 void EtherGame::PlayGame_Internal() {
 
-	// Add cross hair entity/model to the scene
-	m_pCrossHairEntity = new kbGameEntity();
-	kbModel *const pCrossHairModel = (kbModel*)g_ResourceManager.GetResource( "./assets/FX/crosshair.ms3d", true );
-	std::vector<kbShader *> ShaderOverrideList;
-	ShaderOverrideList.push_back( m_pTranslucentShader );
-	crossHair.m_pComponent = m_pCrossHairEntity->GetComponent( 0 );
-	crossHair.m_pModel = pCrossHairModel;
-	crossHair.m_Position = kbVec3::zero;
-	crossHair.m_Orientation = kbQuat();
-	crossHair.m_Scale.Set( 1.0f, 1.0f, 1.0f ),
-	crossHair.m_RenderPass = RP_InWorldUI;
-	crossHair.m_OverrideShaderList = ShaderOverrideList;
-
-	g_pD3D11Renderer->AddRenderObject( crossHair );
-
-	//g_pD3D11Renderer->AddRenderObject( m_pCrossHairEntity->GetComponent( 0 ), pCrossHairModel, kbVec3::zero, kbQuat(), kbVec3( 1.0f, 1.0f, 1.0f ), RP_InWorldUI, &ShaderOverrideList );
-
-	// Create air strike bombers
-	kbPackage *const pVehiclePackage = (kbPackage*) g_ResourceManager.GetPackage( "./assets/Packages/Vehicles.kbPkg" );
-	kbErrorCheck( pVehiclePackage != nullptr, "Unable to Vehicle character package." );
-
-	const kbGameEntity *const pBomberPrefab = pVehiclePackage->GetPrefab( "EL_Bomber" )->GetGameEntity( 0 );
-	kbErrorCheck( pBomberPrefab != nullptr, "Unable to find bomber prefab" );
-
-	/*for ( int i = 0; i < 3; i++ ) {
-		m_ELBomberEntity[i] = CreateEntity( pBomberPrefab );
-
-		// Hack - billboard type isn't being set correctly from data.  So force it here
-		kbParticleComponent *const pParticleComp = (kbParticleComponent*)  m_ELBomberEntity[i]->GetComponentByType( kbParticleComponent::GetType() );
-		if ( pParticleComp != nullptr ) {
-			pParticleComp->SetBillboardType( BT_AxialBillboard );
-		}
-	}
-
+/*
 	m_pAirstrikeFlybyWave = (kbWaveFile *)g_ResourceManager.GetResource( "./assets/Sounds/airstrike.wav", true );
 	kbErrorCheck( m_pAirstrikeFlybyWave != nullptr, "EtherGame::PlayGame_Internal() - Failed to find airstrike.wav" );
 
 	m_pOLCWindupWave = (kbWaveFile *)g_ResourceManager.GetResource( "./assets/Sounds/olc_windup.wav", true );
-	m_pOLCExplosion = (kbWaveFile *)g_ResourceManager.GetResource( "./assets/Sounds/olc_explosion.wav", true );
-
-	g_pD3D11Renderer->LoadTexture( "./assets/UI/TitleScreen.jpg", 5 );
-	g_pD3D11Renderer->LoadTexture( "./assets/UI/verse1.jpg", 6 );
-	g_pD3D11Renderer->LoadTexture( "./assets/UI/verse2.jpg", 7 );
-	g_pD3D11Renderer->LoadTexture( "./assets/UI/verse3.jpg", 8 );*/
+	m_pOLCExplosion = (kbWaveFile *)g_ResourceManager.GetResource( "./assets/Sounds/olc_explosion.wav", true );*/
 }
 
 /**
@@ -177,12 +135,6 @@ void EtherGame::InitGame_Internal() {
 void EtherGame::StopGame_Internal() {
 	m_pPlayerComponent = nullptr;
 	m_pLocalPlayer = nullptr;
-
-	if ( m_pCrossHairEntity != nullptr ) {
-		g_pD3D11Renderer->RemoveRenderObject( crossHair );
-		delete m_pCrossHairEntity;
-		m_pCrossHairEntity = nullptr;
-	}
 
 	for ( int i = 0; i < 3; i++ ) {
 		RemoveGameEntity( m_ELBomberEntity[i] );
@@ -251,7 +203,18 @@ void EtherGame::Update_Internal( float DT ) {
 			EtherWeaponComponent *const pPlayerWeapon = static_cast<EtherWeaponComponent*>( pEntity->GetComponentByType( EtherWeaponComponent::GetType() ) );
 			if ( pPlayerWeapon != nullptr ) {
 		
-				kbVec3 curPos( 5.5f, -10.0f, 3.0f );	// Weapon offset from camera
+				static kbVec3 curPos( 7.75f, -6.5f, 8.0f );	// Weapon offset from camera
+				static float updateAmt = 1.0f;
+/*
+if (GetAsyncKeyState('O')) curPos.y += updateAmt;
+if (GetAsyncKeyState('P')) curPos.y -= updateAmt;
+
+if (GetAsyncKeyState('K')) curPos.x += updateAmt;
+if (GetAsyncKeyState('L')) curPos.x -= updateAmt;
+
+if (GetAsyncKeyState('N')) curPos.z += updateAmt;
+if (GetAsyncKeyState('M')) curPos.z -= updateAmt;
+*/
 				kbTransformComponent *const pTrans = static_cast<kbTransformComponent*>( pPlayerWeapon->GetOwner()->GetComponent(0) );
 				pTrans->SetPosition( kbVec3( curPos.x, curPos.y, curPos.z ) );
 			}
