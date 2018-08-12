@@ -1311,11 +1311,11 @@ void kbRenderer_DX11::RenderScene() {
 			m_RenderState.SetBlendState( false,
 										 false,
 										 true,
-										 kbRenderState::BF_SourceAlpha,
-										 kbRenderState::BF_InvSourceAlpha,
+										 BlendFactor_SrcAlpha,
+										 BlendFactor_InvSrcAlpha,
 										 kbRenderState::BO_Add,
-										 kbRenderState::BF_One,
-										 kbRenderState::BF_Zero,
+										 BlendFactor_One,
+										 BlendFactor_Zero,
 										 kbRenderState::BO_Add );
 
 			std::vector<kbRenderObject*> & InWorldUIVisibleList = m_pCurrentRenderWindow->GetVisibleRenderObjects( RP_PostLighting );
@@ -1472,11 +1472,11 @@ void kbRenderer_DX11::RenderTranslucency() {
 	m_RenderState.SetBlendState( false,
 								 false,
 								 true,
-								 kbRenderState::BF_One,
-								 kbRenderState::BF_One,
+								 BlendFactor_One,
+								 BlendFactor_One,
 								 kbRenderState::BO_Add,
-								 kbRenderState::BF_One,
-								 kbRenderState::BF_Zero,
+								 BlendFactor_One,
+								 BlendFactor_Zero,
 								 kbRenderState::BO_Add,
 							     kbRenderState::CW_All );
 
@@ -1616,11 +1616,11 @@ void kbRenderer_DX11::RenderDebugText() {
 		m_RenderState.SetBlendState( false,
 									 false,
 									 true,
-									 kbRenderState::BF_SourceAlpha,
-									 kbRenderState::BF_InvSourceAlpha,
+									 BlendFactor_SrcAlpha,
+									 BlendFactor_InvSrcAlpha,
 									 kbRenderState::BO_Add,
-									 kbRenderState::BF_One,
-									 kbRenderState::BF_Zero,
+									 BlendFactor_One,
+									 BlendFactor_Zero,
 									 kbRenderState::BO_Add );
 
 		RenderScreenSpaceQuadImmediate( int( Back_Buffer_Width * 0.25f ), int( Back_Buffer_Height * 0.1f ), int( Back_Buffer_Width * 0.51f ), int( Back_Buffer_Height * 0.65f ), 3, m_pTranslucentShader );
@@ -1689,11 +1689,11 @@ void kbRenderer_DX11::RenderDebugText() {
 	m_RenderState.SetBlendState( false,
 								 false,
 								 true,
-								 kbRenderState::BF_One,
-								 kbRenderState::BF_One,
+								 BlendFactor_One,
+								 BlendFactor_One,
 								 kbRenderState::BO_Add,
-								 kbRenderState::BF_One,
-								 kbRenderState::BF_Zero,
+								 BlendFactor_One,
+								 BlendFactor_Zero,
 								 kbRenderState::BO_Add,
 							     kbRenderState::CW_All );
 
@@ -2053,11 +2053,11 @@ void kbRenderer_DX11::RenderBloom() {
 	m_RenderState.SetBlendState( false,
 								 false,
 								 true,
-								 kbRenderState::BF_One,
-								 kbRenderState::BF_One,
+								 BlendFactor_One,
+								 BlendFactor_One,
 								 kbRenderState::BO_Add,
-								 kbRenderState::BF_One,
-								 kbRenderState::BF_Zero,
+								 BlendFactor_One,
+								 BlendFactor_Zero,
 								 kbRenderState::BO_Add,
 							     kbRenderState::CW_All );
 
@@ -2407,6 +2407,24 @@ void kbRenderer_DX11::LoadShader( const std::string & fileName, ID3D11VertexShad
 								  ID3D11InputLayout *& vertexLayout, const std::string & vertexShaderFunc, const std::string & pixelShaderFunc,
 								  kbShaderVarBindings_t * pShaderBindings ) {
 
+	std::ifstream shaderFile;
+	shaderFile.open( fileName.c_str(), std::fstream::in );
+	std::string shaderText( ( std::istreambuf_iterator<char>(shaderFile) ), std::istreambuf_iterator<char>() );
+	shaderFile.close();
+
+	kbTextParser shaderTextParser( shaderText );
+	shaderTextParser.RemoveComments();
+
+	CreateShaderFromText( fileName, shaderText, vertexShader, geometryShader, pixelShader, vertexLayout, vertexShaderFunc, pixelShaderFunc, pShaderBindings );
+}
+/**
+ *	kbRenderer_DX11::CreateShaderFromText
+ */
+
+void kbRenderer_DX11::CreateShaderFromText( const std::string & fileName, const std::string & shaderText, ID3D11VertexShader *& vertexShader, ID3D11GeometryShader *& geometryShader,
+											ID3D11PixelShader *& pixelShader, ID3D11InputLayout *& vertexLayout, const std::string & vertexShaderFunc, 
+											const std::string & pixelShaderFunc, struct kbShaderVarBindings_t * pShaderBindings ) {
+
 	HRESULT hr;
 	struct shaderBlobs_t {
 		~shaderBlobs_t() {
@@ -2422,44 +2440,8 @@ void kbRenderer_DX11::LoadShader( const std::string & fileName, ID3D11VertexShad
         ID3D10Blob * geometryShaderBuffer = nullptr;
 	} localBlobs;
 
-	std::ifstream shaderFile;
-	shaderFile.open( fileName.c_str(), std::fstream::in );	
-	std::string readBuffer( ( std::istreambuf_iterator<char>(shaderFile) ), std::istreambuf_iterator<char>() );
-	shaderFile.close();
 
-	if ( pShaderBindings != nullptr ) {
-
-        // Remove comments
-        for ( int i = 0; i < readBuffer.size() - 1; i++ )
-        {
-            if ( readBuffer[i] == '/' && readBuffer[i+1] == '*' ) {
-                int j = i;
-                while ( j < readBuffer.size() - 1 && !(readBuffer[j] == '*' && readBuffer[j + 1] == '/' ) ) {
-
-                    // Preserve new lines so that any shader error messages still line up with the source flie
-                    if (readBuffer[j] != '\n') {
-                        readBuffer[j] = ' ';
-                    }
-                    j++;
-                }
-
-                if ( j < readBuffer.size() - 1 ) {
-                    readBuffer[j] = ' ';
-                    readBuffer[j+1] = ' ';
-                }
-            }
-
-            if ( readBuffer[i] == '/' && readBuffer[i+1] == '/' ) {
-                int j = i;
-                while ( j < readBuffer.size() - 1 && readBuffer[j] != '\n' ) {
-                    readBuffer[j] = ' ';
-                    j++;
-                }
-               // readBuffer.erase(i, (j - i) + 1);
-            }
-        }
-
-		ReadShaderFile( readBuffer, pShaderBindings );
+		ReadShaderFile( shaderText, pShaderBindings );
 
 		const UINT desiredByteWidth = ( pShaderBindings->m_ConstantBufferSizeBytes + 15 ) & 0xfffffff0;
 		if ( m_ConstantBuffers.find( desiredByteWidth ) == m_ConstantBuffers.end() ) {
@@ -2478,7 +2460,7 @@ void kbRenderer_DX11::LoadShader( const std::string & fileName, ID3D11VertexShad
 
 			m_ConstantBuffers.insert( std::pair<size_t, ID3D11Buffer*>( desiredByteWidth, pConstantBuffer ) );
 		}
-	}
+//	}
 
 	// Compile vertex shader
 	const UINT shaderFlags = D3DCOMPILE_PACK_MATRIX_ROW_MAJOR | D3DCOMPILE_ENABLE_STRICTNESS | D3DCOMPILE_ALL_RESOURCES_BOUND | D3DCOMPILE_WARNINGS_ARE_ERRORS;
@@ -2488,7 +2470,7 @@ void kbRenderer_DX11::LoadShader( const std::string & fileName, ID3D11VertexShad
 		numTries++;
 
 		SAFE_RELEASE( localBlobs.errorMessage );
-		hr = D3DCompile( readBuffer.c_str(), readBuffer.length(), nullptr, nullptr, nullptr, vertexShaderFunc.c_str(), "vs_5_0", shaderFlags, 0, &localBlobs.vertexShaderBuffer, &localBlobs.errorMessage );
+		hr = D3DCompile( shaderText.c_str(), shaderText.length(), nullptr, nullptr, nullptr, vertexShaderFunc.c_str(), "vs_5_0", shaderFlags, 0, &localBlobs.vertexShaderBuffer, &localBlobs.errorMessage );
 		if ( FAILED(hr)  ) {
 			Sleep( 250 );
 			SAFE_RELEASE( localBlobs.vertexShaderBuffer );
@@ -2503,13 +2485,13 @@ void kbRenderer_DX11::LoadShader( const std::string & fileName, ID3D11VertexShad
 	SAFE_RELEASE( localBlobs.errorMessage );
 
     // Geometry Shader
-    if ( readBuffer.find( "void geometryShader") != std::string::npos ) {
+    if ( shaderText.find( "void geometryShader") != std::string::npos ) {
         numTries = 0;
         do {
 		    numTries++;
 
 		    SAFE_RELEASE( localBlobs.errorMessage );
-		    hr = D3DCompile( readBuffer.c_str(), readBuffer.length(), nullptr, nullptr, nullptr, "geometryShader", "gs_5_0", shaderFlags, 0, &localBlobs.geometryShaderBuffer, &localBlobs.errorMessage );
+		    hr = D3DCompile( shaderText.c_str(), shaderText.length(), nullptr, nullptr, nullptr, "geometryShader", "gs_5_0", shaderFlags, 0, &localBlobs.geometryShaderBuffer, &localBlobs.errorMessage );
 		    if ( FAILED(hr)  ) {
 			    Sleep( 250 );
 			    SAFE_RELEASE( localBlobs.geometryShaderBuffer );
@@ -2536,7 +2518,7 @@ void kbRenderer_DX11::LoadShader( const std::string & fileName, ID3D11VertexShad
 		numTries++;
 
 		SAFE_RELEASE( localBlobs.errorMessage )
-		hr = D3DCompile( readBuffer.c_str(), readBuffer.length(), nullptr, nullptr, nullptr, pixelShaderFunc.c_str(), "ps_5_0", shaderFlags, 0, &localBlobs.pixelShaderBuffer, &localBlobs.errorMessage );
+		hr = D3DCompile( shaderText.c_str(), shaderText.length(), nullptr, nullptr, nullptr, pixelShaderFunc.c_str(), "ps_5_0", shaderFlags, 0, &localBlobs.pixelShaderBuffer, &localBlobs.errorMessage );
 		if ( FAILED(hr) ) {
 			Sleep( 250 );
 			SAFE_RELEASE( localBlobs.pixelShaderBuffer );
@@ -2744,11 +2726,11 @@ void kbRenderer_DX11::RenderScreenSpaceQuads() {
 	m_RenderState.SetBlendState( false,
 								 false,
 								 true,
-								 kbRenderState::BF_SourceAlpha,
-								 kbRenderState::BF_InvSourceAlpha,
+								 BlendFactor_SrcAlpha,
+								 BlendFactor_InvSrcAlpha,
 								 kbRenderState::BO_Add,
-								 kbRenderState::BF_One,
-								 kbRenderState::BF_Zero,
+								 BlendFactor_One,
+								 BlendFactor_Zero,
 								 kbRenderState::BO_Add );
 
 	m_RenderState.SetDepthStencilState( false, kbRenderState::DepthWriteMaskZero, kbRenderState::CompareLess, false );

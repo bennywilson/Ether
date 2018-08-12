@@ -259,4 +259,109 @@ struct kbInput_t {
 	bool			RightMouseButtonDown;
 };
 
+
+struct kbTextParser {
+	kbTextParser( std::string & inString ) :
+		m_StringBuffer( inString ),
+		m_StartBlock( 0 ),
+		m_EndBlock( m_StringBuffer.size() - 1 ) {
+	}
+
+	std::string & m_StringBuffer;
+	std::string::size_type m_StartBlock;
+	std::string::size_type m_EndBlock;
+
+	bool SetBlock( const char * blockName ) {
+		m_StartBlock = 0;
+		m_EndBlock = m_StringBuffer.size() - 1;
+
+		static char delimiters[] = " \n\t";
+		auto startBlock = m_StringBuffer.find( blockName );
+		if ( startBlock == std::string::npos ) {
+			return false;
+		}
+
+		auto endBlock = m_StringBuffer.find( "}", startBlock );
+		if ( endBlock == std::string::npos ) {
+			return false;
+		}
+
+		m_StartBlock = startBlock;
+		m_EndBlock = endBlock;
+
+		return true;
+	}
+
+	void MakeLowerCase() {
+
+		if ( m_StartBlock == std::string::npos ) {
+			std::transform( m_StringBuffer.begin(), m_StringBuffer.end(), m_StringBuffer.begin(), ::tolower );
+		} else {
+			std::transform( m_StringBuffer.begin() + m_StartBlock, m_StringBuffer.begin() + m_EndBlock, m_StringBuffer.begin() + m_StartBlock, ::tolower );
+		}
+	}
+
+	bool GetValueForKey( std::string & outValue,  char * key ) {
+		outValue.clear();
+		auto keyStartPos = m_StringBuffer.find( key, m_StartBlock /*TODO: Should confine scope of search shaderStateEndBlock - shaderStateStartBlock*/ );
+		if ( keyStartPos != std::string::npos ) {
+
+			static char delimiters[] = " \n\t";
+			auto valueStartPos = m_StringBuffer.find_first_of( delimiters, keyStartPos );
+			if ( valueStartPos == std::string::npos ) {
+				return false;
+			}
+
+			valueStartPos = m_StringBuffer.find_first_not_of( delimiters, valueStartPos + 1 );
+			if ( valueStartPos == std::string::npos ) {
+				return false;
+			}
+
+			auto endValuePos = m_StringBuffer.find_first_of( delimiters, valueStartPos );
+			if ( endValuePos == std::string::npos ) {
+				return false;
+			}
+
+			outValue = m_StringBuffer.substr( valueStartPos, endValuePos - valueStartPos );
+			return true;
+		}
+
+		return false;	
+	}
+
+	void EraseBlock() {
+		m_StringBuffer.erase( m_StartBlock, m_EndBlock );
+	}
+
+	void RemoveComments() {
+
+		// Remove comments
+		for ( int i = 0; i < m_StringBuffer.size() - 1; i++ ) {
+			if ( m_StringBuffer[i] == '/' && m_StringBuffer[i+1] == '*' ) {
+				int j = i;
+				while ( j < m_StringBuffer.size() - 1 && !(m_StringBuffer[j] == '*' && m_StringBuffer[j + 1] == '/' ) ) {
+	
+					// Preserve new lines so that any error messages still line up with the source flie
+					if (m_StringBuffer[j] != '\n') {
+						m_StringBuffer[j] = ' ';
+					}
+					j++;
+				}
+	
+				if ( j < m_StringBuffer.size() - 1 ) {
+					m_StringBuffer[j] = ' ';
+					m_StringBuffer[j+1] = ' ';
+				}
+			}
+	
+			if ( m_StringBuffer[i] == '/' && m_StringBuffer[i+1] == '/' ) {
+				int j = i;
+				while ( j < m_StringBuffer.size() - 1 && m_StringBuffer[j] != '\n' ) {
+					m_StringBuffer[j] = ' ';
+					j++;
+				}
+			}
+		}
+	}
+};
 #endif

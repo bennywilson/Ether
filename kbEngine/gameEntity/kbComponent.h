@@ -188,4 +188,14 @@ protected:
 	float										m_MaxHealth;
 	float										m_CurrentHealth;
 };
+
+/**
+ *	kbPlayerStartComponent
+ */
+class kbPlayerStartComponent : public kbGameComponent {
+	KB_DECLARE_COMPONENT( kbPlayerStartComponent, kbGameComponent );
+
+	int m_DummyVar;
+};
+
 #endif

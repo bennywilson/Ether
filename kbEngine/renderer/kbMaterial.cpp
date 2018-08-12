@@ -573,8 +573,11 @@ kbShader::kbShader( const std::string & fileName ) :
 	m_pPixelShader( nullptr ),
 	m_pVertexLayout( nullptr ),
 	m_VertexShaderFunctionName( "vertexShader" ),
-	m_PixelShaderFunctionName( "pixelShader" ) {
+	m_PixelShaderFunctionName( "pixelShader" ),
+	m_SrcBlendFactor( BlendFactor_None ),
+	m_DstBlendFactor( BlendFactor_None ) {
 	m_FullFileName = fileName;
+
 }
 
 /**
@@ -582,7 +585,40 @@ kbShader::kbShader( const std::string & fileName ) :
  */
 bool kbShader::Load_Internal() {
 	if ( g_pD3D11Renderer != nullptr ) {		// HACK TODO
-		g_pD3D11Renderer->LoadShader( GetFullFileName(), m_pVertexShader, m_pGeometryShader, m_pPixelShader, m_pVertexLayout, m_VertexShaderFunctionName.c_str(), m_PixelShaderFunctionName.c_str(), &m_ShaderVarBindings );
+
+		// Load File
+		std::ifstream shaderFile;
+		shaderFile.open( GetFullFileName().c_str(), std::fstream::in );
+		std::string shaderText( ( std::istreambuf_iterator<char>(shaderFile) ), std::istreambuf_iterator<char>() );
+		shaderFile.close();
+
+		kbTextParser shaderParser( shaderText );
+		shaderParser.RemoveComments();
+
+		if ( shaderParser.SetBlock( "kbShaderState" ) ) {
+			shaderParser.MakeLowerCase();
+
+			std::string value;
+			if ( shaderParser.GetValueForKey( value, "srcblend" ) ) {
+				if ( value == "blendfactor_alpha" ) {
+					m_SrcBlendFactor = BlendFactor_SrcAlpha;
+				} else if ( value == "blendfactor_invsrcalpha" ) {
+					m_SrcBlendFactor = BlendFactor_InvSrcAlpha;
+				}
+			}
+
+			if ( shaderParser.GetValueForKey( value, "dstblend" ) ) {
+				if ( value == "blendfactor_alpha" ) {
+					m_DstBlendFactor = BlendFactor_SrcAlpha;
+				} else if ( value == "blendfactor_invsrcalpha" ) {
+					m_DstBlendFactor = BlendFactor_InvSrcAlpha;
+				}
+			}
+
+			shaderParser.EraseBlock();
+		}
+
+		g_pD3D11Renderer->CreateShaderFromText( GetFullFileName(), shaderText, m_pVertexShader, m_pGeometryShader, m_pPixelShader, m_pVertexLayout, m_VertexShaderFunctionName.c_str(), m_PixelShaderFunctionName.c_str(), &m_ShaderVarBindings );
 	}
 	return true;
 }

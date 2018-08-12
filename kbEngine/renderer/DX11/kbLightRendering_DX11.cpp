@@ -65,11 +65,11 @@ void kbRenderer_DX11::RenderLight( const kbRenderLight *const pLight ) {
 	m_RenderState.SetBlendState( false,
 								 false,
 								 true,
-								 kbRenderState::BF_One,
-								 kbRenderState::BF_One,
+								 BlendFactor_One,
+								 BlendFactor_One,
 								 kbRenderState::BO_Add,
-								 kbRenderState::BF_One,
-								 kbRenderState::BF_Zero,
+								 BlendFactor_One,
+								 BlendFactor_Zero,
 								 kbRenderState::BO_Add,
 							     kbRenderState::CW_All );
 
@@ -466,11 +466,11 @@ void kbRenderer_DX11::RenderLightShafts() {
 			m_RenderState.SetBlendState( false,
 										 false,
 										 true,
-										 kbRenderState::BF_One,
-										 kbRenderState::BF_One,
+										 BlendFactor_One,
+										 BlendFactor_One,
 										 kbRenderState::BO_Add,
-										 kbRenderState::BF_One,
-										 kbRenderState::BF_Zero,
+										 BlendFactor_One,
+										 BlendFactor_Zero,
 										 kbRenderState::BO_Add,
 										 kbRenderState::CW_All );
 

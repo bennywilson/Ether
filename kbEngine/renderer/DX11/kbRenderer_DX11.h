@@ -242,14 +242,8 @@ struct kbRenderState {
 
 	ID3D11DepthStencilState * m_pCurrentDepthStencilState;
 
-	enum kbBlend {
-		BF_One,
-		BF_Zero,
-		BF_SourceAlpha,
-		BF_InvSourceAlpha,
-	};
 
-	enum kbBlendOp {
+	enum kbBlendFactorOp {
 		BO_Add
 	};
 
@@ -257,18 +251,18 @@ struct kbRenderState {
 		CW_All
 	};
 
-	D3D11_BLEND GetD3DBlend( const kbBlend blend ) {
+	D3D11_BLEND GetD3DBlend( const kbBlendFactor blend ) {
 		switch( blend ) {
-			case BF_Zero : return D3D11_BLEND_ZERO;
-			case BF_One : return D3D11_BLEND_ONE;
-			case BF_SourceAlpha : return D3D11_BLEND_SRC_ALPHA;
-			case BF_InvSourceAlpha : return D3D11_BLEND_INV_SRC_ALPHA;
+			case BlendFactor_Zero : return D3D11_BLEND_ZERO;
+			case BlendFactor_One : return D3D11_BLEND_ONE;
+			case BlendFactor_SrcAlpha : return D3D11_BLEND_SRC_ALPHA;
+			case BlendFactor_InvSrcAlpha : return D3D11_BLEND_INV_SRC_ALPHA;
 		};
 
 		return D3D11_BLEND_ONE;
 	}
 
-	D3D11_BLEND_OP GetD3DBlendOp( const kbBlendOp blendOp ) {
+	D3D11_BLEND_OP GetD3DBlendOp( const kbBlendFactorOp blendOp ) {
 		switch( blendOp ) {
 			case BO_Add : return D3D11_BLEND_OP_ADD;
 		}
@@ -287,12 +281,12 @@ struct kbRenderState {
 	void SetBlendState( const bool bAlphaToCoverageEnable = false,
 						const bool bIndependentBlendEnabled = false,
 						const bool bBlendEnable = false,
-						const kbBlend sourceBlend = BF_One,
-						const kbBlend destBlend = BF_One,
-						const kbBlendOp blendOp = BO_Add,
-						const kbBlend sourceAlpha = BF_One,
-						const kbBlend destAlpha = BF_One,
-						const kbBlendOp alphaBlendOp = BO_Add,
+						const kbBlendFactor sourceBlend = BlendFactor_One,
+						const kbBlendFactor destBlend = BlendFactor_One,
+						const kbBlendFactorOp blendOp = BO_Add,
+						const kbBlendFactor sourceAlpha = BlendFactor_One,
+						const kbBlendFactor destAlpha = BlendFactor_One,
+						const kbBlendFactorOp alphaBlendOp = BO_Add,
 						const kbColorWriteEnable renderTargetWriteMask = CW_All,
 						const UINT sampleMask = 0xffffffff ) {
 
@@ -347,7 +341,9 @@ public:
 															ID3D11PixelShader *& pixelShader, ID3D11InputLayout *& vertexLayout, const std::string & vertexShaderFunc, 
 															const std::string & pixelShaderFunc, struct kbShaderVarBindings_t * ShaderBindings = nullptr );
 
-
+	void										CreateShaderFromText( const std::string & fileName, const std::string & shaderText, ID3D11VertexShader *& vertexShader, ID3D11GeometryShader *& geometryShader,
+															ID3D11PixelShader *& pixelShader, ID3D11InputLayout *& vertexLayout, const std::string & vertexShaderFunc, 
+															const std::string & pixelShaderFunc, struct kbShaderVarBindings_t * ShaderBindings = nullptr );
 
 	// Oculus
 	bool										IsRenderingToHMD() const { return m_bRenderToHMD; }

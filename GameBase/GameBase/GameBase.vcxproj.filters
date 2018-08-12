@@ -38,6 +38,9 @@
     <None Include="assets\shaders\grass.kbShader">
       <Filter>Shaders</Filter>
     </None>
+    <None Include="assets\shaders\baseHoloscope.kbShader">
+      <Filter>Shaders</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameBase.h">

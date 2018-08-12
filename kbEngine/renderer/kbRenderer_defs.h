@@ -420,4 +420,12 @@ public:
 	bool										m_bIsDirectional;
 };
 
+enum kbBlendFactor {
+	BlendFactor_None,
+	BlendFactor_One,
+	BlendFactor_Zero,
+	BlendFactor_SrcAlpha,
+	BlendFactor_InvSrcAlpha,
+};
+
 #endif

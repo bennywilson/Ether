@@ -295,3 +295,10 @@ void kbActorComponent::TakeDamage( const class kbDamageComponent *const pDamageC
 
 	m_CurrentHealth -= pDamageComponent->GetMaxDamage();
 }
+
+/**
+ *	kbPlayerStartComponent::Constructor
+ */
+void kbPlayerStartComponent::Constructor() {
+	m_DummyVar = 0;
+}

@@ -113,6 +113,9 @@ private:
 	std::vector<kbVec4>							m_GlobalShaderParams_RenderThread;
 
 	kbShaderVarBindings_t						m_ShaderVarBindings;
+
+	kbBlendFactor								m_SrcBlendFactor;
+	kbBlendFactor								m_DstBlendFactor;
 };
 
 /**

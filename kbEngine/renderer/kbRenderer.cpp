@@ -214,7 +214,7 @@ void kbRenderer::Init( HWND hwnd, const int width, const int height, const bool 
 /**
  *	kbRenderer::Shutdown
  */
-void kbRenderer::Shutdown(){
+void kbRenderer::Shutdown() {
 
 	kbLog( "Shutting down kbRenderer" );
 

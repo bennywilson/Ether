@@ -157,6 +157,10 @@ std::vector<kbTypeInfoClass *> kbCollisionComponent::kbCollisionComponent_TypeIn
 kbActorComponent_TypeInfo kbActorComponent::typeInfo;
 std::vector<kbTypeInfoClass *> kbActorComponent::kbActorComponent_TypeInfoVar;
 
+// kbPlayerStartComponent
+kbPlayerStartComponent_TypeInfo kbPlayerStartComponent::typeInfo;
+std::vector<kbTypeInfoClass *> kbPlayerStartComponent::kbPlayerStartComponent_TypeInfoVar;
+
 // kbSoundData
 kbSoundData_TypeInfo kbSoundData::typeInfo;
 std::vector<kbTypeInfoClass *> kbSoundData::kbSoundData_TypeInfoVar;

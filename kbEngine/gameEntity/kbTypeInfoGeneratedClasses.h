@@ -215,6 +215,11 @@ GenerateClass(
 )
 
 GenerateClass(
+	kbPlayerStartComponent,
+	AddField( "Dummy", KBTYPEINFO_FLOAT, kbPlayerStartComponent, m_DummyVar, false, "" )
+)
+
+GenerateClass(
 	kbCollisionComponent,
 	AddField( "CollisionType", KBTYPEINFO_ENUM, kbCollisionComponent, m_CollisionType, false, "ECollisionType" )
 	AddField( "Extent", KBTYPEINFO_VECTOR, kbCollisionComponent, m_Extent, false, "" )
