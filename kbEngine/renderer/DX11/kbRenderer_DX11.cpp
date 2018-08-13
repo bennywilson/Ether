@@ -406,7 +406,7 @@ kbRenderer_DX11::kbRenderer_DX11() :
 	m_FrameNum( 0 ),
 	m_DebugText( nullptr ) {
 
-	m_pSkinnedDirectionalLightShadowShader = new kbShader( "../../kbEngine/assets/Shaders/directionalLightShadow.kbShader" );
+	m_pSkinnedDirectionalLightShadowShader = new kbShader( "../../kbEngine/assets/Shaders/directionalLightSkinnedShadow.kbShader" );
 	m_pBloomGatherShader = new kbShader( "../../kbEngine/assets/Shaders/bloom.kbShader" );
 	m_pBloomBlur = new kbShader( "../../kbEngine/assets/Shaders/bloom.kbShader" );
 

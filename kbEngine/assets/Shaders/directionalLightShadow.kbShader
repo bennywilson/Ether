@@ -6,7 +6,6 @@
 //===================================================================================================
 cbuffer matrixBuffer {
    matrix      mvpMatrix;
-   float4x4    boneList[128];
 };
 
 //-------------------------------------
@@ -28,12 +27,8 @@ shadowPixelInput vertexShader( shadowVertexInput input ) {
 	shadowPixelInput output = ( shadowPixelInput )(0);
 
 	output.position = mul( input.position, mvpMatrix );
-   output.position2 = output.position.zw;
+	output.position2 = output.position.zw;
 
-   // Clip out polies that are marked as non-shadow casting
- /*  if ( input.color.w == 0 ) {
-      output.position.z = -2.0f;
-   }*/
 	return output;
 }
 
@@ -41,40 +36,5 @@ shadowPixelInput vertexShader( shadowVertexInput input ) {
  *	pixelShader
  */
  float pixelShader( shadowPixelInput input ) : SV_TARGET {
-   return input.position2.x / input.position2.y;
-}
-
-//-------------------------------------
-struct skinnedVertexInput {
-   float4      position         : POSITION;
-   float4      blendIndices     : BLENDINDICES;
-   float4      boneWeights      : BLENDWEIGHT;
-};
-
-/**
- *	skinnedVertexMain
- */
-shadowPixelInput skinnedVertexMain( skinnedVertexInput input ) {
-
-	shadowPixelInput output = (shadowPixelInput)(0);
-
-   float4 Pos = 0.0f;
-
-   int4 IndexVector = D3DCOLORtoUBYTE4(input.blendIndices);
-   float BlendWeightsArray[4] = (float[4])input.boneWeights;
-   int   IndexArray[4]        = (int[4])IndexVector;
-
-   Pos = mul( input.position, boneList[IndexArray[0]] );
-
-	output.position = mul( Pos, mvpMatrix );
-	output.position2 = output.position.zw;
-
-	return output;
-}
-
-/**
- *	skinnedPixelMain
- */
- float skinnedPixelMain( shadowPixelInput input ) : SV_TARGET {
    return input.position2.x / input.position2.y;
 }
