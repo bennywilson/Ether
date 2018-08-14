@@ -300,7 +300,7 @@ kbGameEntity 292847838 1140569109 1236968083 2365837966 {
 				Animation = .\assets\models\items\el_rifle_fp_shoot.kbanim.ms3d
 				AnimationName = "Shoot"
 				IsLooping = 0
-				TimeScale =  1.000000
+				TimeScale =  0.65
 			}
 		DebugAnimIndex = -1
 		IsFirstPersonModel = 1
