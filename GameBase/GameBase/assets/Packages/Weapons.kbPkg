@@ -284,6 +284,7 @@ kbGameEntity 292847838 1140569109 1236968083 2365837966 {
 		ShaderOverride = 2
 			..\..\kbengine\assets\shaders\basicSkinned.kbshader
 .\assets\shaders\baseholoscope.kbshader
+..\..\kbengine\assets\shaders\basicSkinned.kbshader
 
 		Animations = 2
 			EtherAnimComponent { 
