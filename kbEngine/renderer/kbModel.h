@@ -148,6 +148,9 @@ public:
 	const kbBoneMatrix_t &						GetRefBoneMatrix( const int index ) const { return m_RefPose[index]; }
 	const kbBoneMatrix_t &						GetInvRefBoneMatrix( const int index ) const { return m_InvRefPose[index]; }
 
+	// Debug
+	void										DrawDebugTBN( const kbVec3 & modelTranslation, const kbQuat & modelOrientation, const kbVec3 & modelScale );
+
 protected:
 
 	virtual bool								Load_Internal();
@@ -181,6 +184,11 @@ private:
 	virtual kbTypeInfoType_t					GetType() const { return KBTYPEINFO_STATICMODEL; }
 
 	virtual void								Load( const std::string & fileName ) { };
+
+	// Debug
+	std::vector<kbVec3>							m_DebugPositions;
+	std::vector<kbVec3>							m_DebugNormals;
+	std::vector<kbVec3>							m_DebugTangents;
 };
 
 #endif
