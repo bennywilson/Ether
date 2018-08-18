@@ -82,6 +82,14 @@ float4 pixelShader( pixelInput input ) : SV_TARGET {
    const float3 lightVec = normalize( pointAlongLine - worldPos.xyz );
    float nDotL = saturate( dot( lightVec, normal ) );
 
-   float3 finalColor = attenuation * nDotL * baseColor * lightColor.xyz;
+   // Spec
+   
+   float3 toCameraVec = normalize( cameraPosition.xyz - worldPos.xyz );
+   float3 lightReflect = ( 2.0f * dot( normal, lightDirection.xyz ) * normal ) - lightDirection.xyz;
+   float3 spec = saturate( dot( lightReflect, toCameraVec ) );
+   float4 specColor = specularTexture.Sample( DiffuseSamplerState, input.uv );
+   specColor.xyz *= pow( spec, specColor.w ) * attenuation;
+
+   float3 finalColor = attenuation * nDotL * baseColor * lightColor.xyz + specColor.xyz;
    return float4( finalColor, 1.0f );
 }
