@@ -14,8 +14,8 @@ kbPrefab 1 {
 			Enabled = 1
 			LifeTime =  -1.000000
 			CastsShadows = 0
-			Color = 1.000000 1.000000 1.000000 1.000000
-			LightRadius =  64.000000
+			Color = 2.000000 2.000000 2.000000 1.000000
+			LightRadius =  16.000000
 			Length =  128.000000
 		}
 		EtherProjectileComponent { 
