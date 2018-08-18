@@ -54,7 +54,6 @@ pixelInput vertexShader( vertexInput input ) {
 
 	output.position = mul( Pos, mvpMatrix );
 	output.uv = input.uv;
-	//output.color = 0;//input.color;
 	output.position2 = output.position.zw;
 	output.normal.xyz = mul( ( input.normal.xyz * 2.0f ) - 1.0f, (float3x3)modelMatrix );
 

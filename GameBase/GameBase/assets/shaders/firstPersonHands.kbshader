@@ -18,20 +18,11 @@ struct vertexInput {
 	float4 boneWeights		: BLENDWEIGHT;
 };
 
-//-------------------------------------
 struct pixelInput {
 	float4      position	: SV_POSITION;
 	float2      uv			: TEXCOORD0;
 	float2      position2	: TEXCOORD1;
 	float3      normal		: TEXCOORD2;
-};
-
-struct pixelInput2 {
-	float4      position	: SV_POSITION;
-	float2      uv			: TEXCOORD0;
-	float2      position2	: TEXCOORD1;
-	float3      normal		: TEXCOORD2;
-	bool		IsFrontFace	: SV_IsFrontFace;
 };
 //-------------------------------------
 struct PS_OUTPUT {
@@ -58,7 +49,7 @@ pixelInput vertexShader( vertexInput input ) {
 
 	output.position = mul( Pos, mvpMatrix );
 	output.uv = input.uv;
-	//output.color = 0;//input.color;
+
 	output.position2 = output.position.zw;
 	output.normal.xyz = mul( ( input.normal.xyz * 2.0f ) - 1.0f, (float3x3)modelMatrix );
 
@@ -71,7 +62,7 @@ pixelInput vertexShader( vertexInput input ) {
 Texture2D shaderTexture;
 SamplerState SampleType;
 
- PS_OUTPUT pixelShader( pixelInput2	input ) {
+ PS_OUTPUT pixelShader( pixelInput	input ) {
 	PS_OUTPUT output = (PS_OUTPUT) 0;
 
 	output.Color = shaderTexture.Sample( SampleType, input.uv );
@@ -79,9 +70,6 @@ SamplerState SampleType;
 	output.Depth.r = input.position2.x / input.position2.y;
 
 	output.Normal.xyz = normalize( input.normal );
-	if ( input.IsFrontFace == false ) {
-	   output.Normal *= -1.0f;
-	}
 
 	return output;
 }
