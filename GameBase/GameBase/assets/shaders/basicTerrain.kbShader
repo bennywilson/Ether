@@ -120,6 +120,7 @@ float4 BlendWeights( float4 val1, float4 val2, float4 val3, float4 weights ) {
 	const float4 weights = splatMap.Sample( SampleType, input.uv );
 
 	output.Color = BlendWeights( mat1.diffuse, mat2.diffuse, mat3.diffuse, weights );
+	output.Color.w = 0.0f;
 	output.Normal = BlendWeights( mat1.normal, mat2.normal, mat3.normal, weights );
 	output.Normal.xyz = normalize( output.Normal.xyz );
 	output.Spec = BlendWeights( mat1.spec, mat2.spec, mat3.spec, weights ) / 3.0f;

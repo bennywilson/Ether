@@ -117,8 +117,10 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <None Include="assets\shaders\baseHoloscope.kbShader" />
+    <None Include="assets\shaders\baseWeapon.kbShader" />
     <None Include="assets\shaders\basicTerrain.kbShader" />
     <None Include="assets\shaders\enemyEye.kbShader" />
+    <None Include="assets\shaders\firstPersonHands.kbshader" />
     <None Include="assets\shaders\grass.kbShader" />
     <None Include="assets\shaders\holey_wall.kbShader" />
     <None Include="assets\shaders\skyBox.kbShader" />
