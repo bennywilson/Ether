@@ -278,7 +278,7 @@ void kbParticleComponent::RenderSync() {
 		m_ParticleBuffer[m_CurrentParticleBuffer].UnmapIndexBuffer();		// todo : don't need to map/remap index buffer
 	}
 
-	m_ParticleBuffer[m_CurrentParticleBuffer].SwapTexture( 0, m_pParticleTexture );
+	m_ParticleBuffer[m_CurrentParticleBuffer].SwapTexture( 0, m_pParticleTexture, 0 );
 	g_pRenderer->AddParticle( this, &m_ParticleBuffer[m_CurrentParticleBuffer], GetPosition(), kbQuat( 0.0f, 0.0f, 0.0f, 1.0f ) );
 
 	m_CurrentParticleBuffer++;

@@ -34,9 +34,7 @@ struct pixelInput {
 };
 
 //-------------------------------------
-struct PS_OUTPUT {
-	float4 Color		: SV_TARGET0;
-};
+
 
 /**
  *	vertexShader
@@ -59,11 +57,7 @@ pixelInput vertexShader( vertexInput input ) {
 Texture2D shaderTexture;
 SamplerState SampleType;
 
-PS_OUTPUT pixelShader( pixelInput input ) {
-	PS_OUTPUT output = (PS_OUTPUT) 0;
+float4 pixelShader( pixelInput input ) : SV_TARGET {
 
-	output.Color.xyz = shaderTexture.Sample( SampleType, input.uv ).xyz * input.color.xyz;
-	output.Color.w = 1.0;//input.position2.x / input.position2.y;
-
-	return output;
+	return shaderTexture.Sample( SampleType, input.uv ).xyzw * input.color.xyzw;
 }

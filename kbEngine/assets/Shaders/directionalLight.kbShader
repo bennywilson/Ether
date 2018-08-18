@@ -59,13 +59,13 @@ SamplerState ShadowMapSamplerState;
 Texture2D ShadowMap					: register(t4);
 
 float4 pixelShader( pixelInput input ) : SV_TARGET {
-   float3 baseColor = colorTexture.Sample( DiffuseSamplerState, input.uv ).xyz;
+   float4 diffuseColor = colorTexture.Sample( DiffuseSamplerState, input.uv );
    float3 normal = normalTexture.Sample( NormalSamplerState, input.uv ).xyz;
    float4 specColor = specularTexture.Sample( DiffuseSamplerState, input.uv );
 
    // Diffuse
-   float diffuse = dot( normal, lightDirection.xyz );
-   diffuse = ( diffuse * 0.5f ) + 0.5f;
+   float diffuse = saturate( dot( normal, lightDirection.xyz ) );
+   diffuse = ( diffuse * 0.8f ) + 0.2f;	// Bit of fake ambience
 
    float4 worldPos = float4( input.position2.xy, depthTexture.Sample( DepthSamplerState, input.uv ).r, 1 );
    worldPos = mul( worldPos, inverseViewProjection );
@@ -107,6 +107,7 @@ float4 pixelShader( pixelInput input ) : SV_TARGET {
       }
    }
 
-	float3 finalColor = baseColor * diffuse * lightColor.xyz + specColor.xyz;	// todo
+	const float3 emissive = diffuseColor.xyz * diffuseColor.w;
+	float3 finalColor = diffuseColor.xyz * diffuse * lightColor.xyz + specColor.xyz + emissive;	// todo
 	return float4( finalColor, 1.0f );
 }

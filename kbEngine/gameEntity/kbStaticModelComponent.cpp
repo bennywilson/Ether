@@ -82,4 +82,6 @@ void kbStaticModelComponent::Update_Internal( const float DeltaTime ) {
 
 		g_pRenderer->UpdateRenderObject( m_RenderObject );
 	}
+
+	// m_pModel->DrawDebugTBN( GetOwner()->GetPosition(), GetOwner()->GetOrientation(), GetOwner()->GetScale() );
 }

@@ -14,8 +14,8 @@ kbPrefab 1 {
 			Enabled = 1
 			LifeTime =  -1.000000
 			CastsShadows = 0
-			Color = 1.000000 1.000000 1.000000 1.000000
-			LightRadius =  64.000000
+			Color = 2.000000 2.000000 2.000000 1.000000
+			LightRadius =  16.000000
 			Length =  128.000000
 		}
 		EtherProjectileComponent { 
@@ -281,10 +281,10 @@ kbGameEntity 292847838 1140569109 1236968083 2365837966 {
 		CastsShadow = 0
 		m_RenderPass = FirstPersonPass
 		Model = .\assets\models\items\el_rifle_fp.ms3d
-		ShaderOverride = 2
-			..\..\kbengine\assets\shaders\basicSkinned.kbshader
+		ShaderOverride = 3
+			.\assets\shaders\baseweapon.kbshader
 .\assets\shaders\baseholoscope.kbshader
-..\..\kbengine\assets\shaders\basicSkinned.kbshader
+.\assets\shaders\firstPersonHands.kbshader
 
 		Animations = 2
 			EtherAnimComponent { 
@@ -301,7 +301,7 @@ kbGameEntity 292847838 1140569109 1236968083 2365837966 {
 				Animation = .\assets\models\items\el_rifle_fp_shoot.kbanim.ms3d
 				AnimationName = "Shoot"
 				IsLooping = 0
-				TimeScale =  2
+				TimeScale =  2.000000
 			}
 		DebugAnimIndex = -1
 		IsFirstPersonModel = 1

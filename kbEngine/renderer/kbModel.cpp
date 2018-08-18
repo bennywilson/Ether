@@ -269,32 +269,31 @@ bool kbModel::Load_Internal() {
 	}
 
 	// todo:don't load duplicate textures
-	for ( uint i = 0; i < numMaterials; i++ ) {
+	for ( uint iMat = 0; iMat < numMaterials; iMat++ ) {
 		ms3dMaterial_t * pMat = ( ms3dMaterial_t * ) pPtr;
 		pPtr += sizeof( ms3dMaterial_t );
 
-		m_Materials[i].m_DiffuseColor.Set( pMat->m_Diffuse[0], pMat->m_Diffuse[1], pMat->m_Diffuse[2], 1.0f );
+		m_Materials[iMat].m_DiffuseColor.Set( pMat->m_Diffuse[0], pMat->m_Diffuse[1], pMat->m_Diffuse[2], 1.0f );
 
 		// get the base texture name
-		std::string textureName = pMat->m_Texture;
-		if ( textureName.length() == 0 ) {
-			continue;
+		char *const texture[] = { pMat->m_Texture, pMat->m_AlphaMap };
+
+		for ( int iTex = 0; iTex < 2; iTex++ ) {
+			
+			std::string texName = texture[iTex];
+			if ( texName.length() == 0 ) {
+				continue;
+			}
+
+			// load the base diffuse textures
+			const std::string diffuseTextureName = filePath + texName;
+			m_Materials[iMat].m_Textures.push_back ( (kbTexture *) g_ResourceManager.GetResource( diffuseTextureName.c_str(), true ) );
 		}
-
-		stringPos = textureName.rfind( "." );
-		std::string fileExt = textureName.substr( stringPos + 1 );
-		textureName.erase( stringPos );
-
-		// load the base diffuse textures
-		std::string diffuseTextureName = filePath;
-		diffuseTextureName.append( pMat->m_Texture );
-
-		m_Materials[i].m_Texture = ( kbTexture * ) g_ResourceManager.GetResource( diffuseTextureName.c_str(), true );
 
 		std::string shaderName = pMat->m_Name;
 
 		if ( shaderName.find( "NoCull" ) != std::string::npos ) {
-			m_Materials[i].m_CullingMode = kbMaterial::CM_None;
+			m_Materials[iMat].m_CullingMode = kbMaterial::CM_None;
 		}
 
 		const size_t endOfShaderName = shaderName.find("_");
@@ -302,7 +301,7 @@ bool kbModel::Load_Internal() {
 			shaderName.resize( endOfShaderName );
 		}
 		shaderName += ".kbshader";
-		m_Materials[i].m_pShader = ( kbShader * ) g_ResourceManager.GetResource( shaderName );
+		m_Materials[iMat].m_pShader = ( kbShader * ) g_ResourceManager.GetResource( shaderName );
 	}
 
 	// create index buffer
@@ -399,6 +398,63 @@ bool kbModel::Load_Internal() {
 			// color, normal, etc
 		}
 
+		// Tangent space generation from http://www.terathon.com/code/tangent.html
+		kbVec3 * tan1 = new kbVec3[m_CPUVertices.size() * 2];
+		kbVec3 * tan2 = tan1 + m_CPUVertices.size();
+		ZeroMemory( tan1, m_CPUVertices.size() * sizeof(kbVec3) * 2);
+
+		for ( int i = 0; i < m_CPUIndices.size(); i += 3 ) {
+
+			const int idx1 = m_CPUIndices[i + 0];
+			const int idx2 = m_CPUIndices[i + 1];
+			const int idx3 = m_CPUIndices[i + 2];
+
+			const kbVec3 & v1 = verts[idx1].position;
+			const kbVec3 & v2 = verts[idx2].position;
+			const kbVec3 & v3 = verts[idx3].position;
+
+			const kbVec2 & w1 = verts[idx1].uv;
+			const kbVec2 & w2 = verts[idx2].uv;
+			const kbVec2 & w3 = verts[idx3].uv;
+
+			float x1 = v2.x - v1.x;
+			float x2 = v3.x - v1.x;
+			float y1 = v2.y - v1.y;
+			float y2 = v3.y - v1.y;
+			float z1 = v2.z - v1.z;
+			float z2 = v3.z - v1.z;
+
+			float s1 = w2.x - w1.x;
+			float s2 = w3.x - w1.x;
+			float t1 = w2.y - w1.y;
+			float t2 = w3.y - w1.y;
+
+			float r = 1.0f / ( s1 * t2 - s2 * t1 );
+			kbVec3 sdir( ( t2 * x1 - t1 * x2 ) * r, ( t2 * y1 - t1 * y2 ) * r, ( t2 * z1 - t1 * z2 ) * r );
+			kbVec3 tdir( ( s1 * x2 - s2 * x1 ) * r, ( s1 * y2 - s2 * y1 ) * r, ( s1 * z2 - s2 * z1 ) * r );
+	
+			tan1[idx1] += sdir;
+			tan1[idx2] += sdir;
+			tan1[idx3] += sdir;
+
+			tan2[idx1] += tdir;
+			tan2[idx2] += tdir;
+			tan2[idx3] += tdir;
+		}
+
+		for ( int i = 0; i < verts.size(); i++ ) {
+			const kbVec3 & n = verts[i].GetNormal();
+			const kbVec3 & t = tan1[i].Normalized();
+			kbVec3 finalTangent = ( t - n * n.Dot(t) ).Normalized();
+			float handedness = ( n.Cross( t ).Dot( tan2[i] ) > 0.0f ) ? -1.0f : 1.0f;
+			verts[i].SetTangent( kbVec4( finalTangent.x, finalTangent.y, finalTangent.z, handedness ) );
+
+			// Debug
+			m_DebugPositions.push_back( verts[i].position );
+			m_DebugNormals.push_back( verts[i].GetNormal() );
+			m_DebugTangents.push_back( verts[i].GetTangent() );
+		}
+		delete[] tan1;
 		m_VertexBuffer.CreateVertexBuffer( verts );
 	}
    
@@ -621,14 +677,21 @@ void kbModel::UnmapIndexBuffer() {
 /**
  *	kbMode::SwapTexture
  */
-void kbModel::SwapTexture( const UINT MeshIdx, const kbTexture * pTexture ) {
+void kbModel::SwapTexture( const UINT MeshIdx, const kbTexture * pTexture, const int textureIdx ) {
 	
-	if ( MeshIdx < 0 ||  MeshIdx >= m_Materials.size() )
-	{
+	if ( MeshIdx < 0 ||  MeshIdx >= m_Materials.size() ) {
 		return;
 	}
 
-	m_Materials[ MeshIdx ].m_Texture = pTexture;
+	if ( textureIdx < 0 || textureIdx >= m_Materials[MeshIdx].m_Textures.size() + 1) {
+		return;
+	}
+
+	if ( textureIdx < m_Materials[MeshIdx].m_Textures.size() ) {
+		m_Materials[MeshIdx].m_Textures[textureIdx] = pTexture;
+	} else {
+		m_Materials[MeshIdx].m_Textures.push_back( pTexture );
+	}
 }
 
 /**
@@ -861,7 +924,7 @@ bool kbAnimation::Load_Internal() {
 	modelFile.seekg( 0, std::ifstream::beg );
 
 	// Load file into memory
-	char * pMemoryFileBuffer = new char[ fileSize ];
+	char * pMemoryFileBuffer = new char[fileSize];
 	modelFile.read( pMemoryFileBuffer, fileSize );
 	modelFile.close();
 
@@ -1018,4 +1081,38 @@ kbBoneMatrix_t operator *( const kbBoneMatrix_t & op1, const kbBoneMatrix_t & op
 	returnMatrix.m_Axis[2].z = op1.m_Axis[2].x*op2.m_Axis[0].z + op1.m_Axis[2].y*op2.m_Axis[1].z + op1.m_Axis[2].z*op2.m_Axis[2].z;
 	returnMatrix.m_Axis[3].z = op1.m_Axis[3].x*op2.m_Axis[0].z + op1.m_Axis[3].y*op2.m_Axis[1].z + op1.m_Axis[3].z*op2.m_Axis[2].z + op2.m_Axis[3].z;
 	return returnMatrix;
+}
+
+void kbModel::DrawDebugTBN( const kbVec3 & modelTranslation, const kbQuat & modelOrientation, const kbVec3 & scale ) {
+
+	kbMat4 modelMatrix;
+	modelMatrix.MakeScale( scale );
+	modelMatrix *= modelOrientation.ToMat4();
+	modelMatrix[3].Set( modelTranslation.x, modelTranslation.y, modelTranslation.z, 1.0f );
+
+	for ( int i = 0; i < m_DebugPositions.size(); i++ ) {
+		const kbVec3 worldPos = modelMatrix.TransformPoint( m_DebugPositions[i] );
+		const kbVec3 worldNormal = m_DebugNormals[i] * modelMatrix;
+		const kbVec3 worldTangent = m_DebugTangents[i] * modelMatrix;
+		const kbVec3 worldBitangent = worldNormal.Cross( worldTangent ).Normalized();
+
+/*
+
+	void SetNormal( const kbVec4 & inNormal ) {
+		normal[0] = ( byte ) ( ( ( inNormal.z * 0.5f ) + 0.5f ) * 255.0f );
+		normal[1] = ( byte ) ( ( ( inNormal.y * 0.5f ) + 0.5f ) * 255.0f );
+		normal[2] = ( byte ) ( ( ( inNormal.x * 0.5f ) + 0.5f ) * 255.0f );
+		normal[3] = ( byte ) ( ( ( inNormal.w * 0.5f ) + 0.5f ) * 255.0f );
+*/
+		g_pRenderer->DrawLine( worldPos, worldPos + worldTangent * 3.0f, kbColor::red );
+		g_pRenderer->DrawLine( worldPos, worldPos + worldBitangent * 3.0f, kbColor::green );
+		g_pRenderer->DrawLine( worldPos, worldPos + worldNormal * 3.0f, kbColor::blue );
+	}
+/*	kbModelIntersection_t intersectionInfo;
+
+	kbMat4 inverseModelRotation = modelOrientation.ToMat4();
+	inverseModelRotation.TransposeSelf();
+	const kbVec3 rayStart = ( inRayOrigin - modelTranslation ) * inverseModelRotation;
+	const kbVec3 rayDir = inRayDirection.Normalized() * inverseModelRotation;
+	float t = FLT_MAX;*/
 }

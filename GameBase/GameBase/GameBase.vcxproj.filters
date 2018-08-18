@@ -41,6 +41,15 @@
     <None Include="assets\shaders\baseHoloscope.kbShader">
       <Filter>Shaders</Filter>
     </None>
+    <None Include="assets\shaders\holey_wall.kbShader">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="assets\shaders\baseWeapon.kbShader">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="assets\shaders\firstPersonHands.kbshader">
+      <Filter>Shaders</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameBase.h">

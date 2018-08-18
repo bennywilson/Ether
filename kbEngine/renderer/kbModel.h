@@ -126,7 +126,7 @@ public:
 	const std::vector<vertexLayout>	&			GetCPUVertices() const { return m_CPUVertices; }
 	const std::vector<unsigned long> &			GetCPUIndices() const { return m_CPUIndices; }
 
-	void										SwapTexture( const UINT MeshIdx, const kbTexture * pTexture );
+	void										SwapTexture( const UINT MeshIdx, const kbTexture * pTexture, const int textureIdx );
 
 	const std::vector< mesh_t >	&				GetMeshes() const { return m_Meshes; }
 	const std::vector< kbMaterial > &			GetMaterials() const { return m_Materials; }
@@ -147,6 +147,9 @@ public:
 	int											GetBoneIndex( const kbString & BoneName ) const;
 	const kbBoneMatrix_t &						GetRefBoneMatrix( const int index ) const { return m_RefPose[index]; }
 	const kbBoneMatrix_t &						GetInvRefBoneMatrix( const int index ) const { return m_InvRefPose[index]; }
+
+	// Debug
+	void										DrawDebugTBN( const kbVec3 & modelTranslation, const kbQuat & modelOrientation, const kbVec3 & modelScale );
 
 protected:
 
@@ -181,6 +184,11 @@ private:
 	virtual kbTypeInfoType_t					GetType() const { return KBTYPEINFO_STATICMODEL; }
 
 	virtual void								Load( const std::string & fileName ) { };
+
+	// Debug
+	std::vector<kbVec3>							m_DebugPositions;
+	std::vector<kbVec3>							m_DebugNormals;
+	std::vector<kbVec3>							m_DebugTangents;
 };
 
 #endif

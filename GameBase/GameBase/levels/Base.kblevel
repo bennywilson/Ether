@@ -24,10 +24,10 @@ kbGameEntity 0 0 0 0 {
 				DiffuseMap = .\assets\models\enviroobjects\grass_1.dds
 				FakeAODarkness =  0.250000
 				FakeAOPower =  2.000000
-				GrassCellsPerTerrainSide = 8
+				GrassCellsPerTerrainSide = 32
 				GrassMap = .\assets\models\enviroobjects\grass_1.dds
 				MaxBladeJitterOffset =  0.000000
-				MaxPatchJitterOffset =  2.000000
+				MaxPatchJitterOffset =  3.000000
 				NoiseMap = .\assets\terrain\noisemap.png
 				PatchEndCullDistance =  1000.000000
 				PatchStartCullDistance =  200.000000
@@ -39,8 +39,8 @@ kbGameEntity 0 0 0 0 {
 		Materials = 3
 			kbTerrainMatComponent { 
 				Enabled = 0
-				DiffuseMap = .\assets\terrain\sand.jpg
-				NormalMap = .\assets\terrain\sand_nm.jpg
+				DiffuseMap = .\assets\terrain\textures\sand.jpg
+				NormalMap = .\assets\terrain\textures\sand_nm.jpg
 				SpecFactors =  1.000000
 				SpecMap = .\assets\terrain\sand.jpg
 				SpecPowerMultiplier =  1.000000
@@ -248,7 +248,7 @@ kbGameEntity 0 0 0 0 {
 		m_RenderPass = LightingPass
 		Model = .\assets\models\architecture\bricks.ms3d
 		ShaderOverride = 1
-			..\..\kbengine\assets\shaders\basictexture.kbshader
+			.\assets\shaders\holey_wall.kbshader
 
 	}
 }
@@ -258,7 +258,7 @@ kbGameEntity 0 0 0 0 {
 		LifeTime =  -1.000000
 		Name = "Entity_27"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
-		Position = 63.664196 38.681833 -19.486687
+		Position = 63.664196 38.681831 -19.486687
 		Scale = 1.000000 1.000000 1.000000
 	}
 	kbPlayerStartComponent { 

@@ -10,7 +10,7 @@ cbuffer matrixBuffer {
 	matrix mvpMatrix;
 	matrix projection;
 	matrix inverseProjection;
-   matrix viewProjection;
+	matrix viewProjection;
 	float4 cameraPos;
 };
 

@@ -2727,7 +2727,7 @@ void kbRenderer_DX11::CreateShaderFromText( const std::string & fileName, const 
 
 		polygonLayout[3].SemanticName = "NORMAL";
 		polygonLayout[3].SemanticIndex = 0;
-		polygonLayout[3].Format = DXGI_FORMAT_B8G8R8A8_UNORM;
+		polygonLayout[3].Format = DXGI_FORMAT_R8G8B8A8_UNORM;
 		polygonLayout[3].InputSlot = 0;
 		polygonLayout[3].AlignedByteOffset = D3D11_APPEND_ALIGNED_ELEMENT;
 		polygonLayout[3].InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
@@ -2770,7 +2770,7 @@ void kbRenderer_DX11::CreateShaderFromText( const std::string & fileName, const 
 
 		polygonLayout[3].SemanticName = "NORMAL";
 		polygonLayout[3].SemanticIndex = 0;
-		polygonLayout[3].Format = DXGI_FORMAT_B8G8R8A8_UNORM;//DXGI_FORMAT_R8G8B8A8_UNORM;
+		polygonLayout[3].Format = DXGI_FORMAT_R8G8B8A8_UNORM;
 		polygonLayout[3].InputSlot = 0;
 		polygonLayout[3].AlignedByteOffset = D3D11_APPEND_ALIGNED_ELEMENT;
 		polygonLayout[3].InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
@@ -2977,9 +2977,13 @@ void kbRenderer_DX11::RenderMesh( const kbRenderSubmesh *const pRenderMesh, cons
 	m_pDeviceContext->GSSetSamplers( 0, 1, &m_pBasicSamplerState );
 
 	// Set textures
-	ID3D11ShaderResourceView *const texture = (meshMaterial.GetTexture() != nullptr)?(ID3D11ShaderResourceView *)meshMaterial.GetTexture()->GetGPUTexture() : ( nullptr );
-	m_pDeviceContext->PSSetShaderResources( 0, 1, &texture );
-	m_pDeviceContext->PSSetSamplers( 0, 1, &m_pBasicSamplerState );
+	const std::vector<const kbTexture*> & textureList = meshMaterial.GetTextureList();
+
+	for ( int i = 0; i < textureList.size(); i++ ) {
+		ID3D11ShaderResourceView *const texture = (textureList[i] != nullptr)?(ID3D11ShaderResourceView *)textureList[i]->GetGPUTexture() : ( nullptr );
+		m_pDeviceContext->PSSetShaderResources( i, 1, &texture );
+		m_pDeviceContext->PSSetSamplers( i, 1, &m_pBasicSamplerState );
+	}
 
 	// Get a valid constant buffer and bind the kbShader's vars to it
 	const kbShaderVarBindings_t & shaderVarBindings = pShader->GetShaderVarBindings();

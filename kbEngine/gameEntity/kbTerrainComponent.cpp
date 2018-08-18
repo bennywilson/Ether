@@ -452,7 +452,7 @@ void kbTerrainComponent::GenerateTerrain() {
 			zVec = xVec.Cross( finalVec ).Normalized();
 
 			pVerts[currentIndex].SetTangent( -zVec );
-			pVerts[currentIndex].SetBinormal( xVec );
+			pVerts[currentIndex].SetBitangent( xVec );
 
 			debugNormal newNormal;
 			newNormal.normal = xVec;
