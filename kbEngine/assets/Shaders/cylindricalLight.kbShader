@@ -71,7 +71,7 @@ float4 pixelShader( pixelInput input ) : SV_TARGET {
    const float lightRadius = lightPosition.w;
    const float lightLength = lightDirection.w;
 
-   const float distAlongLine = ( dot( worldPos.xyz - lightPosition.xyz, lightDirection.xyz ) );
+   const float distAlongLine = dot( worldPos.xyz - lightPosition.xyz, lightDirection.xyz );
    const float3 pointAlongLine = lightPosition.xyz + ( lightDirection.xyz * distAlongLine );
    const float distToLine = length( pointAlongLine - worldPos.xyz );
 

@@ -9,7 +9,6 @@
 #include "kbVector.h"
 #include "kbIntersectionTests.h"
 #include "kbModel.h"
-#include "kbRenderer.h"
 
 #pragma pack( push, packing )
 #pragma pack( 1 )
