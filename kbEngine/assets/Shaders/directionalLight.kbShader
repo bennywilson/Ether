@@ -64,8 +64,8 @@ float4 pixelShader( pixelInput input ) : SV_TARGET {
    float4 specColor = specularTexture.Sample( DiffuseSamplerState, input.uv );
 
    // Diffuse
-   float diffuse = dot( normal, lightDirection.xyz );
-   diffuse = ( diffuse * 0.5f ) + 0.5f;
+   float diffuse = saturate( dot( normal, lightDirection.xyz ) );
+   diffuse = ( diffuse * 0.8f ) + 0.2f;	// Bit of fake ambience
 
    float4 worldPos = float4( input.position2.xy, depthTexture.Sample( DepthSamplerState, input.uv ).r, 1 );
    worldPos = mul( worldPos, inverseViewProjection );

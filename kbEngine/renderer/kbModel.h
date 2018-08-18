@@ -126,7 +126,7 @@ public:
 	const std::vector<vertexLayout>	&			GetCPUVertices() const { return m_CPUVertices; }
 	const std::vector<unsigned long> &			GetCPUIndices() const { return m_CPUIndices; }
 
-	void										SwapTexture( const UINT MeshIdx, const kbTexture * pTexture );
+	void										SwapTexture( const UINT MeshIdx, const kbTexture * pTexture, const int textureIdx );
 
 	const std::vector< mesh_t >	&				GetMeshes() const { return m_Meshes; }
 	const std::vector< kbMaterial > &			GetMaterials() const { return m_Materials; }

@@ -45,16 +45,19 @@ pixelInput vertexShader( vertexInput input ) {
  *	pixelShader
  */
 SamplerState DiffuseSamplerState;
-Texture2D colorTexture;
+Texture2D colorTexture				: register(t0);
 
 SamplerState NormalSamplerState;
-Texture2D normalTexture;
+Texture2D normalTexture				: register(t1);
+
+Texture2D specularTexture			: register(t2);
+
 
 SamplerState DepthSamplerState;
-Texture2D depthTexture;
+Texture2D depthTexture				: register(t3);
 
 SamplerState ShadowMapSamplerState;
-Texture2D ShadowMap;
+Texture2D ShadowMap					: register(t4);
 
 float4 pixelShader( pixelInput input ) : SV_TARGET {
 
@@ -68,7 +71,7 @@ float4 pixelShader( pixelInput input ) : SV_TARGET {
    const float lightRadius = lightPosition.w;
    const float lightLength = lightDirection.w;
 
-   const float distAlongLine = dot( worldPos.xyz - lightPosition.xyz, lightDirection.xyz );
+   const float distAlongLine = ( dot( worldPos.xyz - lightPosition.xyz, lightDirection.xyz ) );
    const float3 pointAlongLine = lightPosition.xyz + ( lightDirection.xyz * distAlongLine );
    const float distToLine = length( pointAlongLine - worldPos.xyz );
 

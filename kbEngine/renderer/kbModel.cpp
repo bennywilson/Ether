@@ -270,32 +270,31 @@ bool kbModel::Load_Internal() {
 	}
 
 	// todo:don't load duplicate textures
-	for ( uint i = 0; i < numMaterials; i++ ) {
+	for ( uint iMat = 0; iMat < numMaterials; iMat++ ) {
 		ms3dMaterial_t * pMat = ( ms3dMaterial_t * ) pPtr;
 		pPtr += sizeof( ms3dMaterial_t );
 
-		m_Materials[i].m_DiffuseColor.Set( pMat->m_Diffuse[0], pMat->m_Diffuse[1], pMat->m_Diffuse[2], 1.0f );
+		m_Materials[iMat].m_DiffuseColor.Set( pMat->m_Diffuse[0], pMat->m_Diffuse[1], pMat->m_Diffuse[2], 1.0f );
 
 		// get the base texture name
-		std::string textureName = pMat->m_Texture;
-		if ( textureName.length() == 0 ) {
-			continue;
+		char *const texture[] = { pMat->m_Texture, pMat->m_AlphaMap };
+
+		for ( int iTex = 0; iTex < 2; iTex++ ) {
+			
+			std::string texName = texture[iTex];
+			if ( texName.length() == 0 ) {
+				continue;
+			}
+
+			// load the base diffuse textures
+			const std::string diffuseTextureName = filePath + texName;
+			m_Materials[iMat].m_Textures.push_back ( (kbTexture *) g_ResourceManager.GetResource( diffuseTextureName.c_str(), true ) );
 		}
-
-		stringPos = textureName.rfind( "." );
-		std::string fileExt = textureName.substr( stringPos + 1 );
-		textureName.erase( stringPos );
-
-		// load the base diffuse textures
-		std::string diffuseTextureName = filePath;
-		diffuseTextureName.append( pMat->m_Texture );
-
-		m_Materials[i].m_Texture = ( kbTexture * ) g_ResourceManager.GetResource( diffuseTextureName.c_str(), true );
 
 		std::string shaderName = pMat->m_Name;
 
 		if ( shaderName.find( "NoCull" ) != std::string::npos ) {
-			m_Materials[i].m_CullingMode = kbMaterial::CM_None;
+			m_Materials[iMat].m_CullingMode = kbMaterial::CM_None;
 		}
 
 		const size_t endOfShaderName = shaderName.find("_");
@@ -303,7 +302,7 @@ bool kbModel::Load_Internal() {
 			shaderName.resize( endOfShaderName );
 		}
 		shaderName += ".kbshader";
-		m_Materials[i].m_pShader = ( kbShader * ) g_ResourceManager.GetResource( shaderName );
+		m_Materials[iMat].m_pShader = ( kbShader * ) g_ResourceManager.GetResource( shaderName );
 	}
 
 	// create index buffer
@@ -405,11 +404,6 @@ bool kbModel::Load_Internal() {
 		kbVec3 * tan2 = tan1 + m_CPUVertices.size();
 		ZeroMemory( tan1, m_CPUVertices.size() * sizeof(kbVec3) * 2);
 
-		if ( GetFullFileName().find( "ricks" ) != std::string::npos ) {
-			static int breakhere = 0;
-			breakhere++;
-		}
-
 		for ( int i = 0; i < m_CPUIndices.size(); i += 3 ) {
 
 			const int idx1 = m_CPUIndices[i + 0];
@@ -451,9 +445,9 @@ bool kbModel::Load_Internal() {
 
 		for ( int i = 0; i < verts.size(); i++ ) {
 			const kbVec3 & n = verts[i].GetNormal();
-			const kbVec3 & t = tan1[i].Normalized();		// I added
+			const kbVec3 & t = tan1[i].Normalized();
 			kbVec3 finalTangent = ( t - n * n.Dot(t) ).Normalized();
-			float handedness = ( n.Cross( t ).Dot( tan2[i] ) < 0.0f ) ? -1.0f : 1.0f;
+			float handedness = ( n.Cross( t ).Dot( tan2[i] ) > 0.0f ) ? -1.0f : 1.0f;
 			verts[i].SetTangent( kbVec4( finalTangent.x, finalTangent.y, finalTangent.z, handedness ) );
 
 			// Debug
@@ -684,14 +678,21 @@ void kbModel::UnmapIndexBuffer() {
 /**
  *	kbMode::SwapTexture
  */
-void kbModel::SwapTexture( const UINT MeshIdx, const kbTexture * pTexture ) {
+void kbModel::SwapTexture( const UINT MeshIdx, const kbTexture * pTexture, const int textureIdx ) {
 	
-	if ( MeshIdx < 0 ||  MeshIdx >= m_Materials.size() )
-	{
+	if ( MeshIdx < 0 ||  MeshIdx >= m_Materials.size() ) {
 		return;
 	}
 
-	m_Materials[ MeshIdx ].m_Texture = pTexture;
+	if ( textureIdx < 0 || textureIdx >= m_Materials[MeshIdx].m_Textures.size() + 1) {
+		return;
+	}
+
+	if ( textureIdx < m_Materials[MeshIdx].m_Textures.size() ) {
+		m_Materials[MeshIdx].m_Textures[textureIdx] = pTexture;
+	} else {
+		m_Materials[MeshIdx].m_Textures.push_back( pTexture );
+	}
 }
 
 /**

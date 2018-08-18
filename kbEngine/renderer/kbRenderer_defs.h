@@ -77,34 +77,44 @@ struct vertexLayout {
 	}
 
 	void SetNormal( const kbVec4 & inNormal ) {
-		normal[0] = ( byte ) ( ( ( inNormal.z * 0.5f ) + 0.5f ) * 255.0f );
+		normal[0] = ( byte ) ( ( ( inNormal.x * 0.5f ) + 0.5f ) * 255.0f );
 		normal[1] = ( byte ) ( ( ( inNormal.y * 0.5f ) + 0.5f ) * 255.0f );
-		normal[2] = ( byte ) ( ( ( inNormal.x * 0.5f ) + 0.5f ) * 255.0f );
+		normal[2] = ( byte ) ( ( ( inNormal.z * 0.5f ) + 0.5f ) * 255.0f );
 		normal[3] = ( byte ) ( ( ( inNormal.w * 0.5f ) + 0.5f ) * 255.0f );
 	}
 	
 	void SetTangent( const kbVec4 & inTangent ) {
-		tangent[0] = ( byte ) ( ( ( inTangent.z * 0.5f ) + 0.5f ) * 255.0f );
+		tangent[0] = ( byte ) ( ( ( inTangent.x * 0.5f ) + 0.5f ) * 255.0f );
 		tangent[1] = ( byte ) ( ( ( inTangent.y * 0.5f ) + 0.5f ) * 255.0f );
-		tangent[2] = ( byte ) ( ( ( inTangent.x * 0.5f ) + 0.5f ) * 255.0f );
+		tangent[2] = ( byte ) ( ( ( inTangent.z * 0.5f ) + 0.5f ) * 255.0f );
 		tangent[3] = ( byte ) ( ( ( inTangent.w * 0.5f ) + 0.5f ) * 255.0f );
 	}
 
-	void SetBinormal( const kbVec4 & inBinormal ) {
-		color[0] = ( byte ) ( ( ( inBinormal.z * 0.5f ) + 0.5f ) * 255.0f );
-		color[1] = ( byte ) ( ( ( inBinormal.y * 0.5f ) + 0.5f ) * 255.0f );
-		color[2] = ( byte ) ( ( ( inBinormal.x * 0.5f ) + 0.5f ) * 255.0f );
-		color[3] = ( byte ) ( ( ( inBinormal.w * 0.5f ) + 0.5f ) * 255.0f );
+	void SetBitangent( const kbVec4 & inBitangent ) {
+		color[0] = ( byte ) ( ( ( inBitangent.x * 0.5f ) + 0.5f ) * 255.0f );
+		color[1] = ( byte ) ( ( ( inBitangent.y * 0.5f ) + 0.5f ) * 255.0f );
+		color[2] = ( byte ) ( ( ( inBitangent.z * 0.5f ) + 0.5f ) * 255.0f );
+		color[3] = ( byte ) ( ( ( inBitangent.w * 0.5f ) + 0.5f ) * 255.0f );
 	}
 
 	kbVec3 GetNormal() const {
-		kbVec3 outNormal( ( float ) normal[2], ( float ) normal[1], ( float ) normal[0] );
+		kbVec3 outNormal( ( float ) normal[0], ( float ) normal[1], ( float ) normal[2] );
 		outNormal.x = ( ( outNormal.x / 255.0f ) * 2.0f ) - 1.0f;
 		outNormal.y = ( ( outNormal.y / 255.0f ) * 2.0f ) - 1.0f;
 		outNormal.z = ( ( outNormal.z / 255.0f ) * 2.0f ) - 1.0f;
 
 		outNormal.Normalize();
 		return outNormal;
+	}
+
+	kbVec3 GetTangent() const {
+		kbVec3 outTangent( ( float ) tangent[0], ( float ) tangent[1], ( float ) tangent[2] );
+		outTangent.x = ( ( outTangent.x / 255.0f ) * 2.0f ) - 1.0f;
+		outTangent.y = ( ( outTangent.y / 255.0f ) * 2.0f ) - 1.0f;
+		outTangent.z = ( ( outTangent.z / 255.0f ) * 2.0f ) - 1.0f;
+
+		outTangent.Normalize();
+		return outTangent;
 	}
 
 	kbVec4 GetColor() const {

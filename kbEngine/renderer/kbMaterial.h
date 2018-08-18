@@ -147,10 +147,10 @@ public:
 		CM_None,
 	};
 
-												kbMaterial() : m_Texture( nullptr ), m_pShader( nullptr ), m_CullingMode( CM_BackFaces ) { }
+												kbMaterial() : m_pShader( nullptr ), m_CullingMode( CM_BackFaces ) { }
 
 	const kbShader *							GetShader() const { return m_pShader; }
-	const kbTexture *							GetTexture() const { return m_Texture; }
+	const std::vector<const kbTexture *>		GetTextureList() const { return m_Textures; }
 	const kbColor &								GetDiffuseColor() const { return m_DiffuseColor; }
 	cullingMode_t								GetCullingMode() const { return m_CullingMode; }
 
@@ -158,7 +158,7 @@ public:
 
 private:
 
-	const kbTexture *							m_Texture;
+	std::vector<const kbTexture *>				m_Textures;
 	kbShader *									m_pShader;
 	kbColor										m_DiffuseColor;
 	cullingMode_t								m_CullingMode;
