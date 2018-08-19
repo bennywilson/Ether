@@ -431,7 +431,6 @@ kbGameEntity * EtherGame::CreatePlayer( const int netId, const kbGUID & prefabGU
 
 		AddPrefabToEntity( m_pWeaponsPackage, "EL_Rifle", pNewEntity, false );
 		AddPrefabToEntity( m_pWeaponsPackage, "EL_Grenade", pNewEntity, false );
-		AddPrefabToEntity( m_pCharacterPackage, "FP_Hands", pNewEntity, false );
 
 		for ( int i = 0; i < pNewEntity->NumComponents(); i++ ) {
 			kbComponent *const pCurComponent = pNewEntity->GetComponent(i);

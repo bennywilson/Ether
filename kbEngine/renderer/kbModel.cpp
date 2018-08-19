@@ -9,6 +9,7 @@
 #include "kbVector.h"
 #include "kbIntersectionTests.h"
 #include "kbModel.h"
+#include "kbRenderer.h"
 
 #pragma pack( push, packing )
 #pragma pack( 1 )
@@ -1096,23 +1097,8 @@ void kbModel::DrawDebugTBN( const kbVec3 & modelTranslation, const kbQuat & mode
 		const kbVec3 worldTangent = m_DebugTangents[i] * modelMatrix;
 		const kbVec3 worldBitangent = worldNormal.Cross( worldTangent ).Normalized();
 
-/*
-
-	void SetNormal( const kbVec4 & inNormal ) {
-		normal[0] = ( byte ) ( ( ( inNormal.z * 0.5f ) + 0.5f ) * 255.0f );
-		normal[1] = ( byte ) ( ( ( inNormal.y * 0.5f ) + 0.5f ) * 255.0f );
-		normal[2] = ( byte ) ( ( ( inNormal.x * 0.5f ) + 0.5f ) * 255.0f );
-		normal[3] = ( byte ) ( ( ( inNormal.w * 0.5f ) + 0.5f ) * 255.0f );
-*/
 		g_pRenderer->DrawLine( worldPos, worldPos + worldTangent * 3.0f, kbColor::red );
 		g_pRenderer->DrawLine( worldPos, worldPos + worldBitangent * 3.0f, kbColor::green );
 		g_pRenderer->DrawLine( worldPos, worldPos + worldNormal * 3.0f, kbColor::blue );
 	}
-/*	kbModelIntersection_t intersectionInfo;
-
-	kbMat4 inverseModelRotation = modelOrientation.ToMat4();
-	inverseModelRotation.TransposeSelf();
-	const kbVec3 rayStart = ( inRayOrigin - modelTranslation ) * inverseModelRotation;
-	const kbVec3 rayDir = inRayDirection.Normalized() * inverseModelRotation;
-	float t = FLT_MAX;*/
 }
