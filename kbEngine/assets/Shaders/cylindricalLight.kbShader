@@ -61,7 +61,7 @@ Texture2D ShadowMap					: register(t4);
 
 float4 pixelShader( pixelInput input ) : SV_TARGET {
 
-   float3 baseColor = colorTexture.Sample( DiffuseSamplerState, input.uv ).xyz;
+   float4 baseColor = colorTexture.Sample( DiffuseSamplerState, input.uv );
    float3 normal = normalTexture.Sample( NormalSamplerState, input.uv ).xyz;
 
    float4 worldPos = float4( input.position2.xy, depthTexture.Sample( DepthSamplerState, input.uv ).r, 1 );
@@ -90,6 +90,7 @@ float4 pixelShader( pixelInput input ) : SV_TARGET {
    float4 specColor = specularTexture.Sample( DiffuseSamplerState, input.uv );
    specColor.xyz *= pow( spec, specColor.w ) * attenuation;
 
-   float3 finalColor = attenuation * nDotL * baseColor * lightColor.xyz + specColor.xyz;
-   return float4( finalColor, 1.0f );
+   float3 finalColor = attenuation * nDotL * baseColor.xyz * lightColor.xyz + specColor.xyz;
+//   const float3 emissive = diffuseColor.xyz * diffuseColor.w;
+   return float4( finalColor, baseColor.w );
 }

@@ -134,6 +134,18 @@ struct eventMarker_t {
 /**
  *	kbRenderState
  */
+enum kbColorWriteEnable {
+	ColorWriteEnable_Red	= 1,
+	ColorWriteEnable_Green	= 2,
+	ColorWriteEnable_Blue	= 4,
+	ColorWriteEnable_Alpha	= 8,
+	ColorWriteEnable_RGB	= ColorWriteEnable_Red | ColorWriteEnable_Green | ColorWriteEnable_Blue,
+	ColorWriteEnable_All	= ColorWriteEnable_Red | ColorWriteEnable_Green | ColorWriteEnable_Blue | ColorWriteEnable_Alpha
+};
+
+kbColorWriteEnable operator| ( const kbColorWriteEnable lhs, const kbColorWriteEnable rhs );
+D3D11_COLOR_WRITE_ENABLE & operator |= ( D3D11_COLOR_WRITE_ENABLE & lhs, const D3D11_COLOR_WRITE_ENABLE rhs );
+
 struct kbRenderState {
 
 	enum kbDepthWriteMask {
@@ -247,10 +259,6 @@ struct kbRenderState {
 		BO_Add
 	};
 
-	enum kbColorWriteEnable {
-		CW_All
-	};
-
 	D3D11_BLEND GetD3DBlend( const kbBlendFactor blend ) {
 		switch( blend ) {
 			case BlendFactor_Zero : return D3D11_BLEND_ZERO;
@@ -271,11 +279,24 @@ struct kbRenderState {
 	}
 
 	D3D11_COLOR_WRITE_ENABLE GetD3DColorWriteEnable( const kbColorWriteEnable colorWriteEnable ) {
-		switch( colorWriteEnable ) {
-			case CW_All : return D3D11_COLOR_WRITE_ENABLE_ALL;
+
+		D3D11_COLOR_WRITE_ENABLE retVal = (D3D11_COLOR_WRITE_ENABLE)0;
+		if ( colorWriteEnable & ColorWriteEnable_Red ) {
+			retVal |= D3D11_COLOR_WRITE_ENABLE_RED;
 		}
 
-		return D3D11_COLOR_WRITE_ENABLE_ALL;
+		if ( colorWriteEnable & ColorWriteEnable_Green ) {
+			retVal |= D3D11_COLOR_WRITE_ENABLE_GREEN;
+		}
+
+		if ( colorWriteEnable & ColorWriteEnable_Blue ) {
+			retVal |= D3D11_COLOR_WRITE_ENABLE_BLUE;
+		}
+
+		if ( colorWriteEnable & ColorWriteEnable_Alpha) {
+			retVal |= D3D11_COLOR_WRITE_ENABLE_ALPHA;
+		}
+		return retVal;
 	}
 
 	void SetBlendState( const bool bAlphaToCoverageEnable = false,
@@ -287,15 +308,15 @@ struct kbRenderState {
 						const kbBlendFactor sourceAlpha = BlendFactor_One,
 						const kbBlendFactor destAlpha = BlendFactor_One,
 						const kbBlendFactorOp alphaBlendOp = BO_Add,
-						const kbColorWriteEnable renderTargetWriteMask = CW_All,
+						const kbColorWriteEnable renderTargetWriteMask = ColorWriteEnable_All,
 						const UINT sampleMask = 0xffffffff ) {
 
 		SAFE_RELEASE( m_pAlphaBlendState );
 
-		if ( bBlendEnable == false ) {
+	/*	if ( bBlendEnable == false ) {
 			m_pDeviceContext->OMSetBlendState( nullptr, nullptr, sampleMask );
 			return;
-		}
+		}*/
 
 		D3D11_BLEND_DESC BlendStateDesc = { 0 };
 		BlendStateDesc.AlphaToCoverageEnable = bAlphaToCoverageEnable;
@@ -307,7 +328,7 @@ struct kbRenderState {
 		BlendStateDesc.RenderTarget[0].SrcBlendAlpha = GetD3DBlend( sourceAlpha );
 		BlendStateDesc.RenderTarget[0].DestBlendAlpha = GetD3DBlend( destAlpha );
 		BlendStateDesc.RenderTarget[0].BlendOpAlpha = GetD3DBlendOp( alphaBlendOp );
-		BlendStateDesc.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
+		BlendStateDesc.RenderTarget[0].RenderTargetWriteMask = renderTargetWriteMask;
 
 		HRESULT hr = m_pDevice->CreateBlendState( &BlendStateDesc, &m_pAlphaBlendState );
 		kbErrorCheck( SUCCEEDED( hr ), "kbRenderer_DX11::Init() - Failed to create additive blend state" );

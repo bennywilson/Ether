@@ -109,5 +109,5 @@ float4 pixelShader( pixelInput input ) : SV_TARGET {
 
 	const float3 emissive = diffuseColor.xyz * diffuseColor.w;
 	float3 finalColor = diffuseColor.xyz * diffuse * lightColor.xyz + specColor.xyz + emissive;	// todo
-	return float4( finalColor, 1.0f );
+	return float4( finalColor, diffuseColor.w );
 }

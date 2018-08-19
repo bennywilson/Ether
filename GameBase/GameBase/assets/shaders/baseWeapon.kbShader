@@ -77,7 +77,8 @@ SamplerState SampleType;
 	output.Color = shaderTexture.Sample( SampleType, input.uv );
 	output.Color.w = 0.0f;
 
-	output.Specular = float4( 0.0f, 0.0f, 0.0f, 1.0f );
+	output.Specular.xyz = output.Color.xyz * 0.75f;
+	output.Specular.w = 64.0f;
 	output.Depth.r = input.position2.x / input.position2.y;
 
 	output.Normal.xyz = normalize( input.normal );

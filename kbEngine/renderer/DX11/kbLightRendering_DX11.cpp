@@ -71,7 +71,7 @@ void kbRenderer_DX11::RenderLight( const kbRenderLight *const pLight ) {
 								 BlendFactor_One,
 								 BlendFactor_Zero,
 								 kbRenderState::BO_Add,
-							     kbRenderState::CW_All );
+							     ColorWriteEnable_All );
 
 
 	m_pDeviceContext->OMSetRenderTargets( 1, &GetRenderTarget_DX11(ACCUMULATION_BUFFER)->m_pRenderTargetView, nullptr );
@@ -473,7 +473,7 @@ void kbRenderer_DX11::RenderLightShafts() {
 										 BlendFactor_One,
 										 BlendFactor_Zero,
 										 kbRenderState::BO_Add,
-										 kbRenderState::CW_All );
+										 ColorWriteEnable_RGB );
 
 
 			ID3D11ShaderResourceView *const  RenderTargetViews[] = { GetRenderTarget_DX11(SCRATCH_BUFFER)->m_pShaderResourceView };

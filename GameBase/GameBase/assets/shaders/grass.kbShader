@@ -165,7 +165,7 @@ Texture2D Mat4Diffuse	: register(t7);
 	fakeAO = pow( fakeAO, abs(fakeAOData.y) );
 
 	if ( input.uv.x >= 2.0f/8.0f ) fakeAO = 1;
-	output.Color.xyzw = grassDiffuseMap.Sample( SampleType, input.uv ).xyzw * fakeAO;
+	output.Color.xyz = grassDiffuseMap.Sample( SampleType, input.uv ).xyz * fakeAO;
 	clip( ( input.invAlphaMask + output.Color.w ) - 0.01f );
 
 	output.Normal.xyz = float3( 0.0f, 1.0f,0.0 );

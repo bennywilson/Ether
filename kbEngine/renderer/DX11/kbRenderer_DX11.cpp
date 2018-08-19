@@ -18,6 +18,9 @@
 #include "kbComponent.h"
 #include "kbConsole.h"
 
+kbColorWriteEnable operator |( const kbColorWriteEnable lhs, const kbColorWriteEnable rhs ) { return (kbColorWriteEnable)((int)lhs | (int)rhs); }
+D3D11_COLOR_WRITE_ENABLE & operator |= ( D3D11_COLOR_WRITE_ENABLE & lhs, const D3D11_COLOR_WRITE_ENABLE rhs ) { return lhs = (D3D11_COLOR_WRITE_ENABLE)(lhs | rhs); }
+
 // Must match eTextureFormat
 DXGI_FORMAT kbTextureFormatToDXGITextureFormat[NUM_TEXTURE_FORMATS] = {
 	DXGI_FORMAT_UNKNOWN,
@@ -1257,6 +1260,8 @@ void kbRenderer_DX11::RenderScene() {
 												kbRenderState::CompareAlways,
 												1);
 
+			m_pDeviceContext->OMSetBlendState( nullptr, nullptr, 0xffffffff );
+
 			std::vector<kbRenderSubmesh> & FirstPersonPassVisibleList = m_pCurrentRenderWindow->GetVisibleSubMeshes( RP_FirstPerson );
 			for ( int i = 0; i < FirstPersonPassVisibleList.size(); i++ ) {
 				RenderMesh( &FirstPersonPassVisibleList[i], false );
@@ -1315,9 +1320,10 @@ void kbRenderer_DX11::RenderScene() {
 										 kbRenderState::BO_Add,
 										 BlendFactor_One,
 										 BlendFactor_Zero,
-										 kbRenderState::BO_Add );
+										 kbRenderState::BO_Add,
+										 ColorWriteEnable_RGB );
 
-			std::vector<kbRenderSubmesh> & InWorldUIVisibleList = m_pCurrentRenderWindow->GetVisibleSubMeshes( RP_PostLighting );
+			std::vector<kbRenderSubmesh> & InWorldUIVisibleList = m_pCurrentRenderWindow->GetVisibleSubMeshes( RP_InWorldUI );
 			for ( int i = 0; i < InWorldUIVisibleList.size(); i++ ) {
 				RenderMesh( &InWorldUIVisibleList[i], false );
 			}
@@ -1499,7 +1505,7 @@ void kbRenderer_DX11::RenderTranslucency() {
 								 BlendFactor_One,
 								 BlendFactor_Zero,
 								 kbRenderState::BO_Add,
-							     kbRenderState::CW_All );
+							     ColorWriteEnable_RGB );
 
 	for ( auto iter = m_pCurrentRenderWindow->GetRenderParticleMap().begin(); iter != m_pCurrentRenderWindow->GetRenderParticleMap().end(); iter++ ) {
 		// TODO
@@ -1556,7 +1562,7 @@ void kbRenderer_DX11::RenderTranslucency() {
 									 BlendFactor_One,
 									 BlendFactor_Zero,
 									 kbRenderState::BO_Add,
-									 kbRenderState::CW_All );
+									 ColorWriteEnable_RGB );
 
 		RenderMesh( &visibleSubmeshList[i], false );
 	}
@@ -1772,7 +1778,7 @@ void kbRenderer_DX11::RenderDebugText() {
 								 BlendFactor_One,
 								 BlendFactor_Zero,
 								 kbRenderState::BO_Add,
-							     kbRenderState::CW_All );
+							     ColorWriteEnable_All );
 
 	m_RenderState.SetDepthStencilState( false, kbRenderState::DepthWriteMaskZero, kbRenderState::CompareLess, false );
 
@@ -1966,6 +1972,8 @@ void kbRenderer_DX11::RenderBloom() {
 	viewport.MaxDepth = 1.0f;
 	m_pDeviceContext->RSSetViewports( 1, &viewport );
 
+	m_RenderState.SetBlendState();
+
 	///////////////////////////////
 	// Gather
 	///////////////////////////////
@@ -2031,7 +2039,7 @@ void kbRenderer_DX11::RenderBloom() {
 		m_pDeviceContext->VSSetShader( (ID3D11VertexShader *)m_pBloomBlur->GetVertexShader(), nullptr, 0 );
 		m_pDeviceContext->PSSetShader( (ID3D11PixelShader *)m_pBloomBlur->GetPixelShader(), nullptr, 0 );
 
-		const auto & varBindings = m_pBloomGatherShader->GetShaderVarBindings();
+		const auto & varBindings = m_pBloomBlur->GetShaderVarBindings();
 		ID3D11Buffer *const pConstantBuffer = GetConstantBuffer( varBindings.m_ConstantBufferSizeBytes );
 
 		// Set constants
@@ -2084,7 +2092,7 @@ void kbRenderer_DX11::RenderBloom() {
 		ID3D11SamplerState * samplerState[] = { m_pNormalMapSamplerState };
 
 		// Set constants
-		const auto & varBindings = m_pBloomGatherShader->GetShaderVarBindings();
+		const auto & varBindings = m_pBloomBlur->GetShaderVarBindings();
 		ID3D11Buffer *const pConstantBuffer = GetConstantBuffer( varBindings.m_ConstantBufferSizeBytes );
 
 		// Set constants
@@ -2109,6 +2117,7 @@ void kbRenderer_DX11::RenderBloom() {
 		offsetsAndWeights[2].Set( 2.0f * texelSize, 0.0f, 0.12162f, 0.0f );
 		offsetsAndWeights[3].Set( 3.0f * texelSize, 0.0f, 0.05405f, 0.0f );
 		offsetsAndWeights[4].Set( 4.0f * texelSize, 0.0f, 0.01621f, 0.0f );
+		SetShaderVec4Array( "offsetsAndWeights", offsetsAndWeights, 5, (byte*) mappedResource.pData, varBindings ); 
 
 		m_pDeviceContext->Unmap( pConstantBuffer, 0 );
 
@@ -2140,7 +2149,7 @@ void kbRenderer_DX11::RenderBloom() {
 								 BlendFactor_One,
 								 BlendFactor_Zero,
 								 kbRenderState::BO_Add,
-							     kbRenderState::CW_All );
+							     ColorWriteEnable_All );
 
 		m_pDeviceContext->RSSetViewports( 1, &viewport );
 		m_pDeviceContext->OMSetRenderTargets( 1, &GetRenderTarget_DX11(ACCUMULATION_BUFFER)->m_pRenderTargetView, nullptr );
