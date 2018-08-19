@@ -4,9 +4,10 @@
 // 2018 kbEngine 2.0
 //==============================================================================
 cbuffer matrixBuffer {
-   matrix      modelMatrix;
-   matrix      mvpMatrix;
-   float4x4    boneList[128];
+	matrix      modelMatrix;
+	matrix      mvpMatrix;
+	float4		time;
+	float4x4    boneList[128];
 };
 
 //-------------------------------------
@@ -24,6 +25,7 @@ struct pixelInput {
 	float2      position2	: TEXCOORD1;
 	float3      normal		: TEXCOORD2;
 };
+
 //-------------------------------------
 struct PS_OUTPUT {
 	float4      Color		: SV_TARGET0;
@@ -66,7 +68,17 @@ SamplerState SampleType;
 	PS_OUTPUT output = (PS_OUTPUT) 0;
 
 	output.Color = shaderTexture.Sample( SampleType, input.uv );
-	output.Specular = float4( 0.0f, 0.0f, 0.0f, 1.0f );
+	float emissive = output.Color.w;
+	float movementSpeed = 2.0f;
+	float pulseFreq = 35.f;
+
+	const float specAmt = ( emissive > 0.1f ) ? ( 0.0f ) : ( 1.0f );
+	emissive = (1.0f - specAmt) * (sin( emissive * pulseFreq + movementSpeed * -time.x ) + 1.0f );
+	output.Color.w = emissive;
+
+	output.Specular.xyz = output.Color.xyz * specAmt * 2.0f;
+	output.Specular.w = 16.0f;
+
 	output.Depth.r = input.position2.x / input.position2.y;
 
 	output.Normal.xyz = normalize( input.normal );

@@ -13,14 +13,14 @@ cbuffer matrixBuffer {
 //-------------------------------------
 struct vertexInput {
 	float4 position		: POSITION;
-	float2 uv			   : TEXCOORD0;
+	float2 uv			: TEXCOORD0;
 };
 
 //-------------------------------------
 struct pixelInput {
-	float4 position      : SV_POSITION;
-	float2 uv            : TEXCOORD0;
-	float4 position2     : TEXCOORD1;
+	float4 position		: SV_POSITION;
+	float2 uv			: TEXCOORD0;
+	float4 position2	: TEXCOORD1;
 };
 
 /**
@@ -39,16 +39,16 @@ pixelInput bloomGatherVertexMain( vertexInput input ) {
 /**
  *	bloomGatherPixelMain
  */
-Texture2D sceneTexture;
+Texture2D sceneTexture : 			register(t0);
 SamplerState sceneColorSampler;
 
 
 float4 bloomGatherPixelMain( pixelInput	input ) : SV_TARGET {
 	float4 inSceneColor = sceneTexture.Sample( sceneColorSampler, input.uv );
-   float maxComponent = max( inSceneColor.x, max( inSceneColor.y, inSceneColor.z ) );
-   if ( maxComponent <= 2.5f ) {
-      return 0.0f;
-   }
+	float maxComponent = max( inSceneColor.x, max( inSceneColor.y, inSceneColor.z ) );
+	if ( inSceneColor.w <= 0.0f ) {
+	   return 0.0f;
+	}
 	return inSceneColor;
 }
 
