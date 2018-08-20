@@ -65,6 +65,8 @@ protected:
 
 	virtual void							Update_Internal( const float DeltaTime ) override;
 
+	void									UpdateShells( const float DeltaTime );
+
 	bool									Fire_Internal();
 
 private:
@@ -72,6 +74,14 @@ private:
 	float									m_SecondsBetweenShots;
 	kbGameEntityPtr							m_MuzzleFlashEntity;
 	kbGameEntityPtr							m_Projectile;
+
+	kbModel	*								m_pShellModel;
+	kbVec3									m_MinShellVelocity;
+	kbVec3									m_MaxShellVelocity;
+	kbVec3									m_MinAxisVelocity;
+	kbVec3									m_MaxAxisVelocity;
+	float									m_ShellLifeTime;
+	kbTexture *								m_pShellTrailTexture;
 
 	int										m_BurstCount;
 	float									m_SecondsBetweenBursts;
@@ -81,6 +91,20 @@ private:
 
 	bool									m_bInstantHit;
 	bool									m_bIsFiring;
+
+	struct BulletShell {
+											BulletShell() : m_bAvailable( true ) { }
+
+		kbVec3								m_Velocity;
+		kbQuat								m_StartingRotation;
+		kbVec3								m_AxisVelocity;
+		kbQuat								m_Rotation;
+		float								m_LifeTimeLeft;
+		kbRenderObject						m_RenderObject;
+		kbTransformComponent				m_Component;
+		bool								m_bAvailable;
+	};
+	std::vector<BulletShell>				m_ShellPool;
 };
 
 #endif

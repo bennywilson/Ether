@@ -73,7 +73,7 @@ SamplerState SampleType;
 	float pulseFreq = 35.f;
 
 	const float specAmt = ( emissive > 0.2f ) ? ( 0.0f ) : ( 1.0f );
-	const float emissive = emissive * (sin( emissive * pulseFreq + movementSpeed * time.x ) + 1.0f );
+	emissive = /*(1.0f - specAmt) **/( emissive) * (sin( emissive * pulseFreq + movementSpeed * time.x ) + 1.0f );
 	output.Color.w = emissive;
 
 	output.Specular.xyz = output.Color.xyz * specAmt * 2.0f;

@@ -81,6 +81,13 @@ GenerateClass(
 	AddField( "BurstCount", KBTYPEINFO_INT, EtherWeaponComponent, m_BurstCount, false, "" )
 	AddField( "MuzzleFlash", KBTYPEINFO_GAMEENTITY, EtherWeaponComponent, m_MuzzleFlashEntity, false, "" )
 	AddField( "Projectile", KBTYPEINFO_GAMEENTITY, EtherWeaponComponent, m_Projectile, false, "" )
+	AddField( "ShellModel", KBTYPEINFO_STATICMODEL, EtherWeaponComponent, m_pShellModel, false, "" )
+	AddField( "ShellMinVelocity", KBTYPEINFO_VECTOR, EtherWeaponComponent, m_MinShellVelocity, false, "" )
+	AddField( "ShellMaxVelocity", KBTYPEINFO_VECTOR, EtherWeaponComponent, m_MaxShellVelocity, false, "" )
+	AddField( "ShellMinAxisVelocity", KBTYPEINFO_VECTOR, EtherWeaponComponent, m_MinAxisVelocity, false, "" )
+	AddField( "ShellMaxAxisVelocity", KBTYPEINFO_VECTOR, EtherWeaponComponent, m_MaxAxisVelocity, false, "" )
+	AddField( "ShellLifeTime", KBTYPEINFO_FLOAT, EtherWeaponComponent, m_ShellLifeTime, false, "" )
+	AddField( "ShellTrailTexture", KBTYPEINFO_TEXTURE, EtherWeaponComponent, m_pShellTrailTexture, false, "" )
 	AddField( "IsInstantHit", KBTYPEINFO_BOOL, EtherWeaponComponent, m_bInstantHit, false, "" )
 )
 

@@ -284,7 +284,7 @@ kbGameEntity 292847838 1140569109 1236968083 2365837966 {
 		ShaderOverride = 3
 			.\assets\shaders\baseweapon.kbshader
 .\assets\shaders\baseholoscope.kbshader
-.\assets\shaders\firstPersonHands.kbshader
+.\assets\shaders\firstpersonhands.kbshader
 
 		Animations = 2
 			EtherAnimComponent { 
@@ -316,6 +316,13 @@ kbGameEntity 292847838 1140569109 1236968083 2365837966 {
 		Projectile = 402992291 1133905897 445195195 1933284623
 		SecondsBetweenBursts =  0.100000
 		SecondsBetweenShots =  0.040000
+		ShellMaxVelocity = 55.000000 32.000000 0.000000
+		ShellMinVelocity = 40.000000 21.000000 0.000000
+		ShellLifeTime = 0.777
+		ShellMinAxisVelocity = 199 0 599
+		ShellMaxAxisVelocity = 199 0 599
+		ShellModel = .\assets\models\items\bulletshell.ms3d
+		ShellTrailTexture = .\assets\models\items\bulletshell.dds
 	}
 }
 }

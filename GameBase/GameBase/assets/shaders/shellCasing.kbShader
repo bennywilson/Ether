@@ -1,0 +1,69 @@
+cbuffer matrixBuffer {
+	matrix modelMatrix;
+	matrix modelViewMatrix;
+	matrix viewMatrix;
+	matrix mvpMatrix;
+	matrix projection;
+	matrix inverseProjection;
+	matrix viewProjection;
+	float4 cameraPos;
+};
+
+//-------------------------------------
+struct vertexInput {
+	float4 position		: POSITION;
+	float2 uv			   : TEXCOORD0;
+	float4 color		   : COLOR;
+	float4 normal		   : NORMAL;
+	float4 tangent		   : TANGENT;
+};
+
+//-------------------------------------
+struct pixelInput {
+	float4 position		: SV_POSITION;
+	float2 uv			   : TEXCOORD0;
+	float4 color		   : COLOR;
+	float2 position2	   : TEXCOORD1;
+	float3 normal		   : TEXCOORD2;
+};
+
+//-------------------------------------
+struct PS_OUTPUT {
+	float4 Color		: SV_TARGET0;
+	float4 Normal		: SV_TARGET1;
+	float4 Specular		: SV_TARGET2;
+	float2 Depth		: SV_TARGET3;
+};
+
+
+/*
+ *	vertexShader
+ */
+pixelInput vertexShader( vertexInput input ) {
+	pixelInput output = (pixelInput)(0);
+
+	output.position = mul( input.position, mvpMatrix );
+	output.uv = input.uv;
+	output.color = input.color;
+	output.position2 = output.position.zw;
+	output.normal.xyz = mul( ( input.normal.xyz * 2.0f ) - 1.0f, (float3x3)modelMatrix );
+
+	return output;
+}
+
+/*
+ *	pixelShader
+ */
+Texture2D shaderTexture;
+SamplerState SampleType;
+
+ PS_OUTPUT pixelShader( pixelInput	input ) {
+ 	PS_OUTPUT output = (PS_OUTPUT) 0;
+
+	output.Color = shaderTexture.Sample( SampleType, input.uv );
+	output.Depth.r = input.position2.x / input.position2.y;
+	output.Specular = float4( 0.0f, 0.0f, 0.0f, 1.0f );
+	output.Normal.xyz = normalize( input.normal );
+
+	return output;
+}
