@@ -301,6 +301,18 @@ void EtherWeaponComponent::UpdateShells( const float DeltaTime ) {
 		shell.m_RenderObject.m_Orientation = shell.m_RenderObject.m_Orientation * rotation;
 		//shell.m_RenderObject.m_Orientation = shell.m_RenderObject.m_Orientation * shell.
 		g_pRenderer->UpdateRenderObject( shell.m_RenderObject );
+
+		kbParticleManager::CustomParticleAtlasInfo_t particle;
+		particle.m_Color.Set( 1.0f, 1.0f, 1.0f );
+		particle.m_Direction = shell.m_StartingRotation.ToMat4()[1].ToVec3();
+		particle.m_Height = 5.0f;
+		particle.m_Position = shell.m_RenderObject.m_Position;
+		particle.m_Type = EBillboardType::BT_AxialBillboard;
+		particle.m_UVs[0].Set( 0.0f, 0.0f );
+		particle.m_UVs[1].Set( 0.25f, 1.0f );
+		particle.m_Width = 5.0f;
+
+		g_pGame->GetParticleManager()->AddQuad( 1, particle );
 	}
 }
 /**
