@@ -148,6 +148,12 @@ void kbParticleManager::ReturnParticleComponent( kbParticleComponent *const pPar
  */
 void kbParticleManager::RenderSync() {
 
+	const bool bFirstRun = (m_CurrentParticleBuffer == 255);
+	if ( bFirstRun ) {
+		m_CurrentParticleBuffer = 0;
+	}
+
+	const uint nextBuffer = (m_CurrentParticleBuffer + 1) % NumCustomParticleBuffers;
 	for ( int iAtlas = 0; iAtlas < NumCustomAtlases; iAtlas++ ) {
 		CustomAtlasParticles_t & curAtlas = m_CustomAtlasParticles[iAtlas];
 		if ( curAtlas.m_pAtlasTexture == nullptr ) {
@@ -168,28 +174,22 @@ void kbParticleManager::RenderSync() {
 		}
 
 		kbModel *const pRenderModels = curAtlas.m_RenderModel;
-		if ( m_CurrentParticleBuffer == 255 ) {
-			m_CurrentParticleBuffer = 0;
-		} else {
-
+		if ( bFirstRun == false ) {
 			g_pRenderer->RemoveParticle( &pRenderModels[m_CurrentParticleBuffer] );
 			pRenderModels[m_CurrentParticleBuffer].UnmapVertexBuffer( curAtlas.m_NumIndices );
 			pRenderModels[m_CurrentParticleBuffer].UnmapIndexBuffer();		// todo : don't need to map/remap index buffer
 		}
 
 		pRenderModels[m_CurrentParticleBuffer].SwapTexture( 0, curAtlas.m_pAtlasTexture, 0 );
-		g_pRenderer->AddParticle( this, &pRenderModels[m_CurrentParticleBuffer], kbVec3::zero, kbQuat( 0.0f, 0.0f, 0.0f, 1.0f ) );
+		g_pRenderer->AddParticle( &pRenderModels[m_CurrentParticleBuffer], &pRenderModels[m_CurrentParticleBuffer], kbVec3::zero, kbQuat( 0.0f, 0.0f, 0.0f, 1.0f ) );
 
-		m_CurrentParticleBuffer++;
-		if ( m_CurrentParticleBuffer >= NumCustomParticleBuffers ) {
-			m_CurrentParticleBuffer = 0;
-		}
-
-		curAtlas.m_pVertexBuffer = (kbParticleVertex*)pRenderModels[m_CurrentParticleBuffer].MapVertexBuffer();
-		curAtlas.m_pIndexBuffer = ( unsigned long * ) pRenderModels[m_CurrentParticleBuffer].MapIndexBuffer();
+		curAtlas.m_pVertexBuffer = (kbParticleVertex*)pRenderModels[nextBuffer].MapVertexBuffer();
+		curAtlas.m_pIndexBuffer = ( unsigned long * ) pRenderModels[nextBuffer].MapIndexBuffer();
 
 		curAtlas.m_NumIndices = 0;
 	}
+
+	m_CurrentParticleBuffer = nextBuffer;
 }
 
 /**
