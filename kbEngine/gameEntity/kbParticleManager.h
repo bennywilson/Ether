@@ -2,7 +2,7 @@
 // kbParticleManager.h
 //
 //
-// 2016 kbEngine 2.0
+// 2016-2018 kbEngine 2.0
 //===================================================================================================
 #ifndef _KBPARTICLEMANAGER_H_
 #define _KBPARTICLEMANAGER_H_
@@ -15,44 +15,60 @@
  *	kbParticleManager
  */
 class kbParticleManager {
+
+//-------------------------------------------------------------------------------------------------------------------------------------------------------------
+
 public:
-											kbParticleManager();
-											~kbParticleManager();
+				
+																kbParticleManager();
+																~kbParticleManager();
 
-	void									SetCustomParticleTextureAtlas( const std::string & atlasFileName );
+	void														SetCustomParticleTextureAtlas( const uint atlasIdx, const std::string & atlasFileName );
+	void														SetCustomParticleShader( const uint atlasIdx, const std::string & atlasFileName );
 
-	void									PoolParticleComponent( const kbParticleComponent *const pParticle, const int PoolSize );
+	void														PoolParticleComponent( const kbParticleComponent *const pParticle, const int PoolSize );
 
-	kbParticleComponent *					GetParticleComponent( const kbParticleComponent *const pParticle );
-	void									ReturnParticleComponent( kbParticleComponent *const pParticle );
+	kbParticleComponent *										GetParticleComponent( const kbParticleComponent *const pParticle );
+	void														ReturnParticleComponent( kbParticleComponent *const pParticle );
 
-	void									RenderSync();
+	void														RenderSync();
 
-	struct CustomParticleInfo_t {
-		EBillboardType						m_Type;
-		kbVec3								m_Position;
-		kbVec3								m_Direction;
-		kbVec3								m_Color;
-		float								m_Width;
-		float								m_Height;
-		kbVec2								m_UVs[2];
+	struct CustomParticleAtlasInfo_t {
+		EBillboardType											m_Type;
+		kbVec3													m_Position;
+		kbVec3													m_Direction;
+		kbVec3													m_Color;
+		float													m_Width;
+		float													m_Height;
+		kbVec2													m_UVs[2];
 	};
-	void									AddQuad( const CustomParticleInfo_t & CustomParticleInfo );
+	void														AddQuad( const uint atlasIdx, const CustomParticleAtlasInfo_t & CustomParticleInfo );
 
 private:
 
 	std::map<const kbParticleComponent *, std::vector< kbParticleComponent *>>	m_ParticlePools;
 
-	static const int						NumCustomParticleBuffers = 3;
-	std::vector<CustomParticleInfo_t>		m_Particles;
-	kbModel									m_CustomParticleBuffer[NumCustomParticleBuffers];
-	uint									m_NumIndicesInCurrentBuffer;
-	byte									m_CurrentParticleBuffer;
+	static const int											NumCustomParticleBuffers = 3;
+	byte														m_CurrentParticleBuffer;
+	std::vector<CustomParticleAtlasInfo_t>						m_Particles;
 
-	kbParticleVertex *						m_pVertexBuffer;
-	unsigned long *							m_pIndexBuffer;
+	struct CustomAtlasParticles_t {
+																CustomAtlasParticles_t() :
+																	m_NumIndices( 0 ),
+																	m_pVertexBuffer( nullptr ),
+																	m_pIndexBuffer( nullptr ),
+																	m_pAtlasTexture( nullptr ) { }
 
-	kbTexture *								m_pParticleTexture;
+		kbModel													m_RenderModel[NumCustomParticleBuffers];
+		uint													m_NumIndices;
+	
+		kbParticleVertex *										m_pVertexBuffer;
+		unsigned long *											m_pIndexBuffer;
+		
+		kbTexture *												m_pAtlasTexture;
+		kbShader *												m_pAtlasShader;
+	};
+	std::vector<CustomAtlasParticles_t>							m_CustomAtlasParticles;
 };
 
 #endif

@@ -11,16 +11,13 @@
 #include "kbRenderer.h"
 
 static const uint NumParticleBufferVerts = 10000;
-
+static const uint NumCustomAtlases = 16;
 /**
  *	kbParticleManager::kbParticleManager
  */
 kbParticleManager::kbParticleManager() :
-		m_NumIndicesInCurrentBuffer( 0 ),
-		m_CurrentParticleBuffer( 255 ),
-		m_pVertexBuffer( nullptr ),
-		m_pIndexBuffer( nullptr ),
-		m_pParticleTexture( nullptr ) {
+	m_CurrentParticleBuffer( 255 ) {
+	m_CustomAtlasParticles.resize( NumCustomAtlases );
 }
 
 /**
@@ -38,8 +35,25 @@ kbParticleManager::~kbParticleManager() {
 /**
  *	kbParticleManager::SetCustomParticleTextureAtlas
  */
-void kbParticleManager::SetCustomParticleTextureAtlas( const std::string & atlasFileName ) {
-	m_pParticleTexture = ( kbTexture* )g_ResourceManager.GetResource( atlasFileName.c_str(), true );
+void kbParticleManager::SetCustomParticleTextureAtlas( const uint atlasIdx, const std::string & atlasFileName ) {
+	kbErrorCheck( atlasIdx < m_CustomAtlasParticles.size(), "kbParticleManager::SetCustomParticleTextureAtlas() - Atlas index %d is out of range", atlasIdx );
+
+	m_CustomAtlasParticles[atlasIdx].m_pAtlasTexture = ( kbTexture* )g_ResourceManager.GetResource( atlasFileName.c_str(), true );
+	if ( m_CustomAtlasParticles[atlasIdx].m_pAtlasTexture == nullptr ) {
+		kbWarning( "kbParticleManager::SetCustomParticleTextureAtlas() - Unable to find shader %s", atlasFileName.c_str() );
+	}
+}
+
+/**
+ *	kbParticleManager::SetCustomParticleShader
+ */
+void kbParticleManager::SetCustomParticleShader( const uint atlasIdx, const std::string & shaderFileName ) {
+	kbErrorCheck( atlasIdx < m_CustomAtlasParticles.size(), "kbParticleManager::SetCustomParticleShader() - Atlas index %d is out of range", atlasIdx );
+
+	m_CustomAtlasParticles[atlasIdx].m_pAtlasShader = ( kbShader* )g_ResourceManager.GetResource( shaderFileName.c_str(), true );
+	if ( m_CustomAtlasParticles[atlasIdx].m_pAtlasShader == nullptr ) {
+		kbWarning( "kbParticleManager::SetCustomParticleShader() - Unable to find shader %s", shaderFileName.c_str() );
+	}
 }
 
 /**
@@ -134,95 +148,102 @@ void kbParticleManager::ReturnParticleComponent( kbParticleComponent *const pPar
  */
 void kbParticleManager::RenderSync() {
 
-	if ( m_pParticleTexture == nullptr ) {
-		m_pParticleTexture = ( kbTexture* )g_ResourceManager.GetResource( "./assets/FX/laser_beam.jpg", true );
-	}
-
-	if ( m_CustomParticleBuffer[0].NumVertices() == 0 ) {
-		for ( int i = 0; i < NumCustomParticleBuffers; i++ ) {
-			// todo: Need to dyamically set the number of particles to render since we might not fill up the entire buffer
-			m_CustomParticleBuffer[i].CreateDynamicModel( NumParticleBufferVerts, NumParticleBufferVerts, "../../kbEngine/assets/Shaders/basicParticle.kbShader", "", sizeof( kbParticleVertex )  );	// todo
-
-			m_pVertexBuffer = (kbParticleVertex*)m_CustomParticleBuffer[i].MapVertexBuffer();
-			for ( int iVert = 0; iVert < NumParticleBufferVerts; iVert++ ) {
-				m_pVertexBuffer[iVert].position.Set( 0.0f, 0.0f, 0.0f );
-			}
-			m_CustomParticleBuffer[i].UnmapVertexBuffer();
+	for ( int iAtlas = 0; iAtlas < NumCustomAtlases; iAtlas++ ) {
+		CustomAtlasParticles_t & curAtlas = m_CustomAtlasParticles[iAtlas];
+		if ( curAtlas.m_pAtlasTexture == nullptr ) {
+			curAtlas.m_pAtlasTexture = ( kbTexture* )g_ResourceManager.GetResource( "./assets/FX/laser_beam.jpg", true );
 		}
+
+		if ( curAtlas.m_RenderModel[0].NumVertices() == 0 ) {
+			for ( int iModel = 0; iModel < NumCustomParticleBuffers; iModel++ ) {
+				// todo: Need to dyamically set the number of particles to render since we might not fill up the entire buffer
+				curAtlas.m_RenderModel[iModel].CreateDynamicModel( NumParticleBufferVerts, NumParticleBufferVerts, "../../kbEngine/assets/Shaders/basicParticle.kbShader", "", sizeof( kbParticleVertex )  );	// todo
+
+				curAtlas.m_pVertexBuffer = (kbParticleVertex*)curAtlas.m_RenderModel[iModel].MapVertexBuffer();
+				for ( int iVert = 0; iVert < NumParticleBufferVerts; iVert++ ) {
+					curAtlas.m_pVertexBuffer[iVert].position.Set( 0.0f, 0.0f, 0.0f );
+				}
+				curAtlas.m_RenderModel[iModel].UnmapVertexBuffer();
+			}
+		}
+
+		kbModel *const pRenderModels = curAtlas.m_RenderModel;
+		if ( m_CurrentParticleBuffer == 255 ) {
+			m_CurrentParticleBuffer = 0;
+		} else {
+
+			g_pRenderer->RemoveParticle( &pRenderModels[m_CurrentParticleBuffer] );
+			pRenderModels[m_CurrentParticleBuffer].UnmapVertexBuffer( curAtlas.m_NumIndices );
+			pRenderModels[m_CurrentParticleBuffer].UnmapIndexBuffer();		// todo : don't need to map/remap index buffer
+		}
+
+		pRenderModels[m_CurrentParticleBuffer].SwapTexture( 0, curAtlas.m_pAtlasTexture, 0 );
+		g_pRenderer->AddParticle( this, &pRenderModels[m_CurrentParticleBuffer], kbVec3::zero, kbQuat( 0.0f, 0.0f, 0.0f, 1.0f ) );
+
+		m_CurrentParticleBuffer++;
+		if ( m_CurrentParticleBuffer >= NumCustomParticleBuffers ) {
+			m_CurrentParticleBuffer = 0;
+		}
+
+		curAtlas.m_pVertexBuffer = (kbParticleVertex*)pRenderModels[m_CurrentParticleBuffer].MapVertexBuffer();
+		curAtlas.m_pIndexBuffer = ( unsigned long * ) pRenderModels[m_CurrentParticleBuffer].MapIndexBuffer();
+
+		curAtlas.m_NumIndices = 0;
 	}
-
-	if ( m_CurrentParticleBuffer == 255 ) {
-		m_CurrentParticleBuffer = 0;
-	} else {
-		g_pRenderer->RemoveParticle( this );
-		m_CustomParticleBuffer[m_CurrentParticleBuffer].UnmapVertexBuffer( m_NumIndicesInCurrentBuffer );
-
-		m_CustomParticleBuffer[m_CurrentParticleBuffer].UnmapIndexBuffer();		// todo : don't need to map/remap index buffer
-	}
-
-	m_CustomParticleBuffer[m_CurrentParticleBuffer].SwapTexture( 0, m_pParticleTexture, 0 );
-	g_pRenderer->AddParticle( this, &m_CustomParticleBuffer[m_CurrentParticleBuffer], kbVec3::zero, kbQuat( 0.0f, 0.0f, 0.0f, 1.0f ) );
-
-	m_CurrentParticleBuffer++;
-	if ( m_CurrentParticleBuffer >= NumCustomParticleBuffers ) {
-		m_CurrentParticleBuffer = 0;
-	}
-
-	m_pVertexBuffer = (kbParticleVertex*)m_CustomParticleBuffer[m_CurrentParticleBuffer].MapVertexBuffer();
-	m_pIndexBuffer = ( unsigned long * ) m_CustomParticleBuffer[m_CurrentParticleBuffer].MapIndexBuffer();
-
-	m_NumIndicesInCurrentBuffer = 0;
 }
 
 /**
  *	kbParticleManager::AddQuad
  */
-void kbParticleManager::AddQuad( const CustomParticleInfo_t & CustomParticleInfo ) {
+void kbParticleManager::AddQuad( const uint atlasIdx, const CustomParticleAtlasInfo_t & CustomParticleInfo ) {
 	
-	if ( m_pVertexBuffer == nullptr || m_pIndexBuffer == nullptr ) {
+	kbErrorCheck( atlasIdx < m_CustomAtlasParticles.size(), "kbParticleManager::AddQuad() - Invalid atlasIdx %d", atlasIdx );
+	CustomAtlasParticles_t & curAtlas = m_CustomAtlasParticles[atlasIdx];
+
+	if ( curAtlas.m_pVertexBuffer == nullptr || curAtlas.m_pIndexBuffer == nullptr ) {
 		return;
 	}
 
-	const int vertexIndex = m_NumIndicesInCurrentBuffer - ( m_NumIndicesInCurrentBuffer / 3 );
-	m_pVertexBuffer[vertexIndex + 0].position = CustomParticleInfo.m_Position;
-	m_pVertexBuffer[vertexIndex + 1].position = CustomParticleInfo.m_Position;
-	m_pVertexBuffer[vertexIndex + 2].position = CustomParticleInfo.m_Position;
-	m_pVertexBuffer[vertexIndex + 3].position = CustomParticleInfo.m_Position;
+	const int vertexIndex = curAtlas.m_NumIndices - ( curAtlas.m_NumIndices / 3 );
+	curAtlas.m_pVertexBuffer[vertexIndex + 0].position = CustomParticleInfo.m_Position;
+	curAtlas.m_pVertexBuffer[vertexIndex + 1].position = CustomParticleInfo.m_Position;
+	curAtlas.m_pVertexBuffer[vertexIndex + 2].position = CustomParticleInfo.m_Position;
+	curAtlas.m_pVertexBuffer[vertexIndex + 3].position = CustomParticleInfo.m_Position;
 	
-	m_pVertexBuffer[vertexIndex + 0].uv.Set( CustomParticleInfo.m_UVs[0].x, CustomParticleInfo.m_UVs[0].y );
-	m_pVertexBuffer[vertexIndex + 1].uv.Set( CustomParticleInfo.m_UVs[1].x, CustomParticleInfo.m_UVs[0].y );
-	m_pVertexBuffer[vertexIndex + 2].uv.Set( CustomParticleInfo.m_UVs[1].x, CustomParticleInfo.m_UVs[1].y );
-	m_pVertexBuffer[vertexIndex + 3].uv.Set( CustomParticleInfo.m_UVs[0].x, CustomParticleInfo.m_UVs[1].y );
+	curAtlas.m_pVertexBuffer[vertexIndex + 0].uv.Set( CustomParticleInfo.m_UVs[0].x, CustomParticleInfo.m_UVs[0].y );
+	curAtlas.m_pVertexBuffer[vertexIndex + 1].uv.Set( CustomParticleInfo.m_UVs[1].x, CustomParticleInfo.m_UVs[0].y );
+	curAtlas.m_pVertexBuffer[vertexIndex + 2].uv.Set( CustomParticleInfo.m_UVs[1].x, CustomParticleInfo.m_UVs[1].y );
+	curAtlas.m_pVertexBuffer[vertexIndex + 3].uv.Set( CustomParticleInfo.m_UVs[0].x, CustomParticleInfo.m_UVs[1].y );
 
 	kbVec3 color = CustomParticleInfo.m_Color;
-	m_pVertexBuffer[vertexIndex + 0].SetColor( color );
-	m_pVertexBuffer[vertexIndex + 1].SetColor( color );
-	m_pVertexBuffer[vertexIndex + 2].SetColor( color );
-	m_pVertexBuffer[vertexIndex + 3].SetColor( color );
+	curAtlas.m_pVertexBuffer[vertexIndex + 0].SetColor( color );
+	curAtlas.m_pVertexBuffer[vertexIndex + 1].SetColor( color );
+	curAtlas.m_pVertexBuffer[vertexIndex + 2].SetColor( color );
+	curAtlas.m_pVertexBuffer[vertexIndex + 3].SetColor( color );
 
-	m_pVertexBuffer[vertexIndex + 0].color[3] = ( CustomParticleInfo.m_Type == BT_FaceCamera ) ? ( 0 ) : ( 0xff );
-	m_pVertexBuffer[vertexIndex + 1].color[3] = ( CustomParticleInfo.m_Type == BT_FaceCamera ) ? ( 0 ) : ( 0xff );
-	m_pVertexBuffer[vertexIndex + 2].color[3] = ( CustomParticleInfo.m_Type == BT_FaceCamera ) ? ( 0 ) : ( 0xff );
-	m_pVertexBuffer[vertexIndex + 3].color[3] = ( CustomParticleInfo.m_Type == BT_FaceCamera ) ? ( 0 ) : ( 0xff );
+	curAtlas.m_pVertexBuffer[vertexIndex + 0].color[3] = ( CustomParticleInfo.m_Type == BT_FaceCamera ) ? ( 0 ) : ( 0xff );
+	curAtlas.m_pVertexBuffer[vertexIndex + 1].color[3] = ( CustomParticleInfo.m_Type == BT_FaceCamera ) ? ( 0 ) : ( 0xff );
+	curAtlas.m_pVertexBuffer[vertexIndex + 2].color[3] = ( CustomParticleInfo.m_Type == BT_FaceCamera ) ? ( 0 ) : ( 0xff );
+	curAtlas.m_pVertexBuffer[vertexIndex + 3].color[3] = ( CustomParticleInfo.m_Type == BT_FaceCamera ) ? ( 0 ) : ( 0xff );
 
 	const float halfWidth = CustomParticleInfo.m_Width * 0.5f;
 	const float halfHeight = CustomParticleInfo.m_Height * 0.5f;
 
-	m_pVertexBuffer[vertexIndex + 0].size = kbVec2( -halfWidth,  halfHeight );
-	m_pVertexBuffer[vertexIndex + 1].size = kbVec2(  halfWidth,  halfHeight );
-	m_pVertexBuffer[vertexIndex + 2].size = kbVec2(  halfWidth, -halfHeight );
-	m_pVertexBuffer[vertexIndex + 3].size = kbVec2( -halfWidth, -halfHeight );
+	curAtlas.m_pVertexBuffer[vertexIndex + 0].size = kbVec2( -halfWidth,  halfHeight );
+	curAtlas.m_pVertexBuffer[vertexIndex + 1].size = kbVec2(  halfWidth,  halfHeight );
+	curAtlas.m_pVertexBuffer[vertexIndex + 2].size = kbVec2(  halfWidth, -halfHeight );
+	curAtlas.m_pVertexBuffer[vertexIndex + 3].size = kbVec2( -halfWidth, -halfHeight );
 
-	m_pVertexBuffer[vertexIndex + 0].direction = CustomParticleInfo.m_Direction;
-	m_pVertexBuffer[vertexIndex + 1].direction = CustomParticleInfo.m_Direction;
-	m_pVertexBuffer[vertexIndex + 2].direction = CustomParticleInfo.m_Direction;
-	m_pVertexBuffer[vertexIndex + 3].direction = CustomParticleInfo.m_Direction;
+	curAtlas.m_pVertexBuffer[vertexIndex + 0].direction = CustomParticleInfo.m_Direction;
+	curAtlas.m_pVertexBuffer[vertexIndex + 1].direction = CustomParticleInfo.m_Direction;
+	curAtlas.m_pVertexBuffer[vertexIndex + 2].direction = CustomParticleInfo.m_Direction;
+	curAtlas.m_pVertexBuffer[vertexIndex + 3].direction = CustomParticleInfo.m_Direction;
 
-	m_pIndexBuffer[m_NumIndicesInCurrentBuffer + 0] = vertexIndex + 2;
-	m_pIndexBuffer[m_NumIndicesInCurrentBuffer + 1] = vertexIndex + 1;
-	m_pIndexBuffer[m_NumIndicesInCurrentBuffer + 2] = vertexIndex + 0;
-	m_pIndexBuffer[m_NumIndicesInCurrentBuffer + 3] = vertexIndex + 3;
-	m_pIndexBuffer[m_NumIndicesInCurrentBuffer + 4] = vertexIndex + 2;
-	m_pIndexBuffer[m_NumIndicesInCurrentBuffer + 5] = vertexIndex + 0;
-	m_NumIndicesInCurrentBuffer += 6;
+	curAtlas.m_pIndexBuffer[curAtlas.m_NumIndices + 0] = vertexIndex + 2;
+	curAtlas.m_pIndexBuffer[curAtlas.m_NumIndices + 1] = vertexIndex + 1;
+	curAtlas.m_pIndexBuffer[curAtlas.m_NumIndices + 2] = vertexIndex + 0;
+	curAtlas.m_pIndexBuffer[curAtlas.m_NumIndices + 3] = vertexIndex + 3;
+	curAtlas.m_pIndexBuffer[curAtlas.m_NumIndices + 4] = vertexIndex + 2;
+	curAtlas.m_pIndexBuffer[curAtlas.m_NumIndices + 5] = vertexIndex + 0;
+	curAtlas.m_NumIndices += 6;
 }

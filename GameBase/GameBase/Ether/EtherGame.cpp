@@ -153,7 +153,8 @@ void EtherGame::LevelLoaded_Internal() {
 		pEntity->SetPosition( pEntity->GetPosition() + kbVec3( 0.0f, 20000.0f, 0.0f ) );
 	}
 
-	m_pParticleManager->SetCustomParticleTextureAtlas( "./assets/FX/fx_atlas.jpg" );
+	m_pParticleManager->SetCustomParticleTextureAtlas( 0, "./assets/FX/fx_atlas.jpg" );
+	m_pParticleManager->SetCustomParticleTextureAtlas( 1, "./assets/FX/SmokeTrailAtlas.dds" );
 }
 
 /**
@@ -697,7 +698,7 @@ if ( m_pWorldGenComponent == nullptr ) {
 	m_OLCTimer -= DeltaTimeSec;
 	const float fxSecElapsed = g_OLCLen - m_OLCTimer;
 
-	kbParticleManager::CustomParticleInfo_t ParticleInfo;
+	kbParticleManager::CustomParticleAtlasInfo_t ParticleInfo;
 	ParticleInfo.m_Type = BT_FaceCamera;
 	ParticleInfo.m_Position = m_pLocalPlayer->GetPosition() + kbVec3( 0.0f, 0.0f, 900.0f );
 	ParticleInfo.m_Direction = kbVec3( 0.0f, 1.0f, 0.0f );
@@ -831,7 +832,7 @@ warpIntensity = kbClamp( warpIntensity, 0.0f, 10.0f );
 	}
 
 	ParticleInfo.m_Color = finalColor;
-	this->m_pParticleManager->AddQuad( ParticleInfo );
+	this->m_pParticleManager->AddQuad( 0, ParticleInfo );
 }
 
 /**

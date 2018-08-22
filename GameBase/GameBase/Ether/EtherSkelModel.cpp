@@ -280,7 +280,7 @@ void EtherSkelModelComponent::Update_Internal( const float DeltaTime ) {
 			const float distance = ( ClothMasses[iMass].GetPosition() - ClothMasses[iMass+1].GetPosition() ).Length();
 			const kbVec3 direction = ( ClothMasses[iMass+1].GetPosition() - ClothMasses[iMass].GetPosition() ) / distance; 
 
-			kbParticleManager::CustomParticleInfo_t ParticleInfo;
+			kbParticleManager::CustomParticleAtlasInfo_t ParticleInfo;
 			ParticleInfo.m_Position = midPt;
 			ParticleInfo.m_Direction = direction;
 			ParticleInfo.m_Width = distance;
@@ -290,7 +290,7 @@ void EtherSkelModelComponent::Update_Internal( const float DeltaTime ) {
 			ParticleInfo.m_UVs[1].Set( 0.25f + 0.125f, 0.125f );
 			ParticleInfo.m_Type = BT_AxialBillboard;
 
-			g_pGame->GetParticleManager()->AddQuad( ParticleInfo );
+			g_pGame->GetParticleManager()->AddQuad( 0, ParticleInfo );
 		}
 	}
 }

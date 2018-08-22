@@ -87,7 +87,6 @@ GenerateClass(
 	AddField( "ShellMinAxisVelocity", KBTYPEINFO_VECTOR, EtherWeaponComponent, m_MinAxisVelocity, false, "" )
 	AddField( "ShellMaxAxisVelocity", KBTYPEINFO_VECTOR, EtherWeaponComponent, m_MaxAxisVelocity, false, "" )
 	AddField( "ShellLifeTime", KBTYPEINFO_FLOAT, EtherWeaponComponent, m_ShellLifeTime, false, "" )
-	AddField( "ShellTrailTexture", KBTYPEINFO_TEXTURE, EtherWeaponComponent, m_pShellTrailTexture, false, "" )
 	AddField( "IsInstantHit", KBTYPEINFO_BOOL, EtherWeaponComponent, m_bInstantHit, false, "" )
 )
 

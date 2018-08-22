@@ -66,7 +66,7 @@ void EtherProjectileComponent::Update_Internal( const float DeltaTime ) {
 
 	// Draw projectile
 	if ( m_bUseBillboard ) {
-		kbParticleManager::CustomParticleInfo_t ParticleInfo;
+		kbParticleManager::CustomParticleAtlasInfo_t ParticleInfo ;
 		ParticleInfo.m_Position = GetOwner()->GetPosition();
 		ParticleInfo.m_Direction = projectileMat[2].ToVec3();
 		ParticleInfo.m_Width = m_TracerLength;
@@ -75,9 +75,9 @@ void EtherProjectileComponent::Update_Internal( const float DeltaTime ) {
 		ParticleInfo.m_UVs[0].Set( 0.125f, 0.0f );
 		ParticleInfo.m_UVs[1].Set( 0.25f, 0.125f );
 		ParticleInfo.m_Type = BT_AxialBillboard;
-		g_pGame->GetParticleManager()->AddQuad( ParticleInfo );
+		g_pGame->GetParticleManager()->AddQuad( 0, ParticleInfo );
 	} else {
-		kbParticleManager::CustomParticleInfo_t ParticleInfo;
+		kbParticleManager::CustomParticleAtlasInfo_t ParticleInfo;
 		ParticleInfo.m_Position = GetOwner()->GetPosition();
 		ParticleInfo.m_Direction = projectileMat[2].ToVec3();
 		ParticleInfo.m_Width = 32.0f;
@@ -86,7 +86,7 @@ void EtherProjectileComponent::Update_Internal( const float DeltaTime ) {
 		ParticleInfo.m_UVs[0].Set( 0.5f, 0.0f );
 		ParticleInfo.m_UVs[1].Set( 0.625f, 0.125f );
 		ParticleInfo.m_Type = BT_FaceCamera;
-		g_pGame->GetParticleManager()->AddQuad( ParticleInfo );
+		g_pGame->GetParticleManager()->AddQuad( 0, ParticleInfo );
 	}
 
 	const kbVec3 oldPosition = GetOwner()->GetPosition();
@@ -233,9 +233,6 @@ void EtherWeaponComponent::Constructor() {
 	m_MinAxisVelocity.Set( 0.0f, 0.0f, 0.0f );
 	m_MaxAxisVelocity.Set( 0.0f, 0.0f, 0.0f );
 	m_ShellLifeTime = 2.0f;
-
-	m_pShellTrailTexture = nullptr;
-
 
 	m_CurrentBurstCount = 0;
 }
@@ -409,7 +406,7 @@ bool EtherWeaponComponent::Fire_Internal() {
 		pProjectileComponent->Launch();
 
 		// Muzzle Flash
-		kbParticleManager::CustomParticleInfo_t ParticleInfo;
+		kbParticleManager::CustomParticleAtlasInfo_t ParticleInfo;
 		if ( pWeaponModel->GetBoneWorldPosition( kbString( "MuzzleFlash" ), ParticleInfo.m_Position ) == true ) {
 			kbVec3 pos2 =  kbVec3( 0.0f, -16.0f, 0.0f ) + WeaponPos + WeaponMatrix[0].ToVec3() * 14 + WeaponMatrix[2].ToVec3() * 64.0f;
 			ParticleInfo.m_Direction = WeaponMatrix[2].ToVec3();
@@ -419,7 +416,7 @@ bool EtherWeaponComponent::Fire_Internal() {
 			ParticleInfo.m_UVs[1].Set( 0.125f, 0.125f );
 			ParticleInfo.m_Type = BT_FaceCamera;
 			ParticleInfo.m_Color.Set( 1.0f, 1.0f, 1.0f );
-			g_pGame->GetParticleManager()->AddQuad( ParticleInfo );
+			g_pGame->GetParticleManager()->AddQuad( 0, ParticleInfo );
 		}
 
 		if ( m_pShellModel != nullptr ) {

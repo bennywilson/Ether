@@ -81,7 +81,9 @@ private:
 	kbVec3									m_MinAxisVelocity;
 	kbVec3									m_MaxAxisVelocity;
 	float									m_ShellLifeTime;
-	kbTexture *								m_pShellTrailTexture;
+
+	kbMaterial *							m_pShellTrailMaterial;
+	kbTexture *								m_pShellTrailShader;
 
 	int										m_BurstCount;
 	float									m_SecondsBetweenBursts;
