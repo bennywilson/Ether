@@ -288,17 +288,10 @@ void EtherWeaponComponent::UpdateShells( const float DeltaTime ) {
 		static float grav = 100.0f;
 		shell.m_Velocity.y -= (grav * DeltaTime );
 
-		kbQuat xRotation;
-		xRotation.FromAxisAngle( kbVec3::right, shell.m_AxisVelocity.x * DeltaTime );
+		kbQuat shellRotationDelta;
+		shellRotationDelta.FromAxisAngle( shell.m_RotationAxis, shell.m_RotationMag * DeltaTime );
 
-		kbQuat yRotation;
-		yRotation.FromAxisAngle( kbVec3::up, shell.m_AxisVelocity.y * DeltaTime );
-		
-		kbQuat zRotation;
-		zRotation.FromAxisAngle( kbVec3::forward, shell.m_AxisVelocity.z * DeltaTime );
-
-		kbQuat rotation = xRotation * yRotation * zRotation * shell.m_StartingRotation;
-		shell.m_RenderObject.m_Orientation = shell.m_RenderObject.m_Orientation * rotation;
+		shell.m_RenderObject.m_Orientation = shell.m_RenderObject.m_Orientation * shellRotationDelta;
 		//shell.m_RenderObject.m_Orientation = shell.m_RenderObject.m_Orientation * shell.
 		g_pRenderer->UpdateRenderObject( shell.m_RenderObject );
 
@@ -471,11 +464,11 @@ bool EtherWeaponComponent::Fire_Internal() {
 					newShell.m_Velocity = velocity * pWeaponModel->GetOwner()->GetOrientation().ToMat4();
 
 					kbVec3 axisVelocity = m_MaxAxisVelocity - m_MinAxisVelocity;
-					newShell.m_AxisVelocity.x = ( axisVelocity.x * kbfrand() ) + m_MinAxisVelocity.x;
-					newShell.m_AxisVelocity.y = ( axisVelocity.y * kbfrand() ) + m_MinAxisVelocity.y;
-					newShell.m_AxisVelocity.z = ( axisVelocity.z * kbfrand() ) + m_MinAxisVelocity.z;
-
-					newShell.m_StartingRotation = pWeaponModel->GetOwner()->GetOrientation();
+					newShell.m_RotationAxis.x = ( axisVelocity.z * kbfrand() ) + m_MinAxisVelocity.z;
+					newShell.m_RotationAxis.y = ( axisVelocity.y * kbfrand() ) + m_MinAxisVelocity.y;
+					newShell.m_RotationAxis.z = ( axisVelocity.x * kbfrand() ) + m_MinAxisVelocity.x;
+					newShell.m_RotationMag = newShell.m_RotationAxis.Length();
+					newShell.m_RotationAxis.Normalize();
 
 					newShell.m_LifeTimeLeft = m_ShellLifeTime;
 

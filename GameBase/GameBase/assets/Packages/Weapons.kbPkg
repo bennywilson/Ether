@@ -319,8 +319,8 @@ kbGameEntity 292847838 1140569109 1236968083 2365837966 {
 		ShellMaxVelocity = 30.000000 26.000000 8.000000
 		ShellMinVelocity = 25.000000 15.000000 3.000000
 		ShellLifeTime = 0.777
-		ShellMinAxisVelocity = 8 0 10
-		ShellMaxAxisVelocity = 10 0 10
+		ShellMinAxisVelocity = 20 0 15
+		ShellMaxAxisVelocity = 30 0 20
 		ShellModel = .\assets\models\items\bulletshell.ms3d
 		ShellTrailTexture = .\assets\models\items\bulletshell.dds
 	}

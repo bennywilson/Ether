@@ -98,7 +98,8 @@ private:
 											BulletShell() : m_bAvailable( true ) { }
 
 		kbVec3								m_Velocity;
-		kbQuat								m_StartingRotation;
+		kbVec3								m_RotationAxis;
+		float								m_RotationMag;
 		kbVec3								m_AxisVelocity;
 		kbQuat								m_Rotation;
 		float								m_LifeTimeLeft;
