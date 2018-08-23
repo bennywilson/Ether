@@ -304,7 +304,7 @@ void EtherWeaponComponent::UpdateShells( const float DeltaTime ) {
 
 		kbParticleManager::CustomParticleAtlasInfo_t particle;
 		particle.m_Color.Set( shell.m_NormalizedAnimStartTime, shell.m_NormalizedAnimStartTime * kbPI, shell.m_NormalizedAnimStartTime * kbPI );
-		particle.m_Direction = shell.m_StartingRotation.ToMat4()[0].ToVec3();
+		particle.m_Direction = shell.m_Velocity.Normalized();//shell.m_StartingRotation.ToMat4()[0].ToVec3();
 		particle.m_Height = 2.0f;
 		particle.m_Position = shell.m_RenderObject.m_Position - particle.m_Direction * 4.0f;
 		particle.m_Type = EBillboardType::BT_AxialBillboard;

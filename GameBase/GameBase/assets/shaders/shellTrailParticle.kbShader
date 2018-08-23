@@ -86,7 +86,7 @@ SamplerState SampleType;
 
 	float timeScale = 25.0f;
 	float pulseFreq = 15.f;
-	float amp = 0.1f * ( 1.0f - uv.x ) + 0.03f;
+	float amp = 0.01f * ( 1.0f - uv.x ) + 0.01f;
 
 	uv.y += amp * sin( input.color.x + ( uv.x * pulseFreq + timeScale * time.x ) );
 
