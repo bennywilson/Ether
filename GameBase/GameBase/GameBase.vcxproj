@@ -123,6 +123,7 @@
     <None Include="assets\shaders\firstPersonHands.kbshader" />
     <None Include="assets\shaders\grass.kbShader" />
     <None Include="assets\shaders\holey_wall.kbShader" />
+    <None Include="assets\shaders\shellTrailParticle.kbShader" />
     <None Include="assets\shaders\skyBox.kbShader" />
     <None Include="assets\shaders\terrain.kbShader" />
     <None Include="GameBase.ico" />

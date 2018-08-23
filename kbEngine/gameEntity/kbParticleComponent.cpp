@@ -257,10 +257,10 @@ void kbParticleComponent::RenderSync() {
 		return;
 	}
 
+	kbShader *const pDefaultShader = (kbShader*) g_ResourceManager.GetResource( "../../kbEngine/assets/Shaders/basicParticle.kbShader", true );
 	if ( m_ParticleBuffer[0].NumVertices() == 0 ) {
 		for ( int i = 0; i < NumParticleBuffers; i++ ) {
-			m_ParticleBuffer[i].CreateDynamicModel( NumParticleBufferVerts, NumParticleBufferVerts, "../../kbEngine/assets/Shaders/basicParticle.kbShader", "", sizeof( kbParticleVertex )  );	// todo
-
+			m_ParticleBuffer[i].CreateDynamicModel( NumParticleBufferVerts, NumParticleBufferVerts, pDefaultShader, nullptr, sizeof(kbParticleVertex) );
 			m_pVertexBuffer = (kbParticleVertex*)m_ParticleBuffer[i].MapVertexBuffer();
 			for ( int iVert = 0; iVert < NumParticleBufferVerts; iVert++ ) {
 				m_pVertexBuffer[iVert].position.Set( 0.0f, 0.0f, 0.0f );

@@ -11,12 +11,11 @@
 #include "kbRenderer.h"
 
 static const uint NumParticleBufferVerts = 10000;
-static const uint NumCustomAtlases = 16;
+static const uint NumCustomAtlases = 2;
 /**
  *	kbParticleManager::kbParticleManager
  */
-kbParticleManager::kbParticleManager() :
-	m_CurrentParticleBuffer( 255 ) {
+kbParticleManager::kbParticleManager() {
 	m_CustomAtlasParticles.resize( NumCustomAtlases );
 }
 
@@ -39,6 +38,8 @@ void kbParticleManager::SetCustomParticleTextureAtlas( const uint atlasIdx, cons
 	kbErrorCheck( atlasIdx < m_CustomAtlasParticles.size(), "kbParticleManager::SetCustomParticleTextureAtlas() - Atlas index %d is out of range", atlasIdx );
 
 	m_CustomAtlasParticles[atlasIdx].m_pAtlasTexture = ( kbTexture* )g_ResourceManager.GetResource( atlasFileName.c_str(), true );
+//	m_CustomAtlasParticles[atlasIdx].m_bDirty = true;
+
 	if ( m_CustomAtlasParticles[atlasIdx].m_pAtlasTexture == nullptr ) {
 		kbWarning( "kbParticleManager::SetCustomParticleTextureAtlas() - Unable to find shader %s", atlasFileName.c_str() );
 	}
@@ -51,6 +52,8 @@ void kbParticleManager::SetCustomParticleShader( const uint atlasIdx, const std:
 	kbErrorCheck( atlasIdx < m_CustomAtlasParticles.size(), "kbParticleManager::SetCustomParticleShader() - Atlas index %d is out of range", atlasIdx );
 
 	m_CustomAtlasParticles[atlasIdx].m_pAtlasShader = ( kbShader* )g_ResourceManager.GetResource( shaderFileName.c_str(), true );
+	m_CustomAtlasParticles[atlasIdx].m_bDirty = true;
+
 	if ( m_CustomAtlasParticles[atlasIdx].m_pAtlasShader == nullptr ) {
 		kbWarning( "kbParticleManager::SetCustomParticleShader() - Unable to find shader %s", shaderFileName.c_str() );
 	}
@@ -148,48 +151,68 @@ void kbParticleManager::ReturnParticleComponent( kbParticleComponent *const pPar
  */
 void kbParticleManager::RenderSync() {
 
-	const bool bFirstRun = (m_CurrentParticleBuffer == 255);
-	if ( bFirstRun ) {
-		m_CurrentParticleBuffer = 0;
-	}
-
-	const uint nextBuffer = (m_CurrentParticleBuffer + 1) % NumCustomParticleBuffers;
+	// Create new atlases if needed
 	for ( int iAtlas = 0; iAtlas < NumCustomAtlases; iAtlas++ ) {
 		CustomAtlasParticles_t & curAtlas = m_CustomAtlasParticles[iAtlas];
-		if ( curAtlas.m_pAtlasTexture == nullptr ) {
-			curAtlas.m_pAtlasTexture = ( kbTexture* )g_ResourceManager.GetResource( "./assets/FX/laser_beam.jpg", true );
+		if ( curAtlas.m_bDirty == false ) {
+			continue;
 		}
 
-		if ( curAtlas.m_RenderModel[0].NumVertices() == 0 ) {
-			for ( int iModel = 0; iModel < NumCustomParticleBuffers; iModel++ ) {
-				// todo: Need to dyamically set the number of particles to render since we might not fill up the entire buffer
-				curAtlas.m_RenderModel[iModel].CreateDynamicModel( NumParticleBufferVerts, NumParticleBufferVerts, "../../kbEngine/assets/Shaders/basicParticle.kbShader", "", sizeof( kbParticleVertex )  );	// todo
+		if ( curAtlas.m_iCurParticleModel >= 0 ) {
+			g_pRenderer->RemoveParticle( &curAtlas );
+		}
 
-				curAtlas.m_pVertexBuffer = (kbParticleVertex*)curAtlas.m_RenderModel[iModel].MapVertexBuffer();
-				for ( int iVert = 0; iVert < NumParticleBufferVerts; iVert++ ) {
-					curAtlas.m_pVertexBuffer[iVert].position.Set( 0.0f, 0.0f, 0.0f );
-				}
-				curAtlas.m_RenderModel[iModel].UnmapVertexBuffer();
+		for ( uint iModel = 0; iModel < NumCustomParticleBuffers; iModel++ ) {
+			kbModel & renderModel = curAtlas.m_RenderModel[iModel];
+			if ( renderModel.IsVertexBufferMapped() ) {
+				renderModel.UnmapVertexBuffer();
+				renderModel.UnmapIndexBuffer();
 			}
+			renderModel.Release();
+
+			if ( curAtlas.m_pAtlasTexture == nullptr ) {
+				curAtlas.m_pAtlasTexture = (kbTexture*)g_ResourceManager.GetResource( "./assets/FX/laser_beam.jpg", true );
+			}
+			if ( curAtlas.m_pAtlasShader == nullptr ) {
+				curAtlas.m_pAtlasShader = (kbShader*)g_ResourceManager.GetResource( "../../kbEngine/assets/Shaders/basicParticle.kbShader", true );
+			}
+
+			renderModel.CreateDynamicModel( NumParticleBufferVerts, NumParticleBufferVerts, curAtlas.m_pAtlasShader, curAtlas.m_pAtlasTexture, sizeof(kbParticleVertex) );
+
+			curAtlas.m_pVertexBuffer = (kbParticleVertex*)curAtlas.m_RenderModel[iModel].MapVertexBuffer();
+			for ( int iVert = 0; iVert < NumParticleBufferVerts; iVert++ ) {
+				curAtlas.m_pVertexBuffer[iVert].position.Set( 0.0f, 0.0f, 0.0f );
+			}
+			renderModel.UnmapVertexBuffer();
+			curAtlas.m_pVertexBuffer = nullptr;
 		}
-
-		kbModel *const pRenderModels = curAtlas.m_RenderModel;
-		if ( bFirstRun == false ) {
-			g_pRenderer->RemoveParticle( &pRenderModels[m_CurrentParticleBuffer] );
-			pRenderModels[m_CurrentParticleBuffer].UnmapVertexBuffer( curAtlas.m_NumIndices );
-			pRenderModels[m_CurrentParticleBuffer].UnmapIndexBuffer();		// todo : don't need to map/remap index buffer
-		}
-
-		pRenderModels[m_CurrentParticleBuffer].SwapTexture( 0, curAtlas.m_pAtlasTexture, 0 );
-		g_pRenderer->AddParticle( &pRenderModels[m_CurrentParticleBuffer], &pRenderModels[m_CurrentParticleBuffer], kbVec3::zero, kbQuat( 0.0f, 0.0f, 0.0f, 1.0f ) );
-
-		curAtlas.m_pVertexBuffer = (kbParticleVertex*)pRenderModels[nextBuffer].MapVertexBuffer();
-		curAtlas.m_pIndexBuffer = ( unsigned long * ) pRenderModels[nextBuffer].MapIndexBuffer();
-
-		curAtlas.m_NumIndices = 0;
+		curAtlas.m_iCurParticleModel = -1;
+		curAtlas.m_bDirty = false;
 	}
 
-	m_CurrentParticleBuffer = nextBuffer;
+	// Map/unmap buffers and pass it to the renderer
+	for ( int iAtlas = 0; iAtlas < NumCustomAtlases; iAtlas++ ) {
+		CustomAtlasParticles_t & curAtlas = m_CustomAtlasParticles[iAtlas];
+
+		kbModel & finishedModel = (curAtlas.m_iCurParticleModel >= 0 ) ? ( curAtlas.m_RenderModel[curAtlas.m_iCurParticleModel] ) : ( curAtlas.m_RenderModel[0] );
+		if ( curAtlas.m_iCurParticleModel >= 0 ) {
+			g_pRenderer->RemoveParticle( &curAtlas );
+			finishedModel.UnmapVertexBuffer( curAtlas.m_NumIndices );
+			finishedModel.UnmapIndexBuffer();		// todo : don't need to map/remap index buffer
+		} else {
+			curAtlas.m_iCurParticleModel = 0;
+		}
+
+		finishedModel.SwapTexture( 0, curAtlas.m_pAtlasTexture, 0 );
+		g_pRenderer->AddParticle( &curAtlas, &finishedModel, kbVec3::zero, kbQuat( 0.0f, 0.0f, 0.0f, 1.0f ) );
+
+		curAtlas.m_iCurParticleModel = ( curAtlas.m_iCurParticleModel + 1 ) % NumCustomParticleBuffers;
+
+		kbModel & nextModel = curAtlas.m_RenderModel[curAtlas.m_iCurParticleModel];
+		curAtlas.m_pVertexBuffer = (kbParticleVertex*)nextModel.MapVertexBuffer();
+		curAtlas.m_pIndexBuffer = (unsigned long *)nextModel.MapIndexBuffer();
+		curAtlas.m_NumIndices = 0;
+	}
 }
 
 /**

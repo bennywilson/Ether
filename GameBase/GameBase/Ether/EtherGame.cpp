@@ -154,7 +154,9 @@ void EtherGame::LevelLoaded_Internal() {
 	}
 
 	m_pParticleManager->SetCustomParticleTextureAtlas( 0, "./assets/FX/fx_atlas.jpg" );
+
 	m_pParticleManager->SetCustomParticleTextureAtlas( 1, "./assets/FX/SmokeTrailAtlas.dds" );
+	m_pParticleManager->SetCustomParticleShader( 1, "./assets/shaders/shellTrailParticle.kbShader" );
 }
 
 /**

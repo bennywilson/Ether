@@ -49,7 +49,6 @@ private:
 	std::map<const kbParticleComponent *, std::vector< kbParticleComponent *>>	m_ParticlePools;
 
 	static const int											NumCustomParticleBuffers = 3;
-	byte														m_CurrentParticleBuffer;
 	std::vector<CustomParticleAtlasInfo_t>						m_Particles;
 
 	struct CustomAtlasParticles_t {
@@ -57,7 +56,10 @@ private:
 																	m_NumIndices( 0 ),
 																	m_pVertexBuffer( nullptr ),
 																	m_pIndexBuffer( nullptr ),
-																	m_pAtlasTexture( nullptr ) { }
+																	m_pAtlasTexture( nullptr ),
+																	m_pAtlasShader( nullptr ),
+																	m_iCurParticleModel( -1 ),
+																	m_bDirty( true ) { }
 
 		kbModel													m_RenderModel[NumCustomParticleBuffers];
 		uint													m_NumIndices;
@@ -67,6 +69,9 @@ private:
 		
 		kbTexture *												m_pAtlasTexture;
 		kbShader *												m_pAtlasShader;
+
+		int														m_iCurParticleModel;
+		bool													m_bDirty;
 	};
 	std::vector<CustomAtlasParticles_t>							m_CustomAtlasParticles;
 };

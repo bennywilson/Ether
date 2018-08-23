@@ -554,7 +554,7 @@ bool kbModel::Load_Internal() {
 /**
  *	kbModel::CreateDynamicModel
  */
-void kbModel::CreateDynamicModel( const UINT numVertices, const UINT numIndices, const std::string & ShaderToUse, const std::string & TextureToUse, const UINT vertexSizeInBytes ) {
+void kbModel::CreateDynamicModel( const UINT numVertices, const UINT numIndices, kbShader *const pShaderToUse, kbTexture *const pTextureToUse, const UINT vertexSizeInBytes ) {
 
 	if ( m_NumVertices > 0 || m_Meshes.size() > 0 || m_Materials.size() > 0 || m_VertexBuffer.GetBufferPtr() != nullptr || m_IndexBuffer.GetBufferPtr() != nullptr ) {
 		Release_Internal();
@@ -576,8 +576,8 @@ void kbModel::CreateDynamicModel( const UINT numVertices, const UINT numIndices,
 	m_Meshes.push_back( newMesh );
 
 	kbMaterial newMaterial;
-	if ( ShaderToUse.length() > 0 ) {
-		newMaterial.m_pShader = (kbShader *) g_ResourceManager.GetResource( ShaderToUse.c_str(), true );
+	if ( pShaderToUse != nullptr ) {
+		newMaterial.m_pShader = pShaderToUse;
 	} else {
 		newMaterial.m_pShader = (kbShader *) g_ResourceManager.GetResource( "../../kbEngine/assets/Shaders/basicShader.kbShader", true );
 	}
@@ -620,9 +620,8 @@ void kbModel::CreatePointCloud( const UINT numVertices, const std::string & shad
  *	kbModel::MapVertexBuffer
  */
 void * kbModel::MapVertexBuffer() {
-	if( m_bVBIsMapped ) {
-		kbError( "Vertex buffer already mapped" );
-	}
+
+	kbErrorCheck( m_bVBIsMapped == false, "Vertex buffer already mapped" );
 
 	m_bVBIsMapped = true;
 	return m_VertexBuffer.Map();
