@@ -84,11 +84,11 @@ SamplerState SampleType;
   // float4 finalColor = input.color;
    float2 uv = input.uv;
 
-	float timeScale = 25.0f;
+	float timeScale = 1.0f;
 	float pulseFreq = 15.f;
 	float amp = 0.01f * ( 1.0f - uv.x ) + 0.01f;
 
-	uv.y += amp * sin( input.color.x + ( uv.x * pulseFreq + timeScale * time.x ) );
+	uv.y += amp * sin( input.color.x * 7.0f + ( uv.x * pulseFreq + timeScale * time.x ) );
 
    return float4(shaderTexture.Sample( SampleType, uv ).xyz * 0.25f, 1.0f);
 }
