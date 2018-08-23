@@ -303,14 +303,15 @@ void EtherWeaponComponent::UpdateShells( const float DeltaTime ) {
 		g_pRenderer->UpdateRenderObject( shell.m_RenderObject );
 
 		kbParticleManager::CustomParticleAtlasInfo_t particle;
-		particle.m_Color.Set( 1.0f, 1.0f, 1.0f );
+		particle.m_Color.Set( shell.m_NormalizedAnimStartTime, shell.m_NormalizedAnimStartTime * kbPI, shell.m_NormalizedAnimStartTime * kbPI );
 		particle.m_Direction = shell.m_StartingRotation.ToMat4()[0].ToVec3();
-		particle.m_Height = 5.0f;
-		particle.m_Position = shell.m_RenderObject.m_Position;
+		particle.m_Height = 2.0f;
+		particle.m_Position = shell.m_RenderObject.m_Position - particle.m_Direction * 4.0f;
 		particle.m_Type = EBillboardType::BT_AxialBillboard;
-		particle.m_UVs[0].Set( 0.0f, 0.0f );
-		particle.m_UVs[1].Set( 1.0f, 0.25f );
-		particle.m_Width = 5.0f;
+		float startV = 0.25f * shell.m_AtlasIdx;
+		particle.m_UVs[0].Set( 0.0f, startV );
+		particle.m_UVs[1].Set( 1.0f, startV + 0.25f );
+		particle.m_Width = 8.0f;
 
 		g_pGame->GetParticleManager()->AddQuad( 1, particle );
 	}
@@ -447,7 +448,8 @@ bool EtherWeaponComponent::Fire_Internal() {
 				if ( m_ShellPool[i].m_bAvailable == true ) {
 
 					BulletShell & newShell = m_ShellPool[i];
-	
+					newShell.m_AtlasIdx = rand() % 4;
+					newShell.m_NormalizedAnimStartTime = kbfrand();
 					kbRenderObject & renderObj = newShell.m_RenderObject;
 					renderObj.m_Orientation.Set( 0.0f, 0.0f, 0.0f, 1.0f );
 					renderObj.m_bCastsShadow = false;

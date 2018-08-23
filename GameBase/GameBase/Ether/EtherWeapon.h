@@ -104,6 +104,8 @@ private:
 		float								m_LifeTimeLeft;
 		kbRenderObject						m_RenderObject;
 		kbTransformComponent				m_Component;
+		int									m_AtlasIdx;
+		float								m_NormalizedAnimStartTime;
 		bool								m_bAvailable;
 	};
 	std::vector<BulletShell>				m_ShellPool;
