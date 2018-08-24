@@ -316,13 +316,12 @@ kbGameEntity 292847838 1140569109 1236968083 2365837966 {
 		Projectile = 402992291 1133905897 445195195 1933284623
 		SecondsBetweenBursts =  0.100000
 		SecondsBetweenShots =  0.040000
+		ShellLifeTime =  0.777000
+		ShellMaxAxisVelocity = 30.000000 0.000000 20.000000
 		ShellMaxVelocity = 30.000000 26.000000 8.000000
+		ShellMinAxisVelocity = 20.000000 0.000000 15.000000
 		ShellMinVelocity = 25.000000 15.000000 3.000000
-		ShellLifeTime = 0.777
-		ShellMinAxisVelocity = 20 0 15
-		ShellMaxAxisVelocity = 30 0 20
 		ShellModel = .\assets\models\items\bulletshell.ms3d
-		ShellTrailTexture = .\assets\models\items\bulletshell.dds
 	}
 }
 }

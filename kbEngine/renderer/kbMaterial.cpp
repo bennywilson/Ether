@@ -607,6 +607,8 @@ bool kbShader::Load_Internal() {
 					m_SrcBlendFactor = BlendFactor_SrcAlpha;
 				} else if ( value == "blendfactor_invsrcalpha" ) {
 					m_SrcBlendFactor = BlendFactor_InvSrcAlpha;
+				} else if ( value == "blendfactor_one" ) {
+					m_SrcBlendFactor = BlendFactor_One;
 				}
 			}
 
@@ -615,6 +617,8 @@ bool kbShader::Load_Internal() {
 					m_DstBlendFactor = BlendFactor_SrcAlpha;
 				} else if ( value == "blendfactor_invsrcalpha" ) {
 					m_DstBlendFactor = BlendFactor_InvSrcAlpha;
+				} else if ( value == "blendfactor_one" ) {
+					m_DstBlendFactor = BlendFactor_One;
 				}
 			}
 

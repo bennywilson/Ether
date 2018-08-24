@@ -52,6 +52,7 @@ private:
 
 	// Editable
 	kbTexture *													m_pParticleTexture;
+	kbShader *													m_pParticleShader;
 	float														m_TotalDuration;
 	float														m_MinParticleSpawnRate;				// Particles per second
 	float														m_MaxParticleSpawnRate;				// Particles per second
@@ -67,6 +68,7 @@ private:
 	float														m_ParticleMaxDuration;
 	kbVec4														m_ParticleStartColor;
 	kbVec4														m_ParticleEndColor;
+	kbVec3														m_Gravity;
 	int															m_MinBurstCount;
 	int															m_MaxBurstCount;
 	EBillboardType												m_ParticleBillboardType;

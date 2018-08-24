@@ -119,6 +119,7 @@
     <None Include="assets\shaders\baseHoloscope.kbShader" />
     <None Include="assets\shaders\baseWeapon.kbShader" />
     <None Include="assets\shaders\basicTerrain.kbShader" />
+    <None Include="assets\shaders\concreteImpactParticle.kbShader" />
     <None Include="assets\shaders\enemyEye.kbShader" />
     <None Include="assets\shaders\firstPersonHands.kbshader" />
     <None Include="assets\shaders\grass.kbShader" />

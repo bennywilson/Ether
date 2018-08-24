@@ -239,7 +239,7 @@ kbGameEntity 0 0 0 0 {
 		Name = "Entity_26"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
 		Position = -41.824341 12.146704 -21.926552
-		Scale = 1 1 1
+		Scale = 1.000000 1.000000 1.000000
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -272,5 +272,44 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 1
 		LifeTime =  -1.000000
 		Dummy =  0.000000
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Entity_24"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 46.211468 58.481571 147.883286
+		Scale = 1.000000 1.000000 1.000000
+	}
+	kbParticleComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		Name = ""
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 0.000000 0.000000 0.000000
+		Scale = 1.000000 1.000000 1.000000
+		EndColor = 1.000000 1.000000 1.000000 1.000000
+		Gravity = 0.000000 0.000000 0.000000
+		MaxBurstCount = 0
+		MaxDuration =  3.000000
+		MaxEndSize = 3.000000 3.000000 3.000000
+		MaxEndVelocity = 0.000000 0.000000 0.000000
+		MaxSpawnRate =  2.000000
+		MaxStartSize = 3.000000 3.000000 3.000000
+		MaxStartVelocity = 5.000000 5.000000 5.000000
+		MinBurstCount = 0
+		MinDuration =  3.000000
+		MinEndSize = 3.000000 3.000000 3.000000
+		MinEndVelocity = 0.000000 0.000000 0.000000
+		MinSpawnRate =  1.000000
+		MinStartSize = 3.000000 3.000000 3.000000
+		MinStartVelocity = -5.000000 -2.000000 2.000000
+		ParticleBillboardType = FaceCamera
+		ParticleShader = .\assets\shaders\concreteimpactparticle.kbshader
+		ParticleTexture = .\assets\fx\concreteparticles.dds
+		StartColor = 1.000000 1.000000 1.000000 1.000000
+		TotalDuration =  -1.000000
 	}
 }

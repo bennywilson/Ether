@@ -53,6 +53,9 @@
     <None Include="assets\shaders\shellTrailParticle.kbShader">
       <Filter>Shaders</Filter>
     </None>
+    <None Include="assets\shaders\concreteImpactParticle.kbShader">
+      <Filter>Shaders</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameBase.h">

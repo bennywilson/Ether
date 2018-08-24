@@ -39,16 +39,16 @@ void kbParticleComponent::Constructor() {
 	m_MaxBurstCount = 0;
 	m_BurstCount = 0;
 	m_ParticleBillboardType = BT_FaceCamera;
-
+	m_Gravity.Set( 0.0f, 0.0f, 0.0f );
 	m_LeftOverTime = 0.0f;
 	m_pVertexBuffer = NULL;
 	m_pIndexBuffer = NULL;
 	m_CurrentParticleBuffer = 255;
 	m_NumIndicesInCurrentBuffer = 0;
 
-	m_pParticleTexture = ( kbTexture* )g_ResourceManager.GetResource( "../../kbEngine/assets/Textures/Editor/white.bmp" );
+	m_pParticleTexture = (kbTexture*)g_ResourceManager.GetResource( "../../kbEngine/assets/Textures/Editor/white.bmp" );
+	m_pParticleShader = (kbShader*)g_ResourceManager.GetResource( "../../kbEngine/assets/Shaders/basicParticle.kbShader", true );
 
-	m_TimeAlive = 0.0f;
 	m_bIsPooled = false;
 	m_ParticleTemplate = NULL;
 }
@@ -257,10 +257,9 @@ void kbParticleComponent::RenderSync() {
 		return;
 	}
 
-	kbShader *const pDefaultShader = (kbShader*) g_ResourceManager.GetResource( "../../kbEngine/assets/Shaders/basicParticle.kbShader", true );
 	if ( m_ParticleBuffer[0].NumVertices() == 0 ) {
 		for ( int i = 0; i < NumParticleBuffers; i++ ) {
-			m_ParticleBuffer[i].CreateDynamicModel( NumParticleBufferVerts, NumParticleBufferVerts, pDefaultShader, nullptr, sizeof(kbParticleVertex) );
+			m_ParticleBuffer[i].CreateDynamicModel( NumParticleBufferVerts, NumParticleBufferVerts, m_pParticleShader, nullptr, sizeof(kbParticleVertex) );
 			m_pVertexBuffer = (kbParticleVertex*)m_ParticleBuffer[i].MapVertexBuffer();
 			for ( int iVert = 0; iVert < NumParticleBufferVerts; iVert++ ) {
 				m_pVertexBuffer[iVert].position.Set( 0.0f, 0.0f, 0.0f );

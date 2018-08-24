@@ -1508,8 +1508,21 @@ void kbRenderer_DX11::RenderTranslucency() {
 							     ColorWriteEnable_RGB );
 
 	for ( auto iter = m_pCurrentRenderWindow->GetRenderParticleMap().begin(); iter != m_pCurrentRenderWindow->GetRenderParticleMap().end(); iter++ ) {
-		// TODO
+
 		kbRenderSubmesh newMesh( iter->second, 0, RP_Translucent );
+
+		const kbShader *const pShader = newMesh.GetShader();
+		m_RenderState.SetBlendState( false,
+									 false,
+									 true,
+									 pShader->GetSrcBlendFactor(),
+									 pShader->GetDstBlendFactor(),
+									 kbRenderState::BO_Add,
+									 BlendFactor_One,
+									 BlendFactor_Zero,
+									 kbRenderState::BO_Add,
+									 ColorWriteEnable_RGB );
+
 		RenderMesh( &newMesh, false );
 	}
 

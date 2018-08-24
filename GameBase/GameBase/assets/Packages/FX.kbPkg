@@ -18,6 +18,7 @@ kbPrefab 1 {
 			Position = 3.000000 -3.000000 15.000000
 			Scale = 0.250000 0.250000 0.250000
 			EndColor = 0.000000 0.000000 0.000000 0.000000
+			Gravity = 0.000000 0.000000 0.000000
 			MaxBurstCount = 0
 			MaxDuration =  0.050000
 			MaxEndSize = 3.000000 3.000000 3.000000
@@ -33,7 +34,8 @@ kbPrefab 1 {
 			MinStartSize = 3.000000 3.000000 3.000000
 			MinStartVelocity = -0.000000 -0.000000 0.000000
 			ParticleBillboardType = FaceCamera
-			ParticleTexture = ./assets/FX/smoke.jpg
+			ParticleShader = ..\..\kbengine\assets\shaders\basicparticle.kbshader
+			ParticleTexture = .\assets\fx\smoke.jpg
 			StartColor = 1.000000 0.400000 0.700000 1.000000
 			TotalDuration =  0.500000
 		}
@@ -59,6 +61,7 @@ kbGameEntity 288884920 1074764317 1666654870 1595214297 {
 		Position = 0.000000 0.000000 0.000000
 		Scale = 2.000000 2.000000 2.000000
 		EndColor = 0.000000 0.000000 0.000000 0.000000
+		Gravity = 0.000000 0.000000 0.000000
 		MaxBurstCount = 50
 		MaxDuration =  1.000000
 		MaxEndSize = 3.000000 3.000000 3.000000
@@ -74,7 +77,8 @@ kbGameEntity 288884920 1074764317 1666654870 1595214297 {
 		MinStartSize = 1.200000 1.200000 1.200000
 		MinStartVelocity = -3.500000 -3.500000 -3.500000
 		ParticleBillboardType = FaceCamera
-		ParticleTexture = ./assets/FX/smoke.jpg
+		ParticleShader = ..\..\kbengine\assets\shaders\basicparticle.kbshader
+		ParticleTexture = .\assets\fx\smoke.jpg
 		StartColor = 1.000000 1.000000 1.000000 1.000000
 		TotalDuration =  2.000000
 	}
@@ -106,6 +110,7 @@ kbGameEntity 749854598 1122407100 2268504468 2469228342 {
 		Position = 0.000000 0.000000 0.000000
 		Scale = 5.000000 5.000000 5.000000
 		EndColor = 0.000000 0.000000 0.000000 0.000000
+		Gravity = 0.000000 0.000000 0.000000
 		MaxBurstCount = 50
 		MaxDuration =  1.000000
 		MaxEndSize = 3.000000 3.000000 3.000000
@@ -121,7 +126,8 @@ kbGameEntity 749854598 1122407100 2268504468 2469228342 {
 		MinStartSize = 1.200000 1.200000 1.200000
 		MinStartVelocity = -35.500000 -35.500000 -35.500000
 		ParticleBillboardType = FaceCamera
-		ParticleTexture = ./assets/FX/smoke.jpg
+		ParticleShader = ..\..\kbengine\assets\shaders\basicparticle.kbshader
+		ParticleTexture = .\assets\fx\smoke.jpg
 		StartColor = 1.000000 1.000000 1.000000 1.000000
 		TotalDuration =  3.500000
 	}
@@ -153,6 +159,7 @@ kbGameEntity 834051548 1161303702 3343001743 2051538980 {
 		Position = 0.000000 0.000000 0.000000
 		Scale = 75.000000 75.000000 75.000000
 		EndColor = 0.000000 0.000000 0.000000 0.000000
+		Gravity = 0.000000 0.000000 0.000000
 		MaxBurstCount = 6
 		MaxDuration =  8.000000
 		MaxEndSize = 3.000000 3.000000 3.000000
@@ -168,9 +175,53 @@ kbGameEntity 834051548 1161303702 3343001743 2051538980 {
 		MinStartSize = 1.200000 1.200000 1.200000
 		MinStartVelocity = -35.500000 -35.500000 -35.500000
 		ParticleBillboardType = FaceCamera
-		ParticleTexture = ./assets/FX/smoke.jpg
+		ParticleShader = ..\..\kbengine\assets\shaders\basicparticle.kbshader
+		ParticleTexture = .\assets\fx\smoke.jpg
 		StartColor = 1.000000 1.000000 1.000000 1.000000
 		TotalDuration =  3.500000
+	}
+}
+}
+ImpactFX 1
+kbPrefab 1 {
+	ConcreteFX
+kbGameEntity 4227010865 2632918935 1228561351 3287441000 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Entity_24"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 46.211468 58.481571 147.883286
+		Scale = 1.000000 1.000000 1.000000
+	}
+	kbParticleComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		Name = ""
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 0.000000 0.000000 0.000000
+		Scale = 1.000000 1.000000 1.000000
+		EndColor = 1.000000 1.000000 1.000000 1.000000
+		Gravity = 0.000000 0.000000 0.000000
+		MaxBurstCount = 0
+		MaxDuration =  3.000000
+		MaxEndSize = 3.000000 3.000000 3.000000
+		MaxEndVelocity = 0.000000 0.000000 0.000000
+		MaxSpawnRate =  2.000000
+		MaxStartSize = 3.000000 3.000000 3.000000
+		MaxStartVelocity = 5.000000 5.000000 5.000000
+		MinBurstCount = 0
+		MinDuration =  3.000000
+		MinEndSize = 3.000000 3.000000 3.000000
+		MinEndVelocity = 0.000000 0.000000 0.000000
+		MinSpawnRate =  1.000000
+		MinStartSize = 3.000000 3.000000 3.000000
+		MinStartVelocity = -5.000000 -2.000000 2.000000
+		ParticleBillboardType = FaceCamera
+		ParticleShader = .\assets\shaders\concreteimpactparticle.kbshader
+		ParticleTexture = .\assets\fx\concreteparticles.dds
+		StartColor = 1.000000 1.000000 1.000000 1.000000
+		TotalDuration =  -1.000000
 	}
 }
 }

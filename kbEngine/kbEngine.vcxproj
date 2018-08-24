@@ -150,6 +150,7 @@
     <None Include="assets\Shaders\mousePicker.kbShader" />
     <None Include="assets\Shaders\pointLight.kbShader" />
     <None Include="assets\Shaders\SimpleAdditive.kbShader" />
+    <None Include="assets\Shaders\SimpleAlphaBlend.kbShader" />
     <None Include="assets\Shaders\uberPostProcess.kbShader" />
     <None Include="ReadMe.txt" />
   </ItemGroup>

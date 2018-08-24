@@ -173,6 +173,7 @@ GenerateEnum(
 GenerateClass(
 	kbParticleComponent,
 	AddField( "ParticleTexture", KBTYPEINFO_TEXTURE, kbParticleComponent, m_pParticleTexture, false, "" )
+	AddField( "ParticleShader", KBTYPEINFO_SHADER, kbParticleComponent, m_pParticleShader, false, "" )
 	AddField( "TotalDuration", KBTYPEINFO_FLOAT, kbParticleComponent, m_TotalDuration, false, "" )
 	AddField( "MinSpawnRate", KBTYPEINFO_FLOAT, kbParticleComponent, m_MinParticleSpawnRate, false, "" )
 	AddField( "MaxSpawnRate", KBTYPEINFO_FLOAT, kbParticleComponent, m_MaxParticleSpawnRate, false, "" )
@@ -195,6 +196,7 @@ GenerateClass(
 	AddField( "EndColor", KBTYPEINFO_VECTOR4, kbParticleComponent, m_ParticleEndColor, false, "" )
 	AddField( "MaxBurstCount", KBTYPEINFO_INT, kbParticleComponent, m_MaxBurstCount, false, "" )
 	AddField( "MinBurstCount", KBTYPEINFO_INT, kbParticleComponent, m_MinBurstCount, false, "" )
+	AddField( "Gravity", KBTYPEINFO_VECTOR, kbParticleComponent, m_Gravity, false, "" )
 
 	AddField( "ParticleBillboardType", KBTYPEINFO_ENUM, kbParticleComponent, m_ParticleBillboardType, false, "EBillboardType" )
 )

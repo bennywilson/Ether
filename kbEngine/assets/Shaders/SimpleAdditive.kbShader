@@ -8,6 +8,12 @@ cbuffer matrixBuffer {
 	matrix mvpMatrix;
 };
 
+
+kbShaderState {
+	srcblend BlendFactor_One
+	dstBlend BlendFactor_One
+}
+
 //-------------------------------------
 struct vertexInput {
 	float4 position		: POSITION;
