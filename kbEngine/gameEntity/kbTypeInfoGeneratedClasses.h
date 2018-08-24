@@ -187,6 +187,8 @@ GenerateClass(
 	AddField( "MaxEndVelocity", KBTYPEINFO_VECTOR, kbParticleComponent, m_MaxParticleEndVelocity, false, "" )
 	AddField( "MinEndVelocity", KBTYPEINFO_VECTOR, kbParticleComponent, m_MinParticleEndVelocity, false, "" )
 	AddField( "MaxEndVelocity", KBTYPEINFO_VECTOR, kbParticleComponent, m_MaxParticleEndVelocity, false, "" )
+	AddField( "LockVelocity", KBTYPEINFO_BOOL, kbParticleComponent, m_bLockVelocity, false, "" )
+
 	AddField( "MinStartSize", KBTYPEINFO_VECTOR, kbParticleComponent, m_MinParticleStartSize, false, "" )
 	AddField( "MaxStartSize", KBTYPEINFO_VECTOR, kbParticleComponent, m_MaxParticleStartSize, false, "" )
 	AddField( "MinEndSize", KBTYPEINFO_VECTOR, kbParticleComponent, m_MinParticleEndSize, false, "" )
@@ -199,6 +201,7 @@ GenerateClass(
 	AddField( "Gravity", KBTYPEINFO_VECTOR, kbParticleComponent, m_Gravity, false, "" )
 
 	AddField( "ParticleBillboardType", KBTYPEINFO_ENUM, kbParticleComponent, m_ParticleBillboardType, false, "EBillboardType" )
+	
 )
 
 GenerateClass(

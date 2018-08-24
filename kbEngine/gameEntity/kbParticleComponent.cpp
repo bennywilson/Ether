@@ -40,6 +40,8 @@ void kbParticleComponent::Constructor() {
 	m_BurstCount = 0;
 	m_ParticleBillboardType = BT_FaceCamera;
 	m_Gravity.Set( 0.0f, 0.0f, 0.0f );
+	m_bLockVelocity = false;
+
 	m_LeftOverTime = 0.0f;
 	m_pVertexBuffer = NULL;
 	m_pIndexBuffer = NULL;
@@ -198,6 +200,8 @@ void kbParticleComponent::Update_Internal( const float DeltaTime ) {
 	int currentListEnd = (int)m_Particles.size();
 	float NextSpawn = 0.0f;
 
+	kbMat4 ownerMatrix = GetOwner()->GetOrientation().ToMat4();
+
 	// Spawn particles
 	const kbVec3 MyPosition = GetPosition();
 	while ( ( m_MaxParticleSpawnRate > 0 && TimeLeft >= NextSpawn ) || m_BurstCount > 0 ) {
@@ -205,10 +209,16 @@ void kbParticleComponent::Update_Internal( const float DeltaTime ) {
 		newParticle.m_StartVelocity.x = m_MinParticleStartVelocity.x + ( kbfrand() * ( m_MaxParticleStartVelocity.x - m_MinParticleStartVelocity.x ) );
 		newParticle.m_StartVelocity.y = m_MinParticleStartVelocity.y + ( kbfrand() * ( m_MaxParticleStartVelocity.y - m_MinParticleStartVelocity.y ) );
 		newParticle.m_StartVelocity.z = m_MinParticleStartVelocity.z + ( kbfrand() * ( m_MaxParticleStartVelocity.z - m_MinParticleStartVelocity.z ) );
-
-		newParticle.m_EndVelocity.x = m_MinParticleEndVelocity.x + ( kbfrand() * ( m_MaxParticleEndVelocity.x - m_MinParticleEndVelocity.x ) );
-		newParticle.m_EndVelocity.y = m_MinParticleEndVelocity.y + ( kbfrand() * ( m_MaxParticleEndVelocity.y - m_MinParticleEndVelocity.y ) );
-		newParticle.m_EndVelocity.z = m_MinParticleEndVelocity.z + ( kbfrand() * ( m_MaxParticleEndVelocity.z - m_MinParticleEndVelocity.z ) );
+		newParticle.m_StartVelocity = newParticle.m_StartVelocity * ownerMatrix;
+		
+		if ( m_bLockVelocity ) {
+			newParticle.m_EndVelocity = newParticle.m_StartVelocity;
+		} else {
+			newParticle.m_EndVelocity.x = m_MinParticleEndVelocity.x + ( kbfrand() * ( m_MaxParticleEndVelocity.x - m_MinParticleEndVelocity.x ) );
+			newParticle.m_EndVelocity.y = m_MinParticleEndVelocity.y + ( kbfrand() * ( m_MaxParticleEndVelocity.y - m_MinParticleEndVelocity.y ) );
+			newParticle.m_EndVelocity.z = m_MinParticleEndVelocity.z + ( kbfrand() * ( m_MaxParticleEndVelocity.z - m_MinParticleEndVelocity.z ) );
+			newParticle.m_EndVelocity = newParticle.m_StartVelocity * ownerMatrix;
+		}
 
 		newParticle.m_Position = MyPosition + newParticle.m_StartVelocity * TimeLeft;
 		newParticle.m_LifeLeft = m_ParticleMinDuration + ( kbfrand() * ( m_ParticleMaxDuration - m_ParticleMinDuration ) );

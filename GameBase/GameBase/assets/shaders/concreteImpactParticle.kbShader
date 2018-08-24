@@ -49,30 +49,21 @@ pixelInput vertexShader( vertexInput input ) {
    const float3 particleWorldPos = input.position.xyz;//mul( input.position, modelMatrix ).xyz;
 
    float3x3 billboardMatrix;
-   if ( input.billboardType.x == 0 ) {
-      // Billboard
-      float3 up = float3( 0.0f, 1.0f, 0.0f );
-      const float3 zAxis = normalize( cameraPos.xyz - particleWorldPos );
-      const float3 xAxis = normalize( cross( up, zAxis ) );
-      const float3 yAxis = normalize( cross( zAxis, xAxis ) );
-      billboardMatrix = float3x3( xAxis, yAxis, zAxis );
-   } else {
-      // Axial
-      float3 heading = input.rotationAndDirection.xyz;
-      const float3 xAxis = normalize( cross( normalize( cameraPos.xyz - particleWorldPos ), heading ) );
-      const float3 yAxis = normalize( cross( heading, xAxis ) );
-      billboardMatrix = float3x3( heading, xAxis, yAxis );
-   }
+
+  // Billboard
+  float3 up = float3( 0.0f, 1.0f, 0.0f );
+  const float3 zAxis = normalize( cameraPos.xyz - particleWorldPos );
+  const float3 xAxis = normalize( cross( up, zAxis ) );
+  const float3 yAxis = normalize( cross( zAxis, xAxis ) );
+  billboardMatrix = float3x3( xAxis, yAxis, zAxis );
+
    const float3 offset = mul( float3( input.size.x , input.size.y, 0 ), billboardMatrix );
    output.position = mul( float4(particleWorldPos,1) + float4( offset, 0.0f ), viewProjection );
   
-	output.uv = input.uv * 0.5f;
-	if (input.billboardType.w > 0.75f)
-		output.uv += 0.5f;
-	else if (input.billboardType.w > 0.5f)
-		output.uv.y += 0.5f;
-	else if (input.billboardType.w > 0.25f)
-		output.uv.x += 0.5f;
+	output.uv = input.uv * 0.25f;
+	uint atlasIdx = (int)(input.billboardType.w * 16.0f);
+	output.uv.x += (atlasIdx % 4)/4.0f;
+	output.uv.y += (atlasIdx / 4) / 4.0f;
 
 	output.color = input.color;
 	output.position2 = output.position.zw;

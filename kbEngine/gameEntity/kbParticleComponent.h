@@ -74,6 +74,7 @@ private:
 	int															m_MinBurstCount;
 	int															m_MaxBurstCount;
 	EBillboardType												m_ParticleBillboardType;
+	bool														m_bLockVelocity;
 
 	// Non-editable
 	float														m_LeftOverTime;
