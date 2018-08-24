@@ -20,24 +20,9 @@ enum eCameraMode_t {
 };
 
 /**
- *	EtherFoliageManager
- */
-class EtherFoliageManager : public kbRenderHook {
-
-//-------------------------------------------------------------------------------------------------------------------------------------------------------------
-public:
-												EtherFoliageManager();
-												~EtherFoliageManager();
-
-private:
-
-	virtual void								RenderThreadCallBack() override;
-};
-
-/**
  *	EtherGame
  */
-class EtherGame : public kbGame {
+class EtherGame : public kbGame, public kbRenderHook {
 
 //-------------------------------------------------------------------------------------------------------------------------------------------------------------
 public:
@@ -65,6 +50,8 @@ public:
 	bool										IsAirstrikeInProgress() const { return  m_AirstrikeTimeLeft > 0.0f; }
 
 	const kbVec3 &								GetHMDWorldOffset() const { return m_HMDWorldOffset; }
+
+	void										RegisterHit( kbComponent *const pComponent, const kbVec3 & hitLoc, const kbVec3 & hitDir );
 
 protected:
 
@@ -135,6 +122,17 @@ protected:
 	kbWaveFile *								m_pOLCWindupWave;
 	kbWaveFile *								m_pOLCExplosion;
 	kbVec3										m_OLCTint;
+
+	// kbRenderHook
+	struct hits {
+		kbComponent * pHitComponent;
+		kbVec3 hitLocation;
+		kbVec3 hitDirection;
+	};
+	std::vector<hits>							m_Hits;
+	virtual void								RenderSync() override;
+	virtual void								RenderThreadCallBack() override;
+	kbRenderTexture *							m_pBulletHoleTarget;
 };
 
 

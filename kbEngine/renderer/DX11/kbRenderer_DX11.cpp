@@ -1239,6 +1239,11 @@ void kbRenderer_DX11::RenderScene() {
 		m_pDeviceContext->RSSetViewports( 1, &viewport );
 	
 		{
+
+			for ( int iHook = 0; iHook < m_RenderHooks[RP_FirstPerson].size(); iHook++ ) {
+				m_RenderHooks[RP_FirstPerson][iHook]->RenderThreadCallBack();
+			}
+
 			START_SCOPED_RENDER_TIMER( RENDER_G_BUFFER );
 
 			// First person Render Pass
@@ -3339,4 +3344,41 @@ kbVec2i kbRenderer_DX11::GetEntityIdAtScreenPosition( const uint x, const uint y
 	m_pDeviceContext->Unmap( m_pOffScreenRenderTargetTexture, 0 );
 
 	return retVal;
+}
+
+/**
+ *	kbRenderer_DX11::RT_SetRenderTarget
+ */
+void kbRenderer_DX11::RT_SetRenderTarget( kbRenderTexture *const pRenderTexture ) {
+	m_pDeviceContext->OMSetRenderTargets(1, &((kbRenderTexture_DX11*)pRenderTexture)->m_pRenderTargetView, nullptr );
+}
+
+/**
+ *	kbRenderer_DX11::RT_RenderMesh
+ */
+void kbRenderer_DX11::RT_RenderMesh( const kbModel *const pModel, kbShader *const pShader, const kbShaderVarBindings_t * binding ) {
+
+	const UINT vertexStride = pModel->VertexStride();
+	const UINT vertexOffset = 0;
+
+	ID3D11Buffer *const pVertexBuffer = (ID3D11Buffer * const)pModel->m_VertexBuffer.GetBufferPtr();
+	m_pDeviceContext->IASetVertexBuffers(0, 1, &pVertexBuffer, &vertexStride, &vertexOffset);
+
+	ID3D11Buffer *const pIndexBuffer = (ID3D11Buffer * const)pModel->m_IndexBuffer.GetBufferPtr();
+	m_pDeviceContext->IASetIndexBuffer(pIndexBuffer, DXGI_FORMAT_R32_UINT, 0);
+	m_pDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
+	m_pDeviceContext->IASetInputLayout((ID3D11InputLayout*)pShader->GetVertexLayout());
+	m_pDeviceContext->VSSetShader((ID3D11VertexShader *)pShader->GetVertexShader(), nullptr, 0);
+	m_pDeviceContext->PSSetShader((ID3D11PixelShader *)pShader->GetPixelShader(), nullptr, 0);
+
+	m_pDeviceContext->GSSetShader((ID3D11GeometryShader *)pShader->GetGeometryShader(), nullptr, 0);
+	m_pDeviceContext->GSSetSamplers(0, 1, &m_pBasicSamplerState);
+
+	for ( int i = 0; i < pModel->NumMeshes(); i++ ) {
+
+		const kbModel::mesh_t & pMesh = pModel->GetMeshes()[i];
+		const kbMaterial & meshMaterial = pModel->GetMaterials()[pMesh.m_MaterialIndex];
+		m_pDeviceContext->DrawIndexed(pMesh.m_NumTriangles * 3, pMesh.m_IndexBufferIndex, 0);
+	}
 }

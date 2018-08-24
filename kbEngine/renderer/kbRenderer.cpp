@@ -750,6 +750,12 @@ void kbRenderer::RenderSync() {
 
 	m_LightShafts_GameThread.clear();
 
+	for ( int i = 0; i < NUM_RENDER_PASSES; i++ ) {
+		for ( int iHook = 0; iHook < m_RenderHooks[i].size(); iHook++ ) {
+			m_RenderHooks[i][iHook]->RenderSync();
+		}
+	}
+
 	// Camera
 	for ( int i = 0; i < m_RenderWindowList.size(); i++ ) {
 
@@ -950,11 +956,29 @@ void kbRenderer::RT_ReturnRenderTexture( kbRenderTexture *const pRenderTexture )
 }
 
 /**
+ *	kbRenderer::RegisterRenderHook
+ */
+void kbRenderer::RegisterRenderHook( kbRenderHook *const pRenderHook ) {
+	kbErrorCheck( pRenderHook != nullptr, "kbRenderer::RegisterRenderHook() - NULL render hook" );
+
+	m_RenderHooks[(int)pRenderHook->m_RenderPass].push_back( pRenderHook );
+}
+
+/**
+ *	kbRenderer::UregisterRenderHook
+ */
+void kbRenderer::UnregisterRenderHook( kbRenderHook *const pRenderHook ) {
+	kbErrorCheck(pRenderHook != nullptr, "kbRenderer::RegisterUregisterRenderHookRenderHook() - NULL render hook");
+
+	VectorRemoveFast( m_RenderHooks[(int)pRenderHook->m_RenderPass], pRenderHook );
+
+}
+
+/**
  *	kbRenderHook::kbRenderHook
  */
-kbRenderHook::kbRenderHook( const ERenderPass ) {
-
-
+kbRenderHook::kbRenderHook( const ERenderPass renderPass ) :
+	m_RenderPass( renderPass ) {
 }
 
 /**

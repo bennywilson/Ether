@@ -203,9 +203,11 @@ public:
 
 	ERenderPass									GetRenderPass() const { return m_RenderPass; }
 
+	virtual void								RenderThreadCallBack() = 0;
+
 private:
 
-	virtual void								RenderThreadCallBack() = 0;
+	virtual void								RenderSync() { }
 
 	ERenderPass									m_RenderPass;
 };
@@ -303,8 +305,10 @@ public:
 	kbViewMode_t								m_ViewMode;
 
 	// Render thread functions
+	virtual void								RT_SetRenderTarget( kbRenderTexture *const pRenderTexture ) = 0;
 	virtual kbRenderTexture *					RT_GetRenderTexture( const int width, const int height, const eTextureFormat );
 	virtual void								RT_ReturnRenderTexture( kbRenderTexture *const pRenderTexture );
+	virtual void								RT_RenderMesh(const kbModel *const pModel, kbShader *const pShader, const struct kbShaderVarBindings_t * binding ) = 0;
 
 private:
 
@@ -328,7 +332,7 @@ protected:
 
 	std::vector<kbRenderTexture	*>				m_pRenderTargets;
 
-	std::vector<kbRenderObject*>				m_RenderHooks[NUM_RENDER_PASSES];
+	std::vector<kbRenderHook*>					m_RenderHooks[NUM_RENDER_PASSES];
 
 	struct ScreenSpaceQuad_t {
 												ScreenSpaceQuad_t() { }

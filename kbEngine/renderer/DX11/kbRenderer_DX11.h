@@ -379,6 +379,10 @@ public:
 	const static float							Near_Plane;
 	const static float							Far_Plane;
 
+	// Render thread
+	virtual void								RT_SetRenderTarget( kbRenderTexture *const pRenderTexture ) override;
+	virtual void								RT_RenderMesh( const kbModel *const pModel, kbShader *const pShader, const kbShaderVarBindings_t * binding) override;
+
 private:
 
 	virtual void								Init_Internal( HWND, const int width, const int height, const bool bUseHMD, const bool bUseHMDTrackingOnly ) override;

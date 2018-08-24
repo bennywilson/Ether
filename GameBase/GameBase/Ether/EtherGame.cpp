@@ -39,6 +39,7 @@ static kbVec3 g_CountUIOffset( 14.96f, -12.0f, 10.0f );
  *	EtherGame::EtherGame
  */
 EtherGame::EtherGame() :
+	kbRenderHook( RP_FirstPerson ),
 	m_CameraMode( Cam_FirstPerson ),
 	m_pPlayerComponent( nullptr ),
 	m_pWorldGenComponent( nullptr ),
@@ -60,7 +61,8 @@ EtherGame::EtherGame() :
 	m_OLCPostProcess( -1.0f ),
 	m_pOLCWindupWave( nullptr ),
 	m_pOLCExplosion( nullptr ),
-	m_OLCTint( kbVec3::zero ) {
+	m_OLCTint( kbVec3::zero ),
+	m_pBulletHoleTarget( nullptr ) {
 
 	m_ELBomberEntity[0] = m_ELBomberEntity[1] = m_ELBomberEntity[2] = nullptr;
 	m_BombTimer[0] = m_BombTimer[1] = m_BombTimer[2] = 0.0f;
@@ -86,6 +88,7 @@ kbRenderObject crossHair;
  *	EtherGame::PlayGame_Internal
  */
 void EtherGame::PlayGame_Internal() {
+	g_pRenderer->RegisterRenderHook( this );
 
 /*
 	m_pAirstrikeFlybyWave = (kbWaveFile *)g_ResourceManager.GetResource( "./assets/Sounds/airstrike.wav", true );
@@ -135,6 +138,8 @@ void EtherGame::InitGame_Internal() {
 void EtherGame::StopGame_Internal() {
 	m_pPlayerComponent = nullptr;
 	m_pLocalPlayer = nullptr;
+
+	g_pRenderer->UnregisterRenderHook( this );
 
 	for ( int i = 0; i < 3; i++ ) {
 		RemoveGameEntity( m_ELBomberEntity[i] );
@@ -838,23 +843,39 @@ warpIntensity = kbClamp( warpIntensity, 0.0f, 10.0f );
 }
 
 /**
- *	EtherFoliageManager::EtherFoliageManager
+ *	EtherGameRenderHook::RegisterHit
  */
-EtherFoliageManager::EtherFoliageManager() :
-	kbRenderHook( RP_FirstPerson ) {
+void EtherGame::RegisterHit( kbComponent *const pHitComponent, const kbVec3 & hitLocation, const kbVec3 & hitDirection ) {
+	hits newHit;
+	newHit.hitDirection = hitDirection;
+	newHit.hitLocation = hitLocation;
+	newHit.pHitComponent = pHitComponent;
+	m_Hits.push_back(newHit);
+}
+
+/**
+ *	EtherGameRenderHook::RenderThreadCallBack
+ */
+void EtherGame::RenderThreadCallBack() {
 
 }
 
 /**
- *	EtherFoliageManager::~EtherFoliageManager
+ *	EtherGameRenderHook::RenderSync
  */
-EtherFoliageManager::~EtherFoliageManager() {
+void EtherGame::RenderSync() {
+	if ( m_pBulletHoleTarget == nullptr ) {
+		m_pBulletHoleTarget = g_pRenderer->RT_GetRenderTexture( 1024, 1024, eTextureFormat::KBTEXTURE_R8G8B8A8 );
+	}
 
-}
-
-/**
- *	EtherFoliageManager::RenderThreadCallBack
- */
-void EtherFoliageManager::RenderThreadCallBack() {
-
+	kbShader * pUnwrapShader = (kbShader*)g_ResourceManager.GetResource( "./assets/shaders/pokehole_flat.kbshader", true );
+	for ( int i = 0; i < m_Hits.size(); i++ ) {
+		kbGameEntity *const pEnt = (kbGameEntity*)m_Hits[i].pHitComponent->GetOwner();
+		kbStaticModelComponent *const pSM = (kbStaticModelComponent*)pEnt->GetComponentByType( kbStaticModelComponent::GetType() );
+		if (pSM == nullptr ) {
+			continue;
+		}
+		g_pRenderer->RT_SetRenderTarget( m_pBulletHoleTarget );
+		g_pRenderer->RT_RenderMesh( pSM->GetModel(), pUnwrapShader, nullptr );
+	}
 }
