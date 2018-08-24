@@ -70,7 +70,7 @@ void EtherProjectileComponent::Update_Internal( const float DeltaTime ) {
 		ParticleInfo.m_Position = GetOwner()->GetPosition();
 		ParticleInfo.m_Direction = projectileMat[2].ToVec3();
 		ParticleInfo.m_Width = m_TracerLength;
-		ParticleInfo.m_Color.Set( 1.0f, 1.0f, 1.0f );
+		ParticleInfo.m_Color.Set( 1.0f, 1.0f, 1.0f, 1.0f );
 		ParticleInfo.m_Height = m_TraceWidth;
 		ParticleInfo.m_UVs[0].Set( 0.125f, 0.0f );
 		ParticleInfo.m_UVs[1].Set( 0.25f, 0.125f );
@@ -81,7 +81,7 @@ void EtherProjectileComponent::Update_Internal( const float DeltaTime ) {
 		ParticleInfo.m_Position = GetOwner()->GetPosition();
 		ParticleInfo.m_Direction = projectileMat[2].ToVec3();
 		ParticleInfo.m_Width = 32.0f;
-		ParticleInfo.m_Color.Set( 1.0f, 1.0f, 1.0f );
+		ParticleInfo.m_Color.Set( 1.0f, 1.0f, 1.0f, 1.0f );
 		ParticleInfo.m_Height = 32.0f;
 		ParticleInfo.m_UVs[0].Set( 0.5f, 0.0f );
 		ParticleInfo.m_UVs[1].Set( 0.625f, 0.125f );
@@ -316,7 +316,7 @@ void EtherWeaponComponent::UpdateShells( const float DeltaTime ) {
 		g_pRenderer->UpdateRenderObject( shell.m_RenderObject );
 
 		kbParticleManager::CustomParticleAtlasInfo_t particle;
-		particle.m_Color.Set( shell.m_NormalizedAnimStartTime, shell.m_NormalizedAnimStartTime * kbPI, shell.m_NormalizedAnimStartTime * kbPI );
+		particle.m_Color.Set( shell.m_NormalizedAnimStartTime, shell.m_NormalizedAnimStartTime * kbPI, shell.m_NormalizedAnimStartTime * kbPI, 1.0f );
 		particle.m_Direction = shell.m_Velocity.Normalized();//shell.m_StartingRotation.ToMat4()[0].ToVec3();
 		particle.m_Height = 2.0f;
 		particle.m_Position = shell.m_RenderObject.m_Position - particle.m_Direction * 4.0f;
@@ -441,7 +441,7 @@ bool EtherWeaponComponent::Fire_Internal() {
 			ParticleInfo.m_UVs[0].Set( 0.0f, 0.0f );
 			ParticleInfo.m_UVs[1].Set( 0.125f, 0.125f );
 			ParticleInfo.m_Type = BT_FaceCamera;
-			ParticleInfo.m_Color.Set( 1.0f, 1.0f, 1.0f );
+			ParticleInfo.m_Color.Set( 1.0f, 1.0f, 1.0f, 1.0f );
 			g_pGame->GetParticleManager()->AddQuad( 0, ParticleInfo );
 		}
 

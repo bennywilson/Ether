@@ -238,16 +238,16 @@ void kbParticleManager::AddQuad( const uint atlasIdx, const CustomParticleAtlasI
 	curAtlas.m_pVertexBuffer[vertexIndex + 2].uv.Set( CustomParticleInfo.m_UVs[1].x, CustomParticleInfo.m_UVs[1].y );
 	curAtlas.m_pVertexBuffer[vertexIndex + 3].uv.Set( CustomParticleInfo.m_UVs[0].x, CustomParticleInfo.m_UVs[1].y );
 
-	kbVec3 color = CustomParticleInfo.m_Color;
+	kbVec4 color = CustomParticleInfo.m_Color;
 	curAtlas.m_pVertexBuffer[vertexIndex + 0].SetColor( color );
 	curAtlas.m_pVertexBuffer[vertexIndex + 1].SetColor( color );
 	curAtlas.m_pVertexBuffer[vertexIndex + 2].SetColor( color );
 	curAtlas.m_pVertexBuffer[vertexIndex + 3].SetColor( color );
 
-	curAtlas.m_pVertexBuffer[vertexIndex + 0].color[3] = ( CustomParticleInfo.m_Type == BT_FaceCamera ) ? ( 0 ) : ( 0xff );
-	curAtlas.m_pVertexBuffer[vertexIndex + 1].color[3] = ( CustomParticleInfo.m_Type == BT_FaceCamera ) ? ( 0 ) : ( 0xff );
-	curAtlas.m_pVertexBuffer[vertexIndex + 2].color[3] = ( CustomParticleInfo.m_Type == BT_FaceCamera ) ? ( 0 ) : ( 0xff );
-	curAtlas.m_pVertexBuffer[vertexIndex + 3].color[3] = ( CustomParticleInfo.m_Type == BT_FaceCamera ) ? ( 0 ) : ( 0xff );
+	curAtlas.m_pVertexBuffer[vertexIndex + 0].billboardType[0] = ( CustomParticleInfo.m_Type == BT_FaceCamera ) ? ( 0 ) : ( 0xff );
+	curAtlas.m_pVertexBuffer[vertexIndex + 1].billboardType[0] = ( CustomParticleInfo.m_Type == BT_FaceCamera ) ? ( 0 ) : ( 0xff );
+	curAtlas.m_pVertexBuffer[vertexIndex + 2].billboardType[0] = ( CustomParticleInfo.m_Type == BT_FaceCamera ) ? ( 0 ) : ( 0xff );
+	curAtlas.m_pVertexBuffer[vertexIndex + 3].billboardType[0] = ( CustomParticleInfo.m_Type == BT_FaceCamera ) ? ( 0 ) : ( 0xff );
 
 	const float halfWidth = CustomParticleInfo.m_Width * 0.5f;
 	const float halfHeight = CustomParticleInfo.m_Height * 0.5f;

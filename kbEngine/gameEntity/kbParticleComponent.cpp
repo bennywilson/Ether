@@ -124,7 +124,11 @@ void kbParticleComponent::Update_Internal( const float DeltaTime ) {
 			continue;
 		}
 
-		m_Particles[i].m_Position = m_Particles[i].m_Position + m_Particles[i].m_Velocity * DeltaTime;
+		const float LerpValue = m_Particles[i].m_LifeLeft / m_Particles[i].m_TotalLife;
+		kbVec3 curVelocity = kbLerp( m_Particles[i].m_EndVelocity, m_Particles[i].m_StartVelocity, LerpValue );
+		curVelocity += m_Gravity * ( m_Particles[i].m_TotalLife - m_Particles[i].m_LifeLeft );
+
+		m_Particles[i].m_Position = m_Particles[i].m_Position + curVelocity * DeltaTime;
 
 		m_pIndexBuffer[m_NumIndicesInCurrentBuffer + 2] = ( curVBPosition * 4 ) + 0;
 		m_pIndexBuffer[m_NumIndicesInCurrentBuffer + 1] = ( curVBPosition * 4 ) + 1;
@@ -143,8 +147,6 @@ void kbParticleComponent::Update_Internal( const float DeltaTime ) {
 		m_pVertexBuffer[iVertex + 1].uv.Set( 1.0f, 0.0f );
 		m_pVertexBuffer[iVertex + 2].uv.Set( 1.0f, 1.0f );
 		m_pVertexBuffer[iVertex + 3].uv.Set( 0.0f, 1.0f );
-
-		const float LerpValue = m_Particles[i].m_LifeLeft / m_Particles[i].m_TotalLife;
 		kbVec2 curSize = kbLerp( m_Particles[i].m_EndSize, m_Particles[i].m_StartSize, LerpValue );
 		curSize.x *= scale.x;
 		curSize.y *= scale.y;
@@ -155,7 +157,7 @@ void kbParticleComponent::Update_Internal( const float DeltaTime ) {
 		m_pVertexBuffer[iVertex + 3].size = kbVec2( -curSize.x, -curSize.y );
 
 		kbVec4 curColor = kbLerp( m_ParticleEndColor, m_ParticleStartColor, LerpValue );
-		byte byteColor[4] = { ( byte )kbClamp( curColor.x * 255.0f, 0.0f, 255.0f  ), ( byte )kbClamp( curColor.y * 255.0f, 0.0f, 255.0f ), ( byte )kbClamp( curColor.z * 255.0f, 0.0f, 255.0f ), iBillboardType };
+		byte byteColor[4] = { ( byte )kbClamp( curColor.x * 255.0f, 0.0f, 255.0f  ), ( byte )kbClamp( curColor.y * 255.0f, 0.0f, 255.0f ), ( byte )kbClamp( curColor.z * 255.0f, 0.0f, 255.0f ), ( byte )kbClamp( curColor.w * 255.0f, 0.0f, 255.0f ) };
 		memcpy(&m_pVertexBuffer[iVertex + 0].color, byteColor, sizeof(byteColor));
 		memcpy(&m_pVertexBuffer[iVertex + 1].color, byteColor, sizeof(byteColor));
 		memcpy(&m_pVertexBuffer[iVertex + 2].color, byteColor, sizeof(byteColor));
@@ -166,6 +168,15 @@ void kbParticleComponent::Update_Internal( const float DeltaTime ) {
 		m_pVertexBuffer[iVertex + 2].direction = direction;
 		m_pVertexBuffer[iVertex + 3].direction = direction;
 
+		m_pVertexBuffer[iVertex + 0].billboardType[0] = m_pVertexBuffer[iVertex + 0].billboardType[1] = m_pVertexBuffer[iVertex + 0].billboardType[2] = m_pVertexBuffer[iVertex + 0].billboardType[3] = iBillboardType;
+		m_pVertexBuffer[iVertex + 1].billboardType[0] = m_pVertexBuffer[iVertex + 1].billboardType[1] = m_pVertexBuffer[iVertex + 1].billboardType[2] = m_pVertexBuffer[iVertex + 1].billboardType[3] = iBillboardType;
+		m_pVertexBuffer[iVertex + 2].billboardType[0] = m_pVertexBuffer[iVertex + 2].billboardType[1] = m_pVertexBuffer[iVertex + 2].billboardType[2] = m_pVertexBuffer[iVertex + 2].billboardType[3] = iBillboardType;
+		m_pVertexBuffer[iVertex + 3].billboardType[0] = m_pVertexBuffer[iVertex + 3].billboardType[1] = m_pVertexBuffer[iVertex + 3].billboardType[2] = m_pVertexBuffer[iVertex + 3].billboardType[3] = iBillboardType;
+
+		m_pVertexBuffer[iVertex + 0].billboardType[3] = (byte)kbClamp( m_Particles[i].m_Random * 255.0f, 0.0f, 255.0f );
+		m_pVertexBuffer[iVertex + 1].billboardType[3] = m_pVertexBuffer[iVertex + 0].billboardType[3];
+		m_pVertexBuffer[iVertex + 2].billboardType[3] = m_pVertexBuffer[iVertex + 0].billboardType[3];
+		m_pVertexBuffer[iVertex + 3].billboardType[3] = m_pVertexBuffer[iVertex + 0].billboardType[3];
 		iVertex += 4;
 		curVBPosition++;
 
@@ -191,11 +202,15 @@ void kbParticleComponent::Update_Internal( const float DeltaTime ) {
 	const kbVec3 MyPosition = GetPosition();
 	while ( ( m_MaxParticleSpawnRate > 0 && TimeLeft >= NextSpawn ) || m_BurstCount > 0 ) {
 		kbParticle_t newParticle;
-		newParticle.m_Velocity.x = m_MinParticleStartVelocity.x + ( kbfrand() * ( m_MaxParticleStartVelocity.x - m_MinParticleStartVelocity.x ) );
-		newParticle.m_Velocity.y = m_MinParticleStartVelocity.y + ( kbfrand() * ( m_MaxParticleStartVelocity.y - m_MinParticleStartVelocity.y ) );
-		newParticle.m_Velocity.z = m_MinParticleStartVelocity.z + ( kbfrand() * ( m_MaxParticleStartVelocity.z - m_MinParticleStartVelocity.z ) );
+		newParticle.m_StartVelocity.x = m_MinParticleStartVelocity.x + ( kbfrand() * ( m_MaxParticleStartVelocity.x - m_MinParticleStartVelocity.x ) );
+		newParticle.m_StartVelocity.y = m_MinParticleStartVelocity.y + ( kbfrand() * ( m_MaxParticleStartVelocity.y - m_MinParticleStartVelocity.y ) );
+		newParticle.m_StartVelocity.z = m_MinParticleStartVelocity.z + ( kbfrand() * ( m_MaxParticleStartVelocity.z - m_MinParticleStartVelocity.z ) );
 
-		newParticle.m_Position = MyPosition + newParticle.m_Velocity * TimeLeft;
+		newParticle.m_EndVelocity.x = m_MinParticleEndVelocity.x + ( kbfrand() * ( m_MaxParticleEndVelocity.x - m_MinParticleEndVelocity.x ) );
+		newParticle.m_EndVelocity.y = m_MinParticleEndVelocity.y + ( kbfrand() * ( m_MaxParticleEndVelocity.y - m_MinParticleEndVelocity.y ) );
+		newParticle.m_EndVelocity.z = m_MinParticleEndVelocity.z + ( kbfrand() * ( m_MaxParticleEndVelocity.z - m_MinParticleEndVelocity.z ) );
+
+		newParticle.m_Position = MyPosition + newParticle.m_StartVelocity * TimeLeft;
 		newParticle.m_LifeLeft = m_ParticleMinDuration + ( kbfrand() * ( m_ParticleMaxDuration - m_ParticleMinDuration ) );
 		newParticle.m_TotalLife = newParticle.m_LifeLeft;
 
@@ -207,6 +222,7 @@ void kbParticleComponent::Update_Internal( const float DeltaTime ) {
 		newParticle.m_EndSize.x = m_MinParticleEndSize.x + ( endSizeRand * ( m_MinParticleEndSize.x - m_MaxParticleEndSize.x ) );
 		newParticle.m_EndSize.y = m_MinParticleEndSize.y + ( endSizeRand * ( m_MinParticleEndSize.y - m_MaxParticleEndSize.y ) );
 
+		newParticle.m_Random = kbfrand();
 		if ( m_BurstCount > 0 ) {
 			m_BurstCount--;
 		} else {

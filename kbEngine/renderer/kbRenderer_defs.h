@@ -47,10 +47,11 @@ struct vertexColorLayout {
 
 struct kbParticleVertex {
 
-	void SetColor( const kbVec3 & inColor ) {
-		color[0] = ( byte ) ( inColor.z * 255.0f );
-		color[1] = ( byte ) ( inColor.y * 255.0f );
-		color[2] = ( byte ) ( inColor.x * 255.0f );
+	void SetColor( const kbVec4 & inColor ) {
+		color[0] = (byte) ( inColor.x * 255.0f );
+		color[1] = (byte) ( inColor.y * 255.0f );
+		color[2] = (byte) ( inColor.z * 255.0f );
+		color[3] = (byte) ( inColor.w * 255.0f );
 	}
 
 	kbVec3	position;
@@ -59,6 +60,7 @@ struct kbParticleVertex {
 	kbVec2	size;
 	kbVec3	direction;
 	float	rotation;
+	byte	billboardType[4];
 };
 
 struct vertexLayout {

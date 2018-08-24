@@ -285,7 +285,7 @@ void EtherSkelModelComponent::Update_Internal( const float DeltaTime ) {
 			ParticleInfo.m_Direction = direction;
 			ParticleInfo.m_Width = distance;
 			ParticleInfo.m_Height = 4.0f;
-			ParticleInfo.m_Color.Set( 1.0f, 1.0f, 1.0f );
+			ParticleInfo.m_Color.Set( 1.0f, 1.0f, 1.0f, 1.0f );
 			ParticleInfo.m_UVs[0].Set( 0.25f, 0.0f );
 			ParticleInfo.m_UVs[1].Set( 0.25f + 0.125f, 0.125f );
 			ParticleInfo.m_Type = BT_AxialBillboard;

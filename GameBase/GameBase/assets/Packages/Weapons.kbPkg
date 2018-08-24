@@ -26,7 +26,7 @@ kbPrefab 1 {
 			DamageRadius =  0.000000
 			DetonationTime =  -1.000000
 			ExplodeOnImpact = 1
-			ExplosionFX = 288884920 1074764317 1666654870 1595214297
+			ExplosionFX = 4227010865 2632918935 1228561351 3287441000
 			ExplosionSound = 0
 			ImpactCharacterSound = 1
 				kbSoundData { 

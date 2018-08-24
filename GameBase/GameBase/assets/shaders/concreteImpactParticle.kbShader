@@ -17,11 +17,12 @@ kbShaderState {
 
 //-------------------------------------
 struct vertexInput {
-   float4 position               : POSITION;
-   float2 uv                     : TEXCOORD0;
-   float4 color                  : COLOR;
-   float2 size                   : TEXCOORD1;
-   float4 rotationAndDirection   : TEXCOORD2;
+	float4 position					: POSITION;
+	float2 uv						: TEXCOORD0;
+	float4 color					: COLOR;
+	float2 size						: TEXCOORD1;
+	float4 rotationAndDirection		: TEXCOORD2;
+	float4 billboardType			: TEXCOORD3;
 };
 
 //-------------------------------------
@@ -48,7 +49,7 @@ pixelInput vertexShader( vertexInput input ) {
    const float3 particleWorldPos = input.position.xyz;//mul( input.position, modelMatrix ).xyz;
 
    float3x3 billboardMatrix;
-   if ( input.color.a == 0 ) {
+   if ( input.billboardType.x == 0 ) {
       // Billboard
       float3 up = float3( 0.0f, 1.0f, 0.0f );
       const float3 zAxis = normalize( cameraPos.xyz - particleWorldPos );
@@ -65,8 +66,15 @@ pixelInput vertexShader( vertexInput input ) {
    const float3 offset = mul( float3( input.size.x , input.size.y, 0 ), billboardMatrix );
    output.position = mul( float4(particleWorldPos,1) + float4( offset, 0.0f ), viewProjection );
   
-	output.uv = input.uv;
-   output.color = input.color;
+	output.uv = input.uv * 0.5f;
+	if (input.billboardType.w > 0.75f)
+		output.uv += 0.5f;
+	else if (input.billboardType.w > 0.5f)
+		output.uv.y += 0.5f;
+	else if (input.billboardType.w > 0.25f)
+		output.uv.x += 0.5f;
+
+	output.color = input.color;
 	output.position2 = output.position.zw;
 
 	return output;
@@ -80,7 +88,7 @@ SamplerState SampleType;
 
  float4 pixelShader( pixelInput	input ) : SV_TARGET {
    float4 finalColor = input.color;
-   finalColor =  shaderTexture.Sample( SampleType, input.uv );
+   finalColor = shaderTexture.Sample( SampleType, input.uv );
 
    return finalColor;
 }

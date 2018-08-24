@@ -2678,7 +2678,7 @@ void kbRenderer_DX11::CreateShaderFromText( const std::string & fileName, const 
 		polygonLayout[2].InstanceDataStepRate = 0;
 
 	} else if ( fileName.find("particle") != std::string::npos ) {
-		polygonLayout.insert( polygonLayout.begin(), 5, D3D11_INPUT_ELEMENT_DESC() );
+		polygonLayout.insert( polygonLayout.begin(), 6, D3D11_INPUT_ELEMENT_DESC() );
 
 		polygonLayout[0].SemanticName = "POSITION";
 		polygonLayout[0].SemanticIndex = 0;
@@ -2719,6 +2719,14 @@ void kbRenderer_DX11::CreateShaderFromText( const std::string & fileName, const 
 		polygonLayout[4].AlignedByteOffset = D3D11_APPEND_ALIGNED_ELEMENT;
 		polygonLayout[4].InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
 		polygonLayout[4].InstanceDataStepRate = 0;
+
+		polygonLayout[5].SemanticName = "TEXCOORD";
+		polygonLayout[5].SemanticIndex = 3;
+		polygonLayout[5].Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+		polygonLayout[5].InputSlot = 0;
+		polygonLayout[5].AlignedByteOffset = D3D11_APPEND_ALIGNED_ELEMENT;
+		polygonLayout[5].InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
+		polygonLayout[5].InstanceDataStepRate = 0;
 	}
 	else if (fileName.find("skinned") != std::string::npos || vertexShaderFunc.find( "skin" ) != std::string::npos || pShaderBindings->ContainsBinding( "boneList" ) ) {
 		polygonLayout.insert( polygonLayout.begin(), 5, D3D11_INPUT_ELEMENT_DESC() );

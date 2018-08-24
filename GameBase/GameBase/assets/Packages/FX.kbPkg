@@ -202,26 +202,26 @@ kbGameEntity 4227010865 2632918935 1228561351 3287441000 {
 		Position = 0.000000 0.000000 0.000000
 		Scale = 1.000000 1.000000 1.000000
 		EndColor = 1.000000 1.000000 1.000000 1.000000
-		Gravity = 0.000000 0.000000 0.000000
-		MaxBurstCount = 0
+		Gravity = 0.000000 -39.500000 0.000000
+		MaxBurstCount = 10
 		MaxDuration =  3.000000
 		MaxEndSize = 3.000000 3.000000 3.000000
 		MaxEndVelocity = 0.000000 0.000000 0.000000
 		MaxSpawnRate =  2.000000
 		MaxStartSize = 3.000000 3.000000 3.000000
-		MaxStartVelocity = 5.000000 5.000000 5.000000
-		MinBurstCount = 0
+		MaxStartVelocity = 52.000000 25.0000002 -52.000000
+		MinBurstCount = 10
 		MinDuration =  3.000000
 		MinEndSize = 3.000000 3.000000 3.000000
 		MinEndVelocity = 0.000000 0.000000 0.000000
 		MinSpawnRate =  1.000000
 		MinStartSize = 3.000000 3.000000 3.000000
-		MinStartVelocity = -5.000000 -2.000000 2.000000
+		MinStartVelocity = 22.000000 -15.000000 52.000000
 		ParticleBillboardType = FaceCamera
 		ParticleShader = .\assets\shaders\concreteimpactparticle.kbshader
 		ParticleTexture = .\assets\fx\concreteparticles.dds
 		StartColor = 1.000000 1.000000 1.000000 1.000000
-		TotalDuration =  -1.000000
+		TotalDuration =  0.50000
 	}
 }
 }

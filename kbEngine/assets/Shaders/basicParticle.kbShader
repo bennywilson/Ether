@@ -1,35 +1,36 @@
 cbuffer matrixBuffer {
-   matrix modelMatrix;
-   matrix modelViewMatrix;
-   matrix viewMatrix;
-   matrix mvpMatrix;
-   matrix projection;
-   matrix inverseProjection;
-   matrix viewProjection;
-   float4 cameraPos;
+	matrix modelMatrix;
+	matrix modelViewMatrix;
+	matrix viewMatrix;
+	matrix mvpMatrix;
+	matrix projection;
+	matrix inverseProjection;
+	matrix viewProjection;
+	float4 cameraPos;
 };
 
 //-------------------------------------
 struct vertexInput {
-   float4 position               : POSITION;
-   float2 uv                     : TEXCOORD0;
-   float4 color                  : COLOR;
-   float2 size                   : TEXCOORD1;
-   float4 rotationAndDirection   : TEXCOORD2;
+	float4 position					: POSITION;
+	float2 uv						: TEXCOORD0;
+	float4 color					: COLOR;
+	float2 size						: TEXCOORD1;
+	float4 rotationAndDirection		: TEXCOORD2;
+   	float4 billboardType			: TEXCOORD3;
 };
 
 //-------------------------------------
 struct pixelInput {
-	float4 position               : SV_POSITION;
-	float2 uv                     : TEXCOORD0;
-	float4 color                  : COLOR;
-	float2 position2              : TEXCOORD1;
-	float3 normal                 : TEXCOORD2;
+	float4 position					: SV_POSITION;
+	float2 uv						: TEXCOORD0;
+	float4 color					: COLOR;
+	float2 position2				: TEXCOORD1;
+	float3 normal					: TEXCOORD2;
 };
 
 //-------------------------------------
 struct PS_OUTPUT {
-	float4 Color                  : SV_TARGET0;
+	float4 Color					: SV_TARGET0;
 };
 
 /*
@@ -42,7 +43,7 @@ pixelInput vertexShader( vertexInput input ) {
    const float3 particleWorldPos = input.position.xyz;//mul( input.position, modelMatrix ).xyz;
 
    float3x3 billboardMatrix;
-   if ( input.color.a == 0 ) {
+   if ( input.billboardType.x == 0 ) {
       // Billboard
       float3 up = float3( 0.0f, 1.0f, 0.0f );
       const float3 zAxis = normalize( cameraPos.xyz - particleWorldPos );
