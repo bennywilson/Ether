@@ -29,13 +29,14 @@ pixelInput vertexShader( vertexInput input ) {
 	pixelInput output = (pixelInput)(0);
 
 	output.position = input.position;
-	output.uv = mul( input.uv, (float2x2)mvpMatrix );
+	output.uv = mul( float4( input.uv, 0.0f, 1.0f), mvpMatrix ).xy;
 
 	output.position2 = ( input.position * 0.5f ) + 0.5f;
    output.position2.y = 1.0f - output.position2.y;
 
 	return output;
 }
+
 
 /**
  *	pixelShader
