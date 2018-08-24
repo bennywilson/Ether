@@ -239,7 +239,7 @@ kbGameEntity 0 0 0 0 {
 		Name = "Entity_26"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
 		Position = -41.824341 12.146704 -21.926552
-		Scale = 0.700000 0.700000 0.700000
+		Scale = 1 1 1
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
