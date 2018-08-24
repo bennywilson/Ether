@@ -56,7 +56,7 @@
     <None Include="assets\shaders\concreteImpactParticle.kbShader">
       <Filter>Shaders</Filter>
     </None>
-    <None Include="assets\shaders\pokehole_flat.kbShader">
+    <None Include="assets\shaders\pokeyholeunwrap.kbShader">
       <Filter>Shaders</Filter>
     </None>
   </ItemGroup>

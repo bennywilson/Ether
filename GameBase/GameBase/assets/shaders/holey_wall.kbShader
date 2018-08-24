@@ -82,7 +82,7 @@ SamplerState normalSampler;
 
 	output.Color.xyz = diffuse.Sample( diffuseSampler, input.uv ).xyz;
 	output.Depth.r = input.position2.x / input.position2.y;
-	output.Specular =  float4( 0.35f * output.Color.xyz, 5.0f );//0.1f * output.Color.xyzx;//float4( 0.0f, 0.0f, 0.0f, 1.0f );
+	output.Specular =  float4( 0.08f * output.Color.xyz, 15.0f );//0.1f * output.Color.xyzx;//float4( 0.0f, 0.0f, 0.0f, 1.0f );
 
 	float3x3 TBN = float3x3( normalize( input.TBN0.xyz ), normalize( input.TBN1.xyz ), normalize( input.TBN2.xyz ) );
 	float3 tangentNormal = normalize( normal.Sample( normalSampler, input.uv ).xyz * 2.0f - 1.0f );

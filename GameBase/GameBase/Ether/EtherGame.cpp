@@ -868,7 +868,7 @@ void EtherGame::RenderSync() {
 		m_pBulletHoleTarget = g_pRenderer->RT_GetRenderTexture( 1024, 1024, eTextureFormat::KBTEXTURE_R8G8B8A8 );
 	}
 
-	kbShader * pUnwrapShader = (kbShader*)g_ResourceManager.GetResource( "./assets/shaders/pokehole_flat.kbshader", true );
+	kbShader *const pUnwrapShader = (kbShader*)g_ResourceManager.GetResource( "./assets/shaders/pokeyholeunwrap.kbshader", true );
 	for ( int i = 0; i < m_Hits.size(); i++ ) {
 		kbGameEntity *const pEnt = (kbGameEntity*)m_Hits[i].pHitComponent->GetOwner();
 		kbStaticModelComponent *const pSM = (kbStaticModelComponent*)pEnt->GetComponentByType( kbStaticModelComponent::GetType() );
@@ -876,6 +876,11 @@ void EtherGame::RenderSync() {
 			continue;
 		}
 		g_pRenderer->RT_SetRenderTarget( m_pBulletHoleTarget );
-		g_pRenderer->RT_RenderMesh( pSM->GetModel(), pUnwrapShader, nullptr );
+
+		kbShaderParamOverrides_t shaderParams;
+		shaderParams.SetTexture( "baseTexture", pSM->GetModel()->GetMaterials()[0].GetTextureList()[0] );
+		shaderParams.SetVec4( "color", kbVec4( 0.f, 1.0f, 1.0f, 1.0f ) );
+
+		g_pRenderer->RT_RenderMesh( pSM->GetModel(), pUnwrapShader, &shaderParams );
 	}
 }

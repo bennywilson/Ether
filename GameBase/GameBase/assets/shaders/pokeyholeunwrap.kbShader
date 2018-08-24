@@ -4,26 +4,25 @@
 // 2018 kbEngine 2.0
 //==============================================================================
 cbuffer matrixBuffer {
-	matrix modelMatrix;
+	float4	color;
 };
 
 //-------------------------------------
 struct vertexInput {
-	float4 position		: POSITION;
-	float2 uv			: TEXCOORD0;
+	float4 position			: POSITION;
+	float2 uv				: TEXCOORD0;
 };
 
 //-------------------------------------
 struct pixelInput {
-	float4 position		: SV_POSITION;
-	float2 uv			   : TEXCOORD0;
+	float4 position			: SV_POSITION;
+	float2 uv				: TEXCOORD0;
 };
 
 //-------------------------------------
 struct PS_OUTPUT {
-	float4 Color		: SV_TARGET0;
+	float4 Color			: SV_TARGET0;
 };
-
 
 /**
  *	vertexShader
@@ -33,7 +32,7 @@ pixelInput vertexShader( vertexInput input ) {
 
 	output.position = float4( ( 2.0f * input.uv ) - 1.0f, 0.0f, 1.0f );
 	output.position.y = -output.position.y;
-	output.uv = input.uv;
+	output.uv = output.position.xy;
 
 	return output;
 }
@@ -41,11 +40,11 @@ pixelInput vertexShader( vertexInput input ) {
 /**
  *	pixelShader
  */
-Texture2D shaderTexture;
+Texture2D baseTexture			: register(t0);
 SamplerState SampleType;
 
  PS_OUTPUT pixelShader( pixelInput	input ) {
  	PS_OUTPUT output = (PS_OUTPUT) 0;
-	output.Color.xyz = 1;//shaderTexture.Sample( SampleType, input.uv ).xyz * 2.0f;
+	output.Color = baseTexture.Sample( SampleType, input.uv ) * color;
 	return output;
 }

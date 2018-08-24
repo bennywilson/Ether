@@ -381,7 +381,7 @@ public:
 
 	// Render thread
 	virtual void								RT_SetRenderTarget( kbRenderTexture *const pRenderTexture ) override;
-	virtual void								RT_RenderMesh( const kbModel *const pModel, kbShader *const pShader, const kbShaderVarBindings_t * binding) override;
+	virtual void								RT_RenderMesh( const kbModel *const pModel, kbShader *const pShader, const kbShaderParamOverrides_t *const pShaderParams ) override;
 
 private:
 

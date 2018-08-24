@@ -308,7 +308,7 @@ public:
 	virtual void								RT_SetRenderTarget( kbRenderTexture *const pRenderTexture ) = 0;
 	virtual kbRenderTexture *					RT_GetRenderTexture( const int width, const int height, const eTextureFormat );
 	virtual void								RT_ReturnRenderTexture( kbRenderTexture *const pRenderTexture );
-	virtual void								RT_RenderMesh(const kbModel *const pModel, kbShader *const pShader, const struct kbShaderVarBindings_t * binding ) = 0;
+	virtual void								RT_RenderMesh(const kbModel *const pModel, kbShader *const pShader, const kbShaderParamOverrides_t *const pShaderParams ) = 0;
 
 private:
 
