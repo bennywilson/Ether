@@ -19,6 +19,7 @@ GenerateEnum(
 	ECollisionType, "ECollisionType",
 	AddEnumField( CT_Sphere, "Sphere" )
 	AddEnumField( CT_Box, "Box" )
+	AddEnumField( CT_Mesh, "Mesh" )
 )
 
 GenerateClass( 

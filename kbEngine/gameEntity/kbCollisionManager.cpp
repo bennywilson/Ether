@@ -97,7 +97,22 @@ kbCollisionInfo_t kbCollisionManager::PerformLineCheck( const kbVec3 & start, co
 
 	for ( int i = 0; i < m_CollisionComponents.size(); i++ ) {
 		kbCollisionComponent *const pCollision = m_CollisionComponents[i];
-		if ( pCollision->m_CollisionType == CT_Sphere ) {
+
+		if ( pCollision->m_CollisionType == CT_Mesh ) {
+			kbGameEntity *const pOwner = pCollision->GetOwner();
+			kbStaticModelComponent *const pStaticModel = (kbStaticModelComponent*)pOwner->GetComponentByType( kbStaticModelComponent::GetType() );
+			if ( pStaticModel == nullptr ) {
+				kbWarning( "kbCollisionManager::PerformLineCheck() - Entity %s is missing a kbStaticModelComponent", pOwner->GetName().c_str() );
+				continue;
+			}
+			kbModelIntersection_t intersection = pStaticModel->GetModel()->RayIntersection( start, rayDir, pOwner->GetPosition(), pOwner->GetOrientation() );
+			if ( intersection.hasIntersection && intersection.t < LineLength && intersection.t < collisionInfo.m_T ) {
+				collisionInfo.m_bHit = true;
+				collisionInfo.m_HitLocation = start + rayDir * intersection.t;
+				collisionInfo.m_T = intersection.t;
+				collisionInfo.m_pHitComponent = pCollision;		
+			}
+		} else if ( pCollision->m_CollisionType == CT_Sphere ) {
 			kbGameEntity *const pCollisionOwner = pCollision->GetOwner();
 			kbVec3 intersectionPt;
 			if ( kbRaySphereIntersection( intersectionPt, start, rayDir, pCollisionOwner->GetPosition(), pCollision->m_Extent.x ) ) {

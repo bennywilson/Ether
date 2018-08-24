@@ -104,15 +104,17 @@ void EtherProjectileComponent::Update_Internal( const float DeltaTime ) {
 
 	// Check if this projectile hit another actor
 	kbActorComponent * pHitActorComponent = nullptr;
+	kbVec3 worldHitCollisionPt;
 	const kbCollisionInfo_t collisionInfo = g_CollisionManager.PerformLineCheck( oldPosition, newPosition );
-	if ( collisionInfo.m_bHit && collisionInfo.m_pHitComponent != nullptr && collisionInfo.m_T <= 1.0f ) {
+	if ( collisionInfo.m_bHit && collisionInfo.m_pHitComponent != nullptr ) {
 		pHitActorComponent = collisionInfo.m_pHitComponent->GetOwner()->GetActorComponent();
 		hitT = collisionInfo.m_T;
+		worldHitCollisionPt = collisionInfo.m_HitLocation;
 	}
 
 	// Check if this projectile hit the world
 	EtherGame *const pGame = static_cast<EtherGame*>( g_pGame );
-	kbVec3 worldHitCollisionPt;
+
 	if ( pGame->TraceAgainstWorld( oldPosition, newPosition, worldHitCollisionPt, true ) ) {
 		const float T = ( worldHitCollisionPt - oldPosition ).Length() / ( newPosition - oldPosition ).Length();
 		if ( T < hitT ) {
@@ -143,19 +145,37 @@ void EtherProjectileComponent::Update_Internal( const float DeltaTime ) {
 		const kbVec3 newPosition = oldPosition + projectileMat[2].ToVec3() * hitT;
 		GetOwner()->SetPosition( newPosition + g_ProjectileStuckOffset );
 		this->m_Velocity = 0.0f;
-	} else if ( bExploded == false && pHitActorComponent != nullptr ) {
+	} else if ( bExploded == false ) {
 
-		bool bShouldDamage = true;
-		if ( m_OwnerEntity.GetEntity() != nullptr && m_OwnerEntity.GetEntity()->GetComponentByType( EtherPlayerComponent::GetType() ) != pHitActorComponent->GetOwner()->GetComponentByType( EtherPlayerComponent::GetType() ) ) {
-			pHitActorComponent->TakeDamage( this, nullptr );
-		}
+		if ( pHitActorComponent != nullptr ) {
+			bool bShouldDamage = true;
+			if ( m_OwnerEntity.GetEntity() != nullptr && m_OwnerEntity.GetEntity()->GetComponentByType( EtherPlayerComponent::GetType() ) != pHitActorComponent->GetOwner()->GetComponentByType( EtherPlayerComponent::GetType() ) ) {
+				pHitActorComponent->TakeDamage( this, nullptr );
+			}
 	
-		if ( m_ImpactCharacterSoundData.size() > 0 ) {
-			m_ImpactCharacterSoundData[0].PlaySoundAtPosition( newPosition );
+			if ( m_ImpactCharacterSoundData.size() > 0 ) {
+				m_ImpactCharacterSoundData[0].PlaySoundAtPosition( newPosition );
+			}
+			DealRadiusDamage();
+
+			g_pGame->RemoveGameEntity( GetOwner() );
+			return;
+		} else if ( hitT < FLT_MAX ) {
+			if ( m_ExplosionFX.GetEntity() != nullptr ) {
+				kbGameEntity *const pExplosionFX = g_pGame->CreateEntity( m_ExplosionFX.GetEntity() );
+				pExplosionFX->SetPosition( worldHitCollisionPt );
+				pExplosionFX->SetOrientation( GetOwner()->GetOrientation() );
+				pExplosionFX->DeleteWhenComponentsAreInactive( true );
+			}
+
+			if ( m_ImpactEnvironmentSoundData.size() > 0 ) {
+				const int indexToPlay = rand() % m_ImpactEnvironmentSoundData.size();
+				m_ImpactEnvironmentSoundData[indexToPlay].PlaySoundAtPosition( newPosition );
+			}
+
+			g_pGame->RemoveGameEntity( GetOwner() );
+			return;
 		}
-		DealRadiusDamage();
-		g_pGame->RemoveGameEntity( GetOwner() );
-		return;
 	}
 
 	if ( m_DetonationTimer > 0 ) {

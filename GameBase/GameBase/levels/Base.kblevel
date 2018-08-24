@@ -21,11 +21,11 @@ kbGameEntity 0 0 0 0 {
 				BladeMaxWidth =  1.000000
 				BladeMinHeight =  20.000000
 				BladeMinWidth =  1.000000
-				DiffuseMap = ./assets/Terrain/Foliage/grass_1.dds
+				DiffuseMap = .\assets\terrain\foliage\grass_1.dds
 				FakeAODarkness =  0.250000
 				FakeAOPower =  2.000000
 				GrassCellsPerTerrainSide = 32
-				GrassMap = ./assets/Terrain/Foliage/grass_1.dds
+				GrassMap = .\assets\terrain\foliage\grass_1.dds
 				MaxBladeJitterOffset =  0.000000
 				MaxPatchJitterOffset =  3.000000
 				NoiseMap = .\assets\terrain\noisemap.png
@@ -250,6 +250,13 @@ kbGameEntity 0 0 0 0 {
 		ShaderOverride = 1
 			.\assets\shaders\holey_wall.kbshader
 
+	}
+	kbCollisionComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CollisionType = Mesh
+		Extent = 10.000000 10.000000 10.000000
+		SphereCollision = 0
 	}
 }
 kbGameEntity 0 0 0 0 {

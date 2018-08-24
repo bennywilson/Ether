@@ -697,7 +697,7 @@ void kbModel::SwapTexture( const UINT MeshIdx, const kbTexture * pTexture, const
 /**
  *	kbModel::RayIntersection
  */
-kbModelIntersection_t kbModel::RayIntersection( const kbVec3 & inRayOrigin, const kbVec3 & inRayDirection, const kbVec3 & modelTranslation, const kbQuat & modelOrientation ) {
+kbModelIntersection_t kbModel::RayIntersection( const kbVec3 & inRayOrigin, const kbVec3 & inRayDirection, const kbVec3 & modelTranslation, const kbQuat & modelOrientation ) const {
 	kbModelIntersection_t intersectionInfo;
 
 	kbMat4 inverseModelRotation = modelOrientation.ToMat4();

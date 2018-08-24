@@ -20,6 +20,7 @@ public:
 	virtual										~kbStaticModelComponent();
 
 	void										SetModel( class kbModel * pModel ) { m_pModel = pModel; }
+	const kbModel *								GetModel() const { return m_pModel; }
 
 	virtual void								EditorChange( const std::string & propertyName );
 

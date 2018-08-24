@@ -15,6 +15,7 @@
 enum ECollisionType {
 	CT_Sphere,
 	CT_Box,
+	CT_Mesh
 };
 
 /**
