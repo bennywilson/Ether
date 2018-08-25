@@ -69,18 +69,20 @@ pixelInput vertexShader( vertexInput input ) {
 /**
  *	pixelShader
  */
-Texture2D diffuse;
+Texture2D diffuse					: register(t0);
 SamplerState diffuseSampler;
 
-Texture2D normal;
+Texture2D normal					: register(t1);
 SamplerState normalSampler;
+
+Texture2D holeTex					: register(t2);
 
  PS_OUTPUT pixelShader( pixelInput	input ) {
  	PS_OUTPUT output = (PS_OUTPUT) 0;
 
 	//output.Color.xyz = clamp( saturate(diffuse.Sample( diffuseSampler, input.uv ).xyz * 0.25f), 0.25f, 1.0f );
 
-	output.Color.xyz = diffuse.Sample( diffuseSampler, input.uv ).xyz;
+	output.Color.xyz = diffuse.Sample( diffuseSampler, input.uv ).xyz * ( 1.0f - holeTex.Sample( diffuseSampler, input.uv ).xyz );
 	output.Depth.r = input.position2.x / input.position2.y;
 	output.Specular =  float4( 0.08f * output.Color.xyz, 15.0f );//0.1f * output.Color.xyzx;//float4( 0.0f, 0.0f, 0.0f, 1.0f );
 

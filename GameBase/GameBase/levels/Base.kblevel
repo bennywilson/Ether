@@ -236,7 +236,7 @@ kbGameEntity 0 0 0 0 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		Name = "Entity_26"
+		Name = "Holey_Wall"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
 		Position = -41.824341 12.146704 -21.926552
 		Scale = 1.000000 1.000000 1.000000
@@ -292,6 +292,7 @@ kbGameEntity 0 0 0 0 {
 		Scale = 1.000000 1.000000 1.000000
 		EndColor = 1.000000 1.000000 1.000000 1.000000
 		Gravity = 0.000000 0.000000 0.000000
+		LockVelocity = 0
 		MaxBurstCount = 0
 		MaxDuration =  3.000000
 		MaxEndSize = 3.000000 3.000000 3.000000

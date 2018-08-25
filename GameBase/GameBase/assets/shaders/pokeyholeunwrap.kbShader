@@ -32,7 +32,7 @@ pixelInput vertexShader( vertexInput input ) {
 
 	output.position = float4( ( 2.0f * input.uv ) - 1.0f, 0.0f, 1.0f );
 	output.position.y = -output.position.y;
-	output.uv = output.position.xy;
+	output.uv = input.uv;
 
 	return output;
 }

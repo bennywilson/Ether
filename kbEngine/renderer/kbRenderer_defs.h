@@ -254,11 +254,11 @@ struct kbShaderParamOverrides_t {
 		std::vector<kbMat4> m_Mat4List;
 		std::vector<kbVec4> m_Vec4List;
 
-        const class kbTexture * m_pTexture;
-
-        kbShaderParam_t() { }
-        std::string m_VarName;
-        size_t m_VarSizeBytes;
+        kbShaderParam_t() : m_pTexture( nullptr ), m_pRenderTexture( nullptr ) { }
+        const class kbTexture *			m_pTexture;
+		const class kbRenderTexture *	m_pRenderTexture;
+        std::string						m_VarName;
+        size_t							m_VarSizeBytes;
     };
 
     kbShaderParamOverrides_t() { }
@@ -318,6 +318,14 @@ struct kbShaderParamOverrides_t {
         newParam.m_Type = kbShaderParam_t::SHADER_TEX;
         newParam.m_VarSizeBytes = sizeof(kbTexture*);
     }
+
+	void SetTexture( const std::string & varName, const kbRenderTexture *const pRenderTexture ) {
+        kbShaderParam_t & newParam = AllocateParam( varName );
+        newParam.m_VarName = varName;
+        newParam.m_pRenderTexture = pRenderTexture;
+        newParam.m_Type = kbShaderParam_t::SHADER_TEX;
+        newParam.m_VarSizeBytes = sizeof(kbRenderTexture*);
+	}
 };
 
 /**

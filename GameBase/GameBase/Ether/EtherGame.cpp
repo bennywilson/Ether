@@ -866,6 +866,19 @@ void EtherGame::RenderThreadCallBack() {
 void EtherGame::RenderSync() {
 	if ( m_pBulletHoleTarget == nullptr ) {
 		m_pBulletHoleTarget = g_pRenderer->RT_GetRenderTexture( 1024, 1024, eTextureFormat::KBTEXTURE_R8G8B8A8 );
+
+		for ( int i = 0; i < GetGameEntities().size(); i++ ) {
+			kbGameEntity *const pEnt = GetGameEntities()[i];
+			if ( pEnt->GetName().find( "Holey_Wall" ) ) {
+				kbStaticModelComponent *const pSM = (kbStaticModelComponent*)pEnt->GetComponentByType( kbStaticModelComponent::GetType() );
+				if ( pSM != nullptr ) {
+					kbShaderParamOverrides_t shaderParams;
+					shaderParams.SetTexture( "baseTexture", pSM->GetModel()->GetMaterials()[0].GetTextureList()[0] );
+					pSM->SetShaderParams( shaderParams );
+				}
+				break;
+			}
+		}
 	}
 
 	kbShader *const pUnwrapShader = (kbShader*)g_ResourceManager.GetResource( "./assets/shaders/pokeyholeunwrap.kbshader", true );
@@ -876,10 +889,12 @@ void EtherGame::RenderSync() {
 			continue;
 		}
 		g_pRenderer->RT_SetRenderTarget( m_pBulletHoleTarget );
-
 		kbShaderParamOverrides_t shaderParams;
 		shaderParams.SetTexture( "baseTexture", pSM->GetModel()->GetMaterials()[0].GetTextureList()[0] );
 		shaderParams.SetVec4( "color", kbVec4( 0.f, 1.0f, 1.0f, 1.0f ) );
+		shaderParams.SetTexture( "holeTex", m_pBulletHoleTarget );
+		pSM->SetShaderParams( shaderParams );
+
 
 		g_pRenderer->RT_RenderMesh( pSM->GetModel(), pUnwrapShader, &shaderParams );
 	}

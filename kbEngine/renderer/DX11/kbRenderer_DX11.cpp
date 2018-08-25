@@ -3126,8 +3126,14 @@ void kbRenderer_DX11::RenderMesh( const kbRenderSubmesh *const pRenderMesh, cons
 	    for ( int iOverride = 0; iOverride < paramOverrides.size(); iOverride++ ) {
 			const kbShaderParamOverrides_t::kbShaderParam_t & curOverride = paramOverrides[iOverride];
 			if ( curOverride.m_Type == kbShaderParamOverrides_t::kbShaderParam_t::SHADER_TEX && curOverride.m_VarName == shaderVarBindings.m_TextureNames[iTex] ) {
-	            ID3D11ShaderResourceView *const pShaderResourceView = ( curOverride.m_pTexture != nullptr ) ? ( curOverride.m_pTexture->GetGPUTexture() ) : ( nullptr );
-				// Todo
+
+	            ID3D11ShaderResourceView * pShaderResourceView = nullptr;
+				if ( curOverride.m_pTexture != nullptr ) {
+					 pShaderResourceView = curOverride.m_pTexture->GetGPUTexture();
+				} else if ( curOverride.m_pRenderTexture != nullptr ) {
+					pShaderResourceView = ((kbRenderTexture_DX11*)curOverride.m_pRenderTexture)->m_pShaderResourceView;
+				}
+
 				m_pDeviceContext->VSSetShaderResources( iTex, 1, &pShaderResourceView );				
 				m_pDeviceContext->GSSetShaderResources( iTex, 1, &pShaderResourceView );				
 				m_pDeviceContext->PSSetShaderResources( iTex, 1, &pShaderResourceView );				
@@ -3353,6 +3359,15 @@ kbVec2i kbRenderer_DX11::GetEntityIdAtScreenPosition( const uint x, const uint y
  */
 void kbRenderer_DX11::RT_SetRenderTarget( kbRenderTexture *const pRenderTexture ) {
 	m_pDeviceContext->OMSetRenderTargets(1, &((kbRenderTexture_DX11*)pRenderTexture)->m_pRenderTargetView, nullptr );
+
+	D3D11_VIEWPORT viewport;
+	viewport.TopLeftX = 0;
+	viewport.TopLeftY = 0;
+	viewport.Width = (float) pRenderTexture->GetWidth();
+	viewport.Height = (float) pRenderTexture->GetHeight();
+	viewport.MinDepth = 0;
+	viewport.MaxDepth = 1.0f;
+	m_pDeviceContext->RSSetViewports( 1, &viewport );
 }
 
 /**
@@ -3457,8 +3472,14 @@ void kbRenderer_DX11::RT_RenderMesh( const kbModel *const pModel, kbShader *cons
 			for ( int iOverride = 0; iOverride < paramOverrides.size(); iOverride++ ) {
 				const kbShaderParamOverrides_t::kbShaderParam_t & curOverride = paramOverrides[iOverride];
 				if ( curOverride.m_Type == kbShaderParamOverrides_t::kbShaderParam_t::SHADER_TEX && curOverride.m_VarName == shaderVarBindings.m_TextureNames[iTex] ) {
-					ID3D11ShaderResourceView *const pShaderResourceView = ( curOverride.m_pTexture != nullptr ) ? ( curOverride.m_pTexture->GetGPUTexture() ) : ( nullptr );
-					// Todo
+
+					ID3D11ShaderResourceView * pShaderResourceView = nullptr;
+					if ( curOverride.m_pTexture != nullptr ) {
+						 pShaderResourceView = curOverride.m_pTexture->GetGPUTexture();
+					} else if ( curOverride.m_pRenderTexture != nullptr ) {
+						pShaderResourceView = ((kbRenderTexture_DX11*)curOverride.m_pRenderTexture)->m_pShaderResourceView;
+					}
+
 					m_pDeviceContext->VSSetShaderResources( iTex, 1, &pShaderResourceView );				
 				//	m_pDeviceContext->GSSetShaderResources( iTex, 1, &pShaderResourceView );				
 					m_pDeviceContext->PSSetShaderResources( iTex, 1, &pShaderResourceView );				
