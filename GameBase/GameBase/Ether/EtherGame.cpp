@@ -911,4 +911,5 @@ void EtherGame::RenderSync() {
 
 		g_pRenderer->RT_RenderMesh( pSM->GetModel(), pUnwrapShader, &shaderParams );
 	}
+	m_Hits.clear();
 }

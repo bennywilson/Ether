@@ -448,4 +448,11 @@ enum kbBlendFactor {
 	BlendFactor_InvSrcAlpha,
 };
 
+
+enum kbCullMode {
+	CullMode_FrontFaces,
+	CullMode_BackFaces,
+	CullMode_None,
+};
+
 #endif

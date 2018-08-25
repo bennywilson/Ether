@@ -44,9 +44,9 @@ SamplerState SampleType;
 
  float4 pixelShader( pixelInput	input ) : SV_TARGET {
 
-	float3 closestPt = ( input.localPos.xyz - hitLocation.xyz ) * hitDirection.xyz + hitLocation.xyz;
-	if ( length( closestPt - input.localPos.xyz ) > 4.0f )
+	float3 closestPt = dot( ( input.localPos.xyz - hitLocation.xyz ), hitDirection.xyz ) * hitDirection.xyz + hitLocation.xyz;
+	if ( length( closestPt - input.localPos.xyz ) > 1.0f )
 		clip(-1);
 
-	return float4(1, 0, 1, 1 );
+	return float4( 0, 0, 0, 1 );
 }

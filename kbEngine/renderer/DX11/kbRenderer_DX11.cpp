@@ -2954,19 +2954,9 @@ void kbRenderer_DX11::RenderMesh( const kbRenderSubmesh *const pRenderMesh, cons
 	const kbModel::mesh_t & pMesh = pModel->GetMeshes()[pRenderMesh->GetMeshIdx()];
 	const kbMaterial & meshMaterial = pModel->GetMaterials()[pMesh.m_MaterialIndex];
 
-	if ( m_ViewMode == ViewMode_Wireframe ) {
-		m_pDeviceContext->RSSetState( m_pWireFrameRasterizerState );
-	} else if ( meshMaterial.GetCullingMode() == kbMaterial::CM_BackFaces ) {
-		m_pDeviceContext->RSSetState( m_pDefaultRasterizerState );
-	} else if ( meshMaterial.GetCullingMode() == kbMaterial::CM_None ) {
-		m_pDeviceContext->RSSetState( m_pNoFaceCullingRasterizerState );
-	} else {
-		kbError( "kbRenderer_DX11::RenderMesh() - Unsupported culling mode" );
-	}
-
 	// Get Shader
-	const kbShader * pShader = meshMaterial.GetShader();
 	const std::vector<kbShader *> *const pShaderOverrideList = &pRenderObject->m_OverrideShaderList;	
+	const kbShader * pShader = meshMaterial.GetShader();
 	
 	if ( bShadowPass ) {
 		if ( pRenderObject->m_bIsSkinnedModel ) {
@@ -2985,6 +2975,16 @@ void kbRenderer_DX11::RenderMesh( const kbRenderSubmesh *const pRenderMesh, cons
 		}
 	}
 	
+	if ( m_ViewMode == ViewMode_Wireframe ) {
+		m_pDeviceContext->RSSetState( m_pWireFrameRasterizerState );
+	} else if ( pShader->GetCullMode() == CullMode_BackFaces ) {
+		m_pDeviceContext->RSSetState( m_pDefaultRasterizerState );
+	} else if ( pShader->GetCullMode() == CullMode_None ) {
+		m_pDeviceContext->RSSetState( m_pNoFaceCullingRasterizerState );
+	} else {
+		kbError( "kbRenderer_DX11::RenderMesh() - Unsupported culling mode" );
+	}
+
 	m_pDeviceContext->IASetInputLayout( (ID3D11InputLayout*)pShader->GetVertexLayout() );
 	m_pDeviceContext->VSSetShader( (ID3D11VertexShader *)pShader->GetVertexShader(), nullptr, 0 );
 	

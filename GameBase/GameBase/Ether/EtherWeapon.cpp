@@ -173,7 +173,7 @@ void EtherProjectileComponent::Update_Internal( const float DeltaTime ) {
 				m_ImpactEnvironmentSoundData[indexToPlay].PlaySoundAtPosition( newPosition );
 			}
 
-			g_pEtherGame->RegisterHit( collisionInfo.m_pHitComponent, collisionInfo.m_HitLocation, -GetOwner()->GetOrientation().ToMat4()[2].ToVec3() );
+			g_pEtherGame->RegisterHit( collisionInfo.m_pHitComponent, collisionInfo.m_HitLocation, ( newPosition - oldPosition ).Normalized() );
 			g_pGame->RemoveGameEntity( GetOwner() );
 			return;
 		}

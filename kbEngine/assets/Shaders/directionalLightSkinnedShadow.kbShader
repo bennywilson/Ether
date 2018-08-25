@@ -9,6 +9,9 @@ cbuffer matrixBuffer {
    float4x4    boneList[128];
 };
 
+kbShaderState {
+	cullMode CullMode_None
+}
 //-------------------------------------
 struct shadowVertexInput {
 	float4 position      : POSITION;

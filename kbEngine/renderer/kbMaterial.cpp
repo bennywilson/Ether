@@ -563,7 +563,8 @@ kbShader::kbShader() :
 	m_VertexShaderFunctionName( "vertexShader" ),
 	m_PixelShaderFunctionName( "pixelShader" ),
 	m_SrcBlendFactor( BlendFactor_None ),
-	m_DstBlendFactor( BlendFactor_None ) {
+	m_DstBlendFactor( BlendFactor_None ),
+	m_CullMode( CullMode_BackFaces ) {
 }
 
 /**
@@ -622,6 +623,15 @@ bool kbShader::Load_Internal() {
 				}
 			}
 
+			if ( shaderParser.GetValueForKey( value, "cullmode" ) ) {
+				if ( value == "cullmode_none" ) {
+					m_CullMode = CullMode_None;
+				} else if ( value == "cullmode_frontfaces" ) {
+					m_CullMode = CullMode_FrontFaces;
+				} else if ( value == " cullmode_backfaces" ) {
+					m_CullMode = CullMode_BackFaces;
+				}
+			}
 			shaderParser.EraseBlock();
 		}
 

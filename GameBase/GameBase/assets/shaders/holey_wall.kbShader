@@ -14,6 +14,10 @@ cbuffer matrixBuffer {
 	float4 cameraPos;
 };
 
+kbShaderState {
+	cullMode CullMode_BackFaces
+}
+
 //-------------------------------------
 struct vertexInput {
 	float4 position		: POSITION;
@@ -75,18 +79,26 @@ SamplerState diffuseSampler;
 Texture2D normal					: register(t1);
 SamplerState normalSampler;
 
-Texture2D holeTex					: register(t2);
+Texture2D holeTex				: register(t2);
 
- PS_OUTPUT pixelShader( pixelInput	input ) {
+ PS_OUTPUT pixelShader( pixelInput	input, bool IsFrontFace	: SV_IsFrontFace ) {
  	PS_OUTPUT output = (PS_OUTPUT) 0;
 
 	//output.Color.xyz = clamp( saturate(diffuse.Sample( diffuseSampler, input.uv ).xyz * 0.25f), 0.25f, 1.0f );
 
-	output.Color.xyz = diffuse.Sample( diffuseSampler, input.uv ).xyz * ( holeTex.Sample( diffuseSampler, input.uv ).xyz );
+	float4 holeValues = holeTex.Sample( diffuseSampler, input.uv );
+	clip( 0.5f - holeValues.w );
+
+	output.Color.xyz = diffuse.Sample( diffuseSampler, input.uv ).xyz;
 	output.Depth.r = input.position2.x / input.position2.y;
 	output.Specular =  float4( 0.08f * output.Color.xyz, 15.0f );//0.1f * output.Color.xyzx;//float4( 0.0f, 0.0f, 0.0f, 1.0f );
 
 	float3x3 TBN = float3x3( normalize( input.TBN0.xyz ), normalize( input.TBN1.xyz ), normalize( input.TBN2.xyz ) );
+
+	/*if ( IsFrontFace == 0 ) {
+		TBN *= -1.0f;
+	}*/
+
 	float3 tangentNormal = normalize( normal.Sample( normalSampler, input.uv ).xyz * 2.0f - 1.0f );
 	output.Normal.xyz = mul( tangentNormal, TBN );
 	return output;
