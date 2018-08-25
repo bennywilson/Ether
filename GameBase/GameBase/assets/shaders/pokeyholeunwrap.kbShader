@@ -42,20 +42,27 @@ pixelInput vertexShader( vertexInput input ) {
 Texture2D baseTexture			: register(t0);
 SamplerState SampleType;
 
+Texture2D noiseTex				: register(t1);
+Texture2D scorchTex				: register(t2);
 
-Texture2D noiseTex			: register(t1);
+float4 pixelShader( pixelInput	input ) : SV_TARGET {
 
- float4 pixelShader( pixelInput	input ) : SV_TARGET {
+	float4 returnColor = 0;
 
- 
+	returnColor.xyz = 1.0f;
 	float noise = noiseTex.Sample( SampleType, input.uv ).r * 1.f;
 	float3 closestPt = dot( ( input.localPos.xyz - hitLocation.xyz ), hitDirection.xyz ) * hitDirection.xyz + hitLocation.xyz;
+
+	float2 scorchUV = 0.5f + ( 0.5f * (input.localPos.yz - closestPt.yz) / ( hitDirection.w * hitLocation.w ) );
+	scorchUV = saturate(scorchUV);
+	returnColor.xyz = scorchTex.Sample( SampleType, scorchUV ).x;
+
 	if ( length( closestPt - input.localPos.xyz ) > 1.0f )
-		clip(-1.0f);
+		returnColor.w = 1.0f;
 
 	float normalizedDist = saturate( length( closestPt - input.localPos.xyz ) / hitLocation.w );
 	if ( normalizedDist - noise > 0.4f )
-		clip(-1.0f);
-
-	return float4( 0, 0, 0, 1 );
+		returnColor.w = 1.0f;
+	
+	return returnColor;
 }
