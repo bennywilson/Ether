@@ -3371,6 +3371,14 @@ void kbRenderer_DX11::RT_SetRenderTarget( kbRenderTexture *const pRenderTexture 
 }
 
 /**
+ *	kbRenderer_DX11::RT_ClearRenderTarget
+ */
+void kbRenderer_DX11::RT_ClearRenderTarget( kbRenderTexture *const pRenderTexture, const kbColor & color ) {
+
+	m_pDeviceContext->ClearRenderTargetView( ((kbRenderTexture_DX11*)pRenderTexture)->m_pRenderTargetView, &color. x);
+}
+
+/**
  *	kbRenderer_DX11::RT_RenderMesh
  */
 void kbRenderer_DX11::RT_RenderMesh( const kbModel *const pModel, kbShader *const pShader, const kbShaderParamOverrides_t *const pShaderParams ) {

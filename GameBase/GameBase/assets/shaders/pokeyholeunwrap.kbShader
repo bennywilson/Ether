@@ -4,7 +4,10 @@
 // 2018 kbEngine 2.0
 //==============================================================================
 cbuffer matrixBuffer {
+	matrix	modelMatrix;
 	float4	color;
+	float4	hitLocation;
+	float4	hitDirection;
 };
 
 //-------------------------------------
@@ -17,11 +20,7 @@ struct vertexInput {
 struct pixelInput {
 	float4 position			: SV_POSITION;
 	float2 uv				: TEXCOORD0;
-};
-
-//-------------------------------------
-struct PS_OUTPUT {
-	float4 Color			: SV_TARGET0;
+	float4 localPos			: TEXCOORD1;
 };
 
 /**
@@ -33,7 +32,7 @@ pixelInput vertexShader( vertexInput input ) {
 	output.position = float4( ( 2.0f * input.uv ) - 1.0f, 0.0f, 1.0f );
 	output.position.y = -output.position.y;
 	output.uv = input.uv;
-
+	output.localPos = input.position;
 	return output;
 }
 
@@ -43,8 +42,11 @@ pixelInput vertexShader( vertexInput input ) {
 Texture2D baseTexture			: register(t0);
 SamplerState SampleType;
 
- PS_OUTPUT pixelShader( pixelInput	input ) {
- 	PS_OUTPUT output = (PS_OUTPUT) 0;
-	output.Color = baseTexture.Sample( SampleType, input.uv ) * color;
-	return output;
+ float4 pixelShader( pixelInput	input ) : SV_TARGET {
+
+	float3 closestPt = ( input.localPos.xyz - hitLocation.xyz ) * hitDirection.xyz + hitLocation.xyz;
+	if ( length( closestPt - input.localPos.xyz ) > 4.0f )
+		clip(-1);
+
+	return float4(1, 0, 1, 1 );
 }
