@@ -865,7 +865,7 @@ void EtherGame::RenderThreadCallBack() {
  */
 void EtherGame::RenderSync() {
 	if ( m_pBulletHoleTarget == nullptr ) {
-		m_pBulletHoleTarget = g_pRenderer->RT_GetRenderTexture( 1024, 1024, eTextureFormat::KBTEXTURE_R8G8B8A8 );
+		m_pBulletHoleTarget = g_pRenderer->RT_GetRenderTexture( 4096, 4096, eTextureFormat::KBTEXTURE_R8G8B8A8 );
 		g_pRenderer->RT_ClearRenderTarget( m_pBulletHoleTarget, kbColor::white );
 		
 		g_ResourceManager.GetResource( "./assets/FX/noise.jpg", true );
@@ -905,7 +905,7 @@ void EtherGame::RenderSync() {
 		const kbVec3 hitLocation = invWorldMatrix.TransformPoint( m_Hits[i].hitLocation );
 		const kbVec3 hitDir = m_Hits[i].hitDirection * invWorldMatrix;
 		const float holeSize = 0.75f + ( kbfrand() * 0.5f );
-		const float scorchSize = 2.0f + ( kbfrand() * 1.5f );
+		const float scorchSize = 3.0f + ( kbfrand() * 1.5f );
 
 		shaderParams.SetTexture( "baseTexture", pSM->GetModel()->GetMaterials()[0].GetTextureList()[0] );
 		shaderParams.SetVec4( "hitLocation", kbVec4( hitLocation.x, hitLocation.y, hitLocation.z, holeSize ) );

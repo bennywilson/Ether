@@ -18,6 +18,10 @@ cbuffer ConstantBuffer1 {
 };
 
 
+kbShaderState {
+	cullMode CullMode_None
+}
+
 //-------------------------------------
 struct vertexInput {
 	float4 position			: POSITION;
