@@ -446,8 +446,17 @@ enum kbBlendFactor {
 	BlendFactor_Zero,
 	BlendFactor_SrcAlpha,
 	BlendFactor_InvSrcAlpha,
+	BlendFactor_SrcColor,
+	BlendFactor_DstColor,
+	BlendFactor_DstAlpha,
+	BlendFactor_InvDstAlpha,
 };
 
+enum kbBlendOp {
+	BlendOp_Add,
+	BlendOp_Max,
+	BlendOp_Min
+};
 
 enum kbCullMode {
 	CullMode_FrontFaces,

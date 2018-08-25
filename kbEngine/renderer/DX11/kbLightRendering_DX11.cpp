@@ -67,10 +67,10 @@ void kbRenderer_DX11::RenderLight( const kbRenderLight *const pLight ) {
 								 true,
 								 BlendFactor_One,
 								 BlendFactor_One,
-								 kbRenderState::BO_Add,
+								 BlendOp_Add,
 								 BlendFactor_One,
 								 BlendFactor_Zero,
-								 kbRenderState::BO_Add,
+								 BlendOp_Add,
 							     ColorWriteEnable_All );
 
 
@@ -469,10 +469,10 @@ void kbRenderer_DX11::RenderLightShafts() {
 										 true,
 										 BlendFactor_One,
 										 BlendFactor_One,
-										 kbRenderState::BO_Add,
+										 BlendOp_Add,
 										 BlendFactor_One,
 										 BlendFactor_Zero,
-										 kbRenderState::BO_Add,
+										 BlendOp_Add,
 										 ColorWriteEnable_RGB );
 
 

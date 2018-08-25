@@ -168,10 +168,10 @@ void EtherProjectileComponent::Update_Internal( const float DeltaTime ) {
 				pExplosionFX->DeleteWhenComponentsAreInactive( true );
 			}
 
-			if ( m_ImpactEnvironmentSoundData.size() > 0 ) {
+		/*	if ( m_ImpactEnvironmentSoundData.size() > 0 ) {
 				const int indexToPlay = rand() % m_ImpactEnvironmentSoundData.size();
 				m_ImpactEnvironmentSoundData[indexToPlay].PlaySoundAtPosition( newPosition );
-			}
+			}*/
 
 			g_pEtherGame->RegisterHit( collisionInfo.m_pHitComponent, collisionInfo.m_HitLocation, ( newPosition - oldPosition ).Normalized() );
 			g_pGame->RemoveGameEntity( GetOwner() );

@@ -358,8 +358,11 @@ void EtherPlayerComponent::HandleMovement( const kbInput_t & Input, const float 
 		movementVec.Normalize();
 	
 		const float PlayerSpeed = 190.0f;
-		const float movementMag = DT * PlayerSpeed * 0.5f;//( Input.m_KeyStruct.m_Shift ? 20.5f : 0.5f );
-		
+		float movementMag = DT * PlayerSpeed * 0.5f;//( Input.m_KeyStruct.m_Shift ? 20.5f : 0.5f );
+		if ( GetAsyncKeyState (VK_SHIFT ) ) {
+			movementMag *= 0.25f;
+		}
+
 		localPlayer->SetPosition( localPlayer->GetPosition() + movementVec * movementMag );
 
 		if ( pSkelModelComponent != nullptr ) {

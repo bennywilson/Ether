@@ -175,7 +175,7 @@ Texture2D Mat4Diffuse	: register(t7);
 	output.Normal.xyz = float3( 0.0f, 1.0f,0.0 );
 
 	//dsfdsf
-	output.Spec = float4( 0.25f, 0.25f, 0.25f, 1.0f );
+	output.Spec = float4(0,0,0,1);//float4( 0.25f, 0.25f, 0.25f, 1.0f );
 	output.Depth.r = input.position2.x / input.position2.y;
 
 	return output;

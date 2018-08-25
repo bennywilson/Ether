@@ -886,6 +886,10 @@ void EtherGame::RenderSync() {
 		}
 	}
 
+	if ( GetAsyncKeyState( 'C' ) ) {
+		g_pRenderer->RT_ClearRenderTarget( m_pBulletHoleTarget, kbColor::white );
+	}
+
 	kbShader *const pUnwrapShader = (kbShader*)g_ResourceManager.GetResource( "./assets/shaders/pokeyholeunwrap.kbshader", true );
 	for ( int i = 0; i < m_Hits.size(); i++ ) {
 		kbGameEntity *const pEnt = (kbGameEntity*)m_Hits[i].pHitComponent->GetOwner();
