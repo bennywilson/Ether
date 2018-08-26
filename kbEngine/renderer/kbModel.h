@@ -111,7 +111,7 @@ public:
 	};
 
 	void										CreateDynamicModel( const UINT numVertices, const UINT numIndices, kbShader *const pShaderToUse = nullptr, kbTexture *const pTextureToUse = nullptr, const UINT VertexSizeInBytes = sizeof( vertexLayout ) );
-    void                                        CreatePointCloud( const UINT numVertices, const std::string & ShaderToUse = "", const kbMaterial::cullingMode_t cullingMode = kbMaterial::CM_None, const UINT VertexSizeInBytes = sizeof( vertexLayout ) );
+    void                                        CreatePointCloud( const UINT numVertices, const std::string & ShaderToUse = "", const kbCullMode cullingMode = CullMode_BackFaces, const UINT VertexSizeInBytes = sizeof( vertexLayout ) );
 
 	void *										MapVertexBuffer();
 	void										UnmapVertexBuffer( const INT numVerticesWritten = -1 );

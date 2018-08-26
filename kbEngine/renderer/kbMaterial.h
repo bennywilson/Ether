@@ -108,6 +108,8 @@ public:
 	kbBlendFactor								GetSrcBlendFactor() const { return m_SrcBlendFactor; }
 	kbBlendFactor								GetDstBlendFactor() const { return m_DstBlendFactor; }
 
+	kbCullMode									GetCullMode() const { return m_CullMode; }
+
 private:
 	virtual bool								Load_Internal();
 	virtual void								Release_Internal();
@@ -129,6 +131,8 @@ private:
 
 	kbBlendFactor								m_SrcBlendFactor;
 	kbBlendFactor								m_DstBlendFactor;
+
+	kbCullMode									m_CullMode;
 };
 
 /**
@@ -141,27 +145,21 @@ class kbMaterial {
 //---------------------------------------------------------------------------------------------------
 public:
 
-	enum cullingMode_t {
-		CM_FrontFaces,
-		CM_BackFaces,
-		CM_None,
-	};
-
-												kbMaterial() : m_pShader( nullptr ), m_CullingMode( CM_BackFaces ) { }
+												kbMaterial() : m_pShader( nullptr ), m_CullingMode( CullMode_BackFaces ) { }
 
 	const kbShader *							GetShader() const { return m_pShader; }
 	const std::vector<const kbTexture *>		GetTextureList() const { return m_Textures; }
 	const kbColor &								GetDiffuseColor() const { return m_DiffuseColor; }
-	cullingMode_t								GetCullingMode() const { return m_CullingMode; }
+	kbCullMode									GetCullingMode() const { return m_CullingMode; }
 
-	void										SetCullingMode( const cullingMode_t newMode ) { m_CullingMode = newMode; }
+	void										SetCullingMode( const kbCullMode newMode ) { m_CullingMode = newMode; }
 
 private:
 
 	std::vector<const kbTexture *>				m_Textures;
 	kbShader *									m_pShader;
 	kbColor										m_DiffuseColor;
-	cullingMode_t								m_CullingMode;
+	kbCullMode									m_CullingMode;
 };
 
 #endif

@@ -245,9 +245,7 @@ struct kbRenderState {
 		depthStencilDesc.BackFace.StencilFunc = GetDepthStencilCompareTest( backFaceComparisonTest );;
 
 		HRESULT hr = m_pDevice->CreateDepthStencilState( &depthStencilDesc, &m_pCurrentDepthStencilState );
-		if ( FAILED( hr ) ) {
-			kbError( "kbDepthStencilState::SetDepthStencilState()" );
-		}
+		kbErrorCheck( SUCCEEDED(hr), "kbDepthStencilState::SetDepthStencilState() Failed" );
 
 		m_pDeviceContext->OMSetDepthStencilState( m_pCurrentDepthStencilState, stencilRef );
 	}
@@ -255,24 +253,27 @@ struct kbRenderState {
 	ID3D11DepthStencilState * m_pCurrentDepthStencilState;
 
 
-	enum kbBlendFactorOp {
-		BO_Add
-	};
-
 	D3D11_BLEND GetD3DBlend( const kbBlendFactor blend ) {
 		switch( blend ) {
 			case BlendFactor_Zero : return D3D11_BLEND_ZERO;
 			case BlendFactor_One : return D3D11_BLEND_ONE;
 			case BlendFactor_SrcAlpha : return D3D11_BLEND_SRC_ALPHA;
 			case BlendFactor_InvSrcAlpha : return D3D11_BLEND_INV_SRC_ALPHA;
+			case BlendFactor_SrcColor : return D3D11_BLEND_SRC_COLOR;
+			case BlendFactor_DstColor : return D3D11_BLEND_DEST_COLOR;
+			case BlendFactor_DstAlpha : return D3D11_BLEND_DEST_ALPHA;
+			case BlendFactor_InvDstAlpha : return D3D11_BLEND_INV_DEST_ALPHA;
+
 		};
 
 		return D3D11_BLEND_ONE;
 	}
 
-	D3D11_BLEND_OP GetD3DBlendOp( const kbBlendFactorOp blendOp ) {
+	D3D11_BLEND_OP GetD3DBlendOp( const kbBlendOp blendOp ) {
 		switch( blendOp ) {
-			case BO_Add : return D3D11_BLEND_OP_ADD;
+			case BlendOp_Add : return D3D11_BLEND_OP_ADD;
+			case BlendOp_Max : return D3D11_BLEND_OP_MAX;
+			case BlendOp_Min : return D3D11_BLEND_OP_MIN;
 		}
 
 		return D3D11_BLEND_OP_ADD;
@@ -304,10 +305,10 @@ struct kbRenderState {
 						const bool bBlendEnable = false,
 						const kbBlendFactor sourceBlend = BlendFactor_One,
 						const kbBlendFactor destBlend = BlendFactor_One,
-						const kbBlendFactorOp blendOp = BO_Add,
+						const kbBlendOp blendOp = BlendOp_Add,
 						const kbBlendFactor sourceAlpha = BlendFactor_One,
 						const kbBlendFactor destAlpha = BlendFactor_One,
-						const kbBlendFactorOp alphaBlendOp = BO_Add,
+						const kbBlendOp alphaBlendOp = BlendOp_Add,
 						const kbColorWriteEnable renderTargetWriteMask = ColorWriteEnable_All,
 						const UINT sampleMask = 0xffffffff ) {
 
@@ -381,7 +382,8 @@ public:
 
 	// Render thread
 	virtual void								RT_SetRenderTarget( kbRenderTexture *const pRenderTexture ) override;
-	virtual void								RT_RenderMesh( const kbModel *const pModel, kbShader *const pShader, const kbShaderParamOverrides_t *const pShaderParams ) override;
+	virtual void								RT_ClearRenderTarget( kbRenderTexture *const pRenderTexture, const kbColor & color ) override;
+	virtual void								RT_RenderMesh( const kbModel *const pModel, kbShader * pShader, const kbShaderParamOverrides_t *const pShaderParams ) override;
 
 private:
 

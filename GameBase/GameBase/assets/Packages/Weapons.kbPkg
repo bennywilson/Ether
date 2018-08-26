@@ -152,7 +152,7 @@ kbGameEntity 2411460423 1126542526 3016243094 357289685 {
 		LifeTime =  -1.000000
 		CastsShadows = 0
 		Color = 0.070000 0.930000 0.930000 1.000000
-		LightRadius =  64.000000
+		LightRadius =  1.000000
 	}
 	EtherProjectileComponent { 
 		Enabled = 0

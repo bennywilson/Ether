@@ -30,10 +30,7 @@ void kbRenderBuffer::CreateVertexBuffer( const int numVerts, const int vertexSiz
 	vertexBufferDesc.StructureByteStride = 0;
 
 	HRESULT hr = g_pD3DDevice->CreateBuffer( &vertexBufferDesc, NULL, &m_pBuffer );
-
-	if ( FAILED( hr ) ) {
-		kbError( "Error: kbRenderBuffer::CreateVertexBuffer() - Failed to create vertex buffer" );
-	}
+	kbErrorCheck( SUCCEEDED(hr), "kbRenderBuffer::CreateVertexBuffer() - Failed to create vertex buffer" );
 
 #if defined(_DEBUG)
 	static int BufferNum = 0;

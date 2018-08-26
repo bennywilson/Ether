@@ -1,5 +1,5 @@
 //==============================================================================
-// basicSkinnedTexture.kbShader
+// basicSkinned.kbShader
 //
 // 2016-2018 kbEngine 2.0
 //==============================================================================
@@ -8,6 +8,10 @@ cbuffer matrixBuffer {
    matrix      mvpMatrix;
    float4x4    boneList[128];
 };
+
+kbShaderState {
+	cullMode CullMode_None
+}
 
 //-------------------------------------
 struct vertexInput {

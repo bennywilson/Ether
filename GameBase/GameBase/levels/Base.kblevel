@@ -176,16 +176,6 @@ kbGameEntity 0 0 0 0 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		Name = "Entity_22"
-		Orientation = 0.000000 0.000000 0.000000 1.000000
-		Position = -14.511436 38.180302 25.449627
-		Scale = 1.000000 1.000000 1.000000
-	}
-}
-kbGameEntity 0 0 0 0 {
-	kbTransformComponent { 
-		Enabled = 0
-		LifeTime =  -1.000000
 		Name = "Entity_23"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
 		Position = 41.130100 45.297951 41.438030
@@ -283,34 +273,60 @@ kbGameEntity 0 0 0 0 {
 		Position = 46.211468 58.481571 147.883286
 		Scale = 1.000000 1.000000 1.000000
 	}
-	kbParticleComponent { 
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Entity_26"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = -21.015541 32.045563 25.725283
+		Scale = 2.000000 2.000000 2.000000
+	}
+	kbStaticModelComponent { 
 		Enabled = 1
 		LifeTime =  -1.000000
-		Name = ""
+		CastsShadow = 0
+		m_RenderPass = LightingPass
+		Model = .\assets\models\items\basiclamp.ms3d
+		ShaderOverride = 2
+			.\assets\shaders\cyanglow.kbshader
+.\assets\shaders\basicmetal.kbshader
+
+	}
+	kbPointLightComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadows = 0
+		Color = 0.000000 1.000000 1.000000 1.000000
+		LightRadius =  32.000000
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Entity_27"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
-		Position = 0.000000 0.000000 0.000000
-		Scale = 1.000000 1.000000 1.000000
-		EndColor = 1.000000 1.000000 1.000000 1.000000
-		Gravity = 0.000000 0.000000 0.000000
-		LockVelocity = 0
-		MaxBurstCount = 0
-		MaxDuration =  3.000000
-		MaxEndSize = 3.000000 3.000000 3.000000
-		MaxEndVelocity = 0.000000 0.000000 0.000000
-		MaxSpawnRate =  2.000000
-		MaxStartSize = 3.000000 3.000000 3.000000
-		MaxStartVelocity = 5.000000 5.000000 5.000000
-		MinBurstCount = 0
-		MinDuration =  3.000000
-		MinEndSize = 3.000000 3.000000 3.000000
-		MinEndVelocity = 0.000000 0.000000 0.000000
-		MinSpawnRate =  1.000000
-		MinStartSize = 3.000000 3.000000 3.000000
-		MinStartVelocity = -5.000000 -2.000000 2.000000
-		ParticleBillboardType = FaceCamera
-		ParticleShader = .\assets\shaders\concreteimpactparticle.kbshader
-		ParticleTexture = .\assets\fx\concreteparticles.dds
-		StartColor = 1.000000 1.000000 1.000000 1.000000
-		TotalDuration =  -1.000000
+		Position = -27.406290 32.045563 -68.251816
+		Scale = 2.000000 2.000000 2.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		m_RenderPass = LightingPass
+		Model = .\assets\models\items\basiclamp.ms3d
+		ShaderOverride = 2
+			.\assets\shaders\orangeglow.kbshader
+.\assets\shaders\basicmetal.kbshader
+
+	}
+	kbPointLightComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadows = 0
+		Color = 1.2500000 0.670000 1.2500000 1.000000
+		LightRadius =  32.000000
 	}
 }

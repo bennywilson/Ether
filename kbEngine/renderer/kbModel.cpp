@@ -294,7 +294,7 @@ bool kbModel::Load_Internal() {
 		std::string shaderName = pMat->m_Name;
 
 		if ( shaderName.find( "NoCull" ) != std::string::npos ) {
-			m_Materials[iMat].m_CullingMode = kbMaterial::CM_None;
+			m_Materials[iMat].m_CullingMode = CullMode_None;
 		}
 
 		const size_t endOfShaderName = shaderName.find("_");
@@ -587,7 +587,7 @@ void kbModel::CreateDynamicModel( const UINT numVertices, const UINT numIndices,
 /**
  *	kbModel::CreatePointCloud
  */
-void kbModel::CreatePointCloud( const UINT numVertices, const std::string & shaderToUse, const kbMaterial::cullingMode_t cullingMode,  const UINT vertexSizeInBytes ) {
+void kbModel::CreatePointCloud( const UINT numVertices, const std::string & shaderToUse, const kbCullMode cullingMode,  const UINT vertexSizeInBytes ) {
 	if ( m_NumVertices > 0 || m_Meshes.size() > 0 || m_Materials.size() > 0 || m_VertexBuffer.GetBufferPtr() != nullptr || m_IndexBuffer.GetBufferPtr() != nullptr ) {
 		Release_Internal();
 	}

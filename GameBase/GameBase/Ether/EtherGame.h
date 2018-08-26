@@ -45,10 +45,6 @@ public:
 
 	EtherAIManager &							GetAIManager() { return m_AIManager; }
 
-	bool										IsInSlomoMode() const { return m_SlomoStartTime > 0.0f; }
-	bool										IsOLCFiring() const { return m_OLCTimer > 0.0f; }
-	bool										IsAirstrikeInProgress() const { return  m_AirstrikeTimeLeft > 0.0f; }
-
 	const kbVec3 &								GetHMDWorldOffset() const { return m_HMDWorldOffset; }
 
 	void										RegisterHit( kbComponent *const pComponent, const kbVec3 & hitLoc, const kbVec3 & hitDir );
@@ -69,15 +65,6 @@ protected:
 	void										AddPrefabToEntity( const kbPackage *const pPrefab, const std::string & prefabName, kbGameEntity *const pEntity, 
 																   const bool bComponentsOnly );
 
-	// Power ups
-	void										ActivateStimPack();
-	void										ActivateAirstrike();
-	void										ActivateOLC();
-	
-	void										UpdateStimPack( const float deltaTimeSec );
-	void										UpdateAirstrike( const float deltaTimeSec );
-	void										UpdateOLC( const float deltaTimeSec );
-
 protected:
 
 	kbCamera									m_Camera;
@@ -95,33 +82,6 @@ protected:
 	kbShader *									m_pTranslucentShader;
 
 	kbVec3										m_HMDWorldOffset;
-
-	enum EtherGameState_t {
-		TitleScreen,
-		VerseScreen,
-		GamePlay,
-	}											m_CurrentGameState;
-	int											m_VerseIdx;
-
-	// Stimpack
-	float										m_SlomoStartTime;
-	class kbWaveFile *							m_pSlomoSound;
-	
-	// Airstrike
-	float										m_AirstrikeTimeLeft;
-	int											m_BombersLeft;
-	float										m_NextBomberSpawnTime;
-	kbModel *									m_pELBomberModel;
-	kbGameEntity *								m_ELBomberEntity[3];
-	float										m_BombTimer[3];
-	kbWaveFile *								m_pAirstrikeFlybyWave;
-	
-	// OLC
-	float										m_OLCTimer;
-	float										m_OLCPostProcess;
-	kbWaveFile *								m_pOLCWindupWave;
-	kbWaveFile *								m_pOLCExplosion;
-	kbVec3										m_OLCTint;
 
 	// kbRenderHook
 	struct hits {
