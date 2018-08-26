@@ -280,15 +280,14 @@ bool kbModel::Load_Internal() {
 		char *const texture[] = { pMat->m_Texture, pMat->m_AlphaMap };
 
 		for ( int iTex = 0; iTex < 2; iTex++ ) {
-			
-			std::string texName = texture[iTex];
-			if ( texName.length() == 0 ) {
+
+			if ( texture[iTex][0] == '\0' ) {
 				continue;
 			}
 
 			// load the base diffuse textures
-			const std::string diffuseTextureName = filePath + texName;
-			m_Materials[iMat].m_Textures.push_back ( (kbTexture *) g_ResourceManager.GetResource( diffuseTextureName.c_str(), true ) );
+			const std::string textureFileName = filePath + texture[iTex];
+			m_Materials[iMat].m_Textures.push_back( (kbTexture *) g_ResourceManager.GetResource( textureFileName.c_str(), true ) );
 		}
 
 		std::string shaderName = pMat->m_Name;
@@ -400,9 +399,11 @@ bool kbModel::Load_Internal() {
 		}
 
 		// Tangent space generation from http://www.terathon.com/code/tangent.html
-		kbVec3 * tan1 = new kbVec3[m_CPUVertices.size() * 2];
-		kbVec3 * tan2 = tan1 + m_CPUVertices.size();
-		ZeroMemory( tan1, m_CPUVertices.size() * sizeof(kbVec3) * 2);
+		std::vector<kbVec3> tan1;
+		std::vector<kbVec3> tan2;
+
+		tan1.insert( tan1.begin(), m_CPUIndices.size(), kbVec3::zero );
+		tan2.insert( tan2.begin(), m_CPUIndices.size(), kbVec3::zero );
 
 		for ( int i = 0; i < m_CPUIndices.size(); i += 3 ) {
 
@@ -418,21 +419,21 @@ bool kbModel::Load_Internal() {
 			const kbVec2 & w2 = verts[idx2].uv;
 			const kbVec2 & w3 = verts[idx3].uv;
 
-			float x1 = v2.x - v1.x;
-			float x2 = v3.x - v1.x;
-			float y1 = v2.y - v1.y;
-			float y2 = v3.y - v1.y;
-			float z1 = v2.z - v1.z;
-			float z2 = v3.z - v1.z;
+			const float x1 = v2.x - v1.x;
+			const float x2 = v3.x - v1.x;
+			const float y1 = v2.y - v1.y;
+			const float y2 = v3.y - v1.y;
+			const float z1 = v2.z - v1.z;
+			const float z2 = v3.z - v1.z;
 
-			float s1 = w2.x - w1.x;
-			float s2 = w3.x - w1.x;
-			float t1 = w2.y - w1.y;
-			float t2 = w3.y - w1.y;
+			const float s1 = w2.x - w1.x;
+			const float s2 = w3.x - w1.x;
+			const float t1 = w2.y - w1.y;
+			const float t2 = w3.y - w1.y;
 
-			float r = 1.0f / ( s1 * t2 - s2 * t1 );
-			kbVec3 sdir( ( t2 * x1 - t1 * x2 ) * r, ( t2 * y1 - t1 * y2 ) * r, ( t2 * z1 - t1 * z2 ) * r );
-			kbVec3 tdir( ( s1 * x2 - s2 * x1 ) * r, ( s1 * y2 - s2 * y1 ) * r, ( s1 * z2 - s2 * z1 ) * r );
+			const float r = 1.0f / ( s1 * t2 - s2 * t1 );
+			const kbVec3 sdir( ( t2 * x1 - t1 * x2 ) * r, ( t2 * y1 - t1 * y2 ) * r, ( t2 * z1 - t1 * z2 ) * r );
+			const kbVec3 tdir( ( s1 * x2 - s2 * x1 ) * r, ( s1 * y2 - s2 * y1 ) * r, ( s1 * z2 - s2 * z1 ) * r );
 	
 			tan1[idx1] += sdir;
 			tan1[idx2] += sdir;
@@ -455,7 +456,7 @@ bool kbModel::Load_Internal() {
 			m_DebugNormals.push_back( verts[i].GetNormal() );
 			m_DebugTangents.push_back( verts[i].GetTangent() );
 		}
-		delete[] tan1;
+
 		m_VertexBuffer.CreateVertexBuffer( verts );
 	}
    
@@ -683,7 +684,7 @@ void kbModel::SwapTexture( const UINT MeshIdx, const kbTexture * pTexture, const
 		return;
 	}
 
-	if ( textureIdx < 0 || textureIdx >= m_Materials[MeshIdx].m_Textures.size() + 1) {
+	if ( textureIdx < 0 || textureIdx >= m_Materials[MeshIdx].m_Textures.size() + 1 ) {
 		return;
 	}
 
@@ -924,7 +925,7 @@ bool kbAnimation::Load_Internal() {
 	modelFile.seekg( 0, std::ifstream::beg );
 
 	// Load file into memory
-	char * pMemoryFileBuffer = new char[fileSize];
+	char *const pMemoryFileBuffer = new char[fileSize];
 	modelFile.read( pMemoryFileBuffer, fileSize );
 	modelFile.close();
 
