@@ -50,9 +50,6 @@
     <None Include="assets\shaders\environment_hole.kbShader">
       <Filter>Shaders</Filter>
     </None>
-    <None Include="assets\shaders\basicMetal.kbShader">
-      <Filter>Shaders</Filter>
-    </None>
     <None Include="assets\shaders\shellCasing.kbShader">
       <Filter>Shaders</Filter>
     </None>

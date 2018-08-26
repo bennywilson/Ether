@@ -86,7 +86,6 @@
   <ItemGroup>
     <None Include="assets\shaders\baseHoloscope.kbShader" />
     <None Include="assets\shaders\baseWeapon.kbShader" />
-    <None Include="assets\shaders\basicMetal.kbShader" />
     <None Include="assets\shaders\basicTerrain.kbShader" />
     <None Include="assets\shaders\particleAtlas.kbShader" />
     <None Include="assets\shaders\firstPersonHands.kbshader" />

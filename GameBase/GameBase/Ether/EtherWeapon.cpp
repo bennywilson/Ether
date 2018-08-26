@@ -13,6 +13,7 @@
 #include "DX11/kbRenderer_DX11.h"
 
 kbVec3 g_ProjectileStuckOffset = kbVec3( 0.0f, 5.0f, 0.0f );
+static int g_ShellPoolSize = 15;
 
 /**
  *	EtherProjectileComponent::Constructor
@@ -240,13 +241,6 @@ void EtherProjectileComponent::DealRadiusDamage() {
  */
 void EtherWeaponComponent::Constructor() {
 	m_SecondsBetweenShots = 1.0f;
-	m_bInstantHit = 0;
-
-	m_bIsFiring = false;
-	m_BurstCount = 1;
-	m_SecondsBetweenBursts = 0.5f;
-	m_ShotTimer = 0.0f;
-	m_BurstTimer = 0.0f;
 
 	m_pShellModel = nullptr;
 	m_MinShellVelocity.Set( 1.0f, 1.0f, 0.0f );
@@ -255,7 +249,17 @@ void EtherWeaponComponent::Constructor() {
 	m_MaxAxisVelocity.Set( 0.0f, 0.0f, 0.0f );
 	m_ShellLifeTime = 2.0f;
 
+	m_pShellTrailMaterial = nullptr;
+	m_pShellTrailShader = nullptr;
+
+	m_BurstCount = 1;
+	m_SecondsBetweenBursts = 0.5f;
 	m_CurrentBurstCount = 0;
+	m_BurstTimer = 0.0f;
+	m_ShotTimer = 0.0f;
+
+	m_bInstantHit = false;
+	m_bIsFiring = false;
 }
 
 /**
@@ -302,8 +306,6 @@ void EtherWeaponComponent::UpdateShells( const float DeltaTime ) {
 			continue;
 		}
 
-//		static kbVec3 grav( 0.0f, -10.0f, 0.0f );
-
 		shell.m_RenderObject.m_Position += shell.m_Velocity * DeltaTime;
 
 		static float grav = 100.0f;
@@ -313,23 +315,26 @@ void EtherWeaponComponent::UpdateShells( const float DeltaTime ) {
 		shellRotationDelta.FromAxisAngle( shell.m_RotationAxis, shell.m_RotationMag * DeltaTime );
 
 		shell.m_RenderObject.m_Orientation = shell.m_RenderObject.m_Orientation * shellRotationDelta;
-		//shell.m_RenderObject.m_Orientation = shell.m_RenderObject.m_Orientation * shell.
 		g_pRenderer->UpdateRenderObject( shell.m_RenderObject );
 
 		kbParticleManager::CustomParticleAtlasInfo_t particle;
-		particle.m_Color.Set( shell.m_NormalizedAnimStartTime, shell.m_NormalizedAnimStartTime * kbPI, shell.m_NormalizedAnimStartTime * kbPI, 1.0f );
-		particle.m_Direction = shell.m_Velocity.Normalized();//shell.m_StartingRotation.ToMat4()[0].ToVec3();
-		particle.m_Height = 2.0f;
-		particle.m_Position = shell.m_RenderObject.m_Position - particle.m_Direction * 4.0f;
 		particle.m_Type = EBillboardType::BT_AxialBillboard;
+		particle.m_Direction = shell.m_Velocity.Normalized();
+		particle.m_Position = shell.m_RenderObject.m_Position - particle.m_Direction * 4.0f;
+
+		particle.m_Color.Set( shell.m_NormalizedAnimStartTime, shell.m_NormalizedAnimStartTime * kbPI, shell.m_NormalizedAnimStartTime * kbPI, 1.0f );
+
+		particle.m_Width = 8.0f;
+		particle.m_Height = 2.0f;
+
 		float startV = 0.25f * shell.m_AtlasIdx;
 		particle.m_UVs[0].Set( 0.0f, startV );
 		particle.m_UVs[1].Set( 1.0f, startV + 0.25f );
-		particle.m_Width = 8.0f;
 
 		g_pGame->GetParticleManager()->AddQuad( 1, particle );
 	}
 }
+
 /**
  *	EtherWeaponComponent::Fire
  */
@@ -449,54 +454,55 @@ bool EtherWeaponComponent::Fire_Internal() {
 		if ( m_pShellModel != nullptr ) {
 			if ( m_ShellPool.size() == 0 ) {
 				kbShader *const pShader = (kbShader *)g_ResourceManager.GetResource( "./assets/shaders/shellCasing.kbShader", true );
-				m_ShellPool.insert( m_ShellPool.begin(), 15, BulletShell() );
-				for ( int i = 0; i < 15; i++ ) {
+				kbErrorCheck( pShader != nullptr, "EtherWeaponComponent::Fire_Internal() - Did not find shellCasing.kbShader" );
+
+				m_ShellPool.insert( m_ShellPool.begin(), g_ShellPoolSize, BulletShell() );
+				for ( int i = 0; i < g_ShellPoolSize; i++ ) {
 					m_ShellPool[i].m_RenderObject.m_OverrideShaderList.clear();
-					if ( pShader != nullptr ) {
-						m_ShellPool[i].m_RenderObject.m_OverrideShaderList.push_back( pShader );
-					}
+					m_ShellPool[i].m_RenderObject.m_OverrideShaderList.push_back( pShader );
 				}
 			}
 
 			for ( int i = 0; i < m_ShellPool.size(); i++ ) {
-				if ( m_ShellPool[i].m_bAvailable == true ) {
-
-					BulletShell & newShell = m_ShellPool[i];
-					newShell.m_AtlasIdx = rand() % 4;
-					newShell.m_NormalizedAnimStartTime = kbfrand();
-					kbRenderObject & renderObj = newShell.m_RenderObject;
-					renderObj.m_Orientation.Set( 0.0f, 0.0f, 0.0f, 1.0f );
-					renderObj.m_bCastsShadow = false;
-					renderObj.m_bIsSkinnedModel = false;
-					renderObj.m_CullDistance = -1.0f;
-					renderObj.m_pComponent = &newShell.m_Component;
-					renderObj.m_pModel = m_pShellModel;
-					renderObj.m_RenderPass = RP_Lighting;
-					renderObj.m_Scale.Set( 1.0f, 1.0f, 1.0f );
-
-					if ( pWeaponModel->GetBoneWorldPosition( kbString( "ShellEject" ), renderObj.m_Position ) == false ) {
-						renderObj.m_Position = pWeaponModel->GetOwner()->GetPosition();
-					}
-
-					kbVec3 velocity = m_MaxShellVelocity - m_MinShellVelocity;
-					velocity.x = ( velocity.x * kbfrand() ) + m_MinShellVelocity.x;
-					velocity.y = ( velocity.y * kbfrand() ) + m_MinShellVelocity.y;
-					velocity.z = ( velocity.z * kbfrand() ) + m_MinShellVelocity.z;
-					newShell.m_Velocity = velocity * pWeaponModel->GetOwner()->GetOrientation().ToMat4();
-
-					kbVec3 axisVelocity = m_MaxAxisVelocity - m_MinAxisVelocity;
-					newShell.m_RotationAxis.x = ( axisVelocity.z * kbfrand() ) + m_MinAxisVelocity.z;
-					newShell.m_RotationAxis.y = ( axisVelocity.y * kbfrand() ) + m_MinAxisVelocity.y;
-					newShell.m_RotationAxis.z = ( axisVelocity.x * kbfrand() ) + m_MinAxisVelocity.x;
-					newShell.m_RotationMag = newShell.m_RotationAxis.Length();
-					newShell.m_RotationAxis.Normalize();
-
-					newShell.m_LifeTimeLeft = m_ShellLifeTime;
-
-					g_pRenderer->AddRenderObject( renderObj );
-					m_ShellPool[i].m_bAvailable = false;
-					break;
+				if ( m_ShellPool[i].m_bAvailable == false ) {
+					continue;
 				}
+
+				BulletShell & newShell = m_ShellPool[i];
+				newShell.m_AtlasIdx = rand() % 4;
+				newShell.m_NormalizedAnimStartTime = kbfrand();
+				kbRenderObject & renderObj = newShell.m_RenderObject;
+				renderObj.m_Orientation.Set( 0.0f, 0.0f, 0.0f, 1.0f );
+				renderObj.m_bCastsShadow = false;
+				renderObj.m_bIsSkinnedModel = false;
+				renderObj.m_CullDistance = -1.0f;
+				renderObj.m_pComponent = &newShell.m_Component;
+				renderObj.m_pModel = m_pShellModel;
+				renderObj.m_RenderPass = RP_Lighting;
+				renderObj.m_Scale.Set( 1.0f, 1.0f, 1.0f );
+
+				if ( pWeaponModel->GetBoneWorldPosition( kbString( "ShellEject" ), renderObj.m_Position ) == false ) {
+					renderObj.m_Position = pWeaponModel->GetOwner()->GetPosition();
+				}
+
+				kbVec3 velocity = m_MaxShellVelocity - m_MinShellVelocity;
+				velocity.x = ( velocity.x * kbfrand() ) + m_MinShellVelocity.x;
+				velocity.y = ( velocity.y * kbfrand() ) + m_MinShellVelocity.y;
+				velocity.z = ( velocity.z * kbfrand() ) + m_MinShellVelocity.z;
+				newShell.m_Velocity = velocity * pWeaponModel->GetOwner()->GetOrientation().ToMat4();
+
+				kbVec3 axisVelocity = m_MaxAxisVelocity - m_MinAxisVelocity;
+				newShell.m_RotationAxis.x = ( axisVelocity.z * kbfrand() ) + m_MinAxisVelocity.z;
+				newShell.m_RotationAxis.y = ( axisVelocity.y * kbfrand() ) + m_MinAxisVelocity.y;
+				newShell.m_RotationAxis.z = ( axisVelocity.x * kbfrand() ) + m_MinAxisVelocity.x;
+				newShell.m_RotationMag = newShell.m_RotationAxis.Length();
+				newShell.m_RotationAxis.Normalize();
+
+				newShell.m_LifeTimeLeft = m_ShellLifeTime;
+
+				g_pRenderer->AddRenderObject( renderObj );
+				m_ShellPool[i].m_bAvailable = false;
+				break;
 			}
 		}
 	}
