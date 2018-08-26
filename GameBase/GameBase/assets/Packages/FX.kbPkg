@@ -219,7 +219,7 @@ kbGameEntity 4227010865 2632918935 1228561351 3287441000 {
 		MinSpawnRate =  1.000000
 		MinStartSize = 1.000000 1.000000 1.000000
 		ParticleBillboardType = FaceCamera
-		ParticleShader = .\assets\shaders\concreteimpactparticle.kbshader
+		ParticleShader = .\assets\shaders\particleAtlas.kbshader
 		ParticleTexture = .\assets\fx\concreteparticles.dds
 		StartColor = 1.000000 1.000000 1.000000 1.000000
 		TotalDuration =  0.50000
