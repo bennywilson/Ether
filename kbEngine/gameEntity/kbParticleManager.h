@@ -23,8 +23,8 @@ public:
 																kbParticleManager();
 																~kbParticleManager();
 
-	void														SetCustomParticleTextureAtlas( const uint atlasIdx, const std::string & atlasFileName );
-	void														SetCustomParticleShader( const uint atlasIdx, const std::string & atlasFileName );
+	void														SetCustomAtlasTexture( const uint atlasIdx, const std::string & atlasFileName );
+	void														SetCustomAtlasShader( const uint atlasIdx, const std::string & atlasFileName );
 
 	void														PoolParticleComponent( const kbParticleComponent *const pParticle, const int PoolSize );
 
@@ -73,7 +73,7 @@ private:
 		int														m_iCurParticleModel;
 		bool													m_bDirty;
 	};
-	std::vector<CustomAtlasParticles_t>							m_CustomAtlasParticles;
+	std::vector<CustomAtlasParticles_t>							m_CustomAtlases;
 };
 
 #endif

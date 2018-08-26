@@ -16,7 +16,7 @@ static const uint NumCustomAtlases = 2;
  *	kbParticleManager::kbParticleManager
  */
 kbParticleManager::kbParticleManager() {
-	m_CustomAtlasParticles.resize( NumCustomAtlases );
+	m_CustomAtlases.resize( NumCustomAtlases );
 }
 
 /**
@@ -32,30 +32,30 @@ kbParticleManager::~kbParticleManager() {
 }
 
 /**
- *	kbParticleManager::SetCustomParticleTextureAtlas
+ *	kbParticleManager::SetCustomAtlasTexture
  */
-void kbParticleManager::SetCustomParticleTextureAtlas( const uint atlasIdx, const std::string & atlasFileName ) {
-	kbErrorCheck( atlasIdx < m_CustomAtlasParticles.size(), "kbParticleManager::SetCustomParticleTextureAtlas() - Atlas index %d is out of range", atlasIdx );
+void kbParticleManager::SetCustomAtlasTexture( const uint atlasIdx, const std::string & atlasFileName ) {
+	kbErrorCheck( atlasIdx < m_CustomAtlases.size(), "kbParticleManager::SetCustomAtlasTexture() - Atlas index %d is out of range", atlasIdx );
 
-	m_CustomAtlasParticles[atlasIdx].m_pAtlasTexture = ( kbTexture* )g_ResourceManager.GetResource( atlasFileName.c_str(), true );
-//	m_CustomAtlasParticles[atlasIdx].m_bDirty = true;
+	m_CustomAtlases[atlasIdx].m_pAtlasTexture = ( kbTexture* )g_ResourceManager.GetResource( atlasFileName.c_str(), true );
+//	m_CustomAtlases[atlasIdx].m_bDirty = true;
 
-	if ( m_CustomAtlasParticles[atlasIdx].m_pAtlasTexture == nullptr ) {
-		kbWarning( "kbParticleManager::SetCustomParticleTextureAtlas() - Unable to find shader %s", atlasFileName.c_str() );
+	if ( m_CustomAtlases[atlasIdx].m_pAtlasTexture == nullptr ) {
+		kbWarning( "kbParticleManager::SetCustomAtlasTexture() - Unable to find shader %s", atlasFileName.c_str() );
 	}
 }
 
 /**
- *	kbParticleManager::SetCustomParticleShader
+ *	kbParticleManager::SetCustomAtlasShader
  */
-void kbParticleManager::SetCustomParticleShader( const uint atlasIdx, const std::string & shaderFileName ) {
-	kbErrorCheck( atlasIdx < m_CustomAtlasParticles.size(), "kbParticleManager::SetCustomParticleShader() - Atlas index %d is out of range", atlasIdx );
+void kbParticleManager::SetCustomAtlasShader( const uint atlasIdx, const std::string & shaderFileName ) {
+	kbErrorCheck( atlasIdx < m_CustomAtlases.size(), "kbParticleManager::SetCustomAtlasShader() - Atlas index %d is out of range", atlasIdx );
 
-	m_CustomAtlasParticles[atlasIdx].m_pAtlasShader = ( kbShader* )g_ResourceManager.GetResource( shaderFileName.c_str(), true );
-	m_CustomAtlasParticles[atlasIdx].m_bDirty = true;
+	m_CustomAtlases[atlasIdx].m_pAtlasShader = ( kbShader* )g_ResourceManager.GetResource( shaderFileName.c_str(), true );
+	m_CustomAtlases[atlasIdx].m_bDirty = true;
 
-	if ( m_CustomAtlasParticles[atlasIdx].m_pAtlasShader == nullptr ) {
-		kbWarning( "kbParticleManager::SetCustomParticleShader() - Unable to find shader %s", shaderFileName.c_str() );
+	if ( m_CustomAtlases[atlasIdx].m_pAtlasShader == nullptr ) {
+		kbWarning( "kbParticleManager::SetCustomAtlasShader() - Unable to find shader %s", shaderFileName.c_str() );
 	}
 }
 
@@ -153,7 +153,7 @@ void kbParticleManager::RenderSync() {
 
 	// Create new atlases if needed
 	for ( int iAtlas = 0; iAtlas < NumCustomAtlases; iAtlas++ ) {
-		CustomAtlasParticles_t & curAtlas = m_CustomAtlasParticles[iAtlas];
+		CustomAtlasParticles_t & curAtlas = m_CustomAtlases[iAtlas];
 		if ( curAtlas.m_bDirty == false ) {
 			continue;
 		}
@@ -192,7 +192,7 @@ void kbParticleManager::RenderSync() {
 
 	// Map/unmap buffers and pass it to the renderer
 	for ( int iAtlas = 0; iAtlas < NumCustomAtlases; iAtlas++ ) {
-		CustomAtlasParticles_t & curAtlas = m_CustomAtlasParticles[iAtlas];
+		CustomAtlasParticles_t & curAtlas = m_CustomAtlases[iAtlas];
 
 		kbModel & finishedModel = (curAtlas.m_iCurParticleModel >= 0 ) ? ( curAtlas.m_RenderModel[curAtlas.m_iCurParticleModel] ) : ( curAtlas.m_RenderModel[0] );
 		if ( curAtlas.m_iCurParticleModel >= 0 ) {
@@ -220,8 +220,8 @@ void kbParticleManager::RenderSync() {
  */
 void kbParticleManager::AddQuad( const uint atlasIdx, const CustomParticleAtlasInfo_t & CustomParticleInfo ) {
 	
-	kbErrorCheck( atlasIdx < m_CustomAtlasParticles.size(), "kbParticleManager::AddQuad() - Invalid atlasIdx %d", atlasIdx );
-	CustomAtlasParticles_t & curAtlas = m_CustomAtlasParticles[atlasIdx];
+	kbErrorCheck( atlasIdx < m_CustomAtlases.size(), "kbParticleManager::AddQuad() - Invalid atlasIdx %d", atlasIdx );
+	CustomAtlasParticles_t & curAtlas = m_CustomAtlases[atlasIdx];
 
 	if ( curAtlas.m_pVertexBuffer == nullptr || curAtlas.m_pIndexBuffer == nullptr ) {
 		return;

@@ -136,10 +136,10 @@ void EtherGame::LevelLoaded_Internal() {
 		pEntity->SetPosition( pEntity->GetPosition() + kbVec3( 0.0f, 20000.0f, 0.0f ) );
 	}
 
-	m_pParticleManager->SetCustomParticleTextureAtlas( 0, "./assets/FX/fx_atlas.jpg" );
+	m_pParticleManager->SetCustomAtlasTexture( 0, "./assets/FX/fx_atlas.jpg" );
 
-	m_pParticleManager->SetCustomParticleTextureAtlas( 1, "./assets/FX/SmokeTrailAtlas.dds" );
-	m_pParticleManager->SetCustomParticleShader( 1, "./assets/shaders/shellTrailParticle.kbShader" );
+	m_pParticleManager->SetCustomAtlasTexture( 1, "./assets/FX/SmokeTrailAtlas.dds" );
+	m_pParticleManager->SetCustomAtlasShader( 1, "./assets/shaders/shellTrailParticle.kbShader" );
 }
 
 /**
