@@ -3381,34 +3381,22 @@ void kbRenderer_DX11::RT_ClearRenderTarget( kbRenderTexture *const pRenderTextur
 /**
  *	kbRenderer_DX11::RT_RenderMesh
  */
-void kbRenderer_DX11::RT_RenderMesh( const kbModel *const pModel, kbShader *const pShader, const kbShaderParamOverrides_t *const pShaderParams ) {
+void kbRenderer_DX11::RT_RenderMesh( const kbModel *const pModel, kbShader * pShader, const kbShaderParamOverrides_t *const pShaderParams ) {
 
-/* TEMP HACK */
-/*
+	if ( pShader == nullptr || pShader->GetVertexShader() == nullptr || pShader->GetPixelShader() == nullptr ) {
+		pShader = m_pMissingShader;
 	}
 
-	void SetBlendState( const bool bAlphaToCoverageEnable = false,
-						const bool bIndependentBlendEnabled = false,
-						const bool bBlendEnable = false,
-						const kbBlendFactor sourceBlend = BlendFactor_One,
-						const kbBlendFactor destBlend = BlendFactor_One,
-						const kbBlendFactorOp blendOp = BO_Add,
-						const kbBlendFactor sourceAlpha = BlendFactor_One,
-						const kbBlendFactor destAlpha = BlendFactor_One,
-						const kbBlendFactorOp alphaBlendOp = BO_Add,
-						const kbColorWriteEnable renderTargetWriteMask = ColorWriteEnable_All,
-						const UINT sampleMask = 0xffffffff ) {
-*/
-			m_RenderState.SetBlendState( false,
-										 false,
-										 true,
-										 BlendFactor_DstColor,
-										 BlendFactor_Zero,
-										 BlendOp_Add,
-										 BlendFactor_One,
-										 BlendFactor_One,
-										 BlendOp_Min,
-										 ColorWriteEnable_All );
+	m_RenderState.SetBlendState( false,
+								 false,
+								 true,
+								 BlendFactor_DstColor,
+								 BlendFactor_Zero,
+								 BlendOp_Add,
+								 BlendFactor_One,
+								 BlendFactor_One,
+								 BlendOp_Min,
+								 ColorWriteEnable_All );
 
 	const UINT vertexStride = pModel->VertexStride();
 	const UINT vertexOffset = 0;

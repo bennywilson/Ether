@@ -245,9 +245,7 @@ struct kbRenderState {
 		depthStencilDesc.BackFace.StencilFunc = GetDepthStencilCompareTest( backFaceComparisonTest );;
 
 		HRESULT hr = m_pDevice->CreateDepthStencilState( &depthStencilDesc, &m_pCurrentDepthStencilState );
-		if ( FAILED( hr ) ) {
-			kbError( "kbDepthStencilState::SetDepthStencilState()" );
-		}
+		kbErrorCheck( SUCCEEDED(hr), "kbDepthStencilState::SetDepthStencilState() Failed" );
 
 		m_pDeviceContext->OMSetDepthStencilState( m_pCurrentDepthStencilState, stencilRef );
 	}
@@ -385,7 +383,7 @@ public:
 	// Render thread
 	virtual void								RT_SetRenderTarget( kbRenderTexture *const pRenderTexture ) override;
 	virtual void								RT_ClearRenderTarget( kbRenderTexture *const pRenderTexture, const kbColor & color ) override;
-	virtual void								RT_RenderMesh( const kbModel *const pModel, kbShader *const pShader, const kbShaderParamOverrides_t *const pShaderParams ) override;
+	virtual void								RT_RenderMesh( const kbModel *const pModel, kbShader * pShader, const kbShaderParamOverrides_t *const pShaderParams ) override;
 
 private:
 

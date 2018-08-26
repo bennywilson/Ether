@@ -43,14 +43,7 @@ void EtherPlayerComponent::TakeDamage( const kbDamageComponent *const damageComp
 		return;
 	}
 
-	if ( g_pEtherGame->IsInSlomoMode() ) {
-		float desiredDamage = damageComponent->GetMaxDamage();
-		desiredDamage *= 0.25f;
-		m_CurrentHealth += damageComponent->GetMaxDamage() - desiredDamage;
-	}
-
 	Super::TakeDamage( damageComponent, attackerComponent );
-
 
 	m_LastTimeHit = g_GlobalTimer.TimeElapsedSeconds();
 }
@@ -359,7 +352,7 @@ void EtherPlayerComponent::HandleMovement( const kbInput_t & Input, const float 
 	
 		const float PlayerSpeed = 190.0f;
 		float movementMag = DT * PlayerSpeed * 0.5f;//( Input.m_KeyStruct.m_Shift ? 20.5f : 0.5f );
-		if ( GetAsyncKeyState (VK_SHIFT ) ) {
+		if ( GetAsyncKeyState( VK_SHIFT ) ) {
 			movementMag *= 0.25f;
 		}
 
