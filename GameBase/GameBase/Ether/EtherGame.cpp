@@ -536,7 +536,7 @@ void EtherGame::RenderSync() {
 
 	if ( m_pBulletTraceRenderTexture == nullptr ) {
 		m_pBulletTraceRenderTexture = g_pRenderer->RT_GetRenderTexture( 4096, 4096, eTextureFormat::KBTEXTURE_R8G8B8A8 );
-		g_pRenderer->RT_ClearRenderTarget( m_pBulletHoleRenderTexture, kbColor::black );
+		g_pRenderer->RT_ClearRenderTarget( m_pBulletTraceRenderTexture, kbColor::black );
 	}
 
 	/*g_pRenderer->RT_SetRenderTarget( m_pBulletTraceRenderTexture );

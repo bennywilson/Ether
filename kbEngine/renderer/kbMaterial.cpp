@@ -632,7 +632,7 @@ bool kbShader::Load_Internal() {
 					m_CullMode = CullMode_BackFaces;
 				}
 			}
-			shaderParser.EraseBlock();
+			shaderParser.ReplaceBlockWithSpaces();
 		}
 
 		g_pD3D11Renderer->CreateShaderFromText( GetFullFileName(), shaderText, m_pVertexShader, m_pGeometryShader, m_pPixelShader, m_pVertexLayout, m_VertexShaderFunctionName.c_str(), m_PixelShaderFunctionName.c_str(), &m_ShaderVarBindings );

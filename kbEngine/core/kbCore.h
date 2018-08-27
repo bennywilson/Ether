@@ -333,6 +333,14 @@ struct kbTextParser {
 		m_StringBuffer.erase( m_StartBlock, 1 + m_EndBlock - m_StartBlock );
 	}
 
+	void ReplaceBlockWithSpaces() {
+		for ( size_t i = m_StartBlock; i <= m_EndBlock; i++ ) {
+			if ( m_StringBuffer[i] != '\n' ) {
+				m_StringBuffer[i] = ' ';
+			}
+		}
+	}
+
 	void RemoveComments() {
 
 		// Remove comments
