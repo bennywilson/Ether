@@ -38,7 +38,6 @@ void kbParticleManager::SetCustomAtlasTexture( const uint atlasIdx, const std::s
 	kbErrorCheck( atlasIdx < m_CustomAtlases.size(), "kbParticleManager::SetCustomAtlasTexture() - Atlas index %d is out of range", atlasIdx );
 
 	m_CustomAtlases[atlasIdx].m_pAtlasTexture = ( kbTexture* )g_ResourceManager.GetResource( atlasFileName.c_str(), true );
-//	m_CustomAtlases[atlasIdx].m_bDirty = true;
 
 	if ( m_CustomAtlases[atlasIdx].m_pAtlasTexture == nullptr ) {
 		kbWarning( "kbParticleManager::SetCustomAtlasTexture() - Unable to find shader %s", atlasFileName.c_str() );

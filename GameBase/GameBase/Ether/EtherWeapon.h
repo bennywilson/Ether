@@ -100,8 +100,6 @@ private:
 		kbVec3								m_Velocity;
 		kbVec3								m_RotationAxis;
 		float								m_RotationMag;
-		kbVec3								m_AxisVelocity;
-		kbQuat								m_Rotation;
 		float								m_LifeTimeLeft;
 		kbRenderObject						m_RenderObject;
 		kbTransformComponent				m_Component;

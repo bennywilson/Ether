@@ -62,12 +62,12 @@ pixelInput vertexShader( vertexInput input ) {
 	billboardMatrix = float3x3( xAxis, yAxis, zAxis );
 
 	const float3 offset = mul( float3( input.size.x , input.size.y, 0 ), billboardMatrix );
-	output.position = mul( float4(particleWorldPos,1) + float4( offset, 0.0f ), viewProjection );
+	output.position = mul( float4( particleWorldPos, 1 ) + float4( offset, 0.0f ), viewProjection );
 
 	output.uv = input.uv * 0.25f;
-	uint atlasIdx = (int)(input.billboardType.w * 16.0f);
-	output.uv.x += (atlasIdx % 4)/4.0f;
-	output.uv.y += (atlasIdx / 4) / 4.0f;
+	uint atlasIdx = (int)( input.billboardType.w * 16.0f );
+	output.uv.x += ( atlasIdx % 4 ) / 4.0f;
+	output.uv.y += ( atlasIdx / 4 ) / 4.0f;
 	
 	output.color = input.color;
 	output.position2 = output.position.zw;
@@ -82,8 +82,6 @@ Texture2D shaderTexture;
 SamplerState SampleType;
 
  float4 pixelShader( pixelInput	input ) : SV_TARGET {
-	float4 finalColor = input.color;
-	finalColor = shaderTexture.Sample( SampleType, input.uv );
-
+	float4 finalColor = shaderTexture.Sample( SampleType, input.uv )
 	return finalColor;
 }

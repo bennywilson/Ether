@@ -469,9 +469,27 @@ bool EtherWeaponComponent::Fire_Internal() {
 				}
 
 				BulletShell & newShell = m_ShellPool[i];
-				newShell.m_AtlasIdx = rand() % 4;
-				newShell.m_NormalizedAnimStartTime = kbfrand();
+
+				newShell.m_Velocity = m_MaxShellVelocity - m_MinShellVelocity;
+				newShell.m_Velocity.x = ( newShell.m_Velocity .x * kbfrand() ) + m_MinShellVelocity.x;
+				newShell.m_Velocity.y = ( newShell.m_Velocity .y * kbfrand() ) + m_MinShellVelocity.y;
+				newShell.m_Velocity.z = ( newShell.m_Velocity .z * kbfrand() ) + m_MinShellVelocity.z;
+				newShell.m_Velocity = newShell.m_Velocity * pWeaponModel->GetOwner()->GetOrientation().ToMat4();
+
+				newShell.m_RotationAxis = m_MaxAxisVelocity - m_MinAxisVelocity;
+				newShell.m_RotationAxis.x = ( newShell.m_RotationAxis.z * kbfrand() ) + m_MinAxisVelocity.z;
+				newShell.m_RotationAxis.y = ( newShell.m_RotationAxis.y * kbfrand() ) + m_MinAxisVelocity.y;
+				newShell.m_RotationAxis.z = ( newShell.m_RotationAxis.x * kbfrand() ) + m_MinAxisVelocity.x;
+				newShell.m_RotationMag = newShell.m_RotationAxis.Length();
+				newShell.m_RotationAxis.Normalize();
+
+				newShell.m_LifeTimeLeft = m_ShellLifeTime;
+
 				kbRenderObject & renderObj = newShell.m_RenderObject;
+				if ( pWeaponModel->GetBoneWorldPosition( kbString( "ShellEject" ), renderObj.m_Position ) == false ) {
+					renderObj.m_Position = pWeaponModel->GetOwner()->GetPosition();
+				}
+
 				renderObj.m_Orientation.Set( 0.0f, 0.0f, 0.0f, 1.0f );
 				renderObj.m_bCastsShadow = false;
 				renderObj.m_bIsSkinnedModel = false;
@@ -481,27 +499,12 @@ bool EtherWeaponComponent::Fire_Internal() {
 				renderObj.m_RenderPass = RP_Lighting;
 				renderObj.m_Scale.Set( 1.0f, 1.0f, 1.0f );
 
-				if ( pWeaponModel->GetBoneWorldPosition( kbString( "ShellEject" ), renderObj.m_Position ) == false ) {
-					renderObj.m_Position = pWeaponModel->GetOwner()->GetPosition();
-				}
-
-				kbVec3 velocity = m_MaxShellVelocity - m_MinShellVelocity;
-				velocity.x = ( velocity.x * kbfrand() ) + m_MinShellVelocity.x;
-				velocity.y = ( velocity.y * kbfrand() ) + m_MinShellVelocity.y;
-				velocity.z = ( velocity.z * kbfrand() ) + m_MinShellVelocity.z;
-				newShell.m_Velocity = velocity * pWeaponModel->GetOwner()->GetOrientation().ToMat4();
-
-				kbVec3 axisVelocity = m_MaxAxisVelocity - m_MinAxisVelocity;
-				newShell.m_RotationAxis.x = ( axisVelocity.z * kbfrand() ) + m_MinAxisVelocity.z;
-				newShell.m_RotationAxis.y = ( axisVelocity.y * kbfrand() ) + m_MinAxisVelocity.y;
-				newShell.m_RotationAxis.z = ( axisVelocity.x * kbfrand() ) + m_MinAxisVelocity.x;
-				newShell.m_RotationMag = newShell.m_RotationAxis.Length();
-				newShell.m_RotationAxis.Normalize();
-
-				newShell.m_LifeTimeLeft = m_ShellLifeTime;
+				newShell.m_AtlasIdx = rand() % 4;
+				newShell.m_NormalizedAnimStartTime = kbfrand();
 
 				g_pRenderer->AddRenderObject( renderObj );
-				m_ShellPool[i].m_bAvailable = false;
+				newShell.m_bAvailable = false;
+
 				break;
 			}
 		}

@@ -750,9 +750,10 @@ void kbRenderer::RenderSync() {
 
 	m_LightShafts_GameThread.clear();
 
-	for ( int i = 0; i < NUM_RENDER_PASSES; i++ ) {
-		for ( int iHook = 0; iHook < m_RenderHooks[i].size(); iHook++ ) {
-			m_RenderHooks[i][iHook]->RenderSync();
+	for ( int iPass = 0; iPass < NUM_RENDER_PASSES; iPass++ ) {
+		std::vector<kbRenderHook*> & passHooks = m_RenderHooks[iPass];
+		for ( int iHook = 0; iHook < passHooks.size(); iHook++ ) {
+			passHooks[iHook]->RenderSync();
 		}
 	}
 
@@ -965,10 +966,10 @@ void kbRenderer::RegisterRenderHook( kbRenderHook *const pRenderHook ) {
 }
 
 /**
- *	kbRenderer::UregisterRenderHook
+ *	kbRenderer::UnregisterRenderHook
  */
 void kbRenderer::UnregisterRenderHook( kbRenderHook *const pRenderHook ) {
-	kbErrorCheck(pRenderHook != nullptr, "kbRenderer::RegisterUregisterRenderHookRenderHook() - NULL render hook");
+	kbErrorCheck(pRenderHook != nullptr, "kbRenderer::UnregisterRenderHook() - NULL render hook");
 
 	VectorRemoveFast( m_RenderHooks[(int)pRenderHook->m_RenderPass], pRenderHook );
 

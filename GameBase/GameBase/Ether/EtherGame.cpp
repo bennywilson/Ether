@@ -137,9 +137,9 @@ void EtherGame::LevelLoaded_Internal() {
 	}
 
 	m_pParticleManager->SetCustomAtlasTexture( 0, "./assets/FX/fx_atlas.jpg" );
+	m_pParticleManager->SetCustomAtlasShader( 1, "./assets/shaders/shellTrailParticle.kbShader" );
 
 	m_pParticleManager->SetCustomAtlasTexture( 1, "./assets/FX/SmokeTrailAtlas.dds" );
-	m_pParticleManager->SetCustomAtlasShader( 1, "./assets/shaders/shellTrailParticle.kbShader" );
 }
 
 /**
@@ -490,7 +490,7 @@ void EtherGame::AddPrefabToEntity( const kbPackage *const pPrefabPackage, const 
 }
 
 /**
- *	EtherGameRenderHook::RegisterHit
+ *	EtherGame::RegisterHit
  */
 void EtherGame::RegisterHit( kbComponent *const pHitComponent, const kbVec3 & hitLocation, const kbVec3 & hitDirection ) {
 	hits newHit;
@@ -501,14 +501,14 @@ void EtherGame::RegisterHit( kbComponent *const pHitComponent, const kbVec3 & hi
 }
 
 /**
- *	EtherGameRenderHook::RenderThreadCallBack
+ *	EtherGame::RenderThreadCallBack
  */
 void EtherGame::RenderThreadCallBack() {
 
 }
 
 /**
- *	EtherGameRenderHook::RenderSync
+ *	EtherGame::RenderSync
  */
 void EtherGame::RenderSync() {
 	if ( m_pBulletHoleTarget == nullptr ) {

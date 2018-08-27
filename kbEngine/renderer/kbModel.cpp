@@ -622,7 +622,7 @@ void kbModel::CreatePointCloud( const UINT numVertices, const std::string & shad
  */
 void * kbModel::MapVertexBuffer() {
 
-	kbErrorCheck( m_bVBIsMapped == false, "Vertex buffer already mapped" );
+	kbErrorCheck( m_bVBIsMapped == false, "kbModel::MapVertexBuffer() - Vertex buffer already mapped" );
 
 	m_bVBIsMapped = true;
 	return m_VertexBuffer.Map();
