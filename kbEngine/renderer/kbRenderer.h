@@ -309,8 +309,9 @@ public:
 	virtual void								RT_ClearRenderTarget( kbRenderTexture *const pRenderTexture, const kbColor & color ) = 0;
 	virtual kbRenderTexture *					RT_GetRenderTexture( const int width, const int height, const eTextureFormat );
 	virtual void								RT_ReturnRenderTexture( kbRenderTexture *const pRenderTexture );
-	virtual void								RT_RenderMesh(const kbModel *const pModel, kbShader * pShader, const kbShaderParamOverrides_t *const pShaderParams ) = 0;
-
+	virtual void								RT_RenderMesh( const kbModel *const pModel, kbShader * pShader, const kbShaderParamOverrides_t *const pShaderParams ) = 0;
+	virtual void								RT_Render2DLine( const kbVec2 & startPt, const kbVec2 & endPt, const kbColor & color, const float width ) = 0;
+ 
 private:
 
 	virtual void								Init_Internal( HWND, const int width, const int height, const bool bUseHMD, const bool bUseHMDTrackingOnly ) = 0;

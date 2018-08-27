@@ -48,7 +48,8 @@ EtherGame::EtherGame() :
 	m_pFXPackage( nullptr ),
 	m_pTranslucentShader( nullptr ),
 	m_HMDWorldOffset( kbVec3::zero ),
-	m_pBulletHoleTarget( nullptr ) {
+	m_pBulletHoleRenderTexture( nullptr ),
+	m_pBulletTraceRenderTexture( nullptr ) {
 
 	m_Camera.m_Position.Set( 0.0f, 2600.0f, 0.0f );
 
@@ -511,9 +512,9 @@ void EtherGame::RenderThreadCallBack() {
  *	EtherGame::RenderSync
  */
 void EtherGame::RenderSync() {
-	if ( m_pBulletHoleTarget == nullptr ) {
-		m_pBulletHoleTarget = g_pRenderer->RT_GetRenderTexture( 4096, 4096, eTextureFormat::KBTEXTURE_R8G8B8A8 );
-		g_pRenderer->RT_ClearRenderTarget( m_pBulletHoleTarget, kbColor::white );
+	if ( m_pBulletHoleRenderTexture == nullptr ) {
+		m_pBulletHoleRenderTexture = g_pRenderer->RT_GetRenderTexture( 4096, 4096, eTextureFormat::KBTEXTURE_R8G8B8A8 );
+		g_pRenderer->RT_ClearRenderTarget( m_pBulletHoleRenderTexture, kbColor::white );
 		
 		g_ResourceManager.GetResource( "./assets/FX/noise.jpg", true );
 		g_ResourceManager.GetResource( "./assets/FX/scorch.jpg", true );
@@ -525,7 +526,7 @@ void EtherGame::RenderSync() {
 				if ( pSM != nullptr ) {
 
 					kbShaderParamOverrides_t shaderParams;
-					shaderParams.SetTexture( "holeTex", m_pBulletHoleTarget );
+					shaderParams.SetTexture( "holeTex", m_pBulletHoleRenderTexture );
 					pSM->SetShaderParams( shaderParams );
 				}
 				break;
@@ -533,8 +534,18 @@ void EtherGame::RenderSync() {
 		}
 	}
 
+	if ( m_pBulletTraceRenderTexture == nullptr ) {
+		m_pBulletTraceRenderTexture = g_pRenderer->RT_GetRenderTexture( 4096, 4096, eTextureFormat::KBTEXTURE_R8G8B8A8 );
+		g_pRenderer->RT_ClearRenderTarget( m_pBulletHoleRenderTexture, kbColor::black );
+	}
+
+	/*g_pRenderer->RT_SetRenderTarget( m_pBulletTraceRenderTexture );
+	g_pRenderer->RT_Render2DLine( kbVec2( 0.1f, 0.0f ), kbVec2( 0.1f, 1.0f ), kbColor::red, 1.0f / 4096.0f );
+	g_pRenderer->RT_Render2DLine( kbVec2( 0.2f, 0.0f ), kbVec2( 0.2f, 1.0f ), kbColor::red, 2.0f / 4096.0f );
+	g_pRenderer->RT_Render2DLine( kbVec2( 0.3f, 0.0f ), kbVec2( 0.3f, 1.0f ), kbColor::red, 8.0f / 4096.0f );*/
+
 	if ( GetAsyncKeyState( 'C' ) ) {
-		g_pRenderer->RT_ClearRenderTarget( m_pBulletHoleTarget, kbColor::white );
+		g_pRenderer->RT_ClearRenderTarget( m_pBulletHoleRenderTexture, kbColor::white );
 	}
 
 	kbShader *const pUnwrapShader = (kbShader*)g_ResourceManager.GetResource( "./assets/shaders/pokeyholeunwrap.kbshader", true );
@@ -544,7 +555,7 @@ void EtherGame::RenderSync() {
 		if ( pSM == nullptr ) {
 			continue;
 		}
-		g_pRenderer->RT_SetRenderTarget( m_pBulletHoleTarget );
+		g_pRenderer->RT_SetRenderTarget( m_pBulletHoleRenderTexture );
 		kbShaderParamOverrides_t shaderParams;
 
 		kbMat4 invWorldMatrix;

@@ -3214,10 +3214,7 @@ void kbRenderer_DX11::RenderDebugLines() {
 
 	D3D11_MAPPED_SUBRESOURCE mappedResource;
 	HRESULT hr = m_pDeviceContext->Map( m_DebugVertexBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource );
-
-	if ( FAILED( hr ) ) {
-		kbError( "Failed to map debug lines" );
-	}
+	kbErrorCheck( SUCCEEDED(hr), "kbRenderer_DX11::RenderDebugLines() - Failed to map debug vertex buffer" );
 
 	vertexLayout * vertices = ( vertexLayout * ) mappedResource.pData;
 	memcpy( vertices, m_DebugLines.data(), sizeof( vertexLayout ) * m_DebugLines.size() );
@@ -3519,4 +3516,74 @@ void kbRenderer_DX11::RT_RenderMesh( const kbModel *const pModel, kbShader * pSh
 	}
 
 	m_RenderState.SetBlendState();
+}
+
+/**
+ *	kbRenderer_DX11::RT_Render2DLine
+ */
+void kbRenderer_DX11::RT_Render2DLine( const kbVec2 & startPt, const kbVec2 & endPt, const kbColor & color, const float width ) {
+	
+	D3D11_MAPPED_SUBRESOURCE mappedResource;
+	HRESULT hr = m_pDeviceContext->Map( m_DebugVertexBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource );
+
+	kbErrorCheck( SUCCEEDED(hr), "kbRenderer_DX11::RT_Render2DLine() - Failed to map debug vertex buffer" );
+
+	kbVec3 finalStartPt = kbVec3( startPt.x * 2.0f - 1.0f, -( ( startPt.y * 2.0f) - 1.0f ), 0.0f );
+	kbVec3 finalEndPt = kbVec3( endPt.x * 2.0f - 1.0f, -( ( endPt.y * 2.0f) - 1.0f ), 0.0f );
+	kbVec3 perpLine( finalEndPt.x - finalStartPt.x, finalEndPt.y - finalStartPt.y, 0.0f );
+	perpLine.Normalize();
+	float swap = perpLine.x;
+	perpLine.x = perpLine.y;
+	perpLine.y = -swap;
+	perpLine *= width * 0.5f;
+
+	vertexLayout *const vertices = (vertexLayout *) mappedResource.pData;
+	vertices[0].position = finalStartPt + perpLine;
+	vertices[0].SetColor( color );
+	
+	vertices[1].position = finalStartPt - perpLine;
+	vertices[1].SetColor( color );
+
+	vertices[2].position = finalEndPt - perpLine;
+	vertices[2].SetColor( color );
+
+	vertices[3].position = finalEndPt - perpLine;
+	vertices[3].SetColor( color );
+	
+	vertices[4].position = finalEndPt + perpLine;
+	vertices[4].SetColor( color );
+
+	vertices[5].position = finalStartPt + perpLine;
+	vertices[5].SetColor( color );
+
+	m_pDeviceContext->Unmap( m_DebugVertexBuffer, 0 );
+
+	const unsigned int stride = sizeof(vertexLayout);
+	const unsigned int offset = 0;
+
+	m_pDeviceContext->IASetVertexBuffers( 0, 1, &m_DebugVertexBuffer, &stride, &offset );
+	m_pDeviceContext->IASetPrimitiveTopology( D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST );
+
+	m_pDeviceContext->RSSetState( m_pNoFaceCullingRasterizerState );
+
+	ID3D11ShaderResourceView *const pShaderResourceView = (ID3D11ShaderResourceView*)m_pTextures[0]->GetGPUTexture();
+	m_pDeviceContext->PSSetShaderResources( 0, 1, &pShaderResourceView );
+	m_pDeviceContext->PSSetSamplers( 0, 1, &m_pBasicSamplerState );
+	m_pDeviceContext->IASetInputLayout( (ID3D11InputLayout*)m_pDebugShader->GetVertexLayout() );
+	m_pDeviceContext->VSSetShader( (ID3D11VertexShader*) m_pDebugShader->GetVertexShader(), nullptr, 0 );
+	m_pDeviceContext->PSSetShader( (ID3D11PixelShader*) m_pDebugShader->GetPixelShader(), nullptr, 0 );
+
+	const auto & varBindings = m_pDebugShader->GetShaderVarBindings();
+	ID3D11Buffer *const pConstantBuffer = GetConstantBuffer( varBindings.m_ConstantBufferSizeBytes );
+	hr = m_pDeviceContext->Map( pConstantBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource );
+	kbErrorCheck( SUCCEEDED(hr), "kbRenderer_DX11::RenderDebugLines() - Failed to map matrix buffer" );
+
+	SetShaderMat4( "mvpMatrix", kbMat4::identity, mappedResource.pData, varBindings );
+
+	m_pDeviceContext->Unmap( pConstantBuffer, 0 );
+	m_pDeviceContext->VSSetConstantBuffers( 0, 1, &pConstantBuffer );
+
+	m_pDeviceContext->Draw( 6, 0 );
+
+	m_pDeviceContext->RSSetState( m_pDefaultRasterizerState );
 }

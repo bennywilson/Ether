@@ -153,7 +153,7 @@ public:
 kbVec3 operator *( const float op1, const kbVec3 & op2 ); 
 
 
-/*
+/**
  * kbVec4
  */
 class kbVec4
@@ -203,7 +203,7 @@ public:
 
 kbVec4 operator *( const float op1, const kbVec4 & op2 ); 
 
-/*
+/**
  * kbColor
  */
 class kbColor : public kbVec4 {
@@ -220,6 +220,7 @@ public:
 	const static kbColor blue;
 	const static kbColor yellow;
 	const static kbColor white;
+	const static kbColor black;
 };
 
 /**

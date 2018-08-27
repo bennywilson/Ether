@@ -25,6 +25,7 @@ const kbColor kbColor::green( 0.0f, 1.0f, 0.0f, 1.0f );
 const kbColor kbColor::blue( 0.0f, 0.0f, 1.0f, 1.0f );
 const kbColor kbColor::yellow( 1.0f, 1.0f, 0.0f, 1.0f );
 const kbColor kbColor::white( 1.0f, 1.0f, 1.0f, 1.0f );
+const kbColor kbColor::black( 0.0f, 0.0f, 0.0f, 0.0f );
 
 const kbMat4 kbMat4::identity( kbVec4::right, kbVec4::up, kbVec4::forward, kbVec4( 0.0f, 0.0f, 0.0f, 1.0f ) );
 

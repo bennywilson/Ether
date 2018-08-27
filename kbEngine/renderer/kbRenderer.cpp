@@ -70,7 +70,7 @@ kbRenderWindow::kbRenderWindow( HWND inHwnd, const RECT & windowDimensions, cons
 kbRenderWindow::~kbRenderWindow() {
 	
 	{
-		std::map< const kbComponent *, kbRenderObject * >::iterator iter;
+		std::map<const kbComponent *, kbRenderObject *>::iterator iter;
 	
 		for ( iter = m_RenderObjectMap.begin(); iter != m_RenderObjectMap.end(); iter++ ) {
 		   delete iter->second;
@@ -78,7 +78,7 @@ kbRenderWindow::~kbRenderWindow() {
 	}
 	
 	{
-		std::map< const kbLightComponent *, kbRenderLight * >::iterator iter;
+		std::map<const kbLightComponent *, kbRenderLight *>::iterator iter;
 	
 		for ( iter = m_RenderLightMap.begin(); iter != m_RenderLightMap.end(); iter++ ) {
 		   delete iter->second;

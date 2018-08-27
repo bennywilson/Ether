@@ -92,7 +92,8 @@ protected:
 	std::vector<hits>							m_Hits;
 	virtual void								RenderSync() override;
 	virtual void								RenderThreadCallBack() override;
-	kbRenderTexture *							m_pBulletHoleTarget;
+	kbRenderTexture *							m_pBulletHoleRenderTexture;
+	kbRenderTexture *							m_pBulletTraceRenderTexture;
 };
 
 
