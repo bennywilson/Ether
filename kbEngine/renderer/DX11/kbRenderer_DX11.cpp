@@ -3521,8 +3521,8 @@ void kbRenderer_DX11::RT_RenderMesh( const kbModel *const pModel, kbShader * pSh
 /**
  *	kbRenderer_DX11::RT_Render2DLine
  */
-void kbRenderer_DX11::RT_Render2DLine( const kbVec2 & startPt, const kbVec2 & endPt, const kbColor & color, const float width ) {
-	
+void kbRenderer_DX11::RT_Render2DLine( const kbVec2 & startPt, const kbVec2 & endPt, const kbColor & color, const float width, const kbShader * pShader ) {
+
 	D3D11_MAPPED_SUBRESOURCE mappedResource;
 	HRESULT hr = m_pDeviceContext->Map( m_DebugVertexBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource );
 
@@ -3566,14 +3566,18 @@ void kbRenderer_DX11::RT_Render2DLine( const kbVec2 & startPt, const kbVec2 & en
 
 	m_pDeviceContext->RSSetState( m_pNoFaceCullingRasterizerState );
 
+	if ( pShader == nullptr ) {
+		pShader = m_pDebugShader;
+	}
+
 	ID3D11ShaderResourceView *const pShaderResourceView = (ID3D11ShaderResourceView*)m_pTextures[0]->GetGPUTexture();
 	m_pDeviceContext->PSSetShaderResources( 0, 1, &pShaderResourceView );
 	m_pDeviceContext->PSSetSamplers( 0, 1, &m_pBasicSamplerState );
-	m_pDeviceContext->IASetInputLayout( (ID3D11InputLayout*)m_pDebugShader->GetVertexLayout() );
-	m_pDeviceContext->VSSetShader( (ID3D11VertexShader*) m_pDebugShader->GetVertexShader(), nullptr, 0 );
-	m_pDeviceContext->PSSetShader( (ID3D11PixelShader*) m_pDebugShader->GetPixelShader(), nullptr, 0 );
+	m_pDeviceContext->IASetInputLayout( (ID3D11InputLayout*)pShader->GetVertexLayout() );
+	m_pDeviceContext->VSSetShader( (ID3D11VertexShader*) pShader->GetVertexShader(), nullptr, 0 );
+	m_pDeviceContext->PSSetShader( (ID3D11PixelShader*) pShader->GetPixelShader(), nullptr, 0 );
 
-	const auto & varBindings = m_pDebugShader->GetShaderVarBindings();
+	const auto & varBindings = pShader->GetShaderVarBindings();
 	ID3D11Buffer *const pConstantBuffer = GetConstantBuffer( varBindings.m_ConstantBufferSizeBytes );
 	hr = m_pDeviceContext->Map( pConstantBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource );
 	kbErrorCheck( SUCCEEDED(hr), "kbRenderer_DX11::RenderDebugLines() - Failed to map matrix buffer" );

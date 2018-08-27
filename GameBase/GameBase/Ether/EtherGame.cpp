@@ -540,10 +540,10 @@ void EtherGame::RenderSync() {
 	}
 
 	/*g_pRenderer->RT_SetRenderTarget( m_pBulletTraceRenderTexture );
-	g_pRenderer->RT_Render2DLine( kbVec2( 0.1f, 0.0f ), kbVec2( 0.1f, 1.0f ), kbColor::red, 1.0f / 4096.0f );
-	g_pRenderer->RT_Render2DLine( kbVec2( 0.2f, 0.0f ), kbVec2( 0.2f, 1.0f ), kbColor::red, 2.0f / 4096.0f );
-	g_pRenderer->RT_Render2DLine( kbVec2( 0.3f, 0.0f ), kbVec2( 0.3f, 1.0f ), kbColor::red, 8.0f / 4096.0f );*/
-
+	g_pRenderer->RT_Render2DLine( kbVec2( 0.1f, 0.0f ), kbVec2( 0.1f, 1.0f ), kbColor::red, 1.0f / 4096.0f, (kbShader*)g_ResourceManager.GetResource( "./assets/shaders/collisionMapGen.kbshader", true ) );
+	g_pRenderer->RT_Render2DLine( kbVec2( 0.2f, 0.0f ), kbVec2( 0.2f, 1.0f ), kbColor::red, 2.0f / 4096.0f, (kbShader*)g_ResourceManager.GetResource( "./assets/shaders/collisionMapGen.kbshader", true ) );
+	g_pRenderer->RT_Render2DLine( kbVec2( 0.3f, 0.0f ), kbVec2( 0.3f, 1.0f ), kbColor::red, 8.0f / 4096.0f, (kbShader*)g_ResourceManager.GetResource( "./assets/shaders/collisionMapGen.kbshader", true ) );
+*/
 	if ( GetAsyncKeyState( 'C' ) ) {
 		g_pRenderer->RT_ClearRenderTarget( m_pBulletHoleRenderTexture, kbColor::white );
 	}

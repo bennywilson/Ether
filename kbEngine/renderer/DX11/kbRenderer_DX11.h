@@ -384,7 +384,7 @@ public:
 	virtual void								RT_SetRenderTarget( kbRenderTexture *const pRenderTexture ) override;
 	virtual void								RT_ClearRenderTarget( kbRenderTexture *const pRenderTexture, const kbColor & color ) override;
 	virtual void								RT_RenderMesh( const kbModel *const pModel, kbShader * pShader, const kbShaderParamOverrides_t *const pShaderParams ) override;
-	virtual void								RT_Render2DLine( const kbVec2 & startPt, const kbVec2 & endPt, const kbColor & color, const float width );
+	virtual void								RT_Render2DLine( const kbVec2 & startPt, const kbVec2 & endPt, const kbColor & color, const float width, const kbShader * pShader );
 
 private:
 
