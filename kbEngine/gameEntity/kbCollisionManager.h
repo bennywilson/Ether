@@ -13,9 +13,10 @@
  *	kbCollisionComponent
  */
 enum ECollisionType {
-	CT_Sphere,
-	CT_Box,
-	CT_Mesh
+	CollisionType_Sphere,
+	CollisionType_Box,
+	CollisionType_StaticMesh,
+	CollisionType_CustomTriangles
 };
 
 /**
@@ -54,6 +55,14 @@ public:
 
 	float										GetRadius() const { return m_Extent.Length(); }
 
+	struct customTriangle_t {
+		kbVec3									m_Vertex1;
+		kbVec3									m_Vertex2;
+		kbVec3									m_Vertex3;
+	};
+	void										SetCustomTriangleCollision( const std::vector<customTriangle_t> & inCollision );
+
+
 protected:
 	virtual void								SetEnable_Internal( const bool isEnabled ) override;
 	virtual void								Update_Internal( const float DeltaTime ) override;
@@ -61,8 +70,10 @@ protected:
 private:
 	ECollisionType								m_CollisionType;
 	kbVec3										m_Extent;
+
 	std::vector<kbVec4>							m_WorldSpaceCollisionSpheres;
 	std::vector<kbBoneCollisionSphere>			m_LocalSpaceCollisionSpheres;
+	std::vector<customTriangle_t>				m_CustomTriangleCollision;
 };
 
 /**

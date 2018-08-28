@@ -19,7 +19,7 @@ kbCollisionManager g_CollisionManager;
  *	kbCollisionComponent::Constructor
  */
 void kbCollisionComponent::Constructor() {
-	m_CollisionType = CT_Sphere;
+	m_CollisionType = CollisionType_Sphere;
 	m_Extent.Set( 10.0f, 10.0f, 10.0f );
 }
 
@@ -65,6 +65,23 @@ void kbCollisionComponent::SetWorldSpaceCollisionSphere( const int idx, const kb
 }
 
 /**
+ *	kbCollisionComponent::SetCustomTriangleCollision
+ */
+void kbCollisionComponent::SetCustomTriangleCollision( const std::vector<customTriangle_t> & inCollision ) {
+
+	if ( IsEnabled() ) {
+		g_CollisionManager.UnregisterComponent( this );
+	}
+
+	m_CollisionType = CollisionType_CustomTriangles;
+	m_CustomTriangleCollision = inCollision;
+
+	if ( IsEnabled() ) {
+		g_CollisionManager.RegisterComponent( this );
+	}
+}
+
+/**
  *	kbCollisionManager::kbCollisionManager
  */
 kbCollisionManager::kbCollisionManager() {
@@ -95,10 +112,34 @@ kbCollisionInfo_t kbCollisionManager::PerformLineCheck( const kbVec3 & start, co
 	const float oneOverLength = 1.0f / LineLength;
 	const kbVec3 rayDir = ( end - start ) * oneOverLength;
 
-	for ( int i = 0; i < m_CollisionComponents.size(); i++ ) {
-		kbCollisionComponent *const pCollision = m_CollisionComponents[i];
+	for ( int iCollisionComp = 0; iCollisionComp < m_CollisionComponents.size(); iCollisionComp++ ) {
+		kbCollisionComponent *const pCollision = m_CollisionComponents[iCollisionComp];
 
-		if ( pCollision->m_CollisionType == CT_Mesh ) {
+		if ( pCollision->m_CollisionType == CollisionType_CustomTriangles ) {
+
+			bool bHit = false;
+			const std::vector<kbCollisionComponent::customTriangle_t> & triList = pCollision->m_CustomTriangleCollision;
+			for ( int iTri = 0; iTri < triList.size(); iTri++ ) {
+			
+				const kbVec3 & v1 = triList[iTri].m_Vertex1;
+				const kbVec3 & v2 = triList[iTri].m_Vertex2;
+				const kbVec3 & v3 = triList[iTri].m_Vertex3;
+				float t;
+				if ( kbRayTriIntersection( t, start, rayDir, v1, v2, v3 ) ) {
+					if ( t < collisionInfo.m_T && t >= 0 && t < LineLength ) {
+						collisionInfo.m_T = t;
+						bHit = true;
+					}
+				}
+			}
+
+			if ( bHit ) {
+				collisionInfo.m_HitLocation = start + rayDir * collisionInfo.m_T;
+				collisionInfo.m_pHitComponent = pCollision;
+				collisionInfo.m_bHit = true;
+			}
+
+		} else if ( pCollision->m_CollisionType == CollisionType_StaticMesh ) {
 			kbGameEntity *const pOwner = pCollision->GetOwner();
 			kbStaticModelComponent *const pStaticModel = (kbStaticModelComponent*)pOwner->GetComponentByType( kbStaticModelComponent::GetType() );
 			if ( pStaticModel == nullptr ) {
@@ -112,7 +153,7 @@ kbCollisionInfo_t kbCollisionManager::PerformLineCheck( const kbVec3 & start, co
 				collisionInfo.m_T = intersection.t;
 				collisionInfo.m_pHitComponent = pCollision;		
 			}
-		} else if ( pCollision->m_CollisionType == CT_Sphere ) {
+		} else if ( pCollision->m_CollisionType == CollisionType_Sphere ) {
 			kbGameEntity *const pCollisionOwner = pCollision->GetOwner();
 			kbVec3 intersectionPt;
 			if ( kbRaySphereIntersection( intersectionPt, start, rayDir, pCollisionOwner->GetPosition(), pCollision->m_Extent.x ) ) {

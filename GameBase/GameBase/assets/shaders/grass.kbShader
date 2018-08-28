@@ -96,10 +96,6 @@ void CreateVertex( inout TriangleStream<pixelInput> OutputStream, float3 vertexW
 	terrainMapUV.y = ( ( bladeWorldOrigin.z - collisionMapCenter.y ) / collisionMapCenter.z ) * 0.5f + 0.5f;
 
 	const float4 collisionMapVal = collisionMap.SampleLevel( SampleType, terrainMapUV, 0.0f );
-	if ( length( collisionMapVal ) > 0 ) {
-		return;
-	}
-
 
 	// Check collision
 	float3 windpush = 0.0f;
@@ -132,16 +128,24 @@ void CreateVertex( inout TriangleStream<pixelInput> OutputStream, float3 vertexW
 
 	CreateVertex( OutputStream, bladeWorldOrigin, float2( textureStartU, 1.0f - textureBorderSize ), invAlphaMask );
 	CreateVertex( OutputStream, bladeWorldOrigin + jitterOffset, float2( textureEndU, 1.0f - textureBorderSize ), invAlphaMask );
-	CreateVertex( OutputStream, bladeWorldOrigin + segmentVec, float2( textureStartU, 0.67f ), invAlphaMask );
-	CreateVertex( OutputStream, bladeWorldOrigin + jitterOffset + segmentVec, float2( textureEndU, 0.67f ), invAlphaMask );
-	CreateVertex( OutputStream, bladeWorldOrigin + segmentVec_2X, float2( textureStartU, 0.33f ), invAlphaMask );
-	CreateVertex( OutputStream, bladeWorldOrigin + jitterOffset + segmentVec_2X, float2( textureEndU, 0.33f ), invAlphaMask  );
 
-	if ( textureIdx == 0 ) {
-		CreateVertex( OutputStream, bladeWorldOrigin + jitterOffset * 0.5f + segmentVec_3X, float2( ( textureStartU + textureEndU ) * 0.5f, textureBorderSize ), invAlphaMask );
-	} else {
-		CreateVertex( OutputStream, bladeWorldOrigin + segmentVec_3X, float2( textureStartU, textureBorderSize ), invAlphaMask );
-		CreateVertex( OutputStream, bladeWorldOrigin + jitterOffset + segmentVec_3X, float2( ( textureStartU + textureEndU ) * 0.5f, textureBorderSize ), invAlphaMask );
+	if ( bladeWorldOrigin.y + segmentVec.y < collisionMapVal.w ) {
+		CreateVertex( OutputStream, bladeWorldOrigin + segmentVec, float2( textureStartU, 0.67f ), invAlphaMask );
+		CreateVertex( OutputStream, bladeWorldOrigin + jitterOffset + segmentVec, float2( textureEndU, 0.67f ), invAlphaMask );
+
+		if ( bladeWorldOrigin.y + segmentVec_2X.y < collisionMapVal.w ) {
+			CreateVertex( OutputStream, bladeWorldOrigin + segmentVec_2X, float2( textureStartU, 0.33f ), invAlphaMask );
+			CreateVertex( OutputStream, bladeWorldOrigin + jitterOffset + segmentVec_2X, float2( textureEndU, 0.33f ), invAlphaMask  );
+
+			if ( bladeWorldOrigin.y + segmentVec_3X.y < collisionMapVal.w ) {
+				if ( textureIdx == 0 ) {
+					CreateVertex( OutputStream, bladeWorldOrigin + jitterOffset * 0.5f + segmentVec_3X, float2( ( textureStartU + textureEndU ) * 0.5f, textureBorderSize ), invAlphaMask );
+				} else {
+					CreateVertex( OutputStream, bladeWorldOrigin + segmentVec_3X, float2( textureStartU, textureBorderSize ), invAlphaMask );
+					CreateVertex( OutputStream, bladeWorldOrigin + jitterOffset + segmentVec_3X, float2( ( textureStartU + textureEndU ) * 0.5f, textureBorderSize ), invAlphaMask );
+				}
+			}
+		}
 	}
 
 	OutputStream.RestartStrip();

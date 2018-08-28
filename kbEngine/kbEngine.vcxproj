@@ -113,7 +113,6 @@
     <None Include="assets\Shaders\SimpleAdditive.kbShader" />
     <None Include="assets\Shaders\SimpleAlphaBlend.kbShader" />
     <None Include="assets\Shaders\uberPostProcess.kbShader" />
-    <None Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="app\kbApp.h" />

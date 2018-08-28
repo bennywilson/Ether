@@ -678,20 +678,21 @@ void kbModel::UnmapIndexBuffer() {
 /**
  *	kbMode::SwapTexture
  */
-void kbModel::SwapTexture( const UINT MeshIdx, const kbTexture * pTexture, const int textureIdx ) {
+void kbModel::SwapTexture( const UINT meshIdx, const kbTexture * pTexture, const int textureIdx ) {
 	
-	if ( MeshIdx < 0 ||  MeshIdx >= m_Materials.size() ) {
+	if ( meshIdx < 0 || meshIdx >= m_Materials.size() ) {
 		return;
 	}
 
-	if ( textureIdx < 0 || textureIdx >= m_Materials[MeshIdx].m_Textures.size() + 1 ) {
+	kbMaterial & material = m_Materials[meshIdx];
+	if ( textureIdx < 0 || textureIdx >= material.m_Textures.size() + 1 ) {
 		return;
 	}
 
-	if ( textureIdx < m_Materials[MeshIdx].m_Textures.size() ) {
-		m_Materials[MeshIdx].m_Textures[textureIdx] = pTexture;
+	if ( textureIdx < material.m_Textures.size() ) {
+		material.m_Textures[textureIdx] = pTexture;
 	} else {
-		m_Materials[MeshIdx].m_Textures.push_back( pTexture );
+		material.m_Textures.push_back( pTexture );
 	}
 }
 

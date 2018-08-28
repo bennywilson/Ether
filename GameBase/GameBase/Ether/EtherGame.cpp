@@ -540,7 +540,7 @@ void EtherGame::RenderSync() {
 
 	if ( m_pBulletTraceRenderTexture == nullptr ) {
 		m_pBulletTraceRenderTexture = g_pRenderer->RT_GetRenderTexture( 4096, 4096, eTextureFormat::KBTEXTURE_R16G16B16A16 );
-		g_pRenderer->RT_ClearRenderTarget( m_pBulletTraceRenderTexture, kbColor::black );
+		g_pRenderer->RT_ClearRenderTarget( m_pBulletTraceRenderTexture, kbColor( 0.0f, 0.0f, 0.0f, 99999.0f ) );
 
 		for ( int i = 0; i < GetGameEntities().size(); i++ ) {
 			kbGameEntity *const pEnt = GetGameEntities()[i];
@@ -558,11 +558,6 @@ void EtherGame::RenderSync() {
 		}
 	}
 
-	/*g_pRenderer->RT_SetRenderTarget( m_pBulletTraceRenderTexture );
-	g_pRenderer->RT_Render2DLine( kbVec2( 0.1f, 0.0f ), kbVec2( 0.1f, 1.0f ), kbColor::red, 1.0f / 4096.0f, (kbShader*)g_ResourceManager.GetResource( "./assets/shaders/collisionMapGen.kbshader", true ) );
-	g_pRenderer->RT_Render2DLine( kbVec2( 0.2f, 0.0f ), kbVec2( 0.2f, 1.0f ), kbColor::red, 2.0f / 4096.0f, (kbShader*)g_ResourceManager.GetResource( "./assets/shaders/collisionMapGen.kbshader", true ) );
-	g_pRenderer->RT_Render2DLine( kbVec2( 0.3f, 0.0f ), kbVec2( 0.3f, 1.0f ), kbColor::red, 8.0f / 4096.0f, (kbShader*)g_ResourceManager.GetResource( "./assets/shaders/collisionMapGen.kbshader", true ) );
-*/
 	if ( GetAsyncKeyState( 'C' ) ) {
 		g_pRenderer->RT_ClearRenderTarget( m_pBulletHoleRenderTexture, kbColor::white );
 	}
@@ -615,7 +610,7 @@ void EtherGame::RenderSync() {
 		kbVec3 endPos = ( ( kbVec3( curShot.shotEnd.x, curShot.shotEnd.z, 0.0f ) - terrainCenter ) / halfTerrainWidth ) * 0.5f + 0.5f;
 		endPos.z = curShot.shotEnd.y;
 
-		g_pRenderer->RT_RenderLine( startPos, endPos, kbColor( 0.0f, 0.0f, 1.0f, 0.0f ), 4.0f / 4096.0f, (kbShader*)g_ResourceManager.GetResource( "./assets/shaders/collisionMapGen.kbshader", true ) );
+		g_pRenderer->RT_RenderLine( startPos, endPos, kbColor( 0.0f, 0.0f, 1.0f, 0.0f ), 16.0f / 4096.0f, (kbShader*)g_ResourceManager.GetResource( "./assets/shaders/collisionMapGen.kbshader", true ) );
 	}
 	m_ShotsThisFrame.clear();
 }

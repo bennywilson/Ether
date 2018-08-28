@@ -42,7 +42,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <None Include="ReadMe.txt" />
     <None Include="assets\Shaders\basicShader.kbShader">
       <Filter>Assets\Shaders</Filter>
     </None>

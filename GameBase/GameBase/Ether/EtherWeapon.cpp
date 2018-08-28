@@ -91,7 +91,8 @@ void EtherProjectileComponent::Update_Internal( const float DeltaTime ) {
 	}
 
 	const kbVec3 oldPosition = GetOwner()->GetPosition();
-	const kbVec3 newPosition = GetOwner()->GetPosition() + projectileMat[2].ToVec3() * DeltaTime * m_Velocity;
+	const kbVec3 travelVec = projectileMat[2].ToVec3() * DeltaTime * m_Velocity;
+	const kbVec3 newPosition = GetOwner()->GetPosition() + travelVec;
 	GetOwner()->SetPosition( newPosition );
 
 	// Hack to get around dirty flag issues
@@ -116,7 +117,7 @@ void EtherProjectileComponent::Update_Internal( const float DeltaTime ) {
 	// Check if this projectile hit the world
 	EtherGame *const pGame = static_cast<EtherGame*>( g_pGame );
 
-	if ( pGame->TraceAgainstWorld( oldPosition, newPosition, worldHitCollisionPt, true ) ) {
+	if ( pGame->TraceAgainstWorld( oldPosition - travelVec, newPosition, worldHitCollisionPt, true ) ) {
 		const float T = ( worldHitCollisionPt - oldPosition ).Length() / ( newPosition - oldPosition ).Length();
 		if ( T < hitT ) {
 			hitT = T;

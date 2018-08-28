@@ -68,6 +68,13 @@ kbGameEntity 0 0 0 0 {
 		SplatMap = .\assets\terrain\terrain1_splatmap.bmp
 		Width =  8192.000000
 	}
+	kbCollisionComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CollisionType = CustomTriangles
+		Extent = 10.000000 10.000000 10.000000
+		SphereCollision = 0
+	}
 }
 kbGameEntity 0 0 0 0 {
 	kbTransformComponent { 
@@ -244,7 +251,7 @@ kbGameEntity 0 0 0 0 {
 	kbCollisionComponent { 
 		Enabled = 1
 		LifeTime =  -1.000000
-		CollisionType = Mesh
+		CollisionType = StaticMesh
 		Extent = 10.000000 10.000000 10.000000
 		SphereCollision = 0
 	}

@@ -377,6 +377,8 @@ void kbTerrainComponent::GenerateTerrain() {
 	m_TerrainModel.CreateDynamicModel( numVerts, numIndices );
 
 	vertexLayout *const pVerts = (vertexLayout *) m_TerrainModel.MapVertexBuffer();
+	std::vector<kbVec3> cpuVerts;
+	cpuVerts.resize( m_TerrainDimensions * m_TerrainDimensions );
 
 	int blurSampleSize = 1;
 	int currentVert = 0;
@@ -411,7 +413,10 @@ void kbTerrainComponent::GenerateTerrain() {
 			height /= 255.0f;
 			height *= ( m_HeightScale / divisor );
 			pVerts[currentVert].Clear();
-			pVerts[currentVert].position.Set( -HalfTerrainWidth + ( startX * cellWidth ), height, -HalfTerrainWidth + ( startY * cellWidth ) );
+			cpuVerts[currentVert] = kbVec3( -HalfTerrainWidth + ( startX * cellWidth ), height, -HalfTerrainWidth + ( startY * cellWidth ) );
+			pVerts[currentVert].position = cpuVerts[currentVert];
+			cpuVerts[currentVert] += GetOwner()->GetPosition();
+
 			pVerts[currentVert].uv.Set( (float)(startX) / (float)m_TerrainDimensions, (float)(startY) / (float)m_TerrainDimensions );
 			pVerts[currentVert].SetColor( kbVec4( 1.0f, 1.0f, 1.0f, 1.0f ) );
 			pVerts[currentVert].SetNormal( kbVec4( 0.0f, 1.0f, 0.0f, 0.0f ) );
@@ -466,8 +471,11 @@ void kbTerrainComponent::GenerateTerrain() {
 		}
 	}
 
-	for ( int y = 0; y < m_TerrainDimensions - 1; y++ ) {
-		for ( int x = 0; x < m_TerrainDimensions - 1; x++ ) {
+	std::vector<kbCollisionComponent::customTriangle_t> terrainCollision;
+	terrainCollision.resize( ( (m_TerrainDimensions - 1) * (m_TerrainDimensions-1) ) * 2 );
+
+	for ( int y = 0, triIdx = 0; y < m_TerrainDimensions - 1; y++ ) {
+		for ( int x = 0; x < m_TerrainDimensions - 1; x++, triIdx += 2 ) {
 			
 			const unsigned int currentIndex = ( y * m_TerrainDimensions ) + x;
 			pIndices[currentIndexToWrite + 2] = currentIndex;
@@ -477,14 +485,26 @@ void kbTerrainComponent::GenerateTerrain() {
 			pIndices[currentIndexToWrite + 5] = currentIndex + 1;
 			pIndices[currentIndexToWrite + 4] = currentIndex + 1 + m_TerrainDimensions;
 			pIndices[currentIndexToWrite + 3] = currentIndex + m_TerrainDimensions;
-
 			currentIndexToWrite += 6;
+
+			terrainCollision[triIdx + 0].m_Vertex1 = cpuVerts[currentIndex];
+			terrainCollision[triIdx + 0].m_Vertex2 = cpuVerts[currentIndex + 1];
+			terrainCollision[triIdx + 0].m_Vertex3 = cpuVerts[currentIndex + m_TerrainDimensions];
+
+			terrainCollision[triIdx + 1].m_Vertex1 = cpuVerts[currentIndex + 1];
+			terrainCollision[triIdx + 1].m_Vertex2 = cpuVerts[currentIndex + 1 + m_TerrainDimensions];
+			terrainCollision[triIdx + 1].m_Vertex3 = cpuVerts[currentIndex + m_TerrainDimensions];
 		}
 	}
 
 	m_TerrainModel.UnmapIndexBuffer();
 
     UpdateTerrainMaterial();
+
+	kbCollisionComponent *const pCollision = (kbCollisionComponent*)GetOwner()->GetComponentByType( kbCollisionComponent::GetType() );
+	if ( pCollision != nullptr ) {
+		pCollision->SetCustomTriangleCollision( terrainCollision );
+	}
 
     g_pRenderer->AddRenderObject( m_TerrainRenderObject );
 }
