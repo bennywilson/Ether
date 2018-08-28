@@ -539,7 +539,7 @@ void EtherGame::RenderSync() {
 	static float halfTerrainWidth;
 
 	if ( m_pBulletTraceRenderTexture == nullptr ) {
-		m_pBulletTraceRenderTexture = g_pRenderer->RT_GetRenderTexture( 4096, 4096, eTextureFormat::KBTEXTURE_R8G8B8A8 );
+		m_pBulletTraceRenderTexture = g_pRenderer->RT_GetRenderTexture( 4096, 4096, eTextureFormat::KBTEXTURE_R16G16B16A16 );
 		g_pRenderer->RT_ClearRenderTarget( m_pBulletTraceRenderTexture, kbColor::black );
 
 		for ( int i = 0; i < GetGameEntities().size(); i++ ) {
@@ -608,10 +608,14 @@ void EtherGame::RenderSync() {
 
 		// Update collision map
 		g_pRenderer->RT_SetRenderTarget( m_pBulletTraceRenderTexture );
-		const kbVec2 terrainCenter( terrainPos.x, terrainPos.z );
-		const kbVec2 startPos = ( ( kbVec2( curShot.shotStart.x, curShot.shotStart.z ) - terrainCenter ) / halfTerrainWidth ) * 0.5f + 0.5f;
-		const kbVec2 endPos = ( ( kbVec2( curShot.shotEnd.x, curShot.shotEnd.z ) - terrainCenter ) / halfTerrainWidth ) * 0.5f + 0.5f;
-		g_pRenderer->RT_Render2DLine( startPos, endPos, kbColor( 0.0f, 0.0f, 1.0f, 0.0f ), 4.0f / 4096.0f, (kbShader*)g_ResourceManager.GetResource( "./assets/shaders/collisionMapGen.kbshader", true ) );
+		const kbVec3 terrainCenter( terrainPos.x, terrainPos.z, 0.0f );
+		kbVec3 startPos = ( ( kbVec3( curShot.shotStart.x, curShot.shotStart.z, 0.0f ) - terrainCenter ) / halfTerrainWidth ) * 0.5f + 0.5f;
+		startPos.z = curShot.shotStart.y;
+
+		kbVec3 endPos = ( ( kbVec3( curShot.shotEnd.x, curShot.shotEnd.z, 0.0f ) - terrainCenter ) / halfTerrainWidth ) * 0.5f + 0.5f;
+		endPos.z = curShot.shotEnd.y;
+
+		g_pRenderer->RT_RenderLine( startPos, endPos, kbColor( 0.0f, 0.0f, 1.0f, 0.0f ), 4.0f / 4096.0f, (kbShader*)g_ResourceManager.GetResource( "./assets/shaders/collisionMapGen.kbshader", true ) );
 	}
 	m_ShotsThisFrame.clear();
 }

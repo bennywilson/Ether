@@ -16,11 +16,12 @@ struct vertexInput {
 
 //-------------------------------------
 struct pixelInput {
-	float4	position	: SV_POSITION;
+	float4 position		: SV_POSITION;
 	float2 uv			: TEXCOORD0;
-	float4	color		: COLOR;
+	float4 color		: COLOR;
 	float2 position2	: TEXCOORD1;
 	float3 normal		: TEXCOORD2;
+	float height		: TEXCOORD3;
 };
 
 /**
@@ -28,8 +29,12 @@ struct pixelInput {
  */
 pixelInput vertexShader( vertexInput input ) {
 	pixelInput output = (pixelInput)0;
+	
+	output.height = input.position.z;
+	output.position = input.position;
+	output.position.z = 0;
 
-	output.position = mul( input.position, mvpMatrix );
+	//output.position = mul( position, mvpMatrix );
 	output.color = input.color;
 	output.position2 = output.position.zw;
 
@@ -43,5 +48,5 @@ Texture2D shaderTexture;
 SamplerState SampleType;
 
 float4 pixelShader( pixelInput input ) : SV_TARGET {
-	return float4( 0.0f, 1.0f, 1.0f, 1.0f );
+	return float4( 0.0f, 1.0f, 1.0f, input.height );
 }

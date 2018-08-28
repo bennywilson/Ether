@@ -3519,9 +3519,9 @@ void kbRenderer_DX11::RT_RenderMesh( const kbModel *const pModel, kbShader * pSh
 }
 
 /**
- *	kbRenderer_DX11::RT_Render2DLine
+ *	kbRenderer_DX11::RT_RenderLine
  */
-void kbRenderer_DX11::RT_Render2DLine( const kbVec2 & startPt, const kbVec2 & endPt, const kbColor & color, const float width, const kbShader * pShader ) {
+void kbRenderer_DX11::RT_RenderLine( const kbVec3 & startPt, const kbVec3 & endPt, const kbColor & color, const float width, const kbShader * pShader ) {
 
 	D3D11_MAPPED_SUBRESOURCE mappedResource;
 	HRESULT hr = m_pDeviceContext->Map( m_DebugVertexBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource );
@@ -3531,6 +3531,10 @@ void kbRenderer_DX11::RT_Render2DLine( const kbVec2 & startPt, const kbVec2 & en
 	kbVec3 finalStartPt = kbVec3( startPt.x * 2.0f - 1.0f, -( ( startPt.y * 2.0f) - 1.0f ), 0.0f );
 	kbVec3 finalEndPt = kbVec3( endPt.x * 2.0f - 1.0f, -( ( endPt.y * 2.0f) - 1.0f ), 0.0f );
 	kbVec3 perpLine( finalEndPt.x - finalStartPt.x, finalEndPt.y - finalStartPt.y, 0.0f );
+
+	finalStartPt.z = startPt.z;
+	finalEndPt.z = endPt.z;
+
 	perpLine.Normalize();
 	float swap = perpLine.x;
 	perpLine.x = perpLine.y;
