@@ -37,6 +37,8 @@ public:
 
 	void	operator *=(const float rhs ) { x *= rhs, y *= rhs; }
 
+	void operator /=( const float rhs )  { x /= rhs, y /= rhs; }
+
 	bool Compare( const kbVec2 & op2, const float epsilon = 0.0001f ) const { return fabs( x - op2.x ) < epsilon && fabs( y - op2.y ) < epsilon; }
 
 	const float operator[]( const int index ) const { return ( &x )[index]; }
@@ -79,6 +81,8 @@ public:
 };
 
 kbVec2 operator *( const kbVec2 & op1, const float op2 );
+kbVec2 operator +( const kbVec2 & op1, const float op2 );
+kbVec2 operator /( const kbVec2 & op1, const float op2 ); 
 
 /**
  *	kbVec3i

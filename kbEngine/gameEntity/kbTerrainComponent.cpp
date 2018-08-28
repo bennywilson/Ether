@@ -185,7 +185,7 @@ void kbGrass::UpdateMaterial() {
 		bladeOffsets.push_back( offset );
 	}
 
-	m_GrassShaderOverrides.m_ParamOverrides.clear();
+	//m_GrassShaderOverrides.m_ParamOverrides.clear();
 	m_GrassShaderOverrides.SetTexture( "grassMap", m_pGrassMap );
     m_GrassShaderOverrides.SetTexture( "noiseMap", m_pNoiseMap );
 	m_GrassShaderOverrides.SetTexture( "heightMap", m_pOwningTerrainComponent->GetHeightMap() );
@@ -197,14 +197,11 @@ void kbGrass::UpdateMaterial() {
     m_GrassShaderOverrides.SetVec4( "wind", m_TestWind );
     m_GrassShaderOverrides.SetVec4( "fakeAOData", kbVec4( m_FakeAODarkness, m_FakeAOPower, 0.0f, 0.0f ) );
 
-	if ( m_pDiffuseMap != nullptr ) {
-		m_GrassShaderOverrides.SetTexture( "grassDiffuseMap", m_pDiffuseMap );
-	}
+	m_GrassShaderOverrides.SetTexture( "grassDiffuseMap", m_pDiffuseMap );
+    m_GrassShaderOverrides.SetTexture( "noiseMap", m_pNoiseMap );
 
-    if ( m_pNoiseMap != nullptr ) {
-        m_GrassShaderOverrides.SetTexture( "noiseMap", m_pNoiseMap );
-    }
-
+	const kbVec2 collisionMapPos = kbVec2( m_pOwningTerrainComponent->GetOwner()->GetPosition().x, m_pOwningTerrainComponent->GetOwner()->GetPosition().z );
+	m_GrassShaderOverrides.SetVec4( "collisionMapCenter", kbVec4( collisionMapPos.x, collisionMapPos.y, m_pOwningTerrainComponent->GetTerrainWidth() * 0.5f, 0.0f ) );
 	for ( int i = 0; i < m_GrassRenderObjects.size(); i++ ) {
 		g_pRenderer->RemoveRenderObject( m_GrassRenderObjects[i].m_RenderObject );
 		m_GrassRenderObjects[i].Shutdown();
@@ -491,7 +488,18 @@ void kbTerrainComponent::GenerateTerrain() {
 
     g_pRenderer->AddRenderObject( m_TerrainRenderObject );
 }
-
+/**
+ *  kbTerrainComponent::SetCollisionMap
+ */
+void kbTerrainComponent::SetCollisionMap( const kbRenderTexture *const pTexture ) {
+	for ( int i = 0; i < m_Grass.size(); i++ ) {
+		m_Grass[i].m_GrassShaderOverrides.SetTexture( "collisionMap", pTexture );
+		for ( int cellIdx = 0; cellIdx < m_Grass[i].m_GrassRenderObjects.size(); cellIdx++ ) {
+			m_Grass[i].m_GrassRenderObjects[cellIdx].m_RenderObject.m_ShaderParamOverrides = m_Grass[i].m_GrassShaderOverrides;
+			g_pRenderer->UpdateRenderObject( m_Grass[i].m_GrassRenderObjects[cellIdx].m_RenderObject );
+		}
+	}
+}
 /**
  *	kbTerrainComponent::SetEnable_Internal
  */	

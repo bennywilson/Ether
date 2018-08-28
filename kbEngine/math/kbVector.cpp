@@ -29,9 +29,18 @@ const kbColor kbColor::black( 0.0f, 0.0f, 0.0f, 0.0f );
 
 const kbMat4 kbMat4::identity( kbVec4::right, kbVec4::up, kbVec4::forward, kbVec4( 0.0f, 0.0f, 0.0f, 1.0f ) );
 
-kbVec2 operator *( const kbVec2 & op1, const float op2 ) {
-	return kbVec2( op2 * op1.x, op2 * op1.y );
+kbVec2 operator +( const kbVec2 & op1, const float op2 ) {
+	return kbVec2( op1.x + op2, op1.y + op2 );
 }
+
+kbVec2 operator *( const kbVec2 & op1, const float op2 ) {
+	return kbVec2( op1.x * op2, op1.y * op2 );
+}
+
+kbVec2 operator /( const kbVec2 & op1, const float op2 ) {
+	return kbVec2( op1.x / op2, op1.y / op2 );
+}
+
 
 kbVec3 kbVec3::operator *( const kbMat4 & rhs ) const {
 	kbVec3 returnVec;

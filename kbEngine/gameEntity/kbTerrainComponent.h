@@ -139,6 +139,8 @@ public:
 	float										GetHeightScale() const { return m_HeightScale; }
 	float										GetTerrainWidth() const { return m_TerrainWidth; }
 
+	void										SetCollisionMap( const kbRenderTexture *const pTexture );
+
 protected:
 
 	virtual void								SetEnable_Internal( const bool isEnabled ) override;

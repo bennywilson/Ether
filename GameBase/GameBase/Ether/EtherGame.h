@@ -47,7 +47,7 @@ public:
 
 	const kbVec3 &								GetHMDWorldOffset() const { return m_HMDWorldOffset; }
 
-	void										RegisterHit( kbComponent *const pComponent, const kbVec3 & hitLoc, const kbVec3 & hitDir );
+	void										RegisterBulletShot( kbComponent *const pComponent, const kbVec3 & shotStart, const kbVec3 & shotEnd );
 
 protected:
 
@@ -84,12 +84,12 @@ protected:
 	kbVec3										m_HMDWorldOffset;
 
 	// kbRenderHook
-	struct hits {
+	struct frameBulletShots {
 		kbComponent * pHitComponent;
-		kbVec3 hitLocation;
-		kbVec3 hitDirection;
+		kbVec3 shotStart;
+		kbVec3 shotEnd;
 	};
-	std::vector<hits>							m_Hits;
+	std::vector<frameBulletShots>				m_ShotsThisFrame;
 	virtual void								RenderSync() override;
 	virtual void								RenderThreadCallBack() override;
 	kbRenderTexture *							m_pBulletHoleRenderTexture;

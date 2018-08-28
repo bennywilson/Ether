@@ -174,11 +174,13 @@ void EtherProjectileComponent::Update_Internal( const float DeltaTime ) {
 				m_ImpactEnvironmentSoundData[indexToPlay].PlaySoundAtPosition( newPosition );
 			}*/
 
-			g_pEtherGame->RegisterHit( collisionInfo.m_pHitComponent, collisionInfo.m_HitLocation, ( newPosition - oldPosition ).Normalized() );
+			g_pEtherGame->RegisterBulletShot( collisionInfo.m_pHitComponent, oldPosition, collisionInfo.m_HitLocation );
 			g_pGame->RemoveGameEntity( GetOwner() );
 			return;
 		}
 	}
+
+	g_pEtherGame->RegisterBulletShot( collisionInfo.m_pHitComponent, oldPosition, newPosition );
 
 	if ( m_DetonationTimer > 0 ) {
 		m_DetonationTimer -= DeltaTime;

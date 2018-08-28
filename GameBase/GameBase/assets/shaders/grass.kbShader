@@ -14,6 +14,7 @@ cbuffer ConstantBuffer1 {
 	float4 wind;
 	float4 time;
 	float4 fakeAOData;		// x - Darkness, y - power
+	float4 collisionMapCenter;
 	//float4 collisionSphere;
 };
 
@@ -72,6 +73,7 @@ Texture2D grassMap			: register(t0);
 Texture2D heightMap			: register(t1);
 Texture2D grassDiffuseMap	: register(t2);
 Texture2D noiseMap			: register(t3);
+Texture2D collisionMap		: register(t4);
 
 void CreateVertex( inout TriangleStream<pixelInput> OutputStream, float3 vertexWorldOrigin, float2 uv, float invAlphaMask ) {
 
@@ -88,6 +90,16 @@ void CreateVertex( inout TriangleStream<pixelInput> OutputStream, float3 vertexW
 	const int4 IndexVector = D3DCOLORtoUBYTE4( input[0].blendIndices );
 	const float startHeight = heightMap.SampleLevel( SampleType, input[0].uv, 0.0f ).r * GrassData1.x;
 	const float3 bladeWorldOrigin = float3( 0.0f, startHeight, 0.0f ) + bladeLocalOrigin + float3( jitterOffsets[IndexVector.x + grassNumber].z, 0.0f, jitterOffsets[IndexVector.x + grassNumber].w ) + wind.xyz + input[0].position.xyz;
+
+	float2 terrainMapUV;
+	terrainMapUV.x = ( ( bladeWorldOrigin.x - collisionMapCenter.x ) / collisionMapCenter.z ) * 0.5f + 0.5f;
+	terrainMapUV.y = ( ( bladeWorldOrigin.z - collisionMapCenter.y ) / collisionMapCenter.z ) * 0.5f + 0.5f;
+
+	const float4 collisionMapVal = collisionMap.SampleLevel( SampleType, terrainMapUV, 0.0f );
+	if ( length( collisionMapVal ) > 0 ) {
+		return;
+	}
+
 
 	// Check collision
 	float3 windpush = 0.0f;
