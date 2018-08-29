@@ -3461,6 +3461,7 @@ void kbRenderer_DX11::RT_RenderLine( const kbVec3 & startPt, const kbVec3 & endP
 	ID3D11Buffer *const pConstantBuffer = SetConstantBuffer( varBindings, pShaderParamOverrides, nullptr );
 
 	m_pDeviceContext->VSSetConstantBuffers( 0, 1, &pConstantBuffer );
+	m_pDeviceContext->PSSetConstantBuffers( 0, 1, &pConstantBuffer );
 
 	m_pDeviceContext->Draw( 6, 0 );
 
@@ -3516,7 +3517,7 @@ ID3D11Buffer * kbRenderer_DX11::SetConstantBuffer( const kbShaderVarBindings_t &
 	const auto & bindings = shaderVarBindings.m_VarBindings;
 	byte * constantPtr = (byte*) mappedResource.pData;
 
-    std::vector<kbShaderParamOverrides_t::kbShaderParam_t> * paramOverrides = nullptr;
+    const std::vector<kbShaderParamOverrides_t::kbShaderParam_t> * paramOverrides = nullptr;
 	if ( pRenderObject != nullptr ) {
 		paramOverrides = &pRenderObject->m_ShaderParamOverrides.m_ParamOverrides;
 	} else if ( shaderParamOverrides != nullptr ) {

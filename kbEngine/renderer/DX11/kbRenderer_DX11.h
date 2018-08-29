@@ -320,7 +320,7 @@ struct kbRenderState {
 		BlendStateDesc.RenderTarget[0].SrcBlendAlpha = GetD3DBlend( sourceAlpha );
 		BlendStateDesc.RenderTarget[0].DestBlendAlpha = GetD3DBlend( destAlpha );
 		BlendStateDesc.RenderTarget[0].BlendOpAlpha = GetD3DBlendOp( alphaBlendOp );
-		BlendStateDesc.RenderTarget[0].RenderTargetWriteMask = renderTargetWriteMask;
+		BlendStateDesc.RenderTarget[0].RenderTargetWriteMask = GetD3DColorWriteEnable( renderTargetWriteMask );
 
 		HRESULT hr = m_pDevice->CreateBlendState( &BlendStateDesc, &m_pAlphaBlendState );
 		kbErrorCheck( SUCCEEDED( hr ), "kbRenderer_DX11::Init() - Failed to create additive blend state" );

@@ -5,7 +5,7 @@
 // 2018 kbEngine 2.0
 //===================================================================================================
 cbuffer matrixBuffer {
-   matrix mvpMatrix;
+   float4 perpendicularDirection;
 };
 
 //-------------------------------------
@@ -48,5 +48,5 @@ Texture2D shaderTexture;
 SamplerState SampleType;
 
 float4 pixelShader( pixelInput input ) : SV_TARGET {
-	return float4( input.color.xyz, input.height );
+	return float4( perpendicularDirection.xyz/*input.color.xyz*/, input.height );
 }
