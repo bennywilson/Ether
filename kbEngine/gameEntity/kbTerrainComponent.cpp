@@ -471,9 +471,6 @@ void kbTerrainComponent::GenerateTerrain() {
 		}
 	}
 
-	std::vector<kbCollisionComponent::customTriangle_t> terrainCollision;
-	terrainCollision.resize( ( (m_TerrainDimensions - 1) * (m_TerrainDimensions-1) ) * 2 );
-
 	for ( int y = 0, triIdx = 0; y < m_TerrainDimensions - 1; y++ ) {
 		for ( int x = 0; x < m_TerrainDimensions - 1; x++, triIdx += 2 ) {
 			
@@ -486,14 +483,6 @@ void kbTerrainComponent::GenerateTerrain() {
 			pIndices[currentIndexToWrite + 4] = currentIndex + 1 + m_TerrainDimensions;
 			pIndices[currentIndexToWrite + 3] = currentIndex + m_TerrainDimensions;
 			currentIndexToWrite += 6;
-
-			terrainCollision[triIdx + 0].m_Vertex1 = cpuVerts[currentIndex];
-			terrainCollision[triIdx + 0].m_Vertex2 = cpuVerts[currentIndex + 1];
-			terrainCollision[triIdx + 0].m_Vertex3 = cpuVerts[currentIndex + m_TerrainDimensions];
-
-			terrainCollision[triIdx + 1].m_Vertex1 = cpuVerts[currentIndex + 1];
-			terrainCollision[triIdx + 1].m_Vertex2 = cpuVerts[currentIndex + 1 + m_TerrainDimensions];
-			terrainCollision[triIdx + 1].m_Vertex3 = cpuVerts[currentIndex + m_TerrainDimensions];
 		}
 	}
 
@@ -501,12 +490,33 @@ void kbTerrainComponent::GenerateTerrain() {
 
     UpdateTerrainMaterial();
 
+    g_pRenderer->AddRenderObject( m_TerrainRenderObject );
+
+	// Update collision
+	int collisionPatchSize = 128;
+
+	std::vector<kbCollisionComponent::customTriangle_t> terrainCollision;
+	terrainCollision.resize( ( (m_TerrainDimensions / collisionPatchSize) * (m_TerrainDimensions/collisionPatchSize) ) * 2 );
+
+	int triIdx = 0;
+	for ( int y = 0; y < m_TerrainDimensions - collisionPatchSize; y += collisionPatchSize ) {
+		for ( int x = 0; x < m_TerrainDimensions - collisionPatchSize; x += collisionPatchSize, triIdx += 2 ) {
+			
+			const unsigned int currentIndex = ( y * m_TerrainDimensions ) + x;
+			terrainCollision[triIdx + 0].m_Vertex1 = cpuVerts[currentIndex];
+			terrainCollision[triIdx + 0].m_Vertex2 = cpuVerts[currentIndex + collisionPatchSize];
+			terrainCollision[triIdx + 0].m_Vertex3 = cpuVerts[currentIndex + (collisionPatchSize*m_TerrainDimensions)];
+
+			terrainCollision[triIdx + 1].m_Vertex1 = cpuVerts[currentIndex + collisionPatchSize];
+			terrainCollision[triIdx + 1].m_Vertex2 = cpuVerts[currentIndex +collisionPatchSize + (m_TerrainDimensions*collisionPatchSize)];
+			terrainCollision[triIdx + 1].m_Vertex3 = cpuVerts[currentIndex + (collisionPatchSize*m_TerrainDimensions)];
+		}
+	}
+
 	kbCollisionComponent *const pCollision = (kbCollisionComponent*)GetOwner()->GetComponentByType( kbCollisionComponent::GetType() );
 	if ( pCollision != nullptr ) {
 		pCollision->SetCustomTriangleCollision( terrainCollision );
 	}
-
-    g_pRenderer->AddRenderObject( m_TerrainRenderObject );
 }
 /**
  *  kbTerrainComponent::SetCollisionMap
