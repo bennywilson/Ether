@@ -524,12 +524,15 @@ void kbTerrainComponent::GenerateTerrain() {
 void kbTerrainComponent::SetCollisionMap( const kbRenderTexture *const pTexture ) {
 	for ( int i = 0; i < m_Grass.size(); i++ ) {
 		m_Grass[i].m_GrassShaderOverrides.SetTexture( "collisionMap", pTexture );
+		m_Grass[i].m_GrassShaderOverrides.SetVec4( "collisionMapPixelWorldSize", kbVec4( GetTerrainWidth() / pTexture->GetWidth(), 0.0f, 0.0f, 0.0f ) );
+
 		for ( int cellIdx = 0; cellIdx < m_Grass[i].m_GrassRenderObjects.size(); cellIdx++ ) {
 			m_Grass[i].m_GrassRenderObjects[cellIdx].m_RenderObject.m_ShaderParamOverrides = m_Grass[i].m_GrassShaderOverrides;
 			g_pRenderer->UpdateRenderObject( m_Grass[i].m_GrassRenderObjects[cellIdx].m_RenderObject );
 		}
 	}
 }
+
 /**
  *	kbTerrainComponent::SetEnable_Internal
  */	

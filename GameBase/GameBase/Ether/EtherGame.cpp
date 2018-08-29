@@ -630,12 +630,14 @@ void EtherGame::RenderSync() {
 		kbVec3 perpLine( finalEndPt.x - finalStartPt.x, finalEndPt.y - finalStartPt.y, 0.0f );
 		perpLine.Normalize();
 
+		const float pushLineWidth = 32.0f / 4096.0f;
 		float swap = perpLine.x;
 		perpLine.x = perpLine.y;
 		perpLine.y = -swap;
 		perpLine.Normalize();
+		perpLine *= pushLineWidth * 0.5f;
 
-		m_ShaderParamOverrides.SetVec4( "perpendicularDirection", kbVec4( 1,1,0,1 ) );//kbVec4( perpLine.x, perpLine.y, 0.0f, 0.0f ) );
+		m_ShaderParamOverrides.SetVec4( "perpendicularDirection", kbVec4( perpLine.x, perpLine.y, 0.0f, 0.0f ) );
 		g_pRenderer->RT_SetBlendState( false,
 									   false,
 									   true,
@@ -647,7 +649,7 @@ void EtherGame::RenderSync() {
 									   BlendOp_Min,
 									   ColorWriteEnable_RGB );
 
-		g_pRenderer->RT_RenderLine( startPos, endPos, kbColor( 0.0f, 0.0f, 1.0f, 0.0f ), 32.0f / 4096.0f, m_pCollisionGenShader, &m_ShaderParamOverrides );
+		g_pRenderer->RT_RenderLine( startPos, endPos, kbColor( 0.0f, 0.0f, 1.0f, 0.0f ), pushLineWidth, m_pCollisionGenShader, &m_ShaderParamOverrides );
 
 	
 		g_pRenderer->RT_SetBlendState( false,

@@ -15,6 +15,7 @@ cbuffer ConstantBuffer1 {
 	float4 time;
 	float4 fakeAOData;		// x - Darkness, y - power
 	float4 collisionMapCenter;
+	float4 collisionMapPixelWorldSize;
 	//float4 collisionSphere;
 };
 
@@ -95,10 +96,27 @@ void CreateVertex( inout TriangleStream<pixelInput> OutputStream, float3 vertexW
 	terrainMapUV.x = ( ( bladeWorldOrigin.x - collisionMapCenter.x ) / collisionMapCenter.z ) * 0.5f + 0.5f;
 	terrainMapUV.y = ( ( bladeWorldOrigin.z - collisionMapCenter.y ) / collisionMapCenter.z ) * 0.5f + 0.5f;
 
-	const float4 collisionMapVal = collisionMap.SampleLevel( SampleType, terrainMapUV, 0.0f );
+	float4 collisionMapVal = collisionMap.SampleLevel( SampleType, terrainMapUV, 0.0f );
 
 	// Check collision
 	float3 windpush = 0.0f;
+	if ( length( collisionMapVal.xy ) > 0.0f ) {
+		float2 centerPt = terrainMapUV;
+		centerPt = ( centerPt * 2.0f ) - 1.0f;
+		centerPt -= collisionMapVal.xy;
+		centerPt *= collisionMapCenter.z;
+		float3 worldCenterPt = float3( centerPt.x, collisionMapVal.w, centerPt.y );
+
+		float3 vecTo = bladeWorldOrigin - worldCenterPt.xyz;
+		vecTo.y = min( vecTo.y, 0.0f );
+
+		float collisionRadius = 8.0f;
+
+		windpush = 1.0f - saturate( length( vecTo ) / collisionRadius);
+		windpush *= normalize( vecTo ) * collisionRadius * 2.f;
+	}
+	collisionMapVal.w = 999999999;
+
 /*	if ( length( collisionSphere.xz - bladeWorldOrigin.xz ) < collisionSphere.w && abs( collisionSphere.y - bladeWorldOrigin.y ) < collisionSphere.w ) {
 		float3 vecTo = bladeWorldOrigin - collisionSphere.xyz;
 		vecTo.y = min( vecTo.y, 0.0f );
