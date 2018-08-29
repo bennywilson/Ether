@@ -94,6 +94,7 @@ protected:
 	virtual void								RenderThreadCallBack() override;
 	kbRenderTexture *							m_pBulletHoleRenderTexture;
 	kbRenderTexture *							m_pBulletTraceRenderTexture;
+	kbShader *									m_pCollisionGenShader;
 };
 
 

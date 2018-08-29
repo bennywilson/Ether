@@ -352,11 +352,11 @@ public:
 
 	void										LoadShader( const std::string & fileName, ID3D11VertexShader *& vertexShader, ID3D11GeometryShader *& geometryShader,
 															ID3D11PixelShader *& pixelShader, ID3D11InputLayout *& vertexLayout, const std::string & vertexShaderFunc, 
-															const std::string & pixelShaderFunc, struct kbShaderVarBindings_t * ShaderBindings = nullptr );
+															const std::string & pixelShaderFunc, struct kbShaderVarBindings_t * pShaderBindings = nullptr );
 
 	void										CreateShaderFromText( const std::string & fileName, const std::string & shaderText, ID3D11VertexShader *& vertexShader, ID3D11GeometryShader *& geometryShader,
 															ID3D11PixelShader *& pixelShader, ID3D11InputLayout *& vertexLayout, const std::string & vertexShaderFunc, 
-															const std::string & pixelShaderFunc, struct kbShaderVarBindings_t * ShaderBindings = nullptr );
+															const std::string & pixelShaderFunc, struct kbShaderVarBindings_t * pShaderBindings = nullptr );
 
 	// Oculus
 	bool										IsRenderingToHMD() const { return m_bRenderToHMD; }
@@ -375,7 +375,7 @@ public:
 	virtual void								RT_SetRenderTarget( kbRenderTexture *const pRenderTexture ) override;
 	virtual void								RT_ClearRenderTarget( kbRenderTexture *const pRenderTexture, const kbColor & color ) override;
 	virtual void								RT_RenderMesh( const kbModel *const pModel, kbShader * pShader, const kbShaderParamOverrides_t *const pShaderParams ) override;
-	virtual void								RT_RenderLine( const kbVec3 & startPt, const kbVec3 & endPt, const kbColor & color, const float width, const kbShader * pShader );
+	virtual void								RT_RenderLine( const kbVec3 & startPt, const kbVec3 & endPt, const kbColor & color, const float width, const kbShader * pShader, const struct kbShaderParamOverrides_t *const ShaderBindings = nullptr );
 	virtual void								RT_SetBlendState( const bool bAlphaToCoverageEnable = false,
 																  const bool bIndependentBlendEnabled = false,
 																  const bool bBlendEnable = false,
@@ -426,6 +426,7 @@ private:
 	void										RenderDebugText();
 	void										RenderMousePickerIds();
 	void										Blit( kbRenderTexture *const src, kbRenderTexture *const dest );
+	ID3D11Buffer *								SetConstantBuffer( const kbShaderVarBindings_t & shaderBindings, const kbShaderParamOverrides_t * shaderParamOverrides, const kbRenderObject *const pRenderObject );
 
 	ID3D11Buffer *								GetConstantBuffer( const size_t requestSize );
 	void										SetShaderMat4( const std::string & varName, const kbMat4 & inMatrix, void *const pBuffer, const kbShaderVarBindings_t & binding );

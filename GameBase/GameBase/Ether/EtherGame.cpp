@@ -49,7 +49,8 @@ EtherGame::EtherGame() :
 	m_pTranslucentShader( nullptr ),
 	m_HMDWorldOffset( kbVec3::zero ),
 	m_pBulletHoleRenderTexture( nullptr ),
-	m_pBulletTraceRenderTexture( nullptr ) {
+	m_pBulletTraceRenderTexture( nullptr ),
+	m_pCollisionGenShader( nullptr ) {
 
 	m_Camera.m_Position.Set( 0.0f, 2600.0f, 0.0f );
 
@@ -556,6 +557,8 @@ void EtherGame::RenderSync() {
 				}
 			}
 		}
+
+		m_pCollisionGenShader = (kbShader*)g_ResourceManager.GetResource( "./assets/shaders/collisionMapGen.kbshader", true );
 	}
 
 	if ( GetAsyncKeyState( 'C' ) ) {
@@ -621,6 +624,22 @@ void EtherGame::RenderSync() {
 		kbVec3 endPos = ( ( kbVec3( curShot.shotEnd.x, curShot.shotEnd.z, 0.0f ) - terrainCenter ) / halfTerrainWidth ) * 0.5f + 0.5f;
 		endPos.z = curShot.shotEnd.y;
 
+
+	
+		g_pRenderer->RT_SetBlendState( false,
+									   false,
+									   true,
+									   BlendFactor_One,
+									   BlendFactor_Zero,
+									   BlendOp_Add,
+									   BlendFactor_One,
+									   BlendFactor_One,
+									   BlendOp_Min,
+									   ColorWriteEnable_RGB );
+
+		g_pRenderer->RT_RenderLine( startPos, endPos, kbColor( 0.0f, 0.0f, 1.0f, 0.0f ), 32.0f / 4096.0f, m_pCollisionGenShader );
+
+	
 		g_pRenderer->RT_SetBlendState( false,
 									   false,
 									   true,
@@ -632,7 +651,7 @@ void EtherGame::RenderSync() {
 									   BlendOp_Min,
 									   ColorWriteEnable_All );
 
-		g_pRenderer->RT_RenderLine( startPos, endPos, kbColor( 0.0f, 0.0f, 1.0f, 0.0f ), 16.0f / 4096.0f, (kbShader*)g_ResourceManager.GetResource( "./assets/shaders/collisionMapGen.kbshader", true ) );
+		g_pRenderer->RT_RenderLine( startPos, endPos, kbColor( 0.0f, 0.0f, 1.0f, 0.0f ), 16.0f / 4096.0f, m_pCollisionGenShader );
 
 		g_pRenderer->RT_SetBlendState();
 	}

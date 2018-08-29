@@ -2932,11 +2932,6 @@ void kbRenderer_DX11::RenderMesh( const kbRenderSubmesh *const pRenderMesh, cons
 	kbErrorCheck( pRenderObject != nullptr && pRenderObject->m_pModel != nullptr, "kbRenderer_DX11::RenderMesh() - no model found" );
 	kbErrorCheck( pModel->GetMaterials().size() > 0, "kbRenderer_DX11::RenderMesh() - No materials found for model %s", pRenderObject->m_pModel->GetFullName() );
 
-	kbMat4 worldMatrix;
-	worldMatrix.MakeScale( pRenderObject->m_Scale );
-	worldMatrix *= pRenderObject->m_Orientation.ToMat4();
-	worldMatrix[3] = pRenderObject->m_Position;
-
 	const UINT vertexStride = pModel->VertexStride();
 	const UINT vertexOffset = 0;
 
@@ -3024,126 +3019,12 @@ void kbRenderer_DX11::RenderMesh( const kbRenderSubmesh *const pRenderMesh, cons
 
 	// Get a valid constant buffer and bind the kbShader's vars to it
 	const kbShaderVarBindings_t & shaderVarBindings = pShader->GetShaderVarBindings();
-	std::map<size_t, ID3D11Buffer *>::iterator constantBufferIt = m_ConstantBuffers.find( shaderVarBindings.m_ConstantBufferSizeBytes );
-	kbErrorCheck( constantBufferIt != m_ConstantBuffers.end() && constantBufferIt->second != nullptr, "kbRenderer_DX11::RenderMesh() - Could not find constant buffer for shader %s", pShader->GetFullFileName() );
 
-	ID3D11Buffer *const pConstantBuffer = constantBufferIt->second;
-	D3D11_MAPPED_SUBRESOURCE mappedResource;
-	HRESULT hr = m_pDeviceContext->Map( pConstantBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource );
+	ID3D11Buffer *const pConstantBuffer = SetConstantBuffer( shaderVarBindings, &pRenderObject->m_ShaderParamOverrides, pRenderObject );
 
-	const auto & bindings = shaderVarBindings.m_VarBindings;
-	byte * constantPtr = (byte*) mappedResource.pData;
-	for ( int i = 0; i < bindings.size(); i++ ) {
-		const std::string & varName = bindings[i].m_VarName;
-		const byte * pVarByteOffset = constantPtr + bindings[i].m_VarByteOffset;
-		if ( varName == "mvpMatrix" ) {
-			kbMat4 *const pMatOffset = (kbMat4*)pVarByteOffset;
-			*pMatOffset = worldMatrix * m_pCurrentRenderWindow->GetViewProjectionMatrix();
-		} else if ( varName == "vpMatrix" ) {
-			kbMat4 *const pMatOffset = (kbMat4*)pVarByteOffset;
-			*pMatOffset = m_pCurrentRenderWindow->GetViewProjectionMatrix();
-        } else if ( varName == "modelMatrix" ) {
-			kbMat4 *const pMatOffset = (kbMat4*)pVarByteOffset;
-			*pMatOffset = worldMatrix;
-		} else if ( varName == "cameraPos" ) {
-			kbVec4 *const pVecOffset = (kbVec4*)pVarByteOffset;
-			*pVecOffset = m_pCurrentRenderWindow->GetCameraPosition();
-		} else if ( varName == "viewProjection" ) {
-			kbMat4 *const pMatOffset = (kbMat4*)pVarByteOffset;
-			*pMatOffset = m_pCurrentRenderWindow->GetViewProjectionMatrix();
-		} else if ( varName == "boneList" ) {
-			kbMat4 *const boneMatrices = (kbMat4*)pVarByteOffset;
-			for ( int i = 0; i < pRenderObject->m_MatrixList.size() && i < Max_Shader_Bones; i++ ) {
-				boneMatrices[i].MakeIdentity();
-				boneMatrices[i][0] = pRenderObject->m_MatrixList[i].GetAxis(0);
-				boneMatrices[i][1] = pRenderObject->m_MatrixList[i].GetAxis(1);
-				boneMatrices[i][2] = pRenderObject->m_MatrixList[i].GetAxis(2);
-				boneMatrices[i][3] = pRenderObject->m_MatrixList[i].GetAxis(3);
-				
-				boneMatrices[i][0].w = 0;
-				boneMatrices[i][1].w = 0;
-				boneMatrices[i][2].w = 0;
-            }
-		} else if ( varName == "time" ) {
-
-            kbVec4 time;
-            time.x = g_GlobalTimer.TimeElapsedSeconds();
-            time.y = sin( time.x );
-            time.z = sin( time.x * 2.0f );
-            time.w = sin( time.x * 3.0f );
-            kbVec4 *const pVecOffset = (kbVec4*)pVarByteOffset;
-            *pVecOffset = time;
-        } else {
-            const std::vector<kbShaderParamOverrides_t::kbShaderParam_t> & paramOverrides = pRenderObject->m_ShaderParamOverrides.m_ParamOverrides;
-            for ( int iOverride = 0; iOverride < paramOverrides.size(); iOverride++ ) {
-                const kbShaderParamOverrides_t::kbShaderParam_t & curOverride = paramOverrides[iOverride];
-                const std::string & overrideVarName = curOverride.m_VarName;
-                if ( varName == overrideVarName ) {
-
-                    // Check if it doesn't fit
-                    const size_t endOffset = curOverride.m_VarSizeBytes + bindings[i].m_VarByteOffset;
-                    if ( endOffset > shaderVarBindings.m_ConstantBufferSizeBytes || ( i < bindings.size() - 1 && endOffset > bindings[i+1].m_VarByteOffset ) ) {
-                        break;
-                    }
-               
-                    switch( curOverride.m_Type ) {
-                        case kbShaderParamOverrides_t::kbShaderParam_t::SHADER_MAT4 : {
-                            kbMat4 *const pMatOffset = (kbMat4*)pVarByteOffset;
-			                *pMatOffset = curOverride.m_Mat4List[0];
-                            break;
-                        }
-
-                        case kbShaderParamOverrides_t::kbShaderParam_t::SHADER_VEC4 : {
-                            kbVec4 *const pVecOffset = (kbVec4*)pVarByteOffset;
-			                *pVecOffset = curOverride.m_Vec4List[0];
-                            break;
-                        }
-
-						case kbShaderParamOverrides_t::kbShaderParam_t::SHADER_MAT4_LIST : {
-                            kbMat4 *const pMatOffset = (kbMat4*)pVarByteOffset;
-							for ( int i = 0; i < curOverride.m_Mat4List.size(); i++ ) {
-								pMatOffset[i] = curOverride.m_Mat4List[i];
-							}
-                            break;
-						}
-
-						case kbShaderParamOverrides_t::kbShaderParam_t::SHADER_VEC4_LIST : {
-                            kbVec4 *const pVecOffset = (kbVec4*)pVarByteOffset;
-							for ( int i = 0; i < curOverride.m_Vec4List.size(); i++ ) {
-								pVecOffset[i] = curOverride.m_Vec4List[i];
-							}
-                            break;
-						}
-                    }
-                }
-            }
-        }
-	}
-
-    // Bind textures
-    const std::vector<kbShaderParamOverrides_t::kbShaderParam_t> & paramOverrides = pRenderObject->m_ShaderParamOverrides.m_ParamOverrides;
-	for ( int iTex = 0; iTex < shaderVarBindings.m_TextureNames.size(); iTex++ ) {
-	    for ( int iOverride = 0; iOverride < paramOverrides.size(); iOverride++ ) {
-			const kbShaderParamOverrides_t::kbShaderParam_t & curOverride = paramOverrides[iOverride];
-			if ( curOverride.m_Type == kbShaderParamOverrides_t::kbShaderParam_t::SHADER_TEX && curOverride.m_VarName == shaderVarBindings.m_TextureNames[iTex] ) {
-
-	            ID3D11ShaderResourceView * pShaderResourceView = nullptr;
-				if ( curOverride.m_pTexture != nullptr ) {
-					 pShaderResourceView = curOverride.m_pTexture->GetGPUTexture();
-				} else if ( curOverride.m_pRenderTexture != nullptr ) {
-					pShaderResourceView = ((kbRenderTexture_DX11*)curOverride.m_pRenderTexture)->m_pShaderResourceView;
-				}
-
-				m_pDeviceContext->VSSetShaderResources( iTex, 1, &pShaderResourceView );				
-				m_pDeviceContext->GSSetShaderResources( iTex, 1, &pShaderResourceView );				
-				m_pDeviceContext->PSSetShaderResources( iTex, 1, &pShaderResourceView );				
-			}
-		}
-	}
-
-	m_pDeviceContext->Unmap( pConstantBuffer, 0 );
 	m_pDeviceContext->VSSetConstantBuffers( 0, 1, &pConstantBuffer );
 	m_pDeviceContext->PSSetConstantBuffers( 0, 1, &pConstantBuffer );
+
     if ( pShader->GetGeometryShader() != nullptr ) {
         m_pDeviceContext->GSSetConstantBuffers( 0, 1, &pConstantBuffer );
     }
@@ -3510,7 +3391,7 @@ void kbRenderer_DX11::RT_RenderMesh( const kbModel *const pModel, kbShader * pSh
 /**
  *	kbRenderer_DX11::RT_RenderLine
  */
-void kbRenderer_DX11::RT_RenderLine( const kbVec3 & startPt, const kbVec3 & endPt, const kbColor & color, const float width, const kbShader * pShader ) {
+void kbRenderer_DX11::RT_RenderLine( const kbVec3 & startPt, const kbVec3 & endPt, const kbColor & color, const float width, const kbShader * pShader, const kbShaderParamOverrides_t *const pShaderParamOverrides ) {
 
 	D3D11_MAPPED_SUBRESOURCE mappedResource;
 	HRESULT hr = m_pDeviceContext->Map( m_DebugVertexBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource );
@@ -3533,21 +3414,27 @@ void kbRenderer_DX11::RT_RenderLine( const kbVec3 & startPt, const kbVec3 & endP
 	vertexLayout *const vertices = (vertexLayout *) mappedResource.pData;
 	vertices[0].position = finalStartPt + perpLine;
 	vertices[0].SetColor( color );
-	
+	vertices[0].uv.Set( 1.0f, 0.0f );
+
 	vertices[1].position = finalStartPt - perpLine;
 	vertices[1].SetColor( color );
+	vertices[1].uv.Set( 0.0f, 0.0f );
 
 	vertices[2].position = finalEndPt - perpLine;
 	vertices[2].SetColor( color );
+	vertices[2].uv.Set( 0.0f, 1.0f );
 
 	vertices[3].position = finalEndPt - perpLine;
 	vertices[3].SetColor( color );
+	vertices[3].uv.Set( 0.0f, 1.0f );
 	
 	vertices[4].position = finalEndPt + perpLine;
 	vertices[4].SetColor( color );
+	vertices[4].uv.Set( 1.0f, 1.0f );
 
 	vertices[5].position = finalStartPt + perpLine;
 	vertices[5].SetColor( color );
+	vertices[5].uv.Set( 1.0f, 0.0f );
 
 	m_pDeviceContext->Unmap( m_DebugVertexBuffer, 0 );
 
@@ -3571,13 +3458,8 @@ void kbRenderer_DX11::RT_RenderLine( const kbVec3 & startPt, const kbVec3 & endP
 	m_pDeviceContext->PSSetShader( (ID3D11PixelShader*) pShader->GetPixelShader(), nullptr, 0 );
 
 	const auto & varBindings = pShader->GetShaderVarBindings();
-	ID3D11Buffer *const pConstantBuffer = GetConstantBuffer( varBindings.m_ConstantBufferSizeBytes );
-	hr = m_pDeviceContext->Map( pConstantBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource );
-	kbErrorCheck( SUCCEEDED(hr), "kbRenderer_DX11::RenderDebugLines() - Failed to map matrix buffer" );
+	ID3D11Buffer *const pConstantBuffer = SetConstantBuffer( varBindings, pShaderParamOverrides, nullptr );
 
-	SetShaderMat4( "mvpMatrix", kbMat4::identity, mappedResource.pData, varBindings );
-
-	m_pDeviceContext->Unmap( pConstantBuffer, 0 );
 	m_pDeviceContext->VSSetConstantBuffers( 0, 1, &pConstantBuffer );
 
 	m_pDeviceContext->Draw( 6, 0 );
@@ -3610,4 +3492,147 @@ void kbRenderer_DX11::RT_SetBlendState( const bool bAlphaToCoverageEnable,
 								 alphaBlendOp,
 								 renderTargetWriteMask,
 								 sampleMask );
+}
+
+/**
+ *	kbRenderer_DX11::SetConstantBuffer
+ */
+ID3D11Buffer * kbRenderer_DX11::SetConstantBuffer( const kbShaderVarBindings_t & shaderVarBindings, const kbShaderParamOverrides_t * shaderParamOverrides, const kbRenderObject *const pRenderObject ) {
+	kbMat4 worldMatrix;
+	if ( pRenderObject != nullptr ) {
+		worldMatrix.MakeScale( pRenderObject->m_Scale );
+		worldMatrix *= pRenderObject->m_Orientation.ToMat4();
+		worldMatrix[3] = pRenderObject->m_Position;
+	} else {
+		worldMatrix = kbMat4::identity;
+	}
+
+
+	D3D11_MAPPED_SUBRESOURCE mappedResource;
+	ID3D11Buffer *const pConstantBuffer = GetConstantBuffer( shaderVarBindings.m_ConstantBufferSizeBytes );
+	HRESULT hr = m_pDeviceContext->Map( pConstantBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource );
+	kbErrorCheck( SUCCEEDED(hr), "kbRenderer_DX11::RenderDebugLines() - Failed to map matrix buffer" );
+
+	const auto & bindings = shaderVarBindings.m_VarBindings;
+	byte * constantPtr = (byte*) mappedResource.pData;
+
+    std::vector<kbShaderParamOverrides_t::kbShaderParam_t> * paramOverrides = nullptr;
+	if ( pRenderObject != nullptr ) {
+		paramOverrides = &pRenderObject->m_ShaderParamOverrides.m_ParamOverrides;
+	} else if ( shaderParamOverrides != nullptr ) {
+		paramOverrides = &shaderParamOverrides->m_ParamOverrides;
+	}
+
+	for ( int i = 0; i < bindings.size(); i++ ) {
+		const std::string & varName = bindings[i].m_VarName;
+		const byte * pVarByteOffset = constantPtr + bindings[i].m_VarByteOffset;
+		if ( varName == "mvpMatrix" ) {
+			kbMat4 *const pMatOffset = (kbMat4*)pVarByteOffset;
+			*pMatOffset = worldMatrix * m_pCurrentRenderWindow->GetViewProjectionMatrix();
+		} else if ( varName == "vpMatrix" ) {
+			kbMat4 *const pMatOffset = (kbMat4*)pVarByteOffset;
+			*pMatOffset = m_pCurrentRenderWindow->GetViewProjectionMatrix();
+        } else if ( varName == "modelMatrix" ) {
+			kbMat4 *const pMatOffset = (kbMat4*)pVarByteOffset;
+			*pMatOffset = worldMatrix;
+		} else if ( varName == "cameraPos" ) {
+			kbVec4 *const pVecOffset = (kbVec4*)pVarByteOffset;
+			*pVecOffset = m_pCurrentRenderWindow->GetCameraPosition();
+		} else if ( varName == "viewProjection" ) {
+			kbMat4 *const pMatOffset = (kbMat4*)pVarByteOffset;
+			*pMatOffset = m_pCurrentRenderWindow->GetViewProjectionMatrix();
+		} else if ( varName == "boneList" ) {
+			if ( pRenderObject != nullptr ) {
+				kbMat4 *const boneMatrices = (kbMat4*)pVarByteOffset;
+				for ( int i = 0; i < pRenderObject->m_MatrixList.size() && i < Max_Shader_Bones; i++ ) {
+					boneMatrices[i].MakeIdentity();
+					boneMatrices[i][0] = pRenderObject->m_MatrixList[i].GetAxis(0);
+					boneMatrices[i][1] = pRenderObject->m_MatrixList[i].GetAxis(1);
+					boneMatrices[i][2] = pRenderObject->m_MatrixList[i].GetAxis(2);
+					boneMatrices[i][3] = pRenderObject->m_MatrixList[i].GetAxis(3);
+				
+					boneMatrices[i][0].w = 0;
+					boneMatrices[i][1].w = 0;
+					boneMatrices[i][2].w = 0;
+				}
+			}
+		} else if ( varName == "time" ) {
+
+            kbVec4 time;
+            time.x = g_GlobalTimer.TimeElapsedSeconds();
+            time.y = sin( time.x );
+            time.z = sin( time.x * 2.0f );
+            time.w = sin( time.x * 3.0f );
+            kbVec4 *const pVecOffset = (kbVec4*)pVarByteOffset;
+            *pVecOffset = time;
+        } else if ( paramOverrides != nullptr ) {
+            for ( int iOverride = 0; iOverride < paramOverrides->size(); iOverride++ ) {
+                const kbShaderParamOverrides_t::kbShaderParam_t & curOverride = (*paramOverrides)[iOverride];
+                const std::string & overrideVarName = curOverride.m_VarName;
+                if ( varName == overrideVarName ) {
+
+                    // Check if it doesn't fit
+                    const size_t endOffset = curOverride.m_VarSizeBytes + bindings[i].m_VarByteOffset;
+                    if ( endOffset > shaderVarBindings.m_ConstantBufferSizeBytes || ( i < bindings.size() - 1 && endOffset > bindings[i+1].m_VarByteOffset ) ) {
+                        break;
+                    }
+               
+                    switch( curOverride.m_Type ) {
+                        case kbShaderParamOverrides_t::kbShaderParam_t::SHADER_MAT4 : {
+                            kbMat4 *const pMatOffset = (kbMat4*)pVarByteOffset;
+			                *pMatOffset = curOverride.m_Mat4List[0];
+                            break;
+                        }
+
+                        case kbShaderParamOverrides_t::kbShaderParam_t::SHADER_VEC4 : {
+                            kbVec4 *const pVecOffset = (kbVec4*)pVarByteOffset;
+			                *pVecOffset = curOverride.m_Vec4List[0];
+                            break;
+                        }
+
+						case kbShaderParamOverrides_t::kbShaderParam_t::SHADER_MAT4_LIST : {
+                            kbMat4 *const pMatOffset = (kbMat4*)pVarByteOffset;
+							for ( int i = 0; i < curOverride.m_Mat4List.size(); i++ ) {
+								pMatOffset[i] = curOverride.m_Mat4List[i];
+							}
+                            break;
+						}
+
+						case kbShaderParamOverrides_t::kbShaderParam_t::SHADER_VEC4_LIST : {
+                            kbVec4 *const pVecOffset = (kbVec4*)pVarByteOffset;
+							for ( int i = 0; i < curOverride.m_Vec4List.size(); i++ ) {
+								pVecOffset[i] = curOverride.m_Vec4List[i];
+							}
+                            break;
+						}
+                    }
+                }
+            }
+        }
+	}
+
+    // Bind textures
+	if ( paramOverrides != nullptr ) {
+		for ( int iTex = 0; iTex < shaderVarBindings.m_TextureNames.size(); iTex++ ) {
+			for ( int iOverride = 0; iOverride < paramOverrides->size(); iOverride++ ) {
+				const kbShaderParamOverrides_t::kbShaderParam_t & curOverride = (*paramOverrides)[iOverride];
+				if ( curOverride.m_Type == kbShaderParamOverrides_t::kbShaderParam_t::SHADER_TEX && curOverride.m_VarName == shaderVarBindings.m_TextureNames[iTex] ) {
+
+					ID3D11ShaderResourceView * pShaderResourceView = nullptr;
+					if ( curOverride.m_pTexture != nullptr ) {
+						 pShaderResourceView = curOverride.m_pTexture->GetGPUTexture();
+					} else if ( curOverride.m_pRenderTexture != nullptr ) {
+						pShaderResourceView = ((kbRenderTexture_DX11*)curOverride.m_pRenderTexture)->m_pShaderResourceView;
+					}
+
+					m_pDeviceContext->VSSetShaderResources( iTex, 1, &pShaderResourceView );				
+					m_pDeviceContext->GSSetShaderResources( iTex, 1, &pShaderResourceView );				
+					m_pDeviceContext->PSSetShaderResources( iTex, 1, &pShaderResourceView );				
+				}
+			}
+		}
+	}
+
+	m_pDeviceContext->Unmap( pConstantBuffer, 0 );
+	return pConstantBuffer;
 }
