@@ -598,6 +598,17 @@ void EtherGame::RenderSync() {
 			kbTexture *const pScorchTex = (kbTexture*)g_ResourceManager.GetResource( "./assets/FX/scorch.jpg", true );
 			shaderParams.SetTexture( "scorchTex", pScorchTex );
 
+			g_pRenderer->RT_SetBlendState( false,
+										   false,
+										   true,
+										   BlendFactor_DstColor,
+										   BlendFactor_Zero,
+										   BlendOp_Add,
+										   BlendFactor_One,
+										   BlendFactor_One,
+										   BlendOp_Min,
+										   ColorWriteEnable_All );
+
 			g_pRenderer->RT_RenderMesh( pSM->GetModel(), pUnwrapShader, &shaderParams );
 		}
 
@@ -610,7 +621,20 @@ void EtherGame::RenderSync() {
 		kbVec3 endPos = ( ( kbVec3( curShot.shotEnd.x, curShot.shotEnd.z, 0.0f ) - terrainCenter ) / halfTerrainWidth ) * 0.5f + 0.5f;
 		endPos.z = curShot.shotEnd.y;
 
+		g_pRenderer->RT_SetBlendState( false,
+									   false,
+									   true,
+									   BlendFactor_One,
+									   BlendFactor_One,
+									   BlendOp_Add,
+									   BlendFactor_One,
+									   BlendFactor_One,
+									   BlendOp_Min,
+									   ColorWriteEnable_All );
+
 		g_pRenderer->RT_RenderLine( startPos, endPos, kbColor( 0.0f, 0.0f, 1.0f, 0.0f ), 16.0f / 4096.0f, (kbShader*)g_ResourceManager.GetResource( "./assets/shaders/collisionMapGen.kbshader", true ) );
+
+		g_pRenderer->RT_SetBlendState();
 	}
 	m_ShotsThisFrame.clear();
 }

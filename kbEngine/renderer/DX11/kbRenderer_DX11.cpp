@@ -3384,17 +3384,6 @@ void kbRenderer_DX11::RT_RenderMesh( const kbModel *const pModel, kbShader * pSh
 		pShader = m_pMissingShader;
 	}
 
-	m_RenderState.SetBlendState( false,
-								 false,
-								 true,
-								 BlendFactor_DstColor,
-								 BlendFactor_Zero,
-								 BlendOp_Add,
-								 BlendFactor_One,
-								 BlendFactor_One,
-								 BlendOp_Min,
-								 ColorWriteEnable_All );
-
 	const UINT vertexStride = pModel->VertexStride();
 	const UINT vertexOffset = 0;
 
@@ -3594,4 +3583,31 @@ void kbRenderer_DX11::RT_RenderLine( const kbVec3 & startPt, const kbVec3 & endP
 	m_pDeviceContext->Draw( 6, 0 );
 
 	m_pDeviceContext->RSSetState( m_pDefaultRasterizerState );
+}
+
+/**
+ *	kbRenderer_DX11::RT_SetBlendState
+ */
+void kbRenderer_DX11::RT_SetBlendState( const bool bAlphaToCoverageEnable,
+										const bool bIndependentBlendEnabled,
+										const bool bBlendEnable,
+										const kbBlendFactor sourceBlend,
+										const kbBlendFactor destBlend,
+										const kbBlendOp blendOp,
+										const kbBlendFactor sourceAlpha,
+										const kbBlendFactor destAlpha,
+										const kbBlendOp alphaBlendOp,
+										const kbColorWriteEnable renderTargetWriteMask,
+										const UINT sampleMask ) {
+	m_RenderState.SetBlendState( bAlphaToCoverageEnable,
+								 bIndependentBlendEnabled,
+								 bBlendEnable,
+								 sourceBlend,
+								 destBlend,
+								 blendOp,
+								 sourceAlpha,
+								 destAlpha,
+								 alphaBlendOp,
+								 renderTargetWriteMask,
+								 sampleMask );
 }

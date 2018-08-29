@@ -134,16 +134,7 @@ struct eventMarker_t {
 /**
  *	kbRenderState
  */
-enum kbColorWriteEnable {
-	ColorWriteEnable_Red	= 1,
-	ColorWriteEnable_Green	= 2,
-	ColorWriteEnable_Blue	= 4,
-	ColorWriteEnable_Alpha	= 8,
-	ColorWriteEnable_RGB	= ColorWriteEnable_Red | ColorWriteEnable_Green | ColorWriteEnable_Blue,
-	ColorWriteEnable_All	= ColorWriteEnable_Red | ColorWriteEnable_Green | ColorWriteEnable_Blue | ColorWriteEnable_Alpha
-};
 
-kbColorWriteEnable operator| ( const kbColorWriteEnable lhs, const kbColorWriteEnable rhs );
 D3D11_COLOR_WRITE_ENABLE & operator |= ( D3D11_COLOR_WRITE_ENABLE & lhs, const D3D11_COLOR_WRITE_ENABLE rhs );
 
 struct kbRenderState {
@@ -385,7 +376,17 @@ public:
 	virtual void								RT_ClearRenderTarget( kbRenderTexture *const pRenderTexture, const kbColor & color ) override;
 	virtual void								RT_RenderMesh( const kbModel *const pModel, kbShader * pShader, const kbShaderParamOverrides_t *const pShaderParams ) override;
 	virtual void								RT_RenderLine( const kbVec3 & startPt, const kbVec3 & endPt, const kbColor & color, const float width, const kbShader * pShader );
-
+	virtual void								RT_SetBlendState( const bool bAlphaToCoverageEnable = false,
+																  const bool bIndependentBlendEnabled = false,
+																  const bool bBlendEnable = false,
+																  const kbBlendFactor sourceBlend = BlendFactor_One,
+																  const kbBlendFactor destBlend = BlendFactor_One,
+																  const kbBlendOp blendOp = BlendOp_Add,
+																  const kbBlendFactor sourceAlpha = BlendFactor_One,
+																  const kbBlendFactor destAlpha = BlendFactor_One,
+																  const kbBlendOp alphaBlendOp = BlendOp_Add,
+																  const kbColorWriteEnable renderTargetWriteMask = ColorWriteEnable_All,
+																  const UINT sampleMask = 0xffffffff ) override;
 private:
 
 	virtual void								Init_Internal( HWND, const int width, const int height, const bool bUseHMD, const bool bUseHMDTrackingOnly ) override;

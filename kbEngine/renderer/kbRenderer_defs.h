@@ -464,4 +464,15 @@ enum kbCullMode {
 	CullMode_None,
 };
 
+enum kbColorWriteEnable {
+	ColorWriteEnable_Red	= 1,
+	ColorWriteEnable_Green	= 2,
+	ColorWriteEnable_Blue	= 4,
+	ColorWriteEnable_Alpha	= 8,
+	ColorWriteEnable_RGB	= ColorWriteEnable_Red | ColorWriteEnable_Green | ColorWriteEnable_Blue,
+	ColorWriteEnable_All	= ColorWriteEnable_Red | ColorWriteEnable_Green | ColorWriteEnable_Blue | ColorWriteEnable_Alpha
+};
+
+kbColorWriteEnable operator| ( const kbColorWriteEnable lhs, const kbColorWriteEnable rhs );
+
 #endif
