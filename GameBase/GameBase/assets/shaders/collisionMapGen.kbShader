@@ -6,6 +6,7 @@
 //===================================================================================================
 cbuffer matrixBuffer {
    float4 perpendicularDirection;
+   float4 time;
 };
 
 //-------------------------------------
@@ -20,6 +21,7 @@ struct pixelInput {
 	float4 position		: SV_POSITION;
 	float2 perpVec		: TEXCOORD0;
 	float height		: TEXCOORD3;
+	float4 color		: TEXCOORD4;
 };
 
 /**
@@ -31,6 +33,7 @@ pixelInput vertexShader( vertexInput input ) {
 	output.height = input.position.z;
 	output.position = input.position;
 	output.position.z = 0;
+	output.color = input.color;
 
 	if ( input.uv.x < 0.5f ) {
 		output.perpVec = -perpendicularDirection.xy;
@@ -48,5 +51,5 @@ Texture2D shaderTexture;
 SamplerState SampleType;
 
 float4 pixelShader( pixelInput input ) : SV_TARGET {
-	return float4( input.perpVec.xy, perpendicularDirection.z, input.height );
+	return float4( input.perpVec.xy, time.x, input.height );
 }

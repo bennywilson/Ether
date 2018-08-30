@@ -140,6 +140,7 @@ public:
 	float										GetTerrainWidth() const { return m_TerrainWidth; }
 
 	void										SetCollisionMap( const kbRenderTexture *const pTexture );
+	void										SetGrassTexture( const std::string & textureName, const kbTexture *const pTexture );
 
 protected:
 

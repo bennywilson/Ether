@@ -520,6 +520,7 @@ void EtherGame::RenderSync() {
 	static float terrainWidth;
 	static float halfTerrainWidth;
 
+	// Initialize
 	if ( m_pBulletHoleRenderTexture == nullptr ) {
 		m_pBulletHoleRenderTexture = g_pRenderer->RT_GetRenderTexture( 4096, 4096, eTextureFormat::KBTEXTURE_R8G8B8A8 );
 		g_pRenderer->RT_ClearRenderTarget( m_pBulletHoleRenderTexture, kbColor::white );
@@ -542,14 +543,16 @@ void EtherGame::RenderSync() {
 		}
 
 		m_pGrassCollisionTexture = g_pRenderer->RT_GetRenderTexture( 4096, 4096, eTextureFormat::KBTEXTURE_R16G16B16A16 );
-		g_pRenderer->RT_ClearRenderTarget( m_pGrassCollisionTexture, kbColor( 0.0f, 0.0f, 0.0f, 99999.0f ) );
+		g_pRenderer->RT_ClearRenderTarget( m_pGrassCollisionTexture, kbColor( 0.0f, 0.0f, 99999.0f, 99999.0f ) );
 
+		kbTexture *const pEmberTexture = (kbTexture*)g_ResourceManager.GetResource( "./assets/FX/EmberGradient.jpg", true );
 		for ( int i = 0; i < GetGameEntities().size(); i++ ) {
 			kbGameEntity *const pEnt = GetGameEntities()[i];
 			if ( pEnt->GetName().find( "Terrain" ) != std::string::npos ) {
 				kbTerrainComponent *const pTerrain = (kbTerrainComponent*)pEnt->GetComponentByType( kbTerrainComponent::GetType() );
 				if ( pTerrain != nullptr ) {
 					pTerrain->SetCollisionMap( m_pGrassCollisionTexture );
+					pTerrain->SetGrassTexture( "emberGradientTex", pEmberTexture );
 
 					terrainPos = pEnt->GetPosition();
 					terrainWidth = pTerrain->GetTerrainWidth();
@@ -562,6 +565,7 @@ void EtherGame::RenderSync() {
 		m_pCollisionMapGenShader = (kbShader*)g_ResourceManager.GetResource( "./assets/shaders/collisionMapGen.kbshader", true );
 		m_pCollisionMapUpdateTimeShader = (kbShader*)g_ResourceManager.GetResource( "./assets/shaders/collisionMapTimeUpdate.kbshader", true );
 		m_pBulletHoleUpdateShader = (kbShader*)g_ResourceManager.GetResource( "./assets/shaders/pokeyholeunwrap.kbshader", true );
+		
 	}
 
 	if ( GetAsyncKeyState( 'C' ) ) {
@@ -656,6 +660,7 @@ void EtherGame::RenderSync() {
 
 		perpLine *= pushLineWidth * 0.5f;
 	
+		// Add directional information
 		m_ShaderParamOverrides.SetVec4( "perpendicularDirection", kbVec4( perpLine.x, perpLine.y, g_GlobalTimer.TimeElapsedSeconds(), 0.0f ) );
 		g_pRenderer->RT_SetBlendState( false,
 									   false,
@@ -670,6 +675,21 @@ void EtherGame::RenderSync() {
 
 		g_pRenderer->RT_RenderLine( startPos, endPos, kbColor( 0.0f, 0.0f, 1.0f, 0.0f ), pushLineWidth, m_pCollisionMapGenShader, &m_ShaderParamOverrides );
 	
+		// Add time
+		g_pRenderer->RT_SetBlendState( false,
+									   false,
+									   true,
+									   BlendFactor_One,
+									   BlendFactor_One,
+									   BlendOp_Min,
+									   BlendFactor_One,
+									   BlendFactor_One,
+									   BlendOp_Min,
+									   ColorWriteEnable_Blue );
+
+		g_pRenderer->RT_RenderLine( startPos, endPos, kbColor( 0.0f, 0.0f, 1.0f, 0.0f ), pushLineWidth, m_pCollisionMapGenShader, &m_ShaderParamOverrides );
+
+		// Add Height
 		g_pRenderer->RT_SetBlendState( false,
 									   false,
 									   true,
@@ -679,7 +699,7 @@ void EtherGame::RenderSync() {
 									   BlendFactor_One,
 									   BlendFactor_One,
 									   BlendOp_Min,
-									   ColorWriteEnable_Blue | ColorWriteEnable_Alpha );
+									   ColorWriteEnable_Alpha );
 
 		g_pRenderer->RT_RenderLine( startPos, endPos, kbColor( 0.0f, 0.0f, curTime, 0.0f ), 16.0f / 4096.0f, m_pCollisionMapGenShader );
 
