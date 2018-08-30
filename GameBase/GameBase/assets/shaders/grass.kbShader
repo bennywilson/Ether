@@ -116,9 +116,9 @@ void CreateVertex( inout TriangleStream<pixelInput> OutputStream, float3 vertexW
 
 		windpush = 1.0f - saturate( length( vecTo ) / collisionRadius);
 		
-		const float recoverTime = 0.7f + ( noiseValues.r * 0.225f );
+		const float recoverTime = 0.25f + ( noiseValues.r * 2.625f );
 		float strength = 1.0f - saturate( ( time.x - collisionMapVal.z ) / recoverTime );
-		windpush *= normalize( vecTo ) * collisionRadius * 0.13f * strength;
+		windpush *= normalize( vecTo ) * collisionRadius * 0.33f * strength;
 	}
 	//collisionMapVal.w = 999999999;
 
