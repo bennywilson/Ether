@@ -3237,6 +3237,15 @@ kbVec2i kbRenderer_DX11::GetEntityIdAtScreenPosition( const uint x, const uint y
  *	kbRenderer_DX11::RT_SetRenderTarget
  */
 void kbRenderer_DX11::RT_SetRenderTarget( kbRenderTexture *const pRenderTexture ) {
+	
+	ID3D11ShaderResourceView * pNullSRVs[] = { nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, 
+											   nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr };
+
+	// Unbind all textures
+	/*m_pDeviceContext->VSSetShaderResources( 0, 16, pNullSRVs );
+	m_pDeviceContext->GSSetShaderResources( 0, 16, pNullSRVs );
+	m_pDeviceContext->PSSetShaderResources( 0, 16, pNullSRVs );*/
+
 	m_pDeviceContext->OMSetRenderTargets(1, &((kbRenderTexture_DX11*)pRenderTexture)->m_pRenderTargetView, nullptr );
 
 	D3D11_VIEWPORT viewport;

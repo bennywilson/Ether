@@ -514,6 +514,7 @@ void EtherGame::RenderThreadCallBack() {
 /**
  *	EtherGame::RenderSync
  */
+static float g_TimeMultiplier = 0.95f / 0.016f;
 void EtherGame::RenderSync() {
 
 	static kbVec3 terrainPos;
@@ -542,7 +543,7 @@ void EtherGame::RenderSync() {
 			}
 		}
 
-		m_pGrassCollisionTexture = g_pRenderer->RT_GetRenderTexture( 4096, 4096, eTextureFormat::KBTEXTURE_R16G16B16A16 );
+		m_pGrassCollisionTexture = g_pRenderer->RT_GetRenderTexture( 1024, 1024, eTextureFormat::KBTEXTURE_R16G16B16A16 );
 		g_pRenderer->RT_ClearRenderTarget( m_pGrassCollisionTexture, kbColor( 0.0f, 0.0f, 99999.0f, 99999.0f ) );
 
 		kbTexture *const pEmberTexture = (kbTexture*)g_ResourceManager.GetResource( "./assets/FX/EmberGradient.jpg", true );
@@ -574,7 +575,7 @@ void EtherGame::RenderSync() {
 
 	// Update time in collision Map
 	g_pRenderer->RT_SetRenderTarget( m_pGrassCollisionTexture );
-	static float timeSubtract = 0.9f;
+
 	g_pRenderer->RT_SetBlendState( false,
 								   false,
 								   true,
@@ -586,7 +587,15 @@ void EtherGame::RenderSync() {
 								   BlendOp_Min,
 								   ColorWriteEnable_Red | ColorWriteEnable_Green );
 
-	g_pRenderer->RT_RenderLine( kbVec3( 0.5f, 0.0f, 0.0f ), kbVec3( 0.5f, 1.0f, 0.0f ), kbColor( timeSubtract, timeSubtract, timeSubtract, timeSubtract ), 15.0f, m_pCollisionMapUpdateTimeShader );
+	float timeMultiplier = 1.0f - kbClamp( g_TimeMultiplier * GetCurrentFrameDeltaTime(), 0.0f, 1.0f );
+	timeMultiplier *= 0.15f;
+	timeMultiplier += 0.85f;
+
+if ( GetAsyncKeyState('B' ) ) {
+	kbLog( "timeMult = %f %f", timeMultiplier, GetCurrentFrameDeltaTime() );
+}
+
+	g_pRenderer->RT_RenderLine( kbVec3( 0.5f, 0.0f, 0.0f ), kbVec3( 0.5f, 1.0f, 0.0f ), kbColor( timeMultiplier, timeMultiplier, timeMultiplier, timeMultiplier ), 15.0f, m_pCollisionMapUpdateTimeShader );
 	const float curTime = g_GlobalTimer.TimeElapsedSeconds();
 
 	for ( int i = 0; i < m_ShotsThisFrame.size(); i++ ) {

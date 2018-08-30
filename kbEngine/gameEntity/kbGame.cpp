@@ -25,7 +25,8 @@ kbGame::kbGame() :
 	m_bIsPlaying( false ),
 	m_bIsRunning( true ),
 	m_pParticleManager( new kbParticleManager() ),
-	m_DeltaTimeScale( 1.0f ) {
+	m_DeltaTimeScale( 1.0f ),
+	m_CurFrameDeltaTime( 0.0f ) {
 
 	g_pGame = this;
 	m_Console.RegisterCommandProcessor( this );
@@ -161,7 +162,7 @@ void kbGame::Update() {
 
 	START_SCOPED_TIMER( GAME_THREAD );
 
-	float DT = ( float ) m_Timer.TimeElapsedSeconds() * m_DeltaTimeScale;
+	m_CurFrameDeltaTime = ( float ) m_Timer.TimeElapsedSeconds() * m_DeltaTimeScale;
 	m_Timer.Reset();
 
 	static int NumFrames = 0;
@@ -177,16 +178,16 @@ void kbGame::Update() {
 	}
 
 	if ( g_TimeScale.GetFloat() > 0.0f ) {
-		DT *= g_TimeScale.GetFloat();
+		m_CurFrameDeltaTime *= g_TimeScale.GetFloat();
 	}
 
-	m_InputManager.Update( DT );
+	m_InputManager.Update( m_CurFrameDeltaTime );
 	m_SoundManager.Update();
 
-	Update_Internal( DT );
+	Update_Internal( m_CurFrameDeltaTime );
 
 	for ( int i = 0; i < m_GameEntityList.size(); i++ ) {
-		m_GameEntityList[i]->Update( DT );
+		m_GameEntityList[i]->Update( m_CurFrameDeltaTime );
 	}
 
 	if ( g_pRenderer != nullptr ) {
@@ -305,7 +306,7 @@ void kbGame::Update() {
 	}
 
 	kbConsoleVarManager::GetConsoleVarManager()->Update();
-	m_Console.Update( DT, m_InputManager.GetInput() );
+	m_Console.Update( m_CurFrameDeltaTime, m_InputManager.GetInput() );
 }
 
 /**

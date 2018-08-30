@@ -106,7 +106,7 @@ void CreateVertex( inout TriangleStream<pixelInput> OutputStream, float3 vertexW
 
 	// Check collision
 	float3 windpush = 0.0f;
-	if ( length( collisionMapVal.xy ) > 0.000f ) {
+	if ( dot( collisionMapVal.xy, collisionMapVal.xy ) > 0.000f ) {
 		float2 centerPt = terrainMapUV;
 		centerPt = ( centerPt * 2.0f ) - 1.0f;
 		centerPt += collisionMapVal.xy;
@@ -116,9 +116,10 @@ void CreateVertex( inout TriangleStream<pixelInput> OutputStream, float3 vertexW
 		float3 vecTo = bladeWorldOrigin - worldCenterPt.xyz;
 		float collisionRadius = 32.0f;
 
-		windpush = 1.0f - saturate( length( vecTo ) / collisionRadius);
+		windpush = 1.0f - saturate( length( vecTo ) / collisionRadius );
 		
-		windpush *= normalize( vecTo ) * collisionRadius * 0.33f * ( 1.0f + noiseValues.x * 0.25f );
+		float timeFactor = saturate( ( time.x - collisionMapVal.z ) / 0.5f );
+		windpush *= normalize( vecTo ) * collisionRadius * 0.33f * ( 1.0f + noiseValues.x * 0.25f ) * timeFactor;
 	}
 
 /*	if ( length( collisionSphere.xz - bladeWorldOrigin.xz ) < collisionSphere.w && abs( collisionSphere.y - bladeWorldOrigin.y ) < collisionSphere.w ) {
@@ -153,10 +154,10 @@ void CreateVertex( inout TriangleStream<pixelInput> OutputStream, float3 vertexW
 
 	float burnStartHeight = collisionMapVal.w + 99999.0f;
 	int numSegments = 3;
-	if ( bladeWorldOrigin.y + ( grassLength *  0.33333f ) > collisionMapVal.w ) {
+	if ( bladeWorldOrigin.y + ( grassLength *  0.55f ) > collisionMapVal.w ) {
 		burnStartHeight = bladeWorldOrigin.y + ( grassLength * 0.33333f ) - 0.0001f;
 		numSegments = 1;
-	} else if ( bladeWorldOrigin.y + ( grassLength *  0.67f ) > collisionMapVal.w ) {
+	} else if ( bladeWorldOrigin.y + ( grassLength *  0.75f ) > collisionMapVal.w ) {
 		burnStartHeight = bladeWorldOrigin.y + ( grassLength *  0.67f )- 0.0001f;
 		numSegments = 2;
 	}
@@ -228,17 +229,18 @@ PS_OUTPUT pixelShader( pixelInput input, bool isFrontFace : SV_IsFrontFace )  {
 	const float3 noiseValues = noiseMap.Sample( SampleType, input.uv ).xyz;
 	float burnSize = 0.777f + input.worldPosition.w * 2.0f;
 
+	
 	if ( abs( input.worldPosition.y - input.grassData1.y ) <= burnSize ) {
 
-		const float normalizedTime = ( input.worldPosition.w * 0.33f ) + saturate( ( 1.0f + noiseValues.g ) * ( ( time.x - input.grassData1.z ) / 1.0f ) );
+		const float normalizedTime = ( input.worldPosition.w * 0.33f ) + saturate( ( 1.0f + noiseValues.g ) * ( ( time.x - input.grassData1.z ) / 7.0f ) );
 
 		float animatedEmberU = clamp( normalizedTime, 0.0f, 0.99f );
-		const float3 ember = emberGradientTex.Sample( SampleType, float2( animatedEmberU, 0.0f ) ).xyz;
+		const float3 ember = emberGradientTex.Sample( SampleType, float2( animatedEmberU, 0.0f ) ).xyz * 0.15f;
 
 		float lerpVal = ( burnSize - abs(input.worldPosition.y - input.grassData1.y ) ) / burnSize;
 		lerpVal = saturate( lerpVal );
 		output.Color.xyz = lerp( output.Color.xyz, ember, lerpVal);
-		output.Color.w = saturate( lerpVal - 0.5f ) * 2.0f;
+		output.Color.w = saturate( lerpVal - 0.5f ) * 35.0f * saturate( 1.0f - ( 5.0f * animatedEmberU ) ) ;
 	}
 	clip( ( input.grassData1.r + foliageColor.w ) - 0.01f );
 

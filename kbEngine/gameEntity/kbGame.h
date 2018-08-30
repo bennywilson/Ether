@@ -57,6 +57,8 @@ public:
 
 	void														SetDeltaTimeScale( const float newScale ) { m_DeltaTimeScale = newScale; }
 
+	float														GetCurrentFrameDeltaTime() const { return m_CurFrameDeltaTime; }
+
 protected:
 
 	virtual void												InitGame_Internal() = 0;
@@ -96,6 +98,7 @@ private:
 	kbConsole													m_Console;
 
 	float														m_DeltaTimeScale;
+	float														m_CurFrameDeltaTime;
 
 	bool														m_bIsPlaying;
 	bool														m_bIsRunning;
