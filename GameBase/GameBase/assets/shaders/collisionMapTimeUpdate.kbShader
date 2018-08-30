@@ -40,5 +40,5 @@ Texture2D shaderTexture;
 SamplerState SampleType;
 
 float4 pixelShader( pixelInput input ) : SV_TARGET {
-	return 0;
+	return input.color;
 }

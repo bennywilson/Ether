@@ -93,9 +93,11 @@ protected:
 	virtual void								RenderSync() override;
 	virtual void								RenderThreadCallBack() override;
 	kbRenderTexture *							m_pBulletHoleRenderTexture;
-	kbRenderTexture *							m_pBulletTraceRenderTexture;
+	kbRenderTexture *							m_pGrassCollisionTexture;
 
-	kbShader *									m_pCollisionGenShader;
+	kbShader *									m_pCollisionMapGenShader;
+	kbShader *									m_pCollisionMapUpdateTimeShader;
+	kbShader *									m_pBulletHoleUpdateShader;
 	kbShaderParamOverrides_t					m_ShaderParamOverrides;
 };
 

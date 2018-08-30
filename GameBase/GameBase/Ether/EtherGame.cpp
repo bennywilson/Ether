@@ -49,8 +49,10 @@ EtherGame::EtherGame() :
 	m_pTranslucentShader( nullptr ),
 	m_HMDWorldOffset( kbVec3::zero ),
 	m_pBulletHoleRenderTexture( nullptr ),
-	m_pBulletTraceRenderTexture( nullptr ),
-	m_pCollisionGenShader( nullptr ) {
+	m_pGrassCollisionTexture( nullptr ),
+	m_pCollisionMapGenShader( nullptr ),
+	m_pCollisionMapUpdateTimeShader( nullptr ),
+	m_pBulletHoleUpdateShader( nullptr ) {
 
 	m_Camera.m_Position.Set( 0.0f, 2600.0f, 0.0f );
 
@@ -513,6 +515,11 @@ void EtherGame::RenderThreadCallBack() {
  *	EtherGame::RenderSync
  */
 void EtherGame::RenderSync() {
+
+	static kbVec3 terrainPos;
+	static float terrainWidth;
+	static float halfTerrainWidth;
+
 	if ( m_pBulletHoleRenderTexture == nullptr ) {
 		m_pBulletHoleRenderTexture = g_pRenderer->RT_GetRenderTexture( 4096, 4096, eTextureFormat::KBTEXTURE_R8G8B8A8 );
 		g_pRenderer->RT_ClearRenderTarget( m_pBulletHoleRenderTexture, kbColor::white );
@@ -533,22 +540,16 @@ void EtherGame::RenderSync() {
 				break;
 			}
 		}
-	}
 
-	static kbVec3 terrainPos;
-	static float terrainWidth;
-	static float halfTerrainWidth;
-
-	if ( m_pBulletTraceRenderTexture == nullptr ) {
-		m_pBulletTraceRenderTexture = g_pRenderer->RT_GetRenderTexture( 4096, 4096, eTextureFormat::KBTEXTURE_R16G16B16A16 );
-		g_pRenderer->RT_ClearRenderTarget( m_pBulletTraceRenderTexture, kbColor( 0.0f, 0.0f, 0.0f, 99999.0f ) );
+		m_pGrassCollisionTexture = g_pRenderer->RT_GetRenderTexture( 4096, 4096, eTextureFormat::KBTEXTURE_R16G16B16A16 );
+		g_pRenderer->RT_ClearRenderTarget( m_pGrassCollisionTexture, kbColor( 0.0f, 0.0f, 0.0f, 99999.0f ) );
 
 		for ( int i = 0; i < GetGameEntities().size(); i++ ) {
 			kbGameEntity *const pEnt = GetGameEntities()[i];
 			if ( pEnt->GetName().find( "Terrain" ) != std::string::npos ) {
 				kbTerrainComponent *const pTerrain = (kbTerrainComponent*)pEnt->GetComponentByType( kbTerrainComponent::GetType() );
 				if ( pTerrain != nullptr ) {
-					pTerrain->SetCollisionMap( m_pBulletTraceRenderTexture );
+					pTerrain->SetCollisionMap( m_pGrassCollisionTexture );
 
 					terrainPos = pEnt->GetPosition();
 					terrainWidth = pTerrain->GetTerrainWidth();
@@ -558,55 +559,18 @@ void EtherGame::RenderSync() {
 			}
 		}
 
-		m_pCollisionGenShader = (kbShader*)g_ResourceManager.GetResource( "./assets/shaders/collisionMapGen.kbshader", true );
+		m_pCollisionMapGenShader = (kbShader*)g_ResourceManager.GetResource( "./assets/shaders/collisionMapGen.kbshader", true );
+		m_pCollisionMapUpdateTimeShader = (kbShader*)g_ResourceManager.GetResource( "./assets/shaders/collisionMapTimeUpdate.kbshader", true );
+		m_pBulletHoleUpdateShader = (kbShader*)g_ResourceManager.GetResource( "./assets/shaders/pokeyholeunwrap.kbshader", true );
 	}
 
 	if ( GetAsyncKeyState( 'C' ) ) {
 		g_pRenderer->RT_ClearRenderTarget( m_pBulletHoleRenderTexture, kbColor::white );
 	}
 
-	g_pRenderer->RT_SetRenderTarget( m_pBulletTraceRenderTexture );
-/*	{
-		kbVec3 startPos = kbVec3( 0.5f, 0.33f, 0.0f );
-		kbVec3 endPos = kbVec3( 0.5f, 0.0f, 0.0f );
-
-		kbVec3 finalStartPt = kbVec3( startPos.x * 2.0f - 1.0f, -( ( startPos.z * 2.0f) - 1.0f ), 0.0f );
-		kbVec3 finalEndPt = kbVec3( endPos.x * 2.0f - 1.0f, -( ( endPos.z * 2.0f) - 1.0f ), 0.0f );
-		kbVec3 perpLine( finalEndPt.x - finalStartPt.x, finalEndPt.y - finalStartPt.y, 0.0f );
-		perpLine.Normalize();
-
-		const float pushLineWidth = 64.0f / 4096.0f;
-		float swap = perpLine.x;
-		perpLine.x = perpLine.y;
-		perpLine.y = -swap;
-		perpLine.Normalize();
-
-		m_ShaderParamOverrides.SetVec4( "perpendicularDirection", kbVec4( perpLine.x, perpLine.y, 0.0f, 0.0f ) );
-		g_pRenderer->RT_RenderLine( startPos, endPos, kbColor( 1.0f, 1.0f, 1.0f, 1.0f ), 32.0f/4096.0f, m_pCollisionGenShader, &m_ShaderParamOverrides );
-	}
-	{
-		kbVec3 startPos = kbVec3( 0.5f, 0.67f, 0.0f );
-		kbVec3 endPos = kbVec3( 0.5f, 1.0f, 1.0f );
-
-		kbVec3 finalStartPt = kbVec3( startPos.x * 2.0f - 1.0f, -( ( startPos.z * 2.0f) - 1.0f ), 0.0f );
-		kbVec3 finalEndPt = kbVec3( endPos.x * 2.0f - 1.0f, -( ( endPos.z * 2.0f) - 1.0f ), 0.0f );
-		kbVec3 perpLine( finalEndPt.x - finalStartPt.x, finalEndPt.y - finalStartPt.y, 0.0f );
-		perpLine.Normalize();
-
-		const float pushLineWidth = 64.0f / 4096.0f;
-		float swap = perpLine.x;
-		perpLine.x = perpLine.y;
-		perpLine.y = -swap;
-		perpLine.Normalize();
-
-		m_ShaderParamOverrides.SetVec4( "perpendicularDirection", kbVec4( perpLine.x, perpLine.y, 0.0f, 0.0f ) );
-		g_pRenderer->RT_RenderLine( startPos, endPos, kbColor( 1.0f, 1.0f, 1.0f, 1.0f ), 32.0f/4096.0f, m_pCollisionGenShader, &m_ShaderParamOverrides );
-	}*/
-
 	// Update time in collision Map
-	kbShader *const pTimeUpdateShader = (kbShader*)g_ResourceManager.GetResource( "./assets/shaders/collisionMapTimeUpdate.kbshader", true );
-	g_pRenderer->RT_SetRenderTarget( m_pBulletTraceRenderTexture );
-	static float timeSubtract = 0.0f;
+	g_pRenderer->RT_SetRenderTarget( m_pGrassCollisionTexture );
+	static float timeSubtract = 0.9f;
 	g_pRenderer->RT_SetBlendState( false,
 								   false,
 								   true,
@@ -616,11 +580,11 @@ void EtherGame::RenderSync() {
 								   BlendFactor_One,
 								   BlendFactor_One,
 								   BlendOp_Min,
-								   ColorWriteEnable_Red | ColorWriteEnable_Blue );
+								   ColorWriteEnable_Red | ColorWriteEnable_Green );
 
-	g_pRenderer->RT_RenderLine( kbVec3( 0.5f, 0.0f, 0.0f ), kbVec3( 0.5f, 1.0f, 0.0f ), kbColor( timeSubtract, timeSubtract, timeSubtract, timeSubtract ), 15.0f, pTimeUpdateShader );
+	g_pRenderer->RT_RenderLine( kbVec3( 0.5f, 0.0f, 0.0f ), kbVec3( 0.5f, 1.0f, 0.0f ), kbColor( timeSubtract, timeSubtract, timeSubtract, timeSubtract ), 15.0f, m_pCollisionMapUpdateTimeShader );
+	const float curTime = g_GlobalTimer.TimeElapsedSeconds();
 
-	kbShader *const pUnwrapShader = (kbShader*)g_ResourceManager.GetResource( "./assets/shaders/pokeyholeunwrap.kbshader", true );
 	for ( int i = 0; i < m_ShotsThisFrame.size(); i++ ) {
 
 		const frameBulletShots & curShot = m_ShotsThisFrame[i];
@@ -667,11 +631,11 @@ void EtherGame::RenderSync() {
 										   BlendOp_Min,
 										   ColorWriteEnable_All );
 
-			g_pRenderer->RT_RenderMesh( pSM->GetModel(), pUnwrapShader, &shaderParams );
+			g_pRenderer->RT_RenderMesh( pSM->GetModel(), m_pBulletHoleUpdateShader, &shaderParams );
 		}
 
 		// Update collision map
-		g_pRenderer->RT_SetRenderTarget( m_pBulletTraceRenderTexture );
+		g_pRenderer->RT_SetRenderTarget( m_pGrassCollisionTexture );
 		const kbVec3 terrainCenter( terrainPos.x, terrainPos.z, 0.0f );
 		kbVec3 startPos = ( ( kbVec3( curShot.shotStart.x, curShot.shotStart.z, 0.0f ) - terrainCenter ) / halfTerrainWidth ) * 0.5f + 0.5f;
 		startPos.z = curShot.shotStart.y;
@@ -679,20 +643,6 @@ void EtherGame::RenderSync() {
 		kbVec3 endPos = ( ( kbVec3( curShot.shotEnd.x, curShot.shotEnd.z, 0.0f ) - terrainCenter ) / halfTerrainWidth ) * 0.5f + 0.5f;
 		endPos.z = curShot.shotEnd.y;
 
-/*
-	kbVec3 finalStartPt = kbVec3( startPt.x * 2.0f - 1.0f, -( ( startPt.y * 2.0f) - 1.0f ), 0.0f );
-	kbVec3 finalEndPt = kbVec3( endPt.x * 2.0f - 1.0f, -( ( endPt.y * 2.0f) - 1.0f ), 0.0f );
-	kbVec3 perpLine( finalEndPt.x - finalStartPt.x, finalEndPt.y - finalStartPt.y, 0.0f );
-
-	finalStartPt.z = startPt.z;
-	finalEndPt.z = endPt.z;
-
-	perpLine.Normalize();
-	float swap = perpLine.x;
-	perpLine.x = perpLine.y;
-	perpLine.y = -swap;
-	perpLine *= width * 0.5f;
-*/
 		kbVec3 finalStartPt = kbVec3( startPos.x * 2.0f - 1.0f, ( ( startPos.y * 2.0f) - 1.0f ), 0.0f );
 		kbVec3 finalEndPt = kbVec3( endPos.x * 2.0f - 1.0f, ( ( endPos.y * 2.0f) - 1.0f ), 0.0f );
 		kbVec3 perpLine( finalEndPt.x - finalStartPt.x, finalEndPt.y - finalStartPt.y, 0.0f );
@@ -716,10 +666,9 @@ void EtherGame::RenderSync() {
 									   BlendFactor_One,
 									   BlendFactor_One,
 									   BlendOp_Min,
-									   ColorWriteEnable_RGB );
+									   ColorWriteEnable_Red | ColorWriteEnable_Green );
 
-		g_pRenderer->RT_RenderLine( startPos, endPos, kbColor( 0.0f, 0.0f, 1.0f, 0.0f ), pushLineWidth, m_pCollisionGenShader, &m_ShaderParamOverrides );
-
+		g_pRenderer->RT_RenderLine( startPos, endPos, kbColor( 0.0f, 0.0f, 1.0f, 0.0f ), pushLineWidth, m_pCollisionMapGenShader, &m_ShaderParamOverrides );
 	
 		g_pRenderer->RT_SetBlendState( false,
 									   false,
@@ -730,9 +679,9 @@ void EtherGame::RenderSync() {
 									   BlendFactor_One,
 									   BlendFactor_One,
 									   BlendOp_Min,
-									   ColorWriteEnable_Alpha );
+									   ColorWriteEnable_Blue | ColorWriteEnable_Alpha );
 
-		g_pRenderer->RT_RenderLine( startPos, endPos, kbColor( 0.0f, 0.0f, 1.0f, 0.0f ), 16.0f / 4096.0f, m_pCollisionGenShader );
+		g_pRenderer->RT_RenderLine( startPos, endPos, kbColor( 0.0f, 0.0f, curTime, 0.0f ), 16.0f / 4096.0f, m_pCollisionMapGenShader );
 
 		g_pRenderer->RT_SetBlendState();
 	}

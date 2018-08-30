@@ -101,7 +101,7 @@ void CreateVertex( inout TriangleStream<pixelInput> OutputStream, float3 vertexW
 
 	// Check collision
 	float3 windpush = 0.0f;
-	if ( length( collisionMapVal.xy ) > 0.0001f ) {
+	if ( length( collisionMapVal.xy ) > 0.000f ) {
 		float2 centerPt = terrainMapUV;
 		centerPt = ( centerPt * 2.0f ) - 1.0f;
 		centerPt += collisionMapVal.xy;
@@ -117,7 +117,7 @@ void CreateVertex( inout TriangleStream<pixelInput> OutputStream, float3 vertexW
 		
 		//const float recoverTime = 0.25f + ( noiseValues.r * 2.625f );
 		//float strength = 1.0f - saturate( ( time.x - collisionMapVal.z ) / recoverTime );
-		windpush *= normalize( vecTo ) * collisionRadius * 2.33f;// * strength;
+		windpush *= normalize( vecTo ) * collisionRadius * 0.33f;// * strength;
 	}
 	//collisionMapVal.w = 999999999;
 
