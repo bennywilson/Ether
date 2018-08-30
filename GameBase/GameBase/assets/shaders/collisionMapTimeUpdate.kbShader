@@ -1,0 +1,44 @@
+//===================================================================================================
+// collisionMapTimeUpdate.kbShader
+//
+//
+// 2018 kbEngine 2.0
+//===================================================================================================
+cbuffer matrixBuffer {
+   float4 timeUpdateValue;
+};
+
+//-------------------------------------
+struct vertexInput {
+	float4 position		: POSITION;
+	float4 color		: COLOR;
+};
+
+//-------------------------------------
+struct pixelInput {
+	float4 position		: SV_POSITION;
+	float4 color		: COLOR;
+};
+
+/**
+ *	vertexShader
+ */
+pixelInput vertexShader( vertexInput input ) {
+	pixelInput output = (pixelInput)0;
+	
+	output.position = input.position;
+	output.position.z = 0;
+	output.color = input.color;
+
+	return output;
+}
+
+/**
+ *	pixelShader
+ */
+Texture2D shaderTexture;
+SamplerState SampleType;
+
+float4 pixelShader( pixelInput input ) : SV_TARGET {
+	return 0;
+}

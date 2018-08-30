@@ -88,6 +88,7 @@
     <None Include="assets\shaders\baseWeapon.kbShader" />
     <None Include="assets\shaders\basicTerrain.kbShader" />
     <None Include="assets\shaders\collisionMapGen.kbShader" />
+    <None Include="assets\shaders\collisionMapTimeUpdate.kbShader" />
     <None Include="assets\shaders\particleAtlas.kbShader" />
     <None Include="assets\shaders\firstPersonHands.kbshader" />
     <None Include="assets\shaders\grass.kbShader" />

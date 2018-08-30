@@ -603,6 +603,22 @@ void EtherGame::RenderSync() {
 		g_pRenderer->RT_RenderLine( startPos, endPos, kbColor( 1.0f, 1.0f, 1.0f, 1.0f ), 32.0f/4096.0f, m_pCollisionGenShader, &m_ShaderParamOverrides );
 	}*/
 
+	// Update time in collision Map
+	kbShader *const pTimeUpdateShader = (kbShader*)g_ResourceManager.GetResource( "./assets/shaders/collisionMapTimeUpdate.kbshader", true );
+	g_pRenderer->RT_SetRenderTarget( m_pBulletTraceRenderTexture );
+	static float timeSubtract = 0.0f;
+	g_pRenderer->RT_SetBlendState( false,
+								   false,
+								   true,
+								   BlendFactor_DstColor,
+								   BlendFactor_Zero,
+								   BlendOp_Add,
+								   BlendFactor_One,
+								   BlendFactor_One,
+								   BlendOp_Min,
+								   ColorWriteEnable_Red | ColorWriteEnable_Blue );
+
+	g_pRenderer->RT_RenderLine( kbVec3( 0.5f, 0.0f, 0.0f ), kbVec3( 0.5f, 1.0f, 0.0f ), kbColor( timeSubtract, timeSubtract, timeSubtract, timeSubtract ), 15.0f, pTimeUpdateShader );
 
 	kbShader *const pUnwrapShader = (kbShader*)g_ResourceManager.GetResource( "./assets/shaders/pokeyholeunwrap.kbshader", true );
 	for ( int i = 0; i < m_ShotsThisFrame.size(); i++ ) {

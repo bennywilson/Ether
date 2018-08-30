@@ -263,6 +263,7 @@ struct kbRenderState {
 	D3D11_BLEND_OP GetD3DBlendOp( const kbBlendOp blendOp ) {
 		switch( blendOp ) {
 			case BlendOp_Add : return D3D11_BLEND_OP_ADD;
+			case BlendOp_Subtract : return D3D11_BLEND_OP_SUBTRACT;
 			case BlendOp_Max : return D3D11_BLEND_OP_MAX;
 			case BlendOp_Min : return D3D11_BLEND_OP_MIN;
 		}

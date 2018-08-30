@@ -59,6 +59,9 @@
     <None Include="assets\shaders\collisionMapGen.kbShader">
       <Filter>Shaders</Filter>
     </None>
+    <None Include="assets\shaders\collisionMapTimeUpdate.kbShader">
+      <Filter>Shaders</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameBase.h">

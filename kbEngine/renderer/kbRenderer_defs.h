@@ -454,6 +454,7 @@ enum kbBlendFactor {
 
 enum kbBlendOp {
 	BlendOp_Add,
+	BlendOp_Subtract,
 	BlendOp_Max,
 	BlendOp_Min
 };
