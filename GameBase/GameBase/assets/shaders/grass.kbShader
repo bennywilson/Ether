@@ -98,6 +98,8 @@ void CreateVertex( inout TriangleStream<pixelInput> OutputStream, float3 vertexW
 
 	float4 collisionMapVal = collisionMap.SampleLevel( SampleType, terrainMapUV, 0.0f );
 
+	const float3 noiseValues = noiseMap.SampleLevel( SampleType, input[0].uv * grassNumber, 0.0f ).xyz;
+
 	// Check collision
 	float3 windpush = 0.0f;
 	if ( length( collisionMapVal.xy ) > 0.0f ) {
@@ -108,14 +110,17 @@ void CreateVertex( inout TriangleStream<pixelInput> OutputStream, float3 vertexW
 		float3 worldCenterPt = float3( centerPt.x, collisionMapVal.w, centerPt.y );
 
 		float3 vecTo = bladeWorldOrigin - worldCenterPt.xyz;
-		vecTo.y = min( vecTo.y, 0.0f );
+		//vecTo.y = min( vecTo.y, 0.0f );
 
-		float collisionRadius = 12.0f;
+		float collisionRadius = 32.0f;
 
 		windpush = 1.0f - saturate( length( vecTo ) / collisionRadius);
-		windpush *= normalize( vecTo ) * collisionRadius * 2.f;
+		
+		const float recoverTime = 0.7f + ( noiseValues.r * 0.225f );
+		float strength = 1.0f - saturate( ( time.x - collisionMapVal.z ) / recoverTime );
+		windpush *= normalize( vecTo ) * collisionRadius * 0.13f * strength;
 	}
-	collisionMapVal.w = 999999999;
+	//collisionMapVal.w = 999999999;
 
 /*	if ( length( collisionSphere.xz - bladeWorldOrigin.xz ) < collisionSphere.w && abs( collisionSphere.y - bladeWorldOrigin.y ) < collisionSphere.w ) {
 		float3 vecTo = bladeWorldOrigin - collisionSphere.xyz;
@@ -123,8 +128,6 @@ void CreateVertex( inout TriangleStream<pixelInput> OutputStream, float3 vertexW
 		windpush = 1.0f - saturate( length( vecTo ) / collisionSphere.w );
 		windpush *= normalize( vecTo ) * collisionSphere.w * 2.f;
 	}*/
-
-	const float3 noiseValues = noiseMap.SampleLevel( SampleType, input[0].uv * grassNumber, 0.0f ).xyz;
 
 	const float oscNoise = noiseValues.x * 5.0f;
 	float oscillation = sin( oscNoise.x + time.x * ( 1.0f * ( ( oscNoise.x * 0.5f ) + 0.5f ) ) ) * 0.5f + 0.5f;
@@ -147,21 +150,19 @@ void CreateVertex( inout TriangleStream<pixelInput> OutputStream, float3 vertexW
 	CreateVertex( OutputStream, bladeWorldOrigin, float2( textureStartU, 1.0f - textureBorderSize ), invAlphaMask );
 	CreateVertex( OutputStream, bladeWorldOrigin + jitterOffset, float2( textureEndU, 1.0f - textureBorderSize ), invAlphaMask );
 
-	if ( bladeWorldOrigin.y + segmentVec.y < collisionMapVal.w ) {
-		CreateVertex( OutputStream, bladeWorldOrigin + segmentVec, float2( textureStartU, 0.67f ), invAlphaMask );
-		CreateVertex( OutputStream, bladeWorldOrigin + jitterOffset + segmentVec, float2( textureEndU, 0.67f ), invAlphaMask );
+	CreateVertex( OutputStream, bladeWorldOrigin + segmentVec, float2( textureStartU, 0.67f ), invAlphaMask );
+	CreateVertex( OutputStream, bladeWorldOrigin + jitterOffset + segmentVec, float2( textureEndU, 0.67f ), invAlphaMask );
 
-		if ( bladeWorldOrigin.y + segmentVec_2X.y < collisionMapVal.w ) {
-			CreateVertex( OutputStream, bladeWorldOrigin + segmentVec_2X, float2( textureStartU, 0.33f ), invAlphaMask );
-			CreateVertex( OutputStream, bladeWorldOrigin + jitterOffset + segmentVec_2X, float2( textureEndU, 0.33f ), invAlphaMask  );
+	if ( bladeWorldOrigin.y + segmentVec_2X.y < collisionMapVal.w ) {
+		CreateVertex( OutputStream, bladeWorldOrigin + segmentVec_2X, float2( textureStartU, 0.33f ), invAlphaMask );
+		CreateVertex( OutputStream, bladeWorldOrigin + jitterOffset + segmentVec_2X, float2( textureEndU, 0.33f ), invAlphaMask  );
 
-			if ( bladeWorldOrigin.y + segmentVec_3X.y < collisionMapVal.w ) {
-				if ( textureIdx == 0 ) {
-					CreateVertex( OutputStream, bladeWorldOrigin + jitterOffset * 0.5f + segmentVec_3X, float2( ( textureStartU + textureEndU ) * 0.5f, textureBorderSize ), invAlphaMask );
-				} else {
-					CreateVertex( OutputStream, bladeWorldOrigin + segmentVec_3X, float2( textureStartU, textureBorderSize ), invAlphaMask );
-					CreateVertex( OutputStream, bladeWorldOrigin + jitterOffset + segmentVec_3X, float2( ( textureStartU + textureEndU ) * 0.5f, textureBorderSize ), invAlphaMask );
-				}
+		if ( bladeWorldOrigin.y + segmentVec_3X.y < collisionMapVal.w ) {
+			if ( textureIdx == 0 ) {
+				CreateVertex( OutputStream, bladeWorldOrigin + jitterOffset * 0.5f + segmentVec_3X, float2( ( textureStartU + textureEndU ) * 0.5f, textureBorderSize ), invAlphaMask );
+			} else {
+				CreateVertex( OutputStream, bladeWorldOrigin + segmentVec_3X, float2( textureStartU, textureBorderSize ), invAlphaMask );
+				CreateVertex( OutputStream, bladeWorldOrigin + jitterOffset + segmentVec_3X, float2( ( textureStartU + textureEndU ) * 0.5f, textureBorderSize ), invAlphaMask );
 			}
 		}
 	}

@@ -48,5 +48,5 @@ Texture2D shaderTexture;
 SamplerState SampleType;
 
 float4 pixelShader( pixelInput input ) : SV_TARGET {
-	return float4( input.perpVec.xy, 0.5f, input.height );
+	return float4( input.perpVec.xy, perpendicularDirection.z, input.height );
 }
