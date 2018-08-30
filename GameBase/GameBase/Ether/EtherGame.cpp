@@ -220,7 +220,7 @@ if (GetAsyncKeyState('M')) curPos.z -= updateAmt;
 	PlayerPos += " z:";
 	PlayerPos += std::to_string( m_Camera.m_Position.z );
 	
-	//g_pD3D11Renderer->DrawDebugText( PlayerPos, 0, 0, g_DebugTextSize, g_DebugTextSize, kbColor::green );
+	g_pD3D11Renderer->DrawDebugText( PlayerPos, 0, 0, g_DebugTextSize, g_DebugTextSize, kbColor::green );
 
 
 	UpdateWorld( DT );
@@ -565,6 +565,45 @@ void EtherGame::RenderSync() {
 		g_pRenderer->RT_ClearRenderTarget( m_pBulletHoleRenderTexture, kbColor::white );
 	}
 
+	g_pRenderer->RT_SetRenderTarget( m_pBulletTraceRenderTexture );
+/*	{
+		kbVec3 startPos = kbVec3( 0.5f, 0.33f, 0.0f );
+		kbVec3 endPos = kbVec3( 0.5f, 0.0f, 0.0f );
+
+		kbVec3 finalStartPt = kbVec3( startPos.x * 2.0f - 1.0f, -( ( startPos.z * 2.0f) - 1.0f ), 0.0f );
+		kbVec3 finalEndPt = kbVec3( endPos.x * 2.0f - 1.0f, -( ( endPos.z * 2.0f) - 1.0f ), 0.0f );
+		kbVec3 perpLine( finalEndPt.x - finalStartPt.x, finalEndPt.y - finalStartPt.y, 0.0f );
+		perpLine.Normalize();
+
+		const float pushLineWidth = 64.0f / 4096.0f;
+		float swap = perpLine.x;
+		perpLine.x = perpLine.y;
+		perpLine.y = -swap;
+		perpLine.Normalize();
+
+		m_ShaderParamOverrides.SetVec4( "perpendicularDirection", kbVec4( perpLine.x, perpLine.y, 0.0f, 0.0f ) );
+		g_pRenderer->RT_RenderLine( startPos, endPos, kbColor( 1.0f, 1.0f, 1.0f, 1.0f ), 32.0f/4096.0f, m_pCollisionGenShader, &m_ShaderParamOverrides );
+	}
+	{
+		kbVec3 startPos = kbVec3( 0.5f, 0.67f, 0.0f );
+		kbVec3 endPos = kbVec3( 0.5f, 1.0f, 1.0f );
+
+		kbVec3 finalStartPt = kbVec3( startPos.x * 2.0f - 1.0f, -( ( startPos.z * 2.0f) - 1.0f ), 0.0f );
+		kbVec3 finalEndPt = kbVec3( endPos.x * 2.0f - 1.0f, -( ( endPos.z * 2.0f) - 1.0f ), 0.0f );
+		kbVec3 perpLine( finalEndPt.x - finalStartPt.x, finalEndPt.y - finalStartPt.y, 0.0f );
+		perpLine.Normalize();
+
+		const float pushLineWidth = 64.0f / 4096.0f;
+		float swap = perpLine.x;
+		perpLine.x = perpLine.y;
+		perpLine.y = -swap;
+		perpLine.Normalize();
+
+		m_ShaderParamOverrides.SetVec4( "perpendicularDirection", kbVec4( perpLine.x, perpLine.y, 0.0f, 0.0f ) );
+		g_pRenderer->RT_RenderLine( startPos, endPos, kbColor( 1.0f, 1.0f, 1.0f, 1.0f ), 32.0f/4096.0f, m_pCollisionGenShader, &m_ShaderParamOverrides );
+	}*/
+
+
 	kbShader *const pUnwrapShader = (kbShader*)g_ResourceManager.GetResource( "./assets/shaders/pokeyholeunwrap.kbshader", true );
 	for ( int i = 0; i < m_ShotsThisFrame.size(); i++ ) {
 
@@ -624,19 +663,34 @@ void EtherGame::RenderSync() {
 		kbVec3 endPos = ( ( kbVec3( curShot.shotEnd.x, curShot.shotEnd.z, 0.0f ) - terrainCenter ) / halfTerrainWidth ) * 0.5f + 0.5f;
 		endPos.z = curShot.shotEnd.y;
 
+/*
+	kbVec3 finalStartPt = kbVec3( startPt.x * 2.0f - 1.0f, -( ( startPt.y * 2.0f) - 1.0f ), 0.0f );
+	kbVec3 finalEndPt = kbVec3( endPt.x * 2.0f - 1.0f, -( ( endPt.y * 2.0f) - 1.0f ), 0.0f );
+	kbVec3 perpLine( finalEndPt.x - finalStartPt.x, finalEndPt.y - finalStartPt.y, 0.0f );
 
-		kbVec3 finalStartPt = kbVec3( startPos.x * 2.0f - 1.0f, -( ( startPos.y * 2.0f) - 1.0f ), 0.0f );
-		kbVec3 finalEndPt = kbVec3( endPos.x * 2.0f - 1.0f, -( ( endPos.y * 2.0f) - 1.0f ), 0.0f );
+	finalStartPt.z = startPt.z;
+	finalEndPt.z = endPt.z;
+
+	perpLine.Normalize();
+	float swap = perpLine.x;
+	perpLine.x = perpLine.y;
+	perpLine.y = -swap;
+	perpLine *= width * 0.5f;
+*/
+		kbVec3 finalStartPt = kbVec3( startPos.x * 2.0f - 1.0f, ( ( startPos.y * 2.0f) - 1.0f ), 0.0f );
+		kbVec3 finalEndPt = kbVec3( endPos.x * 2.0f - 1.0f, ( ( endPos.y * 2.0f) - 1.0f ), 0.0f );
 		kbVec3 perpLine( finalEndPt.x - finalStartPt.x, finalEndPt.y - finalStartPt.y, 0.0f );
 		perpLine.Normalize();
 
-		const float pushLineWidth = 32.0f / 4096.0f;
+		const float pushLineWidth = 64.0f / 4096.0f;
 		float swap = perpLine.x;
 		perpLine.x = perpLine.y;
 		perpLine.y = -swap;
 		perpLine.Normalize();
-		perpLine *= pushLineWidth * 0.5f;
+		kbLog( "Perp = %f %f", perpLine.x, perpLine.y );
 
+		perpLine *= pushLineWidth * 0.5f;
+	
 		m_ShaderParamOverrides.SetVec4( "perpendicularDirection", kbVec4( perpLine.x, perpLine.y, 0.0f, 0.0f ) );
 		g_pRenderer->RT_SetBlendState( false,
 									   false,
