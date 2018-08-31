@@ -151,6 +151,7 @@ void CreateVertex( inout TriangleStream<pixelInput> OutputStream, float3 vertexW
 	const float3 segmentVec = normalize( float3( 0.0f, grassLength, 0.0f ) + windVec ) * ( grassLength * 0.33333f );
 	const float3 segmentVec_2X = segmentVec * 2.0f;
 	const float3 segmentVec_3X = segmentVec * 3.0f;
+	const float3 segmentVec_4X = segmentVec * 4.0f;
 
 	float burnStartHeight = collisionMapVal.w + 99999.0f;
 	int numSegments = 3;
@@ -186,6 +187,32 @@ void CreateVertex( inout TriangleStream<pixelInput> OutputStream, float3 vertexW
 		}
 	}
 
+	OutputStream.RestartStrip();
+
+	// Broken blade animation
+	const float animationTime = ( time.x - collisionMapVal.z ) / 5.0f;
+	
+	if ( numSegments < 3 && animationTime <= 1.0f ) {
+		float3 newSegVec = jitterOffset * sign( randIt - 0.5f );
+		newSegVec.y += 2.0f;
+		newSegVec = normalize( newSegVec ) * grassLength * 0.33f;
+
+		float3 newStart = bladeWorldOrigin + segmentVec_3X;
+		float vel = ( 100.0f * randIt ) + 50.0f;
+		const float animXVel = animationTime * vel;
+		newStart.x += animXVel * 2.0f * sign( newSegVec.x );
+		newStart.z += animXVel * 2.0f * sign( newSegVec.z );
+		newStart.y += ( animXVel + 0.5f * ( -0.45f ) * ( animXVel * animXVel ) );
+
+		CreateVertex( OutputStream, newStart, float2( textureStartU, 0.33f ), grassData, 0, randIt );
+		CreateVertex( OutputStream, newStart + jitterOffset, float2( textureEndU, 0.33f ), grassData, 1, randIt );
+		if ( textureIdx == 0 ) {
+			CreateVertex( OutputStream, newStart + jitterOffset * 0.5f + newSegVec, float2( ( textureStartU + textureEndU ) * 0.5f, textureBorderSize ), grassData, 0.5f, randIt );
+		} else {
+			CreateVertex( OutputStream, newStart + newSegVec, float2( textureStartU, textureBorderSize ), grassData, 0, randIt );
+			CreateVertex( OutputStream, newStart + jitterOffset + newSegVec, float2( ( textureStartU + textureEndU ) * 0.5f, textureBorderSize ), grassData, 1.0f, randIt );
+		}
+	}
 	OutputStream.RestartStrip();
  }
 

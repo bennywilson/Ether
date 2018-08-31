@@ -3242,9 +3242,9 @@ void kbRenderer_DX11::RT_SetRenderTarget( kbRenderTexture *const pRenderTexture 
 											   nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr };
 
 	// Unbind all textures
-	/*m_pDeviceContext->VSSetShaderResources( 0, 16, pNullSRVs );
+	m_pDeviceContext->VSSetShaderResources( 0, 16, pNullSRVs );
 	m_pDeviceContext->GSSetShaderResources( 0, 16, pNullSRVs );
-	m_pDeviceContext->PSSetShaderResources( 0, 16, pNullSRVs );*/
+	m_pDeviceContext->PSSetShaderResources( 0, 16, pNullSRVs );
 
 	m_pDeviceContext->OMSetRenderTargets(1, &((kbRenderTexture_DX11*)pRenderTexture)->m_pRenderTargetView, nullptr );
 
