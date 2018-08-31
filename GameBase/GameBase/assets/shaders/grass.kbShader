@@ -197,12 +197,12 @@ void CreateVertex( inout TriangleStream<pixelInput> OutputStream, float3 vertexW
 		newSegVec.y += 2.0f;
 		newSegVec = normalize( newSegVec ) * grassLength * 0.33f;
 
-		float3 newStart = bladeWorldOrigin + segmentVec_3X;
-		float vel = ( 100.0f * randIt ) + 50.0f;
+		float3 newStart = bladeWorldOrigin + segmentVec_2X;
+		float vel = ( 200.0f * randIt ) + 50.0f;
 		const float animXVel = animationTime * vel;
 		newStart.x += animXVel * 2.0f * sign( newSegVec.x );
 		newStart.z += animXVel * 2.0f * sign( newSegVec.z );
-		newStart.y += ( animXVel + 0.5f * ( -0.45f ) * ( animXVel * animXVel ) );
+		newStart.y += ( animXVel * 3.0f + 0.5f * ( -0.45f ) * ( animXVel * animXVel ) );
 
 		CreateVertex( OutputStream, newStart, float2( textureStartU, 0.33f ), grassData, 0, randIt );
 		CreateVertex( OutputStream, newStart + jitterOffset, float2( textureEndU, 0.33f ), grassData, 1, randIt );
@@ -253,16 +253,16 @@ PS_OUTPUT pixelShader( pixelInput input, bool isFrontFace : SV_IsFrontFace )  {
 	float4 foliageColor = grassDiffuseMap.Sample( SampleType, input.uv );
 	output.Color.xyz = foliageColor.xyz * fakeAO;
 
-	const float3 noiseValues = noiseMap.Sample( SampleType, input.uv ).xyz;
+	const float3 noiseValues = 1;//noiseMap.Sample( SampleType, input.uv ).xyz;
 	float burnSize = 0.777f + input.worldPosition.w * 2.0f;
 
 	
-	if ( abs( input.worldPosition.y - input.grassData1.y ) <= burnSize ) {
+	{//if ( abs( input.worldPosition.y - input.grassData1.y ) <= burnSize ) {
 
-		const float normalizedTime = ( input.worldPosition.w * 0.33f ) + saturate( ( 1.0f + noiseValues.g ) * ( ( time.x - input.grassData1.z ) / 7.0f ) );
+		const float normalizedTime = ( input.worldPosition.w * 0.33f ) + saturate( ( 1.0f + noiseValues.g ) * ( ( time.x - input.grassData1.z ) / 5.0f ) );
 
-		float animatedEmberU = clamp( normalizedTime, 0.0f, 0.99f );
-		const float3 ember = emberGradientTex.Sample( SampleType, float2( animatedEmberU, 0.0f ) ).xyz * 0.15f;
+		float animatedEmberU = clamp( normalizedTime * 2.5f, 0.0f, 0.99f );
+		const float3 ember = lerp( float3( 1.0f, 0.415f,0.04313f ), float3( 0.0f, 0.0f, 0.0f ), animatedEmberU );//emberGradientTex.Sample( SampleType, float2( animatedEmberU, 0.0f ) ).xyz * 1.0f;
 
 		float lerpVal = ( burnSize - abs(input.worldPosition.y - input.grassData1.y ) ) / burnSize;
 		lerpVal = saturate( lerpVal );
