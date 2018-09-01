@@ -13,10 +13,6 @@ kbShaderState {
 	dstBlend Blend_Zero
 	blendOp BlendOp_Add
 
-	srcblendalpha Blend_One
-	dstblendAlpha Blend_One
-	blendOp BlendOp_Min
-
 	colorwriteenable colorwriteenable_rg
 }
 

@@ -10,9 +10,6 @@ cbuffer matrixBuffer {
 };
 
 kbShaderState {
-	srcBlend Blend_One
-	dstBlend Blend_One
-
 	srcBlendAlpha Blend_One
 	dsBlendAlpha Blend_One
 	blendOpAlpha BlendOp_Min

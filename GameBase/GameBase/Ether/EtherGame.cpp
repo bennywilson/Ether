@@ -21,6 +21,7 @@ using namespace OVR;
 
 kbConsoleVariable g_NoEnemies( "noenemies", false, kbConsoleVariable::Console_Bool, "Remove enemies", "" );
 kbConsoleVariable g_LockMouse( "lockmouse", true, kbConsoleVariable::Console_Int, "Locks mouse", "" );
+kbConsoleVariable g_ShowPos( "showpos", false, kbConsoleVariable::Console_Bool, "Displays player position", "" );
 
 EtherGame * g_pEtherGame = nullptr;
 
@@ -215,17 +216,18 @@ if (GetAsyncKeyState('M')) curPos.z -= updateAmt;
 		// Update renderer cam
 		g_pD3D11Renderer->SetRenderViewTransform( nullptr, m_Camera.m_Position, m_Camera.m_Rotation );
 	}
-	
-	std::string PlayerPos;
-	PlayerPos += "x:";
-	PlayerPos += std::to_string( m_Camera.m_Position.x );
-	PlayerPos += " y:";
-	PlayerPos += std::to_string( m_Camera.m_Position.y );
-	PlayerPos += " z:";
-	PlayerPos += std::to_string( m_Camera.m_Position.z );
-	
-//	g_pD3D11Renderer->DrawDebugText( PlayerPos, 0, 0, g_DebugTextSize, g_DebugTextSize, kbColor::green );
 
+	if ( g_ShowPos.GetBool() ) {
+		std::string PlayerPos;
+		PlayerPos += "x:";
+		PlayerPos += std::to_string( m_Camera.m_Position.x );
+		PlayerPos += " y:";
+		PlayerPos += std::to_string( m_Camera.m_Position.y );
+		PlayerPos += " z:";
+		PlayerPos += std::to_string( m_Camera.m_Position.z );
+	
+		g_pD3D11Renderer->DrawDebugText( PlayerPos, 0, 0, g_DebugTextSize, g_DebugTextSize, kbColor::green );
+	}
 
 	UpdateWorld( DT );
 }
