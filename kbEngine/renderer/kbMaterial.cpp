@@ -675,11 +675,6 @@ kbBlendOp GetBlendOpFromName( std::string & name ) {
  */
 bool kbShader::Load_Internal() {
 
-	if ( GetFullFileName().find("update") != std::string::npos ) {
-		static int breakhere = 0;
-		breakhere++;
-	}
-
 	if ( g_pD3D11Renderer != nullptr ) {		// HACK TODO
 
 		// Load File
