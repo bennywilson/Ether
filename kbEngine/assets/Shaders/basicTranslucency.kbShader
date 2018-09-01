@@ -2,7 +2,7 @@
 // basicTranslucency.kbShader
 //
 //
-// 2016-2017 kbEngine 2.0
+// 2016-2018 kbEngine 2.0
 //===================================================================================================
 cbuffer matrixBuffer {
 	matrix modelMatrix;
@@ -11,9 +11,19 @@ cbuffer matrixBuffer {
 	matrix mvpMatrix;
 	matrix projection;
 	matrix inverseProjection;
-   matrix viewProjection;
+	matrix viewProjection;
 	float4 cameraPos;
 };
+
+kbShaderState {
+	srcBlend Blend_SrcAlpha
+	dstBlend Blend_InvSrcAlpha
+	blendOp BlendOp_Add
+
+	srcBlendAlpha Blend_One
+	dstBlendAlpha Blend_Zero
+	blendOpAlpha BlendOp_Add
+}
 
 //-------------------------------------
 struct vertexInput {

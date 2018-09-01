@@ -1,3 +1,8 @@
+//==============================================================================
+// baseShader.kbShader
+//
+// 2016-2018 kbEngine 2.0
+//==============================================================================
 cbuffer matrixBuffer {
 	matrix modelMatrix;
 	matrix modelViewMatrix;
@@ -8,6 +13,13 @@ cbuffer matrixBuffer {
 	matrix viewProjection;
 	float4 cameraPos;
 };
+
+kbShaderState {
+	srcblend Blend_One
+	dstBlend Blend_One
+	blendOp BlendOp_Add
+	colorWriteEnable ColorWriteEnable_rgb
+}
 
 //-------------------------------------
 struct vertexInput {

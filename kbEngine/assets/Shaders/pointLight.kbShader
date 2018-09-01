@@ -15,6 +15,15 @@ cbuffer matrixBuffer {
    float4               cameraPosition;
 };
 
+kbShaderState {
+	srcBlend Blend_One
+	dstBlend Blend_One
+	blendOp BlendOp_Add
+	srcBlendAlpha Blend_Zero
+	dstBlendAlpha Blend_One
+	blendOpAlpha BlendOp_Add
+}
+
 //-------------------------------------
 struct vertexInput {
 	float4 position      : POSITION;
