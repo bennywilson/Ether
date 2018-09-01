@@ -475,6 +475,6 @@ enum kbColorWriteEnable {
 	ColorWriteEnable_All	= ColorWriteEnable_Red | ColorWriteEnable_Green | ColorWriteEnable_Blue | ColorWriteEnable_Alpha
 };
 
-kbColorWriteEnable operator| ( const kbColorWriteEnable lhs, const kbColorWriteEnable rhs );
+kbColorWriteEnable operator |( const kbColorWriteEnable lhs, const kbColorWriteEnable rhs );
 
 #endif

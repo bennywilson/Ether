@@ -248,13 +248,14 @@ struct kbRenderState {
 		switch( blend ) {
 			case Blend_Zero : return D3D11_BLEND_ZERO;
 			case Blend_One : return D3D11_BLEND_ONE;
+			case Blend_SrcColor : return D3D11_BLEND_SRC_COLOR;
+			case Blend_InvSrcColor : return D3D11_BLEND_INV_SRC_COLOR;
 			case Blend_SrcAlpha : return D3D11_BLEND_SRC_ALPHA;
 			case Blend_InvSrcAlpha : return D3D11_BLEND_INV_SRC_ALPHA;
-			case Blend_SrcColor : return D3D11_BLEND_SRC_COLOR;
-			case Blend_DstColor : return D3D11_BLEND_DEST_COLOR;
 			case Blend_DstAlpha : return D3D11_BLEND_DEST_ALPHA;
 			case Blend_InvDstAlpha : return D3D11_BLEND_INV_DEST_ALPHA;
-
+			case Blend_DstColor : return D3D11_BLEND_DEST_COLOR;
+			case Blend_InvDstColor : return D3D11_BLEND_INV_DEST_COLOR;
 		};
 
 		return D3D11_BLEND_ONE;

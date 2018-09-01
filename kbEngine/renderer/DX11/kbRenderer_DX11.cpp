@@ -1181,10 +1181,6 @@ void kbRenderer_DX11::RenderScene() {
 			m_pDeviceContext->RSSetState( m_pWireFrameRasterizerState );
 		}
 
-		ID3D11RenderTargetView * RenderTargetViews[] = { GetRenderTarget_DX11(COLOR_BUFFER)->m_pRenderTargetView, GetRenderTarget_DX11(NORMAL_BUFFER)->m_pRenderTargetView, GetRenderTarget_DX11(SPECULAR_BUFFER)->m_pRenderTargetView, GetRenderTarget_DX11(DEPTH_BUFFER)->m_pRenderTargetView };
-	
-		m_pDeviceContext->OMSetRenderTargets( 4, RenderTargetViews, m_pDepthStencilView );
-
 		D3D11_VIEWPORT viewport;
 	
 		if ( IsRenderingToHMD() ) {
@@ -1238,14 +1234,16 @@ void kbRenderer_DX11::RenderScene() {
 				m_pCurrentRenderWindow->m_CameraPosition.z = inverseView.m[3][2];
 			}*/
 		}
-
-		m_pDeviceContext->RSSetViewports( 1, &viewport );
 	
 		{
 
 			for ( int iHook = 0; iHook < m_RenderHooks[RP_FirstPerson].size(); iHook++ ) {
 				m_RenderHooks[RP_FirstPerson][iHook]->RenderThreadCallBack();
 			}
+
+			m_pDeviceContext->RSSetViewports( 1, &viewport );
+			ID3D11RenderTargetView * RenderTargetViews[] = { GetRenderTarget_DX11(COLOR_BUFFER)->m_pRenderTargetView, GetRenderTarget_DX11(NORMAL_BUFFER)->m_pRenderTargetView, GetRenderTarget_DX11(SPECULAR_BUFFER)->m_pRenderTargetView, GetRenderTarget_DX11(DEPTH_BUFFER)->m_pRenderTargetView };
+			m_pDeviceContext->OMSetRenderTargets( 4, RenderTargetViews, m_pDepthStencilView );
 
 			START_SCOPED_RENDER_TIMER( RENDER_G_BUFFER );
 

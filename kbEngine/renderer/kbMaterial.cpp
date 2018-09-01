@@ -640,7 +640,7 @@ kbBlend GetBlendFromName( const std::string & name ) {
 		g_BlendMap.insert( blendMapPair( "blend_srcalpha", Blend_SrcAlpha ) );
 		g_BlendMap.insert( blendMapPair( "blend_invsrcalpha", Blend_InvSrcAlpha ) );
 		g_BlendMap.insert( blendMapPair( "blend_dstalpha", Blend_DstAlpha ) );
-		g_BlendMap.insert( blendMapPair( "blend_invsrcalpha", Blend_InvDstAlpha ) );
+		g_BlendMap.insert( blendMapPair( "blend_invdstalpha", Blend_InvDstAlpha ) );
 		g_BlendMap.insert( blendMapPair( "blend_dstcolor", Blend_DstColor ) );
 		g_BlendMap.insert( blendMapPair( "blend_invdstcolor", Blend_InvDstColor ) );
 	}

@@ -1,6 +1,8 @@
 //===================================================================================================
 // directionalLight.kbShader
 //
+// Note that  the directional light shader is responsible for copying the glow mask from the color
+// buffer to the accumulation buffer
 //
 // 2016-2018 kbEngine 2.0
 //===================================================================================================
@@ -19,7 +21,7 @@ kbShaderState {
 	srcBlend Blend_One
 	dstBlend Blend_One
 	blendOp BlendOp_Add
-	srcBlendAlpha Blend_One
+	srcBlendAlpha Blend_One			// For passing glow mask from scene color buffer to accumulation buffer
 	dstBlendAlpha Blend_Zero
 	blendOpAlpha BlendOp_Add
 }
