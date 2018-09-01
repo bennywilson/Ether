@@ -440,19 +440,20 @@ public:
 	bool										m_bIsDirectional;
 };
 
-enum kbBlendFactor {
-	BlendFactor_None,
-	BlendFactor_One,
-	BlendFactor_Zero,
-	BlendFactor_SrcAlpha,
-	BlendFactor_InvSrcAlpha,
-	BlendFactor_SrcColor,
-	BlendFactor_DstColor,
-	BlendFactor_DstAlpha,
-	BlendFactor_InvDstAlpha,
+enum kbBlend {
+	Blend_None,
+	Blend_One,
+	Blend_Zero,
+	Blend_SrcAlpha,
+	Blend_InvSrcAlpha,
+	Blend_SrcColor,
+	Blend_DstColor,
+	Blend_DstAlpha,
+	Blend_InvDstAlpha,
 };
 
 enum kbBlendOp {
+	BlendOp_None,
 	BlendOp_Add,
 	BlendOp_Subtract,
 	BlendOp_Max,
@@ -466,6 +467,7 @@ enum kbCullMode {
 };
 
 enum kbColorWriteEnable {
+	ColorWriteEnable_None	= 0,
 	ColorWriteEnable_Red	= 1,
 	ColorWriteEnable_Green	= 2,
 	ColorWriteEnable_Blue	= 4,

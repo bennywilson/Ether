@@ -1320,11 +1320,11 @@ void kbRenderer_DX11::RenderScene() {
 			m_RenderState.SetBlendState( false,
 										 false,
 										 true,
-										 BlendFactor_SrcAlpha,
-										 BlendFactor_InvSrcAlpha,
+										 Blend_SrcAlpha,
+										 Blend_InvSrcAlpha,
 										 BlendOp_Add,
-										 BlendFactor_One,
-										 BlendFactor_Zero,
+										 Blend_One,
+										 Blend_Zero,
 										 BlendOp_Add,
 										 ColorWriteEnable_RGB );
 
@@ -1466,7 +1466,7 @@ void kbRenderer_DX11::PreRenderCullAndSort() {
 					pShader = renderObj.m_OverrideShaderList[i];
 				}
 
-				if ( pShader == nullptr || pShader->GetSrcBlendFactor() == BlendFactor_None || pShader->GetSrcBlendFactor() == BlendFactor_None ) {
+				if ( pShader == nullptr || pShader->GetSrcBlend() == Blend_None || pShader->GetSrcBlend() == Blend_None ) {
 					m_pCurrentRenderWindow->GetVisibleSubMeshes( renderObj.m_RenderPass ).push_back( kbRenderSubmesh( &renderObj, i, renderObj.m_RenderPass ) );
 				} else {
 					m_pCurrentRenderWindow->GetVisibleSubMeshes( RP_Translucent ).push_back( kbRenderSubmesh( &renderObj, i, RP_Translucent ) );
@@ -1504,11 +1504,11 @@ void kbRenderer_DX11::RenderTranslucency() {
 	m_RenderState.SetBlendState( false,
 								 false,
 								 true,
-								 BlendFactor_One,
-								 BlendFactor_One,
+								 Blend_One,
+								 Blend_One,
 								 BlendOp_Add,
-								 BlendFactor_One,
-								 BlendFactor_Zero,
+								 Blend_One,
+								 Blend_Zero,
 								 BlendOp_Add,
 							     ColorWriteEnable_RGB );
 
@@ -1520,11 +1520,11 @@ void kbRenderer_DX11::RenderTranslucency() {
 		m_RenderState.SetBlendState( false,
 									 false,
 									 true,
-									 pShader->GetSrcBlendFactor(),
-									 pShader->GetDstBlendFactor(),
+									 pShader->GetSrcBlend(),
+									 pShader->GetDstBlend(),
 									 BlendOp_Add,
-									 BlendFactor_One,
-									 BlendFactor_Zero,
+									 Blend_One,
+									 Blend_Zero,
 									 BlendOp_Add,
 									 ColorWriteEnable_RGB );
 
@@ -1574,11 +1574,11 @@ void kbRenderer_DX11::RenderTranslucency() {
 		m_RenderState.SetBlendState( false,
 									 false,
 									 true,
-									 pShader->GetSrcBlendFactor(),
-									 pShader->GetDstBlendFactor(),
+									 pShader->GetSrcBlend(),
+									 pShader->GetDstBlend(),
 									 BlendOp_Add,
-									 BlendFactor_One,
-									 BlendFactor_Zero,
+									 Blend_One,
+									 Blend_Zero,
 									 BlendOp_Add,
 									 ColorWriteEnable_RGB );
 
@@ -1717,11 +1717,11 @@ void kbRenderer_DX11::RenderDebugText() {
 		m_RenderState.SetBlendState( false,
 									 false,
 									 true,
-									 BlendFactor_SrcAlpha,
-									 BlendFactor_InvSrcAlpha,
+									 Blend_SrcAlpha,
+									 Blend_InvSrcAlpha,
 									 BlendOp_Add,
-									 BlendFactor_One,
-									 BlendFactor_Zero,
+									 Blend_One,
+									 Blend_Zero,
 									 BlendOp_Add );
 
 		RenderScreenSpaceQuadImmediate( int( Back_Buffer_Width * 0.25f ), int( Back_Buffer_Height * 0.1f ), int( Back_Buffer_Width * 0.51f ), int( Back_Buffer_Height * 0.65f ), 3, m_pTranslucentShader );
@@ -1790,11 +1790,11 @@ void kbRenderer_DX11::RenderDebugText() {
 	m_RenderState.SetBlendState( false,
 								 false,
 								 true,
-								 BlendFactor_One,
-								 BlendFactor_One,
+								 Blend_One,
+								 Blend_One,
 								 BlendOp_Add,
-								 BlendFactor_One,
-								 BlendFactor_Zero,
+								 Blend_One,
+								 Blend_Zero,
 								 BlendOp_Add,
 							     ColorWriteEnable_All );
 
@@ -2161,11 +2161,11 @@ void kbRenderer_DX11::RenderBloom() {
 	m_RenderState.SetBlendState( false,
 								 false,
 								 true,
-								 BlendFactor_One,
-								 BlendFactor_One,
+								 Blend_One,
+								 Blend_One,
 								 BlendOp_Add,
-								 BlendFactor_One,
-								 BlendFactor_Zero,
+								 Blend_One,
+								 Blend_Zero,
 								 BlendOp_Add,
 							     ColorWriteEnable_All );
 
@@ -2844,11 +2844,11 @@ void kbRenderer_DX11::RenderScreenSpaceQuads() {
 	m_RenderState.SetBlendState( false,
 								 false,
 								 true,
-								 BlendFactor_SrcAlpha,
-								 BlendFactor_InvSrcAlpha,
+								 Blend_SrcAlpha,
+								 Blend_InvSrcAlpha,
 								 BlendOp_Add,
-								 BlendFactor_One,
-								 BlendFactor_Zero,
+								 Blend_One,
+								 Blend_Zero,
 								 BlendOp_Add );
 
 	m_RenderState.SetDepthStencilState( false, kbRenderState::DepthWriteMaskZero, kbRenderState::CompareLess, false );
@@ -3006,7 +3006,7 @@ void kbRenderer_DX11::RenderMesh( const kbRenderSubmesh *const pRenderMesh, cons
 	}
 	
     m_pDeviceContext->GSSetShader( (ID3D11GeometryShader *) pShader->GetGeometryShader(), nullptr, 0 );
-	ID3D11SamplerState *const  SamplerStates[] = { m_pBasicSamplerState, m_pNormalMapSamplerState };	// todo: Grass uses this for sampling time
+	ID3D11SamplerState *const  SamplerStates[] = { m_pNormalMapSamplerState, m_pNormalMapSamplerState };	// todo: Grass uses this for sampling time
 	m_pDeviceContext->GSSetSamplers( 0, 2, SamplerStates );
 
 	// Set textures
@@ -3282,15 +3282,17 @@ void kbRenderer_DX11::RT_RenderMesh( const kbModel *const pModel, kbShader * pSh
 	m_pDeviceContext->IASetVertexBuffers(0, 1, &pVertexBuffer, &vertexStride, &vertexOffset);
 
 	ID3D11Buffer *const pIndexBuffer = (ID3D11Buffer * const)pModel->m_IndexBuffer.GetBufferPtr();
-	m_pDeviceContext->IASetIndexBuffer(pIndexBuffer, DXGI_FORMAT_R32_UINT, 0);
-	m_pDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	m_pDeviceContext->IASetIndexBuffer( pIndexBuffer, DXGI_FORMAT_R32_UINT, 0 );
+	m_pDeviceContext->IASetPrimitiveTopology( D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST );
 
-	m_pDeviceContext->IASetInputLayout((ID3D11InputLayout*)pShader->GetVertexLayout());
-	m_pDeviceContext->VSSetShader((ID3D11VertexShader *)pShader->GetVertexShader(), nullptr, 0);
-	m_pDeviceContext->PSSetShader((ID3D11PixelShader *)pShader->GetPixelShader(), nullptr, 0);
+	m_pDeviceContext->IASetInputLayout( (ID3D11InputLayout*)pShader->GetVertexLayout() );
+	m_pDeviceContext->VSSetShader( (ID3D11VertexShader *)pShader->GetVertexShader(), nullptr, 0 );
+	m_pDeviceContext->PSSetShader( (ID3D11PixelShader *)pShader->GetPixelShader(), nullptr, 0 );
 
-	m_pDeviceContext->GSSetShader((ID3D11GeometryShader *)pShader->GetGeometryShader(), nullptr, 0);
-	m_pDeviceContext->GSSetSamplers(0, 1, &m_pBasicSamplerState);
+	m_pDeviceContext->GSSetShader( (ID3D11GeometryShader *)pShader->GetGeometryShader(), nullptr, 0 );
+	m_pDeviceContext->GSSetSamplers(0, 1, &m_pBasicSamplerState );
+
+	RT_SetBlendState( pShader );
 
     // Bind textures
 	const kbShaderVarBindings_t & shaderVarBindings = pShader->GetShaderVarBindings();
@@ -3305,7 +3307,7 @@ void kbRenderer_DX11::RT_RenderMesh( const kbModel *const pModel, kbShader * pSh
 
 		const kbModel::mesh_t & pMesh = pModel->GetMeshes()[i];
 		const kbMaterial & meshMaterial = pModel->GetMaterials()[pMesh.m_MaterialIndex];
-		m_pDeviceContext->DrawIndexed(pMesh.m_NumTriangles * 3, pMesh.m_IndexBufferIndex, 0);
+		m_pDeviceContext->DrawIndexed( pMesh.m_NumTriangles * 3, pMesh.m_IndexBufferIndex, 0 );
 	}
 
 	m_RenderState.SetBlendState();
@@ -3373,6 +3375,8 @@ void kbRenderer_DX11::RT_RenderLine( const kbVec3 & startPt, const kbVec3 & endP
 		pShader = m_pDebugShader;
 	}
 
+	RT_SetBlendState( pShader );
+
 	ID3D11ShaderResourceView *const pShaderResourceView = (ID3D11ShaderResourceView*)m_pTextures[0]->GetGPUTexture();
 	m_pDeviceContext->PSSetShaderResources( 0, 1, &pShaderResourceView );
 	m_pDeviceContext->PSSetSamplers( 0, 1, &m_pBasicSamplerState );
@@ -3391,17 +3395,35 @@ void kbRenderer_DX11::RT_RenderLine( const kbVec3 & startPt, const kbVec3 & endP
 	m_pDeviceContext->RSSetState( m_pDefaultRasterizerState );
 }
 
+
+/**
+ *	kbRenderer_DX11::RT_SetBlendState
+ */
+void kbRenderer_DX11::RT_SetBlendState( const kbShader *const pShader ) {
+
+	m_RenderState.SetBlendState(	false,
+									false,
+									pShader->IsBlendEnabled(),
+									pShader->GetSrcBlend(),
+									pShader->GetDstBlend(),
+									pShader->GetBlendOp(),
+									pShader->GetSrcBlendAlpha(),
+									pShader->GetDstBlendAlpha(),
+									pShader->GetBlendOpAlpha(),
+									pShader->GetColorWriteEnable() );
+}
+
 /**
  *	kbRenderer_DX11::RT_SetBlendState
  */
 void kbRenderer_DX11::RT_SetBlendState( const bool bAlphaToCoverageEnable,
 										const bool bIndependentBlendEnabled,
 										const bool bBlendEnable,
-										const kbBlendFactor sourceBlend,
-										const kbBlendFactor destBlend,
+										const kbBlend sourceBlend,
+										const kbBlend destBlend,
 										const kbBlendOp blendOp,
-										const kbBlendFactor sourceAlpha,
-										const kbBlendFactor destAlpha,
+										const kbBlend sourceAlpha,
+										const kbBlend destAlpha,
 										const kbBlendOp alphaBlendOp,
 										const kbColorWriteEnable renderTargetWriteMask,
 										const UINT sampleMask ) {

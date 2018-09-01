@@ -562,8 +562,13 @@ kbShader::kbShader() :
 	m_pVertexLayout( nullptr ),
 	m_VertexShaderFunctionName( "vertexShader" ),
 	m_PixelShaderFunctionName( "pixelShader" ),
-	m_SrcBlendFactor( BlendFactor_None ),
-	m_DstBlendFactor( BlendFactor_None ),
+	m_SrcBlend( Blend_None ),
+	m_DstBlend( Blend_None ),
+	m_BlendOp( BlendOp_Add ),
+	m_SrcBlendAlpha( Blend_None ),
+	m_DstBlendAlpha( Blend_None ),
+	m_BlendOpAlpha( BlendOp_Add ),
+	m_ColorWriteEnable( ColorWriteEnable_All ),
 	m_CullMode( CullMode_BackFaces ) {
 }
 
@@ -577,16 +582,76 @@ kbShader::kbShader( const std::string & fileName ) :
 	m_pVertexLayout( nullptr ),
 	m_VertexShaderFunctionName( "vertexShader" ),
 	m_PixelShaderFunctionName( "pixelShader" ),
-	m_SrcBlendFactor( BlendFactor_None ),
-	m_DstBlendFactor( BlendFactor_None ) {
-	m_FullFileName = fileName;
+	m_SrcBlend( Blend_None ),
+	m_DstBlend( Blend_None ),
+	m_BlendOp( BlendOp_Add ),
+	m_SrcBlendAlpha( Blend_None ),
+	m_DstBlendAlpha( Blend_None ),
+	m_BlendOpAlpha( BlendOp_Add ),
+	m_ColorWriteEnable( ColorWriteEnable_All ),
+	m_CullMode( CullMode_BackFaces ) {
 
+	m_FullFileName = fileName;
+}
+
+kbColorWriteEnable GetColorWriteEnableFromName( const std::string & name ) {
+	if ( name == "colorwriteenable_rg" ) {
+		return ColorWriteEnable_Red | ColorWriteEnable_Green;
+	}
+
+	if ( name == "colorwriteenable_b" ) {
+		return ColorWriteEnable_Blue;
+	}
+
+	if ( name == "colorwriteenable_a" ) {
+		return ColorWriteEnable_Alpha;
+	}
+
+	kbWarning( "GetColorWriteEnableFromName() - Invalid value %s", name.c_str() );
+	return ColorWriteEnable_None;
+}
+
+kbBlend GetBlendFromName( std::string & name ) {
+	if ( name == "blend_alpha" ) {
+		return Blend_SrcAlpha;
+	} else if ( name == "blend_invsrcalpha" ) {
+		return Blend_InvSrcAlpha;
+	} else if ( name == "blend_one" ) {
+		return Blend_One;
+	} else if ( name == "blend_zero" ) {
+		return Blend_Zero;
+	} else if ( name == "blend_dstcolor" ) {
+		return Blend_DstColor;
+	}
+
+	kbWarning( "GetBlendFromName() - Invalid value %s", name.c_str() );
+	return Blend_None;
+}
+
+kbBlendOp GetBlendOpFromName( std::string & name ) {
+	if ( name == "blendop_add" ) {
+		return BlendOp_Add;
+	} else if ( name == "blendop_subtract" ) {
+		return BlendOp_Subtract;
+	} else if ( name == "blendop_max" ) {
+		return BlendOp_Max;
+	} else if ( name == "blendop_min" ) {
+		return BlendOp_Min;
+	}
+
+	kbWarning( "GetBlendOpFromName() - Invalid value %s", name.c_str() );
+	return BlendOp_None;
 }
 
 /**
  *	kbShader::Load_Internal
  */
 bool kbShader::Load_Internal() {
+
+	if ( GetFullFileName().find("update") != std::string::npos ) {
+		static int breakhere = 0;
+		breakhere++;
+	}
 
 	if ( g_pD3D11Renderer != nullptr ) {		// HACK TODO
 
@@ -603,24 +668,34 @@ bool kbShader::Load_Internal() {
 			shaderParser.MakeLowerCase();
 
 			std::string value;
+
+
 			if ( shaderParser.GetValueForKey( value, "srcblend" ) ) {
-				if ( value == "blendfactor_alpha" ) {
-					m_SrcBlendFactor = BlendFactor_SrcAlpha;
-				} else if ( value == "blendfactor_invsrcalpha" ) {
-					m_SrcBlendFactor = BlendFactor_InvSrcAlpha;
-				} else if ( value == "blendfactor_one" ) {
-					m_SrcBlendFactor = BlendFactor_One;
-				}
+				m_SrcBlend = GetBlendFromName( value );
 			}
 
 			if ( shaderParser.GetValueForKey( value, "dstblend" ) ) {
-				if ( value == "blendfactor_alpha" ) {
-					m_DstBlendFactor = BlendFactor_SrcAlpha;
-				} else if ( value == "blendfactor_invsrcalpha" ) {
-					m_DstBlendFactor = BlendFactor_InvSrcAlpha;
-				} else if ( value == "blendfactor_one" ) {
-					m_DstBlendFactor = BlendFactor_One;
-				}
+				m_DstBlend = GetBlendFromName( value );
+			}
+
+			if ( shaderParser.GetValueForKey( value, "blendop" ) ) {
+				m_BlendOp = GetBlendOpFromName( value );
+			}
+
+			if ( shaderParser.GetValueForKey( value, "srcblendalpha" ) ) {
+				m_SrcBlendAlpha = GetBlendFromName( value );
+			}
+
+			if ( shaderParser.GetValueForKey( value, "dstblendalpha" ) ) {
+				m_DstBlendAlpha = GetBlendFromName( value );
+			}
+
+			if ( shaderParser.GetValueForKey( value, "blendopalpha" ) ) {
+				m_BlendOpAlpha = GetBlendOpFromName( value );
+			}
+
+			if ( shaderParser.GetValueForKey( value, "colorwriteenable" ) ) {
+				m_ColorWriteEnable = GetColorWriteEnableFromName( value );
 			}
 
 			if ( shaderParser.GetValueForKey( value, "cullmode" ) ) {

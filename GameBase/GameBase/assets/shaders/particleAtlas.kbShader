@@ -15,8 +15,8 @@ cbuffer matrixBuffer {
 };
 
 kbShaderState {
-	srcblend BlendFactor_Alpha
-	dstBlend BlendFactor_InvSrcAlpha
+	srcblend Blend_Alpha
+	dstBlend Blend_InvSrcAlpha
 }
 
 //-------------------------------------

@@ -10,8 +10,8 @@ cbuffer matrixBuffer {
 
 
 kbShaderState {
-	srcblend BlendFactor_One
-	dstBlend BlendFactor_One
+	srcblend Blend_One
+	dstBlend Blend_One
 }
 
 //-------------------------------------

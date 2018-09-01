@@ -244,16 +244,16 @@ struct kbRenderState {
 	ID3D11DepthStencilState * m_pCurrentDepthStencilState;
 
 
-	D3D11_BLEND GetD3DBlend( const kbBlendFactor blend ) {
+	D3D11_BLEND GetD3DBlend( const kbBlend blend ) {
 		switch( blend ) {
-			case BlendFactor_Zero : return D3D11_BLEND_ZERO;
-			case BlendFactor_One : return D3D11_BLEND_ONE;
-			case BlendFactor_SrcAlpha : return D3D11_BLEND_SRC_ALPHA;
-			case BlendFactor_InvSrcAlpha : return D3D11_BLEND_INV_SRC_ALPHA;
-			case BlendFactor_SrcColor : return D3D11_BLEND_SRC_COLOR;
-			case BlendFactor_DstColor : return D3D11_BLEND_DEST_COLOR;
-			case BlendFactor_DstAlpha : return D3D11_BLEND_DEST_ALPHA;
-			case BlendFactor_InvDstAlpha : return D3D11_BLEND_INV_DEST_ALPHA;
+			case Blend_Zero : return D3D11_BLEND_ZERO;
+			case Blend_One : return D3D11_BLEND_ONE;
+			case Blend_SrcAlpha : return D3D11_BLEND_SRC_ALPHA;
+			case Blend_InvSrcAlpha : return D3D11_BLEND_INV_SRC_ALPHA;
+			case Blend_SrcColor : return D3D11_BLEND_SRC_COLOR;
+			case Blend_DstColor : return D3D11_BLEND_DEST_COLOR;
+			case Blend_DstAlpha : return D3D11_BLEND_DEST_ALPHA;
+			case Blend_InvDstAlpha : return D3D11_BLEND_INV_DEST_ALPHA;
 
 		};
 
@@ -295,11 +295,11 @@ struct kbRenderState {
 	void SetBlendState( const bool bAlphaToCoverageEnable = false,
 						const bool bIndependentBlendEnabled = false,
 						const bool bBlendEnable = false,
-						const kbBlendFactor sourceBlend = BlendFactor_One,
-						const kbBlendFactor destBlend = BlendFactor_One,
+						const kbBlend sourceBlend = Blend_One,
+						const kbBlend destBlend = Blend_One,
 						const kbBlendOp blendOp = BlendOp_Add,
-						const kbBlendFactor sourceAlpha = BlendFactor_One,
-						const kbBlendFactor destAlpha = BlendFactor_One,
+						const kbBlend sourceAlpha = Blend_One,
+						const kbBlend destAlpha = Blend_One,
 						const kbBlendOp alphaBlendOp = BlendOp_Add,
 						const kbColorWriteEnable renderTargetWriteMask = ColorWriteEnable_All,
 						const UINT sampleMask = 0xffffffff ) {
@@ -380,14 +380,16 @@ public:
 	virtual void								RT_SetBlendState( const bool bAlphaToCoverageEnable = false,
 																  const bool bIndependentBlendEnabled = false,
 																  const bool bBlendEnable = false,
-																  const kbBlendFactor sourceBlend = BlendFactor_One,
-																  const kbBlendFactor destBlend = BlendFactor_One,
+																  const kbBlend sourceBlend = Blend_One,
+																  const kbBlend destBlend = Blend_One,
 																  const kbBlendOp blendOp = BlendOp_Add,
-																  const kbBlendFactor sourceAlpha = BlendFactor_One,
-																  const kbBlendFactor destAlpha = BlendFactor_One,
+																  const kbBlend sourceAlpha = Blend_One,
+																  const kbBlend destAlpha = Blend_One,
 																  const kbBlendOp alphaBlendOp = BlendOp_Add,
 																  const kbColorWriteEnable renderTargetWriteMask = ColorWriteEnable_All,
 																  const UINT sampleMask = 0xffffffff ) override;
+	virtual void								RT_SetBlendState( const kbShader *const pShader ) override;
+
 private:
 
 	virtual void								Init_Internal( HWND, const int width, const int height, const bool bUseHMD, const bool bUseHMDTrackingOnly ) override;

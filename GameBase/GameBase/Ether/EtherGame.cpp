@@ -50,7 +50,9 @@ EtherGame::EtherGame() :
 	m_HMDWorldOffset( kbVec3::zero ),
 	m_pBulletHoleRenderTexture( nullptr ),
 	m_pGrassCollisionTexture( nullptr ),
-	m_pCollisionMapGenShader( nullptr ),
+	m_pCollisionMapPushGenShader( nullptr ),
+	m_pCollisionMapTimeGenShader( nullptr ),
+	m_pCollisionMapDamageGenShader( nullptr ),
 	m_pCollisionMapUpdateTimeShader( nullptr ),
 	m_pBulletHoleUpdateShader( nullptr ) {
 
@@ -222,7 +224,7 @@ if (GetAsyncKeyState('M')) curPos.z -= updateAmt;
 	PlayerPos += " z:";
 	PlayerPos += std::to_string( m_Camera.m_Position.z );
 	
-	g_pD3D11Renderer->DrawDebugText( PlayerPos, 0, 0, g_DebugTextSize, g_DebugTextSize, kbColor::green );
+//	g_pD3D11Renderer->DrawDebugText( PlayerPos, 0, 0, g_DebugTextSize, g_DebugTextSize, kbColor::green );
 
 
 	UpdateWorld( DT );
@@ -544,7 +546,7 @@ void EtherGame::RenderSync() {
 		}
 
 		m_pGrassCollisionTexture = g_pRenderer->RT_GetRenderTexture( 1024, 1024, eTextureFormat::KBTEXTURE_R16G16B16A16 );
-		g_pRenderer->RT_ClearRenderTarget( m_pGrassCollisionTexture, kbColor( 0.0f, 0.0f, 99999.0f, 99999.0f ) );
+		g_pRenderer->RT_ClearRenderTarget( m_pGrassCollisionTexture, kbColor( 0.0f, 0.0f, 9999.0f, 9999.0f ) );
 
 		kbTexture *const pEmberTexture = (kbTexture*)g_ResourceManager.GetResource( "./assets/FX/EmberGradient.jpg", true );
 		for ( int i = 0; i < GetGameEntities().size(); i++ ) {
@@ -563,39 +565,24 @@ void EtherGame::RenderSync() {
 			}
 		}
 
-		m_pCollisionMapGenShader = (kbShader*)g_ResourceManager.GetResource( "./assets/shaders/collisionMapGen.kbshader", true );
-		m_pCollisionMapUpdateTimeShader = (kbShader*)g_ResourceManager.GetResource( "./assets/shaders/collisionMapTimeUpdate.kbshader", true );
-		m_pBulletHoleUpdateShader = (kbShader*)g_ResourceManager.GetResource( "./assets/shaders/pokeyholeunwrap.kbshader", true );
+		m_pCollisionMapPushGenShader = (kbShader*)g_ResourceManager.GetResource( "./assets/shaders/DamageGen/collisionMapPushGen.kbshader", true );
+		m_pCollisionMapDamageGenShader = (kbShader*)g_ResourceManager.GetResource( "./assets/shaders/DamageGen/collisionMapDamageGen.kbshader", true );
+		m_pCollisionMapTimeGenShader = (kbShader*)g_ResourceManager.GetResource( "./assets/shaders/DamageGen/collisionMapTimeGen.kbshader", true );
+		m_pCollisionMapUpdateTimeShader = (kbShader*)g_ResourceManager.GetResource( "./assets/shaders/DamageGen/collisionMapTimeUpdate.kbshader", true );
+		m_pBulletHoleUpdateShader = (kbShader*)g_ResourceManager.GetResource( "./assets/shaders/DamageGen/pokeyholeunwrap.kbshader", true );
 		
 	}
 
 	if ( GetAsyncKeyState( 'C' ) ) {
 		g_pRenderer->RT_ClearRenderTarget( m_pBulletHoleRenderTexture, kbColor::white );
+		g_pRenderer->RT_ClearRenderTarget( m_pGrassCollisionTexture, kbColor( 0.0f, 0.0f, 9999.0f, 9999.0f ) );
 	}
 
 	// Update time in collision Map
 	g_pRenderer->RT_SetRenderTarget( m_pGrassCollisionTexture );
-
-	g_pRenderer->RT_SetBlendState( false,
-								   false,
-								   true,
-								   BlendFactor_DstColor,
-								   BlendFactor_Zero,
-								   BlendOp_Add,
-								   BlendFactor_One,
-								   BlendFactor_One,
-								   BlendOp_Min,
-								   ColorWriteEnable_Red | ColorWriteEnable_Green );
-
-	float timeMultiplier = 1.0f - kbClamp( g_TimeMultiplier * GetCurrentFrameDeltaTime(), 0.0f, 1.0f );
-	timeMultiplier *= 0.15f;
-	timeMultiplier += 0.85f;
-
-if ( GetAsyncKeyState('B' ) ) {
-	kbLog( "timeMult = %f %f", timeMultiplier, GetCurrentFrameDeltaTime() );
-}
-
+	const float timeMultiplier = ( 1.0f - kbClamp( g_TimeMultiplier * GetCurrentFrameDeltaTime(), 0.0f, 1.0f ) ) * 0.15f + 0.85f;
 	g_pRenderer->RT_RenderLine( kbVec3( 0.5f, 0.0f, 0.0f ), kbVec3( 0.5f, 1.0f, 0.0f ), kbColor( timeMultiplier, timeMultiplier, timeMultiplier, timeMultiplier ), 15.0f, m_pCollisionMapUpdateTimeShader );
+
 	const float curTime = g_GlobalTimer.TimeElapsedSeconds();
 
 	for ( int i = 0; i < m_ShotsThisFrame.size(); i++ ) {
@@ -633,17 +620,6 @@ if ( GetAsyncKeyState('B' ) ) {
 			kbTexture *const pScorchTex = (kbTexture*)g_ResourceManager.GetResource( "./assets/FX/scorch.jpg", true );
 			shaderParams.SetTexture( "scorchTex", pScorchTex );
 
-			g_pRenderer->RT_SetBlendState( false,
-										   false,
-										   true,
-										   BlendFactor_DstColor,
-										   BlendFactor_Zero,
-										   BlendOp_Add,
-										   BlendFactor_One,
-										   BlendFactor_One,
-										   BlendOp_Min,
-										   ColorWriteEnable_All );
-
 			g_pRenderer->RT_RenderMesh( pSM->GetModel(), m_pBulletHoleUpdateShader, &shaderParams );
 		}
 
@@ -669,48 +645,15 @@ if ( GetAsyncKeyState('B' ) ) {
 
 		perpLine *= pushLineWidth * 0.5f;
 	
-		// Add directional information
+		// Render push data
 		m_ShaderParamOverrides.SetVec4( "perpendicularDirection", kbVec4( perpLine.x, perpLine.y, g_GlobalTimer.TimeElapsedSeconds(), 0.0f ) );
-		g_pRenderer->RT_SetBlendState( false,
-									   false,
-									   false,
-									   BlendFactor_One,
-									   BlendFactor_One,
-									   BlendOp_Max,
-									   BlendFactor_One,
-									   BlendFactor_One,
-									   BlendOp_Min,
-									   ColorWriteEnable_Red | ColorWriteEnable_Green );
-
-		g_pRenderer->RT_RenderLine( startPos, endPos, kbColor( 0.0f, 0.0f, 1.0f, 0.0f ), pushLineWidth, m_pCollisionMapGenShader, &m_ShaderParamOverrides );
+		g_pRenderer->RT_RenderLine( startPos, endPos, kbColor( 0.0f, 0.0f, 1.0f, 0.0f ), pushLineWidth, m_pCollisionMapPushGenShader, &m_ShaderParamOverrides );
 	
-		// Add time
-		g_pRenderer->RT_SetBlendState( false,
-									   false,
-									   true,
-									   BlendFactor_One,
-									   BlendFactor_One,
-									   BlendOp_Min,
-									   BlendFactor_One,
-									   BlendFactor_One,
-									   BlendOp_Min,
-									   ColorWriteEnable_Blue );
+		// Render time data
+		g_pRenderer->RT_RenderLine( startPos, endPos, kbColor( 0.0f, 0.0f, 1.0f, 0.0f ), pushLineWidth, m_pCollisionMapTimeGenShader, &m_ShaderParamOverrides );
 
-		g_pRenderer->RT_RenderLine( startPos, endPos, kbColor( 0.0f, 0.0f, 1.0f, 0.0f ), pushLineWidth, m_pCollisionMapGenShader, &m_ShaderParamOverrides );
-
-		// Add Height
-		g_pRenderer->RT_SetBlendState( false,
-									   false,
-									   true,
-									   BlendFactor_One,
-									   BlendFactor_One,
-									   BlendOp_Add,
-									   BlendFactor_One,
-									   BlendFactor_One,
-									   BlendOp_Min,
-									   ColorWriteEnable_Alpha );
-
-		g_pRenderer->RT_RenderLine( startPos, endPos, kbColor( 0.0f, 0.0f, curTime, 0.0f ), 16.0f / 4096.0f, m_pCollisionMapGenShader );
+		// Render damage
+		g_pRenderer->RT_RenderLine( startPos, endPos, kbColor( 0.0f, 0.0f, curTime, 0.0f ), 16.0f / 4096.0f, m_pCollisionMapDamageGenShader );
 
 		g_pRenderer->RT_SetBlendState();
 	}

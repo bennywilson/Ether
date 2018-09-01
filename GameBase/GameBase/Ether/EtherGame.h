@@ -95,7 +95,9 @@ protected:
 	kbRenderTexture *							m_pBulletHoleRenderTexture;
 	kbRenderTexture *							m_pGrassCollisionTexture;
 
-	kbShader *									m_pCollisionMapGenShader;
+	kbShader *									m_pCollisionMapPushGenShader;
+	kbShader *									m_pCollisionMapDamageGenShader;
+	kbShader *									m_pCollisionMapTimeGenShader;
 	kbShader *									m_pCollisionMapUpdateTimeShader;
 	kbShader *									m_pBulletHoleUpdateShader;
 	kbShaderParamOverrides_t					m_ShaderParamOverrides;
