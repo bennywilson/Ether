@@ -441,7 +441,6 @@ public:
 };
 
 enum kbBlend {
-	Blend_None,
 	Blend_One,
 	Blend_Zero,
 	Blend_SrcAlpha,
@@ -453,7 +452,6 @@ enum kbBlend {
 };
 
 enum kbBlendOp {
-	BlendOp_None,
 	BlendOp_Add,
 	BlendOp_Subtract,
 	BlendOp_Max,
@@ -467,7 +465,6 @@ enum kbCullMode {
 };
 
 enum kbColorWriteEnable {
-	ColorWriteEnable_None	= 0,
 	ColorWriteEnable_Red	= 1,
 	ColorWriteEnable_Green	= 2,
 	ColorWriteEnable_Blue	= 4,

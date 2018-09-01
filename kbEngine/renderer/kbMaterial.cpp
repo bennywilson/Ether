@@ -5,6 +5,7 @@
 // 2016-2018 kbEngine 2.0
 //===================================================================================================
 #include <Wincodec.h>
+#include <unordered_map>
 #include "kbCore.h"
 #include "kbRenderer_defs.h"
 #include "kbRenderer.h"
@@ -563,11 +564,11 @@ kbShader::kbShader() :
 	m_VertexShaderFunctionName( "vertexShader" ),
 	m_PixelShaderFunctionName( "pixelShader" ),
 	m_bBlendEnabled( false ),
-	m_SrcBlend( Blend_None ),
-	m_DstBlend( Blend_None ),
+	m_SrcBlend( Blend_One ),
+	m_DstBlend( Blend_One ),
 	m_BlendOp( BlendOp_Add ),
-	m_SrcBlendAlpha( Blend_None ),
-	m_DstBlendAlpha( Blend_None ),
+	m_SrcBlendAlpha( Blend_One ),
+	m_DstBlendAlpha( Blend_One ),
 	m_BlendOpAlpha( BlendOp_Add ),
 	m_ColorWriteEnable( ColorWriteEnable_All ),
 	m_CullMode( CullMode_BackFaces ) {
@@ -584,11 +585,11 @@ kbShader::kbShader( const std::string & fileName ) :
 	m_VertexShaderFunctionName( "vertexShader" ),
 	m_PixelShaderFunctionName( "pixelShader" ),
 	m_bBlendEnabled( false ),
-	m_SrcBlend( Blend_None ),
-	m_DstBlend( Blend_None ),
+	m_SrcBlend( Blend_One ),
+	m_DstBlend( Blend_One ),
 	m_BlendOp( BlendOp_Add ),
-	m_SrcBlendAlpha( Blend_None ),
-	m_DstBlendAlpha( Blend_None ),
+	m_SrcBlendAlpha( Blend_One ),
+	m_DstBlendAlpha( Blend_One ),
 	m_BlendOpAlpha( BlendOp_Add ),
 	m_ColorWriteEnable( ColorWriteEnable_All ),
 	m_CullMode( CullMode_BackFaces ) {
@@ -596,57 +597,77 @@ kbShader::kbShader( const std::string & fileName ) :
 	m_FullFileName = fileName;
 }
 
+std::unordered_map<std::string, kbColorWriteEnable> g_ColorWriteMap;
 kbColorWriteEnable GetColorWriteEnableFromName( const std::string & name ) {
-	if ( name == "colorwriteenable_rgb" ) {
-		return ColorWriteEnable_Red | ColorWriteEnable_Green | ColorWriteEnable_Blue;
+
+	if ( g_ColorWriteMap.empty() ) {
+		typedef std::pair<std::string, kbColorWriteEnable> colorWriteMapPair;
+
+		g_ColorWriteMap.insert( colorWriteMapPair( "colorwriteenable_r", ColorWriteEnable_Red ) );
+		g_ColorWriteMap.insert( colorWriteMapPair( "colorwriteenable_rg", ColorWriteEnable_Red | ColorWriteEnable_Green ) );
+		g_ColorWriteMap.insert( colorWriteMapPair( "colorwriteenable_rgb", ColorWriteEnable_Red | ColorWriteEnable_Green | ColorWriteEnable_Blue ) );
+		g_ColorWriteMap.insert( colorWriteMapPair( "colorwriteenable_rgba", ColorWriteEnable_All ) );
+		g_ColorWriteMap.insert( colorWriteMapPair( "colorwriteenable_rb", ColorWriteEnable_Red | ColorWriteEnable_Blue ) );
+		g_ColorWriteMap.insert( colorWriteMapPair( "colorwriteenable_rba", ColorWriteEnable_Red | ColorWriteEnable_Blue | ColorWriteEnable_Alpha ) );
+		g_ColorWriteMap.insert( colorWriteMapPair( "colorwriteenable_ra", ColorWriteEnable_Red | ColorWriteEnable_Alpha) );
+		g_ColorWriteMap.insert( colorWriteMapPair( "colorwriteenable_g", ColorWriteEnable_Green ) );
+		g_ColorWriteMap.insert( colorWriteMapPair( "colorwriteenable_gb", ColorWriteEnable_Green | ColorWriteEnable_Blue ) );
+		g_ColorWriteMap.insert( colorWriteMapPair( "colorwriteenable_gba", ColorWriteEnable_Green | ColorWriteEnable_Blue | ColorWriteEnable_Alpha ) );
+		g_ColorWriteMap.insert( colorWriteMapPair( "colorwriteenable_ga", ColorWriteEnable_Green | ColorWriteEnable_Alpha ) );
+		g_ColorWriteMap.insert( colorWriteMapPair( "colorwriteenable_b", ColorWriteEnable_Blue ) );
+		g_ColorWriteMap.insert( colorWriteMapPair( "colorwriteenable_ba", ColorWriteEnable_Blue | ColorWriteEnable_Alpha ) );
+		g_ColorWriteMap.insert( colorWriteMapPair( "colorwriteenable_a", ColorWriteEnable_Alpha ) );
 	}
 
-	if ( name == "colorwriteenable_rg" ) {
-		return ColorWriteEnable_Red | ColorWriteEnable_Green;
-	}
-
-	if ( name == "colorwriteenable_b" ) {
-		return ColorWriteEnable_Blue;
-	}
-
-	if ( name == "colorwriteenable_a" ) {
-		return ColorWriteEnable_Alpha;
+	auto colorMapIt = g_ColorWriteMap.find( name );
+	if ( colorMapIt != g_ColorWriteMap.end() ) {
+		return colorMapIt->second;
 	}
 
 	kbWarning( "GetColorWriteEnableFromName() - Invalid value %s", name.c_str() );
-	return ColorWriteEnable_None;
+	return ColorWriteEnable_All;
 }
 
-kbBlend GetBlendFromName( std::string & name ) {
-	if ( name == "blend_srcalpha" ) {
-		return Blend_SrcAlpha;
-	} else if ( name == "blend_invsrcalpha" ) {
-		return Blend_InvSrcAlpha;
-	} else if ( name == "blend_one" ) {
-		return Blend_One;
-	} else if ( name == "blend_zero" ) {
-		return Blend_Zero;
-	} else if ( name == "blend_dstcolor" ) {
-		return Blend_DstColor;
+std::unordered_map<std::string, kbBlend> g_BlendMap;
+kbBlend GetBlendFromName( const std::string & name ) {
+
+	if ( g_BlendMap.empty() ) {
+		typedef std::pair<std::string, kbBlend> blendMapPair;	
+		g_BlendMap.insert( blendMapPair( "blend_srcalpha", Blend_SrcAlpha ) );
+		g_BlendMap.insert( blendMapPair( "blend_invsrcalpha", Blend_InvSrcAlpha ) );
+		g_BlendMap.insert( blendMapPair( "blend_one", Blend_One ) );
+		g_BlendMap.insert( blendMapPair( "blend_zero", Blend_Zero ) );
+		g_BlendMap.insert( blendMapPair( "blend_dstcolor", Blend_DstColor ) );
+
+	}
+
+	auto blendMapIt = g_BlendMap.find( name );
+	if ( blendMapIt != g_BlendMap.end() ) {
+		return blendMapIt->second;
 	}
 
 	kbWarning( "GetBlendFromName() - Invalid value %s", name.c_str() );
-	return Blend_None;
+	return Blend_One;
 }
 
+std::unordered_map<std::string, kbBlendOp> g_BlendOpMap;
 kbBlendOp GetBlendOpFromName( std::string & name ) {
-	if ( name == "blendop_add" ) {
-		return BlendOp_Add;
-	} else if ( name == "blendop_subtract" ) {
-		return BlendOp_Subtract;
-	} else if ( name == "blendop_max" ) {
-		return BlendOp_Max;
-	} else if ( name == "blendop_min" ) {
-		return BlendOp_Min;
+
+	if ( g_BlendOpMap.empty() ) {
+		typedef std::pair<std::string, kbBlendOp> blendOpMapPair;
+		g_BlendOpMap.insert( blendOpMapPair( "blendop_add", BlendOp_Add ) );
+		g_BlendOpMap.insert( blendOpMapPair( "blendop_subtract", BlendOp_Subtract ) );
+		g_BlendOpMap.insert( blendOpMapPair( "blendop_max", BlendOp_Max ) );
+		g_BlendOpMap.insert( blendOpMapPair( "blendop_min", BlendOp_Min ) );
+	}
+
+	auto blendOpMapIt = g_BlendOpMap.find( name );
+	if ( blendOpMapIt != g_BlendOpMap.end() ) {
+		return blendOpMapIt->second;
 	}
 
 	kbWarning( "GetBlendOpFromName() - Invalid value %s", name.c_str() );
-	return BlendOp_None;
+	return BlendOp_Add;
 }
 
 /**
@@ -739,11 +760,11 @@ void kbShader::Release_Internal() {
 	m_ShaderVarBindings.m_TextureNames.clear();
 
 	m_bBlendEnabled = false;
-	m_SrcBlend = Blend_None;
-	m_DstBlend = Blend_None;
+	m_SrcBlend = Blend_One;
+	m_DstBlend = Blend_One;
 	m_BlendOp = BlendOp_Add;
-	m_SrcBlendAlpha = Blend_None;
-	m_DstBlendAlpha = Blend_None;
+	m_SrcBlendAlpha = Blend_One;
+	m_DstBlendAlpha = Blend_One;
 	m_BlendOpAlpha = BlendOp_Add;
 	m_ColorWriteEnable = ColorWriteEnable_All;
 	m_CullMode = CullMode_BackFaces;

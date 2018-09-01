@@ -1458,7 +1458,7 @@ void kbRenderer_DX11::PreRenderCullAndSort() {
 					pShader = renderObj.m_OverrideShaderList[i];
 				}
 
-				if ( pShader == nullptr || pShader->GetSrcBlend() == Blend_None || pShader->GetSrcBlend() == Blend_None ) {
+				if ( pShader == nullptr || pShader->IsBlendEnabled() == false ) {
 					m_pCurrentRenderWindow->GetVisibleSubMeshes( renderObj.m_RenderPass ).push_back( kbRenderSubmesh( &renderObj, i, renderObj.m_RenderPass ) );
 				} else {
 					m_pCurrentRenderWindow->GetVisibleSubMeshes( RP_Translucent ).push_back( kbRenderSubmesh( &renderObj, i, RP_Translucent ) );

@@ -289,6 +289,11 @@ struct kbRenderState {
 		if ( colorWriteEnable & ColorWriteEnable_Alpha) {
 			retVal |= D3D11_COLOR_WRITE_ENABLE_ALPHA;
 		}
+
+		if ( retVal == (D3D11_COLOR_WRITE_ENABLE)0 ) {
+			return D3D11_COLOR_WRITE_ENABLE_ALL;
+		}
+
 		return retVal;
 	}
 
