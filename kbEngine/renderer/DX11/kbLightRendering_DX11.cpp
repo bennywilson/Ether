@@ -37,7 +37,7 @@ void kbRenderer_DX11::RenderLights() {
 
 	ID3D11ShaderResourceView * const nullRTViews[] = { nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr };
 	m_pDeviceContext->PSSetShaderResources( 0, 8, nullRTViews );
-	m_pDeviceContext->OMSetBlendState( nullptr, nullptr, 0xffffffff );
+	RT_SetBlendState();
 }
 
 /**
@@ -55,25 +55,12 @@ void kbRenderer_DX11::RenderLight( const kbRenderLight *const pLight ) {
 	splitMatrices[3].MakeScale( kbVec3::zero );
 
 	if ( pLight->m_bCastsShadow ) {
-		m_RenderState.SetBlendState();
 		RenderShadow( pLight, splitMatrices );
 	}
 
 	START_SCOPED_RENDER_TIMER( RENDER_LIGHT );
 
 	// Render Light
-	m_RenderState.SetBlendState( false,
-								 false,
-								 true,
-								 Blend_One,
-								 Blend_One,
-								 BlendOp_Add,
-								 Blend_One,
-								 Blend_Zero,
-								 BlendOp_Add,
-							     ColorWriteEnable_All );
-
-
 	m_pDeviceContext->OMSetRenderTargets( 1, &GetRenderTarget_DX11(ACCUMULATION_BUFFER)->m_pRenderTargetView, nullptr );
 
 	const unsigned int stride = sizeof( vertexLayout );
@@ -103,6 +90,7 @@ void kbRenderer_DX11::RenderLight( const kbRenderLight *const pLight ) {
 		pShader = m_pPointLightShader;
 	}
 
+	RT_SetBlendState( pShader );
 	m_pDeviceContext->IASetInputLayout( (ID3D11InputLayout*)pShader->GetVertexLayout() );
 	m_pDeviceContext->VSSetShader( (ID3D11VertexShader *)pShader->GetVertexShader(), nullptr, 0 );
 	m_pDeviceContext->PSSetShader( (ID3D11PixelShader *)pShader->GetPixelShader(), nullptr, 0 );
@@ -464,28 +452,18 @@ void kbRenderer_DX11::RenderLightShafts() {
 			viewport.MaxDepth = 1.0f;
 			m_pDeviceContext->RSSetViewports( 1, &viewport );	
 
-			m_RenderState.SetBlendState( false,
-										 false,
-										 true,
-										 Blend_One,
-										 Blend_One,
-										 BlendOp_Add,
-										 Blend_One,
-										 Blend_Zero,
-										 BlendOp_Add,
-										 ColorWriteEnable_RGB );
-
-
 			ID3D11ShaderResourceView *const  RenderTargetViews[] = { GetRenderTarget_DX11(SCRATCH_BUFFER)->m_pShaderResourceView };
 			ID3D11SamplerState *const  SamplerStates[] = { m_pBasicSamplerState };
 			m_pDeviceContext->PSSetShaderResources( 0, 1, RenderTargetViews );
 			m_pDeviceContext->PSSetSamplers( 0, 1, SamplerStates );
 
-			m_pDeviceContext->IASetInputLayout( (ID3D11InputLayout*)m_pSimpleAdditiveShader->GetVertexLayout() );
-			m_pDeviceContext->VSSetShader( (ID3D11VertexShader *)this->m_pSimpleAdditiveShader->GetVertexShader(), nullptr, 0 );
-			m_pDeviceContext->PSSetShader( (ID3D11PixelShader *)m_pSimpleAdditiveShader->GetPixelShader(), nullptr, 0 );
+			m_pDeviceContext->IASetInputLayout( (ID3D11InputLayout*) m_pGodRayIterationShader->GetVertexLayout() );
+			m_pDeviceContext->VSSetShader( (ID3D11VertexShader *) m_pGodRayIterationShader->GetVertexShader(), nullptr, 0 );
+			m_pDeviceContext->PSSetShader( (ID3D11PixelShader *) m_pGodRayIterationShader->GetPixelShader(), nullptr, 0 );
 
-			const auto & varBindings = m_pSimpleAdditiveShader->GetShaderVarBindings();
+			RT_SetBlendState( m_pGodRayIterationShader );
+
+			const auto & varBindings = m_pGodRayIterationShader->GetShaderVarBindings();
 			ID3D11Buffer *const pConstantBuffer = GetConstantBuffer( varBindings.m_ConstantBufferSizeBytes );
 
 			kbMat4 mvpMatrix;
@@ -559,21 +537,21 @@ void kbRenderer_DX11::RenderLightShafts() {
 		}
 		ID3D11ShaderResourceView *const nullArray[] = { nullptr };
 		m_pDeviceContext->PSSetShaderResources( 0, 1, nullArray );
-		m_pDeviceContext->OMSetBlendState( nullptr, nullptr, 0xffffffff );
+		RT_SetBlendState();
 	}
 
 	D3D11_VIEWPORT viewport;
 	if ( m_bRenderToHMD ) {
 
-		viewport.TopLeftX = ( float )m_EyeRenderViewport[m_HMDPass].Pos.x;
-		viewport.TopLeftY = ( float )m_EyeRenderViewport[m_HMDPass].Pos.y;
-		viewport.Width = ( float )m_EyeRenderViewport[m_HMDPass].Size.w;
-		viewport.Height = ( float )m_EyeRenderViewport[m_HMDPass].Size.h;
+		viewport.TopLeftX = (float) m_EyeRenderViewport[m_HMDPass].Pos.x;
+		viewport.TopLeftY = (float) m_EyeRenderViewport[m_HMDPass].Pos.y;
+		viewport.Width = (float) m_EyeRenderViewport[m_HMDPass].Size.w;
+		viewport.Height = (float) m_EyeRenderViewport[m_HMDPass].Size.h;
 		viewport.MinDepth = 0;
 		viewport.MaxDepth = 1.0f;
 	} else {
-		viewport.Width = (float)Back_Buffer_Width;
-		viewport.Height = (float)Back_Buffer_Height;
+		viewport.Width = (float) Back_Buffer_Width;
+		viewport.Height = (float) Back_Buffer_Height;
 		viewport.MinDepth = 0.0f;
 		viewport.MaxDepth = 1.0f;
 		viewport.TopLeftX = 0;

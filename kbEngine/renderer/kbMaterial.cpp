@@ -562,6 +562,7 @@ kbShader::kbShader() :
 	m_pVertexLayout( nullptr ),
 	m_VertexShaderFunctionName( "vertexShader" ),
 	m_PixelShaderFunctionName( "pixelShader" ),
+	m_bBlendEnabled( false ),
 	m_SrcBlend( Blend_None ),
 	m_DstBlend( Blend_None ),
 	m_BlendOp( BlendOp_Add ),
@@ -582,6 +583,7 @@ kbShader::kbShader( const std::string & fileName ) :
 	m_pVertexLayout( nullptr ),
 	m_VertexShaderFunctionName( "vertexShader" ),
 	m_PixelShaderFunctionName( "pixelShader" ),
+	m_bBlendEnabled( false ),
 	m_SrcBlend( Blend_None ),
 	m_DstBlend( Blend_None ),
 	m_BlendOp( BlendOp_Add ),
@@ -595,6 +597,10 @@ kbShader::kbShader( const std::string & fileName ) :
 }
 
 kbColorWriteEnable GetColorWriteEnableFromName( const std::string & name ) {
+	if ( name == "colorwriteenable_rgb" ) {
+		return ColorWriteEnable_Red | ColorWriteEnable_Green | ColorWriteEnable_Blue;
+	}
+
 	if ( name == "colorwriteenable_rg" ) {
 		return ColorWriteEnable_Red | ColorWriteEnable_Green;
 	}
@@ -612,7 +618,7 @@ kbColorWriteEnable GetColorWriteEnableFromName( const std::string & name ) {
 }
 
 kbBlend GetBlendFromName( std::string & name ) {
-	if ( name == "blend_alpha" ) {
+	if ( name == "blend_srcalpha" ) {
 		return Blend_SrcAlpha;
 	} else if ( name == "blend_invsrcalpha" ) {
 		return Blend_InvSrcAlpha;
@@ -669,29 +675,34 @@ bool kbShader::Load_Internal() {
 
 			std::string value;
 
-
 			if ( shaderParser.GetValueForKey( value, "srcblend" ) ) {
 				m_SrcBlend = GetBlendFromName( value );
+				m_bBlendEnabled = true;
 			}
 
 			if ( shaderParser.GetValueForKey( value, "dstblend" ) ) {
 				m_DstBlend = GetBlendFromName( value );
+				m_bBlendEnabled = true;
 			}
 
 			if ( shaderParser.GetValueForKey( value, "blendop" ) ) {
 				m_BlendOp = GetBlendOpFromName( value );
+				m_bBlendEnabled = true;
 			}
 
 			if ( shaderParser.GetValueForKey( value, "srcblendalpha" ) ) {
 				m_SrcBlendAlpha = GetBlendFromName( value );
+				m_bBlendEnabled = true;
 			}
 
 			if ( shaderParser.GetValueForKey( value, "dstblendalpha" ) ) {
 				m_DstBlendAlpha = GetBlendFromName( value );
+				m_bBlendEnabled = true;
 			}
 
 			if ( shaderParser.GetValueForKey( value, "blendopalpha" ) ) {
 				m_BlendOpAlpha = GetBlendOpFromName( value );
+				m_bBlendEnabled = true;
 			}
 
 			if ( shaderParser.GetValueForKey( value, "colorwriteenable" ) ) {
@@ -726,6 +737,16 @@ void kbShader::Release_Internal() {
 
 	m_ShaderVarBindings.m_VarBindings.clear();
 	m_ShaderVarBindings.m_TextureNames.clear();
+
+	m_bBlendEnabled = false;
+	m_SrcBlend = Blend_None;
+	m_DstBlend = Blend_None;
+	m_BlendOp = BlendOp_Add;
+	m_SrcBlendAlpha = Blend_None;
+	m_DstBlendAlpha = Blend_None;
+	m_BlendOpAlpha = BlendOp_Add;
+	m_ColorWriteEnable = ColorWriteEnable_All;
+	m_CullMode = CullMode_BackFaces;
 }
 
 /**

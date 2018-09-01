@@ -105,7 +105,7 @@ public:
 	const kbShaderVarBindings_t &				GetShaderVarBindings() const { return m_ShaderVarBindings; }
 
 	// Render States
-	bool										IsBlendEnabled() const { return m_SrcBlend != Blend_None && m_DstBlend != Blend_None && m_BlendOp != BlendOp_None; }
+	bool										IsBlendEnabled() const { return m_bBlendEnabled; }
 
 	kbBlend										GetSrcBlend() const { return m_SrcBlend; }
 	kbBlend										GetDstBlend() const { return m_DstBlend; }
@@ -138,6 +138,7 @@ private:
 
 	kbShaderVarBindings_t						m_ShaderVarBindings;
 
+	bool										m_bBlendEnabled;
 	kbBlend										m_SrcBlend;
 	kbBlend										m_DstBlend;
 	kbBlendOp									m_BlendOp;

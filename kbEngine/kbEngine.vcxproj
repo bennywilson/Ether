@@ -106,6 +106,7 @@
     <None Include="assets\Shaders\directionalLight.kbShader" />
     <None Include="assets\Shaders\directionalLightShadow.kbShader" />
     <None Include="assets\Shaders\directionalLightSkinnedShadow.kbShader" />
+    <None Include="assets\Shaders\godRayIteration.kbShader" />
     <None Include="assets\Shaders\lightShafts.kbShader" />
     <None Include="assets\Shaders\missingShader.kbShader" />
     <None Include="assets\Shaders\mousePicker.kbShader" />
