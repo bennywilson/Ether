@@ -633,12 +633,16 @@ kbBlend GetBlendFromName( const std::string & name ) {
 
 	if ( g_BlendMap.empty() ) {
 		typedef std::pair<std::string, kbBlend> blendMapPair;	
+		g_BlendMap.insert( blendMapPair( "blend_zero", Blend_Zero ) );
+		g_BlendMap.insert( blendMapPair( "blend_one", Blend_One ) );
+		g_BlendMap.insert( blendMapPair( "blend_srccolor", Blend_SrcColor ) );
+		g_BlendMap.insert( blendMapPair( "blend_invsrccolor", Blend_InvSrcColor ) );
 		g_BlendMap.insert( blendMapPair( "blend_srcalpha", Blend_SrcAlpha ) );
 		g_BlendMap.insert( blendMapPair( "blend_invsrcalpha", Blend_InvSrcAlpha ) );
-		g_BlendMap.insert( blendMapPair( "blend_one", Blend_One ) );
-		g_BlendMap.insert( blendMapPair( "blend_zero", Blend_Zero ) );
+		g_BlendMap.insert( blendMapPair( "blend_dstalpha", Blend_DstAlpha ) );
+		g_BlendMap.insert( blendMapPair( "blend_invsrcalpha", Blend_InvDstAlpha ) );
 		g_BlendMap.insert( blendMapPair( "blend_dstcolor", Blend_DstColor ) );
-
+		g_BlendMap.insert( blendMapPair( "blend_invdstcolor", Blend_InvDstColor ) );
 	}
 
 	auto blendMapIt = g_BlendMap.find( name );

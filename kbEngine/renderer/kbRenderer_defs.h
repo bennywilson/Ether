@@ -441,14 +441,16 @@ public:
 };
 
 enum kbBlend {
-	Blend_One,
 	Blend_Zero,
+	Blend_One,
+	Blend_SrcColor,
+	Blend_InvSrcColor,
 	Blend_SrcAlpha,
 	Blend_InvSrcAlpha,
-	Blend_SrcColor,
-	Blend_DstColor,
 	Blend_DstAlpha,
 	Blend_InvDstAlpha,
+	Blend_DstColor,
+	Blend_InvDstColor,
 };
 
 enum kbBlendOp {
