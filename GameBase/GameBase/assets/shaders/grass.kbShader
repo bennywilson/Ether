@@ -259,10 +259,10 @@ PS_OUTPUT pixelShader( pixelInput input, bool isFrontFace : SV_IsFrontFace )  {
 	
 	{//if ( abs( input.worldPosition.y - input.grassData1.y ) <= burnSize ) {
 
-		const float normalizedTime = ( input.worldPosition.w * 0.33f ) + saturate( ( 1.0f + noiseValues.g ) * ( ( time.x - input.grassData1.z ) / 5.0f ) );
+		const float normalizedTime = ( input.worldPosition.w * 0.33f ) + saturate( ( 1.0f + noiseValues.g ) * ( ( time.x - input.grassData1.z ) / 13.0f ) );
 
 		float animatedEmberU = clamp( normalizedTime * 2.5f, 0.0f, 0.99f );
-		const float3 ember = lerp( float3( 1.0f, 0.415f,0.04313f ), float3( 0.0f, 0.0f, 0.0f ), animatedEmberU );//emberGradientTex.Sample( SampleType, float2( animatedEmberU, 0.0f ) ).xyz * 1.0f;
+		const float3 ember = lerp( float3( 1.0f, 0.215f ,0.04313f ), float3( 0.0f, 0.0f, 0.0f ), animatedEmberU );//emberGradientTex.Sample( SampleType, float2( animatedEmberU, 0.0f ) ).xyz * 1.0f;
 
 		float lerpVal = ( burnSize - abs(input.worldPosition.y - input.grassData1.y ) ) / burnSize;
 		lerpVal = saturate( lerpVal );

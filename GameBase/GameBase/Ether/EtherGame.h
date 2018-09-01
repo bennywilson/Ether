@@ -90,6 +90,7 @@ protected:
 		kbVec3 shotEnd;
 	};
 	std::vector<frameBulletShots>				m_ShotsThisFrame;
+	std::vector<frameBulletShots>				m_RenderThreadShotsThisFrame;
 	virtual void								RenderSync() override;
 	virtual void								RenderThreadCallBack() override;
 	kbRenderTexture *							m_pBulletHoleRenderTexture;

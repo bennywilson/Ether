@@ -509,18 +509,18 @@ void EtherGame::RegisterBulletShot( kbComponent *const pHitComponent, const kbVe
 }
 
 /**
- *	EtherGame::RenderThreadCallBack
+ *	EtherGame::RenderSync
  */
-void EtherGame::RenderThreadCallBack() {
-
+void EtherGame::RenderSync() {
+	m_RenderThreadShotsThisFrame = m_ShotsThisFrame;
+	m_ShotsThisFrame.clear();
 }
 
 /**
- *	EtherGame::RenderSync
+ *	EtherGame::RenderThreadCallBack
  */
 static float g_TimeMultiplier = 0.95f / 0.016f;
-void EtherGame::RenderSync() {
-
+void EtherGame::RenderThreadCallBack() {
 	static kbVec3 terrainPos;
 	static float terrainWidth;
 	static float halfTerrainWidth;
@@ -587,42 +587,41 @@ void EtherGame::RenderSync() {
 
 	const float curTime = g_GlobalTimer.TimeElapsedSeconds();
 
-	for ( int i = 0; i < m_ShotsThisFrame.size(); i++ ) {
+	for ( int i = 0; i < m_RenderThreadShotsThisFrame.size(); i++ ) {
 
-		const frameBulletShots & curShot = m_ShotsThisFrame[i];
+		const frameBulletShots & curShot = m_RenderThreadShotsThisFrame[i];
 		if ( curShot.pHitComponent != nullptr ) {
-			kbGameEntity *const pEnt = (kbGameEntity*)m_ShotsThisFrame[i].pHitComponent->GetOwner();
+			kbGameEntity *const pEnt = (kbGameEntity*)curShot.pHitComponent->GetOwner();
 			kbStaticModelComponent *const pSM = (kbStaticModelComponent*)pEnt->GetComponentByType( kbStaticModelComponent::GetType() );
-			if ( pSM == nullptr ) {
-				continue;
+				if ( pSM != nullptr ) {
+
+				// Generate bullet holes
+				g_pRenderer->RT_SetRenderTarget( m_pBulletHoleRenderTexture );
+				kbShaderParamOverrides_t shaderParams;
+
+				kbMat4 invWorldMatrix;
+				invWorldMatrix.MakeScale( pEnt->GetScale() );
+				invWorldMatrix *= pEnt->GetOrientation().ToMat4();
+				invWorldMatrix[3] = pEnt->GetPosition();
+				invWorldMatrix.InvertFast();
+
+				const kbVec3 hitLocation = invWorldMatrix.TransformPoint( curShot.shotEnd );
+				const kbVec3 hitDir = ( curShot.shotEnd - curShot.shotStart ).Normalized() * invWorldMatrix;
+				const float holeSize = 0.75f + ( kbfrand() * 0.5f );
+				const float scorchSize = 3.0f + ( kbfrand() * 1.5f );
+
+				shaderParams.SetTexture( "baseTexture", pSM->GetModel()->GetMaterials()[0].GetTextureList()[0] );
+				shaderParams.SetVec4( "hitLocation", kbVec4( hitLocation.x, hitLocation.y, hitLocation.z, holeSize ) );
+				shaderParams.SetVec4( "hitDirection", kbVec4( hitDir.x, hitDir.y, hitDir.z, scorchSize ) );
+
+				kbTexture *const pNoiseTex = (kbTexture*)g_ResourceManager.GetResource( "./assets/FX/noise.jpg", true );
+				shaderParams.SetTexture( "noiseTex", pNoiseTex );
+
+				kbTexture *const pScorchTex = (kbTexture*)g_ResourceManager.GetResource( "./assets/FX/scorch.jpg", true );
+				shaderParams.SetTexture( "scorchTex", pScorchTex );
+
+				g_pRenderer->RT_RenderMesh( pSM->GetModel(), m_pBulletHoleUpdateShader, &shaderParams );
 			}
-
-			// Generate bullet holes
-			g_pRenderer->RT_SetRenderTarget( m_pBulletHoleRenderTexture );
-			kbShaderParamOverrides_t shaderParams;
-
-			kbMat4 invWorldMatrix;
-			invWorldMatrix.MakeScale( pEnt->GetScale() );
-			invWorldMatrix *= pEnt->GetOrientation().ToMat4();
-			invWorldMatrix[3] = pEnt->GetPosition();
-			invWorldMatrix.InvertFast();
-
-			const kbVec3 hitLocation = invWorldMatrix.TransformPoint( curShot.shotEnd );
-			const kbVec3 hitDir = ( curShot.shotEnd - curShot.shotStart ).Normalized() * invWorldMatrix;
-			const float holeSize = 0.75f + ( kbfrand() * 0.5f );
-			const float scorchSize = 3.0f + ( kbfrand() * 1.5f );
-
-			shaderParams.SetTexture( "baseTexture", pSM->GetModel()->GetMaterials()[0].GetTextureList()[0] );
-			shaderParams.SetVec4( "hitLocation", kbVec4( hitLocation.x, hitLocation.y, hitLocation.z, holeSize ) );
-			shaderParams.SetVec4( "hitDirection", kbVec4( hitDir.x, hitDir.y, hitDir.z, scorchSize ) );
-
-			kbTexture *const pNoiseTex = (kbTexture*)g_ResourceManager.GetResource( "./assets/FX/noise.jpg", true );
-			shaderParams.SetTexture( "noiseTex", pNoiseTex );
-
-			kbTexture *const pScorchTex = (kbTexture*)g_ResourceManager.GetResource( "./assets/FX/scorch.jpg", true );
-			shaderParams.SetTexture( "scorchTex", pScorchTex );
-
-			g_pRenderer->RT_RenderMesh( pSM->GetModel(), m_pBulletHoleUpdateShader, &shaderParams );
 		}
 
 		// Update collision map
@@ -659,5 +658,5 @@ void EtherGame::RenderSync() {
 
 		g_pRenderer->RT_SetBlendState();
 	}
-	m_ShotsThisFrame.clear();
+	m_RenderThreadShotsThisFrame.clear();
 }
