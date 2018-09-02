@@ -58,8 +58,7 @@ private:
 																	m_pIndexBuffer( nullptr ),
 																	m_pAtlasTexture( nullptr ),
 																	m_pAtlasShader( nullptr ),
-																	m_iCurParticleModel( -1 ),
-																	m_bDirty( true ) { }
+																	m_iCurParticleModel( -1 ) { }
 
 		kbModel													m_RenderModel[NumCustomParticleBuffers];
 		uint													m_NumIndices;
@@ -71,9 +70,12 @@ private:
 		kbShader *												m_pAtlasShader;
 
 		int														m_iCurParticleModel;
-		bool													m_bDirty;
 	};
 	std::vector<CustomAtlasParticles_t>							m_CustomAtlases;
+
+private:
+
+	void														UpdateAtlas( CustomAtlasParticles_t & atlasInfo );
 };
 
 #endif

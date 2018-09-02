@@ -59,6 +59,9 @@ public:
 
 	float														GetCurrentFrameDeltaTime() const { return m_CurFrameDeltaTime; }
 
+
+	bool														HasFirstSyncCompleted() const { return m_bHasFirstSyncCompleted; }
+
 protected:
 
 	virtual void												InitGame_Internal() = 0;
@@ -102,6 +105,8 @@ private:
 
 	bool														m_bIsPlaying;
 	bool														m_bIsRunning;
+
+	bool														m_bHasFirstSyncCompleted;
 };
 
 extern kbGame * g_pGame;

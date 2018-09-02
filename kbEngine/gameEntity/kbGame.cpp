@@ -2,7 +2,7 @@
 // kbGame.cpp
 //
 //
-// 2016-2017 kbEngine 2.0
+// 2016-2018 kbEngine 2.0
 //===================================================================================================
 #include <sstream>
 #include <iomanip>
@@ -24,6 +24,7 @@ kbGame::kbGame() :
 	m_pLocalPlayer( nullptr ),
 	m_bIsPlaying( false ),
 	m_bIsRunning( true ),
+	m_bHasFirstSyncCompleted( false ),
 	m_pParticleManager( new kbParticleManager() ),
 	m_DeltaTimeScale( 1.0f ),
 	m_CurFrameDeltaTime( 0.0f ) {
@@ -285,6 +286,7 @@ void kbGame::Update() {
 		}
 
 		UpdateScopedTimers();
+		m_bHasFirstSyncCompleted = true;
 		g_pRenderer->SetReadyToRender();
 
 		m_RemoveEntityList.clear();

@@ -17,6 +17,10 @@ static const uint NumCustomAtlases = 2;
  */
 kbParticleManager::kbParticleManager() {
 	m_CustomAtlases.resize( NumCustomAtlases );
+
+	for ( int iAtlas = 0; iAtlas < NumCustomAtlases; iAtlas++ ) {
+		UpdateAtlas( m_CustomAtlases[iAtlas] );
+	}
 }
 
 /**
@@ -36,12 +40,15 @@ kbParticleManager::~kbParticleManager() {
  */
 void kbParticleManager::SetCustomAtlasTexture( const uint atlasIdx, const std::string & atlasFileName ) {
 	kbErrorCheck( atlasIdx < m_CustomAtlases.size(), "kbParticleManager::SetCustomAtlasTexture() - Atlas index %d is out of range", atlasIdx );
+	kbErrorCheck( g_pRenderer->IsRenderingSynced(), "kbParticleManager::SetCustomAtlasTexture() - Rendering not synced" );
 
-	m_CustomAtlases[atlasIdx].m_pAtlasTexture = ( kbTexture* )g_ResourceManager.GetResource( atlasFileName.c_str(), true );
-
-	if ( m_CustomAtlases[atlasIdx].m_pAtlasTexture == nullptr ) {
+	CustomAtlasParticles_t & curAtlas = m_CustomAtlases[atlasIdx];
+	curAtlas.m_pAtlasTexture = (kbTexture *)g_ResourceManager.GetResource( atlasFileName.c_str(), true );
+	if ( curAtlas.m_pAtlasTexture == nullptr ) {
 		kbWarning( "kbParticleManager::SetCustomAtlasTexture() - Unable to find shader %s", atlasFileName.c_str() );
 	}
+
+	UpdateAtlas( curAtlas );
 }
 
 /**
@@ -49,13 +56,16 @@ void kbParticleManager::SetCustomAtlasTexture( const uint atlasIdx, const std::s
  */
 void kbParticleManager::SetCustomAtlasShader( const uint atlasIdx, const std::string & shaderFileName ) {
 	kbErrorCheck( atlasIdx < m_CustomAtlases.size(), "kbParticleManager::SetCustomAtlasShader() - Atlas index %d is out of range", atlasIdx );
+	kbErrorCheck( g_pRenderer->IsRenderingSynced(), "kbParticleManager::SetCustomAtlasShader() - Rendering not synced" );
 
-	m_CustomAtlases[atlasIdx].m_pAtlasShader = ( kbShader* )g_ResourceManager.GetResource( shaderFileName.c_str(), true );
-	m_CustomAtlases[atlasIdx].m_bDirty = true;
+	CustomAtlasParticles_t & curAtlas = m_CustomAtlases[atlasIdx];
+	curAtlas.m_pAtlasShader = (kbShader *)g_ResourceManager.GetResource( shaderFileName.c_str(), true );
 
-	if ( m_CustomAtlases[atlasIdx].m_pAtlasShader == nullptr ) {
+	if ( curAtlas.m_pAtlasShader == nullptr ) {
 		kbWarning( "kbParticleManager::SetCustomAtlasShader() - Unable to find shader %s", shaderFileName.c_str() );
 	}
+
+	UpdateAtlas( curAtlas );
 }
 
 /**
@@ -146,48 +156,47 @@ void kbParticleManager::ReturnParticleComponent( kbParticleComponent *const pPar
 }
 
 /**
+ *	kbParticleManager::UpdateAtlas
+ */
+void kbParticleManager::UpdateAtlas( CustomAtlasParticles_t & atlasInfo ) {
+
+	kbErrorCheck( g_pRenderer->IsRenderingSynced(), "kbParticleManager::UpdateAtlas() - Rendering isn't sync'd" );
+
+	if ( atlasInfo.m_iCurParticleModel >= 0 ) {
+		g_pRenderer->RemoveParticle( &atlasInfo );
+	}
+
+	for ( uint iModel = 0; iModel < NumCustomParticleBuffers; iModel++ ) {
+		kbModel & renderModel = atlasInfo.m_RenderModel[iModel];
+		if ( renderModel.IsVertexBufferMapped() ) {
+			renderModel.UnmapVertexBuffer();
+			renderModel.UnmapIndexBuffer();
+		}
+		renderModel.Release();
+
+		if ( atlasInfo.m_pAtlasTexture == nullptr ) {
+			atlasInfo.m_pAtlasTexture = (kbTexture*)g_ResourceManager.GetResource( "./assets/FX/laser_beam.jpg", true );
+		}
+		if ( atlasInfo.m_pAtlasShader == nullptr ) {
+			atlasInfo.m_pAtlasShader = (kbShader*)g_ResourceManager.GetResource( "../../kbEngine/assets/Shaders/basicParticle.kbShader", true );
+		}
+
+		renderModel.CreateDynamicModel( NumParticleBufferVerts, NumParticleBufferVerts, atlasInfo.m_pAtlasShader, atlasInfo.m_pAtlasTexture, sizeof(kbParticleVertex) );
+
+		atlasInfo.m_pVertexBuffer = (kbParticleVertex*)atlasInfo.m_RenderModel[iModel].MapVertexBuffer();
+		for ( int iVert = 0; iVert < NumParticleBufferVerts; iVert++ ) {
+			atlasInfo.m_pVertexBuffer[iVert].position.Set( 0.0f, 0.0f, 0.0f );
+		}
+		renderModel.UnmapVertexBuffer();
+		atlasInfo.m_pVertexBuffer = nullptr;
+	}
+	atlasInfo.m_iCurParticleModel = -1;
+}
+
+/**
  *	kbParticleManager::RenderSync
  */
 void kbParticleManager::RenderSync() {
-
-	// Create new atlases if needed
-	for ( int iAtlas = 0; iAtlas < NumCustomAtlases; iAtlas++ ) {
-		CustomAtlasParticles_t & curAtlas = m_CustomAtlases[iAtlas];
-		if ( curAtlas.m_bDirty == false ) {
-			continue;
-		}
-
-		if ( curAtlas.m_iCurParticleModel >= 0 ) {
-			g_pRenderer->RemoveParticle( &curAtlas );
-		}
-
-		for ( uint iModel = 0; iModel < NumCustomParticleBuffers; iModel++ ) {
-			kbModel & renderModel = curAtlas.m_RenderModel[iModel];
-			if ( renderModel.IsVertexBufferMapped() ) {
-				renderModel.UnmapVertexBuffer();
-				renderModel.UnmapIndexBuffer();
-			}
-			renderModel.Release();
-
-			if ( curAtlas.m_pAtlasTexture == nullptr ) {
-				curAtlas.m_pAtlasTexture = (kbTexture*)g_ResourceManager.GetResource( "./assets/FX/laser_beam.jpg", true );
-			}
-			if ( curAtlas.m_pAtlasShader == nullptr ) {
-				curAtlas.m_pAtlasShader = (kbShader*)g_ResourceManager.GetResource( "../../kbEngine/assets/Shaders/basicParticle.kbShader", true );
-			}
-
-			renderModel.CreateDynamicModel( NumParticleBufferVerts, NumParticleBufferVerts, curAtlas.m_pAtlasShader, curAtlas.m_pAtlasTexture, sizeof(kbParticleVertex) );
-
-			curAtlas.m_pVertexBuffer = (kbParticleVertex*)curAtlas.m_RenderModel[iModel].MapVertexBuffer();
-			for ( int iVert = 0; iVert < NumParticleBufferVerts; iVert++ ) {
-				curAtlas.m_pVertexBuffer[iVert].position.Set( 0.0f, 0.0f, 0.0f );
-			}
-			renderModel.UnmapVertexBuffer();
-			curAtlas.m_pVertexBuffer = nullptr;
-		}
-		curAtlas.m_iCurParticleModel = -1;
-		curAtlas.m_bDirty = false;
-	}
 
 	// Map/unmap buffers and pass it to the renderer
 	for ( int iAtlas = 0; iAtlas < NumCustomAtlases; iAtlas++ ) {
