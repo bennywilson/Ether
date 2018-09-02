@@ -261,3 +261,105 @@ kbGameEntity 0 0 0 0 {
 		Scale = 1.000000 1.000000 1.000000
 	}
 }
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Fire Test"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 38.210419 8.019803 21.018299
+		Scale = 0.250000 0.250000 0.250000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		m_RenderPass = LightingPass
+		Model = .\assets\models\fx\firemodel.ms3d
+		ShaderOverride = 1
+			.\assets\shaders\fx\basicfire.kbshader
+
+	}
+	kbShaderParamListComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		ShaderParams = 10
+			kbShaderParamComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				ParamName = "fireNoiseMap"
+				Texture = .\assets\fx\noise\firenoise1.dds
+				Vector = 0.000000 0.000000 0.000000 0.000000
+			}
+			kbShaderParamComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				ParamName = "noiseMap1"
+				Texture = .\assets\fx\noise\noise1.png
+				Vector = 0.000000 0.000000 0.000000 0.000000
+			}
+			kbShaderParamComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				ParamName = "noiseMap2"
+				Texture = .\assets\fx\noise\noise2.png
+				Vector = 0.000000 0.000000 0.000000 0.000000
+			}
+			kbShaderParamComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				ParamName = "noiseMap3"
+				Texture = .\assets\fx\noise\noise3.png
+				Vector = 0.000000 0.000000 0.000000 0.000000
+			}
+			kbShaderParamComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				ParamName = "noiseScroll"
+				Texture = NULL
+				Vector = 1.000000 1.000000 1.000000 4.000000
+			}
+			kbShaderParamComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				ParamName = "startFireColor"
+				Texture = NULL
+				Vector = 255.000000 224.000000 115.000000 1.000000
+			}
+			kbShaderParamComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				ParamName = "endFireColor"
+				Texture = NULL
+				Vector = 206.000000 46.000000 24.000000 0.000000
+			}
+			kbShaderParamComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				ParamName = "distortion_1_2"
+				Texture = NULL
+				Vector = 0.500000 1.000000 0.400000 0.000000
+			}
+			kbShaderParamComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				ParamName = "distortion_3"
+				Texture = NULL
+				Vector = 0.000000 0.000000 0.150000 0.025000
+			}
+			kbShaderParamComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				ParamName = "fireDistortion"
+				Texture = NULL
+				Vector = 1.000000 0.000000 0.000000 0.000000
+			}
+	}
+	kbPointLightComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadows = 0
+		Color = 1.000000 1.000000 1.000000 1.000000
+		LightRadius =  16.000000
+	}
+}
