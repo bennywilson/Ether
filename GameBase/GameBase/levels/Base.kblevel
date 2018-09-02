@@ -123,11 +123,11 @@ kbGameEntity 0 0 0 0 {
 		LifeTime =  -1.000000
 		Name = "Cartel Soldier"
 		Orientation = 0.000000 0.991689 0.000000 0.128659
-		Position = -5.011830 13.654261 44.547634
+		Position = 23.481934 13.654261 37.027657
 		Scale = 0.100000 0.100000 0.100000
 	}
 	EtherSkelModelComponent { 
-		Enabled = 1
+		Enabled = 0
 		LifeTime =  -1.000000
 		CastsShadow = 1
 		m_RenderPass = LightingPass
@@ -267,7 +267,7 @@ kbGameEntity 0 0 0 0 {
 		LifeTime =  -1.000000
 		Name = "Fire Test"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
-		Position = 38.210419 8.019803 21.018299
+		Position = 39.599003 8.019803 21.018299
 		Scale = 0.250000 0.250000 0.250000
 	}
 	kbStaticModelComponent { 
@@ -324,14 +324,14 @@ kbGameEntity 0 0 0 0 {
 				LifeTime =  -1.000000
 				ParamName = "startFireColor"
 				Texture = NULL
-				Vector = 255.000000 224.000000 115.000000 1.000000
+				Vector = 255.000000 224.000000 115.000000 3.000000
 			}
 			kbShaderParamComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
 				ParamName = "endFireColor"
 				Texture = NULL
-				Vector = 206.000000 46.000000 24.000000 0.000000
+				Vector = 206.000000 46.000000 24.000000 1.000000
 			}
 			kbShaderParamComponent { 
 				Enabled = 0
@@ -359,7 +359,27 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadows = 0
-		Color = 1.000000 1.000000 1.000000 1.000000
-		LightRadius =  16.000000
+		Color = 3.000000 1.500000 0.400000 1.000000
+		LightRadius =  36.000000
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Entity_25"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 25.629631 21.153952 25.807467
+		Scale = 2.000000 2.000000 2.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		m_RenderPass = LightingPass
+		Model = ..\..\kbengine\assets\models\unitsphere.ms3d
+		ShaderOverride = 1
+			..\..\kbengine\assets\shaders\basicshader.kbshader
+
 	}
 }
