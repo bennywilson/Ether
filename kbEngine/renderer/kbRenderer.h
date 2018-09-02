@@ -310,19 +310,7 @@ public:
 	virtual kbRenderTexture *					RT_GetRenderTexture( const int width, const int height, const eTextureFormat );
 	virtual void								RT_ReturnRenderTexture( kbRenderTexture *const pRenderTexture );
 	virtual void								RT_RenderMesh( const kbModel *const pModel, kbShader * pShader, const kbShaderParamOverrides_t *const pShaderParams ) = 0;
-	virtual void								RT_RenderLine( const kbVec3 & startPt, const kbVec3 & endPt, const kbColor & color, const float width, const kbShader * pShader, const struct kbShaderParamOverrides_t *const ShaderBindings = nullptr ) = 0;
-	virtual void								RT_SetBlendState( const bool bAlphaToCoverageEnable = false,
-																  const bool bIndependentBlendEnabled = false,
-																  const bool bBlendEnable = false,
-																  const kbBlend sourceBlend = Blend_One,
-																  const kbBlend destBlend = Blend_One,
-																  const kbBlendOp blendOp = BlendOp_Add,
-																  const kbBlend sourceAlpha = Blend_One,
-																  const kbBlend destAlpha = Blend_One,
-																  const kbBlendOp alphaBlendOp = BlendOp_Add,
-																  const kbColorWriteEnable renderTargetWriteMask = ColorWriteEnable_All,
-																  const UINT sampleMask = 0xffffffff ) = 0;
-	virtual void								RT_SetBlendState( const kbShader *const pShader ) = 0;
+	virtual void								RT_Render2DLine( const kbVec3 & startPt, const kbVec3 & endPt, const kbColor & color, const float width, const kbShader * pShader, const struct kbShaderParamOverrides_t *const ShaderBindings = nullptr ) = 0;
 
 private:
 

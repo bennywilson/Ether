@@ -520,7 +520,7 @@ void kbTerrainComponent::GenerateTerrain() {
 }
 
 /**
- *  kbTerrainComponent::SetGrassTexture
+ *  kbTerrainComponent::SetCollisionMap
  */
 void kbTerrainComponent::SetCollisionMap( const kbRenderTexture *const pTexture ) {
 	for ( int i = 0; i < m_Grass.size(); i++ ) {

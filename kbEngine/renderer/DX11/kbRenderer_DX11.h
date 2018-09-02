@@ -298,6 +298,19 @@ struct kbRenderState {
 		return retVal;
 	}
 
+	void SetBlendState( const kbShader *const pShader ) {
+		SetBlendState(	false,
+						false,
+						pShader->IsBlendEnabled(),
+						pShader->GetSrcBlend(),
+						pShader->GetDstBlend(),
+						pShader->GetBlendOp(),
+						pShader->GetSrcBlendAlpha(),
+						pShader->GetDstBlendAlpha(),
+						pShader->GetBlendOpAlpha(),
+						pShader->GetColorWriteEnable() );
+	}
+
 	void SetBlendState( const bool bAlphaToCoverageEnable = false,
 						const bool bIndependentBlendEnabled = false,
 						const bool bBlendEnable = false,
@@ -382,19 +395,7 @@ public:
 	virtual void								RT_SetRenderTarget( kbRenderTexture *const pRenderTexture ) override;
 	virtual void								RT_ClearRenderTarget( kbRenderTexture *const pRenderTexture, const kbColor & color ) override;
 	virtual void								RT_RenderMesh( const kbModel *const pModel, kbShader * pShader, const kbShaderParamOverrides_t *const pShaderParams ) override;
-	virtual void								RT_RenderLine( const kbVec3 & startPt, const kbVec3 & endPt, const kbColor & color, const float width, const kbShader * pShader, const struct kbShaderParamOverrides_t *const ShaderBindings = nullptr );
-	virtual void								RT_SetBlendState( const bool bAlphaToCoverageEnable = false,
-																  const bool bIndependentBlendEnabled = false,
-																  const bool bBlendEnable = false,
-																  const kbBlend sourceBlend = Blend_One,
-																  const kbBlend destBlend = Blend_One,
-																  const kbBlendOp blendOp = BlendOp_Add,
-																  const kbBlend sourceAlpha = Blend_One,
-																  const kbBlend destAlpha = Blend_One,
-																  const kbBlendOp alphaBlendOp = BlendOp_Add,
-																  const kbColorWriteEnable renderTargetWriteMask = ColorWriteEnable_All,
-																  const UINT sampleMask = 0xffffffff ) override;
-	virtual void								RT_SetBlendState( const kbShader *const pShader ) override;
+	virtual void								RT_Render2DLine( const kbVec3 & startPt, const kbVec3 & endPt, const kbColor & color, const float width, const kbShader * pShader, const struct kbShaderParamOverrides_t *const ShaderBindings = nullptr );
 
 private:
 

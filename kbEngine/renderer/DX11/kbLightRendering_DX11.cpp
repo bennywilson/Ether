@@ -37,7 +37,7 @@ void kbRenderer_DX11::RenderLights() {
 
 	ID3D11ShaderResourceView * const nullRTViews[] = { nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr };
 	m_pDeviceContext->PSSetShaderResources( 0, 8, nullRTViews );
-	RT_SetBlendState();
+	m_RenderState.SetBlendState();
 }
 
 /**
@@ -90,7 +90,7 @@ void kbRenderer_DX11::RenderLight( const kbRenderLight *const pLight ) {
 		pShader = m_pPointLightShader;
 	}
 
-	RT_SetBlendState( pShader );
+	m_RenderState.SetBlendState( pShader );
 	m_pDeviceContext->IASetInputLayout( (ID3D11InputLayout*)pShader->GetVertexLayout() );
 	m_pDeviceContext->VSSetShader( (ID3D11VertexShader *)pShader->GetVertexShader(), nullptr, 0 );
 	m_pDeviceContext->PSSetShader( (ID3D11PixelShader *)pShader->GetPixelShader(), nullptr, 0 );
@@ -461,7 +461,7 @@ void kbRenderer_DX11::RenderLightShafts() {
 			m_pDeviceContext->VSSetShader( (ID3D11VertexShader *) m_pGodRayIterationShader->GetVertexShader(), nullptr, 0 );
 			m_pDeviceContext->PSSetShader( (ID3D11PixelShader *) m_pGodRayIterationShader->GetPixelShader(), nullptr, 0 );
 
-			RT_SetBlendState( m_pGodRayIterationShader );
+			m_RenderState.SetBlendState( m_pGodRayIterationShader );
 
 			const auto & varBindings = m_pGodRayIterationShader->GetShaderVarBindings();
 			ID3D11Buffer *const pConstantBuffer = GetConstantBuffer( varBindings.m_ConstantBufferSizeBytes );
@@ -537,7 +537,7 @@ void kbRenderer_DX11::RenderLightShafts() {
 		}
 		ID3D11ShaderResourceView *const nullArray[] = { nullptr };
 		m_pDeviceContext->PSSetShaderResources( 0, 1, nullArray );
-		RT_SetBlendState();
+		m_RenderState.SetBlendState();
 	}
 
 	D3D11_VIEWPORT viewport;

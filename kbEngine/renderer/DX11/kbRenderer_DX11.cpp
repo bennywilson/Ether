@@ -1266,7 +1266,7 @@ void kbRenderer_DX11::RenderScene() {
 												kbRenderState::CompareAlways,
 												1);
 
-			RT_SetBlendState();
+			m_RenderState.SetBlendState();
 
 			std::vector<kbRenderSubmesh> & FirstPersonPassVisibleList = m_pCurrentRenderWindow->GetVisibleSubMeshes( RP_FirstPerson );
 			for ( int i = 0; i < FirstPersonPassVisibleList.size(); i++ ) {
@@ -1748,7 +1748,7 @@ void kbRenderer_DX11::RenderDebugText() {
 	m_pDeviceContext->IASetInputLayout( (ID3D11InputLayout*)m_pSimpleAdditiveShader->GetVertexLayout() );
 	m_pDeviceContext->VSSetShader( (ID3D11VertexShader *)m_pSimpleAdditiveShader->GetVertexShader(), nullptr, 0 );
 	m_pDeviceContext->PSSetShader( (ID3D11PixelShader *)m_pSimpleAdditiveShader->GetPixelShader(), nullptr, 0 );
-	RT_SetBlendState( m_pSimpleAdditiveShader );
+	m_RenderState.SetBlendState( m_pSimpleAdditiveShader );
 
 	const kbShaderVarBindings_t & shaderVarBindings = m_pSimpleAdditiveShader->GetShaderVarBindings();
 	ID3D11Buffer *const pConstantBuffer = GetConstantBuffer( shaderVarBindings.m_ConstantBufferSizeBytes );
@@ -2102,7 +2102,7 @@ void kbRenderer_DX11::RenderBloom() {
 		m_pDeviceContext->PSSetShader( (ID3D11PixelShader *)m_pSimpleAdditiveShader->GetPixelShader(), nullptr, 0 );
 		m_pDeviceContext->PSSetShaderResources( 0, 1, RenderTargetViews );
 		m_pDeviceContext->PSSetSamplers( 0, 1, SamplerStates );
-		RT_SetBlendState( m_pSimpleAdditiveShader );
+		m_RenderState.SetBlendState( m_pSimpleAdditiveShader );
 
 		const auto & varBindings = m_pSimpleAdditiveShader->GetShaderVarBindings();
 		ID3D11Buffer *const pConstantBuffer = GetConstantBuffer( varBindings.m_ConstantBufferSizeBytes );
@@ -2813,7 +2813,7 @@ void kbRenderer_DX11::RenderScreenSpaceQuadImmediate( const int start_x, const i
 	m_pDeviceContext->IASetInputLayout( (ID3D11InputLayout*)pShader->GetVertexLayout() );
 	m_pDeviceContext->VSSetShader( (ID3D11VertexShader *)pShader->GetVertexShader(), nullptr, 0 );
 	m_pDeviceContext->PSSetShader( (ID3D11PixelShader *)pShader->GetPixelShader(), nullptr, 0 );
-	RT_SetBlendState( pShader );
+	m_RenderState.SetBlendState( pShader );
 
 	D3D11_MAPPED_SUBRESOURCE mappedResource;
 	const auto & varBindings = pShader->GetShaderVarBindings();
@@ -2884,7 +2884,7 @@ void kbRenderer_DX11::RenderMesh( const kbRenderSubmesh *const pRenderMesh, cons
 			pShader = m_pMissingShader;
 		}
 	}
-	RT_SetBlendState( pShader );
+	m_RenderState.SetBlendState( pShader );
 
 	if ( m_ViewMode == ViewMode_Wireframe ) {
 		m_pDeviceContext->RSSetState( m_pWireFrameRasterizerState );
@@ -3208,7 +3208,7 @@ void kbRenderer_DX11::RT_RenderMesh( const kbModel *const pModel, kbShader * pSh
 	m_pDeviceContext->GSSetShader( (ID3D11GeometryShader *)pShader->GetGeometryShader(), nullptr, 0 );
 	m_pDeviceContext->GSSetSamplers(0, 1, &m_pBasicSamplerState );
 
-	RT_SetBlendState( pShader );
+	m_RenderState.SetBlendState( pShader );
 
     // Bind textures
 	const kbShaderVarBindings_t & shaderVarBindings = pShader->GetShaderVarBindings();
@@ -3230,9 +3230,9 @@ void kbRenderer_DX11::RT_RenderMesh( const kbModel *const pModel, kbShader * pSh
 }
 
 /**
- *	kbRenderer_DX11::RT_RenderLine
+ *	kbRenderer_DX11::RT_Render2DLine
  */
-void kbRenderer_DX11::RT_RenderLine( const kbVec3 & startPt, const kbVec3 & endPt, const kbColor & color, const float width, const kbShader * pShader, const kbShaderParamOverrides_t *const pShaderParamOverrides ) {
+void kbRenderer_DX11::RT_Render2DLine( const kbVec3 & startPt, const kbVec3 & endPt, const kbColor & color, const float width, const kbShader * pShader, const kbShaderParamOverrides_t *const pShaderParamOverrides ) {
 
 	D3D11_MAPPED_SUBRESOURCE mappedResource;
 	HRESULT hr = m_pDeviceContext->Map( m_DebugVertexBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource );
@@ -3291,7 +3291,7 @@ void kbRenderer_DX11::RT_RenderLine( const kbVec3 & startPt, const kbVec3 & endP
 		pShader = m_pDebugShader;
 	}
 
-	RT_SetBlendState( pShader );
+	m_RenderState.SetBlendState( pShader );
 
 	ID3D11ShaderResourceView *const pShaderResourceView = (ID3D11ShaderResourceView*)m_pTextures[0]->GetGPUTexture();
 	m_pDeviceContext->PSSetShaderResources( 0, 1, &pShaderResourceView );
@@ -3309,52 +3309,6 @@ void kbRenderer_DX11::RT_RenderLine( const kbVec3 & startPt, const kbVec3 & endP
 	m_pDeviceContext->Draw( 6, 0 );
 
 	m_pDeviceContext->RSSetState( m_pDefaultRasterizerState );
-}
-
-
-/**
- *	kbRenderer_DX11::RT_SetBlendState
- */
-void kbRenderer_DX11::RT_SetBlendState( const kbShader *const pShader ) {
-
-	m_RenderState.SetBlendState(	false,
-									false,
-									pShader->IsBlendEnabled(),
-									pShader->GetSrcBlend(),
-									pShader->GetDstBlend(),
-									pShader->GetBlendOp(),
-									pShader->GetSrcBlendAlpha(),
-									pShader->GetDstBlendAlpha(),
-									pShader->GetBlendOpAlpha(),
-									pShader->GetColorWriteEnable() );
-}
-
-/**
- *	kbRenderer_DX11::RT_SetBlendState
- */
-void kbRenderer_DX11::RT_SetBlendState( const bool bAlphaToCoverageEnable,
-										const bool bIndependentBlendEnabled,
-										const bool bBlendEnable,
-										const kbBlend sourceBlend,
-										const kbBlend destBlend,
-										const kbBlendOp blendOp,
-										const kbBlend sourceAlpha,
-										const kbBlend destAlpha,
-										const kbBlendOp alphaBlendOp,
-										const kbColorWriteEnable renderTargetWriteMask,
-										const UINT sampleMask ) {
-
-	m_RenderState.SetBlendState( bAlphaToCoverageEnable,
-								 bIndependentBlendEnabled,
-								 bBlendEnable,
-								 sourceBlend,
-								 destBlend,
-								 blendOp,
-								 sourceAlpha,
-								 destAlpha,
-								 alphaBlendOp,
-								 renderTargetWriteMask,
-								 sampleMask );
 }
 
 /**
