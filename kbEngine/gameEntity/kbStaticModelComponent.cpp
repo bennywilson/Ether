@@ -85,11 +85,3 @@ void kbStaticModelComponent::Update_Internal( const float DeltaTime ) {
 
 	// m_pModel->DrawDebugTBN( GetOwner()->GetPosition(), GetOwner()->GetOrientation(), GetOwner()->GetScale() );
 }
-
-/**
- *	kbStaticModelComponent:SetShaderParams
- */
-void kbStaticModelComponent::SetShaderParams( const kbShaderParamOverrides_t & shaderParams ) {
-	m_RenderObject.m_ShaderParamOverrides = shaderParams;
-	g_pRenderer->UpdateRenderObject( m_RenderObject );
-}

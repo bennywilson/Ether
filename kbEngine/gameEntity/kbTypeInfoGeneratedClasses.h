@@ -34,6 +34,18 @@ GenerateClass(
 )
 
 GenerateClass(
+	kbShaderParamComponent,
+	AddField( "ParamName", KBTYPEINFO_KBSTRING, kbShaderParamComponent, m_ParamName, false, "" )
+	AddField( "Texture", KBTYPEINFO_TEXTURE, kbShaderParamComponent, m_pTexture, false, "" )
+	AddField( "Vector", KBTYPEINFO_VECTOR4, kbShaderParamComponent, m_Vector, false, "" )
+)
+
+GenerateClass(
+	kbShaderParamListComponent,
+	AddField( "ShaderParams", KBTYPEINFO_STRUCT, kbShaderParamListComponent, m_ShaderParamList, true, "kbShaderParamComponent" )
+)
+
+GenerateClass(
 	kbClothBone,
 	AddField( "BoneName", KBTYPEINFO_KBSTRING, kbClothBone, m_BoneName, false, "" )
 	AddField( "NeighborBones", KBTYPEINFO_KBSTRING, kbClothBone, m_NeighborBones, true, "kbString" )

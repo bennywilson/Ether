@@ -16,11 +16,6 @@ static const uint NumCustomAtlases = 2;
  *	kbParticleManager::kbParticleManager
  */
 kbParticleManager::kbParticleManager() {
-	m_CustomAtlases.resize( NumCustomAtlases );
-
-	for ( int iAtlas = 0; iAtlas < NumCustomAtlases; iAtlas++ ) {
-		UpdateAtlas( m_CustomAtlases[iAtlas] );
-	}
 }
 
 /**
@@ -197,6 +192,13 @@ void kbParticleManager::UpdateAtlas( CustomAtlasParticles_t & atlasInfo ) {
  *	kbParticleManager::RenderSync
  */
 void kbParticleManager::RenderSync() {
+
+	if ( m_CustomAtlases.size() == 0 ) {
+		m_CustomAtlases.resize( NumCustomAtlases );
+		for ( int iAtlas = 0; iAtlas < NumCustomAtlases; iAtlas++ ) {
+			UpdateAtlas( m_CustomAtlases[iAtlas] );
+		}
+	}
 
 	// Map/unmap buffers and pass it to the renderer
 	for ( int iAtlas = 0; iAtlas < NumCustomAtlases; iAtlas++ ) {

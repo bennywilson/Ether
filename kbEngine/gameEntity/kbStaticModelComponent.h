@@ -22,8 +22,6 @@ public:
 	void										SetModel( class kbModel * pModel ) { m_pModel = pModel; }
 	const kbModel *								GetModel() const { return m_pModel; }
 
-	void										SetShaderParams( const kbShaderParamOverrides_t & shaderParams );
-
 	virtual void								EditorChange( const std::string & propertyName );
 
 protected:
@@ -33,9 +31,8 @@ protected:
 
 private:
 
-	kbRenderObject								m_RenderObject;
 	class kbModel *								m_pModel;
-	std::vector< class kbShader * >				m_pOverrideShaderList;
+	std::vector<class kbShader *>				m_pOverrideShaderList;
 };
 
 #endif
