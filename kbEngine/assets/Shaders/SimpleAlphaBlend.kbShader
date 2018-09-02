@@ -9,8 +9,9 @@ cbuffer matrixBuffer {
 };
 
 kbShaderState {
-	srcblend BlendFactor_Alpha
-	dstBlend BlendFactor_InvSrcAlpha
+	srcblend Blend_SrcAlpha
+	dstBlend Blend_InvSrcAlpha
+	colorWriteEnable ColorWriteEnable_rgb
 }
 
 //-------------------------------------

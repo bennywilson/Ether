@@ -105,8 +105,17 @@ public:
 	const kbShaderVarBindings_t &				GetShaderVarBindings() const { return m_ShaderVarBindings; }
 
 	// Render States
-	kbBlendFactor								GetSrcBlendFactor() const { return m_SrcBlendFactor; }
-	kbBlendFactor								GetDstBlendFactor() const { return m_DstBlendFactor; }
+	bool										IsBlendEnabled() const { return m_bBlendEnabled; }
+
+	kbBlend										GetSrcBlend() const { return m_SrcBlend; }
+	kbBlend										GetDstBlend() const { return m_DstBlend; }
+	kbBlendOp									GetBlendOp() const { return m_BlendOp; }
+
+	kbBlend										GetSrcBlendAlpha() const { return m_SrcBlendAlpha; }
+	kbBlend										GetDstBlendAlpha() const { return m_DstBlendAlpha; }
+	kbBlendOp									GetBlendOpAlpha() const { return m_BlendOpAlpha; }
+
+	kbColorWriteEnable							GetColorWriteEnable() const { return m_ColorWriteEnable; }
 
 	kbCullMode									GetCullMode() const { return m_CullMode; }
 
@@ -129,9 +138,16 @@ private:
 
 	kbShaderVarBindings_t						m_ShaderVarBindings;
 
-	kbBlendFactor								m_SrcBlendFactor;
-	kbBlendFactor								m_DstBlendFactor;
+	bool										m_bBlendEnabled;
+	kbBlend										m_SrcBlend;
+	kbBlend										m_DstBlend;
+	kbBlendOp									m_BlendOp;
 
+	kbBlend										m_SrcBlendAlpha;
+	kbBlend										m_DstBlendAlpha;
+	kbBlendOp									m_BlendOpAlpha;
+
+	kbColorWriteEnable							m_ColorWriteEnable;
 	kbCullMode									m_CullMode;
 };
 

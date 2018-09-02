@@ -14,6 +14,9 @@
     <Filter Include="Source Files\Ether\Game Logic">
       <UniqueIdentifier>{d013e3b1-f49d-42f2-ad7e-fda96d59834e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Shaders\DamageGen">
+      <UniqueIdentifier>{f2cee1ca-6a59-4e6f-95b9-d935b720001d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="ReadMe.txt" />
@@ -44,9 +47,6 @@
     <None Include="assets\shaders\shellTrailParticle.kbShader">
       <Filter>Shaders</Filter>
     </None>
-    <None Include="assets\shaders\pokeyholeunwrap.kbShader">
-      <Filter>Shaders</Filter>
-    </None>
     <None Include="assets\shaders\environment_hole.kbShader">
       <Filter>Shaders</Filter>
     </None>
@@ -56,11 +56,20 @@
     <None Include="assets\shaders\particleAtlas.kbShader">
       <Filter>Shaders</Filter>
     </None>
-    <None Include="assets\shaders\collisionMapGen.kbShader">
-      <Filter>Shaders</Filter>
+    <None Include="assets\shaders\DamageGen\collisionMapTimeUpdate.kbShader">
+      <Filter>Shaders\DamageGen</Filter>
     </None>
-    <None Include="assets\shaders\collisionMapTimeUpdate.kbShader">
-      <Filter>Shaders</Filter>
+    <None Include="assets\shaders\DamageGen\pokeyholeunwrap.kbShader">
+      <Filter>Shaders\DamageGen</Filter>
+    </None>
+    <None Include="assets\shaders\DamageGen\collisionMapPushGen.kbShader">
+      <Filter>Shaders\DamageGen</Filter>
+    </None>
+    <None Include="assets\shaders\DamageGen\collisionMapDamageGen.kbShader">
+      <Filter>Shaders\DamageGen</Filter>
+    </None>
+    <None Include="assets\shaders\DamageGen\collisionMapTimeGen.kbShader">
+      <Filter>Shaders\DamageGen</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

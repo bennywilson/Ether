@@ -10,14 +10,14 @@ cbuffer matrixBuffer {
 
 //-------------------------------------
 struct shadowVertexInput {
-	float4 position      : POSITION;
-	float4 color         : COLOR;
+	float4 position			: POSITION;
+	float4 color			: COLOR;
 };
 
 //-------------------------------------
 struct shadowPixelInput {
-	float4 position		: SV_POSITION;
-	float2 position2	   : TEXCOORD1;
+	float4 position			: SV_POSITION;
+	float2 position2		: TEXCOORD1;
 };
 
 /**

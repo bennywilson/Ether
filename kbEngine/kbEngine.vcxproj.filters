@@ -96,6 +96,7 @@
     <None Include="assets\Shaders\SimpleAlphaBlend.kbShader">
       <Filter>Assets\Shaders</Filter>
     </None>
+    <None Include="assets\Shaders\godRayIteration.kbShader" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="renderer\kbModel.h">

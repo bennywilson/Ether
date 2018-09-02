@@ -440,16 +440,17 @@ public:
 	bool										m_bIsDirectional;
 };
 
-enum kbBlendFactor {
-	BlendFactor_None,
-	BlendFactor_One,
-	BlendFactor_Zero,
-	BlendFactor_SrcAlpha,
-	BlendFactor_InvSrcAlpha,
-	BlendFactor_SrcColor,
-	BlendFactor_DstColor,
-	BlendFactor_DstAlpha,
-	BlendFactor_InvDstAlpha,
+enum kbBlend {
+	Blend_Zero,
+	Blend_One,
+	Blend_SrcColor,
+	Blend_InvSrcColor,
+	Blend_SrcAlpha,
+	Blend_InvSrcAlpha,
+	Blend_DstAlpha,
+	Blend_InvDstAlpha,
+	Blend_DstColor,
+	Blend_InvDstColor,
 };
 
 enum kbBlendOp {
@@ -474,6 +475,6 @@ enum kbColorWriteEnable {
 	ColorWriteEnable_All	= ColorWriteEnable_Red | ColorWriteEnable_Green | ColorWriteEnable_Blue | ColorWriteEnable_Alpha
 };
 
-kbColorWriteEnable operator| ( const kbColorWriteEnable lhs, const kbColorWriteEnable rhs );
+kbColorWriteEnable operator |( const kbColorWriteEnable lhs, const kbColorWriteEnable rhs );
 
 #endif

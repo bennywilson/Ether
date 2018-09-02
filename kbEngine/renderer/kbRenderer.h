@@ -314,14 +314,16 @@ public:
 	virtual void								RT_SetBlendState( const bool bAlphaToCoverageEnable = false,
 																  const bool bIndependentBlendEnabled = false,
 																  const bool bBlendEnable = false,
-																  const kbBlendFactor sourceBlend = BlendFactor_One,
-																  const kbBlendFactor destBlend = BlendFactor_One,
+																  const kbBlend sourceBlend = Blend_One,
+																  const kbBlend destBlend = Blend_One,
 																  const kbBlendOp blendOp = BlendOp_Add,
-																  const kbBlendFactor sourceAlpha = BlendFactor_One,
-																  const kbBlendFactor destAlpha = BlendFactor_One,
+																  const kbBlend sourceAlpha = Blend_One,
+																  const kbBlend destAlpha = Blend_One,
 																  const kbBlendOp alphaBlendOp = BlendOp_Add,
 																  const kbColorWriteEnable renderTargetWriteMask = ColorWriteEnable_All,
 																  const UINT sampleMask = 0xffffffff ) = 0;
+	virtual void								RT_SetBlendState( const kbShader *const pShader ) = 0;
+
 private:
 
 	virtual void								Init_Internal( HWND, const int width, const int height, const bool bUseHMD, const bool bUseHMDTrackingOnly ) = 0;

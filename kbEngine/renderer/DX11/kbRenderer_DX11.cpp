@@ -392,6 +392,7 @@ kbRenderer_DX11::kbRenderer_DX11() :
 	m_pMissingShader( nullptr ),
 	m_pDirectionalLightShader( nullptr ),
 	m_pSimpleAdditiveShader( nullptr ),
+	m_pGodRayIterationShader( nullptr ),
 	m_pMousePickerIdShader( nullptr ),
 	m_pBasicSamplerState( nullptr ),
 	m_pNormalMapSamplerState( nullptr ),
@@ -664,23 +665,25 @@ void kbRenderer_DX11::Init_Internal( HWND hwnd, const int frameWidth, const int 
 	}
 
 	// Load some shaders
-	m_pBasicShader = ( kbShader * )g_ResourceManager.GetResource( "../../kbEngine/assets/Shaders/BasicShader.kbshader", true );	
-	m_pOpaqueQuadShader = ( kbShader * ) g_ResourceManager.GetResource( "../../kbEngine/assets/Shaders/basicTexture.kbshader", true );
-	m_pTranslucentShader = ( kbShader * ) g_ResourceManager.GetResource( "../../kbEngine/assets/Shaders/basicTranslucency.kbshader", true );
-	m_pBasicParticleShader = ( kbShader * ) g_ResourceManager.GetResource( "../../kbEngine/assets/Shaders/basicParticle.kbshader", true );
-	m_pMissingShader = ( kbShader * ) g_ResourceManager.GetResource( "../../kbEngine/assets/Shaders/missingShader.kbshader", true );
-	m_pDebugShader = ( kbShader * ) g_ResourceManager.GetResource( "../../kbEngine/assets/Shaders/debugShader.kbshader", true );
-	m_pBasicSkinnedTextureShader = ( kbShader * ) g_ResourceManager.GetResource( "../../kbEngine/assets/Shaders/basicSkinned.kbshader", true );
+	m_pBasicShader = (kbShader *)g_ResourceManager.GetResource( "../../kbEngine/assets/Shaders/BasicShader.kbshader", true );	
+	m_pOpaqueQuadShader = (kbShader *) g_ResourceManager.GetResource( "../../kbEngine/assets/Shaders/basicTexture.kbshader", true );
+	m_pTranslucentShader = (kbShader *) g_ResourceManager.GetResource( "../../kbEngine/assets/Shaders/basicTranslucency.kbshader", true );
+	m_pBasicParticleShader = (kbShader *) g_ResourceManager.GetResource( "../../kbEngine/assets/Shaders/basicParticle.kbshader", true );
+	m_pMissingShader = (kbShader *) g_ResourceManager.GetResource( "../../kbEngine/assets/Shaders/missingShader.kbshader", true );
+	m_pDebugShader = (kbShader *) g_ResourceManager.GetResource( "../../kbEngine/assets/Shaders/debugShader.kbshader", true );
+	m_pBasicSkinnedTextureShader = (kbShader * ) g_ResourceManager.GetResource( "../../kbEngine/assets/Shaders/basicSkinned.kbshader", true );
 
-	m_pUberPostProcess = ( kbShader * ) g_ResourceManager.GetResource( "../../kbEngine/assets/Shaders/UberPostProcess.kbshader", true );
-	m_pDirectionalLightShader = ( kbShader * ) g_ResourceManager.GetResource( "../../kbEngine/assets/Shaders/DirectionalLight.kbshader", true );
-	m_pPointLightShader = ( kbShader * ) g_ResourceManager.GetResource( "../../kbEngine/assets/Shaders/PointLight.kbshader", true );
-	m_pCylindricalLightShader = ( kbShader * ) g_ResourceManager.GetResource( "../../kbEngine/assets/Shaders/cylindricalLight.kbshader", true );
+	m_pUberPostProcess = (kbShader *) g_ResourceManager.GetResource( "../../kbEngine/assets/Shaders/UberPostProcess.kbshader", true );
+	m_pDirectionalLightShader = (kbShader *) g_ResourceManager.GetResource( "../../kbEngine/assets/Shaders/DirectionalLight.kbshader", true );
+	m_pPointLightShader = (kbShader *) g_ResourceManager.GetResource( "../../kbEngine/assets/Shaders/PointLight.kbshader", true );
+	m_pCylindricalLightShader = (kbShader *) g_ResourceManager.GetResource( "../../kbEngine/assets/Shaders/cylindricalLight.kbshader", true );
 
-	m_pDirectionalLightShadowShader = ( kbShader * ) g_ResourceManager.GetResource( "../../kbEngine/assets/Shaders/directionalLightShadow.kbshader", true );
-	m_pLightShaftsShader = ( kbShader * ) g_ResourceManager.GetResource( "../../kbEngine/assets/Shaders/lightShafts.kbshader", true );
-	m_pSimpleAdditiveShader = ( kbShader * ) g_ResourceManager.GetResource( "../../kbEngine/assets/Shaders/SimpleAdditive.kbshader", true );
-	m_pMousePickerIdShader = (kbShader *) g_ResourceManager.GetResource( "../../kbEngine/assets/Shaders/MousePicker.kbshader", true );
+	m_pDirectionalLightShadowShader = (kbShader *) g_ResourceManager.GetResource( "../../kbEngine/assets/Shaders/directionalLightShadow.kbshader", true );
+	m_pLightShaftsShader = (kbShader *) g_ResourceManager.GetResource( "../../kbEngine/assets/Shaders/lightShafts.kbshader", true );
+	m_pSimpleAdditiveShader = (kbShader *) g_ResourceManager.GetResource( "../../kbEngine/assets/Shaders/simpleAdditive.kbshader", true );
+	m_pGodRayIterationShader = (kbShader *) g_ResourceManager.GetResource( "../../kbEngine/assets/Shaders/godRayIteration.kbShader", true );
+
+	m_pMousePickerIdShader = (kbShader *) g_ResourceManager.GetResource( "../../kbEngine/assets/Shaders/mousePicker.kbshader", true );
 
 	// Non-resource managed shaders
 	m_pSkinnedDirectionalLightShadowShader->SetVertexShaderFunctionName( "skinnedVertexMain" );
@@ -1178,10 +1181,6 @@ void kbRenderer_DX11::RenderScene() {
 			m_pDeviceContext->RSSetState( m_pWireFrameRasterizerState );
 		}
 
-		ID3D11RenderTargetView * RenderTargetViews[] = { GetRenderTarget_DX11(COLOR_BUFFER)->m_pRenderTargetView, GetRenderTarget_DX11(NORMAL_BUFFER)->m_pRenderTargetView, GetRenderTarget_DX11(SPECULAR_BUFFER)->m_pRenderTargetView, GetRenderTarget_DX11(DEPTH_BUFFER)->m_pRenderTargetView };
-	
-		m_pDeviceContext->OMSetRenderTargets( 4, RenderTargetViews, m_pDepthStencilView );
-
 		D3D11_VIEWPORT viewport;
 	
 		if ( IsRenderingToHMD() ) {
@@ -1235,14 +1234,16 @@ void kbRenderer_DX11::RenderScene() {
 				m_pCurrentRenderWindow->m_CameraPosition.z = inverseView.m[3][2];
 			}*/
 		}
-
-		m_pDeviceContext->RSSetViewports( 1, &viewport );
 	
 		{
 
 			for ( int iHook = 0; iHook < m_RenderHooks[RP_FirstPerson].size(); iHook++ ) {
 				m_RenderHooks[RP_FirstPerson][iHook]->RenderThreadCallBack();
 			}
+
+			m_pDeviceContext->RSSetViewports( 1, &viewport );
+			ID3D11RenderTargetView * RenderTargetViews[] = { GetRenderTarget_DX11(COLOR_BUFFER)->m_pRenderTargetView, GetRenderTarget_DX11(NORMAL_BUFFER)->m_pRenderTargetView, GetRenderTarget_DX11(SPECULAR_BUFFER)->m_pRenderTargetView, GetRenderTarget_DX11(DEPTH_BUFFER)->m_pRenderTargetView };
+			m_pDeviceContext->OMSetRenderTargets( 4, RenderTargetViews, m_pDepthStencilView );
 
 			START_SCOPED_RENDER_TIMER( RENDER_G_BUFFER );
 
@@ -1265,7 +1266,7 @@ void kbRenderer_DX11::RenderScene() {
 												kbRenderState::CompareAlways,
 												1);
 
-			m_pDeviceContext->OMSetBlendState( nullptr, nullptr, 0xffffffff );
+			RT_SetBlendState();
 
 			std::vector<kbRenderSubmesh> & FirstPersonPassVisibleList = m_pCurrentRenderWindow->GetVisibleSubMeshes( RP_FirstPerson );
 			for ( int i = 0; i < FirstPersonPassVisibleList.size(); i++ ) {
@@ -1317,17 +1318,6 @@ void kbRenderer_DX11::RenderScene() {
 		if ( m_ViewMode == ViewMode_Shaded ) {
 			// In World UI Pass
 			m_RenderState.SetDepthStencilState( false, kbRenderState::DepthWriteMaskZero, kbRenderState::CompareLess, false );
-			m_RenderState.SetBlendState( false,
-										 false,
-										 true,
-										 BlendFactor_SrcAlpha,
-										 BlendFactor_InvSrcAlpha,
-										 BlendOp_Add,
-										 BlendFactor_One,
-										 BlendFactor_Zero,
-										 BlendOp_Add,
-										 ColorWriteEnable_RGB );
-
 			std::vector<kbRenderSubmesh> & InWorldUIVisibleList = m_pCurrentRenderWindow->GetVisibleSubMeshes( RP_InWorldUI );
 			for ( int i = 0; i < InWorldUIVisibleList.size(); i++ ) {
 				RenderMesh( &InWorldUIVisibleList[i], false );
@@ -1466,7 +1456,7 @@ void kbRenderer_DX11::PreRenderCullAndSort() {
 					pShader = renderObj.m_OverrideShaderList[i];
 				}
 
-				if ( pShader == nullptr || pShader->GetSrcBlendFactor() == BlendFactor_None || pShader->GetSrcBlendFactor() == BlendFactor_None ) {
+				if ( pShader == nullptr || pShader->IsBlendEnabled() == false ) {
 					m_pCurrentRenderWindow->GetVisibleSubMeshes( renderObj.m_RenderPass ).push_back( kbRenderSubmesh( &renderObj, i, renderObj.m_RenderPass ) );
 				} else {
 					m_pCurrentRenderWindow->GetVisibleSubMeshes( RP_Translucent ).push_back( kbRenderSubmesh( &renderObj, i, RP_Translucent ) );
@@ -1501,33 +1491,9 @@ void kbRenderer_DX11::RenderTranslucency() {
 										kbRenderState::CompareNotEqual,
 										1);
 
-	m_RenderState.SetBlendState( false,
-								 false,
-								 true,
-								 BlendFactor_One,
-								 BlendFactor_One,
-								 BlendOp_Add,
-								 BlendFactor_One,
-								 BlendFactor_Zero,
-								 BlendOp_Add,
-							     ColorWriteEnable_RGB );
-
 	for ( auto iter = m_pCurrentRenderWindow->GetRenderParticleMap().begin(); iter != m_pCurrentRenderWindow->GetRenderParticleMap().end(); iter++ ) {
 
 		kbRenderSubmesh newMesh( iter->second, 0, RP_Translucent );
-
-		const kbShader *const pShader = newMesh.GetShader();
-		m_RenderState.SetBlendState( false,
-									 false,
-									 true,
-									 pShader->GetSrcBlendFactor(),
-									 pShader->GetDstBlendFactor(),
-									 BlendOp_Add,
-									 BlendFactor_One,
-									 BlendFactor_Zero,
-									 BlendOp_Add,
-									 ColorWriteEnable_RGB );
-
 		RenderMesh( &newMesh, false );
 	}
 
@@ -1569,18 +1535,6 @@ void kbRenderer_DX11::RenderTranslucency() {
 												kbRenderState::CompareNotEqual,
 												1);
 		}
-
-		const kbShader *const pShader = submesh.GetShader();
-		m_RenderState.SetBlendState( false,
-									 false,
-									 true,
-									 pShader->GetSrcBlendFactor(),
-									 pShader->GetDstBlendFactor(),
-									 BlendOp_Add,
-									 BlendFactor_One,
-									 BlendFactor_Zero,
-									 BlendOp_Add,
-									 ColorWriteEnable_RGB );
 
 		RenderMesh( &visibleSubmeshList[i], false );
 	}
@@ -1714,18 +1668,7 @@ void kbRenderer_DX11::RenderDebugText() {
 
 	extern kbConsoleVariable g_ShowPerfTimers;
 	if ( g_ShowPerfTimers.GetBool() ) {
-		m_RenderState.SetBlendState( false,
-									 false,
-									 true,
-									 BlendFactor_SrcAlpha,
-									 BlendFactor_InvSrcAlpha,
-									 BlendOp_Add,
-									 BlendFactor_One,
-									 BlendFactor_Zero,
-									 BlendOp_Add );
-
 		RenderScreenSpaceQuadImmediate( int( Back_Buffer_Width * 0.25f ), int( Back_Buffer_Height * 0.1f ), int( Back_Buffer_Width * 0.51f ), int( Back_Buffer_Height * 0.65f ), 3, m_pTranslucentShader );
-		m_RenderState.SetBlendState();
 	}
 
 	/*if ( m_bRenderToHMD == true ) {
@@ -1787,16 +1730,6 @@ void kbRenderer_DX11::RenderDebugText() {
 	const unsigned int stride = sizeof( vertexLayout );
 	const unsigned int offset = 0;
 
-	m_RenderState.SetBlendState( false,
-								 false,
-								 true,
-								 BlendFactor_One,
-								 BlendFactor_One,
-								 BlendOp_Add,
-								 BlendFactor_One,
-								 BlendFactor_Zero,
-								 BlendOp_Add,
-							     ColorWriteEnable_All );
 
 	m_RenderState.SetDepthStencilState( false, kbRenderState::DepthWriteMaskZero, kbRenderState::CompareLess, false );
 
@@ -1815,6 +1748,7 @@ void kbRenderer_DX11::RenderDebugText() {
 	m_pDeviceContext->IASetInputLayout( (ID3D11InputLayout*)m_pSimpleAdditiveShader->GetVertexLayout() );
 	m_pDeviceContext->VSSetShader( (ID3D11VertexShader *)m_pSimpleAdditiveShader->GetVertexShader(), nullptr, 0 );
 	m_pDeviceContext->PSSetShader( (ID3D11PixelShader *)m_pSimpleAdditiveShader->GetPixelShader(), nullptr, 0 );
+	RT_SetBlendState( m_pSimpleAdditiveShader );
 
 	const kbShaderVarBindings_t & shaderVarBindings = m_pSimpleAdditiveShader->GetShaderVarBindings();
 	ID3D11Buffer *const pConstantBuffer = GetConstantBuffer( shaderVarBindings.m_ConstantBufferSizeBytes );
@@ -2158,17 +2092,6 @@ void kbRenderer_DX11::RenderBloom() {
 		viewport.TopLeftX = 0;
 		viewport.TopLeftY = 0;
 
-	m_RenderState.SetBlendState( false,
-								 false,
-								 true,
-								 BlendFactor_One,
-								 BlendFactor_One,
-								 BlendOp_Add,
-								 BlendFactor_One,
-								 BlendFactor_Zero,
-								 BlendOp_Add,
-							     ColorWriteEnable_All );
-
 		m_pDeviceContext->RSSetViewports( 1, &viewport );
 		m_pDeviceContext->OMSetRenderTargets( 1, &GetRenderTarget_DX11(ACCUMULATION_BUFFER)->m_pRenderTargetView, nullptr );
 
@@ -2179,6 +2102,7 @@ void kbRenderer_DX11::RenderBloom() {
 		m_pDeviceContext->PSSetShader( (ID3D11PixelShader *)m_pSimpleAdditiveShader->GetPixelShader(), nullptr, 0 );
 		m_pDeviceContext->PSSetShaderResources( 0, 1, RenderTargetViews );
 		m_pDeviceContext->PSSetSamplers( 0, 1, SamplerStates );
+		RT_SetBlendState( m_pSimpleAdditiveShader );
 
 		const auto & varBindings = m_pSimpleAdditiveShader->GetShaderVarBindings();
 		ID3D11Buffer *const pConstantBuffer = GetConstantBuffer( varBindings.m_ConstantBufferSizeBytes );
@@ -2841,16 +2765,6 @@ void kbRenderer_DX11::RenderScreenSpaceQuads() {
 		return;
 	}
 
-	m_RenderState.SetBlendState( false,
-								 false,
-								 true,
-								 BlendFactor_SrcAlpha,
-								 BlendFactor_InvSrcAlpha,
-								 BlendOp_Add,
-								 BlendFactor_One,
-								 BlendFactor_Zero,
-								 BlendOp_Add );
-
 	m_RenderState.SetDepthStencilState( false, kbRenderState::DepthWriteMaskZero, kbRenderState::CompareLess, false );
 
 	for ( int i = 0; i < m_ScreenSpaceQuads_RenderThread.size(); i++ ) {
@@ -2899,6 +2813,7 @@ void kbRenderer_DX11::RenderScreenSpaceQuadImmediate( const int start_x, const i
 	m_pDeviceContext->IASetInputLayout( (ID3D11InputLayout*)pShader->GetVertexLayout() );
 	m_pDeviceContext->VSSetShader( (ID3D11VertexShader *)pShader->GetVertexShader(), nullptr, 0 );
 	m_pDeviceContext->PSSetShader( (ID3D11PixelShader *)pShader->GetPixelShader(), nullptr, 0 );
+	RT_SetBlendState( pShader );
 
 	D3D11_MAPPED_SUBRESOURCE mappedResource;
 	const auto & varBindings = pShader->GetShaderVarBindings();
@@ -2969,7 +2884,8 @@ void kbRenderer_DX11::RenderMesh( const kbRenderSubmesh *const pRenderMesh, cons
 			pShader = m_pMissingShader;
 		}
 	}
-	
+	RT_SetBlendState( pShader );
+
 	if ( m_ViewMode == ViewMode_Wireframe ) {
 		m_pDeviceContext->RSSetState( m_pWireFrameRasterizerState );
 	} else if ( pShader->GetCullMode() == CullMode_BackFaces ) {
@@ -3006,7 +2922,7 @@ void kbRenderer_DX11::RenderMesh( const kbRenderSubmesh *const pRenderMesh, cons
 	}
 	
     m_pDeviceContext->GSSetShader( (ID3D11GeometryShader *) pShader->GetGeometryShader(), nullptr, 0 );
-	ID3D11SamplerState *const  SamplerStates[] = { m_pBasicSamplerState, m_pNormalMapSamplerState };	// todo: Grass uses this for sampling time
+	ID3D11SamplerState *const  SamplerStates[] = { m_pNormalMapSamplerState, m_pNormalMapSamplerState };	// todo: Grass uses this for sampling time
 	m_pDeviceContext->GSSetSamplers( 0, 2, SamplerStates );
 
 	// Set textures
@@ -3282,15 +3198,17 @@ void kbRenderer_DX11::RT_RenderMesh( const kbModel *const pModel, kbShader * pSh
 	m_pDeviceContext->IASetVertexBuffers(0, 1, &pVertexBuffer, &vertexStride, &vertexOffset);
 
 	ID3D11Buffer *const pIndexBuffer = (ID3D11Buffer * const)pModel->m_IndexBuffer.GetBufferPtr();
-	m_pDeviceContext->IASetIndexBuffer(pIndexBuffer, DXGI_FORMAT_R32_UINT, 0);
-	m_pDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	m_pDeviceContext->IASetIndexBuffer( pIndexBuffer, DXGI_FORMAT_R32_UINT, 0 );
+	m_pDeviceContext->IASetPrimitiveTopology( D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST );
 
-	m_pDeviceContext->IASetInputLayout((ID3D11InputLayout*)pShader->GetVertexLayout());
-	m_pDeviceContext->VSSetShader((ID3D11VertexShader *)pShader->GetVertexShader(), nullptr, 0);
-	m_pDeviceContext->PSSetShader((ID3D11PixelShader *)pShader->GetPixelShader(), nullptr, 0);
+	m_pDeviceContext->IASetInputLayout( (ID3D11InputLayout*)pShader->GetVertexLayout() );
+	m_pDeviceContext->VSSetShader( (ID3D11VertexShader *)pShader->GetVertexShader(), nullptr, 0 );
+	m_pDeviceContext->PSSetShader( (ID3D11PixelShader *)pShader->GetPixelShader(), nullptr, 0 );
 
-	m_pDeviceContext->GSSetShader((ID3D11GeometryShader *)pShader->GetGeometryShader(), nullptr, 0);
-	m_pDeviceContext->GSSetSamplers(0, 1, &m_pBasicSamplerState);
+	m_pDeviceContext->GSSetShader( (ID3D11GeometryShader *)pShader->GetGeometryShader(), nullptr, 0 );
+	m_pDeviceContext->GSSetSamplers(0, 1, &m_pBasicSamplerState );
+
+	RT_SetBlendState( pShader );
 
     // Bind textures
 	const kbShaderVarBindings_t & shaderVarBindings = pShader->GetShaderVarBindings();
@@ -3305,7 +3223,7 @@ void kbRenderer_DX11::RT_RenderMesh( const kbModel *const pModel, kbShader * pSh
 
 		const kbModel::mesh_t & pMesh = pModel->GetMeshes()[i];
 		const kbMaterial & meshMaterial = pModel->GetMaterials()[pMesh.m_MaterialIndex];
-		m_pDeviceContext->DrawIndexed(pMesh.m_NumTriangles * 3, pMesh.m_IndexBufferIndex, 0);
+		m_pDeviceContext->DrawIndexed( pMesh.m_NumTriangles * 3, pMesh.m_IndexBufferIndex, 0 );
 	}
 
 	m_RenderState.SetBlendState();
@@ -3373,6 +3291,8 @@ void kbRenderer_DX11::RT_RenderLine( const kbVec3 & startPt, const kbVec3 & endP
 		pShader = m_pDebugShader;
 	}
 
+	RT_SetBlendState( pShader );
+
 	ID3D11ShaderResourceView *const pShaderResourceView = (ID3D11ShaderResourceView*)m_pTextures[0]->GetGPUTexture();
 	m_pDeviceContext->PSSetShaderResources( 0, 1, &pShaderResourceView );
 	m_pDeviceContext->PSSetSamplers( 0, 1, &m_pBasicSamplerState );
@@ -3391,17 +3311,35 @@ void kbRenderer_DX11::RT_RenderLine( const kbVec3 & startPt, const kbVec3 & endP
 	m_pDeviceContext->RSSetState( m_pDefaultRasterizerState );
 }
 
+
+/**
+ *	kbRenderer_DX11::RT_SetBlendState
+ */
+void kbRenderer_DX11::RT_SetBlendState( const kbShader *const pShader ) {
+
+	m_RenderState.SetBlendState(	false,
+									false,
+									pShader->IsBlendEnabled(),
+									pShader->GetSrcBlend(),
+									pShader->GetDstBlend(),
+									pShader->GetBlendOp(),
+									pShader->GetSrcBlendAlpha(),
+									pShader->GetDstBlendAlpha(),
+									pShader->GetBlendOpAlpha(),
+									pShader->GetColorWriteEnable() );
+}
+
 /**
  *	kbRenderer_DX11::RT_SetBlendState
  */
 void kbRenderer_DX11::RT_SetBlendState( const bool bAlphaToCoverageEnable,
 										const bool bIndependentBlendEnabled,
 										const bool bBlendEnable,
-										const kbBlendFactor sourceBlend,
-										const kbBlendFactor destBlend,
+										const kbBlend sourceBlend,
+										const kbBlend destBlend,
 										const kbBlendOp blendOp,
-										const kbBlendFactor sourceAlpha,
-										const kbBlendFactor destAlpha,
+										const kbBlend sourceAlpha,
+										const kbBlend destAlpha,
 										const kbBlendOp alphaBlendOp,
 										const kbColorWriteEnable renderTargetWriteMask,
 										const UINT sampleMask ) {

@@ -16,6 +16,13 @@ cbuffer matrixBuffer {
    float4 time;
 };
 
+kbShaderState {
+	srcblend Blend_One
+	dstBlend Blend_One
+	blendOp BlendOp_Add
+	colorWriteEnable ColorWriteEnable_rgb
+}
+
 //-------------------------------------
 struct vertexInput {
    float4 position               : POSITION;
