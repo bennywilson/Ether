@@ -781,7 +781,7 @@ void kbRenderer_DX11::Init_Internal( HWND hwnd, const int frameWidth, const int 
 	textureDesc.CPUAccessFlags = D3D11_CPU_ACCESS_READ;
 	textureDesc.MiscFlags = 0;
 
-	hr = m_pD3DDevice->CreateTexture2D( &textureDesc, nullptr, &m_pOffScreenRenderTargetTexture);
+	hr = m_pD3DDevice->CreateTexture2D( &textureDesc, nullptr, &m_pOffScreenRenderTargetTexture );
 
 	LoadTexture( "../../kbEngine/assets/Textures/Editor/white.bmp", 0 );
 
@@ -811,7 +811,7 @@ void kbRenderer_DX11::Init_Internal( HWND hwnd, const int frameWidth, const int 
 	m_DebugText->UnmapIndexBuffer();
 
 	hr = m_pDeviceContext->QueryInterface( __uuidof(m_pEventMarker), (void**)&m_pEventMarker );
-	kbErrorCheck( SUCCEEDED( hr ), " kbRenderer_DX11::Initialize() - Failed to query user defined annotation" );
+	kbErrorCheck( SUCCEEDED(hr), " kbRenderer_DX11::Initialize() - Failed to query user defined annotation" );
 }
 
 /**
@@ -907,10 +907,8 @@ bool kbRenderer_DX11::InitializeOculus() {
  */
 int kbRenderer_DX11::CreateRenderView( HWND hwnd )
 {
-	if ( hwnd == nullptr ) {
-		kbError( "nullptr window handle passed into kbRenderer_DX11::CreateRenderView" );
-	}
-
+	kbErrorCheck( hwnd != nullptr, "nullptr window handle passed into kbRenderer_DX11::CreateRenderView" );
+	
 	DXGI_SWAP_CHAIN_DESC sd = { 0 };
 	
 	sd.BufferDesc.Width = Back_Buffer_Width;
@@ -1007,7 +1005,7 @@ kbRenderTexture * kbRenderer_DX11::GetRenderTexture_Internal( const int width, c
 	textureDesc.MiscFlags = 0;
 
 	HRESULT hr = m_pD3DDevice->CreateTexture2D( &textureDesc, nullptr, &rt.m_pRenderTargetTexture );
-	kbErrorCheck( SUCCEEDED( hr ), "kbRenderer_DX11::CreateRenderTarget() - Failed to create 2D texture with format", (int)targetFormat );
+	kbErrorCheck( SUCCEEDED(hr), "kbRenderer_DX11::CreateRenderTarget() - Failed to create 2D texture with format", (int)targetFormat );
 
 	// Render target view
 	D3D11_RENDER_TARGET_VIEW_DESC renderTargetViewDesc;
@@ -1016,7 +1014,7 @@ kbRenderTexture * kbRenderer_DX11::GetRenderTexture_Internal( const int width, c
 	renderTargetViewDesc.Texture2D.MipSlice = 0;
 
 	hr = m_pD3DDevice->CreateRenderTargetView( rt.m_pRenderTargetTexture, &renderTargetViewDesc, &rt.m_pRenderTargetView );
-	kbErrorCheck( SUCCEEDED( hr ), "kbRenderer_DX11::CreateRenderTarget() - Failed to create RTV with format", (int)targetFormat );
+	kbErrorCheck( SUCCEEDED(hr), "kbRenderer_DX11::CreateRenderTarget() - Failed to create RTV with format", (int)targetFormat );
 
 	// Shader resource view
 	D3D11_SHADER_RESOURCE_VIEW_DESC shaderResourceViewDesc;
@@ -1026,7 +1024,7 @@ kbRenderTexture * kbRenderer_DX11::GetRenderTexture_Internal( const int width, c
 	shaderResourceViewDesc.Texture2D.MipLevels = 1;
 
 	hr = m_pD3DDevice->CreateShaderResourceView( rt.m_pRenderTargetTexture, &shaderResourceViewDesc, &rt.m_pShaderResourceView );
-	kbErrorCheck( SUCCEEDED( hr ), "kbRenderer_DX11::CreateRenderTarget() - Failed to create SRV texture for index", (int)targetFormat );
+	kbErrorCheck( SUCCEEDED(hr), "kbRenderer_DX11::CreateRenderTarget() - Failed to create SRV texture for index", (int)targetFormat );
 
 	return &rt;
 }
@@ -1376,6 +1374,7 @@ void kbRenderer_DX11::RenderScene() {
 	RenderDebugText();
 
 	if ( g_UseEditor ) {
+		m_RenderState.SetBlendState();
 		RenderMousePickerIds();
 	}
 	m_DebugLines.clear();
@@ -1809,12 +1808,13 @@ void kbRenderer_DX11::RenderMousePickerIds() {
 	m_pDeviceContext->RSSetViewports( 1, &viewport );
 	m_pDeviceContext->OMSetRenderTargets( 1, &GetRenderTarget_DX11(MOUSE_PICKER_BUFFER)->m_pRenderTargetView, m_pDepthStencilView );
 	m_RenderState.SetDepthStencilState();
+	m_RenderState.SetBlendState();
 
 	for ( auto iter = m_pCurrentRenderWindow->GetRenderObjectMap().begin(); iter != m_pCurrentRenderWindow->GetRenderObjectMap().end(); iter++ ) {
 		if ( iter->second->m_EntityId > 0 ) {
 			// TODO
 			kbRenderSubmesh newMesh( iter->second, 0, RP_MousePicker );
-			RenderMesh( &newMesh, false );
+			RenderMesh( &newMesh, false, true );
 		}
 	}
 
@@ -2856,7 +2856,7 @@ void kbRenderer_DX11::RenderScreenSpaceQuadImmediate( const int start_x, const i
 /**
  *	kbRenderer_DX11::RenderMesh
  */
-void kbRenderer_DX11::RenderMesh( const kbRenderSubmesh *const pRenderMesh, const bool bShadowPass ) {
+void kbRenderer_DX11::RenderMesh( const kbRenderSubmesh *const pRenderMesh, const bool bShadowPass, const bool bSkipMeshBlendSettings ) {
 
 	const kbRenderObject * pRenderObject = pRenderMesh->GetRenderObject();
 	const kbModel *const pModel = pRenderObject->m_pModel;
@@ -2901,7 +2901,10 @@ void kbRenderer_DX11::RenderMesh( const kbRenderSubmesh *const pRenderMesh, cons
 			pShader = m_pMissingShader;
 		}
 	}
-	m_RenderState.SetBlendState( pShader );
+
+	if ( bSkipMeshBlendSettings == false ) {
+		m_RenderState.SetBlendState( pShader );
+	}
 
 	if ( m_ViewMode == ViewMode_Wireframe ) {
 		m_pDeviceContext->RSSetState( m_pWireFrameRasterizerState );

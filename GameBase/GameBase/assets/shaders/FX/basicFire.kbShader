@@ -105,7 +105,7 @@ float4 pixelShader( pixelInput	input ) : SV_Target {
 
 	 float dist = 0.5f;
 	dist = 1.0f - saturate((dist - input.uv.y )/ dist);
-	color.w *= dist * (lerpVal * 2);
+	color.w *= dist * (lerpVal * 1.75f);
 	//	color.w = 0.0f;
 	return color;
 }

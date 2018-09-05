@@ -15,7 +15,7 @@ cbuffer matrixBuffer {
 };
 
 kbShaderState {
-	srcblend Blend_Alpha
+	srcblend Blend_SrcAlpha
 	dstBlend Blend_InvSrcAlpha
 	blendOp BlendOp_Add
 	colorWriteEnable ColorWriteEnable_rgb
@@ -87,6 +87,7 @@ SamplerState SampleType;
 
  float4 pixelShader( pixelInput	input ) : SV_TARGET {
    float4 finalColor = input.color;
-   finalColor.xyz *=  shaderTexture.Sample( SampleType, input.uv ).xyz;
+   finalColor = shaderTexture.Sample( SampleType, input.uv );
+   finalColor.a *= 2.0f;
    return finalColor;
 }
