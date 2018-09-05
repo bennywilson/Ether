@@ -60,6 +60,7 @@ void kbStaticModelComponent::SetEnable_Internal( const bool isEnabled ) {
 		m_RenderObject.m_RenderPass = m_RenderPass;
 		m_RenderObject.m_Scale = GetOwner()->GetScale();
 		m_RenderObject.m_OverrideShaderList = m_pOverrideShaderList;
+		m_RenderObject.m_RenderPassBucket = m_RenderPassBucket;
 
 		g_pRenderer->AddRenderObject( m_RenderObject );
 	} else {

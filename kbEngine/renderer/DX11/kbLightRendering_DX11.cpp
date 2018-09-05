@@ -322,10 +322,12 @@ void kbRenderer_DX11::RenderShadow( const kbRenderLight *const pLight, kbMat4 sp
 		m_pCurrentRenderWindow->HackSetProjectionMatrix( lightProjMatrix );
 		m_pCurrentRenderWindow->HackSetViewProjectionMatrix( lightViewProjMatrix * offset );
 		
-		std::vector<kbRenderSubmesh> & LightingPassVisibleList = m_pCurrentRenderWindow->GetVisibleSubMeshes( RP_Lighting );
-		for ( int i = 0; i < LightingPassVisibleList.size(); i++ ) {
-			if ( LightingPassVisibleList[i].GetRenderObject()->m_bCastsShadow ) {
-				RenderMesh( &LightingPassVisibleList[i], true );
+		for ( int iBucket = 0; iBucket < NUM_RENDER_PASS_BUCKETS; iBucket++ ) {
+			std::vector<kbRenderSubmesh> & LightingPassVisibleList = m_pCurrentRenderWindow->GetVisibleSubMeshes( RP_Lighting, iBucket );
+			for ( int i = 0; i < LightingPassVisibleList.size(); i++ ) {
+				if ( LightingPassVisibleList[i].GetRenderObject()->m_bCastsShadow ) {
+					RenderMesh( &LightingPassVisibleList[i], true );
+				}
 			}
 		}
 	}

@@ -119,6 +119,7 @@ float4 pixelShader( pixelInput	input ) : SV_Target {
 	float sinWave2 = ( 0.5f + 0.5f * cos( ( input.uv.x * 65.1f + -3.5f * time.x) )  )* fluffSize * 0.14f;
 	float topMult = 1.0f - saturate((1.25f * fluffSize - ((sinWave + sinWave2)*0.5f)- input.uv.y) / fluffSize);
 	color.a *= pow( abs(topMult), 1.5f );
+	color.a = pow( abs(color.a),0.8f );
 	float dist = 0.5f;
 	dist = 1.0f - saturate((dist - input.uv.y )/ dist);
 	color.xyz *= dist * dist;

@@ -14,6 +14,7 @@
 class kbShader;
 class kbModel;
 
+const int NUM_RENDER_PASS_BUCKETS = 8;
 
 /**
  *	kbRenderTexture
@@ -145,7 +146,7 @@ public:
 	const std::map<const kbLightComponent *, kbRenderLight *> &	GetRenderLightMap() const { return m_RenderLightMap; }
 	const std::map<const void *, kbRenderObject *> &			GetRenderParticleMap() const { return m_RenderParticleMap; }
 
-	std::vector<kbRenderSubmesh> &								GetVisibleSubMeshes( const int renderPass ) { return m_VisibleRenderMeshes[renderPass]; }
+	std::vector<kbRenderSubmesh> &								GetVisibleSubMeshes( const int renderPass, const int bucket ) { return m_VisibleRenderMeshes[renderPass][bucket]; }
  
 	void														HackSetViewMatrix( const kbMat4 & inViewMat ) { m_ViewMatrix = inViewMat; }
 	void														HackSetViewProjectionMatrix( const kbMat4 & inViewProjMat ) { m_ViewProjectionMatrix = inViewProjMat; }
@@ -184,7 +185,7 @@ private:
 	std::map<const kbLightComponent *, kbRenderLight *>			m_RenderLightMap;
 	std::map<const void *, kbRenderObject *>					m_RenderParticleMap;
 
-	std::vector<kbRenderSubmesh>								m_VisibleRenderMeshes[NUM_RENDER_PASSES];
+	std::vector<kbRenderSubmesh>								m_VisibleRenderMeshes[NUM_RENDER_PASSES][NUM_RENDER_PASS_BUCKETS];
 };
 
 /**

@@ -339,6 +339,7 @@ public:
 													m_pComponent( nullptr ),
 													m_pModel( nullptr ),
 													m_RenderPass( RP_Lighting ),
+													m_RenderPassBucket( 0 ),
 													m_EntityId( 0 ),
 													m_CullDistance( -1.0f ),
 													m_bCastsShadow( false ),
@@ -351,6 +352,7 @@ public:
 	std::vector<class kbShader *>				m_OverrideShaderList;
 	kbShaderParamOverrides_t                    m_ShaderParamOverrides;
 	ERenderPass									m_RenderPass;
+	int											m_RenderPassBucket;
 	kbVec3										m_Position;
 	kbQuat										m_Orientation;
 	kbVec3										m_Scale;

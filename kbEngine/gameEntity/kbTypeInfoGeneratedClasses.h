@@ -79,7 +79,8 @@ GenerateClass(
 
 GenerateClass(
 	kbModelComponent,
-	AddField( "m_RenderPass", KBTYPEINFO_ENUM, kbModelComponent, m_RenderPass, false, "ERenderPass" )
+	AddField( "RenderPass", KBTYPEINFO_ENUM, kbModelComponent, m_RenderPass, false, "ERenderPass" )
+	AddField( "RenderPassBucket", KBTYPEINFO_INT, kbModelComponent, m_RenderPassBucket, false, "" )
 	AddField( "CastsShadow", KBTYPEINFO_BOOL, kbModelComponent, m_bCastsShadow, false, "" )
 )
 

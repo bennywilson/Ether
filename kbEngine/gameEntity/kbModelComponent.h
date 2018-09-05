@@ -30,6 +30,8 @@ public:
 protected:
 
 	enum ERenderPass							m_RenderPass;
+	int											m_RenderPassBucket;
+
 	kbShaderParamOverrides_t					m_ShaderParams;
 
 	kbRenderObject								m_RenderObject;
