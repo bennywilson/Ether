@@ -22,7 +22,7 @@ struct kbParticle_t {
 	float m_TotalLife;
 	kbVec3 m_StartVelocity;
 	kbVec3 m_EndVelocity;
-	float m_Random;
+	float m_Randoms[3];
 };
 
 /*

@@ -170,12 +170,22 @@ void kbParticleComponent::Update_Internal( const float DeltaTime ) {
 		m_pVertexBuffer[iVertex + 2].direction = direction;
 		m_pVertexBuffer[iVertex + 3].direction = direction;
 
-		m_pVertexBuffer[iVertex + 0].billboardType[0] = m_pVertexBuffer[iVertex + 0].billboardType[1] = m_pVertexBuffer[iVertex + 0].billboardType[2] = m_pVertexBuffer[iVertex + 0].billboardType[3] = iBillboardType;
-		m_pVertexBuffer[iVertex + 1].billboardType[0] = m_pVertexBuffer[iVertex + 1].billboardType[1] = m_pVertexBuffer[iVertex + 1].billboardType[2] = m_pVertexBuffer[iVertex + 1].billboardType[3] = iBillboardType;
-		m_pVertexBuffer[iVertex + 2].billboardType[0] = m_pVertexBuffer[iVertex + 2].billboardType[1] = m_pVertexBuffer[iVertex + 2].billboardType[2] = m_pVertexBuffer[iVertex + 2].billboardType[3] = iBillboardType;
-		m_pVertexBuffer[iVertex + 3].billboardType[0] = m_pVertexBuffer[iVertex + 3].billboardType[1] = m_pVertexBuffer[iVertex + 3].billboardType[2] = m_pVertexBuffer[iVertex + 3].billboardType[3] = iBillboardType;
+		m_pVertexBuffer[iVertex + 0].billboardType[0] = iBillboardType;
+		m_pVertexBuffer[iVertex + 1].billboardType[0] = iBillboardType;
+		m_pVertexBuffer[iVertex + 2].billboardType[0] = iBillboardType;
+		m_pVertexBuffer[iVertex + 3].billboardType[0] = iBillboardType;
 
-		m_pVertexBuffer[iVertex + 0].billboardType[3] = (byte)kbClamp( m_Particles[i].m_Random * 255.0f, 0.0f, 255.0f );
+		m_pVertexBuffer[iVertex + 0].billboardType[1] = (byte)kbClamp( m_Particles[i].m_Randoms[0] * 255.0f, 0.0f, 255.0f );
+		m_pVertexBuffer[iVertex + 1].billboardType[1] = m_pVertexBuffer[iVertex + 0].billboardType[1];
+		m_pVertexBuffer[iVertex + 2].billboardType[1] = m_pVertexBuffer[iVertex + 0].billboardType[1];
+		m_pVertexBuffer[iVertex + 3].billboardType[1] = m_pVertexBuffer[iVertex + 0].billboardType[1];
+
+		m_pVertexBuffer[iVertex + 0].billboardType[2] = (byte)kbClamp( m_Particles[i].m_Randoms[1] * 255.0f, 0.0f, 255.0f );
+		m_pVertexBuffer[iVertex + 1].billboardType[2] = m_pVertexBuffer[iVertex + 0].billboardType[2];
+		m_pVertexBuffer[iVertex + 2].billboardType[2] = m_pVertexBuffer[iVertex + 0].billboardType[2];
+		m_pVertexBuffer[iVertex + 3].billboardType[2] = m_pVertexBuffer[iVertex + 0].billboardType[2];
+
+		m_pVertexBuffer[iVertex + 0].billboardType[3] = (byte)kbClamp( m_Particles[i].m_Randoms[2] * 255.0f, 0.0f, 255.0f );
 		m_pVertexBuffer[iVertex + 1].billboardType[3] = m_pVertexBuffer[iVertex + 0].billboardType[3];
 		m_pVertexBuffer[iVertex + 2].billboardType[3] = m_pVertexBuffer[iVertex + 0].billboardType[3];
 		m_pVertexBuffer[iVertex + 3].billboardType[3] = m_pVertexBuffer[iVertex + 0].billboardType[3];
@@ -232,7 +242,10 @@ void kbParticleComponent::Update_Internal( const float DeltaTime ) {
 		newParticle.m_EndSize.x = m_MinParticleEndSize.x + ( endSizeRand * ( m_MinParticleEndSize.x - m_MaxParticleEndSize.x ) );
 		newParticle.m_EndSize.y = m_MinParticleEndSize.y + ( endSizeRand * ( m_MinParticleEndSize.y - m_MaxParticleEndSize.y ) );
 
-		newParticle.m_Random = kbfrand();
+		newParticle.m_Randoms[0] = kbfrand();
+		newParticle.m_Randoms[1] = kbfrand();
+		newParticle.m_Randoms[2] = kbfrand();
+
 		if ( m_BurstCount > 0 ) {
 			m_BurstCount--;
 		} else {

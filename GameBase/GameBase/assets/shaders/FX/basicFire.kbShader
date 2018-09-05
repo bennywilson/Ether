@@ -21,7 +21,11 @@ kbShaderState {
 	srcblend Blend_SrcAlpha
 	dstBlend Blend_InvSrcAlpha
 	blendOp BlendOp_Add
-	colorWriteEnable colorWriteEnable_rgb
+
+	srcBlendAlpha Blend_One
+	dstBlendAlpha Blend_Zero
+	colorWriteEnable ColorWriteEnable_rgba
+
 	cullmode cullmode_none
 }
 
@@ -101,8 +105,7 @@ float4 pixelShader( pixelInput	input ) : SV_Target {
 
 	 float dist = 0.5f;
 	dist = 1.0f - saturate((dist - input.uv.y )/ dist);
-	color.w *= dist;
-	//if ( input.uv.y < 0.3f )
+	color.w *= dist * (lerpVal * 2);
 	//	color.w = 0.0f;
 	return color;
 }
