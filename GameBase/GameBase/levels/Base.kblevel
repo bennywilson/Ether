@@ -389,15 +389,35 @@ kbGameEntity 0 0 0 0 {
 		Color = 3.000000 1.500000 0.400000 1.000000
 		LightRadius =  36.000000
 	}
-}
-kbGameEntity 0 0 0 0 {
-	kbTransformComponent { 
-		Enabled = 0
+	kbParticleComponent { 
+		Enabled = 1
 		LifeTime =  -1.000000
-		Name = "Entity_31"
+		Name = ""
 		Orientation = 0.000000 0.000000 0.000000 1.000000
-		Position = -4.391226 34.186455 26.969919
+		Position = 0.000000 0.000000 0.000000
 		Scale = 1.000000 1.000000 1.000000
+		EndColor = 1.000000 1.000000 1.000000 0.000000
+		Gravity = 0.000000 0.000000 0.000000
+		LockVelocity = 0
+		MaxBurstCount = 0
+		MaxDuration =  5.000000
+		MaxEndSize = 0.250000 0.250000 0.250000
+		MaxEndVelocity = 0.000000 0.000000 0.000000
+		MaxSpawnRate =  5.000000
+		MaxStartSize = 0.250000 0.300000 0.250000
+		MaxStartVelocity = 2.000000 5.000000 2.000000
+		MinBurstCount = 0
+		MinDuration =  3.000000
+		MinEndSize = 0.200000 0.200000 0.200000
+		MinEndVelocity = 0.000000 0.000000 0.000000
+		MinSpawnRate =  2.000000
+		MinStartSize = 0.200000 0.250000 0.200000
+		MinStartVelocity = -2.000000 5.000000 -2.000000
+		ParticleBillboardType = FaceCamera
+		ParticleShader = .\assets\shaders\emberparticle.kbshader
+		ParticleTexture = .\assets\fx\orangeglow.dds
+		StartColor = 1.000000 1.000000 1.000000 1.000000
+		TotalDuration =  -1.000000
 	}
 }
 kbGameEntity 0 0 0 0 {
