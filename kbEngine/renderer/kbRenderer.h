@@ -144,7 +144,7 @@ public:
 
 	const std::map<const kbComponent *, kbRenderObject *> &		GetRenderObjectMap() const { return m_RenderObjectMap; }
 	const std::map<const kbLightComponent *, kbRenderLight *> &	GetRenderLightMap() const { return m_RenderLightMap; }
-	const std::map<const void *, kbRenderObject *> &			GetRenderParticleMap() const { return m_RenderParticleMap; }
+	const std::map<const void *, kbRenderObject *> &			GetRenderParticleMap( const int iBucket ) const { return m_RenderParticleMap[iBucket]; }
 
 	std::vector<kbRenderSubmesh> &								GetVisibleSubMeshes( const int renderPass, const int bucket ) { return m_VisibleRenderMeshes[renderPass][bucket]; }
  
@@ -183,7 +183,7 @@ private:
 
 	std::map<const kbComponent *, kbRenderObject *>				m_RenderObjectMap;
 	std::map<const kbLightComponent *, kbRenderLight *>			m_RenderLightMap;
-	std::map<const void *, kbRenderObject *>					m_RenderParticleMap;
+	std::map<const void *, kbRenderObject *>					m_RenderParticleMap[NUM_RENDER_PASS_BUCKETS];
 
 	std::vector<kbRenderSubmesh>								m_VisibleRenderMeshes[NUM_RENDER_PASSES][NUM_RENDER_PASS_BUCKETS];
 };
@@ -255,9 +255,9 @@ public:
 	void										UpdateFog( const kbColor & color, const float startDistance, const float endDistance );
 
 	// Particles
-	void										AddParticle( const void *const pParentPtr, const kbModel *const pModel, const kbVec3 & pos, kbQuat & orientation );
-	void										UpdateParticle( const void *const pParentPtr, const kbModel *const pModel, const kbVec3 & pos, kbQuat & orientation );
-	void										RemoveParticle( const void *const pParentPtr );
+	void										AddParticle( const void *const pParentPtr, const kbModel *const pModel, const kbVec3 & pos, kbQuat & orientation, const int renderPass = 0 );
+	void										UpdateParticle( const void *const pParentPtr, const kbModel *const pModel, const kbVec3 & pos, kbQuat & orientation, const int renderPass = 0 );
+	void										RemoveParticle( const void *const pParentPtr, const int renderPassBucket );
 
 	// Light Shafts
 	void										AddLightShafts( const kbLightShaftsComponent *const pComponent, const kbVec3 & pos, const kbQuat & orientation );

@@ -396,7 +396,7 @@ kbGameEntity 0 0 0 0 {
 		Orientation = 0.000000 0.000000 0.000000 1.000000
 		Position = 0.000000 0.000000 0.000000
 		Scale = 1.000000 1.000000 1.000000
-		EndColor = 1.000000 1.000000 1.000000 0.000000
+		EndColor = 0.800000 0.200000 1.000000 0.000000
 		Gravity = 0.000000 0.000000 0.000000
 		LockVelocity = 0
 		MaxBurstCount = 0
@@ -417,7 +417,7 @@ kbGameEntity 0 0 0 0 {
 		ParticleShader = .\assets\shaders\emberparticle.kbshader
 		ParticleTexture = .\assets\fx\orangeglow.dds
 		RenderPassBucket = 1
-		StartColor = 1.000000 1.000000 1.000000 1.000000
+		StartColor = 0.800000 0.200000 0.094000 1.000000
 		TotalDuration =  -1.000000
 	}
 }

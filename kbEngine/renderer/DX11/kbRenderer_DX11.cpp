@@ -1466,10 +1466,6 @@ void kbRenderer_DX11::PreRenderCullAndSort() {
 					pShader = renderObj.m_OverrideShaderList[i];
 				}
 
-				if ( renderObj.m_RenderPassBucket != 0 ) {
-static int breakhere =0;
-breakhere++;
-}
 				if ( pShader == nullptr || pShader->IsBlendEnabled() == false ) {
 					m_pCurrentRenderWindow->GetVisibleSubMeshes( renderObj.m_RenderPass, renderObj.m_RenderPassBucket ).push_back( kbRenderSubmesh( &renderObj, i, renderObj.m_RenderPass ) );
 				} else {
@@ -1505,13 +1501,16 @@ void kbRenderer_DX11::RenderTranslucency() {
 										kbRenderState::CompareNotEqual,
 										1);
 
-	for ( auto iter = m_pCurrentRenderWindow->GetRenderParticleMap().begin(); iter != m_pCurrentRenderWindow->GetRenderParticleMap().end(); iter++ ) {
-
-		kbRenderSubmesh newMesh( iter->second, 0, RP_Translucent );
-		RenderMesh( &newMesh, false );
-	}
-
 	for ( int iBucket = 0; iBucket < NUM_RENDER_PASS_BUCKETS; iBucket++ ) {
+
+		const std::map<const void *, kbRenderObject *> & curMap = m_pCurrentRenderWindow->GetRenderParticleMap( iBucket );
+		for ( auto iter = curMap.begin(); iter != curMap.end(); iter++ ) {
+
+			kbRenderSubmesh newMesh( iter->second, 0, RP_Translucent );
+			RenderMesh( &newMesh, false );
+		}
+
+
 		std::vector<kbRenderSubmesh> & visibleSubmeshList = m_pCurrentRenderWindow->GetVisibleSubMeshes( RP_Translucent, iBucket );
 		for ( int i = 0; i < visibleSubmeshList.size(); i++ ) {
 			const kbRenderSubmesh & submesh = visibleSubmeshList[i];

@@ -40,6 +40,7 @@ void kbParticleComponent::Constructor() {
 	m_BurstCount = 0;
 	m_ParticleBillboardType = BT_FaceCamera;
 	m_Gravity.Set( 0.0f, 0.0f, 0.0f );
+	m_RenderPassBucket = 0;
 	m_bLockVelocity = false;
 
 	m_LeftOverTime = 0.0f;
@@ -75,7 +76,7 @@ void kbParticleComponent::StopParticleSystem() {
 		kbError( "Shutting down particle component even though rendering is not synced" );
 	}
 
-	g_pRenderer->RemoveParticle( this );
+	g_pRenderer->RemoveParticle( this, m_RenderPassBucket );
 	for ( int i = 0; i < NumParticleBuffers; i++ ) {
 		if ( m_ParticleBuffer[i].IsVertexBufferMapped() ) {
 			m_ParticleBuffer[i].UnmapVertexBuffer( 0 );
@@ -310,14 +311,14 @@ void kbParticleComponent::RenderSync() {
 	if ( m_CurrentParticleBuffer == 255 ) {
 		m_CurrentParticleBuffer = 0;
 	} else {
-		g_pRenderer->RemoveParticle( this );
+		g_pRenderer->RemoveParticle( this, m_RenderPassBucket );
 
 		m_ParticleBuffer[m_CurrentParticleBuffer].UnmapVertexBuffer( m_NumIndicesInCurrentBuffer );
 		m_ParticleBuffer[m_CurrentParticleBuffer].UnmapIndexBuffer();		// todo : don't need to map/remap index buffer
 	}
 
 	m_ParticleBuffer[m_CurrentParticleBuffer].SwapTexture( 0, m_pParticleTexture, 0 );
-	g_pRenderer->AddParticle( this, &m_ParticleBuffer[m_CurrentParticleBuffer], GetPosition(), kbQuat( 0.0f, 0.0f, 0.0f, 1.0f ) );
+	g_pRenderer->AddParticle( this, &m_ParticleBuffer[m_CurrentParticleBuffer], GetPosition(), kbQuat( 0.0f, 0.0f, 0.0f, 1.0f ), m_RenderPassBucket );
 
 	m_CurrentParticleBuffer++;
 	if ( m_CurrentParticleBuffer >= NumParticleBuffers ) {

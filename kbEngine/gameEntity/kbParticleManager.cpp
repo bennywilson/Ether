@@ -131,7 +131,7 @@ void kbParticleManager::ReturnParticleComponent( kbParticleComponent *const pPar
 		return;
 	}
 
-	g_pRenderer->RemoveParticle( pParticle );
+	g_pRenderer->RemoveParticle( pParticle, 0 );
 	pParticle->GetOwner()->RemoveComponent( pParticle );
 	const kbParticleComponent *const pParticleTemplate = pParticle->m_ParticleTemplate;
 	if ( pParticleTemplate == nullptr || pParticle->m_bIsPooled == false ) {
@@ -158,7 +158,7 @@ void kbParticleManager::UpdateAtlas( CustomAtlasParticles_t & atlasInfo ) {
 	kbErrorCheck( g_pRenderer->IsRenderingSynced(), "kbParticleManager::UpdateAtlas() - Rendering isn't sync'd" );
 
 	if ( atlasInfo.m_iCurParticleModel >= 0 ) {
-		g_pRenderer->RemoveParticle( &atlasInfo );
+		g_pRenderer->RemoveParticle( &atlasInfo, 0 );
 	}
 
 	for ( uint iModel = 0; iModel < NumCustomParticleBuffers; iModel++ ) {
@@ -206,7 +206,7 @@ void kbParticleManager::RenderSync() {
 
 		kbModel & finishedModel = (curAtlas.m_iCurParticleModel >= 0 ) ? ( curAtlas.m_RenderModel[curAtlas.m_iCurParticleModel] ) : ( curAtlas.m_RenderModel[0] );
 		if ( curAtlas.m_iCurParticleModel >= 0 ) {
-			g_pRenderer->RemoveParticle( &curAtlas );
+			g_pRenderer->RemoveParticle( &curAtlas, 0 );
 			finishedModel.UnmapVertexBuffer( curAtlas.m_NumIndices );
 			finishedModel.UnmapIndexBuffer();		// todo : don't need to map/remap index buffer
 		} else {

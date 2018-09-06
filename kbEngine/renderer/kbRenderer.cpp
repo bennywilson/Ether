@@ -442,7 +442,7 @@ void kbRenderer::HackClearLight( const kbLightComponent *const pLightComponent )
 /**
  *	kbRenderer::AddParticle
  */
-void kbRenderer::AddParticle( const void *const pParticleComponent, const kbModel *const pModel, const kbVec3 & pos, kbQuat & orientation ) {
+void kbRenderer::AddParticle( const void *const pParticleComponent, const kbModel *const pModel, const kbVec3 & pos, kbQuat & orientation, const int renderBucket ) {
 	kbRenderObject NewParticle;
 	NewParticle.m_pComponent = static_cast<const kbComponent*>( pParticleComponent );
 	NewParticle.m_pModel = pModel;
@@ -451,6 +451,7 @@ void kbRenderer::AddParticle( const void *const pParticleComponent, const kbMode
 	NewParticle.m_Orientation = orientation;
 	NewParticle.m_bIsFirstAdd = true;
 	NewParticle.m_bIsRemove = false;
+	NewParticle.m_RenderPassBucket = renderBucket;
 
 	m_ParticleList_GameThread.push_back( NewParticle );
 }
@@ -458,7 +459,7 @@ void kbRenderer::AddParticle( const void *const pParticleComponent, const kbMode
 /**
  *	kbRenderer::UpdateParticle
  */
-void kbRenderer::UpdateParticle( const void *const pParticleComponent, const kbModel *const pModel, const kbVec3 & pos, kbQuat & orientation ) {
+void kbRenderer::UpdateParticle( const void *const pParticleComponent, const kbModel *const pModel, const kbVec3 & pos, kbQuat & orientation, const int renderBucket ) {
 
 	kbRenderObject NewParticle;
 	NewParticle.m_pComponent = static_cast<const kbComponent*>( pParticleComponent );
@@ -467,6 +468,7 @@ void kbRenderer::UpdateParticle( const void *const pParticleComponent, const kbM
 	NewParticle.m_Position = pos;
 	NewParticle.m_Orientation = orientation;
 	NewParticle.m_bIsFirstAdd = false;
+	NewParticle.m_RenderPassBucket = renderBucket;
 
 	m_ParticleList_GameThread.push_back( NewParticle );
 }
@@ -474,11 +476,12 @@ void kbRenderer::UpdateParticle( const void *const pParticleComponent, const kbM
 /**
  *	kbRenderer::RemoveParticle
  */
-void kbRenderer::RemoveParticle( const void *const pParticleComponent ) {
+void kbRenderer::RemoveParticle( const void *const pParticleComponent, const int renderPassBucket ) {
 	kbRenderObject NewParticle;
 	NewParticle.m_pComponent = static_cast<const kbComponent*>( pParticleComponent );
 	NewParticle.m_bIsFirstAdd = false;
 	NewParticle.m_bIsRemove = true;
+	NewParticle.m_RenderPassBucket = renderPassBucket;
 	m_ParticleList_GameThread.push_back( NewParticle );
 }
 
@@ -679,26 +682,28 @@ void kbRenderer::RenderSync() {
 	// Particles
 	for ( int i = 0; i < m_ParticleList_GameThread.size(); i++ ) {
 		const void *const pComponent = m_ParticleList_GameThread[i].m_pComponent;
+		const int renderPassBucket = m_ParticleList_GameThread[i].m_RenderPassBucket;
+		std::map<const void *, kbRenderObject *> & particleMap = m_pCurrentRenderWindow->m_RenderParticleMap[renderPassBucket];
 
 		if ( m_ParticleList_GameThread[i].m_bIsRemove ) {
-			kbRenderObject * renderParticle = m_pCurrentRenderWindow->m_RenderParticleMap[pComponent];
-			m_pCurrentRenderWindow->m_RenderParticleMap.erase( pComponent );
+			kbRenderObject * renderParticle = particleMap[pComponent];
+			particleMap.erase( pComponent );
 			delete renderParticle;
 		} else {
 			kbRenderObject * renderParticle = nullptr;
 
 			if ( m_ParticleList_GameThread[i].m_bIsFirstAdd ) {
-				renderParticle = m_pCurrentRenderWindow->m_RenderParticleMap[pComponent];
+				renderParticle = particleMap[pComponent];
 
 				if ( renderParticle != nullptr ) {
 					kbError( "kbRenderer::AddParticle - Adding a particle that already exists" );
 				} else {
 					renderParticle = new kbRenderObject;
-					m_pCurrentRenderWindow->m_RenderParticleMap[pComponent] = renderParticle;
+					particleMap[pComponent] = renderParticle;
 				}
 			} else {
-				std::map< const void *, kbRenderObject * >::iterator it = m_pCurrentRenderWindow->m_RenderParticleMap.find( pComponent );
-				if ( it == m_pCurrentRenderWindow->m_RenderParticleMap.end() || it->second == nullptr ) {
+				std::map< const void *, kbRenderObject * >::iterator it = particleMap.find( pComponent );
+				if ( it == particleMap.end() || it->second == nullptr ) {
 					kbError( "kbRenderer::UpdateRenderObject - Error, Updating a RenderObject that doesn't exist" );
 				}
 

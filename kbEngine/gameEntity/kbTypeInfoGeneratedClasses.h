@@ -186,6 +186,7 @@ GenerateEnum(
 
 GenerateClass(
 	kbParticleComponent,
+	AddField( "RenderPassBucket", KBTYPEINFO_INT, kbParticleComponent, m_RenderPassBucket, false, "" )
 	AddField( "ParticleTexture", KBTYPEINFO_TEXTURE, kbParticleComponent, m_pParticleTexture, false, "" )
 	AddField( "ParticleShader", KBTYPEINFO_SHADER, kbParticleComponent, m_pParticleShader, false, "" )
 	AddField( "TotalDuration", KBTYPEINFO_FLOAT, kbParticleComponent, m_TotalDuration, false, "" )

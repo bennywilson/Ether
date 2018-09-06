@@ -50,7 +50,7 @@ float4 bloomGatherPixelMain( pixelInput	input ) : SV_TARGET {
 	if ( inSceneColor.w <= 0.0f ) {
 	   return 0.0f;
 	}
-	return inSceneColor * inSceneColor.w;
+	return inSceneColor * inSceneColor.w * 2.0f;
 }
 
 /**
