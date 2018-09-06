@@ -14,8 +14,6 @@
 class kbShader;
 class kbModel;
 
-const int NUM_RENDER_PASS_BUCKETS = 8;
-
 /**
  *	kbRenderTexture
  */
@@ -91,19 +89,22 @@ class kbRenderSubmesh {
 
 //-------------------------------------------------------------------------------------------------------------------------------------------------------------
 public:
-												kbRenderSubmesh( const kbRenderObject *const pInMesh, const int inMeshIdx, const ERenderPass renderPass ) :
+												kbRenderSubmesh( const kbRenderObject *const pInMesh, const int inMeshIdx, const ERenderPass renderPass, const float distFromCamera ) :
 													m_pRenderObject( pInMesh ),
 													m_MeshIdx( inMeshIdx ),
-													m_RenderPass( renderPass ) { }
+													m_RenderPass( renderPass ),
+													m_DistFromCamera( distFromCamera ) { }
 
 	const kbRenderObject *						GetRenderObject() const { return m_pRenderObject; }
 	int											GetMeshIdx() const { return m_MeshIdx; }
 	ERenderPass									GetRenderPass() const { return m_RenderPass; }
 	const kbShader *							GetShader() const;
+	float										GetDistFromCamera() const { return m_DistFromCamera; }
 
 private:
 	const kbRenderObject *						m_pRenderObject;
 	int											m_MeshIdx;
+	float										m_DistFromCamera;
 	ERenderPass									m_RenderPass;
 };
 
@@ -144,9 +145,9 @@ public:
 
 	const std::map<const kbComponent *, kbRenderObject *> &		GetRenderObjectMap() const { return m_RenderObjectMap; }
 	const std::map<const kbLightComponent *, kbRenderLight *> &	GetRenderLightMap() const { return m_RenderLightMap; }
-	const std::map<const void *, kbRenderObject *> &			GetRenderParticleMap( const int iBucket ) const { return m_RenderParticleMap[iBucket]; }
+	const std::map<const void *, kbRenderObject *> &			GetRenderParticleMap() const { return m_RenderParticleMap; }
 
-	std::vector<kbRenderSubmesh> &								GetVisibleSubMeshes( const int renderPass, const int bucket ) { return m_VisibleRenderMeshes[renderPass][bucket]; }
+	std::vector<kbRenderSubmesh> &								GetVisibleSubMeshes( const int renderPass ) { return m_VisibleRenderMeshes[renderPass]; }
  
 	void														HackSetViewMatrix( const kbMat4 & inViewMat ) { m_ViewMatrix = inViewMat; }
 	void														HackSetViewProjectionMatrix( const kbMat4 & inViewProjMat ) { m_ViewProjectionMatrix = inViewProjMat; }
@@ -183,9 +184,9 @@ private:
 
 	std::map<const kbComponent *, kbRenderObject *>				m_RenderObjectMap;
 	std::map<const kbLightComponent *, kbRenderLight *>			m_RenderLightMap;
-	std::map<const void *, kbRenderObject *>					m_RenderParticleMap[NUM_RENDER_PASS_BUCKETS];
+	std::map<const void *, kbRenderObject *>					m_RenderParticleMap;
 
-	std::vector<kbRenderSubmesh>								m_VisibleRenderMeshes[NUM_RENDER_PASSES][NUM_RENDER_PASS_BUCKETS];
+	std::vector<kbRenderSubmesh>								m_VisibleRenderMeshes[NUM_RENDER_PASSES];
 };
 
 /**

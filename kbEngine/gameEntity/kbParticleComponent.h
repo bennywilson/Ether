@@ -74,7 +74,7 @@ private:
 	int															m_MinBurstCount;
 	int															m_MaxBurstCount;
 	EBillboardType												m_ParticleBillboardType;
-	int															m_RenderPassBucket;
+	float														m_TranslucencySortBias;
 	bool														m_bLockVelocity;
 
 	// Non-editable

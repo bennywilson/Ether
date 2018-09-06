@@ -30,7 +30,7 @@ public:
 protected:
 
 	enum ERenderPass							m_RenderPass;
-	int											m_RenderPassBucket;
+	float										m_TranslucencySortBias;
 
 	kbShaderParamOverrides_t					m_ShaderParams;
 

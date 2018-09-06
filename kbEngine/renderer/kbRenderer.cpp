@@ -656,8 +656,7 @@ void kbRenderer::RenderSync() {
 	// Particles
 	for ( int i = 0; i < m_ParticleList_GameThread.size(); i++ ) {
 		const void *const pComponent = m_ParticleList_GameThread[i].m_pComponent;
-		const int renderPassBucket = m_ParticleList_GameThread[i].m_RenderPassBucket;
-		std::map<const void *, kbRenderObject *> & particleMap = m_pCurrentRenderWindow->m_RenderParticleMap[renderPassBucket];
+		std::map<const void *, kbRenderObject *> & particleMap = m_pCurrentRenderWindow->m_RenderParticleMap;
 
 		if ( m_ParticleList_GameThread[i].m_bIsRemove ) {
 			kbRenderObject * renderParticle = particleMap[pComponent];

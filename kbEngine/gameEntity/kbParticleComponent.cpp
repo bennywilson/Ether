@@ -40,7 +40,7 @@ void kbParticleComponent::Constructor() {
 	m_BurstCount = 0;
 	m_ParticleBillboardType = BT_FaceCamera;
 	m_Gravity.Set( 0.0f, 0.0f, 0.0f );
-	m_RenderPassBucket = 0;
+	m_TranslucencySortBias = 0.0f;
 	m_bLockVelocity = false;
 
 	m_LeftOverTime = 0.0f;
@@ -315,7 +315,7 @@ void kbParticleComponent::RenderSync() {
 	m_RenderObject.m_RenderPass = RP_Translucent;
 	m_RenderObject.m_Position = GetPosition();
 	m_RenderObject.m_Orientation = kbQuat( 0.0f, 0.0f, 0.0f, 1.0f );
-	m_RenderObject.m_RenderPassBucket = this->m_RenderPassBucket;;
+	m_RenderObject.m_TranslucencySortBias = m_TranslucencySortBias;
 
 	if ( m_CurrentParticleBuffer == 255 ) {
 		m_CurrentParticleBuffer = 0;

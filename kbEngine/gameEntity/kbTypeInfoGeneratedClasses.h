@@ -80,7 +80,7 @@ GenerateClass(
 GenerateClass(
 	kbModelComponent,
 	AddField( "RenderPass", KBTYPEINFO_ENUM, kbModelComponent, m_RenderPass, false, "ERenderPass" )
-	AddField( "RenderPassBucket", KBTYPEINFO_INT, kbModelComponent, m_RenderPassBucket, false, "" )
+	AddField( "TranslucencySortBias", KBTYPEINFO_FLOAT, kbModelComponent, m_TranslucencySortBias, false, "" )
 	AddField( "CastsShadow", KBTYPEINFO_BOOL, kbModelComponent, m_bCastsShadow, false, "" )
 )
 
@@ -186,7 +186,7 @@ GenerateEnum(
 
 GenerateClass(
 	kbParticleComponent,
-	AddField( "RenderPassBucket", KBTYPEINFO_INT, kbParticleComponent, m_RenderPassBucket, false, "" )
+	AddField( "TranslucencySortBias", KBTYPEINFO_FLOAT, kbParticleComponent, m_TranslucencySortBias, false, "" )
 	AddField( "ParticleTexture", KBTYPEINFO_TEXTURE, kbParticleComponent, m_pParticleTexture, false, "" )
 	AddField( "ParticleShader", KBTYPEINFO_SHADER, kbParticleComponent, m_pParticleShader, false, "" )
 	AddField( "TotalDuration", KBTYPEINFO_FLOAT, kbParticleComponent, m_TotalDuration, false, "" )

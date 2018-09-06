@@ -20,7 +20,7 @@ KB_DEFINE_COMPONENT(kbModelComponent)
  */
 void kbModelComponent::Constructor() {
 	m_RenderPass = RP_Lighting;
-	m_RenderPassBucket = 0;
+	m_TranslucencySortBias = 0.0f;
 	m_bCastsShadow = false;
 }
 

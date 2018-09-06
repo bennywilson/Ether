@@ -12,7 +12,7 @@ kbGameEntity 0 0 0 0 {
 		LifeTime =  -1.000000
 		CastsShadow = 0
 		RenderPass = LightingPass
-		RenderPassBucket = 0
+		TranslucencySortBias =  -1.000000
 		Dimensions = 513
 		Grass = 1
 			kbGrass { 
@@ -112,7 +112,7 @@ kbGameEntity 0 0 0 0 {
 		LifeTime =  -1.000000
 		CastsShadow = 0
 		RenderPass = Post-LightingPass
-		RenderPassBucket = 0
+		TranslucencySortBias =  -1.000000
 		Model = .\assets\models\skydomes\skydomes.ms3d
 		ShaderOverride = 1
 			.\assets\shaders\skybox.kbshader
@@ -133,7 +133,7 @@ kbGameEntity 0 0 0 0 {
 		LifeTime =  -1.000000
 		CastsShadow = 1
 		RenderPass = LightingPass
-		RenderPassBucket = 0
+		TranslucencySortBias =  -1.000000
 		Model = .\assets\models\characters\cartel_warrior\cartel_warrior.ms3d
 		ShaderOverride = 0
 			
@@ -206,7 +206,7 @@ kbGameEntity 0 0 0 0 {
 		LifeTime =  -1.000000
 		CastsShadow = 0
 		RenderPass = LightingPass
-		RenderPassBucket = 0
+		TranslucencySortBias =  -1.000000
 		Model = .\assets\models\vehicles\jet.ms3d
 		ShaderOverride = 1
 			..\..\kbengine\assets\shaders\basicshader.kbshader
@@ -227,7 +227,7 @@ kbGameEntity 0 0 0 0 {
 		LifeTime =  -1.000000
 		CastsShadow = 0
 		RenderPass = LightingPass
-		RenderPassBucket = 0
+		TranslucencySortBias =  -1.000000
 		Model = .\assets\models\architecture\bricks.ms3d
 		ShaderOverride = 1
 			.\assets\shaders\environment_hole.kbshader
@@ -280,7 +280,7 @@ kbGameEntity 0 0 0 0 {
 		LifeTime =  -1.000000
 		CastsShadow = 0
 		RenderPass = LightingPass
-		RenderPassBucket = 0
+		TranslucencySortBias =  -1.000000
 		Model = ..\..\kbengine\assets\models\unitsphere.ms3d
 		ShaderOverride = 1
 			..\..\kbengine\assets\shaders\basicshader.kbshader
@@ -293,7 +293,7 @@ kbGameEntity 0 0 0 0 {
 		LifeTime =  -1.000000
 		Name = "Fire"
 		Orientation = 0.000000 0.707000 0.000000 0.707000
-		Position = -27.714203 11.605455 25.002096
+		Position = -27.714203 11.605456 25.002096
 		Scale = 0.250000 0.250000 0.250000
 	}
 	kbStaticModelComponent { 
@@ -301,7 +301,7 @@ kbGameEntity 0 0 0 0 {
 		LifeTime =  -1.000000
 		CastsShadow = 0
 		RenderPass = LightingPass
-		RenderPassBucket = 3
+		TranslucencySortBias =  -5.000000
 		Model = .\assets\models\fx\firemodel.ms3d
 		ShaderOverride = 1
 			.\assets\shaders\fx\basicfire.kbshader
@@ -416,9 +416,9 @@ kbGameEntity 0 0 0 0 {
 		ParticleBillboardType = FaceCamera
 		ParticleShader = .\assets\shaders\fx\emberparticle.kbshader
 		ParticleTexture = .\assets\fx\orangeglow.dds
-		RenderPassBucket = 1
 		StartColor = 1.000000 1.000000 1.000000 1.000000
 		TotalDuration =  -1.000000
+		TranslucencySortBias =  0.000000
 	}
 }
 kbGameEntity 0 0 0 0 {
@@ -435,7 +435,7 @@ kbGameEntity 0 0 0 0 {
 		LifeTime =  -1.000000
 		CastsShadow = 0
 		RenderPass = LightingPass
-		RenderPassBucket = 0
+		TranslucencySortBias =  2.000000
 		Model = .\assets\models\fx\firemodel.ms3d
 		ShaderOverride = 1
 			.\assets\shaders\fx\basicsmoke.kbshader
@@ -531,7 +531,7 @@ kbGameEntity 0 0 0 0 {
 		LifeTime =  -1.000000
 		CastsShadow = 0
 		RenderPass = LightingPass
-		RenderPassBucket = 3
+		TranslucencySortBias =  -5.000000
 		Model = ..\..\kbengine\assets\models\unitquad.ms3d
 		ShaderOverride = 1
 			.\assets\shaders\fx\basicfire.kbshader
@@ -627,7 +627,7 @@ kbGameEntity 0 0 0 0 {
 		LifeTime =  -1.000000
 		CastsShadow = 0
 		RenderPass = LightingPass
-		RenderPassBucket = 0
+		TranslucencySortBias =  5.000000
 		Model = ..\..\kbengine\assets\models\unitquad.ms3d
 		ShaderOverride = 1
 			.\assets\shaders\fx\basicsmoke.kbshader
@@ -745,8 +745,8 @@ kbGameEntity 0 0 0 0 {
 		ParticleBillboardType = FaceCamera
 		ParticleShader = .\assets\shaders\fx\emberparticle.kbshader
 		ParticleTexture = .\assets\fx\orangeglow.dds
-		RenderPassBucket = 1
 		StartColor = 1.000000 1.000000 1.000000 1.000000
 		TotalDuration =  -1.000000
+		TranslucencySortBias =  0.000000
 	}
 }

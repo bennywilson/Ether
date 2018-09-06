@@ -1266,21 +1266,17 @@ void kbRenderer_DX11::RenderScene() {
 
 			m_RenderState.SetBlendState();
 
-			for ( int iBucket = 0; iBucket < NUM_RENDER_PASS_BUCKETS; iBucket++ ) {
-				std::vector<kbRenderSubmesh> & FirstPersonPassVisibleList = m_pCurrentRenderWindow->GetVisibleSubMeshes( RP_FirstPerson, iBucket );
-				for ( int i = 0; i < FirstPersonPassVisibleList.size(); i++ ) {
-					RenderMesh( &FirstPersonPassVisibleList[i], false );
-				}
+			std::vector<kbRenderSubmesh> & FirstPersonPassVisibleList = m_pCurrentRenderWindow->GetVisibleSubMeshes( RP_FirstPerson );
+			for ( int i = 0; i < FirstPersonPassVisibleList.size(); i++ ) {
+				RenderMesh( &FirstPersonPassVisibleList[i], false );
 			}
 
 			// Render models that need to be lit
 			m_RenderState.SetDepthStencilState();
 
-			for ( int iBucket = 0; iBucket < NUM_RENDER_PASS_BUCKETS; iBucket++ ) {
-				std::vector<kbRenderSubmesh> & LightingPassVisibleList = m_pCurrentRenderWindow->GetVisibleSubMeshes( RP_Lighting, iBucket );
-				for ( int i = 0; i < LightingPassVisibleList.size(); i++ ) {
-					RenderMesh( &LightingPassVisibleList[i], false );
-				}
+			std::vector<kbRenderSubmesh> & LightingPassVisibleList = m_pCurrentRenderWindow->GetVisibleSubMeshes( RP_Lighting );
+			for ( int i = 0; i < LightingPassVisibleList.size(); i++ ) {
+				RenderMesh( &LightingPassVisibleList[i], false );
 			}
 
 			m_RenderState.SetDepthStencilState( false, kbRenderState::DepthWriteMaskZero, kbRenderState::CompareLess, false );
@@ -1301,11 +1297,9 @@ void kbRenderer_DX11::RenderScene() {
 			}
 
 			// Post-Lighting Render Pass
-			for ( int iBucket = 0; iBucket < NUM_RENDER_PASS_BUCKETS; iBucket++ ) {
-				std::vector<kbRenderSubmesh> & PostLightingVisibleList = m_pCurrentRenderWindow->GetVisibleSubMeshes( RP_PostLighting, iBucket );
-				for ( int i = 0; i < PostLightingVisibleList.size(); i++ ) {
-					RenderMesh( &PostLightingVisibleList[i], false  );
-				}
+			std::vector<kbRenderSubmesh> & PostLightingVisibleList = m_pCurrentRenderWindow->GetVisibleSubMeshes( RP_PostLighting );
+			for ( int i = 0; i < PostLightingVisibleList.size(); i++ ) {
+				RenderMesh( &PostLightingVisibleList[i], false  );
 			}
 
 			PLACE_GPU_TIME_STAMP( "Unlit" );
@@ -1323,11 +1317,9 @@ void kbRenderer_DX11::RenderScene() {
 		if ( m_ViewMode == ViewMode_Shaded ) {
 			// In World UI Pass
 			m_RenderState.SetDepthStencilState( false, kbRenderState::DepthWriteMaskZero, kbRenderState::CompareLess, false );
-			for ( int iBucket = 0; iBucket < NUM_RENDER_PASS_BUCKETS; iBucket++ ) {
-				std::vector<kbRenderSubmesh> & InWorldUIVisibleList = m_pCurrentRenderWindow->GetVisibleSubMeshes( RP_InWorldUI, iBucket );
-				for ( int i = 0; i < InWorldUIVisibleList.size(); i++ ) {
-					RenderMesh( &InWorldUIVisibleList[i], false );
-				}
+			std::vector<kbRenderSubmesh> & InWorldUIVisibleList = m_pCurrentRenderWindow->GetVisibleSubMeshes( RP_InWorldUI );
+			for ( int i = 0; i < InWorldUIVisibleList.size(); i++ ) {
+				RenderMesh( &InWorldUIVisibleList[i], false );
 			}
 
 			m_RenderState.SetBlendState();
@@ -1432,9 +1424,7 @@ void kbRenderer_DX11::RenderScene() {
 void kbRenderer_DX11::PreRenderCullAndSort() {
 
 	for ( int i = 0; i < NUM_RENDER_PASSES; i++ ) {
-		for ( int iBucket = 0; iBucket < NUM_RENDER_PASS_BUCKETS; iBucket++ ) {
-			m_pCurrentRenderWindow->GetVisibleSubMeshes( i, iBucket ).clear();
-		}
+		m_pCurrentRenderWindow->GetVisibleSubMeshes( i ).clear();
 	}
 
 	for ( auto iter = m_pCurrentRenderWindow->GetRenderObjectMap().begin(); iter != m_pCurrentRenderWindow->GetRenderObjectMap().end(); iter++ ) {
@@ -1443,9 +1433,9 @@ void kbRenderer_DX11::PreRenderCullAndSort() {
 
 		kbRenderObject & renderObj = *iter->second;
 
+		const float distToCamSqr = ( renderObj.m_Position - m_pCurrentRenderWindow->GetCameraPosition() ).LengthSqr();
 		if ( renderObj.m_CullDistance > 0 ) {
 			const float cullDistSqr = renderObj.m_CullDistance * renderObj.m_CullDistance;
-			const float distToCamSqr = ( renderObj.m_Position - m_pCurrentRenderWindow->GetCameraPosition() ).LengthSqr();
 	
 			if ( distToCamSqr >= cullDistSqr ) {
 				bIsVisible = false;
@@ -1467,14 +1457,42 @@ void kbRenderer_DX11::PreRenderCullAndSort() {
 				}
 
 				if ( pShader == nullptr || pShader->IsBlendEnabled() == false ) {
-					m_pCurrentRenderWindow->GetVisibleSubMeshes( renderObj.m_RenderPass, renderObj.m_RenderPassBucket ).push_back( kbRenderSubmesh( &renderObj, i, renderObj.m_RenderPass ) );
+					m_pCurrentRenderWindow->GetVisibleSubMeshes( renderObj.m_RenderPass ).push_back( kbRenderSubmesh( &renderObj, i, renderObj.m_RenderPass, sqrt( distToCamSqr ) ) );
 				} else {
-					m_pCurrentRenderWindow->GetVisibleSubMeshes( RP_Translucent, renderObj.m_RenderPassBucket ).push_back( kbRenderSubmesh( &renderObj, i, RP_Translucent ) );
+					m_pCurrentRenderWindow->GetVisibleSubMeshes( RP_Translucent ).push_back( kbRenderSubmesh( &renderObj, i, RP_Translucent, sqrt( distToCamSqr ) ) );
 		
 				}
 			}
 		}
 	}
+
+	const std::map<const void *, kbRenderObject *> & curMap = m_pCurrentRenderWindow->GetRenderParticleMap();
+	for ( auto iter = curMap.begin(); iter != curMap.end(); iter++ ) {
+
+		kbRenderObject & renderObj = *iter->second;
+		float distToCamSqr = distToCamSqr = ( renderObj.m_Position - m_pCurrentRenderWindow->GetCameraPosition() ).LengthSqr();
+		if ( renderObj.m_CullDistance > 0 ) {
+			const float cullDistSqr = renderObj.m_CullDistance * renderObj.m_CullDistance;
+			
+	
+			if ( distToCamSqr >= cullDistSqr ) {
+				continue;
+			}
+		}
+
+		float distToCam = sqrt( distToCamSqr );
+		kbRenderSubmesh newMesh( iter->second, 0, RP_Translucent, distToCam );
+		m_pCurrentRenderWindow->GetVisibleSubMeshes( RP_Translucent ).push_back( newMesh );
+	}
+
+	// Sort translucent meshes by depth
+	std::vector<kbRenderSubmesh> & visibleTranslucentMeshes = m_pCurrentRenderWindow->GetVisibleSubMeshes( RP_Translucent );
+	std::sort( visibleTranslucentMeshes.begin(), visibleTranslucentMeshes.end(), []( kbRenderSubmesh & op1, kbRenderSubmesh & op2 ) {
+		const float op1Dist = op1.GetDistFromCamera() + op1.GetRenderObject()->m_TranslucencySortBias;
+		const float op2Dist = op2.GetDistFromCamera() + op2.GetRenderObject()->m_TranslucencySortBias;
+
+		return op1Dist > op2Dist;
+	});
 }
 
 /**
@@ -1501,58 +1519,48 @@ void kbRenderer_DX11::RenderTranslucency() {
 										kbRenderState::CompareNotEqual,
 										1);
 
-	for ( int iBucket = 0; iBucket < NUM_RENDER_PASS_BUCKETS; iBucket++ ) {
+	std::vector<kbRenderSubmesh> & visibleSubmeshList = m_pCurrentRenderWindow->GetVisibleSubMeshes( RP_Translucent );
+	for ( int i = 0; i < visibleSubmeshList.size(); i++ ) {
+		const kbRenderSubmesh & submesh = visibleSubmeshList[i];
+		const kbModel *const pModel = submesh.GetRenderObject()->m_pModel;
 
-		const std::map<const void *, kbRenderObject *> & curMap = m_pCurrentRenderWindow->GetRenderParticleMap( iBucket );
-		for ( auto iter = curMap.begin(); iter != curMap.end(); iter++ ) {
-
-			kbRenderSubmesh newMesh( iter->second, 0, RP_Translucent );
-			RenderMesh( &newMesh, false );
+		if ( submesh.GetRenderObject()->m_RenderPass == RP_FirstPerson ) {
+			m_RenderState.SetDepthStencilState( true,
+												kbRenderState::DepthWriteMaskZero,
+												kbRenderState::CompareLess,
+												true,
+												0,
+												0xff,
+												kbRenderState::StencilKeep,
+												kbRenderState::StencilKeep,
+												kbRenderState::StencilReplace,
+												kbRenderState::CompareAlways,
+												kbRenderState::StencilKeep,
+												kbRenderState::StencilKeep,
+												kbRenderState::StencilReplace,
+												kbRenderState::CompareAlways,
+												1);
+		} else {
+			m_RenderState.SetDepthStencilState(	true,
+												kbRenderState::DepthWriteMaskZero,
+												kbRenderState::CompareLess,
+												true,
+												0xff,
+												0x0,
+												kbRenderState::StencilKeep,
+												kbRenderState::StencilKeep,
+												kbRenderState::StencilReplace,
+												kbRenderState::CompareNotEqual,
+												kbRenderState::StencilKeep,
+												kbRenderState::StencilKeep,
+												kbRenderState::StencilReplace,
+												kbRenderState::CompareNotEqual,
+												1);
 		}
 
-
-		std::vector<kbRenderSubmesh> & visibleSubmeshList = m_pCurrentRenderWindow->GetVisibleSubMeshes( RP_Translucent, iBucket );
-		for ( int i = 0; i < visibleSubmeshList.size(); i++ ) {
-			const kbRenderSubmesh & submesh = visibleSubmeshList[i];
-			const kbModel *const pModel = submesh.GetRenderObject()->m_pModel;
-
-			if ( submesh.GetRenderObject()->m_RenderPass == RP_FirstPerson ) {
-				m_RenderState.SetDepthStencilState( true,
-													kbRenderState::DepthWriteMaskZero,
-													kbRenderState::CompareLess,
-													true,
-													0,
-													0xff,
-													kbRenderState::StencilKeep,
-													kbRenderState::StencilKeep,
-													kbRenderState::StencilReplace,
-													kbRenderState::CompareAlways,
-													kbRenderState::StencilKeep,
-													kbRenderState::StencilKeep,
-													kbRenderState::StencilReplace,
-													kbRenderState::CompareAlways,
-													1);
-			} else {
-				m_RenderState.SetDepthStencilState(	true,
-													kbRenderState::DepthWriteMaskZero,
-													kbRenderState::CompareLess,
-													true,
-													0xff,
-													0x0,
-													kbRenderState::StencilKeep,
-													kbRenderState::StencilKeep,
-													kbRenderState::StencilReplace,
-													kbRenderState::CompareNotEqual,
-													kbRenderState::StencilKeep,
-													kbRenderState::StencilKeep,
-													kbRenderState::StencilReplace,
-													kbRenderState::CompareNotEqual,
-													1);
-			}
-
-			RenderMesh( &visibleSubmeshList[i], false );
-		}
+		RenderMesh( &visibleSubmeshList[i], false );
 	}
+	
 
 	m_RenderState.SetBlendState();
 
