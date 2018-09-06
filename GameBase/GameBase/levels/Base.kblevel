@@ -301,7 +301,7 @@ kbGameEntity 0 0 0 0 {
 		LifeTime =  -1.000000
 		CastsShadow = 0
 		RenderPass = LightingPass
-		RenderPassBucket = 1
+		RenderPassBucket = 3
 		Model = .\assets\models\fx\firemodel.ms3d
 		ShaderOverride = 1
 			.\assets\shaders\fx\basicfire.kbshader
@@ -408,7 +408,7 @@ kbGameEntity 0 0 0 0 {
 		MaxStartVelocity = 3.000000 10.000000 3.000000
 		MinBurstCount = 0
 		MinDuration =  3.000000
-		MinEndSize = 0.150000 0.250000 0.150000
+		MinEndSize = 0.200000 0.200000 0.150000
 		MinEndVelocity = 0.000000 5.000000 0.000000
 		MinSpawnRate =  2.000000
 		MinStartSize = 0.420000 0.450000 0.420000
@@ -416,6 +416,7 @@ kbGameEntity 0 0 0 0 {
 		ParticleBillboardType = FaceCamera
 		ParticleShader = .\assets\shaders\emberparticle.kbshader
 		ParticleTexture = .\assets\fx\orangeglow.dds
+		RenderPassBucket = 1
 		StartColor = 1.000000 1.000000 1.000000 1.000000
 		TotalDuration =  -1.000000
 	}
@@ -426,8 +427,8 @@ kbGameEntity 0 0 0 0 {
 		LifeTime =  -1.000000
 		Name = "Smoke"
 		Orientation = 0.000000 0.707000 0.000000 0.707000
-		Position = -27.714203 11.605455 25.002096
-		Scale = 0.350000 0.350000 0.270000
+		Position = -27.714203 17.596306 25.002096
+		Scale = 0.250000 0.250000 0.250000
 	}
 	kbStaticModelComponent { 
 		Enabled = 1

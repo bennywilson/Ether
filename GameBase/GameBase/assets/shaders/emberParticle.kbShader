@@ -1,5 +1,5 @@
 //==============================================================================
-// alphaParticles.kbShader
+// alphaParticle.kbShader
 //
 // 2018 kbEngine 2.0
 //==============================================================================
@@ -18,7 +18,12 @@ kbShaderState {
 	srcblend Blend_SrcAlpha
 	dstBlend Blend_InvSrcAlpha
 	blendOp BlendOp_Add
-	colorWriteEnable ColorWriteEnable_rgb
+
+	srcBlendAlpha Blend_One
+	dstBlendAlpha Blend_zero
+	blendOp BlendOp_Max
+
+	colorWriteEnable ColorWriteEnable_rgba
 }
 
 //-------------------------------------
@@ -70,8 +75,8 @@ pixelInput vertexShader( vertexInput input ) {
 	   billboardMatrix = float3x3( heading, xAxis, yAxis );
 	}
 	float3 offset = mul( float3( input.size.x , input.size.y, 0 ), billboardMatrix );
-	offset.x += sin( particleWorldPos.y * input.billboardType.y * 0.25f ) * 1.0f * input.billboardType.z ;
-	offset.z += sin( particleWorldPos.y * input.billboardType.y * 0.33f ) * 1.0f * input.billboardType.z;
+	offset.x += sin( particleWorldPos.y * input.billboardType.y * 0.2f ) * 2.0f * input.billboardType.z ;
+	offset.z += sin( particleWorldPos.y * input.billboardType.y * 0.25f ) * 2.0f * input.billboardType.z;
 	output.position = mul( float4(particleWorldPos,1) + float4( offset, 0.0f ), viewProjection );
 
 	output.uv = input.uv;
@@ -89,6 +94,7 @@ SamplerState SampleType;
 
  float4 pixelShader( pixelInput	input ) : SV_TARGET {
    float4 finalColor = input.color;
-   finalColor *= shaderTexture.Sample( SampleType, input.uv ) * 5;
+   finalColor *= shaderTexture.Sample( SampleType, input.uv );
+   finalColor.a *= 3.0f;
    return finalColor;
 }
