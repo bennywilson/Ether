@@ -55,11 +55,7 @@ EtherGame::EtherGame() :
 	m_pCollisionMapTimeGenShader( nullptr ),
 	m_pCollisionMapDamageGenShader( nullptr ),
 	m_pCollisionMapUpdateTimeShader( nullptr ),
-	m_pBulletHoleUpdateShader( nullptr ),
-	m_pFireNoiseTex( nullptr ),
-	m_pGrayScaleNoise1( nullptr ),
-	m_pGrayScaleNoise2( nullptr ),
-	m_pGrayScaleNoise3( nullptr ) {
+	m_pBulletHoleUpdateShader( nullptr ) {
 
 	m_Camera.m_Position.Set( 0.0f, 2600.0f, 0.0f );
 
@@ -524,13 +520,6 @@ void EtherGame::RenderSync() {
 
 	m_RenderThreadShotsThisFrame = m_ShotsThisFrame;
 	m_ShotsThisFrame.clear();
-
-	if ( m_pFireNoiseTex == nullptr ) {
-		m_pFireNoiseTex = (kbTexture *) g_ResourceManager.GetResource( "./assets/fx/Noise/FireNoise1.dds", true );
-		m_pGrayScaleNoise1 = (kbTexture *) g_ResourceManager.GetResource( "./assets/fx/Noise/GrayScaleNoise1.dds", true );
-		m_pGrayScaleNoise2 = (kbTexture *) g_ResourceManager.GetResource( "./assets/fx/Noise/GrayScaleNoise2.dds", true );
-		m_pGrayScaleNoise3 = (kbTexture *) g_ResourceManager.GetResource( "./assets/fx/Noise/GrayScaleNoise3.dds", true );
-	}
 }
 
 /**

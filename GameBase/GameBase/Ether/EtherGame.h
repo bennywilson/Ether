@@ -102,11 +102,6 @@ protected:
 	kbShader *									m_pCollisionMapUpdateTimeShader;
 	kbShader *									m_pBulletHoleUpdateShader;
 	kbShaderParamOverrides_t					m_ShaderParamOverrides;
-
-	kbTexture *									m_pFireNoiseTex;
-	kbTexture *									m_pGrayScaleNoise1;
-	kbTexture *									m_pGrayScaleNoise2;
-	kbTexture *									m_pGrayScaleNoise3;
 };
 
 

@@ -1350,7 +1350,7 @@ void kbRenderer_DX11::RenderScene() {
 				renderObject.m_Scale = m_DebugModels[i].m_Scale;
 				renderObject.m_EntityId = m_DebugModels[i].m_EntityId;
 				for ( int j = 0; j < renderObject.m_pModel->NumMeshes(); j++ ) {
-					kbRenderSubmesh newMesh( &renderObject, j, RP_Debug );
+					kbRenderSubmesh newMesh( &renderObject, j, RP_Debug, 0.0f );
 					RenderMesh( &newMesh, false );
 				}
 			}
@@ -1820,7 +1820,7 @@ void kbRenderer_DX11::RenderMousePickerIds() {
 	for ( auto iter = m_pCurrentRenderWindow->GetRenderObjectMap().begin(); iter != m_pCurrentRenderWindow->GetRenderObjectMap().end(); iter++ ) {
 		if ( iter->second->m_EntityId > 0 ) {
 			// TODO
-			kbRenderSubmesh newMesh( iter->second, 0, RP_MousePicker );
+			kbRenderSubmesh newMesh( iter->second, 0, RP_MousePicker, 0.0f );
 			RenderMesh( &newMesh, false, true );
 		}
 	}
@@ -1835,7 +1835,7 @@ void kbRenderer_DX11::RenderMousePickerIds() {
 		renderObject.m_Scale = m_DebugModels[i].m_Scale;
 		renderObject.m_EntityId = m_DebugModels[i].m_EntityId;
 		for ( int j = 0; j < renderObject.m_pModel->NumMeshes(); j++ ) {
-			kbRenderSubmesh newMesh( &renderObject, j, RP_MousePicker );
+			kbRenderSubmesh newMesh( &renderObject, j, RP_MousePicker, 0.0f );
 			RenderMesh( &newMesh, false );
 		}
 	}
