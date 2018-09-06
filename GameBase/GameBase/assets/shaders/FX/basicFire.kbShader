@@ -5,16 +5,15 @@
 // 2018 kbEngine 2.0
 //===================================================================================================
 cbuffer matrixBuffer {
-	matrix mvpMatrix;
+	matrix vpMatrix;
+	matrix billboardedModelMatrix;
 	float4 cameraPos;
-	float4 noiseScroll;
-	float4 noiseScale;
+	float4 noiseScroll;			// 'w' is available	
 	float4 time;
 	float4 startFireColor;
 	float4 endFireColor;
-	float4 distortion_1_2;
-	float4 distortion_3;
-	float4 fireDistortion;
+	float4 noiseDistortion_1_2;
+	float4 noiseDistortion_3_colorDistortion;
 };
 
 kbShaderState {
@@ -61,7 +60,8 @@ struct PS_OUTPUT {
 pixelInput vertexShader( vertexInput input ) {
 	pixelInput output = (pixelInput)(0);
 
-	output.position = mul( input.position, mvpMatrix );
+	output.position = mul( input.position, billboardedModelMatrix );
+	output.position = mul( output.position, vpMatrix );
 	output.uv = input.uv;
 	output.color = input.color;
 	output.position2 = output.position.zw;
@@ -84,12 +84,12 @@ float4 pixelShader( pixelInput	input ) : SV_Target {
 	float4 noise1 = noiseMap1.Sample( SampleType, input.uv + float2( 0.0f, noiseScroll.x * time.x ) ) * 2.0f - 1.0f;
 	float4 noise2 = noiseMap2.Sample( SampleType, input.uv + float2( 0.0f, noiseScroll.y * time.x ) ) * 2.0f - 1.0f;
 	float4 noise3 = noiseMap3.Sample( SampleType, input.uv + float2( 0.0f, noiseScroll.z * time.x ) ) * 2.0f - 1.0f;
-	noise1.xy *= distortion_1_2.xy;
-	noise2.xy *= distortion_1_2.zw;
-	noise3.xy *= distortion_3.xy;
+	noise1.xy *= noiseDistortion_1_2.xy;
+	noise2.xy *= noiseDistortion_1_2.zw;
+	noise3.xy *= noiseDistortion_3_colorDistortion.xy;
 
 	float2 finalNoise = ( noise1 + noise2 + noise3 ).xy;
-	float perturb = ( ( 1.0f - input.uv.y) * fireDistortion.x ) + fireDistortion.y;
+	float perturb = ( ( 1.0f - input.uv.y) * noiseDistortion_3_colorDistortion.z ) + noiseDistortion_3_colorDistortion.w;
 
 	float4 fireNoise = fireNoiseMap.Sample( SampleType, saturate( input.uv * 0.2f + finalNoise * perturb ) );
 	fireNoise.w = fireNoiseMap.Sample( SampleType, saturate( input.uv + finalNoise * perturb ) ).w;

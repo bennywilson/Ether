@@ -5,17 +5,18 @@
 // 2018 kbEngine 2.0
 //===================================================================================================
 cbuffer matrixBuffer {
-	matrix modelMatrix;
+	matrix vpMatrix;
+	matrix billboardedModelMatrix;
 	matrix mvpMatrix;
 	float4 cameraPos;
 	float4 noiseScroll;
 	float4 noiseScale;
 	float4 time;
-	float4 startFireColor;
-	float4 endFireColor;
+	float4 startSmokeColor;
+	float4 endSmokeColor;
 	float4 distortion_1_2;
 	float4 distortion_3_AlphaScroll;
-	float4 fireDistortion;
+	float4 smokeDistortion;
 };
 
 kbShaderState {
@@ -51,24 +52,14 @@ struct PS_OUTPUT {
 	float2 Depth			: SV_TARGET3;
 };
 
-
 /**
  *	vertexShader
  */
 pixelInput vertexShader( vertexInput input ) {
 	pixelInput output = (pixelInput)(0);
 	  
-	const float3 worldPos = mul( input.position, modelMatrix ).xyz;
-
-	float3x3 billboardMatrix;
-	// Billboard
-	float3 up = float3( 0.0f, 1.0f, 0.0f );
-	const float3 zAxis = normalize( cameraPos.xyz - worldPos );
-	const float3 xAxis = normalize( cross( up, zAxis ) );
-	const float3 yAxis = normalize( cross( zAxis, xAxis ) );
-	billboardMatrix = float3x3( xAxis, yAxis, zAxis );
-
-	output.position = mul( input.position, mvpMatrix );
+	output.position = mul( input.position, billboardedModelMatrix );
+	output.position = mul( output.position, vpMatrix );
 	output.uv = input.uv;
 	output.color = input.color;
 	output.position2 = output.position.zw;
@@ -79,7 +70,7 @@ pixelInput vertexShader( vertexInput input ) {
 /**
  *	pixelShader
  */
-Texture2D fireNoiseMap				: register(t0);
+Texture2D smokeNoiseMap				: register(t0);
 SamplerState SampleType;
 
 Texture2D noiseMap1					: register(t1);
@@ -96,32 +87,32 @@ float4 pixelShader( pixelInput	input ) : SV_Target {
 	noise3.xy *= distortion_3_AlphaScroll.xy;
 
 	float2 finalNoise = ( noise1 + noise2 + noise3 ).xy;
-	float perturb = ( ( 1.0f - input.uv.y) * fireDistortion.x ) + fireDistortion.y;
+	float perturb = ( ( 1.0f - input.uv.y) * smokeDistortion.x ) + smokeDistortion.y;
 
-	float4 fireNoise = fireNoiseMap.Sample( SampleType, saturate( input.uv * 0.2f + finalNoise * perturb ) );
-	fireNoise.b = fireNoiseMap.Sample( SampleType, saturate( input.uv + finalNoise * perturb ) ).z;
+	float4 fireNoise = smokeNoiseMap.Sample( SampleType, saturate( input.uv * 0.2f + finalNoise * perturb ) );
+	fireNoise.b = smokeNoiseMap.Sample( SampleType, saturate( input.uv + finalNoise * perturb ) ).z;
 
 	float2 alphaScroll1 = 0;
 	float2 alphaScroll2 = 0;
 	alphaScroll1.y = distortion_3_AlphaScroll.z * time.x;
 	alphaScroll2.y = distortion_3_AlphaScroll.w * time.x;
-	fireNoise.b = fireNoiseMap.Sample( SampleType, ( alphaScroll1 + input.uv + finalNoise * perturb ) ).b;
-	fireNoise.a = fireNoiseMap.Sample( SampleType, ( alphaScroll2 + input.uv + finalNoise * perturb ) ).a;
+	fireNoise.b = smokeNoiseMap.Sample( SampleType, ( alphaScroll1 + input.uv + finalNoise * perturb ) ).b;
+	fireNoise.a = smokeNoiseMap.Sample( SampleType, ( alphaScroll2 + input.uv + finalNoise * perturb ) ).a;
 
-	float lerpVal = saturate( saturate(fireNoise.r + fireNoise.g + perturb) - fireNoise.w * 0.05f );
+	float lerpVal = saturate( saturate( fireNoise.r + fireNoise.g + perturb ) - fireNoise.w * 0.05f );
 	float4 color;
-	color.xyz = saturate(lerp(startFireColor.w * startFireColor.xyz, endFireColor.w * endFireColor.xyz, lerpVal ));
-	color.w = saturate(fireNoise.a*fireNoise.b);
-	color.w *= 1.0f - pow(abs(1.0f - input.uv.y), 2.15f );
+	color.xyz = saturate( lerp( startSmokeColor.w * startSmokeColor.xyz, endSmokeColor.w * endSmokeColor.xyz, lerpVal ) );
+	color.w = saturate( fireNoise.a*fireNoise.b );
+	color.w *= 1.0f - pow( abs( 1.0f - input.uv.y ), 2.15f );
 	const float fluffSize = 0.16f;
 
 	float sinWave =   ( 0.5f + 0.5f * sin( input.uv.x * 25.1f + 2.1f * time.x )  )* fluffSize * 0.55f;
 	float sinWave2 = ( 0.5f + 0.5f * cos( ( input.uv.x * 65.1f + -3.5f * time.x) )  )* fluffSize * 0.14f;
-	float topMult = 1.0f - saturate((1.25f * fluffSize - ((sinWave + sinWave2)*0.5f)- input.uv.y) / fluffSize);
+	float topMult = 1.0f - saturate( ( 1.25f * fluffSize - (  ( sinWave + sinWave2 )*0.5f )- input.uv.y ) / fluffSize );
 	color.a *= pow( abs(topMult), 1.5f );
-	color.a = pow( abs(color.a),0.8f );
+	color.a = pow( abs( color. a), 0.8f );
 	float dist = 0.5f;
-	dist = 1.0f - saturate((dist - input.uv.y )/ dist);
+	dist = 1.0f - saturate( ( dist - input.uv.y )/ dist );
 	color.xyz *= dist * dist;
 	
 	return color;

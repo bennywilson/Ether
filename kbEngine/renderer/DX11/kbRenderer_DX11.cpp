@@ -3362,7 +3362,23 @@ ID3D11Buffer * kbRenderer_DX11::SetConstantBuffer( const kbShaderVarBindings_t &
 	for ( int i = 0; i < bindings.size(); i++ ) {
 		const std::string & varName = bindings[i].m_VarName;
 		const byte * pVarByteOffset = constantPtr + bindings[i].m_VarByteOffset;
-		if ( varName == "mvpMatrix" ) {
+		if ( varName == "billboardedModelMatrix" ) {
+
+			const kbVec3 camToObject = ( m_pCurrentRenderWindow->GetCameraPosition() - pRenderObject->m_Position ).Normalized();
+			const kbVec3 rightVec = kbVec3::up.Cross( camToObject );
+			kbMat4 billBoardedMatrix = kbMat4::identity;
+			billBoardedMatrix[0].Set( rightVec.x, rightVec.y, rightVec.z, 0.0f );
+			billBoardedMatrix[1].Set( 0.0f, 1.0f, 0.0f, 0.0f );
+			billBoardedMatrix[2].Set( camToObject.x, camToObject.y, camToObject.z, 0.0f );
+			billBoardedMatrix[3].Set( pRenderObject->m_Position.x, pRenderObject->m_Position.y, pRenderObject->m_Position.z, 1.0f );
+
+			kbMat4 scaleMatrix;
+			scaleMatrix.MakeScale( pRenderObject->m_Scale );
+			billBoardedMatrix = scaleMatrix * billBoardedMatrix;
+
+			kbMat4 *const pMatOffset = (kbMat4*)pVarByteOffset;
+			*pMatOffset = billBoardedMatrix;
+		} else if ( varName == "mvpMatrix" ) {
 			kbMat4 *const pMatOffset = (kbMat4*)pVarByteOffset;
 			*pMatOffset = worldMatrix * m_pCurrentRenderWindow->GetViewProjectionMatrix();
 		} else if ( varName == "vpMatrix" ) {
@@ -3377,6 +3393,12 @@ ID3D11Buffer * kbRenderer_DX11::SetConstantBuffer( const kbShaderVarBindings_t &
 		} else if ( varName == "viewProjection" ) {
 			kbMat4 *const pMatOffset = (kbMat4*)pVarByteOffset;
 			*pMatOffset = m_pCurrentRenderWindow->GetViewProjectionMatrix();
+		} else if ( varName == "inverseView" ) {
+
+			kbMat4 *const pMatOffset = (kbMat4*)pVarByteOffset;
+			kbMat4 invView = m_pCurrentRenderWindow->GetViewMatrix();
+			invView.InvertFast();
+			*pMatOffset = invView;
 		} else if ( varName == "boneList" ) {
 			if ( pRenderObject != nullptr ) {
 				kbMat4 *const boneMatrices = (kbMat4*)pVarByteOffset;
