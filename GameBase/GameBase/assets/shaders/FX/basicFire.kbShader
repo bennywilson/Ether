@@ -89,23 +89,21 @@ float4 pixelShader( pixelInput	input ) : SV_Target {
 	noise3.xy *= noiseDistortion_3_colorDistortion.xy;
 
 	float2 finalNoise = ( noise1 + noise2 + noise3 ).xy;
-	float perturb = ( ( 1.0f - input.uv.y) * noiseDistortion_3_colorDistortion.z ) + noiseDistortion_3_colorDistortion.w;
+	float perturb = ( ( 1.0f - input.uv.y ) * noiseDistortion_3_colorDistortion.z ) + noiseDistortion_3_colorDistortion.w;
 
 	float4 fireNoise = fireNoiseMap.Sample( SampleType, saturate( input.uv * 0.2f + finalNoise * perturb ) );
 	fireNoise.w = fireNoiseMap.Sample( SampleType, saturate( input.uv + finalNoise * perturb ) ).w;
 
-	float lerpVal = saturate(fireNoise.y + fireNoise.z + perturb) - fireNoise.w * 0.05f;
-//	lerpVal += abs(input.uv.y - 1.0f) * 0.5f;
-	//lerpVal += abs(input.uv.x - 0.5f) * 1.5f;
+	float lerpVal = saturate( fireNoise.y + fireNoise.z + perturb ) - fireNoise.w * 0.05f;
+	lerpVal = saturate( lerpVal );
 
-		lerpVal = saturate(lerpVal);
 	float4 color;
-	color.xyz = saturate(lerp(startFireColor.w * startFireColor.xyz, endFireColor.w * endFireColor.xyz, lerpVal ));
+	color.xyz = saturate( lerp (startFireColor.w * startFireColor.xyz, endFireColor.w * endFireColor.xyz, lerpVal ) );
 	color.w = fireNoise.w * 1;
 
 	 float dist = 0.5f;
-	dist = 1.0f - saturate((dist - input.uv.y )/ dist);
-	color.w *= dist;//* (lerpVal * 1.75f);
-	//	color.w = 0.0f;
+	dist = 1.0f - saturate( ( dist - input.uv.y )/ dist );
+	color.w *= dist;
+
 	return color;
 }
