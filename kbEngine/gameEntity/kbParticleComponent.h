@@ -82,6 +82,8 @@ private:
 	float														m_TimeAlive;
 	int															m_BurstCount;
 
+	kbRenderObject												m_RenderObject;
+
 	static const int											NumParticleBuffers = 3;
 	std::vector<kbParticle_t>									m_Particles;
 	kbModel														m_ParticleBuffer[NumParticleBuffers];

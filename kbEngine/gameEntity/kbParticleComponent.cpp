@@ -44,8 +44,8 @@ void kbParticleComponent::Constructor() {
 	m_bLockVelocity = false;
 
 	m_LeftOverTime = 0.0f;
-	m_pVertexBuffer = NULL;
-	m_pIndexBuffer = NULL;
+	m_pVertexBuffer = nullptr;
+	m_pIndexBuffer = nullptr;
 	m_CurrentParticleBuffer = 255;
 	m_NumIndicesInCurrentBuffer = 0;
 
@@ -53,7 +53,7 @@ void kbParticleComponent::Constructor() {
 	m_pParticleShader = (kbShader*)g_ResourceManager.GetResource( "../../kbEngine/assets/Shaders/basicParticle.kbShader", true );
 
 	m_bIsPooled = false;
-	m_ParticleTemplate = NULL;
+	m_ParticleTemplate = nullptr;
 }
 
 /**
@@ -76,7 +76,7 @@ void kbParticleComponent::StopParticleSystem() {
 		kbError( "Shutting down particle component even though rendering is not synced" );
 	}
 
-	g_pRenderer->RemoveParticle( this, m_RenderPassBucket );
+	g_pRenderer->RemoveParticle( m_RenderObject );
 	for ( int i = 0; i < NumParticleBuffers; i++ ) {
 		if ( m_ParticleBuffer[i].IsVertexBufferMapped() ) {
 			m_ParticleBuffer[i].UnmapVertexBuffer( 0 );
@@ -281,6 +281,7 @@ void kbParticleComponent::EditorChange( const std::string & propertyName ) {
 void kbParticleComponent::RenderSync() {
 	Super::RenderSync();
 
+
 	if ( g_UseEditor && IsEnabled() == true && ( m_TotalDuration > 0.0f && m_TimeAlive > m_TotalDuration && m_BurstCount <= 0 ) ) {
 		StopParticleSystem();
 		Enable( false );
@@ -308,17 +309,27 @@ void kbParticleComponent::RenderSync() {
 		}
 	}
 
+
+	m_RenderObject.m_pComponent = static_cast<const kbComponent*>( this );
+	m_RenderObject.m_pModel = nullptr;
+	m_RenderObject.m_RenderPass = RP_Translucent;
+	m_RenderObject.m_Position = GetPosition();
+	m_RenderObject.m_Orientation = kbQuat( 0.0f, 0.0f, 0.0f, 1.0f );
+	m_RenderObject.m_RenderPassBucket = this->m_RenderPassBucket;;
+
 	if ( m_CurrentParticleBuffer == 255 ) {
 		m_CurrentParticleBuffer = 0;
 	} else {
-		g_pRenderer->RemoveParticle( this, m_RenderPassBucket );
+		g_pRenderer->RemoveParticle( m_RenderObject );
 
 		m_ParticleBuffer[m_CurrentParticleBuffer].UnmapVertexBuffer( m_NumIndicesInCurrentBuffer );
 		m_ParticleBuffer[m_CurrentParticleBuffer].UnmapIndexBuffer();		// todo : don't need to map/remap index buffer
 	}
 
 	m_ParticleBuffer[m_CurrentParticleBuffer].SwapTexture( 0, m_pParticleTexture, 0 );
-	g_pRenderer->AddParticle( this, &m_ParticleBuffer[m_CurrentParticleBuffer], GetPosition(), kbQuat( 0.0f, 0.0f, 0.0f, 1.0f ), m_RenderPassBucket );
+
+	m_RenderObject.m_pModel = &m_ParticleBuffer[m_CurrentParticleBuffer];
+	g_pRenderer->AddParticle( m_RenderObject );
 
 	m_CurrentParticleBuffer++;
 	if ( m_CurrentParticleBuffer >= NumParticleBuffers ) {
@@ -337,7 +348,9 @@ void kbParticleComponent::RenderSync() {
 void kbParticleComponent::SetEnable_Internal( const bool isEnabled ) {
 	Super::SetEnable_Internal( isEnabled );
 
+
 	if ( isEnabled ) {
+
 		m_TimeAlive = 0.0f;
 		if ( m_MaxBurstCount > 0 ) {
 			m_BurstCount = m_MinBurstCount;

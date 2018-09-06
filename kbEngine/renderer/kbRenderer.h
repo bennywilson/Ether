@@ -255,9 +255,8 @@ public:
 	void										UpdateFog( const kbColor & color, const float startDistance, const float endDistance );
 
 	// Particles
-	void										AddParticle( const void *const pParentPtr, const kbModel *const pModel, const kbVec3 & pos, kbQuat & orientation, const int renderPass = 0 );
-	void										UpdateParticle( const void *const pParentPtr, const kbModel *const pModel, const kbVec3 & pos, kbQuat & orientation, const int renderPass = 0 );
-	void										RemoveParticle( const void *const pParentPtr, const int renderPassBucket );
+	void										AddParticle( const kbRenderObject & renderObject );
+	void										RemoveParticle( const kbRenderObject & renderObject );
 
 	// Light Shafts
 	void										AddLightShafts( const kbLightShaftsComponent *const pComponent, const kbVec3 & pos, const kbQuat & orientation );

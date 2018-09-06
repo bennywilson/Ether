@@ -442,47 +442,21 @@ void kbRenderer::HackClearLight( const kbLightComponent *const pLightComponent )
 /**
  *	kbRenderer::AddParticle
  */
-void kbRenderer::AddParticle( const void *const pParticleComponent, const kbModel *const pModel, const kbVec3 & pos, kbQuat & orientation, const int renderBucket ) {
-	kbRenderObject NewParticle;
-	NewParticle.m_pComponent = static_cast<const kbComponent*>( pParticleComponent );
-	NewParticle.m_pModel = pModel;
-	NewParticle.m_RenderPass = RP_Translucent;
-	NewParticle.m_Position = pos;
-	NewParticle.m_Orientation = orientation;
-	NewParticle.m_bIsFirstAdd = true;
-	NewParticle.m_bIsRemove = false;
-	NewParticle.m_RenderPassBucket = renderBucket;
+void kbRenderer::AddParticle( const kbRenderObject & renderObject ) {
 
-	m_ParticleList_GameThread.push_back( NewParticle );
-}
-
-/**
- *	kbRenderer::UpdateParticle
- */
-void kbRenderer::UpdateParticle( const void *const pParticleComponent, const kbModel *const pModel, const kbVec3 & pos, kbQuat & orientation, const int renderBucket ) {
-
-	kbRenderObject NewParticle;
-	NewParticle.m_pComponent = static_cast<const kbComponent*>( pParticleComponent );
-	NewParticle.m_pModel = pModel;
-	NewParticle.m_RenderPass = RP_Translucent;
-	NewParticle.m_Position = pos;
-	NewParticle.m_Orientation = orientation;
-	NewParticle.m_bIsFirstAdd = false;
-	NewParticle.m_RenderPassBucket = renderBucket;
-
-	m_ParticleList_GameThread.push_back( NewParticle );
+	m_ParticleList_GameThread.push_back( renderObject );
+	m_ParticleList_GameThread[m_ParticleList_GameThread.size() -1].m_bIsFirstAdd = true;
+	m_ParticleList_GameThread[m_ParticleList_GameThread.size() -1].m_bIsRemove = false;
 }
 
 /**
  *	kbRenderer::RemoveParticle
  */
-void kbRenderer::RemoveParticle( const void *const pParticleComponent, const int renderPassBucket ) {
-	kbRenderObject NewParticle;
-	NewParticle.m_pComponent = static_cast<const kbComponent*>( pParticleComponent );
-	NewParticle.m_bIsFirstAdd = false;
-	NewParticle.m_bIsRemove = true;
-	NewParticle.m_RenderPassBucket = renderPassBucket;
-	m_ParticleList_GameThread.push_back( NewParticle );
+void kbRenderer::RemoveParticle(const kbRenderObject & renderObject ) {
+
+	m_ParticleList_GameThread.push_back( renderObject );
+	m_ParticleList_GameThread[m_ParticleList_GameThread.size() -1].m_bIsFirstAdd = false;
+	m_ParticleList_GameThread[m_ParticleList_GameThread.size() -1].m_bIsRemove = true;
 }
 
 /**

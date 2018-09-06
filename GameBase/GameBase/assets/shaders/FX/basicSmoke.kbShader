@@ -7,7 +7,6 @@
 cbuffer matrixBuffer {
 	matrix vpMatrix;
 	matrix billboardedModelMatrix;
-	matrix mvpMatrix;
 	float4 cameraPos;
 	float4 noiseScroll;
 	float4 noiseScale;
