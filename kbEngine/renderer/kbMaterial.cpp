@@ -684,6 +684,10 @@ bool kbShader::Load_Internal() {
 		// Load File
 		std::ifstream shaderFile;
 		shaderFile.open( GetFullFileName().c_str(), std::fstream::in );
+		if ( shaderFile.fail() ) {
+			return false;
+		}
+
 		std::string shaderText( ( std::istreambuf_iterator<char>(shaderFile) ), std::istreambuf_iterator<char>() );
 		shaderFile.close();
 

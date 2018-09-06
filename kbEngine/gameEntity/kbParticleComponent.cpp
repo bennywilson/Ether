@@ -40,11 +40,12 @@ void kbParticleComponent::Constructor() {
 	m_BurstCount = 0;
 	m_ParticleBillboardType = BT_FaceCamera;
 	m_Gravity.Set( 0.0f, 0.0f, 0.0f );
+	m_TranslucencySortBias = 0.0f;
 	m_bLockVelocity = false;
 
 	m_LeftOverTime = 0.0f;
-	m_pVertexBuffer = NULL;
-	m_pIndexBuffer = NULL;
+	m_pVertexBuffer = nullptr;
+	m_pIndexBuffer = nullptr;
 	m_CurrentParticleBuffer = 255;
 	m_NumIndicesInCurrentBuffer = 0;
 
@@ -52,7 +53,7 @@ void kbParticleComponent::Constructor() {
 	m_pParticleShader = (kbShader*)g_ResourceManager.GetResource( "../../kbEngine/assets/Shaders/basicParticle.kbShader", true );
 
 	m_bIsPooled = false;
-	m_ParticleTemplate = NULL;
+	m_ParticleTemplate = nullptr;
 }
 
 /**
@@ -75,7 +76,7 @@ void kbParticleComponent::StopParticleSystem() {
 		kbError( "Shutting down particle component even though rendering is not synced" );
 	}
 
-	g_pRenderer->RemoveParticle( this );
+	g_pRenderer->RemoveParticle( m_RenderObject );
 	for ( int i = 0; i < NumParticleBuffers; i++ ) {
 		if ( m_ParticleBuffer[i].IsVertexBufferMapped() ) {
 			m_ParticleBuffer[i].UnmapVertexBuffer( 0 );
@@ -170,12 +171,22 @@ void kbParticleComponent::Update_Internal( const float DeltaTime ) {
 		m_pVertexBuffer[iVertex + 2].direction = direction;
 		m_pVertexBuffer[iVertex + 3].direction = direction;
 
-		m_pVertexBuffer[iVertex + 0].billboardType[0] = m_pVertexBuffer[iVertex + 0].billboardType[1] = m_pVertexBuffer[iVertex + 0].billboardType[2] = m_pVertexBuffer[iVertex + 0].billboardType[3] = iBillboardType;
-		m_pVertexBuffer[iVertex + 1].billboardType[0] = m_pVertexBuffer[iVertex + 1].billboardType[1] = m_pVertexBuffer[iVertex + 1].billboardType[2] = m_pVertexBuffer[iVertex + 1].billboardType[3] = iBillboardType;
-		m_pVertexBuffer[iVertex + 2].billboardType[0] = m_pVertexBuffer[iVertex + 2].billboardType[1] = m_pVertexBuffer[iVertex + 2].billboardType[2] = m_pVertexBuffer[iVertex + 2].billboardType[3] = iBillboardType;
-		m_pVertexBuffer[iVertex + 3].billboardType[0] = m_pVertexBuffer[iVertex + 3].billboardType[1] = m_pVertexBuffer[iVertex + 3].billboardType[2] = m_pVertexBuffer[iVertex + 3].billboardType[3] = iBillboardType;
+		m_pVertexBuffer[iVertex + 0].billboardType[0] = iBillboardType;
+		m_pVertexBuffer[iVertex + 1].billboardType[0] = iBillboardType;
+		m_pVertexBuffer[iVertex + 2].billboardType[0] = iBillboardType;
+		m_pVertexBuffer[iVertex + 3].billboardType[0] = iBillboardType;
 
-		m_pVertexBuffer[iVertex + 0].billboardType[3] = (byte)kbClamp( m_Particles[i].m_Random * 255.0f, 0.0f, 255.0f );
+		m_pVertexBuffer[iVertex + 0].billboardType[1] = (byte)kbClamp( m_Particles[i].m_Randoms[0] * 255.0f, 0.0f, 255.0f );
+		m_pVertexBuffer[iVertex + 1].billboardType[1] = m_pVertexBuffer[iVertex + 0].billboardType[1];
+		m_pVertexBuffer[iVertex + 2].billboardType[1] = m_pVertexBuffer[iVertex + 0].billboardType[1];
+		m_pVertexBuffer[iVertex + 3].billboardType[1] = m_pVertexBuffer[iVertex + 0].billboardType[1];
+
+		m_pVertexBuffer[iVertex + 0].billboardType[2] = (byte)kbClamp( m_Particles[i].m_Randoms[1] * 255.0f, 0.0f, 255.0f );
+		m_pVertexBuffer[iVertex + 1].billboardType[2] = m_pVertexBuffer[iVertex + 0].billboardType[2];
+		m_pVertexBuffer[iVertex + 2].billboardType[2] = m_pVertexBuffer[iVertex + 0].billboardType[2];
+		m_pVertexBuffer[iVertex + 3].billboardType[2] = m_pVertexBuffer[iVertex + 0].billboardType[2];
+
+		m_pVertexBuffer[iVertex + 0].billboardType[3] = (byte)kbClamp( m_Particles[i].m_Randoms[2] * 255.0f, 0.0f, 255.0f );
 		m_pVertexBuffer[iVertex + 1].billboardType[3] = m_pVertexBuffer[iVertex + 0].billboardType[3];
 		m_pVertexBuffer[iVertex + 2].billboardType[3] = m_pVertexBuffer[iVertex + 0].billboardType[3];
 		m_pVertexBuffer[iVertex + 3].billboardType[3] = m_pVertexBuffer[iVertex + 0].billboardType[3];
@@ -232,7 +243,10 @@ void kbParticleComponent::Update_Internal( const float DeltaTime ) {
 		newParticle.m_EndSize.x = m_MinParticleEndSize.x + ( endSizeRand * ( m_MinParticleEndSize.x - m_MaxParticleEndSize.x ) );
 		newParticle.m_EndSize.y = m_MinParticleEndSize.y + ( endSizeRand * ( m_MinParticleEndSize.y - m_MaxParticleEndSize.y ) );
 
-		newParticle.m_Random = kbfrand();
+		newParticle.m_Randoms[0] = kbfrand();
+		newParticle.m_Randoms[1] = kbfrand();
+		newParticle.m_Randoms[2] = kbfrand();
+
 		if ( m_BurstCount > 0 ) {
 			m_BurstCount--;
 		} else {
@@ -267,6 +281,7 @@ void kbParticleComponent::EditorChange( const std::string & propertyName ) {
 void kbParticleComponent::RenderSync() {
 	Super::RenderSync();
 
+
 	if ( g_UseEditor && IsEnabled() == true && ( m_TotalDuration > 0.0f && m_TimeAlive > m_TotalDuration && m_BurstCount <= 0 ) ) {
 		StopParticleSystem();
 		Enable( false );
@@ -294,17 +309,27 @@ void kbParticleComponent::RenderSync() {
 		}
 	}
 
+
+	m_RenderObject.m_pComponent = static_cast<const kbComponent*>( this );
+	m_RenderObject.m_pModel = nullptr;
+	m_RenderObject.m_RenderPass = RP_Translucent;
+	m_RenderObject.m_Position = GetPosition();
+	m_RenderObject.m_Orientation = kbQuat( 0.0f, 0.0f, 0.0f, 1.0f );
+	m_RenderObject.m_TranslucencySortBias = m_TranslucencySortBias;
+
 	if ( m_CurrentParticleBuffer == 255 ) {
 		m_CurrentParticleBuffer = 0;
 	} else {
-		g_pRenderer->RemoveParticle( this );
+		g_pRenderer->RemoveParticle( m_RenderObject );
 
 		m_ParticleBuffer[m_CurrentParticleBuffer].UnmapVertexBuffer( m_NumIndicesInCurrentBuffer );
 		m_ParticleBuffer[m_CurrentParticleBuffer].UnmapIndexBuffer();		// todo : don't need to map/remap index buffer
 	}
 
 	m_ParticleBuffer[m_CurrentParticleBuffer].SwapTexture( 0, m_pParticleTexture, 0 );
-	g_pRenderer->AddParticle( this, &m_ParticleBuffer[m_CurrentParticleBuffer], GetPosition(), kbQuat( 0.0f, 0.0f, 0.0f, 1.0f ) );
+
+	m_RenderObject.m_pModel = &m_ParticleBuffer[m_CurrentParticleBuffer];
+	g_pRenderer->AddParticle( m_RenderObject );
 
 	m_CurrentParticleBuffer++;
 	if ( m_CurrentParticleBuffer >= NumParticleBuffers ) {
@@ -323,7 +348,9 @@ void kbParticleComponent::RenderSync() {
 void kbParticleComponent::SetEnable_Internal( const bool isEnabled ) {
 	Super::SetEnable_Internal( isEnabled );
 
+
 	if ( isEnabled ) {
+
 		m_TimeAlive = 0.0f;
 		if ( m_MaxBurstCount > 0 ) {
 			m_BurstCount = m_MinBurstCount;

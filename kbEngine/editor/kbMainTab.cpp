@@ -162,6 +162,10 @@ void kbMainTab::RenderSync() {
 
     // Convert mouse coordinates from window space to screen space
 	kbEditorWindow *const pCurrentWindow = GetCurrentWindow();
+	if ( pCurrentWindow == nullptr ) {
+		return;
+	}
+
 	RECT windowRect;
 	GetWindowRect( pCurrentWindow->GetWindowHandle(), &windowRect );
 

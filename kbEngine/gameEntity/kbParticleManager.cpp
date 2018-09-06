@@ -16,17 +16,22 @@ static const uint NumCustomAtlases = 2;
  *	kbParticleManager::kbParticleManager
  */
 kbParticleManager::kbParticleManager() {
-	m_CustomAtlases.resize( NumCustomAtlases );
-
-	for ( int iAtlas = 0; iAtlas < NumCustomAtlases; iAtlas++ ) {
-		UpdateAtlas( m_CustomAtlases[iAtlas] );
-	}
 }
 
 /**
  *	kbParticleManager::~kbParticleManager
  */
 kbParticleManager::~kbParticleManager() {
+
+	for ( int i = 0; i < m_CustomAtlases.size(); i++ ) {
+		CustomAtlasParticles_t & curAtlas = m_CustomAtlases[i];
+		for ( int iBuffer = 0; iBuffer < NumCustomParticleBuffers; iBuffer++ ) {
+			curAtlas.m_RenderModel[iBuffer].Release();
+			delete curAtlas.m_RenderObject.m_pComponent;
+			curAtlas.m_RenderObject.m_pComponent = nullptr;
+		}
+	}
+
 	for ( std::map<const kbParticleComponent *, std::vector< kbParticleComponent *>>::iterator it = m_ParticlePools.begin(); it != m_ParticlePools.end(); ++it ) {
 		std::vector< kbParticleComponent *> & particleList = it->second;
 		for ( int i = 0; i < particleList.size(); i++ ) {
@@ -136,7 +141,7 @@ void kbParticleManager::ReturnParticleComponent( kbParticleComponent *const pPar
 		return;
 	}
 
-	g_pRenderer->RemoveParticle( pParticle );
+	g_pRenderer->RemoveParticle( pParticle->m_RenderObject );
 	pParticle->GetOwner()->RemoveComponent( pParticle );
 	const kbParticleComponent *const pParticleTemplate = pParticle->m_ParticleTemplate;
 	if ( pParticleTemplate == nullptr || pParticle->m_bIsPooled == false ) {
@@ -163,7 +168,7 @@ void kbParticleManager::UpdateAtlas( CustomAtlasParticles_t & atlasInfo ) {
 	kbErrorCheck( g_pRenderer->IsRenderingSynced(), "kbParticleManager::UpdateAtlas() - Rendering isn't sync'd" );
 
 	if ( atlasInfo.m_iCurParticleModel >= 0 ) {
-		g_pRenderer->RemoveParticle( &atlasInfo );
+		g_pRenderer->RemoveParticle( atlasInfo.m_RenderObject );
 	}
 
 	for ( uint iModel = 0; iModel < NumCustomParticleBuffers; iModel++ ) {
@@ -198,13 +203,24 @@ void kbParticleManager::UpdateAtlas( CustomAtlasParticles_t & atlasInfo ) {
  */
 void kbParticleManager::RenderSync() {
 
+	if ( m_CustomAtlases.size() == 0 ) {
+		m_CustomAtlases.resize( NumCustomAtlases );
+		for ( int iAtlas = 0; iAtlas < NumCustomAtlases; iAtlas++ ) {
+			UpdateAtlas( m_CustomAtlases[iAtlas] );
+		}
+	}
+
 	// Map/unmap buffers and pass it to the renderer
 	for ( int iAtlas = 0; iAtlas < NumCustomAtlases; iAtlas++ ) {
 		CustomAtlasParticles_t & curAtlas = m_CustomAtlases[iAtlas];
+		kbRenderObject & curRenderObj = curAtlas.m_RenderObject;
+		if ( curRenderObj.m_pComponent == nullptr ) {
+			curRenderObj.m_pComponent = new kbTransformComponent();
+		}
 
 		kbModel & finishedModel = (curAtlas.m_iCurParticleModel >= 0 ) ? ( curAtlas.m_RenderModel[curAtlas.m_iCurParticleModel] ) : ( curAtlas.m_RenderModel[0] );
 		if ( curAtlas.m_iCurParticleModel >= 0 ) {
-			g_pRenderer->RemoveParticle( &curAtlas );
+			g_pRenderer->RemoveParticle( curRenderObj );
 			finishedModel.UnmapVertexBuffer( curAtlas.m_NumIndices );
 			finishedModel.UnmapIndexBuffer();		// todo : don't need to map/remap index buffer
 		} else {
@@ -212,7 +228,11 @@ void kbParticleManager::RenderSync() {
 		}
 
 		finishedModel.SwapTexture( 0, curAtlas.m_pAtlasTexture, 0 );
-		g_pRenderer->AddParticle( &curAtlas, &finishedModel, kbVec3::zero, kbQuat( 0.0f, 0.0f, 0.0f, 1.0f ) );
+
+		curRenderObj.m_Position = kbVec3::zero;
+		curRenderObj.m_Orientation = kbQuat( 0.0f, 0.0f, 0.0f, 1.0f );
+		curRenderObj.m_pModel = &finishedModel;
+		g_pRenderer->AddParticle( curRenderObj );
 
 		curAtlas.m_iCurParticleModel = ( curAtlas.m_iCurParticleModel + 1 ) % NumCustomParticleBuffers;
 

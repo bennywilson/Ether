@@ -1,0 +1,118 @@
+//===================================================================================================
+// basicSmoke.kbShader
+//
+//
+// 2018 kbEngine 2.0
+//===================================================================================================
+cbuffer matrixBuffer {
+	matrix vpMatrix;
+	matrix billboardedModelMatrix;
+	float4 cameraPos;
+	float4 noiseScroll;
+	float4 noiseScale;
+	float4 time;
+	float4 startSmokeColor;
+	float4 endSmokeColor;
+	float4 distortion_1_2;
+	float4 distortion_3_AlphaScroll;
+	float4 smokeDistortion;
+};
+
+kbShaderState {
+	srcblend Blend_SrcAlpha
+	dstBlend Blend_InvSrcAlpha
+	blendOp BlendOp_Add
+	colorWriteEnable colorWriteEnable_rgb
+	cullmode cullmode_none
+}
+
+//-------------------------------------
+struct vertexInput {
+	float4 position			: POSITION;
+	float2 uv				: TEXCOORD0;
+	float4 color			: COLOR;
+	float4 normal			: NORMAL;
+	float4 tangent			: TANGENT;
+};
+
+//-------------------------------------
+struct pixelInput {
+	float4 position			: SV_POSITION;
+	float2 uv				: TEXCOORD0;
+	float4 color			: COLOR;
+	float2 position2		: TEXCOORD1;
+};
+
+//-------------------------------------
+struct PS_OUTPUT {
+	float4 Color			: SV_TARGET0;
+	float4 Normal			: SV_TARGET1;
+	float4 Specular			: SV_TARGET2;
+	float2 Depth			: SV_TARGET3;
+};
+
+/**
+ *	vertexShader
+ */
+pixelInput vertexShader( vertexInput input ) {
+	pixelInput output = (pixelInput)(0);
+	  
+	output.position = mul( input.position, billboardedModelMatrix );
+	output.position = mul( output.position, vpMatrix );
+	output.uv = input.uv;
+	output.color = input.color;
+	output.position2 = output.position.zw;
+
+	return output;
+}
+
+/**
+ *	pixelShader
+ */
+Texture2D smokeNoiseMap				: register(t0);
+SamplerState SampleType;
+
+Texture2D noiseMap1					: register(t1);
+Texture2D noiseMap2					: register(t2);
+Texture2D noiseMap3					: register(t3);
+ 
+float4 pixelShader( pixelInput	input ) : SV_Target {
+
+	float4 noise1 = noiseMap1.Sample( SampleType, input.uv + float2( 0.0f, noiseScroll.x * time.x ) ) * 2.0f - 1.0f;
+	float4 noise2 = noiseMap2.Sample( SampleType, input.uv + float2( 0.0f, noiseScroll.y * time.x ) ) * 2.0f - 1.0f;
+	float4 noise3 = noiseMap3.Sample( SampleType, input.uv + float2( 0.0f, noiseScroll.z * time.x ) ) * 2.0f - 1.0f;
+	noise1.xy *= distortion_1_2.xy;
+	noise2.xy *= distortion_1_2.zw;
+	noise3.xy *= distortion_3_AlphaScroll.xy;
+
+	float2 finalNoise = ( noise1 + noise2 + noise3 ).xy;
+	float perturb = ( ( 1.0f - input.uv.y) * smokeDistortion.x ) + smokeDistortion.y;
+
+	float4 fireNoise = smokeNoiseMap.Sample( SampleType, saturate( input.uv * 0.2f + finalNoise * perturb ) );
+	fireNoise.b = smokeNoiseMap.Sample( SampleType, saturate( input.uv + finalNoise * perturb ) ).z;
+
+	float2 alphaScroll1 = 0;
+	float2 alphaScroll2 = 0;
+	alphaScroll1.y = distortion_3_AlphaScroll.z * time.x;
+	alphaScroll2.y = distortion_3_AlphaScroll.w * time.x;
+	fireNoise.b = smokeNoiseMap.Sample( SampleType, ( alphaScroll1 + input.uv + finalNoise * perturb ) ).b;
+	fireNoise.a = smokeNoiseMap.Sample( SampleType, ( alphaScroll2 + input.uv + finalNoise * perturb ) ).a;
+
+	float lerpVal = saturate( saturate( fireNoise.r + fireNoise.g + perturb ) - fireNoise.w * 0.05f );
+	float4 color;
+	color.xyz = saturate( lerp( startSmokeColor.w * startSmokeColor.xyz, endSmokeColor.w * endSmokeColor.xyz, lerpVal ) );
+	color.w = saturate( fireNoise.a*fireNoise.b );
+	color.w *= 1.0f - pow( abs( 1.0f - input.uv.y ), 2.15f );
+	const float fluffSize = 0.16f;
+
+	float sinWave =   ( 0.5f + 0.5f * sin( input.uv.x * 25.1f + 2.1f * time.x )  )* fluffSize * 0.55f;
+	float sinWave2 = ( 0.5f + 0.5f * cos( ( input.uv.x * 65.1f + -3.5f * time.x) )  )* fluffSize * 0.14f;
+	float topMult = 1.0f - saturate( ( 1.25f * fluffSize - (  ( sinWave + sinWave2 )*0.5f )- input.uv.y ) / fluffSize );
+	color.a *= pow( abs(topMult), 1.5f );
+	color.a = pow( abs( color. a), 0.8f );
+	float dist = 0.5f;
+	dist = 1.0f - saturate( ( dist - input.uv.y )/ dist );
+	color.xyz *= dist * dist;
+	
+	return color;
+}

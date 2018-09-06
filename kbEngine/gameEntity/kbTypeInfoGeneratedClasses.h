@@ -34,6 +34,18 @@ GenerateClass(
 )
 
 GenerateClass(
+	kbShaderParamComponent,
+	AddField( "ParamName", KBTYPEINFO_KBSTRING, kbShaderParamComponent, m_ParamName, false, "" )
+	AddField( "Texture", KBTYPEINFO_TEXTURE, kbShaderParamComponent, m_pTexture, false, "" )
+	AddField( "Vector", KBTYPEINFO_VECTOR4, kbShaderParamComponent, m_Vector, false, "" )
+)
+
+GenerateClass(
+	kbShaderParamListComponent,
+	AddField( "ShaderParams", KBTYPEINFO_STRUCT, kbShaderParamListComponent, m_ShaderParamList, true, "kbShaderParamComponent" )
+)
+
+GenerateClass(
 	kbClothBone,
 	AddField( "BoneName", KBTYPEINFO_KBSTRING, kbClothBone, m_BoneName, false, "" )
 	AddField( "NeighborBones", KBTYPEINFO_KBSTRING, kbClothBone, m_NeighborBones, true, "kbString" )
@@ -67,7 +79,8 @@ GenerateClass(
 
 GenerateClass(
 	kbModelComponent,
-	AddField( "m_RenderPass", KBTYPEINFO_ENUM, kbModelComponent, m_RenderPass, false, "ERenderPass" )
+	AddField( "RenderPass", KBTYPEINFO_ENUM, kbModelComponent, m_RenderPass, false, "ERenderPass" )
+	AddField( "TranslucencySortBias", KBTYPEINFO_FLOAT, kbModelComponent, m_TranslucencySortBias, false, "" )
 	AddField( "CastsShadow", KBTYPEINFO_BOOL, kbModelComponent, m_bCastsShadow, false, "" )
 )
 
@@ -173,6 +186,7 @@ GenerateEnum(
 
 GenerateClass(
 	kbParticleComponent,
+	AddField( "TranslucencySortBias", KBTYPEINFO_FLOAT, kbParticleComponent, m_TranslucencySortBias, false, "" )
 	AddField( "ParticleTexture", KBTYPEINFO_TEXTURE, kbParticleComponent, m_pParticleTexture, false, "" )
 	AddField( "ParticleShader", KBTYPEINFO_SHADER, kbParticleComponent, m_pParticleShader, false, "" )
 	AddField( "TotalDuration", KBTYPEINFO_FLOAT, kbParticleComponent, m_TotalDuration, false, "" )

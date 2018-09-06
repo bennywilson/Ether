@@ -17,6 +17,9 @@
     <Filter Include="Shaders\DamageGen">
       <UniqueIdentifier>{f2cee1ca-6a59-4e6f-95b9-d935b720001d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Shaders\FX">
+      <UniqueIdentifier>{643c3a40-4ed8-4d04-ac24-31d66d2ea136}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="ReadMe.txt" />
@@ -70,6 +73,15 @@
     </None>
     <None Include="assets\shaders\DamageGen\collisionMapTimeGen.kbShader">
       <Filter>Shaders\DamageGen</Filter>
+    </None>
+    <None Include="assets\shaders\FX\basicFire.kbShader">
+      <Filter>Shaders\FX</Filter>
+    </None>
+    <None Include="assets\shaders\FX\basicSmoke.kbShader">
+      <Filter>Shaders\FX</Filter>
+    </None>
+    <None Include="assets\shaders\FX\emberParticle.kbShader">
+      <Filter>Shaders\FX</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

@@ -22,7 +22,7 @@ struct kbParticle_t {
 	float m_TotalLife;
 	kbVec3 m_StartVelocity;
 	kbVec3 m_EndVelocity;
-	float m_Random;
+	float m_Randoms[3];
 };
 
 /*
@@ -74,12 +74,15 @@ private:
 	int															m_MinBurstCount;
 	int															m_MaxBurstCount;
 	EBillboardType												m_ParticleBillboardType;
+	float														m_TranslucencySortBias;
 	bool														m_bLockVelocity;
 
 	// Non-editable
 	float														m_LeftOverTime;
 	float														m_TimeAlive;
 	int															m_BurstCount;
+
+	kbRenderObject												m_RenderObject;
 
 	static const int											NumParticleBuffers = 3;
 	std::vector<kbParticle_t>									m_Particles;

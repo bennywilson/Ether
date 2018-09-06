@@ -60,6 +60,7 @@ void kbStaticModelComponent::SetEnable_Internal( const bool isEnabled ) {
 		m_RenderObject.m_RenderPass = m_RenderPass;
 		m_RenderObject.m_Scale = GetOwner()->GetScale();
 		m_RenderObject.m_OverrideShaderList = m_pOverrideShaderList;
+		m_RenderObject.m_TranslucencySortBias = m_TranslucencySortBias;
 
 		g_pRenderer->AddRenderObject( m_RenderObject );
 	} else {
@@ -84,12 +85,4 @@ void kbStaticModelComponent::Update_Internal( const float DeltaTime ) {
 	}
 
 	// m_pModel->DrawDebugTBN( GetOwner()->GetPosition(), GetOwner()->GetOrientation(), GetOwner()->GetScale() );
-}
-
-/**
- *	kbStaticModelComponent:SetShaderParams
- */
-void kbStaticModelComponent::SetShaderParams( const kbShaderParamOverrides_t & shaderParams ) {
-	m_RenderObject.m_ShaderParamOverrides = shaderParams;
-	g_pRenderer->UpdateRenderObject( m_RenderObject );
 }

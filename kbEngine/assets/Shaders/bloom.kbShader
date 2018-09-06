@@ -42,14 +42,15 @@ pixelInput bloomGatherVertexMain( vertexInput input ) {
 Texture2D sceneTexture : 			register(t0);
 SamplerState sceneColorSampler;
 
-
 float4 bloomGatherPixelMain( pixelInput	input ) : SV_TARGET {
 	float4 inSceneColor = sceneTexture.Sample( sceneColorSampler, input.uv );
 	float maxComponent = max( inSceneColor.x, max( inSceneColor.y, inSceneColor.z ) );
+
+	inSceneColor.w = clamp( ( inSceneColor.w - 0.25f ) * 1.3333f, 0.0f, 1000.0f );
 	if ( inSceneColor.w <= 0.0f ) {
 	   return 0.0f;
 	}
-	return inSceneColor;
+	return inSceneColor * inSceneColor.w * 2.0f;
 }
 
 /**

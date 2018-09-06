@@ -14,7 +14,6 @@
 class kbShader;
 class kbModel;
 
-
 /**
  *	kbRenderTexture
  */
@@ -90,19 +89,22 @@ class kbRenderSubmesh {
 
 //-------------------------------------------------------------------------------------------------------------------------------------------------------------
 public:
-												kbRenderSubmesh( const kbRenderObject *const pInMesh, const int inMeshIdx, const ERenderPass renderPass ) :
+												kbRenderSubmesh( const kbRenderObject *const pInMesh, const int inMeshIdx, const ERenderPass renderPass, const float distFromCamera ) :
 													m_pRenderObject( pInMesh ),
 													m_MeshIdx( inMeshIdx ),
-													m_RenderPass( renderPass ) { }
+													m_RenderPass( renderPass ),
+													m_DistFromCamera( distFromCamera ) { }
 
 	const kbRenderObject *						GetRenderObject() const { return m_pRenderObject; }
 	int											GetMeshIdx() const { return m_MeshIdx; }
 	ERenderPass									GetRenderPass() const { return m_RenderPass; }
 	const kbShader *							GetShader() const;
+	float										GetDistFromCamera() const { return m_DistFromCamera; }
 
 private:
 	const kbRenderObject *						m_pRenderObject;
 	int											m_MeshIdx;
+	float										m_DistFromCamera;
 	ERenderPass									m_RenderPass;
 };
 
@@ -254,9 +256,8 @@ public:
 	void										UpdateFog( const kbColor & color, const float startDistance, const float endDistance );
 
 	// Particles
-	void										AddParticle( const void *const pParentPtr, const kbModel *const pModel, const kbVec3 & pos, kbQuat & orientation );
-	void										UpdateParticle( const void *const pParentPtr, const kbModel *const pModel, const kbVec3 & pos, kbQuat & orientation );
-	void										RemoveParticle( const void *const pParentPtr );
+	void										AddParticle( const kbRenderObject & renderObject );
+	void										RemoveParticle( const kbRenderObject & renderObject );
 
 	// Light Shafts
 	void										AddLightShafts( const kbLightShaftsComponent *const pComponent, const kbVec3 & pos, const kbQuat & orientation );

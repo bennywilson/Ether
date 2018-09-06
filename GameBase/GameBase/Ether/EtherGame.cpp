@@ -142,11 +142,6 @@ void EtherGame::LevelLoaded_Internal() {
 		kbGameEntity *const pEntity = m_pLocalPlayer->GetChildEntities()[0];
 		pEntity->SetPosition( pEntity->GetPosition() + kbVec3( 0.0f, 20000.0f, 0.0f ) );
 	}
-
-	m_pParticleManager->SetCustomAtlasTexture( 0, "./assets/FX/fx_atlas.jpg" );
-	m_pParticleManager->SetCustomAtlasShader( 1, "./assets/shaders/shellTrailParticle.kbShader" );
-
-	m_pParticleManager->SetCustomAtlasTexture( 1, "./assets/FX/SmokeTrailAtlas.dds" );
 }
 
 /**
@@ -343,6 +338,8 @@ void EtherGame::MoveActorAlongGround( EtherActorComponent *const pActor, const k
  */
 void EtherGame::UpdateWorld( const float DT ) {
 	const double GameTimeInSeconds = m_GameStartTimer.TimeElapsedSeconds();
+
+
 /*
 	m_AIManager.Update( DT );
 	int numEntities = 0;
@@ -512,6 +509,15 @@ void EtherGame::RegisterBulletShot( kbComponent *const pHitComponent, const kbVe
  *	EtherGame::RenderSync
  */
 void EtherGame::RenderSync() {
+
+	if ( HasFirstSyncCompleted() == false ) {
+
+		m_pParticleManager->SetCustomAtlasTexture( 0, "./assets/FX/fx_atlas.jpg" );
+		m_pParticleManager->SetCustomAtlasShader( 1, "./assets/shaders/shellTrailParticle.kbShader" );
+
+		m_pParticleManager->SetCustomAtlasTexture( 1, "./assets/FX/SmokeTrailAtlas.dds" );
+	}
+
 	m_RenderThreadShotsThisFrame = m_ShotsThisFrame;
 	m_ShotsThisFrame.clear();
 }
@@ -567,12 +573,11 @@ void EtherGame::RenderThreadCallBack() {
 			}
 		}
 
-		m_pCollisionMapPushGenShader = (kbShader*)g_ResourceManager.GetResource( "./assets/shaders/DamageGen/collisionMapPushGen.kbshader", true );
-		m_pCollisionMapDamageGenShader = (kbShader*)g_ResourceManager.GetResource( "./assets/shaders/DamageGen/collisionMapDamageGen.kbshader", true );
-		m_pCollisionMapTimeGenShader = (kbShader*)g_ResourceManager.GetResource( "./assets/shaders/DamageGen/collisionMapTimeGen.kbshader", true );
-		m_pCollisionMapUpdateTimeShader = (kbShader*)g_ResourceManager.GetResource( "./assets/shaders/DamageGen/collisionMapTimeUpdate.kbshader", true );
-		m_pBulletHoleUpdateShader = (kbShader*)g_ResourceManager.GetResource( "./assets/shaders/DamageGen/pokeyholeunwrap.kbshader", true );
-		
+		m_pCollisionMapPushGenShader = (kbShader *) g_ResourceManager.GetResource( "./assets/shaders/DamageGen/collisionMapPushGen.kbshader", true );
+		m_pCollisionMapDamageGenShader = (kbShader *) g_ResourceManager.GetResource( "./assets/shaders/DamageGen/collisionMapDamageGen.kbshader", true );
+		m_pCollisionMapTimeGenShader = (kbShader *) g_ResourceManager.GetResource( "./assets/shaders/DamageGen/collisionMapTimeGen.kbshader", true );
+		m_pCollisionMapUpdateTimeShader = (kbShader *) g_ResourceManager.GetResource( "./assets/shaders/DamageGen/collisionMapTimeUpdate.kbshader", true );
+		m_pBulletHoleUpdateShader = (kbShader *) g_ResourceManager.GetResource( "./assets/shaders/DamageGen/pokeyholeunwrap.kbshader", true );
 	}
 
 	if ( GetAsyncKeyState( 'C' ) ) {
@@ -583,7 +588,7 @@ void EtherGame::RenderThreadCallBack() {
 	// Update time in collision Map
 	g_pRenderer->RT_SetRenderTarget( m_pGrassCollisionTexture );
 	const float timeMultiplier = ( 1.0f - kbClamp( g_TimeMultiplier * GetCurrentFrameDeltaTime(), 0.0f, 1.0f ) ) * 0.15f + 0.85f;
-	g_pRenderer->RT_RenderLine( kbVec3( 0.5f, 0.0f, 0.0f ), kbVec3( 0.5f, 1.0f, 0.0f ), kbColor( timeMultiplier, timeMultiplier, timeMultiplier, timeMultiplier ), 15.0f, m_pCollisionMapUpdateTimeShader );
+	g_pRenderer->RT_Render2DLine( kbVec3( 0.5f, 0.0f, 0.0f ), kbVec3( 0.5f, 1.0f, 0.0f ), kbColor( timeMultiplier, timeMultiplier, timeMultiplier, timeMultiplier ), 15.0f, m_pCollisionMapUpdateTimeShader );
 
 	const float curTime = g_GlobalTimer.TimeElapsedSeconds();
 
@@ -648,15 +653,13 @@ void EtherGame::RenderThreadCallBack() {
 	
 		// Render push data
 		m_ShaderParamOverrides.SetVec4( "perpendicularDirection", kbVec4( perpLine.x, perpLine.y, g_GlobalTimer.TimeElapsedSeconds(), 0.0f ) );
-		g_pRenderer->RT_RenderLine( startPos, endPos, kbColor( 0.0f, 0.0f, 1.0f, 0.0f ), pushLineWidth, m_pCollisionMapPushGenShader, &m_ShaderParamOverrides );
+		g_pRenderer->RT_Render2DLine( startPos, endPos, kbColor( 0.0f, 0.0f, 1.0f, 0.0f ), pushLineWidth, m_pCollisionMapPushGenShader, &m_ShaderParamOverrides );
 	
 		// Render time data
-		g_pRenderer->RT_RenderLine( startPos, endPos, kbColor( 0.0f, 0.0f, 1.0f, 0.0f ), pushLineWidth, m_pCollisionMapTimeGenShader, &m_ShaderParamOverrides );
+		g_pRenderer->RT_Render2DLine( startPos, endPos, kbColor( 0.0f, 0.0f, 1.0f, 0.0f ), pushLineWidth, m_pCollisionMapTimeGenShader, &m_ShaderParamOverrides );
 
 		// Render damage
-		g_pRenderer->RT_RenderLine( startPos, endPos, kbColor( 0.0f, 0.0f, curTime, 0.0f ), 16.0f / 4096.0f, m_pCollisionMapDamageGenShader );
-
-		g_pRenderer->RT_SetBlendState();
+		g_pRenderer->RT_Render2DLine( startPos, endPos, kbColor( 0.0f, 0.0f, curTime, 0.0f ), 16.0f / 4096.0f, m_pCollisionMapDamageGenShader );
 	}
 	m_RenderThreadShotsThisFrame.clear();
 }

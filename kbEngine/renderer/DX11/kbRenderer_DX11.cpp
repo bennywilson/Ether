@@ -781,7 +781,7 @@ void kbRenderer_DX11::Init_Internal( HWND hwnd, const int frameWidth, const int 
 	textureDesc.CPUAccessFlags = D3D11_CPU_ACCESS_READ;
 	textureDesc.MiscFlags = 0;
 
-	hr = m_pD3DDevice->CreateTexture2D( &textureDesc, nullptr, &m_pOffScreenRenderTargetTexture);
+	hr = m_pD3DDevice->CreateTexture2D( &textureDesc, nullptr, &m_pOffScreenRenderTargetTexture );
 
 	LoadTexture( "../../kbEngine/assets/Textures/Editor/white.bmp", 0 );
 
@@ -811,7 +811,7 @@ void kbRenderer_DX11::Init_Internal( HWND hwnd, const int frameWidth, const int 
 	m_DebugText->UnmapIndexBuffer();
 
 	hr = m_pDeviceContext->QueryInterface( __uuidof(m_pEventMarker), (void**)&m_pEventMarker );
-	kbErrorCheck( SUCCEEDED( hr ), " kbRenderer_DX11::Initialize() - Failed to query user defined annotation" );
+	kbErrorCheck( SUCCEEDED(hr), " kbRenderer_DX11::Initialize() - Failed to query user defined annotation" );
 }
 
 /**
@@ -907,10 +907,8 @@ bool kbRenderer_DX11::InitializeOculus() {
  */
 int kbRenderer_DX11::CreateRenderView( HWND hwnd )
 {
-	if ( hwnd == nullptr ) {
-		kbError( "nullptr window handle passed into kbRenderer_DX11::CreateRenderView" );
-	}
-
+	kbErrorCheck( hwnd != nullptr, "nullptr window handle passed into kbRenderer_DX11::CreateRenderView" );
+	
 	DXGI_SWAP_CHAIN_DESC sd = { 0 };
 	
 	sd.BufferDesc.Width = Back_Buffer_Width;
@@ -1007,7 +1005,7 @@ kbRenderTexture * kbRenderer_DX11::GetRenderTexture_Internal( const int width, c
 	textureDesc.MiscFlags = 0;
 
 	HRESULT hr = m_pD3DDevice->CreateTexture2D( &textureDesc, nullptr, &rt.m_pRenderTargetTexture );
-	kbErrorCheck( SUCCEEDED( hr ), "kbRenderer_DX11::CreateRenderTarget() - Failed to create 2D texture with format", (int)targetFormat );
+	kbErrorCheck( SUCCEEDED(hr), "kbRenderer_DX11::CreateRenderTarget() - Failed to create 2D texture with format", (int)targetFormat );
 
 	// Render target view
 	D3D11_RENDER_TARGET_VIEW_DESC renderTargetViewDesc;
@@ -1016,7 +1014,7 @@ kbRenderTexture * kbRenderer_DX11::GetRenderTexture_Internal( const int width, c
 	renderTargetViewDesc.Texture2D.MipSlice = 0;
 
 	hr = m_pD3DDevice->CreateRenderTargetView( rt.m_pRenderTargetTexture, &renderTargetViewDesc, &rt.m_pRenderTargetView );
-	kbErrorCheck( SUCCEEDED( hr ), "kbRenderer_DX11::CreateRenderTarget() - Failed to create RTV with format", (int)targetFormat );
+	kbErrorCheck( SUCCEEDED(hr), "kbRenderer_DX11::CreateRenderTarget() - Failed to create RTV with format", (int)targetFormat );
 
 	// Shader resource view
 	D3D11_SHADER_RESOURCE_VIEW_DESC shaderResourceViewDesc;
@@ -1026,7 +1024,7 @@ kbRenderTexture * kbRenderer_DX11::GetRenderTexture_Internal( const int width, c
 	shaderResourceViewDesc.Texture2D.MipLevels = 1;
 
 	hr = m_pD3DDevice->CreateShaderResourceView( rt.m_pRenderTargetTexture, &shaderResourceViewDesc, &rt.m_pShaderResourceView );
-	kbErrorCheck( SUCCEEDED( hr ), "kbRenderer_DX11::CreateRenderTarget() - Failed to create SRV texture for index", (int)targetFormat );
+	kbErrorCheck( SUCCEEDED(hr), "kbRenderer_DX11::CreateRenderTarget() - Failed to create SRV texture for index", (int)targetFormat );
 
 	return &rt;
 }
@@ -1303,6 +1301,7 @@ void kbRenderer_DX11::RenderScene() {
 			for ( int i = 0; i < PostLightingVisibleList.size(); i++ ) {
 				RenderMesh( &PostLightingVisibleList[i], false  );
 			}
+
 			PLACE_GPU_TIME_STAMP( "Unlit" );
 		}
 
@@ -1351,7 +1350,7 @@ void kbRenderer_DX11::RenderScene() {
 				renderObject.m_Scale = m_DebugModels[i].m_Scale;
 				renderObject.m_EntityId = m_DebugModels[i].m_EntityId;
 				for ( int j = 0; j < renderObject.m_pModel->NumMeshes(); j++ ) {
-					kbRenderSubmesh newMesh( &renderObject, j, RP_Debug );
+					kbRenderSubmesh newMesh( &renderObject, j, RP_Debug, 0.0f );
 					RenderMesh( &newMesh, false );
 				}
 			}
@@ -1367,6 +1366,7 @@ void kbRenderer_DX11::RenderScene() {
 	RenderDebugText();
 
 	if ( g_UseEditor ) {
+		m_RenderState.SetBlendState();
 		RenderMousePickerIds();
 	}
 	m_DebugLines.clear();
@@ -1424,7 +1424,7 @@ void kbRenderer_DX11::RenderScene() {
 void kbRenderer_DX11::PreRenderCullAndSort() {
 
 	for ( int i = 0; i < NUM_RENDER_PASSES; i++ ) {
-		m_pCurrentRenderWindow->GetVisibleSubMeshes(i).clear();
+		m_pCurrentRenderWindow->GetVisibleSubMeshes( i ).clear();
 	}
 
 	for ( auto iter = m_pCurrentRenderWindow->GetRenderObjectMap().begin(); iter != m_pCurrentRenderWindow->GetRenderObjectMap().end(); iter++ ) {
@@ -1433,9 +1433,9 @@ void kbRenderer_DX11::PreRenderCullAndSort() {
 
 		kbRenderObject & renderObj = *iter->second;
 
+		const float distToCamSqr = ( renderObj.m_Position - m_pCurrentRenderWindow->GetCameraPosition() ).LengthSqr();
 		if ( renderObj.m_CullDistance > 0 ) {
 			const float cullDistSqr = renderObj.m_CullDistance * renderObj.m_CullDistance;
-			const float distToCamSqr = ( renderObj.m_Position - m_pCurrentRenderWindow->GetCameraPosition() ).LengthSqr();
 	
 			if ( distToCamSqr >= cullDistSqr ) {
 				bIsVisible = false;
@@ -1457,14 +1457,42 @@ void kbRenderer_DX11::PreRenderCullAndSort() {
 				}
 
 				if ( pShader == nullptr || pShader->IsBlendEnabled() == false ) {
-					m_pCurrentRenderWindow->GetVisibleSubMeshes( renderObj.m_RenderPass ).push_back( kbRenderSubmesh( &renderObj, i, renderObj.m_RenderPass ) );
+					m_pCurrentRenderWindow->GetVisibleSubMeshes( renderObj.m_RenderPass ).push_back( kbRenderSubmesh( &renderObj, i, renderObj.m_RenderPass, sqrt( distToCamSqr ) ) );
 				} else {
-					m_pCurrentRenderWindow->GetVisibleSubMeshes( RP_Translucent ).push_back( kbRenderSubmesh( &renderObj, i, RP_Translucent ) );
+					m_pCurrentRenderWindow->GetVisibleSubMeshes( RP_Translucent ).push_back( kbRenderSubmesh( &renderObj, i, RP_Translucent, sqrt( distToCamSqr ) ) );
 		
 				}
 			}
 		}
 	}
+
+	const std::map<const void *, kbRenderObject *> & curMap = m_pCurrentRenderWindow->GetRenderParticleMap();
+	for ( auto iter = curMap.begin(); iter != curMap.end(); iter++ ) {
+
+		kbRenderObject & renderObj = *iter->second;
+		float distToCamSqr = distToCamSqr = ( renderObj.m_Position - m_pCurrentRenderWindow->GetCameraPosition() ).LengthSqr();
+		if ( renderObj.m_CullDistance > 0 ) {
+			const float cullDistSqr = renderObj.m_CullDistance * renderObj.m_CullDistance;
+			
+	
+			if ( distToCamSqr >= cullDistSqr ) {
+				continue;
+			}
+		}
+
+		float distToCam = sqrt( distToCamSqr );
+		kbRenderSubmesh newMesh( iter->second, 0, RP_Translucent, distToCam );
+		m_pCurrentRenderWindow->GetVisibleSubMeshes( RP_Translucent ).push_back( newMesh );
+	}
+
+	// Sort translucent meshes by depth
+	std::vector<kbRenderSubmesh> & visibleTranslucentMeshes = m_pCurrentRenderWindow->GetVisibleSubMeshes( RP_Translucent );
+	std::sort( visibleTranslucentMeshes.begin(), visibleTranslucentMeshes.end(), []( kbRenderSubmesh & op1, kbRenderSubmesh & op2 ) {
+		const float op1Dist = op1.GetDistFromCamera() + op1.GetRenderObject()->m_TranslucencySortBias;
+		const float op2Dist = op2.GetDistFromCamera() + op2.GetRenderObject()->m_TranslucencySortBias;
+
+		return op1Dist > op2Dist;
+	});
 }
 
 /**
@@ -1490,12 +1518,6 @@ void kbRenderer_DX11::RenderTranslucency() {
 										kbRenderState::StencilReplace,
 										kbRenderState::CompareNotEqual,
 										1);
-
-	for ( auto iter = m_pCurrentRenderWindow->GetRenderParticleMap().begin(); iter != m_pCurrentRenderWindow->GetRenderParticleMap().end(); iter++ ) {
-
-		kbRenderSubmesh newMesh( iter->second, 0, RP_Translucent );
-		RenderMesh( &newMesh, false );
-	}
 
 	std::vector<kbRenderSubmesh> & visibleSubmeshList = m_pCurrentRenderWindow->GetVisibleSubMeshes( RP_Translucent );
 	for ( int i = 0; i < visibleSubmeshList.size(); i++ ) {
@@ -1538,6 +1560,7 @@ void kbRenderer_DX11::RenderTranslucency() {
 
 		RenderMesh( &visibleSubmeshList[i], false );
 	}
+	
 
 	m_RenderState.SetBlendState();
 
@@ -1792,12 +1815,13 @@ void kbRenderer_DX11::RenderMousePickerIds() {
 	m_pDeviceContext->RSSetViewports( 1, &viewport );
 	m_pDeviceContext->OMSetRenderTargets( 1, &GetRenderTarget_DX11(MOUSE_PICKER_BUFFER)->m_pRenderTargetView, m_pDepthStencilView );
 	m_RenderState.SetDepthStencilState();
+	m_RenderState.SetBlendState();
 
 	for ( auto iter = m_pCurrentRenderWindow->GetRenderObjectMap().begin(); iter != m_pCurrentRenderWindow->GetRenderObjectMap().end(); iter++ ) {
 		if ( iter->second->m_EntityId > 0 ) {
 			// TODO
-			kbRenderSubmesh newMesh( iter->second, 0, RP_MousePicker );
-			RenderMesh( &newMesh, false );
+			kbRenderSubmesh newMesh( iter->second, 0, RP_MousePicker, 0.0f );
+			RenderMesh( &newMesh, false, true );
 		}
 	}
 
@@ -1811,7 +1835,7 @@ void kbRenderer_DX11::RenderMousePickerIds() {
 		renderObject.m_Scale = m_DebugModels[i].m_Scale;
 		renderObject.m_EntityId = m_DebugModels[i].m_EntityId;
 		for ( int j = 0; j < renderObject.m_pModel->NumMeshes(); j++ ) {
-			kbRenderSubmesh newMesh( &renderObject, j, RP_MousePicker );
+			kbRenderSubmesh newMesh( &renderObject, j, RP_MousePicker, 0.0f );
 			RenderMesh( &newMesh, false );
 		}
 	}
@@ -2839,7 +2863,7 @@ void kbRenderer_DX11::RenderScreenSpaceQuadImmediate( const int start_x, const i
 /**
  *	kbRenderer_DX11::RenderMesh
  */
-void kbRenderer_DX11::RenderMesh( const kbRenderSubmesh *const pRenderMesh, const bool bShadowPass ) {
+void kbRenderer_DX11::RenderMesh( const kbRenderSubmesh *const pRenderMesh, const bool bShadowPass, const bool bSkipMeshBlendSettings ) {
 
 	const kbRenderObject * pRenderObject = pRenderMesh->GetRenderObject();
 	const kbModel *const pModel = pRenderObject->m_pModel;
@@ -2884,7 +2908,10 @@ void kbRenderer_DX11::RenderMesh( const kbRenderSubmesh *const pRenderMesh, cons
 			pShader = m_pMissingShader;
 		}
 	}
-	m_RenderState.SetBlendState( pShader );
+
+	if ( bSkipMeshBlendSettings == false ) {
+		m_RenderState.SetBlendState( pShader );
+	}
 
 	if ( m_ViewMode == ViewMode_Wireframe ) {
 		m_pDeviceContext->RSSetState( m_pWireFrameRasterizerState );
@@ -3324,7 +3351,6 @@ ID3D11Buffer * kbRenderer_DX11::SetConstantBuffer( const kbShaderVarBindings_t &
 		worldMatrix = kbMat4::identity;
 	}
 
-
 	D3D11_MAPPED_SUBRESOURCE mappedResource;
 	ID3D11Buffer *const pConstantBuffer = GetConstantBuffer( shaderVarBindings.m_ConstantBufferSizeBytes );
 	HRESULT hr = m_pDeviceContext->Map( pConstantBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource );
@@ -3343,7 +3369,23 @@ ID3D11Buffer * kbRenderer_DX11::SetConstantBuffer( const kbShaderVarBindings_t &
 	for ( int i = 0; i < bindings.size(); i++ ) {
 		const std::string & varName = bindings[i].m_VarName;
 		const byte * pVarByteOffset = constantPtr + bindings[i].m_VarByteOffset;
-		if ( varName == "mvpMatrix" ) {
+		if ( varName == "billboardedModelMatrix" ) {
+
+			const kbVec3 camToObject = ( m_pCurrentRenderWindow->GetCameraPosition() - pRenderObject->m_Position ).Normalized();
+			const kbVec3 rightVec = kbVec3::up.Cross( camToObject );
+			kbMat4 billBoardedMatrix = kbMat4::identity;
+			billBoardedMatrix[0].Set( rightVec.x, rightVec.y, rightVec.z, 0.0f );
+			billBoardedMatrix[1].Set( 0.0f, 1.0f, 0.0f, 0.0f );
+			billBoardedMatrix[2].Set( camToObject.x, camToObject.y, camToObject.z, 0.0f );
+			billBoardedMatrix[3].Set( pRenderObject->m_Position.x, pRenderObject->m_Position.y, pRenderObject->m_Position.z, 1.0f );
+
+			kbMat4 scaleMatrix;
+			scaleMatrix.MakeScale( pRenderObject->m_Scale );
+			billBoardedMatrix = scaleMatrix * billBoardedMatrix;
+
+			kbMat4 *const pMatOffset = (kbMat4*)pVarByteOffset;
+			*pMatOffset = billBoardedMatrix;
+		} else if ( varName == "mvpMatrix" ) {
 			kbMat4 *const pMatOffset = (kbMat4*)pVarByteOffset;
 			*pMatOffset = worldMatrix * m_pCurrentRenderWindow->GetViewProjectionMatrix();
 		} else if ( varName == "vpMatrix" ) {
