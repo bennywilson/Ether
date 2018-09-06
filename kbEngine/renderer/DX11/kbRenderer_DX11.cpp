@@ -3351,7 +3351,6 @@ ID3D11Buffer * kbRenderer_DX11::SetConstantBuffer( const kbShaderVarBindings_t &
 		worldMatrix = kbMat4::identity;
 	}
 
-
 	D3D11_MAPPED_SUBRESOURCE mappedResource;
 	ID3D11Buffer *const pConstantBuffer = GetConstantBuffer( shaderVarBindings.m_ConstantBufferSizeBytes );
 	HRESULT hr = m_pDeviceContext->Map( pConstantBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource );
@@ -3401,12 +3400,6 @@ ID3D11Buffer * kbRenderer_DX11::SetConstantBuffer( const kbShaderVarBindings_t &
 		} else if ( varName == "viewProjection" ) {
 			kbMat4 *const pMatOffset = (kbMat4*)pVarByteOffset;
 			*pMatOffset = m_pCurrentRenderWindow->GetViewProjectionMatrix();
-		} else if ( varName == "inverseView" ) {
-
-			kbMat4 *const pMatOffset = (kbMat4*)pVarByteOffset;
-			kbMat4 invView = m_pCurrentRenderWindow->GetViewMatrix();
-			invView.InvertFast();
-			*pMatOffset = invView;
 		} else if ( varName == "boneList" ) {
 			if ( pRenderObject != nullptr ) {
 				kbMat4 *const boneMatrices = (kbMat4*)pVarByteOffset;

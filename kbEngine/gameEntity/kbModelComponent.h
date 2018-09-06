@@ -23,8 +23,6 @@ public:
 
 	void										SetShaderParams( const kbShaderParamOverrides_t & shaderParams );
 
-	//void										SetShaderParam( const std::string & paramName, const kbShaderParamOverrides_t::kbShaderParam_t & shaderParam );
-
 	bool										GetCastsShadow() const { return m_bCastsShadow; }
 
 protected:
@@ -52,9 +50,10 @@ public:
 
 
 private:
-	kbString							m_ParamName;
-	kbTexture *							m_pTexture;
-	kbVec4								m_Vector;
+
+	kbString									m_ParamName;
+	kbTexture *									m_pTexture;
+	kbVec4										m_Vector;
 };
 
 /**

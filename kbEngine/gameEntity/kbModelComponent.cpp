@@ -57,7 +57,7 @@ void kbShaderParamListComponent::Constructor() {
 }
 
 /**
- *	kbShaderParamListComponent::ConstEditorChangeructor
+ *	kbShaderParamListComponent::EditorChange
  */
 void kbShaderParamListComponent::EditorChange( const std::string & propertyName ) {
 	UpdateModelWithParams();

@@ -339,7 +339,7 @@ public:
 													m_pComponent( nullptr ),
 													m_pModel( nullptr ),
 													m_RenderPass( RP_Lighting ),
-													m_TranslucencySortBias( -1.0f ),
+													m_TranslucencySortBias( 0.0f ),
 													m_EntityId( 0 ),
 													m_CullDistance( -1.0f ),
 													m_bCastsShadow( false ),
