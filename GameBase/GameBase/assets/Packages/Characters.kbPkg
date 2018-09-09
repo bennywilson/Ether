@@ -44,7 +44,9 @@ kbGameEntity 3296042617 1156675361 562646963 1803854321 {
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadow = 1
-		m_RenderPass = LightingPass
+		RenderPass = LightingPass
+		ShaderParams = 0
+		TranslucencySortBias =  0.000000
 		Model = .\assets\models\characters\cartel_warrior\cartel_warrior.ms3d
 		ShaderOverride = 0
 			

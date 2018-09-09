@@ -9,7 +9,6 @@ cbuffer matrixBuffer {
 	matrix billboardedModelMatrix;
 	float4 cameraPos;
 	float4 noiseScroll;
-	float4 noiseScale;
 	float4 time;
 	float4 startSmokeColor;
 	float4 endSmokeColor;

@@ -31,11 +31,54 @@ kbModelComponent::~kbModelComponent() {
 }
 
 /**
+ *	kbModelComponent::EditorChange
+ */
+void kbModelComponent::EditorChange( const std::string & propertyName ) {
+	Super::EditorChange( propertyName );
+
+	m_RenderObject.m_ShaderParamOverrides.m_ParamOverrides.clear();
+	for ( int i = 0; i < m_ShaderParamList.size(); i++ ) {
+		if ( m_ShaderParamList[i].GetParamName().stl_str().empty() ) {
+			continue;
+		}
+
+		if ( m_ShaderParamList[i].GetTexture() != nullptr ) {
+			m_RenderObject.m_ShaderParamOverrides.SetTexture( m_ShaderParamList[i].GetParamName().stl_str(), m_ShaderParamList[i].GetTexture() );
+		} else {
+			m_RenderObject.m_ShaderParamOverrides.SetVec4( m_ShaderParamList[i].GetParamName().stl_str(), m_ShaderParamList[i].GetVector() );
+
+		}
+	}
+}
+
+/**
+ *	kbModelComponent::PostLoad
+ */
+void kbModelComponent::PostLoad() {
+	Super::PostLoad();
+
+	if ( GetOwner()->IsPrefab() == false ) {
+		for ( int i = 0; i < m_ShaderParamList.size(); i++ ) {
+			if ( m_ShaderParamList[i].GetParamName().stl_str().empty() ) {
+				continue;
+			}
+
+			if ( m_ShaderParamList[i].GetTexture() != nullptr ) {
+				m_RenderObject.m_ShaderParamOverrides.SetTexture( m_ShaderParamList[i].GetParamName().stl_str(), m_ShaderParamList[i].GetTexture() );
+			} else {
+				m_RenderObject.m_ShaderParamOverrides.SetVec4( m_ShaderParamList[i].GetParamName().stl_str(), m_ShaderParamList[i].GetVector() );
+
+			}
+		}
+	}
+}
+
+/**
  *	kbModelComponent:SetShaderParams
  */
 void kbModelComponent::SetShaderParams( const kbShaderParamOverrides_t & shaderParams ) {
-	m_RenderObject.m_ShaderParamOverrides = shaderParams;
 
+	m_RenderObject.m_ShaderParamOverrides = shaderParams;
 	if ( IsEnabled() ) {
 		g_pRenderer->UpdateRenderObject( m_RenderObject );
 	}
@@ -47,59 +90,4 @@ void kbModelComponent::SetShaderParams( const kbShaderParamOverrides_t & shaderP
 void kbShaderParamComponent::Constructor() {
 	m_pTexture = nullptr;
 	m_Vector.Set( 0.0f, 0.0f, 0.0f, 0.0f );
-}
-
-/**
- *	kbShaderParamListComponent::Constructor
- */
-void kbShaderParamListComponent::Constructor() {
-
-}
-
-/**
- *	kbShaderParamListComponent::EditorChange
- */
-void kbShaderParamListComponent::EditorChange( const std::string & propertyName ) {
-	UpdateModelWithParams();
-}
-
-/**
- *	kbShaderParamListComponent::Enable
- */
-void kbShaderParamListComponent::Enable( const bool setEnabled ) {
-	Super::Enable( setEnabled );
-
-	if ( setEnabled ) {
-		UpdateModelWithParams();
-	}
-}
-
-/**
- *	kbShaderParamListComponent::UpdateModelWithParams
- */								
-void kbShaderParamListComponent::UpdateModelWithParams() {
-	kbGameEntity *const pGameEntity = GetOwner();
-	kbModelComponent *const pModelComponent = (kbModelComponent *)GetOwner()->GetComponentByType( kbModelComponent::GetType() );
-	if ( pModelComponent == nullptr ) {
-		kbWarning( "kbShaderParamListComponent::UpdateModelWithParams() - Missing model component" );
-		return;
-	}
-
-	kbShaderParamOverrides_t shaderOverride;
-
-	for ( int i = 0; i < m_ShaderParamList.size(); i++ ) {
-		kbShaderParamComponent & curParam = m_ShaderParamList[i];
-		const std::string & paramName = curParam.m_ParamName.stl_str();
-		if ( paramName.empty() ) {
-			continue;
-		}
-
-		if ( curParam.m_pTexture != nullptr ) {
-			shaderOverride.SetTexture( paramName, curParam.m_pTexture );
-		} else {
-			shaderOverride.SetVec4( paramName, curParam.m_Vector );
-		}
-	}
-
-	pModelComponent->SetShaderParams( shaderOverride );
 }

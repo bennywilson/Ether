@@ -3371,8 +3371,9 @@ ID3D11Buffer * kbRenderer_DX11::SetConstantBuffer( const kbShaderVarBindings_t &
 		const byte * pVarByteOffset = constantPtr + bindings[i].m_VarByteOffset;
 		if ( varName == "billboardedModelMatrix" ) {
 
-			const kbVec3 camToObject = ( m_pCurrentRenderWindow->GetCameraPosition() - pRenderObject->m_Position ).Normalized();
-			const kbVec3 rightVec = kbVec3::up.Cross( camToObject );
+			kbVec3 camToObject = ( m_pCurrentRenderWindow->GetCameraPosition() - pRenderObject->m_Position ).Normalized();
+			const kbVec3 rightVec = kbVec3::up.Cross( camToObject ).Normalized();
+			camToObject = rightVec.Cross( kbVec3::up ).Normalized();
 			kbMat4 billBoardedMatrix = kbMat4::identity;
 			billBoardedMatrix[0].Set( rightVec.x, rightVec.y, rightVec.z, 0.0f );
 			billBoardedMatrix[1].Set( 0.0f, 1.0f, 0.0f, 0.0f );

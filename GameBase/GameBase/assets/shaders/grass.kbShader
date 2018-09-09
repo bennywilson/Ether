@@ -95,7 +95,7 @@ void CreateVertex( inout TriangleStream<pixelInput> OutputStream, float3 vertexW
 
 	const int4 IndexVector = D3DCOLORtoUBYTE4( input[0].blendIndices );
 	const float startHeight = heightMap.SampleLevel( SampleType, input[0].uv, 0.0f ).r * GrassData1.x;
-	const float3 bladeWorldOrigin = float3( 0.0f, startHeight, 0.0f ) + bladeLocalOrigin + float3( jitterOffsets[IndexVector.x + grassNumber].z, 0.0f, jitterOffsets[IndexVector.x + grassNumber].w ) + wind.xyz + input[0].position.xyz;
+	const float3 bladeWorldOrigin = float3( 0.0f, startHeight, 0.0f ) + bladeLocalOrigin + float3( jitterOffsets[IndexVector.x + grassNumber].z, 0.0f, jitterOffsets[IndexVector.x + grassNumber].w ) + input[0].position.xyz;
 
 	float2 terrainMapUV;
 	terrainMapUV.x = ( ( bladeWorldOrigin.x - collisionMapCenter.x ) / collisionMapCenter.z ) * 0.5f + 0.5f;
@@ -129,46 +129,55 @@ void CreateVertex( inout TriangleStream<pixelInput> OutputStream, float3 vertexW
 		windpush *= normalize( vecTo ) * collisionSphere.w * 2.f;
 	}*/
 
-	const float oscNoise = noiseValues.x * 5.0f;
-	float oscillation = sin( oscNoise.x + time.x * ( 1.0f * ( ( oscNoise.x * 0.5f ) + 0.5f ) ) ) * 0.5f + 0.5f;
-	const float3 windVec = ( windpush + ( wind.xyz ) * ( oscillation * 0.1f ) + 0.9f );
-
-	const float3 jitterOffset = float3( jitterOffsets[IndexVector.x + grassNumber].x, 0.0f, jitterOffsets[IndexVector.x + grassNumber].y );
+	const float oscNoise = noiseValues.x * 5.5f;
+	float oscSin = sin( oscNoise.x + time.x * ( 1.0f * ( ( oscNoise.x * 0.5f ) + 0.5f ) ) );
+	float oscillation =  oscSin * 0.5f + 0.5f;
+	float3 windVec = ( windpush + ( wind.xyz ) * ( oscillation * 0.1f ) + 0.9f );
 
 	float randIt = frac( 3.5349578345f * ( bladeWorldOrigin.x + bladeWorldOrigin.z ) );
 	int textureIdx = 0;
-	if ( randIt > 0.96f )
+	float jitterMult = 1;
+	if ( randIt > 0.98f ) {
 		textureIdx = 1;
-	else if ( randIt > 0.9f )
+		jitterMult = 3.0f;
+	} else if ( randIt > 0.97f ) {
 		textureIdx = 2;
+		jitterMult = 3.0f;
+	} else if ( randIt > 0.96f ) {
+		textureIdx = 3;
+		jitterMult = 5.0f;
+	}
 
-	const float textureBorderSize = 0.0f;
-	const float textureSize = ( 1.0f / 8.0f ) - textureBorderSize;	// Assumes 8 plant textures packed together.  Polygonal grass is at index 0
-	const float textureStartU = textureSize * textureIdx;
-	const float textureEndU = textureStartU + textureSize;
+	const float3 jitterOffset = jitterMult * float3( jitterOffsets[IndexVector.x + grassNumber].x, 0.0f, jitterOffsets[IndexVector.x + grassNumber].y );
+
+	const float textureUBorderSize = 0.005f;
+	const float textureVBorderSize = 0.03f;
+	const float textureSize = ( 1.0f / 4.0f );	// Assumes 8 plant textures packed together.  Polygonal grass is at index 0
+	const float textureStartU = textureSize * textureIdx + textureUBorderSize;
+	const float textureEndU = textureStartU + textureSize - textureUBorderSize - textureUBorderSize;
 
 	const float grassLength = ( ( bladeParameters.w - bladeParameters.z ) * noiseValues.x + bladeParameters.z ) * lodScale;
 	const float3 segmentVec = normalize( float3( 0.0f, grassLength, 0.0f ) + windVec ) * ( grassLength * 0.33333f );
-	const float3 segmentVec_2X = segmentVec * 2.0f;
-	const float3 segmentVec_3X = segmentVec * 3.0f;
+	const float3 segmentVec_2X = segmentVec + normalize( float3( 0.0f, grassLength, 0.0f ) + windVec * 2.5f) * ( grassLength * 0.33333f );
+	const float3 segmentVec_3X = segmentVec_2X + normalize( float3( 0.0f, grassLength, 0.0f ) + windVec * 3.f ) * ( grassLength * 0.33333f );
 	const float3 segmentVec_4X = segmentVec * 4.0f;
 
 	float burnStartHeight = collisionMapVal.w + 99999.0f;
 	int numSegments = 3;
-	if ( bladeWorldOrigin.y + ( grassLength *  0.55f ) > collisionMapVal.w ) {
+	/*if ( bladeWorldOrigin.y + ( grassLength *  0.55f ) > collisionMapVal.w ) {
 		burnStartHeight = bladeWorldOrigin.y + ( grassLength * 0.33333f ) - 0.0001f;
 		numSegments = 1;
 	} else if ( bladeWorldOrigin.y + ( grassLength *  0.75f ) > collisionMapVal.w ) {
 		burnStartHeight = bladeWorldOrigin.y + ( grassLength *  0.67f )- 0.0001f;
 		numSegments = 2;
-	}
+	}*/
 	float4 grassData = 0;
-	grassData.x = ( textureIdx == 0 ) ? ( 1 ) : ( 0 );	// Polygonal grass (index 0) doesn't require any clipping
+	grassData.x = 0;//( textureIdx == 0 ) ? ( 1 ) : ( 0 );	// Polygonal grass (index 0) doesn't require any clipping
 	grassData.y = burnStartHeight;
 	grassData.z = collisionMapVal.b;
 
-	CreateVertex( OutputStream, bladeWorldOrigin, float2( textureStartU, 1.0f - textureBorderSize ), grassData, 0, randIt );
-	CreateVertex( OutputStream, bladeWorldOrigin + jitterOffset, float2( textureEndU, 1.0f - textureBorderSize ), grassData, 1, randIt );
+	CreateVertex( OutputStream, bladeWorldOrigin, float2( textureStartU, 1.0f - textureVBorderSize ), grassData, 0, randIt );
+	CreateVertex( OutputStream, bladeWorldOrigin + jitterOffset, float2( textureEndU, 1.0f - textureVBorderSize ), grassData, 1, randIt );
 
 	CreateVertex( OutputStream, bladeWorldOrigin + segmentVec, float2( textureStartU, 0.67f ), grassData, 0, randIt );
 	CreateVertex( OutputStream, bladeWorldOrigin + jitterOffset + segmentVec, float2( textureEndU, 0.67f ), grassData, 1, randIt );
@@ -178,12 +187,8 @@ void CreateVertex( inout TriangleStream<pixelInput> OutputStream, float3 vertexW
 		CreateVertex( OutputStream, bladeWorldOrigin + jitterOffset + segmentVec_2X, float2( textureEndU, 0.33f ), grassData, 1, randIt );
 
 		if ( numSegments > 2 ) {
-			if ( textureIdx == 0 ) {
-				CreateVertex( OutputStream, bladeWorldOrigin + jitterOffset * 0.5f + segmentVec_3X, float2( ( textureStartU + textureEndU ) * 0.5f, textureBorderSize ), grassData, 0.5f, randIt );
-			} else {
-				CreateVertex( OutputStream, bladeWorldOrigin + segmentVec_3X, float2( textureStartU, textureBorderSize ), grassData, 0, randIt );
-				CreateVertex( OutputStream, bladeWorldOrigin + jitterOffset + segmentVec_3X, float2( ( textureStartU + textureEndU ) * 0.5f, textureBorderSize ), grassData, 1.0f, randIt );
-			}
+			CreateVertex( OutputStream, bladeWorldOrigin + segmentVec_3X, float2( textureStartU, textureVBorderSize ), grassData, 0, randIt );
+			CreateVertex( OutputStream, bladeWorldOrigin + jitterOffset + segmentVec_3X, float2(  textureEndU, textureVBorderSize ), grassData, 1.0f, randIt );
 		}
 	}
 
@@ -207,10 +212,10 @@ void CreateVertex( inout TriangleStream<pixelInput> OutputStream, float3 vertexW
 		CreateVertex( OutputStream, newStart, float2( textureStartU, 0.33f ), grassData, 0, randIt );
 		CreateVertex( OutputStream, newStart + jitterOffset, float2( textureEndU, 0.33f ), grassData, 1, randIt );
 		if ( textureIdx == 0 ) {
-			CreateVertex( OutputStream, newStart + jitterOffset * 0.5f + newSegVec, float2( ( textureStartU + textureEndU ) * 0.5f, textureBorderSize ), grassData, 0.5f, randIt );
+			CreateVertex( OutputStream, newStart + jitterOffset * 0.5f + newSegVec, float2( ( textureStartU + textureEndU ) * 0.5f, textureVBorderSize ), grassData, 0.5f, randIt );
 		} else {
-			CreateVertex( OutputStream, newStart + newSegVec, float2( textureStartU, textureBorderSize ), grassData, 0, randIt );
-			CreateVertex( OutputStream, newStart + jitterOffset + newSegVec, float2( ( textureStartU + textureEndU ) * 0.5f, textureBorderSize ), grassData, 1.0f, randIt );
+			CreateVertex( OutputStream, newStart + newSegVec, float2( textureStartU, textureVBorderSize ), grassData, 0, randIt );
+			CreateVertex( OutputStream, newStart + jitterOffset + newSegVec, float2( ( textureStartU + textureEndU ) * 0.5f, textureVBorderSize ), grassData, 1.0f, randIt );
 		}
 	}
 	OutputStream.RestartStrip();

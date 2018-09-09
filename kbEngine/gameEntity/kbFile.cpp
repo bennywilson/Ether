@@ -172,6 +172,14 @@ kbGameEntity * kbFile::ReadGameEntity_Internal() {
 	} while( bracketCount != 0 && nextStringPos != std::string::npos );
 
 	pGameEntity->PostLoad();
+
+	for ( int i = 0; i < pGameEntity->NumComponents(); i++ ) {
+		kbGameComponent *const pComponent = pGameEntity->GetComponent(i);
+		if ( pComponent->IsEnabled() && m_bIsPackageFile == false ) {
+			pComponent->Enable( false );
+			pComponent->Enable( true );
+		}
+	}
 	return pGameEntity;
 }
 
@@ -317,12 +325,6 @@ void kbFile::ReadComponent( kbGameEntity *const pGameEntity, const std::string &
 		}
 		nextStringPos = m_Buffer.find_first_of( " {\n\r\t", m_CurrentReadPos );
 	} while ( bracketState != 0 );
-
-
-	if ( pComponent->IsEnabled() && m_bIsPackageFile == false ) {
-		pComponent->Enable( false );
-		pComponent->Enable( true );
-	}
 }
 
 /**

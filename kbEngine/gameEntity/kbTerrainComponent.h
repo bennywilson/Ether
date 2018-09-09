@@ -42,6 +42,8 @@ private:
 	kbTexture *									m_pGrassMap;
     kbTexture *                                 m_pNoiseMap;
 
+	std::vector<kbShaderParamComponent>			m_ShaderParamList;
+
 	float										m_PatchStartCullDistance;
 	float										m_PatchEndCullDistance;
 
@@ -129,7 +131,7 @@ public:
 
 	virtual void								PostLoad() override;
 
-	void										SetHeightMap( kbTexture * pTexture ) { m_pHeightMap = pTexture; }
+	void										SetHeightMap( kbTexture *const pTexture ) { m_pHeightMap = pTexture; }
 
 	virtual void								EditorChange( const std::string & propertyName ) override;
 
@@ -162,7 +164,6 @@ protected:
 
 	// Non-editor
 	kbModel										m_TerrainModel;
-	kbRenderObject								m_TerrainRenderObject;
 
 	kbShaderParamOverrides_t					m_TerrainShaderOverrides;
     std::vector<kbShader *>                     m_ShaderOverrideList;

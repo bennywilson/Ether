@@ -73,10 +73,6 @@ std::vector<kbTypeInfoClass *> kbComponent::kbComponent_TypeInfoVar;
 kbShaderParamComponent_TypeInfo kbShaderParamComponent::typeInfo;
 std::vector<kbTypeInfoClass *> kbShaderParamComponent::kbShaderParamComponent_TypeInfoVar;
 
-// kbShaderParamListComponent
-kbShaderParamListComponent_TypeInfo kbShaderParamListComponent::typeInfo;
-std::vector<kbTypeInfoClass *> kbShaderParamListComponent::kbShaderParamListComponent_TypeInfoVar;
-
 // kbGameComponent
 kbGameComponent_TypeInfo kbGameComponent::typeInfo;
 std::vector<kbTypeInfoClass *> kbGameComponent::kbGameComponent_TypeInfoVar;

@@ -14,7 +14,9 @@ kbPrefab 1 {
 			Enabled = 1
 			LifeTime =  -1.000000
 			CastsShadow = 0
-			m_RenderPass = LightingPass
+			RenderPass = LightingPass
+			ShaderParams = 0
+			TranslucencySortBias =  0.000000
 			Model = .\assets\models\vehicles\jet.ms3d
 			ShaderOverride = 0
 				
@@ -48,6 +50,7 @@ kbPrefab 1 {
 			ParticleTexture = .\assets\fx\smoke.jpg
 			StartColor = 0.500000 0.300000 0.250000 1.000000
 			TotalDuration =  -1.000000
+			TranslucencySortBias =  0.000000
 		}
 	}
 }

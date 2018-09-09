@@ -279,7 +279,9 @@ kbGameEntity 292847838 1140569109 1236968083 2365837966 {
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadow = 0
-		m_RenderPass = FirstPersonPass
+		RenderPass = LightingPass
+		ShaderParams = 0
+		TranslucencySortBias =  0.000000
 		Model = .\assets\models\items\el_rifle_fp.ms3d
 		ShaderOverride = 3
 			.\assets\shaders\baseweapon.kbshader

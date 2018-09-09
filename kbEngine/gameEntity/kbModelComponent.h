@@ -10,6 +10,27 @@
 #include "kbRenderer_Defs.h"
 
 /**
+ *	kbShaderParamComponent
+ */
+class kbShaderParamComponent : public kbGameComponent {
+
+	KB_DECLARE_COMPONENT( kbShaderParamComponent, kbGameComponent );
+
+//---------------------------------------------------------------------------------------------------
+public:
+
+	const kbString &							GetParamName() const { return m_ParamName; }
+	const kbTexture *							GetTexture() const { return m_pTexture; }
+	const kbVec4 &								GetVector() const { return m_Vector; }	
+
+private:
+
+	kbString									m_ParamName;
+	kbTexture *									m_pTexture;
+	kbVec4										m_Vector;
+};
+
+/**
  *	kbModelComponent
  */
 class kbModelComponent : public kbGameComponent {
@@ -21,6 +42,9 @@ public:
 
 	virtual										~kbModelComponent();
 
+	virtual void								EditorChange( const std::string & propertyName ) override;
+	virtual void								PostLoad() override;
+
 	void										SetShaderParams( const kbShaderParamOverrides_t & shaderParams );
 
 	bool										GetCastsShadow() const { return m_bCastsShadow; }
@@ -31,50 +55,11 @@ protected:
 	float										m_TranslucencySortBias;
 
 	kbShaderParamOverrides_t					m_ShaderParams;
+	std::vector<kbShaderParamComponent>			m_ShaderParamList;
 
 	kbRenderObject								m_RenderObject;
 
 	bool										m_bCastsShadow;
 };
 
-/**
- *	kbShaderParamComponent
- */
-class kbShaderParamComponent : public kbGameComponent {
-
-	friend class kbShaderParamListComponent;
-
-	KB_DECLARE_COMPONENT( kbShaderParamComponent, kbGameComponent );
-
-public:
-
-
-private:
-
-	kbString									m_ParamName;
-	kbTexture *									m_pTexture;
-	kbVec4										m_Vector;
-};
-
-/**
- *	kbShaderParamListComponent
- */
-class kbShaderParamListComponent : public kbGameComponent {
-
-	KB_DECLARE_COMPONENT( kbShaderParamListComponent, kbGameComponent );
-
-//---------------------------------------------------------------------------------------------------
-public:
-
-	virtual void								EditorChange( const std::string & propertyName ) override;
-
-	virtual void								Enable( const bool setEnabled ) override;
-
-private:
-
-	void										UpdateModelWithParams();
-
-	std::vector<kbShaderParamComponent>			m_ShaderParamList;
-
-};
 #endif

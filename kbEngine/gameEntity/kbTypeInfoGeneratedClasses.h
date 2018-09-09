@@ -41,11 +41,6 @@ GenerateClass(
 )
 
 GenerateClass(
-	kbShaderParamListComponent,
-	AddField( "ShaderParams", KBTYPEINFO_STRUCT, kbShaderParamListComponent, m_ShaderParamList, true, "kbShaderParamComponent" )
-)
-
-GenerateClass(
 	kbClothBone,
 	AddField( "BoneName", KBTYPEINFO_KBSTRING, kbClothBone, m_BoneName, false, "" )
 	AddField( "NeighborBones", KBTYPEINFO_KBSTRING, kbClothBone, m_NeighborBones, true, "kbString" )
@@ -82,6 +77,7 @@ GenerateClass(
 	AddField( "RenderPass", KBTYPEINFO_ENUM, kbModelComponent, m_RenderPass, false, "ERenderPass" )
 	AddField( "TranslucencySortBias", KBTYPEINFO_FLOAT, kbModelComponent, m_TranslucencySortBias, false, "" )
 	AddField( "CastsShadow", KBTYPEINFO_BOOL, kbModelComponent, m_bCastsShadow, false, "" )
+	AddField( "ShaderParams", KBTYPEINFO_STRUCT, kbModelComponent, m_ShaderParamList, true, "kbShaderParamComponent" )
 )
 
 GenerateClass( 
@@ -154,6 +150,7 @@ GenerateClass(
     AddField( "TestWind", KBTYPEINFO_VECTOR, kbGrass, m_TestWind, false, "" )
     AddField( "FakeAODarkness", KBTYPEINFO_FLOAT, kbGrass, m_FakeAODarkness, false, "" )
     AddField( "FakeAOPower", KBTYPEINFO_FLOAT, kbGrass, m_FakeAOPower, false, "" )
+	AddField( "ShaderParams", KBTYPEINFO_STRUCT, kbGrass, m_ShaderParamList, true, "kbShaderParamComponent" )
 )
 
 GenerateClass(

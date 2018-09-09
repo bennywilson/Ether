@@ -200,6 +200,19 @@ void kbGrass::UpdateMaterial() {
 	m_GrassShaderOverrides.SetTexture( "grassDiffuseMap", m_pDiffuseMap );
     m_GrassShaderOverrides.SetTexture( "noiseMap", m_pNoiseMap );
 
+	for ( int i = 0; i < m_ShaderParamList.size(); i++ ) {
+		if ( m_ShaderParamList[i].GetParamName().stl_str().empty() ) {
+			continue;
+		}
+
+		if ( m_ShaderParamList[i].GetTexture() != nullptr ) {
+			m_GrassShaderOverrides.SetTexture( m_ShaderParamList[i].GetParamName().stl_str(), m_ShaderParamList[i].GetTexture() );
+		} else {
+			m_GrassShaderOverrides.SetVec4( m_ShaderParamList[i].GetParamName().stl_str(), m_ShaderParamList[i].GetVector() );
+		}
+	}
+
+
 	const kbVec2 collisionMapPos = kbVec2( m_pOwningTerrainComponent->GetOwner()->GetPosition().x, m_pOwningTerrainComponent->GetOwner()->GetPosition().z );
 	m_GrassShaderOverrides.SetVec4( "collisionMapCenter", kbVec4( collisionMapPos.x, collisionMapPos.y, m_pOwningTerrainComponent->GetTerrainWidth() * 0.5f, 0.0f ) );
 	for ( int i = 0; i < m_GrassRenderObjects.size(); i++ ) {
@@ -341,7 +354,7 @@ void kbTerrainComponent::EditorChange( const std::string & propertyName ) {
 	}
 
     UpdateTerrainMaterial();
-	g_pRenderer->UpdateRenderObject( m_TerrainRenderObject );
+	g_pRenderer->UpdateRenderObject( m_RenderObject );
 }
 
 /**
@@ -371,7 +384,7 @@ void kbTerrainComponent::GenerateTerrain() {
 	const float cellWidth = m_TerrainWidth / (float)m_TerrainDimensions;
 
 	if ( m_TerrainModel.NumVertices() > 0 ) {
-		g_pRenderer->RemoveRenderObject( m_TerrainRenderObject );
+		g_pRenderer->RemoveRenderObject( m_RenderObject );
 	}
 
 	m_TerrainModel.CreateDynamicModel( numVerts, numIndices );
@@ -490,7 +503,7 @@ void kbTerrainComponent::GenerateTerrain() {
 
     UpdateTerrainMaterial();
 
-    g_pRenderer->AddRenderObject( m_TerrainRenderObject );
+    g_pRenderer->AddRenderObject( m_RenderObject );
 
 	// Update collision
 	int collisionPatchSize = 128;
@@ -560,14 +573,14 @@ void kbTerrainComponent::SetEnable_Internal( const bool isEnabled ) {
 
 	if ( isEnabled ) {
 		UpdateTerrainMaterial();
-		g_pRenderer->AddRenderObject( m_TerrainRenderObject );
+		g_pRenderer->AddRenderObject( m_RenderObject );
 
 		for ( int i = 0; i < m_Grass.size(); i++ ) {
 			m_Grass[i].Enable( true );
 		}
 
 	} else {
-		g_pRenderer->RemoveRenderObject( m_TerrainRenderObject );
+		g_pRenderer->RemoveRenderObject( m_RenderObject );
 
 		for ( int i = 0; i < m_Grass.size(); i++ ) {
 			m_Grass[i].Enable( false );
@@ -584,7 +597,7 @@ void kbTerrainComponent::Update_Internal( const float DeltaTime ) {
 	if ( m_TerrainModel.GetMeshes().size() > 0 && ( GetOwner()->IsDirty() ) ) {
 
 		UpdateTerrainMaterial();
-		g_pRenderer->UpdateRenderObject( m_TerrainRenderObject );
+		g_pRenderer->UpdateRenderObject( m_RenderObject );
 	}
 
 	kbVec3 currentCameraPosition;
@@ -652,15 +665,15 @@ void kbTerrainComponent::UpdateTerrainMaterial() {
 	m_TerrainShaderOverrides.SetVec4( "specFactors", specFactors );
 	m_TerrainShaderOverrides.SetVec4( "specPowerMultipliers", specPowMult );
 
-	m_TerrainRenderObject.m_bCastsShadow = false;
-	m_TerrainRenderObject.m_bIsSkinnedModel = false;
-	m_TerrainRenderObject.m_Orientation = GetOwner()->GetOrientation();
-	m_TerrainRenderObject.m_Position = GetOwner()->GetPosition();
-	m_TerrainRenderObject.m_EntityId = GetOwner()->GetEntityId();
-	m_TerrainRenderObject.m_Scale.Set( 1.0f, 1.0f, 1.0f );
-	m_TerrainRenderObject.m_pModel = &m_TerrainModel;
-	m_TerrainRenderObject.m_RenderPass = RP_Lighting;
-	m_TerrainRenderObject.m_OverrideShaderList = m_ShaderOverrideList;
-	m_TerrainRenderObject.m_ShaderParamOverrides = m_TerrainShaderOverrides;
-	m_TerrainRenderObject.m_pComponent = this;
+	m_RenderObject.m_bCastsShadow = false;
+	m_RenderObject.m_bIsSkinnedModel = false;
+	m_RenderObject.m_Orientation = GetOwner()->GetOrientation();
+	m_RenderObject.m_Position = GetOwner()->GetPosition();
+	m_RenderObject.m_EntityId = GetOwner()->GetEntityId();
+	m_RenderObject.m_Scale.Set( 1.0f, 1.0f, 1.0f );
+	m_RenderObject.m_pModel = &m_TerrainModel;
+	m_RenderObject.m_RenderPass = RP_Lighting;
+	m_RenderObject.m_OverrideShaderList = m_ShaderOverrideList;
+	m_RenderObject.m_ShaderParamOverrides = m_TerrainShaderOverrides;
+	m_RenderObject.m_pComponent = this;
 }
