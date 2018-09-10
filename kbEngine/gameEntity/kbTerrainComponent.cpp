@@ -198,11 +198,18 @@ void kbGrass::RefreshGrass() {
     m_GrassShaderOverrides.SetTexture( "noiseMap", m_pNoiseMap );
 	m_GrassShaderOverrides.SetTexture( "heightMap", m_pOwningTerrainComponent->GetHeightMap() );
 
-	m_GrassShaderOverrides.SetVec4List( "jitterOffsets", bladeOffsets );
+	m_GrassShaderOverrides.SetVec4List( "bladeOffsets", bladeOffsets );
+	m_GrassShaderOverrides.SetVec4( "GrassData0", kbVec4( m_PatchStartCullDistance, 1.0f / ( m_PatchEndCullDistance - m_PatchStartCullDistance ), m_BladeMinHeight, m_BladeMaxHeight ) );
+	m_GrassShaderOverrides.SetVec4( "GrassData1", kbVec4( m_pOwningTerrainComponent->GetHeightScale(), m_pOwningTerrainComponent->GetOwner()->GetPosition().y, patchLen, 0.0f ) );
+    m_GrassShaderOverrides.SetVec4( "wind", m_TestWind );
+
+/*
 	m_GrassShaderOverrides.SetVec4( "bladeParameters", kbVec4( m_BladeMinWidth, m_BladeMaxWidth, m_BladeMinHeight, m_BladeMaxHeight ) );
 	m_GrassShaderOverrides.SetVec4( "GrassData1", kbVec4( m_pOwningTerrainComponent->GetHeightScale(), m_pOwningTerrainComponent->GetOwner()->GetPosition().y, patchLen, 0.0f ) );
 	m_GrassShaderOverrides.SetVec4( "GrassData2", kbVec4( m_PatchStartCullDistance, 1.0f / ( m_PatchEndCullDistance - m_PatchStartCullDistance ), 0.0f, 0.0f ) );
     m_GrassShaderOverrides.SetVec4( "wind", m_TestWind );
+ 
+*/
     m_GrassShaderOverrides.SetVec4( "fakeAOData", kbVec4( m_FakeAODarkness, m_FakeAOPower, 0.0f, 0.0f ) );
 
 	m_GrassShaderOverrides.SetTexture( "grassDiffuseMap", m_pDiffuseMap );
@@ -222,7 +229,7 @@ void kbGrass::RefreshGrass() {
 
 
 	const kbVec2 collisionMapPos = kbVec2( m_pOwningTerrainComponent->GetOwner()->GetPosition().x, m_pOwningTerrainComponent->GetOwner()->GetPosition().z );
-	m_GrassShaderOverrides.SetVec4( "collisionMapCenter", kbVec4( collisionMapPos.x, collisionMapPos.y, m_pOwningTerrainComponent->GetTerrainWidth() * 0.5f, 0.0f ) );
+	m_GrassShaderOverrides.SetVec4( "collisionMapCenter", kbVec4( collisionMapPos.x, collisionMapPos.y, m_pOwningTerrainComponent->GetTerrainWidth() * 0.5f, 1.0f / ( m_pOwningTerrainComponent->GetTerrainWidth() * 0.5f ) ) );
 
 	if ( m_bUpdatePointCloud ) {
 		for ( int i = 0; i < m_GrassRenderObjects.size(); i++ ) {

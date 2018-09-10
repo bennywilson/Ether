@@ -34,13 +34,20 @@ kbGameEntity 0 0 0 0 {
 				PatchEndCullDistance =  1000.000000
 				PatchStartCullDistance =  200.000000
 				PatchesPerCellSide = 60
-				ShaderParams = 1
+				ShaderParams = 2
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
-						ParamName = "testColor"
+						ParamName = "plant_1_2_size"
 						Texture = NULL
-						Vector = 1.000000 0.000000 0.000000 0.000000
+						Vector = 1.200000 0.900000 1.300000 0.800000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "plant_3_size"
+						Texture = NULL
+						Vector = 1.300000 0.850000 0.000000 0.000000
 					}
 				TestWind = 0.000000 0.000000 25.000000
 			}
