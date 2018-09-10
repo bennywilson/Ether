@@ -196,18 +196,19 @@ void CreateVertex( inout TriangleStream<pixelInput> OutputStream, float3 vertexW
 		newSegVec.y += 2.0f;
 		newSegVec = normalize( newSegVec ) * grassLength * 0.33f;
 
-		float3 newStart = segment2StartPos;
-		float vel = ( 200.0f * randomNum ) + 50.0f;
-		const float animXVel = animationTime * vel;
-		newStart.x += animXVel * 2.0f * sign( newSegVec.x );
-		newStart.z += animXVel * 2.0f * sign( newSegVec.z );
-		newStart.y += ( animXVel * 3.0f + 0.5f * ( -0.45f ) * ( animXVel * animXVel ) );
+		const float verticalVel = ( 100.0f * randomNum ) + 75.0f;
+		const float horizontalVel = ( 150.0f * randomNum ) + 120.0f;
+		const float horizontalDelta = animationTime * horizontalVel;
+		float3 brokenBladePos = segment2StartPos;
+		brokenBladePos.x += horizontalDelta * sign( newSegVec.x );
+		brokenBladePos.z += horizontalDelta * sign( newSegVec.z );
+		brokenBladePos.y += ( verticalVel * animationTime ) + 0.5f * ( -2755.0f * animationTime * animationTime );
 
-		CreateVertex( OutputStream, newStart, float2( textureStartU, 0.33f ), grassData );
-		CreateVertex( OutputStream, newStart + jitterOffset, float2( textureEndU, 0.33f ), grassData );
+		CreateVertex( OutputStream, brokenBladePos, float2( textureStartU, 0.33f ), grassData );
+		CreateVertex( OutputStream, brokenBladePos + jitterOffset, float2( textureEndU, 0.33f ), grassData );
 
-		CreateVertex( OutputStream, newStart + newSegVec, float2( textureStartU, textureVBorderSize ), grassData );
-		CreateVertex( OutputStream, newStart + jitterOffset + newSegVec, float2( textureEndU, textureVBorderSize ), grassData );
+		CreateVertex( OutputStream, brokenBladePos + newSegVec, float2( textureStartU, textureVBorderSize ), grassData );
+		CreateVertex( OutputStream, brokenBladePos + jitterOffset + newSegVec, float2( textureEndU, textureVBorderSize ), grassData );
 
 		OutputStream.RestartStrip();
 	}
