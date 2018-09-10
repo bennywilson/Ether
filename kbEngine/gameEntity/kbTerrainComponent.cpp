@@ -171,7 +171,7 @@ void kbGrass::RefreshGrass() {
 	for ( int i = 0; i < 64; i++ ) {
 
 		kbMat4 matrix = kbMat4::identity;
-		const float angle = kbfrand() * kbPI;
+		const float angle = 2.0f * kbfrand() * kbPI;
 		float cosPIOver2 = cos( angle );
 		float sinPIOver2 = sin( angle );
 		matrix[0][0] = cosPIOver2;

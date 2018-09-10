@@ -157,9 +157,10 @@ void CreateVertex( inout TriangleStream<pixelInput> OutputStream, float3 vertexW
 		burnStartHeight = bladeWorldOrigin.y + ( grassLength * 0.33333f ) - 0.0001f;
 		numSegments = 1;
 	} else if ( bladeWorldOrigin.y + ( grassLength *  0.75f ) > collisionMapVal.w ) {
-		burnStartHeight = bladeWorldOrigin.y + ( grassLength *  0.67f )- 0.0001f;
+		burnStartHeight = bladeWorldOrigin.y + ( grassLength * 0.67f ) - 0.0001f;
 		numSegments = 2;
 	}
+
 	float4 grassData = 0;
 	grassData.x = randomNum;
 	grassData.y = burnStartHeight;
@@ -191,12 +192,12 @@ void CreateVertex( inout TriangleStream<pixelInput> OutputStream, float3 vertexW
 	const float animationTime = ( time.x - collisionMapVal.z ) / 5.0f;
 	
 	if ( numSegments < 3 && animationTime <= 1.0f ) {
-		float3 newSegVec = jitterOffset * sign( randomNum - 0.5f );
+		float3 newSegVec = jitterOffset * sign( randomNum );
 		newSegVec.y += 2.0f;
 		newSegVec = normalize( newSegVec ) * grassLength * 0.33f;
 
 		float3 newStart = segment2StartPos;
-		float vel = ( 200.0f * sign( randomNum - 0.5f ) ) + 50.0f;
+		float vel = ( 200.0f * randomNum ) + 50.0f;
 		const float animXVel = animationTime * vel;
 		newStart.x += animXVel * 2.0f * sign( newSegVec.x );
 		newStart.z += animXVel * 2.0f * sign( newSegVec.z );
