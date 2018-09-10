@@ -34,7 +34,14 @@ kbGameEntity 0 0 0 0 {
 				PatchEndCullDistance =  1000.000000
 				PatchStartCullDistance =  200.000000
 				PatchesPerCellSide = 60
-				ShaderParams = 0
+				ShaderParams = 1
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "testColor"
+						Texture = NULL
+						Vector = 1.000000 0.000000 0.000000 0.000000
+					}
 				TestWind = 0.000000 0.000000 25.000000
 			}
 		HeightMap = .\assets\terrain\terrain1_height.bmp

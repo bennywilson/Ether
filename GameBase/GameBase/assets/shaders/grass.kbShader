@@ -17,6 +17,8 @@ cbuffer ConstantBuffer1 {
 	float4 collisionMapCenter;
 	float4 collisionMapPixelWorldSize;
 	//float4 collisionSphere;
+	float4 plant_1_2_size;
+	float4 plant_3_size;
 };
 
 
@@ -137,15 +139,19 @@ void CreateVertex( inout TriangleStream<pixelInput> OutputStream, float3 vertexW
 	float randIt = frac( 3.5349578345f * ( bladeWorldOrigin.x + bladeWorldOrigin.z ) );
 	int textureIdx = 0;
 	float jitterMult = 1;
+	float heightMult = 1;
 	if ( randIt > 0.98f ) {
 		textureIdx = 1;
-		jitterMult = 3.0f;
+		jitterMult = plant_1_2_size.x;
+		heightMult = plant_1_2_size.y;
 	} else if ( randIt > 0.97f ) {
 		textureIdx = 2;
-		jitterMult = 3.0f;
+		jitterMult = plant_1_2_size.z;
+		heightMult = plant_1_2_size.w;
 	} else if ( randIt > 0.96f ) {
 		textureIdx = 3;
-		jitterMult = 5.0f;
+		jitterMult = plant_3_size.x;
+		heightMult = plant_3_size.y;
 	}
 
 	const float3 jitterOffset = jitterMult * float3( jitterOffsets[IndexVector.x + grassNumber].x, 0.0f, jitterOffsets[IndexVector.x + grassNumber].y );
@@ -156,7 +162,7 @@ void CreateVertex( inout TriangleStream<pixelInput> OutputStream, float3 vertexW
 	const float textureStartU = textureSize * textureIdx + textureUBorderSize;
 	const float textureEndU = textureStartU + textureSize - textureUBorderSize - textureUBorderSize;
 
-	const float grassLength = ( ( bladeParameters.w - bladeParameters.z ) * noiseValues.x + bladeParameters.z ) * lodScale;
+	const float grassLength = ( ( bladeParameters.w - bladeParameters.z ) * noiseValues.x + bladeParameters.z ) * lodScale * heightMult;
 	const float3 segmentVec = normalize( float3( 0.0f, grassLength, 0.0f ) + windVec ) * ( grassLength * 0.33333f );
 	const float3 segmentVec_2X = segmentVec + normalize( float3( 0.0f, grassLength, 0.0f ) + windVec * 2.5f) * ( grassLength * 0.33333f );
 	const float3 segmentVec_3X = segmentVec_2X + normalize( float3( 0.0f, grassLength, 0.0f ) + windVec * 3.f ) * ( grassLength * 0.33333f );

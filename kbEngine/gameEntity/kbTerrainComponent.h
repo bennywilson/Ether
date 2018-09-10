@@ -33,9 +33,9 @@ protected:
 
 private:
 
-	void										SetOwningTerrainComponent( kbTerrainComponent *const pTerrain ) { m_pOwningTerrainComponent = pTerrain; m_bNeedsMaterialUpdate = true; }
+	void										SetOwningTerrainComponent( kbTerrainComponent *const pTerrain ) { m_pOwningTerrainComponent = pTerrain; m_bUpdateMaterial = true; m_bUpdatePointCloud = true; }
 
-	void										UpdateMaterial();
+	void										RefreshGrass();
 
 	int											m_GrassCellsPerTerrainSide;
 
@@ -84,7 +84,9 @@ private:
 	kbShaderParamOverrides_t					m_GrassShaderOverrides;
 
 	kbTerrainComponent *						m_pOwningTerrainComponent;
-	bool										m_bNeedsMaterialUpdate;
+
+	bool										m_bUpdatePointCloud;
+	bool										m_bUpdateMaterial;
 };
 
 /**
