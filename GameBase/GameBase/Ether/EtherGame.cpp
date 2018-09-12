@@ -13,7 +13,7 @@
 #include "EtherAI.h"
 #include "EtherWeapon.h"
 #include "DX11/kbRenderer_DX11.h"
-#include <DirectXMath.h>
+#include <directxpackedvector.h>
 
 // oculus
 #include "OVR_CAPI_D3D.h"
