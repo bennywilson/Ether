@@ -51,8 +51,8 @@ class kbRenderTexture_DX11 : public kbRenderTexture {
 
 //-------------------------------------------------------------------------------------------------------------------------------------------------------------
 public:
-												kbRenderTexture_DX11( const int width, const int height, const eTextureFormat targetFormat ) :
-													kbRenderTexture( width, height, targetFormat ),
+												kbRenderTexture_DX11( const int width, const int height, const eTextureFormat targetFormat, const bool bIsCPUAccessible ) :
+													kbRenderTexture( width, height, targetFormat, bIsCPUAccessible ),
 													m_pRenderTargetTexture( nullptr ),
 													m_pRenderTargetView( nullptr ),
 													m_pShaderResourceView( nullptr ),
@@ -395,14 +395,17 @@ public:
 	virtual void								RT_SetRenderTarget( kbRenderTexture *const pRenderTexture ) override;
 	virtual void								RT_ClearRenderTarget( kbRenderTexture *const pRenderTexture, const kbColor & color ) override;
 	virtual void								RT_RenderMesh( const kbModel *const pModel, kbShader * pShader, const kbShaderParamOverrides_t *const pShaderParams ) override;
-	virtual void								RT_Render2DLine( const kbVec3 & startPt, const kbVec3 & endPt, const kbColor & color, const float width, const kbShader * pShader, const struct kbShaderParamOverrides_t *const ShaderBindings = nullptr );
+	virtual void								RT_Render2DLine( const kbVec3 & startPt, const kbVec3 & endPt, const kbColor & color, const float width, const kbShader * pShader, const struct kbShaderParamOverrides_t *const ShaderBindings = nullptr ) override;
+	virtual void								RT_CopyRenderTarget( kbRenderTexture *const pSrcTexture, kbRenderTexture *const pDstTexture ) override;
+	virtual kbRenderTargetMap					RT_MapRenderTarget( kbRenderTexture *const pDstTexture ) override;
+	virtual void								RT_UnmapRenderTarget( kbRenderTexture *const pDstTexture ) override;
 
 private:
 
 	virtual void								Init_Internal( HWND, const int width, const int height, const bool bUseHMD, const bool bUseHMDTrackingOnly ) override;
 	virtual bool								LoadTexture_Internal( const char * name, int index, int width = -1, int height = -1 ) override;
 
-	virtual kbRenderTexture *					GetRenderTexture_Internal( const int width, const int height, const eTextureFormat texFormat ) override;
+	virtual kbRenderTexture *					GetRenderTexture_Internal( const int width, const int height, const eTextureFormat texFormat, const bool bIsCPUAccessible ) override;
 	virtual void								ReturnRenderTexture_Internal( const kbRenderTexture *const ) override;
 
 	virtual void								RenderSync_Internal() override;

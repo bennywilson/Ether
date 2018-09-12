@@ -911,7 +911,7 @@ void kbRenderer::DrawPreTransformedLine( const std::vector<kbVec3> & vertList, c
 /**
  *	kbRenderer::RT_GetRenderTexture
  */
-kbRenderTexture * kbRenderer::RT_GetRenderTexture( const int width, const int height, const eTextureFormat texFormat ) {
+kbRenderTexture * kbRenderer::RT_GetRenderTexture( const int width, const int height, const eTextureFormat texFormat, const bool bRequiresCPUAccess ) {
 
 	for ( int i = NUM_RESERVED_RENDER_TARGETS; i < m_pRenderTargets.size(); i++ ) {
 		kbRenderTexture *const pRT = m_pRenderTargets[i];
@@ -921,7 +921,7 @@ kbRenderTexture * kbRenderer::RT_GetRenderTexture( const int width, const int he
 		}
 	}
 
-	kbRenderTexture *const pRenderTexture = GetRenderTexture_Internal( width, height, texFormat );
+	kbRenderTexture *const pRenderTexture = GetRenderTexture_Internal( width, height, texFormat, bRequiresCPUAccess );
 	pRenderTexture->m_bInUse = true;
 	return pRenderTexture;
 }

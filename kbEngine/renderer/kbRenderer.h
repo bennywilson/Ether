@@ -21,6 +21,7 @@ enum eTextureFormat {
 	KBTEXTURE_NULLFORMAT,
 	KBTEXTURE_R8G8B8A8,
 	KBTEXTURE_R16G16B16A16,
+	KBTEXTURE_R32G32B32A32,
 	KBTEXTURE_R32G32,
 	KBTEXTURE_R32,
 	KBTEXTURE_D24S8,
@@ -53,12 +54,14 @@ public:
 													m_Width( 0 ),
 													m_Height( 0 ),
 													m_TextureFormat( KBTEXTURE_NULLFORMAT ),
-													m_bInUse( false ) { }
+													m_bInUse( false ),
+													m_bCPUAccessible( false ) { }
    
-												kbRenderTexture( const int width, const int height, const eTextureFormat targetFormat ) :
+												kbRenderTexture( const int width, const int height, const eTextureFormat targetFormat, const bool bIsCPUAccessible ) :
 													m_Width( width ),
 													m_Height( height ),
-													m_TextureFormat( targetFormat ) { }
+													m_TextureFormat( targetFormat ),
+													m_bCPUAccessible( bIsCPUAccessible ) { }
 
 												void Release() {
 													Release_Internal();
@@ -67,6 +70,7 @@ public:
 	int											GetWidth() const { return m_Width; }
 	int											GetHeight() const { return m_Height; }
 	eTextureFormat								GetTextureFormat() const { return m_TextureFormat; }
+	bool										IsCPUAccessible() const { return m_bCPUAccessible; }
 
 private:
 
@@ -77,6 +81,7 @@ private:
 
 	eTextureFormat								m_TextureFormat;
 
+	bool										m_bCPUAccessible;
 	bool										m_bInUse;
 };
 
@@ -308,10 +313,13 @@ public:
 	// Render thread functions
 	virtual void								RT_SetRenderTarget( kbRenderTexture *const pRenderTexture ) = 0;
 	virtual void								RT_ClearRenderTarget( kbRenderTexture *const pRenderTexture, const kbColor & color ) = 0;
-	virtual kbRenderTexture *					RT_GetRenderTexture( const int width, const int height, const eTextureFormat );
+	kbRenderTexture *							RT_GetRenderTexture( const int width, const int height, const eTextureFormat, const bool bRequiresCPUAccess );
 	virtual void								RT_ReturnRenderTexture( kbRenderTexture *const pRenderTexture );
 	virtual void								RT_RenderMesh( const kbModel *const pModel, kbShader * pShader, const kbShaderParamOverrides_t *const pShaderParams ) = 0;
 	virtual void								RT_Render2DLine( const kbVec3 & startPt, const kbVec3 & endPt, const kbColor & color, const float width, const kbShader * pShader, const struct kbShaderParamOverrides_t *const ShaderBindings = nullptr ) = 0;
+	virtual void								RT_CopyRenderTarget( kbRenderTexture *const pSrcTexture, kbRenderTexture *const pDstTexture ) = 0;
+	virtual kbRenderTargetMap					RT_MapRenderTarget( kbRenderTexture *const pDstTexture ) = 0;
+	virtual void								RT_UnmapRenderTarget( kbRenderTexture *const pDstTexture ) = 0;
 
 private:
 
@@ -320,7 +328,7 @@ private:
 	virtual void								RenderSync_Internal() = 0;
 	virtual void								Shutdown_Internal() = 0;
 	
-	virtual kbRenderTexture *					GetRenderTexture_Internal( const int width, const int height, const eTextureFormat texFormat ) = 0;
+	virtual kbRenderTexture *					GetRenderTexture_Internal( const int width, const int height, const eTextureFormat texFormat, const bool bRequiresCPUAccess ) = 0;
 	virtual void								ReturnRenderTexture_Internal( const kbRenderTexture * ) = 0;
 
 	virtual void								RenderScene() = 0;

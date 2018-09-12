@@ -38,7 +38,7 @@ class EtherTerrainChunkGenJob : public kbJob {
 public:
 												EtherTerrainChunkGenJob();
 
-	virtual void								Run();
+	virtual void								Run() override;
 	void										Reset();
 
 	// Inputs

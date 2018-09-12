@@ -28,10 +28,10 @@ struct vertexColorLayout {
 	byte color[4];
 
 	void SetColor( const kbVec4 & inColor ) {
-		color[0] = ( byte ) ( inColor.z * 255.0f );
-		color[1] = ( byte ) ( inColor.y * 255.0f );
-		color[2] = ( byte ) ( inColor.x * 255.0f );
-		color[3] = ( byte ) ( inColor.w * 255.0f );
+		color[0] = (byte) ( inColor.z * 255.0f );
+		color[1] = (byte) ( inColor.y * 255.0f );
+		color[2] = (byte) ( inColor.x * 255.0f );
+		color[3] = (byte) ( inColor.w * 255.0f );
 	}
 
 	kbVec4 GetColor() const {
@@ -440,6 +440,11 @@ public:
 	float										m_IterationHeight;
 	eRenderObjectOp								m_Operation;
 	bool										m_bIsDirectional;
+};
+
+struct kbRenderTargetMap {
+	byte * pData;
+	uint rowPitch;
 };
 
 enum kbBlend {

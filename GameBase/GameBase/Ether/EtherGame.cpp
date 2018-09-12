@@ -13,6 +13,7 @@
 #include "EtherAI.h"
 #include "EtherWeapon.h"
 #include "DX11/kbRenderer_DX11.h"
+#include <DirectXMath.h>
 
 // oculus
 #include "OVR_CAPI_D3D.h"
@@ -51,6 +52,7 @@ EtherGame::EtherGame() :
 	m_HMDWorldOffset( kbVec3::zero ),
 	m_pBulletHoleRenderTexture( nullptr ),
 	m_pGrassCollisionTexture( nullptr ),
+	m_pGrassCollisionReadBackTexture( nullptr ),
 	m_pCollisionMapPushGenShader( nullptr ),
 	m_pCollisionMapTimeGenShader( nullptr ),
 	m_pCollisionMapDamageGenShader( nullptr ),
@@ -523,6 +525,43 @@ void EtherGame::RenderSync() {
 }
 
 /**
+ *	EtherCollisionMapReadBackJob
+ */
+class EtherCollisionMapReadBackJob : public kbJob {
+
+//-------------------------------------------------------------------------------------------------------------------------------------------------------------
+public:
+												EtherCollisionMapReadBackJob() { }
+
+	virtual void								Run() override {
+		DirectX::PackedVector::HALF * pCurVal = (DirectX::PackedVector::HALF*)m_RTMap.pData;
+
+		for ( int y = 0; y < m_Height; y++ ) {
+			for ( int x = 0; x < m_Width; x++ ) {
+				const float r = DirectX::PackedVector::XMConvertHalfToFloat( *pCurVal );
+				pCurVal++;
+				const float g = DirectX::PackedVector::XMConvertHalfToFloat( *pCurVal );
+				pCurVal++;
+				const float b = DirectX::PackedVector::XMConvertHalfToFloat( *pCurVal );
+				pCurVal++;
+				const float a = DirectX::PackedVector::XMConvertHalfToFloat( *pCurVal );
+				pCurVal++;
+			}
+
+			const size_t leftOverPitch = ( m_RTMap.rowPitch / sizeof( DirectX::PackedVector::HALF ) ) - ( m_Width * sizeof( DirectX::PackedVector::HALF ) );
+			pCurVal += leftOverPitch;
+		}
+	}
+
+	// Input
+	kbRenderTargetMap							m_RTMap;
+	int											m_Width;
+	int											m_Height;
+
+	// Output
+} g_CollisionMapReadJob;
+
+/**
  *	EtherGame::RenderThreadCallBack
  */
 static float g_TimeMultiplier = 0.95f / 0.016f;
@@ -533,7 +572,7 @@ void EtherGame::RenderThreadCallBack() {
 
 	// Initialize
 	if ( m_pBulletHoleRenderTexture == nullptr ) {
-		m_pBulletHoleRenderTexture = g_pRenderer->RT_GetRenderTexture( 4096, 4096, eTextureFormat::KBTEXTURE_R8G8B8A8 );
+		m_pBulletHoleRenderTexture = g_pRenderer->RT_GetRenderTexture( 4096, 4096, eTextureFormat::KBTEXTURE_R8G8B8A8, false );
 		g_pRenderer->RT_ClearRenderTarget( m_pBulletHoleRenderTexture, kbColor::white );
 		
 		g_ResourceManager.GetResource( "./assets/FX/noise.jpg", true );
@@ -553,8 +592,10 @@ void EtherGame::RenderThreadCallBack() {
 			}
 		}
 
-		m_pGrassCollisionTexture = g_pRenderer->RT_GetRenderTexture( 1024, 1024, eTextureFormat::KBTEXTURE_R16G16B16A16 );
+		m_pGrassCollisionTexture = g_pRenderer->RT_GetRenderTexture( 1024, 1024, eTextureFormat::KBTEXTURE_R16G16B16A16, false );
 		g_pRenderer->RT_ClearRenderTarget( m_pGrassCollisionTexture, kbColor( 0.0f, 0.0f, 9999.0f, 9999.0f ) );
+
+		m_pGrassCollisionReadBackTexture = g_pRenderer->RT_GetRenderTexture( 1024, 1024, eTextureFormat::KBTEXTURE_R16G16B16A16, true );
 
 		kbTexture *const pEmberTexture = (kbTexture*)g_ResourceManager.GetResource( "./assets/FX/EmberGradient.jpg", true );
 		for ( int i = 0; i < GetGameEntities().size(); i++ ) {
@@ -662,4 +703,26 @@ void EtherGame::RenderThreadCallBack() {
 		g_pRenderer->RT_Render2DLine( startPos, endPos, kbColor( 0.0f, 0.0f, curTime, 0.0f ), 16.0f / 4096.0f, m_pCollisionMapDamageGenShader );
 	}
 	m_RenderThreadShotsThisFrame.clear();
+
+	static int status = -1;
+	if ( g_CollisionMapReadJob.IsJobFinished() == true ) {
+		if ( status == 0 ) {
+			g_pRenderer->RT_UnmapRenderTarget( m_pGrassCollisionReadBackTexture );
+		}
+
+		if ( status == 1 || status == -1 ) {
+			g_pRenderer->RT_CopyRenderTarget( m_pGrassCollisionTexture, m_pGrassCollisionReadBackTexture );
+			status = 1;
+		} else if ( status == 2 ) {
+			g_CollisionMapReadJob.m_RTMap = g_pRenderer->RT_MapRenderTarget( m_pGrassCollisionReadBackTexture );
+			g_CollisionMapReadJob.m_Width = m_pGrassCollisionReadBackTexture->GetWidth();
+			g_CollisionMapReadJob.m_Height = m_pGrassCollisionReadBackTexture->GetHeight();
+
+			g_pJobManager->RegisterJob( &g_CollisionMapReadJob );
+		}
+		status++;
+		if ( status > 2 ) {
+			status = 0;
+		}
+	}
 }

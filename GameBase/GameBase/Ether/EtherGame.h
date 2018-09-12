@@ -95,6 +95,7 @@ protected:
 	virtual void								RenderThreadCallBack() override;
 	kbRenderTexture *							m_pBulletHoleRenderTexture;
 	kbRenderTexture *							m_pGrassCollisionTexture;
+	kbRenderTexture *							m_pGrassCollisionReadBackTexture;
 
 	kbShader *									m_pCollisionMapPushGenShader;
 	kbShader *									m_pCollisionMapDamageGenShader;

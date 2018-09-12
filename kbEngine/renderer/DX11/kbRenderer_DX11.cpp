@@ -26,6 +26,7 @@ DXGI_FORMAT kbTextureFormatToDXGITextureFormat[NUM_TEXTURE_FORMATS] = {
 	DXGI_FORMAT_UNKNOWN,
 	DXGI_FORMAT_R8G8B8A8_UNORM,
 	DXGI_FORMAT_R16G16B16A16_FLOAT,
+	DXGI_FORMAT_R32G32B32A32_FLOAT,
 	DXGI_FORMAT_R32G32_FLOAT,
 	DXGI_FORMAT_R32_FLOAT,
 	DXGI_FORMAT_D24_UNORM_S8_UINT,
@@ -494,21 +495,21 @@ void kbRenderer_DX11::Init_Internal( HWND hwnd, const int frameWidth, const int 
 	KBTEXTURE_R16G16,
 	NUM_TEXTURE_FORMATS,
 */
-	RT_GetRenderTexture( deferredRTWidth, deferredRTHeight, KBTEXTURE_R16G16B16A16 );
-	RT_GetRenderTexture( deferredRTWidth, deferredRTHeight, KBTEXTURE_R16G16B16A16 );
-	RT_GetRenderTexture( deferredRTWidth, deferredRTHeight, KBTEXTURE_R16G16B16A16 );
-	RT_GetRenderTexture( deferredRTWidth, deferredRTHeight, KBTEXTURE_R32 );
-	RT_GetRenderTexture( deferredRTWidth, deferredRTHeight, KBTEXTURE_R16G16B16A16 );
+	RT_GetRenderTexture( deferredRTWidth, deferredRTHeight, KBTEXTURE_R16G16B16A16, false );
+	RT_GetRenderTexture( deferredRTWidth, deferredRTHeight, KBTEXTURE_R16G16B16A16, false );
+	RT_GetRenderTexture( deferredRTWidth, deferredRTHeight, KBTEXTURE_R16G16B16A16, false );
+	RT_GetRenderTexture( deferredRTWidth, deferredRTHeight, KBTEXTURE_R32, false );
+	RT_GetRenderTexture( deferredRTWidth, deferredRTHeight, KBTEXTURE_R16G16B16A16, false );
 
 	const int shadowBufferSize = 2048;
-	RT_GetRenderTexture( shadowBufferSize, shadowBufferSize, KBTEXTURE_R32 );
-	RT_GetRenderTexture( shadowBufferSize, shadowBufferSize, KBTEXTURE_D24S8 );
+	RT_GetRenderTexture( shadowBufferSize, shadowBufferSize, KBTEXTURE_R32, false );
+	RT_GetRenderTexture( shadowBufferSize, shadowBufferSize, KBTEXTURE_D24S8, false );
 
-	RT_GetRenderTexture( deferredRTWidth / 2, deferredRTHeight / 2, KBTEXTURE_R16G16B16A16 );
-	RT_GetRenderTexture( deferredRTWidth / 2, deferredRTHeight / 2, KBTEXTURE_R16G16B16A16 );
-	RT_GetRenderTexture( deferredRTHeight / 2, deferredRTHeight / 2, KBTEXTURE_R16G16B16A16 );
+	RT_GetRenderTexture( deferredRTWidth / 2, deferredRTHeight / 2, KBTEXTURE_R16G16B16A16, false );
+	RT_GetRenderTexture( deferredRTWidth / 2, deferredRTHeight / 2, KBTEXTURE_R16G16B16A16, false );
+	RT_GetRenderTexture( deferredRTHeight / 2, deferredRTHeight / 2, KBTEXTURE_R16G16B16A16, false );
 
-	RT_GetRenderTexture( deferredRTWidth, deferredRTHeight, KBTEXTURE_R16G16 );
+	RT_GetRenderTexture( deferredRTWidth, deferredRTHeight, KBTEXTURE_R16G16, false );
 
 	// create back buffer
 	D3D11_TEXTURE2D_DESC depthBufferDesc = { 0 };
@@ -949,9 +950,9 @@ int kbRenderer_DX11::CreateRenderView( HWND hwnd )
 /**
  *	kbRenderer_DX11::GetRenderTexture_Internal
  */
-kbRenderTexture * kbRenderer_DX11::GetRenderTexture_Internal( const int width, const int height, const eTextureFormat targetFormat ) {
+kbRenderTexture * kbRenderer_DX11::GetRenderTexture_Internal( const int width, const int height, const eTextureFormat targetFormat, const bool bIsCPUAccessible  ) {
 
-	m_pRenderTargets.push_back( new kbRenderTexture_DX11( width, height, targetFormat ) );
+	m_pRenderTargets.push_back( new kbRenderTexture_DX11( width, height, targetFormat, bIsCPUAccessible ) );
 
 	kbRenderTexture_DX11 & rt = *GetRenderTarget_DX11( (eReservedRenderTargets)(m_pRenderTargets.size() - 1) );
 
@@ -999,13 +1000,17 @@ kbRenderTexture * kbRenderer_DX11::GetRenderTexture_Internal( const int width, c
 	textureDesc.ArraySize = 1;
 	textureDesc.Format = kbTextureFormatToDXGITextureFormat[targetFormat];
 	textureDesc.SampleDesc.Count = 1;
-	textureDesc.Usage = D3D11_USAGE_DEFAULT;
-	textureDesc.BindFlags = D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE;
-	textureDesc.CPUAccessFlags = 0;
+	textureDesc.Usage = ( bIsCPUAccessible == false ) ? ( D3D11_USAGE_DEFAULT ) : ( D3D11_USAGE_STAGING );
+	textureDesc.BindFlags = ( bIsCPUAccessible == false ) ? ( D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE ) : ( 0 );
+	textureDesc.CPUAccessFlags = ( bIsCPUAccessible == false ) ? ( 0 ) : ( D3D11_CPU_ACCESS_READ );
 	textureDesc.MiscFlags = 0;
 
 	HRESULT hr = m_pD3DDevice->CreateTexture2D( &textureDesc, nullptr, &rt.m_pRenderTargetTexture );
 	kbErrorCheck( SUCCEEDED(hr), "kbRenderer_DX11::CreateRenderTarget() - Failed to create 2D texture with format", (int)targetFormat );
+
+	if ( bIsCPUAccessible ) {
+		return &rt;
+	}
 
 	// Render target view
 	D3D11_RENDER_TARGET_VIEW_DESC renderTargetViewDesc;
@@ -3339,6 +3344,16 @@ void kbRenderer_DX11::RT_Render2DLine( const kbVec3 & startPt, const kbVec3 & en
 }
 
 /**
+ *	kbRenderer_DX11::RT_CopyRenderTarget
+ */
+void kbRenderer_DX11::RT_CopyRenderTarget( kbRenderTexture *const pSrcTexture, kbRenderTexture *const pDstTexture ) {
+	kbRenderTexture_DX11 *const pSrc = (kbRenderTexture_DX11*)pSrcTexture;
+	kbRenderTexture_DX11 *const pDst = (kbRenderTexture_DX11*)pDstTexture;
+
+	m_pDeviceContext->CopyResource( pDst->m_pRenderTargetTexture, pSrc->m_pRenderTargetTexture );
+}
+
+/**
  *	kbRenderer_DX11::SetConstantBuffer
  */
 ID3D11Buffer * kbRenderer_DX11::SetConstantBuffer( const kbShaderVarBindings_t & shaderVarBindings, const kbShaderParamOverrides_t * shaderParamOverrides, const kbRenderObject *const pRenderObject ) {
@@ -3495,4 +3510,30 @@ ID3D11Buffer * kbRenderer_DX11::SetConstantBuffer( const kbShaderVarBindings_t &
 
 	m_pDeviceContext->Unmap( pConstantBuffer, 0 );
 	return pConstantBuffer;
+}
+
+/**
+ *	kbRenderer_DX11::RT_MapRenderTarget
+ */
+kbRenderTargetMap kbRenderer_DX11::RT_MapRenderTarget( kbRenderTexture *const pTarget ) {
+
+	kbRenderTexture_DX11 *const pDX11Target = (kbRenderTexture_DX11*)pTarget;
+
+	D3D11_MAPPED_SUBRESOURCE mappedResource;
+	m_pDeviceContext->Map( pDX11Target->m_pRenderTargetTexture, 0, D3D11_MAP_READ, 0, &mappedResource );
+
+	kbRenderTargetMap returnVal;
+	returnVal.pData = (byte*)mappedResource.pData;
+	returnVal.rowPitch = mappedResource.RowPitch;
+
+	return returnVal;
+}
+
+/**
+ *	kbRenderer_DX11::RT_UnmapRenderTarget
+ */
+void kbRenderer_DX11::RT_UnmapRenderTarget( kbRenderTexture *const pTarget ) {
+	kbRenderTexture_DX11 *const pDX11Target = (kbRenderTexture_DX11*)pTarget;
+
+	m_pDeviceContext->Unmap( pDX11Target->m_pRenderTargetTexture, 0 );
 }
