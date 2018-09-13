@@ -35,6 +35,11 @@ protected:
 	kbGameEntity *								m_pSmokeEntity;
 	kbGameEntity *								m_pEmberEntity;
 	kbVec3										m_Position;
+
+	float										m_StartingTimeSeconds;
+	kbVec3										m_FireScale;
+	kbVec3										m_SmokeScale;
+	kbVec3										m_EmberScale;
 };
 
 /**

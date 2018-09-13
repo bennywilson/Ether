@@ -38,6 +38,75 @@ const kbVec3 g_CountUIScale( 0.5f, 0.5f, 0.5f );
 static kbVec3 g_CountUIOffset( 14.96f, -12.0f, 10.0f );
 
 /**
+ *	EtherCollisionMapReadBackJob
+ */
+class EtherCollisionMapReadBackJob : public kbJob {
+
+//-------------------------------------------------------------------------------------------------------------------------------------------------------------
+public:
+												EtherCollisionMapReadBackJob() :
+													m_bSynced( false ) { }
+
+	virtual void								Run() override {
+
+		m_FireInfo.clear();
+
+		DirectX::PackedVector::HALF * pCurVal = (DirectX::PackedVector::HALF*)m_RTMap.pData;
+		const size_t halfsPerWidth = m_TextureWidth * 4;
+		const size_t halfsPerPitch = m_RTMap.rowPitch / sizeof(DirectX::PackedVector::HALF);
+		const float curTimer = g_GlobalTimer.TimeElapsedSeconds();
+		int numFires = 0;
+
+		byte * pStartByte = m_RTMap.pData;
+		for ( int y = 0; y < m_TextureHeight; y++ ) {
+			for ( int x = 0; x < m_TextureWidth; x++ ) {
+				byte * pCurByte = (byte*)pCurVal;
+				const float r = DirectX::PackedVector::XMConvertHalfToFloat( *pCurVal );
+				pCurVal++;
+				const float g = DirectX::PackedVector::XMConvertHalfToFloat( *pCurVal );
+				pCurVal++;
+				const float b = DirectX::PackedVector::XMConvertHalfToFloat( *pCurVal );
+				pCurVal++;
+				const float a = DirectX::PackedVector::XMConvertHalfToFloat( *pCurVal );
+				pCurVal++;
+
+				if ( a < 900.0f && curTimer < b + 1.5f && numFires < 1 ) {
+
+					kbVec3 normalizedPos( (float)x / m_TextureWidth, 0.0f, (float)y / m_TextureHeight );
+					normalizedPos = ( normalizedPos * 2.0f ) - 1.0f;
+					normalizedPos = m_WorldCenter + normalizedPos * ( m_WorldSize * 0.5f );
+
+					FireInfo newFireInfo;
+					newFireInfo.m_Position.Set( normalizedPos.x, b, normalizedPos.z );
+					m_FireInfo.push_back( newFireInfo );
+					numFires++;
+				}
+			}
+
+			pCurVal += halfsPerPitch - halfsPerWidth;
+		}
+	}
+
+	// Input
+	kbRenderTargetMap							m_RTMap;
+	int											m_TextureWidth;
+	int											m_TextureHeight;
+
+	kbVec3										m_WorldCenter;
+	float										m_WorldSize;
+
+	// Output
+	struct FireInfo {
+		kbVec3									m_Position;
+	};
+
+	std::vector<FireInfo>						m_FireInfo;
+
+	bool										m_bSynced;
+
+} g_CollisionMapReadJob;
+
+/**
  *	EtherGame::EtherGame
  */
 EtherGame::EtherGame() :
@@ -192,16 +261,6 @@ void EtherGame::Update_Internal( float DT ) {
 		
 				static kbVec3 curPos( 7.75f, -6.5f, 8.0f );	// Weapon offset from camera
 				static float updateAmt = 1.0f;
-/*
-if (GetAsyncKeyState('O')) curPos.y += updateAmt;
-if (GetAsyncKeyState('P')) curPos.y -= updateAmt;
-
-if (GetAsyncKeyState('K')) curPos.x += updateAmt;
-if (GetAsyncKeyState('L')) curPos.x -= updateAmt;
-
-if (GetAsyncKeyState('N')) curPos.z += updateAmt;
-if (GetAsyncKeyState('M')) curPos.z -= updateAmt;
-*/
 				kbTransformComponent *const pTrans = static_cast<kbTransformComponent*>( pPlayerWeapon->GetOwner()->GetComponent(0) );
 				pTrans->SetPosition( kbVec3( curPos.x, curPos.y, curPos.z ) );
 			}
@@ -338,6 +397,49 @@ void EtherGame::MoveActorAlongGround( EtherActorComponent *const pActor, const k
 void EtherGame::UpdateWorld( const float DT ) {
 	const double GameTimeInSeconds = m_GameStartTimer.TimeElapsedSeconds();
 
+	// Update fire
+	if ( g_CollisionMapReadJob.IsJobFinished() ) {
+
+		for ( int i = 0; i < g_CollisionMapReadJob.m_FireInfo.size(); i++ ) {
+
+			EtherCollisionMapReadBackJob::FireInfo & curFire = g_CollisionMapReadJob.m_FireInfo[i];
+			bool bCancelTheContract = false;
+
+			kbVec3 firePos = curFire.m_Position;
+			firePos.y = 0.0f;
+
+			for ( int l = 0; l < m_FireEntities.size(); l++ ) {
+				kbVec3 compareFirePos = m_FireEntities[l].GetPosition();
+				compareFirePos.y = 0.0f;
+
+				if ( ( firePos - compareFirePos ).Length() < 1000.0f ) {
+					bCancelTheContract = true;
+					break;
+				}
+			}
+
+			if ( bCancelTheContract ) {
+				continue;
+			}
+
+			const kbCollisionInfo_t collisionInfo = g_CollisionManager.PerformLineCheck( curFire.m_Position, curFire.m_Position + kbVec3( 0.0f, -256.0f, 0.0f ) );
+			if ( collisionInfo.m_bHit ) {
+				EtherFireEntity newFireEntity( collisionInfo.m_HitLocation, m_FirePrefabs[0], m_SmokePrefabs[0], m_EmberPrefabs[0] );
+				m_FireEntities.push_back( newFireEntity );
+			}
+		}
+		g_CollisionMapReadJob.m_FireInfo.clear();
+
+		static float lastTime = -1.0f;
+		if ( g_GlobalTimer.TimeElapsedSeconds() > lastTime + 0.5f ) {
+			g_CollisionMapReadJob.m_bSynced = true;
+			lastTime = g_GlobalTimer.TimeElapsedSeconds();
+		}
+	}
+
+	for ( int i = 0; i < m_FireEntities.size(); i++ ) {
+		m_FireEntities[i].Update();
+	}
 
 /*
 	m_AIManager.Update( DT );
@@ -522,95 +624,7 @@ void EtherGame::RenderSync() {
 
 	m_RenderThreadShotsThisFrame = m_ShotsThisFrame;
 	m_ShotsThisFrame.clear();
-
-	kbVec3 fireExtents( 10.0f, 10.0f, 10.0f );
-	if ( m_FireEntities.empty() )
-	for ( int i = 0; i < fires.size(); i++ ) {
-
-		bool bCancelTheContract = false;
-
-		for ( int l = 0; l < m_FireEntities.size(); l++ ) {
-			if ( ( fires[i] - m_FireEntities[l].GetPosition() ).Length() < 1000.0f ) {
-				bCancelTheContract = true;
-				break;
-			}
-		}
-
-		if ( bCancelTheContract ) {
-			continue;
-		}
-
-		EtherFireEntity newFireEntity( fires[i], m_FirePrefabs[0], m_SmokePrefabs[0], m_EmberPrefabs[0] );
-		m_FireEntities.push_back( newFireEntity );
-	}
-	fires.empty();
 }
-
-/**
- *	EtherCollisionMapReadBackJob
- */
-class EtherCollisionMapReadBackJob : public kbJob {
-
-//-------------------------------------------------------------------------------------------------------------------------------------------------------------
-public:
-												EtherCollisionMapReadBackJob() { }
-
-	virtual void								Run() override {
-
-		m_FireInfo.empty();
-
-		DirectX::PackedVector::HALF * pCurVal = (DirectX::PackedVector::HALF*)m_RTMap.pData;
-		const size_t halfsPerWidth = m_TextureWidth * 4;
-		const size_t halfsPerPitch = m_RTMap.rowPitch / sizeof(DirectX::PackedVector::HALF);
-		const float curTimer = g_GlobalTimer.TimeElapsedSeconds();
-		int numFires = 0;
-
-		byte * pStartByte = m_RTMap.pData;
-		for ( int y = 0; y < m_TextureHeight; y++ ) {
-			for ( int x = 0; x < m_TextureWidth; x++ ) {
-				byte * pCurByte = (byte*)pCurVal;
-				const float r = DirectX::PackedVector::XMConvertHalfToFloat( *pCurVal );
-				pCurVal++;
-				const float g = DirectX::PackedVector::XMConvertHalfToFloat( *pCurVal );
-				pCurVal++;
-				const float b = DirectX::PackedVector::XMConvertHalfToFloat( *pCurVal );
-				pCurVal++;
-				const float a = DirectX::PackedVector::XMConvertHalfToFloat( *pCurVal );
-				pCurVal++;
-
-				if ( a < 900.0f && curTimer < b + 1.0f && numFires < 1 ) {
-
-					kbVec3 normalizedPos( (float)x / m_TextureWidth, 0.0f, (float)y / m_TextureHeight );
-					normalizedPos = ( normalizedPos * 2.0f ) - 1.0f;
-					normalizedPos = m_WorldCenter + normalizedPos * ( m_WorldSize * 0.5f );
-
-					FireInfo newFireInfo;
-					newFireInfo.m_Position.Set( normalizedPos.x, b, normalizedPos.z );
-					m_FireInfo.push_back( newFireInfo );
-					numFires++;
-				}
-			}
-
-			pCurVal += halfsPerPitch - halfsPerWidth;
-		}
-	}
-
-	// Input
-	kbRenderTargetMap							m_RTMap;
-	int											m_TextureWidth;
-	int											m_TextureHeight;
-
-	kbVec3										m_WorldCenter;
-	float										m_WorldSize;
-
-	// Output
-	struct FireInfo {
-		kbVec3									m_Position;
-	};
-
-	std::vector<FireInfo>						m_FireInfo;
-
-} g_CollisionMapReadJob;
 
 /**
  *	EtherGame::RenderThreadCallBack
@@ -761,16 +775,11 @@ void EtherGame::RenderThreadCallBack() {
 	m_RenderThreadShotsThisFrame.clear();
 
 	static int status = -1;
-	if ( g_CollisionMapReadJob.IsJobFinished() == true ) {
+
+	if ( g_CollisionMapReadJob.m_bSynced ) {
 		if ( status == 0 ) {
 			g_pRenderer->RT_UnmapRenderTarget( m_pGrassCollisionReadBackTexture );
-
-			for ( int i = 0; i < g_CollisionMapReadJob.m_FireInfo.size(); i++ ) {
-				fires.push_back( g_CollisionMapReadJob.m_FireInfo[i].m_Position );
-			}
-		}
-
-		if ( status == 1 || status == -1 ) {
+		} else if ( status == 1 || status == -1 ) {
 			g_pRenderer->RT_CopyRenderTarget( m_pGrassCollisionTexture, m_pGrassCollisionReadBackTexture );
 			status = 1;
 		} else if ( status == 2 ) {
@@ -779,6 +788,7 @@ void EtherGame::RenderThreadCallBack() {
 			g_CollisionMapReadJob.m_TextureHeight = m_pGrassCollisionReadBackTexture->GetHeight();
 			g_CollisionMapReadJob.m_WorldCenter = terrainPos;
 			g_CollisionMapReadJob.m_WorldSize = terrainWidth;
+			g_CollisionMapReadJob.m_bSynced = false;
 			g_pJobManager->RegisterJob( &g_CollisionMapReadJob );
 		}
 		status++;
@@ -791,15 +801,24 @@ void EtherGame::RenderThreadCallBack() {
 /**
  *	EtherFireEntity::EtherFireEntity
  */
+static kbVec3 fireOffset = kbVec3( 0.0f, 35.0f, 0.0f );
+static kbVec3 smokeOffset = kbVec3( 0.0f, 35.0f, 0.0f );
+static kbVec3 emberOffset = kbVec3( 0.0f, 35.0f, 0.0f );
 EtherFireEntity::EtherFireEntity( const kbVec3 & position, const kbPrefab *const pFirePrefab, const kbPrefab *const pSmokePrefab, const kbPrefab *const pParticlePrefab ) {
 
 	m_pFireEntity = g_pGame->CreateEntity( pFirePrefab->GetGameEntity(0) );
 	m_pSmokeEntity = g_pGame->CreateEntity( pSmokePrefab->GetGameEntity(0) );
 	m_pEmberEntity = g_pGame->CreateEntity( pParticlePrefab->GetGameEntity(0) );
 
+	m_Position = position;
 	m_pFireEntity->SetPosition( position );
-	m_pSmokeEntity->SetPosition( position );
-	m_pEmberEntity->SetPosition( position );
+	m_pSmokeEntity->SetPosition( position + smokeOffset);
+	m_pEmberEntity->SetPosition( position + emberOffset);
+
+	m_StartingTimeSeconds = g_GlobalTimer.TimeElapsedSeconds();
+	m_FireScale = m_pFireEntity->GetScale();
+
+	m_pFireEntity->SetScale( kbVec3::zero );
 }
 
 /**
@@ -813,6 +832,14 @@ void EtherFireEntity::Destroy() {
  *	EtherFireEntity::Update
  */
 void EtherFireEntity::Update() {
+	const float currentTimeSeconds = g_GlobalTimer.TimeElapsedSeconds();
+	const float scaleTime = 1.0f;
+	const float normalizedTime = kbClamp( ( currentTimeSeconds - m_StartingTimeSeconds ) / scaleTime, 0.0f, 1.0f );
 
+	const kbVec3 fireScale = m_FireScale * normalizedTime;
+	m_pFireEntity->SetScale( fireScale );
+
+	const kbVec3 firePosition = m_Position + fireOffset * normalizedTime;
+	m_pFireEntity->SetPosition( firePosition );
 }
 
