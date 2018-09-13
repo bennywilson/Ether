@@ -265,8 +265,8 @@ PS_OUTPUT pixelShader( pixelInput input, bool isFrontFace : SV_IsFrontFace )  {
 
 	float lerpVal = ( burnSize - abs(input.worldPosition.y - input.grassData1.y ) ) / burnSize;
 	lerpVal = saturate( lerpVal );
-	output.Color.xyz = lerp( output.Color.xyz, ember, lerpVal);
-	output.Color.w = saturate( lerpVal - 0.5f ) * 10.0f * saturate( 1.0f - ( 5.0f * animatedEmberU ) );
+	output.Color.xyz = lerp( output.Color.xyz, ember, lerpVal );
+	output.Color.w = saturate( lerpVal - 0.5f ) * 10.0f * saturate( 1.0f - ( 2.5f * animatedEmberU ) );
 
 	//
 	output.Normal.xyz = float3( 0.0f, 1.0f,0.0 );

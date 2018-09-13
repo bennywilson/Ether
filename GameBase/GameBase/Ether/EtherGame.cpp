@@ -535,9 +535,13 @@ public:
 
 	virtual void								Run() override {
 		DirectX::PackedVector::HALF * pCurVal = (DirectX::PackedVector::HALF*)m_RTMap.pData;
+		const size_t halfsPerWidth = m_Width * 4;
+		const size_t halfsPerPitch = m_RTMap.rowPitch / sizeof(DirectX::PackedVector::HALF);
 
+		byte * pStartByte = m_RTMap.pData;
 		for ( int y = 0; y < m_Height; y++ ) {
 			for ( int x = 0; x < m_Width; x++ ) {
+				byte * pCurByte = (byte*)pCurVal;
 				const float r = DirectX::PackedVector::XMConvertHalfToFloat( *pCurVal );
 				pCurVal++;
 				const float g = DirectX::PackedVector::XMConvertHalfToFloat( *pCurVal );
@@ -548,8 +552,7 @@ public:
 				pCurVal++;
 			}
 
-			const size_t leftOverPitch = ( m_RTMap.rowPitch / sizeof( DirectX::PackedVector::HALF ) ) - ( m_Width * sizeof( DirectX::PackedVector::HALF ) );
-			pCurVal += leftOverPitch;
+			pCurVal += halfsPerPitch - halfsPerWidth;
 		}
 	}
 
@@ -628,8 +631,13 @@ void EtherGame::RenderThreadCallBack() {
 
 	// Update time in collision Map
 	g_pRenderer->RT_SetRenderTarget( m_pGrassCollisionTexture );
-	const float timeMultiplier = ( 1.0f - kbClamp( g_TimeMultiplier * GetCurrentFrameDeltaTime(), 0.0f, 1.0f ) ) * 0.15f + 0.85f;
-	g_pRenderer->RT_Render2DLine( kbVec3( 0.5f, 0.0f, 0.0f ), kbVec3( 0.5f, 1.0f, 0.0f ), kbColor( timeMultiplier, timeMultiplier, timeMultiplier, timeMultiplier ), 15.0f, m_pCollisionMapUpdateTimeShader );
+	//const float timeMultiplier = ( 1.0f - kbClamp( g_TimeMultiplier * GetCurrentFrameDeltaTime(), 0.0f, 1.0f ) ) * 0.15f + 0.85f;
+	//g_pRenderer->RT_Render2DLine( kbVec3( 0.5f, 0.0f, 0.0f ), kbVec3( 0.5f, 1.0f, 0.0f ), kbColor( timeMultiplier, timeMultiplier, timeMultiplier, timeMultiplier ), 15.0f, m_pCollisionMapUpdateTimeShader );
+	const float pixelWidth = 4.0f / 1024.0f;
+	g_pRenderer->RT_Render2DLine( kbVec3( 0.0f, 0.0f, 0.0f ), kbVec3( pixelWidth, 0.0f, 0.0f ), kbColor::red, pixelWidth, m_pCollisionMapUpdateTimeShader );
+	g_pRenderer->RT_Render2DLine( kbVec3( 0.0f, 1.0f, 0.0f ), kbVec3( pixelWidth, 1.0f, 0.0f ), kbColor::green, pixelWidth, m_pCollisionMapUpdateTimeShader );
+	g_pRenderer->RT_Render2DLine( kbVec3( 1.0f - pixelWidth, 0.0f, 0.0f ), kbVec3( 1.0f, 0.0f, 0.0f ), kbColor( 1.0f, 1.0f, 0.0f, 0.0f ), pixelWidth, m_pCollisionMapUpdateTimeShader );
+	g_pRenderer->RT_Render2DLine( kbVec3( 1.0f - pixelWidth, 1.0f, 0.0f ), kbVec3( 1.0f, 1.0f, 0.0f ), kbColor(0.5f, 0.5f, 0.0f, 0.0f ), pixelWidth, m_pCollisionMapUpdateTimeShader );
 
 	const float curTime = g_GlobalTimer.TimeElapsedSeconds();
 
