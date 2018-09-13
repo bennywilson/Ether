@@ -19,6 +19,24 @@ enum eCameraMode_t {
 	Cam_Free,
 };
 
+class EtherFireEntity {
+
+//-------------------------------------------------------------------------------------------------------------------------------------------------------------
+public:
+												EtherFireEntity( const kbVec3 & position, const kbPrefab *const pFirePrefab, const kbPrefab *const pSmokePrefab, const kbPrefab *const pParticlePrefab );
+
+	void										Update();
+	void										Destroy();
+
+	kbVec3										GetPosition() const { return m_Position; }
+
+protected:
+	kbGameEntity *								m_pFireEntity;
+	kbGameEntity *								m_pSmokeEntity;
+	kbGameEntity *								m_pEmberEntity;
+	kbVec3										m_Position;
+};
+
 /**
  *	EtherGame
  */
@@ -103,6 +121,12 @@ protected:
 	kbShader *									m_pCollisionMapUpdateTimeShader;
 	kbShader *									m_pBulletHoleUpdateShader;
 	kbShaderParamOverrides_t					m_ShaderParamOverrides;
+
+	static const int NUM_FIRE_PREFABS = 16;
+	const kbPrefab *							m_FirePrefabs[16];
+	const kbPrefab *							m_SmokePrefabs[16];
+	const kbPrefab *							m_EmberPrefabs[16];
+	std::vector<EtherFireEntity>				m_FireEntities;
 };
 
 

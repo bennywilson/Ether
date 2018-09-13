@@ -463,7 +463,7 @@ kbGameEntity 1199553285 1083518041 1518451114 1990211042 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		Name = "Ember_0"
+		Name = "Embers_0"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
 		Position = 58.785179 26.030029 -60.218063
 		Scale = 1.000000 1.000000 1.000000

@@ -82,12 +82,9 @@ kbRenderObject crossHair;
 void EtherGame::PlayGame_Internal() {
 	g_pRenderer->RegisterRenderHook( this );
 
-/*
-	m_pAirstrikeFlybyWave = (kbWaveFile *)g_ResourceManager.GetResource( "./assets/Sounds/airstrike.wav", true );
-	kbErrorCheck( m_pAirstrikeFlybyWave != nullptr, "EtherGame::PlayGame_Internal() - Failed to find airstrike.wav" );
-
-	m_pOLCWindupWave = (kbWaveFile *)g_ResourceManager.GetResource( "./assets/Sounds/olc_windup.wav", true );
-	m_pOLCExplosion = (kbWaveFile *)g_ResourceManager.GetResource( "./assets/Sounds/olc_explosion.wav", true );*/
+	m_FirePrefabs[0] = m_pFXPackage->GetPrefab( "Fire_0" );
+	m_SmokePrefabs[0] = m_pFXPackage->GetPrefab( "Smoke_0" );
+	m_EmberPrefabs[0] = m_pFXPackage->GetPrefab( "Embers_0" );
 }
 
 /**
@@ -510,6 +507,9 @@ void EtherGame::RegisterBulletShot( kbComponent *const pHitComponent, const kbVe
 /**
  *	EtherGame::RenderSync
  */
+static std::vector<kbVec3> fires;
+
+
 void EtherGame::RenderSync() {
 
 	if ( HasFirstSyncCompleted() == false ) {
@@ -522,6 +522,28 @@ void EtherGame::RenderSync() {
 
 	m_RenderThreadShotsThisFrame = m_ShotsThisFrame;
 	m_ShotsThisFrame.clear();
+
+	kbVec3 fireExtents( 10.0f, 10.0f, 10.0f );
+	if ( m_FireEntities.empty() )
+	for ( int i = 0; i < fires.size(); i++ ) {
+
+		bool bCancelTheContract = false;
+
+		for ( int l = 0; l < m_FireEntities.size(); l++ ) {
+			if ( ( fires[i] - m_FireEntities[l].GetPosition() ).Length() < 1000.0f ) {
+				bCancelTheContract = true;
+				break;
+			}
+		}
+
+		if ( bCancelTheContract ) {
+			continue;
+		}
+
+		EtherFireEntity newFireEntity( fires[i], m_FirePrefabs[0], m_SmokePrefabs[0], m_EmberPrefabs[0] );
+		m_FireEntities.push_back( newFireEntity );
+	}
+	fires.empty();
 }
 
 /**
@@ -534,13 +556,18 @@ public:
 												EtherCollisionMapReadBackJob() { }
 
 	virtual void								Run() override {
+
+		m_FireInfo.empty();
+
 		DirectX::PackedVector::HALF * pCurVal = (DirectX::PackedVector::HALF*)m_RTMap.pData;
-		const size_t halfsPerWidth = m_Width * 4;
+		const size_t halfsPerWidth = m_TextureWidth * 4;
 		const size_t halfsPerPitch = m_RTMap.rowPitch / sizeof(DirectX::PackedVector::HALF);
+		const float curTimer = g_GlobalTimer.TimeElapsedSeconds();
+		int numFires = 0;
 
 		byte * pStartByte = m_RTMap.pData;
-		for ( int y = 0; y < m_Height; y++ ) {
-			for ( int x = 0; x < m_Width; x++ ) {
+		for ( int y = 0; y < m_TextureHeight; y++ ) {
+			for ( int x = 0; x < m_TextureWidth; x++ ) {
 				byte * pCurByte = (byte*)pCurVal;
 				const float r = DirectX::PackedVector::XMConvertHalfToFloat( *pCurVal );
 				pCurVal++;
@@ -550,6 +577,18 @@ public:
 				pCurVal++;
 				const float a = DirectX::PackedVector::XMConvertHalfToFloat( *pCurVal );
 				pCurVal++;
+
+				if ( a < 900.0f && curTimer < b + 1.0f && numFires < 1 ) {
+
+					kbVec3 normalizedPos( (float)x / m_TextureWidth, 0.0f, (float)y / m_TextureHeight );
+					normalizedPos = ( normalizedPos * 2.0f ) - 1.0f;
+					normalizedPos = m_WorldCenter + normalizedPos * ( m_WorldSize * 0.5f );
+
+					FireInfo newFireInfo;
+					newFireInfo.m_Position.Set( normalizedPos.x, b, normalizedPos.z );
+					m_FireInfo.push_back( newFireInfo );
+					numFires++;
+				}
 			}
 
 			pCurVal += halfsPerPitch - halfsPerWidth;
@@ -558,10 +597,19 @@ public:
 
 	// Input
 	kbRenderTargetMap							m_RTMap;
-	int											m_Width;
-	int											m_Height;
+	int											m_TextureWidth;
+	int											m_TextureHeight;
+
+	kbVec3										m_WorldCenter;
+	float										m_WorldSize;
 
 	// Output
+	struct FireInfo {
+		kbVec3									m_Position;
+	};
+
+	std::vector<FireInfo>						m_FireInfo;
+
 } g_CollisionMapReadJob;
 
 /**
@@ -631,14 +679,14 @@ void EtherGame::RenderThreadCallBack() {
 
 	// Update time in collision Map
 	g_pRenderer->RT_SetRenderTarget( m_pGrassCollisionTexture );
-	//const float timeMultiplier = ( 1.0f - kbClamp( g_TimeMultiplier * GetCurrentFrameDeltaTime(), 0.0f, 1.0f ) ) * 0.15f + 0.85f;
-	//g_pRenderer->RT_Render2DLine( kbVec3( 0.5f, 0.0f, 0.0f ), kbVec3( 0.5f, 1.0f, 0.0f ), kbColor( timeMultiplier, timeMultiplier, timeMultiplier, timeMultiplier ), 15.0f, m_pCollisionMapUpdateTimeShader );
-	const float pixelWidth = 4.0f / 1024.0f;
+	const float timeMultiplier = ( 1.0f - kbClamp( g_TimeMultiplier * GetCurrentFrameDeltaTime(), 0.0f, 1.0f ) ) * 0.15f + 0.85f;
+	g_pRenderer->RT_Render2DLine( kbVec3( 0.5f, 0.0f, 0.0f ), kbVec3( 0.5f, 1.0f, 0.0f ), kbColor( timeMultiplier, timeMultiplier, timeMultiplier, timeMultiplier ), 15.0f, m_pCollisionMapUpdateTimeShader );
+	/*const float pixelWidth = 4.0f / 1024.0f;
 	g_pRenderer->RT_Render2DLine( kbVec3( 0.0f, 0.0f, 0.0f ), kbVec3( pixelWidth, 0.0f, 0.0f ), kbColor::red, pixelWidth, m_pCollisionMapUpdateTimeShader );
 	g_pRenderer->RT_Render2DLine( kbVec3( 0.0f, 1.0f, 0.0f ), kbVec3( pixelWidth, 1.0f, 0.0f ), kbColor::green, pixelWidth, m_pCollisionMapUpdateTimeShader );
 	g_pRenderer->RT_Render2DLine( kbVec3( 1.0f - pixelWidth, 0.0f, 0.0f ), kbVec3( 1.0f, 0.0f, 0.0f ), kbColor( 1.0f, 1.0f, 0.0f, 0.0f ), pixelWidth, m_pCollisionMapUpdateTimeShader );
 	g_pRenderer->RT_Render2DLine( kbVec3( 1.0f - pixelWidth, 1.0f, 0.0f ), kbVec3( 1.0f, 1.0f, 0.0f ), kbColor(0.5f, 0.5f, 0.0f, 0.0f ), pixelWidth, m_pCollisionMapUpdateTimeShader );
-
+*/
 	const float curTime = g_GlobalTimer.TimeElapsedSeconds();
 
 	for ( int i = 0; i < m_RenderThreadShotsThisFrame.size(); i++ ) {
@@ -716,6 +764,10 @@ void EtherGame::RenderThreadCallBack() {
 	if ( g_CollisionMapReadJob.IsJobFinished() == true ) {
 		if ( status == 0 ) {
 			g_pRenderer->RT_UnmapRenderTarget( m_pGrassCollisionReadBackTexture );
+
+			for ( int i = 0; i < g_CollisionMapReadJob.m_FireInfo.size(); i++ ) {
+				fires.push_back( g_CollisionMapReadJob.m_FireInfo[i].m_Position );
+			}
 		}
 
 		if ( status == 1 || status == -1 ) {
@@ -723,9 +775,10 @@ void EtherGame::RenderThreadCallBack() {
 			status = 1;
 		} else if ( status == 2 ) {
 			g_CollisionMapReadJob.m_RTMap = g_pRenderer->RT_MapRenderTarget( m_pGrassCollisionReadBackTexture );
-			g_CollisionMapReadJob.m_Width = m_pGrassCollisionReadBackTexture->GetWidth();
-			g_CollisionMapReadJob.m_Height = m_pGrassCollisionReadBackTexture->GetHeight();
-
+			g_CollisionMapReadJob.m_TextureWidth = m_pGrassCollisionReadBackTexture->GetWidth();
+			g_CollisionMapReadJob.m_TextureHeight = m_pGrassCollisionReadBackTexture->GetHeight();
+			g_CollisionMapReadJob.m_WorldCenter = terrainPos;
+			g_CollisionMapReadJob.m_WorldSize = terrainWidth;
 			g_pJobManager->RegisterJob( &g_CollisionMapReadJob );
 		}
 		status++;
@@ -734,3 +787,32 @@ void EtherGame::RenderThreadCallBack() {
 		}
 	}
 }
+
+/**
+ *	EtherFireEntity::EtherFireEntity
+ */
+EtherFireEntity::EtherFireEntity( const kbVec3 & position, const kbPrefab *const pFirePrefab, const kbPrefab *const pSmokePrefab, const kbPrefab *const pParticlePrefab ) {
+
+	m_pFireEntity = g_pGame->CreateEntity( pFirePrefab->GetGameEntity(0) );
+	m_pSmokeEntity = g_pGame->CreateEntity( pSmokePrefab->GetGameEntity(0) );
+	m_pEmberEntity = g_pGame->CreateEntity( pParticlePrefab->GetGameEntity(0) );
+
+	m_pFireEntity->SetPosition( position );
+	m_pSmokeEntity->SetPosition( position );
+	m_pEmberEntity->SetPosition( position );
+}
+
+/**
+ *	EtherFireEntity::Destroy
+ */
+void EtherFireEntity::Destroy() {
+
+}
+
+/**
+ *	EtherFireEntity::Update
+ */
+void EtherFireEntity::Update() {
+
+}
+

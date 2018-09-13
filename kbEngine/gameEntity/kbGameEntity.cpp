@@ -237,13 +237,15 @@ kbGameEntity::kbGameEntity( const kbGameEntity * pGameEntity, const bool bIsPref
 				kbError( "kbGameEntity::kbGameEntity() - Somehow the first component is not the transform component" );
 			}
 		}
+	}
 
-		if ( m_bIsPrefab == false ) {
-			if ( pGameEntity->m_Components[i]->IsEnabled() == true ) {
-				newComponent->Enable( false );
-				newComponent->Enable( true );
+	if ( m_bIsPrefab == false ) {
+		for ( int i = 0; i < m_Components.size(); i++ ) {
+			if ( pGameEntity->m_Components[i]->IsEnabled() ) {
+				m_Components[i]->Enable( false );
+				m_Components[i]->Enable( true );
 			} else {
-				newComponent->Enable( false );
+				m_Components[i]->Enable( false );
 			}
 		}
 	}
