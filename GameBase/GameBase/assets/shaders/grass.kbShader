@@ -103,7 +103,7 @@ void CreateVertex( inout TriangleStream<pixelInput> OutputStream, float3 vertexW
 
 	// Check collision
 	float3 windpush = 0.0f;
-	if ( dot( collisionMapVal.xy, collisionMapVal.xy ) > 0.001f ) {
+	/*if ( dot( collisionMapVal.xy, collisionMapVal.xy ) > 0.00000001f ) {
 		float2 centerPt = terrainMapUV;
 		const float2 normalizedCollisionPos = ( normalizedTerrainMapPos + collisionMapVal.xy ) * collisionMapCenter.z;
 		const float3 worldCollisionPos = float3( normalizedCollisionPos.x, collisionMapVal.w, normalizedCollisionPos.y );
@@ -114,13 +114,13 @@ void CreateVertex( inout TriangleStream<pixelInput> OutputStream, float3 vertexW
 		windpush = 1.0f - saturate( length( vecTo ) / collisionRadius );
 		
 		float timeFactor = saturate( ( time.x - collisionMapVal.z ) / 0.5f );
-		windpush *= normalize( vecTo ) * collisionRadius * 0.33f * ( 1.0f + noiseValues.x * 0.25f ) * timeFactor;
-	}
+		windpush *= normalize( vecTo ) * 0.25f * collisionRadius * ( 1.0f + noiseValues.x * 0.25f ) * timeFactor;
+	}*/
 
 	const float oscNoise = noiseValues.x * 5.5f;
 	float oscSin = sin( oscNoise.x + time.x * ( 1.0f * ( ( oscNoise.x * 0.5f ) + 0.5f ) ) );
 	float oscillation =  oscSin * 0.5f + 0.5f;
-	float3 windVec = ( windpush + ( wind.xyz ) * ( oscillation * 0.1f ) + 0.9f );
+	float3 windVec =  ( windpush + ( wind.xyz ) * ( oscillation * 0.1f ) + 0.9f );
 
 	const float randomNum = frac( 3.5349578345f * ( bladeWorldOrigin.x + bladeWorldOrigin.z ) );
 	int textureIdx = 0;

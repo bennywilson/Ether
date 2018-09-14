@@ -85,6 +85,16 @@ void kbModelComponent::SetShaderParams( const kbShaderParamOverrides_t & shaderP
 }
 
 /**
+ *	kbModelComponent:SetShaderParams
+ */
+void kbModelComponent::SetShaderVectorParam( const std::string & paramName, const kbVec4 & value ) {
+	m_RenderObject.m_ShaderParamOverrides.SetVec4( paramName, value );
+	if ( IsEnabled() ) {
+		g_pRenderer->UpdateRenderObject( m_RenderObject );
+	}
+}
+
+/**
  *	kbShaderParamComponent::Constructor
  */
 void kbShaderParamComponent::Constructor() {

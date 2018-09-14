@@ -360,9 +360,9 @@ kbGameEntity 0 0 0 0 {
 			kbShaderParamComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
-				ParamName = ""
+				ParamName = "additionalData"
 				Texture = NULL
-				Vector = 0.000000 0.000000 0.000000 0.000000
+				Vector = 1.000000 0.000000 0.000000 0.000000
 			}
 		TranslucencySortBias =  -5.000000
 		Model = ..\..\kbengine\assets\models\unitquad.ms3d

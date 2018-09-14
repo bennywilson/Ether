@@ -46,6 +46,7 @@ public:
 	virtual void								PostLoad() override;
 
 	void										SetShaderParams( const kbShaderParamOverrides_t & shaderParams );
+	void										SetShaderVectorParam( const std::string & paramName, const kbVec4 & value );
 
 	bool										GetCastsShadow() const { return m_bCastsShadow; }
 

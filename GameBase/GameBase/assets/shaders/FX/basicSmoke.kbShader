@@ -15,6 +15,7 @@ cbuffer matrixBuffer {
 	float4 distortion_1_2;
 	float4 distortion_3_AlphaScroll;
 	float4 smokeDistortion;
+	float4 additionalData;			// x: Alpha value
 };
 
 kbShaderState {
@@ -112,6 +113,10 @@ float4 pixelShader( pixelInput	input ) : SV_Target {
 	float dist = 0.5f;
 	dist = 1.0f - saturate( ( dist - input.uv.y )/ dist );
 	color.xyz *= dist * dist;
-	
+	color.a *= additionalData.x;
+
+	if ( color.a < 0.001 )
+		clip(-1);
+
 	return color;
 }
