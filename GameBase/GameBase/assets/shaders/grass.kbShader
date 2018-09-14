@@ -99,6 +99,7 @@ void CreateVertex( inout TriangleStream<pixelInput> OutputStream, float3 vertexW
 	const float2 terrainMapUV = ( normalizedTerrainMapPos * 0.5f ) + 0.5f;
 
 	const float4 collisionMapVal = collisionMap.SampleLevel( PointSampler, terrainMapUV, 0.0f );
+	const float collisionTime = abs( collisionMapVal.w );
 	const float3 noiseValues = noiseMap.SampleLevel( LinearSampler, input[0].uv * grassNumber, 0.0f ).xyz;
 
 	// Check collision
@@ -113,7 +114,7 @@ void CreateVertex( inout TriangleStream<pixelInput> OutputStream, float3 vertexW
 
 		windpush = 1.0f - saturate( length( vecTo ) / collisionRadius );
 		
-		float timeFactor = saturate( ( time.x - collisionMapVal.z ) / 0.5f );
+		float timeFactor = saturate( ( time.x - collisionTime ) / 0.5f );
 		windpush *= normalize( vecTo ) * 0.25f * collisionRadius * ( 1.0f + noiseValues.x * 0.25f ) * timeFactor;
 	}*/
 
@@ -164,7 +165,7 @@ void CreateVertex( inout TriangleStream<pixelInput> OutputStream, float3 vertexW
 	float4 grassData = 0;
 	grassData.x = randomNum;
 	grassData.y = burnStartHeight;
-	grassData.z = collisionMapVal.b;		// Collision start time
+	grassData.z = collisionTime;		// Collision start time
 
 	const float3 segment1StartPos = bladeWorldOrigin + normalize( float3( 0.0f, grassLength, 0.0f ) + windVec ) * ( grassLength * 0.33333f );
 	const float3 segment2StartPos = segment1StartPos + normalize( float3( 0.0f, grassLength, 0.0f ) + windVec * 2.5f) * ( grassLength * 0.33333f );
@@ -191,7 +192,7 @@ void CreateVertex( inout TriangleStream<pixelInput> OutputStream, float3 vertexW
 	// Broken blade animation
 	const float animationTime = ( time.x - collisionMapVal.z ) / 5.0f;
 	
-	if ( numSegments < 3 && animationTime <= 1.0f ) {
+	if ( numSegments < 3 && animationTime <= 1.0f && collisionMapVal.z > 0.0f /* Negative collision means burn w/o throwing grass */ ) {
 		float3 newSegVec = jitterOffset * sign( randomNum );
 		newSegVec.y += 2.0f;
 		newSegVec = normalize( newSegVec ) * grassLength * 0.33f;

@@ -30,6 +30,8 @@ public:
 
 	kbVec3										GetPosition() const { return m_Position; }
 
+	float										GetScorchRadius() const { return m_ScorchRadius; }
+
 protected:
 	kbGameEntity *								m_pFireEntity;
 	kbGameEntity *								m_pSmokeEntity;
@@ -40,6 +42,9 @@ protected:
 	kbVec3										m_FireScale;
 	kbVec3										m_SmokeScale;
 	kbVec3										m_EmberScale;
+
+	float										m_ScorchRadius;
+	int											m_ScorchState;
 };
 
 /**
@@ -120,6 +125,7 @@ protected:
 	kbRenderTexture *							m_pGrassCollisionTexture;
 	kbRenderTexture *							m_pGrassCollisionReadBackTexture;
 
+	kbShader *									m_pCollisionMapScorchGenShader;
 	kbShader *									m_pCollisionMapPushGenShader;
 	kbShader *									m_pCollisionMapDamageGenShader;
 	kbShader *									m_pCollisionMapTimeGenShader;
@@ -132,6 +138,12 @@ protected:
 	const kbPrefab *							m_SmokePrefabs[16];
 	const kbPrefab *							m_EmberPrefabs[16];
 	std::vector<EtherFireEntity>				m_FireEntities;
+
+	struct RenderThreadScorch {
+		kbVec3									m_Position;
+		kbVec3									m_Size;
+	};
+	std::vector<RenderThreadScorch>				m_RenderThreadScorch;
 };
 
 

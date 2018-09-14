@@ -3356,6 +3356,76 @@ void kbRenderer_DX11::RT_CopyRenderTarget( kbRenderTexture *const pSrcTexture, k
 /**
  *	kbRenderer_DX11::SetConstantBuffer
  */
+void kbRenderer_DX11::RT_Render2DQuad( const kbVec2 & origin, const kbVec2 & size, const kbColor & color, const kbShader * pShader, const struct kbShaderParamOverrides_t *const pShaderParamOverrides ) {
+	D3D11_MAPPED_SUBRESOURCE mappedResource;
+	HRESULT hr = m_pDeviceContext->Map( m_DebugVertexBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource );
+
+	kbErrorCheck( SUCCEEDED(hr), "kbRenderer_DX11::RT_Render2DLine() - Failed to map debug vertex buffer" );
+
+	const kbVec3 origin3D = kbVec3( (origin.x * 2.0f) - 1.0f, -((origin.y*2.0f) - 1.0f), 0.0f );
+
+	vertexLayout *const vertices = (vertexLayout *) mappedResource.pData;
+	vertices[0].position = origin3D + kbVec3( -size.x, -size.y, 0.0f );
+	vertices[0].SetColor( color );
+	vertices[0].uv.Set( 1.0f, 0.0f );
+
+	vertices[1].position = origin3D + kbVec3( size.x, -size.y, 0.0f );
+	vertices[1].SetColor( color );
+	vertices[1].uv.Set( 0.0f, 0.0f );
+
+	vertices[2].position = origin3D + kbVec3( size.x, size.y, 0.0f );
+	vertices[2].SetColor( color );
+	vertices[2].uv.Set( 0.0f, 1.0f );
+
+	vertices[3].position = origin3D + kbVec3( size.x, size.y, 0.0f );
+	vertices[3].SetColor( color );
+	vertices[3].uv.Set( 0.0f, 1.0f );
+	
+	vertices[4].position = origin3D + kbVec3( -size.x, size.y, 0.0f );
+	vertices[4].SetColor( color );
+	vertices[4].uv.Set( 1.0f, 1.0f );
+
+	vertices[5].position = origin3D + kbVec3( -size.x, -size.y, 0.0f );
+	vertices[5].SetColor( color );
+	vertices[5].uv.Set( 1.0f, 0.0f );
+
+	m_pDeviceContext->Unmap( m_DebugVertexBuffer, 0 );
+
+	const unsigned int stride = sizeof(vertexLayout);
+	const unsigned int offset = 0;
+
+	m_pDeviceContext->IASetVertexBuffers( 0, 1, &m_DebugVertexBuffer, &stride, &offset );
+	m_pDeviceContext->IASetPrimitiveTopology( D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST );
+
+	m_pDeviceContext->RSSetState( m_pNoFaceCullingRasterizerState );
+
+	if ( pShader == nullptr ) {
+		pShader = m_pDebugShader;
+	}
+
+	m_RenderState.SetBlendState( pShader );
+
+	ID3D11ShaderResourceView *const pShaderResourceView = (ID3D11ShaderResourceView*)m_pTextures[0]->GetGPUTexture();
+	m_pDeviceContext->PSSetShaderResources( 0, 1, &pShaderResourceView );
+	m_pDeviceContext->PSSetSamplers( 0, 1, &m_pBasicSamplerState );
+	m_pDeviceContext->IASetInputLayout( (ID3D11InputLayout*)pShader->GetVertexLayout() );
+	m_pDeviceContext->VSSetShader( (ID3D11VertexShader*) pShader->GetVertexShader(), nullptr, 0 );
+	m_pDeviceContext->PSSetShader( (ID3D11PixelShader*) pShader->GetPixelShader(), nullptr, 0 );
+
+	const auto & varBindings = pShader->GetShaderVarBindings();
+	ID3D11Buffer *const pConstantBuffer = SetConstantBuffer( varBindings, pShaderParamOverrides, nullptr );
+
+	m_pDeviceContext->VSSetConstantBuffers( 0, 1, &pConstantBuffer );
+	m_pDeviceContext->PSSetConstantBuffers( 0, 1, &pConstantBuffer );
+
+	m_pDeviceContext->Draw( 6, 0 );
+
+	m_pDeviceContext->RSSetState( m_pDefaultRasterizerState );
+}
+
+/**
+ *	kbRenderer_DX11::SetConstantBuffer
+ */
 ID3D11Buffer * kbRenderer_DX11::SetConstantBuffer( const kbShaderVarBindings_t & shaderVarBindings, const kbShaderParamOverrides_t * shaderParamOverrides, const kbRenderObject *const pRenderObject ) {
 	kbMat4 worldMatrix;
 	if ( pRenderObject != nullptr ) {

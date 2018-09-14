@@ -625,6 +625,16 @@ void EtherGame::RenderSync() {
 
 	m_RenderThreadShotsThisFrame = m_ShotsThisFrame;
 	m_ShotsThisFrame.clear();
+
+	m_RenderThreadScorch.clear();
+	for ( int i = 0; i < m_FireEntities.size(); i++ ) {
+		if ( m_FireEntities[i].GetScorchRadius() > 0.00001f ) {
+			RenderThreadScorch newScorch;
+			newScorch.m_Position = m_FireEntities[i].GetPosition();
+			newScorch.m_Size.Set( m_FireEntities[i].GetScorchRadius(), m_FireEntities[i].GetScorchRadius(), m_FireEntities[i].GetScorchRadius() );
+			m_RenderThreadScorch.push_back( newScorch );
+		}
+	}
 }
 
 /**
@@ -687,6 +697,7 @@ void EtherGame::RenderThreadCallBack() {
 		m_pCollisionMapTimeGenShader = (kbShader *) g_ResourceManager.GetResource( "./assets/shaders/DamageGen/collisionMapTimeGen.kbshader", true );
 		m_pCollisionMapUpdateTimeShader = (kbShader *) g_ResourceManager.GetResource( "./assets/shaders/DamageGen/collisionMapTimeUpdate.kbshader", true );
 		m_pBulletHoleUpdateShader = (kbShader *) g_ResourceManager.GetResource( "./assets/shaders/DamageGen/pokeyholeunwrap.kbshader", true );
+		m_pCollisionMapScorchGenShader = (kbShader*) g_ResourceManager.GetResource( "./assets/shaders/DamageGen/collisionMapScorchGen.kbShader", true );
 	}
 
 	if ( GetAsyncKeyState( 'C' ) ) {
@@ -700,6 +711,7 @@ void EtherGame::RenderThreadCallBack() {
 	g_pRenderer->RT_Render2DLine( kbVec3( 0.5f, 0.0f, 0.0f ), kbVec3( 0.5f, 1.0f, 0.0f ), kbColor( timeMultiplier, timeMultiplier, timeMultiplier, timeMultiplier ), 15.0f, m_pCollisionMapUpdateTimeShader );
 
 	const float curTime = g_GlobalTimer.TimeElapsedSeconds();
+	const kbVec3 terrainCenter( terrainPos.x, terrainPos.z, 0.0f );
 
 	for ( int i = 0; i < m_RenderThreadShotsThisFrame.size(); i++ ) {
 
@@ -740,7 +752,6 @@ void EtherGame::RenderThreadCallBack() {
 
 		// Update collision map
 		g_pRenderer->RT_SetRenderTarget( m_pGrassCollisionTexture );
-		const kbVec3 terrainCenter( terrainPos.x, terrainPos.z, 0.0f );
 		kbVec3 startPos = ( ( kbVec3( curShot.shotStart.x, curShot.shotStart.z, 0.0f ) - terrainCenter ) / halfTerrainWidth ) * 0.5f + 0.5f;
 		startPos.z = curShot.shotStart.y;
 
@@ -795,6 +806,22 @@ void EtherGame::RenderThreadCallBack() {
 			status = 0;
 		}
 	}
+
+	// Additional Scorches
+	g_pRenderer->RT_SetRenderTarget( m_pGrassCollisionTexture );
+
+	for ( int i = 0; i < m_RenderThreadScorch.size(); i++ ) {
+
+		kbVec2 startPos( m_RenderThreadScorch[i].m_Position.x, m_RenderThreadScorch[0].m_Position.z );
+		kbVec2 width( m_RenderThreadScorch[i].m_Size.x, m_RenderThreadScorch[i].m_Size.z );
+
+		startPos.x = ( ( startPos.x - terrainCenter.x - (width.x * 0.5f) ) / halfTerrainWidth ) * 0.5f + 0.5f;
+		startPos.y = ( ( startPos.y - terrainCenter.z - (width.y * 0.5f) ) / halfTerrainWidth ) * 0.5f + 0.5f;
+
+		kbShaderParamOverrides_t shaderParams;
+		shaderParams.SetVec4( "centerPt", kbVec4( ( startPos.x * 2.0f ) - 1.0f,  -((startPos.y*2.0f) - 1.0f), width.x, 0.0f ) );
+		g_pRenderer->RT_Render2DQuad( startPos, width, kbColor::red, m_pCollisionMapScorchGenShader, &shaderParams ); 
+	}
 }
 
 /**
@@ -804,6 +831,9 @@ static kbVec3 fireOffset = kbVec3( 0.0f, 27.0f, 0.0f );
 static kbVec3 smokeOffset = kbVec3( 0.0f, 27.0f, 0.0f );
 static kbVec3 emberOffset = kbVec3( 0.0f, 27.0f, 0.0f );
 EtherFireEntity::EtherFireEntity( const kbVec3 & position, const kbPrefab *const pFirePrefab, const kbPrefab *const pSmokePrefab, const kbPrefab *const pParticlePrefab ) {
+
+	m_ScorchRadius = 0.0f;
+	m_ScorchState = 0;
 
 	m_pFireEntity = g_pGame->CreateEntity( pFirePrefab->GetGameEntity(0) );
 	m_pSmokeEntity = g_pGame->CreateEntity( pSmokePrefab->GetGameEntity(0) );
@@ -838,6 +868,21 @@ void EtherFireEntity::Update() {
 	const float scaleTime = 1.0f;
 	const float unclampedNormalizedTime = ( currentTimeSeconds - m_StartingTimeSeconds ) / scaleTime;
 	const float clampedNormalizedTime = kbClamp( unclampedNormalizedTime, 0.0f, 1.0f );
+
+	if ( unclampedNormalizedTime > 0.25f && m_ScorchState == 0 ) {
+		m_ScorchState = 1;
+		m_ScorchRadius = 6.0f / 1024.0f;
+	} else {
+		m_ScorchRadius = 0.0f;
+	}
+
+	/*if ( m_Sc == 0 ) {
+		if ( unclampedNormalizedTime > 1.0f ) {
+			m_ScorchState = 1;
+		}
+	} else {
+		m_ScorchState = 2;
+	}*/
 
 	const kbVec3 fireScale = m_FireScale * clampedNormalizedTime;
 	m_pFireEntity->SetScale( fireScale );
