@@ -515,8 +515,8 @@ kbGameEntity 2392815626 1128253038 2191027591 643962852 {
 	kbCustomPointLightComponent { 
 		Enabled = 1
 		LifeTime =  -1.000000
-		CastsShadows = 0ww
-		Color = 5 3 1 1
+		CastsShadows = 0
+		Color = 2.5 1.5 0.5 1
 		LightRadius =  64.000000
 		Shader = NULL
 		ShaderParams = 0
