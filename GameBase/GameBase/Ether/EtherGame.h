@@ -31,6 +31,7 @@ public:
 	kbVec3										GetPosition() const { return m_Position; }
 
 	float										GetScorchRadius() const { return m_ScorchRadius; }
+	kbVec3										GetScorchOffset() const { return m_ScorchOffset; }
 
 protected:
 	kbGameEntity *								m_pFireEntity;
@@ -43,8 +44,12 @@ protected:
 	kbVec3										m_SmokeScale;
 	kbVec3										m_EmberScale;
 
+	kbVec3										m_ScorchOffset;
 	float										m_ScorchRadius;
+	float										m_NextScorchStartTime;
 	int											m_ScorchState;
+
+	float										m_RandomScroller;
 };
 
 /**

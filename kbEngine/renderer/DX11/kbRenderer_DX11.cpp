@@ -3360,32 +3360,32 @@ void kbRenderer_DX11::RT_Render2DQuad( const kbVec2 & origin, const kbVec2 & siz
 	D3D11_MAPPED_SUBRESOURCE mappedResource;
 	HRESULT hr = m_pDeviceContext->Map( m_DebugVertexBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource );
 
-	kbErrorCheck( SUCCEEDED(hr), "kbRenderer_DX11::RT_Render2DLine() - Failed to map debug vertex buffer" );
+	kbErrorCheck( SUCCEEDED(hr), "kbRenderer_DX11::RT_Render2DQuad() - Failed to map debug vertex buffer" );
 
 	const kbVec3 origin3D = kbVec3( (origin.x * 2.0f) - 1.0f, -((origin.y*2.0f) - 1.0f), 0.0f );
 
 	vertexLayout *const vertices = (vertexLayout *) mappedResource.pData;
-	vertices[0].position = origin3D + kbVec3( -size.x, -size.y, 0.0f );
+	vertices[0].position = origin3D + kbVec3( -size.x, -size.y, 0.01f );
 	vertices[0].SetColor( color );
 	vertices[0].uv.Set( 1.0f, 0.0f );
 
-	vertices[1].position = origin3D + kbVec3( size.x, -size.y, 0.0f );
+	vertices[1].position = origin3D + kbVec3( size.x, -size.y, 0.01f );
 	vertices[1].SetColor( color );
 	vertices[1].uv.Set( 0.0f, 0.0f );
 
-	vertices[2].position = origin3D + kbVec3( size.x, size.y, 0.0f );
+	vertices[2].position = origin3D + kbVec3( size.x, size.y, 0.01f );
 	vertices[2].SetColor( color );
 	vertices[2].uv.Set( 0.0f, 1.0f );
 
-	vertices[3].position = origin3D + kbVec3( size.x, size.y, 0.0f );
+	vertices[3].position = origin3D + kbVec3( size.x, size.y, 0.01f );
 	vertices[3].SetColor( color );
 	vertices[3].uv.Set( 0.0f, 1.0f );
 	
-	vertices[4].position = origin3D + kbVec3( -size.x, size.y, 0.0f );
+	vertices[4].position = origin3D + kbVec3( -size.x, size.y, 0.01f );
 	vertices[4].SetColor( color );
 	vertices[4].uv.Set( 1.0f, 1.0f );
 
-	vertices[5].position = origin3D + kbVec3( -size.x, -size.y, 0.0f );
+	vertices[5].position = origin3D + kbVec3( -size.x, -size.y, 0.01f );
 	vertices[5].SetColor( color );
 	vertices[5].uv.Set( 1.0f, 0.0f );
 

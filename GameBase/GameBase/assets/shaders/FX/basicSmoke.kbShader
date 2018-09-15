@@ -15,7 +15,7 @@ cbuffer matrixBuffer {
 	float4 distortion_1_2;
 	float4 distortion_3_AlphaScroll;
 	float4 smokeDistortion;
-	float4 additionalData;			// x: Alpha value
+	float4 additionalData;			// x: Alpha value, b: Starting Time
 };
 
 kbShaderState {
@@ -78,9 +78,10 @@ Texture2D noiseMap3					: register(t3);
  
 float4 pixelShader( pixelInput	input ) : SV_Target {
 
-	float4 noise1 = noiseMap1.Sample( SampleType, input.uv + float2( 0.0f, noiseScroll.x * time.x ) ) * 2.0f - 1.0f;
-	float4 noise2 = noiseMap2.Sample( SampleType, input.uv + float2( 0.0f, noiseScroll.y * time.x ) ) * 2.0f - 1.0f;
-	float4 noise3 = noiseMap3.Sample( SampleType, input.uv + float2( 0.0f, noiseScroll.z * time.x ) ) * 2.0f - 1.0f;
+	const float scrollTime = time.x + additionalData.y;
+	float4 noise1 = noiseMap1.Sample( SampleType, input.uv + float2( 0.0f, noiseScroll.x * scrollTime ) ) * 2.0f - 1.0f;
+	float4 noise2 = noiseMap2.Sample( SampleType, input.uv + float2( 0.0f, noiseScroll.y * scrollTime ) ) * 2.0f - 1.0f;
+	float4 noise3 = noiseMap3.Sample( SampleType, input.uv + float2( 0.0f, noiseScroll.z * scrollTime ) ) * 2.0f - 1.0f;
 	noise1.xy *= distortion_1_2.xy;
 	noise2.xy *= distortion_1_2.zw;
 	noise3.xy *= distortion_3_AlphaScroll.xy;
