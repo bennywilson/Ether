@@ -422,8 +422,9 @@ void EtherGame::UpdateWorld( const float DT ) {
 			if ( bCancelTheContract ) {
 				continue;
 			}
-
-			const kbCollisionInfo_t collisionInfo = g_CollisionManager.PerformLineCheck( curFire.m_Position + kbVec3( 0.0f, 99999999.0f, 0.0f ), curFire.m_Position + kbVec3( 0.0f, -99999999.0f, 0.0f ) );
+kbVec3 startPos = curFire.m_Position;
+startPos.y = 0.0f;
+			const kbCollisionInfo_t collisionInfo = g_CollisionManager.PerformLineCheck( startPos + kbVec3( 0.0f, 99999999.0f, 0.0f ), startPos + kbVec3( 0.0f, -99999999.0f, 0.0f ) );
 			if ( collisionInfo.m_bHit && ( curFire.m_Position.y < -99999.0f || abs( curFire.m_Position.y - collisionInfo.m_HitLocation.y ) < 15.0f ) ) {
 				EtherFireEntity newFireEntity( collisionInfo.m_HitLocation, m_FirePrefabs[0], m_SmokePrefabs[0], m_EmberPrefabs[0] );
 				m_FireEntities.push_back( newFireEntity );
@@ -627,7 +628,7 @@ void EtherGame::RenderSync() {
 	for ( int i = 0; i < m_FireEntities.size(); i++ ) {
 		if ( m_FireEntities[i].GetScorchRadius() > 0.00001f ) {
 			RenderThreadScorch newScorch;
-			newScorch.m_Position = m_FireEntities[i].GetPosition();
+			newScorch.m_Position = m_FireEntities[i].GetScorchOffset();
 			newScorch.m_Size.Set( m_FireEntities[i].GetScorchRadius(), m_FireEntities[i].GetScorchRadius(), m_FireEntities[i].GetScorchRadius() );
 			m_RenderThreadScorch.push_back( newScorch );
 		}
@@ -824,9 +825,9 @@ void EtherGame::RenderThreadCallBack() {
 /**
  *	EtherFireEntity::EtherFireEntity
  */
-static kbVec3 fireOffset = kbVec3( 0.0f, 27.0f, 0.0f );
-static kbVec3 smokeOffset = kbVec3( 0.0f, 45.0f, 0.0f );
-static kbVec3 emberOffset = kbVec3( 0.0f, 27.0f, 0.0f );
+static kbVec3 fireOffset = kbVec3( 0.0f, 15.0f, 0.0f );
+static kbVec3 smokeOffset = kbVec3( 0.0f, 25.0f, 0.0f );
+static kbVec3 emberOffset = kbVec3( 0.0f, 15.0f, 0.0f );
 EtherFireEntity::EtherFireEntity( const kbVec3 & position, const kbPrefab *const pFirePrefab, const kbPrefab *const pSmokePrefab, const kbPrefab *const pParticlePrefab ) {
 
 	m_ScorchRadius = 0.0f;
@@ -889,12 +890,13 @@ void EtherFireEntity::Update() {
 		m_ScorchState = 2;
 		m_NextScorchStartTime = 2.0f + kbfrand() * 2.0f + currentTimeSeconds;
 	} else if ( m_ScorchState == 2 && currentTimeSeconds > m_NextScorchStartTime ) {
-		//m_ScorchState = 3;
+		m_ScorchState = 3;
 
 		m_ScorchRadius = 16.0f / 1024.0f;
 		m_ScorchOffset = m_Position + kbVec3( kbfrand() * 75.0f, 0.0f, kbfrand() * 86.0f );
 	} else if ( m_ScorchState == 3 ) {
-	//	m_ScorchRadius = 0.0f;
+		m_ScorchRadius = 0.0f;
+	//	g_pRenderer->DrawBox( kbBounds( m_ScorchOffset - kbVec3( 8.0f, 8.0f, 8.0f ), m_ScorchOffset + kbVec3( 8.0f, 8.0f, 8.0f ) ), kbColor::red );
 	//	m_ScorchState = 2.0f;
 	}
 
