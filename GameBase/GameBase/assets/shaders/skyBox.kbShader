@@ -54,8 +54,8 @@ pixelInput vertexShader( vertexInput input ) {
 }
 
 
-Texture2D shaderTexture;
-SamplerState SampleType;
+Texture2D diffuseTexture;
+SamplerState LinearSampler;
 
 /**
  *	pixelShader
@@ -63,7 +63,7 @@ SamplerState SampleType;
  PS_OUTPUT pixelShader( pixelInput	input ) {
  	PS_OUTPUT output = (PS_OUTPUT) 0;
 
-	output.Color.xyz += shaderTexture.Sample( SampleType, input.uv ).xyz;
+	output.Color.xyz += diffuseTexture.Sample( LinearSampler, input.uv ).xyz;
 
 	return output;
 }
