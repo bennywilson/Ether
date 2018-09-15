@@ -95,6 +95,10 @@ protected:
 	void										ProcessInput( const float deltaTimeSec );
 	void										UpdateWorld( const float deltaTimeSec );
 
+	void										UpdateFires_GameThread();
+	void										UpdateFires_RenderSync();
+	void										UpdateFires_RenderHook( const kbTerrainComponent *const pTerrain );
+
 	void										AddPrefabToEntity( const kbPackage *const pPrefab, const std::string & prefabName, kbGameEntity *const pEntity, 
 																   const bool bComponentsOnly );
 
