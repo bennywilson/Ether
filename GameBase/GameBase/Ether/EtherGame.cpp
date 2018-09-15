@@ -882,11 +882,11 @@ EtherFireEntity::EtherFireEntity( const kbVec3 & position, const kbPrefab *const
 	const float scaleAmt = 0.67f + kbfrand() * 0.33f;
 
 	m_pFireEntity->SetScale( m_pFireEntity->GetScale() * scaleAmt );
-	m_pSmokeEntity->SetScale( m_pSmokeEntity->GetScale() * scaleAmt );
+	m_pSmokeEntity->SetScale( m_pFireEntity->GetScale() * scaleAmt );
 	m_pEmberEntity->SetScale( m_pEmberEntity->GetScale() * scaleAmt );
 
 	m_pFireEntity->SetPosition( position );
-	m_pSmokeEntity->SetPosition( position + kbVec3( 0.0f, -kbfrand() * 12.0f, 0.0f ) );
+	m_pSmokeEntity->SetPosition( position + kbVec3( 0.0f, -kbfrand() * 12.0f, 0.0f ) + smokeOffset );
 	m_pEmberEntity->SetPosition( position );
 	
 	m_FireStartPos = m_pFireEntity->GetPosition();
@@ -963,9 +963,9 @@ void EtherFireEntity::Update() {
 
 	} else if ( m_ScorchState == 4 ) {
 		fireFade = firePos = 1.0f - kbClamp( ( currentTimeSeconds - m_FadeOutStartTime ) / m_NextStateChangeTime, 0.0f, 1.0f );
-		smokeFade = 1.0f - kbClamp( ( currentTimeSeconds - m_FadeOutStartTime ) / ( m_NextStateChangeTime * 3.0f ), 0.0f, 1.0f );
+		smokeFade = 1.0f - kbClamp( ( currentTimeSeconds - m_FadeOutStartTime ) / ( m_NextStateChangeTime * 1.3f ), 0.0f, 1.0f );
 
-		if ( currentTimeSeconds > m_FadeOutStartTime + m_NextStateChangeTime  * 3.0f ) {
+		if ( currentTimeSeconds > m_FadeOutStartTime + m_NextStateChangeTime * 1.3f ) {
 			m_bIsFinished = true;
 		}
 	}
@@ -975,7 +975,7 @@ void EtherFireEntity::Update() {
 	m_pEmberEntity->SetPosition( m_EmberStartPos + fireOffset * fireFade );
 
 	kbStaticModelComponent * pSM = (kbStaticModelComponent*)m_pSmokeEntity->GetComponentByType( kbStaticModelComponent::GetType() );
-	pSM->SetShaderVectorParam( "additionalData", kbVec4( smokeFade * 0.25f, m_RandomScroller, 0.0f, 0.0f ) );
+	pSM->SetShaderVectorParam( "additionalData", kbVec4( smokeFade * 0.24f, m_RandomScroller, 0.0f, 0.0f ) );
 
 	pSM = (kbStaticModelComponent*)m_pFireEntity->GetComponentByType( kbStaticModelComponent::GetType() );
 	pSM->SetShaderVectorParam( "additionalData", kbVec4( fireFade, m_RandomScroller, 0.0f, 0.0f ) );

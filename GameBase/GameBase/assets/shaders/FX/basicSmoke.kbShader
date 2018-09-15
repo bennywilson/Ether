@@ -116,7 +116,7 @@ float4 pixelShader( pixelInput	input ) : SV_Target {
 	color.xyz *= dist * dist;
 	color.a *= additionalData.x;
 
-	if ( color.a < 0.001 )
+	if ( color.a < 0.01 )
 		clip(-1);
 
 	return color;
