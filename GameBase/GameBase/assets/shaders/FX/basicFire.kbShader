@@ -104,8 +104,8 @@ float4 pixelShader( pixelInput	input ) : SV_Target {
 	color.xyz = saturate( lerp (startFireColor.w * startFireColor.xyz, endFireColor.w * endFireColor.xyz, lerpVal ) );
 	color.w = fireNoise.w * 1;
 
-	 float dist = 0.5f;
-	dist = 1.0f - saturate( ( dist - input.uv.y )/ dist );
+	float dist = 0.5f;
+	dist = pow( 1.0f - saturate( ( dist - input.uv.y ) / dist ), 5.0f );
 	color.w *= dist * additionalData.x;
 
 	

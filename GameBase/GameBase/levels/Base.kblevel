@@ -106,7 +106,7 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadows = 1
-		Color = 1.000000 1.000000 1.000000 0.250000
+		Color = 0.25 0.25 0.25 0.250000
 		CascadedShadowSplits = 4
  100.000000
  200.000000
@@ -502,5 +502,33 @@ kbGameEntity 0 0 0 0 {
 		ShaderOverride = 1
 			.\assets\shaders\fx\basicsmoke.kbshader
 
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Holey_Wall"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = -41.824341 12.146704 -21.926552
+		Scale = 1.000000 1.000000 1.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		RenderPass = LightingPass
+		TranslucencySortBias =  -1.000000
+		Model = .\assets\models\architecture\bricks.ms3d
+		ShaderOverride = 1
+			.\assets\shaders\environment_hole.kbshader
+
+	}
+	kbCollisionComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CollisionType = StaticMesh
+		Extent = 10.000000 10.000000 10.000000
+		SphereCollision = 0
 	}
 }

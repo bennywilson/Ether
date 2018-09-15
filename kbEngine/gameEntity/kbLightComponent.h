@@ -97,6 +97,22 @@ protected:
 };
 
 /**
+ *	kbCustomPointLightComponent
+ */
+class kbCustomPointLightComponent : public kbPointLightComponent {
+
+	KB_DECLARE_COMPONENT( kbCustomPointLightComponent, kbPointLightComponent );
+
+//---------------------------------------------------------------------------------------------------
+
+protected:
+
+	kbShader *									m_pShader;
+	std::vector<kbShaderParamComponent>			m_ShaderParamList;
+};
+
+
+/**
  *	kbLightShaftsComponent
  */
 class kbLightShaftsComponent : public kbGameComponent {

@@ -106,6 +106,7 @@ void kbRenderer::SetRenderViewTransform( const HWND hwnd, const kbVec3 & positio
 
 	if ( viewIndex < 0 || viewIndex >= m_RenderWindowList.size() ) {
 		kbWarning( "kbRenderer::SetRenderViewTransform() - Invalid view index" );
+		return;
 	}
 
 	m_RenderWindowList[viewIndex]->m_CameraPosition_GameThread = position;
