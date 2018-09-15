@@ -33,6 +33,8 @@ public:
 	float										GetScorchRadius() const { return m_ScorchRadius; }
 	kbVec3										GetScorchOffset() const { return m_ScorchOffset; }
 
+	bool										IsFinished() const { return m_bIsFinished; }
+
 protected:
 	kbGameEntity *								m_pFireEntity;
 	kbGameEntity *								m_pSmokeEntity;
@@ -40,16 +42,19 @@ protected:
 	kbVec3										m_Position;
 
 	float										m_StartingTimeSeconds;
-	kbVec3										m_FireScale;
-	kbVec3										m_SmokeScale;
-	kbVec3										m_EmberScale;
+	float										m_FadeOutStartTime;
+
+	kbVec3										m_FireStartPos;
+	kbVec3										m_SmokeStartPos;
+	kbVec3										m_EmberStartPos;
 
 	kbVec3										m_ScorchOffset;
 	float										m_ScorchRadius;
-	float										m_NextScorchStartTime;
+	float										m_NextStateChangeTime;
 	int											m_ScorchState;
 
 	float										m_RandomScroller;
+	bool										m_bIsFinished;
 };
 
 /**
