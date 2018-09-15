@@ -7,8 +7,7 @@
 cbuffer matrixBuffer {
 	matrix vpMatrix;
 	matrix billboardedModelMatrix;
-	float4 cameraPos;
-	float4 noiseScroll;			// 'w' is available	
+	float4 noiseScroll;				// 'w' is available	
 	float4 time;
 	float4 startFireColor;
 	float4 endFireColor;
@@ -53,7 +52,6 @@ struct PS_OUTPUT {
 	float4 Specular			: SV_TARGET2;
 	float2 Depth			: SV_TARGET3;
 };
-
 
 /**
  *	vertexShader
@@ -108,7 +106,6 @@ float4 pixelShader( pixelInput	input ) : SV_Target {
 	dist = pow( 1.0f - saturate( ( dist - input.uv.y ) / dist ), 5.0f );
 	color.w *= dist * additionalData.x;
 
-	
 	if ( color.a < 0.01 )
 		clip(-1);
 

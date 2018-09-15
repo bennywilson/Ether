@@ -689,15 +689,14 @@ public:
 
 		m_FireInfo.clear();
 
-		DirectX::PackedVector::HALF * pCurVal = (DirectX::PackedVector::HALF*)m_RTMap.pData;
-		const size_t halfsPerWidth = m_TextureWidth * 4;
-		const size_t halfsPerPitch = m_RTMap.rowPitch / sizeof(DirectX::PackedVector::HALF);
+		DirectX::PackedVector::HALF * pCurVal = (DirectX::PackedVector::HALF*)m_RTMap.m_pData;
+		const size_t halfsPerWidth = m_RTMap.m_Width * 4;
+		const size_t halfsPerPitch = m_RTMap.m_rowPitch / sizeof(DirectX::PackedVector::HALF);
 		const float curTimer = g_GlobalTimer.TimeElapsedSeconds();
 		int numFires = 0;
 
-		byte * pStartByte = m_RTMap.pData;
-		for ( int y = 0; y < m_TextureHeight; y++ ) {
-			for ( int x = 0; x < m_TextureWidth; x++ ) {
+		for ( uint y = 0; y < m_RTMap.m_Height; y++ ) {
+			for ( uint x = 0; x < m_RTMap.m_Width; x++ ) {
 				byte * pCurByte = (byte*)pCurVal;
 				const float r = DirectX::PackedVector::XMConvertHalfToFloat( *pCurVal );
 				pCurVal++;
@@ -710,7 +709,7 @@ public:
 
 				if ( a < 900.0f && curTimer < b + 0.5f && kbfrand() > 0.9f ) {
 
-					kbVec3 normalizedPos( (float) x / m_TextureWidth, 0.0f, (float) y / m_TextureHeight );
+					kbVec3 normalizedPos( (float) x / m_RTMap.m_Width, 0.0f, (float) y /  m_RTMap.m_Height );
 					normalizedPos = ( normalizedPos * 2.0f ) - 1.0f;
 					normalizedPos = m_WorldCenter + normalizedPos * ( m_WorldSize * 0.5f );
 
@@ -727,8 +726,6 @@ public:
 
 	// Input
 	kbRenderTargetMap							m_RTMap;
-	int											m_TextureWidth;
-	int											m_TextureHeight;
 
 	kbVec3										m_WorldCenter;
 	float										m_WorldSize;
@@ -840,8 +837,6 @@ void EtherGame::UpdateFires_RenderHook( const kbTerrainComponent *const pTerrain
 			status = 1;
 		} else if ( status == 2 ) {
 			g_CollisionMapReadJob.m_RTMap = g_pRenderer->RT_MapRenderTarget( m_pGrassCollisionReadBackTexture );
-			g_CollisionMapReadJob.m_TextureWidth = m_pGrassCollisionReadBackTexture->GetWidth();
-			g_CollisionMapReadJob.m_TextureHeight = m_pGrassCollisionReadBackTexture->GetHeight();
 			g_CollisionMapReadJob.m_WorldCenter = terrainPos;
 			g_CollisionMapReadJob.m_WorldSize = terrainWidth;
 			g_CollisionMapReadJob.m_bSynced = false;
