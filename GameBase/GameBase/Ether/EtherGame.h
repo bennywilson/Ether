@@ -146,10 +146,9 @@ protected:
 	kbRenderTexture *							m_DynamicLightMapDirections;
 
 	kbShader *									m_pCollisionMapScorchGenShader;
-	kbShader *									m_pCollisionMapPushGenShader;
 	kbShader *									m_pCollisionMapDamageGenShader;
 	kbShader *									m_pCollisionMapTimeGenShader;
-	kbShader *									m_pCollisionMapUpdateTimeShader;
+
 	kbShader *									m_pBulletHoleUpdateShader;
 	kbShaderParamOverrides_t					m_ShaderParamOverrides;
 

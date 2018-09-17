@@ -89,9 +89,7 @@
     <None Include="assets\shaders\basicTerrain.kbShader" />
     <None Include="assets\shaders\DamageGen\collisionMapDamageGen.kbShader" />
     <None Include="assets\shaders\DamageGen\collisionMapScorchGen.kbShader" />
-    <None Include="assets\shaders\DamageGen\collisionMapPushGen.kbShader" />
     <None Include="assets\shaders\DamageGen\collisionMapTimeGen.kbShader" />
-    <None Include="assets\shaders\DamageGen\collisionMapTimeUpdate.kbShader" />
     <None Include="assets\shaders\DamageGen\pokeyholeunwrap.kbShader" />
     <None Include="assets\shaders\FX\basicFire.kbShader" />
     <None Include="assets\shaders\FX\basicSmoke.kbShader" />
