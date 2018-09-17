@@ -12,15 +12,15 @@ cbuffer matrixBuffer {
 
 //-------------------------------------
 struct vertexInput {
-	float4 position		: POSITION;
-	float2 uv			: TEXCOORD0;
+	float4 position			: POSITION;
+	float2 uv				: TEXCOORD0;
 };
 
 //-------------------------------------
 struct pixelInput {
-	float4 position		: SV_POSITION;
-	float2 uv			: TEXCOORD0;
-	float4 position2	: TEXCOORD1;
+	float4 position			: SV_POSITION;
+	float2 uv				: TEXCOORD0;
+	float4 position2		: TEXCOORD1;
 };
 
 /**

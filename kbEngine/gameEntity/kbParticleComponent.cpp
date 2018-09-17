@@ -280,7 +280,6 @@ void kbParticleComponent::EditorChange( const std::string & propertyName ) {
 void kbParticleComponent::RenderSync() {
 	Super::RenderSync();
 
-
 	if ( g_UseEditor && IsEnabled() == true && ( m_TotalDuration > 0.0f && m_TimeAlive > m_TotalDuration && m_BurstCount <= 0 ) ) {
 		StopParticleSystem();
 		Enable( false );
@@ -307,7 +306,6 @@ void kbParticleComponent::RenderSync() {
 			m_ParticleBuffer[i].UnmapVertexBuffer();
 		}
 	}
-
 
 	m_RenderObject.m_pComponent = static_cast<const kbComponent*>( this );
 	m_RenderObject.m_pModel = nullptr;
@@ -346,7 +344,6 @@ void kbParticleComponent::RenderSync() {
  */
 void kbParticleComponent::SetEnable_Internal( const bool isEnabled ) {
 	Super::SetEnable_Internal( isEnabled );
-
 
 	if ( isEnabled ) {
 

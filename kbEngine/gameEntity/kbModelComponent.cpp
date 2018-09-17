@@ -46,7 +46,6 @@ void kbModelComponent::EditorChange( const std::string & propertyName ) {
 			m_RenderObject.m_ShaderParamOverrides.SetTexture( m_ShaderParamList[i].GetParamName().stl_str(), m_ShaderParamList[i].GetTexture() );
 		} else {
 			m_RenderObject.m_ShaderParamOverrides.SetVec4( m_ShaderParamList[i].GetParamName().stl_str(), m_ShaderParamList[i].GetVector() );
-
 		}
 	}
 }
@@ -85,7 +84,7 @@ void kbModelComponent::SetShaderParams( const kbShaderParamOverrides_t & shaderP
 }
 
 /**
- *	kbModelComponent:SetShaderParams
+ *	kbModelComponent::SetShaderVectorParam
  */
 void kbModelComponent::SetShaderVectorParam( const std::string & paramName, const kbVec4 & value ) {
 	m_RenderObject.m_ShaderParamOverrides.SetVec4( paramName, value );
