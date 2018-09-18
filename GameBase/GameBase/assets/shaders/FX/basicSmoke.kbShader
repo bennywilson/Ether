@@ -77,7 +77,7 @@ Texture2D noiseMap3					: register(t3);
  
 float4 pixelShader( pixelInput	input ) : SV_Target {
 
-	const float scrollTime = time.x + additionalData.y;
+	const float scrollTime = additionalData.y;
 	float4 noise1 = noiseMap1.Sample( SampleType, input.uv + float2( 0.0f, noiseScroll.x * scrollTime ) ) * 2.0f - 1.0f;
 	float4 noise2 = noiseMap2.Sample( SampleType, input.uv + float2( 0.0f, noiseScroll.y * scrollTime ) ) * 2.0f - 1.0f;
 	float4 noise3 = noiseMap3.Sample( SampleType, input.uv + float2( 0.0f, noiseScroll.z * scrollTime ) ) * 2.0f - 1.0f;
@@ -111,7 +111,7 @@ float4 pixelShader( pixelInput	input ) : SV_Target {
 	color.a *= pow( abs(topMult), 1.5f );
 	color.a = pow( abs( color. a), 0.8f );
 	float dist = 0.5f;
-	dist = 1.0f - saturate( ( dist - input.uv.y )/ dist );
+	dist = 1.0f - saturate( ( dist - input.uv.y ) / dist );
 	color.xyz *= dist * dist;
 	color.a *= additionalData.x;
 

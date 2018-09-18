@@ -333,7 +333,7 @@ void EtherGame::MoveActorAlongGround( EtherActorComponent *const pActor, const k
 void EtherGame::UpdateWorld( const float DT ) {
 	const double GameTimeInSeconds = m_GameStartTimer.TimeElapsedSeconds();
 
-	UpdateFires_GameThread();
+	UpdateFires_GameThread( DT );
 
 
 /*
@@ -750,7 +750,7 @@ public:
 /**
  *	EtherGame::UpdateFires_GameThread
  */
-void EtherGame::UpdateFires_GameThread() {
+void EtherGame::UpdateFires_GameThread( const float DeltaTime ) {
 
 	if ( g_CollisionMapReadJob.IsJobFinished() ) {
 
@@ -804,7 +804,7 @@ void EtherGame::UpdateFires_GameThread() {
 			VectorRemoveFastIndex( m_FireEntities, i );
 			continue;
 		}
-		m_FireEntities[i].Update();
+		m_FireEntities[i].Update( DeltaTime );
 	}
 }
 
@@ -905,7 +905,7 @@ EtherFireEntity::EtherFireEntity( const kbVec3 & position, const kbPrefab *const
 
 	m_Position = position - kbVec3( 0.0f, 60.0f, 0.0f );
 
-	const float scaleAmt = 0.67f + kbfrand() * 0.33f;
+	const float scaleAmt = 0.67f + kbfrand() * 0.70f;
 
 	m_pFireEntity->SetScale( m_pFireEntity->GetScale() * scaleAmt );
 	m_pSmokeEntity->SetScale( m_pFireEntity->GetScale() * scaleAmt );
@@ -930,7 +930,7 @@ EtherFireEntity::EtherFireEntity( const kbVec3 & position, const kbPrefab *const
 	m_EmberStartPos = m_pEmberEntity->GetPosition();
 
 	m_StartingTimeSeconds = g_GlobalTimer.TimeElapsedSeconds();
-	m_RandomScroller = kbfrand() * 33.33333f;
+	m_RandomScroller = 1.0f + kbfrand() * 0.1f;
 
 	kbStaticModelComponent * pSM = (kbStaticModelComponent*)m_pSmokeEntity->GetComponentByType( kbStaticModelComponent::GetType() );
 	pSM->SetShaderVectorParam( "additionalData", kbVec4( 0.0f, m_RandomScroller, 0.0f, 0.0f ) );
@@ -968,7 +968,7 @@ void EtherFireEntity::Destroy() {
 /**
  *	EtherFireEntity::Update
  */
-void EtherFireEntity::Update() {
+void EtherFireEntity::Update( const float DeltaTime ) {
 
 	const float currentTimeSeconds = g_GlobalTimer.TimeElapsedSeconds();
 	const float scaleTime = 1.0f;
@@ -978,6 +978,7 @@ void EtherFireEntity::Update() {
 	float firePos = clampedNormalizedTime;
 	float fireFade = 1;
 	float smokeFade = clampedNormalizedTime;
+	float scrollTime = currentTimeSeconds;
 
 	if ( unclampedNormalizedTime > 0.33f && m_ScorchState == 0 ) {
 		m_ScorchState = 1;
@@ -1009,6 +1010,7 @@ void EtherFireEntity::Update() {
 		if ( currentTimeSeconds > m_FadeOutStartTime + m_NextStateChangeTime * 1.3f ) {
 			m_bIsFinished = true;
 		}
+		scrollTime = m_FadeOutStartTime + ( currentTimeSeconds - m_FadeOutStartTime ) * ( 0.1f + fireFade * 0.9f );
 	}
 
 	if ( m_pFireLight != nullptr ) {
@@ -1028,6 +1030,7 @@ void EtherFireEntity::Update() {
 	m_pSmokeEntity->SetPosition( m_SmokeStartPos + smokeOffset * smokeFade );
 	m_pEmberEntity->SetPosition( m_EmberStartPos + fireOffset * fireFade );
 
+	m_RandomScroller += DeltaTime * fireFade;
 	kbStaticModelComponent * pSM = (kbStaticModelComponent*)m_pSmokeEntity->GetComponentByType( kbStaticModelComponent::GetType() );
 	pSM->SetShaderVectorParam( "additionalData", kbVec4( smokeFade * 0.24f, m_RandomScroller, 0.0f, 0.0f ) );
 

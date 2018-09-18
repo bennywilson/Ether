@@ -25,7 +25,7 @@ class EtherFireEntity {
 public:
 												EtherFireEntity( const kbVec3 & position, const kbPrefab *const pFirePrefab, const kbPrefab *const pSmokePrefab, const kbPrefab *const pParticlePrefab, const kbPrefab *const pFireLightPrefab );
 
-	void										Update();
+	void										Update( const float DeltaTime );
 	void										Destroy();
 
 	kbVec3										GetPosition() const { return m_Position; }
@@ -51,6 +51,7 @@ protected:
 	kbVec3										m_EmberStartPos;
 	kbVec3										m_StartFireLightPos;
 	kbColor										m_StartFireColor;
+	float										m_StartingScrollSpeed;
 
 	kbVec3										m_ScorchOffset;
 	float										m_ScorchRadius;
@@ -104,7 +105,7 @@ protected:
 	void										ProcessInput( const float deltaTimeSec );
 	void										UpdateWorld( const float deltaTimeSec );
 
-	void										UpdateFires_GameThread();
+	void										UpdateFires_GameThread( const float DeltaTime );
 	void										UpdateFires_RenderSync();
 	void										UpdateFires_RenderHook( const kbTerrainComponent *const pTerrain );
 
