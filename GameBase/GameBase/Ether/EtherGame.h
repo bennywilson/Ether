@@ -23,28 +23,43 @@ class EtherFireEntity {
 
 //-------------------------------------------------------------------------------------------------------------------------------------------------------------
 public:
-												EtherFireEntity( const kbVec3 & position, const kbPrefab *const pFirePrefab, const kbPrefab *const pSmokePrefab, const kbPrefab *const pParticlePrefab );
+												EtherFireEntity( const kbVec3 & position, const kbPrefab *const pFirePrefab, const kbPrefab *const pSmokePrefab, const kbPrefab *const pParticlePrefab, const kbPrefab *const pFireLightPrefab );
 
-	void										Update();
+	void										Update( const float DeltaTime );
 	void										Destroy();
 
 	kbVec3										GetPosition() const { return m_Position; }
 
 	float										GetScorchRadius() const { return m_ScorchRadius; }
+	kbVec3										GetScorchOffset() const { return m_ScorchOffset; }
+
+	bool										IsFinished() const { return m_bIsFinished; }
 
 protected:
 	kbGameEntity *								m_pFireEntity;
 	kbGameEntity *								m_pSmokeEntity;
 	kbGameEntity *								m_pEmberEntity;
+	kbGameEntity *								m_pFireLight;
+
 	kbVec3										m_Position;
 
 	float										m_StartingTimeSeconds;
-	kbVec3										m_FireScale;
-	kbVec3										m_SmokeScale;
-	kbVec3										m_EmberScale;
+	float										m_FadeOutStartTime;
 
+	kbVec3										m_FireStartPos;
+	kbVec3										m_SmokeStartPos;
+	kbVec3										m_EmberStartPos;
+	kbVec3										m_StartFireLightPos;
+	kbColor										m_StartFireColor;
+	float										m_StartingScrollSpeed;
+
+	kbVec3										m_ScorchOffset;
 	float										m_ScorchRadius;
+	float										m_NextStateChangeTime;
 	int											m_ScorchState;
+
+	float										m_RandomScroller;
+	bool										m_bIsFinished;
 };
 
 /**
@@ -90,6 +105,10 @@ protected:
 	void										ProcessInput( const float deltaTimeSec );
 	void										UpdateWorld( const float deltaTimeSec );
 
+	void										UpdateFires_GameThread( const float DeltaTime );
+	void										UpdateFires_RenderSync();
+	void										UpdateFires_RenderHook( const kbTerrainComponent *const pTerrain );
+
 	void										AddPrefabToEntity( const kbPackage *const pPrefab, const std::string & prefabName, kbGameEntity *const pEntity, 
 																   const bool bComponentsOnly );
 
@@ -124,19 +143,22 @@ protected:
 	kbRenderTexture *							m_pBulletHoleRenderTexture;
 	kbRenderTexture *							m_pGrassCollisionTexture;
 	kbRenderTexture *							m_pGrassCollisionReadBackTexture;
+	kbRenderTexture *							mww_DynamicLightMapColors;
+	kbRenderTexture *							m_DynamicLightMapDirections;
 
 	kbShader *									m_pCollisionMapScorchGenShader;
-	kbShader *									m_pCollisionMapPushGenShader;
 	kbShader *									m_pCollisionMapDamageGenShader;
 	kbShader *									m_pCollisionMapTimeGenShader;
-	kbShader *									m_pCollisionMapUpdateTimeShader;
+
 	kbShader *									m_pBulletHoleUpdateShader;
 	kbShaderParamOverrides_t					m_ShaderParamOverrides;
 
 	static const int NUM_FIRE_PREFABS = 16;
-	const kbPrefab *							m_FirePrefabs[16];
-	const kbPrefab *							m_SmokePrefabs[16];
-	const kbPrefab *							m_EmberPrefabs[16];
+	const kbPrefab *							m_FirePrefabs[NUM_FIRE_PREFABS];
+	const kbPrefab *							m_SmokePrefabs[NUM_FIRE_PREFABS];
+	const kbPrefab *							m_EmberPrefabs[NUM_FIRE_PREFABS];
+	const kbPrefab *							m_FireLightPrefabs[NUM_FIRE_PREFABS];
+
 	std::vector<EtherFireEntity>				m_FireEntities;
 
 	struct RenderThreadScorch {

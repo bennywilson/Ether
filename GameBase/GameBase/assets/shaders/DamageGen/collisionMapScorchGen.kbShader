@@ -1,5 +1,5 @@
 //===================================================================================================
-// m_pCollisionMapScorchGenShader.kbShader
+// collisionMapScorchGen.kbShader
 //
 //
 // 2018 kbEngine 2.0
@@ -10,7 +10,13 @@ cbuffer matrixBuffer {
 };
 
 kbShaderState {
-	colorwriteenable colorwriteenable_ba
+	cullmode cullmode_none
+
+	srcblend Blend_One
+	dstBlend Blend_One
+	blendOp BlendOp_Min
+
+	colorwriteenable colorwriteenable_rg
 }
 
 //-------------------------------------
@@ -32,7 +38,7 @@ struct pixelInput {
 pixelInput vertexShader( vertexInput input ) {
 	pixelInput output = (pixelInput)0;
 	output.position = input.position;
-	output.position.z = 0;
+	output.position.z = 0.01f;
 	output.position2 = output.position;
 
 	return output;
@@ -48,5 +54,5 @@ float4 pixelShader( pixelInput input ) : SV_TARGET {
 	if ( length( input.position2.xy - centerPt.xy ) > centerPt.z ) {
 		clip( -1.0f );
 	}
-	return float4( 0.0f, 0.0f, -time.x, -999.0f );
+	return float4( time.x, time.x, 0, 0 );
 }

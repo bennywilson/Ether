@@ -442,9 +442,14 @@ public:
 	bool										m_bIsDirectional;
 };
 
+/**
+ *	kbRenderTargetMap
+ */
 struct kbRenderTargetMap {
-	byte * pData;
-	uint rowPitch;
+	byte *										m_pData;
+	uint										m_Width;
+	uint										m_Height;
+	uint										m_rowPitch;
 };
 
 enum kbBlend {

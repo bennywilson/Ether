@@ -38,75 +38,6 @@ const kbVec3 g_CountUIScale( 0.5f, 0.5f, 0.5f );
 static kbVec3 g_CountUIOffset( 14.96f, -12.0f, 10.0f );
 
 /**
- *	EtherCollisionMapReadBackJob
- */
-class EtherCollisionMapReadBackJob : public kbJob {
-
-//-------------------------------------------------------------------------------------------------------------------------------------------------------------
-public:
-												EtherCollisionMapReadBackJob() :
-													m_bSynced( false ) { }
-
-	virtual void								Run() override {
-
-		m_FireInfo.clear();
-
-		DirectX::PackedVector::HALF * pCurVal = (DirectX::PackedVector::HALF*)m_RTMap.pData;
-		const size_t halfsPerWidth = m_TextureWidth * 4;
-		const size_t halfsPerPitch = m_RTMap.rowPitch / sizeof(DirectX::PackedVector::HALF);
-		const float curTimer = g_GlobalTimer.TimeElapsedSeconds();
-		int numFires = 0;
-
-		byte * pStartByte = m_RTMap.pData;
-		for ( int y = 0; y < m_TextureHeight; y++ ) {
-			for ( int x = 0; x < m_TextureWidth; x++ ) {
-				byte * pCurByte = (byte*)pCurVal;
-				const float r = DirectX::PackedVector::XMConvertHalfToFloat( *pCurVal );
-				pCurVal++;
-				const float g = DirectX::PackedVector::XMConvertHalfToFloat( *pCurVal );
-				pCurVal++;
-				const float b = DirectX::PackedVector::XMConvertHalfToFloat( *pCurVal );
-				pCurVal++;
-				const float a = DirectX::PackedVector::XMConvertHalfToFloat( *pCurVal );
-				pCurVal++;
-
-				if ( a < 900.0f && curTimer < b + 1.5f && numFires < 1 ) {
-
-					kbVec3 normalizedPos( (float)x / m_TextureWidth, 0.0f, (float)y / m_TextureHeight );
-					normalizedPos = ( normalizedPos * 2.0f ) - 1.0f;
-					normalizedPos = m_WorldCenter + normalizedPos * ( m_WorldSize * 0.5f );
-
-					FireInfo newFireInfo;
-					newFireInfo.m_Position.Set( normalizedPos.x, a, normalizedPos.z );
-					m_FireInfo.push_back( newFireInfo );
-					numFires++;
-				}
-			}
-
-			pCurVal += halfsPerPitch - halfsPerWidth;
-		}
-	}
-
-	// Input
-	kbRenderTargetMap							m_RTMap;
-	int											m_TextureWidth;
-	int											m_TextureHeight;
-
-	kbVec3										m_WorldCenter;
-	float										m_WorldSize;
-
-	// Output
-	struct FireInfo {
-		kbVec3									m_Position;
-	};
-
-	std::vector<FireInfo>						m_FireInfo;
-
-	bool										m_bSynced;
-
-} g_CollisionMapReadJob;
-
-/**
  *	EtherGame::EtherGame
  */
 EtherGame::EtherGame() :
@@ -122,10 +53,8 @@ EtherGame::EtherGame() :
 	m_pBulletHoleRenderTexture( nullptr ),
 	m_pGrassCollisionTexture( nullptr ),
 	m_pGrassCollisionReadBackTexture( nullptr ),
-	m_pCollisionMapPushGenShader( nullptr ),
 	m_pCollisionMapTimeGenShader( nullptr ),
 	m_pCollisionMapDamageGenShader( nullptr ),
-	m_pCollisionMapUpdateTimeShader( nullptr ),
 	m_pBulletHoleUpdateShader( nullptr ) {
 
 	m_Camera.m_Position.Set( 0.0f, 2600.0f, 0.0f );
@@ -154,6 +83,7 @@ void EtherGame::PlayGame_Internal() {
 	m_FirePrefabs[0] = m_pFXPackage->GetPrefab( "Fire_0" );
 	m_SmokePrefabs[0] = m_pFXPackage->GetPrefab( "Smoke_0" );
 	m_EmberPrefabs[0] = m_pFXPackage->GetPrefab( "Embers_0" );
+	m_FireLightPrefabs[0] = m_pFXPackage->GetPrefab( "FireLight_0" );
 }
 
 /**
@@ -195,6 +125,12 @@ void EtherGame::InitGame_Internal() {
 void EtherGame::StopGame_Internal() {
 	m_pPlayerComponent = nullptr;
 	m_pLocalPlayer = nullptr;
+
+	for ( int i = 0; i < m_FireEntities.size(); i++ ) {
+		m_FireEntities[i].Destroy();
+	}
+	m_FireEntities.clear();
+	m_RenderThreadScorch.clear();
 
 	g_pRenderer->UnregisterRenderHook( this );
 }
@@ -397,50 +333,8 @@ void EtherGame::MoveActorAlongGround( EtherActorComponent *const pActor, const k
 void EtherGame::UpdateWorld( const float DT ) {
 	const double GameTimeInSeconds = m_GameStartTimer.TimeElapsedSeconds();
 
-	// Update fire
-	if ( g_CollisionMapReadJob.IsJobFinished() ) {
+	UpdateFires_GameThread( DT );
 
-		for ( int i = 0; i < g_CollisionMapReadJob.m_FireInfo.size(); i++ ) {
-
-			EtherCollisionMapReadBackJob::FireInfo & curFire = g_CollisionMapReadJob.m_FireInfo[i];
-			bool bCancelTheContract = false;
-
-			kbVec3 firePos = curFire.m_Position;
-			firePos.y = 0.0f;
-
-			for ( int l = 0; l < m_FireEntities.size(); l++ ) {
-				kbVec3 compareFirePos = m_FireEntities[l].GetPosition();
-				compareFirePos.y = 0.0f;
-
-				float distBetween = ( firePos - compareFirePos ).Length();
-				if ( distBetween < 20.0f ) {
-					bCancelTheContract = true;
-					break;
-				}
-			}
-
-			if ( bCancelTheContract ) {
-				continue;
-			}
-
-			const kbCollisionInfo_t collisionInfo = g_CollisionManager.PerformLineCheck( curFire.m_Position + kbVec3( 0.0f, 1000.0f, 0.0f ), curFire.m_Position + kbVec3( 0.0f, -1000.0f, 0.0f ) );
-			if ( collisionInfo.m_bHit && abs( curFire.m_Position.y - collisionInfo.m_HitLocation.y ) < 15.0f ) {
-				EtherFireEntity newFireEntity( collisionInfo.m_HitLocation, m_FirePrefabs[0], m_SmokePrefabs[0], m_EmberPrefabs[0] );
-				m_FireEntities.push_back( newFireEntity );
-			}
-		}
-		g_CollisionMapReadJob.m_FireInfo.clear();
-
-		static float lastTime = -1.0f;
-		if ( g_GlobalTimer.TimeElapsedSeconds() > lastTime + 0.5f ) {
-			g_CollisionMapReadJob.m_bSynced = true;
-			lastTime = g_GlobalTimer.TimeElapsedSeconds();
-		}
-	}
-
-	for ( int i = 0; i < m_FireEntities.size(); i++ ) {
-		m_FireEntities[i].Update();
-	}
 
 /*
 	m_AIManager.Update( DT );
@@ -610,9 +504,6 @@ void EtherGame::RegisterBulletShot( kbComponent *const pHitComponent, const kbVe
 /**
  *	EtherGame::RenderSync
  */
-static std::vector<kbVec3> fires;
-
-
 void EtherGame::RenderSync() {
 
 	if ( HasFirstSyncCompleted() == false ) {
@@ -626,15 +517,7 @@ void EtherGame::RenderSync() {
 	m_RenderThreadShotsThisFrame = m_ShotsThisFrame;
 	m_ShotsThisFrame.clear();
 
-	m_RenderThreadScorch.clear();
-	for ( int i = 0; i < m_FireEntities.size(); i++ ) {
-		if ( m_FireEntities[i].GetScorchRadius() > 0.00001f ) {
-			RenderThreadScorch newScorch;
-			newScorch.m_Position = m_FireEntities[i].GetPosition();
-			newScorch.m_Size.Set( m_FireEntities[i].GetScorchRadius(), m_FireEntities[i].GetScorchRadius(), m_FireEntities[i].GetScorchRadius() );
-			m_RenderThreadScorch.push_back( newScorch );
-		}
-	}
+	UpdateFires_RenderSync();
 }
 
 /**
@@ -650,6 +533,8 @@ void EtherGame::RenderThreadCallBack() {
 	static kbTerrainComponent * pTerrain = nullptr;
 
 	if ( m_pBulletHoleRenderTexture == nullptr ) {
+
+		// Bullet Hole FX
 		m_pBulletHoleRenderTexture = g_pRenderer->RT_GetRenderTexture( 4096, 4096, eTextureFormat::KBTEXTURE_R8G8B8A8, false );
 		g_pRenderer->RT_ClearRenderTarget( m_pBulletHoleRenderTexture, kbColor::white );
 		
@@ -670,8 +555,9 @@ void EtherGame::RenderThreadCallBack() {
 			}
 		}
 
+		// Grass Damage
 		m_pGrassCollisionTexture = g_pRenderer->RT_GetRenderTexture( 1024, 1024, eTextureFormat::KBTEXTURE_R16G16B16A16, false );
-		g_pRenderer->RT_ClearRenderTarget( m_pGrassCollisionTexture, kbColor( 0.0f, 0.0f, 9999.0f, 9999.0f ) );
+		g_pRenderer->RT_ClearRenderTarget( m_pGrassCollisionTexture, kbColor( 64000.0f, 64000.0f, 64000.0f, 64000.0f ) );
 
 		m_pGrassCollisionReadBackTexture = g_pRenderer->RT_GetRenderTexture( 1024, 1024, eTextureFormat::KBTEXTURE_R16G16B16A16, true );
 
@@ -692,23 +578,21 @@ void EtherGame::RenderThreadCallBack() {
 			}
 		}
 
-		m_pCollisionMapPushGenShader = (kbShader *) g_ResourceManager.GetResource( "./assets/shaders/DamageGen/collisionMapPushGen.kbshader", true );
 		m_pCollisionMapDamageGenShader = (kbShader *) g_ResourceManager.GetResource( "./assets/shaders/DamageGen/collisionMapDamageGen.kbshader", true );
 		m_pCollisionMapTimeGenShader = (kbShader *) g_ResourceManager.GetResource( "./assets/shaders/DamageGen/collisionMapTimeGen.kbshader", true );
-		m_pCollisionMapUpdateTimeShader = (kbShader *) g_ResourceManager.GetResource( "./assets/shaders/DamageGen/collisionMapTimeUpdate.kbshader", true );
 		m_pBulletHoleUpdateShader = (kbShader *) g_ResourceManager.GetResource( "./assets/shaders/DamageGen/pokeyholeunwrap.kbshader", true );
 		m_pCollisionMapScorchGenShader = (kbShader*) g_ResourceManager.GetResource( "./assets/shaders/DamageGen/collisionMapScorchGen.kbShader", true );
 	}
 
 	if ( GetAsyncKeyState( 'C' ) ) {
 		g_pRenderer->RT_ClearRenderTarget( m_pBulletHoleRenderTexture, kbColor::white );
-		g_pRenderer->RT_ClearRenderTarget( m_pGrassCollisionTexture, kbColor( 0.0f, 0.0f, 9999.0f, 9999.0f ) );
+		g_pRenderer->RT_ClearRenderTarget( m_pGrassCollisionTexture, kbColor( 64000.0f, 64000.0f, 64000.0f, 64000.0f ) );
 	}
 
 	// Update time in collision Map
 	g_pRenderer->RT_SetRenderTarget( m_pGrassCollisionTexture );
-	const float timeMultiplier = ( 1.0f - kbClamp( g_TimeMultiplier * GetCurrentFrameDeltaTime(), 0.0f, 1.0f ) ) * 0.15f + 0.85f;
-	g_pRenderer->RT_Render2DLine( kbVec3( 0.5f, 0.0f, 0.0f ), kbVec3( 0.5f, 1.0f, 0.0f ), kbColor( timeMultiplier, timeMultiplier, timeMultiplier, timeMultiplier ), 15.0f, m_pCollisionMapUpdateTimeShader );
+//	const float timeMultiplier = ( 1.0f - kbClamp( g_TimeMultiplier * GetCurrentFrameDeltaTime(), 0.0f, 1.0f ) ) * 0.15f + 0.85f;
+	//g_pRenderer->RT_Render2DLine( kbVec3( 0.5f, 0.0f, 0.0f ), kbVec3( 0.5f, 1.0f, 0.0f ), kbColor( timeMultiplier, timeMultiplier, timeMultiplier, timeMultiplier ), 15.0f, m_pCollisionMapUpdateTimeShader );
 
 	const float curTime = g_GlobalTimer.TimeElapsedSeconds();
 	const kbVec3 terrainCenter( terrainPos.x, terrainPos.z, 0.0f );
@@ -721,33 +605,33 @@ void EtherGame::RenderThreadCallBack() {
 			kbStaticModelComponent *const pSM = (kbStaticModelComponent*)pEnt->GetComponentByType( kbStaticModelComponent::GetType() );
 				if ( pSM != nullptr ) {
 
-				// Generate bullet holes
-				g_pRenderer->RT_SetRenderTarget( m_pBulletHoleRenderTexture );
-				kbShaderParamOverrides_t shaderParams;
+					// Generate bullet holes
+					g_pRenderer->RT_SetRenderTarget( m_pBulletHoleRenderTexture );
+					kbShaderParamOverrides_t shaderParams;
 
-				kbMat4 invWorldMatrix;
-				invWorldMatrix.MakeScale( pEnt->GetScale() );
-				invWorldMatrix *= pEnt->GetOrientation().ToMat4();
-				invWorldMatrix[3] = pEnt->GetPosition();
-				invWorldMatrix.InvertFast();
+					kbMat4 invWorldMatrix;
+					invWorldMatrix.MakeScale( pEnt->GetScale() );
+					invWorldMatrix *= pEnt->GetOrientation().ToMat4();
+					invWorldMatrix[3] = pEnt->GetPosition();
+					invWorldMatrix.InvertFast();
 
-				const kbVec3 hitLocation = invWorldMatrix.TransformPoint( curShot.shotEnd );
-				const kbVec3 hitDir = ( curShot.shotEnd - curShot.shotStart ).Normalized() * invWorldMatrix;
-				const float holeSize = 0.75f + ( kbfrand() * 0.5f );
-				const float scorchSize = 3.0f + ( kbfrand() * 1.5f );
+					const kbVec3 hitLocation = invWorldMatrix.TransformPoint( curShot.shotEnd );
+					const kbVec3 hitDir = ( curShot.shotEnd - curShot.shotStart ).Normalized() * invWorldMatrix;
+					const float holeSize = 0.75f + ( kbfrand() * 0.5f );
+					const float scorchSize = 3.0f + ( kbfrand() * 1.5f );
 
-				shaderParams.SetTexture( "baseTexture", pSM->GetModel()->GetMaterials()[0].GetTextureList()[0] );
-				shaderParams.SetVec4( "hitLocation", kbVec4( hitLocation.x, hitLocation.y, hitLocation.z, holeSize ) );
-				shaderParams.SetVec4( "hitDirection", kbVec4( hitDir.x, hitDir.y, hitDir.z, scorchSize ) );
+					shaderParams.SetTexture( "baseTexture", pSM->GetModel()->GetMaterials()[0].GetTextureList()[0] );
+					shaderParams.SetVec4( "hitLocation", kbVec4( hitLocation.x, hitLocation.y, hitLocation.z, holeSize ) );
+					shaderParams.SetVec4( "hitDirection", kbVec4( hitDir.x, hitDir.y, hitDir.z, scorchSize ) );
 
-				kbTexture *const pNoiseTex = (kbTexture*)g_ResourceManager.GetResource( "./assets/FX/noise.jpg", true );
-				shaderParams.SetTexture( "noiseTex", pNoiseTex );
+					kbTexture *const pNoiseTex = (kbTexture*)g_ResourceManager.GetResource( "./assets/FX/noise.jpg", true );
+					shaderParams.SetTexture( "noiseTex", pNoiseTex );
 
-				kbTexture *const pScorchTex = (kbTexture*)g_ResourceManager.GetResource( "./assets/FX/scorch.jpg", true );
-				shaderParams.SetTexture( "scorchTex", pScorchTex );
+					kbTexture *const pScorchTex = (kbTexture*)g_ResourceManager.GetResource( "./assets/FX/scorch.jpg", true );
+					shaderParams.SetTexture( "scorchTex", pScorchTex );
 
-				g_pRenderer->RT_RenderMesh( pSM->GetModel(), m_pBulletHoleUpdateShader, &shaderParams );
-			}
+					g_pRenderer->RT_RenderMesh( pSM->GetModel(), m_pBulletHoleUpdateShader, &shaderParams );
+				}
 		}
 
 		// Update collision map
@@ -774,7 +658,6 @@ void EtherGame::RenderThreadCallBack() {
 		// Render push data
 		m_ShaderParamOverrides.SetVec4( "perpendicularDirection", kbVec4( perpLine.x, perpLine.y, g_GlobalTimer.TimeElapsedSeconds(), 0.0f ) );
 		m_ShaderParamOverrides.SetVec4( "heightScale", kbVec4( pTerrain->GetHeightScale(), 0.0f, 0.0f, 0.0f ) );
-		g_pRenderer->RT_Render2DLine( startPos, endPos, kbColor( 0.0f, 0.0f, 1.0f, 0.0f ), pushLineWidth, m_pCollisionMapPushGenShader, &m_ShaderParamOverrides );
 	
 		// Render time data
 		g_pRenderer->RT_Render2DLine( startPos, endPos, kbColor( 0.0f, 0.0f, 1.0f, 0.0f ), pushLineWidth, m_pCollisionMapTimeGenShader, &m_ShaderParamOverrides );
@@ -783,6 +666,172 @@ void EtherGame::RenderThreadCallBack() {
 		g_pRenderer->RT_Render2DLine( startPos, endPos, kbColor( 0.0f, 0.0f, curTime, 0.0f ), 16.0f / 4096.0f, m_pCollisionMapDamageGenShader, &m_ShaderParamOverrides );
 	}
 	m_RenderThreadShotsThisFrame.clear();
+
+	UpdateFires_RenderHook( pTerrain );
+}
+
+/**
+ *	EtherCollisionMapReadBackJob
+ */
+const float StartingDamageMapHeight = 64000.0f;
+class EtherCollisionMapReadBackJob : public kbJob {
+
+//-------------------------------------------------------------------------------------------------------------------------------------------------------------
+public:
+												EtherCollisionMapReadBackJob() :
+													m_bSynced( false ) { }
+
+	virtual void								Run() override {
+
+		m_FireInfo.clear();
+
+		DirectX::PackedVector::HALF * pCurVal = (DirectX::PackedVector::HALF*)m_RTMap.m_pData;
+		const size_t halfsPerWidth = m_RTMap.m_Width * 4;
+		const size_t halfsPerPitch = m_RTMap.m_rowPitch / sizeof(DirectX::PackedVector::HALF);
+		const float curTimer = g_GlobalTimer.TimeElapsedSeconds();
+		int numFires = 0;
+
+		const float thresh = 64000.0f - 1000.0f;
+		for ( uint y = 0; y < m_RTMap.m_Height; y++ ) {
+			for ( uint x = 0; x < m_RTMap.m_Width; x++ ) {
+
+				byte * pCurByte = (byte*)pCurVal;
+				const float r = DirectX::PackedVector::XMConvertHalfToFloat( *pCurVal );
+				pCurVal++;
+				const float g = DirectX::PackedVector::XMConvertHalfToFloat( *pCurVal );
+				pCurVal++;
+				const float b = DirectX::PackedVector::XMConvertHalfToFloat( *pCurVal );
+				pCurVal++;
+				const float a = DirectX::PackedVector::XMConvertHalfToFloat( *pCurVal );
+				pCurVal++;
+
+				const bool rTest = ( r < thresh && curTimer < r + 2.0f );
+				const bool bTest = ( a < thresh && curTimer < b + 0.5f );
+				if ( rTest || bTest ) {
+
+					if ( kbfrand() > 0.9f ) {
+						kbVec3 normalizedPos( (float) x / m_RTMap.m_Width, 0.0f, (float) y /  m_RTMap.m_Height );
+						normalizedPos = ( normalizedPos * 2.0f ) - 1.0f;
+						normalizedPos = m_WorldCenter + normalizedPos * ( m_WorldSize * 0.5f );
+
+						FireInfo newFireInfo;
+						if ( bTest ) {
+							newFireInfo.m_Position.Set( normalizedPos.x, a, normalizedPos.z );
+						} else {
+							newFireInfo.m_Position.Set( normalizedPos.x, -59999.0f, normalizedPos.z );
+						}
+						m_FireInfo.push_back( newFireInfo );
+						numFires++;
+					}
+				}
+			}
+
+			pCurVal += halfsPerPitch - halfsPerWidth;
+		}
+	}
+
+	// Input
+	kbRenderTargetMap							m_RTMap;
+
+	kbVec3										m_WorldCenter;
+	float										m_WorldSize;
+
+	// Output
+	struct FireInfo {
+		kbVec3									m_Position;
+	};
+
+	std::vector<FireInfo>						m_FireInfo;
+
+	bool										m_bSynced;
+
+} g_CollisionMapReadJob;
+
+/**
+ *	EtherGame::UpdateFires_GameThread
+ */
+void EtherGame::UpdateFires_GameThread( const float DeltaTime ) {
+
+	if ( g_CollisionMapReadJob.IsJobFinished() ) {
+
+		if ( m_FireEntities.size() < 40.0f ) {
+			for ( int i = 0; i < g_CollisionMapReadJob.m_FireInfo.size(); i++ ) {
+
+				EtherCollisionMapReadBackJob::FireInfo & curFire = g_CollisionMapReadJob.m_FireInfo[i];
+				bool bCancelTheContract = false;
+
+				kbVec3 firePos = curFire.m_Position;
+				firePos.y = 0.0f;
+
+				for ( int l = 0; l < m_FireEntities.size(); l++ ) {
+					kbVec3 compareFirePos = m_FireEntities[l].GetPosition();
+					compareFirePos.y = 0.0f;
+
+					float distBetween = ( firePos - compareFirePos ).Length();
+					if ( distBetween < 10.0f ) {
+						bCancelTheContract = true;
+						break;
+					}
+				}
+
+				if ( bCancelTheContract ) {
+					continue;
+				}
+
+				kbVec3 startPos = curFire.m_Position;
+				startPos.y = 0.0f;
+				const kbCollisionInfo_t collisionInfo = g_CollisionManager.PerformLineCheck( startPos + kbVec3( 0.0f, 99999999.0f, 0.0f ), startPos + kbVec3( 0.0f, -99999999.0f, 0.0f ) );
+				if ( collisionInfo.m_bHit && ( curFire.m_Position.y < -50000.0f || abs( curFire.m_Position.y - collisionInfo.m_HitLocation.y ) < 15.0f ) ) {
+					if ( collisionInfo.m_pHitComponent->GetOwner()->GetComponentByType( kbTerrainComponent::GetType() ) != nullptr ) {
+						EtherFireEntity newFireEntity( collisionInfo.m_HitLocation, m_FirePrefabs[0], m_SmokePrefabs[0], m_EmberPrefabs[0], m_FireLightPrefabs[0] );
+						m_FireEntities.push_back( newFireEntity );
+					}
+				}
+			}
+		}
+		g_CollisionMapReadJob.m_FireInfo.clear();
+
+		static float lastTime = -1.0f;
+		if ( g_GlobalTimer.TimeElapsedSeconds() > lastTime + 0.5f ) {
+			g_CollisionMapReadJob.m_bSynced = true;
+			lastTime = g_GlobalTimer.TimeElapsedSeconds();
+		}
+	}
+
+	for ( int i = (int)m_FireEntities.size() - 1; i >= 0; i-- ) {
+		if ( m_FireEntities[i].IsFinished() ) {
+			m_FireEntities[i].Destroy();
+			VectorRemoveFastIndex( m_FireEntities, i );
+			continue;
+		}
+		m_FireEntities[i].Update( DeltaTime );
+	}
+}
+
+/**
+ *	EtherGame::UpdateFires_RenderSync
+ */
+void EtherGame::UpdateFires_RenderSync() {
+	m_RenderThreadScorch.clear();
+	for ( int i = 0; i < m_FireEntities.size(); i++ ) {
+		if ( m_FireEntities[i].GetScorchRadius() > 0.00001f ) {
+			RenderThreadScorch newScorch;
+			newScorch.m_Position = m_FireEntities[i].GetScorchOffset();
+			newScorch.m_Size.Set( m_FireEntities[i].GetScorchRadius(), m_FireEntities[i].GetScorchRadius(), m_FireEntities[i].GetScorchRadius() );
+			m_RenderThreadScorch.push_back( newScorch );
+		}
+	}
+}
+
+/**
+ *	EtherGame::UpdateFires_RenderHook
+ */
+void EtherGame::UpdateFires_RenderHook( const kbTerrainComponent *const pTerrain ) {
+
+	const kbVec3 terrainPos = pTerrain->GetOwner()->GetPosition();
+	const kbVec3 terrainCenter( pTerrain->GetOwner()->GetPosition().x, pTerrain->GetOwner()->GetPosition().z, 0.0f );
+	const float terrainWidth = pTerrain->GetTerrainWidth();
+	const float halfTerrainWidth = pTerrain->GetTerrainWidth() * 0.5f;
 
 	static int status = -1;
 
@@ -794,8 +843,6 @@ void EtherGame::RenderThreadCallBack() {
 			status = 1;
 		} else if ( status == 2 ) {
 			g_CollisionMapReadJob.m_RTMap = g_pRenderer->RT_MapRenderTarget( m_pGrassCollisionReadBackTexture );
-			g_CollisionMapReadJob.m_TextureWidth = m_pGrassCollisionReadBackTexture->GetWidth();
-			g_CollisionMapReadJob.m_TextureHeight = m_pGrassCollisionReadBackTexture->GetHeight();
 			g_CollisionMapReadJob.m_WorldCenter = terrainPos;
 			g_CollisionMapReadJob.m_WorldSize = terrainWidth;
 			g_CollisionMapReadJob.m_bSynced = false;
@@ -807,7 +854,11 @@ void EtherGame::RenderThreadCallBack() {
 		}
 	}
 
-	// Additional Scorches
+	if ( m_RenderThreadScorch.size() == 0 ) {
+		return;
+	}
+
+	// EtherGame Scorches
 	g_pRenderer->RT_SetRenderTarget( m_pGrassCollisionTexture );
 
 	for ( int i = 0; i < m_RenderThreadScorch.size(); i++ ) {
@@ -827,10 +878,13 @@ void EtherGame::RenderThreadCallBack() {
 /**
  *	EtherFireEntity::EtherFireEntity
  */
-static kbVec3 fireOffset = kbVec3( 0.0f, 27.0f, 0.0f );
-static kbVec3 smokeOffset = kbVec3( 0.0f, 27.0f, 0.0f );
-static kbVec3 emberOffset = kbVec3( 0.0f, 27.0f, 0.0f );
-EtherFireEntity::EtherFireEntity( const kbVec3 & position, const kbPrefab *const pFirePrefab, const kbPrefab *const pSmokePrefab, const kbPrefab *const pParticlePrefab ) {
+static kbVec3 fireOffset = kbVec3( 0.0f, 20.0f, 0.0f );
+static kbVec3 smokeOffset = kbVec3( 0.0f, 12.0f, 0.0f );
+static kbVec3 emberOffset = kbVec3( 0.0f, 15.0f, 0.0f );
+static kbVec3 fireLightOffset = kbVec3( 0.0f, 15.25f, 0.0f );
+static float lightIntensity = 0.45f;
+
+EtherFireEntity::EtherFireEntity( const kbVec3 & position, const kbPrefab *const pFirePrefab, const kbPrefab *const pSmokePrefab, const kbPrefab *const pParticlePrefab, const kbPrefab * const pFireLightPrefab ) {
 
 	m_ScorchRadius = 0.0f;
 	m_ScorchState = 0;
@@ -839,18 +893,52 @@ EtherFireEntity::EtherFireEntity( const kbVec3 & position, const kbPrefab *const
 	m_pSmokeEntity = g_pGame->CreateEntity( pSmokePrefab->GetGameEntity(0) );
 	m_pEmberEntity = g_pGame->CreateEntity( pParticlePrefab->GetGameEntity(0) );
 
-	m_Position = position;
+	static int numero = 1;
+
+	if ( numero & 1 ) {
+		m_pFireLight = g_pGame->CreateEntity( pFireLightPrefab->GetGameEntity(0) );
+	} else {
+		m_pFireLight = nullptr;
+	}
+
+	numero++;
+
+	m_Position = position - kbVec3( 0.0f, 60.0f, 0.0f );
+
+	const float scaleAmt = 0.67f + kbfrand() * 0.70f;
+
+	m_pFireEntity->SetScale( m_pFireEntity->GetScale() * scaleAmt );
+	m_pSmokeEntity->SetScale( m_pFireEntity->GetScale() * scaleAmt );
+	m_pEmberEntity->SetScale( m_pEmberEntity->GetScale() * scaleAmt );
+
 	m_pFireEntity->SetPosition( position );
-	m_pSmokeEntity->SetPosition( position + smokeOffset);
-	m_pEmberEntity->SetPosition( position + emberOffset);
+	m_pSmokeEntity->SetPosition( position + kbVec3( 0.0f, -kbfrand() * 12.0f, 0.0f ) + smokeOffset );
+	m_pEmberEntity->SetPosition( position );
+
+	if ( m_pFireLight != nullptr ) {
+		m_pFireLight->SetPosition( position + fireLightOffset );
+		kbCustomPointLightComponent *const pLight = (kbCustomPointLightComponent*)m_pFireLight->GetComponentByType( kbCustomPointLightComponent::GetType() );
+		pLight->Enable( false );
+		pLight->Enable( true );
+		m_StartFireColor = pLight->GetColor() * lightIntensity;
+		pLight->SetColor( kbColor::black );
+		m_StartFireLightPos = m_pFireLight->GetPosition();
+	}
+
+	m_FireStartPos = m_pFireEntity->GetPosition();
+	m_SmokeStartPos = m_pSmokeEntity->GetPosition();
+	m_EmberStartPos = m_pEmberEntity->GetPosition();
 
 	m_StartingTimeSeconds = g_GlobalTimer.TimeElapsedSeconds();
-	m_FireScale = m_pFireEntity->GetScale();
+	m_RandomScroller = 1.0f + kbfrand() * 0.1f;
 
-	m_pFireEntity->SetScale( kbVec3::zero );
+	kbStaticModelComponent * pSM = (kbStaticModelComponent*)m_pSmokeEntity->GetComponentByType( kbStaticModelComponent::GetType() );
+	pSM->SetShaderVectorParam( "additionalData", kbVec4( 0.0f, m_RandomScroller, 0.0f, 0.0f ) );
 
-	kbStaticModelComponent *const pSM = (kbStaticModelComponent*)m_pSmokeEntity->GetComponentByType( kbStaticModelComponent::GetType() );
-	pSM->SetShaderVectorParam( "additionalData", kbVec4( 0.0f, 0.0f, 0.0f, 0.0f ) );
+	pSM = (kbStaticModelComponent*)m_pFireEntity->GetComponentByType( kbStaticModelComponent::GetType() );
+	pSM->SetShaderVectorParam( "additionalData", kbVec4( 0.0f, m_RandomScroller, 0.0f, 0.0f ) );
+
+	m_bIsFinished = false;
 }
 
 /**
@@ -858,39 +946,95 @@ EtherFireEntity::EtherFireEntity( const kbVec3 & position, const kbPrefab *const
  */
 void EtherFireEntity::Destroy() {
 
+	kbStaticModelComponent * pSM = (kbStaticModelComponent*)m_pSmokeEntity->GetComponentByType( kbStaticModelComponent::GetType() );
+	pSM->Enable( false );
+
+	pSM = (kbStaticModelComponent*)m_pFireEntity->GetComponentByType( kbStaticModelComponent::GetType() );
+	pSM->Enable( false );
+
+	kbParticleComponent *const pParticle = (kbParticleComponent*)m_pEmberEntity->GetComponentByType( kbParticleComponent::GetType() );
+	pParticle->Enable( false );
+
+	if ( m_pFireLight != nullptr ) {
+		kbCustomPointLightComponent *const pLight = (kbCustomPointLightComponent*)m_pFireLight->GetComponentByType( kbCustomPointLightComponent::GetType() );
+		pLight->Enable( false );
+		g_pGame->RemoveGameEntity( m_pFireLight );
+	}
+	g_pGame->RemoveGameEntity( m_pFireEntity );
+	g_pGame->RemoveGameEntity( m_pSmokeEntity );
+	g_pGame->RemoveGameEntity( m_pEmberEntity );
 }
 
 /**
  *	EtherFireEntity::Update
  */
-void EtherFireEntity::Update() {
+void EtherFireEntity::Update( const float DeltaTime ) {
+
 	const float currentTimeSeconds = g_GlobalTimer.TimeElapsedSeconds();
 	const float scaleTime = 1.0f;
 	const float unclampedNormalizedTime = ( currentTimeSeconds - m_StartingTimeSeconds ) / scaleTime;
 	const float clampedNormalizedTime = kbClamp( unclampedNormalizedTime, 0.0f, 1.0f );
 
-	if ( unclampedNormalizedTime > 0.25f && m_ScorchState == 0 ) {
+	float firePos = clampedNormalizedTime;
+	float fireFade = 1;
+	float smokeFade = clampedNormalizedTime;
+	float scrollTime = currentTimeSeconds;
+
+	if ( unclampedNormalizedTime > 0.33f && m_ScorchState == 0 ) {
 		m_ScorchState = 1;
-		m_ScorchRadius = 6.0f / 1024.0f;
-	} else {
+		m_ScorchRadius = 4.0f / 1024.0f;
+
+		m_ScorchOffset = m_Position;
+	} else if ( m_ScorchState == 1 ) {
 		m_ScorchRadius = 0.0f;
+		m_ScorchState = 2;
+		m_NextStateChangeTime = 2.0f + kbfrand() * 2.0f + currentTimeSeconds;
+	} else if ( m_ScorchState == 2 && currentTimeSeconds > m_NextStateChangeTime ) {
+		m_ScorchState = 3;
+
+		m_ScorchRadius = 4.0f / 1024.0f;
+		m_ScorchOffset = m_Position + kbVec3( ( kbfrand() * 10.0f ) - 5.0f, 0.0f, ( kbfrand() * 10.0f ) - 5.0f );
+	} else if ( m_ScorchState == 3 ) {
+		m_ScorchRadius = 0.0f;
+		m_FadeOutStartTime = currentTimeSeconds;
+		m_NextStateChangeTime = 5.1f + kbfrand() * 5.3f;
+		m_ScorchState = 4;
+
+		kbParticleComponent *const pParticle = (kbParticleComponent*)m_pEmberEntity->GetComponentByType( kbParticleComponent::GetType() );
+		pParticle->StopNewSpawns();
+
+	} else if ( m_ScorchState == 4 ) {
+		fireFade = firePos = 1.0f - kbClamp( ( currentTimeSeconds - m_FadeOutStartTime ) / m_NextStateChangeTime, 0.0f, 1.0f );
+		smokeFade = 1.0f - kbClamp( ( currentTimeSeconds - m_FadeOutStartTime ) / ( m_NextStateChangeTime * 1.3f ), 0.0f, 1.0f );
+
+		if ( currentTimeSeconds > m_FadeOutStartTime + m_NextStateChangeTime * 1.3f ) {
+			m_bIsFinished = true;
+		}
+		scrollTime = m_FadeOutStartTime + ( currentTimeSeconds - m_FadeOutStartTime ) * ( 0.1f + fireFade * 0.9f );
 	}
 
-	/*if ( m_Sc == 0 ) {
-		if ( unclampedNormalizedTime > 1.0f ) {
-			m_ScorchState = 1;
-		}
-	} else {
-		m_ScorchState = 2;
-	}*/
+	if ( m_pFireLight != nullptr ) {
+		kbCustomPointLightComponent *const pLight = (kbCustomPointLightComponent*)m_pFireLight->GetComponentByType( kbCustomPointLightComponent::GetType() );
+		pLight->Enable( false );
+		const float targetIntensity = m_StartFireColor.ToVec3().Dot( kbVec3( 0.3f, 0.59f, 0.11f ) ) * ( fireFade * ( lightIntensity + kbfrand() * ( lightIntensity * 1.0f ) ) );
+		const float curIntensity = pLight->GetColor().ToVec3().Dot( kbVec3( 0.3f, 0.59f, 0.11f ) );
+		float newIntensity = kbClamp( kbLerp( curIntensity, targetIntensity, 0.25f ), 0.0f, 1.0f );
+		pLight->SetColor( m_StartFireColor * newIntensity );
 
-	const kbVec3 fireScale = m_FireScale * clampedNormalizedTime;
-	m_pFireEntity->SetScale( fireScale );
+		kbVec3 desiredPos = kbLerp( m_pFireLight->GetPosition(), m_StartFireLightPos + kbVec3( kbfrand() * 3.0f, kbfrand() * 3.0f, kbfrand() * 4.5f ), 0.25f );
+		m_pFireLight->SetPosition( desiredPos );
+		pLight->Enable( true );
+	}
 
-	const kbVec3 firePosition = m_Position + fireOffset * clampedNormalizedTime;
-	m_pFireEntity->SetPosition( firePosition );
+	m_pFireEntity->SetPosition( m_FireStartPos + fireOffset * firePos );
+	m_pSmokeEntity->SetPosition( m_SmokeStartPos + smokeOffset * smokeFade );
+	m_pEmberEntity->SetPosition( m_EmberStartPos + fireOffset * fireFade );
 
-	kbStaticModelComponent *const pSM = (kbStaticModelComponent*)m_pSmokeEntity->GetComponentByType( kbStaticModelComponent::GetType() );
-	pSM->SetShaderVectorParam( "additionalData", kbVec4( kbClamp( unclampedNormalizedTime * 0.25f, 0.0f, 1.0f ), 0.0f, 0.0f, 0.0f ) );
+	m_RandomScroller += DeltaTime * fireFade;
+	kbStaticModelComponent * pSM = (kbStaticModelComponent*)m_pSmokeEntity->GetComponentByType( kbStaticModelComponent::GetType() );
+	pSM->SetShaderVectorParam( "additionalData", kbVec4( smokeFade * 0.24f, m_RandomScroller, 0.0f, 0.0f ) );
+
+	pSM = (kbStaticModelComponent*)m_pFireEntity->GetComponentByType( kbStaticModelComponent::GetType() );
+	pSM->SetShaderVectorParam( "additionalData", kbVec4( fireFade, m_RandomScroller, 0.0f, 0.0f ) );
 }
 

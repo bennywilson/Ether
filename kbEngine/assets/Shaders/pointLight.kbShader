@@ -64,9 +64,6 @@ Texture2D specularTexture			: register(t2);
 SamplerState DepthSamplerState;
 Texture2D depthTexture				: register(t3);
 
-SamplerState ShadowMapSamplerState;
-Texture2D ShadowMap					: register(t4);
-
 float4 pixelShader( pixelInput input ) : SV_TARGET {
 
    const float4 worldDiffuseColor = colorTexture.Sample( DiffuseSamplerState, input.uv ).xyzw;
@@ -80,7 +77,6 @@ float4 pixelShader( pixelInput input ) : SV_TARGET {
    const float3 worldPosToLight = ( lightPosition.xyz - worldPosition.xyz ) / worldPosToLightDist;
    const float lightDotNormal = saturate( dot( worldNormal, worldPosToLight ) );
    const float lightAttenuation = saturate( 1.0f - worldPosToLightDist / lightPosition.w );
-   float DistFromCamera = length( worldPosition.xyz - lightPosition.xyz );
 
 	float3 finalColor = worldDiffuseColor.xyz * lightDotNormal * lightColor.xyz * lightAttenuation;
 	return float4( finalColor, worldDiffuseColor.w );

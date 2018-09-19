@@ -48,6 +48,7 @@ void kbParticleComponent::Constructor() {
 	m_pIndexBuffer = nullptr;
 	m_CurrentParticleBuffer = 255;
 	m_NumIndicesInCurrentBuffer = 0;
+	m_bIsSpawning = true;
 
 	m_pParticleTexture = (kbTexture*)g_ResourceManager.GetResource( "../../kbEngine/assets/Textures/Editor/white.bmp" );
 	m_pParticleShader = (kbShader*)g_ResourceManager.GetResource( "../../kbEngine/assets/Shaders/basicParticle.kbShader", true );
@@ -72,9 +73,7 @@ kbParticleComponent::~kbParticleComponent() {
  */
 void kbParticleComponent::StopParticleSystem() {
 
-	if ( g_pRenderer->IsRenderingSynced() == false ) {
-		kbError( "Shutting down particle component even though rendering is not synced" );
-	}
+	kbErrorCheck( g_pRenderer->IsRenderingSynced() == true, "kbParticleComponent::StopParticleSystem() - Shutting down particle component even though rendering is not synced" );
 
 	g_pRenderer->RemoveParticle( m_RenderObject );
 	for ( int i = 0; i < NumParticleBuffers; i++ ) {
@@ -215,7 +214,7 @@ void kbParticleComponent::Update_Internal( const float DeltaTime ) {
 
 	// Spawn particles
 	const kbVec3 MyPosition = GetPosition();
-	while ( ( m_MaxParticleSpawnRate > 0 && TimeLeft >= NextSpawn ) || m_BurstCount > 0 ) {
+	while ( m_bIsSpawning && ( ( m_MaxParticleSpawnRate > 0 && TimeLeft >= NextSpawn ) || m_BurstCount > 0 ) ) {
 		kbParticle_t newParticle;
 		newParticle.m_StartVelocity.x = m_MinParticleStartVelocity.x + ( kbfrand() * ( m_MaxParticleStartVelocity.x - m_MinParticleStartVelocity.x ) );
 		newParticle.m_StartVelocity.y = m_MinParticleStartVelocity.y + ( kbfrand() * ( m_MaxParticleStartVelocity.y - m_MinParticleStartVelocity.y ) );
@@ -281,7 +280,6 @@ void kbParticleComponent::EditorChange( const std::string & propertyName ) {
 void kbParticleComponent::RenderSync() {
 	Super::RenderSync();
 
-
 	if ( g_UseEditor && IsEnabled() == true && ( m_TotalDuration > 0.0f && m_TimeAlive > m_TotalDuration && m_BurstCount <= 0 ) ) {
 		StopParticleSystem();
 		Enable( false );
@@ -289,7 +287,7 @@ void kbParticleComponent::RenderSync() {
 		return;
 	}
 
-	if ( ( g_UseEditor && IsEnabled() == false ) || ( m_TotalDuration > 0.0f && m_TimeAlive > m_TotalDuration && m_NumIndicesInCurrentBuffer == 0 ) ) {
+	if ( IsEnabled() == false || ( m_TotalDuration > 0.0f && m_TimeAlive > m_TotalDuration && m_NumIndicesInCurrentBuffer == 0 ) ) {
 		StopParticleSystem();
 		Enable( false );
 		if ( m_bIsPooled ) {
@@ -308,7 +306,6 @@ void kbParticleComponent::RenderSync() {
 			m_ParticleBuffer[i].UnmapVertexBuffer();
 		}
 	}
-
 
 	m_RenderObject.m_pComponent = static_cast<const kbComponent*>( this );
 	m_RenderObject.m_pModel = nullptr;
@@ -348,7 +345,6 @@ void kbParticleComponent::RenderSync() {
 void kbParticleComponent::SetEnable_Internal( const bool isEnabled ) {
 	Super::SetEnable_Internal( isEnabled );
 
-
 	if ( isEnabled ) {
 
 		m_TimeAlive = 0.0f;
@@ -358,5 +354,7 @@ void kbParticleComponent::SetEnable_Internal( const bool isEnabled ) {
 				m_BurstCount += rand() % ( m_MaxBurstCount - m_MinBurstCount );
 			}
 		}
+	} else {
+		g_pRenderer->RemoveParticle( m_RenderObject );
 	}
 }

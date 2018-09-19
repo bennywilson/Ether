@@ -5,11 +5,7 @@
 //==============================================================================
 cbuffer matrixBuffer {
 	matrix modelMatrix;
-	matrix modelViewMatrix;
-	matrix viewMatrix;
 	matrix mvpMatrix;
-	matrix projection;
-	matrix inverseProjection;
 	matrix viewProjection;
 	float4 cameraPos;
 };
@@ -75,8 +71,8 @@ pixelInput vertexShader( vertexInput input ) {
 	   billboardMatrix = float3x3( heading, xAxis, yAxis );
 	}
 	float3 offset = mul( float3( input.size.x , input.size.y, 0 ), billboardMatrix );
-	offset.x += sin( particleWorldPos.y * input.billboardType.y * 0.2f ) * 2.0f * input.billboardType.z ;
-	offset.z += sin( particleWorldPos.y * input.billboardType.y * 0.25f ) * 2.0f * input.billboardType.z;
+	offset.x += sin( particleWorldPos.y * input.billboardType.y * 0.1f ) * 5.0f * input.billboardType.z ;
+	offset.z += sin( particleWorldPos.y * input.billboardType.y * 0.15f ) * 5.0f * input.billboardType.z;
 	output.position = mul( float4(particleWorldPos,1) + float4( offset, 0.0f ), viewProjection );
 
 	output.uv = input.uv;

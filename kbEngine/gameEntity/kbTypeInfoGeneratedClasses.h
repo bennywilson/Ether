@@ -128,6 +128,12 @@ GenerateClass(
 )
 
 GenerateClass( 
+	kbCustomPointLightComponent,
+	AddField( "Shader", KBTYPEINFO_SHADER, kbCustomPointLightComponent, m_pShader, false, "" )
+	AddField( "ShaderParams", KBTYPEINFO_STRUCT, kbCustomPointLightComponent, m_ShaderParamList, true, "kbShaderParamComponent" )
+)
+
+GenerateClass( 
 	kbCylindricalLightComponent,
 	AddField( "Length", KBTYPEINFO_FLOAT, kbCylindricalLightComponent, m_Length, false, "float" )
 )

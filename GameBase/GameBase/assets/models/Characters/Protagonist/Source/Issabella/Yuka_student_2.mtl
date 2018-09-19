@@ -1,0 +1,108 @@
+#
+#
+#
+
+newmtl _all_no_combine2:all_head:mo5:head_p:Gen5:eyeline_hair:lambert14
+illum 1
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.000000 0.000000 0.000000
+Ns 1.000000
+map_Kd cheek.tga
+
+newmtl _face1:mesch:mesch:lambert21
+illum 1
+Ka 0.000000 0.000000 0.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.000000 0.000000 0.000000
+Ns 1.000000
+map_Kd hair_Red.jpg
+
+newmtl _lambert25
+illum 1
+Ka 0.000000 0.000000 0.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.000000 0.000000 0.000000
+Ns 1.000000
+map_Kd Student_2.png
+
+newmtl _lambert26
+illum 1
+Ka 0.000000 0.000000 0.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.000000 0.000000 0.000000
+Ns 1.000000
+map_Kd Student_2.png
+
+newmtl _all_no_combine2:all_head:mo5:head_p:Gen5:eyeline_hair:lambert9
+illum 1
+Ka 0.000000 0.000000 0.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.000000 0.000000 0.000000
+Ns 1.000000
+map_Kd eyeR_p.tga
+
+newmtl _all_no_combine2:all_head:mo5:head_p:lambert3
+illum 1
+Ka 0.000000 0.000000 0.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.000000 0.000000 0.000000
+Ns 1.000000
+map_Kd eyeL_p.tga
+
+newmtl _tech:mo7:lambert3
+illum 1
+Ka 0.000000 0.000000 0.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.000000 0.000000 0.000000
+Ns 1.000000
+map_Kd gen_face3.png
+
+newmtl _lambert17
+illum 1
+Ka 0.000000 0.000000 0.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.000000 0.000000 0.000000
+Ns 1.000000
+map_Kd gen_face3.png
+
+newmtl _all_no_combine2:all_head:mo5:head_p:Gen5:eyeline_hair:lambert6
+illum 1
+Ka 0.000000 0.000000 0.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.000000 0.000000 0.000000
+Ns 1.000000
+map_Kd eyeline2.jpg
+
+newmtl _face1:lambert17
+illum 1
+Ka 0.000000 0.000000 0.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.000000 0.000000 0.000000
+Ns 1.000000
+map_Kd gen_face3.png
+
+newmtl _face1:all_no_combine2:all_head:mo5:head_p:Gen5:eyeline_hair:lambert6
+illum 1
+Ka 0.000000 0.000000 0.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.000000 0.000000 0.000000
+Ns 1.000000
+map_Kd eyeline2.jpg
+
+newmtl _all_no_combine2:all_head:mo5:head_p:Gen5:eyeline_hair:lambert11
+illum 1
+Ka 0.000000 0.000000 0.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.000000 0.000000 0.000000
+Ns 1.000000
+map_Kd eyeline.jpg
+
+newmtl _all_no_combine2:all_head:mo5:head_p:Gen5:eyeline_hair:lambert11
+illum 1
+Ka 0.000000 0.000000 0.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.000000 0.000000 0.000000
+Ns 1.000000
+map_Kd eyeline.jpg
+

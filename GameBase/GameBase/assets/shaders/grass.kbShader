@@ -99,25 +99,11 @@ void CreateVertex( inout TriangleStream<pixelInput> OutputStream, float3 vertexW
 	const float2 terrainMapUV = ( normalizedTerrainMapPos * 0.5f ) + 0.5f;
 
 	const float4 collisionMapVal = collisionMap.SampleLevel( PointSampler, terrainMapUV, 0.0f );
-	const float collisionTime = abs( collisionMapVal.b );
+	float collisionTime = abs( collisionMapVal.b );
 	const float3 noiseValues = noiseMap.SampleLevel( LinearSampler, input[0].uv * grassNumber, 0.0f ).xyz;
 
 	// Check collision
 	float3 windpush = 0.0f;
-	/*if ( dot( collisionMapVal.xy, collisionMapVal.xy ) > 0.00000001f ) {
-		float2 centerPt = terrainMapUV;
-		const float2 normalizedCollisionPos = ( normalizedTerrainMapPos + collisionMapVal.xy ) * collisionMapCenter.z;
-		const float3 worldCollisionPos = float3( normalizedCollisionPos.x, collisionMapVal.w, normalizedCollisionPos.y );
-
-		float3 vecTo = bladeWorldOrigin - worldCollisionPos.xyz;
-		float collisionRadius = 32.0f;
-
-		windpush = 1.0f - saturate( length( vecTo ) / collisionRadius );
-		
-		float timeFactor = saturate( ( time.x - collisionTime ) / 0.5f );
-		windpush *= normalize( vecTo ) * 0.25f * collisionRadius * ( 1.0f + noiseValues.x * 0.25f ) * timeFactor;
-	}*/
-
 	const float oscNoise = noiseValues.x * 5.5f;
 	float oscSin = sin( oscNoise.x + time.x * ( 1.0f * ( ( oscNoise.x * 0.5f ) + 0.5f ) ) );
 	float oscillation =  oscSin * 0.5f + 0.5f;
@@ -160,6 +146,9 @@ void CreateVertex( inout TriangleStream<pixelInput> OutputStream, float3 vertexW
 	} else if ( bladeWorldOrigin.y + ( grassLength *  0.75f ) > collisionMapVal.w ) {
 		burnStartHeight = bladeWorldOrigin.y + ( grassLength * 0.67f ) - 0.0001f;
 		numSegments = 2;
+	} else if ( collisionMapVal.x < 59999.0f ) {
+		burnStartHeight = bladeWorldOrigin.y + clamp( ( 1.0f - saturate( ( time.x - collisionMapVal.x ) / 3.3f ) ) * grassLength, grassLength * 0.33f, 99999.0f );
+		collisionTime = collisionMapVal.x;
 	}
 
 	float4 grassData = 0;
@@ -263,6 +252,10 @@ PS_OUTPUT pixelShader( pixelInput input, bool isFrontFace : SV_IsFrontFace )  {
 
 	float animatedEmberU = clamp( normalizedTime * 2.5f, 0.0f, 0.99f );
 	const float3 ember = lerp( float3( 1.0f, 0.215f ,0.04313f ), float3( 0.0f, 0.0f, 0.0f ), animatedEmberU );//emberGradientTex.Sample( SampleType, float2( animatedEmberU, 0.0f ) ).xyz * 1.0f;
+
+	if ( input.worldPosition.y > input.grassData1.y + 0.01f ) {
+		clip( input.grassData1.y + 0.01f - input.worldPosition.y );
+	}
 
 	float lerpVal = ( burnSize - abs(input.worldPosition.y - input.grassData1.y ) ) / burnSize;
 	lerpVal = saturate( lerpVal );

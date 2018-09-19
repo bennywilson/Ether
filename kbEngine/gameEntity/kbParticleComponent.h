@@ -42,9 +42,11 @@ public:
 	virtual void												RenderSync();
 
 	void														StopParticleSystem();
+	void														StopNewSpawns() { m_bIsSpawning = false; }
 
    // Hack wasn't picking up from the package file
 	void														SetBillboardType( const EBillboardType inBBType ) { m_ParticleBillboardType = inBBType; }
+
 protected:
 
 	virtual void												SetEnable_Internal( const bool isEnabled ) override;
@@ -96,6 +98,7 @@ private:
 	friend class kbParticleManager;
 	const kbParticleComponent *									m_ParticleTemplate;
 	bool														m_bIsPooled;
+	bool														m_bIsSpawning;
 };
 
 #endif

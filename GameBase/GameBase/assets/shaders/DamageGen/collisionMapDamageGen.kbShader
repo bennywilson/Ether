@@ -5,13 +5,12 @@
 // 2018 kbEngine 2.0
 //===================================================================================================
 cbuffer matrixBuffer {
-   float4 perpendicularDirection;
    float4 time;
 };
 
 kbShaderState {
 	srcBlendAlpha Blend_One
-	dsBlendAlpha Blend_One
+	dstBlendAlpha Blend_One
 	blendOpAlpha BlendOp_Min
 	colorwriteenable colorwriteenable_a
 }
@@ -26,9 +25,7 @@ struct vertexInput {
 //-------------------------------------
 struct pixelInput {
 	float4 position		: SV_POSITION;
-	float2 perpVec		: TEXCOORD0;
-	float height		: TEXCOORD3;
-	float4 color		: TEXCOORD4;
+	float height		: TEXCOORD0;
 };
 
 /**
@@ -40,13 +37,6 @@ pixelInput vertexShader( vertexInput input ) {
 	output.height = input.position.z;
 	output.position = input.position;
 	output.position.z = 0;
-	output.color = input.color;
-
-	if ( input.uv.x < 0.5f ) {
-		output.perpVec = -perpendicularDirection.xy;
-	} else {
-		output.perpVec = perpendicularDirection.xy;	
-	}
 
 	return output;
 }
@@ -58,5 +48,5 @@ Texture2D shaderTexture;
 SamplerState SampleType;
 
 float4 pixelShader( pixelInput input ) : SV_TARGET {
-	return float4( input.perpVec.xy, time.x, input.height );
+	return float4( 0.0f, 0.0f, 0.0f, input.height );
 }

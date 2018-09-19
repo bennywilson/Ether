@@ -909,9 +909,9 @@ bool kbRenderer_DX11::InitializeOculus() {
 int kbRenderer_DX11::CreateRenderView( HWND hwnd )
 {
 	kbErrorCheck( hwnd != nullptr, "nullptr window handle passed into kbRenderer_DX11::CreateRenderView" );
-	
+
 	DXGI_SWAP_CHAIN_DESC sd = { 0 };
-	
+
 	sd.BufferDesc.Width = Back_Buffer_Width;
 	sd.BufferDesc.Height = Back_Buffer_Height;
 	sd.BufferDesc.RefreshRate.Numerator = 0;
@@ -1475,7 +1475,7 @@ void kbRenderer_DX11::PreRenderCullAndSort() {
 	for ( auto iter = curMap.begin(); iter != curMap.end(); iter++ ) {
 
 		kbRenderObject & renderObj = *iter->second;
-		float distToCamSqr = distToCamSqr = ( renderObj.m_Position - m_pCurrentRenderWindow->GetCameraPosition() ).LengthSqr();
+		const float distToCamSqr = ( renderObj.m_Position - m_pCurrentRenderWindow->GetCameraPosition() ).LengthSqr();
 		if ( renderObj.m_CullDistance > 0 ) {
 			const float cullDistSqr = renderObj.m_CullDistance * renderObj.m_CullDistance;
 			
@@ -1485,7 +1485,7 @@ void kbRenderer_DX11::PreRenderCullAndSort() {
 			}
 		}
 
-		float distToCam = sqrt( distToCamSqr );
+		const float distToCam = sqrt( distToCamSqr );
 		kbRenderSubmesh newMesh( iter->second, 0, RP_Translucent, distToCam );
 		m_pCurrentRenderWindow->GetVisibleSubMeshes( RP_Translucent ).push_back( newMesh );
 	}
@@ -2874,7 +2874,7 @@ void kbRenderer_DX11::RenderMesh( const kbRenderSubmesh *const pRenderMesh, cons
 	const kbModel *const pModel = pRenderObject->m_pModel;
 
 	kbErrorCheck( pRenderObject != nullptr && pRenderObject->m_pModel != nullptr, "kbRenderer_DX11::RenderMesh() - no model found" );
-	kbErrorCheck( pModel->GetMaterials().size() > 0, "kbRenderer_DX11::RenderMesh() - No materials found for model %s", pRenderObject->m_pModel->GetFullName() );
+	kbErrorCheck( pModel->GetMaterials().size() > 0, "kbRenderer_DX11::RenderMesh() - No materials found for model %s", pRenderObject->m_pModel->GetFullName().c_str() );
 
 	const UINT vertexStride = pModel->VertexStride();
 	const UINT vertexOffset = 0;
@@ -3354,38 +3354,38 @@ void kbRenderer_DX11::RT_CopyRenderTarget( kbRenderTexture *const pSrcTexture, k
 }
 
 /**
- *	kbRenderer_DX11::SetConstantBuffer
+ *	kbRenderer_DX11::RT_Render2DQuad
  */
 void kbRenderer_DX11::RT_Render2DQuad( const kbVec2 & origin, const kbVec2 & size, const kbColor & color, const kbShader * pShader, const struct kbShaderParamOverrides_t *const pShaderParamOverrides ) {
 	D3D11_MAPPED_SUBRESOURCE mappedResource;
 	HRESULT hr = m_pDeviceContext->Map( m_DebugVertexBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource );
 
-	kbErrorCheck( SUCCEEDED(hr), "kbRenderer_DX11::RT_Render2DLine() - Failed to map debug vertex buffer" );
+	kbErrorCheck( SUCCEEDED(hr), "kbRenderer_DX11::RT_Render2DQuad() - Failed to map debug vertex buffer" );
 
 	const kbVec3 origin3D = kbVec3( (origin.x * 2.0f) - 1.0f, -((origin.y*2.0f) - 1.0f), 0.0f );
 
 	vertexLayout *const vertices = (vertexLayout *) mappedResource.pData;
-	vertices[0].position = origin3D + kbVec3( -size.x, -size.y, 0.0f );
+	vertices[0].position = origin3D + kbVec3( -size.x, -size.y, 0.01f );
 	vertices[0].SetColor( color );
 	vertices[0].uv.Set( 1.0f, 0.0f );
 
-	vertices[1].position = origin3D + kbVec3( size.x, -size.y, 0.0f );
+	vertices[1].position = origin3D + kbVec3( size.x, -size.y, 0.01f );
 	vertices[1].SetColor( color );
 	vertices[1].uv.Set( 0.0f, 0.0f );
 
-	vertices[2].position = origin3D + kbVec3( size.x, size.y, 0.0f );
+	vertices[2].position = origin3D + kbVec3( size.x, size.y, 0.01f );
 	vertices[2].SetColor( color );
 	vertices[2].uv.Set( 0.0f, 1.0f );
 
-	vertices[3].position = origin3D + kbVec3( size.x, size.y, 0.0f );
+	vertices[3].position = origin3D + kbVec3( size.x, size.y, 0.01f );
 	vertices[3].SetColor( color );
 	vertices[3].uv.Set( 0.0f, 1.0f );
 	
-	vertices[4].position = origin3D + kbVec3( -size.x, size.y, 0.0f );
+	vertices[4].position = origin3D + kbVec3( -size.x, size.y, 0.01f );
 	vertices[4].SetColor( color );
 	vertices[4].uv.Set( 1.0f, 1.0f );
 
-	vertices[5].position = origin3D + kbVec3( -size.x, -size.y, 0.0f );
+	vertices[5].position = origin3D + kbVec3( -size.x, -size.y, 0.01f );
 	vertices[5].SetColor( color );
 	vertices[5].uv.Set( 1.0f, 0.0f );
 
@@ -3593,8 +3593,10 @@ kbRenderTargetMap kbRenderer_DX11::RT_MapRenderTarget( kbRenderTexture *const pT
 	m_pDeviceContext->Map( pDX11Target->m_pRenderTargetTexture, 0, D3D11_MAP_READ, 0, &mappedResource );
 
 	kbRenderTargetMap returnVal;
-	returnVal.pData = (byte*)mappedResource.pData;
-	returnVal.rowPitch = mappedResource.RowPitch;
+	returnVal.m_pData = (byte*)mappedResource.pData;
+	returnVal.m_Width = pTarget->GetWidth();
+	returnVal.m_Height = pTarget->GetHeight();
+	returnVal.m_rowPitch = mappedResource.RowPitch;
 
 	return returnVal;
 }

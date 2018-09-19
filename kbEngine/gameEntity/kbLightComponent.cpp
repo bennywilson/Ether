@@ -108,6 +108,14 @@ void kbDirectionalLightComponent::EditorChange( const std::string & propertyName
 }
 
 /**
+ *	kbCustomPointLightComponent::Constructor
+ */
+void kbCustomPointLightComponent::Constructor() {
+	m_pShader = nullptr;
+}
+
+
+/**
  *	kbLightShaftsComponent::Constructor
  */
 void kbLightShaftsComponent::Constructor() {

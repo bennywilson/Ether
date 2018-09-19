@@ -59,19 +59,10 @@
     <None Include="assets\shaders\particleAtlas.kbShader">
       <Filter>Shaders</Filter>
     </None>
-    <None Include="assets\shaders\DamageGen\collisionMapTimeUpdate.kbShader">
-      <Filter>Shaders\DamageGen</Filter>
-    </None>
     <None Include="assets\shaders\DamageGen\pokeyholeunwrap.kbShader">
       <Filter>Shaders\DamageGen</Filter>
     </None>
-    <None Include="assets\shaders\DamageGen\collisionMapPushGen.kbShader">
-      <Filter>Shaders\DamageGen</Filter>
-    </None>
     <None Include="assets\shaders\DamageGen\collisionMapDamageGen.kbShader">
-      <Filter>Shaders\DamageGen</Filter>
-    </None>
-    <None Include="assets\shaders\DamageGen\collisionMapTimeGen.kbShader">
       <Filter>Shaders\DamageGen</Filter>
     </None>
     <None Include="assets\shaders\FX\basicFire.kbShader">
@@ -84,6 +75,9 @@
       <Filter>Shaders\FX</Filter>
     </None>
     <None Include="assets\shaders\DamageGen\collisionMapScorchGen.kbShader">
+      <Filter>Shaders\DamageGen</Filter>
+    </None>
+    <None Include="assets\shaders\DamageGen\collisionMapTimeGen.kbShader">
       <Filter>Shaders\DamageGen</Filter>
     </None>
   </ItemGroup>
