@@ -20,6 +20,9 @@
     <Filter Include="Shaders\FX">
       <UniqueIdentifier>{643c3a40-4ed8-4d04-ac24-31d66d2ea136}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Shaders\Character">
+      <UniqueIdentifier>{f33e0882-22ee-458c-bf30-a739f5973432}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="ReadMe.txt" />
@@ -79,6 +82,12 @@
     </None>
     <None Include="assets\shaders\DamageGen\collisionMapTimeGen.kbShader">
       <Filter>Shaders\DamageGen</Filter>
+    </None>
+    <None Include="assets\shaders\Character\characterBase.kbShader">
+      <Filter>Shaders\Character</Filter>
+    </None>
+    <None Include="assets\shaders\Character\characterTranslucent.kbShader">
+      <Filter>Shaders\Character</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

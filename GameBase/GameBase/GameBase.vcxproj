@@ -87,6 +87,8 @@
     <None Include="assets\shaders\baseHoloscope.kbShader" />
     <None Include="assets\shaders\baseWeapon.kbShader" />
     <None Include="assets\shaders\basicTerrain.kbShader" />
+    <None Include="assets\shaders\Character\characterBase.kbShader" />
+    <None Include="assets\shaders\Character\characterTranslucent.kbShader" />
     <None Include="assets\shaders\DamageGen\collisionMapDamageGen.kbShader" />
     <None Include="assets\shaders\DamageGen\collisionMapScorchGen.kbShader" />
     <None Include="assets\shaders\DamageGen\collisionMapTimeGen.kbShader" />
