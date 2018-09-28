@@ -117,10 +117,6 @@ std::vector<kbTypeInfoClass *> kbDirectionalLightComponent::kbDirectionalLightCo
 kbPointLightComponent_TypeInfo kbPointLightComponent::typeInfo;
 std::vector<kbTypeInfoClass *> kbPointLightComponent::kbPointLightComponent_TypeInfoVar;
 
-// kbCustomPointLightComponent
-kbCustomPointLightComponent_TypeInfo kbCustomPointLightComponent::typeInfo;
-std::vector<kbTypeInfoClass *> kbCustomPointLightComponent::kbCustomPointLightComponent_TypeInfoVar;
-
 // kbCylindricalComponent
 kbCylindricalLightComponent_TypeInfo kbCylindricalLightComponent::typeInfo;
 std::vector<kbTypeInfoClass *> kbCylindricalLightComponent::kbCylindricalLightComponent_TypeInfoVar;

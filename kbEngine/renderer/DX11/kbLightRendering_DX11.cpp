@@ -79,15 +79,18 @@ void kbRenderer_DX11::RenderLight( const kbRenderLight *const pLight ) {
 	m_pDeviceContext->PSSetShaderResources( 0, 5, RenderTargetViews );
 	m_pDeviceContext->PSSetSamplers( 0, 4, SamplerStates );
 
-	kbShader * pShader = nullptr;
 	const kbLightComponent *const pLightComponent = pLight->m_pLightComponent;
-	
-	if ( pLightComponent->IsA( kbDirectionalLightComponent::GetType() ) ) {
-		pShader = m_pDirectionalLightShader;
-	} else if ( pLightComponent->IsA( kbCylindricalLightComponent::GetType() ) ) {
-		pShader = m_pCylindricalLightShader;
-	} else {
-		pShader = m_pPointLightShader;
+	const kbShader * pShader = pLightComponent->GetOverrideShader();
+
+	if ( pShader == nullptr || pShader->GetVertexShader() == nullptr || pShader->GetPixelShader() == nullptr ) {
+
+		if ( pLightComponent->IsA( kbDirectionalLightComponent::GetType() ) ) {
+			pShader = m_pDirectionalLightShader;
+		} else if ( pLightComponent->IsA( kbCylindricalLightComponent::GetType() ) ) {
+			pShader = m_pCylindricalLightShader;
+		} else {
+			pShader = m_pPointLightShader;
+		}
 	}
 
 	m_RenderState.SetBlendState( pShader );
@@ -97,7 +100,12 @@ void kbRenderer_DX11::RenderLight( const kbRenderLight *const pLight ) {
     m_pDeviceContext->GSSetShader( (ID3D11GeometryShader *) pShader->GetGeometryShader(), nullptr, 0 );
 
 	const auto & varBindings = pShader->GetShaderVarBindings();
-	auto pConstBuffer = GetConstantBuffer( varBindings.m_ConstantBufferSizeBytes );
+	ID3D11Buffer * pConstBuffer = nullptr;
+	if ( pLightComponent->GetOverrideShader() != nullptr ) {
+		pConstBuffer = SetConstantBuffer( pLightComponent->GetOverrideShader()->GetShaderVarBindings(), &pLightComponent->GetShaderParamOverrides(), nullptr );
+	} else {
+		pConstBuffer = GetConstantBuffer( varBindings.m_ConstantBufferSizeBytes );
+	}
 	D3D11_MAPPED_SUBRESOURCE mappedResource;
 
 	HRESULT hr = m_pDeviceContext->Map( pConstBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource );

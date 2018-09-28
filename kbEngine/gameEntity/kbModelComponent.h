@@ -45,17 +45,18 @@ public:
 	virtual void								EditorChange( const std::string & propertyName ) override;
 	virtual void								PostLoad() override;
 
-	void										SetShaderParams( const kbShaderParamOverrides_t & shaderParams );
+	void										SetShaderParamOverrides( const kbShaderParamOverrides_t & shaderParams );
 	void										SetShaderVectorParam( const std::string & paramName, const kbVec4 & value );
 
 	bool										GetCastsShadow() const { return m_bCastsShadow; }
 
 protected:
 
+	void										SetShaderParamList();
+
 	enum ERenderPass							m_RenderPass;
 	float										m_TranslucencySortBias;
 
-	kbShaderParamOverrides_t					m_ShaderParams;
 	std::vector<kbShaderParamComponent>			m_ShaderParamList;
 
 	kbRenderObject								m_RenderObject;

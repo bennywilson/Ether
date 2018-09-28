@@ -23,6 +23,9 @@
     <Filter Include="Shaders\Character">
       <UniqueIdentifier>{f33e0882-22ee-458c-bf30-a739f5973432}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Shaders\Lighting">
+      <UniqueIdentifier>{23ccd1a4-90d2-42cb-9d56-88b847978266}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="ReadMe.txt" />
@@ -88,6 +91,9 @@
     </None>
     <None Include="assets\shaders\Character\characterTranslucent.kbShader">
       <Filter>Shaders\Character</Filter>
+    </None>
+    <None Include="assets\shaders\Lighting\directionalLightToon.kbShader">
+      <Filter>Shaders\Lighting</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

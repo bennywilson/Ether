@@ -96,6 +96,8 @@ GenerateClass(
 	kbLightComponent,
 	AddField( "Color", KBTYPEINFO_VECTOR4, kbLightComponent, m_Color, false, "" )
 	AddField( "CastsShadows", KBTYPEINFO_BOOL, kbLightComponent, m_bCastsShadow, false, "" )
+	AddField( "ShaderParams", KBTYPEINFO_STRUCT, kbLightComponent, m_OverrideShaderParamList, true, "kbShaderParamComponent" )
+	AddField( "OverrideShader", KBTYPEINFO_SHADER, kbLightComponent, m_pOverrideShader, false, "" )
 )
 
 GenerateClass(
@@ -125,12 +127,6 @@ GenerateClass(
 GenerateClass( 
 	kbPointLightComponent,
 	AddField( "LightRadius", KBTYPEINFO_FLOAT, kbPointLightComponent, m_Radius, false, "float" )
-)
-
-GenerateClass( 
-	kbCustomPointLightComponent,
-	AddField( "Shader", KBTYPEINFO_SHADER, kbCustomPointLightComponent, m_pShader, false, "" )
-	AddField( "ShaderParams", KBTYPEINFO_STRUCT, kbCustomPointLightComponent, m_ShaderParamList, true, "kbShaderParamComponent" )
 )
 
 GenerateClass( 

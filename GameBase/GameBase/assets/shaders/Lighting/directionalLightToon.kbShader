@@ -1,0 +1,131 @@
+//===================================================================================================
+// directionalLightToon.kbShader
+//
+// Note that  the directional light shader is responsible for copying the glow mask from the color
+// buffer to the accumulation buffer
+//
+// 2018 kbEngine 2.0
+//===================================================================================================
+cbuffer matrixBuffer {
+   matrix               mvpMatrix;
+   matrix               inverseViewProjection;
+   matrix               lightMatrix[4];
+   float4               splitDistances;
+   float4               lightDirection;
+   float4               lightPosition;
+   float4               lightColor;
+   float4               cameraPosition;
+};
+
+kbShaderState {
+	srcBlend Blend_One
+	dstBlend Blend_One
+	blendOp BlendOp_Add
+	srcBlendAlpha Blend_One			// For passing glow mask from scene color buffer to accumulation buffer
+	dstBlendAlpha Blend_Zero
+	blendOpAlpha BlendOp_Add
+}
+
+//-------------------------------------
+struct vertexInput {
+	float4 position      : POSITION;
+	float2 uv            : TEXCOORD0;
+};
+
+//-------------------------------------
+struct pixelInput {
+	float4 position      : SV_POSITION;
+	float4 position2     : TEXCOORD0;
+	float2 uv            : TEXCOORD1;
+};
+
+/**
+ *	vertexShader
+ */
+pixelInput vertexShader( vertexInput input ) {
+	pixelInput output = (pixelInput)(0);
+
+	output.position = input.position;
+	output.uv = mul( input.uv, (float2x2)mvpMatrix );
+	output.position2 = input.position;
+
+	return output;
+}
+
+/**
+ *	pixelShader
+ */
+SamplerState DiffuseSamplerState;
+Texture2D colorTexture				: register(t0);
+
+SamplerState NormalSamplerState;
+Texture2D normalTexture				: register(t1);
+
+Texture2D specularTexture			: register(t2);
+
+SamplerState DepthSamplerState;
+Texture2D depthTexture				: register(t3);
+
+SamplerState ShadowMapSamplerState;
+Texture2D ShadowMap					: register(t4);
+
+float4 pixelShader( pixelInput input ) : SV_TARGET {
+	float4 diffuseColor = colorTexture.Sample( DiffuseSamplerState, input.uv );
+	float3 normal = normalTexture.Sample( NormalSamplerState, input.uv ).xyz;
+	float4 specColor = specularTexture.Sample( DiffuseSamplerState, input.uv );
+	
+	// Diffuse
+	float diffuse = saturate( dot( normal, lightDirection.xyz ) );
+//	diffuse = ( diffuse * 0.8f ) + 0.2f;	// Bit of fake ambience
+	
+	if ( diffuse < 0.75f ) {
+		diffuse = 0.75f;
+	} else if ( diffuse < 0.85f )
+		diffuse = 0.85f;
+	else
+		diffuse = 1.0f;
+
+	float4 worldPos = float4( input.position2.xy, depthTexture.Sample( DepthSamplerState, input.uv ).r, 1 );
+	worldPos = mul( worldPos, inverseViewProjection );
+	worldPos /= worldPos.w;
+	
+	float3 toCameraVec = normalize( cameraPosition.xyz - worldPos.xyz );
+	
+	// Spec
+	float3 lightReflect = ( 2.0f * dot( normal, lightDirection.xyz ) * normal ) - lightDirection.xyz;
+	float3 spec = saturate( dot( lightReflect, toCameraVec ) );
+	specColor.xyz *= pow( spec, specColor.w );
+	
+	// Shadow
+	float DistFromCamera = length( worldPos.xyz - cameraPosition.xyz );
+	
+	int index = 0;
+	float2 offset = float2( 0.0f, 0.0f );
+	
+	if ( DistFromCamera > splitDistances.z ) {
+	   index = 3.0f;
+	   offset.x += 0.5f;
+	   offset.y += 0.5f;
+	} else if ( DistFromCamera > splitDistances.y ) {
+	   index = 2.0f;
+	   offset.y += 0.5f;
+	} else if ( DistFromCamera > splitDistances.x ) {
+	   index = 1.0f;
+	   offset.x += 0.5f;
+	}  
+	
+	float4 shadowTex = mul( worldPos, lightMatrix[index] );
+	shadowTex /= shadowTex.w;
+	shadowTex.xy *= 0.5f;
+	shadowTex.xy += offset;
+	
+	if ( DistFromCamera < splitDistances.w ) {
+	   if ( ShadowMap.Sample( ShadowMapSamplerState, shadowTex.xy ).r < shadowTex.z - 0.0003f ) {
+	      diffuse *= 0.83f;
+	   }
+	}
+	
+	const float3 emissive = diffuseColor.xyz * diffuseColor.w;
+	float3 finalColor = diffuseColor.xyz * diffuse * lightColor.xyz + specColor.xyz + emissive;	// todo
+	return float4( finalColor, diffuseColor.w );
+}

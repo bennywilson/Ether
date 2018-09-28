@@ -21,6 +21,7 @@ void kbLightComponent::Constructor() {
 	m_Color = kbColor::white;
 	m_bCastsShadow = false;
 	m_Brightness = 1;
+	m_pOverrideShader = nullptr;
 }
 
 /**
@@ -46,11 +47,37 @@ void kbLightComponent::SetEnable_Internal( const bool bIsEnabled ) {
 
 	if ( g_pRenderer != nullptr ) {
 		if ( bIsEnabled ) {
+			SetShaderParamList();
+
 			g_pRenderer->AddLight( this, GetOwner()->GetPosition(), GetOwner()->GetOrientation() );
 		} else {
 			g_pRenderer->RemoveLight( this );
 		}
 	}
+}
+
+/**
+ *	kbLightComponent:SetShaderParamList
+ */
+void kbLightComponent::SetShaderParamList() {
+
+	if ( m_pOverrideShader == nullptr ) {
+		return;
+	}
+
+	for ( int i = 0; i < m_OverrideShaderParamList.size(); i++ ) {
+		const kbShaderParamComponent & curParam = m_OverrideShaderParamList[i];
+		if ( curParam.GetParamName().stl_str().empty() ) {
+			continue;
+		}
+
+		if ( curParam.GetTexture() != nullptr ) {
+			m_OverrideShaderParams.SetTexture( curParam.GetParamName().stl_str(), curParam.GetTexture() );
+		} else {
+			m_OverrideShaderParams.SetVec4( curParam.GetParamName().stl_str(), curParam.GetVector() );
+		}	
+	}
+
 }
 
 /**
@@ -106,14 +133,6 @@ void kbDirectionalLightComponent::EditorChange( const std::string & propertyName
 	Super::EditorChange( propertyName );
 	// TODO: clamp shadow splits to 4.  Also ensure that the ordering is correct
 }
-
-/**
- *	kbCustomPointLightComponent::Constructor
- */
-void kbCustomPointLightComponent::Constructor() {
-	m_pShader = nullptr;
-}
-
 
 /**
  *	kbLightShaftsComponent::Constructor

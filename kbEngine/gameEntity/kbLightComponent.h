@@ -32,7 +32,12 @@ public:
 
 	bool										CastsShadow() const { return m_bCastsShadow; }
 
+	const kbShader *							GetOverrideShader() const { return m_pOverrideShader; }
+	const kbShaderParamOverrides_t &			GetShaderParamOverrides() const { return m_OverrideShaderParams; }
+
 protected:
+
+	void										SetShaderParamList();
 
 	virtual void								SetEnable_Internal( const bool isEnabled ) override;
 	virtual void								Update_Internal( const float DeltaTime ) override;
@@ -40,6 +45,11 @@ protected:
 	kbColor										m_Color;
 	float										m_Brightness;
 	bool										m_bCastsShadow;
+
+	// Allow custom shader override
+	kbShader *									m_pOverrideShader;
+	kbShaderParamOverrides_t					m_OverrideShaderParams;
+	std::vector<kbShaderParamComponent>			m_OverrideShaderParamList;
 };
 
 /**
@@ -95,22 +105,6 @@ protected:
 
 	std::vector<float>							m_SplitDistances;
 };
-
-/**
- *	kbCustomPointLightComponent
- */
-class kbCustomPointLightComponent : public kbPointLightComponent {
-
-	KB_DECLARE_COMPONENT( kbCustomPointLightComponent, kbPointLightComponent );
-
-//---------------------------------------------------------------------------------------------------
-
-protected:
-
-	kbShader *									m_pShader;
-	std::vector<kbShaderParamComponent>			m_ShaderParamList;
-};
-
 
 /**
  *	kbLightShaftsComponent

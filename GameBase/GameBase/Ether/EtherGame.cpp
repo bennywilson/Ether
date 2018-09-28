@@ -549,7 +549,7 @@ void EtherGame::RenderThreadCallBack() {
 
 					kbShaderParamOverrides_t shaderParams;
 					shaderParams.SetTexture( "holeTex", m_pBulletHoleRenderTexture );
-					pSM->SetShaderParams( shaderParams );
+					pSM->SetShaderParamOverrides( shaderParams );
 				}
 				break;
 			}
@@ -917,7 +917,7 @@ EtherFireEntity::EtherFireEntity( const kbVec3 & position, const kbPrefab *const
 
 	if ( m_pFireLight != nullptr ) {
 		m_pFireLight->SetPosition( position + fireLightOffset );
-		kbCustomPointLightComponent *const pLight = (kbCustomPointLightComponent*)m_pFireLight->GetComponentByType( kbCustomPointLightComponent::GetType() );
+		kbPointLightComponent *const pLight = (kbPointLightComponent*)m_pFireLight->GetComponentByType( kbPointLightComponent::GetType() );
 		pLight->Enable( false );
 		pLight->Enable( true );
 		m_StartFireColor = pLight->GetColor() * lightIntensity;
@@ -956,7 +956,7 @@ void EtherFireEntity::Destroy() {
 	pParticle->Enable( false );
 
 	if ( m_pFireLight != nullptr ) {
-		kbCustomPointLightComponent *const pLight = (kbCustomPointLightComponent*)m_pFireLight->GetComponentByType( kbCustomPointLightComponent::GetType() );
+		kbPointLightComponent *const pLight = (kbPointLightComponent*)m_pFireLight->GetComponentByType( kbPointLightComponent::GetType() );
 		pLight->Enable( false );
 		g_pGame->RemoveGameEntity( m_pFireLight );
 	}
@@ -1014,7 +1014,7 @@ void EtherFireEntity::Update( const float DeltaTime ) {
 	}
 
 	if ( m_pFireLight != nullptr ) {
-		kbCustomPointLightComponent *const pLight = (kbCustomPointLightComponent*)m_pFireLight->GetComponentByType( kbCustomPointLightComponent::GetType() );
+		kbPointLightComponent *const pLight = (kbPointLightComponent*)m_pFireLight->GetComponentByType( kbPointLightComponent::GetType() );
 		pLight->Enable( false );
 		const float targetIntensity = m_StartFireColor.ToVec3().Dot( kbVec3( 0.3f, 0.59f, 0.11f ) ) * ( fireFade * ( lightIntensity + kbfrand() * ( lightIntensity * 1.0f ) ) );
 		const float curIntensity = pLight->GetColor().ToVec3().Dot( kbVec3( 0.3f, 0.59f, 0.11f ) );
