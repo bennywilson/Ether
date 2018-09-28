@@ -1,0 +1,81 @@
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Gina"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 0.000000 3.000000 35.251560
+		Scale = 1.000000 1.000000 1.000000
+	}
+	EtherSkelModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		RenderPass = LightingPass
+		ShaderParams = 0
+		TranslucencySortBias =  0.000000
+		Model = .\assets\models\characters\gina\street\gina_street.ms3d
+		ShaderOverride = 9
+			.\assets\shaders\character\characterbase.kbshader
+.\assets\shaders\character\characterbase.kbshader
+.\assets\shaders\character\characterbase.kbshader
+.\assets\shaders\character\characterbase.kbshader
+.\assets\shaders\character\characterbase.kbshader
+.\assets\shaders\character\characterbase.kbshader
+.\assets\shaders\character\characterbase.kbshader
+.\assets\shaders\character\characterbase.kbshader
+.\assets\shaders\character\charactertranslucent.kbshader
+
+		Animations = 1
+			EtherAnimComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Animation = .\assets\models\characters\gina\street\aim.kbanim.ms3d
+				AnimationName = ""
+				IsLooping = 0
+				TimeScale =  1.000000
+			}
+		DebugAnimIndex = 0
+		IsFirstPersonModel = 0
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Sun"
+		Orientation = -0.421677 -0.283876 -0.140901 0.849559
+		Position = -6.981124 11.565353 31.394756
+		Scale = 1.000000 1.000000 1.000000
+	}
+	kbDirectionalLightComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadows = 0
+		Color = 1.000000 1.000000 1.000000 1.000000
+		OverrideShader = .\assets\shaders\lighting\directionallighttoon.kbshader
+		ShaderParams = 0
+		CascadedShadowSplits = 0
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Entity_19"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 0.000000 13.647652 31.789953
+		Scale = 10.000000 10.000000 10.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		RenderPass = LightingPass
+		ShaderParams = 0
+		TranslucencySortBias =  0.000000
+		Model = ..\..\kbengine\assets\models\editor\invertedcube.ms3d
+		ShaderOverride = 0
+			
+	}
+}
