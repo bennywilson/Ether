@@ -440,7 +440,7 @@ private:
 	void										RenderDebugText();
 	void										RenderMousePickerIds();
 	void										Blit( kbRenderTexture *const src, kbRenderTexture *const dest );
-	ID3D11Buffer *								SetConstantBuffer( const kbShaderVarBindings_t & shaderBindings, const kbShaderParamOverrides_t * shaderParamOverrides, const kbRenderObject *const pRenderObject );
+	ID3D11Buffer *								SetConstantBuffer( const kbShaderVarBindings_t & shaderBindings, const kbShaderParamOverrides_t * shaderParamOverrides, const kbRenderObject *const pRenderObject,  byte *const pInMappedBufferData );
 
 	ID3D11Buffer *								GetConstantBuffer( const size_t requestSize );
 	void										SetShaderMat4( const std::string & varName, const kbMat4 & inMatrix, void *const pBuffer, const kbShaderVarBindings_t & binding );

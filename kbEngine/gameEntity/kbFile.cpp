@@ -257,8 +257,12 @@ void kbFile::ReadComponent( kbGameEntity *const pGameEntity, const std::string &
 						std::vector< class kbShader * >	& shaderList = *( std::vector< class kbShader * > *)( &pCurrentComponentAsBytePtr[currentVar->Offset()] );
 			
 						shaderList.resize( atoi( nextToken.c_str() ) );
-						m_CurrentReadPos++;
-			
+						int size = (int)shaderList.size();
+						while( size > 0 ) {
+							m_CurrentReadPos++;
+							size /= 10;
+						}
+
 						for ( int i = 0; i < shaderList.size(); i++ ) {
 							while ( m_Buffer[m_CurrentReadPos] == ' ' || m_Buffer[m_CurrentReadPos] == '\n' || m_Buffer[m_CurrentReadPos] == '\r' || m_Buffer[m_CurrentReadPos] == '\t' ) {
 								m_CurrentReadPos++;

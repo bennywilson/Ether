@@ -22,6 +22,10 @@ public:
 
 	virtual void								PostLoad() override;
 
+	virtual void								RenderSync();
+
+	virtual void								EditorChange( const std::string & propertyName ) override;
+
 	void										SetColor( const kbColor & newColor ) { m_Color = newColor; }
 	void										SetColor( const float R, const float G, const float B, const float A ) { m_Color.Set( R, G, B, A ); }
 
@@ -45,6 +49,7 @@ protected:
 	kbColor										m_Color;
 	float										m_Brightness;
 	bool										m_bCastsShadow;
+	bool										m_bShaderParamsDirty;
 
 	// Allow custom shader override
 	kbShader *									m_pOverrideShader;

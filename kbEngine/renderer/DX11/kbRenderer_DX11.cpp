@@ -2961,7 +2961,7 @@ void kbRenderer_DX11::RenderMesh( const kbRenderSubmesh *const pRenderMesh, cons
 	const std::vector<const kbTexture*> & textureList = meshMaterial.GetTextureList();
 
 	for ( int i = 0; i < textureList.size(); i++ ) {
-		ID3D11ShaderResourceView *const texture = (textureList[i] != nullptr)?(ID3D11ShaderResourceView *)textureList[i]->GetGPUTexture() : ( nullptr );
+		ID3D11ShaderResourceView *const texture = ( textureList[i] != nullptr ) ? (ID3D11ShaderResourceView *)textureList[i]->GetGPUTexture() : (nullptr);
 		m_pDeviceContext->PSSetShaderResources( i, 1, &texture );
 		m_pDeviceContext->PSSetSamplers( i, 1, &m_pBasicSamplerState );
 	}
@@ -2969,7 +2969,7 @@ void kbRenderer_DX11::RenderMesh( const kbRenderSubmesh *const pRenderMesh, cons
 	// Get a valid constant buffer and bind the kbShader's vars to it
 	const kbShaderVarBindings_t & shaderVarBindings = pShader->GetShaderVarBindings();
 
-	ID3D11Buffer *const pConstantBuffer = SetConstantBuffer( shaderVarBindings, &pRenderObject->m_ShaderParamOverrides, pRenderObject );
+	ID3D11Buffer *const pConstantBuffer = SetConstantBuffer( shaderVarBindings, &pRenderObject->m_ShaderParamOverrides, pRenderObject, nullptr );
 
 	m_pDeviceContext->VSSetConstantBuffers( 0, 1, &pConstantBuffer );
 	m_pDeviceContext->PSSetConstantBuffers( 0, 1, &pConstantBuffer );
@@ -2996,9 +2996,7 @@ void kbRenderer_DX11::RenderPretransformedDebugLines() {
 	D3D11_MAPPED_SUBRESOURCE mappedResource;
 	HRESULT hr = m_pDeviceContext->Map( m_DebugPreTransformedVertexBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource );
 
-	if ( FAILED( hr ) ) {
-		kbError( "Failed to map debug lines" );
-	}
+	kbErrorCheck( SUCCEEDED(hr), "kbRenderer_DX11::RenderPretransformedDebugLines() - Failed to map debug lines" );
 
 	vertexLayout * vertices = ( vertexLayout * ) mappedResource.pData;
 	memcpy( vertices, m_DebugPreTransformedLines.data(), sizeof( vertexLayout ) * m_DebugPreTransformedLines.size() );
@@ -3244,7 +3242,7 @@ void kbRenderer_DX11::RT_RenderMesh( const kbModel *const pModel, kbShader * pSh
 
     // Bind textures
 	const kbShaderVarBindings_t & shaderVarBindings = pShader->GetShaderVarBindings();
-	ID3D11Buffer *const pConstantBuffer = SetConstantBuffer( shaderVarBindings, pShaderParams, nullptr );
+	ID3D11Buffer *const pConstantBuffer = SetConstantBuffer( shaderVarBindings, pShaderParams, nullptr, nullptr );
 
 	if ( pConstantBuffer != nullptr ) {
 		m_pDeviceContext->VSSetConstantBuffers( 0, 1, &pConstantBuffer );
@@ -3333,7 +3331,7 @@ void kbRenderer_DX11::RT_Render2DLine( const kbVec3 & startPt, const kbVec3 & en
 	m_pDeviceContext->PSSetShader( (ID3D11PixelShader*) pShader->GetPixelShader(), nullptr, 0 );
 
 	const auto & varBindings = pShader->GetShaderVarBindings();
-	ID3D11Buffer *const pConstantBuffer = SetConstantBuffer( varBindings, pShaderParamOverrides, nullptr );
+	ID3D11Buffer *const pConstantBuffer = SetConstantBuffer( varBindings, pShaderParamOverrides, nullptr, nullptr );
 
 	m_pDeviceContext->VSSetConstantBuffers( 0, 1, &pConstantBuffer );
 	m_pDeviceContext->PSSetConstantBuffers( 0, 1, &pConstantBuffer );
@@ -3413,7 +3411,7 @@ void kbRenderer_DX11::RT_Render2DQuad( const kbVec2 & origin, const kbVec2 & siz
 	m_pDeviceContext->PSSetShader( (ID3D11PixelShader*) pShader->GetPixelShader(), nullptr, 0 );
 
 	const auto & varBindings = pShader->GetShaderVarBindings();
-	ID3D11Buffer *const pConstantBuffer = SetConstantBuffer( varBindings, pShaderParamOverrides, nullptr );
+	ID3D11Buffer *const pConstantBuffer = SetConstantBuffer( varBindings, pShaderParamOverrides, nullptr, nullptr );
 
 	m_pDeviceContext->VSSetConstantBuffers( 0, 1, &pConstantBuffer );
 	m_pDeviceContext->PSSetConstantBuffers( 0, 1, &pConstantBuffer );
@@ -3426,7 +3424,7 @@ void kbRenderer_DX11::RT_Render2DQuad( const kbVec2 & origin, const kbVec2 & siz
 /**
  *	kbRenderer_DX11::SetConstantBuffer
  */
-ID3D11Buffer * kbRenderer_DX11::SetConstantBuffer( const kbShaderVarBindings_t & shaderVarBindings, const kbShaderParamOverrides_t * shaderParamOverrides, const kbRenderObject *const pRenderObject ) {
+ID3D11Buffer * kbRenderer_DX11::SetConstantBuffer( const kbShaderVarBindings_t & shaderVarBindings, const kbShaderParamOverrides_t * shaderParamOverrides, const kbRenderObject *const pRenderObject, byte *const pInMappedBufferData ) {
 	kbMat4 worldMatrix;
 	if ( pRenderObject != nullptr ) {
 		worldMatrix.MakeScale( pRenderObject->m_Scale );
@@ -3437,12 +3435,18 @@ ID3D11Buffer * kbRenderer_DX11::SetConstantBuffer( const kbShaderVarBindings_t &
 	}
 
 	D3D11_MAPPED_SUBRESOURCE mappedResource;
-	ID3D11Buffer *const pConstantBuffer = GetConstantBuffer( shaderVarBindings.m_ConstantBufferSizeBytes );
-	HRESULT hr = m_pDeviceContext->Map( pConstantBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource );
-	kbErrorCheck( SUCCEEDED(hr), "kbRenderer_DX11::RenderDebugLines() - Failed to map matrix buffer" );
+	ID3D11Buffer * pConstantBuffer = nullptr;
+	HRESULT hr;
 
-	const auto & bindings = shaderVarBindings.m_VarBindings;
-	byte * constantPtr = (byte*) mappedResource.pData;
+	byte * constantPtr = nullptr;
+	if ( pInMappedBufferData == nullptr ) {
+		pConstantBuffer = GetConstantBuffer( shaderVarBindings.m_ConstantBufferSizeBytes );
+		hr = m_pDeviceContext->Map( pConstantBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource );
+		kbErrorCheck( SUCCEEDED(hr), "kbRenderer_DX11::RenderDebugLines() - Failed to map matrix buffer" );
+		constantPtr = (byte*) mappedResource.pData;
+	} else {
+		constantPtr = pInMappedBufferData;
+	}
 
     const std::vector<kbShaderParamOverrides_t::kbShaderParam_t> * paramOverrides = nullptr;
 	if ( pRenderObject != nullptr ) {
@@ -3451,6 +3455,7 @@ ID3D11Buffer * kbRenderer_DX11::SetConstantBuffer( const kbShaderVarBindings_t &
 		paramOverrides = &shaderParamOverrides->m_ParamOverrides;
 	}
 
+	const auto & bindings = shaderVarBindings.m_VarBindings;
 	for ( int i = 0; i < bindings.size(); i++ ) {
 		const std::string & varName = bindings[i].m_VarName;
 		const byte * pVarByteOffset = constantPtr + bindings[i].m_VarByteOffset;
@@ -3578,7 +3583,10 @@ ID3D11Buffer * kbRenderer_DX11::SetConstantBuffer( const kbShaderVarBindings_t &
 		}
 	}
 
-	m_pDeviceContext->Unmap( pConstantBuffer, 0 );
+	if ( pInMappedBufferData == nullptr ) {
+		m_pDeviceContext->Unmap( pConstantBuffer, 0 );
+	}
+
 	return pConstantBuffer;
 }
 

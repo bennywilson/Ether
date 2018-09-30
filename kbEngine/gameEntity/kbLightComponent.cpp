@@ -22,6 +22,7 @@ void kbLightComponent::Constructor() {
 	m_bCastsShadow = false;
 	m_Brightness = 1;
 	m_pOverrideShader = nullptr;
+	m_bShaderParamsDirty = false;
 }
 
 /**
@@ -32,10 +33,33 @@ kbLightComponent::~kbLightComponent() {
 }
 
 /**
- *	kbLightComponent::PoadLoad
+ *	kbLightComponent::PostLoad
  */
 void kbLightComponent::PostLoad() {
 	Super::PostLoad();
+}
+
+/**
+ *	kbLightComponent::EditorChange
+ */
+void kbLightComponent::EditorChange( const std::string & propertyName ) {
+	Super::EditorChange( propertyName );
+
+	if ( IsEnabled() ) {
+		m_bShaderParamsDirty = true;
+	}
+}
+
+/**
+ *	kbLightComponent::RenderSync
+ */
+void kbLightComponent::RenderSync() {
+	Super::RenderSync();
+
+	if ( m_bShaderParamsDirty ) {
+		SetShaderParamList();
+		m_bShaderParamsDirty = false;
+	}
 }
 
 /**
@@ -47,7 +71,7 @@ void kbLightComponent::SetEnable_Internal( const bool bIsEnabled ) {
 
 	if ( g_pRenderer != nullptr ) {
 		if ( bIsEnabled ) {
-			SetShaderParamList();
+			m_bShaderParamsDirty = true;
 
 			g_pRenderer->AddLight( this, GetOwner()->GetPosition(), GetOwner()->GetOrientation() );
 		} else {
