@@ -95,6 +95,9 @@
     <None Include="assets\shaders\Lighting\directionalLightToon.kbShader">
       <Filter>Shaders\Lighting</Filter>
     </None>
+    <None Include="assets\shaders\Character\characterMetal.kbShader">
+      <Filter>Shaders\Character</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameBase.h">

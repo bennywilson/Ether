@@ -4,7 +4,7 @@ kbGameEntity 0 0 0 0 {
 		LifeTime =  -1.000000
 		Name = "Gina"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
-		Position = 0.000000 3.000000 35.251560
+		Position = 0.000000 3.000000 44.473156
 		Scale = 1.000000 1.000000 1.000000
 	}
 	EtherSkelModelComponent { 
@@ -15,7 +15,7 @@ kbGameEntity 0 0 0 0 {
 		ShaderParams = 0
 		TranslucencySortBias =  0.000000
 		Model = .\assets\models\characters\gina\street\gina_street.ms3d
-		ShaderOverride = 9
+		ShaderOverride = 11
 			.\assets\shaders\character\characterbase.kbshader
 .\assets\shaders\character\characterbase.kbshader
 .\assets\shaders\character\characterbase.kbshader
@@ -25,6 +25,8 @@ kbGameEntity 0 0 0 0 {
 .\assets\shaders\character\characterbase.kbshader
 .\assets\shaders\character\characterbase.kbshader
 .\assets\shaders\character\charactertranslucent.kbshader
+.\assets\shaders\character\charactermetal.kbshader
+.\assets\shaders\character\charactermetal.kbshader
 
 		Animations = 1
 			EtherAnimComponent { 
@@ -54,7 +56,21 @@ kbGameEntity 0 0 0 0 {
 		CastsShadows = 0
 		Color = 1.000000 1.000000 1.000000 1.000000
 		OverrideShader = .\assets\shaders\lighting\directionallighttoon.kbshader
-		ShaderParams = 0
+		ShaderParams = 2
+			kbShaderParamComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				ParamName = "diffuseColorBand"
+				Texture = NULL
+				Vector = 0.800000 1.000000 0.700000 0.800000
+			}
+			kbShaderParamComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				ParamName = "specularColorBand"
+				Texture = NULL
+				Vector = 0.000000 1.100000 1.000000 4.000000
+			}
 		CascadedShadowSplits = 0
 	}
 }
@@ -62,20 +78,40 @@ kbGameEntity 0 0 0 0 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		Name = "Entity_19"
+		Name = "Room"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
-		Position = 0.000000 13.647652 31.789953
+		Position = 0.000000 0.000000 0.000000
 		Scale = 10.000000 10.000000 10.000000
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadow = 0
-		RenderPass = LightingPass
+		RenderPass = Post-LightingPass
 		ShaderParams = 0
 		TranslucencySortBias =  0.000000
 		Model = ..\..\kbengine\assets\models\editor\invertedcube.ms3d
-		ShaderOverride = 0
-			
+		ShaderOverride = 1
+			.\assets\shaders\skybox.kbshader
+
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Point_Underlight"
+		Orientation = 0.592193 -0.039026 0.012332 0.804756
+		Position = 2.899681 10.305837 33.357639
+		Scale = 1.000000 1.000000 1.000000
+	}
+	kbPointLightComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadows = 0
+		Color = 0.200000 0.200000 0.400000 1.000000
+		OverrideShader = NULL
+		ShaderParams = 0
+		LightRadius =  32.000000
 	}
 }

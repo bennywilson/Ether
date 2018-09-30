@@ -15,6 +15,8 @@ cbuffer matrixBuffer {
    float4               lightPosition;
    float4               lightColor;
    float4               cameraPosition;
+   float4				diffuseColorBand;
+   float4				specularColorBand;
 };
 
 kbShaderState {
@@ -78,12 +80,15 @@ float4 pixelShader( pixelInput input ) : SV_TARGET {
 	float diffuse = saturate( dot( normal, lightDirection.xyz ) );
 //	diffuse = ( diffuse * 0.8f ) + 0.2f;	// Bit of fake ambience
 	
-	if ( diffuse < 0.75f ) {
-		diffuse = 0.75f;
-	} else if ( diffuse < 0.85f )
-		diffuse = 0.85f;
-	else
-		diffuse = 1.0f;
+	if ( diffuse < diffuseColorBand.x ) {
+		diffuse = diffuseColorBand.x;
+	} else if ( diffuse < diffuseColorBand.y ) {
+		diffuse = diffuseColorBand.y;
+	} else if ( diffuse < diffuseColorBand.z ) {
+		diffuse = diffuseColorBand.z;
+	} else if ( diffuse < diffuseColorBand.w ) {
+		diffuse = diffuseColorBand.w;
+	}
 
 	float4 worldPos = float4( input.position2.xy, depthTexture.Sample( DepthSamplerState, input.uv ).r, 1 );
 	worldPos = mul( worldPos, inverseViewProjection );
@@ -93,8 +98,16 @@ float4 pixelShader( pixelInput input ) : SV_TARGET {
 	
 	// Spec
 	float3 lightReflect = ( 2.0f * dot( normal, lightDirection.xyz ) * normal ) - lightDirection.xyz;
-	float3 spec = saturate( dot( lightReflect, toCameraVec ) );
-	specColor.xyz *= pow( spec, specColor.w );
+	float3 spec = saturate( dot( lightReflect, toCameraVec ) ) * specularColorBand.z;
+	float specLum = dot( spec, float3( 0.3f, 0.59f, 0.11f ) );
+	if ( specLum < specularColorBand.x ) {
+		specLum = specularColorBand.x;
+	} else {
+		specLum = specularColorBand.y;
+	}
+
+	// specularColorBand
+	specColor.xyz *= pow( abs( spec * specLum ), specColor.w );
 	
 	// Shadow
 	float DistFromCamera = length( worldPos.xyz - cameraPosition.xyz );

@@ -1,7 +1,7 @@
 //==============================================================================
-// basicSkinned.kbShader
+// characterBase.kbShader
 //
-// 2016-2018 kbEngine 2.0
+// 2018 kbEngine 2.0
 //==============================================================================
 cbuffer matrixBuffer {
    matrix      modelMatrix;
@@ -80,8 +80,8 @@ SamplerState SampleType;
 
 	const float4 colorTex = colorTexture.Sample( SampleType, input.uv );
 	output.Color.xyz = colorTex.xyz;
-	output.Color.w = colorTex.w * 0.55;
-	output.Specular = float4( colorTex.www, 25.0f );
+	output.Color.w = 0;//colorTex.w * 0.55;
+	output.Specular = float4( colorTex.xyz * colorTex.w, 1.0f );
 	output.Depth.r = input.position2.x / input.position2.y;
 
 	output.Normal.xyz = normalize( input.normal );
