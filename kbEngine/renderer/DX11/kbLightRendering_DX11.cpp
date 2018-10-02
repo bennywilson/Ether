@@ -114,7 +114,7 @@ void kbRenderer_DX11::RenderLight( const kbRenderLight *const pLight ) {
 	SetShaderVec4( "lightDirection", kbVec4( -pLight->m_Orientation.ToMat4()[2].ToVec3(), pLight->m_Length ), pMappedData, varBindings );
 	SetShaderVec4( "lightColor", pLight->m_Color, pMappedData, varBindings );
 	SetShaderMat4( "inverseViewProjection", m_pCurrentRenderWindow->GetInverseViewProjection(), pMappedData, varBindings );
-	SetShaderVec4( "cameraPosition", frozenCameraPosition, pMappedData, varBindings );
+	SetShaderVec4( "cameraPosition", m_pCurrentRenderWindow->GetCameraPosition(), pMappedData, varBindings );
 
 	kbMat4 lightMatrix[4];
 	kbVec4 splitDistances;
