@@ -64,7 +64,8 @@ pixelInput vertexShader( vertexInput input ) {
 	output.uv = input.uv;
 	//output.color = 0;//input.color;
 	output.position2 = output.position.zw;
-	output.normal.xyz = mul( ( input.normal.xyz * 2.0f ) - 1.0f, (float3x3)modelMatrix );
+	output.normal.xyz = mul( ( input.normal.xyz * 2.0f ) - 1.0f, (float3x3)boneList[IndexArray[0]] );
+	output.normal.xyz = mul( output.normal.xyz, (float3x3)modelMatrix );
 
 	return output;
 }
@@ -81,7 +82,7 @@ SamplerState SampleType;
 	const float4 colorTex = colorTexture.Sample( SampleType, input.uv );
 	output.Color.xyz = colorTex.xyz;
 	output.Color.w = 0;//colorTex.w * 0.55;
-	output.Specular = float4( colorTex.xyz * colorTex.w, 1.0f );
+	output.Specular = float4( colorTex.www, 55 );
 	output.Depth.r = input.position2.x / input.position2.y;
 
 	output.Normal.xyz = normalize( input.normal );

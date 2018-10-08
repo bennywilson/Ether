@@ -745,6 +745,10 @@ void kbModel::Release_Internal() {
 		delete[] m_Meshes[i].m_TriangleIndices;
 	}
 	m_Meshes.clear();
+
+	m_CPUVertices.clear();
+	m_CPUIndices.clear();
+	m_Bounds.Reset();
 }
 
 /**

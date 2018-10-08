@@ -17,6 +17,7 @@ cbuffer matrixBuffer {
    float4               cameraPosition;
    float4				diffuseColorBand;
    float4				specularColorBand;
+   float4				rimLightColor;		// xyz - color, w - width
 };
 
 kbShaderState {
@@ -76,49 +77,26 @@ float4 pixelShader( pixelInput input ) : SV_TARGET {
 	float4 normal = normalTexture.Sample( NormalSamplerState, input.uv );
 	float4 specColor = specularTexture.Sample( DiffuseSamplerState, input.uv );
 	
-	// Diffuse
-	float diffuse = saturate( dot( normal.xyz, lightDirection.xyz ) );
-//	diffuse = ( diffuse * 0.8f ) + 0.2f;	// Bit of fake ambience
-	
-	if ( normal.w == 0 ) {
-		if ( diffuse < diffuseColorBand.x ) {
-			diffuse = diffuseColorBand.x;
-		} else if ( diffuse < diffuseColorBand.y ) {
-			diffuse = diffuseColorBand.y;
-		} else if ( diffuse < diffuseColorBand.z ) {
-			diffuse = diffuseColorBand.z;
-		} else if ( diffuse < diffuseColorBand.w ) {
-			diffuse = diffuseColorBand.w;
-		}
-	}
-
 	float4 worldPos = float4( input.position2.xy, depthTexture.Sample( DepthSamplerState, input.uv ).r, 1 );
 	worldPos = mul( worldPos, inverseViewProjection );
 	worldPos /= worldPos.w;
 	
 	float3 toCameraVec = normalize( cameraPosition.xyz - worldPos.xyz );
-	
-	// Spec
+	float diffuse = saturate( dot( normal.xyz, lightDirection.xyz ) );
+
 	float3 lightReflect = ( 2.0f * dot( normal.xyz, lightDirection.xyz ) * normal.xyz ) - lightDirection.xyz;
-	float3 spec = saturate( dot( lightReflect, toCameraVec ) ) * specularColorBand.z;
-	float specLum = 1.0f;
+	float spec = saturate( dot( lightReflect, toCameraVec ) );
 	
-	{
-		specLum = dot( spec, float3( 0.3f, 0.59f, 0.11f ) );
-		if (normal.w > 0) {
-			diffuseColor.w += (specLum - 0.61f);
-		}
-		if ( specLum < specularColorBand.x ) {
-			specLum = specularColorBand.x;
-		} else {
-			specLum = specularColorBand.y;
-		}
-
-
+	if ( normal.w == 0 ) {
+		diffuse = smoothstep( diffuseColorBand.x, diffuseColorBand.y, diffuse ) * diffuseColorBand.z + diffuseColorBand.w;
+		spec = smoothstep( specularColorBand.x, specularColorBand.y, spec ) * specularColorBand.z + specularColorBand.w;
 	}
 
-	// specularColorBand
-	specColor.xyz *= pow( abs( spec * specLum ), specColor.w );
+	if ( normal.w > 0.95f) {
+		diffuseColor.w += (specColor.w / 6) * saturate( ( spec - 0.75f ) );
+	}
+
+	specColor.xyz *= pow( abs( spec ), specColor.w );
 	
 	// Shadow
 	float DistFromCamera = length( worldPos.xyz - cameraPosition.xyz );
@@ -151,5 +129,10 @@ float4 pixelShader( pixelInput input ) : SV_TARGET {
 	
 	const float3 emissive = diffuseColor.xyz * diffuseColor.w;
 	float3 finalColor = diffuseColor.xyz * diffuse * lightColor.xyz + specColor.xyz + emissive;	// todo
-	return float4( finalColor, diffuseColor.w);
+
+	const float oneMinusRimDot = 1.0f - dot( normal.xyz, toCameraVec );
+	float3 rimColor =  smoothstep( 1.0f - rimLightColor.w, 1.0f, oneMinusRimDot ) * rimLightColor.xyz;
+
+	finalColor.xyz += rimColor;
+	return float4( finalColor, diffuseColor.w );
 }
