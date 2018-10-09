@@ -92,7 +92,7 @@ float4 pixelShader( pixelInput input ) : SV_TARGET {
 		spec = smoothstep( specularColorBand.x, specularColorBand.y, spec ) * specularColorBand.z + specularColorBand.w;
 	}
 
-	if ( normal.w > 0.95f) {
+	if ( normal.w > 0.95f ) {
 		diffuseColor.w += (specColor.w / 6) * saturate( ( spec - 0.75f ) );
 	}
 
@@ -130,9 +130,5 @@ float4 pixelShader( pixelInput input ) : SV_TARGET {
 	const float3 emissive = diffuseColor.xyz * diffuseColor.w;
 	float3 finalColor = diffuseColor.xyz * diffuse * lightColor.xyz + specColor.xyz + emissive;	// todo
 
-	const float oneMinusRimDot = 1.0f - dot( normal.xyz, toCameraVec );
-	float3 rimColor =  smoothstep( 1.0f - rimLightColor.w, 1.0f, oneMinusRimDot ) * rimLightColor.xyz;
-
-	finalColor.xyz += rimColor;
 	return float4( finalColor, diffuseColor.w );
 }
