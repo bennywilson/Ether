@@ -89,14 +89,14 @@ float4 pixelShader( pixelInput input ) : SV_TARGET {
 	
 	if ( normal.w == 0 ) {
 		diffuse = smoothstep( diffuseColorBand.x, diffuseColorBand.y, diffuse ) * diffuseColorBand.z + diffuseColorBand.w;
-		spec = smoothstep( specularColorBand.x, specularColorBand.y, spec ) * specularColorBand.z + specularColorBand.w;
+	//	spec = smoothstep( specularColorBand.x, specularColorBand.y, spec ) * specularColorBand.z + specularColorBand.w;
 	}
 
 	if ( normal.w > 0.95f ) {
-		diffuseColor.w += (specColor.w / 6) * saturate( ( spec - 0.75f ) );
+		diffuseColor.w += (specColor.y / 6) * saturate( ( spec - 0.75f ) );
 	}
 
-	specColor.xyz *= pow( abs( spec ), specColor.w );
+	spec = pow( abs( spec ), specColor.y ) * specColor.x;
 	
 	// Shadow
 	float DistFromCamera = length( worldPos.xyz - cameraPosition.xyz );
@@ -128,7 +128,12 @@ float4 pixelShader( pixelInput input ) : SV_TARGET {
 	}
 	
 	const float3 emissive = diffuseColor.xyz * diffuseColor.w;
-	float3 finalColor = diffuseColor.xyz * diffuse * lightColor.xyz + specColor.xyz + emissive;	// todo
+	float3 finalColor = diffuseColor.xyz * diffuse * lightColor.xyz + spec.xxx + emissive;	// todo
+
+	const float oneMinusRimDot = 1.0f - dot( normal.xyz, toCameraVec );
+	float3 rimColor =  smoothstep( 1.0f - rimLightColor.w, 1.0f, oneMinusRimDot ) * rimLightColor.xyz * specColor.z;
+
+	//finalColor.xyz += rimColor;
 
 	return float4( finalColor, diffuseColor.w );
 }

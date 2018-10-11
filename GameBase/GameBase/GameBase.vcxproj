@@ -88,6 +88,7 @@
     <None Include="assets\shaders\baseWeapon.kbShader" />
     <None Include="assets\shaders\basicTerrain.kbShader" />
     <None Include="assets\shaders\Character\characterBase.kbShader" />
+    <None Include="assets\shaders\Character\characterHair.kbShader" />
     <None Include="assets\shaders\Character\characterMetal.kbShader" />
     <None Include="assets\shaders\Character\characterTranslucent.kbShader" />
     <None Include="assets\shaders\DamageGen\collisionMapDamageGen.kbShader" />

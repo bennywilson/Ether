@@ -98,6 +98,9 @@
     <None Include="assets\shaders\Character\characterMetal.kbShader">
       <Filter>Shaders\Character</Filter>
     </None>
+    <None Include="assets\shaders\Character\characterHair.kbShader">
+      <Filter>Shaders\Character</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameBase.h">

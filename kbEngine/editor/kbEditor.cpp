@@ -334,6 +334,11 @@ void kbEditor::Update() {
 
 	//m_pMainTab->GetCurrentWindow()->GetCamera().Update();
 
+	if ( GetAsyncKeyState( VK_LSHIFT ) && GetAsyncKeyState( 'P' ) ) {
+		this->SetMainCameraPos( kbVec3( 1.31999433f, 12.7329245f, 39.7846413f ) );
+		this->SetMainCameraRot( kbQuat( -0.0644864589f, 0.119459502f, -0.00777558470f, 0.990712106f ) );
+	}
+
 	if ( GetFocus() == fl_xid( this ) ) {
 		// input
 		if ( GetAsyncKeyState( 'W' ) ) {
@@ -708,7 +713,7 @@ void kbEditor::AdjustCameraSpeedCB( class Fl_Widget * widget, void * ) {
 
 	float multiplier = 1.0f;
 
-	if ( strstr( widget->label(), "Speedx15" ) ) {
+	if ( strstr( widget->label(), "Speedx0.25" ) ) {
 		multiplier = 1.0f;
 		g_Editor->m_pSpeedButton->label( "Speedx1" );
 	} else if ( strstr( widget->label(), "Speedx1" ) ) {
@@ -720,7 +725,11 @@ void kbEditor::AdjustCameraSpeedCB( class Fl_Widget * widget, void * ) {
 		multiplier = 15.0f;
 		g_Editor->m_pSpeedButton->label( "Speedx15" );
 	}
-
+	else if ( strstr( widget->label(), "Speedx15" ) )
+	{
+		multiplier = 0.25f;
+		g_Editor->m_pSpeedButton->label( "Speedx0.25" );
+	}
 	g_Editor->m_pMainTab->AdjustCameraMoveSpeedMultiplier( multiplier );
 }
 

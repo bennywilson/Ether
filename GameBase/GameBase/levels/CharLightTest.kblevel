@@ -16,7 +16,7 @@ kbGameEntity 0 0 0 0 {
 		TranslucencySortBias =  0.000000
 		Model = .\assets\models\characters\gina\street\gina_street.ms3d
 		ShaderOverride = 11
-			.\assets\shaders\character\characterbase.kbshader
+			.\assets\shaders\character\characterhair.kbshader
 .\assets\shaders\character\characterbase.kbshader
 .\assets\shaders\character\charactermetal.kbshader
 .\assets\shaders\character\characterbase.kbshader
@@ -46,9 +46,9 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "Key_Light"
-		Orientation = 0.000000 -0.399115 0.000000 0.916901
+		Orientation = -0.119297 -0.485624 -0.041118 0.865012
 		Position = -2.113075 12.223671 38.250706
-		Scale = 1.000000 1.000000 1.000000
+		Scale = 10.000000 10.000000 10.000000
 	}
 	kbDirectionalLightComponent { 
 		Enabled = 1
@@ -56,7 +56,7 @@ kbGameEntity 0 0 0 0 {
 		CastsShadows = 0
 		Color = 1.000000 1.000000 1.000000 1.000000
 		OverrideShader = .\assets\shaders\lighting\directionallighttoon.kbshader
-		ShaderParams = 2
+		ShaderParams = 3
 			kbShaderParamComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
@@ -70,6 +70,13 @@ kbGameEntity 0 0 0 0 {
 				ParamName = "specularColorBand"
 				Texture = NULL
 				Vector = 0.200000 0.300000 0.950000 0.050000
+			}
+			kbShaderParamComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				ParamName = "rimLightColor"
+				Texture = NULL
+				Vector = 0.350000 0.350000 0.350000 0.500000
 			}
 		CascadedShadowSplits = 0
 	}
@@ -90,7 +97,7 @@ kbGameEntity 0 0 0 0 {
 		RenderPass = Post-LightingPass
 		ShaderParams = 0
 		TranslucencySortBias =  0.000000
-		Model = .\assets\models\test\invertedcube.ms3d
+		Model = .\assets\models\test\invertedcube2.ms3d
 		ShaderOverride = 1
 			.\assets\shaders\skybox.kbshader
 
