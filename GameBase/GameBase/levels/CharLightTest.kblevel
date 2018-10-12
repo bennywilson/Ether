@@ -16,9 +16,9 @@ kbGameEntity 0 0 0 0 {
 		TranslucencySortBias =  0.000000
 		Model = .\assets\models\characters\gina\street\gina_street.ms3d
 		ShaderOverride = 11
-			.\assets\shaders\character\characterhair.kbshader
+			.\assets\shaders\character\characterbase.kbshader
 .\assets\shaders\character\characterbase.kbshader
-.\assets\shaders\character\charactermetal.kbshader
+.\assets\shaders\character\charactermetaldull.kbshader
 .\assets\shaders\character\characterbase.kbshader
 .\assets\shaders\character\characterbase.kbshader
 .\assets\shaders\character\characterbase.kbshader

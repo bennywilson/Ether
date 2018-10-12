@@ -157,6 +157,12 @@ void EtherGame::Update_Internal( float DT ) {
 		ProcessInput( DT );
 	}
 	
+	if ( GetAsyncKeyState( VK_LSHIFT ) && GetAsyncKeyState( 'P' ) ) {
+	    kbCamera & playerCamera = GetCamera();
+        playerCamera.m_Position = kbVec3( 1.31999433f, 12.7329245f, 39.7846413f );
+		playerCamera.m_Rotation = playerCamera.m_RotationTarget = kbQuat( -0.0644864589f, 0.119459502f, -0.00777558470f, 0.990712106f );
+	}
+
 	if ( ( g_pD3D11Renderer->IsRenderingToHMD() || g_pD3D11Renderer->IsUsingHMDTrackingOnly() ) && g_pD3D11Renderer->GetFrameNum() > 0 ) {
 	
 		kbVec3 eyePos[2];
@@ -584,6 +590,10 @@ void EtherGame::RenderThreadCallBack() {
 		m_pCollisionMapScorchGenShader = (kbShader*) g_ResourceManager.GetResource( "./assets/shaders/DamageGen/collisionMapScorchGen.kbShader", true );
 	}
 
+    if ( pTerrain == nullptr ) {
+        return;
+    }
+
 	if ( GetAsyncKeyState( 'C' ) ) {
 		g_pRenderer->RT_ClearRenderTarget( m_pBulletHoleRenderTexture, kbColor::white );
 		g_pRenderer->RT_ClearRenderTarget( m_pGrassCollisionTexture, kbColor( 64000.0f, 64000.0f, 64000.0f, 64000.0f ) );
@@ -827,6 +837,10 @@ void EtherGame::UpdateFires_RenderSync() {
  *	EtherGame::UpdateFires_RenderHook
  */
 void EtherGame::UpdateFires_RenderHook( const kbTerrainComponent *const pTerrain ) {
+
+    if ( pTerrain == nullptr ) {
+        return;
+    }
 
 	const kbVec3 terrainPos = pTerrain->GetOwner()->GetPosition();
 	const kbVec3 terrainCenter( pTerrain->GetOwner()->GetPosition().x, pTerrain->GetOwner()->GetPosition().z, 0.0f );
