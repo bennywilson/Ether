@@ -1,0 +1,129 @@
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Gina"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 0.000000 3.000000 44.473156
+		Scale = 1.000000 1.000000 1.000000
+	}
+	EtherSkelModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		RenderPass = LightingPass
+		ShaderParams = 0
+		TranslucencySortBias =  0.000000
+		Model = .\assets\models\characters\gina\street\gina_street.ms3d
+		ShaderOverride = 12
+			.\assets\shaders\character\characterbase.kbshader
+.\assets\shaders\character\characterbase.kbshader
+.\assets\shaders\character\charactermetaldull.kbshader
+.\assets\shaders\character\characterbase.kbshader
+.\assets\shaders\character\characterbase.kbshader
+.\assets\shaders\character\characterbase.kbshader
+.\assets\shaders\character\characterbase.kbshader
+.\assets\shaders\character\characterbase.kbshader
+.\assets\shaders\character\charactertranslucent.kbshader
+.\assets\shaders\character\charactermetal.kbshader
+.\assets\shaders\character\charactermetal.kbshader
+.\assets\shaders\character\charactermetaldull.kbshader
+
+		Animations = 1
+			EtherAnimComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Animation = .\assets\models\characters\gina\street\aim.kbanim.ms3d
+				AnimationName = ""
+				IsLooping = 0
+				TimeScale =  1.000000
+			}
+		DebugAnimIndex = 0
+		IsFirstPersonModel = 0
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Key_Light"
+		Orientation = -0.393731 -0.032055 0.004173 0.918657
+		Position = -2.113075 12.223671 38.250706
+		Scale = 10.000000 10.000000 10.000000
+	}
+	kbDirectionalLightComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadows = 0
+		Color = 1.000000 1.000000 1.000000 1.000000
+		OverrideShader = .\assets\shaders\lighting\directionallighttoon.kbshader
+		ShaderParams = 3
+			kbShaderParamComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				ParamName = "diffuseColorBand"
+				Texture = NULL
+				Vector = 0.010000 0.070000 0.100000 0.900000
+			}
+			kbShaderParamComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				ParamName = "specularColorBand"
+				Texture = NULL
+				Vector = 0.200000 0.300000 0.950000 0.050000
+			}
+			kbShaderParamComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				ParamName = "rimLightColor"
+				Texture = NULL
+				Vector = 0.350000 0.350000 0.350000 0.500000
+			}
+		CascadedShadowSplits = 0
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Room"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 0.000000 0.000000 0.000000
+		Scale = 10.000000 10.000000 10.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		RenderPass = Post-LightingPass
+		ShaderParams = 0
+		TranslucencySortBias =  0.000000
+		Model = .\assets\models\test\invertedcube2.ms3d
+		ShaderOverride = 1
+			.\assets\shaders\skybox.kbshader
+
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Entity_22"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = -3.741652 5.038576 41.503956
+		Scale = 1.000000 1.000000 1.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		RenderPass = LightingPass
+		ShaderParams = 0
+		TranslucencySortBias =  0.000000
+		Model = .\assets\storyshots\initiation\enviro\prison_interior.ms3d
+		ShaderOverride = 2
+			.\assets\shaders\environment\environmentbase.kbshader
+.\assets\shaders\environment\environmentbase.kbshader
+
+	}
+}
