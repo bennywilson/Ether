@@ -74,7 +74,7 @@ void kbGame::LoadMap( const std::string & mapName ) {
 		HANDLE hFind = nullptr;
 
 		std::string LevelPath = NPath;
-		LevelPath += "/Levels/";
+		LevelPath += "/Assets/Levels/";
 		std::string curLevelFolder = "";
 
 		m_MapName = mapName;

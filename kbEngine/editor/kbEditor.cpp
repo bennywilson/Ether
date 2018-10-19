@@ -221,7 +221,7 @@ void kbEditor::LoadMap( const std::string & InMapName ) {
 		HANDLE hFind = nullptr;
 
 		std::string LevelPath = NPath;
-		LevelPath += "/Levels/";
+		LevelPath += "/Assets/Levels/";
 		std::string curLevelFolder = "";
 
 		if ( m_CurrentLevelFileName.find( "." ) == std::string::npos ) {
@@ -231,10 +231,11 @@ void kbEditor::LoadMap( const std::string & InMapName ) {
 		hFind = FindFirstFile( ( LevelPath + "*" ).c_str(), &fdFile );
 		BOOL nextFileFound = ( hFind != INVALID_HANDLE_VALUE  );
 		do {
-			m_CurrentLevelFileName = LevelPath + curLevelFolder + m_CurrentLevelFileName;
+			std::string nextFileName = LevelPath + curLevelFolder + m_CurrentLevelFileName;
 				
 			kbFile inFile;		
-			if ( inFile.Open( m_CurrentLevelFileName.c_str(), kbFile::FT_Read ) ) {
+			if ( inFile.Open( nextFileName.c_str(), kbFile::FT_Read ) ) {
+				m_CurrentLevelFileName = nextFileName;
 
 				kbGameEntity * gameEntity = inFile.ReadGameEntity();
 				while ( gameEntity != nullptr ) {
