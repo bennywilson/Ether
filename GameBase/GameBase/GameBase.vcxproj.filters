@@ -26,6 +26,9 @@
     <Filter Include="Shaders\Lighting">
       <UniqueIdentifier>{23ccd1a4-90d2-42cb-9d56-88b847978266}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Shaders\Environment">
+      <UniqueIdentifier>{1f204a64-f111-45dc-876f-967889263bf6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="ReadMe.txt" />
@@ -103,6 +106,9 @@
     </None>
     <None Include="assets\shaders\Lighting\environmentDirectionalFillLight.kbShader">
       <Filter>Shaders\Lighting</Filter>
+    </None>
+    <None Include="assets\shaders\Environment\environmentBase.kbShader">
+      <Filter>Shaders\Environment</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

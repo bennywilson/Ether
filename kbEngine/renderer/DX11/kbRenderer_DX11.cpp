@@ -501,7 +501,7 @@ void kbRenderer_DX11::Init_Internal( HWND hwnd, const int frameWidth, const int 
 	RT_GetRenderTexture( deferredRTWidth, deferredRTHeight, KBTEXTURE_R32, false );
 	RT_GetRenderTexture( deferredRTWidth, deferredRTHeight, KBTEXTURE_R16G16B16A16, false );
 
-	const int shadowBufferSize = 2048;
+	const int shadowBufferSize = 4096;
 	RT_GetRenderTexture( shadowBufferSize, shadowBufferSize, KBTEXTURE_R32, false );
 	RT_GetRenderTexture( shadowBufferSize, shadowBufferSize, KBTEXTURE_D24S8, false );
 

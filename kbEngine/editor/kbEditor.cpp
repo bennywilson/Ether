@@ -334,10 +334,16 @@ void kbEditor::Update() {
 	g_pRenderer->SetReadyToRender();
 
 	//m_pMainTab->GetCurrentWindow()->GetCamera().Update();
-
+/* Get the bag
 	if ( GetAsyncKeyState( VK_LSHIFT ) && GetAsyncKeyState( 'P' ) ) {
 		this->SetMainCameraPos( kbVec3( 1.31999433f, 12.7329245f, 39.7846413f ) );
 		this->SetMainCameraRot( kbQuat( -0.0644864589f, 0.119459502f, -0.00777558470f, 0.990712106f ) );
+	}
+*/
+	// Initiation
+	if ( GetAsyncKeyState( VK_LSHIFT ) && GetAsyncKeyState( 'P' ) ) {
+		this->SetMainCameraPos( kbVec3( 5.03189945f, 12.6808462f, 36.3190956f ) );
+		this->SetMainCameraRot( kbQuat( -0.0299576875f, -0.0499558337f, -0.00149911048f, 0.998300910f ) );
 	}
 
 	if ( GetFocus() == fl_xid( this ) ) {
