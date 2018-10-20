@@ -124,7 +124,7 @@ kbGameEntity 0 0 0 0 {
 		LifeTime =  -1.000000
 		CastsShadows = 0
 		Color = 0.200000 0.200000 0.200000 1.000000
-		OverrideShader = .\assets\shaders\lighting\environmentdirectionalfilllight.kbshader
+		OverrideShader = .\assets\shaders\lights\environmentdirectionalfill.kbshader
 		ShaderParams = 0
 		CascadedShadowSplits = 0
 	}

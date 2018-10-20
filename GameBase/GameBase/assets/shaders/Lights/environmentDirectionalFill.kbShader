@@ -1,8 +1,5 @@
 //===================================================================================================
-// directionalLightToon.kbShader
-//
-// Note that  the directional light shader is responsible for copying the glow mask from the color
-// buffer to the accumulation buffer
+// environmentDirectionalFill.kbShader
 //
 // 2018 kbEngine 2.0
 //===================================================================================================
