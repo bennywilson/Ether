@@ -4,7 +4,7 @@ kbGameEntity 0 0 0 0 {
 		LifeTime =  -1.000000
 		Name = "Gina"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
-		Position = 0.294572 3.000000 44.448784
+		Position = 1.348596 3.686581 44.448784
 		Scale = 1.000000 1.000000 1.000000
 	}
 	EtherSkelModelComponent { 
@@ -15,7 +15,7 @@ kbGameEntity 0 0 0 0 {
 		ShaderParams = 0
 		TranslucencySortBias =  0.000000
 		Model = .\assets\visualtarget\initiation\gina\gina_prison.ms3d
-		ShaderOverride = 9
+		ShaderOverride = 10
 			.\assets\shaders\character\characterbase.kbshader
 .\assets\shaders\character\characterbase.kbshader
 .\assets\shaders\character\characterbase.kbshader
@@ -25,6 +25,7 @@ kbGameEntity 0 0 0 0 {
 .\assets\shaders\character\characterbase.kbshader
 .\assets\shaders\character\characterbase.kbshader
 .\assets\shaders\character\characterbase.kbshader
+.\assets\shaders\character\charactermetal.kbshader
 
 		Animations = 1
 			EtherAnimComponent { 
@@ -54,7 +55,7 @@ kbGameEntity 0 0 0 0 {
 		CastsShadows = 1
 		Color = 1.000000 1.000000 1.000000 1.000000
 		OverrideShader = .\assets\shaders\lights\directionallighttoon.kbshader
-		ShaderParams = 3
+		ShaderParams = 4
 			kbShaderParamComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
@@ -76,11 +77,18 @@ kbGameEntity 0 0 0 0 {
 				Texture = NULL
 				Vector = 0.350000 0.350000 0.350000 0.500000
 			}
+			kbShaderParamComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				ParamName = "nonToonDiffuseScaleAndBias"
+				Texture = NULL
+				Vector = 0.900000 0.100000 0.000000 0.000000
+			}
 		CascadedShadowSplits = 4
  20.000000
  60.000000
- 200.000000
- 500.000000
+ 160.000000
+ 800.000000
 	}
 }
 kbGameEntity 0 0 0 0 {
@@ -89,19 +97,22 @@ kbGameEntity 0 0 0 0 {
 		LifeTime =  -1.000000
 		Name = "Prison"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
-		Position = -3.741652 5.038576 41.503956
+		Position = -3.741652 3.687035 41.503956
 		Scale = 1.000000 1.000000 1.000000
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
 		LifeTime =  -1.000000
-		CastsShadow = 0
+		CastsShadow = 1
 		RenderPass = LightingPass
 		ShaderParams = 0
 		TranslucencySortBias =  0.000000
 		Model = .\assets\visualtarget\initiation\enviro\prison_interior.ms3d
-		ShaderOverride = 6
+		ShaderOverride = 9
 			.\assets\shaders\environment\environmentbase.kbshader
+.\assets\shaders\environment\environmentbase.kbshader
+.\assets\shaders\environment\environmentbase.kbshader
+.\assets\shaders\environment\environmentbase.kbshader
 .\assets\shaders\environment\environmentbase.kbshader
 .\assets\shaders\environment\environmentbase.kbshader
 .\assets\shaders\environment\environmentbase.kbshader
@@ -135,7 +146,7 @@ kbGameEntity 0 0 0 0 {
 		LifeTime =  -1.000000
 		Name = "Target"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
-		Position = 13.680246 5.327232 73.264900
+		Position = 13.680246 4.325361 73.264900
 		Scale = 1.000000 1.000000 1.000000
 	}
 	EtherSkelModelComponent { 
@@ -166,9 +177,9 @@ kbGameEntity 0 0 0 0 {
 	kbTransformComponent { 
 		Enabled = 1
 		LifeTime =  -1.000000
-		Name = "Target"
-		Orientation = 0.000000 0.000000 0.000000 1.000000
-		Position = 38.262245 5.327232 65.623558
+		Name = "Recruiter"
+		Orientation = 0.076746 -0.652109 0.066615 0.751283
+		Position = 38.440685 4.014602 66.829323
 		Scale = 1.000000 1.000000 1.000000
 	}
 	EtherSkelModelComponent { 
@@ -193,5 +204,57 @@ kbGameEntity 0 0 0 0 {
 		Animations = 0
 		DebugAnimIndex = -1
 		IsFirstPersonModel = 0
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Gina_Rim"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 3.673923 14.159297 47.399494
+		Scale = 1.000000 1.000000 1.000000
+	}
+	kbPointLightComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadows = 0
+		Color = 3.000000 3.000000 3.000000 0.500000
+		OverrideShader = .\assets\shaders\lights\characterpointrim.kbshader
+		ShaderParams = 1
+			kbShaderParamComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				ParamName = "rimLightWidth"
+				Texture = NULL
+				Vector = 0.700000 0.710000 2.000000 0.500000
+			}
+		LightRadius =  4.000000
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Recruiter"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 43.433765 15.539772 64.374329
+		Scale = 1.000000 1.000000 1.000000
+	}
+	kbPointLightComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadows = 0
+		Color = 1.000000 1.000000 1.000000 1.000000
+		OverrideShader = .\assets\shaders\lights\characterpointrim.kbshader
+		ShaderParams = 1
+			kbShaderParamComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				ParamName = "rimLightWidth"
+				Texture = NULL
+				Vector = 0.100000 0.800000 1.000000 1.000000
+			}
+		LightRadius =  8.000000
 	}
 }

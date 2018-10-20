@@ -99,8 +99,9 @@
     <None Include="assets\shaders\FX\basicFire.kbShader" />
     <None Include="assets\shaders\FX\basicSmoke.kbShader" />
     <None Include="assets\shaders\FX\emberParticle.kbShader" />
-    <None Include="assets\shaders\Lighting\directionalLightToon.kbShader" />
-    <None Include="assets\shaders\Lighting\environmentDirectionalFillLight.kbShader" />
+    <None Include="assets\shaders\Lights\characterRim.kbShader" />
+    <None Include="assets\shaders\Lights\directionalLightToon.kbShader" />
+    <None Include="assets\shaders\Lights\environmentDirectionalFill.kbShader" />
     <None Include="assets\shaders\particleAtlas.kbShader" />
     <None Include="assets\shaders\firstPersonHands.kbshader" />
     <None Include="assets\shaders\grass.kbShader" />

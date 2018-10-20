@@ -1,5 +1,9 @@
 del /s /q *.db
+del /s /q *.db-*
 del /s /q *.opendb
+del /s /q /ah *.db
+del /s /q /ah *.db-*
+del /s /q /ah *.opendb
 del /s /q *.obj
 del /s /q *.tlog
 del /s /q *.user
@@ -11,7 +15,7 @@ del /s /q *.log
 del /s /q *.lastbuildstate
 del /s /q *.ipch
 del /s /q *.suo
-del /s /q *.suo
+del /s /q /ah *.suo
 del /s /q *.idb 
 del /s /q *.exe
 del /s /q  *.txt

@@ -18,6 +18,7 @@ cbuffer matrixBuffer {
    float4				diffuseColorBand;
    float4				specularColorBand;
    float4				rimLightColor;		// xyz - color, w - width
+   float4				nonToonDiffuseScaleAndBias;
 };
 
 kbShaderState {
@@ -120,6 +121,8 @@ float4 pixelShader( pixelInput input ) : SV_TARGET {
 	if ( normal.w == 0 ) {
 		diffuse = smoothstep( diffuseColorBand.x, diffuseColorBand.y, diffuse ) * diffuseColorBand.z + diffuseColorBand.w;
 	//	spec = smoothstep( specularColorBand.x, specularColorBand.y, spec ) * specularColorBand.z + specularColorBand.w;
+	} else {
+		diffuse = ( diffuse * nonToonDiffuseScaleAndBias.x ) + nonToonDiffuseScaleAndBias.y;
 	}
 
 	if ( normal.w > 0.95f ) {

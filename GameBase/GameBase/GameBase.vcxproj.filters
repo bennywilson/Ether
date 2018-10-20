@@ -23,11 +23,11 @@
     <Filter Include="Shaders\Character">
       <UniqueIdentifier>{f33e0882-22ee-458c-bf30-a739f5973432}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Shaders\Lighting">
-      <UniqueIdentifier>{23ccd1a4-90d2-42cb-9d56-88b847978266}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Shaders\Environment">
       <UniqueIdentifier>{1f204a64-f111-45dc-876f-967889263bf6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shaders\Lights">
+      <UniqueIdentifier>{23ccd1a4-90d2-42cb-9d56-88b847978266}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -95,20 +95,23 @@
     <None Include="assets\shaders\Character\characterTranslucent.kbShader">
       <Filter>Shaders\Character</Filter>
     </None>
-    <None Include="assets\shaders\Lighting\directionalLightToon.kbShader">
-      <Filter>Shaders\Lighting</Filter>
-    </None>
     <None Include="assets\shaders\Character\characterMetal.kbShader">
       <Filter>Shaders\Character</Filter>
     </None>
     <None Include="assets\shaders\Character\characterHair.kbShader">
       <Filter>Shaders\Character</Filter>
     </None>
-    <None Include="assets\shaders\Lighting\environmentDirectionalFillLight.kbShader">
-      <Filter>Shaders\Lighting</Filter>
-    </None>
     <None Include="assets\shaders\Environment\environmentBase.kbShader">
       <Filter>Shaders\Environment</Filter>
+    </None>
+    <None Include="assets\shaders\Lights\directionalLightToon.kbShader">
+      <Filter>Shaders\Lights</Filter>
+    </None>
+    <None Include="assets\shaders\Lights\environmentDirectionalFill.kbShader">
+      <Filter>Shaders\Lights</Filter>
+    </None>
+    <None Include="assets\shaders\Lights\characterRim.kbShader">
+      <Filter>Shaders\Lights</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
