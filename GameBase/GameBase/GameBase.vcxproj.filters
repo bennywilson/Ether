@@ -101,6 +101,9 @@
     <None Include="assets\shaders\Character\characterHair.kbShader">
       <Filter>Shaders\Character</Filter>
     </None>
+    <None Include="assets\shaders\Lighting\environmentDirectionalFillLight.kbShader">
+      <Filter>Shaders\Lighting</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameBase.h">

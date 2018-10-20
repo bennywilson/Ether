@@ -84,20 +84,6 @@ float4 pixelShader( pixelInput input ) : SV_TARGET {
 	float3 toCameraVec = normalize( cameraPosition.xyz - worldPos.xyz );
 	float diffuse = saturate( dot( normal.xyz, lightDirection.xyz ) );
 
-	float3 lightReflect = ( 2.0f * dot( normal.xyz, lightDirection.xyz ) * normal.xyz ) - lightDirection.xyz;
-	float spec = saturate( dot( lightReflect, toCameraVec ) );
-	
-	if ( normal.w == 0 ) {
-		diffuse = smoothstep( diffuseColorBand.x, diffuseColorBand.y, diffuse ) * diffuseColorBand.z + diffuseColorBand.w;
-	//	spec = smoothstep( specularColorBand.x, specularColorBand.y, spec ) * specularColorBand.z + specularColorBand.w;
-	}
-
-	if ( normal.w > 0.95f ) {
-		diffuseColor.w += (specColor.y / 6) * saturate( ( spec - 0.75f ) );
-	}
-
-	spec = pow( abs( spec ), specColor.y ) * specColor.x;
-	
 	// Shadow
 	float DistFromCamera = length( worldPos.xyz - cameraPosition.xyz );
 	
@@ -123,10 +109,25 @@ float4 pixelShader( pixelInput input ) : SV_TARGET {
 	
 	if ( DistFromCamera < splitDistances.w ) {
 	   if ( ShadowMap.Sample( ShadowMapSamplerState, shadowTex.xy ).r < shadowTex.z - 0.0003f ) {
-	      diffuse *= 0.83f;
+	      diffuse = 0;
 	   }
 	}
 	
+
+	float3 lightReflect = ( 2.0f * dot( normal.xyz, lightDirection.xyz ) * normal.xyz ) - lightDirection.xyz;
+	float spec = saturate( dot( lightReflect, toCameraVec ) );
+	
+	if ( normal.w == 0 ) {
+		diffuse = smoothstep( diffuseColorBand.x, diffuseColorBand.y, diffuse ) * diffuseColorBand.z + diffuseColorBand.w;
+	//	spec = smoothstep( specularColorBand.x, specularColorBand.y, spec ) * specularColorBand.z + specularColorBand.w;
+	}
+
+	if ( normal.w > 0.95f ) {
+		diffuseColor.w += (specColor.y / 6) * saturate( ( spec - 0.75f ) );
+	}
+
+	spec = pow( abs( spec ), specColor.y ) * specColor.x;
+
 	const float3 emissive = diffuseColor.xyz * diffuseColor.w;
 	float3 finalColor = diffuseColor.xyz * diffuse * lightColor.xyz + spec.xxx + emissive;	// todo
 
