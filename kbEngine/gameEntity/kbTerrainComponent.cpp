@@ -250,7 +250,7 @@ void kbGrass::RefreshGrass() {
 				const kbVec3 cellCenter = cellStart + kbVec3( m_GrassCellLength * 0.5f, 0.0f, m_GrassCellLength * 0.5f );
 				const kbVec3 halfCell = kbVec3( m_GrassCellLength * 0.5f, 0.0f, m_GrassCellLength * 0.5f );
 
-				renderObj.m_pModel->CreatePointCloud( m_PatchesPerCellSide * m_PatchesPerCellSide, "./assets/Shaders/grass.kbshader", CullMode_None, sizeof(patchVertLayout) );
+				renderObj.m_pModel->CreatePointCloud( m_PatchesPerCellSide * m_PatchesPerCellSide, "./assets/Shaders/Environment/grass.kbshader", CullMode_None, sizeof(patchVertLayout) );
 
 				patchVertLayout *const pVerts = (patchVertLayout *) renderObj.m_pModel->MapVertexBuffer();
 

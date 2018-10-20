@@ -515,7 +515,7 @@ void EtherGame::RenderSync() {
 	if ( HasFirstSyncCompleted() == false ) {
 
 		m_pParticleManager->SetCustomAtlasTexture( 0, "./assets/FX/fx_atlas.jpg" );
-		m_pParticleManager->SetCustomAtlasShader( 1, "./assets/shaders/shellTrailParticle.kbShader" );
+		m_pParticleManager->SetCustomAtlasShader( 1, "./assets/shaders/FX/shellTrailParticle.kbShader" );
 
 		m_pParticleManager->SetCustomAtlasTexture( 1, "./assets/FX/SmokeTrailAtlas.dds" );
 	}
@@ -567,14 +567,12 @@ void EtherGame::RenderThreadCallBack() {
 
 		m_pGrassCollisionReadBackTexture = g_pRenderer->RT_GetRenderTexture( 1024, 1024, eTextureFormat::KBTEXTURE_R16G16B16A16, true );
 
-		kbTexture *const pEmberTexture = (kbTexture*)g_ResourceManager.GetResource( "./assets/FX/EmberGradient.jpg", true );
 		for ( int i = 0; i < GetGameEntities().size(); i++ ) {
 			kbGameEntity *const pEnt = GetGameEntities()[i];
 			if ( pEnt->GetName().find( "Terrain" ) != std::string::npos ) {
 				pTerrain = (kbTerrainComponent*)pEnt->GetComponentByType( kbTerrainComponent::GetType() );
 				if ( pTerrain != nullptr ) {
 					pTerrain->SetCollisionMap( m_pGrassCollisionTexture );
-					pTerrain->SetGrassTexture( "emberGradientTex", pEmberTexture );
 
 					terrainPos = pEnt->GetPosition();
 					terrainWidth = pTerrain->GetTerrainWidth();
@@ -634,7 +632,7 @@ void EtherGame::RenderThreadCallBack() {
 					shaderParams.SetVec4( "hitLocation", kbVec4( hitLocation.x, hitLocation.y, hitLocation.z, holeSize ) );
 					shaderParams.SetVec4( "hitDirection", kbVec4( hitDir.x, hitDir.y, hitDir.z, scorchSize ) );
 
-					kbTexture *const pNoiseTex = (kbTexture*)g_ResourceManager.GetResource( "./assets/FX/noise.jpg", true );
+					kbTexture *const pNoiseTex = (kbTexture*)g_ResourceManager.GetResource( "./assets/FX/Noise/noise.jpg", true );
 					shaderParams.SetTexture( "noiseTex", pNoiseTex );
 
 					kbTexture *const pScorchTex = (kbTexture*)g_ResourceManager.GetResource( "./assets/FX/scorch.jpg", true );
