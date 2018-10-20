@@ -1,0 +1,197 @@
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Gina"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 0.294572 3.000000 44.448784
+		Scale = 1.000000 1.000000 1.000000
+	}
+	EtherSkelModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 1
+		RenderPass = LightingPass
+		ShaderParams = 0
+		TranslucencySortBias =  0.000000
+		Model = .\assets\visualtarget\initiation\gina\gina_prison.ms3d
+		ShaderOverride = 9
+			.\assets\shaders\character\characterbase.kbshader
+.\assets\shaders\character\characterbase.kbshader
+.\assets\shaders\character\characterbase.kbshader
+.\assets\shaders\character\characterbase.kbshader
+.\assets\shaders\character\characterbase.kbshader
+.\assets\shaders\character\characterbase.kbshader
+.\assets\shaders\character\characterbase.kbshader
+.\assets\shaders\character\characterbase.kbshader
+.\assets\shaders\character\characterbase.kbshader
+
+		Animations = 1
+			EtherAnimComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Animation = .\assets\visualtarget\initiation\gina\cover_lean_left.kbanim.ms3d
+				AnimationName = ""
+				IsLooping = 0
+				TimeScale =  1.000000
+			}
+		DebugAnimIndex = 0
+		IsFirstPersonModel = 0
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Key_Light"
+		Orientation = -0.394413 0.305833 0.329583 0.801424
+		Position = -2.113075 12.223671 38.250706
+		Scale = 10.000000 10.000000 10.000000
+	}
+	kbDirectionalLightComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadows = 1
+		Color = 1.000000 1.000000 1.000000 1.000000
+		OverrideShader = .\assets\shaders\lighting\directionallighttoon.kbshader
+		ShaderParams = 3
+			kbShaderParamComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				ParamName = "diffuseColorBand"
+				Texture = NULL
+				Vector = 0.010000 0.070000 0.500000 0.500000
+			}
+			kbShaderParamComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				ParamName = "specularColorBand"
+				Texture = NULL
+				Vector = 0.200000 0.300000 0.950000 0.050000
+			}
+			kbShaderParamComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				ParamName = "rimLightColor"
+				Texture = NULL
+				Vector = 0.350000 0.350000 0.350000 0.500000
+			}
+		CascadedShadowSplits = 4
+ 20.000000
+ 60.000000
+ 200.000000
+ 500.000000
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Prison"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = -3.741652 5.038576 41.503956
+		Scale = 1.000000 1.000000 1.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		RenderPass = LightingPass
+		ShaderParams = 0
+		TranslucencySortBias =  0.000000
+		Model = .\assets\visualtarget\initiation\enviro\prison_interior.ms3d
+		ShaderOverride = 6
+			.\assets\shaders\environment\environmentbase.kbshader
+.\assets\shaders\environment\environmentbase.kbshader
+.\assets\shaders\environment\environmentbase.kbshader
+.\assets\shaders\environment\environmentbase.kbshader
+.\assets\shaders\environment\environmentbase.kbshader
+.\assets\shaders\environment\environmentbase.kbshader
+
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "EnvironmentDirectionalFill"
+		Orientation = 0.117166 -0.479171 -0.045908 0.868654
+		Position = 2.812516 16.311335 27.335854
+		Scale = 1.000000 1.000000 1.000000
+	}
+	kbDirectionalLightComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadows = 0
+		Color = 0.200000 0.200000 0.200000 1.000000
+		OverrideShader = .\assets\shaders\lighting\environmentdirectionalfilllight.kbshader
+		ShaderParams = 0
+		CascadedShadowSplits = 0
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		Name = "Target"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 13.680246 5.327232 73.264900
+		Scale = 1.000000 1.000000 1.000000
+	}
+	EtherSkelModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 1
+		RenderPass = LightingPass
+		ShaderParams = 0
+		TranslucencySortBias =  0.000000
+		Model = .\assets\visualtarget\initiation\gina\gina_prison.ms3d
+		ShaderOverride = 9
+			.\assets\shaders\character\characterbase.kbshader
+.\assets\shaders\character\characterbase.kbshader
+.\assets\shaders\character\characterbase.kbshader
+.\assets\shaders\character\characterbase.kbshader
+.\assets\shaders\character\characterbase.kbshader
+.\assets\shaders\character\characterbase.kbshader
+.\assets\shaders\character\characterbase.kbshader
+.\assets\shaders\character\characterbase.kbshader
+.\assets\shaders\character\characterbase.kbshader
+
+		Animations = 0
+		DebugAnimIndex = -1
+		IsFirstPersonModel = 0
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		Name = "Target"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 38.262245 5.327232 65.623558
+		Scale = 1.000000 1.000000 1.000000
+	}
+	EtherSkelModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 1
+		RenderPass = LightingPass
+		ShaderParams = 0
+		TranslucencySortBias =  0.000000
+		Model = .\assets\visualtarget\initiation\gina\gina_prison.ms3d
+		ShaderOverride = 9
+			.\assets\shaders\character\characterbase.kbshader
+.\assets\shaders\character\characterbase.kbshader
+.\assets\shaders\character\characterbase.kbshader
+.\assets\shaders\character\characterbase.kbshader
+.\assets\shaders\character\characterbase.kbshader
+.\assets\shaders\character\characterbase.kbshader
+.\assets\shaders\character\characterbase.kbshader
+.\assets\shaders\character\characterbase.kbshader
+.\assets\shaders\character\characterbase.kbshader
+
+		Animations = 0
+		DebugAnimIndex = -1
+		IsFirstPersonModel = 0
+	}
+}
