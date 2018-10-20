@@ -100,7 +100,7 @@ kbGameEntity 0 0 0 0 {
 		TranslucencySortBias =  0.000000
 		Model = .\assets\models\test\invertedcube2.ms3d
 		ShaderOverride = 1
-			.\assets\shaders\skybox.kbshader
+			.\assets\shaders\skybox\skybox.kbshader
 
 	}
 }

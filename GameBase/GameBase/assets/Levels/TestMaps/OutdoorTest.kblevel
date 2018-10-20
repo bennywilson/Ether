@@ -30,7 +30,7 @@ kbGameEntity 0 0 0 0 {
 				GrassMap = .\assets\terrain\foliage\grass_1.dds
 				MaxBladeJitterOffset =  0.000000
 				MaxPatchJitterOffset =  3.000000
-				NoiseMap = .\assets\terrain\noisemap.png
+				NoiseMap = .\assets\FX\Nois\noisemap.png
 				PatchEndCullDistance =  1000.000000
 				PatchStartCullDistance =  200.000000
 				PatchesPerCellSide = 60
@@ -51,7 +51,7 @@ kbGameEntity 0 0 0 0 {
 					}
 				TestWind = 0.000000 0.000000 25.000000
 			}
-		HeightMap = .\assets\terrain\terrain1_height.bmp
+		HeightMap = .\assets\terrain\BasicTerrain\terrain1_height.bmp
 		HeightScale =  1024.000000
 		Materials = 3
 			kbTerrainMatComponent { 
@@ -82,7 +82,7 @@ kbGameEntity 0 0 0 0 {
 				UVScale = 25.000000 25.000000 50.000000
 			}
 		Shader = .\assets\shaders\environment\basicterrain.kbshader
-		SplatMap = .\assets\terrain\terrain1_splatmap.bmp
+		SplatMap = .\assets\terrain\BasicTerrain\terrain1_splatmap.bmp
 		Width =  8192.000000
 	}
 	kbCollisionComponent { 
