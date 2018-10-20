@@ -227,7 +227,7 @@ kbGameEntity 4227010865 2632918935 1228561351 3287441000 {
 		MinStartSize = 1.000000 1.000000 1.000000
 		MinStartVelocity = -75.000000 -20.000000 -50.000000
 		ParticleBillboardType = FaceCamera
-		ParticleShader = .\assets\shaders\particleatlas.kbshader
+		ParticleShader = .\assets\shaders\FX\particleatlas.kbshader
 		ParticleTexture = .\assets\fx\concreteparticles.dds
 		StartColor = 1.000000 1.000000 1.000000 1.000000
 		TotalDuration =  0.500000

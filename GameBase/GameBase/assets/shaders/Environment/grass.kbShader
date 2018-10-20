@@ -227,10 +227,6 @@ void CreateVertex( inout TriangleStream<pixelInput> OutputStream, float3 vertexW
 /**
  *	pixelShader
  */ 
-
-
-Texture2D emberGradientTex	: register(t5);
-
 PS_OUTPUT pixelShader( pixelInput input, bool isFrontFace : SV_IsFrontFace )  {
  	PS_OUTPUT output = (PS_OUTPUT) 0;
 
@@ -251,7 +247,7 @@ PS_OUTPUT pixelShader( pixelInput input, bool isFrontFace : SV_IsFrontFace )  {
 	const float normalizedTime = ( input.grassData1.x * 0.33f ) + saturate( ( 1.0f + noiseValues.g ) * ( ( time.x - input.grassData1.z ) / 13.0f ) );
 
 	float animatedEmberU = clamp( normalizedTime * 2.5f, 0.0f, 0.99f );
-	const float3 ember = lerp( float3( 1.0f, 0.215f ,0.04313f ), float3( 0.0f, 0.0f, 0.0f ), animatedEmberU );//emberGradientTex.Sample( SampleType, float2( animatedEmberU, 0.0f ) ).xyz * 1.0f;
+	const float3 ember = lerp( float3( 1.0f, 0.215f ,0.04313f ), float3( 0.0f, 0.0f, 0.0f ), animatedEmberU );
 
 	if ( input.worldPosition.y > input.grassData1.y + 0.01f ) {
 		clip( input.grassData1.y + 0.01f - input.worldPosition.y );

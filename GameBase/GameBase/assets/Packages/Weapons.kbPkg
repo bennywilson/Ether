@@ -284,9 +284,9 @@ kbGameEntity 292847838 1140569109 1236968083 2365837966 {
 		TranslucencySortBias =  0.000000
 		Model = .\assets\models\items\el_rifle_fp.ms3d
 		ShaderOverride = 3
-			.\assets\shaders\baseweapon.kbshader
-.\assets\shaders\baseholoscope.kbshader
-.\assets\shaders\firstpersonhands.kbshader
+			.\assets\shaders\Weapons\baseweapon.kbshader
+.\assets\shaders\Weapons\baseholoscope.kbshader
+.\assets\shaders\Character\firstpersonhands.kbshader
 
 		Animations = 2
 			EtherAnimComponent { 

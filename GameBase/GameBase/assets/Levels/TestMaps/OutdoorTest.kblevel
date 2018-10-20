@@ -81,7 +81,7 @@ kbGameEntity 0 0 0 0 {
 				SpecPowerMultiplier =  55.000000
 				UVScale = 25.000000 25.000000 50.000000
 			}
-		Shader = .\assets\shaders\basicterrain.kbshader
+		Shader = .\assets\shaders\environment\basicterrain.kbshader
 		SplatMap = .\assets\terrain\terrain1_splatmap.bmp
 		Width =  8192.000000
 	}
@@ -139,7 +139,7 @@ kbGameEntity 0 0 0 0 {
 		TranslucencySortBias =  -1.000000
 		Model = .\assets\models\skydomes\skydomes.ms3d
 		ShaderOverride = 1
-			.\assets\shaders\skybox.kbshader
+			.\assets\shaders\Skybox\skybox.kbshader
 
 	}
 }
@@ -529,7 +529,7 @@ kbGameEntity 0 0 0 0 {
 		TranslucencySortBias =  -1.000000
 		Model = .\assets\models\architecture\bricks.ms3d
 		ShaderOverride = 1
-			.\assets\shaders\environment_hole.kbshader
+			.\assets\shaders\environment\environmentHole.kbshader
 
 	}
 	kbCollisionComponent { 
