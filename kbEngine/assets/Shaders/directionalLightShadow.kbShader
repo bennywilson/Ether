@@ -8,6 +8,10 @@ cbuffer matrixBuffer {
    matrix      mvpMatrix;
 };
 
+kbShaderState {
+	cullMode cullmode_frontfaces
+}
+
 //-------------------------------------
 struct shadowVertexInput {
 	float4 position			: POSITION;
@@ -22,7 +26,7 @@ struct shadowPixelInput {
 
 /**
  *	vertexShader
- */
+ */	
 shadowPixelInput vertexShader( shadowVertexInput input ) {
 	shadowPixelInput output = ( shadowPixelInput )(0);
 
@@ -36,5 +40,5 @@ shadowPixelInput vertexShader( shadowVertexInput input ) {
  *	pixelShader
  */
  float pixelShader( shadowPixelInput input ) : SV_TARGET {
-   return input.position2.x / input.position2.y;
+   return 0;//input.position2.x / input.position2.y;
 }

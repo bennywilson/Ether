@@ -15,7 +15,7 @@ kbGameEntity 0 0 0 0 {
 		ShaderParams = 0
 		TranslucencySortBias =  0.000000
 		Model = .\assets\visualtarget\initiation\gina\gina_prison.ms3d
-		ShaderOverride = 10
+		ShaderOverride = 12
 			.\assets\shaders\character\characterbase.kbshader
 .\assets\shaders\character\characterbase.kbshader
 .\assets\shaders\character\characterbase.kbshader
@@ -26,6 +26,8 @@ kbGameEntity 0 0 0 0 {
 .\assets\shaders\character\characterbase.kbshader
 .\assets\shaders\character\characterbase.kbshader
 .\assets\shaders\character\charactermetal.kbshader
+.\assets\shaders\character\characterbase.kbshader
+.\assets\shaders\character\characterbase.kbshader
 
 		Animations = 1
 			EtherAnimComponent { 
@@ -108,8 +110,14 @@ kbGameEntity 0 0 0 0 {
 		ShaderParams = 0
 		TranslucencySortBias =  0.000000
 		Model = .\assets\visualtarget\initiation\enviro\prison_interior.ms3d
-		ShaderOverride = 9
+		ShaderOverride = 15
 			.\assets\shaders\environment\environmentbase.kbshader
+.\assets\shaders\environment\environmentbase.kbshader
+.\assets\shaders\environment\environmentbase.kbshader
+.\assets\shaders\environment\environmentbase.kbshader
+.\assets\shaders\environment\environmentbase.kbshader
+.\assets\shaders\environment\environmentbase.kbshader
+.\assets\shaders\environment\environmentbase.kbshader
 .\assets\shaders\environment\environmentbase.kbshader
 .\assets\shaders\environment\environmentbase.kbshader
 .\assets\shaders\environment\environmentbase.kbshader
@@ -123,7 +131,7 @@ kbGameEntity 0 0 0 0 {
 }
 kbGameEntity 0 0 0 0 {
 	kbTransformComponent { 
-		Enabled = 0
+		Enabled = 1
 		LifeTime =  -1.000000
 		Name = "EnvironmentDirectionalFill"
 		Orientation = 0.117166 -0.479171 -0.045908 0.868654
@@ -157,8 +165,9 @@ kbGameEntity 0 0 0 0 {
 		ShaderParams = 0
 		TranslucencySortBias =  0.000000
 		Model = .\assets\visualtarget\initiation\gina\gina_prison.ms3d
-		ShaderOverride = 9
+		ShaderOverride = 10
 			.\assets\shaders\character\characterbase.kbshader
+.\assets\shaders\character\characterbase.kbshader
 .\assets\shaders\character\characterbase.kbshader
 .\assets\shaders\character\characterbase.kbshader
 .\assets\shaders\character\characterbase.kbshader
@@ -256,5 +265,1112 @@ kbGameEntity 0 0 0 0 {
 				Vector = 0.100000 0.800000 1.000000 1.000000
 			}
 		LightRadius =  8.000000
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "BackWall_BackLight"
+		Orientation = -0.991793 0.023890 0.091362 0.086191
+		Position = 12.376690 12.442192 40.291950
+		Scale = 1.000000 1.000000 1.000000
+	}
+	kbDirectionalLightComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadows = 0
+		Color = 2.000000 2.000000 2.000000 1.000000
+		OverrideShader = .\assets\shaders\lights\environmentdirectionalfill.kbshader
+		ShaderParams = 0
+		CascadedShadowSplits = 0
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Entity_26"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 24.233452 20.621309 43.004551
+		Scale = 1.000000 1.000000 1.000000
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Door1_1"
+		Orientation = 0.000000 0.422290 0.000000 0.906461
+		Position = 33.316635 3.875316 54.869850
+		Scale = 1.000122 1.000122 1.000122
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 1
+		RenderPass = LightingPass
+		ShaderParams = 0
+		TranslucencySortBias =  0.000000
+		Model = .\assets\visualtarget\initiation\enviro\jailcelldoor.ms3d
+		ShaderOverride = 1
+			.\assets\shaders\environment\environmentbase.kbshader
+
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Door1_2"
+		Orientation = 0.000000 -0.707000 0.000000 0.707000
+		Position = 35.888119 4.004708 75.949699
+		Scale = 1.100000 1.000122 1.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 1
+		RenderPass = LightingPass
+		ShaderParams = 0
+		TranslucencySortBias =  0.000000
+		Model = .\assets\visualtarget\initiation\enviro\jailcelldoor.ms3d
+		ShaderOverride = 1
+			.\assets\shaders\environment\environmentbase.kbshader
+
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Door1_2"
+		Orientation = 0.000000 -0.707000 0.000000 0.707000
+		Position = 35.889542 4.004708 91.235321
+		Scale = 1.100000 1.000122 1.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 1
+		RenderPass = LightingPass
+		ShaderParams = 0
+		TranslucencySortBias =  0.000000
+		Model = .\assets\visualtarget\initiation\enviro\jailcelldoor.ms3d
+		ShaderOverride = 1
+			.\assets\shaders\environment\environmentbase.kbshader
+
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Door1_2"
+		Orientation = 0.000000 -0.707000 0.000000 0.707000
+		Position = 35.891006 4.004708 106.383263
+		Scale = 1.100000 1.000122 1.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 1
+		RenderPass = LightingPass
+		ShaderParams = 0
+		TranslucencySortBias =  0.000000
+		Model = .\assets\visualtarget\initiation\enviro\jailcelldoor.ms3d
+		ShaderOverride = 1
+			.\assets\shaders\environment\environmentbase.kbshader
+
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Door1_2"
+		Orientation = 0.000000 -0.707000 0.000000 0.707000
+		Position = 35.892479 4.004708 121.516724
+		Scale = 1.100000 1.000122 1.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 1
+		RenderPass = LightingPass
+		ShaderParams = 0
+		TranslucencySortBias =  0.000000
+		Model = .\assets\visualtarget\initiation\enviro\jailcelldoor.ms3d
+		ShaderOverride = 1
+			.\assets\shaders\environment\environmentbase.kbshader
+
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Door1_2"
+		Orientation = 0.000000 -0.707000 0.000000 0.707000
+		Position = 35.893940 4.004708 136.671036
+		Scale = 1.100000 1.000122 1.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 1
+		RenderPass = LightingPass
+		ShaderParams = 0
+		TranslucencySortBias =  0.000000
+		Model = .\assets\visualtarget\initiation\enviro\jailcelldoor.ms3d
+		ShaderOverride = 1
+			.\assets\shaders\environment\environmentbase.kbshader
+
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Door1_2"
+		Orientation = 0.000000 -0.707000 0.000000 0.707000
+		Position = 35.893635 4.004708 151.683945
+		Scale = 1.100000 1.000122 1.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 1
+		RenderPass = LightingPass
+		ShaderParams = 0
+		TranslucencySortBias =  0.000000
+		Model = .\assets\visualtarget\initiation\enviro\jailcelldoor.ms3d
+		ShaderOverride = 1
+			.\assets\shaders\environment\environmentbase.kbshader
+
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Door1_2"
+		Orientation = 0.000000 -0.707000 0.000000 0.707000
+		Position = 35.893452 4.004708 167.292877
+		Scale = 1.100000 1.000122 1.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 1
+		RenderPass = LightingPass
+		ShaderParams = 0
+		TranslucencySortBias =  0.000000
+		Model = .\assets\visualtarget\initiation\enviro\jailcelldoor.ms3d
+		ShaderOverride = 1
+			.\assets\shaders\environment\environmentbase.kbshader
+
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Door1_2"
+		Orientation = 0.000000 -0.707000 0.000000 0.707000
+		Position = 35.893482 4.004708 182.182480
+		Scale = 1.100000 1.000122 1.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 1
+		RenderPass = LightingPass
+		ShaderParams = 0
+		TranslucencySortBias =  0.000000
+		Model = .\assets\visualtarget\initiation\enviro\jailcelldoor.ms3d
+		ShaderOverride = 1
+			.\assets\shaders\environment\environmentbase.kbshader
+
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Door1_2"
+		Orientation = 0.000000 -0.707000 0.000000 0.707000
+		Position = 35.893486 4.004708 197.177139
+		Scale = 1.100000 1.000122 1.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 1
+		RenderPass = LightingPass
+		ShaderParams = 0
+		TranslucencySortBias =  0.000000
+		Model = .\assets\visualtarget\initiation\enviro\jailcelldoor.ms3d
+		ShaderOverride = 1
+			.\assets\shaders\environment\environmentbase.kbshader
+
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Door1_2"
+		Orientation = 0.000000 -0.707000 0.000000 0.707000
+		Position = 35.893349 4.004708 212.624268
+		Scale = 1.100000 1.000122 1.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 1
+		RenderPass = LightingPass
+		ShaderParams = 0
+		TranslucencySortBias =  0.000000
+		Model = .\assets\visualtarget\initiation\enviro\jailcelldoor.ms3d
+		ShaderOverride = 1
+			.\assets\shaders\environment\environmentbase.kbshader
+
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Door1_2"
+		Orientation = 0.000000 -0.707000 0.000000 0.707000
+		Position = 35.894184 4.004708 227.861649
+		Scale = 1.100000 1.000122 1.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 1
+		RenderPass = LightingPass
+		ShaderParams = 0
+		TranslucencySortBias =  0.000000
+		Model = .\assets\visualtarget\initiation\enviro\jailcelldoor.ms3d
+		ShaderOverride = 1
+			.\assets\shaders\environment\environmentbase.kbshader
+
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Door1_2"
+		Orientation = 0.000000 -0.707000 0.000000 0.707000
+		Position = 35.894169 4.004708 242.904266
+		Scale = 1.100000 1.000122 1.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 1
+		RenderPass = LightingPass
+		ShaderParams = 0
+		TranslucencySortBias =  0.000000
+		Model = .\assets\visualtarget\initiation\enviro\jailcelldoor.ms3d
+		ShaderOverride = 1
+			.\assets\shaders\environment\environmentbase.kbshader
+
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Door1_2"
+		Orientation = 0.000000 -0.707000 0.000000 0.707000
+		Position = 35.894192 4.004708 257.839325
+		Scale = 1.100000 1.000122 1.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 1
+		RenderPass = LightingPass
+		ShaderParams = 0
+		TranslucencySortBias =  0.000000
+		Model = .\assets\visualtarget\initiation\enviro\jailcelldoor.ms3d
+		ShaderOverride = 1
+			.\assets\shaders\environment\environmentbase.kbshader
+
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Door1_2"
+		Orientation = 0.000000 -0.707000 0.000000 0.707000
+		Position = 35.894035 4.004708 273.345795
+		Scale = 1.100000 1.000122 1.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 1
+		RenderPass = LightingPass
+		ShaderParams = 0
+		TranslucencySortBias =  0.000000
+		Model = .\assets\visualtarget\initiation\enviro\jailcelldoor.ms3d
+		ShaderOverride = 1
+			.\assets\shaders\environment\environmentbase.kbshader
+
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Door1_2"
+		Orientation = 0.000000 -0.707000 0.000000 0.707000
+		Position = 35.894077 4.004708 288.206726
+		Scale = 1.100000 1.000122 1.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 1
+		RenderPass = LightingPass
+		ShaderParams = 0
+		TranslucencySortBias =  0.000000
+		Model = .\assets\visualtarget\initiation\enviro\jailcelldoor.ms3d
+		ShaderOverride = 1
+			.\assets\shaders\environment\environmentbase.kbshader
+
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Door1_2"
+		Orientation = 0.000000 -0.707000 0.000000 0.707000
+		Position = 35.893997 4.004708 303.482269
+		Scale = 1.100000 1.000122 1.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 1
+		RenderPass = LightingPass
+		ShaderParams = 0
+		TranslucencySortBias =  0.000000
+		Model = .\assets\visualtarget\initiation\enviro\jailcelldoor.ms3d
+		ShaderOverride = 1
+			.\assets\shaders\environment\environmentbase.kbshader
+
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Door1_2"
+		Orientation = 0.000000 -0.707000 0.000000 0.707000
+		Position = 35.894054 4.004708 318.290497
+		Scale = 1.100000 1.000122 1.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 1
+		RenderPass = LightingPass
+		ShaderParams = 0
+		TranslucencySortBias =  0.000000
+		Model = .\assets\visualtarget\initiation\enviro\jailcelldoor.ms3d
+		ShaderOverride = 1
+			.\assets\shaders\environment\environmentbase.kbshader
+
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Door1_2"
+		Orientation = 0.000000 -0.707000 0.000000 0.707000
+		Position = 35.893940 4.004708 333.669128
+		Scale = 1.100000 1.000122 1.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 1
+		RenderPass = LightingPass
+		ShaderParams = 0
+		TranslucencySortBias =  0.000000
+		Model = .\assets\visualtarget\initiation\enviro\jailcelldoor.ms3d
+		ShaderOverride = 1
+			.\assets\shaders\environment\environmentbase.kbshader
+
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Door1_2"
+		Orientation = 0.000000 -0.707000 0.000000 0.707000
+		Position = 35.893929 4.004708 348.707092
+		Scale = 1.100000 1.000122 1.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 1
+		RenderPass = LightingPass
+		ShaderParams = 0
+		TranslucencySortBias =  0.000000
+		Model = .\assets\visualtarget\initiation\enviro\jailcelldoor.ms3d
+		ShaderOverride = 1
+			.\assets\shaders\environment\environmentbase.kbshader
+
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Door1_2"
+		Orientation = 0.000000 -0.707000 0.000000 0.707000
+		Position = 35.893730 4.004708 364.364044
+		Scale = 1.100000 1.000122 1.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 1
+		RenderPass = LightingPass
+		ShaderParams = 0
+		TranslucencySortBias =  0.000000
+		Model = .\assets\visualtarget\initiation\enviro\jailcelldoor.ms3d
+		ShaderOverride = 1
+			.\assets\shaders\environment\environmentbase.kbshader
+
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Door1_2"
+		Orientation = 0.000000 -0.707000 0.000000 0.707000
+		Position = 35.893860 4.004708 378.922119
+		Scale = 1.100000 1.000122 1.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 1
+		RenderPass = LightingPass
+		ShaderParams = 0
+		TranslucencySortBias =  0.000000
+		Model = .\assets\visualtarget\initiation\enviro\jailcelldoor.ms3d
+		ShaderOverride = 1
+			.\assets\shaders\environment\environmentbase.kbshader
+
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Door1_2"
+		Orientation = 0.000000 -0.707000 0.000000 0.707000
+		Position = 35.893829 4.004708 394.034332
+		Scale = 1.100000 1.000122 1.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 1
+		RenderPass = LightingPass
+		ShaderParams = 0
+		TranslucencySortBias =  0.000000
+		Model = .\assets\visualtarget\initiation\enviro\jailcelldoor.ms3d
+		ShaderOverride = 1
+			.\assets\shaders\environment\environmentbase.kbshader
+
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Door1_2"
+		Orientation = 0.000000 -0.707000 0.000000 0.707000
+		Position = 35.893742 4.004708 409.317627
+		Scale = 1.100000 1.000122 1.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 1
+		RenderPass = LightingPass
+		ShaderParams = 0
+		TranslucencySortBias =  0.000000
+		Model = .\assets\visualtarget\initiation\enviro\jailcelldoor.ms3d
+		ShaderOverride = 1
+			.\assets\shaders\environment\environmentbase.kbshader
+
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Door1_1"
+		Orientation = 0.000000 -0.707000 0.000000 0.707000
+		Position = 35.346237 28.027853 60.665947
+		Scale = 1.000122 1.000122 1.000122
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 1
+		RenderPass = LightingPass
+		ShaderParams = 0
+		TranslucencySortBias =  0.000000
+		Model = .\assets\visualtarget\initiation\enviro\jailcelldoor.ms3d
+		ShaderOverride = 1
+			.\assets\shaders\environment\environmentbase.kbshader
+
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Door1_2"
+		Orientation = 0.000000 -0.707000 0.000000 0.707000
+		Position = 35.888119 28.027853 75.949699
+		Scale = 1.100000 1.000122 1.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 1
+		RenderPass = LightingPass
+		ShaderParams = 0
+		TranslucencySortBias =  0.000000
+		Model = .\assets\visualtarget\initiation\enviro\jailcelldoor.ms3d
+		ShaderOverride = 1
+			.\assets\shaders\environment\environmentbase.kbshader
+
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Door1_2"
+		Orientation = 0.000000 -0.707000 0.000000 0.707000
+		Position = 35.889542 28.027853 91.235321
+		Scale = 1.100000 1.000122 1.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 1
+		RenderPass = LightingPass
+		ShaderParams = 0
+		TranslucencySortBias =  0.000000
+		Model = .\assets\visualtarget\initiation\enviro\jailcelldoor.ms3d
+		ShaderOverride = 1
+			.\assets\shaders\environment\environmentbase.kbshader
+
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Door1_2"
+		Orientation = 0.000000 -0.707000 0.000000 0.707000
+		Position = 35.891006 28.027853 106.383263
+		Scale = 1.100000 1.000122 1.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 1
+		RenderPass = LightingPass
+		ShaderParams = 0
+		TranslucencySortBias =  0.000000
+		Model = .\assets\visualtarget\initiation\enviro\jailcelldoor.ms3d
+		ShaderOverride = 1
+			.\assets\shaders\environment\environmentbase.kbshader
+
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Door1_2"
+		Orientation = 0.000000 -0.707000 0.000000 0.707000
+		Position = 35.892479 28.027853 121.516724
+		Scale = 1.100000 1.000122 1.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 1
+		RenderPass = LightingPass
+		ShaderParams = 0
+		TranslucencySortBias =  0.000000
+		Model = .\assets\visualtarget\initiation\enviro\jailcelldoor.ms3d
+		ShaderOverride = 1
+			.\assets\shaders\environment\environmentbase.kbshader
+
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Door1_2"
+		Orientation = 0.000000 -0.707000 0.000000 0.707000
+		Position = 35.893940 28.027853 136.671036
+		Scale = 1.100000 1.000122 1.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 1
+		RenderPass = LightingPass
+		ShaderParams = 0
+		TranslucencySortBias =  0.000000
+		Model = .\assets\visualtarget\initiation\enviro\jailcelldoor.ms3d
+		ShaderOverride = 1
+			.\assets\shaders\environment\environmentbase.kbshader
+
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Door1_2"
+		Orientation = 0.000000 -0.707000 0.000000 0.707000
+		Position = 35.893635 28.027853 151.683945
+		Scale = 1.100000 1.000122 1.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 1
+		RenderPass = LightingPass
+		ShaderParams = 0
+		TranslucencySortBias =  0.000000
+		Model = .\assets\visualtarget\initiation\enviro\jailcelldoor.ms3d
+		ShaderOverride = 1
+			.\assets\shaders\environment\environmentbase.kbshader
+
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Door1_2"
+		Orientation = 0.000000 -0.707000 0.000000 0.707000
+		Position = 35.893452 28.027853 167.292877
+		Scale = 1.100000 1.000122 1.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 1
+		RenderPass = LightingPass
+		ShaderParams = 0
+		TranslucencySortBias =  0.000000
+		Model = .\assets\visualtarget\initiation\enviro\jailcelldoor.ms3d
+		ShaderOverride = 1
+			.\assets\shaders\environment\environmentbase.kbshader
+
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Door1_2"
+		Orientation = 0.000000 -0.707000 0.000000 0.707000
+		Position = 35.893482 28.027853 182.182480
+		Scale = 1.100000 1.000122 1.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 1
+		RenderPass = LightingPass
+		ShaderParams = 0
+		TranslucencySortBias =  0.000000
+		Model = .\assets\visualtarget\initiation\enviro\jailcelldoor.ms3d
+		ShaderOverride = 1
+			.\assets\shaders\environment\environmentbase.kbshader
+
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Door1_2"
+		Orientation = 0.000000 -0.707000 0.000000 0.707000
+		Position = 35.893486 28.027853 197.177139
+		Scale = 1.100000 1.000122 1.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 1
+		RenderPass = LightingPass
+		ShaderParams = 0
+		TranslucencySortBias =  0.000000
+		Model = .\assets\visualtarget\initiation\enviro\jailcelldoor.ms3d
+		ShaderOverride = 1
+			.\assets\shaders\environment\environmentbase.kbshader
+
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Door1_2"
+		Orientation = 0.000000 -0.707000 0.000000 0.707000
+		Position = 35.893349 28.027853 212.624268
+		Scale = 1.100000 1.000122 1.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 1
+		RenderPass = LightingPass
+		ShaderParams = 0
+		TranslucencySortBias =  0.000000
+		Model = .\assets\visualtarget\initiation\enviro\jailcelldoor.ms3d
+		ShaderOverride = 1
+			.\assets\shaders\environment\environmentbase.kbshader
+
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Door1_2"
+		Orientation = 0.000000 -0.707000 0.000000 0.707000
+		Position = 35.894184 28.027853 227.861649
+		Scale = 1.100000 1.000122 1.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 1
+		RenderPass = LightingPass
+		ShaderParams = 0
+		TranslucencySortBias =  0.000000
+		Model = .\assets\visualtarget\initiation\enviro\jailcelldoor.ms3d
+		ShaderOverride = 1
+			.\assets\shaders\environment\environmentbase.kbshader
+
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Door1_2"
+		Orientation = 0.000000 -0.707000 0.000000 0.707000
+		Position = 35.894169 28.027853 242.904266
+		Scale = 1.100000 1.000122 1.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 1
+		RenderPass = LightingPass
+		ShaderParams = 0
+		TranslucencySortBias =  0.000000
+		Model = .\assets\visualtarget\initiation\enviro\jailcelldoor.ms3d
+		ShaderOverride = 1
+			.\assets\shaders\environment\environmentbase.kbshader
+
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Door1_2"
+		Orientation = 0.000000 -0.707000 0.000000 0.707000
+		Position = 35.894192 28.027853 257.839325
+		Scale = 1.100000 1.000122 1.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 1
+		RenderPass = LightingPass
+		ShaderParams = 0
+		TranslucencySortBias =  0.000000
+		Model = .\assets\visualtarget\initiation\enviro\jailcelldoor.ms3d
+		ShaderOverride = 1
+			.\assets\shaders\environment\environmentbase.kbshader
+
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Door1_2"
+		Orientation = 0.000000 -0.707000 0.000000 0.707000
+		Position = 35.894035 28.027853 273.345795
+		Scale = 1.100000 1.000122 1.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 1
+		RenderPass = LightingPass
+		ShaderParams = 0
+		TranslucencySortBias =  0.000000
+		Model = .\assets\visualtarget\initiation\enviro\jailcelldoor.ms3d
+		ShaderOverride = 1
+			.\assets\shaders\environment\environmentbase.kbshader
+
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Door1_2"
+		Orientation = 0.000000 -0.707000 0.000000 0.707000
+		Position = 35.894077 28.027853 288.206726
+		Scale = 1.100000 1.000122 1.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 1
+		RenderPass = LightingPass
+		ShaderParams = 0
+		TranslucencySortBias =  0.000000
+		Model = .\assets\visualtarget\initiation\enviro\jailcelldoor.ms3d
+		ShaderOverride = 1
+			.\assets\shaders\environment\environmentbase.kbshader
+
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Door1_2"
+		Orientation = 0.000000 -0.707000 0.000000 0.707000
+		Position = 35.893997 28.027853 303.482269
+		Scale = 1.100000 1.000122 1.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 1
+		RenderPass = LightingPass
+		ShaderParams = 0
+		TranslucencySortBias =  0.000000
+		Model = .\assets\visualtarget\initiation\enviro\jailcelldoor.ms3d
+		ShaderOverride = 1
+			.\assets\shaders\environment\environmentbase.kbshader
+
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Door1_2"
+		Orientation = 0.000000 -0.707000 0.000000 0.707000
+		Position = 35.894054 28.027853 318.290497
+		Scale = 1.100000 1.000122 1.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 1
+		RenderPass = LightingPass
+		ShaderParams = 0
+		TranslucencySortBias =  0.000000
+		Model = .\assets\visualtarget\initiation\enviro\jailcelldoor.ms3d
+		ShaderOverride = 1
+			.\assets\shaders\environment\environmentbase.kbshader
+
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Door1_2"
+		Orientation = 0.000000 -0.707000 0.000000 0.707000
+		Position = 35.893940 28.027853 333.669128
+		Scale = 1.100000 1.000122 1.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 1
+		RenderPass = LightingPass
+		ShaderParams = 0
+		TranslucencySortBias =  0.000000
+		Model = .\assets\visualtarget\initiation\enviro\jailcelldoor.ms3d
+		ShaderOverride = 1
+			.\assets\shaders\environment\environmentbase.kbshader
+
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Door1_2"
+		Orientation = 0.000000 -0.707000 0.000000 0.707000
+		Position = 35.893929 28.027853 348.707092
+		Scale = 1.100000 1.000122 1.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 1
+		RenderPass = LightingPass
+		ShaderParams = 0
+		TranslucencySortBias =  0.000000
+		Model = .\assets\visualtarget\initiation\enviro\jailcelldoor.ms3d
+		ShaderOverride = 1
+			.\assets\shaders\environment\environmentbase.kbshader
+
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Door1_2"
+		Orientation = 0.000000 -0.707000 0.000000 0.707000
+		Position = 35.893730 28.027853 364.364044
+		Scale = 1.100000 1.000122 1.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 1
+		RenderPass = LightingPass
+		ShaderParams = 0
+		TranslucencySortBias =  0.000000
+		Model = .\assets\visualtarget\initiation\enviro\jailcelldoor.ms3d
+		ShaderOverride = 1
+			.\assets\shaders\environment\environmentbase.kbshader
+
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Door1_2"
+		Orientation = 0.000000 -0.707000 0.000000 0.707000
+		Position = 35.893860 28.027853 378.922119
+		Scale = 1.100000 1.000122 1.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 1
+		RenderPass = LightingPass
+		ShaderParams = 0
+		TranslucencySortBias =  0.000000
+		Model = .\assets\visualtarget\initiation\enviro\jailcelldoor.ms3d
+		ShaderOverride = 1
+			.\assets\shaders\environment\environmentbase.kbshader
+
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Door1_2"
+		Orientation = 0.000000 -0.707000 0.000000 0.707000
+		Position = 35.893829 28.027853 394.034332
+		Scale = 1.100000 1.000122 1.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 1
+		RenderPass = LightingPass
+		ShaderParams = 0
+		TranslucencySortBias =  0.000000
+		Model = .\assets\visualtarget\initiation\enviro\jailcelldoor.ms3d
+		ShaderOverride = 1
+			.\assets\shaders\environment\environmentbase.kbshader
+
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Door1_2"
+		Orientation = 0.000000 -0.707000 0.000000 0.707000
+		Position = 35.893742 28.027853 409.317627
+		Scale = 1.100000 1.000122 1.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 1
+		RenderPass = LightingPass
+		ShaderParams = 0
+		TranslucencySortBias =  0.000000
+		Model = .\assets\visualtarget\initiation\enviro\jailcelldoor.ms3d
+		ShaderOverride = 1
+			.\assets\shaders\environment\environmentbase.kbshader
+
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Entity_75"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 56.041698 3.593109 60.579796
+		Scale = 1.000000 1.000000 1.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		RenderPass = LightingPass
+		ShaderParams = 0
+		TranslucencySortBias =  0.000000
+		Model = .\assets\visualtarget\initiation\enviro\cell.ms3d
+		ShaderOverride = 1
+			.\assets\shaders\environment\environmentbase.kbshader
+
 	}
 }

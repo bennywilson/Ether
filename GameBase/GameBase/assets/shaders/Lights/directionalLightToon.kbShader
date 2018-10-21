@@ -134,10 +134,6 @@ float4 pixelShader( pixelInput input ) : SV_TARGET {
 	const float3 emissive = diffuseColor.xyz * diffuseColor.w;
 	float3 finalColor = diffuseColor.xyz * diffuse * lightColor.xyz + spec.xxx + emissive;	// todo
 
-	const float oneMinusRimDot = 1.0f - dot( normal.xyz, toCameraVec );
-	float3 rimColor =  smoothstep( 1.0f - rimLightColor.w, 1.0f, oneMinusRimDot ) * rimLightColor.xyz * specColor.z;
-
-	//finalColor.xyz += rimColor;
 
 	return float4( finalColor, diffuseColor.w );
 }

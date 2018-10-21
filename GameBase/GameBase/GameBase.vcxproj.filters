@@ -113,6 +113,18 @@
     <None Include="assets\shaders\Lights\characterRim.kbShader">
       <Filter>Shaders\Lights</Filter>
     </None>
+    <None Include="assets\shaders\Environment\environmentHole.kbShader">
+      <Filter>Shaders\Environment</Filter>
+    </None>
+    <None Include="assets\shaders\Environment\basicTerrain.kbShader">
+      <Filter>Shaders\Environment</Filter>
+    </None>
+    <None Include="assets\shaders\Environment\grass.kbShader">
+      <Filter>Shaders\Environment</Filter>
+    </None>
+    <None Include="assets\shaders\Lights\characterPointRim.kbShader">
+      <Filter>Shaders\Lights</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameBase.h">

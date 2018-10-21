@@ -24,8 +24,8 @@ kbShaderState {
 	srcBlend Blend_One
 	dstBlend Blend_One
 	blendOp BlendOp_Add
-	srcBlendAlpha Blend_One			// For passing glow mask from scene color buffer to accumulation buffer
-	dstBlendAlpha Blend_Zero
+	srcBlendAlpha Blend_Zero			// For passing glow mask from scene color buffer to accumulation buffer
+	dstBlendAlpha BlendOne
 	blendOpAlpha BlendOp_Add
 }
 

@@ -12,6 +12,7 @@ cbuffer matrixBuffer {
 kbShaderState {
 	cullMode CullMode_None
 }
+
 //-------------------------------------
 struct shadowVertexInput {
 	float4 position      : POSITION;

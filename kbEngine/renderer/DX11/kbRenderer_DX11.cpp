@@ -375,6 +375,7 @@ kbRenderer_DX11::kbRenderer_DX11() :
 	m_pDeviceContext( nullptr ),
 	m_pDepthStencilBuffer( nullptr ),
 	m_pDefaultRasterizerState( nullptr ),
+	m_pFrontFaceCullingRasterizerState( nullptr ),
 	m_pNoFaceCullingRasterizerState( nullptr ),
 	m_pWireFrameRasterizerState( nullptr ),
 	m_pDepthStencilView( nullptr ),
@@ -558,6 +559,11 @@ void kbRenderer_DX11::Init_Internal( HWND hwnd, const int frameWidth, const int 
 	// Create the default rasterizer state
 	hr = m_pD3DDevice->CreateRasterizerState( &rasterDesc, &m_pDefaultRasterizerState );
 	kbErrorCheck( SUCCEEDED( hr ), "kbRenderer_DX11::Init() - Failed to create default rasterizer state" );
+
+	// Create front face culling rasterizer state
+	rasterDesc.CullMode = D3D11_CULL_FRONT;
+	hr = m_pD3DDevice->CreateRasterizerState( &rasterDesc, &m_pFrontFaceCullingRasterizerState );
+	kbErrorCheck( SUCCEEDED( hr ), "kbRenderer_DX11::Init() - Failed to create front face culling rasterizer state" );
 
 	// Create non-culling rasterizer state
 	rasterDesc.CullMode = D3D11_CULL_NONE;
@@ -1092,6 +1098,7 @@ void kbRenderer_DX11::Shutdown_Internal() {
 	}
 
 	SAFE_RELEASE( m_pDefaultRasterizerState );
+	SAFE_RELEASE( m_pFrontFaceCullingRasterizerState );
 	SAFE_RELEASE( m_pNoFaceCullingRasterizerState );
 	SAFE_RELEASE( m_pWireFrameRasterizerState );
 
@@ -2924,7 +2931,9 @@ void kbRenderer_DX11::RenderMesh( const kbRenderSubmesh *const pRenderMesh, cons
 		m_pDeviceContext->RSSetState( m_pDefaultRasterizerState );
 	} else if ( pShader->GetCullMode() == CullMode_None ) {
 		m_pDeviceContext->RSSetState( m_pNoFaceCullingRasterizerState );
-	} else {
+	} else if ( pShader->GetCullMode() == CullMode_FrontFaces ) {
+		m_pDeviceContext->RSSetState( m_pFrontFaceCullingRasterizerState );
+	}  else {
 		kbError( "kbRenderer_DX11::RenderMesh() - Unsupported culling mode" );
 	}
 

@@ -496,6 +496,7 @@ private:
 	std::map<size_t, ID3D11Buffer*>				m_ConstantBuffers;		// Maps constant buffers to their byte width
 
 	ID3D11RasterizerState *						m_pDefaultRasterizerState;
+	ID3D11RasterizerState *						m_pFrontFaceCullingRasterizerState;
 	ID3D11RasterizerState *						m_pNoFaceCullingRasterizerState;
 	ID3D11RasterizerState *						m_pWireFrameRasterizerState;
 
