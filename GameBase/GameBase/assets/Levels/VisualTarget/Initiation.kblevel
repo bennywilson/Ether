@@ -15,7 +15,7 @@ kbGameEntity 0 0 0 0 {
 		ShaderParams = 0
 		TranslucencySortBias =  0.000000
 		Model = .\assets\visualtarget\initiation\gina\gina_prison.ms3d
-		ShaderOverride = 10
+		ShaderOverride = 12
 			.\assets\shaders\character\characterbase.kbshader
 .\assets\shaders\character\characterbase.kbshader
 .\assets\shaders\character\characterbase.kbshader
@@ -26,6 +26,8 @@ kbGameEntity 0 0 0 0 {
 .\assets\shaders\character\characterbase.kbshader
 .\assets\shaders\character\characterbase.kbshader
 .\assets\shaders\character\charactermetal.kbshader
+.\assets\shaders\character\characterbase.kbshader
+.\assets\shaders\character\characterbase.kbshader
 
 		Animations = 1
 			EtherAnimComponent { 
@@ -108,8 +110,10 @@ kbGameEntity 0 0 0 0 {
 		ShaderParams = 0
 		TranslucencySortBias =  0.000000
 		Model = .\assets\visualtarget\initiation\enviro\prison_interior.ms3d
-		ShaderOverride = 9
+		ShaderOverride = 11
 			.\assets\shaders\environment\environmentbase.kbshader
+.\assets\shaders\environment\environmentbase.kbshader
+.\assets\shaders\environment\environmentbase.kbshader
 .\assets\shaders\environment\environmentbase.kbshader
 .\assets\shaders\environment\environmentbase.kbshader
 .\assets\shaders\environment\environmentbase.kbshader
@@ -131,7 +135,7 @@ kbGameEntity 0 0 0 0 {
 		Scale = 1.000000 1.000000 1.000000
 	}
 	kbDirectionalLightComponent { 
-		Enabled = 1
+		Enabled = 0
 		LifeTime =  -1.000000
 		CastsShadows = 0
 		Color = 0.200000 0.200000 0.200000 1.000000
@@ -256,5 +260,24 @@ kbGameEntity 0 0 0 0 {
 				Vector = 0.100000 0.800000 1.000000 1.000000
 			}
 		LightRadius =  8.000000
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "BackWall_BackLight"
+		Orientation = -0.985377 0.000000 0.000000 0.170386
+		Position = 12.376690 12.442192 40.291950
+		Scale = 1.000000 1.000000 1.000000
+	}
+	kbDirectionalLightComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		CastsShadows = 0
+		Color = 2.000000 2.000000 2.000000 1.000000
+		OverrideShader = .\assets\shaders\lights\environmentdirectionalfill.kbshader
+		ShaderParams = 0
+		CascadedShadowSplits = 0
 	}
 }

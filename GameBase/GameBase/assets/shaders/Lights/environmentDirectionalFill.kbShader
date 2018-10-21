@@ -12,17 +12,14 @@ cbuffer matrixBuffer {
    float4               lightPosition;
    float4               lightColor;
    float4               cameraPosition;
-   float4				diffuseColorBand;
-   float4				specularColorBand;
-   float4				rimLightColor;		// xyz - color, w - width
 };
 
 kbShaderState {
 	srcBlend Blend_One
 	dstBlend Blend_One
 	blendOp BlendOp_Add
-	srcBlendAlpha Blend_One			// For passing glow mask from scene color buffer to accumulation buffer
-	dstBlendAlpha Blend_Zero
+	srcBlendAlpha Blend_Zero			// For passing glow mask from scene color buffer to accumulation buffer
+	dstBlendAlpha Blend_One
 	blendOpAlpha BlendOp_Add
 }
 
@@ -88,11 +85,7 @@ float4 pixelShader( pixelInput input ) : SV_TARGET {
 	
 		spec = pow( abs( spec ), specColor.y ) * specColor.x;
 	
-		float3 finalColor = diffuseColor.xyz * diffuse * lightColor.xyz + spec.xxx;	// todo
-
-		const float oneMinusRimDot = 1.0f - dot( normal.xyz, toCameraVec );
-	
-		//finalColor.xyz += rimColor;
+		float3 finalColor = diffuseColor.xyz * diffuse * lightColor.xyz;// + spec.xxx;	// todo
 
 		return float4( finalColor, diffuseColor.w );
 }
