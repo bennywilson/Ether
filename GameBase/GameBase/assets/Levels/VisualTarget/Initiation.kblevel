@@ -1374,3 +1374,736 @@ kbGameEntity 0 0 0 0 {
 
 	}
 }
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Ceiling_Light_1"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 16.029036 56.106159 103.637253
+		Scale = 1.000000 1.000000 1.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		RenderPass = LightingPass
+		ShaderParams = 0
+		TranslucencySortBias =  0.000000
+		Model = .\assets\visualtarget\initiation\enviro\ceilinglight.ms3d
+		ShaderOverride = 2
+			.\assets\shaders\environment\environmentbase.kbshader
+.\assets\shaders\environment\environmentbase.kbshader
+
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Ceiling_Light_2"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 16.029036 56.106159 143.637253
+		Scale = 1.000000 1.000000 1.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		RenderPass = LightingPass
+		ShaderParams = 0
+		TranslucencySortBias =  0.000000
+		Model = .\assets\visualtarget\initiation\enviro\ceilinglight.ms3d
+		ShaderOverride = 2
+			.\assets\shaders\environment\environmentbase.kbshader
+.\assets\shaders\environment\environmentbase.kbshader
+
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Ceiling_Light_3"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 16.029036 56.106159 183.637253
+		Scale = 1.000000 1.000000 1.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		RenderPass = LightingPass
+		ShaderParams = 0
+		TranslucencySortBias =  0.000000
+		Model = .\assets\visualtarget\initiation\enviro\ceilinglight.ms3d
+		ShaderOverride = 2
+			.\assets\shaders\environment\environmentbase.kbshader
+.\assets\shaders\environment\environmentbase.kbshader
+
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Ceiling_Light_4"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 16.029036 56.106159 223.637253
+		Scale = 1.000000 1.000000 1.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		RenderPass = LightingPass
+		ShaderParams = 0
+		TranslucencySortBias =  0.000000
+		Model = .\assets\visualtarget\initiation\enviro\ceilinglight.ms3d
+		ShaderOverride = 2
+			.\assets\shaders\environment\environmentbase.kbshader
+.\assets\shaders\environment\environmentbase.kbshader
+
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Ceiling_Light_5"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 16.029036 56.106159 263.637268
+		Scale = 1.000000 1.000000 1.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		RenderPass = LightingPass
+		ShaderParams = 0
+		TranslucencySortBias =  0.000000
+		Model = .\assets\visualtarget\initiation\enviro\ceilinglight.ms3d
+		ShaderOverride = 2
+			.\assets\shaders\environment\environmentbase.kbshader
+.\assets\shaders\environment\environmentbase.kbshader
+
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Ceiling_Light_6"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 16.029036 56.106159 303.637268
+		Scale = 1.000000 1.000000 1.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		RenderPass = LightingPass
+		ShaderParams = 0
+		TranslucencySortBias =  0.000000
+		Model = .\assets\visualtarget\initiation\enviro\ceilinglight.ms3d
+		ShaderOverride = 2
+			.\assets\shaders\environment\environmentbase.kbshader
+.\assets\shaders\environment\environmentbase.kbshader
+
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Ceiling_Light_7"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 16.029036 56.106159 343.637268
+		Scale = 1.000000 1.000000 1.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		RenderPass = LightingPass
+		ShaderParams = 0
+		TranslucencySortBias =  0.000000
+		Model = .\assets\visualtarget\initiation\enviro\ceilinglight.ms3d
+		ShaderOverride = 2
+			.\assets\shaders\environment\environmentbase.kbshader
+.\assets\shaders\environment\environmentbase.kbshader
+
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Rail"
+		Orientation = 0.000000 0.707 0 0.707
+		Position = 35.031403 26.636539 56.022415
+		Scale = 1.000000 1.000000 1.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		RenderPass = LightingPass
+		ShaderParams = 0
+		TranslucencySortBias =  0.000000
+		Model = .\assets\visualtarget\initiation\enviro\rail.ms3d
+		ShaderOverride = 1
+			.\assets\shaders\environment\environmentbase.kbshader
+
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Rail"
+		Orientation = 0.000000 0.707 0 0.707
+		Position = 35.031403 26.636539 70.431503
+		Scale = 1.000000 1.000000 1.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		RenderPass = LightingPass
+		ShaderParams = 0
+		TranslucencySortBias =  0.000000
+		Model = .\assets\visualtarget\initiation\enviro\rail.ms3d
+		ShaderOverride = 1
+			.\assets\shaders\environment\environmentbase.kbshader
+
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Rail"
+		Orientation = 0.000000 0.707 0 0.707
+		Position = 35.031403 26.636539 84.840588
+		Scale = 1.000000 1.000000 1.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		RenderPass = LightingPass
+		ShaderParams = 0
+		TranslucencySortBias =  0.000000
+		Model = .\assets\visualtarget\initiation\enviro\rail.ms3d
+		ShaderOverride = 1
+			.\assets\shaders\environment\environmentbase.kbshader
+
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Rail"
+		Orientation = 0.000000 0.707 0 0.707
+		Position = 35.031403 26.636539 99.249676
+		Scale = 1.000000 1.000000 1.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		RenderPass = LightingPass
+		ShaderParams = 0
+		TranslucencySortBias =  0.000000
+		Model = .\assets\visualtarget\initiation\enviro\rail.ms3d
+		ShaderOverride = 1
+			.\assets\shaders\environment\environmentbase.kbshader
+
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Rail"
+		Orientation = 0.000000 0.707 0 0.707
+		Position = 35.031403 26.636539 113.658764
+		Scale = 1.000000 1.000000 1.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		RenderPass = LightingPass
+		ShaderParams = 0
+		TranslucencySortBias =  0.000000
+		Model = .\assets\visualtarget\initiation\enviro\rail.ms3d
+		ShaderOverride = 1
+			.\assets\shaders\environment\environmentbase.kbshader
+
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Rail"
+		Orientation = 0.000000 0.707 0 0.707
+		Position = 35.031403 26.636539 128.067852
+		Scale = 1.000000 1.000000 1.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		RenderPass = LightingPass
+		ShaderParams = 0
+		TranslucencySortBias =  0.000000
+		Model = .\assets\visualtarget\initiation\enviro\rail.ms3d
+		ShaderOverride = 1
+			.\assets\shaders\environment\environmentbase.kbshader
+
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Rail"
+		Orientation = 0.000000 0.707 0 0.707
+		Position = 35.031403 26.636539 142.47694
+		Scale = 1.000000 1.000000 1.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		RenderPass = LightingPass
+		ShaderParams = 0
+		TranslucencySortBias =  0.000000
+		Model = .\assets\visualtarget\initiation\enviro\rail.ms3d
+		ShaderOverride = 1
+			.\assets\shaders\environment\environmentbase.kbshader
+
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Rail"
+		Orientation = 0.000000 0.707 0 0.707
+		Position = 35.031403 26.636539 156.886028
+		Scale = 1.000000 1.000000 1.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		RenderPass = LightingPass
+		ShaderParams = 0
+		TranslucencySortBias =  0.000000
+		Model = .\assets\visualtarget\initiation\enviro\rail.ms3d
+		ShaderOverride = 1
+			.\assets\shaders\environment\environmentbase.kbshader
+
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Rail"
+		Orientation = 0.000000 0.707 0 0.707
+		Position = 35.031403 26.636539 171.295116
+		Scale = 1.000000 1.000000 1.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		RenderPass = LightingPass
+		ShaderParams = 0
+		TranslucencySortBias =  0.000000
+		Model = .\assets\visualtarget\initiation\enviro\rail.ms3d
+		ShaderOverride = 1
+			.\assets\shaders\environment\environmentbase.kbshader
+
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Rail"
+		Orientation = 0.000000 0.707 0 0.707
+		Position = 35.031403 26.636539 185.704204
+		Scale = 1.000000 1.000000 1.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		RenderPass = LightingPass
+		ShaderParams = 0
+		TranslucencySortBias =  0.000000
+		Model = .\assets\visualtarget\initiation\enviro\rail.ms3d
+		ShaderOverride = 1
+			.\assets\shaders\environment\environmentbase.kbshader
+
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Rail"
+		Orientation = 0.000000 0.707 0 0.707
+		Position = 35.031403 26.636539 200.113292
+		Scale = 1.000000 1.000000 1.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		RenderPass = LightingPass
+		ShaderParams = 0
+		TranslucencySortBias =  0.000000
+		Model = .\assets\visualtarget\initiation\enviro\rail.ms3d
+		ShaderOverride = 1
+			.\assets\shaders\environment\environmentbase.kbshader
+
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Rail"
+		Orientation = 0.000000 0.707 0 0.707
+		Position = 35.031403 26.636539 214.52238
+		Scale = 1.000000 1.000000 1.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		RenderPass = LightingPass
+		ShaderParams = 0
+		TranslucencySortBias =  0.000000
+		Model = .\assets\visualtarget\initiation\enviro\rail.ms3d
+		ShaderOverride = 1
+			.\assets\shaders\environment\environmentbase.kbshader
+
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Rail"
+		Orientation = 0.000000 0.707 0 0.707
+		Position = 35.031403 26.636539 228.931468
+		Scale = 1.000000 1.000000 1.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		RenderPass = LightingPass
+		ShaderParams = 0
+		TranslucencySortBias =  0.000000
+		Model = .\assets\visualtarget\initiation\enviro\rail.ms3d
+		ShaderOverride = 1
+			.\assets\shaders\environment\environmentbase.kbshader
+
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Rail"
+		Orientation = 0.000000 0.707 0 0.707
+		Position = 35.031403 26.636539 243.340556
+		Scale = 1.000000 1.000000 1.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		RenderPass = LightingPass
+		ShaderParams = 0
+		TranslucencySortBias =  0.000000
+		Model = .\assets\visualtarget\initiation\enviro\rail.ms3d
+		ShaderOverride = 1
+			.\assets\shaders\environment\environmentbase.kbshader
+
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Rail"
+		Orientation = 0.000000 0.707 0 0.707
+		Position = 35.031403 26.636539 257.749644
+		Scale = 1.000000 1.000000 1.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		RenderPass = LightingPass
+		ShaderParams = 0
+		TranslucencySortBias =  0.000000
+		Model = .\assets\visualtarget\initiation\enviro\rail.ms3d
+		ShaderOverride = 1
+			.\assets\shaders\environment\environmentbase.kbshader
+
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Rail"
+		Orientation = 0.000000 0.707 0 0.707
+		Position = 35.031403 26.636539 272.158732
+		Scale = 1.000000 1.000000 1.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		RenderPass = LightingPass
+		ShaderParams = 0
+		TranslucencySortBias =  0.000000
+		Model = .\assets\visualtarget\initiation\enviro\rail.ms3d
+		ShaderOverride = 1
+			.\assets\shaders\environment\environmentbase.kbshader
+
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Rail"
+		Orientation = 0.000000 0.707 0 0.707
+		Position = 35.031403 26.636539 286.56782
+		Scale = 1.000000 1.000000 1.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		RenderPass = LightingPass
+		ShaderParams = 0
+		TranslucencySortBias =  0.000000
+		Model = .\assets\visualtarget\initiation\enviro\rail.ms3d
+		ShaderOverride = 1
+			.\assets\shaders\environment\environmentbase.kbshader
+
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Rail"
+		Orientation = 0.000000 0.707 0 0.707
+		Position = 35.031403 26.636539 300.976908
+		Scale = 1.000000 1.000000 1.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		RenderPass = LightingPass
+		ShaderParams = 0
+		TranslucencySortBias =  0.000000
+		Model = .\assets\visualtarget\initiation\enviro\rail.ms3d
+		ShaderOverride = 1
+			.\assets\shaders\environment\environmentbase.kbshader
+
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Rail"
+		Orientation = 0.000000 0.707 0 0.707
+		Position = 35.031403 26.636539 315.385996
+		Scale = 1.000000 1.000000 1.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		RenderPass = LightingPass
+		ShaderParams = 0
+		TranslucencySortBias =  0.000000
+		Model = .\assets\visualtarget\initiation\enviro\rail.ms3d
+		ShaderOverride = 1
+			.\assets\shaders\environment\environmentbase.kbshader
+
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Rail"
+		Orientation = 0.000000 0.707 0 0.707
+		Position = 35.031403 26.636539 329.795084
+		Scale = 1.000000 1.000000 1.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		RenderPass = LightingPass
+		ShaderParams = 0
+		TranslucencySortBias =  0.000000
+		Model = .\assets\visualtarget\initiation\enviro\rail.ms3d
+		ShaderOverride = 1
+			.\assets\shaders\environment\environmentbase.kbshader
+
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Rail"
+		Orientation = 0.000000 0.707 0 0.707
+		Position = 35.031403 26.636539 344.204172
+		Scale = 1.000000 1.000000 1.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		RenderPass = LightingPass
+		ShaderParams = 0
+		TranslucencySortBias =  0.000000
+		Model = .\assets\visualtarget\initiation\enviro\rail.ms3d
+		ShaderOverride = 1
+			.\assets\shaders\environment\environmentbase.kbshader
+
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Rail"
+		Orientation = 0.000000 0.707 0 0.707
+		Position = 35.031403 26.636539 358.61326
+		Scale = 1.000000 1.000000 1.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		RenderPass = LightingPass
+		ShaderParams = 0
+		TranslucencySortBias =  0.000000
+		Model = .\assets\visualtarget\initiation\enviro\rail.ms3d
+		ShaderOverride = 1
+			.\assets\shaders\environment\environmentbase.kbshader
+
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Rail"
+		Orientation = 0.000000 0.707 0 0.707
+		Position = 35.031403 26.636539 373.022348
+		Scale = 1.000000 1.000000 1.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		RenderPass = LightingPass
+		ShaderParams = 0
+		TranslucencySortBias =  0.000000
+		Model = .\assets\visualtarget\initiation\enviro\rail.ms3d
+		ShaderOverride = 1
+			.\assets\shaders\environment\environmentbase.kbshader
+
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Rail"
+		Orientation = 0.000000 0.707 0 0.707
+		Position = 35.031403 26.636539 387.431436
+		Scale = 1.000000 1.000000 1.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		RenderPass = LightingPass
+		ShaderParams = 0
+		TranslucencySortBias =  0.000000
+		Model = .\assets\visualtarget\initiation\enviro\rail.ms3d
+		ShaderOverride = 1
+			.\assets\shaders\environment\environmentbase.kbshader
+
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Rail"
+		Orientation = 0.000000 0.707 0 0.707
+		Position = 35.031403 26.636539 401.840524
+		Scale = 1.000000 1.000000 1.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		RenderPass = LightingPass
+		ShaderParams = 0
+		TranslucencySortBias =  0.000000
+		Model = .\assets\visualtarget\initiation\enviro\rail.ms3d
+		ShaderOverride = 1
+			.\assets\shaders\environment\environmentbase.kbshader
+
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Rail"
+		Orientation = 0.000000 0.707 0 0.707
+		Position = 35.031403 26.636539 416.249612
+		Scale = 1.000000 1.000000 1.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		RenderPass = LightingPass
+		ShaderParams = 0
+		TranslucencySortBias =  0.000000
+		Model = .\assets\visualtarget\initiation\enviro\rail.ms3d
+		ShaderOverride = 1
+			.\assets\shaders\environment\environmentbase.kbshader
+
+	}
+}
