@@ -82,10 +82,7 @@ SamplerState normalSampler;
  PS_OUTPUT pixelShader( pixelInput	input, bool IsFrontFace	: SV_IsFrontFace ) {
  	PS_OUTPUT output = (PS_OUTPUT) 0;
 
-	//output.Color.xyz = clamp( saturate(diffuse.Sample( diffuseSampler, input.uv ).xyz * 0.25f), 0.25f, 1.0f );
-
-
-	output.Color.xyz = diffuse.Sample( diffuseSampler, input.uv ).xyz;
+	output.Color = diffuse.Sample( diffuseSampler, input.uv );
 	output.Depth.r = input.position2.x / input.position2.y;
 	output.Specular =  float4(0,1,0,0);//float4( 0.08f * output.Color.xyz, 15.0f );//0.1f * output.Color.xyzx;//float4( 0.0f, 0.0f, 0.0f, 1.0f );
 

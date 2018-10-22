@@ -12,10 +12,17 @@ kbGameEntity 0 0 0 0 {
 		LifeTime =  -1.000000
 		CastsShadow = 1
 		RenderPass = LightingPass
-		ShaderParams = 0
+		ShaderParams = 1
+			kbShaderParamComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				ParamName = "glowParams"
+				Texture = NULL
+				Vector = 3.000000 0.000000 0.000000 0.000000
+			}
 		TranslucencySortBias =  0.000000
 		Model = .\assets\visualtarget\initiation\gina\gina_prison.ms3d
-		ShaderOverride = 12
+		ShaderOverride = 11
 			.\assets\shaders\character\characterbase.kbshader
 .\assets\shaders\character\characterbase.kbshader
 .\assets\shaders\character\characterbase.kbshader
@@ -25,9 +32,8 @@ kbGameEntity 0 0 0 0 {
 .\assets\shaders\character\characterbase.kbshader
 .\assets\shaders\character\characterbase.kbshader
 .\assets\shaders\character\characterbase.kbshader
-.\assets\shaders\character\charactermetal.kbshader
 .\assets\shaders\character\characterbase.kbshader
-.\assets\shaders\character\characterbase.kbshader
+.\assets\shaders\character\characterglow.kbshader
 
 		Animations = 1
 			EtherAnimComponent { 
@@ -142,7 +148,7 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadows = 0
-		Color = 0.200000 0.200000 0.200000 1.000000
+		Color = 0.500000 0.500000 0.500000 1.000000
 		OverrideShader = .\assets\shaders\lights\environmentdirectionalfill.kbshader
 		ShaderParams = 0
 		CascadedShadowSplits = 0
@@ -262,7 +268,7 @@ kbGameEntity 0 0 0 0 {
 				LifeTime =  -1.000000
 				ParamName = "rimLightWidth"
 				Texture = NULL
-				Vector = 0.100000 0.800000 1.000000 1.000000
+				Vector = 0.500000 0.600000 1.000000 1.000000
 			}
 		LightRadius =  8.000000
 	}
@@ -280,7 +286,7 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadows = 0
-		Color = 2.000000 2.000000 2.000000 1.000000
+		Color = 3.000000 3.000000 3.000000 1.000000
 		OverrideShader = .\assets\shaders\lights\environmentdirectionalfill.kbshader
 		ShaderParams = 0
 		CascadedShadowSplits = 0
@@ -292,7 +298,7 @@ kbGameEntity 0 0 0 0 {
 		LifeTime =  -1.000000
 		Name = "Entity_26"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
-		Position = 24.233452 20.621309 43.004551
+		Position = 24.233452 20.621309 120.598694
 		Scale = 1.000000 1.000000 1.000000
 	}
 }
@@ -1391,9 +1397,10 @@ kbGameEntity 0 0 0 0 {
 		ShaderParams = 0
 		TranslucencySortBias =  0.000000
 		Model = .\assets\visualtarget\initiation\enviro\ceilinglight.ms3d
-		ShaderOverride = 2
+		ShaderOverride = 3
 			.\assets\shaders\environment\environmentbase.kbshader
 .\assets\shaders\environment\environmentbase.kbshader
+..\..\kbengine\assets\shaders\basictranslucency.kbshader
 
 	}
 }
@@ -1414,9 +1421,10 @@ kbGameEntity 0 0 0 0 {
 		ShaderParams = 0
 		TranslucencySortBias =  0.000000
 		Model = .\assets\visualtarget\initiation\enviro\ceilinglight.ms3d
-		ShaderOverride = 2
+		ShaderOverride = 3
 			.\assets\shaders\environment\environmentbase.kbshader
 .\assets\shaders\environment\environmentbase.kbshader
+..\..\kbengine\assets\shaders\basictranslucency.kbshader
 
 	}
 }
@@ -1437,9 +1445,10 @@ kbGameEntity 0 0 0 0 {
 		ShaderParams = 0
 		TranslucencySortBias =  0.000000
 		Model = .\assets\visualtarget\initiation\enviro\ceilinglight.ms3d
-		ShaderOverride = 2
+		ShaderOverride = 3
 			.\assets\shaders\environment\environmentbase.kbshader
 .\assets\shaders\environment\environmentbase.kbshader
+..\..\kbengine\assets\shaders\basictranslucency.kbshader
 
 	}
 }
@@ -1460,9 +1469,10 @@ kbGameEntity 0 0 0 0 {
 		ShaderParams = 0
 		TranslucencySortBias =  0.000000
 		Model = .\assets\visualtarget\initiation\enviro\ceilinglight.ms3d
-		ShaderOverride = 2
+		ShaderOverride = 3
 			.\assets\shaders\environment\environmentbase.kbshader
 .\assets\shaders\environment\environmentbase.kbshader
+..\..\kbengine\assets\shaders\basictranslucency.kbshader
 
 	}
 }
@@ -1483,9 +1493,10 @@ kbGameEntity 0 0 0 0 {
 		ShaderParams = 0
 		TranslucencySortBias =  0.000000
 		Model = .\assets\visualtarget\initiation\enviro\ceilinglight.ms3d
-		ShaderOverride = 2
+		ShaderOverride = 3
 			.\assets\shaders\environment\environmentbase.kbshader
 .\assets\shaders\environment\environmentbase.kbshader
+..\..\kbengine\assets\shaders\basictranslucency.kbshader
 
 	}
 }
@@ -1506,9 +1517,10 @@ kbGameEntity 0 0 0 0 {
 		ShaderParams = 0
 		TranslucencySortBias =  0.000000
 		Model = .\assets\visualtarget\initiation\enviro\ceilinglight.ms3d
-		ShaderOverride = 2
+		ShaderOverride = 3
 			.\assets\shaders\environment\environmentbase.kbshader
 .\assets\shaders\environment\environmentbase.kbshader
+..\..\kbengine\assets\shaders\basictranslucency.kbshader
 
 	}
 }
@@ -1529,9 +1541,10 @@ kbGameEntity 0 0 0 0 {
 		ShaderParams = 0
 		TranslucencySortBias =  0.000000
 		Model = .\assets\visualtarget\initiation\enviro\ceilinglight.ms3d
-		ShaderOverride = 2
+		ShaderOverride = 3
 			.\assets\shaders\environment\environmentbase.kbshader
 .\assets\shaders\environment\environmentbase.kbshader
+..\..\kbengine\assets\shaders\basictranslucency.kbshader
 
 	}
 }
@@ -1540,7 +1553,7 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "Rail"
-		Orientation = 0.000000 0.707 0 0.707
+		Orientation = 0.000000 0.707000 0.000000 0.707000
 		Position = 35.031403 26.636539 56.022415
 		Scale = 1.000000 1.000000 1.000000
 	}
@@ -1562,7 +1575,7 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "Rail"
-		Orientation = 0.000000 0.707 0 0.707
+		Orientation = 0.000000 0.707000 0.000000 0.707000
 		Position = 35.031403 26.636539 70.431503
 		Scale = 1.000000 1.000000 1.000000
 	}
@@ -1584,8 +1597,8 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "Rail"
-		Orientation = 0.000000 0.707 0 0.707
-		Position = 35.031403 26.636539 84.840588
+		Orientation = 0.000000 0.707000 0.000000 0.707000
+		Position = 35.031403 26.636539 84.840591
 		Scale = 1.000000 1.000000 1.000000
 	}
 	kbStaticModelComponent { 
@@ -1606,8 +1619,8 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "Rail"
-		Orientation = 0.000000 0.707 0 0.707
-		Position = 35.031403 26.636539 99.249676
+		Orientation = 0.000000 0.707000 0.000000 0.707000
+		Position = 35.031403 26.636539 99.249680
 		Scale = 1.000000 1.000000 1.000000
 	}
 	kbStaticModelComponent { 
@@ -1628,8 +1641,8 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "Rail"
-		Orientation = 0.000000 0.707 0 0.707
-		Position = 35.031403 26.636539 113.658764
+		Orientation = 0.000000 0.707000 0.000000 0.707000
+		Position = 35.031403 26.636539 113.658768
 		Scale = 1.000000 1.000000 1.000000
 	}
 	kbStaticModelComponent { 
@@ -1650,8 +1663,8 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "Rail"
-		Orientation = 0.000000 0.707 0 0.707
-		Position = 35.031403 26.636539 128.067852
+		Orientation = 0.000000 0.707000 0.000000 0.707000
+		Position = 35.031403 26.636539 128.067856
 		Scale = 1.000000 1.000000 1.000000
 	}
 	kbStaticModelComponent { 
@@ -1672,8 +1685,8 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "Rail"
-		Orientation = 0.000000 0.707 0 0.707
-		Position = 35.031403 26.636539 142.47694
+		Orientation = 0.000000 0.707000 0.000000 0.707000
+		Position = 35.031403 26.636539 142.476944
 		Scale = 1.000000 1.000000 1.000000
 	}
 	kbStaticModelComponent { 
@@ -1694,8 +1707,8 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "Rail"
-		Orientation = 0.000000 0.707 0 0.707
-		Position = 35.031403 26.636539 156.886028
+		Orientation = 0.000000 0.707000 0.000000 0.707000
+		Position = 35.031403 26.636539 156.886032
 		Scale = 1.000000 1.000000 1.000000
 	}
 	kbStaticModelComponent { 
@@ -1716,8 +1729,8 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "Rail"
-		Orientation = 0.000000 0.707 0 0.707
-		Position = 35.031403 26.636539 171.295116
+		Orientation = 0.000000 0.707000 0.000000 0.707000
+		Position = 35.031403 26.636539 171.295120
 		Scale = 1.000000 1.000000 1.000000
 	}
 	kbStaticModelComponent { 
@@ -1738,8 +1751,8 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "Rail"
-		Orientation = 0.000000 0.707 0 0.707
-		Position = 35.031403 26.636539 185.704204
+		Orientation = 0.000000 0.707000 0.000000 0.707000
+		Position = 35.031403 26.636539 185.704208
 		Scale = 1.000000 1.000000 1.000000
 	}
 	kbStaticModelComponent { 
@@ -1760,8 +1773,8 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "Rail"
-		Orientation = 0.000000 0.707 0 0.707
-		Position = 35.031403 26.636539 200.113292
+		Orientation = 0.000000 0.707000 0.000000 0.707000
+		Position = 35.031403 26.636539 200.113297
 		Scale = 1.000000 1.000000 1.000000
 	}
 	kbStaticModelComponent { 
@@ -1782,8 +1795,8 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "Rail"
-		Orientation = 0.000000 0.707 0 0.707
-		Position = 35.031403 26.636539 214.52238
+		Orientation = 0.000000 0.707000 0.000000 0.707000
+		Position = 35.031403 26.636539 214.522385
 		Scale = 1.000000 1.000000 1.000000
 	}
 	kbStaticModelComponent { 
@@ -1804,8 +1817,8 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "Rail"
-		Orientation = 0.000000 0.707 0 0.707
-		Position = 35.031403 26.636539 228.931468
+		Orientation = 0.000000 0.707000 0.000000 0.707000
+		Position = 35.031403 26.636539 228.931473
 		Scale = 1.000000 1.000000 1.000000
 	}
 	kbStaticModelComponent { 
@@ -1826,8 +1839,8 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "Rail"
-		Orientation = 0.000000 0.707 0 0.707
-		Position = 35.031403 26.636539 243.340556
+		Orientation = 0.000000 0.707000 0.000000 0.707000
+		Position = 35.031403 26.636539 243.340561
 		Scale = 1.000000 1.000000 1.000000
 	}
 	kbStaticModelComponent { 
@@ -1848,8 +1861,8 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "Rail"
-		Orientation = 0.000000 0.707 0 0.707
-		Position = 35.031403 26.636539 257.749644
+		Orientation = 0.000000 0.707000 0.000000 0.707000
+		Position = 35.031403 26.636539 257.749634
 		Scale = 1.000000 1.000000 1.000000
 	}
 	kbStaticModelComponent { 
@@ -1870,8 +1883,8 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "Rail"
-		Orientation = 0.000000 0.707 0 0.707
-		Position = 35.031403 26.636539 272.158732
+		Orientation = 0.000000 0.707000 0.000000 0.707000
+		Position = 35.031403 26.636539 272.158722
 		Scale = 1.000000 1.000000 1.000000
 	}
 	kbStaticModelComponent { 
@@ -1892,8 +1905,8 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "Rail"
-		Orientation = 0.000000 0.707 0 0.707
-		Position = 35.031403 26.636539 286.56782
+		Orientation = 0.000000 0.707000 0.000000 0.707000
+		Position = 35.031403 26.636539 286.567810
 		Scale = 1.000000 1.000000 1.000000
 	}
 	kbStaticModelComponent { 
@@ -1914,8 +1927,8 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "Rail"
-		Orientation = 0.000000 0.707 0 0.707
-		Position = 35.031403 26.636539 300.976908
+		Orientation = 0.000000 0.707000 0.000000 0.707000
+		Position = 35.031403 26.636539 300.976898
 		Scale = 1.000000 1.000000 1.000000
 	}
 	kbStaticModelComponent { 
@@ -1936,8 +1949,8 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "Rail"
-		Orientation = 0.000000 0.707 0 0.707
-		Position = 35.031403 26.636539 315.385996
+		Orientation = 0.000000 0.707000 0.000000 0.707000
+		Position = 35.031403 26.636539 315.385986
 		Scale = 1.000000 1.000000 1.000000
 	}
 	kbStaticModelComponent { 
@@ -1958,8 +1971,8 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "Rail"
-		Orientation = 0.000000 0.707 0 0.707
-		Position = 35.031403 26.636539 329.795084
+		Orientation = 0.000000 0.707000 0.000000 0.707000
+		Position = 35.031403 26.636539 329.795074
 		Scale = 1.000000 1.000000 1.000000
 	}
 	kbStaticModelComponent { 
@@ -1980,8 +1993,8 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "Rail"
-		Orientation = 0.000000 0.707 0 0.707
-		Position = 35.031403 26.636539 344.204172
+		Orientation = 0.000000 0.707000 0.000000 0.707000
+		Position = 35.031403 26.636539 344.204163
 		Scale = 1.000000 1.000000 1.000000
 	}
 	kbStaticModelComponent { 
@@ -2002,8 +2015,8 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "Rail"
-		Orientation = 0.000000 0.707 0 0.707
-		Position = 35.031403 26.636539 358.61326
+		Orientation = 0.000000 0.707000 0.000000 0.707000
+		Position = 35.031403 26.636539 358.613251
 		Scale = 1.000000 1.000000 1.000000
 	}
 	kbStaticModelComponent { 
@@ -2024,8 +2037,8 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "Rail"
-		Orientation = 0.000000 0.707 0 0.707
-		Position = 35.031403 26.636539 373.022348
+		Orientation = 0.000000 0.707000 0.000000 0.707000
+		Position = 35.031403 26.636539 373.022339
 		Scale = 1.000000 1.000000 1.000000
 	}
 	kbStaticModelComponent { 
@@ -2046,8 +2059,8 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "Rail"
-		Orientation = 0.000000 0.707 0 0.707
-		Position = 35.031403 26.636539 387.431436
+		Orientation = 0.000000 0.707000 0.000000 0.707000
+		Position = 35.031403 26.636539 387.431427
 		Scale = 1.000000 1.000000 1.000000
 	}
 	kbStaticModelComponent { 
@@ -2068,8 +2081,8 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "Rail"
-		Orientation = 0.000000 0.707 0 0.707
-		Position = 35.031403 26.636539 401.840524
+		Orientation = 0.000000 0.707000 0.000000 0.707000
+		Position = 35.031403 26.636539 401.840515
 		Scale = 1.000000 1.000000 1.000000
 	}
 	kbStaticModelComponent { 
@@ -2090,8 +2103,8 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "Rail"
-		Orientation = 0.000000 0.707 0 0.707
-		Position = 35.031403 26.636539 416.249612
+		Orientation = 0.000000 0.707000 0.000000 0.707000
+		Position = 35.031403 26.636539 416.249603
 		Scale = 1.000000 1.000000 1.000000
 	}
 	kbStaticModelComponent { 
@@ -2104,6 +2117,69 @@ kbGameEntity 0 0 0 0 {
 		Model = .\assets\visualtarget\initiation\enviro\rail.ms3d
 		ShaderOverride = 1
 			.\assets\shaders\environment\environmentbase.kbshader
+
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Entity_76"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = -0.455482 8.086106 43.891235
+		Scale = 1.000000 1.000000 1.000000
+	}
+	kbPointLightComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadows = 0
+		Color = 1.000000 1.000000 2.000000 1.000000
+		OverrideShader = NULL
+		ShaderParams = 0
+		LightRadius =  3.000000
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "TopFloor_AO"
+		Orientation = 0.499456 -0.500577 -0.501577 0.498383
+		Position = 34.576653 23.437078 229.756744
+		Scale = 25.000000 0.015000 0.015000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		RenderPass = TranlucentPass
+		ShaderParams = 0
+		TranslucencySortBias =  0.000000
+		Model = .\assets\visualtarget\initiation\enviro\cornerao.ms3d
+		ShaderOverride = 1
+			..\..\kbengine\assets\shaders\basicmultiplyblend.kbshader
+
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "TopFloor_AO"
+		Orientation = -0.499359 -0.500605 0.500184 0.499852
+		Position = 2.487579 3.957572 229.896072
+		Scale = 25.000000 0.015000 0.015000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		RenderPass = TranlucentPass
+		ShaderParams = 0
+		TranslucencySortBias =  0.000000
+		Model = .\assets\visualtarget\initiation\enviro\cornerao.ms3d
+		ShaderOverride = 1
+			..\..\kbengine\assets\shaders\basicmultiplyblend.kbshader
 
 	}
 }

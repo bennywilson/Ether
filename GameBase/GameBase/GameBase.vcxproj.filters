@@ -125,6 +125,9 @@
     <None Include="assets\shaders\Lights\characterPointRim.kbShader">
       <Filter>Shaders\Lights</Filter>
     </None>
+    <None Include="assets\shaders\Character\characterGlow.kbShader">
+      <Filter>Shaders\Character</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameBase.h">
