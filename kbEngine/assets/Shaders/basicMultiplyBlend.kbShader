@@ -13,6 +13,7 @@ cbuffer matrixBuffer {
 	matrix inverseProjection;
 	matrix viewProjection;
 	float4 cameraPos;
+	float4 uvScale;
 };
 
 kbShaderState {
@@ -68,6 +69,6 @@ Texture2D shaderTexture;
 SamplerState SampleType;
 
 float4 pixelShader( pixelInput	input ) : SV_TARGET {
-   float4 outColor = shaderTexture.Sample( SampleType, input.uv );
+   float4 outColor = shaderTexture.Sample( SampleType, input.uv * uvScale.xy );
    return outColor;
 }

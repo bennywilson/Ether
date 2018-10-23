@@ -470,6 +470,7 @@ private:
 
 	kbShader *									m_pOpaqueQuadShader;
 	kbShader *									m_pTranslucentShader;
+	kbShader *									m_pMultiplyBlendShader;
 	kbShader *									m_pBasicShader;
 	kbShader *									m_pDebugShader;
 	kbShader *									m_pMissingShader;

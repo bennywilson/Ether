@@ -383,6 +383,7 @@ kbRenderer_DX11::kbRenderer_DX11() :
 	m_pConsoleQuad( nullptr ),
 	m_pOpaqueQuadShader( nullptr ),
 	m_pTranslucentShader( nullptr ),
+	m_pMultiplyBlendShader( nullptr ),
 	m_pBasicParticleShader( nullptr ),
 	m_pBasicShader( nullptr ),
 	m_pDebugShader( nullptr ),
@@ -675,6 +676,7 @@ void kbRenderer_DX11::Init_Internal( HWND hwnd, const int frameWidth, const int 
 	m_pBasicShader = (kbShader *)g_ResourceManager.GetResource( "../../kbEngine/assets/Shaders/BasicShader.kbshader", true );	
 	m_pOpaqueQuadShader = (kbShader *) g_ResourceManager.GetResource( "../../kbEngine/assets/Shaders/basicTexture.kbshader", true );
 	m_pTranslucentShader = (kbShader *) g_ResourceManager.GetResource( "../../kbEngine/assets/Shaders/basicTranslucency.kbshader", true );
+	m_pMultiplyBlendShader = (kbShader *) g_ResourceManager.GetResource( "../../kbEngine/assets/Shaders/basicMultiplyBlend.kbshader", true );
 	m_pBasicParticleShader = (kbShader *) g_ResourceManager.GetResource( "../../kbEngine/assets/Shaders/basicParticle.kbshader", true );
 	m_pMissingShader = (kbShader *) g_ResourceManager.GetResource( "../../kbEngine/assets/Shaders/missingShader.kbshader", true );
 	m_pDebugShader = (kbShader *) g_ResourceManager.GetResource( "../../kbEngine/assets/Shaders/debugShader.kbshader", true );

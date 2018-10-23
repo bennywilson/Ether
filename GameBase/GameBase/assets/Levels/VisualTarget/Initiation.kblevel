@@ -1100,7 +1100,7 @@ kbGameEntity 0 0 0 0 {
 		LifeTime =  -1.000000
 		Name = "Door1_2"
 		Orientation = 0.000000 -0.707000 0.000000 0.707000
-		Position = 35.894169 28.027853 242.904266
+		Position = 35.894169 28.027853 242.904282
 		Scale = 1.100000 1.000122 1.000000
 	}
 	kbStaticModelComponent { 
@@ -2144,8 +2144,8 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "TopFloor_AO"
-		Orientation = 0.499456 -0.500577 -0.501577 0.498383
-		Position = 34.576653 23.437078 229.756744
+		Orientation = 0.500000 -0.500000 -0.500000 0.500000
+		Position = 35.286625 23.904457 229.753647
 		Scale = 25.000000 0.015000 0.015000
 	}
 	kbStaticModelComponent { 
@@ -2153,7 +2153,14 @@ kbGameEntity 0 0 0 0 {
 		LifeTime =  -1.000000
 		CastsShadow = 0
 		RenderPass = TranlucentPass
-		ShaderParams = 0
+		ShaderParams = 1
+			kbShaderParamComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				ParamName = "uvScale"
+				Texture = NULL
+				Vector = 1000.000000 1.000000 0.000000 0.000000
+			}
 		TranslucencySortBias =  0.000000
 		Model = .\assets\visualtarget\initiation\enviro\cornerao.ms3d
 		ShaderOverride = 1
@@ -2165,17 +2172,82 @@ kbGameEntity 0 0 0 0 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		Name = "TopFloor_AO"
-		Orientation = -0.499359 -0.500605 0.500184 0.499852
-		Position = 2.487579 3.957572 229.896072
-		Scale = 25.000000 0.015000 0.015000
+		Name = "BottoLeftFloor_AO"
+		Orientation = -0.500000 -0.500000 0.500000 0.500000
+		Position = 2.215589 3.957572 229.896072
+		Scale = 25.000000 0.010000 0.015000
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadow = 0
 		RenderPass = TranlucentPass
-		ShaderParams = 0
+		ShaderParams = 1
+			kbShaderParamComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				ParamName = "uvScale"
+				Texture = NULL
+				Vector = 1000.000000 1.000000 0.000000 0.000000
+			}
+		TranslucencySortBias =  0.000000
+		Model = .\assets\visualtarget\initiation\enviro\cornerao.ms3d
+		ShaderOverride = 1
+			..\..\kbengine\assets\shaders\basicmultiplyblend.kbshader
+
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "TopLeftFloor_AO"
+		Orientation = -0.707000 0.000000 0.707000 0.000000
+		Position = 2.271192 61.550976 229.912369
+		Scale = 25.000000 0.060000 0.060000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		RenderPass = TranlucentPass
+		ShaderParams = 1
+			kbShaderParamComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				ParamName = "uvScale"
+				Texture = NULL
+				Vector = 1000.000000 1.000000 0.000000 0.000000
+			}
+		TranslucencySortBias =  0.000000
+		Model = .\assets\visualtarget\initiation\enviro\cornerao.ms3d
+		ShaderOverride = 1
+			..\..\kbengine\assets\shaders\basicmultiplyblend.kbshader
+
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "TopRightFloor_AO"
+		Orientation = 0.500000 -0.500000 -0.500000 0.500000
+		Position = 36.084930 61.331200 230.306870
+		Scale = 1000.000000 0.040000 0.060000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		RenderPass = TranlucentPass
+		ShaderParams = 1
+			kbShaderParamComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				ParamName = "uvScale"
+				Texture = NULL
+				Vector = 1000.000000 1.000000 0.000000 0.000000
+			}
 		TranslucencySortBias =  0.000000
 		Model = .\assets\visualtarget\initiation\enviro\cornerao.ms3d
 		ShaderOverride = 1
