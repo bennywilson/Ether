@@ -22,7 +22,7 @@ kbGameEntity 0 0 0 0 {
 			}
 		TranslucencySortBias =  0.000000
 		Model = .\assets\visualtarget\initiation\gina\gina_prison.ms3d
-		ShaderOverride = 11
+		ShaderOverride = 12
 			.\assets\shaders\character\characterbase.kbshader
 .\assets\shaders\character\characterbase.kbshader
 .\assets\shaders\character\characterbase.kbshader
@@ -34,6 +34,7 @@ kbGameEntity 0 0 0 0 {
 .\assets\shaders\character\characterbase.kbshader
 .\assets\shaders\character\characterbase.kbshader
 .\assets\shaders\character\characterglow.kbshader
+.\assets\shaders\character\characterbase.kbshader
 
 		Animations = 1
 			EtherAnimComponent { 
@@ -2252,6 +2253,28 @@ kbGameEntity 0 0 0 0 {
 		Model = .\assets\visualtarget\initiation\enviro\cornerao.ms3d
 		ShaderOverride = 1
 			..\..\kbengine\assets\shaders\basicmultiplyblend.kbshader
+
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Entity_114"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 31.139088 58.313217 120.209724
+		Scale = 1.000000 1.000000 1.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		RenderPass = LightingPass
+		ShaderParams = 0
+		TranslucencySortBias =  0.000000
+		Model = .\assets\visualtarget\initiation\enviro\pipe.ms3d
+		ShaderOverride = 1
+			.\assets\shaders\environment\environmentbase.kbshader
 
 	}
 }
