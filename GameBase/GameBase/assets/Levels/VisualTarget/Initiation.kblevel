@@ -171,7 +171,7 @@ kbGameEntity 0 0 0 0 {
 		RenderPass = LightingPass
 		ShaderParams = 0
 		TranslucencySortBias =  0.000000
-		Model = .\assets\visualtarget\initiation\gina\gina_prison.ms3d
+		Model = .\assets\visualtarget\initiation\other\maletarget.ms3d
 		ShaderOverride = 10
 			.\assets\shaders\character\characterbase.kbshader
 .\assets\shaders\character\characterbase.kbshader
@@ -205,7 +205,7 @@ kbGameEntity 0 0 0 0 {
 		RenderPass = LightingPass
 		ShaderParams = 0
 		TranslucencySortBias =  0.000000
-		Model = .\assets\visualtarget\initiation\gina\gina_prison.ms3d
+		Model = .\assets\visualtarget\initiation\other\maletarget.ms3d
 		ShaderOverride = 9
 			.\assets\shaders\character\characterbase.kbshader
 .\assets\shaders\character\characterbase.kbshader
