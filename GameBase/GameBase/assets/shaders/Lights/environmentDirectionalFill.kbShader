@@ -12,9 +12,7 @@ cbuffer matrixBuffer {
    float4               lightPosition;
    float4               lightColor;
    float4               cameraPosition;
-   float4				diffuseColorBand;
-   float4				specularColorBand;
-   float4				rimLightColor;		// xyz - color, w - width
+   float4				specParams;
 };
 
 kbShaderState {
@@ -86,7 +84,7 @@ float4 pixelShader( pixelInput input ) : SV_TARGET {
 		float3 lightReflect = ( 2.0f * dot( normal.xyz, lightDirection.xyz ) * normal.xyz ) - lightDirection.xyz;
 		float spec = saturate( dot( lightReflect, toCameraVec ) );
 	
-		spec = pow( abs( spec ), specColor.y ) * specColor.x;
+		spec = pow( abs( spec ), specColor.y ) * specColor.x * specParams.x;
 	
 		float3 finalColor = diffuseColor.xyz * diffuse * lightColor.xyz + spec.xxx;	// todo
 

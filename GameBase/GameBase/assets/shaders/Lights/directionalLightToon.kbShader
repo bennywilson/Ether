@@ -19,6 +19,7 @@ cbuffer matrixBuffer {
    float4				specularColorBand;
    float4				rimLightColor;		// xyz - color, w - width
    float4				nonToonDiffuseScaleAndBias;
+   float4				specParams;
 };
 
 kbShaderState {
@@ -124,12 +125,12 @@ float4 pixelShader( pixelInput input ) : SV_TARGET {
 	} else {
 		diffuse = ( diffuse * nonToonDiffuseScaleAndBias.x ) + nonToonDiffuseScaleAndBias.y;
 	}
-
+		
+	spec = pow( abs( spec ), specColor.y ) * specColor.x;
 	if ( normal.w > 0.95f ) {
 		diffuseColor.w += (specColor.y / 6) * saturate( ( spec - 0.75f ) );
+		spec *= specParams.x;
 	}
-
-	spec = pow( abs( spec ), specColor.y ) * specColor.x;
 
 	const float3 emissive = diffuseColor.xyz * diffuseColor.w;
 	float3 finalColor = diffuseColor.xyz * diffuse * lightColor.xyz + spec.xxx + emissive;	// todo

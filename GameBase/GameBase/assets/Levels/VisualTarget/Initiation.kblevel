@@ -2,7 +2,7 @@ kbGameEntity 0 0 0 0 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		Name = "Gina"
+		Name = "Izzy"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
 		Position = 1.348596 3.686581 44.448784
 		Scale = 1.000000 1.000000 1.000000
@@ -62,9 +62,9 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadows = 1
-		Color = 1.000000 1.000000 1.000000 1.000000
+		Color = 0.500000 0.500000 0.500000 1.000000
 		OverrideShader = .\assets\shaders\lights\directionallighttoon.kbshader
-		ShaderParams = 4
+		ShaderParams = 5
 			kbShaderParamComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
@@ -93,6 +93,13 @@ kbGameEntity 0 0 0 0 {
 				Texture = NULL
 				Vector = 0.900000 0.100000 0.000000 0.000000
 			}
+			kbShaderParamComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				ParamName = "specParams"
+				Texture = NULL
+				Vector = 0.000000 0.000000 0.001000 0.000000
+			}
 		CascadedShadowSplits = 4
  20.000000
  60.000000
@@ -106,7 +113,7 @@ kbGameEntity 0 0 0 0 {
 		LifeTime =  -1.000000
 		Name = "Prison"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
-		Position = -3.741652 3.687035 41.503956
+		Position = -3.741652 3.687034 41.503956
 		Scale = 1.000000 1.000000 1.000000
 	}
 	kbStaticModelComponent { 
@@ -142,16 +149,23 @@ kbGameEntity 0 0 0 0 {
 		LifeTime =  -1.000000
 		Name = "EnvironmentDirectionalFill"
 		Orientation = 0.117166 -0.479171 -0.045908 0.868654
-		Position = 2.812516 16.311335 27.335854
+		Position = 2.812515 16.311335 27.335854
 		Scale = 1.000000 1.000000 1.000000
 	}
 	kbDirectionalLightComponent { 
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadows = 0
-		Color = 0.500000 0.500000 0.500000 1.000000
+		Color = 0.450000 0.450000 0.450000 1.000000
 		OverrideShader = .\assets\shaders\lights\environmentdirectionalfill.kbshader
-		ShaderParams = 0
+		ShaderParams = 1
+			kbShaderParamComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				ParamName = "specParams"
+				Texture = NULL
+				Vector = 0.000000 0.000000 0.000000 0.000000
+			}
 		CascadedShadowSplits = 0
 	}
 }
@@ -161,7 +175,7 @@ kbGameEntity 0 0 0 0 {
 		LifeTime =  -1.000000
 		Name = "Target"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
-		Position = 13.680246 4.325361 73.264900
+		Position = 13.239701 4.325361 71.178795
 		Scale = 1.000000 1.000000 1.000000
 	}
 	EtherSkelModelComponent { 
@@ -193,7 +207,7 @@ kbGameEntity 0 0 0 0 {
 	kbTransformComponent { 
 		Enabled = 1
 		LifeTime =  -1.000000
-		Name = "Recruiter"
+		Name = "Corn Bread"
 		Orientation = 0.076746 -0.652109 0.066615 0.751283
 		Position = 38.440685 4.014602 66.829323
 		Scale = 1.000000 1.000000 1.000000
@@ -205,7 +219,7 @@ kbGameEntity 0 0 0 0 {
 		RenderPass = LightingPass
 		ShaderParams = 0
 		TranslucencySortBias =  0.000000
-		Model = .\assets\visualtarget\initiation\other\maletarget.ms3d
+		Model = .\assets\visualtarget\initiation\other\accomplice.ms3d
 		ShaderOverride = 9
 			.\assets\shaders\character\characterbase.kbshader
 .\assets\shaders\character\characterbase.kbshader
@@ -228,7 +242,7 @@ kbGameEntity 0 0 0 0 {
 		LifeTime =  -1.000000
 		Name = "Gina_Rim"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
-		Position = 3.673923 14.159297 47.399494
+		Position = 3.940117 13.921847 47.399494
 		Scale = 1.000000 1.000000 1.000000
 	}
 	kbPointLightComponent { 
@@ -236,14 +250,35 @@ kbGameEntity 0 0 0 0 {
 		LifeTime =  -1.000000
 		CastsShadows = 0
 		Color = 3.000000 3.000000 3.000000 0.500000
-		OverrideShader = .\assets\shaders\lights\characterpointrim.kbshader
-		ShaderParams = 1
+		OverrideShader = .\assets\shaders\lights\charenviropointlight.kbshader
+		ShaderParams = 4
 			kbShaderParamComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
-				ParamName = "rimLightWidth"
+				ParamName = "rimParams"
 				Texture = NULL
-				Vector = 0.700000 0.710000 2.000000 0.500000
+				Vector = 0.700000 0.710000 1.000000 1.000000
+			}
+			kbShaderParamComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				ParamName = "enviroParams"
+				Texture = NULL
+				Vector = 0.000000 0.000000 0.000000 0.000000
+			}
+			kbShaderParamComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				ParamName = "characterParams"
+				Texture = NULL
+				Vector = 0.000000 0.000000 0.000000 0.000000
+			}
+			kbShaderParamComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				ParamName = "diffuseParams"
+				Texture = NULL
+				Vector = 0.000000 0.000000 0.000000 0.000000
 			}
 		LightRadius =  4.000000
 	}
@@ -252,26 +287,54 @@ kbGameEntity 0 0 0 0 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		Name = "Recruiter"
+		Name = "Corn Bread"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
-		Position = 43.433765 15.539772 64.374329
+		Position = 36.856426 11.509547 64.075928
 		Scale = 1.000000 1.000000 1.000000
 	}
 	kbPointLightComponent { 
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadows = 0
-		Color = 1.000000 1.000000 1.000000 1.000000
-		OverrideShader = .\assets\shaders\lights\characterpointrim.kbshader
-		ShaderParams = 1
+		Color = 0.500000 0.500000 2.000000 1.000000
+		OverrideShader = .\assets\shaders\lights\charenviropointlight.kbshader
+		ShaderParams = 5
 			kbShaderParamComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
-				ParamName = "rimLightWidth"
+				ParamName = "rimParams"
 				Texture = NULL
-				Vector = 0.500000 0.600000 1.000000 1.000000
+				Vector = 0.000000 0.000000 0.000000 0.000000
 			}
-		LightRadius =  8.000000
+			kbShaderParamComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				ParamName = "diffuseColorBand"
+				Texture = NULL
+				Vector = 0.010000 0.070000 1.000000 0.000000
+			}
+			kbShaderParamComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				ParamName = "diffuseParams"
+				Texture = NULL
+				Vector = 1.000000 0.500000 0.000000 0.000000
+			}
+			kbShaderParamComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				ParamName = "enviroParams"
+				Texture = NULL
+				Vector = 0.000000 0.000000 0.000000 0.000000
+			}
+			kbShaderParamComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				ParamName = "characterParams"
+				Texture = NULL
+				Vector = 1.000000 0.000000 0.000000 0.000000
+			}
+		LightRadius =  3.000000
 	}
 }
 kbGameEntity 0 0 0 0 {
@@ -279,28 +342,25 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BackWall_BackLight"
-		Orientation = -0.991793 0.023890 0.091362 0.086191
-		Position = 12.376690 12.442192 40.291950
+		Orientation = -0.997964 0.024719 0.033881 0.048046
+		Position = 15.089282 14.880506 54.465736
 		Scale = 1.000000 1.000000 1.000000
 	}
 	kbDirectionalLightComponent { 
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadows = 0
-		Color = 3.000000 3.000000 3.000000 1.000000
+		Color = 2.000000 2.000000 2.000000 1.000000
 		OverrideShader = .\assets\shaders\lights\environmentdirectionalfill.kbshader
-		ShaderParams = 0
+		ShaderParams = 1
+			kbShaderParamComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				ParamName = "specParams"
+				Texture = NULL
+				Vector = 1.000000 0.000000 0.000000 0.000000
+			}
 		CascadedShadowSplits = 0
-	}
-}
-kbGameEntity 0 0 0 0 {
-	kbTransformComponent { 
-		Enabled = 0
-		LifeTime =  -1.000000
-		Name = "Entity_26"
-		Orientation = 0.000000 0.000000 0.000000 1.000000
-		Position = 24.233452 20.621309 120.598694
-		Scale = 1.000000 1.000000 1.000000
 	}
 }
 kbGameEntity 0 0 0 0 {
@@ -342,8 +402,9 @@ kbGameEntity 0 0 0 0 {
 		ShaderParams = 0
 		TranslucencySortBias =  0.000000
 		Model = .\assets\visualtarget\initiation\enviro\jailcelldoor.ms3d
-		ShaderOverride = 1
+		ShaderOverride = 2
 			.\assets\shaders\environment\environmentbase.kbshader
+.\assets\shaders\environment\environmentbase.kbshader
 
 	}
 }
@@ -2127,16 +2188,44 @@ kbGameEntity 0 0 0 0 {
 		LifeTime =  -1.000000
 		Name = "Entity_76"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
-		Position = -0.455482 8.086106 43.891235
+		Position = -0.150677 7.904458 42.768696
 		Scale = 1.000000 1.000000 1.000000
 	}
 	kbPointLightComponent { 
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadows = 0
-		Color = 1.000000 1.000000 2.000000 1.000000
-		OverrideShader = NULL
-		ShaderParams = 0
+		Color = 0.000000 0.000000 1.000000 1.000000
+		OverrideShader = .\assets\shaders\lights\charenviropointlight.kbshader
+		ShaderParams = 4
+			kbShaderParamComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				ParamName = "diffuseColorBand"
+				Texture = NULL
+				Vector = 0.010000 0.070000 1.000000 0.000000
+			}
+			kbShaderParamComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				ParamName = "rimParams"
+				Texture = NULL
+				Vector = 0.000000 0.000000 0.000000 0.000000
+			}
+			kbShaderParamComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				ParamName = "diffuseParams"
+				Texture = NULL
+				Vector = 5.000000 1.000000 0.000000 0.000000
+			}
+			kbShaderParamComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				ParamName = "characterParams"
+				Texture = NULL
+				Vector = 1.000000 0.000000 0.000000 0.000000
+			}
 		LightRadius =  3.000000
 	}
 }
@@ -2276,5 +2365,60 @@ kbGameEntity 0 0 0 0 {
 		ShaderOverride = 1
 			.\assets\shaders\environment\environmentbase.kbshader
 
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Entity_116"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 52.573692 28.625965 34.128868
+		Scale = 1.000000 1.000000 1.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 1
+		RenderPass = LightingPass
+		ShaderParams = 0
+		TranslucencySortBias =  0.000000
+		Model = ..\..\kbengine\assets\editor\cube.ms3d
+		ShaderOverride = 1
+			.\assets\shaders\environment\environmentbase.kbshader
+
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Entity_115"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 13.570678 15.339252 71.273422
+		Scale = 1.000000 1.000000 1.000000
+	}
+	kbPointLightComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadows = 0
+		Color = 1.000000 1.000000 1.000000 1.000000
+		OverrideShader = .\assets\shaders\lights\charenviropointlight.kbshader
+		ShaderParams = 2
+			kbShaderParamComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				ParamName = "rimParams"
+				Texture = NULL
+				Vector = 0.150000 1.000000 1.000000 1.000000
+			}
+			kbShaderParamComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				ParamName = "diffuseParams"
+				Texture = NULL
+				Vector = 0.000000 0.000000 0.000000 0.000000
+			}
+		LightRadius =  6.000000
 	}
 }
