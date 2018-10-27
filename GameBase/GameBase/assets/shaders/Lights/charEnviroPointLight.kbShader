@@ -99,12 +99,12 @@ float4 pixelShader( pixelInput input ) : SV_TARGET {
 		diffuse = characterParams.x * smoothstep( diffuseColorBand.x, diffuseColorBand.y, diffuse ) ;//* diffuseColorBand.z + diffuseColorBand.w;
 		spec = 0;
 	} else {
-		if ( enviroParams.x <= 0 && enviroParams.y <= 0 ) {
+		if ( enviroParams.x <= 0 && enviroParams.y <= 0 || lightAttenuation == 0.0f ) {
 			clip(-1);
 		}
 		diffuse *= enviroParams.x;
 		spec *= enviroParams.y;
-		spec = pow( abs( spec ), specColor.y ) * specColor.x * lightAttenuation;
+		spec = pow( abs( spec ), ( enviroParams.w + specColor.y ) ) * ( enviroParams.z + specColor.x ) * lightAttenuation;
 	}
 
 

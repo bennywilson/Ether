@@ -175,7 +175,7 @@ kbGameEntity 0 0 0 0 {
 		LifeTime =  -1.000000
 		Name = "Target"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
-		Position = 13.239701 4.325361 71.178795
+		Position = 14.264540 4.325360 73.649841
 		Scale = 1.000000 1.000000 1.000000
 	}
 	EtherSkelModelComponent { 
@@ -198,8 +198,16 @@ kbGameEntity 0 0 0 0 {
 .\assets\shaders\character\characterbase.kbshader
 .\assets\shaders\character\characterbase.kbshader
 
-		Animations = 0
-		DebugAnimIndex = -1
+		Animations = 1
+			EtherAnimComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Animation = .\assets\visualtarget\initiation\other\targetwalk.kbanim.ms3d
+				AnimationName = ""
+				IsLooping = 0
+				TimeScale =  1.000000
+			}
+		DebugAnimIndex = 0
 		IsFirstPersonModel = 0
 	}
 }
@@ -208,8 +216,8 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 1
 		LifeTime =  -1.000000
 		Name = "Corn Bread"
-		Orientation = 0.076746 -0.652109 0.066615 0.751283
-		Position = 38.440685 4.014602 66.829323
+		Orientation = 0.000000 -0.703875 0.000000 0.710324
+		Position = 38.454140 4.014602 65.354477
 		Scale = 1.000000 1.000000 1.000000
 	}
 	EtherSkelModelComponent { 
@@ -217,22 +225,33 @@ kbGameEntity 0 0 0 0 {
 		LifeTime =  -1.000000
 		CastsShadow = 1
 		RenderPass = LightingPass
-		ShaderParams = 0
+		ShaderParams = 1
+			kbShaderParamComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				ParamName = "glowParams"
+				Texture = NULL
+				Vector = 3.000000 0.000000 0.000000 0.000000
+			}
 		TranslucencySortBias =  0.000000
-		Model = .\assets\visualtarget\initiation\other\accomplice.ms3d
-		ShaderOverride = 9
+		Model = .\assets\visualtarget\initiation\other\cornbread.ms3d
+		ShaderOverride = 5
 			.\assets\shaders\character\characterbase.kbshader
 .\assets\shaders\character\characterbase.kbshader
 .\assets\shaders\character\characterbase.kbshader
 .\assets\shaders\character\characterbase.kbshader
-.\assets\shaders\character\characterbase.kbshader
-.\assets\shaders\character\characterbase.kbshader
-.\assets\shaders\character\characterbase.kbshader
-.\assets\shaders\character\characterbase.kbshader
-.\assets\shaders\character\characterbase.kbshader
+.\assets\shaders\character\characterglow.kbshader
 
-		Animations = 0
-		DebugAnimIndex = -1
+		Animations = 1
+			EtherAnimComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Animation = .\assets\visualtarget\initiation\other\peek.kbanim.ms3d
+				AnimationName = "Peek"
+				IsLooping = 0
+				TimeScale =  1.000000
+			}
+		DebugAnimIndex = 0
 		IsFirstPersonModel = 0
 	}
 }
@@ -289,14 +308,14 @@ kbGameEntity 0 0 0 0 {
 		LifeTime =  -1.000000
 		Name = "Corn Bread"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
-		Position = 36.856426 11.509547 64.075928
+		Position = 36.856426 12.831622 64.075928
 		Scale = 1.000000 1.000000 1.000000
 	}
 	kbPointLightComponent { 
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadows = 0
-		Color = 0.500000 0.500000 2.000000 1.000000
+		Color = 0.500000 0.500000 5.000000 1.000000
 		OverrideShader = .\assets\shaders\lights\charenviropointlight.kbshader
 		ShaderParams = 5
 			kbShaderParamComponent { 
@@ -332,9 +351,9 @@ kbGameEntity 0 0 0 0 {
 				LifeTime =  -1.000000
 				ParamName = "characterParams"
 				Texture = NULL
-				Vector = 1.000000 0.000000 0.000000 0.000000
+				Vector = 0.200000 0.000000 0.000000 0.000000
 			}
-		LightRadius =  3.000000
+		LightRadius =  2.300000
 	}
 }
 kbGameEntity 0 0 0 0 {
@@ -2186,18 +2205,18 @@ kbGameEntity 0 0 0 0 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		Name = "Entity_76"
+		Name = "Izzy_Blade_Light"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
-		Position = -0.150677 7.904458 42.768696
+		Position = -0.720111 9.417298 43.218426
 		Scale = 1.000000 1.000000 1.000000
 	}
 	kbPointLightComponent { 
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadows = 0
-		Color = 0.000000 0.000000 1.000000 1.000000
+		Color = 0.500000 0.500000 5.000000 1.000000
 		OverrideShader = .\assets\shaders\lights\charenviropointlight.kbshader
-		ShaderParams = 4
+		ShaderParams = 6
 			kbShaderParamComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
@@ -2224,9 +2243,84 @@ kbGameEntity 0 0 0 0 {
 				LifeTime =  -1.000000
 				ParamName = "characterParams"
 				Texture = NULL
-				Vector = 1.000000 0.000000 0.000000 0.000000
+				Vector = 0.100000 0.000000 0.000000 0.000000
 			}
-		LightRadius =  3.000000
+			kbShaderParamComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				ParamName = "diffuseColorBand"
+				Texture = NULL
+				Vector = 0.000000 0.000000 1.000000 0.000000
+			}
+			kbShaderParamComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				ParamName = "enviroParams"
+				Texture = NULL
+				Vector = 0.200000 0.500000 5.000000 1.000000
+			}
+		LightRadius =  1.050000
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Izzy_Blade_Light_2"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = -2.039632 8.659781 44.326653
+		Scale = 1.000000 1.000000 1.000000
+	}
+	kbPointLightComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadows = 0
+		Color = 0.500000 0.500000 5.000000 1.000000
+		OverrideShader = .\assets\shaders\lights\charenviropointlight.kbshader
+		ShaderParams = 6
+			kbShaderParamComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				ParamName = "diffuseColorBand"
+				Texture = NULL
+				Vector = 0.010000 0.070000 1.000000 0.000000
+			}
+			kbShaderParamComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				ParamName = "rimParams"
+				Texture = NULL
+				Vector = 0.000000 0.000000 0.000000 0.000000
+			}
+			kbShaderParamComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				ParamName = "diffuseParams"
+				Texture = NULL
+				Vector = 5.000000 1.000000 0.000000 0.000000
+			}
+			kbShaderParamComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				ParamName = "characterParams"
+				Texture = NULL
+				Vector = 0.000000 0.000000 0.000000 0.000000
+			}
+			kbShaderParamComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				ParamName = "diffuseColorBand"
+				Texture = NULL
+				Vector = 0.000000 0.000000 1.000000 0.000000
+			}
+			kbShaderParamComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				ParamName = "enviroParams"
+				Texture = NULL
+				Vector = 0.050000 0.300000 5.000000 1.000000
+			}
+		LightRadius =  2.100000
 	}
 }
 kbGameEntity 0 0 0 0 {
@@ -2235,8 +2329,8 @@ kbGameEntity 0 0 0 0 {
 		LifeTime =  -1.000000
 		Name = "TopFloor_AO"
 		Orientation = 0.500000 -0.500000 -0.500000 0.500000
-		Position = 35.286625 23.904457 229.753647
-		Scale = 25.000000 0.015000 0.015000
+		Position = 35.286625 24.187912 229.753647
+		Scale = 25.000000 0.165000 0.040000
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -2265,7 +2359,7 @@ kbGameEntity 0 0 0 0 {
 		Name = "BottoLeftFloor_AO"
 		Orientation = -0.500000 -0.500000 0.500000 0.500000
 		Position = 2.215589 3.957572 229.896072
-		Scale = 25.000000 0.010000 0.015000
+		Scale = 25.000000 0.013000 0.040000
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -2294,7 +2388,7 @@ kbGameEntity 0 0 0 0 {
 		Name = "TopLeftFloor_AO"
 		Orientation = -0.707000 0.000000 0.707000 0.000000
 		Position = 2.271192 61.550976 229.912369
-		Scale = 25.000000 0.060000 0.060000
+		Scale = 25.000000 0.200000 0.030000
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -2323,7 +2417,7 @@ kbGameEntity 0 0 0 0 {
 		Name = "TopRightFloor_AO"
 		Orientation = 0.500000 -0.500000 -0.500000 0.500000
 		Position = 36.084930 61.331200 230.306870
-		Scale = 1000.000000 0.040000 0.060000
+		Scale = 1000.000000 0.100000 0.060000
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -2395,7 +2489,7 @@ kbGameEntity 0 0 0 0 {
 		LifeTime =  -1.000000
 		Name = "Entity_115"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
-		Position = 13.570678 15.339252 71.273422
+		Position = 13.526390 15.021092 76.700058
 		Scale = 1.000000 1.000000 1.000000
 	}
 	kbPointLightComponent { 
@@ -2404,13 +2498,13 @@ kbGameEntity 0 0 0 0 {
 		CastsShadows = 0
 		Color = 1.000000 1.000000 1.000000 1.000000
 		OverrideShader = .\assets\shaders\lights\charenviropointlight.kbshader
-		ShaderParams = 2
+		ShaderParams = 4
 			kbShaderParamComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
 				ParamName = "rimParams"
 				Texture = NULL
-				Vector = 0.150000 1.000000 1.000000 1.000000
+				Vector = 0.150000 1.000000 1.300000 1.000000
 			}
 			kbShaderParamComponent { 
 				Enabled = 0
@@ -2419,6 +2513,164 @@ kbGameEntity 0 0 0 0 {
 				Texture = NULL
 				Vector = 0.000000 0.000000 0.000000 0.000000
 			}
+			kbShaderParamComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				ParamName = ""
+				Texture = NULL
+				Vector = 0.000000 0.000000 0.000000 0.000000
+			}
+			kbShaderParamComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				ParamName = "enviroParams"
+				Texture = NULL
+				Vector = 0.000000 0.000000 0.000000 0.000000
+			}
 		LightRadius =  6.000000
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Entity_116"
+		Orientation = 0.000000 -0.703642 0.000000 0.710555
+		Position = 32.356773 26.128716 169.997009
+		Scale = 1.000000 1.000000 1.000000
+	}
+	EtherSkelModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		RenderPass = LightingPass
+		ShaderParams = 0
+		TranslucencySortBias =  0.000000
+		Model = .\assets\visualtarget\initiation\other\brunette.ms3d
+		ShaderOverride = 4
+			.\assets\shaders\character\characterbase.kbshader
+.\assets\shaders\character\characterbase.kbshader
+.\assets\shaders\character\characterbase.kbshader
+.\assets\shaders\character\characterbase.kbshader
+
+		Animations = 1
+			EtherAnimComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Animation = .\assets\visualtarget\initiation\other\railleaner.kbanim.ms3d
+				AnimationName = ""
+				IsLooping = 0
+				TimeScale =  1.000000
+			}
+		DebugAnimIndex = 0
+		IsFirstPersonModel = 0
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Entity_117"
+		Orientation = 0.000000 -0.695822 0.000000 0.718214
+		Position = 33.994026 25.997089 217.922287
+		Scale = 1.000000 1.000000 1.000000
+	}
+	EtherSkelModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		RenderPass = LightingPass
+		ShaderParams = 0
+		TranslucencySortBias =  0.000000
+		Model = .\assets\visualtarget\initiation\other\female_blond.ms3d
+		ShaderOverride = 4
+			.\assets\shaders\character\characterbase.kbshader
+.\assets\shaders\character\characterbase.kbshader
+.\assets\shaders\character\characterbase.kbshader
+.\assets\shaders\character\characterbase.kbshader
+
+		Animations = 1
+			EtherAnimComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Animation = .\assets\visualtarget\initiation\other\smoker.kbanim.ms3d
+				AnimationName = ""
+				IsLooping = 0
+				TimeScale =  1.000000
+			}
+		DebugAnimIndex = 0
+		IsFirstPersonModel = 0
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Entity_118"
+		Orientation = 0.000000 -0.371678 0.000000 0.928362
+		Position = 34.084721 3.370880 295.813934
+		Scale = 1.000000 1.000000 1.000000
+	}
+	EtherSkelModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		RenderPass = LightingPass
+		ShaderParams = 0
+		TranslucencySortBias =  0.000000
+		Model = .\assets\visualtarget\initiation\other\brunette.ms3d
+		ShaderOverride = 4
+			.\assets\shaders\character\characterbase.kbshader
+.\assets\shaders\character\characterbase.kbshader
+.\assets\shaders\character\characterbase.kbshader
+.\assets\shaders\character\characterbase.kbshader
+
+		Animations = 1
+			EtherAnimComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Animation = .\assets\visualtarget\initiation\other\standingaround.kbanim.ms3d
+				AnimationName = ""
+				IsLooping = 0
+				TimeScale =  1.000000
+			}
+		DebugAnimIndex = 0
+		IsFirstPersonModel = 0
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Entity_119"
+		Orientation = 0.000000 0.510934 0.000000 0.859620
+		Position = 27.599810 3.673371 298.850159
+		Scale = 1.000000 1.000000 1.000000
+	}
+	EtherSkelModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		RenderPass = LightingPass
+		ShaderParams = 0
+		TranslucencySortBias =  0.000000
+		Model = .\assets\visualtarget\initiation\other\brunette.ms3d
+		ShaderOverride = 4
+			.\assets\shaders\character\characterbase.kbshader
+.\assets\shaders\character\characterbase.kbshader
+.\assets\shaders\character\characterbase.kbshader
+.\assets\shaders\character\characterbase.kbshader
+
+		Animations = 1
+			EtherAnimComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Animation = .\assets\visualtarget\initiation\other\standingaround.kbanim.ms3d
+				AnimationName = ""
+				IsLooping = 0
+				TimeScale =  1.000000
+			}
+		DebugAnimIndex = 0
+		IsFirstPersonModel = 0
 	}
 }
