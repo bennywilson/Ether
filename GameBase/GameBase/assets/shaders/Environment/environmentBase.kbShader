@@ -40,9 +40,9 @@ struct pixelInput {
 
 //-------------------------------------
 struct PS_OUTPUT {
-	float4 Color		: SV_TARGET0;
-	float4 Normal		: SV_TARGET1;
-	float4 Specular		: SV_TARGET2;
+	float4 Color		: SV_TARGET0;	// Albedo.rgb, Emissive.z
+	float4 Normal		: SV_TARGET1;	// Normal.rgb, Toon or environment
+	float4 Specular		: SV_TARGET2;	// Specular, Spec Power, Emissive.x, Emissive.y
 	float2 Depth		: SV_TARGET3;
 };
 
@@ -79,14 +79,26 @@ SamplerState diffuseSampler;
 Texture2D normal					: register(t1);
 SamplerState normalSampler;
 
+Texture2D propertyMap				: register(t2);
+
+Texture2D emissiveMap				: register(t3);
+
+
  PS_OUTPUT pixelShader( pixelInput	input, bool IsFrontFace	: SV_IsFrontFace ) {
  	PS_OUTPUT output = (PS_OUTPUT) 0;
 
-	output.Color = diffuse.Sample( diffuseSampler, input.uv );
-	output.Depth.r = input.position2.x / input.position2.y;
-	float4 normalMap = normal.Sample( normalSampler, input.uv );
-	output.Specular = float4( output.Color.w, max( 1.0f, normalMap.w * 450.f ), 0.0f, 0.0f );
+	const float4 normalMap = normal.Sample( normalSampler, input.uv );
+	const float4 propertyMapValues = propertyMap.Sample( diffuseSampler, input.uv );
+	const float4 emissive = emissiveMap.Sample( diffuseSampler, input.uv );
 
+	output.Color = diffuse.Sample( diffuseSampler, input.uv );
+	output.Color.w = emissive.z;
+
+	output.Depth.r = input.position2.x / input.position2.y;
+
+
+	output.Specular = float4( propertyMapValues.x, max( 1.0f, propertyMapValues.y * 450.f ), emissive.x, emissive.y );
+	
 	float3x3 TBN = float3x3( normalize( input.TBN0.xyz ), normalize( input.TBN1.xyz ), normalize( input.TBN2.xyz ) );
 
 	/*if ( IsFrontFace == 0 ) {
@@ -95,6 +107,7 @@ SamplerState normalSampler;
 
 	float3 tangentNormal = normalize( normalMap.xyz * 2.0f - 1.0f );
 	output.Normal.xyz = mul( tangentNormal, TBN );
-	output.Normal.w = 1;
+	output.Normal.w = normalMap.w;
 	return output;
 }
+ 
