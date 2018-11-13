@@ -1,0 +1,191 @@
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		Name = "Key Light"
+		Orientation = -0.096824 0.000000 0.000000 0.995302
+		Position = -12.952059 14.228377 48.224205
+		Scale = 1.000000 1.000000 1.000000
+	}
+	kbDirectionalLightComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadows = 0
+		Color = 0.001000 0.100000 0.100000 0.000100
+		OverrideShader = .\assets\shaders\lights\directionallighttoon.kbshader
+		ShaderParams = 5
+			kbShaderParamComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				ParamName = "diffuseColorBand"
+				Texture = NULL
+				Vector = 0.010000 0.070000 0.500000 0.500000
+			}
+			kbShaderParamComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				ParamName = "specularColorBand"
+				Texture = NULL
+				Vector = 0.200000 0.300000 0.950000 0.050000
+			}
+			kbShaderParamComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				ParamName = "rimLightColor"
+				Texture = NULL
+				Vector = 0.350000 0.350000 0.350000 0.500000
+			}
+			kbShaderParamComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				ParamName = "nonToonDiffuseScaleAndBias"
+				Texture = NULL
+				Vector = 0.900000 0.100000 0.000000 0.000000
+			}
+			kbShaderParamComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				ParamName = "specParams"
+				Texture = NULL
+				Vector = 0.000000 0.000000 0.001000 0.000000
+			}
+		CascadedShadowSplits = 4
+ 20.000000
+ 60.000000
+ 160.000000
+ 800.000000
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "TV"
+		Orientation = -0.711201 0.000044 -0.000043 0.702989
+		Position = 5.431427 13.886693 53.160984
+		Scale = 5.000000 5.000000 5.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		RenderPass = LightingPass
+		ShaderParams = 2
+			kbShaderParamComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				ParamName = "propertyMap"
+				Texture = .\assets\visualtarget\elp_ad\tv\tv_screen_property.jpg
+				Vector = 1.000000 0.000000 0.000000 0.000000
+			}
+			kbShaderParamComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				ParamName = "emissiveMap"
+				Texture = .\assets\visualtarget\elp_ad\tv\tv_screen_emissive.jpg
+				Vector = 0.000000 0.000000 0.000000 0.000000
+			}
+		TranslucencySortBias =  0.000000
+		Model = .\assets\visualtarget\elp_ad\tv\tv.ms3d
+		ShaderOverride = 1
+			.\assets\shaders\environment\environmentbase.kbshader
+
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		Name = "Room"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 4.781331 25.421461 34.996712
+		Scale = 25.000000 25.000000 25.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		RenderPass = LightingPass
+		ShaderParams = 2
+			kbShaderParamComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				ParamName = "propertyMap"
+				Texture = .\assets\visualtarget\elp_ad\room\room_property.jpg
+				Vector = 0.000000 0.000000 0.000000 0.000000
+			}
+			kbShaderParamComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				ParamName = "emissiveMap"
+				Texture = .\assets\test\black.jpg
+				Vector = 0.000000 0.000000 0.000000 0.000000
+			}
+		TranslucencySortBias =  0.000000
+		Model = .\assets\visualtarget\elp_ad\room\room.ms3d
+		ShaderOverride = 1
+			.\assets\shaders\environment\environmentbase.kbshader
+
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "TV Light"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 5.963055 12.158839 48.001358
+		Scale = 1.000000 1.000000 1.000000
+	}
+	kbPointLightComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		CastsShadows = 0
+		Color = 1.000000 5.000000 5.000000 5.000000
+		OverrideShader = .\assets\shaders\lights\charenviropointlight.kbshader
+		ShaderParams = 6
+			kbShaderParamComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				ParamName = "diffuseColorBand"
+				Texture = NULL
+				Vector = 0.010000 0.070000 1.000000 0.000000
+			}
+			kbShaderParamComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				ParamName = "rimParams"
+				Texture = NULL
+				Vector = 0.000000 0.000000 0.000000 0.000000
+			}
+			kbShaderParamComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				ParamName = "diffuseParams"
+				Texture = NULL
+				Vector = 0.500000 1.000000 0.000000 0.000000
+			}
+			kbShaderParamComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				ParamName = "characterParams"
+				Texture = NULL
+				Vector = 0.100000 0.000000 0.000000 0.000000
+			}
+			kbShaderParamComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				ParamName = "diffuseColorBand"
+				Texture = NULL
+				Vector = 0.000000 0.000000 1.000000 0.000000
+			}
+			kbShaderParamComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				ParamName = "enviroParams"
+				Texture = NULL
+				Vector = 0.220000 0.500000 5.000000 1.000000
+			}
+		LightRadius =  16.000000
+	}
+}
