@@ -159,14 +159,11 @@ void EtherGame::Update_Internal( float DT ) {
 	
 	if ( GetAsyncKeyState( VK_LSHIFT ) && GetAsyncKeyState( 'P' ) ) {
 	    kbCamera & playerCamera = GetCamera();
-/*
-		this->SetMainCameraPos( kbVec3( 10.767f, 12.573f, 37.470f ) );
-		this->SetMainCameraRot( kbQuat( -0.125988275f, 0.325487375f, -0.0470125787f, 0.935935199f ) );
-*/
-      //  playerCamera.m_Position = kbVec3( 1.31999433f, 12.7329245f, 39.7846413f );
-		//playerCamera.m_Rotation = playerCamera.m_RotationTarget = kbQuat( -0.0644864589f, 0.119459502f, -0.00777558470f, 0.990712106f );
-		playerCamera.m_Position = kbVec3( 10.767f, 12.573f, 37.470f );
-		playerCamera.m_RotationTarget = playerCamera.m_Rotation = kbQuat( -0.125988275f, 0.325487375f, -0.0470125787f, 0.935935199f );//kbQuat( -0.0299576875f, -0.0499558337f, -0.00149911048f, 0.998300910f );
+
+		//SetMainCameraPos( kbVec3( 5.1198f, 13.310f, 43.877f ) );
+		//SetMainCameraRot( kbQuat( -0.0149f, 0.00499f,-7.51334301e-05f, 0.999875009f ) );
+		playerCamera.m_Position = kbVec3( 5.1198f, 13.310f, 43.877f ) ;
+		playerCamera.m_RotationTarget = playerCamera.m_Rotation = kbQuat( -0.0149f, 0.00499f,-7.51334301e-05f, 0.999875009f ); 
 	}
 
 	if ( ( g_pD3D11Renderer->IsRenderingToHMD() || g_pD3D11Renderer->IsUsingHMDTrackingOnly() ) && g_pD3D11Renderer->GetFrameNum() > 0 ) {

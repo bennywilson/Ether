@@ -120,9 +120,14 @@ kbEditor::kbEditor() :
 	curX += TRSButtonWidth + buttonSpacing;
 
 	const int speedButtonWidth = 85;
-	m_pSpeedButton = new Fl_Button(curX, curY, speedButtonWidth, buttonHeight, "Speedx1" );
+	m_pSpeedButton = new Fl_Button( curX, curY, speedButtonWidth, buttonHeight, "Speedx1" );
 	m_pSpeedButton->callback( AdjustCameraSpeedCB );
 	curX += speedButtonWidth + buttonSpacing * 2;
+
+	const int toggleIconButtonWidth = 85 * 2;
+	Fl_Button * iconToggleButton = new Fl_Button( curX , curY, speedButtonWidth, buttonHeight, "Toggle Icons" );
+	iconToggleButton->callback( ToggleIconsCB );
+	curX += toggleIconButtonWidth + buttonSpacing * 2;
 
 	m_pViewModeChoice = new Fl_Choice( curX, curY, (int)fl_width( "Wireframe") + TRSButtonWidth, buttonHeight );
 	m_pViewModeChoice->add( "Shaded" );		// Note: These have to be in the same order as the entries in kbViewMode_t
@@ -342,8 +347,8 @@ void kbEditor::Update() {
 */
 	// Initiation
 	if ( GetAsyncKeyState( VK_LSHIFT ) && GetAsyncKeyState( 'P' ) ) {
-		this->SetMainCameraPos( kbVec3( 5.03189945f, 12.6808462f, 36.3190956f ) );
-		this->SetMainCameraRot( kbQuat( -0.0299576875f, -0.0499558337f, -0.00149911048f, 0.998300910f ) );
+		SetMainCameraPos( kbVec3( 5.1198f, 13.310f, 43.877f ) );
+		SetMainCameraRot( kbQuat( -0.0149f, 0.00499f,-7.51334301e-05f, 0.999875009f ) );
 	}
 
 	if ( GetFocus() == fl_xid( this ) ) {
@@ -741,6 +746,15 @@ void kbEditor::AdjustCameraSpeedCB( class Fl_Widget * widget, void * ) {
 }
 
 /**
+ *	kbEditor::ToggleIconsCB
+ */
+void kbEditor::ToggleIconsCB( Fl_Widget * widget, void * userData ) {
+	static bool bBillboardsEnabled = true;
+	bBillboardsEnabled = !bBillboardsEnabled;
+	g_pRenderer->EnableDebugBillboards( bBillboardsEnabled );
+}
+
+/**
  *	kbEditor::NewLevel
  */
 void kbEditor::NewLevel( Fl_Widget *, void * ) {
@@ -763,7 +777,7 @@ void kbEditor::OpenLevel( class Fl_Widget *, void * ) {
 	Fl_File_Chooser fileChooser( ".", "*.kbLevel", Fl_File_Chooser::SINGLE, "Open Level" );
 
 	std::string currentDir = fileChooser.directory();
-	currentDir += "/levels";
+	currentDir += "/assets/levels";
 	fileChooser.directory( currentDir.c_str() );
 
 	fileChooser.show();
@@ -834,12 +848,10 @@ void kbEditor::SaveLevel_Internal( const std::string & fileNameStr, const bool b
  */
 void kbEditor::SaveLevelAs( class Fl_Widget *, void * ) {
 
-	Fl_File_Chooser fileChooser( ".", "*.kbLevel", Fl_File_Chooser::CREATE, "Save Level" );
-
+	Fl_File_Chooser fileChooser( "./assets/levels", "*.kbLevel", Fl_File_Chooser::CREATE, "Save Level" );
 	std::string currentDir = fileChooser.directory();
-	currentDir += "/levels";
-	fileChooser.directory( currentDir.c_str() );
-	
+	currentDir += "/assets/levels";
+
 	fileChooser.show();
 
 	while( fileChooser.shown() ) { Fl::wait(); }

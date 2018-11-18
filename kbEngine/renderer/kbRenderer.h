@@ -270,7 +270,9 @@ public:
 	void										RemoveLightShafts( const kbLightShaftsComponent *const pComponent );
 
 
-	// Debug Text Drawing
+	// Debug Drawing
+	virtual void								EnableDebugBillboards( const bool bEnable ) { m_bDebugBillboardsEnabled = bEnable; }
+
 	void										EnableConsole( const bool bEnable ) { m_bConsoleEnabled = bEnable; }
 	void										DrawDebugText( const std::string & theString, const float X, const float Y, const float ScreenCharWidth, 
 															   const float ScreenCharHeight, const kbColor & color );
@@ -413,7 +415,7 @@ protected:
 	volatile int								m_RenderThreadSync;
 
 	bool										m_bConsoleEnabled;
-
+	bool										m_bDebugBillboardsEnabled;
 };
 
 extern class kbRenderer * g_pRenderer;

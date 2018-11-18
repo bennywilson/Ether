@@ -267,28 +267,22 @@ void kbPropertiesTab::TextFieldCB( Fl_Widget * widget, void * voidPtr ) {
 	const std::string prevValue = inputField->value();
 	inputField->value( currentValue.c_str() );
 
+	kbComponent *const pModifiedComponent = userData->m_pComponent;
+	kbGameEntity *const pGameEntity = (kbGameEntity*)( pModifiedComponent->IsA( kbGameComponent::GetType() ) ? ( pModifiedComponent->GetOwner() ) : ( nullptr ) );
+
 	if ( userData->m_VariableType == KBTYPEINFO_VECTOR4 || userData->m_VariableType == KBTYPEINFO_VECTOR ) {
 		float & componentVar = *(float*)userData->m_pVariablePtr;
 		prevValuePtr = new float( (float)atof( prevValue.c_str() ) );
 		curValuePtr = new float( (float)atof( currentValue.c_str() ) );
 
 		componentVar = *(float*)curValuePtr;
-		
-		if ( userData->m_pComponent->IsEnabled() ) {
-			userData->m_pComponent->Enable( false );
-			userData->m_pComponent->Enable( true );
-		}
+
 	} else if ( userData->m_VariableType == KBTYPEINFO_INT ) {
 		int & componentVar = *( int * ) userData->m_pVariablePtr;
-		prevValuePtr = new int( (int)atoi( prevValue.c_str() ) );
-		curValuePtr = new int( (int)atoi( currentValue.c_str() ) );
+		prevValuePtr = new int( atoi( prevValue.c_str() ) );
+		curValuePtr = new int( atoi( currentValue.c_str() ) );
 
 		componentVar = ( int ) atoi( inputField->value() );
-
-		if ( userData->m_pComponent->IsEnabled() ) {
-			userData->m_pComponent->Enable( false );
-			userData->m_pComponent->Enable( true );
-		}
 	} else if ( userData->m_VariableType == KBTYPEINFO_FLOAT ) {
 		float & componentVar = *(float*)userData->m_pVariablePtr;
 		prevValuePtr = new float( (float)atof( prevValue.c_str() ) );
@@ -296,10 +290,6 @@ void kbPropertiesTab::TextFieldCB( Fl_Widget * widget, void * voidPtr ) {
 
 		componentVar = *(float*)curValuePtr;
 
-		if ( userData->m_pComponent->IsEnabled() ) {
-			userData->m_pComponent->Enable( false );
-			userData->m_pComponent->Enable( true );
-		}
 	} else if ( userData->m_VariableType == KBTYPEINFO_KBSTRING ) {
 		kbString & curString = *(kbString*)userData->m_pVariablePtr;
 		curString = inputField->value();
@@ -309,6 +299,21 @@ void kbPropertiesTab::TextFieldCB( Fl_Widget * widget, void * voidPtr ) {
 	}
 
 	g_Editor->PushUndoAction( new kbUndoVariableAction( userData->m_VariableType, prevValuePtr, curValuePtr, userData->m_pVariablePtr ) );
+
+	if ( pGameEntity != nullptr && pGameEntity->GetComponent(0) == pModifiedComponent ) {
+		// Refresh all components if the transform component was modified
+		kbTransformComponent *const pTransformComponent = (kbTransformComponent*)pGameEntity->GetComponent(0);
+		for ( int i = 0; i < pGameEntity->NumComponents(); i++ ) {
+			kbComponent *const pCurComp = pGameEntity->GetComponent(i);
+			if ( pCurComp->IsEnabled() ) {
+				pCurComp->Enable( false );
+				pCurComp->Enable( true );
+			}
+		}
+	} else if ( userData->m_pComponent->IsEnabled() ) {
+		userData->m_pComponent->Enable( false );
+		userData->m_pComponent->Enable( true );
+	}
 
 	userData->m_pComponent->EditorChange( userData->m_VariableName.stl_str() );
     if ( userData->m_pParentComponent != nullptr ) {

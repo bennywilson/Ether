@@ -134,14 +134,14 @@ kbGameEntity 0 0 0 0 {
 		LifeTime =  -1.000000
 		Name = "TV Light"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
-		Position = 5.963055 12.158839 48.001358
+		Position = 5.369246 13.782788 49.522701
 		Scale = 1.000000 1.000000 1.000000
 	}
 	kbPointLightComponent { 
-		Enabled = 0
+		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadows = 0
-		Color = 1.000000 5.000000 5.000000 5.000000
+		Color = 5.000000 5.000000 5.000000 0.000000
 		OverrideShader = .\assets\shaders\lights\charenviropointlight.kbshader
 		ShaderParams = 6
 			kbShaderParamComponent { 
@@ -186,6 +186,6 @@ kbGameEntity 0 0 0 0 {
 				Texture = NULL
 				Vector = 0.220000 0.500000 5.000000 1.000000
 			}
-		LightRadius =  16.000000
+		LightRadius =  9.000000
 	}
 }

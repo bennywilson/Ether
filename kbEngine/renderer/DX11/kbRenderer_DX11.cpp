@@ -2048,11 +2048,11 @@ void kbRenderer_DX11::RenderBloom() {
 
 		const float texelSize = 1.0f / GetRenderTarget_DX11(DOWN_RES_BUFFER_2)->GetWidth();
 		kbVec4 offsetsAndWeights[5];
-		offsetsAndWeights[0].Set( 0.0f * texelSize, 0.0f, 0.22702f, 0.0f );
-		offsetsAndWeights[1].Set( 1.0f * texelSize, 0.0f, 0.19459f, 0.0f );
-		offsetsAndWeights[2].Set( 2.0f * texelSize, 0.0f, 0.12162f, 0.0f );
-		offsetsAndWeights[3].Set( 3.0f * texelSize, 0.0f, 0.05405f, 0.0f );
-		offsetsAndWeights[4].Set( 4.0f * texelSize, 0.0f, 0.01621f, 0.0f );
+		offsetsAndWeights[0].Set( 0.0f, 0.0f * texelSize, 0.22702f, 0.0f );
+		offsetsAndWeights[1].Set( 0.0f, 1.0f * texelSize, 0.19459f, 0.0f );
+		offsetsAndWeights[2].Set( 0.0f, 2.0f * texelSize, 0.12162f, 0.0f );
+		offsetsAndWeights[3].Set( 0.0f, 3.0f * texelSize, 0.05405f, 0.0f );
+		offsetsAndWeights[4].Set( 0.0f, 4.0f * texelSize, 0.01621f, 0.0f );
 		SetShaderVec4Array( "offsetsAndWeights", offsetsAndWeights, 5, (byte*) mappedResource.pData, varBindings ); 
 		m_pDeviceContext->Unmap( pConstantBuffer, 0 );
 
@@ -3092,7 +3092,7 @@ void kbRenderer_DX11::RenderDebugLines() {
  */
 void kbRenderer_DX11::RenderDebugBillboards( const bool bIsEntityIdPass ) {
 	
-	if ( m_DebugBillboards.size() == 0 ) {
+	if ( m_DebugBillboards.size() == 0 || m_bDebugBillboardsEnabled == false ) {
 		return;
 	}
 

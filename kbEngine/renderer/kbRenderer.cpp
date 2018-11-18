@@ -200,7 +200,8 @@ kbRenderer::kbRenderer() :
 	m_FogEndDistance_RenderThread( 2200 ),
 	m_bConsoleEnabled( false ),
 	m_pRenderJob( nullptr ),
-	m_RenderThreadSync( 0 ) {
+	m_RenderThreadSync( 0 ),
+	m_bDebugBillboardsEnabled( false ) {
 
 	g_pRenderer = this;
 
