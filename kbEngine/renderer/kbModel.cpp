@@ -5,6 +5,7 @@
 //
 // 2016-2018 kbEngine 2.0
 //==============================================================================
+#include <fbxsdk.h>
 #include "kbCore.h"
 #include "kbVector.h"
 #include "kbIntersectionTests.h"
@@ -96,7 +97,21 @@ kbModel::~kbModel() {
  *	kbModel::Load_Internal
  */
 bool kbModel::Load_Internal() {
+	const std::string fileExt = GetFileExtension( GetFullFileName() );
+	if (fileExt == "ms3d") {
+		return LoadMS3D();
+	}
+	else if (fileExt == "fbx") {
+		return LoadFBX();
+	}
 
+	return false;
+}
+
+/**
+ *	kbModel::LoadMS3D
+ */
+bool kbModel::LoadMS3D() {
 	std::ifstream modelFile;
 	modelFile.open( m_FullFileName, std::ifstream::in | std::ifstream::binary );
 	kbErrorCheck( modelFile.good(), "kbModel::LoadResource_Internal() - Failed to load model %s", m_FullFileName.c_str() );
@@ -547,6 +562,108 @@ bool kbModel::Load_Internal() {
 
 		m_InvRefPose[i] = m_RefPose[i];
 		m_InvRefPose[i].Invert();
+	}
+
+	return true;
+}
+
+/**
+ *	kbModel::LoadFBX
+ */
+FbxManager * g_pFBXSDKManager = nullptr;
+
+bool kbModel::LoadFBX() {
+
+	struct FBXData {
+		FbxImporter * pImporter = nullptr;
+		FbxScene * pScene = nullptr;
+
+		~FBXData() {
+			if ( pImporter != nullptr ) {
+				pImporter->Destroy();
+			}
+			if ( pScene != nullptr ) {
+				pScene->Destroy();
+			}
+		}
+	} fbxData;
+
+	if ( g_pFBXSDKManager == nullptr ) {
+		g_pFBXSDKManager = FbxManager::Create();
+
+		FbxIOSettings *const pIOsettings = FbxIOSettings::Create( g_pFBXSDKManager, IOSROOT );
+		g_pFBXSDKManager->SetIOSettings(pIOsettings);
+	}
+
+	fbxData.pImporter = FbxImporter::Create( g_pFBXSDKManager, "" );
+
+	bool bSuccess = fbxData.pImporter->Initialize( GetFullFileName().c_str(), -1, g_pFBXSDKManager->GetIOSettings() );
+	if( bSuccess == false ) {
+		return false;
+	}
+
+	fbxData.pScene = FbxScene::Create( g_pFBXSDKManager,"" );
+	bSuccess = fbxData.pImporter->Import( fbxData.pScene );
+	if( bSuccess == false ) {
+		return false;
+	}
+
+	FbxNode * pRootNode = fbxData.pScene->GetRootNode();
+	kbErrorCheck( pRootNode != nullptr, "kbModel::LoadFBX() - Root node not found in %s", GetFullFileName().c_str() );
+
+	for ( uint iMesh = 0; iMesh < pRootNode->GetChildCount(); iMesh++ ) {
+		
+		FbxMesh *const pFBXMesh = pRootNode->GetChild(iMesh)->GetMesh();
+		if ( pFBXMesh == nullptr ) {
+			kbWarning( "kbModel::LoadFBX() - Model has nodes without meshes" );
+			continue;
+		}
+
+		mesh_t newMesh;
+		newMesh.m_NumTriangles = pFBXMesh->GetPolygonCount();
+		int vertexCount = 0;
+
+		for ( uint iTri = 0; iTri < newMesh.m_NumTriangles; iTri++ ) {
+			kbVec3 normal[3];
+			kbVec3 tangent[3];
+			kbVec3 binormal[3];
+			kbVec2 uvs[3];
+
+			for ( uint iTriVert = 0; iTriVert < 3; iTriVert++ ) {
+				int iCtrlPt = pFBXMesh->GetPolygonVertex( iTri, iTriVert );
+
+				FbxGeometryElementNormal *const pFBXVertNormal = pFBXMesh->GetElementNormal(0);
+				if ( pFBXVertNormal != nullptr ) {
+					auto mappingMode = pFBXVertNormal->GetMappingMode();
+					kbErrorCheck( mappingMode == FbxGeometryElement::eByPolygonVertex, "kbModel::LoadFBX() - Invalid vertex normal mapping mode" );
+
+					auto refMode = pFBXVertNormal->GetReferenceMode();
+					kbErrorCheck( refMode == FbxGeometryElement::eDirect, "kbModel::LoadFBX() - Invalid vertex normal mapping mode" );
+
+					normal[iTriVert].x = pFBXVertNormal->GetDirectArray().GetAt(iTriVert).mData[0];
+					normal[iTriVert].y = pFBXVertNormal->GetDirectArray().GetAt(iTriVert).mData[1];
+					normal[iTriVert].z = pFBXVertNormal->GetDirectArray().GetAt(iTriVert).mData[2];
+				}
+
+				FbxGeometryElementUV *const pFBXVertUV = pFBXMesh->GetElementUV(0);
+				if ( pFBXVertUV != nullptr ) {
+					auto uvMapMode = pFBXVertUV->GetMappingMode();
+					kbErrorCheck( uvMapMode == FbxGeometryElement::eByPolygonVertex, "kbModel::LoadFBX() - Invalid uvs mapping mode" );
+
+					auto uvRefMode = pFBXVertUV->GetReferenceMode();
+					kbErrorCheck( uvRefMode == FbxGeometryElement::eIndexToDirect, "kbModel::LoadFBX() - Invalid uvs mapping mode" );
+
+					const int uvIndex = pFBXVertUV->GetIndexArray().GetAt(iTriVert);
+					uvs[iTriVert].x = pFBXVertUV->GetDirectArray().GetAt(uvIndex).mData[0];
+					uvs[iTriVert].y = pFBXVertUV->GetDirectArray().GetAt(uvIndex).mData[1];
+
+					static int breakhere = 0;
+					breakhere++;
+				}
+//				ReadFBXNormal( pCurMesh, iCtrlPt, vertexCount );
+//				ReadFBXUVs( pCurMesh, iCtrlPt, pCurMesh->GetTextureUVIndex( iTri, iTriVert ), 0 );
+			}
+		}
 	}
 
 	return true;

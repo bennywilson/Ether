@@ -154,7 +154,10 @@ public:
 protected:
 
 	virtual bool								Load_Internal();
+	bool										LoadMS3D();
+	bool										LoadFBX();
 	virtual void								Release_Internal();
+
 
 	kbRenderBuffer								m_VertexBuffer;
 	kbRenderBuffer								m_IndexBuffer;

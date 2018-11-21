@@ -17,7 +17,6 @@ void kbStaticModelComponent::Constructor() {
 	m_pModel = nullptr;
 }
 
-
 /**
  *	~kbStaticModelComponent
  */
@@ -30,7 +29,7 @@ kbStaticModelComponent::~kbStaticModelComponent() {
 void kbStaticModelComponent::EditorChange( const std::string & propertyName ) {
 	Super::EditorChange( propertyName );
 
-	if ( propertyName == "Model" || propertyName == "ShaderOverride" ) {
+	if ( IsEnabled() && ( propertyName == "Model" || propertyName == "ShaderOverride" ) ) {
 		SetEnable_Internal( false );
 		SetEnable_Internal( true );
 	}
