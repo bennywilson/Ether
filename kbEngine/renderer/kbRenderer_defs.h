@@ -133,55 +133,25 @@ struct vertexLayout {
 		memset( this, 0, sizeof(vertexLayout) );
 	}
 
-	bool operator == ( const vertexLayout & op2 ) const {
-		const float epsilon = 0.0000001f;
-		return position.Compare( op2.position, epsilon ) && uv.Compare( op2.uv, epsilon ) && 
-			normal[0] == op2.normal[0] && normal[1] == op2.normal[1] && normal[2] == op2.normal[2];
-	}
-
-	bool operator < ( const vertexLayout & op2 ) const {
-
-		if ( position.x < op2.position.x ) {
-			return true;
-		} else if ( position.x > op2.position.x ) {
-			return false;
-		} else if ( position.y < op2.position.y ) {
-			return true;
-		} else if ( position.y > op2.position.y ) {
-			return false;
-		} else if ( position.z < op2.position.z ) {
-			return true;
-		} else if ( position.z > op2.position.z ) {
-			return false;
-		} else if ( normal[0] < op2.normal[0] ) {
-			return true;
-		} else if ( normal[0] > op2.normal[0] ) {
-			return false;
-		} else if ( normal[1] < op2.normal[1] ) {
-			return true;
-		} else if ( normal[1] > op2.normal[1] ) {
-			return false;
-		} else if ( normal[2] < op2.normal[2] ) {
-			return true;
-		} else if ( normal[2] > op2.normal[2] ) {
-			return false;
-		} else if ( normal[3] < op2.normal[3] ) {
-			return true;
-		} else if ( normal[3] > op2.normal[3] ) {
-			return false;
-		} else if ( uv.x < op2.uv.x ) {
-			return true;
-		} else if ( uv.x > op2.uv.x ) {
-			return false;
-		} else if ( uv.y < op2.uv.y ) {
-			return true;
-		} else if ( uv.y > op2.uv.y ) {
-			return false;
-		} 
-
-		return false;
+	bool operator ==( const vertexLayout & op2 ) const {
+		const float epsilon = 0.0000000001f;
+		return  position.Compare( op2.position, epsilon ) && uv.Compare( op2.uv, epsilon ) &&
+				kbCompareByte4( color, op2.color ) &&
+				kbCompareByte4( normal, op2.normal ) && kbCompareByte4( tangent, op2.tangent );
 	}
 };
+
+struct kbVertexHash
+{
+     size_t operator()( const vertexLayout & key ) const
+     {
+		 size_t hash = ((int)key.color[0] << 24) | ((int)key.color[1] << 16) | ((int)key.color[2] << 8) | ((int)key.color[3]);
+		 hash ^= ((int)key.normal[0] << 24) | ((int)key.normal[1] << 16) | ((int)key.normal[2] << 8) | ((int)key.normal[3]);
+		 hash ^= ((int)key.tangent[0] << 24) | ((int)key.tangent[1] << 16) | ((int)key.tangent[2] << 8) | ((int)key.tangent[3]);
+
+		 return hash;
+     }
+ };
 
 /**
  *	kbBoneMatrix_t

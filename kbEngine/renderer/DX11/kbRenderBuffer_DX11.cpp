@@ -130,7 +130,7 @@ void kbRenderBuffer::CreateVertexBuffer( const std::vector< vertexLayout > & ver
 /**
  *	kbRenderBuffer::CreateIndexBuffer
  */
-void kbRenderBuffer::CreateIndexBuffer( const std::vector< unsigned long > & indices ) {
+void kbRenderBuffer::CreateIndexBuffer( const std::vector<unsigned long> & indices ) {
 	if ( m_pBuffer != NULL ) {
 		m_pBuffer->Release();
 		m_pBuffer = NULL;

@@ -131,8 +131,11 @@ void kbErrorCheck( const bool bExpression, const char *const msg, ... ) {
 
 	va_list args;
 	va_start( args, msg );
-	kbError( msg, args );
+	WriteToFile( msg, args );
 	va_end( args );
+
+	DebugBreak();
+	throw finalBuffer;
 }
 
 /**
