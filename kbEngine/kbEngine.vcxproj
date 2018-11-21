@@ -14,7 +14,7 @@
     <ProjectGuid>{1A5BE40E-CA10-4F6F-BBD9-335935B93092}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>kbEngine</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
@@ -41,8 +41,8 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>./sound;$(WindowsSDK_IncludePath);./External;./gameEntity;./boundingVolumes;./math;./core;C:\Program Files (x86)\Windows Kits\8.1\Include\shared;$(IncludePath);./renderer;.\External\OculusSDK\LibOVR\Include;.\External\OculusSDK\LibOVR\Include\Extras;.\External\OculusSDK\LibOVRKernel\Src\Kernel</IncludePath>
-    <LibraryPath>./External/OculusSDK\LibOVR\Lib\Windows\x64\Debug\VS2015;C:\Program Files (x86)\Windows Kits\8.1\Lib\winv6.3\um\x64;C:\Program Files\Microsoft SDKs\Windows\v7.1\Lib\FL\x64;$(LibraryPath)</LibraryPath>
+    <IncludePath>C:\Program Files\Autodesk\FBX\FBX SDK\2019.0\include;./sound;$(WindowsSDK_IncludePath);./External;./gameEntity;./boundingVolumes;./math;./core;C:\Program Files (x86)\Windows Kits\8.1\Include\shared;$(IncludePath);./renderer;.\External\OculusSDK\LibOVR\Include;.\External\OculusSDK\LibOVR\Include\Extras;.\External\OculusSDK\LibOVRKernel\Src\Kernel</IncludePath>
+    <LibraryPath>C:\Program Files\Autodesk\FBX\FBX SDK\2019.0\lib\vs2015\x64\debug;./External/OculusSDK\LibOVR\Lib\Windows\x64\Debug\VS2015;C:\Program Files (x86)\Windows Kits\8.1\Lib\winv6.3\um\x64;C:\Program Files\Microsoft SDKs\Windows\v7.1\Lib\FL\x64;$(LibraryPath)</LibraryPath>
     <OutDir>.\lib\</OutDir>
     <TargetName>kbEngined</TargetName>
   </PropertyGroup>
@@ -67,7 +67,7 @@
     </Link>
     <Lib>
       <OutputFile>./lib/kbEngineD.lib</OutputFile>
-      <AdditionalDependencies>libovr.lib</AdditionalDependencies>
+      <AdditionalDependencies>libovr.lib; libfbxsdk-md.lib</AdditionalDependencies>
     </Lib>
     <ProjectReference>
       <LinkLibraryDependencies>false</LinkLibraryDependencies>

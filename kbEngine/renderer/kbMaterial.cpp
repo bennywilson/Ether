@@ -5,7 +5,6 @@
 // 2016-2018 kbEngine 2.0
 //===================================================================================================
 #include <Wincodec.h>
-#include <unordered_map>
 #include "kbCore.h"
 #include "kbRenderer_defs.h"
 #include "kbRenderer.h"
