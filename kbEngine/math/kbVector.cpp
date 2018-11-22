@@ -19,6 +19,7 @@ const kbVec3 kbVec3::one( 1.0f, 1.0f, 1.0f );
 const kbVec4 kbVec4::right( 1.0f, 0.0f, 0.0f, 0.0f );
 const kbVec4 kbVec4::up( 0.0f, 1.0f, 0.0f, 0.0f );
 const kbVec4 kbVec4::forward( 0.0f, 0.0f, 1.0f, 0.0f );
+const kbVec4 kbVec4::zero( 0.0f, 0.0f, 0.0f, 0.0f );
 
 const kbColor kbColor::red( 1.0f, 0.0f, 0.0f, 1.0f );
 const kbColor kbColor::green( 0.0f, 1.0f, 0.0f, 1.0f );
