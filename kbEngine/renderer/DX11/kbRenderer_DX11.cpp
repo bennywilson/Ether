@@ -806,7 +806,7 @@ void kbRenderer_DX11::Init_Internal( HWND hwnd, const int frameWidth, const int 
 	m_DebugText = new kbModel();
 	m_DebugText->CreateDynamicModel( 10000, 10000 );
 
-	unsigned long * pDebugText = (unsigned long *)m_DebugText->MapIndexBuffer();
+	ushort *const pDebugText = (ushort*)m_DebugText->MapIndexBuffer();
 	int iVert = 0;
 
 	for ( int i = 0; i < 9996; i += 6, iVert += 4 ) {
@@ -1774,7 +1774,7 @@ void kbRenderer_DX11::RenderDebugText() {
 	ID3D11Buffer * const indexBuffer = ( ID3D11Buffer * const ) m_DebugText->m_IndexBuffer.GetBufferPtr();
 
 	m_pDeviceContext->IASetVertexBuffers( 0, 1, &vertexBuffer, &stride, &offset );
-	m_pDeviceContext->IASetIndexBuffer( indexBuffer, DXGI_FORMAT_R32_UINT, 0 );
+	m_pDeviceContext->IASetIndexBuffer( indexBuffer, DXGI_FORMAT_R16_UINT, 0 );
 	m_pDeviceContext->IASetPrimitiveTopology( D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST );
 	m_pDeviceContext->RSSetState( m_pNoFaceCullingRasterizerState );
 
@@ -2895,7 +2895,7 @@ void kbRenderer_DX11::RenderMesh( const kbRenderSubmesh *const pRenderMesh, cons
 	    m_pDeviceContext->IASetPrimitiveTopology( D3D11_PRIMITIVE_TOPOLOGY_POINTLIST );
     } else {
 	    ID3D11Buffer *const pIndexBuffer = ( ID3D11Buffer * const ) pModel->m_IndexBuffer.GetBufferPtr();
-	    m_pDeviceContext->IASetIndexBuffer( pIndexBuffer, DXGI_FORMAT_R32_UINT, 0 );
+	    m_pDeviceContext->IASetIndexBuffer( pIndexBuffer, DXGI_FORMAT_R16_UINT, 0 );
 	    m_pDeviceContext->IASetPrimitiveTopology( D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST );
     }
 
@@ -3220,7 +3220,7 @@ void kbRenderer_DX11::RT_SetRenderTarget( kbRenderTexture *const pRenderTexture 
  */
 void kbRenderer_DX11::RT_ClearRenderTarget( kbRenderTexture *const pRenderTexture, const kbColor & color ) {
 
-	m_pDeviceContext->ClearRenderTargetView( ((kbRenderTexture_DX11*)pRenderTexture)->m_pRenderTargetView, &color. x);
+	m_pDeviceContext->ClearRenderTargetView( ((kbRenderTexture_DX11*)pRenderTexture)->m_pRenderTargetView, &color.x );
 }
 
 /**
@@ -3239,7 +3239,7 @@ void kbRenderer_DX11::RT_RenderMesh( const kbModel *const pModel, kbShader * pSh
 	m_pDeviceContext->IASetVertexBuffers(0, 1, &pVertexBuffer, &vertexStride, &vertexOffset);
 
 	ID3D11Buffer *const pIndexBuffer = (ID3D11Buffer * const)pModel->m_IndexBuffer.GetBufferPtr();
-	m_pDeviceContext->IASetIndexBuffer( pIndexBuffer, DXGI_FORMAT_R32_UINT, 0 );
+	m_pDeviceContext->IASetIndexBuffer( pIndexBuffer, DXGI_FORMAT_R16_UINT, 0 );
 	m_pDeviceContext->IASetPrimitiveTopology( D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST );
 
 	m_pDeviceContext->IASetInputLayout( (ID3D11InputLayout*)pShader->GetVertexLayout() );

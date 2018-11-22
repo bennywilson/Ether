@@ -132,9 +132,7 @@ bool kbModel::LoadMS3D() {
 	const ms3dHeader_t * pHeader = ( const ms3dHeader_t * ) pPtr;
 	pPtr += sizeof( ms3dHeader_t );
 
-	if ( strncmp( pHeader->m_ID, "MS3D000000", 10 ) != 0 ) {
-		kbError( "Error: kbModel::LoadResource_Internal - Invalid model header %d", pHeader->m_ID );
-	}
+	kbErrorCheck( strncmp( pHeader->m_ID, "MS3D000000", 10 ) == 0, "kbModel::LoadResource_Internal - Invalid model header %d", pHeader->m_ID );
 
 	// Vertices
 	m_Bounds.Reset();
@@ -613,7 +611,7 @@ bool kbModel::LoadFBX() {
 
 	std::unordered_map<vertexLayout, int, kbVertexHash> vertexMap;
 	std::vector<vertexLayout> vertexList;
-	std::vector<unsigned long> indexList;
+	std::vector<ushort> indexList;
 
 	for ( int iMesh = 0; iMesh < pRootNode->GetChildCount(); iMesh++ ) {
 		
@@ -1010,7 +1008,7 @@ void kbModel::SetBoneMatrices( const float time, const kbAnimation *const theAni
 }
 
 /**
- *	kbModel::BlendAnimations
+ *	kbModel::Animate
  */
 void kbModel::Animate( const float time, const kbAnimation *const pAnimation, const bool bLoopAnim, std::vector<kbBoneMatrix_t> & boneMatrices ) {
 	std::vector<tempBone_t> tempBones;
@@ -1090,7 +1088,7 @@ kbAnimation::kbAnimation() :
 }
 
 /**
- *	kbAnimation::kbAnimation
+ *	kbAnimation::Load_Internal
  */
 bool kbAnimation::Load_Internal() {
 

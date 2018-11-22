@@ -2,7 +2,7 @@
 // kbRenderBuffer.h
 //
 //
-// 2016-2017 kbEngine 2.0
+// 2016-2018 kbEngine 2.0
 //===================================================================================================
 #ifndef _KBRENDERBUFFER_H_
 #define _KBRENDERBUFFER_H_
@@ -25,8 +25,8 @@ public:
 	void										CreateVertexBuffer( const int numVerts, const int vertexByteSize );
 	void										CreateIndexBuffer( const int numIndexes );
 
-	void										CreateVertexBuffer( const std::vector< vertexLayout > & vertices );
-	void										CreateIndexBuffer( const std::vector< unsigned long > & indices );
+	void										CreateVertexBuffer( const std::vector<vertexLayout> & vertices );
+	void										CreateIndexBuffer( const std::vector<ushort> & indices );
 
 	void *										Map();
 	void										Unmap();
@@ -35,6 +35,7 @@ public:
 	const kbHWBuffer *							GetBufferPtr() const { return m_pBuffer; }
 
 private:
+
 	kbHWBuffer *								m_pBuffer;
 };
 

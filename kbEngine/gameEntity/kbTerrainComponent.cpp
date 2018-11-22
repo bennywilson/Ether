@@ -455,7 +455,7 @@ void kbTerrainComponent::GenerateTerrain() {
 	}
 	m_TerrainModel.UnmapVertexBuffer();
 
-	unsigned long * pIndices = ( unsigned long* ) m_TerrainModel.MapIndexBuffer();
+	ushort * pIndices = ( ushort * ) m_TerrainModel.MapIndexBuffer();
 	int currentIndexToWrite = 0;
 
 	for ( int startY = 0; startY < m_TerrainDimensions; startY++ ) {

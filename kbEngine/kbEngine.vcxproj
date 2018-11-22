@@ -47,8 +47,8 @@
     <TargetName>kbEngined</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>.\sound;.\external;./gameEntity;./boundingVolumes;./math;./core;$(IncludePath);C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Include;./renderer;.\External\OculusSDK\LibOVR\Include;.\External\OculusSDK\LibOVR\Include\Extras;.\External\OculusSDK\LibOVRKernel\Src\Kernel</IncludePath>
-    <LibraryPath>C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Lib\x86;$(VCInstallDir)lib;./External/OculusSDK\LibOVR\Lib\Windows\x64\Release\VS2015;$(VCInstallDir)atlmfc\lib;$(WindowsSdkDir)lib;$(FrameworkSDKDir)\lib</LibraryPath>
+    <IncludePath>C:\Program Files\Autodesk\FBX\FBX SDK\2019.0\include;.\sound;.\external;./gameEntity;./boundingVolumes;./math;./core;$(IncludePath);C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Include;./renderer;.\External\OculusSDK\LibOVR\Include;.\External\OculusSDK\LibOVR\Include\Extras;.\External\OculusSDK\LibOVRKernel\Src\Kernel</IncludePath>
+    <LibraryPath>C:\Program Files\Autodesk\FBX\FBX SDK\2019.0\lib\vs2015\x64\release;C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Lib\x86;$(VCInstallDir)lib;./External/OculusSDK\LibOVR\Lib\Windows\x64\Release\VS2015;$(VCInstallDir)atlmfc\lib;$(WindowsSdkDir)lib;$(FrameworkSDKDir)\lib</LibraryPath>
     <OutDir>.\lib\</OutDir>
     <TargetName>kbEngine</TargetName>
   </PropertyGroup>
@@ -82,6 +82,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>_XM_NO_INTRINSICS_;WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <WholeProgramOptimization>true</WholeProgramOptimization>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -91,7 +92,7 @@
     </Link>
     <Lib>
       <OutputFile>./lib/kbEngine.lib</OutputFile>
-      <AdditionalDependencies>libovr.lib;</AdditionalDependencies>
+      <AdditionalDependencies>libovr.lib;libfbxsdk-md.lib</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>

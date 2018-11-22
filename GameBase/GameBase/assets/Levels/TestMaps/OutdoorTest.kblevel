@@ -14,7 +14,7 @@ kbGameEntity 0 0 0 0 {
 		RenderPass = LightingPass
 		ShaderParams = 0
 		TranslucencySortBias =  -1.000000
-		Dimensions = 513
+		Dimensions = 129
 		Grass = 1
 			kbGrass { 
 				Enabled = 1
