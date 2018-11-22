@@ -102,7 +102,7 @@ void kbRenderBuffer::CreateVertexBuffer( const std::vector< vertexLayout > & ver
 	}
 
 	D3D11_BUFFER_DESC vertexBufferDesc = { 0 };
-	vertexBufferDesc.ByteWidth = static_cast< UINT >( sizeof( vertexLayout ) * vertices.size() );
+	vertexBufferDesc.ByteWidth = static_cast<UINT>( sizeof( vertexLayout ) * vertices.size() );
 	vertexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
 	vertexBufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
 	vertexBufferDesc.CPUAccessFlags = 0;
@@ -115,10 +115,7 @@ void kbRenderBuffer::CreateVertexBuffer( const std::vector< vertexLayout > & ver
 	vertexData.SysMemSlicePitch = 0;
 
 	HRESULT hr = g_pD3DDevice->CreateBuffer( &vertexBufferDesc, &vertexData, &m_pBuffer );
-
-	if ( FAILED( hr ) ) {
-		kbError( "Error: kbRenderBuffer::CreateVertexBuffer() - Failed to create vertex buffer" );
-	}
+	kbErrorCheck( SUCCEEDED(hr), "kbRenderBuffer::CreateVertexBuffer() - Failed to create vertex buffer" );
 }
 
 /**
@@ -142,7 +139,7 @@ void kbRenderBuffer::CreateIndexBuffer( const std::vector<ushort> & indices ) {
 	indexData.pSysMem = indices.data();
 	indexData.SysMemPitch = 0;
 	indexData.SysMemSlicePitch = 0;
-	HRESULT hr = g_pD3DDevice->CreateBuffer( &indexBufferDesc, &indexData, &m_pBuffer );
 
+	HRESULT hr = g_pD3DDevice->CreateBuffer( &indexBufferDesc, &indexData, &m_pBuffer );
 	kbErrorCheck( SUCCEEDED(hr), "kbRenderBuffer::CreateVertexBuffer() - Failed to create index buffer" );
 }
