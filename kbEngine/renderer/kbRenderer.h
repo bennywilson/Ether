@@ -302,6 +302,7 @@ public:
 	enum kbViewMode_t {
 		ViewMode_Shaded,
 		ViewMode_Wireframe,
+		ViewMode_Color,
 		ViewMode_Normals,
 		ViewMode_Specular,
 		ViewMode_Depth

@@ -58,10 +58,33 @@ void kbStaticModelComponent::SetEnable_Internal( const bool isEnabled ) {
 		m_RenderObject.m_Position = GetOwner()->GetPosition();
 		m_RenderObject.m_RenderPass = m_RenderPass;
 		m_RenderObject.m_Scale = GetOwner()->GetScale();
-		m_RenderObject.m_OverrideShaderList = m_pOverrideShaderList;
 		m_RenderObject.m_TranslucencySortBias = m_TranslucencySortBias;
 
-		for ( int i = 0; i < m_ShaderParamList.size(); i++ ) {
+		m_RenderObject.m_Materials.clear();
+		for ( int i = 0; i < m_MaterialList.size(); i++ ) {
+			kbMaterialComponent & matComp = m_MaterialList[i];
+
+			kbShaderParamOverrides_t newShaderParams;
+			newShaderParams.m_pShader = matComp.GetShader();
+
+			auto srcShaderParams = matComp.GetShaderParams();
+			for ( int j = 0; j < srcShaderParams.size(); j++ ) {
+				if ( srcShaderParams[j].GetTexture() == nullptr ) {
+					newShaderParams.SetVec4( srcShaderParams[j].GetParamName().stl_str(), srcShaderParams[j].GetVector() );
+				} else {
+					newShaderParams.SetTexture( srcShaderParams[j].GetParamName().stl_str(), srcShaderParams[j].GetTexture() );
+				}
+			}
+			//	kbShaderParamOverrides_t & materials = m_RenderObject.m_Materials.push_back()
+
+			m_RenderObject.m_Materials.push_back( newShaderParams );
+		}
+
+//		m_RenderObject.m_MaterialList = m_MaterialList;
+		// MaterialHack
+		//		m_RenderObject.m_OverrideShaderList = m_pOverrideShaderList;	// MaterialHack
+
+/*		for ( int i = 0; i < m_ShaderParamList.size(); i++ ) {
 			if ( m_ShaderParamList[i].GetParamName().stl_str().empty() ) {
 				continue;
 			}
@@ -72,7 +95,7 @@ void kbStaticModelComponent::SetEnable_Internal( const bool isEnabled ) {
 				m_RenderObject.m_ShaderParamOverrides.SetVec4( m_ShaderParamList[i].GetParamName().stl_str(), m_ShaderParamList[i].GetVector() );
 
 			}
-		}
+		}*/
 
 		g_pRenderer->AddRenderObject( m_RenderObject );
 	} else {

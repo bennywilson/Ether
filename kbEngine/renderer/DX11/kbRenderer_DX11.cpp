@@ -2178,6 +2178,8 @@ void kbRenderer_DX11::RenderPostProcess() {
 	if ( m_ViewMode == ViewMode_Wireframe ) {
 		Blit( GetRenderTarget_DX11(ACCUMULATION_BUFFER), nullptr );
 		return;
+	} else if ( m_ViewMode == ViewMode_Color ) {
+		Blit( GetRenderTarget_DX11(COLOR_BUFFER), nullptr );
 	} else if ( m_ViewMode == ViewMode_Normals ) {
 		Blit( GetRenderTarget_DX11(NORMAL_BUFFER), nullptr );
 	} else if ( m_ViewMode == ViewMode_Specular ) {
@@ -2393,8 +2395,29 @@ void kbRenderer_DX11::RenderSync_Internal() {
 	m_FrameNum++;
 }
 
+kbString g_BuiltInShaderParams[] = {
+	"billboardedModelMatrix",
+	"modelMatrix",
+	"modelViewMatrix",
+	"viewMatrix",
+	"mvpMatrix",
+	"projection",
+	"inverseProjection",
+	"inverseViewProjection",
+	"lightMatrix",
+	"splitDistances",
+	"lightDirection",
+	"lightPosition",
+	"viewProjection",
+	"vpMatrix",
+	"modelMatrix",
+	"cameraPos",
+	"viewProjection",
+	"boneList",
+	"time"
+};
 
-void ReadShaderFile( const std::string & shaderText, kbShaderVarBindings_t *const pShaderBindings ) {
+void kbRenderer_DX11::ReadShaderFile( std::string & shaderText, kbShaderVarBindings_t *const pShaderBindings ) {
 	
 	std::string::size_type n = shaderText.find( "cbuffer" );
 	if ( n == std::string::npos ) {
@@ -2413,7 +2436,7 @@ void ReadShaderFile( const std::string & shaderText, kbShaderVarBindings_t *cons
 
 	std::string bufferBlock( shaderText.begin() + startBlock + 1, shaderText.begin() + endBlock );
 	std::vector<std::string> constantBufferStrings;
-	const std::string delimiters = "\t ;\n";
+	const std::string delimiters = "\t ;\n()";
 
     std::string::size_type startPos = bufferBlock.find_first_not_of( delimiters, 0 );
     std::string::size_type endPos = bufferBlock.find_first_of( delimiters, startPos );
@@ -2425,6 +2448,15 @@ void ReadShaderFile( const std::string & shaderText, kbShaderVarBindings_t *cons
         startPos = bufferBlock.find_first_not_of( delimiters, endPos );
         endPos = bufferBlock.find_first_of( delimiters, startPos );
     }
+
+	const int sizeofBuiltInParams = sizeof( g_BuiltInShaderParams );
+	const int sizeofSTDString = sizeof( kbString );
+	const int numBuiltInParams = sizeofBuiltInParams / sizeofSTDString;
+
+	// Param defaults
+	kbTexture *const pWhiteTex = (kbTexture*)g_ResourceManager.GetResource( "../../kbEngine/assets/Textures/white.bmp", true );
+	kbTexture *const pBlackTex = (kbTexture*)g_ResourceManager.GetResource( "../../kbEngine/assets/Textures/black.bmp", true );
+	kbTexture *const pDefaultNormal = (kbTexture*)g_ResourceManager.GetResource( "../../kbEngine/assets/Textures/defaultNormal.bmp", true );
 
 	size_t currOffset = 0;
 	for ( int i = 0; i < constantBufferStrings.size(); i += 2 ) {
@@ -2441,7 +2473,15 @@ void ReadShaderFile( const std::string & shaderText, kbShaderVarBindings_t *cons
 			count = std::stoi( sCount );
 			varName.resize( arrayStart );
 		}
-		pShaderBindings->m_VarBindings.push_back( kbShaderVarBindings_t::binding_t( varName, currOffset ) );
+
+		bool bIsUserDefinedVar = true;
+		kbString varNameString = kbString( varName );
+		for ( int iParamCheck = 0; iParamCheck < numBuiltInParams; iParamCheck++ ) {
+			if ( varNameString == g_BuiltInShaderParams[iParamCheck] ) {
+				bIsUserDefinedVar = false;
+			}
+		}
+		pShaderBindings->m_VarBindings.push_back( kbShaderVarBindings_t::binding_t( varName, currOffset, bIsUserDefinedVar ) );
 
 		if ( constantBufferStrings[i] == "matrix" || constantBufferStrings[i] == "float4x4" ) {
 			currOffset += 64 * count;
@@ -2454,18 +2494,60 @@ void ReadShaderFile( const std::string & shaderText, kbShaderVarBindings_t *cons
 
 	pShaderBindings->m_ConstantBufferSizeBytes = ( currOffset + 15 ) & 0xfffffff0;
 
-
     // Bind textures
     std::string::size_type texturePos = shaderText.find( "Texture2D" );
     while ( texturePos != std::string::npos ) {
 
-        std::string::size_type startPos = shaderText.find_first_not_of( delimiters, texturePos + 9 );
-        std::string::size_type endPos = shaderText.find_first_of( delimiters, startPos );
+        auto startPos = shaderText.find_first_not_of( delimiters, texturePos + 9 );
+        auto endPos = shaderText.find_first_of( delimiters, startPos );
 
         if ( startPos == std::string::npos || endPos == std::string::npos ) {
             break;
         }
-		pShaderBindings->m_TextureNames.push_back( shaderText.substr( startPos, endPos - startPos ) );
+
+		kbShaderVarBindings_t::textureBinding_t textureBinding;
+		textureBinding.m_pDefaultTexture = nullptr;
+		textureBinding.m_pDefaultRenderTexture = nullptr;
+		textureBinding.m_TextureName = shaderText.substr( startPos, endPos - startPos );
+
+		// Check for default values
+		if ( shaderText[endPos] == '(' ) {
+			auto defaultValStart = endPos + 1;
+			auto defaultValEnd = shaderText.find_first_of( delimiters, defaultValStart );
+			if ( defaultValEnd == std::string::npos || shaderText[defaultValEnd] != ')' ) {
+				break;
+			}
+
+			std::string defaultTexture = shaderText.substr( defaultValStart, defaultValEnd - defaultValStart );
+			std::transform( defaultTexture.begin(), defaultTexture.end(), defaultTexture.begin(), ::tolower );
+
+			defaultValStart--;
+			while( defaultValStart <= defaultValEnd ) {
+				shaderText[defaultValStart++] = ' ';
+			}
+
+			if ( defaultTexture == "white" ) {
+				textureBinding.m_pDefaultTexture = pWhiteTex;
+			} else if ( defaultTexture == "black" ) {
+				textureBinding.m_pDefaultTexture = pBlackTex;
+			} else if ( defaultTexture == "defaultnormal" ) {
+				textureBinding.m_pDefaultTexture = pDefaultNormal;
+			} else if ( defaultTexture == "colorbuffer" ) {
+				textureBinding.m_pDefaultRenderTexture = m_pRenderTargets[COLOR_BUFFER];
+			} else if ( defaultTexture == "normalbuffer" ) {
+				textureBinding.m_pDefaultRenderTexture = m_pRenderTargets[NORMAL_BUFFER];
+			} else if ( defaultTexture == "depthbuffer" ) {
+				textureBinding.m_pDefaultRenderTexture = m_pRenderTargets[DEPTH_BUFFER];
+			} else if ( defaultTexture == "specularbuffer" ) {
+				textureBinding.m_pDefaultRenderTexture = m_pRenderTargets[SPECULAR_BUFFER];
+			} else if ( defaultTexture == "shadowBuffer" ) {
+				textureBinding.m_pDefaultRenderTexture = m_pRenderTargets[SHADOW_BUFFER];
+			} else {
+				kbWarning( "Default texture %s not found", defaultTexture.c_str() );
+			}
+		}
+		pShaderBindings->m_Textures.push_back( textureBinding );
+
         texturePos = shaderText.find( "Texture2D", texturePos + 1 );
     }
 }
@@ -2491,9 +2573,11 @@ void kbRenderer_DX11::LoadShader( const std::string & fileName, ID3D11VertexShad
  *	kbRenderer_DX11::CreateShaderFromText
  */
 
-void kbRenderer_DX11::CreateShaderFromText( const std::string & fileName, const std::string & shaderText, ID3D11VertexShader *& vertexShader, ID3D11GeometryShader *& geometryShader,
+void kbRenderer_DX11::CreateShaderFromText( const std::string & fileName, const std::string & inShaderText, ID3D11VertexShader *& vertexShader, ID3D11GeometryShader *& geometryShader,
 											ID3D11PixelShader *& pixelShader, ID3D11InputLayout *& vertexLayout, const std::string & vertexShaderFunc, 
 											const std::string & pixelShaderFunc, struct kbShaderVarBindings_t * pShaderBindings ) {
+
+	std::string shaderText = inShaderText;
 
 	HRESULT hr;
 	struct shaderBlobs_t {
@@ -2918,6 +3002,10 @@ void kbRenderer_DX11::RenderMesh( const kbRenderSubmesh *const pRenderMesh, cons
 			pShader = (*pShaderOverrideList)[pRenderMesh->GetMeshIdx()];
 		}
 	
+		if ( pRenderObject->m_Materials.size() > 0 ) {
+			pShader = pRenderObject->m_Materials[pRenderMesh->GetMeshIdx()].m_pShader;
+		}
+
 		if ( pShader == nullptr || pShader->GetPixelShader() == nullptr ) {
 			pShader = m_pMissingShader;
 		}
@@ -2980,7 +3068,12 @@ void kbRenderer_DX11::RenderMesh( const kbRenderSubmesh *const pRenderMesh, cons
 	// Get a valid constant buffer and bind the kbShader's vars to it
 	const kbShaderVarBindings_t & shaderVarBindings = pShader->GetShaderVarBindings();
 
-	ID3D11Buffer *const pConstantBuffer = SetConstantBuffer( shaderVarBindings, &pRenderObject->m_ShaderParamOverrides, pRenderObject, nullptr );
+	ID3D11Buffer * pConstantBuffer = nullptr;
+	if ( pRenderObject->m_Materials.size() > 0 ) {
+		pConstantBuffer = SetConstantBuffer( shaderVarBindings, &pRenderObject->m_Materials[pRenderMesh->GetMeshIdx()], pRenderObject, nullptr );
+	} else {
+		pConstantBuffer = SetConstantBuffer( shaderVarBindings, &pRenderObject->m_ShaderParamOverrides, pRenderObject, nullptr );
+	}
 
 	m_pDeviceContext->VSSetConstantBuffers( 0, 1, &pConstantBuffer );
 	m_pDeviceContext->PSSetConstantBuffers( 0, 1, &pConstantBuffer );
@@ -3460,7 +3553,7 @@ ID3D11Buffer * kbRenderer_DX11::SetConstantBuffer( const kbShaderVarBindings_t &
 	}
 
     const std::vector<kbShaderParamOverrides_t::kbShaderParam_t> * paramOverrides = nullptr;
-	if ( pRenderObject != nullptr ) {
+	if ( pRenderObject != nullptr && pRenderObject->m_Materials.size() == 0 ) {
 		paramOverrides = &pRenderObject->m_ShaderParamOverrides.m_ParamOverrides;
 	} else if ( shaderParamOverrides != nullptr ) {
 		paramOverrides = &shaderParamOverrides->m_ParamOverrides;
@@ -3574,23 +3667,31 @@ ID3D11Buffer * kbRenderer_DX11::SetConstantBuffer( const kbShaderVarBindings_t &
 
     // Bind textures
 	if ( paramOverrides != nullptr ) {
-		for ( int iTex = 0; iTex < shaderVarBindings.m_TextureNames.size(); iTex++ ) {
+		for ( int iTex = 0; iTex < shaderVarBindings.m_Textures.size(); iTex++ ) {
+			auto textureBinding = shaderVarBindings.m_Textures[iTex];
+
+			ID3D11ShaderResourceView * pShaderResourceView = nullptr;
+			if ( textureBinding.m_pDefaultTexture != nullptr ) {
+				pShaderResourceView = textureBinding.m_pDefaultTexture->GetGPUTexture();
+			} else if ( textureBinding.m_pDefaultRenderTexture != nullptr ) {
+				pShaderResourceView = ((kbRenderTexture_DX11*)textureBinding.m_pDefaultRenderTexture)->m_pShaderResourceView;
+			}
+
 			for ( int iOverride = 0; iOverride < paramOverrides->size(); iOverride++ ) {
 				const kbShaderParamOverrides_t::kbShaderParam_t & curOverride = (*paramOverrides)[iOverride];
-				if ( curOverride.m_Type == kbShaderParamOverrides_t::kbShaderParam_t::SHADER_TEX && curOverride.m_VarName == shaderVarBindings.m_TextureNames[iTex] ) {
+				if ( curOverride.m_Type == kbShaderParamOverrides_t::kbShaderParam_t::SHADER_TEX && curOverride.m_VarName == shaderVarBindings.m_Textures[iTex].m_TextureName ) {
 
-					ID3D11ShaderResourceView * pShaderResourceView = nullptr;
 					if ( curOverride.m_pTexture != nullptr ) {
 						 pShaderResourceView = curOverride.m_pTexture->GetGPUTexture();
 					} else if ( curOverride.m_pRenderTexture != nullptr ) {
 						pShaderResourceView = ((kbRenderTexture_DX11*)curOverride.m_pRenderTexture)->m_pShaderResourceView;
 					}
-
-					m_pDeviceContext->VSSetShaderResources( iTex, 1, &pShaderResourceView );				
-					m_pDeviceContext->GSSetShaderResources( iTex, 1, &pShaderResourceView );				
-					m_pDeviceContext->PSSetShaderResources( iTex, 1, &pShaderResourceView );				
 				}
 			}
+
+			m_pDeviceContext->VSSetShaderResources( iTex, 1, &pShaderResourceView );				
+			m_pDeviceContext->GSSetShaderResources( iTex, 1, &pShaderResourceView );				
+			m_pDeviceContext->PSSetShaderResources( iTex, 1, &pShaderResourceView );				
 		}
 	}
 

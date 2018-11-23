@@ -9,10 +9,15 @@
 
 #include "kbRenderer_Defs.h"
 
+class kbTexture;
+class kbShader;
+
 /**
  *	kbShaderParamComponent
  */
 class kbShaderParamComponent : public kbGameComponent {
+
+	friend class kbMaterialComponent;
 
 	KB_DECLARE_COMPONENT( kbShaderParamComponent, kbGameComponent );
 
@@ -25,9 +30,35 @@ public:
 
 private:
 
+	void										SetParamName( const kbString & newName ) { m_ParamName = newName; }
+	void										SetTexture( kbTexture *const pTexture ) { m_pTexture = pTexture; }
+	void										SetVector( const kbVec4 & vector ) { m_Vector = vector; }
+
 	kbString									m_ParamName;
 	kbTexture *									m_pTexture;
 	kbVec4										m_Vector;
+};
+
+
+/**
+ *	kbMaterialComponent
+ */
+class kbMaterialComponent : public kbGameComponent {
+
+	KB_DECLARE_COMPONENT( kbMaterialComponent, kbGameComponent );
+
+//---------------------------------------------------------------------------------------------------
+public:
+
+	virtual void								EditorChange( const std::string & propertyName ) override;
+
+	const kbShader *							GetShader() const { return m_pShader; }
+	const std::vector<kbShaderParamComponent> &	GetShaderParams() const { return m_ShaderParamComponents; }
+
+private:
+
+	kbShader *									m_pShader;
+	std::vector<kbShaderParamComponent>			m_ShaderParamComponents;
 };
 
 /**
@@ -45,19 +76,14 @@ public:
 	virtual void								EditorChange( const std::string & propertyName ) override;
 	virtual void								PostLoad() override;
 
-	void										SetShaderParamOverrides( const kbShaderParamOverrides_t & shaderParams );
-	void										SetShaderVectorParam( const std::string & paramName, const kbVec4 & value );
-
 	bool										GetCastsShadow() const { return m_bCastsShadow; }
 
 protected:
 
-	void										SetShaderParamList();
-
 	enum ERenderPass							m_RenderPass;
 	float										m_TranslucencySortBias;
 
-	std::vector<kbShaderParamComponent>			m_ShaderParamList;
+	std::vector<kbMaterialComponent>			m_MaterialList;
 
 	kbRenderObject								m_RenderObject;
 

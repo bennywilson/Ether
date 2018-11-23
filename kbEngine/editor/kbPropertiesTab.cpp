@@ -214,6 +214,42 @@ void kbPropertiesTab::PointerButtonCB( Fl_Widget * widget, void * voidPtr ) {
 	PropertyChangedCB( userData->m_GameEntityPtr );
 }
 
+/**
+ *	kbPropertiesTab::ClearPointerButtonCB
+ */
+void kbPropertiesTab::ClearPointerButtonCB( Fl_Widget * widget, void * voidPtr ) {
+
+	propertiesTabCBData_t *const userData = static_cast< propertiesTabCBData_t * >( voidPtr );
+	kbErrorCheck( userData != nullptr, "kbPropertiesTab::ClearPointerButtonCB() - null user data passed in" );
+
+	const std::string *const fieldName = ( std::string * ) userData->m_pVariablePtr;
+	if ( userData->m_VariableType == KBTYPEINFO_GAMEENTITY ) {
+		const kbPrefab *const pPrefab = g_Editor->GetCurrentlySelectedPrefab();
+		kbGameEntityPtr & pEntityPtr = userData->m_GameEntityPtr;
+
+		pEntityPtr.SetEntity( nullptr );
+
+		userData->m_pComponent->EditorChange( *fieldName );
+        if ( userData->m_pParentComponent != nullptr ) {
+            userData->m_pParentComponent->EditorChange( *fieldName );
+        }
+
+		g_pPropertiesTab->RefreshEntity();
+		return;
+	}
+
+	*userData->m_pResource = nullptr;
+
+	userData->m_pComponent->EditorChange( *fieldName );
+     if ( userData->m_pParentComponent != nullptr ) {
+         userData->m_pParentComponent->EditorChange( *fieldName );
+     }
+
+	g_pPropertiesTab->RefreshEntity();
+
+	PropertyChangedCB( userData->m_GameEntityPtr );
+}
+
 bool IsNumeric( const char *const cString ) {
 	const int fieldTextLen = (int)strlen( cString );
 	bool bHasDecimalSpot = false;
@@ -715,7 +751,7 @@ void kbPropertiesTab::RefreshProperty( kbEditorEntity *const pEntity, const std:
 				propertyNameLabel->align( FL_ALIGN_RIGHT );
 			}
 
-			Fl_Button *const b1 = new Fl_Button( xPos + propertyNamePixelWidth - ( 5 + inputHeight / 2 ), yPos + (int)(inputHeight * 0.25f), inputHeight / 2,inputHeight / 2,">");
+			Fl_Button *const b1 = new Fl_Button( xPos + propertyNamePixelWidth - ( 5 + inputHeight / 2 ), yPos + (int)(inputHeight * 0.25f), inputHeight / 2,inputHeight / 2,">" );
 			b1->color(88+1);
 			b1->labelsize( FontSize() );
 
@@ -741,16 +777,32 @@ void kbPropertiesTab::RefreshProperty( kbEditorEntity *const pEntity, const std:
 				propertyNameLabel->align( FL_ALIGN_RIGHT );
 			}
 
-			Fl_Button *const b1 = new Fl_Button( xPos + propertyNamePixelWidth - ( 5 + inputHeight / 2 ), yPos + (int)(inputHeight * 0.25f), FontSize(), FontSize(), ">" );
-			b1->color( 89 );
-			b1->labelsize( (int)(FontSize() * 0.75f) );
+			{
+				Fl_Button *const b1 = new Fl_Button( xPos + propertyNamePixelWidth - 2 * ( 5 + inputHeight / 2 ), yPos + (int)(inputHeight * 0.25f), FontSize(), FontSize(), "-" );
+				b1->color( 89 );
+				b1->labelsize( (int)(FontSize() * 0.75f) );
 
-			cbData.m_pResource = ( const kbResource** ) byteOffsetToVar;
-			cbData.m_VariableType = propertyType;
-			cbData.m_pVariablePtr = const_cast<void*>( (void*)&propertyName );
+				cbData.m_pResource = ( const kbResource** ) byteOffsetToVar;
+				cbData.m_VariableType = propertyType;
+				cbData.m_pVariablePtr = const_cast<void*>( (void*)&propertyName );
 
-			m_CallBackData.push_back( cbData );
-			b1->callback( &PointerButtonCB, static_cast<void *>( &m_CallBackData[m_CallBackData.size() - 1] ) );//static_cast< void * >( pComponent ) );
+				m_CallBackData.push_back( cbData );
+				b1->callback( &ClearPointerButtonCB, static_cast<void *>( &m_CallBackData[m_CallBackData.size() - 1] ) );//static_cast< void * >( pComponent ) );
+			}
+
+			{
+				Fl_Button *const b1 = new Fl_Button( xPos + propertyNamePixelWidth - ( 5 + inputHeight / 2 ), yPos + (int)(inputHeight * 0.25f), FontSize(), FontSize(), ">" );
+				b1->color( FL_GREEN );
+				b1->labelsize( (int)(FontSize() * 0.75f) );
+
+				cbData.m_pResource = ( const kbResource** ) byteOffsetToVar;
+				cbData.m_VariableType = propertyType;
+				cbData.m_pVariablePtr = const_cast<void*>( (void*)&propertyName );
+
+				m_CallBackData.push_back( cbData );
+				b1->callback( &PointerButtonCB, static_cast<void *>( &m_CallBackData[m_CallBackData.size() - 1] ) );//static_cast< void * >( pComponent ) );
+			}
+
 			break;
 		}
 

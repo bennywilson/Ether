@@ -415,6 +415,8 @@ private:
 
 	bool										InitializeOculus();
 
+	void										ReadShaderFile( std::string & shaderText, kbShaderVarBindings_t *const pShaderBindings );
+
 	void										SetRenderTarget( eReservedRenderTargets type );
 
 	virtual void								RenderScene() override;

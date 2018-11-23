@@ -626,12 +626,11 @@ bool kbModel::LoadFBX() {
 		newMesh.m_IndexBufferIndex = (unsigned int)indexList.size();
 		newMesh.m_MaterialIndex = 0;
 		newMesh.m_NumTriangles = pFBXMesh->GetPolygonCount();
-
-		int vertexCount = 0;
+		uint iVertexCount = 0;
 
 		for ( uint iTri = 0; iTri < newMesh.m_NumTriangles; iTri++ ) {
 
-			for ( uint iTriVert = 0; iTriVert < 3; iTriVert++ ) {
+			for ( uint iTriVert = 0; iTriVert < 3; iTriVert++, iVertexCount++ ) {
 				vertexLayout triVert;
 
 				int iCtrlPt = pFBXMesh->GetPolygonVertex( iTri, iTriVert );
@@ -648,9 +647,9 @@ bool kbModel::LoadFBX() {
 					kbErrorCheck( refMode == FbxGeometryElement::eDirect, "kbModel::LoadFBX() - Invalid vertex normal mapping mode" );
 
 					kbVec4 normal;
-					normal.x = (float)pFBXVertNormal->GetDirectArray().GetAt(iTriVert).mData[0];
-					normal.y = (float)pFBXVertNormal->GetDirectArray().GetAt(iTriVert).mData[1];
-					normal.z = (float)pFBXVertNormal->GetDirectArray().GetAt(iTriVert).mData[2];
+					normal.x = (float)pFBXVertNormal->GetDirectArray().GetAt(iVertexCount).mData[0];
+					normal.y = (float)pFBXVertNormal->GetDirectArray().GetAt(iVertexCount).mData[1];
+					normal.z = (float)pFBXVertNormal->GetDirectArray().GetAt(iVertexCount).mData[2];
 					normal.w = 0;
 					triVert.SetNormal( normal );
 				}
@@ -664,9 +663,9 @@ bool kbModel::LoadFBX() {
 					kbErrorCheck( refMode == FbxGeometryElement::eDirect, "kbModel::LoadFBX() - Invalid vertex tangent mapping mode" );
 
 					kbVec4 tangent;
-					tangent.x = (float)pFBXVertTangent->GetDirectArray().GetAt(iTriVert).mData[0];
-					tangent.y = (float)pFBXVertTangent->GetDirectArray().GetAt(iTriVert).mData[1];
-					tangent.z = (float)pFBXVertTangent->GetDirectArray().GetAt(iTriVert).mData[2];
+					tangent.x = (float)pFBXVertTangent->GetDirectArray().GetAt(iVertexCount).mData[0];
+					tangent.y = (float)pFBXVertTangent->GetDirectArray().GetAt(iVertexCount).mData[1];
+					tangent.z = (float)pFBXVertTangent->GetDirectArray().GetAt(iVertexCount).mData[2];
 					tangent.w = 0;
 					triVert.SetTangent( tangent );
 				}
@@ -680,9 +679,9 @@ bool kbModel::LoadFBX() {
 					kbErrorCheck( refMode == FbxGeometryElement::eDirect, "kbModel::LoadFBX() - Invalid vertex binormal mapping mode" );
 
 					kbVec4 binormal;
-					binormal.x = (float)pFBXVertBinormal->GetDirectArray().GetAt(iTriVert).mData[0];
-					binormal.y = (float)pFBXVertBinormal->GetDirectArray().GetAt(iTriVert).mData[1];
-					binormal.z = (float)pFBXVertBinormal->GetDirectArray().GetAt(iTriVert).mData[2];
+					binormal.x = (float)pFBXVertBinormal->GetDirectArray().GetAt(iVertexCount).mData[0];
+					binormal.y = (float)pFBXVertBinormal->GetDirectArray().GetAt(iVertexCount).mData[1];
+					binormal.z = (float)pFBXVertBinormal->GetDirectArray().GetAt(iVertexCount).mData[2];
 					binormal.w = 0;
 					triVert.SetBitangent( binormal );
 				}
@@ -691,11 +690,11 @@ bool kbModel::LoadFBX() {
 				if ( pFBXVertUV != nullptr ) {
 					auto uvMapMode = pFBXVertUV->GetMappingMode();
 					kbErrorCheck( uvMapMode == FbxGeometryElement::eByPolygonVertex, "kbModel::LoadFBX() - Invalid uvs mapping mode" );
-					;
+
 					auto uvRefMode = pFBXVertUV->GetReferenceMode();
 					kbErrorCheck( uvRefMode == FbxGeometryElement::eIndexToDirect, "kbModel::LoadFBX() - Invalid uvs mapping mode" );
 
-					const int uvIndex = pFBXVertUV->GetIndexArray().GetAt(iTriVert);
+					const int uvIndex = pFBXVertUV->GetIndexArray().GetAt(iVertexCount);
 					triVert.uv.x = (float)pFBXVertUV->GetDirectArray().GetAt(uvIndex).mData[0];
 					triVert.uv.y = (float)pFBXVertUV->GetDirectArray().GetAt(uvIndex).mData[1];
 				}

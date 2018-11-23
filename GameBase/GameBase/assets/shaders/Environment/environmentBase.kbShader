@@ -63,9 +63,9 @@ pixelInput vertexShader( vertexInput input ) {
 	const float3 worldNormal = normalize( mul( ( input.normal.xyz * 2.0f ) - 1.0f, (float3x3)modelMatrix ) );
 	const float3 worldBitangent = normalize( cross( worldNormal, worldTangent ) ) * ( input.tangent.w * 2.0f - 1.0f );
 
-	output.TBN0 = float4(worldTangent, 0 );
-	output.TBN1 = float4(worldBitangent, 0 );
-	output.TBN2 = float4(worldNormal, 0 );
+	output.TBN0 = float4(worldTangent.x, worldBitangent.x, worldNormal.x, 0 );
+	output.TBN1 = float4(worldTangent.y, worldBitangent.y, worldNormal.y, 0 );
+	output.TBN2 = float4(worldTangent.z, worldBitangent.z, worldNormal.z, 0 );
 
 	return output;
 }
@@ -73,15 +73,15 @@ pixelInput vertexShader( vertexInput input ) {
 /**
  *	pixelShader
  */
-Texture2D diffuse					: register(t0);
+Texture2D diffuse(white)			: register(t0);
 SamplerState diffuseSampler;
 
-Texture2D normal					: register(t1);
+Texture2D normal(defaultNormal)		: register(t1);
 SamplerState normalSampler;
 
-Texture2D propertyMap				: register(t2);
+Texture2D propertyMap(white)		: register(t2);
 
-Texture2D emissiveMap				: register(t3);
+Texture2D emissiveMap(black)		: register(t3);
 
 
  PS_OUTPUT pixelShader( pixelInput	input, bool IsFrontFace	: SV_IsFrontFace ) {
@@ -106,8 +106,9 @@ Texture2D emissiveMap				: register(t3);
 	}*/
 
 	float3 tangentNormal = normalize( normalMap.xyz * 2.0f - 1.0f );
-	output.Normal.xyz = mul( tangentNormal, TBN );
-	output.Normal.w = normalMap.w;
+//	output.Normal.xyz = mul( tangentNormal, TBN );
+	output.Normal.xyz = float3( ( input.TBN0.z ), ( input.TBN1.z ), ( input.TBN2.z ) );
+	output.Normal.w = 1;//normalMap.w;
 	return output;
 }
  

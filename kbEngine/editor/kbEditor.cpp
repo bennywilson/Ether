@@ -132,6 +132,7 @@ kbEditor::kbEditor() :
 	m_pViewModeChoice = new Fl_Choice( curX, curY, (int)fl_width( "Wireframe") + TRSButtonWidth, buttonHeight );
 	m_pViewModeChoice->add( "Shaded" );		// Note: These have to be in the same order as the entries in kbViewMode_t
 	m_pViewModeChoice->add( "Wireframe" );
+	m_pViewModeChoice->add( "Color" );
 	m_pViewModeChoice->add( "Normals" );
 	m_pViewModeChoice->add( "Specular" );
 	m_pViewModeChoice->add( "Depth" );
@@ -160,7 +161,7 @@ kbEditor::kbEditor() :
 	// setup the renderer
 	if ( g_pRenderer == nullptr ) {
 		g_pRenderer = new kbRenderer_DX11();
-		g_pRenderer->Init( m_pMainTab->GetEditorWindow()->GetWindowHandle(), 1400  * 3 , 833 * 3, false, false );
+		g_pRenderer->Init( m_pMainTab->GetEditorWindow()->GetWindowHandle(), 1400, 833, false, false );
 		g_pRenderer->EnableDebugBillboards( true );
 	}
 

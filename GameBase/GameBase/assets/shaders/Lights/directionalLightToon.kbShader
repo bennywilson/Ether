@@ -61,18 +61,18 @@ pixelInput vertexShader( vertexInput input ) {
  *	pixelShader
  */
 SamplerState DiffuseSamplerState;
-Texture2D colorTexture				: register(t0);
+Texture2D colorTexture(colorBuffer)				: register(t0);
 
 SamplerState NormalSamplerState;
-Texture2D normalTexture				: register(t1);
+Texture2D normalTexture(normalBuffer)			: register(t1);
 
-Texture2D specularTexture			: register(t2);
+Texture2D specularTexture(specularBuffer)		: register(t2);
 
 SamplerState DepthSamplerState;
-Texture2D depthTexture				: register(t3);
+Texture2D depthTexture(depthBuffer)				: register(t3);
 
 SamplerState ShadowMapSamplerState;
-Texture2D ShadowMap					: register(t4);
+Texture2D ShadowMap(shadowBuffer)				: register(t4);
 
 float4 pixelShader( pixelInput input ) : SV_TARGET {
 	float4 diffuseColor = colorTexture.Sample( DiffuseSamplerState, input.uv );

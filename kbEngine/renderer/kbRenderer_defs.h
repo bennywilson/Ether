@@ -231,9 +231,10 @@ struct kbShaderParamOverrides_t {
         size_t							m_VarSizeBytes;
     };
 
-    kbShaderParamOverrides_t() { }
+    kbShaderParamOverrides_t() : m_pShader( nullptr ) { }
 
-    std::vector<kbShaderParam_t> m_ParamOverrides;
+    std::vector<kbShaderParam_t>		m_ParamOverrides;
+	const class kbShader *				m_pShader;
 
     kbShaderParam_t & AllocateParam( const std::string & varName ) {
 		for ( int i = 0; i < m_ParamOverrides.size(); i++ ) {
@@ -321,6 +322,7 @@ public:
 	const class kbModel *						m_pModel;
 	std::vector<class kbShader *>				m_OverrideShaderList;
 	kbShaderParamOverrides_t                    m_ShaderParamOverrides;
+	std::vector<kbShaderParamOverrides_t>		m_Materials;
 	ERenderPass									m_RenderPass;
 	float										m_TranslucencySortBias;
 	kbVec3										m_Position;

@@ -54,12 +54,23 @@ struct kbShaderVarBindings_t {
 	size_t										m_ConstantBufferSizeBytes;
 
 	struct binding_t {
-		binding_t( const std::string & inName, const size_t offset ) : m_VarName ( inName ), m_VarByteOffset( offset ) { }
+		binding_t( const std::string & inName, const size_t offset, const bool bIsUserDefinedVar ) :
+			m_VarName ( inName ),
+			m_VarByteOffset( offset ),
+			m_bIsUserDefinedVar( bIsUserDefinedVar ) { }
 
 		std::string								m_VarName;
 		size_t									m_VarByteOffset;
+		bool									m_bIsUserDefinedVar;
 	};
 	std::vector<binding_t>						m_VarBindings;
+
+	struct textureBinding_t {
+		std::string								m_TextureName;
+		kbTexture *								m_pDefaultTexture;
+		kbRenderTexture *						m_pDefaultRenderTexture;
+	};
+    std::vector<textureBinding_t>				m_Textures;
 
 	bool ContainsBinding( const char *const pBinding ) {
 		for ( int i = 0; i < m_VarBindings.size(); i++ ) {
@@ -70,7 +81,6 @@ struct kbShaderVarBindings_t {
 		return false;
 	}
 
-    std::vector<std::string>					m_TextureNames;
 };
 
 /**
