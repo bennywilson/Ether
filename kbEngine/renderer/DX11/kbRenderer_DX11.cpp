@@ -1359,6 +1359,7 @@ void kbRenderer_DX11::RenderScene() {
 
 				kbRenderObject renderObject;
 				renderObject.m_pModel = m_DebugModels[i].m_pModel;
+				renderObject.m_Materials = m_DebugModels[i].m_Materials;
 				renderObject.m_Position = m_DebugModels[i].m_Position;
 				renderObject.m_Orientation = m_DebugModels[i].m_Orientation;
 				renderObject.m_Scale = m_DebugModels[i].m_Scale;
@@ -1844,6 +1845,7 @@ void kbRenderer_DX11::RenderMousePickerIds() {
 	for ( int i = 0; i < m_DebugModels.size(); i++ ) {
 		kbRenderObject renderObject;
 		renderObject.m_pModel = m_DebugModels[i].m_pModel;
+		renderObject.m_Materials = m_DebugModels[i].m_Materials;
 		renderObject.m_Position = m_DebugModels[i].m_Position;
 		renderObject.m_Orientation = m_DebugModels[i].m_Orientation;
 		renderObject.m_Scale = m_DebugModels[i].m_Scale;
@@ -2540,7 +2542,7 @@ void kbRenderer_DX11::ReadShaderFile( std::string & shaderText, kbShaderVarBindi
 				textureBinding.m_pDefaultRenderTexture = m_pRenderTargets[DEPTH_BUFFER];
 			} else if ( defaultTexture == "specularbuffer" ) {
 				textureBinding.m_pDefaultRenderTexture = m_pRenderTargets[SPECULAR_BUFFER];
-			} else if ( defaultTexture == "shadowBuffer" ) {
+			} else if ( defaultTexture == "shadowbuffer" ) {
 				textureBinding.m_pDefaultRenderTexture = m_pRenderTargets[SHADOW_BUFFER];
 			} else {
 				kbWarning( "Default texture %s not found", defaultTexture.c_str() );
@@ -3002,7 +3004,7 @@ void kbRenderer_DX11::RenderMesh( const kbRenderSubmesh *const pRenderMesh, cons
 			pShader = (*pShaderOverrideList)[pRenderMesh->GetMeshIdx()];
 		}
 	
-		if ( pRenderObject->m_Materials.size() > 0 ) {
+		if ( pRenderObject->m_Materials.size() > 0 && pRenderObject->m_Materials.size() > pRenderMesh->GetMeshIdx() ) {
 			pShader = pRenderObject->m_Materials[pRenderMesh->GetMeshIdx()].m_pShader;
 		}
 
@@ -3070,7 +3072,11 @@ void kbRenderer_DX11::RenderMesh( const kbRenderSubmesh *const pRenderMesh, cons
 
 	ID3D11Buffer * pConstantBuffer = nullptr;
 	if ( pRenderObject->m_Materials.size() > 0 ) {
-		pConstantBuffer = SetConstantBuffer( shaderVarBindings, &pRenderObject->m_Materials[pRenderMesh->GetMeshIdx()], pRenderObject, nullptr );
+		if ( pRenderObject->m_Materials.size() > pRenderMesh->GetMeshIdx() ) {
+			pConstantBuffer = SetConstantBuffer( shaderVarBindings, &pRenderObject->m_Materials[pRenderMesh->GetMeshIdx()], pRenderObject, nullptr );
+		} else {
+			pConstantBuffer = SetConstantBuffer( shaderVarBindings, &pRenderObject->m_Materials[0], pRenderObject, nullptr );
+		}
 	} else {
 		pConstantBuffer = SetConstantBuffer( shaderVarBindings, &pRenderObject->m_ShaderParamOverrides, pRenderObject, nullptr );
 	}

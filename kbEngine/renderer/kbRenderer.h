@@ -296,7 +296,7 @@ public:
 	void										DrawPreTransformedLine( const std::vector<kbVec3> & vertList, const kbColor & color );
 	void										DrawSphere( const kbVec3 & origin, const float radius, const int NumSegments, const kbColor & color );
 	void										DrawBillboard( const kbVec3 & position, const kbVec2 & size, const int textureIndex, kbShader *const pShader, const int entityId = -1 );
-	void										DrawModel( const kbModel * pModel, const kbVec3 & start, const kbQuat & orientation, const kbVec3 & scale, const int entityId );
+	void										DrawModel( const kbModel *const pModel, const std::vector<kbShaderParamOverrides_t> & materials, const kbVec3 & start, const kbQuat & orientation, const kbVec3 & scale, const int entityId );
 
 	//
 	enum kbViewMode_t {
@@ -401,7 +401,8 @@ protected:
 		kbQuat									m_Orientation;
 		kbVec3									m_Scale;
 		const kbModel *							m_pModel;
-		kbShader*								m_pShader;
+		std::vector<kbShaderParamOverrides_t>	m_Materials;
+		kbShader *								m_pShader;
 		int										m_TextureIndex;
 		int										m_EntityId;
 	};

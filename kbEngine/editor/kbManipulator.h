@@ -62,6 +62,7 @@ private:
 
 	int											m_SelectedGroup;
 
+	std::vector<kbShaderParamOverrides_t>		m_ManipulatorMaterials;
 
 	// draw stuff
 	kbVec3 vecToGrabPoint;

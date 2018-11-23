@@ -769,13 +769,14 @@ void kbRenderer::DrawBillboard( const kbVec3 & position, const kbVec2 & size, co
 /**
  *	kbRenderer::DrawModel
  */
-void kbRenderer::DrawModel( const kbModel * pModel, const kbVec3 & position, const kbQuat & orientation, const kbVec3 & scale, const int entityId ) {
+void kbRenderer::DrawModel( const kbModel *const pModel, const std::vector<kbShaderParamOverrides_t> & materials, const kbVec3 & position, const kbQuat & orientation, const kbVec3 & scale, const int entityId ) {
 	debugDrawObject_t model;
 	model.m_Position = position;
 	model.m_Orientation = orientation;
 	model.m_Scale = scale;
 	model.m_pModel = pModel;
 	model.m_EntityId = entityId;
+	model.m_Materials = materials;
 
 	m_DebugModels_GameThread.push_back( model );
 }

@@ -127,25 +127,33 @@ void kbManipulator::UpdateMouseDrag( const kbVec3 & rayOrigin, const kbVec3 & ra
  *	kbManipulator::Update
  */
 void kbManipulator::Update() {
-	g_pRenderer->DrawModel( m_pModels[m_ManipulatorMode], m_Position, m_Orientation, kbVec3::one, UINT16_MAX );
+	g_pRenderer->DrawModel( m_pModels[m_ManipulatorMode], m_ManipulatorMaterials, m_Position, m_Orientation, kbVec3::one, UINT16_MAX );
 }
 
 /**
  *	kbManipulator::RenderSync
  */
 void kbManipulator::RenderSync() {
-	if ( m_pModels[kbManipulator::Translate] == nullptr ) {
-		m_pModels[kbManipulator::Translate] = ( kbModel * ) g_ResourceManager.GetResource( "../../kbEngine/assets/Models/Editor/translationManipulator.ms3d", true );
+
+	static bool bFirstUpdate = true;
+	if ( bFirstUpdate == false ) {
+		return;
 	}
 
-	if ( m_pModels[kbManipulator::Rotate] == nullptr ) {
-		m_pModels[kbManipulator::Rotate] = ( kbModel * ) g_ResourceManager.GetResource( "../../kbEngine/assets/Models/Editor/rotationManipulator.ms3d", true );
-	}
+	bFirstUpdate = false;
+	kbShaderParamOverrides_t material;
+	material.m_pShader = (kbShader *) g_ResourceManager.GetResource( "../../kbEngine/assets/Shaders/basicTexture.kbshader", true );
+	kbTexture *const pTexture = (kbTexture *) g_ResourceManager.GetResource( "../../kbEngine/assets/editor/manipulator.bmp", true );
+	material.SetTexture( "shaderTexture", pTexture );
+	m_ManipulatorMaterials.push_back( material );
+	m_ManipulatorMaterials.push_back( material );
+	m_ManipulatorMaterials.push_back( material );
 
-	if ( m_pModels[kbManipulator::Scale] == nullptr ) {
-		m_pModels[kbManipulator::Scale] = ( kbModel * ) g_ResourceManager.GetResource( "../../kbEngine/assets/Models/Editor/scaleManipulator.ms3d", true );
-	}
-
+	m_ManipulatorMaterials.push_back( material );
+	m_pModels[kbManipulator::Translate] = (kbModel *) g_ResourceManager.GetResource( "../../kbEngine/assets/Models/Editor/translationManipulator.ms3d", true );
+	m_pModels[kbManipulator::Rotate] = (kbModel *) g_ResourceManager.GetResource( "../../kbEngine/assets/Models/Editor/rotationManipulator.ms3d", true );
+	m_pModels[kbManipulator::Scale] = (kbModel * ) g_ResourceManager.GetResource( "../../kbEngine/assets/Models/Editor/scaleManipulator.ms3d", true );
+	
 	kbErrorCheck( m_pModels[kbManipulator::Translate] != nullptr && m_pModels[kbManipulator::Rotate] != nullptr && m_pModels[kbManipulator::Scale] != nullptr, "Could load editor manipulator models" );
 }
 

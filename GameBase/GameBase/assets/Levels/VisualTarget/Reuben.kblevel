@@ -58,8 +58,8 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "Entity_18"
-		Orientation = -0.456685 0.000000 0.000000 0.889629
-		Position = 4.712048 2.596002 24.219509
+		Orientation = -0.456655 0.010202 0.005237 0.889570
+		Position = 4.712048 2.651852 24.297367
 		Scale = 1.000000 1.000000 1.000000
 	}
 	kbDirectionalLightComponent { 
@@ -164,5 +164,102 @@ kbGameEntity 0 0 0 0 {
 		Model = ..\..\kbengine\assets\models\unitsphere.ms3d
 		ShaderOverride = 0
 			
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Entity_20"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = -3.428510 3.079995 12.674395
+		Scale = 1.000000 1.000000 1.000000
+	}
+	EtherSkelModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		Materials = 5
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Shader = .\assets\shaders\character\characterbase.kbshader
+				ShaderParams = 1
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorTexture"
+						Texture = .\assets\visualtarget\getthebag\gina\eyebrowl.dds
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Shader = .\assets\shaders\character\characterbase.kbshader
+				ShaderParams = 1
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorTexture"
+						Texture = .\assets\visualtarget\getthebag\gina\eye.dds
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Shader = .\assets\shaders\character\characterbase.kbshader
+				ShaderParams = 1
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorTexture"
+						Texture = .\assets\visualtarget\reuben\izzy\face.dds
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Shader = .\assets\shaders\character\characterbase.kbshader
+				ShaderParams = 1
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorTexture"
+						Texture = .\assets\visualtarget\reuben\izzy\izzy_combat.bmp
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Shader = .\assets\shaders\character\characterbase.kbshader
+				ShaderParams = 1
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorTexture"
+						Texture = .\assets\visualtarget\getthebag\gina\eyebrowr.dds
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		RenderPass = LightingPass
+		TranslucencySortBias =  0.000000
+		Model = .\assets\visualtarget\reuben\izzy\izza_combat.ms3d
+		ShaderOverride = 0
+			
+		Animations = 1
+			EtherAnimComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Animation = .\assets\visualtarget\initiation\gina\cover_lean_left.kbanim.ms3d
+				AnimationName = ""
+				IsLooping = 0
+				TimeScale =  1.000000
+			}
+		DebugAnimIndex = -1
+		IsFirstPersonModel = 0
 	}
 }
