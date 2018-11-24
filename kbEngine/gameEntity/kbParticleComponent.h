@@ -90,7 +90,7 @@ private:
 	std::vector<kbParticle_t>									m_Particles;
 	kbModel														m_ParticleBuffer[NumParticleBuffers];
 	kbParticleVertex *											m_pVertexBuffer;
-	unsigned long *												m_pIndexBuffer;
+	ushort *													m_pIndexBuffer;
 
 	unsigned int												m_NumIndicesInCurrentBuffer;
 	byte														m_CurrentParticleBuffer;

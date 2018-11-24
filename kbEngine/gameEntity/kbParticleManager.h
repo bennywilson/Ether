@@ -66,7 +66,7 @@ private:
 		uint													m_NumIndices;
 	
 		kbParticleVertex *										m_pVertexBuffer;
-		unsigned long *											m_pIndexBuffer;
+		ushort *												m_pIndexBuffer;
 		
 		kbTexture *												m_pAtlasTexture;
 		kbShader *												m_pAtlasShader;

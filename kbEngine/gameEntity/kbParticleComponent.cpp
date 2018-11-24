@@ -314,6 +314,13 @@ void kbParticleComponent::RenderSync() {
 	m_RenderObject.m_Orientation = kbQuat( 0.0f, 0.0f, 0.0f, 1.0f );
 	m_RenderObject.m_TranslucencySortBias = m_TranslucencySortBias;
 
+	// Update materials
+	m_RenderObject.m_Materials.clear();
+	kbShaderParamOverrides_t particleMaterial;
+	particleMaterial.m_pShader = m_pParticleShader;
+	particleMaterial.SetTexture( "shaderTexture", m_pParticleTexture );
+	m_RenderObject.m_Materials.push_back( particleMaterial );
+
 	if ( m_CurrentParticleBuffer == 255 ) {
 		m_CurrentParticleBuffer = 0;
 	} else {
@@ -334,7 +341,7 @@ void kbParticleComponent::RenderSync() {
 	}
 
 	m_pVertexBuffer = (kbParticleVertex*)m_ParticleBuffer[m_CurrentParticleBuffer].MapVertexBuffer();
-	m_pIndexBuffer = ( unsigned long * ) m_ParticleBuffer[m_CurrentParticleBuffer].MapIndexBuffer();
+	m_pIndexBuffer = (ushort*) m_ParticleBuffer[m_CurrentParticleBuffer].MapIndexBuffer();
 
 	m_NumIndicesInCurrentBuffer = 0;
 }
