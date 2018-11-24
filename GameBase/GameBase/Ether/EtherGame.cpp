@@ -555,6 +555,13 @@ void EtherGame::RenderThreadCallBack() {
 			if ( pEnt->GetName().find( "Holey_Wall" ) != std::string::npos ) {
 				kbStaticModelComponent *const pSM = (kbStaticModelComponent*)pEnt->GetComponentByType( kbStaticModelComponent::GetType() );
 				if ( pSM != nullptr ) {
+	
+					kbShader *const pHoleShader = (kbShader*)g_ResourceManager.LoadResource( "./assets/shaders/environment/environmenthole.kbshader", true );
+					kbTexture *const diff = (kbTexture*)g_ResourceManager.LoadResource( "./assets/models/architecture/bricks.png", true );
+					kbTexture *const normal = (kbTexture*)g_ResourceManager.LoadResource( "./assets/models/architecture/bricks_nm.png", true );
+
+					pSM->SetMaterialParamTexture( 0, "holeTex" ,m_pBulletHoleRenderTexture );
+/*
 					std::vector<kbMaterialComponent> materials;
 					kbMaterialComponent newMat;
 					newMat.SetShader( (kbShader*)g_ResourceManager.LoadResource( "./assets/shaders/environment/environmenthole.kbshader", true ) );
@@ -562,19 +569,19 @@ void EtherGame::RenderThreadCallBack() {
 					kbShaderParamComponent holeTextureParam;
 					holeTextureParam.SetParamName( kbString( "holeTex" ) );
 					holeTextureParam.SetRenderTexture( m_pBulletHoleRenderTexture );
-					newMat.SetShaderParamComponent( 0, holeTextureParam );
+					newMat.SetShaderParamComponent( holeTextureParam );
 
 					kbShaderParamComponent diffuseParam;
 					diffuseParam.SetParamName( kbString( "diffuse" ) );
 					diffuseParam.SetTexture( (kbTexture*)g_ResourceManager.LoadResource( "./assets/models/architecture/bricks.png", true ) );
-					newMat.SetShaderParamComponent( 1, diffuseParam );
+					newMat.SetShaderParamComponent( diffuseParam );
 
 					kbShaderParamComponent normalParam;
 					normalParam.SetParamName( kbString( "normal" ) );
 					normalParam.SetTexture( (kbTexture*)g_ResourceManager.LoadResource( "./assets/models/architecture/bricks_nm.png", true ) );
-					newMat.SetShaderParamComponent( 2, normalParam );
+					newMat.SetShaderParamComponent( normalParam );
 
-					pSM->SetMaterial( 0, newMat );
+					pSM->SetMaterial( 0, newMat );*/
 				}
 				break;
 			}
@@ -964,13 +971,13 @@ EtherFireEntity::EtherFireEntity( const kbVec3 & position, const kbPrefab *const
 	m_RandomScroller = 1.0f + kbfrand() * 0.1f;
 
 	// MATERIALHACK
-	/*
+
 	kbStaticModelComponent * pSM = (kbStaticModelComponent*)m_pSmokeEntity->GetComponentByType( kbStaticModelComponent::GetType() );
-	pSM->SetShaderVectorParam( "additionalData", kbVec4( 0.0f, m_RandomScroller, 0.0f, 0.0f ) );
+	pSM->SetMaterialParamVector( 0, "additionalData", kbVec4( 0.0f, m_RandomScroller, 0.0f, 0.0f ) );
 
 	pSM = (kbStaticModelComponent*)m_pFireEntity->GetComponentByType( kbStaticModelComponent::GetType() );
-	pSM->SetShaderVectorParam( "additionalData", kbVec4( 0.0f, m_RandomScroller, 0.0f, 0.0f ) );
-*/
+	pSM->SetMaterialParamVector( 0, "additionalData", kbVec4( 0.0f, m_RandomScroller, 0.0f, 0.0f ) );
+
 	m_bIsFinished = false;
 }
 
@@ -1064,13 +1071,29 @@ void EtherFireEntity::Update( const float DeltaTime ) {
 	m_pEmberEntity->SetPosition( m_EmberStartPos + fireOffset * fireFade );
 
 	m_RandomScroller += DeltaTime * fireFade;
-	// MATERIALHACK
-	/**
+
 	kbStaticModelComponent * pSM = (kbStaticModelComponent*)m_pSmokeEntity->GetComponentByType( kbStaticModelComponent::GetType() );
-	pSM->SetShaderVectorParam( "additionalData", kbVec4( smokeFade * 0.24f, m_RandomScroller, 0.0f, 0.0f ) );
+	pSM->SetMaterialParamVector( 0, "additionalData", kbVec4( smokeFade * 0.24f, m_RandomScroller, 0.0f, 0.0f ) );
 
 	pSM = (kbStaticModelComponent*)m_pFireEntity->GetComponentByType( kbStaticModelComponent::GetType() );
-	pSM->SetShaderVectorParam( "additionalData", kbVec4( fireFade, m_RandomScroller, 0.0f, 0.0f ) );
-	*/
+	pSM->SetMaterialParamVector( 0, "additionalData", kbVec4( fireFade, m_RandomScroller, 0.0f, 0.0f ) );
+
+	{
+	/*	kbStaticModelComponent * pSM = (kbStaticModelComponent*)m_pSmokeEntity->GetComponentByType( kbStaticModelComponent::GetType() );
+		std::vector<kbMaterialComponent> materials;
+		kbMaterialComponent newMat;
+		newMat.SetShader( (kbShader*)g_ResourceManager.LoadResource( "./assets/shaders/environment/environmenthole.kbshader", true ) );
+	
+		kbShaderParamComponent holeTextureParam;
+		holeTextureParam.SetParamName( kbString( "holeTex" ) );
+		holeTextureParam.SetRenderTexture( m_pBulletHoleRenderTexture );
+		newMat.SetShaderParamComponent( 0, holeTextureParam );
+
+		pSM->SetShaderVectorParam( "additionalData", kbVec4( smokeFade * 0.24f, m_RandomScroller, 0.0f, 0.0f ) );*/
+	}
+
+	//pSM = (kbStaticModelComponent*)m_pFireEntity->GetComponentByType( kbStaticModelComponent::GetType() );
+//	pSM->SetShaderVectorParam( "additionalData", kbVec4( fireFade, m_RandomScroller, 0.0f, 0.0f ) );
+	
 }
 

@@ -2969,7 +2969,7 @@ void kbRenderer_DX11::RenderMesh( const kbRenderSubmesh *const pRenderMesh, cons
 	const kbModel *const pModel = pRenderObject->m_pModel;
 
 	kbErrorCheck( pRenderObject != nullptr && pRenderObject->m_pModel != nullptr, "kbRenderer_DX11::RenderMesh() - no model found" );
-	kbErrorCheck( pModel->GetMaterials().size() > 0, "kbRenderer_DX11::RenderMesh() - No materials found for model %s", pRenderObject->m_pModel->GetFullName().c_str() );
+	//kbErrorCheck( pModel->GetMaterials().size() > 0, "kbRenderer_DX11::RenderMesh() - No materials found for model %s", pRenderObject->m_pModel->GetFullName().c_str() );
 
 	const UINT vertexStride = pModel->VertexStride();
 	const UINT vertexOffset = 0;

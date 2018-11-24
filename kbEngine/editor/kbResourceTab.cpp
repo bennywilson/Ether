@@ -415,7 +415,7 @@ void kbResourceTab::FindResourcesRecursively( const std::string & file, kbResour
 					if ( strcmp( ext, validExtensions[i] ) == 0 ) {
 						if ( strcmp( ext, ".kbPkg" ) == 0 ) {
 							// Add a package and its folders and prefab
-							kbPackage *const pPackage = g_ResourceManager.GetPackage( file + FindFileData.cFileName, false );
+							kbPackage *const pPackage = g_ResourceManager.GetPackage( file + FindFileData.cFileName, true );		// TODO: Don't want to auto load resources here since it can be slow
 							kbErrorCheck( pPackage != nullptr, "kbResourceTab::FindResourcesRecursively() - Failed to load package" );
 
 							// Add Package

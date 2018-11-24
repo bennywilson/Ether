@@ -60,7 +60,7 @@ public:
 	const std::vector<kbShaderParamComponent> &	GetShaderParams() const { return m_ShaderParamComponents; }
 
 	void										SetShader( kbShader *const pShader ) { m_pShader = pShader; }
-	void										SetShaderParamComponent( const int idx, const kbShaderParamComponent & inParam );
+	void										SetShaderParamComponent( const kbShaderParamComponent & inParam );
 
 private:
 
@@ -86,6 +86,10 @@ public:
 	bool										GetCastsShadow() const { return m_bCastsShadow; }
 
 	void										SetMaterial( const int idx, const kbMaterialComponent & newMats );
+	void										SetMaterialShader( const int idx, kbShader *const pShader );
+	void										SetMaterialParamVector( const int idx, const std::string & paramName, const kbVec4 paramValue );
+	void										SetMaterialParamTexture( const int idx, const std::string & paramName, kbTexture *const pTexture );
+	void										SetMaterialParamTexture( const int idx, const std::string & paramName, kbRenderTexture *const pTexture );
 
 protected:
 

@@ -315,7 +315,7 @@ public:
 													m_CullDistance( -1.0f ),
 													m_bCastsShadow( false ),
 													m_bIsSkinnedModel( false ),
-													m_bIsFirstAdd( false ),
+													m_bIsFirstAdd( true ),
 													m_bIsRemove( false ) { }
 
 	const class kbComponent *					m_pComponent;

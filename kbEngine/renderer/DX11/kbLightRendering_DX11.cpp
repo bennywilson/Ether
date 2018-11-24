@@ -379,6 +379,8 @@ void kbRenderer_DX11::RenderLightShafts() {
 
 	START_SCOPED_RENDER_TIMER( RENDER_LIGHTSHAFTS );
 
+	m_RenderState.SetBlendState();
+
 	const unsigned int stride = sizeof( vertexLayout );
 	const unsigned int offset = 0;
 	m_pDeviceContext->IASetVertexBuffers( 0, 1, &m_pUnitQuad, &stride, &offset );

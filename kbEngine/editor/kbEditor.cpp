@@ -1145,7 +1145,7 @@ void kbEditor::AddEntityAsPrefab_Internal( const std::string & PackageName, cons
  */
 void kbEditor::InsertSelectedPrefabIntoScene( Fl_Widget *, void * pUserdata ) {
 
-	const kbPrefab * prefabToCreate = g_Editor->m_pResourceTab->GetSelectedPrefab();
+	const kbPrefab *const prefabToCreate = g_Editor->m_pResourceTab->GetSelectedPrefab();
 	if ( prefabToCreate == nullptr ) {
 		return;
 	}
