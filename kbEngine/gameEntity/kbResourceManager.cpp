@@ -180,7 +180,7 @@ void kbResourceManager::UpdateHotReloads() {
 /**
  *	kbResourceManager::GetResource
  */
-kbResource * kbResourceManager::GetResource( const std::string & fullFileName, const bool loadImmediately ) {
+kbResource * kbResourceManager::LoadResource( const std::string & fullFileName, const bool loadImmediately ) {
 
 	if ( strcmp( fullFileName.c_str(), "nullptr" ) == 0 ) {
 		return nullptr;
@@ -521,7 +521,7 @@ void kbResourceManager::FileModifiedCB( const std::wstring & fileName ) {
 	}
 
 	kbLog( "Loading %s", p.string().c_str() );
-	GetResource( p.string(), true );
+	LoadResource( p.string(), true );
 }
 
 /**

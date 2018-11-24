@@ -456,7 +456,7 @@ bool EtherWeaponComponent::Fire_Internal() {
 
 		if ( m_pShellModel != nullptr ) {
 			if ( m_ShellPool.size() == 0 ) {
-				kbShader *const pShader = (kbShader *)g_ResourceManager.GetResource( "./assets/shaders/Weapons/shellCasing.kbShader", true );
+				kbShader *const pShader = (kbShader *)g_ResourceManager.LoadResource( "./assets/shaders/Weapons/shellCasing.kbShader", true );
 				kbErrorCheck( pShader != nullptr, "EtherWeaponComponent::Fire_Internal() - Did not find shellCasing.kbShader" );
 
 				m_ShellPool.insert( m_ShellPool.begin(), g_ShellPoolSize, BulletShell() );

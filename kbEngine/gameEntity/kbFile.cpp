@@ -271,7 +271,7 @@ void kbFile::ReadComponent( kbGameEntity *const pGameEntity, const std::string &
 							nextToken = m_Buffer.substr( m_CurrentReadPos, nextStringPos - m_CurrentReadPos );
 			
 							const kbTypeInfoVar * pVar = currentVar;
-							shaderList[i] = (kbShader*)g_ResourceManager.GetResource( nextToken, m_bLoadAssetsImmediately );
+							shaderList[i] = (kbShader*)g_ResourceManager.LoadResource( nextToken, m_bLoadAssetsImmediately );
 							m_CurrentReadPos = nextStringPos;
 						}
 			
@@ -452,7 +452,7 @@ void kbFile::ReadProperty( const kbTypeInfoVar *const pTypeInfoVar, byte *const 
 			INT_PTR * intPtr = ( INT_PTR * )byteOffset;
 			INT_PTR & intRef = *intPtr;
 			if ( nextToken != "NULL" ) {
-				intRef = (INT_PTR)(g_ResourceManager.GetResource( nextToken, m_bLoadAssetsImmediately ));
+				intRef = (INT_PTR)(g_ResourceManager.LoadResource( nextToken, m_bLoadAssetsImmediately ));
 			}
 			break;
 		}

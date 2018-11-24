@@ -8,45 +8,26 @@ kbGameEntity 0 0 0 0 {
 		Scale = 1.000000 1.000000 1.000000
 	}
 	EtherSkelModelComponent { 
-		Enabled = 1
+		Enabled = 0
 		LifeTime =  -1.000000
 		CastsShadow = 1
+		Materials = 0
 		RenderPass = LightingPass
-		ShaderParams = 1
-			kbShaderParamComponent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				ParamName = "glowParams"
-				Texture = NULL
-				Vector = 3.000000 0.000000 0.000000 0.000000
-			}
 		TranslucencySortBias =  0.000000
-		Model = .\assets\visualtarget\initiation\gina\gina_prison.ms3d
-		ShaderOverride = 12
-			.\assets\shaders\character\characterbase.kbshader
-.\assets\shaders\character\characterbase.kbshader
-.\assets\shaders\character\characterbase.kbshader
-.\assets\shaders\character\characterbase.kbshader
-.\assets\shaders\character\characterbase.kbshader
-.\assets\shaders\character\characterbase.kbshader
-.\assets\shaders\character\characterbase.kbshader
-.\assets\shaders\character\characterbase.kbshader
-.\assets\shaders\character\characterbase.kbshader
-.\assets\shaders\character\characterbase.kbshader
-.\assets\shaders\character\characterglow.kbshader
-.\assets\shaders\character\characterbase.kbshader
-
-		Animations = 1
-			EtherAnimComponent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				Animation = .\assets\visualtarget\initiation\gina\cover_lean_left.kbanim.ms3d
-				AnimationName = ""
-				IsLooping = 0
-				TimeScale =  1.000000
-			}
-		DebugAnimIndex = 0
+		Model = NULL
+		ShaderOverride = 0
+			
+		Animations = 0
+		DebugAnimIndex = -1
 		IsFirstPersonModel = 0
+	}
+	EtherAnimComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Animation = .\assets\visualtarget\initiation\gina\cover_lean_left.kbanim.ms3d
+		AnimationName = ""
+		IsLooping = 0
+		TimeScale =  1.000000
 	}
 }
 kbGameEntity 0 0 0 0 {
@@ -120,8 +101,518 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadow = 1
+		Materials = 15
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Shader = .\assets\shaders\environment\environmentbase.kbshader
+				ShaderParams = 4
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "diffuse"
+						Texture = .\assets\visualtarget\initiation\enviro\foregroundwall.dds
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "normal"
+						Texture = .\assets\visualtarget\initiation\enviro\westwall_nm.dds
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "propertyMap"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "emissiveMap"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Shader = .\assets\shaders\environment\environmentbase.kbshader
+				ShaderParams = 4
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "diffuse"
+						Texture = .\assets\visualtarget\initiation\enviro\ceiling.dds
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "normal"
+						Texture = .\assets\visualtarget\initiation\enviro\eastwall_nm.dds
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "propertyMap"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "emissiveMap"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Shader = .\assets\shaders\environment\environmentbase.kbshader
+				ShaderParams = 4
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "diffuse"
+						Texture = .\assets\visualtarget\initiation\enviro\backwall.dds
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "normal"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "propertyMap"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "emissiveMap"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Shader = .\assets\shaders\environment\environmentbase.kbshader
+				ShaderParams = 4
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "diffuse"
+						Texture = .\assets\visualtarget\initiation\enviro\westwall.dds
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "normal"
+						Texture = .\assets\visualtarget\initiation\enviro\westwall_nm.dds
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "propertyMap"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "emissiveMap"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Shader = .\assets\shaders\environment\environmentbase.kbshader
+				ShaderParams = 4
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "diffuse"
+						Texture = .\assets\visualtarget\initiation\enviro\floor.dds
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "normal"
+						Texture = .\assets\visualtarget\initiation\enviro\floor_nm.dds
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "propertyMap"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "emissiveMap"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Shader = .\assets\shaders\environment\environmentbase.kbshader
+				ShaderParams = 4
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "diffuse"
+						Texture = .\assets\visualtarget\initiation\enviro\eastwall.dds
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "normal"
+						Texture = .\assets\visualtarget\initiation\enviro\eastwall_nm.dds
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "propertyMap"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "emissiveMap"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Shader = .\assets\shaders\environment\environmentbase.kbshader
+				ShaderParams = 4
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "diffuse"
+						Texture = .\assets\visualtarget\initiation\enviro\eastwall.dds
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "normal"
+						Texture = .\assets\visualtarget\initiation\enviro\eastwall_nm.dds
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "propertyMap"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "emissiveMap"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Shader = .\assets\shaders\environment\environmentbase.kbshader
+				ShaderParams = 4
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "diffuse"
+						Texture = .\assets\visualtarget\initiation\enviro\eastwall.dds
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "normal"
+						Texture = .\assets\visualtarget\initiation\enviro\eastwall_nm.dds
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "propertyMap"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "emissiveMap"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Shader = .\assets\shaders\environment\environmentbase.kbshader
+				ShaderParams = 4
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "diffuse"
+						Texture = ..\..\kbengine\assets\textures\white.bmp
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "normal"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "propertyMap"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "emissiveMap"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Shader = .\assets\shaders\environment\environmentbase.kbshader
+				ShaderParams = 4
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "diffuse"
+						Texture = .\assets\visualtarget\initiation\enviro\eastwall.dds
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "normal"
+						Texture = .\assets\visualtarget\initiation\enviro\eastwall_nm.dds
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "propertyMap"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "emissiveMap"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Shader = .\assets\shaders\environment\environmentbase.kbshader
+				ShaderParams = 4
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "diffuse"
+						Texture = ..\..\kbengine\assets\textures\white.bmp
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "normal"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "propertyMap"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "emissiveMap"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Shader = .\assets\shaders\environment\environmentbase.kbshader
+				ShaderParams = 4
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "diffuse"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "normal"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "propertyMap"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "emissiveMap"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Shader = .\assets\shaders\environment\environmentbase.kbshader
+				ShaderParams = 4
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "diffuse"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "normal"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "propertyMap"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "emissiveMap"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Shader = .\assets\shaders\environment\environmentbase.kbshader
+				ShaderParams = 4
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "diffuse"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "normal"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "propertyMap"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "emissiveMap"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Shader = .\assets\shaders\environment\environmentbase.kbshader
+				ShaderParams = 4
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "diffuse"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "normal"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "propertyMap"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "emissiveMap"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
 		RenderPass = LightingPass
-		ShaderParams = 0
 		TranslucencySortBias =  0.000000
 		Model = .\assets\visualtarget\initiation\enviro\prison_interior.ms3d
 		ShaderOverride = 15
@@ -182,8 +673,8 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadow = 1
+		Materials = 0
 		RenderPass = LightingPass
-		ShaderParams = 0
 		TranslucencySortBias =  0.000000
 		Model = .\assets\visualtarget\initiation\other\maletarget.ms3d
 		ShaderOverride = 10
@@ -221,38 +712,26 @@ kbGameEntity 0 0 0 0 {
 		Scale = 1.000000 1.000000 1.000000
 	}
 	EtherSkelModelComponent { 
-		Enabled = 1
+		Enabled = 0
 		LifeTime =  -1.000000
 		CastsShadow = 1
+		Materials = 0
 		RenderPass = LightingPass
-		ShaderParams = 1
-			kbShaderParamComponent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				ParamName = "glowParams"
-				Texture = NULL
-				Vector = 3.000000 0.000000 0.000000 0.000000
-			}
 		TranslucencySortBias =  0.000000
-		Model = .\assets\visualtarget\initiation\other\cornbread.ms3d
-		ShaderOverride = 5
-			.\assets\shaders\character\characterbase.kbshader
-.\assets\shaders\character\characterbase.kbshader
-.\assets\shaders\character\characterbase.kbshader
-.\assets\shaders\character\characterbase.kbshader
-.\assets\shaders\character\characterglow.kbshader
-
-		Animations = 1
-			EtherAnimComponent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				Animation = .\assets\visualtarget\initiation\other\peek.kbanim.ms3d
-				AnimationName = "Peek"
-				IsLooping = 0
-				TimeScale =  1.000000
-			}
-		DebugAnimIndex = 0
+		Model = NULL
+		ShaderOverride = 0
+			
+		Animations = 0
+		DebugAnimIndex = -1
 		IsFirstPersonModel = 0
+	}
+	EtherAnimComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Animation = .\assets\visualtarget\initiation\other\peek.kbanim.ms3d
+		AnimationName = "Peek"
+		IsLooping = 0
+		TimeScale =  1.000000
 	}
 }
 kbGameEntity 0 0 0 0 {
@@ -395,8 +874,8 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadow = 1
+		Materials = 0
 		RenderPass = LightingPass
-		ShaderParams = 0
 		TranslucencySortBias =  0.000000
 		Model = .\assets\visualtarget\initiation\enviro\jailcelldoor.ms3d
 		ShaderOverride = 1
@@ -417,8 +896,8 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadow = 1
+		Materials = 0
 		RenderPass = LightingPass
-		ShaderParams = 0
 		TranslucencySortBias =  0.000000
 		Model = .\assets\visualtarget\initiation\enviro\jailcelldoor.ms3d
 		ShaderOverride = 2
@@ -440,8 +919,8 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadow = 1
+		Materials = 0
 		RenderPass = LightingPass
-		ShaderParams = 0
 		TranslucencySortBias =  0.000000
 		Model = .\assets\visualtarget\initiation\enviro\jailcelldoor.ms3d
 		ShaderOverride = 1
@@ -462,8 +941,8 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadow = 1
+		Materials = 0
 		RenderPass = LightingPass
-		ShaderParams = 0
 		TranslucencySortBias =  0.000000
 		Model = .\assets\visualtarget\initiation\enviro\jailcelldoor.ms3d
 		ShaderOverride = 1
@@ -484,8 +963,8 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadow = 1
+		Materials = 0
 		RenderPass = LightingPass
-		ShaderParams = 0
 		TranslucencySortBias =  0.000000
 		Model = .\assets\visualtarget\initiation\enviro\jailcelldoor.ms3d
 		ShaderOverride = 1
@@ -506,8 +985,8 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadow = 1
+		Materials = 0
 		RenderPass = LightingPass
-		ShaderParams = 0
 		TranslucencySortBias =  0.000000
 		Model = .\assets\visualtarget\initiation\enviro\jailcelldoor.ms3d
 		ShaderOverride = 1
@@ -528,8 +1007,8 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadow = 1
+		Materials = 0
 		RenderPass = LightingPass
-		ShaderParams = 0
 		TranslucencySortBias =  0.000000
 		Model = .\assets\visualtarget\initiation\enviro\jailcelldoor.ms3d
 		ShaderOverride = 1
@@ -550,8 +1029,8 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadow = 1
+		Materials = 0
 		RenderPass = LightingPass
-		ShaderParams = 0
 		TranslucencySortBias =  0.000000
 		Model = .\assets\visualtarget\initiation\enviro\jailcelldoor.ms3d
 		ShaderOverride = 1
@@ -572,8 +1051,8 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadow = 1
+		Materials = 0
 		RenderPass = LightingPass
-		ShaderParams = 0
 		TranslucencySortBias =  0.000000
 		Model = .\assets\visualtarget\initiation\enviro\jailcelldoor.ms3d
 		ShaderOverride = 1
@@ -594,8 +1073,8 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadow = 1
+		Materials = 0
 		RenderPass = LightingPass
-		ShaderParams = 0
 		TranslucencySortBias =  0.000000
 		Model = .\assets\visualtarget\initiation\enviro\jailcelldoor.ms3d
 		ShaderOverride = 1
@@ -616,8 +1095,8 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadow = 1
+		Materials = 0
 		RenderPass = LightingPass
-		ShaderParams = 0
 		TranslucencySortBias =  0.000000
 		Model = .\assets\visualtarget\initiation\enviro\jailcelldoor.ms3d
 		ShaderOverride = 1
@@ -638,8 +1117,8 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadow = 1
+		Materials = 0
 		RenderPass = LightingPass
-		ShaderParams = 0
 		TranslucencySortBias =  0.000000
 		Model = .\assets\visualtarget\initiation\enviro\jailcelldoor.ms3d
 		ShaderOverride = 1
@@ -660,8 +1139,8 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadow = 1
+		Materials = 0
 		RenderPass = LightingPass
-		ShaderParams = 0
 		TranslucencySortBias =  0.000000
 		Model = .\assets\visualtarget\initiation\enviro\jailcelldoor.ms3d
 		ShaderOverride = 1
@@ -682,8 +1161,8 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadow = 1
+		Materials = 0
 		RenderPass = LightingPass
-		ShaderParams = 0
 		TranslucencySortBias =  0.000000
 		Model = .\assets\visualtarget\initiation\enviro\jailcelldoor.ms3d
 		ShaderOverride = 1
@@ -704,8 +1183,8 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadow = 1
+		Materials = 0
 		RenderPass = LightingPass
-		ShaderParams = 0
 		TranslucencySortBias =  0.000000
 		Model = .\assets\visualtarget\initiation\enviro\jailcelldoor.ms3d
 		ShaderOverride = 1
@@ -726,8 +1205,8 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadow = 1
+		Materials = 0
 		RenderPass = LightingPass
-		ShaderParams = 0
 		TranslucencySortBias =  0.000000
 		Model = .\assets\visualtarget\initiation\enviro\jailcelldoor.ms3d
 		ShaderOverride = 1
@@ -748,8 +1227,8 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadow = 1
+		Materials = 0
 		RenderPass = LightingPass
-		ShaderParams = 0
 		TranslucencySortBias =  0.000000
 		Model = .\assets\visualtarget\initiation\enviro\jailcelldoor.ms3d
 		ShaderOverride = 1
@@ -770,8 +1249,8 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadow = 1
+		Materials = 0
 		RenderPass = LightingPass
-		ShaderParams = 0
 		TranslucencySortBias =  0.000000
 		Model = .\assets\visualtarget\initiation\enviro\jailcelldoor.ms3d
 		ShaderOverride = 1
@@ -792,8 +1271,8 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadow = 1
+		Materials = 0
 		RenderPass = LightingPass
-		ShaderParams = 0
 		TranslucencySortBias =  0.000000
 		Model = .\assets\visualtarget\initiation\enviro\jailcelldoor.ms3d
 		ShaderOverride = 1
@@ -814,8 +1293,8 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadow = 1
+		Materials = 0
 		RenderPass = LightingPass
-		ShaderParams = 0
 		TranslucencySortBias =  0.000000
 		Model = .\assets\visualtarget\initiation\enviro\jailcelldoor.ms3d
 		ShaderOverride = 1
@@ -836,8 +1315,8 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadow = 1
+		Materials = 0
 		RenderPass = LightingPass
-		ShaderParams = 0
 		TranslucencySortBias =  0.000000
 		Model = .\assets\visualtarget\initiation\enviro\jailcelldoor.ms3d
 		ShaderOverride = 1
@@ -858,8 +1337,8 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadow = 1
+		Materials = 0
 		RenderPass = LightingPass
-		ShaderParams = 0
 		TranslucencySortBias =  0.000000
 		Model = .\assets\visualtarget\initiation\enviro\jailcelldoor.ms3d
 		ShaderOverride = 1
@@ -880,8 +1359,8 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadow = 1
+		Materials = 0
 		RenderPass = LightingPass
-		ShaderParams = 0
 		TranslucencySortBias =  0.000000
 		Model = .\assets\visualtarget\initiation\enviro\jailcelldoor.ms3d
 		ShaderOverride = 1
@@ -902,8 +1381,8 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadow = 1
+		Materials = 0
 		RenderPass = LightingPass
-		ShaderParams = 0
 		TranslucencySortBias =  0.000000
 		Model = .\assets\visualtarget\initiation\enviro\jailcelldoor.ms3d
 		ShaderOverride = 1
@@ -924,8 +1403,8 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadow = 1
+		Materials = 0
 		RenderPass = LightingPass
-		ShaderParams = 0
 		TranslucencySortBias =  0.000000
 		Model = .\assets\visualtarget\initiation\enviro\jailcelldoor.ms3d
 		ShaderOverride = 1
@@ -946,8 +1425,8 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadow = 1
+		Materials = 0
 		RenderPass = LightingPass
-		ShaderParams = 0
 		TranslucencySortBias =  0.000000
 		Model = .\assets\visualtarget\initiation\enviro\jailcelldoor.ms3d
 		ShaderOverride = 1
@@ -968,8 +1447,8 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadow = 1
+		Materials = 0
 		RenderPass = LightingPass
-		ShaderParams = 0
 		TranslucencySortBias =  0.000000
 		Model = .\assets\visualtarget\initiation\enviro\jailcelldoor.ms3d
 		ShaderOverride = 1
@@ -990,8 +1469,8 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadow = 1
+		Materials = 0
 		RenderPass = LightingPass
-		ShaderParams = 0
 		TranslucencySortBias =  0.000000
 		Model = .\assets\visualtarget\initiation\enviro\jailcelldoor.ms3d
 		ShaderOverride = 1
@@ -1012,8 +1491,8 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadow = 1
+		Materials = 0
 		RenderPass = LightingPass
-		ShaderParams = 0
 		TranslucencySortBias =  0.000000
 		Model = .\assets\visualtarget\initiation\enviro\jailcelldoor.ms3d
 		ShaderOverride = 1
@@ -1034,8 +1513,8 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadow = 1
+		Materials = 0
 		RenderPass = LightingPass
-		ShaderParams = 0
 		TranslucencySortBias =  0.000000
 		Model = .\assets\visualtarget\initiation\enviro\jailcelldoor.ms3d
 		ShaderOverride = 1
@@ -1056,8 +1535,8 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadow = 1
+		Materials = 0
 		RenderPass = LightingPass
-		ShaderParams = 0
 		TranslucencySortBias =  0.000000
 		Model = .\assets\visualtarget\initiation\enviro\jailcelldoor.ms3d
 		ShaderOverride = 1
@@ -1078,8 +1557,8 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadow = 1
+		Materials = 0
 		RenderPass = LightingPass
-		ShaderParams = 0
 		TranslucencySortBias =  0.000000
 		Model = .\assets\visualtarget\initiation\enviro\jailcelldoor.ms3d
 		ShaderOverride = 1
@@ -1100,8 +1579,8 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadow = 1
+		Materials = 0
 		RenderPass = LightingPass
-		ShaderParams = 0
 		TranslucencySortBias =  0.000000
 		Model = .\assets\visualtarget\initiation\enviro\jailcelldoor.ms3d
 		ShaderOverride = 1
@@ -1122,8 +1601,8 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadow = 1
+		Materials = 0
 		RenderPass = LightingPass
-		ShaderParams = 0
 		TranslucencySortBias =  0.000000
 		Model = .\assets\visualtarget\initiation\enviro\jailcelldoor.ms3d
 		ShaderOverride = 1
@@ -1144,8 +1623,8 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadow = 1
+		Materials = 0
 		RenderPass = LightingPass
-		ShaderParams = 0
 		TranslucencySortBias =  0.000000
 		Model = .\assets\visualtarget\initiation\enviro\jailcelldoor.ms3d
 		ShaderOverride = 1
@@ -1166,8 +1645,8 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadow = 1
+		Materials = 0
 		RenderPass = LightingPass
-		ShaderParams = 0
 		TranslucencySortBias =  0.000000
 		Model = .\assets\visualtarget\initiation\enviro\jailcelldoor.ms3d
 		ShaderOverride = 1
@@ -1188,8 +1667,8 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadow = 1
+		Materials = 0
 		RenderPass = LightingPass
-		ShaderParams = 0
 		TranslucencySortBias =  0.000000
 		Model = .\assets\visualtarget\initiation\enviro\jailcelldoor.ms3d
 		ShaderOverride = 1
@@ -1210,8 +1689,8 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadow = 1
+		Materials = 0
 		RenderPass = LightingPass
-		ShaderParams = 0
 		TranslucencySortBias =  0.000000
 		Model = .\assets\visualtarget\initiation\enviro\jailcelldoor.ms3d
 		ShaderOverride = 1
@@ -1232,8 +1711,8 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadow = 1
+		Materials = 0
 		RenderPass = LightingPass
-		ShaderParams = 0
 		TranslucencySortBias =  0.000000
 		Model = .\assets\visualtarget\initiation\enviro\jailcelldoor.ms3d
 		ShaderOverride = 1
@@ -1254,8 +1733,8 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadow = 1
+		Materials = 0
 		RenderPass = LightingPass
-		ShaderParams = 0
 		TranslucencySortBias =  0.000000
 		Model = .\assets\visualtarget\initiation\enviro\jailcelldoor.ms3d
 		ShaderOverride = 1
@@ -1276,8 +1755,8 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadow = 1
+		Materials = 0
 		RenderPass = LightingPass
-		ShaderParams = 0
 		TranslucencySortBias =  0.000000
 		Model = .\assets\visualtarget\initiation\enviro\jailcelldoor.ms3d
 		ShaderOverride = 1
@@ -1298,8 +1777,8 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadow = 1
+		Materials = 0
 		RenderPass = LightingPass
-		ShaderParams = 0
 		TranslucencySortBias =  0.000000
 		Model = .\assets\visualtarget\initiation\enviro\jailcelldoor.ms3d
 		ShaderOverride = 1
@@ -1320,8 +1799,8 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadow = 1
+		Materials = 0
 		RenderPass = LightingPass
-		ShaderParams = 0
 		TranslucencySortBias =  0.000000
 		Model = .\assets\visualtarget\initiation\enviro\jailcelldoor.ms3d
 		ShaderOverride = 1
@@ -1342,8 +1821,8 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadow = 1
+		Materials = 0
 		RenderPass = LightingPass
-		ShaderParams = 0
 		TranslucencySortBias =  0.000000
 		Model = .\assets\visualtarget\initiation\enviro\jailcelldoor.ms3d
 		ShaderOverride = 1
@@ -1364,8 +1843,8 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadow = 1
+		Materials = 0
 		RenderPass = LightingPass
-		ShaderParams = 0
 		TranslucencySortBias =  0.000000
 		Model = .\assets\visualtarget\initiation\enviro\jailcelldoor.ms3d
 		ShaderOverride = 1
@@ -1386,8 +1865,8 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadow = 1
+		Materials = 0
 		RenderPass = LightingPass
-		ShaderParams = 0
 		TranslucencySortBias =  0.000000
 		Model = .\assets\visualtarget\initiation\enviro\jailcelldoor.ms3d
 		ShaderOverride = 1
@@ -1408,8 +1887,8 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadow = 1
+		Materials = 0
 		RenderPass = LightingPass
-		ShaderParams = 0
 		TranslucencySortBias =  0.000000
 		Model = .\assets\visualtarget\initiation\enviro\jailcelldoor.ms3d
 		ShaderOverride = 1
@@ -1430,8 +1909,8 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadow = 1
+		Materials = 0
 		RenderPass = LightingPass
-		ShaderParams = 0
 		TranslucencySortBias =  0.000000
 		Model = .\assets\visualtarget\initiation\enviro\jailcelldoor.ms3d
 		ShaderOverride = 1
@@ -1452,8 +1931,8 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadow = 0
+		Materials = 0
 		RenderPass = LightingPass
-		ShaderParams = 0
 		TranslucencySortBias =  0.000000
 		Model = .\assets\visualtarget\initiation\enviro\cell.ms3d
 		ShaderOverride = 1
@@ -1474,8 +1953,8 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadow = 0
+		Materials = 0
 		RenderPass = LightingPass
-		ShaderParams = 0
 		TranslucencySortBias =  0.000000
 		Model = .\assets\visualtarget\initiation\enviro\ceilinglight.ms3d
 		ShaderOverride = 3
@@ -1498,8 +1977,8 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadow = 0
+		Materials = 0
 		RenderPass = LightingPass
-		ShaderParams = 0
 		TranslucencySortBias =  0.000000
 		Model = .\assets\visualtarget\initiation\enviro\ceilinglight.ms3d
 		ShaderOverride = 3
@@ -1522,8 +2001,8 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadow = 0
+		Materials = 0
 		RenderPass = LightingPass
-		ShaderParams = 0
 		TranslucencySortBias =  0.000000
 		Model = .\assets\visualtarget\initiation\enviro\ceilinglight.ms3d
 		ShaderOverride = 3
@@ -1546,8 +2025,8 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadow = 0
+		Materials = 0
 		RenderPass = LightingPass
-		ShaderParams = 0
 		TranslucencySortBias =  0.000000
 		Model = .\assets\visualtarget\initiation\enviro\ceilinglight.ms3d
 		ShaderOverride = 3
@@ -1570,8 +2049,8 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadow = 0
+		Materials = 0
 		RenderPass = LightingPass
-		ShaderParams = 0
 		TranslucencySortBias =  0.000000
 		Model = .\assets\visualtarget\initiation\enviro\ceilinglight.ms3d
 		ShaderOverride = 3
@@ -1594,8 +2073,8 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadow = 0
+		Materials = 0
 		RenderPass = LightingPass
-		ShaderParams = 0
 		TranslucencySortBias =  0.000000
 		Model = .\assets\visualtarget\initiation\enviro\ceilinglight.ms3d
 		ShaderOverride = 3
@@ -1618,8 +2097,8 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadow = 0
+		Materials = 0
 		RenderPass = LightingPass
-		ShaderParams = 0
 		TranslucencySortBias =  0.000000
 		Model = .\assets\visualtarget\initiation\enviro\ceilinglight.ms3d
 		ShaderOverride = 3
@@ -1642,8 +2121,8 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadow = 0
+		Materials = 0
 		RenderPass = LightingPass
-		ShaderParams = 0
 		TranslucencySortBias =  0.000000
 		Model = .\assets\visualtarget\initiation\enviro\rail.ms3d
 		ShaderOverride = 1
@@ -1664,8 +2143,8 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadow = 0
+		Materials = 0
 		RenderPass = LightingPass
-		ShaderParams = 0
 		TranslucencySortBias =  0.000000
 		Model = .\assets\visualtarget\initiation\enviro\rail.ms3d
 		ShaderOverride = 1
@@ -1686,8 +2165,8 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadow = 0
+		Materials = 0
 		RenderPass = LightingPass
-		ShaderParams = 0
 		TranslucencySortBias =  0.000000
 		Model = .\assets\visualtarget\initiation\enviro\rail.ms3d
 		ShaderOverride = 1
@@ -1708,8 +2187,8 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadow = 0
+		Materials = 0
 		RenderPass = LightingPass
-		ShaderParams = 0
 		TranslucencySortBias =  0.000000
 		Model = .\assets\visualtarget\initiation\enviro\rail.ms3d
 		ShaderOverride = 1
@@ -1730,8 +2209,8 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadow = 0
+		Materials = 0
 		RenderPass = LightingPass
-		ShaderParams = 0
 		TranslucencySortBias =  0.000000
 		Model = .\assets\visualtarget\initiation\enviro\rail.ms3d
 		ShaderOverride = 1
@@ -1752,8 +2231,8 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadow = 0
+		Materials = 0
 		RenderPass = LightingPass
-		ShaderParams = 0
 		TranslucencySortBias =  0.000000
 		Model = .\assets\visualtarget\initiation\enviro\rail.ms3d
 		ShaderOverride = 1
@@ -1774,8 +2253,8 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadow = 0
+		Materials = 0
 		RenderPass = LightingPass
-		ShaderParams = 0
 		TranslucencySortBias =  0.000000
 		Model = .\assets\visualtarget\initiation\enviro\rail.ms3d
 		ShaderOverride = 1
@@ -1796,8 +2275,8 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadow = 0
+		Materials = 0
 		RenderPass = LightingPass
-		ShaderParams = 0
 		TranslucencySortBias =  0.000000
 		Model = .\assets\visualtarget\initiation\enviro\rail.ms3d
 		ShaderOverride = 1
@@ -1818,8 +2297,8 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadow = 0
+		Materials = 0
 		RenderPass = LightingPass
-		ShaderParams = 0
 		TranslucencySortBias =  0.000000
 		Model = .\assets\visualtarget\initiation\enviro\rail.ms3d
 		ShaderOverride = 1
@@ -1840,8 +2319,8 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadow = 0
+		Materials = 0
 		RenderPass = LightingPass
-		ShaderParams = 0
 		TranslucencySortBias =  0.000000
 		Model = .\assets\visualtarget\initiation\enviro\rail.ms3d
 		ShaderOverride = 1
@@ -1862,8 +2341,8 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadow = 0
+		Materials = 0
 		RenderPass = LightingPass
-		ShaderParams = 0
 		TranslucencySortBias =  0.000000
 		Model = .\assets\visualtarget\initiation\enviro\rail.ms3d
 		ShaderOverride = 1
@@ -1884,8 +2363,8 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadow = 0
+		Materials = 0
 		RenderPass = LightingPass
-		ShaderParams = 0
 		TranslucencySortBias =  0.000000
 		Model = .\assets\visualtarget\initiation\enviro\rail.ms3d
 		ShaderOverride = 1
@@ -1906,8 +2385,8 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadow = 0
+		Materials = 0
 		RenderPass = LightingPass
-		ShaderParams = 0
 		TranslucencySortBias =  0.000000
 		Model = .\assets\visualtarget\initiation\enviro\rail.ms3d
 		ShaderOverride = 1
@@ -1928,8 +2407,8 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadow = 0
+		Materials = 0
 		RenderPass = LightingPass
-		ShaderParams = 0
 		TranslucencySortBias =  0.000000
 		Model = .\assets\visualtarget\initiation\enviro\rail.ms3d
 		ShaderOverride = 1
@@ -1950,8 +2429,8 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadow = 0
+		Materials = 0
 		RenderPass = LightingPass
-		ShaderParams = 0
 		TranslucencySortBias =  0.000000
 		Model = .\assets\visualtarget\initiation\enviro\rail.ms3d
 		ShaderOverride = 1
@@ -1972,8 +2451,8 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadow = 0
+		Materials = 0
 		RenderPass = LightingPass
-		ShaderParams = 0
 		TranslucencySortBias =  0.000000
 		Model = .\assets\visualtarget\initiation\enviro\rail.ms3d
 		ShaderOverride = 1
@@ -1994,8 +2473,8 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadow = 0
+		Materials = 0
 		RenderPass = LightingPass
-		ShaderParams = 0
 		TranslucencySortBias =  0.000000
 		Model = .\assets\visualtarget\initiation\enviro\rail.ms3d
 		ShaderOverride = 1
@@ -2016,8 +2495,8 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadow = 0
+		Materials = 0
 		RenderPass = LightingPass
-		ShaderParams = 0
 		TranslucencySortBias =  0.000000
 		Model = .\assets\visualtarget\initiation\enviro\rail.ms3d
 		ShaderOverride = 1
@@ -2038,8 +2517,8 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadow = 0
+		Materials = 0
 		RenderPass = LightingPass
-		ShaderParams = 0
 		TranslucencySortBias =  0.000000
 		Model = .\assets\visualtarget\initiation\enviro\rail.ms3d
 		ShaderOverride = 1
@@ -2060,8 +2539,8 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadow = 0
+		Materials = 0
 		RenderPass = LightingPass
-		ShaderParams = 0
 		TranslucencySortBias =  0.000000
 		Model = .\assets\visualtarget\initiation\enviro\rail.ms3d
 		ShaderOverride = 1
@@ -2082,8 +2561,8 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadow = 0
+		Materials = 0
 		RenderPass = LightingPass
-		ShaderParams = 0
 		TranslucencySortBias =  0.000000
 		Model = .\assets\visualtarget\initiation\enviro\rail.ms3d
 		ShaderOverride = 1
@@ -2104,8 +2583,8 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadow = 0
+		Materials = 0
 		RenderPass = LightingPass
-		ShaderParams = 0
 		TranslucencySortBias =  0.000000
 		Model = .\assets\visualtarget\initiation\enviro\rail.ms3d
 		ShaderOverride = 1
@@ -2126,8 +2605,8 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadow = 0
+		Materials = 0
 		RenderPass = LightingPass
-		ShaderParams = 0
 		TranslucencySortBias =  0.000000
 		Model = .\assets\visualtarget\initiation\enviro\rail.ms3d
 		ShaderOverride = 1
@@ -2148,8 +2627,8 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadow = 0
+		Materials = 0
 		RenderPass = LightingPass
-		ShaderParams = 0
 		TranslucencySortBias =  0.000000
 		Model = .\assets\visualtarget\initiation\enviro\rail.ms3d
 		ShaderOverride = 1
@@ -2170,8 +2649,8 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadow = 0
+		Materials = 0
 		RenderPass = LightingPass
-		ShaderParams = 0
 		TranslucencySortBias =  0.000000
 		Model = .\assets\visualtarget\initiation\enviro\rail.ms3d
 		ShaderOverride = 1
@@ -2192,8 +2671,8 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadow = 0
+		Materials = 0
 		RenderPass = LightingPass
-		ShaderParams = 0
 		TranslucencySortBias =  0.000000
 		Model = .\assets\visualtarget\initiation\enviro\rail.ms3d
 		ShaderOverride = 1
@@ -2333,23 +2812,15 @@ kbGameEntity 0 0 0 0 {
 		Scale = 25.000000 0.165000 0.040000
 	}
 	kbStaticModelComponent { 
-		Enabled = 1
+		Enabled = 0
 		LifeTime =  -1.000000
 		CastsShadow = 0
+		Materials = 0
 		RenderPass = TranlucentPass
-		ShaderParams = 1
-			kbShaderParamComponent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				ParamName = "uvScale"
-				Texture = NULL
-				Vector = 1000.000000 1.000000 0.000000 0.000000
-			}
 		TranslucencySortBias =  0.000000
-		Model = .\assets\visualtarget\initiation\enviro\cornerao.ms3d
-		ShaderOverride = 1
-			..\..\kbengine\assets\shaders\basicmultiplyblend.kbshader
-
+		Model = NULL
+		ShaderOverride = 0
+			
 	}
 }
 kbGameEntity 0 0 0 0 {
@@ -2362,23 +2833,15 @@ kbGameEntity 0 0 0 0 {
 		Scale = 25.000000 0.013000 0.040000
 	}
 	kbStaticModelComponent { 
-		Enabled = 1
+		Enabled = 0
 		LifeTime =  -1.000000
 		CastsShadow = 0
+		Materials = 0
 		RenderPass = TranlucentPass
-		ShaderParams = 1
-			kbShaderParamComponent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				ParamName = "uvScale"
-				Texture = NULL
-				Vector = 1000.000000 1.000000 0.000000 0.000000
-			}
 		TranslucencySortBias =  0.000000
-		Model = .\assets\visualtarget\initiation\enviro\cornerao.ms3d
-		ShaderOverride = 1
-			..\..\kbengine\assets\shaders\basicmultiplyblend.kbshader
-
+		Model = NULL
+		ShaderOverride = 0
+			
 	}
 }
 kbGameEntity 0 0 0 0 {
@@ -2391,23 +2854,15 @@ kbGameEntity 0 0 0 0 {
 		Scale = 25.000000 0.200000 0.030000
 	}
 	kbStaticModelComponent { 
-		Enabled = 1
+		Enabled = 0
 		LifeTime =  -1.000000
 		CastsShadow = 0
+		Materials = 0
 		RenderPass = TranlucentPass
-		ShaderParams = 1
-			kbShaderParamComponent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				ParamName = "uvScale"
-				Texture = NULL
-				Vector = 1000.000000 1.000000 0.000000 0.000000
-			}
 		TranslucencySortBias =  0.000000
-		Model = .\assets\visualtarget\initiation\enviro\cornerao.ms3d
-		ShaderOverride = 1
-			..\..\kbengine\assets\shaders\basicmultiplyblend.kbshader
-
+		Model = NULL
+		ShaderOverride = 0
+			
 	}
 }
 kbGameEntity 0 0 0 0 {
@@ -2420,23 +2875,15 @@ kbGameEntity 0 0 0 0 {
 		Scale = 1000.000000 0.100000 0.060000
 	}
 	kbStaticModelComponent { 
-		Enabled = 1
+		Enabled = 0
 		LifeTime =  -1.000000
 		CastsShadow = 0
+		Materials = 0
 		RenderPass = TranlucentPass
-		ShaderParams = 1
-			kbShaderParamComponent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				ParamName = "uvScale"
-				Texture = NULL
-				Vector = 1000.000000 1.000000 0.000000 0.000000
-			}
 		TranslucencySortBias =  0.000000
-		Model = .\assets\visualtarget\initiation\enviro\cornerao.ms3d
-		ShaderOverride = 1
-			..\..\kbengine\assets\shaders\basicmultiplyblend.kbshader
-
+		Model = NULL
+		ShaderOverride = 0
+			
 	}
 }
 kbGameEntity 0 0 0 0 {
@@ -2452,8 +2899,8 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadow = 0
+		Materials = 0
 		RenderPass = LightingPass
-		ShaderParams = 0
 		TranslucencySortBias =  0.000000
 		Model = .\assets\visualtarget\initiation\enviro\pipe.ms3d
 		ShaderOverride = 1
@@ -2474,8 +2921,8 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadow = 1
+		Materials = 0
 		RenderPass = LightingPass
-		ShaderParams = 0
 		TranslucencySortBias =  0.000000
 		Model = ..\..\kbengine\assets\editor\cube.ms3d
 		ShaderOverride = 1
@@ -2543,8 +2990,8 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadow = 0
+		Materials = 0
 		RenderPass = LightingPass
-		ShaderParams = 0
 		TranslucencySortBias =  0.000000
 		Model = .\assets\visualtarget\initiation\other\brunette.ms3d
 		ShaderOverride = 4
@@ -2579,8 +3026,8 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadow = 0
+		Materials = 0
 		RenderPass = LightingPass
-		ShaderParams = 0
 		TranslucencySortBias =  0.000000
 		Model = .\assets\visualtarget\initiation\other\female_blond.ms3d
 		ShaderOverride = 4
@@ -2615,8 +3062,8 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadow = 0
+		Materials = 0
 		RenderPass = LightingPass
-		ShaderParams = 0
 		TranslucencySortBias =  0.000000
 		Model = .\assets\visualtarget\initiation\other\brunette.ms3d
 		ShaderOverride = 4
@@ -2651,8 +3098,8 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadow = 0
+		Materials = 0
 		RenderPass = LightingPass
-		ShaderParams = 0
 		TranslucencySortBias =  0.000000
 		Model = .\assets\visualtarget\initiation\other\brunette.ms3d
 		ShaderOverride = 4

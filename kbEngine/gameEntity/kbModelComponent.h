@@ -26,16 +26,20 @@ public:
 
 	const kbString &							GetParamName() const { return m_ParamName; }
 	const kbTexture *							GetTexture() const { return m_pTexture; }
+	const kbRenderTexture *						GetRenderTexture() const { return m_pRenderTexture; }
 	const kbVec4 &								GetVector() const { return m_Vector; }	
 
-private:
 
+	void										SetRenderTexture( kbRenderTexture *const pTexture ) { m_pRenderTexture = pTexture; }
 	void										SetParamName( const kbString & newName ) { m_ParamName = newName; }
 	void										SetTexture( kbTexture *const pTexture ) { m_pTexture = pTexture; }
 	void										SetVector( const kbVec4 & vector ) { m_Vector = vector; }
 
+private:
+
 	kbString									m_ParamName;
 	kbTexture *									m_pTexture;
+	kbRenderTexture *							m_pRenderTexture;
 	kbVec4										m_Vector;
 };
 
@@ -54,6 +58,9 @@ public:
 
 	const kbShader *							GetShader() const { return m_pShader; }
 	const std::vector<kbShaderParamComponent> &	GetShaderParams() const { return m_ShaderParamComponents; }
+
+	void										SetShader( kbShader *const pShader ) { m_pShader = pShader; }
+	void										SetShaderParamComponent( const int idx, const kbShaderParamComponent & inParam );
 
 private:
 
@@ -78,7 +85,11 @@ public:
 
 	bool										GetCastsShadow() const { return m_bCastsShadow; }
 
+	void										SetMaterial( const int idx, const kbMaterialComponent & newMats );
+
 protected:
+
+	void										RefreshMaterials();
 
 	enum ERenderPass							m_RenderPass;
 	float										m_TranslucencySortBias;

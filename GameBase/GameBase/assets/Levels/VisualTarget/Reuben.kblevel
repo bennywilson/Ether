@@ -172,7 +172,7 @@ kbGameEntity 0 0 0 0 {
 		LifeTime =  -1.000000
 		Name = "Entity_20"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
-		Position = -3.428510 3.079995 12.674395
+		Position = -3.428510 3.079995 51.821846
 		Scale = 1.000000 1.000000 1.000000
 	}
 	EtherSkelModelComponent { 

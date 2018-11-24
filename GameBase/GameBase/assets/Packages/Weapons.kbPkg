@@ -283,10 +283,46 @@ kbGameEntity 292847838 1140569109 1236968083 2365837966 {
 		ShaderParams = 0
 		TranslucencySortBias =  0.000000
 		Model = .\assets\models\items\el_rifle_fp.ms3d
-		ShaderOverride = 3
-			.\assets\shaders\Weapons\baseweapon.kbshader
-.\assets\shaders\Weapons\baseholoscope.kbshader
-.\assets\shaders\Character\firstpersonhands.kbshader
+		Materials = 3
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Shader = .\assets\shaders\Weapons\baseweapon.kbshader
+				ShaderParams = 1
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "shaderTexture"
+						Texture = ./assets/models/Items/EL_Rifle_FP_Diffuse.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Shader = .\assets\shaders\Weapons\baseholoscope.kbshader
+				ShaderParams = 1
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "shaderTexture"
+						Texture = ./assets/models/Items/HoloScope.dds
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Shader = .\assets\shaders\Character\firstpersonhands.kbshader
+				ShaderParams = 1
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "shaderTexture"
+						Texture = ./assets/models/Items/FP_Hands.dds
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
 
 		Animations = 2
 			EtherAnimComponent { 

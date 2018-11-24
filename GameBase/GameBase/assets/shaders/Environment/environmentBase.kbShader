@@ -66,6 +66,10 @@ pixelInput vertexShader( vertexInput input ) {
 	output.TBN0 = float4(worldTangent.x, worldBitangent.x, worldNormal.x, 0 );
 	output.TBN1 = float4(worldTangent.y, worldBitangent.y, worldNormal.y, 0 );
 	output.TBN2 = float4(worldTangent.z, worldBitangent.z, worldNormal.z, 0 );
+		
+/*	output.TBN0 = worldTangent;//float4(worldTangent.x, worldBitangent.x, worldNormal.x, 0 );
+	output.TBN1 = worldBitangent;//float4(worldTangent.y, worldBitangent.y, worldNormal.y, 0 );
+	output.TBN2 = worldNormal;//float4(worldTangent.z, worldBitangent.z, worldNormal.z, 0 );*/
 
 	return output;
 }
@@ -106,9 +110,8 @@ Texture2D emissiveMap(black)		: register(t3);
 	}*/
 
 	float3 tangentNormal = normalize( normalMap.xyz * 2.0f - 1.0f );
-//	output.Normal.xyz = mul( tangentNormal, TBN );
-	output.Normal.xyz = float3( ( input.TBN0.z ), ( input.TBN1.z ), ( input.TBN2.z ) );
-	output.Normal.w = 1;//normalMap.w;
+	output.Normal.xyz = mul( tangentNormal, TBN );
+	output.Normal.w = 0.5f;//normalMap.w;
 	return output;
 }
  

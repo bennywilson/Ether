@@ -60,24 +60,7 @@ void kbStaticModelComponent::SetEnable_Internal( const bool isEnabled ) {
 		m_RenderObject.m_Scale = GetOwner()->GetScale();
 		m_RenderObject.m_TranslucencySortBias = m_TranslucencySortBias;
 
-		m_RenderObject.m_Materials.clear();
-		for ( int i = 0; i < m_MaterialList.size(); i++ ) {
-			kbMaterialComponent & matComp = m_MaterialList[i];
-
-			kbShaderParamOverrides_t newShaderParams;
-			newShaderParams.m_pShader = matComp.GetShader();
-
-			auto srcShaderParams = matComp.GetShaderParams();
-			for ( int j = 0; j < srcShaderParams.size(); j++ ) {
-				if ( srcShaderParams[j].GetTexture() == nullptr ) {
-					newShaderParams.SetVec4( srcShaderParams[j].GetParamName().stl_str(), srcShaderParams[j].GetVector() );
-				} else {
-					newShaderParams.SetTexture( srcShaderParams[j].GetParamName().stl_str(), srcShaderParams[j].GetTexture() );
-				}
-			}
-
-			m_RenderObject.m_Materials.push_back( newShaderParams );
-		}
+		RefreshMaterials();
 
 		g_pRenderer->AddRenderObject( m_RenderObject );
 	} else {

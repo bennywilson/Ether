@@ -50,8 +50,8 @@ void kbParticleComponent::Constructor() {
 	m_NumIndicesInCurrentBuffer = 0;
 	m_bIsSpawning = true;
 
-	m_pParticleTexture = (kbTexture*)g_ResourceManager.GetResource( "../../kbEngine/assets/Textures/Editor/white.bmp" );
-	m_pParticleShader = (kbShader*)g_ResourceManager.GetResource( "../../kbEngine/assets/Shaders/basicParticle.kbShader", true );
+	m_pParticleTexture = (kbTexture*)g_ResourceManager.LoadResource( "../../kbEngine/assets/Textures/Editor/white.bmp", true );
+	m_pParticleShader = (kbShader*)g_ResourceManager.LoadResource( "../../kbEngine/assets/Shaders/basicParticle.kbShader", true );
 
 	m_bIsPooled = false;
 	m_ParticleTemplate = nullptr;

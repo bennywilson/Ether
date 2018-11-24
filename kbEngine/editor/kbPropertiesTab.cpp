@@ -195,7 +195,7 @@ void kbPropertiesTab::PointerButtonCB( Fl_Widget * widget, void * voidPtr ) {
 		return;
 	}
 
-	kbResource *const pResource = (kbResource*)g_ResourceManager.GetResource( g_pPropertiesTab->m_CurrentlySelectedResource.c_str() , true );
+	kbResource *const pResource = (kbResource*)g_ResourceManager.LoadResource( g_pPropertiesTab->m_CurrentlySelectedResource.c_str() , true );
 
 	// Don't do anything if the selected resource is not the right type, or if it's the same resource that's already present
 	if ( pResource->GetType() != userData->m_VariableType || *userData->m_pResource == pResource ) {

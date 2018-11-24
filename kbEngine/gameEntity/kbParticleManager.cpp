@@ -48,7 +48,7 @@ void kbParticleManager::SetCustomAtlasTexture( const uint atlasIdx, const std::s
 	kbErrorCheck( g_pRenderer->IsRenderingSynced(), "kbParticleManager::SetCustomAtlasTexture() - Rendering not synced" );
 
 	CustomAtlasParticles_t & curAtlas = m_CustomAtlases[atlasIdx];
-	curAtlas.m_pAtlasTexture = (kbTexture *)g_ResourceManager.GetResource( atlasFileName.c_str(), true );
+	curAtlas.m_pAtlasTexture = (kbTexture *)g_ResourceManager.LoadResource( atlasFileName.c_str(), true );
 	if ( curAtlas.m_pAtlasTexture == nullptr ) {
 		kbWarning( "kbParticleManager::SetCustomAtlasTexture() - Unable to find shader %s", atlasFileName.c_str() );
 	}
@@ -64,7 +64,7 @@ void kbParticleManager::SetCustomAtlasShader( const uint atlasIdx, const std::st
 	kbErrorCheck( g_pRenderer->IsRenderingSynced(), "kbParticleManager::SetCustomAtlasShader() - Rendering not synced" );
 
 	CustomAtlasParticles_t & curAtlas = m_CustomAtlases[atlasIdx];
-	curAtlas.m_pAtlasShader = (kbShader *)g_ResourceManager.GetResource( shaderFileName.c_str(), true );
+	curAtlas.m_pAtlasShader = (kbShader *)g_ResourceManager.LoadResource( shaderFileName.c_str(), true );
 
 	if ( curAtlas.m_pAtlasShader == nullptr ) {
 		kbWarning( "kbParticleManager::SetCustomAtlasShader() - Unable to find shader %s", shaderFileName.c_str() );
@@ -180,10 +180,10 @@ void kbParticleManager::UpdateAtlas( CustomAtlasParticles_t & atlasInfo ) {
 		renderModel.Release();
 
 		if ( atlasInfo.m_pAtlasTexture == nullptr ) {
-			atlasInfo.m_pAtlasTexture = (kbTexture*)g_ResourceManager.GetResource( "./assets/FX/laser_beam.jpg", true );
+			atlasInfo.m_pAtlasTexture = (kbTexture*)g_ResourceManager.LoadResource( "./assets/FX/laser_beam.jpg", true );
 		}
 		if ( atlasInfo.m_pAtlasShader == nullptr ) {
-			atlasInfo.m_pAtlasShader = (kbShader*)g_ResourceManager.GetResource( "../../kbEngine/assets/Shaders/basicParticle.kbShader", true );
+			atlasInfo.m_pAtlasShader = (kbShader*)g_ResourceManager.LoadResource( "../../kbEngine/assets/Shaders/basicParticle.kbShader", true );
 		}
 
 		renderModel.CreateDynamicModel( NumParticleBufferVerts, NumParticleBufferVerts, atlasInfo.m_pAtlasShader, atlasInfo.m_pAtlasTexture, sizeof(kbParticleVertex) );

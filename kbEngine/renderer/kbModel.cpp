@@ -300,7 +300,7 @@ bool kbModel::LoadMS3D() {
 
 			// load the base diffuse textures
 			const std::string textureFileName = filePath + texture[iTex];
-			m_Materials[iMat].m_Textures.push_back( (kbTexture *) g_ResourceManager.GetResource( textureFileName.c_str(), true ) );
+			m_Materials[iMat].m_Textures.push_back( (kbTexture *) g_ResourceManager.LoadResource( textureFileName.c_str(), true ) );
 		}
 
 		std::string shaderName = pMat->m_Name;
@@ -720,7 +720,7 @@ bool kbModel::LoadFBX() {
 	m_IndexBuffer.CreateIndexBuffer( indexList );
 
 	kbMaterial newMaterial;
-	newMaterial.m_pShader = (kbShader *) g_ResourceManager.GetResource( "../../kbEngine/assets/Shaders/basicShader.kbShader", true );
+	newMaterial.m_pShader = (kbShader *) g_ResourceManager.LoadResource( "../../kbEngine/assets/Shaders/basicShader.kbShader", true );
 	m_Materials.push_back( newMaterial );
 
 	return true;
@@ -754,7 +754,7 @@ void kbModel::CreateDynamicModel( const UINT numVertices, const UINT numIndices,
 	if ( pShaderToUse != nullptr ) {
 		newMaterial.m_pShader = pShaderToUse;
 	} else {
-		newMaterial.m_pShader = (kbShader *) g_ResourceManager.GetResource( "../../kbEngine/assets/Shaders/basicShader.kbShader", true );
+		newMaterial.m_pShader = (kbShader *) g_ResourceManager.LoadResource( "../../kbEngine/assets/Shaders/basicShader.kbShader", true );
 	}
 	m_Materials.push_back( newMaterial );
 }
@@ -783,9 +783,9 @@ void kbModel::CreatePointCloud( const UINT numVertices, const std::string & shad
 
 	kbMaterial newMaterial;
 	if ( shaderToUse.length() > 0 ) {
-		newMaterial.m_pShader = (kbShader *) g_ResourceManager.GetResource( shaderToUse.c_str(), true );
+		newMaterial.m_pShader = (kbShader *) g_ResourceManager.LoadResource( shaderToUse.c_str(), true );
 	} else {
-		newMaterial.m_pShader = (kbShader *) g_ResourceManager.GetResource( "../../kbEngine/assets/Shaders/basicShader.kbshader", true );
+		newMaterial.m_pShader = (kbShader *) g_ResourceManager.LoadResource( "../../kbEngine/assets/Shaders/basicShader.kbshader", true );
 	}
 	newMaterial.SetCullingMode( cullingMode );
 	m_Materials.push_back( newMaterial );

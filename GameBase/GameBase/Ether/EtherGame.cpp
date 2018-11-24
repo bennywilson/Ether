@@ -116,7 +116,7 @@ void EtherGame::InitGame_Internal() {
 	}
 	m_GameStartTimer.Reset();
 
-	m_pTranslucentShader = (kbShader*)g_ResourceManager.GetResource( "../../kbEngine/assets/Shaders/basicTranslucency.kbShader", true );
+	m_pTranslucentShader = (kbShader*)g_ResourceManager.LoadResource( "../../kbEngine/assets/Shaders/basicTranslucency.kbShader", true );
 }
 
 /**
@@ -547,20 +547,34 @@ void EtherGame::RenderThreadCallBack() {
 		m_pBulletHoleRenderTexture = g_pRenderer->RT_GetRenderTexture( 4096, 4096, eTextureFormat::KBTEXTURE_R8G8B8A8, false );
 		g_pRenderer->RT_ClearRenderTarget( m_pBulletHoleRenderTexture, kbColor::white );
 		
-		g_ResourceManager.GetResource( "./assets/FX/noise.jpg", true );
-		g_ResourceManager.GetResource( "./assets/FX/scorch.jpg", true );
+		g_ResourceManager.LoadResource( "./assets/FX/noise.jpg", true );
+		g_ResourceManager.LoadResource( "./assets/FX/scorch.jpg", true );
 
 		for ( int i = 0; i < GetGameEntities().size(); i++ ) {
 			kbGameEntity *const pEnt = GetGameEntities()[i];
 			if ( pEnt->GetName().find( "Holey_Wall" ) != std::string::npos ) {
 				kbStaticModelComponent *const pSM = (kbStaticModelComponent*)pEnt->GetComponentByType( kbStaticModelComponent::GetType() );
 				if ( pSM != nullptr ) {
+					std::vector<kbMaterialComponent> materials;
+					kbMaterialComponent newMat;
+					newMat.SetShader( (kbShader*)g_ResourceManager.LoadResource( "./assets/shaders/environment/environmenthole.kbshader", true ) );
 
-					// MATERIALHACK /*
-					/*
-					kbShaderParamOverrides_t shaderParams;
-					shaderParams.SetTexture( "holeTex", m_pBulletHoleRenderTexture );
-					pSM->SetShaderParamOverrides( shaderParams );*/
+					kbShaderParamComponent holeTextureParam;
+					holeTextureParam.SetParamName( kbString( "holeTex" ) );
+					holeTextureParam.SetRenderTexture( m_pBulletHoleRenderTexture );
+					newMat.SetShaderParamComponent( 0, holeTextureParam );
+
+					kbShaderParamComponent diffuseParam;
+					diffuseParam.SetParamName( kbString( "diffuse" ) );
+					diffuseParam.SetTexture( (kbTexture*)g_ResourceManager.LoadResource( "./assets/models/architecture/bricks.png", true ) );
+					newMat.SetShaderParamComponent( 1, diffuseParam );
+
+					kbShaderParamComponent normalParam;
+					normalParam.SetParamName( kbString( "normal" ) );
+					normalParam.SetTexture( (kbTexture*)g_ResourceManager.LoadResource( "./assets/models/architecture/bricks_nm.png", true ) );
+					newMat.SetShaderParamComponent( 2, normalParam );
+
+					pSM->SetMaterial( 0, newMat );
 				}
 				break;
 			}
@@ -587,10 +601,10 @@ void EtherGame::RenderThreadCallBack() {
 			}
 		}
 
-		m_pCollisionMapDamageGenShader = (kbShader *) g_ResourceManager.GetResource( "./assets/shaders/DamageGen/collisionMapDamageGen.kbshader", true );
-		m_pCollisionMapTimeGenShader = (kbShader *) g_ResourceManager.GetResource( "./assets/shaders/DamageGen/collisionMapTimeGen.kbshader", true );
-		m_pBulletHoleUpdateShader = (kbShader *) g_ResourceManager.GetResource( "./assets/shaders/DamageGen/pokeyholeunwrap.kbshader", true );
-		m_pCollisionMapScorchGenShader = (kbShader*) g_ResourceManager.GetResource( "./assets/shaders/DamageGen/collisionMapScorchGen.kbShader", true );
+		m_pCollisionMapDamageGenShader = (kbShader *) g_ResourceManager.LoadResource( "./assets/shaders/DamageGen/collisionMapDamageGen.kbshader", true );
+		m_pCollisionMapTimeGenShader = (kbShader *) g_ResourceManager.LoadResource( "./assets/shaders/DamageGen/collisionMapTimeGen.kbshader", true );
+		m_pBulletHoleUpdateShader = (kbShader *) g_ResourceManager.LoadResource( "./assets/shaders/DamageGen/pokeyholeunwrap.kbshader", true );
+		m_pCollisionMapScorchGenShader = (kbShader*) g_ResourceManager.LoadResource( "./assets/shaders/DamageGen/collisionMapScorchGen.kbShader", true );
 	}
 
     if ( pTerrain == nullptr ) {
@@ -637,10 +651,10 @@ void EtherGame::RenderThreadCallBack() {
 					shaderParams.SetVec4( "hitLocation", kbVec4( hitLocation.x, hitLocation.y, hitLocation.z, holeSize ) );
 					shaderParams.SetVec4( "hitDirection", kbVec4( hitDir.x, hitDir.y, hitDir.z, scorchSize ) );
 
-					kbTexture *const pNoiseTex = (kbTexture*)g_ResourceManager.GetResource( "./assets/FX/Noise/noise.jpg", true );
+					kbTexture *const pNoiseTex = (kbTexture*)g_ResourceManager.LoadResource( "./assets/FX/Noise/noise.jpg", true );
 					shaderParams.SetTexture( "noiseTex", pNoiseTex );
 
-					kbTexture *const pScorchTex = (kbTexture*)g_ResourceManager.GetResource( "./assets/FX/scorch.jpg", true );
+					kbTexture *const pScorchTex = (kbTexture*)g_ResourceManager.LoadResource( "./assets/FX/scorch.jpg", true );
 					shaderParams.SetTexture( "scorchTex", pScorchTex );
 
 					g_pRenderer->RT_RenderMesh( pSM->GetModel(), m_pBulletHoleUpdateShader, &shaderParams );

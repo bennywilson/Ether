@@ -15,7 +15,7 @@
  *	kbDebugSphereCollision::Constructor
  */
 void kbDebugSphereCollision::Constructor() {
-	m_pCollisionModel = (kbModel*)g_ResourceManager.GetResource( "../../kbEngine/assets/Models/UnitSphere.ms3d", true );
+	m_pCollisionModel = (kbModel*)g_ResourceManager.LoadResource( "../../kbEngine/assets/Models/UnitSphere.ms3d", true );
 
 	m_RenderObject.m_bCastsShadow = false;
 	m_RenderObject.m_bIsSkinnedModel = false;

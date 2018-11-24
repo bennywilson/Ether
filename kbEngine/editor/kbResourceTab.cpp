@@ -445,7 +445,7 @@ void kbResourceTab::FindResourcesRecursively( const std::string & file, kbResour
 							std::string fileName = file + FindFileData.cFileName ;
 							StringToLower( fileName );
 
-							NewFolder.m_ResourceList[NewFolder.m_ResourceList.size() - 1].m_pResource = g_ResourceManager.GetResource( fileName, false );
+							NewFolder.m_ResourceList[NewFolder.m_ResourceList.size() - 1].m_pResource = g_ResourceManager.LoadResource( fileName, false );
 						}
 						continue;
 					}

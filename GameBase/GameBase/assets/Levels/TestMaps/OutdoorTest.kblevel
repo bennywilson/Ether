@@ -132,13 +132,19 @@ kbGameEntity 0 0 0 0 {
 		CastsShadow = 0
 		Materials = 0
 		RenderPass = Post-LightingPass
-		ShaderParams = 1
-			kbShaderParamComponent { 
+		Materials = 1
+			kbMaterialComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
-				ParamName = "diffuseTexture"
-				Texture = .\assets\models\skydomes\sky_01.png
-				Vector = 0.000000 0.000000 0.000000 0.000000
+				Shader = .\assets\shaders\skybox\skybox.kbshader
+				ShaderParams = 1
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "diffuseTexture"
+						Texture = .\assets\models\skydomes\sky_01.png
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
 			}
 		TranslucencySortBias =  -1.000000
 		Model = .\assets\models\skydomes\skydomes.ms3d
@@ -538,9 +544,6 @@ kbGameEntity 0 0 0 0 {
 		ShaderParams = 0
 		TranslucencySortBias =  -1.000000
 		Model = .\assets\models\architecture\bricks.ms3d
-		ShaderOverride = 1
-			.\assets\shaders\environment\environmenthole.kbshader
-
 	}
 	kbCollisionComponent { 
 		Enabled = 1

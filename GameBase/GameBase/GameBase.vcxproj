@@ -14,7 +14,7 @@
     <ProjectGuid>{00C43D40-0F98-498D-A494-1274FDE720F7}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>GameBase</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
@@ -114,6 +114,9 @@
     <None Include="assets\shaders\shellCasing.kbShader" />
     <None Include="assets\shaders\shellTrailParticle.kbShader" />
     <None Include="assets\shaders\skyBox.kbShader" />
+    <None Include="assets\shaders\Weapons\baseHoloscope.kbShader" />
+    <None Include="assets\shaders\Weapons\baseWeapon.kbShader" />
+    <None Include="assets\shaders\Weapons\shellCasing.kbShader" />
     <None Include="GameBase.ico" />
     <None Include="ReadMe.txt" />
     <None Include="small.ico" />
