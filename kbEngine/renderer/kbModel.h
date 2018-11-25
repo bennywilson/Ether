@@ -156,6 +156,8 @@ protected:
 	virtual bool								Load_Internal();
 	bool										LoadMS3D();
 	bool										LoadFBX();
+	bool										LoadDiablo3();
+
 	virtual void								Release_Internal();
 
 

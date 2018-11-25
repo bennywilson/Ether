@@ -98,11 +98,12 @@ kbModel::~kbModel() {
  */
 bool kbModel::Load_Internal() {
 	const std::string fileExt = GetFileExtension( GetFullFileName() );
-	if (fileExt == "ms3d") {
+	if ( fileExt == "ms3d" ) {
 		return LoadMS3D();
-	}
-	else if (fileExt == "fbx") {
+	} else if ( fileExt == "fbx" ) {
 		return LoadFBX();
+	} else if ( fileExt == "diablo3" ) {
+		return LoadDiablo3();
 	}
 
 	return false;
@@ -114,7 +115,7 @@ bool kbModel::Load_Internal() {
 bool kbModel::LoadMS3D() {
 	std::ifstream modelFile;
 	modelFile.open( m_FullFileName, std::ifstream::in | std::ifstream::binary );
-	kbErrorCheck( modelFile.good(), "kbModel::LoadResource_Internal() - Failed to load model %s", m_FullFileName.c_str() );
+	kbErrorCheck( modelFile.good(), "kbModel::LoadMS3D() - Failed to load model %s", m_FullFileName.c_str() );
 	
 	// Find the file size
 	modelFile.seekg( 0, std::ifstream::end );
@@ -718,6 +719,134 @@ bool kbModel::LoadFBX() {
 
 	m_VertexBuffer.CreateVertexBuffer( vertexList );
 	m_IndexBuffer.CreateIndexBuffer( indexList );
+
+	kbMaterial newMaterial;
+	newMaterial.m_pShader = (kbShader *) g_ResourceManager.LoadResource( "../../kbEngine/assets/Shaders/basicShader.kbShader", true );
+	m_Materials.push_back( newMaterial );
+
+	return true;
+}
+
+/**
+ *	kbModel::LoadDiablo3
+ */
+bool kbModel::LoadDiablo3() {
+
+
+// Vertex,Index,POSITION 0,POSITION 1,POSITION 2,NORMAL 0,NORMAL 1,NORMAL 2,NORMAL 3,COLOR0 0,COLOR0 1,COLOR0 2,COLOR0 3,COLOR1 0,COLOR1 1,COLOR1 2,COLOR1 3,TEXCOORD0 0,TEXCOORD0 1,TEXCOORD0 2,TEXCOORD0 3,TEXCOORD1 0,TEXCOORD1 1,TEXCOORD1 2,TEXCOORD1 3,BLENDINDICES 0,BLENDINDICES 1,BLENDINDICES 2,BLENDINDICES 3,BLENDWEIGHT 0,BLENDWEIGHT 1,BLENDWEIGHT 2
+
+
+	struct FileReader {
+		FileReader() { }
+		const std::string delimiters = "\n,";
+
+		int GetInt() {
+			std::string::size_type endPos = m_ModelText.find_first_of( delimiters, m_CurPos );
+			int retInt = 0;
+			if ( endPos != std::string::npos ) {
+				const std::string intstr = m_ModelText.substr( m_CurPos, endPos - m_CurPos );
+				retInt = std::atoi( intstr.c_str() );
+				m_CurPos = endPos + 1;
+			} else {
+				m_CurPos = m_ModelText.size();
+			}
+
+			return retInt;
+		}
+
+		float GetFloat() {
+			std::string::size_type endPos = m_ModelText.find_first_of( delimiters, m_CurPos );
+			float retFloat = 0;
+			if ( endPos != std::string::npos ) {
+				const std::string floatstr  = m_ModelText.substr( m_CurPos, endPos - m_CurPos );
+				retFloat = (float)std::atof( floatstr.c_str() );
+				m_CurPos = endPos + 1;
+			} else {
+				m_CurPos = m_ModelText.size();
+			}
+
+			return retFloat;
+		}
+
+		kbVec2 GetVec2() {
+			return kbVec2( GetFloat(), GetFloat() );
+		}
+
+		kbVec3 GetVec3() {
+			return kbVec3( GetFloat(), GetFloat(), GetFloat() );
+		}
+
+		kbVec4 GetVec4() {
+			return kbVec4( GetFloat(), GetFloat(), GetFloat(), GetFloat() );
+		}
+
+		std::string			m_ModelText;
+		size_t				m_CurPos = 0;
+
+	} fileReader;
+
+
+	std::ifstream modelFile;
+	modelFile.open( m_FullFileName, std::ifstream::in );
+	kbErrorCheck( modelFile.good(), "kbModel::LoadDiablo3() - Failed to load model %s", m_FullFileName.c_str() );
+	fileReader.m_ModelText = std::string( ( std::istreambuf_iterator<char>(modelFile) ), std::istreambuf_iterator<char>() );
+
+	std::vector<vertexLayout> vertexList;
+	std::vector<ushort> indexList;
+
+	while( fileReader.m_CurPos < fileReader.m_ModelText.size() ) {
+		// Vertex,Index,POSITION 0,POSITION 1,POSITION 2,NORMAL 0,NORMAL 1,NORMAL 2,NORMAL 3,COLOR0 0,COLOR0 1,COLOR0 2,COLOR0 3,COLOR1 0,COLOR1 1,COLOR1 2,COLOR1 3,TEXCOORD0 0,TEXCOORD0 1,TEXCOORD0 2,TEXCOORD0 3,TEXCOORD1 0,TEXCOORD1 1,TEXCOORD1 2,TEXCOORD1 3,BLENDINDICES 0,BLENDINDICES 1,BLENDINDICES 2,BLENDINDICES 3,BLENDWEIGHT 0,BLENDWEIGHT 1,BLENDWEIGHT 2
+
+		const int vertNum = fileReader.GetInt();
+		const int vertIdx = fileReader.GetInt();
+		const kbVec3 vertPos = fileReader.GetVec3();
+		const kbVec4 vertNormal = fileReader.GetVec4();
+		const kbVec4 vertColor1 = fileReader.GetVec4();
+		const kbVec4 vertColor2 = fileReader.GetVec4();
+		const kbVec4 vertUV1 = fileReader.GetVec4();
+		const kbVec4 vertUV2 = fileReader.GetVec4();
+
+		// Blend Indices
+		fileReader.GetInt();
+		fileReader.GetInt();
+		fileReader.GetInt();
+		fileReader.GetInt();
+
+		// Blend Weights
+		fileReader.GetVec3();
+
+		vertexLayout newVert;
+		newVert.position.Set( vertPos.y, vertPos.x, vertPos.z );
+		newVert.normal[0] = (byte)vertNormal.x;
+		newVert.normal[1] = (byte)vertNormal.y;
+		newVert.normal[2] = (byte)vertNormal.z;
+		newVert.normal[3] = (byte)vertNormal.w;
+
+		if ( vertUV1.z == 128 ) {
+			newVert.uv.x = vertUV1.w / 512.0f;
+		} else {
+			newVert.uv.x = 0.5f + vertUV1.w / 512.0f;
+		}
+
+		if ( vertUV1.x == 128 ) {
+			newVert.uv.y = vertUV1.y / 512.0f;
+		} else {
+			newVert.uv.y = 0.5f + vertUV1.y / 512.0f;
+		}
+
+		vertexList.push_back( newVert );
+		indexList.push_back( vertNum );
+		//kbLog( "%d, %d, (%f %f %f), (%f %f %f %f), (%f %f)", vertNum, vertIdx, vertPos.x, vertPos.y, vertPos.z, vertNormal.x, vertNormal.y, vertNormal.z, vertNormal.w, vertUV1.x, vertUV1.y );
+	}
+
+	m_VertexBuffer.CreateVertexBuffer( vertexList );
+	m_IndexBuffer.CreateIndexBuffer( indexList );
+
+	m_Meshes.push_back( mesh_t() );
+	mesh_t & newMesh = m_Meshes[m_Meshes.size() - 1];
+	newMesh.m_IndexBufferIndex = 0;
+	newMesh.m_MaterialIndex = 0;
+	newMesh.m_NumTriangles = indexList.size() / 3;
 
 	kbMaterial newMaterial;
 	newMaterial.m_pShader = (kbShader *) g_ResourceManager.LoadResource( "../../kbEngine/assets/Shaders/basicShader.kbShader", true );

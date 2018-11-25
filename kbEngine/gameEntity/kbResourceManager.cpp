@@ -215,7 +215,7 @@ kbResource * kbResourceManager::LoadResource( const std::string & fullFileName, 
 
 	if ( convertedFileName.find(".kbanim.ms3d") != std::string::npos ) {
 		pResource = new kbAnimation();
-	} else if ( fileExt == "ms3d" || fileExt == "fbx" ) {
+	} else if ( fileExt == "ms3d" || fileExt == "fbx" || fileExt == "diablo3" ) {
 	   pResource = new kbModel();
 	} else if ( fileExt == "kbshader" ) {
 	   pResource = new kbShader();

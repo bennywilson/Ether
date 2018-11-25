@@ -142,7 +142,7 @@ void kbManipulator::RenderSync() {
 
 	bFirstUpdate = false;
 	kbShaderParamOverrides_t material;
-	material.m_pShader = (kbShader *) g_ResourceManager.LoadResource( "../../kbEngine/assets/Shaders/basicTexture.kbshader", true );
+	material.m_pShader = (kbShader *) g_ResourceManager.LoadResource( "../../kbEngine/assets/Shaders/UIManipulator.kbshader", true );
 	kbTexture *const pTexture = (kbTexture *) g_ResourceManager.LoadResource( "../../kbEngine/assets/editor/manipulator.bmp", true );
 	material.SetTexture( "shaderTexture", pTexture );
 	m_ManipulatorMaterials.push_back( material );

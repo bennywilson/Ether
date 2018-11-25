@@ -407,7 +407,7 @@ void kbResourceTab::FindResourcesRecursively( const std::string & file, kbResour
 				}
 
 				const int MaxNumExtensions = 16;
-				const char validExtensions[][MaxNumExtensions] = { ".fbx", ".dds", ".png", ".ms3d", ".kbMat", ".kbShader", ".jpg", ".tga", ".bmp", ".kbPkg", ".kbAnim", ".wav" };
+				const char validExtensions[][MaxNumExtensions] = { ".fbx", ".dds", ".png", ".ms3d", ".kbMat", ".kbShader", ".jpg", ".tga", ".bmp", ".kbPkg", ".kbAnim", ".wav", ".diablo3" };
 				const int numExtensions = sizeof( validExtensions ) / ( sizeof( char ) * 16 );
 
 				for ( int i = 0; i < numExtensions; i++ ) {
@@ -415,7 +415,7 @@ void kbResourceTab::FindResourcesRecursively( const std::string & file, kbResour
 					if ( strcmp( ext, validExtensions[i] ) == 0 ) {
 						if ( strcmp( ext, ".kbPkg" ) == 0 ) {
 							// Add a package and its folders and prefab
-							kbPackage *const pPackage = g_ResourceManager.GetPackage( file + FindFileData.cFileName, true );		// TODO: Don't want to auto load resources here since it can be slow
+							kbPackage *const pPackage = g_ResourceManager.GetPackage( file + FindFileData.cFileName, false );		// MATERIALHACK - Need to lazy load these packages when used in editor
 							kbErrorCheck( pPackage != nullptr, "kbResourceTab::FindResourcesRecursively() - Failed to load package" );
 
 							// Add Package
