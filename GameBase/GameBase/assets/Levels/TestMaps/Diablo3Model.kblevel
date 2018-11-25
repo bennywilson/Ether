@@ -57,7 +57,7 @@ kbGameEntity 0 0 0 0 {
 }
 kbGameEntity 0 0 0 0 {
 	kbTransformComponent { 
-		Enabled = 0
+		Enabled = 1
 		LifeTime =  -1.000000
 		Name = "Entity_19"
 		Orientation = -0.340447 0.236690 -0.088978 0.905625

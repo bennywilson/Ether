@@ -36,8 +36,16 @@ kbModelComponent::~kbModelComponent() {
 void kbModelComponent::EditorChange( const std::string & propertyName ) {
 	Super::EditorChange( propertyName );
 
-	// MaterialHack
-//	SetShaderParamList();
+	m_RenderObject.m_bCastsShadow = this->GetCastsShadow();
+	m_RenderObject.m_bIsSkinnedModel = false;
+	m_RenderObject.m_EntityId = GetOwner()->GetEntityId();
+	m_RenderObject.m_Orientation = GetOwner()->GetOrientation();
+	m_RenderObject.m_Position = GetOwner()->GetPosition();
+	m_RenderObject.m_RenderPass = m_RenderPass;
+	m_RenderObject.m_Scale = GetOwner()->GetScale();
+	m_RenderObject.m_TranslucencySortBias = m_TranslucencySortBias;
+
+	RefreshMaterials( true );
 }
 
 /**
@@ -47,7 +55,7 @@ void kbModelComponent::PostLoad() {
 	Super::PostLoad();
 
 	if ( GetOwner()->IsPrefab() == false ) {
-		RefreshMaterials();
+		RefreshMaterials( false );
 	}
 }
 
@@ -66,7 +74,7 @@ void kbModelComponent::SetMaterial( const int idx, const kbMaterialComponent & n
 
 	m_MaterialList[idx] = newMats;
 
-	RefreshMaterials();
+	RefreshMaterials( true );
 
 	if ( IsEnabled() ) {
 		g_pRenderer->UpdateRenderObject( m_RenderObject );
@@ -76,7 +84,7 @@ void kbModelComponent::SetMaterial( const int idx, const kbMaterialComponent & n
 /**
  *	kbModelComponent::RefreshMaterials
  */
-void kbModelComponent::RefreshMaterials() {
+void kbModelComponent::RefreshMaterials( const bool bRefreshRenderObejct ) {
 	m_RenderObject.m_Materials.clear();
 	for ( int i = 0; i < m_MaterialList.size(); i++ ) {
 		kbMaterialComponent & matComp = m_MaterialList[i];
@@ -97,6 +105,10 @@ void kbModelComponent::RefreshMaterials() {
 		}
 	
 		m_RenderObject.m_Materials.push_back( newShaderParams );
+	}
+
+	if ( IsEnabled() && m_RenderObject.m_pComponent != nullptr && bRefreshRenderObejct ) {
+		g_pRenderer->UpdateRenderObject( m_RenderObject );
 	}
 }
 
@@ -130,11 +142,7 @@ void kbModelComponent::SetMaterialParamVector( const int idx, const std::string 
 	newParam.SetVector( paramValue );
 	m_MaterialList[idx].SetShaderParamComponent( newParam );
 
-	RefreshMaterials();
-
-	if ( IsEnabled() ) {
-		g_pRenderer->UpdateRenderObject( m_RenderObject );
-	}
+	RefreshMaterials( true );
 }
 
 /**
@@ -151,11 +159,7 @@ void kbModelComponent::SetMaterialParamTexture( const int idx, const std::string
 	newParam.SetTexture( pTexture );
 	m_MaterialList[idx].SetShaderParamComponent( newParam );
 
-	RefreshMaterials();
-
-	if ( IsEnabled() ) {
-		g_pRenderer->UpdateRenderObject( m_RenderObject );
-	}
+	RefreshMaterials( true );
 }
 
 /**
@@ -166,15 +170,12 @@ void kbModelComponent::SetMaterialParamTexture( const int idx, const std::string
 		kbWarning( "kbModelComponent::SetMaterialParamVector() called on invalid index" );
 		return;
 	}
-
-	RefreshMaterials();
-
 	kbShaderParamComponent newParam;
 	newParam.SetParamName( paramName );
 	newParam.SetRenderTexture( pRenderTexture );
 	m_MaterialList[idx].SetShaderParamComponent( newParam );
 
-	RefreshMaterials();
+	RefreshMaterials( true );
 
 	if ( IsEnabled() ) {
 		g_pRenderer->UpdateRenderObject( m_RenderObject );
@@ -253,6 +254,14 @@ void kbMaterialComponent::EditorChange( const std::string & propertyName ) {
 				m_ShaderParamComponents.push_back( newParam );			
 			}
 		}
+	}
+
+	// Refresh owner
+	if ( GetOwningComponent() != nullptr && GetOwningComponent()->IsA( kbModelComponent::GetType() ) ) {
+		kbModelComponent *const pModelComp = (kbModelComponent*) GetOwningComponent();
+		pModelComp->RefreshMaterials( true );
+	} else {
+		kbWarning( "kbMaterialComponent::EditorChange() - Material component doesn't have a model component owner.  Is this okay?" );
 	}
 }
 

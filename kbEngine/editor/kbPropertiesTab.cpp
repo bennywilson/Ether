@@ -149,12 +149,10 @@ void kbPropertiesTab::CheckButtonCB( Fl_Widget * widget, void * voidPtr ) {
 	Fl_Check_Button *const pCheckButton = static_cast<Fl_Check_Button *>( widget );
 
 	const char buttonVal = pCheckButton->value();
-	if ( buttonVal == 0 && userData->m_pComponent->IsEnabled() == false ||
-		 buttonVal > 0 && userData->m_pComponent->IsEnabled() == true ) {
-		return;
-	}
 
-	userData->m_pComponent->Enable( buttonVal > 0 );
+	*((bool*)userData->m_pVariablePtr) = (bool)buttonVal;
+
+	userData->m_pComponent->EditorChange( userData->m_VariableName.stl_str() );
 
 	PropertyChangedCB( userData->m_GameEntityPtr );
 }
@@ -167,7 +165,7 @@ void kbPropertiesTab::PointerButtonCB( Fl_Widget * widget, void * voidPtr ) {
 	propertiesTabCBData_t *const userData = static_cast< propertiesTabCBData_t * >( voidPtr );
 	kbErrorCheck( userData != nullptr, "kbPropertiesTab::PointerButtonCB() - null user data passed in" );
 
-	const std::string *const fieldName = ( std::string * ) userData->m_pVariablePtr;
+	const std::string *const fieldName = (std::string * ) userData->m_pVariablePtr;
 	if ( userData->m_VariableType == KBTYPEINFO_GAMEENTITY ) {
 		const kbPrefab *const pPrefab = g_Editor->GetCurrentlySelectedPrefab();
 		kbGameEntityPtr & pEntityPtr = userData->m_GameEntityPtr;

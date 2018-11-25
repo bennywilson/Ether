@@ -182,6 +182,21 @@ void kbGameComponent::Enable( const bool setEnabled ) {
 }
 
 /**
+ *	kbGameComponent::EditorChange
+ */
+void kbGameComponent::EditorChange( const std::string & propertyName ) {
+	Super::EditorChange( propertyName );
+
+	if ( propertyName == "Enabled" ) {
+		if ( GetOwner() == nullptr || GetOwner()->IsPrefab() == true ) {
+			return;
+		}
+
+		SetEnable_Internal( m_IsEnabled );
+	}
+}
+
+/**
  *	kbGameComponent::Update
  */
 void kbGameComponent::Update( const float DeltaTimeSeconds ) {

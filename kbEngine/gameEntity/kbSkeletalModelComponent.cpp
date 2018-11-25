@@ -31,7 +31,7 @@ void kbSkeletalModelComponent::EditorChange( const std::string & propertyName ) 
 	Super::EditorChange( propertyName );
 
 	if ( propertyName == "Model" || propertyName == "ShaderOverride" ) {
-		RefreshMaterials();
+		RefreshMaterials( true );
 	}
 }
 
@@ -54,7 +54,7 @@ void kbSkeletalModelComponent::SetEnable_Internal( const bool isEnabled ) {
 		m_RenderObject.m_Position = GetOwner()->GetPosition();
 		m_RenderObject.m_RenderPass = m_RenderPass;
 		m_RenderObject.m_Scale = GetOwner()->GetScale();
-		RefreshMaterials();
+		RefreshMaterials( true );
 
 		g_pRenderer->AddRenderObject( m_RenderObject );
 	} else {

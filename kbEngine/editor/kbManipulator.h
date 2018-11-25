@@ -44,6 +44,7 @@
 	const kbVec3 &								GetScale() const { return m_Scale; }
 
 	void										SetMode( const manipulatorMode_t newMode ) { m_ManipulatorMode = newMode; }
+	manipulatorMode_t							GetMode() const { return m_ManipulatorMode; }
 
 private:
 

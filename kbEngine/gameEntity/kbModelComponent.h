@@ -91,9 +91,9 @@ public:
 	void										SetMaterialParamTexture( const int idx, const std::string & paramName, kbTexture *const pTexture );
 	void										SetMaterialParamTexture( const int idx, const std::string & paramName, kbRenderTexture *const pTexture );
 
-protected:
+	void										RefreshMaterials( const bool bUpdateRenderObject );
 
-	void										RefreshMaterials();
+protected:
 
 	enum ERenderPass							m_RenderPass;
 	float										m_TranslucencySortBias;

@@ -35,6 +35,7 @@ protected:
 class kbComponent : public kbBaseComponent {
 
 	friend class kbEntity;
+	friend class kbFile;
 
 	KB_DECLARE_COMPONENT( kbComponent, kbBaseComponent );
 
@@ -63,6 +64,7 @@ protected:
 	virtual void								Update_Internal( const float DeltaTimeSeconds ) { }
 	virtual void								LifeTimeExpired() { }
 
+	kbComponent *								GetOwningComponent() const { return m_pOwningComponent; }
 	bool										IsDirty() const { return m_bIsDirty; }
 
 	bool										m_bIsDirty;
@@ -70,8 +72,11 @@ protected:
 
 private:
 
-	kbEntity *									m_pOwner;
 	void										SetOwner( kbEntity *const pGameEntity );
+	void										SetOwningComponent( kbComponent *const pOwningComponent ) { m_pOwningComponent = pOwningComponent; }
+
+	kbEntity *									m_pOwner;
+	kbComponent *								m_pOwningComponent;
 };
 
 /**
@@ -85,6 +90,7 @@ class kbGameComponent : public kbComponent {
 public:
 
 	virtual void								Enable( const bool setEnabled ) override;
+	virtual void								EditorChange( const std::string & propertyName );
 
 	void										Update( const float DeltaTimeSeconds );
 
