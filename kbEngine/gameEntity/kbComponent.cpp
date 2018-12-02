@@ -214,6 +214,13 @@ void kbGameComponent::Update( const float DeltaTimeSeconds ) {
 }
 
 /**
+ *	kbGameComponent::GetOwnerName
+ */
+kbString kbGameComponent::GetOwnerName() const {
+	return GetOwner()->GetName();
+}
+
+/**
  *	kbTransformComponent::Constructor
  */
 void kbTransformComponent::Constructor() {

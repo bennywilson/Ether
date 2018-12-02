@@ -95,6 +95,7 @@ public:
 	void										Update( const float DeltaTimeSeconds );
 
 	kbGameEntity *								GetOwner() const { return (kbGameEntity *) Super::GetOwner(); }
+	kbString									GetOwnerName() const;
 
 	float										GetStartingLifeTime() const { return m_StartingLifeTime; }
 	float										GetLifeTimeRemaining() const { return m_LifeTimeRemaining; }

@@ -846,7 +846,7 @@ bool kbModel::LoadDiablo3() {
 	mesh_t & newMesh = m_Meshes[m_Meshes.size() - 1];
 	newMesh.m_IndexBufferIndex = 0;
 	newMesh.m_MaterialIndex = 0;
-	newMesh.m_NumTriangles = indexList.size() / 3;
+	newMesh.m_NumTriangles = (uint)indexList.size() / 3;
 
 	kbMaterial newMaterial;
 	newMaterial.m_pShader = (kbShader *) g_ResourceManager.LoadResource( "../../kbEngine/assets/Shaders/basicShader.kbShader", true );

@@ -148,7 +148,7 @@ public:
 	const kbVec3 &												GetCameraPosition() const { return m_CameraPosition; }
 	const kbQuat &												GetCameraRotation() const { return m_CameraRotation; }
 
-	const std::map<const kbComponent *, kbRenderObject *> &		GetRenderObjectMap() const { return m_RenderObjectMap; }
+	const std::map<const kbGameComponent *, kbRenderObject *> &	GetRenderObjectMap() const { return m_RenderObjectMap; }
 	const std::map<const kbLightComponent *, kbRenderLight *> &	GetRenderLightMap() const { return m_RenderLightMap; }
 	const std::map<const void *, kbRenderObject *> &			GetRenderParticleMap() const { return m_RenderParticleMap; }
 
@@ -187,7 +187,7 @@ private:
 	kbVec3														m_CameraPosition_GameThread;
 	kbQuat														m_CameraRotation_GameThread;
 
-	std::map<const kbComponent *, kbRenderObject *>				m_RenderObjectMap;
+	std::map<const kbGameComponent *, kbRenderObject *>			m_RenderObjectMap;
 	std::map<const kbLightComponent *, kbRenderLight *>			m_RenderLightMap;
 	std::map<const void *, kbRenderObject *>					m_RenderParticleMap;
 

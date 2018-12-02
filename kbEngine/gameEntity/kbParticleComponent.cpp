@@ -2,7 +2,7 @@
 // kbParticleComponent.cpp
 //
 //
-// 2016-2017 kbEngine 2.0
+// 2016-2018 kbEngine 2.0
 //===================================================================================================
 #include "kbCore.h"
 #include "kbVector.h"
@@ -307,7 +307,7 @@ void kbParticleComponent::RenderSync() {
 		}
 	}
 
-	m_RenderObject.m_pComponent = static_cast<const kbComponent*>( this );
+	m_RenderObject.m_pComponent = this;
 	m_RenderObject.m_pModel = nullptr;
 	m_RenderObject.m_RenderPass = RP_Translucent;
 	m_RenderObject.m_Position = GetPosition();

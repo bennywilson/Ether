@@ -76,7 +76,7 @@ private:
 		void									Shutdown();
 
 		kbModel *								m_pModel;
-		kbComponent *							m_pComponent;
+		kbGameComponent *						m_pComponent;
 		kbRenderObject							m_RenderObject;
 	};
 	std::vector<grassRenderObject_t>			m_GrassRenderObjects;

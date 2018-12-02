@@ -34,7 +34,7 @@ void kbGrass::grassRenderObject_t::Initialize( const kbVec3 & ownerPosition ) {
 	kbErrorCheck( m_pModel == nullptr && m_pComponent == nullptr, "grassRenderObject_t::Initialize() - m_pModel or m_pComponent is not NULL" );
 
 	m_pModel = new kbModel();
-	m_pComponent = new kbComponent();
+	m_pComponent = new kbGameComponent();
 
 	m_RenderObject.m_pComponent = m_pComponent;
 	m_RenderObject.m_pModel = m_pModel;

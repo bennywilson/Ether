@@ -54,7 +54,7 @@ void kbSkeletalModelComponent::SetEnable_Internal( const bool isEnabled ) {
 		m_RenderObject.m_Position = GetOwner()->GetPosition();
 		m_RenderObject.m_RenderPass = m_RenderPass;
 		m_RenderObject.m_Scale = GetOwner()->GetScale();
-		RefreshMaterials( true );
+		RefreshMaterials( false );
 
 		g_pRenderer->AddRenderObject( m_RenderObject );
 	} else {

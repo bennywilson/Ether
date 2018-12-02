@@ -70,9 +70,9 @@ kbRenderWindow::kbRenderWindow( HWND inHwnd, const RECT & windowDimensions, cons
 kbRenderWindow::~kbRenderWindow() {
 	
 	{
-		std::map<const kbComponent *, kbRenderObject *>::iterator iter;
+		auto iter = m_RenderObjectMap.begin();
 	
-		for ( iter = m_RenderObjectMap.begin(); iter != m_RenderObjectMap.end(); iter++ ) {
+		for ( ; iter != m_RenderObjectMap.end(); iter++ ) {
 		   delete iter->second;
 		}
 	}
@@ -575,13 +575,13 @@ void kbRenderer::RenderSync() {
 			m_pCurrentRenderWindow->m_RenderObjectMap.erase( m_RenderObjectList_GameThread[i].m_pComponent );
 			delete pRenderObject;
 		} else {
-			const kbComponent *const pComponent = m_RenderObjectList_GameThread[i].m_pComponent;
+			const kbGameComponent *const pComponent = m_RenderObjectList_GameThread[i].m_pComponent;
 			kbErrorCheck( pComponent != nullptr, "kbRenderer::RenderSync() - Adding/updating a render object with a NULL component" );
 
 			if ( m_RenderObjectList_GameThread[i].m_bIsFirstAdd == false ) {
 
 				// Updating a renderobject 
-				std::map< const kbComponent *, kbRenderObject * >::iterator it = m_pCurrentRenderWindow->m_RenderObjectMap.find( m_RenderObjectList_GameThread[i].m_pComponent );
+				auto it = m_pCurrentRenderWindow->m_RenderObjectMap.find( m_RenderObjectList_GameThread[i].m_pComponent );
 				if ( it == m_pCurrentRenderWindow->m_RenderObjectMap.end() || it->second == nullptr ) {
 					kbError( "kbRenderer::UpdateRenderObject - Error, Updating a RenderObject that doesn't exist" );
 				}

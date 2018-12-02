@@ -74,7 +74,7 @@ void kbModelComponent::SetMaterial( const int idx, const kbMaterialComponent & n
 
 	m_MaterialList[idx] = newMats;
 
-	RefreshMaterials( true );
+	RefreshMaterials( false );
 
 	if ( IsEnabled() ) {
 		g_pRenderer->UpdateRenderObject( m_RenderObject );

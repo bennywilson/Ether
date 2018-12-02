@@ -318,7 +318,7 @@ public:
 													m_bIsFirstAdd( true ),
 													m_bIsRemove( false ) { }
 
-	const class kbComponent *					m_pComponent;
+	const class kbGameComponent *				m_pComponent;
 	const class kbModel *						m_pModel;
 	std::vector<class kbShader *>				m_OverrideShaderList;
 	kbShaderParamOverrides_t                    m_ShaderParamOverrides;
