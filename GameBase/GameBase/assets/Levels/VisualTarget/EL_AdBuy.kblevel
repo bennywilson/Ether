@@ -69,27 +69,53 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadow = 0
+		Materials = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Shader = .\assets\shaders\environment\environmentbase.kbshader
+				ShaderParams = 4
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "diffuse"
+						Texture = .\assets\visualtarget\elp_ad\tv\tv_screen_diffuse.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "normal"
+						Texture = .\assets\visualtarget\elp_ad\tv\tv_screen_normal.dds
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "propertyMap"
+						Texture = .\assets\visualtarget\elp_ad\tv\tv_screen_property.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "emissiveMap"
+						Texture = .\assets\visualtarget\elp_ad\tv\tv_screen_emissive.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
 		RenderPass = LightingPass
-		ShaderParams = 2
-			kbShaderParamComponent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				ParamName = "propertyMap"
-				Texture = .\assets\visualtarget\elp_ad\tv\tv_screen_property.jpg
-				Vector = 1.000000 0.000000 0.000000 0.000000
-			}
-			kbShaderParamComponent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				ParamName = "emissiveMap"
-				Texture = .\assets\visualtarget\elp_ad\tv\tv_screen_emissive.jpg
-				Vector = 0.000000 0.000000 0.000000 0.000000
-			}
 		TranslucencySortBias =  0.000000
 		Model = .\assets\visualtarget\elp_ad\tv\tv.ms3d
-		ShaderOverride = 1
-			.\assets\shaders\environment\environmentbase.kbshader
-
+		ShaderOverride = 0
+			
+	}
+	kbShaderParamComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		ParamName = "emissiveMap"
+		Texture = .\assets\visualtarget\elp_ad\tv\tv_screen_emissive.jpg
+		Vector = 0.000000 0.000000 0.000000 0.000000
 	}
 }
 kbGameEntity 0 0 0 0 {
@@ -105,27 +131,53 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadow = 0
+		Materials = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Shader = .\assets\shaders\environment\environmentbase.kbshader
+				ShaderParams = 4
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "diffuse"
+						Texture = .\assets\visualtarget\elp_ad\room\roomtexture.dds
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "normal"
+						Texture = .\assets\visualtarget\elp_ad\room\roomtexture_normal.dds
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "propertyMap"
+						Texture = .\assets\visualtarget\elp_ad\room\room_property.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "emissiveMap"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
 		RenderPass = LightingPass
-		ShaderParams = 2
-			kbShaderParamComponent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				ParamName = "propertyMap"
-				Texture = .\assets\visualtarget\elp_ad\room\room_property.jpg
-				Vector = 0.000000 0.000000 0.000000 0.000000
-			}
-			kbShaderParamComponent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				ParamName = "emissiveMap"
-				Texture = .\assets\test\black.jpg
-				Vector = 0.000000 0.000000 0.000000 0.000000
-			}
 		TranslucencySortBias =  0.000000
 		Model = .\assets\visualtarget\elp_ad\room\room.ms3d
-		ShaderOverride = 1
-			.\assets\shaders\environment\environmentbase.kbshader
-
+		ShaderOverride = 0
+			
+	}
+	kbShaderParamComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		ParamName = "emissiveMap"
+		Texture = .\assets\test\black.jpg
+		Vector = 0.000000 0.000000 0.000000 0.000000
 	}
 }
 kbGameEntity 0 0 0 0 {

@@ -35,7 +35,6 @@ protected:
 class kbComponent : public kbBaseComponent {
 
 	friend class kbEntity;
-	friend class kbFile;
 
 	KB_DECLARE_COMPONENT( kbComponent, kbBaseComponent );
 
@@ -58,6 +57,9 @@ public:
 
 	void										MarkAsDirty() { m_bIsDirty = true; }
 
+	void										SetOwner( kbEntity *const pGameEntity );
+	void										SetOwningComponent( kbComponent *const pOwningComponent ) { m_pOwningComponent = pOwningComponent; }
+
 protected:
 
 	virtual void								SetEnable_Internal( const bool bIsEnabled ) { }
@@ -71,9 +73,6 @@ protected:
 	bool										m_IsEnabled;
 
 private:
-
-	void										SetOwner( kbEntity *const pGameEntity );
-	void										SetOwningComponent( kbComponent *const pOwningComponent ) { m_pOwningComponent = pOwningComponent; }
 
 	kbEntity *									m_pOwner;
 	kbComponent *								m_pOwningComponent;
