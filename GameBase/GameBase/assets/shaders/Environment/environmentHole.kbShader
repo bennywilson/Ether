@@ -79,7 +79,7 @@ SamplerState diffuseSampler;
 Texture2D normal					: register(t1);
 SamplerState normalSampler;
 
-Texture2D holeTex				: register(t2);
+Texture2D holeTex(white)			: register(t2);
 
  PS_OUTPUT pixelShader( pixelInput	input, bool IsFrontFace	: SV_IsFrontFace ) {
  	PS_OUTPUT output = (PS_OUTPUT) 0;

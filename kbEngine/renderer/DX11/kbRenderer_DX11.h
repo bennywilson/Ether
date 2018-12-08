@@ -481,7 +481,6 @@ private:
 	kbShader *									m_pPointLightShader;
 	kbShader *									m_pCylindricalLightShader;
 	kbShader *									m_pBasicParticleShader;
-	kbShader *									m_pBasicSkinnedTextureShader;
 	kbShader *									m_pDirectionalLightShadowShader;
 	kbShader *									m_pLightShaftsShader;
 	kbShader *									m_pSimpleAdditiveShader;

@@ -265,7 +265,7 @@ kbGameEntity 0 0 0 0 {
 }
 kbGameEntity 0 0 0 0 {
 	kbTransformComponent { 
-		Enabled = 0
+		Enabled = 1
 		LifeTime =  -1.000000
 		Name = "Cartel Soldier"
 		Orientation = 0.000000 0.991689 0.000000 0.128659
@@ -273,10 +273,36 @@ kbGameEntity 0 0 0 0 {
 		Scale = 0.100000 0.100000 0.100000
 	}
 	EtherSkelModelComponent { 
-		Enabled = 0
+		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadow = 1
-		Materials = 0
+		Materials = 2
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Shader = .\assets\shaders\character\characterbase.kbshader
+				ShaderParams = 1
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorTexture"
+						Texture = .\assets\models\shared_color_palette.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Shader = .\assets\shaders\character\characterbase.kbshader
+				ShaderParams = 1
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorTexture"
+						Texture = .\assets\models\shared_color_palette.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
 		RenderPass = LightingPass
 		TranslucencySortBias =  -1.000000
 		Model = .\assets\models\characters\cartel_warrior\cartel_warrior.ms3d

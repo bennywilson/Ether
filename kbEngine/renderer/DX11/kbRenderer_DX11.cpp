@@ -387,7 +387,6 @@ kbRenderer_DX11::kbRenderer_DX11() :
 	m_pBasicParticleShader( nullptr ),
 	m_pBasicShader( nullptr ),
 	m_pDebugShader( nullptr ),
-	m_pBasicSkinnedTextureShader( nullptr ),
 	m_pDirectionalLightShadowShader( nullptr ),
 	m_pPointLightShader( nullptr ),
 	m_pCylindricalLightShader( nullptr ),
@@ -685,7 +684,6 @@ void kbRenderer_DX11::Init_Internal( HWND hwnd, const int frameWidth, const int 
 	m_pBasicParticleShader = (kbShader *) g_ResourceManager.LoadResource( "../../kbEngine/assets/Shaders/basicParticle.kbshader", true );
 	m_pMissingShader = (kbShader *) g_ResourceManager.LoadResource( "../../kbEngine/assets/Shaders/missingShader.kbshader", true );
 	m_pDebugShader = (kbShader *) g_ResourceManager.LoadResource( "../../kbEngine/assets/Shaders/debugShader.kbshader", true );
-	m_pBasicSkinnedTextureShader = (kbShader * ) g_ResourceManager.LoadResource( "../../kbEngine/assets/Shaders/basicSkinned.kbshader", true );
 
 	m_pUberPostProcess = (kbShader *) g_ResourceManager.LoadResource( "../../kbEngine/assets/Shaders/UberPostProcess.kbshader", true );
 	m_pDirectionalLightShader = (kbShader *) g_ResourceManager.LoadResource( "../../kbEngine/assets/Shaders/DirectionalLight.kbshader", true );
