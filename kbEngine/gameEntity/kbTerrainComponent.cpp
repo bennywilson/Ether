@@ -193,7 +193,8 @@ void kbGrass::RefreshGrass() {
 	m_GrassCellLength = m_pOwningTerrainComponent->GetTerrainWidth() / (float)m_GrassCellsPerTerrainSide;
 	const float patchLen = m_GrassCellLength / (float)m_PatchesPerCellSide;
 
-	//m_GrassShaderOverrides.m_ParamOverrides.clear();
+	m_GrassShaderOverrides.m_ParamOverrides.clear();
+	m_GrassShaderOverrides.m_pShader = (kbShader*)g_ResourceManager.LoadResource( "./assets/Shaders/Environment/grass.kbshader", true );
 	m_GrassShaderOverrides.SetTexture( "grassMap", m_pGrassMap );
     m_GrassShaderOverrides.SetTexture( "noiseMap", m_pNoiseMap );
 	m_GrassShaderOverrides.SetTexture( "heightMap", m_pOwningTerrainComponent->GetHeightMap() );
@@ -281,13 +282,19 @@ void kbGrass::RefreshGrass() {
 				renderObj.m_pModel->UnmapVertexBuffer();
 
 				m_GrassRenderObjects[cellIdx].m_RenderObject.m_Position = cellCenter;
-				m_GrassRenderObjects[cellIdx].m_RenderObject.m_ShaderParamOverrides = m_GrassShaderOverrides;
+
+				auto & renderObjMatList = m_GrassRenderObjects[cellIdx].m_RenderObject.m_Materials;
+				renderObjMatList.clear();
+				renderObjMatList.push_back( m_GrassShaderOverrides );
 				g_pRenderer->AddRenderObject( m_GrassRenderObjects[cellIdx].m_RenderObject );
 			}
 		}
 	} else {
+
 		for ( int i = 0; i < m_GrassRenderObjects.size(); i++ ) {
-			m_GrassRenderObjects[i].m_RenderObject.m_ShaderParamOverrides = m_GrassShaderOverrides;
+			auto & renderObjMatList = m_GrassRenderObjects[i].m_RenderObject.m_Materials;
+			renderObjMatList.clear();
+			renderObjMatList.push_back( m_GrassShaderOverrides );
 			g_pRenderer->UpdateRenderObject( m_GrassRenderObjects[i].m_RenderObject );
 		}
 	}
@@ -561,12 +568,17 @@ void kbTerrainComponent::GenerateTerrain() {
  */
 void kbTerrainComponent::SetCollisionMap( const kbRenderTexture *const pTexture ) {
 	for ( int i = 0; i < m_Grass.size(); i++ ) {
-		m_Grass[i].m_GrassShaderOverrides.SetTexture( "collisionMap", pTexture );
-		m_Grass[i].m_GrassShaderOverrides.SetVec4( "collisionMapPixelWorldSize", kbVec4( GetTerrainWidth() / pTexture->GetWidth(), 0.0f, 0.0f, 0.0f ) );
 
-		for ( int cellIdx = 0; cellIdx < m_Grass[i].m_GrassRenderObjects.size(); cellIdx++ ) {
-			m_Grass[i].m_GrassRenderObjects[cellIdx].m_RenderObject.m_ShaderParamOverrides = m_Grass[i].m_GrassShaderOverrides;
-			g_pRenderer->UpdateRenderObject( m_Grass[i].m_GrassRenderObjects[cellIdx].m_RenderObject );
+		kbGrass & grass = m_Grass[i];
+		grass.m_GrassShaderOverrides.SetTexture( "collisionMap", pTexture );
+		grass.m_GrassShaderOverrides.SetVec4( "collisionMapPixelWorldSize", kbVec4( GetTerrainWidth() / pTexture->GetWidth(), 0.0f, 0.0f, 0.0f ) );
+
+		for ( int cellIdx = 0; cellIdx < grass.m_GrassRenderObjects.size(); cellIdx++ ) {
+			auto & grassRenderObj = grass.m_GrassRenderObjects[cellIdx];
+			auto & renderObjMatList = grassRenderObj.m_RenderObject.m_Materials;
+			renderObjMatList.clear();
+			renderObjMatList.push_back( grass.m_GrassShaderOverrides );
+			g_pRenderer->UpdateRenderObject( grassRenderObj.m_RenderObject );
 		}
 	}
 }

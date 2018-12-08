@@ -561,27 +561,7 @@ void EtherGame::RenderThreadCallBack() {
 					kbTexture *const normal = (kbTexture*)g_ResourceManager.LoadResource( "./assets/models/architecture/bricks_nm.png", true );
 
 					pSM->SetMaterialParamTexture( 0, "holeTex" ,m_pBulletHoleRenderTexture );
-/*
-					std::vector<kbMaterialComponent> materials;
-					kbMaterialComponent newMat;
-					newMat.SetShader( (kbShader*)g_ResourceManager.LoadResource( "./assets/shaders/environment/environmenthole.kbshader", true ) );
 
-					kbShaderParamComponent holeTextureParam;
-					holeTextureParam.SetParamName( kbString( "holeTex" ) );
-					holeTextureParam.SetRenderTexture( m_pBulletHoleRenderTexture );
-					newMat.SetShaderParamComponent( holeTextureParam );
-
-					kbShaderParamComponent diffuseParam;
-					diffuseParam.SetParamName( kbString( "diffuse" ) );
-					diffuseParam.SetTexture( (kbTexture*)g_ResourceManager.LoadResource( "./assets/models/architecture/bricks.png", true ) );
-					newMat.SetShaderParamComponent( diffuseParam );
-
-					kbShaderParamComponent normalParam;
-					normalParam.SetParamName( kbString( "normal" ) );
-					normalParam.SetTexture( (kbTexture*)g_ResourceManager.LoadResource( "./assets/models/architecture/bricks_nm.png", true ) );
-					newMat.SetShaderParamComponent( normalParam );
-
-					pSM->SetMaterial( 0, newMat );*/
 				}
 				break;
 			}

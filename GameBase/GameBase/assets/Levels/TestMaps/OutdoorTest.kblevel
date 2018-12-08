@@ -164,6 +164,7 @@ kbGameEntity 0 0 0 0 {
 			}
 		HeightMap = .\assets\terrain\basicterrain\terrain1_height.bmp
 		HeightScale =  1024.000000
+		MaterialList = 0
 		Shader = .\assets\shaders\environment\basicterrain.kbshader
 		SplatMap = .\assets\terrain\basicterrain\terrain1_splatmap.bmp
 		TerrainMaterials = 3
@@ -349,7 +350,13 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadow = 0
-		Materials = 0
+		Materials = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Shader = ..\..\kbengine\assets\shaders\basicshader.kbshader
+				ShaderParams = 0
+			}
 		RenderPass = LightingPass
 		TranslucencySortBias =  -1.000000
 		Model = .\assets\models\vehicles\jet.ms3d

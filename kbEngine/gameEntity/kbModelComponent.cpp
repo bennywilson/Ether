@@ -67,28 +67,6 @@ void kbModelComponent::PostLoad() {
 }
 
 /**
- *	kbModelComponent::SetNewMaterials
- */
-void kbModelComponent::SetMaterial( const int idx, const kbMaterialComponent & newMats ) {
-	if ( idx < 0 || idx > 32 ) {
-		kbWarning( "kbModelComponent::SetMaterial() - Invalid index." );
-		return;
-	}
-
-	if ( idx >= m_MaterialList.size() ) {
-		m_MaterialList.resize( idx + 1 );
-	}
-
-	m_MaterialList[idx] = newMats;
-
-	RefreshMaterials( false );
-
-	if ( IsEnabled() ) {
-		g_pRenderer->UpdateRenderObject( m_RenderObject );
-	}
-}
-
-/**
  *	kbModelComponent::RefreshMaterials
  */
 void kbModelComponent::RefreshMaterials( const bool bRefreshRenderObejct ) {
@@ -115,22 +93,6 @@ void kbModelComponent::RefreshMaterials( const bool bRefreshRenderObejct ) {
 	}
 
 	if ( IsEnabled() && m_RenderObject.m_pComponent != nullptr && bRefreshRenderObejct ) {
-		g_pRenderer->UpdateRenderObject( m_RenderObject );
-	}
-}
-
-/**
- *	kbModelComponent:SetMaterialParamVector
- */
-void kbModelComponent::SetMaterialShader( const int idx, kbShader *const pShader ) {
-	if ( idx < 0 || idx > 32 || idx >= m_MaterialList.size() ) {
-		kbWarning( "kbModelComponent::SetMaterialParamVector() called on invalid index" );
-		return;
-	}
-
-	m_MaterialList[idx].SetShader( pShader );
-
-	if ( IsEnabled() ) {
 		g_pRenderer->UpdateRenderObject( m_RenderObject );
 	}
 }
