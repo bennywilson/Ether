@@ -135,6 +135,7 @@ void CopyVarToComponent( const kbComponent * Src, kbComponent * Dst, const kbTyp
  */
 void kbComponent::Constructor() {
 	m_pOwner = nullptr;
+	m_pOwningComponent = nullptr;
 	m_bIsDirty = false;
 	m_IsEnabled = false;
 }

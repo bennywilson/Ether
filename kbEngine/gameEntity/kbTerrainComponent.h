@@ -144,14 +144,13 @@ public:
 	float										GetTerrainWidth() const { return m_TerrainWidth; }
 
 	void										SetCollisionMap( const kbRenderTexture *const pTexture );
-	void										SetGrassTexture( const std::string & textureName, const kbTexture *const pTexture );
 
 protected:
 
 	virtual void								SetEnable_Internal( const bool isEnabled ) override;
 	virtual void								Update_Internal( const float DeltaTime ) override;
 
-    void                                        UpdateTerrainMaterial();
+    void                                        RefreshMaterials();
 
 	// Editor properties
 	kbTexture *									m_pHeightMap;
@@ -159,6 +158,7 @@ protected:
 	float										m_TerrainWidth;
 	int											m_TerrainDimensions;
 
+	std::vector<kbMaterialComponent>			m_MaterialList;
 	std::vector<kbTerrainMatComponent>          m_TerrainMaterials;
 	kbShader *                                  m_pTerrainShader;
 	kbTexture *                                 m_pSplatMap;
@@ -167,7 +167,6 @@ protected:
 	// Non-editor
 	kbModel										m_TerrainModel;
 
-	kbShaderParamOverrides_t					m_TerrainShaderOverrides;
     std::vector<kbShader *>                     m_ShaderOverrideList;
 
 	bool										m_bRegenerateTerrain;

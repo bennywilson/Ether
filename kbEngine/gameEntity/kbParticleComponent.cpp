@@ -272,6 +272,13 @@ void kbParticleComponent::EditorChange( const std::string & propertyName ) {
 			m_pParticleTexture = (kbTexture *)g_ResourceManager.GetResource( m_pParticleTexture->GetFullFileName() );
 		}
 	}
+
+	// Editor Hack!
+	if ( propertyName == "Materials" ) {
+		for ( int i = 0; i < this->m_MaterialList.size(); i++ ) {
+			m_MaterialList[i].SetOwningComponent( this );
+		}
+	}
 }
 
 /**
@@ -316,10 +323,26 @@ void kbParticleComponent::RenderSync() {
 
 	// Update materials
 	m_RenderObject.m_Materials.clear();
-	kbShaderParamOverrides_t particleMaterial;
-	particleMaterial.m_pShader = m_pParticleShader;
-	particleMaterial.SetTexture( "shaderTexture", m_pParticleTexture );
-	m_RenderObject.m_Materials.push_back( particleMaterial );
+	for ( int i = 0; i < m_MaterialList.size(); i++ ) {
+		kbMaterialComponent & matComp = m_MaterialList[i];
+	
+		kbShaderParamOverrides_t newShaderParams;
+		newShaderParams.m_pShader = matComp.GetShader();
+	
+		auto srcShaderParams = matComp.GetShaderParams();
+		for ( int j = 0; j < srcShaderParams.size(); j++ ) {
+			if ( srcShaderParams[j].GetTexture() != nullptr ) {
+				newShaderParams.SetTexture( srcShaderParams[j].GetParamName().stl_str(), srcShaderParams[j].GetTexture() );
+			} else if ( srcShaderParams[j].GetRenderTexture() != nullptr ) {
+	
+				newShaderParams.SetTexture( srcShaderParams[j].GetParamName().stl_str(), srcShaderParams[j].GetRenderTexture() );
+			} else {
+				newShaderParams.SetVec4( srcShaderParams[j].GetParamName().stl_str(), srcShaderParams[j].GetVector() );
+			}
+		}
+	
+		m_RenderObject.m_Materials.push_back( newShaderParams );
+	}
 
 	if ( m_CurrentParticleBuffer == 255 ) {
 		m_CurrentParticleBuffer = 0;

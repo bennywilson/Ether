@@ -513,6 +513,11 @@ void kbRenderer_DX11::Init_Internal( HWND hwnd, const int frameWidth, const int 
 
 	RT_GetRenderTexture( deferredRTWidth, deferredRTHeight, KBTEXTURE_R16G16, false );
 
+	// MAX_HALF
+	RT_GetRenderTexture( 1, 1, KBTEXTURE_R16G16B16A16, false );
+	float maxHalf[] = { 65000.0f, 65000.0f, 65000.0f, 65000.0f };
+	m_pDeviceContext->ClearRenderTargetView( GetRenderTarget_DX11(MAX_HALF_BUFFER)->m_pRenderTargetView, maxHalf );
+
 	// create back buffer
 	D3D11_TEXTURE2D_DESC depthBufferDesc = { 0 };
 	depthBufferDesc.Width = deferredRTWidth;
@@ -2544,6 +2549,8 @@ void kbRenderer_DX11::ReadShaderFile( std::string & shaderText, kbShaderVarBindi
 				textureBinding.m_pDefaultRenderTexture = m_pRenderTargets[SPECULAR_BUFFER];
 			} else if ( defaultTexture == "shadowbuffer" ) {
 				textureBinding.m_pDefaultRenderTexture = m_pRenderTargets[SHADOW_BUFFER];
+			} else if ( defaultTexture == "maxhalf" ) {
+				textureBinding.m_pDefaultRenderTexture = m_pRenderTargets[MAX_HALF_BUFFER];
 			} else {
 				kbWarning( "Default texture %s not found", defaultTexture.c_str() );
 			}

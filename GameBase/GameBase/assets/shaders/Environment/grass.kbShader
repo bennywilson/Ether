@@ -71,11 +71,11 @@ geometryShaderInput vertexShader( vertexInput input ) {
 SamplerState LinearSampler;
 SamplerState PointSampler;
 
-Texture2D grassMap			: register(t0);
-Texture2D heightMap			: register(t1);
-Texture2D grassDiffuseMap	: register(t2);
-Texture2D noiseMap			: register(t3);
-Texture2D collisionMap		: register(t4);
+Texture2D grassMap					: register(t0);
+Texture2D heightMap					: register(t1);
+Texture2D grassDiffuseMap			: register(t2);
+Texture2D noiseMap					: register(t3);
+Texture2D collisionMap(maxhalf)		: register(t4);
 
 void CreateVertex( inout TriangleStream<pixelInput> OutputStream, float3 vertexWorldOrigin, float2 uv, float4 grassData ) {
 

@@ -25,7 +25,7 @@ struct kbParticle_t {
 	float m_Randoms[3];
 };
 
-/*
+/**
  *	kbParticleComponent
  */
 class kbParticleComponent : public kbTransformComponent {
@@ -44,7 +44,7 @@ public:
 	void														StopParticleSystem();
 	void														StopNewSpawns() { m_bIsSpawning = false; }
 
-   // Hack wasn't picking up from the package file
+	// Hack wasn't picking up from the package file
 	void														SetBillboardType( const EBillboardType inBBType ) { m_ParticleBillboardType = inBBType; }
 
 protected:
@@ -56,6 +56,7 @@ private:
 
 	// Editable
 	kbTexture *													m_pParticleTexture;
+	std::vector<kbMaterialComponent>							m_MaterialList;
 	kbShader *													m_pParticleShader;
 	float														m_TotalDuration;
 	float														m_MinParticleSpawnRate;				// Particles per second

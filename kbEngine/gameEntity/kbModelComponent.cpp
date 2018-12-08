@@ -45,6 +45,7 @@ void kbModelComponent::EditorChange( const std::string & propertyName ) {
 	m_RenderObject.m_Scale = GetOwner()->GetScale();
 	m_RenderObject.m_TranslucencySortBias = m_TranslucencySortBias;
 
+	// Editor Hack!
 	if ( propertyName == "Materials" ) {
 		for ( int i = 0; i < this->m_MaterialList.size(); i++ ) {
 			m_MaterialList[i].SetOwningComponent( this );

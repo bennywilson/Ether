@@ -20,6 +20,7 @@ kbPrefab 1 {
 			EndColor = 0.000000 0.000000 0.000000 0.000000
 			Gravity = 0.000000 0.000000 0.000000
 			LockVelocity = 0
+			MaterialList = 0
 			MaxBurstCount = 0
 			MaxDuration =  0.050000
 			MaxEndSize = 3.000000 3.000000 3.000000
@@ -65,6 +66,7 @@ kbGameEntity 288884920 1074764317 1666654870 1595214297 {
 		EndColor = 0.000000 0.000000 0.000000 0.000000
 		Gravity = 0.000000 0.000000 0.000000
 		LockVelocity = 0
+		MaterialList = 0
 		MaxBurstCount = 50
 		MaxDuration =  1.000000
 		MaxEndSize = 3.000000 3.000000 3.000000
@@ -118,6 +120,7 @@ kbGameEntity 749854598 1122407100 2268504468 2469228342 {
 		EndColor = 0.000000 0.000000 0.000000 0.000000
 		Gravity = 0.000000 0.000000 0.000000
 		LockVelocity = 0
+		MaterialList = 0
 		MaxBurstCount = 50
 		MaxDuration =  1.000000
 		MaxEndSize = 3.000000 3.000000 3.000000
@@ -171,6 +174,7 @@ kbGameEntity 834051548 1161303702 3343001743 2051538980 {
 		EndColor = 0.000000 0.000000 0.000000 0.000000
 		Gravity = 0.000000 0.000000 0.000000
 		LockVelocity = 0
+		MaterialList = 0
 		MaxBurstCount = 6
 		MaxDuration =  8.000000
 		MaxEndSize = 3.000000 3.000000 3.000000
@@ -216,6 +220,7 @@ kbGameEntity 4227010865 2632918935 1228561351 3287441000 {
 		EndColor = 1.000000 1.000000 1.000000 1.000000
 		Gravity = 0.000000 -100.500000 0.000000
 		LockVelocity = 1
+		MaterialList = 0
 		MaxBurstCount = 10
 		MaxDuration =  3.000000
 		MaxEndSize = 1.500000 1.500000 1.500000
@@ -247,6 +252,7 @@ kbGameEntity 4227010865 2632918935 1228561351 3287441000 {
 		EndColor = 0.000000 0.000000 0.000000 0.000000
 		Gravity = 0.000000 0.000000 0.000000
 		LockVelocity = 0
+		MaterialList = 0
 		MaxBurstCount = 5
 		MaxDuration =  1.000000
 		MaxEndSize = 3.000000 3.000000 3.000000
@@ -499,6 +505,20 @@ kbGameEntity 1199553285 1083518041 1518451114 1990211042 {
 		EndColor = 1.000000 1.000000 1.000000 0.000000
 		Gravity = 0.000000 0.000000 0.000000
 		LockVelocity = 0
+		MaterialList = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Shader = .\assets\shaders\fx\emberparticle.kbshader
+				ShaderParams = 1
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "shaderTexture"
+						Texture = .\assets\fx\orangeglow.dds
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
 		MaxBurstCount = 0
 		MaxDuration =  5.000000
 		MaxEndSize = 0.500000 0.300000 0.200000
