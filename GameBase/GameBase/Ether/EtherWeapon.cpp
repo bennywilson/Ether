@@ -461,8 +461,13 @@ bool EtherWeaponComponent::Fire_Internal() {
 
 				m_ShellPool.insert( m_ShellPool.begin(), g_ShellPoolSize, BulletShell() );
 				for ( int i = 0; i < g_ShellPoolSize; i++ ) {
-					m_ShellPool[i].m_RenderObject.m_OverrideShaderList.clear();
-					m_ShellPool[i].m_RenderObject.m_OverrideShaderList.push_back( pShader );
+
+					auto & renderObj = m_ShellPool[i].m_RenderObject;
+		
+					kbShaderParamOverrides_t newShaderParams;
+					newShaderParams.m_pShader = pShader;
+					renderObj.m_Materials.clear();
+					renderObj.m_Materials.push_back( newShaderParams );
 				}
 			}
 

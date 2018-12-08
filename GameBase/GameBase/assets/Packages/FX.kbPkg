@@ -20,7 +20,20 @@ kbPrefab 1 {
 			EndColor = 0.000000 0.000000 0.000000 0.000000
 			Gravity = 0.000000 0.000000 0.000000
 			LockVelocity = 0
-			MaterialList = 0
+			MaterialList = 1
+				kbMaterialComponent { 
+					Enabled = 0
+					LifeTime =  -1.000000
+					Shader = ..\..\kbengine\assets\shaders\basicparticle.kbshader
+					ShaderParams = 1
+						kbShaderParamComponent { 
+							Enabled = 0
+							LifeTime =  -1.000000
+							ParamName = "shaderTexture"
+							Texture = .\assets\fx\smoke.jpg
+							Vector = 0.000000 0.000000 0.000000 0.000000
+						}
+				}
 			MaxBurstCount = 0
 			MaxDuration =  0.050000
 			MaxEndSize = 3.000000 3.000000 3.000000
@@ -66,7 +79,20 @@ kbGameEntity 288884920 1074764317 1666654870 1595214297 {
 		EndColor = 0.000000 0.000000 0.000000 0.000000
 		Gravity = 0.000000 0.000000 0.000000
 		LockVelocity = 0
-		MaterialList = 0
+		MaterialList = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Shader = ..\..\kbengine\assets\shaders\basicparticle.kbshader
+				ShaderParams = 1
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "shaderTexture"
+						Texture = .\assets\fx\smoke.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
 		MaxBurstCount = 50
 		MaxDuration =  1.000000
 		MaxEndSize = 3.000000 3.000000 3.000000
@@ -220,7 +246,20 @@ kbGameEntity 4227010865 2632918935 1228561351 3287441000 {
 		EndColor = 1.000000 1.000000 1.000000 1.000000
 		Gravity = 0.000000 -100.500000 0.000000
 		LockVelocity = 1
-		MaterialList = 0
+		MaterialList = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Shader = .\assets\shaders\fx\particleatlas.kbshader
+				ShaderParams = 1
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "shaderTexture"
+						Texture = .\assets\fx\concreteparticles.dds
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
 		MaxBurstCount = 10
 		MaxDuration =  3.000000
 		MaxEndSize = 1.500000 1.500000 1.500000
@@ -252,7 +291,20 @@ kbGameEntity 4227010865 2632918935 1228561351 3287441000 {
 		EndColor = 0.000000 0.000000 0.000000 0.000000
 		Gravity = 0.000000 0.000000 0.000000
 		LockVelocity = 0
-		MaterialList = 0
+		MaterialList = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Shader = ..\..\kbengine\assets\shaders\basicparticle.kbshader
+				ShaderParams = 1
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "shaderTexture"
+						Texture = .\assets\fx\impactsmoke.dds
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
 		MaxBurstCount = 5
 		MaxDuration =  1.000000
 		MaxEndSize = 3.000000 3.000000 3.000000
