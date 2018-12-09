@@ -21,7 +21,6 @@ void kbLightComponent::Constructor() {
 	m_Color = kbColor::white;
 	m_bCastsShadow = false;
 	m_Brightness = 1;
-	m_pOverrideShader = nullptr;
 	m_bShaderParamsDirty = false;
 }
 
@@ -48,6 +47,13 @@ void kbLightComponent::EditorChange( const std::string & propertyName ) {
 	if ( IsEnabled() ) {
 		m_bShaderParamsDirty = true;
 	}
+
+	// Editor Hack
+	if ( propertyName == "Materials" ) {
+		for ( int i = 0; i < m_MaterialList.size(); i++ ) {
+			m_MaterialList[i].SetOwningComponent( this );
+		}
+	}
 }
 
 /**
@@ -57,7 +63,7 @@ void kbLightComponent::RenderSync() {
 	Super::RenderSync();
 
 	if ( m_bShaderParamsDirty ) {
-		SetShaderParamList();
+		RefreshMaterials();
 		m_bShaderParamsDirty = false;
 	}
 }
@@ -81,11 +87,37 @@ void kbLightComponent::SetEnable_Internal( const bool bIsEnabled ) {
 }
 
 /**
- *	kbLightComponent:SetShaderParamList
+ *	kbLightComponent:RefreshMaterials
  */
-void kbLightComponent::SetShaderParamList() {
+void kbLightComponent::RefreshMaterials() {
 
-	if ( m_pOverrideShader == nullptr ) {
+	//m_RenderObject.m_Materials.clear();
+	/*{//for ( int i = 0; i < m_MaterialList.size(); i++ ) {
+		kbMaterialComponent & matComp = m_Material;
+	
+		kbShaderParamOverrides_t newShaderParams;
+		newShaderParams.m_pShader = matComp.GetShader();
+	
+		auto srcShaderParams = matComp.GetShaderParams();
+		for ( int j = 0; j < srcShaderParams.size(); j++ ) {
+			if ( srcShaderParams[j].GetTexture() != nullptr ) {
+				newShaderParams.SetTexture( srcShaderParams[j].GetParamName().stl_str(), srcShaderParams[j].GetTexture() );
+			} else if ( srcShaderParams[j].GetRenderTexture() != nullptr ) {
+	
+				newShaderParams.SetTexture( srcShaderParams[j].GetParamName().stl_str(), srcShaderParams[j].GetRenderTexture() );
+			} else {
+				newShaderParams.SetVec4( srcShaderParams[j].GetParamName().stl_str(), srcShaderParams[j].GetVector() );
+			}
+		}
+	
+		m_RenderObject.m_Materials.push_back( newShaderParams );
+	}
+
+	if ( IsEnabled() && m_RenderObject.m_pComponent != nullptr && bRefreshRenderObejct ) {
+		g_pRenderer->UpdateRenderObject( m_RenderObject );
+	}
+
+	/*if ( m_pOverrideShader == nullptr ) {
 		return;
 	}
 
@@ -100,8 +132,7 @@ void kbLightComponent::SetShaderParamList() {
 		} else {
 			m_OverrideShaderParams.SetVec4( curParam.GetParamName().stl_str(), curParam.GetVector() );
 		}	
-	}
-
+	}*/
 }
 
 /**

@@ -102,8 +102,7 @@ GenerateClass(
 	kbLightComponent,
 	AddField( "Color", KBTYPEINFO_VECTOR4, kbLightComponent, m_Color, false, "" )
 	AddField( "CastsShadows", KBTYPEINFO_BOOL, kbLightComponent, m_bCastsShadow, false, "" )
-	AddField( "ShaderParams", KBTYPEINFO_STRUCT, kbLightComponent, m_OverrideShaderParamList, true, "kbShaderParamComponent" )
-	AddField( "OverrideShader", KBTYPEINFO_SHADER, kbLightComponent, m_pOverrideShader, false, "" )
+	AddField( "Materials", KBTYPEINFO_STRUCT, kbLightComponent, m_MaterialList, true, "kbMaterialComponent" )
 )
 
 GenerateClass(

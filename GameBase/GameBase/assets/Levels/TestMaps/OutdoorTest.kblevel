@@ -219,8 +219,97 @@ kbGameEntity 0 0 0 0 {
 		LifeTime =  -1.000000
 		CastsShadows = 1
 		Color = 1.000000 1.000000 1.000000 0.250000
-		OverrideShader = NULL
-		ShaderParams = 0
+		Materials = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Shader = .\assets\shaders\lights\directionallighttoon.kbshader
+				ShaderParams = 12
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "lightColor"
+						Texture = NULL
+						Vector = 1.000000 1.000000 1.000000 1.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "cameraPosition"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "diffuseColorBand"
+						Texture = NULL
+						Vector = 0.010000 0.070000 0.500000 0.500000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "specularColorBand"
+						Texture = NULL
+						Vector = 0.200000 0.300000 0.950000 0.050000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "rimLightColor"
+						Texture = NULL
+						Vector = 0.350000 0.350000 0.350000 0.500000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "nonToonDiffuseScaleAndBias"
+						Texture = NULL
+						Vector = 0.900000 0.100000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "specParams"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.001000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorTexture"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "normalTexture"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "specularTexture"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "depthTexture"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "ShadowMap"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
 		CascadedShadowSplits = 4
  100.000000
  200.000000
@@ -1354,8 +1443,93 @@ kbGameEntity 0 0 0 0 {
 		LifeTime =  -1.000000
 		CastsShadows = 0
 		Color = 2.500000 1.500000 0.500000 1.000000
-		OverrideShader = NULL
-		ShaderParams = 0
+		Materials = 0
 		LightRadius =  124.000000
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Entity_38"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 11.190129 23.505821 -66.707130
+		Scale = 1.000000 1.000000 1.000000
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Izzy"
+		Orientation = 0.000000 0.997620 0.000000 -0.068949
+		Position = 24.617346 14.938108 15.440613
+		Scale = 2.250000 2.300000 2.500000
+	}
+	EtherSkelModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		Materials = 4
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Shader = .\assets\shaders\character\characterbase.kbshader
+				ShaderParams = 1
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorTexture"
+						Texture = .\assets\visualtarget\initiation\gina\prisonjumpsuit.dds
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Shader = .\assets\shaders\character\characterbase.kbshader
+				ShaderParams = 1
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorTexture"
+						Texture = .\assets\visualtarget\getthebag\gina\eye.dds
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Shader = .\assets\shaders\character\characterbase.kbshader
+				ShaderParams = 1
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorTexture"
+						Texture = .\assets\visualtarget\reuben\izzy\face.dds
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Shader = .\assets\shaders\character\characterbase.kbshader
+				ShaderParams = 1
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorTexture"
+						Texture = .\assets\visualtarget\reuben\izzy\izzy_combat.bmp
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		RenderPass = LightingPass
+		TranslucencySortBias =  0.000000
+		Model = .\assets\visualtarget\reuben\izzy\izza_combat.ms3d
+		ShaderOverride = 0
+			
+		Animations = 0
+		DebugAnimIndex = -1
+		IsFirstPersonModel = 0
 	}
 }

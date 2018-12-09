@@ -260,7 +260,9 @@ PS_OUTPUT pixelShader( pixelInput input, bool isFrontFace : SV_IsFrontFace )  {
 
 	//
 	output.Normal.xyz = float3( 0.0f, 1.0f,0.0 );
-	output.Spec = float4(0,0,0,1);//float4( 0.25f, 0.25f, 0.25f, 1.0f );
+	output.Normal.w = 0.5f;
+
+	output.Spec = float4(0,1,0,0);//float4( 0.25f, 0.25f, 0.25f, 1.0f );
 	output.Depth.r = input.position2.x / input.position2.y;
 
 	return output;
