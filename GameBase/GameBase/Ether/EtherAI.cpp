@@ -240,8 +240,8 @@ void  EtherEnemySoldierAIComponent::Update_Internal( const float DeltaTime ) {
 				rotMat[1] = EyeMatrix.GetAxis(1);
 				rotMat[2] = EyeMatrix.GetAxis(2);
 
-				m_EyeBallRenderObject.m_OverrideShaderList.clear();
-				m_EyeBallRenderObject.m_OverrideShaderList.push_back( (kbShader*)g_ResourceManager.LoadResource( "../../kbEngine/assets/Shaders/SimpleAdditive.kbShader", true ) );
+			///	m_EyeBallRenderObject.m_OverrideShaderList.clear();
+			//	m_EyeBallRenderObject.m_OverrideShaderList.push_back( (kbShader*)g_ResourceManager.LoadResource( "../../kbEngine/assets/Shaders/SimpleAdditive.kbShader", true ) );
 				if ( m_bEyeballAdded == false ) {
 					g_pRenderer->AddRenderObject( m_EyeBallRenderObject );
 				} else {

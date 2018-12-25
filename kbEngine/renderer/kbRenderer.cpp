@@ -27,13 +27,13 @@ kbRenderer * g_pRenderer = nullptr;
 const kbShader * kbRenderSubmesh::GetShader() const {
 	const kbRenderObject & renderObj = *GetRenderObject();
 
-	if ( renderObj.m_OverrideShaderList.size() > GetMeshIdx() ) {
-		return renderObj.m_OverrideShaderList[GetMeshIdx()];
+	const kbModel *const pModel = GetRenderObject()->m_pModel;
+	const kbModel::mesh_t & mesh = pModel->GetMeshes()[GetMeshIdx()]; 
+	if ( pModel->GetMaterials().size() > mesh.m_MaterialIndex ) {
+		return pModel->GetMaterials()[mesh.m_MaterialIndex].GetShader();
 	}
 
-	const kbModel & model = *GetRenderObject()->m_pModel;
-	const kbModel::mesh_t & mesh = model.GetMeshes()[GetMeshIdx()]; 
-	return model.GetMaterials()[mesh.m_MaterialIndex].GetShader();
+	return nullptr;
 }
 
 /**

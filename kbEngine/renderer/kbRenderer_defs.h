@@ -320,8 +320,6 @@ public:
 
 	const class kbGameComponent *				m_pComponent;
 	const class kbModel *						m_pModel;
-	std::vector<class kbShader *>				m_OverrideShaderList;
-	kbShaderParamOverrides_t                    m_ShaderParamOverrides;
 	std::vector<kbShaderParamOverrides_t>		m_Materials;
 	ERenderPass									m_RenderPass;
 	float										m_TranslucencySortBias;

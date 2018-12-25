@@ -537,7 +537,7 @@ void kbTerrainComponent::GenerateTerrain() {
     g_pRenderer->AddRenderObject( m_RenderObject );
 
 	// Update collision
-	int collisionPatchSize = 128;
+	int collisionPatchSize = 1;
 
 	std::vector<kbCollisionComponent::customTriangle_t> terrainCollision;
 	terrainCollision.resize( ( (m_TerrainDimensions / collisionPatchSize) * (m_TerrainDimensions/collisionPatchSize) ) * 2 );
@@ -553,7 +553,7 @@ void kbTerrainComponent::GenerateTerrain() {
 
 			terrainCollision[triIdx + 1].m_Vertex1 = cpuVerts[currentIndex + collisionPatchSize];
 			terrainCollision[triIdx + 1].m_Vertex2 = cpuVerts[currentIndex +collisionPatchSize + (m_TerrainDimensions*collisionPatchSize)];
-			terrainCollision[triIdx + 1].m_Vertex3 = cpuVerts[currentIndex + (collisionPatchSize*m_TerrainDimensions)];
+			terrainCollision[triIdx + 1].m_Vertex3 = cpuVerts[currentIndex + (collisionPatchSize * m_TerrainDimensions)];
 		}
 	}
 
@@ -665,6 +665,5 @@ void kbTerrainComponent::RefreshMaterials() {
 	m_RenderObject.m_Scale.Set( 1.0f, 1.0f, 1.0f );
 	m_RenderObject.m_pModel = &m_TerrainModel;
 	m_RenderObject.m_RenderPass = RP_Lighting;
-	m_RenderObject.m_OverrideShaderList = m_ShaderOverrideList;
 	m_RenderObject.m_pComponent = this;
 }

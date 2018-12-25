@@ -1468,10 +1468,9 @@ void kbRenderer_DX11::PreRenderCullAndSort() {
 			const kbModel *const pModel = renderObj.m_pModel;
 			for ( int i = 0; i < pModel->GetMeshes().size(); i++ ) {
 				const kbModel::mesh_t & mesh = pModel->GetMeshes()[i];
-				const kbShader * pShader = pModel->GetMaterials()[mesh.m_MaterialIndex].GetShader();
-
-				if ( renderObj.m_OverrideShaderList.size() > i ) {
-					pShader = renderObj.m_OverrideShaderList[i];
+				const kbShader * pShader = nullptr;
+				if ( renderObj.m_Materials.size() >= pModel->GetMeshes().size() ) {
+					pShader = renderObj.m_Materials[i].m_pShader;
 				}
 
 				if ( pShader == nullptr || pShader->IsBlendEnabled() == false ) {
@@ -2994,7 +2993,6 @@ void kbRenderer_DX11::RenderMesh( const kbRenderSubmesh *const pRenderMesh, cons
 	const kbMaterial & meshMaterial = pModel->GetMaterials()[pMesh.m_MaterialIndex];
 
 	// Get Shader
-	const std::vector<kbShader *> *const pShaderOverrideList = &pRenderObject->m_OverrideShaderList;	
 	const kbShader * pShader = meshMaterial.GetShader();
 	
 	if ( bShadowPass ) {
@@ -3005,9 +3003,6 @@ void kbRenderer_DX11::RenderMesh( const kbRenderSubmesh *const pRenderMesh, cons
 		}
 	
 	} else {
-		if ( pShaderOverrideList != nullptr && pShaderOverrideList->size() > pRenderMesh->GetMeshIdx() ) {
-			pShader = (*pShaderOverrideList)[pRenderMesh->GetMeshIdx()];
-		}
 	
 		if ( pRenderObject->m_Materials.size() > 0 && pRenderObject->m_Materials.size() > pRenderMesh->GetMeshIdx() ) {
 			pShader = pRenderObject->m_Materials[pRenderMesh->GetMeshIdx()].m_pShader;
@@ -3082,8 +3077,6 @@ void kbRenderer_DX11::RenderMesh( const kbRenderSubmesh *const pRenderMesh, cons
 		} else {
 			pConstantBuffer = SetConstantBuffer( shaderVarBindings, &pRenderObject->m_Materials[0], pRenderObject, nullptr );
 		}
-	} else {
-		pConstantBuffer = SetConstantBuffer( shaderVarBindings, &pRenderObject->m_ShaderParamOverrides, pRenderObject, nullptr );
 	}
 
 	m_pDeviceContext->VSSetConstantBuffers( 0, 1, &pConstantBuffer );
@@ -3564,9 +3557,7 @@ ID3D11Buffer * kbRenderer_DX11::SetConstantBuffer( const kbShaderVarBindings_t &
 	}
 
     const std::vector<kbShaderParamOverrides_t::kbShaderParam_t> * paramOverrides = nullptr;
-	if ( pRenderObject != nullptr && pRenderObject->m_Materials.size() == 0 ) {
-		paramOverrides = &pRenderObject->m_ShaderParamOverrides.m_ParamOverrides;
-	} else if ( shaderParamOverrides != nullptr ) {
+	if ( shaderParamOverrides != nullptr ) {
 		paramOverrides = &shaderParamOverrides->m_ParamOverrides;
 	}
 
