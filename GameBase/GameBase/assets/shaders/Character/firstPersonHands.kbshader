@@ -75,9 +75,9 @@ SamplerState SampleType;
 	output.Color.w = emissive * 0.75f * ( sin( emissive * pulseFreq + movementSpeed * time.x ) + 1.0f );
 
 	const float specAmt = ( emissive > 0.2f ) ? ( 0.0f ) : ( 1.0f );
-	output.Specular.xyz = output.Color.xyz * specAmt * 2.0f;
-	output.Specular.w = 16.0f;
-
+	output.Specular.x = specAmt * 2.0f;
+	output.Specular.y = 16.0f;
+	output.Specular.zw = 0.0f;
 	output.Depth.r = input.position2.x / input.position2.y;
 
 	output.Normal.xyz = normalize( input.normal );

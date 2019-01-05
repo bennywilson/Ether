@@ -61,7 +61,6 @@ pixelInput vertexShader( vertexInput input ) {
 	//output.color = 0;//input.color;
 	output.position2 = output.position.zw;
 	output.normal.xyz = mul( ( input.normal.xyz * 2.0f ) - 1.0f, (float3x3)modelMatrix );
-
 	return output;
 }
 
@@ -77,14 +76,15 @@ SamplerState SampleType;
 	output.Color = shaderTexture.Sample( SampleType, input.uv );
 	output.Color.w = 0.0f;
 
-	output.Specular.xyz = output.Color.xyz * 0.75f;
-	output.Specular.w = 64.0f;
+	output.Specular.x = 0;
+	output.Specular.yzw = 1;//output.Color.xyz * 0.75f;
+//	output.Specular.w = 64.0f;
 	output.Depth.r = input.position2.x / input.position2.y;
 
 	output.Normal.xyz = normalize( input.normal );
 	if ( input.IsFrontFace == false ) {
 	   output.Normal *= -1.0f;
 	}
-
+	output.Normal.w = 1.0f;
 	return output;
 }

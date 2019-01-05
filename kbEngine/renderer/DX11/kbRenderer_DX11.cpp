@@ -1469,7 +1469,7 @@ void kbRenderer_DX11::PreRenderCullAndSort() {
 			for ( int i = 0; i < pModel->GetMeshes().size(); i++ ) {
 				const kbModel::mesh_t & mesh = pModel->GetMeshes()[i];
 				const kbShader * pShader = nullptr;
-				if ( renderObj.m_Materials.size() >= pModel->GetMeshes().size() ) {
+				if ( renderObj.m_Materials.size() > i ) {
 					pShader = renderObj.m_Materials[i].m_pShader;
 				}
 

@@ -15,6 +15,90 @@ kbPrefab 1 {
 			LifeTime =  -1.000000
 			CastsShadows = 0
 			Color = 2.000000 2.000000 2.000000 1.000000
+			Materials = 1
+				kbMaterialComponent { 
+					Enabled = 0
+					LifeTime =  -1.000000
+					Shader = .\assets\shaders\lights\charenvirocylinderlight.kbshader
+					ShaderParams = 11
+						kbShaderParamComponent { 
+							Enabled = 0
+							LifeTime =  -1.000000
+							ParamName = "lightColor"
+							Texture = NULL
+							Vector = 1.000000 1.000000 1.000000 1.000000
+						}
+						kbShaderParamComponent { 
+							Enabled = 0
+							LifeTime =  -1.000000
+							ParamName = "cameraPosition"
+							Texture = NULL
+							Vector = 0.000000 0.000000 0.000000 0.000000
+						}
+						kbShaderParamComponent { 
+							Enabled = 0
+							LifeTime =  -1.000000
+							ParamName = "diffuseColorBand"
+							Texture = NULL
+							Vector = 0.000000 0.000000 0.000000 0.000000
+						}
+						kbShaderParamComponent { 
+							Enabled = 0
+							LifeTime =  -1.000000
+							ParamName = "rimParams"
+							Texture = NULL
+							Vector = 0.000000 0.000000 0.000000 0.000000
+						}
+						kbShaderParamComponent { 
+							Enabled = 0
+							LifeTime =  -1.000000
+							ParamName = "enviroParams"
+							Texture = NULL
+							Vector = 0.000000 0.000000 0.000000 0.000000
+						}
+						kbShaderParamComponent { 
+							Enabled = 0
+							LifeTime =  -1.000000
+							ParamName = "characterParams"
+							Texture = NULL
+							Vector = 0.000000 0.000000 0.000000 0.000000
+						}
+						kbShaderParamComponent { 
+							Enabled = 0
+							LifeTime =  -1.000000
+							ParamName = "diffuseParams"
+							Texture = NULL
+							Vector = 0.000000 0.000000 0.000000 0.000000
+						}
+						kbShaderParamComponent { 
+							Enabled = 0
+							LifeTime =  -1.000000
+							ParamName = "colorTexture"
+							Texture = NULL
+							Vector = 0.000000 0.000000 0.000000 0.000000
+						}
+						kbShaderParamComponent { 
+							Enabled = 0
+							LifeTime =  -1.000000
+							ParamName = "normalTexture"
+							Texture = NULL
+							Vector = 0.000000 0.000000 0.000000 0.000000
+						}
+						kbShaderParamComponent { 
+							Enabled = 0
+							LifeTime =  -1.000000
+							ParamName = "specularTexture"
+							Texture = NULL
+							Vector = 0.000000 0.000000 0.000000 0.000000
+						}
+						kbShaderParamComponent { 
+							Enabled = 0
+							LifeTime =  -1.000000
+							ParamName = "depthTexture"
+							Texture = NULL
+							Vector = 0.000000 0.000000 0.000000 0.000000
+						}
+				}
 			LightRadius =  16.000000
 			Length =  128.000000
 		}
@@ -84,6 +168,7 @@ kbGameEntity 2459381576 1233845788 1100758177 1698127025 {
 		LifeTime =  -1.000000
 		CastsShadows = 0
 		Color = 0.500000 0.211000 0.111000 1.000000
+		Materials = 0
 		LightRadius =  64.000000
 		Length =  128.000000
 	}
@@ -152,6 +237,7 @@ kbGameEntity 2411460423 1126542526 3016243094 357289685 {
 		LifeTime =  -1.000000
 		CastsShadows = 0
 		Color = 0.070000 0.930000 0.930000 1.000000
+		Materials = 0
 		LightRadius =  1.000000
 	}
 	EtherProjectileComponent { 
@@ -279,51 +365,64 @@ kbGameEntity 292847838 1140569109 1236968083 2365837966 {
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadow = 0
+		Materials = 4
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Shader = .\assets\shaders\weapons\baseweapon.kbshader
+				ShaderParams = 1
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "shaderTexture"
+						Texture = .\assets\models\items\el_rifle_fp_diffuse.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Shader = .\assets\shaders\weapons\baseweapon.kbshader
+				ShaderParams = 1
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "shaderTexture"
+						Texture = .\assets\models\items\hammer.dds
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Shader = .\assets\shaders\weapons\baseholoscope.kbshader
+				ShaderParams = 1
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "shaderTexture"
+						Texture = .\assets\models\items\holoscope.dds
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Shader = .\assets\shaders\character\firstpersonhands.kbshader
+				ShaderParams = 1
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "shaderTexture"
+						Texture = .\assets\models\items\fp_hands.dds
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
 		RenderPass = LightingPass
-		ShaderParams = 0
 		TranslucencySortBias =  0.000000
 		Model = .\assets\models\items\el_rifle_fp.ms3d
-		Materials = 3
-			kbMaterialComponent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				Shader = .\assets\shaders\Weapons\baseweapon.kbshader
-				ShaderParams = 1
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "shaderTexture"
-						Texture = ./assets/models/Items/EL_Rifle_FP_Diffuse.jpg
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-			}
-			kbMaterialComponent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				Shader = .\assets\shaders\Weapons\baseholoscope.kbshader
-				ShaderParams = 1
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "shaderTexture"
-						Texture = ./assets/models/Items/HoloScope.dds
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-			}
-			kbMaterialComponent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				Shader = .\assets\shaders\Character\firstpersonhands.kbshader
-				ShaderParams = 1
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "shaderTexture"
-						Texture = ./assets/models/Items/FP_Hands.dds
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-			}
-
+		ShaderOverride = 0
+			
 		Animations = 2
 			EtherAnimComponent { 
 				Enabled = 0

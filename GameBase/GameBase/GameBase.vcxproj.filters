@@ -137,6 +137,15 @@
     <None Include="assets\shaders\Weapons\shellCasing.kbShader">
       <Filter>Shaders\Weapons</Filter>
     </None>
+    <None Include="assets\shaders\Lights\charEnviroCylinderLight.kbShader">
+      <Filter>Shaders\Lights</Filter>
+    </None>
+    <None Include="assets\shaders\Character\characterMetalDull.kbShader">
+      <Filter>Shaders\Character</Filter>
+    </None>
+    <None Include="assets\shaders\Character\firstPersonHands.kbshader">
+      <Filter>Shaders\Character</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameBase.h">
