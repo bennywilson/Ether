@@ -11,7 +11,7 @@
 #include "kbRenderer.h"
 
 static const uint NumParticleBufferVerts = 10000;
-static const uint NumCustomAtlases = 2;
+static const uint NumCustomAtlases = 16;
 /**
  *	kbParticleManager::kbParticleManager
  */
@@ -293,6 +293,11 @@ void kbParticleManager::AddQuad( const uint atlasIdx, const CustomParticleAtlasI
 	curAtlas.m_pVertexBuffer[vertexIndex + 1].direction = CustomParticleInfo.m_Direction;
 	curAtlas.m_pVertexBuffer[vertexIndex + 2].direction = CustomParticleInfo.m_Direction;
 	curAtlas.m_pVertexBuffer[vertexIndex + 3].direction = CustomParticleInfo.m_Direction;
+
+	curAtlas.m_pVertexBuffer[vertexIndex + 0].rotation = CustomParticleInfo.m_Rotation;
+	curAtlas.m_pVertexBuffer[vertexIndex + 1].rotation = CustomParticleInfo.m_Rotation;
+	curAtlas.m_pVertexBuffer[vertexIndex + 2].rotation = CustomParticleInfo.m_Rotation;
+	curAtlas.m_pVertexBuffer[vertexIndex + 3].rotation = CustomParticleInfo.m_Rotation;
 
 	curAtlas.m_pIndexBuffer[curAtlas.m_NumIndices + 0] = vertexIndex + 2;
 	curAtlas.m_pIndexBuffer[curAtlas.m_NumIndices + 1] = vertexIndex + 1;

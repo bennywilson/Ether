@@ -257,6 +257,8 @@ void EtherWeaponComponent::Constructor() {
 
 	m_BurstCount = 1;
 	m_SecondsBetweenBursts = 0.5f;
+
+	m_pWeaponComponent = nullptr;
 	m_CurrentBurstCount = 0;
 	m_BurstTimer = 0.0f;
 	m_ShotTimer = 0.0f;
@@ -270,6 +272,24 @@ void EtherWeaponComponent::Constructor() {
  */
 void EtherWeaponComponent::Update_Internal( const float DeltaTime ) {
 	Super::Update_Internal( DeltaTime );
+
+	if ( m_pWeaponComponent == nullptr ) {
+
+		for ( int i = 0; i < GetOwner()->NumComponents(); i++ ) {
+			kbComponent *const pCurComponent = GetOwner()->GetComponent(i);
+			if ( pCurComponent->IsA( EtherSkelModelComponent::GetType() ) == false ) {
+				continue;
+			}
+
+			EtherSkelModelComponent *const pSkelModel = static_cast<EtherSkelModelComponent*>( pCurComponent );
+			if ( pSkelModel->IsFirstPersonModel()  ) {
+				m_pWeaponComponent = pSkelModel;
+				break;
+			}
+		}
+	}
+
+	kbWarningCheck( m_pWeaponComponent != nullptr, "%s has no weapon component", GetOwner()->GetName().c_str() );
 
 	if ( m_bIsFiring ) {
 		if ( m_CurrentBurstCount >= m_BurstCount ) {
@@ -288,6 +308,18 @@ void EtherWeaponComponent::Update_Internal( const float DeltaTime ) {
 	}
 
 	UpdateShells( DeltaTime );
+
+	kbVec3 muzzleFlashBone;
+	if ( m_pWeaponComponent->GetBoneWorldPosition( kbString( "MuzzleFlash" ),muzzleFlashBone ) == true ) {
+		for ( int i = (int)m_ActiveMuzzleFlashAnims.size() - 1; i >= 0; i-- ) {
+			if ( m_ActiveMuzzleFlashAnims[i].AnimationIsFinished() ) {
+				VectorRemoveFastIndex( m_ActiveMuzzleFlashAnims, i );
+				continue;
+			}
+
+			m_ActiveMuzzleFlashAnims[i].UpdateAnimation( muzzleFlashBone );
+		}
+	}
 }
 
 /**
@@ -364,24 +396,12 @@ bool EtherWeaponComponent::Fire_Internal() {
 
 	const static kbString ShootName( "Shoot" );
 
-	EtherSkelModelComponent * pWeaponModel = nullptr;
-
-	for ( int i = 0; i < GetOwner()->NumComponents(); i++ ) {
-		kbComponent *const pCurComponent = GetOwner()->GetComponent(i);
-		if ( pCurComponent->IsA( EtherSkelModelComponent::GetType() ) == false ) {
-			continue;
-		}
-
-		EtherSkelModelComponent *const pSkelModel = static_cast<EtherSkelModelComponent*>( pCurComponent );
-		if ( pSkelModel->IsFirstPersonModel()  ) {
-			pSkelModel->PlayAnimation( kbString( ShootName ), -1.0f, true );
-			pWeaponModel = pSkelModel;
-			break;
-		}
+	if ( m_pWeaponComponent != nullptr ) {
+		m_pWeaponComponent->PlayAnimation( ShootName, -1.0f, true );
 	}
 
 	// Muzzle Flash
-	const kbGameEntity *const pMuzzleFlashEntity = m_MuzzleFlashEntity.GetEntity();
+/*	const kbGameEntity *const pMuzzleFlashEntity = m_MuzzleFlashEntity.GetEntity();
 	if ( pMuzzleFlashEntity != nullptr ) {
 
 		for ( int i = 1; i < pMuzzleFlashEntity->NumComponents(); i++ ) {
@@ -398,12 +418,12 @@ bool EtherWeaponComponent::Fire_Internal() {
 
 			break;
 		}
-	}
+	}*/
 
 	// Spawn projectile
 	const kbGameEntity *const pProjectileEntity = m_Projectile.GetEntity();
 
-	if ( pProjectileEntity != nullptr  && pWeaponModel != nullptr ) {
+	if ( pProjectileEntity != nullptr  && m_pWeaponComponent != nullptr ) {
 
 		EtherGame *const pEtherGame = static_cast<EtherGame*>( g_pGame );;
 		const kbCamera & gameCamera = pEtherGame->GetCamera();
@@ -440,18 +460,13 @@ bool EtherWeaponComponent::Fire_Internal() {
 		pProjectileComponent->m_OwnerEntity.SetEntity( pParent );
 		pProjectileComponent->Launch();
 
-		// Muzzle Flash
-		kbParticleManager::CustomParticleAtlasInfo_t ParticleInfo;
-		if ( pWeaponModel->GetBoneWorldPosition( kbString( "MuzzleFlash" ), ParticleInfo.m_Position ) == true ) {
-			kbVec3 pos2 =  kbVec3( 0.0f, -16.0f, 0.0f ) + WeaponPos + WeaponMatrix[0].ToVec3() * 14 + WeaponMatrix[2].ToVec3() * 64.0f;
-			ParticleInfo.m_Direction = WeaponMatrix[2].ToVec3();
-			ParticleInfo.m_Width = 8.0f;
-			ParticleInfo.m_Height = 8.0f;
-			ParticleInfo.m_UVs[0].Set( 0.0f, 0.0f );
-			ParticleInfo.m_UVs[1].Set( 0.125f, 0.125f );
-			ParticleInfo.m_Type = BT_FaceCamera;
-			ParticleInfo.m_Color.Set( 1.0f, 1.0f, 1.0f, 1.0f );
-			g_pGame->GetParticleManager()->AddQuad( 0, ParticleInfo );
+		kbVec3 muzzleFlashBone;
+		if ( m_pWeaponComponent->GetBoneWorldPosition( kbString( "MuzzleFlash" ), muzzleFlashBone ) == true ) {
+			for ( int i = 0; i < m_MuzzleFlashAnimData.size(); i++ ) {
+				m_ActiveMuzzleFlashAnims.push_back( m_MuzzleFlashAnimData[i] );
+				kbAnimatedQuadComponent & muzzleFlashAnim = m_ActiveMuzzleFlashAnims[m_ActiveMuzzleFlashAnims.size() - 1];
+				muzzleFlashAnim.StartAnimation( muzzleFlashBone );
+			}
 		}
 
 		if ( m_pShellModel != nullptr ) {
@@ -482,7 +497,7 @@ bool EtherWeaponComponent::Fire_Internal() {
 				newShell.m_Velocity.x = ( newShell.m_Velocity .x * kbfrand() ) + m_MinShellVelocity.x;
 				newShell.m_Velocity.y = ( newShell.m_Velocity .y * kbfrand() ) + m_MinShellVelocity.y;
 				newShell.m_Velocity.z = ( newShell.m_Velocity .z * kbfrand() ) + m_MinShellVelocity.z;
-				newShell.m_Velocity = newShell.m_Velocity * pWeaponModel->GetOwner()->GetOrientation().ToMat4();
+				newShell.m_Velocity = newShell.m_Velocity * m_pWeaponComponent->GetOwner()->GetOrientation().ToMat4();
 
 				newShell.m_RotationAxis = m_MaxAxisVelocity - m_MinAxisVelocity;
 				newShell.m_RotationAxis.x = ( newShell.m_RotationAxis.z * kbfrand() ) + m_MinAxisVelocity.z;
@@ -494,8 +509,8 @@ bool EtherWeaponComponent::Fire_Internal() {
 				newShell.m_LifeTimeLeft = m_ShellLifeTime;
 
 				kbRenderObject & renderObj = newShell.m_RenderObject;
-				if ( pWeaponModel->GetBoneWorldPosition( kbString( "ShellEject" ), renderObj.m_Position ) == false ) {
-					renderObj.m_Position = pWeaponModel->GetOwner()->GetPosition();
+				if ( m_pWeaponComponent->GetBoneWorldPosition( kbString( "ShellEject" ), renderObj.m_Position ) == false ) {
+					renderObj.m_Position = m_pWeaponComponent->GetOwner()->GetPosition();
 				}
 
 				renderObj.m_Orientation.Set( 0.0f, 0.0f, 0.0f, 1.0f );
@@ -521,4 +536,88 @@ bool EtherWeaponComponent::Fire_Internal() {
 	m_bIsFiring = true;
 
 	return true;
+}
+
+/**
+ *	kbVec3TimePointComponent::Constructor
+ */
+void kbVec3TimePointComponent::Constructor() {
+	m_Time = 0.0f;
+	m_Vector = kbVec3::zero;
+}
+
+/**
+ *	kbAnimatedQuadComponent::Constructor
+ */
+void kbAnimatedQuadComponent::Constructor() {
+	m_pTexture = nullptr;
+	m_UVStart = kbVec3::zero;
+	m_UVEnd = kbVec3::one;
+	m_MinStartScale = kbVec3::one;
+	m_MaxStartScale = kbVec3::one;
+	m_MinLifeTime = 1.0f;
+	m_MaxLifeTime = 1.0f;
+	m_bRandomizeStartingRotation = true;
+
+	m_StartScale = kbVec3::one;
+	m_StartingRotation = 0.0f;
+	m_LifeTime = 1.0f;
+	m_StartTime = 0.0f;
+}
+
+/**
+ *	kbAnimatedQuadComponent::StartAnimation
+ */
+void kbAnimatedQuadComponent::StartAnimation( const kbVec3 & pPosition ) {
+	m_StartTime = g_GlobalTimer.TimeElapsedSeconds();
+	m_LifeTime = m_MaxLifeTime;
+
+	m_StartScale = kbVec3Rand( m_MinStartScale, m_MaxStartScale );
+
+	if ( m_bRandomizeStartingRotation == true ) {
+		m_StartingRotation = kbfrand() * kbPI * 2.0f;
+	}
+}
+
+/**
+ *	kbAnimatedQuadComponent::UpdateAnimation
+ */
+void kbAnimatedQuadComponent::UpdateAnimation( const kbVec3 & pPosition ) {
+	kbParticleManager::CustomParticleAtlasInfo_t ParticleInfo;
+	//kbVec3 pos2 =  kbVec3( 0.0f, -16.0f, 0.0f ) + WeaponPos + WeaponMatrix[0].ToVec3() * 14 + WeaponMatrix[2].ToVec3() * 64.0f;
+
+	kbVec3 curScale = m_StartScale;
+
+	const float normalizedElapsedTime = ( g_GlobalTimer.TimeElapsedSeconds() - m_StartTime ) / m_LifeTime;
+	for ( int i = 1; i < m_ScaleOverTime.size(); i++ ) {
+		if ( normalizedElapsedTime < m_ScaleOverTime[i].GetTime() ) {
+			const float prevTime = m_ScaleOverTime[i-1].GetTime();
+			const float nextTime = m_ScaleOverTime[i].GetTime();
+			const float lerpVal = ( normalizedElapsedTime - prevTime ) / ( nextTime - prevTime );
+			const kbVec3 scaleFactor = kbLerp( m_ScaleOverTime[i-1].GetVectorValue(), m_ScaleOverTime[i].GetVectorValue(), lerpVal );
+
+			curScale.x *= scaleFactor.x;
+			curScale.y *= scaleFactor.y;
+			curScale.z *= scaleFactor.z;
+			break;
+		}
+	}
+
+	ParticleInfo.m_Direction.Set( 1.0f, 0.0f, 0.0f );
+	ParticleInfo.m_Rotation = m_StartingRotation;
+	ParticleInfo.m_Width = curScale.x;
+	ParticleInfo.m_Height = curScale.y;
+	ParticleInfo.m_UVs[0].Set( 0.5f, 0.0f );
+	ParticleInfo.m_UVs[1].Set( 1.0f, 1.0f );
+	ParticleInfo.m_Type = BT_FaceCamera;
+	ParticleInfo.m_Color.Set( 1.0f, 1.0f, 1.0f, 1.0f );
+	ParticleInfo.m_Position = pPosition;
+	g_pGame->GetParticleManager()->AddQuad( 2, ParticleInfo );
+}
+
+/**
+ *	kbAnimatedQuadComponent::AnimationIsFinished
+ */
+bool kbAnimatedQuadComponent::AnimationIsFinished() const {
+	return g_GlobalTimer.TimeElapsedSeconds() - m_StartTime > m_LifeTime;
 }

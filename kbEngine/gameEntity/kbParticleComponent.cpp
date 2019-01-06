@@ -216,18 +216,12 @@ void kbParticleComponent::Update_Internal( const float DeltaTime ) {
 	const kbVec3 MyPosition = GetPosition();
 	while ( m_bIsSpawning && ( ( m_MaxParticleSpawnRate > 0 && TimeLeft >= NextSpawn ) || m_BurstCount > 0 ) ) {
 		kbParticle_t newParticle;
-		newParticle.m_StartVelocity.x = m_MinParticleStartVelocity.x + ( kbfrand() * ( m_MaxParticleStartVelocity.x - m_MinParticleStartVelocity.x ) );
-		newParticle.m_StartVelocity.y = m_MinParticleStartVelocity.y + ( kbfrand() * ( m_MaxParticleStartVelocity.y - m_MinParticleStartVelocity.y ) );
-		newParticle.m_StartVelocity.z = m_MinParticleStartVelocity.z + ( kbfrand() * ( m_MaxParticleStartVelocity.z - m_MinParticleStartVelocity.z ) );
-		newParticle.m_StartVelocity = newParticle.m_StartVelocity * ownerMatrix;
+		newParticle.m_StartVelocity = kbVec3Rand( m_MinParticleStartVelocity, m_MaxParticleStartVelocity ) * ownerMatrix;
 		
 		if ( m_bLockVelocity ) {
 			newParticle.m_EndVelocity = newParticle.m_StartVelocity;
 		} else {
-			newParticle.m_EndVelocity.x = m_MinParticleEndVelocity.x + ( kbfrand() * ( m_MaxParticleEndVelocity.x - m_MinParticleEndVelocity.x ) );
-			newParticle.m_EndVelocity.y = m_MinParticleEndVelocity.y + ( kbfrand() * ( m_MaxParticleEndVelocity.y - m_MinParticleEndVelocity.y ) );
-			newParticle.m_EndVelocity.z = m_MinParticleEndVelocity.z + ( kbfrand() * ( m_MaxParticleEndVelocity.z - m_MinParticleEndVelocity.z ) );
-			newParticle.m_EndVelocity = newParticle.m_StartVelocity * ownerMatrix;
+			newParticle.m_EndVelocity = kbVec3Rand( m_MinParticleEndVelocity, m_MaxParticleEndVelocity ) * ownerMatrix;
 		}
 
 		newParticle.m_Position = MyPosition + newParticle.m_StartVelocity * TimeLeft;

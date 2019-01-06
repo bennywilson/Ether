@@ -2,7 +2,7 @@
 // EtherWeapon.h
 //
 //
-// 2016-2017 kbEngine 2.0
+// 2016-2019 kbEngine 2.0
 //===================================================================================================
 #ifndef _ETHERWEAPON_H_
 #define _ETHERWEAPON_H_
@@ -50,6 +50,54 @@ private:
 	kbGameEntityPtr							m_OwnerEntity;
 };
 
+/**
+ *	kbVec3TimePointComponent
+ */
+class kbVec3TimePointComponent : public kbGameLogicComponent {
+public:
+	KB_DECLARE_COMPONENT( kbVec3TimePointComponent, kbGameLogicComponent );
+
+	const kbVec3 &							GetVectorValue() const { return m_Vector; }
+	float									GetTime() const { return m_Time; }
+
+private:
+	kbVec3									m_Vector;
+	float									m_Time;
+};
+
+
+/**
+ *	kbAnimatedQuadComponent
+ */
+class kbAnimatedQuadComponent : public kbGameLogicComponent {
+public:
+	KB_DECLARE_COMPONENT( kbAnimatedQuadComponent, kbGameLogicComponent );
+
+	void									StartAnimation( const kbVec3 & position );
+	void									UpdateAnimation( const kbVec3 & position );
+
+	bool									AnimationIsFinished() const;
+
+private:
+
+	// Editor properties
+	kbTexture *								m_pTexture;
+	kbVec3									m_UVStart;
+	kbVec3									m_UVEnd;
+	kbVec3									m_MinStartScale;
+	kbVec3									m_MaxStartScale;
+	std::vector<kbVec3TimePointComponent>	m_ScaleOverTime;
+	float									m_MinLifeTime;
+	float									m_MaxLifeTime;
+	bool									m_bRandomizeStartingRotation;
+
+	// Run time
+	kbVec3									m_StartScale;
+	float									m_StartingRotation;
+	float									m_LifeTime;
+	float									m_StartTime;
+};
+
 
 /**
  *	EtherWeaponComponent
@@ -72,6 +120,7 @@ protected:
 private:
 
 	float									m_SecondsBetweenShots;
+	std::vector<kbAnimatedQuadComponent>	m_MuzzleFlashAnimData;
 	kbGameEntityPtr							m_MuzzleFlashEntity;
 	kbGameEntityPtr							m_Projectile;
 
@@ -87,9 +136,15 @@ private:
 
 	int										m_BurstCount;
 	float									m_SecondsBetweenBursts;
+
+	// Run time
+	EtherSkelModelComponent *				m_pWeaponComponent;
 	int										m_CurrentBurstCount;
 	float									m_BurstTimer;
 	float									m_ShotTimer;
+
+	
+	std::vector<kbAnimatedQuadComponent>	m_ActiveMuzzleFlashAnims;
 
 	bool									m_bInstantHit;
 	bool									m_bIsFiring;

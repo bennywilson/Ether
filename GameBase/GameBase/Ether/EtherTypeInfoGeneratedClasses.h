@@ -80,6 +80,7 @@ GenerateClass(
 	AddField( "SecondsBetweenBursts", KBTYPEINFO_FLOAT, EtherWeaponComponent, m_SecondsBetweenBursts, false, "" )
 	AddField( "BurstCount", KBTYPEINFO_INT, EtherWeaponComponent, m_BurstCount, false, "" )
 	AddField( "MuzzleFlash", KBTYPEINFO_GAMEENTITY, EtherWeaponComponent, m_MuzzleFlashEntity, false, "" )
+	AddField( "MuzzleFlashAnimations", KBTYPEINFO_STRUCT, EtherWeaponComponent, m_MuzzleFlashAnimData, true, "kbAnimatedQuadComponent" )
 	AddField( "Projectile", KBTYPEINFO_GAMEENTITY, EtherWeaponComponent, m_Projectile, false, "" )
 	AddField( "ShellModel", KBTYPEINFO_STATICMODEL, EtherWeaponComponent, m_pShellModel, false, "" )
 	AddField( "ShellMinVelocity", KBTYPEINFO_VECTOR, EtherWeaponComponent, m_MinShellVelocity, false, "" )
@@ -88,6 +89,25 @@ GenerateClass(
 	AddField( "ShellMaxAxisVelocity", KBTYPEINFO_VECTOR, EtherWeaponComponent, m_MaxAxisVelocity, false, "" )
 	AddField( "ShellLifeTime", KBTYPEINFO_FLOAT, EtherWeaponComponent, m_ShellLifeTime, false, "" )
 	AddField( "IsInstantHit", KBTYPEINFO_BOOL, EtherWeaponComponent, m_bInstantHit, false, "" )
+)
+
+GenerateClass(
+	kbVec3TimePointComponent,
+	AddField( "Vector", KBTYPEINFO_VECTOR, kbVec3TimePointComponent, m_Vector, false, "" )
+	AddField( "Time", KBTYPEINFO_FLOAT, kbVec3TimePointComponent, m_Time, false, "" )
+)
+
+GenerateClass(
+	kbAnimatedQuadComponent,
+	AddField( "Texture", KBTYPEINFO_TEXTURE, kbAnimatedQuadComponent, m_pTexture, false, "" )
+	AddField( "UVStart", KBTYPEINFO_VECTOR, kbAnimatedQuadComponent, m_UVStart, false, "" )
+	AddField( "UVEnd", KBTYPEINFO_VECTOR, kbAnimatedQuadComponent, m_UVEnd, false, "" )
+	AddField( "MinStartScale", KBTYPEINFO_VECTOR, kbAnimatedQuadComponent, m_MinStartScale, false, "" )
+	AddField( "MaxStartScale", KBTYPEINFO_VECTOR, kbAnimatedQuadComponent, m_MaxStartScale, false, "" )
+	AddField( "ScaleOverTime", KBTYPEINFO_STRUCT, kbAnimatedQuadComponent, m_ScaleOverTime, true, "kbVec3TimePointComponent" )
+	AddField( "MinLifeTime", KBTYPEINFO_FLOAT, kbAnimatedQuadComponent, m_MinLifeTime, false, "" )
+	AddField( "MaxLifeTime", KBTYPEINFO_FLOAT, kbAnimatedQuadComponent, m_MaxLifeTime, false, "" )
+	AddField( "RandomRotation", KBTYPEINFO_BOOL, kbAnimatedQuadComponent, m_bRandomizeStartingRotation, false, "" )
 )
 
 GenerateClass(

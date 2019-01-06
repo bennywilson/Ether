@@ -450,6 +450,42 @@ kbGameEntity 292847838 1140569109 1236968083 2365837966 {
 		BurstCount = 3
 		IsInstantHit = 0
 		MuzzleFlash = 3287441000 1228561351 2632918935 4227010865
+		MuzzleFlashAnimations = 1
+			kbAnimatedQuadComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				DummyTemp = 0
+				MaxLifeTime =  0.09
+				MaxStartScale = 10.000000 10.000000 0.000000
+				MinLifeTime =  0.05
+				MinStartScale = 10.000000 10.000000 0.000000
+				RandomRotation = 1
+				ScaleOverTime = 3
+					kbVec3TimePointComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						DummyTemp = 0
+						Time =  0.000000
+						Vector = 1.000000 1.000000 1.000000
+					}
+					kbVec3TimePointComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						DummyTemp = 0
+						Time =  0.5
+						Vector = 2.000000 2.000000 2.000000
+					}
+					kbVec3TimePointComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						DummyTemp = 0
+						Time =  1.0
+						Vector = 0.000000 0.000000 0.000000
+					}
+				Texture = .\assets\fx\muzzleflashes\basicorange_muzzleflash.jpg
+				UVEnd = 1.000000 1.000000 0.000000
+				UVStart = 0.000000 0.000000 0.000000
+			}
 		Projectile = 402992291 1133905897 445195195 1933284623
 		SecondsBetweenBursts =  0.100000
 		SecondsBetweenShots =  0.040000

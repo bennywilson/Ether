@@ -51,6 +51,14 @@ std::vector<class kbTypeInfoClass*> EtherProjectileComponent::EtherProjectileCom
 EtherWeaponComponent_TypeInfo EtherWeaponComponent::typeInfo;
 std::vector<class kbTypeInfoClass*> EtherWeaponComponent::EtherWeaponComponent_TypeInfoVar;
 
+// kbVec3TimePoint
+kbVec3TimePointComponent_TypeInfo kbVec3TimePointComponent::typeInfo;
+std::vector<class kbTypeInfoClass*> kbVec3TimePointComponent::kbVec3TimePointComponent_TypeInfoVar;
+
+// kbAnimatedQuadComponent
+kbAnimatedQuadComponent_TypeInfo kbAnimatedQuadComponent::typeInfo;
+std::vector<class kbTypeInfoClass*> kbAnimatedQuadComponent::kbAnimatedQuadComponent_TypeInfoVar;
+
 // EtherEnviroMaterial
 EtherEnviroMaterial_TypeInfo EtherEnviroMaterial::typeInfo;
 std::vector<class kbTypeInfoClass*> EtherEnviroMaterial::EtherEnviroMaterial_TypeInfoVar;
