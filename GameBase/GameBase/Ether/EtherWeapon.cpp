@@ -607,8 +607,9 @@ void kbAnimatedQuadComponent::UpdateAnimation( const kbVec3 & pPosition ) {
 	ParticleInfo.m_Rotation = m_StartingRotation;
 	ParticleInfo.m_Width = curScale.x;
 	ParticleInfo.m_Height = curScale.y;
-	ParticleInfo.m_UVs[0].Set( 0.5f, 0.0f );
-	ParticleInfo.m_UVs[1].Set( 1.0f, 1.0f );
+
+	ParticleInfo.m_UVs[0].Set( m_UVStart.x, m_UVStart.y );
+	ParticleInfo.m_UVs[1].Set( m_UVEnd.x, m_UVEnd.y );
 	ParticleInfo.m_Type = BT_FaceCamera;
 	ParticleInfo.m_Color.Set( 1.0f, 1.0f, 1.0f, 1.0f );
 	ParticleInfo.m_Position = pPosition;

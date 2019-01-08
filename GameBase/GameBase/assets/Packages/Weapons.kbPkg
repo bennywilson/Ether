@@ -450,14 +450,14 @@ kbGameEntity 292847838 1140569109 1236968083 2365837966 {
 		BurstCount = 3
 		IsInstantHit = 0
 		MuzzleFlash = 3287441000 1228561351 2632918935 4227010865
-		MuzzleFlashAnimations = 1
+		MuzzleFlashAnimations = 2
 			kbAnimatedQuadComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
 				DummyTemp = 0
-				MaxLifeTime =  0.09
+				MaxLifeTime =  0.075
 				MaxStartScale = 10.000000 10.000000 0.000000
-				MinLifeTime =  0.05
+				MinLifeTime =  0.075
 				MinStartScale = 10.000000 10.000000 0.000000
 				RandomRotation = 1
 				ScaleOverTime = 3
@@ -465,8 +465,8 @@ kbGameEntity 292847838 1140569109 1236968083 2365837966 {
 						Enabled = 0
 						LifeTime =  -1.000000
 						DummyTemp = 0
-						Time =  0.000000
-						Vector = 1.000000 1.000000 1.000000
+						Time =  0.0
+						Vector = 1 1 1
 					}
 					kbVec3TimePointComponent { 
 						Enabled = 0
@@ -483,8 +483,50 @@ kbGameEntity 292847838 1140569109 1236968083 2365837966 {
 						Vector = 0.000000 0.000000 0.000000
 					}
 				Texture = .\assets\fx\muzzleflashes\basicorange_muzzleflash.jpg
-				UVEnd = 1.000000 1.000000 0.000000
+				UVEnd = 0.5000000 1.00000 0.000000
 				UVStart = 0.000000 0.000000 0.000000
+			}
+			kbAnimatedQuadComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				DummyTemp = 0
+				MaxLifeTime =  0.08
+				MaxStartScale = 9 9 9
+				MinLifeTime =  0.08
+				MinStartScale = 9 9 9
+				RandomRotation = 1
+				ScaleOverTime = 4
+					kbVec3TimePointComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						DummyTemp = 0
+						Time =  0.05
+						Vector = 0 0 0
+					}
+					kbVec3TimePointComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						DummyTemp = 0
+						Time =  0.05
+						Vector = 1 1 1
+					}
+					kbVec3TimePointComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						DummyTemp = 0
+						Time =  0.25
+						Vector = 2.000000 2.000000 2.000000
+					}
+					kbVec3TimePointComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						DummyTemp = 0
+						Time =  1.0
+						Vector = 0.000000 0.000000 0.000000
+					}
+				Texture = .\assets\fx\muzzleflashes\basicorange_muzzleflash.jpg
+				UVEnd = 1.000000 1.00000 0.000000
+				UVStart = 0.500000 0.000000 0.000000
 			}
 		Projectile = 402992291 1133905897 445195195 1933284623
 		SecondsBetweenBursts =  0.100000
