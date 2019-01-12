@@ -320,6 +320,11 @@ void EtherWeaponComponent::Update_Internal( const float DeltaTime ) {
 			m_ActiveMuzzleFlashAnims[i].UpdateAnimation( muzzleFlashBone );
 		}
 	}
+
+	if ( m_pWeaponComponent != nullptr && m_pWeaponComponent->HasFinishedAnimation() ) {
+		const static kbString IdleName( "Idle" );
+		m_pWeaponComponent->PlayAnimation( IdleName, -1.0f, true );
+	}
 }
 
 /**

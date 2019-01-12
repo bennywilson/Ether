@@ -430,7 +430,7 @@ kbGameEntity 292847838 1140569109 1236968083 2365837966 {
 				Animation = .\assets\models\items\el_rifle_fp_idle.kbanim.ms3d
 				AnimationName = "Idle"
 				IsLooping = 1
-				TimeScale =  0.250000
+				TimeScale = 0.5000
 			}
 			EtherAnimComponent { 
 				Enabled = 0
