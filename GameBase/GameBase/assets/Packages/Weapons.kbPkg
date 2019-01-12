@@ -429,8 +429,8 @@ kbGameEntity 292847838 1140569109 1236968083 2365837966 {
 				LifeTime =  -1.000000
 				Animation = .\assets\models\items\el_rifle_fp_idle.kbanim.ms3d
 				AnimationName = "Idle"
-				IsLooping = 0
-				TimeScale =  1.000000
+				IsLooping = 1
+				TimeScale =  0.250000
 			}
 			EtherAnimComponent { 
 				Enabled = 0
@@ -438,7 +438,7 @@ kbGameEntity 292847838 1140569109 1236968083 2365837966 {
 				Animation = .\assets\models\items\el_rifle_fp_shoot.kbanim.ms3d
 				AnimationName = "Shoot"
 				IsLooping = 0
-				TimeScale =  2.000000
+				TimeScale =  12.000000
 			}
 		DebugAnimIndex = -1
 		IsFirstPersonModel = 1
@@ -456,9 +456,9 @@ kbGameEntity 292847838 1140569109 1236968083 2365837966 {
 				LifeTime =  -1.000000
 				DummyTemp = 0
 				MaxLifeTime =  0.075
-				MaxStartScale = 10.000000 10.000000 0.000000
+				MaxStartScale = 15 15 0
 				MinLifeTime =  0.075
-				MinStartScale = 10.000000 10.000000 0.000000
+				MinStartScale = 15 15 0
 				RandomRotation = 1
 				ScaleOverTime = 3
 					kbVec3TimePointComponent { 
@@ -491,9 +491,9 @@ kbGameEntity 292847838 1140569109 1236968083 2365837966 {
 				LifeTime =  -1.000000
 				DummyTemp = 0
 				MaxLifeTime =  0.08
-				MaxStartScale = 9 9 9
+				MaxStartScale = 15 15 0
 				MinLifeTime =  0.08
-				MinStartScale = 9 9 9
+				MinStartScale = 15 15 0
 				RandomRotation = 1
 				ScaleOverTime = 4
 					kbVec3TimePointComponent { 
@@ -530,7 +530,7 @@ kbGameEntity 292847838 1140569109 1236968083 2365837966 {
 			}
 		Projectile = 402992291 1133905897 445195195 1933284623
 		SecondsBetweenBursts =  0.100000
-		SecondsBetweenShots =  0.040000
+		SecondsBetweenShots =  0.090000
 		ShellLifeTime =  0.777000
 		ShellMaxAxisVelocity = 30.000000 0.000000 20.000000
 		ShellMaxVelocity = 30.000000 26.000000 8.000000
