@@ -2,7 +2,7 @@
 // EtherWeapon.cpp
 //
 //
-// 2016-2018 kbEngine 2.0
+// 2016-2019 kbEngine 2.0
 //===================================================================================================
 #include <math.h>
 #include "EtherGame.h"
@@ -14,6 +14,7 @@
 
 kbVec3 g_ProjectileStuckOffset = kbVec3( 0.0f, 5.0f, 0.0f );
 static int g_ShellPoolSize = 15;
+const static kbString g_IdleAnimation( "Idle" );
 
 /**
  *	EtherProjectileComponent::Constructor
@@ -273,22 +274,6 @@ void EtherWeaponComponent::Constructor() {
 void EtherWeaponComponent::Update_Internal( const float DeltaTime ) {
 	Super::Update_Internal( DeltaTime );
 
-	if ( m_pWeaponComponent == nullptr ) {
-
-		for ( int i = 0; i < GetOwner()->NumComponents(); i++ ) {
-			kbComponent *const pCurComponent = GetOwner()->GetComponent(i);
-			if ( pCurComponent->IsA( EtherSkelModelComponent::GetType() ) == false ) {
-				continue;
-			}
-
-			EtherSkelModelComponent *const pSkelModel = static_cast<EtherSkelModelComponent*>( pCurComponent );
-			if ( pSkelModel->IsFirstPersonModel()  ) {
-				m_pWeaponComponent = pSkelModel;
-				break;
-			}
-		}
-	}
-
 	kbWarningCheck( m_pWeaponComponent != nullptr, "%s has no weapon component", GetOwner()->GetName().c_str() );
 
 	if ( m_bIsFiring ) {
@@ -320,11 +305,25 @@ void EtherWeaponComponent::Update_Internal( const float DeltaTime ) {
 			m_ActiveMuzzleFlashAnims[i].UpdateAnimation( muzzleFlashBone );
 		}
 	}
+}
 
-	if ( m_pWeaponComponent != nullptr && m_pWeaponComponent->HasFinishedAnimation() ) {
-		const static kbString IdleName( "Idle" );
-		m_pWeaponComponent->PlayAnimation( IdleName, -1.0f, true );
+void EtherWeaponComponent::SetEnable_Internal( const bool bEnable ) {
+	Super::SetEnable_Internal( bEnable );
+
+	for ( int i = 0; i < GetOwner()->NumComponents(); i++ ) {
+		kbComponent *const pCurComponent = GetOwner()->GetComponent(i);
+		if ( pCurComponent->IsA( EtherSkelModelComponent::GetType() ) == false ) {
+			continue;
+		}
+
+		EtherSkelModelComponent *const pSkelModel = static_cast<EtherSkelModelComponent*>( pCurComponent );
+		if ( pSkelModel->IsFirstPersonModel()  ) {
+			m_pWeaponComponent = pSkelModel;
+			break;
+		}
 	}
+
+	m_pWeaponComponent->PlayAnimation( g_IdleAnimation, -1.0f, g_IdleAnimation );
 }
 
 /**
@@ -402,7 +401,7 @@ bool EtherWeaponComponent::Fire_Internal() {
 	const static kbString ShootName( "Shoot" );
 
 	if ( m_pWeaponComponent != nullptr ) {
-		m_pWeaponComponent->PlayAnimation( ShootName, -1.0f, true );
+		m_pWeaponComponent->PlayAnimation( ShootName, 0.1f, g_IdleAnimation, 0.75f );
 	}
 
 	// Muzzle Flash

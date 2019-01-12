@@ -2,7 +2,7 @@
 // kbString.h
 //
 //
-// 2016-2017 kbEngine 2.0
+// 2016-2019 kbEngine 2.0
 //===================================================================================================
 #ifndef _KBSTRING_H_
 #define _KBSTRING_H_
@@ -12,29 +12,33 @@
  */
 #define INVALID_KBSTRING -1
 
-class kbString
-{
+class kbString {
+
+//-------------------------------------------------------------------------------------------------------------------------------------------------------------
 public:
+												kbString() { m_StringTableIndex = INVALID_KBSTRING; }
+												kbString( const std::string & InString );
 
-	kbString() { m_StringTableIndex = INVALID_KBSTRING; }
-	kbString( const std::string & InString );
+	bool										operator==( const kbString & Op2 ) const;
+	bool										operator==( const char * string ) const;
+
+	bool										operator!=( const kbString & Op2 ) const;
+
+	kbString &									operator=( const kbString & Op2 );
+	kbString &									operator=( const std::string & InString );
+
+	bool										operator <( const kbString & op2 ) const { return stl_str() < op2.stl_str(); }
+
+	bool										IsEmptyString() const { return c_str()[0] == '\0'; }
+
+	const std::string &							stl_str() const;
+	const char *								c_str() const;
 	
-	bool operator==( const kbString & Op2 ) const;
-	bool operator==( const char * string ) const;
-
-	kbString & operator=( const kbString & Op2 );
-	kbString & operator=( const std::string & InString );
-
-	bool operator <( const kbString & op2 ) const { return stl_str() < op2.stl_str(); }
-
-	const std::string & stl_str() const;
-	const char * c_str() const;
-
 	static void ShutDown();
 
 private:
 
-	int m_StringTableIndex;
+	int											m_StringTableIndex;
 };
 
 #endif

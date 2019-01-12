@@ -76,7 +76,7 @@ void EtherPlayerComponent::Action_ThrowGrenade( const bool bActivatedThisFrame )
 	}
 
 	//m_pFPHands->Enable( true );
-	m_pFPHands->PlayAnimation( kbString( "ThrowGrenade" ), -1, true );
+	m_pFPHands->PlayAnimation( kbString( "ThrowGrenade" ), -1, kbString( "Idle" ) );
 	m_GrenadeCoolddownSec = g_GrenadeCoolDownSec;
 }
 
@@ -361,14 +361,14 @@ void EtherPlayerComponent::HandleMovement( const kbInput_t & Input, const float 
 		if ( pSkelModelComponent != nullptr ) {
 			const static kbString RunAnimName( "Run" );
 			if ( pSkelModelComponent->IsPlaying( RunAnimName ) == false ) {
-				pSkelModelComponent->PlayAnimation( RunAnimName, -1.0f, false );
+				pSkelModelComponent->PlayAnimation( RunAnimName, -1.0f );
 			}
 		}
 	} else {
 		if ( pSkelModelComponent != nullptr ) {
 			const static kbString AimAnimName( "Aim" );
 			if ( pSkelModelComponent->IsPlaying( AimAnimName ) == false ) {
-				pSkelModelComponent->PlayAnimation( AimAnimName, -1.0f, false );
+				pSkelModelComponent->PlayAnimation( AimAnimName, -1.0f );
 			}
 		}
 	}

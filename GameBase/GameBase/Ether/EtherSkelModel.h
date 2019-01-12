@@ -27,7 +27,8 @@ private:
 	bool									m_bIsLooping;
 
 	float									m_CurrentAnimationTime;
-	bool									m_bReturnToIdleWhenDone;
+	kbString								m_DesiredNextAnimation;
+	float									m_DesiredNextAnimBlendLength;
 };
 
 /**
@@ -37,7 +38,7 @@ class EtherSkelModelComponent : public kbSkeletalModelComponent {
 public:
 	KB_DECLARE_COMPONENT( EtherSkelModelComponent, kbSkeletalModelComponent );
 
-	void									PlayAnimation( const kbString & AnimationName, const float BlendLength, const bool ReturnToIdleWhenDone );
+	void									PlayAnimation( const kbString & AnimationName, const float BlendLength, const kbString desiredNextAnimation = kbString( "" ), const float desiredNextAnimBlendLength = 0.0f );
 	bool									IsPlaying( const kbString & AnimationName ) const;
 
 	void									SetModel( kbModel *const pModel, bool bIsFirstPersonModel );

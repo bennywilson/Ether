@@ -2,7 +2,7 @@
 // EtherSkelModel.cpp
 //
 //
-// 2016-2018 kbEngine 2.0
+// 2016-2019 kbEngine 2.0
 //===================================================================================================
 #include "EtherGame.h"
 #include "EtherSkelModel.h"
@@ -21,7 +21,6 @@ void EtherAnimComponent::Constructor() {
 	m_TimeScale = 1.0f;
 	m_bIsLooping = false;
 	m_CurrentAnimationTime = -1.0f;
-	m_bReturnToIdleWhenDone = false;
 }
 
 /**
@@ -37,10 +36,10 @@ void EtherSkelModelComponent::Constructor() {
 /**
  *	EtherSkelModelComponent::PlayAnimation
  */
-void EtherSkelModelComponent::PlayAnimation( const kbString & AnimationName, const float BlendLength, const bool bReturnToIdleWhenDone ) {
+void EtherSkelModelComponent::PlayAnimation( const kbString & AnimationName, const float BlendLength, const kbString desiredNextAnimation, const float desiredNextAnimationBlendLength ) {
 
 #if DEBUG_ANIMS
-	kbLog( "%s Playing Animation", GetOwner()->GetName().c_str() );
+	kbLog( "Attempting to play Animation %s ===================================================================", AnimationName.c_str() );
 #endif
 
 	if ( IsPlaying( AnimationName ) ) {
@@ -51,14 +50,28 @@ void EtherSkelModelComponent::PlayAnimation( const kbString & AnimationName, con
 	for ( int i = 0; i < m_Animations.size(); i++ ) {
 		const std::string & CurName = m_Animations[i].m_AnimationName.stl_str();
 		if ( m_Animations[i].m_AnimationName == AnimationName ) {
+			#if DEBUG_ANIMS
+				kbLog( "	Found desired animation" );
+			#endif
 			if ( BlendLength <= 0.0f || m_CurrentAnimation == -1 ) {
+
+				#if DEBUG_ANIMS
+						kbLog( "	Starting this animation immediately.  Blend length is %f, currentanimation is %d", BlendLength, m_CurrentAnimation );
+				#endif
 
 				// Stop previous animation
 				if ( m_CurrentAnimation != -1 && m_CurrentAnimation != i ) {
+					#if DEBUG_ANIMS
+						kbLog( "	Stopping Animation %s", m_Animations[m_CurrentAnimation].GetAnimationName().c_str() );
+					#endif
 					m_Animations[m_CurrentAnimation].m_CurrentAnimationTime = -1;
 				}
 
 				if ( m_NextAnimation != -1 && m_NextAnimation != i ) {
+
+					#if DEBUG_ANIMS
+						kbLog( "	Canceling next animation %s", m_Animations[m_NextAnimation].GetAnimationName().c_str() );
+					#endif
 					m_Animations[m_NextAnimation].m_CurrentAnimationTime = -1;
 				}
 				m_NextAnimation = -1;
@@ -69,15 +82,24 @@ void EtherSkelModelComponent::PlayAnimation( const kbString & AnimationName, con
 				}
 				m_CurrentAnimation = i;
 
-				m_Animations[m_CurrentAnimation].m_bReturnToIdleWhenDone = bReturnToIdleWhenDone;
-
+				#if DEBUG_ANIMS
+					kbLog( "	Anim all set up.  Next anim = %s.  Desired blend = %f", desiredNextAnimation.c_str() );
+				#endif
+				m_Animations[m_CurrentAnimation].m_DesiredNextAnimation = desiredNextAnimation;
+				m_Animations[m_CurrentAnimation].m_DesiredNextAnimBlendLength = desiredNextAnimationBlendLength;
 			} else {
 				m_BlendStartTime = g_GlobalTimer.TimeElapsedSeconds();
 				m_BlendLength = BlendLength;
 				m_NextAnimation = i;
 
-				m_Animations[m_NextAnimation].m_bReturnToIdleWhenDone = bReturnToIdleWhenDone;
-				m_Animations[m_NextAnimation].m_CurrentAnimationTime = 0.042f;		// hack to get it to first frame
+				m_Animations[m_NextAnimation].m_DesiredNextAnimation = desiredNextAnimation;
+				m_Animations[m_NextAnimation].m_DesiredNextAnimBlendLength = desiredNextAnimationBlendLength;
+				m_Animations[m_NextAnimation].m_CurrentAnimationTime = 0.0f;
+
+
+				#if DEBUG_ANIMS
+					kbLog( "	Blending this animation in %f %d.  Desired next = %s, desired len = %f ", m_BlendLength, m_NextAnimation, desiredNextAnimation.c_str(), desiredNextAnimationBlendLength );
+				#endif
 			}
 
 			break;
@@ -154,57 +176,71 @@ void EtherSkelModelComponent::Update_Internal( const float DeltaTime ) {
 		}
 
 		if ( m_CurrentAnimation != -1 ) {
-
+#if DEBUG_ANIMS
+			kbLog( "Updating current anim %s", m_Animations[m_CurrentAnimation].GetAnimationName().c_str() );
+#endif
 			// Check if the blend is finished
 			if ( m_NextAnimation != -1 ) {
 				const float blendTime = ( g_GlobalTimer.TimeElapsedSeconds() - m_BlendStartTime ) / m_BlendLength;
-				if ( blendTime > 1.0f ) {
+
+#if DEBUG_ANIMS
+				kbLog( "	Checking if blend is finished.  Blend time is %f", blendTime );
+#endif
+				if ( blendTime >= 1.0f ) {
 					m_CurrentAnimation = m_NextAnimation;
 					m_NextAnimation = -1;
 
 #if DEBUG_ANIMS
-					kbLog( "%s Transition to Next Animation", GetOwner()->GetName().c_str() );
+					kbLog( "	%s Transition to Next Animation", GetOwner()->GetName().c_str() );
 #endif
 				}
 			}
 
 			EtherAnimComponent & CurAnim = m_Animations[m_CurrentAnimation];
 
+			bool bAnimIsFinished = false;
+
+			if ( CurAnim.m_bIsLooping == false ) {
+				if ( CurAnim.m_CurrentAnimationTime >= CurAnim.m_pAnimation->GetLengthInSeconds() ) {
+
+#if DEBUG_ANIMS
+				kbLog( "	Cur anim is finished!" );
+#endif
+					CurAnim.m_CurrentAnimationTime = CurAnim.m_pAnimation->GetLengthInSeconds();
+					bAnimIsFinished = true;
+				}
+			}
+
 			if ( m_NextAnimation == -1 ) {
 				CurAnim.m_CurrentAnimationTime += DeltaTime * CurAnim.m_TimeScale;
-				bool bAnimIsFinished = false;
 
-				if ( CurAnim.m_bIsLooping == false ) {
-					if ( CurAnim.m_CurrentAnimationTime >= CurAnim.m_pAnimation->GetLengthInSeconds() ) {
-						CurAnim.m_CurrentAnimationTime = CurAnim.m_pAnimation->GetLengthInSeconds();
-						bAnimIsFinished = true;
-					}
-				}
 
 				if ( m_BindToLocalSpaceMatrices.size() == 0 ) {
 					m_BindToLocalSpaceMatrices.resize( m_pModel->NumBones() );
 				}
 
 #if DEBUG_ANIMS
-				kbLog( "%s anim time = %f", GetOwner()->GetName().c_str(), CurAnim.m_CurrentAnimationTime );
+				kbLog( "	Not blending anim %s. anim time = %f", CurAnim.m_AnimationName.c_str(), CurAnim.m_CurrentAnimationTime );
 #endif
 
 				m_pModel->Animate( CurAnim.m_CurrentAnimationTime, CurAnim.m_pAnimation, CurAnim.m_bIsLooping, m_BindToLocalSpaceMatrices );
 
-				if ( bAnimIsFinished && CurAnim.m_bReturnToIdleWhenDone ) {
-					CurAnim.m_CurrentAnimationTime = -1.0f;
-					m_CurrentAnimation = -1;
+				if ( bAnimIsFinished && CurAnim.m_DesiredNextAnimation.IsEmptyString() == false ) {
 
 #if DEBUG_ANIMS
-				kbLog( "%s Cur Animation Done, going back to idle", GetOwner()->GetName().c_str() );
+					kbLog( "	Cur Animation Done, going to %s - %f", CurAnim.m_DesiredNextAnimation.c_str(), CurAnim.m_DesiredNextAnimBlendLength );
 #endif
+
+					PlayAnimation( CurAnim.m_DesiredNextAnimation, CurAnim.m_DesiredNextAnimBlendLength );
 				}
 			} else {
 				if ( m_BindToLocalSpaceMatrices.size() == 0 ) {
 					m_BindToLocalSpaceMatrices.resize( m_pModel->NumBones() );
 				}
 
-				CurAnim.m_CurrentAnimationTime += DeltaTime * CurAnim.m_TimeScale;
+				if ( bAnimIsFinished == false ) {
+					CurAnim.m_CurrentAnimationTime += DeltaTime * CurAnim.m_TimeScale;
+				}
 
 				EtherAnimComponent & NextAnim = m_Animations[m_NextAnimation];
 
@@ -212,14 +248,14 @@ void EtherSkelModelComponent::Update_Internal( const float DeltaTime ) {
 					// Sync the anims if they're both looping
 					NextAnim.m_CurrentAnimationTime = CurAnim.m_CurrentAnimationTime;
 				} else {
-					NextAnim.m_CurrentAnimationTime += DeltaTime * CurAnim.m_TimeScale;
+					NextAnim.m_CurrentAnimationTime += DeltaTime * NextAnim.m_TimeScale;
 				}
 
 				const float blendTime = kbClamp( ( g_GlobalTimer.TimeElapsedSeconds() - m_BlendStartTime ) / m_BlendLength, 0.0f, 1.0f );
 				m_pModel->BlendAnimations( CurAnim.m_pAnimation, CurAnim.m_CurrentAnimationTime, CurAnim.m_bIsLooping, NextAnim.m_pAnimation, NextAnim.m_CurrentAnimationTime, NextAnim.m_bIsLooping, blendTime, m_BindToLocalSpaceMatrices ); 
 
 #if DEBUG_ANIMS
-				kbLog( "%s Blend time = %f.  %f", GetOwner()->GetName().c_str(), blendTime, NextAnim.m_CurrentAnimationTime );
+				kbLog( "	Blending anims %f.  %s cur time = %f. %s cur time is %f", blendTime, CurAnim.GetAnimationName().c_str(), CurAnim.m_CurrentAnimationTime, NextAnim.GetAnimationName().c_str(), NextAnim.m_CurrentAnimationTime );
 #endif
 			}
 		}

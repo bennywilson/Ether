@@ -111,6 +111,7 @@ public:
 
 protected:
 
+	virtual void							SetEnable_Internal( const bool bEnable ) override;
 	virtual void							Update_Internal( const float DeltaTime ) override;
 
 	void									UpdateShells( const float DeltaTime );

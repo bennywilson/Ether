@@ -2,7 +2,7 @@
 // kbDebugComponents.cpp
 //
 //
-// 2018 kbEngine 2.0
+// 2018-2019 kbEngine 2.0
 //===================================================================================================
 #include "kbCore.h"
 #include "kbVector.h"
@@ -25,7 +25,7 @@ void kbDebugSphereCollision::Constructor() {
 }
 
 /**
- *	kbDebugSphereCollision::SetEnabled_Internal
+ *	kbDebugSphereCollision::SetEnable_Internal
  */
 void kbDebugSphereCollision::SetEnable_Internal( const bool bEnable ) {
 	Super::SetEnable_Internal( bEnable );

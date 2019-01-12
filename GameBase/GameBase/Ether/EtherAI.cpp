@@ -59,27 +59,27 @@ void EtherAIComponent::StartDeath( const kbDamageComponent *const damageComponen
 
 	const float deathChance = kbfrand();
 	if ( deathChance < 0.2f ) {
-		pSkelModelComponent->PlayAnimation( kbString( "Death_Back_1" ), 0.05f, false );
+		pSkelModelComponent->PlayAnimation( kbString( "Death_Back_1" ), 0.05f );
 
 		const float velModifider = ( kbfrand() * 60.0f ) + 120.0f;
 		m_DeathVelocity = -GetOwner()->GetOrientation().ToMat4()[2].ToVec3() * velModifider;
 	} else if ( deathChance < 0.4f ) {
-		pSkelModelComponent->PlayAnimation( kbString( "Death_Back_2" ), 0.05f, false );
+		pSkelModelComponent->PlayAnimation( kbString( "Death_Back_2" ), 0.05f );
 
 		const float velModifider = ( kbfrand() * 60.0f ) + 140.0f;
 		m_DeathVelocity = -GetOwner()->GetOrientation().ToMat4()[2].ToVec3() * velModifider;
 	} else if ( deathChance < 0.6f ) {
-		pSkelModelComponent->PlayAnimation( kbString( "Death_Spin" ), 0.05f, false );
+		pSkelModelComponent->PlayAnimation( kbString( "Death_Spin" ), 0.05f );
 
 		const float velModifider = ( kbfrand() * 60.0f ) + 140.0f;
 		m_DeathVelocity = -GetOwner()->GetOrientation().ToMat4()[2].ToVec3() * velModifider;
 	} else if ( deathChance < 0.8f ) {
-		pSkelModelComponent->PlayAnimation( kbString( "Death_KneelForward" ), 0.05f, false );
+		pSkelModelComponent->PlayAnimation( kbString( "Death_KneelForward" ), 0.05f );
 
 		const float velModifider = ( kbfrand() * 60.0f ) + 140.0f;
 		m_DeathVelocity = kbVec3::zero;//-GetOwner()->GetOrientation().ToMat4()[2].ToVec3() * velModifider;
 	} else {
-		pSkelModelComponent->PlayAnimation( kbString( "Death_Flip" ), 0.05f, false );
+		pSkelModelComponent->PlayAnimation( kbString( "Death_Flip" ), 0.05f );
 
 		const float velModifider = ( kbfrand() * 60.0f ) + 120.0f;
 		m_DeathVelocity = -GetOwner()->GetOrientation().ToMat4()[2].ToVec3() * velModifider;
@@ -463,13 +463,13 @@ void EtherEnemySoldierAIComponent::UpdateMovementAndAnimation( const float Delta
 	kbVec3 vecToTargetLocation = ( m_TargetLocation - GetOwner()->GetPosition() ).ToVecXZ();
 	const float distToTargetLocSqr = vecToTargetLocation.LengthSqr();
 	if ( distToTargetLocSqr < 3.0f ) {
-		pSkelModel->PlayAnimation( kbString( "Aim" ), 0.0f, false );
+		pSkelModel->PlayAnimation( kbString( "Aim" ), 0.0f );
 	} else {
 		const kbMat4 orientationMatrix = GetOwner()->GetOrientation().ToMat4();
 		const kbVec3 forwardVec = orientationMatrix[2].ToVec3().ToVecXZ();
 
 		if ( vecToTargetLocation.Compare( kbVec3::zero ) ) {
-			pSkelModel->PlayAnimation( kbString( "Aim" ), 0.3f, false );
+			pSkelModel->PlayAnimation( kbString( "Aim" ), 0.3f );
 		} else {
 			vecToTargetLocation.Normalize();
 			float runSpeedScale = 0.25f;
@@ -478,17 +478,17 @@ void EtherEnemySoldierAIComponent::UpdateMovementAndAnimation( const float Delta
 			static float BlendBetweenAnimTime = 0.5f;
 			if ( vecBetween < 0.0f ) {
 				// Backwards
-				pSkelModel->PlayAnimation( kbString( "BackPedal" ), BlendBetweenAnimTime, false );
+				pSkelModel->PlayAnimation( kbString( "BackPedal" ), BlendBetweenAnimTime );
 			} else {
 				if ( vecBetween >= 0.785f ) {
-					pSkelModel->PlayAnimation( kbString( "Run" ), BlendBetweenAnimTime, false );
+					pSkelModel->PlayAnimation( kbString( "Run" ), BlendBetweenAnimTime );
 				} else {
 					const kbVec3 rightVec = orientationMatrix[0].ToVec3().ToVecXZ();
 					const float rightDotToTargetVec = rightVec.Dot( vecToTargetLocation );
 					if ( rightDotToTargetVec < 0.0f ) {
-						pSkelModel->PlayAnimation( kbString( "StrafeLeft" ), BlendBetweenAnimTime, false );
+						pSkelModel->PlayAnimation( kbString( "StrafeLeft" ), BlendBetweenAnimTime );
 					} else {
-						pSkelModel->PlayAnimation( kbString( "StrafeRight" ), BlendBetweenAnimTime, false );
+						pSkelModel->PlayAnimation( kbString( "StrafeRight" ), BlendBetweenAnimTime );
 					}
 				}
 			}
