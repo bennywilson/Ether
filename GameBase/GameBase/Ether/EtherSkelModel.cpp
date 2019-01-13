@@ -41,11 +41,11 @@ void EtherSkelModelComponent::PlayAnimation( const kbString & AnimationName, con
 #if DEBUG_ANIMS
 	kbLog( "Attempting to play Animation %s ===================================================================", AnimationName.c_str() );
 #endif
-
+/*
 	if ( IsPlaying( AnimationName ) ) {
 		return;
 	}
-
+*/
 	const std::string & animName = AnimationName.stl_str();
 	for ( int i = 0; i < m_Animations.size(); i++ ) {
 		const std::string & CurName = m_Animations[i].m_AnimationName.stl_str();

@@ -284,7 +284,6 @@ void EtherWeaponComponent::Update_Internal( const float DeltaTime ) {
 			m_ShotTimer += DeltaTime;
 			if ( m_ShotTimer >= m_SecondsBetweenShots ) {
 				m_ShotTimer = 0.0f;
-				m_CurrentBurstCount++;
 				Fire_Internal();
 			}
 		}
@@ -310,20 +309,22 @@ void EtherWeaponComponent::Update_Internal( const float DeltaTime ) {
 void EtherWeaponComponent::SetEnable_Internal( const bool bEnable ) {
 	Super::SetEnable_Internal( bEnable );
 
-	for ( int i = 0; i < GetOwner()->NumComponents(); i++ ) {
-		kbComponent *const pCurComponent = GetOwner()->GetComponent(i);
-		if ( pCurComponent->IsA( EtherSkelModelComponent::GetType() ) == false ) {
-			continue;
+	if ( bEnable ) {
+		for ( int i = 0; i < GetOwner()->NumComponents(); i++ ) {
+			kbComponent *const pCurComponent = GetOwner()->GetComponent(i);
+			if ( pCurComponent->IsA( EtherSkelModelComponent::GetType() ) == false ) {
+				continue;
+			}
+
+			EtherSkelModelComponent *const pSkelModel = static_cast<EtherSkelModelComponent*>( pCurComponent );
+			if ( pSkelModel->IsFirstPersonModel()  ) {
+				m_pWeaponComponent = pSkelModel;
+				break;
+			}
 		}
 
-		EtherSkelModelComponent *const pSkelModel = static_cast<EtherSkelModelComponent*>( pCurComponent );
-		if ( pSkelModel->IsFirstPersonModel()  ) {
-			m_pWeaponComponent = pSkelModel;
-			break;
-		}
+		m_pWeaponComponent->PlayAnimation( g_IdleAnimation, -1.0f, g_IdleAnimation );
 	}
-
-	m_pWeaponComponent->PlayAnimation( g_IdleAnimation, -1.0f, g_IdleAnimation );
 }
 
 /**
@@ -387,7 +388,7 @@ bool EtherWeaponComponent::Fire( const bool bActivatedThisFrame ) {
 		return false;
 	}
 
-	m_CurrentBurstCount = 1;
+	m_CurrentBurstCount = 0;
 	m_ShotTimer = 0.0f;
 
 	return Fire_Internal();
@@ -400,10 +401,11 @@ bool EtherWeaponComponent::Fire_Internal() {
 
 	const static kbString ShootName( "Shoot" );
 
-	if ( m_pWeaponComponent != nullptr ) {
+	if ( m_pWeaponComponent != nullptr && m_CurrentBurstCount == 0 ) {
 		m_pWeaponComponent->PlayAnimation( ShootName, 0.1f, g_IdleAnimation, 0.75f );
 	}
 
+	m_CurrentBurstCount++;
 	// Muzzle Flash
 /*	const kbGameEntity *const pMuzzleFlashEntity = m_MuzzleFlashEntity.GetEntity();
 	if ( pMuzzleFlashEntity != nullptr ) {

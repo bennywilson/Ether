@@ -529,7 +529,7 @@ kbGameEntity 292847838 1140569109 1236968083 2365837966 {
 				UVStart = 0.500000 0.000000 0.000000
 			}
 		Projectile = 402992291 1133905897 445195195 1933284623
-		SecondsBetweenBursts =  0.100000
+		SecondsBetweenBursts =  0.2500000
 		SecondsBetweenShots =  0.090000
 		ShellLifeTime =  0.777000
 		ShellMaxAxisVelocity = 30.000000 0.000000 20.000000
