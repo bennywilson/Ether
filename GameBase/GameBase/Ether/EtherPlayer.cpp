@@ -338,11 +338,15 @@ void EtherPlayerComponent::HandleMovement( const kbInput_t & Input, const float 
 		movementVec += forwardVec;
 
 		if ( pWeaponComponent != nullptr ) {
-			pWeaponComponent->PlayAnimation( kbString( "WalkForward" ), 0.25f );
+			pWeaponComponent->PlayAnimation( kbString( "WalkForward" ), 0.15f );
 		}
 
 	} else if ( Input.IsKeyPressedOrDown( 'S' ) || Input.IsKeyPressedOrDown( 's' ) ) {
 		movementVec -= forwardVec;
+
+		if ( pWeaponComponent != nullptr ) {
+			pWeaponComponent->PlayAnimation( kbString( "WalkForward" ), 0.15f );
+		}
 	}
 
 	if ( Input.IsKeyPressedOrDown( 'A' ) || Input.IsKeyPressedOrDown( 'a' ) ) {
@@ -384,7 +388,7 @@ void EtherPlayerComponent::HandleMovement( const kbInput_t & Input, const float 
 		}
 
 		if ( pWeaponComponent != nullptr ) {
-			pWeaponComponent->PlayAnimation( kbString( "Idle" ), 1.5f );
+			pWeaponComponent->PlayAnimation( kbString( "Idle" ), 0.35f );
 		}
 	}
 

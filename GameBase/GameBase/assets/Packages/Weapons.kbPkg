@@ -446,7 +446,7 @@ kbGameEntity 292847838 1140569109 1236968083 2365837966 {
 				Animation = .\assets\models\items\el_rifle_fp_walkforward.kbanim.ms3d
 				AnimationName = "WalkForward"
 				IsLooping = 1
-				TimeScale =  3
+				TimeScale =  5
 			}
 		DebugAnimIndex = -1
 		IsFirstPersonModel = 1

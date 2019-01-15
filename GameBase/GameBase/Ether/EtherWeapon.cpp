@@ -402,7 +402,7 @@ void EtherWeaponComponent::PlayAnimation( const kbString & animationName, const 
 		return;
 	}
 
-	m_pWeaponModel->PlayAnimation( animationName, 0.5f, false, kbString(""), 0.0f );
+	m_pWeaponModel->PlayAnimation( animationName, transitionLenSec, false, kbString(""), 0.0f );
 }
 
 /**

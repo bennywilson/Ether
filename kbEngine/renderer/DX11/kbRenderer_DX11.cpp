@@ -506,6 +506,7 @@ void kbRenderer_DX11::Init_Internal( HWND hwnd, const int frameWidth, const int 
 	RT_GetRenderTexture( shadowBufferSize, shadowBufferSize, KBTEXTURE_R32, false );
 	RT_GetRenderTexture( shadowBufferSize, shadowBufferSize, KBTEXTURE_D24S8, false );
 
+	RT_GetRenderTexture( deferredRTWidth, deferredRTHeight, KBTEXTURE_R16G16B16A16, false );
 	RT_GetRenderTexture( deferredRTWidth / 2, deferredRTHeight / 2, KBTEXTURE_R16G16B16A16, false );
 	RT_GetRenderTexture( deferredRTWidth / 2, deferredRTHeight / 2, KBTEXTURE_R16G16B16A16, false );
 	RT_GetRenderTexture( deferredRTHeight / 2, deferredRTHeight / 2, KBTEXTURE_R16G16B16A16, false );
@@ -1960,8 +1961,8 @@ void kbRenderer_DX11::RenderBloom() {
 	D3D11_VIEWPORT viewport;
 	viewport.TopLeftX = 0.0f;
 	viewport.TopLeftY = 0.0f;
-	viewport.Width = ( float )GetRenderTarget_DX11(DOWN_RES_BUFFER)->GetWidth();
-	viewport.Height = ( float )GetRenderTarget_DX11(DOWN_RES_BUFFER)->GetHeight();
+	viewport.Width = ( float )GetRenderTarget_DX11(RGBA_BUFFER)->GetWidth();
+	viewport.Height = ( float )GetRenderTarget_DX11(RGBA_BUFFER)->GetHeight();
 	viewport.MinDepth = 0;
 	viewport.MaxDepth = 1.0f;
 	m_pDeviceContext->RSSetViewports( 1, &viewport );
@@ -1972,7 +1973,7 @@ void kbRenderer_DX11::RenderBloom() {
 	// Gather
 	///////////////////////////////
 	{
-		m_pDeviceContext->OMSetRenderTargets( 1, &GetRenderTarget_DX11(DOWN_RES_BUFFER)->m_pRenderTargetView, nullptr );
+		m_pDeviceContext->OMSetRenderTargets( 1, &GetRenderTarget_DX11(RGBA_BUFFER)->m_pRenderTargetView, nullptr );
 		const unsigned int stride = sizeof( vertexLayout );
 		const unsigned int offset = 0;
 
@@ -2013,6 +2014,15 @@ void kbRenderer_DX11::RenderBloom() {
 		m_pDeviceContext->Draw( 6, 0 );
 	}
 
+	viewport.TopLeftX = 0.0f;
+	viewport.TopLeftY = 0.0f;
+	viewport.Width = ( float )GetRenderTarget_DX11(DOWN_RES_BUFFER)->GetWidth();
+	viewport.Height = ( float )GetRenderTarget_DX11(DOWN_RES_BUFFER)->GetHeight();
+	viewport.MinDepth = 0;
+	viewport.MaxDepth = 1.0f;
+	m_pDeviceContext->RSSetViewports( 1, &viewport );
+
+
 	///////////////////////////////
 	// Horizontal blur
 	///////////////////////////////
@@ -2025,7 +2035,7 @@ void kbRenderer_DX11::RenderBloom() {
 		m_pDeviceContext->IASetPrimitiveTopology( D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST );
 		m_pDeviceContext->RSSetState( m_pDefaultRasterizerState );
 
-		m_pDeviceContext->PSSetShaderResources( 0, 1, &GetRenderTarget_DX11(DOWN_RES_BUFFER)->m_pShaderResourceView );
+		m_pDeviceContext->PSSetShaderResources( 0, 1, &GetRenderTarget_DX11(RGBA_BUFFER)->m_pShaderResourceView );
 		ID3D11SamplerState * samplerState[] = { m_pNormalMapSamplerState };
 
 		m_pDeviceContext->PSSetSamplers( 0, 1, samplerState );
