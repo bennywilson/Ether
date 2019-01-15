@@ -423,7 +423,7 @@ kbGameEntity 292847838 1140569109 1236968083 2365837966 {
 		Model = .\assets\models\items\el_rifle_fp.ms3d
 		ShaderOverride = 0
 			
-		Animations = 2
+		Animations = 3
 			EtherAnimComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
@@ -439,6 +439,14 @@ kbGameEntity 292847838 1140569109 1236968083 2365837966 {
 				AnimationName = "Shoot"
 				IsLooping = 0
 				TimeScale =  12.000000
+			}
+			EtherAnimComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Animation = .\assets\models\items\el_rifle_fp_walkforward.kbanim.ms3d
+				AnimationName = "WalkForward"
+				IsLooping = 1
+				TimeScale =  3
 			}
 		DebugAnimIndex = -1
 		IsFirstPersonModel = 1

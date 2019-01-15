@@ -259,7 +259,7 @@ void EtherWeaponComponent::Constructor() {
 	m_BurstCount = 1;
 	m_SecondsBetweenBursts = 0.5f;
 
-	m_pWeaponComponent = nullptr;
+	m_pWeaponModel = nullptr;
 	m_CurrentBurstCount = 0;
 	m_BurstTimer = 0.0f;
 	m_ShotTimer = 0.0f;
@@ -274,7 +274,7 @@ void EtherWeaponComponent::Constructor() {
 void EtherWeaponComponent::Update_Internal( const float DeltaTime ) {
 	Super::Update_Internal( DeltaTime );
 
-	kbWarningCheck( m_pWeaponComponent != nullptr, "%s has no weapon component", GetOwner()->GetName().c_str() );
+	kbWarningCheck( m_pWeaponModel != nullptr, "%s has no weapon component", GetOwner()->GetName().c_str() );
 
 	if ( m_bIsFiring ) {
 		if ( m_CurrentBurstCount >= m_BurstCount ) {
@@ -294,7 +294,7 @@ void EtherWeaponComponent::Update_Internal( const float DeltaTime ) {
 	UpdateShells( DeltaTime );
 
 	kbVec3 muzzleFlashBone;
-	if ( m_pWeaponComponent->GetBoneWorldPosition( kbString( "MuzzleFlash" ),muzzleFlashBone ) == true ) {
+	if ( m_pWeaponModel->GetBoneWorldPosition( kbString( "MuzzleFlash" ),muzzleFlashBone ) == true ) {
 		for ( int i = (int)m_ActiveMuzzleFlashAnims.size() - 1; i >= 0; i-- ) {
 			if ( m_ActiveMuzzleFlashAnims[i].AnimationIsFinished() ) {
 				VectorRemoveFastIndex( m_ActiveMuzzleFlashAnims, i );
@@ -318,12 +318,12 @@ void EtherWeaponComponent::SetEnable_Internal( const bool bEnable ) {
 
 			EtherSkelModelComponent *const pSkelModel = static_cast<EtherSkelModelComponent*>( pCurComponent );
 			if ( pSkelModel->IsFirstPersonModel()  ) {
-				m_pWeaponComponent = pSkelModel;
+				m_pWeaponModel = pSkelModel;
 				break;
 			}
 		}
 
-		m_pWeaponComponent->PlayAnimation( g_IdleAnimation, -1.0f, g_IdleAnimation );
+		m_pWeaponModel->PlayAnimation( g_IdleAnimation, -1.0f, false, g_IdleAnimation );
 	}
 }
 
@@ -395,14 +395,25 @@ bool EtherWeaponComponent::Fire( const bool bActivatedThisFrame ) {
 }
 
 /**
+ *	EtherWeaponComponent::PlayAnimation
+ */
+void EtherWeaponComponent::PlayAnimation( const kbString & animationName, const float transitionLenSec ) {
+	if ( m_bIsFiring == true ) {
+		return;
+	}
+
+	m_pWeaponModel->PlayAnimation( animationName, 0.5f, false, kbString(""), 0.0f );
+}
+
+/**
  *	EtherWeaponComponent::Fire_Internal
  */
 bool EtherWeaponComponent::Fire_Internal() {
 
 	const static kbString ShootName( "Shoot" );
 
-	if ( m_pWeaponComponent != nullptr && m_CurrentBurstCount == 0 ) {
-		m_pWeaponComponent->PlayAnimation( ShootName, 0.1f, g_IdleAnimation, 0.75f );
+	if ( m_pWeaponModel != nullptr && m_CurrentBurstCount == 0 ) {
+		m_pWeaponModel->PlayAnimation( ShootName, 0.1f, true, g_IdleAnimation, 2.5f );
 	}
 
 	m_CurrentBurstCount++;
@@ -429,7 +440,7 @@ bool EtherWeaponComponent::Fire_Internal() {
 	// Spawn projectile
 	const kbGameEntity *const pProjectileEntity = m_Projectile.GetEntity();
 
-	if ( pProjectileEntity != nullptr  && m_pWeaponComponent != nullptr ) {
+	if ( pProjectileEntity != nullptr  && m_pWeaponModel != nullptr ) {
 
 		EtherGame *const pEtherGame = static_cast<EtherGame*>( g_pGame );;
 		const kbCamera & gameCamera = pEtherGame->GetCamera();
@@ -467,7 +478,7 @@ bool EtherWeaponComponent::Fire_Internal() {
 		pProjectileComponent->Launch();
 
 		kbVec3 muzzleFlashBone;
-		if ( m_pWeaponComponent->GetBoneWorldPosition( kbString( "MuzzleFlash" ), muzzleFlashBone ) == true ) {
+		if ( m_pWeaponModel->GetBoneWorldPosition( kbString( "MuzzleFlash" ), muzzleFlashBone ) == true ) {
 			for ( int i = 0; i < m_MuzzleFlashAnimData.size(); i++ ) {
 				m_ActiveMuzzleFlashAnims.push_back( m_MuzzleFlashAnimData[i] );
 				kbAnimatedQuadComponent & muzzleFlashAnim = m_ActiveMuzzleFlashAnims[m_ActiveMuzzleFlashAnims.size() - 1];
@@ -503,7 +514,7 @@ bool EtherWeaponComponent::Fire_Internal() {
 				newShell.m_Velocity.x = ( newShell.m_Velocity .x * kbfrand() ) + m_MinShellVelocity.x;
 				newShell.m_Velocity.y = ( newShell.m_Velocity .y * kbfrand() ) + m_MinShellVelocity.y;
 				newShell.m_Velocity.z = ( newShell.m_Velocity .z * kbfrand() ) + m_MinShellVelocity.z;
-				newShell.m_Velocity = newShell.m_Velocity * m_pWeaponComponent->GetOwner()->GetOrientation().ToMat4();
+				newShell.m_Velocity = newShell.m_Velocity * m_pWeaponModel->GetOwner()->GetOrientation().ToMat4();
 
 				newShell.m_RotationAxis = m_MaxAxisVelocity - m_MinAxisVelocity;
 				newShell.m_RotationAxis.x = ( newShell.m_RotationAxis.z * kbfrand() ) + m_MinAxisVelocity.z;
@@ -515,8 +526,8 @@ bool EtherWeaponComponent::Fire_Internal() {
 				newShell.m_LifeTimeLeft = m_ShellLifeTime;
 
 				kbRenderObject & renderObj = newShell.m_RenderObject;
-				if ( m_pWeaponComponent->GetBoneWorldPosition( kbString( "ShellEject" ), renderObj.m_Position ) == false ) {
-					renderObj.m_Position = m_pWeaponComponent->GetOwner()->GetPosition();
+				if ( m_pWeaponModel->GetBoneWorldPosition( kbString( "ShellEject" ), renderObj.m_Position ) == false ) {
+					renderObj.m_Position = m_pWeaponModel->GetOwner()->GetPosition();
 				}
 
 				renderObj.m_Orientation.Set( 0.0f, 0.0f, 0.0f, 1.0f );

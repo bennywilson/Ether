@@ -38,7 +38,7 @@ class EtherSkelModelComponent : public kbSkeletalModelComponent {
 public:
 	KB_DECLARE_COMPONENT( EtherSkelModelComponent, kbSkeletalModelComponent );
 
-	void									PlayAnimation( const kbString & AnimationName, const float BlendLength, const kbString desiredNextAnimation = kbString( "" ), const float desiredNextAnimBlendLength = 0.0f );
+	void									PlayAnimation( const kbString & AnimationName, const float BlendLength, bool bRestartIfAlreadyPlaying, const kbString desiredNextAnimation = kbString( "" ), const float desiredNextAnimBlendLength = 0.0f );
 	bool									IsPlaying( const kbString & AnimationName ) const;
 
 	void									SetModel( kbModel *const pModel, bool bIsFirstPersonModel );

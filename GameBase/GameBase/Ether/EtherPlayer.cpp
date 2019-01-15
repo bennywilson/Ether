@@ -76,7 +76,7 @@ void EtherPlayerComponent::Action_ThrowGrenade( const bool bActivatedThisFrame )
 	}
 
 	//m_pFPHands->Enable( true );
-	m_pFPHands->PlayAnimation( kbString( "ThrowGrenade" ), -1, kbString( "Idle" ) );
+	m_pFPHands->PlayAnimation( kbString( "ThrowGrenade" ), -1, false, kbString( "Idle" ) );
 	m_GrenadeCoolddownSec = g_GrenadeCoolDownSec;
 }
 
@@ -328,8 +328,19 @@ void EtherPlayerComponent::HandleMovement( const kbInput_t & Input, const float 
 
 	kbVec3 movementVec( kbVec3::zero );
 
+	EtherWeaponComponent * pWeaponComponent = nullptr;
+	kbGameEntity *const pWeapon = GetEquippedItem();
+	if ( pWeapon != nullptr ) {		
+		pWeaponComponent = ( EtherWeaponComponent* ) pWeapon->GetComponentByType( EtherWeaponComponent::GetType() );
+	}
+
 	if ( Input.IsKeyPressedOrDown( 'W' ) || Input.IsKeyPressedOrDown( 'w' ) ) {
 		movementVec += forwardVec;
+
+		if ( pWeaponComponent != nullptr ) {
+			pWeaponComponent->PlayAnimation( kbString( "WalkForward" ), 0.25f );
+		}
+
 	} else if ( Input.IsKeyPressedOrDown( 'S' ) || Input.IsKeyPressedOrDown( 's' ) ) {
 		movementVec -= forwardVec;
 	}
@@ -361,15 +372,19 @@ void EtherPlayerComponent::HandleMovement( const kbInput_t & Input, const float 
 		if ( pSkelModelComponent != nullptr ) {
 			const static kbString RunAnimName( "Run" );
 			if ( pSkelModelComponent->IsPlaying( RunAnimName ) == false ) {
-				pSkelModelComponent->PlayAnimation( RunAnimName, -1.0f );
+				pSkelModelComponent->PlayAnimation( RunAnimName, -1.0f, false );
 			}
 		}
 	} else {
 		if ( pSkelModelComponent != nullptr ) {
 			const static kbString AimAnimName( "Aim" );
 			if ( pSkelModelComponent->IsPlaying( AimAnimName ) == false ) {
-				pSkelModelComponent->PlayAnimation( AimAnimName, -1.0f );
+				pSkelModelComponent->PlayAnimation( AimAnimName, -1.0f, false );
 			}
+		}
+
+		if ( pWeaponComponent != nullptr ) {
+			pWeaponComponent->PlayAnimation( kbString( "Idle" ), 1.5f );
 		}
 	}
 

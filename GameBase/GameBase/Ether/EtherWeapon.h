@@ -108,6 +108,7 @@ public:
 
 	virtual bool							Fire( const bool bActivatedThisFrame );
 
+	void									PlayAnimation( const kbString & animationName, const float transitionLenSec );
 
 protected:
 
@@ -139,7 +140,7 @@ private:
 	float									m_SecondsBetweenBursts;
 
 	// Run time
-	EtherSkelModelComponent *				m_pWeaponComponent;
+	EtherSkelModelComponent *				m_pWeaponModel;
 	int										m_CurrentBurstCount;
 	float									m_BurstTimer;
 	float									m_ShotTimer;

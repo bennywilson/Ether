@@ -36,16 +36,16 @@ void EtherSkelModelComponent::Constructor() {
 /**
  *	EtherSkelModelComponent::PlayAnimation
  */
-void EtherSkelModelComponent::PlayAnimation( const kbString & AnimationName, const float BlendLength, const kbString desiredNextAnimation, const float desiredNextAnimationBlendLength ) {
+void EtherSkelModelComponent::PlayAnimation( const kbString & AnimationName, const float BlendLength, const bool bRestartIfAlreadyPlaying, const kbString desiredNextAnimation, const float desiredNextAnimationBlendLength ) {
 
 #if DEBUG_ANIMS
 	kbLog( "Attempting to play Animation %s ===================================================================", AnimationName.c_str() );
 #endif
-/*
-	if ( IsPlaying( AnimationName ) ) {
+
+	if ( bRestartIfAlreadyPlaying == false && IsPlaying( AnimationName ) ) {
 		return;
 	}
-*/
+
 	const std::string & animName = AnimationName.stl_str();
 	for ( int i = 0; i < m_Animations.size(); i++ ) {
 		const std::string & CurName = m_Animations[i].m_AnimationName.stl_str();
@@ -231,7 +231,7 @@ void EtherSkelModelComponent::Update_Internal( const float DeltaTime ) {
 					kbLog( "	Cur Animation Done, going to %s - %f", CurAnim.m_DesiredNextAnimation.c_str(), CurAnim.m_DesiredNextAnimBlendLength );
 #endif
 
-					PlayAnimation( CurAnim.m_DesiredNextAnimation, CurAnim.m_DesiredNextAnimBlendLength );
+					PlayAnimation( CurAnim.m_DesiredNextAnimation, CurAnim.m_DesiredNextAnimBlendLength, true );
 				}
 			} else {
 				if ( m_BindToLocalSpaceMatrices.size() == 0 ) {
