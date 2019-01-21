@@ -445,7 +445,7 @@ void kbRenderer_DX11::Init_Internal( HWND hwnd, const int frameWidth, const int 
 		Flags |= D3D11_CREATE_DEVICE_DEBUG;
 
 	HRESULT hr = CreateDXGIFactory1( __uuidof(IDXGIFactory), (void**)&m_pDXGIFactory );
-	kbErrorCheck( SUCCEEDED( hr ), "kbRenderer_DX11::Init() - Failed to create DXGI Factory" );
+	kbErrorCheck( SUCCEEDED( hr ), "kbRenderer_DX11::Init_Internal() - Failed to create DXGI Factory" );
 
 	// Initialize HMD if desired
 	if ( bUseHMD || bUseHMDTrackingOnly ) {
@@ -473,7 +473,7 @@ void kbRenderer_DX11::Init_Internal( HWND hwnd, const int frameWidth, const int 
 								&m_pDeviceContext );
 	}
 
-	kbErrorCheck( SUCCEEDED( hr ), "kbRenderer_DX11::Init() - Failed to create D3D11 Device and swap chain" );
+	kbErrorCheck( SUCCEEDED( hr ), "kbRenderer_DX11::Init_Internal() - Failed to create D3D11 Device and swap chain" );
 
 	g_pD3DDevice = m_pD3DDevice;
 	g_pImmediateContext = m_pDeviceContext;
@@ -533,7 +533,7 @@ void kbRenderer_DX11::Init_Internal( HWND hwnd, const int frameWidth, const int 
 	depthBufferDesc.MiscFlags = 0;
 
 	hr = m_pD3DDevice->CreateTexture2D( &depthBufferDesc, nullptr, &m_pDepthStencilBuffer );
-	kbErrorCheck( SUCCEEDED( hr ), "kbRenderer_DX11::Init() - Failed to create DepthStencilBuffer" );
+	kbErrorCheck( SUCCEEDED( hr ), "kbRenderer_DX11::Init_Internal() - Failed to create DepthStencilBuffer" );
 
 	// specify the subresources of a texture that are accesible from a depth-stencil view
 	D3D11_DEPTH_STENCIL_VIEW_DESC depthStencilViewDesc;
@@ -544,7 +544,7 @@ void kbRenderer_DX11::Init_Internal( HWND hwnd, const int frameWidth, const int 
 	depthStencilViewDesc.Texture2D.MipSlice = 0;
 
 	hr = m_pD3DDevice->CreateDepthStencilView( m_pDepthStencilBuffer, &depthStencilViewDesc, &m_pDepthStencilView );
-	kbErrorCheck( SUCCEEDED( hr ), "kbRenderer_DX11::Init() - Failed to create DepthStencilView" );
+	kbErrorCheck( SUCCEEDED( hr ), "kbRenderer_DX11::Init_Internal() - Failed to create DepthStencilView" );
 
 	// bind render target view and depth stencil to output render pipeline
 	m_pDeviceContext->OMSetRenderTargets( 1, &((kbRenderWindow_DX11*)m_RenderWindowList[0])->m_pRenderTargetView, m_pDepthStencilView );
@@ -564,23 +564,23 @@ void kbRenderer_DX11::Init_Internal( HWND hwnd, const int frameWidth, const int 
 
 	// Create the default rasterizer state
 	hr = m_pD3DDevice->CreateRasterizerState( &rasterDesc, &m_pDefaultRasterizerState );
-	kbErrorCheck( SUCCEEDED( hr ), "kbRenderer_DX11::Init() - Failed to create default rasterizer state" );
+	kbErrorCheck( SUCCEEDED( hr ), "kbRenderer_DX11::Init_Internal() - Failed to create default rasterizer state" );
 
 	// Create front face culling rasterizer state
 	rasterDesc.CullMode = D3D11_CULL_FRONT;
 	hr = m_pD3DDevice->CreateRasterizerState( &rasterDesc, &m_pFrontFaceCullingRasterizerState );
-	kbErrorCheck( SUCCEEDED( hr ), "kbRenderer_DX11::Init() - Failed to create front face culling rasterizer state" );
+	kbErrorCheck( SUCCEEDED( hr ), "kbRenderer_DX11::Init_Internal() - Failed to create front face culling rasterizer state" );
 
 	// Create non-culling rasterizer state
 	rasterDesc.CullMode = D3D11_CULL_NONE;
 	// Create the rasterizer state from the description we just filled out.
 	hr = m_pD3DDevice->CreateRasterizerState( &rasterDesc, &m_pNoFaceCullingRasterizerState );
-	kbErrorCheck( SUCCEEDED( hr ), "kbRenderer_DX11::Init() - Failed to create non-culling rasterizer state" );
+	kbErrorCheck( SUCCEEDED( hr ), "kbRenderer_DX11::Init_Internal() - Failed to create non-culling rasterizer state" );
 
 	// Create a wireframe rasterizer state
 	rasterDesc.FillMode = D3D11_FILL_WIREFRAME;
 	hr = m_pD3DDevice->CreateRasterizerState( &rasterDesc, &m_pWireFrameRasterizerState );
-	kbErrorCheck( SUCCEEDED( hr ), "kbRenderer_DX11::Init() - Failed to create wireframe rasterizer state" );
+	kbErrorCheck( SUCCEEDED( hr ), "kbRenderer_DX11::Init_Internal() - Failed to create wireframe rasterizer state" );
 
 	// Now set the rasterizer state.
 	m_pDeviceContext->RSSetState( m_pDefaultRasterizerState );
@@ -728,14 +728,14 @@ void kbRenderer_DX11::Init_Internal( HWND hwnd, const int frameWidth, const int 
 	samplerDesc.MaxLOD = D3D11_FLOAT32_MAX;
 
 	hr = m_pD3DDevice->CreateSamplerState( &samplerDesc, &m_pBasicSamplerState );
-	kbErrorCheck( SUCCEEDED( hr ), "kbRenderer_DX11::Init() - Failed to create basic sampler state" );
+	kbErrorCheck( SUCCEEDED( hr ), "kbRenderer_DX11::Init_Internal() - Failed to create basic sampler state" );
 
 	samplerDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_POINT;
 	hr = m_pD3DDevice->CreateSamplerState( &samplerDesc, &m_pNormalMapSamplerState );
-	kbErrorCheck( SUCCEEDED( hr ), "kbRenderer_DX11::Init() - Failed to create normal sampler state" );
+	kbErrorCheck( SUCCEEDED( hr ), "kbRenderer_DX11::Init_Internal() - Failed to create normal sampler state" );
 	
 	hr = m_pD3DDevice->CreateSamplerState( &samplerDesc, &m_pShadowMapSamplerState );
-	kbErrorCheck( SUCCEEDED( hr ), "kbRenderer_DX11::Init() - Failed to create shadowmap sampler state" );
+	kbErrorCheck( SUCCEEDED( hr ), "kbRenderer_DX11::Init_Internal() - Failed to create shadowmap sampler state" );
 
 	// debug vertex buffer
 	m_DebugLines.resize( 1024 * 1024 );
@@ -755,7 +755,7 @@ void kbRenderer_DX11::Init_Internal( HWND hwnd, const int frameWidth, const int 
 	debugLinesVertexData.SysMemSlicePitch = 0;
 
 	hr = g_pD3DDevice->CreateBuffer( &debugLinesVBDesc, &debugLinesVertexData, &m_DebugVertexBuffer );
-	kbErrorCheck( SUCCEEDED( hr ), "kbRenderer_DX11::Init() - Failed to create debug line vertex buffer" );
+	kbErrorCheck( SUCCEEDED( hr ), "kbRenderer_DX11::Init_Internal() - Failed to create debug line vertex buffer" );
 
 	m_DebugPreTransformedLines.resize( 1024 );
 	memset( m_DebugPreTransformedLines.data(), 0, sizeof( vertexLayout ) * m_DebugPreTransformedLines.size() );
@@ -772,7 +772,7 @@ void kbRenderer_DX11::Init_Internal( HWND hwnd, const int frameWidth, const int 
 	debugLinesVertexData.SysMemSlicePitch = 0;
 
 	hr = g_pD3DDevice->CreateBuffer( &debugLinesVBDesc, &debugLinesVertexData, &m_DebugPreTransformedVertexBuffer );
-	kbErrorCheck( SUCCEEDED( hr ), "kbRenderer_DX11::Init() - Failed to create pretransformed debug line vertex buffer" );
+	kbErrorCheck( SUCCEEDED( hr ), "kbRenderer_DX11::Init_Internal() - Failed to create pretransformed debug line vertex buffer" );
 
 	m_DebugLines.clear();
 
@@ -1125,6 +1125,9 @@ void kbRenderer_DX11::Shutdown_Internal() {
 	SAFE_RELEASE( m_pDeviceContext );
 
 	if ( GCreateDebugD3DDevice ) {
+		kbLog( "" );
+		kbLog( "" );
+		kbLog( "  Reporting live D3D Objects..........................................................." );
 		ID3D11Debug * debugDev;
 		HRESULT hr = m_pD3DDevice->QueryInterface( __uuidof(ID3D11Debug), reinterpret_cast<void**>( &debugDev ) );
 		debugDev->ReportLiveDeviceObjects( D3D11_RLDO_DETAIL );
