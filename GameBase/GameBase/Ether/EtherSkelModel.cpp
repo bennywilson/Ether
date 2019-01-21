@@ -60,6 +60,7 @@ void EtherSkelModelComponent::PlayAnimation( const kbString & AnimationName, con
 			#if DEBUG_ANIMS
 				kbLog( "	Found desired animation" );
 			#endif
+
 			if ( BlendLength <= 0.0f || m_CurrentAnimation == -1 ) {
 
 				#if DEBUG_ANIMS
@@ -71,6 +72,7 @@ void EtherSkelModelComponent::PlayAnimation( const kbString & AnimationName, con
 					#if DEBUG_ANIMS
 						kbLog( "	Stopping Animation %s", m_Animations[m_CurrentAnimation].GetAnimationName().c_str() );
 					#endif
+
 					m_Animations[m_CurrentAnimation].m_CurrentAnimationTime = -1;
 				}
 
@@ -79,6 +81,7 @@ void EtherSkelModelComponent::PlayAnimation( const kbString & AnimationName, con
 					#if DEBUG_ANIMS
 						kbLog( "	Canceling next animation %s", m_Animations[m_NextAnimation].GetAnimationName().c_str() );
 					#endif
+
 					m_Animations[m_NextAnimation].m_CurrentAnimationTime = -1;
 				}
 				m_NextAnimation = -1;
@@ -90,8 +93,9 @@ void EtherSkelModelComponent::PlayAnimation( const kbString & AnimationName, con
 				m_CurrentAnimation = i;
 
 				#if DEBUG_ANIMS
-					kbLog( "	Anim all set up.  Next anim = %s.  Desired blend = %f", desiredNextAnimation.c_str() );
+					kbLog( "	Anim all set up.  Next anim = %s.  Desired blend length = %f", desiredNextAnimation.c_str() ,desiredNextAnimationBlendLength );
 				#endif
+
 				m_Animations[m_CurrentAnimation].m_DesiredNextAnimation = desiredNextAnimation;
 				m_Animations[m_CurrentAnimation].m_DesiredNextAnimBlendLength = desiredNextAnimationBlendLength;
 			} else {
@@ -118,6 +122,10 @@ void EtherSkelModelComponent::PlayAnimation( const kbString & AnimationName, con
  *	EtherSkelModelComponent::IsPlaying
  */
 bool EtherSkelModelComponent::IsPlaying( const kbString & AnimationName ) const {
+	if ( m_Animations.size() == 0 ) {
+		return false;
+	}
+
 	if ( m_NextAnimation != -1 && m_Animations[m_NextAnimation].m_AnimationName == AnimationName ) {
 		return true;
 	}

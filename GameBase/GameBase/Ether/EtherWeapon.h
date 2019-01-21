@@ -13,6 +13,8 @@
  *	EtherProjectileComponent
  */
 class EtherProjectileComponent : public kbDamageComponent {
+
+//-------------------------------------------------------------------------------------------------------------------------------------------------------------
 public:
 	friend class EtherWeaponComponent;
 
@@ -54,6 +56,8 @@ private:
  *	kbVec3TimePointComponent
  */
 class kbVec3TimePointComponent : public kbGameLogicComponent {
+
+//-------------------------------------------------------------------------------------------------------------------------------------------------------------
 public:
 	KB_DECLARE_COMPONENT( kbVec3TimePointComponent, kbGameLogicComponent );
 
@@ -70,6 +74,8 @@ private:
  *	kbAnimatedQuadComponent
  */
 class kbAnimatedQuadComponent : public kbGameLogicComponent {
+
+//-------------------------------------------------------------------------------------------------------------------------------------------------------------
 public:
 	KB_DECLARE_COMPONENT( kbAnimatedQuadComponent, kbGameLogicComponent );
 
@@ -103,6 +109,8 @@ private:
  *	EtherWeaponComponent
  */
 class EtherWeaponComponent : public kbGameLogicComponent {
+
+//-------------------------------------------------------------------------------------------------------------------------------------------------------------
 public:
 	KB_DECLARE_COMPONENT( EtherWeaponComponent, kbGameLogicComponent );
 

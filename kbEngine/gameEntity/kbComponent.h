@@ -58,6 +58,8 @@ public:
 	void										MarkAsDirty() { m_bIsDirty = true; }
 
 	void										SetOwner( kbEntity *const pGameEntity );
+
+	// TODO: This is very hacky
 	void										SetOwningComponent( kbComponent *const pOwningComponent ) { m_pOwningComponent = pOwningComponent; }
 
 protected:

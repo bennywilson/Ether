@@ -125,7 +125,7 @@ kbEditor::kbEditor() :
 	curX += speedButtonWidth + buttonSpacing * 2;
 
 	const int toggleIconButtonWidth = 85 * 2;
-	Fl_Button * iconToggleButton = new Fl_Button( curX , curY, speedButtonWidth, buttonHeight, "Toggle Icons" );
+	Fl_Button *const iconToggleButton = new Fl_Button( curX , curY, speedButtonWidth, buttonHeight, "Toggle Icons" );
 	iconToggleButton->callback( ToggleIconsCB );
 	curX += toggleIconButtonWidth + buttonSpacing * 2;
 

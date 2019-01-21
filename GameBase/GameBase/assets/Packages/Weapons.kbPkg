@@ -488,7 +488,7 @@ kbGameEntity 292847838 1140569109 1236968083 2365837966 {
 				MaxStartScale = 15.000000 15.000000 0.000000
 				MinLifeTime =  0.075000
 				MinStartScale = 15.000000 15.000000 0.000000
-				RandomRotation = 1
+				ApplyRandomRotation = 1
 				ScaleOverTime = 3
 					kbVec3TimePointComponent { 
 						Enabled = 0
@@ -523,7 +523,7 @@ kbGameEntity 292847838 1140569109 1236968083 2365837966 {
 				MaxStartScale = 15.000000 15.000000 0.000000
 				MinLifeTime =  0.080000
 				MinStartScale = 15.000000 15.000000 0.000000
-				RandomRotation = 1
+				ApplyRandomRotation = 1
 				ScaleOverTime = 4
 					kbVec3TimePointComponent { 
 						Enabled = 0

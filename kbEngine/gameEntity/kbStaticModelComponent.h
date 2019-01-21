@@ -2,10 +2,10 @@
 // kbStaticModelComponent.h
 //
 //
-// 2016-2018 kbEngine 2.0
+// 2016-2019 kbEngine 2.0
 //===================================================================================================
-#ifndef _KBSTATICMESHCOMPONENT_H_
-#define _KBSTATICMESHCOMPONENT_H_
+#ifndef _KBSTATICMODELCOMPONENT_H_
+#define _KBSTATICMODELCOMPONENT_H_
 
 /**
  *	kbStaticModelComponent

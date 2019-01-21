@@ -162,7 +162,7 @@ void kbPropertiesTab::CheckButtonCB( Fl_Widget * widget, void * voidPtr ) {
  */
 void kbPropertiesTab::PointerButtonCB( Fl_Widget * widget, void * voidPtr ) {
 
-	propertiesTabCBData_t *const userData = static_cast< propertiesTabCBData_t * >( voidPtr );
+	propertiesTabCBData_t *const userData = static_cast<propertiesTabCBData_t *>( voidPtr );
 	kbErrorCheck( userData != nullptr, "kbPropertiesTab::PointerButtonCB() - null user data passed in" );
 
 	const std::string *const fieldName = (std::string * ) userData->m_pVariablePtr;
@@ -301,11 +301,10 @@ void kbPropertiesTab::TextFieldCB( Fl_Widget * widget, void * voidPtr ) {
 	const std::string prevValue = inputField->value();
 	inputField->value( currentValue.c_str() );
 
-	kbComponent *const pModifiedComponent = userData->m_pComponent;
-	kbGameEntity *const pGameEntity = (kbGameEntity*)( pModifiedComponent->IsA( kbGameComponent::GetType() ) ? ( pModifiedComponent->GetOwner() ) : ( nullptr ) );
-
 	if ( userData->m_VariableType == KBTYPEINFO_VECTOR4 || userData->m_VariableType == KBTYPEINFO_VECTOR ) {
 		float & componentVar = *(float*)userData->m_pVariablePtr;
+
+		// TODO - I don't beliece this allocations are cleaned up anywhere
 		prevValuePtr = new float( (float)atof( prevValue.c_str() ) );
 		curValuePtr = new float( (float)atof( currentValue.c_str() ) );
 
@@ -333,6 +332,9 @@ void kbPropertiesTab::TextFieldCB( Fl_Widget * widget, void * voidPtr ) {
 	}
 
 	g_Editor->PushUndoAction( new kbUndoVariableAction( userData->m_VariableType, prevValuePtr, curValuePtr, userData->m_pVariablePtr ) );
+
+	kbComponent *const pModifiedComponent = userData->m_pComponent;
+	kbGameEntity *const pGameEntity = (kbGameEntity*)( pModifiedComponent->IsA( kbGameComponent::GetType() ) ? ( pModifiedComponent->GetOwner() ) : ( nullptr ) );
 
 	if ( pGameEntity != nullptr && pGameEntity->GetComponent(0) == pModifiedComponent ) {
 		// Refresh all components if the transform component was modified
@@ -380,7 +382,7 @@ void kbPropertiesTab::ArrayExpandCB( Fl_Widget * widet, void * userData ) {
  */
 void kbPropertiesTab::ArrayResizeCB( Fl_Widget * widget, void * voidPtr ) {
 
-	propertiesTabCBData_t *const userData = static_cast< propertiesTabCBData_t * >( voidPtr );
+	propertiesTabCBData_t *const userData = static_cast<propertiesTabCBData_t *>( voidPtr );
 	kbErrorCheck( userData != nullptr, "kbPropertiesTab::ArrayResizeCB() - NULL userData passed in" );
 
 	const Fl_Input *const inputField = ( Fl_Input * ) widget;
@@ -430,7 +432,7 @@ void kbPropertiesTab::ArrayResizeCB( Fl_Widget * widget, void * voidPtr ) {
  */
 void kbPropertiesTab::EnumCB( Fl_Widget * widget, void * voidPtr ) {
 
-	propertiesTabCBData_t *const userData = static_cast< propertiesTabCBData_t * >( voidPtr );
+	propertiesTabCBData_t *const userData = static_cast<propertiesTabCBData_t *>( voidPtr );
 	kbErrorCheck( userData != nullptr, "kbPropertiesTab::EnumCB() - NULL userData passed in" );
 
 	Fl_Choice *const pDropDown = ( Fl_Choice * ) widget;
@@ -463,7 +465,7 @@ void kbPropertiesTab::PropertyChangedCB( const kbGameEntityPtr entityPtr ) {
  */
 void kbPropertiesTab::RefreshComponent( kbEditorEntity *const pEntity, kbComponent *const pComponent, kbComponent *const pParentComponent, int & startX, int & curY, const int inputHeight, const bool bIsStruct, const void *const pArrayPtr, const int arrayIndex ) {
 
-	byte *const componentBytePtr = ( byte* ) pComponent;
+	byte *const componentBytePtr = (byte*) pComponent;
 
 	// Display Component class name ( kbStaticMeshComponent, kbSkeletalMeshComponent, etc );
 	const char *const pComponentName = pComponent->GetComponentClassName();
@@ -749,7 +751,7 @@ void kbPropertiesTab::RefreshProperty( kbEditorEntity *const pEntity, const std:
 				propertyNameLabel->align( FL_ALIGN_RIGHT );
 			}
 
-			Fl_Button *const b1 = new Fl_Button( xPos + propertyNamePixelWidth - ( 5 + inputHeight / 2 ), yPos + (int)(inputHeight * 0.25f), inputHeight / 2,inputHeight / 2,">" );
+			Fl_Button *const b1 = new Fl_Button( xPos + propertyNamePixelWidth - ( 5 + inputHeight / 2 ), yPos + (int)(inputHeight * 0.25f), inputHeight / 2,inputHeight / 2, ">" );
 			b1->color(88+1);
 			b1->labelsize( FontSize() );
 

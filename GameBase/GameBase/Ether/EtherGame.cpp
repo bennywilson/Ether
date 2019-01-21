@@ -1060,24 +1060,6 @@ void EtherFireEntity::Update( const float DeltaTime ) {
 	pSM->SetMaterialParamVector( 0, "additionalData", kbVec4( smokeFade * 0.24f, m_RandomScroller, 0.0f, 0.0f ) );
 
 	pSM = (kbStaticModelComponent*)m_pFireEntity->GetComponentByType( kbStaticModelComponent::GetType() );
-	pSM->SetMaterialParamVector( 0, "additionalData", kbVec4( fireFade, m_RandomScroller, 0.0f, 0.0f ) );
-
-	{
-	/*	kbStaticModelComponent * pSM = (kbStaticModelComponent*)m_pSmokeEntity->GetComponentByType( kbStaticModelComponent::GetType() );
-		std::vector<kbMaterialComponent> materials;
-		kbMaterialComponent newMat;
-		newMat.SetShader( (kbShader*)g_ResourceManager.LoadResource( "./assets/shaders/environment/environmenthole.kbshader", true ) );
-	
-		kbShaderParamComponent holeTextureParam;
-		holeTextureParam.SetParamName( kbString( "holeTex" ) );
-		holeTextureParam.SetRenderTexture( m_pBulletHoleRenderTexture );
-		newMat.SetShaderParamComponent( 0, holeTextureParam );
-
-		pSM->SetShaderVectorParam( "additionalData", kbVec4( smokeFade * 0.24f, m_RandomScroller, 0.0f, 0.0f ) );*/
-	}
-
-	//pSM = (kbStaticModelComponent*)m_pFireEntity->GetComponentByType( kbStaticModelComponent::GetType() );
-//	pSM->SetShaderVectorParam( "additionalData", kbVec4( fireFade, m_RandomScroller, 0.0f, 0.0f ) );
-	
+	pSM->SetMaterialParamVector( 0, "additionalData", kbVec4( fireFade, m_RandomScroller, 0.0f, 0.0f ) );	
 }
 

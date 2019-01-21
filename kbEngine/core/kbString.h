@@ -34,7 +34,9 @@ public:
 	const std::string &							stl_str() const;
 	const char *								c_str() const;
 	
-	static void ShutDown();
+	static void									ShutDown();
+
+	static kbString								EmptyString;
 
 private:
 

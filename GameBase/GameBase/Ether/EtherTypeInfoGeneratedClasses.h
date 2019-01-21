@@ -51,7 +51,6 @@ GenerateClass(
 
 GenerateClass(
 	EtherEnemySoldierAIComponent,
-	AddField( "EyeModel", KBTYPEINFO_STATICMODEL, EtherEnemySoldierAIComponent, m_pEyeBall, false, "" )
 	AddField( "SprayDurationSec", KBTYPEINFO_FLOAT, EtherEnemySoldierAIComponent, m_SprayDurationSec, false, "" )
 	AddField( "SecBetweenSprays", KBTYPEINFO_FLOAT, EtherEnemySoldierAIComponent, m_SecTimeBetweenSprays, false, "" )
 	AddField( "SecondsBetweenShots", KBTYPEINFO_FLOAT, EtherEnemySoldierAIComponent, m_SecBetweenShots, false, "" )
@@ -114,7 +113,7 @@ GenerateClass(
 	AddField( "ScaleOverTime", KBTYPEINFO_STRUCT, kbAnimatedQuadComponent, m_ScaleOverTime, true, "kbVec3TimePointComponent" )
 	AddField( "MinLifeTime", KBTYPEINFO_FLOAT, kbAnimatedQuadComponent, m_MinLifeTime, false, "" )
 	AddField( "MaxLifeTime", KBTYPEINFO_FLOAT, kbAnimatedQuadComponent, m_MaxLifeTime, false, "" )
-	AddField( "RandomRotation", KBTYPEINFO_BOOL, kbAnimatedQuadComponent, m_bRandomizeStartingRotation, false, "" )
+	AddField( "ApplyRandomRotation", KBTYPEINFO_BOOL, kbAnimatedQuadComponent, m_bRandomizeStartingRotation, false, "" )
 )
 
 GenerateClass(

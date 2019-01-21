@@ -14,9 +14,11 @@
 
 kbVec3 g_ProjectileStuckOffset = kbVec3( 0.0f, 5.0f, 0.0f );
 static int g_ShellPoolSize = 15;
-const static kbString g_IdleAnimation( "Idle" );
-const static kbString g_ShootAnimation( "Shoot" );
-const static kbString g_WalkForwardAnimation( "WalkForward" );
+const static kbString g_IdleAnimName( "Idle" );
+const static kbString g_ShootAnimName( "Shoot" );
+const static kbString g_WalkForwardAnimName( "WalkForward" );
+const static kbString g_MuzzleFlashAnimName( "MuzzleFlash" );
+const static kbString g_ShellEjectBoneName( "ShellEject" );
 
 /**
  *	EtherProjectileComponent::Constructor
@@ -27,10 +29,10 @@ void EtherProjectileComponent::Constructor() {
 	m_LifeTime = 5.0f;
 	m_TracerLength = 200.0f;
 	m_TraceWidth = 5.0f;
-	m_bUseBillboard = false;
-	m_bExplodeOnImpact = true;
 	m_DetonationTimer = -1.0f;
 	m_DamageRadius = 0.0f;
+	m_bUseBillboard = false;
+	m_bExplodeOnImpact = true;
 }
 
 /**
@@ -276,7 +278,7 @@ void EtherWeaponComponent::Constructor() {
 void EtherWeaponComponent::Update_Internal( const float DeltaTime ) {
 	Super::Update_Internal( DeltaTime );
 
-	kbWarningCheck( m_pWeaponModel != nullptr, "%s has no weapon component", GetOwner()->GetName().c_str() );
+	kbWarningCheck( m_pWeaponModel != nullptr, "%s has no weapon model", GetOwner()->GetName().c_str() );
 
 	if ( m_bIsFiring ) {
 		if ( m_CurrentBurstCount >= m_BurstCount ) {
@@ -296,7 +298,7 @@ void EtherWeaponComponent::Update_Internal( const float DeltaTime ) {
 	UpdateShells( DeltaTime );
 
 	kbVec3 muzzleFlashBone;
-	if ( m_pWeaponModel->GetBoneWorldPosition( kbString( "MuzzleFlash" ),muzzleFlashBone ) == true ) {
+	if ( m_pWeaponModel->GetBoneWorldPosition( g_MuzzleFlashAnimName, muzzleFlashBone ) == true ) {
 		for ( int i = (int)m_ActiveMuzzleFlashAnims.size() - 1; i >= 0; i-- ) {
 			if ( m_ActiveMuzzleFlashAnims[i].AnimationIsFinished() ) {
 				VectorRemoveFastIndex( m_ActiveMuzzleFlashAnims, i );
@@ -308,10 +310,13 @@ void EtherWeaponComponent::Update_Internal( const float DeltaTime ) {
 	}
 }
 
+/**
+ *	EtherWeaponComponent::SetEnable_Internal
+ */
 void EtherWeaponComponent::SetEnable_Internal( const bool bEnable ) {
 	Super::SetEnable_Internal( bEnable );
 
-	if ( bEnable ) {
+	if ( bEnable && m_pWeaponModel == nullptr ) {
 		for ( int i = 0; i < GetOwner()->NumComponents(); i++ ) {
 			kbComponent *const pCurComponent = GetOwner()->GetComponent(i);
 			if ( pCurComponent->IsA( EtherSkelModelComponent::GetType() ) == false ) {
@@ -324,8 +329,10 @@ void EtherWeaponComponent::SetEnable_Internal( const bool bEnable ) {
 				break;
 			}
 		}
+	}
 
-		m_pWeaponModel->PlayAnimation( g_IdleAnimation, -1.0f, false, g_IdleAnimation );
+	if ( m_pWeaponModel != nullptr ) {
+		m_pWeaponModel->PlayAnimation( g_IdleAnimName, -1.0f, false, g_IdleAnimName );
 	}
 }
 
@@ -404,11 +411,11 @@ void EtherWeaponComponent::PlayAnimation( const kbString & animationName, const 
 		return;
 	}
 
-	if ( m_bIsFiring && m_pWeaponModel->IsPlaying( g_ShootAnimation ) && animationName == g_WalkForwardAnimation ) {
+	if ( m_bIsFiring && m_pWeaponModel->IsPlaying( g_ShootAnimName ) && animationName == g_WalkForwardAnimName ) {
 		return;
 	}
 
-	m_pWeaponModel->PlayAnimation( animationName, transitionLenSec, false, kbString(""), 0.0f );
+	m_pWeaponModel->PlayAnimation( animationName, transitionLenSec, false, kbString::EmptyString, 0.0f );
 }
 
 /**
@@ -416,10 +423,8 @@ void EtherWeaponComponent::PlayAnimation( const kbString & animationName, const 
  */
 bool EtherWeaponComponent::Fire_Internal() {
 
-	const static kbString ShootName( "Shoot" );
-
 	if ( m_pWeaponModel != nullptr && m_CurrentBurstCount == 0 ) {
-		m_pWeaponModel->PlayAnimation( ShootName, 0.1f, true, g_IdleAnimation, 2.5f );
+		m_pWeaponModel->PlayAnimation( g_ShootAnimName, 0.1f, true, g_IdleAnimName, 2.5f );
 	}
 
 	m_CurrentBurstCount++;
@@ -532,7 +537,7 @@ bool EtherWeaponComponent::Fire_Internal() {
 				newShell.m_LifeTimeLeft = m_ShellLifeTime;
 
 				kbRenderObject & renderObj = newShell.m_RenderObject;
-				if ( m_pWeaponModel->GetBoneWorldPosition( kbString( "ShellEject" ), renderObj.m_Position ) == false ) {
+				if ( m_pWeaponModel->GetBoneWorldPosition( g_ShellEjectBoneName, renderObj.m_Position ) == false ) {
 					renderObj.m_Position = m_pWeaponModel->GetOwner()->GetPosition();
 				}
 

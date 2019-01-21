@@ -1,10 +1,10 @@
 //===================================================================================================
 // directionalLightToon.kbShader
 //
-// Note that  the directional light shader is responsible for copying the glow mask from the color
+// Note that the directional light shader is responsible for copying the glow mask from the color
 // buffer to the accumulation buffer
 //
-// 2018 kbEngine 2.0
+// 2018-2019 kbEngine 2.0
 //===================================================================================================
 cbuffer matrixBuffer {
    matrix               mvpMatrix;
@@ -19,7 +19,6 @@ cbuffer matrixBuffer {
    float4				specularColorBand;
    float4				rimLightColor;		// xyz - color, w - width
    float4				nonToonDiffuseScaleAndBias;
-   float4				specParams;			// x - spec fc
 };
 
 kbShaderState {

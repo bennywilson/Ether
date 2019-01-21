@@ -72,7 +72,7 @@ void kbModelComponent::PostLoad() {
 void kbModelComponent::RefreshMaterials( const bool bRefreshRenderObejct ) {
 	m_RenderObject.m_Materials.clear();
 	for ( int i = 0; i < m_MaterialList.size(); i++ ) {
-		kbMaterialComponent & matComp = m_MaterialList[i];
+		const kbMaterialComponent & matComp = m_MaterialList[i];
 	
 		kbShaderParamOverrides_t newShaderParams;
 		newShaderParams.m_pShader = matComp.GetShader();

@@ -14,6 +14,8 @@ std::map<std::string, int> * g_StringTable = nullptr;
 std::vector<std::string> * g_StringList = nullptr;
 std::string * g_EmptyString = nullptr;
 
+kbString kbString::EmptyString( "" );
+
 /**
  *	kbString::ShutDown
  */

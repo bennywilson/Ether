@@ -242,7 +242,7 @@ void kbGame::Update() {
 		std::stringstream stream;
 		stream << std::fixed << std::setprecision(2) << FPS;
 		fpsString += stream.str();
-		//g_pRenderer->DrawDebugText( fpsString, 0.85f, 0, g_DebugTextSize, g_DebugTextSize, kbColor::green );
+		g_pRenderer->DrawDebugText( fpsString, 0.85f, 0, g_DebugTextSize, g_DebugTextSize, kbColor::green );
 
 		if ( g_ShowPerfTimers.GetBool() ) {
 
