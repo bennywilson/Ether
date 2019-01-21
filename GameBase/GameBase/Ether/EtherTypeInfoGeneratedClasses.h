@@ -18,11 +18,18 @@ GenerateClass(
 )
 
 GenerateClass(
+	EtherAnimEvent,
+	AddField( "EventName", KBTYPEINFO_KBSTRING, EtherAnimEvent, m_EventName, false, "" )
+	AddField( "EventTime", KBTYPEINFO_FLOAT, EtherAnimEvent, m_EventTime, false, "" )
+)
+
+GenerateClass(
 	EtherAnimComponent,
 	AddField( "AnimationName", KBTYPEINFO_KBSTRING, EtherAnimComponent, m_AnimationName, false, "" )
 	AddField( "Animation", KBTYPEINFO_ANIMATION, EtherAnimComponent, m_pAnimation, false, "" )
 	AddField( "TimeScale", KBTYPEINFO_FLOAT, EtherAnimComponent, m_TimeScale, false, "" )
 	AddField( "IsLooping", KBTYPEINFO_BOOL, EtherAnimComponent, m_bIsLooping, false, "" )
+	AddField( "AnimationEvent", KBTYPEINFO_STRUCT, EtherAnimComponent, m_AnimEvents, true, "EtherAnimEvent" )
 )
 
 GenerateClass(

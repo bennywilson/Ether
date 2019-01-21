@@ -14,6 +14,13 @@ KB_DEFINE_COMPONENT(EtherSkelModelComponent)
 #define DEBUG_ANIMS 0
 
 /**
+ *	EtherAnimEvent::Constructor()
+ */
+void EtherAnimEvent::Constructor() {
+	m_EventTime = 0.0f;
+}
+
+/**
  *	EtherAnimComponent::Constructor()
  */
 void EtherAnimComponent::Constructor() {
@@ -212,8 +219,16 @@ void EtherSkelModelComponent::Update_Internal( const float DeltaTime ) {
 			}
 
 			if ( m_NextAnimation == -1 ) {
+				const float prevAnimTime = CurAnim.m_CurrentAnimationTime;
+	
 				CurAnim.m_CurrentAnimationTime += DeltaTime * CurAnim.m_TimeScale;
 
+				for ( int iAnimEvent = 0; iAnimEvent < CurAnim.m_AnimEvents.size(); iAnimEvent++ ) {
+					auto & curEvent = CurAnim.m_AnimEvents[iAnimEvent];
+					if ( curEvent.GetEventTime() > prevAnimTime && curEvent.GetEventTime() <= CurAnim.m_CurrentAnimationTime  ) {
+						kbLog( "AnimEvent %s - %f", curEvent.GetEventName().c_str(), curEvent.GetEventTime() );
+					}
+				}
 
 				if ( m_BindToLocalSpaceMatrices.size() == 0 ) {
 					m_BindToLocalSpaceMatrices.resize( m_pModel->NumBones() );
@@ -239,16 +254,33 @@ void EtherSkelModelComponent::Update_Internal( const float DeltaTime ) {
 				}
 
 				if ( bAnimIsFinished == false ) {
+					const float prevAnimTime = CurAnim.m_CurrentAnimationTime;
+	
+					CurAnim.m_CurrentAnimationTime += DeltaTime * CurAnim.m_TimeScale;
+
+					for ( int iAnimEvent = 0; iAnimEvent < CurAnim.m_AnimEvents.size(); iAnimEvent++ ) {
+						auto & curEvent = CurAnim.m_AnimEvents[iAnimEvent];
+						if ( curEvent.GetEventTime() > prevAnimTime && curEvent.GetEventTime() <= CurAnim.m_CurrentAnimationTime  ) {
+							kbLog( "AnimEvent %s - %f", curEvent.GetEventName().c_str(), curEvent.GetEventTime() );
+						}
+					}
 					CurAnim.m_CurrentAnimationTime += DeltaTime * CurAnim.m_TimeScale;
 				}
 
 				EtherAnimComponent & NextAnim = m_Animations[m_NextAnimation];
-
+				const float prevNextAnimTime = NextAnim.m_CurrentAnimationTime;
 				if ( CurAnim.m_bIsLooping && NextAnim.m_bIsLooping ) {
 					// Sync the anims if they're both looping
 					NextAnim.m_CurrentAnimationTime = CurAnim.m_CurrentAnimationTime;
 				} else {
 					NextAnim.m_CurrentAnimationTime += DeltaTime * NextAnim.m_TimeScale;
+				}
+
+				for ( int iAnimEvent = 0; iAnimEvent < NextAnim.m_AnimEvents.size(); iAnimEvent++ ) {
+					auto & curEvent = NextAnim.m_AnimEvents[iAnimEvent];
+					if ( curEvent.GetEventTime() > prevNextAnimTime && curEvent.GetEventTime() <= NextAnim.m_CurrentAnimationTime  ) {
+						kbLog( "AnimEvent %s - %f", curEvent.GetEventName().c_str(), curEvent.GetEventTime() );
+					}
 				}
 
 				const float blendTime = kbClamp( ( g_GlobalTimer.TimeElapsedSeconds() - m_BlendStartTime ) / m_BlendLength, 0.0f, 1.0f );

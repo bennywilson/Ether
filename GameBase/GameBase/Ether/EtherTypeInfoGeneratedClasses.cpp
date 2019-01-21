@@ -19,6 +19,10 @@ using namespace std;
 EtherWorldGenComponent_TypeInfo EtherWorldGenComponent::typeInfo;
 std::vector<class kbTypeInfoClass *> EtherWorldGenComponent::EtherWorldGenComponent_TypeInfoVar;
 
+// EtherAnimEvent
+EtherAnimEvent_TypeInfo EtherAnimEvent::typeInfo;
+std::vector<class kbTypeInfoClass*> EtherAnimEvent::EtherAnimEvent_TypeInfoVar;
+
 // EtherAnimComponent
 EtherAnimComponent_TypeInfo EtherAnimComponent::typeInfo;
 std::vector<class kbTypeInfoClass*> EtherAnimComponent::EtherAnimComponent_TypeInfoVar;

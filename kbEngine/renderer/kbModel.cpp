@@ -607,6 +607,9 @@ bool kbModel::LoadFBX() {
 		return false;
 	}
 
+	/*F/*bxAxisSystem SceneAxisSystem = fbxData.pScene->GetGlobalSettings().GetAxisSystem();
+	FbxAxisSystem OurAxisSystem(FbxAxisSystem::DirectX);
+	OurAxisSystem.ConvertScene( fbxData.pScene );*/
 	FbxNode * pRootNode = fbxData.pScene->GetRootNode();
 	kbErrorCheck( pRootNode != nullptr, "kbModel::LoadFBX() - Root node not found in %s", GetFullFileName().c_str() );
 
@@ -627,18 +630,24 @@ bool kbModel::LoadFBX() {
 		newMesh.m_IndexBufferIndex = (unsigned int)indexList.size();
 		newMesh.m_MaterialIndex = 0;
 		newMesh.m_NumTriangles = pFBXMesh->GetPolygonCount();
+
+		newMesh.m_Bounds.Reset();
+
 		uint iVertexCount = 0;
 
-		for ( uint iTri = 0; iTri < newMesh.m_NumTriangles; iTri++ ) {
+		for ( int iTri = 0; iTri < (int)newMesh.m_NumTriangles; iTri++ ) {
 
-			for ( uint iTriVert = 0; iTriVert < 3; iTriVert++, iVertexCount++ ) {
+			int topDawg = iVertexCount + 2;
+			for ( int iTriVert = 2; iTriVert >= 0; iTriVert--, iVertexCount++ ,topDawg-- ) {
 				vertexLayout triVert;
+				memset( &triVert, 0, sizeof( triVert ) );
 
-				int iCtrlPt = pFBXMesh->GetPolygonVertex( iTri, iTriVert );
+				const int iCtrlPt = pFBXMesh->GetPolygonVertex( iTri, iTriVert );
 				const FbxVector4 ctrlPt = pFBXMesh->GetControlPointAt(iCtrlPt);
 
-				triVert.position.Set( (float)ctrlPt[0], (float)ctrlPt[1], (float)ctrlPt[2] );
-
+				triVert.position.Set( (float)ctrlPt[1], (float)ctrlPt[2], -(float)ctrlPt[0] );
+				newMesh.m_Bounds.AddPoint( triVert.position );
+		
 				FbxGeometryElementNormal *const pFBXVertNormal = pFBXMesh->GetElementNormal(0);
 				if ( pFBXVertNormal != nullptr ) {
 					auto mappingMode = pFBXVertNormal->GetMappingMode();
@@ -648,15 +657,18 @@ bool kbModel::LoadFBX() {
 					kbErrorCheck( refMode == FbxGeometryElement::eDirect, "kbModel::LoadFBX() - Invalid vertex normal mapping mode" );
 
 					kbVec4 normal;
-					normal.x = (float)pFBXVertNormal->GetDirectArray().GetAt(iVertexCount).mData[0];
-					normal.y = (float)pFBXVertNormal->GetDirectArray().GetAt(iVertexCount).mData[1];
-					normal.z = (float)pFBXVertNormal->GetDirectArray().GetAt(iVertexCount).mData[2];
+					normal.x = (float)pFBXVertNormal->GetDirectArray().GetAt(topDawg).mData[1];
+					normal.y = (float)pFBXVertNormal->GetDirectArray().GetAt(topDawg).mData[2];
+					normal.z = -(float)pFBXVertNormal->GetDirectArray().GetAt(topDawg).mData[0];
 					normal.w = 0;
+kbLog( "Normals are %f %f %f %f", (float)pFBXVertNormal->GetDirectArray().GetAt(topDawg).mData[0], (float)pFBXVertNormal->GetDirectArray().GetAt(topDawg).mData[1], (float)pFBXVertNormal->GetDirectArray().GetAt(topDawg).mData[2], (float)pFBXVertNormal->GetDirectArray().GetAt(topDawg).mData[3]);
 					triVert.SetNormal( normal );
 				}
 
 				FbxGeometryElementTangent *const pFBXVertTangent = pFBXMesh->GetElementTangent(0);
 				if ( pFBXVertTangent != nullptr ) {
+//kbErrorCheck( pFBXVertTangent != nullptr, "" );
+
 					auto mappingMode = pFBXVertTangent->GetMappingMode();
 					kbErrorCheck( mappingMode == FbxGeometryElement::eByPolygonVertex, "kbModel::LoadFBX() - Invalid vertex tangent mapping mode" );
 
@@ -664,15 +676,17 @@ bool kbModel::LoadFBX() {
 					kbErrorCheck( refMode == FbxGeometryElement::eDirect, "kbModel::LoadFBX() - Invalid vertex tangent mapping mode" );
 
 					kbVec4 tangent;
-					tangent.x = (float)pFBXVertTangent->GetDirectArray().GetAt(iVertexCount).mData[0];
-					tangent.y = (float)pFBXVertTangent->GetDirectArray().GetAt(iVertexCount).mData[1];
-					tangent.z = (float)pFBXVertTangent->GetDirectArray().GetAt(iVertexCount).mData[2];
+					tangent.x = (float)pFBXVertTangent->GetDirectArray().GetAt(topDawg).mData[1];
+					tangent.y = (float)pFBXVertTangent->GetDirectArray().GetAt(topDawg).mData[2];
+					tangent.z = -(float)pFBXVertTangent->GetDirectArray().GetAt(topDawg).mData[0];
 					tangent.w = 0;
 					triVert.SetTangent( tangent );
 				}
 
 				FbxGeometryElementBinormal *const pFBXVertBinormal = pFBXMesh->GetElementBinormal(0);
+//kbErrorCheck( pFBXVertBinormal != nullptr, "" );
 				if ( pFBXVertBinormal != nullptr ) {
+
 					auto mappingMode = pFBXVertBinormal->GetMappingMode();
 					kbErrorCheck( mappingMode == FbxGeometryElement::eByPolygonVertex, "kbModel::LoadFBX() - Invalid vertex binormal mapping mode" );
 
@@ -680,14 +694,15 @@ bool kbModel::LoadFBX() {
 					kbErrorCheck( refMode == FbxGeometryElement::eDirect, "kbModel::LoadFBX() - Invalid vertex binormal mapping mode" );
 
 					kbVec4 binormal;
-					binormal.x = (float)pFBXVertBinormal->GetDirectArray().GetAt(iVertexCount).mData[0];
-					binormal.y = (float)pFBXVertBinormal->GetDirectArray().GetAt(iVertexCount).mData[1];
-					binormal.z = (float)pFBXVertBinormal->GetDirectArray().GetAt(iVertexCount).mData[2];
+					binormal.x = (float)pFBXVertBinormal->GetDirectArray().GetAt(topDawg).mData[1];
+					binormal.y = (float)pFBXVertBinormal->GetDirectArray().GetAt(topDawg).mData[2];
+					binormal.z = -(float)pFBXVertBinormal->GetDirectArray().GetAt(topDawg).mData[0];
 					binormal.w = 0;
 					triVert.SetBitangent( binormal );
 				}
 
 				FbxGeometryElementUV *const pFBXVertUV = pFBXMesh->GetElementUV(0);
+//kbErrorCheck( pFBXVertUV != nullptr, "" );
 				if ( pFBXVertUV != nullptr ) {
 					auto uvMapMode = pFBXVertUV->GetMappingMode();
 					kbErrorCheck( uvMapMode == FbxGeometryElement::eByPolygonVertex, "kbModel::LoadFBX() - Invalid uvs mapping mode" );
@@ -695,9 +710,16 @@ bool kbModel::LoadFBX() {
 					auto uvRefMode = pFBXVertUV->GetReferenceMode();
 					kbErrorCheck( uvRefMode == FbxGeometryElement::eIndexToDirect, "kbModel::LoadFBX() - Invalid uvs mapping mode" );
 
-					const int uvIndex = pFBXVertUV->GetIndexArray().GetAt(iVertexCount);
+					const int index = iTri * 3 + iTriVert;//pFBXVertUV->GetIndexArray().GetAt( topDawg );//pFBXMesh->GetTextureUVIndex( iTri, iTriVert );//pFBXVertUV->GetIndexArray().GetAt(iCtrlPt);
+					const int uvIndex = pFBXVertUV->GetIndexArray().GetAt(index);
 					triVert.uv.x = (float)pFBXVertUV->GetDirectArray().GetAt(uvIndex).mData[0];
-					triVert.uv.y = (float)pFBXVertUV->GetDirectArray().GetAt(uvIndex).mData[1];
+					triVert.uv.y = 1.0f - (float)pFBXVertUV->GetDirectArray().GetAt(uvIndex).mData[1];
+
+			/*	kbVec2 a;
+a.x = triVert.uv.x * cos(-kbPI /2.0f ) + triVert.uv.y * -sin(-kbPI/2.0f);
+a.y = triVert.uv.x * sin(-kbPI /2.0f ) + triVert.uv.y * cos(-kbPI/2.0f);
+triVert.uv = a;
+triVert.uv.x = 1.0f - triVert.uv.x;*/
 				}
 
 				auto vertIt = vertexMap.find( triVert );
@@ -711,10 +733,6 @@ bool kbModel::LoadFBX() {
 				}
 			}
 		}
-
-		newMesh.m_Bounds.Reset();
-		newMesh.m_Bounds.AddPoint( kbVec3( 10.0f, 10.0f, 10.0f ) );
-		newMesh.m_Bounds.AddPoint( kbVec3( -10.0f, -10.0f, -10.0f ) );
 	}
 
 	m_VertexBuffer.CreateVertexBuffer( vertexList );

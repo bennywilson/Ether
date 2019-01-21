@@ -15,6 +15,8 @@
 kbVec3 g_ProjectileStuckOffset = kbVec3( 0.0f, 5.0f, 0.0f );
 static int g_ShellPoolSize = 15;
 const static kbString g_IdleAnimation( "Idle" );
+const static kbString g_ShootAnimation( "Shoot" );
+const static kbString g_WalkForwardAnimation( "WalkForward" );
 
 /**
  *	EtherProjectileComponent::Constructor
@@ -399,6 +401,10 @@ bool EtherWeaponComponent::Fire( const bool bActivatedThisFrame ) {
  */
 void EtherWeaponComponent::PlayAnimation( const kbString & animationName, const float transitionLenSec ) {
 	if ( m_bIsFiring == true ) {
+		return;
+	}
+
+	if ( m_bIsFiring && m_pWeaponModel->IsPlaying( g_ShootAnimation ) && animationName == g_WalkForwardAnimation ) {
 		return;
 	}
 

@@ -402,6 +402,7 @@ kbGameEntity 0 0 0 0 {
 				Enabled = 0
 				LifeTime =  -1.000000
 				Animation = .\assets\models\characters\cartel_warrior\cartel_warrior_run.kbanim.ms3d
+				AnimationEvent = 0
 				AnimationName = ""
 				IsLooping = 0
 				TimeScale =  1.000000
@@ -977,7 +978,7 @@ kbGameEntity 0 0 0 0 {
 		LifeTime =  -1.000000
 		Name = "Smoke_0"
 		Orientation = 0.000000 0.707000 0.000000 0.707000
-		Position = 39.201965 21.001173 12.877377
+		Position = 79.241020 21.001173 33.964390
 		Scale = 25.000000 15.000000 5.000000
 	}
 	kbStaticModelComponent { 
@@ -1137,7 +1138,7 @@ kbGameEntity 0 0 0 0 {
 		LifeTime =  -1.000000
 		Name = "Fire_0"
 		Orientation = 0.000000 0.707000 0.000000 0.707000
-		Position = 16.153471 27.242178 48.717892
+		Position = 54.286793 27.242178 53.676590
 		Scale = 20.000000 20.000000 20.000000
 	}
 	kbStaticModelComponent { 
@@ -1232,10 +1233,114 @@ kbGameEntity 0 0 0 0 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		Name = "Fire_0"
-		Orientation = 0.000000 0.707000 0.000000 0.707000
-		Position = 166.094650 36.050854 32.969303
-		Scale = 20.000000 20.000000 20.000000
+		Name = "Entity_30"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 380.404633 22.954044 83.992416
+		Scale = 1.000000 1.000000 1.000000
+	}
+	kbPointLightComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadows = 0
+		Color = 2.500000 1.500000 0.500000 1.000000
+		Materials = 0
+		LightRadius =  124.000000
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Entity_38"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 11.190129 23.505821 -66.707130
+		Scale = 1.000000 1.000000 1.000000
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Izzy"
+		Orientation = 0.000000 0.997620 0.000000 -0.068949
+		Position = 24.617346 14.938108 15.440613
+		Scale = 2.250000 2.300000 2.500000
+	}
+	EtherSkelModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		Materials = 4
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Shader = .\assets\shaders\character\characterbase.kbshader
+				ShaderParams = 1
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorTexture"
+						Texture = .\assets\visualtarget\initiation\gina\prisonjumpsuit.dds
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Shader = .\assets\shaders\character\characterbase.kbshader
+				ShaderParams = 1
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorTexture"
+						Texture = .\assets\visualtarget\getthebag\gina\eye.dds
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Shader = .\assets\shaders\character\characterbase.kbshader
+				ShaderParams = 1
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorTexture"
+						Texture = .\assets\visualtarget\reuben\izzy\face.dds
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Shader = .\assets\shaders\character\characterbase.kbshader
+				ShaderParams = 1
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorTexture"
+						Texture = .\assets\visualtarget\reuben\izzy\izzy_combat.bmp
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		RenderPass = LightingPass
+		TranslucencySortBias =  0.000000
+		Model = .\assets\visualtarget\reuben\izzy\izza_combat.ms3d
+		ShaderOverride = 0
+			
+		Animations = 0
+		DebugAnimIndex = -1
+		IsFirstPersonModel = 0
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Entity_42"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 7.085353 28.571327 57.909828
+		Scale = 5.000000 5.000000 5.000000
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -1245,84 +1350,60 @@ kbGameEntity 0 0 0 0 {
 			kbMaterialComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
-				Shader = .\assets\shaders\fx\basicfire.kbshader
-				ShaderParams = 10
+				Shader = .\assets\shaders\environment\environmentbase.kbshader
+				ShaderParams = 4
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
-						ParamName = "fireNoiseMap"
-						Texture = .\assets\fx\noise\firenoise1.dds
+						ParamName = "diffuse"
+						Texture = .\assets\models\environment\crate_1.jpg
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
-						ParamName = "noiseMap1"
-						Texture = .\assets\fx\noise\noise1.png
+						ParamName = "normal"
+						Texture = .\assets\test\flatnormal.bmp
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
-						ParamName = "noiseMap2"
-						Texture = .\assets\fx\noise\noise2.png
+						ParamName = "propertyMap"
+						Texture = .\assets\test\black.jpg
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
-						ParamName = "noiseMap3"
-						Texture = .\assets\fx\noise\noise3.png
+						ParamName = "emissiveMap"
+						Texture = NULL
 						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "noiseScroll"
-						Texture = NULL
-						Vector = 1.000000 1.000000 1.000000 4.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "noiseDistortion_1_2"
-						Texture = NULL
-						Vector = 0.500000 1.000000 0.400000 0.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "noiseDistortion_3_colorDistortion"
-						Texture = NULL
-						Vector = 0.100000 0.200000 1.000000 0.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "startFireColor"
-						Texture = NULL
-						Vector = 1.000000 0.878000 0.450000 3.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "endFireColor"
-						Texture = NULL
-						Vector = 0.807000 0.180000 0.094000 1.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "additionalData"
-						Texture = NULL
-						Vector = 1.000000 1.000000 0.000000 0.000000
 					}
 			}
-		RenderPass = Post-LightingPass
-		TranslucencySortBias =  -5.000000
-		Model = ..\..\kbengine\assets\models\unitquad.ms3d
+		RenderPass = LightingPass
+		TranslucencySortBias =  0.000000
+		Model = .\assets\models\environment\crate_1.fbx
 		ShaderOverride = 0
 			
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Entity_41"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 43.444088 50.446579 81.266235
+		Scale = 1.000000 1.000000 1.000000
+	}
+	kbPointLightComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadows = 0
+		Color = 1.000000 1.000000 1.000000 1.000000
+		Materials = 0
+		LightRadius =  16.000000
 	}
 }
 kbGameEntity 0 0 0 0 {
@@ -1433,103 +1514,151 @@ kbGameEntity 0 0 0 0 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		Name = "Entity_30"
-		Orientation = 0.000000 0.000000 0.000000 1.000000
-		Position = 380.404633 22.954044 83.992416
-		Scale = 1.000000 1.000000 1.000000
+		Name = "Fire_0"
+		Orientation = 0.000000 0.707000 0.000000 0.707000
+		Position = 166.094650 36.050854 32.969303
+		Scale = 20.000000 20.000000 20.000000
 	}
-	kbPointLightComponent { 
-		Enabled = 1
-		LifeTime =  -1.000000
-		CastsShadows = 0
-		Color = 2.500000 1.500000 0.500000 1.000000
-		Materials = 0
-		LightRadius =  124.000000
-	}
-}
-kbGameEntity 0 0 0 0 {
-	kbTransformComponent { 
-		Enabled = 0
-		LifeTime =  -1.000000
-		Name = "Entity_38"
-		Orientation = 0.000000 0.000000 0.000000 1.000000
-		Position = 11.190129 23.505821 -66.707130
-		Scale = 1.000000 1.000000 1.000000
-	}
-}
-kbGameEntity 0 0 0 0 {
-	kbTransformComponent { 
-		Enabled = 0
-		LifeTime =  -1.000000
-		Name = "Izzy"
-		Orientation = 0.000000 0.997620 0.000000 -0.068949
-		Position = 24.617346 14.938108 15.440613
-		Scale = 2.250000 2.300000 2.500000
-	}
-	EtherSkelModelComponent { 
+	kbStaticModelComponent { 
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadow = 0
-		Materials = 4
+		Materials = 1
 			kbMaterialComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
-				Shader = .\assets\shaders\character\characterbase.kbshader
-				ShaderParams = 1
+				Shader = .\assets\shaders\fx\basicfire.kbshader
+				ShaderParams = 10
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
-						ParamName = "colorTexture"
-						Texture = .\assets\visualtarget\initiation\gina\prisonjumpsuit.dds
+						ParamName = "fireNoiseMap"
+						Texture = .\assets\fx\noise\firenoise1.dds
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
-			}
-			kbMaterialComponent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				Shader = .\assets\shaders\character\characterbase.kbshader
-				ShaderParams = 1
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
-						ParamName = "colorTexture"
-						Texture = .\assets\visualtarget\getthebag\gina\eye.dds
+						ParamName = "noiseMap1"
+						Texture = .\assets\fx\noise\noise1.png
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
-			}
-			kbMaterialComponent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				Shader = .\assets\shaders\character\characterbase.kbshader
-				ShaderParams = 1
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
-						ParamName = "colorTexture"
-						Texture = .\assets\visualtarget\reuben\izzy\face.dds
+						ParamName = "noiseMap2"
+						Texture = .\assets\fx\noise\noise2.png
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
-			}
-			kbMaterialComponent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				Shader = .\assets\shaders\character\characterbase.kbshader
-				ShaderParams = 1
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
-						ParamName = "colorTexture"
-						Texture = .\assets\visualtarget\reuben\izzy\izzy_combat.bmp
+						ParamName = "noiseMap3"
+						Texture = .\assets\fx\noise\noise3.png
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "noiseScroll"
+						Texture = NULL
+						Vector = 1.000000 1.000000 1.000000 4.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "noiseDistortion_1_2"
+						Texture = NULL
+						Vector = 0.500000 1.000000 0.400000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "noiseDistortion_3_colorDistortion"
+						Texture = NULL
+						Vector = 0.100000 0.200000 1.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "startFireColor"
+						Texture = NULL
+						Vector = 1.000000 0.878000 0.450000 3.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "endFireColor"
+						Texture = NULL
+						Vector = 0.807000 0.180000 0.094000 1.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "additionalData"
+						Texture = NULL
+						Vector = 1.000000 1.000000 0.000000 0.000000
+					}
+			}
+		RenderPass = Post-LightingPass
+		TranslucencySortBias =  -5.000000
+		Model = ..\..\kbengine\assets\models\unitquad.ms3d
+		ShaderOverride = 0
+			
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Entity_42"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 37.787895 36.670231 97.200798
+		Scale = 5.000000 5.000000 5.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		Materials = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Shader = .\assets\shaders\environment\environmentbase.kbshader
+				ShaderParams = 4
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "diffuse"
+						Texture = .\assets\models\test\abcd.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "normal"
+						Texture = .\assets\test\flatnormal.bmp
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "propertyMap"
+						Texture = .\assets\test\black.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "emissiveMap"
+						Texture = .\assets\test\black.jpg
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 			}
 		RenderPass = LightingPass
 		TranslucencySortBias =  0.000000
-		Model = .\assets\visualtarget\reuben\izzy\izza_combat.ms3d
+		Model = .\assets\test\quad.fbx
 		ShaderOverride = 0
 			
-		Animations = 0
-		DebugAnimIndex = -1
-		IsFirstPersonModel = 0
 	}
 }
