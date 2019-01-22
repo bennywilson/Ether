@@ -34,7 +34,7 @@ void kbGrass::grassRenderObject_t::Initialize( const kbVec3 & ownerPosition ) {
 	kbErrorCheck( m_pModel == nullptr && m_pComponent == nullptr, "grassRenderObject_t::Initialize() - m_pModel or m_pComponent is not NULL" );
 
 	m_pModel = new kbModel();
-	m_pComponent = new kbComponent();
+	m_pComponent = new kbGameComponent();
 
 	m_RenderObject.m_pComponent = m_pComponent;
 	m_RenderObject.m_pModel = m_pModel;
@@ -193,7 +193,8 @@ void kbGrass::RefreshGrass() {
 	m_GrassCellLength = m_pOwningTerrainComponent->GetTerrainWidth() / (float)m_GrassCellsPerTerrainSide;
 	const float patchLen = m_GrassCellLength / (float)m_PatchesPerCellSide;
 
-	//m_GrassShaderOverrides.m_ParamOverrides.clear();
+	m_GrassShaderOverrides.m_ParamOverrides.clear();
+	m_GrassShaderOverrides.m_pShader = (kbShader*)g_ResourceManager.LoadResource( "./assets/Shaders/Environment/grass.kbshader", true );
 	m_GrassShaderOverrides.SetTexture( "grassMap", m_pGrassMap );
     m_GrassShaderOverrides.SetTexture( "noiseMap", m_pNoiseMap );
 	m_GrassShaderOverrides.SetTexture( "heightMap", m_pOwningTerrainComponent->GetHeightMap() );
@@ -281,13 +282,19 @@ void kbGrass::RefreshGrass() {
 				renderObj.m_pModel->UnmapVertexBuffer();
 
 				m_GrassRenderObjects[cellIdx].m_RenderObject.m_Position = cellCenter;
-				m_GrassRenderObjects[cellIdx].m_RenderObject.m_ShaderParamOverrides = m_GrassShaderOverrides;
+
+				auto & renderObjMatList = m_GrassRenderObjects[cellIdx].m_RenderObject.m_Materials;
+				renderObjMatList.clear();
+				renderObjMatList.push_back( m_GrassShaderOverrides );
 				g_pRenderer->AddRenderObject( m_GrassRenderObjects[cellIdx].m_RenderObject );
 			}
 		}
 	} else {
+
 		for ( int i = 0; i < m_GrassRenderObjects.size(); i++ ) {
-			m_GrassRenderObjects[i].m_RenderObject.m_ShaderParamOverrides = m_GrassShaderOverrides;
+			auto & renderObjMatList = m_GrassRenderObjects[i].m_RenderObject.m_Materials;
+			renderObjMatList.clear();
+			renderObjMatList.push_back( m_GrassShaderOverrides );
 			g_pRenderer->UpdateRenderObject( m_GrassRenderObjects[i].m_RenderObject );
 		}
 	}
@@ -370,7 +377,14 @@ void kbTerrainComponent::EditorChange( const std::string & propertyName ) {
 		return;
 	}
 
-    UpdateTerrainMaterial();
+    RefreshMaterials();
+
+	// Editor Hack!
+	if ( propertyName == "Materials" ) {
+		for ( int i = 0; i < this->m_MaterialList.size(); i++ ) {
+			m_MaterialList[i].SetOwningComponent( this );
+		}
+	}
 	g_pRenderer->UpdateRenderObject( m_RenderObject );
 }
 
@@ -455,7 +469,7 @@ void kbTerrainComponent::GenerateTerrain() {
 	}
 	m_TerrainModel.UnmapVertexBuffer();
 
-	unsigned long * pIndices = ( unsigned long* ) m_TerrainModel.MapIndexBuffer();
+	ushort * pIndices = (ushort *) m_TerrainModel.MapIndexBuffer();
 	int currentIndexToWrite = 0;
 
 	for ( int startY = 0; startY < m_TerrainDimensions; startY++ ) {
@@ -518,12 +532,12 @@ void kbTerrainComponent::GenerateTerrain() {
 
 	m_TerrainModel.UnmapIndexBuffer();
 
-    UpdateTerrainMaterial();
+    RefreshMaterials();
 
     g_pRenderer->AddRenderObject( m_RenderObject );
 
 	// Update collision
-	int collisionPatchSize = 128;
+	int collisionPatchSize = 1;
 
 	std::vector<kbCollisionComponent::customTriangle_t> terrainCollision;
 	terrainCollision.resize( ( (m_TerrainDimensions / collisionPatchSize) * (m_TerrainDimensions/collisionPatchSize) ) * 2 );
@@ -539,7 +553,7 @@ void kbTerrainComponent::GenerateTerrain() {
 
 			terrainCollision[triIdx + 1].m_Vertex1 = cpuVerts[currentIndex + collisionPatchSize];
 			terrainCollision[triIdx + 1].m_Vertex2 = cpuVerts[currentIndex +collisionPatchSize + (m_TerrainDimensions*collisionPatchSize)];
-			terrainCollision[triIdx + 1].m_Vertex3 = cpuVerts[currentIndex + (collisionPatchSize*m_TerrainDimensions)];
+			terrainCollision[triIdx + 1].m_Vertex3 = cpuVerts[currentIndex + (collisionPatchSize * m_TerrainDimensions)];
 		}
 	}
 
@@ -554,27 +568,17 @@ void kbTerrainComponent::GenerateTerrain() {
  */
 void kbTerrainComponent::SetCollisionMap( const kbRenderTexture *const pTexture ) {
 	for ( int i = 0; i < m_Grass.size(); i++ ) {
-		m_Grass[i].m_GrassShaderOverrides.SetTexture( "collisionMap", pTexture );
-		m_Grass[i].m_GrassShaderOverrides.SetVec4( "collisionMapPixelWorldSize", kbVec4( GetTerrainWidth() / pTexture->GetWidth(), 0.0f, 0.0f, 0.0f ) );
 
-		for ( int cellIdx = 0; cellIdx < m_Grass[i].m_GrassRenderObjects.size(); cellIdx++ ) {
-			m_Grass[i].m_GrassRenderObjects[cellIdx].m_RenderObject.m_ShaderParamOverrides = m_Grass[i].m_GrassShaderOverrides;
-			g_pRenderer->UpdateRenderObject( m_Grass[i].m_GrassRenderObjects[cellIdx].m_RenderObject );
-		}
-	}
-}
+		kbGrass & grass = m_Grass[i];
+		grass.m_GrassShaderOverrides.SetTexture( "collisionMap", pTexture );
+		grass.m_GrassShaderOverrides.SetVec4( "collisionMapPixelWorldSize", kbVec4( GetTerrainWidth() / pTexture->GetWidth(), 0.0f, 0.0f, 0.0f ) );
 
-/**
- *  kbTerrainComponent::SetGrassTexture
- */
-
-void kbTerrainComponent::SetGrassTexture( const std::string & textureName, const kbTexture *const pTexture ) {
-	for ( int i = 0; i < m_Grass.size(); i++ ) {
-		m_Grass[i].m_GrassShaderOverrides.SetTexture( textureName, pTexture );
-
-		for ( int cellIdx = 0; cellIdx < m_Grass[i].m_GrassRenderObjects.size(); cellIdx++ ) {
-			m_Grass[i].m_GrassRenderObjects[cellIdx].m_RenderObject.m_ShaderParamOverrides = m_Grass[i].m_GrassShaderOverrides;
-			g_pRenderer->UpdateRenderObject( m_Grass[i].m_GrassRenderObjects[cellIdx].m_RenderObject );
+		for ( int cellIdx = 0; cellIdx < grass.m_GrassRenderObjects.size(); cellIdx++ ) {
+			auto & grassRenderObj = grass.m_GrassRenderObjects[cellIdx];
+			auto & renderObjMatList = grassRenderObj.m_RenderObject.m_Materials;
+			renderObjMatList.clear();
+			renderObjMatList.push_back( grass.m_GrassShaderOverrides );
+			g_pRenderer->UpdateRenderObject( grassRenderObj.m_RenderObject );
 		}
 	}
 }
@@ -589,7 +593,7 @@ void kbTerrainComponent::SetEnable_Internal( const bool isEnabled ) {
 	}
 
 	if ( isEnabled ) {
-		UpdateTerrainMaterial();
+		RefreshMaterials();
 		g_pRenderer->AddRenderObject( m_RenderObject );
 
 		for ( int i = 0; i < m_Grass.size(); i++ ) {
@@ -613,7 +617,7 @@ void kbTerrainComponent::Update_Internal( const float DeltaTime ) {
 
 	if ( m_TerrainModel.GetMeshes().size() > 0 && ( GetOwner()->IsDirty() ) ) {
 
-		UpdateTerrainMaterial();
+		RefreshMaterials();
 		g_pRenderer->UpdateRenderObject( m_RenderObject );
 	}
 
@@ -649,38 +653,9 @@ void kbTerrainComponent::RenderSync() {
 }
 
 /**
- *	kbTerrainComponent::UpdateTerrainMaterial
+ *	kbTerrainComponent::RefreshMaterials
  */
-void kbTerrainComponent::UpdateTerrainMaterial() {
-
-	m_ShaderOverrideList.clear();
-	if ( m_pTerrainShader != nullptr ) {
-		m_ShaderOverrideList.push_back( m_pTerrainShader );
-	}
-
-	m_TerrainShaderOverrides.m_ParamOverrides.clear();
-    m_TerrainShaderOverrides.SetTexture( "splatMap", m_pSplatMap );
-
-	kbVec4 specFactors( 1.0f, 1.0f, 1.0f, 1.0f );
-	kbVec4 specPowMult( 1.0f, 1.0f, 1.0f, 1.0f );
-	float uvScale[8] = { 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f };
-	for ( int i = 0; i < m_TerrainMaterials.size() && i < 4; i++ ) {
-		const kbTerrainMatComponent & curMaterial = m_TerrainMaterials[i];
-		m_TerrainShaderOverrides.SetTexture( std::string( "Mat" + std::to_string(i + 1) + "Diffuse" ).c_str(), curMaterial.GetDiffuseMap() );
-		m_TerrainShaderOverrides.SetTexture( std::string( "Mat" + std::to_string(i + 1) + "Normal" ).c_str(), curMaterial.GetNormalMap() );
-		m_TerrainShaderOverrides.SetTexture( std::string( "Mat" + std::to_string(i + 1) + "Specular" ).c_str(), curMaterial.GetSpecMap() );
-
-		specFactors[i] = curMaterial.GetSpecFactor();
-		specPowMult[i] = curMaterial.GetSpecPowerMultiplier();
-		uvScale[(i*2) + 0] = curMaterial.GetUVScale().x;
-		uvScale[(i*2) + 1] = curMaterial.GetUVScale().y;
-	}
-
-	m_TerrainShaderOverrides.SetVec4( "mat1And2UVScale", kbVec4( uvScale[0], uvScale[1], uvScale[2], uvScale[3] ) );
-	m_TerrainShaderOverrides.SetVec4( "mat3And4UVScale", kbVec4( uvScale[4], uvScale[5], uvScale[6], uvScale[7] ) );
-
-	m_TerrainShaderOverrides.SetVec4( "specFactors", specFactors );
-	m_TerrainShaderOverrides.SetVec4( "specPowerMultipliers", specPowMult );
+void kbTerrainComponent::RefreshMaterials() {
 
 	m_RenderObject.m_bCastsShadow = false;
 	m_RenderObject.m_bIsSkinnedModel = false;
@@ -690,7 +665,5 @@ void kbTerrainComponent::UpdateTerrainMaterial() {
 	m_RenderObject.m_Scale.Set( 1.0f, 1.0f, 1.0f );
 	m_RenderObject.m_pModel = &m_TerrainModel;
 	m_RenderObject.m_RenderPass = RP_Lighting;
-	m_RenderObject.m_OverrideShaderList = m_ShaderOverrideList;
-	m_RenderObject.m_ShaderParamOverrides = m_TerrainShaderOverrides;
 	m_RenderObject.m_pComponent = this;
 }

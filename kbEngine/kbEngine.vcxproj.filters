@@ -96,8 +96,18 @@
     <None Include="assets\Shaders\SimpleAlphaBlend.kbShader">
       <Filter>Assets\Shaders</Filter>
     </None>
-    <None Include="assets\Shaders\godRayIteration.kbShader" />
-    <None Include="assets\Shaders\alphaParticles.kbShader" />
+    <None Include="assets\Shaders\basicMultiplyBlend.kbShader">
+      <Filter>Assets\Shaders</Filter>
+    </None>
+    <None Include="assets\Shaders\alphaParticles.kbShader">
+      <Filter>Assets\Shaders</Filter>
+    </None>
+    <None Include="assets\Shaders\godRayIteration.kbShader">
+      <Filter>Assets\Shaders</Filter>
+    </None>
+    <None Include="assets\Shaders\UIManipulator.kbShader">
+      <Filter>Assets\Shaders</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="renderer\kbModel.h">

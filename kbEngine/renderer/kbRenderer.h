@@ -37,10 +37,12 @@ enum eReservedRenderTargets {
 	ACCUMULATION_BUFFER,
 	SHADOW_BUFFER,
 	SHADOW_BUFFER_DEPTH,
+	RGBA_BUFFER,
 	DOWN_RES_BUFFER,
 	DOWN_RES_BUFFER_2,
 	SCRATCH_BUFFER,
 	MOUSE_PICKER_BUFFER,
+	MAX_HALF_BUFFER,
 	NUM_RESERVED_RENDER_TARGETS,
 };
 
@@ -148,7 +150,7 @@ public:
 	const kbVec3 &												GetCameraPosition() const { return m_CameraPosition; }
 	const kbQuat &												GetCameraRotation() const { return m_CameraRotation; }
 
-	const std::map<const kbComponent *, kbRenderObject *> &		GetRenderObjectMap() const { return m_RenderObjectMap; }
+	const std::map<const kbGameComponent *, kbRenderObject *> &	GetRenderObjectMap() const { return m_RenderObjectMap; }
 	const std::map<const kbLightComponent *, kbRenderLight *> &	GetRenderLightMap() const { return m_RenderLightMap; }
 	const std::map<const void *, kbRenderObject *> &			GetRenderParticleMap() const { return m_RenderParticleMap; }
 
@@ -187,7 +189,7 @@ private:
 	kbVec3														m_CameraPosition_GameThread;
 	kbQuat														m_CameraRotation_GameThread;
 
-	std::map<const kbComponent *, kbRenderObject *>				m_RenderObjectMap;
+	std::map<const kbGameComponent *, kbRenderObject *>			m_RenderObjectMap;
 	std::map<const kbLightComponent *, kbRenderLight *>			m_RenderLightMap;
 	std::map<const void *, kbRenderObject *>					m_RenderParticleMap;
 
@@ -270,7 +272,9 @@ public:
 	void										RemoveLightShafts( const kbLightShaftsComponent *const pComponent );
 
 
-	// Debug Text Drawing
+	// Debug Drawing
+	virtual void								EnableDebugBillboards( const bool bEnable ) { m_bDebugBillboardsEnabled = bEnable; }
+
 	void										EnableConsole( const bool bEnable ) { m_bConsoleEnabled = bEnable; }
 	void										DrawDebugText( const std::string & theString, const float X, const float Y, const float ScreenCharWidth, 
 															   const float ScreenCharHeight, const kbColor & color );
@@ -294,12 +298,13 @@ public:
 	void										DrawPreTransformedLine( const std::vector<kbVec3> & vertList, const kbColor & color );
 	void										DrawSphere( const kbVec3 & origin, const float radius, const int NumSegments, const kbColor & color );
 	void										DrawBillboard( const kbVec3 & position, const kbVec2 & size, const int textureIndex, kbShader *const pShader, const int entityId = -1 );
-	void										DrawModel( const kbModel * pModel, const kbVec3 & start, const kbQuat & orientation, const kbVec3 & scale, const int entityId );
+	void										DrawModel( const kbModel *const pModel, const std::vector<kbShaderParamOverrides_t> & materials, const kbVec3 & start, const kbQuat & orientation, const kbVec3 & scale, const int entityId );
 
 	//
 	enum kbViewMode_t {
 		ViewMode_Shaded,
 		ViewMode_Wireframe,
+		ViewMode_Color,
 		ViewMode_Normals,
 		ViewMode_Specular,
 		ViewMode_Depth
@@ -398,7 +403,8 @@ protected:
 		kbQuat									m_Orientation;
 		kbVec3									m_Scale;
 		const kbModel *							m_pModel;
-		kbShader*								m_pShader;
+		std::vector<kbShaderParamOverrides_t>	m_Materials;
+		kbShader *								m_pShader;
 		int										m_TextureIndex;
 		int										m_EntityId;
 	};
@@ -413,7 +419,7 @@ protected:
 	volatile int								m_RenderThreadSync;
 
 	bool										m_bConsoleEnabled;
-
+	bool										m_bDebugBillboardsEnabled;
 };
 
 extern class kbRenderer * g_pRenderer;

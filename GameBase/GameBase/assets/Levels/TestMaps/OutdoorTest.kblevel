@@ -11,10 +11,121 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadow = 0
+		Materials = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Shader = .\assets\shaders\environment\basicterrain.kbshader
+				ShaderParams = 15
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "mat1And2UVScale"
+						Texture = NULL
+						Vector = 1.000000 1.000000 55.000000 55.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "mat3And4UVScale"
+						Texture = NULL
+						Vector = 25.000000 25.000000 1.000000 1.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "specFactors"
+						Texture = NULL
+						Vector = 1.000000 1.000000 5.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "specPowerMultipliers"
+						Texture = NULL
+						Vector = 1.000000 3.000000 55.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "splatMap"
+						Texture = .\assets\terrain\basicterrain\terrain1_splatmap.bmp
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "Mat1Diffuse"
+						Texture = .\assets\terrain\textures\sand.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "Mat1Normal"
+						Texture = .\assets\terrain\textures\sand_nm.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "Mat1Specular"
+						Texture = .\assets\terrain\textures\sand.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "Mat2Diffuse"
+						Texture = .\assets\terrain\textures\rocky_diffuse.dds
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "Mat2Normal"
+						Texture = .\assets\terrain\textures\rocky_normal.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "Mat2Specular"
+						Texture = .\assets\terrain\textures\rocky_diffuse.dds
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "Mat3Diffuse"
+						Texture = .\assets\terrain\textures\grassy_lowrock_diffuse.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "Mat3Normal"
+						Texture = .\assets\terrain\textures\grassy_lowrock_normal.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "Mat3Specular"
+						Texture = .\assets\terrain\textures\grassy_lowrock_diffuse.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "Mat4Diffuse"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
 		RenderPass = LightingPass
-		ShaderParams = 0
 		TranslucencySortBias =  -1.000000
-		Dimensions = 513
+		Dimensions = 129
 		Grass = 1
 			kbGrass { 
 				Enabled = 1
@@ -30,7 +141,7 @@ kbGameEntity 0 0 0 0 {
 				GrassMap = .\assets\terrain\foliage\grass_1.dds
 				MaxBladeJitterOffset =  0.000000
 				MaxPatchJitterOffset =  3.000000
-				NoiseMap = .\assets\FX\Nois\noisemap.png
+				NoiseMap = .\assets\fx\noise\noisemap.png
 				PatchEndCullDistance =  1000.000000
 				PatchStartCullDistance =  200.000000
 				PatchesPerCellSide = 60
@@ -51,38 +162,39 @@ kbGameEntity 0 0 0 0 {
 					}
 				TestWind = 0.000000 0.000000 25.000000
 			}
-		HeightMap = .\assets\terrain\BasicTerrain\terrain1_height.bmp
+		HeightMap = .\assets\terrain\basicterrain\terrain1_height.bmp
 		HeightScale =  1024.000000
-		Materials = 3
+		MaterialList = 0
+		Shader = .\assets\shaders\environment\basicterrain.kbshader
+		SplatMap = .\assets\terrain\basicterrain\terrain1_splatmap.bmp
+		TerrainMaterials = 3
 			kbTerrainMatComponent { 
 				Enabled = 0
-				DiffuseMap = .\assets\terrain\textures\sand.jpg
-				NormalMap = .\assets\terrain\textures\sand_nm.jpg
+				DiffuseMap = NULL
+				NormalMap = NULL
 				SpecFactors =  1.000000
-				SpecMap = .\assets\terrain\sand.jpg
+				SpecMap = NULL
 				SpecPowerMultiplier =  1.000000
 				UVScale = 1.000000 1.000000 1.000000
 			}
 			kbTerrainMatComponent { 
 				Enabled = 0
-				DiffuseMap = .\assets\terrain\textures\rocky_diffuse.dds
-				NormalMap = .\assets\terrain\textures\rocky_normal.jpg
+				DiffuseMap = NULL
+				NormalMap = NULL
 				SpecFactors =  1.000000
-				SpecMap = .\assets\terrain\textures\rocky_diffuse.dds
-				SpecPowerMultiplier =  3.000000
-				UVScale = 55.000000 55.000000 50.000000
+				SpecMap = NULL
+				SpecPowerMultiplier =  1.000000
+				UVScale = 1.000000 1.000000 1.000000
 			}
 			kbTerrainMatComponent { 
 				Enabled = 0
-				DiffuseMap = .\assets\terrain\textures\grassy_lowrock_diffuse.jpg
-				NormalMap = .\assets\terrain\textures\grassy_lowrock_normal.jpg
-				SpecFactors =  5.000000
-				SpecMap = .\assets\terrain\textures\grassy_lowrock_diffuse.jpg
-				SpecPowerMultiplier =  55.000000
-				UVScale = 25.000000 25.000000 50.000000
+				DiffuseMap = NULL
+				NormalMap = NULL
+				SpecFactors =  1.000000
+				SpecMap = NULL
+				SpecPowerMultiplier =  1.000000
+				UVScale = 1.000000 1.000000 1.000000
 			}
-		Shader = .\assets\shaders\environment\basicterrain.kbshader
-		SplatMap = .\assets\terrain\BasicTerrain\terrain1_splatmap.bmp
 		Width =  8192.000000
 	}
 	kbCollisionComponent { 
@@ -107,6 +219,97 @@ kbGameEntity 0 0 0 0 {
 		LifeTime =  -1.000000
 		CastsShadows = 1
 		Color = 1.000000 1.000000 1.000000 0.250000
+		Materials = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Shader = .\assets\shaders\lights\directionallighttoon.kbshader
+				ShaderParams = 12
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "lightColor"
+						Texture = NULL
+						Vector = 1.000000 1.000000 1.000000 1.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "cameraPosition"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "diffuseColorBand"
+						Texture = NULL
+						Vector = 0.010000 0.070000 0.500000 0.500000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "specularColorBand"
+						Texture = NULL
+						Vector = 0.200000 0.300000 0.950000 0.050000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "rimLightColor"
+						Texture = NULL
+						Vector = 0.350000 0.350000 0.350000 0.500000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "nonToonDiffuseScaleAndBias"
+						Texture = NULL
+						Vector = 0.900000 0.100000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "specParams"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.001000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorTexture"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "normalTexture"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "specularTexture"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "depthTexture"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "ShadowMap"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
 		CascadedShadowSplits = 4
  100.000000
  200.000000
@@ -127,25 +330,31 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadow = 0
-		RenderPass = Post-LightingPass
-		ShaderParams = 1
-			kbShaderParamComponent { 
+		Materials = 1
+			kbMaterialComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
-				ParamName = "diffuseTexture"
-				Texture = .\assets\models\skydomes\sky_01.png
-				Vector = 0.000000 0.000000 0.000000 0.000000
+				Shader = .\assets\shaders\skybox\skybox.kbshader
+				ShaderParams = 1
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "diffuseTexture"
+						Texture = .\assets\models\skydomes\sky_01.png
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
 			}
+		RenderPass = Post-LightingPass
 		TranslucencySortBias =  -1.000000
 		Model = .\assets\models\skydomes\skydomes.ms3d
 		ShaderOverride = 1
-			.\assets\shaders\Skybox\skybox.kbshader
+			.\assets\shaders\skybox\skybox.kbshader
 
 	}
 }
 kbGameEntity 0 0 0 0 {
 	kbTransformComponent { 
-		Enabled = 0
+		Enabled = 1
 		LifeTime =  -1.000000
 		Name = "Cartel Soldier"
 		Orientation = 0.000000 0.991689 0.000000 0.128659
@@ -153,11 +362,37 @@ kbGameEntity 0 0 0 0 {
 		Scale = 0.100000 0.100000 0.100000
 	}
 	EtherSkelModelComponent { 
-		Enabled = 0
+		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadow = 1
+		Materials = 2
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Shader = .\assets\shaders\character\characterbase.kbshader
+				ShaderParams = 1
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorTexture"
+						Texture = .\assets\models\shared_color_palette.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Shader = .\assets\shaders\character\characterbase.kbshader
+				ShaderParams = 1
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorTexture"
+						Texture = .\assets\models\shared_color_palette.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
 		RenderPass = LightingPass
-		ShaderParams = 0
 		TranslucencySortBias =  -1.000000
 		Model = .\assets\models\characters\cartel_warrior\cartel_warrior.ms3d
 		ShaderOverride = 0
@@ -167,6 +402,7 @@ kbGameEntity 0 0 0 0 {
 				Enabled = 0
 				LifeTime =  -1.000000
 				Animation = .\assets\models\characters\cartel_warrior\cartel_warrior_run.kbanim.ms3d
+				AnimationEvent = 0
 				AnimationName = ""
 				IsLooping = 0
 				TimeScale =  1.000000
@@ -230,8 +466,14 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadow = 0
+		Materials = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Shader = ..\..\kbengine\assets\shaders\basicshader.kbshader
+				ShaderParams = 0
+			}
 		RenderPass = LightingPass
-		ShaderParams = 0
 		TranslucencySortBias =  -1.000000
 		Model = .\assets\models\vehicles\jet.ms3d
 		ShaderOverride = 1
@@ -277,8 +519,21 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadow = 0
+		Materials = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Shader = ..\..\kbengine\assets\shaders\basictexture.kbshader
+				ShaderParams = 1
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "shaderTexture"
+						Texture = ..\..\kbengine\assets\textures\white.bmp
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
 		RenderPass = LightingPass
-		ShaderParams = 0
 		TranslucencySortBias =  -1.000000
 		Model = ..\..\kbengine\assets\models\unitsphere.ms3d
 		ShaderOverride = 1
@@ -296,86 +551,78 @@ kbGameEntity 0 0 0 0 {
 		Scale = 20.000000 20.000000 20.000000
 	}
 	kbStaticModelComponent { 
-		Enabled = 1
+		Enabled = 0
 		LifeTime =  -1.000000
 		CastsShadow = 0
+		Materials = 0
 		RenderPass = LightingPass
-		ShaderParams = 10
-			kbShaderParamComponent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				ParamName = "fireNoiseMap"
-				Texture = .\assets\fx\noise\firenoise1.dds
-				Vector = 0.000000 0.000000 0.000000 0.000000
-			}
-			kbShaderParamComponent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				ParamName = "noiseMap1"
-				Texture = .\assets\fx\noise\noise1.png
-				Vector = 0.000000 0.000000 0.000000 0.000000
-			}
-			kbShaderParamComponent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				ParamName = "noiseMap2"
-				Texture = .\assets\fx\noise\noise2.png
-				Vector = 0.000000 0.000000 0.000000 0.000000
-			}
-			kbShaderParamComponent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				ParamName = "noiseMap3"
-				Texture = .\assets\fx\noise\noise3.png
-				Vector = 0.000000 0.000000 0.000000 0.000000
-			}
-			kbShaderParamComponent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				ParamName = "noiseScroll"
-				Texture = NULL
-				Vector = 1.000000 1.000000 1.000000 4.000000
-			}
-			kbShaderParamComponent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				ParamName = "noiseDistortion_1_2"
-				Texture = NULL
-				Vector = 0.500000 1.000000 0.400000 0.000000
-			}
-			kbShaderParamComponent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				ParamName = "noiseDistortion_3_colorDistortion"
-				Texture = NULL
-				Vector = 0.100000 0.200000 1.000000 0.000000
-			}
-			kbShaderParamComponent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				ParamName = "startFireColor"
-				Texture = NULL
-				Vector = 1.000000 0.878000 0.450000 3.000000
-			}
-			kbShaderParamComponent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				ParamName = "endFireColor"
-				Texture = NULL
-				Vector = 0.807000 0.180000 0.094000 1.000000
-			}
-			kbShaderParamComponent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				ParamName = "additionalData"
-				Texture = NULL
-				Vector = 1.000000 0.000000 0.000000 0.000000
-			}
-		TranslucencySortBias =  -5.000000
-		Model = ..\..\kbengine\assets\models\unitquad.ms3d
-		ShaderOverride = 1
-			.\assets\shaders\fx\basicfire.kbshader
-
+		TranslucencySortBias =  0.000000
+		Model = NULL
+		ShaderOverride = 0
+			
+	}
+	kbShaderParamComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		ParamName = "noiseMap1"
+		Texture = .\assets\fx\noise\noise1.png
+		Vector = 0.000000 0.000000 0.000000 0.000000
+	}
+	kbShaderParamComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		ParamName = "noiseMap2"
+		Texture = .\assets\fx\noise\noise2.png
+		Vector = 0.000000 0.000000 0.000000 0.000000
+	}
+	kbShaderParamComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		ParamName = "noiseMap3"
+		Texture = .\assets\fx\noise\noise3.png
+		Vector = 0.000000 0.000000 0.000000 0.000000
+	}
+	kbShaderParamComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		ParamName = "noiseScroll"
+		Texture = NULL
+		Vector = 1.000000 1.000000 1.000000 4.000000
+	}
+	kbShaderParamComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		ParamName = "noiseDistortion_1_2"
+		Texture = NULL
+		Vector = 0.500000 1.000000 0.400000 0.000000
+	}
+	kbShaderParamComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		ParamName = "noiseDistortion_3_colorDistortion"
+		Texture = NULL
+		Vector = 0.100000 0.200000 1.000000 0.000000
+	}
+	kbShaderParamComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		ParamName = "startFireColor"
+		Texture = NULL
+		Vector = 1.000000 0.878000 0.450000 3.000000
+	}
+	kbShaderParamComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		ParamName = "endFireColor"
+		Texture = NULL
+		Vector = 0.807000 0.180000 0.094000 1.000000
+	}
+	kbShaderParamComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		ParamName = "additionalData"
+		Texture = NULL
+		Vector = 1.000000 0.000000 0.000000 0.000000
 	}
 }
 kbGameEntity 0 0 0 0 {
@@ -397,6 +644,20 @@ kbGameEntity 0 0 0 0 {
 		EndColor = 1.000000 1.000000 1.000000 0.000000
 		Gravity = 0.000000 0.000000 0.000000
 		LockVelocity = 0
+		MaterialList = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Shader = .\assets\shaders\fx\emberparticle.kbshader
+				ShaderParams = 1
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "shaderTexture"
+						Texture = .\assets\fx\orangeglow.dds
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
 		MaxBurstCount = 0
 		MaxDuration =  5.000000
 		MaxEndSize = 0.500000 0.300000 0.200000
@@ -429,86 +690,78 @@ kbGameEntity 0 0 0 0 {
 		Scale = 15.000000 25.000000 5.000000
 	}
 	kbStaticModelComponent { 
-		Enabled = 1
+		Enabled = 0
 		LifeTime =  -1.000000
 		CastsShadow = 0
+		Materials = 0
 		RenderPass = LightingPass
-		ShaderParams = 10
-			kbShaderParamComponent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				ParamName = "smokeNoiseMap"
-				Texture = .\assets\fx\noise\smokenoise1.dds
-				Vector = 0.000000 0.000000 0.000000 0.000000
-			}
-			kbShaderParamComponent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				ParamName = "noiseMap1"
-				Texture = .\assets\fx\noise\smokenoise1.dds
-				Vector = 0.000000 0.000000 0.000000 0.000000
-			}
-			kbShaderParamComponent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				ParamName = "noiseMap2"
-				Texture = .\assets\fx\noise\smokenoise2.png
-				Vector = 0.000000 0.000000 0.000000 0.000000
-			}
-			kbShaderParamComponent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				ParamName = "noiseMap3"
-				Texture = .\assets\fx\noise\smokenoise3.png
-				Vector = 0.000000 0.000000 0.000000 0.000000
-			}
-			kbShaderParamComponent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				ParamName = "noiseScroll"
-				Texture = NULL
-				Vector = 0.100000 0.200000 0.200000 4.000000
-			}
-			kbShaderParamComponent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				ParamName = "distortion_1_2"
-				Texture = NULL
-				Vector = 0.100000 0.100000 0.100000 0.100000
-			}
-			kbShaderParamComponent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				ParamName = "distortion_3_AlphaScroll"
-				Texture = NULL
-				Vector = 0.100000 0.250000 0.100000 0.500000
-			}
-			kbShaderParamComponent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				ParamName = "startSmokeColor"
-				Texture = NULL
-				Vector = 0.250000 0.250000 0.250000 3.000000
-			}
-			kbShaderParamComponent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				ParamName = "endSmokeColor"
-				Texture = NULL
-				Vector = 0.100000 0.100000 0.100000 1.000000
-			}
-			kbShaderParamComponent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				ParamName = "smokeDistortion"
-				Texture = NULL
-				Vector = 0.100000 0.100000 0.000000 0.000000
-			}
-		TranslucencySortBias =  5.000000
-		Model = ..\..\kbengine\assets\models\unitquad.ms3d
-		ShaderOverride = 1
-			.\assets\shaders\fx\basicsmoke.kbshader
-
+		TranslucencySortBias =  0.000000
+		Model = NULL
+		ShaderOverride = 0
+			
+	}
+	kbShaderParamComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		ParamName = "noiseMap1"
+		Texture = .\assets\fx\noise\smokenoise1.dds
+		Vector = 0.000000 0.000000 0.000000 0.000000
+	}
+	kbShaderParamComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		ParamName = "noiseMap2"
+		Texture = .\assets\fx\noise\smokenoise2.png
+		Vector = 0.000000 0.000000 0.000000 0.000000
+	}
+	kbShaderParamComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		ParamName = "noiseMap3"
+		Texture = .\assets\fx\noise\smokenoise3.png
+		Vector = 0.000000 0.000000 0.000000 0.000000
+	}
+	kbShaderParamComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		ParamName = "noiseScroll"
+		Texture = NULL
+		Vector = 0.100000 0.200000 0.200000 4.000000
+	}
+	kbShaderParamComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		ParamName = "distortion_1_2"
+		Texture = NULL
+		Vector = 0.100000 0.100000 0.100000 0.100000
+	}
+	kbShaderParamComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		ParamName = "distortion_3_AlphaScroll"
+		Texture = NULL
+		Vector = 0.100000 0.250000 0.100000 0.500000
+	}
+	kbShaderParamComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		ParamName = "startSmokeColor"
+		Texture = NULL
+		Vector = 0.250000 0.250000 0.250000 3.000000
+	}
+	kbShaderParamComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		ParamName = "endSmokeColor"
+		Texture = NULL
+		Vector = 0.100000 0.100000 0.100000 1.000000
+	}
+	kbShaderParamComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		ParamName = "smokeDistortion"
+		Texture = NULL
+		Vector = 0.100000 0.100000 0.000000 0.000000
 	}
 }
 kbGameEntity 0 0 0 0 {
@@ -524,13 +777,32 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadow = 0
+		Materials = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Shader = .\assets\shaders\environment\environmenthole.kbshader
+				ShaderParams = 2
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "diffuse"
+						Texture = .\assets\models\architecture\bricks.png
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "normal"
+						Texture = .\assets\models\architecture\bricks_nm.png
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
 		RenderPass = LightingPass
-		ShaderParams = 0
 		TranslucencySortBias =  -1.000000
 		Model = .\assets\models\architecture\bricks.ms3d
-		ShaderOverride = 1
-			.\assets\shaders\environment\environmentHole.kbshader
-
+		ShaderOverride = 0
+			
 	}
 	kbCollisionComponent { 
 		Enabled = 1
@@ -538,5 +810,800 @@ kbGameEntity 0 0 0 0 {
 		CollisionType = StaticMesh
 		Extent = 10.000000 10.000000 10.000000
 		SphereCollision = 0
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Smoke_0"
+		Orientation = 0.000000 0.707000 0.000000 0.707000
+		Position = -23.650311 33.969433 4.039940
+		Scale = 25.000000 15.000000 5.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		Materials = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Shader = .\assets\shaders\fx\basicsmoke.kbshader
+				ShaderParams = 11
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "noiseScroll"
+						Texture = NULL
+						Vector = 0.100000 0.200000 0.200000 4.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "startSmokeColor"
+						Texture = NULL
+						Vector = 0.250000 0.250000 0.250000 3.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "endSmokeColor"
+						Texture = NULL
+						Vector = 0.100000 0.100000 0.100000 1.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "distortion_1_2"
+						Texture = NULL
+						Vector = 0.100000 0.100000 0.100000 0.100000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "distortion_3_AlphaScroll"
+						Texture = NULL
+						Vector = 0.100000 0.250000 0.100000 0.500000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "smokeDistortion"
+						Texture = NULL
+						Vector = 0.100000 0.100000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "additionalData"
+						Texture = NULL
+						Vector = 1.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "smokeNoiseMap"
+						Texture = .\assets\fx\noise\smokenoise1.dds
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "noiseMap1"
+						Texture = .\assets\fx\noise\smokenoise1.dds
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "noiseMap2"
+						Texture = .\assets\fx\noise\smokenoise2.png
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "noiseMap3"
+						Texture = .\assets\fx\noise\smokenoise3.png
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		RenderPass = LightingPass
+		TranslucencySortBias =  0.000000
+		Model = NULL
+		ShaderOverride = 0
+			
+	}
+	kbShaderParamComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		ParamName = "noiseMap2"
+		Texture = .\assets\fx\noise\smokenoise2.png
+		Vector = 0.000000 0.000000 0.000000 0.000000
+	}
+	kbShaderParamComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		ParamName = "noiseMap3"
+		Texture = .\assets\fx\noise\smokenoise3.png
+		Vector = 0.000000 0.000000 0.000000 0.000000
+	}
+	kbShaderParamComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		ParamName = "noiseScroll"
+		Texture = NULL
+		Vector = 0.100000 0.200000 0.200000 4.000000
+	}
+	kbShaderParamComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		ParamName = "distortion_1_2"
+		Texture = NULL
+		Vector = 0.100000 0.100000 0.100000 0.100000
+	}
+	kbShaderParamComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		ParamName = "distortion_3_AlphaScroll"
+		Texture = NULL
+		Vector = 0.100000 0.250000 0.100000 0.500000
+	}
+	kbShaderParamComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		ParamName = "startSmokeColor"
+		Texture = NULL
+		Vector = 0.250000 0.250000 0.250000 3.000000
+	}
+	kbShaderParamComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		ParamName = "endSmokeColor"
+		Texture = NULL
+		Vector = 0.100000 0.100000 0.100000 1.000000
+	}
+	kbShaderParamComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		ParamName = "smokeDistortion"
+		Texture = NULL
+		Vector = 0.100000 0.100000 0.000000 0.000000
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Smoke_0"
+		Orientation = 0.000000 0.707000 0.000000 0.707000
+		Position = 79.241020 21.001173 33.964390
+		Scale = 25.000000 15.000000 5.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		Materials = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Shader = .\assets\shaders\fx\basicsmoke.kbshader
+				ShaderParams = 11
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "noiseScroll"
+						Texture = NULL
+						Vector = 0.100000 0.200000 0.200000 4.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "startSmokeColor"
+						Texture = NULL
+						Vector = 0.250000 0.250000 0.250000 3.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "endSmokeColor"
+						Texture = NULL
+						Vector = 0.100000 0.100000 0.100000 1.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "distortion_1_2"
+						Texture = NULL
+						Vector = 0.100000 0.100000 0.100000 0.100000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "distortion_3_AlphaScroll"
+						Texture = NULL
+						Vector = 0.100000 0.250000 0.100000 0.500000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "smokeDistortion"
+						Texture = NULL
+						Vector = 0.100000 0.100000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "additionalData"
+						Texture = NULL
+						Vector = 1.000000 1.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "smokeNoiseMap"
+						Texture = .\assets\fx\noise\smokenoise1.dds
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "noiseMap1"
+						Texture = .\assets\fx\noise\smokenoise1.dds
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "noiseMap2"
+						Texture = .\assets\fx\noise\smokenoise2.png
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "noiseMap3"
+						Texture = .\assets\fx\noise\smokenoise3.png
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		RenderPass = Post-LightingPass
+		TranslucencySortBias =  0.000000
+		Model = ..\..\kbengine\assets\models\unitquad.ms3d
+		ShaderOverride = 0
+			
+	}
+	kbShaderParamComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		ParamName = "noiseMap2"
+		Texture = .\assets\fx\noise\smokenoise2.png
+		Vector = 0.000000 0.000000 0.000000 0.000000
+	}
+	kbShaderParamComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		ParamName = "noiseMap3"
+		Texture = .\assets\fx\noise\smokenoise3.png
+		Vector = 0.000000 0.000000 0.000000 0.000000
+	}
+	kbShaderParamComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		ParamName = "noiseScroll"
+		Texture = NULL
+		Vector = 0.100000 0.200000 0.200000 4.000000
+	}
+	kbShaderParamComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		ParamName = "distortion_1_2"
+		Texture = NULL
+		Vector = 0.100000 0.100000 0.100000 0.100000
+	}
+	kbShaderParamComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		ParamName = "distortion_3_AlphaScroll"
+		Texture = NULL
+		Vector = 0.100000 0.250000 0.100000 0.500000
+	}
+	kbShaderParamComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		ParamName = "startSmokeColor"
+		Texture = NULL
+		Vector = 0.250000 0.250000 0.250000 3.000000
+	}
+	kbShaderParamComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		ParamName = "endSmokeColor"
+		Texture = NULL
+		Vector = 0.100000 0.100000 0.100000 1.000000
+	}
+	kbShaderParamComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		ParamName = "smokeDistortion"
+		Texture = NULL
+		Vector = 0.100000 0.100000 0.000000 0.000000
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Fire_0"
+		Orientation = 0.000000 0.707000 0.000000 0.707000
+		Position = 54.286793 27.242178 53.676590
+		Scale = 20.000000 20.000000 20.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		Materials = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Shader = .\assets\shaders\fx\basicfire.kbshader
+				ShaderParams = 10
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "fireNoiseMap"
+						Texture = .\assets\fx\noise\firenoise1.dds
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "noiseMap1"
+						Texture = .\assets\fx\noise\noise1.png
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "noiseMap2"
+						Texture = .\assets\fx\noise\noise2.png
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "noiseMap3"
+						Texture = .\assets\fx\noise\noise3.png
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "noiseScroll"
+						Texture = NULL
+						Vector = 1.000000 1.000000 1.000000 4.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "noiseDistortion_1_2"
+						Texture = NULL
+						Vector = 0.500000 1.000000 0.400000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "noiseDistortion_3_colorDistortion"
+						Texture = NULL
+						Vector = 0.100000 0.200000 1.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "startFireColor"
+						Texture = NULL
+						Vector = 1.000000 0.878000 0.450000 3.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "endFireColor"
+						Texture = NULL
+						Vector = 0.807000 0.180000 0.094000 1.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "additionalData"
+						Texture = NULL
+						Vector = 1.000000 1.000000 0.000000 0.000000
+					}
+			}
+		RenderPass = Post-LightingPass
+		TranslucencySortBias =  -5.000000
+		Model = ..\..\kbengine\assets\models\unitquad.ms3d
+		ShaderOverride = 0
+			
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Entity_30"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 380.404633 22.954044 83.992416
+		Scale = 1.000000 1.000000 1.000000
+	}
+	kbPointLightComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadows = 0
+		Color = 2.500000 1.500000 0.500000 1.000000
+		Materials = 0
+		LightRadius =  124.000000
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Entity_38"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 11.190129 23.505821 -66.707130
+		Scale = 1.000000 1.000000 1.000000
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Izzy"
+		Orientation = 0.000000 0.997620 0.000000 -0.068949
+		Position = 24.617346 14.938108 15.440613
+		Scale = 2.250000 2.300000 2.500000
+	}
+	EtherSkelModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		Materials = 4
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Shader = .\assets\shaders\character\characterbase.kbshader
+				ShaderParams = 1
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorTexture"
+						Texture = .\assets\visualtarget\initiation\gina\prisonjumpsuit.dds
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Shader = .\assets\shaders\character\characterbase.kbshader
+				ShaderParams = 1
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorTexture"
+						Texture = .\assets\visualtarget\getthebag\gina\eye.dds
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Shader = .\assets\shaders\character\characterbase.kbshader
+				ShaderParams = 1
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorTexture"
+						Texture = .\assets\visualtarget\reuben\izzy\face.dds
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Shader = .\assets\shaders\character\characterbase.kbshader
+				ShaderParams = 1
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorTexture"
+						Texture = .\assets\visualtarget\reuben\izzy\izzy_combat.bmp
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		RenderPass = LightingPass
+		TranslucencySortBias =  0.000000
+		Model = .\assets\visualtarget\reuben\izzy\izza_combat.ms3d
+		ShaderOverride = 0
+			
+		Animations = 0
+		DebugAnimIndex = -1
+		IsFirstPersonModel = 0
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Entity_42"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 7.085353 28.571327 57.909828
+		Scale = 5.000000 5.000000 5.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		Materials = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Shader = .\assets\shaders\environment\environmentbase.kbshader
+				ShaderParams = 4
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "diffuse"
+						Texture = .\assets\models\environment\crate_1.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "normal"
+						Texture = .\assets\test\flatnormal.bmp
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "propertyMap"
+						Texture = .\assets\test\black.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "emissiveMap"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		RenderPass = LightingPass
+		TranslucencySortBias =  0.000000
+		Model = .\assets\models\environment\crate_1.fbx
+		ShaderOverride = 0
+			
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Entity_41"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 43.444088 50.446579 81.266235
+		Scale = 1.000000 1.000000 1.000000
+	}
+	kbPointLightComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadows = 0
+		Color = 1.000000 1.000000 1.000000 1.000000
+		Materials = 0
+		LightRadius =  16.000000
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Smoke_0"
+		Orientation = 0.000000 0.707000 0.000000 0.707000
+		Position = 223.005020 27.579363 56.179073
+		Scale = 25.000000 15.000000 5.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		Materials = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Shader = .\assets\shaders\fx\basicsmoke.kbshader
+				ShaderParams = 11
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "noiseScroll"
+						Texture = NULL
+						Vector = 0.100000 0.200000 0.200000 4.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "startSmokeColor"
+						Texture = NULL
+						Vector = 0.250000 0.250000 0.250000 3.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "endSmokeColor"
+						Texture = NULL
+						Vector = 0.100000 0.100000 0.100000 1.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "distortion_1_2"
+						Texture = NULL
+						Vector = 0.100000 0.100000 0.100000 0.100000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "distortion_3_AlphaScroll"
+						Texture = NULL
+						Vector = 0.100000 0.250000 0.100000 0.500000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "smokeDistortion"
+						Texture = NULL
+						Vector = 0.100000 0.100000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "additionalData"
+						Texture = NULL
+						Vector = 1.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "smokeNoiseMap"
+						Texture = .\assets\fx\noise\smokenoise1.dds
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "noiseMap1"
+						Texture = .\assets\fx\noise\smokenoise1.dds
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "noiseMap2"
+						Texture = .\assets\fx\noise\smokenoise2.png
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "noiseMap3"
+						Texture = .\assets\fx\noise\smokenoise3.png
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		RenderPass = Post-LightingPass
+		TranslucencySortBias =  0.000000
+		Model = ..\..\kbengine\assets\models\unitquad.ms3d
+		ShaderOverride = 0
+			
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Fire_0"
+		Orientation = 0.000000 0.707000 0.000000 0.707000
+		Position = 166.094650 36.050854 32.969303
+		Scale = 20.000000 20.000000 20.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		Materials = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Shader = .\assets\shaders\fx\basicfire.kbshader
+				ShaderParams = 10
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "fireNoiseMap"
+						Texture = .\assets\fx\noise\firenoise1.dds
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "noiseMap1"
+						Texture = .\assets\fx\noise\noise1.png
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "noiseMap2"
+						Texture = .\assets\fx\noise\noise2.png
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "noiseMap3"
+						Texture = .\assets\fx\noise\noise3.png
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "noiseScroll"
+						Texture = NULL
+						Vector = 1.000000 1.000000 1.000000 4.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "noiseDistortion_1_2"
+						Texture = NULL
+						Vector = 0.500000 1.000000 0.400000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "noiseDistortion_3_colorDistortion"
+						Texture = NULL
+						Vector = 0.100000 0.200000 1.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "startFireColor"
+						Texture = NULL
+						Vector = 1.000000 0.878000 0.450000 3.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "endFireColor"
+						Texture = NULL
+						Vector = 0.807000 0.180000 0.094000 1.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "additionalData"
+						Texture = NULL
+						Vector = 1.000000 1.000000 0.000000 0.000000
+					}
+			}
+		RenderPass = Post-LightingPass
+		TranslucencySortBias =  -5.000000
+		Model = ..\..\kbengine\assets\models\unitquad.ms3d
+		ShaderOverride = 0
+			
 	}
 }

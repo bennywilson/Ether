@@ -415,6 +415,8 @@ private:
 
 	bool										InitializeOculus();
 
+	void										ReadShaderFile( std::string & shaderText, kbShaderVarBindings_t *const pShaderBindings );
+
 	void										SetRenderTarget( eReservedRenderTargets type );
 
 	virtual void								RenderScene() override;
@@ -479,7 +481,6 @@ private:
 	kbShader *									m_pPointLightShader;
 	kbShader *									m_pCylindricalLightShader;
 	kbShader *									m_pBasicParticleShader;
-	kbShader *									m_pBasicSkinnedTextureShader;
 	kbShader *									m_pDirectionalLightShadowShader;
 	kbShader *									m_pLightShaftsShader;
 	kbShader *									m_pSimpleAdditiveShader;

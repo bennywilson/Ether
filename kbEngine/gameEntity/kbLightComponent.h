@@ -36,25 +36,22 @@ public:
 
 	bool										CastsShadow() const { return m_bCastsShadow; }
 
-	const kbShader *							GetOverrideShader() const { return m_pOverrideShader; }
-	const kbShaderParamOverrides_t &			GetShaderParamOverrides() const { return m_OverrideShaderParams; }
+	const std::vector<kbMaterialComponent> &	GetMaterialList() const { return m_MaterialList; }
 
 protected:
 
-	void										SetShaderParamList();
+	void										RefreshMaterials();
 
 	virtual void								SetEnable_Internal( const bool isEnabled ) override;
 	virtual void								Update_Internal( const float DeltaTime ) override;
+
+	std::vector<kbMaterialComponent>			m_MaterialList;
 
 	kbColor										m_Color;
 	float										m_Brightness;
 	bool										m_bCastsShadow;
 	bool										m_bShaderParamsDirty;
 
-	// Allow custom shader override
-	kbShader *									m_pOverrideShader;
-	kbShaderParamOverrides_t					m_OverrideShaderParams;
-	std::vector<kbShaderParamComponent>			m_OverrideShaderParamList;
 };
 
 /**

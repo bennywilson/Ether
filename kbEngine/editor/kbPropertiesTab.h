@@ -76,6 +76,7 @@ private:
 
 	static void									CheckButtonCB( Fl_Widget * widget, void * voidPtr );
 	static void									PointerButtonCB( Fl_Widget * widget, void * voidPtr );
+	static void									ClearPointerButtonCB( Fl_Widget * widget, void * voidPtr );
 	static void									TextFieldCB( Fl_Widget * widget, void * voidPtr );
 	static void									ArrayExpandCB( Fl_Widget * widet, void * voidPtr );
 	static void									ArrayResizeCB( Fl_Widget * widget, void * voidPtr );

@@ -5,7 +5,7 @@ kbPrefab 1 {
 		kbTransformComponent { 
 			Enabled = 0
 			LifeTime =  -1.000000
-			Name = "Angelica"
+			Name = "Isabella"
 			Orientation = 0.000000 0.000000 0.000000 1.000000
 			Position = 22.923193 143.452286 267.461517
 			Scale = 0.150000 0.150000 0.150000

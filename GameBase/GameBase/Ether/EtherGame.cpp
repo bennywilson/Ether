@@ -116,7 +116,7 @@ void EtherGame::InitGame_Internal() {
 	}
 	m_GameStartTimer.Reset();
 
-	m_pTranslucentShader = (kbShader*)g_ResourceManager.GetResource( "../../kbEngine/assets/Shaders/basicTranslucency.kbShader", true );
+	m_pTranslucentShader = (kbShader*)g_ResourceManager.LoadResource( "../../kbEngine/assets/Shaders/basicTranslucency.kbShader", true );
 }
 
 /**
@@ -159,10 +159,11 @@ void EtherGame::Update_Internal( float DT ) {
 	
 	if ( GetAsyncKeyState( VK_LSHIFT ) && GetAsyncKeyState( 'P' ) ) {
 	    kbCamera & playerCamera = GetCamera();
-      //  playerCamera.m_Position = kbVec3( 1.31999433f, 12.7329245f, 39.7846413f );
-		//playerCamera.m_Rotation = playerCamera.m_RotationTarget = kbQuat( -0.0644864589f, 0.119459502f, -0.00777558470f, 0.990712106f );
-		playerCamera.m_Position = kbVec3( 5.03189945f, 12.6808462f, 36.3190956f );
-		playerCamera.m_RotationTarget = playerCamera.m_Rotation =  kbQuat( -0.0299576875f, -0.0499558337f, -0.00149911048f, 0.998300910f );
+
+		//SetMainCameraPos( kbVec3( 5.1198f, 13.310f, 43.877f ) );
+		//SetMainCameraRot( kbQuat( -0.0149f, 0.00499f,-7.51334301e-05f, 0.999875009f ) );
+		playerCamera.m_Position = kbVec3( 5.1198f, 13.310f, 43.877f ) ;
+		playerCamera.m_RotationTarget = playerCamera.m_Rotation = kbQuat( -0.0149f, 0.00499f,-7.51334301e-05f, 0.999875009f ); 
 	}
 
 	if ( ( g_pD3D11Renderer->IsRenderingToHMD() || g_pD3D11Renderer->IsUsingHMDTrackingOnly() ) && g_pD3D11Renderer->GetFrameNum() > 0 ) {
@@ -517,9 +518,13 @@ void EtherGame::RenderSync() {
 	if ( HasFirstSyncCompleted() == false ) {
 
 		m_pParticleManager->SetCustomAtlasTexture( 0, "./assets/FX/fx_atlas.jpg" );
-		m_pParticleManager->SetCustomAtlasShader( 1, "./assets/shaders/FX/shellTrailParticle.kbShader" );
 
+		m_pParticleManager->SetCustomAtlasShader( 1, "./assets/shaders/FX/shellTrailParticle.kbShader" );
 		m_pParticleManager->SetCustomAtlasTexture( 1, "./assets/FX/SmokeTrailAtlas.dds" );
+
+		g_ResourceManager.LoadResource( "../../kbEngine/assets/Shaders/basicParticle.kbShader", true );
+		m_pParticleManager->SetCustomAtlasShader( 2, "../../kbEngine/assets/Shaders/basicParticle.kbShader" );
+		m_pParticleManager->SetCustomAtlasTexture( 2, "./assets/FX/MuzzleFlashes/BasicOrange_MuzzleFlash.jpg" );
 	}
 
 	m_RenderThreadShotsThisFrame = m_ShotsThisFrame;
@@ -546,18 +551,21 @@ void EtherGame::RenderThreadCallBack() {
 		m_pBulletHoleRenderTexture = g_pRenderer->RT_GetRenderTexture( 4096, 4096, eTextureFormat::KBTEXTURE_R8G8B8A8, false );
 		g_pRenderer->RT_ClearRenderTarget( m_pBulletHoleRenderTexture, kbColor::white );
 		
-		g_ResourceManager.GetResource( "./assets/FX/noise.jpg", true );
-		g_ResourceManager.GetResource( "./assets/FX/scorch.jpg", true );
+		g_ResourceManager.LoadResource( "./assets/FX/noise.jpg", true );
+		g_ResourceManager.LoadResource( "./assets/FX/scorch.jpg", true );
 
 		for ( int i = 0; i < GetGameEntities().size(); i++ ) {
 			kbGameEntity *const pEnt = GetGameEntities()[i];
 			if ( pEnt->GetName().find( "Holey_Wall" ) != std::string::npos ) {
 				kbStaticModelComponent *const pSM = (kbStaticModelComponent*)pEnt->GetComponentByType( kbStaticModelComponent::GetType() );
 				if ( pSM != nullptr ) {
+	
+					kbShader *const pHoleShader = (kbShader*)g_ResourceManager.LoadResource( "./assets/shaders/environment/environmenthole.kbshader", true );
+					kbTexture *const diff = (kbTexture*)g_ResourceManager.LoadResource( "./assets/models/architecture/bricks.png", true );
+					kbTexture *const normal = (kbTexture*)g_ResourceManager.LoadResource( "./assets/models/architecture/bricks_nm.png", true );
 
-					kbShaderParamOverrides_t shaderParams;
-					shaderParams.SetTexture( "holeTex", m_pBulletHoleRenderTexture );
-					pSM->SetShaderParamOverrides( shaderParams );
+					pSM->SetMaterialParamTexture( 0, "holeTex" ,m_pBulletHoleRenderTexture );
+
 				}
 				break;
 			}
@@ -584,10 +592,10 @@ void EtherGame::RenderThreadCallBack() {
 			}
 		}
 
-		m_pCollisionMapDamageGenShader = (kbShader *) g_ResourceManager.GetResource( "./assets/shaders/DamageGen/collisionMapDamageGen.kbshader", true );
-		m_pCollisionMapTimeGenShader = (kbShader *) g_ResourceManager.GetResource( "./assets/shaders/DamageGen/collisionMapTimeGen.kbshader", true );
-		m_pBulletHoleUpdateShader = (kbShader *) g_ResourceManager.GetResource( "./assets/shaders/DamageGen/pokeyholeunwrap.kbshader", true );
-		m_pCollisionMapScorchGenShader = (kbShader*) g_ResourceManager.GetResource( "./assets/shaders/DamageGen/collisionMapScorchGen.kbShader", true );
+		m_pCollisionMapDamageGenShader = (kbShader *) g_ResourceManager.LoadResource( "./assets/shaders/DamageGen/collisionMapDamageGen.kbshader", true );
+		m_pCollisionMapTimeGenShader = (kbShader *) g_ResourceManager.LoadResource( "./assets/shaders/DamageGen/collisionMapTimeGen.kbshader", true );
+		m_pBulletHoleUpdateShader = (kbShader *) g_ResourceManager.LoadResource( "./assets/shaders/DamageGen/pokeyholeunwrap.kbshader", true );
+		m_pCollisionMapScorchGenShader = (kbShader*) g_ResourceManager.LoadResource( "./assets/shaders/DamageGen/collisionMapScorchGen.kbShader", true );
 	}
 
     if ( pTerrain == nullptr ) {
@@ -634,10 +642,10 @@ void EtherGame::RenderThreadCallBack() {
 					shaderParams.SetVec4( "hitLocation", kbVec4( hitLocation.x, hitLocation.y, hitLocation.z, holeSize ) );
 					shaderParams.SetVec4( "hitDirection", kbVec4( hitDir.x, hitDir.y, hitDir.z, scorchSize ) );
 
-					kbTexture *const pNoiseTex = (kbTexture*)g_ResourceManager.GetResource( "./assets/FX/Noise/noise.jpg", true );
+					kbTexture *const pNoiseTex = (kbTexture*)g_ResourceManager.LoadResource( "./assets/FX/Noise/noise.jpg", true );
 					shaderParams.SetTexture( "noiseTex", pNoiseTex );
 
-					kbTexture *const pScorchTex = (kbTexture*)g_ResourceManager.GetResource( "./assets/FX/scorch.jpg", true );
+					kbTexture *const pScorchTex = (kbTexture*)g_ResourceManager.LoadResource( "./assets/FX/scorch.jpg", true );
 					shaderParams.SetTexture( "scorchTex", pScorchTex );
 
 					g_pRenderer->RT_RenderMesh( pSM->GetModel(), m_pBulletHoleUpdateShader, &shaderParams );
@@ -946,11 +954,13 @@ EtherFireEntity::EtherFireEntity( const kbVec3 & position, const kbPrefab *const
 	m_StartingTimeSeconds = g_GlobalTimer.TimeElapsedSeconds();
 	m_RandomScroller = 1.0f + kbfrand() * 0.1f;
 
+	// MATERIALHACK
+
 	kbStaticModelComponent * pSM = (kbStaticModelComponent*)m_pSmokeEntity->GetComponentByType( kbStaticModelComponent::GetType() );
-	pSM->SetShaderVectorParam( "additionalData", kbVec4( 0.0f, m_RandomScroller, 0.0f, 0.0f ) );
+	pSM->SetMaterialParamVector( 0, "additionalData", kbVec4( 0.0f, m_RandomScroller, 0.0f, 0.0f ) );
 
 	pSM = (kbStaticModelComponent*)m_pFireEntity->GetComponentByType( kbStaticModelComponent::GetType() );
-	pSM->SetShaderVectorParam( "additionalData", kbVec4( 0.0f, m_RandomScroller, 0.0f, 0.0f ) );
+	pSM->SetMaterialParamVector( 0, "additionalData", kbVec4( 0.0f, m_RandomScroller, 0.0f, 0.0f ) );
 
 	m_bIsFinished = false;
 }
@@ -1045,10 +1055,11 @@ void EtherFireEntity::Update( const float DeltaTime ) {
 	m_pEmberEntity->SetPosition( m_EmberStartPos + fireOffset * fireFade );
 
 	m_RandomScroller += DeltaTime * fireFade;
+
 	kbStaticModelComponent * pSM = (kbStaticModelComponent*)m_pSmokeEntity->GetComponentByType( kbStaticModelComponent::GetType() );
-	pSM->SetShaderVectorParam( "additionalData", kbVec4( smokeFade * 0.24f, m_RandomScroller, 0.0f, 0.0f ) );
+	pSM->SetMaterialParamVector( 0, "additionalData", kbVec4( smokeFade * 0.24f, m_RandomScroller, 0.0f, 0.0f ) );
 
 	pSM = (kbStaticModelComponent*)m_pFireEntity->GetComponentByType( kbStaticModelComponent::GetType() );
-	pSM->SetShaderVectorParam( "additionalData", kbVec4( fireFade, m_RandomScroller, 0.0f, 0.0f ) );
+	pSM->SetMaterialParamVector( 0, "additionalData", kbVec4( fireFade, m_RandomScroller, 0.0f, 0.0f ) );	
 }
 

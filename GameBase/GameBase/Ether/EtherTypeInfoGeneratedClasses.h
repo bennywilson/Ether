@@ -18,11 +18,18 @@ GenerateClass(
 )
 
 GenerateClass(
+	EtherAnimEvent,
+	AddField( "EventName", KBTYPEINFO_KBSTRING, EtherAnimEvent, m_EventName, false, "" )
+	AddField( "EventTime", KBTYPEINFO_FLOAT, EtherAnimEvent, m_EventTime, false, "" )
+)
+
+GenerateClass(
 	EtherAnimComponent,
 	AddField( "AnimationName", KBTYPEINFO_KBSTRING, EtherAnimComponent, m_AnimationName, false, "" )
 	AddField( "Animation", KBTYPEINFO_ANIMATION, EtherAnimComponent, m_pAnimation, false, "" )
 	AddField( "TimeScale", KBTYPEINFO_FLOAT, EtherAnimComponent, m_TimeScale, false, "" )
 	AddField( "IsLooping", KBTYPEINFO_BOOL, EtherAnimComponent, m_bIsLooping, false, "" )
+	AddField( "AnimationEvent", KBTYPEINFO_STRUCT, EtherAnimComponent, m_AnimEvents, true, "EtherAnimEvent" )
 )
 
 GenerateClass(
@@ -44,7 +51,6 @@ GenerateClass(
 
 GenerateClass(
 	EtherEnemySoldierAIComponent,
-	AddField( "EyeModel", KBTYPEINFO_STATICMODEL, EtherEnemySoldierAIComponent, m_pEyeBall, false, "" )
 	AddField( "SprayDurationSec", KBTYPEINFO_FLOAT, EtherEnemySoldierAIComponent, m_SprayDurationSec, false, "" )
 	AddField( "SecBetweenSprays", KBTYPEINFO_FLOAT, EtherEnemySoldierAIComponent, m_SecTimeBetweenSprays, false, "" )
 	AddField( "SecondsBetweenShots", KBTYPEINFO_FLOAT, EtherEnemySoldierAIComponent, m_SecBetweenShots, false, "" )
@@ -80,6 +86,7 @@ GenerateClass(
 	AddField( "SecondsBetweenBursts", KBTYPEINFO_FLOAT, EtherWeaponComponent, m_SecondsBetweenBursts, false, "" )
 	AddField( "BurstCount", KBTYPEINFO_INT, EtherWeaponComponent, m_BurstCount, false, "" )
 	AddField( "MuzzleFlash", KBTYPEINFO_GAMEENTITY, EtherWeaponComponent, m_MuzzleFlashEntity, false, "" )
+	AddField( "MuzzleFlashAnimations", KBTYPEINFO_STRUCT, EtherWeaponComponent, m_MuzzleFlashAnimData, true, "kbAnimatedQuadComponent" )
 	AddField( "Projectile", KBTYPEINFO_GAMEENTITY, EtherWeaponComponent, m_Projectile, false, "" )
 	AddField( "ShellModel", KBTYPEINFO_STATICMODEL, EtherWeaponComponent, m_pShellModel, false, "" )
 	AddField( "ShellMinVelocity", KBTYPEINFO_VECTOR, EtherWeaponComponent, m_MinShellVelocity, false, "" )
@@ -88,6 +95,25 @@ GenerateClass(
 	AddField( "ShellMaxAxisVelocity", KBTYPEINFO_VECTOR, EtherWeaponComponent, m_MaxAxisVelocity, false, "" )
 	AddField( "ShellLifeTime", KBTYPEINFO_FLOAT, EtherWeaponComponent, m_ShellLifeTime, false, "" )
 	AddField( "IsInstantHit", KBTYPEINFO_BOOL, EtherWeaponComponent, m_bInstantHit, false, "" )
+)
+
+GenerateClass(
+	kbVec3TimePointComponent,
+	AddField( "Vector", KBTYPEINFO_VECTOR, kbVec3TimePointComponent, m_Vector, false, "" )
+	AddField( "Time", KBTYPEINFO_FLOAT, kbVec3TimePointComponent, m_Time, false, "" )
+)
+
+GenerateClass(
+	kbAnimatedQuadComponent,
+	AddField( "Texture", KBTYPEINFO_TEXTURE, kbAnimatedQuadComponent, m_pTexture, false, "" )
+	AddField( "UVStart", KBTYPEINFO_VECTOR, kbAnimatedQuadComponent, m_UVStart, false, "" )
+	AddField( "UVEnd", KBTYPEINFO_VECTOR, kbAnimatedQuadComponent, m_UVEnd, false, "" )
+	AddField( "MinStartScale", KBTYPEINFO_VECTOR, kbAnimatedQuadComponent, m_MinStartScale, false, "" )
+	AddField( "MaxStartScale", KBTYPEINFO_VECTOR, kbAnimatedQuadComponent, m_MaxStartScale, false, "" )
+	AddField( "ScaleOverTime", KBTYPEINFO_STRUCT, kbAnimatedQuadComponent, m_ScaleOverTime, true, "kbVec3TimePointComponent" )
+	AddField( "MinLifeTime", KBTYPEINFO_FLOAT, kbAnimatedQuadComponent, m_MinLifeTime, false, "" )
+	AddField( "MaxLifeTime", KBTYPEINFO_FLOAT, kbAnimatedQuadComponent, m_MaxLifeTime, false, "" )
+	AddField( "ApplyRandomRotation", KBTYPEINFO_BOOL, kbAnimatedQuadComponent, m_bRandomizeStartingRotation, false, "" )
 )
 
 GenerateClass(

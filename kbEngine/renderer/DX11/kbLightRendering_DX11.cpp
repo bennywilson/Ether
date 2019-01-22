@@ -80,7 +80,11 @@ void kbRenderer_DX11::RenderLight( const kbRenderLight *const pLight ) {
 	m_pDeviceContext->PSSetSamplers( 0, 4, SamplerStates );
 
 	const kbLightComponent *const pLightComponent = pLight->m_pLightComponent;
-	const kbShader * pShader = pLightComponent->GetOverrideShader();
+	const kbShader * pShader = nullptr;
+
+	if ( pLightComponent->GetMaterialList().size() > 0 ) {
+		pShader = pLightComponent->GetMaterialList()[0].GetShader();
+	}
 
 	if ( pShader == nullptr || pShader->GetVertexShader() == nullptr || pShader->GetPixelShader() == nullptr ) {
 
@@ -107,8 +111,25 @@ void kbRenderer_DX11::RenderLight( const kbRenderLight *const pLight ) {
 	kbErrorCheck( SUCCEEDED(hr), "kbRenderer_DX11::RenderLight() - Failed to map matrix buffer" );
 
 	byte * pMappedData = (byte*)mappedResource.pData;
-	if ( pLightComponent->GetOverrideShader() != nullptr ) {
-		SetConstantBuffer( pLightComponent->GetOverrideShader()->GetShaderVarBindings(), &pLightComponent->GetShaderParamOverrides(), nullptr, pMappedData );
+	if ( pLightComponent->GetMaterialList().size() > 0 ) {
+		const kbMaterialComponent & matComp = pLightComponent->GetMaterialList()[0];
+		auto & shaderParms = matComp.GetShaderParams();
+	
+		kbShaderParamOverrides_t overrides;
+		for ( int j = 0; j < shaderParms.size(); j++ ) {
+			if ( shaderParms[j].GetTexture() != nullptr ) {
+				overrides.SetTexture( shaderParms[j].GetParamName().stl_str(), shaderParms[j].GetTexture() );
+			} else if ( shaderParms[j].GetRenderTexture() != nullptr ) {
+	
+				overrides.SetTexture( shaderParms[j].GetParamName().stl_str(), shaderParms[j].GetRenderTexture() );
+			} else {
+				overrides.SetVec4( shaderParms[j].GetParamName().stl_str(), shaderParms[j].GetVector() );
+			}
+		}
+
+		if ( matComp.GetShader() != nullptr ) {
+			SetConstantBuffer( matComp.GetShader()->GetShaderVarBindings(), &overrides, nullptr, pMappedData );
+		}
 	} 
 
 	SetShaderVec4( "lightDirection", kbVec4( -pLight->m_Orientation.ToMat4()[2].ToVec3(), pLight->m_Length ), pMappedData, varBindings );
@@ -378,6 +399,8 @@ void kbRenderer_DX11::RenderLightShafts() {
 	}
 
 	START_SCOPED_RENDER_TIMER( RENDER_LIGHTSHAFTS );
+
+	m_RenderState.SetBlendState();
 
 	const unsigned int stride = sizeof( vertexLayout );
 	const unsigned int offset = 0;

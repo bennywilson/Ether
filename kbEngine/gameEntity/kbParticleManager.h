@@ -37,6 +37,7 @@ public:
 		EBillboardType											m_Type;
 		kbVec3													m_Position;
 		kbVec3													m_Direction;
+		float													m_Rotation;
 		kbVec4													m_Color;
 		float													m_Width;
 		float													m_Height;
@@ -66,7 +67,7 @@ private:
 		uint													m_NumIndices;
 	
 		kbParticleVertex *										m_pVertexBuffer;
-		unsigned long *											m_pIndexBuffer;
+		ushort *												m_pIndexBuffer;
 		
 		kbTexture *												m_pAtlasTexture;
 		kbShader *												m_pAtlasShader;

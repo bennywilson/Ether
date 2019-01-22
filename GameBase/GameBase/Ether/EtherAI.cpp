@@ -2,7 +2,7 @@
 // EtherAI.cpp
 //
 //
-// 2016-2018 kbEngine 2.0
+// 2016-2019 kbEngine 2.0
 //===================================================================================================
 #include <math.h>
 #include "EtherGame.h"
@@ -175,8 +175,6 @@ void EtherAIComponent::Update_Internal( const float DeltaTimeSeconds ) {
  */
 void EtherEnemySoldierAIComponent::Constructor() {
 	m_AIState = Enemy_Pursue;
-	m_pEyeBall = nullptr;
-	m_bEyeballAdded = false;
 
 	m_bIsSpraying = false;
 	m_LastSprayTime = 0.0f;
@@ -187,14 +185,6 @@ void EtherEnemySoldierAIComponent::Constructor() {
 	m_SprayDurationSec = 1.25f;
 	m_SecTimeBetweenSprays = 5.0f;
 	m_SecBetweenShots = 0.25f;
-
-	m_EyeBallRenderObject.m_pComponent = this;
-	m_EyeBallRenderObject.m_bCastsShadow = false;
-	m_EyeBallRenderObject.m_bIsSkinnedModel = false;
-	m_EyeBallRenderObject.m_pComponent = this;
-	m_EyeBallRenderObject.m_pModel = m_pEyeBall;
-
-	m_EyeBallRenderObject.m_RenderPass = RP_PostLighting;
 }
 
 /**
@@ -202,56 +192,12 @@ void EtherEnemySoldierAIComponent::Constructor() {
  */
 void EtherEnemySoldierAIComponent::SetEnable_Internal( const bool isEnabled ) {
 	Super::SetEnable_Internal( isEnabled );
-
-	if ( m_pEyeBall == nullptr ) {
-		return;
-	}
-
-	if ( isEnabled && m_bEyeballAdded == false ) {
-		m_EyeBallRenderObject.m_pModel = m_pEyeBall;
-
-		g_pRenderer->AddRenderObject( m_EyeBallRenderObject );
-		m_bEyeballAdded = true;
-	} else {
-		g_pRenderer->RemoveRenderObject( m_EyeBallRenderObject );
-		m_bEyeballAdded = false;
-	}
 }
 
 /**
  *	EtherEnemySoldierAIComponent::Update_Internal
  */
 void  EtherEnemySoldierAIComponent::Update_Internal( const float DeltaTime ) {
-	if ( m_pEyeBall != nullptr ) {
-
-		m_EyeBallRenderObject.m_Scale = GetOwner()->GetScale();
-		m_EyeBallRenderObject.m_Position = GetOwner()->GetPosition();
-		m_EyeBallRenderObject.m_Orientation = GetOwner()->GetOrientation();
-		m_EyeBallRenderObject.m_pModel = m_pEyeBall;
-
-		EtherSkelModelComponent *const pSkelModelComponent = (EtherSkelModelComponent*)GetOwner()->GetComponentByType( EtherSkelModelComponent::GetType() );
-		if ( pSkelModelComponent != nullptr ) {
-			static kbString EyeBone( "Dummy07" );
-			kbBoneMatrix_t EyeMatrix;
-			if ( pSkelModelComponent->GetBoneWorldMatrix( EyeBone, EyeMatrix ) ) {
-
-				kbMat4 rotMat( kbMat4::identity );
-				rotMat[0] = EyeMatrix.GetAxis(0);
-				rotMat[1] = EyeMatrix.GetAxis(1);
-				rotMat[2] = EyeMatrix.GetAxis(2);
-
-				m_EyeBallRenderObject.m_OverrideShaderList.clear();
-				m_EyeBallRenderObject.m_OverrideShaderList.push_back( (kbShader*)g_ResourceManager.GetResource( "../../kbEngine/assets/Shaders/SimpleAdditive.kbShader", true ) );
-				if ( m_bEyeballAdded == false ) {
-					g_pRenderer->AddRenderObject( m_EyeBallRenderObject );
-				} else {
-					m_EyeBallRenderObject.m_Position = EyeMatrix.GetOrigin();
-					g_pRenderer->UpdateRenderObject( m_EyeBallRenderObject );
-				}
-				m_bEyeballAdded = true;
-			}
-		}
-	}
 
 	Super::Update_Internal( DeltaTime );
 

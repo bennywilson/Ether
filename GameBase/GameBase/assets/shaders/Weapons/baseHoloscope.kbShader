@@ -13,7 +13,7 @@ kbShaderState {
 	srcblend Blend_SrcAlpha
 	dstBlend Blend_InvSrcAlpha
 	blendOp BlendOp_Add
-	colorWriteEnable colorWriteEnable_rgb
+	colorWriteEnable colorWriteEnable_rgba
 }
 
 //-------------------------------------
@@ -70,6 +70,6 @@ SamplerState SampleType;
  PS_OUTPUT pixelShader( pixelInput	input ) {
 	PS_OUTPUT output = (PS_OUTPUT) 0;
 	output.Color.xyzw = shaderTexture.Sample( SampleType, input.uv ).xyzw;
-
+	output.Color.w *= 1.1f;
 	return output;
 }

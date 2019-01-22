@@ -3,29 +3,31 @@
 //
 // Instead of storing a string, kbString stores an index into the string table for fast look ups
 //
-// 2016-2017 kbEngine 2.0
+// 2016-2019 kbEngine 2.0
 //===================================================================================================
 #include <map>
 #include <string>
 #include <vector>
 #include "kbString.h"
 
-std::map<std::string, int> * g_StringTable = NULL;
-std::vector<std::string> * g_StringList = NULL;
-std::string * g_EmptyString = NULL;
+std::map<std::string, int> * g_StringTable = nullptr;
+std::vector<std::string> * g_StringList = nullptr;
+std::string * g_EmptyString = nullptr;
+
+kbString kbString::EmptyString( "" );
 
 /**
  *	kbString::ShutDown
  */
 void kbString::ShutDown() {
 	delete g_StringTable;
-	g_StringTable = NULL;
+	g_StringTable = nullptr;
 
 	delete g_StringList;
-	g_StringList = NULL;
+	g_StringList = nullptr;
 
 	delete g_EmptyString;
-	g_EmptyString = NULL;
+	g_EmptyString = nullptr;
 }
 
 /**
@@ -33,13 +35,13 @@ void kbString::ShutDown() {
  */
 kbString::kbString( const std::string & InString ) {
 
-	if ( g_StringTable == NULL ) {
+	if ( g_StringTable == nullptr ) {
 		g_StringTable= new std::map<std::string, int>();
 		g_StringList = new std::vector<std::string>();
 		g_EmptyString = new std::string;
 	}
 
-	std::map< std::string, int >::const_iterator it = g_StringTable->find( InString );
+	std::map<std::string, int>::const_iterator it = g_StringTable->find( InString );
 	if ( it != g_StringTable->end() ) {
 		m_StringTableIndex = it->second;
 	}
@@ -65,6 +67,13 @@ bool kbString::operator==( const char * op2 ) const {
 }
 
 /**
+ *	kbString::operator!=
+ */
+bool kbString::operator!=( const kbString & Op2 ) const {
+	return m_StringTableIndex != Op2.m_StringTableIndex;
+}
+
+/**
  *	kbString::operator=
  */
 kbString & kbString::operator=( const kbString & Op2 ) {
@@ -76,7 +85,7 @@ kbString & kbString::operator=( const kbString & Op2 ) {
  *	kbString::operator=
  */
 kbString & kbString::operator=( const std::string & Op2 ) {
-	std::map< std::string, int >::const_iterator it = g_StringTable->find( Op2 );
+	std::map<std::string, int>::const_iterator it = g_StringTable->find( Op2 );
 	if ( it != g_StringTable->end() ) {
 		m_StringTableIndex = it->second;
 	}

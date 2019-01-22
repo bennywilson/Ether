@@ -200,9 +200,10 @@ public:
 	};
 
 public:
-	const static kbVec4 right;
-	const static kbVec4 up;
-	const static kbVec4 forward;
+	static const kbVec4 right;
+	static const kbVec4 up;
+	static const kbVec4 forward;
+	static const kbVec4 zero;
 };
 
 kbVec4 operator *( const float op1, const kbVec4 & op2 ); 

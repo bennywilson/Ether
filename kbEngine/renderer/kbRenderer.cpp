@@ -27,13 +27,13 @@ kbRenderer * g_pRenderer = nullptr;
 const kbShader * kbRenderSubmesh::GetShader() const {
 	const kbRenderObject & renderObj = *GetRenderObject();
 
-	if ( renderObj.m_OverrideShaderList.size() > GetMeshIdx() ) {
-		return renderObj.m_OverrideShaderList[GetMeshIdx()];
+	const kbModel *const pModel = GetRenderObject()->m_pModel;
+	const kbModel::mesh_t & mesh = pModel->GetMeshes()[GetMeshIdx()]; 
+	if ( pModel->GetMaterials().size() > mesh.m_MaterialIndex ) {
+		return pModel->GetMaterials()[mesh.m_MaterialIndex].GetShader();
 	}
 
-	const kbModel & model = *GetRenderObject()->m_pModel;
-	const kbModel::mesh_t & mesh = model.GetMeshes()[GetMeshIdx()]; 
-	return model.GetMaterials()[mesh.m_MaterialIndex].GetShader();
+	return nullptr;
 }
 
 /**
@@ -70,9 +70,9 @@ kbRenderWindow::kbRenderWindow( HWND inHwnd, const RECT & windowDimensions, cons
 kbRenderWindow::~kbRenderWindow() {
 	
 	{
-		std::map<const kbComponent *, kbRenderObject *>::iterator iter;
+		auto iter = m_RenderObjectMap.begin();
 	
-		for ( iter = m_RenderObjectMap.begin(); iter != m_RenderObjectMap.end(); iter++ ) {
+		for ( ; iter != m_RenderObjectMap.end(); iter++ ) {
 		   delete iter->second;
 		}
 	}
@@ -200,7 +200,8 @@ kbRenderer::kbRenderer() :
 	m_FogEndDistance_RenderThread( 2200 ),
 	m_bConsoleEnabled( false ),
 	m_pRenderJob( nullptr ),
-	m_RenderThreadSync( 0 ) {
+	m_RenderThreadSync( 0 ),
+	m_bDebugBillboardsEnabled( false ) {
 
 	g_pRenderer = this;
 
@@ -574,13 +575,13 @@ void kbRenderer::RenderSync() {
 			m_pCurrentRenderWindow->m_RenderObjectMap.erase( m_RenderObjectList_GameThread[i].m_pComponent );
 			delete pRenderObject;
 		} else {
-			const kbComponent *const pComponent = m_RenderObjectList_GameThread[i].m_pComponent;
+			const kbGameComponent *const pComponent = m_RenderObjectList_GameThread[i].m_pComponent;
 			kbErrorCheck( pComponent != nullptr, "kbRenderer::RenderSync() - Adding/updating a render object with a NULL component" );
 
 			if ( m_RenderObjectList_GameThread[i].m_bIsFirstAdd == false ) {
 
 				// Updating a renderobject 
-				std::map< const kbComponent *, kbRenderObject * >::iterator it = m_pCurrentRenderWindow->m_RenderObjectMap.find( m_RenderObjectList_GameThread[i].m_pComponent );
+				auto it = m_pCurrentRenderWindow->m_RenderObjectMap.find( m_RenderObjectList_GameThread[i].m_pComponent );
 				if ( it == m_pCurrentRenderWindow->m_RenderObjectMap.end() || it->second == nullptr ) {
 					kbError( "kbRenderer::UpdateRenderObject - Error, Updating a RenderObject that doesn't exist" );
 				}
@@ -768,13 +769,14 @@ void kbRenderer::DrawBillboard( const kbVec3 & position, const kbVec2 & size, co
 /**
  *	kbRenderer::DrawModel
  */
-void kbRenderer::DrawModel( const kbModel * pModel, const kbVec3 & position, const kbQuat & orientation, const kbVec3 & scale, const int entityId ) {
+void kbRenderer::DrawModel( const kbModel *const pModel, const std::vector<kbShaderParamOverrides_t> & materials, const kbVec3 & position, const kbQuat & orientation, const kbVec3 & scale, const int entityId ) {
 	debugDrawObject_t model;
 	model.m_Position = position;
 	model.m_Orientation = orientation;
 	model.m_Scale = scale;
 	model.m_pModel = pModel;
 	model.m_EntityId = entityId;
+	model.m_Materials = materials;
 
 	m_DebugModels_GameThread.push_back( model );
 }

@@ -2,7 +2,7 @@
 // kbParticleComponent.cpp
 //
 //
-// 2016-2017 kbEngine 2.0
+// 2016-2018 kbEngine 2.0
 //===================================================================================================
 #include "kbCore.h"
 #include "kbVector.h"
@@ -50,8 +50,8 @@ void kbParticleComponent::Constructor() {
 	m_NumIndicesInCurrentBuffer = 0;
 	m_bIsSpawning = true;
 
-	m_pParticleTexture = (kbTexture*)g_ResourceManager.GetResource( "../../kbEngine/assets/Textures/Editor/white.bmp" );
-	m_pParticleShader = (kbShader*)g_ResourceManager.GetResource( "../../kbEngine/assets/Shaders/basicParticle.kbShader", true );
+	m_pParticleTexture = (kbTexture*)g_ResourceManager.LoadResource( "../../kbEngine/assets/Textures/Editor/white.bmp", true );
+	m_pParticleShader = (kbShader*)g_ResourceManager.LoadResource( "../../kbEngine/assets/Shaders/basicParticle.kbShader", true );
 
 	m_bIsPooled = false;
 	m_ParticleTemplate = nullptr;
@@ -216,18 +216,12 @@ void kbParticleComponent::Update_Internal( const float DeltaTime ) {
 	const kbVec3 MyPosition = GetPosition();
 	while ( m_bIsSpawning && ( ( m_MaxParticleSpawnRate > 0 && TimeLeft >= NextSpawn ) || m_BurstCount > 0 ) ) {
 		kbParticle_t newParticle;
-		newParticle.m_StartVelocity.x = m_MinParticleStartVelocity.x + ( kbfrand() * ( m_MaxParticleStartVelocity.x - m_MinParticleStartVelocity.x ) );
-		newParticle.m_StartVelocity.y = m_MinParticleStartVelocity.y + ( kbfrand() * ( m_MaxParticleStartVelocity.y - m_MinParticleStartVelocity.y ) );
-		newParticle.m_StartVelocity.z = m_MinParticleStartVelocity.z + ( kbfrand() * ( m_MaxParticleStartVelocity.z - m_MinParticleStartVelocity.z ) );
-		newParticle.m_StartVelocity = newParticle.m_StartVelocity * ownerMatrix;
+		newParticle.m_StartVelocity = kbVec3Rand( m_MinParticleStartVelocity, m_MaxParticleStartVelocity ) * ownerMatrix;
 		
 		if ( m_bLockVelocity ) {
 			newParticle.m_EndVelocity = newParticle.m_StartVelocity;
 		} else {
-			newParticle.m_EndVelocity.x = m_MinParticleEndVelocity.x + ( kbfrand() * ( m_MaxParticleEndVelocity.x - m_MinParticleEndVelocity.x ) );
-			newParticle.m_EndVelocity.y = m_MinParticleEndVelocity.y + ( kbfrand() * ( m_MaxParticleEndVelocity.y - m_MinParticleEndVelocity.y ) );
-			newParticle.m_EndVelocity.z = m_MinParticleEndVelocity.z + ( kbfrand() * ( m_MaxParticleEndVelocity.z - m_MinParticleEndVelocity.z ) );
-			newParticle.m_EndVelocity = newParticle.m_StartVelocity * ownerMatrix;
+			newParticle.m_EndVelocity = kbVec3Rand( m_MinParticleEndVelocity, m_MaxParticleEndVelocity ) * ownerMatrix;
 		}
 
 		newParticle.m_Position = MyPosition + newParticle.m_StartVelocity * TimeLeft;
@@ -272,6 +266,13 @@ void kbParticleComponent::EditorChange( const std::string & propertyName ) {
 			m_pParticleTexture = (kbTexture *)g_ResourceManager.GetResource( m_pParticleTexture->GetFullFileName() );
 		}
 	}
+
+	// Editor Hack!
+	if ( propertyName == "Materials" ) {
+		for ( int i = 0; i < this->m_MaterialList.size(); i++ ) {
+			m_MaterialList[i].SetOwningComponent( this );
+		}
+	}
 }
 
 /**
@@ -307,12 +308,35 @@ void kbParticleComponent::RenderSync() {
 		}
 	}
 
-	m_RenderObject.m_pComponent = static_cast<const kbComponent*>( this );
+	m_RenderObject.m_pComponent = this;
 	m_RenderObject.m_pModel = nullptr;
 	m_RenderObject.m_RenderPass = RP_Translucent;
 	m_RenderObject.m_Position = GetPosition();
 	m_RenderObject.m_Orientation = kbQuat( 0.0f, 0.0f, 0.0f, 1.0f );
 	m_RenderObject.m_TranslucencySortBias = m_TranslucencySortBias;
+
+	// Update materials
+	m_RenderObject.m_Materials.clear();
+	for ( int i = 0; i < m_MaterialList.size(); i++ ) {
+		kbMaterialComponent & matComp = m_MaterialList[i];
+	
+		kbShaderParamOverrides_t newShaderParams;
+		newShaderParams.m_pShader = matComp.GetShader();
+	
+		auto srcShaderParams = matComp.GetShaderParams();
+		for ( int j = 0; j < srcShaderParams.size(); j++ ) {
+			if ( srcShaderParams[j].GetTexture() != nullptr ) {
+				newShaderParams.SetTexture( srcShaderParams[j].GetParamName().stl_str(), srcShaderParams[j].GetTexture() );
+			} else if ( srcShaderParams[j].GetRenderTexture() != nullptr ) {
+	
+				newShaderParams.SetTexture( srcShaderParams[j].GetParamName().stl_str(), srcShaderParams[j].GetRenderTexture() );
+			} else {
+				newShaderParams.SetVec4( srcShaderParams[j].GetParamName().stl_str(), srcShaderParams[j].GetVector() );
+			}
+		}
+	
+		m_RenderObject.m_Materials.push_back( newShaderParams );
+	}
 
 	if ( m_CurrentParticleBuffer == 255 ) {
 		m_CurrentParticleBuffer = 0;
@@ -334,7 +358,7 @@ void kbParticleComponent::RenderSync() {
 	}
 
 	m_pVertexBuffer = (kbParticleVertex*)m_ParticleBuffer[m_CurrentParticleBuffer].MapVertexBuffer();
-	m_pIndexBuffer = ( unsigned long * ) m_ParticleBuffer[m_CurrentParticleBuffer].MapIndexBuffer();
+	m_pIndexBuffer = (ushort*) m_ParticleBuffer[m_CurrentParticleBuffer].MapIndexBuffer();
 
 	m_NumIndicesInCurrentBuffer = 0;
 }

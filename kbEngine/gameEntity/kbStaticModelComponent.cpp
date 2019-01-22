@@ -17,7 +17,6 @@ void kbStaticModelComponent::Constructor() {
 	m_pModel = nullptr;
 }
 
-
 /**
  *	~kbStaticModelComponent
  */
@@ -30,7 +29,7 @@ kbStaticModelComponent::~kbStaticModelComponent() {
 void kbStaticModelComponent::EditorChange( const std::string & propertyName ) {
 	Super::EditorChange( propertyName );
 
-	if ( propertyName == "Model" || propertyName == "ShaderOverride" ) {
+	if ( IsEnabled() && ( propertyName == "Model" || propertyName == "ShaderOverride" ) ) {
 		SetEnable_Internal( false );
 		SetEnable_Internal( true );
 	}
@@ -59,21 +58,9 @@ void kbStaticModelComponent::SetEnable_Internal( const bool isEnabled ) {
 		m_RenderObject.m_Position = GetOwner()->GetPosition();
 		m_RenderObject.m_RenderPass = m_RenderPass;
 		m_RenderObject.m_Scale = GetOwner()->GetScale();
-		m_RenderObject.m_OverrideShaderList = m_pOverrideShaderList;
 		m_RenderObject.m_TranslucencySortBias = m_TranslucencySortBias;
 
-		for ( int i = 0; i < m_ShaderParamList.size(); i++ ) {
-			if ( m_ShaderParamList[i].GetParamName().stl_str().empty() ) {
-				continue;
-			}
-
-			if ( m_ShaderParamList[i].GetTexture() != nullptr ) {
-				m_RenderObject.m_ShaderParamOverrides.SetTexture( m_ShaderParamList[i].GetParamName().stl_str(), m_ShaderParamList[i].GetTexture() );
-			} else {
-				m_RenderObject.m_ShaderParamOverrides.SetVec4( m_ShaderParamList[i].GetParamName().stl_str(), m_ShaderParamList[i].GetVector() );
-
-			}
-		}
+		RefreshMaterials( false );
 
 		g_pRenderer->AddRenderObject( m_RenderObject );
 	} else {

@@ -79,7 +79,7 @@ SamplerState diffuseSampler;
 Texture2D normal					: register(t1);
 SamplerState normalSampler;
 
-Texture2D holeTex				: register(t2);
+Texture2D holeTex(white)			: register(t2);
 
  PS_OUTPUT pixelShader( pixelInput	input, bool IsFrontFace	: SV_IsFrontFace ) {
  	PS_OUTPUT output = (PS_OUTPUT) 0;
@@ -90,9 +90,10 @@ Texture2D holeTex				: register(t2);
 	clip( 0.5f - ( 1.0f - holeValues.w ) );
 
 	output.Color.xyz = diffuse.Sample( diffuseSampler, input.uv ).xyz * holeValues.xyz;
-	output.Depth.r = input.position2.x / input.position2.y;
-	output.Specular =  float4( 0.08f * output.Color.xyz, 15.0f );//0.1f * output.Color.xyzx;//float4( 0.0f, 0.0f, 0.0f, 1.0f );
 
+	output.Depth.r = input.position2.x / input.position2.y;
+	output.Specular = float4( 0.08f * max( max(output.Color.x ,output.Color.y), output.Color.z),1,0,0);//float4( 0.08f * output.Color.xyz, 15.0f );//0.1f * output.Color.xyzx;//float4( 0.0f, 0.0f, 0.0f, 1.0f );
+	
 	float3x3 TBN = float3x3( normalize( input.TBN0.xyz ), normalize( input.TBN1.xyz ), normalize( input.TBN2.xyz ) );
 
 	/*if ( IsFrontFace == 0 ) {
@@ -101,5 +102,6 @@ Texture2D holeTex				: register(t2);
 
 	float3 tangentNormal = normalize( normal.Sample( normalSampler, input.uv ).xyz * 2.0f - 1.0f );
 	output.Normal.xyz = mul( tangentNormal, TBN );
+	output.Normal.w = 0.5f;
 	return output;
 }

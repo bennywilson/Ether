@@ -41,6 +41,12 @@ GenerateClass(
 )
 
 GenerateClass(
+	kbMaterialComponent,
+	AddField( "Shader", KBTYPEINFO_SHADER, kbMaterialComponent, m_pShader, false, "" )
+	AddField( "ShaderParams", KBTYPEINFO_STRUCT, kbMaterialComponent, m_ShaderParamComponents, true, "kbShaderParamComponent" )
+)
+
+GenerateClass(
 	kbClothBone,
 	AddField( "BoneName", KBTYPEINFO_KBSTRING, kbClothBone, m_BoneName, false, "" )
 	AddField( "NeighborBones", KBTYPEINFO_KBSTRING, kbClothBone, m_NeighborBones, true, "kbString" )
@@ -77,7 +83,7 @@ GenerateClass(
 	AddField( "RenderPass", KBTYPEINFO_ENUM, kbModelComponent, m_RenderPass, false, "ERenderPass" )
 	AddField( "TranslucencySortBias", KBTYPEINFO_FLOAT, kbModelComponent, m_TranslucencySortBias, false, "" )
 	AddField( "CastsShadow", KBTYPEINFO_BOOL, kbModelComponent, m_bCastsShadow, false, "" )
-	AddField( "ShaderParams", KBTYPEINFO_STRUCT, kbModelComponent, m_ShaderParamList, true, "kbShaderParamComponent" )
+	AddField( "Materials", KBTYPEINFO_STRUCT, kbModelComponent, m_MaterialList, true, "kbMaterialComponent" )
 )
 
 GenerateClass( 
@@ -96,8 +102,7 @@ GenerateClass(
 	kbLightComponent,
 	AddField( "Color", KBTYPEINFO_VECTOR4, kbLightComponent, m_Color, false, "" )
 	AddField( "CastsShadows", KBTYPEINFO_BOOL, kbLightComponent, m_bCastsShadow, false, "" )
-	AddField( "ShaderParams", KBTYPEINFO_STRUCT, kbLightComponent, m_OverrideShaderParamList, true, "kbShaderParamComponent" )
-	AddField( "OverrideShader", KBTYPEINFO_SHADER, kbLightComponent, m_pOverrideShader, false, "" )
+	AddField( "Materials", KBTYPEINFO_STRUCT, kbLightComponent, m_MaterialList, true, "kbMaterialComponent" )
 )
 
 GenerateClass(
@@ -171,7 +176,8 @@ GenerateClass(
 	AddField( "HeightScale", KBTYPEINFO_FLOAT, kbTerrainComponent, m_HeightScale, false, "" )
 	AddField( "Width", KBTYPEINFO_FLOAT, kbTerrainComponent, m_TerrainWidth, false, "" )
 	AddField( "Dimensions", KBTYPEINFO_INT, kbTerrainComponent, m_TerrainDimensions, false, "" )
-	AddField( "Materials", KBTYPEINFO_STRUCT, kbTerrainComponent, m_TerrainMaterials, true, "kbTerrainMatComponent" )
+	AddField( "MaterialList", KBTYPEINFO_STRUCT, kbTerrainComponent, m_MaterialList, true, "kbMaterialComponent" )
+	AddField( "TerrainMaterials", KBTYPEINFO_STRUCT, kbTerrainComponent, m_TerrainMaterials, true, "kbTerrainMatComponent" )
 	AddField( "SplatMap", KBTYPEINFO_TEXTURE, kbTerrainComponent, m_pSplatMap, false, "" )
 	AddField( "Shader", KBTYPEINFO_SHADER, kbTerrainComponent, m_pTerrainShader, false, "" )
 	AddField( "Grass", KBTYPEINFO_STRUCT, kbTerrainComponent, m_Grass, true, "kbGrass" )
@@ -188,6 +194,7 @@ GenerateClass(
 	AddField( "TranslucencySortBias", KBTYPEINFO_FLOAT, kbParticleComponent, m_TranslucencySortBias, false, "" )
 	AddField( "ParticleTexture", KBTYPEINFO_TEXTURE, kbParticleComponent, m_pParticleTexture, false, "" )
 	AddField( "ParticleShader", KBTYPEINFO_SHADER, kbParticleComponent, m_pParticleShader, false, "" )
+	AddField( "MaterialList", KBTYPEINFO_STRUCT, kbParticleComponent, m_MaterialList, true, "kbMaterialComponent" )
 	AddField( "TotalDuration", KBTYPEINFO_FLOAT, kbParticleComponent, m_TotalDuration, false, "" )
 	AddField( "MinSpawnRate", KBTYPEINFO_FLOAT, kbParticleComponent, m_MinParticleSpawnRate, false, "" )
 	AddField( "MaxSpawnRate", KBTYPEINFO_FLOAT, kbParticleComponent, m_MaxParticleSpawnRate, false, "" )

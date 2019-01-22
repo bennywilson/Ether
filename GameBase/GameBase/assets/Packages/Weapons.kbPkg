@@ -15,6 +15,90 @@ kbPrefab 1 {
 			LifeTime =  -1.000000
 			CastsShadows = 0
 			Color = 2.000000 2.000000 2.000000 1.000000
+			Materials = 1
+				kbMaterialComponent { 
+					Enabled = 0
+					LifeTime =  -1.000000
+					Shader = .\assets\shaders\lights\charenvirocylinderlight.kbshader
+					ShaderParams = 11
+						kbShaderParamComponent { 
+							Enabled = 0
+							LifeTime =  -1.000000
+							ParamName = "lightColor"
+							Texture = NULL
+							Vector = 1.000000 1.000000 1.000000 1.000000
+						}
+						kbShaderParamComponent { 
+							Enabled = 0
+							LifeTime =  -1.000000
+							ParamName = "cameraPosition"
+							Texture = NULL
+							Vector = 0.000000 0.000000 0.000000 0.000000
+						}
+						kbShaderParamComponent { 
+							Enabled = 0
+							LifeTime =  -1.000000
+							ParamName = "diffuseColorBand"
+							Texture = NULL
+							Vector = 0.000000 0.000000 0.000000 0.000000
+						}
+						kbShaderParamComponent { 
+							Enabled = 0
+							LifeTime =  -1.000000
+							ParamName = "rimParams"
+							Texture = NULL
+							Vector = 0.000000 0.000000 0.000000 0.000000
+						}
+						kbShaderParamComponent { 
+							Enabled = 0
+							LifeTime =  -1.000000
+							ParamName = "enviroParams"
+							Texture = NULL
+							Vector = 0.000000 0.000000 0.000000 0.000000
+						}
+						kbShaderParamComponent { 
+							Enabled = 0
+							LifeTime =  -1.000000
+							ParamName = "characterParams"
+							Texture = NULL
+							Vector = 0.000000 0.000000 0.000000 0.000000
+						}
+						kbShaderParamComponent { 
+							Enabled = 0
+							LifeTime =  -1.000000
+							ParamName = "diffuseParams"
+							Texture = NULL
+							Vector = 0.000000 0.000000 0.000000 0.000000
+						}
+						kbShaderParamComponent { 
+							Enabled = 0
+							LifeTime =  -1.000000
+							ParamName = "colorTexture"
+							Texture = NULL
+							Vector = 0.000000 0.000000 0.000000 0.000000
+						}
+						kbShaderParamComponent { 
+							Enabled = 0
+							LifeTime =  -1.000000
+							ParamName = "normalTexture"
+							Texture = NULL
+							Vector = 0.000000 0.000000 0.000000 0.000000
+						}
+						kbShaderParamComponent { 
+							Enabled = 0
+							LifeTime =  -1.000000
+							ParamName = "specularTexture"
+							Texture = NULL
+							Vector = 0.000000 0.000000 0.000000 0.000000
+						}
+						kbShaderParamComponent { 
+							Enabled = 0
+							LifeTime =  -1.000000
+							ParamName = "depthTexture"
+							Texture = NULL
+							Vector = 0.000000 0.000000 0.000000 0.000000
+						}
+				}
 			LightRadius =  16.000000
 			Length =  128.000000
 		}
@@ -84,6 +168,7 @@ kbGameEntity 2459381576 1233845788 1100758177 1698127025 {
 		LifeTime =  -1.000000
 		CastsShadows = 0
 		Color = 0.500000 0.211000 0.111000 1.000000
+		Materials = 0
 		LightRadius =  64.000000
 		Length =  128.000000
 	}
@@ -152,6 +237,7 @@ kbGameEntity 2411460423 1126542526 3016243094 357289685 {
 		LifeTime =  -1.000000
 		CastsShadows = 0
 		Color = 0.070000 0.930000 0.930000 1.000000
+		Materials = 0
 		LightRadius =  1.000000
 	}
 	EtherProjectileComponent { 
@@ -279,31 +365,109 @@ kbGameEntity 292847838 1140569109 1236968083 2365837966 {
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadow = 0
+		Materials = 4
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Shader = .\assets\shaders\weapons\baseweapon.kbshader
+				ShaderParams = 1
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "shaderTexture"
+						Texture = .\assets\models\items\el_rifle_fp_diffuse.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Shader = .\assets\shaders\weapons\baseweapon.kbshader
+				ShaderParams = 1
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "shaderTexture"
+						Texture = .\assets\models\items\hammer.dds
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Shader = .\assets\shaders\weapons\baseholoscope.kbshader
+				ShaderParams = 1
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "shaderTexture"
+						Texture = .\assets\models\items\holoscope.dds
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Shader = .\assets\shaders\character\firstpersonhands.kbshader
+				ShaderParams = 1
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "shaderTexture"
+						Texture = .\assets\models\items\fp_hands.dds
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
 		RenderPass = LightingPass
-		ShaderParams = 0
 		TranslucencySortBias =  0.000000
 		Model = .\assets\models\items\el_rifle_fp.ms3d
-		ShaderOverride = 3
-			.\assets\shaders\Weapons\baseweapon.kbshader
-.\assets\shaders\Weapons\baseholoscope.kbshader
-.\assets\shaders\Character\firstpersonhands.kbshader
-
-		Animations = 2
+		ShaderOverride = 0
+			
+		Animations = 3
 			EtherAnimComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
 				Animation = .\assets\models\items\el_rifle_fp_idle.kbanim.ms3d
+				AnimationEvent = 0
 				AnimationName = "Idle"
-				IsLooping = 0
-				TimeScale =  1.000000
+				IsLooping = 1
+				TimeScale =  0.500000
 			}
 			EtherAnimComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
 				Animation = .\assets\models\items\el_rifle_fp_shoot.kbanim.ms3d
+				AnimationEvent = 3
+					EtherAnimEvent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						EventName = "Shoot"
+						EventTime =  0.200000
+					}
+					EtherAnimEvent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						EventName = "Shoot"
+						EventTime =  0.400000
+					}
+					EtherAnimEvent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						EventName = "Shoot"
+						EventTime =  0.600000
+					}
 				AnimationName = "Shoot"
 				IsLooping = 0
-				TimeScale =  2.000000
+				TimeScale =  8.000000
+			}
+			EtherAnimComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Animation = .\assets\models\items\el_rifle_fp_walkforward.kbanim.ms3d
+				AnimationEvent = 0
+				AnimationName = "WalkForward"
+				IsLooping = 1
+				TimeScale =  5.000000
 			}
 		DebugAnimIndex = -1
 		IsFirstPersonModel = 1
@@ -315,9 +479,87 @@ kbGameEntity 292847838 1140569109 1236968083 2365837966 {
 		BurstCount = 3
 		IsInstantHit = 0
 		MuzzleFlash = 3287441000 1228561351 2632918935 4227010865
+		MuzzleFlashAnimations = 2
+			kbAnimatedQuadComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				DummyTemp = 0
+				MaxLifeTime =  0.075000
+				MaxStartScale = 15.000000 15.000000 0.000000
+				MinLifeTime =  0.075000
+				MinStartScale = 15.000000 15.000000 0.000000
+				ApplyRandomRotation = 1
+				ScaleOverTime = 3
+					kbVec3TimePointComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						DummyTemp = 0
+						Time =  0.000000
+						Vector = 1.000000 1.000000 1.000000
+					}
+					kbVec3TimePointComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						DummyTemp = 0
+						Time =  0.500000
+						Vector = 2.000000 2.000000 2.000000
+					}
+					kbVec3TimePointComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						DummyTemp = 0
+						Time =  1.000000
+						Vector = 0.000000 0.000000 0.000000
+					}
+				Texture = .\assets\fx\muzzleflashes\basicorange_muzzleflash.jpg
+				UVEnd = 0.500000 1.000000 0.000000
+				UVStart = 0.000000 0.000000 0.000000
+			}
+			kbAnimatedQuadComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				DummyTemp = 0
+				MaxLifeTime =  0.080000
+				MaxStartScale = 15.000000 15.000000 0.000000
+				MinLifeTime =  0.080000
+				MinStartScale = 15.000000 15.000000 0.000000
+				ApplyRandomRotation = 1
+				ScaleOverTime = 4
+					kbVec3TimePointComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						DummyTemp = 0
+						Time =  0.050000
+						Vector = 0.000000 0.000000 0.000000
+					}
+					kbVec3TimePointComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						DummyTemp = 0
+						Time =  0.050000
+						Vector = 1.000000 1.000000 1.000000
+					}
+					kbVec3TimePointComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						DummyTemp = 0
+						Time =  0.250000
+						Vector = 2.000000 2.000000 2.000000
+					}
+					kbVec3TimePointComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						DummyTemp = 0
+						Time =  1.000000
+						Vector = 0.000000 0.000000 0.000000
+					}
+				Texture = .\assets\fx\muzzleflashes\basicorange_muzzleflash.jpg
+				UVEnd = 1.000000 1.000000 0.000000
+				UVStart = 0.500000 0.000000 0.000000
+			}
 		Projectile = 402992291 1133905897 445195195 1933284623
-		SecondsBetweenBursts =  0.100000
-		SecondsBetweenShots =  0.040000
+		SecondsBetweenBursts =  0.250000
+		SecondsBetweenShots =  0.090000
 		ShellLifeTime =  0.777000
 		ShellMaxAxisVelocity = 30.000000 0.000000 20.000000
 		ShellMaxVelocity = 30.000000 26.000000 8.000000

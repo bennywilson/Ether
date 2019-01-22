@@ -114,6 +114,7 @@ private:
 	static void												RotationButtonCB( Fl_Widget *, void * );
 	static void												ScaleButtonCB( Fl_Widget *, void * );
 	static void												AdjustCameraSpeedCB( Fl_Widget *, void * );
+	static void												ToggleIconsCB( Fl_Widget *, void * );
 	static void												OutputCB( kbOutputMessageType_t, const char * );
 	static void												PlayGameFromHere( Fl_Widget *, void * );
 	static void												StopGame( Fl_Widget *, void * );

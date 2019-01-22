@@ -217,7 +217,7 @@ void GenerateFlatShadedTriangleIndices( vertexLayout *const pInputVerts, vertexL
 		const EtherEnviroObject & EnviroObject = *worldObjects[iObj].m_pEnviroObject;
 		const kbModel *const pModel = EnviroObject.GetModel();
 		const std::vector<vertexLayout>	& dynVerts = pModel->GetCPUVertices();
-		const std::vector<unsigned long> & dynIndices = pModel->GetCPUIndices();
+		const std::vector<ushort> & dynIndices = pModel->GetCPUIndices();
 		
 		if ( dynVerts.size() + pTerrainJob->m_NumDynamicVertices > g_MaxDynamicVertices || dynIndices.size() + pTerrainJob->m_NumDynamicIndices > g_MaxDynamicVertices ) {
 			continue;

@@ -36,7 +36,23 @@ kbModelComponent::~kbModelComponent() {
 void kbModelComponent::EditorChange( const std::string & propertyName ) {
 	Super::EditorChange( propertyName );
 
-	SetShaderParamList();
+	m_RenderObject.m_bCastsShadow = this->GetCastsShadow();
+	m_RenderObject.m_bIsSkinnedModel = false;
+	m_RenderObject.m_EntityId = GetOwner()->GetEntityId();
+	m_RenderObject.m_Orientation = GetOwner()->GetOrientation();
+	m_RenderObject.m_Position = GetOwner()->GetPosition();
+	m_RenderObject.m_RenderPass = m_RenderPass;
+	m_RenderObject.m_Scale = GetOwner()->GetScale();
+	m_RenderObject.m_TranslucencySortBias = m_TranslucencySortBias;
+
+	// Editor Hack!
+	if ( propertyName == "Materials" ) {
+		for ( int i = 0; i < this->m_MaterialList.size(); i++ ) {
+			m_MaterialList[i].SetOwningComponent( this );
+		}
+	}
+
+	RefreshMaterials( true );
 }
 
 /**
@@ -46,45 +62,90 @@ void kbModelComponent::PostLoad() {
 	Super::PostLoad();
 
 	if ( GetOwner()->IsPrefab() == false ) {
-		SetShaderParamList();
+		RefreshMaterials( false );
 	}
 }
 
 /**
- *	kbModelComponent:SetShaderParamOverrides
+ *	kbModelComponent::RefreshMaterials
  */
-void kbModelComponent::SetShaderParamOverrides( const kbShaderParamOverrides_t & shaderParams ) {
+void kbModelComponent::RefreshMaterials( const bool bRefreshRenderObejct ) {
+	m_RenderObject.m_Materials.clear();
+	for ( int i = 0; i < m_MaterialList.size(); i++ ) {
+		const kbMaterialComponent & matComp = m_MaterialList[i];
+	
+		kbShaderParamOverrides_t newShaderParams;
+		newShaderParams.m_pShader = matComp.GetShader();
+	
+		auto srcShaderParams = matComp.GetShaderParams();
+		for ( int j = 0; j < srcShaderParams.size(); j++ ) {
+			if ( srcShaderParams[j].GetTexture() != nullptr ) {
+				newShaderParams.SetTexture( srcShaderParams[j].GetParamName().stl_str(), srcShaderParams[j].GetTexture() );
+			} else if ( srcShaderParams[j].GetRenderTexture() != nullptr ) {
+	
+				newShaderParams.SetTexture( srcShaderParams[j].GetParamName().stl_str(), srcShaderParams[j].GetRenderTexture() );
+			} else {
+				newShaderParams.SetVec4( srcShaderParams[j].GetParamName().stl_str(), srcShaderParams[j].GetVector() );
+			}
+		}
+	
+		m_RenderObject.m_Materials.push_back( newShaderParams );
+	}
 
-	m_RenderObject.m_ShaderParamOverrides = shaderParams;
-	if ( IsEnabled() ) {
+	if ( IsEnabled() && m_RenderObject.m_pComponent != nullptr && bRefreshRenderObejct ) {
 		g_pRenderer->UpdateRenderObject( m_RenderObject );
 	}
 }
 
 /**
- *	kbModelComponent:SetShaderParamList
+ *	kbModelComponent:SetMaterialParamVector
  */
-void kbModelComponent::SetShaderParamList() {
-
-	m_RenderObject.m_ShaderParamOverrides.m_ParamOverrides.clear();
-	for ( int i = 0; i < m_ShaderParamList.size(); i++ ) {
-		if ( m_ShaderParamList[i].GetParamName().stl_str().empty() ) {
-			continue;
-		}
-
-		if ( m_ShaderParamList[i].GetTexture() != nullptr ) {
-			m_RenderObject.m_ShaderParamOverrides.SetTexture( m_ShaderParamList[i].GetParamName().stl_str(), m_ShaderParamList[i].GetTexture() );
-		} else {
-			m_RenderObject.m_ShaderParamOverrides.SetVec4( m_ShaderParamList[i].GetParamName().stl_str(), m_ShaderParamList[i].GetVector() );
-		}
+void kbModelComponent::SetMaterialParamVector( const int idx, const std::string & paramName, const kbVec4 paramValue ) {
+	if ( idx < 0 || idx > 32 || idx >= m_MaterialList.size() ) {
+		kbWarning( "kbModelComponent::SetMaterialParamVector() called on invalid index" );
+		return;
 	}
+
+	kbShaderParamComponent newParam;
+	newParam.SetParamName( paramName );
+	newParam.SetVector( paramValue );
+	m_MaterialList[idx].SetShaderParamComponent( newParam );
+
+	RefreshMaterials( true );
 }
 
 /**
- *	kbModelComponent::SetShaderVectorParam
+ *	kbModelComponent:SetMaterialParamTexture
  */
-void kbModelComponent::SetShaderVectorParam( const std::string & paramName, const kbVec4 & value ) {
-	m_RenderObject.m_ShaderParamOverrides.SetVec4( paramName, value );
+void kbModelComponent::SetMaterialParamTexture( const int idx, const std::string & paramName, kbTexture *const pTexture ) {
+	if ( idx < 0 || idx > 32 || idx >= m_MaterialList.size() ) {
+		kbWarning( "kbModelComponent::SetMaterialParamVector() called on invalid index" );
+		return;
+	}
+
+	kbShaderParamComponent newParam;
+	newParam.SetParamName( paramName );
+	newParam.SetTexture( pTexture );
+	m_MaterialList[idx].SetShaderParamComponent( newParam );
+
+	RefreshMaterials( true );
+}
+
+/**
+ *	kbModelComponent:SetMaterialParamTexture
+ */
+void kbModelComponent::SetMaterialParamTexture( const int idx, const std::string & paramName, kbRenderTexture *const pRenderTexture ) {
+	if ( idx < 0 || idx > 32 || idx >= m_MaterialList.size() ) {
+		kbWarning( "kbModelComponent::SetMaterialParamVector() called on invalid index" );
+		return;
+	}
+	kbShaderParamComponent newParam;
+	newParam.SetParamName( paramName );
+	newParam.SetRenderTexture( pRenderTexture );
+	m_MaterialList[idx].SetShaderParamComponent( newParam );
+
+	RefreshMaterials( true );
+
 	if ( IsEnabled() ) {
 		g_pRenderer->UpdateRenderObject( m_RenderObject );
 	}
@@ -95,5 +156,95 @@ void kbModelComponent::SetShaderVectorParam( const std::string & paramName, cons
  */
 void kbShaderParamComponent::Constructor() {
 	m_pTexture = nullptr;
+	m_pRenderTexture = nullptr;
 	m_Vector.Set( 0.0f, 0.0f, 0.0f, 0.0f );
+}
+
+/**
+ *	kbMaterialComponent::Constructor
+ */
+void kbMaterialComponent::Constructor() {
+	m_pShader = nullptr;
+}
+
+/**
+ *	kbMaterialComponent::EditorChange
+ */
+void kbMaterialComponent::EditorChange( const std::string & propertyName ) {
+	Super::EditorChange( propertyName );
+
+	if ( propertyName == "Shader" && m_pShader != nullptr ) {
+
+		std::vector<kbShaderParamComponent>	oldParams = m_ShaderParamComponents;
+		m_ShaderParamComponents.clear();
+
+		const kbShaderVarBindings_t & shaderBindings = m_pShader->GetShaderVarBindings();
+		for ( int i = 0; i < shaderBindings.m_VarBindings.size(); i++ ) {
+			auto currentVar = shaderBindings.m_VarBindings[i];
+			if ( currentVar.m_bIsUserDefinedVar == false ) {
+				continue;
+			}
+
+			const kbString boundVarName( currentVar.m_VarName );
+			bool boundParamFound = false;
+			for ( int iOldParam = 0; iOldParam < oldParams.size(); iOldParam++ ) {
+				if ( oldParams[iOldParam].GetParamName() == boundVarName ) {
+					m_ShaderParamComponents.push_back( oldParams[iOldParam] );
+					boundParamFound = true;
+					break;
+				}
+			}
+
+			if ( boundParamFound == false ) {
+				kbShaderParamComponent newParam;
+				newParam.SetParamName( boundVarName );
+				newParam.SetVector( kbVec4::zero );
+				newParam.SetTexture( nullptr );
+				m_ShaderParamComponents.push_back( newParam );
+			}
+		}
+
+		for ( int i = 0; i < shaderBindings.m_Textures.size(); i++ ) {
+			const kbString boundTextureName( shaderBindings.m_Textures[i].m_TextureName );
+			bool boundParamFound = false;
+			for ( int iOldParam = 0; iOldParam < oldParams.size(); iOldParam++ ) {
+				if ( oldParams[iOldParam].GetParamName() == boundTextureName ) {
+					m_ShaderParamComponents.push_back( oldParams[iOldParam] );
+					boundParamFound = true;
+					break;
+				}
+			}
+
+			if ( boundParamFound == false ) {
+				kbShaderParamComponent newParam;
+				newParam.SetParamName( boundTextureName );
+				newParam.SetVector( kbVec4::zero );
+				newParam.SetTexture( nullptr );
+				m_ShaderParamComponents.push_back( newParam );			
+			}
+		}
+	}
+
+	// Refresh owner
+	if ( GetOwningComponent() != nullptr && GetOwningComponent()->IsA( kbModelComponent::GetType() ) ) {
+		kbModelComponent *const pModelComp = (kbModelComponent*) GetOwningComponent();
+		pModelComp->RefreshMaterials( true );
+	} else {
+		kbWarning( "kbMaterialComponent::EditorChange() - Material component doesn't have a model component owner.  Is this okay?" );
+	}
+}
+
+/**
+ *	kbMaterialComponent::SetShaderParamComponent
+ */
+void kbMaterialComponent::SetShaderParamComponent( const kbShaderParamComponent & inParam ) {
+	
+	for ( int i = 0; i < m_ShaderParamComponents.size(); i++ ) {
+		if ( m_ShaderParamComponents[i].GetParamName() == inParam.GetParamName() ) {
+			m_ShaderParamComponents[i] = inParam;
+			return;
+		}
+	}
+
+	m_ShaderParamComponents.push_back( inParam );
 }

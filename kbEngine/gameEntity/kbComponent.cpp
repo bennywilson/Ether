@@ -135,6 +135,7 @@ void CopyVarToComponent( const kbComponent * Src, kbComponent * Dst, const kbTyp
  */
 void kbComponent::Constructor() {
 	m_pOwner = nullptr;
+	m_pOwningComponent = nullptr;
 	m_bIsDirty = false;
 	m_IsEnabled = false;
 }
@@ -182,6 +183,21 @@ void kbGameComponent::Enable( const bool setEnabled ) {
 }
 
 /**
+ *	kbGameComponent::EditorChange
+ */
+void kbGameComponent::EditorChange( const std::string & propertyName ) {
+	Super::EditorChange( propertyName );
+
+	if ( propertyName == "Enabled" ) {
+		if ( GetOwner() == nullptr || GetOwner()->IsPrefab() == true ) {
+			return;
+		}
+
+		SetEnable_Internal( m_IsEnabled );
+	}
+}
+
+/**
  *	kbGameComponent::Update
  */
 void kbGameComponent::Update( const float DeltaTimeSeconds ) {
@@ -196,6 +212,13 @@ void kbGameComponent::Update( const float DeltaTimeSeconds ) {
 
 	Update_Internal( DeltaTimeSeconds ); 
 	m_bIsDirty = false;
+}
+
+/**
+ *	kbGameComponent::GetOwnerName
+ */
+kbString kbGameComponent::GetOwnerName() const {
+	return GetOwner()->GetName();
 }
 
 /**

@@ -29,6 +29,9 @@
     <Filter Include="Shaders\Lights">
       <UniqueIdentifier>{23ccd1a4-90d2-42cb-9d56-88b847978266}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Shaders\Weapons">
+      <UniqueIdentifier>{0660bacb-6b2f-4135-9e29-205faee3d441}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="ReadMe.txt" />
@@ -124,6 +127,24 @@
     </None>
     <None Include="assets\shaders\Lights\environmentDirectionalFill.kbShader">
       <Filter>Shaders\Lights</Filter>
+    </None>
+    <None Include="assets\shaders\Weapons\baseHoloscope.kbShader">
+      <Filter>Shaders\Weapons</Filter>
+    </None>
+    <None Include="assets\shaders\Weapons\baseWeapon.kbShader">
+      <Filter>Shaders\Weapons</Filter>
+    </None>
+    <None Include="assets\shaders\Weapons\shellCasing.kbShader">
+      <Filter>Shaders\Weapons</Filter>
+    </None>
+    <None Include="assets\shaders\Lights\charEnviroCylinderLight.kbShader">
+      <Filter>Shaders\Lights</Filter>
+    </None>
+    <None Include="assets\shaders\Character\characterMetalDull.kbShader">
+      <Filter>Shaders\Character</Filter>
+    </None>
+    <None Include="assets\shaders\Character\firstPersonHands.kbshader">
+      <Filter>Shaders\Character</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

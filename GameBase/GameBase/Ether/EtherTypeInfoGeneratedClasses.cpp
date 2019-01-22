@@ -19,6 +19,10 @@ using namespace std;
 EtherWorldGenComponent_TypeInfo EtherWorldGenComponent::typeInfo;
 std::vector<class kbTypeInfoClass *> EtherWorldGenComponent::EtherWorldGenComponent_TypeInfoVar;
 
+// EtherAnimEvent
+EtherAnimEvent_TypeInfo EtherAnimEvent::typeInfo;
+std::vector<class kbTypeInfoClass*> EtherAnimEvent::EtherAnimEvent_TypeInfoVar;
+
 // EtherAnimComponent
 EtherAnimComponent_TypeInfo EtherAnimComponent::typeInfo;
 std::vector<class kbTypeInfoClass*> EtherAnimComponent::EtherAnimComponent_TypeInfoVar;
@@ -50,6 +54,14 @@ std::vector<class kbTypeInfoClass*> EtherProjectileComponent::EtherProjectileCom
 // EtherWeaponComponent
 EtherWeaponComponent_TypeInfo EtherWeaponComponent::typeInfo;
 std::vector<class kbTypeInfoClass*> EtherWeaponComponent::EtherWeaponComponent_TypeInfoVar;
+
+// kbVec3TimePoint
+kbVec3TimePointComponent_TypeInfo kbVec3TimePointComponent::typeInfo;
+std::vector<class kbTypeInfoClass*> kbVec3TimePointComponent::kbVec3TimePointComponent_TypeInfoVar;
+
+// kbAnimatedQuadComponent
+kbAnimatedQuadComponent_TypeInfo kbAnimatedQuadComponent::typeInfo;
+std::vector<class kbTypeInfoClass*> kbAnimatedQuadComponent::kbAnimatedQuadComponent_TypeInfoVar;
 
 // EtherEnviroMaterial
 EtherEnviroMaterial_TypeInfo EtherEnviroMaterial::typeInfo;

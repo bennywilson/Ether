@@ -5,6 +5,7 @@
 //
 // 2016-2018 kbEngine 2.0
 //==============================================================================
+#include <fbxsdk.h>
 #include "kbCore.h"
 #include "kbVector.h"
 #include "kbIntersectionTests.h"
@@ -96,10 +97,25 @@ kbModel::~kbModel() {
  *	kbModel::Load_Internal
  */
 bool kbModel::Load_Internal() {
+	const std::string fileExt = GetFileExtension( GetFullFileName() );
+	if ( fileExt == "ms3d" ) {
+		return LoadMS3D();
+	} else if ( fileExt == "fbx" ) {
+		return LoadFBX();
+	} else if ( fileExt == "diablo3" ) {
+		return LoadDiablo3();
+	}
 
+	return false;
+}
+
+/**
+ *	kbModel::LoadMS3D
+ */
+bool kbModel::LoadMS3D() {
 	std::ifstream modelFile;
 	modelFile.open( m_FullFileName, std::ifstream::in | std::ifstream::binary );
-	kbErrorCheck( modelFile.good(), "kbModel::LoadResource_Internal() - Failed to load model %s", m_FullFileName.c_str() );
+	kbErrorCheck( modelFile.good(), "kbModel::LoadMS3D() - Failed to load model %s", m_FullFileName.c_str() );
 	
 	// Find the file size
 	modelFile.seekg( 0, std::ifstream::end );
@@ -117,9 +133,7 @@ bool kbModel::Load_Internal() {
 	const ms3dHeader_t * pHeader = ( const ms3dHeader_t * ) pPtr;
 	pPtr += sizeof( ms3dHeader_t );
 
-	if ( strncmp( pHeader->m_ID, "MS3D000000", 10 ) != 0 ) {
-		kbError( "Error: kbModel::LoadResource_Internal - Invalid model header %d", pHeader->m_ID );
-	}
+	kbErrorCheck( strncmp( pHeader->m_ID, "MS3D000000", 10 ) == 0, "kbModel::LoadResource_Internal - Invalid model header %d", pHeader->m_ID );
 
 	// Vertices
 	m_Bounds.Reset();
@@ -287,7 +301,7 @@ bool kbModel::Load_Internal() {
 
 			// load the base diffuse textures
 			const std::string textureFileName = filePath + texture[iTex];
-			m_Materials[iMat].m_Textures.push_back( (kbTexture *) g_ResourceManager.GetResource( textureFileName.c_str(), true ) );
+			m_Materials[iMat].m_Textures.push_back( (kbTexture *) g_ResourceManager.LoadResource( textureFileName.c_str(), true ) );
 		}
 
 		std::string shaderName = pMat->m_Name;
@@ -319,7 +333,7 @@ bool kbModel::Load_Internal() {
 
 	ibIndex = 0;
 
-	std::map<vertexLayout, int> vertHash;
+	std::unordered_map<vertexLayout, int, kbVertexHash> vertHash;
 
 	for ( uint i = 0; i < m_Meshes.size(); i++ ) {
 
@@ -349,7 +363,7 @@ bool kbModel::Load_Internal() {
 					newVert.color[3] = (byte)boneIndices[currentTriangle.m_VertexIndices[j]]; 
 				}
 
-				std::map<vertexLayout, int>::iterator it = vertHash.find( newVert );
+				auto it = vertHash.find( newVert );
 
 				int vertIndex;
 				if ( it == vertHash.end() ) {
@@ -553,6 +567,311 @@ bool kbModel::Load_Internal() {
 }
 
 /**
+ *	kbModel::LoadFBX
+ */
+FbxManager * g_pFBXSDKManager = nullptr;
+
+bool kbModel::LoadFBX() {
+
+	struct FBXData {
+		FbxImporter * pImporter = nullptr;
+		FbxScene * pScene = nullptr;
+
+		~FBXData() {
+			if ( pImporter != nullptr ) {
+				pImporter->Destroy();
+			}
+			if ( pScene != nullptr ) {
+				pScene->Destroy();
+			}
+		}
+	} fbxData;
+
+	if ( g_pFBXSDKManager == nullptr ) {
+		g_pFBXSDKManager = FbxManager::Create();
+
+		FbxIOSettings *const pIOsettings = FbxIOSettings::Create( g_pFBXSDKManager, IOSROOT );
+		g_pFBXSDKManager->SetIOSettings(pIOsettings);
+	}
+
+	fbxData.pImporter = FbxImporter::Create( g_pFBXSDKManager, "" );
+
+	bool bSuccess = fbxData.pImporter->Initialize( GetFullFileName().c_str(), -1, g_pFBXSDKManager->GetIOSettings() );
+	if( bSuccess == false ) {
+		return false;
+	}
+
+	fbxData.pScene = FbxScene::Create( g_pFBXSDKManager,"" );
+	bSuccess = fbxData.pImporter->Import( fbxData.pScene );
+	if( bSuccess == false ) {
+		return false;
+	}
+
+	/*FbxAxisSystem SceneAxisSystem = fbxData.pScene->GetGlobalSettings().GetAxisSystem();
+	FbxAxisSystem OurAxisSystem( FbxAxisSystem::eYAxis, FbxAxisSystem::eParityEven, FbxAxisSystem::eLeftHanded );
+	OurAxisSystem.ConvertScene( fbxData.pScene );*/
+
+	FbxNode * pRootNode = fbxData.pScene->GetRootNode();
+	kbErrorCheck( pRootNode != nullptr, "kbModel::LoadFBX() - Root node not found in %s", GetFullFileName().c_str() );
+
+	std::unordered_map<vertexLayout, int, kbVertexHash> vertexMap;
+	std::vector<vertexLayout> vertexList;
+	std::vector<ushort> indexList;
+
+	for ( int iMesh = 0; iMesh < pRootNode->GetChildCount(); iMesh++ ) {
+		
+		FbxMesh *const pFBXMesh = pRootNode->GetChild(iMesh)->GetMesh();
+		if ( pFBXMesh == nullptr ) {
+			kbWarning( "kbModel::LoadFBX() - Model has nodes without meshes" );
+			continue;
+		}
+
+		m_Meshes.push_back( mesh_t() );
+		mesh_t & newMesh = m_Meshes[m_Meshes.size() - 1];
+		newMesh.m_IndexBufferIndex = (unsigned int)indexList.size();
+		newMesh.m_MaterialIndex = 0;
+		newMesh.m_NumTriangles = pFBXMesh->GetPolygonCount();
+
+		newMesh.m_Bounds.Reset();
+
+		uint vertexCount = 0;
+
+		for ( int iTri = 0; iTri < (int)newMesh.m_NumTriangles; iTri++ ) {
+
+			int iCurVertex = vertexCount + 2;
+			for ( int iTriVert = 2; iTriVert >= 0; iTriVert--, vertexCount++, iCurVertex-- ) {
+				vertexLayout triVert;
+				memset( &triVert, 0, sizeof( triVert ) );
+
+				const int iCtrlPt = pFBXMesh->GetPolygonVertex( iTri, iTriVert );
+				const FbxVector4 ctrlPt = pFBXMesh->GetControlPointAt(iCtrlPt);
+
+				triVert.position.Set( (float)ctrlPt[1], (float)ctrlPt[2], -(float)ctrlPt[0] );
+				newMesh.m_Bounds.AddPoint( triVert.position );
+		
+				FbxGeometryElementNormal *const pFBXVertNormal = pFBXMesh->GetElementNormal(0);
+				if ( pFBXVertNormal != nullptr ) {
+					auto mappingMode = pFBXVertNormal->GetMappingMode();
+					kbErrorCheck( mappingMode == FbxGeometryElement::eByPolygonVertex, "kbModel::LoadFBX() - Invalid vertex normal mapping mode" );
+
+					auto refMode = pFBXVertNormal->GetReferenceMode();
+					kbErrorCheck( refMode == FbxGeometryElement::eDirect, "kbModel::LoadFBX() - Invalid vertex normal reference mode" );
+
+					const auto fbxNormal = pFBXVertNormal->GetDirectArray().GetAt(iCurVertex).mData;
+					kbVec4 normal( (float)fbxNormal[1], (float)fbxNormal[2], -(float)fbxNormal[0], 0.0f );
+					normal.w = 0;
+					triVert.SetNormal( normal );
+				}
+
+				FbxGeometryElementTangent *const pFBXVertTangent = pFBXMesh->GetElementTangent(0);
+				if ( pFBXVertTangent != nullptr ) {
+
+					auto mappingMode = pFBXVertTangent->GetMappingMode();
+					kbErrorCheck( mappingMode == FbxGeometryElement::eByPolygonVertex, "kbModel::LoadFBX() - Invalid vertex tangent mapping mode" );
+
+					auto refMode = pFBXVertTangent->GetReferenceMode();
+					kbErrorCheck( refMode == FbxGeometryElement::eDirect, "kbModel::LoadFBX() - Invalid vertex tangent reference mode" );
+
+					const auto fbxTangent = pFBXVertTangent->GetDirectArray().GetAt(iCurVertex).mData;
+					kbVec4 tangent( (float)fbxTangent[1], (float)fbxTangent[2], -(float)fbxTangent[0], 0.0f );
+					triVert.SetTangent( tangent );
+				}
+
+				FbxGeometryElementBinormal *const pFBXVertBinormal = pFBXMesh->GetElementBinormal(0);
+				if ( pFBXVertBinormal != nullptr ) {
+
+					auto mappingMode = pFBXVertBinormal->GetMappingMode();
+					kbErrorCheck( mappingMode == FbxGeometryElement::eByPolygonVertex, "kbModel::LoadFBX() - Invalid vertex binormal mapping mode" );
+
+					auto refMode = pFBXVertBinormal->GetReferenceMode();
+					kbErrorCheck( refMode == FbxGeometryElement::eDirect, "kbModel::LoadFBX() - Invalid vertex binormal reference mode" );
+
+					const auto fbxBinormal = pFBXVertBinormal->GetDirectArray().GetAt(iCurVertex).mData;
+					kbVec4 binormal( (float)fbxBinormal[1], (float)fbxBinormal[2], -(float)fbxBinormal[0], 0.0f );
+					triVert.SetBitangent( binormal );
+				}
+
+				FbxGeometryElementUV *const pFBXVertUV = pFBXMesh->GetElementUV(0);
+				if ( pFBXVertUV != nullptr ) {
+
+					auto uvMapMode = pFBXVertUV->GetMappingMode();
+					kbErrorCheck( uvMapMode == FbxGeometryElement::eByPolygonVertex, "kbModel::LoadFBX() - Invalid uvs mapping mode" );
+
+					auto uvRefMode = pFBXVertUV->GetReferenceMode();
+					kbErrorCheck( uvRefMode == FbxGeometryElement::eIndexToDirect, "kbModel::LoadFBX() - Invalid uvs reference mode" );
+
+					const int uvIndex = pFBXVertUV->GetIndexArray().GetAt(iCurVertex);
+					const auto fbxUV = pFBXVertUV->GetDirectArray().GetAt(uvIndex).mData;
+					triVert.uv.Set((float)fbxUV[0], (float)fbxUV[1]);
+				}
+
+				FbxGeometryElementVertexColor *const pFBXVertColor = pFBXMesh->GetElementVertexColor(0);
+				if (pFBXVertColor != nullptr) {
+
+					auto mappingMode = pFBXVertColor->GetMappingMode();
+					kbErrorCheck(mappingMode == FbxGeometryElement::eByPolygonVertex, "kbModel::LoadFBX() - Invalid vertex color mapping mode");
+
+					auto refMode = pFBXVertColor->GetReferenceMode();
+					kbErrorCheck(refMode == FbxGeometryElement::eIndexToDirect, "kbModel::LoadFBX() - Invalid vertex color reference mode");
+
+					const int colorIndex = pFBXVertColor->GetIndexArray().GetAt(iCurVertex);
+					const auto fbxColor = pFBXVertColor->GetDirectArray().GetAt(colorIndex);
+					kbVec4 color( (float)fbxColor.mRed, (float)fbxColor.mGreen, (float)fbxColor.mBlue, (float)fbxColor.mAlpha );
+					triVert.SetColor(color);
+				}
+
+				auto vertIt = vertexMap.find( triVert );
+				if ( vertIt == vertexMap.end() ) {
+					const int vertIdx = (int)vertexList.size();
+					vertexMap.insert( std::pair<vertexLayout, int>( triVert, vertIdx ) );
+					vertexList.push_back( triVert );
+					indexList.push_back( vertIdx );
+				} else {
+					indexList.push_back( vertIt->second );
+				}
+			}
+		}
+	}
+
+	m_VertexBuffer.CreateVertexBuffer( vertexList );
+	m_IndexBuffer.CreateIndexBuffer( indexList );
+
+	kbMaterial newMaterial;
+	newMaterial.m_pShader = (kbShader *) g_ResourceManager.LoadResource( "../../kbEngine/assets/Shaders/basicShader.kbShader", true );
+	m_Materials.push_back( newMaterial );
+
+	return true;
+}
+
+/**
+ *	kbModel::LoadDiablo3
+ */
+bool kbModel::LoadDiablo3() {
+
+
+// Vertex,Index,POSITION 0,POSITION 1,POSITION 2,NORMAL 0,NORMAL 1,NORMAL 2,NORMAL 3,COLOR0 0,COLOR0 1,COLOR0 2,COLOR0 3,COLOR1 0,COLOR1 1,COLOR1 2,COLOR1 3,TEXCOORD0 0,TEXCOORD0 1,TEXCOORD0 2,TEXCOORD0 3,TEXCOORD1 0,TEXCOORD1 1,TEXCOORD1 2,TEXCOORD1 3,BLENDINDICES 0,BLENDINDICES 1,BLENDINDICES 2,BLENDINDICES 3,BLENDWEIGHT 0,BLENDWEIGHT 1,BLENDWEIGHT 2
+
+
+	struct FileReader {
+		FileReader() { }
+		const std::string delimiters = "\n,";
+
+		int GetInt() {
+			std::string::size_type endPos = m_ModelText.find_first_of( delimiters, m_CurPos );
+			int retInt = 0;
+			if ( endPos != std::string::npos ) {
+				const std::string intstr = m_ModelText.substr( m_CurPos, endPos - m_CurPos );
+				retInt = std::atoi( intstr.c_str() );
+				m_CurPos = endPos + 1;
+			} else {
+				m_CurPos = m_ModelText.size();
+			}
+
+			return retInt;
+		}
+
+		float GetFloat() {
+			std::string::size_type endPos = m_ModelText.find_first_of( delimiters, m_CurPos );
+			float retFloat = 0;
+			if ( endPos != std::string::npos ) {
+				const std::string floatstr  = m_ModelText.substr( m_CurPos, endPos - m_CurPos );
+				retFloat = (float)std::atof( floatstr.c_str() );
+				m_CurPos = endPos + 1;
+			} else {
+				m_CurPos = m_ModelText.size();
+			}
+
+			return retFloat;
+		}
+
+		kbVec2 GetVec2() {
+			return kbVec2( GetFloat(), GetFloat() );
+		}
+
+		kbVec3 GetVec3() {
+			return kbVec3( GetFloat(), GetFloat(), GetFloat() );
+		}
+
+		kbVec4 GetVec4() {
+			return kbVec4( GetFloat(), GetFloat(), GetFloat(), GetFloat() );
+		}
+
+		std::string			m_ModelText;
+		size_t				m_CurPos = 0;
+
+	} fileReader;
+
+
+	std::ifstream modelFile;
+	modelFile.open( m_FullFileName, std::ifstream::in );
+	kbErrorCheck( modelFile.good(), "kbModel::LoadDiablo3() - Failed to load model %s", m_FullFileName.c_str() );
+	fileReader.m_ModelText = std::string( ( std::istreambuf_iterator<char>(modelFile) ), std::istreambuf_iterator<char>() );
+
+	std::vector<vertexLayout> vertexList;
+	std::vector<ushort> indexList;
+
+	while( fileReader.m_CurPos < fileReader.m_ModelText.size() ) {
+		// Vertex,Index,POSITION 0,POSITION 1,POSITION 2,NORMAL 0,NORMAL 1,NORMAL 2,NORMAL 3,COLOR0 0,COLOR0 1,COLOR0 2,COLOR0 3,COLOR1 0,COLOR1 1,COLOR1 2,COLOR1 3,TEXCOORD0 0,TEXCOORD0 1,TEXCOORD0 2,TEXCOORD0 3,TEXCOORD1 0,TEXCOORD1 1,TEXCOORD1 2,TEXCOORD1 3,BLENDINDICES 0,BLENDINDICES 1,BLENDINDICES 2,BLENDINDICES 3,BLENDWEIGHT 0,BLENDWEIGHT 1,BLENDWEIGHT 2
+
+		const int vertNum = fileReader.GetInt();
+		const int vertIdx = fileReader.GetInt();
+		const kbVec3 vertPos = fileReader.GetVec3();
+		const kbVec4 vertNormal = fileReader.GetVec4();
+		const kbVec4 vertColor1 = fileReader.GetVec4();
+		const kbVec4 vertColor2 = fileReader.GetVec4();
+		const kbVec4 vertUV1 = fileReader.GetVec4();
+		const kbVec4 vertUV2 = fileReader.GetVec4();
+
+		// Blend Indices
+		fileReader.GetInt();
+		fileReader.GetInt();
+		fileReader.GetInt();
+		fileReader.GetInt();
+
+		// Blend Weights
+		fileReader.GetVec3();
+
+		vertexLayout newVert;
+		newVert.position.Set( vertPos.y, vertPos.x, vertPos.z );
+		newVert.normal[0] = (byte)vertNormal.x;
+		newVert.normal[1] = (byte)vertNormal.y;
+		newVert.normal[2] = (byte)vertNormal.z;
+		newVert.normal[3] = (byte)vertNormal.w;
+
+		if ( vertUV1.z == 128 ) {
+			newVert.uv.x = vertUV1.w / 512.0f;
+		} else {
+			newVert.uv.x = 0.5f + vertUV1.w / 512.0f;
+		}
+
+		if ( vertUV1.x == 128 ) {
+			newVert.uv.y = vertUV1.y / 512.0f;
+		} else {
+			newVert.uv.y = 0.5f + vertUV1.y / 512.0f;
+		}
+
+		vertexList.push_back( newVert );
+		indexList.push_back( vertNum );
+		//kbLog( "%d, %d, (%f %f %f), (%f %f %f %f), (%f %f)", vertNum, vertIdx, vertPos.x, vertPos.y, vertPos.z, vertNormal.x, vertNormal.y, vertNormal.z, vertNormal.w, vertUV1.x, vertUV1.y );
+	}
+
+	m_VertexBuffer.CreateVertexBuffer( vertexList );
+	m_IndexBuffer.CreateIndexBuffer( indexList );
+
+	m_Meshes.push_back( mesh_t() );
+	mesh_t & newMesh = m_Meshes[m_Meshes.size() - 1];
+	newMesh.m_IndexBufferIndex = 0;
+	newMesh.m_MaterialIndex = 0;
+	newMesh.m_NumTriangles = (uint)indexList.size() / 3;
+
+	kbMaterial newMaterial;
+	newMaterial.m_pShader = (kbShader *) g_ResourceManager.LoadResource( "../../kbEngine/assets/Shaders/basicShader.kbShader", true );
+	m_Materials.push_back( newMaterial );
+
+	return true;
+}
+
+/**
  *	kbModel::CreateDynamicModel
  */
 void kbModel::CreateDynamicModel( const UINT numVertices, const UINT numIndices, kbShader *const pShaderToUse, kbTexture *const pTextureToUse, const UINT vertexSizeInBytes ) {
@@ -580,7 +899,7 @@ void kbModel::CreateDynamicModel( const UINT numVertices, const UINT numIndices,
 	if ( pShaderToUse != nullptr ) {
 		newMaterial.m_pShader = pShaderToUse;
 	} else {
-		newMaterial.m_pShader = (kbShader *) g_ResourceManager.GetResource( "../../kbEngine/assets/Shaders/basicShader.kbShader", true );
+		newMaterial.m_pShader = (kbShader *) g_ResourceManager.LoadResource( "../../kbEngine/assets/Shaders/basicShader.kbShader", true );
 	}
 	m_Materials.push_back( newMaterial );
 }
@@ -609,9 +928,9 @@ void kbModel::CreatePointCloud( const UINT numVertices, const std::string & shad
 
 	kbMaterial newMaterial;
 	if ( shaderToUse.length() > 0 ) {
-		newMaterial.m_pShader = (kbShader *) g_ResourceManager.GetResource( shaderToUse.c_str(), true );
+		newMaterial.m_pShader = (kbShader *) g_ResourceManager.LoadResource( shaderToUse.c_str(), true );
 	} else {
-		newMaterial.m_pShader = (kbShader *) g_ResourceManager.GetResource( "../../kbEngine/assets/Shaders/basicShader.kbshader", true );
+		newMaterial.m_pShader = (kbShader *) g_ResourceManager.LoadResource( "../../kbEngine/assets/Shaders/basicShader.kbshader", true );
 	}
 	newMaterial.SetCullingMode( cullingMode );
 	m_Materials.push_back( newMaterial );
@@ -833,7 +1152,7 @@ void kbModel::SetBoneMatrices( const float time, const kbAnimation *const theAni
 }
 
 /**
- *	kbModel::BlendAnimations
+ *	kbModel::Animate
  */
 void kbModel::Animate( const float time, const kbAnimation *const pAnimation, const bool bLoopAnim, std::vector<kbBoneMatrix_t> & boneMatrices ) {
 	std::vector<tempBone_t> tempBones;
@@ -913,7 +1232,7 @@ kbAnimation::kbAnimation() :
 }
 
 /**
- *	kbAnimation::kbAnimation
+ *	kbAnimation::Load_Internal
  */
 bool kbAnimation::Load_Internal() {
 

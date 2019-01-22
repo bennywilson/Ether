@@ -2,7 +2,7 @@
 // EtherSkelModel.h
 //
 //
-// 2016-2018 kbEngine 2.0
+// 2016-2019 kbEngine 2.0
 //===================================================================================================
 #ifndef _ETHERSKELMODEL_H_
 #define _ETHERSKELMODEL_H_
@@ -10,13 +10,33 @@
 #include "kbSkeletalModelComponent.h"
 
 /**
+ *	EtherAnimEvent
+ */
+class EtherAnimEvent : public kbGameComponent {
+	KB_DECLARE_COMPONENT( EtherAnimEvent, kbGameComponent );
+
+public:
+
+	const kbString							GetEventName() const { return m_EventName; }
+	float									GetEventTime() const { return m_EventTime; }
+
+private:
+	kbString								m_EventName;
+	float									m_EventTime;
+};
+
+/**
  *	EtherAnimComponent
  */
 class EtherAnimComponent : public kbGameComponent {
-public:
+
 	friend class EtherSkelModelComponent;
 
 	KB_DECLARE_COMPONENT( EtherAnimComponent, kbGameComponent );
+
+//-------------------------------------------------------------------------------------------------------------------------------------------------------------
+public:
+
 
 	const kbString &						GetAnimationName() const { return m_AnimationName; }
 
@@ -25,19 +45,24 @@ private:
 	kbAnimation *							m_pAnimation;
 	float									m_TimeScale;
 	bool									m_bIsLooping;
+	std::vector<EtherAnimEvent>				m_AnimEvents;
 
 	float									m_CurrentAnimationTime;
-	bool									m_bReturnToIdleWhenDone;
+	kbString								m_DesiredNextAnimation;
+	float									m_DesiredNextAnimBlendLength;
 };
 
 /**
  *	EtherSkelModelComponent
  */
 class EtherSkelModelComponent : public kbSkeletalModelComponent {
-public:
+
 	KB_DECLARE_COMPONENT( EtherSkelModelComponent, kbSkeletalModelComponent );
 
-	void									PlayAnimation( const kbString & AnimationName, const float BlendLength, const bool ReturnToIdleWhenDone );
+//-------------------------------------------------------------------------------------------------------------------------------------------------------------
+public:
+
+	void									PlayAnimation( const kbString & AnimationName, const float BlendLength, bool bRestartIfAlreadyPlaying, const kbString desiredNextAnimation = kbString::EmptyString, const float desiredNextAnimBlendLength = 0.0f );
 	bool									IsPlaying( const kbString & AnimationName ) const;
 
 	void									SetModel( kbModel *const pModel, bool bIsFirstPersonModel );
@@ -48,6 +73,7 @@ public:
 	bool									IsTransitioningAnimations() const { return m_CurrentAnimation != -1 && m_NextAnimation != -1; }
 
 	float									GetCurAnimTimeSeconds() const { if ( m_CurrentAnimation == -1 ) return -1.0f; return m_Animations[m_CurrentAnimation].m_CurrentAnimationTime; }
+	float									GetNormalizedAnimTime() const { return GetCurAnimTimeSeconds() / GetCurAnimLengthSeconds(); }
 	float									GetCurAnimLengthSeconds() const { if ( m_CurrentAnimation == -1 || m_Animations[m_CurrentAnimation].m_pAnimation == NULL ) return -1.0f; return m_Animations[m_CurrentAnimation].m_pAnimation->GetLengthInSeconds(); }
 
 	const kbString *						GetCurAnimationName() const;

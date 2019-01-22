@@ -57,12 +57,18 @@ public:
 
 	void										MarkAsDirty() { m_bIsDirty = true; }
 
+	void										SetOwner( kbEntity *const pGameEntity );
+
+	// TODO: This is very hacky
+	void										SetOwningComponent( kbComponent *const pOwningComponent ) { m_pOwningComponent = pOwningComponent; }
+
 protected:
 
 	virtual void								SetEnable_Internal( const bool bIsEnabled ) { }
 	virtual void								Update_Internal( const float DeltaTimeSeconds ) { }
 	virtual void								LifeTimeExpired() { }
 
+	kbComponent *								GetOwningComponent() const { return m_pOwningComponent; }
 	bool										IsDirty() const { return m_bIsDirty; }
 
 	bool										m_bIsDirty;
@@ -71,7 +77,7 @@ protected:
 private:
 
 	kbEntity *									m_pOwner;
-	void										SetOwner( kbEntity *const pGameEntity );
+	kbComponent *								m_pOwningComponent;
 };
 
 /**
@@ -85,10 +91,12 @@ class kbGameComponent : public kbComponent {
 public:
 
 	virtual void								Enable( const bool setEnabled ) override;
+	virtual void								EditorChange( const std::string & propertyName );
 
 	void										Update( const float DeltaTimeSeconds );
 
 	kbGameEntity *								GetOwner() const { return (kbGameEntity *) Super::GetOwner(); }
+	kbString									GetOwnerName() const;
 
 	float										GetStartingLifeTime() const { return m_StartingLifeTime; }
 	float										GetLifeTimeRemaining() const { return m_LifeTimeRemaining; }

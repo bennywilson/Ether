@@ -180,7 +180,7 @@ void kbResourceManager::UpdateHotReloads() {
 /**
  *	kbResourceManager::GetResource
  */
-kbResource * kbResourceManager::GetResource( const std::string & fullFileName, const bool loadImmediately ) {
+kbResource * kbResourceManager::LoadResource( const std::string & fullFileName, const bool loadImmediately ) {
 
 	if ( strcmp( fullFileName.c_str(), "nullptr" ) == 0 ) {
 		return nullptr;
@@ -215,7 +215,7 @@ kbResource * kbResourceManager::GetResource( const std::string & fullFileName, c
 
 	if ( convertedFileName.find(".kbanim.ms3d") != std::string::npos ) {
 		pResource = new kbAnimation();
-	} else if ( fileExt == "ms3d" ) {
+	} else if ( fileExt == "ms3d" || fileExt == "fbx" || fileExt == "diablo3" ) {
 	   pResource = new kbModel();
 	} else if ( fileExt == "kbshader" ) {
 	   pResource = new kbShader();
@@ -521,7 +521,7 @@ void kbResourceManager::FileModifiedCB( const std::wstring & fileName ) {
 	}
 
 	kbLog( "Loading %s", p.string().c_str() );
-	GetResource( p.string(), true );
+	LoadResource( p.string(), true );
 }
 
 /**

@@ -186,7 +186,7 @@ kbGameEntity * kbFile::ReadGameEntity_Internal() {
 /**
  *	kbFile::ReadComponent
  */
-void kbFile::ReadComponent( kbGameEntity *const pGameEntity, const std::string & componentType, kbComponent * ComponentToFill ) {
+kbComponent * kbFile::ReadComponent( kbGameEntity *const pGameEntity, const std::string & componentType, kbComponent * ComponentToFill ) {
 	kbComponent * pComponent = nullptr;
 	if ( ComponentToFill != nullptr ) {
 		pComponent = ComponentToFill;
@@ -271,11 +271,11 @@ void kbFile::ReadComponent( kbGameEntity *const pGameEntity, const std::string &
 							nextToken = m_Buffer.substr( m_CurrentReadPos, nextStringPos - m_CurrentReadPos );
 			
 							const kbTypeInfoVar * pVar = currentVar;
-							shaderList[i] = (kbShader*)g_ResourceManager.GetResource( nextToken, m_bLoadAssetsImmediately );
+							shaderList[i] = (kbShader*)g_ResourceManager.LoadResource( nextToken, m_bLoadAssetsImmediately );
 							m_CurrentReadPos = nextStringPos;
 						}
 			
-						currentVar = NULL;
+						currentVar = nullptr;
 						break;
 					}
 
@@ -292,7 +292,8 @@ void kbFile::ReadComponent( kbGameEntity *const pGameEntity, const std::string &
 								while ( m_Buffer[m_CurrentReadPos] != '{' ) {
 									m_CurrentReadPos++;
 								}
-								ReadComponent( pGameEntity, currentVar->GetStructName(), (kbComponent*)arrayElem );
+								kbComponent *const pNewComponent = ReadComponent( pGameEntity, currentVar->GetStructName(), (kbComponent*)arrayElem );
+								pNewComponent->SetOwningComponent( pComponent );
 							} else {
 								// hack
 								if ( currentVar->Type() == KBTYPEINFO_FLOAT ) {
@@ -329,6 +330,8 @@ void kbFile::ReadComponent( kbGameEntity *const pGameEntity, const std::string &
 		}
 		nextStringPos = m_Buffer.find_first_of( " {\n\r\t", m_CurrentReadPos );
 	} while ( bracketState != 0 );
+
+	return pComponent;
 }
 
 /**
@@ -352,13 +355,13 @@ void kbFile::ReadProperty( const kbTypeInfoVar *const pTypeInfoVar, byte *const 
 		
 		case KBTYPEINFO_INT : 
 		{
-			int & pComponentBool = *(int*)byteOffset;
-			pComponentBool = atoi(nextToken.c_str());
+			int & pComponentInt = *(int*)byteOffset;
+			pComponentInt = atoi(nextToken.c_str());
 			break;
 		}
 		
 		case KBTYPEINFO_KBSTRING : {
-			kbString& string = *(kbString*)byteOffset;
+			kbString & string = *(kbString*)byteOffset;
 			std::string strippedString = nextToken;
 			strippedString.erase( std::remove( strippedString.begin(), strippedString.end(), '"'), strippedString.end() );
 			string = strippedString;
@@ -452,7 +455,7 @@ void kbFile::ReadProperty( const kbTypeInfoVar *const pTypeInfoVar, byte *const 
 			INT_PTR * intPtr = ( INT_PTR * )byteOffset;
 			INT_PTR & intRef = *intPtr;
 			if ( nextToken != "NULL" ) {
-				intRef = (INT_PTR)(g_ResourceManager.GetResource( nextToken, m_bLoadAssetsImmediately ));
+				intRef = (INT_PTR)(g_ResourceManager.LoadResource( nextToken, m_bLoadAssetsImmediately ));
 			}
 			break;
 		}
@@ -596,11 +599,11 @@ void kbFile::WriteComponent( const kbComponent *const pCurComponent, std::string
 void kbFile::WriteProperty( const kbTypeInfoType_t propertyType, const std::string & structName, byte * byteOffsetToVar, std::string & writeBuffer ) {
 	static 	char charBuffer[256];
 
-	switch( propertyType )
-	{
+	switch( propertyType ) {
 		case KBTYPEINFO_BOOL :
 		{
-			if ( * ( (bool*) byteOffsetToVar ) == 0 ) {
+			bool *const boolVal = (bool*)byteOffsetToVar;
+			if ( *boolVal == 0 ) {
 				writeBuffer += "0";
 			}
 			else {

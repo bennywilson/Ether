@@ -2,7 +2,7 @@
 // EtherAI.h
 //
 //
-// 2016-2017 kbEngine 2.0
+// 2016-2019 kbEngine 2.0
 //===================================================================================================
 #ifndef _ETHERAI_H_
 #define _ETHERAI_H_
@@ -88,10 +88,6 @@ protected:
 
 	void										UpdateFiringBehavior( const float DeltaSeconds );
 	bool										Fire();
-
-	class kbModel *								m_pEyeBall;
-	kbRenderObject								m_EyeBallRenderObject;
-	bool										m_bEyeballAdded;
 
 	kbGameEntityPtr								m_TargetEntity;
 

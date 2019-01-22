@@ -149,12 +149,10 @@ void kbPropertiesTab::CheckButtonCB( Fl_Widget * widget, void * voidPtr ) {
 	Fl_Check_Button *const pCheckButton = static_cast<Fl_Check_Button *>( widget );
 
 	const char buttonVal = pCheckButton->value();
-	if ( buttonVal == 0 && userData->m_pComponent->IsEnabled() == false ||
-		 buttonVal > 0 && userData->m_pComponent->IsEnabled() == true ) {
-		return;
-	}
 
-	userData->m_pComponent->Enable( buttonVal > 0 );
+	*((bool*)userData->m_pVariablePtr) = (bool)buttonVal;
+
+	userData->m_pComponent->EditorChange( userData->m_VariableName.stl_str() );
 
 	PropertyChangedCB( userData->m_GameEntityPtr );
 }
@@ -164,10 +162,10 @@ void kbPropertiesTab::CheckButtonCB( Fl_Widget * widget, void * voidPtr ) {
  */
 void kbPropertiesTab::PointerButtonCB( Fl_Widget * widget, void * voidPtr ) {
 
-	propertiesTabCBData_t *const userData = static_cast< propertiesTabCBData_t * >( voidPtr );
+	propertiesTabCBData_t *const userData = static_cast<propertiesTabCBData_t *>( voidPtr );
 	kbErrorCheck( userData != nullptr, "kbPropertiesTab::PointerButtonCB() - null user data passed in" );
 
-	const std::string *const fieldName = ( std::string * ) userData->m_pVariablePtr;
+	const std::string *const fieldName = (std::string * ) userData->m_pVariablePtr;
 	if ( userData->m_VariableType == KBTYPEINFO_GAMEENTITY ) {
 		const kbPrefab *const pPrefab = g_Editor->GetCurrentlySelectedPrefab();
 		kbGameEntityPtr & pEntityPtr = userData->m_GameEntityPtr;
@@ -195,7 +193,7 @@ void kbPropertiesTab::PointerButtonCB( Fl_Widget * widget, void * voidPtr ) {
 		return;
 	}
 
-	kbResource *const pResource = (kbResource*)g_ResourceManager.GetResource( g_pPropertiesTab->m_CurrentlySelectedResource.c_str() , true );
+	kbResource *const pResource = (kbResource*)g_ResourceManager.LoadResource( g_pPropertiesTab->m_CurrentlySelectedResource.c_str() , true );
 
 	// Don't do anything if the selected resource is not the right type, or if it's the same resource that's already present
 	if ( pResource->GetType() != userData->m_VariableType || *userData->m_pResource == pResource ) {
@@ -203,6 +201,42 @@ void kbPropertiesTab::PointerButtonCB( Fl_Widget * widget, void * voidPtr ) {
 	}
 
 	*userData->m_pResource = pResource;
+
+	userData->m_pComponent->EditorChange( *fieldName );
+     if ( userData->m_pParentComponent != nullptr ) {
+         userData->m_pParentComponent->EditorChange( *fieldName );
+     }
+
+	g_pPropertiesTab->RefreshEntity();
+
+	PropertyChangedCB( userData->m_GameEntityPtr );
+}
+
+/**
+ *	kbPropertiesTab::ClearPointerButtonCB
+ */
+void kbPropertiesTab::ClearPointerButtonCB( Fl_Widget * widget, void * voidPtr ) {
+
+	propertiesTabCBData_t *const userData = static_cast< propertiesTabCBData_t * >( voidPtr );
+	kbErrorCheck( userData != nullptr, "kbPropertiesTab::ClearPointerButtonCB() - null user data passed in" );
+
+	const std::string *const fieldName = ( std::string * ) userData->m_pVariablePtr;
+	if ( userData->m_VariableType == KBTYPEINFO_GAMEENTITY ) {
+		const kbPrefab *const pPrefab = g_Editor->GetCurrentlySelectedPrefab();
+		kbGameEntityPtr & pEntityPtr = userData->m_GameEntityPtr;
+
+		pEntityPtr.SetEntity( nullptr );
+
+		userData->m_pComponent->EditorChange( *fieldName );
+        if ( userData->m_pParentComponent != nullptr ) {
+            userData->m_pParentComponent->EditorChange( *fieldName );
+        }
+
+		g_pPropertiesTab->RefreshEntity();
+		return;
+	}
+
+	*userData->m_pResource = nullptr;
 
 	userData->m_pComponent->EditorChange( *fieldName );
      if ( userData->m_pParentComponent != nullptr ) {
@@ -269,26 +303,19 @@ void kbPropertiesTab::TextFieldCB( Fl_Widget * widget, void * voidPtr ) {
 
 	if ( userData->m_VariableType == KBTYPEINFO_VECTOR4 || userData->m_VariableType == KBTYPEINFO_VECTOR ) {
 		float & componentVar = *(float*)userData->m_pVariablePtr;
+
+		// TODO - I don't beliece this allocations are cleaned up anywhere
 		prevValuePtr = new float( (float)atof( prevValue.c_str() ) );
 		curValuePtr = new float( (float)atof( currentValue.c_str() ) );
 
 		componentVar = *(float*)curValuePtr;
-		
-		if ( userData->m_pComponent->IsEnabled() ) {
-			userData->m_pComponent->Enable( false );
-			userData->m_pComponent->Enable( true );
-		}
+
 	} else if ( userData->m_VariableType == KBTYPEINFO_INT ) {
 		int & componentVar = *( int * ) userData->m_pVariablePtr;
-		prevValuePtr = new int( (int)atoi( prevValue.c_str() ) );
-		curValuePtr = new int( (int)atoi( currentValue.c_str() ) );
+		prevValuePtr = new int( atoi( prevValue.c_str() ) );
+		curValuePtr = new int( atoi( currentValue.c_str() ) );
 
 		componentVar = ( int ) atoi( inputField->value() );
-
-		if ( userData->m_pComponent->IsEnabled() ) {
-			userData->m_pComponent->Enable( false );
-			userData->m_pComponent->Enable( true );
-		}
 	} else if ( userData->m_VariableType == KBTYPEINFO_FLOAT ) {
 		float & componentVar = *(float*)userData->m_pVariablePtr;
 		prevValuePtr = new float( (float)atof( prevValue.c_str() ) );
@@ -296,10 +323,6 @@ void kbPropertiesTab::TextFieldCB( Fl_Widget * widget, void * voidPtr ) {
 
 		componentVar = *(float*)curValuePtr;
 
-		if ( userData->m_pComponent->IsEnabled() ) {
-			userData->m_pComponent->Enable( false );
-			userData->m_pComponent->Enable( true );
-		}
 	} else if ( userData->m_VariableType == KBTYPEINFO_KBSTRING ) {
 		kbString & curString = *(kbString*)userData->m_pVariablePtr;
 		curString = inputField->value();
@@ -309,6 +332,24 @@ void kbPropertiesTab::TextFieldCB( Fl_Widget * widget, void * voidPtr ) {
 	}
 
 	g_Editor->PushUndoAction( new kbUndoVariableAction( userData->m_VariableType, prevValuePtr, curValuePtr, userData->m_pVariablePtr ) );
+
+	kbComponent *const pModifiedComponent = userData->m_pComponent;
+	kbGameEntity *const pGameEntity = (kbGameEntity*)( pModifiedComponent->IsA( kbGameComponent::GetType() ) ? ( pModifiedComponent->GetOwner() ) : ( nullptr ) );
+
+	if ( pGameEntity != nullptr && pGameEntity->GetComponent(0) == pModifiedComponent ) {
+		// Refresh all components if the transform component was modified
+		kbTransformComponent *const pTransformComponent = (kbTransformComponent*)pGameEntity->GetComponent(0);
+		for ( int i = 0; i < pGameEntity->NumComponents(); i++ ) {
+			kbComponent *const pCurComp = pGameEntity->GetComponent(i);
+			if ( pCurComp->IsEnabled() ) {
+				pCurComp->Enable( false );
+				pCurComp->Enable( true );
+			}
+		}
+	} else if ( userData->m_pComponent->IsEnabled() ) {
+		userData->m_pComponent->Enable( false );
+		userData->m_pComponent->Enable( true );
+	}
 
 	userData->m_pComponent->EditorChange( userData->m_VariableName.stl_str() );
     if ( userData->m_pParentComponent != nullptr ) {
@@ -341,7 +382,7 @@ void kbPropertiesTab::ArrayExpandCB( Fl_Widget * widet, void * userData ) {
  */
 void kbPropertiesTab::ArrayResizeCB( Fl_Widget * widget, void * voidPtr ) {
 
-	propertiesTabCBData_t *const userData = static_cast< propertiesTabCBData_t * >( voidPtr );
+	propertiesTabCBData_t *const userData = static_cast<propertiesTabCBData_t *>( voidPtr );
 	kbErrorCheck( userData != nullptr, "kbPropertiesTab::ArrayResizeCB() - NULL userData passed in" );
 
 	const Fl_Input *const inputField = ( Fl_Input * ) widget;
@@ -391,7 +432,7 @@ void kbPropertiesTab::ArrayResizeCB( Fl_Widget * widget, void * voidPtr ) {
  */
 void kbPropertiesTab::EnumCB( Fl_Widget * widget, void * voidPtr ) {
 
-	propertiesTabCBData_t *const userData = static_cast< propertiesTabCBData_t * >( voidPtr );
+	propertiesTabCBData_t *const userData = static_cast<propertiesTabCBData_t *>( voidPtr );
 	kbErrorCheck( userData != nullptr, "kbPropertiesTab::EnumCB() - NULL userData passed in" );
 
 	Fl_Choice *const pDropDown = ( Fl_Choice * ) widget;
@@ -424,7 +465,7 @@ void kbPropertiesTab::PropertyChangedCB( const kbGameEntityPtr entityPtr ) {
  */
 void kbPropertiesTab::RefreshComponent( kbEditorEntity *const pEntity, kbComponent *const pComponent, kbComponent *const pParentComponent, int & startX, int & curY, const int inputHeight, const bool bIsStruct, const void *const pArrayPtr, const int arrayIndex ) {
 
-	byte *const componentBytePtr = ( byte* ) pComponent;
+	byte *const componentBytePtr = (byte*) pComponent;
 
 	// Display Component class name ( kbStaticMeshComponent, kbSkeletalMeshComponent, etc );
 	const char *const pComponentName = pComponent->GetComponentClassName();
@@ -710,7 +751,7 @@ void kbPropertiesTab::RefreshProperty( kbEditorEntity *const pEntity, const std:
 				propertyNameLabel->align( FL_ALIGN_RIGHT );
 			}
 
-			Fl_Button *const b1 = new Fl_Button( xPos + propertyNamePixelWidth - ( 5 + inputHeight / 2 ), yPos + (int)(inputHeight * 0.25f), inputHeight / 2,inputHeight / 2,">");
+			Fl_Button *const b1 = new Fl_Button( xPos + propertyNamePixelWidth - ( 5 + inputHeight / 2 ), yPos + (int)(inputHeight * 0.25f), inputHeight / 2,inputHeight / 2, ">" );
 			b1->color(88+1);
 			b1->labelsize( FontSize() );
 
@@ -736,16 +777,32 @@ void kbPropertiesTab::RefreshProperty( kbEditorEntity *const pEntity, const std:
 				propertyNameLabel->align( FL_ALIGN_RIGHT );
 			}
 
-			Fl_Button *const b1 = new Fl_Button( xPos + propertyNamePixelWidth - ( 5 + inputHeight / 2 ), yPos + (int)(inputHeight * 0.25f), FontSize(), FontSize(), ">" );
-			b1->color( 89 );
-			b1->labelsize( (int)(FontSize() * 0.75f) );
+			{
+				Fl_Button *const b1 = new Fl_Button( xPos + propertyNamePixelWidth - 2 * ( 5 + inputHeight / 2 ), yPos + (int)(inputHeight * 0.25f), FontSize(), FontSize(), "-" );
+				b1->color( 89 );
+				b1->labelsize( (int)(FontSize() * 0.75f) );
 
-			cbData.m_pResource = ( const kbResource** ) byteOffsetToVar;
-			cbData.m_VariableType = propertyType;
-			cbData.m_pVariablePtr = const_cast<void*>( (void*)&propertyName );
+				cbData.m_pResource = ( const kbResource** ) byteOffsetToVar;
+				cbData.m_VariableType = propertyType;
+				cbData.m_pVariablePtr = const_cast<void*>( (void*)&propertyName );
 
-			m_CallBackData.push_back( cbData );
-			b1->callback( &PointerButtonCB, static_cast<void *>( &m_CallBackData[m_CallBackData.size() - 1] ) );//static_cast< void * >( pComponent ) );
+				m_CallBackData.push_back( cbData );
+				b1->callback( &ClearPointerButtonCB, static_cast<void *>( &m_CallBackData[m_CallBackData.size() - 1] ) );//static_cast< void * >( pComponent ) );
+			}
+
+			{
+				Fl_Button *const b1 = new Fl_Button( xPos + propertyNamePixelWidth - ( 5 + inputHeight / 2 ), yPos + (int)(inputHeight * 0.25f), FontSize(), FontSize(), ">" );
+				b1->color( FL_GREEN );
+				b1->labelsize( (int)(FontSize() * 0.75f) );
+
+				cbData.m_pResource = ( const kbResource** ) byteOffsetToVar;
+				cbData.m_VariableType = propertyType;
+				cbData.m_pVariablePtr = const_cast<void*>( (void*)&propertyName );
+
+				m_CallBackData.push_back( cbData );
+				b1->callback( &PointerButtonCB, static_cast<void *>( &m_CallBackData[m_CallBackData.size() - 1] ) );//static_cast< void * >( pComponent ) );
+			}
+
 			break;
 		}
 

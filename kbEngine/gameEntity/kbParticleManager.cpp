@@ -11,7 +11,7 @@
 #include "kbRenderer.h"
 
 static const uint NumParticleBufferVerts = 10000;
-static const uint NumCustomAtlases = 2;
+static const uint NumCustomAtlases = 16;
 /**
  *	kbParticleManager::kbParticleManager
  */
@@ -48,10 +48,9 @@ void kbParticleManager::SetCustomAtlasTexture( const uint atlasIdx, const std::s
 	kbErrorCheck( g_pRenderer->IsRenderingSynced(), "kbParticleManager::SetCustomAtlasTexture() - Rendering not synced" );
 
 	CustomAtlasParticles_t & curAtlas = m_CustomAtlases[atlasIdx];
-	curAtlas.m_pAtlasTexture = (kbTexture *)g_ResourceManager.GetResource( atlasFileName.c_str(), true );
-	if ( curAtlas.m_pAtlasTexture == nullptr ) {
-		kbWarning( "kbParticleManager::SetCustomAtlasTexture() - Unable to find shader %s", atlasFileName.c_str() );
-	}
+	curAtlas.m_pAtlasTexture = (kbTexture *)g_ResourceManager.LoadResource( atlasFileName.c_str(), true );
+
+	kbWarningCheck( curAtlas.m_pAtlasTexture  != nullptr, "kbParticleManager::SetCustomAtlasTexture() - Unable to find shader %s", atlasFileName.c_str() );
 
 	UpdateAtlas( curAtlas );
 }
@@ -64,12 +63,10 @@ void kbParticleManager::SetCustomAtlasShader( const uint atlasIdx, const std::st
 	kbErrorCheck( g_pRenderer->IsRenderingSynced(), "kbParticleManager::SetCustomAtlasShader() - Rendering not synced" );
 
 	CustomAtlasParticles_t & curAtlas = m_CustomAtlases[atlasIdx];
-	curAtlas.m_pAtlasShader = (kbShader *)g_ResourceManager.GetResource( shaderFileName.c_str(), true );
+	curAtlas.m_pAtlasShader = (kbShader *)g_ResourceManager.LoadResource( shaderFileName.c_str(), true );
 
-	if ( curAtlas.m_pAtlasShader == nullptr ) {
-		kbWarning( "kbParticleManager::SetCustomAtlasShader() - Unable to find shader %s", shaderFileName.c_str() );
-	}
-
+	kbWarningCheck( curAtlas.m_pAtlasShader != nullptr, "kbParticleManager::SetCustomAtlasShader() - Unable to find shader %s", shaderFileName.c_str() );
+	
 	UpdateAtlas( curAtlas );
 }
 
@@ -92,7 +89,6 @@ void kbParticleManager::PoolParticleComponent( const kbParticleComponent *const 
 	if ( it != m_ParticlePools.end() ) {
 		kbWarning( "kbParticleManager::PoolParticleComponent() - Particle %s already pooled", pParticleTemplate->GetOwner()->GetName().c_str() );
 		return;
-
 	}
 
 	// Create a new pool
@@ -180,13 +176,21 @@ void kbParticleManager::UpdateAtlas( CustomAtlasParticles_t & atlasInfo ) {
 		renderModel.Release();
 
 		if ( atlasInfo.m_pAtlasTexture == nullptr ) {
-			atlasInfo.m_pAtlasTexture = (kbTexture*)g_ResourceManager.GetResource( "./assets/FX/laser_beam.jpg", true );
+			atlasInfo.m_pAtlasTexture = (kbTexture*)g_ResourceManager.LoadResource( "./assets/FX/laser_beam.jpg", true );
 		}
+
 		if ( atlasInfo.m_pAtlasShader == nullptr ) {
-			atlasInfo.m_pAtlasShader = (kbShader*)g_ResourceManager.GetResource( "../../kbEngine/assets/Shaders/basicParticle.kbShader", true );
+			atlasInfo.m_pAtlasShader = (kbShader*)g_ResourceManager.LoadResource( "../../kbEngine/assets/Shaders/basicParticle.kbShader", true );
 		}
 
 		renderModel.CreateDynamicModel( NumParticleBufferVerts, NumParticleBufferVerts, atlasInfo.m_pAtlasShader, atlasInfo.m_pAtlasTexture, sizeof(kbParticleVertex) );
+
+		// Update materials
+		atlasInfo.m_RenderObject.m_Materials.clear();
+		kbShaderParamOverrides_t atlasMaterial;
+		atlasMaterial.m_pShader = atlasInfo.m_pAtlasShader;
+		atlasMaterial.SetTexture( "shaderTexture", atlasInfo.m_pAtlasTexture );
+		atlasInfo.m_RenderObject.m_Materials.push_back( atlasMaterial );
 
 		atlasInfo.m_pVertexBuffer = (kbParticleVertex*)atlasInfo.m_RenderModel[iModel].MapVertexBuffer();
 		for ( int iVert = 0; iVert < NumParticleBufferVerts; iVert++ ) {
@@ -238,7 +242,7 @@ void kbParticleManager::RenderSync() {
 
 		kbModel & nextModel = curAtlas.m_RenderModel[curAtlas.m_iCurParticleModel];
 		curAtlas.m_pVertexBuffer = (kbParticleVertex*)nextModel.MapVertexBuffer();
-		curAtlas.m_pIndexBuffer = (unsigned long *)nextModel.MapIndexBuffer();
+		curAtlas.m_pIndexBuffer = (ushort *)nextModel.MapIndexBuffer();
 		curAtlas.m_NumIndices = 0;
 	}
 }
@@ -289,6 +293,11 @@ void kbParticleManager::AddQuad( const uint atlasIdx, const CustomParticleAtlasI
 	curAtlas.m_pVertexBuffer[vertexIndex + 1].direction = CustomParticleInfo.m_Direction;
 	curAtlas.m_pVertexBuffer[vertexIndex + 2].direction = CustomParticleInfo.m_Direction;
 	curAtlas.m_pVertexBuffer[vertexIndex + 3].direction = CustomParticleInfo.m_Direction;
+
+	curAtlas.m_pVertexBuffer[vertexIndex + 0].rotation = CustomParticleInfo.m_Rotation;
+	curAtlas.m_pVertexBuffer[vertexIndex + 1].rotation = CustomParticleInfo.m_Rotation;
+	curAtlas.m_pVertexBuffer[vertexIndex + 2].rotation = CustomParticleInfo.m_Rotation;
+	curAtlas.m_pVertexBuffer[vertexIndex + 3].rotation = CustomParticleInfo.m_Rotation;
 
 	curAtlas.m_pIndexBuffer[curAtlas.m_NumIndices + 0] = vertexIndex + 2;
 	curAtlas.m_pIndexBuffer[curAtlas.m_NumIndices + 1] = vertexIndex + 1;

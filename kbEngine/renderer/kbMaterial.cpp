@@ -5,7 +5,6 @@
 // 2016-2018 kbEngine 2.0
 //===================================================================================================
 #include <Wincodec.h>
-#include <unordered_map>
 #include "kbCore.h"
 #include "kbRenderer_defs.h"
 #include "kbRenderer.h"
@@ -760,7 +759,7 @@ void kbShader::Release_Internal() {
 	SAFE_RELEASE( m_pVertexLayout );
 
 	m_ShaderVarBindings.m_VarBindings.clear();
-	m_ShaderVarBindings.m_TextureNames.clear();
+	m_ShaderVarBindings.m_Textures.clear();
 
 	m_bBlendEnabled = false;
 	m_SrcBlend = Blend_One;

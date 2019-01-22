@@ -124,7 +124,7 @@ public:
 	// CPU Access
 	void										SetCPUAccessOnly( const bool bCPUAccessOnly ) { m_bCPUAccessOnly = bCPUAccessOnly; }
 	const std::vector<vertexLayout>	&			GetCPUVertices() const { return m_CPUVertices; }
-	const std::vector<unsigned long> &			GetCPUIndices() const { return m_CPUIndices; }
+	const std::vector<ushort> &					GetCPUIndices() const { return m_CPUIndices; }
 
 	void										SwapTexture( const UINT MeshIdx, const kbTexture * pTexture, const int textureIdx );
 
@@ -154,13 +154,18 @@ public:
 protected:
 
 	virtual bool								Load_Internal();
+	bool										LoadMS3D();
+	bool										LoadFBX();
+	bool										LoadDiablo3();
+
 	virtual void								Release_Internal();
+
 
 	kbRenderBuffer								m_VertexBuffer;
 	kbRenderBuffer								m_IndexBuffer;
 	kbBounds									m_Bounds;
 
-	std::vector<unsigned long>					m_CPUIndices;
+	std::vector<ushort>							m_CPUIndices;
 	std::vector<vertexLayout>					m_CPUVertices;
 
 	int											m_NumTriangles;

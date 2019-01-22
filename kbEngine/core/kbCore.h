@@ -2,21 +2,22 @@
 // kbCore.h
 //
 //
-// 2016-2017 kbEngine 2.0
+// 2016-2019 kbEngine 2.0
 //===================================================================================================
 #ifndef _CORE_H_
 #define _CORE_H_
 
 #pragma warning( disable : 4482 )
 
+#include <windows.h>
 #include <fstream>
 #include <vector>
 #include <map>
+#include <unordered_map>
 #include <set>
 #include <algorithm>
 #include <string>
 #include "kbString.h"
-
 /**
  *	kbTypeInfoType_t
  */
@@ -39,9 +40,6 @@ enum kbTypeInfoType_t {
 	KBTYPEINFO_STRUCT,
 	KBTYPEINFO_GAMEENTITY,
 };
-
-#include <windows.h>
-
 
 typedef unsigned char byte;
 typedef unsigned short ushort;
@@ -102,6 +100,7 @@ const float kbEpsilon = 0.00001f;
 inline float kbToRadians( const float degrees ) { return degrees * kbPI / 180.0f; }
 inline float kbToDegrees( const float radians ) { return radians * 180.0f / kbPI; }
 float kbfrand();
+inline bool kbCompareByte4( const byte lhs[4], const byte rhs[4] ) { return lhs[0] == rhs[0] && lhs[1] == rhs[1] && lhs[2] == rhs[2] && lhs[3] == rhs[3]; }
 
 template<typename T> T kbClamp( const T & value, const T & min, const T & max ) { return value < min ? min : ( value > max ? max : value ); }
 
@@ -117,6 +116,24 @@ void StringToLower( std::string & outString );
 
 std::string GetFileExtension( const std::string & FileName );
 std::wstring GetFileExtension( const std::wstring & FileName );
+
+#include "kbVector.h"
+
+inline kbVec2 kbVec2Rand( const kbVec2 & min, const kbVec2 & max ) { 
+	kbVec2 randVec;
+	randVec.x = min.x + ( kbfrand() * ( max.x - min.x ) );
+	randVec.y = min.y + ( kbfrand() * ( max.y - min.y ) );
+	return randVec;
+}
+
+inline kbVec3 kbVec3Rand( const kbVec3 & min, const kbVec3 & max ) { 
+	kbVec3 randVec;
+	randVec.x = min.x + ( kbfrand() * ( max.x - min.x ) );
+	randVec.y = min.y + ( kbfrand() * ( max.y - min.y ) );
+	randVec.z = min.z + ( kbfrand() * ( max.z - min.z ) );
+	return randVec;
+
+}
 
 #define SAFE_RELEASE( object ) { if ( object != nullptr ) { object->Release(); object = nullptr; } }
 

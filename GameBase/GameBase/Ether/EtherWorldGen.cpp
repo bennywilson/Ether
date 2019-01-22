@@ -111,7 +111,7 @@ void EtherWorldGenComponent::InitializeWorld() {
 
 	m_VisibleTerrainMap.Shutdown();
 
-	m_pTerrainShader = (kbShader*)g_ResourceManager.GetResource( "./assets/Shaders/terrain.kbShader", true );
+	m_pTerrainShader = (kbShader*)g_ResourceManager.LoadResource( "./assets/Shaders/terrain.kbShader", true );
 	kbErrorCheck( m_pTerrainShader != nullptr, "EtherWorldGenComponent::InitializeWorld() - Failed to load terrain shader" );
 }
 

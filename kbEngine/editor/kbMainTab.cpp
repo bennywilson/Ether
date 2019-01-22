@@ -190,9 +190,13 @@ void kbMainTab::RenderSync() {
 
 		    for ( int i = 0; i < entityList.size(); i++ ) {
 			    if ( entityList[i]->IsSelected() ) {
-				    entityList[i]->SetPosition( m_Manipulator.GetPosition() );
-				    entityList[i]->SetOrientation( m_Manipulator.GetOrientation() );
-				    entityList[i]->SetScale( m_Manipulator.GetScale() );
+					if ( m_Manipulator.GetMode() == kbManipulator::manipulatorMode_t::Translate ) {
+					    entityList[i]->SetPosition( m_Manipulator.GetPosition() );
+					} else if ( m_Manipulator.GetMode() == kbManipulator::manipulatorMode_t::Rotate ) {
+					    entityList[i]->SetOrientation( m_Manipulator.GetOrientation() );
+					} else if ( m_Manipulator.GetMode() == kbManipulator::manipulatorMode_t::Scale ) {
+					    entityList[i]->SetScale( m_Manipulator.GetScale() );
+					}
 			    }
 		    }
 

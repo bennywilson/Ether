@@ -71,11 +71,11 @@ geometryShaderInput vertexShader( vertexInput input ) {
 SamplerState LinearSampler;
 SamplerState PointSampler;
 
-Texture2D grassMap			: register(t0);
-Texture2D heightMap			: register(t1);
-Texture2D grassDiffuseMap	: register(t2);
-Texture2D noiseMap			: register(t3);
-Texture2D collisionMap		: register(t4);
+Texture2D grassMap					: register(t0);
+Texture2D heightMap					: register(t1);
+Texture2D grassDiffuseMap			: register(t2);
+Texture2D noiseMap					: register(t3);
+Texture2D collisionMap(maxhalf)		: register(t4);
 
 void CreateVertex( inout TriangleStream<pixelInput> OutputStream, float3 vertexWorldOrigin, float2 uv, float4 grassData ) {
 
@@ -260,7 +260,9 @@ PS_OUTPUT pixelShader( pixelInput input, bool isFrontFace : SV_IsFrontFace )  {
 
 	//
 	output.Normal.xyz = float3( 0.0f, 1.0f,0.0 );
-	output.Spec = float4(0,0,0,1);//float4( 0.25f, 0.25f, 0.25f, 1.0f );
+	output.Normal.w = 0.5f;
+
+	output.Spec = float4(0,1,0,0);//float4( 0.25f, 0.25f, 0.25f, 1.0f );
 	output.Depth.r = input.position2.x / input.position2.y;
 
 	return output;

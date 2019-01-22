@@ -16,8 +16,8 @@
 #define MAX_LOADSTRING 100
 
 extern bool g_UseEditor;
-int backBufferWidth = 1600;
-int backBufferHeight = 900;
+int backBufferWidth = 1920;
+int backBufferHeight = 1080;
 int WindowStartX = 0;
 int MonitorIdx = 0;
 

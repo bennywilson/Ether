@@ -85,7 +85,7 @@ public:
 
 	void										RenderSync();
 
-	kbResource *								GetResource( const std::string & fullFileName, const bool loadImmediately );
+	kbResource *								LoadResource( const std::string & fullFileName, const bool loadImmediately );
 	kbResource *								GetResource( const std::string & displayName );
 	kbResource *								AsyncLoadResource( const kbString & stringName );
 
