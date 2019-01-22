@@ -655,12 +655,10 @@ bool kbModel::LoadFBX() {
 					kbErrorCheck( mappingMode == FbxGeometryElement::eByPolygonVertex, "kbModel::LoadFBX() - Invalid vertex normal mapping mode" );
 
 					auto refMode = pFBXVertNormal->GetReferenceMode();
-					kbErrorCheck( refMode == FbxGeometryElement::eDirect, "kbModel::LoadFBX() - Invalid vertex normal mapping mode" );
+					kbErrorCheck( refMode == FbxGeometryElement::eDirect, "kbModel::LoadFBX() - Invalid vertex normal reference mode" );
 
-					kbVec4 normal;
-					normal.x = (float)pFBXVertNormal->GetDirectArray().GetAt(iCurVertex).mData[1];
-					normal.y = (float)pFBXVertNormal->GetDirectArray().GetAt(iCurVertex).mData[2];
-					normal.z = -(float)pFBXVertNormal->GetDirectArray().GetAt(iCurVertex).mData[0];
+					const auto fbxNormal = pFBXVertNormal->GetDirectArray().GetAt(iCurVertex).mData;
+					kbVec4 normal( (float)fbxNormal[1], (float)fbxNormal[2], -(float)fbxNormal[0], 0.0f );
 					normal.w = 0;
 					triVert.SetNormal( normal );
 				}
@@ -672,13 +670,10 @@ bool kbModel::LoadFBX() {
 					kbErrorCheck( mappingMode == FbxGeometryElement::eByPolygonVertex, "kbModel::LoadFBX() - Invalid vertex tangent mapping mode" );
 
 					auto refMode = pFBXVertTangent->GetReferenceMode();
-					kbErrorCheck( refMode == FbxGeometryElement::eDirect, "kbModel::LoadFBX() - Invalid vertex tangent mapping mode" );
+					kbErrorCheck( refMode == FbxGeometryElement::eDirect, "kbModel::LoadFBX() - Invalid vertex tangent reference mode" );
 
-					kbVec4 tangent;
-					tangent.x = (float)pFBXVertTangent->GetDirectArray().GetAt(iCurVertex).mData[1];
-					tangent.y = (float)pFBXVertTangent->GetDirectArray().GetAt(iCurVertex).mData[2];
-					tangent.z = -(float)pFBXVertTangent->GetDirectArray().GetAt(iCurVertex).mData[0];
-					tangent.w = 0;
+					const auto fbxTangent = pFBXVertTangent->GetDirectArray().GetAt(iCurVertex).mData;
+					kbVec4 tangent( (float)fbxTangent[1], (float)fbxTangent[2], -(float)fbxTangent[0], 0.0f );
 					triVert.SetTangent( tangent );
 				}
 
@@ -689,28 +684,40 @@ bool kbModel::LoadFBX() {
 					kbErrorCheck( mappingMode == FbxGeometryElement::eByPolygonVertex, "kbModel::LoadFBX() - Invalid vertex binormal mapping mode" );
 
 					auto refMode = pFBXVertBinormal->GetReferenceMode();
-					kbErrorCheck( refMode == FbxGeometryElement::eDirect, "kbModel::LoadFBX() - Invalid vertex binormal mapping mode" );
+					kbErrorCheck( refMode == FbxGeometryElement::eDirect, "kbModel::LoadFBX() - Invalid vertex binormal reference mode" );
 
-					kbVec4 binormal;
-					binormal.x = (float)pFBXVertBinormal->GetDirectArray().GetAt(iCurVertex).mData[1];
-					binormal.y = (float)pFBXVertBinormal->GetDirectArray().GetAt(iCurVertex).mData[2];
-					binormal.z = -(float)pFBXVertBinormal->GetDirectArray().GetAt(iCurVertex).mData[0];
-					binormal.w = 0;
+					const auto fbxBinormal = pFBXVertBinormal->GetDirectArray().GetAt(iCurVertex).mData;
+					kbVec4 binormal( (float)fbxBinormal[1], (float)fbxBinormal[2], -(float)fbxBinormal[0], 0.0f );
 					triVert.SetBitangent( binormal );
 				}
 
 				FbxGeometryElementUV *const pFBXVertUV = pFBXMesh->GetElementUV(0);
-
 				if ( pFBXVertUV != nullptr ) {
+
 					auto uvMapMode = pFBXVertUV->GetMappingMode();
 					kbErrorCheck( uvMapMode == FbxGeometryElement::eByPolygonVertex, "kbModel::LoadFBX() - Invalid uvs mapping mode" );
 
 					auto uvRefMode = pFBXVertUV->GetReferenceMode();
-					kbErrorCheck( uvRefMode == FbxGeometryElement::eIndexToDirect, "kbModel::LoadFBX() - Invalid uvs mapping mode" );
+					kbErrorCheck( uvRefMode == FbxGeometryElement::eIndexToDirect, "kbModel::LoadFBX() - Invalid uvs reference mode" );
 
 					const int uvIndex = pFBXVertUV->GetIndexArray().GetAt(iCurVertex);
-					triVert.uv.x = (float)pFBXVertUV->GetDirectArray().GetAt(uvIndex).mData[0];
-					triVert.uv.y = 1.0f - (float)pFBXVertUV->GetDirectArray().GetAt(uvIndex).mData[1];
+					const auto fbxUV = pFBXVertUV->GetDirectArray().GetAt(uvIndex).mData;
+					triVert.uv.Set((float)fbxUV[0], (float)fbxUV[1]);
+				}
+
+				FbxGeometryElementVertexColor *const pFBXVertColor = pFBXMesh->GetElementVertexColor(0);
+				if (pFBXVertColor != nullptr) {
+
+					auto mappingMode = pFBXVertColor->GetMappingMode();
+					kbErrorCheck(mappingMode == FbxGeometryElement::eByPolygonVertex, "kbModel::LoadFBX() - Invalid vertex color mapping mode");
+
+					auto refMode = pFBXVertColor->GetReferenceMode();
+					kbErrorCheck(refMode == FbxGeometryElement::eIndexToDirect, "kbModel::LoadFBX() - Invalid vertex color reference mode");
+
+					const int colorIndex = pFBXVertColor->GetIndexArray().GetAt(iCurVertex);
+					const auto fbxColor = pFBXVertColor->GetDirectArray().GetAt(colorIndex);
+					kbVec4 color( (float)fbxColor.mRed, (float)fbxColor.mGreen, (float)fbxColor.mBlue, (float)fbxColor.mAlpha );
+					triVert.SetColor(color);
 				}
 
 				auto vertIt = vertexMap.find( triVert );
