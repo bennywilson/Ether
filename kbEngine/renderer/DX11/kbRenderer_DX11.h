@@ -433,6 +433,7 @@ private:
 	void										RenderDebugBillboards( const bool bIsEntityIdPass );
 	void										RenderPostProcess();
 	void										RenderBloom();
+	void										RenderSSAO();
 	void										RenderConsole();
 	void										RenderLights();
 	void										RenderLight( const kbRenderLight *const );
@@ -491,6 +492,7 @@ private:
 	kbShader *									m_pSkinnedDirectionalLightShadowShader;
 	kbShader *									m_pBloomGatherShader;
 	kbShader *									m_pBloomBlur;
+	kbShader *									m_pSSAO;
 
 	ID3D11Buffer *								m_pUnitQuad;
 	ID3D11Buffer *								m_pConsoleQuad;
