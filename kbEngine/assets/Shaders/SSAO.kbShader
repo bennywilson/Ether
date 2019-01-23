@@ -1,0 +1,69 @@
+//===================================================================================================
+// SSAO.kbShader
+//
+//
+// 2019 kbEngine 2.0
+//===================================================================================================
+cbuffer matrixBuffer {
+   matrix   mvpMatrix;
+   float4   offsetsAndWeights[16];
+   int      numSamples;
+};
+
+//-------------------------------------
+struct vertexInput {
+	float4 position			: POSITION;
+	float2 uv				: TEXCOORD0;
+};
+
+//-------------------------------------
+struct pixelInput {
+	float4 position			: SV_POSITION;
+	float2 uv				: TEXCOORD0;
+	float4 position2		: TEXCOORD1;
+};
+
+/**
+ *	SSAOVertexMain
+ */
+pixelInput SSAOVertexMain( vertexInput input ) {
+	pixelInput output = (pixelInput)(0);
+
+	output.position = input.position;
+	output.uv = mul( input.uv, (float2x2)mvpMatrix );
+	output.position2 = input.position;
+
+	return output;
+}
+
+/**
+ *	SSAOPixelMain
+ */
+SamplerState DiffuseSamplerState;
+Texture2D colorTexture(colorBuffer)				: register(t0);
+
+SamplerState NormalSamplerState;
+Texture2D normalTexture(normalBuffer)			: register(t1);
+
+Texture2D specularTexture(specularBuffer)		: register(t2);
+
+SamplerState DepthSamplerState;
+Texture2D depthTexture(depthBuffer)				: register(t3);
+
+SamplerState ShadowMapSamplerState;
+Texture2D ShadowMap(shadowBuffer)				: register(t4);
+
+float4 SSAOPixelMain( pixelInput	input ) : SV_TARGET {
+	//return float4( 1, 1, 0, 0);
+	return colorTexture.Sample( DiffuseSamplerState, input.uv );
+
+
+/*	float4 inSceneColor = sceneTexture.Sample( sceneColorSampler, input.uv );
+	float maxComponent = max( inSceneColor.x, max( inSceneColor.y, inSceneColor.z ) );
+
+	inSceneColor.w = clamp( ( inSceneColor.w - 0.25f ) * 1.3333f, 0.0f, 1000.0f );
+	if ( inSceneColor.w <= 0.0f ) {
+	   return 0.0f;
+	}
+	return inSceneColor * inSceneColor.w * 2.0f;*/
+}
