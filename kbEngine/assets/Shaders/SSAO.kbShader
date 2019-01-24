@@ -31,7 +31,7 @@ pixelInput SSAOVertexMain( vertexInput input ) {
 	pixelInput output = (pixelInput)(0);
 
 	output.position = input.position;
-	output.uv = mul( input.uv, (float2x2)mvpMatrix );
+	output.uv = input.uv;
 	output.position2 = input.position;
 
 	return output;
@@ -67,8 +67,7 @@ float CalculateOcclusion( float2 ab, float2 uv, float3 baseWorldPos ) {
 }
 
 float4 SSAOPixelMain( pixelInput input ) : SV_TARGET {
-	//return float4( 1, 1, 0, 0);
-	//return colorTexture.Sample( DiffuseSamplerState, input.uv );
+
 	float4 diffuseColor = colorTexture.Sample( DiffuseSamplerState, input.uv );
 	float3 normal = normalTexture.Sample( NormalSamplerState, input.uv ).xyz;
 	float4 specColor = specularTexture.Sample( DiffuseSamplerState, input.uv );

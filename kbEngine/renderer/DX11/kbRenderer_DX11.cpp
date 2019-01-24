@@ -1310,10 +1310,10 @@ void kbRenderer_DX11::RenderScene() {
 			PLACE_GPU_TIME_STAMP( "GBuffer" );
 		}
 
-		RenderSSAO();
-
 		RenderLights();
 	
+		RenderSSAO();
+
 		{
 			START_SCOPED_RENDER_TIMER( RENDER_UNLIT )
 
