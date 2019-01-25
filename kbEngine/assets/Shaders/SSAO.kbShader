@@ -11,6 +11,12 @@ cbuffer matrixBuffer {
    int					numSamples;
 };
 
+kbShaderState {
+	srcBlend Blend_DstColor
+	dstBlend Blend_Zero
+	colorwriteenable colorwriteenable_rgb
+}
+
 //-------------------------------------
 struct vertexInput {
 	float4 position			: POSITION;
@@ -25,9 +31,9 @@ struct pixelInput {
 };
 
 /**
- *	SSAOVertexMain
+ *	vertexShader
  */
-pixelInput SSAOVertexMain( vertexInput input ) {
+pixelInput vertexShader( vertexInput input ) {
 	pixelInput output = (pixelInput)(0);
 
 	output.position = input.position;
@@ -54,19 +60,22 @@ Texture2D depthTexture(depthBuffer)				: register(t3);
 SamplerState ShadowMapSamplerState;
 Texture2D ShadowMap(shadowBuffer)				: register(t4);
 
-float CalculateOcclusion( float2 ab, float2 uv, float3 baseWorldPos ) {
-	float4 worldPos = float4( ab, depthTexture.Sample( DepthSamplerState, uv ).r, 1 );
-	worldPos = mul( worldPos, inverseViewProjection );
-	worldPos /= worldPos.w;
+float CalculateOcclusion( float2 ab, float2 uv, float3 basePixelWorldPos, float3 basePixelWorldNormal ) {
+	float4 testPos = float4( ab, depthTexture.Sample( DepthSamplerState, uv ).r, 1 );
+	testPos = mul( testPos, inverseViewProjection );
+	testPos /= testPos.w;
 	
-	if ( worldPos.z < baseWorldPos.z - 2.75f) {
-		return 1.0f;
-	}
+	float3 diff = testPos.xyz - basePixelWorldPos;
+	float3 v = normalize( diff );
+	float d = length( diff ) * 55.0f;
 
-	return 0.0f;
+	return max( 0.0f, dot( basePixelWorldNormal,v ) ) * ( 1.0f / ( 1.0f + d ) );
+
+
 }
 
-float4 SSAOPixelMain( pixelInput input ) : SV_TARGET {
+
+float4 pixelShader( pixelInput input ) : SV_TARGET {
 
 	float4 diffuseColor = colorTexture.Sample( DiffuseSamplerState, input.uv );
 	float3 normal = normalTexture.Sample( NormalSamplerState, input.uv ).xyz;
@@ -78,14 +87,17 @@ float4 SSAOPixelMain( pixelInput input ) : SV_TARGET {
 
 	int iterations = 4;
 	float ao = 0;
-	float2 pixelSize = float2( 1.0f / 1920.0f, 1.0f / 1080.0f );
-	for ( int j = 0; j < iterations; j++ ) {
-	
-		ao += CalculateOcclusion( input.position2.xy - pixelSize * 2.0f, input.uv - pixelSize, worldPos.xyz );
-		ao += CalculateOcclusion( input.position2.xy + pixelSize * 2.0f, input.uv + pixelSize, worldPos.xyz );
-	//	ao += CalculateOcclusion( i.uv - pixelSize, worldPos.xyz );
-		// ao += CalculateOcclusion( i.uv - pixelSize, worldPos.xyz );
-	}
+	float2 pixelSize = 5 * float2( 1.0f / 1920.0f, 1.0f / 1080.0f );
 
-	return ao;
+	//for ( int j = 0; j < iterations; j++ ) {
+	
+		ao += CalculateOcclusion( input.position2.xy + 2 * float2(pixelSize.x, pixelSize.y), input.uv + float2(pixelSize.x, pixelSize.y), worldPos.xyz, normal );
+		ao += CalculateOcclusion( input.position2.xy + 2 * float2(-pixelSize.x, pixelSize.y), input.uv + float2(-pixelSize.x, pixelSize.y), worldPos.xyz, normal );
+		ao += CalculateOcclusion( input.position2.xy + 2 * float2(-pixelSize.x, -pixelSize.y), input.uv + float2(-pixelSize.x, -pixelSize.y), worldPos.xyz, normal );
+		ao += CalculateOcclusion( input.position2.xy + 2 * float2(pixelSize.x, -pixelSize.y), input.uv + float2(pixelSize.x, -pixelSize.y), worldPos.xyz, normal );
+//	}
+
+
+	float finalAO = pow(abs( 1.0f - ao ), 10);
+	return float4( abs( finalAO.xxx ), 0 );//colorTexture.Sample( DiffuseSamplerState,  theUV );
 }

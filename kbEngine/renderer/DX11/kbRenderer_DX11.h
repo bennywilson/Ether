@@ -487,12 +487,12 @@ private:
 	kbShader *									m_pSimpleAdditiveShader;
 	kbShader *									m_pGodRayIterationShader;
 	kbShader *									m_pMousePickerIdShader;
+	kbShader *									m_pSSAO;
 
 	// Non-resource managed shaders (Game assets cannot reference these).  These have to be manually released
 	kbShader *									m_pSkinnedDirectionalLightShadowShader;
 	kbShader *									m_pBloomGatherShader;
 	kbShader *									m_pBloomBlur;
-	kbShader *									m_pSSAO;
 
 	ID3D11Buffer *								m_pUnitQuad;
 	ID3D11Buffer *								m_pConsoleQuad;

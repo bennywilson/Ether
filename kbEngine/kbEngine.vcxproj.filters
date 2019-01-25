@@ -108,6 +108,9 @@
     <None Include="assets\Shaders\UIManipulator.kbShader">
       <Filter>Assets\Shaders</Filter>
     </None>
+    <None Include="assets\Shaders\SSAO.kbShader">
+      <Filter>Assets\Shaders</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="renderer\kbModel.h">

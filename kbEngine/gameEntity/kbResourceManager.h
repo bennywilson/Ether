@@ -126,7 +126,8 @@ private:
 	std::vector<class kbLoadResourceJob *>		m_LoadResourceJobs;
 
 	// Hot reloading
-	HANDLE										m_hAssetDirectory;
+	HANDLE										m_hGameAssetDirectory;
+	HANDLE										m_hEngineAssetDirectory;
 	OVERLAPPED									m_Ovl;
 
 

@@ -59,13 +59,22 @@ void kbResource::Release() {
  */
 kbResourceManager::kbResourceManager() {
 
-	m_hAssetDirectory = CreateFile( "./assets/",
+	m_hGameAssetDirectory = CreateFile( "./assets/",
 									GENERIC_READ | FILE_LIST_DIRECTORY, 
 									FILE_SHARE_READ | FILE_SHARE_WRITE | FILE_SHARE_DELETE,
 									nullptr, 
 									OPEN_EXISTING,
 									FILE_FLAG_BACKUP_SEMANTICS | FILE_FLAG_OVERLAPPED,
 									nullptr );
+
+
+	m_hEngineAssetDirectory = CreateFile("../../kbEngine/assets/",
+		GENERIC_READ | FILE_LIST_DIRECTORY,
+		FILE_SHARE_READ | FILE_SHARE_WRITE | FILE_SHARE_DELETE,
+		nullptr,
+		OPEN_EXISTING,
+		FILE_FLAG_BACKUP_SEMANTICS | FILE_FLAG_OVERLAPPED,
+		nullptr);
 
 	ZeroMemory( &m_Ovl, sizeof(m_Ovl) );
 //	m_Ovl.hEvent = ::CreateEvent( nullptr, FALSE, FALSE, nullptr );
@@ -118,62 +127,68 @@ void kbResourceManager::UpdateHotReloads() {
 	}
 	queuedFiles.clear();
 
-	static int state =  0;
-	static byte *const buffer = new byte[2048];
+	static int states[] = {0,0};
+	HANDLE handles[] = { m_hGameAssetDirectory, m_hEngineAssetDirectory };
+	static byte * buffers[2] = { new byte[2048], new byte[2048] };
 	DWORD numBytes = 0;
 
-	if ( state == 0 ) {
-		BOOL result = ReadDirectoryChangesW( m_hAssetDirectory, 
-											 buffer,
-											 2048,
-											 TRUE,
-											 FILE_NOTIFY_CHANGE_LAST_WRITE | FILE_NOTIFY_CHANGE_FILE_NAME,
-											 &numBytes,
-											 &m_Ovl,
-											 nullptr );
+	for ( int i = 0; i < 2; i++ ) {
+		if ( states[i] == 0 ) {
+			BOOL result = ReadDirectoryChangesW( handles[i],
+												 buffers[i],
+												 2048,
+												 TRUE,
+												 FILE_NOTIFY_CHANGE_LAST_WRITE | FILE_NOTIFY_CHANGE_FILE_NAME,
+												 &numBytes,
+												 &m_Ovl,
+												 nullptr );
 
-		if ( result == FALSE ) {
-			return;
+			states[i] = 1;
 		}
-		state = 1;
-	}
 
-	FILE_NOTIFY_INFORMATION * pCurInfo = (FILE_NOTIFY_INFORMATION*)buffer;
-	byte * pByteCurInfo = buffer;
+		FILE_NOTIFY_INFORMATION * pCurInfo = (FILE_NOTIFY_INFORMATION*)buffers[i];
+		byte * pByteCurInfo = buffers[i];
 
-	if (GetOverlappedResult( m_hAssetDirectory, &m_Ovl, &numBytes, FALSE ) )
-	while ( pCurInfo->Action != 0 ) {
-		state = 0;
+		if ( GetOverlappedResult( handles[i], &m_Ovl, &numBytes, FALSE ) ) {
+			while ( pCurInfo->Action != 0 ) {
+				states[i] = 0;
 
-		const DWORD FileNameLength = (pCurInfo->FileNameLength) / 2;
-		std::wstring fileName;
+				const DWORD FileNameLength = (pCurInfo->FileNameLength) / 2;
+				std::wstring fileName;
 
-		fileName.resize( FileNameLength );
-		bool bHasTilda = false;
-		for ( DWORD i = 0; i < FileNameLength; i++ ) {
+				fileName.resize( FileNameLength );
+				bool bHasTilda = false;
+				for ( DWORD i = 0; i < FileNameLength; i++ ) {
 
-			fileName[i] = pCurInfo->FileName[i];
-			if (fileName[i] == '~' ) {
-				bHasTilda = true;
-				break;
+					fileName[i] = pCurInfo->FileName[i];
+					if (fileName[i] == '~' ) {
+						bHasTilda = true;
+						break;
+					}
+				}
+
+				if ( bHasTilda == false && GetFileExtension( fileName ).empty() == false ) {
+					std::replace( fileName.begin(), fileName.end(), '/', '\\' );
+					std::wstring fullFileName;
+					if ( i == 0 ) {
+						fullFileName = L".\\assets\\" + fileName;
+					} else {
+						fullFileName = L"..\\..\\kbEngine\\assets\\" + fileName;
+					}
+
+					if ( VectorContains( queuedFiles, fullFileName ) == false ) {
+						queuedFiles.push_back( fullFileName );
+					} else {
+						static int breakhere = 0;
+						breakhere++;
+					}
+				}
+
+				pCurInfo->Action = 0;
+				pByteCurInfo += pCurInfo->NextEntryOffset;
+				pCurInfo = (FILE_NOTIFY_INFORMATION*)pByteCurInfo;
 			}
 		}
-
-		if ( bHasTilda == false && GetFileExtension( fileName ).empty() == false ) {
-			std::replace( fileName.begin(), fileName.end(), '/', '\\' );
-			const std::wstring fullFileName = L".\\assets\\" + fileName;
-
-			if ( VectorContains( queuedFiles, fullFileName ) == false ) {
-				queuedFiles.push_back( fullFileName );
-			} else {
-				static int breakhere = 0;
-				breakhere++;
-			}
-		}
-
-		pCurInfo->Action = 0;
-		pByteCurInfo += pCurInfo->NextEntryOffset;
-		pCurInfo = (FILE_NOTIFY_INFORMATION*)pByteCurInfo;
 	}
 }
 
@@ -496,8 +511,11 @@ void kbResourceManager::Shutdown() {
 	}
 	m_pPackages.clear();
 
-	CloseHandle( m_hAssetDirectory );
-	m_hAssetDirectory = nullptr;
+	CloseHandle( m_hGameAssetDirectory );
+	m_hGameAssetDirectory = nullptr;
+
+	CloseHandle( m_hEngineAssetDirectory );
+	m_hEngineAssetDirectory = nullptr;
 }
 
 /**
@@ -512,6 +530,7 @@ void kbResourceManager::FileModifiedCB( const std::wstring & fileName ) {
 	for ( int i = 0; i < m_Resources.size(); i++ ) {
 		fs::path resourcePath = fs::canonical( m_Resources[i]->GetFullFileName() );
 
+		kbLog( "Comparing ( %s to %s", resourcePath.string().c_str(), p.string().c_str() );
 		if ( resourcePath.string() == p.string() ) {
 			kbLog( "Hot reloading %s", p.string().c_str() );
 			m_Resources[i]->Release();

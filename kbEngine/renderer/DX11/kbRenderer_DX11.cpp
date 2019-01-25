@@ -415,7 +415,6 @@ kbRenderer_DX11::kbRenderer_DX11() :
 	m_pSkinnedDirectionalLightShadowShader = new kbShader( "../../kbEngine/assets/Shaders/directionalLightSkinnedShadow.kbShader" );
 	m_pBloomGatherShader = new kbShader( "../../kbEngine/assets/Shaders/bloom.kbShader" );
 	m_pBloomBlur = new kbShader( "../../kbEngine/assets/Shaders/bloom.kbShader" );
-	m_pSSAO = new kbShader( "../../kbEngine/assets/Shaders/SSAO.kbShader");
 
 	ZeroMemory( m_pTextures, sizeof(m_pTextures) );
 
@@ -699,6 +698,8 @@ void kbRenderer_DX11::Init_Internal( HWND hwnd, const int frameWidth, const int 
 
 	m_pMousePickerIdShader = (kbShader *) g_ResourceManager.LoadResource( "../../kbEngine/assets/Shaders/mousePicker.kbshader", true );
 
+	m_pSSAO = (kbShader*) g_ResourceManager.LoadResource( "../../kbEngine/assets/Shaders/SSAO.kbShader", true );
+
 	// Non-resource managed shaders
 	m_pSkinnedDirectionalLightShadowShader->SetVertexShaderFunctionName( "skinnedVertexMain" );
 	m_pSkinnedDirectionalLightShadowShader->SetPixelShaderFunctionName( "skinnedPixelMain" );
@@ -707,10 +708,6 @@ void kbRenderer_DX11::Init_Internal( HWND hwnd, const int frameWidth, const int 
 	m_pBloomGatherShader->SetVertexShaderFunctionName( "bloomGatherVertexMain" );
 	m_pBloomGatherShader->SetPixelShaderFunctionName( "bloomGatherPixelMain" );
 	m_pBloomGatherShader->Load();
-
-	m_pSSAO->SetVertexShaderFunctionName("SSAOVertexMain");
-	m_pSSAO->SetPixelShaderFunctionName("SSAOPixelMain");
-	m_pSSAO->Load();
 
 	m_pBloomBlur->SetVertexShaderFunctionName( "bloomBlurVertexMain" );
 	m_pBloomBlur->SetPixelShaderFunctionName( "bloomBlurPixelMain" );
@@ -1977,7 +1974,7 @@ void kbRenderer_DX11::RenderSSAO() {
 	viewport.MaxDepth = 1.0f;
 	m_pDeviceContext->RSSetViewports(1, &viewport);
 
-	m_RenderState.SetBlendState();
+	m_RenderState.SetBlendState( m_pSSAO );
 
 	m_pDeviceContext->OMSetRenderTargets(1, &GetRenderTarget_DX11(ACCUMULATION_BUFFER)->m_pRenderTargetView, nullptr);
 	const unsigned int stride = sizeof(vertexLayout);
@@ -2007,26 +2004,22 @@ void kbRenderer_DX11::RenderSSAO() {
 	const auto & varBindings = m_pSSAO->GetShaderVarBindings();
 
 	kbShaderParamOverrides_t shaderParams;
-	ID3D11Buffer *const pConstantBuffer = SetConstantBuffer( varBindings, &shaderParams, nullptr, nullptr );
+	ID3D11Buffer * pConstantBuffer = GetConstantBuffer( varBindings.m_ConstantBufferSizeBytes );
+	
+	D3D11_MAPPED_SUBRESOURCE mappedResource;
+	HRESULT hr = m_pDeviceContext->Map( pConstantBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource );
+	kbErrorCheck( SUCCEEDED(hr), "kbRenderer_DX11::RenderSSAO() - Failed to map matrix buffer" );
+	byte * pMappedData = (byte*)mappedResource.pData;
+
+	SetConstantBuffer( varBindings, &shaderParams, nullptr, pMappedData );
+	SetShaderMat4( "inverseViewProjection", m_pCurrentRenderWindow->GetInverseViewProjection(), pMappedData, varBindings );
+	m_pDeviceContext->Unmap( pConstantBuffer, 0 );
+
 	m_pDeviceContext->VSSetConstantBuffers(0, 1, &pConstantBuffer);
 	m_pDeviceContext->PSSetConstantBuffers(0, 1, &pConstantBuffer);
 
 	// Draw
 	m_pDeviceContext->Draw(6, 0);
-
-	/*	GetConstantBuffer(varBindings.m_ConstantBufferSizeBytes);
-
-
-	if (pRenderObject->m_Materials.size() > 0) {
-		if (pRenderObject->m_Materials.size() > pRenderMesh->GetMeshIdx()) {
-			pConstantBuffer = SetConstantBuffer(shaderVarBindings, &pRenderObject->m_Materials[pRenderMesh->GetMeshIdx()], pRenderObject, nullptr);
-		}
-		else {
-			pConstantBuffer = SetConstantBuffer(shaderVarBindings, &pRenderObject->m_Materials[0], pRenderObject, nullptr);
-		}
-	}
-
-	m_pDeviceContext->VS*/
 }
 
 /**
