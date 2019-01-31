@@ -2543,6 +2543,7 @@ void kbRenderer_DX11::ReadShaderFile( std::string & shaderText, kbShaderVarBindi
 	kbTexture *const pWhiteTex = (kbTexture*)g_ResourceManager.LoadResource( "../../kbEngine/assets/Textures/white.bmp", true );
 	kbTexture *const pBlackTex = (kbTexture*)g_ResourceManager.LoadResource( "../../kbEngine/assets/Textures/black.bmp", true );
 	kbTexture *const pDefaultNormal = (kbTexture*)g_ResourceManager.LoadResource( "../../kbEngine/assets/Textures/defaultNormal.bmp", true );
+	kbTexture *const pNoiseTex = (kbTexture*)g_ResourceManager.LoadResource( "../../kbEngine/assets/Textures/noise.jpg", true );
 
 	size_t currOffset = 0;
 	for ( int i = 0; i < constantBufferStrings.size(); i += 2 ) {
@@ -2630,6 +2631,8 @@ void kbRenderer_DX11::ReadShaderFile( std::string & shaderText, kbShaderVarBindi
 				textureBinding.m_pDefaultRenderTexture = m_pRenderTargets[SHADOW_BUFFER];
 			} else if ( defaultTexture == "maxhalf" ) {
 				textureBinding.m_pDefaultRenderTexture = m_pRenderTargets[MAX_HALF_BUFFER];
+			} else if ( defaultTexture == "noise" ) {
+				textureBinding.m_pDefaultTexture = pNoiseTex;
 			} else {
 				kbWarning( "Default texture %s not found", defaultTexture.c_str() );
 			}

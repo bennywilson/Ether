@@ -530,7 +530,6 @@ void kbResourceManager::FileModifiedCB( const std::wstring & fileName ) {
 	for ( int i = 0; i < m_Resources.size(); i++ ) {
 		fs::path resourcePath = fs::canonical( m_Resources[i]->GetFullFileName() );
 
-		kbLog( "Comparing ( %s to %s", resourcePath.string().c_str(), p.string().c_str() );
 		if ( resourcePath.string() == p.string() ) {
 			kbLog( "Hot reloading %s", p.string().c_str() );
 			m_Resources[i]->Release();

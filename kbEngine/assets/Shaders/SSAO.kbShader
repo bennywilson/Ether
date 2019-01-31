@@ -61,11 +61,13 @@ Texture2D depthTexture(depthBuffer)				: register(t3);
 SamplerState ShadowMapSamplerState;
 Texture2D ShadowMap(shadowBuffer)				: register(t4);
 
+Texture2D NoiseTex(noise);
+
 float CalculateOcclusion( float2 ab, float2 uv, float3 basePixelWorldPos, float3 basePixelWorldNormal ) {
 
 	float maxOcclusionAngleDot = 0.3f;
 	float g_intensity = 0.5f;
-	float g_scale = 0.f;
+	float g_scale = 0.5f;
 
 	float4 testPos = float4( ab, depthTexture.Sample( DepthSamplerState, uv ).r, 1 );
 	testPos = mul( testPos, inverseViewProjection );
@@ -81,9 +83,9 @@ return 0;
 	float d = length( diff ) * g_scale;
 
 
-	return saturate( dot( normalize( basePixelWorldNormal ), v) - maxOcclusionAngleDot  );
+	//return saturate( dot( normalize( basePixelWorldNormal ), v) - maxOcclusionAngleDot  );
 
-//max( 0.0f, dot( normalize( basePixelWorldNormal ), v ) - maxOcclusionAngleDot ) * ( 1.0f / ( 1.0f + d ) ) * g_intensity;
+	return max( 0.0f, dot( normalize( basePixelWorldNormal ), v ) - maxOcclusionAngleDot ) * ( 1.0f / ( 1.0f + d ) ) * g_intensity;
 
 
 }
@@ -94,26 +96,35 @@ float4 pixelShader( pixelInput input ) : SV_TARGET {
 	float4 diffuseColor = colorTexture.Sample( DiffuseSamplerState, input.uv );
 	float3 normal = normalTexture.Sample( NormalSamplerState, input.uv ).xyz;
 	float4 specColor = specularTexture.Sample( DiffuseSamplerState, input.uv );
-
+	float theDepth = depthTexture.Sample( DepthSamplerState, input.uv ).r;
+	if ( theDepth == 0)
+		return 1;
 	float4 worldPos = float4( input.position2.xy, depthTexture.Sample( DepthSamplerState, input.uv ).r, 1 );
 	worldPos = mul( worldPos, inverseViewProjection );
 	worldPos /= worldPos.w;
 
 	int iterations = 4;
 	float ao = 0;
-	float2 pixelSize = 5 * float2( 1.0f / 1920.0f, 1.0f / 1080.0f );
+	const float radius = 15.0f;
 
-	//for ( int j = 0; j < iterations; j++ ) {
-	
-		ao += CalculateOcclusion( input.position2.xy + 2 * float2(pixelSize.x, pixelSize.y), input.uv + float2(pixelSize.x, pixelSize.y), worldPos.xyz, normal );
-		ao += CalculateOcclusion( input.position2.xy + 2 * float2(-pixelSize.x, pixelSize.y), input.uv + float2(-pixelSize.x, pixelSize.y), worldPos.xyz, normal );
-		ao += CalculateOcclusion( input.position2.xy + 2 * float2(-pixelSize.x, -pixelSize.y), input.uv + float2(-pixelSize.x, -pixelSize.y), worldPos.xyz, normal );
-		ao += CalculateOcclusion( input.position2.xy + 2 * float2(pixelSize.x, -pixelSize.y), input.uv + float2(pixelSize.x, -pixelSize.y), worldPos.xyz, normal );
-//	}
+	const float2 pixelSize = float2( 1.0f / 1920.0f, 1.0f / 1080.0f );
+	const float2 noise = NoiseTex.Sample( DiffuseSamplerState, input.uv ).xy * 0.0001f;
+	const float2 textureSampleOffset = ( noise + pixelSize ) * radius;
+	const float2 clipSpaceSampleOffset =  ( 2.0f * ( noise + pixelSize ) * radius );
+	ao += CalculateOcclusion( input.position2.xy + float2( clipSpaceSampleOffset.x, -clipSpaceSampleOffset.y ), input.uv + float2( textureSampleOffset.x, textureSampleOffset.y ), worldPos.xyz, normal );
+	ao += CalculateOcclusion( input.position2.xy + float2( -clipSpaceSampleOffset.x, -clipSpaceSampleOffset.y ), input.uv + float2( -textureSampleOffset.x, textureSampleOffset.y ), worldPos.xyz, normal );
+	ao += CalculateOcclusion( input.position2.xy + float2( -clipSpaceSampleOffset.x, clipSpaceSampleOffset.y ), input.uv + float2( -textureSampleOffset.x, -textureSampleOffset.y ), worldPos.xyz, normal );
+	ao += CalculateOcclusion( input.position2.xy + float2( clipSpaceSampleOffset.x, clipSpaceSampleOffset.y ), input.uv + float2( textureSampleOffset.x, -textureSampleOffset.y ), worldPos.xyz, normal );
 
-	if ( ao > 0.25)
-			return 0;
-	return 1;
-//	float finalAO = pow(abs( 1.0f - ao ), 1);
-	//return float4( abs( finalAO.xxx ), 0 );//colorTexture.Sample( DiffuseSamplerState,  theUV );
+/*
+	const float2 pixelSize = float2( 1.0f / 1920.0f, 1.0f / 1080.0f );
+	const float2 noise = NoiseTex.Sample( DiffuseSamplerState, input.uv ).xy * 0.0001f;
+	const float2 sampleOffset = noise + pixelSize * radius;
+	ao += CalculateOcclusion( input.position2.xy + 2 * radius * float2(pixelSize.x + noise.x, -(pixelSize.y + noise.y)), input.uv + radius * float2((pixelSize.x + noise.x), (pixelSize.y + noise.y)), worldPos.xyz, normal );
+	ao += CalculateOcclusion( input.position2.xy + 2 * radius * float2(-(pixelSize.x + noise.x), -(pixelSize.y + noise.y)), input.uv + radius * float2(-(pixelSize.x + noise.x), (pixelSize.y + noise.y)), worldPos.xyz, normal );
+	ao += CalculateOcclusion( input.position2.xy + 2 * radius * float2(-(pixelSize.x + noise.x), (pixelSize.y + noise.y)), input.uv + radius  * float2(-(pixelSize.x + noise.x ), -(pixelSize.y + noise.y)), worldPos.xyz, normal );
+	ao += CalculateOcclusion( input.position2.xy + 2 * radius * float2(pixelSize.x + noise.x, (pixelSize.y + noise.y)), input.uv + radius  * float2((pixelSize.x + noise.x ), -(pixelSize.y + noise.y)), worldPos.xyz, normal );
+
+*/
+	return (1 - ao);
 }
