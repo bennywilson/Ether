@@ -6,6 +6,7 @@
 //===================================================================================================
 cbuffer matrixBuffer {
    matrix				mvpMatrix;
+	matrix	viewMatrix;
    matrix               inverseViewProjection;
    float4				offsetsAndWeights[16];
    int					numSamples;
@@ -61,15 +62,28 @@ SamplerState ShadowMapSamplerState;
 Texture2D ShadowMap(shadowBuffer)				: register(t4);
 
 float CalculateOcclusion( float2 ab, float2 uv, float3 basePixelWorldPos, float3 basePixelWorldNormal ) {
+
+	float maxOcclusionAngleDot = 0.3f;
+	float g_intensity = 0.5f;
+	float g_scale = 0.f;
+
 	float4 testPos = float4( ab, depthTexture.Sample( DepthSamplerState, uv ).r, 1 );
 	testPos = mul( testPos, inverseViewProjection );
 	testPos /= testPos.w;
 	
 	float3 diff = testPos.xyz - basePixelWorldPos;
-	float3 v = normalize( diff );
-	float d = length( diff ) * 55.0f;
 
-	return max( 0.0f, dot( basePixelWorldNormal,v ) ) * ( 1.0f / ( 1.0f + d ) );
+	if ( dot(diff, diff ) < 0.001f )
+		{
+return 0;
+}
+	float3 v = normalize( diff );
+	float d = length( diff ) * g_scale;
+
+
+	return saturate( dot( normalize( basePixelWorldNormal ), v) - maxOcclusionAngleDot  );
+
+//max( 0.0f, dot( normalize( basePixelWorldNormal ), v ) - maxOcclusionAngleDot ) * ( 1.0f / ( 1.0f + d ) ) * g_intensity;
 
 
 }
@@ -97,7 +111,9 @@ float4 pixelShader( pixelInput input ) : SV_TARGET {
 		ao += CalculateOcclusion( input.position2.xy + 2 * float2(pixelSize.x, -pixelSize.y), input.uv + float2(pixelSize.x, -pixelSize.y), worldPos.xyz, normal );
 //	}
 
-
-	float finalAO = pow(abs( 1.0f - ao ), 10);
-	return float4( abs( finalAO.xxx ), 0 );//colorTexture.Sample( DiffuseSamplerState,  theUV );
+	if ( ao > 0.25)
+			return 0;
+	return 1;
+//	float finalAO = pow(abs( 1.0f - ao ), 1);
+	//return float4( abs( finalAO.xxx ), 0 );//colorTexture.Sample( DiffuseSamplerState,  theUV );
 }
