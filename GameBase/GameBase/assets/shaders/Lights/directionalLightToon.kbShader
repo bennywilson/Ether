@@ -83,7 +83,7 @@ float4 pixelShader( pixelInput input ) : SV_TARGET {
 	worldPos /= worldPos.w;
 	
 	float3 toCameraVec = normalize( cameraPosition.xyz - worldPos.xyz );
-	float diffuse = saturate( dot( normal.xyz, lightDirection.xyz ) );
+	float diffuse = saturate( dot( normal.xyz, lightDirection.xyz ) ) * 0.8f + 0.2f;
 
 	// Shadow
 	float DistFromCamera = length( worldPos.xyz - cameraPosition.xyz );
@@ -109,7 +109,7 @@ float4 pixelShader( pixelInput input ) : SV_TARGET {
 	shadowTex.xy += offset;
 	
 	if ( DistFromCamera < splitDistances.w ) {
-	   if ( ShadowMap.Sample( ShadowMapSamplerState, shadowTex.xy ).r < shadowTex.z - 0.0003f ) {
+	   if ( ShadowMap.Sample( ShadowMapSamplerState, shadowTex.xy ).r < shadowTex.z - 0.25f ) {
 	      diffuse = 0;
 	   }
 	}
