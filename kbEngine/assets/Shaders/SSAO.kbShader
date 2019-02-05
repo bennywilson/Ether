@@ -109,6 +109,6 @@ float4 pixelShader( pixelInput input ) : SV_TARGET {
 	ao += CalculateOcclusion( input.position2.xy + float2( -clipSpaceSampleOffset.x, clipSpaceSampleOffset.y ), input.uv + float2( -textureSampleOffset.x, -textureSampleOffset.y ), worldPos.xyz, normal );
 	ao += CalculateOcclusion( input.position2.xy + float2( clipSpaceSampleOffset.x, clipSpaceSampleOffset.y ), input.uv + float2( textureSampleOffset.x, -textureSampleOffset.y ), worldPos.xyz, normal );
 
-	return 1;//
+	//return 1;//
 	return (1 - ao);
 }
