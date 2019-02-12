@@ -14,8 +14,8 @@ kbPrefab 1 {
 			Enabled = 1
 			LifeTime =  -1.000000
 			CastsShadow = 0
+			Materials = 0
 			RenderPass = LightingPass
-			ShaderParams = 0
 			TranslucencySortBias =  0.000000
 			Model = .\assets\models\vehicles\jet.ms3d
 			ShaderOverride = 0
@@ -31,6 +31,7 @@ kbPrefab 1 {
 			EndColor = 0.000000 0.000000 0.000000 0.000000
 			Gravity = 0.000000 0.000000 0.000000
 			LockVelocity = 0
+			MaterialList = 0
 			MaxBurstCount = 0
 			MaxDuration =  3.000000
 			MaxEndSize = 3.000000 3.000000 2000.000000

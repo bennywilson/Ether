@@ -547,7 +547,7 @@ kbGameEntity 0 0 0 0 {
 		LifeTime =  -1.000000
 		Name = "Fire_0"
 		Orientation = 0.000000 0.707000 0.000000 0.707000
-		Position = 58.785179 26.030029 -60.218063
+		Position = 68.867493 26.030029 -60.221107
 		Scale = 20.000000 20.000000 20.000000
 	}
 	kbStaticModelComponent { 
@@ -641,7 +641,7 @@ kbGameEntity 0 0 0 0 {
 		Orientation = 0.000000 0.000000 0.000000 1.000000
 		Position = 0.000000 0.000000 0.000000
 		Scale = 1.000000 1.000000 1.000000
-		EndColor = 1.000000 1.000000 1.000000 0.000000
+		EndColor = 0.000000 0.000000 0.000000 0.000000
 		Gravity = 0.000000 0.000000 0.000000
 		LockVelocity = 0
 		MaterialList = 1
@@ -654,7 +654,7 @@ kbGameEntity 0 0 0 0 {
 						Enabled = 0
 						LifeTime =  -1.000000
 						ParamName = "shaderTexture"
-						Texture = .\assets\fx\orangeglow.dds
+						Texture = .\assets\fx\ember.jpg
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 			}
@@ -662,20 +662,20 @@ kbGameEntity 0 0 0 0 {
 		MaxDuration =  5.000000
 		MaxEndSize = 0.500000 0.300000 0.200000
 		MaxEndVelocity = 0.000000 5.000000 0.000000
-		MaxSpawnRate =  5.000000
+		MaxSpawnRate =  3.000000
 		MaxStartSize = 0.500000 0.500000 0.500000
-		MaxStartVelocity = 3.000000 10.000000 3.000000
+		MaxStartVelocity = 3.000000 35.000000 3.000000
 		MinBurstCount = 0
 		MinDuration =  3.000000
 		MinEndSize = 0.200000 0.200000 0.150000
 		MinEndVelocity = 0.000000 2.000000 0.000000
 		MinSpawnRate =  2.000000
 		MinStartSize = 0.420000 0.450000 0.420000
-		MinStartVelocity = -3.000000 10.000000 -3.000000
+		MinStartVelocity = -3.000000 25.000000 -3.000000
 		ParticleBillboardType = FaceCamera
 		ParticleShader = .\assets\shaders\fx\emberparticle.kbshader
-		ParticleTexture = .\assets\fx\orangeglow.dds
-		StartColor = 1.000000 1.000000 1.000000 1.000000
+		ParticleTexture = .\assets\fx\basicglow.jpg
+		StartColor = 1.000000 1.000000 1.000000 0.000000
 		TotalDuration =  -1.000000
 		TranslucencySortBias =  0.000000
 	}
@@ -686,7 +686,7 @@ kbGameEntity 0 0 0 0 {
 		LifeTime =  -1.000000
 		Name = "Smoke_0"
 		Orientation = 0.000000 0.707000 0.000000 0.707000
-		Position = 58.785175 26.030029 -60.218063
+		Position = 11.933762 26.030029 -60.203911
 		Scale = 15.000000 25.000000 5.000000
 	}
 	kbStaticModelComponent { 
