@@ -161,7 +161,7 @@ kbEditor::kbEditor() :
 	// setup the renderer
 	if ( g_pRenderer == nullptr ) {
 		g_pRenderer = new kbRenderer_DX11();
-		g_pRenderer->Init( m_pMainTab->GetEditorWindow()->GetWindowHandle(), 1400, 833, false, false );
+		g_pRenderer->Init( m_pMainTab->GetEditorWindow()->GetWindowHandle(), 1920, 1080, false, false );
 		g_pRenderer->EnableDebugBillboards( true );
 	}
 
