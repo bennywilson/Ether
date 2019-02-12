@@ -132,8 +132,7 @@ kbGameEntity 749854598 1122407100 2268504468 2469228342 {
 		LifeTime =  0.125000
 		CastsShadows = 0
 		Color = 0.200000 1.800000 1.800000 1.000000
-		OverrideShader = NULL
-		ShaderParams = 0
+		Materials = 0
 		LightRadius =  256.000000
 	}
 	kbParticleComponent { 
@@ -186,8 +185,7 @@ kbGameEntity 834051548 1161303702 3343001743 2051538980 {
 		LifeTime =  0.350000
 		CastsShadows = 0
 		Color = 0.950000 0.600000 0.020000 1.000000
-		OverrideShader = NULL
-		ShaderParams = 0
+		Materials = 0
 		LightRadius =  1024.000000
 	}
 	kbParticleComponent { 
@@ -542,7 +540,7 @@ kbGameEntity 1199553285 1083518041 1518451114 1990211042 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		Name = "Embers_0"
+		Name = "Ember_0"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
 		Position = 58.785179 26.030029 -60.218063
 		Scale = 1.000000 1.000000 1.000000
@@ -554,7 +552,7 @@ kbGameEntity 1199553285 1083518041 1518451114 1990211042 {
 		Orientation = 0.000000 0.000000 0.000000 1.000000
 		Position = 0.000000 0.000000 0.000000
 		Scale = 1.000000 1.000000 1.000000
-		EndColor = 1.000000 1.000000 1.000000 0.000000
+		EndColor = 0.000000 0.000000 0.000000 0.000000
 		Gravity = 0.000000 0.000000 0.000000
 		LockVelocity = 0
 		MaterialList = 1
@@ -567,28 +565,28 @@ kbGameEntity 1199553285 1083518041 1518451114 1990211042 {
 						Enabled = 0
 						LifeTime =  -1.000000
 						ParamName = "shaderTexture"
-						Texture = .\assets\fx\orangeglow.dds
+						Texture = .\assets\fx\ember.jpg
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 			}
 		MaxBurstCount = 0
 		MaxDuration =  5.000000
-		MaxEndSize = 0.500000 0.300000 0.200000
-		MaxEndVelocity = 0.000000 15.000000 0.000000
-		MaxSpawnRate =  2.200000
-		MaxStartSize = 1.250000 1.250000 1.250000
-		MaxStartVelocity = 4.000000 22.000000 4.000000
+		MaxEndSize = 0.300000 0.300000 0.300000
+		MaxEndVelocity = 0.000000 8.000000 0.000000
+		MaxSpawnRate =  3.000000
+		MaxStartSize = 0.500000 0.500000 0.500000
+		MaxStartVelocity = 0.000000 15.000000 0.000000
 		MinBurstCount = 0
 		MinDuration =  3.000000
-		MinEndSize = 0.200000 0.200000 0.150000
-		MinEndVelocity = 0.000000 10.000000 0.000000
+		MinEndSize = 0.200000 0.200000 0.200000
+		MinEndVelocity = 0.000000 5.000000 0.000000
 		MinSpawnRate =  2.000000
-		MinStartSize = 0.800000 0.800000 0.800000
-		MinStartVelocity = 4.000000 22.000000 4.000000
+		MinStartSize = 0.420000 0.450000 0.420000
+		MinStartVelocity = 0.000000 10.000000 0.000000
 		ParticleBillboardType = FaceCamera
 		ParticleShader = .\assets\shaders\fx\emberparticle.kbshader
-		ParticleTexture = .\assets\fx\orangeglow.dds
-		StartColor = 1.000000 1.000000 1.000000 1.000000
+		ParticleTexture = .\assets\fx\basicglow.jpg
+		StartColor = 1.000000 1.000000 1.000000 0.000000
 		TotalDuration =  -1.000000
 		TranslucencySortBias =  0.000000
 	}
@@ -610,8 +608,7 @@ kbGameEntity 2392815626 1128253038 2191027591 643962852 {
 		LifeTime =  -1.000000
 		CastsShadows = 0
 		Color = 2.500000 1.500000 0.500000 1.000000
-		OverrideShader = NULL
-		ShaderParams = 0
+		Materials = 0
 		LightRadius =  124.000000
 	}
 }

@@ -660,18 +660,18 @@ kbGameEntity 0 0 0 0 {
 			}
 		MaxBurstCount = 0
 		MaxDuration =  5.000000
-		MaxEndSize = 0.500000 0.300000 0.200000
-		MaxEndVelocity = 0.000000 5.000000 0.000000
+		MaxEndSize = 0.300000 0.300000 0.300000
+		MaxEndVelocity = 0.000000 8.000000 0.000000
 		MaxSpawnRate =  3.000000
 		MaxStartSize = 0.500000 0.500000 0.500000
-		MaxStartVelocity = 3.000000 35.000000 3.000000
+		MaxStartVelocity = 0.000000 15.000000 0.000000
 		MinBurstCount = 0
 		MinDuration =  3.000000
-		MinEndSize = 0.200000 0.200000 0.150000
-		MinEndVelocity = 0.000000 2.000000 0.000000
+		MinEndSize = 0.200000 0.200000 0.200000
+		MinEndVelocity = 0.000000 5.000000 0.000000
 		MinSpawnRate =  2.000000
 		MinStartSize = 0.420000 0.450000 0.420000
-		MinStartVelocity = -3.000000 25.000000 -3.000000
+		MinStartVelocity = 0.000000 10.000000 0.000000
 		ParticleBillboardType = FaceCamera
 		ParticleShader = .\assets\shaders\fx\emberparticle.kbshader
 		ParticleTexture = .\assets\fx\basicglow.jpg

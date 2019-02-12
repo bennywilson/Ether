@@ -5,6 +5,7 @@
 //==============================================================================
 cbuffer matrixBuffer {
 	matrix modelMatrix;
+	matrix worldViewMatrix;
 	matrix mvpMatrix;
 	matrix viewProjection;
 	float4 cameraPos;
@@ -67,23 +68,30 @@ pixelInput vertexShader( vertexInput input ) {
 	   billboardMatrix = float3x3( heading, xAxis, yAxis );
 	}
 	float3 offset = mul( float3( input.size.x , input.size.y, 0 ), billboardMatrix );
-	offset.x += sin( particleWorldPos.y * input.billboardType.y * 0.3f ) * 1.0f * input.billboardType.z;
-	offset.z += sin( particleWorldPos.y * input.billboardType.y * 0.55f ) * 2.0f * input.billboardType.z;
+	float3 moveOffset = 0;
+	moveOffset.x += sin( particleWorldPos.y * input.billboardType.y * 0.6f) * 3.0f * input.billboardType.z;
+	moveOffset.z += sin( particleWorldPos.y * input.billboardType.y * 0.35f ) * 5.0f * input.billboardType.z;
+	offset += moveOffset;
 
 	output.position = mul( float4(particleWorldPos,1) + float4( offset, 0.0f ), viewProjection );
 
-	output.uv = input.uv * 0.5f + float2(0.0f, 0.5f);
+	output.uv = input.uv * 0.5f;
 
-/*
-
-	if (offset.x < -0.25f) {
-		output.uv += 0; 
-	} else if (offset.x > 0.25f) {
-		output.uv += float2(0.0f, 0.5f);
-	} /*else {
-		output.uv += float2(0.5f,0.0f);
-	}*/
 	output.color = input.color;
+
+	moveOffset.x = cos( particleWorldPos.y * input.billboardType.y * 0.3f);
+	moveOffset.z = cos( particleWorldPos.y * input.billboardType.y * 0.55f );
+
+	moveOffset = mul( moveOffset, (float3x3)worldViewMatrix );
+	if (moveOffset.x < -0.2f) {
+	output.color = float4(0,0,1,0);
+		output.uv += 0; 
+	} else if (moveOffset.x > 0.2f) {
+		output.uv += float2(0.0f, 0.5f);
+	} else {
+		output.uv += float2(0.5f,0.0f);
+	}
+
 	output.position2 = output.position.zw;
 
 	return output;

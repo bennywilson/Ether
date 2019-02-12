@@ -3670,6 +3670,9 @@ ID3D11Buffer * kbRenderer_DX11::SetConstantBuffer( const kbShaderVarBindings_t &
 		} else if ( varName == "mvpMatrix" ) {
 			kbMat4 *const pMatOffset = (kbMat4*)pVarByteOffset;
 			*pMatOffset = worldMatrix * m_pCurrentRenderWindow->GetViewProjectionMatrix();
+		} else if ( varName == "worldViewMatrix" ) {
+			kbMat4 *const pMatOffset = (kbMat4*)pVarByteOffset;
+			*pMatOffset = worldMatrix * m_pCurrentRenderWindow->GetViewMatrix();
 		} else if ( varName == "vpMatrix" ) {
 			kbMat4 *const pMatOffset = (kbMat4*)pVarByteOffset;
 			*pMatOffset = m_pCurrentRenderWindow->GetViewProjectionMatrix();
