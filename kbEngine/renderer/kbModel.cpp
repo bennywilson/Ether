@@ -571,6 +571,22 @@ bool kbModel::LoadMS3D() {
  */
 FbxManager * g_pFBXSDKManager = nullptr;
 
+FbxAMatrix GetGeometryTransformation(FbxNode* inNode)
+{
+	if (!inNode)
+	{
+		throw std::exception("Null for mesh geometry");
+	}
+
+	const FbxVector4 lT = inNode->GetGeometricTranslation(FbxNode::eSourcePivot);
+	const FbxVector4 lR = inNode->GetGeometricRotation(FbxNode::eSourcePivot);
+	const FbxVector4 lS = inNode->GetGeometricScaling(FbxNode::eSourcePivot);
+
+	return FbxAMatrix(lT, lR, lS);
+}
+
+std::map<int, std::string> happy;
+
 bool kbModel::LoadFBX() {
 
 	struct FBXData {
@@ -626,6 +642,45 @@ bool kbModel::LoadFBX() {
 			continue;
 		}
 
+		int numDeformers = pFBXMesh->GetDeformerCount();
+		FbxAMatrix geomXForm = GetGeometryTransformation(pRootNode->GetChild(iMesh));
+		for ( int iDeform = 0; iDeform < numDeformers; iDeform++ ) {
+			FbxSkin * pCurSkin = (FbxSkin*)pFBXMesh->GetDeformer( iDeform, FbxDeformer::eSkin );
+			if ( pCurSkin == nullptr ) {
+				continue;
+			}
+
+			uint numClusters = pCurSkin->GetClusterCount();
+			for ( uint iCluster = 0; iCluster < numClusters; iCluster++ ) {
+				FbxCluster * pCurCluster = pCurSkin->GetCluster( iCluster );
+				std::string curJointName = pCurCluster->GetLink()->GetName();
+				kbLog( "			--> CurJointName = %s", curJointName.c_str() );
+
+				FbxAMatrix xformMat;
+				FbxAMatrix xformLinkMat;
+				FbxAMatrix globalBindPoseInverseMatrix;
+
+				pCurCluster->GetTransformMatrix( xformMat );
+				pCurCluster->GetTransformLinkMatrix( xformLinkMat );
+				globalBindPoseInverseMatrix = xformLinkMat.Inverse() * xformMat * geomXForm;
+				kbLog( "Yay!");
+
+				unsigned int numOfIndices = pCurCluster->GetControlPointIndicesCount();
+				for (unsigned int i = 0; i < numOfIndices; ++i)
+				{
+					int * pCtrlPt = pCurCluster->GetControlPointIndices();
+
+			//		happy[pCurCluster->GetControlPointIndices()] = "asedser";
+					static int whatItDo = 0;
+					whatItDo++;
+				//	BlendingIndexWeightPair currBlendingIndexWeightPair;
+					//currBlendingIndexWeightPair.mBlendingIndex = currJointIndex;
+					//currBlendingIndexWeightPair.mBlendingWeight = currCluster->GetControlPointWeights();
+					//mControlPoints[currCluster->GetControlPointIndices()]->mBlendingInfo.push_back(currBlendingIndexWeightPair);
+				}
+
+			}
+		}
 		m_Meshes.push_back( mesh_t() );
 		mesh_t & newMesh = m_Meshes[m_Meshes.size() - 1];
 		newMesh.m_IndexBufferIndex = (unsigned int)indexList.size();
@@ -733,6 +788,55 @@ bool kbModel::LoadFBX() {
 		}
 	}
 
+	for ( int i = 0; i < pRootNode->GetChildCount(); i++ ) {
+		FbxNode * pCurNode = pRootNode->GetChild(i);
+		kbLog( "Processing parent node %s", pCurNode->GetName() );
+
+		for ( int j = 0; j < pCurNode->GetChildCount(); j++ ) {
+			FbxNode * pRootBone = pCurNode->GetChild(j);
+			if ( pRootBone->GetNodeAttribute() == nullptr || pRootBone->GetNodeAttribute()->GetAttributeType() != FbxNodeAttribute::eSkeleton ) {
+				continue;
+			}
+			kbLog( "	Processing Root bone %s", pRootBone->GetName() );
+					
+			for ( int l = 0; l < pRootBone->GetChildCount(); l++ ) {
+				FbxNode * pBoneNode = pRootBone->GetChild(l);
+				if ( pBoneNode->GetNodeAttribute() == nullptr || pBoneNode->GetNodeAttribute()->GetAttributeType() != FbxNodeAttribute::eSkeleton ) {
+					continue;
+				}
+				kbLog( "		Processing child bones %s", pBoneNode->GetName() );
+			}
+		}
+	}
+	// Skeletal data
+	/*
+	void FBXExporter::ProcessSkeletonHierarchy(FbxNode* inRootNode)
+{
+
+	for (int childIndex = 0; childIndex < inRootNode->GetChildCount(); ++childIndex)
+	{
+		FbxNode* currNode = inRootNode->GetChild(childIndex);
+		ProcessSkeletonHierarchyRecursively(currNode, 0, 0, -1);
+	}
+}
+
+
+// inDepth is not needed here, I used it for debug but forgot to remove it
+void FBXExporter::ProcessSkeletonHierarchyRecursively(FbxNode* inNode, int inDepth, int myIndex, int inParentIndex)
+{
+	if(inNode->GetNodeAttribute() && inNode->GetNodeAttribute()->GetAttributeType() && inNode->GetNodeAttribute()->GetAttributeType() == FbxNodeAttribute::eSkeleton)
+	{
+		Joint currJoint;
+		currJoint.mParentIndex = inParentIndex;
+		currJoint.mName = inNode->GetName();
+		mSkeleton.mJoints.push_back(currJoint);
+	}
+	for (int i = 0; i < inNode->GetChildCount(); i++)
+	{
+		ProcessSkeletonHierarchyRecursively(inNode->GetChild(i), inDepth + 1, mSkeleton.mJoints.size(), myIndex);
+	}
+}
+	*/
 	m_VertexBuffer.CreateVertexBuffer( vertexList );
 	m_IndexBuffer.CreateIndexBuffer( indexList );
 
