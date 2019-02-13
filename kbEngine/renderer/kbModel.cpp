@@ -642,45 +642,6 @@ bool kbModel::LoadFBX() {
 			continue;
 		}
 
-		int numDeformers = pFBXMesh->GetDeformerCount();
-		FbxAMatrix geomXForm = GetGeometryTransformation(pRootNode->GetChild(iMesh));
-		for ( int iDeform = 0; iDeform < numDeformers; iDeform++ ) {
-			FbxSkin * pCurSkin = (FbxSkin*)pFBXMesh->GetDeformer( iDeform, FbxDeformer::eSkin );
-			if ( pCurSkin == nullptr ) {
-				continue;
-			}
-
-			uint numClusters = pCurSkin->GetClusterCount();
-			for ( uint iCluster = 0; iCluster < numClusters; iCluster++ ) {
-				FbxCluster * pCurCluster = pCurSkin->GetCluster( iCluster );
-				std::string curJointName = pCurCluster->GetLink()->GetName();
-				kbLog( "			--> CurJointName = %s", curJointName.c_str() );
-
-				FbxAMatrix xformMat;
-				FbxAMatrix xformLinkMat;
-				FbxAMatrix globalBindPoseInverseMatrix;
-
-				pCurCluster->GetTransformMatrix( xformMat );
-				pCurCluster->GetTransformLinkMatrix( xformLinkMat );
-				globalBindPoseInverseMatrix = xformLinkMat.Inverse() * xformMat * geomXForm;
-				kbLog( "Yay!");
-
-				unsigned int numOfIndices = pCurCluster->GetControlPointIndicesCount();
-				for (unsigned int i = 0; i < numOfIndices; ++i)
-				{
-					int * pCtrlPt = pCurCluster->GetControlPointIndices();
-
-			//		happy[pCurCluster->GetControlPointIndices()] = "asedser";
-					static int whatItDo = 0;
-					whatItDo++;
-				//	BlendingIndexWeightPair currBlendingIndexWeightPair;
-					//currBlendingIndexWeightPair.mBlendingIndex = currJointIndex;
-					//currBlendingIndexWeightPair.mBlendingWeight = currCluster->GetControlPointWeights();
-					//mControlPoints[currCluster->GetControlPointIndices()]->mBlendingInfo.push_back(currBlendingIndexWeightPair);
-				}
-
-			}
-		}
 		m_Meshes.push_back( mesh_t() );
 		mesh_t & newMesh = m_Meshes[m_Meshes.size() - 1];
 		newMesh.m_IndexBufferIndex = (unsigned int)indexList.size();
@@ -775,6 +736,54 @@ bool kbModel::LoadFBX() {
 					triVert.SetColor(color);
 				}
 
+										bool bFound = false;
+				int numDeformers = pFBXMesh->GetDeformerCount();
+				FbxAMatrix geomXForm = GetGeometryTransformation(pRootNode->GetChild(iMesh));
+				for ( int iDeform = 0; iDeform < numDeformers; iDeform++ ) {
+					FbxSkin * pCurSkin = (FbxSkin*)pFBXMesh->GetDeformer( iDeform, FbxDeformer::eSkin );
+					if ( pCurSkin == nullptr ) {
+						continue;
+					}
+
+					uint numClusters = pCurSkin->GetClusterCount();
+					for ( uint iCluster = 0; iCluster < numClusters; iCluster++ ) {
+						FbxCluster * pCurCluster = pCurSkin->GetCluster( iCluster );
+						std::string curJointName = pCurCluster->GetLink()->GetName();
+					//	kbLog( "			--> CurJointName = %s", curJointName.c_str() );
+
+						FbxAMatrix xformMat;
+						FbxAMatrix xformLinkMat;
+						FbxAMatrix globalBindPoseInverseMatrix;
+
+						pCurCluster->GetTransformMatrix( xformMat );
+						pCurCluster->GetTransformLinkMatrix( xformLinkMat );
+						globalBindPoseInverseMatrix = xformLinkMat.Inverse() * xformMat * geomXForm;
+						//kbLog( "Yay!");
+
+						unsigned int numOfIndices = pCurCluster->GetControlPointIndicesCount();
+
+						for (unsigned int i = 0; i < numOfIndices; ++i)
+						{
+							int * pCtrlPt = pCurCluster->GetControlPointIndices();
+							if ( iCtrlPt == pCtrlPt[i]) {
+								bFound = true;
+							}
+
+					//		happy[pCurCluster->GetControlPointIndices()] = "asedser";
+							static int whatItDo = 0;
+							whatItDo++;
+						//	BlendingIndexWeightPair currBlendingIndexWeightPair;
+							//currBlendingIndexWeightPair.mBlendingIndex = currJointIndex;
+							//currBlendingIndexWeightPair.mBlendingWeight = currCluster->GetControlPointWeights();
+							//mControlPoints[currCluster->GetControlPointIndices()]->mBlendingInfo.push_back(currBlendingIndexWeightPair);
+						}
+
+					}
+				}
+
+				if ( bFound ) {
+					triVert.SetColor( kbVec4( 1.0f, 0.0f, 1.0f, 1.0f ) );
+				}
 				auto vertIt = vertexMap.find( triVert );
 				if ( vertIt == vertexMap.end() ) {
 					const int vertIdx = (int)vertexList.size();
