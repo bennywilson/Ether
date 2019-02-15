@@ -192,13 +192,30 @@ void EtherSkelModelComponent::Update_Internal( const float DeltaTime ) {
 
 		if ( m_pModel->IsDestructible() ) {
 			static float scale = 1.0f;
+						static float angle = 0.0f;
 			if ( GetAsyncKeyState('G'))	{
 				scale += 0.01f;
+				angle += 0.01f;
+			} else if ( GetAsyncKeyState('H')) {
+				angle = 0;
+				scale = 1;
 			}
+
+			
+			kbMat4 mat = kbMat4::identity;
+			mat[0][0] = cos(angle);
+			mat[2][0] = -sin(angle);
+			mat[0][2] = sin(angle);
+			mat[2][2] = cos(angle);
+	
 			for ( int i = 0; i < m_pModel->NumBones(); i++ ) {
-				kbBoneMatrix_t boneMat = m_pModel->GetRefBoneMatrix(i);
-				boneMat.SetAxis( 3, boneMat.GetOrigin() * scale );
-				m_BindToLocalSpaceMatrices[i] = m_pModel->GetInvRefBoneMatrix(i) * boneMat;
+				kbBoneMatrix_t boneMat = m_pModel->GetInvRefBoneMatrix(i);
+								
+				mat[3] = -boneMat.GetOrigin() * scale;
+				kbBoneMatrix_t refPose = m_pModel->GetRefBoneMatrix(i);
+				boneMat *= mat;
+
+				m_BindToLocalSpaceMatrices[i] = boneMat;
 			}
 //			m_bIsDestructible
 		}
