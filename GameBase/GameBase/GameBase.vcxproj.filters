@@ -146,6 +146,9 @@
     <None Include="assets\shaders\Character\firstPersonHands.kbshader">
       <Filter>Shaders\Character</Filter>
     </None>
+    <None Include="assets\shaders\Environment\environmentSkinned.kbShader">
+      <Filter>Shaders\Environment</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameBase.h">

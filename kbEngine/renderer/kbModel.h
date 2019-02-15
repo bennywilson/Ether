@@ -121,6 +121,8 @@ public:
 	bool										IsIndexBufferMapped() const { return m_bIBIsMapped; }
     bool                                        IsPointCloud() const { return m_bIsPointCloud; }
 
+	bool										IsDestructible() const { return m_bIsDestructible; }
+
 	// CPU Access
 	void										SetCPUAccessOnly( const bool bCPUAccessOnly ) { m_bCPUAccessOnly = bCPUAccessOnly; }
 	const std::vector<vertexLayout>	&			GetCPUVertices() const { return m_CPUVertices; }
@@ -183,6 +185,7 @@ protected:
 	bool										m_bVBIsMapped           : 1;
 	bool										m_bIBIsMapped           : 1;
 	bool										m_bCPUAccessOnly        : 1;
+	bool										m_bIsDestructible		: 1;
 
 private:
 

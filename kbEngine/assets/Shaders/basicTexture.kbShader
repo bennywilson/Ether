@@ -60,7 +60,7 @@ SamplerState SampleType;
  PS_OUTPUT pixelShader( pixelInput	input ) {
  	PS_OUTPUT output = (PS_OUTPUT) 0;
 
-	output.Color.xyz = shaderTexture.Sample( SampleType, input.uv ).xyz;
+	output.Color.xyz = input.color.xyz;//shaderTexture.Sample( SampleType, input.uv ).xyz;
 	output.Depth.r = input.position2.x / input.position2.y;
 	output.Specular = float4( 0.0f, 0.0f, 0.0f, 1.0f );
 	output.Normal.xyz = normalize( input.normal );

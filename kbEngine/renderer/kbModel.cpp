@@ -83,7 +83,8 @@ kbModel::kbModel() :
     m_bIsPointCloud( false ),
 	m_bVBIsMapped( false ),
 	m_bIBIsMapped( false ),
-	m_bCPUAccessOnly( false )  {
+	m_bCPUAccessOnly( false ),
+	m_bIsDestructible( false ) {
 }
 
 /**
@@ -585,8 +586,6 @@ FbxAMatrix GetGeometryTransformation(FbxNode* inNode)
 	return FbxAMatrix(lT, lR, lS);
 }
 
-std::map<int, std::string> happy;
-
 bool kbModel::LoadFBX() {
 
 	struct FBXData {
@@ -634,6 +633,11 @@ bool kbModel::LoadFBX() {
 	std::vector<vertexLayout> vertexList;
 	std::vector<ushort> indexList;
 
+			std::map<int, kbBounds> boneToBounds;
+		std::map<int, int> vertToBone;
+		std::map<int, kbColor> boneToColor;
+
+
 	for ( int iMesh = 0; iMesh < pRootNode->GetChildCount(); iMesh++ ) {
 		
 		FbxMesh *const pFBXMesh = pRootNode->GetChild(iMesh)->GetMesh();
@@ -652,8 +656,6 @@ bool kbModel::LoadFBX() {
 
 		uint vertexCount = 0;
 
-		std::map<int, int> vertToBone;
-		std::map<int, kbColor> boneToColor;
 
 					int numDeformers = pFBXMesh->GetDeformerCount();
 			FbxAMatrix geomXForm = GetGeometryTransformation(pRootNode->GetChild(iMesh));
@@ -669,10 +671,11 @@ bool kbModel::LoadFBX() {
 					FbxCluster * pCurCluster = pCurSkin->GetCluster( iCluster );
 					std::string curJointName = pCurCluster->GetLink()->GetName();
 
+					boneToBounds[iCluster].Reset();
 					kbColor boneColor( kbfrand() * 0.5f + 0.5f, kbfrand() * 0.5f + 0.5f, kbfrand() * 0.5f + 0.5f, 1.0f );
 					boneToColor[iCluster] = boneColor;
 
-					kbLog( "%s bone color is %f %f %f", curJointName.c_str(), boneColor.x, boneColor.y, boneColor.z, boneColor.w );
+				//	kbLog( "%s bone color is %f %f %f", curJointName.c_str(), boneColor.x, boneColor.y, boneColor.z, boneColor.w );
 
 					FbxAMatrix xformMat;
 					FbxAMatrix xformLinkMat;
@@ -687,8 +690,9 @@ bool kbModel::LoadFBX() {
 					int * pCtrlPtList = pCurCluster->GetControlPointIndices();
 					for (unsigned int i = 0; i < numOfIndices; ++i)
 					{
-						kbLog( "	Adding vertex %d", pCtrlPtList[i]);
-						vertToBone[pCtrlPtList[i]]= iCluster;
+						m_bIsDestructible = true;
+					//	kbLog( "	Adding vertex %d", pCtrlPtList[i]);
+						vertToBone[pCtrlPtList[i]] = iCluster;
 					}
 
 				}
@@ -778,7 +782,20 @@ bool kbModel::LoadFBX() {
 					triVert.SetColor(color);
 				}
 
-				triVert.SetColor( boneToColor[vertToBone[iCtrlPt]] );
+				int boneIdx = vertToBone[iCtrlPt];
+				boneToBounds[boneIdx].AddPoint( triVert.position );
+				triVert.color[0] = (byte) boneIdx;
+				triVert.color[1] = (byte) boneIdx;
+				triVert.color[2] = (byte) boneIdx;
+				triVert.color[3] = (byte) boneIdx;
+
+				/*
+									newVert.color[0] = (byte)boneIndices[currentTriangle.m_VertexIndices[j]];
+					newVert.color[1] = (byte)boneIndices[currentTriangle.m_VertexIndices[j]];
+					newVert.color[2] = (byte)boneIndices[currentTriangle.m_VertexIndices[j]];
+					newVert.color[3] = (byte)boneIndices[currentTriangle.m_VertexIndices[j]]; 
+				*/
+				//triVert.SetColor( boneToColor[boneIdx] );
 				auto vertIt = vertexMap.find( triVert );
 				if ( vertIt == vertexMap.end() ) {
 					const int vertIdx = (int)vertexList.size();
@@ -812,35 +829,7 @@ bool kbModel::LoadFBX() {
 			}
 		}
 	}
-	// Skeletal data
-	/*
-	void FBXExporter::ProcessSkeletonHierarchy(FbxNode* inRootNode)
-{
 
-	for (int childIndex = 0; childIndex < inRootNode->GetChildCount(); ++childIndex)
-	{
-		FbxNode* currNode = inRootNode->GetChild(childIndex);
-		ProcessSkeletonHierarchyRecursively(currNode, 0, 0, -1);
-	}
-}
-
-
-// inDepth is not needed here, I used it for debug but forgot to remove it
-void FBXExporter::ProcessSkeletonHierarchyRecursively(FbxNode* inNode, int inDepth, int myIndex, int inParentIndex)
-{
-	if(inNode->GetNodeAttribute() && inNode->GetNodeAttribute()->GetAttributeType() && inNode->GetNodeAttribute()->GetAttributeType() == FbxNodeAttribute::eSkeleton)
-	{
-		Joint currJoint;
-		currJoint.mParentIndex = inParentIndex;
-		currJoint.mName = inNode->GetName();
-		mSkeleton.mJoints.push_back(currJoint);
-	}
-	for (int i = 0; i < inNode->GetChildCount(); i++)
-	{
-		ProcessSkeletonHierarchyRecursively(inNode->GetChild(i), inDepth + 1, mSkeleton.mJoints.size(), myIndex);
-	}
-}
-	*/
 	m_VertexBuffer.CreateVertexBuffer( vertexList );
 	m_IndexBuffer.CreateIndexBuffer( indexList );
 
@@ -848,6 +837,22 @@ void FBXExporter::ProcessSkeletonHierarchyRecursively(FbxNode* inNode, int inDep
 	newMaterial.m_pShader = (kbShader *) g_ResourceManager.LoadResource( "../../kbEngine/assets/Shaders/basicShader.kbShader", true );
 	m_Materials.push_back( newMaterial );
 
+	m_Bones.resize( boneToBounds.size() );
+	for ( int i = 0; i < boneToBounds.size(); i++ ) {
+		kbBounds & boneBounds = boneToBounds[i];
+		m_Bones[i].m_RelativePosition = boneBounds.Center();
+		m_Bones[i].m_RelativeRotation = kbQuat( 0.0f, 0.0f, 0.0f, 1.0f );
+
+		kbBoneMatrix_t invRef;
+		invRef.SetIdentity();
+		invRef.SetAxis( 3, -m_Bones[i].m_RelativePosition );
+		m_InvRefPose.push_back( invRef );
+
+		kbBoneMatrix_t ref;
+		ref.SetIdentity();
+		ref.SetAxis( 3, m_Bones[i].m_RelativePosition );
+		m_RefPose.push_back( ref );
+	}
 	return true;
 }
 

@@ -1,212 +1,5 @@
 kbGameEntity 0 0 0 0 {
 	kbTransformComponent { 
-		Enabled = 0
-		LifeTime =  -1.000000
-		Name = "Terrain"
-		Orientation = 0.000000 0.000000 0.000000 1.000000
-		Position = 0.000000 -410.000000 0.000000
-		Scale = 1.000000 1.000000 1.000000
-	}
-	kbTerrainComponent { 
-		Enabled = 1
-		LifeTime =  -1.000000
-		CastsShadow = 0
-		Materials = 1
-			kbMaterialComponent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				Shader = .\assets\shaders\environment\basicterrain.kbshader
-				ShaderParams = 15
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "mat1And2UVScale"
-						Texture = NULL
-						Vector = 1.000000 1.000000 55.000000 55.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "mat3And4UVScale"
-						Texture = NULL
-						Vector = 25.000000 25.000000 1.000000 1.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "specFactors"
-						Texture = NULL
-						Vector = 1.000000 1.000000 5.000000 0.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "specPowerMultipliers"
-						Texture = NULL
-						Vector = 1.000000 3.000000 55.000000 0.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "splatMap"
-						Texture = .\assets\terrain\basicterrain\terrain1_splatmap.bmp
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "Mat1Diffuse"
-						Texture = .\assets\terrain\textures\sand.jpg
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "Mat1Normal"
-						Texture = .\assets\terrain\textures\sand_nm.jpg
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "Mat1Specular"
-						Texture = .\assets\terrain\textures\sand.jpg
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "Mat2Diffuse"
-						Texture = .\assets\terrain\textures\rocky_diffuse.dds
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "Mat2Normal"
-						Texture = .\assets\terrain\textures\rocky_normal.jpg
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "Mat2Specular"
-						Texture = .\assets\terrain\textures\rocky_diffuse.dds
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "Mat3Diffuse"
-						Texture = .\assets\terrain\textures\grassy_lowrock_diffuse.jpg
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "Mat3Normal"
-						Texture = .\assets\terrain\textures\grassy_lowrock_normal.jpg
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "Mat3Specular"
-						Texture = .\assets\terrain\textures\grassy_lowrock_diffuse.jpg
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "Mat4Diffuse"
-						Texture = NULL
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-			}
-		RenderPass = LightingPass
-		TranslucencySortBias =  -1.000000
-		Dimensions = 129
-		Grass = 1
-			kbGrass { 
-				Enabled = 1
-				LifeTime =  -1.000000
-				BladeMaxHeight =  25.000000
-				BladeMaxWidth =  1.000000
-				BladeMinHeight =  20.000000
-				BladeMinWidth =  1.000000
-				DiffuseMap = .\assets\terrain\foliage\grass_1.dds
-				FakeAODarkness =  0.250000
-				FakeAOPower =  2.000000
-				GrassCellsPerTerrainSide = 30
-				GrassMap = .\assets\terrain\foliage\grass_1.dds
-				MaxBladeJitterOffset =  0.000000
-				MaxPatchJitterOffset =  3.000000
-				NoiseMap = .\assets\fx\noise\noisemap.png
-				PatchEndCullDistance =  1000.000000
-				PatchStartCullDistance =  200.000000
-				PatchesPerCellSide = 60
-				ShaderParams = 2
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "plant_1_2_size"
-						Texture = NULL
-						Vector = 1.200000 0.900000 1.300000 0.800000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "plant_3_size"
-						Texture = NULL
-						Vector = 1.300000 0.850000 0.000000 0.000000
-					}
-				TestWind = 0.000000 0.000000 25.000000
-			}
-		HeightMap = .\assets\terrain\basicterrain\terrain1_height.bmp
-		HeightScale =  1024.000000
-		MaterialList = 0
-		Shader = .\assets\shaders\environment\basicterrain.kbshader
-		SplatMap = .\assets\terrain\basicterrain\terrain1_splatmap.bmp
-		TerrainMaterials = 3
-			kbTerrainMatComponent { 
-				Enabled = 0
-				DiffuseMap = NULL
-				NormalMap = NULL
-				SpecFactors =  1.000000
-				SpecMap = NULL
-				SpecPowerMultiplier =  1.000000
-				UVScale = 1.000000 1.000000 1.000000
-			}
-			kbTerrainMatComponent { 
-				Enabled = 0
-				DiffuseMap = NULL
-				NormalMap = NULL
-				SpecFactors =  1.000000
-				SpecMap = NULL
-				SpecPowerMultiplier =  1.000000
-				UVScale = 1.000000 1.000000 1.000000
-			}
-			kbTerrainMatComponent { 
-				Enabled = 0
-				DiffuseMap = NULL
-				NormalMap = NULL
-				SpecFactors =  1.000000
-				SpecMap = NULL
-				SpecPowerMultiplier =  1.000000
-				UVScale = 1.000000 1.000000 1.000000
-			}
-		Width =  8192.000000
-	}
-	kbCollisionComponent { 
-		Enabled = 1
-		LifeTime =  -1.000000
-		CollisionType = CustomTriangles
-		Extent = 10.000000 10.000000 10.000000
-		SphereCollision = 0
-	}
-}
-kbGameEntity 0 0 0 0 {
-	kbTransformComponent { 
 		Enabled = 1
 		LifeTime =  -1.000000
 		Name = "Directional Light"
@@ -350,65 +143,6 @@ kbGameEntity 0 0 0 0 {
 		ShaderOverride = 1
 			.\assets\shaders\skybox\skybox.kbshader
 
-	}
-}
-kbGameEntity 0 0 0 0 {
-	kbTransformComponent { 
-		Enabled = 1
-		LifeTime =  -1.000000
-		Name = "Cartel Soldier"
-		Orientation = 0.000000 0.991689 0.000000 0.128659
-		Position = 23.481934 13.654261 37.027657
-		Scale = 0.100000 0.100000 0.100000
-	}
-	EtherSkelModelComponent { 
-		Enabled = 1
-		LifeTime =  -1.000000
-		CastsShadow = 1
-		Materials = 2
-			kbMaterialComponent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				Shader = .\assets\shaders\character\characterbase.kbshader
-				ShaderParams = 1
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "colorTexture"
-						Texture = .\assets\models\shared_color_palette.jpg
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-			}
-			kbMaterialComponent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				Shader = .\assets\shaders\character\characterbase.kbshader
-				ShaderParams = 1
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "colorTexture"
-						Texture = .\assets\models\shared_color_palette.jpg
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-			}
-		RenderPass = LightingPass
-		TranslucencySortBias =  -1.000000
-		Model = .\assets\models\characters\cartel_warrior\cartel_warrior.ms3d
-		ShaderOverride = 0
-			
-		Animations = 1
-			EtherAnimComponent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				Animation = .\assets\models\characters\cartel_warrior\cartel_warrior_run.kbanim.ms3d
-				AnimationEvent = 0
-				AnimationName = ""
-				IsLooping = 0
-				TimeScale =  1.000000
-			}
-		DebugAnimIndex = 0
-		IsFirstPersonModel = 0
 	}
 }
 kbGameEntity 2609040299 1100347930 3115268521 1892043160 {
@@ -1261,155 +995,6 @@ kbGameEntity 0 0 0 0 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		Name = "Izzy"
-		Orientation = 0.000000 0.997620 0.000000 -0.068949
-		Position = 24.617346 14.938108 15.440613
-		Scale = 2.250000 2.300000 2.500000
-	}
-	EtherSkelModelComponent { 
-		Enabled = 1
-		LifeTime =  -1.000000
-		CastsShadow = 0
-		Materials = 4
-			kbMaterialComponent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				Shader = .\assets\shaders\character\characterbase.kbshader
-				ShaderParams = 1
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "colorTexture"
-						Texture = .\assets\visualtarget\initiation\gina\prisonjumpsuit.dds
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-			}
-			kbMaterialComponent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				Shader = .\assets\shaders\character\characterbase.kbshader
-				ShaderParams = 1
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "colorTexture"
-						Texture = .\assets\visualtarget\getthebag\gina\eye.dds
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-			}
-			kbMaterialComponent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				Shader = .\assets\shaders\character\characterbase.kbshader
-				ShaderParams = 1
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "colorTexture"
-						Texture = .\assets\visualtarget\reuben\izzy\face.dds
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-			}
-			kbMaterialComponent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				Shader = .\assets\shaders\character\characterbase.kbshader
-				ShaderParams = 1
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "colorTexture"
-						Texture = .\assets\visualtarget\reuben\izzy\izzy_combat.bmp
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-			}
-		RenderPass = LightingPass
-		TranslucencySortBias =  0.000000
-		Model = .\assets\visualtarget\reuben\izzy\izza_combat.ms3d
-		ShaderOverride = 0
-			
-		Animations = 0
-		DebugAnimIndex = -1
-		IsFirstPersonModel = 0
-	}
-}
-kbGameEntity 0 0 0 0 {
-	kbTransformComponent { 
-		Enabled = 0
-		LifeTime =  -1.000000
-		Name = "Entity_42"
-		Orientation = 0.000000 0.000000 0.000000 1.000000
-		Position = 7.085353 28.571327 57.909828
-		Scale = 5.000000 5.000000 5.000000
-	}
-	kbStaticModelComponent { 
-		Enabled = 1
-		LifeTime =  -1.000000
-		CastsShadow = 0
-		Materials = 1
-			kbMaterialComponent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				Shader = .\assets\shaders\environment\environmentbase.kbshader
-				ShaderParams = 4
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "diffuse"
-						Texture = .\assets\models\environment\crate_1.jpg
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "normal"
-						Texture = .\assets\models\environment\crate_1_normal.jpg
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "propertyMap"
-						Texture = .\assets\test\black.jpg
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "emissiveMap"
-						Texture = NULL
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-			}
-		RenderPass = LightingPass
-		TranslucencySortBias =  0.000000
-		Model = .\assets\models\environment\crate_1.fbx
-		ShaderOverride = 0
-			
-	}
-}
-kbGameEntity 0 0 0 0 {
-	kbTransformComponent { 
-		Enabled = 0
-		LifeTime =  -1.000000
-		Name = "Entity_41"
-		Orientation = 0.000000 0.000000 0.000000 1.000000
-		Position = 43.444088 50.446579 81.266235
-		Scale = 1.000000 1.000000 1.000000
-	}
-	kbPointLightComponent { 
-		Enabled = 1
-		LifeTime =  -1.000000
-		CastsShadows = 0
-		Color = 1.000000 1.000000 1.000000 1.000000
-		Materials = 0
-		LightRadius =  16.000000
-	}
-}
-kbGameEntity 0 0 0 0 {
-	kbTransformComponent { 
-		Enabled = 0
-		LifeTime =  -1.000000
 		Name = "Smoke_0"
 		Orientation = 0.000000 0.707000 0.000000 0.707000
 		Position = 223.005020 27.579363 56.179073
@@ -1728,5 +1313,294 @@ kbGameEntity 0 0 0 0 {
 		Model = .\assets\models\environment\crate_1_destructible.fbx
 		ShaderOverride = 0
 			
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Entity_43"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 95.122154 48.174290 15.732035
+		Scale = 1.000000 1.000000 1.000000
+	}
+	EtherSkelModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		Materials = 0
+		RenderPass = LightingPass
+		TranslucencySortBias =  0.000000
+		Model = NULL
+		ShaderOverride = 0
+			
+		Animations = 0
+		DebugAnimIndex = -1
+		IsFirstPersonModel = 0
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Entity_45"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 87.468468 38.580292 48.668808
+		Scale = 5.000000 5.000000 5.000000
+	}
+	EtherSkelModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		Materials = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Shader = .\assets\shaders\environment\environmentskinned.kbshader
+				ShaderParams = 4
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "diffuse"
+						Texture = .\assets\models\environment\crate_1.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "normal"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "propertyMap"
+						Texture = .\assets\test\black.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "emissiveMap"
+						Texture = .\assets\test\black.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		RenderPass = LightingPass
+		TranslucencySortBias =  0.000000
+		Model = .\assets\models\environment\crate_1_destructible.fbx
+		ShaderOverride = 0
+			
+		Animations = 0
+		DebugAnimIndex = -1
+		IsFirstPersonModel = 0
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Terrain"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 0.000000 -410.000000 0.000000
+		Scale = 1.000000 1.000000 1.000000
+	}
+	kbTerrainComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		Materials = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Shader = .\assets\shaders\environment\basicterrain.kbshader
+				ShaderParams = 15
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "mat1And2UVScale"
+						Texture = NULL
+						Vector = 1.000000 1.000000 55.000000 55.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "mat3And4UVScale"
+						Texture = NULL
+						Vector = 25.000000 25.000000 1.000000 1.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "specFactors"
+						Texture = NULL
+						Vector = 1.000000 1.000000 5.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "specPowerMultipliers"
+						Texture = NULL
+						Vector = 1.000000 3.000000 55.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "splatMap"
+						Texture = .\assets\terrain\basicterrain\terrain1_splatmap.bmp
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "Mat1Diffuse"
+						Texture = .\assets\terrain\textures\sand.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "Mat1Normal"
+						Texture = .\assets\terrain\textures\sand_nm.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "Mat1Specular"
+						Texture = .\assets\terrain\textures\sand.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "Mat2Diffuse"
+						Texture = .\assets\terrain\textures\rocky_diffuse.dds
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "Mat2Normal"
+						Texture = .\assets\terrain\textures\rocky_normal.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "Mat2Specular"
+						Texture = .\assets\terrain\textures\rocky_diffuse.dds
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "Mat3Diffuse"
+						Texture = .\assets\terrain\textures\grassy_lowrock_diffuse.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "Mat3Normal"
+						Texture = .\assets\terrain\textures\grassy_lowrock_normal.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "Mat3Specular"
+						Texture = .\assets\terrain\textures\grassy_lowrock_diffuse.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "Mat4Diffuse"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		RenderPass = LightingPass
+		TranslucencySortBias =  -1.000000
+		Dimensions = 129
+		Grass = 1
+			kbGrass { 
+				Enabled = 1
+				LifeTime =  -1.000000
+				BladeMaxHeight =  25.000000
+				BladeMaxWidth =  1.000000
+				BladeMinHeight =  20.000000
+				BladeMinWidth =  1.000000
+				DiffuseMap = .\assets\terrain\foliage\grass_1.dds
+				FakeAODarkness =  0.250000
+				FakeAOPower =  2.000000
+				GrassCellsPerTerrainSide = 30
+				GrassMap = .\assets\terrain\foliage\grass_1.dds
+				MaxBladeJitterOffset =  0.000000
+				MaxPatchJitterOffset =  3.000000
+				NoiseMap = .\assets\fx\noise\noisemap.png
+				PatchEndCullDistance =  1000.000000
+				PatchStartCullDistance =  200.000000
+				PatchesPerCellSide = 60
+				ShaderParams = 2
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "plant_1_2_size"
+						Texture = NULL
+						Vector = 1.200000 0.900000 1.300000 0.800000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "plant_3_size"
+						Texture = NULL
+						Vector = 1.300000 0.850000 0.000000 0.000000
+					}
+				TestWind = 0.000000 0.000000 25.000000
+			}
+		HeightMap = .\assets\terrain\basicterrain\terrain1_height.bmp
+		HeightScale =  1024.000000
+		MaterialList = 0
+		Shader = .\assets\shaders\environment\basicterrain.kbshader
+		SplatMap = .\assets\terrain\basicterrain\terrain1_splatmap.bmp
+		TerrainMaterials = 3
+			kbTerrainMatComponent { 
+				Enabled = 0
+				DiffuseMap = NULL
+				NormalMap = NULL
+				SpecFactors =  1.000000
+				SpecMap = NULL
+				SpecPowerMultiplier =  1.000000
+				UVScale = 1.000000 1.000000 1.000000
+			}
+			kbTerrainMatComponent { 
+				Enabled = 0
+				DiffuseMap = NULL
+				NormalMap = NULL
+				SpecFactors =  1.000000
+				SpecMap = NULL
+				SpecPowerMultiplier =  1.000000
+				UVScale = 1.000000 1.000000 1.000000
+			}
+			kbTerrainMatComponent { 
+				Enabled = 0
+				DiffuseMap = NULL
+				NormalMap = NULL
+				SpecFactors =  1.000000
+				SpecMap = NULL
+				SpecPowerMultiplier =  1.000000
+				UVScale = 1.000000 1.000000 1.000000
+			}
+		Width =  8192.000000
+	}
+	kbCollisionComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CollisionType = CustomTriangles
+		Extent = 10.000000 10.000000 10.000000
+		SphereCollision = 0
 	}
 }

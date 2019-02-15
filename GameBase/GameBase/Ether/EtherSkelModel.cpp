@@ -190,6 +190,19 @@ void EtherSkelModelComponent::Update_Internal( const float DeltaTime ) {
 			}
 		}
 
+		if ( m_pModel->IsDestructible() ) {
+			static float scale = 1.0f;
+			if ( GetAsyncKeyState('G'))	{
+				scale += 0.01f;
+			}
+			for ( int i = 0; i < m_pModel->NumBones(); i++ ) {
+				kbBoneMatrix_t boneMat = m_pModel->GetRefBoneMatrix(i);
+				boneMat.SetAxis( 3, boneMat.GetOrigin() * scale );
+				m_BindToLocalSpaceMatrices[i] = m_pModel->GetInvRefBoneMatrix(i) * boneMat;
+			}
+//			m_bIsDestructible
+		}
+
 		if ( m_CurrentAnimation != -1 ) {
 #if DEBUG_ANIMS
 			kbLog( "Updating current anim %s", m_Animations[m_CurrentAnimation].GetAnimationName().c_str() );
