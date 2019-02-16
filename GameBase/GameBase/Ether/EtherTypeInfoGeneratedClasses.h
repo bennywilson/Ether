@@ -42,6 +42,12 @@ GenerateClass(
 GenerateClass(
 	EtherDestructibleComponent,
 	AddField( "MaxLifeTime", KBTYPEINFO_FLOAT, EtherDestructibleComponent, m_MaxLifeTime, false, "" )
+	AddField( "Gravity", KBTYPEINFO_VECTOR, EtherDestructibleComponent, m_Gravity, false, "" )
+	AddField( "MinLinearVelocity", KBTYPEINFO_FLOAT, EtherDestructibleComponent, m_MinLinearVelocity, false, "" )
+	AddField( "MaxLinearVelocity", KBTYPEINFO_FLOAT, EtherDestructibleComponent, m_MaxLinearVelocity, false, "" )
+	AddField( "MinAngularVelocity", KBTYPEINFO_FLOAT, EtherDestructibleComponent, m_MinAngularVelocity, false, "" )
+	AddField( "MaxAngularVelocity", KBTYPEINFO_FLOAT, EtherDestructibleComponent, m_MaxAngularVeloctiy, false, "" )
+	AddField( "ResetSim", KBTYPEINFO_BOOL, EtherDestructibleComponent, m_bDebugResetSim, false, "" )
 )
 
 GenerateClass(

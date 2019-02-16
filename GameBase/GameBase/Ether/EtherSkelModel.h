@@ -106,6 +106,8 @@ class EtherDestructibleComponent : public kbGameComponent {
 //-------------------------------------------------------------------------------------------------------------------------------------------------------------
 public:
 
+	virtual void							EditorChange( const std::string & propertyName ) override;
+
 	void									Explode( const kbVec3 & explosionPosition, const float explosionRadius );
 
 	bool									IsSimulating() const { return m_bIsSimulating; }
@@ -126,12 +128,22 @@ private:
 	void									SetEnable_Internal( const bool bEnable ) override;
 	void									Update_Internal( const float deltaTime ) override;
 
+	// Editor
 	float									m_MaxLifeTime;
+	kbVec3									m_Gravity;
+	float									m_MinLinearVelocity;
+	float									m_MaxLinearVelocity;
+	float									m_MinAngularVelocity;
+	float									m_MaxAngularVeloctiy;
 
+	bool									m_bDebugResetSim;
+
+	// Run time
 	std::vector<brokenBone_t>				m_BonesList;
 
 	const EtherSkelModelComponent *			m_pSkelModel;
 	float									m_SimStartTime;
+	kbVec3									m_LastHitLocation;
 	bool									m_bIsSimulating;
 };
 #endif

@@ -7,6 +7,8 @@
 #include "EtherGame.h"
 #include "EtherSkelModel.h"
 #include "kbRenderer.h"
+#include "kbConsole.h"
+#include "DX11/kbRenderer_DX11.h"			// HACK
 
 KB_DEFINE_COMPONENT(EtherAnimComponent)
 KB_DEFINE_COMPONENT(EtherSkelModelComponent)
@@ -416,15 +418,41 @@ const kbString * EtherSkelModelComponent::GetCurAnimationName() const {
  */
 void EtherDestructibleComponent::Constructor() {
 	m_MaxLifeTime = 4.0f;
+	m_Gravity.Set( 0.0f, 22.0f, 0.0f );
+	m_MinLinearVelocity = 20.0f;
+	m_MaxLinearVelocity = 25.0f;
+	m_MinAngularVelocity = 5.0f;
+	m_MaxAngularVeloctiy = 10.0f;
+	m_bDebugResetSim = false;
+
 	m_pSkelModel = nullptr;
 	m_bIsSimulating = false;
 	m_SimStartTime = 0.0f;
 }
 
 /**
+ *	EtherDestructibleComponent::Constructor
+ */
+void EtherDestructibleComponent::EditorChange( const std::string & propertyName ) {
+	Super::EditorChange( propertyName );
+
+	if ( propertyName == "ResetSim" ) {
+		if ( m_bIsSimulating ) {
+			m_bIsSimulating = false;
+		} else {
+			Explode( GetOwner()->GetPosition() + kbVec3( kbfrand(), kbfrand(), kbfrand() ) * 5.0f, 10000000.0f );
+		}
+	}
+}
+
+/**
  *	EtherDestructibleComponent::Explode
  */
-kbVec3 hitLoc;
+
+// TODO: HACK!
+static XMMATRIX & XMMATRIXFromkbMat4( kbMat4 & matrix ) { return (*(XMMATRIX*) &matrix); }
+static kbMat4 & kbMat4FromXMMATRIX( FXMMATRIX & matrix ) { return (*(kbMat4*) & matrix); }
+
 void EtherDestructibleComponent::Explode( const kbVec3 & explosionPosition, const float explosionRadius ) {
 	if ( m_pSkelModel == nullptr ) {
 		m_pSkelModel = (EtherSkelModelComponent *) GetOwner()->GetComponentByType( EtherSkelModelComponent::GetType() );
@@ -436,21 +464,23 @@ void EtherDestructibleComponent::Explode( const kbVec3 & explosionPosition, cons
 		return;
 	}
 
-	hitLoc = explosionPosition;
+	m_LastHitLocation = explosionPosition;
 
 	kbMat4 localMat;
 	GetOwner()->CalculateWorldMatrix( localMat );
-	localMat.InvertFast();
+	XMMATRIX inverseMat = XMMatrixInverse( nullptr, XMMATRIXFromkbMat4( localMat ) );
+	localMat = kbMat4FromXMMATRIX( inverseMat );
 
-	kbVec3 localExplositionPos = explosionPosition * localMat;
+	kbVec3 localExplositionPos = localMat.TransformPoint( explosionPosition );
 	const kbModel *const pModel = m_pSkelModel->GetModel();
+
 	m_BonesList.resize( pModel->NumBones() );
 	for ( int i = 0; i < pModel->NumBones(); i++ ) {
 		m_BonesList[i].m_Position = pModel->GetRefBoneMatrix(i).GetOrigin();
-		m_BonesList[i].m_Velocity = ( m_BonesList[i].m_Position - localExplositionPos ).Normalized() * ( kbfrand() * 5.0f + 10.0f );
+		m_BonesList[i].m_Velocity = ( m_BonesList[i].m_Position - localExplositionPos ).Normalized() * ( kbfrand() * ( m_MaxLinearVelocity - m_MinLinearVelocity ) + m_MinLinearVelocity );
 		m_BonesList[i].m_Acceleration = kbVec3::zero;
 		m_BonesList[i].m_RotationAxis = kbVec3( kbfrand(), kbfrand(), kbfrand() );
-		m_BonesList[i].m_RotationSpeed = kbfrand() * 5.0f + 5.0f;
+		m_BonesList[i].m_RotationSpeed = kbfrand() * ( m_MaxAngularVeloctiy - m_MinAngularVelocity ) + m_MinAngularVelocity;
 		m_BonesList[i].m_CurRotationAngle = 0.0f;
 	}
 
@@ -480,7 +510,7 @@ void EtherDestructibleComponent::SetEnable_Internal( const bool bEnable ) {
 /**
  *	EtherDestructibleComponent::Update_Internal
  */
-static float grav = 22.0f;
+extern kbConsoleVariable g_ShowCollision;
 
 void EtherDestructibleComponent::Update_Internal( const float deltaTime ) {
 
@@ -489,7 +519,6 @@ void EtherDestructibleComponent::Update_Internal( const float deltaTime ) {
 	}
 
 	if ( m_bIsSimulating ) {
-				g_pRenderer->DrawBox( kbBounds( hitLoc - kbVec3::one, hitLoc + kbVec3::one ), kbColor::red );
 		const float t = g_GlobalTimer.TimeElapsedSeconds() - m_SimStartTime;
 
 		if ( t > m_MaxLifeTime ) {
@@ -504,9 +533,13 @@ void EtherDestructibleComponent::Update_Internal( const float deltaTime ) {
 				m_BonesList[i].m_Position.x += m_BonesList[i].m_Velocity.x * deltaTime;
 				m_BonesList[i].m_Position.z += m_BonesList[i].m_Velocity.z * deltaTime;
 			
-				m_BonesList[i].m_Position.y = pModel->GetRefBoneMatrix(i).GetOrigin().y + ( m_BonesList[i].m_Velocity.y * t - ( 0.5f * grav * tSqr ) );
+				m_BonesList[i].m_Position.y = pModel->GetRefBoneMatrix(i).GetOrigin().y + ( m_BonesList[i].m_Velocity.y * t - ( 0.5f * m_Gravity.y * tSqr ) );
 				m_BonesList[i].m_CurRotationAngle += m_BonesList[i].m_RotationSpeed * deltaTime;
 			}
+		}
+
+		if ( g_ShowCollision.GetBool() ) {
+			g_pRenderer->DrawBox( kbBounds( m_LastHitLocation - kbVec3::one, m_LastHitLocation + kbVec3::one ), kbColor::red );
 		}
 	}
 }
