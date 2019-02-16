@@ -108,7 +108,7 @@ public:
 
 	virtual void							EditorChange( const std::string & propertyName ) override;
 
-	void									Explode( const kbVec3 & explosionPosition, const float explosionRadius );
+	void									TakeDamage( const float damageAmt, const kbVec3 & damagePosition, const float damageRadius );
 
 	bool									IsSimulating() const { return m_bIsSimulating; }
 
@@ -134,13 +134,15 @@ private:
 	float									m_MinLinearVelocity;
 	float									m_MaxLinearVelocity;
 	float									m_MinAngularVelocity;
-	float									m_MaxAngularVeloctiy;
+	float									m_MaxAngularVelocity;
+	float									m_StartingHealth;
 
 	bool									m_bDebugResetSim;
 
 	// Run time
 	std::vector<brokenBone_t>				m_BonesList;
 
+	float									m_Health;
 	const EtherSkelModelComponent *			m_pSkelModel;
 	float									m_SimStartTime;
 	kbVec3									m_LastHitLocation;

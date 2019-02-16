@@ -422,9 +422,11 @@ void EtherDestructibleComponent::Constructor() {
 	m_MinLinearVelocity = 20.0f;
 	m_MaxLinearVelocity = 25.0f;
 	m_MinAngularVelocity = 5.0f;
-	m_MaxAngularVeloctiy = 10.0f;
-	m_bDebugResetSim = false;
+	m_MaxAngularVelocity = 10.0f;
+	m_StartingHealth = 6.0f;
 
+	m_bDebugResetSim = false;
+	m_Health = 6.0f;
 	m_pSkelModel = nullptr;
 	m_bIsSimulating = false;
 	m_SimStartTime = 0.0f;
@@ -439,8 +441,11 @@ void EtherDestructibleComponent::EditorChange( const std::string & propertyName 
 	if ( propertyName == "ResetSim" ) {
 		if ( m_bIsSimulating ) {
 			m_bIsSimulating = false;
+			m_Health = m_StartingHealth;
 		} else {
-			Explode( GetOwner()->GetPosition() + kbVec3( kbfrand(), kbfrand(), kbfrand() ) * 5.0f, 10000000.0f );
+			const float actualHealth = m_Health;	// Put health back
+			TakeDamage( 9999999.0f, GetOwner()->GetPosition() + kbVec3( kbfrand(), kbfrand(), kbfrand() ) * 5.0f, 10000000.0f );
+			m_Health = actualHealth;
 		}
 	}
 }
@@ -453,7 +458,12 @@ void EtherDestructibleComponent::EditorChange( const std::string & propertyName 
 static XMMATRIX & XMMATRIXFromkbMat4( kbMat4 & matrix ) { return (*(XMMATRIX*) &matrix); }
 static kbMat4 & kbMat4FromXMMATRIX( FXMMATRIX & matrix ) { return (*(kbMat4*) & matrix); }
 
-void EtherDestructibleComponent::Explode( const kbVec3 & explosionPosition, const float explosionRadius ) {
+void EtherDestructibleComponent::TakeDamage( const float damageAmt, const kbVec3 & explosionPosition, const float explosionRadius ) {
+	m_Health -= damageAmt;
+	if ( m_Health > 0.0f ) {
+		return;
+	}
+
 	if ( m_pSkelModel == nullptr ) {
 		m_pSkelModel = (EtherSkelModelComponent *) GetOwner()->GetComponentByType( EtherSkelModelComponent::GetType() );
 	}
@@ -480,7 +490,7 @@ void EtherDestructibleComponent::Explode( const kbVec3 & explosionPosition, cons
 		m_BonesList[i].m_Velocity = ( m_BonesList[i].m_Position - localExplositionPos ).Normalized() * ( kbfrand() * ( m_MaxLinearVelocity - m_MinLinearVelocity ) + m_MinLinearVelocity );
 		m_BonesList[i].m_Acceleration = kbVec3::zero;
 		m_BonesList[i].m_RotationAxis = kbVec3( kbfrand(), kbfrand(), kbfrand() );
-		m_BonesList[i].m_RotationSpeed = kbfrand() * ( m_MaxAngularVeloctiy - m_MinAngularVelocity ) + m_MinAngularVelocity;
+		m_BonesList[i].m_RotationSpeed = kbfrand() * ( m_MaxAngularVelocity - m_MinAngularVelocity ) + m_MinAngularVelocity;
 		m_BonesList[i].m_CurRotationAngle = 0.0f;
 	}
 
@@ -516,6 +526,7 @@ void EtherDestructibleComponent::Update_Internal( const float deltaTime ) {
 
 	if ( GetAsyncKeyState( 'G' ) ) {
 		m_bIsSimulating = false;
+		m_Health = m_StartingHealth;
 	}
 
 	if ( m_bIsSimulating ) {
@@ -526,7 +537,6 @@ void EtherDestructibleComponent::Update_Internal( const float deltaTime ) {
 			m_bIsSimulating = false;
 		} else {
 			const float tSqr = t * t;
-
 			const kbModel *const pModel = m_pSkelModel->GetModel();
 
 			for ( int i = 0; i < m_BonesList.size(); i++ ) {
