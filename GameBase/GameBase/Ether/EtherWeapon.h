@@ -35,6 +35,7 @@ private:
 
 	std::vector<kbSoundData>				m_ImpactCharacterSoundData;
 	std::vector<kbSoundData>				m_ImpactEnvironmentSoundData;
+	std::vector<kbSoundData>				m_ImpactWoodSoundData;
 	std::vector<kbSoundData>				m_ExplosionSoundData;
 	std::vector<kbSoundData>				m_LaunchSoundData;
 
@@ -43,7 +44,9 @@ private:
 	float									m_LifeTime;
 	float									m_TracerLength;
 	float									m_TraceWidth;
-	kbGameEntityPtr							m_ExplosionFX;
+	kbGameEntityPtr							m_DefaultImpactFX;
+	kbGameEntityPtr							m_WoodImpactFX;
+
 	float									m_DetonationTimer;		// Todo: remove in favor of kbComponent's lifetime var
 	float									m_DamageRadius;
 	bool									m_bUseBillboard;

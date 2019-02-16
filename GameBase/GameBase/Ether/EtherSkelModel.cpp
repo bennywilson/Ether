@@ -514,6 +514,8 @@ void EtherDestructibleComponent::SetEnable_Internal( const bool bEnable ) {
 		}
 
 		m_BonesList.resize( m_pSkelModel->GetModel()->NumBones() );
+
+		m_Health = m_StartingHealth;
 	}
 }
 

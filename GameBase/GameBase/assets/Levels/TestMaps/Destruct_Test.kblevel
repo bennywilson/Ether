@@ -282,7 +282,7 @@ kbGameEntity 0 0 0 0 {
 		Name = "Entity_45"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
 		Position = 87.468468 38.580292 48.668808
-		Scale = 10 10 10
+		Scale = 10.000000 10.000000 10.000000
 	}
 	EtherSkelModelComponent { 
 		Enabled = 1
@@ -335,17 +335,485 @@ kbGameEntity 0 0 0 0 {
 	EtherDestructibleComponent { 
 		Enabled = 1
 		LifeTime =  -1.000000
-		MaxLifeTime = 10.0
+		Gravity = 0.000000 22.000000 0.000000
+		Health =  6.000000
+		MaxAngularVelocity =  10.000000
+		MaxLifeTime =  10.000000
+		MaxLinearVelocity =  25.000000
+		MinAngularVelocity =  5.000000
+		MinLinearVelocity =  20.000000
+		ResetSim = 0
 	}
 	kbCollisionComponent { 
 		Enabled = 1
 		LifeTime =  -1.000000
 		CollisionType = Sphere
-		Extent = 20 20 20
+		Extent = 20.000000 20.000000 20.000000
 		SphereCollision = 0
 	}
 }
-
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Entity_45"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 117.468468 38.580292 48.668808
+		Scale = 10.000000 10.000000 10.000000
+	}
+	EtherSkelModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		Materials = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Shader = .\assets\shaders\environment\environmentskinned.kbshader
+				ShaderParams = 4
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "diffuse"
+						Texture = .\assets\models\environment\crate_1.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "normal"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "propertyMap"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "emissiveMap"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		RenderPass = LightingPass
+		TranslucencySortBias =  0.000000
+		Model = .\assets\models\environment\crate_1_destructible.fbx
+		ShaderOverride = 0
+			
+		Animations = 0
+		DebugAnimIndex = -1
+		IsFirstPersonModel = 0
+	}
+	EtherDestructibleComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		Gravity = 0.000000 22.000000 0.000000
+		Health =  1.000000
+		MaxAngularVelocity =  10.000000
+		MaxLifeTime =  10.000000
+		MaxLinearVelocity =  25.000000
+		MinAngularVelocity =  5.000000
+		MinLinearVelocity =  20.000000
+		ResetSim = 0
+	}
+	kbCollisionComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CollisionType = Sphere
+		Extent = 20.000000 20.000000 20.000000
+		SphereCollision = 0
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Entity_45"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 147.468468 38.580292 48.668808
+		Scale = 10.000000 10.000000 10.000000
+	}
+	EtherSkelModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		Materials = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Shader = .\assets\shaders\environment\environmentskinned.kbshader
+				ShaderParams = 4
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "diffuse"
+						Texture = .\assets\models\environment\crate_1.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "normal"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "propertyMap"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "emissiveMap"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		RenderPass = LightingPass
+		TranslucencySortBias =  0.000000
+		Model = .\assets\models\environment\crate_1_destructible.fbx
+		ShaderOverride = 0
+			
+		Animations = 0
+		DebugAnimIndex = -1
+		IsFirstPersonModel = 0
+	}
+	EtherDestructibleComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		Gravity = 0.000000 22.000000 0.000000
+		Health =  1.000000
+		MaxAngularVelocity =  10.000000
+		MaxLifeTime =  10.000000
+		MaxLinearVelocity =  25.000000
+		MinAngularVelocity =  5.000000
+		MinLinearVelocity =  20.000000
+		ResetSim = 0
+	}
+	kbCollisionComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CollisionType = Sphere
+		Extent = 20.000000 20.000000 20.000000
+		SphereCollision = 0
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Entity_45"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 177.468468 38.580292 48.668808
+		Scale = 10.000000 10.000000 10.000000
+	}
+	EtherSkelModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		Materials = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Shader = .\assets\shaders\environment\environmentskinned.kbshader
+				ShaderParams = 4
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "diffuse"
+						Texture = .\assets\models\environment\crate_1.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "normal"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "propertyMap"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "emissiveMap"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		RenderPass = LightingPass
+		TranslucencySortBias =  0.000000
+		Model = .\assets\models\environment\crate_1_destructible.fbx
+		ShaderOverride = 0
+			
+		Animations = 0
+		DebugAnimIndex = -1
+		IsFirstPersonModel = 0
+	}
+	EtherDestructibleComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		Gravity = 0.000000 22.000000 0.000000
+		Health =  1.000000
+		MaxAngularVelocity =  10.000000
+		MaxLifeTime =  10.000000
+		MaxLinearVelocity =  25.000000
+		MinAngularVelocity =  5.000000
+		MinLinearVelocity =  20.000000
+		ResetSim = 0
+	}
+	kbCollisionComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CollisionType = Sphere
+		Extent = 20.000000 20.000000 20.000000
+		SphereCollision = 0
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Entity_45"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 207.468468 38.580292 48.668808
+		Scale = 10.000000 10.000000 10.000000
+	}
+	EtherSkelModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		Materials = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Shader = .\assets\shaders\environment\environmentskinned.kbshader
+				ShaderParams = 4
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "diffuse"
+						Texture = .\assets\models\environment\crate_1.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "normal"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "propertyMap"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "emissiveMap"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		RenderPass = LightingPass
+		TranslucencySortBias =  0.000000
+		Model = .\assets\models\environment\crate_1_destructible.fbx
+		ShaderOverride = 0
+			
+		Animations = 0
+		DebugAnimIndex = -1
+		IsFirstPersonModel = 0
+	}
+	EtherDestructibleComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		Gravity = 0.000000 22.000000 0.000000
+		Health =  1.000000
+		MaxAngularVelocity =  10.000000
+		MaxLifeTime =  10.000000
+		MaxLinearVelocity =  25.000000
+		MinAngularVelocity =  5.000000
+		MinLinearVelocity =  20.000000
+		ResetSim = 0
+	}
+	kbCollisionComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CollisionType = Sphere
+		Extent = 20.000000 20.000000 20.000000
+		SphereCollision = 0
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Entity_45"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 237.468468 38.580292 48.668808
+		Scale = 10.000000 10.000000 10.000000
+	}
+	EtherSkelModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		Materials = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Shader = .\assets\shaders\environment\environmentskinned.kbshader
+				ShaderParams = 4
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "diffuse"
+						Texture = .\assets\models\environment\crate_1.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "normal"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "propertyMap"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "emissiveMap"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		RenderPass = LightingPass
+		TranslucencySortBias =  0.000000
+		Model = .\assets\models\environment\crate_1_destructible.fbx
+		ShaderOverride = 0
+			
+		Animations = 0
+		DebugAnimIndex = -1
+		IsFirstPersonModel = 0
+	}
+	EtherDestructibleComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		Gravity = 0.000000 22.000000 0.000000
+		Health =  1.000000
+		MaxAngularVelocity =  10.000000
+		MaxLifeTime =  10.000000
+		MaxLinearVelocity =  25.000000
+		MinAngularVelocity =  5.000000
+		MinLinearVelocity =  20.000000
+		ResetSim = 0
+	}
+	kbCollisionComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CollisionType = Sphere
+		Extent = 20.000000 20.000000 20.000000
+		SphereCollision = 0
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Entity_45"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 267.468468 38.580292 48.668808
+		Scale = 10.000000 10.000000 10.000000
+	}
+	EtherSkelModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		Materials = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Shader = .\assets\shaders\environment\environmentskinned.kbshader
+				ShaderParams = 4
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "diffuse"
+						Texture = .\assets\models\environment\crate_1.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "normal"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "propertyMap"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "emissiveMap"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		RenderPass = LightingPass
+		TranslucencySortBias =  0.000000
+		Model = .\assets\models\environment\crate_1_destructible.fbx
+		ShaderOverride = 0
+			
+		Animations = 0
+		DebugAnimIndex = -1
+		IsFirstPersonModel = 0
+	}
+	EtherDestructibleComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		Gravity = 0.000000 22.000000 0.000000
+		Health =  1.000000
+		MaxAngularVelocity =  10.000000
+		MaxLifeTime =  10.000000
+		MaxLinearVelocity =  25.000000
+		MinAngularVelocity =  5.000000
+		MinLinearVelocity =  20.000000
+		ResetSim = 0
+	}
+	kbCollisionComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CollisionType = Sphere
+		Extent = 20.000000 20.000000 20.000000
+		SphereCollision = 0
+	}
+}
 kbGameEntity 0 0 0 0 {
 	kbTransformComponent { 
 		Enabled = 0
@@ -355,7 +823,7 @@ kbGameEntity 0 0 0 0 {
 		Position = 0.000000 -410.000000 0.000000
 		Scale = 1.000000 1.000000 1.000000
 	}
-	kbTerrainComponent {
+	kbTerrainComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
 		CastsShadow = 0
@@ -551,5 +1019,105 @@ kbGameEntity 0 0 0 0 {
 		CollisionType = CustomTriangles
 		Extent = 10.000000 10.000000 10.000000
 		SphereCollision = 0
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Entity_24"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = -79.709572 130.834137 -118.548103
+		Scale = 1.000000 1.000000 1.000000
+	}
+	kbParticleComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		Name = ""
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 0.000000 0.000000 0.000000
+		Scale = 1.000000 1.000000 1.000000
+		EndColor = 1.000000 1.000000 1.000000 1.000000
+		Gravity = 0.000000 -100.500000 0.000000
+		LockVelocity = 1
+		MaterialList = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Shader = .\assets\shaders\fx\particleatlas.kbshader
+				ShaderParams = 1
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "shaderTexture"
+						Texture = .\assets\fx\concreteparticles.dds
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		MaxBurstCount = 10
+		MaxDuration =  3.000000
+		MaxEndSize = 1.500000 1.500000 1.500000
+		MaxEndVelocity = 75.000000 -20.000000 -50.000000
+		MaxSpawnRate =  2.000000
+		MaxStartSize = 1.500000 1.500000 1.500000
+		MaxStartVelocity = 75.000000 50.000000 -20.000000
+		MinBurstCount = 10
+		MinDuration =  3.000000
+		MinEndSize = 1.000000 1.000000 1.000000
+		MinEndVelocity = 75.000000 -20.000000 -50.000000
+		MinSpawnRate =  1.000000
+		MinStartSize = 1.000000 1.000000 1.000000
+		MinStartVelocity = -75.000000 -20.000000 -50.000000
+		ParticleBillboardType = FaceCamera
+		ParticleShader = .\assets\shaders\fx\particleatlas.kbshader
+		ParticleTexture = .\assets\fx\concreteparticles.dds
+		StartColor = 1.000000 1.000000 1.000000 1.000000
+		TotalDuration =  0.500000
+		TranslucencySortBias =  0.000000
+	}
+	kbParticleComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		Name = ""
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 0.000000 0.000000 0.000000
+		Scale = 2.000000 2.000000 2.000000
+		EndColor = 0.000000 0.000000 0.000000 0.000000
+		Gravity = 0.000000 0.000000 0.000000
+		LockVelocity = 0
+		MaterialList = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Shader = ..\..\kbengine\assets\shaders\basicparticle.kbshader
+				ShaderParams = 1
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "shaderTexture"
+						Texture = .\assets\fx\impactsmoke.dds
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		MaxBurstCount = 5
+		MaxDuration =  1.000000
+		MaxEndSize = 3.000000 3.000000 3.000000
+		MaxEndVelocity = 0.000000 0.000000 0.000000
+		MaxSpawnRate =  0.000000
+		MaxStartSize = 3.000000 3.000000 3.000000
+		MaxStartVelocity = 3.500000 3.500000 -5.500000
+		MinBurstCount = 4
+		MinDuration =  1.000000
+		MinEndSize = 3.000000 3.000000 3.000000
+		MinEndVelocity = 0.000000 0.000000 0.000000
+		MinSpawnRate =  0.000000
+		MinStartSize = 1.200000 1.200000 1.200000
+		MinStartVelocity = -3.500000 -3.500000 -7.500000
+		ParticleBillboardType = FaceCamera
+		ParticleShader = ..\..\kbengine\assets\shaders\basicparticle.kbshader
+		ParticleTexture = .\assets\fx\impactsmoke.dds
+		StartColor = 0.250000 0.250000 0.250000 0.250000
+		TotalDuration =  2.000000
+		TranslucencySortBias =  0.000000
 	}
 }
