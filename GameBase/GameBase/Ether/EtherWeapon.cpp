@@ -124,7 +124,7 @@ void EtherProjectileComponent::Update_Internal( const float DeltaTime ) {
 		if ( pHitActorComponent == nullptr ) {
 			EtherDestructibleComponent *const pDestructible = (EtherDestructibleComponent*)pHitOwner->GetComponentByType( EtherDestructibleComponent::GetType() );
 			if ( pDestructible != nullptr ) {
-				pDestructible->Explode( pHitOwner->GetPosition(), 100000.0f );
+				pDestructible->Explode( collisionInfo.m_HitLocation, 100000.0f );
 			}
 		}
 	}

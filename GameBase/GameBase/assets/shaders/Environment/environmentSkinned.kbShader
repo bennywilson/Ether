@@ -67,7 +67,7 @@ pixelInput vertexShader( vertexInput input ) {
 	output.uv = input.uv;
 	output.color = 0;//input.color;
 	output.position2 = output.position.zw;
-	output.normal.xyz = mul( ( input.normal.xyz * 2.0f ) - 1.0f, (float3x3)modelMatrix );
+	output.normal.xyz = normalize( mul( ( input.normal.xyz * 2.0f ) - 1.0f, (float3x3)modelMatrix ) );
 
 	return output;
 }

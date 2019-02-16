@@ -10,7 +10,7 @@
 
 KB_DEFINE_COMPONENT(EtherAnimComponent)
 KB_DEFINE_COMPONENT(EtherSkelModelComponent)
-
+ 
 #define DEBUG_ANIMS 0
 
 /**
@@ -415,29 +415,48 @@ const kbString * EtherSkelModelComponent::GetCurAnimationName() const {
  *	EtherDestructibleComponent::Constructor
  */
 void EtherDestructibleComponent::Constructor() {
-	m_Dummy = 0;
+	m_MaxLifeTime = 4.0f;
 	m_pSkelModel = nullptr;
 	m_bIsSimulating = false;
+	m_SimStartTime = 0.0f;
 }
 
 /**
  *	EtherDestructibleComponent::Explode
  */
+kbVec3 hitLoc;
 void EtherDestructibleComponent::Explode( const kbVec3 & explosionPosition, const float explosionRadius ) {
+	if ( m_pSkelModel == nullptr ) {
+		m_pSkelModel = (EtherSkelModelComponent *) GetOwner()->GetComponentByType( EtherSkelModelComponent::GetType() );
+	}
+
 	kbErrorCheck( m_pSkelModel != nullptr, "EtherDestructibleComponent::Explode() - Missing skeletal model" );
 
+	if ( m_bIsSimulating && g_GlobalTimer.TimeElapsedSeconds() - m_SimStartTime < 2.0f ) {
+		return;
+	}
+
+	hitLoc = explosionPosition;
+
+	kbMat4 localMat;
+	GetOwner()->CalculateWorldMatrix( localMat );
+	localMat.InvertFast();
+
+	kbVec3 localExplositionPos = explosionPosition * localMat;
 	const kbModel *const pModel = m_pSkelModel->GetModel();
 	m_BonesList.resize( pModel->NumBones() );
 	for ( int i = 0; i < pModel->NumBones(); i++ ) {
 		m_BonesList[i].m_Position = pModel->GetRefBoneMatrix(i).GetOrigin();
-		m_BonesList[i].m_Velocity = m_BonesList[i].m_Position.Normalized() * 5.0f;
+		m_BonesList[i].m_Velocity = ( m_BonesList[i].m_Position - localExplositionPos ).Normalized() * ( kbfrand() * 5.0f + 10.0f );
 		m_BonesList[i].m_Acceleration = kbVec3::zero;
 		m_BonesList[i].m_RotationAxis = kbVec3( kbfrand(), kbfrand(), kbfrand() );
-		m_BonesList[i].m_RotationSpeed = 1.0f;
+		m_BonesList[i].m_RotationSpeed = kbfrand() * 5.0f + 5.0f;
 		m_BonesList[i].m_CurRotationAngle = 0.0f;
 	}
 
+	Enable( true );
 	m_bIsSimulating = true;
+	m_SimStartTime = g_GlobalTimer.TimeElapsedSeconds();
 }
 
 /**
@@ -461,12 +480,33 @@ void EtherDestructibleComponent::SetEnable_Internal( const bool bEnable ) {
 /**
  *	EtherDestructibleComponent::Update_Internal
  */
+static float grav = 22.0f;
+
 void EtherDestructibleComponent::Update_Internal( const float deltaTime ) {
 
-	for ( int i = 0; i < m_BonesList.size(); i++ ) {
-		m_BonesList[i].m_Position += m_BonesList[i].m_Velocity * deltaTime;
-		m_BonesList[i].m_CurRotationAngle += m_BonesList[i].m_RotationSpeed * deltaTime;
-	//	m_BonesList[i].m_Orientation = m_BonesList[i].m_Orientation * m_BonesList[i].m_Rotation;
-	////	m_BonesList[i].m_Orientation.Normalize();
+	if ( GetAsyncKeyState( 'G' ) ) {
+		m_bIsSimulating = false;
+	}
+
+	if ( m_bIsSimulating ) {
+				g_pRenderer->DrawBox( kbBounds( hitLoc - kbVec3::one, hitLoc + kbVec3::one ), kbColor::red );
+		const float t = g_GlobalTimer.TimeElapsedSeconds() - m_SimStartTime;
+
+		if ( t > m_MaxLifeTime ) {
+			Enable( false );
+			m_bIsSimulating = false;
+		} else {
+			const float tSqr = t * t;
+
+			const kbModel *const pModel = m_pSkelModel->GetModel();
+
+			for ( int i = 0; i < m_BonesList.size(); i++ ) {
+				m_BonesList[i].m_Position.x += m_BonesList[i].m_Velocity.x * deltaTime;
+				m_BonesList[i].m_Position.z += m_BonesList[i].m_Velocity.z * deltaTime;
+			
+				m_BonesList[i].m_Position.y = pModel->GetRefBoneMatrix(i).GetOrigin().y + ( m_BonesList[i].m_Velocity.y * t - ( 0.5f * grav * tSqr ) );
+				m_BonesList[i].m_CurRotationAngle += m_BonesList[i].m_RotationSpeed * deltaTime;
+			}
+		}
 	}
 }

@@ -41,7 +41,7 @@ GenerateClass(
 
 GenerateClass(
 	EtherDestructibleComponent,
-	AddField( "m_Dummy", KBTYPEINFO_INT, EtherDestructibleComponent, m_Dummy, false, "" )
+	AddField( "MaxLifeTime", KBTYPEINFO_FLOAT, EtherDestructibleComponent, m_MaxLifeTime, false, "" )
 )
 
 GenerateClass(

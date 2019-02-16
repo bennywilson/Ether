@@ -126,11 +126,12 @@ private:
 	void									SetEnable_Internal( const bool bEnable ) override;
 	void									Update_Internal( const float deltaTime ) override;
 
-	int										m_Dummy;
+	float									m_MaxLifeTime;
 
 	std::vector<brokenBone_t>				m_BonesList;
 
 	const EtherSkelModelComponent *			m_pSkelModel;
+	float									m_SimStartTime;
 	bool									m_bIsSimulating;
 };
 #endif
