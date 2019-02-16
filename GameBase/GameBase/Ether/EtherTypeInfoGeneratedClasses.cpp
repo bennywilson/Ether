@@ -31,6 +31,10 @@ std::vector<class kbTypeInfoClass*> EtherAnimComponent::EtherAnimComponent_TypeI
 EtherSkelModelComponent_TypeInfo EtherSkelModelComponent::typeInfo;
 std::vector<class kbTypeInfoClass*> EtherSkelModelComponent::EtherSkelModelComponent_TypeInfoVar;
 
+// EtherDestructibleComponent
+EtherDestructibleComponent_TypeInfo EtherDestructibleComponent::typeInfo;
+std::vector<class kbTypeInfoClass*> EtherDestructibleComponent::EtherDestructibleComponent_TypeInfoVar;
+
 // EtherActorComponent
 EtherActorComponent_TypeInfo EtherActorComponent::typeInfo;
 std::vector<class kbTypeInfoClass*> EtherActorComponent::EtherActorComponent_TypeInfoVar;

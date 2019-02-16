@@ -190,35 +190,19 @@ void EtherSkelModelComponent::Update_Internal( const float DeltaTime ) {
 			}
 		}
 
-		if ( m_pModel->IsDestructible() ) {
-			static float scale = 1.0f;
-						static float angle = 0.0f;
-			if ( GetAsyncKeyState('G'))	{
-				scale += 0.01f;
-				angle += 0.01f;
-			} else if ( GetAsyncKeyState('H')) {
-				angle = 0;
-				scale = 1;
-			}
+		EtherDestructibleComponent *const pDestructible = (EtherDestructibleComponent*)GetOwner()->GetComponentByType( EtherDestructibleComponent::GetType() );
+		if ( pDestructible != nullptr && pDestructible->IsSimulating() ) {
 
-			
-			kbMat4 mat = kbMat4::identity;
-			mat[0][0] = cos(angle);
-			mat[2][0] = -sin(angle);
-			mat[0][2] = sin(angle);
-			mat[2][2] = cos(angle);
-	
-			for ( int i = 0; i < m_pModel->NumBones(); i++ ) {
-				kbBoneMatrix_t boneMat = m_pModel->GetInvRefBoneMatrix(i);
-								
-				mat[3] = -boneMat.GetOrigin() * scale;
-				kbBoneMatrix_t refPose = m_pModel->GetRefBoneMatrix(i);
-				boneMat *= mat;
+			const std::vector<EtherDestructibleComponent::brokenBone_t> & brokenBones = pDestructible->GetBonesList();
+			const kbModel *const pModel = this->GetModel();
+			for ( int i = 0; i < brokenBones.size(); i++ ) {
+				const EtherDestructibleComponent::brokenBone_t destructibleBone = brokenBones[i];
 
-				m_BindToLocalSpaceMatrices[i] = boneMat;
+				m_BindToLocalSpaceMatrices[i].SetIdentity();
+				m_BindToLocalSpaceMatrices[i].SetAxis( 3, destructibleBone.m_Position - pModel->GetRefBoneMatrix(i).GetOrigin() );
 			}
-//			m_bIsDestructible
 		}
+
 
 		if ( m_CurrentAnimation != -1 ) {
 #if DEBUG_ANIMS
@@ -410,4 +394,59 @@ const kbString * EtherSkelModelComponent::GetCurAnimationName() const {
 	}
 
 	return nullptr;
+}
+
+/**
+ *	EtherDestructibleComponent::Constructor
+ */
+void EtherDestructibleComponent::Constructor() {
+	m_Dummy = 0;
+	m_pSkelModel = nullptr;
+	m_bIsSimulating = false;
+}
+
+/**
+ *	EtherDestructibleComponent::Explode
+ */
+void EtherDestructibleComponent::Explode( const kbVec3 & explosionPosition, const float explosionRadius ) {
+	kbErrorCheck( m_pSkelModel != nullptr, "EtherDestructibleComponent::Explode() - Missing skeletal model" );
+
+	const kbModel *const pModel = m_pSkelModel->GetModel();
+	m_BonesList.resize( pModel->NumBones() );
+	for ( int i = 0; i < pModel->NumBones(); i++ ) {
+		m_BonesList[i].m_Position = pModel->GetRefBoneMatrix(i).GetOrigin();
+		m_BonesList[i].m_Orientation = kbQuat( 0.0f, 0.0f, 0.0f, 1.0f );
+		m_BonesList[i].m_Velocity = m_BonesList[i].m_Position.Normalized();
+		m_BonesList[i].m_Acceleration = kbVec3::zero;
+	}
+
+	m_bIsSimulating = true;
+}
+
+/**
+ *	EtherDestructibleComponent::SetEnable_Internal
+ */
+void EtherDestructibleComponent::SetEnable_Internal( const bool bEnable ) {
+	if ( bEnable == false ) {
+		m_pSkelModel = nullptr;
+	} else {
+		m_pSkelModel = (EtherSkelModelComponent *) GetOwner()->GetComponentByType( EtherSkelModelComponent::GetType() );
+		if ( m_pSkelModel == nullptr || m_pSkelModel->GetModel() == nullptr ) {
+			kbWarning( "EtherDestructibleComponent::SetEnable_Internal() - No skeletal model found on entity %", GetOwner()->GetName().c_str() );
+			this->Enable( false );
+			return;
+		}
+
+		m_BonesList.resize( m_pSkelModel->GetModel()->NumBones() );
+	}
+}
+
+/**
+ *	EtherDestructibleComponent::Update_Internal
+ */
+void EtherDestructibleComponent::Update_Internal( const float deltaTime ) {
+
+	for ( int i = 0; i < m_BonesList.size(); i++ ) {
+		m_BonesList[i].m_Position += m_BonesList[i].m_Velocity * deltaTime;
+	}
 }

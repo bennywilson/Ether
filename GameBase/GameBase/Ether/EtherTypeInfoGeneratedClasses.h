@@ -40,6 +40,11 @@ GenerateClass(
 )
 
 GenerateClass(
+	EtherDestructibleComponent,
+	AddField( "m_Dummy", KBTYPEINFO_INT, EtherDestructibleComponent, m_Dummy, false, "" )
+)
+
+GenerateClass(
 	EtherActorComponent,
 	AddField( "m_Dummy", KBTYPEINFO_INT, EtherActorComponent, m_Dummy, false, "" )
 )

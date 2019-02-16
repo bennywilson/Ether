@@ -111,12 +111,22 @@ void EtherProjectileComponent::Update_Internal( const float DeltaTime ) {
 
 	// Check if this projectile hit another actor
 	kbActorComponent * pHitActorComponent = nullptr;
+	kbGameEntity * pHitOwner = nullptr;
 	kbVec3 worldHitCollisionPt;
 	const kbCollisionInfo_t collisionInfo = g_CollisionManager.PerformLineCheck( oldPosition, newPosition );
 	if ( collisionInfo.m_bHit && collisionInfo.m_pHitComponent != nullptr ) {
-		pHitActorComponent = collisionInfo.m_pHitComponent->GetOwner()->GetActorComponent();
+		pHitOwner = collisionInfo.m_pHitComponent->GetOwner();
+		pHitActorComponent = pHitOwner->GetActorComponent();
 		hitT = collisionInfo.m_T;
 		worldHitCollisionPt = collisionInfo.m_HitLocation;
+
+
+		if ( pHitActorComponent == nullptr ) {
+			EtherDestructibleComponent *const pDestructible = (EtherDestructibleComponent*)pHitOwner->GetComponentByType( EtherDestructibleComponent::GetType() );
+			if ( pDestructible != nullptr ) {
+				pDestructible->Explode( pHitOwner->GetPosition(), 100000.0f );
+			}
+		}
 	}
 
 	// Check if this projectile hit the world
