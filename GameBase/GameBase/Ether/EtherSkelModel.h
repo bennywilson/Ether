@@ -112,9 +112,12 @@ public:
 
 	struct brokenBone_t {
 		kbVec3								m_Position;
-		kbQuat								m_Orientation;
 		kbVec3								m_Acceleration;
 		kbVec3								m_Velocity;
+
+		kbVec3								m_RotationAxis;
+		float								m_RotationSpeed;
+		float								m_CurRotationAngle;
 	};
 	const std::vector<brokenBone_t> &		GetBonesList() const { return m_BonesList; }
 

@@ -196,10 +196,25 @@ void EtherSkelModelComponent::Update_Internal( const float DeltaTime ) {
 			const std::vector<EtherDestructibleComponent::brokenBone_t> & brokenBones = pDestructible->GetBonesList();
 			const kbModel *const pModel = this->GetModel();
 			for ( int i = 0; i < brokenBones.size(); i++ ) {
-				const EtherDestructibleComponent::brokenBone_t destructibleBone = brokenBones[i];
+				const EtherDestructibleComponent::brokenBone_t & destructibleBone = brokenBones[i];
 
 				m_BindToLocalSpaceMatrices[i].SetIdentity();
-				m_BindToLocalSpaceMatrices[i].SetAxis( 3, destructibleBone.m_Position - pModel->GetRefBoneMatrix(i).GetOrigin() );
+			/*	kbMat4 rotation = brokenBones[i].m_Orientation.ToMat4();
+				m_BindToLocalSpaceMatrices[i].SetAxis( 0, rotation[0].ToVec3() );
+				m_BindToLocalSpaceMatrices[i].SetAxis( 1, rotation[1].ToVec3() );
+				m_BindToLocalSpaceMatrices[i].SetAxis( 2, rotation[2].ToVec3() );*/
+				kbQuat rot;
+				rot.FromAxisAngle( destructibleBone.m_RotationAxis, destructibleBone.m_CurRotationAngle );
+				kbMat4 matRot = rot.ToMat4();
+				m_BindToLocalSpaceMatrices[i].SetAxis( 0, matRot[0].ToVec3() );
+				m_BindToLocalSpaceMatrices[i].SetAxis( 1, matRot[1].ToVec3() );
+				m_BindToLocalSpaceMatrices[i].SetAxis( 2, matRot[2].ToVec3() );
+
+				m_BindToLocalSpaceMatrices[i].SetAxis( 3, destructibleBone.m_Position );
+
+				m_BindToLocalSpaceMatrices[i] = pModel->GetInvRefBoneMatrix(i) * m_BindToLocalSpaceMatrices[i];
+				//kbVec3 worldPos = destructibleBone.m_Position * GetOwner()->GetOrientation().ToMat4() + GetOwner()->GetPosition();
+				//g_pRenderer->DrawBox( kbBounds( worldPos - kbVec3::one * 0.1f, worldPos + kbVec3::one * 0.1f ), kbColor::red );
 			}
 		}
 
@@ -415,9 +430,11 @@ void EtherDestructibleComponent::Explode( const kbVec3 & explosionPosition, cons
 	m_BonesList.resize( pModel->NumBones() );
 	for ( int i = 0; i < pModel->NumBones(); i++ ) {
 		m_BonesList[i].m_Position = pModel->GetRefBoneMatrix(i).GetOrigin();
-		m_BonesList[i].m_Orientation = kbQuat( 0.0f, 0.0f, 0.0f, 1.0f );
-		m_BonesList[i].m_Velocity = m_BonesList[i].m_Position.Normalized();
+		m_BonesList[i].m_Velocity = m_BonesList[i].m_Position.Normalized() * 5.0f;
 		m_BonesList[i].m_Acceleration = kbVec3::zero;
+		m_BonesList[i].m_RotationAxis = kbVec3( kbfrand(), kbfrand(), kbfrand() );
+		m_BonesList[i].m_RotationSpeed = 1.0f;
+		m_BonesList[i].m_CurRotationAngle = 0.0f;
 	}
 
 	m_bIsSimulating = true;
@@ -448,5 +465,8 @@ void EtherDestructibleComponent::Update_Internal( const float deltaTime ) {
 
 	for ( int i = 0; i < m_BonesList.size(); i++ ) {
 		m_BonesList[i].m_Position += m_BonesList[i].m_Velocity * deltaTime;
+		m_BonesList[i].m_CurRotationAngle += m_BonesList[i].m_RotationSpeed * deltaTime;
+	//	m_BonesList[i].m_Orientation = m_BonesList[i].m_Orientation * m_BonesList[i].m_Rotation;
+	////	m_BonesList[i].m_Orientation.Normalize();
 	}
 }
