@@ -442,7 +442,7 @@ kbGameEntity 2914882686 1195769252 1420378815 2077859665 {
 		MaxSpawnRate =  2.000000
 		MaxStartRotationRate =  5.000000
 		MaxStartSize = 0.100000 0.100000 0.100000
-		MaxStartVelocity = 5.000000 5.000000 -10.000000
+		MaxStartVelocity = 23.000000 23.000000 -10.000000
 		MinBurstCount = 50
 		MinDuration =  0.07
 		MinEndRotationRate =  0.000000
@@ -451,9 +451,9 @@ kbGameEntity 2914882686 1195769252 1420378815 2077859665 {
 		MinSpawnRate =  1.000000
 		MinStartRotationRate =  0.200000
 		MinStartSize = 0.000000 0.000000 0.000000
-		MinStartVelocity = -5.000000 -5.000000 -5.000000
+		MinStartVelocity = -18.000000 -18.000000 -5.000000
 		ParticleBillboardType = FaceCamera
-		StartColor = 0.1 0.1 0.1 1.000000
+		StartColor = 0.1 0.1 0.1 1g
 		TotalDuration =  0.1
 		TranslucencySortBias =  0.000000
 	}
