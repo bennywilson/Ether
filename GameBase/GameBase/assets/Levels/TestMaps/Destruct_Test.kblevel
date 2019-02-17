@@ -953,7 +953,7 @@ kbGameEntity 0 0 0 0 {
 				DiffuseMap = .\assets\terrain\foliage\grass_1.dds
 				FakeAODarkness =  0.250000
 				FakeAOPower =  2.000000
-				GrassCellsPerTerrainSide = 3
+				GrassCellsPerTerrainSide = 30
 				GrassMap = .\assets\terrain\foliage\grass_1.dds
 				MaxBladeJitterOffset =  0.000000
 				MaxPatchJitterOffset =  3.000000

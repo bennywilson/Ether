@@ -112,7 +112,7 @@ public:
 
 	bool									IsSimulating() const { return m_bIsSimulating; }
 
-	struct brokenBone_t {
+	struct destructibleBone_t {
 		kbVec3								m_Position;
 		kbVec3								m_Acceleration;
 		kbVec3								m_Velocity;
@@ -121,7 +121,7 @@ public:
 		float								m_RotationSpeed;
 		float								m_CurRotationAngle;
 	};
-	const std::vector<brokenBone_t> &		GetBonesList() const { return m_BonesList; }
+	const std::vector<destructibleBone_t> &	GetBonesList() const { return m_BonesList; }
 
 private:
 
@@ -140,7 +140,7 @@ private:
 	bool									m_bDebugResetSim;
 
 	// Run time
-	std::vector<brokenBone_t>				m_BonesList;
+	std::vector<destructibleBone_t>				m_BonesList;
 
 	float									m_Health;
 	const EtherSkelModelComponent *			m_pSkelModel;

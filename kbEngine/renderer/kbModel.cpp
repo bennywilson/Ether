@@ -83,8 +83,7 @@ kbModel::kbModel() :
     m_bIsPointCloud( false ),
 	m_bVBIsMapped( false ),
 	m_bIBIsMapped( false ),
-	m_bCPUAccessOnly( false ),
-	m_bIsDestructible( false ) {
+	m_bCPUAccessOnly( false ) {
 }
 
 /**
@@ -690,7 +689,6 @@ bool kbModel::LoadFBX() {
 					int * pCtrlPtList = pCurCluster->GetControlPointIndices();
 					for (unsigned int i = 0; i < numOfIndices; ++i)
 					{
-						m_bIsDestructible = true;
 					//	kbLog( "	Adding vertex %d", pCtrlPtList[i]);
 						vertToBone[pCtrlPtList[i]] = iCluster;
 					}
@@ -808,7 +806,7 @@ bool kbModel::LoadFBX() {
 			}
 		}
 	}
-
+/*
 	for ( int i = 0; i < pRootNode->GetChildCount(); i++ ) {
 		FbxNode * pCurNode = pRootNode->GetChild(i);
 		kbLog( "Processing parent node %s", pCurNode->GetName() );
@@ -828,7 +826,7 @@ bool kbModel::LoadFBX() {
 				kbLog( "		Processing child bones %s", pBoneNode->GetName() );
 			}
 		}
-	}
+	}*/
 
 	m_VertexBuffer.CreateVertexBuffer( vertexList );
 	m_IndexBuffer.CreateIndexBuffer( indexList );

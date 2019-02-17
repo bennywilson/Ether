@@ -12,8 +12,13 @@
 
 KB_DEFINE_COMPONENT(EtherAnimComponent)
 KB_DEFINE_COMPONENT(EtherSkelModelComponent)
- 
+
 #define DEBUG_ANIMS 0
+
+// TODO: HACK!
+static XMMATRIX & XMMATRIXFromkbMat4( kbMat4 & matrix ) { return (*(XMMATRIX*) &matrix); }
+static kbMat4 & kbMat4FromXMMATRIX( FXMMATRIX & matrix ) { return (*(kbMat4*) & matrix); }
+
 
 /**
  *	EtherAnimEvent::Constructor()
@@ -195,16 +200,11 @@ void EtherSkelModelComponent::Update_Internal( const float DeltaTime ) {
 		EtherDestructibleComponent *const pDestructible = (EtherDestructibleComponent*)GetOwner()->GetComponentByType( EtherDestructibleComponent::GetType() );
 		if ( pDestructible != nullptr && pDestructible->IsSimulating() ) {
 
-			const std::vector<EtherDestructibleComponent::brokenBone_t> & brokenBones = pDestructible->GetBonesList();
+			const std::vector<EtherDestructibleComponent::destructibleBone_t> & brokenBones = pDestructible->GetBonesList();
 			const kbModel *const pModel = this->GetModel();
 			for ( int i = 0; i < brokenBones.size(); i++ ) {
-				const EtherDestructibleComponent::brokenBone_t & destructibleBone = brokenBones[i];
+				const EtherDestructibleComponent::destructibleBone_t & destructibleBone = brokenBones[i];
 
-				m_BindToLocalSpaceMatrices[i].SetIdentity();
-			/*	kbMat4 rotation = brokenBones[i].m_Orientation.ToMat4();
-				m_BindToLocalSpaceMatrices[i].SetAxis( 0, rotation[0].ToVec3() );
-				m_BindToLocalSpaceMatrices[i].SetAxis( 1, rotation[1].ToVec3() );
-				m_BindToLocalSpaceMatrices[i].SetAxis( 2, rotation[2].ToVec3() );*/
 				kbQuat rot;
 				rot.FromAxisAngle( destructibleBone.m_RotationAxis, destructibleBone.m_CurRotationAngle );
 				kbMat4 matRot = rot.ToMat4();
@@ -215,6 +215,7 @@ void EtherSkelModelComponent::Update_Internal( const float DeltaTime ) {
 				m_BindToLocalSpaceMatrices[i].SetAxis( 3, destructibleBone.m_Position );
 
 				m_BindToLocalSpaceMatrices[i] = pModel->GetInvRefBoneMatrix(i) * m_BindToLocalSpaceMatrices[i];
+
 				//kbVec3 worldPos = destructibleBone.m_Position * GetOwner()->GetOrientation().ToMat4() + GetOwner()->GetPosition();
 				//g_pRenderer->DrawBox( kbBounds( worldPos - kbVec3::one * 0.1f, worldPos + kbVec3::one * 0.1f ), kbColor::red );
 			}
@@ -433,7 +434,7 @@ void EtherDestructibleComponent::Constructor() {
 }
 
 /**
- *	EtherDestructibleComponent::Constructor
+ *	EtherDestructibleComponent::EditorChange
  */
 void EtherDestructibleComponent::EditorChange( const std::string & propertyName ) {
 	Super::EditorChange( propertyName );
@@ -443,24 +444,17 @@ void EtherDestructibleComponent::EditorChange( const std::string & propertyName 
 			m_bIsSimulating = false;
 			m_Health = m_StartingHealth;
 		} else {
-			const float actualHealth = m_Health;	// Put health back
 			TakeDamage( 9999999.0f, GetOwner()->GetPosition() + kbVec3( kbfrand(), kbfrand(), kbfrand() ) * 5.0f, 10000000.0f );
-			m_Health = actualHealth;
 		}
 	}
 }
 
 /**
- *	EtherDestructibleComponent::Explode
+ *	EtherDestructibleComponent::TakeDamage
  */
-
-// TODO: HACK!
-static XMMATRIX & XMMATRIXFromkbMat4( kbMat4 & matrix ) { return (*(XMMATRIX*) &matrix); }
-static kbMat4 & kbMat4FromXMMATRIX( FXMMATRIX & matrix ) { return (*(kbMat4*) & matrix); }
-
 void EtherDestructibleComponent::TakeDamage( const float damageAmt, const kbVec3 & explosionPosition, const float explosionRadius ) {
 	m_Health -= damageAmt;
-	if ( m_Health > 0.0f ) {
+	if ( m_Health > 0.0f || m_bIsSimulating ) {
 		return;
 	}
 
@@ -468,20 +462,21 @@ void EtherDestructibleComponent::TakeDamage( const float damageAmt, const kbVec3
 		m_pSkelModel = (EtherSkelModelComponent *) GetOwner()->GetComponentByType( EtherSkelModelComponent::GetType() );
 	}
 
-	kbErrorCheck( m_pSkelModel != nullptr, "EtherDestructibleComponent::Explode() - Missing skeletal model" );
+	kbErrorCheck( m_pSkelModel != nullptr, "EtherDestructibleComponent::TakeDamage() - Missing skeletal model" );
 
-	if ( m_bIsSimulating && g_GlobalTimer.TimeElapsedSeconds() - m_SimStartTime < 2.0f ) {
-		return;
+	kbCollisionComponent *const pCollision = (kbCollisionComponent*)GetOwner()->GetComponentByType( kbCollisionComponent::GetType() );
+	if ( pCollision != nullptr ) {
+		pCollision->Enable( false );
 	}
 
 	m_LastHitLocation = explosionPosition;
 
 	kbMat4 localMat;
 	GetOwner()->CalculateWorldMatrix( localMat );
-	XMMATRIX inverseMat = XMMatrixInverse( nullptr, XMMATRIXFromkbMat4( localMat ) );
+	const XMMATRIX inverseMat = XMMatrixInverse( nullptr, XMMATRIXFromkbMat4( localMat ) );
 	localMat = kbMat4FromXMMATRIX( inverseMat );
 
-	kbVec3 localExplositionPos = localMat.TransformPoint( explosionPosition );
+	const kbVec3 localExplositionPos = localMat.TransformPoint( explosionPosition );
 	const kbModel *const pModel = m_pSkelModel->GetModel();
 
 	m_BonesList.resize( pModel->NumBones() );
@@ -494,7 +489,6 @@ void EtherDestructibleComponent::TakeDamage( const float damageAmt, const kbVec3
 		m_BonesList[i].m_CurRotationAngle = 0.0f;
 	}
 
-	Enable( true );
 	m_bIsSimulating = true;
 	m_SimStartTime = g_GlobalTimer.TimeElapsedSeconds();
 }
@@ -529,13 +523,18 @@ void EtherDestructibleComponent::Update_Internal( const float deltaTime ) {
 	if ( GetAsyncKeyState( 'G' ) ) {
 		m_bIsSimulating = false;
 		m_Health = m_StartingHealth;
+
+		kbCollisionComponent *const pCollision = (kbCollisionComponent*)GetOwner()->GetComponentByType( kbCollisionComponent::GetType() );
+		if ( pCollision != nullptr ) {
+			pCollision->Enable( true );
+		}
 	}
 
 	if ( m_bIsSimulating ) {
 		const float t = g_GlobalTimer.TimeElapsedSeconds() - m_SimStartTime;
 
 		if ( t > m_MaxLifeTime ) {
-			Enable( false );
+			GetOwner()->DisableAllComponents();
 			m_bIsSimulating = false;
 		} else {
 			const float tSqr = t * t;

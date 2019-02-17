@@ -85,7 +85,7 @@ GenerateClass(
 	AddField( "TraceWidth", KBTYPEINFO_FLOAT, EtherProjectileComponent, m_TraceWidth, false, "" )
 	AddField( "ImpactCharacterSound", KBTYPEINFO_STRUCT, EtherProjectileComponent, m_ImpactCharacterSoundData, true, "kbSoundData" )
 	AddField( "ImpactEnvironmentSound", KBTYPEINFO_STRUCT, EtherProjectileComponent, m_ImpactEnvironmentSoundData, true, "kbSoundData" )
-	AddField( "ImpactWood", KBTYPEINFO_STRUCT, EtherProjectileComponent, m_ImpactWoodSoundData, true, "kbSoundData" )
+	AddField( "ImpactWoodSound", KBTYPEINFO_STRUCT, EtherProjectileComponent, m_ImpactWoodSoundData, true, "kbSoundData" )
 	AddField( "LaunchSound", KBTYPEINFO_STRUCT, EtherProjectileComponent, m_LaunchSoundData, true, "kbSoundData" )
 	AddField( "RenderBillboard", KBTYPEINFO_BOOL, EtherProjectileComponent, m_bUseBillboard, false, "" )
 	AddField( "DetonationTime", KBTYPEINFO_FLOAT, EtherProjectileComponent, m_DetonationTimer, false, "" )

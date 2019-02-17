@@ -132,7 +132,7 @@ void kbResourceManager::UpdateHotReloads() {
 	static byte * buffers[2] = { new byte[2048], new byte[2048] };
 	DWORD numBytes = 0;
 
-	for ( int i = 0; i < 1; i++ ) {		// TEMP
+	for ( int i = 0; i < 2; i++ ) {
 		if ( states[i] == 0 ) {
 			BOOL result = ReadDirectoryChangesW( handles[i],
 												 buffers[i],
