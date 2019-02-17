@@ -55,7 +55,6 @@ protected:
 private:
 
 	// Editable
-	kbTexture *													m_pParticleTexture;
 	std::vector<kbMaterialComponent>							m_MaterialList;
 	kbShader *													m_pParticleShader;
 	float														m_TotalDuration;

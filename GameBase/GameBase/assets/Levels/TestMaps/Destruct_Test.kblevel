@@ -435,7 +435,7 @@ kbGameEntity 0 0 0 0 {
 		LifeTime =  -1.000000
 		Name = "Entity_45"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
-		Position = 147.468468 38.580292 48.668808
+		Position = 147.468475 38.580292 48.668808
 		Scale = 10.000000 10.000000 10.000000
 	}
 	EtherSkelModelComponent { 
@@ -512,7 +512,7 @@ kbGameEntity 0 0 0 0 {
 		LifeTime =  -1.000000
 		Name = "Entity_45"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
-		Position = 177.468468 38.580292 48.668808
+		Position = 177.468475 38.580292 48.668808
 		Scale = 10.000000 10.000000 10.000000
 	}
 	EtherSkelModelComponent { 
@@ -589,7 +589,7 @@ kbGameEntity 0 0 0 0 {
 		LifeTime =  -1.000000
 		Name = "Entity_45"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
-		Position = 207.468468 38.580292 48.668808
+		Position = 207.468475 38.580292 48.668808
 		Scale = 10.000000 10.000000 10.000000
 	}
 	EtherSkelModelComponent { 
@@ -666,7 +666,7 @@ kbGameEntity 0 0 0 0 {
 		LifeTime =  -1.000000
 		Name = "Entity_45"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
-		Position = 237.468468 38.580292 48.668808
+		Position = 237.468475 38.580292 48.668808
 		Scale = 10.000000 10.000000 10.000000
 	}
 	EtherSkelModelComponent { 
@@ -743,7 +743,7 @@ kbGameEntity 0 0 0 0 {
 		LifeTime =  -1.000000
 		Name = "Entity_45"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
-		Position = 267.468468 38.580292 48.668808
+		Position = 267.468475 38.580292 48.668808
 		Scale = 10.000000 10.000000 10.000000
 	}
 	EtherSkelModelComponent { 
@@ -1070,7 +1070,6 @@ kbGameEntity 0 0 0 0 {
 		MinStartVelocity = -75.000000 -20.000000 -50.000000
 		ParticleBillboardType = FaceCamera
 		ParticleShader = .\assets\shaders\fx\particleatlas.kbshader
-		ParticleTexture = .\assets\fx\concreteparticles.dds
 		StartColor = 1.000000 1.000000 1.000000 1.000000
 		TotalDuration =  0.500000
 		TranslucencySortBias =  0.000000
@@ -1115,7 +1114,6 @@ kbGameEntity 0 0 0 0 {
 		MinStartVelocity = -3.500000 -3.500000 -7.500000
 		ParticleBillboardType = FaceCamera
 		ParticleShader = ..\..\kbengine\assets\shaders\basicparticle.kbshader
-		ParticleTexture = .\assets\fx\impactsmoke.dds
 		StartColor = 0.250000 0.250000 0.250000 0.250000
 		TotalDuration =  2.000000
 		TranslucencySortBias =  0.000000

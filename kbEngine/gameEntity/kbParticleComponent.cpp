@@ -50,7 +50,6 @@ void kbParticleComponent::Constructor() {
 	m_NumIndicesInCurrentBuffer = 0;
 	m_bIsSpawning = true;
 
-	m_pParticleTexture = (kbTexture*)g_ResourceManager.LoadResource( "../../kbEngine/assets/Textures/Editor/white.bmp", true );
 	m_pParticleShader = (kbShader*)g_ResourceManager.LoadResource( "../../kbEngine/assets/Shaders/basicParticle.kbShader", true );
 
 	m_bIsPooled = false;
@@ -261,12 +260,6 @@ void kbParticleComponent::Update_Internal( const float DeltaTime ) {
 void kbParticleComponent::EditorChange( const std::string & propertyName ) {
 	Super::EditorChange( propertyName );
 
-	if ( propertyName == "ParticleTexture" ) {
-		if ( m_pParticleTexture != nullptr && m_pParticleTexture->GetGPUTexture() == nullptr ) {
-			m_pParticleTexture = (kbTexture *)g_ResourceManager.GetResource( m_pParticleTexture->GetFullFileName() );
-		}
-	}
-
 	// Editor Hack!
 	if ( propertyName == "Materials" ) {
 		for ( int i = 0; i < this->m_MaterialList.size(); i++ ) {
@@ -346,8 +339,6 @@ void kbParticleComponent::RenderSync() {
 		m_ParticleBuffer[m_CurrentParticleBuffer].UnmapVertexBuffer( m_NumIndicesInCurrentBuffer );
 		m_ParticleBuffer[m_CurrentParticleBuffer].UnmapIndexBuffer();		// todo : don't need to map/remap index buffer
 	}
-
-	m_ParticleBuffer[m_CurrentParticleBuffer].SwapTexture( 0, m_pParticleTexture, 0 );
 
 	m_RenderObject.m_pModel = &m_ParticleBuffer[m_CurrentParticleBuffer];
 	g_pRenderer->AddParticle( m_RenderObject );

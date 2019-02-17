@@ -128,7 +128,7 @@ private:
 	// Hot reloading
 	HANDLE										m_hGameAssetDirectory;
 	HANDLE										m_hEngineAssetDirectory;
-	OVERLAPPED									m_Ovl;
+	OVERLAPPED									m_Ovl[2];
 
 
 	struct CallbackInfo {

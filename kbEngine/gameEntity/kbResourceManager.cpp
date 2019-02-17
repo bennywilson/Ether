@@ -140,8 +140,12 @@ void kbResourceManager::UpdateHotReloads() {
 												 TRUE,
 												 FILE_NOTIFY_CHANGE_LAST_WRITE | FILE_NOTIFY_CHANGE_FILE_NAME,
 												 &numBytes,
-												 &m_Ovl,
+												 &m_Ovl[i],
 												 nullptr );
+
+			if ( result == false ) {
+				continue;
+			}
 
 			states[i] = 1;
 		}
@@ -149,7 +153,7 @@ void kbResourceManager::UpdateHotReloads() {
 		FILE_NOTIFY_INFORMATION * pCurInfo = (FILE_NOTIFY_INFORMATION*)buffers[i];
 		byte * pByteCurInfo = buffers[i];
 
-		if ( GetOverlappedResult( handles[i], &m_Ovl, &numBytes, FALSE ) ) {
+		if ( GetOverlappedResult( handles[i], &m_Ovl[i], &numBytes, FALSE ) ) {
 			while ( pCurInfo->Action != 0 ) {
 				states[i] = 0;
 

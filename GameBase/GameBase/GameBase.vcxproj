@@ -107,6 +107,7 @@
     <None Include="assets\shaders\FX\basicFire.kbShader" />
     <None Include="assets\shaders\FX\basicSmoke.kbShader" />
     <None Include="assets\shaders\FX\emberParticle.kbShader" />
+    <None Include="assets\shaders\FX\Particle_BlendAdd.kbShader" />
     <None Include="assets\shaders\Lights\charEnviroCylinderLight.kbShader" />
     <None Include="assets\shaders\Lights\charEnviroPointLight.kbShader" />
     <None Include="assets\shaders\Lights\directionalLightToon.kbShader" />

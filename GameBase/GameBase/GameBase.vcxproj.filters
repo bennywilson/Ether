@@ -149,6 +149,9 @@
     <None Include="assets\shaders\Environment\environmentSkinned.kbShader">
       <Filter>Shaders\Environment</Filter>
     </None>
+    <None Include="assets\shaders\FX\Particle_BlendAdd.kbShader">
+      <Filter>Shaders\FX</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameBase.h">
