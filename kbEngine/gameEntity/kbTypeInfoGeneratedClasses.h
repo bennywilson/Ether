@@ -34,6 +34,13 @@ GenerateClass(
 )
 
 GenerateClass(
+	kbAnimEvent,
+	AddField( "EventName", KBTYPEINFO_KBSTRING, kbAnimEvent, m_EventName, false, "" )
+	AddField( "EventTime", KBTYPEINFO_FLOAT, kbAnimEvent, m_EventTime, false, "" )
+	AddField( "EventValue", KBTYPEINFO_FLOAT, kbAnimEvent, m_EventValue, false, "" )
+)
+
+GenerateClass(
 	kbShaderParamComponent,
 	AddField( "ParamName", KBTYPEINFO_KBSTRING, kbShaderParamComponent, m_ParamName, false, "" )
 	AddField( "Texture", KBTYPEINFO_TEXTURE, kbShaderParamComponent, m_pTexture, false, "" )
@@ -205,6 +212,7 @@ GenerateClass(
 	AddField( "MinEndVelocity", KBTYPEINFO_VECTOR, kbParticleComponent, m_MinParticleEndVelocity, false, "" )
 	AddField( "MaxEndVelocity", KBTYPEINFO_VECTOR, kbParticleComponent, m_MaxParticleEndVelocity, false, "" )
 	AddField( "MinEndVelocity", KBTYPEINFO_VECTOR, kbParticleComponent, m_MinParticleEndVelocity, false, "" )
+	AddField( "VelocityCurve", KBTYPEINFO_STRUCT, kbParticleComponent, m_VelocityCurve, true, "kbAnimEvent" )
 	AddField( "MaxEndVelocity", KBTYPEINFO_VECTOR, kbParticleComponent, m_MaxParticleEndVelocity, false, "" )
 	AddField( "LockVelocity", KBTYPEINFO_BOOL, kbParticleComponent, m_bLockVelocity, false, "" )
 

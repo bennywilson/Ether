@@ -21,10 +21,11 @@ static kbMat4 & kbMat4FromXMMATRIX( FXMMATRIX & matrix ) { return (*(kbMat4*) & 
 
 
 /**
- *	EtherAnimEvent::Constructor()
+ *	kbAnimEvent::Constructor()
  */
-void EtherAnimEvent::Constructor() {
+void kbAnimEvent::Constructor() {
 	m_EventTime = 0.0f;
+	m_EventValue = 0.0f;
 }
 
 /**

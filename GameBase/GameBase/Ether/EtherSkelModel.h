@@ -11,22 +11,6 @@
 
 
 /**
- *	EtherAnimEvent
- */
-class EtherAnimEvent : public kbGameComponent {
-	KB_DECLARE_COMPONENT( EtherAnimEvent, kbGameComponent );
-
-public:
-
-	const kbString							GetEventName() const { return m_EventName; }
-	float									GetEventTime() const { return m_EventTime; }
-
-private:
-	kbString								m_EventName;
-	float									m_EventTime;
-};
-
-/**
  *	EtherAnimComponent
  */
 class EtherAnimComponent : public kbGameComponent {
@@ -46,7 +30,7 @@ private:
 	kbAnimation *							m_pAnimation;
 	float									m_TimeScale;
 	bool									m_bIsLooping;
-	std::vector<EtherAnimEvent>				m_AnimEvents;
+	std::vector<kbAnimEvent>				m_AnimEvents;
 
 	float									m_CurrentAnimationTime;
 	kbString								m_DesiredNextAnimation;

@@ -206,4 +206,21 @@ class kbPlayerStartComponent : public kbGameComponent {
 	int m_DummyVar;
 };
 
+/**
+ *	kbAnimEvent
+ */
+class kbAnimEvent : public kbGameComponent {
+	KB_DECLARE_COMPONENT( kbAnimEvent, kbGameComponent );
+
+public:
+
+	const kbString							GetEventName() const { return m_EventName; }
+	float									GetEventTime() const { return m_EventTime; }
+	float									GetEventValue() const { return m_EventValue; }
+
+private:
+	kbString								m_EventName;
+	float									m_EventValue;
+	float									m_EventTime;
+};
 #endif

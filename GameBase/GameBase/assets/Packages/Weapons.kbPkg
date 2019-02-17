@@ -446,19 +446,19 @@ kbGameEntity 292847838 1140569109 1236968083 2365837966 {
 				LifeTime =  -1.000000
 				Animation = .\assets\models\items\el_rifle_fp_shoot.kbanim.ms3d
 				AnimationEvent = 3
-					EtherAnimEvent { 
+					kbAnimEvent { 
 						Enabled = 0
 						LifeTime =  -1.000000
 						EventName = "Shoot"
 						EventTime =  0.200000
 					}
-					EtherAnimEvent { 
+					kbAnimEvent { 
 						Enabled = 0
 						LifeTime =  -1.000000
 						EventName = "Shoot"
 						EventTime =  0.400000
 					}
-					EtherAnimEvent { 
+					kbAnimEvent { 
 						Enabled = 0
 						LifeTime =  -1.000000
 						EventName = "Shoot"

@@ -64,6 +64,7 @@ private:
 	float														m_MaxParticleSpawnRate;				// Particles per second
 	kbVec3														m_MinParticleStartVelocity;
 	kbVec3														m_MaxParticleStartVelocity;
+	std::vector<kbAnimEvent>									m_VelocityCurve;
 	kbVec3														m_MinParticleEndVelocity;
 	kbVec3														m_MaxParticleEndVelocity;
 	float														m_MinStartRotationRate;
