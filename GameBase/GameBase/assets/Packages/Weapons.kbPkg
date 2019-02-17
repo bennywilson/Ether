@@ -108,10 +108,9 @@ kbPrefab 1 {
 			DummyTemp = 0
 			DamageAmount =  0.000000
 			DamageRadius =  0.000000
+			DefaultImpactFX = 4227010865 2632918935 1228561351 3287441000
 			DetonationTime =  -1.000000
 			ExplodeOnImpact = 1
-			DefaultImpactFX = 4227010865 2632918935 1228561351 3287441000
-			WoodImpactFX = 2914882686 1195769252 1420378815 2077859665
 			ExplosionSound = 0
 			ImpactCharacterSound = 1
 				kbSoundData { 
@@ -136,6 +135,7 @@ kbPrefab 1 {
 					Volume =  0.400000
 					WaveFile = .\assets\sounds\woodimpact3.wav
 				}
+			ImpactWoodSound = 0
 			LaunchSound = 1
 				kbSoundData { 
 					Enabled = 0
@@ -149,6 +149,7 @@ kbPrefab 1 {
 			TraceWidth =  10.000000
 			TracerLength =  64.000000
 			Velocity =  3000.000000
+			WoodImpactFX = 2914882686 1195769252 1420378815 2077859665
 		}
 	}
 }
@@ -179,9 +180,9 @@ kbGameEntity 2459381576 1233845788 1100758177 1698127025 {
 		DummyTemp = 0
 		DamageAmount =  0.000000
 		DamageRadius =  0.000000
+		DefaultImpactFX = 288884920 1074764317 1666654870 1595214297
 		DetonationTime =  -1.000000
 		ExplodeOnImpact = 1
-		DefaultImpactFX = 288884920 1074764317 1666654870 1595214297
 		ExplosionSound = 0
 		ImpactCharacterSound = 1
 			kbSoundData { 
@@ -206,6 +207,7 @@ kbGameEntity 2459381576 1233845788 1100758177 1698127025 {
 				Volume =  0.500000
 				WaveFile = .\assets\sounds\woodimpact3.wav
 			}
+		ImpactWoodSound = 0
 		LaunchSound = 1
 			kbSoundData { 
 				Enabled = 0
@@ -219,6 +221,7 @@ kbGameEntity 2459381576 1233845788 1100758177 1698127025 {
 		TraceWidth =  10.000000
 		TracerLength =  64.000000
 		Velocity =  1250.000000
+		WoodImpactFX = 0 0 0 0
 	}
 }
 }
@@ -247,9 +250,9 @@ kbGameEntity 2411460423 1126542526 3016243094 357289685 {
 		DummyTemp = 0
 		DamageAmount =  0.000000
 		DamageRadius =  200.000000
+		DefaultImpactFX = 749854598 1122407100 2268504468 2469228342
 		DetonationTime =  1.500000
 		ExplodeOnImpact = 0
-		DefaultImpactFX = 749854598 1122407100 2268504468 2469228342
 		ExplosionSound = 1
 			kbSoundData { 
 				Enabled = 0
@@ -281,12 +284,14 @@ kbGameEntity 2411460423 1126542526 3016243094 357289685 {
 				Volume =  0.400000
 				WaveFile = .\assets\sounds\woodimpact3.wav
 			}
+		ImpactWoodSound = 0
 		LaunchSound = 0
 		LifeTime =  5.000000
 		RenderBillboard = 0
 		TraceWidth =  10.000000
 		TracerLength =  64.000000
 		Velocity =  500.000000
+		WoodImpactFX = 0 0 0 0
 	}
 }
 }
@@ -307,10 +312,9 @@ kbGameEntity 2473679666 1325603578 2071095454 1188599008 {
 		DummyTemp = 0
 		DamageAmount =  0.000000
 		DamageRadius =  2048.000000
+		DefaultImpactFX = 749854598 1122407100 2268504468 2469228342
 		DetonationTime =  1.500000
 		ExplodeOnImpact = 1
-		DefaultImpactFX = 749854598 1122407100 2268504468 2469228342
-		WoodImpactFX = 2914882686 1195769252 1420378815 2077859665
 		ExplosionSound = 1
 			kbSoundData { 
 				Enabled = 0
@@ -342,12 +346,14 @@ kbGameEntity 2473679666 1325603578 2071095454 1188599008 {
 				Volume =  0.400000
 				WaveFile = .\assets\sounds\grenade_explosion.wav
 			}
+		ImpactWoodSound = 0
 		LaunchSound = 0
 		LifeTime =  5.000000
 		RenderBillboard = 0
 		TraceWidth =  10.000000
 		TracerLength =  64.000000
 		Velocity =  1000.000000
+		WoodImpactFX = 2914882686 1195769252 1420378815 2077859665
 	}
 }
 }

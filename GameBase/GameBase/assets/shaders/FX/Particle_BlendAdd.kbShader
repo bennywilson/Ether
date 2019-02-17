@@ -1,7 +1,7 @@
 //==============================================================================
-// particleAtlas.kbShader
+// Particle_BlendAdd.kbShader
 //
-// 2018 kbEngine 2.0
+// 2019 kbEngine 2.0
 //==============================================================================
 cbuffer matrixBuffer {
 	matrix modelMatrix;
@@ -12,6 +12,7 @@ cbuffer matrixBuffer {
 	matrix inverseProjection;
 	matrix viewProjection;
 	float4 cameraPos;
+	float4 blendAddProps;				// x: 1 is blend, 0 is add
 };
 
 kbShaderState {
@@ -143,7 +144,13 @@ SamplerState SampleType;
 
  float4 pixelShader( pixelInput	input ) : SV_TARGET {
 	float4 finalColor = shaderTexture.Sample( SampleType, input.uv );
+	finalColor *= input.color;
 
-	finalColor.xyz *= finalColor.a;
+	if ( blendAddProps.x  > 0.5f ) {
+		finalColor.xyz *= finalColor.a;
+	} else {
+		finalColor.w = 0.0f;
+	}
+
 	return finalColor;
 }

@@ -250,8 +250,8 @@ void kbParticleComponent::Update_Internal( const float DeltaTime ) {
 		newParticle.m_Randoms[2] = kbfrand();
 
 		newParticle.m_Rotation = kbfrand( m_MinStartRotationRate, m_MaxStartRotationRate );
-		newParticle.m_StartRotation = m_MinStartRotationRate;//newParticle.m_Rotation;
-		newParticle.m_EndRotation = m_MinEndRotationRate;// kbfrand( m_MinEndRotationRate, m_MaxEndRotationRate );
+		newParticle.m_StartRotation = newParticle.m_Rotation;
+		newParticle.m_EndRotation = kbfrand( m_MinEndRotationRate, m_MaxEndRotationRate );
 
 		if ( m_BurstCount > 0 ) {
 			m_BurstCount--;
