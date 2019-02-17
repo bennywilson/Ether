@@ -279,7 +279,7 @@ kbGameEntity 0 0 0 0 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		Name = "Entity_45"
+		Name = "Crate_1"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
 		Position = 87.468468 38.580292 48.668808
 		Scale = 10.000000 10.000000 10.000000
@@ -356,7 +356,7 @@ kbGameEntity 0 0 0 0 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		Name = "Entity_45"
+		Name = "Crate_2"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
 		Position = 117.468468 38.580292 48.668808
 		Scale = 10.000000 10.000000 10.000000
@@ -413,7 +413,7 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 1
 		LifeTime =  -1.000000
 		Gravity = 0.000000 22.000000 0.000000
-		Health =  1.000000
+		Health =  3.000000
 		MaxAngularVelocity =  10.000000
 		MaxLifeTime =  10.000000
 		MaxLinearVelocity =  25.000000
@@ -433,7 +433,7 @@ kbGameEntity 0 0 0 0 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		Name = "Entity_45"
+		Name = "Crate_3"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
 		Position = 147.468475 38.580292 48.668808
 		Scale = 10.000000 10.000000 10.000000
@@ -490,7 +490,7 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 1
 		LifeTime =  -1.000000
 		Gravity = 0.000000 22.000000 0.000000
-		Health =  1.000000
+		Health =  3.000000
 		MaxAngularVelocity =  10.000000
 		MaxLifeTime =  10.000000
 		MaxLinearVelocity =  25.000000
@@ -510,7 +510,7 @@ kbGameEntity 0 0 0 0 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		Name = "Entity_45"
+		Name = "Crate_4"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
 		Position = 177.468475 38.580292 48.668808
 		Scale = 10.000000 10.000000 10.000000
@@ -567,7 +567,7 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 1
 		LifeTime =  -1.000000
 		Gravity = 0.000000 22.000000 0.000000
-		Health =  1.000000
+		Health =  3.000000
 		MaxAngularVelocity =  10.000000
 		MaxLifeTime =  10.000000
 		MaxLinearVelocity =  25.000000
@@ -587,7 +587,7 @@ kbGameEntity 0 0 0 0 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		Name = "Entity_45"
+		Name = "Crate_5"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
 		Position = 207.468475 38.580292 48.668808
 		Scale = 10.000000 10.000000 10.000000
@@ -644,7 +644,7 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 1
 		LifeTime =  -1.000000
 		Gravity = 0.000000 22.000000 0.000000
-		Health =  1.000000
+		Health =  3.000000
 		MaxAngularVelocity =  10.000000
 		MaxLifeTime =  10.000000
 		MaxLinearVelocity =  25.000000
@@ -664,7 +664,7 @@ kbGameEntity 0 0 0 0 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		Name = "Entity_45"
+		Name = "Crate_6"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
 		Position = 237.468475 38.580292 48.668808
 		Scale = 10.000000 10.000000 10.000000
@@ -721,7 +721,7 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 1
 		LifeTime =  -1.000000
 		Gravity = 0.000000 22.000000 0.000000
-		Health =  1.000000
+		Health =  3.000000
 		MaxAngularVelocity =  10.000000
 		MaxLifeTime =  10.000000
 		MaxLinearVelocity =  25.000000

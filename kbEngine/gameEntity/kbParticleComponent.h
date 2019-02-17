@@ -16,12 +16,15 @@ enum EBillboardType {
 
 struct kbParticle_t {
 	kbVec3 m_Position;
+	float m_Rotation;
 	kbVec2 m_StartSize;
 	kbVec2 m_EndSize;
 	float m_LifeLeft;
 	float m_TotalLife;
 	kbVec3 m_StartVelocity;
 	kbVec3 m_EndVelocity;
+	float m_StartRotation;
+	float m_EndRotation;
 	float m_Randoms[3];
 };
 
@@ -56,7 +59,6 @@ private:
 
 	// Editable
 	std::vector<kbMaterialComponent>							m_MaterialList;
-	kbShader *													m_pParticleShader;
 	float														m_TotalDuration;
 	float														m_MinParticleSpawnRate;				// Particles per second
 	float														m_MaxParticleSpawnRate;				// Particles per second
@@ -64,6 +66,10 @@ private:
 	kbVec3														m_MaxParticleStartVelocity;
 	kbVec3														m_MinParticleEndVelocity;
 	kbVec3														m_MaxParticleEndVelocity;
+	float														m_MinStartRotationRate;
+	float														m_MaxStartRotationRate;
+	float														m_MinEndRotationRate;
+	float														m_MaxEndRotationRate;
 	kbVec3														m_MinParticleStartSize;
 	kbVec3														m_MaxParticleStartSize;
 	kbVec3														m_MinParticleEndSize;

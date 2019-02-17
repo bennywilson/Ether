@@ -2487,6 +2487,7 @@ kbString g_BuiltInShaderParams[] = {
 	"modelViewMatrix",
 	"viewMatrix",
 	"mvpMatrix",
+	"worldViewMatrix",
 	"projection",
 	"inverseProjection",
 	"inverseViewProjection",

@@ -99,7 +99,7 @@ const float kbPI = 3.14159265359f;
 const float kbEpsilon = 0.00001f;
 inline float kbToRadians( const float degrees ) { return degrees * kbPI / 180.0f; }
 inline float kbToDegrees( const float radians ) { return radians * 180.0f / kbPI; }
-float kbfrand();
+
 inline bool kbCompareByte4( const byte lhs[4], const byte rhs[4] ) { return lhs[0] == rhs[0] && lhs[1] == rhs[1] && lhs[2] == rhs[2] && lhs[3] == rhs[3]; }
 
 template<typename T> T kbClamp( const T & value, const T & min, const T & max ) { return value < min ? min : ( value > max ? max : value ); }
@@ -118,6 +118,12 @@ std::string GetFileExtension( const std::string & FileName );
 std::wstring GetFileExtension( const std::wstring & FileName );
 
 #include "kbVector.h"
+
+float kbfrand();
+
+inline float kbfrand( const float min, const float max ) {
+	return min + ( kbfrand() * ( max - min ) );
+}
 
 inline kbVec2 kbVec2Rand( const kbVec2 & min, const kbVec2 & max ) { 
 	kbVec2 randVec;
