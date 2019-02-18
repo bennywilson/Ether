@@ -703,23 +703,23 @@ kbGameEntity 1199553285 1083518041 1518451114 1990211042 {
 					}
 			}
 		MaxBurstCount = 0
-		MaxDuration =  5.000000
+		MaxDuration =  3.000000
 		MaxEndRotationRate =  0.000000
 		MaxEndSize = 0.300000 0.300000 0.300000
 		MaxEndVelocity = 0.000000 8.000000 0.000000
-		MaxSpawnRate =  3.000000
+		MaxSpawnRate =  2.000000
 		MaxStartRotationRate =  0.000000
 		MaxStartSize = 0.500000 0.500000 0.500000
-		MaxStartVelocity = 0.000000 15.000000 0.000000
+		MaxStartVelocity = 0.000000 35.000000 0.000000
 		MinBurstCount = 0
-		MinDuration =  3.000000
+		MinDuration =  2.300000
 		MinEndRotationRate =  0.000000
 		MinEndSize = 0.200000 0.200000 0.200000
 		MinEndVelocity = 0.000000 5.000000 0.000000
-		MinSpawnRate =  2.000000
+		MinSpawnRate =  1.265000000
 		MinStartRotationRate =  0.000000
 		MinStartSize = 0.420000 0.450000 0.420000
-		MinStartVelocity = 0.000000 10.000000 0.000000
+		MinStartVelocity = 0.000000 25.000000 0.000000
 		ParticleBillboardType = FaceCamera
 		StartColor = 1.000000 1.000000 1.000000 0.000000
 		TotalDuration =  -1.000000
