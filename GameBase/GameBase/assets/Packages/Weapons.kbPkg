@@ -135,14 +135,56 @@ kbPrefab 1 {
 					Volume =  0.400000
 					WaveFile = .\assets\sounds\woodimpact3.wav
 				}
-			ImpactWoodSound = 0
-			LaunchSound = 1
+			ImpactWoodSound = 3
+				kbSoundData { 
+					Enabled = 0
+					LifeTime =  -1.000000
+					Radius =  75.000000
+					Volume =  0.050000
+					WaveFile = .\assets\sounds\woodimpact4.wav
+				}
+				kbSoundData { 
+					Enabled = 0
+					LifeTime =  -1.000000
+					Radius =  75.000000
+					Volume =  0.050000
+					WaveFile = .\assets\sounds\woodimpact5.wav
+				}
+				kbSoundData { 
+					Enabled = 0
+					LifeTime =  -1.000000
+					Radius =  75.000000
+					Volume =  0.050000
+					WaveFile = .\assets\sounds\woodimpact6.wav
+				}
+			LaunchSound = 4
 				kbSoundData { 
 					Enabled = 0
 					LifeTime =  -1.000000
 					Radius =  -1.000000
-					Volume =  1.000000
+					Volume =  0.1500000
 					WaveFile = .\assets\sounds\rifle.wav
+				}
+				kbSoundData { 
+					Enabled = 0
+					LifeTime =  -1.000000
+					Radius =  -1.000000
+					Volume =  0.1500000
+					WaveFile = .\assets\sounds\rifle_1.wav
+				}
+				kbSoundData { 
+					Enabled = 0
+					LifeTime =  -1.000000
+					Radius =  -1.000000
+					Volume =  0.200000
+					WaveFile = .\assets\sounds\rifle.wav
+				}
+				kbSoundData { 
+					Enabled = 0
+					LifeTime =  -1.000000
+					Radius =  -1.000000
+					Volume =  0.1300000
+					WaveFile = .\assets\sounds\rifle_1.wav
 				}
 			LifeTime =  5.000000
 			RenderBillboard = 1

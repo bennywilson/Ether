@@ -41,7 +41,7 @@ void EtherProjectileComponent::Constructor() {
 void EtherProjectileComponent::Launch() {
 
 	if ( m_LaunchSoundData.size() > 0 ) {
-		m_LaunchSoundData[0].PlaySoundAtPosition( GetOwner()->GetPosition() );
+		m_LaunchSoundData[rand() % m_LaunchSoundData.size()].PlaySoundAtPosition( GetOwner()->GetPosition() );
 	}
 
 	kbLightComponent *const pLightComp = (kbLightComponent*)GetOwner()->GetComponentByType( kbLightComponent::GetType() );
@@ -164,6 +164,11 @@ void EtherProjectileComponent::Update_Internal( const float DeltaTime ) {
 
 			if ( pHitDestructible != nullptr ) {
 				pHitDestructible->TakeDamage( 1.0f, collisionInfo.m_HitLocation, 100000.0f );
+
+				if ( m_ImpactWoodSoundData.size() > 0 ) {
+					m_ImpactWoodSoundData[rand() % m_ImpactWoodSoundData.size()].PlaySoundAtPosition( newPosition );
+				}
+
 				if ( m_WoodImpactFX.GetEntity() != nullptr ) {
 					kbGameEntity *const pExplosionFX = g_pGame->CreateEntity( m_WoodImpactFX.GetEntity() );
 					pExplosionFX->SetPosition( worldHitCollisionPt );

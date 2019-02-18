@@ -339,9 +339,9 @@ kbGameEntity 0 0 0 0 {
 		Health =  2.000000
 		MaxAngularVelocity =  10.000000
 		MaxLifeTime =  10.000000
-		MaxLinearVelocity =  25.000000
+		MaxLinearVelocity =  20.000000
 		MinAngularVelocity =  5.000000
-		MinLinearVelocity =  20.000000
+		MinLinearVelocity =  5.000000
 		ResetSim = 0
 	}
 	kbCollisionComponent { 
@@ -416,9 +416,9 @@ kbGameEntity 0 0 0 0 {
 		Health =  2.000000
 		MaxAngularVelocity =  10.000000
 		MaxLifeTime =  10.000000
-		MaxLinearVelocity =  25.000000
+		MaxLinearVelocity =  20.000000
 		MinAngularVelocity =  5.000000
-		MinLinearVelocity =  20.000000
+		MinLinearVelocity =  5.000000
 		ResetSim = 0
 	}
 	kbCollisionComponent { 
@@ -493,9 +493,9 @@ kbGameEntity 0 0 0 0 {
 		Health =  2.000000
 		MaxAngularVelocity =  10.000000
 		MaxLifeTime =  10.000000
-		MaxLinearVelocity =  25.000000
+		MaxLinearVelocity =  20.000000
 		MinAngularVelocity =  5.000000
-		MinLinearVelocity =  20.000000
+		MinLinearVelocity =  5.000000
 		ResetSim = 0
 	}
 	kbCollisionComponent { 
@@ -570,9 +570,9 @@ kbGameEntity 0 0 0 0 {
 		Health =  2.000000
 		MaxAngularVelocity =  10.000000
 		MaxLifeTime =  10.000000
-		MaxLinearVelocity =  25.000000
+		MaxLinearVelocity =  20.000000
 		MinAngularVelocity =  5.000000
-		MinLinearVelocity =  20.000000
+		MinLinearVelocity =  5.000000
 		ResetSim = 0
 	}
 	kbCollisionComponent { 
@@ -647,9 +647,9 @@ kbGameEntity 0 0 0 0 {
 		Health =  2.000000
 		MaxAngularVelocity =  10.000000
 		MaxLifeTime =  10.000000
-		MaxLinearVelocity =  25.000000
+		MaxLinearVelocity =  20.000000
 		MinAngularVelocity =  5.000000
-		MinLinearVelocity =  20.000000
+		MinLinearVelocity =  5.000000
 		ResetSim = 0
 	}
 	kbCollisionComponent { 
@@ -724,9 +724,9 @@ kbGameEntity 0 0 0 0 {
 		Health =  2.000000
 		MaxAngularVelocity =  10.000000
 		MaxLifeTime =  10.000000
-		MaxLinearVelocity =  25.000000
+		MaxLinearVelocity =  20.000000
 		MinAngularVelocity =  5.000000
-		MinLinearVelocity =  20.000000
+		MinLinearVelocity =  5.000000
 		ResetSim = 0
 	}
 	kbCollisionComponent { 
@@ -798,12 +798,12 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 1
 		LifeTime =  -1.000000
 		Gravity = 0.000000 22.000000 0.000000
-		Health =  1.000000
+		Health =  2.000000
 		MaxAngularVelocity =  10.000000
 		MaxLifeTime =  10.000000
-		MaxLinearVelocity =  25.000000
+		MaxLinearVelocity =  20.000000
 		MinAngularVelocity =  5.000000
-		MinLinearVelocity =  20.000000
+		MinLinearVelocity =  5.000000
 		ResetSim = 0
 	}
 	kbCollisionComponent { 
@@ -1308,12 +1308,12 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 1
 		LifeTime =  -1.000000
 		Gravity = 0.000000 22.000000 0.000000
-		Health =  6.000000
+		Health =  2.000000
 		MaxAngularVelocity =  10.000000
 		MaxLifeTime =  10.000000
-		MaxLinearVelocity =  25.000000
+		MaxLinearVelocity =  20.000000
 		MinAngularVelocity =  5.000000
-		MinLinearVelocity =  20.000000
+		MinLinearVelocity =  5.000000
 		ResetSim = 0
 	}
 	kbCollisionComponent { 
@@ -1388,9 +1388,9 @@ kbGameEntity 0 0 0 0 {
 		Health =  2.000000
 		MaxAngularVelocity =  10.000000
 		MaxLifeTime =  10.000000
-		MaxLinearVelocity =  25.000000
+		MaxLinearVelocity =  20.000000
 		MinAngularVelocity =  5.000000
-		MinLinearVelocity =  20.000000
+		MinLinearVelocity =  5.000000
 		ResetSim = 0
 	}
 	kbCollisionComponent { 
