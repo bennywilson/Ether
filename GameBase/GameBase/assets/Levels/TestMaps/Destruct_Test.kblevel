@@ -281,7 +281,7 @@ kbGameEntity 0 0 0 0 {
 		LifeTime =  -1.000000
 		Name = "Crate_1"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
-		Position = 127.468468 7.386138 48.668808
+		Position = 177.468475 7.386138 48.668808
 		Scale = 10.000000 10.000000 10.000000
 	}
 	EtherSkelModelComponent { 
@@ -358,7 +358,7 @@ kbGameEntity 0 0 0 0 {
 		LifeTime =  -1.000000
 		Name = "Crate_2"
 		Orientation = 0.000000 0.068486 0.000000 0.997652
-		Position = 157.468475 7.877783 48.668808
+		Position = 207.468475 7.877783 48.668808
 		Scale = 10.000000 10.000000 10.000000
 	}
 	EtherSkelModelComponent { 
@@ -435,7 +435,7 @@ kbGameEntity 0 0 0 0 {
 		LifeTime =  -1.000000
 		Name = "Crate_3"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
-		Position = 187.468475 4.655081 48.668808
+		Position = 237.000000 4.655081 48.668808
 		Scale = 10.000000 10.000000 10.000000
 	}
 	EtherSkelModelComponent { 
@@ -512,7 +512,7 @@ kbGameEntity 0 0 0 0 {
 		LifeTime =  -1.000000
 		Name = "Crate_4"
 		Orientation = 0.000000 -0.168044 0.000000 0.985779
-		Position = 125.729103 30.216663 52.010502
+		Position = 175.729095 30.216663 52.010502
 		Scale = 10.000000 10.000000 10.000000
 	}
 	EtherSkelModelComponent { 
@@ -589,7 +589,7 @@ kbGameEntity 0 0 0 0 {
 		LifeTime =  -1.000000
 		Name = "Crate_5"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
-		Position = 152.136414 30.486019 51.091431
+		Position = 202.136414 30.486019 51.091431
 		Scale = 10.000000 10.000000 10.000000
 	}
 	EtherSkelModelComponent { 
@@ -666,7 +666,7 @@ kbGameEntity 0 0 0 0 {
 		LifeTime =  -1.000000
 		Name = "Crate_6"
 		Orientation = 0.000000 0.000000 0.095493 0.995430
-		Position = 175.832169 28.625412 57.086697
+		Position = 225.832169 28.625412 57.086697
 		Scale = 10.000000 10.000000 10.000000
 	}
 	EtherSkelModelComponent { 
@@ -743,7 +743,7 @@ kbGameEntity 0 0 0 0 {
 		LifeTime =  -1.000000
 		Name = "Entity_45"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
-		Position = 130.740555 53.189030 57.310307
+		Position = 180.740555 53.189030 57.310307
 		Scale = 10.000000 10.000000 10.000000
 	}
 	EtherSkelModelComponent { 
@@ -1031,7 +1031,7 @@ kbGameEntity 0 0 0 0 {
 		Scale = 1.000000 1.000000 1.000000
 	}
 	kbParticleComponent { 
-		Enabled = 1
+		Enabled = 0
 		LifeTime =  -1.000000
 		Name = ""
 		Orientation = 0.000000 0.000000 0.000000 1.000000
@@ -1129,7 +1129,7 @@ kbGameEntity 0 0 0 0 {
 }
 kbGameEntity 0 0 0 0 {
 	kbTransformComponent { 
-		Enabled = 1
+		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "Wood_Impact_1"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
@@ -1137,7 +1137,7 @@ kbGameEntity 0 0 0 0 {
 		Scale = 1.000000 1.000000 1.000000
 	}
 	kbParticleComponent { 
-		Enabled = 1
+		Enabled = 0
 		LifeTime =  -1.000000
 		Name = ""
 		Orientation = 0.000000 0.000000 0.000000 1.000000
@@ -1308,7 +1308,7 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 1
 		LifeTime =  -1.000000
 		Gravity = 0.000000 22.000000 0.000000
-		Health =  2.000000
+		Health =  5.000000
 		MaxAngularVelocity =  10.000000
 		MaxLifeTime =  10.000000
 		MaxLinearVelocity =  20.000000
@@ -1326,11 +1326,11 @@ kbGameEntity 0 0 0 0 {
 }
 kbGameEntity 0 0 0 0 {
 	kbTransformComponent { 
-		Enabled = 0
+		Enabled = 1
 		LifeTime =  -1.000000
 		Name = "Crate_1"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
-		Position = 237.368851 2.128942 48.668808
+		Position = 276.000000 2.128942 48.668808
 		Scale = 10.000000 10.000000 10.000000
 	}
 	EtherSkelModelComponent { 
@@ -1386,6 +1386,83 @@ kbGameEntity 0 0 0 0 {
 		LifeTime =  -1.000000
 		Gravity = 0.000000 22.000000 0.000000
 		Health =  2.000000
+		MaxAngularVelocity =  10.000000
+		MaxLifeTime =  10.000000
+		MaxLinearVelocity =  20.000000
+		MinAngularVelocity =  5.000000
+		MinLinearVelocity =  5.000000
+		ResetSim = 0
+	}
+	kbCollisionComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CollisionType = Sphere
+		Extent = 20.000000 20.000000 20.000000
+		SphereCollision = 0
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		Name = "Crate_1"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 116.000000 5.000000 48.668808
+		Scale = 10.000000 10.000000 10.000000
+	}
+	EtherSkelModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		Materials = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Shader = .\assets\shaders\environment\environmentskinned.kbshader
+				ShaderParams = 4
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "diffuse"
+						Texture = .\assets\models\environment\crate_1.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "normal"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "propertyMap"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "emissiveMap"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		RenderPass = LightingPass
+		TranslucencySortBias =  0.000000
+		Model = .\assets\models\environment\crate_1_destructible.fbx
+		ShaderOverride = 0
+			
+		Animations = 0
+		DebugAnimIndex = -1
+		IsFirstPersonModel = 0
+	}
+	EtherDestructibleComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		Gravity = 0.000000 22.000000 0.000000
+		Health =  5.000000
 		MaxAngularVelocity =  10.000000
 		MaxLifeTime =  10.000000
 		MaxLinearVelocity =  20.000000

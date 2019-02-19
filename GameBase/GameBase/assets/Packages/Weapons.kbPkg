@@ -140,21 +140,21 @@ kbPrefab 1 {
 					Enabled = 0
 					LifeTime =  -1.000000
 					Radius =  75.000000
-					Volume =  0.050000
+					Volume =  0.110000
 					WaveFile = .\assets\sounds\woodimpact4.wav
 				}
 				kbSoundData { 
 					Enabled = 0
 					LifeTime =  -1.000000
 					Radius =  75.000000
-					Volume =  0.050000
+					Volume =  0.110000
 					WaveFile = .\assets\sounds\woodimpact5.wav
 				}
 				kbSoundData { 
 					Enabled = 0
 					LifeTime =  -1.000000
 					Radius =  75.000000
-					Volume =  0.050000
+					Volume =  0.110000
 					WaveFile = .\assets\sounds\woodimpact6.wav
 				}
 			LaunchSound = 4
