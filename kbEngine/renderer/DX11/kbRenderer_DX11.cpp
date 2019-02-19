@@ -3140,9 +3140,11 @@ void kbRenderer_DX11::RenderMesh( const kbRenderSubmesh *const pRenderMesh, cons
 		m_pDeviceContext->PSSetShader( (ID3D11PixelShader *)pShader->GetPixelShader(), nullptr, 0 );
 	}
 	
-    m_pDeviceContext->GSSetShader( (ID3D11GeometryShader *) pShader->GetGeometryShader(), nullptr, 0 );
-	ID3D11SamplerState *const  SamplerStates[] = { m_pNormalMapSamplerState, m_pNormalMapSamplerState };	// todo: Grass uses this for sampling time
-	m_pDeviceContext->GSSetSamplers( 0, 2, SamplerStates );
+	{
+		m_pDeviceContext->GSSetShader( (ID3D11GeometryShader *) pShader->GetGeometryShader(), nullptr, 0 );
+		ID3D11SamplerState *const  SamplerStates[] = { m_pBasicSamplerState, m_pNormalMapSamplerState };	// todo: Grass uses this for sampling time
+		m_pDeviceContext->GSSetSamplers( 0, 2, SamplerStates );
+	}
 
 	// Set textures
 	const std::vector<const kbTexture*> & textureList = meshMaterial.GetTextureList();

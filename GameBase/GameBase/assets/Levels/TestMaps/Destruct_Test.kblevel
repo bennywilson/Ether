@@ -947,9 +947,9 @@ kbGameEntity 0 0 0 0 {
 				Enabled = 1
 				LifeTime =  -1.000000
 				BladeMaxHeight =  25.000000
-				BladeMaxWidth =  1.000000
-				BladeMinHeight =  20.000000
-				BladeMinWidth =  1.000000
+				BladeMaxWidth =  1.050000
+				BladeMinHeight =  10.000000
+				BladeMinWidth =  0.850000
 				DiffuseMap = .\assets\terrain\foliage\grass_1.dds
 				FakeAODarkness =  0.250000
 				FakeAOPower =  2.000000
