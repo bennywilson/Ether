@@ -27,6 +27,10 @@ void kbParticleComponent::Constructor() {
 	m_MaxParticleStartVelocity.Set( 2.0f, 5.0f, 2.0f );
 	m_MinParticleEndVelocity.Set( 0.0f, 0.0f, 0.0f );
 	m_MaxParticleEndVelocity.Set( 0.0f, 0.0f, 0.0f );
+	m_MinStartRotationRate = 0;
+	m_MaxStartRotationRate = 0;
+	m_MinEndRotationRate = 0;
+	m_MaxEndRotationRate = 0;
 	m_MinParticleStartSize.Set( 3.0f, 3.0f, 3.0f );
 	m_MaxParticleStartSize.Set( 3.0f, 3.0f, 3.0f );
 	m_MinParticleEndSize.Set( 3.0f, 3.0f, 3.0f );
@@ -49,9 +53,6 @@ void kbParticleComponent::Constructor() {
 	m_CurrentParticleBuffer = 255;
 	m_NumIndicesInCurrentBuffer = 0;
 	m_bIsSpawning = true;
-
-	m_pParticleTexture = (kbTexture*)g_ResourceManager.LoadResource( "../../kbEngine/assets/Textures/Editor/white.bmp", true );
-	m_pParticleShader = (kbShader*)g_ResourceManager.LoadResource( "../../kbEngine/assets/Shaders/basicParticle.kbShader", true );
 
 	m_bIsPooled = false;
 	m_ParticleTemplate = nullptr;
@@ -132,6 +133,9 @@ void kbParticleComponent::Update_Internal( const float DeltaTime ) {
 
 		m_Particles[i].m_Position = m_Particles[i].m_Position + curVelocity * DeltaTime;
 
+		float curRotationRate = kbLerp( m_Particles[i].m_EndRotation, m_Particles[i].m_StartRotation, LerpValue );
+		m_Particles[i].m_Rotation += curRotationRate * DeltaTime;
+
 		m_pIndexBuffer[m_NumIndicesInCurrentBuffer + 2] = ( curVBPosition * 4 ) + 0;
 		m_pIndexBuffer[m_NumIndicesInCurrentBuffer + 1] = ( curVBPosition * 4 ) + 1;
 		m_pIndexBuffer[m_NumIndicesInCurrentBuffer + 0] = ( curVBPosition * 4 ) + 2;
@@ -169,6 +173,11 @@ void kbParticleComponent::Update_Internal( const float DeltaTime ) {
 		m_pVertexBuffer[iVertex + 1].direction = direction;
 		m_pVertexBuffer[iVertex + 2].direction = direction;
 		m_pVertexBuffer[iVertex + 3].direction = direction;
+
+		m_pVertexBuffer[iVertex + 0].rotation = m_Particles[i].m_Rotation;
+		m_pVertexBuffer[iVertex + 1].rotation = m_Particles[i].m_Rotation;
+		m_pVertexBuffer[iVertex + 2].rotation = m_Particles[i].m_Rotation;
+		m_pVertexBuffer[iVertex + 3].rotation = m_Particles[i].m_Rotation;
 
 		m_pVertexBuffer[iVertex + 0].billboardType[0] = iBillboardType;
 		m_pVertexBuffer[iVertex + 1].billboardType[0] = iBillboardType;
@@ -240,6 +249,10 @@ void kbParticleComponent::Update_Internal( const float DeltaTime ) {
 		newParticle.m_Randoms[1] = kbfrand();
 		newParticle.m_Randoms[2] = kbfrand();
 
+		newParticle.m_Rotation = kbfrand( m_MinStartRotationRate, m_MaxStartRotationRate );
+		newParticle.m_StartRotation = newParticle.m_Rotation;
+		newParticle.m_EndRotation = kbfrand( m_MinEndRotationRate, m_MaxEndRotationRate );
+
 		if ( m_BurstCount > 0 ) {
 			m_BurstCount--;
 		} else {
@@ -260,12 +273,6 @@ void kbParticleComponent::Update_Internal( const float DeltaTime ) {
  */
 void kbParticleComponent::EditorChange( const std::string & propertyName ) {
 	Super::EditorChange( propertyName );
-
-	if ( propertyName == "ParticleTexture" ) {
-		if ( m_pParticleTexture != nullptr && m_pParticleTexture->GetGPUTexture() == nullptr ) {
-			m_pParticleTexture = (kbTexture *)g_ResourceManager.GetResource( m_pParticleTexture->GetFullFileName() );
-		}
-	}
 
 	// Editor Hack!
 	if ( propertyName == "Materials" ) {
@@ -299,7 +306,7 @@ void kbParticleComponent::RenderSync() {
 
 	if ( m_ParticleBuffer[0].NumVertices() == 0 ) {
 		for ( int i = 0; i < NumParticleBuffers; i++ ) {
-			m_ParticleBuffer[i].CreateDynamicModel( NumParticleBufferVerts, NumParticleBufferVerts, m_pParticleShader, nullptr, sizeof(kbParticleVertex) );
+			m_ParticleBuffer[i].CreateDynamicModel( NumParticleBufferVerts, NumParticleBufferVerts, nullptr, nullptr, sizeof(kbParticleVertex) );
 			m_pVertexBuffer = (kbParticleVertex*)m_ParticleBuffer[i].MapVertexBuffer();
 			for ( int iVert = 0; iVert < NumParticleBufferVerts; iVert++ ) {
 				m_pVertexBuffer[iVert].position.Set( 0.0f, 0.0f, 0.0f );
@@ -346,8 +353,6 @@ void kbParticleComponent::RenderSync() {
 		m_ParticleBuffer[m_CurrentParticleBuffer].UnmapVertexBuffer( m_NumIndicesInCurrentBuffer );
 		m_ParticleBuffer[m_CurrentParticleBuffer].UnmapIndexBuffer();		// todo : don't need to map/remap index buffer
 	}
-
-	m_ParticleBuffer[m_CurrentParticleBuffer].SwapTexture( 0, m_pParticleTexture, 0 );
 
 	m_RenderObject.m_pModel = &m_ParticleBuffer[m_CurrentParticleBuffer];
 	g_pRenderer->AddParticle( m_RenderObject );

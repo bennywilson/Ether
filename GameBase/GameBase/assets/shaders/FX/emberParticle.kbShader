@@ -1,23 +1,20 @@
 //==============================================================================
 // emberParticle.kbShader
 //
-// 2018 kbEngine 2.0
+// 2018-2019 kbEngine 2.0
 //==============================================================================
 cbuffer matrixBuffer {
 	matrix modelMatrix;
+	matrix worldViewMatrix;
 	matrix mvpMatrix;
 	matrix viewProjection;
 	float4 cameraPos;
 };
 
 kbShaderState {
-	srcblend Blend_SrcAlpha
-	dstBlend Blend_InvSrcAlpha
+	srcblend Blend_One
+	dstBlend Blend_One
 	blendOp BlendOp_Add
-
-	srcBlendAlpha Blend_One
-	dstBlendAlpha Blend_zero
-	blendOp BlendOp_Max
 
 	colorWriteEnable ColorWriteEnable_rgba
 }
@@ -71,12 +68,30 @@ pixelInput vertexShader( vertexInput input ) {
 	   billboardMatrix = float3x3( heading, xAxis, yAxis );
 	}
 	float3 offset = mul( float3( input.size.x , input.size.y, 0 ), billboardMatrix );
-	offset.x += sin( particleWorldPos.y * input.billboardType.y * 0.1f ) * 5.0f * input.billboardType.z ;
-	offset.z += sin( particleWorldPos.y * input.billboardType.y * 0.15f ) * 5.0f * input.billboardType.z;
+	float3 moveOffset = 0;
+	moveOffset.x += sin( particleWorldPos.y * input.billboardType.y * 0.6f) * 3.0f * input.billboardType.z;
+	moveOffset.z += sin( particleWorldPos.y * input.billboardType.y * 0.35f ) * 5.0f * input.billboardType.z;
+	offset += moveOffset;
+
 	output.position = mul( float4(particleWorldPos,1) + float4( offset, 0.0f ), viewProjection );
 
-	output.uv = input.uv;
+	output.uv = input.uv * 0.5f;
+
 	output.color = input.color;
+
+	moveOffset.x = cos( particleWorldPos.y * input.billboardType.y * 0.3f);
+	moveOffset.z = cos( particleWorldPos.y * input.billboardType.y * 0.55f );
+
+	moveOffset = mul( moveOffset, (float3x3)worldViewMatrix );
+	if (moveOffset.x < -0.2f) {
+	output.color = float4(0,0,1,0);
+		output.uv += 0; 
+	} else if (moveOffset.x > 0.2f) {
+		output.uv += float2(0.0f, 0.5f);
+	} else {
+		output.uv += float2(0.5f,0.0f);
+	}
+
 	output.position2 = output.position.zw;
 
 	return output;
@@ -90,7 +105,8 @@ SamplerState SampleType;
 
  float4 pixelShader( pixelInput	input ) : SV_TARGET {
    float4 finalColor = input.color;
-   finalColor *= shaderTexture.Sample( SampleType, input.uv );
-   finalColor.a *= 1.25f;
+   finalColor.xyz = shaderTexture.Sample( SampleType, input.uv ).xyz;
+
+ //  finalColor.a *= 1.25f;
    return finalColor;
 }

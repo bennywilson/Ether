@@ -698,6 +698,8 @@ void kbRenderer_DX11::Init_Internal( HWND hwnd, const int frameWidth, const int 
 
 	m_pMousePickerIdShader = (kbShader *) g_ResourceManager.LoadResource( "../../kbEngine/assets/Shaders/mousePicker.kbshader", true );
 
+	m_pSSAO = (kbShader*) g_ResourceManager.LoadResource( "../../kbEngine/assets/Shaders/SSAO.kbShader", true );
+
 	// Non-resource managed shaders
 	m_pSkinnedDirectionalLightShadowShader->SetVertexShaderFunctionName( "skinnedVertexMain" );
 	m_pSkinnedDirectionalLightShadowShader->SetPixelShaderFunctionName( "skinnedPixelMain" );
@@ -1307,6 +1309,8 @@ void kbRenderer_DX11::RenderScene() {
 
 		RenderLights();
 	
+		RenderSSAO();
+
 		{
 			START_SCOPED_RENDER_TIMER( RENDER_UNLIT )
 
@@ -1954,6 +1958,71 @@ void kbRenderer_DX11::DrawTexture( ID3D11ShaderResourceView *const pShaderResour
 }
 
 /**
+ *	kbRenderer_DX11::RenderSSAO
+ */
+void kbRenderer_DX11::RenderSSAO() {
+	if (m_bRenderToHMD == true) {
+		return;
+	}
+
+	D3D11_VIEWPORT viewport;
+	viewport.TopLeftX = 0.0f;
+	viewport.TopLeftY = 0.0f;
+	viewport.Width = (float)GetRenderTarget_DX11(ACCUMULATION_BUFFER)->GetWidth();
+	viewport.Height = (float)GetRenderTarget_DX11(ACCUMULATION_BUFFER)->GetHeight();
+	viewport.MinDepth = 0;
+	viewport.MaxDepth = 1.0f;
+	m_pDeviceContext->RSSetViewports(1, &viewport);
+
+	m_RenderState.SetBlendState( m_pSSAO );
+
+	m_pDeviceContext->OMSetRenderTargets(1, &GetRenderTarget_DX11(ACCUMULATION_BUFFER)->m_pRenderTargetView, nullptr);
+	const unsigned int stride = sizeof(vertexLayout);
+	const unsigned int offset = 0;
+
+	m_pDeviceContext->IASetVertexBuffers(0, 1, &m_pUnitQuad, &stride, &offset);
+	m_pDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	m_pDeviceContext->RSSetState(m_pDefaultRasterizerState);
+
+	m_pDeviceContext->PSSetShaderResources(0, 1, &GetRenderTarget_DX11(ACCUMULATION_BUFFER)->m_pShaderResourceView);
+	ID3D11SamplerState *const samplerStates[] = { m_pBasicSamplerState, m_pNormalMapSamplerState, m_pShadowMapSamplerState, m_pShadowMapSamplerState };
+	m_pDeviceContext->PSSetSamplers( 0, 4, samplerStates );
+
+	m_pDeviceContext->IASetInputLayout((ID3D11InputLayout*)m_pSSAO->GetVertexLayout());
+	m_pDeviceContext->VSSetShader((ID3D11VertexShader *)m_pSSAO->GetVertexShader(), nullptr, 0);
+	m_pDeviceContext->PSSetShader((ID3D11PixelShader *)m_pSSAO->GetPixelShader(), nullptr, 0);
+
+	// TODO: Why isn't this handled in SetConstantBuffer
+	ID3D11ShaderResourceView *const  RenderTargetViews[] = { GetRenderTarget_DX11(COLOR_BUFFER)->m_pShaderResourceView,
+																GetRenderTarget_DX11(NORMAL_BUFFER)->m_pShaderResourceView,
+																GetRenderTarget_DX11(SPECULAR_BUFFER)->m_pShaderResourceView,
+																GetRenderTarget_DX11(DEPTH_BUFFER)->m_pShaderResourceView,
+																GetRenderTarget_DX11(SHADOW_BUFFER)->m_pShaderResourceView };
+
+	m_pDeviceContext->PSSetShaderResources( 0, 5, RenderTargetViews );
+
+	const auto & varBindings = m_pSSAO->GetShaderVarBindings();
+
+	kbShaderParamOverrides_t shaderParams;
+	ID3D11Buffer * pConstantBuffer = GetConstantBuffer( varBindings.m_ConstantBufferSizeBytes );
+	
+	D3D11_MAPPED_SUBRESOURCE mappedResource;
+	HRESULT hr = m_pDeviceContext->Map( pConstantBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource );
+	kbErrorCheck( SUCCEEDED(hr), "kbRenderer_DX11::RenderSSAO() - Failed to map matrix buffer" );
+	byte * pMappedData = (byte*)mappedResource.pData;
+
+	SetConstantBuffer( varBindings, &shaderParams, nullptr, pMappedData );
+	SetShaderMat4( "inverseViewProjection", m_pCurrentRenderWindow->GetInverseViewProjection(), pMappedData, varBindings );
+	m_pDeviceContext->Unmap( pConstantBuffer, 0 );
+
+	m_pDeviceContext->VSSetConstantBuffers(0, 1, &pConstantBuffer);
+	m_pDeviceContext->PSSetConstantBuffers(0, 1, &pConstantBuffer);
+
+	// Draw
+	m_pDeviceContext->Draw(6, 0);
+}
+
+/**
  *	kbRenderer_DX11::RenderBloom
  */
 void kbRenderer_DX11::RenderBloom() {
@@ -2418,6 +2487,7 @@ kbString g_BuiltInShaderParams[] = {
 	"modelViewMatrix",
 	"viewMatrix",
 	"mvpMatrix",
+	"worldViewMatrix",
 	"projection",
 	"inverseProjection",
 	"inverseViewProjection",
@@ -2474,6 +2544,7 @@ void kbRenderer_DX11::ReadShaderFile( std::string & shaderText, kbShaderVarBindi
 	kbTexture *const pWhiteTex = (kbTexture*)g_ResourceManager.LoadResource( "../../kbEngine/assets/Textures/white.bmp", true );
 	kbTexture *const pBlackTex = (kbTexture*)g_ResourceManager.LoadResource( "../../kbEngine/assets/Textures/black.bmp", true );
 	kbTexture *const pDefaultNormal = (kbTexture*)g_ResourceManager.LoadResource( "../../kbEngine/assets/Textures/defaultNormal.bmp", true );
+	kbTexture *const pNoiseTex = (kbTexture*)g_ResourceManager.LoadResource( "../../kbEngine/assets/Textures/noise.jpg", true );
 
 	size_t currOffset = 0;
 	for ( int i = 0; i < constantBufferStrings.size(); i += 2 ) {
@@ -2561,6 +2632,8 @@ void kbRenderer_DX11::ReadShaderFile( std::string & shaderText, kbShaderVarBindi
 				textureBinding.m_pDefaultRenderTexture = m_pRenderTargets[SHADOW_BUFFER];
 			} else if ( defaultTexture == "maxhalf" ) {
 				textureBinding.m_pDefaultRenderTexture = m_pRenderTargets[MAX_HALF_BUFFER];
+			} else if ( defaultTexture == "noise" ) {
+				textureBinding.m_pDefaultTexture = pNoiseTex;
 			} else {
 				kbWarning( "Default texture %s not found", defaultTexture.c_str() );
 			}
@@ -3067,9 +3140,11 @@ void kbRenderer_DX11::RenderMesh( const kbRenderSubmesh *const pRenderMesh, cons
 		m_pDeviceContext->PSSetShader( (ID3D11PixelShader *)pShader->GetPixelShader(), nullptr, 0 );
 	}
 	
-    m_pDeviceContext->GSSetShader( (ID3D11GeometryShader *) pShader->GetGeometryShader(), nullptr, 0 );
-	ID3D11SamplerState *const  SamplerStates[] = { m_pNormalMapSamplerState, m_pNormalMapSamplerState };	// todo: Grass uses this for sampling time
-	m_pDeviceContext->GSSetSamplers( 0, 2, SamplerStates );
+	{
+		m_pDeviceContext->GSSetShader( (ID3D11GeometryShader *) pShader->GetGeometryShader(), nullptr, 0 );
+		ID3D11SamplerState *const  SamplerStates[] = { m_pBasicSamplerState, m_pNormalMapSamplerState };	// todo: Grass uses this for sampling time
+		m_pDeviceContext->GSSetSamplers( 0, 2, SamplerStates );
+	}
 
 	// Set textures
 	const std::vector<const kbTexture*> & textureList = meshMaterial.GetTextureList();
@@ -3598,6 +3673,9 @@ ID3D11Buffer * kbRenderer_DX11::SetConstantBuffer( const kbShaderVarBindings_t &
 		} else if ( varName == "mvpMatrix" ) {
 			kbMat4 *const pMatOffset = (kbMat4*)pVarByteOffset;
 			*pMatOffset = worldMatrix * m_pCurrentRenderWindow->GetViewProjectionMatrix();
+		} else if ( varName == "worldViewMatrix" ) {
+			kbMat4 *const pMatOffset = (kbMat4*)pVarByteOffset;
+			*pMatOffset = worldMatrix * m_pCurrentRenderWindow->GetViewMatrix();
 		} else if ( varName == "vpMatrix" ) {
 			kbMat4 *const pMatOffset = (kbMat4*)pVarByteOffset;
 			*pMatOffset = m_pCurrentRenderWindow->GetViewProjectionMatrix();

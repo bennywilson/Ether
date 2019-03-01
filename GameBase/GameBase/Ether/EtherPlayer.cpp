@@ -2,7 +2,7 @@
 // EtherPlayer.cpp
 //
 //
-// 2016-2018 kbEngine 2.0
+// 2016-2019 kbEngine 2.0
 //===================================================================================================
 #include <math.h>
 #include "EtherGame.h"
@@ -11,7 +11,6 @@
 #include "EtherWeapon.h"
 #include "DX11/kbRenderer_DX11.h"
 
-kbConsoleVariable g_ShowPlayerCollision( "showcollision", false, kbConsoleVariable::Console_Bool, "Shows player collision", "" );
 kbConsoleVariable g_GodMod( "god", false, kbConsoleVariable::Console_Bool, "God mode", "" );
 
 const float RespawnZPenalty = 1200.0f;
@@ -113,14 +112,6 @@ void EtherPlayerComponent::Update_Internal( const float DeltaTimeSec ) {
 		if ( m_CurrentHealth < m_MaxHealth ) {
 	
 			m_CurrentHealth = kbClamp( m_CurrentHealth + DeltaTimeSec * rechargeRate, 0.0f, m_MaxHealth );
-		}
-	}
-
-	if ( g_ShowPlayerCollision.GetBool() ) {
-		kbCollisionComponent *const pCollisionComponent = (kbCollisionComponent*)GetOwner()->GetComponentByType( kbCollisionComponent::GetType() );
-
-		if ( pCollisionComponent != nullptr ) {
-			g_pRenderer->DrawSphere( GetOwner()->GetPosition(), pCollisionComponent->GetRadius(), 12, kbColor::red );
 		}
 	}
 

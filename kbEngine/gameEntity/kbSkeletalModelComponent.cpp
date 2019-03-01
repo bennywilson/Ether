@@ -95,11 +95,11 @@ bool kbSkeletalModelComponent::GetBoneWorldPosition( const kbString & boneName, 
 		return false;
 	}
 
-	kbMat4 WeaponMatrix;
-	GetOwner()->CalculateWorldMatrix( WeaponMatrix );
+	kbMat4 worldMatrix;
+	GetOwner()->CalculateWorldMatrix( worldMatrix );
 
 	const kbVec3 localPos = m_pModel->GetRefBoneMatrix( boneIdx ).GetOrigin() * m_BindToLocalSpaceMatrices[boneIdx];
-	outWorldPosition = WeaponMatrix.TransformPoint( localPos );
+	outWorldPosition = worldMatrix.TransformPoint( localPos );
 	return true;
 }
 

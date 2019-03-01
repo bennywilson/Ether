@@ -9,21 +9,6 @@
 
 #include "kbSkeletalModelComponent.h"
 
-/**
- *	EtherAnimEvent
- */
-class EtherAnimEvent : public kbGameComponent {
-	KB_DECLARE_COMPONENT( EtherAnimEvent, kbGameComponent );
-
-public:
-
-	const kbString							GetEventName() const { return m_EventName; }
-	float									GetEventTime() const { return m_EventTime; }
-
-private:
-	kbString								m_EventName;
-	float									m_EventTime;
-};
 
 /**
  *	EtherAnimComponent
@@ -45,7 +30,7 @@ private:
 	kbAnimation *							m_pAnimation;
 	float									m_TimeScale;
 	bool									m_bIsLooping;
-	std::vector<EtherAnimEvent>				m_AnimEvents;
+	std::vector<kbAnimEvent>				m_AnimEvents;
 
 	float									m_CurrentAnimationTime;
 	kbString								m_DesiredNextAnimation;
@@ -94,4 +79,57 @@ protected:
 	bool									m_bFirstPersonModel;
 };
 
+
+/**
+ *	EtherDestructibleComponent
+ */
+class EtherDestructibleComponent : public kbGameComponent {
+
+	KB_DECLARE_COMPONENT( EtherDestructibleComponent, kbGameComponent );
+
+//-------------------------------------------------------------------------------------------------------------------------------------------------------------
+public:
+
+	virtual void							EditorChange( const std::string & propertyName ) override;
+
+	void									TakeDamage( const float damageAmt, const kbVec3 & damagePosition, const float damageRadius );
+
+	bool									IsSimulating() const { return m_bIsSimulating; }
+
+	struct destructibleBone_t {
+		kbVec3								m_Position;
+		kbVec3								m_Acceleration;
+		kbVec3								m_Velocity;
+
+		kbVec3								m_RotationAxis;
+		float								m_RotationSpeed;
+		float								m_CurRotationAngle;
+	};
+	const std::vector<destructibleBone_t> &	GetBonesList() const { return m_BonesList; }
+
+private:
+
+	void									SetEnable_Internal( const bool bEnable ) override;
+	void									Update_Internal( const float deltaTime ) override;
+
+	// Editor
+	float									m_MaxLifeTime;
+	kbVec3									m_Gravity;
+	float									m_MinLinearVelocity;
+	float									m_MaxLinearVelocity;
+	float									m_MinAngularVelocity;
+	float									m_MaxAngularVelocity;
+	float									m_StartingHealth;
+
+	bool									m_bDebugResetSim;
+
+	// Run time
+	std::vector<destructibleBone_t>				m_BonesList;
+
+	float									m_Health;
+	const EtherSkelModelComponent *			m_pSkelModel;
+	float									m_SimStartTime;
+	kbVec3									m_LastHitLocation;
+	bool									m_bIsSimulating;
+};
 #endif

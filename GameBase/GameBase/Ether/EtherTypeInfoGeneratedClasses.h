@@ -18,18 +18,12 @@ GenerateClass(
 )
 
 GenerateClass(
-	EtherAnimEvent,
-	AddField( "EventName", KBTYPEINFO_KBSTRING, EtherAnimEvent, m_EventName, false, "" )
-	AddField( "EventTime", KBTYPEINFO_FLOAT, EtherAnimEvent, m_EventTime, false, "" )
-)
-
-GenerateClass(
 	EtherAnimComponent,
 	AddField( "AnimationName", KBTYPEINFO_KBSTRING, EtherAnimComponent, m_AnimationName, false, "" )
 	AddField( "Animation", KBTYPEINFO_ANIMATION, EtherAnimComponent, m_pAnimation, false, "" )
 	AddField( "TimeScale", KBTYPEINFO_FLOAT, EtherAnimComponent, m_TimeScale, false, "" )
 	AddField( "IsLooping", KBTYPEINFO_BOOL, EtherAnimComponent, m_bIsLooping, false, "" )
-	AddField( "AnimationEvent", KBTYPEINFO_STRUCT, EtherAnimComponent, m_AnimEvents, true, "EtherAnimEvent" )
+	AddField( "AnimationEvent", KBTYPEINFO_STRUCT, EtherAnimComponent, m_AnimEvents, true, "kbAnimEvent" )
 )
 
 GenerateClass(
@@ -37,6 +31,18 @@ GenerateClass(
 	AddField( "Animations", KBTYPEINFO_STRUCT, EtherSkelModelComponent, m_Animations, true, "EtherAnimComponent" )
 	AddField( "DebugAnimIndex", KBTYPEINFO_INT, EtherSkelModelComponent, m_DebugAnimIdx, false, "" )
 	AddField( "IsFirstPersonModel", KBTYPEINFO_BOOL, EtherSkelModelComponent, m_bFirstPersonModel, false, "" )
+)
+
+GenerateClass(
+	EtherDestructibleComponent,
+	AddField( "MaxLifeTime", KBTYPEINFO_FLOAT, EtherDestructibleComponent, m_MaxLifeTime, false, "" )
+	AddField( "Gravity", KBTYPEINFO_VECTOR, EtherDestructibleComponent, m_Gravity, false, "" )
+	AddField( "MinLinearVelocity", KBTYPEINFO_FLOAT, EtherDestructibleComponent, m_MinLinearVelocity, false, "" )
+	AddField( "MaxLinearVelocity", KBTYPEINFO_FLOAT, EtherDestructibleComponent, m_MaxLinearVelocity, false, "" )
+	AddField( "MinAngularVelocity", KBTYPEINFO_FLOAT, EtherDestructibleComponent, m_MinAngularVelocity, false, "" )
+	AddField( "MaxAngularVelocity", KBTYPEINFO_FLOAT, EtherDestructibleComponent, m_MaxAngularVelocity, false, "" )
+	AddField( "Health", KBTYPEINFO_FLOAT, EtherDestructibleComponent, m_StartingHealth, false, "" )
+	AddField( "ResetSim", KBTYPEINFO_BOOL, EtherDestructibleComponent, m_bDebugResetSim, false, "" )
 )
 
 GenerateClass(
@@ -67,11 +73,13 @@ GenerateClass(
 	AddField( "DamageAmount", KBTYPEINFO_FLOAT, EtherProjectileComponent, m_Damage, false, "" )
 	AddField( "Velocity", KBTYPEINFO_FLOAT, EtherProjectileComponent, m_Velocity, false, "" )
 	AddField( "LifeTime", KBTYPEINFO_FLOAT, EtherProjectileComponent, m_LifeTime, false, "" )
-	AddField( "ExplosionFX", KBTYPEINFO_GAMEENTITY, EtherProjectileComponent, m_ExplosionFX, false, "" )
+	AddField( "DefaultImpactFX", KBTYPEINFO_GAMEENTITY, EtherProjectileComponent, m_DefaultImpactFX, false, "" )
+	AddField( "WoodImpactFX", KBTYPEINFO_GAMEENTITY, EtherProjectileComponent, m_WoodImpactFX, false, "" )
 	AddField( "TracerLength", KBTYPEINFO_FLOAT, EtherProjectileComponent, m_TracerLength, false, "" )
 	AddField( "TraceWidth", KBTYPEINFO_FLOAT, EtherProjectileComponent, m_TraceWidth, false, "" )
 	AddField( "ImpactCharacterSound", KBTYPEINFO_STRUCT, EtherProjectileComponent, m_ImpactCharacterSoundData, true, "kbSoundData" )
 	AddField( "ImpactEnvironmentSound", KBTYPEINFO_STRUCT, EtherProjectileComponent, m_ImpactEnvironmentSoundData, true, "kbSoundData" )
+	AddField( "ImpactWoodSound", KBTYPEINFO_STRUCT, EtherProjectileComponent, m_ImpactWoodSoundData, true, "kbSoundData" )
 	AddField( "LaunchSound", KBTYPEINFO_STRUCT, EtherProjectileComponent, m_LaunchSoundData, true, "kbSoundData" )
 	AddField( "RenderBillboard", KBTYPEINFO_BOOL, EtherProjectileComponent, m_bUseBillboard, false, "" )
 	AddField( "DetonationTime", KBTYPEINFO_FLOAT, EtherProjectileComponent, m_DetonationTimer, false, "" )

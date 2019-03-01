@@ -433,6 +433,7 @@ private:
 	void										RenderDebugBillboards( const bool bIsEntityIdPass );
 	void										RenderPostProcess();
 	void										RenderBloom();
+	void										RenderSSAO();
 	void										RenderConsole();
 	void										RenderLights();
 	void										RenderLight( const kbRenderLight *const );
@@ -486,6 +487,7 @@ private:
 	kbShader *									m_pSimpleAdditiveShader;
 	kbShader *									m_pGodRayIterationShader;
 	kbShader *									m_pMousePickerIdShader;
+	kbShader *									m_pSSAO;
 
 	// Non-resource managed shaders (Game assets cannot reference these).  These have to be manually released
 	kbShader *									m_pSkinnedDirectionalLightShadowShader;

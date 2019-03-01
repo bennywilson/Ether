@@ -81,6 +81,10 @@ std::vector<kbTypeInfoClass *> kbMaterialComponent::kbMaterialComponent_TypeInfo
 kbGameComponent_TypeInfo kbGameComponent::typeInfo;
 std::vector<kbTypeInfoClass *> kbGameComponent::kbGameComponent_TypeInfoVar;
 
+// kbAnimEvent
+kbAnimEvent_TypeInfo kbAnimEvent::typeInfo;
+std::vector<class kbTypeInfoClass*> kbAnimEvent::kbAnimEvent_TypeInfoVar;
+
 // kbModelComponent
 kbModelComponent_TypeInfo kbModelComponent::typeInfo;
 std::vector<kbTypeInfoClass *> kbModelComponent::kbModelComponent_TypeInfoVar;

@@ -135,6 +135,7 @@ void kbErrorCheck( const bool bExpression, const char *const msg, ... ) {
 	va_end( args );
 
 	DebugBreak();
+
 	throw finalBuffer;
 }
 

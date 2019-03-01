@@ -2,7 +2,7 @@
 // kbCollisionManager.cpp
 //
 //
-// 2016-2017 kbEngine 2.0
+// 2016-2019 kbEngine 2.0
 //===================================================================================================
 #include "kbCore.h"
 #include "kbVector.h"
@@ -10,10 +10,14 @@
 #include "kbGameEntityHeader.h"
 #include "kbCollisionManager.h"
 #include "kbIntersectionTests.h"
+#include "kbConsole.h"
+#include "kbRenderer.h"
 
 KB_DEFINE_COMPONENT(kbCollisionComponent)
 
 kbCollisionManager g_CollisionManager;
+
+kbConsoleVariable g_ShowCollision( "showcollision", false, kbConsoleVariable::Console_Bool, "Show collision", "" );
 
 /**
  *	kbCollisionComponent::Constructor
@@ -45,6 +49,15 @@ void kbCollisionComponent::SetEnable_Internal( const bool isEnabled ) {
  */
 void kbCollisionComponent::Update_Internal( const float DeltaTime ) {
 	Super::Update_Internal( DeltaTime );
+
+	if ( g_ShowCollision.GetBool() ) {
+		const kbVec3 collisionCenter = GetOwner()->GetPosition();//, pCollision->m_Extent.x 
+		if ( m_CollisionType == ECollisionType::CollisionType_Sphere ) {
+			g_pRenderer->DrawSphere( collisionCenter, m_Extent.x, 12, kbColor::green );
+		} else if ( m_CollisionType == ECollisionType::CollisionType_Box ) {
+			g_pRenderer->DrawBox( kbBounds( collisionCenter - m_Extent, collisionCenter + m_Extent ), kbColor::green );
+		}
+	}
 }
 
 /**

@@ -194,6 +194,9 @@ void CreateVertex( inout TriangleStream<pixelInput> OutputStream, float3 vertexW
 		brokenBladePos.z += horizontalDelta * sign( newSegVec.z );
 		brokenBladePos.y += ( verticalVel * animationTime ) + 0.5f * ( -2755.0f * animationTime * animationTime );
 
+		grassData = 0;
+		grassData.y = brokenBladePos.y + 10.0f;		// Don't burn up the flying grass
+
 		CreateVertex( OutputStream, brokenBladePos, float2( textureStartU, 0.33f ), grassData );
 		CreateVertex( OutputStream, brokenBladePos + jitterOffset, float2( textureEndU, 0.33f ), grassData );
 

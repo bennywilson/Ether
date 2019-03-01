@@ -83,7 +83,7 @@ kbModel::kbModel() :
     m_bIsPointCloud( false ),
 	m_bVBIsMapped( false ),
 	m_bIBIsMapped( false ),
-	m_bCPUAccessOnly( false )  {
+	m_bCPUAccessOnly( false ) {
 }
 
 /**
@@ -571,6 +571,20 @@ bool kbModel::LoadMS3D() {
  */
 FbxManager * g_pFBXSDKManager = nullptr;
 
+FbxAMatrix GetGeometryTransformation(FbxNode* inNode)
+{
+	if (!inNode)
+	{
+		throw std::exception("Null for mesh geometry");
+	}
+
+	const FbxVector4 lT = inNode->GetGeometricTranslation(FbxNode::eSourcePivot);
+	const FbxVector4 lR = inNode->GetGeometricRotation(FbxNode::eSourcePivot);
+	const FbxVector4 lS = inNode->GetGeometricScaling(FbxNode::eSourcePivot);
+
+	return FbxAMatrix(lT, lR, lS);
+}
+
 bool kbModel::LoadFBX() {
 
 	struct FBXData {
@@ -618,6 +632,11 @@ bool kbModel::LoadFBX() {
 	std::vector<vertexLayout> vertexList;
 	std::vector<ushort> indexList;
 
+			std::map<int, kbBounds> boneToBounds;
+		std::map<int, int> vertToBone;
+		std::map<int, kbColor> boneToColor;
+
+
 	for ( int iMesh = 0; iMesh < pRootNode->GetChildCount(); iMesh++ ) {
 		
 		FbxMesh *const pFBXMesh = pRootNode->GetChild(iMesh)->GetMesh();
@@ -635,6 +654,47 @@ bool kbModel::LoadFBX() {
 		newMesh.m_Bounds.Reset();
 
 		uint vertexCount = 0;
+
+
+					int numDeformers = pFBXMesh->GetDeformerCount();
+			FbxAMatrix geomXForm = GetGeometryTransformation(pRootNode->GetChild(iMesh));
+			for ( int iDeform = 0; iDeform < numDeformers; iDeform++ ) {
+				FbxSkin * pCurSkin = (FbxSkin*)pFBXMesh->GetDeformer( iDeform, FbxDeformer::eSkin );
+				if ( pCurSkin == nullptr ) {
+					continue;
+				}
+
+
+				uint numClusters = pCurSkin->GetClusterCount();
+				for ( uint iCluster = 0; iCluster < numClusters; iCluster++ ) {
+					FbxCluster * pCurCluster = pCurSkin->GetCluster( iCluster );
+					std::string curJointName = pCurCluster->GetLink()->GetName();
+
+					boneToBounds[iCluster].Reset();
+					kbColor boneColor( kbfrand() * 0.5f + 0.5f, kbfrand() * 0.5f + 0.5f, kbfrand() * 0.5f + 0.5f, 1.0f );
+					boneToColor[iCluster] = boneColor;
+
+				//	kbLog( "%s bone color is %f %f %f", curJointName.c_str(), boneColor.x, boneColor.y, boneColor.z, boneColor.w );
+
+					FbxAMatrix xformMat;
+					FbxAMatrix xformLinkMat;
+					FbxAMatrix globalBindPoseInverseMatrix;
+
+					pCurCluster->GetTransformMatrix( xformMat );
+					pCurCluster->GetTransformLinkMatrix( xformLinkMat );
+					globalBindPoseInverseMatrix = xformLinkMat.Inverse() * xformMat * geomXForm;
+					//kbLog( "Yay!");
+
+					unsigned int numOfIndices = pCurCluster->GetControlPointIndicesCount();
+					int * pCtrlPtList = pCurCluster->GetControlPointIndices();
+					for (unsigned int i = 0; i < numOfIndices; ++i)
+					{
+					//	kbLog( "	Adding vertex %d", pCtrlPtList[i]);
+						vertToBone[pCtrlPtList[i]] = iCluster;
+					}
+
+				}
+			}
 
 		for ( int iTri = 0; iTri < (int)newMesh.m_NumTriangles; iTri++ ) {
 
@@ -720,6 +780,20 @@ bool kbModel::LoadFBX() {
 					triVert.SetColor(color);
 				}
 
+				int boneIdx = vertToBone[iCtrlPt];
+				boneToBounds[boneIdx].AddPoint( triVert.position );
+				triVert.color[0] = (byte) boneIdx;
+				triVert.color[1] = (byte) boneIdx;
+				triVert.color[2] = (byte) boneIdx;
+				triVert.color[3] = (byte) boneIdx;
+
+				/*
+									newVert.color[0] = (byte)boneIndices[currentTriangle.m_VertexIndices[j]];
+					newVert.color[1] = (byte)boneIndices[currentTriangle.m_VertexIndices[j]];
+					newVert.color[2] = (byte)boneIndices[currentTriangle.m_VertexIndices[j]];
+					newVert.color[3] = (byte)boneIndices[currentTriangle.m_VertexIndices[j]]; 
+				*/
+				//triVert.SetColor( boneToColor[boneIdx] );
 				auto vertIt = vertexMap.find( triVert );
 				if ( vertIt == vertexMap.end() ) {
 					const int vertIdx = (int)vertexList.size();
@@ -732,6 +806,27 @@ bool kbModel::LoadFBX() {
 			}
 		}
 	}
+/*
+	for ( int i = 0; i < pRootNode->GetChildCount(); i++ ) {
+		FbxNode * pCurNode = pRootNode->GetChild(i);
+		kbLog( "Processing parent node %s", pCurNode->GetName() );
+
+		for ( int j = 0; j < pCurNode->GetChildCount(); j++ ) {
+			FbxNode * pRootBone = pCurNode->GetChild(j);
+			if ( pRootBone->GetNodeAttribute() == nullptr || pRootBone->GetNodeAttribute()->GetAttributeType() != FbxNodeAttribute::eSkeleton ) {
+				continue;
+			}
+			kbLog( "	Processing Root bone %s", pRootBone->GetName() );
+					
+			for ( int l = 0; l < pRootBone->GetChildCount(); l++ ) {
+				FbxNode * pBoneNode = pRootBone->GetChild(l);
+				if ( pBoneNode->GetNodeAttribute() == nullptr || pBoneNode->GetNodeAttribute()->GetAttributeType() != FbxNodeAttribute::eSkeleton ) {
+					continue;
+				}
+				kbLog( "		Processing child bones %s", pBoneNode->GetName() );
+			}
+		}
+	}*/
 
 	m_VertexBuffer.CreateVertexBuffer( vertexList );
 	m_IndexBuffer.CreateIndexBuffer( indexList );
@@ -740,6 +835,22 @@ bool kbModel::LoadFBX() {
 	newMaterial.m_pShader = (kbShader *) g_ResourceManager.LoadResource( "../../kbEngine/assets/Shaders/basicShader.kbShader", true );
 	m_Materials.push_back( newMaterial );
 
+	m_Bones.resize( boneToBounds.size() );
+	for ( int i = 0; i < boneToBounds.size(); i++ ) {
+		kbBounds & boneBounds = boneToBounds[i];
+		m_Bones[i].m_RelativePosition = boneBounds.Center();
+		m_Bones[i].m_RelativeRotation = kbQuat( 0.0f, 0.0f, 0.0f, 1.0f );
+
+		kbBoneMatrix_t invRef;
+		invRef.SetIdentity();
+		invRef.SetAxis( 3, -m_Bones[i].m_RelativePosition );
+		m_InvRefPose.push_back( invRef );
+
+		kbBoneMatrix_t ref;
+		ref.SetIdentity();
+		ref.SetAxis( 3, m_Bones[i].m_RelativePosition );
+		m_RefPose.push_back( ref );
+	}
 	return true;
 }
 
