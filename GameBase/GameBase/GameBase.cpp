@@ -237,7 +237,7 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 	bool bRenderVR = false;
 	bool bUseVRTrackingOnly = false;
 
-	if ( GetAsyncKeyState( VK_SHIFT ) ) {
+	if ( GetAsyncKeyState(VK_F4 ) ) {
 		g_UseEditor = true;
 	}
 	if ( numArgs > 0 ) {

@@ -162,14 +162,14 @@ kbPrefab 1 {
 					Enabled = 0
 					LifeTime =  -1.000000
 					Radius =  -1.000000
-					Volume =  0.1500000
+					Volume =  0.150000
 					WaveFile = .\assets\sounds\rifle.wav
 				}
 				kbSoundData { 
 					Enabled = 0
 					LifeTime =  -1.000000
 					Radius =  -1.000000
-					Volume =  0.1500000
+					Volume =  0.150000
 					WaveFile = .\assets\sounds\rifle_1.wav
 				}
 				kbSoundData { 
@@ -183,7 +183,7 @@ kbPrefab 1 {
 					Enabled = 0
 					LifeTime =  -1.000000
 					Radius =  -1.000000
-					Volume =  0.1300000
+					Volume =  0.130000
 					WaveFile = .\assets\sounds\rifle_1.wav
 				}
 			LifeTime =  5.000000
@@ -493,18 +493,21 @@ kbGameEntity 292847838 1140569109 1236968083 2365837966 {
 						LifeTime =  -1.000000
 						EventName = "Shoot"
 						EventTime =  0.200000
+						EventValue =  0.000000
 					}
 					kbAnimEvent { 
 						Enabled = 0
 						LifeTime =  -1.000000
 						EventName = "Shoot"
 						EventTime =  0.400000
+						EventValue =  0.000000
 					}
 					kbAnimEvent { 
 						Enabled = 0
 						LifeTime =  -1.000000
 						EventName = "Shoot"
 						EventTime =  0.600000
+						EventValue =  0.000000
 					}
 				AnimationName = "Shoot"
 				IsLooping = 0

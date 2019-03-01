@@ -93,9 +93,7 @@ pixelInput vertexShader( vertexInput input ) {
 		output.uv += float2( 0.5f, 0.5f );
 	}
 
-	float alphaBlendFactor = 1.0f - input.color.a;//saturate( max( max( input.color.r, input.color.g ), input.color.b ) * 2.0f - 1.0f );
-	output.color.rgb = input.color.rgb * input.color.a * lerp( 0, 2.0f, alphaBlendFactor );
-	output.color.a = input.color.a * alphaBlendFactor;
+	output.color = input.color;
 
 	output.position2 = output.position.zw;
 
@@ -110,16 +108,19 @@ SamplerState SampleType;
 
  float4 pixelShader( pixelInput	input ) : SV_TARGET {
 	float4 finalColor = shaderTexture.Sample( SampleType, input.uv );
-	finalColor *= input.color;
 
-/*	if ( finalColor.a < 0.5f ) {
-		 finalColor.a = saturate( finalColor.a * 2.0f );		// Alpha blended
-		finalColor.xyz *= finalColor.a;
+
+	if ( input.color.a < 0.5f ) {
+		finalColor.a *= input.color.a * 2.0f;
+	
+		finalColor.xyz *= finalColor.a;	
 	} else {
-		finalColor.xyz *= ( finalColor.a - 0.5f ) * 2.0f;
-		finalColor.w = 1.0f;
+
+		//finalColor.xyz = inputColor.xyz;;//( finalColor.a - 0.5f ) * 2.0f;
+		//finalColor.xyz = 1;
+		finalColor.w = 0.0f;
 	}
-*/
+	finalColor *= input.color;
 
 	return finalColor;
 }

@@ -64,7 +64,7 @@ private:
 	float														m_MaxParticleSpawnRate;				// Particles per second
 	kbVec3														m_MinParticleStartVelocity;
 	kbVec3														m_MaxParticleStartVelocity;
-	std::vector<kbAnimEvent>									m_VelocityCurve;
+	std::vector<kbAnimEvent>									m_VelocityOverLifeTimeCurve;
 	kbVec3														m_MinParticleEndVelocity;
 	kbVec3														m_MaxParticleEndVelocity;
 	float														m_MinStartRotationRate;
@@ -79,6 +79,8 @@ private:
 	float														m_ParticleMaxDuration;
 	kbVec4														m_ParticleStartColor;
 	kbVec4														m_ParticleEndColor;
+	std::vector<kbVectorAnimEvent>								m_ColorOverLifeTimeCurve;
+	std::vector<kbAnimEvent>									m_AlphaOverLifeTimeCurve;
 	kbVec3														m_Gravity;
 	int															m_MinBurstCount;
 	int															m_MaxBurstCount;

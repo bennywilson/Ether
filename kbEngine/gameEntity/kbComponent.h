@@ -218,9 +218,32 @@ public:
 	float									GetEventTime() const { return m_EventTime; }
 	float									GetEventValue() const { return m_EventValue; }
 
+	static float							Evaluate( const std::vector<kbAnimEvent> & eventList, const float t );
+
 private:
 	kbString								m_EventName;
 	float									m_EventValue;
 	float									m_EventTime;
 };
+
+/**
+ *	kbVectorAnimEvent
+ */
+class kbVectorAnimEvent : public kbGameComponent {
+	KB_DECLARE_COMPONENT( kbVectorAnimEvent, kbGameComponent );
+
+public:
+
+	const kbString							GetEventName() const { return m_EventName; }
+	float									GetEventTime() const { return m_EventTime; }
+	kbVec3									GetEventValue() const { return m_EventValue; }
+
+	static kbVec3							Evaluate( const std::vector<kbVectorAnimEvent> & eventList, const float t );
+
+private:
+	kbString								m_EventName;
+	kbVec3									m_EventValue;
+	float									m_EventTime;
+};
+
 #endif

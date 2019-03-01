@@ -430,7 +430,7 @@ kbGameEntity 2914882686 1195769252 1420378815 2077859665 {
 						Enabled = 0
 						LifeTime =  -1.000000
 						ParamName = "shaderTexture"
-						Texture = .\assets\fx\smoke\smokeatlas_1.jpg
+						Texture = .\assets\fx\smoke\smokeatlas_1.tga
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 			}

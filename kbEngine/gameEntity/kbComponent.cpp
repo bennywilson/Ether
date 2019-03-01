@@ -325,3 +325,67 @@ void kbActorComponent::TakeDamage( const class kbDamageComponent *const pDamageC
 void kbPlayerStartComponent::Constructor() {
 	m_DummyVar = 0;
 }
+
+/**
+ *	kbAnimEvent::Constructor()
+ */
+void kbAnimEvent::Constructor() {
+	m_EventTime = 0.0f;
+	m_EventValue = 0.0f;
+}
+
+/**
+ *	kbVectorAnimEvent::Constructor()
+ */
+void kbVectorAnimEvent::Constructor() {
+	m_EventTime = 0.0f;
+	m_EventValue = kbVec3::zero;
+}
+
+/**
+ *	kbAnimEvent::Evaluate
+ */
+float kbAnimEvent::Evaluate( const std::vector<kbAnimEvent> & eventList, const float t ) {
+	if ( eventList.size() == 0 ) {
+		kbWarning( "kbAnimEvent::Evaluate() - Empty event list" );
+		return 0;
+	}
+
+	for ( int i = 0; i < eventList.size(); i++ ) {
+		if ( t < eventList[i].GetEventTime() ) {
+			if ( i == 0 ) {
+				return eventList[0].GetEventValue();
+			}
+
+			const float lerp = ( t - eventList[i-1].GetEventTime() ) / ( eventList[i].GetEventTime() - eventList[i-1].GetEventTime() );
+			return kbLerp( eventList[i-1].GetEventValue(), eventList[i].GetEventValue(), lerp );
+		}
+	}
+
+	return eventList[eventList.size() - 1].GetEventValue();
+}
+
+/**
+ *	kbVectorAnimEvent::Evaluate
+ */
+kbVec3 kbVectorAnimEvent::Evaluate( const std::vector<kbVectorAnimEvent> & eventList, const float t ) {
+	if ( eventList.size() == 0 ) {
+		kbWarning( "kbVectorAnimEvent::Evaluate() - Empty event list" );
+		return kbVec3::zero;
+	}
+	
+	for ( int i = 0; i < eventList.size(); i++ ) {
+		if ( t < eventList[i].GetEventTime() ) {
+			if ( i == 0 ) {
+				return eventList[0].GetEventValue();
+			}
+
+			const float lerp = ( t - eventList[i-1].GetEventTime() ) / ( eventList[i].GetEventTime() - eventList[i-1].GetEventTime() );
+		//	kbLog( "i = %d, lerp = %f.  time1 = %f, time2 = %f", i, lerp, eventList[i-1].GetEventTime(), t - eventList[i-1].GetEventTime() );
+			return kbLerp( eventList[i-1].GetEventValue(), eventList[i].GetEventValue(), lerp );
+		}
+	}
+
+//	kbLog( "Gah!");
+	return eventList[eventList.size() - 1].GetEventValue();
+}

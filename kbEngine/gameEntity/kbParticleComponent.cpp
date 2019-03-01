@@ -127,13 +127,13 @@ void kbParticleComponent::Update_Internal( const float DeltaTime ) {
 			continue;
 		}
 
-		const float LerpValue = m_Particles[i].m_LifeLeft / m_Particles[i].m_TotalLife;
-		kbVec3 curVelocity = kbLerp( m_Particles[i].m_EndVelocity, m_Particles[i].m_StartVelocity, LerpValue );
+		const float normalizedTime = ( m_Particles[i].m_TotalLife - m_Particles[i].m_LifeLeft ) / m_Particles[i].m_TotalLife;
+		kbVec3 curVelocity = kbLerp( m_Particles[i].m_EndVelocity, m_Particles[i].m_StartVelocity, normalizedTime );
 		curVelocity += m_Gravity * ( m_Particles[i].m_TotalLife - m_Particles[i].m_LifeLeft );
 
 		m_Particles[i].m_Position = m_Particles[i].m_Position + curVelocity * DeltaTime;
 
-		float curRotationRate = kbLerp( m_Particles[i].m_EndRotation, m_Particles[i].m_StartRotation, LerpValue );
+		float curRotationRate = kbLerp( m_Particles[i].m_StartRotation, m_Particles[i].m_EndRotation, normalizedTime );
 		m_Particles[i].m_Rotation += curRotationRate * DeltaTime;
 
 		m_pIndexBuffer[m_NumIndicesInCurrentBuffer + 2] = ( curVBPosition * 4 ) + 0;
@@ -153,7 +153,7 @@ void kbParticleComponent::Update_Internal( const float DeltaTime ) {
 		m_pVertexBuffer[iVertex + 1].uv.Set( 1.0f, 0.0f );
 		m_pVertexBuffer[iVertex + 2].uv.Set( 1.0f, 1.0f );
 		m_pVertexBuffer[iVertex + 3].uv.Set( 0.0f, 1.0f );
-		kbVec2 curSize = kbLerp( m_Particles[i].m_EndSize, m_Particles[i].m_StartSize, LerpValue );
+		kbVec2 curSize = kbLerp( m_Particles[i].m_StartSize, m_Particles[i].m_EndSize, normalizedTime );
 		curSize.x *= scale.x;
 		curSize.y *= scale.y;
 
@@ -162,7 +162,24 @@ void kbParticleComponent::Update_Internal( const float DeltaTime ) {
 		m_pVertexBuffer[iVertex + 2].size = kbVec2(  curSize.x, -curSize.y );
 		m_pVertexBuffer[iVertex + 3].size = kbVec2( -curSize.x, -curSize.y );
 
-		kbVec4 curColor = kbLerp( m_ParticleEndColor, m_ParticleStartColor, LerpValue );
+		kbVec4 curColor = kbVec4::zero;
+		if ( m_ColorOverLifeTimeCurve.size() == 0 ) {
+			curColor = kbLerp( m_ParticleStartColor, m_ParticleEndColor, normalizedTime );
+		} else {
+			curColor = kbVectorAnimEvent::Evaluate( m_ColorOverLifeTimeCurve, normalizedTime );
+
+			kbLog( "Color = %f %f %f %f", curColor.x, curColor.y, curColor.z, normalizedTime );
+		}
+
+		if ( m_AlphaOverLifeTimeCurve.size() == 0 ) {
+			curColor.w = kbLerp( m_ParticleStartColor.w, m_ParticleEndColor.w, normalizedTime );
+		} else {
+			curColor.w = kbAnimEvent::Evaluate( m_AlphaOverLifeTimeCurve, normalizedTime );
+
+			kbLog( "Alpha = %f %f", curColor.w, normalizedTime );
+		//	kbLog( "--> %f %f", normalizedTime, curColor.w );
+		}
+
 		byte byteColor[4] = { ( byte )kbClamp( curColor.x * 255.0f, 0.0f, 255.0f  ), ( byte )kbClamp( curColor.y * 255.0f, 0.0f, 255.0f ), ( byte )kbClamp( curColor.z * 255.0f, 0.0f, 255.0f ), ( byte )kbClamp( curColor.w * 255.0f, 0.0f, 255.0f ) };
 		memcpy(&m_pVertexBuffer[iVertex + 0].color, byteColor, sizeof(byteColor));
 		memcpy(&m_pVertexBuffer[iVertex + 1].color, byteColor, sizeof(byteColor));

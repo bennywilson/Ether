@@ -19,15 +19,6 @@ KB_DEFINE_COMPONENT(EtherSkelModelComponent)
 static XMMATRIX & XMMATRIXFromkbMat4( kbMat4 & matrix ) { return (*(XMMATRIX*) &matrix); }
 static kbMat4 & kbMat4FromXMMATRIX( FXMMATRIX & matrix ) { return (*(kbMat4*) & matrix); }
 
-
-/**
- *	kbAnimEvent::Constructor()
- */
-void kbAnimEvent::Constructor() {
-	m_EventTime = 0.0f;
-	m_EventValue = 0.0f;
-}
-
 /**
  *	EtherAnimComponent::Constructor()
  */
