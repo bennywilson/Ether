@@ -113,7 +113,7 @@ SamplerState SampleType;
 	if ( input.color.a < 0.5f ) {
 		finalColor.xyz *= finalColor.a;
 //		finalColor.xyz *= input.color.a * 2.0f;
-	//finalColor.a *= input.color.a * 2.0f;
+		finalColor.a *= input.color.a * 2.0f;
 			
 	} else {
 

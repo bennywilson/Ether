@@ -148,11 +148,36 @@ void kbPropertiesTab::CheckButtonCB( Fl_Widget * widget, void * voidPtr ) {
 
 	Fl_Check_Button *const pCheckButton = static_cast<Fl_Check_Button *>( widget );
 
+/*
+	kbGameEntity *const pGameEntity = (kbGameEntity*)( pModifiedComponent->IsA( kbGameComponent::GetType() ) ? ( pModifiedComponent->GetOwner() ) : ( nullptr ) );
+
+	if ( pGameEntity != nullptr && pGameEntity->GetComponent(0) == pModifiedComponent ) {
+		// Refresh all components if the transform component was modified
+		kbTransformComponent *const pTransformComponent = (kbTransformComponent*)pGameEntity->GetComponent(0);
+
+		for ( int i = 0; i < pGameEntity->NumComponents(); i++ ) {
+			kbComponent *const pCurComp = pGameEntity->GetComponent(i);
+			if ( pCurComp->IsEnabled() ) {
+				pCurComp->Enable( false );
+				pCurComp->Enable( true );
+			}
+		}
+	} else if ( userData->m_pComponent->IsEnabled() ) {
+		userData->m_pComponent->Enable( false );
+		userData->m_pComponent->Enable( true );
+	}
+*/
 	const char buttonVal = pCheckButton->value();
 
 	*((bool*)userData->m_pVariablePtr) = (bool)buttonVal;
 
 	userData->m_pComponent->EditorChange( userData->m_VariableName.stl_str() );
+
+
+	kbComponent *const pModifiedComponent = userData->m_pComponent;
+	if ( pModifiedComponent->IsA( kbTransformComponent::GetType() ) ) {
+	
+	}
 
 	PropertyChangedCB( userData->m_GameEntityPtr );
 }

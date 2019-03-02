@@ -21,6 +21,7 @@ static const uint NumParticleBufferVerts = 10000;
  */
 void kbParticleComponent::Constructor() {
 	m_TotalDuration = -1.0f;
+	m_StartDelay = 0.0f;
 	m_MinParticleSpawnRate = 1.0f;
 	m_MaxParticleSpawnRate = 2.0f;
 	m_MinParticleStartVelocity.Set( -2.0f, 5.0f, -2.0f );
@@ -42,6 +43,7 @@ void kbParticleComponent::Constructor() {
 	m_MinBurstCount = 0;
 	m_MaxBurstCount = 0;
 	m_BurstCount = 0;
+	m_StartDelayRemaining = 0;
 	m_ParticleBillboardType = BT_FaceCamera;
 	m_Gravity.Set( 0.0f, 0.0f, 0.0f );
 	m_TranslucencySortBias = 0.0f;
@@ -100,6 +102,23 @@ void kbParticleComponent::StopParticleSystem() {
 void kbParticleComponent::Update_Internal( const float DeltaTime ) {
 	Super::Update_Internal( DeltaTime );
 
+	if ( m_StartDelay > 0 ) {
+
+		m_StartDelay -= DeltaTime;
+		if ( m_StartDelay < 0 ) {
+			m_TimeAlive = 0.0f;
+			if ( m_MaxBurstCount > 0 ) {
+				m_BurstCount = m_MinBurstCount;
+				if ( m_MaxBurstCount > m_MinBurstCount ) {
+					m_BurstCount += rand() % ( m_MaxBurstCount - m_MinBurstCount );
+				}
+			}
+		} else {
+			return;
+		}
+
+	}
+
 	const float eps = 0.00000001f;
 	if ( m_pVertexBuffer == nullptr || m_pIndexBuffer == nullptr ) {
 		return;
@@ -131,7 +150,7 @@ void kbParticleComponent::Update_Internal( const float DeltaTime ) {
 		kbVec3 curVelocity = kbVec3::zero;
 
 		if ( m_VelocityOverLifeTimeCurve.size() == 0 ) {
-			curVelocity = kbLerp( m_Particles[i].m_EndVelocity, m_Particles[i].m_StartVelocity, normalizedTime );
+			curVelocity = kbLerp( m_Particles[i].m_StartVelocity, m_Particles[i].m_EndVelocity, normalizedTime );
 		} else {
 			const float velCurve = kbAnimEvent::Evaluate( m_VelocityOverLifeTimeCurve, normalizedTime );
 			curVelocity = m_Particles[i].m_StartVelocity * velCurve;
@@ -274,9 +293,14 @@ void kbParticleComponent::Update_Internal( const float DeltaTime ) {
 		newParticle.m_Randoms[1] = kbfrand();
 		newParticle.m_Randoms[2] = kbfrand();
 
-		newParticle.m_Rotation = kbfrand( m_MinStartRotationRate, m_MaxStartRotationRate );
-		newParticle.m_StartRotation = newParticle.m_Rotation;
+		newParticle.m_StartRotation = kbfrand( m_MinStartRotationRate, m_MaxStartRotationRate );
 		newParticle.m_EndRotation = kbfrand( m_MinEndRotationRate, m_MaxEndRotationRate );
+
+		if ( newParticle.m_StartRotation != 0 || newParticle.m_EndRotation != 0 ) {
+			newParticle.m_Rotation = kbfrand() * kbPI;
+		} else {
+			newParticle.m_Rotation = 0;
+		}
 
 		if ( m_BurstCount > 0 ) {
 			m_BurstCount--;
@@ -400,12 +424,15 @@ void kbParticleComponent::SetEnable_Internal( const bool isEnabled ) {
 	Super::SetEnable_Internal( isEnabled );
 
 	if ( isEnabled ) {
-
-		m_TimeAlive = 0.0f;
-		if ( m_MaxBurstCount > 0 ) {
-			m_BurstCount = m_MinBurstCount;
-			if ( m_MaxBurstCount > m_MinBurstCount ) {
-				m_BurstCount += rand() % ( m_MaxBurstCount - m_MinBurstCount );
+		if ( m_StartDelay > 0 ) {
+			m_StartDelayRemaining = m_StartDelay;
+		} else {
+			m_TimeAlive = 0.0f;
+			if ( m_MaxBurstCount > 0 ) {
+				m_BurstCount = m_MinBurstCount;
+				if ( m_MaxBurstCount > m_MinBurstCount ) {
+					m_BurstCount += rand() % ( m_MaxBurstCount - m_MinBurstCount );
+				}
 			}
 		}
 	} else {

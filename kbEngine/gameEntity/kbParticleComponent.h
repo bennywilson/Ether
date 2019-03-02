@@ -60,6 +60,7 @@ private:
 	// Editable
 	std::vector<kbMaterialComponent>							m_MaterialList;
 	float														m_TotalDuration;
+	float														m_StartDelay;
 	float														m_MinParticleSpawnRate;				// Particles per second
 	float														m_MaxParticleSpawnRate;				// Particles per second
 	kbVec3														m_MinParticleStartVelocity;
@@ -92,6 +93,7 @@ private:
 	float														m_LeftOverTime;
 	float														m_TimeAlive;
 	int															m_BurstCount;
+	float														m_StartDelayRemaining;
 
 	kbRenderObject												m_RenderObject;
 

@@ -209,6 +209,7 @@ GenerateClass(
 	AddField( "TranslucencySortBias", KBTYPEINFO_FLOAT, kbParticleComponent, m_TranslucencySortBias, false, "" )
 	AddField( "MaterialList", KBTYPEINFO_STRUCT, kbParticleComponent, m_MaterialList, true, "kbMaterialComponent" )
 	AddField( "TotalDuration", KBTYPEINFO_FLOAT, kbParticleComponent, m_TotalDuration, false, "" )
+	AddField( "StartDelay", KBTYPEINFO_FLOAT, kbParticleComponent, m_StartDelay, false, "" )
 	AddField( "MinSpawnRate", KBTYPEINFO_FLOAT, kbParticleComponent, m_MinParticleSpawnRate, false, "" )
 	AddField( "MaxSpawnRate", KBTYPEINFO_FLOAT, kbParticleComponent, m_MaxParticleSpawnRate, false, "" )
 
