@@ -128,7 +128,15 @@ void kbParticleComponent::Update_Internal( const float DeltaTime ) {
 		}
 
 		const float normalizedTime = ( m_Particles[i].m_TotalLife - m_Particles[i].m_LifeLeft ) / m_Particles[i].m_TotalLife;
-		kbVec3 curVelocity = kbLerp( m_Particles[i].m_EndVelocity, m_Particles[i].m_StartVelocity, normalizedTime );
+		kbVec3 curVelocity = kbVec3::zero;
+
+		if ( m_VelocityOverLifeTimeCurve.size() == 0 ) {
+			curVelocity = kbLerp( m_Particles[i].m_EndVelocity, m_Particles[i].m_StartVelocity, normalizedTime );
+		} else {
+			const float velCurve = kbAnimEvent::Evaluate( m_VelocityOverLifeTimeCurve, normalizedTime );
+			curVelocity = m_Particles[i].m_StartVelocity * velCurve;
+		}
+
 		curVelocity += m_Gravity * ( m_Particles[i].m_TotalLife - m_Particles[i].m_LifeLeft );
 
 		m_Particles[i].m_Position = m_Particles[i].m_Position + curVelocity * DeltaTime;
@@ -168,7 +176,7 @@ void kbParticleComponent::Update_Internal( const float DeltaTime ) {
 		} else {
 			curColor = kbVectorAnimEvent::Evaluate( m_ColorOverLifeTimeCurve, normalizedTime );
 
-			kbLog( "Color = %f %f %f %f", curColor.x, curColor.y, curColor.z, normalizedTime );
+			//kbLog( "Color = %f %f %f %f", curColor.x, curColor.y, curColor.z, normalizedTime );
 		}
 
 		if ( m_AlphaOverLifeTimeCurve.size() == 0 ) {
@@ -176,7 +184,7 @@ void kbParticleComponent::Update_Internal( const float DeltaTime ) {
 		} else {
 			curColor.w = kbAnimEvent::Evaluate( m_AlphaOverLifeTimeCurve, normalizedTime );
 
-			kbLog( "Alpha = %f %f", curColor.w, normalizedTime );
+			//kbLog( "//Alpha = %f %f", curColor.w, normalizedTime );
 		//	kbLog( "--> %f %f", normalizedTime, curColor.w );
 		}
 
