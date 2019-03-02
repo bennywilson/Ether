@@ -102,6 +102,11 @@ void kbParticleComponent::StopParticleSystem() {
 void kbParticleComponent::Update_Internal( const float DeltaTime ) {
 	Super::Update_Internal( DeltaTime );
 
+	bool bOutput = false;
+	if ( GetName().find("Linger") != std::string::npos ) {
+		bOutput = true;
+	}
+
 	if ( m_StartDelay > 0 ) {
 
 		m_StartDelay -= DeltaTime;
