@@ -762,7 +762,7 @@ bool kbModel::LoadFBX() {
 
 					const int uvIndex = pFBXVertUV->GetIndexArray().GetAt(iCurVertex);
 					const auto fbxUV = pFBXVertUV->GetDirectArray().GetAt(uvIndex).mData;
-					triVert.uv.Set((float)fbxUV[0], (float)fbxUV[1]);
+					triVert.uv.Set((float)fbxUV[0], 1.0f - (float)fbxUV[1]);
 				}
 
 				FbxGeometryElementVertexColor *const pFBXVertColor = pFBXMesh->GetElementVertexColor(0);

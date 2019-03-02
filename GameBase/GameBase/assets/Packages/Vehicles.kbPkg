@@ -54,6 +54,7 @@ kbPrefab 1 {
 			MinStartVelocity = 0.000000 0.000000 -20.000000
 			ParticleBillboardType = AxialBillboard
 			StartColor = 0.500000 0.300000 0.250000 1.000000
+			StartDelay =  0.000000
 			TotalDuration =  -1.000000
 			TranslucencySortBias =  0.000000
 			VelocityCurve = 0
