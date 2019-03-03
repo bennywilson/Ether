@@ -160,13 +160,16 @@ kbGameEntity 0 0 0 0 {
 	EtherDestructibleComponent { 
 		Enabled = 1
 		LifeTime =  -1.000000
+		DestructibleBehavior = PushFromImpactPoint
+		DestructionFX = 0 0 0 0
+		DestructionFXLocalOffset = 0.000000 0.000000 0.000000
 		Gravity = 0.000000 22.000000 0.000000
-		Health =  2.000000
-		MaxAngularVelocity =  10.000000
+		Health =  0.000000
+		MaxAngularVelocity =  0.000000
 		MaxLifeTime =  10.000000
-		MaxLinearVelocity =  20.000000
+		MaxLinearVelocity = 20.000000 0.000000 0.000000
 		MinAngularVelocity =  5.000000
-		MinLinearVelocity =  5.000000
+		MinLinearVelocity = 5.000000 0.000000 0.000000
 		ResetSim = 0
 	}
 	kbCollisionComponent { 
@@ -237,13 +240,16 @@ kbGameEntity 0 0 0 0 {
 	EtherDestructibleComponent { 
 		Enabled = 1
 		LifeTime =  -1.000000
+		DestructibleBehavior = PushFromImpactPoint
+		DestructionFX = 0 0 0 0
+		DestructionFXLocalOffset = 0.000000 0.000000 0.000000
 		Gravity = 0.000000 22.000000 0.000000
-		Health =  2.000000
-		MaxAngularVelocity =  10.000000
+		Health =  0.000000
+		MaxAngularVelocity =  0.000000
 		MaxLifeTime =  10.000000
-		MaxLinearVelocity =  20.000000
+		MaxLinearVelocity = 20.000000 0.000000 0.000000
 		MinAngularVelocity =  5.000000
-		MinLinearVelocity =  5.000000
+		MinLinearVelocity = 5.000000 0.000000 0.000000
 		ResetSim = 0
 	}
 	kbCollisionComponent { 
@@ -314,13 +320,16 @@ kbGameEntity 0 0 0 0 {
 	EtherDestructibleComponent { 
 		Enabled = 1
 		LifeTime =  -1.000000
+		DestructibleBehavior = PushFromImpactPoint
+		DestructionFX = 0 0 0 0
+		DestructionFXLocalOffset = 0.000000 0.000000 0.000000
 		Gravity = 0.000000 22.000000 0.000000
-		Health =  2.000000
-		MaxAngularVelocity =  10.000000
+		Health =  0.000000
+		MaxAngularVelocity =  0.000000
 		MaxLifeTime =  10.000000
-		MaxLinearVelocity =  20.000000
+		MaxLinearVelocity = 20.000000 0.000000 0.000000
 		MinAngularVelocity =  5.000000
-		MinLinearVelocity =  5.000000
+		MinLinearVelocity = 5.000000 0.000000 0.000000
 		ResetSim = 0
 	}
 	kbCollisionComponent { 
@@ -391,13 +400,16 @@ kbGameEntity 0 0 0 0 {
 	EtherDestructibleComponent { 
 		Enabled = 1
 		LifeTime =  -1.000000
+		DestructibleBehavior = PushFromImpactPoint
+		DestructionFX = 0 0 0 0
+		DestructionFXLocalOffset = 0.000000 0.000000 0.000000
 		Gravity = 0.000000 22.000000 0.000000
-		Health =  2.000000
-		MaxAngularVelocity =  10.000000
+		Health =  0.000000
+		MaxAngularVelocity =  0.000000
 		MaxLifeTime =  10.000000
-		MaxLinearVelocity =  20.000000
+		MaxLinearVelocity = 20.000000 0.000000 0.000000
 		MinAngularVelocity =  5.000000
-		MinLinearVelocity =  5.000000
+		MinLinearVelocity = 5.000000 0.000000 0.000000
 		ResetSim = 0
 	}
 	kbCollisionComponent { 
@@ -468,13 +480,16 @@ kbGameEntity 0 0 0 0 {
 	EtherDestructibleComponent { 
 		Enabled = 1
 		LifeTime =  -1.000000
+		DestructibleBehavior = PushFromImpactPoint
+		DestructionFX = 0 0 0 0
+		DestructionFXLocalOffset = 0.000000 0.000000 0.000000
 		Gravity = 0.000000 22.000000 0.000000
-		Health =  2.000000
-		MaxAngularVelocity =  10.000000
+		Health =  0.000000
+		MaxAngularVelocity =  0.000000
 		MaxLifeTime =  10.000000
-		MaxLinearVelocity =  20.000000
+		MaxLinearVelocity = 20.000000 0.000000 0.000000
 		MinAngularVelocity =  5.000000
-		MinLinearVelocity =  5.000000
+		MinLinearVelocity = 5.000000 0.000000 0.000000
 		ResetSim = 0
 	}
 	kbCollisionComponent { 
@@ -545,13 +560,16 @@ kbGameEntity 0 0 0 0 {
 	EtherDestructibleComponent { 
 		Enabled = 1
 		LifeTime =  -1.000000
+		DestructibleBehavior = PushFromImpactPoint
+		DestructionFX = 0 0 0 0
+		DestructionFXLocalOffset = 0.000000 0.000000 0.000000
 		Gravity = 0.000000 22.000000 0.000000
-		Health =  2.000000
-		MaxAngularVelocity =  10.000000
+		Health =  0.000000
+		MaxAngularVelocity =  0.000000
 		MaxLifeTime =  10.000000
-		MaxLinearVelocity =  20.000000
+		MaxLinearVelocity = 20.000000 0.000000 0.000000
 		MinAngularVelocity =  5.000000
-		MinLinearVelocity =  5.000000
+		MinLinearVelocity = 5.000000 0.000000 0.000000
 		ResetSim = 0
 	}
 	kbCollisionComponent { 
@@ -622,13 +640,16 @@ kbGameEntity 0 0 0 0 {
 	EtherDestructibleComponent { 
 		Enabled = 1
 		LifeTime =  -1.000000
+		DestructibleBehavior = PushFromImpactPoint
+		DestructionFX = 0 0 0 0
+		DestructionFXLocalOffset = 0.000000 0.000000 0.000000
 		Gravity = 0.000000 22.000000 0.000000
-		Health =  2.000000
-		MaxAngularVelocity =  10.000000
+		Health =  0.000000
+		MaxAngularVelocity =  0.000000
 		MaxLifeTime =  10.000000
-		MaxLinearVelocity =  20.000000
+		MaxLinearVelocity = 20.000000 0.000000 0.000000
 		MinAngularVelocity =  5.000000
-		MinLinearVelocity =  5.000000
+		MinLinearVelocity = 5.000000 0.000000 0.000000
 		ResetSim = 0
 	}
 	kbCollisionComponent { 
@@ -1090,8 +1111,8 @@ kbGameEntity 0 0 0 0 {
 		LifeTime =  -1.000000
 		Name = "Crate_1"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
-		Position = 68.898811 7.386138 48.668808
-		Scale = 10.000000 10.000000 10.000000
+		Position = 68.898811 20.386139 48.668808
+		Scale = 7.000000 7.000000 7.000000
 	}
 	EtherSkelModelComponent { 
 		Enabled = 1
@@ -1107,7 +1128,7 @@ kbGameEntity 0 0 0 0 {
 						Enabled = 0
 						LifeTime =  -1.000000
 						ParamName = "diffuse"
-						Texture = .\assets\models\environment\crate_1.jpg
+						Texture = .\assets\models\environment\barrel_elp.jpg
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 					kbShaderParamComponent { 
@@ -1134,7 +1155,7 @@ kbGameEntity 0 0 0 0 {
 			}
 		RenderPass = LightingPass
 		TranslucencySortBias =  0.000000
-		Model = .\assets\models\environment\crate_1_destructible.fbx
+		Model = .\assets\models\environment\barrel_elp_destructible.fbx
 		ShaderOverride = 0
 			
 		Animations = 0
@@ -1144,13 +1165,16 @@ kbGameEntity 0 0 0 0 {
 	EtherDestructibleComponent { 
 		Enabled = 1
 		LifeTime =  -1.000000
-		Gravity = 0.000000 22.000000 0.000000
-		Health =  5.000000
-		MaxAngularVelocity =  10.000000
+		DestructibleBehavior = UserVelocity
+		DestructionFX = 1529798310 1082595041 1391599796 3574967169
+		DestructionFXLocalOffset = 0.000000 100.000000 0.000000
+		Gravity = 0.000000 25.000000 0.000000
+		Health =  0.000000
+		MaxAngularVelocity =  5.000000
 		MaxLifeTime =  10.000000
-		MaxLinearVelocity =  20.000000
-		MinAngularVelocity =  5.000000
-		MinLinearVelocity =  5.000000
+		MaxLinearVelocity = 50.000000 105.000000 5.000000
+		MinAngularVelocity =  -5.000000
+		MinLinearVelocity = -50.000000 65.000000 -5.000000
 		ResetSim = 0
 	}
 	kbCollisionComponent { 
@@ -1221,13 +1245,16 @@ kbGameEntity 0 0 0 0 {
 	EtherDestructibleComponent { 
 		Enabled = 1
 		LifeTime =  -1.000000
+		DestructibleBehavior = PushFromImpactPoint
+		DestructionFX = 0 0 0 0
+		DestructionFXLocalOffset = 0.000000 0.000000 0.000000
 		Gravity = 0.000000 22.000000 0.000000
-		Health =  2.000000
-		MaxAngularVelocity =  10.000000
+		Health =  0.000000
+		MaxAngularVelocity =  0.000000
 		MaxLifeTime =  10.000000
-		MaxLinearVelocity =  20.000000
+		MaxLinearVelocity = 20.000000 0.000000 0.000000
 		MinAngularVelocity =  5.000000
-		MinLinearVelocity =  5.000000
+		MinLinearVelocity = 5.000000 0.000000 0.000000
 		ResetSim = 0
 	}
 	kbCollisionComponent { 
@@ -1298,13 +1325,16 @@ kbGameEntity 0 0 0 0 {
 	EtherDestructibleComponent { 
 		Enabled = 1
 		LifeTime =  -1.000000
+		DestructibleBehavior = PushFromImpactPoint
+		DestructionFX = 0 0 0 0
+		DestructionFXLocalOffset = 0.000000 0.000000 0.000000
 		Gravity = 0.000000 22.000000 0.000000
-		Health =  5.000000
-		MaxAngularVelocity =  10.000000
+		Health =  0.000000
+		MaxAngularVelocity =  0.000000
 		MaxLifeTime =  10.000000
-		MaxLinearVelocity =  20.000000
+		MaxLinearVelocity = 20.000000 0.000000 0.000000
 		MinAngularVelocity =  5.000000
-		MinLinearVelocity =  5.000000
+		MinLinearVelocity = 5.000000 0.000000 0.000000
 		ResetSim = 0
 	}
 	kbCollisionComponent { 

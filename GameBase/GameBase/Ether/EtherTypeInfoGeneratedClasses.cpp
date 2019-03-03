@@ -15,6 +15,8 @@ using namespace std;
 
 // AUTO GENERATED TYPE INFO //////////////////////////////////////////
 
+EDestructibleBehavior_Enum EDestructibleBehaviorEnumClass;
+
 // EtherWorldGenComponent
 EtherWorldGenComponent_TypeInfo EtherWorldGenComponent::typeInfo;
 std::vector<class kbTypeInfoClass *> EtherWorldGenComponent::EtherWorldGenComponent_TypeInfoVar;

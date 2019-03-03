@@ -410,13 +410,15 @@ const kbString * EtherSkelModelComponent::GetCurAnimationName() const {
  *	EtherDestructibleComponent::Constructor
  */
 void EtherDestructibleComponent::Constructor() {
+	m_DestructibleType = EDestructibleBehavior::PushFromImpactPoint;
 	m_MaxLifeTime = 4.0f;
 	m_Gravity.Set( 0.0f, 22.0f, 0.0f );
-	m_MinLinearVelocity = 20.0f;
-	m_MaxLinearVelocity = 25.0f;
+	m_MinLinearVelocity.Set( 20.0f, 20.0f, 20.0f );
+	m_MaxLinearVelocity.Set( 25.0f, 25.0f, 25.0f );
 	m_MinAngularVelocity = 5.0f;
 	m_MaxAngularVelocity = 10.0f;
 	m_StartingHealth = 6.0f;
+	m_DestructionFXLocalOffset.Set( 0.0f, 0.0f, 0.0f );
 
 	m_bDebugResetSim = false;
 	m_Health = 6.0f;
@@ -471,15 +473,41 @@ void EtherDestructibleComponent::TakeDamage( const float damageAmt, const kbVec3
 	const kbVec3 localExplositionPos = localMat.TransformPoint( explosionPosition );
 	const kbModel *const pModel = m_pSkelModel->GetModel();
 
+	kbMat4 worldMat = localMat;
+	worldMat.TransposeSelf();
+
 	m_BonesList.resize( pModel->NumBones() );
 	for ( int i = 0; i < pModel->NumBones(); i++ ) {
 		m_BonesList[i].m_Position = pModel->GetRefBoneMatrix(i).GetOrigin();
-		m_BonesList[i].m_Velocity = ( m_BonesList[i].m_Position - localExplositionPos ).Normalized() * ( kbfrand() * ( m_MaxLinearVelocity - m_MinLinearVelocity ) + m_MinLinearVelocity );
+
+		if ( m_DestructibleType == EDestructibleBehavior::UserVelocity ) {
+			m_BonesList[i].m_Velocity = kbVec3Rand( m_MinLinearVelocity, m_MaxLinearVelocity );
+
+
+			m_BonesList[i].m_Velocity = m_BonesList[i].m_Velocity * worldMat;
+
+		} else {
+			m_BonesList[i].m_Velocity = ( m_BonesList[i].m_Position - localExplositionPos ).Normalized() * ( kbfrand() * ( m_MaxLinearVelocity.x - m_MinLinearVelocity.x ) + m_MinLinearVelocity.x );
+		}
+
 		m_BonesList[i].m_Acceleration = kbVec3::zero;
 		m_BonesList[i].m_RotationAxis = kbVec3( kbfrand(), kbfrand(), kbfrand() );
 		m_BonesList[i].m_RotationSpeed = kbfrand() * ( m_MaxAngularVelocity - m_MinAngularVelocity ) + m_MinAngularVelocity;
 		m_BonesList[i].m_CurRotationAngle = 0.0f;
 	}
+
+//	if ( m_CompleteDestructionFX.size() > 0 ) {
+	//	const int iFX = rand() % m_CompleteDestructionFX.size();
+		if ( m_CompleteDestructionFX.GetEntity() != nullptr ) {
+			kbGameEntity *const pExplosionFX = g_pGame->CreateEntity( m_CompleteDestructionFX.GetEntity() );
+
+			kbVec3 worldOffset = worldMat.TransformPoint( m_DestructionFXLocalOffset );
+//kbLog( "% f %f %f --- %f %f %f", m_DestructionFXLocalOffset.x, m_DestructionFXLocalOffset.y, m_DestructionFXLocalOffset.z, worldOffset.x, worldOffset.y, worldOffset.z );
+			pExplosionFX->SetPosition( GetOwner()->GetPosition() + worldOffset );
+			pExplosionFX->SetOrientation( GetOwner()->GetOrientation() );
+			pExplosionFX->DeleteWhenComponentsAreInactive( true );
+		}
+	//}
 
 	m_bIsSimulating = true;
 	m_SimStartTime = g_GlobalTimer.TimeElapsedSeconds();

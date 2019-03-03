@@ -793,7 +793,7 @@ kbGameEntity 1529798310 1082595041 1391599796 3574967169 {
 		LifeTime =  -1.000000
 		Name = "Explosion"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
-		Position = -21.323149 26.081888 55.578140
+		Position = -16.031685 1.280341 43.620434
 		Scale = 1.000000 1.000000 1.000000
 	}
 	kbParticleComponent { 
@@ -1020,7 +1020,7 @@ kbGameEntity 1529798310 1082595041 1391599796 3574967169 {
 	kbParticleComponent { 
 		Enabled = 1
 		LifeTime =  -1.000000
-		Name = ""
+		Name = "Lingering Smoke"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
 		Position = 0.000000 0.000000 0.000000
 		Scale = 1.000000 1.000000 1.000000
@@ -1037,21 +1037,21 @@ kbGameEntity 1529798310 1082595041 1391599796 3574967169 {
 				LifeTime =  -1.000000
 				EventName = ""
 				EventTime =  0.010000
-				EventValue =  0.000000
+				EventValue =  0.490000
 			}
 			kbAnimEvent { 
 				Enabled = 0
 				LifeTime =  -1.000000
 				EventName = ""
 				EventTime =  0.015000
-				EventValue =  0.300000
+				EventValue =  0.490000
 			}
 			kbAnimEvent { 
 				Enabled = 0
 				LifeTime =  -1.000000
 				EventName = ""
 				EventTime =  0.700000
-				EventValue =  0.300000
+				EventValue =  0.490000
 			}
 			kbAnimEvent { 
 				Enabled = 0
@@ -1085,26 +1085,26 @@ kbGameEntity 1529798310 1082595041 1391599796 3574967169 {
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 			}
-		MaxBurstCount = 20
-		MaxDuration =  8.000000
+		MaxBurstCount = 15
+		MaxDuration =  6.000000
 		MaxEndRotationRate =  0.050000
-		MaxEndSize = 20.000000 20.000000 20.000000
+		MaxEndSize = 50.000000 50.000000 50.000000
 		MaxEndVelocity = 0.000000 0.000000 0.000000
 		MaxSpawnRate =  0.000000
 		MaxStartRotationRate =  0.200000
-		MaxStartSize = 20.000000 20.000000 20.000000
+		MaxStartSize = 30.000000 30.000000 30.000000
 		MaxStartVelocity = 15.000000 15.000000 15.000000
-		MinBurstCount = 15
-		MinDuration =  5.000000
+		MinBurstCount = 5
+		MinDuration =  3.000000
 		MinEndRotationRate =  -0.050000
-		MinEndSize = 15.000000 15.000000 15.000000
+		MinEndSize = 40.000000 40.000000 40.000000
 		MinEndVelocity = 0.000000 0.000000 0.000000
 		MinSpawnRate =  0.000000
 		MinStartRotationRate =  -0.200000
-		MinStartSize = 15.000000 15.000000 15.000000
+		MinStartSize = 20.000000 20.000000 20.000000
 		MinStartVelocity = -15.000000 -15.000000 -15.000000
 		ParticleBillboardType = FaceCamera
-		StartColor = 0.080000 0.080000 0.080000 0.000000
+		StartColor = 0.080000 0.080000 0.080000 0.010000
 		StartDelay =  0.000000
 		TotalDuration =  10.000000
 		TranslucencySortBias =  1.000000
@@ -1120,7 +1120,7 @@ kbGameEntity 1529798310 1082595041 1391599796 3574967169 {
 				Enabled = 0
 				LifeTime =  -1.000000
 				EventName = ""
-				EventTime =  0.100000
+				EventTime =  0.230000
 				EventValue =  0.100000
 			}
 			kbAnimEvent { 

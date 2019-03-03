@@ -205,10 +205,14 @@ void kbPropertiesTab::PointerButtonCB( Fl_Widget * widget, void * voidPtr ) {
 			pEntityPtr.SetEntity( const_cast<kbGameEntity*>( pPrefab->GetGameEntity(0) ) );
 		}
 
-		userData->m_pComponent->EditorChange( *fieldName );
-        if ( userData->m_pParentComponent != nullptr ) {
-            userData->m_pParentComponent->EditorChange( *fieldName );
-        }
+		if ( fieldName == nullptr ) {
+			kbWarning( "kbPropertiesTab::PointerButtonCB() - Field name is null!" );
+		} else {
+			userData->m_pComponent->EditorChange( *fieldName );
+			if ( userData->m_pParentComponent != nullptr ) {
+				userData->m_pParentComponent->EditorChange( *fieldName );
+			}
+		}
 
 		g_pPropertiesTab->RefreshEntity();
 		return;

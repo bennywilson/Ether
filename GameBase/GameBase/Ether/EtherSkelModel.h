@@ -79,6 +79,10 @@ protected:
 	bool									m_bFirstPersonModel;
 };
 
+enum EDestructibleBehavior {
+	PushFromImpactPoint,
+	UserVelocity,
+};
 
 /**
  *	EtherDestructibleComponent
@@ -113,18 +117,22 @@ private:
 	void									Update_Internal( const float deltaTime ) override;
 
 	// Editor
+	EDestructibleBehavior					m_DestructibleType;
 	float									m_MaxLifeTime;
 	kbVec3									m_Gravity;
-	float									m_MinLinearVelocity;
-	float									m_MaxLinearVelocity;
+	kbVec3									m_MinLinearVelocity;
+	kbVec3									m_MaxLinearVelocity;
 	float									m_MinAngularVelocity;
 	float									m_MaxAngularVelocity;
 	float									m_StartingHealth;
 
+	kbGameEntityPtr							m_CompleteDestructionFX;
+	kbVec3									m_DestructionFXLocalOffset;
+
 	bool									m_bDebugResetSim;
 
 	// Run time
-	std::vector<destructibleBone_t>				m_BonesList;
+	std::vector<destructibleBone_t>			m_BonesList;
 
 	float									m_Health;
 	const EtherSkelModelComponent *			m_pSkelModel;

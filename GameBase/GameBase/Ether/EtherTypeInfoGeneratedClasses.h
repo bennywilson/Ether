@@ -33,16 +33,25 @@ GenerateClass(
 	AddField( "IsFirstPersonModel", KBTYPEINFO_BOOL, EtherSkelModelComponent, m_bFirstPersonModel, false, "" )
 )
 
+GenerateEnum( 
+	EDestructibleBehavior, "EDestructibleBehavior",
+	AddEnumField( PushFromImpactPoint, "PushFromImpactPoint" )
+	AddEnumField( UserVelocity, "UserVelocity" )
+)
+
 GenerateClass(
 	EtherDestructibleComponent,
+	AddField( "DestructibleBehavior", KBTYPEINFO_ENUM, EtherDestructibleComponent, m_DestructibleType, false, "EDestructibleBehavior" )
 	AddField( "MaxLifeTime", KBTYPEINFO_FLOAT, EtherDestructibleComponent, m_MaxLifeTime, false, "" )
 	AddField( "Gravity", KBTYPEINFO_VECTOR, EtherDestructibleComponent, m_Gravity, false, "" )
-	AddField( "MinLinearVelocity", KBTYPEINFO_FLOAT, EtherDestructibleComponent, m_MinLinearVelocity, false, "" )
-	AddField( "MaxLinearVelocity", KBTYPEINFO_FLOAT, EtherDestructibleComponent, m_MaxLinearVelocity, false, "" )
+	AddField( "MinLinearVelocity", KBTYPEINFO_VECTOR, EtherDestructibleComponent, m_MinLinearVelocity, false, "" )
+	AddField( "MaxLinearVelocity", KBTYPEINFO_VECTOR, EtherDestructibleComponent, m_MaxLinearVelocity, false, "" )
 	AddField( "MinAngularVelocity", KBTYPEINFO_FLOAT, EtherDestructibleComponent, m_MinAngularVelocity, false, "" )
 	AddField( "MaxAngularVelocity", KBTYPEINFO_FLOAT, EtherDestructibleComponent, m_MaxAngularVelocity, false, "" )
 	AddField( "Health", KBTYPEINFO_FLOAT, EtherDestructibleComponent, m_StartingHealth, false, "" )
 	AddField( "ResetSim", KBTYPEINFO_BOOL, EtherDestructibleComponent, m_bDebugResetSim, false, "" )
+	AddField( "DestructionFX", KBTYPEINFO_GAMEENTITY, EtherDestructibleComponent, m_CompleteDestructionFX, false, "" )
+	AddField( "DestructionFXLocalOffset", KBTYPEINFO_VECTOR, EtherDestructibleComponent, m_DestructionFXLocalOffset, false, "" )
 )
 
 GenerateClass(
