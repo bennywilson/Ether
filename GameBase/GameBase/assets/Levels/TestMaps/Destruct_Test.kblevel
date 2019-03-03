@@ -160,6 +160,7 @@ kbGameEntity 0 0 0 0 {
 	EtherDestructibleComponent { 
 		Enabled = 1
 		LifeTime =  -1.000000
+		DamagedModel = NULL
 		DestructibleBehavior = PushFromImpactPoint
 		DestructionFX = 0 0 0 0
 		DestructionFXLocalOffset = 0.000000 0.000000 0.000000
@@ -171,6 +172,7 @@ kbGameEntity 0 0 0 0 {
 		MaxLinearVelocity = 20.000000 0.000000 0.000000
 		MinAngularVelocity =  5.000000
 		MinLinearVelocity = 5.000000 0.000000 0.000000
+		NonDamagedModel = NULL
 		ResetSim = 0
 	}
 	kbCollisionComponent { 
@@ -241,6 +243,7 @@ kbGameEntity 0 0 0 0 {
 	EtherDestructibleComponent { 
 		Enabled = 1
 		LifeTime =  -1.000000
+		DamagedModel = NULL
 		DestructibleBehavior = PushFromImpactPoint
 		DestructionFX = 0 0 0 0
 		DestructionFXLocalOffset = 0.000000 0.000000 0.000000
@@ -252,6 +255,7 @@ kbGameEntity 0 0 0 0 {
 		MaxLinearVelocity = 20.000000 0.000000 0.000000
 		MinAngularVelocity =  5.000000
 		MinLinearVelocity = 5.000000 0.000000 0.000000
+		NonDamagedModel = NULL
 		ResetSim = 0
 	}
 	kbCollisionComponent { 
@@ -322,6 +326,7 @@ kbGameEntity 0 0 0 0 {
 	EtherDestructibleComponent { 
 		Enabled = 1
 		LifeTime =  -1.000000
+		DamagedModel = NULL
 		DestructibleBehavior = PushFromImpactPoint
 		DestructionFX = 0 0 0 0
 		DestructionFXLocalOffset = 0.000000 0.000000 0.000000
@@ -333,6 +338,7 @@ kbGameEntity 0 0 0 0 {
 		MaxLinearVelocity = 20.000000 0.000000 0.000000
 		MinAngularVelocity =  5.000000
 		MinLinearVelocity = 5.000000 0.000000 0.000000
+		NonDamagedModel = NULL
 		ResetSim = 0
 	}
 	kbCollisionComponent { 
@@ -403,6 +409,7 @@ kbGameEntity 0 0 0 0 {
 	EtherDestructibleComponent { 
 		Enabled = 1
 		LifeTime =  -1.000000
+		DamagedModel = NULL
 		DestructibleBehavior = PushFromImpactPoint
 		DestructionFX = 0 0 0 0
 		DestructionFXLocalOffset = 0.000000 0.000000 0.000000
@@ -414,6 +421,7 @@ kbGameEntity 0 0 0 0 {
 		MaxLinearVelocity = 20.000000 0.000000 0.000000
 		MinAngularVelocity =  5.000000
 		MinLinearVelocity = 5.000000 0.000000 0.000000
+		NonDamagedModel = NULL
 		ResetSim = 0
 	}
 	kbCollisionComponent { 
@@ -484,6 +492,7 @@ kbGameEntity 0 0 0 0 {
 	EtherDestructibleComponent { 
 		Enabled = 1
 		LifeTime =  -1.000000
+		DamagedModel = NULL
 		DestructibleBehavior = PushFromImpactPoint
 		DestructionFX = 0 0 0 0
 		DestructionFXLocalOffset = 0.000000 0.000000 0.000000
@@ -495,6 +504,7 @@ kbGameEntity 0 0 0 0 {
 		MaxLinearVelocity = 20.000000 0.000000 0.000000
 		MinAngularVelocity =  5.000000
 		MinLinearVelocity = 5.000000 0.000000 0.000000
+		NonDamagedModel = NULL
 		ResetSim = 0
 	}
 	kbCollisionComponent { 
@@ -565,6 +575,7 @@ kbGameEntity 0 0 0 0 {
 	EtherDestructibleComponent { 
 		Enabled = 1
 		LifeTime =  -1.000000
+		DamagedModel = NULL
 		DestructibleBehavior = PushFromImpactPoint
 		DestructionFX = 0 0 0 0
 		DestructionFXLocalOffset = 0.000000 0.000000 0.000000
@@ -576,6 +587,7 @@ kbGameEntity 0 0 0 0 {
 		MaxLinearVelocity = 20.000000 0.000000 0.000000
 		MinAngularVelocity =  5.000000
 		MinLinearVelocity = 5.000000 0.000000 0.000000
+		NonDamagedModel = NULL
 		ResetSim = 0
 	}
 	kbCollisionComponent { 
@@ -646,6 +658,7 @@ kbGameEntity 0 0 0 0 {
 	EtherDestructibleComponent { 
 		Enabled = 1
 		LifeTime =  -1.000000
+		DamagedModel = NULL
 		DestructibleBehavior = PushFromImpactPoint
 		DestructionFX = 0 0 0 0
 		DestructionFXLocalOffset = 0.000000 0.000000 0.000000
@@ -657,6 +670,7 @@ kbGameEntity 0 0 0 0 {
 		MaxLinearVelocity = 20.000000 0.000000 0.000000
 		MinAngularVelocity =  5.000000
 		MinLinearVelocity = 5.000000 0.000000 0.000000
+		NonDamagedModel = NULL
 		ResetSim = 0
 	}
 	kbCollisionComponent { 
@@ -1172,6 +1186,7 @@ kbGameEntity 0 0 0 0 {
 	EtherDestructibleComponent { 
 		Enabled = 1
 		LifeTime =  -1.000000
+		DamagedModel = .\assets\models\environment\barrel_elp_destructible.fbx
 		DestructibleBehavior = UserVelocity
 		DestructionFX = 1529798310 1082595041 1391599796 3574967169
 		DestructionFXLocalOffset = 0.000000 100.000000 0.000000
@@ -1183,6 +1198,7 @@ kbGameEntity 0 0 0 0 {
 		MaxLinearVelocity = 125.000000 205.000000 50.000000
 		MinAngularVelocity =  -15.000000
 		MinLinearVelocity = -125.000000 155.000000 -50.000000
+		NonDamagedModel = .\assets\models\environment\barrel_elp.fbx
 		ResetSim = 0
 	}
 	kbCollisionComponent { 
@@ -1253,6 +1269,7 @@ kbGameEntity 0 0 0 0 {
 	EtherDestructibleComponent { 
 		Enabled = 1
 		LifeTime =  -1.000000
+		DamagedModel = .\assets\models\environment\barrel_elp_destructible.fbx
 		DestructibleBehavior = UserVelocity
 		DestructionFX = 1529798310 1082595041 1391599796 3574967169
 		DestructionFXLocalOffset = 0.000000 100.000000 0.000000
@@ -1264,6 +1281,7 @@ kbGameEntity 0 0 0 0 {
 		MaxLinearVelocity = 125.000000 205.000000 50.000000
 		MinAngularVelocity =  -15.000000
 		MinLinearVelocity = -125.000000 155.000000 -50.000000
+		NonDamagedModel = .\assets\models\environment\barrel_elp.fbx
 		ResetSim = 0
 	}
 	kbCollisionComponent { 
@@ -1334,6 +1352,7 @@ kbGameEntity 0 0 0 0 {
 	EtherDestructibleComponent { 
 		Enabled = 1
 		LifeTime =  -1.000000
+		DamagedModel = NULL
 		DestructibleBehavior = PushFromImpactPoint
 		DestructionFX = 0 0 0 0
 		DestructionFXLocalOffset = 0.000000 0.000000 0.000000
@@ -1345,6 +1364,7 @@ kbGameEntity 0 0 0 0 {
 		MaxLinearVelocity = 20.000000 0.000000 0.000000
 		MinAngularVelocity =  5.000000
 		MinLinearVelocity = 5.000000 0.000000 0.000000
+		NonDamagedModel = NULL
 		ResetSim = 0
 	}
 	kbCollisionComponent { 
@@ -1415,6 +1435,7 @@ kbGameEntity 0 0 0 0 {
 	EtherDestructibleComponent { 
 		Enabled = 1
 		LifeTime =  -1.000000
+		DamagedModel = NULL
 		DestructibleBehavior = PushFromImpactPoint
 		DestructionFX = 0 0 0 0
 		DestructionFXLocalOffset = 0.000000 0.000000 0.000000
@@ -1426,6 +1447,7 @@ kbGameEntity 0 0 0 0 {
 		MaxLinearVelocity = 20.000000 0.000000 0.000000
 		MinAngularVelocity =  5.000000
 		MinLinearVelocity = 5.000000 0.000000 0.000000
+		NonDamagedModel = NULL
 		ResetSim = 0
 	}
 	kbCollisionComponent { 
@@ -1607,7 +1629,7 @@ kbGameEntity 0 0 0 0 {
 	kbTransformComponent { 
 		Enabled = 1
 		LifeTime =  -1.000000
-		Name = "Ember_0"
+		Name = "Metal_Impact"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
 		Position = -67.542557 33.785671 0.217482
 		Scale = 1.000000 1.000000 1.000000
@@ -1621,40 +1643,47 @@ kbGameEntity 0 0 0 0 {
 		Scale = 1.000000 1.000000 1.000000
 		AlphaOverLife = 0
 		ColorOverLife = 0
-		EndColor = 0.000000 0.000000 0.000000 0.000000
+		EndColor = 1.000000 1.000000 1.000000 0.000000
 		Gravity = 0.000000 0.000000 0.000000
 		LockVelocity = 0
 		MaterialList = 1
 			kbMaterialComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
-				Shader = .\assets\shaders\fx\emberparticle.kbshader
-				ShaderParams = 1
+				Shader = .\assets\shaders\fx\particle_blendadd.kbshader
+				ShaderParams = 2
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorMultplier"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
 						ParamName = "shaderTexture"
-						Texture = .\assets\fx\ember.jpg
+						Texture = .\assets\fx\fire\emberatlas_1.dds
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 			}
-		MaxBurstCount = 0
+		MaxBurstCount = 15
 		MaxDuration =  3.000000
 		MaxEndRotationRate =  0.000000
 		MaxEndSize = 0.300000 0.300000 0.300000
 		MaxEndVelocity = 0.000000 8.000000 0.000000
-		MaxSpawnRate =  2.000000
+		MaxSpawnRate =  35.000000
 		MaxStartRotationRate =  0.000000
 		MaxStartSize = 0.500000 0.500000 0.500000
 		MaxStartVelocity = 0.000000 35.000000 0.000000
-		MinBurstCount = 0
+		MinBurstCount = 5
 		MinDuration =  2.300000
 		MinEndRotationRate =  0.000000
 		MinEndSize = 0.200000 0.200000 0.200000
 		MinEndVelocity = 0.000000 5.000000 0.000000
-		MinSpawnRate =  1.265000
+		MinSpawnRate =  15.000000
 		MinStartRotationRate =  0.000000
-		MinStartSize = 0.420000 0.450000 0.420000
+		MinStartSize = 5.000000 5.000000 5.000000
 		MinStartVelocity = 0.000000 25.000000 0.000000
 		ParticleBillboardType = FaceCamera
 		StartColor = 1.000000 1.000000 1.000000 0.000000
@@ -1662,5 +1691,308 @@ kbGameEntity 0 0 0 0 {
 		TotalDuration =  -1.000000
 		TranslucencySortBias =  0.000000
 		VelocityCurve = 0
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		Name = "Explosion"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = -82.501930 48.477837 -12.468173
+		Scale = 1.000000 1.000000 1.000000
+	}
+	kbParticleComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = ""
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 0.000000 0.000000 0.000000
+		Scale = 1.000000 1.000000 1.000000
+		AlphaOverLife = 4
+			kbAnimEvent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				EventName = ""
+				EventTime =  0.000000
+				EventValue =  1.000000
+			}
+			kbAnimEvent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				EventName = ""
+				EventTime =  0.200000
+				EventValue =  1.000000
+			}
+			kbAnimEvent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				EventName = ""
+				EventTime =  0.210000
+				EventValue =  0.499900
+			}
+			kbAnimEvent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				EventName = ""
+				EventTime =  1.000000
+				EventValue =  0.000000
+			}
+		ColorOverLife = 2
+			kbVectorAnimEvent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				EventName = ""
+				EventTime =  0.000000
+				EventValue = 1.000000 0.740000 0.511000
+			}
+			kbVectorAnimEvent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				EventName = ""
+				EventTime =  0.400000
+				EventValue = 0.000000 0.000000 0.000000
+			}
+		EndColor = 1.000000 1.000000 1.000000 1.000000
+		Gravity = 0.000000 0.000000 0.000000
+		LockVelocity = 0
+		MaterialList = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Shader = .\assets\shaders\fx\particle_blendadd.kbshader
+				ShaderParams = 2
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorMultplier"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "shaderTexture"
+						Texture = .\assets\fx\smoke\smokeatlas_1.dds
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		MaxBurstCount = 100
+		MaxDuration =  2.000000
+		MaxEndRotationRate =  0.050000
+		MaxEndSize = 80.000000 80.000000 80.000000
+		MaxEndVelocity = 1.000000 1.000000 1.000000
+		MaxSpawnRate =  0.000000
+		MaxStartRotationRate =  0.500000
+		MaxStartSize = 0.000000 0.000000 0.000000
+		MaxStartVelocity = 75.000000 5.000000 75.000000
+		MinBurstCount = 50
+		MinDuration =  1.000000
+		MinEndRotationRate =  -0.050000
+		MinEndSize = 60.000000 60.000000 60.000000
+		MinEndVelocity = -1.000000 -1.000000 -1.000000
+		MinSpawnRate =  0.000000
+		MinStartRotationRate =  -0.500000
+		MinStartSize = 0.000000 0.000000 0.000000
+		MinStartVelocity = -75.000000 -5.000000 -75.000000
+		ParticleBillboardType = FaceCamera
+		StartColor = 1.000000 1.000000 1.000000 1.000000
+		StartDelay =  0.000000
+		TotalDuration =  10.000000
+		TranslucencySortBias =  0.000000
+		VelocityCurve = 3
+			kbAnimEvent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				EventName = ""
+				EventTime =  0.000000
+				EventValue =  1.000000
+			}
+			kbAnimEvent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				EventName = ""
+				EventTime =  0.050000
+				EventValue =  0.050000
+			}
+			kbAnimEvent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				EventName = ""
+				EventTime =  1.000000
+				EventValue =  0.000000
+			}
+	}
+	kbParticleComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		Name = "Sparks"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 0.000000 0.000000 0.000000
+		Scale = 0.500000 0.500000 0.500000
+		AlphaOverLife = 0
+		ColorOverLife = 0
+		EndColor = 1.000000 1.000000 1.000000 1.000000
+		Gravity = 0.000000 -120.000000 0.000000
+		LockVelocity = 0
+		MaterialList = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Shader = .\assets\shaders\fx\particle_blendadd.kbshader
+				ShaderParams = 2
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorMultplier"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "shaderTexture"
+						Texture = .\assets\fx\fire\emberatlas_1.dds
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		MaxBurstCount = 10
+		MaxDuration =  1.330000
+		MaxEndRotationRate =  5.000000
+		MaxEndSize = 0.000000 0.000000 0.000000
+		MaxEndVelocity = 20.000000 20.000000 -10.000000
+		MaxSpawnRate =  0.000000
+		MaxStartRotationRate =  5.000000
+		MaxStartSize = 0.750000 0.750000 0.750000
+		MaxStartVelocity = 70.000000 20.000000 -10.000000
+		MinBurstCount = 5
+		MinDuration =  0.500000
+		MinEndRotationRate =  -5.000000
+		MinEndSize = 0.000000 0.000000 0.000000
+		MinEndVelocity = -20.000000 -20.000000 -5.000000
+		MinSpawnRate =  0.000000
+		MinStartRotationRate =  -4.000000
+		MinStartSize = 0.500000 0.500000 0.500000
+		MinStartVelocity = -70.000000 -20.000000 -25.000000
+		ParticleBillboardType = FaceCamera
+		StartColor = 1.000000 1.000000 1.000000 1.000000
+		StartDelay =  0.000000
+		TotalDuration =  1.000000
+		TranslucencySortBias =  -1.000000
+		VelocityCurve = 0
+	}
+	kbParticleComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Lingering Smoke"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 0.000000 0.000000 0.000000
+		Scale = 1.000000 1.000000 1.000000
+		AlphaOverLife = 5
+			kbAnimEvent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				EventName = ""
+				EventTime =  0.000000
+				EventValue =  0.000000
+			}
+			kbAnimEvent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				EventName = ""
+				EventTime =  0.010000
+				EventValue =  0.490000
+			}
+			kbAnimEvent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				EventName = ""
+				EventTime =  0.015000
+				EventValue =  0.490000
+			}
+			kbAnimEvent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				EventName = ""
+				EventTime =  0.700000
+				EventValue =  0.490000
+			}
+			kbAnimEvent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				EventName = ""
+				EventTime =  1.000000
+				EventValue =  0.000000
+			}
+		ColorOverLife = 0
+		EndColor = 0.080000 0.080000 0.080000 0.000000
+		Gravity = 0.000000 0.000000 0.000000
+		LockVelocity = 0
+		MaterialList = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Shader = .\assets\shaders\fx\particle_blendadd.kbshader
+				ShaderParams = 2
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorMultplier"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "shaderTexture"
+						Texture = .\assets\fx\smoke\smokeatlas_1.dds
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		MaxBurstCount = 3
+		MaxDuration =  6.000000
+		MaxEndRotationRate =  0.050000
+		MaxEndSize = 20.000000 20.000000 20.000000
+		MaxEndVelocity = 0.000000 0.000000 0.000000
+		MaxSpawnRate =  0.000000
+		MaxStartRotationRate =  0.200000
+		MaxStartSize = 30.000000 30.000000 30.000000
+		MaxStartVelocity = 15.000000 15.000000 15.000000
+		MinBurstCount = 2
+		MinDuration =  3.000000
+		MinEndRotationRate =  -0.050000
+		MinEndSize = 20.000000 20.000000 20.000000
+		MinEndVelocity = 0.000000 0.000000 0.000000
+		MinSpawnRate =  0.000000
+		MinStartRotationRate =  -0.200000
+		MinStartSize = 20.000000 20.000000 20.000000
+		MinStartVelocity = -15.000000 -15.000000 -15.000000
+		ParticleBillboardType = FaceCamera
+		StartColor = 0.080000 0.080000 0.080000 0.010000
+		StartDelay =  0.000000
+		TotalDuration =  2.000000
+		TranslucencySortBias =  1.000000
+		VelocityCurve = 3
+			kbAnimEvent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				EventName = ""
+				EventTime =  0.000000
+				EventValue =  1.000000
+			}
+			kbAnimEvent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				EventName = ""
+				EventTime =  0.230000
+				EventValue =  0.100000
+			}
+			kbAnimEvent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				EventName = ""
+				EventTime =  1.000000
+				EventValue =  0.000000
+			}
 	}
 }

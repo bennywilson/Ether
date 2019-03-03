@@ -120,6 +120,8 @@ private:
 
 	// Editor
 	EDestructibleBehavior					m_DestructibleType;
+	kbModel	*								m_pNonDamagedModel;
+	kbModel *								m_pDamagedModel;
 	float									m_MaxLifeTime;
 	kbVec3									m_Gravity;
 	kbVec3									m_MinLinearVelocity;
@@ -138,7 +140,7 @@ private:
 	std::vector<destructibleBone_t>			m_BonesList;
 
 	float									m_Health;
-	const EtherSkelModelComponent *			m_pSkelModel;
+	EtherSkelModelComponent *				m_pSkelModel;
 	float									m_SimStartTime;
 	kbVec3									m_LastHitLocation;
 	bool									m_bIsSimulating;

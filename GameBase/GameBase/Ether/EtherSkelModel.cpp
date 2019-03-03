@@ -150,6 +150,10 @@ void EtherSkelModelComponent::SetEnable_Internal( const bool isEnabled ) {
 void EtherSkelModelComponent::SetModel( kbModel *const pModel, bool bIsFirstPersonModel ) {
 	m_bFirstPersonModel = bIsFirstPersonModel;
 	Super::SetModel( pModel );
+
+	m_BindToLocalSpaceMatrices.clear();
+	m_RenderObject.m_pModel = pModel;
+	g_pRenderer->UpdateRenderObject( m_RenderObject );
 }
 
 /**
@@ -411,6 +415,8 @@ const kbString * EtherSkelModelComponent::GetCurAnimationName() const {
  */
 void EtherDestructibleComponent::Constructor() {
 	m_DestructibleType = EDestructibleBehavior::PushFromImpactPoint;
+	m_pNonDamagedModel = nullptr;
+	m_pDamagedModel = nullptr;
 	m_MaxLifeTime = 4.0f;
 	m_Gravity.Set( 0.0f, 22.0f, 0.0f );
 	m_MinLinearVelocity.Set( 20.0f, 20.0f, 20.0f );
@@ -463,6 +469,17 @@ void EtherDestructibleComponent::TakeDamage( const float damageAmt, const kbVec3
 		pCollision->Enable( false );
 	}
 
+kbLog( "About to swap" );
+
+	if ( g_UseEditor == false ) {
+
+		if ( m_pDamagedModel != nullptr ) {
+kbLog( "	swapping! %s", m_pDamagedModel->GetName().c_str() );
+
+			m_pSkelModel->SetModel( m_pDamagedModel, false );
+		}
+	}
+kbLog( "Done@" );
 	m_LastHitLocation = explosionPosition;
 
 	kbMat4 localMat;
@@ -515,6 +532,8 @@ void EtherDestructibleComponent::TakeDamage( const float damageAmt, const kbVec3
 		}
 	//}
 
+
+
 	m_bIsSimulating = true;
 	m_SimStartTime = g_GlobalTimer.TimeElapsedSeconds();
 }
@@ -533,6 +552,12 @@ void EtherDestructibleComponent::SetEnable_Internal( const bool bEnable ) {
 			return;
 		}
 
+		if ( g_UseEditor == false ) {
+			if ( m_pNonDamagedModel != nullptr ) {
+				m_pSkelModel->SetModel( m_pNonDamagedModel, false );
+			}
+		}
+
 		m_BonesList.resize( m_pSkelModel->GetModel()->NumBones() );
 
 		m_Health = m_StartingHealth;
@@ -549,6 +574,12 @@ void EtherDestructibleComponent::Update_Internal( const float deltaTime ) {
 	if ( GetAsyncKeyState( 'G' ) ) {
 		m_bIsSimulating = false;
 		m_Health = m_StartingHealth;
+
+		if ( g_UseEditor == false ) {
+			if ( m_pNonDamagedModel != nullptr ) {
+				m_pSkelModel->SetModel( m_pNonDamagedModel, false );
+			}
+		}
 
 		kbCollisionComponent *const pCollision = (kbCollisionComponent*)GetOwner()->GetComponentByType( kbCollisionComponent::GetType() );
 		if ( pCollision != nullptr ) {

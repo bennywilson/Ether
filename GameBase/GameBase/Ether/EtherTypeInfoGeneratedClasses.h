@@ -42,6 +42,8 @@ GenerateEnum(
 GenerateClass(
 	EtherDestructibleComponent,
 	AddField( "DestructibleBehavior", KBTYPEINFO_ENUM, EtherDestructibleComponent, m_DestructibleType, false, "EDestructibleBehavior" )
+	AddField( "NonDamagedModel", KBTYPEINFO_STATICMODEL, EtherDestructibleComponent, m_pNonDamagedModel, false, "" )
+	AddField( "DamagedModel", KBTYPEINFO_STATICMODEL, EtherDestructibleComponent, m_pDamagedModel, false, "" )
 	AddField( "MaxLifeTime", KBTYPEINFO_FLOAT, EtherDestructibleComponent, m_MaxLifeTime, false, "" )
 	AddField( "Gravity", KBTYPEINFO_VECTOR, EtherDestructibleComponent, m_Gravity, false, "" )
 	AddField( "MinLinearVelocity", KBTYPEINFO_VECTOR, EtherDestructibleComponent, m_MinLinearVelocity, false, "" )
