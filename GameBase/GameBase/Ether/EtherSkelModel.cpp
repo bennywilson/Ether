@@ -492,6 +492,12 @@ void EtherDestructibleComponent::TakeDamage( const float damageAmt, const kbVec3
 
 		m_BonesList[i].m_Acceleration = kbVec3::zero;
 		m_BonesList[i].m_RotationAxis = kbVec3( kbfrand(), kbfrand(), kbfrand() );
+		if ( m_BonesList[i].m_RotationAxis.LengthSqr() < 0.01f ) {
+			m_BonesList[i].m_RotationAxis.Set( 1.0f, 0.0f, 0.0f );
+		} else {
+			m_BonesList[i].m_RotationAxis.Normalize();
+		}
+
 		m_BonesList[i].m_RotationSpeed = kbfrand() * ( m_MaxAngularVelocity - m_MinAngularVelocity ) + m_MinAngularVelocity;
 		m_BonesList[i].m_CurRotationAngle = 0.0f;
 	}
