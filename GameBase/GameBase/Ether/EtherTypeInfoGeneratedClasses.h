@@ -51,6 +51,7 @@ GenerateClass(
 	AddField( "Health", KBTYPEINFO_FLOAT, EtherDestructibleComponent, m_StartingHealth, false, "" )
 	AddField( "ResetSim", KBTYPEINFO_BOOL, EtherDestructibleComponent, m_bDebugResetSim, false, "" )
 	AddField( "DestructionFX", KBTYPEINFO_GAMEENTITY, EtherDestructibleComponent, m_CompleteDestructionFX, false, "" )
+	AddField( "ImpactFX", KBTYPEINFO_GAMEENTITY, EtherDestructibleComponent, m_ImpactFX, false, "" )
 	AddField( "DestructionFXLocalOffset", KBTYPEINFO_VECTOR, EtherDestructibleComponent, m_DestructionFXLocalOffset, false, "" )
 )
 

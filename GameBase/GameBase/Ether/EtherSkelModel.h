@@ -100,6 +100,8 @@ public:
 
 	bool									IsSimulating() const { return m_bIsSimulating; }
 
+	kbGameEntityPtr							GetImpactFX() const { return m_ImpactFX; }
+
 	struct destructibleBone_t {
 		kbVec3								m_Position;
 		kbVec3								m_Acceleration;
@@ -126,6 +128,7 @@ private:
 	float									m_MaxAngularVelocity;
 	float									m_StartingHealth;
 
+	kbGameEntityPtr							m_ImpactFX;
 	kbGameEntityPtr							m_CompleteDestructionFX;
 	kbVec3									m_DestructionFXLocalOffset;
 

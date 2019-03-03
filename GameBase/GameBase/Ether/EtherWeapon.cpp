@@ -165,12 +165,15 @@ void EtherProjectileComponent::Update_Internal( const float DeltaTime ) {
 			if ( pHitDestructible != nullptr ) {
 				pHitDestructible->TakeDamage( 1.0f, collisionInfo.m_HitLocation, 100000.0f );
 
+				kbGameEntityPtr gameEnt = pHitDestructible->GetImpactFX();
 				if ( m_ImpactWoodSoundData.size() > 0 ) {
 					m_ImpactWoodSoundData[rand() % m_ImpactWoodSoundData.size()].PlaySoundAtPosition( newPosition );
 				}
 
-				if ( m_WoodImpactFX.GetEntity() != nullptr ) {
-					kbGameEntity *const pExplosionFX = g_pGame->CreateEntity( m_WoodImpactFX.GetEntity() );
+				
+				if ( gameEnt.GetEntity() != nullptr ) {
+					kbGameEntity *const pExplosionFX = g_pGame->CreateEntity( gameEnt.GetEntity() ) ;
+
 					pExplosionFX->SetPosition( worldHitCollisionPt );
 					pExplosionFX->SetOrientation( GetOwner()->GetOrientation() );
 					pExplosionFX->DeleteWhenComponentsAreInactive( true );
