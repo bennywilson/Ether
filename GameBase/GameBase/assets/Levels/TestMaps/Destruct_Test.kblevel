@@ -161,6 +161,7 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 1
 		LifeTime =  -1.000000
 		DamagedModel = NULL
+		DamagedModelMaterialParams = 0
 		DestructibleBehavior = PushFromImpactPoint
 		DestructionFX = 0 0 0 0
 		DestructionFXLocalOffset = 0.000000 0.000000 0.000000
@@ -244,6 +245,7 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 1
 		LifeTime =  -1.000000
 		DamagedModel = NULL
+		DamagedModelMaterialParams = 0
 		DestructibleBehavior = PushFromImpactPoint
 		DestructionFX = 0 0 0 0
 		DestructionFXLocalOffset = 0.000000 0.000000 0.000000
@@ -327,6 +329,7 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 1
 		LifeTime =  -1.000000
 		DamagedModel = NULL
+		DamagedModelMaterialParams = 0
 		DestructibleBehavior = PushFromImpactPoint
 		DestructionFX = 0 0 0 0
 		DestructionFXLocalOffset = 0.000000 0.000000 0.000000
@@ -410,6 +413,7 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 1
 		LifeTime =  -1.000000
 		DamagedModel = NULL
+		DamagedModelMaterialParams = 0
 		DestructibleBehavior = PushFromImpactPoint
 		DestructionFX = 0 0 0 0
 		DestructionFXLocalOffset = 0.000000 0.000000 0.000000
@@ -493,6 +497,7 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 1
 		LifeTime =  -1.000000
 		DamagedModel = NULL
+		DamagedModelMaterialParams = 0
 		DestructibleBehavior = PushFromImpactPoint
 		DestructionFX = 0 0 0 0
 		DestructionFXLocalOffset = 0.000000 0.000000 0.000000
@@ -576,6 +581,7 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 1
 		LifeTime =  -1.000000
 		DamagedModel = NULL
+		DamagedModelMaterialParams = 0
 		DestructibleBehavior = PushFromImpactPoint
 		DestructionFX = 0 0 0 0
 		DestructionFXLocalOffset = 0.000000 0.000000 0.000000
@@ -659,6 +665,7 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 1
 		LifeTime =  -1.000000
 		DamagedModel = NULL
+		DamagedModelMaterialParams = 0
 		DestructibleBehavior = PushFromImpactPoint
 		DestructionFX = 0 0 0 0
 		DestructionFXLocalOffset = 0.000000 0.000000 0.000000
@@ -1187,6 +1194,7 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 1
 		LifeTime =  -1.000000
 		DamagedModel = .\assets\models\environment\barrel_elp_destructible.fbx
+		DamagedModelMaterialParams = 0
 		DestructibleBehavior = UserVelocity
 		DestructionFX = 1529798310 1082595041 1391599796 3574967169
 		DestructionFXLocalOffset = 0.000000 100.000000 0.000000
@@ -1270,6 +1278,14 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 1
 		LifeTime =  -1.000000
 		DamagedModel = .\assets\models\environment\barrel_elp_destructible.fbx
+		DamagedModelMaterialParams = 1
+			kbShaderParamComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				ParamName = "diffuse"
+				Texture = .\assets\models\environment\barrel_elp_destructible.jpg
+				Vector = 0.000000 0.000000 0.000000 0.000000
+			}
 		DestructibleBehavior = UserVelocity
 		DestructionFX = 1529798310 1082595041 1391599796 3574967169
 		DestructionFXLocalOffset = 0.000000 100.000000 0.000000
@@ -1353,6 +1369,7 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 1
 		LifeTime =  -1.000000
 		DamagedModel = NULL
+		DamagedModelMaterialParams = 0
 		DestructibleBehavior = PushFromImpactPoint
 		DestructionFX = 0 0 0 0
 		DestructionFXLocalOffset = 0.000000 0.000000 0.000000
@@ -1436,6 +1453,7 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 1
 		LifeTime =  -1.000000
 		DamagedModel = NULL
+		DamagedModelMaterialParams = 0
 		DestructibleBehavior = PushFromImpactPoint
 		DestructionFX = 0 0 0 0
 		DestructionFXLocalOffset = 0.000000 0.000000 0.000000

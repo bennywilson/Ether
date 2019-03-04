@@ -564,7 +564,7 @@ void EtherGame::RenderThreadCallBack() {
 					kbTexture *const diff = (kbTexture*)g_ResourceManager.LoadResource( "./assets/models/architecture/bricks.png", true );
 					kbTexture *const normal = (kbTexture*)g_ResourceManager.LoadResource( "./assets/models/architecture/bricks_nm.png", true );
 
-					pSM->SetMaterialParamTexture( 0, "holeTex" ,m_pBulletHoleRenderTexture );
+					pSM->SetMaterialParamTexture( 0, "holeTex", m_pBulletHoleRenderTexture );
 
 				}
 				break;

@@ -469,17 +469,22 @@ void EtherDestructibleComponent::TakeDamage( const float damageAmt, const kbVec3
 		pCollision->Enable( false );
 	}
 
-kbLog( "About to swap" );
 
 	if ( g_UseEditor == false ) {
 
 		if ( m_pDamagedModel != nullptr ) {
-kbLog( "	swapping! %s", m_pDamagedModel->GetName().c_str() );
-
+			for ( int i = 0; i < m_DamagedModelMaterialParams.size(); i++ ) {
+				const kbShaderParamComponent & shaderParam = m_DamagedModelMaterialParams[i];
+				if ( shaderParam.GetTexture() != nullptr ) {
+					m_pSkelModel->SetMaterialParamTexture( 0, shaderParam.GetParamName().stl_str(), const_cast<kbTexture*>( shaderParam.GetTexture() ) );
+				} else {
+					m_pSkelModel->SetMaterialParamVector( 0, shaderParam.GetParamName().stl_str(), shaderParam.GetVector() );
+				}
+			}
 			m_pSkelModel->SetModel( m_pDamagedModel, false );
 		}
 	}
-kbLog( "Done@" );
+
 	m_LastHitLocation = explosionPosition;
 
 	kbMat4 localMat;
