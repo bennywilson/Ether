@@ -121,6 +121,7 @@ private:
 	// Editor
 	EDestructibleBehavior					m_DestructibleType;
 	kbModel	*								m_pNonDamagedModel;
+	std::vector<kbShaderParamComponent>		m_NonDamagedModelMaterialParams;
 	kbModel *								m_pDamagedModel;
 	std::vector<kbShaderParamComponent>		m_DamagedModelMaterialParams;
 	float									m_MaxLifeTime;

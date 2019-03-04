@@ -43,6 +43,7 @@ GenerateClass(
 	EtherDestructibleComponent,
 	AddField( "DestructibleBehavior", KBTYPEINFO_ENUM, EtherDestructibleComponent, m_DestructibleType, false, "EDestructibleBehavior" )
 	AddField( "NonDamagedModel", KBTYPEINFO_STATICMODEL, EtherDestructibleComponent, m_pNonDamagedModel, false, "" )
+	AddField( "NonDamagedModelMaterialParams", KBTYPEINFO_STRUCT, EtherDestructibleComponent, m_NonDamagedModelMaterialParams, true, "kbShaderParamComponent" )
 	AddField( "DamagedModel", KBTYPEINFO_STATICMODEL, EtherDestructibleComponent, m_pDamagedModel, false, "" )
 	AddField( "DamagedModelMaterialParams", KBTYPEINFO_STRUCT, EtherDestructibleComponent, m_DamagedModelMaterialParams, true, "kbShaderParamComponent" )
 	AddField( "MaxLifeTime", KBTYPEINFO_FLOAT, EtherDestructibleComponent, m_MaxLifeTime, false, "" )

@@ -297,7 +297,7 @@ void EtherSkelModelComponent::Update_Internal( const float DeltaTime ) {
 					for ( int iAnimEvent = 0; iAnimEvent < CurAnim.m_AnimEvents.size(); iAnimEvent++ ) {
 						auto & curEvent = CurAnim.m_AnimEvents[iAnimEvent];
 						if ( curEvent.GetEventTime() > prevAnimTime && curEvent.GetEventTime() <= CurAnim.m_CurrentAnimationTime  ) {
-							kbLog( "AnimEvent %s - %f", curEvent.GetEventName().c_str(), curEvent.GetEventTime() );
+							//kbLog( "AnimEvent %s - %f", curEvent.GetEventName().c_str(), curEvent.GetEventTime() );
 						}
 					}
 					CurAnim.m_CurrentAnimationTime += DeltaTime * CurAnim.m_TimeScale;
@@ -315,7 +315,7 @@ void EtherSkelModelComponent::Update_Internal( const float DeltaTime ) {
 				for ( int iAnimEvent = 0; iAnimEvent < NextAnim.m_AnimEvents.size(); iAnimEvent++ ) {
 					auto & curEvent = NextAnim.m_AnimEvents[iAnimEvent];
 					if ( curEvent.GetEventTime() > prevNextAnimTime && curEvent.GetEventTime() <= NextAnim.m_CurrentAnimationTime  ) {
-						kbLog( "AnimEvent %s - %f", curEvent.GetEventName().c_str(), curEvent.GetEventTime() );
+						//kbLog( "AnimEvent %s - %f", curEvent.GetEventName().c_str(), curEvent.GetEventTime() );
 					}
 				}
 
@@ -561,6 +561,15 @@ void EtherDestructibleComponent::SetEnable_Internal( const bool bEnable ) {
 			if ( m_pNonDamagedModel != nullptr ) {
 				m_pSkelModel->SetModel( m_pNonDamagedModel, false );
 			}
+
+			for ( int i = 0; i < m_NonDamagedModelMaterialParams.size(); i++ ) {
+				const kbShaderParamComponent & shaderParam = m_NonDamagedModelMaterialParams[i];
+				if ( shaderParam.GetTexture() != nullptr ) {
+					m_pSkelModel->SetMaterialParamTexture( 0, shaderParam.GetParamName().stl_str(), const_cast<kbTexture*>( shaderParam.GetTexture() ) );
+				} else {
+					m_pSkelModel->SetMaterialParamVector( 0, shaderParam.GetParamName().stl_str(), shaderParam.GetVector() );
+				}
+			}
 		}
 
 		m_BonesList.resize( m_pSkelModel->GetModel()->NumBones() );
@@ -583,6 +592,15 @@ void EtherDestructibleComponent::Update_Internal( const float deltaTime ) {
 		if ( g_UseEditor == false ) {
 			if ( m_pNonDamagedModel != nullptr ) {
 				m_pSkelModel->SetModel( m_pNonDamagedModel, false );
+
+				for ( int i = 0; i < m_NonDamagedModelMaterialParams.size(); i++ ) {
+					const kbShaderParamComponent & shaderParam = m_NonDamagedModelMaterialParams[i];
+					if ( shaderParam.GetTexture() != nullptr ) {
+						m_pSkelModel->SetMaterialParamTexture( 0, shaderParam.GetParamName().stl_str(), const_cast<kbTexture*>( shaderParam.GetTexture() ) );
+					} else {
+						m_pSkelModel->SetMaterialParamVector( 0, shaderParam.GetParamName().stl_str(), shaderParam.GetVector() );
+					}
+				}
 			}
 		}
 
