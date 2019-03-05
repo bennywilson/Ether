@@ -199,9 +199,10 @@ GenerateClass(
 )
 
 GenerateEnum(
-   EBillboardType, "EBillboardType",
-   AddEnumField( BT_FaceCamera, "FaceCamera" )
-   AddEnumField( BT_AxialBillboard, "AxialBillboard" )
+	EBillboardType, "EBillboardType",
+	AddEnumField( BT_FaceCamera, "FaceCamera" )
+	AddEnumField( BT_AxialBillboard, "AxialBillboard" )
+	AddEnumField( BT_AlignAlongVelocity, "AlignAlongVelocity" )
 )
 
 GenerateClass(
@@ -223,7 +224,6 @@ GenerateClass(
 	AddField( "MinEndVelocity", KBTYPEINFO_VECTOR, kbParticleComponent, m_MinParticleEndVelocity, false, "" )
 	AddField( "VelocityCurve", KBTYPEINFO_STRUCT, kbParticleComponent, m_VelocityOverLifeTimeCurve, true, "kbAnimEvent" )
 	AddField( "MaxEndVelocity", KBTYPEINFO_VECTOR, kbParticleComponent, m_MaxParticleEndVelocity, false, "" )
-	AddField( "LockVelocity", KBTYPEINFO_BOOL, kbParticleComponent, m_bLockVelocity, false, "" )
 
 	AddField( "MinStartSize", KBTYPEINFO_VECTOR, kbParticleComponent, m_MinParticleStartSize, false, "" )
 	AddField( "MaxStartSize", KBTYPEINFO_VECTOR, kbParticleComponent, m_MaxParticleStartSize, false, "" )

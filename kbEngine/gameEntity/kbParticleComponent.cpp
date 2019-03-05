@@ -47,7 +47,6 @@ void kbParticleComponent::Constructor() {
 	m_ParticleBillboardType = BT_FaceCamera;
 	m_Gravity.Set( 0.0f, 0.0f, 0.0f );
 	m_TranslucencySortBias = 0.0f;
-	m_bLockVelocity = false;
 
 	m_LeftOverTime = 0.0f;
 	m_pVertexBuffer = nullptr;
@@ -93,7 +92,7 @@ void kbParticleComponent::StopParticleSystem() {
 	m_Particles.clear();
 	m_LeftOverTime = 0.0f;
 
-	m_ParticleBillboardType = BT_FaceCamera;
+	//m_ParticleBillboardType = BT_FaceCamera;
 }
 
 /**
@@ -140,7 +139,13 @@ void kbParticleComponent::Update_Internal( const float DeltaTime ) {
 	int curVBPosition = 0;
 	const kbVec3 scale = GetScale();
 	const kbVec3 direction = GetOrientation().ToMat4()[2].ToVec3();
-	const byte iBillboardType = (int)m_ParticleBillboardType;
+	byte iBillboardType = 0;
+	switch( m_ParticleBillboardType ) {
+		case EBillboardType::BT_FaceCamera : iBillboardType = 0; break;
+		case EBillboardType::BT_AxialBillboard : iBillboardType = 1; break;
+		case EBillboardType::BT_AlignAlongVelocity : iBillboardType = 1; break;
+		default: kbWarning( "kbParticleComponent::Update_Internal() - Invalid billboard type specified" ); break;
+	}
 
 	for ( int i = (int)m_Particles.size() - 1; i >= 0 ; i-- ) {
 		m_Particles[i].m_LifeLeft -= DeltaTime;
@@ -218,10 +223,21 @@ void kbParticleComponent::Update_Internal( const float DeltaTime ) {
 		memcpy(&m_pVertexBuffer[iVertex + 2].color, byteColor, sizeof(byteColor));
 		memcpy(&m_pVertexBuffer[iVertex + 3].color, byteColor, sizeof(byteColor));
 
-		m_pVertexBuffer[iVertex + 0].direction = direction;
-		m_pVertexBuffer[iVertex + 1].direction = direction;
-		m_pVertexBuffer[iVertex + 2].direction = direction;
-		m_pVertexBuffer[iVertex + 3].direction = direction;
+		if ( m_ParticleBillboardType == EBillboardType::BT_AlignAlongVelocity ) {
+			kbVec3 alignVec = kbVec3::up;
+			if ( curVelocity.LengthSqr() > 0.01f ) {
+				alignVec = curVelocity.Normalized();
+				m_pVertexBuffer[iVertex + 0].direction = alignVec;
+				m_pVertexBuffer[iVertex + 1].direction = alignVec;
+				m_pVertexBuffer[iVertex + 2].direction = alignVec;
+				m_pVertexBuffer[iVertex + 3].direction = alignVec;
+			}
+		} else {
+			m_pVertexBuffer[iVertex + 0].direction = direction;
+			m_pVertexBuffer[iVertex + 1].direction = direction;
+			m_pVertexBuffer[iVertex + 2].direction = direction;
+			m_pVertexBuffer[iVertex + 3].direction = direction;
+		}
 
 		m_pVertexBuffer[iVertex + 0].rotation = m_Particles[i].m_Rotation;
 		m_pVertexBuffer[iVertex + 1].rotation = m_Particles[i].m_Rotation;
@@ -275,12 +291,7 @@ void kbParticleComponent::Update_Internal( const float DeltaTime ) {
 	while ( m_bIsSpawning && ( ( m_MaxParticleSpawnRate > 0 && TimeLeft >= NextSpawn ) || m_BurstCount > 0 ) ) {
 		kbParticle_t newParticle;
 		newParticle.m_StartVelocity = kbVec3Rand( m_MinParticleStartVelocity, m_MaxParticleStartVelocity ) * ownerMatrix;
-		
-		if ( m_bLockVelocity ) {
-			newParticle.m_EndVelocity = newParticle.m_StartVelocity;
-		} else {
-			newParticle.m_EndVelocity = kbVec3Rand( m_MinParticleEndVelocity, m_MaxParticleEndVelocity ) * ownerMatrix;
-		}
+		newParticle.m_EndVelocity = kbVec3Rand( m_MinParticleEndVelocity, m_MaxParticleEndVelocity ) * ownerMatrix;
 
 		newParticle.m_Position = MyPosition + newParticle.m_StartVelocity * TimeLeft;
 		newParticle.m_LifeLeft = m_ParticleMinDuration + ( kbfrand() * ( m_ParticleMaxDuration - m_ParticleMinDuration ) );

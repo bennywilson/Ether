@@ -11,7 +11,8 @@
 
 enum EBillboardType {
 	BT_FaceCamera,
-	BT_AxialBillboard
+	BT_AxialBillboard,
+	BT_AlignAlongVelocity
 };
 
 struct kbParticle_t {
@@ -87,7 +88,7 @@ private:
 	int															m_MaxBurstCount;
 	EBillboardType												m_ParticleBillboardType;
 	float														m_TranslucencySortBias;
-	bool														m_bLockVelocity;
+
 
 	// Non-editable
 	float														m_LeftOverTime;
