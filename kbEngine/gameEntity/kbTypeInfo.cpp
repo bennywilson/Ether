@@ -89,6 +89,10 @@ std::vector<class kbTypeInfoClass*> kbAnimEvent::kbAnimEvent_TypeInfoVar;
 kbVectorAnimEvent_TypeInfo kbVectorAnimEvent::typeInfo;
 std::vector<class kbTypeInfoClass*> kbVectorAnimEvent::kbVectorAnimEvent_TypeInfoVar;
 
+// kbModelEmitter
+kbModelEmitter_TypeInfo kbModelEmitter::typeInfo;
+std::vector<class kbTypeInfoClass*> kbModelEmitter::kbModelEmitter_TypeInfoVar;
+
 // kbModelComponent
 kbModelComponent_TypeInfo kbModelComponent::typeInfo;
 std::vector<kbTypeInfoClass *> kbModelComponent::kbModelComponent_TypeInfoVar;

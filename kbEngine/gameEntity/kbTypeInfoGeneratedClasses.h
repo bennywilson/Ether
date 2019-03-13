@@ -62,6 +62,12 @@ GenerateClass(
 )
 
 GenerateClass(
+	kbModelEmitter,
+	AddField( "Model", KBTYPEINFO_STATICMODEL, kbModelEmitter, m_pModel, false, "" )
+	AddField( "MaterialList", KBTYPEINFO_STRUCT, kbModelEmitter, m_MaterialList, true, "kbMaterialComponent" )
+)
+
+GenerateClass(
 	kbClothBone,
 	AddField( "BoneName", KBTYPEINFO_KBSTRING, kbClothBone, m_BoneName, false, "" )
 	AddField( "NeighborBones", KBTYPEINFO_KBSTRING, kbClothBone, m_NeighborBones, true, "kbString" )
@@ -245,6 +251,8 @@ GenerateClass(
 	AddField( "MaxEndRotationRate", KBTYPEINFO_FLOAT, kbParticleComponent, m_MaxEndRotationRate, false, "" )
 
 	AddField( "Gravity", KBTYPEINFO_VECTOR, kbParticleComponent, m_Gravity, false, "" )
+
+	AddField( "ModelEmitter", KBTYPEINFO_STRUCT, kbParticleComponent, m_ModelEmitter, true, "kbModelEmitter" )
 
 	AddField( "ParticleBillboardType", KBTYPEINFO_ENUM, kbParticleComponent, m_ParticleBillboardType, false, "EBillboardType" )
 	

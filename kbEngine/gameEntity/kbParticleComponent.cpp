@@ -434,7 +434,7 @@ void kbParticleComponent::RenderSync() {
 }
 
 /**
- *	kbParticleComponent::SetEnable_Internal(
+ *	kbParticleComponent::SetEnable_Internal
  */
 void kbParticleComponent::SetEnable_Internal( const bool isEnabled ) {
 	Super::SetEnable_Internal( isEnabled );
@@ -454,4 +454,11 @@ void kbParticleComponent::SetEnable_Internal( const bool isEnabled ) {
 	} else {
 		g_pRenderer->RemoveParticle( m_RenderObject );
 	}
+}
+
+/**
+ *	kbModelEmitter::Constructor
+ */
+void kbModelEmitter::Constructor() {
+	m_pModel = nullptr;
 }

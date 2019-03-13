@@ -2,7 +2,7 @@
 // kbParticleComponent.h
 //
 //
-// 2016-2017 kbEngine 2.0
+// 2016-2019 kbEngine 2.0
 //===================================================================================================
 #ifndef _KBPARTICLECOMPONENT_H_
 #define _KBPARTICLECOMPONENT_H_
@@ -16,18 +16,36 @@ enum EBillboardType {
 };
 
 struct kbParticle_t {
-	kbVec3 m_Position;
-	float m_Rotation;
-	kbVec2 m_StartSize;
-	kbVec2 m_EndSize;
-	float m_LifeLeft;
-	float m_TotalLife;
-	kbVec3 m_StartVelocity;
-	kbVec3 m_EndVelocity;
-	float m_StartRotation;
-	float m_EndRotation;
-	float m_Randoms[3];
+	kbVec3														m_Position;
+	float														m_Rotation;
+	kbVec2														m_StartSize;
+	kbVec2														m_EndSize;
+	float														m_LifeLeft;
+	float														m_TotalLife;
+	kbVec3														m_StartVelocity;
+	kbVec3														m_EndVelocity;
+	float														m_StartRotation;
+	float														m_EndRotation;
+	float														m_Randoms[3];
+
+	kbRenderObject												m_RenderObject;		// For model emitters
 };
+
+/**
+ *	kbModelEmitter
+ */
+class kbModelEmitter : public kbGameComponent {
+
+	KB_DECLARE_COMPONENT( kbModelEmitter, kbGameComponent );
+
+//-------------------------------------------------------------------------------------------------------------------------------------------------------------
+public:
+
+private:
+	kbModel *													m_pModel;
+	std::vector<kbMaterialComponent>							m_MaterialList;
+};
+
 
 /**
  *	kbParticleComponent
@@ -87,6 +105,7 @@ private:
 	int															m_MinBurstCount;
 	int															m_MaxBurstCount;
 	EBillboardType												m_ParticleBillboardType;
+	std::vector<kbModelEmitter>									m_ModelEmitter;
 	float														m_TranslucencySortBias;
 
 
