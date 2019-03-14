@@ -2,7 +2,7 @@
 // kbParticleComponent.cpp
 //
 //
-// 2016-2018 kbEngine 2.0
+// 2016-2019 kbEngine 2.0
 //===================================================================================================
 #include "kbCore.h"
 #include "kbVector.h"
@@ -14,7 +14,22 @@
 KB_DEFINE_COMPONENT(kbParticleComponent)
 
 static const uint NumParticleBufferVerts = 10000;
+static const uint NumMeshVerts = 10000;
 
+kbParticle_t::kbParticle_t() {
+
+}
+
+/**
+ *	
+ */
+kbParticle_t::~kbParticle_t() {
+	for ( int i = 0; i < 3; i++ ) {
+		if ( m_Models[i].NumMeshes() > 0 ) {
+			m_Models[i].Release();
+		}
+	}
+}
 
 /**
  *	kbParticleComponent::Initialize

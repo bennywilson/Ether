@@ -16,6 +16,9 @@ enum EBillboardType {
 };
 
 struct kbParticle_t {
+																kbParticle_t();
+																~kbParticle_t();
+
 	kbVec3														m_Position;
 	float														m_Rotation;
 	kbVec2														m_StartSize;
@@ -28,6 +31,8 @@ struct kbParticle_t {
 	float														m_EndRotation;
 	float														m_Randoms[3];
 
+	kbModel														m_Models[3];
+	int															m_CurrentModelIndex;
 	kbRenderObject												m_RenderObject;		// For model emitters
 };
 

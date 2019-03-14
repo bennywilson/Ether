@@ -59,6 +59,7 @@ protected:
 	int											m_ScorchState;
 
 	float										m_RandomScroller;
+	kbVec3										m_ScrollRate;
 	bool										m_bIsFinished;
 };
 

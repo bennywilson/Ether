@@ -14,6 +14,7 @@ cbuffer matrixBuffer {
 	float4 noiseDistortion_1_2;
 	float4 noiseDistortion_3_colorDistortion;
 	float4 additionalData;			// x: Alpha value, b: Random
+
 };
 
 kbShaderState {
@@ -23,7 +24,7 @@ kbShaderState {
 
 	srcBlendAlpha Blend_One
 	dstBlendAlpha Blend_Zero
-	colorWriteEnable ColorWriteEnable_rgba
+	colorWriteEnable ColorWriteEnable_rgb
 
 	cullmode cullmode_none
 }
@@ -82,9 +83,10 @@ float4 pixelShader( pixelInput	input ) : SV_Target {
 
 	const float scrollTime = additionalData.y;
 
-	float4 noise1 = noiseMap1.Sample( SampleType, input.uv + float2( 0.0f, noiseScroll.x * scrollTime ) ) * 2.0f - 1.0f;
-	float4 noise2 = noiseMap2.Sample( SampleType, input.uv + float2( 0.0f, noiseScroll.y * scrollTime ) ) * 2.0f - 1.0f;
-	float4 noise3 = noiseMap3.Sample( SampleType, input.uv + float2( 0.0f, noiseScroll.z * scrollTime ) ) * 2.0f - 1.0f;
+	float4 noise1 = noiseMap1.Sample( SampleType, input.uv + float2( 0.0f, noiseScroll.x * scrollTime * additionalData.z ) ) * 2.0f - 1.0f;
+	float4 noise2 = noiseMap2.Sample( SampleType, input.uv + float2( 0.0f, noiseScroll.y * scrollTime * additionalData.w ) ) * 2.0f - 1.0f;
+	float4 noise3 = noiseMap3.Sample( SampleType, input.uv + float2( 0.0f, noiseScroll.z * scrollTime * additionalData.z ) ) * 2.0f - 1.0f;
+
 	noise1.xy *= noiseDistortion_1_2.xy;
 	noise2.xy *= noiseDistortion_1_2.zw;
 	noise3.xy *= noiseDistortion_3_colorDistortion.xy;
@@ -105,9 +107,6 @@ float4 pixelShader( pixelInput	input ) : SV_Target {
 	float dist = 0.5f;
 	dist = pow( 1.0f - saturate( ( dist - input.uv.y ) / dist ), 5.0f );
 	color.w *= dist * additionalData.x;
-
-	if ( color.a < 0.01 )
-		clip(-1);
 
 	return color * ( 0.75f *color.a );
 }

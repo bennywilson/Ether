@@ -953,14 +953,15 @@ EtherFireEntity::EtherFireEntity( const kbVec3 & position, const kbPrefab *const
 
 	m_StartingTimeSeconds = g_GlobalTimer.TimeElapsedSeconds();
 	m_RandomScroller = 1.0f + kbfrand() * 0.1f;
+	m_ScrollRate = kbVec3Rand( kbVec3( 1.0f, 1.0f, 1.0f ), kbVec3( 1.15f, 1.15f, 1.15f ) );
 
 	// MATERIALHACK
 
 	kbStaticModelComponent * pSM = (kbStaticModelComponent*)m_pSmokeEntity->GetComponentByType( kbStaticModelComponent::GetType() );
-	pSM->SetMaterialParamVector( 0, "additionalData", kbVec4( 0.0f, m_RandomScroller, 0.0f, 0.0f ) );
+	pSM->SetMaterialParamVector( 0, "additionalData", kbVec4( 0.0f, m_RandomScroller, m_ScrollRate.x, m_ScrollRate.y ) );
 
 	pSM = (kbStaticModelComponent*)m_pFireEntity->GetComponentByType( kbStaticModelComponent::GetType() );
-	pSM->SetMaterialParamVector( 0, "additionalData", kbVec4( 0.0f, m_RandomScroller, 0.0f, 0.0f ) );
+	pSM->SetMaterialParamVector( 0, "additionalData", kbVec4( 0.0f, m_RandomScroller, m_ScrollRate.z, m_ScrollRate.y ) );
 
 	m_bIsFinished = false;
 }
@@ -993,6 +994,11 @@ void EtherFireEntity::Destroy() {
  *	EtherFireEntity::Update
  */
 void EtherFireEntity::Update( const float DeltaTime ) {
+
+	if ( GetAsyncKeyState( 'C' ) ) {
+		m_bIsFinished = true;
+		return;
+	}
 
 	const float currentTimeSeconds = g_GlobalTimer.TimeElapsedSeconds();
 	const float scaleTime = 1.0f;
@@ -1057,9 +1063,9 @@ void EtherFireEntity::Update( const float DeltaTime ) {
 	m_RandomScroller += DeltaTime * fireFade;
 
 	kbStaticModelComponent * pSM = (kbStaticModelComponent*)m_pSmokeEntity->GetComponentByType( kbStaticModelComponent::GetType() );
-	pSM->SetMaterialParamVector( 0, "additionalData", kbVec4( smokeFade * 0.24f, m_RandomScroller, 0.0f, 0.0f ) );
+	pSM->SetMaterialParamVector( 0, "additionalData", kbVec4( smokeFade * 0.24f, m_RandomScroller, m_ScrollRate.x, m_ScrollRate.y ) );
 
 	pSM = (kbStaticModelComponent*)m_pFireEntity->GetComponentByType( kbStaticModelComponent::GetType() );
-	pSM->SetMaterialParamVector( 0, "additionalData", kbVec4( fireFade, m_RandomScroller, 0.0f, 0.0f ) );	
+	pSM->SetMaterialParamVector( 0, "additionalData", kbVec4( fireFade, m_RandomScroller, m_ScrollRate.z, m_ScrollRate.y ) );	
 }
 
