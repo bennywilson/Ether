@@ -60,7 +60,6 @@ kbGameEntity 0 0 0 0 {
 			}
 		EndColor = 1.000000 1.000000 1.000000 1.000000
 		Gravity = 0.000000 0.000000 0.000000
-		LockVelocity = 0
 		MaterialList = 1
 			kbMaterialComponent { 
 				Enabled = 0
@@ -100,6 +99,7 @@ kbGameEntity 0 0 0 0 {
 		MinStartRotationRate =  -0.500000
 		MinStartSize = 0.000000 0.000000 0.000000
 		MinStartVelocity = -75.000000 -75.000000 -75.000000
+		ModelEmitter = 0
 		ParticleBillboardType = FaceCamera
 		StartColor = 1.000000 1.000000 1.000000 1.000000
 		StartDelay =  0.000000
@@ -139,7 +139,6 @@ kbGameEntity 0 0 0 0 {
 		ColorOverLife = 0
 		EndColor = 0.000000 0.000000 0.000000 1.000000
 		Gravity = 0.000000 -120.000000 0.000000
-		LockVelocity = 0
 		MaterialList = 1
 			kbMaterialComponent { 
 				Enabled = 0
@@ -179,6 +178,7 @@ kbGameEntity 0 0 0 0 {
 		MinStartRotationRate =  -4.000000
 		MinStartSize = 0.000000 0.000000 0.000000
 		MinStartVelocity = -100.000000 -100.000000 -100.000000
+		ModelEmitter = 0
 		ParticleBillboardType = FaceCamera
 		StartColor = 1.000000 1.000000 1.000000 1.000000
 		StartDelay =  0.000000
@@ -214,7 +214,7 @@ kbGameEntity 0 0 0 0 {
 		LifeTime =  -1.000000
 		Name = "Entity_19"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
-		Position = -1.065154 4.339027 32.108345
+		Position = -3.718102 4.339027 32.108345
 		Scale = 100.000000 100.000000 100.000000
 	}
 	kbStaticModelComponent { 
@@ -226,14 +226,7 @@ kbGameEntity 0 0 0 0 {
 				Enabled = 0
 				LifeTime =  -1.000000
 				Shader = ..\..\kbengine\assets\shaders\basicshader.kbshader
-				ShaderParams = 1
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = ""
-						Texture = NULL
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
+				ShaderParams = 0
 			}
 		RenderPass = LightingPass
 		TranslucencySortBias =  0.000000
@@ -322,7 +315,6 @@ kbGameEntity 0 0 0 0 {
 			}
 		EndColor = 1.000000 1.000000 1.000000 1.000000
 		Gravity = 0.000000 0.000000 0.000000
-		LockVelocity = 0
 		MaterialList = 1
 			kbMaterialComponent { 
 				Enabled = 0
@@ -362,6 +354,19 @@ kbGameEntity 0 0 0 0 {
 		MinStartRotationRate =  -0.500000
 		MinStartSize = 0.000000 0.000000 0.000000
 		MinStartVelocity = -75.000000 -75.000000 -75.000000
+		ModelEmitter = 1
+			kbModelEmitter { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				MaterialList = 1
+					kbMaterialComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						Shader = NULL
+						ShaderParams = 0
+					}
+				Model = .\assets\models\fx\spiralcurve.fbx
+			}
 		ParticleBillboardType = FaceCamera
 		StartColor = 1.000000 1.000000 1.000000 1.000000
 		StartDelay =  0.000000
@@ -391,7 +396,7 @@ kbGameEntity 0 0 0 0 {
 			}
 	}
 	kbParticleComponent { 
-		Enabled = 1
+		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "Sparks"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
@@ -422,7 +427,6 @@ kbGameEntity 0 0 0 0 {
 			}
 		EndColor = 0.000000 0.000000 0.000000 1.000000
 		Gravity = 0.000000 -120.000000 0.000000
-		LockVelocity = 0
 		MaterialList = 1
 			kbMaterialComponent { 
 				Enabled = 0
@@ -462,6 +466,7 @@ kbGameEntity 0 0 0 0 {
 		MinStartRotationRate =  -4.000000
 		MinStartSize = 0.000000 0.000000 0.000000
 		MinStartVelocity = -70.000000 -70.000000 -70.000000
+		ModelEmitter = 0
 		ParticleBillboardType = FaceCamera
 		StartColor = 1.000000 1.000000 1.000000 1.000000
 		StartDelay =  0.000000
@@ -491,7 +496,7 @@ kbGameEntity 0 0 0 0 {
 			}
 	}
 	kbParticleComponent { 
-		Enabled = 1
+		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "Lingering Smoke"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
@@ -536,7 +541,6 @@ kbGameEntity 0 0 0 0 {
 		ColorOverLife = 0
 		EndColor = 0.080000 0.080000 0.080000 0.000000
 		Gravity = 0.000000 0.000000 0.000000
-		LockVelocity = 0
 		MaterialList = 1
 			kbMaterialComponent { 
 				Enabled = 0
@@ -576,6 +580,7 @@ kbGameEntity 0 0 0 0 {
 		MinStartRotationRate =  -0.200000
 		MinStartSize = 20.000000 20.000000 20.000000
 		MinStartVelocity = -15.000000 -15.000000 -15.000000
+		ModelEmitter = 0
 		ParticleBillboardType = FaceCamera
 		StartColor = 0.080000 0.080000 0.080000 0.010000
 		StartDelay =  0.000000
@@ -603,5 +608,39 @@ kbGameEntity 0 0 0 0 {
 				EventTime =  1.000000
 				EventValue =  0.000000
 			}
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Entity_23"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 5.515704 3.524461 16.954765
+		Scale = 1.000000 1.000000 1.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		Materials = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Shader = ..\..\kbengine\assets\shaders\basictexture.kbshader
+				ShaderParams = 1
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "shaderTexture"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		RenderPass = LightingPass
+		TranslucencySortBias =  0.000000
+		Model = .\assets\models\fx\spiralcurve.fbx
+		ShaderOverride = 0
+			
 	}
 }

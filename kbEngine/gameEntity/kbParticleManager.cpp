@@ -2,7 +2,7 @@
 // kbParticleManager.cpp
 //
 //
-// 2016-2018 kbEngine 2.0
+// 2016-2019 kbEngine 2.0
 //===================================================================================================
 #include "kbCore.h"
 #include "kbVector.h"
@@ -12,10 +12,43 @@
 
 static const uint NumParticleBufferVerts = 10000;
 static const uint NumCustomAtlases = 16;
+static const uint NumModelEmitters = 128;
+static const uint MaxModelEmitterVerts = 10000;
+
+/**
+ *	BufferedModel_t::BufferedModel_t
+ */
+BufferedModel_t::BufferedModel_t() {
+
+	m_CurrIdx = 0;
+
+	for ( int iModel = 0; iModel < 3; iModel++ ) {
+		m_pModels[iModel] = new kbModel();
+		m_pModels[iModel]->CreateDynamicModel( MaxModelEmitterVerts, MaxModelEmitterVerts, nullptr, nullptr );
+	}
+}
+
+/**
+ *	BufferedModel_t::~BufferedModel_t
+ */
+BufferedModel_t::~BufferedModel_t() {
+	Release();
+}
+
+/**
+ *	BufferedModel_t::Release
+ */
+void BufferedModel_t::Release() {
+	for ( int i = 0; i < 3; i++ ) {
+		SAFE_RELEASE( m_pModels[i] );
+	}
+}
+
 /**
  *	kbParticleManager::kbParticleManager
  */
 kbParticleManager::kbParticleManager() {
+
 }
 
 /**
@@ -37,6 +70,10 @@ kbParticleManager::~kbParticleManager() {
 		for ( int i = 0; i < particleList.size(); i++ ) {
 			delete particleList[i];
 		}
+	}
+
+	for ( int i = 0; i < m_ModelEmitterPool.size(); i++ ) {
+		m_ModelEmitterPool[i]->Release();
 	}
 }
 
@@ -212,6 +249,11 @@ void kbParticleManager::RenderSync() {
 		for ( int iAtlas = 0; iAtlas < NumCustomAtlases; iAtlas++ ) {
 			UpdateAtlas( m_CustomAtlases[iAtlas] );
 		}
+
+		for ( int i = 0; i < NumModelEmitters; i++ ) {
+			BufferedModel_t *const pModelEmitter = new BufferedModel_t();
+			m_ModelEmitterPool.push_back( pModelEmitter );
+		}
 	}
 
 	// Map/unmap buffers and pass it to the renderer
@@ -306,4 +348,31 @@ void kbParticleManager::AddQuad( const uint atlasIdx, const CustomParticleAtlasI
 	curAtlas.m_pIndexBuffer[curAtlas.m_NumIndices + 4] = vertexIndex + 2;
 	curAtlas.m_pIndexBuffer[curAtlas.m_NumIndices + 5] = vertexIndex + 0;
 	curAtlas.m_NumIndices += 6;
+}
+
+/**
+ *	kbParticleManager::GetModelEmitter
+ */
+BufferedModel_t * kbParticleManager::GetModelEmitter() {
+	if ( m_ModelEmitterPool.size() == 0 ) {
+		kbWarning( "kbParticleManager::GetModelEmitter() - Pool is empty" );
+		return nullptr;
+	}
+
+	BufferedModel_t *const pRetModel = m_ModelEmitterPool[m_ModelEmitterPool.size() - 1];
+	m_ModelEmitterPool.pop_back();
+
+	return pRetModel;
+}
+
+/**
+ *	kbParticleManager::ReturnModelEmitter
+ */
+void kbParticleManager::ReturnModelEmitter( BufferedModel_t *const pModelEmitter ) {
+	if ( pModelEmitter == nullptr ) {
+		kbWarning( "kbParticleManager::ReturnModelEmitter() - nullptr being returned" );
+		return;
+	}
+
+	m_ModelEmitterPool.push_back( pModelEmitter );
 }

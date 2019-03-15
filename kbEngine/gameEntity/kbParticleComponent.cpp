@@ -16,18 +16,20 @@ KB_DEFINE_COMPONENT(kbParticleComponent)
 static const uint NumParticleBufferVerts = 10000;
 static const uint NumMeshVerts = 10000;
 
+/**
+ *	kbParticle_t::bParticle_t
+ */
 kbParticle_t::kbParticle_t() {
-
+	m_pSrcModelEmitter = nullptr;
+	m_pDstModelEmitter = nullptr;
 }
 
 /**
- *	
+ *	kbParticle_t::~kbParticle_t
  */
 kbParticle_t::~kbParticle_t() {
-	for ( int i = 0; i < 3; i++ ) {
-		if ( m_Models[i].NumMeshes() > 0 ) {
-			m_Models[i].Release();
-		}
+	if ( m_pDstModelEmitter != nullptr ) {
+		g_pGame->GetParticleManager()->ReturnModelEmitter( m_pDstModelEmitter );
 	}
 }
 
@@ -92,6 +94,10 @@ void kbParticleComponent::StopParticleSystem() {
 
 	kbErrorCheck( g_pRenderer->IsRenderingSynced() == true, "kbParticleComponent::StopParticleSystem() - Shutting down particle component even though rendering is not synced" );
 
+	if ( IsModelEmitter() ) {
+		return;
+	}
+
 	g_pRenderer->RemoveParticle( m_RenderObject );
 	for ( int i = 0; i < NumParticleBuffers; i++ ) {
 		if ( m_ParticleBuffer[i].IsVertexBufferMapped() ) {
@@ -146,6 +152,7 @@ void kbParticleComponent::Update_Internal( const float DeltaTime ) {
 	if ( m_MaxBurstCount <= 0 && ( m_MaxParticleSpawnRate <= eps || m_MinParticleSpawnRate < eps || m_MaxParticleSpawnRate < m_MinParticleSpawnRate || m_ParticleMinDuration <= eps ) ) {
 		return;
 	}
+
 	kbVec3 currentCameraPosition;
 	kbQuat currentCameraRotation;
 	g_pRenderer->GetRenderViewTransform( nullptr, currentCameraPosition, currentCameraRotation );
@@ -168,6 +175,14 @@ void kbParticleComponent::Update_Internal( const float DeltaTime ) {
 		if ( m_Particles[i].m_LifeLeft <= 0.0f ) {
 			std::swap( m_Particles[i], m_Particles.back() );
 			m_Particles.pop_back();
+			continue;
+		}
+
+		kbParticle_t & particle = m_Particles[i];
+		if ( IsModelEmitter() ) {
+
+
+
 			continue;
 		}
 
@@ -327,6 +342,14 @@ void kbParticleComponent::Update_Internal( const float DeltaTime ) {
 		newParticle.m_StartRotation = kbfrand( m_MinStartRotationRate, m_MaxStartRotationRate );
 		newParticle.m_EndRotation = kbfrand( m_MinEndRotationRate, m_MaxEndRotationRate );
 
+		if ( m_ModelEmitter.size() > 0 ) {
+
+			const int randIdx = rand() % m_ModelEmitter.size();
+			newParticle.m_pSrcModelEmitter = &m_ModelEmitter[randIdx];
+			newParticle.m_pDstModelEmitter = g_pGame->GetParticleManager()->GetModelEmitter();
+
+		}
+
 		if ( newParticle.m_StartRotation != 0 || newParticle.m_EndRotation != 0 ) {
 			newParticle.m_Rotation = kbfrand() * kbPI;
 		} else {
@@ -381,6 +404,11 @@ void kbParticleComponent::RenderSync() {
 		if ( m_bIsPooled ) {
 			g_pGame->GetParticleManager()->ReturnParticleComponent( this );
 		}
+		return;
+	}
+
+	if ( IsModelEmitter() ) {
+
 		return;
 	}
 

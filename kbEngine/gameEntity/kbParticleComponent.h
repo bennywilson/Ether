@@ -31,7 +31,9 @@ struct kbParticle_t {
 	float														m_EndRotation;
 	float														m_Randoms[3];
 
-	kbModel														m_Models[3];
+	struct BufferedModel_t *									m_pDstModelEmitter;
+	class kbModelEmitter *										m_pSrcModelEmitter;
+
 	int															m_CurrentModelIndex;
 	kbRenderObject												m_RenderObject;		// For model emitters
 };
@@ -45,6 +47,8 @@ class kbModelEmitter : public kbGameComponent {
 
 //-------------------------------------------------------------------------------------------------------------------------------------------------------------
 public:
+
+	const kbModel *												GetModel() const { return m_pModel; }
 
 private:
 	kbModel *													m_pModel;
@@ -73,6 +77,9 @@ public:
 
 	// Hack wasn't picking up from the package file
 	void														SetBillboardType( const EBillboardType inBBType ) { m_ParticleBillboardType = inBBType; }
+
+	bool														IsModelEmitter() const { return m_ModelEmitter.size() > 0 && m_ModelEmitter[0].GetModel() != nullptr; }
+
 
 protected:
 
