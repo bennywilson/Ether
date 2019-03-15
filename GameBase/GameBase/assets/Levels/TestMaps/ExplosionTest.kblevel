@@ -218,7 +218,7 @@ kbGameEntity 0 0 0 0 {
 		Scale = 100.000000 100.000000 100.000000
 	}
 	kbStaticModelComponent { 
-		Enabled = 1
+		Enabled = 0
 		LifeTime =  -1.000000
 		CastsShadow = 0
 		Materials = 1
@@ -336,24 +336,24 @@ kbGameEntity 0 0 0 0 {
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 			}
-		MaxBurstCount = 25
+		MaxBurstCount = 0
 		MaxDuration =  2.000000
 		MaxEndRotationRate =  0.050000
-		MaxEndSize = 80.000000 80.000000 80.000000
-		MaxEndVelocity = 1.000000 1.000000 1.000000
-		MaxSpawnRate =  0.000000
+		MaxEndSize = 55.000000 55.000000 55.000000
+		MaxEndVelocity = 0.000000 0.000000 0.000000
+		MaxSpawnRate =  1.000000
 		MaxStartRotationRate =  0.500000
-		MaxStartSize = 0.000000 0.000000 0.000000
-		MaxStartVelocity = 75.000000 75.000000 75.000000
-		MinBurstCount = 15
+		MaxStartSize = 55.000000 55.000000 55.000000
+		MaxStartVelocity = 0.000000 0.000000 0.000000
+		MinBurstCount = 0
 		MinDuration =  1.000000
 		MinEndRotationRate =  -0.050000
-		MinEndSize = 60.000000 60.000000 60.000000
-		MinEndVelocity = -1.000000 -1.000000 -1.000000
-		MinSpawnRate =  0.000000
+		MinEndSize = 55.000000 55.000000 55.000000
+		MinEndVelocity = 0.000000 0.000000 0.000000
+		MinSpawnRate =  1.000000
 		MinStartRotationRate =  -0.500000
-		MinStartSize = 0.000000 0.000000 0.000000
-		MinStartVelocity = -75.000000 -75.000000 -75.000000
+		MinStartSize = 55.000000 55.000000 55.000000
+		MinStartVelocity = 0.000000 0.000000 0.000000
 		ModelEmitter = 1
 			kbModelEmitter { 
 				Enabled = 0
@@ -370,30 +370,9 @@ kbGameEntity 0 0 0 0 {
 		ParticleBillboardType = FaceCamera
 		StartColor = 1.000000 1.000000 1.000000 1.000000
 		StartDelay =  0.000000
-		TotalDuration =  10.000000
+		TotalDuration =  2.000000
 		TranslucencySortBias =  0.000000
-		VelocityCurve = 3
-			kbAnimEvent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				EventName = ""
-				EventTime =  0.000000
-				EventValue =  1.000000
-			}
-			kbAnimEvent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				EventName = ""
-				EventTime =  0.050000
-				EventValue =  0.050000
-			}
-			kbAnimEvent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				EventName = ""
-				EventTime =  1.000000
-				EventValue =  0.000000
-			}
+		VelocityCurve = 0
 	}
 	kbParticleComponent { 
 		Enabled = 0

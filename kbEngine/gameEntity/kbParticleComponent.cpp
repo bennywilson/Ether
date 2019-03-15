@@ -28,9 +28,22 @@ kbParticle_t::kbParticle_t() {
  *	kbParticle_t::~kbParticle_t
  */
 kbParticle_t::~kbParticle_t() {
+	Shutdown();
 	if ( m_pDstModelEmitter != nullptr ) {
 		g_pGame->GetParticleManager()->ReturnModelEmitter( m_pDstModelEmitter );
 	}
+}
+
+/**
+ *	kbParticle_t::Shutdown
+ */
+void kbParticle_t::Shutdown() {
+
+	if ( m_pDstModelEmitter != nullptr ) {
+		g_pGame->GetParticleManager()->ReturnModelEmitter( m_pDstModelEmitter );
+	}
+	m_pDstModelEmitter = nullptr;
+	m_pSrcModelEmitter = nullptr;
 }
 
 /**
@@ -122,11 +135,6 @@ void kbParticleComponent::StopParticleSystem() {
 void kbParticleComponent::Update_Internal( const float DeltaTime ) {
 	Super::Update_Internal( DeltaTime );
 
-	bool bOutput = false;
-	if ( GetName().find("Linger") != std::string::npos ) {
-		bOutput = true;
-	}
-
 	if ( m_StartDelay > 0 ) {
 
 		m_StartDelay -= DeltaTime;
@@ -145,7 +153,7 @@ void kbParticleComponent::Update_Internal( const float DeltaTime ) {
 	}
 
 	const float eps = 0.00000001f;
-	if ( m_pVertexBuffer == nullptr || m_pIndexBuffer == nullptr ) {
+	if ( IsModelEmitter() == false && ( m_pVertexBuffer == nullptr || m_pIndexBuffer == nullptr ) ) {
 		return;
 	}
 
@@ -169,39 +177,68 @@ void kbParticleComponent::Update_Internal( const float DeltaTime ) {
 		default: kbWarning( "kbParticleComponent::Update_Internal() - Invalid billboard type specified" ); break;
 	}
 
+		std::vector<kbShaderParamOverrides_t> shaderParam;
+
+		kbShaderParamOverrides_t material;
+		material.m_pShader = (kbShader *) g_ResourceManager.LoadResource( "../../kbEngine/assets/Shaders/UIManipulator.kbshader", true );
+		kbTexture *const pTexture = (kbTexture *) g_ResourceManager.LoadResource( "../../kbEngine/assets/editor/manipulator.bmp", true );
+		material.SetTexture( "shaderTexture", pTexture );
+		shaderParam.push_back( material );
+
+
 	for ( int i = (int)m_Particles.size() - 1; i >= 0 ; i-- ) {
-		m_Particles[i].m_LifeLeft -= DeltaTime;
-
-		if ( m_Particles[i].m_LifeLeft <= 0.0f ) {
-			std::swap( m_Particles[i], m_Particles.back() );
-			m_Particles.pop_back();
-			continue;
-		}
-
 		kbParticle_t & particle = m_Particles[i];
-		if ( IsModelEmitter() ) {
 
+		particle.m_LifeLeft -= DeltaTime;
 
-
+		if ( particle.m_LifeLeft <= 0.0f ) {
+			particle.Shutdown();
+			VectorRemoveFastIndex( m_Particles, i );
 			continue;
 		}
 
-		const float normalizedTime = ( m_Particles[i].m_TotalLife - m_Particles[i].m_LifeLeft ) / m_Particles[i].m_TotalLife;
+
+		const float normalizedTime = ( particle.m_TotalLife - particle.m_LifeLeft ) / particle.m_TotalLife;
 		kbVec3 curVelocity = kbVec3::zero;
 
 		if ( m_VelocityOverLifeTimeCurve.size() == 0 ) {
-			curVelocity = kbLerp( m_Particles[i].m_StartVelocity, m_Particles[i].m_EndVelocity, normalizedTime );
+			curVelocity = kbLerp( particle.m_StartVelocity, particle.m_EndVelocity, normalizedTime );
 		} else {
 			const float velCurve = kbAnimEvent::Evaluate( m_VelocityOverLifeTimeCurve, normalizedTime );
-			curVelocity = m_Particles[i].m_StartVelocity * velCurve;
+			curVelocity = particle.m_StartVelocity * velCurve;
 		}
 
-		curVelocity += m_Gravity * ( m_Particles[i].m_TotalLife - m_Particles[i].m_LifeLeft );
+		curVelocity += m_Gravity * ( particle.m_TotalLife - particle.m_LifeLeft );
 
-		m_Particles[i].m_Position = m_Particles[i].m_Position + curVelocity * DeltaTime;
+		particle.m_Position = particle.m_Position + curVelocity * DeltaTime;
 
-		float curRotationRate = kbLerp( m_Particles[i].m_StartRotation, m_Particles[i].m_EndRotation, normalizedTime );
-		m_Particles[i].m_Rotation += curRotationRate * DeltaTime;
+		const float curRotationRate = kbLerp( particle.m_StartRotation, particle.m_EndRotation, normalizedTime );
+		particle.m_Rotation += curRotationRate * DeltaTime;
+
+		const kbVec2 curSize = kbLerp( particle.m_StartSize * scale.x, particle.m_EndSize * scale.y, normalizedTime );
+
+		kbVec4 curColor = kbVec4::zero;
+		if ( m_ColorOverLifeTimeCurve.size() == 0 ) {
+			curColor = kbLerp( m_ParticleStartColor, m_ParticleEndColor, normalizedTime );
+		} else {
+			curColor = kbVectorAnimEvent::Evaluate( m_ColorOverLifeTimeCurve, normalizedTime );
+		}
+
+		if ( m_AlphaOverLifeTimeCurve.size() == 0 ) {
+			curColor.w = kbLerp( m_ParticleStartColor.w, m_ParticleEndColor.w, normalizedTime );
+		} else {
+			curColor.w = kbAnimEvent::Evaluate( m_AlphaOverLifeTimeCurve, normalizedTime );
+		}
+
+		byte byteColor[4] = { ( byte )kbClamp( curColor.x * 255.0f, 0.0f, 255.0f  ), ( byte )kbClamp( curColor.y * 255.0f, 0.0f, 255.0f ), ( byte )kbClamp( curColor.z * 255.0f, 0.0f, 255.0f ), ( byte )kbClamp( curColor.w * 255.0f, 0.0f, 255.0f ) };
+
+		if ( IsModelEmitter() ) {
+
+			kbQuat a( 0.0f, 0.0f, 0.0f, 1.0f );
+			g_pRenderer->DrawModel( this->m_ModelEmitter[0].GetModel(), shaderParam, particle.m_Position, a, kbVec3::one, 0 );
+
+			continue;
+		}
 
 		m_pIndexBuffer[m_NumIndicesInCurrentBuffer + 2] = ( curVBPosition * 4 ) + 0;
 		m_pIndexBuffer[m_NumIndicesInCurrentBuffer + 1] = ( curVBPosition * 4 ) + 1;
@@ -211,43 +248,22 @@ void kbParticleComponent::Update_Internal( const float DeltaTime ) {
 		m_pIndexBuffer[m_NumIndicesInCurrentBuffer + 3] = ( curVBPosition * 4 ) + 3;
 		m_NumIndicesInCurrentBuffer += 6;
 
-		m_pVertexBuffer[iVertex + 0].position = m_Particles[i].m_Position;
-		m_pVertexBuffer[iVertex + 1].position = m_Particles[i].m_Position;
-		m_pVertexBuffer[iVertex + 2].position = m_Particles[i].m_Position;
-		m_pVertexBuffer[iVertex + 3].position = m_Particles[i].m_Position;
+		m_pVertexBuffer[iVertex + 0].position = particle.m_Position;
+		m_pVertexBuffer[iVertex + 1].position = particle.m_Position;
+		m_pVertexBuffer[iVertex + 2].position = particle.m_Position;
+		m_pVertexBuffer[iVertex + 3].position = particle.m_Position;
 
 		m_pVertexBuffer[iVertex + 0].uv.Set( 0.0f, 0.0f );
 		m_pVertexBuffer[iVertex + 1].uv.Set( 1.0f, 0.0f );
 		m_pVertexBuffer[iVertex + 2].uv.Set( 1.0f, 1.0f );
 		m_pVertexBuffer[iVertex + 3].uv.Set( 0.0f, 1.0f );
-		kbVec2 curSize = kbLerp( m_Particles[i].m_StartSize, m_Particles[i].m_EndSize, normalizedTime );
-		curSize.x *= scale.x;
-		curSize.y *= scale.y;
+
 
 		m_pVertexBuffer[iVertex + 0].size = kbVec2( -curSize.x,  curSize.y );
 		m_pVertexBuffer[iVertex + 1].size = kbVec2(  curSize.x,  curSize.y );
 		m_pVertexBuffer[iVertex + 2].size = kbVec2(  curSize.x, -curSize.y );
 		m_pVertexBuffer[iVertex + 3].size = kbVec2( -curSize.x, -curSize.y );
 
-		kbVec4 curColor = kbVec4::zero;
-		if ( m_ColorOverLifeTimeCurve.size() == 0 ) {
-			curColor = kbLerp( m_ParticleStartColor, m_ParticleEndColor, normalizedTime );
-		} else {
-			curColor = kbVectorAnimEvent::Evaluate( m_ColorOverLifeTimeCurve, normalizedTime );
-
-			//kbLog( "Color = %f %f %f %f", curColor.x, curColor.y, curColor.z, normalizedTime );
-		}
-
-		if ( m_AlphaOverLifeTimeCurve.size() == 0 ) {
-			curColor.w = kbLerp( m_ParticleStartColor.w, m_ParticleEndColor.w, normalizedTime );
-		} else {
-			curColor.w = kbAnimEvent::Evaluate( m_AlphaOverLifeTimeCurve, normalizedTime );
-
-			//kbLog( "//Alpha = %f %f", curColor.w, normalizedTime );
-		//	kbLog( "--> %f %f", normalizedTime, curColor.w );
-		}
-
-		byte byteColor[4] = { ( byte )kbClamp( curColor.x * 255.0f, 0.0f, 255.0f  ), ( byte )kbClamp( curColor.y * 255.0f, 0.0f, 255.0f ), ( byte )kbClamp( curColor.z * 255.0f, 0.0f, 255.0f ), ( byte )kbClamp( curColor.w * 255.0f, 0.0f, 255.0f ) };
 		memcpy(&m_pVertexBuffer[iVertex + 0].color, byteColor, sizeof(byteColor));
 		memcpy(&m_pVertexBuffer[iVertex + 1].color, byteColor, sizeof(byteColor));
 		memcpy(&m_pVertexBuffer[iVertex + 2].color, byteColor, sizeof(byteColor));
@@ -269,27 +285,27 @@ void kbParticleComponent::Update_Internal( const float DeltaTime ) {
 			m_pVertexBuffer[iVertex + 3].direction = direction;
 		}
 
-		m_pVertexBuffer[iVertex + 0].rotation = m_Particles[i].m_Rotation;
-		m_pVertexBuffer[iVertex + 1].rotation = m_Particles[i].m_Rotation;
-		m_pVertexBuffer[iVertex + 2].rotation = m_Particles[i].m_Rotation;
-		m_pVertexBuffer[iVertex + 3].rotation = m_Particles[i].m_Rotation;
+		m_pVertexBuffer[iVertex + 0].rotation = particle.m_Rotation;
+		m_pVertexBuffer[iVertex + 1].rotation = particle.m_Rotation;
+		m_pVertexBuffer[iVertex + 2].rotation = particle.m_Rotation;
+		m_pVertexBuffer[iVertex + 3].rotation = particle.m_Rotation;
 
 		m_pVertexBuffer[iVertex + 0].billboardType[0] = iBillboardType;
 		m_pVertexBuffer[iVertex + 1].billboardType[0] = iBillboardType;
 		m_pVertexBuffer[iVertex + 2].billboardType[0] = iBillboardType;
 		m_pVertexBuffer[iVertex + 3].billboardType[0] = iBillboardType;
 
-		m_pVertexBuffer[iVertex + 0].billboardType[1] = (byte)kbClamp( m_Particles[i].m_Randoms[0] * 255.0f, 0.0f, 255.0f );
+		m_pVertexBuffer[iVertex + 0].billboardType[1] = (byte)kbClamp( particle.m_Randoms[0] * 255.0f, 0.0f, 255.0f );
 		m_pVertexBuffer[iVertex + 1].billboardType[1] = m_pVertexBuffer[iVertex + 0].billboardType[1];
 		m_pVertexBuffer[iVertex + 2].billboardType[1] = m_pVertexBuffer[iVertex + 0].billboardType[1];
 		m_pVertexBuffer[iVertex + 3].billboardType[1] = m_pVertexBuffer[iVertex + 0].billboardType[1];
 
-		m_pVertexBuffer[iVertex + 0].billboardType[2] = (byte)kbClamp( m_Particles[i].m_Randoms[1] * 255.0f, 0.0f, 255.0f );
+		m_pVertexBuffer[iVertex + 0].billboardType[2] = (byte)kbClamp( particle.m_Randoms[1] * 255.0f, 0.0f, 255.0f );
 		m_pVertexBuffer[iVertex + 1].billboardType[2] = m_pVertexBuffer[iVertex + 0].billboardType[2];
 		m_pVertexBuffer[iVertex + 2].billboardType[2] = m_pVertexBuffer[iVertex + 0].billboardType[2];
 		m_pVertexBuffer[iVertex + 3].billboardType[2] = m_pVertexBuffer[iVertex + 0].billboardType[2];
 
-		m_pVertexBuffer[iVertex + 0].billboardType[3] = (byte)kbClamp( m_Particles[i].m_Randoms[2] * 255.0f, 0.0f, 255.0f );
+		m_pVertexBuffer[iVertex + 0].billboardType[3] = (byte)kbClamp( particle.m_Randoms[2] * 255.0f, 0.0f, 255.0f );
 		m_pVertexBuffer[iVertex + 1].billboardType[3] = m_pVertexBuffer[iVertex + 0].billboardType[3];
 		m_pVertexBuffer[iVertex + 2].billboardType[3] = m_pVertexBuffer[iVertex + 0].billboardType[3];
 		m_pVertexBuffer[iVertex + 3].billboardType[3] = m_pVertexBuffer[iVertex + 0].billboardType[3];
@@ -408,7 +424,6 @@ void kbParticleComponent::RenderSync() {
 	}
 
 	if ( IsModelEmitter() ) {
-
 		return;
 	}
 

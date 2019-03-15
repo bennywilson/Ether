@@ -19,6 +19,8 @@ struct kbParticle_t {
 																kbParticle_t();
 																~kbParticle_t();
 
+	void														Shutdown();
+
 	kbVec3														m_Position;
 	float														m_Rotation;
 	kbVec2														m_StartSize;
