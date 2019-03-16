@@ -341,7 +341,7 @@ kbGameEntity 0 0 0 0 {
 		MaxEndRotationRate =  0.050000
 		MaxEndSize = 55.000000 55.000000 55.000000
 		MaxEndVelocity = 0.000000 0.000000 0.000000
-		MaxSpawnRate =  1.000000
+		MaxSpawnRate =  5.000000
 		MaxStartRotationRate =  0.500000
 		MaxStartSize = 55.000000 55.000000 55.000000
 		MaxStartVelocity = 0.000000 0.000000 0.000000
@@ -350,7 +350,7 @@ kbGameEntity 0 0 0 0 {
 		MinEndRotationRate =  -0.050000
 		MinEndSize = 55.000000 55.000000 55.000000
 		MinEndVelocity = 0.000000 0.000000 0.000000
-		MinSpawnRate =  1.000000
+		MinSpawnRate =  5.000000
 		MinStartRotationRate =  -0.500000
 		MinStartSize = 55.000000 55.000000 55.000000
 		MinStartVelocity = 0.000000 0.000000 0.000000
@@ -362,8 +362,36 @@ kbGameEntity 0 0 0 0 {
 					kbMaterialComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
-						Shader = ..\..\kbengine\assets\shaders\basicshader.kbshader
-						ShaderParams = 0
+						Shader = .\assets\shaders\fx\additivewisp.kbshader
+						ShaderParams = 4
+							kbShaderParamComponent { 
+								Enabled = 0
+								LifeTime =  -1.000000
+								ParamName = "uvOffset"
+								Texture = NULL
+								Vector = 0.000000 1.000000 0.000000 0.000000
+							}
+							kbShaderParamComponent { 
+								Enabled = 0
+								LifeTime =  -1.000000
+								ParamName = "uvTileSpeed"
+								Texture = NULL
+								Vector = 1.500000 15.000000 0.000000 -20.000000
+							}
+							kbShaderParamComponent { 
+								Enabled = 0
+								LifeTime =  -1.000000
+								ParamName = "colorMultiplier"
+								Texture = NULL
+								Vector = 1.000000 1.000000 1.000000 1.000000
+							}
+							kbShaderParamComponent { 
+								Enabled = 0
+								LifeTime =  -1.000000
+								ParamName = "shaderTexture"
+								Texture = .\assets\fx\basicwisp.dds
+								Vector = 0.000000 0.000000 0.000000 0.000000
+							}
 					}
 				Model = .\assets\models\fx\spiralcurve.fbx
 			}

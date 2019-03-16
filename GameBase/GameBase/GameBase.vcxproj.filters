@@ -155,6 +155,9 @@
     <None Include="assets\shaders\FX\particleAtlas.kbShader">
       <Filter>Shaders\FX</Filter>
     </None>
+    <None Include="assets\shaders\FX\additiveWisp.kbShader">
+      <Filter>Shaders\FX</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameBase.h">

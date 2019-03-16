@@ -109,6 +109,7 @@
     <None Include="assets\shaders\FX\emberParticle.kbShader" />
     <None Include="assets\shaders\FX\particleAtlas.kbShader" />
     <None Include="assets\shaders\FX\Particle_BlendAdd.kbShader" />
+    <None Include="assets\shaders\FX\additiveWisp.kbShader" />
     <None Include="assets\shaders\Lights\charEnviroCylinderLight.kbShader" />
     <None Include="assets\shaders\Lights\charEnviroPointLight.kbShader" />
     <None Include="assets\shaders\Lights\directionalLightToon.kbShader" />
