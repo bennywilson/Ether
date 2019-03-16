@@ -229,8 +229,15 @@ kbGameEntity 0 0 0 0 {
 			kbMaterialComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
-				Shader = ..\..\kbengine\assets\shaders\basicshader.kbshader
-				ShaderParams = 0
+				Shader = ..\..\kbengine\assets\shaders\basictexture.kbshader
+				ShaderParams = 1
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "shaderTexture"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
 			}
 		RenderPass = LightingPass
 		TranslucencySortBias =  0.000000
@@ -311,7 +318,7 @@ kbGameEntity 0 0 0 0 {
 		MaxEndRotationRate =  0.050000
 		MaxEndSize = 55.000000 55.000000 55.000000
 		MaxEndVelocity = 0.000000 0.000000 0.000000
-		MaxSpawnRate =  55.000000
+		MaxSpawnRate =  15.000000
 		MaxStart3DRotation = 360.000000 360.000000 360.000000
 		MaxStartRotationRate =  0.500000
 		MaxStartSize = 55.000000 55.000000 55.000000
@@ -321,7 +328,7 @@ kbGameEntity 0 0 0 0 {
 		MinEndRotationRate =  -0.050000
 		MinEndSize = 55.000000 55.000000 55.000000
 		MinEndVelocity = 0.000000 0.000000 0.000000
-		MinSpawnRate =  55.000000
+		MinSpawnRate =  15.000000
 		MinStart3DRotation = 0.000000 0.000000 0.000000
 		MinStartRotationRate =  -0.500000
 		MinStartSize = 55.000000 55.000000 55.000000
@@ -348,7 +355,7 @@ kbGameEntity 0 0 0 0 {
 								LifeTime =  -1.000000
 								ParamName = "uvTileSpeed"
 								Texture = NULL
-								Vector = 1.500000 15.000000 0.000000 -20.000000
+								Vector = 1.000000 15.000000 0.000000 -20.000000
 							}
 							kbShaderParamComponent { 
 								Enabled = 0
@@ -409,14 +416,14 @@ kbGameEntity 0 0 0 0 {
 				LifeTime =  -1.000000
 				EventName = ""
 				EventTime =  0.050000
-				EventValue = 0.150000 0.150000 0.150000
+				EventValue = 0.100000 0.100000 0.100000
 			}
 			kbVectorAnimEvent { 
 				Enabled = 0
 				LifeTime =  -1.000000
 				EventName = ""
 				EventTime =  0.750000
-				EventValue = 0.170000 0.170000 0.170000
+				EventValue = 0.130000 0.130000 0.130000
 			}
 			kbVectorAnimEvent { 
 				Enabled = 0
@@ -477,50 +484,50 @@ kbGameEntity 0 0 0 0 {
 		VelocityCurve = 0
 	}
 	kbParticleComponent { 
-		Enabled = 0
+		Enabled = 1
 		LifeTime =  -1.000000
-		Name = "Lingering Smoke"
+		Name = "Glow"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
 		Position = 0.000000 0.000000 0.000000
-		Scale = 1.000000 1.000000 1.000000
-		AlphaOverLife = 5
+		Scale = 11.000000 11.000000 11.000000
+		AlphaOverLife = 1
 			kbAnimEvent { 
 				Enabled = 0
 				LifeTime =  -1.000000
 				EventName = ""
 				EventTime =  0.000000
-				EventValue =  0.000000
+				EventValue =  1.000000
 			}
-			kbAnimEvent { 
+		ColorOverLife = 4
+			kbVectorAnimEvent { 
 				Enabled = 0
 				LifeTime =  -1.000000
 				EventName = ""
-				EventTime =  0.010000
-				EventValue =  0.490000
+				EventTime =  0.000000
+				EventValue = 0.000000 0.000000 0.000000
 			}
-			kbAnimEvent { 
+			kbVectorAnimEvent { 
 				Enabled = 0
 				LifeTime =  -1.000000
 				EventName = ""
-				EventTime =  0.015000
-				EventValue =  0.490000
+				EventTime =  0.050000
+				EventValue = 0.050000 0.050000 0.050000
 			}
-			kbAnimEvent { 
+			kbVectorAnimEvent { 
 				Enabled = 0
 				LifeTime =  -1.000000
 				EventName = ""
-				EventTime =  0.700000
-				EventValue =  0.490000
+				EventTime =  0.750000
+				EventValue = 0.050000 0.050000 0.050000
 			}
-			kbAnimEvent { 
+			kbVectorAnimEvent { 
 				Enabled = 0
 				LifeTime =  -1.000000
 				EventName = ""
 				EventTime =  1.000000
-				EventValue =  0.000000
+				EventValue = 0.000000 0.000000 0.000000
 			}
-		ColorOverLife = 0
-		EndColor = 0.080000 0.080000 0.080000 0.000000
+		EndColor = 1.000000 1.000000 1.000000 1.000000
 		Gravity = 0.000000 0.000000 0.000000
 		MaterialList = 1
 			kbMaterialComponent { 
@@ -539,57 +546,36 @@ kbGameEntity 0 0 0 0 {
 						Enabled = 0
 						LifeTime =  -1.000000
 						ParamName = "shaderTexture"
-						Texture = .\assets\fx\smoke\smokeatlas_1.dds
+						Texture = .\assets\fx\radialblast.jpg
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 			}
-		MaxBurstCount = 15
-		MaxDuration =  6.000000
-		MaxEndRotationRate =  0.050000
-		MaxEndSize = 50.000000 50.000000 50.000000
+		MaxBurstCount = 0
+		MaxDuration =  5.000000
+		MaxEndRotationRate =  0.100000
+		MaxEndSize = 1.200000 1.200000 1.200000
 		MaxEndVelocity = 0.000000 0.000000 0.000000
-		MaxSpawnRate =  0.000000
+		MaxSpawnRate =  5.000000
 		MaxStart3DRotation = 0.000000 0.000000 0.000000
-		MaxStartRotationRate =  0.200000
-		MaxStartSize = 30.000000 30.000000 30.000000
-		MaxStartVelocity = 15.000000 15.000000 15.000000
-		MinBurstCount = 5
+		MaxStartRotationRate =  0.100000
+		MaxStartSize = 0.500000 0.500000 0.500000
+		MaxStartVelocity = 0.000000 0.000000 0.000000
+		MinBurstCount = 0
 		MinDuration =  3.000000
-		MinEndRotationRate =  -0.050000
-		MinEndSize = 40.000000 40.000000 40.000000
+		MinEndRotationRate =  -0.100000
+		MinEndSize = 1.100000 1.200000 1.100000
 		MinEndVelocity = 0.000000 0.000000 0.000000
-		MinSpawnRate =  0.000000
+		MinSpawnRate =  2.000000
 		MinStart3DRotation = 0.000000 0.000000 0.000000
-		MinStartRotationRate =  -0.200000
-		MinStartSize = 20.000000 20.000000 20.000000
-		MinStartVelocity = -15.000000 -15.000000 -15.000000
+		MinStartRotationRate =  -0.100000
+		MinStartSize = 0.300000 0.300000 0.300000
+		MinStartVelocity = 0.000000 0.000000 0.000000
 		ModelEmitter = 0
 		ParticleBillboardType = FaceCamera
-		StartColor = 0.080000 0.080000 0.080000 0.010000
+		StartColor = 1.000000 1.000000 1.000000 1.000000
 		StartDelay =  0.000000
-		TotalDuration =  10.000000
-		TranslucencySortBias =  1.000000
-		VelocityCurve = 3
-			kbAnimEvent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				EventName = ""
-				EventTime =  0.000000
-				EventValue =  1.000000
-			}
-			kbAnimEvent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				EventName = ""
-				EventTime =  0.230000
-				EventValue =  0.100000
-			}
-			kbAnimEvent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				EventName = ""
-				EventTime =  1.000000
-				EventValue =  0.000000
-			}
+		TotalDuration =  -1.000000
+		TranslucencySortBias =  -1.000000
+		VelocityCurve = 0
 	}
 }

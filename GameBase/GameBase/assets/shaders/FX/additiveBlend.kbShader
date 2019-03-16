@@ -84,7 +84,7 @@ SamplerState SampleType;
 	}
 
 
-				float edgeAlpha = min( input.uv.y, 1.0f - input.uv.y );
+				float edgeAlpha = min( input.uv.y, input.uv.y );
 				edgeAlpha = saturate(edgeAlpha / 0.15f);
 			//	color.w *= edgeAlpha * _AlphaFactor;	// Blended
 				color *= edgeAlpha * color.w;  // Additive
