@@ -34,7 +34,7 @@ struct kbParticle_t {
 	float														m_Randoms[3];
 
 	class kbModelEmitter *										m_pSrcModelEmitter;
-	kbGameComponent	*											m_pComponent;
+
 	int															m_CurrentModelIndex;
 	kbRenderObject												m_RenderObject;		// For model emitters
 };
@@ -109,6 +109,8 @@ private:
 	float														m_MaxStartRotationRate;
 	float														m_MinEndRotationRate;
 	float														m_MaxEndRotationRate;
+	kbVec3														m_MinStart3DRotation;
+	kbVec3														m_MaxStart3DRotation;
 	kbVec3														m_MinParticleStartSize;
 	kbVec3														m_MaxParticleStartSize;
 	kbVec3														m_MinParticleEndSize;

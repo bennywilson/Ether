@@ -320,23 +320,23 @@ void kbParticleManager::AddQuad( const uint atlasIdx, const CustomParticleAtlasI
 }
 
 /**
- *	
+ *	kbParticleManager::GetComponentFromPool
  */
-kbGameComponent * kbParticleManager::GetComponentFromPool() {
+const kbGameComponent * kbParticleManager::GetComponentFromPool() {
 	if ( m_ComponentPool.size() == 0 ) {
 		kbWarning( "kbParticleManager::GetComponentFromPool() - Component pool is empty" );
 		return nullptr;
 	}
 
-	kbGameComponent *const pGameComponent = m_ComponentPool[m_ComponentPool.size() - 1];
+	const kbGameComponent *const pGameComponent = m_ComponentPool[m_ComponentPool.size() - 1];
 	m_ComponentPool.pop_back();
 	return pGameComponent;
 }
 
 /**
- *	
+ *	kbParticleManager::ReturnComponentToPool	
  */
-void kbParticleManager::ReturnComponentToPool( kbGameComponent *const pGameComponent ) {
+void kbParticleManager::ReturnComponentToPool( const kbGameComponent *const pGameComponent ) {
 	if ( pGameComponent == nullptr ) {
 		kbWarning( "kbParticleManager::ReturnComponentToPool() - null component passed in" );
 		return;

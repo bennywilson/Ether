@@ -59,8 +59,8 @@ public:
 	};
 	void														AddQuad( const uint atlasIdx, const CustomParticleAtlasInfo_t & CustomParticleInfo );
 
-	kbGameComponent *											GetComponentFromPool();
-	void														ReturnComponentToPool( kbGameComponent *const );
+	const kbGameComponent *											GetComponentFromPool();
+	void														ReturnComponentToPool( const kbGameComponent *const );
 
 private:
 
@@ -93,7 +93,7 @@ private:
 	};
 	std::vector<CustomAtlasParticles_t>							m_CustomAtlases;
 
-	std::vector<kbGameComponent*>								m_ComponentPool;
+	std::vector<const kbGameComponent*>							m_ComponentPool;
 
 private:
 

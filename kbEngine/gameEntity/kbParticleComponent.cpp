@@ -21,14 +21,12 @@ static const uint NumMeshVerts = 10000;
  */
 kbParticle_t::kbParticle_t() {
 	m_pSrcModelEmitter = nullptr;
-	m_pComponent = nullptr;
 }
 
 /**
  *	kbParticle_t::~kbParticle_t
  */
 kbParticle_t::~kbParticle_t() {
-	Shutdown();
 }
 
 /**
@@ -36,11 +34,12 @@ kbParticle_t::~kbParticle_t() {
  */
 void kbParticle_t::Shutdown() {
 
-	if ( m_pComponent != nullptr ) {
-		g_pGame->GetParticleManager()->ReturnComponentToPool( m_pComponent );
+	if ( m_RenderObject.m_pComponent != nullptr ) {
+		g_pRenderer->RemoveRenderObject( m_RenderObject );
+		g_pGame->GetParticleManager()->ReturnComponentToPool( m_RenderObject.m_pComponent );
 	}
 
-	m_pComponent= nullptr;
+	m_RenderObject.m_pComponent = nullptr;
 	m_pSrcModelEmitter = nullptr;
 }
 
@@ -60,6 +59,10 @@ void kbParticleComponent::Constructor() {
 	m_MaxStartRotationRate = 0;
 	m_MinEndRotationRate = 0;
 	m_MaxEndRotationRate = 0;
+
+	m_MinStart3DRotation = kbVec3::zero;
+	m_MaxStart3DRotation = kbVec3::zero;
+
 	m_MinParticleStartSize.Set( 3.0f, 3.0f, 3.0f );
 	m_MaxParticleStartSize.Set( 3.0f, 3.0f, 3.0f );
 	m_MinParticleEndSize.Set( 3.0f, 3.0f, 3.0f );
@@ -189,7 +192,7 @@ void kbParticleComponent::Update_Internal( const float DeltaTime ) {
 
 		particle.m_LifeLeft -= DeltaTime;
 
-		if ( particle.m_LifeLeft <= 0.0f ) {
+		if ( particle.m_LifeLeft <= 0.0f || ( IsModelEmitter() && particle.m_RenderObject.m_pComponent  == nullptr ) ) {
 			particle.Shutdown();
 			VectorRemoveFastIndex( m_Particles, i );
 			continue;
@@ -235,8 +238,12 @@ void kbParticleComponent::Update_Internal( const float DeltaTime ) {
 			kbRenderObject & renderObj = particle.m_RenderObject;
 
 			renderObj.m_Position = particle.m_Position;
-			renderObj.m_Orientation = kbQuat( 0.0f, 0.0f, 0.0f, 1.0f );
+			//renderObj.m_Orientation = kbQuat( 0.0f, 0.0f, 0.0f, 1.0f );	TODO
 			renderObj.m_Scale = kbVec3::one;
+
+			for ( int iMat = 0; iMat < renderObj.m_Materials.size(); iMat++ ) {
+				renderObj.m_Materials[iMat].SetVec4( "particleColor", curColor );
+			}
 
 			g_pRenderer->UpdateRenderObject( renderObj );
 			continue;
@@ -361,7 +368,7 @@ void kbParticleComponent::Update_Internal( const float DeltaTime ) {
 		newParticle.m_EndRotation = kbfrand( m_MinEndRotationRate, m_MaxEndRotationRate );
 
 		if ( IsModelEmitter() && m_ModelEmitter.size() ) {
-			kbGameComponent *const pComponent = g_pGame->GetParticleManager()->GetComponentFromPool();
+			const kbGameComponent *const pComponent = g_pGame->GetParticleManager()->GetComponentFromPool();
 			if ( pComponent != nullptr ) {
 				const int randIdx = rand() % m_ModelEmitter.size();
 				kbModelEmitter *const pModelEmitter = &m_ModelEmitter[randIdx];
@@ -375,7 +382,7 @@ void kbParticleComponent::Update_Internal( const float DeltaTime ) {
 				renderObj.m_RenderPass = RP_Translucent;
 				renderObj.m_TranslucencySortBias = 0;
 				renderObj.m_Position = newParticle.m_Position;
-				renderObj.m_Orientation = kbQuat( 0.0f, 0.0f, 0.0f, 1.0f );
+
 				renderObj.m_Scale = kbVec3::one;
 				renderObj.m_EntityId = 0;
 				renderObj.m_CullDistance = -1;
@@ -383,6 +390,17 @@ void kbParticleComponent::Update_Internal( const float DeltaTime ) {
 				renderObj.m_bIsSkinnedModel  = false;
 				renderObj.m_bIsFirstAdd = true;
 				renderObj.m_bIsRemove = false;
+
+				renderObj.m_Orientation = kbQuat( 0.0f, 0.0f, 0.0f, 1.0f );
+				if ( m_MinStart3DRotation.Compare( kbVec3::zero ) == false || m_MaxStart3DRotation.Compare( kbVec3::zero ) == false ) {
+					kbVec3 startingRotation = kbVec3Rand( m_MinStart3DRotation, m_MaxStart3DRotation );
+					kbQuat xAxis, yAxis, zAxis;
+					xAxis.FromAxisAngle( kbVec3( 1.0f, 0.0f, 0.0f ), kbToRadians( startingRotation.x ) );
+					yAxis.FromAxisAngle( kbVec3( 0.0f, 1.0f, 0.0f ), kbToRadians( startingRotation.y ) );
+					zAxis.FromAxisAngle( kbVec3( 0.0f, 0.0f, 1.0f ), kbToRadians( startingRotation.z ) );
+
+					renderObj.m_Orientation = xAxis * yAxis * zAxis;
+				}
 
 				g_pRenderer->AddRenderObject( renderObj );
 			}
