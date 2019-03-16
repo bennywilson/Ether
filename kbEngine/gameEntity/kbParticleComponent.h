@@ -33,9 +33,8 @@ struct kbParticle_t {
 	float														m_EndRotation;
 	float														m_Randoms[3];
 
-	struct BufferedModel_t *									m_pDstModelEmitter;
 	class kbModelEmitter *										m_pSrcModelEmitter;
-
+	kbGameComponent	*											m_pComponent;
 	int															m_CurrentModelIndex;
 	kbRenderObject												m_RenderObject;		// For model emitters
 };
@@ -51,10 +50,15 @@ class kbModelEmitter : public kbGameComponent {
 public:
 
 	const kbModel *												GetModel() const { return m_pModel; }
+	const std::vector<kbShaderParamOverrides_t>					GetShaderParamOverrides() const { return m_ShaderParams; }
+
+	void														Init();
 
 private:
 	kbModel *													m_pModel;
 	std::vector<kbMaterialComponent>							m_MaterialList;
+
+	std::vector<kbShaderParamOverrides_t>						m_ShaderParams;
 };
 
 

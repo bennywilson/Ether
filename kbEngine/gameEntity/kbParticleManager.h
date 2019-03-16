@@ -59,8 +59,8 @@ public:
 	};
 	void														AddQuad( const uint atlasIdx, const CustomParticleAtlasInfo_t & CustomParticleInfo );
 
-	BufferedModel_t *											GetModelEmitter();
-	void														ReturnModelEmitter( BufferedModel_t *const pModelEmitter );
+	kbGameComponent *											GetComponentFromPool();
+	void														ReturnComponentToPool( kbGameComponent *const );
 
 private:
 
@@ -93,7 +93,7 @@ private:
 	};
 	std::vector<CustomAtlasParticles_t>							m_CustomAtlases;
 
-	std::vector<BufferedModel_t*>								m_ModelEmitterPool;
+	std::vector<kbGameComponent*>								m_ComponentPool;
 
 private:
 

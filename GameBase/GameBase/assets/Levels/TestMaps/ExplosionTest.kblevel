@@ -218,7 +218,7 @@ kbGameEntity 0 0 0 0 {
 		Scale = 100.000000 100.000000 100.000000
 	}
 	kbStaticModelComponent { 
-		Enabled = 0
+		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadow = 0
 		Materials = 1
@@ -362,7 +362,7 @@ kbGameEntity 0 0 0 0 {
 					kbMaterialComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
-						Shader = NULL
+						Shader = ..\..\kbengine\assets\shaders\basicshader.kbshader
 						ShaderParams = 0
 					}
 				Model = .\assets\models\fx\spiralcurve.fbx

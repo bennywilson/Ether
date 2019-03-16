@@ -21,7 +21,7 @@ static const uint NumMeshVerts = 10000;
  */
 kbParticle_t::kbParticle_t() {
 	m_pSrcModelEmitter = nullptr;
-	m_pDstModelEmitter = nullptr;
+	m_pComponent = nullptr;
 }
 
 /**
@@ -29,9 +29,6 @@ kbParticle_t::kbParticle_t() {
  */
 kbParticle_t::~kbParticle_t() {
 	Shutdown();
-	if ( m_pDstModelEmitter != nullptr ) {
-		g_pGame->GetParticleManager()->ReturnModelEmitter( m_pDstModelEmitter );
-	}
 }
 
 /**
@@ -39,10 +36,11 @@ kbParticle_t::~kbParticle_t() {
  */
 void kbParticle_t::Shutdown() {
 
-	if ( m_pDstModelEmitter != nullptr ) {
-		g_pGame->GetParticleManager()->ReturnModelEmitter( m_pDstModelEmitter );
+	if ( m_pComponent != nullptr ) {
+		g_pGame->GetParticleManager()->ReturnComponentToPool( m_pComponent );
 	}
-	m_pDstModelEmitter = nullptr;
+
+	m_pComponent= nullptr;
 	m_pSrcModelEmitter = nullptr;
 }
 
@@ -234,9 +232,13 @@ void kbParticleComponent::Update_Internal( const float DeltaTime ) {
 
 		if ( IsModelEmitter() ) {
 
-			kbQuat a( 0.0f, 0.0f, 0.0f, 1.0f );
-			g_pRenderer->DrawModel( this->m_ModelEmitter[0].GetModel(), shaderParam, particle.m_Position, a, kbVec3::one, 0 );
+			kbRenderObject & renderObj = particle.m_RenderObject;
 
+			renderObj.m_Position = particle.m_Position;
+			renderObj.m_Orientation = kbQuat( 0.0f, 0.0f, 0.0f, 1.0f );
+			renderObj.m_Scale = kbVec3::one;
+
+			g_pRenderer->UpdateRenderObject( renderObj );
 			continue;
 		}
 
@@ -358,12 +360,32 @@ void kbParticleComponent::Update_Internal( const float DeltaTime ) {
 		newParticle.m_StartRotation = kbfrand( m_MinStartRotationRate, m_MaxStartRotationRate );
 		newParticle.m_EndRotation = kbfrand( m_MinEndRotationRate, m_MaxEndRotationRate );
 
-		if ( m_ModelEmitter.size() > 0 ) {
+		if ( IsModelEmitter() && m_ModelEmitter.size() ) {
+			kbGameComponent *const pComponent = g_pGame->GetParticleManager()->GetComponentFromPool();
+			if ( pComponent != nullptr ) {
+				const int randIdx = rand() % m_ModelEmitter.size();
+				kbModelEmitter *const pModelEmitter = &m_ModelEmitter[randIdx];
+				newParticle.m_pSrcModelEmitter = &m_ModelEmitter[randIdx];
 
-			const int randIdx = rand() % m_ModelEmitter.size();
-			newParticle.m_pSrcModelEmitter = &m_ModelEmitter[randIdx];
-			newParticle.m_pDstModelEmitter = g_pGame->GetParticleManager()->GetModelEmitter();
+				kbRenderObject & renderObj = newParticle.m_RenderObject;
+				renderObj.m_pComponent = pComponent;
 
+				renderObj.m_pModel = pModelEmitter->GetModel();
+				renderObj.m_Materials = pModelEmitter->GetShaderParamOverrides();
+				renderObj.m_RenderPass = RP_Translucent;
+				renderObj.m_TranslucencySortBias = 0;
+				renderObj.m_Position = newParticle.m_Position;
+				renderObj.m_Orientation = kbQuat( 0.0f, 0.0f, 0.0f, 1.0f );
+				renderObj.m_Scale = kbVec3::one;
+				renderObj.m_EntityId = 0;
+				renderObj.m_CullDistance = -1;
+				renderObj.m_bCastsShadow = false;
+				renderObj.m_bIsSkinnedModel  = false;
+				renderObj.m_bIsFirstAdd = true;
+				renderObj.m_bIsRemove = false;
+
+				g_pRenderer->AddRenderObject( renderObj );
+			}
 		}
 
 		if ( newParticle.m_StartRotation != 0 || newParticle.m_EndRotation != 0 ) {
@@ -509,6 +531,11 @@ void kbParticleComponent::SetEnable_Internal( const bool isEnabled ) {
 				}
 			}
 		}
+
+		for ( int i = 0; i < m_ModelEmitter.size(); i++ ) {
+			m_ModelEmitter[i].Init();
+		}
+
 	} else {
 		g_pRenderer->RemoveParticle( m_RenderObject );
 	}
@@ -519,4 +546,33 @@ void kbParticleComponent::SetEnable_Internal( const bool isEnabled ) {
  */
 void kbModelEmitter::Constructor() {
 	m_pModel = nullptr;
+
+
+}
+
+/**
+ *	kbModelEmitter::Init
+ */
+void kbModelEmitter::Init() {
+
+	for ( int i = 0; i < m_MaterialList.size(); i++ ) {
+		const kbMaterialComponent & matComp = m_MaterialList[i];
+	
+		kbShaderParamOverrides_t newShaderParams;
+		newShaderParams.m_pShader = matComp.GetShader();
+	
+		auto srcShaderParams = matComp.GetShaderParams();
+		for ( int j = 0; j < srcShaderParams.size(); j++ ) {
+			if ( srcShaderParams[j].GetTexture() != nullptr ) {
+				newShaderParams.SetTexture( srcShaderParams[j].GetParamName().stl_str(), srcShaderParams[j].GetTexture() );
+			} else if ( srcShaderParams[j].GetRenderTexture() != nullptr ) {
+	
+				newShaderParams.SetTexture( srcShaderParams[j].GetParamName().stl_str(), srcShaderParams[j].GetRenderTexture() );
+			} else {
+				newShaderParams.SetVec4( srcShaderParams[j].GetParamName().stl_str(), srcShaderParams[j].GetVector() );
+			}
+		}
+
+		m_ShaderParams.push_back( newShaderParams );
+	}
 }

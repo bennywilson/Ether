@@ -2,7 +2,7 @@
 // kbComponent.h
 //
 //
-// 2016-2018 kbEngine 2.0
+// 2016-2019 kbEngine 2.0
 //===================================================================================================
 #ifndef _KBCOMPONENT_H_
 #define _KBCOMPONENT_H_
@@ -25,7 +25,7 @@ public:
 	virtual	bool								IsA( const void *const type ) const { return false; }
 
 protected:
-	virtual void								CollectAncestorTypeInfo_Interal( std::vector< class kbTypeInfoClass * > & collection ) { }
+	virtual void								CollectAncestorTypeInfo_Internal( std::vector< class kbTypeInfoClass * > & collection ) { }
 };
 
 /**

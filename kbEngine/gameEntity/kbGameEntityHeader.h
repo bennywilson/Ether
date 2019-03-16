@@ -15,12 +15,12 @@ private: \
 	/*className & operator=( const className * componentToCopy );*/	\
 	void Constructor(); \
 	typedef parentClassName Super; \
-	virtual void CollectAncestorTypeInfo() { CollectAncestorTypeInfo_Interal( className##_TypeInfoVar ); } \
+	virtual void CollectAncestorTypeInfo() { CollectAncestorTypeInfo_Internal( className##_TypeInfoVar ); } \
 	friend class className##_TypeInfo; \
 	static className##_TypeInfo typeInfo; \
 	static std::vector< class kbTypeInfoClass * > className##_TypeInfoVar; \
 protected: \
-	virtual void CollectAncestorTypeInfo_Interal( std::vector< class kbTypeInfoClass * > & collection ) { Super::CollectAncestorTypeInfo_Interal( collection ); collection.push_back( ( kbTypeInfoClass * )( &typeInfo ) ); } \
+	virtual void CollectAncestorTypeInfo_Internal( std::vector< class kbTypeInfoClass * > & collection ) { Super::CollectAncestorTypeInfo_Internal( collection ); collection.push_back( ( kbTypeInfoClass * )( &typeInfo ) ); } \
 public: \
 	className() { Constructor(); if ( GetTypeInfo().size() == 0 ) { CollectAncestorTypeInfo(); }} \
 	/* className( const className & componentToCopy );*/ \
