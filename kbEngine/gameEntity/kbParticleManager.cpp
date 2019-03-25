@@ -12,7 +12,7 @@
 
 static const uint NumParticleBufferVerts = 10000;
 static const uint NumCustomAtlases = 16;
-static const uint ComponentPoolSize = 100;
+static const uint ComponentPoolSize = 1000;
 
 /**
  *	kbParticleManager::kbParticleManager

@@ -274,6 +274,7 @@ public:
 
 	// Debug Drawing
 	virtual void								EnableDebugBillboards( const bool bEnable ) { m_bDebugBillboardsEnabled = bEnable; }
+	bool										DebugBillboardsEnabled() const { return m_bDebugBillboardsEnabled; }
 
 	void										EnableConsole( const bool bEnable ) { m_bConsoleEnabled = bEnable; }
 	void										DrawDebugText( const std::string & theString, const float X, const float Y, const float ScreenCharWidth, 

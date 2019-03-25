@@ -268,7 +268,7 @@ kbGameEntity 0 0 0 0 {
 	kbTransformComponent { 
 		Enabled = 1
 		LifeTime =  -1.000000
-		Name = "Explosion"
+		Name = "Blue Pulse"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
 		Position = -16.031685 1.280341 43.620434
 		Scale = 1.000000 1.000000 1.000000
@@ -301,7 +301,7 @@ kbGameEntity 0 0 0 0 {
 				LifeTime =  -1.000000
 				EventName = ""
 				EventTime =  1.000000
-				EventValue = 1.000000 0.750000 0.300000
+				EventValue = 1.000000 1.000000 1.000000
 			}
 			kbVectorAnimEvent { 
 				Enabled = 0
@@ -316,22 +316,22 @@ kbGameEntity 0 0 0 0 {
 		MaxBurstCount = 0
 		MaxDuration =  3.000000
 		MaxEndRotationRate =  0.050000
-		MaxEndSize = 55.000000 55.000000 55.000000
+		MaxEndSize = 0.600000 0.600000 0.600000
 		MaxEndVelocity = 0.000000 0.000000 0.000000
-		MaxSpawnRate =  15.000000
+		MaxSpawnRate =  125.000000
 		MaxStart3DRotation = 360.000000 360.000000 360.000000
 		MaxStartRotationRate =  0.500000
-		MaxStartSize = 55.000000 55.000000 55.000000
+		MaxStartSize = 0.600000 0.600000 0.600000
 		MaxStartVelocity = 0.000000 0.000000 0.000000
 		MinBurstCount = 0
 		MinDuration =  2.000000
 		MinEndRotationRate =  -0.050000
-		MinEndSize = 55.000000 55.000000 55.000000
+		MinEndSize = 0.600000 0.600000 0.600000
 		MinEndVelocity = 0.000000 0.000000 0.000000
-		MinSpawnRate =  15.000000
+		MinSpawnRate =  125.000000
 		MinStart3DRotation = 0.000000 0.000000 0.000000
 		MinStartRotationRate =  -0.500000
-		MinStartSize = 55.000000 55.000000 55.000000
+		MinStartSize = 0.600000 0.600000 0.600000
 		MinStartVelocity = 0.000000 0.000000 0.000000
 		ModelEmitter = 1
 			kbModelEmitter { 
@@ -384,7 +384,7 @@ kbGameEntity 0 0 0 0 {
 		ParticleBillboardType = FaceCamera
 		StartColor = 1.000000 1.000000 1.000000 1.000000
 		StartDelay =  0.000000
-		TotalDuration =  2.000000
+		TotalDuration =  -1.000000
 		TranslucencySortBias =  0.000000
 		VelocityCurve = 0
 	}
@@ -489,7 +489,7 @@ kbGameEntity 0 0 0 0 {
 		Name = "Glow"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
 		Position = 0.000000 0.000000 0.000000
-		Scale = 11.000000 11.000000 11.000000
+		Scale = 13.000000 13.000000 13.000000
 		AlphaOverLife = 1
 			kbAnimEvent { 
 				Enabled = 0
@@ -577,5 +577,20 @@ kbGameEntity 0 0 0 0 {
 		TotalDuration =  -1.000000
 		TranslucencySortBias =  -1.000000
 		VelocityCurve = 0
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Entity_23"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 0.000000 3.000000 24.000000
+		Scale = 1.000000 1.000000 1.000000
+	}
+	kbPlayerStartComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		Dummy =  0.000000
 	}
 }

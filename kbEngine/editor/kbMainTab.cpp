@@ -138,7 +138,7 @@ void kbMainTab::Update() {
 
 			g_pRenderer->DrawBillboard( pCurrentEntity->GetPosition(), kbVec2( 1.0f, 1.0f ), iconIdx, nullptr, pCurrentEntity->GetGameEntity()->GetEntityId() );
 
-			if ( pCurrentEntity->IsSelected() ) {
+			if ( pCurrentEntity->IsSelected() && g_pRenderer->DebugBillboardsEnabled() ) {
 				g_pRenderer->DrawBox( pCurrentEntity->GetWorldBounds(), kbColor::yellow );
 
 				m_Manipulator.Update();

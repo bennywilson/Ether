@@ -239,7 +239,7 @@ PS_OUTPUT pixelShader( pixelInput input, bool isFrontFace : SV_IsFrontFace )  {
 	if ( input.uv.x >= 2.0f/8.0f ) fakeAO = 1;
 
 	float4 foliageColor = grassDiffuseMap.Sample( LinearSampler, input.uv );
-	clip( foliageColor.w - 0.01f );
+	clip( foliageColor.w - 0.1f );
 
 	output.Color.xyz = foliageColor.xyz * fakeAO;
 

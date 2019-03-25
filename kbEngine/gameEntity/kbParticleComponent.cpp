@@ -239,7 +239,7 @@ void kbParticleComponent::Update_Internal( const float DeltaTime ) {
 
 			renderObj.m_Position = particle.m_Position;
 			//renderObj.m_Orientation = kbQuat( 0.0f, 0.0f, 0.0f, 1.0f );	TODO
-			renderObj.m_Scale = kbVec3::one;
+			renderObj.m_Scale.Set( curSize.x, curSize.x, curSize.x );
 
 			for ( int iMat = 0; iMat < renderObj.m_Materials.size(); iMat++ ) {
 				renderObj.m_Materials[iMat].SetVec4( "particleColor", curColor );
@@ -403,6 +403,8 @@ void kbParticleComponent::Update_Internal( const float DeltaTime ) {
 				}
 
 				g_pRenderer->AddRenderObject( renderObj );
+			} else {
+				continue;
 			}
 		}
 

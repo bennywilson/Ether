@@ -720,7 +720,7 @@ void kbRenderer_DX11::Init_Internal( HWND hwnd, const int frameWidth, const int 
 	samplerDesc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
 	samplerDesc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
 	samplerDesc.MipLODBias = 0.0f;
-	samplerDesc.MaxAnisotropy = 1;
+	samplerDesc.MaxAnisotropy = 16;
 	samplerDesc.ComparisonFunc = D3D11_COMPARISON_ALWAYS;
 	samplerDesc.BorderColor[0] = 0;
 	samplerDesc.BorderColor[1] = 0;
@@ -1261,6 +1261,11 @@ void kbRenderer_DX11::RenderScene() {
 			for ( int iHook = 0; iHook < m_RenderHooks[RP_FirstPerson].size(); iHook++ ) {
 				m_RenderHooks[RP_FirstPerson][iHook]->RenderThreadCallBack();
 			}
+
+			ID3D11ShaderResourceView *const pNullResources[] = { nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr };
+			m_pDeviceContext->PSSetShaderResources( 0, 16, pNullResources );
+			m_pDeviceContext->VSSetShaderResources( 0, 16, pNullResources );
+			m_pDeviceContext->GSSetShaderResources( 0, 16, pNullResources );
 
 			m_pDeviceContext->RSSetViewports( 1, &viewport );
 			ID3D11RenderTargetView * RenderTargetViews[] = { GetRenderTarget_DX11(COLOR_BUFFER)->m_pRenderTargetView, GetRenderTarget_DX11(NORMAL_BUFFER)->m_pRenderTargetView, GetRenderTarget_DX11(SPECULAR_BUFFER)->m_pRenderTargetView, GetRenderTarget_DX11(DEPTH_BUFFER)->m_pRenderTargetView };
@@ -1961,7 +1966,7 @@ void kbRenderer_DX11::DrawTexture( ID3D11ShaderResourceView *const pShaderResour
  *	kbRenderer_DX11::RenderSSAO
  */
 void kbRenderer_DX11::RenderSSAO() {
-	if (m_bRenderToHMD == true) {
+	if ( m_bRenderToHMD == true ) {
 		return;
 	}
 
@@ -1984,7 +1989,7 @@ void kbRenderer_DX11::RenderSSAO() {
 	m_pDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	m_pDeviceContext->RSSetState(m_pDefaultRasterizerState);
 
-	m_pDeviceContext->PSSetShaderResources(0, 1, &GetRenderTarget_DX11(ACCUMULATION_BUFFER)->m_pShaderResourceView);
+	//m_pDeviceContext->PSSetShaderResources(0, 1, &GetRenderTarget_DX11(ACCUMULATION_BUFFER)->m_pShaderResourceView);
 	ID3D11SamplerState *const samplerStates[] = { m_pBasicSamplerState, m_pNormalMapSamplerState, m_pShadowMapSamplerState, m_pShadowMapSamplerState };
 	m_pDeviceContext->PSSetSamplers( 0, 4, samplerStates );
 
@@ -2015,8 +2020,8 @@ void kbRenderer_DX11::RenderSSAO() {
 	SetShaderMat4( "inverseViewProjection", m_pCurrentRenderWindow->GetInverseViewProjection(), pMappedData, varBindings );
 	m_pDeviceContext->Unmap( pConstantBuffer, 0 );
 
-	m_pDeviceContext->VSSetConstantBuffers(0, 1, &pConstantBuffer);
-	m_pDeviceContext->PSSetConstantBuffers(0, 1, &pConstantBuffer);
+	m_pDeviceContext->VSSetConstantBuffers( 0, 1, &pConstantBuffer );
+	m_pDeviceContext->PSSetConstantBuffers( 0, 1, &pConstantBuffer );
 
 	// Draw
 	m_pDeviceContext->Draw(6, 0);
