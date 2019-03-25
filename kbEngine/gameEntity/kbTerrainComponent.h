@@ -90,37 +90,6 @@ private:
 };
 
 /**
- *  kbTerrainMatComponent
- */
-class kbTerrainMatComponent : public kbComponent {
-
-    friend class kbTerrainComponent;
-
-    KB_DECLARE_COMPONENT( kbTerrainMatComponent, kbComponent );
-
-//---------------------------------------------------------------------------------------------------
-public:
-
-	kbTexture *									GetDiffuseMap() const { return m_pDiffuseMap; }
-	kbTexture *									GetNormalMap() const { return m_pNormalMap; }
-	kbTexture *									GetSpecMap() const { return m_pSpecMap; }
-
-	const kbVec3 &								GetUVScale() const { return m_UVScale; }
-	float										GetSpecFactor() const { return m_SpecFactor; }
-	float										GetSpecPowerMultiplier() const { return m_SpecPowerMultiplier; }
-
-private:
-
-    kbTexture *									m_pDiffuseMap;
-	kbTexture *									m_pNormalMap;
-	kbTexture *									m_pSpecMap;
-	float										m_SpecFactor;
-	float										m_SpecPowerMultiplier;
-
-	kbVec3										m_UVScale;
-};
-
-/**
  * kbTerrainComponent
  */
 class kbTerrainComponent : public kbModelComponent {
@@ -159,15 +128,12 @@ protected:
 	int											m_TerrainDimensions;
 
 	std::vector<kbMaterialComponent>			m_MaterialList;
-	std::vector<kbTerrainMatComponent>          m_TerrainMaterials;
-	kbShader *                                  m_pTerrainShader;
+
 	kbTexture *                                 m_pSplatMap;
     std::vector<kbGrass>                        m_Grass;
 
 	// Non-editor
 	kbModel										m_TerrainModel;
-
-    std::vector<kbShader *>                     m_ShaderOverrideList;
 
 	bool										m_bRegenerateTerrain;
 

@@ -1093,7 +1093,7 @@ kbGameEntity 0 0 0 0 {
 				PatchEndCullDistance =  1000.000000
 				PatchStartCullDistance =  200.000000
 				PatchesPerCellSide = 60
-				ShaderParams = 2
+				ShaderParams = 8
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
@@ -1108,41 +1108,54 @@ kbGameEntity 0 0 0 0 {
 						Texture = NULL
 						Vector = 1.300000 0.850000 0.000000 0.000000
 					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "windTex1"
+						Texture = .\assets\terrain\basicterrain\wind_1.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "wind1_tile_speed"
+						Texture = NULL
+						Vector = 10.000000 10.000000 -0.010000 0.050000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "wind1_mag"
+						Texture = NULL
+						Vector = 2.000000 2.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "windTex2"
+						Texture = .\assets\terrain\basicterrain\wind_2.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "wind2_tile_speed"
+						Texture = NULL
+						Vector = 10.000000 10.000000 0.050000 0.050000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "wind2_mag"
+						Texture = NULL
+						Vector = 3.000000 3.000000 2.000000 0.000000
+					}
 				TestWind = 0.000000 0.000000 25.000000
 			}
 		HeightMap = .\assets\terrain\basicterrain\terrain1_height.bmp
 		HeightScale =  1024.000000
 		MaterialList = 0
-		Shader = .\assets\shaders\environment\basicterrain.kbshader
 		SplatMap = .\assets\terrain\basicterrain\terrain1_splatmap.bmp
-		TerrainMaterials = 3
-			kbTerrainMatComponent { 
-				Enabled = 0
-				DiffuseMap = NULL
-				NormalMap = NULL
-				SpecFactors =  1.000000
-				SpecMap = NULL
-				SpecPowerMultiplier =  1.000000
-				UVScale = 1.000000 1.000000 1.000000
-			}
-			kbTerrainMatComponent { 
-				Enabled = 0
-				DiffuseMap = NULL
-				NormalMap = NULL
-				SpecFactors =  1.000000
-				SpecMap = NULL
-				SpecPowerMultiplier =  1.000000
-				UVScale = 1.000000 1.000000 1.000000
-			}
-			kbTerrainMatComponent { 
-				Enabled = 0
-				DiffuseMap = NULL
-				NormalMap = NULL
-				SpecFactors =  1.000000
-				SpecMap = NULL
-				SpecPowerMultiplier =  1.000000
-				UVScale = 1.000000 1.000000 1.000000
-			}
 		Width =  8192.000000
 	}
 	kbCollisionComponent { 

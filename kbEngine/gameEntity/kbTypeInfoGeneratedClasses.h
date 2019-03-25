@@ -182,25 +182,13 @@ GenerateClass(
 )
 
 GenerateClass(
-	kbTerrainMatComponent,
-	AddField( "DiffuseMap", KBTYPEINFO_TEXTURE, kbTerrainMatComponent, m_pDiffuseMap, false, "" )
-	AddField( "NormalMap", KBTYPEINFO_TEXTURE, kbTerrainMatComponent, m_pNormalMap, false, "" )
-	AddField( "SpecMap", KBTYPEINFO_TEXTURE, kbTerrainMatComponent, m_pSpecMap, false, "" )
-	AddField( "SpecFactors", KBTYPEINFO_FLOAT, kbTerrainMatComponent, m_SpecFactor, false, "" )
-	AddField( "SpecPowerMultiplier", KBTYPEINFO_FLOAT, kbTerrainMatComponent, m_SpecPowerMultiplier, false, "" )
-	AddField( "UVScale", KBTYPEINFO_VECTOR, kbTerrainMatComponent, m_UVScale, false, "" )
-)
-
-GenerateClass(
 	kbTerrainComponent,
 	AddField( "HeightMap", KBTYPEINFO_TEXTURE, kbTerrainComponent, m_pHeightMap, false, "" )
 	AddField( "HeightScale", KBTYPEINFO_FLOAT, kbTerrainComponent, m_HeightScale, false, "" )
 	AddField( "Width", KBTYPEINFO_FLOAT, kbTerrainComponent, m_TerrainWidth, false, "" )
 	AddField( "Dimensions", KBTYPEINFO_INT, kbTerrainComponent, m_TerrainDimensions, false, "" )
 	AddField( "MaterialList", KBTYPEINFO_STRUCT, kbTerrainComponent, m_MaterialList, true, "kbMaterialComponent" )
-	AddField( "TerrainMaterials", KBTYPEINFO_STRUCT, kbTerrainComponent, m_TerrainMaterials, true, "kbTerrainMatComponent" )
 	AddField( "SplatMap", KBTYPEINFO_TEXTURE, kbTerrainComponent, m_pSplatMap, false, "" )
-	AddField( "Shader", KBTYPEINFO_SHADER, kbTerrainComponent, m_pTerrainShader, false, "" )
 	AddField( "Grass", KBTYPEINFO_STRUCT, kbTerrainComponent, m_Grass, true, "kbGrass" )
 )
 

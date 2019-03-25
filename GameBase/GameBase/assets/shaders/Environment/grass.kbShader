@@ -16,6 +16,10 @@ cbuffer ConstantBuffer1 {
 	float4 collisionMapCenter;		// x: Collision map world x, y: Collision map world y, z: Half terrain width, w: One over half terrain width
 	float4 plant_1_2_size;
 	float4 plant_3_size;
+	float4 wind1_tile_speed;
+	float4 wind1_mag;
+	float4 wind2_tile_speed;
+	float4 wind2_mag;
 };
 
 
@@ -76,11 +80,13 @@ Texture2D heightMap					: register(t1);
 Texture2D grassDiffuseMap			: register(t2);
 Texture2D noiseMap					: register(t3);
 Texture2D collisionMap(maxhalf)		: register(t4);
+Texture2D windTex1(black)			: register(t5);
+Texture2D windTex2(black)			: register(t6);
 
 void CreateVertex( inout TriangleStream<pixelInput> OutputStream, float3 vertexWorldOrigin, float2 uv, float4 grassData ) {
 
 	pixelInput newVertex;
-	newVertex.position	= mul( float4( vertexWorldOrigin, 1.0f ), vpMatrix );
+	newVertex.position = mul( float4( vertexWorldOrigin, 1.0f ), vpMatrix );
 	newVertex.position2 = newVertex.position.zw;
 	newVertex.grassData1.rgb = grassData.rgb;
 	newVertex.uv = uv;
@@ -103,11 +109,15 @@ void CreateVertex( inout TriangleStream<pixelInput> OutputStream, float3 vertexW
 	const float3 noiseValues = noiseMap.SampleLevel( LinearSampler, input[0].uv * grassNumber, 0.0f ).xyz;
 
 	// Check collision
-	float3 windpush = 0.0f;
-	const float oscNoise = noiseValues.x * 5.5f;
-	float oscSin = sin( oscNoise.x + time.x * ( 1.0f * ( ( oscNoise.x * 0.5f ) + 0.5f ) ) );
-	float oscillation =  oscSin * 0.5f + 0.5f;
-	float3 windVec =  ( windpush + ( wind.xyz ) * ( oscillation * 0.1f ) + 0.9f );
+	float3 windVec1 = windTex1.SampleLevel( LinearSampler, ( input[0].uv * wind1_tile_speed.xy ) + ( time.x * wind1_tile_speed.zw), 3.0f ).xyz;
+	windVec1 = ( windVec1 * 2.0f ) - 1.0f;
+	windVec1 *= wind1_mag.xyz;
+	
+	float3 windVec2 = windTex2.SampleLevel( LinearSampler, ( input[0].uv * wind2_tile_speed.xy ) + ( time.x * wind2_tile_speed.zw), 3.0f ).xyz;
+	windVec2 = ( windVec2 * 2.0f ) - 1.0f;
+	windVec2 *= wind2_mag.xyz;
+	
+	float3 windVec = windVec1 + windVec2;
 
 	const float randomNum = frac( 3.5349578345f * ( bladeWorldOrigin.x + bladeWorldOrigin.z ) );
 	int textureIdx = 0;

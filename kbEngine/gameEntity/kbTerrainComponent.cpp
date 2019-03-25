@@ -304,19 +304,6 @@ void kbGrass::RefreshGrass() {
 }
 
 /**
- *  kbTerrainMatComponent::Constructor
- */
-void kbTerrainMatComponent::Constructor() {
-    m_pDiffuseMap = nullptr;
-	m_pNormalMap = nullptr;
-	m_pSpecMap = nullptr;
-
-	m_SpecFactor = 1.0f;
-	m_SpecPowerMultiplier = 1.0f;
-	m_UVScale.Set( 1.0f, 1.0f, 1.0f );
-} 
-
-/**
  *	kbTerrainComponent::Constructor
  */
 void kbTerrainComponent::Constructor() {
@@ -326,7 +313,6 @@ void kbTerrainComponent::Constructor() {
 	m_TerrainWidth = 256.0f;
 	m_TerrainDimensions = 16;
 	
-	m_pTerrainShader = nullptr;
 	m_pSplatMap = nullptr;
 
 	m_bRegenerateTerrain = false;

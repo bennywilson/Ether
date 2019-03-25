@@ -864,34 +864,6 @@ kbGameEntity 0 0 0 0 {
 		MaterialList = 0
 		Shader = .\assets\shaders\environment\basicterrain.kbshader
 		SplatMap = .\assets\terrain\basicterrain\terrain1_splatmap.bmp
-		TerrainMaterials = 3
-			kbTerrainMatComponent { 
-				Enabled = 0
-				DiffuseMap = NULL
-				NormalMap = NULL
-				SpecFactors =  1.000000
-				SpecMap = NULL
-				SpecPowerMultiplier =  1.000000
-				UVScale = 1.000000 1.000000 1.000000
-			}
-			kbTerrainMatComponent { 
-				Enabled = 0
-				DiffuseMap = NULL
-				NormalMap = NULL
-				SpecFactors =  1.000000
-				SpecMap = NULL
-				SpecPowerMultiplier =  1.000000
-				UVScale = 1.000000 1.000000 1.000000
-			}
-			kbTerrainMatComponent { 
-				Enabled = 0
-				DiffuseMap = NULL
-				NormalMap = NULL
-				SpecFactors =  1.000000
-				SpecMap = NULL
-				SpecPowerMultiplier =  1.000000
-				UVScale = 1.000000 1.000000 1.000000
-			}
 		Width =  8192.000000
 	}
 	kbCollisionComponent { 

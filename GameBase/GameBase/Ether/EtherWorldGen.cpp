@@ -110,9 +110,6 @@ void EtherWorldGenComponent::InitializeWorld() {
 	g_ResourceManager.GetPackage( "./assets/Packages/EnviroData.kbPkg", false );
 
 	m_VisibleTerrainMap.Shutdown();
-
-	m_pTerrainShader = (kbShader*)g_ResourceManager.LoadResource( "./assets/Shaders/terrain.kbShader", true );
-	kbErrorCheck( m_pTerrainShader != nullptr, "EtherWorldGenComponent::InitializeWorld() - Failed to load terrain shader" );
 }
 
 /**
