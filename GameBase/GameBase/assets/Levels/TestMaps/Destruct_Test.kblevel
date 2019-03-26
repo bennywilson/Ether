@@ -21,7 +21,7 @@ kbGameEntity 0 0 0 0 {
 						Enabled = 0
 						LifeTime =  -1.000000
 						ParamName = "diffuseTexture"
-						Texture = .\assets\models\skydomes\sky_01.png
+						Texture = .\assets\models\skydomes\sky_basic.png
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 			}
