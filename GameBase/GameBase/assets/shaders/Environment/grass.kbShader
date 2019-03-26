@@ -17,9 +17,9 @@ cbuffer ConstantBuffer1 {
 	float4 plant_1_2_size;
 	float4 plant_3_size;
 	float4 wind1_tile_speed;
-	float4 wind1_mag;
+	float4 wind1_mag_lod;
 	float4 wind2_tile_speed;
-	float4 wind2_mag;
+	float4 wind2_mag_lod;
 };
 
 
@@ -109,13 +109,14 @@ void CreateVertex( inout TriangleStream<pixelInput> OutputStream, float3 vertexW
 	const float3 noiseValues = noiseMap.SampleLevel( LinearSampler, input[0].uv * grassNumber, 0.0f ).xyz;
 
 	// Check collision
-	float3 windVec1 = windTex1.SampleLevel( LinearSampler, ( input[0].uv * wind1_tile_speed.xy ) + ( time.x * wind1_tile_speed.zw), 3.0f ).xyz;
+	float level = 5;
+	float3 windVec1 = windTex1.SampleLevel( LinearSampler, ( input[0].uv * wind1_tile_speed.xy ) + ( time.x * wind1_tile_speed.zw), wind1_mag_lod.w ).xyz;
 	windVec1 = ( windVec1 * 2.0f ) - 1.0f;
-	windVec1 *= wind1_mag.xyz;
+	windVec1 *= wind1_mag_lod.xyz;
 	
-	float3 windVec2 = windTex2.SampleLevel( LinearSampler, ( input[0].uv * wind2_tile_speed.xy ) + ( time.x * wind2_tile_speed.zw), 3.0f ).xyz;
+	float3 windVec2 = windTex2.SampleLevel( LinearSampler, ( input[0].uv * wind2_tile_speed.xy ) + ( time.x * wind2_tile_speed.zw), wind2_mag_lod.w ).xyz;
 	windVec2 = ( windVec2 * 2.0f ) - 1.0f;
-	windVec2 *= wind2_mag.xyz;
+	windVec2 *= wind2_mag_lod.xyz;
 	
 	float3 windVec = windVec1 + windVec2;
 

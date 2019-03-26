@@ -836,7 +836,6 @@ kbGameEntity 0 0 0 0 {
 				GrassCellsPerTerrainSide = 30
 				MaxBladeJitterOffset =  0.000000
 				MaxPatchJitterOffset =  3.000000
-				NoiseMap = .\assets\fx\noise\noisemap.png
 				PatchEndCullDistance =  1000.000000
 				PatchStartCullDistance =  200.000000
 				PatchesPerCellSide = 60
@@ -867,14 +866,14 @@ kbGameEntity 0 0 0 0 {
 						LifeTime =  -1.000000
 						ParamName = "wind1_tile_speed"
 						Texture = NULL
-						Vector = 10.000000 10.000000 -0.010000 0.050000
+						Vector = 5.000000 5.000000 -0.010000 0.050000
 					}
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
-						ParamName = "wind1_mag"
+						ParamName = "wind1_mag_lod"
 						Texture = NULL
-						Vector = 2.000000 2.000000 0.000000 0.000000
+						Vector = 5.000000 5.000000 0.000000 5.000000
 					}
 					kbShaderParamComponent { 
 						Enabled = 0
@@ -888,14 +887,14 @@ kbGameEntity 0 0 0 0 {
 						LifeTime =  -1.000000
 						ParamName = "wind2_tile_speed"
 						Texture = NULL
-						Vector = 10.000000 10.000000 0.050000 0.050000
+						Vector = 5.000000 5.000000 0.050000 0.050000
 					}
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
-						ParamName = "wind2_mag"
+						ParamName = "wind2_mag_lod"
 						Texture = NULL
-						Vector = 3.000000 3.000000 2.000000 0.000000
+						Vector = 5.000000 5.000000 2.000000 5.000000
 					}
 					kbShaderParamComponent { 
 						Enabled = 0
@@ -911,12 +910,9 @@ kbGameEntity 0 0 0 0 {
 						Texture = .\assets\fx\noise\noisemap.png
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
-				TestWind = 0.000000 0.000000 25.000000
 			}
 		HeightMap = .\assets\terrain\basicterrain\terrain1_height.bmp
 		HeightScale =  1024.000000
-		MaterialList = 0
-		Shader = .\assets\shaders\environment\basicterrain.kbshader
 		SplatMap = .\assets\terrain\basicterrain\terrain1_splatmap.bmp
 		Width =  8192.000000
 	}
@@ -948,7 +944,6 @@ kbGameEntity 0 0 0 0 {
 		ColorOverLife = 0
 		EndColor = 1.000000 1.000000 1.000000 1.000000
 		Gravity = 0.000000 -100.500000 0.000000
-		LockVelocity = 1
 		MaterialList = 1
 			kbMaterialComponent { 
 				Enabled = 0
@@ -969,6 +964,7 @@ kbGameEntity 0 0 0 0 {
 		MaxEndSize = 1.500000 1.500000 1.500000
 		MaxEndVelocity = 75.000000 -20.000000 -50.000000
 		MaxSpawnRate =  2.000000
+		MaxStart3DRotation = 0.000000 0.000000 0.000000
 		MaxStartRotationRate =  0.000000
 		MaxStartSize = 1.500000 1.500000 1.500000
 		MaxStartVelocity = 75.000000 50.000000 -20.000000
@@ -978,9 +974,11 @@ kbGameEntity 0 0 0 0 {
 		MinEndSize = 1.000000 1.000000 1.000000
 		MinEndVelocity = 75.000000 -20.000000 -50.000000
 		MinSpawnRate =  1.000000
+		MinStart3DRotation = 0.000000 0.000000 0.000000
 		MinStartRotationRate =  0.000000
 		MinStartSize = 1.000000 1.000000 1.000000
 		MinStartVelocity = -75.000000 -20.000000 -50.000000
+		ModelEmitter = 0
 		ParticleBillboardType = FaceCamera
 		StartColor = 1.000000 1.000000 1.000000 1.000000
 		StartDelay =  0.000000
@@ -999,7 +997,6 @@ kbGameEntity 0 0 0 0 {
 		ColorOverLife = 0
 		EndColor = 0.000000 0.000000 0.000000 0.000000
 		Gravity = 0.000000 0.000000 0.000000
-		LockVelocity = 0
 		MaterialList = 1
 			kbMaterialComponent { 
 				Enabled = 0
@@ -1020,6 +1017,7 @@ kbGameEntity 0 0 0 0 {
 		MaxEndSize = 3.000000 3.000000 3.000000
 		MaxEndVelocity = 0.000000 0.000000 0.000000
 		MaxSpawnRate =  0.000000
+		MaxStart3DRotation = 0.000000 0.000000 0.000000
 		MaxStartRotationRate =  0.000000
 		MaxStartSize = 3.000000 3.000000 3.000000
 		MaxStartVelocity = 3.500000 3.500000 -5.500000
@@ -1029,9 +1027,11 @@ kbGameEntity 0 0 0 0 {
 		MinEndSize = 3.000000 3.000000 3.000000
 		MinEndVelocity = 0.000000 0.000000 0.000000
 		MinSpawnRate =  0.000000
+		MinStart3DRotation = 0.000000 0.000000 0.000000
 		MinStartRotationRate =  0.000000
 		MinStartSize = 1.200000 1.200000 1.200000
 		MinStartVelocity = -3.500000 -3.500000 -7.500000
+		ModelEmitter = 0
 		ParticleBillboardType = FaceCamera
 		StartColor = 0.250000 0.250000 0.250000 0.250000
 		StartDelay =  0.000000
@@ -1060,7 +1060,6 @@ kbGameEntity 0 0 0 0 {
 		ColorOverLife = 0
 		EndColor = 1.000000 1.000000 1.000000 1.000000
 		Gravity = 0.000000 -100.500000 0.000000
-		LockVelocity = 1
 		MaterialList = 1
 			kbMaterialComponent { 
 				Enabled = 0
@@ -1088,6 +1087,7 @@ kbGameEntity 0 0 0 0 {
 		MaxEndSize = 1.100000 1.100000 1.100000
 		MaxEndVelocity = 75.000000 -20.000000 -50.000000
 		MaxSpawnRate =  2.000000
+		MaxStart3DRotation = 0.000000 0.000000 0.000000
 		MaxStartRotationRate =  15.000000
 		MaxStartSize = 1.100000 1.100000 1.100000
 		MaxStartVelocity = 75.000000 50.000000 -20.000000
@@ -1097,9 +1097,11 @@ kbGameEntity 0 0 0 0 {
 		MinEndSize = 0.500000 0.500000 0.500000
 		MinEndVelocity = 75.000000 -20.000000 -50.000000
 		MinSpawnRate =  1.000000
+		MinStart3DRotation = 0.000000 0.000000 0.000000
 		MinStartRotationRate =  2.000000
 		MinStartSize = 0.500000 0.500000 0.500000
 		MinStartVelocity = -75.000000 -20.000000 -50.000000
+		ModelEmitter = 0
 		ParticleBillboardType = FaceCamera
 		StartColor = 1.000000 1.000000 1.000000 1.000000
 		StartDelay =  0.000000
@@ -1118,7 +1120,6 @@ kbGameEntity 0 0 0 0 {
 		ColorOverLife = 0
 		EndColor = 0.000000 0.000000 0.000000 0.000000
 		Gravity = 0.000000 -0.500000 0.000000
-		LockVelocity = 1
 		MaterialList = 1
 			kbMaterialComponent { 
 				Enabled = 0
@@ -1146,6 +1147,7 @@ kbGameEntity 0 0 0 0 {
 		MaxEndSize = 3.500000 3.500000 3.500000
 		MaxEndVelocity = 0.500000 -7.000000 0.500000
 		MaxSpawnRate =  2.000000
+		MaxStart3DRotation = 0.000000 0.000000 0.000000
 		MaxStartRotationRate =  5.000000
 		MaxStartSize = 0.100000 0.100000 0.100000
 		MaxStartVelocity = 1.000000 1.000000 -10.000000
@@ -1155,9 +1157,11 @@ kbGameEntity 0 0 0 0 {
 		MinEndSize = 3.000000 3.000000 3.000000
 		MinEndVelocity = -0.500000 -2.000000 -0.500000
 		MinSpawnRate =  1.000000
+		MinStart3DRotation = 0.000000 0.000000 0.000000
 		MinStartRotationRate =  0.200000
 		MinStartSize = 0.000000 0.000000 0.000000
 		MinStartVelocity = -1.000000 -1.000000 -5.000000
+		ModelEmitter = 0
 		ParticleBillboardType = FaceCamera
 		StartColor = 1.000000 1.000000 1.000000 1.000000
 		StartDelay =  0.000000
@@ -1735,7 +1739,6 @@ kbGameEntity 0 0 0 0 {
 			}
 		EndColor = 1.000000 1.000000 1.000000 1.000000
 		Gravity = 0.000000 0.000000 0.000000
-		LockVelocity = 0
 		MaterialList = 1
 			kbMaterialComponent { 
 				Enabled = 0
@@ -1763,6 +1766,7 @@ kbGameEntity 0 0 0 0 {
 		MaxEndSize = 100.000000 100.000000 100.000000
 		MaxEndVelocity = 1.000000 1.000000 1.000000
 		MaxSpawnRate =  0.000000
+		MaxStart3DRotation = 0.000000 0.000000 0.000000
 		MaxStartRotationRate =  0.500000
 		MaxStartSize = 0.000000 0.000000 0.000000
 		MaxStartVelocity = 75.000000 75.000000 75.000000
@@ -1772,9 +1776,11 @@ kbGameEntity 0 0 0 0 {
 		MinEndSize = 80.000000 80.000000 80.000000
 		MinEndVelocity = -1.000000 -1.000000 -1.000000
 		MinSpawnRate =  0.000000
+		MinStart3DRotation = 0.000000 0.000000 0.000000
 		MinStartRotationRate =  -0.500000
 		MinStartSize = 0.000000 0.000000 0.000000
 		MinStartVelocity = -75.000000 -75.000000 -75.000000
+		ModelEmitter = 0
 		ParticleBillboardType = FaceCamera
 		StartColor = 1.000000 1.000000 1.000000 1.000000
 		StartDelay =  0.000000
@@ -1849,7 +1855,6 @@ kbGameEntity 0 0 0 0 {
 			}
 		EndColor = 0.000000 0.000000 0.000000 1.000000
 		Gravity = 0.000000 -120.000000 0.000000
-		LockVelocity = 0
 		MaterialList = 1
 			kbMaterialComponent { 
 				Enabled = 0
@@ -1877,6 +1882,7 @@ kbGameEntity 0 0 0 0 {
 		MaxEndSize = 2.000000 2.000000 2.000000
 		MaxEndVelocity = 20.000000 20.000000 20.000000
 		MaxSpawnRate =  0.000000
+		MaxStart3DRotation = 0.000000 0.000000 0.000000
 		MaxStartRotationRate =  5.000000
 		MaxStartSize = 0.000000 0.000000 0.000000
 		MaxStartVelocity = 50.000000 50.000000 50.000000
@@ -1886,9 +1892,11 @@ kbGameEntity 0 0 0 0 {
 		MinEndSize = 2.000000 2.000000 2.000000
 		MinEndVelocity = -20.000000 -20.000000 -20.000000
 		MinSpawnRate =  0.000000
+		MinStart3DRotation = 0.000000 0.000000 0.000000
 		MinStartRotationRate =  -4.000000
 		MinStartSize = 0.000000 0.000000 0.000000
 		MinStartVelocity = -50.000000 -50.000000 -50.000000
+		ModelEmitter = 0
 		ParticleBillboardType = FaceCamera
 		StartColor = 1.000000 1.000000 1.000000 1.000000
 		StartDelay =  0.000000
@@ -1949,7 +1957,6 @@ kbGameEntity 0 0 0 0 {
 		ColorOverLife = 0
 		EndColor = 0.080000 0.080000 0.080000 0.000000
 		Gravity = 0.000000 0.000000 0.000000
-		LockVelocity = 0
 		MaterialList = 1
 			kbMaterialComponent { 
 				Enabled = 0
@@ -1977,6 +1984,7 @@ kbGameEntity 0 0 0 0 {
 		MaxEndSize = 50.000000 50.000000 50.000000
 		MaxEndVelocity = 0.000000 0.000000 0.000000
 		MaxSpawnRate =  0.000000
+		MaxStart3DRotation = 0.000000 0.000000 0.000000
 		MaxStartRotationRate =  0.200000
 		MaxStartSize = 30.000000 30.000000 30.000000
 		MaxStartVelocity = 15.000000 15.000000 15.000000
@@ -1986,9 +1994,11 @@ kbGameEntity 0 0 0 0 {
 		MinEndSize = 40.000000 40.000000 40.000000
 		MinEndVelocity = 0.000000 0.000000 0.000000
 		MinSpawnRate =  0.000000
+		MinStart3DRotation = 0.000000 0.000000 0.000000
 		MinStartRotationRate =  -0.200000
 		MinStartSize = 20.000000 20.000000 20.000000
 		MinStartVelocity = -15.000000 -15.000000 -15.000000
+		ModelEmitter = 0
 		ParticleBillboardType = FaceCamera
 		StartColor = 0.080000 0.080000 0.080000 0.010000
 		StartDelay =  0.000000
