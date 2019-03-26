@@ -30,8 +30,9 @@ kbConsoleVariable g_ProcGenInfo( "procgeninfo", false, kbConsoleVariable::Consol
 void EtherFogComponent::Constructor() {
 	SetRenderPass( RP_Lighting );
 	m_pShader = nullptr;
-	m_FogStart = 300;
-	m_FogEnd = 3000;
+	m_FogStartDist = 300;
+	m_FogEndDist = 3000;
+	m_FogClamp = 1.0f;
 	m_FogColor = kbColor::white;
 }
 
@@ -47,9 +48,14 @@ void EtherFogComponent::RenderHookCallBack( kbRenderTexture *const pSrc, kbRende
 
 	g_pRenderer->RT_SetRenderTarget( pDst );
 	kbShaderParamOverrides_t shaderParams;
-	shaderParams.SetVec4( "fog_Start_End", kbVec4( this->m_FogStart, m_FogEnd, 0.0f, 0.0f ) );
+	shaderParams.SetVec4( "fog_Start_End_Clamp", kbVec4( m_FogStartDist, m_FogEndDist, m_FogClamp, 0.0f ) );
 	shaderParams.SetVec4( "fogColor", m_FogColor );
 
+	kbVec3 position;
+	kbQuat orientation;
+	g_pRenderer->GetRenderViewTransform( nullptr, position, orientation );
+
+	shaderParams.SetVec4( "cameraPosition", position );
 	g_pRenderer->RT_Render2DQuad( kbVec2( 0.5f, 0.5f ), kbVec2( 1.0f, 1.0f ), kbColor::white, m_pShader, &shaderParams );
 }
 

@@ -29,8 +29,9 @@ protected:
 private:
 
 	kbShader *									m_pShader;
-	float										m_FogStart;
-	float										m_FogEnd;
+	float										m_FogStartDist;
+	float										m_FogEndDist;
+	float										m_FogClamp;
 	kbColor										m_FogColor;					
 };
 

@@ -836,7 +836,7 @@ kbGameEntity 0 0 0 0 {
 				GrassCellsPerTerrainSide = 30
 				MaxBladeJitterOffset =  0.000000
 				MaxPatchJitterOffset =  3.000000
-				PatchEndCullDistance =  1000.000000
+				PatchEndCullDistance =  2000.000000
 				PatchStartCullDistance =  200.000000
 				PatchesPerCellSide = 60
 				ShaderParams = 10
@@ -873,7 +873,7 @@ kbGameEntity 0 0 0 0 {
 						LifeTime =  -1.000000
 						ParamName = "wind1_mag_lod"
 						Texture = NULL
-						Vector = 5.000000 5.000000 0.000000 5.000000
+						Vector = 3.000000 3.000000 0.000000 5.000000
 					}
 					kbShaderParamComponent { 
 						Enabled = 0
@@ -894,7 +894,7 @@ kbGameEntity 0 0 0 0 {
 						LifeTime =  -1.000000
 						ParamName = "wind2_mag_lod"
 						Texture = NULL
-						Vector = 5.000000 5.000000 2.000000 5.000000
+						Vector = 3.000000 3.000000 2.000000 5.000000
 					}
 					kbShaderParamComponent { 
 						Enabled = 0
@@ -2050,9 +2050,20 @@ kbGameEntity 0 0 0 0 {
 	EtherFogComponent { 
 		Enabled = 1
 		LifeTime =  -1.000000
+		Clamp =  0.500000
 		Color = 1.000000 1.000000 1.000000 1.000000
-		EndDist =  5000.000000
+		EndDist =  1000.000000
 		Shader = .\assets\shaders\postprocess\fog.kbshader
-		StartDist =  1000.000000
+		StartDist =  300.000000
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Cool View"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = -714.295959 -27.511972 -1107.563599
+		Scale = 1.000000 1.000000 1.000000
 	}
 }
