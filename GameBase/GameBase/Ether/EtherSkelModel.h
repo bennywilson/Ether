@@ -115,8 +115,8 @@ public:
 
 private:
 
-	void									SetEnable_Internal( const bool bEnable ) override;
-	void									Update_Internal( const float deltaTime ) override;
+	virtual void							SetEnable_Internal( const bool bEnable ) override;
+	virtual void							Update_Internal( const float deltaTime ) override;
 
 	// Editor
 	EDestructibleBehavior					m_DestructibleType;

@@ -3,11 +3,36 @@
 //
 // Manages terrain streaming/generation + environmental fx
 //
-// 2016-2018 kbEngine 2.0
+// 2016-2019 kbEngine 2.0
 //===================================================================================================
 #ifndef _ETHERWORLDGEN_H_
 #define _ETHERWORLDGEN_H_
 
+#include "kbRenderer.h"
+
+/**
+ *	EtherFogComponent
+ */
+class EtherFogComponent : public kbGameComponent, kbRenderHook {
+
+	KB_DECLARE_COMPONENT( EtherFogComponent, kbGameComponent );
+
+//-------------------------------------------------------------------------------------------------------------------------------------------------------------
+public:
+
+	virtual void								SetEnable_Internal( const bool bEnable ) override;
+
+protected:
+
+	virtual void								RenderHookCallBack( kbRenderTexture *const pSrc, kbRenderTexture *const pDst ) override;
+
+private:
+
+	kbShader *									m_pShader;
+	float										m_FogStart;
+	float										m_FogEnd;
+	kbColor										m_FogColor;					
+};
 
 /**
  *	EtherCoverObject

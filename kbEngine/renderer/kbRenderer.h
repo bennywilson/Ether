@@ -34,7 +34,8 @@ enum eReservedRenderTargets {
 	NORMAL_BUFFER,		// Normal in xyz. W currently unused
 	SPECULAR_BUFFER,
 	DEPTH_BUFFER,
-	ACCUMULATION_BUFFER,
+	ACCUMULATION_BUFFER_1,
+	ACCUMULATION_BUFFER_2,
 	SHADOW_BUFFER,
 	SHADOW_BUFFER_DEPTH,
 	RGBA_BUFFER,
@@ -207,17 +208,20 @@ class kbRenderHook {
 
 //-------------------------------------------------------------------------------------------------------------------------------------------------------------
 public:
+												kbRenderHook() : m_RenderPass( RP_InWorldUI ) { } 
 												kbRenderHook( const ERenderPass );
 												~kbRenderHook();
 
 	ERenderPass									GetRenderPass() const { return m_RenderPass; }
+	virtual void								RenderHookCallBack( kbRenderTexture *const pSrc, kbRenderTexture *const pDst ) = 0;
 
-	virtual void								RenderThreadCallBack() = 0;
+protected:
+
+	void										SetRenderPass( const ERenderPass nextRenderPass ) { m_RenderPass = nextRenderPass; };
 
 private:
 
 	virtual void								RenderSync() { }
-
 	ERenderPass									m_RenderPass;
 };
 
@@ -378,6 +382,9 @@ protected:
 
 	float										m_FogEndDistance_GameThread;
 	float										m_FogEndDistance_RenderThread;
+
+	kbRenderTexture *							m_pAccumBuffers[2];
+	int											m_iAccumBuffer;
 
 	// Text
 	struct kbTextInfo_t {

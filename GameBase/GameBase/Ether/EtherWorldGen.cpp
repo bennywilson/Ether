@@ -25,6 +25,49 @@ kbConsoleVariable g_ProcGenInfo( "procgeninfo", false, kbConsoleVariable::Consol
 
 
 /**
+ *	EtherFogComponent::Constructor
+ */
+void EtherFogComponent::Constructor() {
+	SetRenderPass( RP_Lighting );
+	m_pShader = nullptr;
+	m_FogStart = 300;
+	m_FogEnd = 3000;
+	m_FogColor = kbColor::white;
+}
+
+/**
+ *	EtherFogComponent::RenderHookCallBack
+ */
+void EtherFogComponent::RenderHookCallBack( kbRenderTexture *const pSrc, kbRenderTexture *const pDst ) {
+	//g_pRenderer->RT_ClearRenderTarget( pDst, kbColor::white );
+
+	if ( m_pShader == nullptr ) {
+		m_pShader = (kbShader *) g_ResourceManager.LoadResource( "./assets/shaders/PostProcess/Fog.kbshader", true );
+	}
+
+	g_pRenderer->RT_SetRenderTarget( pDst );
+	kbShaderParamOverrides_t shaderParams;
+	shaderParams.SetVec4( "fog_Start_End", kbVec4( this->m_FogStart, m_FogEnd, 0.0f, 0.0f ) );
+	shaderParams.SetVec4( "fogColor", m_FogColor );
+
+	g_pRenderer->RT_Render2DQuad( kbVec2( 0.5f, 0.5f ), kbVec2( 1.0f, 1.0f ), kbColor::white, m_pShader, &shaderParams );
+}
+
+/**
+ *	EtherFogComponent::RenderHookCallBack
+ */
+void EtherFogComponent::SetEnable_Internal( const bool bEnable ) {
+
+	Super::SetEnable_Internal( bEnable );
+
+	if ( bEnable ) {
+		g_pRenderer->RegisterRenderHook( this );
+	} else {
+		g_pRenderer->UnregisterRenderHook( this );
+	}
+}
+
+/**
  *	EtherCoverObject::EtherCoverObject
  */
 EtherCoverObject::EtherCoverObject( const kbBounds & inBounds, const float inHealth ) :

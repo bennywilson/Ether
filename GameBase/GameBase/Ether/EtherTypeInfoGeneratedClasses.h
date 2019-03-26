@@ -1,5 +1,14 @@
 // AUTO GENERATED TYPE INFO //////////////////////////////////////////
 
+GenerateClass(
+	EtherFogComponent,
+	AddField( "Shader", KBTYPEINFO_SHADER, EtherFogComponent, m_pShader, false, "" )
+	AddField( "StartDist", KBTYPEINFO_FLOAT, EtherFogComponent, m_FogStart, false, "" )
+	AddField( "EndDist", KBTYPEINFO_FLOAT, EtherFogComponent, m_FogEnd, false, "" )
+	AddField( "Color", KBTYPEINFO_VECTOR4, EtherFogComponent, m_FogColor, false, "" )	
+)
+
+
 GenerateClass( 
 	EtherWorldGenComponent, 
 	AddField( "TerrainDimensions", KBTYPEINFO_INT, EtherWorldGenComponent, m_ChunksPerTerrainSide, false, "" )

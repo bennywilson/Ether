@@ -458,6 +458,7 @@ private:
 															 const kbVec3 & pixelSize, const kbVec3 & renderTargetSize );
 
 	kbRenderTexture_DX11 *						GetRenderTarget_DX11( const eReservedRenderTargets target ) { return (kbRenderTexture_DX11*) m_pRenderTargets[target]; }
+	kbRenderTexture_DX11 *						GetAccumBuffer( const int index ) { return  (kbRenderTexture_DX11*) m_pAccumBuffers[index]; }
 
 	HWND										m_hwnd;
 	IDXGIFactory *								m_pDXGIFactory;

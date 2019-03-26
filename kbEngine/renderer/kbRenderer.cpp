@@ -203,9 +203,10 @@ kbRenderer::kbRenderer() :
 	m_RenderThreadSync( 0 ),
 	m_bDebugBillboardsEnabled( false ) {
 
+	m_pAccumBuffers[0] = m_pAccumBuffers[1] = nullptr;
+	m_iAccumBuffer = 0;
+
 	g_pRenderer = this;
-
-
 }
 
 /**

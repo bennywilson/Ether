@@ -61,7 +61,7 @@ void kbRenderer_DX11::RenderLight( const kbRenderLight *const pLight ) {
 	START_SCOPED_RENDER_TIMER( RENDER_LIGHT );
 
 	// Render Light
-	m_pDeviceContext->OMSetRenderTargets( 1, &GetRenderTarget_DX11(ACCUMULATION_BUFFER)->m_pRenderTargetView, nullptr );
+	m_pDeviceContext->OMSetRenderTargets( 1, &GetAccumBuffer( m_iAccumBuffer )->m_pRenderTargetView, nullptr );
 
 	const unsigned int stride = sizeof( vertexLayout );
 	const unsigned int offset = 0;
@@ -544,7 +544,7 @@ void kbRenderer_DX11::RenderLightShafts() {
 				viewport.TopLeftY = 0;
 			}
 			m_pDeviceContext->RSSetViewports( 1, &viewport );
-			m_pDeviceContext->OMSetRenderTargets( 1, &GetRenderTarget_DX11(ACCUMULATION_BUFFER)->m_pRenderTargetView, nullptr );
+			m_pDeviceContext->OMSetRenderTargets( 1, &GetAccumBuffer( m_iAccumBuffer )->m_pRenderTargetView, nullptr );
 
 			ID3D11ShaderResourceView *const  RenderTargetViews[] = { GetRenderTarget_DX11(DOWN_RES_BUFFER)->m_pShaderResourceView };
 			ID3D11SamplerState *const  SamplerStates[] = { m_pBasicSamplerState };
@@ -590,5 +590,5 @@ void kbRenderer_DX11::RenderLightShafts() {
 	}
 	m_pDeviceContext->RSSetViewports( 1, &viewport );
 
-	m_pDeviceContext->OMSetRenderTargets( 1, &GetRenderTarget_DX11(ACCUMULATION_BUFFER)->m_pRenderTargetView, nullptr );
+	m_pDeviceContext->OMSetRenderTargets( 1, &GetAccumBuffer( m_iAccumBuffer )->m_pRenderTargetView, nullptr );
 }

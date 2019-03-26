@@ -17,6 +17,10 @@ using namespace std;
 
 EDestructibleBehavior_Enum EDestructibleBehaviorEnumClass;
 
+// EtherFogComponent
+EtherFogComponent_TypeInfo EtherFogComponent::typeInfo;
+std::vector<class kbTypeInfoClass*> EtherFogComponent::EtherFogComponent_TypeInfoVar;
+
 // EtherWorldGenComponent
 EtherWorldGenComponent_TypeInfo EtherWorldGenComponent::typeInfo;
 std::vector<class kbTypeInfoClass *> EtherWorldGenComponent::EtherWorldGenComponent_TypeInfoVar;

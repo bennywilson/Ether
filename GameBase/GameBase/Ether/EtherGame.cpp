@@ -26,16 +26,6 @@ kbConsoleVariable g_ShowPos( "showpos", false, kbConsoleVariable::Console_Bool, 
 
 EtherGame * g_pEtherGame = nullptr;
 
-// Stimpack
-const float g_SlomoLength = 7.0f;
-
-// Airstrike
-const float g_AirstrikeDurationSec = 7.0f;
-const float g_TimeBetweenBombers = 1.5f;
-const float g_TimeBetweenBombs = 0.075f;
-
-const kbVec3 g_CountUIScale( 0.5f, 0.5f, 0.5f );
-static kbVec3 g_CountUIOffset( 14.96f, -12.0f, 10.0f );
 
 /**
  *	EtherGame::EtherGame
@@ -534,10 +524,10 @@ void EtherGame::RenderSync() {
 }
 
 /**
- *	EtherGame::RenderThreadCallBack
+ *	EtherGame::RenderHookCallBack
  */
 static float g_TimeMultiplier = 0.95f / 0.016f;
-void EtherGame::RenderThreadCallBack() {
+void EtherGame::RenderHookCallBack( kbRenderTexture *const pSrc, kbRenderTexture *const pDst ) {
 	static kbVec3 terrainPos;
 	static float terrainWidth;
 	static float halfTerrainWidth;

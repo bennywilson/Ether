@@ -85,9 +85,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <None Include="assets\shaders\baseHoloscope.kbShader" />
-    <None Include="assets\shaders\baseWeapon.kbShader" />
-    <None Include="assets\shaders\basicTerrain.kbShader" />
     <None Include="assets\shaders\Character\characterBase.kbShader" />
     <None Include="assets\shaders\Character\characterGlow.kbShader" />
     <None Include="assets\shaders\Character\characterHair.kbShader" />
@@ -114,13 +111,7 @@
     <None Include="assets\shaders\Lights\charEnviroPointLight.kbShader" />
     <None Include="assets\shaders\Lights\directionalLightToon.kbShader" />
     <None Include="assets\shaders\Lights\environmentDirectionalFill.kbShader" />
-    <None Include="assets\shaders\particleAtlas.kbShader" />
-    <None Include="assets\shaders\firstPersonHands.kbshader" />
-    <None Include="assets\shaders\grass.kbShader" />
-    <None Include="assets\shaders\environment_hole.kbShader" />
-    <None Include="assets\shaders\shellCasing.kbShader" />
-    <None Include="assets\shaders\shellTrailParticle.kbShader" />
-    <None Include="assets\shaders\skyBox.kbShader" />
+    <None Include="assets\shaders\PostProcess\Fog.kbShader" />
     <None Include="assets\shaders\Weapons\baseHoloscope.kbShader" />
     <None Include="assets\shaders\Weapons\baseWeapon.kbShader" />
     <None Include="assets\shaders\Weapons\shellCasing.kbShader" />

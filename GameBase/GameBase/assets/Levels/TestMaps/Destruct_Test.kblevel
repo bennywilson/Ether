@@ -2028,3 +2028,31 @@ kbGameEntity 0 0 0 0 {
 			}
 	}
 }
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Fog"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 63.975685 47.484646 -5.905913
+		Scale = 1.000000 1.000000 1.000000
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Fog"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 6.818789 38.074856 14.711714
+		Scale = 1.000000 1.000000 1.000000
+	}
+	EtherFogComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		Color = 1.000000 1.000000 1.000000 1.000000
+		EndDist =  5000.000000
+		Shader = .\assets\shaders\postprocess\fog.kbshader
+		StartDist =  1000.000000
+	}
+}
