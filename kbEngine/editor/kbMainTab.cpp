@@ -117,7 +117,7 @@ void kbMainTab::Update() {
 
 				const kbComponent *const pCurrentComponent = pGameEntity->GetComponent( j );
 
-				if ( pCurrentComponent->IsA( kbDirectionalLightComponent::GetType() ) ) {
+				if ( pCurrentComponent->IsA( kbDirectionalLightComponent::GetType() ) || pCurrentComponent->IsA( kbLightShaftsComponent::GetType() ) ) {
 
 					kbMat4 rotationMatrix = pGameEntity->GetOrientation().ToMat4();
 					kbVec3 lightDirection( 0, 0, 1.0f );

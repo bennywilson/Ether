@@ -672,7 +672,7 @@ void kbRenderer::RenderSync() {
 				renderParticle = particleMap[pComponent];
 
 				if ( renderParticle != nullptr ) {
-					kbError( "kbRenderer::AddParticle - Adding a particle that already exists" );
+					kbWarning( "kbRenderer::AddParticle - Adding a particle that already exists" );
 				} else {
 					renderParticle = new kbRenderObject;
 					particleMap[pComponent] = renderParticle;
@@ -680,7 +680,7 @@ void kbRenderer::RenderSync() {
 			} else {
 				std::map< const void *, kbRenderObject * >::iterator it = particleMap.find( pComponent );
 				if ( it == particleMap.end() || it->second == nullptr ) {
-					kbError( "kbRenderer::UpdateRenderObject - Error, Updating a RenderObject that doesn't exist" );
+					kbWarning( "kbRenderer::UpdateRenderObject - Error, Updating a RenderObject that doesn't exist" );
 				}
 
 				 renderParticle = it->second;
@@ -697,7 +697,7 @@ void kbRenderer::RenderSync() {
 			bool bAlreadyExists = false;
 			for ( int j = 0; j < m_LightShafts_RenderThread.size(); j++ ) {
 				if ( m_LightShafts_RenderThread[j].m_pLightShaftsComponent = m_LightShafts_GameThread[i].m_pLightShaftsComponent ) {
-					kbError( "kbRenderer::SetReadyToRender() - Adding light shafts that already exist" );
+					kbWarning( "kbRenderer::SetReadyToRender() - Adding light shafts that already exist" );
 					bAlreadyExists = true;
 					break;
 				}

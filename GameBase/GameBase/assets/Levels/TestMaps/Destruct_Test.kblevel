@@ -38,8 +38,8 @@ kbGameEntity 2609040299 1100347930 3115268521 1892043160 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "Light Shafts"
-		Orientation = -0.123261 -0.728340 0.231215 0.633141
-		Position = -3.857734 2.205323 16.256676
+		Orientation = -0.006135 -0.740328 0.175946 0.648783
+		Position = 0.000000 41.726536 0.000000
 		Scale = 1.000000 1.000000 1.000000
 	}
 	kbLightShaftsComponent { 
@@ -1584,8 +1584,8 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 1
 		LifeTime =  -1.000000
 		Name = "Directional Light"
-		Orientation = 0.021540 0.381797 -0.761829 -0.522862
-		Position = -7.139423 27.397795 16.036642
+		Orientation = -0.291628 0.619973 -0.460004 -0.564786
+		Position = -7.139423 55.000000 16.036642
 		Scale = 1.000000 1.000000 1.000000
 	}
 	kbDirectionalLightComponent { 
@@ -2064,6 +2064,16 @@ kbGameEntity 0 0 0 0 {
 		Name = "Cool View"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
 		Position = -714.295959 -27.511972 -1107.563599
+		Scale = 1.000000 1.000000 1.000000
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Entity_45"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = -759.454773 -23.060364 -1352.597778
 		Scale = 1.000000 1.000000 1.000000
 	}
 }
