@@ -39,9 +39,6 @@ private:
 
 	int											m_GrassCellsPerTerrainSide;
 
-	kbTexture *									m_pGrassMap;
-    kbTexture *                                 m_pNoiseMap;
-
 	std::vector<kbShaderParamComponent>			m_ShaderParamList;
 
 	float										m_PatchStartCullDistance;
@@ -57,10 +54,6 @@ private:
 
 	float										m_MaxPatchJitterOffset;
 	float										m_MaxBladeJitterOffset;
-
-    kbTexture *									m_pDiffuseMap;
-
-    kbVec3                                      m_TestWind;
 
     float                                       m_FakeAODarkness;
     float                                       m_FakeAOPower;
@@ -126,8 +119,6 @@ protected:
 	float										m_HeightScale;
 	float										m_TerrainWidth;
 	int											m_TerrainDimensions;
-
-	std::vector<kbMaterialComponent>			m_MaterialList;
 
 	kbTexture *                                 m_pSplatMap;
     std::vector<kbGrass>                        m_Grass;

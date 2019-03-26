@@ -831,18 +831,16 @@ kbGameEntity 0 0 0 0 {
 				BladeMaxWidth =  1.050000
 				BladeMinHeight =  10.000000
 				BladeMinWidth =  0.850000
-				DiffuseMap = .\assets\terrain\foliage\grass_1.dds
 				FakeAODarkness =  0.250000
 				FakeAOPower =  2.000000
 				GrassCellsPerTerrainSide = 30
-				GrassMap = .\assets\terrain\foliage\grass_1.dds
 				MaxBladeJitterOffset =  0.000000
 				MaxPatchJitterOffset =  3.000000
 				NoiseMap = .\assets\fx\noise\noisemap.png
 				PatchEndCullDistance =  1000.000000
 				PatchStartCullDistance =  200.000000
 				PatchesPerCellSide = 60
-				ShaderParams = 2
+				ShaderParams = 10
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
@@ -856,6 +854,62 @@ kbGameEntity 0 0 0 0 {
 						ParamName = "plant_3_size"
 						Texture = NULL
 						Vector = 1.300000 0.850000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "windTex1"
+						Texture = .\assets\terrain\basicterrain\wind_1.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "wind1_tile_speed"
+						Texture = NULL
+						Vector = 10.000000 10.000000 -0.010000 0.050000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "wind1_mag"
+						Texture = NULL
+						Vector = 2.000000 2.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "windTex2"
+						Texture = .\assets\terrain\basicterrain\wind_2.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "wind2_tile_speed"
+						Texture = NULL
+						Vector = 10.000000 10.000000 0.050000 0.050000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "wind2_mag"
+						Texture = NULL
+						Vector = 3.000000 3.000000 2.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "grassDiffuseMap"
+						Texture = .\assets\terrain\foliage\grass_1.dds
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "noiseMap"
+						Texture = .\assets\fx\noise\noisemap.png
+						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 				TestWind = 0.000000 0.000000 25.000000
 			}

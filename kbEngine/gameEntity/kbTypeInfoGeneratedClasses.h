@@ -162,8 +162,6 @@ GenerateClass(
 
 GenerateClass(
 	kbGrass,
-	AddField( "GrassMap", KBTYPEINFO_TEXTURE, kbGrass, m_pGrassMap, false, "" )
-    AddField( "NoiseMap", KBTYPEINFO_TEXTURE, kbGrass, m_pNoiseMap, false, "" )
 	AddField( "GrassCellsPerTerrainSide", KBTYPEINFO_INT, kbGrass, m_GrassCellsPerTerrainSide, false, "" )
 	AddField( "PatchStartCullDistance", KBTYPEINFO_FLOAT, kbGrass, m_PatchStartCullDistance, false, "" )
 	AddField( "PatchEndCullDistance", KBTYPEINFO_FLOAT, kbGrass, m_PatchEndCullDistance, false, "" )
@@ -174,8 +172,6 @@ GenerateClass(
 	AddField( "BladeMaxHeight", KBTYPEINFO_FLOAT, kbGrass, m_BladeMaxHeight, false, "" )
 	AddField( "MaxBladeJitterOffset", KBTYPEINFO_FLOAT, kbGrass, m_MaxBladeJitterOffset, false, "" )
 	AddField( "MaxPatchJitterOffset", KBTYPEINFO_FLOAT, kbGrass, m_MaxPatchJitterOffset, false, "" )
-	AddField( "DiffuseMap", KBTYPEINFO_TEXTURE, kbGrass, m_pDiffuseMap, false, "" )
-    AddField( "TestWind", KBTYPEINFO_VECTOR, kbGrass, m_TestWind, false, "" )
     AddField( "FakeAODarkness", KBTYPEINFO_FLOAT, kbGrass, m_FakeAODarkness, false, "" )
     AddField( "FakeAOPower", KBTYPEINFO_FLOAT, kbGrass, m_FakeAOPower, false, "" )
 	AddField( "ShaderParams", KBTYPEINFO_STRUCT, kbGrass, m_ShaderParamList, true, "kbShaderParamComponent" )
@@ -187,7 +183,6 @@ GenerateClass(
 	AddField( "HeightScale", KBTYPEINFO_FLOAT, kbTerrainComponent, m_HeightScale, false, "" )
 	AddField( "Width", KBTYPEINFO_FLOAT, kbTerrainComponent, m_TerrainWidth, false, "" )
 	AddField( "Dimensions", KBTYPEINFO_INT, kbTerrainComponent, m_TerrainDimensions, false, "" )
-	AddField( "MaterialList", KBTYPEINFO_STRUCT, kbTerrainComponent, m_MaterialList, true, "kbMaterialComponent" )
 	AddField( "SplatMap", KBTYPEINFO_TEXTURE, kbTerrainComponent, m_pSplatMap, false, "" )
 	AddField( "Grass", KBTYPEINFO_STRUCT, kbTerrainComponent, m_Grass, true, "kbGrass" )
 )
