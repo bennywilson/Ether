@@ -112,6 +112,8 @@
     <None Include="assets\shaders\Lights\directionalLightToon.kbShader" />
     <None Include="assets\shaders\Lights\environmentDirectionalFill.kbShader" />
     <None Include="assets\shaders\PostProcess\Fog.kbShader" />
+    <None Include="assets\shaders\Skybox\cloudDome.kbShader" />
+    <None Include="assets\shaders\Skybox\skyBox.kbShader" />
     <None Include="assets\shaders\Weapons\baseHoloscope.kbShader" />
     <None Include="assets\shaders\Weapons\baseWeapon.kbShader" />
     <None Include="assets\shaders\Weapons\shellCasing.kbShader" />

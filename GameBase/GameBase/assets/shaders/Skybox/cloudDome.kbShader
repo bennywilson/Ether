@@ -13,20 +13,21 @@ cbuffer matrixBuffer {
 
 //-------------------------------------
 struct vertexInput {
-   float4 position   : POSITION;
-   float2 uv         : TEXCOORD0;
-   float4 color      : COLOR;
-   float4 normal     : NORMAL;
-   float4 tangent    : TANGENT;
+	float4 position   : POSITION;
+	float2 uv         : TEXCOORD0;
+	float4 color      : COLOR;
+	float4 normal     : NORMAL;
+	float4 tangent    : TANGENT;
 };
 
 //-------------------------------------
 struct pixelInput {
-   float4 position   : SV_POSITION;
-   float2 uv         : TEXCOORD0;
-   float4 color      : COLOR;
-   float4 position2  : TEXCOORD1;
-   float3 normal     : TEXCOORD2;
+	float4 position		: SV_POSITION;
+	float2 uv			: TEXCOORD0;
+	float4 color		: COLOR;
+	float4 position2	: TEXCOORD1;
+	float3 normal		: TEXCOORD2;
+	float3 worldPos		: TEXCOORD3;
 };
 
 kbShaderState {
@@ -48,6 +49,7 @@ pixelInput vertexShader( vertexInput input ) {
 	pixelInput output = (pixelInput)(0);
 
 	output.position = mul( input.position, modelMatrix );
+	output.worldPos.xyz = cameraPos.xyz + output.position.xyz * 999;
 	output.position += float4(cameraPos.xyz, 0);
 	output.position = mul( output.position, viewProjection);
 	output.position.z = output.position.w - 0.0001f;
@@ -70,9 +72,27 @@ SamplerState LinearSampler;
  PS_OUTPUT pixelShader( pixelInput	input ) {
  	PS_OUTPUT output = (PS_OUTPUT) 0;
 
-	output.Color = 0.5f * diffuseTexture.Sample( LinearSampler, input.uv + float2( time.x * 0.01f, 0.0f ) );
-	clip ( output.Color.w - 0.00001f );
+	float4 cloudLayer1 = diffuseTexture.Sample( LinearSampler, input.uv + float2( time.x * 0.003f, 0.0f ) ).r;
+	float4 cloudLayer2 = diffuseTexture.Sample( LinearSampler, input.uv + float2( time.x * 0.006f, 0.0f ) ).g;
+	float4 cloudLayer3 = diffuseTexture.Sample( LinearSampler, input.uv + float2( time.x * 0.012f, 0.0f ) ).b;
+	float4 cloudLayer4 = 0;//diffuseTexture.Sample( LinearSampler, input.uv + float2( time.x * 0.03f, 0.0f ) ).a;
 
-	output.Depth.r = input.position2.z / input.position2.w;// / input.position2.y;
+	output.Color = ( cloudLayer1 + cloudLayer2 + cloudLayer3 + cloudLayer4 ) * 0.25f;
+
+//0.5f * diffuseTexture.Sample( LinearSampler, input.uv + float2( time.x * 0.01f, 0.0f ) );
+	//clip ( output.Color.w - 0.00000001f );
+
+	float3 fromCam = normalize( input.worldPos - cameraPos.xyz );
+	float3 sunDir = normalize( float3( -0.958466f, 0.268476f, 0.096246f ) );
+	float sunIntensity = saturate( ( dot( fromCam, sunDir ) - 0.98f ) / 0.02f );
+	sunIntensity = pow( sunIntensity, 5.f );
+	output.Color.xyz += sunIntensity;
+
+
+	if ( output.Color.w < 0.07f ) {
+		output.Depth.r = 0;
+	} else {
+		output.Depth.r = input.position2.z / input.position2.w;// / input.position2.y;
+	}
 	return output;
 }

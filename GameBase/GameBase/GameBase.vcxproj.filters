@@ -35,6 +35,9 @@
     <Filter Include="Shaders\PostProcess">
       <UniqueIdentifier>{d55449ea-8171-4f94-aed5-e9d689c0d2c2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Shaders\Skybox">
+      <UniqueIdentifier>{5606f5b0-0206-480d-b815-a642de7d7a06}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="ReadMe.txt" />
@@ -133,6 +136,12 @@
     </None>
     <None Include="assets\shaders\PostProcess\Fog.kbShader">
       <Filter>Shaders\PostProcess</Filter>
+    </None>
+    <None Include="assets\shaders\Skybox\skyBox.kbShader">
+      <Filter>Shaders\Skybox</Filter>
+    </None>
+    <None Include="assets\shaders\Skybox\cloudDome.kbShader">
+      <Filter>Shaders\Skybox</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

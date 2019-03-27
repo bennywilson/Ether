@@ -147,14 +147,14 @@ void EtherGame::Update_Internal( float DT ) {
 		ProcessInput( DT );
 	}
 	
-	if ( GetAsyncKeyState( VK_LSHIFT ) && GetAsyncKeyState( 'P' ) ) {
+/*	if ( GetAsyncKeyState( VK_LSHIFT ) && GetAsyncKeyState( 'P' ) ) {
 	    kbCamera & playerCamera = GetCamera();
 
 		//SetMainCameraPos( kbVec3( 5.1198f, 13.310f, 43.877f ) );
 		//SetMainCameraRot( kbQuat( -0.0149f, 0.00499f,-7.51334301e-05f, 0.999875009f ) );
 		playerCamera.m_Position = kbVec3( 5.1198f, 13.310f, 43.877f ) ;
 		playerCamera.m_RotationTarget = playerCamera.m_Rotation = kbQuat( -0.0149f, 0.00499f,-7.51334301e-05f, 0.999875009f ); 
-	}
+	}*/
 
 	if ( ( g_pD3D11Renderer->IsRenderingToHMD() || g_pD3D11Renderer->IsUsingHMDTrackingOnly() ) && g_pD3D11Renderer->GetFrameNum() > 0 ) {
 	
