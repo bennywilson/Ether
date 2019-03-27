@@ -2077,3 +2077,47 @@ kbGameEntity 0 0 0 0 {
 		Scale = 1.000000 1.000000 1.000000
 	}
 }
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "CloudDome"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 0.000000 0.000000 0.000000
+		Scale = 1.000000 1.000000 1.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		Materials = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Shader = .\assets\shaders\skybox\clouddome.kbshader
+				ShaderParams = 1
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "diffuseTexture"
+						Texture = .\assets\models\skydomes\basic_clouds.dds
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		RenderPass = TranslucentWithDepthPass
+		TranslucencySortBias =  0.000000
+		Model = .\assets\models\skydomes\clouddome.fbx
+		ShaderOverride = 0
+			
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Entity_47"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = -764.615173 -30.219667 -1343.156250
+		Scale = 1.000000 1.000000 1.000000
+	}
+}
