@@ -5,6 +5,7 @@ GenerateEnum(
 	AddEnumField( RP_FirstPerson, "FirstPersonPass" )
 	AddEnumField( RP_Lighting, "LightingPass" )
 	AddEnumField( RP_Translucent, "TranlucentPass" )
+	AddEnumField( RP_TranslucentWithDepth, "TranslucentWithDepthPass" )
 	AddEnumField( RP_LightingPass, "Post-LightingPass" )
 	AddEnumField( RP_Debug, "DebugPass" )
 )

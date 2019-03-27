@@ -57,7 +57,7 @@ pixelInput vertexShader( vertexInput input ) {
 	output.uv = input.uv;
 	output.color = input.color;
 	output.position2 = output.position;
-//	output.normal.xyz = mul( ( input.normal.xyz * 2.0f ) - 1.0f, modelMatrix );
+	output.normal.xyz = mul( ( input.normal.xyz * 2.0f ) - 1.0f, (float3x3)modelMatrix );
 
 	return output;
 }
@@ -72,27 +72,34 @@ SamplerState LinearSampler;
  PS_OUTPUT pixelShader( pixelInput	input ) {
  	PS_OUTPUT output = (PS_OUTPUT) 0;
 
-	float4 cloudLayer1 = diffuseTexture.Sample( LinearSampler, input.uv + float2( time.x * 0.003f, 0.0f ) ).r;
-	float4 cloudLayer2 = diffuseTexture.Sample( LinearSampler, input.uv + float2( time.x * 0.006f, 0.0f ) ).g;
-	float4 cloudLayer3 = diffuseTexture.Sample( LinearSampler, input.uv + float2( time.x * 0.012f, 0.0f ) ).b;
-	float4 cloudLayer4 = 0;//diffuseTexture.Sample( LinearSampler, input.uv + float2( time.x * 0.03f, 0.0f ) ).a;
+	float2 uv = input.uv;
+	uv.y *= 2.5f;
+	float4 cloudLayer1 = pow( abs( diffuseTexture.Sample( LinearSampler, uv + float2( time.x * 0.003f, 0.0f ) ).r ), 3.5 );
+	float4 cloudLayer2 = pow( abs( diffuseTexture.Sample( LinearSampler, uv + float2( time.x * 0.005f, 0.0f ) ).g ), 3.5 );
+	float4 cloudLayer3 = pow( abs( diffuseTexture.Sample( LinearSampler, uv + float2( time.x * 0.007f, 0.0f ) ).b ), 3.5 );
+	float4 cloudLayer4 = pow( abs( diffuseTexture.Sample( LinearSampler, uv + float2( time.x * 0.02f, 0.0f ) ).r ), 3.5 );
 
-	output.Color = ( cloudLayer1 + cloudLayer2 + cloudLayer3 + cloudLayer4 ) * 0.25f;
-
-//0.5f * diffuseTexture.Sample( LinearSampler, input.uv + float2( time.x * 0.01f, 0.0f ) );
-	//clip ( output.Color.w - 0.00000001f );
+	float4 totalCloud = cloudLayer1 + cloudLayer2 + cloudLayer3 + cloudLayer4;
+	totalCloud /= 3;
+	output.Color.xyz = saturate( pow( abs(totalCloud.xyz), abs(3.0f) ) * 1.0f ) * 3.0;
+	output.Color.w = dot( totalCloud.xyz, float3( 0.3, 0.59f, 0.11f ) );
 
 	float3 fromCam = normalize( input.worldPos - cameraPos.xyz );
 	float3 sunDir = normalize( float3( -0.958466f, 0.268476f, 0.096246f ) );
 	float sunIntensity = saturate( ( dot( fromCam, sunDir ) - 0.98f ) / 0.02f );
-	sunIntensity = pow( sunIntensity, 5.f );
+	sunIntensity = pow( sunIntensity, 5.f ) * 0.45f;
 	output.Color.xyz += sunIntensity;
+	
+	//output.Color.xyz += saturate( dot( sunDir, input.normal ) );
 
-
-	if ( output.Color.w < 0.07f ) {
+	if ( output.Color.w < 0.3f ) {
 		output.Depth.r = 0;
+		output.Depth.g = 0.0f;
 	} else {
 		output.Depth.r = input.position2.z / input.position2.w;// / input.position2.y;
+		output.Depth.g = 1;
 	}
+
+	output.Color.w = max( max( output.Color.x, output.Color.y ), output.Color.z ) * 1.0;
 	return output;
 }

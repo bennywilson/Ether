@@ -213,6 +213,12 @@ kbLightShaftsComponent::~kbLightShaftsComponent() {
 void kbLightShaftsComponent::SetEnable_Internal( const bool isEnabled ) {
 	Super::SetEnable_Internal( isEnabled );
 
+	kbLog( "==========" );
+	kbMat4 ownerMat = GetOwner()->GetOrientation().ToMat4();
+	kbLog( "X = %f %f %f ", ownerMat[0].r, ownerMat[0].g, ownerMat[0].b );
+	kbLog( "Y = %f %f %f ", ownerMat[1].r, ownerMat[1].g, ownerMat[1].b );
+	kbLog( "Z = %f %f %f ", ownerMat[2].r, ownerMat[2].g, ownerMat[2].b );
+
 	if ( g_pRenderer != nullptr ) {
 		if ( isEnabled ) {
 			g_pRenderer->AddLightShafts( this, GetOwner()->GetPosition(), GetOwner()->GetOrientation() );	

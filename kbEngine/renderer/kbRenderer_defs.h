@@ -15,6 +15,7 @@ enum ERenderPass {
 	RP_FirstPerson,
 	RP_Lighting,
 	RP_Translucent,
+	RP_TranslucentWithDepth,
 	RP_PostLighting,
 	RP_InWorldUI,
 	RP_Debug,

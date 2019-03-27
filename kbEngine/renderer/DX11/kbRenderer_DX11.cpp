@@ -1184,7 +1184,8 @@ void kbRenderer_DX11::RenderScene() {
 	kbGPUTimeStamp::BeginFrame( m_pDeviceContext );
 	PLACE_GPU_TIME_STAMP( "Begin Frame" );
 
-	const float color[4] = { 0.0f, 0.0f, 0.0f, 0.0f };
+	const float colorClear[4] = { 0.0f, 0.0f, 0.0f, 0.0f };
+
 	const int numRenderPasses = ( IsRenderingToHMD() ) ? ( 2 ) : ( 1 );
 
 	m_pCurrentRenderWindow->BeginFrame();
@@ -1193,12 +1194,12 @@ void kbRenderer_DX11::RenderScene() {
 
 		{
 			START_SCOPED_RENDER_TIMER( RENDER_THREAD_CLEAR_BUFFERS );
-			m_pDeviceContext->ClearRenderTargetView( GetRenderTarget_DX11(COLOR_BUFFER)->m_pRenderTargetView, color );
-			m_pDeviceContext->ClearRenderTargetView( GetRenderTarget_DX11(NORMAL_BUFFER)->m_pRenderTargetView, color );
-			m_pDeviceContext->ClearRenderTargetView( GetRenderTarget_DX11(SPECULAR_BUFFER)->m_pRenderTargetView, color );
-			m_pDeviceContext->ClearRenderTargetView( GetRenderTarget_DX11(DEPTH_BUFFER)->m_pRenderTargetView, color );
-			m_pDeviceContext->ClearRenderTargetView( GetRenderTarget_DX11(ACCUMULATION_BUFFER_1)->m_pRenderTargetView, color );
-			m_pDeviceContext->ClearRenderTargetView( GetRenderTarget_DX11(ACCUMULATION_BUFFER_2)->m_pRenderTargetView, color );
+			m_pDeviceContext->ClearRenderTargetView( GetRenderTarget_DX11(COLOR_BUFFER)->m_pRenderTargetView, colorClear );
+			m_pDeviceContext->ClearRenderTargetView( GetRenderTarget_DX11(NORMAL_BUFFER)->m_pRenderTargetView, colorClear );
+			m_pDeviceContext->ClearRenderTargetView( GetRenderTarget_DX11(SPECULAR_BUFFER)->m_pRenderTargetView, colorClear );
+			m_pDeviceContext->ClearRenderTargetView( GetRenderTarget_DX11(DEPTH_BUFFER)->m_pRenderTargetView, colorClear );
+			m_pDeviceContext->ClearRenderTargetView( GetRenderTarget_DX11(ACCUMULATION_BUFFER_1)->m_pRenderTargetView, colorClear );
+			m_pDeviceContext->ClearRenderTargetView( GetRenderTarget_DX11(ACCUMULATION_BUFFER_2)->m_pRenderTargetView, colorClear );
 			m_iAccumBuffer = 0;
 			m_pDeviceContext->ClearDepthStencilView( m_pDepthStencilView, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1, 0 );
 		}
@@ -1353,12 +1354,6 @@ void kbRenderer_DX11::RenderScene() {
 			PLACE_GPU_TIME_STAMP( "Post Lighting Render Hook" );
 		}
 
-		if ( m_ViewMode == ViewMode_Shaded ) {
-			RenderLightShafts();
-		}
-		
-		PLACE_GPU_TIME_STAMP( "Light Shafts" );
-
 		RenderTranslucency();
 		RenderScreenSpaceQuads();
 
@@ -1374,6 +1369,12 @@ void kbRenderer_DX11::RenderScene() {
 		}
 
 		PLACE_GPU_TIME_STAMP( "Transparency" );
+
+		if ( m_ViewMode == ViewMode_Shaded ) {
+			RenderLightShafts();
+		}
+		
+		PLACE_GPU_TIME_STAMP( "Light Shafts" );
 
 		//m_pDeviceContext->OMSetDepthStencilState( m_pNoDepthStencilState, 1 );
 
@@ -1507,8 +1508,11 @@ void kbRenderer_DX11::PreRenderCullAndSort() {
 				if ( pShader == nullptr || pShader->IsBlendEnabled() == false ) {
 					m_pCurrentRenderWindow->GetVisibleSubMeshes( renderObj.m_RenderPass ).push_back( kbRenderSubmesh( &renderObj, i, renderObj.m_RenderPass, sqrt( distToCamSqr ) ) );
 				} else {
-					m_pCurrentRenderWindow->GetVisibleSubMeshes( RP_Translucent ).push_back( kbRenderSubmesh( &renderObj, i, RP_Translucent, sqrt( distToCamSqr ) ) );
-		
+					if ( renderObj.m_RenderPass == RP_TranslucentWithDepth ) {
+						m_pCurrentRenderWindow->GetVisibleSubMeshes( RP_TranslucentWithDepth ).push_back( kbRenderSubmesh( &renderObj, i, RP_TranslucentWithDepth, sqrt( distToCamSqr ) ) );
+					} else {
+						m_pCurrentRenderWindow->GetVisibleSubMeshes( RP_Translucent ).push_back( kbRenderSubmesh( &renderObj, i, RP_Translucent, sqrt( distToCamSqr ) ) );
+					}	
 				}
 			}
 		}
@@ -1567,49 +1571,84 @@ void kbRenderer_DX11::RenderTranslucency() {
 										kbRenderState::CompareNotEqual,
 										1);
 
-	std::vector<kbRenderSubmesh> & visibleSubmeshList = m_pCurrentRenderWindow->GetVisibleSubMeshes( RP_Translucent );
-	for ( int i = 0; i < visibleSubmeshList.size(); i++ ) {
-		const kbRenderSubmesh & submesh = visibleSubmeshList[i];
-		const kbModel *const pModel = submesh.GetRenderObject()->m_pModel;
+	// Translucency Pass
+	{
+		std::vector<kbRenderSubmesh> & visibleSubmeshList = m_pCurrentRenderWindow->GetVisibleSubMeshes( RP_Translucent );
+		for ( int i = 0; i < visibleSubmeshList.size(); i++ ) {
+			const kbRenderSubmesh & submesh = visibleSubmeshList[i];
+			const kbModel *const pModel = submesh.GetRenderObject()->m_pModel;
 
-		if ( submesh.GetRenderObject()->m_RenderPass == RP_FirstPerson ) {
-			m_RenderState.SetDepthStencilState( true,
-												kbRenderState::DepthWriteMaskZero,
-												kbRenderState::CompareLess,
-												true,
-												0,
-												0xff,
-												kbRenderState::StencilKeep,
-												kbRenderState::StencilKeep,
-												kbRenderState::StencilReplace,
-												kbRenderState::CompareAlways,
-												kbRenderState::StencilKeep,
-												kbRenderState::StencilKeep,
-												kbRenderState::StencilReplace,
-												kbRenderState::CompareAlways,
-												1);
-		} else {
-			m_RenderState.SetDepthStencilState(	true,
-												kbRenderState::DepthWriteMaskZero,
-												kbRenderState::CompareLess,
-												true,
-												0xff,
-												0x0,
-												kbRenderState::StencilKeep,
-												kbRenderState::StencilKeep,
-												kbRenderState::StencilReplace,
-												kbRenderState::CompareNotEqual,
-												kbRenderState::StencilKeep,
-												kbRenderState::StencilKeep,
-												kbRenderState::StencilReplace,
-												kbRenderState::CompareNotEqual,
-												1);
+			if ( submesh.GetRenderObject()->m_RenderPass == RP_FirstPerson ) {
+				m_RenderState.SetDepthStencilState( true,
+													kbRenderState::DepthWriteMaskZero,
+													kbRenderState::CompareLess,
+													true,
+													0,
+													0xff,
+													kbRenderState::StencilKeep,
+													kbRenderState::StencilKeep,
+													kbRenderState::StencilReplace,
+													kbRenderState::CompareAlways,
+													kbRenderState::StencilKeep,
+													kbRenderState::StencilKeep,
+													kbRenderState::StencilReplace,
+													kbRenderState::CompareAlways,
+													1);
+			} else {
+				m_RenderState.SetDepthStencilState(	true,
+													kbRenderState::DepthWriteMaskZero,
+													kbRenderState::CompareLess,
+													true,
+													0xff,
+													0x0,
+													kbRenderState::StencilKeep,
+													kbRenderState::StencilKeep,
+													kbRenderState::StencilReplace,
+													kbRenderState::CompareNotEqual,
+													kbRenderState::StencilKeep,
+													kbRenderState::StencilKeep,
+													kbRenderState::StencilReplace,
+													kbRenderState::CompareNotEqual,
+													1);
+			}
+
+			RenderMesh( &visibleSubmeshList[i], false );
 		}
-
-		RenderMesh( &visibleSubmeshList[i], false );
 	}
-	
 
+	// Translucency with depth Pass
+	{
+		ID3D11RenderTargetView * RenderTargetViews[] = { GetAccumBuffer( m_iAccumBuffer )->m_pRenderTargetView, GetRenderTarget_DX11(DEPTH_BUFFER)->m_pRenderTargetView };
+		m_pDeviceContext->OMSetRenderTargets( 2, RenderTargetViews, m_pDepthStencilView );
+
+		std::vector<kbRenderSubmesh> & visibleSubmeshList = m_pCurrentRenderWindow->GetVisibleSubMeshes( RP_TranslucentWithDepth );
+		for ( int i = 0; i < visibleSubmeshList.size(); i++ ) {
+			const kbRenderSubmesh & submesh = visibleSubmeshList[i];
+			const kbModel *const pModel = submesh.GetRenderObject()->m_pModel;
+
+			if ( submesh.GetRenderObject()->m_RenderPass == RP_FirstPerson ) {
+				m_RenderState.SetDepthStencilState( true,
+													kbRenderState::DepthWriteMaskZero,
+													kbRenderState::CompareLess,
+													true,
+													0,
+													0xff,
+													kbRenderState::StencilKeep,
+													kbRenderState::StencilKeep,
+													kbRenderState::StencilReplace,
+													kbRenderState::CompareAlways,
+													kbRenderState::StencilKeep,
+													kbRenderState::StencilKeep,
+													kbRenderState::StencilReplace,
+													kbRenderState::CompareAlways,
+													1);
+			} else {
+				m_RenderState.SetDepthStencilState();
+			}
+
+			RenderMesh( &visibleSubmeshList[i], false );
+		}
+	}
 	m_RenderState.SetBlendState();
 
 	m_RenderState.SetDepthStencilState();
