@@ -584,7 +584,8 @@ void kbRenderer::RenderSync() {
 				// Updating a renderobject 
 				auto it = m_pCurrentRenderWindow->m_RenderObjectMap.find( m_RenderObjectList_GameThread[i].m_pComponent );
 				if ( it == m_pCurrentRenderWindow->m_RenderObjectMap.end() || it->second == nullptr ) {
-					kbError( "kbRenderer::UpdateRenderObject - Error, Updating a RenderObject that doesn't exist" );
+					kbWarning( "kbRenderer::UpdateRenderObject - Error, Updating a RenderObject that doesn't exist" );
+					return;
 				}
 
 				renderObject = it->second;
@@ -598,7 +599,7 @@ void kbRenderer::RenderSync() {
 
 				// Adding new renderobject
 				renderObject = m_pCurrentRenderWindow->m_RenderObjectMap[pComponent];
-				kbErrorCheck( renderObject == nullptr, "kbRenderer::AddRenderObject() - Model %s already added", m_RenderObjectList_GameThread[i].m_pModel->GetFullName().c_str() );
+				kbWarningCheck( renderObject == nullptr, "kbRenderer::AddRenderObject() - Model %s already added", m_RenderObjectList_GameThread[i].m_pModel->GetFullName().c_str() );
 
 				if ( pComponent->IsA( kbSkeletalModelComponent::GetType() ) && m_RenderObjectList_GameThread[i].m_pModel->NumBones() > 0 ) {
 

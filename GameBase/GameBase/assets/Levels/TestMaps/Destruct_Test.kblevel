@@ -2120,4 +2120,9 @@ kbGameEntity 0 0 0 0 {
 		Position = -764.615173 -30.219667 -1343.156250
 		Scale = 1.000000 1.000000 1.000000
 	}
+	kbPlayerStartComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		Dummy =  0.000000
+	}
 }

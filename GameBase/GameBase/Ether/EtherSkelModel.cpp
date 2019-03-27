@@ -153,7 +153,7 @@ void EtherSkelModelComponent::SetModel( kbModel *const pModel, bool bIsFirstPers
 
 	m_BindToLocalSpaceMatrices.clear();
 	m_RenderObject.m_pModel = pModel;
-	g_pRenderer->UpdateRenderObject( m_RenderObject );
+	//g_pRenderer->UpdateRenderObject( m_RenderObject );
 }
 
 /**
@@ -335,7 +335,7 @@ void EtherSkelModelComponent::Update_Internal( const float DeltaTime ) {
 		m_RenderObject.m_pModel = m_pModel;
 		m_RenderObject.m_RenderPass = m_RenderPass;
 
-		g_pRenderer->UpdateRenderObject( m_RenderObject );
+		//g_pRenderer->UpdateRenderObject( m_RenderObject );
 	}
 
 	// Update collision component
