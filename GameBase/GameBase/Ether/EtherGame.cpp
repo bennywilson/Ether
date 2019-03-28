@@ -150,14 +150,14 @@ void EtherGame::Update_Internal( float DT ) {
 	if ( GetAsyncKeyState( VK_LSHIFT ) && GetAsyncKeyState( 'P' ) ) {
 	    kbCamera & playerCamera = GetCamera();
 
-		for ( int i = GetGameEntities().size() - 1; i >= 0; i-- ) {
+		for ( size_t i = GetGameEntities().size() - 1; i >= 0; i-- ) {
 
 			const kbGameEntity *const pCurEntity = GetGameEntities()[i];
 			kbPlayerStartComponent *const pStart = (kbPlayerStartComponent*)pCurEntity->GetComponentByType( kbPlayerStartComponent::GetType() );
 			if ( pStart != nullptr ) {
-				kbVec3 newPos = pCurEntity->GetPosition() ;
+				kbVec3 newPos = pCurEntity->GetPosition();
 				playerCamera.m_Position = newPos;
-				this->m_pLocalPlayer->SetPosition( newPos );
+				m_pLocalPlayer->SetPosition( newPos );
 ;
 				break;
 			}
