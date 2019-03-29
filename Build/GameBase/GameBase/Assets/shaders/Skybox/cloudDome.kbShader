@@ -1,0 +1,111 @@
+//==============================================================================
+// cloudDome.kbShader
+//
+// 2019	 kbEngine 2.0
+//==============================================================================
+cbuffer matrixBuffer {
+	matrix mvpMatrix;
+	matrix modelMatrix;
+	matrix viewProjection;
+	float4 cameraPos;
+	float4 time;
+};
+
+//-------------------------------------
+struct vertexInput {
+	float4 position   : POSITION;
+	float2 uv         : TEXCOORD0;
+	float4 color      : COLOR;
+	float4 normal     : NORMAL;
+	float4 tangent    : TANGENT;
+};
+
+//-------------------------------------
+struct pixelInput {
+	float4 position		: SV_POSITION;
+	float2 uv			: TEXCOORD0;
+	float4 color		: COLOR;
+	float4 position2	: TEXCOORD1;
+	float3 normal		: TEXCOORD2;
+	float3 worldPos		: TEXCOORD3;
+};
+
+kbShaderState {
+	cullMode CullMode_None
+	srcblend Blend_One
+	dstBlend Blend_One
+}
+
+//-------------------------------------
+struct PS_OUTPUT {
+	float4 Color		: SV_TARGET0;
+	float2 Depth		: SV_TARGET1;
+};
+
+/**
+ *	vertexShader
+ */
+pixelInput vertexShader( vertexInput input ) {
+	pixelInput output = (pixelInput)(0);
+
+	output.position = mul( input.position, modelMatrix );
+	output.worldPos.xyz = cameraPos.xyz + output.position.xyz * 999;
+	output.position += float4(cameraPos.xyz, 0);
+	output.position = mul( output.position, viewProjection);
+	output.position.z = output.position.w - 0.0001f;
+
+	output.uv = input.uv;
+	output.color = input.color;
+	output.position2 = output.position;
+	output.normal.xyz = mul( ( input.normal.xyz * 2.0f ) - 1.0f, (float3x3)modelMatrix );
+
+	return output;
+}
+
+
+Texture2D diffuseTexture;
+SamplerState LinearSampler;
+
+/**
+ *	pixelShader
+ */
+ PS_OUTPUT pixelShader( pixelInput	input ) {
+ 	PS_OUTPUT output = (PS_OUTPUT) 0;
+
+	float2 uv = input.uv;
+	uv.y *= 2.f;
+
+	const float cloudNoisePower = 3.8f;
+	const float combinedCloudFactor = 2.0f;
+	const float combinedCloudPower = 2.0f;
+	const float cloudDivisor = 3;
+
+	float4 cloudLayer1 = pow( abs( diffuseTexture.Sample( LinearSampler, uv + float2( time.x * 0.003f, 0.0f ) ).r ), abs( cloudNoisePower ) );
+	float4 cloudLayer2 = pow( abs( diffuseTexture.Sample( LinearSampler, uv + float2( time.x * 0.005f, 0.0f ) ).g ), abs( cloudNoisePower ) );
+	float4 cloudLayer3 = pow( abs( diffuseTexture.Sample( LinearSampler, uv + float2( time.x * 0.007f, 0.0f ) ).b ), abs( cloudNoisePower ) );
+	float4 cloudLayer4 = pow( abs( diffuseTexture.Sample( LinearSampler, uv + float2( time.x * 0.013f, 0.0f ) ).r ), abs( cloudNoisePower ));
+
+	float4 totalCloud = cloudLayer1 + cloudLayer2 + cloudLayer3 + cloudLayer4;
+	totalCloud /= cloudDivisor;
+	output.Color.xyz = saturate( pow( abs(totalCloud.xyz), abs( combinedCloudPower ) ) ) * combinedCloudFactor* float3( 1.0f, 0.7f, 0.5f );
+	output.Color.w = dot( totalCloud.xyz, float3( 0.3, 0.59f, 0.11f ) );
+
+	float3 fromCam = normalize( input.worldPos - cameraPos.xyz );
+	float3 sunDir = normalize( float3( -0.958466f, 0.268476f, 0.096246f ) );
+	float sunIntensity = saturate( ( dot( fromCam, sunDir ) - 0.98f ) / 0.02f );
+	sunIntensity = pow( sunIntensity, 15.f ) * 1.0f;
+	output.Color.xyz += sunIntensity * float3( 1.0f, 0.6f, 0.0f ) * 0.5f;
+	
+	//output.Color.xyz += saturate( dot( sunDir, input.normal ) );
+
+	if ( output.Color.w < 0.3f ) {
+		output.Depth.r = 0;
+		output.Depth.g = 0.0f;
+	} else {
+		output.Depth.r = input.position2.z / input.position2.w;// / input.position2.y;
+		output.Depth.g = 1;
+	}
+
+	output.Color.w = 0;//max( max( output.Color.x, output.Color.y ), output.Color.z ) * 1.0;
+	return output;
+}
