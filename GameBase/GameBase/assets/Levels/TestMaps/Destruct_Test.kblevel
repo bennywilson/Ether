@@ -28,9 +28,6 @@ kbGameEntity 0 0 0 0 {
 		RenderPass = Post-LightingPass
 		TranslucencySortBias =  -1.000000
 		Model = .\assets\models\skydomes\skydomes.ms3d
-		ShaderOverride = 1
-			.\assets\shaders\skybox\skybox.kbshader
-
 	}
 }
 kbGameEntity 2609040299 1100347930 3115268521 1892043160 {
@@ -151,8 +148,6 @@ kbGameEntity 0 0 0 0 {
 		RenderPass = LightingPass
 		TranslucencySortBias =  0.000000
 		Model = .\assets\models\environment\crate_1_destructible.fbx
-		ShaderOverride = 0
-			
 		Animations = 0
 		DebugAnimIndex = -1
 		IsFirstPersonModel = 0
@@ -236,8 +231,6 @@ kbGameEntity 0 0 0 0 {
 		RenderPass = LightingPass
 		TranslucencySortBias =  0.000000
 		Model = .\assets\models\environment\crate_1_destructible.fbx
-		ShaderOverride = 0
-			
 		Animations = 0
 		DebugAnimIndex = -1
 		IsFirstPersonModel = 0
@@ -321,8 +314,6 @@ kbGameEntity 0 0 0 0 {
 		RenderPass = LightingPass
 		TranslucencySortBias =  0.000000
 		Model = .\assets\models\environment\crate_1_destructible.fbx
-		ShaderOverride = 0
-			
 		Animations = 0
 		DebugAnimIndex = -1
 		IsFirstPersonModel = 0
@@ -406,8 +397,6 @@ kbGameEntity 0 0 0 0 {
 		RenderPass = LightingPass
 		TranslucencySortBias =  0.000000
 		Model = .\assets\models\environment\crate_1_destructible.fbx
-		ShaderOverride = 0
-			
 		Animations = 0
 		DebugAnimIndex = -1
 		IsFirstPersonModel = 0
@@ -491,8 +480,6 @@ kbGameEntity 0 0 0 0 {
 		RenderPass = LightingPass
 		TranslucencySortBias =  0.000000
 		Model = .\assets\models\environment\crate_1_destructible.fbx
-		ShaderOverride = 0
-			
 		Animations = 0
 		DebugAnimIndex = -1
 		IsFirstPersonModel = 0
@@ -576,8 +563,6 @@ kbGameEntity 0 0 0 0 {
 		RenderPass = LightingPass
 		TranslucencySortBias =  0.000000
 		Model = .\assets\models\environment\crate_1_destructible.fbx
-		ShaderOverride = 0
-			
 		Animations = 0
 		DebugAnimIndex = -1
 		IsFirstPersonModel = 0
@@ -661,8 +646,6 @@ kbGameEntity 0 0 0 0 {
 		RenderPass = LightingPass
 		TranslucencySortBias =  0.000000
 		Model = .\assets\models\environment\crate_1_destructible.fbx
-		ShaderOverride = 0
-			
 		Animations = 0
 		DebugAnimIndex = -1
 		IsFirstPersonModel = 0
@@ -1221,8 +1204,6 @@ kbGameEntity 0 0 0 0 {
 		RenderPass = LightingPass
 		TranslucencySortBias =  0.000000
 		Model = .\assets\models\environment\barrel_elp_destructible.fbx
-		ShaderOverride = 0
-			
 		Animations = 0
 		DebugAnimIndex = -1
 		IsFirstPersonModel = 0
@@ -1306,8 +1287,6 @@ kbGameEntity 0 0 0 0 {
 		RenderPass = LightingPass
 		TranslucencySortBias =  0.000000
 		Model = .\assets\models\environment\barrel_elp_destructible.fbx
-		ShaderOverride = 0
-			
 		Animations = 0
 		DebugAnimIndex = -1
 		IsFirstPersonModel = 0
@@ -1405,8 +1384,6 @@ kbGameEntity 0 0 0 0 {
 		RenderPass = LightingPass
 		TranslucencySortBias =  0.000000
 		Model = .\assets\models\environment\crate_1_destructible.fbx
-		ShaderOverride = 0
-			
 		Animations = 0
 		DebugAnimIndex = -1
 		IsFirstPersonModel = 0
@@ -1490,8 +1467,6 @@ kbGameEntity 0 0 0 0 {
 		RenderPass = LightingPass
 		TranslucencySortBias =  0.000000
 		Model = .\assets\models\environment\crate_1_destructible.fbx
-		ShaderOverride = 0
-			
 		Animations = 0
 		DebugAnimIndex = -1
 		IsFirstPersonModel = 0
@@ -1575,8 +1550,6 @@ kbGameEntity 0 0 0 0 {
 		RenderPass = LightingPass
 		TranslucencySortBias =  0.000000
 		Model = .\assets\models\environment\barrel_elp.fbx
-		ShaderOverride = 0
-			
 	}
 }
 kbGameEntity 0 0 0 0 {
@@ -2107,8 +2080,6 @@ kbGameEntity 0 0 0 0 {
 		RenderPass = TranslucentWithDepthPass
 		TranslucencySortBias =  0.000000
 		Model = .\assets\models\skydomes\clouddome.fbx
-		ShaderOverride = 0
-			
 	}
 }
 kbGameEntity 0 0 0 0 {

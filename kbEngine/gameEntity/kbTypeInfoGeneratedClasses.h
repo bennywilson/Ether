@@ -111,13 +111,11 @@ GenerateClass(
 GenerateClass( 
 	kbStaticModelComponent, 
 	AddField( "Model", KBTYPEINFO_STATICMODEL, kbStaticModelComponent, m_pModel, false, "" )
-	AddField( "ShaderOverride", KBTYPEINFO_SHADER, kbStaticModelComponent, m_pOverrideShaderList, true, "" )
 )
 
 GenerateClass( 
 	kbSkeletalModelComponent, 
 	AddField( "Model", KBTYPEINFO_STATICMODEL, kbSkeletalModelComponent, m_pModel, false, "" )
-	AddField( "ShaderOverride", KBTYPEINFO_SHADER, kbSkeletalModelComponent, m_pOverrideShaderList, true, "" )
 )
 
 GenerateClass( 

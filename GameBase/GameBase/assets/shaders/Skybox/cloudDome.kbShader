@@ -72,10 +72,9 @@ SamplerState LinearSampler;
  PS_OUTPUT pixelShader( pixelInput	input ) {
  	PS_OUTPUT output = (PS_OUTPUT) 0;
 
-	float2 uv = input.uv;
-	uv.y *= 2.f;
+	float2 uv = input.uv * float2( 1.0f, 0.5f );
 
-	const float cloudNoisePower = 3.0f;
+	const float cloudNoisePower = 3.5f;
 	const float combinedCloudFactor = 2.0f;
 	const float combinedCloudPower = 2.7f;
 	const float cloudDivisor = 3;
