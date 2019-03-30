@@ -2068,7 +2068,7 @@ kbGameEntity 0 0 0 0 {
 				Enabled = 0
 				LifeTime =  -1.000000
 				Shader = .\assets\shaders\skybox\clouddome_smoothstep.kbshader
-				ShaderParams = 2
+				ShaderParams = 4
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
@@ -2081,7 +2081,21 @@ kbGameEntity 0 0 0 0 {
 						LifeTime =  -1.000000
 						ParamName = "cloudTileOffset"
 						Texture = NULL
-						Vector = 3.000000 1.000000 0.000000 -0.200000
+						Vector = 4.000000 0.500000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "cloudScrollRate_AlphaStep"
+						Texture = NULL
+						Vector = 0.025000 0.050000 0.150000 0.950000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "cloudColor"
+						Texture = NULL
+						Vector = 1.000000 1.000000 1.000000 0.000000
 					}
 			}
 		RenderPass = TranslucentWithDepthPass

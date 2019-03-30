@@ -10,6 +10,8 @@ cbuffer matrixBuffer {
 	float4 cameraPos;
 	float4 time;
 	float4 cloudTileOffset;
+	float4 cloudScrollRate_AlphaStep;
+	float4 cloudColor;
 };
 
 //-------------------------------------
@@ -35,6 +37,8 @@ kbShaderState {
 	cullMode CullMode_None
 	srcblend Blend_One
 	dstBlend Blend_One
+	blendOp BlendOp_Add
+	colorwriteenable colorwriteenable_rgb
 }
 
 //-------------------------------------
@@ -74,22 +78,25 @@ SamplerState LinearSampler;
  	PS_OUTPUT output = (PS_OUTPUT) 0;
 
 	float2 uv = input.uv * cloudTileOffset.xy + cloudTileOffset.zw;
-	float4 outColor = diffuseTexture.Sample( LinearSampler, uv + float2( time.x * 0.3f, 0.0f ) );
-	outColor.a = smoothstep( 0.5, 0.9f, outColor.a );
-	float3 normal = ( outColor.xzy * 2.0f ) - 1.0f;
+	float4 outColor = diffuseTexture.Sample( LinearSampler, uv + float2( time.x * cloudScrollRate_AlphaStep.x, 0.0f ) );
+	float4 outColor2 = diffuseTexture.Sample( LinearSampler, uv + float2( time.x * cloudScrollRate_AlphaStep.y, 0.0f ) );
+	outColor = lerp( outColor, outColor2, 0.4f );
+	outColor.a = smoothstep( cloudScrollRate_AlphaStep.z, cloudScrollRate_AlphaStep.w, outColor.a );
 
-	float diffuse = saturate( dot( normal, float3( 0, 0, 1.0f ) ) );
-	outColor.r *= diffuse;
-	output.Color.xyz = outColor.a * outColor.r;
+	const float3 normal = normalize( ( outColor.xzy * 2.0f ) - 1.0f );
+
+	float diffuse = saturate( 2.0 * dot( normal, float3( 0, 0, 1.0f ) ) );
+	output.Color.xyz = outColor.a * cloudColor.xyz * diffuse;
 	output.Color.w = outColor.a;
 
-	if ( output.Color.w < 0.3f ) {
+	if ( outColor.w < 0.4f ) {
 		output.Depth.r = 0;
 		output.Depth.g = 0.0f;
 	} else {
 		output.Depth.r = input.position2.z / input.position2.w;// / input.position2.y;
 		output.Depth.g = 1;
 	}
+
 
 	return output;
 
