@@ -89,11 +89,15 @@ SamplerState LinearSampler;
  PS_OUTPUT pixelShader( pixelInput	input ) {
  	PS_OUTPUT output = (PS_OUTPUT) 0;
 
-	float2 uv = input.uv * cloudTileOffset.xy + cloudTileOffset.zw;
+	float2 uv = input.uv * float2( cloudTileOffset.x, 1 ) + cloudTileOffset.zw;
 	float4 outColor = diffuseTexture.Sample( LinearSampler, uv + float2( time.x * cloudScrollRate_AlphaStep.x, 0.0f ) );
-	float4 outColor2 = diffuseTexture.Sample( LinearSampler, uv + float2( time.x * cloudScrollRate_AlphaStep.y, 0.0f ) );
+	const float2 uv2 = input.uv * float2( cloudTileOffset.y, 1 ) + cloudTileOffset.zw;
+	float4 outColor2 = diffuseTexture.Sample( LinearSampler, uv2 + float2( time.x * cloudScrollRate_AlphaStep.y, 0.0f ) );
 	outColor = lerp( outColor, outColor2, 0.4f );
 	outColor.a = smoothstep( cloudScrollRate_AlphaStep.z, cloudScrollRate_AlphaStep.w, outColor.a );
+
+	const float edgeFade = 1.0f - smoothstep( 0.25f, 0.0f, input.uv.y );
+	outColor.a *= edgeFade;
 
 	const float3 lightDir = normalize( float3( 1.0f, 0.1f, 0.0f ) );
 	float3 normal = normalize( ( outColor.xyz * 2.0f ) - 1.0f );

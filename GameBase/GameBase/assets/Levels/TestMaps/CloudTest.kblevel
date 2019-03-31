@@ -44,7 +44,7 @@ kbGameEntity 2609040299 1100347930 3115268521 1892043160 {
 		LifeTime =  -1.000000
 		BaseHeight =  0.750000
 		BaseWidth =  0.750000
-		Color = 0.005421 0.004849 0.004737 1.000000
+		Color = 0.005421 0.004500 0.002000 1.000000
 		Directional = 1
 		IterationHeight =  0.001500
 		IterationWidth =  0.001500
@@ -2081,28 +2081,28 @@ kbGameEntity 0 0 0 0 {
 						LifeTime =  -1.000000
 						ParamName = "cloudTileOffset"
 						Texture = NULL
-						Vector = 5.000000 1.500000 0.000000 0.000000
+						Vector = 5.000000 1.000000 0.000000 0.000000
 					}
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
 						ParamName = "cloudScrollRate_AlphaStep"
 						Texture = NULL
-						Vector = 0.025000 0.030000 0.300000 0.800000
+						Vector = 0.025000 0.010000 0.400000 0.750000
 					}
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
 						ParamName = "cloudColor"
 						Texture = NULL
-						Vector = 1.000000 1.000000 1.000000 0.000000
+						Vector = 0.500000 0.350000 0.200000 0.000000
 					}
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
 						ParamName = "cloudEmissive"
 						Texture = NULL
-						Vector = 0.300000 0.300000 0.300000 1.000000
+						Vector = 0.000000 0.000000 0.000000 1.000000
 					}
 			}
 		RenderPass = TranslucentWithDepthPass
@@ -2123,5 +2123,75 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 1
 		LifeTime =  -1.000000
 		Dummy =  0.000000
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Entity_48"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = -99.519531 128.608047 -135.631058
+		Scale = 1.000000 1.000000 1.000000
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Overhead Clouds"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 0.000000 0.000000 0.000000
+		Scale = 55.000000 55.000000 55.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		Materials = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Shader = .\assets\shaders\skybox\overheadcloudplane.kbshader
+				ShaderParams = 5
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "diffuseTexture"
+						Texture = .\assets\models\skydomes\basic_clouds.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "cloudTileAndOffset"
+						Texture = NULL
+						Vector = 1.000000 1.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "cloud12_ScrollRate"
+						Texture = NULL
+						Vector = 0.000000 -0.010000 0.000000 -0.020000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "cloud34_ScrollRate"
+						Texture = NULL
+						Vector = 0.000000 0.005000 0.000000 -0.004000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "cloudColor"
+						Texture = NULL
+						Vector = 3.000000 2.000000 0.400000 0.000000
+					}
+			}
+		RenderPass = TranslucentWithDepthPass
+		TranslucencySortBias =  0.000000
+		Model = .\assets\models\skydomes\overheadcloudplane.fbx
 	}
 }
