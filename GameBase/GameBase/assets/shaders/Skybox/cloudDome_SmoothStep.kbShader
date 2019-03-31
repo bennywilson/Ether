@@ -12,6 +12,7 @@ cbuffer matrixBuffer {
 	float4 cloudTileOffset;
 	float4 cloudScrollRate_AlphaStep;
 	float4 cloudColor;
+	float4 cloudEmissive;
 };
 
 //-------------------------------------
@@ -31,6 +32,9 @@ struct pixelInput {
 	float4 position2	: TEXCOORD1;
 	float3 normal		: TEXCOORD2;
 	float3 worldPos		: TEXCOORD3;
+	float4 TBN0			: TEXCOORD4;
+	float4 TBN1			: TEXCOORD5;
+	float4 TBN2			: TEXCOORD6;
 };
 
 kbShaderState {
@@ -64,6 +68,14 @@ pixelInput vertexShader( vertexInput input ) {
 	output.position2 = output.position;
 	output.normal.xyz = mul( ( input.normal.xyz * 2.0f ) - 1.0f, (float3x3)modelMatrix );
 
+	const float3 worldTangent = normalize( mul( (input.tangent.xyz * 2.0f ) - 1.0f, (float3x3)modelMatrix ) );
+	const float3 worldNormal = normalize( mul( ( input.normal.xyz * 2.0f ) - 1.0f, (float3x3)modelMatrix ) );
+	const float3 worldBitangent = normalize( mul( ( input.color.xyz * 2.0f ) - 1.0f, (float3x3)modelMatrix ) );//normalize( cross( worldNormal, worldTangent ) ) * ( input.tangent.w * 2.0f - 1.0f );
+
+	output.TBN0 = float4(worldTangent.x, worldBitangent.x, worldNormal.x, 0 );
+	output.TBN1 = float4(worldTangent.y, worldBitangent.y, worldNormal.y, 0 );
+	output.TBN2 = float4(worldTangent.z, worldBitangent.z, worldNormal.z, 0 );
+
 	return output;
 }
 
@@ -83,11 +95,20 @@ SamplerState LinearSampler;
 	outColor = lerp( outColor, outColor2, 0.4f );
 	outColor.a = smoothstep( cloudScrollRate_AlphaStep.z, cloudScrollRate_AlphaStep.w, outColor.a );
 
-	const float3 normal = normalize( ( outColor.xzy * 2.0f ) - 1.0f );
+	const float3 lightDir = normalize( float3( 1.0f, 0.1f, 0.0f ) );
+	float3 normal = normalize( ( outColor.xyz * 2.0f ) - 1.0f );
+//normal.xy *= 2.15f;
+	float3 worldNormal;
+	worldNormal.x = dot( input.TBN0.xyz, normal );
+	worldNormal.y = dot( input.TBN1.xyz, normal );
+	worldNormal.z = dot( input.TBN2.xyz, normal );
+	worldNormal = normalize( worldNormal );
 
-	float diffuse = saturate( 2.0 * dot( normal, float3( 0, 0, 1.0f ) ) );
-	output.Color.xyz = outColor.a * cloudColor.xyz * diffuse;
-	output.Color.w = outColor.a;
+	float diffuse = saturate( 1.0 * dot( worldNormal, lightDir ) ) * 0.5f + 0.5f;
+	output.Color.xyz = diffuse * outColor.a * cloudColor.xyz + cloudEmissive.xyz * outColor.a;
+	//output.Color.xyz = cloudColor.xyz * outColor.a;
+//	output.Color.xyz = diffuse + cloudEmissive.xyz;
+	//output.Color.w = outColor.a;
 
 	if ( outColor.w < 0.4f ) {
 		output.Depth.r = 0;
