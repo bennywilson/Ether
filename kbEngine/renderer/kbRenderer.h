@@ -275,6 +275,7 @@ public:
 	void										UpdateLightShafts( const kbLightShaftsComponent *const pComponent, const kbVec3 & pos, const kbQuat & orientation );
 	void										RemoveLightShafts( const kbLightShaftsComponent *const pComponent );
 
+	virtual void								SetGlobalShaderParam( const kbShaderParamOverrides_t::kbShaderParam_t & shaderParam ) = 0;
 
 	// Debug Drawing
 	virtual void								EnableDebugBillboards( const bool bEnable ) { m_bDebugBillboardsEnabled = bEnable; }

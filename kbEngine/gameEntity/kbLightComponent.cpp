@@ -2,7 +2,7 @@
 // kbLightComponent.cpp
 //
 //
-// 2016-2018 kbEngine 2.0
+// 2016-2019 kbEngine 2.0
 //===================================================================================================
 #include "kbCore.h"
 #include "kbVector.h"
@@ -215,7 +215,7 @@ void kbLightShaftsComponent::SetEnable_Internal( const bool isEnabled ) {
 
 	if ( g_pRenderer != nullptr ) {
 		if ( isEnabled ) {
-			g_pRenderer->AddLightShafts( this, GetOwner()->GetPosition(), GetOwner()->GetOrientation() );	
+			g_pRenderer->AddLightShafts( this, GetOwner()->GetPosition(), GetOwner()->GetOrientation() );
 		} else {
 			g_pRenderer->RemoveLightShafts( this );
 		}
@@ -227,21 +227,22 @@ void kbLightShaftsComponent::SetEnable_Internal( const bool isEnabled ) {
  */
 void kbLightShaftsComponent::SetColor( const kbColor & newColor ) {
 	m_Color = newColor;
-	if ( IsEnabled() ) {
-		g_pRenderer->UpdateLightShafts( this, GetOwner()->GetPosition(), GetOwner()->GetOrientation() );
-	}
 }
 
 /**
- *	kbLightShaftsComponent::EditorChange
+ *	kbLightShaftsComponent::Update_Internal
  */
-void kbLightShaftsComponent::EditorChange( const std::string & propertyName ) {
-	Super::EditorChange( propertyName );
-	if ( IsEnabled() ) {
-		g_pRenderer->UpdateLightShafts( this, GetOwner()->GetPosition(), GetOwner()->GetOrientation() );
-	}
+void kbLightShaftsComponent::Update_Internal( const float DeltaTime ) {
+	Super::Update_Internal( DeltaTime );
 
-	// TODO: clamp shadow splits to 4.  Also ensure that the ordering is correct
+	g_pRenderer->UpdateLightShafts( this, GetOwner()->GetPosition(), GetOwner()->GetOrientation() );
+
+	kbShaderParamOverrides_t::kbShaderParam_t shaderParam;
+	shaderParam.m_VarName = "lightShaftsDir";
+	kbVec4 lightShaftsDir = GetOwner()->GetOrientation().ToMat4()[2] * -1.0f;
+	shaderParam.m_Vec4List.push_back( lightShaftsDir );
+	shaderParam.m_Type = kbShaderParamOverrides_t::kbShaderParam_t::SHADER_VEC4;
+	g_pRenderer->SetGlobalShaderParam( shaderParam );	
 }
 
 /**

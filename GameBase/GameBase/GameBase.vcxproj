@@ -113,7 +113,9 @@
     <None Include="assets\shaders\Lights\environmentDirectionalFill.kbShader" />
     <None Include="assets\shaders\PostProcess\Fog.kbShader" />
     <None Include="assets\shaders\Skybox\cloudDome.kbShader" />
+    <None Include="assets\shaders\Skybox\cloudDome_Basic.kbShader" />
     <None Include="assets\shaders\Skybox\cloudDome_SmoothStep.kbShader" />
+    <None Include="assets\shaders\Skybox\overheadCloudPlane.kbShader" />
     <None Include="assets\shaders\Skybox\skyBox.kbShader" />
     <None Include="assets\shaders\Weapons\baseHoloscope.kbShader" />
     <None Include="assets\shaders\Weapons\baseWeapon.kbShader" />

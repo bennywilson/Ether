@@ -2539,6 +2539,26 @@ void kbRenderer_DX11::RenderSync_Internal() {
 		}
 	}
 
+	// Global shader params
+	for ( int iGameData = 0; iGameData < m_GlobalShaderParams_GameThread.size(); iGameData++ ) {
+		kbShaderParamOverrides_t::kbShaderParam_t & gameData = m_GlobalShaderParams_GameThread[iGameData];
+
+		bool bSetVar = false;
+		for ( int iRenderData = 0; iRenderData < m_GlobalShaderParams_RenderThread.size(); iRenderData++ ) {
+			kbShaderParamOverrides_t::kbShaderParam_t & renderData = m_GlobalShaderParams_RenderThread[iRenderData];
+			if ( renderData.m_VarName == gameData.m_VarName ) {
+				renderData = gameData;
+				bSetVar = true;
+				break;
+			}
+		}
+
+		if ( bSetVar == false ) {
+			m_GlobalShaderParams_RenderThread.push_back( gameData );
+		}
+	}
+	m_GlobalShaderParams_GameThread.clear();
+
 	kbGPUTimeStamp::UpdateFrameNum();
 	m_FrameNum++;
 }
@@ -3440,6 +3460,13 @@ kbVec2i kbRenderer_DX11::GetEntityIdAtScreenPosition( const uint x, const uint y
 }
 
 /**
+ *	kbRenderer_DX11::SetGlobalShaderParam
+ */
+void kbRenderer_DX11::SetGlobalShaderParam( const kbShaderParamOverrides_t::kbShaderParam_t & shaderParam ) {
+	m_GlobalShaderParams_GameThread.push_back( shaderParam );
+}
+
+/**
  *	kbRenderer_DX11::RT_SetRenderTarget
  */
 void kbRenderer_DX11::RT_SetRenderTarget( kbRenderTexture *const pRenderTexture ) {
@@ -3780,8 +3807,10 @@ ID3D11Buffer * kbRenderer_DX11::SetConstantBuffer( const kbShaderVarBindings_t &
             kbVec4 *const pVecOffset = (kbVec4*)pVarByteOffset;
             *pVecOffset = time;
         } else if ( paramOverrides != nullptr ) {
-            for ( int iOverride = 0; iOverride < paramOverrides->size(); iOverride++ ) {
-                const kbShaderParamOverrides_t::kbShaderParam_t & curOverride = (*paramOverrides)[iOverride];
+			bool bGlobalVarSet = false;
+
+            for ( int iOverride = 0; iOverride < m_GlobalShaderParams_RenderThread.size(); iOverride++ ) {
+                const kbShaderParamOverrides_t::kbShaderParam_t & curOverride = m_GlobalShaderParams_RenderThread[iOverride];
                 const std::string & overrideVarName = curOverride.m_VarName;
                 if ( varName == overrideVarName ) {
 
@@ -3790,7 +3819,8 @@ ID3D11Buffer * kbRenderer_DX11::SetConstantBuffer( const kbShaderVarBindings_t &
                     if ( endOffset > shaderVarBindings.m_ConstantBufferSizeBytes || ( i < bindings.size() - 1 && endOffset > bindings[i+1].m_VarByteOffset ) ) {
                         break;
                     }
-               
+
+					bGlobalVarSet = true;               
                     switch( curOverride.m_Type ) {
                         case kbShaderParamOverrides_t::kbShaderParam_t::SHADER_MAT4 : {
                             kbMat4 *const pMatOffset = (kbMat4*)pVarByteOffset;
@@ -3822,6 +3852,51 @@ ID3D11Buffer * kbRenderer_DX11::SetConstantBuffer( const kbShaderVarBindings_t &
                     }
                 }
             }
+
+			if ( bGlobalVarSet == false  ) {
+				for ( int iOverride = 0; iOverride < paramOverrides->size(); iOverride++ ) {
+					const kbShaderParamOverrides_t::kbShaderParam_t & curOverride = (*paramOverrides)[iOverride];
+					const std::string & overrideVarName = curOverride.m_VarName;
+					if ( varName == overrideVarName ) {
+
+						// Check if it doesn't fit
+						const size_t endOffset = curOverride.m_VarSizeBytes + bindings[i].m_VarByteOffset;
+						if ( endOffset > shaderVarBindings.m_ConstantBufferSizeBytes || ( i < bindings.size() - 1 && endOffset > bindings[i+1].m_VarByteOffset ) ) {
+							break;
+						}
+               
+						switch( curOverride.m_Type ) {
+							case kbShaderParamOverrides_t::kbShaderParam_t::SHADER_MAT4 : {
+								kbMat4 *const pMatOffset = (kbMat4*)pVarByteOffset;
+								*pMatOffset = curOverride.m_Mat4List[0];
+								break;
+							}
+
+							case kbShaderParamOverrides_t::kbShaderParam_t::SHADER_VEC4 : {
+								kbVec4 *const pVecOffset = (kbVec4*)pVarByteOffset;
+								*pVecOffset = curOverride.m_Vec4List[0];
+								break;
+							}
+
+							case kbShaderParamOverrides_t::kbShaderParam_t::SHADER_MAT4_LIST : {
+								kbMat4 *const pMatOffset = (kbMat4*)pVarByteOffset;
+								for ( int i = 0; i < curOverride.m_Mat4List.size(); i++ ) {
+									pMatOffset[i] = curOverride.m_Mat4List[i];
+								}
+								break;
+							}
+
+							case kbShaderParamOverrides_t::kbShaderParam_t::SHADER_VEC4_LIST : {
+								kbVec4 *const pVecOffset = (kbVec4*)pVarByteOffset;
+								for ( int i = 0; i < curOverride.m_Vec4List.size(); i++ ) {
+									pVecOffset[i] = curOverride.m_Vec4List[i];
+								}
+								break;
+							}
+						}
+					}
+				}
+			}
         }
 	}
 
