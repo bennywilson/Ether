@@ -40,7 +40,7 @@ struct pixelInput {
 kbShaderState {
 	cullMode CullMode_None
 	srcblend Blend_One
-	dstBlend Blend_One
+	dstBlend Blend_InvSrcAlpha
 	blendOp BlendOp_Add
 	colorwriteenable colorwriteenable_rgb
 }
@@ -99,22 +99,29 @@ SamplerState LinearSampler;
 	const float edgeFade = 1.0f - smoothstep( 0.25f, 0.0f, input.uv.y );
 	outColor.a *= edgeFade;
 
-	const float3 lightDir = normalize( float3( 1.0f, 0.1f, 0.0f ) );
+	float3 lightDir = 2000000.0f * normalize( float3( -0.958466f, 0.268476f, 0.096246f ) );
+	lightDir -= input.worldPos;
+	lightDir = normalize( lightDir );
+	
 	float3 normal = normalize( ( outColor.xyz * 2.0f ) - 1.0f );
-//normal.xy *= 2.15f;
+	normal.xy *= -1.0f;
 	float3 worldNormal;
 	worldNormal.x = dot( input.TBN0.xyz, normal );
 	worldNormal.y = dot( input.TBN1.xyz, normal );
 	worldNormal.z = dot( input.TBN2.xyz, normal );
 	worldNormal = normalize( worldNormal );
 
-	float diffuse = saturate( 1.0 * dot( worldNormal, lightDir ) ) * 0.5f + 0.5f;
+	float diffuse = saturate( abs( 1.0 * dot( worldNormal, lightDir ) ) ) * 0.8f + 0.2f;
 	output.Color.xyz = diffuse * outColor.a * cloudColor.xyz + cloudEmissive.xyz * outColor.a;
-	//output.Color.xyz = cloudColor.xyz * outColor.a;
-//	output.Color.xyz = diffuse + cloudEmissive.xyz;
-	//output.Color.w = outColor.a;
+output.Color.w = outColor.a;
 
-	if ( outColor.w < 0.4f ) {
+	float3 fromCam = normalize( input.worldPos - cameraPos.xyz );
+	float3 sunDir = normalize( float3( -0.958466f, 0.268476f, 0.096246f ) );
+	float sunIntensity = saturate( ( dot( fromCam, sunDir ) - 0.98f ) / 0.02f );
+	sunIntensity = pow( sunIntensity, 3.f ) * 1.5f;
+	output.Color.xyz += sunIntensity * cloudColor.xyz * float3( 0.5f, 0.45f, 0.35f );
+	
+	if ( outColor.w < 0.6f ) {
 		output.Depth.r = 0;
 		output.Depth.g = 0.0f;
 	} else {

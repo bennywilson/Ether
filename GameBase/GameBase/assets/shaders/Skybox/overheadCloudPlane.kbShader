@@ -80,7 +80,7 @@ SamplerState LinearSampler;
 	float2 uv = input.uv * cloudTileAndOffset.xy;
 
 
-	const float cloudNoisePower = 3.5f;
+	const float cloudNoisePower = 1.5f;
 	const float combinedCloudFactor = 2.0f;
 	const float combinedCloudPower = 2.7f;
 	const float cloudDivisor = 3;

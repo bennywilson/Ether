@@ -120,6 +120,8 @@ public:
 
 	virtual										~kbLightShaftsComponent();
 
+	virtual void								EditorChange( const std::string & propertyName ) override;
+
 	kbTexture *									GetTexture() const { return m_Texture; }
 	const kbColor &								GetColor() const { return m_Color; }
 	float										GetBaseWidth() const { return m_BaseWidth; }
