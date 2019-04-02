@@ -118,10 +118,10 @@ SamplerState LinearSampler;
 	output.Color.w = outColor.a;
 
 	float3 fromCam = normalize( input.worldPos - cameraPos.xyz );
-	float3 sunDir = normalize( lightShaftsDir.xyz );//float3( -0.958466f, 0.268476f, 0.096246f ) );
+	float3 sunDir = normalize( float3( -0.958466, 0.268476, 0.096246 );//float3( -0.958466f, 0.268476f, 0.096246f ) );
 	float sunIntensity = saturate( ( dot( fromCam, sunDir ) - 0.98f ) / 0.02f );
 	sunIntensity = pow( sunIntensity, 3.f ) * 1.5f;
-	output.Color.xyz += sunIntensity * cloudColor.xyz * float3( 0.0054f, 0.004f, 0.0005f ) * 35;
+	output.Color.xyz += sunIntensity * cloudColor.xyz * float3( 0.005421, 0.004000, 0.000500 ).xyz * 35;
 	
 	if ( outColor.w < 0.5f ) {
 		output.Depth.r = 0;
