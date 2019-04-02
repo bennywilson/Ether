@@ -58,7 +58,7 @@ struct PS_OUTPUT {
  */
 pixelInput vertexShader( vertexInput input ) {
 	pixelInput output = (pixelInput)(0);
-
+input.position.y -= 0.2f;
 	output.position = mul( input.position, modelMatrix );
 	output.worldPos.xyz = cameraPos.xyz + output.position.xyz * 999;
 	output.position += float4(cameraPos.xyz, 0);
@@ -118,15 +118,18 @@ SamplerState LinearSampler;
 	output.Color.w = outColor.a;
 
 	float3 fromCam = normalize( input.worldPos - cameraPos.xyz );
-	float3 sunDir = normalize( lightShaftsDir.xyz );//float3( -0.958466f, 0.268476f, 0.096246f ) );
+	float3 sunDir = normalize( float3( -0.958466, 0.268476, 0.096246 ) );//float3( -0.958466f, 0.268476f, 0.096246f ) );
 	float sunIntensity = saturate( ( dot( fromCam, sunDir ) - 0.98f ) / 0.02f );
 	sunIntensity = pow( sunIntensity, 3.f ) * 1.5f;
-	output.Color.xyz += sunIntensity * cloudColor.xyz * float3( 0.0054f, 0.004f, 0.0005f ) * 35;
+
 	
-	if ( outColor.w < 0.5f ) {
+	if ( outColor.w < 0.45f ) {
 		output.Depth.r = 0;
 		output.Depth.g = 0.0f;
+	output.Color.xyz += sunIntensity * cloudColor.xyz * float3( 0.005421, 0.004000, 0.000500 ).xyz * 105;
+
 	} else {
+	output.Color.xyz += sunIntensity * cloudColor.xyz * float3( 0.005421, 0.004000, 0.000500 ).xyz * 105;
 		output.Depth.r = input.position2.z / input.position2.w;// / input.position2.y;
 		output.Depth.g = 1;
 	}
