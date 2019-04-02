@@ -2077,21 +2077,21 @@ kbGameEntity 0 0 0 0 {
 			kbMaterialComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
-				Shader = .\assets\shaders\skybox\clouddome_basic.kbshader
+				Shader = .\assets\shaders\skybox\clouddome_static.kbshader
 				ShaderParams = 2
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "diffuseTexture"
-						Texture = .\assets\models\skydomes\clouds_background_1.tif
-						Vector = 1.000000 0.500000 0.000000 0.000000
-					}
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
 						ParamName = "cloudColor"
 						Texture = NULL
 						Vector = 0.500000 0.350000 0.250000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "diffuseTexture"
+						Texture = .\assets\models\skydomes\clouds_background_1.tif
+						Vector = 1.000000 0.500000 0.000000 0.000000
 					}
 			}
 		RenderPass = Post-LightingPass
