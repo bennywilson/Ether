@@ -73,19 +73,11 @@ SamplerState LinearSampler;
  PS_OUTPUT pixelShader( pixelInput	input ) {
  	PS_OUTPUT output = (PS_OUTPUT) 0;
 
-	float2 uv = input.uv * float2( 1.0f, 1.0f );
-
-	const float cloudNoisePower = 3.5f;
-	const float combinedCloudFactor = 2.0f;
-	const float combinedCloudPower = 2.7f;
-	const float cloudDivisor = 3;
+	float2 uv = input.uv * float2( -1.0f, 1.0f );
 
 	float4 textureSample =  diffuseTexture.Sample( LinearSampler, uv );//+ float2( time.x * 0.003f, 0.0f ) );;
-output.Color.xyz = textureSample.xxx * textureSample.w * cloudColor.xyz * 0.15;
-float3 rimColor = lerp( 0, float3( 1.0f, 0.5f, 0.15f ), textureSample.g ) * 0.15f;
-	output.Color.xyz += rimColor;
-output.Color.w = output.Color.w * 0.25f;
+	output.Color.xyz = textureSample.xxx * textureSample.w * cloudColor.xyz * cloudColor.w;
+	output.Color.w = output.Color.w;
 
-//	output.Color.w = 0.5f;//max( max( output.Color.x, output.Color.y ), output.Color.z ) * 1.0;
 	return output;
 }

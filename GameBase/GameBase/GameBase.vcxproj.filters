@@ -146,10 +146,10 @@
     <None Include="assets\shaders\Skybox\cloudDome_SmoothStep.kbShader">
       <Filter>Shaders\Skybox</Filter>
     </None>
-    <None Include="assets\shaders\Skybox\cloudDome_Basic.kbShader">
+    <None Include="assets\shaders\Skybox\overheadCloudPlane.kbShader">
       <Filter>Shaders\Skybox</Filter>
     </None>
-    <None Include="assets\shaders\Skybox\overheadCloudPlane.kbShader">
+    <None Include="assets\shaders\Skybox\cloudDome_Static.kbShader">
       <Filter>Shaders\Skybox</Filter>
     </None>
   </ItemGroup>

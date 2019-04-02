@@ -35,7 +35,7 @@ kbGameEntity 2609040299 1100347930 3115268521 1892043160 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "Light Shafts"
-		Orientation = -0.058002 -0.723885 0.234591 0.646215
+		Orientation = -0.117142 -0.699263 0.300122 0.638150
 		Position = 0.000000 41.726536 0.000000
 		Scale = 1.000000 1.000000 1.000000
 	}
@@ -44,7 +44,7 @@ kbGameEntity 2609040299 1100347930 3115268521 1892043160 {
 		LifeTime =  -1.000000
 		BaseHeight =  0.750000
 		BaseWidth =  0.750000
-		Color = 0.005421 0.004000 0.000500 1.000000
+		Color = 0.004510 0.004000 0.003500 1.000000
 		Directional = 1
 		IterationHeight =  0.001500
 		IterationWidth =  0.001500
@@ -2045,7 +2045,7 @@ kbGameEntity 0 0 0 0 {
 						LifeTime =  -1.000000
 						ParamName = "cloudColor"
 						Texture = NULL
-						Vector = 0.800000 0.800000 0.850000 0.000000
+						Vector = 0.750000 0.750000 0.800000 0.350000
 					}
 					kbShaderParamComponent { 
 						Enabled = 0
@@ -2084,14 +2084,14 @@ kbGameEntity 0 0 0 0 {
 						LifeTime =  -1.000000
 						ParamName = "cloudColor"
 						Texture = NULL
-						Vector = 0.500000 0.350000 0.250000 0.000000
+						Vector = 0.050000 0.050000 0.020000 2.500000
 					}
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
 						ParamName = "diffuseTexture"
 						Texture = .\assets\models\skydomes\clouds_background_1.tif
-						Vector = 1.000000 0.500000 0.000000 0.000000
+						Vector = 1.000000 0.500000 0.000000 1.000000
 					}
 			}
 		RenderPass = Post-LightingPass
@@ -2166,7 +2166,7 @@ kbGameEntity 0 0 0 0 {
 						LifeTime =  -1.000000
 						ParamName = "cloudColor"
 						Texture = NULL
-						Vector = 0.300000 0.200000 0.020000 0.000000
+						Vector = 0.350000 0.350000 0.350000 0.000000
 					}
 			}
 		RenderPass = Post-LightingPass

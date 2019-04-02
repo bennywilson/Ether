@@ -14,6 +14,7 @@ cbuffer matrixBuffer {
 	float4 cloudColor;
 	float4 cloudEmissive;
 	float4 lightShaftsDir;
+	float4 lightShaftsColor;
 };
 
 //-------------------------------------
@@ -98,7 +99,7 @@ SamplerState LinearSampler;
 	outColor.a = smoothstep( cloudScrollRate_AlphaStep.z, cloudScrollRate_AlphaStep.w, outColor.a );
 
 	const float edgeFade = 1.0f - smoothstep( 0.25f, 0.0f, input.uv.y );
-	outColor.a *= edgeFade;
+	outColor.a *= edgeFade * cloudColor.a;
 
 	float3 lightDir = 2000000.0f * normalize( float3( -0.958466f, 0.268476f, 0.096246f ) );
 	lightDir -= input.worldPos;
@@ -120,9 +121,9 @@ SamplerState LinearSampler;
 	float3 sunDir = normalize( lightShaftsDir.xyz );//float3( -0.958466f, 0.268476f, 0.096246f ) );
 	float sunIntensity = saturate( ( dot( fromCam, sunDir ) - 0.98f ) / 0.02f );
 	sunIntensity = pow( sunIntensity, 3.f ) * 1.5f;
-	output.Color.xyz += sunIntensity * cloudColor.xyz * float3( 0.5f, 0.45f, 0.35f );
+	output.Color.xyz += sunIntensity * cloudColor.xyz * lightShaftsColor.xyz * 35;
 	
-	if ( outColor.w < 0.6f ) {
+	if ( outColor.w < 0.5f ) {
 		output.Depth.r = 0;
 		output.Depth.g = 0.0f;
 	} else {
