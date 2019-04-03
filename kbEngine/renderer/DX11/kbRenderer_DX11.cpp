@@ -1618,6 +1618,14 @@ void kbRenderer_DX11::RenderTranslucency() {
 
 	// Translucency with depth Pass
 	{
+		ID3D11ShaderResourceView * pNullSRVs[] = { nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, 
+												   nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr };
+
+		// Unbind all textures
+		m_pDeviceContext->VSSetShaderResources( 0, 16, pNullSRVs );
+		m_pDeviceContext->GSSetShaderResources( 0, 16, pNullSRVs );
+		m_pDeviceContext->PSSetShaderResources( 0, 16, pNullSRVs );
+
 		ID3D11RenderTargetView * RenderTargetViews[] = { GetAccumBuffer( m_iAccumBuffer )->m_pRenderTargetView, GetRenderTarget_DX11(DEPTH_BUFFER)->m_pRenderTargetView };
 		m_pDeviceContext->OMSetRenderTargets( 2, RenderTargetViews, m_pDepthStencilView );
 
@@ -3233,10 +3241,12 @@ void kbRenderer_DX11::RenderMesh( const kbRenderSubmesh *const pRenderMesh, cons
 	// Set textures
 	const std::vector<const kbTexture*> & textureList = meshMaterial.GetTextureList();
 
+		ID3D11SamplerState *const  SamplerStates[] = { m_pBasicSamplerState, m_pNormalMapSamplerState, m_pBasicSamplerState, m_pBasicSamplerState };	// todo: Grass uses this for sampling time
+		m_pDeviceContext->PSSetSamplers( 0, 4, SamplerStates );
+
 	for ( int i = 0; i < textureList.size(); i++ ) {
 		ID3D11ShaderResourceView *const texture = ( textureList[i] != nullptr ) ? (ID3D11ShaderResourceView *)textureList[i]->GetGPUTexture() : (nullptr);
 		m_pDeviceContext->PSSetShaderResources( i, 1, &texture );
-		m_pDeviceContext->PSSetSamplers( i, 1, &m_pBasicSamplerState );
 	}
 
 	// Get a valid constant buffer and bind the kbShader's vars to it

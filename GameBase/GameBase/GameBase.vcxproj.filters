@@ -152,6 +152,9 @@
     <None Include="assets\shaders\Skybox\cloudDome_Static.kbShader">
       <Filter>Shaders\Skybox</Filter>
     </None>
+    <None Include="assets\shaders\Skybox\skybox_Gradient.kbShader">
+      <Filter>Shaders\Skybox</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameBase.h">

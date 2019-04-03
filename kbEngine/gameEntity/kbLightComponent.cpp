@@ -237,12 +237,23 @@ void kbLightShaftsComponent::Update_Internal( const float DeltaTime ) {
 
 	g_pRenderer->UpdateLightShafts( this, GetOwner()->GetPosition(), GetOwner()->GetOrientation() );
 
-	kbShaderParamOverrides_t::kbShaderParam_t shaderParam;
-	shaderParam.m_VarName = "lightShaftsDir";
-	kbVec4 lightShaftsDir = GetOwner()->GetOrientation().ToMat4()[2] * -1.0f;
-	shaderParam.m_Vec4List.push_back( lightShaftsDir );
-	shaderParam.m_Type = kbShaderParamOverrides_t::kbShaderParam_t::SHADER_VEC4;
-	g_pRenderer->SetGlobalShaderParam( shaderParam );	
+	{
+		kbShaderParamOverrides_t::kbShaderParam_t shaderParam;
+		shaderParam.m_VarName = "lightShaftsDir";
+		kbVec4 lightShaftsDir = GetOwner()->GetOrientation().ToMat4()[2] * -1.0f;
+		shaderParam.m_Vec4List.push_back( lightShaftsDir );
+		shaderParam.m_Type = kbShaderParamOverrides_t::kbShaderParam_t::SHADER_VEC4;
+		g_pRenderer->SetGlobalShaderParam( shaderParam );
+	}
+
+	{
+		kbShaderParamOverrides_t::kbShaderParam_t shaderParam;
+		shaderParam.m_VarName = "lightShaftsColor";
+		shaderParam.m_Vec4List.push_back( m_Color );
+		shaderParam.m_Type = kbShaderParamOverrides_t::kbShaderParam_t::SHADER_VEC4;
+		g_pRenderer->SetGlobalShaderParam( shaderParam );
+	}
+
 }
 
 /**

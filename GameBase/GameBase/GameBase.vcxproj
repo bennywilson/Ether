@@ -117,6 +117,7 @@
     <None Include="assets\shaders\Skybox\cloudDome_Static.kbShader" />
     <None Include="assets\shaders\Skybox\overheadCloudPlane.kbShader" />
     <None Include="assets\shaders\Skybox\skyBox.kbShader" />
+    <None Include="assets\shaders\Skybox\skybox_Gradient.kbShader" />
     <None Include="assets\shaders\Weapons\baseHoloscope.kbShader" />
     <None Include="assets\shaders\Weapons\baseWeapon.kbShader" />
     <None Include="assets\shaders\Weapons\shellCasing.kbShader" />

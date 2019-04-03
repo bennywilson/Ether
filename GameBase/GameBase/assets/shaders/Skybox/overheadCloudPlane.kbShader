@@ -41,11 +41,6 @@ kbShaderState {
 	colorwriteenable colorwriteenable_rgb
 }
 
-//-------------------------------------
-struct PS_OUTPUT {
-	float4 Color		: SV_TARGET0;
-	float2 Depth		: SV_TARGET1;
-};
 
 /**
  *	vertexShader
@@ -74,8 +69,8 @@ SamplerState LinearSampler;
 /**
  *	pixelShader
  */
- PS_OUTPUT pixelShader( pixelInput	input ) {
- 	PS_OUTPUT output = (PS_OUTPUT) 0;
+ float4 pixelShader( pixelInput input ) : SV_TARGET0 {
+ 	float4 outColor =  0;
 
 	float2 uv = input.uv * cloudTileAndOffset.xy;
 
@@ -92,24 +87,24 @@ SamplerState LinearSampler;
 
 	float4 totalCloud = cloudLayer1 + cloudLayer2 + cloudLayer3 + cloudLayer4;
 	totalCloud /= cloudDivisor;
-	output.Color.xyz = saturate( pow( abs(totalCloud.xyz), abs( combinedCloudPower ) ) ) * combinedCloudFactor;
-	output.Color.w = dot( totalCloud.xyz, float3( 0.3, 0.59f, 0.11f ) );
+	outColor.xyz = saturate( pow( abs(totalCloud.xyz), abs( combinedCloudPower ) ) ) * combinedCloudFactor;
+	outColor.w = dot( totalCloud.xyz, float3( 0.3, 0.59f, 0.11f ) );
 
 
 	float edgeXAlpha = min( smoothstep( 0.0f, 0.25f, input.uv.x ), 1.0f - smoothstep( 0.75f, 1.0f, input.uv.x ) );
 	float edgeYAlpha = min( smoothstep( 0.0f, 0.25f, input.uv.y ), 1.0f - smoothstep( 0.75f, 1.0f, input.uv.y ) );
 	float edgeAlpha = min( edgeXAlpha, edgeYAlpha );
-	output.Color.w *= edgeAlpha;
-	output.Color.xyz *= output.Color.w * cloudColor.xyz;
+	outColor.w *= edgeAlpha;
+	outColor.xyz *= outColor.w * cloudColor.xyz;
 
-	if ( output.Color.w < 0.4f ) {
+/*	if ( output.Color.w < 0.4f ) {
 		output.Depth.r = 0;
 		output.Depth.g = 0.0f;
 	} else {
 		output.Depth.r = input.position2.z / input.position2.w;// / input.position2.y;
 		output.Depth.g = 1;
-	}
+	}*/
 
 //	output.Color.w = 0;//max( max( output.Color.x, output.Color.y ), output.Color.z ) * 1.0;
-	return output;
+	return outColor;
 }

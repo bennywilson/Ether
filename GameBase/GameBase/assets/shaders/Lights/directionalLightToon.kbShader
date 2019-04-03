@@ -125,7 +125,7 @@ float4 pixelShader( pixelInput input ) : SV_TARGET {
 		diffuse = ( diffuse * nonToonDiffuseScaleAndBias.x ) + nonToonDiffuseScaleAndBias.y;
 	}
 		
-	spec = pow( abs( spec ), specColor.y ) * specColor.x;
+	spec = pow( abs( spec ), max( specColor.y, 1.0f ) ) * specColor.x;
 	const float3 emissive = diffuseColor.xyz * diffuseColor.w;
 //	diffuseColor.w = max( max( emissive.x, emissive.y ), emissive.z );
 //	diffuseColor.w = diffuseColor.w - 1.0f;
