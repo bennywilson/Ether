@@ -2193,9 +2193,9 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "Izzy"
-		Orientation = 0.000000 -0.313450 0.000000 0.949605
+		Orientation = 0.275172 0.233309 -0.660909 0.658062
 		Position = -92.604469 29.839386 -85.255890
-		Scale = 1.000000 1.000000 1.000000
+		Scale = 5.000000 5.000000 5.000000
 	}
 	kbSkeletalModelComponent { 
 		Enabled = 1
@@ -2211,7 +2211,7 @@ kbGameEntity 0 0 0 0 {
 						Enabled = 0
 						LifeTime =  -1.000000
 						ParamName = "colorTexture"
-						Texture = .\assets\test\black.jpg
+						Texture = .\assets\models\characters\izzy_combat.bmp
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 			}
@@ -2237,7 +2237,7 @@ kbGameEntity 0 0 0 0 {
 						Enabled = 0
 						LifeTime =  -1.000000
 						ParamName = "colorTexture"
-						Texture = .\assets\models\characters\face.dds
+						Texture = .\assets\models\characters\face.tif
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 			}
@@ -2269,6 +2269,6 @@ kbGameEntity 0 0 0 0 {
 			}
 		RenderPass = LightingPass
 		TranslucencySortBias =  0.000000
-		Model = .\assets\visualtarget\reuben\izzy\izza_combat.ms3d
+		Model = .\assets\models\characters\izzy.fbx
 	}
 }
