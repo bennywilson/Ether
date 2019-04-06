@@ -149,6 +149,15 @@ void kbLightComponent::Update_Internal( const float DeltaTime ) {
 		return;
 	}
 
+	if ( this->IsA( kbDirectionalLightComponent::GetType() ) ) {
+		kbShaderParamOverrides_t::kbShaderParam_t shaderParam;
+		shaderParam.m_VarName = "sunDir";
+		kbVec4 sunDir = GetOwner()->GetOrientation().ToMat4()[2] * -1.0f;
+		shaderParam.m_Vec4List.push_back( sunDir );
+		shaderParam.m_Type = kbShaderParamOverrides_t::kbShaderParam_t::SHADER_VEC4;
+		g_pRenderer->SetGlobalShaderParam( shaderParam );
+	}
+
 	if ( IsDirty() ) {
 		g_pRenderer->UpdateLight( this, GetOwner()->GetPosition(), GetOwner()->GetOrientation() );
 	}
@@ -187,6 +196,15 @@ kbDirectionalLightComponent::~kbDirectionalLightComponent() {
 void kbDirectionalLightComponent::EditorChange( const std::string & propertyName ) {
 	Super::EditorChange( propertyName );
 	// TODO: clamp shadow splits to 4.  Also ensure that the ordering is correct
+
+	{
+		kbShaderParamOverrides_t::kbShaderParam_t shaderParam;
+		shaderParam.m_VarName = "sunDir";
+		kbVec4 sunDir = GetOwner()->GetOrientation().ToMat4()[2] * -1.0f;
+		shaderParam.m_Vec4List.push_back( sunDir );
+		shaderParam.m_Type = kbShaderParamOverrides_t::kbShaderParam_t::SHADER_VEC4;
+		g_pRenderer->SetGlobalShaderParam( shaderParam );
+	}
 }
 
 /**

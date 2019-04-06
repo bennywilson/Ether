@@ -1322,7 +1322,7 @@ void kbRenderer_DX11::RenderScene() {
 
 		RenderLights();
 	
-		RenderSSAO();
+	//	RenderSSAO();
 
 		{
 			START_SCOPED_RENDER_TIMER( RENDER_UNLIT )

@@ -1,16 +1,17 @@
 //==============================================================================
-// characterBase.kbShader
+// characterBase_NoSkinning.kbShader
 //
-// 2018 kbEngine 2.0
+// 2019 kbEngine 2.0
 //==============================================================================
 cbuffer matrixBuffer {
-   matrix      modelMatrix;
-   matrix      mvpMatrix;
-   float4x4    boneList[128];
+	matrix      modelMatrix;
+	matrix      mvpMatrix;
+	float4		sunDir;
+	float4		hatchParams;
 };
 
 kbShaderState {
-	cullMode CullMode_None
+	cullMode CullMode_Back
 }
 
 //-------------------------------------
@@ -18,8 +19,6 @@ struct vertexInput {
 	float4 position			: POSITION;
 	float2 uv				: TEXCOORD0;
 	float4 normal			: NORMAL;
-	float4 blendIndices		: BLENDINDICES;
-	float4 boneWeights		: BLENDWEIGHT;
 };
 
 //-------------------------------------
@@ -53,10 +52,6 @@ pixelInput vertexShader( vertexInput input ) {
 
    float4 Pos = 0.0f;
 
-   int4 IndexVector = D3DCOLORtoUBYTE4(input.blendIndices);
-   float BlendWeightsArray[4] = (float[4])input.boneWeights;
-   int   IndexArray[4]        = (int[4])IndexVector;
-
    Pos =input.position;
 
 	output.position = mul( Pos, mvpMatrix );
@@ -72,10 +67,44 @@ pixelInput vertexShader( vertexInput input ) {
 /**
  *	pixelShader
  */
-Texture2D colorTexture;
+Texture2D colorTexture		: register(t0);
 SamplerState SampleType;
 
- PS_OUTPUT pixelShader( pixelInput2	input ) {
+Texture2D hatchTexture1		: register(t1);
+
+Texture2D hatchTexture2		: register(t2);
+
+float3 Hatching(float2 _uv, half _intensity)
+{
+
+	_intensity = 1.0f - _intensity;
+	_intensity = _intensity * 0.8f + 0.2f;
+
+    half3 hatch0 = hatchTexture1.Sample( SampleType, _uv ).rgb;
+    half3 hatch1 = hatchTexture2.Sample( SampleType, _uv ).rgb;
+
+	if ( _intensity == 0 ) return hatch0.x;
+    half3 overbright = max(0, _intensity - 1.0);
+
+    half3 weightsA = saturate((_intensity * 6.0) + half3(-0, -1, -2));
+    half3 weightsB = saturate((_intensity * 6.0) + half3(-3, -4, -5));
+
+    weightsA.xy -= weightsA.yz;
+    weightsA.z -= weightsB.x;
+    weightsB.xy -= weightsB.zy;
+
+    hatch0 = hatch0 * weightsA;
+    hatch1 = hatch1 * weightsB;
+
+    half3 hatching = overbright + hatch0.r +
+    	hatch0.g + hatch0.b +
+    	hatch1.r + hatch1.g +
+    	hatch1.b;
+
+    return hatching;
+}
+ 
+PS_OUTPUT pixelShader( pixelInput2	input ) {
 	PS_OUTPUT output = (PS_OUTPUT) 0;
 
 	const float4 colorTex = colorTexture.Sample( SampleType, input.uv );
@@ -84,7 +113,16 @@ SamplerState SampleType;
 	output.Specular = float4( 0.0f, 1.0f, 0.0f, 0.0f );
 	output.Depth.r = input.position2.x / input.position2.y;
 
+
 	output.Normal.xyz = normalize( input.normal );
 
+	float hatchDot = saturate( dot( sunDir.xyz, output.Normal.xyz ) );
+	//hatchDot = ( hatchDot * 0.25f ) + 0.75f;
+	//hatchDot = 1.0f - hatchDot;
+	float3 hatching = Hatching( input.uv * float2(5.5,5), hatchDot );
+
+	output.Color.xyz *= saturate( hatching + hatchParams.x );
+if (  hatchParams.x > 0.5f )
+	output.Normal.w = 0.15f;
 	return output;
 }
