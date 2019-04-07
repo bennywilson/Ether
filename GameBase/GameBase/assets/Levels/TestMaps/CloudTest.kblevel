@@ -1541,8 +1541,8 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 1
 		LifeTime =  -1.000000
 		Name = "Directional Light"
-		Orientation = -0.291628 0.619973 -0.460004 -0.564786
-		Position = -166.669556 76.357399 -100.480568
+		Orientation = 0.178057 -0.520392 0.570230 0.610185
+		Position = -177.305939 73.835655 -90.610909
 		Scale = 1.000000 1.000000 1.000000
 	}
 	kbDirectionalLightComponent { 
@@ -2069,7 +2069,7 @@ kbGameEntity 0 0 0 0 {
 						Vector = 0.000000 0.000000 0.000000 1.000000
 					}
 			}
-		RenderPass = TranslucentWithDepthPass
+		RenderPass = Post-LightingPass
 		TranslucencySortBias =  0.000000
 		Model = .\assets\models\skydomes\clouddome.fbx
 	}
@@ -2321,13 +2321,74 @@ kbGameEntity 0 0 0 0 {
 		TranslucencySortBias =  0.000000
 		Model = .\assets\models\characters\izzy.fbx
 	}
+	kbSkeletalModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		Materials = 4
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Shader = .\assets\shaders\character\characteroutline_noskinning.kbshader
+				ShaderParams = 1
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorTexture"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Shader = .\assets\shaders\character\characteroutline_noskinning.kbshader
+				ShaderParams = 1
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorTexture"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Shader = .\assets\shaders\character\characteroutline_noskinning.kbshader
+				ShaderParams = 1
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorTexture"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Shader = .\assets\shaders\character\characteroutline_noskinning.kbshader
+				ShaderParams = 1
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorTexture"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		RenderPass = LightingPass
+		TranslucencySortBias =  0.000000
+		Model = .\assets\models\characters\izzy.fbx
+	}
 }
 kbGameEntity 0 0 0 0 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "Entity_46"
-		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Orientation = 0.000000 -0.118446 0.000000 0.992961
 		Position = -169.854935 71.224747 -88.688911
 		Scale = 1.000000 1.000000 1.000000
 	}
@@ -2371,6 +2432,49 @@ kbGameEntity 0 0 0 0 {
 					}
 			}
 		RenderPass = LightingPass
+		TranslucencySortBias =  0.000000
+		Model = .\assets\models\test\sphere.ms3d
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		Materials = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Shader = .\assets\shaders\character\characteroutline_noskinning.kbshader
+				ShaderParams = 4
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "cameraPosition"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorTexture"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "hatchTexture1"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "hatchTexture2"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		RenderPass = TranslucentPass
 		TranslucencySortBias =  0.000000
 		Model = .\assets\models\test\sphere.ms3d
 	}

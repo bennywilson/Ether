@@ -122,7 +122,7 @@ float4 pixelShader( pixelInput input ) : SV_TARGET {
 		diffuse = smoothstep( diffuseColorBand.x, diffuseColorBand.y, diffuse ) * diffuseColorBand.z + diffuseColorBand.w;
 
 //if (  normal.w == 0 )
-			return float4( diffuseColor * lightColor );
+	//		return float4( diffuseColor * lightColor );
 	//	spec = smoothstep( specularColorBand.x, specularColorBand.y, spec ) * specularColorBand.z + specularColorBand.w;
 	} else {
 		diffuse = ( diffuse * nonToonDiffuseScaleAndBias.x ) + nonToonDiffuseScaleAndBias.y;
