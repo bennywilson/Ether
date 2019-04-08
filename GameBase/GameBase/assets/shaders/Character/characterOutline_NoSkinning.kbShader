@@ -46,7 +46,7 @@ pixelInput vertexShader( vertexInput input ) {
 	float distFromCam = length( cameraPos.xyz  - objCenter );
 
 	float3 normal = (input.normal.xyz * 2.0f ) - 1.0f;
-	Pos.xyz += normal * 0.03f;
+	Pos.xyz += normal * 0.02f;
 
 	output.position = mul( Pos, modelMatrix );
 

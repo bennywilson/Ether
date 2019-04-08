@@ -2,12 +2,17 @@
 // kbGameEntityHeader.h
 //
 //
-// 2016 kbEngine 2.0
+// 2016-2019 kbEngine 2.0
 //===================================================================================================
 #ifndef KBGAMEENTITYHEADER_H_
 #define KBGAMEENTITYHEADER_H_
 
 void CopyVarToComponent( const class kbComponent * Src, class kbComponent * Dst, const class kbTypeInfoVar * currentVar );
+
+
+#define DEFINE_KBCLASS(className) \
+	class className##_TypeInfo className::typeInfo; \
+	std::vector<class kbTypeInfoClass*> className::className##_TypeInfoVar; \
 
 #define KB_DECLARE_COMPONENT( className, parentClassName ) \
 private: \

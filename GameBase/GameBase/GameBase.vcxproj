@@ -86,10 +86,12 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <None Include="assets\shaders\Character\characterBase.kbShader" />
+    <None Include="assets\shaders\Character\characterBase_NoSkinning.kbShader" />
     <None Include="assets\shaders\Character\characterGlow.kbShader" />
     <None Include="assets\shaders\Character\characterHair.kbShader" />
     <None Include="assets\shaders\Character\characterMetal.kbShader" />
     <None Include="assets\shaders\Character\characterMetalDull.kbShader" />
+    <None Include="assets\shaders\Character\characterOutline_NoSkinning.kbShader" />
     <None Include="assets\shaders\Character\characterTranslucent.kbShader" />
     <None Include="assets\shaders\Character\firstPersonHands.kbshader" />
     <None Include="assets\shaders\DamageGen\collisionMapDamageGen.kbShader" />
@@ -112,6 +114,7 @@
     <None Include="assets\shaders\Lights\directionalLightToon.kbShader" />
     <None Include="assets\shaders\Lights\environmentDirectionalFill.kbShader" />
     <None Include="assets\shaders\PostProcess\Fog.kbShader" />
+    <None Include="assets\shaders\PostProcess\HatchShading.kbShader" />
     <None Include="assets\shaders\Skybox\cloudDome.kbShader" />
     <None Include="assets\shaders\Skybox\cloudDome_SmoothStep.kbShader" />
     <None Include="assets\shaders\Skybox\cloudDome_Static.kbShader" />

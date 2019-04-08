@@ -28,7 +28,7 @@ kbConsoleVariable g_ProcGenInfo( "procgeninfo", false, kbConsoleVariable::Consol
  *	EtherFogComponent::Constructor
  */
 void EtherFogComponent::Constructor() {
-	SetRenderPass( RP_Lighting );
+	SetRenderPass( RP_Translucent );
 	m_pShader = nullptr;
 	m_FogStartDist = 300;
 	m_FogEndDist = 3000;

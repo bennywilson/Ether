@@ -27,14 +27,10 @@ struct pixelInput {
 	float2      uv			: TEXCOORD0;
 	float2      position2	: TEXCOORD1;
 	float3      normal		: TEXCOORD2;
+	float3		localPos	: TEXCOORD3;
+	float3		localNormal	: TEXCOORD4;
 };
 
-struct pixelInput2 {
-	float4      position	: SV_POSITION;
-	float2      uv			: TEXCOORD0;
-	float2      position2	: TEXCOORD1;
-	float3      normal		: TEXCOORD2;
-};
 //-------------------------------------
 struct PS_OUTPUT {
 	float4      Color		: SV_TARGET0;
@@ -60,7 +56,8 @@ pixelInput vertexShader( vertexInput input ) {
 	output.position2 = output.position.zw;
 //	output.normal.xyz = mul( ( input.normal.xyz * 2.0f ) - 1.0f, (float3x3)boneList[IndexArray[0]] );
 	output.normal.xyz = mul(  (input.normal.xyz * 2.0f ) - 1.0f, (float3x3)modelMatrix );
-
+	output.localPos = input.position.xyz;
+	output.localNormal = (input.normal.xyz * 2.0f ) - 1.0f;
 	return output;
 }
 
@@ -84,6 +81,10 @@ float3 Hatching(float2 _uv, half _intensity)
     half3 hatch1 = hatchTexture2.Sample( SampleType, _uv ).rgb;
 
 	if ( _intensity == 0 ) return hatch0.x;
+
+	hatch0 = ( hatch0 * 0.9f ) + 0.1f;
+	hatch1 = ( hatch1 * 0.9f ) + 0.1f;
+
     half3 overbright = max(0, _intensity - 1.0);
 
     half3 weightsA = saturate((_intensity * 6.0) + half3(-0, -1, -2));
@@ -100,11 +101,14 @@ float3 Hatching(float2 _uv, half _intensity)
     	hatch0.g + hatch0.b +
     	hatch1.r + hatch1.g +
     	hatch1.b;
-
-    return hatching;
+/*
+hatching = 1.0f - hatching;
+hatching = pow( abs(hatching), abs(1.2f));
+hatching = 1.0f - hatching;*/
+    return saturate(hatching * 1.1f);
 }
  
-PS_OUTPUT pixelShader( pixelInput2	input ) {
+PS_OUTPUT pixelShader( pixelInput input ) {
 	PS_OUTPUT output = (PS_OUTPUT) 0;
 
 	const float4 colorTex = colorTexture.Sample( SampleType, input.uv );
@@ -117,12 +121,55 @@ PS_OUTPUT pixelShader( pixelInput2	input ) {
 	output.Normal.xyz = normalize( input.normal );
 
 	float hatchDot = saturate( dot( sunDir.xyz, output.Normal.xyz ) );
-	//hatchDot = ( hatchDot * 0.25f ) + 0.75f;
-	//hatchDot = 1.0f - hatchDot;
-	float3 hatching = Hatching( input.uv * float2(5.5,5), hatchDot );
+	hatchDot = ( hatchDot * 0.9f ) + 0.1f;
 
-	output.Color.xyz *= saturate( hatching + hatchParams.x );
-if (  hatchParams.x > 0.5f )
-	output.Normal.w = 0.15f;
+	if ( hatchParams.x > 0 )
+	{
+		// Tri-planar mapping
+		const float textureScale = hatchParams.y;
+		const float sharpness = hatchParams.z;
+
+		float3 localPos = input.localPos;
+		float3 localNormal = input.localNormal;
+
+		float2 yUV = localPos.xz / textureScale;
+		float2 xUV = localPos.zy / textureScale;
+		float2 zUV = localPos.xy / textureScale;
+
+		float3 hatchY = Hatching( yUV, hatchDot );
+		float3 hatchX = Hatching( xUV, hatchDot );
+		float3 hatchZ = Hatching( zUV, hatchDot );
+
+		float3 blendWeights = pow( abs( localNormal), sharpness );
+		blendWeights = blendWeights / ( blendWeights.x + blendWeights.y + blendWeights.z );
+
+		float3 finalHatch = hatchX * blendWeights.x + hatchY * blendWeights.y + hatchZ * blendWeights.z;
+
+
+		// Dual planar mapping
+	/*	float textureScale = 1.0f;
+		float3 localPos = input.localPos;
+		float3 localNormal = input.localNormal;
+
+		float2 xUV = localPos.zy / textureScale;
+		float2 zUV = localPos.xy / textureScale;
+
+		float sharpness = 1;
+	
+		float3 hatchX = Hatching( xUV, hatchDot );
+		float3 hatchZ = Hatching( zUV, hatchDot );
+
+		float3 blendWeights = pow( abs( localNormal), sharpness );
+		blendWeights = blendWeights / ( blendWeights.x + blendWeights.z );
+
+		float3 finalHatch = hatchX * blendWeights.x + hatchZ * blendWeights.z;
+	*/
+
+		output.Color.xyz *= finalHatch;//saturate( hatching + hatchParams.x );
+	}
+
+	if (  hatchParams.x > 0.5f )
+		output.Normal.w = 0.15f;
+
 	return output;
 }

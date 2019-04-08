@@ -155,6 +155,15 @@
     <None Include="assets\shaders\Skybox\skybox_Gradient.kbShader">
       <Filter>Shaders\Skybox</Filter>
     </None>
+    <None Include="assets\shaders\PostProcess\HatchShading.kbShader">
+      <Filter>Shaders\PostProcess</Filter>
+    </None>
+    <None Include="assets\shaders\Character\characterBase_NoSkinning.kbShader">
+      <Filter>Shaders\Character</Filter>
+    </None>
+    <None Include="assets\shaders\Character\characterOutline_NoSkinning.kbShader">
+      <Filter>Shaders\Character</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameBase.h">

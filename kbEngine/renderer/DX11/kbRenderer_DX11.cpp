@@ -1322,10 +1322,21 @@ void kbRenderer_DX11::RenderScene() {
 
 		RenderLights();
 	
-	//	RenderSSAO();
+		RenderSSAO();
 
 		{
 			START_SCOPED_RENDER_TIMER( RENDER_UNLIT )
+
+			{
+
+				for ( int iHook = 0; iHook < m_RenderHooks[RP_PostLighting].size(); iHook++ ) {
+					kbRenderTexture *const pSrc = m_pAccumBuffers[m_iAccumBuffer];
+					m_iAccumBuffer ^= 1;
+					kbRenderTexture *const pDst = m_pAccumBuffers[m_iAccumBuffer];
+					m_RenderHooks[RP_PostLighting][iHook]->RenderHookCallBack( pSrc, pDst );
+				}
+				PLACE_GPU_TIME_STAMP( "Post Lighting Render Hook" );
+			}
 
 			m_RenderState.SetDepthStencilState();
 			m_pDeviceContext->OMSetRenderTargets( 1, &GetAccumBuffer( m_iAccumBuffer )->m_pRenderTargetView, m_pDepthStencilView );
@@ -1345,11 +1356,11 @@ void kbRenderer_DX11::RenderScene() {
 
 		{
 
-			for ( int iHook = 0; iHook < m_RenderHooks[RP_Lighting].size(); iHook++ ) {
+			for ( int iHook = 0; iHook < m_RenderHooks[RP_Translucent].size(); iHook++ ) {
 				kbRenderTexture *const pSrc = m_pAccumBuffers[m_iAccumBuffer];
 				m_iAccumBuffer ^= 1;
 				kbRenderTexture *const pDst = m_pAccumBuffers[m_iAccumBuffer];
-				m_RenderHooks[RP_Lighting][iHook]->RenderHookCallBack( pSrc, pDst );
+				m_RenderHooks[RP_Translucent][iHook]->RenderHookCallBack( pSrc, pDst );
 			}
 			PLACE_GPU_TIME_STAMP( "Post Lighting Render Hook" );
 		}
