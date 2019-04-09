@@ -8,6 +8,7 @@ cbuffer matrixBuffer {
 	matrix		vpMatrix;
 	matrix      mvpMatrix;
 	float4		cameraPos;
+	float4		outlineParams;
 };
 
 kbShaderState {
@@ -46,13 +47,13 @@ pixelInput vertexShader( vertexInput input ) {
 	float distFromCam = length( cameraPos.xyz  - objCenter );
 
 	float3 normal = (input.normal.xyz * 2.0f ) - 1.0f;
-	Pos.xyz += normal * 0.02f;
+	Pos.xyz += normal * outlineParams.x;//0.02f;
 
 	output.position = mul( Pos, modelMatrix );
 
 	
 	float3 fromCam = normalize( cameraPos.xyz  - output.position.xyz  );//output.position.xyz );
-	output.position.xyz -= fromCam * 5;
+	output.position.xyz -= fromCam * outlineParams.y;//5;
 	output.worldPos = output.position.xyz;
 	output.position = mul( output.position, vpMatrix );
 

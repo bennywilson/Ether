@@ -11,7 +11,7 @@ cbuffer matrixBuffer {
 };
 
 kbShaderState {
-	cullMode CullMode_Back
+	cullMode CullMode_BackFaces
 }
 
 //-------------------------------------
@@ -101,10 +101,12 @@ float3 Hatching(float2 _uv, half _intensity)
     	hatch0.g + hatch0.b +
     	hatch1.r + hatch1.g +
     	hatch1.b;
-/*
-hatching = 1.0f - hatching;
-hatching = pow( abs(hatching), abs(1.2f));
-hatching = 1.0f - hatching;*/
+
+hatching = hatching * (1.0f - hatchParams.w) + hatchParams.w;//+ 0.3f;
+//hatching = 1.0f - hatching;
+
+//hatching = pow( abs(hatching), abs(1.f));
+//hatching = 1.0f - hatching;
     return saturate(hatching * 1.1f);
 }
  
