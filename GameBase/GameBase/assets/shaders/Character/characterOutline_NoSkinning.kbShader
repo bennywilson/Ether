@@ -13,10 +13,10 @@ cbuffer matrixBuffer {
 
 kbShaderState {
 	cullMode CullMode_None
-	srcblend Blend_SrcAlpha
-	dstBlend Blend_InvSrcAlpha
-	blendOp BlendOp_Add
-	colorWriteEnable ColorWriteEnable_rgb
+	//srcblend Blend_SrcAlpha
+	//dstBlend Blend_InvSrcAlpha
+	//blendOp BlendOp_Add
+//	colorWriteEnable ColorWriteEnable_rgb
 }
 
 //-------------------------------------
@@ -71,16 +71,24 @@ pixelInput vertexShader( vertexInput input ) {
 Texture2D colorTexture		: register(t0);
 SamplerState SampleType;
 
- 
-float4 pixelShader( pixelInput	input ) : SV_TARGET0 {
-	float4 output = (float4) 0;
+ struct PS_OUTPUT {
+	float4      Color		: SV_TARGET0;
+	float4      Normal		: SV_TARGET1;
+	float4		Specular	: SV_TARGET2;
+	float2      Depth		: SV_TARGET3;
+};
+
+PS_OUTPUT pixelShader( pixelInput input ) {
+	PS_OUTPUT output = (PS_OUTPUT) 0;
 
 	const float4 colorTex = colorTexture.Sample( SampleType, input.uv );
+	output.Color.xyz = colorTex.xyz;
+	output.Color.w = 0;//colorTex.w * 0.55;
+	output.Specular = float4( 0.0f, 1.0f, 0.0f, 0.0f );
+	output.Depth.r = input.position2.x / input.position2.y;
 
-	float fresnel = abs( dot( normalize( input.worldPos.xyz - cameraPos.xyz ), input.normal ) );
-	output.xyz = 0.0f;
+	output.Normal.xyz = normalize( input.normal );
 
-	//output.w = 1.0f - (( fresnel * 0.5f ) );
-output.w = 1.0f;//1.0f - smoothstep( -0.5, 1.0, output.w );
+
 	return output;
 }

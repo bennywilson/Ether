@@ -2003,6 +2003,11 @@ kbGameEntity 0 0 0 0 {
 		Shader = .\assets\shaders\postprocess\fog.kbshader
 		StartDist =  300.000000
 	}
+	EtherAntialiasingComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		Shader = .\assets\shaders\postprocess\antialiasing.kbshader
+	}
 }
 kbGameEntity 0 0 0 0 {
 	kbTransformComponent { 

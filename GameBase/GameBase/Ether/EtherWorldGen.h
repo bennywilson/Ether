@@ -11,6 +11,25 @@
 #include "kbRenderer.h"
 
 /**
+ *	EtherAntialiasingComponent
+ */
+class EtherAntialiasingComponent : public kbGameComponent, kbRenderHook {
+
+	KB_DECLARE_COMPONENT( EtherAntialiasingComponent, kbGameComponent );
+
+//-------------------------------------------------------------------------------------------------------------------------------------------------------------
+public:
+	virtual void								SetEnable_Internal( const bool bEnable ) override;
+
+protected:
+
+	virtual void								RenderHookCallBack( kbRenderTexture *const pSrc, kbRenderTexture *const pDst ) override;
+
+private:
+	kbShader *									m_pShader;
+};
+
+/**
  *	EtherFogComponent
  */
 class EtherFogComponent : public kbGameComponent, kbRenderHook {

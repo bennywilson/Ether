@@ -1389,6 +1389,16 @@ void kbRenderer_DX11::RenderScene() {
 
 		//m_pDeviceContext->OMSetDepthStencilState( m_pNoDepthStencilState, 1 );
 
+		{
+			for ( int iHook = 0; iHook < m_RenderHooks[RP_PostProcess].size(); iHook++ ) {
+				kbRenderTexture *const pSrc = m_pAccumBuffers[m_iAccumBuffer];
+				m_iAccumBuffer ^= 1;
+				kbRenderTexture *const pDst = m_pAccumBuffers[m_iAccumBuffer];
+				m_RenderHooks[RP_PostProcess][iHook]->RenderHookCallBack( pSrc, pDst );
+			}
+			PLACE_GPU_TIME_STAMP( "Post Process Render Hook" );
+		}
+
 		RenderPostProcess();
 
 		PLACE_GPU_TIME_STAMP( "Post-Process" );

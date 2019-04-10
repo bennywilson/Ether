@@ -19,6 +19,8 @@ class kbTypeInfoClass;
 
 EDestructibleBehavior_Enum EDestructibleBehaviorEnumClass;
 
+DEFINE_KBCLASS(EtherAntialiasingComponent);
+
 DEFINE_KBCLASS(EtherFogComponent);
 
 DEFINE_KBCLASS(EtherWorldGenComponent);

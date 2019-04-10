@@ -25,6 +25,49 @@ kbConsoleVariable g_ProcGenInfo( "procgeninfo", false, kbConsoleVariable::Consol
 
 
 /**
+ *	EtherAntialiasingComponent::Constructor
+ */
+void EtherAntialiasingComponent::Constructor() {
+	SetRenderPass( RP_PostProcess );
+	m_pShader = nullptr;
+}
+
+/**
+ *	EtherAntialiasingComponent::SetEnable_Internal
+ */
+void EtherAntialiasingComponent::SetEnable_Internal( const bool bEnable ) {
+	Super::SetEnable_Internal( bEnable );
+
+	if ( bEnable ) {
+		g_pRenderer->RegisterRenderHook( this );
+	} else {
+		g_pRenderer->UnregisterRenderHook( this );
+	}
+}
+
+/**
+ *	EtherAntialiasingComponent::RenderHookCallBack
+ */
+void EtherAntialiasingComponent::RenderHookCallBack( kbRenderTexture *const pSrc, kbRenderTexture *const pDst ) {
+	if ( m_pShader == nullptr ) {
+		g_pRenderer->RT_CopyRenderTarget( pSrc, pDst );
+		return;
+	}
+
+	g_pRenderer->RT_SetRenderTarget( pDst );
+	kbShaderParamOverrides_t shaderParams;
+	//shaderParams.SetVec4( "fog_Start_End_Clamp", kbVec4( m_FogStartDist, m_FogEndDist, m_FogClamp, 0.0f ) );
+	//shaderParams.SetVec4( "fogColor", m_FogColor );
+
+	kbVec3 position;
+	kbQuat orientation;
+	g_pRenderer->GetRenderViewTransform( nullptr, position, orientation );
+
+	//shaderParams.SetVec4( "cameraPosition", position );
+	g_pRenderer->RT_Render2DQuad( kbVec2( 0.5f, 0.5f ), kbVec2( 1.0f, 1.0f ), kbColor::white, m_pShader, &shaderParams );
+}
+
+/**
  *	EtherFogComponent::Constructor
  */
 void EtherFogComponent::Constructor() {

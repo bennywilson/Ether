@@ -75,7 +75,7 @@ float3 Hatching(float2 _uv, half _intensity)
 {
 
 	_intensity = 1.0f - _intensity;
-	_intensity = _intensity * 0.8f + 0.2f;
+	_intensity = _intensity * 0.6f + 0.4f;
 
     half3 hatch0 = hatchTexture1.Sample( SampleType, _uv ).rgb;
     half3 hatch1 = hatchTexture2.Sample( SampleType, _uv ).rgb;

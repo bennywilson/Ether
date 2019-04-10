@@ -1,6 +1,11 @@
 // AUTO GENERATED TYPE INFO //////////////////////////////////////////
 
 GenerateClass(
+	EtherAntialiasingComponent,
+	AddField( "Shader", KBTYPEINFO_SHADER, EtherAntialiasingComponent, m_pShader, false, "" )
+)
+
+GenerateClass(
 	EtherFogComponent,
 	AddField( "Shader", KBTYPEINFO_SHADER, EtherFogComponent, m_pShader, false, "" )
 	AddField( "StartDist", KBTYPEINFO_FLOAT, EtherFogComponent, m_FogStartDist, false, "" )
