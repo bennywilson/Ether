@@ -81,7 +81,7 @@ SamplerState SampleType;
 PS_OUTPUT pixelShader( pixelInput input ) {
 	PS_OUTPUT output = (PS_OUTPUT) 0;
 
-	const float4 colorTex = colorTexture.Sample( SampleType, input.uv );
+	const float4 colorTex = colorTexture.SampleLevel( SampleType, input.uv, 6 ) * 0.6f;
 	output.Color.xyz = colorTex.xyz;
 	output.Color.w = 0;//colorTex.w * 0.55;
 	output.Specular = float4( 0.0f, 1.0f, 0.0f, 0.0f );

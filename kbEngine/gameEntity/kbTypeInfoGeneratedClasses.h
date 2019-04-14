@@ -90,6 +90,12 @@ GenerateClass(
 	AddField( "Height", KBTYPEINFO_INT, kbClothComponent, m_Height, false, "" )
 	AddField( "AdditionalBoneInfo", KBTYPEINFO_STRUCT, kbClothComponent, m_AdditionalBoneInfo, true, "kbClothBone" )
 	AddField( "Collision", KBTYPEINFO_STRUCT, kbClothComponent, m_CollisionSpheres, true, "kbBoneCollisionSphere" )
+	AddField( "Gravity", KBTYPEINFO_VECTOR, kbClothComponent, m_Gravity, false, "" )
+	AddField( "MaxWindVelocity", KBTYPEINFO_VECTOR, kbClothComponent, m_MaxWindVelocity, false, "" )
+	AddField( "MinWindVelocity", KBTYPEINFO_VECTOR, kbClothComponent, m_MinWindVelocity, false, "" )
+	AddField( "MaxWindGustDuration", KBTYPEINFO_FLOAT, kbClothComponent, m_MaxWindGustDuration, false, "" )
+	AddField( "MinWindGustDuration", KBTYPEINFO_FLOAT, kbClothComponent, m_MinWindGustDuration, false, "" )
+	AddField( "AddFakeOscillation", KBTYPEINFO_BOOL, kbClothComponent, m_bAddFakeOscillation, false, "" )
 )
 
 GenerateClass(

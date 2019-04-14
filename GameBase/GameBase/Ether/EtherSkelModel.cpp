@@ -361,42 +361,6 @@ void EtherSkelModelComponent::Update_Internal( const float DeltaTime ) {
 			}	
 		}
 	}
-	// Temp: Search for "Additional Cloth Bones" and draw the hair locks for this AI using axial bill boards
-	kbClothComponent * pClothComponent = nullptr;
-	for ( int i = 0; i < GetOwner()->NumComponents(); i++ ) {
-		if ( GetOwner()->GetComponent( i )->IsA( kbClothComponent::GetType() ) ) {
-			 pClothComponent = static_cast<kbClothComponent*>( GetOwner()->GetComponent( i ) );
-			break;
-		}
-	}
-
-	if ( pClothComponent != nullptr && pClothComponent->GetMasses().size() > 0 ) {
-		
-		const int startAdditionalBonedIdx = (int)pClothComponent->GetBoneInfo().size();
-		const std::vector<kbClothMass_t> & ClothMasses = pClothComponent->GetMasses();
-
-		for ( int iMass = startAdditionalBonedIdx; iMass < ClothMasses.size() - 1; iMass++ ) {
-			if ( ClothMasses[iMass + 1].m_bAnchored ) {
-				continue;
-			}
-
-			const kbVec3 midPt = ( ClothMasses[iMass].GetPosition() + ClothMasses[iMass+1].GetPosition() ) * 0.5f;
-			const float distance = ( ClothMasses[iMass].GetPosition() - ClothMasses[iMass+1].GetPosition() ).Length();
-			const kbVec3 direction = ( ClothMasses[iMass+1].GetPosition() - ClothMasses[iMass].GetPosition() ) / distance; 
-
-			kbParticleManager::CustomParticleAtlasInfo_t ParticleInfo;
-			ParticleInfo.m_Position = midPt;
-			ParticleInfo.m_Direction = direction;
-			ParticleInfo.m_Width = distance;
-			ParticleInfo.m_Height = 4.0f;
-			ParticleInfo.m_Color.Set( 1.0f, 1.0f, 1.0f, 1.0f );
-			ParticleInfo.m_UVs[0].Set( 0.25f, 0.0f );
-			ParticleInfo.m_UVs[1].Set( 0.25f + 0.125f, 0.125f );
-			ParticleInfo.m_Type = BT_AxialBillboard;
-
-			g_pGame->GetParticleManager()->AddQuad( 0, ParticleInfo );
-		}
-	}
 }
 
 /**

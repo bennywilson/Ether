@@ -84,6 +84,19 @@ private:
 	std::vector<class kbBoneCollisionSphere>	m_CollisionSpheres;
 	int											m_NumConstrainIterations;
 
+	kbVec3										m_Gravity;
+	// Wind Data
+	kbVec3										m_MaxWindVelocity;
+	kbVec3										m_MinWindVelocity;
+	float										m_MaxWindGustDuration;
+	float										m_MinWindGustDuration;
+	bool										m_bAddFakeOscillation;
+
+	// Run-time
+	kbVec3										m_CurWindVelocity;
+	kbVec3										m_NextWindVelocity;
+	float										m_NextWindChangeTime;
+
 	const kbModel *								m_pSkeletalModel;
 
 	std::vector<int>							m_BoneIndices;
