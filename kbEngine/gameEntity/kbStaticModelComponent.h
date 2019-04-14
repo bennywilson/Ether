@@ -32,7 +32,6 @@ protected:
 private:
 
 	class kbModel *								m_pModel;
-	std::vector<class kbShader *>				m_pOverrideShaderList;
 };
 
 #endif

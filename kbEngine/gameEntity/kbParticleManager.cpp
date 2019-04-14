@@ -2,7 +2,7 @@
 // kbParticleManager.cpp
 //
 //
-// 2016-2018 kbEngine 2.0
+// 2016-2019 kbEngine 2.0
 //===================================================================================================
 #include "kbCore.h"
 #include "kbVector.h"
@@ -12,10 +12,17 @@
 
 static const uint NumParticleBufferVerts = 10000;
 static const uint NumCustomAtlases = 16;
+static const uint ComponentPoolSize = 1000;
+
 /**
  *	kbParticleManager::kbParticleManager
  */
 kbParticleManager::kbParticleManager() {
+
+	m_ComponentPool.resize( ComponentPoolSize );
+	for ( int i = 0; i < ComponentPoolSize; i++ ) {
+		m_ComponentPool[i] = new kbGameComponent();
+	}
 }
 
 /**
@@ -37,6 +44,10 @@ kbParticleManager::~kbParticleManager() {
 		for ( int i = 0; i < particleList.size(); i++ ) {
 			delete particleList[i];
 		}
+	}
+
+	for ( int i = 0; i < m_ComponentPool.size(); i++ ) {
+		delete m_ComponentPool[i];
 	}
 }
 
@@ -306,4 +317,30 @@ void kbParticleManager::AddQuad( const uint atlasIdx, const CustomParticleAtlasI
 	curAtlas.m_pIndexBuffer[curAtlas.m_NumIndices + 4] = vertexIndex + 2;
 	curAtlas.m_pIndexBuffer[curAtlas.m_NumIndices + 5] = vertexIndex + 0;
 	curAtlas.m_NumIndices += 6;
+}
+
+/**
+ *	kbParticleManager::GetComponentFromPool
+ */
+const kbGameComponent * kbParticleManager::GetComponentFromPool() {
+	if ( m_ComponentPool.size() == 0 ) {
+		kbWarning( "kbParticleManager::GetComponentFromPool() - Component pool is empty" );
+		return nullptr;
+	}
+
+	const kbGameComponent *const pGameComponent = m_ComponentPool[m_ComponentPool.size() - 1];
+	m_ComponentPool.pop_back();
+	return pGameComponent;
+}
+
+/**
+ *	kbParticleManager::ReturnComponentToPool	
+ */
+void kbParticleManager::ReturnComponentToPool( const kbGameComponent *const pGameComponent ) {
+	if ( pGameComponent == nullptr ) {
+		kbWarning( "kbParticleManager::ReturnComponentToPool() - null component passed in" );
+		return;
+	}
+
+	m_ComponentPool.push_back( pGameComponent );
 }

@@ -105,7 +105,8 @@ inline bool kbCompareByte4( const byte lhs[4], const byte rhs[4] ) { return lhs[
 template<typename T> T kbClamp( const T & value, const T & min, const T & max ) { return value < min ? min : ( value > max ? max : value ); }
 
 template<typename T, typename B> void VectorRemoveFast( T & list, B entry ) { list.erase( std::remove( list.begin(), list.end(), entry ), list.end() );  }
-template<typename T> void VectorRemoveFastIndex( T & list, const int i ) { list.erase( list.begin() + i ); }
+template<typename T> void VectorRemoveFastIndex( T & list, const int i ) { std::swap( list[i], list.back() ); list.pop_back(); }
+
 template<typename T, typename B> bool VectorContains( const T & list, B entry ) { return std::find( list.begin(), list.end(), entry ) != list.end(); }
 template<typename T, typename B> auto VectorFind( const T & list, B entry ) { return std::find( list.begin(), list.end(), entry ); }
 template<typename T> inline T kbLerp( const T a, const T b, const float t ) { return ( ( b - a ) * t ) + a; }

@@ -39,7 +39,6 @@ protected:
 	virtual void								Update_Internal( const float DeltaTime ) override;
 
 	class kbModel *								m_pModel;
-	std::vector< class kbShader * >				m_pOverrideShaderList;
 
 	std::vector<kbBoneMatrix_t>					m_BindToLocalSpaceMatrices;
 };

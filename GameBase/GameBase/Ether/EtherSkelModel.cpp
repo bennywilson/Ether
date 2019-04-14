@@ -19,15 +19,6 @@ KB_DEFINE_COMPONENT(EtherSkelModelComponent)
 static XMMATRIX & XMMATRIXFromkbMat4( kbMat4 & matrix ) { return (*(XMMATRIX*) &matrix); }
 static kbMat4 & kbMat4FromXMMATRIX( FXMMATRIX & matrix ) { return (*(kbMat4*) & matrix); }
 
-
-/**
- *	kbAnimEvent::Constructor()
- */
-void kbAnimEvent::Constructor() {
-	m_EventTime = 0.0f;
-	m_EventValue = 0.0f;
-}
-
 /**
  *	EtherAnimComponent::Constructor()
  */
@@ -159,6 +150,10 @@ void EtherSkelModelComponent::SetEnable_Internal( const bool isEnabled ) {
 void EtherSkelModelComponent::SetModel( kbModel *const pModel, bool bIsFirstPersonModel ) {
 	m_bFirstPersonModel = bIsFirstPersonModel;
 	Super::SetModel( pModel );
+
+	m_BindToLocalSpaceMatrices.clear();
+	m_RenderObject.m_pModel = pModel;
+	g_pRenderer->UpdateRenderObject( m_RenderObject );
 }
 
 /**
@@ -302,7 +297,7 @@ void EtherSkelModelComponent::Update_Internal( const float DeltaTime ) {
 					for ( int iAnimEvent = 0; iAnimEvent < CurAnim.m_AnimEvents.size(); iAnimEvent++ ) {
 						auto & curEvent = CurAnim.m_AnimEvents[iAnimEvent];
 						if ( curEvent.GetEventTime() > prevAnimTime && curEvent.GetEventTime() <= CurAnim.m_CurrentAnimationTime  ) {
-							kbLog( "AnimEvent %s - %f", curEvent.GetEventName().c_str(), curEvent.GetEventTime() );
+							//kbLog( "AnimEvent %s - %f", curEvent.GetEventName().c_str(), curEvent.GetEventTime() );
 						}
 					}
 					CurAnim.m_CurrentAnimationTime += DeltaTime * CurAnim.m_TimeScale;
@@ -320,7 +315,7 @@ void EtherSkelModelComponent::Update_Internal( const float DeltaTime ) {
 				for ( int iAnimEvent = 0; iAnimEvent < NextAnim.m_AnimEvents.size(); iAnimEvent++ ) {
 					auto & curEvent = NextAnim.m_AnimEvents[iAnimEvent];
 					if ( curEvent.GetEventTime() > prevNextAnimTime && curEvent.GetEventTime() <= NextAnim.m_CurrentAnimationTime  ) {
-						kbLog( "AnimEvent %s - %f", curEvent.GetEventName().c_str(), curEvent.GetEventTime() );
+						//kbLog( "AnimEvent %s - %f", curEvent.GetEventName().c_str(), curEvent.GetEventTime() );
 					}
 				}
 
@@ -366,42 +361,6 @@ void EtherSkelModelComponent::Update_Internal( const float DeltaTime ) {
 			}	
 		}
 	}
-	// Temp: Search for "Additional Cloth Bones" and draw the hair locks for this AI using axial bill boards
-	kbClothComponent * pClothComponent = nullptr;
-	for ( int i = 0; i < GetOwner()->NumComponents(); i++ ) {
-		if ( GetOwner()->GetComponent( i )->IsA( kbClothComponent::GetType() ) ) {
-			 pClothComponent = static_cast<kbClothComponent*>( GetOwner()->GetComponent( i ) );
-			break;
-		}
-	}
-
-	if ( pClothComponent != nullptr && pClothComponent->GetMasses().size() > 0 ) {
-		
-		const int startAdditionalBonedIdx = (int)pClothComponent->GetBoneInfo().size();
-		const std::vector<kbClothMass_t> & ClothMasses = pClothComponent->GetMasses();
-
-		for ( int iMass = startAdditionalBonedIdx; iMass < ClothMasses.size() - 1; iMass++ ) {
-			if ( ClothMasses[iMass + 1].m_bAnchored ) {
-				continue;
-			}
-
-			const kbVec3 midPt = ( ClothMasses[iMass].GetPosition() + ClothMasses[iMass+1].GetPosition() ) * 0.5f;
-			const float distance = ( ClothMasses[iMass].GetPosition() - ClothMasses[iMass+1].GetPosition() ).Length();
-			const kbVec3 direction = ( ClothMasses[iMass+1].GetPosition() - ClothMasses[iMass].GetPosition() ) / distance; 
-
-			kbParticleManager::CustomParticleAtlasInfo_t ParticleInfo;
-			ParticleInfo.m_Position = midPt;
-			ParticleInfo.m_Direction = direction;
-			ParticleInfo.m_Width = distance;
-			ParticleInfo.m_Height = 4.0f;
-			ParticleInfo.m_Color.Set( 1.0f, 1.0f, 1.0f, 1.0f );
-			ParticleInfo.m_UVs[0].Set( 0.25f, 0.0f );
-			ParticleInfo.m_UVs[1].Set( 0.25f + 0.125f, 0.125f );
-			ParticleInfo.m_Type = BT_AxialBillboard;
-
-			g_pGame->GetParticleManager()->AddQuad( 0, ParticleInfo );
-		}
-	}
 }
 
 /**
@@ -419,13 +378,17 @@ const kbString * EtherSkelModelComponent::GetCurAnimationName() const {
  *	EtherDestructibleComponent::Constructor
  */
 void EtherDestructibleComponent::Constructor() {
+	m_DestructibleType = EDestructibleBehavior::PushFromImpactPoint;
+	m_pNonDamagedModel = nullptr;
+	m_pDamagedModel = nullptr;
 	m_MaxLifeTime = 4.0f;
 	m_Gravity.Set( 0.0f, 22.0f, 0.0f );
-	m_MinLinearVelocity = 20.0f;
-	m_MaxLinearVelocity = 25.0f;
+	m_MinLinearVelocity.Set( 20.0f, 20.0f, 20.0f );
+	m_MaxLinearVelocity.Set( 25.0f, 25.0f, 25.0f );
 	m_MinAngularVelocity = 5.0f;
 	m_MaxAngularVelocity = 10.0f;
 	m_StartingHealth = 6.0f;
+	m_DestructionFXLocalOffset.Set( 0.0f, 0.0f, 0.0f );
 
 	m_bDebugResetSim = false;
 	m_Health = 6.0f;
@@ -470,6 +433,22 @@ void EtherDestructibleComponent::TakeDamage( const float damageAmt, const kbVec3
 		pCollision->Enable( false );
 	}
 
+
+	if ( g_UseEditor == false ) {
+
+		if ( m_pDamagedModel != nullptr ) {
+			for ( int i = 0; i < m_DamagedModelMaterialParams.size(); i++ ) {
+				const kbShaderParamComponent & shaderParam = m_DamagedModelMaterialParams[i];
+				if ( shaderParam.GetTexture() != nullptr ) {
+					m_pSkelModel->SetMaterialParamTexture( 0, shaderParam.GetParamName().stl_str(), const_cast<kbTexture*>( shaderParam.GetTexture() ) );
+				} else {
+					m_pSkelModel->SetMaterialParamVector( 0, shaderParam.GetParamName().stl_str(), shaderParam.GetVector() );
+				}
+			}
+			m_pSkelModel->SetModel( m_pDamagedModel, false );
+		}
+	}
+
 	m_LastHitLocation = explosionPosition;
 
 	kbMat4 localMat;
@@ -480,15 +459,49 @@ void EtherDestructibleComponent::TakeDamage( const float damageAmt, const kbVec3
 	const kbVec3 localExplositionPos = localMat.TransformPoint( explosionPosition );
 	const kbModel *const pModel = m_pSkelModel->GetModel();
 
+	kbMat4 worldMat = localMat;
+	worldMat.TransposeSelf();
+
 	m_BonesList.resize( pModel->NumBones() );
 	for ( int i = 0; i < pModel->NumBones(); i++ ) {
 		m_BonesList[i].m_Position = pModel->GetRefBoneMatrix(i).GetOrigin();
-		m_BonesList[i].m_Velocity = ( m_BonesList[i].m_Position - localExplositionPos ).Normalized() * ( kbfrand() * ( m_MaxLinearVelocity - m_MinLinearVelocity ) + m_MinLinearVelocity );
+
+		if ( m_DestructibleType == EDestructibleBehavior::UserVelocity ) {
+			m_BonesList[i].m_Velocity = kbVec3Rand( m_MinLinearVelocity, m_MaxLinearVelocity );
+
+
+			m_BonesList[i].m_Velocity = m_BonesList[i].m_Velocity * worldMat;
+
+		} else {
+			m_BonesList[i].m_Velocity = ( m_BonesList[i].m_Position - localExplositionPos ).Normalized() * ( kbfrand() * ( m_MaxLinearVelocity.x - m_MinLinearVelocity.x ) + m_MinLinearVelocity.x );
+		}
+
 		m_BonesList[i].m_Acceleration = kbVec3::zero;
 		m_BonesList[i].m_RotationAxis = kbVec3( kbfrand(), kbfrand(), kbfrand() );
+		if ( m_BonesList[i].m_RotationAxis.LengthSqr() < 0.01f ) {
+			m_BonesList[i].m_RotationAxis.Set( 1.0f, 0.0f, 0.0f );
+		} else {
+			m_BonesList[i].m_RotationAxis.Normalize();
+		}
+
 		m_BonesList[i].m_RotationSpeed = kbfrand() * ( m_MaxAngularVelocity - m_MinAngularVelocity ) + m_MinAngularVelocity;
 		m_BonesList[i].m_CurRotationAngle = 0.0f;
 	}
+
+//	if ( m_CompleteDestructionFX.size() > 0 ) {
+	//	const int iFX = rand() % m_CompleteDestructionFX.size();
+		if ( m_CompleteDestructionFX.GetEntity() != nullptr ) {
+			kbGameEntity *const pExplosionFX = g_pGame->CreateEntity( m_CompleteDestructionFX.GetEntity() );
+
+			kbVec3 worldOffset = worldMat.TransformPoint( m_DestructionFXLocalOffset );
+//kbLog( "% f %f %f --- %f %f %f", m_DestructionFXLocalOffset.x, m_DestructionFXLocalOffset.y, m_DestructionFXLocalOffset.z, worldOffset.x, worldOffset.y, worldOffset.z );
+			pExplosionFX->SetPosition( GetOwner()->GetPosition() + worldOffset );
+			pExplosionFX->SetOrientation( GetOwner()->GetOrientation() );
+			pExplosionFX->DeleteWhenComponentsAreInactive( true );
+		}
+	//}
+
+
 
 	m_bIsSimulating = true;
 	m_SimStartTime = g_GlobalTimer.TimeElapsedSeconds();
@@ -508,6 +521,21 @@ void EtherDestructibleComponent::SetEnable_Internal( const bool bEnable ) {
 			return;
 		}
 
+		if ( g_UseEditor == false ) {
+			if ( m_pNonDamagedModel != nullptr ) {
+				m_pSkelModel->SetModel( m_pNonDamagedModel, false );
+			}
+
+			for ( int i = 0; i < m_NonDamagedModelMaterialParams.size(); i++ ) {
+				const kbShaderParamComponent & shaderParam = m_NonDamagedModelMaterialParams[i];
+				if ( shaderParam.GetTexture() != nullptr ) {
+					m_pSkelModel->SetMaterialParamTexture( 0, shaderParam.GetParamName().stl_str(), const_cast<kbTexture*>( shaderParam.GetTexture() ) );
+				} else {
+					m_pSkelModel->SetMaterialParamVector( 0, shaderParam.GetParamName().stl_str(), shaderParam.GetVector() );
+				}
+			}
+		}
+
 		m_BonesList.resize( m_pSkelModel->GetModel()->NumBones() );
 
 		m_Health = m_StartingHealth;
@@ -524,6 +552,21 @@ void EtherDestructibleComponent::Update_Internal( const float deltaTime ) {
 	if ( GetAsyncKeyState( 'G' ) ) {
 		m_bIsSimulating = false;
 		m_Health = m_StartingHealth;
+
+		if ( g_UseEditor == false ) {
+			if ( m_pNonDamagedModel != nullptr ) {
+				m_pSkelModel->SetModel( m_pNonDamagedModel, false );
+
+				for ( int i = 0; i < m_NonDamagedModelMaterialParams.size(); i++ ) {
+					const kbShaderParamComponent & shaderParam = m_NonDamagedModelMaterialParams[i];
+					if ( shaderParam.GetTexture() != nullptr ) {
+						m_pSkelModel->SetMaterialParamTexture( 0, shaderParam.GetParamName().stl_str(), const_cast<kbTexture*>( shaderParam.GetTexture() ) );
+					} else {
+						m_pSkelModel->SetMaterialParamVector( 0, shaderParam.GetParamName().stl_str(), shaderParam.GetVector() );
+					}
+				}
+			}
+		}
 
 		kbCollisionComponent *const pCollision = (kbCollisionComponent*)GetOwner()->GetComponentByType( kbCollisionComponent::GetType() );
 		if ( pCollision != nullptr ) {

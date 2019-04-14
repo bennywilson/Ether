@@ -79,6 +79,10 @@ protected:
 	bool									m_bFirstPersonModel;
 };
 
+enum EDestructibleBehavior {
+	PushFromImpactPoint,
+	UserVelocity,
+};
 
 /**
  *	EtherDestructibleComponent
@@ -96,6 +100,8 @@ public:
 
 	bool									IsSimulating() const { return m_bIsSimulating; }
 
+	kbGameEntityPtr							GetImpactFX() const { return m_ImpactFX; }
+
 	struct destructibleBone_t {
 		kbVec3								m_Position;
 		kbVec3								m_Acceleration;
@@ -109,25 +115,34 @@ public:
 
 private:
 
-	void									SetEnable_Internal( const bool bEnable ) override;
-	void									Update_Internal( const float deltaTime ) override;
+	virtual void							SetEnable_Internal( const bool bEnable ) override;
+	virtual void							Update_Internal( const float deltaTime ) override;
 
 	// Editor
+	EDestructibleBehavior					m_DestructibleType;
+	kbModel	*								m_pNonDamagedModel;
+	std::vector<kbShaderParamComponent>		m_NonDamagedModelMaterialParams;
+	kbModel *								m_pDamagedModel;
+	std::vector<kbShaderParamComponent>		m_DamagedModelMaterialParams;
 	float									m_MaxLifeTime;
 	kbVec3									m_Gravity;
-	float									m_MinLinearVelocity;
-	float									m_MaxLinearVelocity;
+	kbVec3									m_MinLinearVelocity;
+	kbVec3									m_MaxLinearVelocity;
 	float									m_MinAngularVelocity;
 	float									m_MaxAngularVelocity;
 	float									m_StartingHealth;
 
+	kbGameEntityPtr							m_ImpactFX;
+	kbGameEntityPtr							m_CompleteDestructionFX;
+	kbVec3									m_DestructionFXLocalOffset;
+
 	bool									m_bDebugResetSim;
 
 	// Run time
-	std::vector<destructibleBone_t>				m_BonesList;
+	std::vector<destructibleBone_t>			m_BonesList;
 
 	float									m_Health;
-	const EtherSkelModelComponent *			m_pSkelModel;
+	EtherSkelModelComponent *				m_pSkelModel;
 	float									m_SimStartTime;
 	kbVec3									m_LastHitLocation;
 	bool									m_bIsSimulating;

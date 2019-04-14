@@ -65,8 +65,6 @@ void kbGrass::grassRenderObject_t::Shutdown() {
  */
 void kbGrass::Constructor() {
 
-    m_pGrassMap = nullptr;
-    m_pNoiseMap = nullptr;
 
 	m_GrassCellsPerTerrainSide = 1;
 	m_GrassCellLength = 0;
@@ -85,14 +83,11 @@ void kbGrass::Constructor() {
 	m_MaxBladeJitterOffset = 0.0f;
 	m_MaxPatchJitterOffset = 0.0f;
 
-	m_pDiffuseMap = nullptr;
-
 	m_pOwningTerrainComponent = nullptr;
 
 	m_bUpdateMaterial = false;
 	m_bUpdatePointCloud = false;
 
-    m_TestWind = kbVec3::zero;
     m_FakeAODarkness = 0.25f;
     m_FakeAOPower = 2.0f;
 }
@@ -195,19 +190,13 @@ void kbGrass::RefreshGrass() {
 
 	m_GrassShaderOverrides.m_ParamOverrides.clear();
 	m_GrassShaderOverrides.m_pShader = (kbShader*)g_ResourceManager.LoadResource( "./assets/Shaders/Environment/grass.kbshader", true );
-	m_GrassShaderOverrides.SetTexture( "grassMap", m_pGrassMap );
-    m_GrassShaderOverrides.SetTexture( "noiseMap", m_pNoiseMap );
-	m_GrassShaderOverrides.SetTexture( "heightMap", m_pOwningTerrainComponent->GetHeightMap() );
 
+	m_GrassShaderOverrides.SetTexture( "heightMap", m_pOwningTerrainComponent->GetHeightMap() );
 	m_GrassShaderOverrides.SetVec4List( "bladeOffsets", bladeOffsets );
 	m_GrassShaderOverrides.SetVec4( "GrassData0", kbVec4( m_PatchStartCullDistance, 1.0f / ( m_PatchEndCullDistance - m_PatchStartCullDistance ), m_BladeMinHeight, m_BladeMaxHeight ) );
 	m_GrassShaderOverrides.SetVec4( "GrassData1", kbVec4( m_pOwningTerrainComponent->GetHeightScale(), m_pOwningTerrainComponent->GetOwner()->GetPosition().y, patchLen, 0.0f ) );
-    m_GrassShaderOverrides.SetVec4( "wind", m_TestWind );
-
     m_GrassShaderOverrides.SetVec4( "fakeAOData", kbVec4( m_FakeAODarkness, m_FakeAOPower, 0.0f, 0.0f ) );
 
-	m_GrassShaderOverrides.SetTexture( "grassDiffuseMap", m_pDiffuseMap );
-    m_GrassShaderOverrides.SetTexture( "noiseMap", m_pNoiseMap );
 
 	for ( int i = 0; i < m_ShaderParamList.size(); i++ ) {
 		if ( m_ShaderParamList[i].GetParamName().stl_str().empty() ) {
@@ -304,19 +293,6 @@ void kbGrass::RefreshGrass() {
 }
 
 /**
- *  kbTerrainMatComponent::Constructor
- */
-void kbTerrainMatComponent::Constructor() {
-    m_pDiffuseMap = nullptr;
-	m_pNormalMap = nullptr;
-	m_pSpecMap = nullptr;
-
-	m_SpecFactor = 1.0f;
-	m_SpecPowerMultiplier = 1.0f;
-	m_UVScale.Set( 1.0f, 1.0f, 1.0f );
-} 
-
-/**
  *	kbTerrainComponent::Constructor
  */
 void kbTerrainComponent::Constructor() {
@@ -326,7 +302,6 @@ void kbTerrainComponent::Constructor() {
 	m_TerrainWidth = 256.0f;
 	m_TerrainDimensions = 16;
 	
-	m_pTerrainShader = nullptr;
 	m_pSplatMap = nullptr;
 
 	m_bRegenerateTerrain = false;
@@ -379,12 +354,6 @@ void kbTerrainComponent::EditorChange( const std::string & propertyName ) {
 
     RefreshMaterials();
 
-	// Editor Hack!
-	if ( propertyName == "Materials" ) {
-		for ( int i = 0; i < this->m_MaterialList.size(); i++ ) {
-			m_MaterialList[i].SetOwningComponent( this );
-		}
-	}
 	g_pRenderer->UpdateRenderObject( m_RenderObject );
 }
 

@@ -2,7 +2,7 @@
 // kbParticleManager.h
 //
 //
-// 2016-2018 kbEngine 2.0
+// 2016-2019 kbEngine 2.0
 //===================================================================================================
 #ifndef _KBPARTICLEMANAGER_H_
 #define _KBPARTICLEMANAGER_H_
@@ -10,6 +10,20 @@
 #include <vector>
 #include "kbGameEntityHeader.h"
 #include "kbParticleComponent.h"
+
+/**
+ *	BufferedModel_t
+ */
+struct BufferedModel_t {
+
+																BufferedModel_t();
+																~BufferedModel_t();
+
+	void														Release();
+	kbModel *													m_pModels[3];
+
+	int															m_CurrIdx;
+};
 
 /**
  *	kbParticleManager
@@ -45,6 +59,9 @@ public:
 	};
 	void														AddQuad( const uint atlasIdx, const CustomParticleAtlasInfo_t & CustomParticleInfo );
 
+	const kbGameComponent *											GetComponentFromPool();
+	void														ReturnComponentToPool( const kbGameComponent *const );
+
 private:
 
 	std::map<const kbParticleComponent *, std::vector< kbParticleComponent *>>	m_ParticlePools;
@@ -75,6 +92,8 @@ private:
 		int														m_iCurParticleModel;
 	};
 	std::vector<CustomAtlasParticles_t>							m_CustomAtlases;
+
+	std::vector<const kbGameComponent*>							m_ComponentPool;
 
 private:
 

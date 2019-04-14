@@ -117,7 +117,7 @@ void kbMainTab::Update() {
 
 				const kbComponent *const pCurrentComponent = pGameEntity->GetComponent( j );
 
-				if ( pCurrentComponent->IsA( kbDirectionalLightComponent::GetType() ) ) {
+				if ( pCurrentComponent->IsA( kbDirectionalLightComponent::GetType() ) || pCurrentComponent->IsA( kbLightShaftsComponent::GetType() ) ) {
 
 					kbMat4 rotationMatrix = pGameEntity->GetOrientation().ToMat4();
 					kbVec3 lightDirection( 0, 0, 1.0f );
@@ -138,7 +138,7 @@ void kbMainTab::Update() {
 
 			g_pRenderer->DrawBillboard( pCurrentEntity->GetPosition(), kbVec2( 1.0f, 1.0f ), iconIdx, nullptr, pCurrentEntity->GetGameEntity()->GetEntityId() );
 
-			if ( pCurrentEntity->IsSelected() ) {
+			if ( pCurrentEntity->IsSelected() && g_pRenderer->DebugBillboardsEnabled() ) {
 				g_pRenderer->DrawBox( pCurrentEntity->GetWorldBounds(), kbColor::yellow );
 
 				m_Manipulator.Update();

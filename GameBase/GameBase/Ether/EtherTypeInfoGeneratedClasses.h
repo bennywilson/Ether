@@ -1,5 +1,20 @@
 // AUTO GENERATED TYPE INFO //////////////////////////////////////////
 
+GenerateClass(
+	EtherAntialiasingComponent,
+	AddField( "Shader", KBTYPEINFO_SHADER, EtherAntialiasingComponent, m_pShader, false, "" )
+)
+
+GenerateClass(
+	EtherFogComponent,
+	AddField( "Shader", KBTYPEINFO_SHADER, EtherFogComponent, m_pShader, false, "" )
+	AddField( "StartDist", KBTYPEINFO_FLOAT, EtherFogComponent, m_FogStartDist, false, "" )
+	AddField( "EndDist", KBTYPEINFO_FLOAT, EtherFogComponent, m_FogEndDist, false, "" )
+	AddField( "Clamp", KBTYPEINFO_FLOAT, EtherFogComponent, m_FogClamp, false, "" )
+	AddField( "Color", KBTYPEINFO_VECTOR4, EtherFogComponent, m_FogColor, false, "" )	
+)
+
+
 GenerateClass( 
 	EtherWorldGenComponent, 
 	AddField( "TerrainDimensions", KBTYPEINFO_INT, EtherWorldGenComponent, m_ChunksPerTerrainSide, false, "" )
@@ -33,16 +48,30 @@ GenerateClass(
 	AddField( "IsFirstPersonModel", KBTYPEINFO_BOOL, EtherSkelModelComponent, m_bFirstPersonModel, false, "" )
 )
 
+GenerateEnum( 
+	EDestructibleBehavior, "EDestructibleBehavior",
+	AddEnumField( PushFromImpactPoint, "PushFromImpactPoint" )
+	AddEnumField( UserVelocity, "UserVelocity" )
+)
+
 GenerateClass(
 	EtherDestructibleComponent,
+	AddField( "DestructibleBehavior", KBTYPEINFO_ENUM, EtherDestructibleComponent, m_DestructibleType, false, "EDestructibleBehavior" )
+	AddField( "NonDamagedModel", KBTYPEINFO_STATICMODEL, EtherDestructibleComponent, m_pNonDamagedModel, false, "" )
+	AddField( "NonDamagedModelMaterialParams", KBTYPEINFO_STRUCT, EtherDestructibleComponent, m_NonDamagedModelMaterialParams, true, "kbShaderParamComponent" )
+	AddField( "DamagedModel", KBTYPEINFO_STATICMODEL, EtherDestructibleComponent, m_pDamagedModel, false, "" )
+	AddField( "DamagedModelMaterialParams", KBTYPEINFO_STRUCT, EtherDestructibleComponent, m_DamagedModelMaterialParams, true, "kbShaderParamComponent" )
 	AddField( "MaxLifeTime", KBTYPEINFO_FLOAT, EtherDestructibleComponent, m_MaxLifeTime, false, "" )
 	AddField( "Gravity", KBTYPEINFO_VECTOR, EtherDestructibleComponent, m_Gravity, false, "" )
-	AddField( "MinLinearVelocity", KBTYPEINFO_FLOAT, EtherDestructibleComponent, m_MinLinearVelocity, false, "" )
-	AddField( "MaxLinearVelocity", KBTYPEINFO_FLOAT, EtherDestructibleComponent, m_MaxLinearVelocity, false, "" )
+	AddField( "MinLinearVelocity", KBTYPEINFO_VECTOR, EtherDestructibleComponent, m_MinLinearVelocity, false, "" )
+	AddField( "MaxLinearVelocity", KBTYPEINFO_VECTOR, EtherDestructibleComponent, m_MaxLinearVelocity, false, "" )
 	AddField( "MinAngularVelocity", KBTYPEINFO_FLOAT, EtherDestructibleComponent, m_MinAngularVelocity, false, "" )
 	AddField( "MaxAngularVelocity", KBTYPEINFO_FLOAT, EtherDestructibleComponent, m_MaxAngularVelocity, false, "" )
 	AddField( "Health", KBTYPEINFO_FLOAT, EtherDestructibleComponent, m_StartingHealth, false, "" )
 	AddField( "ResetSim", KBTYPEINFO_BOOL, EtherDestructibleComponent, m_bDebugResetSim, false, "" )
+	AddField( "DestructionFX", KBTYPEINFO_GAMEENTITY, EtherDestructibleComponent, m_CompleteDestructionFX, false, "" )
+	AddField( "ImpactFX", KBTYPEINFO_GAMEENTITY, EtherDestructibleComponent, m_ImpactFX, false, "" )
+	AddField( "DestructionFXLocalOffset", KBTYPEINFO_VECTOR, EtherDestructibleComponent, m_DestructionFXLocalOffset, false, "" )
 )
 
 GenerateClass(

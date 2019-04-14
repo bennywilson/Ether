@@ -1,0 +1,75 @@
+//==============================================================================
+// baseHoloScope.kbShader
+//
+// 2018 kbEngine 2.0
+//==============================================================================
+cbuffer matrixBuffer {
+   matrix      modelMatrix;
+   matrix      mvpMatrix;
+   float4x4    boneList[128];
+};
+
+kbShaderState {
+	srcblend Blend_SrcAlpha
+	dstBlend Blend_InvSrcAlpha
+	blendOp BlendOp_Add
+	colorWriteEnable colorWriteEnable_rgba
+}
+
+//-------------------------------------
+struct vertexInput {
+	float4 position			: POSITION;
+	float2 uv				: TEXCOORD0;
+	float4 normal			: NORMAL;
+	float4 blendIndices		: BLENDINDICES;
+	float4 boneWeights		: BLENDWEIGHT;
+};
+
+//-------------------------------------
+struct pixelInput {
+	float4 position			: SV_POSITION;
+	float2 uv				: TEXCOORD0;
+	float4 color			: COLOR;
+	float2 position2		: TEXCOORD1;
+	float3 normal			: TEXCOORD2;
+};
+
+//-------------------------------------
+struct PS_OUTPUT {
+	float4 Color			: SV_TARGET0;
+};
+
+/**
+ *	vertexShader
+ */
+pixelInput vertexShader( vertexInput input ) {
+	pixelInput output = (pixelInput)(0);
+
+	float4 Pos = 0.0f;
+
+	int4 IndexVector = D3DCOLORtoUBYTE4(input.blendIndices);
+	float BlendWeightsArray[4] = (float[4])input.boneWeights;
+	int   IndexArray[4]        = (int[4])IndexVector;
+
+	Pos = mul( input.position, boneList[IndexArray[0]] );
+
+	output.position = mul( Pos, mvpMatrix );
+	output.uv = input.uv;
+	output.position2 = output.position.zw;
+	output.normal.xyz = mul( ( input.normal.xyz * 2.0f ) - 1.0f, (float3x3)modelMatrix );
+
+	return output;
+}
+
+Texture2D shaderTexture;
+SamplerState SampleType;
+
+/**
+ *	pixelShader
+ */
+ PS_OUTPUT pixelShader( pixelInput	input ) {
+	PS_OUTPUT output = (PS_OUTPUT) 0;
+	output.Color.xyzw = shaderTexture.Sample( SampleType, input.uv ).xyzw;
+	output.Color.w *= 1.1f;
+	return output;
+}

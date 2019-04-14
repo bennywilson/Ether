@@ -1,0 +1,95 @@
+//==============================================================================
+// characterGlow.kbShader
+//
+// 2018 kbEngine 2.0
+//==============================================================================
+cbuffer matrixBuffer {
+   matrix      modelMatrix;
+   matrix      mvpMatrix;
+   float4x4    boneList[128];
+   float4	   glowParams;
+};
+
+kbShaderState {
+	cullMode CullMode_None
+}
+
+//-------------------------------------
+struct vertexInput {
+	float4 position			: POSITION;
+	float2 uv				: TEXCOORD0;
+	float4 normal			: NORMAL;
+	float4 blendIndices		: BLENDINDICES;
+	float4 boneWeights		: BLENDWEIGHT;
+};
+
+//-------------------------------------
+struct pixelInput {
+	float4      position	: SV_POSITION;
+	float2      uv			: TEXCOORD0;
+	float2      position2	: TEXCOORD1;
+	float3      normal		: TEXCOORD2;
+};
+
+struct pixelInput2 {
+	float4      position	: SV_POSITION;
+	float2      uv			: TEXCOORD0;
+	float2      position2	: TEXCOORD1;
+	float3      normal		: TEXCOORD2;
+	bool		IsFrontFace	: SV_IsFrontFace;
+};
+//-------------------------------------
+struct PS_OUTPUT {
+	float4      Color		: SV_TARGET0;
+	float4      Normal		: SV_TARGET1;
+	float4		Specular	: SV_TARGET2;
+	float2      Depth		: SV_TARGET3;
+};
+
+
+/**
+ *	vertexShader
+ */
+pixelInput vertexShader( vertexInput input ) {
+	pixelInput output = (pixelInput)(0);
+
+   float4 Pos = 0.0f;
+
+   int4 IndexVector = D3DCOLORtoUBYTE4(input.blendIndices);
+   float BlendWeightsArray[4] = (float[4])input.boneWeights;
+   int   IndexArray[4]        = (int[4])IndexVector;
+
+   Pos = mul( input.position, boneList[IndexArray[0]] );
+
+	output.position = mul( Pos, mvpMatrix );
+	output.uv = input.uv;
+	//output.color = 0;//input.color;
+	output.position2 = output.position.zw;
+	output.normal.xyz = mul( ( input.normal.xyz * 2.0f ) - 1.0f, (float3x3)modelMatrix );
+
+	return output;
+}
+
+/**
+ *	pixelShader
+ */
+Texture2D colorTexture;
+SamplerState SampleType;
+
+ PS_OUTPUT pixelShader( pixelInput2	input ) {
+	PS_OUTPUT output = (PS_OUTPUT) 0;
+
+	output.Color = colorTexture.Sample( SampleType, input.uv );
+	output.Color.w *= glowParams.x;
+	output.Specular.x = 0;
+	output.Specular.y = 1.0f;// + ( colorTex.w *2.0f );
+
+	output.Depth.r = input.position2.x / input.position2.y;
+
+	output.Normal.xyz = normalize( input.normal );
+	if ( input.IsFrontFace == false ) {
+	   output.Normal *= -1.0f;
+	}
+	output.Normal.w = output.Specular.w;
+	return output;
+}

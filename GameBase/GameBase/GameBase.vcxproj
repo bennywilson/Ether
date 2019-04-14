@@ -14,7 +14,7 @@
     <ProjectGuid>{00C43D40-0F98-498D-A494-1274FDE720F7}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>GameBase</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
@@ -85,14 +85,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <None Include="assets\shaders\baseHoloscope.kbShader" />
-    <None Include="assets\shaders\baseWeapon.kbShader" />
-    <None Include="assets\shaders\basicTerrain.kbShader" />
     <None Include="assets\shaders\Character\characterBase.kbShader" />
+    <None Include="assets\shaders\Character\characterBase_NoSkinning.kbShader" />
     <None Include="assets\shaders\Character\characterGlow.kbShader" />
     <None Include="assets\shaders\Character\characterHair.kbShader" />
     <None Include="assets\shaders\Character\characterMetal.kbShader" />
     <None Include="assets\shaders\Character\characterMetalDull.kbShader" />
+    <None Include="assets\shaders\Character\characterOutline_NoSkinning.kbShader" />
     <None Include="assets\shaders\Character\characterTranslucent.kbShader" />
     <None Include="assets\shaders\Character\firstPersonHands.kbshader" />
     <None Include="assets\shaders\DamageGen\collisionMapDamageGen.kbShader" />
@@ -109,17 +108,19 @@
     <None Include="assets\shaders\FX\emberParticle.kbShader" />
     <None Include="assets\shaders\FX\particleAtlas.kbShader" />
     <None Include="assets\shaders\FX\Particle_BlendAdd.kbShader" />
+    <None Include="assets\shaders\FX\additiveBlend.kbShader" />
     <None Include="assets\shaders\Lights\charEnviroCylinderLight.kbShader" />
     <None Include="assets\shaders\Lights\charEnviroPointLight.kbShader" />
     <None Include="assets\shaders\Lights\directionalLightToon.kbShader" />
     <None Include="assets\shaders\Lights\environmentDirectionalFill.kbShader" />
-    <None Include="assets\shaders\particleAtlas.kbShader" />
-    <None Include="assets\shaders\firstPersonHands.kbshader" />
-    <None Include="assets\shaders\grass.kbShader" />
-    <None Include="assets\shaders\environment_hole.kbShader" />
-    <None Include="assets\shaders\shellCasing.kbShader" />
-    <None Include="assets\shaders\shellTrailParticle.kbShader" />
-    <None Include="assets\shaders\skyBox.kbShader" />
+    <None Include="assets\shaders\PostProcess\Fog.kbShader" />
+    <None Include="assets\shaders\PostProcess\HatchShading.kbShader" />
+    <None Include="assets\shaders\Skybox\cloudDome.kbShader" />
+    <None Include="assets\shaders\Skybox\cloudDome_SmoothStep.kbShader" />
+    <None Include="assets\shaders\Skybox\cloudDome_Static.kbShader" />
+    <None Include="assets\shaders\Skybox\overheadCloudPlane.kbShader" />
+    <None Include="assets\shaders\Skybox\skyBox.kbShader" />
+    <None Include="assets\shaders\Skybox\skybox_Gradient.kbShader" />
     <None Include="assets\shaders\Weapons\baseHoloscope.kbShader" />
     <None Include="assets\shaders\Weapons\baseWeapon.kbShader" />
     <None Include="assets\shaders\Weapons\shellCasing.kbShader" />

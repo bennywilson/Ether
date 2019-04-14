@@ -85,6 +85,14 @@ std::vector<kbTypeInfoClass *> kbGameComponent::kbGameComponent_TypeInfoVar;
 kbAnimEvent_TypeInfo kbAnimEvent::typeInfo;
 std::vector<class kbTypeInfoClass*> kbAnimEvent::kbAnimEvent_TypeInfoVar;
 
+// kbVectorAnimEvent
+kbVectorAnimEvent_TypeInfo kbVectorAnimEvent::typeInfo;
+std::vector<class kbTypeInfoClass*> kbVectorAnimEvent::kbVectorAnimEvent_TypeInfoVar;
+
+// kbModelEmitter
+kbModelEmitter_TypeInfo kbModelEmitter::typeInfo;
+std::vector<class kbTypeInfoClass*> kbModelEmitter::kbModelEmitter_TypeInfoVar;
+
 // kbModelComponent
 kbModelComponent_TypeInfo kbModelComponent::typeInfo;
 std::vector<kbTypeInfoClass *> kbModelComponent::kbModelComponent_TypeInfoVar;
@@ -100,10 +108,6 @@ std::vector<kbTypeInfoClass *> kbSkeletalModelComponent::kbSkeletalModelComponen
 // kbGrass
 kbGrass_TypeInfo kbGrass::typeInfo;
 std::vector<kbTypeInfoClass *> kbGrass::kbGrass_TypeInfoVar;
-
-// kbTerrainMatComponent
-kbTerrainMatComponent_TypeInfo kbTerrainMatComponent::typeInfo;
-std::vector<kbTypeInfoClass *> kbTerrainMatComponent::kbTerrainMatComponent_TypeInfoVar;
 
 // kbTerrainComponent
 kbTerrainComponent_TypeInfo kbTerrainComponent::typeInfo;

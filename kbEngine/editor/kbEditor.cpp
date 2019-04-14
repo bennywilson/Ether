@@ -348,10 +348,10 @@ void kbEditor::Update() {
 	}
 */
 	// Initiation
-	if ( GetAsyncKeyState( VK_LSHIFT ) && GetAsyncKeyState( 'P' ) ) {
+/*	if ( GetAsyncKeyState( VK_LSHIFT ) && GetAsyncKeyState( 'P' ) ) {
 		SetMainCameraPos( kbVec3( 5.1198f, 13.310f, 43.877f ) );
 		SetMainCameraRot( kbQuat( -0.0149f, 0.00499f,-7.51334301e-05f, 0.999875009f ) );
-	}
+	}*/
 
 	if ( GetFocus() == fl_xid( this ) ) {
 		// input
@@ -727,20 +727,18 @@ void kbEditor::AdjustCameraSpeedCB( class Fl_Widget * widget, void * ) {
 
 	float multiplier = 1.0f;
 
-	if ( strstr( widget->label(), "Speedx0.25" ) ) {
+	if ( strcmp( widget->label(), "Speedx0.25" ) == 0 ) {
 		multiplier = 1.0f;
 		g_Editor->m_pSpeedButton->label( "Speedx1" );
-	} else if ( strstr( widget->label(), "Speedx1" ) ) {
+	} else if ( strcmp( widget->label(), "Speedx1" ) == 0 ) {
 		multiplier = 5.0f;
 		g_Editor->m_pSpeedButton->label( "Speedx5" );
 	}
-	else if ( strstr( widget->label(), "Speedx5" ) )
-	{
+	else if ( strcmp( widget->label(), "Speedx5" ) == 0 ) {
 		multiplier = 15.0f;
 		g_Editor->m_pSpeedButton->label( "Speedx15" );
 	}
-	else if ( strstr( widget->label(), "Speedx15" ) )
-	{
+	else if ( strcmp( widget->label(), "Speedx15" ) == 0 ) {
 		multiplier = 0.25f;
 		g_Editor->m_pSpeedButton->label( "Speedx0.25" );
 	}

@@ -59,6 +59,7 @@ protected:
 	int											m_ScorchState;
 
 	float										m_RandomScroller;
+	kbVec3										m_ScrollRate;
 	bool										m_bIsFinished;
 };
 
@@ -114,6 +115,9 @@ protected:
 
 protected:
 
+	virtual void								RenderSync() override;
+	virtual void								RenderHookCallBack( kbRenderTexture *const pSrc, kbRenderTexture *const pDst );
+
 	kbCamera									m_Camera;
 	eCameraMode_t								m_CameraMode;
 	class EtherPlayerComponent *				m_pPlayerComponent;
@@ -138,8 +142,7 @@ protected:
 	};
 	std::vector<frameBulletShots>				m_ShotsThisFrame;
 	std::vector<frameBulletShots>				m_RenderThreadShotsThisFrame;
-	virtual void								RenderSync() override;
-	virtual void								RenderThreadCallBack() override;
+
 	kbRenderTexture *							m_pBulletHoleRenderTexture;
 	kbRenderTexture *							m_pGrassCollisionTexture;
 	kbRenderTexture *							m_pGrassCollisionReadBackTexture;

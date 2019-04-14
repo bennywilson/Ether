@@ -1,2 +1,3 @@
 cd GameBase\GameBase
-GameBase.exe Level1.kbLevel
+GameBase.exe cloudTest
+pause

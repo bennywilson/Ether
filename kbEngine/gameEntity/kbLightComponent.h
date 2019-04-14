@@ -2,7 +2,7 @@
 // kbLightComponent.h
 //
 //
-// 2016-2018 kbEngine 2.0
+// 2016-2019 kbEngine 2.0
 //===================================================================================================
 #ifndef _KBLIGHTCOMPONENT_H_
 #define _KBLIGHTCOMPONENT_H_
@@ -134,6 +134,7 @@ public:
 protected:
 
 	virtual void								SetEnable_Internal( const bool isEnabled ) override;
+	virtual void								Update_Internal( const float DeltaTime ) override;
 
 	kbTexture *									m_Texture;
 	kbColor										m_Color;

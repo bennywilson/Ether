@@ -244,7 +244,7 @@ static HRESULT CreateTextureFromWIC( IWICBitmapFrameDecode *const frame,
 	kbErrorCheck( width > 0 && height > 0, "CreateTextureFromWIC() - Invalid width and/or height %d x %d", width, height );
 	
 	if ( maxsize == 0 ) {
-		maxsize = 8192;
+		maxsize = 16384;
 	}
 	
 	if ( width > maxsize || height > maxsize ) {

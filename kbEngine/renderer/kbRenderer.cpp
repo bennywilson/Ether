@@ -203,9 +203,10 @@ kbRenderer::kbRenderer() :
 	m_RenderThreadSync( 0 ),
 	m_bDebugBillboardsEnabled( false ) {
 
+	m_pAccumBuffers[0] = m_pAccumBuffers[1] = nullptr;
+	m_iAccumBuffer = 0;
+
 	g_pRenderer = this;
-
-
 }
 
 /**
@@ -583,7 +584,8 @@ void kbRenderer::RenderSync() {
 				// Updating a renderobject 
 				auto it = m_pCurrentRenderWindow->m_RenderObjectMap.find( m_RenderObjectList_GameThread[i].m_pComponent );
 				if ( it == m_pCurrentRenderWindow->m_RenderObjectMap.end() || it->second == nullptr ) {
-					kbError( "kbRenderer::UpdateRenderObject - Error, Updating a RenderObject that doesn't exist" );
+					kbWarning( "kbRenderer::UpdateRenderObject - Error, Updating a RenderObject that doesn't exist" );
+					return;
 				}
 
 				renderObject = it->second;
@@ -597,7 +599,7 @@ void kbRenderer::RenderSync() {
 
 				// Adding new renderobject
 				renderObject = m_pCurrentRenderWindow->m_RenderObjectMap[pComponent];
-				kbErrorCheck( renderObject == nullptr, "kbRenderer::AddRenderObject() - Model %s already added", m_RenderObjectList_GameThread[i].m_pModel->GetFullName().c_str() );
+				kbWarningCheck( renderObject == nullptr, "kbRenderer::AddRenderObject() - Model %s already added", m_RenderObjectList_GameThread[i].m_pModel->GetFullName().c_str() );
 
 				if ( pComponent->IsA( kbSkeletalModelComponent::GetType() ) && m_RenderObjectList_GameThread[i].m_pModel->NumBones() > 0 ) {
 
@@ -671,7 +673,7 @@ void kbRenderer::RenderSync() {
 				renderParticle = particleMap[pComponent];
 
 				if ( renderParticle != nullptr ) {
-					kbError( "kbRenderer::AddParticle - Adding a particle that already exists" );
+					kbWarning( "kbRenderer::AddParticle - Adding a particle that already exists" );
 				} else {
 					renderParticle = new kbRenderObject;
 					particleMap[pComponent] = renderParticle;
@@ -679,7 +681,7 @@ void kbRenderer::RenderSync() {
 			} else {
 				std::map< const void *, kbRenderObject * >::iterator it = particleMap.find( pComponent );
 				if ( it == particleMap.end() || it->second == nullptr ) {
-					kbError( "kbRenderer::UpdateRenderObject - Error, Updating a RenderObject that doesn't exist" );
+					kbWarning( "kbRenderer::UpdateRenderObject - Error, Updating a RenderObject that doesn't exist" );
 				}
 
 				 renderParticle = it->second;
@@ -696,7 +698,7 @@ void kbRenderer::RenderSync() {
 			bool bAlreadyExists = false;
 			for ( int j = 0; j < m_LightShafts_RenderThread.size(); j++ ) {
 				if ( m_LightShafts_RenderThread[j].m_pLightShaftsComponent = m_LightShafts_GameThread[i].m_pLightShaftsComponent ) {
-					kbError( "kbRenderer::SetReadyToRender() - Adding light shafts that already exist" );
+					kbWarning( "kbRenderer::SetReadyToRender() - Adding light shafts that already exist" );
 					bAlreadyExists = true;
 					break;
 				}

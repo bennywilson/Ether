@@ -26,16 +26,6 @@ kbConsoleVariable g_ShowPos( "showpos", false, kbConsoleVariable::Console_Bool, 
 
 EtherGame * g_pEtherGame = nullptr;
 
-// Stimpack
-const float g_SlomoLength = 7.0f;
-
-// Airstrike
-const float g_AirstrikeDurationSec = 7.0f;
-const float g_TimeBetweenBombers = 1.5f;
-const float g_TimeBetweenBombs = 0.075f;
-
-const kbVec3 g_CountUIScale( 0.5f, 0.5f, 0.5f );
-static kbVec3 g_CountUIOffset( 14.96f, -12.0f, 10.0f );
 
 /**
  *	EtherGame::EtherGame
@@ -160,10 +150,18 @@ void EtherGame::Update_Internal( float DT ) {
 	if ( GetAsyncKeyState( VK_LSHIFT ) && GetAsyncKeyState( 'P' ) ) {
 	    kbCamera & playerCamera = GetCamera();
 
-		//SetMainCameraPos( kbVec3( 5.1198f, 13.310f, 43.877f ) );
-		//SetMainCameraRot( kbQuat( -0.0149f, 0.00499f,-7.51334301e-05f, 0.999875009f ) );
-		playerCamera.m_Position = kbVec3( 5.1198f, 13.310f, 43.877f ) ;
-		playerCamera.m_RotationTarget = playerCamera.m_Rotation = kbQuat( -0.0149f, 0.00499f,-7.51334301e-05f, 0.999875009f ); 
+		for ( size_t i = GetGameEntities().size() - 1; i >= 0; i-- ) {
+
+			const kbGameEntity *const pCurEntity = GetGameEntities()[i];
+			kbPlayerStartComponent *const pStart = (kbPlayerStartComponent*)pCurEntity->GetComponentByType( kbPlayerStartComponent::GetType() );
+			if ( pStart != nullptr ) {
+				kbVec3 newPos = pCurEntity->GetPosition();
+				playerCamera.m_Position = newPos;
+				m_pLocalPlayer->SetPosition( newPos );
+;
+				break;
+			}
+		}
 	}
 
 	if ( ( g_pD3D11Renderer->IsRenderingToHMD() || g_pD3D11Renderer->IsUsingHMDTrackingOnly() ) && g_pD3D11Renderer->GetFrameNum() > 0 ) {
@@ -534,10 +532,10 @@ void EtherGame::RenderSync() {
 }
 
 /**
- *	EtherGame::RenderThreadCallBack
+ *	EtherGame::RenderHookCallBack
  */
 static float g_TimeMultiplier = 0.95f / 0.016f;
-void EtherGame::RenderThreadCallBack() {
+void EtherGame::RenderHookCallBack( kbRenderTexture *const pSrc, kbRenderTexture *const pDst ) {
 	static kbVec3 terrainPos;
 	static float terrainWidth;
 	static float halfTerrainWidth;
@@ -564,7 +562,7 @@ void EtherGame::RenderThreadCallBack() {
 					kbTexture *const diff = (kbTexture*)g_ResourceManager.LoadResource( "./assets/models/architecture/bricks.png", true );
 					kbTexture *const normal = (kbTexture*)g_ResourceManager.LoadResource( "./assets/models/architecture/bricks_nm.png", true );
 
-					pSM->SetMaterialParamTexture( 0, "holeTex" ,m_pBulletHoleRenderTexture );
+					pSM->SetMaterialParamTexture( 0, "holeTex", m_pBulletHoleRenderTexture );
 
 				}
 				break;
@@ -953,14 +951,15 @@ EtherFireEntity::EtherFireEntity( const kbVec3 & position, const kbPrefab *const
 
 	m_StartingTimeSeconds = g_GlobalTimer.TimeElapsedSeconds();
 	m_RandomScroller = 1.0f + kbfrand() * 0.1f;
+	m_ScrollRate = kbVec3Rand( kbVec3( 1.0f, 1.0f, 1.0f ), kbVec3( 1.15f, 1.15f, 1.15f ) );
 
 	// MATERIALHACK
 
 	kbStaticModelComponent * pSM = (kbStaticModelComponent*)m_pSmokeEntity->GetComponentByType( kbStaticModelComponent::GetType() );
-	pSM->SetMaterialParamVector( 0, "additionalData", kbVec4( 0.0f, m_RandomScroller, 0.0f, 0.0f ) );
+	pSM->SetMaterialParamVector( 0, "additionalData", kbVec4( 0.0f, m_RandomScroller, m_ScrollRate.x, m_ScrollRate.y ) );
 
 	pSM = (kbStaticModelComponent*)m_pFireEntity->GetComponentByType( kbStaticModelComponent::GetType() );
-	pSM->SetMaterialParamVector( 0, "additionalData", kbVec4( 0.0f, m_RandomScroller, 0.0f, 0.0f ) );
+	pSM->SetMaterialParamVector( 0, "additionalData", kbVec4( 0.0f, m_RandomScroller, m_ScrollRate.z, m_ScrollRate.y ) );
 
 	m_bIsFinished = false;
 }
@@ -993,6 +992,11 @@ void EtherFireEntity::Destroy() {
  *	EtherFireEntity::Update
  */
 void EtherFireEntity::Update( const float DeltaTime ) {
+
+	if ( GetAsyncKeyState( 'C' ) ) {
+		m_bIsFinished = true;
+		return;
+	}
 
 	const float currentTimeSeconds = g_GlobalTimer.TimeElapsedSeconds();
 	const float scaleTime = 1.0f;
@@ -1057,9 +1061,9 @@ void EtherFireEntity::Update( const float DeltaTime ) {
 	m_RandomScroller += DeltaTime * fireFade;
 
 	kbStaticModelComponent * pSM = (kbStaticModelComponent*)m_pSmokeEntity->GetComponentByType( kbStaticModelComponent::GetType() );
-	pSM->SetMaterialParamVector( 0, "additionalData", kbVec4( smokeFade * 0.24f, m_RandomScroller, 0.0f, 0.0f ) );
+	pSM->SetMaterialParamVector( 0, "additionalData", kbVec4( smokeFade * 0.24f, m_RandomScroller, m_ScrollRate.x, m_ScrollRate.y ) );
 
 	pSM = (kbStaticModelComponent*)m_pFireEntity->GetComponentByType( kbStaticModelComponent::GetType() );
-	pSM->SetMaterialParamVector( 0, "additionalData", kbVec4( fireFade, m_RandomScroller, 0.0f, 0.0f ) );	
+	pSM->SetMaterialParamVector( 0, "additionalData", kbVec4( fireFade, m_RandomScroller, m_ScrollRate.z, m_ScrollRate.y ) );	
 }
 

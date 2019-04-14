@@ -2,7 +2,7 @@
 // kbClothComponent.h
 //
 //
-// 2016-2018 kbEngine 2.0
+// 2016-2019 kbEngine 2.0
 //==============================================================================
 #ifndef _KBCLOTHCOMPONENT_H_
 #define _KBCLOTHCOMPONENT_H_
@@ -19,23 +19,23 @@ enum EClothType {
  *	kbClothSpring_t
  */
 struct kbClothSpring_t {
-	int				m_MassIndices[2];
-	float			m_Length;
+	int											m_MassIndices[2];
+	float										m_Length;
 };
 
 /**
  *	kbClothMass_t
  */
 struct kbClothMass_t {
-	const kbVec3 &	GetPosition() const { return m_Matrix.GetOrigin(); }
-	const kbVec3 &	GetAxis( const int index ) const { return m_Matrix.GetAxis( index ); }
+	const kbVec3 &								GetPosition() const { return m_Matrix.GetOrigin(); }
+	const kbVec3 &								GetAxis( const int index ) const { return m_Matrix.GetAxis( index ); }
 	
-	void			SetPosition( const kbVec3 newOrigin ) { m_Matrix.SetAxis( 3, newOrigin ); }
-	void			SetAxis( const int index, const kbVec3 & axis ) { m_Matrix.SetAxis( index, axis ); }
+	void										SetPosition( const kbVec3 newOrigin ) { m_Matrix.SetAxis( 3, newOrigin ); }
+	void										SetAxis( const int index, const kbVec3 & axis ) { m_Matrix.SetAxis( index, axis ); }
 
-	kbBoneMatrix_t	m_Matrix;
-	kbVec3			m_LastPosition;
-	bool			m_bAnchored;
+	kbBoneMatrix_t								m_Matrix;
+	kbVec3										m_LastPosition;
+	bool										m_bAnchored;
 };
 
 /**
@@ -47,10 +47,11 @@ public:
 
 	KB_DECLARE_COMPONENT( kbClothBone, kbGameComponent );
 
+	//-------------------------------------------------------------------------------------------------------------------------------------------------------------
 private:
-	kbString							m_BoneName;
-	std::vector<kbString>				m_NeighborBones;
-	bool								m_bIsAnchored;
+	kbString									m_BoneName;
+	std::vector<kbString>						m_NeighborBones;
+	bool										m_bIsAnchored;
 };
 
 /**
@@ -82,6 +83,19 @@ private:
 	std::vector<class kbClothBone>				m_AdditionalBoneInfo;
 	std::vector<class kbBoneCollisionSphere>	m_CollisionSpheres;
 	int											m_NumConstrainIterations;
+
+	kbVec3										m_Gravity;
+	// Wind Data
+	kbVec3										m_MaxWindVelocity;
+	kbVec3										m_MinWindVelocity;
+	float										m_MaxWindGustDuration;
+	float										m_MinWindGustDuration;
+	bool										m_bAddFakeOscillation;
+
+	// Run-time
+	kbVec3										m_CurWindVelocity;
+	kbVec3										m_NextWindVelocity;
+	float										m_NextWindChangeTime;
 
 	const kbModel *								m_pSkeletalModel;
 

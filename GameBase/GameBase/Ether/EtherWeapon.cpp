@@ -165,12 +165,15 @@ void EtherProjectileComponent::Update_Internal( const float DeltaTime ) {
 			if ( pHitDestructible != nullptr ) {
 				pHitDestructible->TakeDamage( 1.0f, collisionInfo.m_HitLocation, 100000.0f );
 
+				kbGameEntityPtr gameEnt = pHitDestructible->GetImpactFX();
 				if ( m_ImpactWoodSoundData.size() > 0 ) {
 					m_ImpactWoodSoundData[rand() % m_ImpactWoodSoundData.size()].PlaySoundAtPosition( newPosition );
 				}
 
-				if ( m_WoodImpactFX.GetEntity() != nullptr ) {
-					kbGameEntity *const pExplosionFX = g_pGame->CreateEntity( m_WoodImpactFX.GetEntity() );
+				
+				if ( gameEnt.GetEntity() != nullptr ) {
+					kbGameEntity *const pExplosionFX = g_pGame->CreateEntity( gameEnt.GetEntity() ) ;
+
 					pExplosionFX->SetPosition( worldHitCollisionPt );
 					pExplosionFX->SetOrientation( GetOwner()->GetOrientation() );
 					pExplosionFX->DeleteWhenComponentsAreInactive( true );
@@ -400,7 +403,7 @@ void EtherWeaponComponent::UpdateShells( const float DeltaTime ) {
 		particle.m_UVs[0].Set( 0.0f, startV );
 		particle.m_UVs[1].Set( 1.0f, startV + 0.25f );
 
-		g_pGame->GetParticleManager()->AddQuad( 1, particle );
+	//	g_pGame->GetParticleManager()->AddQuad( 1, particle );
 	}
 }
 
@@ -573,7 +576,7 @@ bool EtherWeaponComponent::Fire_Internal() {
 				newShell.m_AtlasIdx = rand() % 4;
 				newShell.m_NormalizedAnimStartTime = kbfrand();
 
-				g_pRenderer->AddRenderObject( renderObj );
+				//g_pRenderer->AddRenderObject( renderObj );
 				newShell.m_bAvailable = false;
 
 				break;

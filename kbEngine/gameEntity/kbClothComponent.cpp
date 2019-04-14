@@ -2,7 +2,7 @@
 // kbClothComponent.cpp
 //
 //
-// 2016-2018 kbEngine 2.0
+// 2016-2019 kbEngine 2.0
 //===================================================================================================
 #include "kbCore.h"
 #include "kbVector.h"
@@ -48,8 +48,20 @@ void kbClothComponent::Constructor() {
 	m_ClothType = CT_None;
 	m_Width = 0;
 	m_Height = 0;
-	m_pSkeletalModel = NULL;
+	m_pSkeletalModel = nullptr;
 	m_NumConstrainIterations = 1;
+
+	m_Gravity.Set( 0.0f, -100.0f, 0.0f );
+	m_MaxWindVelocity.Set( 20.0f, 160.0f, -9.0f );
+	m_MinWindVelocity.Set( 64.0f, 30.0f, -20.0f );
+	m_MinWindGustDuration = 0.2f;
+	m_MaxWindGustDuration = 0.35f;
+	m_bAddFakeOscillation = false;
+
+	m_CurWindVelocity = kbVec3::zero;
+	m_NextWindVelocity = kbVec3::zero;
+	m_NextWindChangeTime = 0;
+
 	m_CurrentTickFrame = 0;
 }
 
@@ -171,41 +183,23 @@ void kbClothComponent::Update_Internal( const float DeltaTime ) {
  */
 void kbClothComponent::RunSimulation( const float inDeltaTime ) {
 
-	// Temp: Wind simulation
-	static float nextTime = kbfrand() * 10.0f;
-	static float curTime = 0.0f;
-	static float Next_x = kbfrand() * 40.0f;
-	static float Next_y = kbfrand() * 10.0f;
-	static float Next_z = (kbfrand() * .0f );
-	static float cur_x = 0.0f;
-	static float cur_y = 0.0f;
-	static float cur_z = 0.0f;
-
 	const float DeltaTime = kbClamp( inDeltaTime, 0.0f, 0.016f );
-	curTime += DeltaTime;
-	if ( curTime >= nextTime ) {
-		nextTime = kbfrand() * 3.0f;
-		curTime = 0.0f;
 
-static float maxX = 45.0f;
-static float maxY = 5.0f;
-static float maxZ = 45.0f;
+	if ( m_bAddFakeOscillation ) {
 
-		Next_x = ( kbfrand() * maxX ) - (maxX/2.0f);
-		Next_y = ( kbfrand() * maxY );
-		Next_z = ( kbfrand() * maxZ ) - (maxZ/2.0f);
+		if ( g_GlobalTimer.TimeElapsedSeconds() >= m_NextWindChangeTime ) {
+			m_NextWindChangeTime = g_GlobalTimer.TimeElapsedSeconds() + ( kbfrand() * ( m_MaxWindGustDuration- m_MinWindGustDuration ) ) + m_MinWindGustDuration;
+			m_NextWindVelocity = kbVec3Rand( m_MinWindVelocity, m_MaxWindVelocity );
+		}
+
+		m_CurWindVelocity = kbLerp( m_CurWindVelocity, m_NextWindVelocity, 0.0075f );
 	}
-/*
-	Next_x += ( kbfrand() * 0.2f ) - 0.1f;
-	Next_y += ( kbfrand() * 0.2f ) - 0.1f;
-	Next_z += ( kbfrand() * 0.2f ) - 0.1f;
-*/
-	cur_x = kbLerp( cur_x, Next_x, 0.0075f );
-	cur_y = kbLerp( cur_y, Next_y, 0.0075f );
-	cur_z = kbLerp( cur_z, Next_z, 0.0075f );
+
 
 	// Wind Sim
-	const kbVec3 gravity( 0.0f, g_ClothGrav.GetFloat(), 0.0f );
+
+	kbVec3 wind = m_CurWindVelocity;
+
 
 	static kbVec3 BallPos( 0.0f, -35.0f, 0.0f );
 	static kbVec3 BallDir( 0.0f, 0.0f, 1.0f );
@@ -255,11 +249,33 @@ static float maxZ = 45.0f;
 	}
 
 	// Apply forces and update positions
+	std::vector<float> a;
+	for ( int i = 0; i < m_Height; i++ ) {
+		float theRand = kbfrand();
+
+		a.push_back( theRand );
+		a.push_back( theRand );
+		a.push_back( theRand );
+
+	}
+
 	for ( int massIdx = 0; massIdx < m_Masses.size(); massIdx++ ) {
 		if ( m_Masses[massIdx].m_bAnchored )
 			continue;
 
-		const kbVec3 totalForce = gravity;
+		kbVec3 totalForce = m_Gravity;
+		if ( m_bAddFakeOscillation ) {
+
+			kbVec3 windAmt =  ( ( wind - ( wind * 0.5f ) * kbfrand() + ( wind * 0.5f ) ) );
+			int level = massIdx % m_Width;
+
+			if ( a[level] < 0.75f ) {
+				windAmt.y = wind.y;
+			} else {
+				windAmt.y -= wind.y;
+			}
+			totalForce += windAmt;
+		}
 
 		kbVec3 newLocation = m_Masses[massIdx].GetPosition();// + ( totalForce * DeltaTime );
 
@@ -379,13 +395,8 @@ static float maxZ = 45.0f;
  *	kbClothComponent::SetupCloth
  */
 void kbClothComponent::SetupCloth() {
-	if ( m_pSkeletalModel == NULL ) {
+	if ( m_pSkeletalModel == nullptr ) {// || m_BoneInfo.size() <= 2 || m_Width <= 2 || m_Height <= 2 ) {
 		return;
-	}
-
-	if ( m_BoneInfo.size() <= 2 || m_Width <= 2 || m_Height <= 2 ) {
-		kbError( "Invalid cloth setup" );
-		m_pSkeletalModel = NULL;
 	}
 
 	// Create a list of skeletal bone indices
@@ -406,7 +417,7 @@ void kbClothComponent::SetupCloth() {
 		const int curIdx = (int)m_BoneInfo.size() + i;
 		m_BoneIndices[curIdx] = m_pSkeletalModel->GetBoneIndex( m_AdditionalBoneInfo[i].m_BoneName );
 		if ( m_BoneIndices[curIdx] < 0 ) {
-			kbError( "Unable to find index for bone %s", m_BoneInfo[i].m_BoneName.c_str() );
+			kbError( "Unable to find index for bone %s index is %d", m_AdditionalBoneInfo[i].m_BoneName.c_str(), i );
 		}
 	}
 

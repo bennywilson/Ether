@@ -391,6 +391,8 @@ public:
 	const static float							Near_Plane;
 	const static float							Far_Plane;
 
+	virtual void								SetGlobalShaderParam( const kbShaderParamOverrides_t::kbShaderParam_t & shaderParam ) override;
+
 	// Render thread
 	virtual void								RT_SetRenderTarget( kbRenderTexture *const pRenderTexture ) override;
 	virtual void								RT_ClearRenderTarget( kbRenderTexture *const pRenderTexture, const kbColor & color ) override;
@@ -458,6 +460,7 @@ private:
 															 const kbVec3 & pixelSize, const kbVec3 & renderTargetSize );
 
 	kbRenderTexture_DX11 *						GetRenderTarget_DX11( const eReservedRenderTargets target ) { return (kbRenderTexture_DX11*) m_pRenderTargets[target]; }
+	kbRenderTexture_DX11 *						GetAccumBuffer( const int index ) { return  (kbRenderTexture_DX11*) m_pAccumBuffers[index]; }
 
 	HWND										m_hwnd;
 	IDXGIFactory *								m_pDXGIFactory;
@@ -511,6 +514,10 @@ private:
 	ID3D11SamplerState *						m_pNormalMapSamplerState;
 	ID3D11SamplerState *						m_pShadowMapSamplerState;
 	
+	// Shader Params
+	std::vector<kbShaderParamOverrides_t::kbShaderParam_t>	m_GlobalShaderParams_GameThread;
+	std::vector<kbShaderParamOverrides_t::kbShaderParam_t>	m_GlobalShaderParams_RenderThread;
+
 	// debug
 	ID3DUserDefinedAnnotation *					m_pEventMarker;
 	ID3D11Buffer *								m_DebugVertexBuffer;

@@ -25,6 +25,98 @@ kbConsoleVariable g_ProcGenInfo( "procgeninfo", false, kbConsoleVariable::Consol
 
 
 /**
+ *	EtherAntialiasingComponent::Constructor
+ */
+void EtherAntialiasingComponent::Constructor() {
+	SetRenderPass( RP_PostProcess );
+	m_pShader = nullptr;
+}
+
+/**
+ *	EtherAntialiasingComponent::SetEnable_Internal
+ */
+void EtherAntialiasingComponent::SetEnable_Internal( const bool bEnable ) {
+	Super::SetEnable_Internal( bEnable );
+
+	if ( bEnable ) {
+		g_pRenderer->RegisterRenderHook( this );
+	} else {
+		g_pRenderer->UnregisterRenderHook( this );
+	}
+}
+
+/**
+ *	EtherAntialiasingComponent::RenderHookCallBack
+ */
+void EtherAntialiasingComponent::RenderHookCallBack( kbRenderTexture *const pSrc, kbRenderTexture *const pDst ) {
+	if ( m_pShader == nullptr ) {
+		g_pRenderer->RT_CopyRenderTarget( pSrc, pDst );
+		return;
+	}
+
+	g_pRenderer->RT_SetRenderTarget( pDst );
+	kbShaderParamOverrides_t shaderParams;
+	//shaderParams.SetVec4( "fog_Start_End_Clamp", kbVec4( m_FogStartDist, m_FogEndDist, m_FogClamp, 0.0f ) );
+	//shaderParams.SetVec4( "fogColor", m_FogColor );
+
+	kbVec3 position;
+	kbQuat orientation;
+	g_pRenderer->GetRenderViewTransform( nullptr, position, orientation );
+
+	//shaderParams.SetVec4( "cameraPosition", position );
+	g_pRenderer->RT_Render2DQuad( kbVec2( 0.5f, 0.5f ), kbVec2( 1.0f, 1.0f ), kbColor::white, m_pShader, &shaderParams );
+}
+
+/**
+ *	EtherFogComponent::Constructor
+ */
+void EtherFogComponent::Constructor() {
+	SetRenderPass( RP_Translucent );
+	m_pShader = nullptr;
+	m_FogStartDist = 300;
+	m_FogEndDist = 3000;
+	m_FogClamp = 1.0f;
+	m_FogColor = kbColor::white;
+}
+
+/**
+ *	EtherFogComponent::RenderHookCallBack
+ */
+void EtherFogComponent::RenderHookCallBack( kbRenderTexture *const pSrc, kbRenderTexture *const pDst ) {
+	//g_pRenderer->RT_ClearRenderTarget( pDst, kbColor::white );
+
+	if ( m_pShader == nullptr ) {
+		m_pShader = (kbShader *) g_ResourceManager.LoadResource( "./assets/shaders/PostProcess/Fog.kbshader", true );
+	}
+
+	g_pRenderer->RT_SetRenderTarget( pDst );
+	kbShaderParamOverrides_t shaderParams;
+	shaderParams.SetVec4( "fog_Start_End_Clamp", kbVec4( m_FogStartDist, m_FogEndDist, m_FogClamp, 0.0f ) );
+	shaderParams.SetVec4( "fogColor", m_FogColor );
+
+	kbVec3 position;
+	kbQuat orientation;
+	g_pRenderer->GetRenderViewTransform( nullptr, position, orientation );
+
+	shaderParams.SetVec4( "cameraPosition", position );
+	g_pRenderer->RT_Render2DQuad( kbVec2( 0.5f, 0.5f ), kbVec2( 1.0f, 1.0f ), kbColor::white, m_pShader, &shaderParams );
+}
+
+/**
+ *	EtherFogComponent::RenderHookCallBack
+ */
+void EtherFogComponent::SetEnable_Internal( const bool bEnable ) {
+
+	Super::SetEnable_Internal( bEnable );
+
+	if ( bEnable ) {
+		g_pRenderer->RegisterRenderHook( this );
+	} else {
+		g_pRenderer->UnregisterRenderHook( this );
+	}
+}
+
+/**
  *	EtherCoverObject::EtherCoverObject
  */
 EtherCoverObject::EtherCoverObject( const kbBounds & inBounds, const float inHealth ) :
@@ -110,9 +202,6 @@ void EtherWorldGenComponent::InitializeWorld() {
 	g_ResourceManager.GetPackage( "./assets/Packages/EnviroData.kbPkg", false );
 
 	m_VisibleTerrainMap.Shutdown();
-
-	m_pTerrainShader = (kbShader*)g_ResourceManager.LoadResource( "./assets/Shaders/terrain.kbShader", true );
-	kbErrorCheck( m_pTerrainShader != nullptr, "EtherWorldGenComponent::InitializeWorld() - Failed to load terrain shader" );
 }
 
 /**

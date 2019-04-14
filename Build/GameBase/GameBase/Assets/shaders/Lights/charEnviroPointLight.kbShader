@@ -1,0 +1,119 @@
+//===================================================================================================
+// characterPointRim.kbShader
+//
+//
+// 2018 kbEngine 2.0
+//===================================================================================================
+cbuffer matrixBuffer {
+   matrix               mvpMatrix;
+   matrix               inverseViewProjection;
+   matrix               lightMatrix[4];
+   float4               splitDistances;
+   float4               lightDirection;
+   float4               lightPosition; // xyz is position, w is light radius
+   float4               lightColor;
+   float4               cameraPosition;
+   float4				diffuseColorBand;
+   float4				rimParams;	// x: rim start, y: rim end, z: rim factor;
+   float4				enviroParams;	// x: diffuse factor, y: specular factor
+   float4				characterParams;	// x: diffuse factor
+   float4				diffuseParams;
+};
+
+kbShaderState {
+	srcBlend Blend_One
+	dstBlend Blend_One
+	blendOp BlendOp_Add
+	srcBlendAlpha Blend_Zero
+	dstBlendAlpha Blend_One
+	blendOpAlpha BlendOp_Add
+}
+
+//-------------------------------------
+struct vertexInput {
+	float4 position      : POSITION;
+	float2 uv            : TEXCOORD0;
+};
+
+//-------------------------------------
+struct pixelInput {
+	float4 position      : SV_POSITION;
+	float4 position2     : TEXCOORD1;
+	float2 uv            : TEXCOORD0;
+};
+
+/**
+ *	vertexShader
+ */
+pixelInput vertexShader( vertexInput input ) {
+	pixelInput output = (pixelInput)(0);
+
+	output.position = input.position;
+	output.uv = mul( input.uv, (float2x2)mvpMatrix );
+	output.position2 = input.position;
+
+	return output;
+}
+
+/**
+ *	pixelShader
+ */
+SamplerState DiffuseSamplerState;
+Texture2D colorTexture				: register(t0);
+
+SamplerState NormalSamplerState;
+Texture2D normalTexture				: register(t1);
+
+Texture2D specularTexture			: register(t2);
+
+SamplerState DepthSamplerState;
+Texture2D depthTexture				: register(t3);
+
+float4 pixelShader( pixelInput input ) : SV_TARGET {
+
+	const float4 normalTex = normalTexture.Sample( NormalSamplerState, input.uv );
+	/*if ( normalTex.w > 0.0f ) {
+		return 0;
+	}*/
+	const float4 specColor = specularTexture.Sample( DiffuseSamplerState, input.uv ).xyzw;
+   const float4 worldDiffuseColor = colorTexture.Sample( DiffuseSamplerState, input.uv ).xyzw;
+   const float3 worldNormal = normalTex.xyz;
+
+   float4 worldPosition = float4( input.position2.xy, depthTexture.Sample( DepthSamplerState, input.uv ).r, 1 );
+   worldPosition = mul( worldPosition, inverseViewProjection );
+   worldPosition /= worldPosition.w;
+
+   const float worldPosToLightDist = length( lightPosition.xyz - worldPosition.xyz );
+   const float3 worldPosToLight = ( lightPosition.xyz - worldPosition.xyz ) / worldPosToLightDist;
+   const float lightDotNormal = saturate( dot( worldNormal, worldPosToLight ) );
+   const float lightAttenuation = saturate( 1.0f - worldPosToLightDist / lightPosition.w );
+
+	float3 diffuse = lightDotNormal * lightAttenuation * diffuseParams.x;
+
+	float3 toCameraVec = normalize( cameraPosition.xyz - worldPosition.xyz );
+
+	float3 lightReflect = ( 2.0f * dot( worldNormal.xyz, worldPosToLight.xyz ) * worldNormal.xyz ) - worldPosToLight.xyz;
+	float spec = saturate( dot( lightReflect, toCameraVec ) );
+
+	if ( normalTex.w == 0.0f ) {
+		diffuse = characterParams.x * smoothstep( diffuseColorBand.x, diffuseColorBand.y, diffuse ) ;//* diffuseColorBand.z + diffuseColorBand.w;
+		spec = 0;
+	} else {
+		if ( enviroParams.x <= 0 && enviroParams.y <= 0 || lightAttenuation == 0.0f ) {
+			clip(-1);
+		}
+		diffuse *= enviroParams.x;
+		spec *= enviroParams.y;
+		spec = pow( abs( spec ), ( enviroParams.w + specColor.y ) ) * ( enviroParams.z + specColor.x ) * lightAttenuation;
+	}
+
+
+	float3 finalColor = diffuse * lightColor.xyz * worldDiffuseColor.xyz;
+
+	const float oneMinusRimDot = 1.0f - dot( worldNormal.xyz, toCameraVec );
+	float3 rimColor = lightAttenuation * smoothstep( rimParams.x, rimParams.y, oneMinusRimDot ) * lightColor.xyz;// * specColor.z;
+
+	finalColor.xyz += rimColor * rimParams.z + spec.xxx;
+
+	return float4( finalColor, worldDiffuseColor.w );
+}

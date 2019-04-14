@@ -118,14 +118,17 @@ float4 pixelShader( pixelInput input ) : SV_TARGET {
 	float3 lightReflect = ( 2.0f * dot( normal.xyz, lightDirection.xyz ) * normal.xyz ) - lightDirection.xyz;
 	float spec = saturate( dot( lightReflect, toCameraVec ) );
 	
-	if ( normal.w == 0 ) {
+	if ( normal.w <= 0.2f ) {
 		diffuse = smoothstep( diffuseColorBand.x, diffuseColorBand.y, diffuse ) * diffuseColorBand.z + diffuseColorBand.w;
+
+//if (  normal.w == 0 )
+	//		return float4( diffuseColor * lightColor );
 	//	spec = smoothstep( specularColorBand.x, specularColorBand.y, spec ) * specularColorBand.z + specularColorBand.w;
 	} else {
 		diffuse = ( diffuse * nonToonDiffuseScaleAndBias.x ) + nonToonDiffuseScaleAndBias.y;
 	}
 		
-	spec = pow( abs( spec ), specColor.y ) * specColor.x;
+	spec = pow( abs( spec ), max( specColor.y, 1.0f ) ) * specColor.x;
 	const float3 emissive = diffuseColor.xyz * diffuseColor.w;
 //	diffuseColor.w = max( max( emissive.x, emissive.y ), emissive.z );
 //	diffuseColor.w = diffuseColor.w - 1.0f;

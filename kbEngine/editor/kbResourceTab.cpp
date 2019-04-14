@@ -407,7 +407,7 @@ void kbResourceTab::FindResourcesRecursively( const std::string & file, kbResour
 				}
 
 				const int MaxNumExtensions = 16;
-				const char validExtensions[][MaxNumExtensions] = { ".fbx", ".dds", ".png", ".ms3d", ".kbMat", ".kbShader", ".jpg", ".tga", ".bmp", ".kbPkg", ".kbAnim", ".wav", ".diablo3" };
+				const char validExtensions[][MaxNumExtensions] = { ".fbx", ".dds", ".png", ".ms3d", ".kbMat", ".kbShader", ".jpg", ".tga", ".bmp", ".kbPkg", ".kbAnim", ".wav", ".diablo3", ".tif" };
 				const int numExtensions = sizeof( validExtensions ) / ( sizeof( char ) * 16 );
 
 				for ( int i = 0; i < numExtensions; i++ ) {

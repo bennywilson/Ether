@@ -13,72 +13,44 @@
 
 using namespace std;
 
+class kbTypeInfoClass;
+
 // AUTO GENERATED TYPE INFO //////////////////////////////////////////
 
-// EtherWorldGenComponent
-EtherWorldGenComponent_TypeInfo EtherWorldGenComponent::typeInfo;
-std::vector<class kbTypeInfoClass *> EtherWorldGenComponent::EtherWorldGenComponent_TypeInfoVar;
+EDestructibleBehavior_Enum EDestructibleBehaviorEnumClass;
 
-// EtherAnimComponent
-EtherAnimComponent_TypeInfo EtherAnimComponent::typeInfo;
-std::vector<class kbTypeInfoClass*> EtherAnimComponent::EtherAnimComponent_TypeInfoVar;
+DEFINE_KBCLASS(EtherAntialiasingComponent);
 
-// EtherSkelModelComponent
-EtherSkelModelComponent_TypeInfo EtherSkelModelComponent::typeInfo;
-std::vector<class kbTypeInfoClass*> EtherSkelModelComponent::EtherSkelModelComponent_TypeInfoVar;
+DEFINE_KBCLASS(EtherFogComponent);
 
-// EtherDestructibleComponent
-EtherDestructibleComponent_TypeInfo EtherDestructibleComponent::typeInfo;
-std::vector<class kbTypeInfoClass*> EtherDestructibleComponent::EtherDestructibleComponent_TypeInfoVar;
+DEFINE_KBCLASS(EtherWorldGenComponent);
 
-// EtherActorComponent
-EtherActorComponent_TypeInfo EtherActorComponent::typeInfo;
-std::vector<class kbTypeInfoClass*> EtherActorComponent::EtherActorComponent_TypeInfoVar;
+DEFINE_KBCLASS(EtherAnimComponent);
 
-// EtherAIComponent
-EtherAIComponent_TypeInfo EtherAIComponent::typeInfo;
-std::vector<class kbTypeInfoClass*> EtherAIComponent::EtherAIComponent_TypeInfoVar;
+DEFINE_KBCLASS(EtherSkelModelComponent);
 
-// EtherEnemySoldierAIComponent
-EtherEnemySoldierAIComponent_TypeInfo EtherEnemySoldierAIComponent::typeInfo;
-std::vector<class kbTypeInfoClass*> EtherEnemySoldierAIComponent::EtherEnemySoldierAIComponent_TypeInfoVar;
+DEFINE_KBCLASS(EtherDestructibleComponent);
 
-// EtherPlayerComponent
-EtherPlayerComponent_TypeInfo EtherPlayerComponent::typeInfo;
-std::vector<class kbTypeInfoClass*> EtherPlayerComponent::EtherPlayerComponent_TypeInfoVar;
+DEFINE_KBCLASS(EtherActorComponent);
 
-// EtherProjectileComponent
-EtherProjectileComponent_TypeInfo EtherProjectileComponent::typeInfo;
-std::vector<class kbTypeInfoClass*> EtherProjectileComponent::EtherProjectileComponent_TypeInfoVar;
+DEFINE_KBCLASS(EtherAIComponent);
 
-// EtherWeaponComponent
-EtherWeaponComponent_TypeInfo EtherWeaponComponent::typeInfo;
-std::vector<class kbTypeInfoClass*> EtherWeaponComponent::EtherWeaponComponent_TypeInfoVar;
+DEFINE_KBCLASS(EtherEnemySoldierAIComponent);
 
-// kbVec3TimePoint
-kbVec3TimePointComponent_TypeInfo kbVec3TimePointComponent::typeInfo;
-std::vector<class kbTypeInfoClass*> kbVec3TimePointComponent::kbVec3TimePointComponent_TypeInfoVar;
+DEFINE_KBCLASS(EtherPlayerComponent);
 
-// kbAnimatedQuadComponent
-kbAnimatedQuadComponent_TypeInfo kbAnimatedQuadComponent::typeInfo;
-std::vector<class kbTypeInfoClass*> kbAnimatedQuadComponent::kbAnimatedQuadComponent_TypeInfoVar;
+DEFINE_KBCLASS(EtherProjectileComponent);
 
-// EtherEnviroMaterial
-EtherEnviroMaterial_TypeInfo EtherEnviroMaterial::typeInfo;
-std::vector<class kbTypeInfoClass*> EtherEnviroMaterial::EtherEnviroMaterial_TypeInfoVar;
+DEFINE_KBCLASS(EtherWeaponComponent);
 
-// EtherEnviroObject
-EtherEnviroObject_TypeInfo EtherEnviroObject::typeInfo;
-std::vector<class kbTypeInfoClass*> EtherEnviroObject::EtherEnviroObject_TypeInfoVar;
+DEFINE_KBCLASS(kbVec3TimePointComponent);
 
-// EtherEnviroComponent
-EtherEnviroComponent_TypeInfo EtherEnviroComponent::typeInfo;
-std::vector<class kbTypeInfoClass*> EtherEnviroComponent::EtherEnviroComponent_TypeInfoVar;
+DEFINE_KBCLASS(kbAnimatedQuadComponent);
 
-// EtherEnviroInfo
-EtherEnviroInfo_TypeInfo EtherEnviroInfo::typeInfo;
-std::vector<class kbTypeInfoClass*> EtherEnviroInfo::EtherEnviroInfo_TypeInfoVar;
+DEFINE_KBCLASS(EtherEnviroMaterial);
 
-// EtherTimeOfDayModifier
-EtherTimeOfDayModifier_TypeInfo EtherTimeOfDayModifier::typeInfo;
-std::vector<class kbTypeInfoClass*> EtherTimeOfDayModifier::EtherTimeOfDayModifier_TypeInfoVar;
+DEFINE_KBCLASS(EtherEnviroObject);
+
+DEFINE_KBCLASS(EtherEnviroInfo);
+
+DEFINE_KBCLASS(EtherTimeOfDayModifier);

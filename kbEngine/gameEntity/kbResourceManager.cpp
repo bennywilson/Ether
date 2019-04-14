@@ -238,7 +238,7 @@ kbResource * kbResourceManager::LoadResource( const std::string & fullFileName, 
 	   pResource = new kbModel();
 	} else if ( fileExt == "kbshader" ) {
 	   pResource = new kbShader();
-	} else if ( fileExt == "jpg" || fileExt == "tga" || fileExt == "bmp" || fileExt == "gif" || fileExt == "png" || fileExt == "dds" ) {
+	} else if ( fileExt == "tif" || fileExt == "jpg" || fileExt == "tga" || fileExt == "bmp" || fileExt == "gif" || fileExt == "png" || fileExt == "dds" ) {
 		pResource = new kbTexture();
 	} else if ( fileExt == "kbanim" ) {
 		pResource = new kbAnimation();
@@ -247,7 +247,6 @@ kbResource * kbResourceManager::LoadResource( const std::string & fullFileName, 
 	}
 
 	if ( pResource == nullptr ) {
-		kbWarning( "kbResourceManager::AddResource() - Invalid resource type %s", fullFileName.c_str() );
 		return nullptr;
 	}
 
