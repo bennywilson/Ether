@@ -250,7 +250,7 @@ void kbClothComponent::RunSimulation( const float inDeltaTime ) {
 
 	// Apply forces and update positions
 	std::vector<float> a;
-	for ( int i = 0; i < m_Height; i++ ) {
+	for ( int i = 0; i < m_Width; i++ ) {
 		float theRand = kbfrand();
 
 		a.push_back( theRand );
@@ -259,6 +259,7 @@ void kbClothComponent::RunSimulation( const float inDeltaTime ) {
 
 	}
 
+	float theRand = 0.0f;
 	for ( int massIdx = 0; massIdx < m_Masses.size(); massIdx++ ) {
 		if ( m_Masses[massIdx].m_bAnchored )
 			continue;
@@ -267,12 +268,13 @@ void kbClothComponent::RunSimulation( const float inDeltaTime ) {
 		if ( m_bAddFakeOscillation ) {
 
 			kbVec3 windAmt =  ( ( wind - ( wind * 0.5f ) * kbfrand() + ( wind * 0.5f ) ) );
-			int level = massIdx % m_Width;
+			int level = massIdx / m_Height;
 
-			if ( a[level] < 0.75f ) {
-				windAmt.y = wind.y;
-			} else {
-				windAmt.y -= wind.y;
+			if ( massIdx % 2 == 0 ) {
+				theRand = kbfrand();
+			}
+			if ( theRand < 0.35f ) {
+				windAmt *= 1.5f + kbfrand() * 0.35f;
 			}
 			totalForce += windAmt;
 		}
