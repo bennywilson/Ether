@@ -113,6 +113,16 @@ void kbClothComponent::Update_Internal( const float DeltaTime ) {
 		return;
 	}
 
+	static int clothDebug = 0;
+
+	/*if ( GetAsyncKeyState( 'I') ) {
+		clothDebug = 0;
+	} else if ( GetAsyncKeyState( 'O') ) {
+		clothDebug = 1;
+	} else if ( GetAsyncKeyState( 'P') ) {
+		clothDebug = 2;
+	}*/
+
 	for ( int i = 0; i < m_Masses.size(); i++ ) {
 
 		const int BoneIndex = m_BoneIndices[i];
@@ -137,11 +147,11 @@ void kbClothComponent::Update_Internal( const float DeltaTime ) {
 		LocalToRef.Invert();
 		FinalBoneMatrices[BoneIndex] = LocalToRef * WorldToLocalSpace;
 
-		if ( g_DebugCloth.GetInt() == 1 ) {
+		if ( clothDebug == 1 || g_DebugCloth.GetInt() == 1 ) {
 			kbBounds bounds( true );
 			bounds.AddPoint( worldPos );
-			bounds.AddPoint( worldPos + kbVec3( 1.0f, 1.0f, 1.0f ) );
-			bounds.AddPoint( worldPos - kbVec3( 1.0f, 1.0f, 1.0f ) );
+			bounds.AddPoint( worldPos + kbVec3( 0.1f, 0.1f, 0.1f ) );
+			bounds.AddPoint( worldPos - kbVec3( 0.1f, 0.1f, 0.1f ) );
 
 			if ( m_Masses[i].m_bAnchored ) {
 				g_pRenderer->DrawBox( bounds, kbColor( 0.0f, 1.0f, 0.0f, 1.0f ) );
@@ -149,14 +159,15 @@ void kbClothComponent::Update_Internal( const float DeltaTime ) {
 				g_pRenderer->DrawBox( bounds, kbColor( 1.0f, 1.0f, 1.0f, 1.0f ) );
 			}
 
-			const float AxisLen = 10.0f;
+			const float AxisLen = 1.0f;
 			g_pRenderer->DrawLine( worldPos, worldPos + m_Masses[i].GetAxis( 0 ) * AxisLen, kbColor::red );
 			g_pRenderer->DrawLine( worldPos, worldPos + m_Masses[i].GetAxis( 1 ) * AxisLen, kbColor::green );
-			g_pRenderer->DrawLine( worldPos, worldPos + m_Masses[i].GetAxis( 2 ) * AxisLen, kbColor::blue );
+			g_pRenderer->DrawLine( worldPos, worldPos + m_Masses[i].GetAxis( 2 ) * -AxisLen, kbColor::blue );
 		}
 	}
 
-	if ( g_DebugCloth.GetInt() == 2 ) {
+
+	if ( clothDebug == 2 || g_DebugCloth.GetInt() == 2 ) {
 		for ( int i = 0; i < m_Springs.size(); i++ )  {
 			const kbClothSpring_t & curSpring = m_Springs[i];
 			const kbClothMass_t & Mass1 = m_Masses[curSpring.m_MassIndices[0]];
@@ -270,11 +281,11 @@ void kbClothComponent::RunSimulation( const float inDeltaTime ) {
 			kbVec3 windAmt =  ( ( wind - ( wind * 0.5f ) * kbfrand() + ( wind * 0.5f ) ) );
 			int level = massIdx / m_Height;
 
-			if ( massIdx % 2 == 0 ) {
+			if ( massIdx % 1 == 0 ) {
 				theRand = kbfrand();
 			}
-			if ( theRand < 0.35f ) {
-				windAmt *= 1.5f + kbfrand() * 0.35f;
+			if ( a[massIdx / m_Width] < 0.45f ) {
+				windAmt *= 1.3f + kbfrand() * 1.35f;
 			}
 			totalForce += windAmt;
 		}
