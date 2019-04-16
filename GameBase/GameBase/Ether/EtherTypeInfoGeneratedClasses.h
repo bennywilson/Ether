@@ -1,6 +1,11 @@
 // AUTO GENERATED TYPE INFO //////////////////////////////////////////
 
 GenerateClass(
+	EtherClothComponent,
+	AddField( "Health", KBTYPEINFO_FLOAT, EtherClothComponent, m_Health, false, "" )
+)
+
+GenerateClass(
 	EtherAntialiasingComponent,
 	AddField( "Shader", KBTYPEINFO_SHADER, EtherAntialiasingComponent, m_pShader, false, "" )
 )

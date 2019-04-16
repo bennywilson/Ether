@@ -9,6 +9,7 @@
 #include "kbRenderer.h"
 #include "kbConsole.h"
 #include "DX11/kbRenderer_DX11.h"			// HACK
+#include "kbIntersectionTests.h"
 
 KB_DEFINE_COMPONENT(EtherAnimComponent)
 KB_DEFINE_COMPONENT(EtherSkelModelComponent)
@@ -597,4 +598,46 @@ void EtherDestructibleComponent::Update_Internal( const float deltaTime ) {
 			g_pRenderer->DrawBox( kbBounds( m_LastHitLocation - kbVec3::one, m_LastHitLocation + kbVec3::one ), kbColor::red );
 		}
 	}
+}
+
+/**
+ *	EtherClothComponent::Constructor
+ */
+void EtherClothComponent::Constructor() {
+	m_Health = 1.0f;
+}
+
+/**
+ *	EtherClothComponent::Constructor
+ */
+void EtherClothComponent::RunSimulation( const float DeltaTime ) {
+
+	const auto & shotsThisFrame = g_pEtherGame->GetShotsThisFrame();
+
+	static float shotStrength = 3000.0f;
+	/*if ( GetAsyncKeyState('O') ) {
+		shotStrength -= 10.0f;
+		kbLog( "-> %f", shotStrength );
+	}
+	if ( GetAsyncKeyState('P') ) {
+		shotStrength += 10.0f;
+		kbLog( "-> %f", shotStrength );
+	}*/
+	
+	for ( int i = 0; i < shotsThisFrame.size(); i++ ) {
+		const auto & curShot = shotsThisFrame[i];
+		const kbVec3 shotDir = ( curShot.shotEnd - curShot.shotStart ).Normalized();
+		// Do cull check here
+ //*/
+//bool kbRaySphereIntersection( kbVec3 & outIntersectionPt, const kbVec3 & rayOrigin, const kbVec3 & rayDirection, const kbVec3 & sphereOrigin, const float sphereRadius ) {
+
+		for ( int iMass = 0; iMass < GetMasses().size(); iMass++ ) {
+			kbVec3 hitLoc;
+			if ( kbRaySphereIntersection( hitLoc, curShot.shotStart, shotDir, GetMasses()[iMass].GetPosition(), 3.0f ) ) {
+				AddForceToMass( iMass, shotDir * shotStrength );
+			}
+		}
+	}
+
+	Super::RunSimulation( DeltaTime );
 }

@@ -147,4 +147,21 @@ private:
 	kbVec3									m_LastHitLocation;
 	bool									m_bIsSimulating;
 };
+
+/**
+ *	EtherClothComponent
+ */
+class EtherClothComponent : public kbClothComponent {
+	KB_DECLARE_COMPONENT( EtherClothComponent, kbClothComponent );
+
+//-------------------------------------------------------------------------------------------------------------------------------------------------------------
+public:
+
+protected:
+	virtual void							RunSimulation( const float DeltaTime ) override;
+
+private:
+	float									m_Health;
+};
+
 #endif

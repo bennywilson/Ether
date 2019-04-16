@@ -577,14 +577,14 @@ void kbRenderer::RenderSync() {
 			delete pRenderObject;
 		} else {
 			const kbGameComponent *const pComponent = m_RenderObjectList_GameThread[i].m_pComponent;
-			kbErrorCheck( pComponent != nullptr, "kbRenderer::RenderSync() - Adding/updating a render object with a NULL component" );
+			kbErrorCheck( pComponent != nullptr, "kbRenderer::RenderSync() - Adding/updating a render object with a nullptr component" );
 
 			if ( m_RenderObjectList_GameThread[i].m_bIsFirstAdd == false ) {
 
 				// Updating a renderobject 
-				auto it = m_pCurrentRenderWindow->m_RenderObjectMap.find( m_RenderObjectList_GameThread[i].m_pComponent );
+				auto it = m_pCurrentRenderWindow->m_RenderObjectMap.find( pComponent );
 				if ( it == m_pCurrentRenderWindow->m_RenderObjectMap.end() || it->second == nullptr ) {
-					kbWarning( "kbRenderer::UpdateRenderObject - Error, Updating a RenderObject that doesn't exist" );
+					kbWarning( "kbRenderer::UpdateRenderObject - Error, Updating a RenderObject that doesn't exist. %s", pComponent->GetOwner()->GetName().c_str() );
 					return;
 				}
 

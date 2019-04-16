@@ -17,7 +17,7 @@ KB_DEFINE_COMPONENT(kbClothBone)
 KB_DEFINE_COMPONENT(kbClothComponent)
 
 kbConsoleVariable g_DebugCloth( "debugcloth", false, kbConsoleVariable::Console_Int, "Draw cloth debugging info.  Takes values 1-13", "" );
-kbConsoleVariable g_ClothGrav( "clothgravity", -100.0f, kbConsoleVariable::Console_Float, "Cloth gravity", "" );
+kbConsoleVariable g_ClothGrav( "clothgravity", 0.0f, kbConsoleVariable::Console_Float, "Cloth gravity", "" );
 kbConsoleVariable g_ClothSpring( "clothspring", 0.5f, kbConsoleVariable::Console_Float, "Cloth spring", "" );
 kbConsoleVariable g_ClothFriction( "clothFriction", 0.02f, kbConsoleVariable::Console_Float, "Cloth friction", "" );
 
@@ -272,10 +272,12 @@ void kbClothComponent::RunSimulation( const float inDeltaTime ) {
 
 	float theRand = 0.0f;
 	for ( int massIdx = 0; massIdx < m_Masses.size(); massIdx++ ) {
-		if ( m_Masses[massIdx].m_bAnchored )
+		if ( m_Masses[massIdx].m_bAnchored ) {
+			m_Masses[massIdx].m_FrameForces = kbVec3::zero;
 			continue;
+		}
 
-		kbVec3 totalForce = m_Gravity;
+		kbVec3 totalForce = m_Gravity + kbVec3( 0.0f, g_ClothGrav.GetFloat(), 0.0f );
 		if ( m_bAddFakeOscillation ) {
 
 			kbVec3 windAmt =  ( ( wind - ( wind * 0.5f ) * kbfrand() + ( wind * 0.5f ) ) );
@@ -289,7 +291,7 @@ void kbClothComponent::RunSimulation( const float inDeltaTime ) {
 			}
 			totalForce += windAmt;
 		}
-
+		totalForce += m_Masses[massIdx].m_FrameForces;
 		kbVec3 newLocation = m_Masses[massIdx].GetPosition();// + ( totalForce * DeltaTime );
 
 		// ...
@@ -306,6 +308,7 @@ void kbClothComponent::RunSimulation( const float inDeltaTime ) {
 
 		newLocation += velocity * ( 1.0f - g_ClothFriction.GetFloat() ) + totalForce * ( DeltaTime * DeltaTime );
 		m_Masses[massIdx].SetPosition( newLocation );
+		m_Masses[massIdx].m_FrameForces = kbVec3::zero;
 	}
 
 	for ( int iIteration = 0; iIteration < m_NumConstrainIterations; iIteration++ ) {

@@ -576,7 +576,7 @@ bool EtherWeaponComponent::Fire_Internal() {
 				newShell.m_AtlasIdx = rand() % 4;
 				newShell.m_NormalizedAnimStartTime = kbfrand();
 
-				//g_pRenderer->AddRenderObject( renderObj );
+				g_pRenderer->AddRenderObject( renderObj );
 				newShell.m_bAvailable = false;
 
 				break;

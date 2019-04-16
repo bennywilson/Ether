@@ -90,8 +90,14 @@ public:
 	EtherAIManager &							GetAIManager() { return m_AIManager; }
 
 	const kbVec3 &								GetHMDWorldOffset() const { return m_HMDWorldOffset; }
-
+	
+	struct frameBulletShots {
+		kbComponent * pHitComponent;
+		kbVec3 shotStart;
+		kbVec3 shotEnd;
+	};
 	void										RegisterBulletShot( kbComponent *const pComponent, const kbVec3 & shotStart, const kbVec3 & shotEnd );
+	const std::vector<frameBulletShots> &		GetShotsThisFrame() const { if ( m_ShotsThisFrame[0].size() > 0 ) return m_ShotsThisFrame[0]; else return m_ShotsThisFrame[1]; }
 
 protected:
 
@@ -134,15 +140,11 @@ protected:
 
 	kbVec3										m_HMDWorldOffset;
 
-	// kbRenderHook
-	struct frameBulletShots {
-		kbComponent * pHitComponent;
-		kbVec3 shotStart;
-		kbVec3 shotEnd;
-	};
-	std::vector<frameBulletShots>				m_ShotsThisFrame;
+	int											m_ShotFrame;
+	std::vector<frameBulletShots>				m_ShotsThisFrame[2];
 	std::vector<frameBulletShots>				m_RenderThreadShotsThisFrame;
 
+	// kbRenderHook
 	kbRenderTexture *							m_pBulletHoleRenderTexture;
 	kbRenderTexture *							m_pGrassCollisionTexture;
 	kbRenderTexture *							m_pGrassCollisionReadBackTexture;

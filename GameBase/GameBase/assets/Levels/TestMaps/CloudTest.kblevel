@@ -2560,7 +2560,7 @@ kbGameEntity 0 0 0 0 {
 		DebugAnimIndex = -1
 		IsFirstPersonModel = 0
 	}
-	kbClothComponent { 
+	EtherClothComponent { 
 		Enabled = 1
 		LifeTime =  -1.000000
 		AddFakeOscillation = 1
@@ -2912,6 +2912,7 @@ kbGameEntity 0 0 0 0 {
 		MinWindVelocity = 20.000000 30.000000 -20.000000
 		NumIterations = 1
 		Width = 6
+		Health =  1.000000
 	}
 }
 kbGameEntity 0 0 0 0 {
@@ -2948,7 +2949,7 @@ kbGameEntity 0 0 0 0 {
 		DebugAnimIndex = -1
 		IsFirstPersonModel = 0
 	}
-	kbClothComponent { 
+	EtherClothComponent { 
 		Enabled = 1
 		LifeTime =  -1.000000
 		AddFakeOscillation = 1
@@ -3300,6 +3301,7 @@ kbGameEntity 0 0 0 0 {
 		MinWindVelocity = 20.000000 25.000000 -20.000000
 		NumIterations = 1
 		Width = 6
+		Health =  1.000000
 	}
 }
 kbGameEntity 0 0 0 0 {
@@ -3308,7 +3310,7 @@ kbGameEntity 0 0 0 0 {
 		LifeTime =  -1.000000
 		Name = "ELP_Banner_2"
 		Orientation = 0.000000 -0.178244 0.000000 0.983986
-		Position = -85.409966 64.983292 48.836994
+		Position = -85.409966 49.453945 48.836994
 		Scale = 0.300000 0.300000 0.300000
 	}
 	EtherSkelModelComponent { 
@@ -3336,7 +3338,7 @@ kbGameEntity 0 0 0 0 {
 		DebugAnimIndex = -1
 		IsFirstPersonModel = 0
 	}
-	kbClothComponent { 
+	EtherClothComponent { 
 		Enabled = 1
 		LifeTime =  -1.000000
 		AddFakeOscillation = 1
@@ -4191,7 +4193,7 @@ kbGameEntity 0 0 0 0 {
 			}
 		ClothType = Square
 		Collision = 0
-		Gravity = 0.000000 -100.000000 0.000000
+		Gravity = 0.000000 -200.000000 0.000000
 		Height = 11
 		MaxWindGustDuration =  0.250000
 		MaxWindVelocity = 5.000000 20.000000 25.000000
@@ -4199,6 +4201,7 @@ kbGameEntity 0 0 0 0 {
 		MinWindVelocity = -5.000000 10.000000 10.000000
 		NumIterations = 1
 		Width = 11
+		Health =  1.000000
 	}
 }
 kbGameEntity 0 0 0 0 {
@@ -4207,7 +4210,7 @@ kbGameEntity 0 0 0 0 {
 		LifeTime =  -1.000000
 		Name = "ELP_Banner_2"
 		Orientation = 0.000000 -0.178244 0.000000 0.983986
-		Position = -123.642891 64.983292 51.920887
+		Position = -123.642891 48.116493 51.920887
 		Scale = 0.300000 0.300000 0.300000
 	}
 	EtherSkelModelComponent { 
@@ -4263,7 +4266,7 @@ kbGameEntity 0 0 0 0 {
 		DebugAnimIndex = -1
 		IsFirstPersonModel = 0
 	}
-	kbClothComponent { 
+	EtherClothComponent { 
 		Enabled = 1
 		LifeTime =  -1.000000
 		AddFakeOscillation = 1
@@ -5118,7 +5121,7 @@ kbGameEntity 0 0 0 0 {
 			}
 		ClothType = Square
 		Collision = 0
-		Gravity = 0.000000 -100.000000 0.000000
+		Gravity = 0.000000 -200.000000 0.000000
 		Height = 11
 		MaxWindGustDuration =  0.250000
 		MaxWindVelocity = 5.000000 30.000000 40.000000
@@ -5126,5 +5129,6 @@ kbGameEntity 0 0 0 0 {
 		MinWindVelocity = -5.000000 10.000000 10.000000
 		NumIterations = 1
 		Width = 11
+		Health =  1.000000
 	}
 }

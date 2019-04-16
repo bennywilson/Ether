@@ -27,6 +27,8 @@ struct kbClothSpring_t {
  *	kbClothMass_t
  */
 struct kbClothMass_t {
+	kbClothMass_t() : m_LastPosition( kbVec3::zero ), m_FrameForces( kbVec3::zero ), m_bAnchored( false ) { }
+
 	const kbVec3 &								GetPosition() const { return m_Matrix.GetOrigin(); }
 	const kbVec3 &								GetAxis( const int index ) const { return m_Matrix.GetAxis( index ); }
 	
@@ -35,6 +37,7 @@ struct kbClothMass_t {
 
 	kbBoneMatrix_t								m_Matrix;
 	kbVec3										m_LastPosition;
+	kbVec3										m_FrameForces;
 	bool										m_bAnchored;
 };
 
@@ -68,12 +71,17 @@ public:
 	const std::vector<kbClothMass_t> &			GetMasses() const { return m_Masses; }
 	const std::vector<kbClothSpring_t> &		GetSprings() const { return m_Springs; }
 
+	void										AddForceToMass( const int massIdx, const kbVec3 & force ) { m_Masses[massIdx].m_FrameForces += force; }
+
+protected:
+
+	virtual void								RunSimulation( const float DeltaTime );
+
 private:
 
 	virtual void								Update_Internal( const float DeltaTime ) override;
 
 	void										SetupCloth();
-	void										RunSimulation( const float DeltaTime );
 
 	int											m_Width;
 	int											m_Height;

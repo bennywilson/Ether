@@ -46,6 +46,7 @@ EtherGame::EtherGame() :
 	m_pCollisionMapTimeGenShader( nullptr ),
 	m_pCollisionMapDamageGenShader( nullptr ),
 	m_pBulletHoleUpdateShader( nullptr ) {
+	m_ShotFrame = 0;
 
 	m_Camera.m_Position.Set( 0.0f, 2600.0f, 0.0f );
 
@@ -505,7 +506,7 @@ void EtherGame::RegisterBulletShot( kbComponent *const pHitComponent, const kbVe
 	newShot.shotStart = shotStart;
 	newShot.shotEnd = shotEnd;
 	newShot.pHitComponent = pHitComponent;
-	m_ShotsThisFrame.push_back(newShot);
+	m_ShotsThisFrame[m_ShotFrame].push_back(newShot);
 }
 
 /**
@@ -525,8 +526,10 @@ void EtherGame::RenderSync() {
 		m_pParticleManager->SetCustomAtlasTexture( 2, "./assets/FX/MuzzleFlashes/BasicOrange_MuzzleFlash.jpg" );
 	}
 
-	m_RenderThreadShotsThisFrame = m_ShotsThisFrame;
-	m_ShotsThisFrame.clear();
+	m_RenderThreadShotsThisFrame = m_ShotsThisFrame[m_ShotFrame];
+	m_ShotFrame ^= 1;
+
+	m_ShotsThisFrame[m_ShotFrame].clear();
 
 	UpdateFires_RenderSync();
 }
