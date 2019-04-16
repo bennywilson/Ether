@@ -506,7 +506,7 @@ void kbTerrainComponent::GenerateTerrain() {
     g_pRenderer->AddRenderObject( m_RenderObject );
 
 	// Update collision
-	int collisionPatchSize = 1;
+	int collisionPatchSize = 8;
 
 	std::vector<kbCollisionComponent::customTriangle_t> terrainCollision;
 	terrainCollision.resize( ( (m_TerrainDimensions / collisionPatchSize) * (m_TerrainDimensions/collisionPatchSize) ) * 2 );

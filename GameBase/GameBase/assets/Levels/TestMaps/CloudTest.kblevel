@@ -4193,7 +4193,7 @@ kbGameEntity 0 0 0 0 {
 			}
 		ClothType = Square
 		Collision = 0
-		Gravity = 0.000000 -200.000000 0.000000
+		Gravity = 0.000000 -100.000000 0.000000
 		Height = 11
 		MaxWindGustDuration =  0.250000
 		MaxWindVelocity = 5.000000 20.000000 25.000000
@@ -4222,7 +4222,7 @@ kbGameEntity 0 0 0 0 {
 				Enabled = 0
 				LifeTime =  -1.000000
 				Shader = .\assets\shaders\environment\flag.kbshader
-				ShaderParams = 5
+				ShaderParams = 6
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
@@ -4257,6 +4257,13 @@ kbGameEntity 0 0 0 0 {
 						ParamName = "noiseParams"
 						Texture = NULL
 						Vector = 2.000000 2.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "damageParams"
+						Texture = NULL
+						Vector = 1.000000 0.000000 0.000000 0.000000
 					}
 			}
 		RenderPass = LightingPass
@@ -5121,7 +5128,7 @@ kbGameEntity 0 0 0 0 {
 			}
 		ClothType = Square
 		Collision = 0
-		Gravity = 0.000000 -200.000000 0.000000
+		Gravity = 0.000000 -100.000000 0.000000
 		Height = 11
 		MaxWindGustDuration =  0.250000
 		MaxWindVelocity = 5.000000 30.000000 40.000000
@@ -5129,6 +5136,6 @@ kbGameEntity 0 0 0 0 {
 		MinWindVelocity = -5.000000 10.000000 10.000000
 		NumIterations = 1
 		Width = 11
-		Health =  1.000000
+		Health =  2.000000
 	}
 }

@@ -605,6 +605,7 @@ void EtherDestructibleComponent::Update_Internal( const float deltaTime ) {
  */
 void EtherClothComponent::Constructor() {
 	m_Health = 1.0f;
+	m_LastHitTime = 0.0f;
 }
 
 /**
@@ -623,7 +624,8 @@ void EtherClothComponent::RunSimulation( const float DeltaTime ) {
 		shotStrength += 10.0f;
 		kbLog( "-> %f", shotStrength );
 	}*/
-	
+	bool hit = false;
+
 	for ( int i = 0; i < shotsThisFrame.size(); i++ ) {
 		const auto & curShot = shotsThisFrame[i];
 		const kbVec3 shotDir = ( curShot.shotEnd - curShot.shotStart ).Normalized();
@@ -635,7 +637,23 @@ void EtherClothComponent::RunSimulation( const float DeltaTime ) {
 			kbVec3 hitLoc;
 			if ( kbRaySphereIntersection( hitLoc, curShot.shotStart, shotDir, GetMasses()[iMass].GetPosition(), 3.0f ) ) {
 				AddForceToMass( iMass, shotDir * shotStrength );
+				hit = true;
 			}
+		}
+	}
+
+	float curTime = g_GlobalTimer.TimeElapsedSeconds();
+	if ( hit && curTime > m_LastHitTime + 2.0f ) {
+		m_LastHitTime = curTime;
+
+		if ( m_Health > 0 && m_Health - 1.0f <= 0.0f ) {
+			m_Health = -1.0f;
+			EtherSkelModelComponent *const pSkelModel = (EtherSkelModelComponent*)GetOwner()->GetComponentByType( EtherSkelModelComponent::GetType() );
+			if ( pSkelModel != nullptr ) {
+				pSkelModel->SetMaterialParamVector( 0, "damageParams", kbVec4( 0.0f, 0.0f, 0.0f, 0.0f ) );
+			}
+		} else {
+			m_Health--;
 		}
 	}
 

@@ -162,6 +162,7 @@ protected:
 
 private:
 	float									m_Health;
+	float									m_LastHitTime;
 };
 
 #endif
