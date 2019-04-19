@@ -2544,13 +2544,20 @@ kbGameEntity 0 0 0 0 {
 				Enabled = 0
 				LifeTime =  -1.000000
 				Shader = .\assets\shaders\character\characterbase.kbshader
-				ShaderParams = 1
+				ShaderParams = 2
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
 						ParamName = "colorTexture"
 						Texture = .\assets\models\characters\headband.jpg
 						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "damageParams"
+						Texture = NULL
+						Vector = 1.000000 0.000000 0.000000 0.000000
 					}
 			}
 		RenderPass = LightingPass
@@ -2912,7 +2919,7 @@ kbGameEntity 0 0 0 0 {
 		MinWindVelocity = 20.000000 30.000000 -20.000000
 		NumIterations = 1
 		Width = 6
-		Health =  1.000000
+		Health =  0.000000
 	}
 }
 kbGameEntity 0 0 0 0 {
@@ -2933,13 +2940,20 @@ kbGameEntity 0 0 0 0 {
 				Enabled = 0
 				LifeTime =  -1.000000
 				Shader = .\assets\shaders\character\characterbase.kbshader
-				ShaderParams = 1
+				ShaderParams = 2
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
 						ParamName = "colorTexture"
 						Texture = .\assets\models\characters\headband.jpg
 						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "damageParams"
+						Texture = NULL
+						Vector = 1.000000 0.000000 0.000000 0.000000
 					}
 			}
 		RenderPass = LightingPass
@@ -3301,7 +3315,7 @@ kbGameEntity 0 0 0 0 {
 		MinWindVelocity = 20.000000 25.000000 -20.000000
 		NumIterations = 1
 		Width = 6
-		Health =  1.000000
+		Health =  0.000000
 	}
 }
 kbGameEntity 0 0 0 0 {
@@ -3310,907 +3324,7 @@ kbGameEntity 0 0 0 0 {
 		LifeTime =  -1.000000
 		Name = "ELP_Banner_2"
 		Orientation = 0.000000 -0.178244 0.000000 0.983986
-		Position = -85.409966 49.453945 48.836994
-		Scale = 0.300000 0.300000 0.300000
-	}
-	EtherSkelModelComponent { 
-		Enabled = 1
-		LifeTime =  -1.000000
-		CastsShadow = 0
-		Materials = 1
-			kbMaterialComponent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				Shader = .\assets\shaders\character\characterbase.kbshader
-				ShaderParams = 1
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "colorTexture"
-						Texture = .\assets\models\environment\banners\elp_banner_1.jpg
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-			}
-		RenderPass = LightingPass
-		TranslucencySortBias =  0.000000
-		Model = .\assets\models\environment\banners\elp_banner_2.ms3d
-		Animations = 0
-		DebugAnimIndex = -1
-		IsFirstPersonModel = 0
-	}
-	EtherClothComponent { 
-		Enabled = 1
-		LifeTime =  -1.000000
-		AddFakeOscillation = 1
-		AdditionalBoneInfo = 0
-		BoneInfo = 121
-			kbClothBone { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				Anchored = 1
-				BoneName = "B00_00"
-				NeighborBones = 0
-			}
-			kbClothBone { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				Anchored = 1
-				BoneName = "B00_01"
-				NeighborBones = 0
-			}
-			kbClothBone { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				Anchored = 1
-				BoneName = "B00_02"
-				NeighborBones = 0
-			}
-			kbClothBone { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				Anchored = 1
-				BoneName = "B00_03"
-				NeighborBones = 0
-			}
-			kbClothBone { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				Anchored = 1
-				BoneName = "B00_04"
-				NeighborBones = 0
-			}
-			kbClothBone { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				Anchored = 1
-				BoneName = "B00_05"
-				NeighborBones = 0
-			}
-			kbClothBone { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				Anchored = 1
-				BoneName = "B00_06"
-				NeighborBones = 0
-			}
-			kbClothBone { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				Anchored = 1
-				BoneName = "B00_07"
-				NeighborBones = 0
-			}
-			kbClothBone { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				Anchored = 1
-				BoneName = "B00_08"
-				NeighborBones = 0
-			}
-			kbClothBone { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				Anchored = 1
-				BoneName = "B00_09"
-				NeighborBones = 0
-			}
-			kbClothBone { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				Anchored = 1
-				BoneName = "B00_10"
-				NeighborBones = 0
-			}
-			kbClothBone { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				Anchored = 0
-				BoneName = "B01_00"
-				NeighborBones = 0
-			}
-			kbClothBone { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				Anchored = 0
-				BoneName = "B01_01"
-				NeighborBones = 0
-			}
-			kbClothBone { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				Anchored = 0
-				BoneName = "B01_02"
-				NeighborBones = 0
-			}
-			kbClothBone { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				Anchored = 0
-				BoneName = "B01_03"
-				NeighborBones = 0
-			}
-			kbClothBone { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				Anchored = 0
-				BoneName = "B01_04"
-				NeighborBones = 0
-			}
-			kbClothBone { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				Anchored = 0
-				BoneName = "B01_05"
-				NeighborBones = 0
-			}
-			kbClothBone { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				Anchored = 0
-				BoneName = "B01_06"
-				NeighborBones = 0
-			}
-			kbClothBone { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				Anchored = 0
-				BoneName = "B01_07"
-				NeighborBones = 0
-			}
-			kbClothBone { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				Anchored = 0
-				BoneName = "B01_08"
-				NeighborBones = 0
-			}
-			kbClothBone { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				Anchored = 0
-				BoneName = "B01_09"
-				NeighborBones = 0
-			}
-			kbClothBone { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				Anchored = 0
-				BoneName = "B01_10"
-				NeighborBones = 0
-			}
-			kbClothBone { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				Anchored = 0
-				BoneName = "B02_00"
-				NeighborBones = 0
-			}
-			kbClothBone { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				Anchored = 0
-				BoneName = "B02_01"
-				NeighborBones = 0
-			}
-			kbClothBone { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				Anchored = 0
-				BoneName = "B02_02"
-				NeighborBones = 0
-			}
-			kbClothBone { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				Anchored = 0
-				BoneName = "B02_03"
-				NeighborBones = 0
-			}
-			kbClothBone { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				Anchored = 0
-				BoneName = "B02_04"
-				NeighborBones = 0
-			}
-			kbClothBone { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				Anchored = 0
-				BoneName = "B02_05"
-				NeighborBones = 0
-			}
-			kbClothBone { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				Anchored = 0
-				BoneName = "B02_06"
-				NeighborBones = 0
-			}
-			kbClothBone { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				Anchored = 0
-				BoneName = "B02_07"
-				NeighborBones = 0
-			}
-			kbClothBone { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				Anchored = 0
-				BoneName = "B02_08"
-				NeighborBones = 0
-			}
-			kbClothBone { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				Anchored = 0
-				BoneName = "B02_09"
-				NeighborBones = 0
-			}
-			kbClothBone { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				Anchored = 0
-				BoneName = "B02_10"
-				NeighborBones = 0
-			}
-			kbClothBone { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				Anchored = 0
-				BoneName = "B03_00"
-				NeighborBones = 0
-			}
-			kbClothBone { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				Anchored = 0
-				BoneName = "B03_01"
-				NeighborBones = 0
-			}
-			kbClothBone { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				Anchored = 0
-				BoneName = "B03_02"
-				NeighborBones = 0
-			}
-			kbClothBone { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				Anchored = 0
-				BoneName = "B03_03"
-				NeighborBones = 0
-			}
-			kbClothBone { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				Anchored = 0
-				BoneName = "B03_04"
-				NeighborBones = 0
-			}
-			kbClothBone { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				Anchored = 0
-				BoneName = "B03_05"
-				NeighborBones = 0
-			}
-			kbClothBone { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				Anchored = 0
-				BoneName = "B03_06"
-				NeighborBones = 0
-			}
-			kbClothBone { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				Anchored = 0
-				BoneName = "B03_07"
-				NeighborBones = 0
-			}
-			kbClothBone { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				Anchored = 0
-				BoneName = "B03_08"
-				NeighborBones = 0
-			}
-			kbClothBone { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				Anchored = 0
-				BoneName = "B03_09"
-				NeighborBones = 0
-			}
-			kbClothBone { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				Anchored = 0
-				BoneName = "B03_10"
-				NeighborBones = 0
-			}
-			kbClothBone { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				Anchored = 0
-				BoneName = "B04_00"
-				NeighborBones = 0
-			}
-			kbClothBone { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				Anchored = 0
-				BoneName = "B04_01"
-				NeighborBones = 0
-			}
-			kbClothBone { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				Anchored = 0
-				BoneName = "B04_02"
-				NeighborBones = 0
-			}
-			kbClothBone { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				Anchored = 0
-				BoneName = "B04_03"
-				NeighborBones = 0
-			}
-			kbClothBone { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				Anchored = 0
-				BoneName = "B04_04"
-				NeighborBones = 0
-			}
-			kbClothBone { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				Anchored = 0
-				BoneName = "B04_05"
-				NeighborBones = 0
-			}
-			kbClothBone { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				Anchored = 0
-				BoneName = "B04_06"
-				NeighborBones = 0
-			}
-			kbClothBone { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				Anchored = 0
-				BoneName = "B04_07"
-				NeighborBones = 0
-			}
-			kbClothBone { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				Anchored = 0
-				BoneName = "B04_08"
-				NeighborBones = 0
-			}
-			kbClothBone { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				Anchored = 0
-				BoneName = "B04_09"
-				NeighborBones = 0
-			}
-			kbClothBone { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				Anchored = 0
-				BoneName = "B04_10"
-				NeighborBones = 0
-			}
-			kbClothBone { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				Anchored = 0
-				BoneName = "B05_00"
-				NeighborBones = 0
-			}
-			kbClothBone { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				Anchored = 0
-				BoneName = "B05_01"
-				NeighborBones = 0
-			}
-			kbClothBone { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				Anchored = 0
-				BoneName = "B05_02"
-				NeighborBones = 0
-			}
-			kbClothBone { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				Anchored = 0
-				BoneName = "B05_03"
-				NeighborBones = 0
-			}
-			kbClothBone { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				Anchored = 0
-				BoneName = "B05_04"
-				NeighborBones = 0
-			}
-			kbClothBone { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				Anchored = 0
-				BoneName = "B05_05"
-				NeighborBones = 0
-			}
-			kbClothBone { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				Anchored = 0
-				BoneName = "B05_06"
-				NeighborBones = 0
-			}
-			kbClothBone { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				Anchored = 0
-				BoneName = "B05_07"
-				NeighborBones = 0
-			}
-			kbClothBone { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				Anchored = 0
-				BoneName = "B05_08"
-				NeighborBones = 0
-			}
-			kbClothBone { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				Anchored = 0
-				BoneName = "B05_09"
-				NeighborBones = 0
-			}
-			kbClothBone { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				Anchored = 0
-				BoneName = "B05_10"
-				NeighborBones = 0
-			}
-			kbClothBone { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				Anchored = 0
-				BoneName = "B06_00"
-				NeighborBones = 0
-			}
-			kbClothBone { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				Anchored = 0
-				BoneName = "B06_01"
-				NeighborBones = 0
-			}
-			kbClothBone { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				Anchored = 0
-				BoneName = "B06_02"
-				NeighborBones = 0
-			}
-			kbClothBone { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				Anchored = 0
-				BoneName = "B06_03"
-				NeighborBones = 0
-			}
-			kbClothBone { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				Anchored = 0
-				BoneName = "B06_04"
-				NeighborBones = 0
-			}
-			kbClothBone { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				Anchored = 0
-				BoneName = "B06_05"
-				NeighborBones = 0
-			}
-			kbClothBone { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				Anchored = 0
-				BoneName = "B06_06"
-				NeighborBones = 0
-			}
-			kbClothBone { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				Anchored = 0
-				BoneName = "B06_07"
-				NeighborBones = 0
-			}
-			kbClothBone { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				Anchored = 0
-				BoneName = "B06_08"
-				NeighborBones = 0
-			}
-			kbClothBone { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				Anchored = 0
-				BoneName = "B06_09"
-				NeighborBones = 0
-			}
-			kbClothBone { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				Anchored = 0
-				BoneName = "B06_10"
-				NeighborBones = 0
-			}
-			kbClothBone { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				Anchored = 0
-				BoneName = "B07_00"
-				NeighborBones = 0
-			}
-			kbClothBone { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				Anchored = 0
-				BoneName = "B07_01"
-				NeighborBones = 0
-			}
-			kbClothBone { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				Anchored = 0
-				BoneName = "B07_02"
-				NeighborBones = 0
-			}
-			kbClothBone { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				Anchored = 0
-				BoneName = "B07_03"
-				NeighborBones = 0
-			}
-			kbClothBone { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				Anchored = 0
-				BoneName = "B07_04"
-				NeighborBones = 0
-			}
-			kbClothBone { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				Anchored = 0
-				BoneName = "B07_05"
-				NeighborBones = 0
-			}
-			kbClothBone { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				Anchored = 0
-				BoneName = "B07_06"
-				NeighborBones = 0
-			}
-			kbClothBone { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				Anchored = 0
-				BoneName = "B07_07"
-				NeighborBones = 0
-			}
-			kbClothBone { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				Anchored = 0
-				BoneName = "B07_08"
-				NeighborBones = 0
-			}
-			kbClothBone { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				Anchored = 0
-				BoneName = "B07_09"
-				NeighborBones = 0
-			}
-			kbClothBone { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				Anchored = 0
-				BoneName = "B07_10"
-				NeighborBones = 0
-			}
-			kbClothBone { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				Anchored = 0
-				BoneName = "B08_00"
-				NeighborBones = 0
-			}
-			kbClothBone { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				Anchored = 0
-				BoneName = "B08_01"
-				NeighborBones = 0
-			}
-			kbClothBone { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				Anchored = 0
-				BoneName = "B08_02"
-				NeighborBones = 0
-			}
-			kbClothBone { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				Anchored = 0
-				BoneName = "B08_03"
-				NeighborBones = 0
-			}
-			kbClothBone { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				Anchored = 0
-				BoneName = "B08_04"
-				NeighborBones = 0
-			}
-			kbClothBone { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				Anchored = 0
-				BoneName = "B08_05"
-				NeighborBones = 0
-			}
-			kbClothBone { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				Anchored = 0
-				BoneName = "B08_06"
-				NeighborBones = 0
-			}
-			kbClothBone { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				Anchored = 0
-				BoneName = "B08_07"
-				NeighborBones = 0
-			}
-			kbClothBone { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				Anchored = 0
-				BoneName = "B08_08"
-				NeighborBones = 0
-			}
-			kbClothBone { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				Anchored = 0
-				BoneName = "B08_09"
-				NeighborBones = 0
-			}
-			kbClothBone { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				Anchored = 0
-				BoneName = "B08_10"
-				NeighborBones = 0
-			}
-			kbClothBone { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				Anchored = 0
-				BoneName = "B09_00"
-				NeighborBones = 0
-			}
-			kbClothBone { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				Anchored = 0
-				BoneName = "B09_01"
-				NeighborBones = 0
-			}
-			kbClothBone { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				Anchored = 0
-				BoneName = "B09_02"
-				NeighborBones = 0
-			}
-			kbClothBone { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				Anchored = 0
-				BoneName = "B09_03"
-				NeighborBones = 0
-			}
-			kbClothBone { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				Anchored = 0
-				BoneName = "B09_04"
-				NeighborBones = 0
-			}
-			kbClothBone { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				Anchored = 0
-				BoneName = "B09_05"
-				NeighborBones = 0
-			}
-			kbClothBone { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				Anchored = 0
-				BoneName = "B09_06"
-				NeighborBones = 0
-			}
-			kbClothBone { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				Anchored = 0
-				BoneName = "B09_07"
-				NeighborBones = 0
-			}
-			kbClothBone { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				Anchored = 0
-				BoneName = "B09_08"
-				NeighborBones = 0
-			}
-			kbClothBone { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				Anchored = 0
-				BoneName = "B09_09"
-				NeighborBones = 0
-			}
-			kbClothBone { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				Anchored = 0
-				BoneName = "B09_10"
-				NeighborBones = 0
-			}
-			kbClothBone { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				Anchored = 0
-				BoneName = "B10_00"
-				NeighborBones = 0
-			}
-			kbClothBone { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				Anchored = 0
-				BoneName = "B10_01"
-				NeighborBones = 0
-			}
-			kbClothBone { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				Anchored = 0
-				BoneName = "B10_02"
-				NeighborBones = 0
-			}
-			kbClothBone { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				Anchored = 0
-				BoneName = "B10_03"
-				NeighborBones = 0
-			}
-			kbClothBone { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				Anchored = 0
-				BoneName = "B10_04"
-				NeighborBones = 0
-			}
-			kbClothBone { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				Anchored = 0
-				BoneName = "B10_05"
-				NeighborBones = 0
-			}
-			kbClothBone { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				Anchored = 0
-				BoneName = "B10_06"
-				NeighborBones = 0
-			}
-			kbClothBone { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				Anchored = 0
-				BoneName = "B10_07"
-				NeighborBones = 0
-			}
-			kbClothBone { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				Anchored = 0
-				BoneName = "B10_08"
-				NeighborBones = 0
-			}
-			kbClothBone { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				Anchored = 0
-				BoneName = "B10_09"
-				NeighborBones = 0
-			}
-			kbClothBone { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				Anchored = 0
-				BoneName = "B10_10"
-				NeighborBones = 0
-			}
-		ClothType = Square
-		Collision = 0
-		Gravity = 0.000000 -100.000000 0.000000
-		Height = 11
-		MaxWindGustDuration =  0.250000
-		MaxWindVelocity = 5.000000 20.000000 25.000000
-		MinWindGustDuration =  0.700000
-		MinWindVelocity = -5.000000 10.000000 10.000000
-		NumIterations = 1
-		Width = 11
-		Health =  1.000000
-	}
-}
-kbGameEntity 0 0 0 0 {
-	kbTransformComponent { 
-		Enabled = 0
-		LifeTime =  -1.000000
-		Name = "ELP_Banner_2"
-		Orientation = 0.000000 -0.178244 0.000000 0.983986
-		Position = -123.642891 48.116493 51.920887
+		Position = -156.010193 48.116493 64.045052
 		Scale = 0.300000 0.300000 0.300000
 	}
 	EtherSkelModelComponent { 
@@ -4228,7 +3342,7 @@ kbGameEntity 0 0 0 0 {
 						LifeTime =  -1.000000
 						ParamName = "flagDamageDot"
 						Texture = NULL
-						Vector = 0.000000 1.000000 0.000000 0.000000
+						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 					kbShaderParamComponent { 
 						Enabled = 0
@@ -4241,7 +3355,7 @@ kbGameEntity 0 0 0 0 {
 						Enabled = 0
 						LifeTime =  -1.000000
 						ParamName = "damageTexture"
-						Texture = .\assets\models\environment\banners\damagebanner_1.tif
+						Texture = .\assets\models\environment\banners\damagebanner_2.tif
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 					kbShaderParamComponent { 
@@ -4256,7 +3370,7 @@ kbGameEntity 0 0 0 0 {
 						LifeTime =  -1.000000
 						ParamName = "noiseParams"
 						Texture = NULL
-						Vector = 2.000000 2.000000 0.000000 0.000000
+						Vector = 1.000000 1.000000 0.000000 0.000000
 					}
 					kbShaderParamComponent { 
 						Enabled = 0
@@ -5136,6 +4250,941 @@ kbGameEntity 0 0 0 0 {
 		MinWindVelocity = -5.000000 10.000000 10.000000
 		NumIterations = 1
 		Width = 11
-		Health =  2.000000
+		Health =  0.000000
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "ELP_Banner_2"
+		Orientation = 0.000000 -0.178244 0.000000 0.983986
+		Position = -131.321396 48.116493 54.797108
+		Scale = 0.300000 0.300000 0.300000
+	}
+	EtherSkelModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		Materials = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Shader = .\assets\shaders\environment\flag.kbshader
+				ShaderParams = 6
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "flagDamageDot"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorTexture"
+						Texture = .\assets\models\environment\banners\elp_banner_1.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "damageTexture"
+						Texture = .\assets\models\environment\banners\damagebanner_3.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "noiseTexture"
+						Texture = ..\..\kbengine\assets\textures\noise.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "noiseParams"
+						Texture = NULL
+						Vector = 1.000000 1.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "damageParams"
+						Texture = NULL
+						Vector = 1.000000 0.000000 0.000000 0.000000
+					}
+			}
+		RenderPass = LightingPass
+		TranslucencySortBias =  0.000000
+		Model = .\assets\models\environment\banners\elp_banner_2.ms3d
+		Animations = 0
+		DebugAnimIndex = -1
+		IsFirstPersonModel = 0
+	}
+	EtherClothComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		AddFakeOscillation = 1
+		AdditionalBoneInfo = 0
+		BoneInfo = 121
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 1
+				BoneName = "B00_00"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 1
+				BoneName = "B00_01"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 1
+				BoneName = "B00_02"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 1
+				BoneName = "B00_03"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 1
+				BoneName = "B00_04"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 1
+				BoneName = "B00_05"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 1
+				BoneName = "B00_06"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 1
+				BoneName = "B00_07"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 1
+				BoneName = "B00_08"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 1
+				BoneName = "B00_09"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 1
+				BoneName = "B00_10"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B01_00"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B01_01"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B01_02"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B01_03"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B01_04"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B01_05"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B01_06"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B01_07"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B01_08"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B01_09"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B01_10"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B02_00"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B02_01"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B02_02"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B02_03"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B02_04"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B02_05"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B02_06"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B02_07"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B02_08"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B02_09"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B02_10"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B03_00"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B03_01"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B03_02"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B03_03"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B03_04"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B03_05"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B03_06"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B03_07"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B03_08"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B03_09"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B03_10"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B04_00"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B04_01"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B04_02"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B04_03"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B04_04"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B04_05"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B04_06"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B04_07"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B04_08"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B04_09"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B04_10"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B05_00"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B05_01"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B05_02"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B05_03"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B05_04"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B05_05"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B05_06"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B05_07"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B05_08"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B05_09"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B05_10"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B06_00"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B06_01"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B06_02"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B06_03"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B06_04"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B06_05"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B06_06"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B06_07"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B06_08"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B06_09"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B06_10"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B07_00"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B07_01"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B07_02"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B07_03"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B07_04"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B07_05"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B07_06"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B07_07"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B07_08"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B07_09"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B07_10"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B08_00"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B08_01"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B08_02"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B08_03"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B08_04"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B08_05"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B08_06"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B08_07"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B08_08"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B08_09"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B08_10"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B09_00"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B09_01"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B09_02"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B09_03"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B09_04"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B09_05"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B09_06"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B09_07"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B09_08"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B09_09"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B09_10"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B10_00"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B10_01"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B10_02"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B10_03"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B10_04"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B10_05"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B10_06"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B10_07"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B10_08"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B10_09"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B10_10"
+				NeighborBones = 0
+			}
+		ClothType = Square
+		Collision = 0
+		Gravity = 0.000000 -100.000000 0.000000
+		Height = 11
+		MaxWindGustDuration =  0.250000
+		MaxWindVelocity = 5.000000 30.000000 40.000000
+		MinWindGustDuration =  0.700000
+		MinWindVelocity = -5.000000 10.000000 10.000000
+		NumIterations = 1
+		Width = 11
+		Health =  0.000000
 	}
 }
