@@ -49,8 +49,8 @@ kbGameEntity 2609040299 1100347930 3115268521 1892043160 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "Light Shafts"
-		Orientation = -0.006135 -0.740328 0.175946 0.648783
-		Position = 0.000000 41.726536 0.000000
+		Orientation = -0.079773 0.019397 0.242749 0.966609
+		Position = -7.832870 45.924557 0.010947
 		Scale = 1.000000 1.000000 1.000000
 	}
 	kbLightShaftsComponent { 
@@ -99,7 +99,7 @@ kbGameEntity 0 0 0 0 {
 				Enabled = 0
 				LifeTime =  -1.000000
 				Shader = .\assets\shaders\environment\environmentskinned.kbshader
-				ShaderParams = 4
+				ShaderParams = 5
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
@@ -127,6 +127,13 @@ kbGameEntity 0 0 0 0 {
 						ParamName = "emissiveMap"
 						Texture = NULL
 						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "worldVel"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 1.000000
 					}
 			}
 		RenderPass = LightingPass
@@ -182,7 +189,7 @@ kbGameEntity 0 0 0 0 {
 				Enabled = 0
 				LifeTime =  -1.000000
 				Shader = .\assets\shaders\environment\environmentskinned.kbshader
-				ShaderParams = 4
+				ShaderParams = 5
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
@@ -210,6 +217,13 @@ kbGameEntity 0 0 0 0 {
 						ParamName = "emissiveMap"
 						Texture = NULL
 						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "worldVel"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 1.000000
 					}
 			}
 		RenderPass = LightingPass
@@ -265,7 +279,7 @@ kbGameEntity 0 0 0 0 {
 				Enabled = 0
 				LifeTime =  -1.000000
 				Shader = .\assets\shaders\environment\environmentskinned.kbshader
-				ShaderParams = 4
+				ShaderParams = 5
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
@@ -293,6 +307,13 @@ kbGameEntity 0 0 0 0 {
 						ParamName = "emissiveMap"
 						Texture = NULL
 						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "worldVel"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 1.000000
 					}
 			}
 		RenderPass = LightingPass
@@ -348,7 +369,7 @@ kbGameEntity 0 0 0 0 {
 				Enabled = 0
 				LifeTime =  -1.000000
 				Shader = .\assets\shaders\environment\environmentskinned.kbshader
-				ShaderParams = 4
+				ShaderParams = 5
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
@@ -376,6 +397,13 @@ kbGameEntity 0 0 0 0 {
 						ParamName = "emissiveMap"
 						Texture = NULL
 						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "worldVel"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 1.000000
 					}
 			}
 		RenderPass = LightingPass
@@ -431,7 +459,7 @@ kbGameEntity 0 0 0 0 {
 				Enabled = 0
 				LifeTime =  -1.000000
 				Shader = .\assets\shaders\environment\environmentskinned.kbshader
-				ShaderParams = 4
+				ShaderParams = 5
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
@@ -459,6 +487,13 @@ kbGameEntity 0 0 0 0 {
 						ParamName = "emissiveMap"
 						Texture = NULL
 						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "worldVel"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 1.000000
 					}
 			}
 		RenderPass = LightingPass
@@ -514,7 +549,7 @@ kbGameEntity 0 0 0 0 {
 				Enabled = 0
 				LifeTime =  -1.000000
 				Shader = .\assets\shaders\environment\environmentskinned.kbshader
-				ShaderParams = 4
+				ShaderParams = 5
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
@@ -542,6 +577,13 @@ kbGameEntity 0 0 0 0 {
 						ParamName = "emissiveMap"
 						Texture = NULL
 						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "worldVel"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 1.000000
 					}
 			}
 		RenderPass = LightingPass
@@ -597,7 +639,7 @@ kbGameEntity 0 0 0 0 {
 				Enabled = 0
 				LifeTime =  -1.000000
 				Shader = .\assets\shaders\environment\environmentskinned.kbshader
-				ShaderParams = 4
+				ShaderParams = 5
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
@@ -625,6 +667,13 @@ kbGameEntity 0 0 0 0 {
 						ParamName = "emissiveMap"
 						Texture = NULL
 						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "worldVel"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 1.000000
 					}
 			}
 		RenderPass = LightingPass
@@ -1155,7 +1204,7 @@ kbGameEntity 0 0 0 0 {
 				Enabled = 0
 				LifeTime =  -1.000000
 				Shader = .\assets\shaders\environment\environmentskinned.kbshader
-				ShaderParams = 4
+				ShaderParams = 5
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
@@ -1183,6 +1232,13 @@ kbGameEntity 0 0 0 0 {
 						ParamName = "emissiveMap"
 						Texture = NULL
 						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "worldVel"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 1.000000
 					}
 			}
 		RenderPass = LightingPass
@@ -1238,7 +1294,7 @@ kbGameEntity 0 0 0 0 {
 				Enabled = 0
 				LifeTime =  -1.000000
 				Shader = .\assets\shaders\environment\environmentskinned.kbshader
-				ShaderParams = 4
+				ShaderParams = 5
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
@@ -1266,6 +1322,13 @@ kbGameEntity 0 0 0 0 {
 						ParamName = "emissiveMap"
 						Texture = NULL
 						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "worldVel"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 1.000000
 					}
 			}
 		RenderPass = LightingPass
@@ -1335,7 +1398,7 @@ kbGameEntity 0 0 0 0 {
 				Enabled = 0
 				LifeTime =  -1.000000
 				Shader = .\assets\shaders\environment\environmentskinned.kbshader
-				ShaderParams = 4
+				ShaderParams = 5
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
@@ -1363,6 +1426,13 @@ kbGameEntity 0 0 0 0 {
 						ParamName = "emissiveMap"
 						Texture = NULL
 						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "worldVel"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 1.000000
 					}
 			}
 		RenderPass = LightingPass
@@ -1418,7 +1488,7 @@ kbGameEntity 0 0 0 0 {
 				Enabled = 0
 				LifeTime =  -1.000000
 				Shader = .\assets\shaders\environment\environmentskinned.kbshader
-				ShaderParams = 4
+				ShaderParams = 5
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
@@ -1446,6 +1516,13 @@ kbGameEntity 0 0 0 0 {
 						ParamName = "emissiveMap"
 						Texture = NULL
 						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "worldVel"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 1.000000
 					}
 			}
 		RenderPass = LightingPass
@@ -1541,7 +1618,7 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 1
 		LifeTime =  -1.000000
 		Name = "Directional Light"
-		Orientation = -0.295274 -0.684071 -0.006187 0.666950
+		Orientation = -0.225070 -0.069525 0.191229 0.952860
 		Position = -103.608055 74.840149 -98.087181
 		Scale = 1.000000 1.000000 1.000000
 	}
@@ -2199,19 +2276,19 @@ kbGameEntity 0 0 0 0 {
 		LifeTime =  -1.000000
 		Name = "Izzy"
 		Orientation = 0.284925 0.243109 -0.657368 0.653899
-		Position = -92.604469 29.839386 -85.255890
-		Scale = 5.000000 5.000000 5.000000
+		Position = -74.473541 64.685165 -58.149456
+		Scale = 1.500000 1.500000 1.500000
 	}
-	kbSkeletalModelComponent { 
+	EtherSkelModelComponent { 
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadow = 0
-		Materials = 5
+		Materials = 1
 			kbMaterialComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
-				Shader = .\assets\shaders\character\characterbase_noskinning.kbshader
-				ShaderParams = 5
+				Shader = .\assets\shaders\character\characterbase_noskinning_smear.kbshader
+				ShaderParams = 7
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
@@ -2229,124 +2306,15 @@ kbGameEntity 0 0 0 0 {
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
-						ParamName = "colorTexture"
-						Texture = .\assets\models\characters\headband.jpg
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "hatchTexture1"
-						Texture = .\assets\models\characters\tam_1.tif
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "hatchTexture2"
-						Texture = .\assets\models\characters\tam_2.tif
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-			}
-			kbMaterialComponent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				Shader = .\assets\shaders\character\characterbase_noskinning.kbshader
-				ShaderParams = 5
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "sunDir"
+						ParamName = "worldVel"
 						Texture = NULL
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "hatchParams"
-						Texture = NULL
-						Vector = 1.000000 0.350000 2.000000 -1.000000
+						Vector = 0.000000 0.000000 0.000000 1.000000
 					}
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
 						ParamName = "colorTexture"
-						Texture = .\assets\models\characters\hair.tif
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "hatchTexture1"
-						Texture = .\assets\models\characters\tam_1.tif
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "hatchTexture2"
-						Texture = .\assets\models\characters\tam_2.tif
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-			}
-			kbMaterialComponent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				Shader = .\assets\shaders\character\characterbase_noskinning.kbshader
-				ShaderParams = 5
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "sunDir"
-						Texture = NULL
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "colorTexture"
-						Texture = .\assets\models\characters\izzy_combat.bmp
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "hatchTexture1"
-						Texture = .\assets\models\characters\tam_1.tif
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "hatchTexture2"
-						Texture = .\assets\models\characters\tam_2.tif
-						Vector = 0.050000 0.000000 0.000000 0.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "hatchParams"
-						Texture = NULL
-						Vector = 1.000000 0.350000 2.000000 -0.050000
-					}
-			}
-			kbMaterialComponent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				Shader = .\assets\shaders\character\characterbase_noskinning.kbshader
-				ShaderParams = 5
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "sunDir"
-						Texture = NULL
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "colorTexture"
-						Texture = .\assets\models\characters\eye.tif
+						Texture = .\assets\models\test\white.jpg
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 					kbShaderParamComponent { 
@@ -2366,66 +2334,49 @@ kbGameEntity 0 0 0 0 {
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
-						ParamName = "hatchParams"
-						Texture = NULL
-						Vector = 0.000000 0.350000 2.000000 0.150000
-					}
-			}
-			kbMaterialComponent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				Shader = .\assets\shaders\character\characterbase_noskinning.kbshader
-				ShaderParams = 5
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "sunDir"
-						Texture = NULL
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "hatchParams"
-						Texture = NULL
-						Vector = 1.000000 0.350000 2.000000 0.150000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "colorTexture"
-						Texture = .\assets\models\characters\face.tif
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "hatchTexture1"
-						Texture = .\assets\models\characters\tam_1.tif
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "hatchTexture2"
-						Texture = .\assets\models\characters\tam_2.tif
+						ParamName = "noiseTex"
+						Texture = ..\..\kbengine\assets\textures\noise.jpg
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 			}
 		RenderPass = LightingPass
 		TranslucencySortBias =  0.000000
-		Model = .\assets\models\characters\izzy.fbx
+		Model = .\assets\models\test\sphere.ms3d
+		Animations = 0
+		DebugAnimIndex = -1
+		IsFirstPersonModel = 0
 	}
-	kbSkeletalModelComponent { 
-		Enabled = 1
+	EtherSkelModelComponent { 
+		Enabled = 0
 		LifeTime =  -1.000000
 		CastsShadow = 0
-		Materials = 5
+		Materials = 1
 			kbMaterialComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
-				Shader = .\assets\shaders\character\characteroutline_noskinning.kbshader
-				ShaderParams = 2
+				Shader = .\assets\shaders\character\characterbase_noskinning_smear.kbshader
+				ShaderParams = 7
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "sunDir"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "hatchParams"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "worldVel"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
@@ -2436,94 +2387,31 @@ kbGameEntity 0 0 0 0 {
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
-						ParamName = "outlineParams"
-						Texture = NULL
-						Vector = 0.010000 5.000000 0.000000 0.000000
-					}
-			}
-			kbMaterialComponent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				Shader = .\assets\shaders\character\characteroutline_noskinning.kbshader
-				ShaderParams = 2
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "colorTexture"
+						ParamName = "hatchTexture1"
 						Texture = NULL
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
-						ParamName = "outlineParams"
-						Texture = NULL
-						Vector = 0.010000 5.000000 0.000000 0.000000
-					}
-			}
-			kbMaterialComponent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				Shader = .\assets\shaders\character\characteroutline_noskinning.kbshader
-				ShaderParams = 2
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "colorTexture"
-						Texture = .\assets\models\characters\izzy_combat.bmp
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "outlineParams"
-						Texture = NULL
-						Vector = 0.010000 5.000000 0.000000 0.000000
-					}
-			}
-			kbMaterialComponent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				Shader = .\assets\shaders\character\characteroutline_noskinning.kbshader
-				ShaderParams = 2
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "colorTexture"
+						ParamName = "hatchTexture2"
 						Texture = NULL
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
-						ParamName = "outlineParams"
-						Texture = NULL
-						Vector = 0.010000 5.000000 0.000000 0.000000
-					}
-			}
-			kbMaterialComponent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				Shader = .\assets\shaders\character\characteroutline_noskinning.kbshader
-				ShaderParams = 2
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "outlineParams"
-						Texture = NULL
-						Vector = 0.010000 5.000000 0.000000 0.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "colorTexture"
-						Texture = .\assets\models\characters\face.tif
-						Vector = 0.100000 5.000000 0.000000 0.000000
+						ParamName = "noise"
+						Texture = .\assets\fx\noise\noise3.png
+						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 			}
 		RenderPass = LightingPass
 		TranslucencySortBias =  0.000000
-		Model = .\assets\models\characters\izzy.fbx
+		Model = .\assets\models\test\sphere.ms3d
+		Animations = 0
+		DebugAnimIndex = -1
+		IsFirstPersonModel = 0
 	}
 }
 kbGameEntity 0 0 0 0 {
@@ -2544,7 +2432,7 @@ kbGameEntity 0 0 0 0 {
 				Enabled = 0
 				LifeTime =  -1.000000
 				Shader = .\assets\shaders\character\characterbase.kbshader
-				ShaderParams = 3
+				ShaderParams = 4
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
@@ -2565,6 +2453,13 @@ kbGameEntity 0 0 0 0 {
 						ParamName = "flagDamageDot"
 						Texture = NULL
 						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "worldVel"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 1.000000
 					}
 			}
 		RenderPass = LightingPass
@@ -2926,7 +2821,7 @@ kbGameEntity 0 0 0 0 {
 		MinWindVelocity = 20.000000 30.000000 -20.000000
 		NumIterations = 1
 		Width = 6
-		Health =  649.101685
+		Health =  0.000000
 	}
 }
 kbGameEntity 0 0 0 0 {
@@ -2947,7 +2842,7 @@ kbGameEntity 0 0 0 0 {
 				Enabled = 0
 				LifeTime =  -1.000000
 				Shader = .\assets\shaders\character\characterbase.kbshader
-				ShaderParams = 3
+				ShaderParams = 4
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
@@ -2968,6 +2863,13 @@ kbGameEntity 0 0 0 0 {
 						ParamName = "flagDamageDot"
 						Texture = NULL
 						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "worldVel"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 1.000000
 					}
 			}
 		RenderPass = LightingPass
@@ -3329,7 +3231,7 @@ kbGameEntity 0 0 0 0 {
 		MinWindVelocity = 20.000000 25.000000 -20.000000
 		NumIterations = 1
 		Width = 6
-		Health =  643.872925
+		Health =  0.000000
 	}
 }
 kbGameEntity 0 0 0 0 {
@@ -3350,7 +3252,7 @@ kbGameEntity 0 0 0 0 {
 				Enabled = 0
 				LifeTime =  -1.000000
 				Shader = .\assets\shaders\environment\flag.kbshader
-				ShaderParams = 6
+				ShaderParams = 7
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
@@ -3393,6 +3295,13 @@ kbGameEntity 0 0 0 0 {
 						Texture = NULL
 						Vector = 1.000000 0.000000 0.000000 0.000000
 					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "worldVel"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 1.000000
+					}
 			}
 		RenderPass = LightingPass
 		TranslucencySortBias =  0.000000
@@ -4264,7 +4173,7 @@ kbGameEntity 0 0 0 0 {
 		MinWindVelocity = -5.000000 10.000000 10.000000
 		NumIterations = 1
 		Width = 11
-		Health =  649.101685
+		Health =  0.000000
 	}
 }
 kbGameEntity 0 0 0 0 {
@@ -4285,7 +4194,7 @@ kbGameEntity 0 0 0 0 {
 				Enabled = 0
 				LifeTime =  -1.000000
 				Shader = .\assets\shaders\environment\flag.kbshader
-				ShaderParams = 6
+				ShaderParams = 7
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
@@ -4328,6 +4237,13 @@ kbGameEntity 0 0 0 0 {
 						Texture = NULL
 						Vector = 1.000000 0.000000 0.000000 0.000000
 					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "worldVel"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 1.000000
+					}
 			}
 		RenderPass = LightingPass
 		TranslucencySortBias =  0.000000
@@ -5199,7 +5115,7 @@ kbGameEntity 0 0 0 0 {
 		MinWindVelocity = -5.000000 10.000000 10.000000
 		NumIterations = 1
 		Width = 11
-		Health =  643.872925
+		Health =  0.000000
 	}
 }
 kbGameEntity 0 0 0 0 {
@@ -5220,13 +5136,20 @@ kbGameEntity 0 0 0 0 {
 				Enabled = 0
 				LifeTime =  -1.000000
 				Shader = .\assets\shaders\character\characterbase.kbshader
-				ShaderParams = 1
+				ShaderParams = 2
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
 						ParamName = "colorTexture"
 						Texture = .\assets\models\characters\eye.tif
 						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "worldVel"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 1.000000
 					}
 			}
 			kbMaterialComponent { 
@@ -5309,5 +5232,37 @@ kbGameEntity 0 0 0 0 {
 			}
 		DebugAnimIndex = 0
 		IsFirstPersonModel = 0
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Entity_51"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = -75.640533 59.371799 -49.990326
+		Scale = 30.000000 30.000000 30.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		Materials = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Shader = ..\..\kbengine\assets\shaders\basictexture.kbshader
+				ShaderParams = 1
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "shaderTexture"
+						Texture = ..\..\kbengine\assets\textures\black.bmp
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		RenderPass = LightingPass
+		TranslucencySortBias =  0.000000
+		Model = .\assets\models\test\invertedcube2.ms3d
 	}
 }

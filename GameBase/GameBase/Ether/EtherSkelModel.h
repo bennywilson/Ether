@@ -76,6 +76,8 @@ protected:
 	float									m_BlendStartTime;
 	float									m_BlendLength;
 
+	kbVec3									m_LastPos;
+
 	bool									m_bFirstPersonModel;
 };
 
@@ -162,7 +164,9 @@ protected:
 
 private:
 	float									m_Health;
+	float									m_StartingHealth;
 	float									m_LastHitTime;
+	int										m_NumTimesDamaged;
 };
 
 #endif

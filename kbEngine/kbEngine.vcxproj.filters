@@ -111,6 +111,12 @@
     <None Include="assets\Shaders\SSAO.kbShader">
       <Filter>Assets\Shaders</Filter>
     </None>
+    <None Include="assets\Shaders\MotionBlurApply.kbShader">
+      <Filter>Assets\Shaders</Filter>
+    </None>
+    <None Include="assets\Shaders\MotionBlurGen.kbShader">
+      <Filter>Assets\Shaders</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="renderer\kbModel.h">

@@ -112,6 +112,8 @@
     <None Include="assets\Shaders\godRayIteration.kbShader" />
     <None Include="assets\Shaders\lightShafts.kbShader" />
     <None Include="assets\Shaders\missingShader.kbShader" />
+    <None Include="assets\Shaders\MotionBlurApply.kbShader" />
+    <None Include="assets\Shaders\MotionBlurGen.kbShader" />
     <None Include="assets\Shaders\mousePicker.kbShader" />
     <None Include="assets\Shaders\pointLight.kbShader" />
     <None Include="assets\Shaders\SimpleAdditive.kbShader" />

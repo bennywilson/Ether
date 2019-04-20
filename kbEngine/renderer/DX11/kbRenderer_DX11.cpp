@@ -523,6 +523,8 @@ void kbRenderer_DX11::Init_Internal( HWND hwnd, const int frameWidth, const int 
 	float maxHalf[] = { 65000.0f, 65000.0f, 65000.0f, 65000.0f };
 	m_pDeviceContext->ClearRenderTargetView( GetRenderTarget_DX11(MAX_HALF_BUFFER)->m_pRenderTargetView, maxHalf );
 
+	RT_GetRenderTexture( deferredRTWidth, deferredRTHeight, KBTEXTURE_R16G16B16A16, false );
+
 	// create back buffer
 	D3D11_TEXTURE2D_DESC depthBufferDesc = { 0 };
 	depthBufferDesc.Width = deferredRTWidth;
@@ -704,6 +706,10 @@ void kbRenderer_DX11::Init_Internal( HWND hwnd, const int frameWidth, const int 
 	m_pMousePickerIdShader = (kbShader *) g_ResourceManager.LoadResource( "../../kbEngine/assets/Shaders/mousePicker.kbshader", true );
 
 	m_pSSAO = (kbShader*) g_ResourceManager.LoadResource( "../../kbEngine/assets/Shaders/SSAO.kbShader", true );
+
+
+	m_pMotionBlurGen = (kbShader*) g_ResourceManager.LoadResource( "../../kbEngine/assets/Shaders/MotionBlurGen.kbShader", true );
+	m_pMotionBlurApply= (kbShader*) g_ResourceManager.LoadResource( "../../kbEngine/assets/Shaders/MotionBlurApply.kbShader", true );
 
 	// Non-resource managed shaders
 	m_pSkinnedDirectionalLightShadowShader->SetVertexShaderFunctionName( "skinnedVertexMain" );
@@ -1365,6 +1371,214 @@ void kbRenderer_DX11::RenderScene() {
 			PLACE_GPU_TIME_STAMP( "Post Lighting Render Hook" );
 		}
 
+			if ( GetAsyncKeyState('C') ) {
+				const float color[4] = { 0.0f, 0.0f, 0.0f, 0.0f };
+					m_pDeviceContext->ClearRenderTargetView( GetRenderTarget_DX11(MOTION_BLUR_BUFFER)->m_pRenderTargetView, color );
+			}
+
+			static int frame = 0;
+			frame++;
+			static int frameToPlay = 1;
+			if ( GetAsyncKeyState('1') ) {
+				frameToPlay = 1;
+			} else if ( GetAsyncKeyState('2') ) {
+				frameToPlay = 8;
+			} else if ( GetAsyncKeyState('3') ) {
+				frameToPlay = 16;
+			}
+			else if ( GetAsyncKeyState('4') ) {
+				frameToPlay = 32;
+			}
+
+		if ( frame % frameToPlay == 0 ) {
+		{
+
+			ID3D11RenderTargetView * RenderTargetViews[] = {
+						GetRenderTarget_DX11(MOTION_BLUR_BUFFER)->m_pRenderTargetView };
+
+			m_pDeviceContext->OMSetRenderTargets( 1, RenderTargetViews, m_pDepthStencilView );
+
+				m_RenderState.SetDepthStencilState( true,
+													kbRenderState::DepthWriteMaskZero,
+													kbRenderState::CompareLess,
+													true,
+													0xff,
+													0xff,
+													kbRenderState::StencilKeep,
+													kbRenderState::StencilKeep,
+													kbRenderState::StencilKeep,
+													kbRenderState::CompareEqual,
+													kbRenderState::StencilKeep,
+													kbRenderState::StencilKeep,
+													kbRenderState::StencilReplace,
+													kbRenderState::CompareEqual,
+													1);
+
+			const unsigned int stride = sizeof( vertexLayout );
+			const unsigned int offset = 0;
+
+			m_pDeviceContext->IASetVertexBuffers( 0, 1, &m_pUnitQuad, &stride, &offset );
+			m_pDeviceContext->IASetPrimitiveTopology( D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST );
+			m_pDeviceContext->RSSetState( m_pDefaultRasterizerState );
+
+			ID3D11ShaderResourceView * SRV[] = { GetAccumBuffer( m_iAccumBuffer )->m_pShaderResourceView, GetRenderTarget_DX11(DEPTH_BUFFER)->m_pShaderResourceView };
+			m_pDeviceContext->PSSetShaderResources( 0, 2, SRV );
+
+			ID3D11SamplerState * samplerState[] = { m_pNormalMapSamplerState, m_pNormalMapSamplerState };
+			m_pDeviceContext->PSSetSamplers( 0, 2, samplerState );
+			m_pDeviceContext->IASetInputLayout( (ID3D11InputLayout*)m_pMotionBlurGen->GetVertexLayout() );
+			m_pDeviceContext->VSSetShader( (ID3D11VertexShader *)m_pMotionBlurGen->GetVertexShader(), nullptr, 0 );
+			m_pDeviceContext->PSSetShader( (ID3D11PixelShader *)m_pMotionBlurGen->GetPixelShader(), nullptr, 0 );
+
+			m_RenderState.SetBlendState( m_pMotionBlurGen );
+
+			const auto & varBindings = m_pMotionBlurGen->GetShaderVarBindings();
+		//	ID3D11Buffer *const pConstantBuffer = GetConstantBuffer( varBindings.m_ConstantBufferSizeBytes );
+
+//			const auto & varBindings = m_pMotionBlurGen->GetShaderVarBindings();
+
+			kbShaderParamOverrides_t shaderParams;
+			ID3D11Buffer * pConstantBuffer = GetConstantBuffer( varBindings.m_ConstantBufferSizeBytes );
+	
+			D3D11_MAPPED_SUBRESOURCE mappedResource;
+			HRESULT hr = m_pDeviceContext->Map( pConstantBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource );
+		//	kbErrorCheck( SUCCEEDED(hr), "kbRenderer_DX11::RenderSSAO() - Failed to map matrix buffer" );
+			byte * pMappedData = (byte*)mappedResource.pData;
+
+			SetConstantBuffer( varBindings, &shaderParams, nullptr, pMappedData );
+			//SetShaderMat4( "inverseViewProjection", m_pCurrentRenderWindow->GetInverseViewProjection(), pMappedData, varBindings );
+			m_pDeviceContext->Unmap( pConstantBuffer, 0 );
+
+		/*	D3D11_MAPPED_SUBRESOURCE mappedResource;
+			HRESULT hr = m_pDeviceContext->Map( pConstantBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource );
+			kbErrorCheck( SUCCEEDED(hr), "Failed to map matrix buffer" );
+
+			kbMat4 mvpMatrix;
+			if ( m_bRenderToHMD ) {
+				mvpMatrix.MakeScale( kbVec3( 0.5f, 1.0f, 1.0f ) );
+			} else {
+				mvpMatrix.MakeIdentity();
+			}
+
+	SetConstantBuffer( varBindings, &shaderParams, nullptr, mappedResource.pData, );
+			/*kbVec4 time;
+            time.x = g_GlobalTimer.TimeElapsedSeconds();
+            time.y = sin( time.x );
+            time.z = sin( time.x * 2.0f );
+            time.w = sin( time.x * 3.0f );
+			SetShaderVec4( "time", time, mappedResource.pData, varBindings );
+       
+		/*	SetShaderMat4( "mvpMatrix", mvpMatrix, mappedResource.pData, varBindings );
+			SetShaderMat4( "inverseProjection", m_pCurrentRenderWindow->GetInverseProjectionMatrix(), mappedResource.pData, varBindings );	
+			SetShaderVec4( "fogColor", m_FogColor_RenderThread, mappedResource.pData, varBindings );
+			SetShaderFloat( "fogStartDistance", m_FogStartDistance_RenderThread, mappedResource.pData, varBindings );
+			SetShaderFloat( "fogEndDistance", m_FogEndDistance_RenderThread, mappedResource.pData, varBindings );*/
+			//m_pDeviceContext->Unmap( pConstantBuffer, 0 );
+
+			m_pDeviceContext->VSSetConstantBuffers( 0, 1, &pConstantBuffer );
+			m_pDeviceContext->PSSetConstantBuffers( 0, 1, &pConstantBuffer );
+
+			m_pDeviceContext->Draw( 6, 0 );
+
+			ID3D11ShaderResourceView * nullArray[] = { nullptr };
+
+			m_pDeviceContext->PSSetShaderResources( 0, 1, nullArray );
+
+			ID3D11ShaderResourceView * nullarray[] = { nullptr, nullptr };//'{ GetRenderTarget_DX11(ACCUMULATION_BUFFER)->m_pShaderResourceView, GetRenderTarget_DX11(COLOR_BUFFER)->m_pShaderResourceView };
+			m_pDeviceContext->PSSetShaderResources( 0, 2, nullarray );
+		}
+		}
+
+		{
+			D3D11_VIEWPORT viewport;
+			viewport.TopLeftX = 0.0f;
+			viewport.TopLeftY = 0.0f;
+			viewport.Width = (float)GetAccumBuffer( m_iAccumBuffer )->GetWidth();
+			viewport.Height = (float)GetAccumBuffer( m_iAccumBuffer )->GetHeight();
+			viewport.MinDepth = 0;
+			viewport.MaxDepth = 1.0f;
+			m_pDeviceContext->RSSetViewports(1, &viewport);
+
+			m_RenderState.SetBlendState( m_pMotionBlurApply );
+				m_RenderState.SetDepthStencilState( false,
+													kbRenderState::DepthWriteMaskZero,
+													kbRenderState::CompareLess,
+													true,
+													0xff,
+													0xff,
+													kbRenderState::StencilKeep,
+													kbRenderState::StencilKeep,
+													kbRenderState::StencilKeep,
+													kbRenderState::CompareAlways,
+													kbRenderState::StencilKeep,
+													kbRenderState::StencilKeep,
+													kbRenderState::StencilReplace,
+													kbRenderState::CompareAlways,
+													1);
+/*
+	void SetDepthStencilState( const bool bDepthEnable = true,
+							   const kbDepthWriteMask depthWriteMask = DepthWriteMaskAll,
+							   const kbDepthStencilCompareTest depthComparisonTest = CompareLess,
+							   const bool bStencilEnable = true,
+							   const UINT8 stencilReadMask = 0xff,
+							   const UINT8 stencilWriteMask = 0,
+							   const kbStencilOp frontFaceStencilFailOp = StencilKeep,
+							   const kbStencilOp frontFaceStencilDepthFailOp = StencilKeep,
+							   const kbStencilOp frontFaceStencilPassOp = StencilKeep,
+							   const kbDepthStencilCompareTest frontFaceComparisonTest = CompareNotEqual,
+							   const kbStencilOp backFaceStencilFailOp = StencilKeep,
+							   const kbStencilOp backFaceStencilDepthFailOp = StencilKeep,
+							   const kbStencilOp backFaceStencilPassOp = StencilKeep,
+							   const kbDepthStencilCompareTest backFaceComparisonTest = CompareNotEqual,
+							   const UINT stencilRef = 1 ) {
+*/
+			m_pDeviceContext->OMSetRenderTargets(1, &GetAccumBuffer( m_iAccumBuffer )->m_pRenderTargetView, nullptr);
+			const unsigned int stride = sizeof(vertexLayout);
+			const unsigned int offset = 0;
+
+			m_pDeviceContext->IASetVertexBuffers(0, 1, &m_pUnitQuad, &stride, &offset);
+			m_pDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+			m_pDeviceContext->RSSetState(m_pDefaultRasterizerState);
+
+			//m_pDeviceContext->PSSetShaderResources(0, 1, &GetRenderTarget_DX11(ACCUMULATION_BUFFER)->m_pShaderResourceView);
+			ID3D11SamplerState *const samplerStates[] = { m_pBasicSamplerState, m_pNormalMapSamplerState, m_pShadowMapSamplerState, m_pShadowMapSamplerState };
+			m_pDeviceContext->PSSetSamplers( 0, 4, samplerStates );
+
+			m_pDeviceContext->IASetInputLayout((ID3D11InputLayout*)m_pMotionBlurApply->GetVertexLayout());
+			m_pDeviceContext->VSSetShader((ID3D11VertexShader *)m_pMotionBlurApply->GetVertexShader(), nullptr, 0);
+			m_pDeviceContext->PSSetShader((ID3D11PixelShader *)m_pMotionBlurApply->GetPixelShader(), nullptr, 0);
+
+			// TODO: Why isn't this handled in SetConstantBuffer
+	// TODO: Why isn't this handled in SetConstantBuffer
+	ID3D11ShaderResourceView *const  RenderTargetViews[] = { GetRenderTarget_DX11(COLOR_BUFFER)->m_pShaderResourceView,
+																GetRenderTarget_DX11(NORMAL_BUFFER)->m_pShaderResourceView,
+																GetRenderTarget_DX11(SPECULAR_BUFFER)->m_pShaderResourceView,
+																GetRenderTarget_DX11(DEPTH_BUFFER)->m_pShaderResourceView,
+																GetRenderTarget_DX11(MOTION_BLUR_BUFFER)->m_pShaderResourceView };
+	m_pDeviceContext->PSSetShaderResources( 0, 5, RenderTargetViews );
+
+			//m_pDeviceContext->PSSetShaderResources( 0, 1, RenderTargetViews );
+
+			const auto & varBindings = m_pMotionBlurApply->GetShaderVarBindings();
+
+			kbShaderParamOverrides_t shaderParams;
+			ID3D11Buffer * pConstantBuffer = GetConstantBuffer( varBindings.m_ConstantBufferSizeBytes );
+	
+			D3D11_MAPPED_SUBRESOURCE mappedResource;
+			HRESULT hr = m_pDeviceContext->Map( pConstantBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource );
+			kbErrorCheck( SUCCEEDED(hr), "kbRenderer_DX11::RenderSSAO() - Failed to map matrix buffer" );
+			byte * pMappedData = (byte*)mappedResource.pData;
+
+			SetConstantBuffer( varBindings, &shaderParams, nullptr, pMappedData );
+			m_pDeviceContext->Unmap( pConstantBuffer, 0 );
+
+			m_pDeviceContext->VSSetConstantBuffers( 0, 1, &pConstantBuffer );
+			m_pDeviceContext->PSSetConstantBuffers( 0, 1, &pConstantBuffer );
+
+			// Draw
+			m_pDeviceContext->Draw(6, 0);
+		}
+
 		RenderTranslucency();
 		RenderScreenSpaceQuads();
 
@@ -1407,11 +1621,11 @@ void kbRenderer_DX11::RenderScene() {
 	
 		if ( m_ViewMode == ViewMode_Shaded ) {
 			START_SCOPED_RENDER_TIMER( RENDER_DEBUG )
-			RenderDebugBillboards( false );
-			RenderDebugLines();
+			//RenderDebugBillboards( false );
+			//RenderDebugLines();
 			RenderPretransformedDebugLines();
 
-			for ( int i = 0; i < m_DebugModels.size(); i++ ) {
+		/*	for ( int i = 0; i < m_DebugModels.size(); i++ ) {
 
 				kbRenderObject renderObject;
 				renderObject.m_pModel = m_DebugModels[i].m_pModel;
@@ -1424,7 +1638,7 @@ void kbRenderer_DX11::RenderScene() {
 					kbRenderSubmesh newMesh( &renderObject, j, RP_Debug, 0.0f );
 					RenderMesh( &newMesh, false );
 				}
-			}
+			}*/
 		}
 	
 		m_RenderState.SetDepthStencilState();
@@ -1933,17 +2147,17 @@ void kbRenderer_DX11::RenderMousePickerIds() {
 	m_RenderState.SetDepthStencilState();
 	m_RenderState.SetBlendState();
 
-	for ( auto iter = m_pCurrentRenderWindow->GetRenderObjectMap().begin(); iter != m_pCurrentRenderWindow->GetRenderObjectMap().end(); iter++ ) {
+	/*for ( auto iter = m_pCurrentRenderWindow->GetRenderObjectMap().begin(); iter != m_pCurrentRenderWindow->GetRenderObjectMap().end(); iter++ ) {
 		if ( iter->second->m_EntityId > 0 ) {
 			// TODO
 			kbRenderSubmesh newMesh( iter->second, 0, RP_MousePicker, 0.0f );
 			RenderMesh( &newMesh, false, true );
 		}
-	}
+	}*/
 
 	RenderDebugBillboards( true );
 
-	for ( int i = 0; i < m_DebugModels.size(); i++ ) {
+	for ( int i = m_DebugModels.size() - 1; i < m_DebugModels.size(); i++ ) {
 		kbRenderObject renderObject;
 		renderObject.m_pModel = m_DebugModels[i].m_pModel;
 		renderObject.m_Materials = m_DebugModels[i].m_Materials;
@@ -2747,6 +2961,8 @@ void kbRenderer_DX11::ReadShaderFile( std::string & shaderText, kbShaderVarBindi
 				textureBinding.m_pDefaultTexture = pNoiseTex;
 			} else if ( defaultTexture == "scenecolor" ) {
 				textureBinding.m_pDefaultRenderTexture = m_pRenderTargets[ACCUMULATION_BUFFER_1];
+			} else if ( defaultTexture == "motionbuffer" ) {
+				textureBinding.m_pDefaultRenderTexture = m_pRenderTargets[MOTION_BLUR_BUFFER];
 			} else {
 				kbWarning( "Default texture %s not found", defaultTexture.c_str() );
 			}
@@ -3264,10 +3480,12 @@ void kbRenderer_DX11::RenderMesh( const kbRenderSubmesh *const pRenderMesh, cons
 
 		ID3D11SamplerState *const  SamplerStates[] = { m_pBasicSamplerState, m_pNormalMapSamplerState, m_pBasicSamplerState, m_pBasicSamplerState };	// todo: Grass uses this for sampling time
 		m_pDeviceContext->PSSetSamplers( 0, 4, SamplerStates );
-
+	m_pDeviceContext->VSSetSamplers( 0, 4, SamplerStates );
+	
 	for ( int i = 0; i < textureList.size(); i++ ) {
 		ID3D11ShaderResourceView *const texture = ( textureList[i] != nullptr ) ? (ID3D11ShaderResourceView *)textureList[i]->GetGPUTexture() : (nullptr);
-		m_pDeviceContext->PSSetShaderResources( i, 1, &texture );
+		m_pDeviceContext->PSSetShaderResources( i, 1, &texture );	
+		m_pDeviceContext->VSSetShaderResources( i, 1, &texture );
 	}
 
 	// Get a valid constant buffer and bind the kbShader's vars to it

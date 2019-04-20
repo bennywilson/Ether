@@ -1,0 +1,95 @@
+//==============================================================================
+// characterBase_NoSkinning_Smear.kbShader
+//
+// 2019 kbEngine 2.0
+//==============================================================================
+cbuffer matrixBuffer {
+	matrix      modelMatrix;
+	matrix      vpMatrix;
+	matrix      mvpMatrix;
+	float4		sunDir;
+	float4		hatchParams;
+	float4		worldVel;
+};
+
+kbShaderState {
+	cullMode CullMode_BackFaces
+}
+
+//-------------------------------------
+struct vertexInput {
+	float4 position			: POSITION;
+	float2 uv				: TEXCOORD0;
+	float4 normal			: NORMAL;
+};
+
+//-------------------------------------
+struct pixelInput {
+	float4      position	: SV_POSITION;
+	float2      uv			: TEXCOORD0;
+	float2      position2	: TEXCOORD1;
+	float3      normal		: TEXCOORD2;
+	float3		localPos	: TEXCOORD3;
+	float3		localNormal	: TEXCOORD4;
+};
+
+//-------------------------------------
+struct PS_OUTPUT {
+	float4      Color		: SV_TARGET0;
+	float4      Normal		: SV_TARGET1;
+	float4		Specular	: SV_TARGET2;
+	float2      Depth		: SV_TARGET3;
+};
+
+
+/**
+ *	vertexShader
+ */
+
+Texture2D colorTexture		: register(t0);
+SamplerState SampleType;
+
+Texture2D hatchTexture1		: register(t1);
+
+Texture2D hatchTexture2		: register(t2);
+
+Texture2D noiseTex				: register(t3);
+
+pixelInput vertexShader( vertexInput input ) {
+	pixelInput output = (pixelInput)(0);
+	
+	float4 Pos = 0.0f;
+	
+	Pos = input.position;
+	output.uv = input.uv;
+	
+	output.position = mul( Pos, modelMatrix );
+	output.normal.xyz = mul(  (input.normal.xyz * 2.0f ) - 1.0f, (float3x3)modelMatrix );
+	
+	if ( dot( output.normal.xyz, worldVel.xyz ) < -0.5f ) {
+		float noiseParam = noiseTex.SampleLevel( SampleType, output.uv, 0 ).r;
+		output.position.xyz += -worldVel.xyz * 2  * ( noiseParam * 0.9f + 0.1f );
+	}
+	
+	output.localPos = input.position.xyz;
+	output.localNormal = (input.normal.xyz * 2.0f ) - 1.0f;
+	
+	output.position = mul( output.position, vpMatrix );
+	output.position2 = output.position.zw;
+	return output;
+}
+
+/**
+ *	pixelShader
+ */
+PS_OUTPUT pixelShader( pixelInput input ) {
+	PS_OUTPUT output = (PS_OUTPUT) 0;
+
+	const float4 colorTex = colorTexture.Sample( SampleType, input.uv );
+	output.Color = float4( colorTex.xyz, 0.0f );
+	output.Specular = float4( 0.0f, 1.0f, 0.0f, 0.0f );
+	output.Depth.r = input.position2.x / input.position2.y;
+	output.Normal.xyz = normalize( input.normal );
+
+	return output;
+}

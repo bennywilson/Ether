@@ -362,6 +362,12 @@ void EtherSkelModelComponent::Update_Internal( const float DeltaTime ) {
 			}	
 		}
 	}
+
+	
+	kbVec3 movementVec = GetOwner()->GetPosition() - m_LastPos;
+	this->SetMaterialParamVector( 0, "worldVel", movementVec );
+//	kbLog( "Movement Vec = %f %f %f", movementVec.x, movementVec.y, movementVec.z );
+	m_LastPos = GetOwner()->GetPosition();
 }
 
 /**
@@ -514,7 +520,10 @@ void EtherDestructibleComponent::TakeDamage( const float damageAmt, const kbVec3
 void EtherDestructibleComponent::SetEnable_Internal( const bool bEnable ) {
 	if ( bEnable == false ) {
 		m_pSkelModel = nullptr;
+		m_Health = m_StartingHealth;
 	} else {
+		m_StartingHealth = m_Health;
+
 		m_pSkelModel = (EtherSkelModelComponent *) GetOwner()->GetComponentByType( EtherSkelModelComponent::GetType() );
 		if ( m_pSkelModel == nullptr || m_pSkelModel->GetModel() == nullptr ) {
 			kbWarning( "EtherDestructibleComponent::SetEnable_Internal() - No skeletal model found on entity %", GetOwner()->GetName().c_str() );
@@ -606,6 +615,7 @@ void EtherDestructibleComponent::Update_Internal( const float deltaTime ) {
 void EtherClothComponent::Constructor() {
 	m_Health = 1.0f;
 	m_LastHitTime = 0.0f;
+	m_NumTimesDamaged = 0;
 }
 
 /**
@@ -643,18 +653,31 @@ void EtherClothComponent::RunSimulation( const float DeltaTime ) {
 	}
 
 	float curTime = g_GlobalTimer.TimeElapsedSeconds();
-	if ( hit && curTime > m_LastHitTime + 2.0f ) {
-		m_LastHitTime = curTime;
-
-		if ( m_Health > 0 && m_Health - 1.0f <= 0.0f ) {
-			m_Health = -1.0f;
-			EtherSkelModelComponent *const pSkelModel = (EtherSkelModelComponent*)GetOwner()->GetComponentByType( EtherSkelModelComponent::GetType() );
-			if ( pSkelModel != nullptr ) {
-				pSkelModel->SetMaterialParamVector( 0, "damageParams", kbVec4( 0.0f, 0.0f, 0.0f, 0.0f ) );
-			}
-		} else {
-			m_Health--;
+	if ( hit && curTime > m_LastHitTime + 1.0f ) {
+		m_NumTimesDamaged++;
+		kbVec4 damageDot = kbVec4::zero;
+		switch( m_NumTimesDamaged ) {
+			case 1 : damageDot.Set( 1.0f, 0.0f, 0.0f, 0.0f ); break;
+			case 2 : damageDot.Set( 0.0f, 1.0f, 0.0f, 0.0f ); break;
+			case 3 : damageDot.Set( 0.0f, 0.0f, 1.0f, 0.0f ); break;
+			default : damageDot.Set( 0.0f, 0.0f, 0.0f, 01.0f ); break;
 		}
+
+		EtherSkelModelComponent *const pSkelModel = (EtherSkelModelComponent*)GetOwner()->GetComponentByType( EtherSkelModelComponent::GetType() );
+		if ( pSkelModel != nullptr ) {
+			pSkelModel->SetMaterialParamVector( 0, "flagDamageDot", damageDot );
+		}
+
+		m_LastHitTime = curTime;
+	}
+
+	if ( GetAsyncKeyState('C') ) {
+		EtherSkelModelComponent *const pSkelModel = (EtherSkelModelComponent*)GetOwner()->GetComponentByType( EtherSkelModelComponent::GetType() );
+		if ( pSkelModel != nullptr ) {
+			pSkelModel->SetMaterialParamVector( 0, "flagDamageDot", kbVec4( 0.0f, 0.0f, 0.0f, 0.0f ) );
+		}
+		m_Health = m_StartingHealth;
+		m_NumTimesDamaged = 0;
 	}
 
 	Super::RunSimulation( DeltaTime );

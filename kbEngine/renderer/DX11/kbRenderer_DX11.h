@@ -146,6 +146,7 @@ struct kbRenderState {
 
 	enum kbDepthStencilCompareTest {
 		CompareLess,
+		CompareEqual,
 		CompareNotEqual,
 		CompareAlways,
 	};
@@ -186,6 +187,7 @@ struct kbRenderState {
 		switch( inDepthStencilCompareTest ) {
 			case CompareLess : return D3D11_COMPARISON_LESS;
 			case CompareNotEqual : return D3D11_COMPARISON_NOT_EQUAL;
+			case CompareEqual : return D3D11_COMPARISON_EQUAL;
 			case CompareAlways : return D3D11_COMPARISON_ALWAYS;
 		}
 
@@ -491,6 +493,9 @@ private:
 	kbShader *									m_pGodRayIterationShader;
 	kbShader *									m_pMousePickerIdShader;
 	kbShader *									m_pSSAO;
+
+	kbShader *									m_pMotionBlurGen;
+	kbShader *									m_pMotionBlurApply;
 
 	// Non-resource managed shaders (Game assets cannot reference these).  These have to be manually released
 	kbShader *									m_pSkinnedDirectionalLightShadowShader;
