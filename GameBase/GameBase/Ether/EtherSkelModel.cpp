@@ -161,7 +161,6 @@ void EtherSkelModelComponent::SetModel( kbModel *const pModel, bool bIsFirstPers
  *	EtherSkelModelComponent::Update_Internal
  */
 void EtherSkelModelComponent::Update_Internal( const float DeltaTime ) {
-	Super::Update_Internal( DeltaTime );
 
 	if ( m_pModel != nullptr ) {
 		if ( m_BindToLocalSpaceMatrices.size() == 0 ) {
@@ -328,15 +327,6 @@ void EtherSkelModelComponent::Update_Internal( const float DeltaTime ) {
 #endif
 			}
 		}
-
-		m_RenderObject.m_pComponent = this;
-		m_RenderObject.m_Position = GetOwner()->GetPosition();
-		m_RenderObject.m_Orientation = GetOwner()->GetOrientation();
-		m_RenderObject.m_Scale = GetOwner()->GetScale();
-		m_RenderObject.m_pModel = m_pModel;
-		m_RenderObject.m_RenderPass = m_RenderPass;
-
-		g_pRenderer->UpdateRenderObject( m_RenderObject );
 	}
 
 	// Update collision component
@@ -362,6 +352,8 @@ void EtherSkelModelComponent::Update_Internal( const float DeltaTime ) {
 			}	
 		}
 	}
+
+	Super::Update_Internal( DeltaTime );
 }
 
 /**

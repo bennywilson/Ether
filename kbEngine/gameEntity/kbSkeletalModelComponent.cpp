@@ -67,6 +67,14 @@ void kbSkeletalModelComponent::SetEnable_Internal( const bool isEnabled ) {
  */
 void kbSkeletalModelComponent::Update_Internal( const float DeltaTime ) {
 	Super::Update_Internal( DeltaTime );
+
+	m_RenderObject.m_pComponent = this;
+	m_RenderObject.m_Position = GetOwner()->GetPosition();
+	m_RenderObject.m_Orientation = GetOwner()->GetOrientation();
+	m_RenderObject.m_Scale = GetOwner()->GetScale();
+	m_RenderObject.m_pModel = m_pModel;
+	m_RenderObject.m_RenderPass = m_RenderPass;
+	g_pRenderer->UpdateRenderObject( m_RenderObject );
 }
 
 /**
