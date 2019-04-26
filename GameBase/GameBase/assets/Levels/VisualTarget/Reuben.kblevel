@@ -2,7 +2,7 @@ kbGameEntity 0 0 0 0 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		Name = "Skybox"
+		Name = "Sky Gradient"
 		Orientation = 0.000000 -0.969342 0.000000 0.245715
 		Position = 1.814700 40.604389 -22.862383
 		Scale = 1.000000 1.000000 1.000000
@@ -29,14 +29,14 @@ kbGameEntity 0 0 0 0 {
 						LifeTime =  -1.000000
 						ParamName = "horizonColor"
 						Texture = NULL
-						Vector = 1.000000 0.900000 0.850000 0.000000
+						Vector = 0.058824 0.188235 0.309000 0.000000
 					}
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
 						ParamName = "skyColor"
 						Texture = NULL
-						Vector = 0.750000 0.750000 1.000000 0.000000
+						Vector = 0.215000 0.360000 0.509000 0.000000
 					}
 			}
 		RenderPass = Post-LightingPass
@@ -369,14 +369,14 @@ kbGameEntity 0 0 0 0 {
 	kbDirectionalLightComponent { 
 		Enabled = 1
 		LifeTime =  -1.000000
-		CastsShadows = 0
+		CastsShadows = 1
 		Color = 1.000000 1.000000 1.000000 0.250000
 		Materials = 1
 			kbMaterialComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
 				Shader = .\assets\shaders\lights\directionallighttoon.kbshader
-				ShaderParams = 12
+				ShaderParams = 14
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
@@ -408,9 +408,9 @@ kbGameEntity 0 0 0 0 {
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
-						ParamName = "rimLightColor"
+						ParamName = "rimParams"
 						Texture = NULL
-						Vector = 0.350000 0.350000 0.350000 0.500000
+						Vector = 0.700000 0.800000 1.000000 0.000000
 					}
 					kbShaderParamComponent { 
 						Enabled = 0
@@ -461,12 +461,26 @@ kbGameEntity 0 0 0 0 {
 						Texture = NULL
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "rimColor"
+						Texture = NULL
+						Vector = 0.100000 0.100000 0.200000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "shadowParams"
+						Texture = NULL
+						Vector = 0.000300 0.000000 0.000000 0.000000
+					}
 			}
 		CascadedShadowSplits = 4
+ 20.000000
+ 40.000000
+ 50.000000
  100.000000
- 200.000000
- 300.000000
- 400.000000
 	}
 }
 kbGameEntity 0 0 0 0 {
@@ -1026,7 +1040,7 @@ kbGameEntity 0 0 0 0 {
 	EtherSkelModelComponent { 
 		Enabled = 1
 		LifeTime =  -1.000000
-		CastsShadow = 0
+		CastsShadow = 1
 		Materials = 7
 			kbMaterialComponent { 
 				Enabled = 0
@@ -1266,7 +1280,7 @@ kbGameEntity 0 0 0 0 {
 		LifeTime =  -1.000000
 		Name = "Izzy_Reflections"
 		Orientation = 0.000000 0.168769 0.000000 0.985656
-		Position = 14.262156 -21.000000 32.091427
+		Position = 11.750000 -21.000000 32.091427
 		Scale = -5.000000 5.000000 5.000000
 	}
 	EtherSkelModelComponent { 
@@ -4131,7 +4145,7 @@ kbGameEntity 0 0 0 0 {
 	kbStaticModelComponent { 
 		Enabled = 1
 		LifeTime =  -1.000000
-		CastsShadow = 0
+		CastsShadow = 1
 		Materials = 2
 			kbMaterialComponent { 
 				Enabled = 0
