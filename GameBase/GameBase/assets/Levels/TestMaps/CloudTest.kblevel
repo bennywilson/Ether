@@ -2230,21 +2230,21 @@ kbGameEntity 0 0 0 0 {
 						Enabled = 0
 						LifeTime =  -1.000000
 						ParamName = "colorTexture"
-						Texture = .\assets\models\characters\headband.jpg
+						Texture = .\assets\models\characters\Izzy_Combat\headband.jpg
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
 						ParamName = "hatchTexture1"
-						Texture = .\assets\models\characters\tam_1.tif
+						Texture = .\assets\models\characters\Izzy_Combat\tam_1.tif
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
 						ParamName = "hatchTexture2"
-						Texture = .\assets\models\characters\tam_2.tif
+						Texture = .\assets\models\characters\Izzy_Combat\tam_2.tif
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 			}
@@ -2271,21 +2271,21 @@ kbGameEntity 0 0 0 0 {
 						Enabled = 0
 						LifeTime =  -1.000000
 						ParamName = "colorTexture"
-						Texture = .\assets\models\characters\hair.tif
+						Texture = .\assets\models\characters\Izzy_Combat\hair.tif
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
 						ParamName = "hatchTexture1"
-						Texture = .\assets\models\characters\tam_1.tif
+						Texture = .\assets\models\characters\Izzy_Combat\tam_1.tif
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
 						ParamName = "hatchTexture2"
-						Texture = .\assets\models\characters\tam_2.tif
+						Texture = .\assets\models\characters\Izzy_Combat\tam_2.tif
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 			}
@@ -2305,21 +2305,21 @@ kbGameEntity 0 0 0 0 {
 						Enabled = 0
 						LifeTime =  -1.000000
 						ParamName = "colorTexture"
-						Texture = .\assets\models\characters\izzy_combat.bmp
+						Texture = .\assets\models\characters\Izzy_Combat\izzy_combat.bmp
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
 						ParamName = "hatchTexture1"
-						Texture = .\assets\models\characters\tam_1.tif
+						Texture = .\assets\models\characters\Izzy_Combat\tam_1.tif
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
 						ParamName = "hatchTexture2"
-						Texture = .\assets\models\characters\tam_2.tif
+						Texture = .\assets\models\characters\Izzy_Combat\tam_2.tif
 						Vector = 0.050000 0.000000 0.000000 0.000000
 					}
 					kbShaderParamComponent { 
@@ -2346,21 +2346,21 @@ kbGameEntity 0 0 0 0 {
 						Enabled = 0
 						LifeTime =  -1.000000
 						ParamName = "colorTexture"
-						Texture = .\assets\models\characters\eye.tif
+						Texture = .\assets\models\characters\Izzy_Combat\eye.tif
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
 						ParamName = "hatchTexture1"
-						Texture = .\assets\models\characters\tam_1.tif
+						Texture = .\assets\models\characters\Izzy_Combat\tam_1.tif
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
 						ParamName = "hatchTexture2"
-						Texture = .\assets\models\characters\tam_2.tif
+						Texture = .\assets\models\characters\Izzy_Combat\tam_2.tif
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 					kbShaderParamComponent { 
@@ -2394,27 +2394,27 @@ kbGameEntity 0 0 0 0 {
 						Enabled = 0
 						LifeTime =  -1.000000
 						ParamName = "colorTexture"
-						Texture = .\assets\models\characters\face.tif
+						Texture = .\assets\models\characters\Izzy_Combat\face.tif
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
 						ParamName = "hatchTexture1"
-						Texture = .\assets\models\characters\tam_1.tif
+						Texture = .\assets\models\characters\Izzy_Combat\tam_1.tif
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
 						ParamName = "hatchTexture2"
-						Texture = .\assets\models\characters\tam_2.tif
+						Texture = .\assets\models\characters\Izzy_Combat\tam_2.tif
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 			}
 		RenderPass = LightingPass
 		TranslucencySortBias =  0.000000
-		Model = .\assets\models\characters\izzy.fbx
+		Model = .\assets\models\characters\Izzy_Combat\izzy.fbx
 	}
 	kbSkeletalModelComponent { 
 		Enabled = 1
@@ -2430,7 +2430,7 @@ kbGameEntity 0 0 0 0 {
 						Enabled = 0
 						LifeTime =  -1.000000
 						ParamName = "colorTexture"
-						Texture = .\assets\models\characters\headband.jpg
+						Texture = .\assets\models\characters\Izzy_Combat\headband.jpg
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 					kbShaderParamComponent { 
@@ -2470,7 +2470,7 @@ kbGameEntity 0 0 0 0 {
 						Enabled = 0
 						LifeTime =  -1.000000
 						ParamName = "colorTexture"
-						Texture = .\assets\models\characters\izzy_combat.bmp
+						Texture = .\assets\models\characters\Izzy_Combat\izzy_combat.bmp
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 					kbShaderParamComponent { 
@@ -2517,13 +2517,13 @@ kbGameEntity 0 0 0 0 {
 						Enabled = 0
 						LifeTime =  -1.000000
 						ParamName = "colorTexture"
-						Texture = .\assets\models\characters\face.tif
+						Texture = .\assets\models\characters\Izzy_Combat\face.tif
 						Vector = 0.100000 5.000000 0.000000 0.000000
 					}
 			}
 		RenderPass = LightingPass
 		TranslucencySortBias =  0.000000
-		Model = .\assets\models\characters\izzy.fbx
+		Model = .\assets\models\characters\Izzy_Combat\izzy.fbx
 	}
 }
 kbGameEntity 0 0 0 0 {
@@ -2549,13 +2549,13 @@ kbGameEntity 0 0 0 0 {
 						Enabled = 0
 						LifeTime =  -1.000000
 						ParamName = "colorTexture"
-						Texture = .\assets\models\characters\headband.jpg
+						Texture = .\assets\models\characters\Izzy_Combat\headband.jpg
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 			}
 		RenderPass = LightingPass
 		TranslucencySortBias =  0.000000
-		Model = .\assets\models\characters\headband2.ms3d
+		Model = .\assets\models\characters\Izzy_Combat\headband2.ms3d
 		Animations = 0
 		DebugAnimIndex = -1
 		IsFirstPersonModel = 0
@@ -2938,13 +2938,13 @@ kbGameEntity 0 0 0 0 {
 						Enabled = 0
 						LifeTime =  -1.000000
 						ParamName = "colorTexture"
-						Texture = .\assets\models\characters\headband.jpg
+						Texture = .\assets\models\characters\Izzy_Combat\headband.jpg
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 			}
 		RenderPass = LightingPass
 		TranslucencySortBias =  0.000000
-		Model = .\assets\models\characters\headband2.ms3d
+		Model = .\assets\models\characters\Izzy_Combat\headband2.ms3d
 		Animations = 0
 		DebugAnimIndex = -1
 		IsFirstPersonModel = 0
