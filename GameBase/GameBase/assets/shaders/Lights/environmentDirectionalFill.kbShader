@@ -1,7 +1,10 @@
 //===================================================================================================
-// environmentDirectionalFill.kbShader
+// directionalLightToon.kbShader
 //
-// 2018 kbEngine 2.0
+// Note that the directional light shader is responsible for copying the glow mask from the color
+// buffer to the accumulation buffer
+//
+// 2018-2019 kbEngine 2.0
 //===================================================================================================
 cbuffer matrixBuffer {
    matrix               mvpMatrix;
@@ -12,7 +15,6 @@ cbuffer matrixBuffer {
    float4               lightPosition;
    float4               lightColor;
    float4               cameraPosition;
-   float4				specParams;
 };
 
 kbShaderState {
@@ -54,43 +56,47 @@ pixelInput vertexShader( vertexInput input ) {
  *	pixelShader
  */
 SamplerState DiffuseSamplerState;
-Texture2D colorTexture				: register(t0);
+Texture2D colorTexture(colorBuffer)				: register(t0);
 
 SamplerState NormalSamplerState;
-Texture2D normalTexture				: register(t1);
+Texture2D normalTexture(normalBuffer)			: register(t1);
 
-Texture2D specularTexture			: register(t2);
+Texture2D specularTexture(specularBuffer)		: register(t2);
 
 SamplerState DepthSamplerState;
-Texture2D depthTexture				: register(t3);
+Texture2D depthTexture(depthBuffer)				: register(t3);
 
 SamplerState ShadowMapSamplerState;
-Texture2D ShadowMap					: register(t4);
+Texture2D ShadowMap(shadowBuffer)				: register(t4);
 
 float4 pixelShader( pixelInput input ) : SV_TARGET {
-		float4 diffuseColor = colorTexture.Sample( DiffuseSamplerState, input.uv );
-		float4 normal = normalTexture.Sample( NormalSamplerState, input.uv );
-		float4 specColor = specularTexture.Sample( DiffuseSamplerState, input.uv );
+	float4 diffuseColor = colorTexture.Sample( DiffuseSamplerState, input.uv );
+	float4 normal = normalTexture.Sample( NormalSamplerState, input.uv );
+	float4 specColor = specularTexture.Sample( DiffuseSamplerState, input.uv );
 	
-		if (normal.w == 0)
-			clip(-1);
-		float4 worldPos = float4( input.position2.xy, depthTexture.Sample( DepthSamplerState, input.uv ).r, 1 );
-		worldPos = mul( worldPos, inverseViewProjection );
-		worldPos /= worldPos.w;
+	float4 worldPos = float4( input.position2.xy, depthTexture.Sample( DepthSamplerState, input.uv ).r, 1 );
+	worldPos = mul( worldPos, inverseViewProjection );
+	worldPos /= worldPos.w;
 	
-		float3 toCameraVec = normalize( cameraPosition.xyz - worldPos.xyz );
-		float diffuse = saturate( dot( normal.xyz, lightDirection.xyz ) );
+	float3 toCameraVec = normalize( cameraPosition.xyz - worldPos.xyz );
+	float diffuse = saturate( dot( normal.xyz, lightDirection.xyz ) ) * 0.8f + 0.2f;
 
-		float3 lightReflect = ( 2.0f * dot( normal.xyz, lightDirection.xyz ) * normal.xyz ) - lightDirection.xyz;
+	if ( normal.w <= 0.2f ) {
+		clip(-1.0f);
+	}
+
+	// Shadow
+	float DistFromCamera = length( worldPos.xyz - cameraPosition.xyz );
+	
+float3 lightReflect = ( 2.0f * dot( normal.xyz, lightDirection.xyz ) * normal.xyz ) - lightDirection.xyz;
 		float spec = saturate( dot( lightReflect, toCameraVec ) );
-	
-		spec = pow( abs( spec ), specColor.y ) * specColor.x * specParams.x;
-	
-		float3 finalColor = diffuseColor.xyz * diffuse * lightColor.xyz + spec.xxx;	// todo
+	spec = pow( abs( spec ), max( specColor.y, 1.0f ) ) * specColor.x;
+	const float3 emissive = diffuseColor.xyz * diffuseColor.w;
+//	diffuseColor.w = max( max( emissive.x, emissive.y ), emissive.z );
+//	diffuseColor.w = diffuseColor.w - 1.0f;
+//	if ( diffuseColor.w > 0 ) diffuseColor.w += 1.0f;
+	float3 finalColor = diffuseColor.xyz * diffuse * lightColor.xyz + spec.xxx + emissive * 0.2f;	// todo
 
-		const float oneMinusRimDot = 1.0f - dot( normal.xyz, toCameraVec );
-	
-		//finalColor.xyz += rimColor;
 
-		return float4( finalColor, diffuseColor.w );
+	return float4( finalColor, diffuseColor.w );
 }
