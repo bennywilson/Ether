@@ -75,6 +75,8 @@ Texture2D depthTexture(depthBuffer)				: register(t3);
 SamplerState ShadowMapSamplerState;
 Texture2D ShadowMap(shadowBuffer)				: register(t4);
 
+Texture2D NoiseMap(noise);
+
 float4 pixelShader( pixelInput input ) : SV_TARGET {
 	float4 diffuseColor = colorTexture.Sample( DiffuseSamplerState, input.uv );
 	float4 normal = normalTexture.Sample( NormalSamplerState, input.uv );
@@ -111,11 +113,60 @@ float4 pixelShader( pixelInput input ) : SV_TARGET {
 	shadowTex /= shadowTex.w;
 	shadowTex.xy *= 0.5f;
 	shadowTex.xy += offset;
-	
+	float shadowFactor = 1.0f;
+
 	if ( DistFromCamera < splitDistances.w ) {
-	   if ( ShadowMap.Sample( ShadowMapSamplerState, shadowTex.xy ).r < shadowTex.z - shadowParams.x ) {
-	      diffuse = 0;
-	   }
+
+		float3 noise = NoiseMap.Sample( DiffuseSamplerState, input.uv ).xyz;
+		noise.xy = noise.xy * 0.25f + 0.5f;// * 5.0f;//1.9f + 0.1f;
+
+		const float angle = noise.z * 3.14f;
+		const float theSin = sin(angle);
+		const float theCos = cos(angle);
+
+		float2 rot1 = float2( theCos, -theSin );
+		float2 rot2 = float2( theSin, theCos );
+		
+		float2 starttexSize = ( 1.0f / 4096.0f) * noise.xy;
+		float2 texSize = starttexSize;
+	//	texSize.x = dot(starttexSize, rot1);
+		//texSize.y = dot(starttexSize, rot2);
+		float shadow1 = ShadowMap.Sample( ShadowMapSamplerState, shadowTex.xy + float2( -texSize.x, -texSize.y ) ).r;
+		float shadow2 = ShadowMap.Sample( ShadowMapSamplerState, shadowTex.xy + float2( texSize.x, -texSize.y ) ).r;
+		float shadow3 = ShadowMap.Sample( ShadowMapSamplerState, shadowTex.xy + float2( texSize.x, texSize.y ) ).r;
+		float shadow4 = ShadowMap.Sample( ShadowMapSamplerState, shadowTex.xy + float2( -texSize.x, texSize.y ) ).r;
+		float shadow5 = ShadowMap.Sample( ShadowMapSamplerState, shadowTex.xy ).r;
+
+		float pixelShadowDepth = shadowTex.z + shadowParams.x;
+
+//#define LOW_RES
+#ifdef LOW_RES
+		shadowFactor = sign( saturate( shadow1 - pixelShadowDepth ) ) +
+							sign( saturate( shadow2 - pixelShadowDepth ) ) +
+							sign( saturate( shadow3 - pixelShadowDepth ) ) +
+							sign( saturate( shadow4 - pixelShadowDepth ) ) +
+							sign( saturate( shadow5 - pixelShadowDepth ) );
+
+		shadowFactor = shadowFactor * 0.2F;
+#else
+		float shadow6 = ShadowMap.Sample( ShadowMapSamplerState, shadowTex.xy + float2( 0, -texSize.y ) ).r;
+		float shadow7 = ShadowMap.Sample( ShadowMapSamplerState, shadowTex.xy + float2( 0, texSize.y ) ).r;
+		float shadow8 = ShadowMap.Sample( ShadowMapSamplerState, shadowTex.xy + float2( texSize.x, 0 ) ).r;
+		float shadow9 = ShadowMap.Sample( ShadowMapSamplerState, shadowTex.xy + float2( -texSize.x, 0 ) ).r;
+
+		shadowFactor = sign( saturate( shadow1 - pixelShadowDepth ) ) +
+							sign( saturate( shadow2 - pixelShadowDepth ) ) +
+							sign( saturate( shadow3 - pixelShadowDepth ) ) +
+							sign( saturate( shadow4 - pixelShadowDepth ) ) +
+							sign( saturate( shadow5 - pixelShadowDepth ) ) +
+							sign( saturate( shadow6 - pixelShadowDepth ) ) +
+							sign( saturate( shadow7 - pixelShadowDepth ) ) +
+							sign( saturate( shadow8 - pixelShadowDepth ) ) +
+							sign( saturate( shadow9 - pixelShadowDepth ) );
+
+		shadowFactor = shadowFactor / 9;
+#endif
+		diffuse *= shadowFactor;
 	}
 	
 
@@ -141,7 +192,7 @@ float4 pixelShader( pixelInput input ) : SV_TARGET {
 //	diffuseColor.w = diffuseColor.w - 1.0f;
 //	if ( diffuseColor.w > 0 ) diffuseColor.w += 1.0f;
 	float3 finalColor = diffuseColor.xyz * diffuse * lightColor.xyz + spec.xxx + emissive * 0.2f;	// todo
-	finalColor += rimLight.xyz * rimParams.z;
+	finalColor += rimLight.xyz * rimParams.z * shadowFactor;
 
 	return float4( finalColor, diffuseColor.w );
 }

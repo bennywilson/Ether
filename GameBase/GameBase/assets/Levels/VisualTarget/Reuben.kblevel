@@ -362,7 +362,7 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 1
 		LifeTime =  -1.000000
 		Name = "Key Light"
-		Orientation = -0.387773 -0.338104 0.776471 0.363883
+		Orientation = -0.389263 -0.122425 0.717581 0.564415
 		Position = 1.532777 18.642302 -0.720569
 		Scale = 1.000000 1.000000 1.000000
 	}
@@ -376,7 +376,7 @@ kbGameEntity 0 0 0 0 {
 				Enabled = 0
 				LifeTime =  -1.000000
 				Shader = .\assets\shaders\lights\directionallighttoon.kbshader
-				ShaderParams = 14
+				ShaderParams = 15
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
@@ -410,7 +410,7 @@ kbGameEntity 0 0 0 0 {
 						LifeTime =  -1.000000
 						ParamName = "rimParams"
 						Texture = NULL
-						Vector = 0.700000 0.800000 1.000000 0.000000
+						Vector = 0.600000 0.850000 1.000000 0.000000
 					}
 					kbShaderParamComponent { 
 						Enabled = 0
@@ -466,20 +466,27 @@ kbGameEntity 0 0 0 0 {
 						LifeTime =  -1.000000
 						ParamName = "rimColor"
 						Texture = NULL
-						Vector = 0.100000 0.100000 0.200000 0.000000
+						Vector = 0.300000 0.300000 0.300000 0.000000
 					}
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
 						ParamName = "shadowParams"
 						Texture = NULL
-						Vector = 0.000300 0.000000 0.000000 0.000000
+						Vector = -0.000500 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "noiseMap"
+						Texture = ..\..\kbengine\assets\textures\noise.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 			}
 		CascadedShadowSplits = 4
+ 10.000000
  20.000000
- 40.000000
- 50.000000
+ 60.000000
  100.000000
 	}
 }
@@ -1041,7 +1048,7 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadow = 1
-		Materials = 7
+		Materials = 5
 			kbMaterialComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
@@ -1052,32 +1059,6 @@ kbGameEntity 0 0 0 0 {
 						LifeTime =  -1.000000
 						ParamName = "colorTexture"
 						Texture = .\assets\models\characters\izzy_combat\headband.jpg
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-			}
-			kbMaterialComponent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				Shader = .\assets\shaders\character\characterbase.kbshader
-				ShaderParams = 1
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "colorTexture"
-						Texture = .\assets\models\characters\izzy_combat\eyebrowr.dds
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-			}
-			kbMaterialComponent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				Shader = .\assets\shaders\character\characterbase.kbshader
-				ShaderParams = 1
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "colorTexture"
-						Texture = .\assets\models\characters\izzy_combat\face.tif
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 			}
@@ -1129,13 +1110,13 @@ kbGameEntity 0 0 0 0 {
 						Enabled = 0
 						LifeTime =  -1.000000
 						ParamName = "colorTexture"
-						Texture = .\assets\models\characters\izzy_combat\eye.tif
+						Texture = .\assets\models\characters\izzy_combat\sleepyeye.tif
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 			}
 		RenderPass = LightingPass
 		TranslucencySortBias =  0.000000
-		Model = .\assets\models\characters\izzy_combat\izza_combat.ms3d
+		Model = .\assets\models\characters\izzy_combat\izzy_sleep.ms3d
 		Animations = 1
 			EtherAnimComponent { 
 				Enabled = 0
@@ -1279,15 +1260,15 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "Izzy_Reflections"
-		Orientation = 0.000000 0.168769 0.000000 0.985656
-		Position = 11.750000 -21.000000 32.091427
+		Orientation = 0.000000 0.163484 0.000000 0.986546
+		Position = 12.200000 -21.000000 31.000000
 		Scale = -5.000000 5.000000 5.000000
 	}
 	EtherSkelModelComponent { 
 		Enabled = 1
 		LifeTime =  -1.000000
-		CastsShadow = 0
-		Materials = 7
+		CastsShadow = 1
+		Materials = 5
 			kbMaterialComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
@@ -1298,32 +1279,6 @@ kbGameEntity 0 0 0 0 {
 						LifeTime =  -1.000000
 						ParamName = "colorTexture"
 						Texture = .\assets\models\characters\izzy_combat\headband.jpg
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-			}
-			kbMaterialComponent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				Shader = .\assets\shaders\character\characterbase.kbshader
-				ShaderParams = 1
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "colorTexture"
-						Texture = .\assets\models\characters\izzy_combat\eyebrowr.dds
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-			}
-			kbMaterialComponent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				Shader = .\assets\shaders\character\characterbase.kbshader
-				ShaderParams = 1
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "colorTexture"
-						Texture = .\assets\models\characters\izzy_combat\face.tif
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 			}
@@ -1375,13 +1330,13 @@ kbGameEntity 0 0 0 0 {
 						Enabled = 0
 						LifeTime =  -1.000000
 						ParamName = "colorTexture"
-						Texture = .\assets\models\characters\izzy_combat\eye.tif
+						Texture = .\assets\models\characters\izzy_combat\sleepyeye.tif
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 			}
 		RenderPass = LightingPass
 		TranslucencySortBias =  0.000000
-		Model = .\assets\models\characters\izzy_combat\izza_combat.ms3d
+		Model = .\assets\models\characters\izzy_combat\izzy_sleep.ms3d
 		Animations = 1
 			EtherAnimComponent { 
 				Enabled = 0
