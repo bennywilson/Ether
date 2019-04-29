@@ -1184,7 +1184,8 @@ void kbRenderer_DX11::RenderScene() {
 	kbGPUTimeStamp::BeginFrame( m_pDeviceContext );
 	PLACE_GPU_TIME_STAMP( "Begin Frame" );
 
-	const float colorClear[4] = { 0.0f, 0.0f, 0.0f, 0.0f };
+	const float colorClear[] = { 0.0f, 0.0f, 0.0f, 0.0f };
+	const float depthClear[] = { 1.0f, 1.0f, 1.0f, 1.0f };
 
 	const int numRenderPasses = ( IsRenderingToHMD() ) ? ( 2 ) : ( 1 );
 
@@ -1197,7 +1198,7 @@ void kbRenderer_DX11::RenderScene() {
 			m_pDeviceContext->ClearRenderTargetView( GetRenderTarget_DX11(COLOR_BUFFER)->m_pRenderTargetView, colorClear );
 			m_pDeviceContext->ClearRenderTargetView( GetRenderTarget_DX11(NORMAL_BUFFER)->m_pRenderTargetView, colorClear );
 			m_pDeviceContext->ClearRenderTargetView( GetRenderTarget_DX11(SPECULAR_BUFFER)->m_pRenderTargetView, colorClear );
-			m_pDeviceContext->ClearRenderTargetView( GetRenderTarget_DX11(DEPTH_BUFFER)->m_pRenderTargetView, colorClear );
+			m_pDeviceContext->ClearRenderTargetView( GetRenderTarget_DX11(DEPTH_BUFFER)->m_pRenderTargetView, depthClear );
 			m_pDeviceContext->ClearRenderTargetView( GetRenderTarget_DX11(ACCUMULATION_BUFFER_1)->m_pRenderTargetView, colorClear );
 			m_pDeviceContext->ClearRenderTargetView( GetRenderTarget_DX11(ACCUMULATION_BUFFER_2)->m_pRenderTargetView, colorClear );
 			m_iAccumBuffer = 0;
@@ -1686,6 +1687,8 @@ void kbRenderer_DX11::RenderTranslucency() {
 	{
 		m_iAccumBuffer ^= 1;
 
+		m_pDeviceContext->CopyResource( GetAccumBuffer( m_iAccumBuffer )->m_pRenderTargetTexture, GetAccumBuffer( m_iAccumBuffer ^ 1 )->m_pRenderTargetTexture );
+	
 		ID3D11ShaderResourceView * pNullSRVs[] = { nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, 
 												   nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr };
 

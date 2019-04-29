@@ -472,7 +472,6 @@ kbVec3 kbEditor::GetMainCameraPos() const {
  *  kbEditor::SetMainCameraRot
  */
 void kbEditor::SetMainCameraRot( const kbQuat & newCamRot ) {
-kbLog( "CameraPos = %f %f %f %f", newCamRot.x, newCamRot.y, newCamRot.z, newCamRot.w );
 
 	m_pMainTab->GetEditorWindowCamera()->m_Rotation = newCamRot;
 	m_pMainTab->GetEditorWindowCamera()->m_RotationTarget = newCamRot;

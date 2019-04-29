@@ -1,5 +1,5 @@
 //==============================================================================
-// environmentBase.kbShader
+// hackClip.kbShader
 //
 // 2018 kbEngine 2.0
 //==============================================================================
@@ -16,6 +16,10 @@ cbuffer matrixBuffer {
 
 kbShaderState {
 	cullMode CullMode_None
+	srcBlend Blend_SrcAlpha
+	dstBlend Blend_InvSrcAlpha
+	blendOp BlendOp_Add
+
 }
 
 //-------------------------------------
@@ -88,30 +92,8 @@ Texture2D propertyMap(white)		: register(t2);
 Texture2D emissiveMap(black)		: register(t3);
 
 
- PS_OUTPUT pixelShader( pixelInput	input, bool IsFrontFace	: SV_IsFrontFace ) {
- 	PS_OUTPUT output = (PS_OUTPUT) 0;
-
-	const float4 normalMap = normal.Sample( normalSampler, input.uv );
-	const float4 propertyMapValues = propertyMap.Sample( diffuseSampler, input.uv );
-	const float4 emissive = emissiveMap.Sample( diffuseSampler, input.uv );
-
-	output.Color = diffuse.Sample( diffuseSampler, input.uv );
-	output.Color.w = emissive.z;
-
-	output.Depth.r = input.position2.x / input.position2.y;
-
-
-	output.Specular = float4( propertyMapValues.x, max( 1.0f, propertyMapValues.y * 450.f ), emissive.x, emissive.y );
-	
-	float3x3 TBN = float3x3( normalize( input.TBN0.xyz ), normalize( input.TBN1.xyz ), normalize( input.TBN2.xyz ) );
-
-	/*if ( IsFrontFace == 0 ) {
-		TBN *= -1.0f;
-	}*/
-
-	float3 tangentNormal = normalize( normalMap.xyz * 2.0f - 1.0f );
-	output.Normal.xyz = normalize( float3( input.TBN0.z, input.TBN1.z, input.TBN2.z ) );//		//mul( tangentNormal, TBN );
-	output.Normal.w = 0.5f;//normalMap.w;
-	return output;
+ float pixelShader( pixelInput	input, bool IsFrontFace	: SV_IsFrontFace ) : SV_TARGET0 {
+	clip(-1);
+	return 0;
 }
  

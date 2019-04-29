@@ -6,14 +6,11 @@
 //===================================================================================================
 cbuffer matrixBuffer {
 	matrix modelMatrix;
-	matrix modelViewMatrix;
-	matrix viewMatrix;
 	matrix mvpMatrix;
-	matrix projection;
-	matrix inverseProjection;
-	matrix viewProjection;
-	float4 cameraPos;
-};
+	float4 edgeFadeColor;		// xyz: Color edge will fade out to.
+	float4 edgeFadeParams;		// x: Start fade Dist, y: End fade Dist, z: Use Fade
+	float4 distortionParams;	// x: U offset, y: V offset, z: Magnitude
+}
 
 kbShaderState {
 	srcBlend Blend_SrcAlpha
@@ -37,17 +34,12 @@ struct vertexInput {
 //-------------------------------------
 struct pixelInput {
 	float4 position      : SV_POSITION;
-	float2 uv            : TEXCOORD0;
 	float4 color         : COLOR;
-	float2 position2     : TEXCOORD1;
-	float3 normal        : TEXCOORD2;
-	float4 screenPos	 : TEXCOORD3;
+	float2 uv            : TEXCOORD0;
+	float3 normal        : TEXCOORD1;
+	float4 screenPos	 : TEXCOORD2;
 };
 
-//-------------------------------------
-struct PS_OUTPUT {
-	float4 Color         : SV_TARGET0;
-};
 
 /**
  *	vertexShader
@@ -59,15 +51,14 @@ pixelInput vertexShader( vertexInput input ) {
 	output.screenPos = output.position;
 	output.uv = input.uv;
 	output.color = input.color;
-	output.position2 = output.position.zw;
 	output.normal.xyz = mul( ( input.normal.xyz * 2.0f ) - 1.0f, (float3x3)modelMatrix );
-
 	return output;
 }
 
 /**
  *	pixelShader
  */
+SamplerState DefaultSamplerState;
 Texture2D colorTexture(scenecolor)				: register(t0);
 
 SamplerState DepthSamplerState;
@@ -78,32 +69,28 @@ SamplerState SampleType;
 
 float4 pixelShader( pixelInput input ) : SV_TARGET {
 
-	float2 testUv = input.screenPos.xy / input.screenPos.w;
-	testUv.y = -testUv.y;
-	testUv = testUv * 0.5f + 0.5f;
+	float2 screenUV = input.screenPos.xy / input.screenPos.w;
+	screenUV.y = -screenUV.y;
+	screenUV = screenUV * 0.5f + 0.5f;
 
-	float4 distortionVec = distortionTexture.Sample( SampleType, input.uv * 5);
-	distortionVec.xy = 0.05f * ( ( distortionVec.xy ) * 2.0f - 1.0f);
-	float2 distfromEdge = min( input.uv, 1.0f - input.uv );
-	float2 distortionFade;
-	distortionFade.x = smoothstep( 0, 0.15f, distfromEdge.x );
-	distortionFade.y = smoothstep( 0, 0.15f, distfromEdge.y );
+	//
+	float4 distortionVec = distortionTexture.Sample( SampleType, screenUV * distortionParams.xy );
+	distortionVec.xy = distortionParams.z * ( ( distortionVec.xy ) * 2.0f - 1.0f);
 
-	float finalDistort = min( distortionFade.x, distortionFade.y );
+	const float pixelScreenDepth = depthTexture.Sample( DepthSamplerState, screenUV + distortionVec.xy ).r;
+	const float clipCloserDepth = sign( saturate( pixelScreenDepth - ( input.screenPos.z / input.screenPos.w ) ) );
+	distortionVec *= clipCloserDepth;
 
-	distfromEdge = min( testUv, 1.0f - testUv );
-	distortionFade.x = smoothstep( 0, 0.15f, distfromEdge.x );
-	distortionFade.y = smoothstep( 0, 0.15f, distfromEdge.y );
-	finalDistort = min( finalDistort, min( distortionFade.x, distortionFade.y ) );
+	const float3 finalEdgeFadeColor = edgeFadeColor.xyz * edgeFadeColor.w;
+	float4 outColor = colorTexture.Sample( SampleType, screenUV + distortionVec.xy );
+	outColor.xyz *= finalEdgeFadeColor;
 
-	float depth = depthTexture.Sample( DepthSamplerState, testUv ).r;
-	if ( depth < (input.position2.x / input.position2.y) )
-		finalDistort = 0;
+	float2 distFromEdge = min( input.uv, 1.0f - input.uv );
+	distFromEdge = min( screenUV, 1.0f - screenUV );
 
-	distortionVec *= finalDistort;
-
-	float4 outColor = colorTexture.Sample( SampleType, testUv + distortionVec.xy );
-
+	float lerpVal = edgeFadeParams.z * ( 1.0f - smoothstep( edgeFadeParams.y, edgeFadeParams.x , distFromEdge.x ) );
+	lerpVal = lerpVal * 0.25f + 0.75f;
+	outColor.xyz = lerp( outColor.xyz, finalEdgeFadeColor.xyz, lerpVal  );
 	outColor.a = 1.0f;
 	return outColor;
 }

@@ -190,7 +190,7 @@ float4 pixelShader( pixelInput input ) : SV_TARGET {
 		diffuse = smoothstep( diffuseColorBand.x, diffuseColorBand.y, diffuse ) * diffuseColorBand.z + diffuseColorBand.w;
 
 		const float oneMinusRimDot = 1.0f - dot( normal.xyz, toCameraVec );
-	 rimLight = rimColor.xyz * smoothstep( rimParams.x, rimParams.y, oneMinusRimDot ) * lightColor.xyz;// * specColor.z;
+	 rimLight = rimColor.w * ( rimColor.xyz * smoothstep( rimParams.x, rimParams.y, oneMinusRimDot ) * lightColor.xyz );// * specColor.z;
 //if (  normal.w == 0 )
 	//		return float4( diffuseColor * lightColor );
 	//	spec = smoothstep( specularColorBand.x, specularColorBand.y, spec ) * specularColorBand.z + specularColorBand.w;
