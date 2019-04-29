@@ -325,7 +325,12 @@ struct kbTextParser {
 		}
 	}
 
-	bool GetValueForKey( std::string & outValue,  char * key ) {
+	bool ContainsKey( char * key ) {
+		auto keyStartPos = m_StringBuffer.find( key, m_StartBlock /*TODO: Should confine scope of search shaderStateEndBlock - shaderStateStartBlock*/ );
+		return ( keyStartPos != std::string::npos );
+	}
+
+	bool GetValueForKey( std::string & outValue, char * key ) {
 		outValue.clear();
 		auto keyStartPos = m_StringBuffer.find( key, m_StartBlock /*TODO: Should confine scope of search shaderStateEndBlock - shaderStateStartBlock*/ );
 		if ( keyStartPos != std::string::npos ) {

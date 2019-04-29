@@ -21,6 +21,8 @@ cbuffer matrixBuffer {
 	float4				rimColor;
 	float4				nonToonDiffuseScaleAndBias;
 	float4				shadowParams;		// x - depth bias
+	float4				noiseScaleBias1;
+	float4				noiseScaleBias2;
 };
 
 kbShaderState {
@@ -89,7 +91,6 @@ float4 pixelShader( pixelInput input ) : SV_TARGET {
 	worldPos /= worldPos.w;
 	
 	float3 toCameraVec = normalize( cameraPosition.xyz - worldPos.xyz );
-	float diffuse = saturate( dot( normal.xyz, lightDirection.xyz ) ) * 0.8f + 0.2f;
 
 	// Shadow
 	float DistFromCamera = length( worldPos.xyz - cameraPosition.xyz );
@@ -97,18 +98,27 @@ float4 pixelShader( pixelInput input ) : SV_TARGET {
 	int index = 0;
 	float2 offset = float2( 0.0f, 0.0f );
 	
+	float noiseScale = noiseScaleBias2.z;
+	float noiseBias = noiseScaleBias2.w;
+
 	if ( DistFromCamera > splitDistances.z ) {
 	   index = 3.0f;
 	   offset.x += 0.5f;
 	   offset.y += 0.5f;
+		noiseScale = noiseScaleBias2.x;
+		noiseBias = noiseScaleBias2.y;
 	} else if ( DistFromCamera > splitDistances.y ) {
 	   index = 2.0f;
 	   offset.y += 0.5f;
+		noiseScale = noiseScaleBias1.z;
+		noiseBias = noiseScaleBias1.w;
 	} else if ( DistFromCamera > splitDistances.x ) {
 	   index = 1.0f;
 	   offset.x += 0.5f;
+		noiseScale = noiseScaleBias1.x;
+		noiseBias = noiseScaleBias1.y;
 	}  
-	
+
 	float4 shadowTex = mul( worldPos, lightMatrix[index] );
 	shadowTex /= shadowTex.w;
 	shadowTex.xy *= 0.5f;
@@ -118,7 +128,7 @@ float4 pixelShader( pixelInput input ) : SV_TARGET {
 	if ( DistFromCamera < splitDistances.w ) {
 
 		float3 noise = NoiseMap.Sample( DiffuseSamplerState, input.uv ).xyz;
-		noise.xy = noise.xy * 0.25f + 0.5f;// * 5.0f;//1.9f + 0.1f;
+		noise.xy = noise.xy * noiseScale + noiseBias;// * 5.0f;//1.9f + 0.1f;
 
 		const float angle = noise.z * 3.14f;
 		const float theSin = sin(angle);
@@ -127,10 +137,10 @@ float4 pixelShader( pixelInput input ) : SV_TARGET {
 		float2 rot1 = float2( theCos, -theSin );
 		float2 rot2 = float2( theSin, theCos );
 		
-		float2 starttexSize = ( 1.0f / 4096.0f) * noise.xy;
+		float2 starttexSize = (1.0f / 4096.0f) * noise.xy;
 		float2 texSize = starttexSize;
-	//	texSize.x = dot(starttexSize, rot1);
-		//texSize.y = dot(starttexSize, rot2);
+		texSize.x = dot(starttexSize, rot1);
+		texSize.y = dot(starttexSize, rot2);
 		float shadow1 = ShadowMap.Sample( ShadowMapSamplerState, shadowTex.xy + float2( -texSize.x, -texSize.y ) ).r;
 		float shadow2 = ShadowMap.Sample( ShadowMapSamplerState, shadowTex.xy + float2( texSize.x, -texSize.y ) ).r;
 		float shadow3 = ShadowMap.Sample( ShadowMapSamplerState, shadowTex.xy + float2( texSize.x, texSize.y ) ).r;
@@ -166,12 +176,14 @@ float4 pixelShader( pixelInput input ) : SV_TARGET {
 
 		shadowFactor = shadowFactor / 9;
 #endif
-		diffuse *= shadowFactor;
+
 	}
-	
+
+	float diffuse = saturate( dot( normal.xyz, lightDirection.xyz ) ) * shadowFactor;
+	diffuse = diffuse * 0.8f + 0.2f;	
 
 	float3 lightReflect = ( 2.0f * dot( normal.xyz, lightDirection.xyz ) * normal.xyz ) - lightDirection.xyz;
-	float spec = saturate( dot( lightReflect, toCameraVec ) );
+	float spec = saturate( dot( lightReflect, toCameraVec ) ) * shadowFactor;
 	float3 rimLight = 0;
 
 	if ( normal.w <= 0.2f ) {

@@ -376,7 +376,7 @@ kbGameEntity 0 0 0 0 {
 				Enabled = 0
 				LifeTime =  -1.000000
 				Shader = .\assets\shaders\lights\directionallighttoon.kbshader
-				ShaderParams = 15
+				ShaderParams = 17
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
@@ -473,7 +473,7 @@ kbGameEntity 0 0 0 0 {
 						LifeTime =  -1.000000
 						ParamName = "shadowParams"
 						Texture = NULL
-						Vector = -0.000500 0.000000 0.000000 0.000000
+						Vector = -0.000100 0.000000 0.000000 0.000000
 					}
 					kbShaderParamComponent { 
 						Enabled = 0
@@ -482,11 +482,25 @@ kbGameEntity 0 0 0 0 {
 						Texture = ..\..\kbengine\assets\textures\noise.jpg
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "noiseScaleBias1"
+						Texture = NULL
+						Vector = 1.000000 0.500000 2.000000 1.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "noiseScaleBias2"
+						Texture = NULL
+						Vector = 0.500000 0.200000 0.500000 0.500000
+					}
 			}
 		CascadedShadowSplits = 4
  10.000000
  20.000000
- 60.000000
+ 30.000000
  100.000000
 	}
 }
@@ -4105,8 +4119,15 @@ kbGameEntity 0 0 0 0 {
 			kbMaterialComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
-				Shader = ..\..\kbengine\assets\shaders\basictranslucency.kbshader
-				ShaderParams = 1
+				Shader = .\assets\shaders\fx\basicdistortion.kbshader
+				ShaderParams = 2
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "distortionTexture"
+						Texture = .\assets\fx\noise\distortion_3_channel.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000

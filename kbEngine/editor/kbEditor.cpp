@@ -341,12 +341,12 @@ void kbEditor::Update() {
 	g_pRenderer->SetReadyToRender();
 
 	//m_pMainTab->GetCurrentWindow()->GetCamera().Update();
-/* Get the bag
+
 	if ( GetAsyncKeyState( VK_LSHIFT ) && GetAsyncKeyState( 'P' ) ) {
-		this->SetMainCameraPos( kbVec3( 1.31999433f, 12.7329245f, 39.7846413f ) );
-		this->SetMainCameraRot( kbQuat( -0.0644864589f, 0.119459502f, -0.00777558470f, 0.990712106f ) );
+		this->SetMainCameraPos( kbVec3( 0.701963603f, 27.7603569f, 3.12184048f ) );
+		this->SetMainCameraRot( kbQuat( 0.0285657402f, 0.304920107f, 0.00915033650f, 0.951905549f ) );
 	}
-*/
+
 	// Initiation
 /*	if ( GetAsyncKeyState( VK_LSHIFT ) && GetAsyncKeyState( 'P' ) ) {
 		SetMainCameraPos( kbVec3( 5.1198f, 13.310f, 43.877f ) );
@@ -472,6 +472,8 @@ kbVec3 kbEditor::GetMainCameraPos() const {
  *  kbEditor::SetMainCameraRot
  */
 void kbEditor::SetMainCameraRot( const kbQuat & newCamRot ) {
+kbLog( "CameraPos = %f %f %f %f", newCamRot.x, newCamRot.y, newCamRot.z, newCamRot.w );
+
 	m_pMainTab->GetEditorWindowCamera()->m_Rotation = newCamRot;
 	m_pMainTab->GetEditorWindowCamera()->m_RotationTarget = newCamRot;
 }

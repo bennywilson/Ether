@@ -40,5 +40,5 @@ shadowPixelInput vertexShader( shadowVertexInput input ) {
  *	pixelShader
  */
  float pixelShader( shadowPixelInput input ) : SV_TARGET {
-   return 0;//input.position2.x / input.position2.y;
+   return input.position2.x / input.position2.y;
 }

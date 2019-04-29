@@ -279,6 +279,8 @@ void kbRenderer_DX11::RenderShadow( const kbRenderLight *const pLight, kbMat4 sp
 		m_DebugLines.push_back( lines[7] );
 	}
 
+	m_RenderState.SetDepthStencilState();
+
 	for ( int i = 0; i < 4 && pLight->m_CascadedShadowSplits[i] < FLT_MAX; i++ ) {
 		D3D11_VIEWPORT viewport;
 		viewport.TopLeftX = ( i % 2 ) * halfShadowBufferSize;

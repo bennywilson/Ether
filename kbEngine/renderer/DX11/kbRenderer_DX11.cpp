@@ -1529,11 +1529,14 @@ void kbRenderer_DX11::PreRenderCullAndSort() {
 				if ( pShader == nullptr || pShader->IsBlendEnabled() == false ) {
 					m_pCurrentRenderWindow->GetVisibleSubMeshes( renderObj.m_RenderPass ).push_back( kbRenderSubmesh( &renderObj, i, renderObj.m_RenderPass, sqrt( distToCamSqr ) ) );
 				} else {
-					if ( renderObj.m_RenderPass == RP_TranslucentWithDepth ) {
-						m_pCurrentRenderWindow->GetVisibleSubMeshes( RP_TranslucentWithDepth ).push_back( kbRenderSubmesh( &renderObj, i, RP_TranslucentWithDepth, sqrt( distToCamSqr ) ) );
-					} else {
-						m_pCurrentRenderWindow->GetVisibleSubMeshes( RP_Translucent ).push_back( kbRenderSubmesh( &renderObj, i, RP_Translucent, sqrt( distToCamSqr ) ) );
-					}	
+					ERenderPass rp = RP_Translucent;
+					if ( pShader->IsDistortionEnabled() ) {
+						rp = RP_Distortion;
+					} else if ( renderObj.m_RenderPass == RP_TranslucentWithDepth ) {
+						rp = RP_TranslucentWithDepth;
+					}
+
+					m_pCurrentRenderWindow->GetVisibleSubMeshes( rp ).push_back( kbRenderSubmesh( &renderObj, i, RP_TranslucentWithDepth, sqrt( distToCamSqr ) ) );
 				}
 			}
 		}
@@ -1678,6 +1681,50 @@ void kbRenderer_DX11::RenderTranslucency() {
 			RenderMesh( &visibleSubmeshList[i], false );
 		}
 	}
+
+	// Translucency with depth Pass
+	{
+		m_iAccumBuffer ^= 1;
+
+		ID3D11ShaderResourceView * pNullSRVs[] = { nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, 
+												   nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr };
+
+		// Unbind all textures
+		m_pDeviceContext->VSSetShaderResources( 0, 16, pNullSRVs );
+		m_pDeviceContext->GSSetShaderResources( 0, 16, pNullSRVs );
+		m_pDeviceContext->PSSetShaderResources( 0, 16, pNullSRVs );
+
+		m_pDeviceContext->OMSetRenderTargets( 1, &GetAccumBuffer( m_iAccumBuffer )->m_pRenderTargetView, m_pDepthStencilView );
+
+		std::vector<kbRenderSubmesh> & visibleSubmeshList = m_pCurrentRenderWindow->GetVisibleSubMeshes( RP_Distortion );
+		for ( int i = 0; i < visibleSubmeshList.size(); i++ ) {
+			const kbRenderSubmesh & submesh = visibleSubmeshList[i];
+			const kbModel *const pModel = submesh.GetRenderObject()->m_pModel;
+
+			if ( submesh.GetRenderObject()->m_RenderPass == RP_FirstPerson ) {
+				m_RenderState.SetDepthStencilState( true,
+													kbRenderState::DepthWriteMaskZero,
+													kbRenderState::CompareLess,
+													true,
+													0,
+													0xff,
+													kbRenderState::StencilKeep,
+													kbRenderState::StencilKeep,
+													kbRenderState::StencilReplace,
+													kbRenderState::CompareAlways,
+													kbRenderState::StencilKeep,
+													kbRenderState::StencilKeep,
+													kbRenderState::StencilReplace,
+													kbRenderState::CompareAlways,
+													1);
+			} else {
+				m_RenderState.SetDepthStencilState();
+			}
+
+			RenderMesh( &visibleSubmeshList[i], false );
+		}
+	}
+
 	m_RenderState.SetBlendState();
 
 	m_RenderState.SetDepthStencilState();
@@ -1936,8 +1983,10 @@ void kbRenderer_DX11::RenderMousePickerIds() {
 	for ( auto iter = m_pCurrentRenderWindow->GetRenderObjectMap().begin(); iter != m_pCurrentRenderWindow->GetRenderObjectMap().end(); iter++ ) {
 		if ( iter->second->m_EntityId > 0 ) {
 			// TODO
-			kbRenderSubmesh newMesh( iter->second, 0, RP_MousePicker, 0.0f );
-			RenderMesh( &newMesh, false, true );
+			for ( int i = 0; i < iter->second->m_pModel->NumMeshes(); i++ ) {
+				kbRenderSubmesh newMesh( iter->second, i, RP_MousePicker, 0.0f );
+				RenderMesh( &newMesh, false, true );
+			}
 		}
 	}
 

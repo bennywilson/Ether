@@ -116,6 +116,7 @@ public:
 
 	// Render States
 	bool										IsBlendEnabled() const { return m_bBlendEnabled; }
+	bool										IsDistortionEnabled() const { return m_bDistortionEnabled; }
 
 	kbBlend										GetSrcBlend() const { return m_SrcBlend; }
 	kbBlend										GetDstBlend() const { return m_DstBlend; }
@@ -149,6 +150,8 @@ private:
 	kbShaderVarBindings_t						m_ShaderVarBindings;
 
 	bool										m_bBlendEnabled;
+	bool										m_bDistortionEnabled;
+
 	kbBlend										m_SrcBlend;
 	kbBlend										m_DstBlend;
 	kbBlendOp									m_BlendOp;

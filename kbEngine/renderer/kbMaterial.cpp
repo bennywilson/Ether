@@ -563,6 +563,7 @@ kbShader::kbShader() :
 	m_VertexShaderFunctionName( "vertexShader" ),
 	m_PixelShaderFunctionName( "pixelShader" ),
 	m_bBlendEnabled( false ),
+	m_bDistortionEnabled( false ),
 	m_SrcBlend( Blend_One ),
 	m_DstBlend( Blend_One ),
 	m_BlendOp( BlendOp_Add ),
@@ -584,6 +585,7 @@ kbShader::kbShader( const std::string & fileName ) :
 	m_VertexShaderFunctionName( "vertexShader" ),
 	m_PixelShaderFunctionName( "pixelShader" ),
 	m_bBlendEnabled( false ),
+	m_bDistortionEnabled( false ),
 	m_SrcBlend( Blend_One ),
 	m_DstBlend( Blend_One ),
 	m_BlendOp( BlendOp_Add ),
@@ -697,6 +699,10 @@ bool kbShader::Load_Internal() {
 			shaderParser.MakeLowerCase();
 
 			std::string value;
+
+			if ( shaderParser.ContainsKey( "distortion" ) ) {
+				m_bDistortionEnabled = true;
+			}
 
 			if ( shaderParser.GetValueForKey( value, "srcblend" ) ) {
 				m_SrcBlend = GetBlendFromName( value );
