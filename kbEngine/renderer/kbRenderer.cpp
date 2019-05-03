@@ -61,7 +61,7 @@ kbRenderWindow::kbRenderWindow( HWND inHwnd, const RECT & windowDimensions, cons
 	m_fViewPixelHeight = static_cast<float>( m_ViewPixelHeight );
 	m_fViewPixelHalfWidth = m_fViewPixelWidth* 0.5f;
 	m_fViewPixelHalfHeight = m_fViewPixelHeight * 0.5f;
-	m_ProjectionMatrix.CreatePerspectiveMatrix( kbToRadians( 75.0f ), m_fViewPixelWidth / m_fViewPixelHeight, nearPlane, farPlane );
+	m_ProjectionMatrix.CreatePerspectiveMatrix( kbToRadians( 95.0f ), m_fViewPixelWidth / m_fViewPixelHeight, nearPlane, farPlane );
 }
 
 /**
