@@ -32,11 +32,6 @@ struct pixelInput {
 	float3 worldPos		: TEXCOORD3;
 };
 
-kbShaderState {
-	cullMode CullMode_None
-	srcblend Blend_One
-	dstBlend Blend_One
-}
 
 /**
  *	vertexShader

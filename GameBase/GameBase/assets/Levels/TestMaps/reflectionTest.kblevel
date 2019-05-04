@@ -370,7 +370,7 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadows = 1
-		Color = 0.500000 0.500000 0.500000 0.100000
+		Color = 1.000000 1.000000 1.000000 0.250000
 		Materials = 1
 			kbMaterialComponent { 
 				Enabled = 0
@@ -1054,8 +1054,8 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "Izzy"
-		Orientation = 0.000000 0.000000 0.000000 0.491806
-		Position = -1.500000 -15.908672 31.008163
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 0.000000 0.000000 0.000000
 		Scale = 4.300000 4.300000 4.300000
 	}
 	EtherSkelModelComponent { 
@@ -1141,7 +1141,7 @@ kbGameEntity 0 0 0 0 {
 				IsLooping = 1
 				TimeScale =  1.000000
 			}
-		DebugAnimIndex = 0
+		DebugAnimIndex = -1
 		IsFirstPersonModel = 0
 	}
 	EtherSkelModelComponent { 
@@ -1273,10 +1273,10 @@ kbGameEntity 0 0 0 0 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		Name = "Izzy_Reflections"
-		Orientation = 0.000000 0.163484 0.000000 0.986546
-		Position = 9.495791 -15.908672 35.179138
-		Scale = -4.300000 4.300000 4.300000
+		Name = "Izzy_Reflection"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 0.000000 0.000000 0.000000
+		Scale = 4.300000 -4.300000 4.300000
 	}
 	EtherSkelModelComponent { 
 		Enabled = 1
@@ -1361,7 +1361,7 @@ kbGameEntity 0 0 0 0 {
 				IsLooping = 1
 				TimeScale =  1.000000
 			}
-		DebugAnimIndex = 0
+		DebugAnimIndex = -1
 		IsFirstPersonModel = 0
 	}
 	EtherSkelModelComponent { 
@@ -4106,75 +4106,27 @@ kbGameEntity 0 0 0 0 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		Name = "Bus"
-		Orientation = 0.000000 0.192635 0.000000 0.981271
-		Position = -42.568974 15.491619 -21.402271
-		Scale = 15.000000 15.000000 15.000000
+		Name = "Entity_41"
+		Orientation = -0.707000 0.000000 0.000000 0.707000
+		Position = 0.000000 0.000000 0.000000
+		Scale = 250.000000 250.000000 250.000000
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
 		LifeTime =  -1.000000
-		CastsShadow = 1
-		Materials = 3
+		CastsShadow = 0
+		Materials = 1
 			kbMaterialComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
-				Shader = .\assets\shaders\environment\environmentbase.kbshader
-				ShaderParams = 4
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "diffuse"
-						Texture = .\assets\visualtarget\reuben\seat.tif
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "normal"
-						Texture = ..\..\kbengine\assets\textures\defaultnormal.bmp
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "propertyMap"
-						Texture = NULL
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "emissiveMap"
-						Texture = NULL
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-			}
-			kbMaterialComponent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				Shader = .\assets\shaders\fx\basicdistortion.kbshader
-				ShaderParams = 5
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "distortionTexture"
-						Texture = .\assets\fx\noise\distortion_3_channel.jpg
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "shaderTexture"
-						Texture = .\assets\visualtarget\reuben\windows.tif
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
+				Shader = .\assets\shaders\fx\waterdistortion.kbshader
+				ShaderParams = 6
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
 						ParamName = "edgeFadeColor"
 						Texture = NULL
-						Vector = 0.308000 0.359000 0.406000 0.700000
+						Vector = 0.380000 0.359000 0.406000 0.700000
 					}
 					kbShaderParamComponent { 
 						Enabled = 0
@@ -4188,46 +4140,58 @@ kbGameEntity 0 0 0 0 {
 						LifeTime =  -1.000000
 						ParamName = "distortionParams"
 						Texture = NULL
-						Vector = 1.000000 15.000000 0.010000 0.000000
-					}
-			}
-			kbMaterialComponent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				Shader = .\assets\shaders\environment\environmentbase.kbshader
-				ShaderParams = 4
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "diffuse"
-						Texture = .\assets\visualtarget\reuben\bus_interior.tif
-						Vector = 0.000000 0.000000 0.000000 0.000000
+						Vector = 0.200000 15.000000 0.010000 0.000000
 					}
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
-						ParamName = "normal"
-						Texture = ..\..\kbengine\assets\textures\defaultnormal.bmp
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "propertyMap"
+						ParamName = "colorTexture"
 						Texture = NULL
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
-						ParamName = "emissiveMap"
+						ParamName = "depthTexture"
 						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "distortionTexture"
+						Texture = .\assets\fx\noise\distortion_3_channel.jpg
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 			}
 		RenderPass = LightingPass
 		TranslucencySortBias =  0.000000
-		Model = .\assets\visualtarget\reuben\bus2.fbx
+		Model = ..\..\kbengine\assets\models\unitquad.ms3d
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Entity_42"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = -35.471123 3.608764 -31.000608
+		Scale = 100.000000 100.000000 100.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		Materials = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Shader = NULL
+				ShaderParams = 0
+			}
+		RenderPass = LightingPass
+		TranslucencySortBias =  0.000000
+		Model = .\assets\models\test\invertedcube.ms3d
 	}
 }
 kbGameEntity 0 0 0 0 {
@@ -4240,43 +4204,15 @@ kbGameEntity 0 0 0 0 {
 		Scale = -15.000000 15.000000 15.000000
 	}
 	kbStaticModelComponent { 
-		Enabled = 1
+		Enabled = 0
 		LifeTime =  -1.000000
 		CastsShadow = 0
 		Materials = 3
 			kbMaterialComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
-				Shader = .\assets\shaders\environment\environmentbase.kbshader
-				ShaderParams = 4
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "diffuse"
-						Texture = NULL
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "normal"
-						Texture = NULL
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "propertyMap"
-						Texture = NULL
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "emissiveMap"
-						Texture = NULL
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
+				Shader = NULL
+				ShaderParams = 0
 			}
 			kbMaterialComponent { 
 				Enabled = 0
@@ -4321,7 +4257,7 @@ kbGameEntity 0 0 0 0 {
 						Enabled = 0
 						LifeTime =  -1.000000
 						ParamName = "diffuse"
-						Texture = .\assets\visualtarget\reuben\bus_interior.tif
+						Texture = ..\..\kbengine\assets\textures\white.bmp
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 					kbShaderParamComponent { 
