@@ -76,7 +76,8 @@ void kbModelComponent::RefreshMaterials( const bool bRefreshRenderObejct ) {
 	
 		kbShaderParamOverrides_t newShaderParams;
 		newShaderParams.m_pShader = matComp.GetShader();
-	
+		newShaderParams.m_CullModeOverride = matComp.GetCullModeOverride();
+
 		auto srcShaderParams = matComp.GetShaderParams();
 		for ( int j = 0; j < srcShaderParams.size(); j++ ) {
 			if ( srcShaderParams[j].GetTexture() != nullptr ) {
@@ -165,6 +166,7 @@ void kbShaderParamComponent::Constructor() {
  */
 void kbMaterialComponent::Constructor() {
 	m_pShader = nullptr;
+	m_CullModeOverride = CullMode_ShaderDefault;
 }
 
 /**

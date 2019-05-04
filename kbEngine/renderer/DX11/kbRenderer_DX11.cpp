@@ -3245,7 +3245,8 @@ void kbRenderer_DX11::RenderMesh( const kbRenderSubmesh *const pRenderMesh, cons
 
 	// Get Shader
 	const kbShader * pShader = meshMaterial.GetShader();
-	
+	ECullMode cullMode = CullMode_ShaderDefault;
+
 	if ( bShadowPass ) {
 		if ( pRenderObject->m_bIsSkinnedModel ) {
 			pShader = m_pSkinnedDirectionalLightShadowShader;
@@ -3256,12 +3257,18 @@ void kbRenderer_DX11::RenderMesh( const kbRenderSubmesh *const pRenderMesh, cons
 	} else {
 	
 		if ( pRenderObject->m_Materials.size() > 0 && pRenderObject->m_Materials.size() > pRenderMesh->GetMeshIdx() ) {
-			pShader = pRenderObject->m_Materials[pRenderMesh->GetMeshIdx()].m_pShader;
+			const kbShaderParamOverrides_t & shaderOverrides = pRenderObject->m_Materials[pRenderMesh->GetMeshIdx()];
+			pShader = shaderOverrides.m_pShader;
+			cullMode = shaderOverrides.m_CullModeOverride;
 		}
 
 		if ( pShader == nullptr || pShader->GetPixelShader() == nullptr ) {
 			pShader = m_pMissingShader;
 		}
+	}
+
+	if ( cullMode == CullMode_ShaderDefault ) {
+		cullMode = pShader->GetCullMode();
 	}
 
 	if ( bSkipMeshBlendSettings == false ) {

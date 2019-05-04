@@ -15,6 +15,7 @@ kbGameEntity 0 0 0 0 {
 			kbMaterialComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
 				Shader = .\assets\shaders\skybox\skybox_gradient.kbshader
 				ShaderParams = 3
 					kbShaderParamComponent { 
@@ -105,6 +106,7 @@ kbGameEntity 0 0 0 0 {
 			kbMaterialComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
 				Shader = .\assets\shaders\fx\particleatlas.kbshader
 				ShaderParams = 1
 					kbShaderParamComponent { 
@@ -158,6 +160,7 @@ kbGameEntity 0 0 0 0 {
 			kbMaterialComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
 				Shader = ..\..\kbengine\assets\shaders\basicparticle.kbshader
 				ShaderParams = 1
 					kbShaderParamComponent { 
@@ -215,6 +218,7 @@ kbGameEntity 0 0 0 0 {
 			kbMaterialComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
 				Shader = .\assets\shaders\lights\environmentdirectionalfill.kbshader
 				ShaderParams = 8
 					kbShaderParamComponent { 
@@ -295,6 +299,7 @@ kbGameEntity 0 0 0 0 {
 			kbMaterialComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
 				Shader = .\assets\shaders\lights\environmentdirectionalfill.kbshader
 				ShaderParams = 8
 					kbShaderParamComponent { 
@@ -375,6 +380,7 @@ kbGameEntity 0 0 0 0 {
 			kbMaterialComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
 				Shader = .\assets\shaders\lights\directionallighttoon.kbshader
 				ShaderParams = 17
 					kbShaderParamComponent { 
@@ -556,6 +562,7 @@ kbGameEntity 0 0 0 0 {
 			kbMaterialComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
 				Shader = .\assets\shaders\fx\particle_blendadd.kbshader
 				ShaderParams = 2
 					kbShaderParamComponent { 
@@ -672,6 +679,7 @@ kbGameEntity 0 0 0 0 {
 			kbMaterialComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
 				Shader = .\assets\shaders\fx\particle_blendadd.kbshader
 				ShaderParams = 2
 					kbShaderParamComponent { 
@@ -774,6 +782,7 @@ kbGameEntity 0 0 0 0 {
 			kbMaterialComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
 				Shader = .\assets\shaders\fx\particle_blendadd.kbshader
 				ShaderParams = 2
 					kbShaderParamComponent { 
@@ -892,6 +901,7 @@ kbGameEntity 0 0 0 0 {
 			kbMaterialComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
 				Shader = .\assets\shaders\skybox\clouddome_smoothstep.kbshader
 				ShaderParams = 5
 					kbShaderParamComponent { 
@@ -967,6 +977,7 @@ kbGameEntity 0 0 0 0 {
 			kbMaterialComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
 				Shader = .\assets\shaders\skybox\overheadcloudplane.kbshader
 				ShaderParams = 5
 					kbShaderParamComponent { 
@@ -1027,6 +1038,7 @@ kbGameEntity 0 0 0 0 {
 			kbMaterialComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
 				Shader = .\assets\shaders\skybox\clouddome_static.kbshader
 				ShaderParams = 2
 					kbShaderParamComponent { 
@@ -1066,6 +1078,7 @@ kbGameEntity 0 0 0 0 {
 			kbMaterialComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
 				Shader = .\assets\shaders\character\characterbase.kbshader
 				ShaderParams = 1
 					kbShaderParamComponent { 
@@ -1079,6 +1092,7 @@ kbGameEntity 0 0 0 0 {
 			kbMaterialComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
 				Shader = .\assets\shaders\character\characterbase.kbshader
 				ShaderParams = 1
 					kbShaderParamComponent { 
@@ -1092,6 +1106,7 @@ kbGameEntity 0 0 0 0 {
 			kbMaterialComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
 				Shader = .\assets\shaders\character\characterbase.kbshader
 				ShaderParams = 1
 					kbShaderParamComponent { 
@@ -1105,6 +1120,7 @@ kbGameEntity 0 0 0 0 {
 			kbMaterialComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
 				Shader = .\assets\shaders\character\characterbase.kbshader
 				ShaderParams = 1
 					kbShaderParamComponent { 
@@ -1118,6 +1134,7 @@ kbGameEntity 0 0 0 0 {
 			kbMaterialComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
 				Shader = .\assets\shaders\character\characterbase.kbshader
 				ShaderParams = 1
 					kbShaderParamComponent { 
@@ -1152,6 +1169,7 @@ kbGameEntity 0 0 0 0 {
 			kbMaterialComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
 				Shader = .\assets\shaders\character\characteroutline_noskinning.kbshader
 				ShaderParams = 2
 					kbShaderParamComponent { 
@@ -1172,6 +1190,7 @@ kbGameEntity 0 0 0 0 {
 			kbMaterialComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
 				Shader = .\assets\shaders\character\characteroutline_noskinning.kbshader
 				ShaderParams = 2
 					kbShaderParamComponent { 
@@ -1192,6 +1211,7 @@ kbGameEntity 0 0 0 0 {
 			kbMaterialComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
 				Shader = .\assets\shaders\character\characteroutline_noskinning.kbshader
 				ShaderParams = 2
 					kbShaderParamComponent { 
@@ -1212,6 +1232,7 @@ kbGameEntity 0 0 0 0 {
 			kbMaterialComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
 				Shader = .\assets\shaders\character\characteroutline_noskinning.kbshader
 				ShaderParams = 2
 					kbShaderParamComponent { 
@@ -1232,6 +1253,7 @@ kbGameEntity 0 0 0 0 {
 			kbMaterialComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
 				Shader = .\assets\shaders\character\characteroutline_noskinning.kbshader
 				ShaderParams = 2
 					kbShaderParamComponent { 
@@ -1252,12 +1274,14 @@ kbGameEntity 0 0 0 0 {
 			kbMaterialComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
 				Shader = NULL
 				ShaderParams = 0
 			}
 			kbMaterialComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
 				Shader = NULL
 				ShaderParams = 0
 			}
@@ -1286,6 +1310,7 @@ kbGameEntity 0 0 0 0 {
 			kbMaterialComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
 				Shader = .\assets\shaders\character\characterbase.kbshader
 				ShaderParams = 1
 					kbShaderParamComponent { 
@@ -1299,6 +1324,7 @@ kbGameEntity 0 0 0 0 {
 			kbMaterialComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
 				Shader = .\assets\shaders\character\characterbase.kbshader
 				ShaderParams = 1
 					kbShaderParamComponent { 
@@ -1312,6 +1338,7 @@ kbGameEntity 0 0 0 0 {
 			kbMaterialComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
 				Shader = .\assets\shaders\character\characterbase.kbshader
 				ShaderParams = 1
 					kbShaderParamComponent { 
@@ -1325,6 +1352,7 @@ kbGameEntity 0 0 0 0 {
 			kbMaterialComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
 				Shader = .\assets\shaders\character\characterbase.kbshader
 				ShaderParams = 1
 					kbShaderParamComponent { 
@@ -1338,6 +1366,7 @@ kbGameEntity 0 0 0 0 {
 			kbMaterialComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
 				Shader = .\assets\shaders\character\characterbase.kbshader
 				ShaderParams = 1
 					kbShaderParamComponent { 
@@ -1372,6 +1401,7 @@ kbGameEntity 0 0 0 0 {
 			kbMaterialComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
 				Shader = .\assets\shaders\character\characteroutline_noskinning.kbshader
 				ShaderParams = 2
 					kbShaderParamComponent { 
@@ -1392,6 +1422,7 @@ kbGameEntity 0 0 0 0 {
 			kbMaterialComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
 				Shader = .\assets\shaders\character\characteroutline_noskinning.kbshader
 				ShaderParams = 2
 					kbShaderParamComponent { 
@@ -1412,6 +1443,7 @@ kbGameEntity 0 0 0 0 {
 			kbMaterialComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
 				Shader = .\assets\shaders\character\characteroutline_noskinning.kbshader
 				ShaderParams = 2
 					kbShaderParamComponent { 
@@ -1432,6 +1464,7 @@ kbGameEntity 0 0 0 0 {
 			kbMaterialComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
 				Shader = .\assets\shaders\character\characteroutline_noskinning.kbshader
 				ShaderParams = 2
 					kbShaderParamComponent { 
@@ -1452,6 +1485,7 @@ kbGameEntity 0 0 0 0 {
 			kbMaterialComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
 				Shader = .\assets\shaders\character\characteroutline_noskinning.kbshader
 				ShaderParams = 2
 					kbShaderParamComponent { 
@@ -1472,12 +1506,14 @@ kbGameEntity 0 0 0 0 {
 			kbMaterialComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
 				Shader = NULL
 				ShaderParams = 0
 			}
 			kbMaterialComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
 				Shader = NULL
 				ShaderParams = 0
 			}
@@ -1506,6 +1542,7 @@ kbGameEntity 0 0 0 0 {
 			kbMaterialComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
 				Shader = .\assets\shaders\character\characterbase.kbshader
 				ShaderParams = 1
 					kbShaderParamComponent { 
@@ -1895,6 +1932,7 @@ kbGameEntity 0 0 0 0 {
 			kbMaterialComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
 				Shader = .\assets\shaders\character\characterbase.kbshader
 				ShaderParams = 1
 					kbShaderParamComponent { 
@@ -2284,6 +2322,7 @@ kbGameEntity 0 0 0 0 {
 			kbMaterialComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
 				Shader = .\assets\shaders\character\characterbase.kbshader
 				ShaderParams = 1
 					kbShaderParamComponent { 
@@ -3184,6 +3223,7 @@ kbGameEntity 0 0 0 0 {
 			kbMaterialComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
 				Shader = .\assets\shaders\environment\flag.kbshader
 				ShaderParams = 6
 					kbShaderParamComponent { 
@@ -4119,6 +4159,7 @@ kbGameEntity 0 0 0 0 {
 			kbMaterialComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
 				Shader = .\assets\shaders\environment\environmentbase.kbshader
 				ShaderParams = 4
 					kbShaderParamComponent { 
@@ -4153,6 +4194,7 @@ kbGameEntity 0 0 0 0 {
 			kbMaterialComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
 				Shader = .\assets\shaders\fx\basicdistortion.kbshader
 				ShaderParams = 5
 					kbShaderParamComponent { 
@@ -4192,8 +4234,9 @@ kbGameEntity 0 0 0 0 {
 					}
 			}
 			kbMaterialComponent { 
-				Enabled = 0
+				Enabled = 1
 				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
 				Shader = .\assets\shaders\environment\environmentbase.kbshader
 				ShaderParams = 4
 					kbShaderParamComponent { 
@@ -4245,8 +4288,9 @@ kbGameEntity 0 0 0 0 {
 		CastsShadow = 0
 		Materials = 3
 			kbMaterialComponent { 
-				Enabled = 0
+				Enabled = 1
 				LifeTime =  -1.000000
+				CullModeOverride = FrontFaces
 				Shader = .\assets\shaders\environment\environmentbase.kbshader
 				ShaderParams = 4
 					kbShaderParamComponent { 
@@ -4281,6 +4325,7 @@ kbGameEntity 0 0 0 0 {
 			kbMaterialComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
 				Shader = .\assets\shaders\fx\hackclip.kbshader
 				ShaderParams = 4
 					kbShaderParamComponent { 
@@ -4313,8 +4358,9 @@ kbGameEntity 0 0 0 0 {
 					}
 			}
 			kbMaterialComponent { 
-				Enabled = 0
+				Enabled = 1
 				LifeTime =  -1.000000
+				CullModeOverride = FrontFaces
 				Shader = .\assets\shaders\environment\environmentbase.kbshader
 				ShaderParams = 4
 					kbShaderParamComponent { 

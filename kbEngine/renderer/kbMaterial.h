@@ -2,7 +2,7 @@
 // kbMaterial.h
 //
 //
-// 2016-2018 kbEngine 2.0
+// 2016-2019 kbEngine 2.0
 //===================================================================================================
 #ifndef _KBMATERIAL_H_
 #define _KBMATERIAL_H_
@@ -128,7 +128,7 @@ public:
 
 	kbColorWriteEnable							GetColorWriteEnable() const { return m_ColorWriteEnable; }
 
-	kbCullMode									GetCullMode() const { return m_CullMode; }
+	ECullMode									GetCullMode() const { return m_CullMode; }
 
 private:
 	virtual bool								Load_Internal();
@@ -161,7 +161,7 @@ private:
 	kbBlendOp									m_BlendOpAlpha;
 
 	kbColorWriteEnable							m_ColorWriteEnable;
-	kbCullMode									m_CullMode;
+	ECullMode									m_CullMode;
 };
 
 /**
@@ -179,16 +179,16 @@ public:
 	const kbShader *							GetShader() const { return m_pShader; }
 	const std::vector<const kbTexture *>		GetTextureList() const { return m_Textures; }
 	const kbColor &								GetDiffuseColor() const { return m_DiffuseColor; }
-	kbCullMode									GetCullingMode() const { return m_CullingMode; }
+	ECullMode									GetCullingMode() const { return m_CullingMode; }
 
-	void										SetCullingMode( const kbCullMode newMode ) { m_CullingMode = newMode; }
+	void										SetCullingMode( const ECullMode newMode ) { m_CullingMode = newMode; }
 
 private:
 
 	std::vector<const kbTexture *>				m_Textures;
 	kbShader *									m_pShader;
 	kbColor										m_DiffuseColor;
-	kbCullMode									m_CullingMode;
+	ECullMode									m_CullingMode;
 };
 
 #endif

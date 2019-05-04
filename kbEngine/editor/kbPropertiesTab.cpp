@@ -471,6 +471,7 @@ void kbPropertiesTab::EnumCB( Fl_Widget * widget, void * voidPtr ) {
 	componentVar = dropDownValue;
 
 	userData->m_pComponent->Enable( false );
+	userData->m_pComponent->EditorChange( userData->m_VariableName.c_str() );
 	userData->m_pComponent->Enable( true );
 
 	g_pPropertiesTab->RequestRefreshNextUpdate();

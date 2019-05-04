@@ -12,6 +12,14 @@ GenerateEnum(
 )
 
 GenerateEnum( 
+	ECullMode, "ECullMode",
+	AddEnumField( CullMode_ShaderDefault, "ShaderDefault" )
+	AddEnumField( CullMode_None, "None" )
+	AddEnumField( CullMode_FrontFaces, "FrontFaces" )
+	AddEnumField( CullMode_BackFaces, "BackFaces" )
+)
+
+GenerateEnum( 
 	EClothType, "EClothType",
 	AddEnumField( CT_None, "None" )
 	AddEnumField( CT_Square, "Square" )
@@ -61,6 +69,7 @@ GenerateClass(
 	kbMaterialComponent,
 	AddField( "Shader", KBTYPEINFO_SHADER, kbMaterialComponent, m_pShader, false, "" )
 	AddField( "ShaderParams", KBTYPEINFO_STRUCT, kbMaterialComponent, m_ShaderParamComponents, true, "kbShaderParamComponent" )
+	AddField( "CullModeOverride", KBTYPEINFO_ENUM, kbMaterialComponent, m_CullModeOverride, false, "ECullMode" )
 )
 
 GenerateClass(

@@ -1018,7 +1018,7 @@ void kbModel::CreateDynamicModel( const UINT numVertices, const UINT numIndices,
 /**
  *	kbModel::CreatePointCloud
  */
-void kbModel::CreatePointCloud( const UINT numVertices, const std::string & shaderToUse, const kbCullMode cullingMode,  const UINT vertexSizeInBytes ) {
+void kbModel::CreatePointCloud( const UINT numVertices, const std::string & shaderToUse, const ECullMode cullingMode,  const UINT vertexSizeInBytes ) {
 	if ( m_NumVertices > 0 || m_Meshes.size() > 0 || m_Materials.size() > 0 || m_VertexBuffer.GetBufferPtr() != nullptr || m_IndexBuffer.GetBufferPtr() != nullptr ) {
 		Release_Internal();
 	}

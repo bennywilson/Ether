@@ -10,7 +10,7 @@ cbuffer matrixBuffer {
 };
 
 kbShaderState {
-	cullMode CullMode_None
+	cullMode CullMode_BackFaces
 }
 
 //-------------------------------------

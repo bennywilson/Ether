@@ -2,7 +2,7 @@
 // kbModelComponent.h
 //
 //
-// 2016-2018 kbEngine 2.0
+// 2016-2019 kbEngine 2.0
 //==============================================================================
 #ifndef _KBMODELCOMPONENT_H_
 #define _KBMODELCOMPONENT_H_
@@ -58,6 +58,7 @@ public:
 
 	const kbShader *							GetShader() const { return m_pShader; }
 	const std::vector<kbShaderParamComponent> &	GetShaderParams() const { return m_ShaderParamComponents; }
+	ECullMode									GetCullModeOverride() const { return m_CullModeOverride; }
 
 	void										SetShader( kbShader *const pShader ) { m_pShader = pShader; }
 	void										SetShaderParamComponent( const kbShaderParamComponent & inParam );
@@ -65,6 +66,7 @@ public:
 private:
 
 	kbShader *									m_pShader;
+	ECullMode									m_CullModeOverride;
 	std::vector<kbShaderParamComponent>			m_ShaderParamComponents;
 };
 

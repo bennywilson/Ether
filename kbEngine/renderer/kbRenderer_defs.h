@@ -2,7 +2,7 @@
 // kbRenderer_defs.h
 //
 //
-// 2016-2018 kbEngine 2.0
+// 2016-2019 kbEngine 2.0
 //===================================================================================================
 #ifndef _KBRENDERERDEFS_H_
 #define _KBRENDERERDEFS_H_
@@ -23,6 +23,13 @@ enum ERenderPass {
 	RP_Debug,
 	RP_MousePicker,
 	NUM_RENDER_PASSES
+};
+
+enum ECullMode {
+	CullMode_ShaderDefault,
+	CullMode_None,
+	CullMode_FrontFaces,
+	CullMode_BackFaces,
 };
 
 struct vertexColorLayout {
@@ -234,10 +241,11 @@ struct kbShaderParamOverrides_t {
         size_t							m_VarSizeBytes;
     };
 
-    kbShaderParamOverrides_t() : m_pShader( nullptr ) { }
+    kbShaderParamOverrides_t() : m_pShader( nullptr ), m_CullModeOverride( CullMode_ShaderDefault ) { }
 
     std::vector<kbShaderParam_t>		m_ParamOverrides;
 	const class kbShader *				m_pShader;
+	ECullMode							m_CullModeOverride;
 
     kbShaderParam_t & AllocateParam( const std::string & varName ) {
 		for ( int i = 0; i < m_ParamOverrides.size(); i++ ) {
@@ -313,6 +321,7 @@ public:
 													m_pComponent( nullptr ),
 													m_pModel( nullptr ),
 													m_RenderPass( RP_Lighting ),
+													m_CullMode( CullMode_ShaderDefault ),
 													m_TranslucencySortBias( 0.0f ),
 													m_EntityId( 0 ),
 													m_CullDistance( -1.0f ),
@@ -325,6 +334,7 @@ public:
 	const class kbModel *						m_pModel;
 	std::vector<kbShaderParamOverrides_t>		m_Materials;
 	ERenderPass									m_RenderPass;
+	ECullMode									m_CullMode;
 	float										m_TranslucencySortBias;
 	kbVec3										m_Position;
 	kbQuat										m_Orientation;
@@ -443,12 +453,6 @@ enum kbBlendOp {
 	BlendOp_Subtract,
 	BlendOp_Max,
 	BlendOp_Min
-};
-
-enum kbCullMode {
-	CullMode_FrontFaces,
-	CullMode_BackFaces,
-	CullMode_None,
 };
 
 enum kbColorWriteEnable {

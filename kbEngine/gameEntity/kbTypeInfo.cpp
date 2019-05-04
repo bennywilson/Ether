@@ -57,6 +57,8 @@ kbComponent * ConstructClassFromName( const std::string & className ) {
 
 // Should be a macro with each member specified
 
+ECullMode_Enum ECullMode_EnumClass;
+
 ERenderPass_Enum ERenderPass_EnumClass;
 
 EClothType_Enum EClothType_EnumClass;
