@@ -370,7 +370,7 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadows = 1
-		Color = 0.500000 0.500000 0.500000 0.100000
+		Color = 0.350000 0.450000 0.550000 0.100000
 		Materials = 1
 			kbMaterialComponent { 
 				Enabled = 0
