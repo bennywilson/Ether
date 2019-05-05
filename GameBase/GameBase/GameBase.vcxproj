@@ -103,6 +103,7 @@
     <None Include="assets\shaders\Environment\environmentHole.kbShader" />
     <None Include="assets\shaders\Environment\environmentSkinned.kbShader" />
     <None Include="assets\shaders\Environment\grass.kbShader" />
+    <None Include="assets\shaders\FX\basicDistortion.kbShader" />
     <None Include="assets\shaders\FX\basicFire.kbShader" />
     <None Include="assets\shaders\FX\basicSmoke.kbShader" />
     <None Include="assets\shaders\FX\emberParticle.kbShader" />

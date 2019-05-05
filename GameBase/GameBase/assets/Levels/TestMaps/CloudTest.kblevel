@@ -15,6 +15,7 @@ kbGameEntity 0 0 0 0 {
 			kbMaterialComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
 				Shader = .\assets\shaders\skybox\skybox_gradient.kbshader
 				ShaderParams = 3
 					kbShaderParamComponent { 
@@ -98,6 +99,7 @@ kbGameEntity 0 0 0 0 {
 			kbMaterialComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
 				Shader = .\assets\shaders\environment\environmentskinned.kbshader
 				ShaderParams = 4
 					kbShaderParamComponent { 
@@ -181,6 +183,7 @@ kbGameEntity 0 0 0 0 {
 			kbMaterialComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
 				Shader = .\assets\shaders\environment\environmentskinned.kbshader
 				ShaderParams = 4
 					kbShaderParamComponent { 
@@ -264,6 +267,7 @@ kbGameEntity 0 0 0 0 {
 			kbMaterialComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
 				Shader = .\assets\shaders\environment\environmentskinned.kbshader
 				ShaderParams = 4
 					kbShaderParamComponent { 
@@ -347,6 +351,7 @@ kbGameEntity 0 0 0 0 {
 			kbMaterialComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
 				Shader = .\assets\shaders\environment\environmentskinned.kbshader
 				ShaderParams = 4
 					kbShaderParamComponent { 
@@ -430,6 +435,7 @@ kbGameEntity 0 0 0 0 {
 			kbMaterialComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
 				Shader = .\assets\shaders\environment\environmentskinned.kbshader
 				ShaderParams = 4
 					kbShaderParamComponent { 
@@ -513,6 +519,7 @@ kbGameEntity 0 0 0 0 {
 			kbMaterialComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
 				Shader = .\assets\shaders\environment\environmentskinned.kbshader
 				ShaderParams = 4
 					kbShaderParamComponent { 
@@ -596,6 +603,7 @@ kbGameEntity 0 0 0 0 {
 			kbMaterialComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
 				Shader = .\assets\shaders\environment\environmentskinned.kbshader
 				ShaderParams = 4
 					kbShaderParamComponent { 
@@ -679,6 +687,7 @@ kbGameEntity 0 0 0 0 {
 			kbMaterialComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
 				Shader = .\assets\shaders\environment\basicterrain.kbshader
 				ShaderParams = 15
 					kbShaderParamComponent { 
@@ -915,6 +924,7 @@ kbGameEntity 0 0 0 0 {
 			kbMaterialComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
 				Shader = .\assets\shaders\fx\particleatlas.kbshader
 				ShaderParams = 1
 					kbShaderParamComponent { 
@@ -968,6 +978,7 @@ kbGameEntity 0 0 0 0 {
 			kbMaterialComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
 				Shader = ..\..\kbengine\assets\shaders\basicparticle.kbshader
 				ShaderParams = 1
 					kbShaderParamComponent { 
@@ -1031,6 +1042,7 @@ kbGameEntity 0 0 0 0 {
 			kbMaterialComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
 				Shader = .\assets\shaders\fx\particle_blendadd.kbshader
 				ShaderParams = 2
 					kbShaderParamComponent { 
@@ -1091,6 +1103,7 @@ kbGameEntity 0 0 0 0 {
 			kbMaterialComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
 				Shader = .\assets\shaders\fx\particle_blendadd.kbshader
 				ShaderParams = 2
 					kbShaderParamComponent { 
@@ -1154,6 +1167,7 @@ kbGameEntity 0 0 0 0 {
 			kbMaterialComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
 				Shader = .\assets\shaders\environment\environmentskinned.kbshader
 				ShaderParams = 4
 					kbShaderParamComponent { 
@@ -1237,6 +1251,7 @@ kbGameEntity 0 0 0 0 {
 			kbMaterialComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
 				Shader = .\assets\shaders\environment\environmentskinned.kbshader
 				ShaderParams = 4
 					kbShaderParamComponent { 
@@ -1334,6 +1349,7 @@ kbGameEntity 0 0 0 0 {
 			kbMaterialComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
 				Shader = .\assets\shaders\environment\environmentskinned.kbshader
 				ShaderParams = 4
 					kbShaderParamComponent { 
@@ -1417,6 +1433,7 @@ kbGameEntity 0 0 0 0 {
 			kbMaterialComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
 				Shader = .\assets\shaders\environment\environmentskinned.kbshader
 				ShaderParams = 4
 					kbShaderParamComponent { 
@@ -1500,6 +1517,7 @@ kbGameEntity 0 0 0 0 {
 			kbMaterialComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
 				Shader = .\assets\shaders\environment\environmentbase.kbshader
 				ShaderParams = 4
 					kbShaderParamComponent { 
@@ -1554,6 +1572,7 @@ kbGameEntity 0 0 0 0 {
 			kbMaterialComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
 				Shader = .\assets\shaders\lights\directionallighttoon.kbshader
 				ShaderParams = 12
 					kbShaderParamComponent { 
@@ -1700,6 +1719,7 @@ kbGameEntity 0 0 0 0 {
 			kbMaterialComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
 				Shader = .\assets\shaders\fx\particle_blendadd.kbshader
 				ShaderParams = 2
 					kbShaderParamComponent { 
@@ -1816,6 +1836,7 @@ kbGameEntity 0 0 0 0 {
 			kbMaterialComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
 				Shader = .\assets\shaders\fx\particle_blendadd.kbshader
 				ShaderParams = 2
 					kbShaderParamComponent { 
@@ -1918,6 +1939,7 @@ kbGameEntity 0 0 0 0 {
 			kbMaterialComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
 				Shader = .\assets\shaders\fx\particle_blendadd.kbshader
 				ShaderParams = 2
 					kbShaderParamComponent { 
@@ -2036,8 +2058,9 @@ kbGameEntity 0 0 0 0 {
 			kbMaterialComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
 				Shader = .\assets\shaders\skybox\clouddome_smoothstep.kbshader
-				ShaderParams = 5
+				ShaderParams = 7
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
@@ -2072,6 +2095,20 @@ kbGameEntity 0 0 0 0 {
 						ParamName = "cloudEmissive"
 						Texture = NULL
 						Vector = 0.000000 0.000000 0.000000 1.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "sunDiscColor"
+						Texture = NULL
+						Vector = 555.000000 55.000000 5555.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "sunDiscParams"
+						Texture = NULL
+						Vector = 1.000000 1.000000 1.000000 0.000000
 					}
 			}
 		RenderPass = TranslucentWithDepthPass
@@ -2111,6 +2148,7 @@ kbGameEntity 0 0 0 0 {
 			kbMaterialComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
 				Shader = .\assets\shaders\skybox\overheadcloudplane.kbshader
 				ShaderParams = 5
 					kbShaderParamComponent { 
@@ -2171,6 +2209,7 @@ kbGameEntity 0 0 0 0 {
 			kbMaterialComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
 				Shader = .\assets\shaders\skybox\clouddome_static.kbshader
 				ShaderParams = 2
 					kbShaderParamComponent { 
@@ -2210,6 +2249,7 @@ kbGameEntity 0 0 0 0 {
 			kbMaterialComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
 				Shader = .\assets\shaders\character\characterbase_noskinning.kbshader
 				ShaderParams = 5
 					kbShaderParamComponent { 
@@ -2230,27 +2270,28 @@ kbGameEntity 0 0 0 0 {
 						Enabled = 0
 						LifeTime =  -1.000000
 						ParamName = "colorTexture"
-						Texture = .\assets\models\characters\Izzy_Combat\headband.jpg
+						Texture = .\assets\models\characters\izzy_combat\headband.jpg
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
 						ParamName = "hatchTexture1"
-						Texture = .\assets\models\characters\Izzy_Combat\tam_1.tif
+						Texture = .\assets\models\characters\izzy_combat\tam_1.tif
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
 						ParamName = "hatchTexture2"
-						Texture = .\assets\models\characters\Izzy_Combat\tam_2.tif
+						Texture = .\assets\models\characters\izzy_combat\tam_2.tif
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 			}
 			kbMaterialComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
 				Shader = .\assets\shaders\character\characterbase_noskinning.kbshader
 				ShaderParams = 5
 					kbShaderParamComponent { 
@@ -2271,27 +2312,28 @@ kbGameEntity 0 0 0 0 {
 						Enabled = 0
 						LifeTime =  -1.000000
 						ParamName = "colorTexture"
-						Texture = .\assets\models\characters\Izzy_Combat\hair.tif
+						Texture = .\assets\models\characters\izzy_combat\hair.tif
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
 						ParamName = "hatchTexture1"
-						Texture = .\assets\models\characters\Izzy_Combat\tam_1.tif
+						Texture = .\assets\models\characters\izzy_combat\tam_1.tif
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
 						ParamName = "hatchTexture2"
-						Texture = .\assets\models\characters\Izzy_Combat\tam_2.tif
+						Texture = .\assets\models\characters\izzy_combat\tam_2.tif
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 			}
 			kbMaterialComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
 				Shader = .\assets\shaders\character\characterbase_noskinning.kbshader
 				ShaderParams = 5
 					kbShaderParamComponent { 
@@ -2305,21 +2347,21 @@ kbGameEntity 0 0 0 0 {
 						Enabled = 0
 						LifeTime =  -1.000000
 						ParamName = "colorTexture"
-						Texture = .\assets\models\characters\Izzy_Combat\izzy_combat.bmp
+						Texture = .\assets\models\characters\izzy_combat\izzy_combat.bmp
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
 						ParamName = "hatchTexture1"
-						Texture = .\assets\models\characters\Izzy_Combat\tam_1.tif
+						Texture = .\assets\models\characters\izzy_combat\tam_1.tif
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
 						ParamName = "hatchTexture2"
-						Texture = .\assets\models\characters\Izzy_Combat\tam_2.tif
+						Texture = .\assets\models\characters\izzy_combat\tam_2.tif
 						Vector = 0.050000 0.000000 0.000000 0.000000
 					}
 					kbShaderParamComponent { 
@@ -2333,6 +2375,7 @@ kbGameEntity 0 0 0 0 {
 			kbMaterialComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
 				Shader = .\assets\shaders\character\characterbase_noskinning.kbshader
 				ShaderParams = 5
 					kbShaderParamComponent { 
@@ -2346,21 +2389,21 @@ kbGameEntity 0 0 0 0 {
 						Enabled = 0
 						LifeTime =  -1.000000
 						ParamName = "colorTexture"
-						Texture = .\assets\models\characters\Izzy_Combat\eye.tif
+						Texture = .\assets\models\characters\izzy_combat\eye.tif
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
 						ParamName = "hatchTexture1"
-						Texture = .\assets\models\characters\Izzy_Combat\tam_1.tif
+						Texture = .\assets\models\characters\izzy_combat\tam_1.tif
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
 						ParamName = "hatchTexture2"
-						Texture = .\assets\models\characters\Izzy_Combat\tam_2.tif
+						Texture = .\assets\models\characters\izzy_combat\tam_2.tif
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 					kbShaderParamComponent { 
@@ -2374,6 +2417,7 @@ kbGameEntity 0 0 0 0 {
 			kbMaterialComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
 				Shader = .\assets\shaders\character\characterbase_noskinning.kbshader
 				ShaderParams = 5
 					kbShaderParamComponent { 
@@ -2394,27 +2438,27 @@ kbGameEntity 0 0 0 0 {
 						Enabled = 0
 						LifeTime =  -1.000000
 						ParamName = "colorTexture"
-						Texture = .\assets\models\characters\Izzy_Combat\face.tif
+						Texture = .\assets\models\characters\izzy_combat\face.tif
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
 						ParamName = "hatchTexture1"
-						Texture = .\assets\models\characters\Izzy_Combat\tam_1.tif
+						Texture = .\assets\models\characters\izzy_combat\tam_1.tif
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
 						ParamName = "hatchTexture2"
-						Texture = .\assets\models\characters\Izzy_Combat\tam_2.tif
+						Texture = .\assets\models\characters\izzy_combat\tam_2.tif
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 			}
 		RenderPass = LightingPass
 		TranslucencySortBias =  0.000000
-		Model = .\assets\models\characters\Izzy_Combat\izzy.fbx
+		Model = .\assets\models\characters\izzy_combat\izzy.fbx
 	}
 	kbSkeletalModelComponent { 
 		Enabled = 1
@@ -2424,13 +2468,14 @@ kbGameEntity 0 0 0 0 {
 			kbMaterialComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
 				Shader = .\assets\shaders\character\characteroutline_noskinning.kbshader
 				ShaderParams = 2
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
 						ParamName = "colorTexture"
-						Texture = .\assets\models\characters\Izzy_Combat\headband.jpg
+						Texture = .\assets\models\characters\izzy_combat\headband.jpg
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 					kbShaderParamComponent { 
@@ -2444,46 +2489,7 @@ kbGameEntity 0 0 0 0 {
 			kbMaterialComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
-				Shader = .\assets\shaders\character\characteroutline_noskinning.kbshader
-				ShaderParams = 2
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "colorTexture"
-						Texture = NULL
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "outlineParams"
-						Texture = NULL
-						Vector = 0.010000 5.000000 0.000000 0.000000
-					}
-			}
-			kbMaterialComponent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				Shader = .\assets\shaders\character\characteroutline_noskinning.kbshader
-				ShaderParams = 2
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "colorTexture"
-						Texture = .\assets\models\characters\Izzy_Combat\izzy_combat.bmp
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "outlineParams"
-						Texture = NULL
-						Vector = 0.010000 5.000000 0.000000 0.000000
-					}
-			}
-			kbMaterialComponent { 
-				Enabled = 0
-				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
 				Shader = .\assets\shaders\character\characteroutline_noskinning.kbshader
 				ShaderParams = 2
 					kbShaderParamComponent { 
@@ -2504,6 +2510,49 @@ kbGameEntity 0 0 0 0 {
 			kbMaterialComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\character\characteroutline_noskinning.kbshader
+				ShaderParams = 2
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorTexture"
+						Texture = .\assets\models\characters\izzy_combat\izzy_combat.bmp
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "outlineParams"
+						Texture = NULL
+						Vector = 0.010000 5.000000 0.000000 0.000000
+					}
+			}
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\character\characteroutline_noskinning.kbshader
+				ShaderParams = 2
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorTexture"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "outlineParams"
+						Texture = NULL
+						Vector = 0.010000 5.000000 0.000000 0.000000
+					}
+			}
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
 				Shader = .\assets\shaders\character\characteroutline_noskinning.kbshader
 				ShaderParams = 2
 					kbShaderParamComponent { 
@@ -2517,13 +2566,13 @@ kbGameEntity 0 0 0 0 {
 						Enabled = 0
 						LifeTime =  -1.000000
 						ParamName = "colorTexture"
-						Texture = .\assets\models\characters\Izzy_Combat\face.tif
+						Texture = .\assets\models\characters\izzy_combat\face.tif
 						Vector = 0.100000 5.000000 0.000000 0.000000
 					}
 			}
 		RenderPass = LightingPass
 		TranslucencySortBias =  0.000000
-		Model = .\assets\models\characters\Izzy_Combat\izzy.fbx
+		Model = .\assets\models\characters\izzy_combat\izzy.fbx
 	}
 }
 kbGameEntity 0 0 0 0 {
@@ -2543,19 +2592,20 @@ kbGameEntity 0 0 0 0 {
 			kbMaterialComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
 				Shader = .\assets\shaders\character\characterbase.kbshader
 				ShaderParams = 1
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
 						ParamName = "colorTexture"
-						Texture = .\assets\models\characters\Izzy_Combat\headband.jpg
+						Texture = .\assets\models\characters\izzy_combat\headband.jpg
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 			}
 		RenderPass = LightingPass
 		TranslucencySortBias =  0.000000
-		Model = .\assets\models\characters\Izzy_Combat\headband2.ms3d
+		Model = .\assets\models\characters\izzy_combat\headband2.ms3d
 		Animations = 0
 		DebugAnimIndex = -1
 		IsFirstPersonModel = 0
@@ -2932,19 +2982,20 @@ kbGameEntity 0 0 0 0 {
 			kbMaterialComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
 				Shader = .\assets\shaders\character\characterbase.kbshader
 				ShaderParams = 1
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
 						ParamName = "colorTexture"
-						Texture = .\assets\models\characters\Izzy_Combat\headband.jpg
+						Texture = .\assets\models\characters\izzy_combat\headband.jpg
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 			}
 		RenderPass = LightingPass
 		TranslucencySortBias =  0.000000
-		Model = .\assets\models\characters\Izzy_Combat\headband2.ms3d
+		Model = .\assets\models\characters\izzy_combat\headband2.ms3d
 		Animations = 0
 		DebugAnimIndex = -1
 		IsFirstPersonModel = 0
@@ -3321,6 +3372,7 @@ kbGameEntity 0 0 0 0 {
 			kbMaterialComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
 				Shader = .\assets\shaders\character\characterbase.kbshader
 				ShaderParams = 1
 					kbShaderParamComponent { 
@@ -4221,6 +4273,7 @@ kbGameEntity 0 0 0 0 {
 			kbMaterialComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
 				Shader = .\assets\shaders\environment\flag.kbshader
 				ShaderParams = 6
 					kbShaderParamComponent { 

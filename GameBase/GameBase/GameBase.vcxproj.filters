@@ -164,6 +164,9 @@
     <None Include="assets\shaders\Character\characterOutline_NoSkinning.kbShader">
       <Filter>Shaders\Character</Filter>
     </None>
+    <None Include="assets\shaders\FX\basicDistortion.kbShader">
+      <Filter>Shaders\FX</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameBase.h">

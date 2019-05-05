@@ -1,5 +1,5 @@
 //==============================================================================
-// cloudDomeAlphaBlend.kbShader
+// cloudDome_SmoothStep.kbShader
 //
 // 2019	kbEngine 2.0
 //==============================================================================
@@ -15,6 +15,8 @@ cbuffer matrixBuffer {
 	float4 cloudEmissive;
 	float4 lightShaftsDir;
 	float4 lightShaftsColor;
+	float4 sunDiscColor;
+	float4 sunDiscParams;		// x: Dot min
 };
 
 //-------------------------------------
@@ -101,7 +103,7 @@ SamplerState LinearSampler;
 	const float edgeFade = 1.0f - smoothstep( 0.25f, 0.0f, input.uv.y );
 	outColor.a *= edgeFade * cloudColor.a;
 
-	float3 lightDir = 2000000.0f * normalize( float3( -0.958466f, 0.268476f, 0.096246f ) );
+	float3 lightDir = 2000000.0f * lightShaftsDir.xyz;//normalize( float3( -0.958466f, 0.268476f, 0.096246f ) );
 	lightDir -= input.worldPos;
 	lightDir = normalize( lightDir );
 	
@@ -118,18 +120,18 @@ SamplerState LinearSampler;
 	output.Color.w = outColor.a;
 
 	float3 fromCam = normalize( input.worldPos - cameraPos.xyz );
-	float3 sunDir = normalize( float3( -0.958466, 0.268476, 0.096246 ) );//float3( -0.958466f, 0.268476f, 0.096246f ) );
-	float sunIntensity = saturate( ( dot( fromCam, sunDir ) - 0.98f ) / 0.02f );
+	float3 sunDir = lightShaftsDir.xyz;
+	float sunIntensity = saturate( ( dot( fromCam, sunDir ) - (sunDiscParams.x) ) / (1.0f - sunDiscParams.x) );
 	sunIntensity = pow( sunIntensity, 3.f ) * 1.5f;
 
 	
 	if ( outColor.w < 0.45f ) {
 		output.Depth.r = 0;
 		output.Depth.g = 0.0f;
-	output.Color.xyz += sunIntensity * cloudColor.xyz * float3( 0.005421, 0.004000, 0.000500 ).xyz * 105;
+	output.Color.xyz += sunIntensity * lightShaftsColor.xyz * sunDiscColor.xyz;
 
 	} else {
-	output.Color.xyz += sunIntensity * cloudColor.xyz * float3( 0.005421, 0.004000, 0.000500 ).xyz * 105;
+	output.Color.xyz += sunIntensity * lightShaftsColor.xyz * sunDiscColor.xyz;
 		output.Depth.r = input.position2.z / input.position2.w;// / input.position2.y;
 		output.Depth.g = 1;
 	}
