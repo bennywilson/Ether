@@ -17,7 +17,7 @@ cbuffer matrixBuffer {
 	float4				cameraPosition;
 	float4				diffuseColorBand;
 	float4				specularColorBand;
-	float4				rimParams;
+	float4				rimParams;			// x: Lower dot, y: Upper dot, z: final multiplier
 	float4				rimColor;
 	float4				nonToonDiffuseScaleAndBias;
 	float4				shadowParams;		// x - depth bias

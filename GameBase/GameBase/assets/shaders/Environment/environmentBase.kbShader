@@ -104,7 +104,10 @@ Texture2D emissiveMap(black)		: register(t3);
 	}*/
 
 	float3 tangentNormal = normalize( normalMap.xyz * 2.0f - 1.0f );
-	output.Normal.xyz = normalize( float3( input.TBN0.z, input.TBN1.z, input.TBN2.z ) );//		//mul( tangentNormal, TBN );
+	output.Normal.x = dot( tangentNormal, float3( input.TBN0.x, input.TBN1.x, input.TBN2.x ) );//		//mul( tangentNormal, TBN );
+	output.Normal.y = dot( tangentNormal, float3( input.TBN0.y, input.TBN1.y, input.TBN2.y ) );//		//mul( tangentNormal, TBN );
+	output.Normal.z = dot( tangentNormal, float3( input.TBN0.z, input.TBN1.z, input.TBN2.z ) );//		//mul( tangentNormal, TBN );
+
 	output.Normal.w = 0.5f;//normalMap.w;
 	return output;
 }

@@ -1,89 +1,116 @@
-//==============================================================================
-// Decal_Blend.kbShader
+//===================================================================================================
+// decal_Blend.kbShader
 //
-// 2018 kbEngine 2.0
-//==============================================================================
+//
+// 2019 kbEngine 2.0
+//===================================================================================================
 cbuffer matrixBuffer {
 	matrix modelMatrix;
-	matrix modelViewMatrix;
-	matrix viewMatrix;
 	matrix mvpMatrix;
-	matrix projection;
-	matrix inverseProjection;
-	matrix viewProjection;
-	float4 cameraPos;
-};
+	matrix inverseViewProjection;
+	matrix inverseModelMatrix;
+	float4 edgeFadeColor;		// xyz: Color edge will fade out to.
+	float4 edgeFadeParams;		// x: Start fade Dist, y: End fade Dist, z: Use Fade
+	float4 distortionParams;	// x: U offset, y: V offset, z: Magnitude
+	float4 cameraPosition;
+}
 
 kbShaderState {
-	srcblend Blend_SrcAlpha
+	//cullMode cullmode_frontfaces
+	srcBlend Blend_SrcAlpha
 	dstBlend Blend_InvSrcAlpha
 	blendOp BlendOp_Add
-	colorWriteEnable ColorWriteEnable_rgb
+
+	srcBlendAlpha Blend_One
+	dstBlendAlpha Blend_Zero
+	blendOpAlpha BlendOp_Add
 }
 
 //-------------------------------------
 struct vertexInput {
-	float4 position					: POSITION;
-	float2 uv						: TEXCOORD0;
-	float4 color					: COLOR;
-	float2 size						: TEXCOORD1;
-	float4 rotationAndDirection		: TEXCOORD2;
-	float4 billboardType			: TEXCOORD3;
+	float4 position			: POSITION;
+	float2 uv				: TEXCOORD0;
+	float4 color			: COLOR;
+	float4 normal			: NORMAL;
+	float4 tangent			: TANGENT;
 };
 
 //-------------------------------------
 struct pixelInput {
-	float4 position               : SV_POSITION;
-	float2 uv                     : TEXCOORD0;
-	float4 color                  : COLOR;
-	float2 position2              : TEXCOORD1;
-	float3 normal                 : TEXCOORD2;
+	float4 position			: SV_POSITION;
+	float4 color			: COLOR;
+	float2 uv				: TEXCOORD0;
+	float3 normal			: TEXCOORD1;
+	float4 screenPos		: TEXCOORD2;
+	float3 worldDir			: TEXCOORD3;
 };
 
-//-------------------------------------
-struct PS_OUTPUT {
-	float4 Color                  : SV_TARGET0;
-};
 
 /**
  *	vertexShader
  */
 pixelInput vertexShader( vertexInput input ) {
-
 	pixelInput output = (pixelInput)(0);
 
-	const float3 particleWorldPos = input.position.xyz;//mul( input.position, modelMatrix ).xyz;
-	
-	float3x3 billboardMatrix;
-
-	// Billboard
-	float3 up = float3( 0.0f, 1.0f, 0.0f );
-	const float3 zAxis = normalize( cameraPos.xyz - particleWorldPos );
-	const float3 xAxis = normalize( cross( up, zAxis ) );
-	const float3 yAxis = normalize( cross( zAxis, xAxis ) );
-	billboardMatrix = float3x3( xAxis, yAxis, zAxis );
-
-	const float3 offset = mul( float3( input.size.x , input.size.y, 0 ), billboardMatrix );
-	output.position = mul( float4( particleWorldPos, 1 ) + float4( offset, 0.0f ), viewProjection );
-
-	output.uv = input.uv * 0.25f;
-	uint atlasIdx = (int)( input.billboardType.w * 16.0f );
-	output.uv.x += ( atlasIdx % 4 ) / 4.0f;
-	output.uv.y += ( atlasIdx / 4 ) / 4.0f;
-	
+	output.position = mul( input.position, mvpMatrix );
+	output.screenPos = output.position;
+	output.uv = input.uv;
 	output.color = input.color;
-	output.position2 = output.position.zw;
-	
+	output.normal.xyz = mul( ( input.normal.xyz * 2.0f ) - 1.0f, (float3x3)modelMatrix );
+	output.worldDir = mul( input.position, modelMatrix ).xyz - cameraPosition.xyz;
 	return output;
 }
 
 /**
  *	pixelShader
  */
-Texture2D shaderTexture;
-SamplerState SampleType;
+SamplerState DefaultSamplerState;
+Texture2D colorTexture(colorBuffer)				: register(t0);
 
- float4 pixelShader( pixelInput	input ) : SV_TARGET {
-	float4 finalColor = shaderTexture.Sample( SampleType, input.uv );
-	return finalColor;
+SamplerState NormalSamplerState;
+Texture2D normalTexture(normalBuffer)			: register(t1);
+
+Texture2D specularTexture(specularBuffer)		: register(t2);
+
+SamplerState DepthSamplerState;
+Texture2D depthTexture(depthBuffer)				: register(t3);
+
+SamplerState ShadowMapSamplerState;
+Texture2D ShadowMap(shadowBuffer)				: register(t4);
+
+Texture2D ProjectionTex;
+
+float4 pixelShader( pixelInput input ) : SV_TARGET {
+	float4 diffuseColor = colorTexture.Sample( DefaultSamplerState, input.uv );
+	float4 normal = normalTexture.Sample( NormalSamplerState, input.uv );
+	float4 specColor = specularTexture.Sample( DefaultSamplerState, input.uv );
+	
+	normal.xyz = normalize( normal.xyz );
+
+	float4 screenCoord = input.screenPos / input.screenPos.w;
+	float2 screenUV = screenCoord.xy * 0.5f + 0.5f;
+	screenUV.y = 1.0f - screenUV.y;
+	float4 worldPos = float4( screenCoord.xy, depthTexture.Sample( DepthSamplerState, screenUV ).r, 1 );
+	worldPos = mul( worldPos, inverseViewProjection );
+	worldPos /= worldPos.w;
+
+//	if ( length( worldPos.xyz - modelMatrix[3].xyz ) < 3)
+	//	return 1;
+
+	float4 localPos = mul( worldPos, inverseModelMatrix );
+//	localPos.xy 
+	//if ( length( localPos.yz - float2( 0.5f, 0.5f ) ) < 0.2f )
+	//	return 1;
+	float2 finalUV = localPos.zy;
+
+	//finalUV /= 0.5;
+	finalUV = finalUV * 0.5f + 0.5f;
+	finalUV.y = 1.0f - finalUV.y;
+	if ( finalUV.x < 0.1f || finalUV.x > 0.9f || finalUV.y < 0.1f || finalUV.y > 0.9f )
+		clip(-1);
+//				const half2 oneMinusDistToEdge = 0.5f - abs(finalUV - float2(0.5f, 0.5f));
+	//			clip(oneMinusDistToEdge - 0.001f);
+
+	return ProjectionTex.Sample( DefaultSamplerState, finalUV );
+	//return 0;
 }
