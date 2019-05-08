@@ -106,6 +106,7 @@
     <None Include="assets\shaders\FX\basicDistortion.kbShader" />
     <None Include="assets\shaders\FX\basicFire.kbShader" />
     <None Include="assets\shaders\FX\basicSmoke.kbShader" />
+    <None Include="assets\shaders\FX\decal_Blend.kbShader" />
     <None Include="assets\shaders\FX\emberParticle.kbShader" />
     <None Include="assets\shaders\FX\particleAtlas.kbShader" />
     <None Include="assets\shaders\FX\Particle_BlendAdd.kbShader" />

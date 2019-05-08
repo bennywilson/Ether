@@ -45,28 +45,6 @@ kbGameEntity 0 0 0 0 {
 		Model = .\assets\models\skydomes\skydomes.ms3d
 	}
 }
-kbGameEntity 2609040299 1100347930 3115268521 1892043160 {
-	kbTransformComponent { 
-		Enabled = 0
-		LifeTime =  -1.000000
-		Name = "Light Shafts"
-		Orientation = -0.053297 -0.887712 0.167792 0.425410
-		Position = 3712.549805 586.207336 725.149780
-		Scale = 1.000000 1.000000 1.000000
-	}
-	kbLightShaftsComponent { 
-		Enabled = 1
-		LifeTime =  -1.000000
-		BaseHeight =  0.750000
-		BaseWidth =  0.750000
-		Color = 0.005000 0.005000 0.005000 1.000000
-		Directional = 1
-		IterationHeight =  0.001500
-		IterationWidth =  0.001500
-		NumIteractions = 48
-		Texture = ..\..\kbengine\assets\textures\flare.jpg
-	}
-}
 kbGameEntity 0 0 0 0 {
 	kbTransformComponent { 
 		Enabled = 0
@@ -2252,7 +2230,7 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadow = 0
-		Materials = 4
+		Materials = 5
 			kbMaterialComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
@@ -2306,6 +2284,20 @@ kbGameEntity 0 0 0 0 {
 						LifeTime =  -1.000000
 						ParamName = "colorTexture"
 						Texture = .\assets\visualtarget\reuben\reuben\reubenoutfitbase_color.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\character\characterbase.kbshader
+				ShaderParams = 1
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorTexture"
+						Texture = .\assets\visualtarget\reuben\reuben\machete.jpg
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 			}
@@ -2453,7 +2445,7 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadow = 0
-		Materials = 4
+		Materials = 5
 			kbMaterialComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
@@ -2510,6 +2502,20 @@ kbGameEntity 0 0 0 0 {
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 			}
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\character\characterbase.kbshader
+				ShaderParams = 1
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorTexture"
+						Texture = .\assets\visualtarget\reuben\soldier\basesoldieroutfit_color.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
 		RenderPass = LightingPass
 		TranslucencySortBias =  0.000000
 		Model = .\assets\visualtarget\reuben\soldier\basesoldier.ms3d
@@ -2517,7 +2523,7 @@ kbGameEntity 0 0 0 0 {
 			EtherAnimComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
-				Animation = .\assets\visualtarget\reuben\soldier\basesoldier_run.kbanim.ms3d
+				Animation = .\assets\visualtarget\reuben\soldier\basesoldier_run2.kbanim.ms3d
 				AnimationEvent = 0
 				AnimationName = ""
 				IsLooping = 0
@@ -2654,7 +2660,7 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadow = 0
-		Materials = 4
+		Materials = 5
 			kbMaterialComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
@@ -2665,7 +2671,7 @@ kbGameEntity 0 0 0 0 {
 						Enabled = 0
 						LifeTime =  -1.000000
 						ParamName = "colorTexture"
-						Texture = .\assets\visualtarget\reuben\soldier\basesoldierface.jpg
+						Texture = .\assets\visualtarget\reuben\soldier\afrocubansoldier1_face.jpg
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 			}
@@ -2693,7 +2699,21 @@ kbGameEntity 0 0 0 0 {
 						Enabled = 0
 						LifeTime =  -1.000000
 						ParamName = "colorTexture"
-						Texture = .\assets\visualtarget\reuben\soldier\basesoldieroutfit_color.jpg
+						Texture = .\assets\visualtarget\reuben\soldier\afrocubansoldieroutfit_color.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\character\characterbase.kbshader
+				ShaderParams = 1
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorTexture"
+						Texture = .\assets\visualtarget\reuben\soldier\afrocubansoldieroutfit_color.jpg
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 			}
@@ -2855,7 +2875,7 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadow = 0
-		Materials = 4
+		Materials = 5
 			kbMaterialComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
@@ -2912,6 +2932,20 @@ kbGameEntity 0 0 0 0 {
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 			}
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\character\characterbase.kbshader
+				ShaderParams = 1
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorTexture"
+						Texture = .\assets\visualtarget\reuben\soldier\basesoldieroutfit_color.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
 		RenderPass = LightingPass
 		TranslucencySortBias =  0.000000
 		Model = .\assets\visualtarget\reuben\soldier\basesoldier.ms3d
@@ -2919,7 +2953,7 @@ kbGameEntity 0 0 0 0 {
 			EtherAnimComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
-				Animation = .\assets\visualtarget\reuben\soldier\basesoldier_run.kbanim.ms3d
+				Animation = .\assets\visualtarget\reuben\soldier\basesoldier_run3.kbanim.ms3d
 				AnimationEvent = 0
 				AnimationName = ""
 				IsLooping = 0
@@ -3056,7 +3090,7 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadow = 0
-		Materials = 4
+		Materials = 5
 			kbMaterialComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
@@ -3110,6 +3144,20 @@ kbGameEntity 0 0 0 0 {
 						LifeTime =  -1.000000
 						ParamName = "colorTexture"
 						Texture = .\assets\visualtarget\reuben\soldier\basesoldieroutfit_color.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\fx\emberparticle.kbshader
+				ShaderParams = 1
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "shaderTexture"
+						Texture = NULL
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 			}
@@ -3257,7 +3305,7 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadow = 0
-		Materials = 4
+		Materials = 5
 			kbMaterialComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
@@ -3283,6 +3331,20 @@ kbGameEntity 0 0 0 0 {
 						LifeTime =  -1.000000
 						ParamName = "colorTexture"
 						Texture = .\assets\visualtarget\reuben\soldier\basesoldiereye.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\character\characterbase.kbshader
+				ShaderParams = 1
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorTexture"
+						Texture = .\assets\visualtarget\reuben\soldier\basesoldieroutfit_color.jpg
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 			}
@@ -6406,5 +6468,182 @@ kbGameEntity 0 0 0 0 {
 					}
 			}
 		CascadedShadowSplits = 0
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Entity_64"
+		Orientation = 0.000000 0.000000 -0.667678 0.744451
+		Position = 3687.167236 578.897095 839.696777
+		Scale = 7.000000 7.000000 7.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		Materials = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\fx\decal_modulate.kbshader
+				ShaderParams = 8
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "inverseModelMatrix"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "decalParams1"
+						Texture = NULL
+						Vector = 11.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorTexture"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "normalTexture"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "specularTexture"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "depthTexture"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "ShadowMap"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "ProjectionTex"
+						Texture = .\assets\visualtarget\reuben\bloodsplat.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		RenderPass = LightingPass
+		TranslucencySortBias =  0.000000
+		Model = .\assets\models\test\unitcube.ms3d
+	}
+}
+kbGameEntity 2609040299 1100347930 3115268521 1892043160 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Light Shafts"
+		Orientation = -0.016860 -0.898779 0.091552 0.428404
+		Position = 3712.549805 700.000000 725.149780
+		Scale = 1.000000 1.000000 1.000000
+	}
+	kbLightShaftsComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		BaseHeight =  0.750000
+		BaseWidth =  0.750000
+		Color = 0.005000 0.005000 0.005000 1.000000
+		Directional = 1
+		IterationHeight =  0.001500
+		IterationWidth =  0.001500
+		NumIteractions = 48
+		Texture = ..\..\kbengine\assets\textures\flare.jpg
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Entity_65"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 3666.106445 703.148010 948.576233
+		Scale = 1.000000 1.000000 1.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		Materials = 0
+		RenderPass = LightingPass
+		TranslucencySortBias =  0.000000
+		Model = NULL
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Entity_66"
+		Orientation = 0.602754 -0.470530 -0.447808 0.463418
+		Position = 3625.255127 703.153748 862.879883
+		Scale = 12.000000 12.000000 12.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		Materials = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\environment\environmentbase.kbshader
+				ShaderParams = 4
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "diffuse"
+						Texture = .\assets\visualtarget\reuben\machete.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "normal"
+						Texture = .\assets\test\flatnormal.bmp
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "propertyMap"
+						Texture = .\assets\test\black.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "emissiveMap"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		RenderPass = LightingPass
+		TranslucencySortBias =  0.000000
+		Model = .\assets\visualtarget\reuben\machete.fbx
 	}
 }
