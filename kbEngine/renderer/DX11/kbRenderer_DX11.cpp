@@ -3241,10 +3241,10 @@ void kbRenderer_DX11::RenderMesh( const kbRenderSubmesh *const pRenderMesh, cons
     }
 
 	const kbModel::mesh_t & pMesh = pModel->GetMeshes()[pRenderMesh->GetMeshIdx()];
-	const kbMaterial & meshMaterial = pModel->GetMaterials()[pMesh.m_MaterialIndex];
+	const kbMaterial *const pMeshMaterial = ( pMesh.m_MaterialIndex < pModel->GetMaterials().size() ) ? ( &pModel->GetMaterials()[pMesh.m_MaterialIndex] ) : ( nullptr );
 
 	// Get Shader
-	const kbShader * pShader = meshMaterial.GetShader();
+	const kbShader * pShader = ( pMeshMaterial != nullptr ) ? ( pMeshMaterial->GetShader() ) : ( nullptr );
 	ECullMode cullMode = CullMode_ShaderDefault;
 
 	if ( bShadowPass ) {
@@ -3277,15 +3277,19 @@ void kbRenderer_DX11::RenderMesh( const kbRenderSubmesh *const pRenderMesh, cons
 
 	if ( m_ViewMode == ViewMode_Wireframe ) {
 		m_pDeviceContext->RSSetState( m_pWireFrameRasterizerState );
-	} else if ( pShader->GetCullMode() == CullMode_BackFaces ) {
-		m_pDeviceContext->RSSetState( m_pDefaultRasterizerState );
-	} else if ( pShader->GetCullMode() == CullMode_None ) {
-		m_pDeviceContext->RSSetState( m_pNoFaceCullingRasterizerState );
-	} else if ( pShader->GetCullMode() == CullMode_FrontFaces ) {
-		m_pDeviceContext->RSSetState( m_pFrontFaceCullingRasterizerState );
-	}  else {
-		kbError( "kbRenderer_DX11::RenderMesh() - Unsupported culling mode" );
+	} else {
+	
+		if ( cullMode == CullMode_BackFaces ) {
+			m_pDeviceContext->RSSetState( m_pDefaultRasterizerState );
+		} else if ( cullMode == CullMode_None ) {
+			m_pDeviceContext->RSSetState( m_pNoFaceCullingRasterizerState );
+		} else if ( cullMode == CullMode_FrontFaces ) {
+			m_pDeviceContext->RSSetState( m_pFrontFaceCullingRasterizerState );
+		}  else {
+			kbError( "kbRenderer_DX11::RenderMesh() - Unsupported culling mode" );
+		}
 	}
+
 
 	m_pDeviceContext->IASetInputLayout( (ID3D11InputLayout*)pShader->GetVertexLayout() );
 	m_pDeviceContext->VSSetShader( (ID3D11VertexShader *)pShader->GetVertexShader(), nullptr, 0 );
@@ -3319,15 +3323,8 @@ void kbRenderer_DX11::RenderMesh( const kbRenderSubmesh *const pRenderMesh, cons
 	}
 
 	// Set textures
-	const std::vector<const kbTexture*> & textureList = meshMaterial.GetTextureList();
-
-		ID3D11SamplerState *const  SamplerStates[] = { m_pBasicSamplerState, m_pNormalMapSamplerState, m_pBasicSamplerState, m_pBasicSamplerState };	// todo: Grass uses this for sampling time
-		m_pDeviceContext->PSSetSamplers( 0, 4, SamplerStates );
-
-	for ( int i = 0; i < textureList.size(); i++ ) {
-		ID3D11ShaderResourceView *const texture = ( textureList[i] != nullptr ) ? (ID3D11ShaderResourceView *)textureList[i]->GetGPUTexture() : (nullptr);
-		m_pDeviceContext->PSSetShaderResources( i, 1, &texture );
-	}
+	ID3D11SamplerState *const  SamplerStates[] = { m_pBasicSamplerState, m_pNormalMapSamplerState, m_pBasicSamplerState, m_pBasicSamplerState };	// todo: Grass uses this for sampling time
+	m_pDeviceContext->PSSetSamplers( 0, 4, SamplerStates );
 
 	// Get a valid constant buffer and bind the kbShader's vars to it
 	const kbShaderVarBindings_t & shaderVarBindings = pShader->GetShaderVarBindings();
@@ -3872,6 +3869,10 @@ ID3D11Buffer * kbRenderer_DX11::SetConstantBuffer( const kbShaderVarBindings_t &
 		} else if ( varName == "inverseViewProjection" ) {
 			kbMat4 *const pMatOffset = (kbMat4*)pVarByteOffset;
 			*pMatOffset = m_pCurrentRenderWindow->GetInverseViewProjection();
+		} else if ( varName == "inverseModelMatrix" ) {
+			kbMat4 *const pMatOffset = (kbMat4*)pVarByteOffset;
+			XMMATRIX inverseWorldMatrix = XMMatrixInverse( nullptr, XMMATRIXFromkbMat4( worldMatrix ) );
+			*pMatOffset = kbMat4FromXMMATRIX( inverseWorldMatrix );
 		} else if ( varName == "boneList" ) {
 			if ( pRenderObject != nullptr ) {
 				kbMat4 *const boneMatrices = (kbMat4*)pVarByteOffset;

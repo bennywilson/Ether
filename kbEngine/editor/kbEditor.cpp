@@ -746,10 +746,11 @@ void kbEditor::AdjustCameraSpeedCB( class Fl_Widget * widget, void * ) {
 /**
  *	kbEditor::ToggleIconsCB
  */
+bool g_bBillboardsEnabled = true;
 void kbEditor::ToggleIconsCB( Fl_Widget * widget, void * userData ) {
-	static bool bBillboardsEnabled = true;
-	bBillboardsEnabled = !bBillboardsEnabled;
-	g_pRenderer->EnableDebugBillboards( bBillboardsEnabled );
+
+	g_bBillboardsEnabled = !g_bBillboardsEnabled;
+	g_pRenderer->EnableDebugBillboards( g_bBillboardsEnabled );
 }
 
 /**

@@ -48,7 +48,8 @@ SamplerState DepthSamplerState;
 Texture2D depthTexture;
 
 float4 pixelShader( pixelInput input ) : SV_TARGET {
-	const float depth = depthTexture.Sample( DepthSamplerState, input.uv ).r;
+	float depth = depthTexture.Sample( DepthSamplerState, input.uv ).r;
+	if ( depth == 1.0f ) depth = 0.0f;
 	const float2 offScreen = sign(saturate( 1.0f - abs( ( input.uv * 2.0f ) - 1.0f ) ) ); // Use vertex interpolants instead?
 	float4 retVal = 1.5f * flareTexture.Sample( FlareSampleState, input.position2.xy ) * ( 1.0f - sign( depth ) ) * color * min(offScreen.x, offScreen.y);
 	retVal.w = 0;

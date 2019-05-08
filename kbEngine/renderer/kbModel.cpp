@@ -260,19 +260,16 @@ bool kbModel::LoadMS3D() {
 		ibIndex += currentMesh.m_NumTriangles * 3;
 
 		for ( uint iTris = 0; iTris < currentMesh.m_NumTriangles; iTris++ ) {
-			currentMesh.m_TriangleIndices[iTris] = *( ushort *) pPtr;
+			currentMesh.m_TriangleIndices[iTris] = *(ushort *) pPtr;
 			pPtr += sizeof( ushort );
 		}
 
-		currentMesh.m_MaterialIndex = *( byte * ) pPtr;
+		currentMesh.m_MaterialIndex = *(byte *)pPtr;
 
-		if ( currentMesh.m_MaterialIndex == 255 ) {
-			kbError( "Mesh is missing a material" );
-		}
 		pPtr += sizeof( char );
 	}
 
-	const uint numMaterials = *( ushort * ) pPtr;
+	const uint numMaterials = *(ushort *) pPtr;
 	m_Materials.resize( numMaterials );
 	pPtr += sizeof( ushort );
 
@@ -285,8 +282,8 @@ bool kbModel::LoadMS3D() {
 
 	// todo:don't load duplicate textures
 	for ( uint iMat = 0; iMat < numMaterials; iMat++ ) {
-		ms3dMaterial_t * pMat = ( ms3dMaterial_t * ) pPtr;
-		pPtr += sizeof( ms3dMaterial_t );
+		ms3dMaterial_t * pMat = (ms3dMaterial_t *) pPtr;
+		pPtr += sizeof(ms3dMaterial_t);
 
 		m_Materials[iMat].m_DiffuseColor.Set( pMat->m_Diffuse[0], pMat->m_Diffuse[1], pMat->m_Diffuse[2], 1.0f );
 
@@ -1351,7 +1348,19 @@ bool kbAnimation::Load_Internal() {
 	modelFile.open( m_FullFileName, std::ifstream::in | std::ifstream::binary );
 
 	if ( modelFile.fail() ) {
-		kbError( "Error: kbModel::LoadResource_Internal - Failed to load model %s", m_FullFileName.c_str() );
+		int numTries = 5;
+		while( numTries < 2 && modelFile.fail() ) {
+			modelFile.close();
+			Sleep( 2 );
+			modelFile.open( m_FullFileName, std::ifstream::in | std::ifstream::binary );
+			numTries++;
+		}
+
+		if ( modelFile.fail() ) {
+			modelFile.close();
+			kbWarning( "kbModel::LoadResource_Internal - Failed to load model %s", m_FullFileName.c_str() );
+			return false;
+		}
 	}
 	
 	// Find the file size
@@ -1371,7 +1380,7 @@ bool kbAnimation::Load_Internal() {
 	pPtr += sizeof( ms3dHeader_t );
 
 	if ( strncmp( pHeader->m_ID, "MS3D000000", 10 ) != 0 ) {
-		kbError( "Error: kbModel::LoadResource_Internal - Invalid model header %d", pHeader->m_ID );
+		kbError( "Error: kbModel::LoadResource_Internal - Invalid model header %s", pHeader->m_ID );
 	}
 
 	ushort numVertices = *( ushort * ) pPtr;

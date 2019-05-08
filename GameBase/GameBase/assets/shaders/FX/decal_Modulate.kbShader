@@ -10,6 +10,7 @@ cbuffer matrixBuffer {
 	matrix inverseViewProjection;
 	matrix inverseModelMatrix;
 	float4 decalParams1;			// x: floor tolerances
+	float4 decalMask;				// x: Set to 1 to apply to characters, y: Set to 1 to apply to environment
 }
 
 kbShaderState {
@@ -108,6 +109,14 @@ float4 pixelShader( pixelInput input ) : SV_TARGET {
 	finalUV.y = 1.0f - finalUV.y;
 	if ( finalUV.x < 0.1f || finalUV.x > 0.9f || finalUV.y < 0.1f || finalUV.y > 0.9f )
 		clip(-1);
+
+	if ( decalMask.x < 0.5f && normal.w < 0.5f ) {
+		clip(-1);
+	}
+
+	if ( decalMask.y < 0.5f && normal.w >= 0.5f ) {
+		clip(-1);
+	}
 
 	return ProjectionTex.Sample( DefaultSamplerState, finalUV );
 	//return 0;

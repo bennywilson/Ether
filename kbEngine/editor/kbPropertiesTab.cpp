@@ -316,26 +316,35 @@ void kbPropertiesTab::TextFieldCB( Fl_Widget * widget, void * voidPtr ) {
 	kbErrorCheck( userData != nullptr, "kbPropertiesTab::TextFieldCB() - NULL userData passed in" );
 
 	Fl_Input *const inputField = ( Fl_Input * ) widget;
+	std::string inputValue = inputField->value();
+	bool isByte = false;
 	if ( userData->m_VariableType != KBTYPEINFO_KBSTRING ) {
-		if ( IsNumeric( inputField->value() ) == false ) {
-	      return;
+		if ( IsNumeric( inputValue.c_str() ) == false ) {
+			if ( inputValue[inputValue.size() - 1] == 'B' || inputValue[inputValue.size() - 1]  == 'b' ) {
+				inputValue.pop_back();
+				if ( IsNumeric( inputValue.c_str() ) == false ) {
+					return;
+				}
+				isByte = true;
+			}
 	   }
 	}
 
 	void * prevValuePtr = nullptr;
 	void * curValuePtr = nullptr;
 
-	const std::string currentValue = inputField->value();
+	const std::string currentValue = inputValue;
 	inputField->undo();
-	const std::string prevValue = inputField->value();
+	const std::string prevValue = inputValue;
 	inputField->value( currentValue.c_str() );
 
+	const float divisor = ( isByte ) ? ( 255.0f ) : ( 1.0f );
 	if ( userData->m_VariableType == KBTYPEINFO_VECTOR4 || userData->m_VariableType == KBTYPEINFO_VECTOR ) {
 		float & componentVar = *(float*)userData->m_pVariablePtr;
 
 		// TODO - I don't beliece this allocations are cleaned up anywhere
 		prevValuePtr = new float( (float)atof( prevValue.c_str() ) );
-		curValuePtr = new float( (float)atof( currentValue.c_str() ) );
+		curValuePtr = new float( (float)atof( currentValue.c_str() ) / divisor );
 
 		componentVar = *(float*)curValuePtr;
 
@@ -348,7 +357,7 @@ void kbPropertiesTab::TextFieldCB( Fl_Widget * widget, void * voidPtr ) {
 	} else if ( userData->m_VariableType == KBTYPEINFO_FLOAT ) {
 		float & componentVar = *(float*)userData->m_pVariablePtr;
 		prevValuePtr = new float( (float)atof( prevValue.c_str() ) );
-		curValuePtr = new float( (float)atof( currentValue.c_str() ) );
+		curValuePtr = new float( (float)atof( currentValue.c_str() ) / divisor );
 
 		componentVar = *(float*)curValuePtr;
 
