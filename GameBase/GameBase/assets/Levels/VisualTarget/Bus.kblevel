@@ -4397,3 +4397,92 @@ kbGameEntity 0 0 0 0 {
 		Model = .\assets\visualtarget\reuben\bus2.fbx
 	}
 }
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Entity_41"
+		Orientation = -0.027772 0.829348 -0.006899 0.557999
+		Position = -16.767881 10.935239 26.046427
+		Scale = 5.000000 5.000000 5.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		Materials = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\fx\decal_modulate.kbshader
+				ShaderParams = 9
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "inverseModelMatrix"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "decalParams1"
+						Texture = NULL
+						Vector = 1.000000 1.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "decalMask"
+						Texture = NULL
+						Vector = 1.000000 1.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorTexture"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "normalTexture"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "specularTexture"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "depthTexture"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "ShadowMap"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "ProjectionTex"
+						Texture = .\assets\visualtarget\reuben\secag_grey.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		RenderPass = TranslucentPass
+		TranslucencySortBias =  0.000000
+		Model = .\assets\models\test\unitcube.ms3d
+	}
+}

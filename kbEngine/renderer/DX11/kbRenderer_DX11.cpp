@@ -1995,6 +1995,7 @@ void kbRenderer_DX11::RenderMousePickerIds() {
 
 	RenderDebugBillboards( true );
 
+	m_RenderState.SetDepthStencilState( false );	// Allow transform widgets to draw through other models
 	for ( int i = 0; i < m_DebugModels.size(); i++ ) {
 		kbRenderObject renderObject;
 		renderObject.m_pModel = m_DebugModels[i].m_pModel;
@@ -2008,6 +2009,7 @@ void kbRenderer_DX11::RenderMousePickerIds() {
 			RenderMesh( &newMesh, false );
 		}
 	}
+	m_RenderState.SetDepthStencilState();
 }
 
 /**
@@ -2730,6 +2732,7 @@ void kbRenderer_DX11::ReadShaderFile( std::string & shaderText, kbShaderVarBindi
 		for ( int iParamCheck = 0; iParamCheck < numBuiltInParams; iParamCheck++ ) {
 			if ( varNameString == g_BuiltInShaderParams[iParamCheck] ) {
 				bIsUserDefinedVar = false;
+				break;
 			}
 		}
 		pShaderBindings->m_VarBindings.push_back( kbShaderVarBindings_t::binding_t( varName, currOffset, bIsUserDefinedVar ) );

@@ -524,29 +524,6 @@ void EtherGame::RenderSync() {
 		g_ResourceManager.LoadResource( "../../kbEngine/assets/Shaders/basicParticle.kbShader", true );
 		m_pParticleManager->SetCustomAtlasShader( 2, "../../kbEngine/assets/Shaders/basicParticle.kbShader" );
 		m_pParticleManager->SetCustomAtlasTexture( 2, "./assets/FX/MuzzleFlashes/BasicOrange_MuzzleFlash.jpg" );
-	}
-
-	m_RenderThreadShotsThisFrame = m_ShotsThisFrame[m_ShotFrame];
-	m_ShotFrame ^= 1;
-
-	m_ShotsThisFrame[m_ShotFrame].clear();
-
-	UpdateFires_RenderSync();
-}
-
-/**
- *	EtherGame::RenderHookCallBack
- */
-static float g_TimeMultiplier = 0.95f / 0.016f;
-void EtherGame::RenderHookCallBack( kbRenderTexture *const pSrc, kbRenderTexture *const pDst ) {
-	static kbVec3 terrainPos;
-	static float terrainWidth;
-	static float halfTerrainWidth;
-
-	// Initialize
-	static kbTerrainComponent * pTerrain = nullptr;
-
-	if ( m_pBulletHoleRenderTexture == nullptr ) {
 
 		// Bullet Hole FX
 		m_pBulletHoleRenderTexture = g_pRenderer->RT_GetRenderTexture( 4096, 4096, eTextureFormat::KBTEXTURE_R8G8B8A8, false );
@@ -581,13 +558,9 @@ void EtherGame::RenderHookCallBack( kbRenderTexture *const pSrc, kbRenderTexture
 		for ( int i = 0; i < GetGameEntities().size(); i++ ) {
 			kbGameEntity *const pEnt = GetGameEntities()[i];
 			if ( pEnt->GetName().find( "Terrain" ) != std::string::npos ) {
-				pTerrain = (kbTerrainComponent*)pEnt->GetComponentByType( kbTerrainComponent::GetType() );
+				kbTerrainComponent *const pTerrain = (kbTerrainComponent*)pEnt->GetComponentByType( kbTerrainComponent::GetType() );
 				if ( pTerrain != nullptr ) {
 					pTerrain->SetCollisionMap( m_pGrassCollisionTexture );
-
-					terrainPos = pEnt->GetPosition();
-					terrainWidth = pTerrain->GetTerrainWidth();
-					halfTerrainWidth = terrainWidth * 0.5f;
 					break;
 				}
 			}
@@ -597,6 +570,43 @@ void EtherGame::RenderHookCallBack( kbRenderTexture *const pSrc, kbRenderTexture
 		m_pCollisionMapTimeGenShader = (kbShader *) g_ResourceManager.LoadResource( "./assets/shaders/DamageGen/collisionMapTimeGen.kbshader", true );
 		m_pBulletHoleUpdateShader = (kbShader *) g_ResourceManager.LoadResource( "./assets/shaders/DamageGen/pokeyholeunwrap.kbshader", true );
 		m_pCollisionMapScorchGenShader = (kbShader*) g_ResourceManager.LoadResource( "./assets/shaders/DamageGen/collisionMapScorchGen.kbShader", true );
+	}
+
+	m_RenderThreadShotsThisFrame = m_ShotsThisFrame[m_ShotFrame];
+	m_ShotFrame ^= 1;
+
+	m_ShotsThisFrame[m_ShotFrame].clear();
+
+	UpdateFires_RenderSync();
+}
+
+/**
+ *	EtherGame::RenderHookCallBack
+ */
+static float g_TimeMultiplier = 0.95f / 0.016f;
+void EtherGame::RenderHookCallBack( kbRenderTexture *const pSrc, kbRenderTexture *const pDst ) {
+	static kbVec3 terrainPos;
+	static float terrainWidth;
+	static float halfTerrainWidth;
+
+	// Initialize
+	static kbTerrainComponent * pTerrain = nullptr;
+
+
+	if ( pTerrain == nullptr ) {
+
+		for ( int i = 0; i < GetGameEntities().size(); i++ ) {
+			kbGameEntity *const pEnt = GetGameEntities()[i];
+			pTerrain = (kbTerrainComponent*)pEnt->GetComponentByType( kbTerrainComponent::GetType() );
+			if ( pTerrain == nullptr ) {
+				continue;
+			}
+
+			terrainPos = pEnt->GetPosition();
+			terrainWidth = pTerrain->GetTerrainWidth();
+			halfTerrainWidth = terrainWidth * 0.5f;
+			break;
+		}
 	}
 
     if ( pTerrain == nullptr ) {

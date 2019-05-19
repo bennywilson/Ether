@@ -107,7 +107,7 @@ float4 pixelShader( pixelInput input ) : SV_TARGET {
 	//finalUV /= 0.5;
 	finalUV = finalUV * 0.5f + 0.5f;
 	finalUV.y = 1.0f - finalUV.y;
-	if ( finalUV.x < 0.1f || finalUV.x > 0.9f || finalUV.y < 0.1f || finalUV.y > 0.9f )
+	if ( finalUV.x < 0.03f || finalUV.x > 0.97f || finalUV.y < 0.03f || finalUV.y > 0.97f )
 		clip(-1);
 
 	if ( decalMask.x < 0.5f && normal.w < 0.5f ) {

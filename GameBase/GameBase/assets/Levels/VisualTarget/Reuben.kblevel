@@ -4523,3 +4523,74 @@ kbGameEntity 0 0 0 0 {
 		Model = .\assets\models\items\el_rifle_fp.ms3d
 	}
 }
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Rain"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 3796.662354 657.536072 755.957336
+		Scale = 1.000000 1.000000 1.000000
+	}
+	kbParticleComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		Name = ""
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 0.000000 0.000000 0.000000
+		Scale = 10.000000 10.000000 10.000000
+		AlphaOverLife = 0
+		ColorOverLife = 0
+		EndColor = 0.300000 0.300000 0.300000 0.300000
+		Gravity = 0.000000 0.000000 0.000000
+		MaterialList = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\fx\particle_rain.kbshader
+				ShaderParams = 2
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorMultplier"
+						Texture = NULL
+						Vector = 1.000000 1.000000 1.000000 1.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "shaderTexture"
+						Texture = .\assets\fx\rain\rain1.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		MaxBurstCount = 2
+		MaxDuration =  3.000000
+		MaxEndRotationRate =  0.000000
+		MaxEndSize = 3.000000 3.000000 3.000000
+		MaxEndVelocity = 0.000000 0.000000 0.000000
+		MaxSpawnRate =  2.000000
+		MaxStart3DRotation = 0.000000 0.000000 0.000000
+		MaxStartRotationRate =  0.000000
+		MaxStartSize = 3.000000 3.000000 3.000000
+		MaxStartVelocity = 0.000000 0.000000 0.000000
+		MinBurstCount = 1
+		MinDuration =  3.000000
+		MinEndRotationRate =  0.000000
+		MinEndSize = 3.000000 3.000000 3.000000
+		MinEndVelocity = 0.000000 0.000000 0.000000
+		MinSpawnRate =  1.000000
+		MinStart3DRotation = 0.000000 0.000000 0.000000
+		MinStartRotationRate =  0.000000
+		MinStartSize = 3.000000 3.000000 3.000000
+		MinStartVelocity = 0.000000 0.000000 0.000000
+		ModelEmitter = 0
+		ParticleBillboardType = FaceCamera
+		StartColor = 0.200000 0.200000 0.200000 0.300000
+		StartDelay =  0.000000
+		TotalDuration =  0.500000
+		TranslucencySortBias =  0.000000
+		VelocityCurve = 0
+	}
+}

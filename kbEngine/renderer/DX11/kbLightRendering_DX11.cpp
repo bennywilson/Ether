@@ -162,9 +162,8 @@ void kbRenderer_DX11::RenderLight( const kbRenderLight *const pLight ) {
 
 	m_pDeviceContext->Draw( 6, 0 );
 
-	ID3D11ShaderResourceView * nullArray[] = { nullptr };
-
-	m_pDeviceContext->PSSetShaderResources( 0, 1, nullArray );
+	ID3D11ShaderResourceView *const nullArray[] = { nullptr, nullptr, nullptr, nullptr, nullptr };
+	m_pDeviceContext->PSSetShaderResources( 0, 5, nullArray );
 
 	PLACE_GPU_TIME_STAMP( "Light Rendering" );
 }
@@ -173,6 +172,14 @@ void kbRenderer_DX11::RenderLight( const kbRenderLight *const pLight ) {
  *	kbRenderer_DX11::RenderShadow
  */
 void kbRenderer_DX11::RenderShadow( const kbRenderLight *const pLight, kbMat4 splitMatrices[] ) {
+
+	ID3D11ShaderResourceView * pNullSRVs[] = { nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, 
+											   nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr };
+
+	// Unbind all textures
+	m_pDeviceContext->VSSetShaderResources( 0, 16, pNullSRVs );
+	m_pDeviceContext->GSSetShaderResources( 0, 16, pNullSRVs );
+	m_pDeviceContext->PSSetShaderResources( 0, 16, pNullSRVs );
 
 	if ( g_ShowShadows.GetBool() == false ) {
 		return;

@@ -2,6 +2,53 @@ kbGameEntity 0 0 0 0 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
+		Name = "Holey_Wall"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = -41.824341 12.146704 -21.926552
+		Scale = 1.000000 1.000000 1.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		Materials = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\environment\environmenthole.kbshader
+				ShaderParams = 2
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "diffuse"
+						Texture = .\assets\models\architecture\bricks.png
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "normal"
+						Texture = .\assets\models\architecture\bricks_nm.png
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		RenderPass = LightingPass
+		TranslucencySortBias =  -1.000000
+		Model = .\assets\models\architecture\bricks.ms3d
+	}
+	kbCollisionComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CollisionType = StaticMesh
+		Extent = 10.000000 10.000000 10.000000
+		SphereCollision = 0
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
 		Name = "Skybox"
 		Orientation = 0.000000 -0.969342 0.000000 0.245715
 		Position = 1.626685 40.604389 -22.515354
@@ -5190,5 +5237,94 @@ kbGameEntity 0 0 0 0 {
 		NumIterations = 1
 		Width = 11
 		Health =  2.000000
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Entity_51"
+		Orientation = 0.000000 -0.998417 0.000000 0.056240
+		Position = -49.540787 56.755516 -4.810452
+		Scale = 15.000000 15.000000 15.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		Materials = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\fx\decal_modulate.kbshader
+				ShaderParams = 9
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "inverseModelMatrix"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "decalParams1"
+						Texture = NULL
+						Vector = 1.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "decalMask"
+						Texture = NULL
+						Vector = 1.000000 1.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorTexture"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "normalTexture"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "specularTexture"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "depthTexture"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "ShadowMap"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "ProjectionTex"
+						Texture = .\assets\visualtarget\reuben\secag_grey.png
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		RenderPass = LightingPass
+		TranslucencySortBias =  0.000000
+		Model = .\assets\models\test\unitcube.ms3d
 	}
 }

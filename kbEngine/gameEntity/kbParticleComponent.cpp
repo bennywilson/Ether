@@ -178,15 +178,6 @@ void kbParticleComponent::Update_Internal( const float DeltaTime ) {
 		default: kbWarning( "kbParticleComponent::Update_Internal() - Invalid billboard type specified" ); break;
 	}
 
-		std::vector<kbShaderParamOverrides_t> shaderParam;
-
-		kbShaderParamOverrides_t material;
-		material.m_pShader = (kbShader *) g_ResourceManager.LoadResource( "../../kbEngine/assets/Shaders/UIManipulator.kbshader", true );
-		kbTexture *const pTexture = (kbTexture *) g_ResourceManager.LoadResource( "../../kbEngine/assets/editor/manipulator.bmp", true );
-		material.SetTexture( "shaderTexture", pTexture );
-		shaderParam.push_back( material );
-
-
 	for ( int i = (int)m_Particles.size() - 1; i >= 0 ; i-- ) {
 		kbParticle_t & particle = m_Particles[i];
 
