@@ -1995,7 +1995,7 @@ void kbRenderer_DX11::RenderMousePickerIds() {
 
 	RenderDebugBillboards( true );
 
-	m_RenderState.SetDepthStencilState( false );	// Allow transform widgets to draw through other models
+	m_RenderState.SetDepthStencilState( false );	// Allow transform widgets to be selected through other models
 	for ( int i = 0; i < m_DebugModels.size(); i++ ) {
 		kbRenderObject renderObject;
 		renderObject.m_pModel = m_DebugModels[i].m_pModel;
@@ -2655,6 +2655,7 @@ kbString g_BuiltInShaderParams[] = {
 	"worldViewMatrix",
 	"projection",
 	"inverseProjection",
+	"inverseModelMatrix",
 	"inverseViewProjection",
 	"lightMatrix",
 	"splitDistances",
@@ -2780,6 +2781,8 @@ void kbRenderer_DX11::ReadShaderFile( std::string & shaderText, kbShaderVarBindi
 				shaderText[defaultValStart++] = ' ';
 			}
 
+			textureBinding.m_bIsUserDefinedVar = true;
+
 			if ( defaultTexture == "white" ) {
 				textureBinding.m_pDefaultTexture = pWhiteTex;
 			} else if ( defaultTexture == "black" ) {
@@ -2788,20 +2791,28 @@ void kbRenderer_DX11::ReadShaderFile( std::string & shaderText, kbShaderVarBindi
 				textureBinding.m_pDefaultTexture = pDefaultNormal;
 			} else if ( defaultTexture == "colorbuffer" ) {
 				textureBinding.m_pDefaultRenderTexture = m_pRenderTargets[COLOR_BUFFER];
+				textureBinding.m_bIsUserDefinedVar = false;
 			} else if ( defaultTexture == "normalbuffer" ) {
 				textureBinding.m_pDefaultRenderTexture = m_pRenderTargets[NORMAL_BUFFER];
+				textureBinding.m_bIsUserDefinedVar = false;
 			} else if ( defaultTexture == "depthbuffer" ) {
 				textureBinding.m_pDefaultRenderTexture = m_pRenderTargets[DEPTH_BUFFER];
+				textureBinding.m_bIsUserDefinedVar = false;
 			} else if ( defaultTexture == "specularbuffer" ) {
 				textureBinding.m_pDefaultRenderTexture = m_pRenderTargets[SPECULAR_BUFFER];
+				textureBinding.m_bIsUserDefinedVar = false;
 			} else if ( defaultTexture == "shadowbuffer" ) {
 				textureBinding.m_pDefaultRenderTexture = m_pRenderTargets[SHADOW_BUFFER];
+				textureBinding.m_bIsUserDefinedVar = false;
 			} else if ( defaultTexture == "maxhalf" ) {
 				textureBinding.m_pDefaultRenderTexture = m_pRenderTargets[MAX_HALF_BUFFER];
+				textureBinding.m_bIsUserDefinedVar = false;
 			} else if ( defaultTexture == "noise" ) {
 				textureBinding.m_pDefaultTexture = pNoiseTex;
+				textureBinding.m_bIsUserDefinedVar = false;
 			} else if ( defaultTexture == "scenecolor" ) {
 				textureBinding.m_pDefaultRenderTexture = m_pRenderTargets[ACCUMULATION_BUFFER_1];
+				textureBinding.m_bIsUserDefinedVar = false;
 			} else {
 				kbWarning( "Default texture %s not found", defaultTexture.c_str() );
 			}

@@ -173,7 +173,7 @@ void kbRenderer_DX11::RenderLight( const kbRenderLight *const pLight ) {
  */
 void kbRenderer_DX11::RenderShadow( const kbRenderLight *const pLight, kbMat4 splitMatrices[] ) {
 
-	ID3D11ShaderResourceView * pNullSRVs[] = { nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, 
+	ID3D11ShaderResourceView *const pNullSRVs[] = { nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, 
 											   nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr };
 
 	// Unbind all textures

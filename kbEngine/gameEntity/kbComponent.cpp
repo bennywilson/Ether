@@ -2,7 +2,7 @@
 // kbComponent.cpp
 //
 //
-// 2016-2018 kbEngine 2.0
+// 2016-2019 kbEngine 2.0
 //===================================================================================================
 #include "kbCore.h"
 #include "kbVector.h"
@@ -362,7 +362,7 @@ float kbAnimEvent::Evaluate( const std::vector<kbAnimEvent> & eventList, const f
 		}
 	}
 
-	return eventList[eventList.size() - 1].GetEventValue();
+	return eventList.back().GetEventValue();
 }
 
 /**
@@ -387,5 +387,13 @@ kbVec3 kbVectorAnimEvent::Evaluate( const std::vector<kbVectorAnimEvent> & event
 	}
 
 //	kbLog( "Gah!");
-	return eventList[eventList.size() - 1].GetEventValue();
+	return eventList.back().GetEventValue();
+}
+
+/**
+ *	kbEditorLevelComponent::Constructor
+ */	
+void kbEditorLevelComponent::Constructor() {
+	m_CameraPosition = kbVec3::zero;
+	m_CameraRotation = kbQuat::identity;
 }

@@ -2,7 +2,7 @@
 // kbEditor.cpp
 //
 //
-// 2016-2018 kbEngine 2.0
+// 2016-2019 kbEngine 2.0
 //===================================================================================================
 #include "kbCore.h"
 #include "kbVector.h"
@@ -216,6 +216,8 @@ void kbEditor::LoadMap( const std::string & InMapName ) {
 
 	UnloadMap();
 
+	const kbEditorLevelComponent * pEditorLevelComponent = nullptr;
+
 	// Load map
 	if ( InMapName.empty() == false ) {
 		m_CurrentLevelFileName = InMapName;
@@ -246,6 +248,14 @@ void kbEditor::LoadMap( const std::string & InMapName ) {
 
 				kbGameEntity * gameEntity = inFile.ReadGameEntity();
 				while ( gameEntity != nullptr ) {
+
+					if ( pEditorLevelComponent == nullptr ) {
+						pEditorLevelComponent = (kbEditorLevelComponent*)gameEntity->GetComponentByType( kbEditorLevelComponent::GetType() );
+
+						if ( pEditorLevelComponent != nullptr ) {
+							continue;
+						}
+					}
 
 					kbEditorEntity *const newEditorEntity = new kbEditorEntity( gameEntity );
 					g_Editor->m_GameEntities.push_back( newEditorEntity );
@@ -282,6 +292,11 @@ void kbEditor::LoadMap( const std::string & InMapName ) {
 	m_UndoStack.Reset();
 
 	m_pResourceTab->RefreshEntitiesTab();
+
+	if ( pEditorLevelComponent != nullptr ) {
+		SetMainCameraPos( pEditorLevelComponent->GetCameraPosition() );
+		SetMainCameraRot( pEditorLevelComponent->GetCameraRotation() );
+	}
 }
 
 /**
@@ -832,6 +847,15 @@ void kbEditor::SaveLevel_Internal( const std::string & fileNameStr, const bool b
 
 	kbFile outFile;
 	outFile.Open( fileNameStr.c_str(), kbFile::FT_Write );
+
+	{
+		kbGameEntity levelInfoEnt;
+		kbEditorLevelComponent *const pLevelInfo = new kbEditorLevelComponent();
+		pLevelInfo->SetCameraPosition( GetMainCameraPos() );
+		pLevelInfo->SetCameraRotation( GetMainCameraRot() );
+		levelInfoEnt.AddComponent( pLevelInfo );
+		outFile.WriteGameEntity( &levelInfoEnt );
+	}
 
 	for ( int i = 0; i < g_Editor->m_GameEntities.size(); i++ ) {
 		outFile.WriteGameEntity( g_Editor->m_GameEntities[i]->GetGameEntity() );

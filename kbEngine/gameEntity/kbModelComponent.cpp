@@ -182,7 +182,7 @@ void kbMaterialComponent::EditorChange( const std::string & propertyName ) {
 
 		const kbShaderVarBindings_t & shaderBindings = m_pShader->GetShaderVarBindings();
 		for ( int i = 0; i < shaderBindings.m_VarBindings.size(); i++ ) {
-			auto currentVar = shaderBindings.m_VarBindings[i];
+			auto & currentVar = shaderBindings.m_VarBindings[i];
 			if ( currentVar.m_bIsUserDefinedVar == false ) {
 				continue;
 			}
@@ -207,7 +207,12 @@ void kbMaterialComponent::EditorChange( const std::string & propertyName ) {
 		}
 
 		for ( int i = 0; i < shaderBindings.m_Textures.size(); i++ ) {
-			const kbString boundTextureName( shaderBindings.m_Textures[i].m_TextureName );
+			auto & curTexture = shaderBindings.m_Textures[i];
+			if ( curTexture.m_bIsUserDefinedVar == false ) {
+				continue;
+			}
+
+			const kbString boundTextureName( curTexture.m_TextureName );
 			bool boundParamFound = false;
 			for ( int iOldParam = 0; iOldParam < oldParams.size(); iOldParam++ ) {
 				if ( oldParams[iOldParam].GetParamName() == boundTextureName ) {

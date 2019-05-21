@@ -66,9 +66,12 @@ struct kbShaderVarBindings_t {
 	std::vector<binding_t>						m_VarBindings;
 
 	struct textureBinding_t {
+		textureBinding_t() : m_pDefaultTexture( nullptr ), m_pDefaultRenderTexture( nullptr ), m_bIsUserDefinedVar( false ) { }
+
 		std::string								m_TextureName;
 		kbTexture *								m_pDefaultTexture;
 		kbRenderTexture *						m_pDefaultRenderTexture;
+		bool									m_bIsUserDefinedVar;
 	};
     std::vector<textureBinding_t>				m_Textures;
 

@@ -2,6 +2,22 @@ kbGameEntity 0 0 0 0 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
+		Name = "Entity_64"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 0.000000 0.000000 0.000000
+		Scale = 1.000000 1.000000 1.000000
+	}
+	kbEditorLevelComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		MainCameraPosition = 3856.250488 674.924927 771.148254
+		MainCameraRotation = -0.129702 0.656931 -0.116151 0.733572
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
 		Name = "Skybox"
 		Orientation = 0.000000 -0.969342 0.000000 0.245715
 		Position = 1.626685 40.604389 -22.515354
@@ -3849,14 +3865,7 @@ kbGameEntity 0 0 0 0 {
 				LifeTime =  -1.000000
 				CullModeOverride = ShaderDefault
 				Shader = .\assets\shaders\fx\decal_modulate.kbshader
-				ShaderParams = 13
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "inverseModelMatrix"
-						Texture = NULL
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
+				ShaderParams = 6
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
@@ -3875,48 +3884,6 @@ kbGameEntity 0 0 0 0 {
 						Enabled = 0
 						LifeTime =  -1.000000
 						ParamName = "distortionParams"
-						Texture = NULL
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "cameraPosition"
-						Texture = NULL
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "colorTexture"
-						Texture = NULL
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "normalTexture"
-						Texture = NULL
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "specularTexture"
-						Texture = NULL
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "depthTexture"
-						Texture = NULL
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "ShadowMap"
 						Texture = NULL
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
@@ -4569,24 +4536,24 @@ kbGameEntity 0 0 0 0 {
 		MaxDuration =  3.000000
 		MaxEndRotationRate =  0.000000
 		MaxEndSize = 3.000000 3.000000 3.000000
-		MaxEndVelocity = 0.000000 0.000000 0.000000
+		MaxEndVelocity = 0.000000 -0.010000 0.000000
 		MaxSpawnRate =  2.000000
 		MaxStart3DRotation = 0.000000 0.000000 0.000000
 		MaxStartRotationRate =  0.000000
 		MaxStartSize = 3.000000 3.000000 3.000000
-		MaxStartVelocity = 0.000000 0.000000 0.000000
+		MaxStartVelocity = 0.000000 -0.010000 0.000000
 		MinBurstCount = 1
 		MinDuration =  3.000000
 		MinEndRotationRate =  0.000000
 		MinEndSize = 3.000000 3.000000 3.000000
-		MinEndVelocity = 0.000000 0.000000 0.000000
+		MinEndVelocity = 0.000000 -0.010000 0.000000
 		MinSpawnRate =  1.000000
 		MinStart3DRotation = 0.000000 0.000000 0.000000
 		MinStartRotationRate =  0.000000
 		MinStartSize = 3.000000 3.000000 3.000000
-		MinStartVelocity = 0.000000 0.000000 0.000000
+		MinStartVelocity = 0.000000 -0.010000 -0.000000
 		ModelEmitter = 0
-		ParticleBillboardType = FaceCamera
+		ParticleBillboardType = AlignAlongVelocity
 		StartColor = 0.200000 0.200000 0.200000 0.300000
 		StartDelay =  0.000000
 		TotalDuration =  0.500000

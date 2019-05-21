@@ -75,15 +75,11 @@ Texture2D specularTexture(specularBuffer)		: register(t2);
 SamplerState DepthSamplerState;
 Texture2D depthTexture(depthBuffer)				: register(t3);
 
-SamplerState ShadowMapSamplerState;
-Texture2D ShadowMap(shadowBuffer)				: register(t4);
-
 Texture2D ProjectionTex;
 
 float4 pixelShader( pixelInput input ) : SV_TARGET {
 	float4 diffuseColor = colorTexture.Sample( DefaultSamplerState, input.uv );
 	float4 normal = normalTexture.Sample( NormalSamplerState, input.uv );
-	float4 specColor = specularTexture.Sample( DefaultSamplerState, input.uv );
 	
 	normal.xyz = normalize( normal.xyz );
 

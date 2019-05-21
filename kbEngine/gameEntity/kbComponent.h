@@ -203,6 +203,7 @@ protected:
 class kbPlayerStartComponent : public kbGameComponent {
 	KB_DECLARE_COMPONENT( kbPlayerStartComponent, kbGameComponent );
 
+//-------------------------------------------------------------------------------------------------------------------------------------------------------------
 	int m_DummyVar;
 };
 
@@ -212,6 +213,7 @@ class kbPlayerStartComponent : public kbGameComponent {
 class kbAnimEvent : public kbGameComponent {
 	KB_DECLARE_COMPONENT( kbAnimEvent, kbGameComponent );
 
+//-------------------------------------------------------------------------------------------------------------------------------------------------------------
 public:
 
 	const kbString							GetEventName() const { return m_EventName; }
@@ -232,6 +234,7 @@ private:
 class kbVectorAnimEvent : public kbGameComponent {
 	KB_DECLARE_COMPONENT( kbVectorAnimEvent, kbGameComponent );
 
+//-------------------------------------------------------------------------------------------------------------------------------------------------------------
 public:
 
 	const kbString							GetEventName() const { return m_EventName; }
@@ -244,6 +247,25 @@ private:
 	kbString								m_EventName;
 	kbVec3									m_EventValue;
 	float									m_EventTime;
+};
+
+/**
+ *  kbEditorLevelComponent
+ */
+class kbEditorLevelComponent : public kbGameComponent {
+	KB_DECLARE_COMPONENT( kbEditorLevelComponent, kbGameComponent );
+
+//-------------------------------------------------------------------------------------------------------------------------------------------------------------
+public:
+	const kbVec3 &								GetCameraPosition() const { return m_CameraPosition; }
+	const kbQuat &								GetCameraRotation() const { return m_CameraRotation; }
+
+	void										SetCameraPosition( const kbVec3 & newPos ) { m_CameraPosition = newPos; }
+	void										SetCameraRotation( const kbQuat & newRot ) { m_CameraRotation = newRot; }
+
+private:
+	kbVec3										m_CameraPosition;
+	kbQuat										m_CameraRotation;
 };
 
 #endif

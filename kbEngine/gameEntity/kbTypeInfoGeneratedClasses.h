@@ -44,6 +44,12 @@ GenerateClass(
 )
 
 GenerateClass(
+	kbEditorLevelComponent,
+	AddField( "MainCameraPosition", KBTYPEINFO_VECTOR, kbEditorLevelComponent, m_CameraPosition, false, "" )
+	AddField( "MainCameraRotation", KBTYPEINFO_VECTOR4, kbEditorLevelComponent, m_CameraRotation, false, "" )
+)
+
+GenerateClass(
 	kbAnimEvent,
 	AddField( "EventName", KBTYPEINFO_KBSTRING, kbAnimEvent, m_EventName, false, "" )
 	AddField( "EventTime", KBTYPEINFO_FLOAT, kbAnimEvent, m_EventTime, false, "" )

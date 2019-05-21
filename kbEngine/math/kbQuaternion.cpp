@@ -2,13 +2,14 @@
 // kbQuaternion.cpp
 //
 //
-// 2016-2018 kbEngine 2.0
+// 2016-2019 kbEngine 2.0
 //===================================================================================================
 #include "kbCore.h"
 #include "kbVector.h"
 #include "kbQuaternion.h"
 
-kbQuat kbQuat::zero( 0.0f, 0.0f, 0.0f, 0.0f );
+const kbQuat kbQuat::zero( 0.0f, 0.0f, 0.0f, 0.0f );
+const kbQuat kbQuat::identity( 0.0f, 0.0f, 0.0f, 1.0f );
 
 /**
  *  kbQuat::kbQuat
