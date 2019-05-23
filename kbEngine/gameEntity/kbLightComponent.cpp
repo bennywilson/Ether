@@ -211,7 +211,7 @@ void kbDirectionalLightComponent::EditorChange( const std::string & propertyName
  *	kbLightShaftsComponent::Constructor
  */
 void kbLightShaftsComponent::Constructor() {
-	m_Texture = ( kbTexture* )g_ResourceManager.GetResource( "../../kbEngine/assets/Textures/Editor/flare.jpg" );
+	m_Texture = nullptr;
 	m_Color = kbColor::white;
 	m_BaseWidth = m_BaseHeight = 20.0f;
 	m_IterationWidth = m_IterationHeight = 1.0f;

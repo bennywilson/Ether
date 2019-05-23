@@ -40,8 +40,6 @@ kbGame::~kbGame() {
 	delete m_pParticleManager;
 	m_pParticleManager = nullptr;
 	m_Console.RemoveCommandProcessor( this );
-
-	kbString::ShutDown();
 }
 
 /**

@@ -2,7 +2,7 @@
 // kbResourceManager.cpp
 //
 //
-// 2016-2018 kbEngine 2.0
+// 2016-2019 kbEngine 2.0
 //===================================================================================================
 #include "kbCore.h"
 #include "kbMaterial.h"
@@ -199,7 +199,7 @@ void kbResourceManager::UpdateHotReloads() {
 /**
  *	kbResourceManager::GetResource
  */
-kbResource * kbResourceManager::LoadResource( const std::string & fullFileName, const bool loadImmediately ) {
+kbResource * kbResourceManager::GetResource( const std::string & fullFileName, const bool bLoadImmediately, const bool bLoadIfNotFound ) {
 
 	if ( strcmp( fullFileName.c_str(), "nullptr" ) == 0 ) {
 		return nullptr;
@@ -208,25 +208,24 @@ kbResource * kbResourceManager::LoadResource( const std::string & fullFileName, 
 	std::string convertedFileName = fullFileName;
 	std::replace( convertedFileName.begin(), convertedFileName.end(), '/', '\\' );
 	std::transform( convertedFileName.begin(), convertedFileName.end(), convertedFileName.begin(), ::tolower );
+	const kbString fileNameString( convertedFileName );
 
-	for ( int i = 0; i < m_Resources.size(); i++ ) {
-		if ( m_Resources[i]->m_FullFileName == convertedFileName ) {
-			if ( loadImmediately == true && m_Resources[i]->m_bIsLoaded == false ) {
-				m_Resources[i]->Load();
-			}
+	auto mapEntry = m_ResourcesMap.find( fileNameString );
+	if ( mapEntry != m_ResourcesMap.end() ) {
 
-			return m_Resources[i];
+		kbResource *const pResource = mapEntry->second;
+		if ( bLoadImmediately && pResource->m_bIsLoaded == false ) {
+			pResource->Load();
 		}
+
+		return pResource;
+	} else if ( bLoadIfNotFound == false ) {
+		return nullptr;
 	}
 
 	if ( fullFileName.length() < 5 ) {
-		kbError( "kbResourceManager::AddResource() - Invalid file name %s", fullFileName.c_str() );
-	}
-
-	const size_t fileExtPos = fullFileName.find_last_of( "." );
-
-	if ( fileExtPos == std::string::npos ) {
-		kbError( "kbResourceManager::AddResource() - No file extension for file %s", fullFileName.c_str() );
+		kbWarning( "kbResourceManager::AddResource() - Invalid file name %s", fullFileName.c_str() );
+		return nullptr;
 	}
 
 	kbResource * pResource = nullptr;
@@ -253,7 +252,7 @@ kbResource * kbResourceManager::LoadResource( const std::string & fullFileName, 
 //	fs::path p = fs::canonical( fullFileName.c_str() );
 	//StringFromWString( pResource->m_FullFileName, p.c_str() );
 	pResource->m_FullFileName = convertedFileName;
-	pResource->m_FullName = kbString( pResource->m_FullFileName );
+	pResource->m_FullName = fileNameString;//kbString( pResource->m_FullFileName );
 
 	size_t pos = fullFileName.find_last_of( "/" );
 	if ( pos != std::string::npos ) {
@@ -262,11 +261,11 @@ kbResource * kbResourceManager::LoadResource( const std::string & fullFileName, 
 		pResource->m_Name = fullFileName;
 	}
 
-	if ( loadImmediately ) {
+	if ( bLoadImmediately ) {
 		pResource->Load();
 	}
 
-	m_Resources.push_back( pResource );
+	m_ResourcesMap[fileNameString] = pResource;
 
 	return pResource;
 }
@@ -275,6 +274,33 @@ kbResource * kbResourceManager::LoadResource( const std::string & fullFileName, 
  *	kbResourceManager::AsyncLoadResource
  */
 kbResource * kbResourceManager::AsyncLoadResource( const kbString & stringName ) {
+
+	auto mapEntry = m_ResourcesMap.find( stringName );
+	if ( mapEntry != m_ResourcesMap.end() ) {
+		kbResource *const pResource = mapEntry->second;
+		if ( pResource->m_bIsLoaded ) {
+			return pResource;
+		}
+
+		// Check if resource is currently being loaded
+		for ( int j = 0; j < m_LoadResourceJobs.size(); j++ ) {
+			if ( m_LoadResourceJobs[j]->m_Resource == mapEntry->second ) {
+				return nullptr;
+			}
+		}	
+
+		// Create a new loading job for this resources
+		kbLoadResourceJob *const pLoadJob = new kbLoadResourceJob();
+		pLoadJob->m_Resource = pResource;
+		m_LoadResourceJobs.push_back( pLoadJob );
+		g_pJobManager->RegisterJob( pLoadJob );
+
+		return nullptr;
+	}
+
+	kbWarning( "kbResourceManager::AsyncLoadResource() - Failed to kick off a job for %s", stringName.c_str() );
+	return nullptr;
+/*
 	for ( int i = 0; i < m_Resources.size(); i++ ) {
 
 		if ( m_Resources[i]->m_FullName == stringName ) {
@@ -302,25 +328,7 @@ kbResource * kbResourceManager::AsyncLoadResource( const kbString & stringName )
 	}
 
 	kbError( "kbResourceManager::AsyncLoadResource() - Failed to kick off a job for %s", stringName.c_str() );
-	return nullptr;
-}
-
-/**
- *	kbResourceManager::GetResource
- */
-kbResource * kbResourceManager::GetResource( const std::string & displayName ) {
-
-	for ( unsigned int i = 0; i < m_Resources.size(); i++ ) {
-		if ( m_Resources[i] != nullptr && m_Resources[i]->GetName().compare( displayName ) == 0 ) {
-
-			if ( m_Resources[i]->m_bIsLoaded == false ) {
-				m_ResourcesToLoad.push_back( m_Resources[i] );
-			}
-			return m_Resources[i];
-		}
-	}
-
-	return nullptr;
+	return nullptr;*/
 }
 
 /**
@@ -503,11 +511,19 @@ void kbResourceManager::DumpPackageInfo() {
  *	kbResourceManager::Shutdown
  */
 void kbResourceManager::Shutdown() {
-	for ( unsigned int i = 0; i < m_Resources.size(); i++ ) {
+	for ( auto it = m_ResourcesMap.begin(); it != m_ResourcesMap.end(); ++it ) {
+		kbResource *const pResource = it->second;
+		kbLog( "Deleting %s", it->first.c_str() );
+		pResource->Release();
+		delete pResource;
+	}
+	m_ResourcesMap.clear();
+
+	/*for ( unsigned int i = 0; i < m_Resources.size(); i++ ) {
 		m_Resources[i]->Release();
 		delete m_Resources[i];
 	}
-	m_Resources.clear();
+	m_Resources.clear();*/
 
 	for ( unsigned int i = 0; i < m_pPackages.size(); i++ ) {
 		delete m_pPackages[i];
@@ -542,7 +558,7 @@ void kbResourceManager::FileModifiedCB( const std::wstring & fileName ) {
 	}
 
 	kbLog( "Loading %s", p.string().c_str() );
-	LoadResource( p.string(), true );
+	GetResource( p.string(), true, true );
 }
 
 /**

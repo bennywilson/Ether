@@ -142,17 +142,17 @@ void kbManipulator::RenderSync() {
 
 		bFirstUpdate = false;
 		kbShaderParamOverrides_t material;
-		material.m_pShader = (kbShader *) g_ResourceManager.LoadResource( "../../kbEngine/assets/Shaders/UIManipulator.kbshader", true );
-		kbTexture *const pTexture = (kbTexture *) g_ResourceManager.LoadResource( "../../kbEngine/assets/editor/manipulator.bmp", true );
+		material.m_pShader = (kbShader *) g_ResourceManager.GetResource( "../../kbEngine/assets/Shaders/UIManipulator.kbshader", true, true );
+		kbTexture *const pTexture = (kbTexture *) g_ResourceManager.GetResource( "../../kbEngine/assets/editor/manipulator.bmp", true, true );
 		material.SetTexture( "shaderTexture", pTexture );
 		m_ManipulatorMaterials.push_back( material );
 		m_ManipulatorMaterials.push_back( material );
 		m_ManipulatorMaterials.push_back( material );
 
 		m_ManipulatorMaterials.push_back( material );
-		m_pModels[kbManipulator::Translate] = (kbModel *) g_ResourceManager.LoadResource( "../../kbEngine/assets/Models/Editor/translationManipulator.ms3d", true );
-		m_pModels[kbManipulator::Rotate] = (kbModel *) g_ResourceManager.LoadResource( "../../kbEngine/assets/Models/Editor/rotationManipulator.ms3d", true );
-		m_pModels[kbManipulator::Scale] = (kbModel *) g_ResourceManager.LoadResource( "../../kbEngine/assets/Models/Editor/scaleManipulator.ms3d", true );
+		m_pModels[kbManipulator::Translate] = (kbModel *) g_ResourceManager.GetResource( "../../kbEngine/assets/Models/Editor/translationManipulator.ms3d", true, true  );
+		m_pModels[kbManipulator::Rotate] = (kbModel *) g_ResourceManager.GetResource( "../../kbEngine/assets/Models/Editor/rotationManipulator.ms3d", true, true  );
+		m_pModels[kbManipulator::Scale] = (kbModel *) g_ResourceManager.GetResource( "../../kbEngine/assets/Models/Editor/scaleManipulator.ms3d", true, true  );
 
 		kbErrorCheck( m_pModels[kbManipulator::Translate] != nullptr && m_pModels[kbManipulator::Rotate] != nullptr && m_pModels[kbManipulator::Scale] != nullptr, "kbManipulator::RenderSync() - Unable to load manipulator models" );
 	}

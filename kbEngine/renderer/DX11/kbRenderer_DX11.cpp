@@ -683,27 +683,27 @@ void kbRenderer_DX11::Init_Internal( HWND hwnd, const int frameWidth, const int 
 	}
 
 	// Load some shaders
-	m_pBasicShader = (kbShader *)g_ResourceManager.LoadResource( "../../kbEngine/assets/Shaders/BasicShader.kbshader", true );	
-	m_pOpaqueQuadShader = (kbShader *) g_ResourceManager.LoadResource( "../../kbEngine/assets/Shaders/basicTexture.kbshader", true );
-	m_pTranslucentShader = (kbShader *) g_ResourceManager.LoadResource( "../../kbEngine/assets/Shaders/basicTranslucency.kbshader", true );
-	m_pMultiplyBlendShader = (kbShader *) g_ResourceManager.LoadResource( "../../kbEngine/assets/Shaders/basicMultiplyBlend.kbshader", true );
-	m_pBasicParticleShader = (kbShader *) g_ResourceManager.LoadResource( "../../kbEngine/assets/Shaders/basicParticle.kbshader", true );
-	m_pMissingShader = (kbShader *) g_ResourceManager.LoadResource( "../../kbEngine/assets/Shaders/missingShader.kbshader", true );
-	m_pDebugShader = (kbShader *) g_ResourceManager.LoadResource( "../../kbEngine/assets/Shaders/debugShader.kbshader", true );
+	m_pBasicShader = (kbShader *)g_ResourceManager.GetResource( "../../kbEngine/assets/Shaders/BasicShader.kbshader", true, true );	
+	m_pOpaqueQuadShader = (kbShader *) g_ResourceManager.GetResource( "../../kbEngine/assets/Shaders/basicTexture.kbshader", true, true );
+	m_pTranslucentShader = (kbShader *) g_ResourceManager.GetResource( "../../kbEngine/assets/Shaders/basicTranslucency.kbshader", true, true );
+	m_pMultiplyBlendShader = (kbShader *) g_ResourceManager.GetResource( "../../kbEngine/assets/Shaders/basicMultiplyBlend.kbshader", true, true );
+	m_pBasicParticleShader = (kbShader *) g_ResourceManager.GetResource( "../../kbEngine/assets/Shaders/basicParticle.kbshader", true, true );
+	m_pMissingShader = (kbShader *) g_ResourceManager.GetResource( "../../kbEngine/assets/Shaders/missingShader.kbshader", true, true );
+	m_pDebugShader = (kbShader *) g_ResourceManager.GetResource( "../../kbEngine/assets/Shaders/debugShader.kbshader", true, true );
 
-	m_pUberPostProcess = (kbShader *) g_ResourceManager.LoadResource( "../../kbEngine/assets/Shaders/UberPostProcess.kbshader", true );
-	m_pDirectionalLightShader = (kbShader *) g_ResourceManager.LoadResource( "../../kbEngine/assets/Shaders/DirectionalLight.kbshader", true );
-	m_pPointLightShader = (kbShader *) g_ResourceManager.LoadResource( "../../kbEngine/assets/Shaders/PointLight.kbshader", true );
-	m_pCylindricalLightShader = (kbShader *) g_ResourceManager.LoadResource( "../../kbEngine/assets/Shaders/cylindricalLight.kbshader", true );
+	m_pUberPostProcess = (kbShader *) g_ResourceManager.GetResource( "../../kbEngine/assets/Shaders/UberPostProcess.kbshader", true, true );
+	m_pDirectionalLightShader = (kbShader *) g_ResourceManager.GetResource( "../../kbEngine/assets/Shaders/DirectionalLight.kbshader", true, true );
+	m_pPointLightShader = (kbShader *) g_ResourceManager.GetResource( "../../kbEngine/assets/Shaders/PointLight.kbshader", true, true );
+	m_pCylindricalLightShader = (kbShader *) g_ResourceManager.GetResource( "../../kbEngine/assets/Shaders/cylindricalLight.kbshader", true, true );
 
-	m_pDirectionalLightShadowShader = (kbShader *) g_ResourceManager.LoadResource( "../../kbEngine/assets/Shaders/directionalLightShadow.kbshader", true );
-	m_pLightShaftsShader = (kbShader *) g_ResourceManager.LoadResource( "../../kbEngine/assets/Shaders/lightShafts.kbshader", true );
-	m_pSimpleAdditiveShader = (kbShader *) g_ResourceManager.LoadResource( "../../kbEngine/assets/Shaders/simpleAdditive.kbshader", true );
-	m_pGodRayIterationShader = (kbShader *) g_ResourceManager.LoadResource( "../../kbEngine/assets/Shaders/godRayIteration.kbShader", true );
+	m_pDirectionalLightShadowShader = (kbShader *) g_ResourceManager.GetResource( "../../kbEngine/assets/Shaders/directionalLightShadow.kbshader", true, true );
+	m_pLightShaftsShader = (kbShader *) g_ResourceManager.GetResource( "../../kbEngine/assets/Shaders/lightShafts.kbshader", true, true );
+	m_pSimpleAdditiveShader = (kbShader *) g_ResourceManager.GetResource( "../../kbEngine/assets/Shaders/simpleAdditive.kbshader", true, true );
+	m_pGodRayIterationShader = (kbShader *) g_ResourceManager.GetResource( "../../kbEngine/assets/Shaders/godRayIteration.kbShader", true, true );
 
-	m_pMousePickerIdShader = (kbShader *) g_ResourceManager.LoadResource( "../../kbEngine/assets/Shaders/mousePicker.kbshader", true );
+	m_pMousePickerIdShader = (kbShader *) g_ResourceManager.GetResource( "../../kbEngine/assets/Shaders/mousePicker.kbshader", true, true );
 
-	m_pSSAO = (kbShader*) g_ResourceManager.LoadResource( "../../kbEngine/assets/Shaders/SSAO.kbShader", true );
+	m_pSSAO = (kbShader*) g_ResourceManager.GetResource( "../../kbEngine/assets/Shaders/SSAO.kbShader", true, true );
 
 	// Non-resource managed shaders
 	m_pSkinnedDirectionalLightShadowShader->SetVertexShaderFunctionName( "skinnedVertexMain" );
@@ -2707,10 +2707,10 @@ void kbRenderer_DX11::ReadShaderFile( std::string & shaderText, kbShaderVarBindi
 	const int numBuiltInParams = sizeofBuiltInParams / sizeofSTDString;
 
 	// Param defaults
-	kbTexture *const pWhiteTex = (kbTexture*)g_ResourceManager.LoadResource( "../../kbEngine/assets/Textures/white.bmp", true );
-	kbTexture *const pBlackTex = (kbTexture*)g_ResourceManager.LoadResource( "../../kbEngine/assets/Textures/black.bmp", true );
-	kbTexture *const pDefaultNormal = (kbTexture*)g_ResourceManager.LoadResource( "../../kbEngine/assets/Textures/defaultNormal.bmp", true );
-	kbTexture *const pNoiseTex = (kbTexture*)g_ResourceManager.LoadResource( "../../kbEngine/assets/Textures/noise.jpg", true );
+	kbTexture *const pWhiteTex = (kbTexture*)g_ResourceManager.GetResource( "../../kbEngine/assets/Textures/white.bmp", true, true );
+	kbTexture *const pBlackTex = (kbTexture*)g_ResourceManager.GetResource( "../../kbEngine/assets/Textures/black.bmp", true, true );
+	kbTexture *const pDefaultNormal = (kbTexture*)g_ResourceManager.GetResource( "../../kbEngine/assets/Textures/defaultNormal.bmp", true, true );
+	kbTexture *const pNoiseTex = (kbTexture*)g_ResourceManager.GetResource( "../../kbEngine/assets/Textures/noise.jpg", true, true );
 
 	size_t currOffset = 0;
 	for ( int i = 0; i < constantBufferStrings.size(); i += 2 ) {

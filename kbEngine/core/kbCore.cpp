@@ -71,6 +71,8 @@ void ShutdownKBEngine() {
 	g_LogFile = nullptr;
 
 	CloseHandle( g_WriteFileMutex );
+
+	kbString::ShutDown();
 }
 
 /**

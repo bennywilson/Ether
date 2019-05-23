@@ -189,7 +189,7 @@ void kbGrass::RefreshGrass() {
 	const float patchLen = m_GrassCellLength / (float)m_PatchesPerCellSide;
 
 	m_GrassShaderOverrides.m_ParamOverrides.clear();
-	m_GrassShaderOverrides.m_pShader = (kbShader*)g_ResourceManager.LoadResource( "./assets/Shaders/Environment/grass.kbshader", true );
+	m_GrassShaderOverrides.m_pShader = (kbShader*)g_ResourceManager.GetResource( "./assets/Shaders/Environment/grass.kbshader", true, true );
 
 	m_GrassShaderOverrides.SetTexture( "heightMap", m_pOwningTerrainComponent->GetHeightMap() );
 	m_GrassShaderOverrides.SetVec4List( "bladeOffsets", bladeOffsets );

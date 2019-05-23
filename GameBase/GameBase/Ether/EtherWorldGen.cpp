@@ -86,7 +86,7 @@ void EtherFogComponent::RenderHookCallBack( kbRenderTexture *const pSrc, kbRende
 	//g_pRenderer->RT_ClearRenderTarget( pDst, kbColor::white );
 
 	if ( m_pShader == nullptr ) {
-		m_pShader = (kbShader *) g_ResourceManager.LoadResource( "./assets/shaders/PostProcess/Fog.kbshader", true );
+		m_pShader = (kbShader *) g_ResourceManager.GetResource( "./assets/shaders/PostProcess/Fog.kbshader", true, true );
 	}
 
 	g_pRenderer->RT_SetRenderTarget( pDst );

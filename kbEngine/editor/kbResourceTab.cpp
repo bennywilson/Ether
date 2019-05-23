@@ -72,8 +72,8 @@ void kbResourceTab::ResourceSelectedCB( Fl_Widget * widget, void * userData ) {
 		kbResourceTabFile_t * pResourceItem = pResourceTab->m_SelectBrowserIdx[selectedItemIndex];
 
 		if ( pResourceItem->m_pResource != nullptr ) {
-			const char * fileName = pResourceItem->m_pResource->GetName().c_str();
-			kbResource * pResource = g_ResourceManager.GetResource( fileName );
+			const char * fileName = pResourceItem->m_pResource->GetFullFileName().c_str();
+			kbResource * pResource = g_ResourceManager.GetResource( fileName, false, false );
 
 			widgetCBResourceSelected resourceCBObject( WidgetCB_ResourceSelected );
 			resourceCBObject.resourceFileName = pResource->GetFullFileName();
@@ -445,7 +445,7 @@ void kbResourceTab::FindResourcesRecursively( const std::string & file, kbResour
 							std::string fileName = file + FindFileData.cFileName ;
 							StringToLower( fileName );
 
-							NewFolder.m_ResourceList[NewFolder.m_ResourceList.size() - 1].m_pResource = g_ResourceManager.LoadResource( fileName, false );
+							NewFolder.m_ResourceList[NewFolder.m_ResourceList.size() - 1].m_pResource = g_ResourceManager.GetResource( fileName, false, true );
 						}
 						continue;
 					}

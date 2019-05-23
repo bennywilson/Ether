@@ -288,7 +288,7 @@ bool kbModel::LoadMS3D() {
 		m_Materials[iMat].m_DiffuseColor.Set( pMat->m_Diffuse[0], pMat->m_Diffuse[1], pMat->m_Diffuse[2], 1.0f );
 
 		// get the base texture name
-		char *const texture[] = { pMat->m_Texture, pMat->m_AlphaMap };
+	/*	char *const texture[] = { pMat->m_Texture, pMat->m_AlphaMap };
 
 		for ( int iTex = 0; iTex < 2; iTex++ ) {
 
@@ -298,7 +298,7 @@ bool kbModel::LoadMS3D() {
 
 			// load the base diffuse textures
 			const std::string textureFileName = filePath + texture[iTex];
-			m_Materials[iMat].m_Textures.push_back( (kbTexture *) g_ResourceManager.LoadResource( textureFileName.c_str(), true ) );
+			m_Materials[iMat].m_Textures.push_back( (kbTexture *) g_ResourceManager.GetResource( textureFileName.c_str(), true ) );
 		}
 
 		std::string shaderName = pMat->m_Name;
@@ -311,8 +311,9 @@ bool kbModel::LoadMS3D() {
 		if ( endOfShaderName != std::string::npos ) {
 			shaderName.resize( endOfShaderName );
 		}
-		shaderName += ".kbshader";
-		m_Materials[iMat].m_pShader = ( kbShader * ) g_ResourceManager.GetResource( shaderName );
+//		shaderName += ".kbshader";
+	//	m_Materials[iMat].m_pShader = ( kbShader * ) g_ResourceManager.GetResource( shaderName );
+*/
 	}
 
 	// create index buffer
@@ -829,7 +830,7 @@ bool kbModel::LoadFBX() {
 	m_IndexBuffer.CreateIndexBuffer( indexList );
 
 	kbMaterial newMaterial;
-	newMaterial.m_pShader = (kbShader *) g_ResourceManager.LoadResource( "../../kbEngine/assets/Shaders/basicShader.kbShader", true );
+	newMaterial.m_pShader = nullptr;//(kbShader *) g_ResourceManager.GetResource( "../../kbEngine/assets/Shaders/basicShader.kbShader", true );
 	m_Materials.push_back( newMaterial );
 
 	m_Bones.resize( boneToBounds.size() );
@@ -973,7 +974,7 @@ bool kbModel::LoadDiablo3() {
 	newMesh.m_NumTriangles = (uint)indexList.size() / 3;
 
 	kbMaterial newMaterial;
-	newMaterial.m_pShader = (kbShader *) g_ResourceManager.LoadResource( "../../kbEngine/assets/Shaders/basicShader.kbShader", true );
+	newMaterial.m_pShader = nullptr;//(kbShader *) g_ResourceManager.GetResource( "../../kbEngine/assets/Shaders/basicShader.kbShader", true );
 	m_Materials.push_back( newMaterial );
 
 	return true;
@@ -1007,7 +1008,7 @@ void kbModel::CreateDynamicModel( const UINT numVertices, const UINT numIndices,
 	if ( pShaderToUse != nullptr ) {
 		newMaterial.m_pShader = pShaderToUse;
 	} else {
-		newMaterial.m_pShader = (kbShader *) g_ResourceManager.LoadResource( "../../kbEngine/assets/Shaders/basicShader.kbShader", true );
+		newMaterial.m_pShader = nullptr;//(kbShader *) g_ResourceManager.GetResource( "../../kbEngine/assets/Shaders/basicShader.kbShader", true );
 	}
 	m_Materials.push_back( newMaterial );
 }
@@ -1036,9 +1037,9 @@ void kbModel::CreatePointCloud( const UINT numVertices, const std::string & shad
 
 	kbMaterial newMaterial;
 	if ( shaderToUse.length() > 0 ) {
-		newMaterial.m_pShader = (kbShader *) g_ResourceManager.LoadResource( shaderToUse.c_str(), true );
+		newMaterial.m_pShader = nullptr;//(kbShader *) g_ResourceManager.GetResource( shaderToUse.c_str(), true );
 	} else {
-		newMaterial.m_pShader = (kbShader *) g_ResourceManager.LoadResource( "../../kbEngine/assets/Shaders/basicShader.kbshader", true );
+		newMaterial.m_pShader = nullptr;//(kbShader *) g_ResourceManager.GetResource( "../../kbEngine/assets/Shaders/basicShader.kbshader", true );
 	}
 	newMaterial.SetCullingMode( cullingMode );
 	m_Materials.push_back( newMaterial );
