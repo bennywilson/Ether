@@ -85,7 +85,9 @@ public:
 
 	void										RenderSync();
 
-	kbResource *								GetResource( const std::string & displayName, const bool bLoadImmediately, const bool bLoadIfNotFound );
+	kbResource *								GetResource( const std::string & fullFileName, const bool bLoadImmediately, const bool bLoadIfNotFound );
+	kbResource *								GetResource( const kbString & fullFileName, const bool bLoadImmediately, const bool bLoadIfNotFound );
+
 	kbResource *								AsyncLoadResource( const kbString & stringName );
 
 	bool										AddPrefab( class kbGameEntity * pEntity, const std::string & package, const std::string & folder, const std::string & file, const bool bOverwrite, kbPrefab ** prefab = NULL );
@@ -118,7 +120,6 @@ private:
 	void										FileModifiedCB( const std::wstring & fileName );
 
 	std::unordered_map<kbString, kbResource*, kbStringHash>	m_ResourcesMap;
-	std::vector<kbResource *>					m_Resources;
 	std::vector<kbResource *>					m_ResourcesToLoad;		// Loaded during render sync
 	std::vector<kbPackage *>					m_pPackages;
 	std::map<kbGUID, const kbGameEntity *>		m_GuidToEntityMap;

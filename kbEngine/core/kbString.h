@@ -32,6 +32,7 @@ public:
 	bool										IsEmptyString() const { return c_str()[0] == '\0'; }
 
 	int											GetStringTableIndex() const { return m_StringTableIndex; }
+	size_t										GetLength() const { return stl_str().length(); }
 
 	const std::string &							stl_str() const;
 	const char *								c_str() const;

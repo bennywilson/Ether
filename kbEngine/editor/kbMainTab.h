@@ -28,7 +28,7 @@ public:
 
 	kbCamera *												GetEditorWindowCamera() const { return &m_pEditorWindow->GetCamera(); }
 
-	void													AdjustCameraMoveSpeedMultiplier( const float newMultiplier ) { m_CameraMoveSpeedMultiplier = max( min( newMultiplier, 100.0f ), 0.1f ); }
+	void													SetCameraSpeedMultiplier( const float newMultiplier ) { m_CameraMoveSpeedMultiplier = max( min( newMultiplier, 100.0f ), 0.1f ); }
 
 private:
 

@@ -209,8 +209,14 @@ kbResource * kbResourceManager::GetResource( const std::string & fullFileName, c
 	std::replace( convertedFileName.begin(), convertedFileName.end(), '/', '\\' );
 	std::transform( convertedFileName.begin(), convertedFileName.end(), convertedFileName.begin(), ::tolower );
 	const kbString fileNameString( convertedFileName );
+	return GetResource( fileNameString, bLoadImmediately, bLoadIfNotFound );
+}
+/**
+ *	kbResourceManager::GetResource
+ */
+kbResource * kbResourceManager::GetResource( const kbString & fullFileName, const bool bLoadImmediately, const bool bLoadIfNotFound ) {
 
-	auto mapEntry = m_ResourcesMap.find( fileNameString );
+	auto mapEntry = m_ResourcesMap.find( fullFileName );
 	if ( mapEntry != m_ResourcesMap.end() ) {
 
 		kbResource *const pResource = mapEntry->second;
@@ -223,15 +229,16 @@ kbResource * kbResourceManager::GetResource( const std::string & fullFileName, c
 		return nullptr;
 	}
 
-	if ( fullFileName.length() < 5 ) {
+	if ( fullFileName.GetLength() < 5 ) {
 		kbWarning( "kbResourceManager::AddResource() - Invalid file name %s", fullFileName.c_str() );
 		return nullptr;
 	}
 
 	kbResource * pResource = nullptr;
-	std::string fileExt = GetFileExtension( convertedFileName.c_str() );
+	std::string fileExt = GetFileExtension( fullFileName.c_str() );
 
-	if ( convertedFileName.find(".kbanim.ms3d") != std::string::npos ) {
+	const std::string & stlFileName = fullFileName.stl_str();
+	if ( stlFileName.find(".kbanim.ms3d") != std::string::npos ) {
 		pResource = new kbAnimation();
 	} else if ( fileExt == "ms3d" || fileExt == "fbx" || fileExt == "diablo3" ) {
 	   pResource = new kbModel();
@@ -251,21 +258,21 @@ kbResource * kbResourceManager::GetResource( const std::string & fullFileName, c
 
 //	fs::path p = fs::canonical( fullFileName.c_str() );
 	//StringFromWString( pResource->m_FullFileName, p.c_str() );
-	pResource->m_FullFileName = convertedFileName;
-	pResource->m_FullName = fileNameString;//kbString( pResource->m_FullFileName );
+	pResource->m_FullFileName = stlFileName;
+	pResource->m_FullName = fullFileName;//kbString( pResource->m_FullFileName );
 
-	size_t pos = fullFileName.find_last_of( "/" );
+	size_t pos = stlFileName.find_last_of( "/" );
 	if ( pos != std::string::npos ) {
-		pResource->m_Name = &fullFileName.c_str()[pos+1];
+		pResource->m_Name = &stlFileName.c_str()[pos+1];
 	} else {
-		pResource->m_Name = fullFileName;
+		pResource->m_Name = stlFileName;
 	}
 
 	if ( bLoadImmediately ) {
 		pResource->Load();
 	}
 
-	m_ResourcesMap[fileNameString] = pResource;
+	m_ResourcesMap[fullFileName] = pResource;
 
 	return pResource;
 }
@@ -300,35 +307,6 @@ kbResource * kbResourceManager::AsyncLoadResource( const kbString & stringName )
 
 	kbWarning( "kbResourceManager::AsyncLoadResource() - Failed to kick off a job for %s", stringName.c_str() );
 	return nullptr;
-/*
-	for ( int i = 0; i < m_Resources.size(); i++ ) {
-
-		if ( m_Resources[i]->m_FullName == stringName ) {
-
-			// Resource is already loaded so return it
-			if ( m_Resources[i]->m_bIsLoaded ) {
-				return m_Resources[i];
-			}
-
-			// Check if resource is currently being loaded
-			for ( int j = 0; j < m_LoadResourceJobs.size(); j++ ) {
-				if ( m_LoadResourceJobs[j]->m_Resource == m_Resources[i] ) {
-					return nullptr;
-				}
-			}
-
-			// Create a new loading job for this resources
-			kbLoadResourceJob *const pLoadJob = new kbLoadResourceJob();
-			pLoadJob->m_Resource = m_Resources[i];
-			m_LoadResourceJobs.push_back( pLoadJob );
-			g_pJobManager->RegisterJob( pLoadJob );
-
-			return nullptr;
-		}
-	}
-
-	kbError( "kbResourceManager::AsyncLoadResource() - Failed to kick off a job for %s", stringName.c_str() );
-	return nullptr;*/
 }
 
 /**
@@ -519,12 +497,6 @@ void kbResourceManager::Shutdown() {
 	}
 	m_ResourcesMap.clear();
 
-	/*for ( unsigned int i = 0; i < m_Resources.size(); i++ ) {
-		m_Resources[i]->Release();
-		delete m_Resources[i];
-	}
-	m_Resources.clear();*/
-
 	for ( unsigned int i = 0; i < m_pPackages.size(); i++ ) {
 		delete m_pPackages[i];
 	}
@@ -546,7 +518,8 @@ void kbResourceManager::FileModifiedCB( const std::wstring & fileName ) {
 	std::transform( convertedFileName.begin(), convertedFileName.end(), convertedFileName.begin(), ::tolower );
 	fs::path p = fs::canonical( convertedFileName.c_str() );
 
-	for ( int i = 0; i < m_Resources.size(); i++ ) {
+	// TODO HOT RELOADING
+/*	for ( int i = 0; i < m_Resources.size(); i++ ) {
 		fs::path resourcePath = fs::canonical( m_Resources[i]->GetFullFileName() );
 
 		if ( resourcePath.string() == p.string() ) {
@@ -556,7 +529,7 @@ void kbResourceManager::FileModifiedCB( const std::wstring & fileName ) {
 			return;
 		}
 	}
-
+*/
 	kbLog( "Loading %s", p.string().c_str() );
 	GetResource( p.string(), true, true );
 }

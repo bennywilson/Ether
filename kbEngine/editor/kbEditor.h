@@ -77,7 +77,7 @@ private:
 
 	kbGame *												m_pGame;
 	kbEditorWindow *										m_pGameWindow;
-	Fl_Button *												m_pSpeedButton;
+	Fl_Choice *												m_pSpeedChoice;
 
 	// widgets
 	class kbMainTab *										m_pMainTab;

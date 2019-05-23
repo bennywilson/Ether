@@ -47,6 +47,7 @@ GenerateClass(
 	kbEditorLevelComponent,
 	AddField( "MainCameraPosition", KBTYPEINFO_VECTOR, kbEditorLevelComponent, m_CameraPosition, false, "" )
 	AddField( "MainCameraRotation", KBTYPEINFO_VECTOR4, kbEditorLevelComponent, m_CameraRotation, false, "" )
+	AddField( "CameraSpeedIdx", KBTYPEINFO_INT, kbEditorLevelComponent, m_CameraSpeedIdx, false, "" )
 )
 
 GenerateClass(

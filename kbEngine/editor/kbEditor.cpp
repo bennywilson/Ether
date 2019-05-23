@@ -36,6 +36,25 @@ Fl_Text_Buffer * g_StyleBuffer = nullptr;
 static Fl_Text_Display::Style_Table_Entry stable[] = {  { FL_BLACK,	FL_HELVETICA, 12 },				// A
 												{ FL_RED,		FL_HELVETICA, 12 } };		// B
 
+// Editor camera speed
+struct EditorCamSpeedBind {
+	EditorCamSpeedBind( const kbString & displayName, const float multiplier ) :
+		m_DisplayName( displayName ),
+		m_SpeedMultiplier( multiplier ) { }
+
+	kbString m_DisplayName;
+	float m_SpeedMultiplier;
+};
+
+const static EditorCamSpeedBind g_EditorCamSpeedBindings[] = {
+	EditorCamSpeedBind( kbString( "0.25x" ), 0.25f ),
+	EditorCamSpeedBind( kbString( "1x" ), 1.0f ),
+	EditorCamSpeedBind( kbString( "5x" ), 5.0f ),
+	EditorCamSpeedBind( kbString( "15x" ), 15.0f )
+};
+const static size_t g_NumEditorCamSpeedBindings = sizeof( g_EditorCamSpeedBindings ) / sizeof( EditorCamSpeedBind );
+
+
 /**
  * kbEditor
  */
@@ -120,8 +139,12 @@ kbEditor::kbEditor() :
 	curX += TRSButtonWidth + buttonSpacing;
 
 	const int speedButtonWidth = 85;
-	m_pSpeedButton = new Fl_Button( curX, curY, speedButtonWidth, buttonHeight, "Speedx1" );
-	m_pSpeedButton->callback( AdjustCameraSpeedCB );
+	m_pSpeedChoice = new Fl_Choice( curX, curY, (int)fl_width( "Speedx1000" ), buttonHeight );
+	for ( size_t i = 0; i < g_NumEditorCamSpeedBindings; i++ ) {
+		m_pSpeedChoice->add( g_EditorCamSpeedBindings[i].m_DisplayName.c_str() );
+	}
+	m_pSpeedChoice->callback( AdjustCameraSpeedCB );
+
 	curX += speedButtonWidth + buttonSpacing * 2;
 
 	const int toggleIconButtonWidth = 85 * 2;
@@ -294,8 +317,17 @@ void kbEditor::LoadMap( const std::string & InMapName ) {
 	m_pResourceTab->RefreshEntitiesTab();
 
 	if ( pEditorLevelComponent != nullptr ) {
-		SetMainCameraPos( pEditorLevelComponent->GetCameraPosition() );
-		SetMainCameraRot( pEditorLevelComponent->GetCameraRotation() );
+		SetMainCameraPos( pEditorLevelComponent->m_CameraPosition );
+		SetMainCameraRot( pEditorLevelComponent->m_CameraRotation );
+
+		const int speedIdx = pEditorLevelComponent->m_CameraSpeedIdx;
+		if ( speedIdx >= 0 && speedIdx < g_NumEditorCamSpeedBindings ) {
+			m_pSpeedChoice->value( speedIdx );
+			m_pMainTab->SetCameraSpeedMultiplier( g_EditorCamSpeedBindings[speedIdx].m_SpeedMultiplier );
+		} else {
+			m_pSpeedChoice->value( 0 );
+			m_pMainTab->SetCameraSpeedMultiplier( g_EditorCamSpeedBindings[0].m_SpeedMultiplier );
+		}
 	}
 }
 
@@ -738,24 +770,15 @@ void kbEditor::ScaleButtonCB( class Fl_Widget *, void * ) {
  */
 void kbEditor::AdjustCameraSpeedCB( class Fl_Widget * widget, void * ) {
 
-	float multiplier = 1.0f;
+	const Fl_Choice *const pChoiceWidget = g_Editor->m_pSpeedChoice;
+	const int selectionIdx = pChoiceWidget->value();
+	if ( selectionIdx < 0 || selectionIdx >= g_NumEditorCamSpeedBindings ) {
+		kbWarning( "kbEditor::AdjustCameraSpeedCB() - Invalid choice selected." );
+		return;
+	}
 
-	if ( strcmp( widget->label(), "Speedx0.25" ) == 0 ) {
-		multiplier = 1.0f;
-		g_Editor->m_pSpeedButton->label( "Speedx1" );
-	} else if ( strcmp( widget->label(), "Speedx1" ) == 0 ) {
-		multiplier = 5.0f;
-		g_Editor->m_pSpeedButton->label( "Speedx5" );
-	}
-	else if ( strcmp( widget->label(), "Speedx5" ) == 0 ) {
-		multiplier = 15.0f;
-		g_Editor->m_pSpeedButton->label( "Speedx15" );
-	}
-	else if ( strcmp( widget->label(), "Speedx15" ) == 0 ) {
-		multiplier = 0.25f;
-		g_Editor->m_pSpeedButton->label( "Speedx0.25" );
-	}
-	g_Editor->m_pMainTab->AdjustCameraMoveSpeedMultiplier( multiplier );
+	const float multiplier = g_EditorCamSpeedBindings[selectionIdx].m_SpeedMultiplier;
+	g_Editor->m_pMainTab->SetCameraSpeedMultiplier( multiplier );
 }
 
 /**
@@ -848,11 +871,13 @@ void kbEditor::SaveLevel_Internal( const std::string & fileNameStr, const bool b
 	kbFile outFile;
 	outFile.Open( fileNameStr.c_str(), kbFile::FT_Write );
 
+	// Save out editor info
 	{
 		kbGameEntity levelInfoEnt;
 		kbEditorLevelComponent *const pLevelInfo = new kbEditorLevelComponent();
-		pLevelInfo->SetCameraPosition( GetMainCameraPos() );
-		pLevelInfo->SetCameraRotation( GetMainCameraRot() );
+		pLevelInfo->m_CameraPosition = GetMainCameraPos();
+		pLevelInfo->m_CameraRotation = GetMainCameraRot();
+		pLevelInfo->m_CameraSpeedIdx = m_pSpeedChoice->value();
 		levelInfoEnt.AddComponent( pLevelInfo );
 		outFile.WriteGameEntity( &levelInfoEnt );
 	}
