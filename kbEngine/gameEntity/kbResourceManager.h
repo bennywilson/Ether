@@ -121,6 +121,7 @@ private:
 
 	std::unordered_map<kbString, kbResource*, kbStringHash>	m_ResourcesMap;
 	std::vector<kbResource *>					m_ResourcesToLoad;		// Loaded during render sync
+
 	std::vector<kbPackage *>					m_pPackages;
 	std::map<kbGUID, const kbGameEntity *>		m_GuidToEntityMap;
 

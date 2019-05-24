@@ -139,7 +139,8 @@ kbEditor::kbEditor() :
 	curX += TRSButtonWidth + buttonSpacing;
 
 	const int speedButtonWidth = 85;
-	m_pSpeedChoice = new Fl_Choice( curX, curY, (int)fl_width( "Speedx1000" ), buttonHeight );
+	curX += (int)fl_width( "Cam Speed " );
+	m_pSpeedChoice = new Fl_Choice( curX, curY, (int)fl_width( "x100000" ), buttonHeight, "Cam Speed:" );
 	for ( size_t i = 0; i < g_NumEditorCamSpeedBindings; i++ ) {
 		m_pSpeedChoice->add( g_EditorCamSpeedBindings[i].m_DisplayName.c_str() );
 	}
@@ -199,6 +200,35 @@ kbEditor::kbEditor() :
 	g_pRenderer->LoadTexture( "../../kbEngine/assets/Textures/Editor/directionalLightIcon.jpg", 2 );
 
 	SetWindowText( m_pMainTab->GetEditorWindow()->GetWindowHandle(), "kbEditor" );
+
+	// Load Editor Settings
+	kbEditorSettingsComponent * pEditorLevelComponent = nullptr;
+
+	kbFile levelEditorFile;
+	if ( levelEditorFile.Open( "./assets/editorSettings.txt", kbFile::FT_Read ) ) {
+		kbGameEntity * gameEntity = levelEditorFile.ReadGameEntity();
+		pEditorLevelComponent = (kbEditorSettingsComponent*)gameEntity->GetComponentByType( kbEditorSettingsComponent::GetType() );
+		levelEditorFile.Close();
+	}
+
+	if ( pEditorLevelComponent == nullptr ) {
+		SetMainCameraPos( kbVec3::zero );
+		SetMainCameraRot( kbQuat::identity );
+		m_pSpeedChoice->value( 0 );
+		m_pMainTab->SetCameraSpeedMultiplier( g_EditorCamSpeedBindings[0].m_SpeedMultiplier );
+	} else {
+		SetMainCameraPos( pEditorLevelComponent->m_CameraPosition );
+		SetMainCameraRot( pEditorLevelComponent->m_CameraRotation );
+
+		if ( pEditorLevelComponent->m_CameraSpeedIdx >= 0 && pEditorLevelComponent->m_CameraSpeedIdx < g_NumEditorCamSpeedBindings ) {
+			const int idx = pEditorLevelComponent->m_CameraSpeedIdx;
+			m_pSpeedChoice->value( idx );
+			m_pMainTab->SetCameraSpeedMultiplier( g_EditorCamSpeedBindings[idx].m_SpeedMultiplier );
+		} else {
+			m_pSpeedChoice->value( 0 );
+			m_pMainTab->SetCameraSpeedMultiplier( g_EditorCamSpeedBindings[0].m_SpeedMultiplier );
+		}
+	}
 }
 
 /**
@@ -239,8 +269,6 @@ void kbEditor::LoadMap( const std::string & InMapName ) {
 
 	UnloadMap();
 
-	const kbEditorLevelComponent * pEditorLevelComponent = nullptr;
-
 	// Load map
 	if ( InMapName.empty() == false ) {
 		m_CurrentLevelFileName = InMapName;
@@ -271,14 +299,6 @@ void kbEditor::LoadMap( const std::string & InMapName ) {
 
 				kbGameEntity * gameEntity = inFile.ReadGameEntity();
 				while ( gameEntity != nullptr ) {
-
-					if ( pEditorLevelComponent == nullptr ) {
-						pEditorLevelComponent = (kbEditorLevelComponent*)gameEntity->GetComponentByType( kbEditorLevelComponent::GetType() );
-
-						if ( pEditorLevelComponent != nullptr ) {
-							continue;
-						}
-					}
 
 					kbEditorEntity *const newEditorEntity = new kbEditorEntity( gameEntity );
 					g_Editor->m_GameEntities.push_back( newEditorEntity );
@@ -315,20 +335,6 @@ void kbEditor::LoadMap( const std::string & InMapName ) {
 	m_UndoStack.Reset();
 
 	m_pResourceTab->RefreshEntitiesTab();
-
-	if ( pEditorLevelComponent != nullptr ) {
-		SetMainCameraPos( pEditorLevelComponent->m_CameraPosition );
-		SetMainCameraRot( pEditorLevelComponent->m_CameraRotation );
-
-		const int speedIdx = pEditorLevelComponent->m_CameraSpeedIdx;
-		if ( speedIdx >= 0 && speedIdx < g_NumEditorCamSpeedBindings ) {
-			m_pSpeedChoice->value( speedIdx );
-			m_pMainTab->SetCameraSpeedMultiplier( g_EditorCamSpeedBindings[speedIdx].m_SpeedMultiplier );
-		} else {
-			m_pSpeedChoice->value( 0 );
-			m_pMainTab->SetCameraSpeedMultiplier( g_EditorCamSpeedBindings[0].m_SpeedMultiplier );
-		}
-	}
 }
 
 /**
@@ -471,6 +477,19 @@ void kbEditor::Update() {
  *	ShutDown
  */
 void kbEditor::ShutDown() {
+
+	// Save Editor Settings
+	kbFile outFile;
+	outFile.Open( "./assets/editorSettings.txt", kbFile::FT_Write );
+
+	kbGameEntity levelInfoEnt;
+	kbEditorSettingsComponent *const pLevelInfo = new kbEditorSettingsComponent();
+	pLevelInfo->m_CameraPosition = GetMainCameraPos();
+	pLevelInfo->m_CameraRotation = GetMainCameraRot();
+	pLevelInfo->m_CameraSpeedIdx = m_pSpeedChoice->value();
+	levelInfoEnt.AddComponent( pLevelInfo );
+	outFile.WriteGameEntity( &levelInfoEnt );
+	outFile.Close();
 
 	if ( m_bIsRunning == false ) {
 		return;
@@ -870,17 +889,6 @@ void kbEditor::SaveLevel_Internal( const std::string & fileNameStr, const bool b
 
 	kbFile outFile;
 	outFile.Open( fileNameStr.c_str(), kbFile::FT_Write );
-
-	// Save out editor info
-	{
-		kbGameEntity levelInfoEnt;
-		kbEditorLevelComponent *const pLevelInfo = new kbEditorLevelComponent();
-		pLevelInfo->m_CameraPosition = GetMainCameraPos();
-		pLevelInfo->m_CameraRotation = GetMainCameraRot();
-		pLevelInfo->m_CameraSpeedIdx = m_pSpeedChoice->value();
-		levelInfoEnt.AddComponent( pLevelInfo );
-		outFile.WriteGameEntity( &levelInfoEnt );
-	}
 
 	for ( int i = 0; i < g_Editor->m_GameEntities.size(); i++ ) {
 		outFile.WriteGameEntity( g_Editor->m_GameEntities[i]->GetGameEntity() );

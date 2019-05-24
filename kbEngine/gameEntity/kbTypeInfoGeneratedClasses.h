@@ -44,10 +44,10 @@ GenerateClass(
 )
 
 GenerateClass(
-	kbEditorLevelComponent,
-	AddField( "MainCameraPosition", KBTYPEINFO_VECTOR, kbEditorLevelComponent, m_CameraPosition, false, "" )
-	AddField( "MainCameraRotation", KBTYPEINFO_VECTOR4, kbEditorLevelComponent, m_CameraRotation, false, "" )
-	AddField( "CameraSpeedIdx", KBTYPEINFO_INT, kbEditorLevelComponent, m_CameraSpeedIdx, false, "" )
+	kbEditorSettingsComponent,
+	AddField( "MainCameraPosition", KBTYPEINFO_VECTOR, kbEditorSettingsComponent, m_CameraPosition, false, "" )
+	AddField( "MainCameraRotation", KBTYPEINFO_VECTOR4, kbEditorSettingsComponent, m_CameraRotation, false, "" )
+	AddField( "CameraSpeedIdx", KBTYPEINFO_INT, kbEditorSettingsComponent, m_CameraSpeedIdx, false, "" )
 )
 
 GenerateClass(

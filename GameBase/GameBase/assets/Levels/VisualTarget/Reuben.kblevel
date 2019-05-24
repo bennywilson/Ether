@@ -7,7 +7,7 @@ kbGameEntity 0 0 0 0 {
 		Position = 0.000000 0.000000 0.000000
 		Scale = 1.000000 1.000000 1.000000
 	}
-	kbEditorLevelComponent { 
+	kbEditorSettingsComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
 		CameraSpeedIdx = 3
@@ -24,7 +24,7 @@ kbGameEntity 0 0 0 0 {
 		Position = 0.000000 0.000000 0.000000
 		Scale = 1.000000 1.000000 1.000000
 	}
-	kbEditorLevelComponent { 
+	kbEditorSettingsComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
 		CameraSpeedIdx = 0
@@ -41,7 +41,7 @@ kbGameEntity 0 0 0 0 {
 		Position = 0.000000 0.000000 0.000000
 		Scale = 1.000000 1.000000 1.000000
 	}
-	kbEditorLevelComponent { 
+	kbEditorSettingsComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
 		CameraSpeedIdx = 0

@@ -250,10 +250,10 @@ private:
 };
 
 /**
- *  kbEditorLevelComponent
+ *  kbEditorSettingsComponent
  */
-class kbEditorLevelComponent : public kbGameComponent {
-	KB_DECLARE_COMPONENT( kbEditorLevelComponent, kbGameComponent );
+class kbEditorSettingsComponent : public kbGameComponent {
+	KB_DECLARE_COMPONENT( kbEditorSettingsComponent, kbGameComponent );
 
 //-------------------------------------------------------------------------------------------------------------------------------------------------------------
 public:
