@@ -61,6 +61,8 @@ const static size_t g_NumEditorCamSpeedBindings = sizeof( g_EditorCamSpeedBindin
 kbEditor::kbEditor() :
 	Fl_Window( 0, 0, GetSystemMetrics( SM_CXFULLSCREEN ), GetSystemMetrics( SM_CYFULLSCREEN ) ) {
 
+	const float editorInitStartTime = g_GlobalTimer.TimeElapsedSeconds();
+
 	outputCB = kbEditor::OutputCB;
 	m_UndoIDAtLastSave = UINT64_MAX;
 	m_CurrentLevelFileName = "Untitled";
@@ -229,6 +231,8 @@ kbEditor::kbEditor() :
 			m_pMainTab->SetCameraSpeedMultiplier( g_EditorCamSpeedBindings[0].m_SpeedMultiplier );
 		}
 	}
+
+	kbLog( "Editor init time took %f seconds", g_GlobalTimer.TimeElapsedSeconds() - editorInitStartTime );
 }
 
 /**
@@ -266,6 +270,9 @@ void kbEditor::UnloadMap() {
  *  kbEditor::LoadMap()
  */
 void kbEditor::LoadMap( const std::string & InMapName ) {
+
+	kbLog( "LoadMap() called for map %s", InMapName.c_str() );
+	const float loadMapStartTime = g_GlobalTimer.TimeElapsedSeconds();
 
 	UnloadMap();
 
@@ -335,6 +342,8 @@ void kbEditor::LoadMap( const std::string & InMapName ) {
 	m_UndoStack.Reset();
 
 	m_pResourceTab->RefreshEntitiesTab();
+
+	kbLog( "	LoadMap finished.  Took %f seconds", g_GlobalTimer.TimeElapsedSeconds() - loadMapStartTime );
 }
 
 /**
@@ -1060,6 +1069,12 @@ void kbEditor::RightClickOnMainTab() {
 	const kbPrefab *const prefab = g_Editor->m_pResourceTab->GetSelectedPrefab();
 	std::string ReplacePrefabMessage = "Replace Prefab";
 	std::string PlacePrefabMessage = "Place Prefab";
+	std::string DuplicateMessage = "Duplicate Entity";
+
+	if ( g_Editor->GetSelectedObjects().size() > 0 ) {
+		DuplicateMessage += g_Editor->GetSelectedObjects()[0]->GetGameEntity()->GetName();
+	}
+
 	if ( prefab == nullptr ) {
 		PlacePrefabMessage += "into scene";
 	} else {
@@ -1069,7 +1084,8 @@ void kbEditor::RightClickOnMainTab() {
 
 
 	Fl_Menu_Item rclick_menu[] = {
-		{ "Create New Prefab",  0, AddEntityAsPrefab, ( void * ) 0 },
+		{ DuplicateMessage.c_str(), 0, DuplicateEntity, 0 },
+		{ "Create New Prefab",  0, AddEntityAsPrefab, (void *) 0 },
 		{ ReplacePrefabMessage.c_str(), 0, ReplaceCurrentlySelectedPrefab, (void*) 1 },
 		{ PlacePrefabMessage.c_str(),  0, InsertSelectedPrefabIntoScene, ( void * ) this },
 		{ 0 }};
@@ -1077,10 +1093,11 @@ void kbEditor::RightClickOnMainTab() {
 	if ( g_Editor->m_SelectedObjects.size() != 1 ) {
 		rclick_menu[0].deactivate();
 		rclick_menu[1].deactivate();
+		rclick_menu[2].deactivate();
 	}
 
 	if ( prefab == nullptr ) {
-		rclick_menu[2].deactivate();
+		rclick_menu[3].deactivate();
 	}
 
 	const Fl_Menu_Item * m = rclick_menu->popup( Fl::event_x(), Fl::event_y(), 0, 0, 0 );
@@ -1136,6 +1153,24 @@ void kbEditor::ReplaceCurrentlySelectedPrefab( class Fl_Widget *, void * ) {
 //	g_ResourceManager.DumpPackageInfo();
 	//g_ResourceManager.SavePackages();
 }
+/**
+ *	kbEditor::DuplicateEntity
+ */
+void kbEditor::DuplicateEntity( Fl_Widget *, void * userdata ) {
+	auto & selectedObjects = g_Editor->GetSelectedObjects();
+	if ( selectedObjects.size() == 0 ) {
+		return;
+	}
+
+	kbGameEntity *const pSrcEntity = selectedObjects[0]->GetGameEntity();
+	kbGameEntity *const pDstEntity = new kbGameEntity( pSrcEntity, false );
+
+	kbEditorEntity *const pEditorEntity = new kbEditorEntity( pDstEntity );
+	pEditorEntity->SetPosition( pSrcEntity->GetPosition() );
+	g_Editor->m_GameEntities.push_back( pEditorEntity );
+	g_Editor->m_pResourceTab->RefreshEntitiesTab();
+}
+
 
 /**
  *	kbEditor::AddEntityAsPrefab

@@ -160,6 +160,8 @@ void kbGrass::SetEnable_Internal( const bool isEnabled ) {
  */
 void kbGrass::RefreshGrass() {
 
+	const float startRefreshGrassTime = g_GlobalTimer.TimeElapsedSeconds();
+
 	std::vector<kbVec4> bladeOffsets;
 
 	//float grassCellHalfSize = ( m_DistanceBetweenPatches / 2.0f ) * 0.95f;
@@ -290,6 +292,8 @@ void kbGrass::RefreshGrass() {
 
 	m_bUpdateMaterial = false;
 	m_bUpdatePointCloud = false;
+
+	kbLog( "Refreshing grass took %f seconds.", g_GlobalTimer.TimeElapsedSeconds() - startRefreshGrassTime );
 }
 
 /**

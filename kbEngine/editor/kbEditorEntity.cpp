@@ -38,7 +38,7 @@ kbEditorEntity::~kbEditorEntity() {
 /**
  *	kbEditorEntity::GetPropertyMetaData
  */
-varMetaData_t *	kbEditorEntity::GetPropertyMetaData( const kbComponent * pComponent, const size_t Offset) {
+varMetaData_t *	kbEditorEntity::GetPropertyMetaData( const kbComponent * pComponent, const size_t Offset ) {
 	if ( m_pGameEntity == NULL || pComponent == NULL )
 		return NULL;
 

@@ -170,6 +170,21 @@
     <None Include="assets\shaders\FX\decal_Blend.kbShader">
       <Filter>Shaders\FX</Filter>
     </None>
+    <None Include="assets\shaders\FX\decal_Modulate.kbShader">
+      <Filter>Shaders\FX</Filter>
+    </None>
+    <None Include="assets\shaders\FX\hackClip.kbshader">
+      <Filter>Shaders\FX</Filter>
+    </None>
+    <None Include="assets\shaders\FX\Particle_Rain.kbShader">
+      <Filter>Shaders\FX</Filter>
+    </None>
+    <None Include="assets\shaders\FX\shellTrailParticle.kbShader">
+      <Filter>Shaders\FX</Filter>
+    </None>
+    <None Include="assets\shaders\FX\waterDistortion.kbShader">
+      <Filter>Shaders\FX</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameBase.h">

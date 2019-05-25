@@ -63,6 +63,9 @@ void kbParticleComponent::Constructor() {
 	m_MinStart3DRotation = kbVec3::zero;
 	m_MaxStart3DRotation = kbVec3::zero;
 
+	m_MinStart3DOffset = kbVec3::zero;
+	m_MaxStart3DOffset = kbVec3::zero;
+
 	m_MinParticleStartSize.Set( 3.0f, 3.0f, 3.0f );
 	m_MaxParticleStartSize.Set( 3.0f, 3.0f, 3.0f );
 	m_MinParticleEndSize.Set( 3.0f, 3.0f, 3.0f );
@@ -181,14 +184,15 @@ void kbParticleComponent::Update_Internal( const float DeltaTime ) {
 	for ( int i = (int)m_Particles.size() - 1; i >= 0 ; i-- ) {
 		kbParticle_t & particle = m_Particles[i];
 
-		particle.m_LifeLeft -= DeltaTime;
+		if ( particle.m_LifeLeft >= 0.0f ) {
+			particle.m_LifeLeft -= DeltaTime;
 
-		if ( particle.m_LifeLeft <= 0.0f || ( IsModelEmitter() && particle.m_RenderObject.m_pComponent  == nullptr ) ) {
-			particle.Shutdown();
-			VectorRemoveFastIndex( m_Particles, i );
-			continue;
+			if ( particle.m_LifeLeft <= 0.0f || ( IsModelEmitter() && particle.m_RenderObject.m_pComponent  == nullptr ) ) {
+				particle.Shutdown();
+				VectorRemoveFastIndex( m_Particles, i );
+				continue;
+			}
 		}
-
 
 		const float normalizedTime = ( particle.m_TotalLife - particle.m_LifeLeft ) / particle.m_TotalLife;
 		kbVec3 curVelocity = kbVec3::zero;
@@ -333,8 +337,14 @@ void kbParticleComponent::Update_Internal( const float DeltaTime ) {
 	kbMat4 ownerMatrix = GetOwner()->GetOrientation().ToMat4();
 
 	// Spawn particles
-	const kbVec3 MyPosition = GetPosition();
+	kbVec3 MyPosition = GetPosition();
 	while ( m_bIsSpawning && ( ( m_MaxParticleSpawnRate > 0 && TimeLeft >= NextSpawn ) || m_BurstCount > 0 ) ) {
+
+		if ( m_MinStart3DOffset.Compare( kbVec3::zero ) == false || m_MaxStart3DOffset.Compare( kbVec3::zero ) == false ) {
+			const kbVec3 startingOffset = kbVec3Rand( m_MinStart3DOffset, m_MaxStart3DOffset );
+			MyPosition += startingOffset;
+		}
+
 		kbParticle_t newParticle;
 		newParticle.m_StartVelocity = kbVec3Rand( m_MinParticleStartVelocity, m_MaxParticleStartVelocity ) * ownerMatrix;
 		newParticle.m_EndVelocity = kbVec3Rand( m_MinParticleEndVelocity, m_MaxParticleEndVelocity ) * ownerMatrix;
@@ -384,7 +394,7 @@ void kbParticleComponent::Update_Internal( const float DeltaTime ) {
 
 				renderObj.m_Orientation = kbQuat( 0.0f, 0.0f, 0.0f, 1.0f );
 				if ( m_MinStart3DRotation.Compare( kbVec3::zero ) == false || m_MaxStart3DRotation.Compare( kbVec3::zero ) == false ) {
-					kbVec3 startingRotation = kbVec3Rand( m_MinStart3DRotation, m_MaxStart3DRotation );
+					const kbVec3 startingRotation = kbVec3Rand( m_MinStart3DRotation, m_MaxStart3DRotation );
 					kbQuat xAxis, yAxis, zAxis;
 					xAxis.FromAxisAngle( kbVec3( 1.0f, 0.0f, 0.0f ), kbToRadians( startingRotation.x ) );
 					yAxis.FromAxisAngle( kbVec3( 0.0f, 1.0f, 0.0f ), kbToRadians( startingRotation.y ) );

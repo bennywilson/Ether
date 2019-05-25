@@ -970,6 +970,7 @@ kbGameEntity 0 0 0 0 {
 		MaxEndSize = 1.500000 1.500000 1.500000
 		MaxEndVelocity = 75.000000 -20.000000 -50.000000
 		MaxSpawnRate =  2.000000
+		MaxStart3DOffset = 0.000000 0.000000 0.000000
 		MaxStart3DRotation = 0.000000 0.000000 0.000000
 		MaxStartRotationRate =  0.000000
 		MaxStartSize = 1.500000 1.500000 1.500000
@@ -980,6 +981,7 @@ kbGameEntity 0 0 0 0 {
 		MinEndSize = 1.000000 1.000000 1.000000
 		MinEndVelocity = 75.000000 -20.000000 -50.000000
 		MinSpawnRate =  1.000000
+		MinStart3DOffset = 0.000000 0.000000 0.000000
 		MinStart3DRotation = 0.000000 0.000000 0.000000
 		MinStartRotationRate =  0.000000
 		MinStartSize = 1.000000 1.000000 1.000000
@@ -1024,6 +1026,7 @@ kbGameEntity 0 0 0 0 {
 		MaxEndSize = 3.000000 3.000000 3.000000
 		MaxEndVelocity = 0.000000 0.000000 0.000000
 		MaxSpawnRate =  0.000000
+		MaxStart3DOffset = 0.000000 0.000000 0.000000
 		MaxStart3DRotation = 0.000000 0.000000 0.000000
 		MaxStartRotationRate =  0.000000
 		MaxStartSize = 3.000000 3.000000 3.000000
@@ -1034,6 +1037,7 @@ kbGameEntity 0 0 0 0 {
 		MinEndSize = 3.000000 3.000000 3.000000
 		MinEndVelocity = 0.000000 0.000000 0.000000
 		MinSpawnRate =  0.000000
+		MinStart3DOffset = 0.000000 0.000000 0.000000
 		MinStart3DRotation = 0.000000 0.000000 0.000000
 		MinStartRotationRate =  0.000000
 		MinStartSize = 1.200000 1.200000 1.200000
@@ -1095,6 +1099,7 @@ kbGameEntity 0 0 0 0 {
 		MaxEndSize = 1.100000 1.100000 1.100000
 		MaxEndVelocity = 75.000000 -20.000000 -50.000000
 		MaxSpawnRate =  2.000000
+		MaxStart3DOffset = 0.000000 0.000000 0.000000
 		MaxStart3DRotation = 0.000000 0.000000 0.000000
 		MaxStartRotationRate =  15.000000
 		MaxStartSize = 1.100000 1.100000 1.100000
@@ -1105,6 +1110,7 @@ kbGameEntity 0 0 0 0 {
 		MinEndSize = 0.500000 0.500000 0.500000
 		MinEndVelocity = 75.000000 -20.000000 -50.000000
 		MinSpawnRate =  1.000000
+		MinStart3DOffset = 0.000000 0.000000 0.000000
 		MinStart3DRotation = 0.000000 0.000000 0.000000
 		MinStartRotationRate =  2.000000
 		MinStartSize = 0.500000 0.500000 0.500000
@@ -1156,6 +1162,7 @@ kbGameEntity 0 0 0 0 {
 		MaxEndSize = 3.500000 3.500000 3.500000
 		MaxEndVelocity = 0.500000 -7.000000 0.500000
 		MaxSpawnRate =  2.000000
+		MaxStart3DOffset = 0.000000 0.000000 0.000000
 		MaxStart3DRotation = 0.000000 0.000000 0.000000
 		MaxStartRotationRate =  5.000000
 		MaxStartSize = 0.100000 0.100000 0.100000
@@ -1166,6 +1173,7 @@ kbGameEntity 0 0 0 0 {
 		MinEndSize = 3.000000 3.000000 3.000000
 		MinEndVelocity = -0.500000 -2.000000 -0.500000
 		MinSpawnRate =  1.000000
+		MinStart3DOffset = 0.000000 0.000000 0.000000
 		MinStart3DRotation = 0.000000 0.000000 0.000000
 		MinStartRotationRate =  0.200000
 		MinStartSize = 0.000000 0.000000 0.000000
@@ -1779,6 +1787,7 @@ kbGameEntity 0 0 0 0 {
 		MaxEndSize = 100.000000 100.000000 100.000000
 		MaxEndVelocity = 1.000000 1.000000 1.000000
 		MaxSpawnRate =  0.000000
+		MaxStart3DOffset = 0.000000 0.000000 0.000000
 		MaxStart3DRotation = 0.000000 0.000000 0.000000
 		MaxStartRotationRate =  0.500000
 		MaxStartSize = 0.000000 0.000000 0.000000
@@ -1789,6 +1798,7 @@ kbGameEntity 0 0 0 0 {
 		MinEndSize = 80.000000 80.000000 80.000000
 		MinEndVelocity = -1.000000 -1.000000 -1.000000
 		MinSpawnRate =  0.000000
+		MinStart3DOffset = 0.000000 0.000000 0.000000
 		MinStart3DRotation = 0.000000 0.000000 0.000000
 		MinStartRotationRate =  -0.500000
 		MinStartSize = 0.000000 0.000000 0.000000
@@ -1896,6 +1906,7 @@ kbGameEntity 0 0 0 0 {
 		MaxEndSize = 2.000000 2.000000 2.000000
 		MaxEndVelocity = 20.000000 20.000000 20.000000
 		MaxSpawnRate =  0.000000
+		MaxStart3DOffset = 0.000000 0.000000 0.000000
 		MaxStart3DRotation = 0.000000 0.000000 0.000000
 		MaxStartRotationRate =  5.000000
 		MaxStartSize = 0.000000 0.000000 0.000000
@@ -1906,6 +1917,7 @@ kbGameEntity 0 0 0 0 {
 		MinEndSize = 2.000000 2.000000 2.000000
 		MinEndVelocity = -20.000000 -20.000000 -20.000000
 		MinSpawnRate =  0.000000
+		MinStart3DOffset = 0.000000 0.000000 0.000000
 		MinStart3DRotation = 0.000000 0.000000 0.000000
 		MinStartRotationRate =  -4.000000
 		MinStartSize = 0.000000 0.000000 0.000000
@@ -1999,6 +2011,7 @@ kbGameEntity 0 0 0 0 {
 		MaxEndSize = 50.000000 50.000000 50.000000
 		MaxEndVelocity = 0.000000 0.000000 0.000000
 		MaxSpawnRate =  0.000000
+		MaxStart3DOffset = 0.000000 0.000000 0.000000
 		MaxStart3DRotation = 0.000000 0.000000 0.000000
 		MaxStartRotationRate =  0.200000
 		MaxStartSize = 30.000000 30.000000 30.000000
@@ -2009,6 +2022,7 @@ kbGameEntity 0 0 0 0 {
 		MinEndSize = 40.000000 40.000000 40.000000
 		MinEndVelocity = 0.000000 0.000000 0.000000
 		MinSpawnRate =  0.000000
+		MinStart3DOffset = 0.000000 0.000000 0.000000
 		MinStart3DRotation = 0.000000 0.000000 0.000000
 		MinStartRotationRate =  -0.200000
 		MinStartSize = 20.000000 20.000000 20.000000
@@ -4531,7 +4545,7 @@ kbGameEntity 0 0 0 0 {
 		LifeTime =  -1.000000
 		Name = "Rain"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
-		Position = 3796.662354 657.536072 755.957336
+		Position = 3783.799561 657.422668 951.250671
 		Scale = 1.000000 1.000000 1.000000
 	}
 	kbParticleComponent { 
@@ -4540,7 +4554,7 @@ kbGameEntity 0 0 0 0 {
 		Name = ""
 		Orientation = 0.000000 0.000000 0.000000 1.000000
 		Position = 0.000000 0.000000 0.000000
-		Scale = 10.000000 10.000000 10.000000
+		Scale = 50.000000 75.000000 50.000000
 		AlphaOverLife = 0
 		ColorOverLife = 0
 		EndColor = 0.300000 0.300000 0.300000 0.300000
@@ -4567,31 +4581,471 @@ kbGameEntity 0 0 0 0 {
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 			}
-		MaxBurstCount = 2
-		MaxDuration =  3.000000
+		MaxBurstCount = 1
+		MaxDuration =  -1.000000
 		MaxEndRotationRate =  0.000000
 		MaxEndSize = 3.000000 3.000000 3.000000
-		MaxEndVelocity = 0.000000 -0.010000 0.000000
-		MaxSpawnRate =  2.000000
+		MaxEndVelocity = 0.000000 -4.000000 0.000000
+		MaxSpawnRate =  0.000000
+		MaxStart3DOffset = 100.000000 0.000000 100.000000
 		MaxStart3DRotation = 0.000000 0.000000 0.000000
-		MaxStartRotationRate =  0.000000
+		MaxStartRotationRate =  15.000000
 		MaxStartSize = 3.000000 3.000000 3.000000
-		MaxStartVelocity = 0.000000 -0.010000 0.000000
+		MaxStartVelocity = 0.000000 -5.000000 0.000000
 		MinBurstCount = 1
-		MinDuration =  3.000000
+		MinDuration =  -1.000000
 		MinEndRotationRate =  0.000000
 		MinEndSize = 3.000000 3.000000 3.000000
-		MinEndVelocity = 0.000000 -0.010000 0.000000
-		MinSpawnRate =  1.000000
+		MinEndVelocity = 0.000000 -1.000000 0.000000
+		MinSpawnRate =  0.000000
+		MinStart3DOffset = -100.000000 0.000000 -100.000000
 		MinStart3DRotation = 0.000000 0.000000 0.000000
-		MinStartRotationRate =  0.000000
+		MinStartRotationRate =  5.000000
 		MinStartSize = 3.000000 3.000000 3.000000
-		MinStartVelocity = 0.000000 -0.010000 -0.000000
+		MinStartVelocity = 0.000000 -1.000000 -0.000000
 		ModelEmitter = 0
 		ParticleBillboardType = AlignAlongVelocity
 		StartColor = 0.200000 0.200000 0.200000 0.300000
 		StartDelay =  0.000000
-		TotalDuration =  0.500000
+		TotalDuration =  -1.000000
+		TranslucencySortBias =  0.000000
+		VelocityCurve = 0
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Rain"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 3796.662354 657.536072 712.942383
+		Scale = 1.000000 1.000000 1.000000
+	}
+	kbParticleComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		Name = ""
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 0.000000 0.000000 0.000000
+		Scale = 50.000000 75.000000 50.000000
+		AlphaOverLife = 0
+		ColorOverLife = 0
+		EndColor = 0.300000 0.300000 0.300000 0.300000
+		Gravity = 0.000000 0.000000 0.000000
+		MaterialList = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\fx\particle_rain.kbshader
+				ShaderParams = 2
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorMultplier"
+						Texture = NULL
+						Vector = 1.000000 1.000000 1.000000 1.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "shaderTexture"
+						Texture = .\assets\fx\rain\rain1.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		MaxBurstCount = 1
+		MaxDuration =  -1.000000
+		MaxEndRotationRate =  0.000000
+		MaxEndSize = 3.000000 3.000000 3.000000
+		MaxEndVelocity = 0.000000 -4.000000 0.000000
+		MaxSpawnRate =  0.000000
+		MaxStart3DOffset = 100.000000 0.000000 100.000000
+		MaxStart3DRotation = 0.000000 0.000000 0.000000
+		MaxStartRotationRate =  15.000000
+		MaxStartSize = 3.000000 3.000000 3.000000
+		MaxStartVelocity = 0.000000 -5.000000 0.000000
+		MinBurstCount = 1
+		MinDuration =  -1.000000
+		MinEndRotationRate =  0.000000
+		MinEndSize = 3.000000 3.000000 3.000000
+		MinEndVelocity = 0.000000 -1.000000 0.000000
+		MinSpawnRate =  0.000000
+		MinStart3DOffset = -100.000000 0.000000 -100.000000
+		MinStart3DRotation = 0.000000 0.000000 0.000000
+		MinStartRotationRate =  5.000000
+		MinStartSize = 3.000000 3.000000 3.000000
+		MinStartVelocity = 0.000000 -1.000000 -0.000000
+		ModelEmitter = 0
+		ParticleBillboardType = AlignAlongVelocity
+		StartColor = 0.200000 0.200000 0.200000 0.300000
+		StartDelay =  0.000000
+		TotalDuration =  -1.000000
+		TranslucencySortBias =  0.000000
+		VelocityCurve = 0
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Rain"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 3796.662354 657.536072 784.747864
+		Scale = 1.000000 1.000000 1.000000
+	}
+	kbParticleComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		Name = ""
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 0.000000 0.000000 0.000000
+		Scale = 50.000000 75.000000 50.000000
+		AlphaOverLife = 0
+		ColorOverLife = 0
+		EndColor = 0.300000 0.300000 0.300000 0.300000
+		Gravity = 0.000000 0.000000 0.000000
+		MaterialList = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\fx\particle_rain.kbshader
+				ShaderParams = 2
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorMultplier"
+						Texture = NULL
+						Vector = 1.000000 1.000000 1.000000 1.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "shaderTexture"
+						Texture = .\assets\fx\rain\rain1.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		MaxBurstCount = 1
+		MaxDuration =  -1.000000
+		MaxEndRotationRate =  0.000000
+		MaxEndSize = 3.000000 3.000000 3.000000
+		MaxEndVelocity = 0.000000 -4.000000 0.000000
+		MaxSpawnRate =  0.000000
+		MaxStart3DOffset = 100.000000 0.000000 100.000000
+		MaxStart3DRotation = 0.000000 0.000000 0.000000
+		MaxStartRotationRate =  15.000000
+		MaxStartSize = 3.000000 3.000000 3.000000
+		MaxStartVelocity = 0.000000 -5.000000 0.000000
+		MinBurstCount = 1
+		MinDuration =  -1.000000
+		MinEndRotationRate =  0.000000
+		MinEndSize = 3.000000 3.000000 3.000000
+		MinEndVelocity = 0.000000 -1.000000 0.000000
+		MinSpawnRate =  0.000000
+		MinStart3DOffset = -100.000000 0.000000 -100.000000
+		MinStart3DRotation = 0.000000 0.000000 0.000000
+		MinStartRotationRate =  5.000000
+		MinStartSize = 3.000000 3.000000 3.000000
+		MinStartVelocity = 0.000000 -1.000000 -0.000000
+		ModelEmitter = 0
+		ParticleBillboardType = AlignAlongVelocity
+		StartColor = 0.200000 0.200000 0.200000 0.300000
+		StartDelay =  0.000000
+		TotalDuration =  -1.000000
+		TranslucencySortBias =  0.000000
+		VelocityCurve = 0
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Rain"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 3796.662354 657.536072 834.245178
+		Scale = 1.000000 1.000000 1.000000
+	}
+	kbParticleComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		Name = ""
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 0.000000 0.000000 0.000000
+		Scale = 50.000000 75.000000 50.000000
+		AlphaOverLife = 0
+		ColorOverLife = 0
+		EndColor = 0.300000 0.300000 0.300000 0.300000
+		Gravity = 0.000000 0.000000 0.000000
+		MaterialList = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\fx\particle_rain.kbshader
+				ShaderParams = 2
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorMultplier"
+						Texture = NULL
+						Vector = 1.000000 1.000000 1.000000 1.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "shaderTexture"
+						Texture = .\assets\fx\rain\rain1.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		MaxBurstCount = 1
+		MaxDuration =  -1.000000
+		MaxEndRotationRate =  0.000000
+		MaxEndSize = 3.000000 3.000000 3.000000
+		MaxEndVelocity = 0.000000 -4.000000 0.000000
+		MaxSpawnRate =  0.000000
+		MaxStart3DOffset = 100.000000 0.000000 100.000000
+		MaxStart3DRotation = 0.000000 0.000000 0.000000
+		MaxStartRotationRate =  15.000000
+		MaxStartSize = 3.000000 3.000000 3.000000
+		MaxStartVelocity = 0.000000 -5.000000 0.000000
+		MinBurstCount = 1
+		MinDuration =  -1.000000
+		MinEndRotationRate =  0.000000
+		MinEndSize = 3.000000 3.000000 3.000000
+		MinEndVelocity = 0.000000 -1.000000 0.000000
+		MinSpawnRate =  0.000000
+		MinStart3DOffset = -100.000000 0.000000 -100.000000
+		MinStart3DRotation = 0.000000 0.000000 0.000000
+		MinStartRotationRate =  5.000000
+		MinStartSize = 3.000000 3.000000 3.000000
+		MinStartVelocity = 0.000000 -1.000000 -0.000000
+		ModelEmitter = 0
+		ParticleBillboardType = AlignAlongVelocity
+		StartColor = 0.200000 0.200000 0.200000 0.300000
+		StartDelay =  0.000000
+		TotalDuration =  -1.000000
+		TranslucencySortBias =  0.000000
+		VelocityCurve = 0
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Rain"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 3796.662354 657.536072 755.957336
+		Scale = 1.000000 1.000000 1.000000
+	}
+	kbParticleComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		Name = ""
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 0.000000 0.000000 0.000000
+		Scale = 50.000000 75.000000 50.000000
+		AlphaOverLife = 0
+		ColorOverLife = 0
+		EndColor = 0.300000 0.300000 0.300000 0.300000
+		Gravity = 0.000000 0.000000 0.000000
+		MaterialList = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\fx\particle_rain.kbshader
+				ShaderParams = 2
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorMultplier"
+						Texture = NULL
+						Vector = 1.000000 1.000000 1.000000 1.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "shaderTexture"
+						Texture = .\assets\fx\rain\rain1.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		MaxBurstCount = 1
+		MaxDuration =  55.000000
+		MaxEndRotationRate =  0.000000
+		MaxEndSize = 3.000000 3.000000 3.000000
+		MaxEndVelocity = 0.000000 -4.000000 0.000000
+		MaxSpawnRate =  0.000000
+		MaxStart3DOffset = 100.000000 0.000000 100.000000
+		MaxStart3DRotation = 0.000000 0.000000 0.000000
+		MaxStartRotationRate =  15.000000
+		MaxStartSize = 3.000000 3.000000 3.000000
+		MaxStartVelocity = 0.000000 -5.000000 0.000000
+		MinBurstCount = 1
+		MinDuration =  -1.000000
+		MinEndRotationRate =  0.000000
+		MinEndSize = 3.000000 3.000000 3.000000
+		MinEndVelocity = 0.000000 -1.000000 0.000000
+		MinSpawnRate =  0.000000
+		MinStart3DOffset = -100.000000 0.000000 -100.000000
+		MinStart3DRotation = 0.000000 0.000000 0.000000
+		MinStartRotationRate =  5.000000
+		MinStartSize = 3.000000 3.000000 3.000000
+		MinStartVelocity = 0.000000 -1.000000 -0.000000
+		ModelEmitter = 0
+		ParticleBillboardType = AlignAlongVelocity
+		StartColor = 0.200000 0.200000 0.200000 0.300000
+		StartDelay =  0.000000
+		TotalDuration =  -1.000000
+		TranslucencySortBias =  0.000000
+		VelocityCurve = 0
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Rain"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 3783.799561 657.422668 868.583984
+		Scale = 1.000000 1.000000 1.000000
+	}
+	kbParticleComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		Name = ""
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 0.000000 0.000000 0.000000
+		Scale = 50.000000 75.000000 50.000000
+		AlphaOverLife = 0
+		ColorOverLife = 0
+		EndColor = 0.300000 0.300000 0.300000 0.300000
+		Gravity = 0.000000 0.000000 0.000000
+		MaterialList = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\fx\particle_rain.kbshader
+				ShaderParams = 2
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorMultplier"
+						Texture = NULL
+						Vector = 1.000000 1.000000 1.000000 1.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "shaderTexture"
+						Texture = .\assets\fx\rain\rain1.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		MaxBurstCount = 1
+		MaxDuration =  -1.000000
+		MaxEndRotationRate =  0.000000
+		MaxEndSize = 3.000000 3.000000 3.000000
+		MaxEndVelocity = 0.000000 -4.000000 0.000000
+		MaxSpawnRate =  0.000000
+		MaxStart3DOffset = 100.000000 0.000000 100.000000
+		MaxStart3DRotation = 0.000000 0.000000 0.000000
+		MaxStartRotationRate =  15.000000
+		MaxStartSize = 3.000000 3.000000 3.000000
+		MaxStartVelocity = 0.000000 -5.000000 0.000000
+		MinBurstCount = 1
+		MinDuration =  -1.000000
+		MinEndRotationRate =  0.000000
+		MinEndSize = 3.000000 3.000000 3.000000
+		MinEndVelocity = 0.000000 -1.000000 0.000000
+		MinSpawnRate =  0.000000
+		MinStart3DOffset = -100.000000 0.000000 -100.000000
+		MinStart3DRotation = 0.000000 0.000000 0.000000
+		MinStartRotationRate =  5.000000
+		MinStartSize = 3.000000 3.000000 3.000000
+		MinStartVelocity = 0.000000 -1.000000 -0.000000
+		ModelEmitter = 0
+		ParticleBillboardType = AlignAlongVelocity
+		StartColor = 0.200000 0.200000 0.200000 0.300000
+		StartDelay =  0.000000
+		TotalDuration =  -1.000000
+		TranslucencySortBias =  0.000000
+		VelocityCurve = 0
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Rain"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 3783.799561 657.422668 903.478455
+		Scale = 1.000000 1.000000 1.000000
+	}
+	kbParticleComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		Name = ""
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 0.000000 0.000000 0.000000
+		Scale = 50.000000 75.000000 50.000000
+		AlphaOverLife = 0
+		ColorOverLife = 0
+		EndColor = 0.300000 0.300000 0.300000 0.300000
+		Gravity = 0.000000 0.000000 0.000000
+		MaterialList = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\fx\particle_rain.kbshader
+				ShaderParams = 2
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorMultplier"
+						Texture = NULL
+						Vector = 1.000000 1.000000 1.000000 1.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "shaderTexture"
+						Texture = .\assets\fx\rain\rain1.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		MaxBurstCount = 1
+		MaxDuration =  -1.000000
+		MaxEndRotationRate =  0.000000
+		MaxEndSize = 3.000000 3.000000 3.000000
+		MaxEndVelocity = 0.000000 -4.000000 0.000000
+		MaxSpawnRate =  0.000000
+		MaxStart3DOffset = 100.000000 0.000000 100.000000
+		MaxStart3DRotation = 0.000000 0.000000 0.000000
+		MaxStartRotationRate =  15.000000
+		MaxStartSize = 3.000000 3.000000 3.000000
+		MaxStartVelocity = 0.000000 -5.000000 0.000000
+		MinBurstCount = 1
+		MinDuration =  -1.000000
+		MinEndRotationRate =  0.000000
+		MinEndSize = 3.000000 3.000000 3.000000
+		MinEndVelocity = 0.000000 -1.000000 0.000000
+		MinSpawnRate =  0.000000
+		MinStart3DOffset = -100.000000 0.000000 -100.000000
+		MinStart3DRotation = 0.000000 0.000000 0.000000
+		MinStartRotationRate =  5.000000
+		MinStartSize = 3.000000 3.000000 3.000000
+		MinStartVelocity = 0.000000 -1.000000 -0.000000
+		ModelEmitter = 0
+		ParticleBillboardType = AlignAlongVelocity
+		StartColor = 0.200000 0.200000 0.200000 0.300000
+		StartDelay =  0.000000
+		TotalDuration =  -1.000000
 		TranslucencySortBias =  0.000000
 		VelocityCurve = 0
 	}

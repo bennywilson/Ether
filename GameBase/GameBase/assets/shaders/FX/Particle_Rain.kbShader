@@ -84,7 +84,7 @@ pixelInput vertexShader( vertexInput input ) {
 	const float3 offset = mul( localPos, billboardMatrix );
 	output.position = mul( float4(particleWorldPos,1) + float4( offset, 0.0f ), viewProjection );
 
-	output.uv = input.uv;
+	output.uv = input.uv.yx * 5;
 	output.uv.y -= time.x;
 
 	output.color = input.color;

@@ -258,6 +258,9 @@ GenerateClass(
 	AddField( "MinStart3DRotation", KBTYPEINFO_VECTOR, kbParticleComponent, m_MinStart3DRotation, false, "" )
 	AddField( "MaxStart3DRotation", KBTYPEINFO_VECTOR, kbParticleComponent, m_MaxStart3DRotation, false, "" )
 
+	AddField( "MinStart3DOffset", KBTYPEINFO_VECTOR, kbParticleComponent, m_MinStart3DOffset, false, "" )
+	AddField( "MaxStart3DOffset", KBTYPEINFO_VECTOR, kbParticleComponent, m_MaxStart3DOffset, false, "" )
+
 	AddField( "Gravity", KBTYPEINFO_VECTOR, kbParticleComponent, m_Gravity, false, "" )
 
 	AddField( "ModelEmitter", KBTYPEINFO_STRUCT, kbParticleComponent, m_ModelEmitter, true, "kbModelEmitter" )

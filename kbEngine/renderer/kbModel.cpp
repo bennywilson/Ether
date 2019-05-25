@@ -639,7 +639,6 @@ bool kbModel::LoadFBX() {
 		
 		FbxMesh *const pFBXMesh = pRootNode->GetChild(iMesh)->GetMesh();
 		if ( pFBXMesh == nullptr ) {
-			kbWarning( "kbModel::LoadFBX() - Model has nodes without meshes" );
 			continue;
 		}
 

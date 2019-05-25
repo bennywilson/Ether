@@ -38,11 +38,18 @@ public:
  */
 void kbResource::Load() {
 
+	const float loadStartTime = g_GlobalTimer.TimeElapsedSeconds();
+
 	if ( m_bIsLoaded == false ) { 
 		if ( Load_Internal() ) {
 			m_bIsLoaded = true;
 		}
 	}
+
+	const float curLoadTime = g_GlobalTimer.TimeElapsedSeconds() - loadStartTime;
+	static float totalLoadTime = 0.0f;
+	totalLoadTime += curLoadTime;
+	kbLog( "It took %f seconds to load %s.  Total resource load time = %f", curLoadTime, GetFullFileName().c_str(), totalLoadTime );
 }
 
 /**
@@ -519,17 +526,18 @@ void kbResourceManager::FileModifiedCB( const std::wstring & fileName ) {
 	fs::path p = fs::canonical( convertedFileName.c_str() );
 
 	// TODO HOT RELOADING
-/*	for ( int i = 0; i < m_Resources.size(); i++ ) {
-		fs::path resourcePath = fs::canonical( m_Resources[i]->GetFullFileName() );
+	for ( auto it = m_ResourcesMap.begin(); it != m_ResourcesMap.end(); ++it ) {
 
+		kbResource *const pCurResource = it->second;
+		fs::path resourcePath = fs::canonical( pCurResource->GetFullFileName() );
 		if ( resourcePath.string() == p.string() ) {
 			kbLog( "Hot reloading %s", p.string().c_str() );
-			m_Resources[i]->Release();
-			m_Resources[i]->Load();
+			pCurResource->Release();
+			pCurResource->Load();
 			return;
 		}
 	}
-*/
+
 	kbLog( "Loading %s", p.string().c_str() );
 	GetResource( p.string(), true, true );
 }
