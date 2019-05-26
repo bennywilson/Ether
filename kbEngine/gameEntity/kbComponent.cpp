@@ -391,11 +391,16 @@ kbVec3 kbVectorAnimEvent::Evaluate( const std::vector<kbVectorAnimEvent> & event
 }
 
 /**
- *	kbEditorSettingsComponent::Constructor
+ *	kbEditorGlobalSettingsComponent::Constructor
  */	
-void kbEditorSettingsComponent::Constructor() {
+void kbEditorGlobalSettingsComponent::Constructor() {
+	m_CameraSpeedIdx = 0;
+}
+
+/**
+ *	kbEditorLevelSettingsComponent::Constructor
+ */	
+void kbEditorLevelSettingsComponent::Constructor() {
 	m_CameraPosition = kbVec3::zero;
 	m_CameraRotation = kbQuat::identity;
-
-	m_CameraSpeedIdx = 0;
 }

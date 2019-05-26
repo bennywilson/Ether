@@ -204,26 +204,22 @@ kbEditor::kbEditor() :
 	SetWindowText( m_pMainTab->GetEditorWindow()->GetWindowHandle(), "kbEditor" );
 
 	// Load Editor Settings
-	kbEditorSettingsComponent * pEditorLevelComponent = nullptr;
+	kbEditorGlobalSettingsComponent * pEditorGlobalComponent = nullptr;
 
 	kbFile levelEditorFile;
 	if ( levelEditorFile.Open( "./assets/editorSettings.txt", kbFile::FT_Read ) ) {
-		kbGameEntity * gameEntity = levelEditorFile.ReadGameEntity();
-		pEditorLevelComponent = (kbEditorSettingsComponent*)gameEntity->GetComponentByType( kbEditorSettingsComponent::GetType() );
+		kbGameEntity *const gameEntity = levelEditorFile.ReadGameEntity();
+		pEditorGlobalComponent = (kbEditorGlobalSettingsComponent*)gameEntity->GetComponentByType( kbEditorGlobalSettingsComponent::GetType() );
 		levelEditorFile.Close();
 	}
 
-	if ( pEditorLevelComponent == nullptr ) {
-		SetMainCameraPos( kbVec3::zero );
-		SetMainCameraRot( kbQuat::identity );
+	if ( pEditorGlobalComponent == nullptr ) {
 		m_pSpeedChoice->value( 0 );
 		m_pMainTab->SetCameraSpeedMultiplier( g_EditorCamSpeedBindings[0].m_SpeedMultiplier );
 	} else {
-		SetMainCameraPos( pEditorLevelComponent->m_CameraPosition );
-		SetMainCameraRot( pEditorLevelComponent->m_CameraRotation );
 
-		if ( pEditorLevelComponent->m_CameraSpeedIdx >= 0 && pEditorLevelComponent->m_CameraSpeedIdx < g_NumEditorCamSpeedBindings ) {
-			const int idx = pEditorLevelComponent->m_CameraSpeedIdx;
+		if ( pEditorGlobalComponent->m_CameraSpeedIdx >= 0 && pEditorGlobalComponent->m_CameraSpeedIdx < g_NumEditorCamSpeedBindings ) {
+			const int idx = pEditorGlobalComponent->m_CameraSpeedIdx;
 			m_pSpeedChoice->value( idx );
 			m_pMainTab->SetCameraSpeedMultiplier( g_EditorCamSpeedBindings[idx].m_SpeedMultiplier );
 		} else {
@@ -276,6 +272,8 @@ void kbEditor::LoadMap( const std::string & InMapName ) {
 
 	UnloadMap();
 
+	const kbEditorLevelSettingsComponent * pLevelSettings = nullptr;
+
 	// Load map
 	if ( InMapName.empty() == false ) {
 		m_CurrentLevelFileName = InMapName;
@@ -304,12 +302,19 @@ void kbEditor::LoadMap( const std::string & InMapName ) {
 			if ( inFile.Open( nextFileName.c_str(), kbFile::FT_Read ) ) {
 				m_CurrentLevelFileName = nextFileName;
 
-				kbGameEntity * gameEntity = inFile.ReadGameEntity();
-				while ( gameEntity != nullptr ) {
+				kbGameEntity * pGameEntity = inFile.ReadGameEntity();
+				while ( pGameEntity != nullptr ) {
 
-					kbEditorEntity *const newEditorEntity = new kbEditorEntity( gameEntity );
+					if ( pLevelSettings == nullptr ) {
+						pLevelSettings = (kbEditorLevelSettingsComponent*)pGameEntity->GetComponentByType( kbEditorLevelSettingsComponent::GetType() );
+						if ( pLevelSettings != nullptr ) {
+							continue;
+						}
+					}
+
+					kbEditorEntity *const newEditorEntity = new kbEditorEntity( pGameEntity );
 					g_Editor->m_GameEntities.push_back( newEditorEntity );
-					gameEntity = inFile.ReadGameEntity();
+					pGameEntity = inFile.ReadGameEntity();
 				}
 				inFile.Close();
 				
@@ -337,6 +342,14 @@ void kbEditor::LoadMap( const std::string & InMapName ) {
 				nextFileFound = FindNextFile( hFind, &fdFile );
 			}
 		} while( true );
+	}
+
+	if ( pLevelSettings != nullptr ) {
+		SetMainCameraPos( pLevelSettings->m_CameraPosition );
+		SetMainCameraRot( pLevelSettings->m_CameraRotation );
+	} else {
+		SetMainCameraPos( kbVec3::zero );
+		SetMainCameraRot( kbQuat::identity );
 	}
 
 	m_UndoStack.Reset();
@@ -492,9 +505,7 @@ void kbEditor::ShutDown() {
 	outFile.Open( "./assets/editorSettings.txt", kbFile::FT_Write );
 
 	kbGameEntity levelInfoEnt;
-	kbEditorSettingsComponent *const pLevelInfo = new kbEditorSettingsComponent();
-	pLevelInfo->m_CameraPosition = GetMainCameraPos();
-	pLevelInfo->m_CameraRotation = GetMainCameraRot();
+	kbEditorGlobalSettingsComponent *const pLevelInfo = new kbEditorGlobalSettingsComponent();
 	pLevelInfo->m_CameraSpeedIdx = m_pSpeedChoice->value();
 	levelInfoEnt.AddComponent( pLevelInfo );
 	outFile.WriteGameEntity( &levelInfoEnt );
@@ -847,10 +858,9 @@ void kbEditor::OpenLevel( class Fl_Widget *, void * ) {
 
 	fileChooser.show();
 
-	while(fileChooser.shown()) { Fl::wait(); }
+	while( fileChooser.shown() ) { Fl::wait(); }
 
-	const char * fileName = fileChooser.value();
-
+	const char *const fileName = fileChooser.value();
 	if ( fileName == nullptr ) {
 		return;
 	}
@@ -898,6 +908,17 @@ void kbEditor::SaveLevel_Internal( const std::string & fileNameStr, const bool b
 
 	kbFile outFile;
 	outFile.Open( fileNameStr.c_str(), kbFile::FT_Write );
+
+	{
+		kbGameEntity *const pLevelSettingsEnt = new kbGameEntity();
+		kbEditorLevelSettingsComponent *const pLevelSettingsComp = new kbEditorLevelSettingsComponent();
+		kbCamera *const pCam = m_pMainTab->GetEditorWindowCamera();
+		pLevelSettingsComp->m_CameraPosition = pCam->m_Position;
+		pLevelSettingsComp->m_CameraRotation = pCam->m_Rotation;
+		pLevelSettingsEnt->AddComponent( pLevelSettingsComp );
+		outFile.WriteGameEntity( pLevelSettingsEnt );
+		delete pLevelSettingsEnt;
+	}
 
 	for ( int i = 0; i < g_Editor->m_GameEntities.size(); i++ ) {
 		outFile.WriteGameEntity( g_Editor->m_GameEntities[i]->GetGameEntity() );

@@ -2,51 +2,16 @@ kbGameEntity 0 0 0 0 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		Name = "Entity_66"
+		Name = "Entity_71"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
 		Position = 0.000000 0.000000 0.000000
 		Scale = 1.000000 1.000000 1.000000
 	}
-	kbEditorSettingsComponent { 
+	kbEditorLevelSettingsComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		CameraSpeedIdx = 3
-		MainCameraPosition = 3866.235352 704.849976 821.890686
-		MainCameraRotation = -0.061295 0.728415 -0.065735 0.679216
-	}
-}
-kbGameEntity 0 0 0 0 {
-	kbTransformComponent { 
-		Enabled = 0
-		LifeTime =  -1.000000
-		Name = "Entity_65"
-		Orientation = 0.000000 0.000000 0.000000 1.000000
-		Position = 0.000000 0.000000 0.000000
-		Scale = 1.000000 1.000000 1.000000
-	}
-	kbEditorSettingsComponent { 
-		Enabled = 0
-		LifeTime =  -1.000000
-		CameraSpeedIdx = 0
-		MainCameraPosition = 3866.235352 704.849976 821.890686
-		MainCameraRotation = -0.061295 0.728415 -0.065735 0.679216
-	}
-}
-kbGameEntity 0 0 0 0 {
-	kbTransformComponent { 
-		Enabled = 0
-		LifeTime =  -1.000000
-		Name = "Entity_64"
-		Orientation = 0.000000 0.000000 0.000000 1.000000
-		Position = 0.000000 0.000000 0.000000
-		Scale = 1.000000 1.000000 1.000000
-	}
-	kbEditorSettingsComponent { 
-		Enabled = 0
-		LifeTime =  -1.000000
-		CameraSpeedIdx = 0
-		MainCameraPosition = 3856.250488 674.924927 771.148254
-		MainCameraRotation = -0.129702 0.656931 -0.116151 0.733572
+		MainCameraPosition = 3859.398193 686.890381 816.739380
+		MainCameraRotation = -0.113633 0.712267 -0.118602 0.682420
 	}
 }
 kbGameEntity 0 0 0 0 {

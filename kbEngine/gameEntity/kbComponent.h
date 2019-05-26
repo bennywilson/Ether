@@ -250,16 +250,26 @@ private:
 };
 
 /**
- *  kbEditorSettingsComponent
+ *  kbEditorGlobalSettingsComponent
  */
-class kbEditorSettingsComponent : public kbGameComponent {
-	KB_DECLARE_COMPONENT( kbEditorSettingsComponent, kbGameComponent );
+class kbEditorGlobalSettingsComponent : public kbGameComponent {
+	KB_DECLARE_COMPONENT( kbEditorGlobalSettingsComponent, kbGameComponent );
+
+//-------------------------------------------------------------------------------------------------------------------------------------------------------------
+public:
+	int										m_CameraSpeedIdx;
+};
+
+/**
+ *  kbEditorLevelSettingsComponent
+ */
+class kbEditorLevelSettingsComponent : public kbGameComponent {
+	KB_DECLARE_COMPONENT( kbEditorLevelSettingsComponent, kbGameComponent );
 
 //-------------------------------------------------------------------------------------------------------------------------------------------------------------
 public:
 	kbVec3									m_CameraPosition;
 	kbQuat									m_CameraRotation;
-	int										m_CameraSpeedIdx;
 };
 
 #endif

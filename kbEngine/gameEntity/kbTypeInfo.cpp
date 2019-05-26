@@ -71,8 +71,13 @@ EBillboardType_Enum EBillboardType_EnumClass;
 kbComponent_TypeInfo kbComponent::typeInfo;
 std::vector<kbTypeInfoClass *> kbComponent::kbComponent_TypeInfoVar;
 
-kbEditorSettingsComponent_TypeInfo kbEditorSettingsComponent::typeInfo;
-std::vector<kbTypeInfoClass *> kbEditorSettingsComponent::kbEditorSettingsComponent_TypeInfoVar;
+// kbEditorGlobalSettingsComponent
+kbEditorGlobalSettingsComponent_TypeInfo kbEditorGlobalSettingsComponent::typeInfo;
+std::vector<kbTypeInfoClass *> kbEditorGlobalSettingsComponent::kbEditorGlobalSettingsComponent_TypeInfoVar;
+
+// kbEditorLevelSettingsComponent
+kbEditorLevelSettingsComponent_TypeInfo kbEditorLevelSettingsComponent::typeInfo;
+std::vector<kbTypeInfoClass *> kbEditorLevelSettingsComponent::kbEditorLevelSettingsComponent_TypeInfoVar;
 
 // kbShaderParamComponent
 kbShaderParamComponent_TypeInfo kbShaderParamComponent::typeInfo;
