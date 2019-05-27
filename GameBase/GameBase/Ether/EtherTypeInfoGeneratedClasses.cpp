@@ -51,6 +51,8 @@ DEFINE_KBCLASS(kbAnimatedQuadComponent);
 
 DEFINE_KBCLASS(EtherEnviroMaterial);
 
+DEFINE_KBCLASS(EtherEnviroComponent);
+
 DEFINE_KBCLASS(EtherEnviroObject);
 
 DEFINE_KBCLASS(EtherEnviroInfo);

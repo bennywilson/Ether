@@ -175,10 +175,9 @@ GenerateClass(
 
 GenerateClass(
 	EtherEnviroComponent,
-	AddField( "EnviroMaterial", KBTYPEINFO_STRUCT, EtherEnviroComponent, m_EnviroMaterials, true, "EtherEnviroMaterial" )
-	AddField( "CoverObjects", KBTYPEINFO_STRUCT, EtherEnviroComponent, m_CoverObjects, true, "EtherEnviroObject" )
-	AddField( "EnviroObjects", KBTYPEINFO_STRUCT, EtherEnviroComponent, m_EnviroObjects, true, "EtherEnviroObject" )
-	AddField( "TimeOfDayModifiers", KBTYPEINFO_STRUCT, EtherEnviroComponent, m_TimeOfDayModifiers, true, "EtherTimeOfDayModifier" )
+	AddField( "MinRainSheetTileAndSpeed", KBTYPEINFO_VECTOR4, EtherEnviroComponent, m_MinRainSheetTileAndSpeed, false, "" )
+	AddField( "MaxRainSheetTileAndSpeed", KBTYPEINFO_VECTOR4, EtherEnviroComponent, m_MaxRainSheetTileAndSpeed, false, "" )
+	AddField( "RainColor", KBTYPEINFO_VECTOR4, EtherEnviroComponent, m_RainColor, false, "" );
 )
 
 GenerateClass(

@@ -392,6 +392,7 @@ public:
 	const static float							Far_Plane;
 
 	virtual void								SetGlobalShaderParam( const kbShaderParamOverrides_t::kbShaderParam_t & shaderParam ) override;
+	virtual void								SetGlobalShaderParam( const kbShaderParamOverrides_t & shaderParam ) override;
 
 	// Render thread
 	virtual void								RT_SetRenderTarget( kbRenderTexture *const pRenderTexture ) override;

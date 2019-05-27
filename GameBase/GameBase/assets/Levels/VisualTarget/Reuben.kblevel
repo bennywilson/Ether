@@ -2,6 +2,166 @@ kbGameEntity 0 0 0 0 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
+		Name = "Entity_81"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 0.000000 0.000000 0.000000
+		Scale = 1.000000 1.000000 1.000000
+	}
+	kbEditorLevelSettingsComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		MainCameraPosition = 3861.354736 663.938843 726.195435
+		MainCameraRotation = -0.083836 0.708703 -0.085455 0.695277
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Entity_79"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 0.000000 0.000000 0.000000
+		Scale = 1.000000 1.000000 1.000000
+	}
+	kbEditorLevelSettingsComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		MainCameraPosition = 3903.506348 684.461365 811.317627
+		MainCameraRotation = -0.006786 0.734484 -0.007345 0.678552
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Entity_78"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 0.000000 0.000000 0.000000
+		Scale = 1.000000 1.000000 1.000000
+	}
+	kbEditorLevelSettingsComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		MainCameraPosition = 3801.135010 692.247681 856.851746
+		MainCameraRotation = 0.040690 0.733199 0.044045 0.677365
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Entity_77"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 0.000000 0.000000 0.000000
+		Scale = 1.000000 1.000000 1.000000
+	}
+	kbEditorLevelSettingsComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		MainCameraPosition = 3768.361328 681.574707 839.520630
+		MainCameraRotation = -0.047974 0.725915 -0.050897 0.684219
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Entity_76"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 0.000000 0.000000 0.000000
+		Scale = 1.000000 1.000000 1.000000
+	}
+	kbEditorLevelSettingsComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		MainCameraPosition = 3926.303467 691.626526 972.447937
+		MainCameraRotation = 0.006931 0.720766 0.007208 0.693106
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Entity_75"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 0.000000 0.000000 0.000000
+		Scale = 1.000000 1.000000 1.000000
+	}
+	kbEditorLevelSettingsComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		MainCameraPosition = 3869.724609 693.122986 847.272644
+		MainCameraRotation = -0.096723 0.713750 -0.100583 0.686359
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Entity_74"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 0.000000 0.000000 0.000000
+		Scale = 1.000000 1.000000 1.000000
+	}
+	kbEditorLevelSettingsComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		MainCameraPosition = 3869.724609 693.122986 847.272644
+		MainCameraRotation = -0.096947 0.623855 -0.078391 0.771531
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Entity_74"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 0.000000 0.000000 0.000000
+		Scale = 1.000000 1.000000 1.000000
+	}
+	kbEditorLevelSettingsComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		MainCameraPosition = 3869.724609 693.122986 847.272644
+		MainCameraRotation = -0.096947 0.623855 -0.078391 0.771531
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Entity_72"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 0.000000 0.000000 0.000000
+		Scale = 1.000000 1.000000 1.000000
+	}
+	kbEditorLevelSettingsComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		MainCameraPosition = 3877.402100 666.247314 782.592773
+		MainCameraRotation = -0.092530 0.694464 -0.090792 0.707753
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Entity_71"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 0.000000 0.000000 0.000000
+		Scale = 1.000000 1.000000 1.000000
+	}
+	kbEditorLevelSettingsComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		MainCameraPosition = 3877.402100 666.247314 782.592773
+		MainCameraRotation = -0.092530 0.694464 -0.090792 0.707753
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
 		Name = "Entity_71"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
 		Position = 0.000000 0.000000 0.000000
@@ -2044,6 +2204,13 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 1
 		LifeTime =  -1.000000
 		Shader = .\assets\shaders\postprocess\antialiasing.kbshader
+	}
+	EtherEnviroComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		MaxRainSheetTileAndSpeed = 3.000000 3.000000 3.000000 5.000000
+		MinRainSheetTileAndSpeed = 3.000000 3.000000 3.000000 5.000000
+		RainColor = 0.500000 0.500000 0.500000 0.500000
 	}
 }
 kbGameEntity 0 0 0 0 {
@@ -4522,7 +4689,7 @@ kbGameEntity 0 0 0 0 {
 		Scale = 50.000000 75.000000 50.000000
 		AlphaOverLife = 0
 		ColorOverLife = 0
-		EndColor = 0.300000 0.300000 0.300000 0.300000
+		EndColor = 1.000000 1.000000 1.000000 1.000000
 		Gravity = 0.000000 0.000000 0.000000
 		MaterialList = 1
 			kbMaterialComponent { 
@@ -4570,7 +4737,7 @@ kbGameEntity 0 0 0 0 {
 		MinStartVelocity = 0.000000 -1.000000 -0.000000
 		ModelEmitter = 0
 		ParticleBillboardType = AlignAlongVelocity
-		StartColor = 0.200000 0.200000 0.200000 0.300000
+		StartColor = 1.000000 1.000000 1.000000 1.000000
 		StartDelay =  0.000000
 		TotalDuration =  -1.000000
 		TranslucencySortBias =  0.000000
@@ -4595,7 +4762,7 @@ kbGameEntity 0 0 0 0 {
 		Scale = 50.000000 75.000000 50.000000
 		AlphaOverLife = 0
 		ColorOverLife = 0
-		EndColor = 0.300000 0.300000 0.300000 0.300000
+		EndColor = 1.000000 1.000000 1.000000 1.000000
 		Gravity = 0.000000 0.000000 0.000000
 		MaterialList = 1
 			kbMaterialComponent { 
@@ -4643,7 +4810,7 @@ kbGameEntity 0 0 0 0 {
 		MinStartVelocity = 0.000000 -1.000000 -0.000000
 		ModelEmitter = 0
 		ParticleBillboardType = AlignAlongVelocity
-		StartColor = 0.200000 0.200000 0.200000 0.300000
+		StartColor = 1.000000 1.000000 1.000000 1.000000
 		StartDelay =  0.000000
 		TotalDuration =  -1.000000
 		TranslucencySortBias =  0.000000
@@ -4668,7 +4835,7 @@ kbGameEntity 0 0 0 0 {
 		Scale = 50.000000 75.000000 50.000000
 		AlphaOverLife = 0
 		ColorOverLife = 0
-		EndColor = 0.300000 0.300000 0.300000 0.300000
+		EndColor = 1.000000 1.000000 1.000000 1.000000
 		Gravity = 0.000000 0.000000 0.000000
 		MaterialList = 1
 			kbMaterialComponent { 
@@ -4716,7 +4883,7 @@ kbGameEntity 0 0 0 0 {
 		MinStartVelocity = 0.000000 -1.000000 -0.000000
 		ModelEmitter = 0
 		ParticleBillboardType = AlignAlongVelocity
-		StartColor = 0.200000 0.200000 0.200000 0.300000
+		StartColor = 1.000000 1.000000 1.000000 1.000000
 		StartDelay =  0.000000
 		TotalDuration =  -1.000000
 		TranslucencySortBias =  0.000000
@@ -4741,7 +4908,7 @@ kbGameEntity 0 0 0 0 {
 		Scale = 50.000000 75.000000 50.000000
 		AlphaOverLife = 0
 		ColorOverLife = 0
-		EndColor = 0.300000 0.300000 0.300000 0.300000
+		EndColor = 1.000000 1.000000 1.000000 1.000000
 		Gravity = 0.000000 0.000000 0.000000
 		MaterialList = 1
 			kbMaterialComponent { 
@@ -4789,7 +4956,7 @@ kbGameEntity 0 0 0 0 {
 		MinStartVelocity = 0.000000 -1.000000 -0.000000
 		ModelEmitter = 0
 		ParticleBillboardType = AlignAlongVelocity
-		StartColor = 0.200000 0.200000 0.200000 0.300000
+		StartColor = 1.000000 1.000000 1.000000 1.000000
 		StartDelay =  0.000000
 		TotalDuration =  -1.000000
 		TranslucencySortBias =  0.000000
@@ -4814,7 +4981,7 @@ kbGameEntity 0 0 0 0 {
 		Scale = 50.000000 75.000000 50.000000
 		AlphaOverLife = 0
 		ColorOverLife = 0
-		EndColor = 0.300000 0.300000 0.300000 0.300000
+		EndColor = 1.000000 1.000000 1.000000 1.000000
 		Gravity = 0.000000 0.000000 0.000000
 		MaterialList = 1
 			kbMaterialComponent { 
@@ -4839,7 +5006,7 @@ kbGameEntity 0 0 0 0 {
 					}
 			}
 		MaxBurstCount = 1
-		MaxDuration =  55.000000
+		MaxDuration =  -1.000000
 		MaxEndRotationRate =  0.000000
 		MaxEndSize = 3.000000 3.000000 3.000000
 		MaxEndVelocity = 0.000000 -4.000000 0.000000
@@ -4862,7 +5029,7 @@ kbGameEntity 0 0 0 0 {
 		MinStartVelocity = 0.000000 -1.000000 -0.000000
 		ModelEmitter = 0
 		ParticleBillboardType = AlignAlongVelocity
-		StartColor = 0.200000 0.200000 0.200000 0.300000
+		StartColor = 1.000000 1.000000 1.000000 1.000000
 		StartDelay =  0.000000
 		TotalDuration =  -1.000000
 		TranslucencySortBias =  0.000000
@@ -4887,7 +5054,7 @@ kbGameEntity 0 0 0 0 {
 		Scale = 50.000000 75.000000 50.000000
 		AlphaOverLife = 0
 		ColorOverLife = 0
-		EndColor = 0.300000 0.300000 0.300000 0.300000
+		EndColor = 1.000000 1.000000 1.000000 1.000000
 		Gravity = 0.000000 0.000000 0.000000
 		MaterialList = 1
 			kbMaterialComponent { 
@@ -4935,7 +5102,7 @@ kbGameEntity 0 0 0 0 {
 		MinStartVelocity = 0.000000 -1.000000 -0.000000
 		ModelEmitter = 0
 		ParticleBillboardType = AlignAlongVelocity
-		StartColor = 0.200000 0.200000 0.200000 0.300000
+		StartColor = 1.000000 1.000000 1.000000 1.000000
 		StartDelay =  0.000000
 		TotalDuration =  -1.000000
 		TranslucencySortBias =  0.000000
@@ -4960,7 +5127,7 @@ kbGameEntity 0 0 0 0 {
 		Scale = 50.000000 75.000000 50.000000
 		AlphaOverLife = 0
 		ColorOverLife = 0
-		EndColor = 0.300000 0.300000 0.300000 0.300000
+		EndColor = 1.000000 1.000000 1.000000 1.000000
 		Gravity = 0.000000 0.000000 0.000000
 		MaterialList = 1
 			kbMaterialComponent { 
@@ -5008,7 +5175,7 @@ kbGameEntity 0 0 0 0 {
 		MinStartVelocity = 0.000000 -1.000000 -0.000000
 		ModelEmitter = 0
 		ParticleBillboardType = AlignAlongVelocity
-		StartColor = 0.200000 0.200000 0.200000 0.300000
+		StartColor = 1.000000 1.000000 1.000000 1.000000
 		StartDelay =  0.000000
 		TotalDuration =  -1.000000
 		TranslucencySortBias =  0.000000

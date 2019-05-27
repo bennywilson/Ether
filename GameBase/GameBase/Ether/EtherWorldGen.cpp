@@ -2,7 +2,7 @@
 // EtherWorldGen.cpp
 //
 //
-// 2016-2018 kbEngine 2.0
+// 2016-2019 kbEngine 2.0
 //===================================================================================================
 #include "kbCore.h"
 #include "kbVector.h"
@@ -814,6 +814,41 @@ void EtherEnviroObject::Constructor() {
  *	EtherEnviroComponent::Constructor
  */
 void EtherEnviroComponent::Constructor() {
+	m_MinRainSheetTileAndSpeed.Set( 1.0f, 1.0f, 1.0f, 1.0f );
+	m_MaxRainSheetTileAndSpeed.Set( 1.0f, 1.0f, 1.0f, 1.0f );
+	m_RainColor.Set( 1.0f, 1.0f, 1.0f, 1.0f );
+}
+
+/**
+ *	EtherEnviroComponent::SetEnable_Internal
+ */
+void EtherEnviroComponent::SetEnable_Internal( const bool bEnable ) {
+	if ( bEnable ) {
+		SetGlobalShaderParams();
+	}
+}
+
+/**
+ *	EtherEnviroComponent::EditorChange
+ */
+void EtherEnviroComponent::EditorChange( const std::string & propertyName ) {
+	Super::EditorChange( propertyName );
+	if ( IsEnabled() ) {
+		SetGlobalShaderParams();
+	}
+}
+
+/**
+ *	EtherEnviroComponent::SetGlobalShaderParams
+ */
+void EtherEnviroComponent::SetGlobalShaderParams() {
+
+	kbShaderParamOverrides_t shaderParam;
+	shaderParam.SetVec4( "rainParams", kbVec4Rand( m_MinRainSheetTileAndSpeed, m_MaxRainSheetTileAndSpeed ) );
+	shaderParam.SetVec4( "rainColor", m_RainColor );
+	for ( int i = 0; i < shaderParam.m_ParamOverrides.size(); i++ ) {
+		g_pRenderer->SetGlobalShaderParam( shaderParam.m_ParamOverrides[i] );
+	}
 }
 
 /**

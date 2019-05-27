@@ -3568,6 +3568,14 @@ void kbRenderer_DX11::SetGlobalShaderParam( const kbShaderParamOverrides_t::kbSh
 }
 
 /**
+ *	kbRenderer_DX11::SetGlobalShaderParam
+ */
+void kbRenderer_DX11::SetGlobalShaderParam( const kbShaderParamOverrides_t & shaderParam ) {
+	for ( int i = 0; i < shaderParam.m_ParamOverrides.size(); i++ ) {
+		m_GlobalShaderParams_GameThread.push_back( shaderParam.m_ParamOverrides[i] );
+	}
+}
+/**
  *	kbRenderer_DX11::RT_SetRenderTarget
  */
 void kbRenderer_DX11::RT_SetRenderTarget( kbRenderTexture *const pRenderTexture ) {
@@ -3920,7 +3928,7 @@ ID3D11Buffer * kbRenderer_DX11::SetConstantBuffer( const kbShaderVarBindings_t &
                 if ( varName == overrideVarName ) {
 
                     // Check if it doesn't fit
-                    const size_t endOffset = curOverride.m_VarSizeBytes + bindings[i].m_VarByteOffset;
+                    const size_t endOffset = bindings[i].m_VarByteOffset + curOverride.m_VarSizeBytes;
                     if ( endOffset > shaderVarBindings.m_ConstantBufferSizeBytes || ( i < bindings.size() - 1 && endOffset > bindings[i+1].m_VarByteOffset ) ) {
                         break;
                     }

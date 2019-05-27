@@ -130,6 +130,7 @@ inline kbVec2 kbVec2Rand( const kbVec2 & min, const kbVec2 & max ) {
 	kbVec2 randVec;
 	randVec.x = min.x + ( kbfrand() * ( max.x - min.x ) );
 	randVec.y = min.y + ( kbfrand() * ( max.y - min.y ) );
+
 	return randVec;
 }
 
@@ -138,6 +139,16 @@ inline kbVec3 kbVec3Rand( const kbVec3 & min, const kbVec3 & max ) {
 	randVec.x = min.x + ( kbfrand() * ( max.x - min.x ) );
 	randVec.y = min.y + ( kbfrand() * ( max.y - min.y ) );
 	randVec.z = min.z + ( kbfrand() * ( max.z - min.z ) );
+
+	return randVec;
+}
+
+inline kbVec4 kbVec4Rand( const kbVec4 & min, const kbVec4 & max ) { 
+	kbVec4 randVec;
+	randVec.x = min.x + ( kbfrand() * ( max.x - min.x ) );
+	randVec.y = min.y + ( kbfrand() * ( max.y - min.y ) );
+	randVec.z = min.z + ( kbfrand() * ( max.z - min.z ) );
+	randVec.w = min.w + ( kbfrand() * ( max.w - min.w ) );
 	return randVec;
 
 }
