@@ -2,7 +2,7 @@ kbGameEntity 0 0 0 0 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		Name = "Entity_70"
+		Name = "Entity_72"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
 		Position = 0.000000 0.000000 0.000000
 		Scale = 1.000000 1.000000 1.000000
@@ -2674,7 +2674,7 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "Soldier"
-		Orientation = 0.000000 -0.178544 0.000000 -0.983932
+		Orientation = 0.000000 -0.188084 0.000000 -0.982153
 		Position = 3626.553467 657.729431 879.778931
 		Scale = 5.000000 5.000000 5.000000
 	}
@@ -5016,7 +5016,7 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "UI"
-		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Orientation = -0.080739 0.089420 0.665281 0.736808
 		Position = 3807.963623 659.104431 765.983276
 		Scale = 1.000000 1.000000 1.000000
 	}
@@ -5061,6 +5061,67 @@ kbGameEntity 0 0 0 0 {
 					}
 			}
 		RenderPass = UIPass
+		TranslucencySortBias =  0.000000
+		Model = ..\..\kbengine\assets\models\unitquad.ms3d
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Scrolling Buildings"
+		Orientation = 0.005286 0.120361 -0.043558 0.991760
+		Position = 3847.469238 624.916199 929.854431
+		Scale = 35.000000 50.000000 25.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		Materials = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\fx\scrollingbackground.kbshader
+				ShaderParams = 5
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "uvOffset"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "uvTileSpeed"
+						Texture = NULL
+						Vector = 1.000000 1.000000 0.005000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorMultiplier"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "particleColor"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "shaderTexture"
+						Texture = .\assets\visualtarget\reuben\backgroundbuildings.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		RenderPass = Post-LightingPass
 		TranslucencySortBias =  0.000000
 		Model = ..\..\kbengine\assets\models\unitquad.ms3d
 	}
