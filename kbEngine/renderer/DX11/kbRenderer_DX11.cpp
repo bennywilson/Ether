@@ -1305,7 +1305,7 @@ void kbRenderer_DX11::RenderScene() {
 
 			std::vector<kbRenderSubmesh> & FirstPersonPassVisibleList = m_pCurrentRenderWindow->GetVisibleSubMeshes( RP_FirstPerson );
 			for ( int i = 0; i < FirstPersonPassVisibleList.size(); i++ ) {
-				RenderMesh( &FirstPersonPassVisibleList[i], false );
+			//	RenderMesh( &FirstPersonPassVisibleList[i], false );
 			}
 
 			// Render models that need to be lit
@@ -1403,6 +1403,32 @@ void kbRenderer_DX11::RenderScene() {
 		RenderPostProcess();
 
 		PLACE_GPU_TIME_STAMP( "Post-Process" );
+
+		{
+			m_RenderState.SetDepthStencilState(	true,
+										kbRenderState::DepthWriteMaskZero,
+										kbRenderState::CompareLess,
+										true,
+										0xff,
+										0x0,
+										kbRenderState::StencilKeep,
+										kbRenderState::StencilKeep,
+										kbRenderState::StencilReplace,
+										kbRenderState::CompareNotEqual,
+										kbRenderState::StencilKeep,
+										kbRenderState::StencilKeep,
+										kbRenderState::StencilReplace,
+										kbRenderState::CompareNotEqual,
+										1);
+
+			std::vector<kbRenderSubmesh> & UIList = m_pCurrentRenderWindow->GetVisibleSubMeshes( RP_UI );
+			for ( int i = 0; i < UIList.size(); i++ ) {
+				RenderMesh( &UIList[i], false );
+			}
+
+			PLACE_GPU_TIME_STAMP( "UI" );
+		}
+
 
 		m_RenderState.SetDepthStencilState();
 	
@@ -1527,7 +1553,7 @@ void kbRenderer_DX11::PreRenderCullAndSort() {
 					pShader = renderObj.m_Materials[i].m_pShader;
 				}
 
-				if ( pShader == nullptr || pShader->IsBlendEnabled() == false ) {
+				if ( pShader == nullptr || pShader->IsBlendEnabled() == false || renderObj.m_RenderPass == RP_UI ) {
 					m_pCurrentRenderWindow->GetVisibleSubMeshes( renderObj.m_RenderPass ).push_back( kbRenderSubmesh( &renderObj, i, renderObj.m_RenderPass, sqrt( distToCamSqr ) ) );
 				} else {
 					ERenderPass rp = RP_Translucent;

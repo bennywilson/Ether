@@ -7,7 +7,10 @@ GenerateEnum(
 	AddEnumField( RP_Translucent, "TranslucentPass" )
 	AddEnumField( RP_TranslucentWithDepth, "TranslucentWithDepthPass" )
 	AddEnumField( RP_LightingPass, "Post-LightingPass" )
+	AddEnumField( RP_InWorldUI, "In-World UI" )
 	AddEnumField( RP_Distortion, "DistortionPass" )
+	AddEnumField( RP_PostProcess, "PostProcess" )
+	AddEnumField( RP_UI, "UIPass" )
 	AddEnumField( RP_Debug, "DebugPass" )
 )
 

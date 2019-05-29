@@ -122,6 +122,10 @@ std::wstring GetFileExtension( const std::wstring & FileName );
 
 float kbfrand();
 
+inline int kbirand( const int min, const int max ) {
+	return min + rand() % ( max - min );
+}
+
 inline float kbfrand( const float min, const float max ) {
 	return min + ( kbfrand() * ( max - min ) );
 }

@@ -308,6 +308,7 @@ void kbEditor::LoadMap( const std::string & InMapName ) {
 					if ( pLevelSettings == nullptr ) {
 						pLevelSettings = (kbEditorLevelSettingsComponent*)pGameEntity->GetComponentByType( kbEditorLevelSettingsComponent::GetType() );
 						if ( pLevelSettings != nullptr ) {
+							pGameEntity = inFile.ReadGameEntity();
 							continue;
 						}
 					}
@@ -417,13 +418,6 @@ void kbEditor::Update() {
 
 	//m_pMainTab->GetCurrentWindow()->GetCamera().Update();
 
-	if ( GetAsyncKeyState( VK_LSHIFT ) && GetAsyncKeyState( 'P' ) ) {
-		SetMainCameraPos( kbVec3( -2.02074528f, 28.4168167f, 14.1997643f ) );
-		SetMainCameraRot( kbQuat( 0.0239890888f, 0.281068176f, 0.0070281f, 0.959362f ) );
-
-		//this->SetMainCameraPos( kbVec3( 0.701963603f, 27.7603569f, 3.12184048f ) );
-		//this->SetMainCameraRot( kbQuat( 0.0285657402f, 0.304920107f, 0.00915033650f, 0.951905549f ) );
-	}
 
 	if ( GetFocus() == fl_xid( this ) ) {
 		// input

@@ -156,10 +156,14 @@ void EtherGame::Update_Internal( float DT ) {
 			const kbGameEntity *const pCurEntity = GetGameEntities()[i];
 			kbPlayerStartComponent *const pStart = (kbPlayerStartComponent*)pCurEntity->GetComponentByType( kbPlayerStartComponent::GetType() );
 			if ( pStart != nullptr ) {
-				kbVec3 newPos = pCurEntity->GetPosition();
+				const kbVec3 newPos = pCurEntity->GetPosition();
+				const kbQuat newRotation = pCurEntity->GetOrientation();
 				playerCamera.m_Position = newPos;
+				playerCamera.m_Rotation = newRotation;
+				playerCamera.m_RotationTarget = newRotation;
+
 				m_pLocalPlayer->SetPosition( newPos );
-;
+				m_pLocalPlayer->SetOrientation( newRotation );
 				break;
 			}
 		}
@@ -397,7 +401,7 @@ kbGameEntity * EtherGame::CreatePlayer( const int netId, const kbGUID & prefabGU
 
 		pNewEntity = g_pGame->CreateEntity( m_pCharacterPackage->GetPrefab( "Angelica" )->GetGameEntity(0), true );
 
-		AddPrefabToEntity( m_pWeaponsPackage, "EL_Rifle", pNewEntity, false );
+	//	AddPrefabToEntity( m_pWeaponsPackage, "EL_Rifle", pNewEntity, false );
 		AddPrefabToEntity( m_pWeaponsPackage, "EL_Grenade", pNewEntity, false );
 
 		for ( int i = 0; i < pNewEntity->NumComponents(); i++ ) {

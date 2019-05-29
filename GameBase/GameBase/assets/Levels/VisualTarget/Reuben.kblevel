@@ -2,7 +2,7 @@ kbGameEntity 0 0 0 0 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		Name = "Entity_81"
+		Name = "Entity_70"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
 		Position = 0.000000 0.000000 0.000000
 		Scale = 1.000000 1.000000 1.000000
@@ -10,168 +10,8 @@ kbGameEntity 0 0 0 0 {
 	kbEditorLevelSettingsComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		MainCameraPosition = 3861.354736 663.938843 726.195435
-		MainCameraRotation = -0.083836 0.708703 -0.085455 0.695277
-	}
-}
-kbGameEntity 0 0 0 0 {
-	kbTransformComponent { 
-		Enabled = 0
-		LifeTime =  -1.000000
-		Name = "Entity_79"
-		Orientation = 0.000000 0.000000 0.000000 1.000000
-		Position = 0.000000 0.000000 0.000000
-		Scale = 1.000000 1.000000 1.000000
-	}
-	kbEditorLevelSettingsComponent { 
-		Enabled = 0
-		LifeTime =  -1.000000
-		MainCameraPosition = 3903.506348 684.461365 811.317627
-		MainCameraRotation = -0.006786 0.734484 -0.007345 0.678552
-	}
-}
-kbGameEntity 0 0 0 0 {
-	kbTransformComponent { 
-		Enabled = 0
-		LifeTime =  -1.000000
-		Name = "Entity_78"
-		Orientation = 0.000000 0.000000 0.000000 1.000000
-		Position = 0.000000 0.000000 0.000000
-		Scale = 1.000000 1.000000 1.000000
-	}
-	kbEditorLevelSettingsComponent { 
-		Enabled = 0
-		LifeTime =  -1.000000
-		MainCameraPosition = 3801.135010 692.247681 856.851746
-		MainCameraRotation = 0.040690 0.733199 0.044045 0.677365
-	}
-}
-kbGameEntity 0 0 0 0 {
-	kbTransformComponent { 
-		Enabled = 0
-		LifeTime =  -1.000000
-		Name = "Entity_77"
-		Orientation = 0.000000 0.000000 0.000000 1.000000
-		Position = 0.000000 0.000000 0.000000
-		Scale = 1.000000 1.000000 1.000000
-	}
-	kbEditorLevelSettingsComponent { 
-		Enabled = 0
-		LifeTime =  -1.000000
-		MainCameraPosition = 3768.361328 681.574707 839.520630
-		MainCameraRotation = -0.047974 0.725915 -0.050897 0.684219
-	}
-}
-kbGameEntity 0 0 0 0 {
-	kbTransformComponent { 
-		Enabled = 0
-		LifeTime =  -1.000000
-		Name = "Entity_76"
-		Orientation = 0.000000 0.000000 0.000000 1.000000
-		Position = 0.000000 0.000000 0.000000
-		Scale = 1.000000 1.000000 1.000000
-	}
-	kbEditorLevelSettingsComponent { 
-		Enabled = 0
-		LifeTime =  -1.000000
-		MainCameraPosition = 3926.303467 691.626526 972.447937
-		MainCameraRotation = 0.006931 0.720766 0.007208 0.693106
-	}
-}
-kbGameEntity 0 0 0 0 {
-	kbTransformComponent { 
-		Enabled = 0
-		LifeTime =  -1.000000
-		Name = "Entity_75"
-		Orientation = 0.000000 0.000000 0.000000 1.000000
-		Position = 0.000000 0.000000 0.000000
-		Scale = 1.000000 1.000000 1.000000
-	}
-	kbEditorLevelSettingsComponent { 
-		Enabled = 0
-		LifeTime =  -1.000000
-		MainCameraPosition = 3869.724609 693.122986 847.272644
-		MainCameraRotation = -0.096723 0.713750 -0.100583 0.686359
-	}
-}
-kbGameEntity 0 0 0 0 {
-	kbTransformComponent { 
-		Enabled = 0
-		LifeTime =  -1.000000
-		Name = "Entity_74"
-		Orientation = 0.000000 0.000000 0.000000 1.000000
-		Position = 0.000000 0.000000 0.000000
-		Scale = 1.000000 1.000000 1.000000
-	}
-	kbEditorLevelSettingsComponent { 
-		Enabled = 0
-		LifeTime =  -1.000000
-		MainCameraPosition = 3869.724609 693.122986 847.272644
-		MainCameraRotation = -0.096947 0.623855 -0.078391 0.771531
-	}
-}
-kbGameEntity 0 0 0 0 {
-	kbTransformComponent { 
-		Enabled = 0
-		LifeTime =  -1.000000
-		Name = "Entity_74"
-		Orientation = 0.000000 0.000000 0.000000 1.000000
-		Position = 0.000000 0.000000 0.000000
-		Scale = 1.000000 1.000000 1.000000
-	}
-	kbEditorLevelSettingsComponent { 
-		Enabled = 0
-		LifeTime =  -1.000000
-		MainCameraPosition = 3869.724609 693.122986 847.272644
-		MainCameraRotation = -0.096947 0.623855 -0.078391 0.771531
-	}
-}
-kbGameEntity 0 0 0 0 {
-	kbTransformComponent { 
-		Enabled = 0
-		LifeTime =  -1.000000
-		Name = "Entity_72"
-		Orientation = 0.000000 0.000000 0.000000 1.000000
-		Position = 0.000000 0.000000 0.000000
-		Scale = 1.000000 1.000000 1.000000
-	}
-	kbEditorLevelSettingsComponent { 
-		Enabled = 0
-		LifeTime =  -1.000000
-		MainCameraPosition = 3877.402100 666.247314 782.592773
-		MainCameraRotation = -0.092530 0.694464 -0.090792 0.707753
-	}
-}
-kbGameEntity 0 0 0 0 {
-	kbTransformComponent { 
-		Enabled = 0
-		LifeTime =  -1.000000
-		Name = "Entity_71"
-		Orientation = 0.000000 0.000000 0.000000 1.000000
-		Position = 0.000000 0.000000 0.000000
-		Scale = 1.000000 1.000000 1.000000
-	}
-	kbEditorLevelSettingsComponent { 
-		Enabled = 0
-		LifeTime =  -1.000000
-		MainCameraPosition = 3877.402100 666.247314 782.592773
-		MainCameraRotation = -0.092530 0.694464 -0.090792 0.707753
-	}
-}
-kbGameEntity 0 0 0 0 {
-	kbTransformComponent { 
-		Enabled = 0
-		LifeTime =  -1.000000
-		Name = "Entity_71"
-		Orientation = 0.000000 0.000000 0.000000 1.000000
-		Position = 0.000000 0.000000 0.000000
-		Scale = 1.000000 1.000000 1.000000
-	}
-	kbEditorLevelSettingsComponent { 
-		Enabled = 0
-		LifeTime =  -1.000000
-		MainCameraPosition = 3859.398193 686.890381 816.739380
-		MainCameraRotation = -0.113633 0.712267 -0.118602 0.682420
+		MainCameraPosition = 3859.214844 633.358459 876.291931
+		MainCameraRotation = -0.044485 0.669349 -0.040209 0.740524
 	}
 }
 kbGameEntity 0 0 0 0 {
@@ -226,8 +66,8 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "Player Start"
-		Orientation = 0.000000 0.000000 0.000000 1.000000
-		Position = 63.664196 38.681831 -19.486687
+		Orientation = -0.044485 0.669349 -0.040209 0.740524
+		Position = 3859.214844 633.358459 876.291931
 		Scale = 1.000000 1.000000 1.000000
 	}
 	kbPlayerStartComponent { 
@@ -957,15 +797,15 @@ kbGameEntity 0 0 0 0 {
 			kbGrass { 
 				Enabled = 1
 				LifeTime =  -1.000000
-				BladeMaxHeight =  80.000000
+				BladeMaxHeight =  20.000000
 				BladeMaxWidth =  1.050000
-				BladeMinHeight =  10.000000
+				BladeMinHeight =  80.000000
 				BladeMinWidth =  0.850000
 				FakeAODarkness =  0.250000
 				FakeAOPower =  2.000000
-				GrassCellsPerTerrainSide = 30
+				GrassCellsPerTerrainSide = 80
 				MaxBladeJitterOffset =  1.000000
-				MaxPatchJitterOffset =  3.000000
+				MaxPatchJitterOffset =  1.000000
 				PatchEndCullDistance =  1500.000000
 				PatchStartCullDistance =  200.000000
 				PatchesPerCellSide = 60
@@ -2208,9 +2048,9 @@ kbGameEntity 0 0 0 0 {
 	EtherEnviroComponent { 
 		Enabled = 1
 		LifeTime =  -1.000000
-		MaxRainSheetTileAndSpeed = 3.000000 3.000000 3.000000 5.000000
-		MinRainSheetTileAndSpeed = 3.000000 3.000000 3.000000 5.000000
-		RainColor = 0.500000 0.500000 0.500000 0.500000
+		MaxRainSheetTileAndSpeed = 3.000000 5.000000 3.000000 5.000000
+		MinRainSheetTileAndSpeed = 3.000000 5.000000 3.000000 5.000000
+		RainColor = 1.000000 1.000000 1.000000 0.300000
 	}
 }
 kbGameEntity 0 0 0 0 {
@@ -2262,7 +2102,7 @@ kbGameEntity 0 0 0 0 {
 						LifeTime =  -1.000000
 						ParamName = "cloudScrollRate_AlphaStep"
 						Texture = NULL
-						Vector = 0.025000 0.010000 0.100000 0.600000
+						Vector = 0.000000 0.010000 0.100000 0.600000
 					}
 					kbShaderParamComponent { 
 						Enabled = 0
@@ -2293,24 +2133,9 @@ kbGameEntity 0 0 0 0 {
 						Vector = 0.999000 0.000000 0.000000 0.000000
 					}
 			}
-		RenderPass = TranslucentWithDepthPass
+		RenderPass = TranslucentPass
 		TranslucencySortBias =  0.000000
 		Model = .\assets\models\skydomes\clouddome.fbx
-	}
-}
-kbGameEntity 0 0 0 0 {
-	kbTransformComponent { 
-		Enabled = 0
-		LifeTime =  -1.000000
-		Name = "Player Start 2"
-		Orientation = 0.000000 0.000000 0.000000 1.000000
-		Position = -764.615173 -30.219667 -1343.156250
-		Scale = 1.000000 1.000000 1.000000
-	}
-	kbPlayerStartComponent { 
-		Enabled = 1
-		LifeTime =  -1.000000
-		Dummy =  0.000000
 	}
 }
 kbGameEntity 0 0 0 0 {
@@ -2635,7 +2460,7 @@ kbGameEntity 0 0 0 0 {
 		LifeTime =  -1.000000
 		Name = "Soldier"
 		Orientation = 0.000000 -0.146842 0.000000 -0.989160
-		Position = 3656.986816 548.272034 888.083374
+		Position = 3656.986816 558.928528 888.083374
 		Scale = 5.000000 5.000000 5.000000
 	}
 	EtherSkelModelComponent { 
@@ -2849,7 +2674,7 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "Soldier"
-		Orientation = 0.000000 -0.121844 0.000000 -0.992549
+		Orientation = 0.000000 -0.178544 0.000000 -0.983932
 		Position = 3626.553467 657.729431 879.778931
 		Scale = 5.000000 5.000000 5.000000
 	}
@@ -3494,8 +3319,8 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "Soldier 2"
-		Orientation = 0.078061 0.507143 -0.042944 0.857245
-		Position = 3725.000000 530.000000 705.000000
+		Orientation = 0.164222 -0.185100 0.029368 0.968456
+		Position = 3666.148193 583.672119 951.086731
 		Scale = 5.000000 5.000000 5.000000
 	}
 	EtherSkelModelComponent { 
@@ -3894,16 +3719,16 @@ kbGameEntity 0 0 0 0 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		Name = "Lightning Light"
-		Orientation = -0.451550 0.363521 -0.127379 0.804817
-		Position = 3789.130371 596.161377 729.331421
-		Scale = 1.000000 1.000000 1.000000
+		Name = "Demon Shadow"
+		Orientation = -0.001522 0.178246 -0.000276 0.983985
+		Position = 3656.622559 623.286255 853.493042
+		Scale = 15.000000 75.000000 150.000000
 	}
 	kbDirectionalLightComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
 		CastsShadows = 0
-		Color = 1.000000 1.000000 1.000000 0.000000
+		Color = 1.500000 1.500000 1.500000 1.500000
 		Materials = 1
 			kbMaterialComponent { 
 				Enabled = 0
@@ -4026,18 +3851,8 @@ kbGameEntity 0 0 0 0 {
 			}
 		CascadedShadowSplits = 0
 	}
-}
-kbGameEntity 0 0 0 0 {
-	kbTransformComponent { 
-		Enabled = 0
-		LifeTime =  -1.000000
-		Name = "Demon Shadow"
-		Orientation = -0.001522 0.178246 -0.000276 0.983985
-		Position = 3656.622559 623.286255 853.493042
-		Scale = 15.000000 75.000000 150.000000
-	}
 	kbStaticModelComponent { 
-		Enabled = 1
+		Enabled = 0
 		LifeTime =  -1.000000
 		CastsShadow = 0
 		Materials = 1
@@ -4093,6 +3908,20 @@ kbGameEntity 0 0 0 0 {
 		RenderPass = TranslucentPass
 		TranslucencySortBias =  0.000000
 		Model = .\assets\models\test\unitcube.ms3d
+	}
+	EtherComponentToggler { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		MaxFirstBurstDelaySec =  60.000000
+		MaxNumOnBursts = 5
+		MaxOffSeconds =  3.000000
+		MaxOnSeconds =  0.150000
+		MaxSecBetweenBursts =  0.100000
+		MinFirstBurstDelaySec =  60.000000
+		MinNumOnBursts = 1
+		MinOffSeconds =  1.000000
+		MinOnSeconds =  0.100000
+		MinSecBetweenBursts =  0.100000
 	}
 }
 kbGameEntity 0 0 0 0 {
@@ -4175,7 +4004,7 @@ kbGameEntity 0 0 0 0 {
 		LifeTime =  -1.000000
 		Name = "Blood"
 		Orientation = 0.000000 0.000000 -0.667678 0.744451
-		Position = 3729.332764 575.541321 695.056641
+		Position = 3671.467041 591.937439 961.865723
 		Scale = 7.000000 7.000000 7.000000
 	}
 	kbStaticModelComponent { 
@@ -4263,8 +4092,8 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "Ground Blood"
-		Orientation = 0.000000 0.000000 -0.667678 0.744451
-		Position = 3729.332764 575.541321 695.056641
+		Orientation = 0.169249 -0.188709 -0.645870 0.720136
+		Position = 3674.488770 583.192444 959.949890
 		Scale = 30.000000 30.000000 30.000000
 	}
 	kbStaticModelComponent { 
@@ -4352,7 +4181,7 @@ kbGameEntity 2609040299 1100347930 3115268521 1892043160 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "Light Shafts"
-		Orientation = -0.016860 -0.898779 0.091552 0.428404
+		Orientation = -0.007365 -0.850011 0.092800 0.518475
 		Position = 3712.549805 700.000000 725.149780
 		Scale = 1.000000 1.000000 1.000000
 	}
@@ -4374,8 +4203,8 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "Enemy Machete"
-		Orientation = 0.698248 -0.574593 -0.276214 0.325573
-		Position = 3666.492188 581.430054 875.424072
+		Orientation = 0.726655 -0.609920 -0.189255 0.253284
+		Position = 3667.250977 590.396118 875.687195
 		Scale = 12.000000 12.000000 12.000000
 	}
 	kbStaticModelComponent { 
@@ -4429,7 +4258,7 @@ kbGameEntity 0 0 0 0 {
 		LifeTime =  -1.000000
 		Name = "Enemy Pistol"
 		Orientation = -0.060521 -0.618176 -0.076363 0.779977
-		Position = 3625.962646 693.374573 866.308411
+		Position = 3627.836426 693.489319 866.151733
 		Scale = 10.000000 10.000000 10.000000
 	}
 	kbStaticModelComponent { 
@@ -4717,26 +4546,26 @@ kbGameEntity 0 0 0 0 {
 		MaxDuration =  -1.000000
 		MaxEndRotationRate =  0.000000
 		MaxEndSize = 3.000000 3.000000 3.000000
-		MaxEndVelocity = 0.000000 -4.000000 0.000000
+		MaxEndVelocity = 0.000000 0.000000 0.000000
 		MaxSpawnRate =  0.000000
 		MaxStart3DOffset = 100.000000 0.000000 100.000000
 		MaxStart3DRotation = 0.000000 0.000000 0.000000
 		MaxStartRotationRate =  15.000000
 		MaxStartSize = 3.000000 3.000000 3.000000
-		MaxStartVelocity = 0.000000 -5.000000 0.000000
+		MaxStartVelocity = 0.000000 0.000000 0.000000
 		MinBurstCount = 1
 		MinDuration =  -1.000000
 		MinEndRotationRate =  0.000000
 		MinEndSize = 3.000000 3.000000 3.000000
-		MinEndVelocity = 0.000000 -1.000000 0.000000
+		MinEndVelocity = 0.000000 0.000000 0.000000
 		MinSpawnRate =  0.000000
 		MinStart3DOffset = -100.000000 0.000000 -100.000000
 		MinStart3DRotation = 0.000000 0.000000 0.000000
 		MinStartRotationRate =  5.000000
 		MinStartSize = 3.000000 3.000000 3.000000
-		MinStartVelocity = 0.000000 -1.000000 -0.000000
+		MinStartVelocity = 0.000000 0.000000 0.000000
 		ModelEmitter = 0
-		ParticleBillboardType = AlignAlongVelocity
+		ParticleBillboardType = FaceCamera
 		StartColor = 1.000000 1.000000 1.000000 1.000000
 		StartDelay =  0.000000
 		TotalDuration =  -1.000000
@@ -4790,26 +4619,26 @@ kbGameEntity 0 0 0 0 {
 		MaxDuration =  -1.000000
 		MaxEndRotationRate =  0.000000
 		MaxEndSize = 3.000000 3.000000 3.000000
-		MaxEndVelocity = 0.000000 -4.000000 0.000000
+		MaxEndVelocity = 0.000000 0.000000 0.000000
 		MaxSpawnRate =  0.000000
 		MaxStart3DOffset = 100.000000 0.000000 100.000000
 		MaxStart3DRotation = 0.000000 0.000000 0.000000
 		MaxStartRotationRate =  15.000000
 		MaxStartSize = 3.000000 3.000000 3.000000
-		MaxStartVelocity = 0.000000 -5.000000 0.000000
+		MaxStartVelocity = 0.000000 0.000000 0.000000
 		MinBurstCount = 1
 		MinDuration =  -1.000000
 		MinEndRotationRate =  0.000000
 		MinEndSize = 3.000000 3.000000 3.000000
-		MinEndVelocity = 0.000000 -1.000000 0.000000
+		MinEndVelocity = 0.000000 0.000000 0.000000
 		MinSpawnRate =  0.000000
 		MinStart3DOffset = -100.000000 0.000000 -100.000000
 		MinStart3DRotation = 0.000000 0.000000 0.000000
 		MinStartRotationRate =  5.000000
 		MinStartSize = 3.000000 3.000000 3.000000
-		MinStartVelocity = 0.000000 -1.000000 -0.000000
+		MinStartVelocity = 0.000000 0.000000 0.000000
 		ModelEmitter = 0
-		ParticleBillboardType = AlignAlongVelocity
+		ParticleBillboardType = FaceCamera
 		StartColor = 1.000000 1.000000 1.000000 1.000000
 		StartDelay =  0.000000
 		TotalDuration =  -1.000000
@@ -4863,24 +4692,24 @@ kbGameEntity 0 0 0 0 {
 		MaxDuration =  -1.000000
 		MaxEndRotationRate =  0.000000
 		MaxEndSize = 3.000000 3.000000 3.000000
-		MaxEndVelocity = 0.000000 -4.000000 0.000000
+		MaxEndVelocity = 0.000000 0.000000 0.000000
 		MaxSpawnRate =  0.000000
 		MaxStart3DOffset = 100.000000 0.000000 100.000000
 		MaxStart3DRotation = 0.000000 0.000000 0.000000
 		MaxStartRotationRate =  15.000000
 		MaxStartSize = 3.000000 3.000000 3.000000
-		MaxStartVelocity = 0.000000 -5.000000 0.000000
+		MaxStartVelocity = 0.000000 0.000000 0.000000
 		MinBurstCount = 1
 		MinDuration =  -1.000000
 		MinEndRotationRate =  0.000000
 		MinEndSize = 3.000000 3.000000 3.000000
-		MinEndVelocity = 0.000000 -1.000000 0.000000
+		MinEndVelocity = 0.000000 0.000000 0.000000
 		MinSpawnRate =  0.000000
 		MinStart3DOffset = -100.000000 0.000000 -100.000000
 		MinStart3DRotation = 0.000000 0.000000 0.000000
 		MinStartRotationRate =  5.000000
 		MinStartSize = 3.000000 3.000000 3.000000
-		MinStartVelocity = 0.000000 -1.000000 -0.000000
+		MinStartVelocity = 0.000000 0.000000 0.000000
 		ModelEmitter = 0
 		ParticleBillboardType = AlignAlongVelocity
 		StartColor = 1.000000 1.000000 1.000000 1.000000
@@ -4936,24 +4765,24 @@ kbGameEntity 0 0 0 0 {
 		MaxDuration =  -1.000000
 		MaxEndRotationRate =  0.000000
 		MaxEndSize = 3.000000 3.000000 3.000000
-		MaxEndVelocity = 0.000000 -4.000000 0.000000
+		MaxEndVelocity = 0.000000 0.000000 0.000000
 		MaxSpawnRate =  0.000000
 		MaxStart3DOffset = 100.000000 0.000000 100.000000
 		MaxStart3DRotation = 0.000000 0.000000 0.000000
 		MaxStartRotationRate =  15.000000
 		MaxStartSize = 3.000000 3.000000 3.000000
-		MaxStartVelocity = 0.000000 -5.000000 0.000000
+		MaxStartVelocity = 0.000000 0.000000 0.000000
 		MinBurstCount = 1
 		MinDuration =  -1.000000
 		MinEndRotationRate =  0.000000
 		MinEndSize = 3.000000 3.000000 3.000000
-		MinEndVelocity = 0.000000 -1.000000 0.000000
+		MinEndVelocity = 0.000000 0.000000 0.000000
 		MinSpawnRate =  0.000000
 		MinStart3DOffset = -100.000000 0.000000 -100.000000
 		MinStart3DRotation = 0.000000 0.000000 0.000000
 		MinStartRotationRate =  5.000000
 		MinStartSize = 3.000000 3.000000 3.000000
-		MinStartVelocity = 0.000000 -1.000000 -0.000000
+		MinStartVelocity = 0.000000 0.000000 0.000000
 		ModelEmitter = 0
 		ParticleBillboardType = AlignAlongVelocity
 		StartColor = 1.000000 1.000000 1.000000 1.000000
@@ -5009,24 +4838,24 @@ kbGameEntity 0 0 0 0 {
 		MaxDuration =  -1.000000
 		MaxEndRotationRate =  0.000000
 		MaxEndSize = 3.000000 3.000000 3.000000
-		MaxEndVelocity = 0.000000 -4.000000 0.000000
+		MaxEndVelocity = 0.000000 0.000000 0.000000
 		MaxSpawnRate =  0.000000
 		MaxStart3DOffset = 100.000000 0.000000 100.000000
 		MaxStart3DRotation = 0.000000 0.000000 0.000000
 		MaxStartRotationRate =  15.000000
 		MaxStartSize = 3.000000 3.000000 3.000000
-		MaxStartVelocity = 0.000000 -5.000000 0.000000
+		MaxStartVelocity = 0.000000 0.000000 0.000000
 		MinBurstCount = 1
 		MinDuration =  -1.000000
 		MinEndRotationRate =  0.000000
 		MinEndSize = 3.000000 3.000000 3.000000
-		MinEndVelocity = 0.000000 -1.000000 0.000000
+		MinEndVelocity = 0.000000 0.000000 0.000000
 		MinSpawnRate =  0.000000
 		MinStart3DOffset = -100.000000 0.000000 -100.000000
 		MinStart3DRotation = 0.000000 0.000000 0.000000
 		MinStartRotationRate =  5.000000
 		MinStartSize = 3.000000 3.000000 3.000000
-		MinStartVelocity = 0.000000 -1.000000 -0.000000
+		MinStartVelocity = 0.000000 0.000000 0.000000
 		ModelEmitter = 0
 		ParticleBillboardType = AlignAlongVelocity
 		StartColor = 1.000000 1.000000 1.000000 1.000000
@@ -5082,24 +4911,24 @@ kbGameEntity 0 0 0 0 {
 		MaxDuration =  -1.000000
 		MaxEndRotationRate =  0.000000
 		MaxEndSize = 3.000000 3.000000 3.000000
-		MaxEndVelocity = 0.000000 -4.000000 0.000000
+		MaxEndVelocity = 0.000000 0.000000 0.000000
 		MaxSpawnRate =  0.000000
 		MaxStart3DOffset = 100.000000 0.000000 100.000000
 		MaxStart3DRotation = 0.000000 0.000000 0.000000
 		MaxStartRotationRate =  15.000000
 		MaxStartSize = 3.000000 3.000000 3.000000
-		MaxStartVelocity = 0.000000 -5.000000 0.000000
+		MaxStartVelocity = 0.000000 0.000000 0.000000
 		MinBurstCount = 1
 		MinDuration =  -1.000000
 		MinEndRotationRate =  0.000000
 		MinEndSize = 3.000000 3.000000 3.000000
-		MinEndVelocity = 0.000000 -1.000000 0.000000
+		MinEndVelocity = 0.000000 0.000000 0.000000
 		MinSpawnRate =  0.000000
 		MinStart3DOffset = -100.000000 0.000000 -100.000000
 		MinStart3DRotation = 0.000000 0.000000 0.000000
 		MinStartRotationRate =  5.000000
 		MinStartSize = 3.000000 3.000000 3.000000
-		MinStartVelocity = 0.000000 -1.000000 -0.000000
+		MinStartVelocity = 0.000000 0.000000 0.000000
 		ModelEmitter = 0
 		ParticleBillboardType = AlignAlongVelocity
 		StartColor = 1.000000 1.000000 1.000000 1.000000
@@ -5155,24 +4984,24 @@ kbGameEntity 0 0 0 0 {
 		MaxDuration =  -1.000000
 		MaxEndRotationRate =  0.000000
 		MaxEndSize = 3.000000 3.000000 3.000000
-		MaxEndVelocity = 0.000000 -4.000000 0.000000
+		MaxEndVelocity = 0.000000 0.000000 0.000000
 		MaxSpawnRate =  0.000000
 		MaxStart3DOffset = 100.000000 0.000000 100.000000
 		MaxStart3DRotation = 0.000000 0.000000 0.000000
 		MaxStartRotationRate =  15.000000
 		MaxStartSize = 3.000000 3.000000 3.000000
-		MaxStartVelocity = 0.000000 -5.000000 0.000000
+		MaxStartVelocity = 0.000000 0.000000 0.000000
 		MinBurstCount = 1
 		MinDuration =  -1.000000
 		MinEndRotationRate =  0.000000
 		MinEndSize = 3.000000 3.000000 3.000000
-		MinEndVelocity = 0.000000 -1.000000 0.000000
+		MinEndVelocity = 0.000000 0.000000 0.000000
 		MinSpawnRate =  0.000000
 		MinStart3DOffset = -100.000000 0.000000 -100.000000
 		MinStart3DRotation = 0.000000 0.000000 0.000000
 		MinStartRotationRate =  5.000000
 		MinStartSize = 3.000000 3.000000 3.000000
-		MinStartVelocity = 0.000000 -1.000000 -0.000000
+		MinStartVelocity = 0.000000 0.000000 0.000000
 		ModelEmitter = 0
 		ParticleBillboardType = AlignAlongVelocity
 		StartColor = 1.000000 1.000000 1.000000 1.000000
@@ -5180,5 +5009,59 @@ kbGameEntity 0 0 0 0 {
 		TotalDuration =  -1.000000
 		TranslucencySortBias =  0.000000
 		VelocityCurve = 0
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "UI"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 3807.963623 659.104431 765.983276
+		Scale = 1.000000 1.000000 1.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		Materials = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\ui\overlay.kbshader
+				ShaderParams = 4
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "cameraPosition"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "fog_Start_End_Clamp"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "fogColor"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "OverlayTexture"
+						Texture = .\assets\visualtarget\reuben\busoverlay.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		RenderPass = UIPass
+		TranslucencySortBias =  0.000000
+		Model = ..\..\kbengine\assets\models\unitquad.ms3d
 	}
 }

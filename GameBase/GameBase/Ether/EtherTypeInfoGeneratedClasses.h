@@ -85,6 +85,21 @@ GenerateClass(
 )
 
 GenerateClass(
+	EtherComponentToggler,
+	AddField( "MinFirstBurstDelaySec", KBTYPEINFO_FLOAT, EtherComponentToggler, m_MinFirstBurstDelaySec, false, "" )
+	AddField( "MaxFirstBurstDelaySec", KBTYPEINFO_FLOAT, EtherComponentToggler, m_MaxFirstBurstDelaySec, false, "" )
+	AddField( "MinOnSeconds", KBTYPEINFO_FLOAT, EtherComponentToggler, m_MinOnSeconds, false, "" )
+	AddField( "MaxOnSeconds", KBTYPEINFO_FLOAT, EtherComponentToggler, m_MaxOnSeconds, false, "" )
+	AddField( "MinOffSeconds", KBTYPEINFO_FLOAT, EtherComponentToggler, m_MinOffSeconds, false, "" )
+	AddField( "MaxOffSeconds", KBTYPEINFO_FLOAT, EtherComponentToggler, m_MaxOffSeconds, false, "" )
+	AddField( "MinNumOnBursts", KBTYPEINFO_INT, EtherComponentToggler, m_MinNumOnBursts, false, "" )
+	AddField( "MaxNumOnBursts", KBTYPEINFO_INT, EtherComponentToggler, m_MaxNumOnBursts, false, "" )
+	AddField( "MinSecBetweenBursts", KBTYPEINFO_FLOAT, EtherComponentToggler, m_MinSecBetweenBursts, false, "" )
+	AddField( "MaxSecBetweenBursts", KBTYPEINFO_FLOAT, EtherComponentToggler, m_MaxSecBetweenBursts, false, "" )
+
+)
+
+GenerateClass(
 	EtherAIComponent,
 	AddField( "UpdateHz", KBTYPEINFO_INT, EtherAIComponent, m_UpdateFrequency, false, "" )
 )

@@ -35,6 +35,8 @@ DEFINE_KBCLASS(EtherDestructibleComponent);
 
 DEFINE_KBCLASS(EtherActorComponent);
 
+DEFINE_KBCLASS(EtherComponentToggler);
+
 DEFINE_KBCLASS(EtherAIComponent);
 
 DEFINE_KBCLASS(EtherEnemySoldierAIComponent);
