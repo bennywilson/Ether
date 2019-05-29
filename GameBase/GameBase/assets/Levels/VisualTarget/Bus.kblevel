@@ -2,13 +2,29 @@ kbGameEntity 0 0 0 0 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
+		Name = "Entity_44"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 0.000000 0.000000 0.000000
+		Scale = 1.000000 1.000000 1.000000
+	}
+	kbEditorLevelSettingsComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		MainCameraPosition = -2.020745 28.416817 14.199764
+		MainCameraRotation = 0.023989 0.281068 0.007028 0.959362
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
 		Name = "Sky Gradient"
 		Orientation = 0.000000 -0.969342 0.000000 0.245715
 		Position = 1.814700 40.604389 -22.862383
 		Scale = 1.000000 1.000000 1.000000
 	}
 	kbStaticModelComponent { 
-		Enabled = 1
+		Enabled = 0
 		LifeTime =  -1.000000
 		CastsShadow = 0
 		Materials = 1
@@ -55,7 +71,7 @@ kbGameEntity 2609040299 1100347930 3115268521 1892043160 {
 		Scale = 1.000000 1.000000 1.000000
 	}
 	kbLightShaftsComponent { 
-		Enabled = 1
+		Enabled = 0
 		LifeTime =  -1.000000
 		BaseHeight =  0.750000
 		BaseWidth =  0.750000
@@ -72,8 +88,8 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "Player Start"
-		Orientation = 0.000000 0.000000 0.000000 1.000000
-		Position = 63.664196 38.681831 -19.486687
+		Orientation = 0.023989 0.281068 0.007028 0.959362
+		Position = -2.020745 28.416817 14.199764
 		Scale = 1.000000 1.000000 1.000000
 	}
 	kbPlayerStartComponent { 
@@ -123,6 +139,7 @@ kbGameEntity 0 0 0 0 {
 		MaxEndSize = 1.500000 1.500000 1.500000
 		MaxEndVelocity = 75.000000 -20.000000 -50.000000
 		MaxSpawnRate =  2.000000
+		MaxStart3DOffset = 0.000000 0.000000 0.000000
 		MaxStart3DRotation = 0.000000 0.000000 0.000000
 		MaxStartRotationRate =  0.000000
 		MaxStartSize = 1.500000 1.500000 1.500000
@@ -133,6 +150,7 @@ kbGameEntity 0 0 0 0 {
 		MinEndSize = 1.000000 1.000000 1.000000
 		MinEndVelocity = 75.000000 -20.000000 -50.000000
 		MinSpawnRate =  1.000000
+		MinStart3DOffset = 0.000000 0.000000 0.000000
 		MinStart3DRotation = 0.000000 0.000000 0.000000
 		MinStartRotationRate =  0.000000
 		MinStartSize = 1.000000 1.000000 1.000000
@@ -177,6 +195,7 @@ kbGameEntity 0 0 0 0 {
 		MaxEndSize = 3.000000 3.000000 3.000000
 		MaxEndVelocity = 0.000000 0.000000 0.000000
 		MaxSpawnRate =  0.000000
+		MaxStart3DOffset = 0.000000 0.000000 0.000000
 		MaxStart3DRotation = 0.000000 0.000000 0.000000
 		MaxStartRotationRate =  0.000000
 		MaxStartSize = 3.000000 3.000000 3.000000
@@ -187,6 +206,7 @@ kbGameEntity 0 0 0 0 {
 		MinEndSize = 3.000000 3.000000 3.000000
 		MinEndVelocity = 0.000000 0.000000 0.000000
 		MinSpawnRate =  0.000000
+		MinStart3DOffset = 0.000000 0.000000 0.000000
 		MinStart3DRotation = 0.000000 0.000000 0.000000
 		MinStartRotationRate =  0.000000
 		MinStartSize = 1.200000 1.200000 1.200000
@@ -375,7 +395,7 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadows = 1
-		Color = 0.350000 0.450000 0.550000 0.100000
+		Color = 0.300000 0.400000 0.500000 0.100000
 		Materials = 1
 			kbMaterialComponent { 
 				Enabled = 0
@@ -586,6 +606,7 @@ kbGameEntity 0 0 0 0 {
 		MaxEndSize = 100.000000 100.000000 100.000000
 		MaxEndVelocity = 1.000000 1.000000 1.000000
 		MaxSpawnRate =  0.000000
+		MaxStart3DOffset = 0.000000 0.000000 0.000000
 		MaxStart3DRotation = 0.000000 0.000000 0.000000
 		MaxStartRotationRate =  0.500000
 		MaxStartSize = 0.000000 0.000000 0.000000
@@ -596,6 +617,7 @@ kbGameEntity 0 0 0 0 {
 		MinEndSize = 80.000000 80.000000 80.000000
 		MinEndVelocity = -1.000000 -1.000000 -1.000000
 		MinSpawnRate =  0.000000
+		MinStart3DOffset = 0.000000 0.000000 0.000000
 		MinStart3DRotation = 0.000000 0.000000 0.000000
 		MinStartRotationRate =  -0.500000
 		MinStartSize = 0.000000 0.000000 0.000000
@@ -703,6 +725,7 @@ kbGameEntity 0 0 0 0 {
 		MaxEndSize = 2.000000 2.000000 2.000000
 		MaxEndVelocity = 20.000000 20.000000 20.000000
 		MaxSpawnRate =  0.000000
+		MaxStart3DOffset = 0.000000 0.000000 0.000000
 		MaxStart3DRotation = 0.000000 0.000000 0.000000
 		MaxStartRotationRate =  5.000000
 		MaxStartSize = 0.000000 0.000000 0.000000
@@ -713,6 +736,7 @@ kbGameEntity 0 0 0 0 {
 		MinEndSize = 2.000000 2.000000 2.000000
 		MinEndVelocity = -20.000000 -20.000000 -20.000000
 		MinSpawnRate =  0.000000
+		MinStart3DOffset = 0.000000 0.000000 0.000000
 		MinStart3DRotation = 0.000000 0.000000 0.000000
 		MinStartRotationRate =  -4.000000
 		MinStartSize = 0.000000 0.000000 0.000000
@@ -806,6 +830,7 @@ kbGameEntity 0 0 0 0 {
 		MaxEndSize = 50.000000 50.000000 50.000000
 		MaxEndVelocity = 0.000000 0.000000 0.000000
 		MaxSpawnRate =  0.000000
+		MaxStart3DOffset = 0.000000 0.000000 0.000000
 		MaxStart3DRotation = 0.000000 0.000000 0.000000
 		MaxStartRotationRate =  0.200000
 		MaxStartSize = 30.000000 30.000000 30.000000
@@ -816,6 +841,7 @@ kbGameEntity 0 0 0 0 {
 		MinEndSize = 40.000000 40.000000 40.000000
 		MinEndVelocity = 0.000000 0.000000 0.000000
 		MinSpawnRate =  0.000000
+		MinStart3DOffset = 0.000000 0.000000 0.000000
 		MinStart3DRotation = 0.000000 0.000000 0.000000
 		MinStartRotationRate =  -0.200000
 		MinStartSize = 20.000000 20.000000 20.000000
@@ -860,7 +886,7 @@ kbGameEntity 0 0 0 0 {
 		Scale = 1.000000 1.000000 1.000000
 	}
 	EtherFogComponent { 
-		Enabled = 1
+		Enabled = 0
 		LifeTime =  -1.000000
 		Clamp =  0.500000
 		Color = 1.000000 1.000000 1.000000 1.000000
@@ -949,28 +975,13 @@ kbGameEntity 0 0 0 0 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		Name = "Player Start 2"
-		Orientation = 0.000000 0.000000 0.000000 1.000000
-		Position = -764.615173 -30.219667 -1343.156250
-		Scale = 1.000000 1.000000 1.000000
-	}
-	kbPlayerStartComponent { 
-		Enabled = 1
-		LifeTime =  -1.000000
-		Dummy =  0.000000
-	}
-}
-kbGameEntity 0 0 0 0 {
-	kbTransformComponent { 
-		Enabled = 0
-		LifeTime =  -1.000000
 		Name = "Overhead Clouds"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
 		Position = 0.000000 0.000000 0.000000
 		Scale = 55.000000 55.000000 55.000000
 	}
 	kbStaticModelComponent { 
-		Enabled = 1
+		Enabled = 0
 		LifeTime =  -1.000000
 		CastsShadow = 0
 		Materials = 1
@@ -1046,7 +1057,7 @@ kbGameEntity 0 0 0 0 {
 						LifeTime =  -1.000000
 						ParamName = "cloudColor"
 						Texture = NULL
-						Vector = 0.050000 0.025000 0.001000 5.000000
+						Vector = 0.025000 0.025000 0.025000 0.000000
 					}
 					kbShaderParamComponent { 
 						Enabled = 0
@@ -4157,7 +4168,7 @@ kbGameEntity 0 0 0 0 {
 		CastsShadow = 1
 		Materials = 3
 			kbMaterialComponent { 
-				Enabled = 0
+				Enabled = 1
 				LifeTime =  -1.000000
 				CullModeOverride = ShaderDefault
 				Shader = .\assets\shaders\environment\environmentbase.kbshader
@@ -4166,7 +4177,7 @@ kbGameEntity 0 0 0 0 {
 						Enabled = 0
 						LifeTime =  -1.000000
 						ParamName = "diffuse"
-						Texture = .\assets\visualtarget\reuben\seat.tif
+						Texture = .\assets\visualtarget\reuben\bus_interior.tif
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 					kbShaderParamComponent { 
@@ -4180,14 +4191,14 @@ kbGameEntity 0 0 0 0 {
 						Enabled = 0
 						LifeTime =  -1.000000
 						ParamName = "propertyMap"
-						Texture = NULL
+						Texture = ..\..\kbengine\assets\textures\white.bmp
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
 						ParamName = "emissiveMap"
-						Texture = NULL
+						Texture = .\assets\test\black.jpg
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 			}
@@ -4216,7 +4227,7 @@ kbGameEntity 0 0 0 0 {
 						LifeTime =  -1.000000
 						ParamName = "edgeFadeColor"
 						Texture = NULL
-						Vector = 0.308000 0.359000 0.406000 0.700000
+						Vector = 0.060000 0.120000 0.200000 1.000000
 					}
 					kbShaderParamComponent { 
 						Enabled = 0
@@ -4234,7 +4245,7 @@ kbGameEntity 0 0 0 0 {
 					}
 			}
 			kbMaterialComponent { 
-				Enabled = 1
+				Enabled = 0
 				LifeTime =  -1.000000
 				CullModeOverride = ShaderDefault
 				Shader = .\assets\shaders\environment\environmentbase.kbshader
@@ -4243,7 +4254,7 @@ kbGameEntity 0 0 0 0 {
 						Enabled = 0
 						LifeTime =  -1.000000
 						ParamName = "diffuse"
-						Texture = .\assets\visualtarget\reuben\bus_interior.tif
+						Texture = .\assets\visualtarget\reuben\seat.tif
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 					kbShaderParamComponent { 
@@ -4257,14 +4268,14 @@ kbGameEntity 0 0 0 0 {
 						Enabled = 0
 						LifeTime =  -1.000000
 						ParamName = "propertyMap"
-						Texture = NULL
+						Texture = ..\..\kbengine\assets\textures\white.bmp
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
 						ParamName = "emissiveMap"
-						Texture = NULL
+						Texture = ..\..\kbengine\assets\textures\black.bmp
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 			}
@@ -4291,13 +4302,20 @@ kbGameEntity 0 0 0 0 {
 				Enabled = 1
 				LifeTime =  -1.000000
 				CullModeOverride = FrontFaces
-				Shader = .\assets\shaders\environment\environmentbase.kbshader
-				ShaderParams = 4
+				Shader = .\assets\shaders\environment\environmentbase_hack.kbshader
+				ShaderParams = 5
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorMult"
+						Texture = NULL
+						Vector = 0.250000 0.250000 0.250000 1.000000
+					}
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
 						ParamName = "diffuse"
-						Texture = NULL
+						Texture = .\assets\visualtarget\reuben\bus_interior.tif
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 					kbShaderParamComponent { 
@@ -4367,7 +4385,7 @@ kbGameEntity 0 0 0 0 {
 						Enabled = 0
 						LifeTime =  -1.000000
 						ParamName = "diffuse"
-						Texture = .\assets\visualtarget\reuben\bus_interior.tif
+						Texture = .\assets\visualtarget\reuben\seat.tif
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 					kbShaderParamComponent { 
@@ -4395,6 +4413,53 @@ kbGameEntity 0 0 0 0 {
 		RenderPass = LightingPass
 		TranslucencySortBias =  0.000000
 		Model = .\assets\visualtarget\reuben\bus2.fbx
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Entity_41"
+		Orientation = -0.027772 0.829348 -0.006899 0.557999
+		Position = -36.545185 8.903897 19.131081
+		Scale = 5.000000 4.000000 13.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		Materials = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\fx\decal_modulate.kbshader
+				ShaderParams = 3
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "decalParams1"
+						Texture = NULL
+						Vector = 1.000000 1.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "decalMask"
+						Texture = NULL
+						Vector = 1.000000 1.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "ProjectionTex"
+						Texture = .\assets\visualtarget\reuben\mars3.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		RenderPass = TranslucentPass
+		TranslucencySortBias =  0.000000
+		Model = .\assets\models\test\unitcube.ms3d
 	}
 }
 kbGameEntity 0 0 0 0 {

@@ -3728,7 +3728,7 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		CastsShadows = 0
-		Color = 1.500000 1.500000 1.500000 1.500000
+		Color = 3.000000 3.000000 3.000000 3.000000
 		Materials = 1
 			kbMaterialComponent { 
 				Enabled = 0
@@ -3937,7 +3937,7 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadows = 0
-		Color = 0.500000 0.500000 0.500000 1.000000
+		Color = 1.000000 1.000000 1.000000 1.000000
 		Materials = 1
 			kbMaterialComponent { 
 				Enabled = 0
@@ -5021,7 +5021,7 @@ kbGameEntity 0 0 0 0 {
 		Scale = 1.000000 1.000000 1.000000
 	}
 	kbStaticModelComponent { 
-		Enabled = 0
+		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadow = 0
 		Materials = 1

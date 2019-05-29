@@ -106,7 +106,7 @@ float4 pixelShader( pixelInput input ) : SV_TARGET {
 
 	//finalUV /= 0.5;
 	finalUV = finalUV * 0.5f + 0.5f;
-	finalUV.y = 1.0f - finalUV.y;
+	finalUV.xy = 1.0f - finalUV.xy;
 	if ( finalUV.x < 0.03f || finalUV.x > 0.97f || finalUV.y < 0.03f || finalUV.y > 0.97f )
 		clip(-1);
 
