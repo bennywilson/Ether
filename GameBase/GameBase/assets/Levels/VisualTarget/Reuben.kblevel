@@ -2,7 +2,7 @@ kbGameEntity 0 0 0 0 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		Name = "Entity_72"
+		Name = "Entity_75"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
 		Position = 0.000000 0.000000 0.000000
 		Scale = 1.000000 1.000000 1.000000
@@ -2457,7 +2457,7 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "Machete Soldier"
-		Orientation = 0.000000 -0.146842 0.000000 -0.989160
+		Orientation = 0.000000 -0.363046 0.000000 -0.931771
 		Position = 3656.986816 558.928528 888.083374
 		Scale = 5.000000 5.000000 5.000000
 	}
@@ -2684,7 +2684,7 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "Soldier 1"
-		Orientation = 0.000000 -0.188084 0.000000 -0.982153
+		Orientation = 0.000000 -0.265176 0.000000 -0.964200
 		Position = 3626.553467 657.729431 879.778931
 		Scale = 5.000000 5.000000 5.000000
 	}
@@ -4396,8 +4396,8 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "Enemy Machete"
-		Orientation = 0.726655 -0.609920 -0.189255 0.253284
-		Position = 3667.250977 590.396118 875.687195
+		Orientation = 0.783049 -0.535154 -0.060677 0.311065
+		Position = 3670.274902 590.080139 880.897461
 		Scale = 12.000000 12.000000 12.000000
 	}
 	kbStaticModelComponent { 
