@@ -1082,7 +1082,7 @@ kbGameEntity 0 0 0 0 {
 		Scale = 4.300000 4.300000 4.300000
 	}
 	EtherSkelModelComponent { 
-		Enabled = 1
+		Enabled = 0
 		LifeTime =  -1.000000
 		CastsShadow = 1
 		Materials = 5
