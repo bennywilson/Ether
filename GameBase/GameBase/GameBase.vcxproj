@@ -91,6 +91,7 @@
     <None Include="assets\shaders\Character\characterHair.kbShader" />
     <None Include="assets\shaders\Character\characterMetal.kbShader" />
     <None Include="assets\shaders\Character\characterMetalDull.kbShader" />
+    <None Include="assets\shaders\Character\characterOutline.kbShader" />
     <None Include="assets\shaders\Character\characterOutline_NoSkinning.kbShader" />
     <None Include="assets\shaders\Character\characterTranslucent.kbShader" />
     <None Include="assets\shaders\Character\firstPersonHands.kbshader" />

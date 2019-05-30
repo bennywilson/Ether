@@ -506,7 +506,15 @@ void kbResourceTab::RefreshResourcesTab_Recursive( kbResourceTabFile_t & current
 
 		for ( int resourceIdx = 0; resourceIdx < currentFolder.m_ResourceList.size(); resourceIdx++ ) {
 			if ( currentFolder.m_ResourceList[resourceIdx].m_pResource != nullptr ) {
-				m_pResourceSelectBrowser->add( ( spaces + currentFolder.m_ResourceList[resourceIdx].m_pResource->GetName() ).c_str() );
+				const std::string & resourceName = currentFolder.m_ResourceList[resourceIdx].m_pResource->GetName();
+				const size_t fileNameStart = resourceName.find_last_of( '\\' );
+				std::string displayName;
+				if ( fileNameStart == std::string::npos ) {
+					displayName = resourceName;
+				} else {
+					displayName = resourceName.substr( fileNameStart + 1 );
+				}
+				m_pResourceSelectBrowser->add( ( spaces + displayName ).c_str() );
 			} else if ( currentFolder.m_ResourceList[resourceIdx].m_pPrefab != nullptr ) {
 				std::string prefabName = ( spaces + currentFolder.m_ResourceList[resourceIdx].m_pPrefab->GetPrefabName() ).c_str();
 				if ( currentFolder.m_ResourceList[resourceIdx].m_bIsDirty ) {

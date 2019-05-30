@@ -1666,7 +1666,7 @@ kbGameEntity 0 0 0 0 {
 						LifeTime =  -1.000000
 						ParamName = "rimParams"
 						Texture = NULL
-						Vector = 0.500000 0.900000 0.700000 1.000000
+						Vector = 0.200000 0.900000 0.700000 1.000000
 					}
 			}
 		CascadedShadowSplits = 4
@@ -2245,7 +2245,7 @@ kbGameEntity 0 0 0 0 {
 		LifeTime =  -1.000000
 		Name = "Reuben"
 		Orientation = 0.000000 0.863958 0.000000 0.503565
-		Position = 3724.000000 569.748047 724.000000
+		Position = 3724.000000 565.919189 724.000000
 		Scale = 5.000000 5.000000 5.000000
 	}
 	EtherSkelModelComponent { 
@@ -2339,8 +2339,8 @@ kbGameEntity 0 0 0 0 {
 		DebugAnimIndex = 0
 		IsFirstPersonModel = 0
 	}
-	kbSkeletalModelComponent { 
-		Enabled = 0
+	EtherSkelModelComponent { 
+		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadow = 0
 		Materials = 5
@@ -2348,70 +2348,35 @@ kbGameEntity 0 0 0 0 {
 				Enabled = 0
 				LifeTime =  -1.000000
 				CullModeOverride = ShaderDefault
-				Shader = .\assets\shaders\character\characteroutline_noskinning.kbshader
-				ShaderParams = 2
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "colorTexture"
-						Texture = .\assets\models\characters\izzy_combat\headband.jpg
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
+				Shader = .\assets\shaders\character\characteroutline.kbshader
+				ShaderParams = 1
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
 						ParamName = "outlineParams"
 						Texture = NULL
-						Vector = 0.010000 5.000000 0.000000 0.000000
+						Vector = 0.100000 5.000000 0.000000 0.000000
 					}
 			}
 			kbMaterialComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
 				CullModeOverride = ShaderDefault
-				Shader = .\assets\shaders\character\characteroutline_noskinning.kbshader
-				ShaderParams = 2
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "colorTexture"
-						Texture = NULL
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
+				Shader = .\assets\shaders\character\characteroutline.kbshader
+				ShaderParams = 1
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
 						ParamName = "outlineParams"
 						Texture = NULL
-						Vector = 0.010000 5.000000 0.000000 0.000000
+						Vector = 0.100000 5.000000 0.000000 0.000000
 					}
 			}
 			kbMaterialComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
 				CullModeOverride = ShaderDefault
-				Shader = .\assets\shaders\character\characteroutline_noskinning.kbshader
-				ShaderParams = 2
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "colorTexture"
-						Texture = .\assets\models\characters\izzy_combat\izzy_combat.bmp
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "outlineParams"
-						Texture = NULL
-						Vector = 0.010000 5.000000 0.000000 0.000000
-					}
-			}
-			kbMaterialComponent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				CullModeOverride = ShaderDefault
-				Shader = .\assets\shaders\character\characteroutline_noskinning.kbshader
+				Shader = .\assets\shaders\character\characteroutline.kbshader
 				ShaderParams = 2
 					kbShaderParamComponent { 
 						Enabled = 0
@@ -2425,14 +2390,35 @@ kbGameEntity 0 0 0 0 {
 						LifeTime =  -1.000000
 						ParamName = "outlineParams"
 						Texture = NULL
-						Vector = 0.010000 5.000000 0.000000 0.000000
+						Vector = 0.100000 5.000000 0.000000 0.000000
 					}
 			}
 			kbMaterialComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
 				CullModeOverride = ShaderDefault
-				Shader = .\assets\shaders\character\characteroutline_noskinning.kbshader
+				Shader = .\assets\shaders\character\characteroutline.kbshader
+				ShaderParams = 2
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorTexture"
+						Texture = NULL
+						Vector = 0.100000 5.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "outlineParams"
+						Texture = NULL
+						Vector = 0.100000 5.000000 0.000000 0.000000
+					}
+			}
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\character\characteroutline.kbshader
 				ShaderParams = 2
 					kbShaderParamComponent { 
 						Enabled = 0
@@ -2451,14 +2437,26 @@ kbGameEntity 0 0 0 0 {
 			}
 		RenderPass = LightingPass
 		TranslucencySortBias =  0.000000
-		Model = .\assets\models\characters\izzy_combat\izzy.fbx
+		Model = .\assets\visualtarget\reuben\reuben\reubenbase.ms3d
+		Animations = 1
+			EtherAnimComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Animation = .\assets\visualtarget\reuben\reuben\reubenexecution.kbanim.ms3d
+				AnimationEvent = 0
+				AnimationName = ""
+				IsLooping = 0
+				TimeScale =  1.000000
+			}
+		DebugAnimIndex = 0
+		IsFirstPersonModel = 0
 	}
 }
 kbGameEntity 0 0 0 0 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		Name = "Soldier"
+		Name = "Machete Soldier"
 		Orientation = 0.000000 -0.146842 0.000000 -0.989160
 		Position = 3656.986816 558.928528 888.083374
 		Scale = 5.000000 5.000000 5.000000
@@ -2554,8 +2552,8 @@ kbGameEntity 0 0 0 0 {
 		DebugAnimIndex = 0
 		IsFirstPersonModel = 0
 	}
-	kbSkeletalModelComponent { 
-		Enabled = 0
+	EtherSkelModelComponent { 
+		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadow = 0
 		Materials = 5
@@ -2563,28 +2561,7 @@ kbGameEntity 0 0 0 0 {
 				Enabled = 0
 				LifeTime =  -1.000000
 				CullModeOverride = ShaderDefault
-				Shader = .\assets\shaders\character\characteroutline_noskinning.kbshader
-				ShaderParams = 2
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "colorTexture"
-						Texture = .\assets\models\characters\izzy_combat\headband.jpg
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "outlineParams"
-						Texture = NULL
-						Vector = 0.010000 5.000000 0.000000 0.000000
-					}
-			}
-			kbMaterialComponent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				CullModeOverride = ShaderDefault
-				Shader = .\assets\shaders\character\characteroutline_noskinning.kbshader
+				Shader = .\assets\shaders\character\characteroutline.kbshader
 				ShaderParams = 2
 					kbShaderParamComponent { 
 						Enabled = 0
@@ -2598,35 +2575,14 @@ kbGameEntity 0 0 0 0 {
 						LifeTime =  -1.000000
 						ParamName = "outlineParams"
 						Texture = NULL
-						Vector = 0.010000 5.000000 0.000000 0.000000
+						Vector = 0.300000 5.000000 0.000000 0.000000
 					}
 			}
 			kbMaterialComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
 				CullModeOverride = ShaderDefault
-				Shader = .\assets\shaders\character\characteroutline_noskinning.kbshader
-				ShaderParams = 2
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "colorTexture"
-						Texture = .\assets\models\characters\izzy_combat\izzy_combat.bmp
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "outlineParams"
-						Texture = NULL
-						Vector = 0.010000 5.000000 0.000000 0.000000
-					}
-			}
-			kbMaterialComponent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				CullModeOverride = ShaderDefault
-				Shader = .\assets\shaders\character\characteroutline_noskinning.kbshader
+				Shader = .\assets\shaders\character\characteroutline.kbshader
 				ShaderParams = 2
 					kbShaderParamComponent { 
 						Enabled = 0
@@ -2640,40 +2596,94 @@ kbGameEntity 0 0 0 0 {
 						LifeTime =  -1.000000
 						ParamName = "outlineParams"
 						Texture = NULL
-						Vector = 0.010000 5.000000 0.000000 0.000000
+						Vector = 0.300000 5.000000 0.000000 0.000000
 					}
 			}
 			kbMaterialComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
 				CullModeOverride = ShaderDefault
-				Shader = .\assets\shaders\character\characteroutline_noskinning.kbshader
+				Shader = .\assets\shaders\character\characteroutline.kbshader
+				ShaderParams = 2
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorTexture"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "outlineParams"
+						Texture = NULL
+						Vector = 0.300000 5.000000 0.000000 0.000000
+					}
+			}
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\character\characteroutline.kbshader
+				ShaderParams = 2
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorTexture"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "outlineParams"
+						Texture = NULL
+						Vector = 0.300000 5.000000 0.000000 0.000000
+					}
+			}
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\character\characteroutline.kbshader
 				ShaderParams = 2
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
 						ParamName = "outlineParams"
 						Texture = NULL
-						Vector = 0.010000 5.000000 0.000000 0.000000
+						Vector = 0.300000 5.000000 0.000000 0.000000
 					}
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
 						ParamName = "colorTexture"
-						Texture = .\assets\models\characters\izzy_combat\face.tif
+						Texture = NULL
 						Vector = 0.100000 5.000000 0.000000 0.000000
 					}
 			}
 		RenderPass = LightingPass
 		TranslucencySortBias =  0.000000
-		Model = .\assets\models\characters\izzy_combat\izzy.fbx
+		Model = .\assets\visualtarget\reuben\soldier\basesoldier.ms3d
+		Animations = 1
+			EtherAnimComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Animation = .\assets\visualtarget\reuben\soldier\basesoldier_run2.kbanim.ms3d
+				AnimationEvent = 0
+				AnimationName = ""
+				IsLooping = 0
+				TimeScale =  1.000000
+			}
+		DebugAnimIndex = 0
+		IsFirstPersonModel = 0
 	}
 }
 kbGameEntity 0 0 0 0 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		Name = "Soldier"
+		Name = "Soldier 1"
 		Orientation = 0.000000 -0.188084 0.000000 -0.982153
 		Position = 3626.553467 657.729431 879.778931
 		Scale = 5.000000 5.000000 5.000000
@@ -2769,8 +2779,8 @@ kbGameEntity 0 0 0 0 {
 		DebugAnimIndex = 0
 		IsFirstPersonModel = 0
 	}
-	kbSkeletalModelComponent { 
-		Enabled = 0
+	EtherSkelModelComponent { 
+		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadow = 0
 		Materials = 5
@@ -2778,28 +2788,7 @@ kbGameEntity 0 0 0 0 {
 				Enabled = 0
 				LifeTime =  -1.000000
 				CullModeOverride = ShaderDefault
-				Shader = .\assets\shaders\character\characteroutline_noskinning.kbshader
-				ShaderParams = 2
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "colorTexture"
-						Texture = .\assets\models\characters\izzy_combat\headband.jpg
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "outlineParams"
-						Texture = NULL
-						Vector = 0.010000 5.000000 0.000000 0.000000
-					}
-			}
-			kbMaterialComponent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				CullModeOverride = ShaderDefault
-				Shader = .\assets\shaders\character\characteroutline_noskinning.kbshader
+				Shader = .\assets\shaders\character\characteroutline.kbshader
 				ShaderParams = 2
 					kbShaderParamComponent { 
 						Enabled = 0
@@ -2813,35 +2802,14 @@ kbGameEntity 0 0 0 0 {
 						LifeTime =  -1.000000
 						ParamName = "outlineParams"
 						Texture = NULL
-						Vector = 0.010000 5.000000 0.000000 0.000000
+						Vector = 0.300000 5.000000 0.000000 0.000000
 					}
 			}
 			kbMaterialComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
 				CullModeOverride = ShaderDefault
-				Shader = .\assets\shaders\character\characteroutline_noskinning.kbshader
-				ShaderParams = 2
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "colorTexture"
-						Texture = .\assets\models\characters\izzy_combat\izzy_combat.bmp
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "outlineParams"
-						Texture = NULL
-						Vector = 0.010000 5.000000 0.000000 0.000000
-					}
-			}
-			kbMaterialComponent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				CullModeOverride = ShaderDefault
-				Shader = .\assets\shaders\character\characteroutline_noskinning.kbshader
+				Shader = .\assets\shaders\character\characteroutline.kbshader
 				ShaderParams = 2
 					kbShaderParamComponent { 
 						Enabled = 0
@@ -2855,14 +2823,56 @@ kbGameEntity 0 0 0 0 {
 						LifeTime =  -1.000000
 						ParamName = "outlineParams"
 						Texture = NULL
-						Vector = 0.010000 5.000000 0.000000 0.000000
+						Vector = 0.300000 5.000000 0.000000 0.000000
 					}
 			}
 			kbMaterialComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
 				CullModeOverride = ShaderDefault
-				Shader = .\assets\shaders\character\characteroutline_noskinning.kbshader
+				Shader = .\assets\shaders\character\characteroutline.kbshader
+				ShaderParams = 2
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorTexture"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "outlineParams"
+						Texture = NULL
+						Vector = 0.300000 5.000000 0.000000 0.000000
+					}
+			}
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\character\characteroutline.kbshader
+				ShaderParams = 2
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorTexture"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "outlineParams"
+						Texture = NULL
+						Vector = 0.300000 5.000000 0.000000 0.000000
+					}
+			}
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\character\characteroutline.kbshader
 				ShaderParams = 2
 					kbShaderParamComponent { 
 						Enabled = 0
@@ -2875,13 +2885,25 @@ kbGameEntity 0 0 0 0 {
 						Enabled = 0
 						LifeTime =  -1.000000
 						ParamName = "colorTexture"
-						Texture = .\assets\models\characters\izzy_combat\face.tif
-						Vector = 0.100000 5.000000 0.000000 0.000000
+						Texture = NULL
+						Vector = 0.300000 5.000000 0.000000 0.000000
 					}
 			}
-		RenderPass = LightingPass
+		RenderPass = Post-LightingPass
 		TranslucencySortBias =  0.000000
-		Model = .\assets\models\characters\izzy_combat\izzy.fbx
+		Model = .\assets\visualtarget\reuben\soldier\basesoldier.ms3d
+		Animations = 1
+			EtherAnimComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Animation = .\assets\visualtarget\reuben\soldier\basesoldier_run.kbanim.ms3d
+				AnimationEvent = 0
+				AnimationName = ""
+				IsLooping = 0
+				TimeScale =  1.000000
+			}
+		DebugAnimIndex = 0
+		IsFirstPersonModel = 0
 	}
 }
 kbGameEntity 0 0 0 0 {
@@ -2984,8 +3006,8 @@ kbGameEntity 0 0 0 0 {
 		DebugAnimIndex = 0
 		IsFirstPersonModel = 0
 	}
-	kbSkeletalModelComponent { 
-		Enabled = 0
+	EtherSkelModelComponent { 
+		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadow = 0
 		Materials = 5
@@ -2993,28 +3015,7 @@ kbGameEntity 0 0 0 0 {
 				Enabled = 0
 				LifeTime =  -1.000000
 				CullModeOverride = ShaderDefault
-				Shader = .\assets\shaders\character\characteroutline_noskinning.kbshader
-				ShaderParams = 2
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "colorTexture"
-						Texture = .\assets\models\characters\izzy_combat\headband.jpg
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "outlineParams"
-						Texture = NULL
-						Vector = 0.010000 5.000000 0.000000 0.000000
-					}
-			}
-			kbMaterialComponent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				CullModeOverride = ShaderDefault
-				Shader = .\assets\shaders\character\characteroutline_noskinning.kbshader
+				Shader = .\assets\shaders\character\characteroutline.kbshader
 				ShaderParams = 2
 					kbShaderParamComponent { 
 						Enabled = 0
@@ -3028,35 +3029,14 @@ kbGameEntity 0 0 0 0 {
 						LifeTime =  -1.000000
 						ParamName = "outlineParams"
 						Texture = NULL
-						Vector = 0.010000 5.000000 0.000000 0.000000
+						Vector = 0.300000 5.000000 0.000000 0.000000
 					}
 			}
 			kbMaterialComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
 				CullModeOverride = ShaderDefault
-				Shader = .\assets\shaders\character\characteroutline_noskinning.kbshader
-				ShaderParams = 2
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "colorTexture"
-						Texture = .\assets\models\characters\izzy_combat\izzy_combat.bmp
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "outlineParams"
-						Texture = NULL
-						Vector = 0.010000 5.000000 0.000000 0.000000
-					}
-			}
-			kbMaterialComponent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				CullModeOverride = ShaderDefault
-				Shader = .\assets\shaders\character\characteroutline_noskinning.kbshader
+				Shader = .\assets\shaders\character\characteroutline.kbshader
 				ShaderParams = 2
 					kbShaderParamComponent { 
 						Enabled = 0
@@ -3070,41 +3050,95 @@ kbGameEntity 0 0 0 0 {
 						LifeTime =  -1.000000
 						ParamName = "outlineParams"
 						Texture = NULL
-						Vector = 0.010000 5.000000 0.000000 0.000000
+						Vector = 0.300000 5.000000 0.000000 0.000000
 					}
 			}
 			kbMaterialComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
 				CullModeOverride = ShaderDefault
-				Shader = .\assets\shaders\character\characteroutline_noskinning.kbshader
+				Shader = .\assets\shaders\character\characteroutline.kbshader
+				ShaderParams = 2
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorTexture"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "outlineParams"
+						Texture = NULL
+						Vector = 0.300000 5.000000 0.000000 0.000000
+					}
+			}
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\character\characteroutline.kbshader
+				ShaderParams = 2
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorTexture"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "outlineParams"
+						Texture = NULL
+						Vector = 0.300000 5.000000 0.000000 0.000000
+					}
+			}
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\character\characteroutline.kbshader
 				ShaderParams = 2
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
 						ParamName = "outlineParams"
 						Texture = NULL
-						Vector = 0.010000 5.000000 0.000000 0.000000
+						Vector = 0.300000 5.000000 0.000000 0.000000
 					}
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
 						ParamName = "colorTexture"
-						Texture = .\assets\models\characters\izzy_combat\face.tif
-						Vector = 0.100000 5.000000 0.000000 0.000000
+						Texture = NULL
+						Vector = 0.300000 5.000000 0.000000 0.000000
 					}
 			}
-		RenderPass = LightingPass
+		RenderPass = Post-LightingPass
 		TranslucencySortBias =  0.000000
-		Model = .\assets\models\characters\izzy_combat\izzy.fbx
+		Model = .\assets\visualtarget\reuben\soldier\basesoldier.ms3d
+		Animations = 1
+			EtherAnimComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Animation = .\assets\visualtarget\reuben\soldier\basesoldier_run3.kbanim.ms3d
+				AnimationEvent = 0
+				AnimationName = ""
+				IsLooping = 0
+				TimeScale =  1.000000
+			}
+		DebugAnimIndex = 0
+		IsFirstPersonModel = 0
 	}
 }
 kbGameEntity 0 0 0 0 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		Name = "Soldier 2"
-		Orientation = 0.000000 0.024519 0.000000 -0.999699
+		Name = "Begging Soldier"
+		Orientation = 0.000000 -0.093144 0.000000 -0.995653
 		Position = 3721.323975 548.233337 769.806946
 		Scale = 5.000000 5.000000 5.000000
 	}
@@ -3173,12 +3207,33 @@ kbGameEntity 0 0 0 0 {
 				Enabled = 0
 				LifeTime =  -1.000000
 				CullModeOverride = ShaderDefault
-				Shader = .\assets\shaders\fx\emberparticle.kbshader
-				ShaderParams = 1
+				Shader = .\assets\shaders\fx\hackclip.kbshader
+				ShaderParams = 4
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
-						ParamName = "shaderTexture"
+						ParamName = "diffuse"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "normal"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "propertyMap"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "emissiveMap"
 						Texture = NULL
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
@@ -3199,8 +3254,8 @@ kbGameEntity 0 0 0 0 {
 		DebugAnimIndex = 0
 		IsFirstPersonModel = 0
 	}
-	kbSkeletalModelComponent { 
-		Enabled = 0
+	EtherSkelModelComponent { 
+		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadow = 0
 		Materials = 5
@@ -3208,28 +3263,7 @@ kbGameEntity 0 0 0 0 {
 				Enabled = 0
 				LifeTime =  -1.000000
 				CullModeOverride = ShaderDefault
-				Shader = .\assets\shaders\character\characteroutline_noskinning.kbshader
-				ShaderParams = 2
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "colorTexture"
-						Texture = .\assets\models\characters\izzy_combat\headband.jpg
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "outlineParams"
-						Texture = NULL
-						Vector = 0.010000 5.000000 0.000000 0.000000
-					}
-			}
-			kbMaterialComponent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				CullModeOverride = ShaderDefault
-				Shader = .\assets\shaders\character\characteroutline_noskinning.kbshader
+				Shader = .\assets\shaders\character\characteroutline.kbshader
 				ShaderParams = 2
 					kbShaderParamComponent { 
 						Enabled = 0
@@ -3243,82 +3277,122 @@ kbGameEntity 0 0 0 0 {
 						LifeTime =  -1.000000
 						ParamName = "outlineParams"
 						Texture = NULL
-						Vector = 0.010000 5.000000 0.000000 0.000000
-					}
-			}
-			kbMaterialComponent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				CullModeOverride = ShaderDefault
-				Shader = .\assets\shaders\character\characteroutline_noskinning.kbshader
-				ShaderParams = 2
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "colorTexture"
-						Texture = .\assets\models\characters\izzy_combat\izzy_combat.bmp
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "outlineParams"
-						Texture = NULL
-						Vector = 0.010000 5.000000 0.000000 0.000000
-					}
-			}
-			kbMaterialComponent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				CullModeOverride = ShaderDefault
-				Shader = .\assets\shaders\character\characteroutline_noskinning.kbshader
-				ShaderParams = 2
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "colorTexture"
-						Texture = NULL
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "outlineParams"
-						Texture = NULL
-						Vector = 0.010000 5.000000 0.000000 0.000000
-					}
-			}
-			kbMaterialComponent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				CullModeOverride = ShaderDefault
-				Shader = .\assets\shaders\character\characteroutline_noskinning.kbshader
-				ShaderParams = 2
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "outlineParams"
-						Texture = NULL
-						Vector = 0.010000 5.000000 0.000000 0.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "colorTexture"
-						Texture = .\assets\models\characters\izzy_combat\face.tif
 						Vector = 0.100000 5.000000 0.000000 0.000000
+					}
+			}
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\character\characteroutline.kbshader
+				ShaderParams = 2
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorTexture"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "outlineParams"
+						Texture = NULL
+						Vector = 0.100000 5.000000 0.000000 0.000000
+					}
+			}
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\character\characteroutline.kbshader
+				ShaderParams = 1
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "outlineParams"
+						Texture = NULL
+						Vector = 0.010000 5.000000 0.000000 0.000000
+					}
+			}
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\character\characteroutline.kbshader
+				ShaderParams = 2
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorTexture"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "outlineParams"
+						Texture = NULL
+						Vector = 0.100000 5.000000 0.000000 0.000000
+					}
+			}
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\fx\hackclip.kbshader
+				ShaderParams = 4
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "diffuse"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "normal"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "propertyMap"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "emissiveMap"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 			}
 		RenderPass = LightingPass
 		TranslucencySortBias =  0.000000
-		Model = .\assets\models\characters\izzy_combat\izzy.fbx
+		Model = .\assets\visualtarget\reuben\soldier\basesoldier.ms3d
+		Animations = 1
+			EtherAnimComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Animation = .\assets\visualtarget\reuben\soldier\basesoldier_beg.kbanim.ms3d
+				AnimationEvent = 0
+				AnimationName = ""
+				IsLooping = 0
+				TimeScale =  1.000000
+			}
+		DebugAnimIndex = 0
+		IsFirstPersonModel = 0
 	}
 }
 kbGameEntity 0 0 0 0 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		Name = "Soldier 2"
+		Name = "Dead Solider"
 		Orientation = 0.164222 -0.185100 0.029368 0.968456
 		Position = 3666.148193 583.672119 951.086731
 		Scale = 5.000000 5.000000 5.000000
@@ -3414,6 +3488,125 @@ kbGameEntity 0 0 0 0 {
 		DebugAnimIndex = 0
 		IsFirstPersonModel = 0
 	}
+	EtherSkelModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		Materials = 5
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\character\characteroutline.kbshader
+				ShaderParams = 2
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorTexture"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "outlineParams"
+						Texture = NULL
+						Vector = 0.300000 5.000000 0.000000 0.000000
+					}
+			}
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\character\characteroutline.kbshader
+				ShaderParams = 2
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorTexture"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "outlineParams"
+						Texture = NULL
+						Vector = 0.300000 5.000000 0.000000 0.000000
+					}
+			}
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\character\characteroutline.kbshader
+				ShaderParams = 1
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "outlineParams"
+						Texture = NULL
+						Vector = 0.300000 5.000000 0.000000 0.000000
+					}
+			}
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\character\characteroutline.kbshader
+				ShaderParams = 2
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorTexture"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "outlineParams"
+						Texture = NULL
+						Vector = 0.300000 5.000000 0.000000 0.000000
+					}
+			}
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\character\characteroutline.kbshader
+				ShaderParams = 2
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorTexture"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "outlineParams"
+						Texture = NULL
+						Vector = 0.300000 5.000000 0.000000 0.000000
+					}
+			}
+		RenderPass = LightingPass
+		TranslucencySortBias =  0.000000
+		Model = .\assets\visualtarget\reuben\soldier\basesoldier.ms3d
+		Animations = 1
+			EtherAnimComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Animation = .\assets\visualtarget\reuben\soldier\basesoldier_dead.kbanim.ms3d
+				AnimationEvent = 0
+				AnimationName = ""
+				IsLooping = 0
+				TimeScale =  1.000000
+			}
+		DebugAnimIndex = 0
+		IsFirstPersonModel = 0
+	}
 }
 kbGameEntity 0 0 0 0 {
 	kbTransformComponent { 
@@ -3431,7 +3624,7 @@ kbGameEntity 0 0 0 0 {
 		LifeTime =  -1.000000
 		Name = "Reuben Rifle"
 		Orientation = -0.112838 0.000000 0.000000 0.993614
-		Position = 3729.765625 610.545959 728.787292
+		Position = 3729.765625 607.108582 727.996399
 		Scale = 0.700000 0.500000 0.700000
 	}
 	kbStaticModelComponent { 
@@ -3912,12 +4105,12 @@ kbGameEntity 0 0 0 0 {
 	EtherComponentToggler { 
 		Enabled = 1
 		LifeTime =  -1.000000
-		MaxFirstBurstDelaySec =  60.000000
+		MaxFirstBurstDelaySec =  1.000000
 		MaxNumOnBursts = 5
 		MaxOffSeconds =  3.000000
 		MaxOnSeconds =  0.150000
 		MaxSecBetweenBursts =  0.100000
-		MinFirstBurstDelaySec =  60.000000
+		MinFirstBurstDelaySec =  1.000000
 		MinNumOnBursts = 1
 		MinOffSeconds =  1.000000
 		MinOnSeconds =  0.100000
@@ -5016,7 +5209,7 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "UI"
-		Orientation = -0.080739 0.089420 0.665281 0.736808
+		Orientation = 0.006382 0.120416 -0.037907 0.991979
 		Position = 3807.963623 659.104431 765.983276
 		Scale = 1.000000 1.000000 1.000000
 	}
@@ -5070,7 +5263,7 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "Scrolling Buildings"
-		Orientation = 0.005286 0.120361 -0.043558 0.991760
+		Orientation = 0.006471 0.120412 -0.038641 0.991951
 		Position = 3847.469238 624.916199 929.854431
 		Scale = 35.000000 50.000000 25.000000
 	}
