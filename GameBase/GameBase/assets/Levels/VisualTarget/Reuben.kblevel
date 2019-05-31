@@ -2,7 +2,7 @@ kbGameEntity 0 0 0 0 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		Name = "Entity_72"
+		Name = "Entity_80"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
 		Position = 0.000000 0.000000 0.000000
 		Scale = 1.000000 1.000000 1.000000
@@ -11,7 +11,7 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		MainCameraPosition = 3859.214844 633.358459 876.291931
-		MainCameraRotation = -0.052586 0.657738 -0.046117 0.749992
+		MainCameraRotation = -0.052586 0.657738 -0.046110 0.749993
 	}
 }
 kbGameEntity 0 0 0 0 {
@@ -66,7 +66,7 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "Player Start"
-		Orientation = -0.052586 0.657738 -0.046117 0.749992
+		Orientation = -0.052586 0.657738 -0.046110 0.749992
 		Position = 3859.214844 633.358459 876.291931
 		Scale = 1.000000 1.000000 1.000000
 	}
@@ -797,17 +797,17 @@ kbGameEntity 0 0 0 0 {
 			kbGrass { 
 				Enabled = 1
 				LifeTime =  -1.000000
-				BladeMaxHeight =  20.000000
+				BladeMaxHeight =  55.000000
 				BladeMaxWidth =  1.050000
-				BladeMinHeight =  80.000000
+				BladeMinHeight =  25.000000
 				BladeMinWidth =  0.850000
 				FakeAODarkness =  0.250000
 				FakeAOPower =  2.000000
 				GrassCellsPerTerrainSide = 80
 				MaxBladeJitterOffset =  1.000000
 				MaxPatchJitterOffset =  1.000000
-				PatchEndCullDistance =  1500.000000
-				PatchStartCullDistance =  200.000000
+				PatchEndCullDistance =  1100.000000
+				PatchStartCullDistance =  1000.000000ii
 				PatchesPerCellSide = 60
 				ShaderParams = 10
 					kbShaderParamComponent { 
@@ -3892,7 +3892,7 @@ kbGameEntity 0 0 0 0 {
 						Enabled = 0
 						LifeTime =  -1.000000
 						ParamName = "propertyMap"
-						Texture = NULL
+						Texture = .\assets\test\halfgray.jpg
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 					kbShaderParamComponent { 
@@ -4108,7 +4108,7 @@ kbGameEntity 0 0 0 0 {
 		MaxFirstBurstDelaySec =  1.000000
 		MaxNumOnBursts = 5
 		MaxOffSeconds =  3.000000
-		MaxOnSeconds =  0.150000
+		MaxOnSeconds =  0.200000
 		MaxSecBetweenBursts =  0.100000
 		MinFirstBurstDelaySec =  1.000000
 		MinNumOnBursts = 1
@@ -5209,7 +5209,7 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "UI"
-		Orientation = 0.006382 0.120416 -0.037907 0.991979
+		Orientation = 0.007889 0.120327 -0.050323 0.991427
 		Position = 3807.963623 659.104431 765.983276
 		Scale = 1.000000 1.000000 1.000000
 	}
@@ -5263,8 +5263,8 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "Scrolling Buildings"
-		Orientation = 0.006471 0.120412 -0.038641 0.991951
-		Position = 3847.469238 624.916199 929.854431
+		Orientation = 0.008471 0.120288 -0.055119 0.991172
+		Position = 3850.110352 625.129578 930.504822
 		Scale = 35.000000 50.000000 25.000000
 	}
 	kbStaticModelComponent { 
