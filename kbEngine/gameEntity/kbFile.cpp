@@ -2,7 +2,7 @@
 // kbFile.cpp
 //
 //
-// 2016 kbEngine 2.0
+// 2016-2019 kbEngine 2.0
 //===================================================================================================
 #include <vector>
 #include <string>
@@ -121,11 +121,16 @@ kbGameEntity *kbFile::ReadGameEntity() {
 kbGameEntity * kbFile::ReadGameEntity_Internal() {
 	size_t nextStringPos = m_Buffer.find_first_of( " {\n\r\t", m_CurrentReadPos );
 	if ( nextStringPos == std::string::npos ) {
-		return NULL;
+		return nullptr;
 	}
 
 	// Read GUID
-	m_CurrentReadPos = m_Buffer.find_first_of( " ", m_CurrentReadPos ) + 1;
+	m_CurrentReadPos = m_Buffer.find_first_of( " ", m_CurrentReadPos );
+	if ( m_CurrentReadPos == std::string::npos ) {
+		return nullptr;
+	}
+	m_CurrentReadPos += 1;
+
 	nextStringPos = m_Buffer.find_first_of( " ", m_CurrentReadPos );
 	const std::string guid1 = m_Buffer.substr( m_CurrentReadPos, nextStringPos - m_CurrentReadPos );
 
