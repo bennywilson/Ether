@@ -10,8 +10,8 @@ kbGameEntity 0 0 0 0 {
 	kbEditorLevelSettingsComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		MainCameraPosition = -24.256941 20.515345 -8.143144
-		MainCameraRotation = -0.033725 -0.266568 0.009333 0.963181
+		MainCameraPosition = -20.244102 14.859900 10.770185
+		MainCameraRotation = -0.009997 0.024996 -0.000251 0.999638
 	}
 }
 kbGameEntity 0 0 0 0 {
@@ -203,7 +203,7 @@ kbGameEntity 0 0 0 0 {
 	kbDirectionalLightComponent { 
 		Enabled = 1
 		LifeTime =  -1.000000
-		CastsShadows = 1
+		CastsShadows = 0
 		Color = 0.160000 0.200000 0.250000 0.050000
 		Materials = 1
 			kbMaterialComponent { 
@@ -462,7 +462,7 @@ kbGameEntity 0 0 0 0 {
 		Scale = 5.000000 5.000000 5.000000
 	}
 	kbStaticModelComponent { 
-		Enabled = 1
+		Enabled = 0
 		LifeTime =  -1.000000
 		CastsShadow = 0
 		Materials = 2
@@ -518,14 +518,14 @@ kbGameEntity 0 0 0 0 {
 						Enabled = 0
 						LifeTime =  -1.000000
 						ParamName = "propertyMap"
-						Texture = .\assets\visualtarget\elp_ad\tv\tv_prop.jpg
+						Texture = .\assets\visualtarget\elp_ad\tv\tv_frame_prop.jpg
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
 						ParamName = "emissiveMap"
-						Texture = ..\..\kbengine\assets\textures\black.bmp
+						Texture = NULL
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 			}
@@ -552,8 +552,15 @@ kbGameEntity 0 0 0 0 {
 				Enabled = 0
 				LifeTime =  -1.000000
 				CullModeOverride = ShaderDefault
-				Shader = .\assets\shaders\environment\environmentbase.kbshader
-				ShaderParams = 4
+				Shader = .\assets\shaders\environment\environtmentbase_simplenormal.kbshader
+				ShaderParams = 5
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorMult"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
@@ -648,7 +655,7 @@ kbGameEntity 0 0 0 0 {
 		LifeTime =  -1.000000
 		Name = "Screen"
 		Orientation = -0.005508 0.677514 0.000532 0.735489
-		Position = -21.987963 14.979536 16.050831
+		Position = -21.987963 14.979538 16.050831
 		Scale = 5.000000 5.000000 5.000000
 	}
 	kbStaticModelComponent { 
@@ -695,8 +702,15 @@ kbGameEntity 0 0 0 0 {
 				Enabled = 0
 				LifeTime =  -1.000000
 				CullModeOverride = ShaderDefault
-				Shader = .\assets\shaders\environment\environmentbase.kbshader
-				ShaderParams = 4
+				Shader = .\assets\shaders\environment\environtmentbase_simplenormal.kbshader
+				ShaderParams = 5
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorMult"
+						Texture = NULL
+						Vector = 1.000000 1.000000 1.000000 0.000000
+					}
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
