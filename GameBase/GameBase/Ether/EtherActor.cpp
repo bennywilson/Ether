@@ -171,3 +171,71 @@ void EtherComponentToggler::ToggleComponents( const bool bToggleOn ) {
 
 	m_bComponentsEnabled = bToggleOn;
 }
+
+/**
+ *	EtherLightAnimatorComponent::Constructor
+ */
+void EtherLightAnimatorComponent::Constructor() {
+	m_StartTime = 0.0f;
+}
+
+/**
+ *	EtherLightAnimatorComponent::SetEnable_Internal
+ */
+void EtherLightAnimatorComponent::SetEnable_Internal( const bool bEnabled ) {
+	if ( bEnabled ) {
+		m_StartTime = g_GlobalTimer.TimeElapsedSeconds();
+	}
+}
+
+/**
+ *	EtherLightAnimatorComponent::Update_Internal
+ */
+void EtherLightAnimatorComponent::Update_Internal( const float DT ) {
+	if ( m_LightColorCurve.size() == 0 ) {
+		return;
+	}
+
+	kbLightComponent *const pLightComp = (kbLightComponent*)GetOwner()->GetComponentByType( kbLightComponent::GetType() );
+	if ( pLightComp == nullptr ) {
+		return;
+	}
+
+	float elapsedTime = g_GlobalTimer.TimeElapsedSeconds() - m_StartTime;
+	const float lastEventTime = m_LightColorCurve.back().GetEventTime();
+	if ( elapsedTime > lastEventTime ) {
+		elapsedTime = fmod( elapsedTime, lastEventTime );
+	}
+
+	kbVec3 lightColor = kbVec3::zero;
+	for ( int i = 1; i < m_LightColorCurve.size(); i++ ) {
+		const float eventTime = m_LightColorCurve[i].GetEventTime();
+		if ( elapsedTime < eventTime ) {
+			const float prevEventTime = m_LightColorCurve[i - 1].GetEventTime();
+			const float t = ( elapsedTime - prevEventTime ) / ( eventTime  - prevEventTime );
+			lightColor = kbLerp( m_LightColorCurve[i - 1].GetEventValue(), m_LightColorCurve[i].GetEventValue(), t );
+			break;
+		}
+	}
+
+	pLightComp->SetColor( lightColor.x, lightColor.y, lightColor.z, 1.0f );
+	pLightComp->MarkAsDirty();
+
+	{
+		kbShaderParamOverrides_t shaderParam;
+		shaderParam.SetVec4( "lightAnimParam", lightColor );
+		g_pRenderer->SetGlobalShaderParam( shaderParam );
+	}
+}
+
+/**
+ *	EtherLightAnimatorComponent::EditorChange
+ */
+void EtherLightAnimatorComponent::EditorChange( const std::string & propertyName ) {
+	Super::EditorChange( propertyName );
+
+	if ( IsEnabled() ) {
+		m_StartTime = g_GlobalTimer.TimeElapsedSeconds();
+	}
+
+}

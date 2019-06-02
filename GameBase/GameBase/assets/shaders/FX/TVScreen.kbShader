@@ -8,10 +8,12 @@ cbuffer matrixBuffer {
 	matrix modelMatrix;
 	matrix mvpMatrix;
 	float4 lightAnimParam;		// lightAnimParam driven by EtherLightAnimatorComponent
+	float4 screenParams;		// x - 
 };
 
 kbShaderState {
 	srcblend Blend_One
+	dstblend Blend_Zero
 	colorWriteEnable ColorWriteEnable_rgba
 	cullMode CullMode_None
 }
@@ -60,8 +62,10 @@ pixelInput vertexShader( vertexInput input ) {
 /**
  *	pixelShader
  */
-Texture2D screenTexture			: register(t0);
+Texture2D screenColorTex		: register(t0);
 SamplerState SampleType;
+
+Texture2D screenEmissiveTex		: register(t1);
 
  float4 pixelShader( pixelInput	input ) : SV_TARGET {
 
@@ -69,7 +73,12 @@ SamplerState SampleType;
 //	float time = 1.0f - input.color.w;
 	float2 uv = input.uv;
 
-	float4 color = screenTexture.Sample( SampleType, uv ) * lerp( lightAnimParam, 1, 0.85f );
-	color.w = 0.1;
+	float4 color = screenColorTex.Sample( SampleType, uv );
+	float4 emissive = screenEmissiveTex.Sample( SampleType, uv );
+
+	color += emissive;
+	color = color * 0.8f;
+
+	color.w = emissive.w * lerp( lightAnimParam.x, 1.0f, screenParams.x ) * screenParams.y;
 	return color;
 }

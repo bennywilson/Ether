@@ -175,6 +175,8 @@ void kbMaterialComponent::Constructor() {
 void kbMaterialComponent::EditorChange( const std::string & propertyName ) {
 	Super::EditorChange( propertyName );
 
+kbLog( "Updating shader" );
+
 	if ( propertyName == "Shader" && m_pShader != nullptr ) {
 
 		std::vector<kbShaderParamComponent>	oldParams = m_ShaderParamComponents;
@@ -184,6 +186,8 @@ void kbMaterialComponent::EditorChange( const std::string & propertyName ) {
 		for ( int i = 0; i < shaderBindings.m_VarBindings.size(); i++ ) {
 			auto & currentVar = shaderBindings.m_VarBindings[i];
 			if ( currentVar.m_bIsUserDefinedVar == false ) {
+kbLog( "Skipping %s", currentVar.m_VarName.c_str() );
+
 				continue;
 			}
 
@@ -209,6 +213,8 @@ void kbMaterialComponent::EditorChange( const std::string & propertyName ) {
 		for ( int i = 0; i < shaderBindings.m_Textures.size(); i++ ) {
 			auto & curTexture = shaderBindings.m_Textures[i];
 			if ( curTexture.m_bIsUserDefinedVar == false ) {
+kbLog( "Skipping %s", curTexture.m_TextureName.c_str() );
+
 				continue;
 			}
 

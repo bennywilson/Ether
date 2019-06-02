@@ -496,6 +496,23 @@ void kbRenderer_DX11::Init_Internal( HWND hwnd, const int frameWidth, const int 
 	KBTEXTURE_R16G16,
 	NUM_TEXTURE_FORMATS,
 */
+/*
+	COLOR_BUFFER,		// Color in xyz.  Pixel Depth in W
+	NORMAL_BUFFER,		// Normal in xyz. W currently unused
+	SPECULAR_BUFFER,
+	DEPTH_BUFFER,
+	ACCUMULATION_BUFFER_1,
+	ACCUMULATION_BUFFER_2,
+	SHADOW_BUFFER,
+	SHADOW_BUFFER_DEPTH,
+	RGBA_BUFFER,
+	DOWN_RES_BUFFER,
+	DOWN_RES_BUFFER_2,
+	SCRATCH_BUFFER,
+	MOUSE_PICKER_BUFFER,
+	MAX_HALF_BUFFER,
+	NUM_RESERVED_RENDER_TARGETS,
+*/
 	RT_GetRenderTexture( deferredRTWidth, deferredRTHeight, KBTEXTURE_R16G16B16A16, false );
 	RT_GetRenderTexture( deferredRTWidth, deferredRTHeight, KBTEXTURE_R16G16B16A16, false );
 	RT_GetRenderTexture( deferredRTWidth, deferredRTHeight, KBTEXTURE_R16G16B16A16, false );
@@ -514,6 +531,12 @@ void kbRenderer_DX11::Init_Internal( HWND hwnd, const int frameWidth, const int 
 	RT_GetRenderTexture( deferredRTWidth, deferredRTHeight, KBTEXTURE_R16G16B16A16, false );
 	RT_GetRenderTexture( deferredRTWidth / 2, deferredRTHeight / 2, KBTEXTURE_R16G16B16A16, false );
 	RT_GetRenderTexture( deferredRTWidth / 2, deferredRTHeight / 2, KBTEXTURE_R16G16B16A16, false );
+	
+	// Bloom buffer
+	RT_GetRenderTexture( deferredRTWidth / 8, deferredRTHeight / 4, KBTEXTURE_R16G16B16A16, false );
+	RT_GetRenderTexture( deferredRTWidth / 8, deferredRTHeight / 4, KBTEXTURE_R16G16B16A16, false );
+
+	// Scratch
 	RT_GetRenderTexture( deferredRTHeight / 2, deferredRTHeight / 2, KBTEXTURE_R16G16B16A16, false );
 
 	RT_GetRenderTexture( deferredRTWidth, deferredRTHeight, KBTEXTURE_R16G16, false );
@@ -2259,8 +2282,8 @@ void kbRenderer_DX11::RenderBloom() {
 
 	viewport.TopLeftX = 0.0f;
 	viewport.TopLeftY = 0.0f;
-	viewport.Width = ( float )GetRenderTarget_DX11(DOWN_RES_BUFFER)->GetWidth();
-	viewport.Height = ( float )GetRenderTarget_DX11(DOWN_RES_BUFFER)->GetHeight();
+	viewport.Width = ( float )GetRenderTarget_DX11(BLOOM_BUFFER_1)->GetWidth();
+	viewport.Height = ( float )GetRenderTarget_DX11(BLOOM_BUFFER_1)->GetHeight();
 	viewport.MinDepth = 0;
 	viewport.MaxDepth = 1.0f;
 	m_pDeviceContext->RSSetViewports( 1, &viewport );
@@ -2270,7 +2293,7 @@ void kbRenderer_DX11::RenderBloom() {
 	// Horizontal blur
 	///////////////////////////////
 	{
-		m_pDeviceContext->OMSetRenderTargets( 1, &GetRenderTarget_DX11(DOWN_RES_BUFFER_2)->m_pRenderTargetView, nullptr );
+		m_pDeviceContext->OMSetRenderTargets( 1, &GetRenderTarget_DX11(BLOOM_BUFFER_2)->m_pRenderTargetView, nullptr );
 		const unsigned int stride = sizeof( vertexLayout );
 		const unsigned int offset = 0;
 
@@ -2303,7 +2326,7 @@ void kbRenderer_DX11::RenderBloom() {
 		SetShaderMat4( "mvpMatrix", mvpMatrix, (byte*) mappedResource.pData, varBindings );
 		SetShaderInt( "numSamples", 5, (byte*) mappedResource.pData, varBindings );
 
-		const float texelSize = 1.0f / GetRenderTarget_DX11(DOWN_RES_BUFFER_2)->GetWidth();
+		const float texelSize = 1.0f / GetRenderTarget_DX11(BLOOM_BUFFER_2)->GetWidth();
 		kbVec4 offsetsAndWeights[5];
 		offsetsAndWeights[0].Set( 0.0f, 0.0f * texelSize, 0.22702f, 0.0f );
 		offsetsAndWeights[1].Set( 0.0f, 1.0f * texelSize, 0.19459f, 0.0f );
@@ -2327,7 +2350,7 @@ void kbRenderer_DX11::RenderBloom() {
 	// Vertical blur
 	///////////////////////////////
 	{
-		m_pDeviceContext->OMSetRenderTargets( 1, &GetRenderTarget_DX11(DOWN_RES_BUFFER)->m_pRenderTargetView, nullptr );
+		m_pDeviceContext->OMSetRenderTargets( 1, &GetRenderTarget_DX11(BLOOM_BUFFER_1)->m_pRenderTargetView, nullptr );
 		const unsigned int stride = sizeof( vertexLayout );
 		const unsigned int offset = 0;
 
@@ -2335,7 +2358,7 @@ void kbRenderer_DX11::RenderBloom() {
 		m_pDeviceContext->IASetPrimitiveTopology( D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST );
 		m_pDeviceContext->RSSetState( m_pDefaultRasterizerState );
 
-		m_pDeviceContext->PSSetShaderResources( 0, 1, &GetRenderTarget_DX11(DOWN_RES_BUFFER_2)->m_pShaderResourceView );
+		m_pDeviceContext->PSSetShaderResources( 0, 1, &GetRenderTarget_DX11(BLOOM_BUFFER_2)->m_pShaderResourceView );
 		ID3D11SamplerState * samplerState[] = { m_pNormalMapSamplerState };
 
 		// Set constants
@@ -2357,7 +2380,7 @@ void kbRenderer_DX11::RenderBloom() {
 		SetShaderMat4( "mvpMatrix", mvpMatrix, (byte*) mappedResource.pData, varBindings );
 		SetShaderInt( "numSamples", 5, (byte*) mappedResource.pData, varBindings );
 
-		const float texelSize = 1.0f / GetRenderTarget_DX11(DOWN_RES_BUFFER_2)->GetWidth();
+		const float texelSize = 1.0f / GetRenderTarget_DX11(BLOOM_BUFFER_2)->GetWidth();
 		kbVec4 offsetsAndWeights[5];
 		offsetsAndWeights[0].Set( 0.0f * texelSize, 0.0f, 0.22702f, 0.0f );
 		offsetsAndWeights[1].Set( 1.0f * texelSize, 0.0f, 0.19459f, 0.0f );
@@ -2390,7 +2413,7 @@ void kbRenderer_DX11::RenderBloom() {
 		m_pDeviceContext->RSSetViewports( 1, &viewport );
 		m_pDeviceContext->OMSetRenderTargets( 1, &GetAccumBuffer( m_iAccumBuffer )->m_pRenderTargetView, nullptr );
 
-		ID3D11ShaderResourceView *const  RenderTargetViews[] = { GetRenderTarget_DX11(DOWN_RES_BUFFER)->m_pShaderResourceView };
+		ID3D11ShaderResourceView *const  RenderTargetViews[] = { GetRenderTarget_DX11(BLOOM_BUFFER_1)->m_pShaderResourceView };
 		ID3D11SamplerState *const  SamplerStates[] = { m_pBasicSamplerState };
 		m_pDeviceContext->IASetInputLayout( (ID3D11InputLayout*)m_pSimpleAdditiveShader->GetVertexLayout() );
 		m_pDeviceContext->VSSetShader( (ID3D11VertexShader *)this->m_pSimpleAdditiveShader->GetVertexShader(), nullptr, 0 );
@@ -2842,7 +2865,10 @@ void kbRenderer_DX11::ReadShaderFile( std::string & shaderText, kbShaderVarBindi
 			} else {
 				kbWarning( "Default texture %s not found", defaultTexture.c_str() );
 			}
+		} else {
+			textureBinding.m_bIsUserDefinedVar = true;
 		}
+
 		pShaderBindings->m_Textures.push_back( textureBinding );
 
         texturePos = shaderText.find( "Texture2D", texturePos + 1 );

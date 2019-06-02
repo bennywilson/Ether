@@ -653,45 +653,45 @@ bool kbModel::LoadFBX() {
 		uint vertexCount = 0;
 
 
-					int numDeformers = pFBXMesh->GetDeformerCount();
-			FbxAMatrix geomXForm = GetGeometryTransformation(pRootNode->GetChild(iMesh));
-			for ( int iDeform = 0; iDeform < numDeformers; iDeform++ ) {
-				FbxSkin * pCurSkin = (FbxSkin*)pFBXMesh->GetDeformer( iDeform, FbxDeformer::eSkin );
-				if ( pCurSkin == nullptr ) {
-					continue;
-				}
-
-
-				uint numClusters = pCurSkin->GetClusterCount();
-				for ( uint iCluster = 0; iCluster < numClusters; iCluster++ ) {
-					FbxCluster * pCurCluster = pCurSkin->GetCluster( iCluster );
-					std::string curJointName = pCurCluster->GetLink()->GetName();
-
-					boneToBounds[iCluster].Reset();
-					kbColor boneColor( kbfrand() * 0.5f + 0.5f, kbfrand() * 0.5f + 0.5f, kbfrand() * 0.5f + 0.5f, 1.0f );
-					boneToColor[iCluster] = boneColor;
-
-				//	kbLog( "%s bone color is %f %f %f", curJointName.c_str(), boneColor.x, boneColor.y, boneColor.z, boneColor.w );
-
-					FbxAMatrix xformMat;
-					FbxAMatrix xformLinkMat;
-					FbxAMatrix globalBindPoseInverseMatrix;
-
-					pCurCluster->GetTransformMatrix( xformMat );
-					pCurCluster->GetTransformLinkMatrix( xformLinkMat );
-					globalBindPoseInverseMatrix = xformLinkMat.Inverse() * xformMat * geomXForm;
-					//kbLog( "Yay!");
-
-					unsigned int numOfIndices = pCurCluster->GetControlPointIndicesCount();
-					int * pCtrlPtList = pCurCluster->GetControlPointIndices();
-					for (unsigned int i = 0; i < numOfIndices; ++i)
-					{
-					//	kbLog( "	Adding vertex %d", pCtrlPtList[i]);
-						vertToBone[pCtrlPtList[i]] = iCluster;
-					}
-
-				}
+		int numDeformers = pFBXMesh->GetDeformerCount();
+		FbxAMatrix geomXForm = GetGeometryTransformation(pRootNode->GetChild(iMesh));
+		for ( int iDeform = 0; iDeform < numDeformers; iDeform++ ) {
+			FbxSkin * pCurSkin = (FbxSkin*)pFBXMesh->GetDeformer( iDeform, FbxDeformer::eSkin );
+			if ( pCurSkin == nullptr ) {
+				continue;
 			}
+
+
+			uint numClusters = pCurSkin->GetClusterCount();
+			for ( uint iCluster = 0; iCluster < numClusters; iCluster++ ) {
+				FbxCluster * pCurCluster = pCurSkin->GetCluster( iCluster );
+				std::string curJointName = pCurCluster->GetLink()->GetName();
+
+				boneToBounds[iCluster].Reset();
+				kbColor boneColor( kbfrand() * 0.5f + 0.5f, kbfrand() * 0.5f + 0.5f, kbfrand() * 0.5f + 0.5f, 1.0f );
+				boneToColor[iCluster] = boneColor;
+
+			//	kbLog( "%s bone color is %f %f %f", curJointName.c_str(), boneColor.x, boneColor.y, boneColor.z, boneColor.w );
+
+				FbxAMatrix xformMat;
+				FbxAMatrix xformLinkMat;
+				FbxAMatrix globalBindPoseInverseMatrix;
+
+				pCurCluster->GetTransformMatrix( xformMat );
+				pCurCluster->GetTransformLinkMatrix( xformLinkMat );
+				globalBindPoseInverseMatrix = xformLinkMat.Inverse() * xformMat * geomXForm;
+				//kbLog( "Yay!");
+
+				unsigned int numOfIndices = pCurCluster->GetControlPointIndicesCount();
+				int * pCtrlPtList = pCurCluster->GetControlPointIndices();
+				for (unsigned int i = 0; i < numOfIndices; ++i)
+				{
+				//	kbLog( "	Adding vertex %d", pCtrlPtList[i]);
+					vertToBone[pCtrlPtList[i]] = iCluster;
+				}
+
+			}
+		}
 
 		for ( int iTri = 0; iTri < (int)newMesh.m_NumTriangles; iTri++ ) {
 

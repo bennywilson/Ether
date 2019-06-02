@@ -100,6 +100,12 @@ GenerateClass(
 )
 
 GenerateClass(
+	EtherLightAnimatorComponent,
+	AddField( "VelocityCurve", KBTYPEINFO_STRUCT, EtherLightAnimatorComponent, m_LightColorCurve, true, "kbVectorAnimEvent" )
+
+)
+
+GenerateClass(
 	EtherAIComponent,
 	AddField( "UpdateHz", KBTYPEINFO_INT, EtherAIComponent, m_UpdateFrequency, false, "" )
 )

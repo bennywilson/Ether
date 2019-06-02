@@ -44,7 +44,7 @@ protected:
 };
 
 /**
- *	EtherComponentToggler - Base Component for AI logic
+ *	EtherComponentToggler
  */
 class EtherComponentToggler : public kbGameComponent {
 
@@ -79,6 +79,27 @@ private:
 	};
 	TogglerState								m_State;
 	bool										m_bComponentsEnabled;
+};
+
+/**
+ *	EtherLightAnimatorComponent
+ */
+class EtherLightAnimatorComponent : public kbGameComponent {
+
+	KB_DECLARE_COMPONENT( EtherLightAnimatorComponent, kbGameComponent );
+//-------------------------------------------------------------------------------------------------------------------------------------------------------------
+public:
+
+protected:
+	virtual void								SetEnable_Internal( const bool bIsEnabled ) override;
+	virtual void								Update_Internal( const float DeltaTimeSeconds ) override;
+
+	virtual void								EditorChange( const std::string & propertyName ) override;
+private:
+
+	std::vector<kbVectorAnimEvent>				m_LightColorCurve;
+
+	float										m_StartTime;
 };
 
 #endif

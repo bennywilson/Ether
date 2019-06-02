@@ -103,6 +103,7 @@
     <None Include="assets\shaders\Environment\environmentBase.kbShader" />
     <None Include="assets\shaders\Environment\environmentHole.kbShader" />
     <None Include="assets\shaders\Environment\environmentSkinned.kbShader" />
+    <None Include="assets\shaders\Environment\environtmentBase_SimpleNormal.kbShader" />
     <None Include="assets\shaders\Environment\grass.kbShader" />
     <None Include="assets\shaders\FX\basicDistortion.kbShader" />
     <None Include="assets\shaders\FX\basicFire.kbShader" />
@@ -115,7 +116,9 @@
     <None Include="assets\shaders\FX\Particle_BlendAdd.kbShader" />
     <None Include="assets\shaders\FX\additiveBlend.kbShader" />
     <None Include="assets\shaders\FX\Particle_Rain.kbShader" />
+    <None Include="assets\shaders\FX\scrollingBackground.kbShader" />
     <None Include="assets\shaders\FX\shellTrailParticle.kbShader" />
+    <None Include="assets\shaders\FX\TVScreen.kbShader" />
     <None Include="assets\shaders\FX\waterDistortion.kbShader" />
     <None Include="assets\shaders\Lights\charEnviroCylinderLight.kbShader" />
     <None Include="assets\shaders\Lights\charEnviroPointLight.kbShader" />
