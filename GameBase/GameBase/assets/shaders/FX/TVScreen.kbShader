@@ -9,6 +9,7 @@ cbuffer matrixBuffer {
 	matrix mvpMatrix;
 	float4 lightAnimParam;		// lightAnimParam driven by EtherLightAnimatorComponent
 	float4 screenParams;		// x - 
+	float4 time;
 };
 
 kbShaderState {
@@ -67,11 +68,29 @@ SamplerState SampleType;
 
 Texture2D screenEmissiveTex		: register(t1);
 
- float4 pixelShader( pixelInput	input ) : SV_TARGET {
+Texture2D noiseTex				: register(t2);
 
+Texture2D scanLineTex			: register(t3);
 
-//	float time = 1.0f - input.color.w;
+const float DistortOffset( const float2 uv, const float distortY, const float distortRadius, const float distortAmpl, const float2 uvTile ) {
+	float distToDistortEdge = 1.0f - saturate( abs( uv.y - distortY ) / distortRadius );
+	distToDistortEdge = pow( distToDistortEdge, 3.0f );
+	const float4 noise = noiseTex.Sample( SampleType, uv * uvTile );
+	const float offset = ( noise.y * distortAmpl ) - ( distortAmpl * 0.5f );
+	return offset * distToDistortEdge;
+}
+
+float4 pixelShader( pixelInput	input ) : SV_TARGET {
+
 	float2 uv = input.uv;
+	float y = frac( -time.x * 0.1f );
+	uv.x += DistortOffset( input.uv, y, 0.01f, 0.21f, float2( 0.01f, 1.0f ) );
+
+//	y = frac( -time.x * 0.2f );
+//	uv.x += DistortOffset( input.uv, y, 0.01f, 0.05f ,float2( 0.1f, 1.0f ) );
+
+	y = frac( time.x * 0.1f );
+	uv.x += DistortOffset( input.uv, y, 0.01f, 0.05f ,float2( 0.1f, 1.0f ) );
 
 	float4 color = screenColorTex.Sample( SampleType, uv );
 	float4 emissive = screenEmissiveTex.Sample( SampleType, uv );
@@ -79,6 +98,9 @@ Texture2D screenEmissiveTex		: register(t1);
 	color += emissive;
 	color = color * 0.8f;
 
+	float4 scanLine = scanLineTex.Sample( SampleType, uv * 75 + float2( 0.0f, time.x * -1.f ) );
+
 	color.w = emissive.w * lerp( lightAnimParam.x, 1.0f, screenParams.x ) * screenParams.y;
+	color.xyz *= ( scanLine.x * 0.05f ) + 0.95f;
 	return color;
 }

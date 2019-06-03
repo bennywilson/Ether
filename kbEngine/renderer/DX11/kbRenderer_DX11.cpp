@@ -533,8 +533,8 @@ void kbRenderer_DX11::Init_Internal( HWND hwnd, const int frameWidth, const int 
 	RT_GetRenderTexture( deferredRTWidth / 2, deferredRTHeight / 2, KBTEXTURE_R16G16B16A16, false );
 	
 	// Bloom buffer
-	RT_GetRenderTexture( deferredRTWidth / 8, deferredRTHeight / 4, KBTEXTURE_R16G16B16A16, false );
-	RT_GetRenderTexture( deferredRTWidth / 8, deferredRTHeight / 4, KBTEXTURE_R16G16B16A16, false );
+	RT_GetRenderTexture( deferredRTWidth / 8, deferredRTHeight / 8, KBTEXTURE_R16G16B16A16, false );
+	RT_GetRenderTexture( deferredRTWidth / 8, deferredRTHeight / 8, KBTEXTURE_R16G16B16A16, false );
 
 	// Scratch
 	RT_GetRenderTexture( deferredRTHeight / 2, deferredRTHeight / 2, KBTEXTURE_R16G16B16A16, false );
