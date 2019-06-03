@@ -2,7 +2,7 @@ kbGameEntity 0 0 0 0 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		Name = "Entity_47"
+		Name = "Entity_61"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
 		Position = 0.000000 0.000000 0.000000
 		Scale = 1.000000 1.000000 1.000000
@@ -540,9 +540,9 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadows = 0
-		Color = 0.827603 0.827603 0.827603 1.000000
+		Color = 0.949518 0.949518 0.949518 1.000000
 		Materials = 0
-		LightRadius =  16.000000
+		LightRadius =  7.000000
 	}
 	EtherLightAnimatorComponent { 
 		Enabled = 1
@@ -1300,7 +1300,7 @@ kbGameEntity 0 0 0 0 {
 		Scale = 1.000000 1.000000 1.000000
 	}
 	kbStaticModelComponent { 
-		Enabled = 1
+		Enabled = 0
 		LifeTime =  -1.000000
 		CastsShadow = 0
 		Materials = 1
@@ -1342,5 +1342,846 @@ kbGameEntity 0 0 0 0 {
 		RenderPass = LightingPass
 		TranslucencySortBias =  0.000000
 		Model = ..\..\kbengine\assets\models\unitquad.ms3d
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "TV Light - Wood Spec 2"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = -15.048956 11.918306 15.343484
+		Scale = 1.000000 1.000000 1.000000
+	}
+	kbPointLightComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadows = 0
+		Color = 0.872196 0.872196 0.872196 1.000000
+		Materials = 0
+		LightRadius =  4.000000
+	}
+	EtherLightAnimatorComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		VelocityCurve = 11
+			kbVectorAnimEvent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				EventName = ""
+				EventTime =  0.000000
+				EventValue = 1.000000 1.000000 1.000000
+			}
+			kbVectorAnimEvent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				EventName = ""
+				EventTime =  0.250000
+				EventValue = 0.800000 0.800000 0.800000
+			}
+			kbVectorAnimEvent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				EventName = "0.2"
+				EventTime =  0.500000
+				EventValue = 0.970000 0.970000 0.970000
+			}
+			kbVectorAnimEvent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				EventName = ""
+				EventTime =  0.750000
+				EventValue = 1.000000 1.000000 1.000000
+			}
+			kbVectorAnimEvent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				EventName = ""
+				EventTime =  1.000000
+				EventValue = 0.920000 0.920000 0.920000
+			}
+			kbVectorAnimEvent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				EventName = ""
+				EventTime =  1.250000
+				EventValue = 0.950000 0.950000 0.950000
+			}
+			kbVectorAnimEvent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				EventName = ""
+				EventTime =  1.500000
+				EventValue = 0.850000 0.850000 0.850000
+			}
+			kbVectorAnimEvent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				EventName = ""
+				EventTime =  1.750000
+				EventValue = 0.980000 0.980000 0.980000
+			}
+			kbVectorAnimEvent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				EventName = ""
+				EventTime =  2.000000
+				EventValue = 0.910000 0.910000 0.910000
+			}
+			kbVectorAnimEvent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				EventName = ""
+				EventTime =  2.250000
+				EventValue = 0.800000 0.800000 0.800000
+			}
+			kbVectorAnimEvent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				EventName = ""
+				EventTime =  2.500000
+				EventValue = 0.950000 0.950000 0.950000
+			}
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "TV Light - Wood Spec 2"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = -17.537521 11.918306 15.343484
+		Scale = 1.000000 1.000000 1.000000
+	}
+	kbPointLightComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadows = 0
+		Color = 0.872009 0.872009 0.872009 1.000000
+		Materials = 0
+		LightRadius =  4.000000
+	}
+	EtherLightAnimatorComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		VelocityCurve = 11
+			kbVectorAnimEvent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				EventName = ""
+				EventTime =  0.000000
+				EventValue = 1.000000 1.000000 1.000000
+			}
+			kbVectorAnimEvent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				EventName = ""
+				EventTime =  0.250000
+				EventValue = 0.800000 0.800000 0.800000
+			}
+			kbVectorAnimEvent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				EventName = "0.2"
+				EventTime =  0.500000
+				EventValue = 0.970000 0.970000 0.970000
+			}
+			kbVectorAnimEvent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				EventName = ""
+				EventTime =  0.750000
+				EventValue = 1.000000 1.000000 1.000000
+			}
+			kbVectorAnimEvent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				EventName = ""
+				EventTime =  1.000000
+				EventValue = 0.920000 0.920000 0.920000
+			}
+			kbVectorAnimEvent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				EventName = ""
+				EventTime =  1.250000
+				EventValue = 0.950000 0.950000 0.950000
+			}
+			kbVectorAnimEvent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				EventName = ""
+				EventTime =  1.500000
+				EventValue = 0.850000 0.850000 0.850000
+			}
+			kbVectorAnimEvent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				EventName = ""
+				EventTime =  1.750000
+				EventValue = 0.980000 0.980000 0.980000
+			}
+			kbVectorAnimEvent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				EventName = ""
+				EventTime =  2.000000
+				EventValue = 0.910000 0.910000 0.910000
+			}
+			kbVectorAnimEvent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				EventName = ""
+				EventTime =  2.250000
+				EventValue = 0.800000 0.800000 0.800000
+			}
+			kbVectorAnimEvent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				EventName = ""
+				EventTime =  2.500000
+				EventValue = 0.950000 0.950000 0.950000
+			}
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "TV Light - Wood Spec"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = -23.708202 11.918306 15.207022
+		Scale = 1.000000 1.000000 1.000000
+	}
+	kbPointLightComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadows = 0
+		Color = 0.871823 0.871823 0.871823 1.000000
+		Materials = 0
+		LightRadius =  4.000000
+	}
+	EtherLightAnimatorComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		VelocityCurve = 11
+			kbVectorAnimEvent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				EventName = ""
+				EventTime =  0.000000
+				EventValue = 1.000000 1.000000 1.000000
+			}
+			kbVectorAnimEvent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				EventName = ""
+				EventTime =  0.250000
+				EventValue = 0.800000 0.800000 0.800000
+			}
+			kbVectorAnimEvent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				EventName = "0.2"
+				EventTime =  0.500000
+				EventValue = 0.970000 0.970000 0.970000
+			}
+			kbVectorAnimEvent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				EventName = ""
+				EventTime =  0.750000
+				EventValue = 1.000000 1.000000 1.000000
+			}
+			kbVectorAnimEvent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				EventName = ""
+				EventTime =  1.000000
+				EventValue = 0.920000 0.920000 0.920000
+			}
+			kbVectorAnimEvent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				EventName = ""
+				EventTime =  1.250000
+				EventValue = 0.950000 0.950000 0.950000
+			}
+			kbVectorAnimEvent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				EventName = ""
+				EventTime =  1.500000
+				EventValue = 0.850000 0.850000 0.850000
+			}
+			kbVectorAnimEvent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				EventName = ""
+				EventTime =  1.750000
+				EventValue = 0.980000 0.980000 0.980000
+			}
+			kbVectorAnimEvent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				EventName = ""
+				EventTime =  2.000000
+				EventValue = 0.910000 0.910000 0.910000
+			}
+			kbVectorAnimEvent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				EventName = ""
+				EventTime =  2.250000
+				EventValue = 0.800000 0.800000 0.800000
+			}
+			kbVectorAnimEvent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				EventName = ""
+				EventTime =  2.500000
+				EventValue = 0.950000 0.950000 0.950000
+			}
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "TV Light - Wood Spec"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = -19.014725 11.918306 15.343485
+		Scale = 1.000000 1.000000 1.000000
+	}
+	kbPointLightComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadows = 0
+		Color = 0.871615 0.871615 0.871615 1.000000
+		Materials = 0
+		LightRadius =  4.000000
+	}
+	EtherLightAnimatorComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		VelocityCurve = 11
+			kbVectorAnimEvent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				EventName = ""
+				EventTime =  0.000000
+				EventValue = 1.000000 1.000000 1.000000
+			}
+			kbVectorAnimEvent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				EventName = ""
+				EventTime =  0.250000
+				EventValue = 0.800000 0.800000 0.800000
+			}
+			kbVectorAnimEvent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				EventName = "0.2"
+				EventTime =  0.500000
+				EventValue = 0.970000 0.970000 0.970000
+			}
+			kbVectorAnimEvent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				EventName = ""
+				EventTime =  0.750000
+				EventValue = 1.000000 1.000000 1.000000
+			}
+			kbVectorAnimEvent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				EventName = ""
+				EventTime =  1.000000
+				EventValue = 0.920000 0.920000 0.920000
+			}
+			kbVectorAnimEvent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				EventName = ""
+				EventTime =  1.250000
+				EventValue = 0.950000 0.950000 0.950000
+			}
+			kbVectorAnimEvent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				EventName = ""
+				EventTime =  1.500000
+				EventValue = 0.850000 0.850000 0.850000
+			}
+			kbVectorAnimEvent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				EventName = ""
+				EventTime =  1.750000
+				EventValue = 0.980000 0.980000 0.980000
+			}
+			kbVectorAnimEvent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				EventName = ""
+				EventTime =  2.000000
+				EventValue = 0.910000 0.910000 0.910000
+			}
+			kbVectorAnimEvent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				EventName = ""
+				EventTime =  2.250000
+				EventValue = 0.800000 0.800000 0.800000
+			}
+			kbVectorAnimEvent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				EventName = ""
+				EventTime =  2.500000
+				EventValue = 0.950000 0.950000 0.950000
+			}
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "TV Light - Wood Spec"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = -25.719734 11.918306 15.207022
+		Scale = 1.000000 1.000000 1.000000
+	}
+	kbPointLightComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadows = 0
+		Color = 0.871428 0.871428 0.871428 1.000000
+		Materials = 0
+		LightRadius =  4.000000
+	}
+	EtherLightAnimatorComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		VelocityCurve = 11
+			kbVectorAnimEvent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				EventName = ""
+				EventTime =  0.000000
+				EventValue = 1.000000 1.000000 1.000000
+			}
+			kbVectorAnimEvent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				EventName = ""
+				EventTime =  0.250000
+				EventValue = 0.800000 0.800000 0.800000
+			}
+			kbVectorAnimEvent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				EventName = "0.2"
+				EventTime =  0.500000
+				EventValue = 0.970000 0.970000 0.970000
+			}
+			kbVectorAnimEvent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				EventName = ""
+				EventTime =  0.750000
+				EventValue = 1.000000 1.000000 1.000000
+			}
+			kbVectorAnimEvent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				EventName = ""
+				EventTime =  1.000000
+				EventValue = 0.920000 0.920000 0.920000
+			}
+			kbVectorAnimEvent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				EventName = ""
+				EventTime =  1.250000
+				EventValue = 0.950000 0.950000 0.950000
+			}
+			kbVectorAnimEvent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				EventName = ""
+				EventTime =  1.500000
+				EventValue = 0.850000 0.850000 0.850000
+			}
+			kbVectorAnimEvent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				EventName = ""
+				EventTime =  1.750000
+				EventValue = 0.980000 0.980000 0.980000
+			}
+			kbVectorAnimEvent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				EventName = ""
+				EventTime =  2.000000
+				EventValue = 0.910000 0.910000 0.910000
+			}
+			kbVectorAnimEvent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				EventName = ""
+				EventTime =  2.250000
+				EventValue = 0.800000 0.800000 0.800000
+			}
+			kbVectorAnimEvent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				EventName = ""
+				EventTime =  2.500000
+				EventValue = 0.950000 0.950000 0.950000
+			}
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "TV Light - Wood Spec"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = -27.241579 11.918306 15.207022
+		Scale = 1.000000 1.000000 1.000000
+	}
+	kbPointLightComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadows = 0
+		Color = 0.871262 0.871262 0.871262 1.000000
+		Materials = 0
+		LightRadius =  4.000000
+	}
+	EtherLightAnimatorComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		VelocityCurve = 11
+			kbVectorAnimEvent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				EventName = ""
+				EventTime =  0.000000
+				EventValue = 1.000000 1.000000 1.000000
+			}
+			kbVectorAnimEvent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				EventName = ""
+				EventTime =  0.250000
+				EventValue = 0.800000 0.800000 0.800000
+			}
+			kbVectorAnimEvent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				EventName = "0.2"
+				EventTime =  0.500000
+				EventValue = 0.970000 0.970000 0.970000
+			}
+			kbVectorAnimEvent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				EventName = ""
+				EventTime =  0.750000
+				EventValue = 1.000000 1.000000 1.000000
+			}
+			kbVectorAnimEvent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				EventName = ""
+				EventTime =  1.000000
+				EventValue = 0.920000 0.920000 0.920000
+			}
+			kbVectorAnimEvent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				EventName = ""
+				EventTime =  1.250000
+				EventValue = 0.950000 0.950000 0.950000
+			}
+			kbVectorAnimEvent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				EventName = ""
+				EventTime =  1.500000
+				EventValue = 0.850000 0.850000 0.850000
+			}
+			kbVectorAnimEvent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				EventName = ""
+				EventTime =  1.750000
+				EventValue = 0.980000 0.980000 0.980000
+			}
+			kbVectorAnimEvent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				EventName = ""
+				EventTime =  2.000000
+				EventValue = 0.910000 0.910000 0.910000
+			}
+			kbVectorAnimEvent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				EventName = ""
+				EventTime =  2.250000
+				EventValue = 0.800000 0.800000 0.800000
+			}
+			kbVectorAnimEvent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				EventName = ""
+				EventTime =  2.500000
+				EventValue = 0.950000 0.950000 0.950000
+			}
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "TV Light - Wood Spec 2"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = -16.037167 11.918306 15.343484
+		Scale = 1.000000 1.000000 1.000000
+	}
+	kbPointLightComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadows = 0
+		Color = 0.871055 0.871055 0.871055 1.000000
+		Materials = 0
+		LightRadius =  4.000000
+	}
+	EtherLightAnimatorComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		VelocityCurve = 11
+			kbVectorAnimEvent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				EventName = ""
+				EventTime =  0.000000
+				EventValue = 1.000000 1.000000 1.000000
+			}
+			kbVectorAnimEvent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				EventName = ""
+				EventTime =  0.250000
+				EventValue = 0.800000 0.800000 0.800000
+			}
+			kbVectorAnimEvent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				EventName = "0.2"
+				EventTime =  0.500000
+				EventValue = 0.970000 0.970000 0.970000
+			}
+			kbVectorAnimEvent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				EventName = ""
+				EventTime =  0.750000
+				EventValue = 1.000000 1.000000 1.000000
+			}
+			kbVectorAnimEvent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				EventName = ""
+				EventTime =  1.000000
+				EventValue = 0.920000 0.920000 0.920000
+			}
+			kbVectorAnimEvent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				EventName = ""
+				EventTime =  1.250000
+				EventValue = 0.950000 0.950000 0.950000
+			}
+			kbVectorAnimEvent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				EventName = ""
+				EventTime =  1.500000
+				EventValue = 0.850000 0.850000 0.850000
+			}
+			kbVectorAnimEvent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				EventName = ""
+				EventTime =  1.750000
+				EventValue = 0.980000 0.980000 0.980000
+			}
+			kbVectorAnimEvent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				EventName = ""
+				EventTime =  2.000000
+				EventValue = 0.910000 0.910000 0.910000
+			}
+			kbVectorAnimEvent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				EventName = ""
+				EventTime =  2.250000
+				EventValue = 0.800000 0.800000 0.800000
+			}
+			kbVectorAnimEvent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				EventName = ""
+				EventTime =  2.500000
+				EventValue = 0.950000 0.950000 0.950000
+			}
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Blob Shadow"
+		Orientation = -0.457016 0.482363 0.542484 0.513978
+		Position = -23.863382 11.221935 17.071308
+		Scale = 3.000000 3.000000 3.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		Materials = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\fx\decal_modulate.kbshader
+				ShaderParams = 3
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "decalParams1"
+						Texture = NULL
+						Vector = 1.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "decalMask"
+						Texture = NULL
+						Vector = 0.000000 1.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "ProjectionTex"
+						Texture = .\assets\visualtarget\elp_ad\tv\blobshadow.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		RenderPass = LightingPass
+		TranslucencySortBias =  0.000000
+		Model = .\assets\models\test\unitcube.ms3d
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Blob Shadow"
+		Orientation = -0.457016 0.482363 0.542484 0.513978
+		Position = -20.916504 11.062792 15.874157
+		Scale = 3.000000 3.000000 3.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		Materials = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\fx\decal_modulate.kbshader
+				ShaderParams = 3
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "decalParams1"
+						Texture = NULL
+						Vector = 1.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "decalMask"
+						Texture = NULL
+						Vector = 0.000000 1.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "ProjectionTex"
+						Texture = .\assets\visualtarget\elp_ad\tv\blobshadow.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		RenderPass = LightingPass
+		TranslucencySortBias =  0.000000
+		Model = .\assets\models\test\unitcube.ms3d
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Blob Shadow"
+		Orientation = -0.457016 0.482363 0.542484 0.513978
+		Position = -22.949896 11.172604 15.453375
+		Scale = 3.000000 3.000000 3.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		Materials = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\fx\decal_modulate.kbshader
+				ShaderParams = 3
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "decalParams1"
+						Texture = NULL
+						Vector = 1.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "decalMask"
+						Texture = NULL
+						Vector = 0.000000 1.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "ProjectionTex"
+						Texture = .\assets\visualtarget\elp_ad\tv\blobshadow.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		RenderPass = LightingPass
+		TranslucencySortBias =  0.000000
+		Model = .\assets\models\test\unitcube.ms3d
 	}
 }
