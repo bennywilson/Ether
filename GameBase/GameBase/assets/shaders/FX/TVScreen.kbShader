@@ -89,7 +89,7 @@ float4 pixelShader( pixelInput	input ) : SV_TARGET {
 //	y = frac( -time.x * 0.2f );
 //	uv.x += DistortOffset( input.uv, y, 0.01f, 0.05f ,float2( 0.1f, 1.0f ) );
 
-	y = frac( time.x * 0.1f );
+	y = frac( time.x * 0.08f );
 	uv.x += DistortOffset( input.uv, y, 0.01f, 0.05f ,float2( 0.1f, 1.0f ) );
 
 	float4 color = screenColorTex.Sample( SampleType, uv );

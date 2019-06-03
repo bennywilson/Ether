@@ -8,6 +8,7 @@ cbuffer matrixBuffer {
 	matrix mvpMatrix;
 	float4 cameraPos;
 	float4 colorMult;
+	float4 specMult;
 };
 
 kbShaderState {
@@ -93,7 +94,7 @@ Texture2D emissiveMap(black)		: register(t3);
 	output.Depth.r = input.position2.x / input.position2.y;
 
 
-	output.Specular = float4( propertyMapValues.x, max( 1.0f, propertyMapValues.y * 450.f ), emissive.x, emissive.y );
+	output.Specular = float4( propertyMapValues.x * specMult.x, max( 1.0f, propertyMapValues.y * 450.f ), emissive.x, emissive.y );
 	
 	float3x3 TBN = float3x3( normalize( input.TBN0.xyz ), normalize( input.TBN1.xyz ), normalize( input.TBN2.xyz ) );
 

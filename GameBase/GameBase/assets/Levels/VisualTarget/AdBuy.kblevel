@@ -2,7 +2,7 @@ kbGameEntity 0 0 0 0 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		Name = "Entity_59"
+		Name = "Entity_58"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
 		Position = 0.000000 0.000000 0.000000
 		Scale = 1.000000 1.000000 1.000000
@@ -39,7 +39,7 @@ kbGameEntity 0 0 0 0 {
 		Scale = 1.000000 1.000000 1.000000
 	}
 	kbDirectionalLightComponent { 
-		Enabled = 1
+		Enabled = 0
 		LifeTime =  -1.000000
 		CastsShadows = 0
 		Color = 0.125000 0.125000 0.125000 1.000000
@@ -120,7 +120,7 @@ kbGameEntity 0 0 0 0 {
 		Scale = 1.000000 1.000000 1.000000
 	}
 	kbDirectionalLightComponent { 
-		Enabled = 1
+		Enabled = 0
 		LifeTime =  -1.000000
 		CastsShadows = 0
 		Color = 0.050000 0.050000 0.050000 1.000000
@@ -201,7 +201,7 @@ kbGameEntity 0 0 0 0 {
 		Scale = 1.000000 1.000000 1.000000
 	}
 	kbDirectionalLightComponent { 
-		Enabled = 1
+		Enabled = 0
 		LifeTime =  -1.000000
 		CastsShadows = 1
 		Color = 0.100000 0.150000 0.200000 0.050000
@@ -485,7 +485,7 @@ kbGameEntity 0 0 0 0 {
 				LifeTime =  -1.000000
 				CullModeOverride = ShaderDefault
 				Shader = .\assets\shaders\environment\environtmentbase_simplenormal.kbshader
-				ShaderParams = 5
+				ShaderParams = 6
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
@@ -521,6 +521,13 @@ kbGameEntity 0 0 0 0 {
 						Texture = ..\..\kbengine\assets\textures\black.bmp
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "specMult"
+						Texture = NULL
+						Vector = 2.500000 0.000000 0.000000 0.000000
+					}
 			}
 		RenderPass = LightingPass
 		TranslucencySortBias =  0.000000
@@ -540,7 +547,7 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadows = 0
-		Color = 0.883897 0.883897 0.883897 1.000000
+		Color = 0.876933 0.876933 0.876933 1.000000
 		Materials = 0
 		LightRadius =  7.000000
 	}
@@ -1300,7 +1307,7 @@ kbGameEntity 0 0 0 0 {
 		Scale = 1.000000 1.000000 1.000000
 	}
 	kbStaticModelComponent { 
-		Enabled = 0
+		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadow = 0
 		Materials = 1
@@ -1348,7 +1355,7 @@ kbGameEntity 0 0 0 0 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		Name = "TV Light - Wood Spec 2"
+		Name = "TV Light - Wood Spec #7"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
 		Position = -15.048956 11.918306 15.343484
 		Scale = 1.000000 1.000000 1.000000
@@ -1357,7 +1364,7 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadows = 0
-		Color = 0.930452 0.930452 0.930452 1.000000
+		Color = 0.935864 0.935864 0.935864 1.000000
 		Materials = 0
 		LightRadius =  4.000000
 	}
@@ -1377,7 +1384,7 @@ kbGameEntity 0 0 0 0 {
 				LifeTime =  -1.000000
 				EventName = ""
 				EventTime =  0.250000
-				EventValue = 0.800000 0.800000 0.800000
+				EventValue = 0.900000 0.900000 0.900000
 			}
 			kbVectorAnimEvent { 
 				Enabled = 0
@@ -1412,7 +1419,7 @@ kbGameEntity 0 0 0 0 {
 				LifeTime =  -1.000000
 				EventName = ""
 				EventTime =  1.500000
-				EventValue = 0.850000 0.850000 0.850000
+				EventValue = 0.930000 0.930000 0.930000
 			}
 			kbVectorAnimEvent { 
 				Enabled = 0
@@ -1433,7 +1440,7 @@ kbGameEntity 0 0 0 0 {
 				LifeTime =  -1.000000
 				EventName = ""
 				EventTime =  2.250000
-				EventValue = 0.800000 0.800000 0.800000
+				EventValue = 0.900000 0.900000 0.900000
 			}
 			kbVectorAnimEvent { 
 				Enabled = 0
@@ -1448,7 +1455,7 @@ kbGameEntity 0 0 0 0 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		Name = "TV Light - Wood Spec 2"
+		Name = "TV Light - Wood Spec #5"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
 		Position = -17.537521 11.918306 15.343484
 		Scale = 1.000000 1.000000 1.000000
@@ -1457,7 +1464,7 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadows = 0
-		Color = 0.930538 0.930538 0.930538 1.000000
+		Color = 0.935888 0.935888 0.935888 1.000000
 		Materials = 0
 		LightRadius =  4.000000
 	}
@@ -1477,7 +1484,7 @@ kbGameEntity 0 0 0 0 {
 				LifeTime =  -1.000000
 				EventName = ""
 				EventTime =  0.250000
-				EventValue = 0.800000 0.800000 0.800000
+				EventValue = 0.900000 0.900000 0.900000
 			}
 			kbVectorAnimEvent { 
 				Enabled = 0
@@ -1512,7 +1519,7 @@ kbGameEntity 0 0 0 0 {
 				LifeTime =  -1.000000
 				EventName = ""
 				EventTime =  1.500000
-				EventValue = 0.850000 0.850000 0.850000
+				EventValue = 0.930000 0.930000 0.930000
 			}
 			kbVectorAnimEvent { 
 				Enabled = 0
@@ -1533,7 +1540,7 @@ kbGameEntity 0 0 0 0 {
 				LifeTime =  -1.000000
 				EventName = ""
 				EventTime =  2.250000
-				EventValue = 0.800000 0.800000 0.800000
+				EventValue = 0.900000 0.900000 0.900000
 			}
 			kbVectorAnimEvent { 
 				Enabled = 0
@@ -1548,7 +1555,7 @@ kbGameEntity 0 0 0 0 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		Name = "TV Light - Wood Spec"
+		Name = "TV Light - Wood Spec #3"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
 		Position = -23.708202 11.918306 15.207022
 		Scale = 1.000000 1.000000 1.000000
@@ -1557,7 +1564,7 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadows = 0
-		Color = 0.930649 0.930649 0.930649 1.000000
+		Color = 0.935916 0.935916 0.935916 1.000000
 		Materials = 0
 		LightRadius =  4.000000
 	}
@@ -1577,7 +1584,7 @@ kbGameEntity 0 0 0 0 {
 				LifeTime =  -1.000000
 				EventName = ""
 				EventTime =  0.250000
-				EventValue = 0.800000 0.800000 0.800000
+				EventValue = 0.900000 0.900000 0.900000
 			}
 			kbVectorAnimEvent { 
 				Enabled = 0
@@ -1612,7 +1619,7 @@ kbGameEntity 0 0 0 0 {
 				LifeTime =  -1.000000
 				EventName = ""
 				EventTime =  1.500000
-				EventValue = 0.850000 0.850000 0.850000
+				EventValue = 0.930000 0.930000 0.930000
 			}
 			kbVectorAnimEvent { 
 				Enabled = 0
@@ -1633,7 +1640,7 @@ kbGameEntity 0 0 0 0 {
 				LifeTime =  -1.000000
 				EventName = ""
 				EventTime =  2.250000
-				EventValue = 0.800000 0.800000 0.800000
+				EventValue = 0.900000 0.900000 0.900000
 			}
 			kbVectorAnimEvent { 
 				Enabled = 0
@@ -1648,7 +1655,7 @@ kbGameEntity 0 0 0 0 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		Name = "TV Light - Wood Spec"
+		Name = "TV Light - Wood Spec #4"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
 		Position = -19.014725 11.918306 15.343485
 		Scale = 1.000000 1.000000 1.000000
@@ -1657,7 +1664,7 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadows = 0
-		Color = 0.930777 0.930777 0.930777 1.000000
+		Color = 0.935951 0.935951 0.935951 1.000000
 		Materials = 0
 		LightRadius =  4.000000
 	}
@@ -1677,7 +1684,7 @@ kbGameEntity 0 0 0 0 {
 				LifeTime =  -1.000000
 				EventName = ""
 				EventTime =  0.250000
-				EventValue = 0.800000 0.800000 0.800000
+				EventValue = 0.900000 0.900000 0.900000
 			}
 			kbVectorAnimEvent { 
 				Enabled = 0
@@ -1712,7 +1719,7 @@ kbGameEntity 0 0 0 0 {
 				LifeTime =  -1.000000
 				EventName = ""
 				EventTime =  1.500000
-				EventValue = 0.850000 0.850000 0.850000
+				EventValue = 0.930000 0.930000 0.930000
 			}
 			kbVectorAnimEvent { 
 				Enabled = 0
@@ -1733,7 +1740,7 @@ kbGameEntity 0 0 0 0 {
 				LifeTime =  -1.000000
 				EventName = ""
 				EventTime =  2.250000
-				EventValue = 0.800000 0.800000 0.800000
+				EventValue = 0.900000 0.900000 0.900000
 			}
 			kbVectorAnimEvent { 
 				Enabled = 0
@@ -1748,7 +1755,7 @@ kbGameEntity 0 0 0 0 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		Name = "TV Light - Wood Spec"
+		Name = "TV Light - Wood Spec #2"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
 		Position = -25.719734 11.918306 15.207022
 		Scale = 1.000000 1.000000 1.000000
@@ -1757,7 +1764,7 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadows = 0
-		Color = 0.930884 0.930884 0.930884 1.000000
+		Color = 0.935979 0.935979 0.935979 1.000000
 		Materials = 0
 		LightRadius =  4.000000
 	}
@@ -1777,7 +1784,7 @@ kbGameEntity 0 0 0 0 {
 				LifeTime =  -1.000000
 				EventName = ""
 				EventTime =  0.250000
-				EventValue = 0.800000 0.800000 0.800000
+				EventValue = 0.900000 0.900000 0.900000
 			}
 			kbVectorAnimEvent { 
 				Enabled = 0
@@ -1812,7 +1819,7 @@ kbGameEntity 0 0 0 0 {
 				LifeTime =  -1.000000
 				EventName = ""
 				EventTime =  1.500000
-				EventValue = 0.850000 0.850000 0.850000
+				EventValue = 0.930000 0.930000 0.930000
 			}
 			kbVectorAnimEvent { 
 				Enabled = 0
@@ -1833,7 +1840,7 @@ kbGameEntity 0 0 0 0 {
 				LifeTime =  -1.000000
 				EventName = ""
 				EventTime =  2.250000
-				EventValue = 0.800000 0.800000 0.800000
+				EventValue = 0.900000 0.900000 0.900000
 			}
 			kbVectorAnimEvent { 
 				Enabled = 0
@@ -1848,7 +1855,7 @@ kbGameEntity 0 0 0 0 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		Name = "TV Light - Wood Spec 2"
+		Name = "TV Light - Wood Spec #6"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
 		Position = -16.037167 11.918306 15.343484
 		Scale = 1.000000 1.000000 1.000000
@@ -1857,7 +1864,7 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadows = 0
-		Color = 0.931076 0.931076 0.931076 1.000000
+		Color = 0.936042 0.936042 0.936042 1.000000
 		Materials = 0
 		LightRadius =  4.000000
 	}
@@ -1877,7 +1884,7 @@ kbGameEntity 0 0 0 0 {
 				LifeTime =  -1.000000
 				EventName = ""
 				EventTime =  0.250000
-				EventValue = 0.800000 0.800000 0.800000
+				EventValue = 0.900000 0.900000 0.900000
 			}
 			kbVectorAnimEvent { 
 				Enabled = 0
@@ -1912,7 +1919,7 @@ kbGameEntity 0 0 0 0 {
 				LifeTime =  -1.000000
 				EventName = ""
 				EventTime =  1.500000
-				EventValue = 0.850000 0.850000 0.850000
+				EventValue = 0.930000 0.930000 0.930000
 			}
 			kbVectorAnimEvent { 
 				Enabled = 0
@@ -1933,7 +1940,7 @@ kbGameEntity 0 0 0 0 {
 				LifeTime =  -1.000000
 				EventName = ""
 				EventTime =  2.250000
-				EventValue = 0.800000 0.800000 0.800000
+				EventValue = 0.900000 0.900000 0.900000
 			}
 			kbVectorAnimEvent { 
 				Enabled = 0
@@ -2044,7 +2051,7 @@ kbGameEntity 0 0 0 0 {
 		LifeTime =  -1.000000
 		Name = "Blob Shadow"
 		Orientation = -0.457016 0.482363 0.542484 0.513978
-		Position = -22.949896 11.172604 15.453375
+		Position = -22.949894 11.172604 15.453375
 		Scale = 3.000000 3.000000 3.000000
 	}
 	kbStaticModelComponent { 
@@ -2089,7 +2096,7 @@ kbGameEntity 0 0 0 0 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		Name = "TV Light - Wood Spec"
+		Name = "TV Light - Wood Spec #1"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
 		Position = -27.241579 11.918306 15.207022
 		Scale = 1.000000 1.000000 1.000000
@@ -2098,7 +2105,7 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadows = 0
-		Color = 0.943745 0.943745 0.943745 1.000000
+		Color = 0.940544 0.940544 0.940544 1.000000
 		Materials = 0
 		LightRadius =  4.000000
 	}
@@ -2118,7 +2125,7 @@ kbGameEntity 0 0 0 0 {
 				LifeTime =  -1.000000
 				EventName = ""
 				EventTime =  0.250000
-				EventValue = 0.800000 0.800000 0.800000
+				EventValue = 0.900000 0.900000 0.900000
 			}
 			kbVectorAnimEvent { 
 				Enabled = 0
@@ -2153,7 +2160,7 @@ kbGameEntity 0 0 0 0 {
 				LifeTime =  -1.000000
 				EventName = ""
 				EventTime =  1.500000
-				EventValue = 0.850000 0.850000 0.850000
+				EventValue = 0.930000 0.930000 0.930000
 			}
 			kbVectorAnimEvent { 
 				Enabled = 0
@@ -2174,7 +2181,7 @@ kbGameEntity 0 0 0 0 {
 				LifeTime =  -1.000000
 				EventName = ""
 				EventTime =  2.250000
-				EventValue = 0.800000 0.800000 0.800000
+				EventValue = 0.900000 0.900000 0.900000
 			}
 			kbVectorAnimEvent { 
 				Enabled = 0
@@ -2190,7 +2197,7 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 1
 		LifeTime =  -1.000000
 		Name = "Directional Fill 1"
-		Orientation = -0.223733 -0.393223 -0.046189 0.890610
+		Orientation = -0.323967 -0.366833 -0.211270 0.846075
 		Position = -28.152912 18.301796 14.820478
 		Scale = 1.000000 1.000000 1.000000
 	}

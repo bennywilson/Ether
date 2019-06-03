@@ -2,7 +2,7 @@ kbGameEntity 0 0 0 0 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		Name = "Entity_80"
+		Name = "Entity_71"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
 		Position = 0.000000 0.000000 0.000000
 		Scale = 1.000000 1.000000 1.000000
@@ -807,7 +807,7 @@ kbGameEntity 0 0 0 0 {
 				MaxBladeJitterOffset =  1.000000
 				MaxPatchJitterOffset =  1.000000
 				PatchEndCullDistance =  1100.000000
-				PatchStartCullDistance =  1000.000000ii
+				PatchStartCullDistance =  1000.000000
 				PatchesPerCellSide = 60
 				ShaderParams = 10
 					kbShaderParamComponent { 
@@ -3918,10 +3918,10 @@ kbGameEntity 0 0 0 0 {
 		Scale = 55.000000 75.000000 150.000000
 	}
 	kbDirectionalLightComponent { 
-		Enabled = 0
+		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadows = 0
-		Color = 3.000000 3.000000 3.000000 3.000000
+		Color = 2.000000 2.000000 2.000000 3.000000
 		Materials = 1
 			kbMaterialComponent { 
 				Enabled = 0
@@ -4045,7 +4045,7 @@ kbGameEntity 0 0 0 0 {
 		CascadedShadowSplits = 0
 	}
 	kbStaticModelComponent { 
-		Enabled = 0
+		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadow = 0
 		Materials = 1
@@ -4103,7 +4103,7 @@ kbGameEntity 0 0 0 0 {
 		Model = .\assets\models\test\unitcube.ms3d
 	}
 	EtherComponentToggler { 
-		Enabled = 1
+		Enabled = 0
 		LifeTime =  -1.000000
 		MaxFirstBurstDelaySec =  1.000000
 		MaxNumOnBursts = 5
@@ -4922,7 +4922,7 @@ kbGameEntity 0 0 0 0 {
 		Scale = 1.000000 1.000000 1.000000
 	}
 	kbParticleComponent { 
-		Enabled = 1
+		Enabled = 0
 		LifeTime =  -1.000000
 		Name = ""
 		Orientation = 0.000000 0.000000 0.000000 1.000000
