@@ -55,7 +55,7 @@ pixelInput vertexShader( vertexInput input ) {
 	output.position = mul( input.position, mvpMatrix );
 	output.uv = input.uv;
 	output.color = colorMultiplier * particleColor;
-//output.color.w = particleColor.w;
+
 	output.position2 = output.position.zw;
 	output.normal.xyz = mul( ( input.normal.xyz * 2.0f ) - 1.0f, (float3x3)modelMatrix );
 
@@ -70,13 +70,7 @@ SamplerState SampleType;
 
  float4 pixelShader( pixelInput	input ) : SV_TARGET {
 
-
-	float2 uv = ( input.uv * uvTileSpeed.xy ) + uvOffset.xy + uvTileSpeed.zw * time.xx;
-
-	float4 tex = shaderTexture.Sample( SampleType, uv );
-	float4 color = tex;
-
-
-
+	const float2 uv = ( input.uv * uvTileSpeed.xy ) + uvOffset.xy + uvTileSpeed.zw * time.xx;
+	const float4 color = shaderTexture.Sample( SampleType, uv );
 	return color;
 }

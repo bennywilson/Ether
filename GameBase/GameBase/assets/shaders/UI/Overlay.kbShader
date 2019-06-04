@@ -12,9 +12,9 @@ cbuffer matrixBuffer {
 };
 
 kbShaderState {
-	srcBlend Blend_SrcAlpha
-	dstBlend Blend_InvSrcAlpha
-	colorwriteenable colorwriteenable_rgb
+	srcBlend			Blend_SrcAlpha
+	dstBlend			Blend_InvSrcAlpha
+	colorwriteenable	colorwriteenable_rgb
 }
 
 //-------------------------------------
@@ -51,7 +51,6 @@ Texture2D OverlayTexture(white);
 
 float4 pixelShader( pixelInput input ) : SV_TARGET {
 	float4 outColor = OverlayTexture.Sample( DiffuseSamplerState, input.uv );
-	//outColor.a  =1;
 	return outColor;
 }
 

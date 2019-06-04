@@ -1328,7 +1328,7 @@ void kbRenderer_DX11::RenderScene() {
 
 			std::vector<kbRenderSubmesh> & FirstPersonPassVisibleList = m_pCurrentRenderWindow->GetVisibleSubMeshes( RP_FirstPerson );
 			for ( int i = 0; i < FirstPersonPassVisibleList.size(); i++ ) {
-			//	RenderMesh( &FirstPersonPassVisibleList[i], false );
+				RenderMesh( &FirstPersonPassVisibleList[i], false );
 			}
 
 			// Render models that need to be lit

@@ -8,7 +8,7 @@
 #define _KBSTRING_H_
 
 /**
- *	Instead of storing a string, kbString stores an index into the string table for fast look ups
+ *	kbString stores an index into a global string table for fast look ups
  */
 #define INVALID_KBSTRING -1
 
@@ -46,10 +46,8 @@ private:
 	int											m_StringTableIndex;
 };
 
-struct kbStringHash
-{
-	 size_t operator()( const kbString & key ) const
-	 {
+struct kbStringHash {
+	 size_t operator()( const kbString & key ) const {
 		 size_t hash = key.GetStringTableIndex();
 		 return hash;
 	 }

@@ -50,9 +50,8 @@ class EtherComponentToggler : public kbGameComponent {
 
 	KB_DECLARE_COMPONENT( EtherComponentToggler, kbGameComponent );
 //-------------------------------------------------------------------------------------------------------------------------------------------------------------
-public:
-
 protected:
+
 	virtual void								SetEnable_Internal( const bool bIsEnabled ) override;
 	virtual void								Update_Internal( const float DeltaTimeSeconds ) override;
 
@@ -60,6 +59,7 @@ private:
 
 	void										ToggleComponents( const bool bToggleOn );
 
+	// Editor
 	float										m_MinFirstBurstDelaySec;
 	float										m_MaxFirstBurstDelaySec;
 	float										m_MinOnSeconds;
@@ -71,6 +71,7 @@ private:
 	int											m_MinNumOnBursts;
 	int											m_MaxNumOnBursts;
 
+	// Run time
 	float										m_NextOnOffStartTime;
 	int											m_NumBurstsLeft;
 	enum TogglerState {
@@ -87,9 +88,8 @@ private:
 class EtherLightAnimatorComponent : public kbGameComponent {
 
 	KB_DECLARE_COMPONENT( EtherLightAnimatorComponent, kbGameComponent );
-//-------------------------------------------------------------------------------------------------------------------------------------------------------------
-public:
 
+//-------------------------------------------------------------------------------------------------------------------------------------------------------------
 protected:
 	virtual void								SetEnable_Internal( const bool bIsEnabled ) override;
 	virtual void								Update_Internal( const float DeltaTimeSeconds ) override;

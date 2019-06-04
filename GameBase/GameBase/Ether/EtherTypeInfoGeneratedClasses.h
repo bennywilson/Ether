@@ -92,17 +92,15 @@ GenerateClass(
 	AddField( "MaxOnSeconds", KBTYPEINFO_FLOAT, EtherComponentToggler, m_MaxOnSeconds, false, "" )
 	AddField( "MinOffSeconds", KBTYPEINFO_FLOAT, EtherComponentToggler, m_MinOffSeconds, false, "" )
 	AddField( "MaxOffSeconds", KBTYPEINFO_FLOAT, EtherComponentToggler, m_MaxOffSeconds, false, "" )
-	AddField( "MinNumOnBursts", KBTYPEINFO_INT, EtherComponentToggler, m_MinNumOnBursts, false, "" )
-	AddField( "MaxNumOnBursts", KBTYPEINFO_INT, EtherComponentToggler, m_MaxNumOnBursts, false, "" )
 	AddField( "MinSecBetweenBursts", KBTYPEINFO_FLOAT, EtherComponentToggler, m_MinSecBetweenBursts, false, "" )
 	AddField( "MaxSecBetweenBursts", KBTYPEINFO_FLOAT, EtherComponentToggler, m_MaxSecBetweenBursts, false, "" )
-
+	AddField( "MinNumOnBursts", KBTYPEINFO_INT, EtherComponentToggler, m_MinNumOnBursts, false, "" )
+	AddField( "MaxNumOnBursts", KBTYPEINFO_INT, EtherComponentToggler, m_MaxNumOnBursts, false, "" )
 )
 
 GenerateClass(
 	EtherLightAnimatorComponent,
 	AddField( "VelocityCurve", KBTYPEINFO_STRUCT, EtherLightAnimatorComponent, m_LightColorCurve, true, "kbVectorAnimEvent" )
-
 )
 
 GenerateClass(

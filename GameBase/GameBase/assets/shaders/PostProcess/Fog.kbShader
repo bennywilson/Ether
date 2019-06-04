@@ -73,8 +73,7 @@ float4 pixelShader( pixelInput input ) : SV_TARGET {
 
 	fog = ( fog_Start_End_Clamp.y - z ) / ( fog_Start_End_Clamp.y - fog_Start_End_Clamp.x );
 	fog = 1.0f - saturate(fog);
-	//fog = clamp( fog, 0.0f, fog_Start_End_Clamp.z );
-fog *= fog_Start_End_Clamp.z;
+	fog *= fog_Start_End_Clamp.z;
 	sceneColor.xyz = lerp( sceneColor.xyz, fogColor.xyz, fog );
 	return sceneColor;
 }

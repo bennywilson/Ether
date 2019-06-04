@@ -14,14 +14,10 @@ cbuffer matrixBuffer {
 }
 
 kbShaderState {
-	//cullMode cullmode_frontfaces
 	srcBlend Blend_DstColor
 	dstBlend Blend_Zero
 	blendOp BlendOp_Add
 	colorWriteEnable colorwriteEnable_rgb
-	/*srcBlendAlpha Blend_One
-	dstBlendAlpha Blend_Zero
-	blendOpAlpha BlendOp_Add*/
 }
 
 //-------------------------------------
@@ -95,18 +91,11 @@ float4 pixelShader( pixelInput input ) : SV_TARGET {
 	worldPos = mul( worldPos, inverseViewProjection );
 	worldPos /= worldPos.w;
 
-//	if ( length( worldPos.xyz - modelMatrix[3].xyz ) < 3)
-	//	return 1;
-
 	float4 localPos = mul( worldPos, inverseModelMatrix );
-//	localPos.xy 
-	//if ( length( localPos.yz - float2( 0.5f, 0.5f ) ) < 0.2f )
-	//	return 1;
 	float2 finalUV = localPos.zy;
 
-	//finalUV /= 0.5;
 	finalUV = finalUV * 0.5f + 0.5f;
-	finalUV.xy = 1.0f - finalUV.xy;
+	finalUV.y = 1.0f - finalUV.y;
 	if ( finalUV.x < 0.03f || finalUV.x > 0.97f || finalUV.y < 0.03f || finalUV.y > 0.97f )
 		clip(-1);
 
@@ -119,5 +108,4 @@ float4 pixelShader( pixelInput input ) : SV_TARGET {
 	}
 
 	return ProjectionTex.Sample( DefaultSamplerState, finalUV );
-	//return 0;
 }

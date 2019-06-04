@@ -4,10 +4,10 @@
 // 2019 kbEngine 2.0
 //==============================================================================
 cbuffer matrixBuffer {
-	matrix      modelMatrix;
-	matrix      mvpMatrix;
+	matrix		modelMatrix;
+	matrix		mvpMatrix;
 	matrix		vpMatrix;
-	float4x4    boneList[128];
+	float4x4	boneList[128];
 	float4		cameraPos;
 	float4		outlineParams;
 };
@@ -56,11 +56,11 @@ struct PS_OUTPUT {
 pixelInput vertexShader( vertexInput input ) {
 	pixelInput output = (pixelInput)(0);
 
-   float4 Pos = 0.0f;
+	float4 Pos = 0.0f;
 
-   int4 IndexVector = D3DCOLORtoUBYTE4(input.blendIndices);
-   float BlendWeightsArray[4] = (float[4])input.boneWeights;
-   int   IndexArray[4]        = (int[4])IndexVector;
+	int4 IndexVector = D3DCOLORtoUBYTE4(input.blendIndices);
+	float BlendWeightsArray[4] = (float[4])input.boneWeights;
+	int   IndexArray[4] = (int[4])IndexVector;
 
 	Pos = input.position;
 	float3 objCenter = float3(  modelMatrix[3].xyz );
@@ -104,7 +104,7 @@ SamplerState SampleType;
 
 	output.Normal.xyz = normalize( input.normal );
 	if ( input.IsFrontFace == false ) {
-	   output.Normal *= -1.0f;
+		output.Normal *= -1.0f;
 	}
 
 	return output;

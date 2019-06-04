@@ -342,7 +342,7 @@ void kbPropertiesTab::TextFieldCB( Fl_Widget * widget, void * voidPtr ) {
 	if ( userData->m_VariableType == KBTYPEINFO_VECTOR4 || userData->m_VariableType == KBTYPEINFO_VECTOR ) {
 		float & componentVar = *(float*)userData->m_pVariablePtr;
 
-		// TODO - I don't beliece this allocations are cleaned up anywhere
+		// [TODO][HACK] - Ehm...Are these news cleared up somewhere?
 		prevValuePtr = new float( (float)atof( prevValue.c_str() ) );
 		curValuePtr = new float( (float)atof( currentValue.c_str() ) / divisor );
 
@@ -688,7 +688,7 @@ void kbPropertiesTab::RefreshEntity() {
 		// TODO: Display properties for the first entity only for now.
 		kbEditorEntity * pEntity = ( m_SelectedEntities.size() > 0 ) ? ( m_SelectedEntities[0] ) : ( m_pTempPrefabEntity );
 		const kbGameEntity * pGameEntity = pEntity->GetGameEntity();
-
+ 
 		for ( size_t i = 0; i < pGameEntity->NumComponents(); i++ ) {
 			RefreshComponent( pEntity, const_cast<kbGameComponent *>( pGameEntity->GetComponent( i ) ), nullptr, startX, curY, inputHeight );
 			curY += LineSpacing();

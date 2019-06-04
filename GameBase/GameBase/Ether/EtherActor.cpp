@@ -92,8 +92,8 @@ void EtherComponentToggler::Constructor() {
  
 	m_NextOnOffStartTime = 0.0f;
 	m_NumBurstsLeft = 0;
-	m_bComponentsEnabled = false;
 	m_State = WaitingToBurst;
+	m_bComponentsEnabled = false;
 }
 
 /**
@@ -103,7 +103,7 @@ void EtherComponentToggler::SetEnable_Internal( const bool bIsEnabled )  {
 	if ( bIsEnabled ) {
 		ToggleComponents( false );
 		m_NextOnOffStartTime = kbfrand( m_MinFirstBurstDelaySec, m_MaxFirstBurstDelaySec );
-		m_NumBurstsLeft = 0;//kbirand( m_MinNumOnBursts, m_MaxNumOnBursts );
+		m_NumBurstsLeft = 0;
 		m_State = WaitingToBurst;
 	}
 }
@@ -117,16 +117,17 @@ void EtherComponentToggler::Update_Internal( const float DeltaTimeSeconds ) {
 
 	switch ( m_State ) {
 
-		// Waiting to burst
 		case WaitingToBurst : {
-			if ( curTime > m_NextOnOffStartTime ) {
-				ToggleComponents( true );
 
-				m_NextOnOffStartTime = g_GlobalTimer.TimeElapsedSeconds() + kbfrand( m_MinOnSeconds, m_MaxOnSeconds );
-	
-				m_NumBurstsLeft = kbirand( m_MinNumOnBursts, m_MaxNumOnBursts ) - 1;
-				m_State = Bursting;
+			if ( curTime < m_NextOnOffStartTime ) {
+				break;
 			}
+
+			m_State = Bursting;
+
+			ToggleComponents( true );
+			m_NextOnOffStartTime = g_GlobalTimer.TimeElapsedSeconds() + kbfrand( m_MinOnSeconds, m_MaxOnSeconds );
+			m_NumBurstsLeft = kbirand( m_MinNumOnBursts, m_MaxNumOnBursts ) - 1;
 			break;
 		}
 
@@ -137,6 +138,7 @@ void EtherComponentToggler::Update_Internal( const float DeltaTimeSeconds ) {
 			}
 
 			if ( m_bComponentsEnabled ) {
+				// Flash Off
 				ToggleComponents( false );
 
 				if ( m_NumBurstsLeft == 0 ) {
@@ -147,10 +149,12 @@ void EtherComponentToggler::Update_Internal( const float DeltaTimeSeconds ) {
 				}
 				
 			} else {
+					// Flash On
 					ToggleComponents( true );
 					m_NumBurstsLeft--;
 					m_NextOnOffStartTime = g_GlobalTimer.TimeElapsedSeconds() + kbfrand( m_MinOnSeconds, m_MaxOnSeconds );		
 			}
+			break;
 		}
 	}
 }
@@ -160,7 +164,7 @@ void EtherComponentToggler::Update_Internal( const float DeltaTimeSeconds ) {
  */
 void EtherComponentToggler::ToggleComponents( const bool bToggleOn ) {
 
-	for ( int i = 1; i < this->GetOwner()->NumComponents(); i++ ) {
+	for ( int i = 1; i < GetOwner()->NumComponents(); i++ ) {
 		kbGameComponent *const pComponent = GetOwner()->GetComponent( i );
 		if ( pComponent == this ) {
 			continue;
@@ -221,11 +225,9 @@ void EtherLightAnimatorComponent::Update_Internal( const float DT ) {
 	pLightComp->SetColor( lightColor.x, lightColor.y, lightColor.z, 1.0f );
 	pLightComp->MarkAsDirty();
 
-	{
-		kbShaderParamOverrides_t shaderParam;
-		shaderParam.SetVec4( "lightAnimParam", lightColor );
-		g_pRenderer->SetGlobalShaderParam( shaderParam );
-	}
+	kbShaderParamOverrides_t shaderParam;
+	shaderParam.SetVec4( "lightAnimParam", lightColor );
+	g_pRenderer->SetGlobalShaderParam( shaderParam );
 }
 
 /**
@@ -237,5 +239,4 @@ void EtherLightAnimatorComponent::EditorChange( const std::string & propertyName
 	if ( IsEnabled() ) {
 		m_StartTime = g_GlobalTimer.TimeElapsedSeconds();
 	}
-
 }

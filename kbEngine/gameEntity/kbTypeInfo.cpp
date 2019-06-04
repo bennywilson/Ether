@@ -67,132 +67,69 @@ ECollisionType_Enum ECollisionType_EnumClass;
 
 EBillboardType_Enum EBillboardType_EnumClass;
 
-// kbComponent
-kbComponent_TypeInfo kbComponent::typeInfo;
-std::vector<kbTypeInfoClass *> kbComponent::kbComponent_TypeInfoVar;
 
-// kbEditorGlobalSettingsComponent
-kbEditorGlobalSettingsComponent_TypeInfo kbEditorGlobalSettingsComponent::typeInfo;
-std::vector<kbTypeInfoClass *> kbEditorGlobalSettingsComponent::kbEditorGlobalSettingsComponent_TypeInfoVar;
+DEFINE_KBCLASS(kbComponent)
 
-// kbEditorLevelSettingsComponent
-kbEditorLevelSettingsComponent_TypeInfo kbEditorLevelSettingsComponent::typeInfo;
-std::vector<kbTypeInfoClass *> kbEditorLevelSettingsComponent::kbEditorLevelSettingsComponent_TypeInfoVar;
+DEFINE_KBCLASS(kbEditorGlobalSettingsComponent)
 
-// kbShaderParamComponent
-kbShaderParamComponent_TypeInfo kbShaderParamComponent::typeInfo;
-std::vector<kbTypeInfoClass *> kbShaderParamComponent::kbShaderParamComponent_TypeInfoVar;
+DEFINE_KBCLASS(kbEditorLevelSettingsComponent)
 
-// kbMaterialComponent
-kbMaterialComponent_TypeInfo kbMaterialComponent::typeInfo;
-std::vector<kbTypeInfoClass *> kbMaterialComponent::kbMaterialComponent_TypeInfoVar;
+DEFINE_KBCLASS(kbShaderParamComponent)
 
-// kbGameComponent
-kbGameComponent_TypeInfo kbGameComponent::typeInfo;
-std::vector<kbTypeInfoClass *> kbGameComponent::kbGameComponent_TypeInfoVar;
+DEFINE_KBCLASS(kbMaterialComponent)
 
-// kbAnimEvent
-kbAnimEvent_TypeInfo kbAnimEvent::typeInfo;
-std::vector<class kbTypeInfoClass*> kbAnimEvent::kbAnimEvent_TypeInfoVar;
+DEFINE_KBCLASS(kbGameComponent)
 
-// kbVectorAnimEvent
-kbVectorAnimEvent_TypeInfo kbVectorAnimEvent::typeInfo;
-std::vector<class kbTypeInfoClass*> kbVectorAnimEvent::kbVectorAnimEvent_TypeInfoVar;
+DEFINE_KBCLASS(kbAnimEvent)
 
-// kbModelEmitter
-kbModelEmitter_TypeInfo kbModelEmitter::typeInfo;
-std::vector<class kbTypeInfoClass*> kbModelEmitter::kbModelEmitter_TypeInfoVar;
+DEFINE_KBCLASS(kbVectorAnimEvent)
 
-// kbModelComponent
-kbModelComponent_TypeInfo kbModelComponent::typeInfo;
-std::vector<kbTypeInfoClass *> kbModelComponent::kbModelComponent_TypeInfoVar;
+DEFINE_KBCLASS(kbModelEmitter)
 
-// kbStaticModelComponent
-kbStaticModelComponent_TypeInfo kbStaticModelComponent::typeInfo;
-std::vector<kbTypeInfoClass *> kbStaticModelComponent::kbStaticModelComponent_TypeInfoVar;
+DEFINE_KBCLASS(kbModelComponent)
 
-// kbSkeletalModelComponent
-kbSkeletalModelComponent_TypeInfo kbSkeletalModelComponent::typeInfo;
-std::vector<kbTypeInfoClass *> kbSkeletalModelComponent::kbSkeletalModelComponent_TypeInfoVar;
+DEFINE_KBCLASS(kbStaticModelComponent)
 
-// kbGrass
-kbGrass_TypeInfo kbGrass::typeInfo;
-std::vector<kbTypeInfoClass *> kbGrass::kbGrass_TypeInfoVar;
+DEFINE_KBCLASS(kbSkeletalModelComponent)
 
-// kbTerrainComponent
-kbTerrainComponent_TypeInfo kbTerrainComponent::typeInfo;
-std::vector<kbTypeInfoClass *> kbTerrainComponent::kbTerrainComponent_TypeInfoVar;
+DEFINE_KBCLASS(kbGrass)
 
-// kbTransformComponent
-kbTransformComponent_TypeInfo kbTransformComponent::typeInfo;
-std::vector<kbTypeInfoClass *> kbTransformComponent::kbTransformComponent_TypeInfoVar;
+DEFINE_KBCLASS(kbTerrainComponent)
 
-// kbLightComponent
-kbLightComponent_TypeInfo kbLightComponent::typeInfo;
-std::vector<kbTypeInfoClass *> kbLightComponent::kbLightComponent_TypeInfoVar;
+DEFINE_KBCLASS(kbTransformComponent)
 
-// kbDirectionalLightComponent
-kbDirectionalLightComponent_TypeInfo kbDirectionalLightComponent::typeInfo;
-std::vector<kbTypeInfoClass *> kbDirectionalLightComponent::kbDirectionalLightComponent_TypeInfoVar;
+DEFINE_KBCLASS(kbLightComponent)
 
-// kbPointLightComponent
-kbPointLightComponent_TypeInfo kbPointLightComponent::typeInfo;
-std::vector<kbTypeInfoClass *> kbPointLightComponent::kbPointLightComponent_TypeInfoVar;
+DEFINE_KBCLASS(kbDirectionalLightComponent)
 
-// kbCylindricalComponent
-kbCylindricalLightComponent_TypeInfo kbCylindricalLightComponent::typeInfo;
-std::vector<kbTypeInfoClass *> kbCylindricalLightComponent::kbCylindricalLightComponent_TypeInfoVar;
+DEFINE_KBCLASS(kbPointLightComponent)
 
-// kbLightShaftsComponent
-kbLightShaftsComponent_TypeInfo kbLightShaftsComponent::typeInfo;
-std::vector<kbTypeInfoClass *> kbLightShaftsComponent::kbLightShaftsComponent_TypeInfoVar;
+DEFINE_KBCLASS(kbCylindricalLightComponent)
 
-// kbFogComponent
-kbFogComponent_TypeInfo kbFogComponent::typeInfo;
-std::vector<kbTypeInfoClass *> kbFogComponent::kbFogComponent_TypeInfoVar;
+DEFINE_KBCLASS(kbLightShaftsComponent)
 
-// kbParticleComponent
-kbParticleComponent_TypeInfo kbParticleComponent::typeInfo;
-std::vector<kbTypeInfoClass *> kbParticleComponent::kbParticleComponent_TypeInfoVar;
+DEFINE_KBCLASS(kbFogComponent)
 
-// kbClothBone
-kbClothBone_TypeInfo kbClothBone::typeInfo;
-std::vector<kbTypeInfoClass *> kbClothBone::kbClothBone_TypeInfoVar;
+DEFINE_KBCLASS(kbParticleComponent)
 
-// kbBoneCollisionSphere
-kbBoneCollisionSphere_TypeInfo kbBoneCollisionSphere::typeInfo;
-std::vector<kbTypeInfoClass *> kbBoneCollisionSphere::kbBoneCollisionSphere_TypeInfoVar;
+DEFINE_KBCLASS(kbClothBone)
 
-// kbClothComponent
-kbClothComponent_TypeInfo kbClothComponent::typeInfo;
-std::vector<kbTypeInfoClass *> kbClothComponent::kbClothComponent_TypeInfoVar;
+DEFINE_KBCLASS(kbBoneCollisionSphere)
 
-// kbGameLogicComponent
-kbGameLogicComponent_TypeInfo kbGameLogicComponent::typeInfo;
-std::vector< kbTypeInfoClass *> kbGameLogicComponent::kbGameLogicComponent_TypeInfoVar;
+DEFINE_KBCLASS(kbClothComponent)
 
-// kbDamageComponent
-kbDamageComponent_TypeInfo kbDamageComponent::typeInfo;
-std::vector< kbTypeInfoClass *> kbDamageComponent::kbDamageComponent_TypeInfoVar;
+DEFINE_KBCLASS(kbGameLogicComponent)
 
-// kbCollisionComponent
-kbCollisionComponent_TypeInfo kbCollisionComponent::typeInfo;
-std::vector<kbTypeInfoClass *> kbCollisionComponent::kbCollisionComponent_TypeInfoVar;
+DEFINE_KBCLASS(kbDamageComponent)
 
-// kbActorComponent
-kbActorComponent_TypeInfo kbActorComponent::typeInfo;
-std::vector<kbTypeInfoClass *> kbActorComponent::kbActorComponent_TypeInfoVar;
+DEFINE_KBCLASS(kbCollisionComponent)
 
-// kbPlayerStartComponent
-kbPlayerStartComponent_TypeInfo kbPlayerStartComponent::typeInfo;
-std::vector<kbTypeInfoClass *> kbPlayerStartComponent::kbPlayerStartComponent_TypeInfoVar;
+DEFINE_KBCLASS(kbActorComponent)
 
-// kbSoundData
-kbSoundData_TypeInfo kbSoundData::typeInfo;
-std::vector<kbTypeInfoClass *> kbSoundData::kbSoundData_TypeInfoVar;
+DEFINE_KBCLASS(kbPlayerStartComponent)
 
-// kbDebugSphereCollision
-kbDebugSphereCollision_TypeInfo kbDebugSphereCollision::typeInfo;
-std::vector<kbTypeInfoClass *> kbDebugSphereCollision::kbDebugSphereCollision_TypeInfoVar;
+DEFINE_KBCLASS(kbSoundData)
+
+DEFINE_KBCLASS(kbDebugSphereCollision)
 
 typedef kbResource * kbResourcePtr;

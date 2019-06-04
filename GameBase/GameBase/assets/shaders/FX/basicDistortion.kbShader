@@ -83,6 +83,7 @@ float4 pixelShader( pixelInput input ) : SV_TARGET {
 
 	const float3 finalEdgeFadeColor = edgeFadeColor.xyz * edgeFadeColor.w;
 	float4 outColor = colorTexture.Sample( SampleType, screenUV + distortionVec.xy );
+	// outColor.xyz *= finalEdgeFadeColor;
 
 	float2 distFromEdge = min( input.uv, 1.0f - input.uv );
 	distFromEdge = min( screenUV, 1.0f - screenUV );

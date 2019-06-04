@@ -38,6 +38,9 @@
     <Filter Include="Shaders\Skybox">
       <UniqueIdentifier>{5606f5b0-0206-480d-b815-a642de7d7a06}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Shaders\UI">
+      <UniqueIdentifier>{750373ee-b8ac-47f8-9cf2-13a13f136b57}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="ReadMe.txt" />
@@ -155,9 +158,6 @@
     <None Include="assets\shaders\Skybox\skybox_Gradient.kbShader">
       <Filter>Shaders\Skybox</Filter>
     </None>
-    <None Include="assets\shaders\PostProcess\HatchShading.kbShader">
-      <Filter>Shaders\PostProcess</Filter>
-    </None>
     <None Include="assets\shaders\Character\characterBase_NoSkinning.kbShader">
       <Filter>Shaders\Character</Filter>
     </None>
@@ -196,6 +196,18 @@
     </None>
     <None Include="assets\shaders\FX\TVScreen.kbShader">
       <Filter>Shaders\FX</Filter>
+    </None>
+    <None Include="assets\shaders\Lights\directionalLightToon_NoShadow.kbShader">
+      <Filter>Shaders\Lights</Filter>
+    </None>
+    <None Include="assets\shaders\Lights\pointLight_Flicker.kbShader">
+      <Filter>Shaders\Lights</Filter>
+    </None>
+    <None Include="assets\shaders\PostProcess\Antialiasing.kbShader">
+      <Filter>Shaders\PostProcess</Filter>
+    </None>
+    <None Include="assets\shaders\UI\Overlay.kbShader">
+      <Filter>Shaders\UI</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

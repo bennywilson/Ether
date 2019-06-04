@@ -32,16 +32,16 @@ struct vertexInput {
 
 //-------------------------------------
 struct pixelInput {
-	float4 position               : SV_POSITION;
-	float2 uv                     : TEXCOORD0;
-	float4 color                  : COLOR;
-	float2 position2              : TEXCOORD1;
-	float3 normal                 : TEXCOORD2;
+	float4 position					: SV_POSITION;
+	float2 uv						: TEXCOORD0;
+	float4 color					: COLOR;
+	float2 position2				: TEXCOORD1;
+	float3 normal					: TEXCOORD2;
 };
 
 //-------------------------------------
 struct PS_OUTPUT {
-	float4 Color                  : SV_TARGET0;
+	float4 Color					: SV_TARGET0;
 };
 
 /**
@@ -55,11 +55,11 @@ pixelInput vertexShader( vertexInput input ) {
 	float3 localPos = float3( input.size.x , input.size.y, 0 );
 	float3x3 billboardMatrix;
 	{
-	   // Axial
-	   float3 heading = float3( 0, -1, 0 );
-	   const float3 xAxis = normalize( cross( normalize( cameraPos.xyz - particleWorldPos ), heading ) );
-	   const float3 yAxis = normalize( cross( heading, xAxis ) );
-	   billboardMatrix = float3x3( heading, xAxis, yAxis );
+		// Axial
+		float3 heading = float3( 0, -1, 0 );
+		const float3 xAxis = normalize( cross( normalize( cameraPos.xyz - particleWorldPos ), heading ) );
+		const float3 yAxis = normalize( cross( heading, xAxis ) );
+		billboardMatrix = float3x3( heading, xAxis, yAxis );
 	}
 
 	const float3 offset = mul( localPos, billboardMatrix );

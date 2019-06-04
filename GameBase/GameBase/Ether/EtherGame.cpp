@@ -151,21 +151,24 @@ void EtherGame::Update_Internal( float DT ) {
 	if ( GetAsyncKeyState( VK_LSHIFT ) && GetAsyncKeyState( 'P' ) ) {
 	    kbCamera & playerCamera = GetCamera();
 
-		for ( size_t i = GetGameEntities().size() - 1; i >= 0; i-- ) {
+		for ( int i = 0; i < GetGameEntities().size();  i++ ) {
 
 			const kbGameEntity *const pCurEntity = GetGameEntities()[i];
 			kbPlayerStartComponent *const pStart = (kbPlayerStartComponent*)pCurEntity->GetComponentByType( kbPlayerStartComponent::GetType() );
-			if ( pStart != nullptr ) {
-				const kbVec3 newPos = pCurEntity->GetPosition();
-				const kbQuat newRotation = pCurEntity->GetOrientation();
-				playerCamera.m_Position = newPos;
-				playerCamera.m_Rotation = newRotation;
-				playerCamera.m_RotationTarget = newRotation;
-
-				m_pLocalPlayer->SetPosition( newPos );
-				m_pLocalPlayer->SetOrientation( newRotation );
-				break;
+			if ( pStart == nullptr ) {
+				continue;
 			}
+
+			const kbVec3 newPos = pCurEntity->GetPosition();
+			const kbQuat newRotation = pCurEntity->GetOrientation();
+
+			playerCamera.m_Position = newPos;
+			playerCamera.m_Rotation = newRotation;
+			playerCamera.m_RotationTarget = newRotation;
+
+			m_pLocalPlayer->SetPosition( newPos );
+			m_pLocalPlayer->SetOrientation( newRotation );
+			break;
 		}
 	}
 
@@ -401,7 +404,7 @@ kbGameEntity * EtherGame::CreatePlayer( const int netId, const kbGUID & prefabGU
 
 		pNewEntity = g_pGame->CreateEntity( m_pCharacterPackage->GetPrefab( "Angelica" )->GetGameEntity(0), true );
 
-	//	AddPrefabToEntity( m_pWeaponsPackage, "EL_Rifle", pNewEntity, false );
+		AddPrefabToEntity( m_pWeaponsPackage, "EL_Rifle", pNewEntity, false );
 		AddPrefabToEntity( m_pWeaponsPackage, "EL_Grenade", pNewEntity, false );
 
 		for ( int i = 0; i < pNewEntity->NumComponents(); i++ ) {
@@ -595,8 +598,6 @@ void EtherGame::RenderHookCallBack( kbRenderTexture *const pSrc, kbRenderTexture
 
 	// Initialize
 	static kbTerrainComponent * pTerrain = nullptr;
-
-
 	if ( pTerrain == nullptr ) {
 
 		for ( int i = 0; i < GetGameEntities().size(); i++ ) {
@@ -636,35 +637,37 @@ void EtherGame::RenderHookCallBack( kbRenderTexture *const pSrc, kbRenderTexture
 		if ( curShot.pHitComponent != nullptr ) {
 			kbGameEntity *const pEnt = (kbGameEntity*)curShot.pHitComponent->GetOwner();
 			kbStaticModelComponent *const pSM = (kbStaticModelComponent*)pEnt->GetComponentByType( kbStaticModelComponent::GetType() );
-				if ( pSM != nullptr ) {
+			if ( pSM == nullptr ) {
+				continue;
+			}
 
-					// Generate bullet holes
-					g_pRenderer->RT_SetRenderTarget( m_pBulletHoleRenderTexture );
-					kbShaderParamOverrides_t shaderParams;
+			// Generate bullet holes
+			g_pRenderer->RT_SetRenderTarget( m_pBulletHoleRenderTexture );
+			kbShaderParamOverrides_t shaderParams;
 
-					kbMat4 invWorldMatrix;
-					invWorldMatrix.MakeScale( pEnt->GetScale() );
-					invWorldMatrix *= pEnt->GetOrientation().ToMat4();
-					invWorldMatrix[3] = pEnt->GetPosition();
-					invWorldMatrix.InvertFast();
+			kbMat4 invWorldMatrix;
+			invWorldMatrix.MakeScale( pEnt->GetScale() );
+			invWorldMatrix *= pEnt->GetOrientation().ToMat4();
+			invWorldMatrix[3] = pEnt->GetPosition();
+			invWorldMatrix.InvertFast();
 
-					const kbVec3 hitLocation = invWorldMatrix.TransformPoint( curShot.shotEnd );
-					const kbVec3 hitDir = ( curShot.shotEnd - curShot.shotStart ).Normalized() * invWorldMatrix;
-					const float holeSize = 0.75f + ( kbfrand() * 0.5f );
-					const float scorchSize = 3.0f + ( kbfrand() * 1.5f );
+			const kbVec3 hitLocation = invWorldMatrix.TransformPoint( curShot.shotEnd );
+			const kbVec3 hitDir = ( curShot.shotEnd - curShot.shotStart ).Normalized() * invWorldMatrix;
+			const float holeSize = 0.75f + ( kbfrand() * 0.5f );
+			const float scorchSize = 3.0f + ( kbfrand() * 1.5f );
 
-					shaderParams.SetTexture( "baseTexture", pSM->GetModel()->GetMaterials()[0].GetTextureList()[0] );
-					shaderParams.SetVec4( "hitLocation", kbVec4( hitLocation.x, hitLocation.y, hitLocation.z, holeSize ) );
-					shaderParams.SetVec4( "hitDirection", kbVec4( hitDir.x, hitDir.y, hitDir.z, scorchSize ) );
+			//shaderParams.SetTexture( "baseTexture", pSM->SetSh()->GetMaterials()[0].GetTextureList()[0] );
+			shaderParams.SetVec4( "hitLocation", kbVec4( hitLocation.x, hitLocation.y, hitLocation.z, holeSize ) );
+			shaderParams.SetVec4( "hitDirection", kbVec4( hitDir.x, hitDir.y, hitDir.z, scorchSize ) );
 
-					kbTexture *const pNoiseTex = (kbTexture*)g_ResourceManager.GetResource( "./assets/FX/Noise/noise.jpg", true, true );
-					shaderParams.SetTexture( "noiseTex", pNoiseTex );
+			kbTexture *const pNoiseTex = (kbTexture*)g_ResourceManager.GetResource( "./assets/FX/Noise/noise.jpg", true, true );
+			shaderParams.SetTexture( "noiseTex", pNoiseTex );
 
-					kbTexture *const pScorchTex = (kbTexture*)g_ResourceManager.GetResource( "./assets/FX/scorch.jpg", true, true );
-					shaderParams.SetTexture( "scorchTex", pScorchTex );
+			kbTexture *const pScorchTex = (kbTexture*)g_ResourceManager.GetResource( "./assets/FX/scorch.jpg", true, true );
+			shaderParams.SetTexture( "scorchTex", pScorchTex );
 
-					g_pRenderer->RT_RenderMesh( pSM->GetModel(), m_pBulletHoleUpdateShader, &shaderParams );
-				}
+			g_pRenderer->RT_RenderMesh( pSM->GetModel(), m_pBulletHoleUpdateShader, &shaderParams );
+			
 		}
 
 		// Update collision map

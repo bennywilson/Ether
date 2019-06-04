@@ -305,7 +305,7 @@ void kbEditor::LoadMap( const std::string & InMapName ) {
 				kbGameEntity * pGameEntity = inFile.ReadGameEntity();
 
 				while ( pGameEntity != nullptr ) {
-kbLog( "Loading in %s", pGameEntity->GetName().c_str() );
+
 					if ( pLevelSettings == nullptr ) {
 						pLevelSettings = (kbEditorLevelSettingsComponent*)pGameEntity->GetComponentByType( kbEditorLevelSettingsComponent::GetType() );
 						if ( pLevelSettings != nullptr ) {
@@ -420,20 +420,20 @@ void kbEditor::Update() {
 	//m_pMainTab->GetCurrentWindow()->GetCamera().Update();
 
 	if ( GetAsyncKeyState( VK_LSHIFT ) && GetAsyncKeyState( 'P' ) && GetGameEntities().size() > 0 ) {
-		//SetMainCameraPos( kbVec3( -2.02074528f, 28.4168167f, 14.1997643f ) );
-		//SetMainCameraRot( kbQuat( 0.0239890888f, 0.281068176f, 0.0070281f, 0.959362f ) );
 
-		for ( int i = GetGameEntities().size() - 1; i >= 0; i-- ) {
+		for ( int i = (int) GetGameEntities().size() - 1; i >= 0; i-- ) {
 
 			const kbEditorEntity *const pCurEntity = GetGameEntities()[i];
-			kbPlayerStartComponent *const pStart = (kbPlayerStartComponent*)pCurEntity->GetGameEntity()->GetComponentByType( kbPlayerStartComponent::GetType() );
-			if ( pStart != nullptr ) {
-				const kbVec3 newPos = pCurEntity->GetPosition();
-				const kbQuat newRotation = pCurEntity->GetOrientation();
-				SetMainCameraPos( newPos );
-				SetMainCameraRot( newRotation );
-				break;
+			const kbPlayerStartComponent *const pStart = (kbPlayerStartComponent*)pCurEntity->GetGameEntity()->GetComponentByType( kbPlayerStartComponent::GetType() );
+			if ( pStart == nullptr ) {
+				continue;
 			}
+
+			const kbVec3 newPos = pCurEntity->GetPosition();
+			const kbQuat newRotation = pCurEntity->GetOrientation();
+			SetMainCameraPos( newPos );
+			SetMainCameraRot( newRotation );
+			break;
 		}
 	
 	}
@@ -923,12 +923,15 @@ void kbEditor::SaveLevel_Internal( const std::string & fileNameStr, const bool b
 	outFile.Open( fileNameStr.c_str(), kbFile::FT_Write );
 
 	{
-		kbGameEntity *const pLevelSettingsEnt = new kbGameEntity();
+		const kbCamera *const pCam = m_pMainTab->GetEditorWindowCamera();
+
 		kbEditorLevelSettingsComponent *const pLevelSettingsComp = new kbEditorLevelSettingsComponent();
-		kbCamera *const pCam = m_pMainTab->GetEditorWindowCamera();
 		pLevelSettingsComp->m_CameraPosition = pCam->m_Position;
 		pLevelSettingsComp->m_CameraRotation = pCam->m_Rotation;
+
+		kbGameEntity *const pLevelSettingsEnt = new kbGameEntity();
 		pLevelSettingsEnt->AddComponent( pLevelSettingsComp );
+
 		outFile.WriteGameEntity( pLevelSettingsEnt );
 		delete pLevelSettingsEnt;
 	}
