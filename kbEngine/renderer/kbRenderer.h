@@ -41,6 +41,8 @@ enum eReservedRenderTargets {
 	RGBA_BUFFER,
 	DOWN_RES_BUFFER,
 	DOWN_RES_BUFFER_2,
+	BLOOM_BUFFER_1,
+	BLOOM_BUFFER_2,
 	SCRATCH_BUFFER,
 	MOUSE_PICKER_BUFFER,
 	MAX_HALF_BUFFER,
@@ -276,6 +278,7 @@ public:
 	void										RemoveLightShafts( const kbLightShaftsComponent *const pComponent );
 
 	virtual void								SetGlobalShaderParam( const kbShaderParamOverrides_t::kbShaderParam_t & shaderParam ) = 0;
+	virtual void								SetGlobalShaderParam( const kbShaderParamOverrides_t & shaderParam ) = 0;
 
 	// Debug Drawing
 	virtual void								EnableDebugBillboards( const bool bEnable ) { m_bDebugBillboardsEnabled = bEnable; }

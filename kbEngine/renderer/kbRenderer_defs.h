@@ -20,6 +20,7 @@ enum ERenderPass {
 	RP_InWorldUI,
 	RP_Distortion,
 	RP_PostProcess,
+	RP_UI,
 	RP_Debug,
 	RP_MousePicker,
 	NUM_RENDER_PASSES

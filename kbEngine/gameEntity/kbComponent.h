@@ -203,6 +203,7 @@ protected:
 class kbPlayerStartComponent : public kbGameComponent {
 	KB_DECLARE_COMPONENT( kbPlayerStartComponent, kbGameComponent );
 
+//-------------------------------------------------------------------------------------------------------------------------------------------------------------
 	int m_DummyVar;
 };
 
@@ -212,6 +213,7 @@ class kbPlayerStartComponent : public kbGameComponent {
 class kbAnimEvent : public kbGameComponent {
 	KB_DECLARE_COMPONENT( kbAnimEvent, kbGameComponent );
 
+//-------------------------------------------------------------------------------------------------------------------------------------------------------------
 public:
 
 	const kbString							GetEventName() const { return m_EventName; }
@@ -232,6 +234,7 @@ private:
 class kbVectorAnimEvent : public kbGameComponent {
 	KB_DECLARE_COMPONENT( kbVectorAnimEvent, kbGameComponent );
 
+//-------------------------------------------------------------------------------------------------------------------------------------------------------------
 public:
 
 	const kbString							GetEventName() const { return m_EventName; }
@@ -244,6 +247,29 @@ private:
 	kbString								m_EventName;
 	kbVec3									m_EventValue;
 	float									m_EventTime;
+};
+
+/**
+ *  kbEditorGlobalSettingsComponent
+ */
+class kbEditorGlobalSettingsComponent : public kbGameComponent {
+	KB_DECLARE_COMPONENT( kbEditorGlobalSettingsComponent, kbGameComponent );
+
+//-------------------------------------------------------------------------------------------------------------------------------------------------------------
+public:
+	int										m_CameraSpeedIdx;
+};
+
+/**
+ *  kbEditorLevelSettingsComponent
+ */
+class kbEditorLevelSettingsComponent : public kbGameComponent {
+	KB_DECLARE_COMPONENT( kbEditorLevelSettingsComponent, kbGameComponent );
+
+//-------------------------------------------------------------------------------------------------------------------------------------------------------------
+public:
+	kbVec3									m_CameraPosition;
+	kbQuat									m_CameraRotation;
 };
 
 #endif

@@ -85,6 +85,25 @@ GenerateClass(
 )
 
 GenerateClass(
+	EtherComponentToggler,
+	AddField( "MinFirstBurstDelaySec", KBTYPEINFO_FLOAT, EtherComponentToggler, m_MinFirstBurstDelaySec, false, "" )
+	AddField( "MaxFirstBurstDelaySec", KBTYPEINFO_FLOAT, EtherComponentToggler, m_MaxFirstBurstDelaySec, false, "" )
+	AddField( "MinOnSeconds", KBTYPEINFO_FLOAT, EtherComponentToggler, m_MinOnSeconds, false, "" )
+	AddField( "MaxOnSeconds", KBTYPEINFO_FLOAT, EtherComponentToggler, m_MaxOnSeconds, false, "" )
+	AddField( "MinOffSeconds", KBTYPEINFO_FLOAT, EtherComponentToggler, m_MinOffSeconds, false, "" )
+	AddField( "MaxOffSeconds", KBTYPEINFO_FLOAT, EtherComponentToggler, m_MaxOffSeconds, false, "" )
+	AddField( "MinSecBetweenBursts", KBTYPEINFO_FLOAT, EtherComponentToggler, m_MinSecBetweenBursts, false, "" )
+	AddField( "MaxSecBetweenBursts", KBTYPEINFO_FLOAT, EtherComponentToggler, m_MaxSecBetweenBursts, false, "" )
+	AddField( "MinNumOnBursts", KBTYPEINFO_INT, EtherComponentToggler, m_MinNumOnBursts, false, "" )
+	AddField( "MaxNumOnBursts", KBTYPEINFO_INT, EtherComponentToggler, m_MaxNumOnBursts, false, "" )
+)
+
+GenerateClass(
+	EtherLightAnimatorComponent,
+	AddField( "VelocityCurve", KBTYPEINFO_STRUCT, EtherLightAnimatorComponent, m_LightColorCurve, true, "kbVectorAnimEvent" )
+)
+
+GenerateClass(
 	EtherAIComponent,
 	AddField( "UpdateHz", KBTYPEINFO_INT, EtherAIComponent, m_UpdateFrequency, false, "" )
 )
@@ -175,10 +194,9 @@ GenerateClass(
 
 GenerateClass(
 	EtherEnviroComponent,
-	AddField( "EnviroMaterial", KBTYPEINFO_STRUCT, EtherEnviroComponent, m_EnviroMaterials, true, "EtherEnviroMaterial" )
-	AddField( "CoverObjects", KBTYPEINFO_STRUCT, EtherEnviroComponent, m_CoverObjects, true, "EtherEnviroObject" )
-	AddField( "EnviroObjects", KBTYPEINFO_STRUCT, EtherEnviroComponent, m_EnviroObjects, true, "EtherEnviroObject" )
-	AddField( "TimeOfDayModifiers", KBTYPEINFO_STRUCT, EtherEnviroComponent, m_TimeOfDayModifiers, true, "EtherTimeOfDayModifier" )
+	AddField( "MinRainSheetTileAndSpeed", KBTYPEINFO_VECTOR4, EtherEnviroComponent, m_MinRainSheetTileAndSpeed, false, "" )
+	AddField( "MaxRainSheetTileAndSpeed", KBTYPEINFO_VECTOR4, EtherEnviroComponent, m_MaxRainSheetTileAndSpeed, false, "" )
+	AddField( "RainColor", KBTYPEINFO_VECTOR4, EtherEnviroComponent, m_RainColor, false, "" );
 )
 
 GenerateClass(

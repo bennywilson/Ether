@@ -1,0 +1,106 @@
+//===================================================================================================
+// TVScreen.kbShader
+//
+//
+// 2019 kbEngine 2.0
+//===================================================================================================
+cbuffer matrixBuffer {
+	matrix modelMatrix;
+	matrix mvpMatrix;
+	float4 lightAnimParam;		// lightAnimParam driven by EtherLightAnimatorComponent
+	float4 screenParams;		// x - 
+	float4 time;
+};
+
+kbShaderState {
+	srcblend Blend_One
+	dstblend Blend_Zero
+	colorWriteEnable ColorWriteEnable_rgba
+	cullMode CullMode_None
+}
+
+//-------------------------------------
+struct vertexInput {
+	float4 position			: POSITION;
+	float2 uv				: TEXCOORD0;
+	float4 color			: COLOR;
+	float4 normal			: NORMAL;
+	float4 tangent			: TANGENT;
+};
+
+//-------------------------------------
+struct pixelInput {
+	float4 position			: SV_POSITION;
+	float2 uv				: TEXCOORD0;
+	float4 color			: COLOR;
+	float2 position2		: TEXCOORD1;
+	float3 normal			: TEXCOORD2;
+};
+
+//-------------------------------------
+struct PS_OUTPUT {
+	float4 Color			: SV_TARGET0;
+	float4 Normal			: SV_TARGET1;
+	float4 Specular			: SV_TARGET2;
+	float2 Depth			: SV_TARGET3;
+};
+
+
+/**
+ *	vertexShader
+ */
+pixelInput vertexShader( vertexInput input ) {
+	pixelInput output = (pixelInput)(0);
+
+	output.position = mul( input.position, mvpMatrix );
+	output.uv = input.uv;
+	output.position2 = output.position.zw;
+	output.normal.xyz = mul( ( input.normal.xyz * 2.0f ) - 1.0f, (float3x3)modelMatrix );
+
+	return output;
+}
+
+/**
+ *	pixelShader
+ */
+Texture2D screenColorTex		: register(t0);
+SamplerState SampleType;
+
+Texture2D screenEmissiveTex		: register(t1);
+
+Texture2D noiseTex				: register(t2);
+
+Texture2D scanLineTex			: register(t3);
+
+const float DistortOffset( const float2 uv, const float distortY, const float distortRadius, const float distortAmpl, const float2 uvTile ) {
+	float distToDistortEdge = 1.0f - saturate( abs( uv.y - distortY ) / distortRadius );
+	distToDistortEdge = pow( distToDistortEdge, 3.0f );
+	const float4 noise = noiseTex.Sample( SampleType, uv * uvTile );
+	const float offset = ( noise.y * distortAmpl ) - ( distortAmpl * 0.5f );
+	return offset * distToDistortEdge;
+}
+
+float4 pixelShader( pixelInput	input ) : SV_TARGET {
+
+	float2 uv = input.uv;
+	float y = frac( -time.x * 0.1f );
+	uv.x += DistortOffset( input.uv, y, 0.01f, 0.21f, float2( 0.01f, 1.0f ) );
+
+//	y = frac( -time.x * 0.2f );
+//	uv.x += DistortOffset( input.uv, y, 0.01f, 0.05f ,float2( 0.1f, 1.0f ) );
+
+	y = frac( time.x * 0.08f );
+	uv.x += DistortOffset( input.uv, y, 0.01f, 0.05f ,float2( 0.1f, 1.0f ) );
+
+	float4 color = screenColorTex.Sample( SampleType, uv );
+	float4 emissive = screenEmissiveTex.Sample( SampleType, uv );
+
+	color += emissive;
+	color = color * 0.8f;
+
+	float4 scanLine = scanLineTex.Sample( SampleType, uv * 75 + float2( 0.0f, time.x * -1.f ) );
+
+	color.w = emissive.w * lerp( lightAnimParam.x, 1.0f, screenParams.x ) * screenParams.y;
+	color.xyz *= ( scanLine.x * 0.05f ) + 0.95f;
+	return color;
+}

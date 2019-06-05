@@ -35,6 +35,10 @@ DEFINE_KBCLASS(EtherDestructibleComponent);
 
 DEFINE_KBCLASS(EtherActorComponent);
 
+DEFINE_KBCLASS(EtherComponentToggler);
+
+DEFINE_KBCLASS(EtherLightAnimatorComponent);
+
 DEFINE_KBCLASS(EtherAIComponent);
 
 DEFINE_KBCLASS(EtherEnemySoldierAIComponent);
@@ -50,6 +54,8 @@ DEFINE_KBCLASS(kbVec3TimePointComponent);
 DEFINE_KBCLASS(kbAnimatedQuadComponent);
 
 DEFINE_KBCLASS(EtherEnviroMaterial);
+
+DEFINE_KBCLASS(EtherEnviroComponent);
 
 DEFINE_KBCLASS(EtherEnviroObject);
 

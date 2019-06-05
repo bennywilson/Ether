@@ -77,7 +77,7 @@ private:
 
 	kbGame *												m_pGame;
 	kbEditorWindow *										m_pGameWindow;
-	Fl_Button *												m_pSpeedButton;
+	Fl_Choice *												m_pSpeedChoice;
 
 	// widgets
 	class kbMainTab *										m_pMainTab;
@@ -124,6 +124,7 @@ private:
 	void													RightClickOnMainTab();
     void                                                    RightClickOnOutputWindow();
 
+	static void												DuplicateEntity( Fl_Widget *, void * );
 	static void												ReplaceCurrentlySelectedPrefab( Fl_Widget *, void * );
 	static void												AddEntityAsPrefab( Fl_Widget *, void * );
 	void													AddEntityAsPrefab_Internal( const std::string & PackageName, const std::string & FolderName, const std::string & PrefabeName );

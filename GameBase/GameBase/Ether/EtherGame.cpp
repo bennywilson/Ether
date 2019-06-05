@@ -107,7 +107,7 @@ void EtherGame::InitGame_Internal() {
 	}
 	m_GameStartTimer.Reset();
 
-	m_pTranslucentShader = (kbShader*)g_ResourceManager.LoadResource( "../../kbEngine/assets/Shaders/basicTranslucency.kbShader", true );
+	m_pTranslucentShader = (kbShader*)g_ResourceManager.GetResource( "../../kbEngine/assets/Shaders/basicTranslucency.kbShader", true, true );
 }
 
 /**
@@ -151,17 +151,24 @@ void EtherGame::Update_Internal( float DT ) {
 	if ( GetAsyncKeyState( VK_LSHIFT ) && GetAsyncKeyState( 'P' ) ) {
 	    kbCamera & playerCamera = GetCamera();
 
-		for ( size_t i = GetGameEntities().size() - 1; i >= 0; i-- ) {
+		for ( int i = 0; i < GetGameEntities().size();  i++ ) {
 
 			const kbGameEntity *const pCurEntity = GetGameEntities()[i];
 			kbPlayerStartComponent *const pStart = (kbPlayerStartComponent*)pCurEntity->GetComponentByType( kbPlayerStartComponent::GetType() );
-			if ( pStart != nullptr ) {
-				kbVec3 newPos = pCurEntity->GetPosition();
-				playerCamera.m_Position = newPos;
-				m_pLocalPlayer->SetPosition( newPos );
-;
-				break;
+			if ( pStart == nullptr ) {
+				continue;
 			}
+
+			const kbVec3 newPos = pCurEntity->GetPosition();
+			const kbQuat newRotation = pCurEntity->GetOrientation();
+
+			playerCamera.m_Position = newPos;
+			playerCamera.m_Rotation = newRotation;
+			playerCamera.m_RotationTarget = newRotation;
+
+			m_pLocalPlayer->SetPosition( newPos );
+			m_pLocalPlayer->SetOrientation( newRotation );
+			break;
 		}
 	}
 
@@ -521,9 +528,55 @@ void EtherGame::RenderSync() {
 		m_pParticleManager->SetCustomAtlasShader( 1, "./assets/shaders/FX/shellTrailParticle.kbShader" );
 		m_pParticleManager->SetCustomAtlasTexture( 1, "./assets/FX/SmokeTrailAtlas.dds" );
 
-		g_ResourceManager.LoadResource( "../../kbEngine/assets/Shaders/basicParticle.kbShader", true );
+		g_ResourceManager.GetResource( "../../kbEngine/assets/Shaders/basicParticle.kbShader", true, true );
 		m_pParticleManager->SetCustomAtlasShader( 2, "../../kbEngine/assets/Shaders/basicParticle.kbShader" );
 		m_pParticleManager->SetCustomAtlasTexture( 2, "./assets/FX/MuzzleFlashes/BasicOrange_MuzzleFlash.jpg" );
+
+		// Bullet Hole FX
+		m_pBulletHoleRenderTexture = g_pRenderer->RT_GetRenderTexture( 4096, 4096, eTextureFormat::KBTEXTURE_R8G8B8A8, false );
+		g_pRenderer->RT_ClearRenderTarget( m_pBulletHoleRenderTexture, kbColor::white );
+		
+		g_ResourceManager.GetResource( "./assets/FX/noise.jpg", true, true );
+		g_ResourceManager.GetResource( "./assets/FX/scorch.jpg", true, true );
+
+		for ( int i = 0; i < GetGameEntities().size(); i++ ) {
+			kbGameEntity *const pEnt = GetGameEntities()[i];
+			if ( pEnt->GetName().find( "Holey_Wall" ) != std::string::npos ) {
+				kbStaticModelComponent *const pSM = (kbStaticModelComponent*)pEnt->GetComponentByType( kbStaticModelComponent::GetType() );
+				if ( pSM != nullptr ) {
+	
+					kbShader *const pHoleShader = (kbShader*)g_ResourceManager.GetResource( "./assets/shaders/environment/environmenthole.kbshader", true, true );
+					kbTexture *const diff = (kbTexture*)g_ResourceManager.GetResource( "./assets/models/architecture/bricks.png", true, true );
+					kbTexture *const normal = (kbTexture*)g_ResourceManager.GetResource( "./assets/models/architecture/bricks_nm.png", true, true );
+
+					pSM->SetMaterialParamTexture( 0, "holeTex", m_pBulletHoleRenderTexture );
+
+				}
+				break;
+			}
+		}
+
+		// Grass Damage
+		m_pGrassCollisionTexture = g_pRenderer->RT_GetRenderTexture( 1024, 1024, eTextureFormat::KBTEXTURE_R16G16B16A16, false );
+		g_pRenderer->RT_ClearRenderTarget( m_pGrassCollisionTexture, kbColor( 64000.0f, 64000.0f, 64000.0f, 64000.0f ) );
+
+		m_pGrassCollisionReadBackTexture = g_pRenderer->RT_GetRenderTexture( 1024, 1024, eTextureFormat::KBTEXTURE_R16G16B16A16, true );
+
+		for ( int i = 0; i < GetGameEntities().size(); i++ ) {
+			kbGameEntity *const pEnt = GetGameEntities()[i];
+			if ( pEnt->GetName().find( "Terrain" ) != std::string::npos ) {
+				kbTerrainComponent *const pTerrain = (kbTerrainComponent*)pEnt->GetComponentByType( kbTerrainComponent::GetType() );
+				if ( pTerrain != nullptr ) {
+					pTerrain->SetCollisionMap( m_pGrassCollisionTexture );
+					break;
+				}
+			}
+		}
+
+		m_pCollisionMapDamageGenShader = (kbShader *) g_ResourceManager.GetResource( "./assets/shaders/DamageGen/collisionMapDamageGen.kbshader", true, true );
+		m_pCollisionMapTimeGenShader = (kbShader *) g_ResourceManager.GetResource( "./assets/shaders/DamageGen/collisionMapTimeGen.kbshader", true, true );
+		m_pBulletHoleUpdateShader = (kbShader *) g_ResourceManager.GetResource( "./assets/shaders/DamageGen/pokeyholeunwrap.kbshader", true, true );
+		m_pCollisionMapScorchGenShader = (kbShader*) g_ResourceManager.GetResource( "./assets/shaders/DamageGen/collisionMapScorchGen.kbShader", true, true );
 	}
 
 	m_RenderThreadShotsThisFrame = m_ShotsThisFrame[m_ShotFrame];
@@ -545,58 +598,20 @@ void EtherGame::RenderHookCallBack( kbRenderTexture *const pSrc, kbRenderTexture
 
 	// Initialize
 	static kbTerrainComponent * pTerrain = nullptr;
-
-	if ( m_pBulletHoleRenderTexture == nullptr ) {
-
-		// Bullet Hole FX
-		m_pBulletHoleRenderTexture = g_pRenderer->RT_GetRenderTexture( 4096, 4096, eTextureFormat::KBTEXTURE_R8G8B8A8, false );
-		g_pRenderer->RT_ClearRenderTarget( m_pBulletHoleRenderTexture, kbColor::white );
-		
-		g_ResourceManager.LoadResource( "./assets/FX/noise.jpg", true );
-		g_ResourceManager.LoadResource( "./assets/FX/scorch.jpg", true );
+	if ( pTerrain == nullptr ) {
 
 		for ( int i = 0; i < GetGameEntities().size(); i++ ) {
 			kbGameEntity *const pEnt = GetGameEntities()[i];
-			if ( pEnt->GetName().find( "Holey_Wall" ) != std::string::npos ) {
-				kbStaticModelComponent *const pSM = (kbStaticModelComponent*)pEnt->GetComponentByType( kbStaticModelComponent::GetType() );
-				if ( pSM != nullptr ) {
-	
-					kbShader *const pHoleShader = (kbShader*)g_ResourceManager.LoadResource( "./assets/shaders/environment/environmenthole.kbshader", true );
-					kbTexture *const diff = (kbTexture*)g_ResourceManager.LoadResource( "./assets/models/architecture/bricks.png", true );
-					kbTexture *const normal = (kbTexture*)g_ResourceManager.LoadResource( "./assets/models/architecture/bricks_nm.png", true );
-
-					pSM->SetMaterialParamTexture( 0, "holeTex", m_pBulletHoleRenderTexture );
-
-				}
-				break;
+			pTerrain = (kbTerrainComponent*)pEnt->GetComponentByType( kbTerrainComponent::GetType() );
+			if ( pTerrain == nullptr ) {
+				continue;
 			}
+
+			terrainPos = pEnt->GetPosition();
+			terrainWidth = pTerrain->GetTerrainWidth();
+			halfTerrainWidth = terrainWidth * 0.5f;
+			break;
 		}
-
-		// Grass Damage
-		m_pGrassCollisionTexture = g_pRenderer->RT_GetRenderTexture( 1024, 1024, eTextureFormat::KBTEXTURE_R16G16B16A16, false );
-		g_pRenderer->RT_ClearRenderTarget( m_pGrassCollisionTexture, kbColor( 64000.0f, 64000.0f, 64000.0f, 64000.0f ) );
-
-		m_pGrassCollisionReadBackTexture = g_pRenderer->RT_GetRenderTexture( 1024, 1024, eTextureFormat::KBTEXTURE_R16G16B16A16, true );
-
-		for ( int i = 0; i < GetGameEntities().size(); i++ ) {
-			kbGameEntity *const pEnt = GetGameEntities()[i];
-			if ( pEnt->GetName().find( "Terrain" ) != std::string::npos ) {
-				pTerrain = (kbTerrainComponent*)pEnt->GetComponentByType( kbTerrainComponent::GetType() );
-				if ( pTerrain != nullptr ) {
-					pTerrain->SetCollisionMap( m_pGrassCollisionTexture );
-
-					terrainPos = pEnt->GetPosition();
-					terrainWidth = pTerrain->GetTerrainWidth();
-					halfTerrainWidth = terrainWidth * 0.5f;
-					break;
-				}
-			}
-		}
-
-		m_pCollisionMapDamageGenShader = (kbShader *) g_ResourceManager.LoadResource( "./assets/shaders/DamageGen/collisionMapDamageGen.kbshader", true );
-		m_pCollisionMapTimeGenShader = (kbShader *) g_ResourceManager.LoadResource( "./assets/shaders/DamageGen/collisionMapTimeGen.kbshader", true );
-		m_pBulletHoleUpdateShader = (kbShader *) g_ResourceManager.LoadResource( "./assets/shaders/DamageGen/pokeyholeunwrap.kbshader", true );
-		m_pCollisionMapScorchGenShader = (kbShader*) g_ResourceManager.LoadResource( "./assets/shaders/DamageGen/collisionMapScorchGen.kbShader", true );
 	}
 
     if ( pTerrain == nullptr ) {
@@ -622,35 +637,37 @@ void EtherGame::RenderHookCallBack( kbRenderTexture *const pSrc, kbRenderTexture
 		if ( curShot.pHitComponent != nullptr ) {
 			kbGameEntity *const pEnt = (kbGameEntity*)curShot.pHitComponent->GetOwner();
 			kbStaticModelComponent *const pSM = (kbStaticModelComponent*)pEnt->GetComponentByType( kbStaticModelComponent::GetType() );
-				if ( pSM != nullptr ) {
+			if ( pSM == nullptr ) {
+				continue;
+			}
 
-					// Generate bullet holes
-					g_pRenderer->RT_SetRenderTarget( m_pBulletHoleRenderTexture );
-					kbShaderParamOverrides_t shaderParams;
+			// Generate bullet holes
+			g_pRenderer->RT_SetRenderTarget( m_pBulletHoleRenderTexture );
+			kbShaderParamOverrides_t shaderParams;
 
-					kbMat4 invWorldMatrix;
-					invWorldMatrix.MakeScale( pEnt->GetScale() );
-					invWorldMatrix *= pEnt->GetOrientation().ToMat4();
-					invWorldMatrix[3] = pEnt->GetPosition();
-					invWorldMatrix.InvertFast();
+			kbMat4 invWorldMatrix;
+			invWorldMatrix.MakeScale( pEnt->GetScale() );
+			invWorldMatrix *= pEnt->GetOrientation().ToMat4();
+			invWorldMatrix[3] = pEnt->GetPosition();
+			invWorldMatrix.InvertFast();
 
-					const kbVec3 hitLocation = invWorldMatrix.TransformPoint( curShot.shotEnd );
-					const kbVec3 hitDir = ( curShot.shotEnd - curShot.shotStart ).Normalized() * invWorldMatrix;
-					const float holeSize = 0.75f + ( kbfrand() * 0.5f );
-					const float scorchSize = 3.0f + ( kbfrand() * 1.5f );
+			const kbVec3 hitLocation = invWorldMatrix.TransformPoint( curShot.shotEnd );
+			const kbVec3 hitDir = ( curShot.shotEnd - curShot.shotStart ).Normalized() * invWorldMatrix;
+			const float holeSize = 0.75f + ( kbfrand() * 0.5f );
+			const float scorchSize = 3.0f + ( kbfrand() * 1.5f );
 
-					shaderParams.SetTexture( "baseTexture", pSM->GetModel()->GetMaterials()[0].GetTextureList()[0] );
-					shaderParams.SetVec4( "hitLocation", kbVec4( hitLocation.x, hitLocation.y, hitLocation.z, holeSize ) );
-					shaderParams.SetVec4( "hitDirection", kbVec4( hitDir.x, hitDir.y, hitDir.z, scorchSize ) );
+			//shaderParams.SetTexture( "baseTexture", pSM->SetSh()->GetMaterials()[0].GetTextureList()[0] );
+			shaderParams.SetVec4( "hitLocation", kbVec4( hitLocation.x, hitLocation.y, hitLocation.z, holeSize ) );
+			shaderParams.SetVec4( "hitDirection", kbVec4( hitDir.x, hitDir.y, hitDir.z, scorchSize ) );
 
-					kbTexture *const pNoiseTex = (kbTexture*)g_ResourceManager.LoadResource( "./assets/FX/Noise/noise.jpg", true );
-					shaderParams.SetTexture( "noiseTex", pNoiseTex );
+			kbTexture *const pNoiseTex = (kbTexture*)g_ResourceManager.GetResource( "./assets/FX/Noise/noise.jpg", true, true );
+			shaderParams.SetTexture( "noiseTex", pNoiseTex );
 
-					kbTexture *const pScorchTex = (kbTexture*)g_ResourceManager.LoadResource( "./assets/FX/scorch.jpg", true );
-					shaderParams.SetTexture( "scorchTex", pScorchTex );
+			kbTexture *const pScorchTex = (kbTexture*)g_ResourceManager.GetResource( "./assets/FX/scorch.jpg", true, true );
+			shaderParams.SetTexture( "scorchTex", pScorchTex );
 
-					g_pRenderer->RT_RenderMesh( pSM->GetModel(), m_pBulletHoleUpdateShader, &shaderParams );
-				}
+			g_pRenderer->RT_RenderMesh( pSM->GetModel(), m_pBulletHoleUpdateShader, &shaderParams );
+			
 		}
 
 		// Update collision map

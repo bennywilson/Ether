@@ -72,8 +72,8 @@ void kbResourceTab::ResourceSelectedCB( Fl_Widget * widget, void * userData ) {
 		kbResourceTabFile_t * pResourceItem = pResourceTab->m_SelectBrowserIdx[selectedItemIndex];
 
 		if ( pResourceItem->m_pResource != nullptr ) {
-			const char * fileName = pResourceItem->m_pResource->GetName().c_str();
-			kbResource * pResource = g_ResourceManager.GetResource( fileName );
+			const char * fileName = pResourceItem->m_pResource->GetFullFileName().c_str();
+			kbResource * pResource = g_ResourceManager.GetResource( fileName, false, false );
 
 			widgetCBResourceSelected resourceCBObject( WidgetCB_ResourceSelected );
 			resourceCBObject.resourceFileName = pResource->GetFullFileName();
@@ -445,7 +445,7 @@ void kbResourceTab::FindResourcesRecursively( const std::string & file, kbResour
 							std::string fileName = file + FindFileData.cFileName ;
 							StringToLower( fileName );
 
-							NewFolder.m_ResourceList[NewFolder.m_ResourceList.size() - 1].m_pResource = g_ResourceManager.LoadResource( fileName, false );
+							NewFolder.m_ResourceList[NewFolder.m_ResourceList.size() - 1].m_pResource = g_ResourceManager.GetResource( fileName, false, true );
 						}
 						continue;
 					}
@@ -506,7 +506,15 @@ void kbResourceTab::RefreshResourcesTab_Recursive( kbResourceTabFile_t & current
 
 		for ( int resourceIdx = 0; resourceIdx < currentFolder.m_ResourceList.size(); resourceIdx++ ) {
 			if ( currentFolder.m_ResourceList[resourceIdx].m_pResource != nullptr ) {
-				m_pResourceSelectBrowser->add( ( spaces + currentFolder.m_ResourceList[resourceIdx].m_pResource->GetName() ).c_str() );
+				const std::string & resourceName = currentFolder.m_ResourceList[resourceIdx].m_pResource->GetName();
+				const size_t fileNameStart = resourceName.find_last_of( '\\' );
+				std::string displayName;
+				if ( fileNameStart == std::string::npos ) {
+					displayName = resourceName;
+				} else {
+					displayName = resourceName.substr( fileNameStart + 1 );
+				}
+				m_pResourceSelectBrowser->add( ( spaces + displayName ).c_str() );
 			} else if ( currentFolder.m_ResourceList[resourceIdx].m_pPrefab != nullptr ) {
 				std::string prefabName = ( spaces + currentFolder.m_ResourceList[resourceIdx].m_pPrefab->GetPrefabName() ).c_str();
 				if ( currentFolder.m_ResourceList[resourceIdx].m_bIsDirty ) {

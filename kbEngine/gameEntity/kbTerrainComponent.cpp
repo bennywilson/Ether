@@ -160,6 +160,8 @@ void kbGrass::SetEnable_Internal( const bool isEnabled ) {
  */
 void kbGrass::RefreshGrass() {
 
+	const float startRefreshGrassTime = g_GlobalTimer.TimeElapsedSeconds();
+
 	std::vector<kbVec4> bladeOffsets;
 
 	//float grassCellHalfSize = ( m_DistanceBetweenPatches / 2.0f ) * 0.95f;
@@ -189,7 +191,7 @@ void kbGrass::RefreshGrass() {
 	const float patchLen = m_GrassCellLength / (float)m_PatchesPerCellSide;
 
 	m_GrassShaderOverrides.m_ParamOverrides.clear();
-	m_GrassShaderOverrides.m_pShader = (kbShader*)g_ResourceManager.LoadResource( "./assets/Shaders/Environment/grass.kbshader", true );
+	m_GrassShaderOverrides.m_pShader = (kbShader*)g_ResourceManager.GetResource( "./assets/Shaders/Environment/grass.kbshader", true, true );
 
 	m_GrassShaderOverrides.SetTexture( "heightMap", m_pOwningTerrainComponent->GetHeightMap() );
 	m_GrassShaderOverrides.SetVec4List( "bladeOffsets", bladeOffsets );
@@ -290,6 +292,8 @@ void kbGrass::RefreshGrass() {
 
 	m_bUpdateMaterial = false;
 	m_bUpdatePointCloud = false;
+
+	kbLog( "Refreshing grass took %f seconds.", g_GlobalTimer.TimeElapsedSeconds() - startRefreshGrassTime );
 }
 
 /**

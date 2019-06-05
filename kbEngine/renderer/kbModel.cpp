@@ -260,19 +260,16 @@ bool kbModel::LoadMS3D() {
 		ibIndex += currentMesh.m_NumTriangles * 3;
 
 		for ( uint iTris = 0; iTris < currentMesh.m_NumTriangles; iTris++ ) {
-			currentMesh.m_TriangleIndices[iTris] = *( ushort *) pPtr;
+			currentMesh.m_TriangleIndices[iTris] = *(ushort *) pPtr;
 			pPtr += sizeof( ushort );
 		}
 
-		currentMesh.m_MaterialIndex = *( byte * ) pPtr;
+		currentMesh.m_MaterialIndex = *(byte *)pPtr;
 
-		if ( currentMesh.m_MaterialIndex == 255 ) {
-			kbError( "Mesh is missing a material" );
-		}
 		pPtr += sizeof( char );
 	}
 
-	const uint numMaterials = *( ushort * ) pPtr;
+	const uint numMaterials = *(ushort *) pPtr;
 	m_Materials.resize( numMaterials );
 	pPtr += sizeof( ushort );
 
@@ -285,13 +282,13 @@ bool kbModel::LoadMS3D() {
 
 	// todo:don't load duplicate textures
 	for ( uint iMat = 0; iMat < numMaterials; iMat++ ) {
-		ms3dMaterial_t * pMat = ( ms3dMaterial_t * ) pPtr;
-		pPtr += sizeof( ms3dMaterial_t );
+		ms3dMaterial_t * pMat = (ms3dMaterial_t *) pPtr;
+		pPtr += sizeof(ms3dMaterial_t);
 
 		m_Materials[iMat].m_DiffuseColor.Set( pMat->m_Diffuse[0], pMat->m_Diffuse[1], pMat->m_Diffuse[2], 1.0f );
 
 		// get the base texture name
-		char *const texture[] = { pMat->m_Texture, pMat->m_AlphaMap };
+	/*	char *const texture[] = { pMat->m_Texture, pMat->m_AlphaMap };
 
 		for ( int iTex = 0; iTex < 2; iTex++ ) {
 
@@ -301,7 +298,7 @@ bool kbModel::LoadMS3D() {
 
 			// load the base diffuse textures
 			const std::string textureFileName = filePath + texture[iTex];
-			m_Materials[iMat].m_Textures.push_back( (kbTexture *) g_ResourceManager.LoadResource( textureFileName.c_str(), true ) );
+			m_Materials[iMat].m_Textures.push_back( (kbTexture *) g_ResourceManager.GetResource( textureFileName.c_str(), true ) );
 		}
 
 		std::string shaderName = pMat->m_Name;
@@ -314,8 +311,9 @@ bool kbModel::LoadMS3D() {
 		if ( endOfShaderName != std::string::npos ) {
 			shaderName.resize( endOfShaderName );
 		}
-		shaderName += ".kbshader";
-		m_Materials[iMat].m_pShader = ( kbShader * ) g_ResourceManager.GetResource( shaderName );
+//		shaderName += ".kbshader";
+	//	m_Materials[iMat].m_pShader = ( kbShader * ) g_ResourceManager.GetResource( shaderName );
+*/
 	}
 
 	// create index buffer
@@ -641,7 +639,6 @@ bool kbModel::LoadFBX() {
 		
 		FbxMesh *const pFBXMesh = pRootNode->GetChild(iMesh)->GetMesh();
 		if ( pFBXMesh == nullptr ) {
-			kbWarning( "kbModel::LoadFBX() - Model has nodes without meshes" );
 			continue;
 		}
 
@@ -656,45 +653,45 @@ bool kbModel::LoadFBX() {
 		uint vertexCount = 0;
 
 
-					int numDeformers = pFBXMesh->GetDeformerCount();
-			FbxAMatrix geomXForm = GetGeometryTransformation(pRootNode->GetChild(iMesh));
-			for ( int iDeform = 0; iDeform < numDeformers; iDeform++ ) {
-				FbxSkin * pCurSkin = (FbxSkin*)pFBXMesh->GetDeformer( iDeform, FbxDeformer::eSkin );
-				if ( pCurSkin == nullptr ) {
-					continue;
-				}
-
-
-				uint numClusters = pCurSkin->GetClusterCount();
-				for ( uint iCluster = 0; iCluster < numClusters; iCluster++ ) {
-					FbxCluster * pCurCluster = pCurSkin->GetCluster( iCluster );
-					std::string curJointName = pCurCluster->GetLink()->GetName();
-
-					boneToBounds[iCluster].Reset();
-					kbColor boneColor( kbfrand() * 0.5f + 0.5f, kbfrand() * 0.5f + 0.5f, kbfrand() * 0.5f + 0.5f, 1.0f );
-					boneToColor[iCluster] = boneColor;
-
-				//	kbLog( "%s bone color is %f %f %f", curJointName.c_str(), boneColor.x, boneColor.y, boneColor.z, boneColor.w );
-
-					FbxAMatrix xformMat;
-					FbxAMatrix xformLinkMat;
-					FbxAMatrix globalBindPoseInverseMatrix;
-
-					pCurCluster->GetTransformMatrix( xformMat );
-					pCurCluster->GetTransformLinkMatrix( xformLinkMat );
-					globalBindPoseInverseMatrix = xformLinkMat.Inverse() * xformMat * geomXForm;
-					//kbLog( "Yay!");
-
-					unsigned int numOfIndices = pCurCluster->GetControlPointIndicesCount();
-					int * pCtrlPtList = pCurCluster->GetControlPointIndices();
-					for (unsigned int i = 0; i < numOfIndices; ++i)
-					{
-					//	kbLog( "	Adding vertex %d", pCtrlPtList[i]);
-						vertToBone[pCtrlPtList[i]] = iCluster;
-					}
-
-				}
+		int numDeformers = pFBXMesh->GetDeformerCount();
+		FbxAMatrix geomXForm = GetGeometryTransformation(pRootNode->GetChild(iMesh));
+		for ( int iDeform = 0; iDeform < numDeformers; iDeform++ ) {
+			FbxSkin * pCurSkin = (FbxSkin*)pFBXMesh->GetDeformer( iDeform, FbxDeformer::eSkin );
+			if ( pCurSkin == nullptr ) {
+				continue;
 			}
+
+
+			uint numClusters = pCurSkin->GetClusterCount();
+			for ( uint iCluster = 0; iCluster < numClusters; iCluster++ ) {
+				FbxCluster * pCurCluster = pCurSkin->GetCluster( iCluster );
+				std::string curJointName = pCurCluster->GetLink()->GetName();
+
+				boneToBounds[iCluster].Reset();
+				kbColor boneColor( kbfrand() * 0.5f + 0.5f, kbfrand() * 0.5f + 0.5f, kbfrand() * 0.5f + 0.5f, 1.0f );
+				boneToColor[iCluster] = boneColor;
+
+			//	kbLog( "%s bone color is %f %f %f", curJointName.c_str(), boneColor.x, boneColor.y, boneColor.z, boneColor.w );
+
+				FbxAMatrix xformMat;
+				FbxAMatrix xformLinkMat;
+				FbxAMatrix globalBindPoseInverseMatrix;
+
+				pCurCluster->GetTransformMatrix( xformMat );
+				pCurCluster->GetTransformLinkMatrix( xformLinkMat );
+				globalBindPoseInverseMatrix = xformLinkMat.Inverse() * xformMat * geomXForm;
+				//kbLog( "Yay!");
+
+				unsigned int numOfIndices = pCurCluster->GetControlPointIndicesCount();
+				int * pCtrlPtList = pCurCluster->GetControlPointIndices();
+				for (unsigned int i = 0; i < numOfIndices; ++i)
+				{
+				//	kbLog( "	Adding vertex %d", pCtrlPtList[i]);
+					vertToBone[pCtrlPtList[i]] = iCluster;
+				}
+
+			}
+		}
 
 		for ( int iTri = 0; iTri < (int)newMesh.m_NumTriangles; iTri++ ) {
 
@@ -832,7 +829,7 @@ bool kbModel::LoadFBX() {
 	m_IndexBuffer.CreateIndexBuffer( indexList );
 
 	kbMaterial newMaterial;
-	newMaterial.m_pShader = (kbShader *) g_ResourceManager.LoadResource( "../../kbEngine/assets/Shaders/basicShader.kbShader", true );
+	newMaterial.m_pShader = nullptr;//(kbShader *) g_ResourceManager.GetResource( "../../kbEngine/assets/Shaders/basicShader.kbShader", true );
 	m_Materials.push_back( newMaterial );
 
 	m_Bones.resize( boneToBounds.size() );
@@ -976,7 +973,7 @@ bool kbModel::LoadDiablo3() {
 	newMesh.m_NumTriangles = (uint)indexList.size() / 3;
 
 	kbMaterial newMaterial;
-	newMaterial.m_pShader = (kbShader *) g_ResourceManager.LoadResource( "../../kbEngine/assets/Shaders/basicShader.kbShader", true );
+	newMaterial.m_pShader = nullptr;//(kbShader *) g_ResourceManager.GetResource( "../../kbEngine/assets/Shaders/basicShader.kbShader", true );
 	m_Materials.push_back( newMaterial );
 
 	return true;
@@ -1010,7 +1007,7 @@ void kbModel::CreateDynamicModel( const UINT numVertices, const UINT numIndices,
 	if ( pShaderToUse != nullptr ) {
 		newMaterial.m_pShader = pShaderToUse;
 	} else {
-		newMaterial.m_pShader = (kbShader *) g_ResourceManager.LoadResource( "../../kbEngine/assets/Shaders/basicShader.kbShader", true );
+		newMaterial.m_pShader = nullptr;//(kbShader *) g_ResourceManager.GetResource( "../../kbEngine/assets/Shaders/basicShader.kbShader", true );
 	}
 	m_Materials.push_back( newMaterial );
 }
@@ -1039,9 +1036,9 @@ void kbModel::CreatePointCloud( const UINT numVertices, const std::string & shad
 
 	kbMaterial newMaterial;
 	if ( shaderToUse.length() > 0 ) {
-		newMaterial.m_pShader = (kbShader *) g_ResourceManager.LoadResource( shaderToUse.c_str(), true );
+		newMaterial.m_pShader = nullptr;//(kbShader *) g_ResourceManager.GetResource( shaderToUse.c_str(), true );
 	} else {
-		newMaterial.m_pShader = (kbShader *) g_ResourceManager.LoadResource( "../../kbEngine/assets/Shaders/basicShader.kbshader", true );
+		newMaterial.m_pShader = nullptr;//(kbShader *) g_ResourceManager.GetResource( "../../kbEngine/assets/Shaders/basicShader.kbshader", true );
 	}
 	newMaterial.SetCullingMode( cullingMode );
 	m_Materials.push_back( newMaterial );
@@ -1351,7 +1348,19 @@ bool kbAnimation::Load_Internal() {
 	modelFile.open( m_FullFileName, std::ifstream::in | std::ifstream::binary );
 
 	if ( modelFile.fail() ) {
-		kbError( "Error: kbModel::LoadResource_Internal - Failed to load model %s", m_FullFileName.c_str() );
+		int numTries = 5;
+		while( numTries < 2 && modelFile.fail() ) {
+			modelFile.close();
+			Sleep( 2 );
+			modelFile.open( m_FullFileName, std::ifstream::in | std::ifstream::binary );
+			numTries++;
+		}
+
+		if ( modelFile.fail() ) {
+			modelFile.close();
+			kbWarning( "kbModel::LoadResource_Internal - Failed to load model %s", m_FullFileName.c_str() );
+			return false;
+		}
 	}
 	
 	// Find the file size
@@ -1371,7 +1380,7 @@ bool kbAnimation::Load_Internal() {
 	pPtr += sizeof( ms3dHeader_t );
 
 	if ( strncmp( pHeader->m_ID, "MS3D000000", 10 ) != 0 ) {
-		kbError( "Error: kbModel::LoadResource_Internal - Invalid model header %d", pHeader->m_ID );
+		kbError( "Error: kbModel::LoadResource_Internal - Invalid model header %s", pHeader->m_ID );
 	}
 
 	ushort numVertices = *( ushort * ) pPtr;

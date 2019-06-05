@@ -2,7 +2,7 @@
 // EtherActor.h
 //
 //
-// 2016-2017 kbEngine 2.0
+// 2016-2019 kbEngine 2.0
 //===================================================================================================
 #ifndef ETHERACTOR_H_
 #define ETHERACTOR_H_
@@ -41,6 +41,65 @@ protected:
 
 	float										m_GroundHoverDist;
 	int											m_Dummy;
+};
+
+/**
+ *	EtherComponentToggler
+ */
+class EtherComponentToggler : public kbGameComponent {
+
+	KB_DECLARE_COMPONENT( EtherComponentToggler, kbGameComponent );
+//-------------------------------------------------------------------------------------------------------------------------------------------------------------
+protected:
+
+	virtual void								SetEnable_Internal( const bool bIsEnabled ) override;
+	virtual void								Update_Internal( const float DeltaTimeSeconds ) override;
+
+private:
+
+	void										ToggleComponents( const bool bToggleOn );
+
+	// Editor
+	float										m_MinFirstBurstDelaySec;
+	float										m_MaxFirstBurstDelaySec;
+	float										m_MinOnSeconds;
+	float										m_MaxOnSeconds;
+	float										m_MinOffSeconds;
+	float										m_MaxOffSeconds;
+	float										m_MinSecBetweenBursts;
+	float										m_MaxSecBetweenBursts;
+	int											m_MinNumOnBursts;
+	int											m_MaxNumOnBursts;
+
+	// Run time
+	float										m_NextOnOffStartTime;
+	int											m_NumBurstsLeft;
+	enum TogglerState {
+		WaitingToBurst,
+		Bursting
+	};
+	TogglerState								m_State;
+	bool										m_bComponentsEnabled;
+};
+
+/**
+ *	EtherLightAnimatorComponent
+ */
+class EtherLightAnimatorComponent : public kbGameComponent {
+
+	KB_DECLARE_COMPONENT( EtherLightAnimatorComponent, kbGameComponent );
+
+//-------------------------------------------------------------------------------------------------------------------------------------------------------------
+protected:
+	virtual void								SetEnable_Internal( const bool bIsEnabled ) override;
+	virtual void								Update_Internal( const float DeltaTimeSeconds ) override;
+
+	virtual void								EditorChange( const std::string & propertyName ) override;
+private:
+
+	std::vector<kbVectorAnimEvent>				m_LightColorCurve;
+
+	float										m_StartTime;
 };
 
 #endif

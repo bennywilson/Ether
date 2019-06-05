@@ -232,14 +232,14 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 	std::wstring cmdArgs[13];   // params passed in from the dashboard
 
 	std::string mapName;
-	std::string ipAddress;
 
 	bool bRenderVR = false;
 	bool bUseVRTrackingOnly = false;
 
-	if ( GetAsyncKeyState( VK_SHIFT ) ) {
+	if ( GetAsyncKeyState( VK_MBUTTON ) ) {
 		g_UseEditor = true;
 	}
+
 	if ( numArgs > 0 ) {
 		for ( int i = 1; i < numArgs; i++ ) {
 			cmdArgs[i-1] = cmdLine[i];

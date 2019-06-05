@@ -111,6 +111,8 @@ private:
 	float														m_MaxEndRotationRate;
 	kbVec3														m_MinStart3DRotation;
 	kbVec3														m_MaxStart3DRotation;
+	kbVec3														m_MinStart3DOffset;
+	kbVec3														m_MaxStart3DOffset;
 	kbVec3														m_MinParticleStartSize;
 	kbVec3														m_MaxParticleStartSize;
 	kbVec3														m_MinParticleEndSize;

@@ -18,11 +18,9 @@ class EtherAntialiasingComponent : public kbGameComponent, kbRenderHook {
 	KB_DECLARE_COMPONENT( EtherAntialiasingComponent, kbGameComponent );
 
 //-------------------------------------------------------------------------------------------------------------------------------------------------------------
-public:
-	virtual void								SetEnable_Internal( const bool bEnable ) override;
-
 protected:
 
+	virtual void								SetEnable_Internal( const bool bEnable ) override;
 	virtual void								RenderHookCallBack( kbRenderTexture *const pSrc, kbRenderTexture *const pDst ) override;
 
 private:
@@ -37,12 +35,9 @@ class EtherFogComponent : public kbGameComponent, kbRenderHook {
 	KB_DECLARE_COMPONENT( EtherFogComponent, kbGameComponent );
 
 //-------------------------------------------------------------------------------------------------------------------------------------------------------------
-public:
-
-	virtual void								SetEnable_Internal( const bool bEnable ) override;
-
 protected:
 
+	virtual void								SetEnable_Internal( const bool bEnable ) override;
 	virtual void								RenderHookCallBack( kbRenderTexture *const pSrc, kbRenderTexture *const pDst ) override;
 
 private:
@@ -364,15 +359,19 @@ class EtherEnviroComponent : public kbGameComponent {
 //-------------------------------------------------------------------------------------------------------------------------------------------------------------
 public:
 
-	const std::vector<EtherEnviroObject> &		GetEnviroObjects() const { return m_EnviroObjects; }
-	const std::vector<EtherEnviroObject> &		GetCoverObjects() const { return m_CoverObjects; }
-	const std::vector<EtherTimeOfDayModifier> & GetTimeOfDayModifiers() const { return m_TimeOfDayModifiers; }
+	virtual void								EditorChange( const std::string & propertyName ) override;
+
+protected:
+
+	virtual void								SetEnable_Internal( const bool bEnable ) override;
 
 private:
-	std::vector<EtherEnviroMaterial>			m_EnviroMaterials;
-	std::vector<EtherEnviroObject>				m_CoverObjects;
-	std::vector<EtherEnviroObject>				m_EnviroObjects;
-	std::vector<EtherTimeOfDayModifier>			m_TimeOfDayModifiers;
+
+	void										SetGlobalShaderParams();
+
+	kbVec4										m_MinRainSheetTileAndSpeed;
+	kbVec4										m_MaxRainSheetTileAndSpeed;
+	kbVec4										m_RainColor;
 };
 
 extern const int g_MaxDynamicVertices;

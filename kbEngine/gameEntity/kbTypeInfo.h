@@ -314,8 +314,6 @@ private:
 	int							m_CurrentIndex;
 };
 
-void ReadInData( const std::string & fileName, void * classObject, const kbTypeInfoClass & typeInfo );
-
 #include "kbTypeInfoGeneratedClasses.h"
 
 

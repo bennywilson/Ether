@@ -1,35 +1,41 @@
 //==============================================================================
 // kbQuaternion.h
 //
-// 2016 kbEngine 2.0
+// 2016-2019 kbEngine 2.0
 //==============================================================================
 #ifndef __KBQUATERNION_H_
 #define __KBQUATERNION_H_
 
+/**
+ *	kbQuat
+ */
 class kbQuat {
+
+//-------------------------------------------------------------------------------------------------------------------------------------------------------------
 public:
-							kbQuat() { }
-	explicit				kbQuat( const kbVec3 & axis, const float angle ) { FromAxisAngle( axis, angle ); }
-	explicit				kbQuat( const float x, const float y, const float z, const float w ) { Set( x, y, z, w ); }
+									kbQuat() { }
+	explicit						kbQuat( const kbVec3 & axis, const float angle ) { FromAxisAngle( axis, angle ); }
+	explicit						kbQuat( const float x, const float y, const float z, const float w ) { Set( x, y, z, w ); }
 
-	float					Length();
-	kbQuat &				Normalize();
-	kbQuat					Normalized() const { kbQuat returnQuat = *this; returnQuat.Normalize(); return returnQuat; }
+	float							Length();
+	kbQuat &						Normalize();
+	kbQuat							Normalized() const { kbQuat returnQuat = *this; returnQuat.Normalize(); return returnQuat; }
 
-	void					Set( const float inX, const float inY, const float inZ, const float inW ) { x = inX, y = inY, z = inZ, w = inW; }
+	void							Set( const float inX, const float inY, const float inZ, const float inW ) { x = inX, y = inY, z = inZ, w = inW; }
 
-	kbQuat					operator*( const kbQuat & ) const;
-	float					operator|( const kbQuat & ) const;
-	inline bool				operator==( const kbQuat & a ) const;
+	kbQuat							operator*( const kbQuat & ) const;
+	float							operator|( const kbQuat & ) const;
+	inline bool						operator==( const kbQuat & a ) const;
 
-	void					FromAxisAngle( const kbVec3 & axis, float angle );
-	kbMat4					ToMat4() const;
+	void							FromAxisAngle( const kbVec3 & axis, float angle );
+	kbMat4							ToMat4() const;
 
-	static kbQuat 			Slerp( const kbQuat & from, const kbQuat & to, float t );
+	static kbQuat 					Slerp( const kbQuat & from, const kbQuat & to, float t );
 
 	float x,y,z,w;
 
-	static					kbQuat zero;
+	static const kbQuat zero;
+	static const kbQuat identity;
 };
 
 /*

@@ -53,17 +53,17 @@ pixelInput vertexShader( vertexInput input ) {
 	output.color = input.color;
 	output.position2 = output.position.zw;
 
-	const float3 worldTangent = normalize( mul( (input.tangent.xyz * 2.0f ) - 1.0f, (float3x3)modelMatrix ) );
+	const float3 worldTangent = -normalize( mul( (input.tangent.xyz * 2.0f ) - 1.0f, (float3x3)modelMatrix ) );
 	const float3 worldNormal = normalize( mul( ( input.normal.xyz * 2.0f ) - 1.0f, (float3x3)modelMatrix ) );
-	const float3 worldBitangent = normalize( cross( worldNormal, worldTangent ) ) * ( input.tangent.w * 2.0f - 1.0f );
+	const float3 worldBitangent = normalize( cross( worldNormal, worldTangent ) );// * ( input.tangent.w * 2.0f - 1.0f );
 
 	output.TBN0 = float4(worldTangent.x, worldBitangent.x, worldNormal.x, 0 );
 	output.TBN1 = float4(worldTangent.y, worldBitangent.y, worldNormal.y, 0 );
 	output.TBN2 = float4(worldTangent.z, worldBitangent.z, worldNormal.z, 0 );
 		
-/*	output.TBN0 = worldTangent;//float4(worldTangent.x, worldBitangent.x, worldNormal.x, 0 );
-	output.TBN1 = worldBitangent;//float4(worldTangent.y, worldBitangent.y, worldNormal.y, 0 );
-	output.TBN2 = worldNormal;//float4(worldTangent.z, worldBitangent.z, worldNormal.z, 0 );*/
+/*	output.TBN0.xyz = worldTangent;//float4(worldTangent.x, worldBitangent.x, worldNormal.x, 0 );
+	output.TBN1.xyz = worldBitangent;//float4(worldTangent.y, worldBitangent.y, worldNormal.y, 0 );
+	output.TBN2.xyz = worldNormal;//float4(worldTangent.z, worldBitangent.z, worldNormal.z, 0 );*/
 
 	return output;
 }
@@ -85,7 +85,7 @@ Texture2D emissiveMap(black)		: register(t3);
  PS_OUTPUT pixelShader( pixelInput	input, bool IsFrontFace	: SV_IsFrontFace ) {
  	PS_OUTPUT output = (PS_OUTPUT) 0;
 
-	const float4 normalMap = normal.Sample( normalSampler, input.uv );
+	const float4 normalMap = normal.Sample( diffuseSampler, input.uv );
 	const float4 propertyMapValues = propertyMap.Sample( diffuseSampler, input.uv );
 	const float4 emissive = emissiveMap.Sample( diffuseSampler, input.uv );
 
@@ -104,7 +104,10 @@ Texture2D emissiveMap(black)		: register(t3);
 	}*/
 
 	float3 tangentNormal = normalize( normalMap.xyz * 2.0f - 1.0f );
-	output.Normal.xyz = normalize( float3( input.TBN0.z, input.TBN1.z, input.TBN2.z ) );//		//mul( tangentNormal, TBN );
+	output.Normal.x = dot( tangentNormal, normalize( float3( input.TBN0.x, input.TBN1.x, input.TBN2.x ) ) );//		//mul( tangentNormal, TBN );
+	output.Normal.y = dot( tangentNormal, normalize( float3( input.TBN0.y, input.TBN1.y, input.TBN2.y ) ) );//		//mul( tangentNormal, TBN );
+	output.Normal.z = dot( tangentNormal, normalize( float3( input.TBN0.z, input.TBN1.z, input.TBN2.z ) ) );//		//mul( tangentNormal, TBN );
+	//output.Normal.xyz = input.TBN2.xyz;
 	output.Normal.w = 0.5f;//normalMap.w;
 	return output;
 }

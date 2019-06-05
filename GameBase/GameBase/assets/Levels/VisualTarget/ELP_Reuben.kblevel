@@ -1,0 +1,5321 @@
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Entity_72"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 0.000000 0.000000 0.000000
+		Scale = 1.000000 1.000000 1.000000
+	}
+	kbEditorLevelSettingsComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		MainCameraPosition = 3859.214844 633.358459 876.291931
+		MainCameraRotation = -0.052586 0.657738 -0.046110 0.749993
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Skybox"
+		Orientation = 0.000000 -0.969342 0.000000 0.245715
+		Position = 1.626685 40.604389 -22.515354
+		Scale = 1.000000 1.000000 1.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		Materials = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\skybox\skybox_gradient.kbshader
+				ShaderParams = 3
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "diffuseTexture"
+						Texture = .\assets\models\skydomes\sky_basic.png
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "horizonColor"
+						Texture = NULL
+						Vector = 0.286275 0.345098 0.458824 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "skyColor"
+						Texture = NULL
+						Vector = 0.000000 0.039216 0.070588 0.000000
+					}
+			}
+		RenderPass = Post-LightingPass
+		TranslucencySortBias =  -1.000000
+		Model = .\assets\models\skydomes\skydomes.ms3d
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Player Start"
+		Orientation = -0.052586 0.657738 -0.046110 0.749992
+		Position = 3859.214844 633.358459 876.291931
+		Scale = 1.000000 1.000000 1.000000
+	}
+	kbPlayerStartComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		Dummy =  0.000000
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Crate_1"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 177.468475 7.386138 48.668808
+		Scale = 10.000000 10.000000 10.000000
+	}
+	EtherSkelModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		Materials = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\environment\environmentskinned.kbshader
+				ShaderParams = 4
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "diffuse"
+						Texture = .\assets\models\environment\crate_1.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "normal"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "propertyMap"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "emissiveMap"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		RenderPass = LightingPass
+		TranslucencySortBias =  0.000000
+		Model = .\assets\models\environment\crate_1_destructible.fbx
+		Animations = 0
+		DebugAnimIndex = -1
+		IsFirstPersonModel = 0
+	}
+	EtherDestructibleComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		DamagedModel = NULL
+		DamagedModelMaterialParams = 0
+		DestructibleBehavior = PushFromImpactPoint
+		DestructionFX = 0 0 0 0
+		DestructionFXLocalOffset = 0.000000 0.000000 0.000000
+		Gravity = 0.000000 22.000000 0.000000
+		Health =  0.000000
+		ImpactFX = 2914882686 1195769252 1420378815 2077859665
+		MaxAngularVelocity =  0.000000
+		MaxLifeTime =  10.000000
+		MaxLinearVelocity = 20.000000 0.000000 0.000000
+		MinAngularVelocity =  5.000000
+		MinLinearVelocity = 5.000000 0.000000 0.000000
+		NonDamagedModel = NULL
+		NonDamagedModelMaterialParams = 0
+		ResetSim = 0
+	}
+	kbCollisionComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CollisionType = Sphere
+		Extent = 20.000000 20.000000 20.000000
+		SphereCollision = 0
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Crate_2"
+		Orientation = 0.000000 0.068486 0.000000 0.997652
+		Position = 207.468475 7.877783 48.668808
+		Scale = 10.000000 10.000000 10.000000
+	}
+	EtherSkelModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		Materials = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\environment\environmentskinned.kbshader
+				ShaderParams = 4
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "diffuse"
+						Texture = .\assets\models\environment\crate_1.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "normal"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "propertyMap"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "emissiveMap"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		RenderPass = LightingPass
+		TranslucencySortBias =  0.000000
+		Model = .\assets\models\environment\crate_1_destructible.fbx
+		Animations = 0
+		DebugAnimIndex = -1
+		IsFirstPersonModel = 0
+	}
+	EtherDestructibleComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		DamagedModel = NULL
+		DamagedModelMaterialParams = 0
+		DestructibleBehavior = PushFromImpactPoint
+		DestructionFX = 0 0 0 0
+		DestructionFXLocalOffset = 0.000000 0.000000 0.000000
+		Gravity = 0.000000 22.000000 0.000000
+		Health =  0.000000
+		ImpactFX = 2914882686 1195769252 1420378815 2077859665
+		MaxAngularVelocity =  0.000000
+		MaxLifeTime =  10.000000
+		MaxLinearVelocity = 20.000000 0.000000 0.000000
+		MinAngularVelocity =  5.000000
+		MinLinearVelocity = 5.000000 0.000000 0.000000
+		NonDamagedModel = NULL
+		NonDamagedModelMaterialParams = 0
+		ResetSim = 0
+	}
+	kbCollisionComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CollisionType = Sphere
+		Extent = 20.000000 20.000000 20.000000
+		SphereCollision = 0
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Crate_3"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 237.000000 4.655081 48.668808
+		Scale = 10.000000 10.000000 10.000000
+	}
+	EtherSkelModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		Materials = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\environment\environmentskinned.kbshader
+				ShaderParams = 4
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "diffuse"
+						Texture = .\assets\models\environment\crate_1.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "normal"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "propertyMap"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "emissiveMap"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		RenderPass = LightingPass
+		TranslucencySortBias =  0.000000
+		Model = .\assets\models\environment\crate_1_destructible.fbx
+		Animations = 0
+		DebugAnimIndex = -1
+		IsFirstPersonModel = 0
+	}
+	EtherDestructibleComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		DamagedModel = NULL
+		DamagedModelMaterialParams = 0
+		DestructibleBehavior = PushFromImpactPoint
+		DestructionFX = 0 0 0 0
+		DestructionFXLocalOffset = 0.000000 0.000000 0.000000
+		Gravity = 0.000000 22.000000 0.000000
+		Health =  0.000000
+		ImpactFX = 2914882686 1195769252 1420378815 2077859665
+		MaxAngularVelocity =  0.000000
+		MaxLifeTime =  10.000000
+		MaxLinearVelocity = 20.000000 0.000000 0.000000
+		MinAngularVelocity =  5.000000
+		MinLinearVelocity = 5.000000 0.000000 0.000000
+		NonDamagedModel = NULL
+		NonDamagedModelMaterialParams = 0
+		ResetSim = 0
+	}
+	kbCollisionComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CollisionType = Sphere
+		Extent = 20.000000 20.000000 20.000000
+		SphereCollision = 0
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Crate_4"
+		Orientation = 0.000000 -0.168044 0.000000 0.985779
+		Position = 175.729095 30.216663 52.010502
+		Scale = 10.000000 10.000000 10.000000
+	}
+	EtherSkelModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		Materials = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\environment\environmentskinned.kbshader
+				ShaderParams = 4
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "diffuse"
+						Texture = .\assets\models\environment\crate_1.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "normal"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "propertyMap"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "emissiveMap"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		RenderPass = LightingPass
+		TranslucencySortBias =  0.000000
+		Model = .\assets\models\environment\crate_1_destructible.fbx
+		Animations = 0
+		DebugAnimIndex = -1
+		IsFirstPersonModel = 0
+	}
+	EtherDestructibleComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		DamagedModel = NULL
+		DamagedModelMaterialParams = 0
+		DestructibleBehavior = PushFromImpactPoint
+		DestructionFX = 0 0 0 0
+		DestructionFXLocalOffset = 0.000000 0.000000 0.000000
+		Gravity = 0.000000 22.000000 0.000000
+		Health =  0.000000
+		ImpactFX = 2914882686 1195769252 1420378815 2077859665
+		MaxAngularVelocity =  0.000000
+		MaxLifeTime =  10.000000
+		MaxLinearVelocity = 20.000000 0.000000 0.000000
+		MinAngularVelocity =  5.000000
+		MinLinearVelocity = 5.000000 0.000000 0.000000
+		NonDamagedModel = NULL
+		NonDamagedModelMaterialParams = 0
+		ResetSim = 0
+	}
+	kbCollisionComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CollisionType = Sphere
+		Extent = 20.000000 20.000000 20.000000
+		SphereCollision = 0
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Crate_5"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 202.136414 30.486019 51.091431
+		Scale = 10.000000 10.000000 10.000000
+	}
+	EtherSkelModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		Materials = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\environment\environmentskinned.kbshader
+				ShaderParams = 4
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "diffuse"
+						Texture = .\assets\models\environment\crate_1.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "normal"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "propertyMap"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "emissiveMap"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		RenderPass = LightingPass
+		TranslucencySortBias =  0.000000
+		Model = .\assets\models\environment\crate_1_destructible.fbx
+		Animations = 0
+		DebugAnimIndex = -1
+		IsFirstPersonModel = 0
+	}
+	EtherDestructibleComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		DamagedModel = NULL
+		DamagedModelMaterialParams = 0
+		DestructibleBehavior = PushFromImpactPoint
+		DestructionFX = 0 0 0 0
+		DestructionFXLocalOffset = 0.000000 0.000000 0.000000
+		Gravity = 0.000000 22.000000 0.000000
+		Health =  0.000000
+		ImpactFX = 2914882686 1195769252 1420378815 2077859665
+		MaxAngularVelocity =  0.000000
+		MaxLifeTime =  10.000000
+		MaxLinearVelocity = 20.000000 0.000000 0.000000
+		MinAngularVelocity =  5.000000
+		MinLinearVelocity = 5.000000 0.000000 0.000000
+		NonDamagedModel = NULL
+		NonDamagedModelMaterialParams = 0
+		ResetSim = 0
+	}
+	kbCollisionComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CollisionType = Sphere
+		Extent = 20.000000 20.000000 20.000000
+		SphereCollision = 0
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Crate_6"
+		Orientation = 0.000000 0.000000 0.095493 0.995430
+		Position = 225.832169 28.625412 57.086697
+		Scale = 10.000000 10.000000 10.000000
+	}
+	EtherSkelModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		Materials = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\environment\environmentskinned.kbshader
+				ShaderParams = 4
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "diffuse"
+						Texture = .\assets\models\environment\crate_1.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "normal"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "propertyMap"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "emissiveMap"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		RenderPass = LightingPass
+		TranslucencySortBias =  0.000000
+		Model = .\assets\models\environment\crate_1_destructible.fbx
+		Animations = 0
+		DebugAnimIndex = -1
+		IsFirstPersonModel = 0
+	}
+	EtherDestructibleComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		DamagedModel = NULL
+		DamagedModelMaterialParams = 0
+		DestructibleBehavior = PushFromImpactPoint
+		DestructionFX = 0 0 0 0
+		DestructionFXLocalOffset = 0.000000 0.000000 0.000000
+		Gravity = 0.000000 22.000000 0.000000
+		Health =  0.000000
+		ImpactFX = 2914882686 1195769252 1420378815 2077859665
+		MaxAngularVelocity =  0.000000
+		MaxLifeTime =  10.000000
+		MaxLinearVelocity = 20.000000 0.000000 0.000000
+		MinAngularVelocity =  5.000000
+		MinLinearVelocity = 5.000000 0.000000 0.000000
+		NonDamagedModel = NULL
+		NonDamagedModelMaterialParams = 0
+		ResetSim = 0
+	}
+	kbCollisionComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CollisionType = Sphere
+		Extent = 20.000000 20.000000 20.000000
+		SphereCollision = 0
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Crate_7"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 180.740555 53.189030 57.310307
+		Scale = 10.000000 10.000000 10.000000
+	}
+	EtherSkelModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		Materials = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\environment\environmentskinned.kbshader
+				ShaderParams = 4
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "diffuse"
+						Texture = .\assets\models\environment\crate_1.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "normal"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "propertyMap"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "emissiveMap"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		RenderPass = LightingPass
+		TranslucencySortBias =  0.000000
+		Model = .\assets\models\environment\crate_1_destructible.fbx
+		Animations = 0
+		DebugAnimIndex = -1
+		IsFirstPersonModel = 0
+	}
+	EtherDestructibleComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		DamagedModel = NULL
+		DamagedModelMaterialParams = 0
+		DestructibleBehavior = PushFromImpactPoint
+		DestructionFX = 0 0 0 0
+		DestructionFXLocalOffset = 0.000000 0.000000 0.000000
+		Gravity = 0.000000 22.000000 0.000000
+		Health =  0.000000
+		ImpactFX = 2914882686 1195769252 1420378815 2077859665
+		MaxAngularVelocity =  0.000000
+		MaxLifeTime =  10.000000
+		MaxLinearVelocity = 20.000000 0.000000 0.000000
+		MinAngularVelocity =  5.000000
+		MinLinearVelocity = 5.000000 0.000000 0.000000
+		NonDamagedModel = NULL
+		NonDamagedModelMaterialParams = 0
+		ResetSim = 0
+	}
+	kbCollisionComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CollisionType = Sphere
+		Extent = 20.000000 20.000000 20.000000
+		SphereCollision = 0
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Terrain"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 0.000000 -410.000000 0.000000
+		Scale = 1.000000 1.000000 1.000000
+	}
+	kbTerrainComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		Materials = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\environment\basicterrain.kbshader
+				ShaderParams = 15
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "mat1And2UVScale"
+						Texture = NULL
+						Vector = 1.000000 1.000000 55.000000 55.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "mat3And4UVScale"
+						Texture = NULL
+						Vector = 25.000000 25.000000 1.000000 1.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "specFactors"
+						Texture = NULL
+						Vector = 1.000000 1.000000 5.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "specPowerMultipliers"
+						Texture = NULL
+						Vector = 1.000000 3.000000 55.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "splatMap"
+						Texture = .\assets\terrain\basicterrain\terrain1_splatmap.bmp
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "Mat1Diffuse"
+						Texture = .\assets\terrain\textures\sand.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "Mat1Normal"
+						Texture = .\assets\terrain\textures\sand_nm.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "Mat1Specular"
+						Texture = .\assets\terrain\textures\sand.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "Mat2Diffuse"
+						Texture = .\assets\terrain\textures\rocky_diffuse.dds
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "Mat2Normal"
+						Texture = .\assets\terrain\textures\rocky_normal.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "Mat2Specular"
+						Texture = .\assets\terrain\textures\rocky_diffuse.dds
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "Mat3Diffuse"
+						Texture = .\assets\terrain\textures\grassy_lowrock_diffuse.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "Mat3Normal"
+						Texture = .\assets\terrain\textures\grassy_lowrock_normal.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "Mat3Specular"
+						Texture = .\assets\terrain\textures\grassy_lowrock_diffuse.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "Mat4Diffuse"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		RenderPass = LightingPass
+		TranslucencySortBias =  -1.000000
+		Dimensions = 129
+		Grass = 1
+			kbGrass { 
+				Enabled = 1
+				LifeTime =  -1.000000
+				BladeMaxHeight =  55.000000
+				BladeMaxWidth =  1.050000
+				BladeMinHeight =  25.000000
+				BladeMinWidth =  0.850000
+				FakeAODarkness =  0.250000
+				FakeAOPower =  2.000000
+				GrassCellsPerTerrainSide = 80
+				MaxBladeJitterOffset =  1.000000
+				MaxPatchJitterOffset =  1.000000
+				PatchEndCullDistance =  1100.000000
+				PatchStartCullDistance =  1000.000000
+				PatchesPerCellSide = 60
+				ShaderParams = 10
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "plant_1_2_size"
+						Texture = NULL
+						Vector = 1.200000 0.900000 1.300000 0.800000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "plant_3_size"
+						Texture = NULL
+						Vector = 1.300000 0.850000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "windTex1"
+						Texture = .\assets\terrain\basicterrain\wind_1.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "wind1_tile_speed"
+						Texture = NULL
+						Vector = 5.000000 5.000000 -0.010000 0.050000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "wind1_mag_lod"
+						Texture = NULL
+						Vector = 3.000000 3.000000 0.000000 5.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "windTex2"
+						Texture = .\assets\terrain\basicterrain\wind_2.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "wind2_tile_speed"
+						Texture = NULL
+						Vector = 5.000000 5.000000 0.050000 0.050000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "wind2_mag_lod"
+						Texture = NULL
+						Vector = 3.000000 3.000000 2.000000 5.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "grassDiffuseMap"
+						Texture = .\assets\terrain\foliage\grass_1.dds
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "noiseMap"
+						Texture = .\assets\fx\noise\noisemap.png
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		HeightMap = .\assets\terrain\basicterrain\terrain1_height.bmp
+		HeightScale =  4096.000000
+		SplatMap = .\assets\terrain\basicterrain\terrain1_splatmap.bmp
+		Width =  8192.000000
+	}
+	kbCollisionComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CollisionType = CustomTriangles
+		Extent = 10.000000 10.000000 10.000000
+		SphereCollision = 0
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Entity_24"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = -79.709572 130.834137 -118.548103
+		Scale = 1.000000 1.000000 1.000000
+	}
+	kbParticleComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = ""
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 0.000000 0.000000 0.000000
+		Scale = 1.000000 1.000000 1.000000
+		AlphaOverLife = 0
+		ColorOverLife = 0
+		EndColor = 1.000000 1.000000 1.000000 1.000000
+		Gravity = 0.000000 -100.500000 0.000000
+		MaterialList = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\fx\particleatlas.kbshader
+				ShaderParams = 1
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "shaderTexture"
+						Texture = .\assets\fx\concreteparticles.dds
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		MaxBurstCount = 10
+		MaxDuration =  3.000000
+		MaxEndRotationRate =  0.000000
+		MaxEndSize = 1.500000 1.500000 1.500000
+		MaxEndVelocity = 75.000000 -20.000000 -50.000000
+		MaxSpawnRate =  2.000000
+		MaxStart3DOffset = 0.000000 0.000000 0.000000
+		MaxStart3DRotation = 0.000000 0.000000 0.000000
+		MaxStartRotationRate =  0.000000
+		MaxStartSize = 1.500000 1.500000 1.500000
+		MaxStartVelocity = 75.000000 50.000000 -20.000000
+		MinBurstCount = 10
+		MinDuration =  3.000000
+		MinEndRotationRate =  0.000000
+		MinEndSize = 1.000000 1.000000 1.000000
+		MinEndVelocity = 75.000000 -20.000000 -50.000000
+		MinSpawnRate =  1.000000
+		MinStart3DOffset = 0.000000 0.000000 0.000000
+		MinStart3DRotation = 0.000000 0.000000 0.000000
+		MinStartRotationRate =  0.000000
+		MinStartSize = 1.000000 1.000000 1.000000
+		MinStartVelocity = -75.000000 -20.000000 -50.000000
+		ModelEmitter = 0
+		ParticleBillboardType = FaceCamera
+		StartColor = 1.000000 1.000000 1.000000 1.000000
+		StartDelay =  0.000000
+		TotalDuration =  0.500000
+		TranslucencySortBias =  0.000000
+		VelocityCurve = 0
+	}
+	kbParticleComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		Name = ""
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 0.000000 0.000000 0.000000
+		Scale = 2.000000 2.000000 2.000000
+		AlphaOverLife = 0
+		ColorOverLife = 0
+		EndColor = 0.000000 0.000000 0.000000 0.000000
+		Gravity = 0.000000 0.000000 0.000000
+		MaterialList = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = ..\..\kbengine\assets\shaders\basicparticle.kbshader
+				ShaderParams = 1
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "shaderTexture"
+						Texture = .\assets\fx\impactsmoke.dds
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		MaxBurstCount = 5
+		MaxDuration =  1.000000
+		MaxEndRotationRate =  0.000000
+		MaxEndSize = 3.000000 3.000000 3.000000
+		MaxEndVelocity = 0.000000 0.000000 0.000000
+		MaxSpawnRate =  0.000000
+		MaxStart3DOffset = 0.000000 0.000000 0.000000
+		MaxStart3DRotation = 0.000000 0.000000 0.000000
+		MaxStartRotationRate =  0.000000
+		MaxStartSize = 3.000000 3.000000 3.000000
+		MaxStartVelocity = 3.500000 3.500000 -5.500000
+		MinBurstCount = 4
+		MinDuration =  1.000000
+		MinEndRotationRate =  0.000000
+		MinEndSize = 3.000000 3.000000 3.000000
+		MinEndVelocity = 0.000000 0.000000 0.000000
+		MinSpawnRate =  0.000000
+		MinStart3DOffset = 0.000000 0.000000 0.000000
+		MinStart3DRotation = 0.000000 0.000000 0.000000
+		MinStartRotationRate =  0.000000
+		MinStartSize = 1.200000 1.200000 1.200000
+		MinStartVelocity = -3.500000 -3.500000 -7.500000
+		ModelEmitter = 0
+		ParticleBillboardType = FaceCamera
+		StartColor = 0.250000 0.250000 0.250000 0.250000
+		StartDelay =  0.000000
+		TotalDuration =  2.000000
+		TranslucencySortBias =  0.000000
+		VelocityCurve = 0
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Wood_Impact_1"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 64.022903 51.456993 -36.990131
+		Scale = 1.000000 1.000000 1.000000
+	}
+	kbParticleComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = ""
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 0.000000 0.000000 0.000000
+		Scale = 2.000000 2.000000 2.000000
+		AlphaOverLife = 0
+		ColorOverLife = 0
+		EndColor = 1.000000 1.000000 1.000000 1.000000
+		Gravity = 0.000000 -100.500000 0.000000
+		MaterialList = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\fx\particle_blendadd.kbshader
+				ShaderParams = 2
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "blendAddProps"
+						Texture = NULL
+						Vector = 1.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "shaderTexture"
+						Texture = .\assets\fx\wood\wood_splinter.dds
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		MaxBurstCount = 25
+		MaxDuration =  3.000000
+		MaxEndRotationRate =  5.000000
+		MaxEndSize = 1.100000 1.100000 1.100000
+		MaxEndVelocity = 75.000000 -20.000000 -50.000000
+		MaxSpawnRate =  2.000000
+		MaxStart3DOffset = 0.000000 0.000000 0.000000
+		MaxStart3DRotation = 0.000000 0.000000 0.000000
+		MaxStartRotationRate =  15.000000
+		MaxStartSize = 1.100000 1.100000 1.100000
+		MaxStartVelocity = 75.000000 50.000000 -20.000000
+		MinBurstCount = 20
+		MinDuration =  3.000000
+		MinEndRotationRate =  0.000000
+		MinEndSize = 0.500000 0.500000 0.500000
+		MinEndVelocity = 75.000000 -20.000000 -50.000000
+		MinSpawnRate =  1.000000
+		MinStart3DOffset = 0.000000 0.000000 0.000000
+		MinStart3DRotation = 0.000000 0.000000 0.000000
+		MinStartRotationRate =  2.000000
+		MinStartSize = 0.500000 0.500000 0.500000
+		MinStartVelocity = -75.000000 -20.000000 -50.000000
+		ModelEmitter = 0
+		ParticleBillboardType = FaceCamera
+		StartColor = 1.000000 1.000000 1.000000 1.000000
+		StartDelay =  0.000000
+		TotalDuration =  0.500000
+		TranslucencySortBias =  0.000000
+		VelocityCurve = 0
+	}
+	kbParticleComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = ""
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 0.000000 0.000000 0.000000
+		Scale = 0.200000 0.200000 0.200000
+		AlphaOverLife = 0
+		ColorOverLife = 0
+		EndColor = 0.000000 0.000000 0.000000 0.000000
+		Gravity = 0.000000 -0.500000 0.000000
+		MaterialList = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\fx\particle_blendadd.kbshader
+				ShaderParams = 2
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "blendAddProps"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "shaderTexture"
+						Texture = .\assets\fx\smoke\smokeatlas_1.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		MaxBurstCount = 75
+		MaxDuration =  0.500000
+		MaxEndRotationRate =  0.500000
+		MaxEndSize = 3.500000 3.500000 3.500000
+		MaxEndVelocity = 0.500000 -7.000000 0.500000
+		MaxSpawnRate =  2.000000
+		MaxStart3DOffset = 0.000000 0.000000 0.000000
+		MaxStart3DRotation = 0.000000 0.000000 0.000000
+		MaxStartRotationRate =  5.000000
+		MaxStartSize = 0.100000 0.100000 0.100000
+		MaxStartVelocity = 1.000000 1.000000 -10.000000
+		MinBurstCount = 50
+		MinDuration =  0.350000
+		MinEndRotationRate =  0.000000
+		MinEndSize = 3.000000 3.000000 3.000000
+		MinEndVelocity = -0.500000 -2.000000 -0.500000
+		MinSpawnRate =  1.000000
+		MinStart3DOffset = 0.000000 0.000000 0.000000
+		MinStart3DRotation = 0.000000 0.000000 0.000000
+		MinStartRotationRate =  0.200000
+		MinStartSize = 0.000000 0.000000 0.000000
+		MinStartVelocity = -1.000000 -1.000000 -5.000000
+		ModelEmitter = 0
+		ParticleBillboardType = FaceCamera
+		StartColor = 1.000000 1.000000 1.000000 1.000000
+		StartDelay =  0.000000
+		TotalDuration =  0.500000
+		TranslucencySortBias =  0.000000
+		VelocityCurve = 0
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Barrel_0"
+		Orientation = 0.000000 0.636307 0.000000 0.771436
+		Position = -5.213316 12.000000 63.029049
+		Scale = 7.000000 7.000000 7.000000
+	}
+	EtherSkelModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 1
+		Materials = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\environment\environmentskinned.kbshader
+				ShaderParams = 4
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "diffuse"
+						Texture = .\assets\models\environment\barrel_elp.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "normal"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "propertyMap"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "emissiveMap"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		RenderPass = LightingPass
+		TranslucencySortBias =  0.000000
+		Model = .\assets\models\environment\barrel_elp_destructible.fbx
+		Animations = 0
+		DebugAnimIndex = -1
+		IsFirstPersonModel = 0
+	}
+	EtherDestructibleComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		DamagedModel = .\assets\models\environment\barrel_elp_destructible.fbx
+		DamagedModelMaterialParams = 0
+		DestructibleBehavior = UserVelocity
+		DestructionFX = 1529798310 1082595041 1391599796 3574967169
+		DestructionFXLocalOffset = 0.000000 100.000000 0.000000
+		Gravity = 0.000000 25.000000 0.000000
+		Health =  0.000000
+		ImpactFX = 0 0 0 0
+		MaxAngularVelocity =  15.000000
+		MaxLifeTime =  10.000000
+		MaxLinearVelocity = 125.000000 205.000000 50.000000
+		MinAngularVelocity =  -15.000000
+		MinLinearVelocity = -125.000000 155.000000 -50.000000
+		NonDamagedModel = .\assets\models\environment\barrel_elp.fbx
+		NonDamagedModelMaterialParams = 0
+		ResetSim = 0
+	}
+	kbCollisionComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CollisionType = Sphere
+		Extent = 20.000000 20.000000 20.000000
+		SphereCollision = 0
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Crate_1"
+		Orientation = 0.000000 -0.726066 0.000000 0.687626
+		Position = 52.901390 8.545316 49.598412
+		Scale = 7.000000 7.000000 7.000000
+	}
+	EtherSkelModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 1
+		Materials = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\environment\environmentskinned.kbshader
+				ShaderParams = 4
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "diffuse"
+						Texture = .\assets\models\environment\barrel_elp.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "normal"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "propertyMap"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "emissiveMap"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		RenderPass = LightingPass
+		TranslucencySortBias =  0.000000
+		Model = .\assets\models\environment\barrel_elp_destructible.fbx
+		Animations = 0
+		DebugAnimIndex = -1
+		IsFirstPersonModel = 0
+	}
+	EtherDestructibleComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		DamagedModel = .\assets\models\environment\barrel_elp_destructible.fbx
+		DamagedModelMaterialParams = 1
+			kbShaderParamComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				ParamName = "diffuse"
+				Texture = .\assets\models\environment\barrel_elp_destructible.jpg
+				Vector = 0.000000 0.000000 0.000000 0.000000
+			}
+		DestructibleBehavior = UserVelocity
+		DestructionFX = 1529798310 1082595041 1391599796 3574967169
+		DestructionFXLocalOffset = 0.000000 100.000000 0.000000
+		Gravity = 0.000000 25.000000 0.000000
+		Health =  0.000000
+		ImpactFX = 0 0 0 0
+		MaxAngularVelocity =  15.000000
+		MaxLifeTime =  10.000000
+		MaxLinearVelocity = 125.000000 205.000000 50.000000
+		MinAngularVelocity =  -15.000000
+		MinLinearVelocity = -125.000000 155.000000 -50.000000
+		NonDamagedModel = .\assets\models\environment\barrel_elp.fbx
+		NonDamagedModelMaterialParams = 1
+			kbShaderParamComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				ParamName = "diffuse"
+				Texture = .\assets\models\environment\barrel_elp.jpg
+				Vector = 0.000000 0.000000 0.000000 0.000000
+			}
+		ResetSim = 0
+	}
+	kbCollisionComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CollisionType = Sphere
+		Extent = 20.000000 20.000000 20.000000
+		SphereCollision = 0
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		Name = "Crate_1"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 276.000000 2.128942 48.668808
+		Scale = 10.000000 10.000000 10.000000
+	}
+	EtherSkelModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		Materials = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\environment\environmentskinned.kbshader
+				ShaderParams = 4
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "diffuse"
+						Texture = .\assets\models\environment\crate_1.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "normal"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "propertyMap"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "emissiveMap"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		RenderPass = LightingPass
+		TranslucencySortBias =  0.000000
+		Model = .\assets\models\environment\crate_1_destructible.fbx
+		Animations = 0
+		DebugAnimIndex = -1
+		IsFirstPersonModel = 0
+	}
+	EtherDestructibleComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		DamagedModel = NULL
+		DamagedModelMaterialParams = 0
+		DestructibleBehavior = PushFromImpactPoint
+		DestructionFX = 0 0 0 0
+		DestructionFXLocalOffset = 0.000000 0.000000 0.000000
+		Gravity = 0.000000 22.000000 0.000000
+		Health =  0.000000
+		ImpactFX = 2914882686 1195769252 1420378815 2077859665
+		MaxAngularVelocity =  0.000000
+		MaxLifeTime =  10.000000
+		MaxLinearVelocity = 20.000000 0.000000 0.000000
+		MinAngularVelocity =  5.000000
+		MinLinearVelocity = 5.000000 0.000000 0.000000
+		NonDamagedModel = NULL
+		NonDamagedModelMaterialParams = 0
+		ResetSim = 0
+	}
+	kbCollisionComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CollisionType = Sphere
+		Extent = 20.000000 20.000000 20.000000
+		SphereCollision = 0
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		Name = "Crate_1"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 116.000000 5.000000 48.668808
+		Scale = 10.000000 10.000000 10.000000
+	}
+	EtherSkelModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		Materials = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\environment\environmentskinned.kbshader
+				ShaderParams = 4
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "diffuse"
+						Texture = .\assets\models\environment\crate_1.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "normal"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "propertyMap"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "emissiveMap"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		RenderPass = LightingPass
+		TranslucencySortBias =  0.000000
+		Model = .\assets\models\environment\crate_1_destructible.fbx
+		Animations = 0
+		DebugAnimIndex = -1
+		IsFirstPersonModel = 0
+	}
+	EtherDestructibleComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		DamagedModel = NULL
+		DamagedModelMaterialParams = 0
+		DestructibleBehavior = PushFromImpactPoint
+		DestructionFX = 0 0 0 0
+		DestructionFXLocalOffset = 0.000000 0.000000 0.000000
+		Gravity = 0.000000 22.000000 0.000000
+		Health =  0.000000
+		ImpactFX = 2914882686 1195769252 1420378815 2077859665
+		MaxAngularVelocity =  0.000000
+		MaxLifeTime =  10.000000
+		MaxLinearVelocity = 20.000000 0.000000 0.000000
+		MinAngularVelocity =  5.000000
+		MinLinearVelocity = 5.000000 0.000000 0.000000
+		NonDamagedModel = NULL
+		NonDamagedModelMaterialParams = 0
+		ResetSim = 0
+	}
+	kbCollisionComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CollisionType = Sphere
+		Extent = 20.000000 20.000000 20.000000
+		SphereCollision = 0
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Barrel_1"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 21.323498 13.383600 59.923164
+		Scale = 7.000000 7.000000 7.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		Materials = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\environment\environmentbase.kbshader
+				ShaderParams = 4
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "diffuse"
+						Texture = .\assets\models\environment\barrel_elp.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "normal"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "propertyMap"
+						Texture = .\assets\test\black.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "emissiveMap"
+						Texture = .\assets\test\black.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		RenderPass = LightingPass
+		TranslucencySortBias =  0.000000
+		Model = .\assets\models\environment\barrel_elp.fbx
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		Name = "Directional Light"
+		Orientation = -0.277256 -0.863607 -0.101756 0.408604
+		Position = 3726.540527 587.083923 730.834106
+		Scale = 1.000000 1.000000 1.000000
+	}
+	kbDirectionalLightComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadows = 1
+		Color = 0.564706 0.674510 0.901961 0.250000
+		Materials = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\lights\directionallighttoon.kbshader
+				ShaderParams = 13
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "lightColor"
+						Texture = NULL
+						Vector = 1.000000 1.000000 1.000000 1.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "cameraPosition"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "diffuseColorBand"
+						Texture = NULL
+						Vector = 0.001000 0.370000 0.500000 0.500000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "specularColorBand"
+						Texture = NULL
+						Vector = 0.200000 0.300000 0.950000 0.050000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "rimColor"
+						Texture = NULL
+						Vector = 0.350000 0.350000 0.350000 1.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "nonToonDiffuseScaleAndBias"
+						Texture = NULL
+						Vector = 0.900000 0.100000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "specParams"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.001000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorTexture"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "normalTexture"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "specularTexture"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "depthTexture"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "ShadowMap"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "rimParams"
+						Texture = NULL
+						Vector = 0.200000 0.900000 0.700000 1.000000
+					}
+			}
+		CascadedShadowSplits = 4
+ 100.000000
+ 200.000000
+ 300.000000
+ 400.000000
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		Name = "Explosion"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = -76.673889 54.670017 19.859879
+		Scale = 1.000000 1.000000 1.000000
+	}
+	kbParticleComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = ""
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 0.000000 0.000000 0.000000
+		Scale = 1.000000 1.000000 1.000000
+		AlphaOverLife = 2
+			kbAnimEvent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				EventName = ""
+				EventTime =  0.000000
+				EventValue =  1.000000
+			}
+			kbAnimEvent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				EventName = ""
+				EventTime =  1.000000
+				EventValue =  0.000000
+			}
+		ColorOverLife = 2
+			kbVectorAnimEvent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				EventName = ""
+				EventTime =  0.000000
+				EventValue = 1.000000 0.740000 0.511000
+			}
+			kbVectorAnimEvent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				EventName = ""
+				EventTime =  0.400000
+				EventValue = 0.000000 0.000000 0.000000
+			}
+		EndColor = 1.000000 1.000000 1.000000 1.000000
+		Gravity = 0.000000 0.000000 0.000000
+		MaterialList = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\fx\particle_blendadd.kbshader
+				ShaderParams = 2
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorMultplier"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "shaderTexture"
+						Texture = .\assets\fx\smoke\smokeatlas_1.dds
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		MaxBurstCount = 25
+		MaxDuration =  1.240000
+		MaxEndRotationRate =  0.050000
+		MaxEndSize = 100.000000 100.000000 100.000000
+		MaxEndVelocity = 1.000000 1.000000 1.000000
+		MaxSpawnRate =  0.000000
+		MaxStart3DOffset = 0.000000 0.000000 0.000000
+		MaxStart3DRotation = 0.000000 0.000000 0.000000
+		MaxStartRotationRate =  0.500000
+		MaxStartSize = 0.000000 0.000000 0.000000
+		MaxStartVelocity = 75.000000 75.000000 75.000000
+		MinBurstCount = 15
+		MinDuration =  0.500000
+		MinEndRotationRate =  -0.050000
+		MinEndSize = 80.000000 80.000000 80.000000
+		MinEndVelocity = -1.000000 -1.000000 -1.000000
+		MinSpawnRate =  0.000000
+		MinStart3DOffset = 0.000000 0.000000 0.000000
+		MinStart3DRotation = 0.000000 0.000000 0.000000
+		MinStartRotationRate =  -0.500000
+		MinStartSize = 0.000000 0.000000 0.000000
+		MinStartVelocity = -75.000000 -75.000000 -75.000000
+		ModelEmitter = 0
+		ParticleBillboardType = FaceCamera
+		StartColor = 1.000000 1.000000 1.000000 1.000000
+		StartDelay =  0.000000
+		TotalDuration =  10.000000
+		TranslucencySortBias =  0.000000
+		VelocityCurve = 3
+			kbAnimEvent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				EventName = ""
+				EventTime =  0.000000
+				EventValue =  1.000000
+			}
+			kbAnimEvent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				EventName = ""
+				EventTime =  0.050000
+				EventValue =  0.050000
+			}
+			kbAnimEvent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				EventName = ""
+				EventTime =  1.000000
+				EventValue =  0.000000
+			}
+	}
+	kbParticleComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Sparks"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 0.000000 0.000000 0.000000
+		Scale = 1.000000 1.000000 1.000000
+		AlphaOverLife = 2
+			kbAnimEvent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				EventName = ""
+				EventTime =  0.000000
+				EventValue =  1.000000
+			}
+			kbAnimEvent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				EventName = ""
+				EventTime =  1.000000
+				EventValue =  0.510000
+			}
+		ColorOverLife = 3
+			kbVectorAnimEvent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				EventName = ""
+				EventTime =  0.000000
+				EventValue = 1.000000 1.000000 1.000000
+			}
+			kbVectorAnimEvent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				EventName = ""
+				EventTime =  0.700000
+				EventValue = 1.000000 1.000000 1.000000
+			}
+			kbVectorAnimEvent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				EventName = ""
+				EventTime =  1.000000
+				EventValue = 0.000000 0.000000 0.000000
+			}
+		EndColor = 0.000000 0.000000 0.000000 1.000000
+		Gravity = 0.000000 -120.000000 0.000000
+		MaterialList = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\fx\particle_blendadd.kbshader
+				ShaderParams = 2
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorMultplier"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "shaderTexture"
+						Texture = .\assets\fx\fire\emberatlas_1.dds
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		MaxBurstCount = 40
+		MaxDuration =  1.330000
+		MaxEndRotationRate =  5.000000
+		MaxEndSize = 2.000000 2.000000 2.000000
+		MaxEndVelocity = 20.000000 20.000000 20.000000
+		MaxSpawnRate =  0.000000
+		MaxStart3DOffset = 0.000000 0.000000 0.000000
+		MaxStart3DRotation = 0.000000 0.000000 0.000000
+		MaxStartRotationRate =  5.000000
+		MaxStartSize = 0.000000 0.000000 0.000000
+		MaxStartVelocity = 50.000000 50.000000 50.000000
+		MinBurstCount = 35
+		MinDuration =  0.500000
+		MinEndRotationRate =  -5.000000
+		MinEndSize = 2.000000 2.000000 2.000000
+		MinEndVelocity = -20.000000 -20.000000 -20.000000
+		MinSpawnRate =  0.000000
+		MinStart3DOffset = 0.000000 0.000000 0.000000
+		MinStart3DRotation = 0.000000 0.000000 0.000000
+		MinStartRotationRate =  -4.000000
+		MinStartSize = 0.000000 0.000000 0.000000
+		MinStartVelocity = -50.000000 -50.000000 -50.000000
+		ModelEmitter = 0
+		ParticleBillboardType = FaceCamera
+		StartColor = 1.000000 1.000000 1.000000 1.000000
+		StartDelay =  0.000000
+		TotalDuration =  10.000000
+		TranslucencySortBias =  -1.000000
+		VelocityCurve = 3
+			kbAnimEvent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				EventName = ""
+				EventTime =  0.000000
+				EventValue =  1.000000
+			}
+			kbAnimEvent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				EventName = ""
+				EventTime =  1.000000
+				EventValue =  1.000000
+			}
+			kbAnimEvent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				EventName = ""
+				EventTime =  1.000000
+				EventValue =  1.000000
+			}
+	}
+	kbParticleComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Lingering Smoke"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 0.000000 0.000000 0.000000
+		Scale = 1.000000 1.000000 1.000000
+		AlphaOverLife = 3
+			kbAnimEvent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				EventName = ""
+				EventTime =  0.000000
+				EventValue =  0.000000
+			}
+			kbAnimEvent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				EventName = ""
+				EventTime =  0.250000
+				EventValue =  0.490000
+			}
+			kbAnimEvent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				EventName = ""
+				EventTime =  1.000000
+				EventValue =  0.000000
+			}
+		ColorOverLife = 0
+		EndColor = 0.080000 0.080000 0.080000 0.000000
+		Gravity = 0.000000 0.000000 0.000000
+		MaterialList = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\fx\particle_blendadd.kbshader
+				ShaderParams = 2
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorMultplier"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "shaderTexture"
+						Texture = .\assets\fx\smoke\smokeatlas_1.dds
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		MaxBurstCount = 15
+		MaxDuration =  6.000000
+		MaxEndRotationRate =  0.050000
+		MaxEndSize = 50.000000 50.000000 50.000000
+		MaxEndVelocity = 0.000000 0.000000 0.000000
+		MaxSpawnRate =  0.000000
+		MaxStart3DOffset = 0.000000 0.000000 0.000000
+		MaxStart3DRotation = 0.000000 0.000000 0.000000
+		MaxStartRotationRate =  0.200000
+		MaxStartSize = 30.000000 30.000000 30.000000
+		MaxStartVelocity = 15.000000 15.000000 15.000000
+		MinBurstCount = 5
+		MinDuration =  3.000000
+		MinEndRotationRate =  -0.050000
+		MinEndSize = 40.000000 40.000000 40.000000
+		MinEndVelocity = 0.000000 0.000000 0.000000
+		MinSpawnRate =  0.000000
+		MinStart3DOffset = 0.000000 0.000000 0.000000
+		MinStart3DRotation = 0.000000 0.000000 0.000000
+		MinStartRotationRate =  -0.200000
+		MinStartSize = 20.000000 20.000000 20.000000
+		MinStartVelocity = -15.000000 -15.000000 -15.000000
+		ModelEmitter = 0
+		ParticleBillboardType = FaceCamera
+		StartColor = 0.080000 0.080000 0.080000 0.010000
+		StartDelay =  0.000000
+		TotalDuration =  10.000000
+		TranslucencySortBias =  1.000000
+		VelocityCurve = 3
+			kbAnimEvent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				EventName = ""
+				EventTime =  0.000000
+				EventValue =  1.000000
+			}
+			kbAnimEvent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				EventName = ""
+				EventTime =  0.230000
+				EventValue =  0.100000
+			}
+			kbAnimEvent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				EventName = ""
+				EventTime =  1.000000
+				EventValue =  0.000000
+			}
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "WorldFX"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 6.818789 38.074856 14.711714
+		Scale = 1.000000 1.000000 1.000000
+	}
+	EtherFogComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		Clamp =  0.500000
+		Color = 0.156863 0.188235 0.278431 1.000000
+		EndDist =  1000.000000
+		Shader = .\assets\shaders\postprocess\fog.kbshader
+		StartDist =  300.000000
+	}
+	EtherAntialiasingComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		Shader = .\assets\shaders\postprocess\antialiasing.kbshader
+	}
+	EtherEnviroComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		MaxRainSheetTileAndSpeed = 3.000000 5.000000 3.000000 5.000000
+		MinRainSheetTileAndSpeed = 3.000000 5.000000 3.000000 5.000000
+		RainColor = 1.000000 1.000000 1.000000 0.300000
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Cool View"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = -714.295959 -27.511972 -1107.563599
+		Scale = 1.000000 1.000000 1.000000
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "CloudDome"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 0.000000 0.000000 0.000000
+		Scale = 1.000000 1.000000 1.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		Materials = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\skybox\clouddome_smoothstep.kbshader
+				ShaderParams = 7
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "diffuseTexture"
+						Texture = .\assets\models\skydomes\clouds_normalmap1.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "cloudTileOffset"
+						Texture = NULL
+						Vector = 5.000000 1.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "cloudScrollRate_AlphaStep"
+						Texture = NULL
+						Vector = 0.000000 0.010000 0.100000 0.600000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "cloudColor"
+						Texture = NULL
+						Vector = 0.290196 0.274510 0.341176 0.500000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "cloudEmissive"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 1.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "sunDiscColor"
+						Texture = NULL
+						Vector = 25.000000 25.000000 25.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "sunDiscParams"
+						Texture = NULL
+						Vector = 0.999000 0.000000 0.000000 0.000000
+					}
+			}
+		RenderPass = TranslucentPass
+		TranslucencySortBias =  0.000000
+		Model = .\assets\models\skydomes\clouddome.fbx
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Overhead Clouds"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 0.000000 0.000000 0.000000
+		Scale = 55.000000 55.000000 55.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		Materials = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\skybox\overheadcloudplane.kbshader
+				ShaderParams = 5
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "diffuseTexture"
+						Texture = .\assets\models\skydomes\basic_clouds.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "cloudTileAndOffset"
+						Texture = NULL
+						Vector = 2.000000 2.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "cloud12_ScrollRate"
+						Texture = NULL
+						Vector = 0.000000 -0.010000 0.000000 -0.020000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "cloud34_ScrollRate"
+						Texture = NULL
+						Vector = 0.000000 0.005000 0.000000 -0.004000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "cloudColor"
+						Texture = NULL
+						Vector = 32.000000 1.000000 1.000000 0.000000
+					}
+			}
+		RenderPass = Post-LightingPass
+		TranslucencySortBias =  0.000000
+		Model = .\assets\models\skydomes\overheadcloudplane.fbx
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "CloudDome2"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 0.000000 0.000000 0.000000
+		Scale = 1.000000 1.000000 1.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		Materials = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\skybox\clouddome_static.kbshader
+				ShaderParams = 2
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "cloudColor"
+						Texture = NULL
+						Vector = 0.050000 0.025000 0.001000 5.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "diffuseTexture"
+						Texture = .\assets\models\skydomes\clouds_background_1.tif
+						Vector = 1.000000 0.500000 0.000000 1.000000
+					}
+			}
+		RenderPass = Post-LightingPass
+		TranslucencySortBias =  0.000000
+		Model = .\assets\models\skydomes\clouddome.fbx
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Reuben"
+		Orientation = 0.000000 0.863958 0.000000 0.503565
+		Position = 3721.557373 565.919189 728.312256
+		Scale = 5.000000 5.000000 5.000000
+	}
+	EtherSkelModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		Materials = 5
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\character\characterbase.kbshader
+				ShaderParams = 1
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorTexture"
+						Texture = .\assets\visualtarget\reuben\reuben\reubenfacebase_color.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\character\characterbase.kbshader
+				ShaderParams = 1
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorTexture"
+						Texture = .\assets\visualtarget\reuben\reuben\reubeneye_color.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\character\characterbase.kbshader
+				ShaderParams = 1
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorTexture"
+						Texture = .\assets\visualtarget\reuben\reuben\reubenoutfitbase_color.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\character\characterbase.kbshader
+				ShaderParams = 1
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorTexture"
+						Texture = .\assets\visualtarget\reuben\reuben\reubenoutfitbase_color.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\character\characterbase.kbshader
+				ShaderParams = 1
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorTexture"
+						Texture = .\assets\visualtarget\reuben\reuben\machete.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		RenderPass = LightingPass
+		TranslucencySortBias =  0.000000
+		Model = .\assets\visualtarget\reuben\reuben\reubenbase.ms3d
+		Animations = 1
+			EtherAnimComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Animation = .\assets\visualtarget\reuben\reuben\reubenexecution.kbanim.ms3d
+				AnimationEvent = 0
+				AnimationName = "Execution"
+				IsLooping = 0
+				TimeScale =  1.000000
+			}
+		DebugAnimIndex = 0
+		IsFirstPersonModel = 0
+	}
+	EtherSkelModelComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		Materials = 5
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\character\characteroutline.kbshader
+				ShaderParams = 1
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "outlineParams"
+						Texture = NULL
+						Vector = 0.100000 5.000000 0.000000 0.000000
+					}
+			}
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\character\characteroutline.kbshader
+				ShaderParams = 1
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "outlineParams"
+						Texture = NULL
+						Vector = 0.100000 5.000000 0.000000 0.000000
+					}
+			}
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\character\characteroutline.kbshader
+				ShaderParams = 2
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorTexture"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "outlineParams"
+						Texture = NULL
+						Vector = 0.100000 5.000000 0.000000 0.000000
+					}
+			}
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\character\characteroutline.kbshader
+				ShaderParams = 2
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorTexture"
+						Texture = NULL
+						Vector = 0.100000 5.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "outlineParams"
+						Texture = NULL
+						Vector = 0.100000 5.000000 0.000000 0.000000
+					}
+			}
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\character\characteroutline.kbshader
+				ShaderParams = 2
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "outlineParams"
+						Texture = NULL
+						Vector = 0.010000 5.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorTexture"
+						Texture = .\assets\models\characters\izzy_combat\face.tif
+						Vector = 0.100000 5.000000 0.000000 0.000000
+					}
+			}
+		RenderPass = LightingPass
+		TranslucencySortBias =  0.000000
+		Model = .\assets\visualtarget\reuben\reuben\reubenbase.ms3d
+		Animations = 1
+			EtherAnimComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Animation = .\assets\visualtarget\reuben\reuben\reubenexecution.kbanim.ms3d
+				AnimationEvent = 0
+				AnimationName = ""
+				IsLooping = 0
+				TimeScale =  1.000000
+			}
+		DebugAnimIndex = 0
+		IsFirstPersonModel = 0
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Machete Soldier"
+		Orientation = 0.000000 -0.363046 0.000000 -0.931771
+		Position = 3656.986816 558.928528 888.083374
+		Scale = 5.000000 5.000000 5.000000
+	}
+	EtherSkelModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		Materials = 5
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\character\characterbase.kbshader
+				ShaderParams = 1
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorTexture"
+						Texture = .\assets\visualtarget\reuben\soldier\basesoldierface.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\character\characterbase.kbshader
+				ShaderParams = 1
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorTexture"
+						Texture = .\assets\visualtarget\reuben\soldier\basesoldiereye.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\character\characterbase.kbshader
+				ShaderParams = 1
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorTexture"
+						Texture = .\assets\visualtarget\reuben\soldier\basesoldieroutfit_color.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\character\characterbase.kbshader
+				ShaderParams = 1
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorTexture"
+						Texture = .\assets\visualtarget\reuben\soldier\basesoldieroutfit_color.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\character\characterbase.kbshader
+				ShaderParams = 1
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorTexture"
+						Texture = .\assets\visualtarget\reuben\soldier\basesoldieroutfit_color.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		RenderPass = LightingPass
+		TranslucencySortBias =  0.000000
+		Model = .\assets\visualtarget\reuben\soldier\basesoldier.ms3d
+		Animations = 1
+			EtherAnimComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Animation = .\assets\visualtarget\reuben\soldier\basesoldier_run2.kbanim.ms3d
+				AnimationEvent = 0
+				AnimationName = ""
+				IsLooping = 0
+				TimeScale =  1.000000
+			}
+		DebugAnimIndex = 0
+		IsFirstPersonModel = 0
+	}
+	EtherSkelModelComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		Materials = 5
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\character\characteroutline.kbshader
+				ShaderParams = 2
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorTexture"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "outlineParams"
+						Texture = NULL
+						Vector = 0.300000 5.000000 0.000000 0.000000
+					}
+			}
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\character\characteroutline.kbshader
+				ShaderParams = 2
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorTexture"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "outlineParams"
+						Texture = NULL
+						Vector = 0.300000 5.000000 0.000000 0.000000
+					}
+			}
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\character\characteroutline.kbshader
+				ShaderParams = 2
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorTexture"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "outlineParams"
+						Texture = NULL
+						Vector = 0.300000 5.000000 0.000000 0.000000
+					}
+			}
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\character\characteroutline.kbshader
+				ShaderParams = 2
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorTexture"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "outlineParams"
+						Texture = NULL
+						Vector = 0.300000 5.000000 0.000000 0.000000
+					}
+			}
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\character\characteroutline.kbshader
+				ShaderParams = 2
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "outlineParams"
+						Texture = NULL
+						Vector = 0.300000 5.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorTexture"
+						Texture = NULL
+						Vector = 0.100000 5.000000 0.000000 0.000000
+					}
+			}
+		RenderPass = LightingPass
+		TranslucencySortBias =  0.000000
+		Model = .\assets\visualtarget\reuben\soldier\basesoldier.ms3d
+		Animations = 1
+			EtherAnimComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Animation = .\assets\visualtarget\reuben\soldier\basesoldier_run2.kbanim.ms3d
+				AnimationEvent = 0
+				AnimationName = ""
+				IsLooping = 0
+				TimeScale =  1.000000
+			}
+		DebugAnimIndex = 0
+		IsFirstPersonModel = 0
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Soldier 1"
+		Orientation = 0.000000 -0.265176 0.000000 -0.964200
+		Position = 3626.553467 657.729431 879.778931
+		Scale = 5.000000 5.000000 5.000000
+	}
+	EtherSkelModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		Materials = 5
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\character\characterbase.kbshader
+				ShaderParams = 1
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorTexture"
+						Texture = .\assets\visualtarget\reuben\soldier\afrocubansoldier1_face.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\character\characterbase.kbshader
+				ShaderParams = 1
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorTexture"
+						Texture = .\assets\visualtarget\reuben\soldier\basesoldiereye.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\character\characterbase.kbshader
+				ShaderParams = 1
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorTexture"
+						Texture = .\assets\visualtarget\reuben\soldier\afrocubansoldieroutfit_color.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\character\characterbase.kbshader
+				ShaderParams = 1
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorTexture"
+						Texture = .\assets\visualtarget\reuben\soldier\afrocubansoldieroutfit_color.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\character\characterbase.kbshader
+				ShaderParams = 1
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorTexture"
+						Texture = .\assets\visualtarget\reuben\soldier\basesoldieroutfit_color.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		RenderPass = LightingPass
+		TranslucencySortBias =  0.000000
+		Model = .\assets\visualtarget\reuben\soldier\basesoldier.ms3d
+		Animations = 1
+			EtherAnimComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Animation = .\assets\visualtarget\reuben\soldier\basesoldier_run.kbanim.ms3d
+				AnimationEvent = 0
+				AnimationName = ""
+				IsLooping = 0
+				TimeScale =  1.000000
+			}
+		DebugAnimIndex = 0
+		IsFirstPersonModel = 0
+	}
+	EtherSkelModelComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		Materials = 5
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\character\characteroutline.kbshader
+				ShaderParams = 2
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorTexture"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "outlineParams"
+						Texture = NULL
+						Vector = 0.300000 5.000000 0.000000 0.000000
+					}
+			}
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\character\characteroutline.kbshader
+				ShaderParams = 2
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorTexture"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "outlineParams"
+						Texture = NULL
+						Vector = 0.300000 5.000000 0.000000 0.000000
+					}
+			}
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\character\characteroutline.kbshader
+				ShaderParams = 2
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorTexture"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "outlineParams"
+						Texture = NULL
+						Vector = 0.300000 5.000000 0.000000 0.000000
+					}
+			}
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\character\characteroutline.kbshader
+				ShaderParams = 2
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorTexture"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "outlineParams"
+						Texture = NULL
+						Vector = 0.300000 5.000000 0.000000 0.000000
+					}
+			}
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\character\characteroutline.kbshader
+				ShaderParams = 2
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "outlineParams"
+						Texture = NULL
+						Vector = 0.010000 5.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorTexture"
+						Texture = NULL
+						Vector = 0.300000 5.000000 0.000000 0.000000
+					}
+			}
+		RenderPass = Post-LightingPass
+		TranslucencySortBias =  0.000000
+		Model = .\assets\visualtarget\reuben\soldier\basesoldier.ms3d
+		Animations = 1
+			EtherAnimComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Animation = .\assets\visualtarget\reuben\soldier\basesoldier_run.kbanim.ms3d
+				AnimationEvent = 0
+				AnimationName = ""
+				IsLooping = 0
+				TimeScale =  1.000000
+			}
+		DebugAnimIndex = 0
+		IsFirstPersonModel = 0
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Soldier 2"
+		Orientation = 0.000000 -0.163920 0.000000 -0.986474
+		Position = 3592.376709 657.729431 977.708313
+		Scale = 5.000000 5.000000 5.000000
+	}
+	EtherSkelModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		Materials = 5
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\character\characterbase.kbshader
+				ShaderParams = 1
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorTexture"
+						Texture = .\assets\visualtarget\reuben\soldier\basesoldierface.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\character\characterbase.kbshader
+				ShaderParams = 1
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorTexture"
+						Texture = .\assets\visualtarget\reuben\soldier\basesoldiereye.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\character\characterbase.kbshader
+				ShaderParams = 1
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorTexture"
+						Texture = .\assets\visualtarget\reuben\soldier\basesoldieroutfit_color.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\character\characterbase.kbshader
+				ShaderParams = 1
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorTexture"
+						Texture = .\assets\visualtarget\reuben\soldier\basesoldieroutfit_color.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\character\characterbase.kbshader
+				ShaderParams = 1
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorTexture"
+						Texture = .\assets\visualtarget\reuben\soldier\basesoldieroutfit_color.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		RenderPass = LightingPass
+		TranslucencySortBias =  0.000000
+		Model = .\assets\visualtarget\reuben\soldier\basesoldier.ms3d
+		Animations = 1
+			EtherAnimComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Animation = .\assets\visualtarget\reuben\soldier\basesoldier_run3.kbanim.ms3d
+				AnimationEvent = 0
+				AnimationName = ""
+				IsLooping = 0
+				TimeScale =  1.000000
+			}
+		DebugAnimIndex = 0
+		IsFirstPersonModel = 0
+	}
+	EtherSkelModelComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		Materials = 5
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\character\characteroutline.kbshader
+				ShaderParams = 2
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorTexture"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "outlineParams"
+						Texture = NULL
+						Vector = 0.300000 5.000000 0.000000 0.000000
+					}
+			}
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\character\characteroutline.kbshader
+				ShaderParams = 2
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorTexture"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "outlineParams"
+						Texture = NULL
+						Vector = 0.300000 5.000000 0.000000 0.000000
+					}
+			}
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\character\characteroutline.kbshader
+				ShaderParams = 2
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorTexture"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "outlineParams"
+						Texture = NULL
+						Vector = 0.300000 5.000000 0.000000 0.000000
+					}
+			}
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\character\characteroutline.kbshader
+				ShaderParams = 2
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorTexture"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "outlineParams"
+						Texture = NULL
+						Vector = 0.300000 5.000000 0.000000 0.000000
+					}
+			}
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\character\characteroutline.kbshader
+				ShaderParams = 2
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "outlineParams"
+						Texture = NULL
+						Vector = 0.300000 5.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorTexture"
+						Texture = NULL
+						Vector = 0.300000 5.000000 0.000000 0.000000
+					}
+			}
+		RenderPass = Post-LightingPass
+		TranslucencySortBias =  0.000000
+		Model = .\assets\visualtarget\reuben\soldier\basesoldier.ms3d
+		Animations = 1
+			EtherAnimComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Animation = .\assets\visualtarget\reuben\soldier\basesoldier_run3.kbanim.ms3d
+				AnimationEvent = 0
+				AnimationName = ""
+				IsLooping = 0
+				TimeScale =  1.000000
+			}
+		DebugAnimIndex = 0
+		IsFirstPersonModel = 0
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Begging Soldier"
+		Orientation = 0.000000 -0.093144 0.000000 -0.995653
+		Position = 3721.323975 548.233337 769.806946
+		Scale = 5.000000 5.000000 5.000000
+	}
+	EtherSkelModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		Materials = 5
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\character\characterbase.kbshader
+				ShaderParams = 1
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorTexture"
+						Texture = .\assets\visualtarget\reuben\soldier\basesoldierface.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\character\characterbase.kbshader
+				ShaderParams = 1
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorTexture"
+						Texture = .\assets\visualtarget\reuben\soldier\basesoldiereye.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\character\characterbase.kbshader
+				ShaderParams = 1
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorTexture"
+						Texture = .\assets\visualtarget\reuben\soldier\basesoldieroutfit_color.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\character\characterbase.kbshader
+				ShaderParams = 1
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorTexture"
+						Texture = .\assets\visualtarget\reuben\soldier\basesoldieroutfit_color.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\fx\hackclip.kbshader
+				ShaderParams = 4
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "diffuse"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "normal"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "propertyMap"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "emissiveMap"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		RenderPass = LightingPass
+		TranslucencySortBias =  0.000000
+		Model = .\assets\visualtarget\reuben\soldier\basesoldier.ms3d
+		Animations = 1
+			EtherAnimComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Animation = .\assets\visualtarget\reuben\soldier\basesoldier_beg.kbanim.ms3d
+				AnimationEvent = 0
+				AnimationName = ""
+				IsLooping = 0
+				TimeScale =  1.000000
+			}
+		DebugAnimIndex = 0
+		IsFirstPersonModel = 0
+	}
+	EtherSkelModelComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		Materials = 5
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\character\characteroutline.kbshader
+				ShaderParams = 2
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorTexture"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "outlineParams"
+						Texture = NULL
+						Vector = 0.100000 5.000000 0.000000 0.000000
+					}
+			}
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\character\characteroutline.kbshader
+				ShaderParams = 2
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorTexture"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "outlineParams"
+						Texture = NULL
+						Vector = 0.100000 5.000000 0.000000 0.000000
+					}
+			}
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\character\characteroutline.kbshader
+				ShaderParams = 1
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "outlineParams"
+						Texture = NULL
+						Vector = 0.010000 5.000000 0.000000 0.000000
+					}
+			}
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\character\characteroutline.kbshader
+				ShaderParams = 2
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorTexture"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "outlineParams"
+						Texture = NULL
+						Vector = 0.100000 5.000000 0.000000 0.000000
+					}
+			}
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\fx\hackclip.kbshader
+				ShaderParams = 4
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "diffuse"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "normal"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "propertyMap"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "emissiveMap"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		RenderPass = LightingPass
+		TranslucencySortBias =  0.000000
+		Model = .\assets\visualtarget\reuben\soldier\basesoldier.ms3d
+		Animations = 1
+			EtherAnimComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Animation = .\assets\visualtarget\reuben\soldier\basesoldier_beg.kbanim.ms3d
+				AnimationEvent = 0
+				AnimationName = ""
+				IsLooping = 0
+				TimeScale =  1.000000
+			}
+		DebugAnimIndex = 0
+		IsFirstPersonModel = 0
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Dead Solider"
+		Orientation = 0.164222 -0.185100 0.029368 0.968456
+		Position = 3666.148193 583.672119 951.086731
+		Scale = 5.000000 5.000000 5.000000
+	}
+	EtherSkelModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		Materials = 5
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\character\characterbase.kbshader
+				ShaderParams = 1
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorTexture"
+						Texture = .\assets\visualtarget\reuben\soldier\basesoldierface.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\character\characterbase.kbshader
+				ShaderParams = 1
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorTexture"
+						Texture = .\assets\visualtarget\reuben\soldier\basesoldiereye.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\character\characterbase.kbshader
+				ShaderParams = 1
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorTexture"
+						Texture = .\assets\visualtarget\reuben\soldier\basesoldieroutfit_color.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\character\characterbase.kbshader
+				ShaderParams = 1
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorTexture"
+						Texture = .\assets\visualtarget\reuben\soldier\basesoldieroutfit_color.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\character\characterbase.kbshader
+				ShaderParams = 1
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorTexture"
+						Texture = .\assets\visualtarget\reuben\soldier\basesoldieroutfit_color.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		RenderPass = LightingPass
+		TranslucencySortBias =  0.000000
+		Model = .\assets\visualtarget\reuben\soldier\basesoldier.ms3d
+		Animations = 1
+			EtherAnimComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Animation = .\assets\visualtarget\reuben\soldier\basesoldier_dead.kbanim.ms3d
+				AnimationEvent = 0
+				AnimationName = ""
+				IsLooping = 0
+				TimeScale =  1.000000
+			}
+		DebugAnimIndex = 0
+		IsFirstPersonModel = 0
+	}
+	EtherSkelModelComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		Materials = 5
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\character\characteroutline.kbshader
+				ShaderParams = 2
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorTexture"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "outlineParams"
+						Texture = NULL
+						Vector = 0.300000 5.000000 0.000000 0.000000
+					}
+			}
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\character\characteroutline.kbshader
+				ShaderParams = 2
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorTexture"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "outlineParams"
+						Texture = NULL
+						Vector = 0.300000 5.000000 0.000000 0.000000
+					}
+			}
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\character\characteroutline.kbshader
+				ShaderParams = 1
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "outlineParams"
+						Texture = NULL
+						Vector = 0.300000 5.000000 0.000000 0.000000
+					}
+			}
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\character\characteroutline.kbshader
+				ShaderParams = 2
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorTexture"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "outlineParams"
+						Texture = NULL
+						Vector = 0.300000 5.000000 0.000000 0.000000
+					}
+			}
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\character\characteroutline.kbshader
+				ShaderParams = 2
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorTexture"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "outlineParams"
+						Texture = NULL
+						Vector = 0.300000 5.000000 0.000000 0.000000
+					}
+			}
+		RenderPass = LightingPass
+		TranslucencySortBias =  0.000000
+		Model = .\assets\visualtarget\reuben\soldier\basesoldier.ms3d
+		Animations = 1
+			EtherAnimComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Animation = .\assets\visualtarget\reuben\soldier\basesoldier_dead.kbanim.ms3d
+				AnimationEvent = 0
+				AnimationName = ""
+				IsLooping = 0
+				TimeScale =  1.000000
+			}
+		DebugAnimIndex = 0
+		IsFirstPersonModel = 0
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "PlayerStart"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 431.673035 1153.493164 3092.361328
+		Scale = 1.000000 1.000000 1.000000
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Reuben Rifle"
+		Orientation = -0.139071 0.000000 0.000000 0.990282
+		Position = 3727.639893 607.148865 733.061584
+		Scale = 0.700000 0.500000 0.700000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		Materials = 6
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\environment\environmentbase.kbshader
+				ShaderParams = 4
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "diffuse"
+						Texture = .\assets\visualtarget\reuben\machinegun.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "normal"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "propertyMap"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "emissiveMap"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\fx\hackclip.kbshader
+				ShaderParams = 4
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "diffuse"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "normal"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "propertyMap"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "emissiveMap"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\fx\hackclip.kbshader
+				ShaderParams = 4
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "diffuse"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "normal"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "propertyMap"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "emissiveMap"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\fx\hackclip.kbshader
+				ShaderParams = 4
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "diffuse"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "normal"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "propertyMap"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "emissiveMap"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\fx\hackclip.kbshader
+				ShaderParams = 4
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "diffuse"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "normal"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "propertyMap"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "emissiveMap"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = NULL
+				ShaderParams = 0
+			}
+		RenderPass = LightingPass
+		TranslucencySortBias =  0.000000
+		Model = .\assets\models\items\el_rifle_fp.ms3d
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Wall"
+		Orientation = 0.000000 -0.585667 0.000000 0.810552
+		Position = 3610.196289 556.203125 938.558167
+		Scale = 50.000000 20.000000 20.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		Materials = 2
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\environment\environmentbase.kbshader
+				ShaderParams = 4
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "diffuse"
+						Texture = .\assets\visualtarget\reuben\grasstop.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "normal"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "propertyMap"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "emissiveMap"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\environment\environmentbase.kbshader
+				ShaderParams = 4
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "diffuse"
+						Texture = .\assets\visualtarget\reuben\dirtground.png
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "normal"
+						Texture = .\assets\visualtarget\reuben\dirtground_n.png
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "propertyMap"
+						Texture = .\assets\test\halfgray.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "emissiveMap"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		RenderPass = LightingPass
+		TranslucencySortBias =  0.000000
+		Model = .\assets\visualtarget\reuben\wall.fbx
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Demon Shadow"
+		Orientation = -0.001522 0.178246 -0.000276 0.983985
+		Position = 3656.622559 623.286255 853.493042
+		Scale = 55.000000 75.000000 150.000000
+	}
+	kbDirectionalLightComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadows = 0
+		Color = 2.000000 2.000000 2.000000 3.000000
+		Materials = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\lights\directionallighttoon_noshadow.kbshader
+				ShaderParams = 16
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "lightColor"
+						Texture = NULL
+						Vector = 55.000000 55.000000 55.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "cameraPosition"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "diffuseColorBand"
+						Texture = NULL
+						Vector = 0.001000 0.370000 0.500000 0.500000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "specularColorBand"
+						Texture = NULL
+						Vector = 0.200000 0.300000 0.950000 0.950000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "rimParams"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "rimColor"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "nonToonDiffuseScaleAndBias"
+						Texture = NULL
+						Vector = 1.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "shadowParams"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "noiseScaleBias1"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "noiseScaleBias2"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorTexture"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "normalTexture"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "specularTexture"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "depthTexture"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "ShadowMap"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "NoiseMap"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		CascadedShadowSplits = 0
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		Materials = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\fx\decal_modulate.kbshader
+				ShaderParams = 6
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "edgeFadeColor"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "edgeFadeParams"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "distortionParams"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "ProjectionTex"
+						Texture = .\assets\visualtarget\reuben\demonshadow.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "decalParams1"
+						Texture = NULL
+						Vector = 0.830000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "decalMask"
+						Texture = NULL
+						Vector = 0.000000 1.000000 0.000000 0.000000
+					}
+			}
+		RenderPass = TranslucentPass
+		TranslucencySortBias =  0.000000
+		Model = .\assets\models\test\unitcube.ms3d
+	}
+	EtherComponentToggler { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		MaxFirstBurstDelaySec =  1.000000
+		MaxNumOnBursts = 5
+		MaxOffSeconds =  3.000000
+		MaxOnSeconds =  0.200000
+		MaxSecBetweenBursts =  0.100000
+		MinFirstBurstDelaySec =  1.000000
+		MinNumOnBursts = 1
+		MinOffSeconds =  1.000000
+		MinOnSeconds =  0.100000
+		MinSecBetweenBursts =  0.100000
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Directional Fill"
+		Orientation = -0.215390 0.522008 -0.069964 0.822326
+		Position = 3784.042480 642.332336 754.327698
+		Scale = 1.000000 1.000000 1.000000
+	}
+	kbDirectionalLightComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadows = 0
+		Color = 1.000000 1.000000 1.000000 1.000000
+		Materials = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\lights\environmentdirectionalfill.kbshader
+				ShaderParams = 7
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "lightColor"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "cameraPosition"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorTexture"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "normalTexture"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "specularTexture"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "depthTexture"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "ShadowMap"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		CascadedShadowSplits = 0
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Blood"
+		Orientation = 0.000000 0.000000 -0.667678 0.744451
+		Position = 3671.467041 591.937439 961.865723
+		Scale = 7.000000 7.000000 7.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		Materials = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\fx\decal_modulate.kbshader
+				ShaderParams = 9
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "inverseModelMatrix"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "decalParams1"
+						Texture = NULL
+						Vector = 11.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorTexture"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "normalTexture"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "specularTexture"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "depthTexture"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "ShadowMap"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "ProjectionTex"
+						Texture = .\assets\visualtarget\reuben\bloodsplat.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "decalMask"
+						Texture = NULL
+						Vector = 1.000000 0.000000 0.000000 0.000000
+					}
+			}
+		RenderPass = LightingPass
+		TranslucencySortBias =  0.000000
+		Model = .\assets\models\test\unitcube.ms3d
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Ground Blood"
+		Orientation = 0.169249 -0.188709 -0.645870 0.720136
+		Position = 3674.488770 583.192444 959.949890
+		Scale = 30.000000 30.000000 30.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		Materials = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\fx\decal_modulate.kbshader
+				ShaderParams = 9
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "inverseModelMatrix"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "decalParams1"
+						Texture = NULL
+						Vector = 11.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorTexture"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "normalTexture"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "specularTexture"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "depthTexture"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "ShadowMap"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "ProjectionTex"
+						Texture = .\assets\visualtarget\reuben\bloodsplat2.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "decalMask"
+						Texture = NULL
+						Vector = 0.000000 1.000000 0.000000 0.000000
+					}
+			}
+		RenderPass = LightingPass
+		TranslucencySortBias =  0.000000
+		Model = .\assets\models\test\unitcube.ms3d
+	}
+}
+kbGameEntity 2609040299 1100347930 3115268521 1892043160 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Light Shafts"
+		Orientation = -0.007365 -0.850011 0.092800 0.518475
+		Position = 3712.549805 700.000000 725.149780
+		Scale = 1.000000 1.000000 1.000000
+	}
+	kbLightShaftsComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		BaseHeight =  0.750000
+		BaseWidth =  0.750000
+		Color = 0.005000 0.005000 0.005000 1.000000
+		Directional = 1
+		IterationHeight =  0.001500
+		IterationWidth =  0.001500
+		NumIteractions = 48
+		Texture = ..\..\kbengine\assets\textures\flare.jpg
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Enemy Machete"
+		Orientation = 0.783049 -0.535154 -0.060677 0.311065
+		Position = 3670.274902 590.080139 880.897461
+		Scale = 12.000000 12.000000 12.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		Materials = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\environment\environmentbase.kbshader
+				ShaderParams = 4
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "diffuse"
+						Texture = .\assets\visualtarget\reuben\machete.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "normal"
+						Texture = .\assets\test\flatnormal.bmp
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "propertyMap"
+						Texture = .\assets\test\black.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "emissiveMap"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		RenderPass = LightingPass
+		TranslucencySortBias =  0.000000
+		Model = .\assets\visualtarget\reuben\machete.fbx
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Enemy Pistol"
+		Orientation = -0.060521 -0.618176 -0.076363 0.779977
+		Position = 3627.836426 693.489319 866.151733
+		Scale = 10.000000 10.000000 10.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		Materials = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\environment\environmentbase.kbshader
+				ShaderParams = 4
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "diffuse"
+						Texture = .\assets\visualtarget\reuben\pistol.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "normal"
+						Texture = .\assets\test\flatnormal.bmp
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "propertyMap"
+						Texture = ..\..\kbengine\assets\textures\black.bmp
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "emissiveMap"
+						Texture = ..\..\kbengine\assets\textures\black.bmp
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		RenderPass = LightingPass
+		TranslucencySortBias =  0.000000
+		Model = .\assets\visualtarget\reuben\pistol.ms3d
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Enemy Rifle"
+		Orientation = 0.000000 0.982083 0.000000 -0.188449
+		Position = 3604.920654 697.704224 963.360168
+		Scale = 0.700000 0.500000 0.700000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		Materials = 5
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\environment\environmentbase.kbshader
+				ShaderParams = 4
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "diffuse"
+						Texture = .\assets\visualtarget\reuben\machinegun.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "normal"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "propertyMap"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "emissiveMap"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\fx\hackclip.kbshader
+				ShaderParams = 4
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "diffuse"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "normal"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "propertyMap"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "emissiveMap"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\fx\hackclip.kbshader
+				ShaderParams = 4
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "diffuse"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "normal"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "propertyMap"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "emissiveMap"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\fx\hackclip.kbshader
+				ShaderParams = 4
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "diffuse"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "normal"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "propertyMap"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "emissiveMap"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\fx\hackclip.kbshader
+				ShaderParams = 4
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "diffuse"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "normal"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "propertyMap"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "emissiveMap"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		RenderPass = LightingPass
+		TranslucencySortBias =  0.000000
+		Model = .\assets\models\items\el_rifle_fp.ms3d
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Rain"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 3752.401123 657.422668 951.250671
+		Scale = 1.000000 1.000000 1.000000
+	}
+	kbParticleComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		Name = ""
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 0.000000 0.000000 0.000000
+		Scale = 30.000000 50.000000 30.000000
+		AlphaOverLife = 0
+		ColorOverLife = 0
+		EndColor = 1.000000 1.000000 1.000000 1.000000
+		Gravity = 0.000000 0.000000 0.000000
+		MaterialList = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\fx\particle_rain.kbshader
+				ShaderParams = 2
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorMultplier"
+						Texture = NULL
+						Vector = 1.000000 1.000000 1.000000 1.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "shaderTexture"
+						Texture = .\assets\fx\rain\rain1.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		MaxBurstCount = 1
+		MaxDuration =  -1.000000
+		MaxEndRotationRate =  0.000000
+		MaxEndSize = 3.000000 3.000000 3.000000
+		MaxEndVelocity = 0.000000 0.000000 0.000000
+		MaxSpawnRate =  0.000000
+		MaxStart3DOffset = 100.000000 0.000000 100.000000
+		MaxStart3DRotation = 0.000000 0.000000 0.000000
+		MaxStartRotationRate =  15.000000
+		MaxStartSize = 3.000000 3.000000 3.000000
+		MaxStartVelocity = 0.000000 0.000000 0.000000
+		MinBurstCount = 1
+		MinDuration =  -1.000000
+		MinEndRotationRate =  0.000000
+		MinEndSize = 3.000000 3.000000 3.000000
+		MinEndVelocity = 0.000000 0.000000 0.000000
+		MinSpawnRate =  0.000000
+		MinStart3DOffset = -100.000000 0.000000 -100.000000
+		MinStart3DRotation = 0.000000 0.000000 0.000000
+		MinStartRotationRate =  5.000000
+		MinStartSize = 3.000000 3.000000 3.000000
+		MinStartVelocity = 0.000000 0.000000 0.000000
+		ModelEmitter = 0
+		ParticleBillboardType = AlignAlongVelocity
+		StartColor = 1.000000 1.000000 1.000000 1.000000
+		StartDelay =  0.000000
+		TotalDuration =  -1.000000
+		TranslucencySortBias =  0.000000
+		VelocityCurve = 0
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Rain"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 3796.662354 657.536072 712.942383
+		Scale = 1.000000 1.000000 1.000000
+	}
+	kbParticleComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		Name = ""
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 0.000000 0.000000 0.000000
+		Scale = 50.000000 75.000000 50.000000
+		AlphaOverLife = 0
+		ColorOverLife = 0
+		EndColor = 1.000000 1.000000 1.000000 1.000000
+		Gravity = 0.000000 0.000000 0.000000
+		MaterialList = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\fx\particle_rain.kbshader
+				ShaderParams = 2
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorMultplier"
+						Texture = NULL
+						Vector = 1.000000 1.000000 1.000000 1.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "shaderTexture"
+						Texture = .\assets\fx\rain\rain1.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		MaxBurstCount = 1
+		MaxDuration =  -1.000000
+		MaxEndRotationRate =  0.000000
+		MaxEndSize = 3.000000 3.000000 3.000000
+		MaxEndVelocity = 0.000000 0.000000 0.000000
+		MaxSpawnRate =  0.000000
+		MaxStart3DOffset = 100.000000 0.000000 100.000000
+		MaxStart3DRotation = 0.000000 0.000000 0.000000
+		MaxStartRotationRate =  15.000000
+		MaxStartSize = 3.000000 3.000000 3.000000
+		MaxStartVelocity = 0.000000 0.000000 0.000000
+		MinBurstCount = 1
+		MinDuration =  -1.000000
+		MinEndRotationRate =  0.000000
+		MinEndSize = 3.000000 3.000000 3.000000
+		MinEndVelocity = 0.000000 0.000000 0.000000
+		MinSpawnRate =  0.000000
+		MinStart3DOffset = -100.000000 0.000000 -100.000000
+		MinStart3DRotation = 0.000000 0.000000 0.000000
+		MinStartRotationRate =  5.000000
+		MinStartSize = 3.000000 3.000000 3.000000
+		MinStartVelocity = 0.000000 0.000000 0.000000
+		ModelEmitter = 0
+		ParticleBillboardType = AlignAlongVelocity
+		StartColor = 1.000000 1.000000 1.000000 1.000000
+		StartDelay =  0.000000
+		TotalDuration =  -1.000000
+		TranslucencySortBias =  0.000000
+		VelocityCurve = 0
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Rain"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 3796.662354 657.536072 784.747864
+		Scale = 1.000000 1.000000 1.000000
+	}
+	kbParticleComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		Name = ""
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 0.000000 0.000000 0.000000
+		Scale = 50.000000 75.000000 50.000000
+		AlphaOverLife = 0
+		ColorOverLife = 0
+		EndColor = 1.000000 1.000000 1.000000 1.000000
+		Gravity = 0.000000 0.000000 0.000000
+		MaterialList = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\fx\particle_rain.kbshader
+				ShaderParams = 2
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorMultplier"
+						Texture = NULL
+						Vector = 1.000000 1.000000 1.000000 1.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "shaderTexture"
+						Texture = .\assets\fx\rain\rain1.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		MaxBurstCount = 1
+		MaxDuration =  -1.000000
+		MaxEndRotationRate =  0.000000
+		MaxEndSize = 3.000000 3.000000 3.000000
+		MaxEndVelocity = 0.000000 0.000000 0.000000
+		MaxSpawnRate =  0.000000
+		MaxStart3DOffset = 100.000000 0.000000 100.000000
+		MaxStart3DRotation = 0.000000 0.000000 0.000000
+		MaxStartRotationRate =  15.000000
+		MaxStartSize = 3.000000 3.000000 3.000000
+		MaxStartVelocity = 0.000000 0.000000 0.000000
+		MinBurstCount = 1
+		MinDuration =  -1.000000
+		MinEndRotationRate =  0.000000
+		MinEndSize = 3.000000 3.000000 3.000000
+		MinEndVelocity = 0.000000 0.000000 0.000000
+		MinSpawnRate =  0.000000
+		MinStart3DOffset = -100.000000 0.000000 -100.000000
+		MinStart3DRotation = 0.000000 0.000000 0.000000
+		MinStartRotationRate =  5.000000
+		MinStartSize = 3.000000 3.000000 3.000000
+		MinStartVelocity = 0.000000 0.000000 0.000000
+		ModelEmitter = 0
+		ParticleBillboardType = AlignAlongVelocity
+		StartColor = 1.000000 1.000000 1.000000 1.000000
+		StartDelay =  0.000000
+		TotalDuration =  -1.000000
+		TranslucencySortBias =  0.000000
+		VelocityCurve = 0
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Rain"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 3782.977295 657.536072 834.245178
+		Scale = 1.000000 1.000000 1.000000
+	}
+	kbParticleComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = ""
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 0.000000 0.000000 0.000000
+		Scale = 50.000000 75.000000 50.000000
+		AlphaOverLife = 0
+		ColorOverLife = 0
+		EndColor = 1.000000 1.000000 1.000000 1.000000
+		Gravity = 0.000000 0.000000 0.000000
+		MaterialList = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\fx\particle_rain.kbshader
+				ShaderParams = 2
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorMultplier"
+						Texture = NULL
+						Vector = 1.000000 1.000000 1.000000 1.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "shaderTexture"
+						Texture = .\assets\fx\rain\rain1.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		MaxBurstCount = 1
+		MaxDuration =  -1.000000
+		MaxEndRotationRate =  0.000000
+		MaxEndSize = 3.000000 3.000000 3.000000
+		MaxEndVelocity = 0.000000 0.000000 0.000000
+		MaxSpawnRate =  0.000000
+		MaxStart3DOffset = 100.000000 0.000000 100.000000
+		MaxStart3DRotation = 0.000000 0.000000 0.000000
+		MaxStartRotationRate =  15.000000
+		MaxStartSize = 3.000000 3.000000 3.000000
+		MaxStartVelocity = 0.000000 0.000000 0.000000
+		MinBurstCount = 1
+		MinDuration =  -1.000000
+		MinEndRotationRate =  0.000000
+		MinEndSize = 3.000000 3.000000 3.000000
+		MinEndVelocity = 0.000000 0.000000 0.000000
+		MinSpawnRate =  0.000000
+		MinStart3DOffset = -100.000000 0.000000 -100.000000
+		MinStart3DRotation = 0.000000 0.000000 0.000000
+		MinStartRotationRate =  5.000000
+		MinStartSize = 3.000000 3.000000 3.000000
+		MinStartVelocity = 0.000000 0.000000 0.000000
+		ModelEmitter = 0
+		ParticleBillboardType = AlignAlongVelocity
+		StartColor = 1.000000 1.000000 1.000000 1.000000
+		StartDelay =  0.000000
+		TotalDuration =  -1.000000
+		TranslucencySortBias =  0.000000
+		VelocityCurve = 0
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Rain"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 3796.662354 657.536072 755.957336
+		Scale = 1.000000 1.000000 1.000000
+	}
+	kbParticleComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		Name = ""
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 0.000000 0.000000 0.000000
+		Scale = 50.000000 75.000000 50.000000
+		AlphaOverLife = 0
+		ColorOverLife = 0
+		EndColor = 1.000000 1.000000 1.000000 1.000000
+		Gravity = 0.000000 0.000000 0.000000
+		MaterialList = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\fx\particle_rain.kbshader
+				ShaderParams = 2
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorMultplier"
+						Texture = NULL
+						Vector = 1.000000 1.000000 1.000000 1.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "shaderTexture"
+						Texture = .\assets\fx\rain\rain1.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		MaxBurstCount = 1
+		MaxDuration =  -1.000000
+		MaxEndRotationRate =  0.000000
+		MaxEndSize = 3.000000 3.000000 3.000000
+		MaxEndVelocity = 0.000000 0.000000 0.000000
+		MaxSpawnRate =  0.000000
+		MaxStart3DOffset = 100.000000 0.000000 100.000000
+		MaxStart3DRotation = 0.000000 0.000000 0.000000
+		MaxStartRotationRate =  15.000000
+		MaxStartSize = 3.000000 3.000000 3.000000
+		MaxStartVelocity = 0.000000 0.000000 0.000000
+		MinBurstCount = 1
+		MinDuration =  -1.000000
+		MinEndRotationRate =  0.000000
+		MinEndSize = 3.000000 3.000000 3.000000
+		MinEndVelocity = 0.000000 0.000000 0.000000
+		MinSpawnRate =  0.000000
+		MinStart3DOffset = -100.000000 0.000000 -100.000000
+		MinStart3DRotation = 0.000000 0.000000 0.000000
+		MinStartRotationRate =  5.000000
+		MinStartSize = 3.000000 3.000000 3.000000
+		MinStartVelocity = 0.000000 0.000000 0.000000
+		ModelEmitter = 0
+		ParticleBillboardType = AlignAlongVelocity
+		StartColor = 1.000000 1.000000 1.000000 1.000000
+		StartDelay =  0.000000
+		TotalDuration =  -1.000000
+		TranslucencySortBias =  0.000000
+		VelocityCurve = 0
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Rain"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 3768.837402 657.422668 868.583984
+		Scale = 1.000000 1.000000 1.000000
+	}
+	kbParticleComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		Name = ""
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 0.000000 0.000000 0.000000
+		Scale = 50.000000 75.000000 50.000000
+		AlphaOverLife = 0
+		ColorOverLife = 0
+		EndColor = 1.000000 1.000000 1.000000 1.000000
+		Gravity = 0.000000 0.000000 0.000000
+		MaterialList = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\fx\particle_rain.kbshader
+				ShaderParams = 2
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorMultplier"
+						Texture = NULL
+						Vector = 1.000000 1.000000 1.000000 1.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "shaderTexture"
+						Texture = .\assets\fx\rain\rain1.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		MaxBurstCount = 1
+		MaxDuration =  -1.000000
+		MaxEndRotationRate =  0.000000
+		MaxEndSize = 3.000000 3.000000 3.000000
+		MaxEndVelocity = 0.000000 0.000000 0.000000
+		MaxSpawnRate =  0.000000
+		MaxStart3DOffset = 100.000000 0.000000 100.000000
+		MaxStart3DRotation = 0.000000 0.000000 0.000000
+		MaxStartRotationRate =  15.000000
+		MaxStartSize = 3.000000 3.000000 3.000000
+		MaxStartVelocity = 0.000000 0.000000 0.000000
+		MinBurstCount = 1
+		MinDuration =  -1.000000
+		MinEndRotationRate =  0.000000
+		MinEndSize = 3.000000 3.000000 3.000000
+		MinEndVelocity = 0.000000 0.000000 0.000000
+		MinSpawnRate =  0.000000
+		MinStart3DOffset = -100.000000 0.000000 -100.000000
+		MinStart3DRotation = 0.000000 0.000000 0.000000
+		MinStartRotationRate =  5.000000
+		MinStartSize = 3.000000 3.000000 3.000000
+		MinStartVelocity = 0.000000 0.000000 0.000000
+		ModelEmitter = 0
+		ParticleBillboardType = AlignAlongVelocity
+		StartColor = 1.000000 1.000000 1.000000 1.000000
+		StartDelay =  0.000000
+		TotalDuration =  -1.000000
+		TranslucencySortBias =  0.000000
+		VelocityCurve = 0
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Rain"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 3771.841064 657.422668 903.478455
+		Scale = 1.000000 1.000000 1.000000
+	}
+	kbParticleComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		Name = ""
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 0.000000 0.000000 0.000000
+		Scale = 50.000000 75.000000 50.000000
+		AlphaOverLife = 0
+		ColorOverLife = 0
+		EndColor = 1.000000 1.000000 1.000000 1.000000
+		Gravity = 0.000000 0.000000 0.000000
+		MaterialList = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\fx\particle_rain.kbshader
+				ShaderParams = 2
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorMultplier"
+						Texture = NULL
+						Vector = 1.000000 1.000000 1.000000 1.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "shaderTexture"
+						Texture = .\assets\fx\rain\rain1.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		MaxBurstCount = 1
+		MaxDuration =  -1.000000
+		MaxEndRotationRate =  0.000000
+		MaxEndSize = 3.000000 3.000000 3.000000
+		MaxEndVelocity = 0.000000 0.000000 0.000000
+		MaxSpawnRate =  0.000000
+		MaxStart3DOffset = 100.000000 0.000000 100.000000
+		MaxStart3DRotation = 0.000000 0.000000 0.000000
+		MaxStartRotationRate =  15.000000
+		MaxStartSize = 3.000000 3.000000 3.000000
+		MaxStartVelocity = 0.000000 0.000000 0.000000
+		MinBurstCount = 1
+		MinDuration =  -1.000000
+		MinEndRotationRate =  0.000000
+		MinEndSize = 3.000000 3.000000 3.000000
+		MinEndVelocity = 0.000000 0.000000 0.000000
+		MinSpawnRate =  0.000000
+		MinStart3DOffset = -100.000000 0.000000 -100.000000
+		MinStart3DRotation = 0.000000 0.000000 0.000000
+		MinStartRotationRate =  5.000000
+		MinStartSize = 3.000000 3.000000 3.000000
+		MinStartVelocity = 0.000000 0.000000 0.000000
+		ModelEmitter = 0
+		ParticleBillboardType = AlignAlongVelocity
+		StartColor = 1.000000 1.000000 1.000000 1.000000
+		StartDelay =  0.000000
+		TotalDuration =  -1.000000
+		TranslucencySortBias =  0.000000
+		VelocityCurve = 0
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "UI"
+		Orientation = 0.007889 0.120327 -0.050323 0.991427
+		Position = 3807.963623 659.104431 765.983276
+		Scale = 1.000000 1.000000 1.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		Materials = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\ui\overlay.kbshader
+				ShaderParams = 4
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "cameraPosition"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "fog_Start_End_Clamp"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "fogColor"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "OverlayTexture"
+						Texture = .\assets\visualtarget\reuben\busoverlay.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		RenderPass = UIPass
+		TranslucencySortBias =  0.000000
+		Model = ..\..\kbengine\assets\models\unitquad.ms3d
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Scrolling Buildings"
+		Orientation = 0.008471 0.120288 -0.055119 0.991172
+		Position = 3850.110352 625.129578 930.504822
+		Scale = 35.000000 50.000000 25.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		Materials = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\fx\scrollingbackground.kbshader
+				ShaderParams = 5
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "uvOffset"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "uvTileSpeed"
+						Texture = NULL
+						Vector = 1.000000 1.000000 0.005000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorMultiplier"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "particleColor"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "shaderTexture"
+						Texture = .\assets\visualtarget\reuben\backgroundbuildings.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		RenderPass = Post-LightingPass
+		TranslucencySortBias =  0.000000
+		Model = ..\..\kbengine\assets\models\unitquad.ms3d
+	}
+}

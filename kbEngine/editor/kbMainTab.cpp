@@ -117,16 +117,15 @@ void kbMainTab::Update() {
 
 				const kbComponent *const pCurrentComponent = pGameEntity->GetComponent( j );
 
-				if ( pCurrentComponent->IsA( kbDirectionalLightComponent::GetType() ) || pCurrentComponent->IsA( kbLightShaftsComponent::GetType() ) ) {
+				extern bool g_bBillboardsEnabled;
+				if ( g_bBillboardsEnabled && ( pCurrentComponent->IsA( kbDirectionalLightComponent::GetType() ) || pCurrentComponent->IsA( kbLightShaftsComponent::GetType() ) ) ) {
 
-					kbMat4 rotationMatrix = pGameEntity->GetOrientation().ToMat4();
-					kbVec3 lightDirection( 0, 0, 1.0f );
-					lightDirection = lightDirection * rotationMatrix;
+					const kbMat4 rotationMatrix = pGameEntity->GetOrientation().ToMat4();
+					const kbVec3 lightDirection = kbVec3( 0, 0, 1.0f ) * rotationMatrix;
 
 					for ( float x = -1.0f; x <= 1.0f; x += 1.0f ) {
 						for ( float y = -1.0f; y <= 1.0f; y += 1.0f ) {
-							kbVec3 lightPosition( x, y, 0.0f );
-							lightPosition = lightPosition * rotationMatrix;
+							const kbVec3 lightPosition = kbVec3( x, y, 0.0f )* rotationMatrix;
 							g_pRenderer->DrawLine( pGameEntity->GetPosition() + lightPosition, pGameEntity->GetPosition() + lightPosition + lightDirection * 3.0f, kbColor( 0.43f, 0.2f, 0.43f, 1.0f ) );
 						}
 					}

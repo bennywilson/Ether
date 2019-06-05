@@ -80,7 +80,7 @@ struct worldObjectInfo_t {
 };
 
 void GenerateFlatShadedTriangleIndices( vertexLayout *const pInputVerts, vertexLayout *const pOutputVerts, unsigned long *const m_IndexBufferOutput, std::vector<kbVec3> & collisionOutput, int cellDimensions, EtherTerrainChunkGenJob *const pTerrainJob, std::vector<kbVec3> & dynamicCollisionOuput ) {
-	const int numVertsPerSide = cellDimensions + 1;
+	/*const int numVertsPerSide = cellDimensions + 1;
 	const int totalNumVerts = numVertsPerSide * numVertsPerSide;
 	int iVertexBuffer = 0;
 
@@ -272,7 +272,7 @@ void GenerateFlatShadedTriangleIndices( vertexLayout *const pInputVerts, vertexL
 	for ( iVertexBuffer = 0; iVertexBuffer < cellDimensions * cellDimensions * 2 * 3 + g_MaxDynamicVertices; iVertexBuffer++ ) {
 		pOutputVerts[iVertexBuffer] = pOutVerts[iVertexBuffer];
 	}
-	delete[] pOutVerts;
+	delete[] pOutVerts;*/
 }
 
 

@@ -17,7 +17,7 @@ cbuffer matrixBuffer {
 	float4				cameraPosition;
 	float4				diffuseColorBand;
 	float4				specularColorBand;
-	float4				rimParams;
+	float4				rimParams;			// x: Lower dot, y: Upper dot, z: final multiplier
 	float4				rimColor;
 	float4				nonToonDiffuseScaleAndBias;
 	float4				shadowParams;		// x - depth bias
@@ -198,7 +198,7 @@ float4 pixelShader( pixelInput input ) : SV_TARGET {
 		diffuse = ( diffuse * nonToonDiffuseScaleAndBias.x ) + nonToonDiffuseScaleAndBias.y;
 	}
 		
-	spec = pow( abs( spec ), max( specColor.y, 1.0f ) ) * specColor.x;
+	spec = pow( abs( spec ), max( specColor.y, 1.0f ) ) * specColor.x * dot( lightColor.xyz, float3( 0.3f, 0.59f, 0.11f ) );
 	const float3 emissive = diffuseColor.xyz * diffuseColor.w;
 //	diffuseColor.w = max( max( emissive.x, emissive.y ), emissive.z );
 //	diffuseColor.w = diffuseColor.w - 1.0f;

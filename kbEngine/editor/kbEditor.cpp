@@ -2,7 +2,7 @@
 // kbEditor.cpp
 //
 //
-// 2016-2018 kbEngine 2.0
+// 2016-2019 kbEngine 2.0
 //===================================================================================================
 #include "kbCore.h"
 #include "kbVector.h"
@@ -36,11 +36,32 @@ Fl_Text_Buffer * g_StyleBuffer = nullptr;
 static Fl_Text_Display::Style_Table_Entry stable[] = {  { FL_BLACK,	FL_HELVETICA, 12 },				// A
 												{ FL_RED,		FL_HELVETICA, 12 } };		// B
 
+// Editor camera speed
+struct EditorCamSpeedBind {
+	EditorCamSpeedBind( const kbString & displayName, const float multiplier ) :
+		m_DisplayName( displayName ),
+		m_SpeedMultiplier( multiplier ) { }
+
+	kbString m_DisplayName;
+	float m_SpeedMultiplier;
+};
+
+const static EditorCamSpeedBind g_EditorCamSpeedBindings[] = {
+	EditorCamSpeedBind( kbString( "0.25x" ), 0.25f ),
+	EditorCamSpeedBind( kbString( "1x" ), 1.0f ),
+	EditorCamSpeedBind( kbString( "5x" ), 5.0f ),
+	EditorCamSpeedBind( kbString( "15x" ), 15.0f )
+};
+const static size_t g_NumEditorCamSpeedBindings = sizeof( g_EditorCamSpeedBindings ) / sizeof( EditorCamSpeedBind );
+
+
 /**
  * kbEditor
  */
 kbEditor::kbEditor() :
 	Fl_Window( 0, 0, GetSystemMetrics( SM_CXFULLSCREEN ), GetSystemMetrics( SM_CYFULLSCREEN ) ) {
+
+	const float editorInitStartTime = g_GlobalTimer.TimeElapsedSeconds();
 
 	outputCB = kbEditor::OutputCB;
 	m_UndoIDAtLastSave = UINT64_MAX;
@@ -120,8 +141,13 @@ kbEditor::kbEditor() :
 	curX += TRSButtonWidth + buttonSpacing;
 
 	const int speedButtonWidth = 85;
-	m_pSpeedButton = new Fl_Button( curX, curY, speedButtonWidth, buttonHeight, "Speedx1" );
-	m_pSpeedButton->callback( AdjustCameraSpeedCB );
+	curX += (int)fl_width( "Cam Speed " );
+	m_pSpeedChoice = new Fl_Choice( curX, curY, (int)fl_width( "x100000" ), buttonHeight, "Cam Speed:" );
+	for ( size_t i = 0; i < g_NumEditorCamSpeedBindings; i++ ) {
+		m_pSpeedChoice->add( g_EditorCamSpeedBindings[i].m_DisplayName.c_str() );
+	}
+	m_pSpeedChoice->callback( AdjustCameraSpeedCB );
+
 	curX += speedButtonWidth + buttonSpacing * 2;
 
 	const int toggleIconButtonWidth = 85 * 2;
@@ -176,6 +202,33 @@ kbEditor::kbEditor() :
 	g_pRenderer->LoadTexture( "../../kbEngine/assets/Textures/Editor/directionalLightIcon.jpg", 2 );
 
 	SetWindowText( m_pMainTab->GetEditorWindow()->GetWindowHandle(), "kbEditor" );
+
+	// Load Editor Settings
+	kbEditorGlobalSettingsComponent * pEditorGlobalComponent = nullptr;
+
+	kbFile levelEditorFile;
+	if ( levelEditorFile.Open( "./assets/editorSettings.txt", kbFile::FT_Read ) ) {
+		kbGameEntity *const gameEntity = levelEditorFile.ReadGameEntity();
+		pEditorGlobalComponent = (kbEditorGlobalSettingsComponent*)gameEntity->GetComponentByType( kbEditorGlobalSettingsComponent::GetType() );
+		levelEditorFile.Close();
+	}
+
+	if ( pEditorGlobalComponent == nullptr ) {
+		m_pSpeedChoice->value( 0 );
+		m_pMainTab->SetCameraSpeedMultiplier( g_EditorCamSpeedBindings[0].m_SpeedMultiplier );
+	} else {
+
+		if ( pEditorGlobalComponent->m_CameraSpeedIdx >= 0 && pEditorGlobalComponent->m_CameraSpeedIdx < g_NumEditorCamSpeedBindings ) {
+			const int idx = pEditorGlobalComponent->m_CameraSpeedIdx;
+			m_pSpeedChoice->value( idx );
+			m_pMainTab->SetCameraSpeedMultiplier( g_EditorCamSpeedBindings[idx].m_SpeedMultiplier );
+		} else {
+			m_pSpeedChoice->value( 0 );
+			m_pMainTab->SetCameraSpeedMultiplier( g_EditorCamSpeedBindings[0].m_SpeedMultiplier );
+		}
+	}
+
+	kbLog( "Editor init time took %f seconds", g_GlobalTimer.TimeElapsedSeconds() - editorInitStartTime );
 }
 
 /**
@@ -214,7 +267,12 @@ void kbEditor::UnloadMap() {
  */
 void kbEditor::LoadMap( const std::string & InMapName ) {
 
+	kbLog( "LoadMap() called for map %s", InMapName.c_str() );
+	const float loadMapStartTime = g_GlobalTimer.TimeElapsedSeconds();
+
 	UnloadMap();
+
+	const kbEditorLevelSettingsComponent * pLevelSettings = nullptr;
 
 	// Load map
 	if ( InMapName.empty() == false ) {
@@ -244,12 +302,21 @@ void kbEditor::LoadMap( const std::string & InMapName ) {
 			if ( inFile.Open( nextFileName.c_str(), kbFile::FT_Read ) ) {
 				m_CurrentLevelFileName = nextFileName;
 
-				kbGameEntity * gameEntity = inFile.ReadGameEntity();
-				while ( gameEntity != nullptr ) {
+				kbGameEntity * pGameEntity = inFile.ReadGameEntity();
 
-					kbEditorEntity *const newEditorEntity = new kbEditorEntity( gameEntity );
+				while ( pGameEntity != nullptr ) {
+
+					if ( pLevelSettings == nullptr ) {
+						pLevelSettings = (kbEditorLevelSettingsComponent*)pGameEntity->GetComponentByType( kbEditorLevelSettingsComponent::GetType() );
+						if ( pLevelSettings != nullptr ) {
+							pGameEntity = inFile.ReadGameEntity();
+							continue;
+						}
+					}
+
+					kbEditorEntity *const newEditorEntity = new kbEditorEntity( pGameEntity );
 					g_Editor->m_GameEntities.push_back( newEditorEntity );
-					gameEntity = inFile.ReadGameEntity();
+					pGameEntity = inFile.ReadGameEntity();
 				}
 				inFile.Close();
 				
@@ -279,9 +346,19 @@ void kbEditor::LoadMap( const std::string & InMapName ) {
 		} while( true );
 	}
 
+	if ( pLevelSettings != nullptr ) {
+		SetMainCameraPos( pLevelSettings->m_CameraPosition );
+		SetMainCameraRot( pLevelSettings->m_CameraRotation );
+	} else {
+		SetMainCameraPos( kbVec3::zero );
+		SetMainCameraRot( kbQuat::identity );
+	}
+
 	m_UndoStack.Reset();
 
 	m_pResourceTab->RefreshEntitiesTab();
+
+	kbLog( "	LoadMap finished.  Took %f seconds", g_GlobalTimer.TimeElapsedSeconds() - loadMapStartTime );
 }
 
 /**
@@ -342,12 +419,23 @@ void kbEditor::Update() {
 
 	//m_pMainTab->GetCurrentWindow()->GetCamera().Update();
 
-	if ( GetAsyncKeyState( VK_LSHIFT ) && GetAsyncKeyState( 'P' ) ) {
-		SetMainCameraPos( kbVec3( -2.02074528f, 28.4168167f, 14.1997643f ) );
-		SetMainCameraRot( kbQuat( 0.0239890888f, 0.281068176f, 0.0070281f, 0.959362f ) );
+	if ( GetAsyncKeyState( VK_LSHIFT ) && GetAsyncKeyState( 'P' ) && GetGameEntities().size() > 0 ) {
 
-		//this->SetMainCameraPos( kbVec3( 0.701963603f, 27.7603569f, 3.12184048f ) );
-		//this->SetMainCameraRot( kbQuat( 0.0285657402f, 0.304920107f, 0.00915033650f, 0.951905549f ) );
+		for ( int i = (int) GetGameEntities().size() - 1; i >= 0; i-- ) {
+
+			const kbEditorEntity *const pCurEntity = GetGameEntities()[i];
+			const kbPlayerStartComponent *const pStart = (kbPlayerStartComponent*)pCurEntity->GetGameEntity()->GetComponentByType( kbPlayerStartComponent::GetType() );
+			if ( pStart == nullptr ) {
+				continue;
+			}
+
+			const kbVec3 newPos = pCurEntity->GetPosition();
+			const kbQuat newRotation = pCurEntity->GetOrientation();
+			SetMainCameraPos( newPos );
+			SetMainCameraRot( newRotation );
+			break;
+		}
+	
 	}
 
 	if ( GetFocus() == fl_xid( this ) ) {
@@ -424,6 +512,17 @@ void kbEditor::Update() {
  *	ShutDown
  */
 void kbEditor::ShutDown() {
+
+	// Save Editor Settings
+	kbFile outFile;
+	outFile.Open( "./assets/editorSettings.txt", kbFile::FT_Write );
+
+	kbGameEntity levelInfoEnt;
+	kbEditorGlobalSettingsComponent *const pLevelInfo = new kbEditorGlobalSettingsComponent();
+	pLevelInfo->m_CameraSpeedIdx = m_pSpeedChoice->value();
+	levelInfoEnt.AddComponent( pLevelInfo );
+	outFile.WriteGameEntity( &levelInfoEnt );
+	outFile.Close();
 
 	if ( m_bIsRunning == false ) {
 		return;
@@ -723,33 +822,25 @@ void kbEditor::ScaleButtonCB( class Fl_Widget *, void * ) {
  */
 void kbEditor::AdjustCameraSpeedCB( class Fl_Widget * widget, void * ) {
 
-	float multiplier = 1.0f;
+	const Fl_Choice *const pChoiceWidget = g_Editor->m_pSpeedChoice;
+	const int selectionIdx = pChoiceWidget->value();
+	if ( selectionIdx < 0 || selectionIdx >= g_NumEditorCamSpeedBindings ) {
+		kbWarning( "kbEditor::AdjustCameraSpeedCB() - Invalid choice selected." );
+		return;
+	}
 
-	if ( strcmp( widget->label(), "Speedx0.25" ) == 0 ) {
-		multiplier = 1.0f;
-		g_Editor->m_pSpeedButton->label( "Speedx1" );
-	} else if ( strcmp( widget->label(), "Speedx1" ) == 0 ) {
-		multiplier = 5.0f;
-		g_Editor->m_pSpeedButton->label( "Speedx5" );
-	}
-	else if ( strcmp( widget->label(), "Speedx5" ) == 0 ) {
-		multiplier = 15.0f;
-		g_Editor->m_pSpeedButton->label( "Speedx15" );
-	}
-	else if ( strcmp( widget->label(), "Speedx15" ) == 0 ) {
-		multiplier = 0.25f;
-		g_Editor->m_pSpeedButton->label( "Speedx0.25" );
-	}
-	g_Editor->m_pMainTab->AdjustCameraMoveSpeedMultiplier( multiplier );
+	const float multiplier = g_EditorCamSpeedBindings[selectionIdx].m_SpeedMultiplier;
+	g_Editor->m_pMainTab->SetCameraSpeedMultiplier( multiplier );
 }
 
 /**
  *	kbEditor::ToggleIconsCB
  */
+bool g_bBillboardsEnabled = true;
 void kbEditor::ToggleIconsCB( Fl_Widget * widget, void * userData ) {
-	static bool bBillboardsEnabled = true;
-	bBillboardsEnabled = !bBillboardsEnabled;
-	g_pRenderer->EnableDebugBillboards( bBillboardsEnabled );
+
+	g_bBillboardsEnabled = !g_bBillboardsEnabled;
+	g_pRenderer->EnableDebugBillboards( g_bBillboardsEnabled );
 }
 
 /**
@@ -780,10 +871,9 @@ void kbEditor::OpenLevel( class Fl_Widget *, void * ) {
 
 	fileChooser.show();
 
-	while(fileChooser.shown()) { Fl::wait(); }
+	while( fileChooser.shown() ) { Fl::wait(); }
 
-	const char * fileName = fileChooser.value();
-
+	const char *const fileName = fileChooser.value();
 	if ( fileName == nullptr ) {
 		return;
 	}
@@ -831,6 +921,20 @@ void kbEditor::SaveLevel_Internal( const std::string & fileNameStr, const bool b
 
 	kbFile outFile;
 	outFile.Open( fileNameStr.c_str(), kbFile::FT_Write );
+
+	{
+		const kbCamera *const pCam = m_pMainTab->GetEditorWindowCamera();
+
+		kbEditorLevelSettingsComponent *const pLevelSettingsComp = new kbEditorLevelSettingsComponent();
+		pLevelSettingsComp->m_CameraPosition = pCam->m_Position;
+		pLevelSettingsComp->m_CameraRotation = pCam->m_Rotation;
+
+		kbGameEntity *const pLevelSettingsEnt = new kbGameEntity();
+		pLevelSettingsEnt->AddComponent( pLevelSettingsComp );
+
+		outFile.WriteGameEntity( pLevelSettingsEnt );
+		delete pLevelSettingsEnt;
+	}
 
 	for ( int i = 0; i < g_Editor->m_GameEntities.size(); i++ ) {
 		outFile.WriteGameEntity( g_Editor->m_GameEntities[i]->GetGameEntity() );
@@ -1002,6 +1106,12 @@ void kbEditor::RightClickOnMainTab() {
 	const kbPrefab *const prefab = g_Editor->m_pResourceTab->GetSelectedPrefab();
 	std::string ReplacePrefabMessage = "Replace Prefab";
 	std::string PlacePrefabMessage = "Place Prefab";
+	std::string DuplicateMessage = "Duplicate Entity";
+
+	if ( g_Editor->GetSelectedObjects().size() > 0 ) {
+		DuplicateMessage += g_Editor->GetSelectedObjects()[0]->GetGameEntity()->GetName();
+	}
+
 	if ( prefab == nullptr ) {
 		PlacePrefabMessage += "into scene";
 	} else {
@@ -1011,7 +1121,8 @@ void kbEditor::RightClickOnMainTab() {
 
 
 	Fl_Menu_Item rclick_menu[] = {
-		{ "Create New Prefab",  0, AddEntityAsPrefab, ( void * ) 0 },
+		{ DuplicateMessage.c_str(), 0, DuplicateEntity, 0 },
+		{ "Create New Prefab",  0, AddEntityAsPrefab, (void *) 0 },
 		{ ReplacePrefabMessage.c_str(), 0, ReplaceCurrentlySelectedPrefab, (void*) 1 },
 		{ PlacePrefabMessage.c_str(),  0, InsertSelectedPrefabIntoScene, ( void * ) this },
 		{ 0 }};
@@ -1019,10 +1130,11 @@ void kbEditor::RightClickOnMainTab() {
 	if ( g_Editor->m_SelectedObjects.size() != 1 ) {
 		rclick_menu[0].deactivate();
 		rclick_menu[1].deactivate();
+		rclick_menu[2].deactivate();
 	}
 
 	if ( prefab == nullptr ) {
-		rclick_menu[2].deactivate();
+		rclick_menu[3].deactivate();
 	}
 
 	const Fl_Menu_Item * m = rclick_menu->popup( Fl::event_x(), Fl::event_y(), 0, 0, 0 );
@@ -1078,6 +1190,24 @@ void kbEditor::ReplaceCurrentlySelectedPrefab( class Fl_Widget *, void * ) {
 //	g_ResourceManager.DumpPackageInfo();
 	//g_ResourceManager.SavePackages();
 }
+/**
+ *	kbEditor::DuplicateEntity
+ */
+void kbEditor::DuplicateEntity( Fl_Widget *, void * userdata ) {
+	auto & selectedObjects = g_Editor->GetSelectedObjects();
+	if ( selectedObjects.size() == 0 ) {
+		return;
+	}
+
+	kbGameEntity *const pSrcEntity = selectedObjects[0]->GetGameEntity();
+	kbGameEntity *const pDstEntity = new kbGameEntity( pSrcEntity, false );
+
+	kbEditorEntity *const pEditorEntity = new kbEditorEntity( pDstEntity );
+	pEditorEntity->SetPosition( pSrcEntity->GetPosition() );
+	g_Editor->m_GameEntities.push_back( pEditorEntity );
+	g_Editor->m_pResourceTab->RefreshEntitiesTab();
+}
+
 
 /**
  *	kbEditor::AddEntityAsPrefab

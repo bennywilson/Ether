@@ -7,7 +7,10 @@ GenerateEnum(
 	AddEnumField( RP_Translucent, "TranslucentPass" )
 	AddEnumField( RP_TranslucentWithDepth, "TranslucentWithDepthPass" )
 	AddEnumField( RP_LightingPass, "Post-LightingPass" )
+	AddEnumField( RP_InWorldUI, "In-World UI" )
 	AddEnumField( RP_Distortion, "DistortionPass" )
+	AddEnumField( RP_PostProcess, "PostProcess" )
+	AddEnumField( RP_UI, "UIPass" )
 	AddEnumField( RP_Debug, "DebugPass" )
 )
 
@@ -41,6 +44,17 @@ GenerateClass(
 GenerateClass( 
 	kbGameComponent, 
 	AddField( "LifeTime", KBTYPEINFO_FLOAT, kbGameComponent, m_StartingLifeTime, false, "" )
+)
+
+GenerateClass(
+	kbEditorGlobalSettingsComponent,
+	AddField( "CameraSpeedIdx", KBTYPEINFO_INT, kbEditorGlobalSettingsComponent, m_CameraSpeedIdx, false, "" )
+)
+
+GenerateClass(
+	kbEditorLevelSettingsComponent,
+	AddField( "MainCameraPosition", KBTYPEINFO_VECTOR, kbEditorLevelSettingsComponent, m_CameraPosition, false, "" )
+	AddField( "MainCameraRotation", KBTYPEINFO_VECTOR4, kbEditorLevelSettingsComponent, m_CameraRotation, false, "" )
 )
 
 GenerateClass(
@@ -250,6 +264,9 @@ GenerateClass(
 
 	AddField( "MinStart3DRotation", KBTYPEINFO_VECTOR, kbParticleComponent, m_MinStart3DRotation, false, "" )
 	AddField( "MaxStart3DRotation", KBTYPEINFO_VECTOR, kbParticleComponent, m_MaxStart3DRotation, false, "" )
+
+	AddField( "MinStart3DOffset", KBTYPEINFO_VECTOR, kbParticleComponent, m_MinStart3DOffset, false, "" )
+	AddField( "MaxStart3DOffset", KBTYPEINFO_VECTOR, kbParticleComponent, m_MaxStart3DOffset, false, "" )
 
 	AddField( "Gravity", KBTYPEINFO_VECTOR, kbParticleComponent, m_Gravity, false, "" )
 

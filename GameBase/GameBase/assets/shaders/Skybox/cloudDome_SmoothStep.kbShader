@@ -1,29 +1,31 @@
 //==============================================================================
-// cloudDomeAlphaBlend.kbShader
+// cloudDome_SmoothStep.kbShader
 //
-// 2019	kbEngine 2.0
+// 2019 kbEngine 2.0
 //==============================================================================
 cbuffer matrixBuffer {
-	matrix mvpMatrix;
-	matrix modelMatrix;
-	matrix viewProjection;
-	float4 cameraPos;
-	float4 time;
-	float4 cloudTileOffset;
-	float4 cloudScrollRate_AlphaStep;
-	float4 cloudColor;
-	float4 cloudEmissive;
-	float4 lightShaftsDir;
-	float4 lightShaftsColor;
+	matrix				mvpMatrix;
+	matrix				modelMatrix;
+	matrix				viewProjection;
+	float4				cameraPos;
+	float4				time;
+	float4				cloudTileOffset;
+	float4				cloudScrollRate_AlphaStep;
+	float4				cloudColor;
+	float4				cloudEmissive;
+	float4				lightShaftsDir;
+	float4				lightShaftsColor;
+	float4				sunDiscColor;
+	float4				sunDiscParams;		// x: Dot min
 };
 
 //-------------------------------------
 struct vertexInput {
-	float4 position   : POSITION;
-	float2 uv         : TEXCOORD0;
-	float4 color      : COLOR;
-	float4 normal     : NORMAL;
-	float4 tangent    : TANGENT;
+	float4 position		: POSITION;
+	float2 uv			: TEXCOORD0;
+	float4 color		: COLOR;
+	float4 normal		: NORMAL;
+	float4 tangent		: TANGENT;
 };
 
 //-------------------------------------
@@ -40,11 +42,11 @@ struct pixelInput {
 };
 
 kbShaderState {
-	cullMode CullMode_None
-	srcblend Blend_One
-	dstBlend Blend_InvSrcAlpha
-	blendOp BlendOp_Add
-	colorwriteenable colorwriteenable_rgb
+	cullMode			CullMode_None
+	srcblend			Blend_One
+	dstBlend			Blend_InvSrcAlpha
+	blendOp				BlendOp_Add
+	colorwriteenable	colorwriteenable_rgb
 }
 
 //-------------------------------------
@@ -58,7 +60,7 @@ struct PS_OUTPUT {
  */
 pixelInput vertexShader( vertexInput input ) {
 	pixelInput output = (pixelInput)(0);
-input.position.y -= 0.2f;
+	input.position.y -= 0.2f;
 	output.position = mul( input.position, modelMatrix );
 	output.worldPos.xyz = cameraPos.xyz + output.position.xyz * 999;
 	output.position += float4(cameraPos.xyz, 0);
@@ -88,7 +90,7 @@ SamplerState LinearSampler;
 /**
  *	pixelShader
  */
- PS_OUTPUT pixelShader( pixelInput	input ) {
+PS_OUTPUT pixelShader( pixelInput	input ) {
  	PS_OUTPUT output = (PS_OUTPUT) 0;
 
 	float2 uv = input.uv * float2( cloudTileOffset.x, 1 ) + cloudTileOffset.zw;
@@ -101,7 +103,7 @@ SamplerState LinearSampler;
 	const float edgeFade = 1.0f - smoothstep( 0.25f, 0.0f, input.uv.y );
 	outColor.a *= edgeFade * cloudColor.a;
 
-	float3 lightDir = 2000000.0f * normalize( float3( -0.958466f, 0.268476f, 0.096246f ) );
+	float3 lightDir = 2000000.0f * lightShaftsDir.xyz;//normalize( float3( -0.958466f, 0.268476f, 0.096246f ) );
 	lightDir -= input.worldPos;
 	lightDir = normalize( lightDir );
 	
@@ -118,23 +120,21 @@ SamplerState LinearSampler;
 	output.Color.w = outColor.a;
 
 	float3 fromCam = normalize( input.worldPos - cameraPos.xyz );
-	float3 sunDir = normalize( float3( -0.958466, 0.268476, 0.096246 ) );//float3( -0.958466f, 0.268476f, 0.096246f ) );
-	float sunIntensity = saturate( ( dot( fromCam, sunDir ) - 0.98f ) / 0.02f );
+	float3 sunDir = lightShaftsDir.xyz;
+	float sunIntensity = saturate( ( dot( fromCam, sunDir ) - (sunDiscParams.x) ) / (1.0f - sunDiscParams.x) );
 	sunIntensity = pow( sunIntensity, 3.f ) * 1.5f;
 
 	
 	if ( outColor.w < 0.45f ) {
 		output.Depth.r = 0;
 		output.Depth.g = 0.0f;
-	output.Color.xyz += sunIntensity * cloudColor.xyz * float3( 0.005421, 0.004000, 0.000500 ).xyz * 105;
+		output.Color.xyz += sunIntensity * lightShaftsColor.xyz * sunDiscColor.xyz;
 
 	} else {
-	output.Color.xyz += sunIntensity * cloudColor.xyz * float3( 0.005421, 0.004000, 0.000500 ).xyz * 105;
+		output.Color.xyz += sunIntensity * lightShaftsColor.xyz * sunDiscColor.xyz;
 		output.Depth.r = input.position2.z / input.position2.w;// / input.position2.y;
 		output.Depth.g = 1;
 	}
 
-
 	return output;
-
 }

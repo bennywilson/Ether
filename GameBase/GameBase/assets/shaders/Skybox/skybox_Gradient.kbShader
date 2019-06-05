@@ -65,7 +65,7 @@ SamplerState LinearSampler;
 
 	float2 uv = input.uv;
 
-	outColor.xyz = lerp( horizonColor.xyz * 0.5f, skyColor.xyz, uv.y );
+	outColor.xyz = lerp( horizonColor.xyz, skyColor.xyz, uv.y );
 
 	return outColor;
 }

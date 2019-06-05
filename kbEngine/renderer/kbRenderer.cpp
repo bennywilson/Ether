@@ -222,11 +222,15 @@ kbRenderer::~kbRenderer() {
 void kbRenderer::Init( HWND hwnd, const int width, const int height, const bool bUseHMD, const bool bUseHMDTrackingOnly ) {
 
 	kbLog( "Initializing kbRenderer" );
+	const float startInitTime = g_GlobalTimer.TimeElapsedSeconds();
+
 	Init_Internal( hwnd, width, height, bUseHMD, bUseHMDTrackingOnly );
 
 	// Kick off render thread
 	m_pRenderJob = new kbRenderJob();
 	g_pJobManager->RegisterJob( m_pRenderJob );
+
+	kbLog( "	Rendered Initialized.  Took %f seconds", g_GlobalTimer.TimeElapsedSeconds() - startInitTime );
 }
 
 /**
