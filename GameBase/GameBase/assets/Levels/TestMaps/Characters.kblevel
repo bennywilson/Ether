@@ -2,7 +2,7 @@ kbGameEntity 0 0 0 0 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		Name = "Entity_54"
+		Name = "Entity_52"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
 		Position = 0.000000 0.000000 0.000000
 		Scale = 1.000000 1.000000 1.000000
@@ -10,8 +10,8 @@ kbGameEntity 0 0 0 0 {
 	kbEditorLevelSettingsComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		MainCameraPosition = -102.861366 93.970154 33.969261
-		MainCameraRotation = 0.002488 0.986031 -0.014788 -0.165888
+		MainCameraPosition = -91.243652 93.916313 5.146728
+		MainCameraRotation = 0.085039 0.852022 -0.146252 -0.495416
 	}
 }
 kbGameEntity 0 0 0 0 {
@@ -3219,7 +3219,7 @@ kbGameEntity 0 0 0 0 {
 						Enabled = 0
 						LifeTime =  -1.000000
 						ParamName = "colorTexture"
-						Texture = .\assets\test\kb-sheepandfox\snolaf_color.jpg
+						Texture = .\assets\models\characters\cartel\soldier_basic01_head.tif
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 					kbShaderParamComponent { 
@@ -3261,7 +3261,7 @@ kbGameEntity 0 0 0 0 {
 						Enabled = 0
 						LifeTime =  -1.000000
 						ParamName = "colorTexture"
-						Texture = .\assets\models\characters\cartel\soldier_basic_1.tif
+						Texture = .\assets\models\characters\cartel\soldier_basic01_head.tif
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 					kbShaderParamComponent { 
@@ -3284,7 +3284,7 @@ kbGameEntity 0 0 0 0 {
 		Model = .\assets\models\characters\cartel\soldier_basic_1.fbx
 	}
 	kbStaticModelComponent { 
-		Enabled = 1
+		Enabled = 0
 		LifeTime =  -1.000000
 		CastsShadow = 0
 		Materials = 1
