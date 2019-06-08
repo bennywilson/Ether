@@ -10,8 +10,8 @@ kbGameEntity 0 0 0 0 {
 	kbEditorLevelSettingsComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		MainCameraPosition = -91.243652 93.916313 5.146728
-		MainCameraRotation = 0.085039 0.852022 -0.146252 -0.495416
+		MainCameraPosition = -52.866920 83.683846 12.284782
+		MainCameraRotation = -0.671161 -0.163502 0.155398 0.706160
 	}
 }
 kbGameEntity 0 0 0 0 {
@@ -3261,7 +3261,7 @@ kbGameEntity 0 0 0 0 {
 						Enabled = 0
 						LifeTime =  -1.000000
 						ParamName = "colorTexture"
-						Texture = .\assets\models\characters\cartel\soldier_basic01_head.tif
+						Texture = .\assets\models\characters\cartel\soldier_basic01_body.tif
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 					kbShaderParamComponent { 
