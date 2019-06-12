@@ -2,7 +2,7 @@ kbGameEntity 0 0 0 0 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		Name = "Entity_52"
+		Name = "Entity_56"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
 		Position = 0.000000 0.000000 0.000000
 		Scale = 1.000000 1.000000 1.000000
@@ -10,8 +10,8 @@ kbGameEntity 0 0 0 0 {
 	kbEditorLevelSettingsComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		MainCameraPosition = -52.866920 83.683846 12.284782
-		MainCameraRotation = -0.671161 -0.163502 0.155398 0.706160
+		MainCameraPosition = -75.758751 58.576847 58.045422
+		MainCameraRotation = 0.004612 -0.992592 0.114653 -0.039931
 	}
 }
 kbGameEntity 0 0 0 0 {
@@ -1409,7 +1409,7 @@ kbGameEntity 0 0 0 0 {
 						LifeTime =  -1.000000
 						ParamName = "nonToonDiffuseScaleAndBias"
 						Texture = NULL
-						Vector = 0.900000 0.100000 0.000000 0.000000
+						Vector = 55.000000 0.500000 0.000000 0.000000
 					}
 					kbShaderParamComponent { 
 						Enabled = 0
@@ -1851,7 +1851,7 @@ kbGameEntity 0 0 0 0 {
 		Scale = 1.000000 1.000000 1.000000
 	}
 	kbStaticModelComponent { 
-		Enabled = 1
+		Enabled = 0
 		LifeTime =  -1.000000
 		CastsShadow = 0
 		Materials = 1
@@ -3033,69 +3033,8 @@ kbGameEntity 0 0 0 0 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		Name = "Entity_51"
-		Orientation = 0.000000 -1.000000 0.000000 0.000000
-		Position = -45.000000 56.707909 7.000000
-		Scale = 15.000000 15.000000 15.000000
-	}
-	kbStaticModelComponent { 
-		Enabled = 1
-		LifeTime =  -1.000000
-		CastsShadow = 0
-		Materials = 1
-			kbMaterialComponent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				CullModeOverride = ShaderDefault
-				Shader = .\assets\shaders\fx\decal_blend.kbshader
-				ShaderParams = 5
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "edgeFadeColor"
-						Texture = NULL
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "edgeFadeParams"
-						Texture = NULL
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "distortionParams"
-						Texture = NULL
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "cameraPosition"
-						Texture = NULL
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "ProjectionTex"
-						Texture = .\assets\grafitti\elp.tif
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-			}
-		RenderPass = LightingPass
-		TranslucencySortBias =  0.000000
-		Model = .\assets\models\test\unitcube.ms3d
-	}
-}
-kbGameEntity 0 0 0 0 {
-	kbTransformComponent { 
-		Enabled = 0
-		LifeTime =  -1.000000
 		Name = "Sheep"
-		Orientation = 0.000000 -0.026366 0.999647 -0.003228
+		Orientation = 0.170622 -0.026530 0.984978 0.001320
 		Position = -173.683090 3.950850 -35.722698
 		Scale = 10.000000 10.000000 10.000000
 	}
@@ -3166,7 +3105,7 @@ kbGameEntity 0 0 0 0 {
 						LifeTime =  -1.000000
 						ParamName = "outlineParams"
 						Texture = NULL
-						Vector = 0.020000 3.000000 0.000000 0.000000
+						Vector = 0.020000 3.000000 0.750000 0.000000
 					}
 					kbShaderParamComponent { 
 						Enabled = 0
@@ -3187,14 +3126,14 @@ kbGameEntity 0 0 0 0 {
 		LifeTime =  -1.000000
 		Name = "Snolaf"
 		Orientation = -0.415359 -0.372633 -0.608362 0.564373
-		Position = -86.581390 11.175843 -7.965597
-		Scale = 0.250000 0.250000 0.250000
+		Position = -53.363228 10.621842 5.567363
+		Scale = 0.150000 0.150000 0.150000
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadow = 0
-		Materials = 2
+		Materials = 3
 			kbMaterialComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
@@ -3219,7 +3158,7 @@ kbGameEntity 0 0 0 0 {
 						Enabled = 0
 						LifeTime =  -1.000000
 						ParamName = "colorTexture"
-						Texture = .\assets\models\characters\cartel\soldier_basic01_head.tif
+						Texture = .\assets\models\characters\cartel\soldier_basic01_face.tif
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 					kbShaderParamComponent { 
@@ -3255,7 +3194,7 @@ kbGameEntity 0 0 0 0 {
 						LifeTime =  -1.000000
 						ParamName = "hatchParams"
 						Texture = NULL
-						Vector = 1.000000 5.000000 2.000000 0.000000
+						Vector = 1.000000 35.000000 2.000000 0.000000
 					}
 					kbShaderParamComponent { 
 						Enabled = 0
@@ -3279,15 +3218,29 @@ kbGameEntity 0 0 0 0 {
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 			}
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\character\characterbase.kbshader
+				ShaderParams = 1
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorTexture"
+						Texture = .\assets\models\characters\cartel\soldier_basic01_head.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
 		RenderPass = LightingPass
 		TranslucencySortBias =  0.000000
 		Model = .\assets\models\characters\cartel\soldier_basic_1.fbx
 	}
 	kbStaticModelComponent { 
-		Enabled = 0
+		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadow = 0
-		Materials = 1
+		Materials = 3
 			kbMaterialComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
@@ -3299,13 +3252,55 @@ kbGameEntity 0 0 0 0 {
 						LifeTime =  -1.000000
 						ParamName = "outlineParams"
 						Texture = NULL
-						Vector = 1.000000 2.000000 0.000000 0.000000
+						Vector = 0.500000 1.000000 0.640000 0.000000
 					}
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
 						ParamName = "colorTexture"
-						Texture = .\assets\test\kb-sheepandfox\snolaf_color.jpg
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\character\characteroutline_noskinning.kbshader
+				ShaderParams = 2
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "outlineParams"
+						Texture = NULL
+						Vector = 2.000000 5.000000 0.750000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorTexture"
+						Texture = .\assets\models\characters\cartel\soldier_basic01_body.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\character\characteroutline_noskinning.kbshader
+				ShaderParams = 2
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "outlineParams"
+						Texture = NULL
+						Vector = 2.000000 5.000000 0.750000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorTexture"
+						Texture = .\assets\models\characters\cartel\soldier_basic01_head.tif
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 			}
@@ -3319,7 +3314,7 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "Fox"
-		Orientation = -0.417451 -0.370266 -0.611560 0.560921
+		Orientation = -0.596841 -0.572002 -0.428854 0.364250
 		Position = -123.349808 11.804875 -22.949446
 		Scale = 1.500000 1.500000 1.500000
 	}
@@ -3390,7 +3385,7 @@ kbGameEntity 0 0 0 0 {
 						LifeTime =  -1.000000
 						ParamName = "outlineParams"
 						Texture = NULL
-						Vector = 0.220000 2.000000 0.000000 0.000000
+						Vector = 0.220000 2.000000 0.750000 0.000000
 					}
 					kbShaderParamComponent { 
 						Enabled = 0
@@ -3403,5 +3398,96 @@ kbGameEntity 0 0 0 0 {
 		RenderPass = LightingPass
 		TranslucencySortBias =  0.000000
 		Model = .\assets\test\kb-sheepandfox\fox.fbx
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Snolaf"
+		Orientation = 0.028603 -0.679793 0.078783 0.728599
+		Position = -86.581390 11.175843 -7.965597
+		Scale = 0.250000 0.250000 0.250000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		Materials = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\character\characterbase_noskinning.kbshader
+				ShaderParams = 5
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "sunDir"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "hatchParams"
+						Texture = NULL
+						Vector = 1.000000 17.000000 2.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorTexture"
+						Texture = .\assets\test\kb-sheepandfox\snolaf_color.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "hatchTexture1"
+						Texture = .\assets\models\characters\izzy_combat\tam_1.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "hatchTexture2"
+						Texture = .\assets\models\characters\izzy_combat\tam_2.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		RenderPass = LightingPass
+		TranslucencySortBias =  0.000000
+		Model = .\assets\test\kb-sheepandfox\snolaf.fbx
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		Materials = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\character\characteroutline_noskinning.kbshader
+				ShaderParams = 2
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "outlineParams"
+						Texture = NULL
+						Vector = 1.000000 5.000000 0.750000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorTexture"
+						Texture = .\assets\test\kb-sheepandfox\snolaf_color.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		RenderPass = LightingPass
+		TranslucencySortBias =  0.000000
+		Model = .\assets\test\kb-sheepandfox\snolaf.fbx
 	}
 }
