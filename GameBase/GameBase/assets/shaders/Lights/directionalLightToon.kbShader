@@ -203,6 +203,7 @@ float4 pixelShader( pixelInput input ) : SV_TARGET {
 //	diffuseColor.w = max( max( emissive.x, emissive.y ), emissive.z );
 //	diffuseColor.w = diffuseColor.w - 1.0f;
 //	if ( diffuseColor.w > 0 ) diffuseColor.w += 1.0f;
+
 	float3 finalColor = diffuseColor.xyz * diffuse * lightColor.xyz + spec.xxx + emissive * 0.2f;	// todo
 	finalColor += rimLight.xyz * rimParams.z * shadowFactor;
 
