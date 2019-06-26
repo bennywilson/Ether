@@ -487,6 +487,8 @@ bool kbModel::LoadMS3D() {
 
 	m_Bones.resize( numJoints );
 
+	kbLog( "%s -----", m_FullFileName.c_str() );
+
 	for ( unsigned i = 0; i < m_Bones.size(); i++ ) {
 		const ms3dBone_t * pJoint = ( ms3dBone_t * ) pPtr;
 		pPtr += sizeof( ms3dBone_t );
@@ -514,12 +516,17 @@ bool kbModel::LoadMS3D() {
 		kbQuat rotationZ( kbVec3::forward, -pJoint->m_Rotation[2] );
 		m_Bones[i].m_RelativeRotation = rotationX * rotationY * rotationZ;
 
+		kbLog( "	[%s] Euler = %f %f %f", pJoint->m_Name, pJoint->m_Rotation[0], pJoint->m_Rotation[1], pJoint->m_Rotation[2] );
+		kbMat4 rotMat = m_Bones[i].m_RelativeRotation .ToMat4();
+		kbLog( "		Vector = (%.2f %.2f %.2f) (%.2f %.2f %.2f) (%.2f %.2f %.2f)", rotMat[0].x, rotMat[0].y, rotMat[0].z, rotMat[1].x, rotMat[1].y, rotMat[1].z, rotMat[2].x, rotMat[2].y, rotMat[2].z );
+		kbLog( "		Pos = (%.2f %.2f %.2f)", m_Bones[i].m_RelativePosition.x, m_Bones[i].m_RelativePosition.y, m_Bones[i].m_RelativePosition.z );
+
 		// Load Animation here
 		const ushort NumTranslationKeyFrames = pJoint->m_NumPositionKeyFrames;
 		const ushort NumRotationKeyFrames = pJoint->m_NumRotationKeyFrames;
 
 		const ms3dRotationKeyFrame_t * rotationKeyFrames = ( ms3dRotationKeyFrame_t * ) pPtr;
-		pPtr += sizeof( ms3dPositionKeyFrame_t ) * NumRotationKeyFrames;
+		pPtr += sizeof( ms3dRotationKeyFrame_t ) * NumRotationKeyFrames;
 
 		const ms3dPositionKeyFrame_t * positionKeyFrames = ( ms3dPositionKeyFrame_t * ) pPtr;
 		pPtr += sizeof( ms3dPositionKeyFrame_t ) * NumTranslationKeyFrames;
@@ -1265,30 +1272,54 @@ void kbModel::SetBoneMatrices( const float time, const kbAnimation *const theAni
 void kbModel::Animate( const float time, const kbAnimation *const pAnimation, const bool bLoopAnim, std::vector<kbBoneMatrix_t> & boneMatrices ) {
 	std::vector<tempBone_t> tempBones;
 	SetBoneMatrices( time, pAnimation, bLoopAnim, tempBones );
+	static kbString DebugTarget( "RHand" );
+	//static kbString LForearm( "LForearm" );
 
 	for ( int i = 0; i < tempBones.size(); i++ ) {
 
 		const int parent = m_Bones[i].m_ParentIndex;
-		if ( parent == 65535 ) {
-			tempBones[i].worldRotation = tempBones[i].rotation * m_Bones[i].m_RelativeRotation;
-		} else {
-			tempBones[i].worldRotation = tempBones[i].rotation * m_Bones[i].m_RelativeRotation * tempBones[parent].worldRotation;
-		}
-		tempBones[i].worldRotation.Normalize();
+		kbMat4 tempMat = m_Bones[i].m_RelativeRotation.ToMat4();
+		kbBoneMatrix_t matLocalSkel;
+		matLocalSkel.SetAxis( 0, tempMat[0].ToVec3() );
+		matLocalSkel.SetAxis( 1, tempMat[1].ToVec3() );
+		matLocalSkel.SetAxis( 2, tempMat[2].ToVec3() );
+		matLocalSkel.SetAxis( 3, m_Bones[i].m_RelativePosition );
+		
+		tempMat = tempBones[i].rotation.ToMat4();
+		kbBoneMatrix_t matAnimate;
+		matAnimate.SetAxis( 0, tempMat[0].ToVec3() );
+		matAnimate.SetAxis( 1, tempMat[1].ToVec3() );
+		matAnimate.SetAxis( 2, tempMat[2].ToVec3() );
+		matAnimate.SetAxis( 3, tempBones[i].position );
 
-		const kbMat4 boneWorldMatrix = tempBones[i].worldRotation.ToMat4();
-		tempBones[i].worldMatrix.SetAxis( 0, boneWorldMatrix[0].ToVec3() );
-		tempBones[i].worldMatrix.SetAxis( 1, boneWorldMatrix[1].ToVec3() );
-		tempBones[i].worldMatrix.SetAxis( 2, boneWorldMatrix[2].ToVec3() );
-
-		kbVec3 finalBonePosition = m_Bones[i].m_RelativePosition + tempBones[i].position;
+		kbBoneMatrix_t matLocal = matAnimate * matLocalSkel;
 		if ( parent != 65535 ) {
-			finalBonePosition = finalBonePosition * tempBones[parent].worldMatrix;
+			tempBones[i].worldMatrix =  matLocal * tempBones[parent].worldMatrix;
+		} else {
+			tempBones[i].worldMatrix = matLocal;
 		}
-		tempBones[i].worldMatrix.SetAxis( 3, finalBonePosition );
 
 		const kbBoneMatrix_t & invRef = GetInvRefBoneMatrix(i);
 		boneMatrices[i] = invRef * tempBones[i].worldMatrix;
+	
+		if ( m_Bones[i].m_Name == DebugTarget && GetAsyncKeyState('P') ) {
+			kbLog( "%s - %f %f %f -- %f %f %f", m_Bones[i].m_Name.c_str(), m_Bones[i].m_RelativePosition.x, m_Bones[i].m_RelativePosition.y, m_Bones[i].m_RelativePosition.z, tempBones[i].position.x, tempBones[i].position.y, tempBones[i].position.z );
+			kbLog( "%f %f %f", tempBones[0].rotation.x, tempBones[0].rotation.y, tempBones[0].rotation.z );
+			int index = i;
+			while( index != 65535 ) {
+				kbVec3 actualWorldPos = kbVec3::zero * tempBones[index].worldMatrix;
+				const float axisLen = 0.25f;
+
+				g_pRenderer->DrawLine( actualWorldPos, actualWorldPos + tempBones[index].worldMatrix.GetAxis(0) * axisLen, kbColor::red, false );
+				g_pRenderer->DrawLine( actualWorldPos, actualWorldPos + tempBones[index].worldMatrix.GetAxis(1) * axisLen, kbColor::green, false );
+				g_pRenderer->DrawLine( actualWorldPos, actualWorldPos + tempBones[index].worldMatrix.GetAxis(2) * axisLen, kbColor::blue, false );
+	
+	
+				kbBoneMatrix_t &m = tempBones[index].worldMatrix;
+				kbLog( "	%s  = (%.2f %.2f %.2f), (%.2f %.2f %.2f), (%.2f %.2f %.2f)", m_Bones[index].m_Name.c_str(), m[0].x, m[0].y, m[0].z, m[1].x, m[1].y, m[1].z, m[2].x, m[2].y, m[2].z );
+				index = m_Bones[index].m_ParentIndex;
+			}
+		}
 	}
 }
 
@@ -1432,6 +1463,8 @@ bool kbAnimation::Load_Internal() {
 	//kbAnimation & baseAnim = m_Animations[0];
 	m_JointKeyFrameData.resize( numJoints );
 
+	kbLog( "Anim %s", m_FullFileName.c_str() );
+
 	for ( unsigned i = 0; i < numJoints; i++ ) {
 		const ms3dBone_t * pJoint = ( ms3dBone_t * ) pPtr;
 		pPtr += sizeof( ms3dBone_t );
@@ -1478,9 +1511,14 @@ bool kbAnimation::Load_Internal() {
 			const kbQuat rotationY( kbVec3::up, rotationKeyFrames[iKey].m_Rotation[1] );
 			const kbQuat rotationZ( kbVec3::forward, -rotationKeyFrames[iKey].m_Rotation[2] );
 		
+		
 			jointData.m_RotationKeyFrames[iKey].m_Rotation = rotationX * rotationY * rotationZ;
 			jointData.m_RotationKeyFrames[iKey].m_Time = rotationKeyFrames[iKey].m_Time;
-		
+	
+			kbLog( "[%s] Euler = %f %f %f", pJoint->m_Name, rotationKeyFrames[iKey].m_Rotation[0], rotationKeyFrames[iKey].m_Rotation[1], rotationKeyFrames[iKey].m_Rotation[2] );
+			kbMat4 rotMat = jointData.m_RotationKeyFrames[iKey].m_Rotation.ToMat4();
+			kbLog( "		Vector = (%.2f %.2f %.2f) (%.2f %.2f %.2f) (%.2f %.2f %.2f)",  rotMat[0].x, rotMat[0].y, rotMat[0].z, rotMat[1].x, rotMat[1].y, rotMat[1].z, rotMat[2].x, rotMat[2].y, rotMat[2].z );
+
 			if ( jointData.m_RotationKeyFrames[iKey].m_Time > m_LengthInSeconds )
 			{
 				m_LengthInSeconds = jointData.m_RotationKeyFrames[iKey].m_Time;
@@ -1490,7 +1528,8 @@ bool kbAnimation::Load_Internal() {
 		for ( int iKey = 0; iKey < NumTranslationKeyFrames; iKey++ ) {
 			jointData.m_TranslationKeyFrames[iKey].m_Position.Set( positionKeyFrames[iKey].m_Position[0], positionKeyFrames[iKey].m_Position[1], -positionKeyFrames[iKey].m_Position[2] );
 			jointData.m_TranslationKeyFrames[iKey].m_Time = positionKeyFrames[iKey].m_Time;
-		
+			kbLog( "		Trans = (%.2f %.2f %.2f)", jointData.m_TranslationKeyFrames[iKey].m_Position.x, jointData.m_TranslationKeyFrames[iKey].m_Position.y, jointData.m_TranslationKeyFrames[iKey].m_Position.z );
+
 			if ( jointData.m_TranslationKeyFrames[iKey].m_Time > m_LengthInSeconds )
 			{
 				m_LengthInSeconds = jointData.m_TranslationKeyFrames[iKey].m_Time;

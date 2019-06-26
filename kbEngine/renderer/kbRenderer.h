@@ -302,8 +302,8 @@ public:
 
 	// Various Drawing commands
 	void										DrawScreenSpaceQuad( const int start_x, const int start_y, const int size_x, const int size_y, const int textureIndex, kbShader *const pShader = nullptr );
-	void										DrawLine( const kbVec3 & start, const kbVec3 & end, const kbColor & color );
-	void										DrawBox( const kbBounds & bounds, const kbColor & color );
+	void										DrawLine( const kbVec3 & start, const kbVec3 & end, const kbColor & color, const bool bDepthTest = true );
+	void										DrawBox( const kbBounds & bounds, const kbColor & color, const bool bDepthTest = true );
 	void										DrawPreTransformedLine( const std::vector<kbVec3> & vertList, const kbColor & color );
 	void										DrawSphere( const kbVec3 & origin, const float radius, const int NumSegments, const kbColor & color );
 	void										DrawBillboard( const kbVec3 & position, const kbVec2 & size, const int textureIndex, kbShader *const pShader, const int entityId = -1 );
@@ -407,7 +407,11 @@ protected:
 	std::vector<kbTextInfo_t>					m_DebugStrings;
 
 	// Debug
-	std::vector<vertexLayout>					m_DebugLines;
+	std::vector<vertexLayout>					m_DepthLines_GameThread;
+	std::vector<vertexLayout>					m_DepthLines_RenderThread;
+	std::vector<vertexLayout>					m_NoDepthLines_GameThread;
+	std::vector<vertexLayout>					m_NoDepthLines_RenderThread;
+
 	std::vector<vertexLayout>					m_DebugPreTransformedLines;
 
 	struct debugDrawObject_t {
@@ -422,7 +426,6 @@ protected:
 	};
 	std::vector<debugDrawObject_t>				m_DebugBillboards;
 	std::vector<debugDrawObject_t>				m_DebugModels;
-	std::vector<vertexLayout>					m_DebugLines_GameThread;
 	std::vector<debugDrawObject_t>				m_DebugBillboards_GameThread;
 	std::vector<debugDrawObject_t>				m_DebugModels_GameThread;
 

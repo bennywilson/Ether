@@ -276,14 +276,14 @@ void kbRenderer_DX11::RenderShadow( const kbRenderLight *const pLight, kbMat4 sp
 		lines[7].position = frozenCameraPosition + lowerRight * DistToFarCorner;
 		lines[7].SetColor( kbVec4( 1.0f, 0.0f, 1.0f, 1.0f ) );
 
-		m_DebugLines.push_back( lines[0] );
-		m_DebugLines.push_back( lines[1] );
-		m_DebugLines.push_back( lines[2] );
-		m_DebugLines.push_back( lines[3] );
-		m_DebugLines.push_back( lines[4] );
-		m_DebugLines.push_back( lines[5] );
-		m_DebugLines.push_back( lines[6] );
-		m_DebugLines.push_back( lines[7] );
+		m_DepthLines_RenderThread.push_back( lines[0] );
+		m_DepthLines_RenderThread.push_back( lines[1] );
+		m_DepthLines_RenderThread.push_back( lines[2] );
+		m_DepthLines_RenderThread.push_back( lines[3] );
+		m_DepthLines_RenderThread.push_back( lines[4] );
+		m_DepthLines_RenderThread.push_back( lines[5] );
+		m_DepthLines_RenderThread.push_back( lines[6] );
+		m_DepthLines_RenderThread.push_back( lines[7] );
 	}
 
 	m_RenderState.SetDepthStencilState();
@@ -314,23 +314,23 @@ void kbRenderer_DX11::RenderShadow( const kbRenderLight *const pLight, kbMat4 sp
 	
 			start.position = frozenCameraPosition + distToCorner * upperLeft;
 			end.position = frozenCameraPosition + distToCorner * upperRight;
-			m_DebugLines.push_back( start );
-			m_DebugLines.push_back( end );
+			m_DepthLines_RenderThread.push_back( start );
+			m_DepthLines_RenderThread.push_back( end );
 		
 			start.position = frozenCameraPosition + distToCorner * upperRight;
 			end.position = frozenCameraPosition + distToCorner * lowerRight;
-			m_DebugLines.push_back( start );
-			m_DebugLines.push_back( end );
+			m_DepthLines_RenderThread.push_back( start );
+			m_DepthLines_RenderThread.push_back( end );
 	
 			start.position = frozenCameraPosition + distToCorner * lowerRight;
 			end.position = frozenCameraPosition + distToCorner * lowerLeft;
-			m_DebugLines.push_back( start );
-			m_DebugLines.push_back( end );
+			m_DepthLines_RenderThread.push_back( start );
+			m_DepthLines_RenderThread.push_back( end );
 	
 			start.position = frozenCameraPosition + distToCorner * lowerLeft;
 			end.position = frozenCameraPosition + distToCorner * upperLeft;
-			m_DebugLines.push_back( start );
-			m_DebugLines.push_back( end );
+			m_DepthLines_RenderThread.push_back( start );
+			m_DepthLines_RenderThread.push_back( end );
 		}
 		// --------------------------------------------------
 		kbVec3 lightDir = -pLight->m_Orientation.ToMat4()[2].ToVec3();

@@ -553,8 +553,11 @@ void kbRenderer::UpdateFog( const kbColor & color, const float startDistance, co
 void kbRenderer::RenderSync() {	
 
 	// Copy requested game thread data over to their corresponding render thread structures
-	m_DebugLines = m_DebugLines_GameThread;
-	m_DebugLines_GameThread.clear();
+	m_DepthLines_RenderThread = m_DepthLines_GameThread;
+	m_DepthLines_GameThread.clear();
+
+	m_NoDepthLines_RenderThread = m_NoDepthLines_GameThread;
+	m_NoDepthLines_GameThread.clear();
 
 	m_DebugBillboards = m_DebugBillboards_GameThread;
 	m_DebugBillboards_GameThread.clear();
@@ -802,12 +805,13 @@ void kbRenderer::DrawScreenSpaceQuad( const int start_x, const int start_y, cons
 	m_ScreenSpaceQuads_GameThread.push_back( quadToAdd );
 }
 
-#define AddVert( vert ) drawVert.position = vert; m_DebugLines_GameThread.push_back( drawVert );
+#define AddVertDepthTest( vert ) drawVert.position = vert; m_DepthLines_GameThread.push_back( drawVert );
+#define AddVertNoDepthTest( vert ) drawVert.position = vert; m_NoDepthLines_GameThread.push_back( drawVert );
 
 /**
  *	kbRenderer::DrawLine
  */
-void kbRenderer::DrawLine( const kbVec3 & start, const kbVec3 & end, const kbColor & color ) {
+void kbRenderer::DrawLine( const kbVec3 & start, const kbVec3 & end, const kbColor & color, const bool bDepthTest ) {
 
 	/*if ( m_DebugLines_GameThread.size() >= m_DebugLines_GameThread.capacity() - 2 ) {
 		return;
@@ -818,14 +822,19 @@ void kbRenderer::DrawLine( const kbVec3 & start, const kbVec3 & end, const kbCol
 	drawVert.Clear();
 	drawVert.SetColor( color );
 
-	AddVert( start );
-	AddVert( end );
+	if ( bDepthTest ) {
+		AddVertDepthTest( start );
+		AddVertDepthTest( end );
+	} else {
+		AddVertNoDepthTest( start );
+		AddVertNoDepthTest( end );
+	}
 }
 
 /**
  *	kbRenderer::DrawBox
  */
-void kbRenderer::DrawBox( const kbBounds & bounds, const kbColor & color ) {
+void kbRenderer::DrawBox( const kbBounds & bounds, const kbColor & color, const bool bDepthTest ) {
 
 	const kbVec3 maxVert = bounds.Max();
 	const kbVec3 minVert = bounds.Min();
@@ -844,20 +853,37 @@ void kbRenderer::DrawBox( const kbBounds & bounds, const kbColor & color ) {
 	drawVert.Clear();
 	drawVert.SetColor( color );
 
-	AddVert( LTF ); AddVert( RTF );
-	AddVert( RTF ); AddVert( RBF );
-	AddVert( RBF ); AddVert( LBF );
-	AddVert( LBF ); AddVert( LTF );
+	if ( bDepthTest ) {
+		AddVertDepthTest( LTF ); AddVertDepthTest( RTF );
+		AddVertDepthTest( RTF ); AddVertDepthTest( RBF );
+		AddVertDepthTest( RBF ); AddVertDepthTest( LBF );
+		AddVertDepthTest( LBF ); AddVertDepthTest( LTF );
 
-	AddVert( LTB ); AddVert( RTB );
-	AddVert( RTB ); AddVert( RBB );
-	AddVert( RBB ); AddVert( LBB );
-	AddVert( LBB ); AddVert( LTB );
+		AddVertDepthTest( LTB ); AddVertDepthTest( RTB );
+		AddVertDepthTest( RTB ); AddVertDepthTest( RBB );
+		AddVertDepthTest( RBB ); AddVertDepthTest( LBB );
+		AddVertDepthTest( LBB ); AddVertDepthTest( LTB );
 
-	AddVert( LTF ); AddVert( LTB );
-	AddVert( RTF ); AddVert( RTB );
-	AddVert( LBF ); AddVert( LBB );
-	AddVert( RBF ); AddVert( RBB );
+		AddVertDepthTest( LTF ); AddVertDepthTest( LTB );
+		AddVertDepthTest( RTF ); AddVertDepthTest( RTB );
+		AddVertDepthTest( LBF ); AddVertDepthTest( LBB );
+		AddVertDepthTest( RBF ); AddVertDepthTest( RBB );
+	} else {
+		AddVertNoDepthTest( LTF ); AddVertNoDepthTest( RTF );
+		AddVertNoDepthTest( RTF ); AddVertNoDepthTest( RBF );
+		AddVertNoDepthTest( RBF ); AddVertNoDepthTest( LBF );
+		AddVertNoDepthTest( LBF ); AddVertNoDepthTest( LTF );
+
+		AddVertNoDepthTest( LTB ); AddVertNoDepthTest( RTB );
+		AddVertNoDepthTest( RTB ); AddVertNoDepthTest( RBB );
+		AddVertNoDepthTest( RBB ); AddVertNoDepthTest( LBB );
+		AddVertNoDepthTest( LBB ); AddVertNoDepthTest( LTB );
+
+		AddVertNoDepthTest( LTF ); AddVertNoDepthTest( LTB );
+		AddVertNoDepthTest( RTF ); AddVertNoDepthTest( RTB );
+		AddVertNoDepthTest( LBF ); AddVertNoDepthTest( LBB );
+		AddVertNoDepthTest( RBF ); AddVertNoDepthTest( RBB );
+	}
 }
 
 /**
@@ -889,8 +915,8 @@ void kbRenderer::DrawSphere( const kbVec3 & origin, const float radius, const in
 
 			pt2 = kbVec3( cosX * curSin, curCos, sinX * curSin ) * radius + origin;
 			pt4 = kbVec3( cosX * nextSin, nextCos, sinX * nextSin ) * radius + origin;
-			AddVert( pt1 ); AddVert( pt2 );
-			AddVert( pt1 ); AddVert( pt3 );
+			AddVertDepthTest( pt1 ); AddVertDepthTest( pt2 );
+			AddVertDepthTest( pt1 ); AddVertDepthTest( pt3 );
 			pt1 = pt2;
 			pt3 = pt4;
 			longitude += angleInc;

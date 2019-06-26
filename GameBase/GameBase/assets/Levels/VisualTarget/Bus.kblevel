@@ -2,7 +2,7 @@ kbGameEntity 0 0 0 0 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		Name = "Entity_45"
+		Name = "Entity_44"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
 		Position = 0.000000 0.000000 0.000000
 		Scale = 1.000000 1.000000 1.000000
@@ -10,8 +10,8 @@ kbGameEntity 0 0 0 0 {
 	kbEditorLevelSettingsComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		MainCameraPosition = -2.020745 28.416817 14.199764
-		MainCameraRotation = 0.023989 0.281068 0.007028 0.959362
+		MainCameraPosition = -2.381426 0.821456 -2.069781
+		MainCameraRotation = -0.269594 -0.115217 0.032508 0.955504
 	}
 }
 kbGameEntity 0 0 0 0 {
@@ -1077,12 +1077,12 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "Izzy"
-		Orientation = 0.000000 0.000000 0.000000 0.491806
-		Position = -1.500000 -15.908672 31.008163
-		Scale = 4.300000 4.300000 4.300000
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 0.000000 0.000000 0.000000
+		Scale = 1.000000 1.000000 1.000000
 	}
 	EtherSkelModelComponent { 
-		Enabled = 0
+		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadow = 1
 		Materials = 5
@@ -1173,7 +1173,7 @@ kbGameEntity 0 0 0 0 {
 		IsFirstPersonModel = 0
 	}
 	EtherSkelModelComponent { 
-		Enabled = 0
+		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadow = 0
 		Materials = 7
@@ -1546,7 +1546,7 @@ kbGameEntity 0 0 0 0 {
 		Scale = 0.025000 0.100000 0.100000
 	}
 	EtherSkelModelComponent { 
-		Enabled = 1
+		Enabled = 0
 		LifeTime =  -1.000000
 		CastsShadow = 0
 		Materials = 1
@@ -1572,7 +1572,7 @@ kbGameEntity 0 0 0 0 {
 		IsFirstPersonModel = 0
 	}
 	EtherClothComponent { 
-		Enabled = 1
+		Enabled = 0
 		LifeTime =  -1.000000
 		AddFakeOscillation = 1
 		AdditionalBoneInfo = 0
@@ -1962,7 +1962,7 @@ kbGameEntity 0 0 0 0 {
 		IsFirstPersonModel = 0
 	}
 	EtherClothComponent { 
-		Enabled = 1
+		Enabled = 0
 		LifeTime =  -1.000000
 		AddFakeOscillation = 1
 		AdditionalBoneInfo = 0
@@ -4171,15 +4171,8 @@ kbGameEntity 0 0 0 0 {
 				Enabled = 1
 				LifeTime =  -1.000000
 				CullModeOverride = ShaderDefault
-				Shader = .\assets\shaders\environment\environmentbase_hack.kbshader
-				ShaderParams = 5
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "colorMult"
-						Texture = NULL
-						Vector = 1.000000 1.000000 1.000000 1.000000
-					}
+				Shader = .\assets\shaders\environment\environmentbase.kbshader
+				ShaderParams = 4
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
@@ -4255,15 +4248,8 @@ kbGameEntity 0 0 0 0 {
 				Enabled = 0
 				LifeTime =  -1.000000
 				CullModeOverride = ShaderDefault
-				Shader = .\assets\shaders\environment\environmentbase_hack.kbshader
-				ShaderParams = 5
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "colorMult"
-						Texture = NULL
-						Vector = 1.000000 1.000000 1.000000 1.000000
-					}
+				Shader = .\assets\shaders\environment\environmentbase.kbshader
+				ShaderParams = 4
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
