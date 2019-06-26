@@ -172,9 +172,8 @@ void EtherSkelModelComponent::Update_Internal( const float DeltaTime ) {
 		// Debug Animation
 		if ( m_DebugAnimIdx >= 0 && m_DebugAnimIdx < m_Animations.size() && m_Animations[m_DebugAnimIdx].m_pAnimation != nullptr ) {
 			if ( m_pModel != nullptr ) {
-			//	static float time = 0.0f;
-				static bool pause = false;
 
+				static bool pause = false;
 				if ( pause == false ) {
 					const float AnimTimeScale = m_Animations[m_DebugAnimIdx].m_TimeScale;
 					m_DebugAnimTime += DeltaTime * AnimTimeScale;
