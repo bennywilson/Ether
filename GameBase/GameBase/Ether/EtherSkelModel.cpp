@@ -185,7 +185,7 @@ void EtherSkelModelComponent::Update_Internal( const float DeltaTime ) {
 				if ( m_BindToLocalSpaceMatrices.size() == 0 ) {
 					m_BindToLocalSpaceMatrices.resize( m_pModel->NumBones() );
 				}
-				m_pModel->Animate( time, m_Animations[m_DebugAnimIdx].m_pAnimation, m_Animations[m_DebugAnimIdx].m_bIsLooping, m_BindToLocalSpaceMatrices );
+				m_pModel->Animate( m_BindToLocalSpaceMatrices, time, m_Animations[m_DebugAnimIdx].m_pAnimation, m_Animations[m_DebugAnimIdx].m_bIsLooping );
 			}
 		} else {
 			for ( int i = 0; i < m_pModel->NumBones(); i++ ) {
@@ -274,7 +274,7 @@ void EtherSkelModelComponent::Update_Internal( const float DeltaTime ) {
 				kbLog( "	Not blending anim %s. anim time = %f", CurAnim.m_AnimationName.c_str(), CurAnim.m_CurrentAnimationTime );
 #endif
 
-				m_pModel->Animate( CurAnim.m_CurrentAnimationTime, CurAnim.m_pAnimation, CurAnim.m_bIsLooping, m_BindToLocalSpaceMatrices );
+				m_pModel->Animate( m_BindToLocalSpaceMatrices, CurAnim.m_CurrentAnimationTime, CurAnim.m_pAnimation, CurAnim.m_bIsLooping );
 
 				if ( bAnimIsFinished && CurAnim.m_DesiredNextAnimation.IsEmptyString() == false ) {
 
@@ -320,7 +320,7 @@ void EtherSkelModelComponent::Update_Internal( const float DeltaTime ) {
 				}
 
 				const float blendTime = kbClamp( ( g_GlobalTimer.TimeElapsedSeconds() - m_BlendStartTime ) / m_BlendLength, 0.0f, 1.0f );
-				m_pModel->BlendAnimations( CurAnim.m_pAnimation, CurAnim.m_CurrentAnimationTime, CurAnim.m_bIsLooping, NextAnim.m_pAnimation, NextAnim.m_CurrentAnimationTime, NextAnim.m_bIsLooping, blendTime, m_BindToLocalSpaceMatrices ); 
+				m_pModel->BlendAnimations( m_BindToLocalSpaceMatrices, CurAnim.m_pAnimation, CurAnim.m_CurrentAnimationTime, CurAnim.m_bIsLooping, NextAnim.m_pAnimation, NextAnim.m_CurrentAnimationTime, NextAnim.m_bIsLooping, blendTime ); 
 
 #if DEBUG_ANIMS
 				kbLog( "	Blending anims %f.  %s cur time = %f. %s cur time is %f", blendTime, CurAnim.GetAnimationName().c_str(), CurAnim.m_CurrentAnimationTime, NextAnim.GetAnimationName().c_str(), NextAnim.m_CurrentAnimationTime );

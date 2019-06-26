@@ -169,6 +169,13 @@ struct kbVertexHash
  */
 struct kbBoneMatrix_t {
 
+	kbBoneMatrix_t() { }
+
+	explicit kbBoneMatrix_t( const kbQuat & quat, const kbVec3 & pos ) {
+		SetFromQuat( quat );
+		m_Axis[3] = pos;
+	}
+
 	void SetIdentity() {
 		m_Axis[0].Set( 1.0f, 0.0f, 0.0f );
 		m_Axis[1].Set( 0.0f, 1.0f, 0.0f );
@@ -180,6 +187,7 @@ struct kbBoneMatrix_t {
 	const kbVec3 & GetAxis( const int axisIndex ) const { if ( axisIndex < 0 || axisIndex > 3 ) { kbError("Doh!"); } return m_Axis[axisIndex]; }
 	const kbVec3 & GetOrigin() const { return m_Axis[3]; }
 	void SetAxis( const int axisIndex, const kbVec3 & inVec ) { if ( axisIndex < 0 || axisIndex > 3 ) { kbError("Doh!"); } m_Axis[axisIndex] = inVec; }
+	void SetFromQuat( const kbQuat & srcQuat );
 
 	void TransposeUpper();
 

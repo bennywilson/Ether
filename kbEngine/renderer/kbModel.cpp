@@ -3,7 +3,7 @@
 //
 // General model format based off of the ms3d specs
 //
-// 2016-2018 kbEngine 2.0
+// 2016-2019 kbEngine 2.0
 //==============================================================================
 #include <fbxsdk.h>
 #include "kbCore.h"
@@ -130,7 +130,7 @@ bool kbModel::LoadMS3D() {
 	const char * pPtr = pMemoryFileBuffer;
 
 	// Header
-	const ms3dHeader_t * pHeader = ( const ms3dHeader_t * ) pPtr;
+	const ms3dHeader_t *const pHeader = (const ms3dHeader_t *) pPtr;
 	pPtr += sizeof( ms3dHeader_t );
 
 	kbErrorCheck( strncmp( pHeader->m_ID, "MS3D000000", 10 ) == 0, "kbModel::LoadResource_Internal - Invalid model header %d", pHeader->m_ID );
@@ -138,7 +138,7 @@ bool kbModel::LoadMS3D() {
 	// Vertices
 	m_Bounds.Reset();
 
-	ushort numVertices = *( ushort * ) pPtr;
+	ushort numVertices = *(ushort *) pPtr;
 	pPtr += sizeof( ushort );
 
 	kbVec3 * tempVertices = new kbVec3[ numVertices ];
@@ -158,12 +158,12 @@ bool kbModel::LoadMS3D() {
 	}
 
 	// Triangles
-	const uint numTriangles = *( ushort * ) pPtr;
+	const uint numTriangles = *(ushort *) pPtr;
 	pPtr += sizeof( ushort );
-	ms3dTriangle_t * tempTriangles = new ms3dTriangle_t[ numTriangles ];
+	ms3dTriangle_t * tempTriangles = new ms3dTriangle_t[numTriangles];
 
 	for ( uint i = 0; i < numTriangles; i++ ) {
-		const ms3dTriangle_t * pTriangles = ( ms3dTriangle_t * ) pPtr;
+		const ms3dTriangle_t * pTriangles = (ms3dTriangle_t *) pPtr;
 		pPtr += sizeof( ms3dTriangle_t );
 		tempTriangles[i] = *pTriangles;
 	
@@ -186,7 +186,7 @@ bool kbModel::LoadMS3D() {
 	}
 
 	// Groups ------------------------------------------------//
-	uint numSrcGroups = *( ushort * ) pPtr;
+	uint numSrcGroups = *(ushort *) pPtr;
 	pPtr += sizeof( ushort );
 
 	// Look for groups named "collision" and build collision geometry from them
@@ -195,7 +195,7 @@ bool kbModel::LoadMS3D() {
 	for ( uint iGroup = 0; iGroup < numSrcGroups; iGroup++ ) {
 
 		pCollisionPtr += sizeof( byte );
-		const char * groupName = (char*)( pCollisionPtr );
+		const char * groupName = (char *)( pCollisionPtr );
 
 		pCollisionPtr += 32;
 		const uint numTris = *(ushort *)( pCollisionPtr );
@@ -209,7 +209,7 @@ bool kbModel::LoadMS3D() {
 			// Use collision geometry to determine the kbModel's bounds
 			m_Bounds.Reset();
 			for ( uint iTris = 0; iTris < numTris; iTris++ ) {
-				unsigned short curTriIndex = *( ushort *) pCollisionPtr;
+				unsigned short curTriIndex = *(ushort *) pCollisionPtr;
 
 				ms3dTriangle_t & curTri  = tempTriangles[ curTriIndex ];
 
@@ -286,34 +286,6 @@ bool kbModel::LoadMS3D() {
 		pPtr += sizeof(ms3dMaterial_t);
 
 		m_Materials[iMat].m_DiffuseColor.Set( pMat->m_Diffuse[0], pMat->m_Diffuse[1], pMat->m_Diffuse[2], 1.0f );
-
-		// get the base texture name
-	/*	char *const texture[] = { pMat->m_Texture, pMat->m_AlphaMap };
-
-		for ( int iTex = 0; iTex < 2; iTex++ ) {
-
-			if ( texture[iTex][0] == '\0' ) {
-				continue;
-			}
-
-			// load the base diffuse textures
-			const std::string textureFileName = filePath + texture[iTex];
-			m_Materials[iMat].m_Textures.push_back( (kbTexture *) g_ResourceManager.GetResource( textureFileName.c_str(), true ) );
-		}
-
-		std::string shaderName = pMat->m_Name;
-
-		if ( shaderName.find( "NoCull" ) != std::string::npos ) {
-			m_Materials[iMat].m_CullingMode = CullMode_None;
-		}
-
-		const size_t endOfShaderName = shaderName.find("_");
-		if ( endOfShaderName != std::string::npos ) {
-			shaderName.resize( endOfShaderName );
-		}
-//		shaderName += ".kbshader";
-	//	m_Materials[iMat].m_pShader = ( kbShader * ) g_ResourceManager.GetResource( shaderName );
-*/
 	}
 
 	// create index buffer
@@ -410,65 +382,6 @@ bool kbModel::LoadMS3D() {
 			// color, normal, etc
 		}
 
-		// Tangent space generation from http://www.terathon.com/code/tangent.html
-		std::vector<kbVec3> tan1;
-		std::vector<kbVec3> tan2;
-
-		tan1.insert( tan1.begin(), m_CPUIndices.size(), kbVec3::zero );
-		tan2.insert( tan2.begin(), m_CPUIndices.size(), kbVec3::zero );
-
-		for ( int i = 0; i < m_CPUIndices.size(); i += 3 ) {
-
-			const int idx1 = m_CPUIndices[i + 0];
-			const int idx2 = m_CPUIndices[i + 1];
-			const int idx3 = m_CPUIndices[i + 2];
-
-			const kbVec3 & v1 = verts[idx1].position;
-			const kbVec3 & v2 = verts[idx2].position;
-			const kbVec3 & v3 = verts[idx3].position;
-
-			const kbVec2 & w1 = verts[idx1].uv;
-			const kbVec2 & w2 = verts[idx2].uv;
-			const kbVec2 & w3 = verts[idx3].uv;
-
-			const float x1 = v2.x - v1.x;
-			const float x2 = v3.x - v1.x;
-			const float y1 = v2.y - v1.y;
-			const float y2 = v3.y - v1.y;
-			const float z1 = v2.z - v1.z;
-			const float z2 = v3.z - v1.z;
-
-			const float s1 = w2.x - w1.x;
-			const float s2 = w3.x - w1.x;
-			const float t1 = w2.y - w1.y;
-			const float t2 = w3.y - w1.y;
-
-			const float r = 1.0f / ( s1 * t2 - s2 * t1 );
-			const kbVec3 sdir( ( t2 * x1 - t1 * x2 ) * r, ( t2 * y1 - t1 * y2 ) * r, ( t2 * z1 - t1 * z2 ) * r );
-			const kbVec3 tdir( ( s1 * x2 - s2 * x1 ) * r, ( s1 * y2 - s2 * y1 ) * r, ( s1 * z2 - s2 * z1 ) * r );
-	
-			tan1[idx1] += sdir;
-			tan1[idx2] += sdir;
-			tan1[idx3] += sdir;
-
-			tan2[idx1] += tdir;
-			tan2[idx2] += tdir;
-			tan2[idx3] += tdir;
-		}
-
-		for ( int i = 0; i < verts.size(); i++ ) {
-			const kbVec3 & n = verts[i].GetNormal();
-			const kbVec3 & t = tan1[i].Normalized();
-			kbVec3 finalTangent = ( t - n * n.Dot(t) ).Normalized();
-			float handedness = ( n.Cross( t ).Dot( tan2[i] ) > 0.0f ) ? -1.0f : 1.0f;
-			verts[i].SetTangent( kbVec4( finalTangent.x, finalTangent.y, finalTangent.z, handedness ) );
-
-			// Debug
-			m_DebugPositions.push_back( verts[i].position );
-			m_DebugNormals.push_back( verts[i].GetNormal() );
-			m_DebugTangents.push_back( verts[i].GetTangent() );
-		}
-
 		m_VertexBuffer.CreateVertexBuffer( verts );
 	}
    
@@ -487,10 +400,8 @@ bool kbModel::LoadMS3D() {
 
 	m_Bones.resize( numJoints );
 
-	kbLog( "%s -----", m_FullFileName.c_str() );
-
 	for ( unsigned i = 0; i < m_Bones.size(); i++ ) {
-		const ms3dBone_t * pJoint = ( ms3dBone_t * ) pPtr;
+		const ms3dBone_t *const pJoint = (ms3dBone_t *)  pPtr;
 		pPtr += sizeof( ms3dBone_t );
 
 		m_Bones[i].m_Name = pJoint->m_Name;
@@ -504,9 +415,7 @@ bool kbModel::LoadMS3D() {
 			}
 		}
 
-		if ( i > 0 && m_Bones[i].m_ParentIndex == -1 ) {
-			kbWarning( "kbModel::Load_Internal() - Missing parent in model %s at index %d", GetName().c_str(), i );
-		}
+		kbWarningCheck( i == 0 || m_Bones[i].m_ParentIndex != 65535, "kbModel::LoadMS3D() - Missing parent in model %s at index %d", GetName().c_str(), i );
 
 		m_Bones[i].m_RelativePosition.Set( pJoint->m_Position[0], pJoint->m_Position[1], -pJoint->m_Position[2] );
 
@@ -516,20 +425,9 @@ bool kbModel::LoadMS3D() {
 		kbQuat rotationZ( kbVec3::forward, -pJoint->m_Rotation[2] );
 		m_Bones[i].m_RelativeRotation = rotationX * rotationY * rotationZ;
 
-		kbLog( "	[%s] Euler = %f %f %f", pJoint->m_Name, pJoint->m_Rotation[0], pJoint->m_Rotation[1], pJoint->m_Rotation[2] );
-		kbMat4 rotMat = m_Bones[i].m_RelativeRotation .ToMat4();
-		kbLog( "		Vector = (%.2f %.2f %.2f) (%.2f %.2f %.2f) (%.2f %.2f %.2f)", rotMat[0].x, rotMat[0].y, rotMat[0].z, rotMat[1].x, rotMat[1].y, rotMat[1].z, rotMat[2].x, rotMat[2].y, rotMat[2].z );
-		kbLog( "		Pos = (%.2f %.2f %.2f)", m_Bones[i].m_RelativePosition.x, m_Bones[i].m_RelativePosition.y, m_Bones[i].m_RelativePosition.z );
-
-		// Load Animation here
-		const ushort NumTranslationKeyFrames = pJoint->m_NumPositionKeyFrames;
-		const ushort NumRotationKeyFrames = pJoint->m_NumRotationKeyFrames;
-
-		const ms3dRotationKeyFrame_t * rotationKeyFrames = ( ms3dRotationKeyFrame_t * ) pPtr;
-		pPtr += sizeof( ms3dRotationKeyFrame_t ) * NumRotationKeyFrames;
-
-		const ms3dPositionKeyFrame_t * positionKeyFrames = ( ms3dPositionKeyFrame_t * ) pPtr;
-		pPtr += sizeof( ms3dPositionKeyFrame_t ) * NumTranslationKeyFrames;
+		// Skip any animations
+		pPtr += sizeof( ms3dRotationKeyFrame_t ) * pJoint->m_NumPositionKeyFrames;
+		pPtr += sizeof( ms3dPositionKeyFrame_t ) * pJoint->m_NumRotationKeyFrames;
 	}
 
 	delete[] tempVertices;
@@ -542,27 +440,20 @@ bool kbModel::LoadMS3D() {
 	m_InvRefPose.insert( m_InvRefPose.begin(), m_Bones.size(), kbBoneMatrix_t() );
 
 	for ( int i = 0; i < m_Bones.size(); i++ ) {
-		if ( i > 0 ) {
-			const int parent = m_Bones[i].m_ParentIndex;			
-			const kbMat4 rotationmat = m_Bones[i].m_RelativeRotation.ToMat4();
-			kbBoneMatrix_t parentMat;
-			if ( parent != 65535 ) {
-				parentMat = m_RefPose[parent];
-			} else { 
-				parentMat.SetIdentity();
-			}
-			m_RefPose[i].SetAxis( 0, rotationmat[0].ToVec3() );
-			m_RefPose[i].SetAxis( 1, rotationmat[1].ToVec3() );
-			m_RefPose[i].SetAxis( 2, rotationmat[2].ToVec3() );
-			m_RefPose[i].SetAxis( 3,  m_Bones[i].m_RelativePosition  );
-			m_RefPose[i] = m_RefPose[i] * parentMat;
-		} else {
-			const kbMat4 rotationmat = m_Bones[i].m_RelativeRotation.ToMat4();
-			m_RefPose[0].SetAxis( 0, rotationmat[0].ToVec3() );
-			m_RefPose[0].SetAxis( 1, rotationmat[1].ToVec3() );
-			m_RefPose[0].SetAxis( 2, rotationmat[2].ToVec3() );
-			m_RefPose[0].SetAxis( 3,  m_Bones[0].m_RelativePosition );
+
+		const int parent = m_Bones[i].m_ParentIndex;			
+		const kbMat4 rotationmat = m_Bones[i].m_RelativeRotation.ToMat4();
+		kbBoneMatrix_t parentMat;
+		if ( parent != 65535 ) {
+			parentMat = m_RefPose[parent];
+		} else { 
+			parentMat.SetIdentity();
 		}
+		m_RefPose[i].SetAxis( 0, rotationmat[0].ToVec3() );
+		m_RefPose[i].SetAxis( 1, rotationmat[1].ToVec3() );
+		m_RefPose[i].SetAxis( 2, rotationmat[2].ToVec3() );
+		m_RefPose[i].SetAxis( 3,  m_Bones[i].m_RelativePosition  );
+		m_RefPose[i] = m_RefPose[i] * parentMat;
 
 		m_InvRefPose[i] = m_RefPose[i];
 		m_InvRefPose[i].Invert();
@@ -576,16 +467,13 @@ bool kbModel::LoadMS3D() {
  */
 FbxManager * g_pFBXSDKManager = nullptr;
 
-FbxAMatrix GetGeometryTransformation(FbxNode* inNode)
-{
-	if (!inNode)
-	{
-		throw std::exception("Null for mesh geometry");
-	}
+FbxAMatrix GetGeometryTransformation( FbxNode const* inNode ) {
 
-	const FbxVector4 lT = inNode->GetGeometricTranslation(FbxNode::eSourcePivot);
-	const FbxVector4 lR = inNode->GetGeometricRotation(FbxNode::eSourcePivot);
-	const FbxVector4 lS = inNode->GetGeometricScaling(FbxNode::eSourcePivot);
+	kbErrorCheck( inNode != nullptr, "GetGeometryTransformation() - null mesh" );
+
+	const FbxVector4 lT = inNode->GetGeometricTranslation( FbxNode::eSourcePivot );
+	const FbxVector4 lR = inNode->GetGeometricRotation( FbxNode::eSourcePivot );
+	const FbxVector4 lS = inNode->GetGeometricScaling( FbxNode::eSourcePivot );
 
 	return FbxAMatrix(lT, lR, lS);
 }
@@ -610,7 +498,7 @@ bool kbModel::LoadFBX() {
 		g_pFBXSDKManager = FbxManager::Create();
 
 		FbxIOSettings *const pIOsettings = FbxIOSettings::Create( g_pFBXSDKManager, IOSROOT );
-		g_pFBXSDKManager->SetIOSettings(pIOsettings);
+		g_pFBXSDKManager->SetIOSettings( pIOsettings );
 	}
 
 	fbxData.pImporter = FbxImporter::Create( g_pFBXSDKManager, "" );
@@ -626,10 +514,6 @@ bool kbModel::LoadFBX() {
 		return false;
 	}
 
-	/*FbxAxisSystem SceneAxisSystem = fbxData.pScene->GetGlobalSettings().GetAxisSystem();
-	FbxAxisSystem OurAxisSystem( FbxAxisSystem::eYAxis, FbxAxisSystem::eParityEven, FbxAxisSystem::eLeftHanded );
-	OurAxisSystem.ConvertScene( fbxData.pScene );*/
-
 	FbxNode * pRootNode = fbxData.pScene->GetRootNode();
 	kbErrorCheck( pRootNode != nullptr, "kbModel::LoadFBX() - Root node not found in %s", GetFullFileName().c_str() );
 
@@ -637,9 +521,9 @@ bool kbModel::LoadFBX() {
 	std::vector<vertexLayout> vertexList;
 	std::vector<ushort> indexList;
 
-			std::map<int, kbBounds> boneToBounds;
-		std::map<int, int> vertToBone;
-		std::map<int, kbColor> boneToColor;
+	std::map<int, kbBounds> boneToBounds;
+	std::map<int, int> vertToBone;
+	std::map<int, kbColor> boneToColor;
 
 
 	for ( int iMesh = 0; iMesh < pRootNode->GetChildCount(); iMesh++ ) {
@@ -862,10 +746,6 @@ bool kbModel::LoadFBX() {
  *	kbModel::LoadDiablo3
  */
 bool kbModel::LoadDiablo3() {
-
-
-// Vertex,Index,POSITION 0,POSITION 1,POSITION 2,NORMAL 0,NORMAL 1,NORMAL 2,NORMAL 3,COLOR0 0,COLOR0 1,COLOR0 2,COLOR0 3,COLOR1 0,COLOR1 1,COLOR1 2,COLOR1 3,TEXCOORD0 0,TEXCOORD0 1,TEXCOORD0 2,TEXCOORD0 3,TEXCOORD1 0,TEXCOORD1 1,TEXCOORD1 2,TEXCOORD1 3,BLENDINDICES 0,BLENDINDICES 1,BLENDINDICES 2,BLENDINDICES 3,BLENDWEIGHT 0,BLENDWEIGHT 1,BLENDWEIGHT 2
-
 
 	struct FileReader {
 		FileReader() { }
@@ -1201,35 +1081,33 @@ int	kbModel::GetBoneIndex( const kbString & BoneName ) const {
 /**
  *	kbAnimation::SetBoneMatrices
  */
-void kbModel::SetBoneMatrices( const float time, const kbAnimation *const theAnimation, const bool bIsLooping, std::vector<tempBone_t> & bones ) {
+void kbModel::SetBoneMatrices( std::vector<AnimatedBone_t> & bones, const float time, const kbAnimation *const pAnimation, const bool bIsLooping ) {
 	if ( m_Bones.size() == 0 ) {
 		return;
 	}
 
-	if ( theAnimation == nullptr ) {
+	if ( pAnimation == nullptr ) {
 		return;
 	}
 
-	const kbAnimation & baseAnim = *theAnimation;
-	const float maxLength = baseAnim.m_LengthInSeconds;
+	const kbAnimation & animationData = *pAnimation;
+	const float maxLength = animationData.m_LengthInSeconds;
 	const float animTime = ( bIsLooping && time > maxLength ) ? ( fmod( time, maxLength ) ) : ( time );
 
 	bones.resize( m_Bones.size() );
 
 	for ( int i = 0; i < m_Bones.size(); i++ ) {
 
-		kbQuat nextBoneRotation( 0.0f, 0.0f, 0.0f, 1.0f );
-		kbVec3 nextBonePosition( 0.0f, 0.0f, 0.0f );
+		bones[i].m_JointSpacePosition = kbVec3::zero;
+		bones[i].m_JointSpaceRotation = kbQuat::identity;
 
-		const kbAnimation::kbBoneKeyFrames_t & jointData = baseAnim.m_JointKeyFrameData[i];
+		const kbAnimation::kbBoneKeyFrames_t & jointData = animationData.m_JointKeyFrameData[i];
 		for ( int nextKey = 0; nextKey < jointData.m_RotationKeyFrames.size(); nextKey++ ) {
 
 			float nextTime = jointData.m_RotationKeyFrames[nextKey].m_Time;
 			if ( animTime >= nextTime && nextKey != jointData.m_RotationKeyFrames.size() - 1 ) {
 				continue;
 			}
-
-			nextBoneRotation = jointData.m_RotationKeyFrames[nextKey].m_Rotation;
 
 			int prevKey = nextKey;
 			if ( animTime >= nextTime ) {
@@ -1256,82 +1134,48 @@ void kbModel::SetBoneMatrices( const float time, const kbAnimation *const theAni
 			const float timeBetweenKeys = nextTime - prevTime;
 			const float timeSincePrevKey = animTime - prevTime;
 			const float t = ( timeBetweenKeys > 0 ) ? ( timeSincePrevKey / timeBetweenKeys ) : ( 0.0f );
-			nextBoneRotation = kbQuat::Slerp( prevBoneRotation, nextRotation, t );
-			nextBonePosition = prevBonePosition + ( nextPosition - prevBonePosition ) * t;
+			bones[i].m_JointSpaceRotation = kbQuat::Slerp( prevBoneRotation, nextRotation, t );
+			bones[i].m_JointSpacePosition = prevBonePosition + ( nextPosition - prevBonePosition ) * t;
 			break;
 		}
-
-		bones[i].position = nextBonePosition;
-		bones[i].rotation = nextBoneRotation;
 	}
 }
 
 /**
  *	kbModel::Animate
  */
-void kbModel::Animate( const float time, const kbAnimation *const pAnimation, const bool bLoopAnim, std::vector<kbBoneMatrix_t> & boneMatrices ) {
-	std::vector<tempBone_t> tempBones;
-	SetBoneMatrices( time, pAnimation, bLoopAnim, tempBones );
-	static kbString DebugTarget( "RHand" );
-	//static kbString LForearm( "LForearm" );
+void kbModel::Animate( std::vector<kbBoneMatrix_t> & outMatrices, const float time, const kbAnimation *const pAnimation, const bool bLoopAnim ) {
+	std::vector<AnimatedBone_t> tempBones;
+	SetBoneMatrices( tempBones, time, pAnimation, bLoopAnim );
 
 	for ( int i = 0; i < tempBones.size(); i++ ) {
 
 		const int parent = m_Bones[i].m_ParentIndex;
-		kbMat4 tempMat = m_Bones[i].m_RelativeRotation.ToMat4();
-		kbBoneMatrix_t matLocalSkel;
-		matLocalSkel.SetAxis( 0, tempMat[0].ToVec3() );
-		matLocalSkel.SetAxis( 1, tempMat[1].ToVec3() );
-		matLocalSkel.SetAxis( 2, tempMat[2].ToVec3() );
-		matLocalSkel.SetAxis( 3, m_Bones[i].m_RelativePosition );
-		
-		tempMat = tempBones[i].rotation.ToMat4();
-		kbBoneMatrix_t matAnimate;
-		matAnimate.SetAxis( 0, tempMat[0].ToVec3() );
-		matAnimate.SetAxis( 1, tempMat[1].ToVec3() );
-		matAnimate.SetAxis( 2, tempMat[2].ToVec3() );
-		matAnimate.SetAxis( 3, tempBones[i].position );
+
+		kbBoneMatrix_t matLocalSkel( m_Bones[i].m_RelativeRotation, m_Bones[i].m_RelativePosition );
+		kbBoneMatrix_t matAnimate( tempBones[i].m_JointSpaceRotation, tempBones[i].m_JointSpacePosition );
 
 		kbBoneMatrix_t matLocal = matAnimate * matLocalSkel;
 		if ( parent != 65535 ) {
-			tempBones[i].worldMatrix =  matLocal * tempBones[parent].worldMatrix;
+			tempBones[i].m_LocalSpaceMatrix =  matLocal * tempBones[parent].m_LocalSpaceMatrix;
 		} else {
-			tempBones[i].worldMatrix = matLocal;
+			tempBones[i].m_LocalSpaceMatrix = matLocal;
 		}
 
 		const kbBoneMatrix_t & invRef = GetInvRefBoneMatrix(i);
-		boneMatrices[i] = invRef * tempBones[i].worldMatrix;
-	
-		if ( m_Bones[i].m_Name == DebugTarget && GetAsyncKeyState('P') ) {
-			kbLog( "%s - %f %f %f -- %f %f %f", m_Bones[i].m_Name.c_str(), m_Bones[i].m_RelativePosition.x, m_Bones[i].m_RelativePosition.y, m_Bones[i].m_RelativePosition.z, tempBones[i].position.x, tempBones[i].position.y, tempBones[i].position.z );
-			kbLog( "%f %f %f", tempBones[0].rotation.x, tempBones[0].rotation.y, tempBones[0].rotation.z );
-			int index = i;
-			while( index != 65535 ) {
-				kbVec3 actualWorldPos = kbVec3::zero * tempBones[index].worldMatrix;
-				const float axisLen = 0.25f;
-
-				g_pRenderer->DrawLine( actualWorldPos, actualWorldPos + tempBones[index].worldMatrix.GetAxis(0) * axisLen, kbColor::red, false );
-				g_pRenderer->DrawLine( actualWorldPos, actualWorldPos + tempBones[index].worldMatrix.GetAxis(1) * axisLen, kbColor::green, false );
-				g_pRenderer->DrawLine( actualWorldPos, actualWorldPos + tempBones[index].worldMatrix.GetAxis(2) * axisLen, kbColor::blue, false );
-	
-	
-				kbBoneMatrix_t &m = tempBones[index].worldMatrix;
-				kbLog( "	%s  = (%.2f %.2f %.2f), (%.2f %.2f %.2f), (%.2f %.2f %.2f)", m_Bones[index].m_Name.c_str(), m[0].x, m[0].y, m[0].z, m[1].x, m[1].y, m[1].z, m[2].x, m[2].y, m[2].z );
-				index = m_Bones[index].m_ParentIndex;
-			}
-		}
+		outMatrices[i] = invRef * tempBones[i].m_LocalSpaceMatrix;
 	}
 }
 
 /**
  *	kbModel::BlendAnimations
  */
-void kbModel::BlendAnimations( const kbAnimation *const pFromAnim, const float FromAnimTime, const bool bFromAnimLoops, const kbAnimation *const pToAnim, const float ToAnimTime, const bool bToAnimLoops, const float normalizedBlendTime, std::vector<kbBoneMatrix_t> & boneMatrices ) {
+void kbModel::BlendAnimations( std::vector<kbBoneMatrix_t> & outMatrices, const kbAnimation *const pFromAnim, const float FromAnimTime, const bool bFromAnimLoops, const kbAnimation *const pToAnim, const float ToAnimTime, const bool bToAnimLoops, const float normalizedBlendTime ) {
 
-	std::vector<tempBone_t> fromTempBones;
+	/*std::vector<AnimatedBone_t> fromTempBones;
 	SetBoneMatrices( FromAnimTime, pFromAnim, bFromAnimLoops, fromTempBones );
 
-	std::vector<tempBone_t> toTempBones;
+	std::vector<AnimatedBone_t> toTempBones;
 	SetBoneMatrices( ToAnimTime, pToAnim, bToAnimLoops, toTempBones );
 
 	for ( int i = 0; i < fromTempBones.size(); i++ ) {
@@ -1360,7 +1204,7 @@ void kbModel::BlendAnimations( const kbAnimation *const pFromAnim, const float F
 
 		const kbBoneMatrix_t & invRef = GetInvRefBoneMatrix(i);
 		boneMatrices[i] = invRef * toTempBones[i].worldMatrix;
-	}
+	}*/
 }
 
 /**

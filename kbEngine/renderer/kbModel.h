@@ -69,14 +69,11 @@ private:
 kbVec3 operator*( const kbVec3 & op1, const kbBoneMatrix_t & op2 );
 kbBoneMatrix_t operator *( const kbBoneMatrix_t & op1, const kbBoneMatrix_t & op2 );
 
-struct tempBone_t {
-	kbQuat										rotation;
-	kbVec3										position;
+struct AnimatedBone_t {
+	kbQuat										m_JointSpaceRotation;
+	kbVec3										m_JointSpacePosition;
 
-	kbQuat										worldRotation;
-	kbVec3										worldPosition;
-
-	kbBoneMatrix_t								worldMatrix;		
+	kbBoneMatrix_t								m_LocalSpaceMatrix;		
 };
 
 
@@ -139,9 +136,9 @@ public:
 
 	kbModelIntersection_t						RayIntersection( const kbVec3 & rayOrigin, const kbVec3 & rayDirection, const kbVec3 & modelTranslation, const kbQuat & modelOrientation ) const;
 
-	void										Animate( const float time, const kbAnimation *const pAnimation, const bool bLoopAnim, std::vector<kbBoneMatrix_t> & boneMatrices );
-	void										BlendAnimations( const kbAnimation *const FromAnim, const float FromAnimTime, const bool bFromAnimLoops, const kbAnimation *const ToAnim, const float ToAnimTime, const bool bToAnimLoops, const float normalizedBlendTime, std::vector<kbBoneMatrix_t> & boneMatrices );
-	void										SetBoneMatrices( const float time, const kbAnimation *const pAnimation, const bool bLoopAnim, std::vector<tempBone_t> & boneMatrices );
+	void										Animate( std::vector<kbBoneMatrix_t> & outMatrices, const float time, const kbAnimation *const pAnimation, const bool bLoopAnim );
+	void										BlendAnimations( std::vector<kbBoneMatrix_t> & outMatrices, const kbAnimation *const pFromAnim, const float fromAnimTime, const bool bFromAnimLoops, const kbAnimation *const pToAnim, const float ToAnimTime, const bool bToAnimLoops, const float normalizedBlendTime );
+	void										SetBoneMatrices( std::vector<AnimatedBone_t> & outMatrices, const float time, const kbAnimation *const pAnimation, const bool bLoopAnim );
 
 	int											NumBones() const { return (int)m_Bones.size(); }
 	int											GetBoneIndex( const kbString & BoneName ) const;

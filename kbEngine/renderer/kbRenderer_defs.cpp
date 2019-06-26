@@ -1,13 +1,13 @@
 //===================================================================================================
 // kbRenderer_defs.cpp
 //
-// 2016 kbEngine 2.0
+// 2016-2019 kbEngine 2.0
 //===================================================================================================
 #include "kbCore.h"
 #include "kbRenderer_defs.h"
 
 /**
- *	kbBoneMatrix_t::Invert()
+ *	kbBoneMatrix_t::Invert
  */
 void kbBoneMatrix_t::Invert() {
 	kbVec3 Trans(-m_Axis[3] );
@@ -23,6 +23,39 @@ void kbBoneMatrix_t::Invert() {
 	m_Axis[3].x = finalTrans.x;
 	m_Axis[3].y = finalTrans.y;
 	m_Axis[3].z = finalTrans.z;
+}
+
+/**
+ *	kbBoneMatrix_t::SetFromQuat
+ */
+void kbBoneMatrix_t::SetFromQuat( const kbQuat & srcQuat ) {
+
+	kbMat4 mat;
+	const float xx = srcQuat.x * srcQuat.x;
+	const float xy = srcQuat.x * srcQuat.y;
+	const float xz = srcQuat.x * srcQuat.z;
+	const float xw = srcQuat.x * srcQuat.w;
+
+	const float yy = srcQuat.y * srcQuat.y;
+	const float yz = srcQuat.y * srcQuat.z;
+	const float yw = srcQuat.y * srcQuat.w;
+
+	const float zz = srcQuat.z * srcQuat.z;
+	const float zw = srcQuat.z * srcQuat.w;
+
+	m_Axis[0].x = 1 - 2 * ( yy + zz );
+	m_Axis[0].y = 2 * ( xy - zw );
+	m_Axis[0].z =  2 * ( xz + yw );
+
+	m_Axis[1].x = 2 * ( xy + zw );
+	m_Axis[1].y = 1 - 2 * ( xx + zz );
+	m_Axis[1].z = 2 * ( yz - xw );
+
+	m_Axis[2].x = 2 * ( xz - yw );
+	m_Axis[2].y = 2 * ( yz + xw );
+	m_Axis[2].z = 1 - 2 * ( xx + yy );
+
+	m_Axis[3] = kbVec3::zero;
 }
 
 /**
