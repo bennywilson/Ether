@@ -70,6 +70,7 @@ protected:
 
 	std::vector<EtherAnimComponent>			m_Animations;
 	int										m_DebugAnimIdx;
+	float									m_DebugAnimTime;
 
 	int										m_CurrentAnimation;
 	int										m_NextAnimation;

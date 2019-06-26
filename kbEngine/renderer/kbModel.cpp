@@ -1301,10 +1301,6 @@ bool kbAnimation::Load_Internal() {
 	const ushort numJoints = *( ushort * ) pPtr;
 	pPtr += sizeof( ushort );
 
-	//m_Bones.resize( numJoints );
-
-	//m_Animations.resize( 1 );
-	//kbAnimation & baseAnim = m_Animations[0];
 	m_JointKeyFrameData.resize( numJoints );
 
 	kbLog( "Anim %s", m_FullFileName.c_str() );
@@ -1313,30 +1309,6 @@ bool kbAnimation::Load_Internal() {
 		const ms3dBone_t * pJoint = ( ms3dBone_t * ) pPtr;
 		pPtr += sizeof( ms3dBone_t );
 
-	//	m_Bones[i].m_Name = pJoint->m_Name;
-	// m_Bones[i].m_ParentIndex = -1;
-
-		// Find this bone's parent index
-	/*	for ( uint parentIdx = 0; parentIdx < i; parentIdx++ ) {
-			if ( m_Bones[parentIdx].m_Name == pJoint->m_ParentName ) {
-				m_Bones[i].m_ParentIndex = parentIdx;
-				break;
-			}
-		}
-
-		if ( i > 0 && m_Bones[i].m_ParentIndex == -1 ) {
-			kbWarning( "kbModel::Load_Internal() - Missing parent in model %s at index %d", GetName().c_str(), i );
-		}
-
-		m_Bones[i].m_Position.Set( pJoint->m_Position[0], pJoint->m_Position[1], -pJoint->m_Position[2] );
-*
-		// Convert rotation from euler angles to quaternions
-		kbQuat rotationX( kbVec3::right, pJoint->m_Rotation[0] ); 
-		kbQuat rotationY( kbVec3::up, pJoint->m_Rotation[1] );
-		kbQuat rotationZ( kbVec3::forward, -pJoint->m_Rotation[2] );
-		m_Bones[i].m_Rotation = rotationX * rotationY * rotationZ;
-*/
-		// Load Animation here
 		const ushort NumTranslationKeyFrames = pJoint->m_NumPositionKeyFrames;
 		const ushort NumRotationKeyFrames = pJoint->m_NumRotationKeyFrames;
 
@@ -1359,10 +1331,6 @@ bool kbAnimation::Load_Internal() {
 			jointData.m_RotationKeyFrames[iKey].m_Rotation = rotationX * rotationY * rotationZ;
 			jointData.m_RotationKeyFrames[iKey].m_Time = rotationKeyFrames[iKey].m_Time;
 	
-			kbLog( "[%s] Euler = %f %f %f", pJoint->m_Name, rotationKeyFrames[iKey].m_Rotation[0], rotationKeyFrames[iKey].m_Rotation[1], rotationKeyFrames[iKey].m_Rotation[2] );
-			kbMat4 rotMat = jointData.m_RotationKeyFrames[iKey].m_Rotation.ToMat4();
-			kbLog( "		Vector = (%.2f %.2f %.2f) (%.2f %.2f %.2f) (%.2f %.2f %.2f)",  rotMat[0].x, rotMat[0].y, rotMat[0].z, rotMat[1].x, rotMat[1].y, rotMat[1].z, rotMat[2].x, rotMat[2].y, rotMat[2].z );
-
 			if ( jointData.m_RotationKeyFrames[iKey].m_Time > m_LengthInSeconds )
 			{
 				m_LengthInSeconds = jointData.m_RotationKeyFrames[iKey].m_Time;
@@ -1372,7 +1340,6 @@ bool kbAnimation::Load_Internal() {
 		for ( int iKey = 0; iKey < NumTranslationKeyFrames; iKey++ ) {
 			jointData.m_TranslationKeyFrames[iKey].m_Position.Set( positionKeyFrames[iKey].m_Position[0], positionKeyFrames[iKey].m_Position[1], -positionKeyFrames[iKey].m_Position[2] );
 			jointData.m_TranslationKeyFrames[iKey].m_Time = positionKeyFrames[iKey].m_Time;
-			kbLog( "		Trans = (%.2f %.2f %.2f)", jointData.m_TranslationKeyFrames[iKey].m_Position.x, jointData.m_TranslationKeyFrames[iKey].m_Position.y, jointData.m_TranslationKeyFrames[iKey].m_Position.z );
 
 			if ( jointData.m_TranslationKeyFrames[iKey].m_Time > m_LengthInSeconds )
 			{

@@ -38,6 +38,8 @@ void EtherSkelModelComponent::Constructor() {
 	m_bFirstPersonModel = false;
 	m_CurrentAnimation = -1;
 	m_NextAnimation = -1;
+
+	m_DebugAnimTime = 0.0f;
 }
 
 /**
@@ -170,22 +172,22 @@ void EtherSkelModelComponent::Update_Internal( const float DeltaTime ) {
 		// Debug Animation
 		if ( m_DebugAnimIdx >= 0 && m_DebugAnimIdx < m_Animations.size() && m_Animations[m_DebugAnimIdx].m_pAnimation != nullptr ) {
 			if ( m_pModel != nullptr ) {
-				static float time = 0.0f;
+			//	static float time = 0.0f;
 				static bool pause = false;
 
 				if ( pause == false ) {
 					const float AnimTimeScale = m_Animations[m_DebugAnimIdx].m_TimeScale;
-					time += DeltaTime * AnimTimeScale;
+					m_DebugAnimTime += DeltaTime * AnimTimeScale;
 
 					if ( m_Animations[m_DebugAnimIdx].m_bIsLooping == false ) {
-						time = kbClamp( time, 0.0f, m_Animations[m_DebugAnimIdx].m_pAnimation->GetLengthInSeconds() );
+						m_DebugAnimTime = kbClamp( m_DebugAnimTime, 0.0f, m_Animations[m_DebugAnimIdx].m_pAnimation->GetLengthInSeconds() );
 					}
 				}
 
 				if ( m_BindToLocalSpaceMatrices.size() == 0 ) {
 					m_BindToLocalSpaceMatrices.resize( m_pModel->NumBones() );
 				}
-				m_pModel->Animate( m_BindToLocalSpaceMatrices, time, m_Animations[m_DebugAnimIdx].m_pAnimation, m_Animations[m_DebugAnimIdx].m_bIsLooping );
+				m_pModel->Animate( m_BindToLocalSpaceMatrices, m_DebugAnimTime, m_Animations[m_DebugAnimIdx].m_pAnimation, m_Animations[m_DebugAnimIdx].m_bIsLooping );
 			}
 		} else {
 			for ( int i = 0; i < m_pModel->NumBones(); i++ ) {
