@@ -165,7 +165,7 @@ void EtherSkelModelComponent::SetModel( kbModel *const pModel, bool bIsFirstPers
 void EtherSkelModelComponent::Update_Internal( const float DeltaTime ) {
 
 	if ( m_pModel != nullptr ) {
-		if ( m_BindToLocalSpaceMatrices.size() == 0 ) {
+		if ( m_BindToLocalSpaceMatrices.size() != m_pModel->NumBones() ) {
 			m_BindToLocalSpaceMatrices.resize( m_pModel->NumBones() );
 		}
 

@@ -133,7 +133,7 @@ bool kbModel::LoadMS3D() {
 	const ms3dHeader_t *const pHeader = (const ms3dHeader_t *) pPtr;
 	pPtr += sizeof( ms3dHeader_t );
 
-	kbErrorCheck( strncmp( pHeader->m_ID, "MS3D000000", 10 ) == 0, "kbModel::LoadResource_Internal - Invalid model header %d", pHeader->m_ID );
+	kbErrorCheck( strncmp( pHeader->m_ID, "MS3D000000", 10 ) == 0, "kbModel::LoadResource_Internal - Invalid model header %d for %s", pHeader->m_ID, m_FullFileName.c_str() );
 
 	// Vertices
 	m_Bounds.Reset();
@@ -141,18 +141,24 @@ bool kbModel::LoadMS3D() {
 	ushort numVertices = *(ushort *) pPtr;
 	pPtr += sizeof( ushort );
 
-	kbVec3 * tempVertices = new kbVec3[ numVertices ];
-	int * boneIndices = new int[numVertices];
+	kbVec3 *const tempVertices = new kbVec3[numVertices];
+	struct vertexBoneData {
+		byte indices[4];
+		byte weights[4];
+	};
+
+	std::vector<vertexBoneData> tempVertexBoneData;
+	tempVertexBoneData.resize( numVertices );
 
 	for ( uint i = 0; i < numVertices; i++ ) {
-		const ms3dVertex_t * pVertices = ( ms3dVertex_t * ) pPtr;
+		const ms3dVertex_t *const pVertices = (const ms3dVertex_t *) pPtr;
 		pPtr += sizeof( ms3dVertex_t );
 
 		tempVertices[i].x = pVertices->m_vertex[0];
 		tempVertices[i].y = pVertices->m_vertex[1];
 		tempVertices[i].z = pVertices->m_vertex[2] * -1;	// flip from rhs to lhs
 
-		boneIndices[i] = pVertices->m_boneID;
+		tempVertexBoneData[i].indices[0] = pVertices->m_boneID;
 
 		m_Bounds.AddPoint( tempVertices[i] );
 	}
@@ -166,18 +172,6 @@ bool kbModel::LoadMS3D() {
 		const ms3dTriangle_t * pTriangles = (ms3dTriangle_t *) pPtr;
 		pPtr += sizeof( ms3dTriangle_t );
 		tempTriangles[i] = *pTriangles;
-	
-	/*	tempTriangles[i].m_VertexIndices[0] = pTriangles->m_VertexIndices[2];
-		tempTriangles[i].m_VertexIndices[1] = pTriangles->m_VertexIndices[1];
-		tempTriangles[i].m_VertexIndices[2] = pTriangles->m_VertexIndices[0];
-
-		tempTriangles[i].u[0] = pTriangles->u[2];
-		tempTriangles[i].u[1] = pTriangles->u[1];
-		tempTriangles[i].u[2] = pTriangles->u[0];
-
-		tempTriangles[i].v[0] = pTriangles->v[2];
-		tempTriangles[i].v[1] = pTriangles->v[1];
-		tempTriangles[i].v[2] = pTriangles->v[0];*/
 
 		// Flip z components of normals from rhs to lhs
 		tempTriangles[i].m_VertexNormals[0][2] *= -1;
@@ -186,68 +180,15 @@ bool kbModel::LoadMS3D() {
 	}
 
 	// Groups ------------------------------------------------//
-	uint numSrcGroups = *(ushort *) pPtr;
+	uint numGroups = *(ushort *) pPtr;
 	pPtr += sizeof( ushort );
 
-	// Look for groups named "collision" and build collision geometry from them
-	int collisionGroupIdx = -1;
-	const char * pCollisionPtr = pPtr;
-	for ( uint iGroup = 0; iGroup < numSrcGroups; iGroup++ ) {
-
-		pCollisionPtr += sizeof( byte );
-		const char * groupName = (char *)( pCollisionPtr );
-
-		pCollisionPtr += 32;
-		const uint numTris = *(ushort *)( pCollisionPtr );
-
-		pCollisionPtr += sizeof( ushort );
-
-		if ( strcmp( groupName, "collision" ) == 0 ) {
-			kbErrorCheck( collisionGroupIdx == -1, "Too many collision groups in %s", m_FullFileName.c_str() );
-			collisionGroupIdx = iGroup;
-
-			// Use collision geometry to determine the kbModel's bounds
-			m_Bounds.Reset();
-			for ( uint iTris = 0; iTris < numTris; iTris++ ) {
-				unsigned short curTriIndex = *(ushort *) pCollisionPtr;
-
-				ms3dTriangle_t & curTri  = tempTriangles[ curTriIndex ];
-
-				m_Bounds.AddPoint( tempVertices[ curTri.m_VertexIndices[ 0 ] ] );
-				m_Bounds.AddPoint( tempVertices[ curTri.m_VertexIndices[ 1 ] ] );
-				m_Bounds.AddPoint( tempVertices[ curTri.m_VertexIndices[ 2 ] ] );
-
-				pCollisionPtr += sizeof( ushort );
-			}
-		} else {
-			pCollisionPtr += sizeof( ushort ) * numTris;
-		}
-
-		pCollisionPtr += sizeof( char );
-	}
-
-	if ( collisionGroupIdx == -1 ) {
-		m_Meshes.resize( numSrcGroups );
-	} else {
-		// Note: collision groups are not copied over to the kbModel
-		m_Meshes.resize( numSrcGroups - 1 );
-	}
+	m_Meshes.resize( numGroups );
 
 	int ibIndex = 0;
-	for ( uint iSrcGroupIdx = 0, iDestGroupIdx = 0; iSrcGroupIdx < numSrcGroups; iSrcGroupIdx++ ) {
+	for ( uint iGroup = 0, iDestGroupIdx = 0; iGroup < numGroups; iGroup++ ) {
 
-		if ( iSrcGroupIdx == collisionGroupIdx ) {
-			
-			// Skip collision group
-			pPtr += sizeof( byte ) + 32;
-			const ushort NumTris = *(ushort *)pPtr;
-			pPtr += sizeof( ushort ) + NumTris * sizeof( ushort ) + sizeof( char );
-
-			continue;
-		}
-
-		mesh_t & currentMesh = m_Meshes[iDestGroupIdx];
-		iDestGroupIdx++;
+		mesh_t & currentMesh = m_Meshes[iGroup];
 
 		pPtr += sizeof( byte );			// Skip flags
 		pPtr += 32;						// Skip name
@@ -255,7 +196,7 @@ bool kbModel::LoadMS3D() {
 		currentMesh.m_NumTriangles = *(ushort *)pPtr;
 		pPtr += sizeof( ushort );
 
-		currentMesh.m_TriangleIndices = new ushort[ currentMesh.m_NumTriangles ];
+		currentMesh.m_TriangleIndices = new ushort[currentMesh.m_NumTriangles];
 		currentMesh.m_IndexBufferIndex = ibIndex;
 		ibIndex += currentMesh.m_NumTriangles * 3;
 
@@ -273,26 +214,139 @@ bool kbModel::LoadMS3D() {
 	m_Materials.resize( numMaterials );
 	pPtr += sizeof( ushort );
 
-	std::string filePath = m_FullFileName;
-	size_t stringPos = filePath.rfind( "\\" );
-	if ( stringPos != std::string::npos ) {
-		filePath.erase( stringPos );
-		filePath.append( "/" );
-	}
-
-	// todo:don't load duplicate textures
 	for ( uint iMat = 0; iMat < numMaterials; iMat++ ) {
-		ms3dMaterial_t * pMat = (ms3dMaterial_t *) pPtr;
-		pPtr += sizeof(ms3dMaterial_t);
+		const ms3dMaterial_t *const pMat = (ms3dMaterial_t *)pPtr;
+		pPtr += sizeof( ms3dMaterial_t );
 
 		m_Materials[iMat].m_DiffuseColor.Set( pMat->m_Diffuse[0], pMat->m_Diffuse[1], pMat->m_Diffuse[2], 1.0f );
+	}
+   
+	// Joints
+	const float AnimationFPS = *(float *) pPtr;
+	pPtr += sizeof( float );
+
+	const float CurrentTime = *(float *) pPtr;
+	pPtr += sizeof( float );
+
+	const int TotalFrames = *(int *) pPtr;
+	pPtr += sizeof( int );
+
+	const ushort numJoints = *(ushort *) pPtr;
+	pPtr += sizeof( ushort );
+
+	m_Bones.resize( numJoints );
+	
+	std::unordered_map<kbString, int, kbStringHash> boneNameToIdxMap;
+
+	for ( uint i = 0; i < m_Bones.size(); i++ ) {
+		const ms3dBone_t *const pJoint = (ms3dBone_t *)  pPtr;
+		pPtr += sizeof( ms3dBone_t );
+
+		m_Bones[i].m_Name = pJoint->m_Name;
+		m_Bones[i].m_ParentIndex = -1;
+
+		boneNameToIdxMap[m_Bones[i].m_Name] = i;
+
+		// Find index to parent
+		const kbString parentName = pJoint->m_ParentName;
+		auto it = boneNameToIdxMap.find( parentName );
+		if ( it != boneNameToIdxMap.end() ) {
+			m_Bones[i].m_ParentIndex = it->second;
+		}
+
+		kbWarningCheck( i == 0 || m_Bones[i].m_ParentIndex != 65535, "kbModel::LoadMS3D() - Missing parent in model %s at index %d", m_FullFileName.c_str(), i );
+
+		m_Bones[i].m_RelativePosition.Set( pJoint->m_Position[0], pJoint->m_Position[1], -pJoint->m_Position[2] );
+
+		// Convert from euler angles to quaternions
+		kbQuat rotationX( kbVec3::right, pJoint->m_Rotation[0] ); 
+		kbQuat rotationY( kbVec3::up, pJoint->m_Rotation[1] );
+		kbQuat rotationZ( kbVec3::forward, -pJoint->m_Rotation[2] );
+		m_Bones[i].m_RelativeRotation = rotationX * rotationY * rotationZ;
+
+		// Skip animations
+		pPtr += sizeof( ms3dRotationKeyFrame_t ) * pJoint->m_NumPositionKeyFrames;
+		pPtr += sizeof( ms3dPositionKeyFrame_t ) * pJoint->m_NumRotationKeyFrames;
+	}
+
+	// Build ref pose
+	m_RefPose.insert( m_RefPose.begin(), m_Bones.size(), kbBoneMatrix_t() );
+	m_InvRefPose.insert( m_InvRefPose.begin(), m_Bones.size(), kbBoneMatrix_t() );
+
+	for ( int i = 0; i < m_Bones.size(); i++ ) {
+
+		const int parent = m_Bones[i].m_ParentIndex;			
+		const kbMat4 rotationmat = m_Bones[i].m_RelativeRotation.ToMat4();
+		kbBoneMatrix_t parentMat;
+		if ( parent != 65535 ) {
+			parentMat = m_RefPose[parent];
+		} else { 
+			parentMat.SetIdentity();
+		}
+		m_RefPose[i].SetAxis( 0, rotationmat[0].ToVec3() );
+		m_RefPose[i].SetAxis( 1, rotationmat[1].ToVec3() );
+		m_RefPose[i].SetAxis( 2, rotationmat[2].ToVec3() );
+		m_RefPose[i].SetAxis( 3,  m_Bones[i].m_RelativePosition  );
+		m_RefPose[i] = m_RefPose[i] * parentMat;
+
+		m_InvRefPose[i] = m_RefPose[i];
+		m_InvRefPose[i].Invert();
+	}
+
+	// Get comments if any
+	int subVersion = *((int*)pPtr);
+	pPtr += sizeof( int );
+
+	if ( subVersion == 1 ) {
+
+		for ( int i = 0; i < 4; i++ ) {
+			const int numComments = *((int*)pPtr);
+			pPtr += sizeof( int );
+
+			for ( int j = 0; j < numComments; j++ ) {
+				pPtr += sizeof( int );
+
+				size_t commentLen = *((size_t*)pPtr);
+				pPtr += sizeof( size_t );
+				if ( commentLen > 0 ) {
+					pPtr += sizeof( char ) * commentLen;
+				}
+			}
+		}
+	}
+
+	// Get additional vertex weights
+	if ( pPtr < pMemoryFileBuffer + fileSize ) {
+		subVersion = *((int*)pPtr);
+		pPtr += sizeof( int );
+
+		for ( int i = 0; i < numVertices; i++ ) {
+			// Assuming subversion 3
+			const char *const pBoneIds = (const char*)pPtr;
+			pPtr += sizeof( char ) * 3;
+
+			tempVertexBoneData[i].indices[1] = pBoneIds[0];
+			tempVertexBoneData[i].indices[2] = pBoneIds[1];
+			tempVertexBoneData[i].indices[3] = pBoneIds[2];
+
+			const char *const pWeights = (const char *)pPtr;
+			pPtr += sizeof( char )  * 3;
+
+			tempVertexBoneData[i].weights[0] = pWeights[0];
+			tempVertexBoneData[i].weights[1] = pWeights[1];
+			tempVertexBoneData[i].weights[2] = pWeights[2];
+			tempVertexBoneData[i].weights[3] = 100 - pWeights[0] - pWeights[1] - pWeights[2];
+
+			const uint *const pExtra = (uint*) pPtr;
+			pPtr += sizeof( uint ) * 2;
+		}
 	}
 
 	// create index buffer
 	const uint numFinalTriangles = ibIndex / 3;
 
 	D3D11_BUFFER_DESC indexBufferDesc = { 0 };
-	indexBufferDesc.ByteWidth = sizeof( unsigned long ) * ibIndex;
+	indexBufferDesc.ByteWidth = sizeof( ushort ) * ibIndex;
 	indexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
 	indexBufferDesc.BindFlags = D3D11_BIND_INDEX_BUFFER;
 	indexBufferDesc.CPUAccessFlags = 0;
@@ -317,8 +371,8 @@ bool kbModel::LoadMS3D() {
 			for ( int j = 0; j < 3; j++ ) {
 				vertexLayout newVert;
 
-				newVert.position = tempVertices[ currentTriangle.m_VertexIndices[ j ] ];
-				newVert.uv.Set( currentTriangle.u[ j ], currentTriangle.v[ j ] );
+				newVert.position = tempVertices[ currentTriangle.m_VertexIndices[j] ];
+				newVert.uv.Set( currentTriangle.u[j], currentTriangle.v[j] );
 
 				kbVec4 normal( currentTriangle.m_VertexNormals[j][0], currentTriangle.m_VertexNormals[j][1], currentTriangle.m_VertexNormals[j][2], 0 );
 				newVert.SetNormal( normal );
@@ -327,10 +381,16 @@ bool kbModel::LoadMS3D() {
 				if ( m_bCPUAccessOnly ) {
 					newVert.SetColor( modelMaterial.GetDiffuseColor() );
 				} else {
-					newVert.color[0] = (byte)boneIndices[currentTriangle.m_VertexIndices[j]];
-					newVert.color[1] = (byte)boneIndices[currentTriangle.m_VertexIndices[j]];
-					newVert.color[2] = (byte)boneIndices[currentTriangle.m_VertexIndices[j]];
-					newVert.color[3] = (byte)boneIndices[currentTriangle.m_VertexIndices[j]]; 
+					const vertexBoneData & boneData = tempVertexBoneData[currentTriangle.m_VertexIndices[j]];
+					newVert.color[0] = (byte)boneData.indices[0];
+					newVert.color[1] = (byte)boneData.indices[1];
+					newVert.color[2] = (byte)boneData.indices[2];
+					newVert.color[3] = (byte)boneData.indices[3];
+
+					newVert.tangent[0] = (byte)boneData.weights[0];
+					newVert.tangent[1] = (byte)boneData.weights[1];
+					newVert.tangent[2] = (byte)boneData.weights[2];
+					newVert.tangent[3] = (byte)boneData.weights[3];
 				}
 
 				auto it = vertHash.find( newVert );
@@ -375,89 +435,23 @@ bool kbModel::LoadMS3D() {
 			verts[i].tangent[2] = m_CPUVertices[i].tangent[2];
 			verts[i].tangent[3] = m_CPUVertices[i].tangent[3];
 
+
 			verts[i].color[0] = m_CPUVertices[i].color[0];
 			verts[i].color[1] = m_CPUVertices[i].color[1];
 			verts[i].color[2] = m_CPUVertices[i].color[2];
 			verts[i].color[3] = m_CPUVertices[i].color[3];
+
+kbLog( "%d: - [%d %d %d %d] [%d %d %d %d]", i, verts[i].color[0], verts[i].color[1], verts[i].color[2], verts[i].color[3], verts[i].tangent[0], verts[i].tangent[1], verts[i].tangent[2], verts[i].tangent[3] );
+	
 			// color, normal, etc
 		}
 
 		m_VertexBuffer.CreateVertexBuffer( verts );
 	}
-   
-	// Joints
-	const float AnimationFPS = *( float * ) pPtr;
-	pPtr += sizeof( float );
-
-	const float CurrentTime = *( float * ) pPtr;
-	pPtr += sizeof( float );
-
-	const int TotalFrames = *( int * ) pPtr;
-	pPtr += sizeof( int );
-
-	const ushort numJoints = *( ushort * ) pPtr;
-	pPtr += sizeof( ushort );
-
-	m_Bones.resize( numJoints );
-
-	for ( unsigned i = 0; i < m_Bones.size(); i++ ) {
-		const ms3dBone_t *const pJoint = (ms3dBone_t *)  pPtr;
-		pPtr += sizeof( ms3dBone_t );
-
-		m_Bones[i].m_Name = pJoint->m_Name;
-		m_Bones[i].m_ParentIndex = -1;
-
-		// Find this bone's parent index
-		for ( uint parentIdx = 0; parentIdx < i; parentIdx++ ) {
-			if ( m_Bones[parentIdx].m_Name == pJoint->m_ParentName ) {
-				m_Bones[i].m_ParentIndex = parentIdx;
-				break;
-			}
-		}
-
-		kbWarningCheck( i == 0 || m_Bones[i].m_ParentIndex != 65535, "kbModel::LoadMS3D() - Missing parent in model %s at index %d", GetName().c_str(), i );
-
-		m_Bones[i].m_RelativePosition.Set( pJoint->m_Position[0], pJoint->m_Position[1], -pJoint->m_Position[2] );
-
-		// Convert rotation from euler angles to quaternions
-		kbQuat rotationX( kbVec3::right, pJoint->m_Rotation[0] ); 
-		kbQuat rotationY( kbVec3::up, pJoint->m_Rotation[1] );
-		kbQuat rotationZ( kbVec3::forward, -pJoint->m_Rotation[2] );
-		m_Bones[i].m_RelativeRotation = rotationX * rotationY * rotationZ;
-
-		// Skip any animations
-		pPtr += sizeof( ms3dRotationKeyFrame_t ) * pJoint->m_NumPositionKeyFrames;
-		pPtr += sizeof( ms3dPositionKeyFrame_t ) * pJoint->m_NumRotationKeyFrames;
-	}
 
 	delete[] tempVertices;
-	delete[] boneIndices;
 	delete[] tempTriangles;
 	delete[] pMemoryFileBuffer;
-
-	// Build ref pose
-	m_RefPose.insert( m_RefPose.begin(), m_Bones.size(), kbBoneMatrix_t() );
-	m_InvRefPose.insert( m_InvRefPose.begin(), m_Bones.size(), kbBoneMatrix_t() );
-
-	for ( int i = 0; i < m_Bones.size(); i++ ) {
-
-		const int parent = m_Bones[i].m_ParentIndex;			
-		const kbMat4 rotationmat = m_Bones[i].m_RelativeRotation.ToMat4();
-		kbBoneMatrix_t parentMat;
-		if ( parent != 65535 ) {
-			parentMat = m_RefPose[parent];
-		} else { 
-			parentMat.SetIdentity();
-		}
-		m_RefPose[i].SetAxis( 0, rotationmat[0].ToVec3() );
-		m_RefPose[i].SetAxis( 1, rotationmat[1].ToVec3() );
-		m_RefPose[i].SetAxis( 2, rotationmat[2].ToVec3() );
-		m_RefPose[i].SetAxis( 3,  m_Bones[i].m_RelativePosition  );
-		m_RefPose[i] = m_RefPose[i] * parentMat;
-
-		m_InvRefPose[i] = m_RefPose[i];
-		m_InvRefPose[i].Invert();
-	}
 
 	return true;
 }

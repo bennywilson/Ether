@@ -2,7 +2,7 @@ kbGameEntity 0 0 0 0 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		Name = "Entity_28"
+		Name = "Entity_24"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
 		Position = 0.000000 0.000000 0.000000
 		Scale = 1.000000 1.000000 1.000000
@@ -10,8 +10,8 @@ kbGameEntity 0 0 0 0 {
 	kbEditorLevelSettingsComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		MainCameraPosition = 33.932438 21.892508 51.122116
-		MainCameraRotation = -0.028195 0.923895 -0.069422 0.375239
+		MainCameraPosition = -16.825697 15.832427 -62.135887
+		MainCameraRotation = 0.180403 0.191995 -0.035929 -0.964003
 	}
 }
 kbGameEntity 0 0 0 0 {
@@ -19,7 +19,7 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "Entity_20"
-		Orientation = 0.027746 0.897061 -0.437347 -0.056911
+		Orientation = 0.185934 0.100058 -0.663972 -0.717327
 		Position = 0.000000 3.000000 24.000000
 		Scale = 1.000000 1.000000 1.000000
 	}
@@ -76,18 +76,28 @@ kbGameEntity 0 0 0 0 {
 			}
 		RenderPass = LightingPass
 		TranslucencySortBias =  0.000000
-		Model = .\assets\models\characters\cartel_warrior\cartel_warrior.ms3d
+		Model = .\assets\test\skintest.ms3d
 		Animations = 1
 			EtherAnimComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
-				Animation = .\assets\models\characters\cartel_warrior\cartel_warrior_run.kbanim.ms3d
+				Animation = .\assets\test\skintest_anim1.kbanim.ms3d
 				AnimationEvent = 0
 				AnimationName = ""
 				IsLooping = 1
-				TimeScale =  1.000000
+				TimeScale =  0.010000
 			}
 		DebugAnimIndex = 0
 		IsFirstPersonModel = 0
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Entity_23"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 27.553886 19.974810 49.179657
+		Scale = 1.000000 1.000000 1.000000
 	}
 }

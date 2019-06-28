@@ -3104,7 +3104,7 @@ void kbRenderer_DX11::CreateShaderFromText( const std::string & fileName, const 
 		polygonLayout[5].InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
 		polygonLayout[5].InstanceDataStepRate = 0;
 	}
-	else if (fileName.find("skinned") != std::string::npos || vertexShaderFunc.find( "skin" ) != std::string::npos || pShaderBindings->ContainsBinding( "boneList" ) ) {
+	else if ( fileName.find("skinned") != std::string::npos || vertexShaderFunc.find( "skin" ) != std::string::npos || pShaderBindings->ContainsBinding( "boneList" ) ) {
 		polygonLayout.insert( polygonLayout.begin(), 5, D3D11_INPUT_ELEMENT_DESC() );
 
 		polygonLayout[0].SemanticName = "POSITION";
