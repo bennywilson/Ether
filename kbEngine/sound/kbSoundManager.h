@@ -2,7 +2,7 @@
 // kbSoundManager.h
 //
 //
-// 2017 kbEngine 2.0
+// 2017-2019 kbEngine 2.0
 //==============================================================================
 #ifndef _KBSOUNDMANAGER_H_
 #define _KBSOUNDMANAGER_H_
@@ -77,6 +77,8 @@ private:
 		IXAudio2SourceVoice *					m_pVoice;
 		bool									m_bInUse;
 	}											m_Voices[MAX_VOICES];
+
+	bool										m_bInitialized;
 };
 
 

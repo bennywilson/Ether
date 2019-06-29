@@ -90,6 +90,8 @@ DEFINE_KBCLASS(kbModelComponent)
 
 DEFINE_KBCLASS(kbStaticModelComponent)
 
+DEFINE_KBCLASS(kbAnimComponent)
+
 DEFINE_KBCLASS(kbSkeletalModelComponent)
 
 DEFINE_KBCLASS(kbGrass)

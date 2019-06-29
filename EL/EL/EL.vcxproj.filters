@@ -1,0 +1,61 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="EL.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="EL\ELGame.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="EL\ELTypeInfoGeneratedClasses.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="stdafx.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="EL\ELGame.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="EL\ELTypeInfoGeneratedClasses.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="GameBase.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="stdafx.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="targetver.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="EL.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="EL.ico">
+      <Filter>Other</Filter>
+    </None>
+    <None Include="small.ico">
+      <Filter>Other</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Source">
+      <UniqueIdentifier>{6d6f5ac1-1496-4978-bee3-f279e0054ba2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Other">
+      <UniqueIdentifier>{4f0b03ca-4680-4839-acbe-ce8473dc5c7a}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="EL.rc">
+      <Filter>Other</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+</Project>

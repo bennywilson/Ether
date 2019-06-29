@@ -1,16 +1,20 @@
 //==============================================================================
-// basicSkinned.kbShader
+// characterOutline.kbShader
 //
-// 2016-2019 kbEngine 2.0
+// 2019 kbEngine 2.0
 //==============================================================================
 cbuffer matrixBuffer {
-	matrix					modelMatrix;
-	matrix					mvpMatrix;
-	float4x4				boneList[128];
+	matrix		modelMatrix;
+	matrix		mvpMatrix;
+	matrix		vpMatrix;
+	float4x4	boneList[128];
+	float4		cameraPos;
+	float4		outlineParams;
 };
 
 kbShaderState {
-	cullMode				CullMode_None
+	cullMode CullMode_None
+	colorWriteEnable ColorWriteEnable_rgb
 }
 
 //-------------------------------------
@@ -54,35 +58,48 @@ pixelInput vertexShader( vertexInput input ) {
 
 	float4 Pos = 0.0f;
 
-	int4 IndexVector = D3DCOLORtoUBYTE4(input.blendIndices).zyxw;
+	int4 IndexVector = D3DCOLORtoUBYTE4(input.blendIndices);
 	float BlendWeightsArray[4] = (float[4])input.boneWeights;
-	int   IndexArray[4]        = (int[4])IndexVector;
-	
-	float4x4 blendedMat =	boneList[IndexArray[0]] * BlendWeightsArray[0] + boneList[IndexArray[1]] * BlendWeightsArray[1] +
-							boneList[IndexArray[2]] * BlendWeightsArray[2] + boneList[IndexArray[3]] * BlendWeightsArray[3];
-	
-	Pos = mul( input.position, boneList[IndexArray[0]] );
-//	Pos = mul( input.position, blendedMat );
-	
-	output.position = mul( Pos, mvpMatrix );
+	int   IndexArray[4] = (int[4])IndexVector;
+
+	Pos = input.position;
+	float3 objCenter = float3(  modelMatrix[3].xyz );
+	float distFromCam = length( cameraPos.xyz  - objCenter );
+
+	float3 normal = (input.normal.xyz * 2.0f ) - 1.0f;
+	Pos.xyz +=  normal * outlineParams.x * 0.75f;//0.02f;
+
+	Pos = mul( Pos, boneList[IndexArray[0]] );
+
+	output.position = mul( Pos, modelMatrix );
+
+	float3 fromCam = normalize( cameraPos.xyz  - output.position.xyz  );//output.position.xyz );
+	output.position.xyz -= fromCam * outlineParams.y;//5;
+//	output.worldPos = output.position.xyz;
+	output.position = mul( output.position, vpMatrix );
+
 	output.uv = input.uv;
+	//output.color = 0;//input.color;
 	output.position2 = output.position.zw;
-	output.normal.xyz = mul( ( input.normal.xyz * 2.0f ) - 1.0f, (float3x3)modelMatrix );
-	
+	output.normal.xyz = mul( ( input.normal.xyz * 2.0f ) - 1.0f, (float3x3)boneList[IndexArray[0]] );
+	output.normal.xyz = mul( output.normal.xyz, (float3x3)modelMatrix );
+
 	return output;
 }
 
 /**
  *	pixelShader
  */
-Texture2D shaderTexture;
+Texture2D colorTexture;
 SamplerState SampleType;
 
  PS_OUTPUT pixelShader( pixelInput2	input ) {
 	PS_OUTPUT output = (PS_OUTPUT) 0;
 
-	output.Color.xyz = shaderTexture.Sample( SampleType, input.uv ).xyz;
-	output.Specular = float4( 0.0f, 0.0f, 0.0f, 1.0f );
+	const float4 colorTex = colorTexture.Sample( SampleType, input.uv );
+	output.Color.xyz = colorTex.xyz;
+	output.Color.w = 0;//colorTex.w * 0.55;
+	output.Specular = float4( 0.0f, 1.0f, 0.0f, 0.0f );
 	output.Depth.r = input.position2.x / input.position2.y;
 
 	output.Normal.xyz = normalize( input.normal );
