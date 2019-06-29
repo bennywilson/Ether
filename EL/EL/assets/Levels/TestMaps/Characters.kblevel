@@ -2,7 +2,7 @@ kbGameEntity 0 0 0 0 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		Name = "Entity_7"
+		Name = "Entity_4"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
 		Position = 0.000000 0.000000 0.000000
 		Scale = 1.000000 1.000000 1.000000
@@ -11,7 +11,7 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		MainCameraPosition = 18.596869 60.978458 -16.408947
-		MainCameraRotation = -0.048664 -0.227693 0.011394 0.972450
+		MainCameraRotation = -0.048664 -0.227693 0.011394 0.972449
 	}
 }
 kbGameEntity 0 0 0 0 {
@@ -20,7 +20,7 @@ kbGameEntity 0 0 0 0 {
 		LifeTime =  -1.000000
 		Name = "Entity_1"
 		Orientation = 0.357832 0.426724 -0.548561 0.623653
-		Position = 63.116508 -2.132487 24.562973
+		Position = 0.000000 0.000000 100.000000
 		Scale = 0.200000 0.200000 0.200000
 	}
 	kbStaticModelComponent { 

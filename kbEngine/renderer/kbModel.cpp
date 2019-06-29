@@ -440,8 +440,6 @@ bool kbModel::LoadMS3D() {
 			verts[i].color[1] = m_CPUVertices[i].color[1];
 			verts[i].color[2] = m_CPUVertices[i].color[2];
 			verts[i].color[3] = m_CPUVertices[i].color[3];
-
-kbLog( "%d: - [%d %d %d %d] [%d %d %d %d]", i, verts[i].color[0], verts[i].color[1], verts[i].color[2], verts[i].color[3], verts[i].tangent[0], verts[i].tangent[1], verts[i].tangent[2], verts[i].tangent[3] );
 	
 			// color, normal, etc
 		}

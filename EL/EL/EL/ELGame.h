@@ -4,8 +4,8 @@
 //
 // 2019 kbEngine 2.0
 //===================================================================================================
-#ifndef _CannonGame_H_
-#define _CannonGame_H_
+#ifndef _ELGame_H_
+#define _ELGame_H_
 
 #include "kbGame.h"
 #include "kbJobManager.h"
@@ -13,14 +13,14 @@
 
 
 /**
- *	CannonGame
+ *	ELGame
  */
-class CannonGame : public kbGame, public kbRenderHook {
+class ELGame : public kbGame, public kbRenderHook {
 
 //-------------------------------------------------------------------------------------------------------------------------------------------------------------
 public:
-												CannonGame();
-	virtual										~CannonGame();
+												ELGame();
+	virtual										~ELGame();
 
 
 
@@ -53,6 +53,6 @@ protected:
 };
 
 
-extern CannonGame * g_pCannonGame;
+extern ELGame * g_pELGame;
 
 #endif

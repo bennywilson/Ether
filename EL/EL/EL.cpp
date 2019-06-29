@@ -294,11 +294,11 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 
 	InitializeKBEngine();
 
-	CannonGame * pGame = nullptr;
+	ELGame * pGame = nullptr;
 	kbEditor * applicationEditor = nullptr;
 
 	if ( g_UseEditor ) {
-		pGame = new CannonGame();
+		pGame = new ELGame();
 
 		applicationEditor = new kbEditor();
 		applicationEditor->SetGame( pGame );
@@ -311,7 +311,7 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 		g_pRenderer = new kbRenderer_DX11();
 		g_pRenderer->Init( hWnd, backBufferWidth, backBufferHeight, bRenderVR, bUseVRTrackingOnly );
 
-		pGame = new CannonGame();//( g_pRenderer->IsRenderingToHMD() ) ? ( new EtherVRGame() ) : ( new CannonGame() );
+		pGame = new ELGame();//( g_pRenderer->IsRenderingToHMD() ) ? ( new EtherVRGame() ) : ( new ELGame() );
 		std::vector< const kbGameEntity * > GameEntitiesList;
 		pGame->InitGame( hWnd, backBufferWidth, backBufferHeight, GameEntitiesList );
 		pGame->LoadMap( mapName );

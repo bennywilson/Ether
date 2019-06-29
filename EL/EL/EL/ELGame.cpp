@@ -11,52 +11,52 @@
 #include "DX11/kbRenderer_DX11.h"
 #include <directxpackedvector.h>
 
-CannonGame * g_pCannonGame = nullptr;
+ELGame * g_pELGame = nullptr;
 
 
 /**
- *	CannonGame::CannonGame
+ *	ELGame::ELGame
  */
-CannonGame::CannonGame() :
+ELGame::ELGame() :
 	kbRenderHook( RP_FirstPerson ) {
 
 
 	m_Camera.m_Position.Set( 0.0f, 2600.0f, 0.0f );
 
-	kbErrorCheck( g_pCannonGame == nullptr, "CannonGame::CannonGame() - g_pCannonGame is not nullptr" );
-	g_pCannonGame = this;
+	kbErrorCheck( g_pELGame == nullptr, "ELGame::ELGame() - g_pELGame is not nullptr" );
+	g_pELGame = this;
 }
 
 /**
- *	CannonGame::~CannonGame
+ *	ELGame::~ELGame
  */
-CannonGame::~CannonGame() {
+ELGame::~ELGame() {
 
-	kbErrorCheck( g_pCannonGame != nullptr, "CannonGame::~CannonGame() - g_pCannonGame is nullptr" );
-	g_pCannonGame = nullptr;
+	kbErrorCheck( g_pELGame != nullptr, "ELGame::~ELGame() - g_pELGame is nullptr" );
+	g_pELGame = nullptr;
 }
 
 kbRenderObject crossHair;
 
 /**
- *	CannonGame::PlayGame_Internal
+ *	ELGame::PlayGame_Internal
  */
-void CannonGame::PlayGame_Internal() {
+void ELGame::PlayGame_Internal() {
 	g_pRenderer->RegisterRenderHook( this );
 }
 
 /**
- *	CannonGame::InitGame_Internal
+ *	ELGame::InitGame_Internal
  */
-void CannonGame::InitGame_Internal() {
+void ELGame::InitGame_Internal() {
 
 	m_GameStartTimer.Reset();
 }
 
 /**
- *	CannonGame::StopGame_Internal
+ *	ELGame::StopGame_Internal
  */
-void CannonGame::StopGame_Internal() {
+void ELGame::StopGame_Internal() {
 
 	m_pLocalPlayer = nullptr;
 
@@ -64,16 +64,16 @@ void CannonGame::StopGame_Internal() {
 }
 
 /**
- *	CannonGame::LevelLoaded_Internal
+ *	ELGame::LevelLoaded_Internal
  */
-void CannonGame::LevelLoaded_Internal() {
+void ELGame::LevelLoaded_Internal() {
 
 }
 
 /**
- *	CannonGame::Update_Internal
+ *	ELGame::Update_Internal
  */
-void CannonGame::Update_Internal( float DT ) {
+void ELGame::Update_Internal( float DT ) {
 
 	if ( IsConsoleActive() == false ) {
 		ProcessInput( DT );
@@ -122,11 +122,11 @@ void CannonGame::Update_Internal( float DT ) {
 }
 
 /**
- *	CannonGame::AddGameEntity_Internal
+ *	ELGame::AddGameEntity_Internal
  */
-void CannonGame::AddGameEntity_Internal( kbGameEntity *const pEntity ) {
+void ELGame::AddGameEntity_Internal( kbGameEntity *const pEntity ) {
 	if ( pEntity == nullptr ) {
-		kbLog( "CannonGame::AddGameEntity_Internal() - nullptr Entity" );
+		kbLog( "ELGame::AddGameEntity_Internal() - nullptr Entity" );
 		return;
 	}
 
@@ -141,17 +141,17 @@ void CannonGame::AddGameEntity_Internal( kbGameEntity *const pEntity ) {
 }
 
 /**
- *	CannonGame::CreatePlayer
+ *	ELGame::CreatePlayer
  */
-kbGameEntity * CannonGame::CreatePlayer( const int netId, const kbGUID & prefabGUID, const kbVec3 & DesiredLocation ) {
+kbGameEntity * ELGame::CreatePlayer( const int netId, const kbGUID & prefabGUID, const kbVec3 & DesiredLocation ) {
 
 	return nullptr;
 }
 
 /**
- *	CannonGame::ProcessInput
+ *	ELGame::ProcessInput
  */
-void CannonGame::ProcessInput( const float DT ) {
+void ELGame::ProcessInput( const float DT ) {
 
 	if ( m_pLocalPlayer == nullptr || m_pLocalPlayer->GetActorComponent()->IsDead() ) {
 		return;
@@ -181,25 +181,29 @@ void CannonGame::ProcessInput( const float DT ) {
 }
 
 /**
- *	CannonGame::AddPrefabToEntity
+ *	ELGame::AddPrefabToEntity
  */
-void CannonGame::AddPrefabToEntity( const kbPackage *const pPrefabPackage, const std::string & prefabName, kbGameEntity *const pEntity, const bool bComponentsOnly ) {
+void ELGame::AddPrefabToEntity( const kbPackage *const pPrefabPackage, const std::string & prefabName, kbGameEntity *const pEntity, const bool bComponentsOnly ) {
 	
 }
 
 /**
- *	CannonGame::RenderSync
+ *	ELGame::RenderSync
  */
-void CannonGame::RenderSync() {
+void ELGame::RenderSync() {
 
 	
 }
 
 /**
- *	CannonGame::RenderHookCallBack
+ *	ELGame::RenderHookCallBack
  */
 static float g_TimeMultiplier = 0.95f / 0.016f;
-void CannonGame::RenderHookCallBack( kbRenderTexture *const pSrc, kbRenderTexture *const pDst ) {
+void ELGame::RenderHookCallBack( kbRenderTexture *const pSrc, kbRenderTexture *const pDst ) {
+
+	if ( pSrc == nullptr || pDst == nullptr ) {
+		return;
+	}
 
 	g_pRenderer->RT_CopyRenderTarget( pSrc, pDst );
 }
