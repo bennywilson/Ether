@@ -143,7 +143,7 @@ private:
 	std::vector<destructibleBone_t>			m_BonesList;
 
 	float									m_Health;
-	EtherSkelModelComponent *				m_pSkelModel;
+	kbSkeletalModelComponent *				m_pSkelModel;
 	float									m_SimStartTime;
 	kbVec3									m_LastHitLocation;
 	bool									m_bIsSimulating;

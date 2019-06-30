@@ -233,6 +233,10 @@ kbSoundManager::kbSoundManager() {
  */						
 kbSoundManager::~kbSoundManager() {
 
+	if ( m_bInitialized == false ) {
+		return;
+	}
+
 	for ( int iVoice = 0; iVoice < MAX_VOICES; iVoice++ ) {
 		if ( m_Voices[iVoice].m_bInUse == false ) {
 			continue;

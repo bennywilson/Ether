@@ -41,7 +41,7 @@ kbGameEntity 0 0 0 0 {
 		Position = 0.000000 3.000000 3.999960
 		Scale = 0.250000 0.250000 0.250000
 	}
-	EtherSkelModelComponent { 
+	kbSkeletalModelComponent { 
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadow = 0
@@ -78,7 +78,7 @@ kbGameEntity 0 0 0 0 {
 		TranslucencySortBias =  0.000000
 		Model = .\assets\test\skintest.ms3d
 		Animations = 1
-			EtherAnimComponent { 
+			kbAnimComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
 				Animation = .\assets\test\skintest_anim1.kbanim.ms3d

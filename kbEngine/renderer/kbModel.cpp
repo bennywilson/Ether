@@ -1164,39 +1164,32 @@ void kbModel::Animate( std::vector<kbBoneMatrix_t> & outMatrices, const float ti
  */
 void kbModel::BlendAnimations( std::vector<kbBoneMatrix_t> & outMatrices, const kbAnimation *const pFromAnim, const float FromAnimTime, const bool bFromAnimLoops, const kbAnimation *const pToAnim, const float ToAnimTime, const bool bToAnimLoops, const float normalizedBlendTime ) {
 
-	/*std::vector<AnimatedBone_t> fromTempBones;
-	SetBoneMatrices( FromAnimTime, pFromAnim, bFromAnimLoops, fromTempBones );
+	std::vector<AnimatedBone_t> fromTempBones;
+	SetBoneMatrices( fromTempBones, FromAnimTime, pFromAnim, bFromAnimLoops  );
 
 	std::vector<AnimatedBone_t> toTempBones;
-	SetBoneMatrices( ToAnimTime, pToAnim, bToAnimLoops, toTempBones );
+	SetBoneMatrices( toTempBones, ToAnimTime, pToAnim, bToAnimLoops );
 
 	for ( int i = 0; i < fromTempBones.size(); i++ ) {
 
-		toTempBones[i].position = kbLerp( fromTempBones[i].position, toTempBones[i].position, normalizedBlendTime );
-		toTempBones[i].rotation = kbQuat::Slerp( fromTempBones[i].rotation, toTempBones[i].rotation, normalizedBlendTime );
+		toTempBones[i].m_JointSpacePosition = kbLerp( fromTempBones[i].m_JointSpacePosition, toTempBones[i].m_JointSpacePosition, normalizedBlendTime );
+		toTempBones[i].m_JointSpaceRotation= kbQuat::Slerp( fromTempBones[i].m_JointSpaceRotation, toTempBones[i].m_JointSpaceRotation, normalizedBlendTime );
 
 		const int parent = m_Bones[i].m_ParentIndex;
-		if ( parent == 65535 ) {
-			toTempBones[i].worldRotation = toTempBones[i].rotation * m_Bones[i].m_RelativeRotation;
-		} else {
-			toTempBones[i].worldRotation = toTempBones[i].rotation * m_Bones[i].m_RelativeRotation * toTempBones[parent].worldRotation;
-		}
-		toTempBones[i].worldRotation.Normalize();
 
-		const kbMat4 boneWorldMatrix = toTempBones[i].worldRotation.ToMat4();
-		toTempBones[i].worldMatrix.SetAxis( 0, boneWorldMatrix[0].ToVec3() );
-		toTempBones[i].worldMatrix.SetAxis( 1, boneWorldMatrix[1].ToVec3() );
-		toTempBones[i].worldMatrix.SetAxis( 2, boneWorldMatrix[2].ToVec3() );
+		kbBoneMatrix_t matLocalSkel( m_Bones[i].m_RelativeRotation, m_Bones[i].m_RelativePosition );
+		kbBoneMatrix_t matAnimate( toTempBones[i].m_JointSpaceRotation, toTempBones[i].m_JointSpacePosition );
 
-		kbVec3 finalBonePosition = m_Bones[i].m_RelativePosition + toTempBones[i].position;
+		kbBoneMatrix_t matLocal = matAnimate * matLocalSkel;
 		if ( parent != 65535 ) {
-			finalBonePosition = finalBonePosition * toTempBones[parent].worldMatrix;
+			toTempBones[i].m_LocalSpaceMatrix =  matLocal * toTempBones[parent].m_LocalSpaceMatrix;
+		} else {
+			toTempBones[i].m_LocalSpaceMatrix = matLocal;
 		}
-		toTempBones[i].worldMatrix.SetAxis( 3, finalBonePosition );
 
 		const kbBoneMatrix_t & invRef = GetInvRefBoneMatrix(i);
-		boneMatrices[i] = invRef * toTempBones[i].worldMatrix;
-	}*/
+		outMatrices[i] = invRef * toTempBones[i].m_LocalSpaceMatrix;
+	}
 }
 
 /**

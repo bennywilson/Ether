@@ -87,13 +87,14 @@ void kbSkeletalModelComponent::SetEnable_Internal( const bool isEnabled ) {
 void kbSkeletalModelComponent::Update_Internal( const float DeltaTime ) {
 	Super::Update_Internal( DeltaTime );
 
+
 	if ( m_pModel != nullptr ) {
 		if ( m_BindToLocalSpaceMatrices.size() != m_pModel->NumBones() ) {
 			m_BindToLocalSpaceMatrices.resize( m_pModel->NumBones() );
 		}
 
 		// Debug Animation
-		if ( m_DebugAnimIdx >= 0 && m_DebugAnimIdx < m_Animations.size() && m_Animations[m_DebugAnimIdx].m_pAnimation != nullptr ) {
+		if ( g_UseEditor && m_DebugAnimIdx >= 0 && m_DebugAnimIdx < m_Animations.size() && m_Animations[m_DebugAnimIdx].m_pAnimation != nullptr ) {
 			if ( m_pModel != nullptr ) {
 
 				static bool pause = false;
@@ -119,21 +120,25 @@ void kbSkeletalModelComponent::Update_Internal( const float DeltaTime ) {
 
 		if ( m_CurrentAnimation != -1 ) {
 #if DEBUG_ANIMS
-			kbLog( "Updating current anim %s", m_Animations[m_CurrentAnimation].GetAnimationName().c_str() );
+			bool bOutput = true;
+			if ( m_Animations[m_CurrentAnimation].GetAnimationName().stl_str().find( "Shoot" ) != std::string::npos ) {
+				bOutput = true;
+			}
+			if ( bOutput ) kbLog( "Updating current anim %s with idx %d", m_Animations[m_CurrentAnimation].GetAnimationName().c_str(), m_CurrentAnimation );
 #endif
 			// Check if the blend is finished
 			if ( m_NextAnimation != -1 ) {
 				const float blendTime = ( g_GlobalTimer.TimeElapsedSeconds() - m_BlendStartTime ) / m_BlendLength;
 
 #if DEBUG_ANIMS
-				kbLog( "	Checking if blend is finished.  Blend time is %f", blendTime );
+				if ( bOutput ) kbLog( "	Checking if blend is finished.  Blend time is %f", blendTime );
 #endif
 				if ( blendTime >= 1.0f ) {
 					m_CurrentAnimation = m_NextAnimation;
 					m_NextAnimation = -1;
 
 #if DEBUG_ANIMS
-					kbLog( "	%s Transition to Next Animation", GetOwner()->GetName().c_str() );
+					if ( bOutput ) kbLog( "	%s Transition to Next Animation", GetOwner()->GetName().c_str() );
 #endif
 				}
 			}
@@ -146,7 +151,7 @@ void kbSkeletalModelComponent::Update_Internal( const float DeltaTime ) {
 				if ( CurAnim.m_CurrentAnimationTime >= CurAnim.m_pAnimation->GetLengthInSeconds() ) {
 
 #if DEBUG_ANIMS
-				kbLog( "	Cur anim is finished!" );
+				if ( bOutput ) kbLog( "	Cur anim is finished!" );
 #endif
 					CurAnim.m_CurrentAnimationTime = CurAnim.m_pAnimation->GetLengthInSeconds();
 					bAnimIsFinished = true;
@@ -157,10 +162,11 @@ void kbSkeletalModelComponent::Update_Internal( const float DeltaTime ) {
 				const float prevAnimTime = CurAnim.m_CurrentAnimationTime;
 	
 				CurAnim.m_CurrentAnimationTime += DeltaTime * CurAnim.m_TimeScale;
+				if ( bOutput ) { kbLog( "		prevAnimTime = %f - Cur anim time = %f.  DeltaT and all that was %f", prevAnimTime, CurAnim.m_CurrentAnimationTime ); }
 
 				for ( int iAnimEvent = 0; iAnimEvent < CurAnim.m_AnimEvents.size(); iAnimEvent++ ) {
 					auto & curEvent = CurAnim.m_AnimEvents[iAnimEvent];
-					if ( curEvent.GetEventTime() > prevAnimTime && curEvent.GetEventTime() <= CurAnim.m_CurrentAnimationTime  ) {
+					if ( bOutput && curEvent.GetEventTime() > prevAnimTime && curEvent.GetEventTime() <= CurAnim.m_CurrentAnimationTime  ) {
 						kbLog( "AnimEvent %s - %f", curEvent.GetEventName().c_str(), curEvent.GetEventTime() );
 					}
 				}
@@ -170,7 +176,7 @@ void kbSkeletalModelComponent::Update_Internal( const float DeltaTime ) {
 				}
 
 #if DEBUG_ANIMS
-				kbLog( "	Not blending anim %s. anim time = %f", CurAnim.m_AnimationName.c_str(), CurAnim.m_CurrentAnimationTime );
+				if ( bOutput ) kbLog( "	Not blending anim %s. anim time = %f", CurAnim.m_AnimationName.c_str(), CurAnim.m_CurrentAnimationTime );
 #endif
 
 				m_pModel->Animate( m_BindToLocalSpaceMatrices, CurAnim.m_CurrentAnimationTime, CurAnim.m_pAnimation, CurAnim.m_bIsLooping );
@@ -178,7 +184,7 @@ void kbSkeletalModelComponent::Update_Internal( const float DeltaTime ) {
 				if ( bAnimIsFinished && CurAnim.m_DesiredNextAnimation.IsEmptyString() == false ) {
 
 #if DEBUG_ANIMS
-					kbLog( "	Cur Animation Done, going to %s - %f", CurAnim.m_DesiredNextAnimation.c_str(), CurAnim.m_DesiredNextAnimBlendLength );
+					if ( bOutput ) kbLog( "	Cur Animation Done, going to %s - %f", CurAnim.m_DesiredNextAnimation.c_str(), CurAnim.m_DesiredNextAnimBlendLength );
 #endif
 
 					PlayAnimation( CurAnim.m_DesiredNextAnimation, CurAnim.m_DesiredNextAnimBlendLength, true );
@@ -199,11 +205,14 @@ void kbSkeletalModelComponent::Update_Internal( const float DeltaTime ) {
 							//kbLog( "AnimEvent %s - %f", curEvent.GetEventName().c_str(), curEvent.GetEventTime() );
 						}
 					}
-					CurAnim.m_CurrentAnimationTime += DeltaTime * CurAnim.m_TimeScale;
+		//			CurAnim.m_CurrentAnimationTime += DeltaTime * CurAnim.m_TimeScale;
 				}
 
 				kbAnimComponent & NextAnim = m_Animations[m_NextAnimation];
 				const float prevNextAnimTime = NextAnim.m_CurrentAnimationTime;
+
+				if ( bOutput ) { kbLog( "		Cur anim is %s.  time = %f.  DeltaT was %f.  Next anim is %s.  Next anim time is %f", CurAnim.m_AnimationName.c_str(), CurAnim.m_CurrentAnimationTime, DeltaTime * CurAnim.m_TimeScale, NextAnim.m_AnimationName.c_str(), NextAnim.m_CurrentAnimationTime ); }
+
 				if ( CurAnim.m_bIsLooping && NextAnim.m_bIsLooping ) {
 					// Sync the anims if they're both looping
 					NextAnim.m_CurrentAnimationTime = CurAnim.m_CurrentAnimationTime;
@@ -222,7 +231,7 @@ void kbSkeletalModelComponent::Update_Internal( const float DeltaTime ) {
 				m_pModel->BlendAnimations( m_BindToLocalSpaceMatrices, CurAnim.m_pAnimation, CurAnim.m_CurrentAnimationTime, CurAnim.m_bIsLooping, NextAnim.m_pAnimation, NextAnim.m_CurrentAnimationTime, NextAnim.m_bIsLooping, blendTime ); 
 
 #if DEBUG_ANIMS
-				kbLog( "	Blending anims %f.  %s cur time = %f. %s cur time is %f", blendTime, CurAnim.GetAnimationName().c_str(), CurAnim.m_CurrentAnimationTime, NextAnim.GetAnimationName().c_str(), NextAnim.m_CurrentAnimationTime );
+				if ( bOutput ) kbLog( "	Blending anims %f.  %s cur time = %f. %s cur time is %f", blendTime, CurAnim.GetAnimationName().c_str(), CurAnim.m_CurrentAnimationTime, NextAnim.GetAnimationName().c_str(), NextAnim.m_CurrentAnimationTime );
 #endif
 			}
 		}
@@ -294,7 +303,11 @@ bool kbSkeletalModelComponent::GetBoneWorldMatrix( const kbString & boneName, kb
 void kbSkeletalModelComponent::PlayAnimation( const kbString & AnimationName, const float BlendLength, const bool bRestartIfAlreadyPlaying, const kbString desiredNextAnimation, const float desiredNextAnimationBlendLength ) {
 
 #if DEBUG_ANIMS
-	kbLog( "Attempting to play Animation %s ===================================================================", AnimationName.c_str() );
+	bool bOutput = false;
+	if ( AnimationName.stl_str().find( "Shoot" ) != std::string::npos ) {
+		bOutput = true;
+	}
+	if ( bOutput ) kbLog( "Attempting to play Animation %s ===================================================================", AnimationName.c_str() );
 #endif
 
 	if ( bRestartIfAlreadyPlaying == false && IsPlaying( AnimationName ) ) {
@@ -303,66 +316,79 @@ void kbSkeletalModelComponent::PlayAnimation( const kbString & AnimationName, co
 
 	const std::string & animName = AnimationName.stl_str();
 	for ( int i = 0; i < m_Animations.size(); i++ ) {
-		const std::string & CurName = m_Animations[i].m_AnimationName.stl_str();
-		if ( m_Animations[i].m_AnimationName == AnimationName ) {
+
+		if ( m_Animations[i].m_AnimationName != AnimationName ) {
+			continue;
+		}
+
+		#if DEBUG_ANIMS
+			if ( bOutput ) kbLog( "		Found desired animation" );
+		#endif
+
+		if ( BlendLength <= 0.0f || m_CurrentAnimation == -1 ) {
+
 			#if DEBUG_ANIMS
-				kbLog( "	Found desired animation" );
+					if ( bOutput ) kbLog( "		Starting this animation immediately.  Blend length is %f, currentanimation is %d", BlendLength, m_CurrentAnimation );
 			#endif
 
-			if ( BlendLength <= 0.0f || m_CurrentAnimation == -1 ) {
-
+			// Stop previous animation
+			if ( m_CurrentAnimation != -1 && m_CurrentAnimation != i ) {
 				#if DEBUG_ANIMS
-						kbLog( "	Starting this animation immediately.  Blend length is %f, currentanimation is %d", BlendLength, m_CurrentAnimation );
+					if ( bOutput ) kbLog( "		Stopping Animation %s", m_Animations[m_CurrentAnimation].GetAnimationName().c_str() );
 				#endif
 
-				// Stop previous animation
-				if ( m_CurrentAnimation != -1 && m_CurrentAnimation != i ) {
-					#if DEBUG_ANIMS
-						kbLog( "	Stopping Animation %s", m_Animations[m_CurrentAnimation].GetAnimationName().c_str() );
-					#endif
-
-					m_Animations[m_CurrentAnimation].m_CurrentAnimationTime = -1;
-				}
-
-				if ( m_NextAnimation != -1 && m_NextAnimation != i ) {
-
-					#if DEBUG_ANIMS
-						kbLog( "	Canceling next animation %s", m_Animations[m_NextAnimation].GetAnimationName().c_str() );
-					#endif
-
-					m_Animations[m_NextAnimation].m_CurrentAnimationTime = -1;
-				}
-				m_NextAnimation = -1;
-
-				// Start current animation
-				if ( m_CurrentAnimation != i ) {
-					m_Animations[i].m_CurrentAnimationTime = 0.0f;
-				}
-				m_CurrentAnimation = i;
-
-				#if DEBUG_ANIMS
-					kbLog( "	Anim all set up.  Next anim = %s.  Desired blend length = %f", desiredNextAnimation.c_str() ,desiredNextAnimationBlendLength );
-				#endif
-
-				m_Animations[m_CurrentAnimation].m_DesiredNextAnimation = desiredNextAnimation;
-				m_Animations[m_CurrentAnimation].m_DesiredNextAnimBlendLength = desiredNextAnimationBlendLength;
-			} else {
-				m_BlendStartTime = g_GlobalTimer.TimeElapsedSeconds();
-				m_BlendLength = BlendLength;
-				m_NextAnimation = i;
-
-				m_Animations[m_NextAnimation].m_DesiredNextAnimation = desiredNextAnimation;
-				m_Animations[m_NextAnimation].m_DesiredNextAnimBlendLength = desiredNextAnimationBlendLength;
-				m_Animations[m_NextAnimation].m_CurrentAnimationTime = 0.0f;
-
-
-				#if DEBUG_ANIMS
-					kbLog( "	Blending this animation in %f %d.  Desired next = %s, desired len = %f ", m_BlendLength, m_NextAnimation, desiredNextAnimation.c_str(), desiredNextAnimationBlendLength );
-				#endif
+				m_Animations[m_CurrentAnimation].m_CurrentAnimationTime = -1;
 			}
 
-			break;
+			if ( m_NextAnimation != -1 && m_NextAnimation != i ) {
+
+				#if DEBUG_ANIMS
+					if ( bOutput )kbLog( "		Canceling next animation %s", m_Animations[m_NextAnimation].GetAnimationName().c_str() );
+				#endif
+
+				m_Animations[m_NextAnimation].m_CurrentAnimationTime = -1;
+			}
+			m_NextAnimation = -1;
+
+			// Start current animation
+			if ( m_CurrentAnimation != i ) {
+				m_Animations[i].m_CurrentAnimationTime = 0.0f;
+			}
+			m_CurrentAnimation = i;
+
+			#if DEBUG_ANIMS
+				if ( bOutput )kbLog( "		Anim all set up.  Next anim = %s.  Desired blend length = %f.  Starting animation time is %f", desiredNextAnimation.c_str(), desiredNextAnimationBlendLength, m_Animations[i].m_CurrentAnimationTime );
+			#endif
+
+			m_Animations[m_CurrentAnimation].m_DesiredNextAnimation = desiredNextAnimation;
+			m_Animations[m_CurrentAnimation].m_DesiredNextAnimBlendLength = desiredNextAnimationBlendLength;
+		} else {
+
+
+			#if DEBUG_ANIMS
+				if ( bOutput ) {
+					if ( m_CurrentAnimation != -1 ) {
+						kbLog( "		Cur anim is %s.  Anim time is %f", m_Animations[m_CurrentAnimation].GetAnimationName().c_str(), m_Animations[m_CurrentAnimation].m_CurrentAnimationTime );
+					}
+					
+				}// kbLog( "	Starting this animation immediately.  Blend length is %f, currentanimation is %d", BlendLength, m_CurrentAnimation );
+			#endif
+
+			m_BlendStartTime = g_GlobalTimer.TimeElapsedSeconds();
+			m_BlendLength = BlendLength;
+			m_NextAnimation = i;
+
+			m_Animations[m_NextAnimation].m_DesiredNextAnimation = desiredNextAnimation;
+			m_Animations[m_NextAnimation].m_DesiredNextAnimBlendLength = desiredNextAnimationBlendLength;
+			m_Animations[m_NextAnimation].m_CurrentAnimationTime = 0.0f;
+
+
+			#if DEBUG_ANIMS
+				if ( bOutput ) kbLog( "		Blend Len = %f.  Next Anim Idx = %d.  Next Anim Name = %s.  Next Anim Len = %f. ", m_BlendLength, m_NextAnimation, desiredNextAnimation.c_str(), desiredNextAnimationBlendLength );
+			#endif
 		}
+
+		break;
 	}
 }
 

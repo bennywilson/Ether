@@ -34,7 +34,7 @@ public:
 	int											GetNumOLC() const { return m_NumOLC; }
 	void										UseOLC() { m_NumOLC--; }
 
-	class EtherSkelModelComponent *				GetFPHands() { return m_pFPHands; }
+	class kbSkeletalModelComponent *			GetFPHands() { return m_pFPHands; }
 
 protected:
 
@@ -53,7 +53,7 @@ protected:
 	int											m_NumAirstrikes;
 	int											m_NumOLC;
 
-	class EtherSkelModelComponent	*			m_pFPHands;
+	class kbSkeletalModelComponent	*			m_pFPHands;
 	float										m_GrenadeCoolddownSec;
 };
 

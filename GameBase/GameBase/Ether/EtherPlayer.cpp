@@ -100,7 +100,7 @@ void EtherPlayerComponent::Update_Internal( const float DeltaTimeSec ) {
 		for ( int i = 0; i < GetOwner()->GetChildEntities().size(); i++ ) {
 			kbGameEntity *const pCurEnt = GetOwner()->GetChildEntities()[i];
 			if ( strstr( pCurEnt->GetName().c_str(), "Hands" ) != nullptr ) {
-				EtherSkelModelComponent *const pSkelModel = (EtherSkelModelComponent*) pCurEnt->GetComponentByType( EtherSkelModelComponent::GetType() );
+				kbSkeletalModelComponent *const pSkelModel = (kbSkeletalModelComponent*) pCurEnt->GetComponentByType( kbSkeletalModelComponent::GetType() );
 				m_pFPHands = pSkelModel;
 				break;
 			}
@@ -300,11 +300,11 @@ void EtherPlayerComponent::HandleMovement( const kbInput_t & Input, const float 
 		return;
 	}
 
-	EtherSkelModelComponent * pSkelModelComponent = nullptr;
+	kbSkeletalModelComponent * pSkelModelComponent = nullptr;
 	
 	for ( int i = 0; i < GetOwner()->NumComponents(); i++ ) {
-		if ( GetOwner()->GetComponent(i)->IsA( EtherSkelModelComponent::GetType() ) ) {
-			pSkelModelComponent = static_cast<EtherSkelModelComponent*>( GetOwner()->GetComponent(i) );
+		if ( GetOwner()->GetComponent(i)->IsA( kbSkeletalModelComponent::GetType() ) ) {
+			pSkelModelComponent = static_cast<kbSkeletalModelComponent*>( GetOwner()->GetComponent(i) );
 		}
 	}
 

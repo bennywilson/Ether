@@ -417,7 +417,7 @@ void EtherDestructibleComponent::TakeDamage( const float damageAmt, const kbVec3
 	}
 
 	if ( m_pSkelModel == nullptr ) {
-		m_pSkelModel = (EtherSkelModelComponent *) GetOwner()->GetComponentByType( EtherSkelModelComponent::GetType() );
+		m_pSkelModel = (kbSkeletalModelComponent *) GetOwner()->GetComponentByType( kbSkeletalModelComponent::GetType() );
 	}
 
 	kbErrorCheck( m_pSkelModel != nullptr, "EtherDestructibleComponent::TakeDamage() - Missing skeletal model" );
@@ -439,7 +439,7 @@ void EtherDestructibleComponent::TakeDamage( const float damageAmt, const kbVec3
 					m_pSkelModel->SetMaterialParamVector( 0, shaderParam.GetParamName().stl_str(), shaderParam.GetVector() );
 				}
 			}
-			m_pSkelModel->SetModel( m_pDamagedModel, false );
+			m_pSkelModel->SetModel( m_pDamagedModel );
 		}
 	}
 
@@ -508,7 +508,7 @@ void EtherDestructibleComponent::SetEnable_Internal( const bool bEnable ) {
 	if ( bEnable == false ) {
 		m_pSkelModel = nullptr;
 	} else {
-		m_pSkelModel = (EtherSkelModelComponent *) GetOwner()->GetComponentByType( EtherSkelModelComponent::GetType() );
+		m_pSkelModel = (kbSkeletalModelComponent *) GetOwner()->GetComponentByType( kbSkeletalModelComponent::GetType() );
 		if ( m_pSkelModel == nullptr || m_pSkelModel->GetModel() == nullptr ) {
 			kbWarning( "EtherDestructibleComponent::SetEnable_Internal() - No skeletal model found on entity %", GetOwner()->GetName().c_str() );
 			this->Enable( false );
@@ -517,7 +517,7 @@ void EtherDestructibleComponent::SetEnable_Internal( const bool bEnable ) {
 
 		if ( g_UseEditor == false ) {
 			if ( m_pNonDamagedModel != nullptr ) {
-				m_pSkelModel->SetModel( m_pNonDamagedModel, false );
+				m_pSkelModel->SetModel( m_pNonDamagedModel );
 			}
 
 			for ( int i = 0; i < m_NonDamagedModelMaterialParams.size(); i++ ) {
@@ -549,7 +549,7 @@ void EtherDestructibleComponent::Update_Internal( const float deltaTime ) {
 
 		if ( g_UseEditor == false ) {
 			if ( m_pNonDamagedModel != nullptr ) {
-				m_pSkelModel->SetModel( m_pNonDamagedModel, false );
+				m_pSkelModel->SetModel( m_pNonDamagedModel );
 
 				for ( int i = 0; i < m_NonDamagedModelMaterialParams.size(); i++ ) {
 					const kbShaderParamComponent & shaderParam = m_NonDamagedModelMaterialParams[i];
@@ -641,7 +641,7 @@ void EtherClothComponent::RunSimulation( const float DeltaTime ) {
 
 		if ( m_Health > 0 && m_Health - 1.0f <= 0.0f ) {
 			m_Health = -1.0f;
-			EtherSkelModelComponent *const pSkelModel = (EtherSkelModelComponent*)GetOwner()->GetComponentByType( EtherSkelModelComponent::GetType() );
+			kbSkeletalModelComponent *const pSkelModel = (kbSkeletalModelComponent*)GetOwner()->GetComponentByType( kbSkeletalModelComponent::GetType() );
 			if ( pSkelModel != nullptr ) {
 				pSkelModel->SetMaterialParamVector( 0, "damageParams", kbVec4( 0.0f, 0.0f, 0.0f, 0.0f ) );
 			}

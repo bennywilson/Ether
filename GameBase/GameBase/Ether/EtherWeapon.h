@@ -151,7 +151,7 @@ private:
 	float									m_SecondsBetweenBursts;
 
 	// Run time
-	EtherSkelModelComponent *				m_pWeaponModel;
+	kbSkeletalModelComponent *				m_pWeaponModel;
 	int										m_CurrentBurstCount;
 	float									m_BurstTimer;
 	float									m_ShotTimer;
