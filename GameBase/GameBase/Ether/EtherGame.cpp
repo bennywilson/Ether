@@ -412,9 +412,9 @@ kbGameEntity * EtherGame::CreatePlayer( const int netId, const kbGUID & prefabGU
 			if ( pCurComponent->IsA( EtherPlayerComponent::GetType() ) ) {
 				m_pPlayerComponent = static_cast<EtherPlayerComponent*>( pCurComponent );
 				kbErrorCheck( m_pPlayerComponent != nullptr, "EtherGame::CreatePlayer() - Failed to find player component" );
-			} else if ( pCurComponent->IsA( EtherSkelModelComponent::GetType() ) ) {
-				EtherSkelModelComponent *const pSkelModel = static_cast<EtherSkelModelComponent*>( pCurComponent );
-				pSkelModel->Enable( pSkelModel->IsFirstPersonModel() );
+			} else if ( pCurComponent->IsA( kbSkeletalModelComponent::GetType() ) ) {
+				kbSkeletalModelComponent *const pSkelModel = static_cast<kbSkeletalModelComponent*>( pCurComponent );
+				pSkelModel->Enable( true );
 			}
 		}
 
@@ -483,13 +483,16 @@ void EtherGame::AddPrefabToEntity( const kbPackage *const pPrefabPackage, const 
 
 		bool bShowComponent = true;
 		const kbComponent *const pPrefabComponent = pPrefabEntity->GetComponent(iComp);
-		if ( pPrefabComponent->IsA( EtherSkelModelComponent::GetType() ) ) {
-			const EtherSkelModelComponent *const skelModel = static_cast<const EtherSkelModelComponent*>( pPrefabComponent );
-			if ( skelModel->IsFirstPersonModel() && g_pGame->GetLocalPlayer() != pEntity ) {
+kbLog(" Prefab is %s", pPrefabComponent->GetType()->GetClassNameW() );
+		if ( pPrefabComponent->IsA( kbSkeletalModelComponent::GetType() ) ) {
+			const kbSkeletalModelComponent *const skelModel = static_cast<const kbSkeletalModelComponent*>( pPrefabComponent );
+			bool isRifle = skelModel->GetOwnerName() == kbString( "EL_Rifle" );
+			kbLog( "%s -- %d", skelModel->GetOwnerName().c_str(), isRifle );
+			if ( isRifle && g_pGame->GetLocalPlayer() != pEntity ) {
 				continue;
 			}
 
-			if ( skelModel->IsFirstPersonModel() == false && g_pGame->GetLocalPlayer() == pEntity ) {
+			if ( isRifle == false && g_pGame->GetLocalPlayer() == pEntity ) {
 				bShowComponent = false;
 			}
 		} else if ( pPrefabComponent->IsA( EtherPlayerComponent::GetType() ) && pEntity != g_pGame->GetLocalPlayer() ) {

@@ -40,7 +40,7 @@ kbGameEntity 3296042617 1156675361 562646963 1803854321 {
 		Position = 0.000000 3.000000 24.000000
 		Scale = 0.100000 0.100000 0.100000
 	}
-	EtherSkelModelComponent { 
+	kbSkeletalModelComponent { 
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadow = 1
@@ -51,7 +51,7 @@ kbGameEntity 3296042617 1156675361 562646963 1803854321 {
 		ShaderOverride = 0
 			
 		Animations = 11
-			EtherAnimComponent { 
+			kbAnimComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
 				Animation = .\assets\models\characters\cartel_warrior\cartel_warrior_aim.kbanim.ms3d
@@ -60,7 +60,7 @@ kbGameEntity 3296042617 1156675361 562646963 1803854321 {
 				IsLooping = 1
 				TimeScale =  0.050000
 			}
-			EtherAnimComponent { 
+			kbAnimComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
 				Animation = .\assets\models\characters\cartel_warrior\cartel_warrior_run.kbanim.ms3d
@@ -69,7 +69,7 @@ kbGameEntity 3296042617 1156675361 562646963 1803854321 {
 				IsLooping = 1
 				TimeScale =  1.000000
 			}
-			EtherAnimComponent { 
+			kbAnimComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
 				Animation = .\assets\models\characters\cartel_warrior\cartel_warrior_backpedal.kbanim.ms3d
@@ -78,7 +78,7 @@ kbGameEntity 3296042617 1156675361 562646963 1803854321 {
 				IsLooping = 1
 				TimeScale =  0.500000
 			}
-			EtherAnimComponent { 
+			kbAnimComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
 				Animation = .\assets\models\characters\cartel_warrior\cartel_warrior_strafeleft.kbanim.ms3d
@@ -87,7 +87,7 @@ kbGameEntity 3296042617 1156675361 562646963 1803854321 {
 				IsLooping = 1
 				TimeScale =  1.000000
 			}
-			EtherAnimComponent { 
+			kbAnimComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
 				Animation = .\assets\models\characters\cartel_warrior\cartel_warrior_straferight.kbanim.ms3d
@@ -96,7 +96,7 @@ kbGameEntity 3296042617 1156675361 562646963 1803854321 {
 				IsLooping = 1
 				TimeScale =  1.000000
 			}
-			EtherAnimComponent { 
+			kbAnimComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
 				Animation = .\assets\models\characters\cartel_warrior\cartel_warrior_death_backwards_1.kbanim.ms3d
@@ -105,7 +105,7 @@ kbGameEntity 3296042617 1156675361 562646963 1803854321 {
 				IsLooping = 0
 				TimeScale =  1.450000
 			}
-			EtherAnimComponent { 
+			kbAnimComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
 				Animation = .\assets\models\characters\cartel_warrior\cartel_warrior_death_spin.kbanim.ms3d
@@ -114,7 +114,7 @@ kbGameEntity 3296042617 1156675361 562646963 1803854321 {
 				IsLooping = 0
 				TimeScale =  1.500000
 			}
-			EtherAnimComponent { 
+			kbAnimComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
 				Animation = .\assets\models\characters\cartel_warrior\cartel_warrior_death_flip.kbanim.ms3d
@@ -123,7 +123,7 @@ kbGameEntity 3296042617 1156675361 562646963 1803854321 {
 				IsLooping = 0
 				TimeScale =  1.450000
 			}
-			EtherAnimComponent { 
+			kbAnimComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
 				Animation = .\assets\models\characters\cartel_warrior\cartel_warrior_death_backwards_2.kbanim.ms3d
@@ -132,7 +132,7 @@ kbGameEntity 3296042617 1156675361 562646963 1803854321 {
 				IsLooping = 0
 				TimeScale =  1.450000
 			}
-			EtherAnimComponent { 
+			kbAnimComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
 				Animation = .\assets\models\characters\cartel_warrior\cartel_warrior_death_kneelforward.kbanim.ms3d
@@ -141,7 +141,7 @@ kbGameEntity 3296042617 1156675361 562646963 1803854321 {
 				IsLooping = 0
 				TimeScale =  1.650000
 			}
-			EtherAnimComponent { 
+			kbAnimComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
 				Animation = .\assets\models\characters\cartel_warrior\cartel_warrior_death_forwardflip.kbanim.ms3d

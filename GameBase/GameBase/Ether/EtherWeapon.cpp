@@ -342,12 +342,16 @@ void EtherWeaponComponent::SetEnable_Internal( const bool bEnable ) {
 	if ( bEnable && m_pWeaponModel == nullptr ) {
 		for ( int i = 0; i < GetOwner()->NumComponents(); i++ ) {
 			kbComponent *const pCurComponent = GetOwner()->GetComponent(i);
-			if ( pCurComponent->IsA( EtherSkelModelComponent::GetType() ) == false ) {
+			if ( pCurComponent->IsA( kbSkeletalModelComponent::GetType() ) == false ) {
 				continue;
 			}
 
-			EtherSkelModelComponent *const pSkelModel = static_cast<EtherSkelModelComponent*>( pCurComponent );
-			if ( pSkelModel->IsFirstPersonModel()  ) {
+			kbSkeletalModelComponent *const pSkelModel = static_cast<kbSkeletalModelComponent*>( pCurComponent );
+//kbLog( "Comparing %s to EL_Rifle", GetOwner()->GetName().c_str() );
+			{//if ( GetOwner()->GetName() == "EL_Rifle" ) {
+//kbLog( "		Made it!" );
+
+				kbLog( "Weapon model is %s", pSkelModel->GetModel()->GetFullFileName().c_str() );
 				m_pWeaponModel = pSkelModel;
 				break;
 			}

@@ -2,7 +2,7 @@
 // kbSoundManager.cpp
 //
 //
-// 2017 kbEngine 2.0
+// 2017-2019 kbEngine 2.0
 //==============================================================================
 #include "kbCore.h"
 #include "kbSoundManager.h"
@@ -207,13 +207,22 @@ kbSoundManager::kbSoundManager() {
 
 	kbLog( "Creating Audio Engine" );
 
+	m_bInitialized = false;
+
 	HRESULT hr = XAudio2Create( &m_pXAudioEngine );
-	kbErrorCheck( SUCCEEDED( hr ), "kbSoundManager::kbSoundManager() - Failed to create XAudio2" );
+	if ( FAILED( hr ) ) {
+		kbWarning( "kbSoundManager::kbSoundManager() - Failed to create XAudio2" );
+		return;
+	}
 
 	hr = m_pXAudioEngine->CreateMasteringVoice( &m_pMasteringVoice );
-	kbErrorCheck( SUCCEEDED( hr ), "kbSoundManager::kbSoundManager()  - Failed to create a mastering voice" );
+	if ( FAILED( hr ) ) {
+		kbWarning( "kbSoundManager::kbSoundManager() - Failed to create a mastering voice" );
+		return;
+	}
 
 	m_FrequencyRatio = 1.0f;
+	m_bInitialized = true;
 
 	//memset( m_Voices, NULL, sizeof( voices ) );
 //	memset( voicesInUse, false, sizeof( voicesInUse ) );
@@ -223,6 +232,10 @@ kbSoundManager::kbSoundManager() {
  *	kbSoundManager::~kbSoundManager
  */						
 kbSoundManager::~kbSoundManager() {
+
+	if ( m_bInitialized == false ) {
+		return;
+	}
 
 	for ( int iVoice = 0; iVoice < MAX_VOICES; iVoice++ ) {
 		if ( m_Voices[iVoice].m_bInUse == false ) {
@@ -245,6 +258,10 @@ kbSoundManager::~kbSoundManager() {
  *	kbSoundManager::PlayWave
  */
 void kbSoundManager::PlayWave( kbWaveFile *const pWaveFile, const float inVolume ) {
+
+	if ( m_bInitialized == false ) {
+		return;
+	}
 
 	kbVoiceData_t * pVoice = nullptr;
 
@@ -289,6 +306,11 @@ void kbSoundManager::PlayWave( kbWaveFile *const pWaveFile, const float inVolume
  *	kbSoundManager::Update
  */
 void kbSoundManager::Update() {
+
+	if ( m_bInitialized == false ) {
+		return;
+	}
+
 	for ( int iVoice = 0; iVoice < MAX_VOICES; iVoice++ ) {
 		if ( m_Voices[iVoice].m_bInUse == false ) {
 			continue;
@@ -310,6 +332,11 @@ void kbSoundManager::Update() {
  *	kbSoundManager::SetFrequencyRatio
  */
 void kbSoundManager::SetFrequencyRatio( const float frequencyRatio ) {
+
+	if ( m_bInitialized == false ) {
+		return;
+	}
+
 	m_FrequencyRatio = frequencyRatio;
 
 	for ( int iVoice = 0; iVoice < MAX_VOICES; iVoice++ ) {

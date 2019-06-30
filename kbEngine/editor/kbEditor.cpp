@@ -419,25 +419,6 @@ void kbEditor::Update() {
 
 	//m_pMainTab->GetCurrentWindow()->GetCamera().Update();
 
-	if ( GetAsyncKeyState( VK_LSHIFT ) && GetAsyncKeyState( 'P' ) && GetGameEntities().size() > 0 ) {
-
-		for ( int i = (int) GetGameEntities().size() - 1; i >= 0; i-- ) {
-
-			const kbEditorEntity *const pCurEntity = GetGameEntities()[i];
-			const kbPlayerStartComponent *const pStart = (kbPlayerStartComponent*)pCurEntity->GetGameEntity()->GetComponentByType( kbPlayerStartComponent::GetType() );
-			if ( pStart == nullptr ) {
-				continue;
-			}
-
-			const kbVec3 newPos = pCurEntity->GetPosition();
-			const kbQuat newRotation = pCurEntity->GetOrientation();
-			SetMainCameraPos( newPos );
-			SetMainCameraRot( newRotation );
-			break;
-		}
-	
-	}
-
 	if ( GetFocus() == fl_xid( this ) ) {
 		// input
 		if ( GetAsyncKeyState( 'W' ) ) {

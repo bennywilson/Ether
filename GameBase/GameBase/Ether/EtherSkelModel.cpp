@@ -38,6 +38,8 @@ void EtherSkelModelComponent::Constructor() {
 	m_bFirstPersonModel = false;
 	m_CurrentAnimation = -1;
 	m_NextAnimation = -1;
+
+	m_DebugAnimTime = 0.0f;
 }
 
 /**
@@ -163,29 +165,28 @@ void EtherSkelModelComponent::SetModel( kbModel *const pModel, bool bIsFirstPers
 void EtherSkelModelComponent::Update_Internal( const float DeltaTime ) {
 
 	if ( m_pModel != nullptr ) {
-		if ( m_BindToLocalSpaceMatrices.size() == 0 ) {
+		if ( m_BindToLocalSpaceMatrices.size() != m_pModel->NumBones() ) {
 			m_BindToLocalSpaceMatrices.resize( m_pModel->NumBones() );
 		}
 
 		// Debug Animation
 		if ( m_DebugAnimIdx >= 0 && m_DebugAnimIdx < m_Animations.size() && m_Animations[m_DebugAnimIdx].m_pAnimation != nullptr ) {
 			if ( m_pModel != nullptr ) {
-				static float time = 0.0f;
-				static bool pause = false;
 
+				static bool pause = false;
 				if ( pause == false ) {
 					const float AnimTimeScale = m_Animations[m_DebugAnimIdx].m_TimeScale;
-					time += DeltaTime * AnimTimeScale;
+					m_DebugAnimTime += DeltaTime * AnimTimeScale;
 
 					if ( m_Animations[m_DebugAnimIdx].m_bIsLooping == false ) {
-						time = kbClamp( time, 0.0f, m_Animations[m_DebugAnimIdx].m_pAnimation->GetLengthInSeconds() );
+						m_DebugAnimTime = kbClamp( m_DebugAnimTime, 0.0f, m_Animations[m_DebugAnimIdx].m_pAnimation->GetLengthInSeconds() );
 					}
 				}
 
 				if ( m_BindToLocalSpaceMatrices.size() == 0 ) {
 					m_BindToLocalSpaceMatrices.resize( m_pModel->NumBones() );
 				}
-				m_pModel->Animate( time, m_Animations[m_DebugAnimIdx].m_pAnimation, m_Animations[m_DebugAnimIdx].m_bIsLooping, m_BindToLocalSpaceMatrices );
+				m_pModel->Animate( m_BindToLocalSpaceMatrices, m_DebugAnimTime, m_Animations[m_DebugAnimIdx].m_pAnimation, m_Animations[m_DebugAnimIdx].m_bIsLooping );
 			}
 		} else {
 			for ( int i = 0; i < m_pModel->NumBones(); i++ ) {
@@ -274,7 +275,7 @@ void EtherSkelModelComponent::Update_Internal( const float DeltaTime ) {
 				kbLog( "	Not blending anim %s. anim time = %f", CurAnim.m_AnimationName.c_str(), CurAnim.m_CurrentAnimationTime );
 #endif
 
-				m_pModel->Animate( CurAnim.m_CurrentAnimationTime, CurAnim.m_pAnimation, CurAnim.m_bIsLooping, m_BindToLocalSpaceMatrices );
+				m_pModel->Animate( m_BindToLocalSpaceMatrices, CurAnim.m_CurrentAnimationTime, CurAnim.m_pAnimation, CurAnim.m_bIsLooping );
 
 				if ( bAnimIsFinished && CurAnim.m_DesiredNextAnimation.IsEmptyString() == false ) {
 
@@ -320,7 +321,7 @@ void EtherSkelModelComponent::Update_Internal( const float DeltaTime ) {
 				}
 
 				const float blendTime = kbClamp( ( g_GlobalTimer.TimeElapsedSeconds() - m_BlendStartTime ) / m_BlendLength, 0.0f, 1.0f );
-				m_pModel->BlendAnimations( CurAnim.m_pAnimation, CurAnim.m_CurrentAnimationTime, CurAnim.m_bIsLooping, NextAnim.m_pAnimation, NextAnim.m_CurrentAnimationTime, NextAnim.m_bIsLooping, blendTime, m_BindToLocalSpaceMatrices ); 
+				m_pModel->BlendAnimations( m_BindToLocalSpaceMatrices, CurAnim.m_pAnimation, CurAnim.m_CurrentAnimationTime, CurAnim.m_bIsLooping, NextAnim.m_pAnimation, NextAnim.m_CurrentAnimationTime, NextAnim.m_bIsLooping, blendTime ); 
 
 #if DEBUG_ANIMS
 				kbLog( "	Blending anims %f.  %s cur time = %f. %s cur time is %f", blendTime, CurAnim.GetAnimationName().c_str(), CurAnim.m_CurrentAnimationTime, NextAnim.GetAnimationName().c_str(), NextAnim.m_CurrentAnimationTime );
@@ -416,7 +417,7 @@ void EtherDestructibleComponent::TakeDamage( const float damageAmt, const kbVec3
 	}
 
 	if ( m_pSkelModel == nullptr ) {
-		m_pSkelModel = (EtherSkelModelComponent *) GetOwner()->GetComponentByType( EtherSkelModelComponent::GetType() );
+		m_pSkelModel = (kbSkeletalModelComponent *) GetOwner()->GetComponentByType( kbSkeletalModelComponent::GetType() );
 	}
 
 	kbErrorCheck( m_pSkelModel != nullptr, "EtherDestructibleComponent::TakeDamage() - Missing skeletal model" );
@@ -438,7 +439,7 @@ void EtherDestructibleComponent::TakeDamage( const float damageAmt, const kbVec3
 					m_pSkelModel->SetMaterialParamVector( 0, shaderParam.GetParamName().stl_str(), shaderParam.GetVector() );
 				}
 			}
-			m_pSkelModel->SetModel( m_pDamagedModel, false );
+			m_pSkelModel->SetModel( m_pDamagedModel );
 		}
 	}
 
@@ -507,7 +508,7 @@ void EtherDestructibleComponent::SetEnable_Internal( const bool bEnable ) {
 	if ( bEnable == false ) {
 		m_pSkelModel = nullptr;
 	} else {
-		m_pSkelModel = (EtherSkelModelComponent *) GetOwner()->GetComponentByType( EtherSkelModelComponent::GetType() );
+		m_pSkelModel = (kbSkeletalModelComponent *) GetOwner()->GetComponentByType( kbSkeletalModelComponent::GetType() );
 		if ( m_pSkelModel == nullptr || m_pSkelModel->GetModel() == nullptr ) {
 			kbWarning( "EtherDestructibleComponent::SetEnable_Internal() - No skeletal model found on entity %", GetOwner()->GetName().c_str() );
 			this->Enable( false );
@@ -516,7 +517,7 @@ void EtherDestructibleComponent::SetEnable_Internal( const bool bEnable ) {
 
 		if ( g_UseEditor == false ) {
 			if ( m_pNonDamagedModel != nullptr ) {
-				m_pSkelModel->SetModel( m_pNonDamagedModel, false );
+				m_pSkelModel->SetModel( m_pNonDamagedModel );
 			}
 
 			for ( int i = 0; i < m_NonDamagedModelMaterialParams.size(); i++ ) {
@@ -548,7 +549,7 @@ void EtherDestructibleComponent::Update_Internal( const float deltaTime ) {
 
 		if ( g_UseEditor == false ) {
 			if ( m_pNonDamagedModel != nullptr ) {
-				m_pSkelModel->SetModel( m_pNonDamagedModel, false );
+				m_pSkelModel->SetModel( m_pNonDamagedModel );
 
 				for ( int i = 0; i < m_NonDamagedModelMaterialParams.size(); i++ ) {
 					const kbShaderParamComponent & shaderParam = m_NonDamagedModelMaterialParams[i];
@@ -640,7 +641,7 @@ void EtherClothComponent::RunSimulation( const float DeltaTime ) {
 
 		if ( m_Health > 0 && m_Health - 1.0f <= 0.0f ) {
 			m_Health = -1.0f;
-			EtherSkelModelComponent *const pSkelModel = (EtherSkelModelComponent*)GetOwner()->GetComponentByType( EtherSkelModelComponent::GetType() );
+			kbSkeletalModelComponent *const pSkelModel = (kbSkeletalModelComponent*)GetOwner()->GetComponentByType( kbSkeletalModelComponent::GetType() );
 			if ( pSkelModel != nullptr ) {
 				pSkelModel->SetMaterialParamVector( 0, "damageParams", kbVec4( 0.0f, 0.0f, 0.0f, 0.0f ) );
 			}

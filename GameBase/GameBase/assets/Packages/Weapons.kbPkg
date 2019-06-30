@@ -406,12 +406,12 @@ kbGameEntity 292847838 1140569109 1236968083 2365837966 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		Name = "EL Standard Pistol"
+		Name = "EL_Rifle"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
 		Position = 5.500000 -10.000000 3.000000
 		Scale = 1.000000 1.000000 1.000000
 	}
-	EtherSkelModelComponent { 
+	kbSkeletalModelComponent { 
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadow = 0
@@ -474,7 +474,7 @@ kbGameEntity 292847838 1140569109 1236968083 2365837966 {
 		ShaderOverride = 0
 			
 		Animations = 3
-			EtherAnimComponent { 
+			kbAnimComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
 				Animation = .\assets\models\items\el_rifle_fp_idle.kbanim.ms3d
@@ -483,7 +483,7 @@ kbGameEntity 292847838 1140569109 1236968083 2365837966 {
 				IsLooping = 1
 				TimeScale =  0.500000
 			}
-			EtherAnimComponent { 
+			kbAnimComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
 				Animation = .\assets\models\items\el_rifle_fp_shoot.kbanim.ms3d
@@ -513,7 +513,7 @@ kbGameEntity 292847838 1140569109 1236968083 2365837966 {
 				IsLooping = 0
 				TimeScale =  8.000000
 			}
-			EtherAnimComponent { 
+			kbAnimComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
 				Animation = .\assets\models\items\el_rifle_fp_walkforward.kbanim.ms3d

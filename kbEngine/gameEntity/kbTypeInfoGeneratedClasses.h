@@ -143,9 +143,20 @@ GenerateClass(
 	AddField( "Model", KBTYPEINFO_STATICMODEL, kbStaticModelComponent, m_pModel, false, "" )
 )
 
+GenerateClass(
+	kbAnimComponent,
+	AddField( "AnimationName", KBTYPEINFO_KBSTRING, kbAnimComponent, m_AnimationName, false, "" )
+	AddField( "Animation", KBTYPEINFO_ANIMATION, kbAnimComponent, m_pAnimation, false, "" )
+	AddField( "TimeScale", KBTYPEINFO_FLOAT, kbAnimComponent, m_TimeScale, false, "" )
+	AddField( "IsLooping", KBTYPEINFO_BOOL, kbAnimComponent, m_bIsLooping, false, "" )
+	AddField( "AnimationEvent", KBTYPEINFO_STRUCT, kbAnimComponent, m_AnimEvents, true, "kbAnimEvent" )
+)
+
 GenerateClass( 
 	kbSkeletalModelComponent, 
 	AddField( "Model", KBTYPEINFO_STATICMODEL, kbSkeletalModelComponent, m_pModel, false, "" )
+	AddField( "Animations", KBTYPEINFO_STRUCT, kbSkeletalModelComponent, m_Animations, true, "kbAnimComponent" )
+	AddField( "DebugAnimIndex", KBTYPEINFO_INT, kbSkeletalModelComponent, m_DebugAnimIdx, false, "" )
 )
 
 GenerateClass( 
