@@ -201,5 +201,7 @@ void CannonGame::RenderSync() {
 static float g_TimeMultiplier = 0.95f / 0.016f;
 void CannonGame::RenderHookCallBack( kbRenderTexture *const pSrc, kbRenderTexture *const pDst ) {
 
-	g_pRenderer->RT_CopyRenderTarget( pSrc, pDst );
+	if ( pSrc != nullptr && pDst != nullptr ) {
+		g_pRenderer->RT_CopyRenderTarget( pSrc, pDst );
+	}
 }

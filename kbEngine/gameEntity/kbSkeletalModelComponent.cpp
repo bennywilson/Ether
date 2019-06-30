@@ -162,13 +162,18 @@ void kbSkeletalModelComponent::Update_Internal( const float DeltaTime ) {
 				const float prevAnimTime = CurAnim.m_CurrentAnimationTime;
 	
 				CurAnim.m_CurrentAnimationTime += DeltaTime * CurAnim.m_TimeScale;
+
+#if DEBUG_ANIMS
 				if ( bOutput ) { kbLog( "		prevAnimTime = %f - Cur anim time = %f.  DeltaT and all that was %f", prevAnimTime, CurAnim.m_CurrentAnimationTime ); }
+#endif
 
 				for ( int iAnimEvent = 0; iAnimEvent < CurAnim.m_AnimEvents.size(); iAnimEvent++ ) {
 					auto & curEvent = CurAnim.m_AnimEvents[iAnimEvent];
+#if DEBUG_ANIMS
 					if ( bOutput && curEvent.GetEventTime() > prevAnimTime && curEvent.GetEventTime() <= CurAnim.m_CurrentAnimationTime  ) {
 						kbLog( "AnimEvent %s - %f", curEvent.GetEventName().c_str(), curEvent.GetEventTime() );
 					}
+#endif
 				}
 
 				if ( m_BindToLocalSpaceMatrices.size() == 0 ) {
@@ -211,7 +216,9 @@ void kbSkeletalModelComponent::Update_Internal( const float DeltaTime ) {
 				kbAnimComponent & NextAnim = m_Animations[m_NextAnimation];
 				const float prevNextAnimTime = NextAnim.m_CurrentAnimationTime;
 
+#if DEBUG_ANIMS
 				if ( bOutput ) { kbLog( "		Cur anim is %s.  time = %f.  DeltaT was %f.  Next anim is %s.  Next anim time is %f", CurAnim.m_AnimationName.c_str(), CurAnim.m_CurrentAnimationTime, DeltaTime * CurAnim.m_TimeScale, NextAnim.m_AnimationName.c_str(), NextAnim.m_CurrentAnimationTime ); }
+#endif
 
 				if ( CurAnim.m_bIsLooping && NextAnim.m_bIsLooping ) {
 					// Sync the anims if they're both looping
