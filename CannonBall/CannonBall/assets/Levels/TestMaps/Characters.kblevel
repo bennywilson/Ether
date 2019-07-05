@@ -2,7 +2,7 @@ kbGameEntity 0 0 0 0 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		Name = "Entity_11"
+		Name = "Entity_8"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
 		Position = 0.000000 0.000000 0.000000
 		Scale = 1.000000 1.000000 1.000000
@@ -10,8 +10,8 @@ kbGameEntity 0 0 0 0 {
 	kbEditorLevelSettingsComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		MainCameraPosition = -45.895466 28.351274 -82.346863
-		MainCameraRotation = -0.159049 0.057413 -0.009265 0.985556
+		MainCameraPosition = -65.287430 32.383560 -78.358200
+		MainCameraRotation = -0.333779 -0.151613 0.054486 0.928782
 	}
 }
 kbGameEntity 0 0 0 0 {
@@ -244,7 +244,7 @@ kbGameEntity 0 0 0 0 {
 				AnimationEvent = 0
 				AnimationName = ""
 				IsLooping = 1
-				TimeScale =  0.150000
+				TimeScale =  2.000000
 			}
 		DebugAnimIndex = 0
 		Model = .\assets\models\characters\sheep\sheep.ms3d
@@ -265,7 +265,7 @@ kbGameEntity 0 0 0 0 {
 						LifeTime =  -1.000000
 						ParamName = "outlineParams"
 						Texture = NULL
-						Vector = 0.400000 2.000000 0.000000 0.000000
+						Vector = 0.400000 5.000000 0.000000 0.000000
 					}
 					kbShaderParamComponent { 
 						Enabled = 0
@@ -285,7 +285,7 @@ kbGameEntity 0 0 0 0 {
 				AnimationEvent = 0
 				AnimationName = ""
 				IsLooping = 1
-				TimeScale =  0.150000
+				TimeScale =  2.000000
 			}
 		DebugAnimIndex = 0
 		Model = .\assets\models\characters\sheep\sheep.ms3d
