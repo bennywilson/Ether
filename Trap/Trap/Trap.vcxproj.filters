@@ -1,0 +1,41 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="stdafx.cpp" />
+    <ClCompile Include="Trap.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Trap\TrapGame.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Trap\TrapTypeInfoGeneratedClasses.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Resource.h" />
+    <ClInclude Include="stdafx.h" />
+    <ClInclude Include="targetver.h" />
+    <ClInclude Include="Trap.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Trap\TrapGame.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Trap\TrapTypeInfoGeneratedClasses.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="small.ico" />
+    <None Include="Trap.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Source">
+      <UniqueIdentifier>{f539becc-1878-4397-be01-c799ba0875e5}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Trap.rc" />
+  </ItemGroup>
+</Project>
