@@ -1,7 +1,7 @@
 //==============================================================================
 // characterBase.kbShader
 //
-// 2018 kbEngine 2.0
+// 2019 kbEngine 2.0
 //==============================================================================
 cbuffer matrixBuffer {
    matrix      modelMatrix;
@@ -10,7 +10,7 @@ cbuffer matrixBuffer {
 };
 
 kbShaderState {
-	cullMode CullMode_None
+	cullMode CullMode_BackFaces
 }
 
 //-------------------------------------
@@ -52,20 +52,23 @@ struct PS_OUTPUT {
 pixelInput vertexShader( vertexInput input ) {
 	pixelInput output = (pixelInput)(0);
 
-   float4 Pos = 0.0f;
+	float4 Pos = 0.0f;
 
-   int4 IndexVector = D3DCOLORtoUBYTE4(input.blendIndices);
-   float BlendWeightsArray[4] = (float[4])input.boneWeights;
-   int   IndexArray[4]        = (int[4])IndexVector;
+	int4 IndexVector = D3DCOLORtoUBYTE4(input.blendIndices).zyxw;
+	float BlendWeightsArray[4] = (float[4])input.boneWeights;
+	int   IndexArray[4]        = (int[4])IndexVector;
 
-   Pos = mul( input.position, boneList[IndexArray[0]] );
+	float4x4 blendedMat =	boneList[IndexArray[0]] * BlendWeightsArray[0] + boneList[IndexArray[1]] * BlendWeightsArray[1] +
+							boneList[IndexArray[2]] * BlendWeightsArray[2] + boneList[IndexArray[3]] * BlendWeightsArray[3];
+
+	Pos = mul( input.position, blendedMat );
 
 	output.position = mul( Pos, mvpMatrix );
 	output.uv = input.uv;
-	//output.color = 0;//input.color;
 	output.position2 = output.position.zw;
-	output.normal.xyz = mul( ( input.normal.xyz * 2.0f ) - 1.0f, (float3x3)boneList[IndexArray[0]] );
-	output.normal.xyz = mul( output.normal.xyz, (float3x3)modelMatrix );
+
+	output.normal.xyz = mul( ( input.normal.xyz * 2.0f ) - 1.0f, (float3x3)blendedMat );
+	output.normal.xyz = normalize( mul( output.normal.xyz , (float3x3)modelMatrix ) );
 
 	return output;
 }

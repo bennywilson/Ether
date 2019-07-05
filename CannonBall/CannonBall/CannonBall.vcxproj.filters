@@ -31,6 +31,18 @@
     <None Include="ReadMe.txt" />
     <None Include="small.ico" />
     <None Include="CannonBall.ico" />
+    <None Include="assets\shaders\Character\CharacterBase.kbShader">
+      <Filter>Shaders\Characters</Filter>
+    </None>
+    <None Include="assets\shaders\Character\characterOutline_NoSkinning.kbShader">
+      <Filter>Shaders\Characters</Filter>
+    </None>
+    <None Include="assets\shaders\Character\characterOutline.kbShader">
+      <Filter>Shaders\Characters</Filter>
+    </None>
+    <None Include="assets\shaders\Environment\environmentBase.kbShader">
+      <Filter>Shaders\Environment</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Shaders">
@@ -38,6 +50,12 @@
     </Filter>
     <Filter Include="Source Files">
       <UniqueIdentifier>{42d305e5-2225-43a6-81e1-d480981991c3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shaders\Characters">
+      <UniqueIdentifier>{70eff587-d687-4d3d-bc0a-66bfd60b2f09}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shaders\Environment">
+      <UniqueIdentifier>{743a5ff9-3b82-431f-9187-09f5990986b1}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
