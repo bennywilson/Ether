@@ -8,11 +8,11 @@ cbuffer matrixBuffer {
 	matrix		vpMatrix;
 	float4x4	boneList[128];
 	float4		cameraPos;
-	float4		outlineParams;		// x: Thickness, y: Push back
+	float4		outlineParams;		// x: Thickness, y: Push back, z: Outline Color Factor, w: Mip-Level
 };
 
 kbShaderState {
-	cullMode CullMode_None
+	cullMode CullMode_BackFaces
 	colorWriteEnable ColorWriteEnable_rgb
 }
 
@@ -27,25 +27,18 @@ struct vertexInput {
 
 //-------------------------------------
 struct pixelInput {
-	float4      position	: SV_POSITION;
-	float2      uv			: TEXCOORD0;
-	float2      position2	: TEXCOORD1;
-	float3      normal		: TEXCOORD2;
+	float4 position			: SV_POSITION;
+	float2 uv				: TEXCOORD0;
+	float2 position2		: TEXCOORD1;
+	float3 normal			: TEXCOORD2;
 };
 
-struct pixelInput2 {
-	float4      position	: SV_POSITION;
-	float2      uv			: TEXCOORD0;
-	float2      position2	: TEXCOORD1;
-	float3      normal		: TEXCOORD2;
-	bool		IsFrontFace	: SV_IsFrontFace;
-};
 //-------------------------------------
 struct PS_OUTPUT {
-	float4      Color		: SV_TARGET0;
-	float4      Normal		: SV_TARGET1;
-	float4		Specular	: SV_TARGET2;
-	float2      Depth		: SV_TARGET3;
+	float4 Color			: SV_TARGET0;
+	float4 Normal			: SV_TARGET1;
+	float4 Specular			: SV_TARGET2;
+	float2 Depth			: SV_TARGET3;
 };
 
 
@@ -88,18 +81,13 @@ pixelInput vertexShader( vertexInput input ) {
  *	pixelShader
  */
 Texture2D colorTexture;
-SamplerState SampleType;
+SamplerState DefaultSampler;
 
- PS_OUTPUT pixelShader( pixelInput2	input ) {
+ PS_OUTPUT pixelShader( pixelInput	input ) {
 	PS_OUTPUT output = (PS_OUTPUT) 0;
 
-	int level = 1;
-	float4 startColor = colorTexture.Sample( SampleType, input.uv );
-	if ( dot( startColor.xyz, startColor.xyz ) < 0.1f )
-		level = 1;
-
-	const float4 colorTex = colorTexture.SampleLevel( SampleType, input.uv, level ) * outlineParams.z;//0.75f;// * 0.5f;
-	output.Color.xyz = 0.1f;//colorTex.xyz;
+	const float4 colorTex = colorTexture.SampleLevel( DefaultSampler, input.uv, outlineParams.w ) * outlineParams.z;//0.75f;// * 0.5f;
+	output.Color.xyz = colorTex.xyz;
 	output.Color.w = 0;//colorTex.w *A 0.55;
 	output.Color.w = -1.0f;
 	output.Specular = float4( 0.0f, 1.0f, 0.0f, 0.0f );

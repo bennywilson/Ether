@@ -2,7 +2,7 @@ kbGameEntity 0 0 0 0 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		Name = "Entity_8"
+		Name = "Entity_12"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
 		Position = 0.000000 0.000000 0.000000
 		Scale = 1.000000 1.000000 1.000000
@@ -10,8 +10,8 @@ kbGameEntity 0 0 0 0 {
 	kbEditorLevelSettingsComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		MainCameraPosition = -65.287430 32.383560 -78.358200
-		MainCameraRotation = -0.333779 -0.151613 0.054486 0.928782
+		MainCameraPosition = 1.454948 30.694080 -59.728779
+		MainCameraRotation = -0.112636 0.425650 -0.053495 0.896255
 	}
 }
 kbGameEntity 0 0 0 0 {
@@ -19,7 +19,7 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "Sun"
-		Orientation = -0.394461 0.000000 0.000000 0.918913
+		Orientation = -0.387471 0.172224 0.073930 0.902629
 		Position = -59.252071 6.522116 -71.278885
 		Scale = 1.000000 1.000000 1.000000
 	}
@@ -156,7 +156,7 @@ kbGameEntity 0 0 0 0 {
 						LifeTime =  -1.000000
 						ParamName = "outlineParams"
 						Texture = NULL
-						Vector = 0.400000 2.000000 0.000000 0.000000
+						Vector = 0.400000 2.000000 0.750000 5.000000
 					}
 					kbShaderParamComponent { 
 						Enabled = 0
@@ -265,7 +265,7 @@ kbGameEntity 0 0 0 0 {
 						LifeTime =  -1.000000
 						ParamName = "outlineParams"
 						Texture = NULL
-						Vector = 0.400000 5.000000 0.000000 0.000000
+						Vector = 0.400000 5.000000 0.800000 5.000000
 					}
 					kbShaderParamComponent { 
 						Enabled = 0
@@ -275,7 +275,7 @@ kbGameEntity 0 0 0 0 {
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 			}
-		RenderPass = LightingPass
+		RenderPass = Post-LightingPass
 		TranslucencySortBias =  0.000000
 		Animations = 1
 			kbAnimComponent { 
@@ -301,7 +301,7 @@ kbGameEntity 0 0 0 0 {
 		Scale = 0.100000 0.100000 0.100000
 	}
 	kbSkeletalModelComponent { 
-		Enabled = 1
+		Enabled = 0
 		LifeTime =  -1.000000
 		CastsShadow = 1
 		Materials = 1
@@ -326,7 +326,7 @@ kbGameEntity 0 0 0 0 {
 		Model = .\assets\models\characters\fox\fox.ms3d
 	}
 	kbSkeletalModelComponent { 
-		Enabled = 1
+		Enabled = 0
 		LifeTime =  -1.000000
 		CastsShadow = 0
 		Materials = 1
@@ -408,7 +408,7 @@ kbGameEntity 0 0 0 0 {
 						LifeTime =  -1.000000
 						ParamName = "outlineParams"
 						Texture = NULL
-						Vector = 0.400000 2.000000 0.000000 0.000000
+						Vector = 0.400000 2.000000 0.650000 5.000000
 					}
 					kbShaderParamComponent { 
 						Enabled = 0
@@ -418,7 +418,7 @@ kbGameEntity 0 0 0 0 {
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 			}
-		RenderPass = LightingPass
+		RenderPass = Post-LightingPass
 		TranslucencySortBias =  0.000000
 		Animations = 0
 		DebugAnimIndex = -1
