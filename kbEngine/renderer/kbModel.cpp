@@ -1105,7 +1105,7 @@ void kbModel::SetBoneMatrices( std::vector<AnimatedBone_t> & bones, const float 
 			if ( animTime >= nextTime ) {
 				if ( bIsLooping ) {
 					// Looped
-					prevKey = jointData.m_RotationKeyFrames.size() - 1;
+					prevKey = (int)jointData.m_RotationKeyFrames.size() - 1;
 					nextKey = 1;
 				} else {
 					prevKey = nextKey = (int) jointData.m_RotationKeyFrames.size() - 1;
