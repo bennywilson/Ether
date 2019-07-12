@@ -569,4 +569,7 @@ inline kbQuat ovrQuatTokbQuat( const ovrQuatf & inQuat ) {
 
 extern kbRenderer_DX11 * g_pD3D11Renderer;
 
+XMMATRIX & XMMATRIXFromkbMat4( kbMat4 & matrix );
+kbMat4 & kbMat4FromXMMATRIX( FXMMATRIX & matrix );
+
 #endif

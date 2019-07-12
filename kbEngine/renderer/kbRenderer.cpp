@@ -221,8 +221,8 @@ void kbRenderJob::Run() {
 kbRenderer::kbRenderer() :
 	Back_Buffer_Width( 1280 ),
 	Back_Buffer_Height( 1024 ),
-	m_WorldScale_GameThread( 1.0f ),
-	m_WorldScale_RenderThread( 1.0f ),
+	m_GlobalModelScale_GameThread( 1.0f ),
+	m_GlobalModelScale_RenderThread( 1.0f ),
 	m_EditorIconScale_GameThread( 1.0f ),
 	m_EditorIconScale_RenderThread( 1.0f ),
 	m_pCurrentRenderWindow( nullptr ),
@@ -797,7 +797,7 @@ void kbRenderer::RenderSync() {
 	m_FogStartDistance_RenderThread = m_FogStartDistance_GameThread;
 	m_FogEndDistance_RenderThread = m_FogEndDistance_GameThread;
 	
-	m_WorldScale_RenderThread = m_WorldScale_GameThread;
+	m_GlobalModelScale_RenderThread = m_GlobalModelScale_GameThread;
 	m_EditorIconScale_RenderThread = m_EditorIconScale_GameThread;
 
 	RenderSync_Internal();

@@ -1467,8 +1467,8 @@ void kbRenderer_DX11::RenderScene() {
 				renderObject.m_Position = m_DebugModels[i].m_Position;
 				renderObject.m_Orientation = m_DebugModels[i].m_Orientation;
 
-				// Hack: Negate the effects of m_WorldScale_RenderThread in SetConstantsBuffer
-				renderObject.m_Scale = m_EditorIconScale_RenderThread * ( m_DebugModels[i].m_Scale ) / m_WorldScale_RenderThread;
+				// Hack: Negate the effects of m_GlobalModelScale_RenderThread in SetConstantsBuffer
+				renderObject.m_Scale = m_EditorIconScale_RenderThread * ( m_DebugModels[i].m_Scale ) / m_GlobalModelScale_RenderThread;
 				renderObject.m_EntityId = m_DebugModels[i].m_EntityId;
 				for ( int j = 0; j < renderObject.m_pModel->NumMeshes(); j++ ) {
 					kbRenderSubmesh newMesh( &renderObject, j, RP_Debug, 0.0f );
@@ -2051,7 +2051,7 @@ void kbRenderer_DX11::RenderMousePickerIds() {
 		renderObject.m_Materials = m_DebugModels[i].m_Materials;
 		renderObject.m_Position = m_DebugModels[i].m_Position;
 		renderObject.m_Orientation = m_DebugModels[i].m_Orientation;
-		renderObject.m_Scale = m_DebugModels[i].m_Scale;
+		renderObject.m_Scale = m_EditorIconScale_RenderThread * ( m_DebugModels[i].m_Scale ) / m_GlobalModelScale_RenderThread;
 		renderObject.m_EntityId = m_DebugModels[i].m_EntityId;
 		for ( int j = 0; j < renderObject.m_pModel->NumMeshes(); j++ ) {
 			kbRenderSubmesh newMesh( &renderObject, j, RP_MousePicker, 0.0f );
@@ -3884,7 +3884,7 @@ void kbRenderer_DX11::RT_Render2DQuad( const kbVec2 & origin, const kbVec2 & siz
 ID3D11Buffer * kbRenderer_DX11::SetConstantBuffer( const kbShaderVarBindings_t & shaderVarBindings, const kbShaderParamOverrides_t * shaderParamOverrides, const kbRenderObject *const pRenderObject, byte *const pInMappedBufferData ) {
 	kbMat4 worldMatrix;
 	if ( pRenderObject != nullptr ) {
-		worldMatrix.MakeScale( pRenderObject->m_Scale * m_WorldScale_RenderThread );
+		worldMatrix.MakeScale( pRenderObject->m_Scale * m_GlobalModelScale_RenderThread );
 		worldMatrix *= pRenderObject->m_Orientation.ToMat4();
 		worldMatrix[3] = pRenderObject->m_Position;
 	} else {

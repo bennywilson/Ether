@@ -65,11 +65,6 @@ void kbClothComponent::Constructor() {
 	m_CurrentTickFrame = 0;
 }
 
-
-// TODO: HACK!
-static XMMATRIX & XMMATRIXFromkbMat4( kbMat4 & matrix ) { return (*(XMMATRIX*) &matrix); }
-static kbMat4 & kbMat4FromXMMATRIX( FXMMATRIX & matrix ) { return (*(kbMat4*) & matrix); }
-
 /**
  *	kbClothComponent::Update_Internal
  */

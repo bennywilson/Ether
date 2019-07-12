@@ -251,7 +251,7 @@ public:
 
 	void										Shutdown();
 
-	void										SetWorldAndEditorIconScale( const float newWorldScale, const float editorIconScale ) { m_WorldScale_GameThread = newWorldScale, m_EditorIconScale_GameThread = editorIconScale; }
+	void										SetWorldAndEditorIconScale( const float newWorldScale, const float editorIconScale ) { m_GlobalModelScale_GameThread = newWorldScale, m_EditorIconScale_GameThread = editorIconScale; }
 
 	virtual void								LoadTexture( const char * name, int index, int width = -1, int height = -1 );
 
@@ -365,8 +365,8 @@ protected:
 	int											Back_Buffer_Width;
 	int											Back_Buffer_Height;
 
-	float										m_WorldScale_GameThread;
-	float										m_WorldScale_RenderThread;
+	float										m_GlobalModelScale_GameThread;
+	float										m_GlobalModelScale_RenderThread;
 
 	float										m_EditorIconScale_GameThread;
 	float										m_EditorIconScale_RenderThread;

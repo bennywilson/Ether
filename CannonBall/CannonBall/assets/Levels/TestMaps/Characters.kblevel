@@ -464,7 +464,7 @@ kbGameEntity 0 0 0 0 {
 		LifeTime =  -1.000000
 		EditorIconScale =  0.500000
 		LevelType = 2D
-		WorldScale =  0.005000
+		GlobalModelScale =  0.005000
 	}
 }
 kbGameEntity 0 0 0 0 {

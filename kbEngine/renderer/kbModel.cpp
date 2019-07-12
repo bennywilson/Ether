@@ -11,6 +11,7 @@
 #include "kbIntersectionTests.h"
 #include "kbModel.h"
 #include "kbRenderer.h"
+#include "DX11/kbRenderer_DX11.h"			// HACK
 
 #pragma pack( push, packing )
 #pragma pack( 1 )
@@ -1005,18 +1006,22 @@ void kbModel::SwapTexture( const UINT meshIdx, const kbTexture * pTexture, const
 /**
  *	kbModel::RayIntersection
  */
-kbModelIntersection_t kbModel::RayIntersection( const kbVec3 & inRayOrigin, const kbVec3 & inRayDirection, const kbVec3 & modelTranslation, const kbQuat & modelOrientation ) const {
+kbModelIntersection_t kbModel::RayIntersection( const kbVec3 & inRayOrigin, const kbVec3 & inRayDirection, const kbVec3 & modelTranslation, const kbQuat & modelOrientation, const kbVec3 & scale ) const {
 	kbModelIntersection_t intersectionInfo;
 
-	kbMat4 inverseModelRotation = modelOrientation.ToMat4();
-	inverseModelRotation.TransposeSelf();
+	kbMat4 inverseModelRotation;
+	inverseModelRotation.MakeScale( scale );
+	inverseModelRotation = inverseModelRotation * modelOrientation.ToMat4();
+	const XMMATRIX xmInverse = XMMatrixInverse( nullptr, XMMATRIXFromkbMat4( inverseModelRotation ) );
+	inverseModelRotation = kbMat4FromXMMATRIX( xmInverse );
+
 	const kbVec3 rayStart = ( inRayOrigin - modelTranslation ) * inverseModelRotation;
 	const kbVec3 rayDir = inRayDirection.Normalized() * inverseModelRotation;
 	float t = FLT_MAX;
 
 	for ( int iMesh = 0; iMesh < m_Meshes.size(); iMesh++ ) {
 		for ( int iVert = 0; iVert < m_Meshes[iMesh].m_Vertices.size(); iVert += 3 ) {
-			
+
 			const kbVec3 & v0 = m_Meshes[iMesh].m_Vertices[iVert+0];
 			const kbVec3 & v1 = m_Meshes[iMesh].m_Vertices[iVert+1];
 			const kbVec3 & v2 = m_Meshes[iMesh].m_Vertices[iVert+2];

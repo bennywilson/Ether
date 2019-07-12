@@ -33,8 +33,11 @@ protected:
 private:
 	ELevelType									m_LevelType;
 
-	float										m_WorldScale;
+	float										m_GlobalModelScale;
 	float										m_EditorIconScale;
 };
 
+
+extern float g_GlobalModelScale;
+extern float g_EditorIconScale;
 #endif
