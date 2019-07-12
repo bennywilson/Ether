@@ -456,7 +456,7 @@ void kbMainTab::ManipulatorEvent( const bool bClicked, const kbVec2i & mouseXY )
 	
 	// Persepctive mat
 	kbMat4 perspectiveMat;
-	perspectiveMat.CreatePerspectiveMatrix( kbToRadians( 95.0f ), windowWidth/ windowHeight, kbRenderer_DX11::Near_Plane, kbRenderer_DX11::Far_Plane );
+	perspectiveMat.CreatePerspectiveMatrix( kbToRadians( 95.0f ), windowWidth / windowHeight, 1.0f, 20000.0f );	// TODO FIX
 	perspectiveMat.InverseProjection();
 
 	// View mat

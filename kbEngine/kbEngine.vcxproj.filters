@@ -260,6 +260,9 @@
     <ClInclude Include="renderer\kbRenderer.h">
       <Filter>renderer</Filter>
     </ClInclude>
+    <ClInclude Include="gameEntity\kbLevelComponent.h">
+      <Filter>game\Components</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="core\kbCore.cpp">
@@ -396,6 +399,9 @@
     </ClCompile>
     <ClCompile Include="renderer\kbRenderer.cpp">
       <Filter>renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="gameEntity\kbLevelComponent.cpp">
+      <Filter>game\Components</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

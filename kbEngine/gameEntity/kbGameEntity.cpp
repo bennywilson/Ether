@@ -295,12 +295,12 @@ kbGameEntity::~kbGameEntity() {
 void kbGameEntity::AddComponent( kbComponent *const pComponent, int indexToInsertAt ) {
 
 	if ( pComponent == nullptr || pComponent->IsA( kbGameComponent::GetType() ) == false ) {
-		kbError( "%s is trying to add a null component or one that is not a kbGameComponent.", *GetName().c_str() );
+		kbError( "%s is trying to add a null component or one that is not a kbGameComponent.", GetName().c_str() );
 	}
 
 	if ( pComponent->IsA( kbActorComponent::GetType() ) ) {
 		if ( m_pActorComponent != nullptr ) {
-			kbError( "%s is trying to add multiple kbGameLogicComponent.", *GetName().c_str() );
+			kbError( "%s is trying to add multiple kbGameLogicComponent.", GetName().c_str() );
 			return;
 		}
 

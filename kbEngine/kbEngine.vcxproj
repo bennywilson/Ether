@@ -147,6 +147,7 @@
     <ClInclude Include="gameEntity\kbFile.h" />
     <ClInclude Include="gameEntity\kbGame.h" />
     <ClInclude Include="gameEntity\kbGameEntity.h" />
+    <ClInclude Include="gameEntity\kbLevelComponent.h" />
     <ClInclude Include="gameEntity\kbLightComponent.h" />
     <ClInclude Include="gameEntity\kbModelComponent.h" />
     <ClInclude Include="gameEntity\kbParticleComponent.h" />
@@ -237,6 +238,7 @@
     <ClCompile Include="gameEntity\kbGameEntity.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="gameEntity\kbLevelComponent.cpp" />
     <ClCompile Include="gameEntity\kbLightComponent.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>

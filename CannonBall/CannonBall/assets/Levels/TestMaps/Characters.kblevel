@@ -2,7 +2,7 @@ kbGameEntity 0 0 0 0 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		Name = "Entity_13"
+		Name = "Entity_12"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
 		Position = 0.000000 0.000000 0.000000
 		Scale = 1.000000 1.000000 1.000000
@@ -10,8 +10,8 @@ kbGameEntity 0 0 0 0 {
 	kbEditorLevelSettingsComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		MainCameraPosition = -194.030411 2.081777 -72.172752
-		MainCameraRotation = 0.093583 -0.617787 -0.074389 0.777205
+		MainCameraPosition = -2.821856 1.508260 -3.661638
+		MainCameraRotation = -0.054797 -0.079691 0.004388 0.995303
 	}
 }
 kbGameEntity 0 0 0 0 {
@@ -82,7 +82,7 @@ kbGameEntity 0 0 0 0 {
 						LifeTime =  -1.000000
 						ParamName = "shadowParams"
 						Texture = NULL
-						Vector = -0.000500 0.000000 0.000000 0.000000
+						Vector = -0.000100 0.000000 0.000000 0.000000
 					}
 					kbShaderParamComponent { 
 						Enabled = 0
@@ -100,10 +100,10 @@ kbGameEntity 0 0 0 0 {
 					}
 			}
 		CascadedShadowSplits = 4
+ 10.000000
+ 30.000000
+ 50.000000
  100.000000
- 200.000000
- 500.000000
- 1000.000000
 	}
 }
 kbGameEntity 0 0 0 0 {
@@ -112,8 +112,8 @@ kbGameEntity 0 0 0 0 {
 		LifeTime =  -1.000000
 		Name = "Snolaf"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
-		Position = 15.000000 -5.052967 -31.904041
-		Scale = 0.100000 0.100000 0.100000
+		Position = 4.000000 0.000000 0.000000
+		Scale = 1.000000 1.000000 1.000000
 	}
 	kbSkeletalModelComponent { 
 		Enabled = 1
@@ -141,7 +141,7 @@ kbGameEntity 0 0 0 0 {
 		Model = .\assets\models\characters\snolaf\snolaf.ms3d
 	}
 	kbSkeletalModelComponent { 
-		Enabled = 0
+		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadow = 0
 		Materials = 1
@@ -156,7 +156,7 @@ kbGameEntity 0 0 0 0 {
 						LifeTime =  -1.000000
 						ParamName = "outlineParams"
 						Texture = NULL
-						Vector = 0.400000 2.000000 0.750000 5.000000
+						Vector = 0.020000 0.100000 0.750000 5.000000
 					}
 					kbShaderParamComponent { 
 						Enabled = 0
@@ -178,9 +178,9 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "Floor"
-		Orientation = 0.707000 0.000000 0.000000 -0.707000
-		Position = -59.252071 -6.153631 -70.755234
-		Scale = 200.000000 200.000000 200.000000
+		Orientation = -0.707000 0.000000 0.000000 0.707000
+		Position = 0.000000 0.000000 0.000000
+		Scale = 2000.000000 2000.000000 2000.000000
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -212,8 +212,8 @@ kbGameEntity 0 0 0 0 {
 		LifeTime =  -1.000000
 		Name = "Jumping Jack Sheep"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
-		Position = -60.873001 -5.148248 -45.215355
-		Scale = 0.100000 0.100000 0.100000
+		Position = 0.000000 0.000000 0.000000
+		Scale = 1.000000 1.000000 1.000000
 	}
 	kbSkeletalModelComponent { 
 		Enabled = 1
@@ -265,7 +265,7 @@ kbGameEntity 0 0 0 0 {
 						LifeTime =  -1.000000
 						ParamName = "outlineParams"
 						Texture = NULL
-						Vector = 0.400000 5.000000 0.800000 5.000000
+						Vector = 0.025000 0.100000 0.800000 5.000000
 					}
 					kbShaderParamComponent { 
 						Enabled = 0
@@ -297,8 +297,8 @@ kbGameEntity 0 0 0 0 {
 		LifeTime =  -1.000000
 		Name = "Fox"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
-		Position = -19.300009 -6.326632 -31.904041
-		Scale = 0.100000 0.100000 0.100000
+		Position = 2.000000 0.000000 0.000000
+		Scale = 1.000000 1.000000 1.000000
 	}
 	kbSkeletalModelComponent { 
 		Enabled = 1
@@ -341,7 +341,7 @@ kbGameEntity 0 0 0 0 {
 						LifeTime =  -1.000000
 						ParamName = "outlineParams"
 						Texture = NULL
-						Vector = 0.400000 2.000000 0.650000 5.000000
+						Vector = 0.020000 0.200000 0.650000 5.000000
 					}
 					kbShaderParamComponent { 
 						Enabled = 0
@@ -362,9 +362,9 @@ kbGameEntity 0 0 0 0 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		Name = "Run It Sheep"
+		Name = "Player"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
-		Position = -103.846992 -5.148248 -45.215355
+		Position = -150.841919 -5.148248 -45.215355
 		Scale = 0.100000 0.100000 0.100000
 	}
 	kbSkeletalModelComponent { 
@@ -402,7 +402,7 @@ kbGameEntity 0 0 0 0 {
 		Model = .\assets\models\characters\sheep\sheep.ms3d
 	}
 	kbSkeletalModelComponent { 
-		Enabled = 1
+		Enabled = 0
 		LifeTime =  -1.000000
 		CastsShadow = 0
 		Materials = 1
@@ -441,5 +441,154 @@ kbGameEntity 0 0 0 0 {
 			}
 		DebugAnimIndex = 0
 		Model = .\assets\models\characters\sheep\sheep.ms3d
+	}
+	CannonPlayerComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		DummyTemp = 0
+		Health =  10.000000
+		Dummy = 1
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Level"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = -190.244919 3.031295 -71.296104
+		Scale = 1.000000 1.000000 1.000000
+	}
+	kbLevelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		EditorIconScale =  0.500000
+		LevelType = 2D
+		WorldScale =  0.005000
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Entity_9"
+		Orientation = -0.115917 0.880476 -0.279848 0.364705
+		Position = -145.841919 -0.148248 -40.215355
+		Scale = 1.000000 1.000000 1.000000
+	}
+	CannonCameraComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		DummyTemp = 0
+		Health =  10.000000
+		FarPlane =  20000.000000
+		MovementMode = Follow
+		NearPlane =  1.000000
+		TargetOffset = 5.000000 5.000000 5.000000
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Run It Sheep"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = -2.000000 0.000000 0.000000
+		Scale = 1.000000 1.000000 1.000000
+	}
+	kbSkeletalModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 1
+		Materials = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\character\characterbase.kbshader
+				ShaderParams = 1
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorTexture"
+						Texture = .\assets\models\characters\sheep\sheep.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		RenderPass = LightingPass
+		TranslucencySortBias =  0.000000
+		Animations = 1
+			kbAnimComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Animation = .\assets\models\characters\sheep\sheep_run_basic.kbanim.ms3d
+				AnimationEvent = 0
+				AnimationName = ""
+				IsLooping = 1
+				TimeScale =  10.000000
+			}
+		DebugAnimIndex = 0
+		Model = .\assets\models\characters\sheep\sheep.ms3d
+	}
+	kbSkeletalModelComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		Materials = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\character\characteroutline.kbshader
+				ShaderParams = 2
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "outlineParams"
+						Texture = NULL
+						Vector = 0.400000 5.000000 0.800000 5.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorTexture"
+						Texture = .\assets\models\characters\sheep\sheep.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		RenderPass = Post-LightingPass
+		TranslucencySortBias =  0.000000
+		Animations = 1
+			kbAnimComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Animation = .\assets\models\characters\sheep\sheep_run_basic.kbanim.ms3d
+				AnimationEvent = 0
+				AnimationName = ""
+				IsLooping = 1
+				TimeScale =  10.000000
+			}
+		DebugAnimIndex = 0
+		Model = .\assets\models\characters\sheep\sheep.ms3d
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Camera"
+		Orientation = -0.115917 0.880476 -0.279848 0.364705
+		Position = -149.841919 -4.148248 -44.215355
+		Scale = 1.000000 1.000000 1.000000
+	}
+	CannonCameraComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		DummyTemp = 0
+		Health =  10.000000
+		FarPlane =  1000.000000
+		MovementMode = Follow
+		NearPlane =  0.250000
+		TargetOffset = 1.000000 1.000000 1.000000
 	}
 }

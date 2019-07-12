@@ -45,6 +45,7 @@ public: \
 #include "kbCollisionManager.h"
 #include "kbLightComponent.h"
 #include "kbClothComponent.h"
+#include "kbLevelComponent.h"
 #include "kbGameEntity.h"
 #include "kbRenderer_Defs.h"
 #include "kbMaterial.h"

@@ -2,7 +2,7 @@ kbGameEntity 0 0 0 0 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		Name = "Entity_56"
+		Name = "Entity_51"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
 		Position = 0.000000 0.000000 0.000000
 		Scale = 1.000000 1.000000 1.000000
@@ -10,8 +10,8 @@ kbGameEntity 0 0 0 0 {
 	kbEditorLevelSettingsComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		MainCameraPosition = -75.758751 58.576847 58.045422
-		MainCameraRotation = 0.004612 -0.992592 0.114653 -0.039931
+		MainCameraPosition = -76.120888 58.459812 56.833370
+		MainCameraRotation = -0.047219 -0.828056 0.070554 0.554181
 	}
 }
 kbGameEntity 0 0 0 0 {
@@ -149,6 +149,8 @@ kbGameEntity 0 0 0 0 {
 			}
 		RenderPass = LightingPass
 		TranslucencySortBias =  0.000000
+		Animations = 0
+		DebugAnimIndex = -1
 		Model = .\assets\models\environment\crate_1_destructible.fbx
 		Animations = 0
 		DebugAnimIndex = -1
@@ -233,6 +235,8 @@ kbGameEntity 0 0 0 0 {
 			}
 		RenderPass = LightingPass
 		TranslucencySortBias =  0.000000
+		Animations = 0
+		DebugAnimIndex = -1
 		Model = .\assets\models\environment\crate_1_destructible.fbx
 		Animations = 0
 		DebugAnimIndex = -1
@@ -317,6 +321,8 @@ kbGameEntity 0 0 0 0 {
 			}
 		RenderPass = LightingPass
 		TranslucencySortBias =  0.000000
+		Animations = 0
+		DebugAnimIndex = -1
 		Model = .\assets\models\environment\crate_1_destructible.fbx
 		Animations = 0
 		DebugAnimIndex = -1
@@ -401,6 +407,8 @@ kbGameEntity 0 0 0 0 {
 			}
 		RenderPass = LightingPass
 		TranslucencySortBias =  0.000000
+		Animations = 0
+		DebugAnimIndex = -1
 		Model = .\assets\models\environment\crate_1_destructible.fbx
 		Animations = 0
 		DebugAnimIndex = -1
@@ -485,6 +493,8 @@ kbGameEntity 0 0 0 0 {
 			}
 		RenderPass = LightingPass
 		TranslucencySortBias =  0.000000
+		Animations = 0
+		DebugAnimIndex = -1
 		Model = .\assets\models\environment\crate_1_destructible.fbx
 		Animations = 0
 		DebugAnimIndex = -1
@@ -569,6 +579,8 @@ kbGameEntity 0 0 0 0 {
 			}
 		RenderPass = LightingPass
 		TranslucencySortBias =  0.000000
+		Animations = 0
+		DebugAnimIndex = -1
 		Model = .\assets\models\environment\crate_1_destructible.fbx
 		Animations = 0
 		DebugAnimIndex = -1
@@ -653,6 +665,8 @@ kbGameEntity 0 0 0 0 {
 			}
 		RenderPass = LightingPass
 		TranslucencySortBias =  0.000000
+		Animations = 0
+		DebugAnimIndex = -1
 		Model = .\assets\models\environment\crate_1_destructible.fbx
 		Animations = 0
 		DebugAnimIndex = -1
@@ -975,26 +989,28 @@ kbGameEntity 0 0 0 0 {
 						Enabled = 0
 						LifeTime =  -1.000000
 						ParamName = "normal"
-						Texture = NULL
+						Texture = ..\..\kbengine\assets\textures\defaultnormal.bmp
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
 						ParamName = "propertyMap"
-						Texture = NULL
+						Texture = ..\..\kbengine\assets\textures\black.bmp
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
 						ParamName = "emissiveMap"
-						Texture = NULL
+						Texture = ..\..\kbengine\assets\textures\black.bmp
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 			}
 		RenderPass = LightingPass
 		TranslucencySortBias =  0.000000
+		Animations = 0
+		DebugAnimIndex = -1
 		Model = .\assets\models\environment\barrel_elp_destructible.fbx
 		Animations = 0
 		DebugAnimIndex = -1
@@ -1079,6 +1095,8 @@ kbGameEntity 0 0 0 0 {
 			}
 		RenderPass = LightingPass
 		TranslucencySortBias =  0.000000
+		Animations = 0
+		DebugAnimIndex = -1
 		Model = .\assets\models\environment\barrel_elp_destructible.fbx
 		Animations = 0
 		DebugAnimIndex = -1
@@ -1177,6 +1195,8 @@ kbGameEntity 0 0 0 0 {
 			}
 		RenderPass = LightingPass
 		TranslucencySortBias =  0.000000
+		Animations = 0
+		DebugAnimIndex = -1
 		Model = .\assets\models\environment\crate_1_destructible.fbx
 		Animations = 0
 		DebugAnimIndex = -1
@@ -1261,6 +1281,8 @@ kbGameEntity 0 0 0 0 {
 			}
 		RenderPass = LightingPass
 		TranslucencySortBias =  0.000000
+		Animations = 0
+		DebugAnimIndex = -1
 		Model = .\assets\models\environment\crate_1_destructible.fbx
 		Animations = 0
 		DebugAnimIndex = -1
@@ -1409,7 +1431,7 @@ kbGameEntity 0 0 0 0 {
 						LifeTime =  -1.000000
 						ParamName = "nonToonDiffuseScaleAndBias"
 						Texture = NULL
-						Vector = 55.000000 0.500000 0.000000 0.000000
+						Vector = 0.500000 0.500000 0.000000 0.000000
 					}
 					kbShaderParamComponent { 
 						Enabled = 0
@@ -2097,6 +2119,8 @@ kbGameEntity 0 0 0 0 {
 			}
 		RenderPass = LightingPass
 		TranslucencySortBias =  0.000000
+		Animations = 0
+		DebugAnimIndex = -1
 		Model = .\assets\models\environment\banners\elp_banner_2.ms3d
 		Animations = 0
 		DebugAnimIndex = -1
