@@ -17,6 +17,52 @@
 	 m_Dummy = -1;
 }
 
+ /**
+ *	CannonPlayerComponent::HandleInput
+ */
+ static float rotRate = 15.0f;
+ void CannonPlayerComponent::HandleInput( const kbInput_t & input, const float DT ) {
+
+	kbVec3 moveVec( kbVec3::zero );
+	if ( input.IsKeyPressedOrDown( 'A' ) ) {
+		moveVec = kbVec3( -0.1f, 0.0f, -1.0f ).Normalized();
+	} else if ( input.IsKeyPressedOrDown( 'D' ) ) {
+		moveVec = kbVec3( -0.1f, 0.0f, 1.0f ).Normalized();
+	}
+
+	static kbString Run_Anim( "Run_Basic" );
+	static kbString Idle_Anim( "Idle_Basic" );
+
+	if ( moveVec.Compare( kbVec3::zero ) == false ) {
+		const kbQuat curRot = GetOwnerRotation();
+
+		kbMat4 facingMat;
+		facingMat.LookAt( GetOwnerPosition(), GetOwnerPosition() + moveVec, kbVec3::up );
+
+		const kbQuat targetRot = kbQuatFromMatrix( facingMat );
+		GetOwner()->SetOrientation( curRot.Slerp( curRot, targetRot, DT * rotRate ) );
+
+		for ( int i = 0; i < m_SkelModelsList.size(); i++ ) {
+			kbSkeletalModelComponent *const pSkelModel = m_SkelModelsList[i];
+			pSkelModel->PlayAnimation( Run_Anim, 0.08f, false );
+		}
+	} else {
+
+		const kbQuat curRot = GetOwnerRotation();
+
+		kbMat4 facingMat;
+		facingMat.LookAt( GetOwnerPosition(), GetOwnerPosition() + kbVec3( -1.0f, 0.0f, 0.0f ), kbVec3::up );
+
+		const kbQuat targetRot = kbQuatFromMatrix( facingMat );
+		GetOwner()->SetOrientation( curRot.Slerp( curRot, targetRot, DT * rotRate ) );
+
+		for ( int i = 0; i < m_SkelModelsList.size(); i++ ) {
+			kbSkeletalModelComponent *const pSkelModel = m_SkelModelsList[i];
+			pSkelModel->PlayAnimation( Idle_Anim, 0.08f, false );
+		}
+	}
+ }
+
 /**
  *	CannonPlayerComponent::SetEnable_Internal
  */

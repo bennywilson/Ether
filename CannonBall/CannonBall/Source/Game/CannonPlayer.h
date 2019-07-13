@@ -15,6 +15,9 @@ class CannonPlayerComponent : public kbActorComponent {
 	KB_DECLARE_COMPONENT( CannonPlayerComponent, kbActorComponent );
 
 //---------------------------------------------------------------------------------------------------
+public:
+	void										HandleInput( const kbInput_t & input, const float DT );
+
 protected:
 
 	virtual void								SetEnable_Internal( const bool bEnable ) override;

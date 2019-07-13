@@ -97,6 +97,8 @@ public:
 
 	kbGameEntity *								GetOwner() const { return (kbGameEntity *) Super::GetOwner(); }
 	kbString									GetOwnerName() const;
+	kbVec3										GetOwnerPosition() const;
+	kbQuat										GetOwnerRotation() const;
 
 	float										GetStartingLifeTime() const { return m_StartingLifeTime; }
 	float										GetLifeTimeRemaining() const { return m_LifeTimeRemaining; }

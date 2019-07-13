@@ -15,19 +15,16 @@
 
 CannonGame * g_pCannonGame = nullptr;
 
-
 /**
  *	CannonGame::CannonGame
  */
 CannonGame::CannonGame() :
 	kbRenderHook( RP_FirstPerson ),
 	m_pLevelComp( nullptr ),
-	m_pMainCamera( nullptr ) {
-
+	m_pMainCamera( nullptr ),
+	m_pPlayerComp( nullptr ) {
 
 	m_Camera.m_Position.Set( 0.0f, 2600.0f, 0.0f );
-
-	m_pLevelComp = nullptr;
 
 	kbErrorCheck( g_pCannonGame == nullptr, "CannonGame::CannonGame() - g_pCannonGame is not nullptr" );
 	g_pCannonGame = this;
@@ -88,10 +85,15 @@ void CannonGame::LevelLoaded_Internal() {
 		if ( m_pMainCamera == nullptr ) {
 			m_pMainCamera = (CannonCameraComponent*)pCurEnt->GetComponentByType( CannonCameraComponent::GetType() );
 		}
+
+		if ( m_pPlayerComp == nullptr ) {
+			m_pPlayerComp = (CannonPlayerComponent*)pCurEnt->GetComponentByType( CannonPlayerComponent::GetType() );
+		}
 	}
 
 	kbWarningCheck( m_pLevelComp != nullptr, "CannonGame::LevelLoaded_Internal() - No level component found.");
 	kbWarningCheck( m_pMainCamera != nullptr, "CannonGame::LevelLoaded_Internal() - No camera found.");
+	kbWarningCheck( m_pPlayerComp != nullptr, "CannonGame::LevelLoaded_Internal() - No player found.");
 }
 
 /**
@@ -131,9 +133,6 @@ void CannonGame::Update_Internal( float DT ) {
 	// Update renderer cam
 	if ( m_pMainCamera != nullptr ) {
 		g_pD3D11Renderer->SetRenderViewTransform( nullptr, m_pMainCamera->GetOwner()->GetPosition(), m_pMainCamera->GetOwner()->GetOrientation() );
-
-		kbLog( "RVT = (%f %f %f), (%f %f %f %f)", m_pMainCamera->GetOwner()->GetPosition().x, m_pMainCamera->GetOwner()->GetPosition().y, m_pMainCamera->GetOwner()->GetPosition().z,
-				m_pMainCamera->GetOwner()->GetOrientation().x, m_pMainCamera->GetOwner()->GetOrientation().y, m_pMainCamera->GetOwner()->GetOrientation().z, m_pMainCamera->GetOwner()->GetOrientation().w );
 	}
 
 	/*if ( g_ShowPos.GetBool() ) {
@@ -182,10 +181,6 @@ kbGameEntity * CannonGame::CreatePlayer( const int netId, const kbGUID & prefabG
  */
 void CannonGame::ProcessInput( const float DT ) {
 
-	if ( m_pLocalPlayer == nullptr || m_pLocalPlayer->GetActorComponent()->IsDead() ) {
-		return;
-	}
-
 	static bool bCursorHidden = false;
 	static bool bWindowIsSelected = true;
 	static bool bFirstRun = true;
@@ -195,17 +190,8 @@ void CannonGame::ProcessInput( const float DT ) {
 		bFirstRun = false;
 	}
 
-	if ( GetAsyncKeyState( VK_SPACE ) ) {
-		const kbMat4 orientation( kbVec4( 0.0f, 0.0f, -1.0f, 0.0f ), kbVec4( 0.0f, 1.0f, 0.0f, 0.0f ), kbVec4( -1.0f, 0.0f, 0.0f, 0.0f ), kbVec3::zero );
-		m_pLocalPlayer->SetOrientation( kbQuatFromMatrix( orientation ) );
-		m_Camera.m_Rotation = kbQuatFromMatrix( orientation );
-		m_Camera.m_RotationTarget = kbQuatFromMatrix( orientation );
-
-		POINT CursorPos;
-		GetCursorPos( &CursorPos );
-		RECT rc;
- 		GetClientRect( m_Hwnd, &rc );
-		SetCursorPos( (rc.right - rc.left ) / 2, (rc.bottom - rc.top) / 2 );
+	if ( m_pPlayerComp != nullptr ) {
+		m_pPlayerComp->HandleInput( GetInput(), DT );
 	}
 }
 

@@ -2,7 +2,7 @@ kbGameEntity 0 0 0 0 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		Name = "Entity_12"
+		Name = "Entity_29"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
 		Position = 0.000000 0.000000 0.000000
 		Scale = 1.000000 1.000000 1.000000
@@ -10,8 +10,8 @@ kbGameEntity 0 0 0 0 {
 	kbEditorLevelSettingsComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		MainCameraPosition = -2.821856 1.508260 -3.661638
-		MainCameraRotation = -0.054797 -0.079691 0.004388 0.995303
+		MainCameraPosition = -0.894506 1.296487 -5.345625
+		MainCameraRotation = 0.027431 -0.727073 -0.029098 0.685395
 	}
 }
 kbGameEntity 0 0 0 0 {
@@ -364,8 +364,8 @@ kbGameEntity 0 0 0 0 {
 		LifeTime =  -1.000000
 		Name = "Player"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
-		Position = -150.841919 -5.148248 -45.215355
-		Scale = 0.100000 0.100000 0.100000
+		Position = 0.000000 0.000000 -5.000000
+		Scale = 1.000000 1.000000 1.000000
 	}
 	kbSkeletalModelComponent { 
 		Enabled = 1
@@ -388,17 +388,26 @@ kbGameEntity 0 0 0 0 {
 			}
 		RenderPass = LightingPass
 		TranslucencySortBias =  0.000000
-		Animations = 1
+		Animations = 2
 			kbAnimComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
 				Animation = .\assets\models\characters\sheep\sheep_run_basic.kbanim.ms3d
 				AnimationEvent = 0
-				AnimationName = ""
+				AnimationName = "Run_Basic"
 				IsLooping = 1
 				TimeScale =  10.000000
 			}
-		DebugAnimIndex = 0
+			kbAnimComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Animation = .\assets\models\characters\sheep\sheep_idle_basic.kbanim.ms3d
+				AnimationEvent = 0
+				AnimationName = "Idle_Basic"
+				IsLooping = 1
+				TimeScale =  1.000000
+			}
+		DebugAnimIndex = 1
 		Model = .\assets\models\characters\sheep\sheep.ms3d
 	}
 	kbSkeletalModelComponent { 
@@ -429,15 +438,24 @@ kbGameEntity 0 0 0 0 {
 			}
 		RenderPass = Post-LightingPass
 		TranslucencySortBias =  0.000000
-		Animations = 1
+		Animations = 2
 			kbAnimComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
 				Animation = .\assets\models\characters\sheep\sheep_run_basic.kbanim.ms3d
 				AnimationEvent = 0
-				AnimationName = ""
+				AnimationName = "Run_Basic"
 				IsLooping = 1
 				TimeScale =  10.000000
+			}
+			kbAnimComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Animation = NULL
+				AnimationEvent = 0
+				AnimationName = "Idle_Basic"
+				IsLooping = 1
+				TimeScale =  1.000000
 			}
 		DebugAnimIndex = 0
 		Model = .\assets\models\characters\sheep\sheep.ms3d
@@ -463,28 +481,8 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 1
 		LifeTime =  -1.000000
 		EditorIconScale =  0.500000
-		LevelType = 2D
 		GlobalModelScale =  0.005000
-	}
-}
-kbGameEntity 0 0 0 0 {
-	kbTransformComponent { 
-		Enabled = 0
-		LifeTime =  -1.000000
-		Name = "Entity_9"
-		Orientation = -0.115917 0.880476 -0.279848 0.364705
-		Position = -145.841919 -0.148248 -40.215355
-		Scale = 1.000000 1.000000 1.000000
-	}
-	CannonCameraComponent { 
-		Enabled = 1
-		LifeTime =  -1.000000
-		DummyTemp = 0
-		Health =  10.000000
-		FarPlane =  20000.000000
-		MovementMode = Follow
-		NearPlane =  1.000000
-		TargetOffset = 5.000000 5.000000 5.000000
+		LevelType = 2D
 	}
 }
 kbGameEntity 0 0 0 0 {
@@ -577,8 +575,8 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "Camera"
-		Orientation = -0.115917 0.880476 -0.279848 0.364705
-		Position = -149.841919 -4.148248 -44.215355
+		Orientation = -0.162460 -0.688191 0.162460 0.688191
+		Position = -3.000000 1.500000 -5.000000
 		Scale = 1.000000 1.000000 1.000000
 	}
 	CannonCameraComponent { 
@@ -589,6 +587,6 @@ kbGameEntity 0 0 0 0 {
 		FarPlane =  1000.000000
 		MovementMode = Follow
 		NearPlane =  0.250000
-		TargetOffset = 1.000000 1.000000 1.000000
+		TargetOffset = -3.000000 1.500000 0.000000
 	}
 }
