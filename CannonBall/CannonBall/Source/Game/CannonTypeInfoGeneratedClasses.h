@@ -14,7 +14,8 @@ GenerateEnum(
 
 GenerateClass(
 	CannonPlayerComponent,
-	AddField( "Dummy", KBTYPEINFO_BOOL, CannonPlayerComponent, m_Dummy, false, "" )
+	AddField( "MaxRunSpeed", KBTYPEINFO_FLOAT, CannonPlayerComponent, m_MaxRunSpeed, false, "" )
+	AddField( "MaxRotateSpeed", KBTYPEINFO_FLOAT, CannonPlayerComponent, m_MaxRotateSpeed, false, "" )
 )
 
 GenerateClass(

@@ -24,7 +24,8 @@ protected:
 	virtual void								Update_Internal( const float DeltaTime ) override;
 
 private:
-	int											m_Dummy;
+	float										m_MaxRunSpeed;
+	float										m_MaxRotateSpeed;
 
 	std::vector<kbSkeletalModelComponent *>		m_SkelModelsList;
 };

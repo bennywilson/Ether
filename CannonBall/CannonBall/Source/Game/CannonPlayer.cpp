@@ -14,13 +14,13 @@
  *	CannonPlayerComponent::Constructor
  */
  void CannonPlayerComponent::Constructor() {
-	 m_Dummy = -1;
+	m_MaxRunSpeed = 3.0f;
+	m_MaxRotateSpeed = 15.0f;
 }
 
  /**
- *	CannonPlayerComponent::HandleInput
- */
- static float rotRate = 15.0f;
+  *	CannonPlayerComponent::HandleInput
+  */
  void CannonPlayerComponent::HandleInput( const kbInput_t & input, const float DT ) {
 
 	kbVec3 moveVec( kbVec3::zero );
@@ -40,8 +40,12 @@
 		facingMat.LookAt( GetOwnerPosition(), GetOwnerPosition() + moveVec, kbVec3::up );
 
 		const kbQuat targetRot = kbQuatFromMatrix( facingMat );
-		GetOwner()->SetOrientation( curRot.Slerp( curRot, targetRot, DT * rotRate ) );
+		GetOwner()->SetOrientation( curRot.Slerp( curRot, targetRot, DT * m_MaxRotateSpeed ) );
 
+		//kbLog( "DT = %f", DT );
+		const kbVec3 targetPos = GetOwnerPosition() - moveVec * DT * m_MaxRunSpeed;
+		GetOwner()->SetPosition( targetPos );
+		this->MarkAsDirty();
 		for ( int i = 0; i < m_SkelModelsList.size(); i++ ) {
 			kbSkeletalModelComponent *const pSkelModel = m_SkelModelsList[i];
 			pSkelModel->PlayAnimation( Run_Anim, 0.08f, false );
@@ -54,7 +58,7 @@
 		facingMat.LookAt( GetOwnerPosition(), GetOwnerPosition() + kbVec3( -1.0f, 0.0f, 0.0f ), kbVec3::up );
 
 		const kbQuat targetRot = kbQuatFromMatrix( facingMat );
-		GetOwner()->SetOrientation( curRot.Slerp( curRot, targetRot, DT * rotRate ) );
+		GetOwner()->SetOrientation( curRot.Slerp( curRot, targetRot, DT * m_MaxRotateSpeed ) );
 
 		for ( int i = 0; i < m_SkelModelsList.size(); i++ ) {
 			kbSkeletalModelComponent *const pSkelModel = m_SkelModelsList[i];

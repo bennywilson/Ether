@@ -57,7 +57,7 @@ public:
 
 	void														SetDeltaTimeScale( const float newScale ) { m_DeltaTimeScale = newScale; }
 
-	float														GetCurrentFrameDeltaTime() const { return m_CurFrameDeltaTime; }
+	float														GetFrameDT() const { return m_CurFrameDeltaTime; }
 
 
 	bool														HasFirstSyncCompleted() const { return m_bHasFirstSyncCompleted; }
@@ -67,7 +67,8 @@ protected:
 	virtual void												InitGame_Internal() = 0;
 	virtual void												PlayGame_Internal() = 0;
 	virtual void												StopGame_Internal() = 0;
-	virtual void												Update_Internal( const float DT ) = 0;
+	virtual void												PreUpdate_Internal() { };
+	virtual void												PostUpdate_Internal() { };
 	virtual void												LevelLoaded_Internal() = 0;
 	virtual void												AddGameEntity_Internal( kbGameEntity *const pEntity ) = 0;
  

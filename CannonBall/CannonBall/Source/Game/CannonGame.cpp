@@ -97,56 +97,26 @@ void CannonGame::LevelLoaded_Internal() {
 }
 
 /**
- *	CannonGame::Update_Internal
+ *	CannonGame::PreUpdate_Internal
  */
-void CannonGame::Update_Internal( float DT ) {
+void CannonGame::PreUpdate_Internal() {
 
+	const float frameDT = GetFrameDT();
 	if ( IsConsoleActive() == false ) {
-		ProcessInput( DT );
+		ProcessInput( frameDT );
 	}
-	
-	/*if ( GetAsyncKeyState( VK_LSHIFT ) && GetAsyncKeyState( 'P' ) ) {
-	    kbCamera & playerCamera = GetCamera();
 
-		for ( int i = 0; i < GetGameEntities().size();  i++ ) {
+}
 
-			const kbGameEntity *const pCurEntity = GetGameEntities()[i];
-			kbPlayerStartComponent *const pStart = (kbPlayerStartComponent*)pCurEntity->GetComponentByType( kbPlayerStartComponent::GetType() );
-			if ( pStart == nullptr ) {
-				continue;
-			}
+/**
+ *	CannonGame::PostUpdate_Internal
+ */
+void CannonGame::PostUpdate_Internal() {
 
-			const kbVec3 newPos = pCurEntity->GetPosition();
-			const kbQuat newRotation = pCurEntity->GetOrientation();
-
-			playerCamera.m_Position = newPos;
-			playerCamera.m_Rotation = newRotation;
-			playerCamera.m_RotationTarget = newRotation;
-
-			m_pLocalPlayer->SetPosition( newPos );
-			m_pLocalPlayer->SetOrientation( newRotation );
-			break;
-		}
-	}*/
-
-
-	// Update renderer cam
+			// Update renderer cam
 	if ( m_pMainCamera != nullptr ) {
 		g_pD3D11Renderer->SetRenderViewTransform( nullptr, m_pMainCamera->GetOwner()->GetPosition(), m_pMainCamera->GetOwner()->GetOrientation() );
 	}
-
-	/*if ( g_ShowPos.GetBool() ) {
-		std::string PlayerPos;
-		PlayerPos += "x:";
-		PlayerPos += std::to_string( m_Camera.m_Position.x );
-		PlayerPos += " y:";
-		PlayerPos += std::to_string( m_Camera.m_Position.y );
-		PlayerPos += " z:";
-		PlayerPos += std::to_string( m_Camera.m_Position.z );
-	
-		g_pD3D11Renderer->DrawDebugText( PlayerPos, 0, 0, g_DebugTextSize, g_DebugTextSize, kbColor::green );
-	}*/
-
 }
 
 /**

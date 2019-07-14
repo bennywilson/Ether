@@ -367,6 +367,13 @@ kbGameEntity 0 0 0 0 {
 		Position = 0.000000 0.000000 -5.000000
 		Scale = 1.000000 1.000000 1.000000
 	}
+	CannonPlayerComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		DummyTemp = 0
+		Health =  10.000000
+		Dummy = 1
+	}
 	kbSkeletalModelComponent { 
 		Enabled = 1
 		LifeTime =  -1.000000
@@ -459,13 +466,6 @@ kbGameEntity 0 0 0 0 {
 			}
 		DebugAnimIndex = 0
 		Model = .\assets\models\characters\sheep\sheep.ms3d
-	}
-	CannonPlayerComponent { 
-		Enabled = 1
-		LifeTime =  -1.000000
-		DummyTemp = 0
-		Health =  10.000000
-		Dummy = 1
 	}
 }
 kbGameEntity 0 0 0 0 {

@@ -183,11 +183,13 @@ void kbGame::Update() {
 	m_InputManager.Update( m_CurFrameDeltaTime );
 	m_SoundManager.Update();
 
-	Update_Internal( m_CurFrameDeltaTime );
+	PreUpdate_Internal();
 
 	for ( int i = 0; i < m_GameEntityList.size(); i++ ) {
 		m_GameEntityList[i]->Update( m_CurFrameDeltaTime );
 	}
+
+	PostUpdate_Internal();
 
 	if ( g_pRenderer != nullptr ) {
 
