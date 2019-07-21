@@ -23,29 +23,95 @@
   */
  void CannonPlayerComponent::HandleInput( const kbInput_t & input, const float DT ) {
 
-	kbVec3 moveVec( kbVec3::zero );
-	if ( input.IsKeyPressedOrDown( 'A' ) ) {
-		moveVec = kbVec3( -0.1f, 0.0f, -1.0f ).Normalized();
-	} else if ( input.IsKeyPressedOrDown( 'D' ) ) {
-		moveVec = kbVec3( -0.1f, 0.0f, 1.0f ).Normalized();
+	static kbVec3 lastMove( 0.0f, 0.0f, -1.0f );
+	static const kbString Run_Anim( "Run_Basic" );
+	static const kbString IdleL_Anim( "IdleLeft_Basic" );
+	static const kbString IdleR_Anim( "IdleRight_Basic" );
+	static const kbString PunchL_Anim( "PunchLeft_Basic" );
+	static const kbString KickL_Anim( "KickLeft_Basic" );
+	static const kbString PunchR_Anim( "PunchRight_Basic" );
+	static const kbString KickR_Anim( "KickRight_Basic" );
+	static const kbString CannonBall_Anim( "CannonBall" );
+
+	static bool bIsPunching = false;
+	static bool bIsCannonBalling = false;
+
+
+	if ( bIsCannonBalling ) {
+		kbMat4 facingMat;
+		facingMat.LookAt( GetOwnerPosition(), GetOwnerPosition() + kbVec3( -1.0f, 0.0f, 0.0f ), kbVec3::up );		
+
+		const kbQuat curRot = GetOwnerRotation();
+		const kbQuat targetRot = kbQuatFromMatrix( facingMat );
+		GetOwner()->SetOrientation( curRot.Slerp( curRot, targetRot, DT * m_MaxRotateSpeed ) );
+
+		if ( m_SkelModelsList[0]->IsPlaying( CannonBall_Anim ) == true ) {
+			return;
+		}
+
+		bIsCannonBalling = false;
 	}
 
-	static kbString Run_Anim( "Run_Basic" );
-	static kbString Idle_Anim( "Idle_Basic" );
+	if ( input.WasKeyJustPressed( 'C' ) ) {
+		bIsCannonBalling = true;
+		for ( int i = 0; i < m_SkelModelsList.size(); i++ ) {
+			kbSkeletalModelComponent *const pSkelModel = m_SkelModelsList[i];
+			kbString returnIdle = IdleL_Anim;
+			if ( lastMove.z > 0 ) {
+				returnIdle = IdleR_Anim;
+			}
+			pSkelModel->PlayAnimation( CannonBall_Anim, 0.08f, false, returnIdle, 0.05f );
+		}
+		return;
+	}
+
+	if ( bIsPunching ) {
+		if ( m_SkelModelsList[0]->IsPlaying( PunchL_Anim ) == true || 
+			 m_SkelModelsList[0]->IsPlaying( KickL_Anim ) == true ||
+			m_SkelModelsList[0]->IsPlaying( PunchR_Anim ) == true || 
+			 m_SkelModelsList[0]->IsPlaying( KickR_Anim ) == true ) {
+			return;
+		}
+		bIsPunching = false;
+	}
+		
+	if ( input.WasKeyJustPressed( kbInput_t::KB_SPACE ) ) {
+		bIsPunching = true;
+		kbString directionToAttackMap[][3] = {  { PunchL_Anim, KickL_Anim, IdleL_Anim },
+												{ PunchR_Anim, KickR_Anim, IdleR_Anim } };
+
+		const int dirIndex = ( lastMove.z < 0 ) ? ( 0 ) : ( 1 );
+
+		const kbString AttackAnim = directionToAttackMap[dirIndex][rand() %2];
+		for ( int i = 0; i < m_SkelModelsList.size(); i++ ) {
+			kbSkeletalModelComponent *const pSkelModel = m_SkelModelsList[i];
+			pSkelModel->PlayAnimation( AttackAnim, 0.08f, false, directionToAttackMap[dirIndex][2], 1.05f );
+		}
+		return;
+	}
+
+	kbVec3 moveVec( kbVec3::zero );
+	if ( input.IsKeyPressedOrDown( 'A' ) ) {
+		moveVec = kbVec3( 0.0f, 0.0f, -1.0f ).Normalized();
+	} else if ( input.IsKeyPressedOrDown( 'D' ) ) {
+		moveVec = kbVec3( 0.0f, 0.0f, 1.0f ).Normalized();
+	}
 
 	if ( moveVec.Compare( kbVec3::zero ) == false ) {
+
+		const kbVec3 targetPos = GetOwnerPosition() - moveVec * DT * m_MaxRunSpeed;
+		GetOwner()->SetPosition( targetPos );
+		lastMove = moveVec;
+
+		const kbVec3 facingVec = moveVec + kbVec3( -0.1f, 0.0f, 0.0f );	// Nudge a little so slerp below rotates player towards the camera
 		const kbQuat curRot = GetOwnerRotation();
 
 		kbMat4 facingMat;
-		facingMat.LookAt( GetOwnerPosition(), GetOwnerPosition() + moveVec, kbVec3::up );
+		facingMat.LookAt( GetOwnerPosition(), GetOwnerPosition() + facingVec, kbVec3::up );
 
 		const kbQuat targetRot = kbQuatFromMatrix( facingMat );
 		GetOwner()->SetOrientation( curRot.Slerp( curRot, targetRot, DT * m_MaxRotateSpeed ) );
 
-		//kbLog( "DT = %f", DT );
-		const kbVec3 targetPos = GetOwnerPosition() - moveVec * DT * m_MaxRunSpeed;
-		GetOwner()->SetPosition( targetPos );
-		this->MarkAsDirty();
 		for ( int i = 0; i < m_SkelModelsList.size(); i++ ) {
 			kbSkeletalModelComponent *const pSkelModel = m_SkelModelsList[i];
 			pSkelModel->PlayAnimation( Run_Anim, 0.08f, false );
@@ -55,14 +121,21 @@
 		const kbQuat curRot = GetOwnerRotation();
 
 		kbMat4 facingMat;
-		facingMat.LookAt( GetOwnerPosition(), GetOwnerPosition() + kbVec3( -1.0f, 0.0f, 0.0f ), kbVec3::up );
-
+		kbString idleAnimToPlay;
+		if ( lastMove.z > 0 ) {
+			facingMat.LookAt( GetOwnerPosition(), GetOwnerPosition() + kbVec3( -0.1f, 0.0f, 1.0f ), kbVec3::up );
+			idleAnimToPlay = IdleR_Anim;
+		} else {
+			facingMat.LookAt( GetOwnerPosition(), GetOwnerPosition() + kbVec3( -0.1f, 0.0f, -1.0f ), kbVec3::up );
+			idleAnimToPlay =IdleL_Anim;
+		}
+		
 		const kbQuat targetRot = kbQuatFromMatrix( facingMat );
 		GetOwner()->SetOrientation( curRot.Slerp( curRot, targetRot, DT * m_MaxRotateSpeed ) );
 
 		for ( int i = 0; i < m_SkelModelsList.size(); i++ ) {
 			kbSkeletalModelComponent *const pSkelModel = m_SkelModelsList[i];
-			pSkelModel->PlayAnimation( Idle_Anim, 0.08f, false );
+			pSkelModel->PlayAnimation( idleAnimToPlay, 0.08f, false );
 		}
 	}
  }

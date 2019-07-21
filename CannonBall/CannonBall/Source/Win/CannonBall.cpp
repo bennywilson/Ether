@@ -20,8 +20,8 @@
 #define MAX_LOADSTRING 100
 
 extern bool g_UseEditor;
-int backBufferWidth = 1280;
-int backBufferHeight = 720;
+int backBufferWidth = 1024;
+int backBufferHeight = 568;
 int WindowStartX = 0;
 int MonitorIdx = 0;
 
@@ -306,11 +306,10 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 
 		applicationEditor = new kbEditor();
 		applicationEditor->SetGame( pGame );
-		if ( mapName.length() > 0 )
-		{
+		if ( mapName.length() > 0 ) {
 			applicationEditor->LoadMap( mapName );
 		}
-		g_pRenderer->SetRenderWindow(nullptr);
+		g_pRenderer->SetRenderWindow( nullptr );
 	} else {
 		g_pRenderer = new kbRenderer_DX11();
 		g_pRenderer->Init( hWnd, backBufferWidth, backBufferHeight, bRenderVR, bUseVRTrackingOnly );

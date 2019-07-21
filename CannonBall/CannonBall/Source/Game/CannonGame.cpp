@@ -12,6 +12,7 @@
 #include "CannonPlayer.h"
 #include "CannonGame.h"
 #include <directxpackedvector.h>
+#include "kbEditorEntity.h"
 
 CannonGame * g_pCannonGame = nullptr;
 
@@ -105,7 +106,6 @@ void CannonGame::PreUpdate_Internal() {
 	if ( IsConsoleActive() == false ) {
 		ProcessInput( frameDT );
 	}
-
 }
 
 /**
@@ -113,7 +113,7 @@ void CannonGame::PreUpdate_Internal() {
  */
 void CannonGame::PostUpdate_Internal() {
 
-			// Update renderer cam
+	// Update renderer cam
 	if ( m_pMainCamera != nullptr ) {
 		g_pD3D11Renderer->SetRenderViewTransform( nullptr, m_pMainCamera->GetOwner()->GetPosition(), m_pMainCamera->GetOwner()->GetOrientation() );
 	}
@@ -189,4 +189,50 @@ void CannonGame::RenderHookCallBack( kbRenderTexture *const pSrc, kbRenderTextur
 	if ( pSrc != nullptr && pDst != nullptr ) {
 		g_pRenderer->RT_CopyRenderTarget( pSrc, pDst );
 	}
+}
+
+/**
+ *	CannonGame::HackEditorInit
+ */
+void CannonGame::HackEditorInit( HWND hwnd, std::vector<class kbEditorEntity *> & editorEntities ) {
+
+	for ( int i = 0; i < editorEntities.size(); i++ ) {
+		kbGameEntity *const pCurEnt = editorEntities[i]->GetGameEntity();
+
+		if ( m_pPlayerComp == nullptr ) {
+			m_pPlayerComp = (CannonPlayerComponent*)pCurEnt->GetComponentByType( CannonPlayerComponent::GetType() );
+		}
+
+		if ( m_pMainCamera == nullptr ) {
+			m_pMainCamera = (CannonCameraComponent*)pCurEnt->GetComponentByType( CannonCameraComponent::GetType() );
+		}
+	}
+
+	m_InputManager.Init( hwnd );
+}
+
+
+/**
+ *	CannonGame::HackEditorUpdate
+ */
+void CannonGame::HackEditorUpdate( const float DT, kbCamera *const pEditorCam ) {
+
+	m_InputManager.Update( DT );
+
+	if ( m_pPlayerComp != nullptr ) {
+		m_pPlayerComp->HandleInput( m_InputManager.GetInput(), DT );
+	}
+
+	if ( m_pMainCamera != nullptr && pEditorCam != nullptr ) {
+		pEditorCam->m_Position = m_pMainCamera->GetOwnerPosition();
+		pEditorCam->m_Rotation = pEditorCam->m_RotationTarget = m_pMainCamera->GetOwnerRotation();
+	}
+}
+
+/**
+ *	CannonGame::HackEditorShutdown
+ */
+void CannonGame::HackEditorShutdown() {
+	m_pPlayerComp = nullptr;
+	m_pMainCamera = nullptr;
 }

@@ -38,10 +38,13 @@ protected:
 	virtual kbGameEntity *						CreatePlayer( const int netId, const kbGUID & prefabGUID, const kbVec3 & desiredLocation );
 
 	void										ProcessInput( const float deltaTimeSec );
-	
 
 	void										AddPrefabToEntity( const kbPackage *const pPrefab, const std::string & prefabName, kbGameEntity *const pEntity, 
 																   const bool bComponentsOnly );
+
+	virtual void								HackEditorInit( HWND hwnd, std::vector<class kbEditorEntity *> & editorEntities );
+	virtual void								HackEditorUpdate( const float DT, kbCamera *const pCamera );
+	virtual void								HackEditorShutdown();
 
 protected:
 
@@ -49,7 +52,7 @@ protected:
 	virtual void								RenderHookCallBack( kbRenderTexture *const pSrc, kbRenderTexture *const pDst );
 
 	kbCamera									m_Camera;
-	
+
 	kbTimer										m_GameStartTimer;
 
 	class kbLevelComponent *					m_pLevelComp;
