@@ -273,7 +273,10 @@ struct kbInput_t {
 		KA_JustReleased,
 	};
 
+	const static char KB_SPACE = 32;
+
 	bool IsKeyPressedOrDown( const char key ) const { return KeyState[key].m_Action == KA_JustPressed || KeyState[key].m_Action == KA_Down; }
+	bool WasKeyJustPressed( const char key ) const { return KeyState[key].m_Action == KA_JustPressed; }
 
 	struct kbKeyState_t {
 		kbKeyAction_t	m_Action;

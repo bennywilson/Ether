@@ -18,6 +18,22 @@
 	m_MaxRotateSpeed = 15.0f;
 }
 
+/**
+*	CannonPlayerComponent::OnAnimEvent
+*/
+void CannonPlayerComponent::OnAnimEvent( const kbAnimEvent & animEvent ) {
+
+	const static kbString CannonBallImpact = "CannonBall_Impact";
+	const kbString & animEventName = animEvent.GetEventName();
+	if ( animEventName != CannonBallImpact ) {
+		return;
+	}
+
+//	const int animEventValue = animEvent.GetEventValue();
+	kbLog( "Anim event fired %s", animEvent.GetEventName().c_str() );
+
+}
+
  /**
   *	CannonPlayerComponent::HandleInput
   */
@@ -60,7 +76,7 @@
 			if ( lastMove.z > 0 ) {
 				returnIdle = IdleR_Anim;
 			}
-			pSkelModel->PlayAnimation( CannonBall_Anim, 0.08f, false, returnIdle, 0.05f );
+			pSkelModel->PlayAnimation( CannonBall_Anim, 0.08f, false, returnIdle, 0.01f );
 		}
 		return;
 	}
@@ -68,7 +84,7 @@
 	if ( bIsPunching ) {
 		if ( m_SkelModelsList[0]->IsPlaying( PunchL_Anim ) == true || 
 			 m_SkelModelsList[0]->IsPlaying( KickL_Anim ) == true ||
-			m_SkelModelsList[0]->IsPlaying( PunchR_Anim ) == true || 
+			 m_SkelModelsList[0]->IsPlaying( PunchR_Anim ) == true || 
 			 m_SkelModelsList[0]->IsPlaying( KickR_Anim ) == true ) {
 			return;
 		}
@@ -85,7 +101,7 @@
 		const kbString AttackAnim = directionToAttackMap[dirIndex][rand() %2];
 		for ( int i = 0; i < m_SkelModelsList.size(); i++ ) {
 			kbSkeletalModelComponent *const pSkelModel = m_SkelModelsList[i];
-			pSkelModel->PlayAnimation( AttackAnim, 0.08f, false, directionToAttackMap[dirIndex][2], 1.05f );
+			pSkelModel->PlayAnimation( AttackAnim, 0.08f, false, directionToAttackMap[dirIndex][2], 0.15f );
 		}
 		return;
 	}
@@ -155,6 +171,14 @@ void CannonPlayerComponent::SetEnable_Internal( const bool bEnable ) {
 				continue;
 			}
 			m_SkelModelsList.push_back( (kbSkeletalModelComponent*)pComponent );
+
+			if ( m_SkelModelsList.size() == 1 ) {
+				m_SkelModelsList[0]->RegisterAnimEventListener( this );
+			}
+		}
+	} else {
+		if ( m_SkelModelsList.size() > 0 ) {
+			m_SkelModelsList[0]->UnregisterAnimEventListener( this );
 		}
 	}
 }
@@ -260,4 +284,3 @@ void CannonCameraComponent::Update_Internal( const float DeltaTime ) {
 		break;
 	}
 }
- 

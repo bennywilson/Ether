@@ -10,13 +10,16 @@
 /**
  *	CannonPlayerComponent
  */
-class CannonPlayerComponent : public kbActorComponent {
+class CannonPlayerComponent : public kbActorComponent, IAnimEventListener {
 
 	KB_DECLARE_COMPONENT( CannonPlayerComponent, kbActorComponent );
 
 //---------------------------------------------------------------------------------------------------
 public:
 	void										HandleInput( const kbInput_t & input, const float DT );
+
+	// IAnimEventListener
+	virtual void								OnAnimEvent( const kbAnimEvent & animEvent );
 
 protected:
 

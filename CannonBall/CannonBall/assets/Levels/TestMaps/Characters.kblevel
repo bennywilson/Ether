@@ -2,7 +2,7 @@ kbGameEntity 0 0 0 0 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		Name = "Entity_15"
+		Name = "Entity_17"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
 		Position = 0.000000 0.000000 0.000000
 		Scale = 1.000000 1.000000 1.000000
@@ -10,8 +10,8 @@ kbGameEntity 0 0 0 0 {
 	kbEditorLevelSettingsComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		MainCameraPosition = -1.397304 2.235298 -3.054234
-		MainCameraRotation = -0.019596 -0.969702 0.228916 0.083013
+		MainCameraPosition = -3.179195 1.589443 5.224139
+		MainCameraRotation = -0.162460 -0.688191 0.162460 0.688191
 	}
 }
 kbGameEntity 0 0 0 0 {
@@ -382,7 +382,7 @@ kbGameEntity 0 0 0 0 {
 		LifeTime =  -1.000000
 		Name = "Player"
 		Orientation = 0.000000 -0.998759 0.000000 0.049814
-		Position = -0.000310 0.000000 -6.089436
+		Position = -0.000310 0.000000 5.224139
 		Scale = 1.000000 1.000000 1.000000
 	}
 	kbSkeletalModelComponent { 
@@ -441,7 +441,7 @@ kbGameEntity 0 0 0 0 {
 				AnimationEvent = 0
 				AnimationName = "PunchLeft_Basic"
 				IsLooping = 0
-				TimeScale =  15.000000
+				TimeScale =  10.000000
 			}
 			kbAnimComponent { 
 				Enabled = 0
@@ -450,7 +450,7 @@ kbGameEntity 0 0 0 0 {
 				AnimationEvent = 0
 				AnimationName = "KickLeft_Basic"
 				IsLooping = 0
-				TimeScale =  15.000000
+				TimeScale =  10.000000
 			}
 			kbAnimComponent { 
 				Enabled = 0
@@ -459,7 +459,7 @@ kbGameEntity 0 0 0 0 {
 				AnimationEvent = 0
 				AnimationName = "PunchRight_Basic"
 				IsLooping = 0
-				TimeScale =  15.000000
+				TimeScale =  10.000000
 			}
 			kbAnimComponent { 
 				Enabled = 0
@@ -468,13 +468,20 @@ kbGameEntity 0 0 0 0 {
 				AnimationEvent = 0
 				AnimationName = "KickRight_Basic"
 				IsLooping = 0
-				TimeScale =  15.000000
+				TimeScale =  10.000000
 			}
 			kbAnimComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
 				Animation = .\assets\models\characters\sheep\sheep_cannonball.kbanim.ms3d
-				AnimationEvent = 0
+				AnimationEvent = 1
+					kbAnimEvent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						EventName = "CannonBall_Impact"
+						EventTime =  2.000000
+						EventValue =  1.000000
+					}
 				AnimationName = "CannonBall"
 				IsLooping = 0
 				TimeScale =  5.000000
@@ -545,7 +552,7 @@ kbGameEntity 0 0 0 0 {
 				AnimationEvent = 0
 				AnimationName = "PunchLeft_Basic"
 				IsLooping = 0
-				TimeScale =  15.000000
+				TimeScale =  10.000000
 			}
 			kbAnimComponent { 
 				Enabled = 0
@@ -554,7 +561,7 @@ kbGameEntity 0 0 0 0 {
 				AnimationEvent = 0
 				AnimationName = "KickLeft_Basic"
 				IsLooping = 0
-				TimeScale =  15.000000
+				TimeScale =  10.000000
 			}
 			kbAnimComponent { 
 				Enabled = 0
@@ -563,7 +570,7 @@ kbGameEntity 0 0 0 0 {
 				AnimationEvent = 0
 				AnimationName = "PunchRight_Basic"
 				IsLooping = 0
-				TimeScale =  15.000000
+				TimeScale =  10.000000
 			}
 			kbAnimComponent { 
 				Enabled = 0
@@ -572,7 +579,7 @@ kbGameEntity 0 0 0 0 {
 				AnimationEvent = 0
 				AnimationName = "KickRight_Basic"
 				IsLooping = 0
-				TimeScale =  15.000000
+				TimeScale =  10.000000
 			}
 			kbAnimComponent { 
 				Enabled = 0
@@ -703,7 +710,7 @@ kbGameEntity 0 0 0 0 {
 		LifeTime =  -1.000000
 		Name = "Camera"
 		Orientation = -0.162460 -0.688191 0.162460 0.688191
-		Position = -3.000310 1.500000 -6.089436
+		Position = -3.000310 1.500000 5.224139
 		Scale = 1.000000 1.000000 1.000000
 	}
 	CannonCameraComponent { 

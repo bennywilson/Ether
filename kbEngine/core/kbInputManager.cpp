@@ -80,12 +80,14 @@ void kbInputManager::Update( const float DeltaTime ) {
 		bFirstRun = false;
 	}
 
-	if ( GetForegroundWindow() != m_Hwnd ) {
-		if ( bWindowIsSelected ) {
-			bWindowIsSelected = false;
-			ShowCursor( true );
+	if ( g_UseEditor == false ) {
+		if ( GetForegroundWindow() != m_Hwnd ) {
+			if ( bWindowIsSelected ) {
+				bWindowIsSelected = false;
+				ShowCursor( true );
+			}
+			return;
 		}
-		return;
 	}
 
 	XINPUT_STATE InputState = { 0 };

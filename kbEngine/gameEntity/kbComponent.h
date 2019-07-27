@@ -230,6 +230,11 @@ private:
 	float									m_EventTime;
 };
 
+class IAnimEventListener abstract {
+public:
+	virtual void							OnAnimEvent( const kbAnimEvent & animEvent ) = 0;
+};
+
 /**
  *	kbVectorAnimEvent
  */
