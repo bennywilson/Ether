@@ -24,14 +24,29 @@
 void CannonPlayerComponent::OnAnimEvent( const kbAnimEvent & animEvent ) {
 
 	const static kbString CannonBallImpact = "CannonBall_Impact";
+	const static kbString CannonBallVO = "CannonBall_VO";
 	const kbString & animEventName = animEvent.GetEventName();
-	if ( animEventName != CannonBallImpact ) {
-		return;
-	}
 
-//	const int animEventValue = animEvent.GetEventValue();
 	kbLog( "Anim event fired %s", animEvent.GetEventName().c_str() );
 
+	if ( animEventName == CannonBallImpact ) {
+		if ( m_CannonBallImpactFX.GetEntity() != nullptr ) {
+			kbGameEntity *const pCannonBallImpact = g_pGame->CreateEntity( m_CannonBallImpactFX.GetEntity() );
+			pCannonBallImpact->SetPosition( GetOwnerPosition() );
+			pCannonBallImpact->SetOrientation( GetOwnerRotation() );
+			pCannonBallImpact->DeleteWhenComponentsAreInactive( true );
+
+			for ( int i = 0; i < pCannonBallImpact->NumComponents(); i++ ) {
+				kbGameComponent *const pGameComponent = pCannonBallImpact->GetComponent(i);
+				pGameComponent->Enable( false );
+				pGameComponent->Enable( true );
+			}
+		}
+
+		if ( m_CannonBallVO.size() > 0 ) {
+			m_CannonBallVO[rand() % m_CannonBallVO.size()].PlaySoundAtPosition( GetOwnerPosition() );
+		}
+	}
 }
 
  /**
@@ -162,8 +177,8 @@ void CannonPlayerComponent::OnAnimEvent( const kbAnimEvent & animEvent ) {
 void CannonPlayerComponent::SetEnable_Internal( const bool bEnable ) {
 	Super::SetEnable_Internal( bEnable );
 
-	m_SkelModelsList.clear();
 	if ( bEnable ) {
+		m_SkelModelsList.clear();
 		const int NumComponents = (int)GetOwner()->NumComponents();
 		for ( int i = 0; i < NumComponents; i++ ) {
 			kbComponent *const pComponent = GetOwner()->GetComponent(i);
@@ -176,10 +191,14 @@ void CannonPlayerComponent::SetEnable_Internal( const bool bEnable ) {
 				m_SkelModelsList[0]->RegisterAnimEventListener( this );
 			}
 		}
+
+		g_ResourceManager.GetPackage( "./assets/Packages/Sheep.kbPkg" );
 	} else {
 		if ( m_SkelModelsList.size() > 0 ) {
 			m_SkelModelsList[0]->UnregisterAnimEventListener( this );
 		}
+
+		m_SkelModelsList.clear();
 	}
 }
 

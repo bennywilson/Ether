@@ -16,6 +16,8 @@ GenerateClass(
 	CannonPlayerComponent,
 	AddField( "MaxRunSpeed", KBTYPEINFO_FLOAT, CannonPlayerComponent, m_MaxRunSpeed, false, "" )
 	AddField( "MaxRotateSpeed", KBTYPEINFO_FLOAT, CannonPlayerComponent, m_MaxRotateSpeed, false, "" )
+	AddField( "CannonBallImpactFX", KBTYPEINFO_GAMEENTITY, CannonPlayerComponent, m_CannonBallImpactFX, false, "" )
+	AddField( "CannonBallVO", KBTYPEINFO_STRUCT, CannonPlayerComponent, m_CannonBallVO, true, "kbSoundData" )
 )
 
 GenerateClass(

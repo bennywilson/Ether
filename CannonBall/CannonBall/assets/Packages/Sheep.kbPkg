@@ -1,0 +1,71 @@
+FX 1
+kbPrefab 1 {
+	CannonBall_Impact
+	kbGameEntity 846208613 1165520682 3641600641 3993117100 {
+		kbTransformComponent { 
+			Enabled = 0
+			LifeTime =  -1.000000
+			Name = "Entity_17"
+			Orientation = 0.000000 0.000000 0.000000 1.000000
+			Position = -0.424150 0.314745 8.137279
+			Scale = 1.000000 1.000000 1.000000
+		}
+		kbParticleComponent { 
+			Enabled = 0
+			LifeTime =  -1.000000
+			Name = "d"
+			Orientation = 0.000000 0.000000 0.000000 1.000000
+			Position = 0.000000 0.000000 0.000000
+			Scale = 0.100000 0.100000 0.100000
+			AlphaOverLife = 0
+			ColorOverLife = 0
+			EndColor = 1.000000 1.000000 1.000000 1.000000
+			Gravity = 0.000000 0.000000 0.000000
+			MaterialList = 1
+				kbMaterialComponent { 
+					Enabled = 0
+					LifeTime =  -1.000000
+					CullModeOverride = ShaderDefault
+					Shader = ..\..\kbengine\assets\shaders\basicparticle.kbshader
+					ShaderParams = 1
+						kbShaderParamComponent { 
+							Enabled = 0
+							LifeTime =  -1.000000
+							ParamName = "shaderTexture"
+							Texture = ..\..\kbengine\assets\textures\flare.jpg
+							Vector = 0.000000 0.000000 0.000000 0.000000
+						}
+				}
+			MaxBurstCount = 35
+			MaxDuration =  3.000000
+			MaxEndRotationRate =  0.000000
+			MaxEndSize = 3.000000 3.000000 3.000000
+			MaxEndVelocity = 0.000000 0.000000 5.000000
+			MaxSpawnRate =  2.000000
+			MaxStart3DOffset = 0.000000 0.000000 0.000000
+			MaxStart3DRotation = 0.000000 0.000000 0.000000
+			MaxStartRotationRate =  0.000000
+			MaxStartSize = 3.000000 3.000000 3.000000
+			MaxStartVelocity = 2.000000 5.000000 2.000000
+			MinBurstCount = 25
+			MinDuration =  3.000000
+			MinEndRotationRate =  0.000000
+			MinEndSize = 3.000000 3.000000 3.000000
+			MinEndVelocity = 0.000000 5.000000 0.000000
+			MinSpawnRate =  1.000000
+			MinStart3DOffset = 0.000000 0.000000 0.000000
+			MinStart3DRotation = 0.000000 0.000000 0.000000
+			MinStartRotationRate =  0.000000
+			MinStartSize = 3.000000 3.000000 3.000000
+			MinStartVelocity = -2.000000 5.000000 -2.000000
+			ModelEmitter = 0
+			ParticleBillboardType = FaceCamera
+			StartColor = 1.000000 1.000000 1.000000 1.000000
+			StartDelay =  0.000000
+			TotalDuration =  3
+			TranslucencySortBias =  0.000000
+			VelocityCurve = 0
+		}
+	}
+}
+}

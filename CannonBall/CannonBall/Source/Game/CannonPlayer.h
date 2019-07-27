@@ -27,9 +27,14 @@ protected:
 	virtual void								Update_Internal( const float DeltaTime ) override;
 
 private:
+
+	// Data
 	float										m_MaxRunSpeed;
 	float										m_MaxRotateSpeed;
+	kbGameEntityPtr								m_CannonBallImpactFX;
+	std::vector<kbSoundData>					m_CannonBallVO;
 
+	// Runtime
 	std::vector<kbSkeletalModelComponent *>		m_SkelModelsList;
 };
 

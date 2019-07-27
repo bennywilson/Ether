@@ -208,10 +208,12 @@ void kbSkeletalModelComponent::Update_Internal( const float DeltaTime ) {
 					for ( int iAnimEvent = 0; iAnimEvent < CurAnim.m_AnimEvents.size(); iAnimEvent++ ) {
 						auto & curEvent = CurAnim.m_AnimEvents[iAnimEvent];
 						if ( curEvent.GetEventTime() > prevAnimTime && curEvent.GetEventTime() <= CurAnim.m_CurrentAnimationTime  ) {
-							//kbLog( "AnimEvent %s - %f", curEvent.GetEventName().c_str(), curEvent.GetEventTime() );
+							for ( int iListener = 0; iListener < m_AnimEventListeners.size(); iListener++ ) {
+								IAnimEventListener *const pCurListener = m_AnimEventListeners[iListener];	
+								m_AnimEventListeners[iListener]->OnAnimEvent( curEvent );
+							}
 						}
 					}
-		//			CurAnim.m_CurrentAnimationTime += DeltaTime * CurAnim.m_TimeScale;
 				}
 
 				kbAnimComponent & NextAnim = m_Animations[m_NextAnimation];
@@ -230,8 +232,12 @@ void kbSkeletalModelComponent::Update_Internal( const float DeltaTime ) {
 
 				for ( int iAnimEvent = 0; iAnimEvent < NextAnim.m_AnimEvents.size(); iAnimEvent++ ) {
 					auto & curEvent = NextAnim.m_AnimEvents[iAnimEvent];
+
 					if ( curEvent.GetEventTime() > prevNextAnimTime && curEvent.GetEventTime() <= NextAnim.m_CurrentAnimationTime  ) {
-						//kbLog( "AnimEvent %s - %f", curEvent.GetEventName().c_str(), curEvent.GetEventTime() );
+						for ( int iListener = 0; iListener < m_AnimEventListeners.size(); iListener++ ) {
+							IAnimEventListener *const pCurListener = m_AnimEventListeners[iListener];	
+							m_AnimEventListeners[iListener]->OnAnimEvent( curEvent );
+						}
 					}
 				}
 
@@ -455,6 +461,6 @@ void kbSkeletalModelComponent::RegisterAnimEventListener( IAnimEventListener *co
  */
 void kbSkeletalModelComponent::UnregisterAnimEventListener( IAnimEventListener *const pListener ) {
 
-	kbErrorCheck( VectorContains( m_AnimEventListeners, pListener ) == true, "UnregisterAnimEventListener() - Duplicate entries");
+	kbErrorCheck( VectorContains( m_AnimEventListeners, pListener ) == true, "UnregisterAnimEventListener() - Listener not previously registered");
 	VectorRemoveFast( m_AnimEventListeners, pListener );
 }
