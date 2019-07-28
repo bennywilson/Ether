@@ -9,6 +9,7 @@ cbuffer matrixBuffer {
 	float4x4	boneList[128];
 	float4		cameraPos;
 	float4		outlineParams;		// x: Thickness, y: Push back, z: Outline Color Factor, w: Mip-Level
+	float4		smearParams;
 };
 
 kbShaderState {
@@ -87,7 +88,7 @@ SamplerState DefaultSampler;
 	PS_OUTPUT output = (PS_OUTPUT) 0;
 
 	const float4 colorTex = colorTexture.SampleLevel( DefaultSampler, input.uv, outlineParams.w ) * outlineParams.z;//0.75f;// * 0.5f;
-	output.Color.xyz = colorTex.xyz;
+	output.Color.xyz = colorTex.xyz + smearParams.xyz;
 	output.Color.w = 0;//colorTex.w *A 0.55;
 	output.Color.w = -1.0f;
 	output.Specular = float4( 0.0f, 1.0f, 0.0f, 0.0f );

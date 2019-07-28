@@ -88,7 +88,6 @@
   <ItemGroup>
     <None Include="assets\shaders\Character\CharacterBase.kbShader" />
     <None Include="assets\shaders\Character\characterOutline.kbShader" />
-    <None Include="assets\shaders\Character\characterOutline_NoSkinning.kbShader" />
     <None Include="assets\shaders\Environment\environmentBase.kbShader" />
     <None Include="CannonBall.ico" />
     <None Include="small.ico" />

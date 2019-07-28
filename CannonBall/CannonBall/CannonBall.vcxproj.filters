@@ -27,9 +27,6 @@
     <None Include="assets\shaders\Character\CharacterBase.kbShader">
       <Filter>Shaders\Characters</Filter>
     </None>
-    <None Include="assets\shaders\Character\characterOutline_NoSkinning.kbShader">
-      <Filter>Shaders\Characters</Filter>
-    </None>
     <None Include="assets\shaders\Character\characterOutline.kbShader">
       <Filter>Shaders\Characters</Filter>
     </None>

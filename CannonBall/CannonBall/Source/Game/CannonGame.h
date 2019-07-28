@@ -22,7 +22,7 @@ public:
 												CannonGame();
 	virtual										~CannonGame();
 
-
+	class CannonCameraComponent *				GetMainCamera() const { return m_pMainCamera; }
 
 protected:
 

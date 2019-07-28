@@ -2,7 +2,7 @@ kbGameEntity 0 0 0 0 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		Name = "Entity_17"
+		Name = "Entity_19"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
 		Position = 0.000000 0.000000 0.000000
 		Scale = 1.000000 1.000000 1.000000
@@ -10,8 +10,8 @@ kbGameEntity 0 0 0 0 {
 	kbEditorLevelSettingsComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		MainCameraPosition = -5.410725 4.609926 7.945758
-		MainCameraRotation = -0.148487 -0.701528 0.153196 0.679957
+		MainCameraPosition = -3.514136 1.253862 6.976054
+		MainCameraRotation = 0.037662 -0.948791 -0.124042 0.288083
 	}
 }
 kbGameEntity 0 0 0 0 {
@@ -499,7 +499,7 @@ kbGameEntity 0 0 0 0 {
 				LifeTime =  -1.000000
 				CullModeOverride = ShaderDefault
 				Shader = .\assets\shaders\character\characteroutline.kbshader
-				ShaderParams = 2
+				ShaderParams = 3
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
@@ -512,6 +512,13 @@ kbGameEntity 0 0 0 0 {
 						LifeTime =  -1.000000
 						ParamName = "colorTexture"
 						Texture = .\assets\models\characters\sheep\sheep.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "smearParams"
+						Texture = NULL
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 			}
@@ -585,7 +592,14 @@ kbGameEntity 0 0 0 0 {
 				Enabled = 0
 				LifeTime =  -1.000000
 				Animation = .\assets\models\characters\sheep\sheep_cannonball.kbanim.ms3d
-				AnimationEvent = 0
+				AnimationEvent = 1
+					kbAnimEvent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						EventName = "CannonBall_JumpSmear"
+						EventTime =  0.200000
+						EventValue =  5.000000
+					}
 				AnimationName = "CannonBall"
 				IsLooping = 0
 				TimeScale =  5.000000
@@ -599,6 +613,7 @@ kbGameEntity 0 0 0 0 {
 		DummyTemp = 0
 		Health =  10.000000
 		CannonBallImpactFX = 846208613 1165520682 3641600641 3993117100
+		CannonBallImpactSound = 0
 		CannonBallVO = 1
 			kbSoundData { 
 				Enabled = 0

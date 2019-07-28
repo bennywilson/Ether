@@ -20,3 +20,5 @@ ECameraMoveMode_Enum ECameraMoveMode_EnumClass;
 DEFINE_KBCLASS(CannonPlayerComponent)
 
 DEFINE_KBCLASS(CannonCameraComponent)
+
+DEFINE_KBCLASS(CannonCameraShakeComponent)

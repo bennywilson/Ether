@@ -7,11 +7,11 @@ kbPrefab 1 {
 			LifeTime =  -1.000000
 			Name = "Entity_17"
 			Orientation = 0.000000 0.000000 0.000000 1.000000
-			Position = -0.424150 0.314745 8.137279
+			Position = -1.776637 2.942439 7.832241
 			Scale = 1.000000 1.000000 1.000000
 		}
 		kbParticleComponent { 
-			Enabled = 0
+			Enabled = 1
 			LifeTime =  -1.000000
 			Name = "d"
 			Orientation = 0.000000 0.000000 0.000000 1.000000
@@ -62,9 +62,20 @@ kbPrefab 1 {
 			ParticleBillboardType = FaceCamera
 			StartColor = 1.000000 1.000000 1.000000 1.000000
 			StartDelay =  0.000000
-			TotalDuration =  3
+			TotalDuration =  3.000000
 			TranslucencySortBias =  0.000000
 			VelocityCurve = 0
+		}
+		CannonCameraShakeComponent { 
+			Enabled = 1
+			LifeTime =  -1.000000
+			DummyTemp = 0
+			Health =  10.000000
+			AmplitudeX =  0.032
+			AmplitudeY =  0.019
+			Duration =  2.000000
+			FrequencyX =  15.000000
+			FrequencyY =  16.000000
 		}
 	}
 }

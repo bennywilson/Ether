@@ -18,6 +18,7 @@ GenerateClass(
 	AddField( "MaxRotateSpeed", KBTYPEINFO_FLOAT, CannonPlayerComponent, m_MaxRotateSpeed, false, "" )
 	AddField( "CannonBallImpactFX", KBTYPEINFO_GAMEENTITY, CannonPlayerComponent, m_CannonBallImpactFX, false, "" )
 	AddField( "CannonBallVO", KBTYPEINFO_STRUCT, CannonPlayerComponent, m_CannonBallVO, true, "kbSoundData" )
+	AddField( "CannonBallImpactSound", KBTYPEINFO_STRUCT, CannonPlayerComponent, m_CannonBallImpactSound, true, "kbSoundData" )
 )
 
 GenerateClass(
@@ -26,4 +27,13 @@ GenerateClass(
 	AddField( "FarPlane", KBTYPEINFO_FLOAT, CannonCameraComponent, m_FarPlane, false, "" )
 	AddField( "MovementMode", KBTYPEINFO_ENUM, CannonCameraComponent, m_MoveMode, false, "ECameraMoveMode" )
 	AddField( "TargetOffset", KBTYPEINFO_VECTOR, CannonCameraComponent, m_Offset, false, "" )
+)
+
+GenerateClass(
+	CannonCameraShakeComponent,
+	AddField( "Duration", KBTYPEINFO_FLOAT, CannonCameraShakeComponent, m_Duration, false, "" )
+	AddField( "AmplitudeX", KBTYPEINFO_FLOAT, CannonCameraShakeComponent, m_AmplitudeX, false, "" )
+	AddField( "FrequencyX", KBTYPEINFO_FLOAT, CannonCameraShakeComponent, m_FrequencyX, false, "" )
+	AddField( "AmplitudeY", KBTYPEINFO_FLOAT, CannonCameraShakeComponent, m_AmplitudeY, false, "" )
+	AddField( "FrequencyY", KBTYPEINFO_FLOAT, CannonCameraShakeComponent, m_FrequencyY, false, "" )
 )
