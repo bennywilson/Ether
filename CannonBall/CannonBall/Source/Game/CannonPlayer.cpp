@@ -57,7 +57,7 @@ void CannonPlayerComponent::OnAnimEvent( const kbAnimEvent & animEvent ) {
 		}
 	} else if ( animEventName == CannonBallJumpSmear ) {
 		m_AnimSmearStartTime = g_GlobalTimer.TimeElapsedSeconds();
-		m_AnimSmearVec.Set( 0.0f, 1.0f, 0.0f, 0.0f );
+		m_AnimSmearVec.Set( 0.0f, -1.0f, 0.0f, 0.0f );
 		m_AnimSmearDuration = animEventVal;
 	}
 }

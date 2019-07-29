@@ -597,7 +597,7 @@ kbGameEntity 0 0 0 0 {
 						Enabled = 0
 						LifeTime =  -1.000000
 						EventName = "CannonBall_JumpSmear"
-						EventTime =  0.200000
+						EventTime =  0.00010
 						EventValue =  5.000000
 					}
 				AnimationName = "CannonBall"

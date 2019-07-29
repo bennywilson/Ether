@@ -63,6 +63,10 @@ pixelInput vertexShader( vertexInput input ) {
 	Pos = mul( Pos, modelMatrix );
 	Pos /= Pos.w;
 
+	if ( dot( output.normal.xyz, smearParams.xyz ) > 0 ) {
+		Pos.xyz += smearParams.xyz;
+	}
+
 	Pos.xyz += output.normal.xyz * outlineParams.x;
 
 	float3 fromCam = normalize( Pos.xyz - cameraPos.xyz );
@@ -88,7 +92,7 @@ SamplerState DefaultSampler;
 	PS_OUTPUT output = (PS_OUTPUT) 0;
 
 	const float4 colorTex = colorTexture.SampleLevel( DefaultSampler, input.uv, outlineParams.w ) * outlineParams.z;//0.75f;// * 0.5f;
-	output.Color.xyz = colorTex.xyz + smearParams.xyz;
+	output.Color.xyz = colorTex.xyz;
 	output.Color.w = 0;//colorTex.w *A 0.55;
 	output.Color.w = -1.0f;
 	output.Specular = float4( 0.0f, 1.0f, 0.0f, 0.0f );
