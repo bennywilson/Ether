@@ -7,7 +7,7 @@ kbPrefab 1 {
 			LifeTime =  -1.000000
 			Name = "Entity_17"
 			Orientation = 0.000000 0.000000 0.000000 1.000000
-			Position = -1.776637 2.942439 7.832241
+			Position = -2.969812 1.634380 18.856277
 			Scale = 1.000000 1.000000 1.000000
 		}
 		kbParticleComponent { 
@@ -20,7 +20,7 @@ kbPrefab 1 {
 			AlphaOverLife = 0
 			ColorOverLife = 0
 			EndColor = 1.000000 1.000000 1.000000 1.000000
-			Gravity = 0.000000 0.000000 0.000000
+			Gravity = 0.000000 -1.000000 0.000000
 			MaterialList = 1
 				kbMaterialComponent { 
 					Enabled = 0
@@ -37,45 +37,59 @@ kbPrefab 1 {
 						}
 				}
 			MaxBurstCount = 35
-			MaxDuration =  3.000000
+			MaxDuration =  1.000000
 			MaxEndRotationRate =  0.000000
-			MaxEndSize = 3.000000 3.000000 3.000000
-			MaxEndVelocity = 0.000000 0.000000 5.000000
-			MaxSpawnRate =  2.000000
+			MaxEndSize = 5.700000 5.700000 5.700000
+			MaxEndVelocity = 0.000000 0.000000 0.000000
+			MaxSpawnRate =  0.000000
 			MaxStart3DOffset = 0.000000 0.000000 0.000000
 			MaxStart3DRotation = 0.000000 0.000000 0.000000
 			MaxStartRotationRate =  0.000000
-			MaxStartSize = 3.000000 3.000000 3.000000
-			MaxStartVelocity = 2.000000 5.000000 2.000000
+			MaxStartSize = 5.500000 5.500000 5.500000
+			MaxStartVelocity = 2.000000 0.750000 2.000000
 			MinBurstCount = 25
-			MinDuration =  3.000000
+			MinDuration =  0.500000
 			MinEndRotationRate =  0.000000
-			MinEndSize = 3.000000 3.000000 3.000000
-			MinEndVelocity = 0.000000 5.000000 0.000000
-			MinSpawnRate =  1.000000
+			MinEndSize = 5.500000 5.500000 5.500000
+			MinEndVelocity = 0.000000 10.000000 0.000000
+			MinSpawnRate =  0.000000
 			MinStart3DOffset = 0.000000 0.000000 0.000000
 			MinStart3DRotation = 0.000000 0.000000 0.000000
 			MinStartRotationRate =  0.000000
-			MinStartSize = 3.000000 3.000000 3.000000
-			MinStartVelocity = -2.000000 5.000000 -2.000000
+			MinStartSize = 5.000000 5.000000 5.000000
+			MinStartVelocity = -2.000000 0.500000 -2.000000
 			ModelEmitter = 0
 			ParticleBillboardType = FaceCamera
 			StartColor = 1.000000 1.000000 1.000000 1.000000
 			StartDelay =  0.000000
 			TotalDuration =  3.000000
 			TranslucencySortBias =  0.000000
-			VelocityCurve = 0
+			VelocityCurve = 2
+				kbAnimEvent { 
+					Enabled = 0
+					LifeTime =  -1.000000
+					EventName = ""
+					EventTime =  0.000000
+					EventValue =  5.000000
+				}
+				kbAnimEvent { 
+					Enabled = 0
+					LifeTime =  -1.000000
+					EventName = ""
+					EventTime =  0.250000
+					EventValue =  0.500000
+				}
 		}
 		CannonCameraShakeComponent { 
 			Enabled = 1
 			LifeTime =  -1.000000
 			DummyTemp = 0
 			Health =  10.000000
-			AmplitudeX =  0.032
-			AmplitudeY =  0.019
-			Duration =  2.000000
-			FrequencyX =  15.000000
-			FrequencyY =  16.000000
+			AmplitudeX =  0.035000
+			AmplitudeY =  0.03000
+			Duration =  0.7
+			FrequencyX =  30.000000
+			FrequencyY =  40.000000
 		}
 	}
 }
