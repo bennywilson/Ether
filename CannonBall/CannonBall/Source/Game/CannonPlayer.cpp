@@ -29,6 +29,7 @@ void CannonPlayerComponent::OnAnimEvent( const kbAnimEvent & animEvent ) {
 	const static kbString CannonBallImpact = "CannonBall_Impact";
 	const static kbString CannonBallVO = "CannonBall_VO";
 	const static kbString CannonBallJumpSmear = "CannonBall_JumpSmear";
+	const static kbString CannonBallDropSmear = "CannonBall_DropSmear";
 
 	const kbString & animEventName = animEvent.GetEventName();
 	const float animEventVal = animEvent.GetEventValue();
@@ -57,7 +58,11 @@ void CannonPlayerComponent::OnAnimEvent( const kbAnimEvent & animEvent ) {
 		}
 	} else if ( animEventName == CannonBallJumpSmear ) {
 		m_AnimSmearStartTime = g_GlobalTimer.TimeElapsedSeconds();
-		m_AnimSmearVec.Set( 0.0f, -1.0f, 0.0f, 0.0f );
+		m_AnimSmearVec.Set( 0.0f, -5.5f, 0.0f, 0.0f );
+		m_AnimSmearDuration = animEventVal;
+	} else if (animEventName == CannonBallDropSmear) {
+		m_AnimSmearStartTime = g_GlobalTimer.TimeElapsedSeconds();
+		m_AnimSmearVec.Set( 0.0f, 2.5f, 0.0f, 0.0f);
 		m_AnimSmearDuration = animEventVal;
 	}
 }
@@ -76,9 +81,30 @@ void CannonPlayerComponent::OnAnimEvent( const kbAnimEvent & animEvent ) {
 	static const kbString PunchR_Anim( "PunchRight_Basic" );
 	static const kbString KickR_Anim( "KickRight_Basic" );
 	static const kbString CannonBall_Anim( "CannonBall" );
+	static const kbString CannonBallWindUp_Anim( "CannonBallWindUp" );
 
 	static bool bIsPunching = false;
 	static bool bIsCannonBalling = false;
+
+	// Anim Smear
+	if (m_AnimSmearStartTime > 0.0f) {
+		const float elapsedTime = g_GlobalTimer.TimeElapsedSeconds() - m_AnimSmearStartTime;
+		if (elapsedTime > m_AnimSmearDuration) {
+			m_AnimSmearStartTime = -1.0f;
+			const static kbString smearParam = "smearParams";
+			m_SkelModelsList[1]->SetMaterialParamVector(0, smearParam.stl_str(), kbVec4::zero);
+		}
+		else {
+			const float strength = 1.0f - kbClamp(elapsedTime / m_AnimSmearDuration, 0.0f, 1.0f);
+			const static kbString smearParam = "smearParams";
+			kbVec4 smearVec = m_AnimSmearVec;
+			smearVec.x *= strength;
+			smearVec.y *= strength;
+			smearVec.z *= strength;
+
+			m_SkelModelsList[1]->SetMaterialParamVector(0, smearParam.stl_str(), smearVec);
+		}
+	}
 
 	if ( bIsCannonBalling ) {
 		kbMat4 facingMat;
@@ -88,7 +114,8 @@ void CannonPlayerComponent::OnAnimEvent( const kbAnimEvent & animEvent ) {
 		const kbQuat targetRot = kbQuatFromMatrix( facingMat );
 		GetOwner()->SetOrientation( curRot.Slerp( curRot, targetRot, DT * m_MaxRotateSpeed ) );
 
-		if ( m_SkelModelsList[0]->IsPlaying( CannonBall_Anim ) == true ) {
+//		if ( m_SkelModelsList[0]->IsPlaying( CannonBall_Anim ) == true || ( m_SkelModelsList[0]->IsPlaying( CannonBallWindUp_Anim ) == true && !m_SkelModelsList[0]->HasFinishedAnimation() ) ) {
+		if ( m_SkelModelsList[0]->HasFinishedAnimation() == false ) {
 			return;
 		}
 
@@ -103,7 +130,7 @@ void CannonPlayerComponent::OnAnimEvent( const kbAnimEvent & animEvent ) {
 			if ( lastMove.z > 0 ) {
 				returnIdle = IdleR_Anim;
 			}
-			pSkelModel->PlayAnimation( CannonBall_Anim, 0.08f, false, returnIdle, 0.01f );
+			pSkelModel->PlayAnimation( CannonBallWindUp_Anim, 0.05f, false, CannonBall_Anim, 0.01f );
 		}
 		return;
 	}
@@ -182,24 +209,6 @@ void CannonPlayerComponent::OnAnimEvent( const kbAnimEvent & animEvent ) {
 		}
 	}
 
-	// Anim Smear
-	if ( m_AnimSmearStartTime > 0.0f ) {
-		const float elapsedTime = g_GlobalTimer.TimeElapsedSeconds() - m_AnimSmearStartTime;
-		if ( elapsedTime > m_AnimSmearDuration ) {
-			m_AnimSmearStartTime = -1.0f;
-				const static kbString smearParam = "smearParams";
-			m_SkelModelsList[1]->SetMaterialParamVector( 0, smearParam.stl_str(), kbVec4::zero );
-		} else {
-			const float strength = 1.0f - kbClamp( elapsedTime / m_AnimSmearDuration, 0.0f, 1.0f );
-			const static kbString smearParam = "smearParams";
-			kbVec4 smearVec = m_AnimSmearVec;
-			smearVec.x *= strength;
-			smearVec.y *= strength;
-			smearVec.z *= strength;
-
-			m_SkelModelsList[1]->SetMaterialParamVector( 0, smearParam.stl_str(), smearVec );
-		}
-	}
 	//		m_AnimSmearStartTime = g_GlobalTimer.TimeElapsedSeconds();
 	//	m_MaxAnimSmearStrength = 1.0f;
 	//	m_AnimSmearDuration = animEventVal;

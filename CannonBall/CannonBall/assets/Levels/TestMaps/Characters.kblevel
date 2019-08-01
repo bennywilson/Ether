@@ -2,7 +2,7 @@ kbGameEntity 0 0 0 0 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		Name = "Entity_20"
+		Name = "Entity_24"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
 		Position = 0.000000 0.000000 0.000000
 		Scale = 1.000000 1.000000 1.000000
@@ -10,8 +10,8 @@ kbGameEntity 0 0 0 0 {
 	kbEditorLevelSettingsComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		MainCameraPosition = -1.965448 2.638126 22.595762
-		MainCameraRotation = -0.016547 0.983444 -0.125397 0.129769
+		MainCameraPosition = -10.307491 2.248667 24.246252
+		MainCameraRotation = -0.087022 -0.852003 0.150101 0.493950
 	}
 }
 kbGameEntity 0 0 0 0 {
@@ -382,7 +382,7 @@ kbGameEntity 0 0 0 0 {
 		LifeTime =  -1.000000
 		Name = "Player"
 		Orientation = 0.000000 -0.998759 0.000000 0.049814
-		Position = -0.000310 0.000000 13.340200
+		Position = -0.000310 0.000000 23.157400
 		Scale = 1.000000 1.000000 1.000000
 	}
 	kbSkeletalModelComponent { 
@@ -406,7 +406,7 @@ kbGameEntity 0 0 0 0 {
 			}
 		RenderPass = LightingPass
 		TranslucencySortBias =  0.000000
-		Animations = 8
+		Animations = 9
 			kbAnimComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
@@ -474,7 +474,7 @@ kbGameEntity 0 0 0 0 {
 				Enabled = 0
 				LifeTime =  -1.000000
 				Animation = .\assets\models\characters\sheep\sheep_cannonball.kbanim.ms3d
-				AnimationEvent = 2
+				AnimationEvent = 4
 					kbAnimEvent { 
 						Enabled = 0
 						LifeTime =  -1.000000
@@ -486,12 +486,36 @@ kbGameEntity 0 0 0 0 {
 						Enabled = 0
 						LifeTime =  -1.000000
 						EventName = "CannonBall_VO"
-						EventTime =  1.000000
+						EventTime =  0.100000
 						EventValue =  0.000000
 					}
+					kbAnimEvent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						EventName = "CannonBall_JumpSmear"
+						EventTime =  0.75
+						EventValue =  0.05
+					}
+					kbAnimEvent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						EventName = "CannonBall_DropSmear"
+						EventTime =  4.5
+						EventValue =  0.05
+					}
+
 				AnimationName = "CannonBall"
 				IsLooping = 0
 				TimeScale =  5.000000
+			}
+			kbAnimComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Animation = .\assets\models\characters\sheep\sheep_cannonballwindup.kbanim.ms3d
+				AnimationEvent = 0
+				AnimationName = "CannonBallWindUp"
+				IsLooping = 0
+				TimeScale =  1.000000
 			}
 		DebugAnimIndex = -1
 		Model = .\assets\models\characters\sheep\sheep.ms3d
@@ -506,7 +530,7 @@ kbGameEntity 0 0 0 0 {
 				LifeTime =  -1.000000
 				CullModeOverride = ShaderDefault
 				Shader = .\assets\shaders\character\characteroutline.kbshader
-				ShaderParams = 2
+				ShaderParams = 3
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
@@ -521,10 +545,17 @@ kbGameEntity 0 0 0 0 {
 						Texture = .\assets\models\characters\sheep\sheep.jpg
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "smearParams"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
 			}
 		RenderPass = Post-LightingPass
 		TranslucencySortBias =  0.000000
-		Animations = 8
+		Animations = 9
 			kbAnimComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
@@ -596,6 +627,15 @@ kbGameEntity 0 0 0 0 {
 				AnimationName = "CannonBall"
 				IsLooping = 0
 				TimeScale =  5.000000
+			}
+			kbAnimComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Animation = .\assets\models\characters\sheep\sheep_cannonballwindup.kbanim.ms3d
+				AnimationEvent = 0
+				AnimationName = "CannonBallWindUp"
+				IsLooping = 0
+				TimeScale =  1.000000
 			}
 		DebugAnimIndex = -1
 		Model = .\assets\models\characters\sheep\sheep.ms3d
@@ -612,7 +652,7 @@ kbGameEntity 0 0 0 0 {
 				LifeTime =  -1.000000
 				Radius =  -1.000000
 				Volume =  1.000000
-				WaveFile = .\assets\test\boom.wav
+				WaveFile = .\assets\sounds\impacts\impact_large_wood.wav
 			}
 		CannonBallVO = 1
 			kbSoundData { 
@@ -620,7 +660,7 @@ kbGameEntity 0 0 0 0 {
 				LifeTime =  -1.000000
 				Radius =  -1.000000
 				Volume =  1.000000
-				WaveFile = .\assets\test\test.wav
+				WaveFile = .\assets\sounds\sheep\sheep_vo_cannonball.wav
 			}
 		MaxRotateSpeed =  15.000000
 		MaxRunSpeed =  3.000000
@@ -733,8 +773,8 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "Camera"
-		Orientation = -0.162460 -0.688191 0.162460 0.688191
-		Position = -3.000310 1.500000 13.340200
+		Orientation = -0.126165 -0.695760 0.126165 0.695760
+		Position = -4.000310 1.500000 23.157400
 		Scale = 1.000000 1.000000 1.000000
 	}
 	CannonCameraComponent { 
@@ -745,7 +785,7 @@ kbGameEntity 0 0 0 0 {
 		FarPlane =  1000.000000
 		MovementMode = Follow
 		NearPlane =  0.250000
-		TargetOffset = -3.000000 1.500000 0.000000
+		TargetOffset = -4.000000 1.500000 0.000000
 	}
 }
 kbGameEntity 0 0 0 0 {
