@@ -86,6 +86,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <None Include="assets\shaders\Basic\unlit.kbShader" />
     <None Include="assets\shaders\Character\CharacterBase.kbShader" />
     <None Include="assets\shaders\Character\characterOutline.kbShader" />
     <None Include="assets\shaders\Environment\environmentBase.kbShader" />

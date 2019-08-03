@@ -34,6 +34,8 @@ private:
 	kbGameEntityPtr								m_CannonBallImpactFX;
 	std::vector<kbSoundData>					m_CannonBallVO;
 	std::vector<kbSoundData>					m_CannonBallImpactSound;
+	float										m_JumpSmearMagnitude;
+	float										m_DropSmearMagnitude;
 
 	// Runtime
 	std::vector<kbSkeletalModelComponent *>		m_SkelModelsList;

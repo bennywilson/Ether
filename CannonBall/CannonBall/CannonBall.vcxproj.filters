@@ -39,6 +39,9 @@
     <None Include="small.ico">
       <Filter>Source\Win</Filter>
     </None>
+    <None Include="assets\shaders\Basic\unlit.kbShader">
+      <Filter>Shaders\Basic</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Shaders">
@@ -58,6 +61,9 @@
     </Filter>
     <Filter Include="Source\Win">
       <UniqueIdentifier>{79a132ad-a0fc-4c2e-abb1-ef8e3a2ed775}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shaders\Basic">
+      <UniqueIdentifier>{e21a0861-7d59-438f-960e-94799d7a6341}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

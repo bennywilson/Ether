@@ -2,7 +2,7 @@ kbGameEntity 0 0 0 0 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		Name = "Entity_22"
+		Name = "Entity_21"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
 		Position = 0.000000 0.000000 0.000000
 		Scale = 1.000000 1.000000 1.000000
@@ -11,7 +11,7 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		MainCameraPosition = 0.839700 1.980368 -1.383773
-		MainCameraRotation = -0.075850 -0.765505 0.091826 0.632310
+		MainCameraRotation = 0.032081 -0.709895 -0.032405 0.702830
 	}
 }
 kbGameEntity 0 0 0 0 {
@@ -661,6 +661,8 @@ kbGameEntity 0 0 0 0 {
 				Volume =  1.000000
 				WaveFile = .\assets\sounds\sheep\sheep_vo_cannonball.wav
 			}
+		DrioSmearMagnitude =  3.000000
+		JumpSmearMagnitude =  3.000000
 		MaxRotateSpeed =  15.000000
 		MaxRunSpeed =  3.000000
 	}
@@ -1193,12 +1195,12 @@ kbGameEntity 0 0 0 0 {
 				Enabled = 0
 				LifeTime =  -1.000000
 				CullModeOverride = ShaderDefault
-				Shader = ..\..\kbengine\assets\shaders\basictexture.kbshader
+				Shader = .\assets\shaders\basic\unlit.kbshader
 				ShaderParams = 1
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
-						ParamName = "shaderTexture"
+						ParamName = "colorTexture"
 						Texture = .\assets\test\checkerboard.jpg
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}

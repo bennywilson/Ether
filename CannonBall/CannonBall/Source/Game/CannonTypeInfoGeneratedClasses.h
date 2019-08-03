@@ -19,6 +19,8 @@ GenerateClass(
 	AddField( "CannonBallImpactFX", KBTYPEINFO_GAMEENTITY, CannonPlayerComponent, m_CannonBallImpactFX, false, "" )
 	AddField( "CannonBallVO", KBTYPEINFO_STRUCT, CannonPlayerComponent, m_CannonBallVO, true, "kbSoundData" )
 	AddField( "CannonBallImpactSound", KBTYPEINFO_STRUCT, CannonPlayerComponent, m_CannonBallImpactSound, true, "kbSoundData" )
+	AddField( "JumpSmearMagnitude", KBTYPEINFO_FLOAT, CannonPlayerComponent, m_MaxRunSpeed, false, "")
+	AddField( "DrioSmearMagnitude", KBTYPEINFO_FLOAT, CannonPlayerComponent, m_MaxRunSpeed, false, "")
 )
 
 GenerateClass(

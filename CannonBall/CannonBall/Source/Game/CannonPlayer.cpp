@@ -19,6 +19,9 @@
 	m_AnimSmearStartTime = -1.0f;
 	m_AnimSmearVec.Set( 0.0f, 0.0f, 0.0f, 0.0f );
 	m_AnimSmearDuration = 0.0f;
+
+	m_JumpSmearMagnitude = -2.0f;
+	m_DropSmearMagnitude = 2.5f;
 }
 
 /**
@@ -58,11 +61,11 @@ void CannonPlayerComponent::OnAnimEvent( const kbAnimEvent & animEvent ) {
 		}
 	} else if ( animEventName == CannonBallJumpSmear ) {
 		m_AnimSmearStartTime = g_GlobalTimer.TimeElapsedSeconds();
-		m_AnimSmearVec.Set( 0.0f, -5.5f, 0.0f, 0.0f );
+		m_AnimSmearVec.Set( 0.0f, m_JumpSmearMagnitude, 0.0f, 0.0f );
 		m_AnimSmearDuration = animEventVal;
 	} else if (animEventName == CannonBallDropSmear) {
 		m_AnimSmearStartTime = g_GlobalTimer.TimeElapsedSeconds();
-		m_AnimSmearVec.Set( 0.0f, 2.5f, 0.0f, 0.0f);
+		m_AnimSmearVec.Set( 0.0f, m_DropSmearMagnitude, 0.0f, 0.0f);
 		m_AnimSmearDuration = animEventVal;
 	}
 }

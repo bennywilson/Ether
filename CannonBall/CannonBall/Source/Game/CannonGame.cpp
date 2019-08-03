@@ -40,8 +40,6 @@ CannonGame::~CannonGame() {
 	g_pCannonGame = nullptr;
 }
 
-kbRenderObject crossHair;
-
 /**
  *	CannonGame::PlayGame_Internal
  */
