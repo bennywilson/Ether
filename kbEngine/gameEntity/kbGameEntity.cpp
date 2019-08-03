@@ -272,8 +272,13 @@ kbGameEntity::kbGameEntity( const kbGameEntity * pGameEntity, const bool bIsPref
  *	kbGameEntity::~kbGameEntity
  */
 kbGameEntity::~kbGameEntity() {
+
+	// Disable components first so they can clean up any cross references before destruction
+	for (int i = 0; i < m_Components.size(); i++) {
+		m_Components[i]->Enable(false);
+	}
+
 	for ( int i = 0; i < m_Components.size(); i++ ) {
-		m_Components[i]->Enable( false );
 		delete m_Components[i];
 	}
 
