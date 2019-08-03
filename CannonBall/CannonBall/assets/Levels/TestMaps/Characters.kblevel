@@ -2,7 +2,7 @@ kbGameEntity 0 0 0 0 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		Name = "Entity_24"
+		Name = "Entity_22"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
 		Position = 0.000000 0.000000 0.000000
 		Scale = 1.000000 1.000000 1.000000
@@ -10,8 +10,8 @@ kbGameEntity 0 0 0 0 {
 	kbEditorLevelSettingsComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		MainCameraPosition = -10.307491 2.248667 24.246252
-		MainCameraRotation = -0.087022 -0.852003 0.150101 0.493950
+		MainCameraPosition = 0.839700 1.980368 -1.383773
+		MainCameraRotation = -0.075850 -0.765505 0.091826 0.632310
 	}
 }
 kbGameEntity 0 0 0 0 {
@@ -150,7 +150,7 @@ kbGameEntity 0 0 0 0 {
 		Model = .\assets\models\characters\snolaf\snolaf.ms3d
 	}
 	kbSkeletalModelComponent { 
-		Enabled = 1
+		Enabled = 0
 		LifeTime =  -1.000000
 		CastsShadow = 0
 		Materials = 1
@@ -268,7 +268,7 @@ kbGameEntity 0 0 0 0 {
 		Model = .\assets\models\characters\sheep\sheep.ms3d
 	}
 	kbSkeletalModelComponent { 
-		Enabled = 1
+		Enabled = 0
 		LifeTime =  -1.000000
 		CastsShadow = 0
 		Materials = 1
@@ -493,17 +493,16 @@ kbGameEntity 0 0 0 0 {
 						Enabled = 0
 						LifeTime =  -1.000000
 						EventName = "CannonBall_JumpSmear"
-						EventTime =  0.75
-						EventValue =  0.05
+						EventTime =  0.750000
+						EventValue =  0.050000
 					}
 					kbAnimEvent { 
 						Enabled = 0
 						LifeTime =  -1.000000
 						EventName = "CannonBall_DropSmear"
-						EventTime =  4.5
-						EventValue =  0.05
+						EventTime =  4.450000
+						EventValue =  0.050000
 					}
-
 				AnimationName = "CannonBall"
 				IsLooping = 0
 				TimeScale =  5.000000
@@ -823,7 +822,7 @@ kbGameEntity 0 0 0 0 {
 		Model = .\assets\models\characters\snolaf\snolaf.ms3d
 	}
 	kbSkeletalModelComponent { 
-		Enabled = 1
+		Enabled = 0
 		LifeTime =  -1.000000
 		CastsShadow = 0
 		Materials = 1
@@ -984,7 +983,7 @@ kbGameEntity 0 0 0 0 {
 		Model = .\assets\models\characters\sheep\sheep.ms3d
 	}
 	kbSkeletalModelComponent { 
-		Enabled = 1
+		Enabled = 0
 		LifeTime =  -1.000000
 		CastsShadow = 0
 		Materials = 1
@@ -1069,7 +1068,7 @@ kbGameEntity 0 0 0 0 {
 		Model = .\assets\models\characters\snolaf\snolaf.ms3d
 	}
 	kbSkeletalModelComponent { 
-		Enabled = 1
+		Enabled = 0
 		LifeTime =  -1.000000
 		CastsShadow = 0
 		Materials = 1
@@ -1200,7 +1199,7 @@ kbGameEntity 0 0 0 0 {
 						Enabled = 0
 						LifeTime =  -1.000000
 						ParamName = "shaderTexture"
-						Texture = .\assets\test\bluesky_basic.bmp
+						Texture = .\assets\test\checkerboard.jpg
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 			}
