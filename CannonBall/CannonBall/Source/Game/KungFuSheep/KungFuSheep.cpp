@@ -18,17 +18,20 @@ class KungFuSheepStateIdle : public KungFuSheepStateBase<T> {
 
 //---------------------------------------------------------------------------------------------------'
 public:
-	KungFuSheepStateIdle();
+	KungFuSheepStateIdle( KungFuSheepComponent *const pPlayerComponent ) : KungFuSheepStateBase( pPlayerComponent ) { }
 
-	virtual void BeginState( const KungFuSheepState::SheepStates_t previousState ) override {
-	
+	virtual void BeginState( T ) override {
+
+		static const kbString IdleR_Anim( "IdleRight_Basic" );
+
+		PlayAnimation( IdleR_Anim );
 	}
 
 	virtual void UpdateState() {
-	
+
 	}
 
-	virtual void EndState( const KungFuSheepState::SheepStates_t nextState ) {
+	virtual void EndState( T ) {
 	
 	}
 };
@@ -41,7 +44,7 @@ class KungFuSheepStateRun : public KungFuSheepStateBase<T> {
 
 //---------------------------------------------------------------------------------------------------'
 public:
-	KungFuSheepStateRun();
+	KungFuSheepStateRun( KungFuSheepComponent *const pPlayerComponent ) : KungFuSheepStateBase( pPlayerComponent ) { }
 
 };
 
@@ -53,7 +56,7 @@ class KungFuSheepStateAttack : public KungFuSheepStateBase<T> {
 
 //---------------------------------------------------------------------------------------------------'
 public:
-	KungFuSheepStateAttack();
+	KungFuSheepStateAttack( KungFuSheepComponent *const pPlayerComponent ) : KungFuSheepStateBase( pPlayerComponent ) { }
 };
 
 /**
@@ -64,7 +67,7 @@ class KungFuSheepStateHugged : public KungFuSheepStateBase<T> {
 
 //---------------------------------------------------------------------------------------------------'
 public:
-	KungFuSheepStateHugged();
+	KungFuSheepStateHugged( KungFuSheepComponent *const pPlayerComponent ) : KungFuSheepStateBase( pPlayerComponent ) { }
 };
 
 /**
@@ -75,7 +78,7 @@ class KungFuSheepStateDead : public KungFuSheepStateBase<T> {
 
 //---------------------------------------------------------------------------------------------------'
 public:
-	KungFuSheepStateDead();
+	KungFuSheepStateDead( KungFuSheepComponent *const pPlayerComponent ) : KungFuSheepStateBase( pPlayerComponent ) { }
 };
 
 /**
@@ -86,7 +89,7 @@ class KungFuSheepStateCannonBall : public KungFuSheepStateBase<T> {
 
 //---------------------------------------------------------------------------------------------------'
 public:
-	KungFuSheepStateCannonBall();
+	KungFuSheepStateCannonBall( KungFuSheepComponent *const pPlayerComponent ) : KungFuSheepStateBase( pPlayerComponent ) { }
 };
 
 
@@ -111,17 +114,26 @@ void KungFuSheepComponent::SetEnable_Internal( const bool bEnable ) {
 			m_SkelModelsList[1]->SetMaterialParamVector( 0, smearParam.stl_str(), kbVec4::zero );
 		}
 
-		KungFuSheepStateIdle<KungFuSheepState::SheepStates_t> * const idleState = new KungFuSheepStateIdle<KungFuSheepState::SheepStates_t>();
 		KungFuSheepStateBase<KungFuSheepState::SheepStates_t> * sheepStates[] = {
-			new KungFuSheepStateIdle<KungFuSheepState::SheepStates_t>(),
-			new KungFuSheepStateRun<KungFuSheepState::SheepStates_t>(),
-			new KungFuSheepStateAttack<KungFuSheepState::SheepStates_t>(),
-			new KungFuSheepStateHugged<KungFuSheepState::SheepStates_t>(),
-			new KungFuSheepStateDead<KungFuSheepState::SheepStates_t>(),
-			new KungFuSheepStateCannonBall<KungFuSheepState::SheepStates_t>()
+			new KungFuSheepStateIdle<KungFuSheepState::SheepStates_t>( this ),
+			new KungFuSheepStateRun<KungFuSheepState::SheepStates_t>( this ),
+			new KungFuSheepStateAttack<KungFuSheepState::SheepStates_t>( this ),
+			new KungFuSheepStateHugged<KungFuSheepState::SheepStates_t>( this ),
+			new KungFuSheepStateDead<KungFuSheepState::SheepStates_t>( this ),
+			new KungFuSheepStateCannonBall<KungFuSheepState::SheepStates_t>( this )
 		};
 
 		InitializeStates( sheepStates );
+	}
+}
+
+/**
+*	KungFuSheepComponent::OnAnimEvent
+*/
+void KungFuSheepComponent::PlayAnimation( const kbString animationName ) {
+	for ( int i = 0; i < m_SkelModelsList.size(); i++ ) {
+		kbSkeletalModelComponent *const pSkelModel = m_SkelModelsList[i];
+		pSkelModel->PlayAnimation( animationName, 0.05f, false, kbString::EmptyString, 0.01f );
 	}
 }
 

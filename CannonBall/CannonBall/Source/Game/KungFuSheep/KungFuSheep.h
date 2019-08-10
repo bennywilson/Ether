@@ -37,8 +37,6 @@ class KungFuSheepComponent : public CannonPlayerComponent, IStateMachine<KungFuS
 //---------------------------------------------------------------------------------------------------'
 public:
 
-	virtual void								HandleInput(const kbInput_t & input, const float DT) override;
-
 	// IAnimEventListener
 	virtual void								OnAnimEvent(const kbAnimEvent & animEvent) override;
 
@@ -49,9 +47,7 @@ protected:
 
 private:
 
-	void										PlayAnimation() {
-
-	}
+	void										PlayAnimation( const kbString animationName );
 
 	// Data
 	kbGameEntityPtr								m_CannonBallImpactFX;
@@ -70,23 +66,21 @@ private:
 template<typename T>
 class KungFuSheepStateBase : public StateMachineNode<T> {
 
-	template<KungFuSheepState::SheepStates_t>
-	class KungFuSheepComponent;
-
 //---------------------------------------------------------------------------------------------------'
 public:
 
 	
-	KungFuSheepStateBase( const KungFuSheepComponent *const pPlayerComponent ) : m_pPlayerComponent( pPlayerComponent ) { }
+	KungFuSheepStateBase( KungFuSheepComponent *const pPlayerComponent ) : m_pPlayerComponent( pPlayerComponent ) { }
 
-	void PlayAnimation() {
-		kbErrorCheck( m_pPlayerComponent != null, "KungFuSheepStateBase::PlayAnimation() - NULL player component" );
-		m_pPlayerComponent->PlayAnimation();
+protected:
+
+	void PlayAnimation( const kbString animationName ) {
+		kbErrorCheck( m_pPlayerComponent != nullptr, "KungFuSheepStateBase::PlayAnimation() - NULL player component" );
+		m_pPlayerComponent->PlayAnimation( animationName );
 	}
 
 private:
 
-	//template<KungFuSheepState::SheepStates_t T>
 	KungFuSheepComponent * m_pPlayerComponent;
 };
 

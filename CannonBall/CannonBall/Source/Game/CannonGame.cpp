@@ -157,10 +157,6 @@ void CannonGame::ProcessInput( const float DT ) {
 		ShowCursor( false );
 		bFirstRun = false;
 	}
-
-	if ( m_pPlayerComp != nullptr ) {
-		m_pPlayerComp->HandleInput( GetInput(), DT );
-	}
 }
 
 /**
@@ -217,9 +213,9 @@ void CannonGame::HackEditorUpdate( const float DT, kbCamera *const pEditorCam ) 
 
 	m_InputManager.Update( DT );
 
-	if ( m_pPlayerComp != nullptr ) {
+	/*if ( m_pPlayerComp != nullptr ) {
 		m_pPlayerComp->HandleInput( m_InputManager.GetInput(), DT );
-	}
+	}*/
 
 	if ( m_pMainCamera != nullptr && pEditorCam != nullptr ) {
 		pEditorCam->m_Position = m_pMainCamera->GetOwnerPosition();

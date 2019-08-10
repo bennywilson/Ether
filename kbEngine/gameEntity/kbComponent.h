@@ -297,7 +297,7 @@ public:
 	virtual void UpdateState() { }
 	virtual void EndState( const StateEnum nextState ) { }
 
-	bool HasStateChangeRequest() const { return m_bHasStateChangeRequest }
+	bool HasStateChangeRequest() const { return m_bHasStateChangeRequest; }
 	StateEnum GetAndClearRequestedStateChange() { m_bHasStateChangeRequest = false; return m_RequestedState; }
 
 protected:

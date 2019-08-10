@@ -16,8 +16,6 @@ class CannonPlayerComponent : public kbActorComponent, IAnimEventListener {
 //---------------------------------------------------------------------------------------------------
 public:
 
-	virtual void								HandleInput( const kbInput_t & input, const float DT ) { }
-
 	// IAnimEventListener
 	virtual void								OnAnimEvent( const kbAnimEvent & animEvent ) { }
 
