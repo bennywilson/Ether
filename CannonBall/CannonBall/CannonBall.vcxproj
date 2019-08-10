@@ -98,6 +98,7 @@
     <ClInclude Include="Source\Game\CannonGame.h" />
     <ClInclude Include="Source\Game\CannonPlayer.h" />
     <ClInclude Include="Source\Game\CannonTypeInfoGeneratedClasses.h" />
+    <ClInclude Include="Source\Game\KungFuSheep\KungFuSheep.h" />
     <ClInclude Include="Source\Win\CannonBall.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
@@ -106,6 +107,7 @@
     <ClCompile Include="Source\Game\CannonGame.cpp" />
     <ClCompile Include="Source\Game\CannonPlayer.cpp" />
     <ClCompile Include="Source\Game\CannonTypeInfoGeneratedClasses.cpp" />
+    <ClCompile Include="Source\Game\KungFuSheep\KungFuSheep.cpp" />
     <ClCompile Include="Source\Win\CannonBall.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>

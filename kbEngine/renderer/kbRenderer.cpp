@@ -282,6 +282,8 @@ void kbRenderer::Shutdown() {
 	delete m_pRenderJob;
 	m_pRenderJob = nullptr;
 
+	g_pRenderer = nullptr;
+
 	for ( int i = 0; i < m_pRenderTargets.size(); i++) {
 		m_pRenderTargets[i]->Release();
 	}

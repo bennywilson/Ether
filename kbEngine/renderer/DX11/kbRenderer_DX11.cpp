@@ -1087,6 +1087,8 @@ void kbRenderer_DX11::ReturnRenderTexture_Internal( const kbRenderTexture *const
  */
 void kbRenderer_DX11::Shutdown_Internal() {
 
+	g_pD3D11Renderer = nullptr;
+
 	for ( int i = 0; i < Max_Num_Textures; i++ ) {
 		if ( m_pTextures[i] != nullptr ) {
 			m_pTextures[i]->Release();

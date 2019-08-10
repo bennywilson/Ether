@@ -6,7 +6,6 @@
 #ifndef _KBCANNONPLAYER_H_
 #define _KBCANNONPLAYER_H_
 
-
 /**
  *	CannonPlayerComponent
  */
@@ -16,33 +15,23 @@ class CannonPlayerComponent : public kbActorComponent, IAnimEventListener {
 
 //---------------------------------------------------------------------------------------------------
 public:
-	void										HandleInput( const kbInput_t & input, const float DT );
+
+	virtual void								HandleInput( const kbInput_t & input, const float DT ) { }
 
 	// IAnimEventListener
-	virtual void								OnAnimEvent( const kbAnimEvent & animEvent );
+	virtual void								OnAnimEvent( const kbAnimEvent & animEvent ) { }
 
 protected:
 
 	virtual void								SetEnable_Internal( const bool bEnable ) override;
 	virtual void								Update_Internal( const float DeltaTime ) override;
 
-private:
-
 	// Data
 	float										m_MaxRunSpeed;
 	float										m_MaxRotateSpeed;
-	kbGameEntityPtr								m_CannonBallImpactFX;
-	std::vector<kbSoundData>					m_CannonBallVO;
-	std::vector<kbSoundData>					m_CannonBallImpactSound;
-	float										m_JumpSmearMagnitude;
-	float										m_DropSmearMagnitude;
 
-	// Runtime
+	// Game
 	std::vector<kbSkeletalModelComponent *>		m_SkelModelsList;
-
-	float										m_AnimSmearStartTime;
-	float										m_AnimSmearDuration;
-	kbVec4										m_AnimSmearVec;
 };
 
 /**
@@ -99,10 +88,11 @@ private:
 	// Editor
 	float										m_NearPlane;
 	float										m_FarPlane;
+	kbVec3										m_PositionOffset;
+	kbVec3										m_LookAtOffset;
 
 	// Game
 	ECameraMoveMode								m_MoveMode;
-	kbVec3										m_Offset;
 	const kbGameEntity *						m_pTarget;
 
 	float										m_CameraShakeStartTime;
@@ -111,5 +101,6 @@ private:
 	kbVec2										m_CameraShakeAmplitude;
 	kbVec2										m_CameraShakeFrequency;
 };
+
 
 #endif

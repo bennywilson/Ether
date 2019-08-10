@@ -380,7 +380,9 @@ void kbEditor::Update() {
 	}
 
 	// Wait for rendering to complete, sync up any game objects that need it and kick off a new scene to render
-	g_pRenderer->WaitForRenderingToComplete();
+	if ( g_pRenderer != nullptr) {
+		g_pRenderer->WaitForRenderingToComplete();
+	}
 
 	// Update editor entities and components
 	for ( int i = 0; i < m_GameEntities.size(); i++ ) {

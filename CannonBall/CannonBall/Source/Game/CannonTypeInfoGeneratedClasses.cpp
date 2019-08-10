@@ -5,6 +5,7 @@
 #include "kbComponent.h"
 #include "CannonGame.h"
 #include "CannonPlayer.h"
+#include "KungFuSheep/KungFuSheep.h"
 #include "CannonTypeInfoGeneratedClasses.h"
 
 using namespace std;
@@ -18,6 +19,8 @@ ELevelType_Enum ELevelType_EnumClass;
 ECameraMoveMode_Enum ECameraMoveMode_EnumClass;
 
 DEFINE_KBCLASS(CannonPlayerComponent)
+
+DEFINE_KBCLASS(KungFuSheepComponent)
 
 DEFINE_KBCLASS(CannonCameraComponent)
 

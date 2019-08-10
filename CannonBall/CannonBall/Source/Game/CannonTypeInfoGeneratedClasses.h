@@ -16,11 +16,15 @@ GenerateClass(
 	CannonPlayerComponent,
 	AddField( "MaxRunSpeed", KBTYPEINFO_FLOAT, CannonPlayerComponent, m_MaxRunSpeed, false, "" )
 	AddField( "MaxRotateSpeed", KBTYPEINFO_FLOAT, CannonPlayerComponent, m_MaxRotateSpeed, false, "" )
-	AddField( "CannonBallImpactFX", KBTYPEINFO_GAMEENTITY, CannonPlayerComponent, m_CannonBallImpactFX, false, "" )
-	AddField( "CannonBallVO", KBTYPEINFO_STRUCT, CannonPlayerComponent, m_CannonBallVO, true, "kbSoundData" )
-	AddField( "CannonBallImpactSound", KBTYPEINFO_STRUCT, CannonPlayerComponent, m_CannonBallImpactSound, true, "kbSoundData" )
-	AddField( "JumpSmearMagnitude", KBTYPEINFO_FLOAT, CannonPlayerComponent, m_MaxRunSpeed, false, "")
-	AddField( "DrioSmearMagnitude", KBTYPEINFO_FLOAT, CannonPlayerComponent, m_MaxRunSpeed, false, "")
+)
+
+GenerateClass(
+	KungFuSheepComponent,
+	AddField("CannonBallImpactFX", KBTYPEINFO_GAMEENTITY, KungFuSheepComponent, m_CannonBallImpactFX, false, "")
+	AddField("CannonBallVO", KBTYPEINFO_STRUCT, KungFuSheepComponent, m_CannonBallVO, true, "kbSoundData")
+	AddField("CannonBallImpactSound", KBTYPEINFO_STRUCT, KungFuSheepComponent, m_CannonBallImpactSound, true, "kbSoundData")
+	AddField("JumpSmearMagnitude", KBTYPEINFO_FLOAT, KungFuSheepComponent, m_JumpSmearMagnitude, false, "")
+	AddField("DropSmearMagnitude", KBTYPEINFO_FLOAT, KungFuSheepComponent, m_DropSmearMagnitude, false, "")
 )
 
 GenerateClass(
@@ -28,7 +32,8 @@ GenerateClass(
 	AddField( "NearPlane", KBTYPEINFO_FLOAT, CannonCameraComponent, m_NearPlane, false, "" )
 	AddField( "FarPlane", KBTYPEINFO_FLOAT, CannonCameraComponent, m_FarPlane, false, "" )
 	AddField( "MovementMode", KBTYPEINFO_ENUM, CannonCameraComponent, m_MoveMode, false, "ECameraMoveMode" )
-	AddField( "TargetOffset", KBTYPEINFO_VECTOR, CannonCameraComponent, m_Offset, false, "" )
+	AddField( "PositionOffset", KBTYPEINFO_VECTOR, CannonCameraComponent, m_PositionOffset, false, "" )
+	AddField( "LookAtOffset", KBTYPEINFO_VECTOR, CannonCameraComponent, m_LookAtOffset, false, "" )
 )
 
 GenerateClass(

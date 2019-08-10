@@ -2,7 +2,7 @@ kbGameEntity 0 0 0 0 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		Name = "Entity_21"
+		Name = "Entity_18"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
 		Position = 0.000000 0.000000 0.000000
 		Scale = 1.000000 1.000000 1.000000
@@ -10,8 +10,8 @@ kbGameEntity 0 0 0 0 {
 	kbEditorLevelSettingsComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		MainCameraPosition = 0.839700 1.980368 -1.383773
-		MainCameraRotation = 0.032081 -0.709895 -0.032405 0.702830
+		MainCameraPosition = -4.000311 2.350000 15.034235
+		MainCameraRotation = -0.030848 -0.706434 0.030848 0.706434
 	}
 }
 kbGameEntity 0 0 0 0 {
@@ -382,7 +382,7 @@ kbGameEntity 0 0 0 0 {
 		LifeTime =  -1.000000
 		Name = "Player"
 		Orientation = 0.000000 -0.998759 0.000000 0.049814
-		Position = -0.000310 0.000000 23.157400
+		Position = -0.000311 0.000000 15.034235
 		Scale = 1.000000 1.000000 1.000000
 	}
 	kbSkeletalModelComponent { 
@@ -441,7 +441,7 @@ kbGameEntity 0 0 0 0 {
 				AnimationEvent = 0
 				AnimationName = "PunchLeft_Basic"
 				IsLooping = 0
-				TimeScale =  10.000000
+				TimeScale =  15.000000
 			}
 			kbAnimComponent { 
 				Enabled = 0
@@ -450,7 +450,7 @@ kbGameEntity 0 0 0 0 {
 				AnimationEvent = 0
 				AnimationName = "KickLeft_Basic"
 				IsLooping = 0
-				TimeScale =  10.000000
+				TimeScale =  15.000000
 			}
 			kbAnimComponent { 
 				Enabled = 0
@@ -459,7 +459,7 @@ kbGameEntity 0 0 0 0 {
 				AnimationEvent = 0
 				AnimationName = "PunchRight_Basic"
 				IsLooping = 0
-				TimeScale =  10.000000
+				TimeScale =  15.000000
 			}
 			kbAnimComponent { 
 				Enabled = 0
@@ -468,7 +468,7 @@ kbGameEntity 0 0 0 0 {
 				AnimationEvent = 0
 				AnimationName = "KickRight_Basic"
 				IsLooping = 0
-				TimeScale =  10.000000
+				TimeScale =  15.000000
 			}
 			kbAnimComponent { 
 				Enabled = 0
@@ -589,7 +589,7 @@ kbGameEntity 0 0 0 0 {
 				AnimationEvent = 0
 				AnimationName = "PunchLeft_Basic"
 				IsLooping = 0
-				TimeScale =  10.000000
+				TimeScale =  15.000000
 			}
 			kbAnimComponent { 
 				Enabled = 0
@@ -598,7 +598,7 @@ kbGameEntity 0 0 0 0 {
 				AnimationEvent = 0
 				AnimationName = "KickLeft_Basic"
 				IsLooping = 0
-				TimeScale =  10.000000
+				TimeScale =  15.000000
 			}
 			kbAnimComponent { 
 				Enabled = 0
@@ -607,7 +607,7 @@ kbGameEntity 0 0 0 0 {
 				AnimationEvent = 0
 				AnimationName = "PunchRight_Basic"
 				IsLooping = 0
-				TimeScale =  10.000000
+				TimeScale =  15.000000
 			}
 			kbAnimComponent { 
 				Enabled = 0
@@ -616,7 +616,7 @@ kbGameEntity 0 0 0 0 {
 				AnimationEvent = 0
 				AnimationName = "KickRight_Basic"
 				IsLooping = 0
-				TimeScale =  10.000000
+				TimeScale =  15.000000
 			}
 			kbAnimComponent { 
 				Enabled = 0
@@ -639,11 +639,13 @@ kbGameEntity 0 0 0 0 {
 		DebugAnimIndex = -1
 		Model = .\assets\models\characters\sheep\sheep.ms3d
 	}
-	CannonPlayerComponent { 
+	KungFuSheepComponent { 
 		Enabled = 1
 		LifeTime =  -1.000000
 		DummyTemp = 0
 		Health =  10.000000
+		MaxRotateSpeed =  15.000000
+		MaxRunSpeed =  3.000000
 		CannonBallImpactFX = 846208613 1165520682 3641600641 3993117100
 		CannonBallImpactSound = 1
 			kbSoundData { 
@@ -661,10 +663,8 @@ kbGameEntity 0 0 0 0 {
 				Volume =  1.000000
 				WaveFile = .\assets\sounds\sheep\sheep_vo_cannonball.wav
 			}
-		DrioSmearMagnitude =  3.000000
-		JumpSmearMagnitude =  3.000000
-		MaxRotateSpeed =  15.000000
-		MaxRunSpeed =  3.000000
+		DropSmearMagnitude =  2.500000
+		JumpSmearMagnitude =  -2.500000
 	}
 }
 kbGameEntity 0 0 0 0 {
@@ -774,8 +774,8 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "Camera"
-		Orientation = -0.126165 -0.695760 0.126165 0.695760
-		Position = -4.000310 1.500000 23.157400
+		Orientation = -0.030848 -0.706434 0.030848 0.706434
+		Position = -4.000311 2.350000 15.034235
 		Scale = 1.000000 1.000000 1.000000
 	}
 	CannonCameraComponent { 
@@ -784,9 +784,10 @@ kbGameEntity 0 0 0 0 {
 		DummyTemp = 0
 		Health =  10.000000
 		FarPlane =  1000.000000
+		LookAtOffset = 0.000000 2.000000 0.000000
 		MovementMode = Follow
 		NearPlane =  0.250000
-		TargetOffset = -4.000000 1.500000 0.000000
+		PositionOffset = -4.000000 2.350000 0.000000
 	}
 }
 kbGameEntity 0 0 0 0 {
@@ -1208,85 +1209,5 @@ kbGameEntity 0 0 0 0 {
 		RenderPass = Post-LightingPass
 		TranslucencySortBias =  0.000000
 		Model = ..\..\kbengine\assets\models\editor\invertedcube.ms3d
-	}
-}
-kbGameEntity 0 0 0 0 {
-	kbTransformComponent { 
-		Enabled = 0
-		LifeTime =  -1.000000
-		Name = "Entity_17"
-		Orientation = 0.000000 0.000000 0.000000 1.000000
-		Position = -3.110427 1.225072 14.286218
-		Scale = 1.000000 1.000000 1.000000
-	}
-	kbParticleComponent { 
-		Enabled = 1
-		LifeTime =  -1.000000
-		Name = "d"
-		Orientation = 0.000000 0.000000 0.000000 1.000000
-		Position = 0.000000 0.000000 0.000000
-		Scale = 0.100000 0.100000 0.100000
-		AlphaOverLife = 0
-		ColorOverLife = 0
-		EndColor = 1.000000 1.000000 1.000000 1.000000
-		Gravity = 0.000000 -1.000000 0.000000
-		MaterialList = 1
-			kbMaterialComponent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				CullModeOverride = ShaderDefault
-				Shader = ..\..\kbengine\assets\shaders\basicparticle.kbshader
-				ShaderParams = 1
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "shaderTexture"
-						Texture = ..\..\kbengine\assets\textures\flare.jpg
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-			}
-		MaxBurstCount = 35
-		MaxDuration =  1.000000
-		MaxEndRotationRate =  0.000000
-		MaxEndSize = 5.700000 5.700000 5.700000
-		MaxEndVelocity = 0.000000 0.000000 0.000000
-		MaxSpawnRate =  0.000000
-		MaxStart3DOffset = 0.000000 0.000000 0.000000
-		MaxStart3DRotation = 0.000000 0.000000 0.000000
-		MaxStartRotationRate =  0.000000
-		MaxStartSize = 5.500000 5.500000 5.500000
-		MaxStartVelocity = 2.000000 0.750000 2.000000
-		MinBurstCount = 25
-		MinDuration =  0.500000
-		MinEndRotationRate =  0.000000
-		MinEndSize = 5.500000 5.500000 5.500000
-		MinEndVelocity = 0.000000 10.000000 0.000000
-		MinSpawnRate =  0.000000
-		MinStart3DOffset = 0.000000 0.000000 0.000000
-		MinStart3DRotation = 0.000000 0.000000 0.000000
-		MinStartRotationRate =  0.000000
-		MinStartSize = 5.000000 5.000000 5.000000
-		MinStartVelocity = -2.000000 0.500000 -2.000000
-		ModelEmitter = 0
-		ParticleBillboardType = FaceCamera
-		StartColor = 1.000000 1.000000 1.000000 1.000000
-		StartDelay =  0.000000
-		TotalDuration =  3.000000
-		TranslucencySortBias =  0.000000
-		VelocityCurve = 2
-			kbAnimEvent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				EventName = ""
-				EventTime =  0.000000
-				EventValue =  5.000000
-			}
-			kbAnimEvent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				EventName = ""
-				EventTime =  0.250000
-				EventValue =  1.000000
-			}
 	}
 }
