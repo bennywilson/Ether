@@ -16,8 +16,8 @@ class CannonPlayerComponent : public kbActorComponent, IAnimEventListener {
 //---------------------------------------------------------------------------------------------------
 public:
 
-	// IAnimEventListener
-	virtual void								OnAnimEvent( const kbAnimEvent & animEvent ) { }
+	float										GetMaxRunSpeed() const { return m_MaxRunSpeed; }
+	float										GetMaxRotateSpeed() const { return m_MaxRotateSpeed; }
 
 protected:
 
@@ -30,6 +30,10 @@ protected:
 
 	// Game
 	std::vector<kbSkeletalModelComponent *>		m_SkelModelsList;
+
+//---------------------------------------------------------------------------------------------------
+	// IAnimEventListener
+	virtual void								OnAnimEvent( const kbAnimEvent & animEvent ) { }
 };
 
 /**

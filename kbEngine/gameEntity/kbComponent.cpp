@@ -236,6 +236,20 @@ kbQuat kbGameComponent::GetOwnerRotation() const {
 }
 
 /**
+ *	kbGameComponent::SetOwnerPosition
+ */
+void kbGameComponent::SetOwnerPosition( const kbVec3 & position ) {
+	GetOwner()->SetPosition( position );
+}
+
+/**
+ *	kbGameComponent::SetOwnerRotation
+ */
+void kbGameComponent::SetOwnerRotation( const kbQuat & rotation ) {
+	GetOwner()->SetOrientation( rotation );
+}
+
+/**
  *	kbTransformComponent::Constructor
  */
 void kbTransformComponent::Constructor() {

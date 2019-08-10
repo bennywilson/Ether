@@ -99,6 +99,9 @@ public:
 	kbString									GetOwnerName() const;
 	kbVec3										GetOwnerPosition() const;
 	kbQuat										GetOwnerRotation() const;
+	
+	void										SetOwnerPosition( const kbVec3 & position );
+	void										SetOwnerRotation( const kbQuat & rotation );
 
 	float										GetStartingLifeTime() const { return m_StartingLifeTime; }
 	float										GetLifeTimeRemaining() const { return m_LifeTimeRemaining; }
@@ -302,7 +305,7 @@ public:
 
 protected:
 
-	void RequestStateChange( const StateEnum state ) { m_bHasStateChangeRequest = true, m_RequestedState = requestedState; }
+	void RequestStateChange( const StateEnum requestedState ) { m_bHasStateChangeRequest = true, m_RequestedState = requestedState; }
 
 private:
 
@@ -329,7 +332,7 @@ public:
 	void UpdateStateMachine() {
 
 		// This condition is valid if state hasn't been set yet
-		if ( m_CurrentState <= StateEnum::NumStates ) {
+		if ( m_CurrentState >= StateEnum::NumStates ) {
 			return;
 		}
 
@@ -359,9 +362,8 @@ protected:
 
 		for ( int i = 0; i < StateEnum::NumStates; i++ ) {
 			delete m_States[i];
+			m_States[i] = stateNodes[i];
 		}
-
-		memcpy( m_States, stateNodes, sizeof( stateNodes ) );
 	}
 
 	void RequestStateChange( const StateEnum newState ) {

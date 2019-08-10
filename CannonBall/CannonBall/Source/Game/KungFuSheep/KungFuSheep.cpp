@@ -10,9 +10,12 @@
 #include "kbEditor.h"
 #include "kbEditorEntity.h"
 
+
 /**
  *	KungFuSheepStateIdle
  */
+kbVec3 g_LeftFacing( -0.01f, 0.0f, -1.0f );
+kbVec3 g_RightFacing( -0.01f, 0.0f, 1.0f );
 template<typename T>
 class KungFuSheepStateIdle : public KungFuSheepStateBase<T> {
 
@@ -22,16 +25,34 @@ public:
 
 	virtual void BeginState( T ) override {
 
+		static const kbString IdleL_Anim( "IdleLeft_Basic" );
 		static const kbString IdleR_Anim( "IdleRight_Basic" );
 
-		PlayAnimation( IdleR_Anim );
+		const kbVec3 & targetDir = m_pPlayerComponent->GetTargetFacingDirection();
+		if ( targetDir.z < 0.0f ) {
+			PlayAnimation( IdleL_Anim, 0.05f );
+		} else {
+			PlayAnimation( IdleR_Anim, 0.05f );
+		}
 	}
 
-	virtual void UpdateState() {
+	virtual void UpdateState() override {
+		const kbInput_t & input = g_pInputManager->GetInput();
 
+		if ( input.IsKeyPressedOrDown( 'C' ) ) {
+			RequestStateChange( KungFuSheepState::CannonBall );
+		} else if ( input.IsKeyPressedOrDown( 'A' ) ) {
+			RequestStateChange( KungFuSheepState::Run );
+			m_pPlayerComponent->SetTargetFacingDirection( g_LeftFacing );
+			
+		} else if ( input.IsKeyPressedOrDown( 'D' ) ) {
+			RequestStateChange( KungFuSheepState::Run );
+			m_pPlayerComponent->SetTargetFacingDirection( g_RightFacing );
+
+		}
 	}
 
-	virtual void EndState( T ) {
+	virtual void EndState( T ) override {
 	
 	}
 };
@@ -46,6 +67,50 @@ class KungFuSheepStateRun : public KungFuSheepStateBase<T> {
 public:
 	KungFuSheepStateRun( KungFuSheepComponent *const pPlayerComponent ) : KungFuSheepStateBase( pPlayerComponent ) { }
 
+	virtual void BeginState( T ) override {
+
+		static const kbString Run_Anim( "Run_Basic" );
+		PlayAnimation( Run_Anim, 0.05f );
+	}
+
+	virtual void UpdateState() override {
+		const kbInput_t & input = g_pInputManager->GetInput();
+
+		const float frameDT = g_pGame->GetFrameDT();
+		const kbVec3 & targetDir = m_pPlayerComponent->GetTargetFacingDirection();
+
+		if ( input.IsKeyPressedOrDown( 'C' ) ) {
+			RequestStateChange( KungFuSheepState::CannonBall );
+		} else if ( targetDir.z < 0.0f ) {
+			if ( input.IsKeyPressedOrDown( 'A' ) ) {
+				
+				const kbVec3 targetPos = m_pPlayerComponent->GetOwnerPosition() - targetDir * frameDT * m_pPlayerComponent->GetMaxRunSpeed();
+				m_pPlayerComponent->SetOwnerPosition( targetPos );
+
+			} else if ( input.IsKeyPressedOrDown( 'D' ) ) {
+				m_pPlayerComponent->SetTargetFacingDirection( g_RightFacing );
+			} else {
+				RequestStateChange( KungFuSheepState::Idle );
+			}
+
+		} else {
+			if ( input.IsKeyPressedOrDown( 'D' ) ) {
+				// Run
+				
+				const kbVec3 targetPos = m_pPlayerComponent->GetOwnerPosition() - targetDir * frameDT * m_pPlayerComponent->GetMaxRunSpeed();
+				m_pPlayerComponent->SetOwnerPosition( targetPos );
+
+			} else if ( input.IsKeyPressedOrDown( 'A' ) ) {
+				m_pPlayerComponent->SetTargetFacingDirection( g_LeftFacing );
+			} else {
+				RequestStateChange( KungFuSheepState::Idle );
+			}
+		}
+	}
+
+	virtual void EndState( T ) override {
+	
+	}
 };
 
 /**
@@ -90,6 +155,25 @@ class KungFuSheepStateCannonBall : public KungFuSheepStateBase<T> {
 //---------------------------------------------------------------------------------------------------'
 public:
 	KungFuSheepStateCannonBall( KungFuSheepComponent *const pPlayerComponent ) : KungFuSheepStateBase( pPlayerComponent ) { }
+	
+
+	virtual void BeginState( T ) override {
+		static const kbString CannonBall_Anim( "CannonBall" );
+		static const kbString CannonBallWindUp_Anim( "CannonBallWindUp" );
+
+		PlayAnimation( CannonBallWindUp_Anim, 0.05f, CannonBall_Anim, 0.01f );
+
+		m_pPlayerComponent->SetTargetFacingDirection( kbVec3( -1.0f, 0.0f, 0.0f ) );
+	}
+
+	virtual void UpdateState() override {
+		
+		if ( m_pPlayerComponent->HasFinishedAnim() ) {
+			RequestStateChange( KungFuSheepState::Idle );
+		}
+	}
+
+	virtual void EndState( T ) override { }
 };
 
 
@@ -97,6 +181,15 @@ public:
  *	KungFuSheepComponent::Constructor
  */
 void KungFuSheepComponent::Constructor() {
+	m_TargetFacingDirection.Set( 0.0f, 0.0f, -1.0f );
+}
+
+bool KungFuSheepComponent::IsPlayingAnim( const kbString animName ) const {
+	if ( m_SkelModelsList.size() == 0 ) {
+		return false;
+	}
+
+	return m_SkelModelsList[0]->IsPlaying( animName );
 }
 
 /**
@@ -124,17 +217,30 @@ void KungFuSheepComponent::SetEnable_Internal( const bool bEnable ) {
 		};
 
 		InitializeStates( sheepStates );
+		RequestStateChange( KungFuSheepState::Idle );
 	}
 }
 
 /**
-*	KungFuSheepComponent::OnAnimEvent
-*/
-void KungFuSheepComponent::PlayAnimation( const kbString animationName ) {
+ *	KungFuSheepComponent::PlayAnimation
+ */
+void KungFuSheepComponent::PlayAnimation( const kbString animName, const float animBlendInLen, const kbString nextAnimName, const float nextAnimBlendInLen ) {
 	for ( int i = 0; i < m_SkelModelsList.size(); i++ ) {
 		kbSkeletalModelComponent *const pSkelModel = m_SkelModelsList[i];
-		pSkelModel->PlayAnimation( animationName, 0.05f, false, kbString::EmptyString, 0.01f );
+		pSkelModel->PlayAnimation( animName, animBlendInLen, false, nextAnimName, nextAnimBlendInLen );
 	}
+}
+
+/**
+ *	KungFuSheepComponent::HasFinishedAnim
+ */
+bool KungFuSheepComponent::HasFinishedAnim() const {
+	if ( m_SkelModelsList.size() == 0 ) {
+		kbWarning( "KungFuSheepComponent::HasFinishedAnim() - Called with empty m_SkelModels list" );
+		return true;
+	}
+
+	return m_SkelModelsList[0]->HasFinishedAnimation();
 }
 
 /**
@@ -190,6 +296,21 @@ void KungFuSheepComponent::Update_Internal( const float DT ) {
 	Super::Update_Internal( DT );
 
 	UpdateStateMachine();
+	
+
+	const kbQuat curRot = GetOwnerRotation();
+
+	kbMat4 facingMat;
+	facingMat.LookAt( GetOwnerPosition(), GetOwnerPosition() + m_TargetFacingDirection, kbVec3::up );
+
+	const kbQuat targetRot = kbQuatFromMatrix( facingMat );
+	GetOwner()->SetOrientation( curRot.Slerp( curRot, targetRot, DT * m_MaxRotateSpeed ) );
+
+	/*
+		const kbQuat curRot = GetOwnerRotation();
+	const kbQuat targetRot = kbQuatFromMatrix( facingMat );
+	GetOwner()->SetOrientation( curRot.Slerp( curRot, targetRot, DT * m_MaxRotateSpeed ) );
+	*/
 }
 
  /**

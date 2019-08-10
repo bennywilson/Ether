@@ -37,8 +37,13 @@ class KungFuSheepComponent : public CannonPlayerComponent, IStateMachine<KungFuS
 //---------------------------------------------------------------------------------------------------'
 public:
 
-	// IAnimEventListener
-	virtual void								OnAnimEvent(const kbAnimEvent & animEvent) override;
+	kbVec3										GetTargetFacingDirection() const { return m_TargetFacingDirection; }
+	void										SetTargetFacingDirection( const kbVec3 & targetDir ) { m_TargetFacingDirection = targetDir; }
+
+	bool										IsPlayingAnim( const kbString animName ) const;
+
+	void										PlayAnimation( const kbString animName, const float animBlendInLen, const kbString nextAnim = kbString::EmptyString, const float nextAnimBlendInLen = 0.0f );
+	bool										HasFinishedAnim() const;
 
 protected:
 
@@ -46,8 +51,6 @@ protected:
 	virtual void								Update_Internal( const float DeltaTime ) override;
 
 private:
-
-	void										PlayAnimation( const kbString animationName );
 
 	// Data
 	kbGameEntityPtr								m_CannonBallImpactFX;
@@ -61,6 +64,10 @@ private:
 	float										m_AnimSmearStartTime;
 	float										m_AnimSmearDuration;
 	kbVec4										m_AnimSmearVec;
+	kbVec3										m_TargetFacingDirection;
+
+	// IAnimEventListener
+	virtual void								OnAnimEvent( const kbAnimEvent & animEvent ) override;
 };
 
 template<typename T>
@@ -69,19 +76,17 @@ class KungFuSheepStateBase : public StateMachineNode<T> {
 //---------------------------------------------------------------------------------------------------'
 public:
 
-	
 	KungFuSheepStateBase( KungFuSheepComponent *const pPlayerComponent ) : m_pPlayerComponent( pPlayerComponent ) { }
 
 protected:
 
-	void PlayAnimation( const kbString animationName ) {
+	void PlayAnimation( const kbString animationName, const float BlendInLength, const kbString nextAnim = kbString::EmptyString, const float nextAnimBlendInLen = 0.0f ) {
 		kbErrorCheck( m_pPlayerComponent != nullptr, "KungFuSheepStateBase::PlayAnimation() - NULL player component" );
-		m_pPlayerComponent->PlayAnimation( animationName );
+		m_pPlayerComponent->PlayAnimation( animationName, BlendInLength, nextAnim, nextAnimBlendInLen );
 	}
-
-private:
-
+	
 	KungFuSheepComponent * m_pPlayerComponent;
+
 };
 
 
