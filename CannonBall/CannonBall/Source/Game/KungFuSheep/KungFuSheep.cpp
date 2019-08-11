@@ -37,9 +37,14 @@ public:
 	}
 
 	virtual void UpdateState() override {
+
+		g_pRenderer->DrawDebugText( "Idle", 0.85f, 0, g_DebugTextSize, g_DebugTextSize, kbColor::green );
+
 		const kbInput_t & input = g_pInputManager->GetInput();
 
-		if ( input.IsKeyPressedOrDown( 'C' ) ) {
+		if ( input.IsKeyPressedOrDown( kbInput_t::KB_SPACE ) ) {
+			RequestStateChange( KungFuSheepState::Attack );
+		} else if ( input.IsKeyPressedOrDown( 'C' ) ) {
 			RequestStateChange( KungFuSheepState::CannonBall );
 		} else if ( input.IsKeyPressedOrDown( 'A' ) ) {
 			RequestStateChange( KungFuSheepState::Run );
@@ -48,13 +53,10 @@ public:
 		} else if ( input.IsKeyPressedOrDown( 'D' ) ) {
 			RequestStateChange( KungFuSheepState::Run );
 			m_pPlayerComponent->SetTargetFacingDirection( g_RightFacing );
-
 		}
 	}
 
-	virtual void EndState( T ) override {
-	
-	}
+	virtual void EndState( T ) override { }
 };
 
 /**
@@ -74,6 +76,8 @@ public:
 	}
 
 	virtual void UpdateState() override {
+
+		g_pRenderer->DrawDebugText( "Running", 0.85f, 0, g_DebugTextSize, g_DebugTextSize, kbColor::green );
 		const kbInput_t & input = g_pInputManager->GetInput();
 
 		const float frameDT = g_pGame->GetFrameDT();
@@ -122,6 +126,47 @@ class KungFuSheepStateAttack : public KungFuSheepStateBase<T> {
 //---------------------------------------------------------------------------------------------------'
 public:
 	KungFuSheepStateAttack( KungFuSheepComponent *const pPlayerComponent ) : KungFuSheepStateBase( pPlayerComponent ) { }
+
+	virtual void BeginState( T ) override {
+
+		static const kbString PunchL_Anim( "PunchLeft_Basic" );
+		static const kbString KickL_Anim( "KickLeft_Basic" );
+		static const kbString PunchR_Anim( "PunchRight_Basic" );
+		static const kbString KickR_Anim( "KickRight_Basic" );
+
+		const kbVec3 & targetDir = m_pPlayerComponent->GetTargetFacingDirection();
+		if ( targetDir.z < 0.0f ) {
+			if ( rand() % 2 == 0 ) {
+				PlayAnimation( PunchL_Anim, 0.05f );
+			} else {
+				PlayAnimation( KickL_Anim, 0.05f );
+			}
+		} else {
+			if ( rand() % 2 == 0 ) {
+				PlayAnimation( PunchR_Anim, 0.05f );
+			} else {
+				PlayAnimation( KickR_Anim, 0.05f );
+			}
+		}
+	}
+
+	virtual void UpdateState() override {
+
+		g_pRenderer->DrawDebugText( "Attack", 0.85f, 0, g_DebugTextSize, g_DebugTextSize, kbColor::green );
+
+		static const kbString PunchL_Anim( "PunchLeft_Basic" );
+		static const kbString KickL_Anim( "KickLeft_Basic" );
+		static const kbString PunchR_Anim( "PunchRight_Basic" );
+		static const kbString KickR_Anim( "KickRight_Basic" );
+
+		if ( m_pPlayerComponent->IsPlayingAnim( PunchL_Anim ) == false &&
+			 m_pPlayerComponent->IsPlayingAnim( KickL_Anim ) == false &&
+			 m_pPlayerComponent->IsPlayingAnim( PunchR_Anim ) == false && 
+			 m_pPlayerComponent->IsPlayingAnim( KickR_Anim ) == false ) {
+			
+			RequestStateChange( KungFuSheepState::Idle );
+		}
+	}
 };
 
 /**
@@ -167,7 +212,9 @@ public:
 	}
 
 	virtual void UpdateState() override {
-		
+			
+		g_pRenderer->DrawDebugText( "Cannon Ball", 0.85f, 0, g_DebugTextSize, g_DebugTextSize, kbColor::green );
+
 		if ( m_pPlayerComponent->HasFinishedAnim() ) {
 			RequestStateChange( KungFuSheepState::Idle );
 		}

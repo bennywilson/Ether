@@ -419,7 +419,11 @@ bool kbSkeletalModelComponent::IsPlaying( const kbString & AnimationName ) const
 	}
 
 	if ( m_CurrentAnimation != -1 && m_Animations[m_CurrentAnimation].m_AnimationName == AnimationName ) {
-		return true;
+
+		const kbAnimComponent & anim = m_Animations[m_CurrentAnimation];
+		if ( anim.m_bIsLooping == true || anim.m_CurrentAnimationTime <= anim.m_pAnimation->GetLengthInSeconds() ) {
+			return true;
+		}
 	}
 
 	return false;
