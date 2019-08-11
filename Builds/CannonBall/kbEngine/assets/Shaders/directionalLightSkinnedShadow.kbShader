@@ -1,0 +1,59 @@
+//===================================================================================================
+// directionalLightShadowSkinned.kbShader
+//
+//
+// 2018-2019 kbEngine 2.0
+//===================================================================================================
+cbuffer matrixBuffer {
+	matrix      mvpMatrix;
+	float4x4    boneList[128];
+};
+
+kbShaderState {
+	cullMode cullmode_frontfaces
+}
+
+//-------------------------------------
+struct skinnedVertexInput {
+	float4 position		: POSITION;
+	float4 blendIndices	: BLENDINDICES;
+	float4 boneWeights	: BLENDWEIGHT;
+};
+
+//-------------------------------------
+struct shadowPixelInput {
+	float4 position		: SV_POSITION;
+	float2 position2	: TEXCOORD0;
+};
+
+
+/**
+ *	skinnedVertexMain
+ */
+shadowPixelInput skinnedVertexMain( skinnedVertexInput input ) {
+
+	shadowPixelInput output = (shadowPixelInput)(0);
+
+	float4 Pos = 0.0f;
+
+	int4 IndexVector = D3DCOLORtoUBYTE4(input.blendIndices).zyxw;
+	float BlendWeightsArray[4] = (float[4])input.boneWeights;
+	int   IndexArray[4]        = (int[4])IndexVector;
+
+	float4x4 blendedMat =	boneList[IndexArray[0]] * BlendWeightsArray[0] + boneList[IndexArray[1]] * BlendWeightsArray[1] +
+							boneList[IndexArray[2]] * BlendWeightsArray[2] + boneList[IndexArray[3]] * BlendWeightsArray[3];
+	
+	Pos = mul( input.position, blendedMat );
+
+	output.position = mul( Pos, mvpMatrix );
+	output.position2 = output.position.zw;
+
+	return output;
+}
+
+/**
+ *	skinnedPixelMain
+ */
+ float skinnedPixelMain( shadowPixelInput input ) : SV_TARGET {
+	return input.position2.x / input.position2.y;
+}

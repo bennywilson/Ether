@@ -1,0 +1,57 @@
+//===================================================================================================
+// lightShafts.kbShader
+//
+//
+// 2017-2019 kbEngine 2.0
+//===================================================================================================
+cbuffer matrixBuffer {
+	matrix mvpMatrix;
+	float4 color;
+	float4 multiplier;
+};
+
+//-------------------------------------
+struct vertexInput {
+	float4 position			: POSITION;
+	float2 uv				: TEXCOORD0;
+};
+
+//-------------------------------------
+struct pixelInput {
+	float4 position			: SV_POSITION;
+	float4 position2		: TEXCOORD1;
+	float2 uv				: TEXCOORD0;
+};
+
+/**
+ *	vertexShader
+ */
+pixelInput vertexShader( vertexInput input ) {
+	pixelInput output = (pixelInput)(0);
+
+	output.position = input.position;
+	output.uv = mul( float4( input.uv, 0.0f, 1.0f), mvpMatrix ).xy;
+
+	output.position2 = ( input.position * 0.5f ) + 0.5f;
+	output.position2.y = 1.0f - output.position2.y;
+
+	return output;
+}
+
+/**
+ *	pixelShader
+ */
+SamplerState FlareSampleState;
+Texture2D flareTexture;
+
+SamplerState DepthSamplerState;
+Texture2D depthTexture;
+
+float4 pixelShader( pixelInput input ) : SV_TARGET {
+	float depth = depthTexture.Sample( DepthSamplerState, input.uv ).r;
+	if ( depth == 1.0f ) depth = 0.0f;
+	const float2 offScreen = sign(saturate( 1.0f - abs( ( input.uv * 2.0f ) - 1.0f ) ) ); // Use vertex interpolants instead?
+	float4 retVal = 1.5f * flareTexture.Sample( FlareSampleState, input.position2.xy ) * ( 1.0f - sign( depth ) ) * color * min(offScreen.x, offScreen.y);
+	retVal.w = 0;
+	return retVal;
+}

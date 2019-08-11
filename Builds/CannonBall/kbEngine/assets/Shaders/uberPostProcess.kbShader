@@ -1,0 +1,56 @@
+//===================================================================================================
+// uberPostProcess.kbShader
+//
+//
+// 2016-2018 kbEngine 2.0
+//===================================================================================================
+cbuffer matrixBuffer {
+   matrix               mvpMatrix;
+   matrix               inverseProjection;
+   float4               tint;
+   float4               additiveColor;
+   float4               fogColor;
+   float                fogStartDistance;
+   float                fogEndDistance;
+};
+
+//-------------------------------------
+struct vertexInput {
+	float4 position		: POSITION;
+	float2 uv			   : TEXCOORD0;
+};
+
+//-------------------------------------
+struct pixelInput {
+	float4 position      : SV_POSITION;
+	float2 uv            : TEXCOORD0;
+	float4 position2     : TEXCOORD1;
+};
+
+/**
+ *	vertexShader
+ */
+pixelInput vertexShader( vertexInput input ) {
+	pixelInput output = (pixelInput)(0);
+
+	output.position = input.position;
+	output.uv = mul( input.uv, (float2x2)mvpMatrix );
+	output.position2 = input.position;
+
+	return output;
+}
+
+/**
+ *	pixelShader
+ */
+Texture2D sceneTexture;
+SamplerState sceneColorSampler;
+
+// TODO: Not actually a color texture
+Texture2D depthTexture;
+SamplerState depthTextureSampler;
+
+ float4 pixelShader( pixelInput	input ) : SV_TARGET {
+   float4 inSceneColor = sceneTexture.Sample( sceneColorSampler, input.uv );
+   return inSceneColor;
+}
