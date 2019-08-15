@@ -317,14 +317,19 @@ bool kbSkeletalModelComponent::GetBoneWorldMatrix( const kbString & boneName, kb
 void kbSkeletalModelComponent::PlayAnimation( const kbString & AnimationName, const float BlendLength, const bool bRestartIfAlreadyPlaying, const kbString desiredNextAnimation, const float desiredNextAnimationBlendLength ) {
 
 #if DEBUG_ANIMS
-	bool bOutput = false;
-	if ( AnimationName.stl_str().find( "Shoot" ) != std::string::npos ) {
-		bOutput = true;
-	}
+	bool bOutput = true;
 	if ( bOutput ) kbLog( "Attempting to play Animation %s ===================================================================", AnimationName.c_str() );
 #endif
 
 	if ( bRestartIfAlreadyPlaying == false && IsPlaying( AnimationName ) ) {
+
+		if ( m_NextAnimation != -1 && m_Animations[m_NextAnimation].m_AnimationName != AnimationName ) {
+			m_Animations[m_NextAnimation].m_CurrentAnimationTime = -1;
+			m_NextAnimation = -1;
+		}
+		#if DEBUG_ANIMS
+			if ( bOutput ) kbLog( "		Returning as it's already playing" );
+		#endif
 		return;
 	}
 

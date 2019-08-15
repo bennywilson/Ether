@@ -42,7 +42,7 @@ public:
 
 	bool										IsPlayingAnim( const kbString animName ) const;
 
-	void										PlayAnimation( const kbString animName, const float animBlendInLen, const kbString nextAnim = kbString::EmptyString, const float nextAnimBlendInLen = 0.0f );
+	void										PlayAnimation( const kbString animName, const float animBlendInLen, const bool bRestartIfAlreadyPlaying = false, const kbString nextAnim = kbString::EmptyString, const float nextAnimBlendInLen = 0.0f );
 	bool										HasFinishedAnim() const;
 
 protected:
@@ -80,9 +80,9 @@ public:
 
 protected:
 
-	void PlayAnimation( const kbString animationName, const float BlendInLength, const kbString nextAnim = kbString::EmptyString, const float nextAnimBlendInLen = 0.0f ) {
+	void PlayAnimation( const kbString animationName, const float BlendInLength, const bool bRestartIfAlreadyPlaying = false, const kbString nextAnim = kbString::EmptyString, const float nextAnimBlendInLen = 0.0f ) {
 		kbErrorCheck( m_pPlayerComponent != nullptr, "KungFuSheepStateBase::PlayAnimation() - NULL player component" );
-		m_pPlayerComponent->PlayAnimation( animationName, BlendInLength, nextAnim, nextAnimBlendInLen );
+		m_pPlayerComponent->PlayAnimation( animationName, BlendInLength, bRestartIfAlreadyPlaying, nextAnim, nextAnimBlendInLen );
 	}
 	
 	KungFuSheepComponent * m_pPlayerComponent;

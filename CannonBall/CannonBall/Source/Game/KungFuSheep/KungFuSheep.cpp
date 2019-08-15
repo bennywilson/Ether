@@ -10,16 +10,16 @@
 #include "kbEditor.h"
 #include "kbEditorEntity.h"
 
-
 /**
  *	KungFuSheepStateIdle
  */
-kbVec3 g_LeftFacing( -0.01f, 0.0f, -1.0f );
-kbVec3 g_RightFacing( -0.01f, 0.0f, 1.0f );
+const kbVec3 g_LeftFacing( -0.01f, 0.0f, -1.0f );
+const kbVec3 g_RightFacing( -0.01f, 0.0f, 1.0f );
+
 template<typename T>
 class KungFuSheepStateIdle : public KungFuSheepStateBase<T> {
 
-//---------------------------------------------------------------------------------------------------'
+//---------------------------------------------------------------------------------------------------
 public:
 	KungFuSheepStateIdle( KungFuSheepComponent *const pPlayerComponent ) : KungFuSheepStateBase( pPlayerComponent ) { }
 
@@ -49,7 +49,6 @@ public:
 		} else if ( input.IsKeyPressedOrDown( 'A' ) ) {
 			RequestStateChange( KungFuSheepState::Run );
 			m_pPlayerComponent->SetTargetFacingDirection( g_LeftFacing );
-			
 		} else if ( input.IsKeyPressedOrDown( 'D' ) ) {
 			RequestStateChange( KungFuSheepState::Run );
 			m_pPlayerComponent->SetTargetFacingDirection( g_RightFacing );
@@ -65,19 +64,18 @@ public:
 template<typename T>
 class KungFuSheepStateRun : public KungFuSheepStateBase<T> {
 
-//---------------------------------------------------------------------------------------------------'
+//---------------------------------------------------------------------------------------------------
 public:
 	KungFuSheepStateRun( KungFuSheepComponent *const pPlayerComponent ) : KungFuSheepStateBase( pPlayerComponent ) { }
 
 	virtual void BeginState( T ) override {
 
 		static const kbString Run_Anim( "Run_Basic" );
-		PlayAnimation( Run_Anim, 0.05f );
+		PlayAnimation( Run_Anim, 0.05f, false );
 	}
 
 	virtual void UpdateState() override {
 
-		g_pRenderer->DrawDebugText( "Running", 0.85f, 0, g_DebugTextSize, g_DebugTextSize, kbColor::green );
 		const kbInput_t & input = g_pInputManager->GetInput();
 
 		const float frameDT = g_pGame->GetFrameDT();
@@ -88,6 +86,7 @@ public:
 		} else if ( targetDir.z < 0.0f ) {
 			if ( input.IsKeyPressedOrDown( 'A' ) ) {
 				
+				// Run
 				const kbVec3 targetPos = m_pPlayerComponent->GetOwnerPosition() - targetDir * frameDT * m_pPlayerComponent->GetMaxRunSpeed();
 				m_pPlayerComponent->SetOwnerPosition( targetPos );
 
@@ -99,8 +98,8 @@ public:
 
 		} else {
 			if ( input.IsKeyPressedOrDown( 'D' ) ) {
+
 				// Run
-				
 				const kbVec3 targetPos = m_pPlayerComponent->GetOwnerPosition() - targetDir * frameDT * m_pPlayerComponent->GetMaxRunSpeed();
 				m_pPlayerComponent->SetOwnerPosition( targetPos );
 
@@ -112,9 +111,7 @@ public:
 		}
 	}
 
-	virtual void EndState( T ) override {
-	
-	}
+	virtual void EndState( T ) override { }
 };
 
 /**
@@ -123,7 +120,7 @@ public:
 template<typename T>
 class KungFuSheepStateAttack : public KungFuSheepStateBase<T> {
 
-//---------------------------------------------------------------------------------------------------'
+//---------------------------------------------------------------------------------------------------
 public:
 	KungFuSheepStateAttack( KungFuSheepComponent *const pPlayerComponent ) : KungFuSheepStateBase( pPlayerComponent ) { }
 
@@ -175,7 +172,7 @@ public:
 template<typename T>
 class KungFuSheepStateHugged : public KungFuSheepStateBase<T> {
 
-//---------------------------------------------------------------------------------------------------'
+//---------------------------------------------------------------------------------------------------
 public:
 	KungFuSheepStateHugged( KungFuSheepComponent *const pPlayerComponent ) : KungFuSheepStateBase( pPlayerComponent ) { }
 };
@@ -186,7 +183,7 @@ public:
 template<typename T>
 class KungFuSheepStateDead : public KungFuSheepStateBase<T> {
 
-//---------------------------------------------------------------------------------------------------'
+//---------------------------------------------------------------------------------------------------
 public:
 	KungFuSheepStateDead( KungFuSheepComponent *const pPlayerComponent ) : KungFuSheepStateBase( pPlayerComponent ) { }
 };
@@ -197,17 +194,19 @@ public:
 template<typename T>
 class KungFuSheepStateCannonBall : public KungFuSheepStateBase<T> {
 
-//---------------------------------------------------------------------------------------------------'
+//---------------------------------------------------------------------------------------------------
 public:
 	KungFuSheepStateCannonBall( KungFuSheepComponent *const pPlayerComponent ) : KungFuSheepStateBase( pPlayerComponent ) { }
 	
+	kbVec3 m_OldFacingDirection;
 
 	virtual void BeginState( T ) override {
 		static const kbString CannonBall_Anim( "CannonBall" );
 		static const kbString CannonBallWindUp_Anim( "CannonBallWindUp" );
 
-		PlayAnimation( CannonBallWindUp_Anim, 0.05f, CannonBall_Anim, 0.01f );
+		PlayAnimation( CannonBallWindUp_Anim, 0.05f, false, CannonBall_Anim, 0.01f );
 
+		m_OldFacingDirection = m_pPlayerComponent->GetTargetFacingDirection();
 		m_pPlayerComponent->SetTargetFacingDirection( kbVec3( -1.0f, 0.0f, 0.0f ) );
 	}
 
@@ -220,17 +219,22 @@ public:
 		}
 	}
 
-	virtual void EndState( T ) override { }
+	virtual void EndState( T ) override {
+		m_pPlayerComponent->SetTargetFacingDirection( m_OldFacingDirection );
+	}
 };
-
 
 /**
  *	KungFuSheepComponent::Constructor
  */
 void KungFuSheepComponent::Constructor() {
 	m_TargetFacingDirection.Set( 0.0f, 0.0f, -1.0f );
+	m_AnimSmearStartTime = 0.0f;
 }
 
+/**
+ *	KungFuSheepComponent::IsPlayingAnim
+ */
 bool KungFuSheepComponent::IsPlayingAnim( const kbString animName ) const {
 	if ( m_SkelModelsList.size() == 0 ) {
 		return false;
@@ -271,10 +275,10 @@ void KungFuSheepComponent::SetEnable_Internal( const bool bEnable ) {
 /**
  *	KungFuSheepComponent::PlayAnimation
  */
-void KungFuSheepComponent::PlayAnimation( const kbString animName, const float animBlendInLen, const kbString nextAnimName, const float nextAnimBlendInLen ) {
+void KungFuSheepComponent::PlayAnimation( const kbString animName, const float animBlendInLen, const bool bRestartIfAlreadyPlaying, const kbString nextAnimName, const float nextAnimBlendInLen ) {
 	for ( int i = 0; i < m_SkelModelsList.size(); i++ ) {
 		kbSkeletalModelComponent *const pSkelModel = m_SkelModelsList[i];
-		pSkelModel->PlayAnimation( animName, animBlendInLen, false, nextAnimName, nextAnimBlendInLen );
+		pSkelModel->PlayAnimation( animName, animBlendInLen, bRestartIfAlreadyPlaying, nextAnimName, nextAnimBlendInLen );
 	}
 }
 
@@ -351,13 +355,27 @@ void KungFuSheepComponent::Update_Internal( const float DT ) {
 	facingMat.LookAt( GetOwnerPosition(), GetOwnerPosition() + m_TargetFacingDirection, kbVec3::up );
 
 	const kbQuat targetRot = kbQuatFromMatrix( facingMat );
-	GetOwner()->SetOrientation( curRot.Slerp( curRot, targetRot, DT * m_MaxRotateSpeed ) );
+	GetOwner()->SetOrientation( curRot.Slerp( curRot, targetRot, DT * m_MaxRotateSpeed ) ); 
+	
+	// Anim Smear
+	if (m_AnimSmearStartTime > 0.0f) {
+		const float elapsedTime = g_GlobalTimer.TimeElapsedSeconds() - m_AnimSmearStartTime;
+		if (elapsedTime > m_AnimSmearDuration) {
+			m_AnimSmearStartTime = -1.0f;
+			const static kbString smearParam = "smearParams";
+			m_SkelModelsList[1]->SetMaterialParamVector(0, smearParam.stl_str(), kbVec4::zero);
+		}
+		else {
+			const float strength = 1.0f - kbClamp(elapsedTime / m_AnimSmearDuration, 0.0f, 1.0f);
+			const static kbString smearParam = "smearParams";
+			kbVec4 smearVec = m_AnimSmearVec;
+			smearVec.x *= strength;
+			smearVec.y *= strength;
+			smearVec.z *= strength;
 
-	/*
-		const kbQuat curRot = GetOwnerRotation();
-	const kbQuat targetRot = kbQuatFromMatrix( facingMat );
-	GetOwner()->SetOrientation( curRot.Slerp( curRot, targetRot, DT * m_MaxRotateSpeed ) );
-	*/
+			m_SkelModelsList[1]->SetMaterialParamVector(0, smearParam.stl_str(), smearVec);
+		}
+	}
 }
 
  /**
