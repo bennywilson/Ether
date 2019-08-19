@@ -87,7 +87,8 @@ public:
 			if ( input.IsKeyPressedOrDown( 'A' ) ) {
 				
 				// Run
-				const kbVec3 targetPos = m_pPlayerComponent->GetOwnerPosition() - targetDir * frameDT * m_pPlayerComponent->GetMaxRunSpeed();
+				const kbVec3 moveDir( 0.0f, 0.0f, -1 );
+				const kbVec3 targetPos = m_pPlayerComponent->GetOwnerPosition() - moveDir * frameDT * m_pPlayerComponent->GetMaxRunSpeed();
 				m_pPlayerComponent->SetOwnerPosition( targetPos );
 
 			} else if ( input.IsKeyPressedOrDown( 'D' ) ) {
@@ -100,7 +101,8 @@ public:
 			if ( input.IsKeyPressedOrDown( 'D' ) ) {
 
 				// Run
-				const kbVec3 targetPos = m_pPlayerComponent->GetOwnerPosition() - targetDir * frameDT * m_pPlayerComponent->GetMaxRunSpeed();
+				const kbVec3 moveDir( 0.0f, 0.0f, 1 );
+				const kbVec3 targetPos = m_pPlayerComponent->GetOwnerPosition() - moveDir * frameDT * m_pPlayerComponent->GetMaxRunSpeed();
 				m_pPlayerComponent->SetOwnerPosition( targetPos );
 
 			} else if ( input.IsKeyPressedOrDown( 'A' ) ) {
