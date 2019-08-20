@@ -2,7 +2,7 @@
 // kbSkeletalModelComponent.cpp
 //
 //
-// 2016-2018 kbEngine 2.0
+// 2016-2019 kbEngine 2.0
 //==============================================================================
 #include "kbModel.h"
 #include "kbGameEntityHeader.h"
@@ -87,14 +87,13 @@ void kbSkeletalModelComponent::SetEnable_Internal( const bool isEnabled ) {
 void kbSkeletalModelComponent::Update_Internal( const float DeltaTime ) {
 	Super::Update_Internal( DeltaTime );
 
-
 	if ( m_pModel != nullptr ) {
 		if ( m_BindToLocalSpaceMatrices.size() != m_pModel->NumBones() ) {
 			m_BindToLocalSpaceMatrices.resize( m_pModel->NumBones() );
 		}
 
 		// Debug Animation
-		if ( g_UseEditor && m_DebugAnimIdx >= 0 && m_DebugAnimIdx < m_Animations.size() && m_Animations[m_DebugAnimIdx].m_pAnimation != nullptr ) {
+		if ( m_DebugAnimIdx >= 0 && m_DebugAnimIdx < m_Animations.size() && m_Animations[m_DebugAnimIdx].m_pAnimation != nullptr ) {
 			if ( m_pModel != nullptr ) {
 
 				static bool pause = false;
@@ -146,7 +145,7 @@ void kbSkeletalModelComponent::Update_Internal( const float DeltaTime ) {
 			kbAnimComponent & CurAnim = m_Animations[m_CurrentAnimation];
 
 			bool bAnimIsFinished = false;
-
+			const float prevAnimTime = CurAnim.m_CurrentAnimationTime;
 			if ( CurAnim.m_bIsLooping == false ) {
 				if ( CurAnim.m_CurrentAnimationTime >= CurAnim.m_pAnimation->GetLengthInSeconds() ) {
 
@@ -159,7 +158,7 @@ void kbSkeletalModelComponent::Update_Internal( const float DeltaTime ) {
 			}
 
 			if ( m_NextAnimation == -1 ) {
-				const float prevAnimTime = CurAnim.m_CurrentAnimationTime;
+				
 	
 				CurAnim.m_CurrentAnimationTime += DeltaTime * CurAnim.m_TimeScale;
 
@@ -169,11 +168,13 @@ void kbSkeletalModelComponent::Update_Internal( const float DeltaTime ) {
 
 				for ( int iAnimEvent = 0; iAnimEvent < CurAnim.m_AnimEvents.size(); iAnimEvent++ ) {
 					auto & curEvent = CurAnim.m_AnimEvents[iAnimEvent];
-#if DEBUG_ANIMS
-					if ( bOutput && curEvent.GetEventTime() > prevAnimTime && curEvent.GetEventTime() <= CurAnim.m_CurrentAnimationTime  ) {
-						kbLog( "AnimEvent %s - %f", curEvent.GetEventName().c_str(), curEvent.GetEventTime() );
+
+					if ( curEvent.GetEventTime() > prevAnimTime && curEvent.GetEventTime() <= CurAnim.m_CurrentAnimationTime  ) {
+						for ( int iListener = 0; iListener < m_AnimEventListeners.size(); iListener++ ) {
+							IAnimEventListener *const pCurListener = m_AnimEventListeners[iListener];	
+							m_AnimEventListeners[iListener]->OnAnimEvent( curEvent );
+						}
 					}
-#endif
 				}
 
 				if ( m_BindToLocalSpaceMatrices.size() == 0 ) {
@@ -207,10 +208,12 @@ void kbSkeletalModelComponent::Update_Internal( const float DeltaTime ) {
 					for ( int iAnimEvent = 0; iAnimEvent < CurAnim.m_AnimEvents.size(); iAnimEvent++ ) {
 						auto & curEvent = CurAnim.m_AnimEvents[iAnimEvent];
 						if ( curEvent.GetEventTime() > prevAnimTime && curEvent.GetEventTime() <= CurAnim.m_CurrentAnimationTime  ) {
-							//kbLog( "AnimEvent %s - %f", curEvent.GetEventName().c_str(), curEvent.GetEventTime() );
+							for ( int iListener = 0; iListener < m_AnimEventListeners.size(); iListener++ ) {
+								IAnimEventListener *const pCurListener = m_AnimEventListeners[iListener];	
+								m_AnimEventListeners[iListener]->OnAnimEvent( curEvent );
+							}
 						}
 					}
-		//			CurAnim.m_CurrentAnimationTime += DeltaTime * CurAnim.m_TimeScale;
 				}
 
 				kbAnimComponent & NextAnim = m_Animations[m_NextAnimation];
@@ -229,8 +232,12 @@ void kbSkeletalModelComponent::Update_Internal( const float DeltaTime ) {
 
 				for ( int iAnimEvent = 0; iAnimEvent < NextAnim.m_AnimEvents.size(); iAnimEvent++ ) {
 					auto & curEvent = NextAnim.m_AnimEvents[iAnimEvent];
+
 					if ( curEvent.GetEventTime() > prevNextAnimTime && curEvent.GetEventTime() <= NextAnim.m_CurrentAnimationTime  ) {
-						//kbLog( "AnimEvent %s - %f", curEvent.GetEventName().c_str(), curEvent.GetEventTime() );
+						for ( int iListener = 0; iListener < m_AnimEventListeners.size(); iListener++ ) {
+							IAnimEventListener *const pCurListener = m_AnimEventListeners[iListener];	
+							m_AnimEventListeners[iListener]->OnAnimEvent( curEvent );
+						}
 					}
 				}
 
@@ -310,14 +317,19 @@ bool kbSkeletalModelComponent::GetBoneWorldMatrix( const kbString & boneName, kb
 void kbSkeletalModelComponent::PlayAnimation( const kbString & AnimationName, const float BlendLength, const bool bRestartIfAlreadyPlaying, const kbString desiredNextAnimation, const float desiredNextAnimationBlendLength ) {
 
 #if DEBUG_ANIMS
-	bool bOutput = false;
-	if ( AnimationName.stl_str().find( "Shoot" ) != std::string::npos ) {
-		bOutput = true;
-	}
+	bool bOutput = true;
 	if ( bOutput ) kbLog( "Attempting to play Animation %s ===================================================================", AnimationName.c_str() );
 #endif
 
 	if ( bRestartIfAlreadyPlaying == false && IsPlaying( AnimationName ) ) {
+
+		if ( m_NextAnimation != -1 && m_Animations[m_NextAnimation].m_AnimationName != AnimationName ) {
+			m_Animations[m_NextAnimation].m_CurrentAnimationTime = -1;
+			m_NextAnimation = -1;
+		}
+		#if DEBUG_ANIMS
+			if ( bOutput ) kbLog( "		Returning as it's already playing" );
+		#endif
 		return;
 	}
 
@@ -412,7 +424,11 @@ bool kbSkeletalModelComponent::IsPlaying( const kbString & AnimationName ) const
 	}
 
 	if ( m_CurrentAnimation != -1 && m_Animations[m_CurrentAnimation].m_AnimationName == AnimationName ) {
-		return true;
+
+		const kbAnimComponent & anim = m_Animations[m_CurrentAnimation];
+		if ( anim.m_bIsLooping == true || anim.m_CurrentAnimationTime <= anim.m_pAnimation->GetLengthInSeconds() ) {
+			return true;
+		}
 	}
 
 	return false;
@@ -438,4 +454,22 @@ const kbString * kbSkeletalModelComponent::GetCurAnimationName() const {
 	}
 
 	return nullptr;
+}
+
+/**
+ *	kbSkeletalModelComponent::RegisterAnimEventListener
+ */
+void kbSkeletalModelComponent::RegisterAnimEventListener( IAnimEventListener *const pListener ) {
+
+	kbErrorCheck( VectorContains( m_AnimEventListeners, pListener ) == false, "RegisterAnimEventListener() - Duplicate entries");
+	m_AnimEventListeners.push_back( pListener );
+}
+
+/**
+ *	kbSkeletalModelComponent::UnregisterAnimEventListener
+ */
+void kbSkeletalModelComponent::UnregisterAnimEventListener( IAnimEventListener *const pListener ) {
+
+	kbErrorCheck( VectorContains( m_AnimEventListeners, pListener ) == true, "UnregisterAnimEventListener() - Listener not previously registered");
+	VectorRemoveFast( m_AnimEventListeners, pListener );
 }

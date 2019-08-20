@@ -37,10 +37,14 @@ const kbShader * kbRenderSubmesh::GetShader() const {
 }
 
 /**
- *	kbRenderWindow::~kbRenderWindow
+ *	kbRenderWindow::kbRenderWindow
  */
 kbRenderWindow::kbRenderWindow( HWND inHwnd, const RECT & windowDimensions, const float nearPlane, const float farPlane ) :
 	m_Hwnd( inHwnd ),
+	m_NearPlane_GameThread( nearPlane ),
+	m_NearPlane_RenderThread( m_NearPlane_GameThread ),
+	m_FarPlane_GameThread( farPlane ),
+	m_FarPlane_RenderThread( m_FarPlane_GameThread ),
 	m_ViewPixelWidth( 0 ),
 	m_ViewPixelHeight( 0 ),
 	m_fViewPixelWidth( 0.0f ),
@@ -139,6 +143,31 @@ void kbRenderer::GetRenderViewTransform( const HWND hwnd, kbVec3 & position, kbQ
 }
 
 /**
+ *	kbRenderer::SetNearFarPlane
+ */
+void kbRenderer::SetNearFarPlane( const HWND hwnd, const float nearPlane, const float farPlane ) {
+	int viewIndex = -1;
+
+	if ( hwnd == nullptr ) {
+		viewIndex = 0;
+	} else {
+		for ( int i = 0 ; i < m_RenderWindowList.size(); i++ ) {
+			if ( m_RenderWindowList[i]->m_Hwnd == hwnd ) {
+				viewIndex = i;
+				break;
+			}
+		}
+	}
+
+	if ( viewIndex < 0 || viewIndex >= m_RenderWindowList.size() ) {
+		kbError( "Invalid view index" );
+	}
+
+	m_RenderWindowList[viewIndex]->m_NearPlane_GameThread = nearPlane;
+	m_RenderWindowList[viewIndex]->m_FarPlane_GameThread = farPlane;
+}
+
+/**
  *	kbRenderWindow::BeginFrame
  */
 void kbRenderWindow::BeginFrame() {
@@ -148,6 +177,9 @@ void kbRenderWindow::BeginFrame() {
 	rotationMatrix.TransposeSelf();
 	
 	m_ViewMatrix = translationMatrix * rotationMatrix;
+
+	m_ProjectionMatrix.CreatePerspectiveMatrix( kbToRadians( 95.0f ), m_fViewPixelWidth / m_fViewPixelHeight, m_NearPlane_RenderThread, m_FarPlane_RenderThread );
+
 	m_ViewProjectionMatrix = m_ViewMatrix * m_ProjectionMatrix;
 	
 	BeginFrame_Internal();
@@ -189,6 +221,10 @@ void kbRenderJob::Run() {
 kbRenderer::kbRenderer() :
 	Back_Buffer_Width( 1280 ),
 	Back_Buffer_Height( 1024 ),
+	m_GlobalModelScale_GameThread( 1.0f ),
+	m_GlobalModelScale_RenderThread( 1.0f ),
+	m_EditorIconScale_GameThread( 1.0f ),
+	m_EditorIconScale_RenderThread( 1.0f ),
 	m_pCurrentRenderWindow( nullptr ),
 	m_ViewMode_GameThread( ViewMode_Shaded ),
 	m_ViewMode( ViewMode_Shaded ),
@@ -245,6 +281,8 @@ void kbRenderer::Shutdown() {
 	while( m_pRenderJob->IsJobFinished() == false ) { }
 	delete m_pRenderJob;
 	m_pRenderJob = nullptr;
+
+	g_pRenderer = nullptr;
 
 	for ( int i = 0; i < m_pRenderTargets.size(); i++) {
 		m_pRenderTargets[i]->Release();
@@ -751,12 +789,18 @@ void kbRenderer::RenderSync() {
 
 		m_RenderWindowList[i]->m_CameraPosition = m_RenderWindowList[i]->m_CameraPosition_GameThread;
 		m_RenderWindowList[i]->m_CameraRotation = m_RenderWindowList[i]->m_CameraRotation_GameThread;
+
+		m_RenderWindowList[i]->m_NearPlane_RenderThread = m_RenderWindowList[i]->m_NearPlane_GameThread;
+		m_RenderWindowList[i]->m_FarPlane_RenderThread = m_RenderWindowList[i]->m_FarPlane_GameThread;
 	}
 
 	// Fog
 	m_FogColor_RenderThread = m_FogColor_GameThread;
 	m_FogStartDistance_RenderThread = m_FogStartDistance_GameThread;
 	m_FogEndDistance_RenderThread = m_FogEndDistance_GameThread;
+	
+	m_GlobalModelScale_RenderThread = m_GlobalModelScale_GameThread;
+	m_EditorIconScale_RenderThread = m_EditorIconScale_GameThread;
 
 	RenderSync_Internal();
 }

@@ -326,3 +326,11 @@ GenerateClass(
 	kbDebugSphereCollision,
 	AddField( "CollisionModel", KBTYPEINFO_STATICMODEL, kbDebugSphereCollision, m_pCollisionModel, false, "" )
 )
+
+
+GenerateClass(
+	kbLevelComponent,
+	AddField( "LevelType", KBTYPEINFO_ENUM, kbLevelComponent, m_LevelType, false, "ELevelType" )
+	AddField( "GlobalModelScale", KBTYPEINFO_FLOAT, kbLevelComponent, m_GlobalModelScale, false, "" )
+	AddField( "EditorIconScale", KBTYPEINFO_FLOAT, kbLevelComponent, m_EditorIconScale, false, "" )
+)

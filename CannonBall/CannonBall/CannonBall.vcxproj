@@ -43,12 +43,12 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>C:\Program Files\Autodesk\FBX\FBX SDK\2019.0\include;..\..\kbEngine\External\OculusSDK\LibOVR\Include;..\..\kbEngine\External\OculusSDK\LibOVR\Include\Extras;..\..\kbEngine\Sound;..\..\kbEngine\external;..\..\kbEngine\gameEntity;..\..\kbEngine\boundingVolumes;..\..\kbEngine\math;C:\Program Files (x86)\Windows Kits\8.1\Include\shared;..\..\kbEngine\editor;..\..\kbEngine\renderer;..\..\kbEngine\app;..\..\kbEngine\core;$(IncludePath)</IncludePath>
+    <IncludePath>.\Source\Game;.\Source\Win;.\;C:\Program Files\Autodesk\FBX\FBX SDK\2019.0\include;..\..\kbEngine\External\OculusSDK\LibOVR\Include;..\..\kbEngine\External\OculusSDK\LibOVR\Include\Extras;..\..\kbEngine\Sound;..\..\kbEngine\external;..\..\kbEngine\gameEntity;..\..\kbEngine\boundingVolumes;..\..\kbEngine\math;C:\Program Files (x86)\Windows Kits\8.1\Include\shared;..\..\kbEngine\editor;..\..\kbEngine\renderer;..\..\kbEngine\app;..\..\kbEngine\core;$(IncludePath)</IncludePath>
     <LibraryPath>C:\Program Files\Autodesk\FBX\FBX SDK\2019.0\lib\vs2015\x64\debug;C:\Program Files (x86)\Windows Kits\8.1\Lib\winv6.3\um\x64;..\..\kbEngine\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>..\..\kbEngine\external\OculusSDK\LibOVR\Include;..\..\kbEngine\external\OculusSDK\LibOVR\Include\Extras;..\..\kbEngine\external\OculusSDK\LibOVRKernel\Src\Kernel;..\..\kbEngine\sound;..\..\kbEngine\external;..\..\kbEngine\gameEntity;..\..\kbEngine\boundingVolumes;..\..\kbEngine\math;..\..\kbEngine\editor;..\..\kbEngine\renderer;..\..\kbEngine\app;..\..\kbEngine\core;$(IncludePath);$(VCInstallDir)atlmfc\include</IncludePath>
+    <IncludePath>.\;.\Source\Game;.\Source\Win;..\..\kbEngine\external\OculusSDK\LibOVR\Include;..\..\kbEngine\external\OculusSDK\LibOVR\Include\Extras;..\..\kbEngine\external\OculusSDK\LibOVRKernel\Src\Kernel;..\..\kbEngine\sound;..\..\kbEngine\external;..\..\kbEngine\gameEntity;..\..\kbEngine\boundingVolumes;..\..\kbEngine\math;..\..\kbEngine\editor;..\..\kbEngine\renderer;..\..\kbEngine\app;..\..\kbEngine\core;$(IncludePath);$(VCInstallDir)atlmfc\include</IncludePath>
     <LibraryPath>./External/OculusSDK\LibOVR\Lib\Windows\x64\Release\VS2015;..\..\kbEngine\lib;$(LibraryPath);C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Lib\x64;$(VSInstallDir);$(VSInstallDir)lib\amd64</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -86,27 +86,29 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <None Include="assets\shaders\Basic\unlit.kbShader" />
     <None Include="assets\shaders\Character\CharacterBase.kbShader" />
     <None Include="assets\shaders\Character\characterOutline.kbShader" />
-    <None Include="assets\shaders\Character\characterOutline_NoSkinning.kbShader" />
     <None Include="assets\shaders\Environment\environmentBase.kbShader" />
     <None Include="CannonBall.ico" />
-    <None Include="ReadMe.txt" />
     <None Include="small.ico" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="CannonBall.h" />
-    <ClInclude Include="CannonBall\CannonGame.h" />
-    <ClInclude Include="CannonBall\CannonTypeInfoGeneratedClasses.h" />
-    <ClInclude Include="GameBase.h" />
     <ClInclude Include="Resource.h" />
+    <ClInclude Include="Source\Game\CannonGame.h" />
+    <ClInclude Include="Source\Game\CannonPlayer.h" />
+    <ClInclude Include="Source\Game\CannonTypeInfoGeneratedClasses.h" />
+    <ClInclude Include="Source\Game\KungFuSheep\KungFuSheep.h" />
+    <ClInclude Include="Source\Win\CannonBall.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="CannonBall.cpp" />
-    <ClCompile Include="CannonBall\CannonGame.cpp" />
-    <ClCompile Include="CannonBall\CannonTypeInfoGeneratedClasses.cpp" />
+    <ClCompile Include="Source\Game\CannonGame.cpp" />
+    <ClCompile Include="Source\Game\CannonPlayer.cpp" />
+    <ClCompile Include="Source\Game\CannonTypeInfoGeneratedClasses.cpp" />
+    <ClCompile Include="Source\Game\KungFuSheep\KungFuSheep.cpp" />
+    <ClCompile Include="Source\Win\CannonBall.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>

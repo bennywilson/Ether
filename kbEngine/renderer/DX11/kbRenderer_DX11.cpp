@@ -51,8 +51,6 @@ ID3D11Device * g_pD3DDevice = nullptr;
 ID3D11DeviceContext * g_pImmediateContext = nullptr;
 
 const UINT Max_Shader_Bones = 128;
-const float	kbRenderer_DX11::Near_Plane = 1.0f;
-const float	kbRenderer_DX11::Far_Plane = 20000.0f;
 
 XMMATRIX & XMMATRIXFromkbMat4( kbMat4 & matrix ) { return (*(XMMATRIX*) &matrix); }
 kbMat4 & kbMat4FromXMMATRIX( FXMMATRIX & matrix ) { return (*(kbMat4*) & matrix); }
@@ -956,7 +954,7 @@ int kbRenderer_DX11::CreateRenderView( HWND hwnd )
 
 	sd.BufferDesc.Width = Back_Buffer_Width;
 	sd.BufferDesc.Height = Back_Buffer_Height;
-	sd.BufferDesc.RefreshRate.Numerator = 0;
+	sd.BufferDesc.RefreshRate.Numerator = 120;
 	sd.BufferDesc.RefreshRate.Denominator = 1;
 	sd.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;//DXGI_FORMAT_B8G8R8A8_UNORM;
 	sd.BufferDesc.ScanlineOrdering = DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED;
@@ -969,13 +967,13 @@ int kbRenderer_DX11::CreateRenderView( HWND hwnd )
 	sd.BufferCount = 2;
 	sd.OutputWindow = hwnd;
 	sd.Windowed = TRUE;
-	sd.SwapEffect = DXGI_SWAP_EFFECT_SEQUENTIAL;
+	sd.SwapEffect = DXGI_SWAP_EFFECT_FLIP_SEQUENTIAL ;
 	sd.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;
 
 	RECT windowDimensions;
 	GetClientRect( hwnd, &windowDimensions );
 
-	kbRenderWindow_DX11 * renderView = new kbRenderWindow_DX11( hwnd, windowDimensions, Near_Plane, Far_Plane );
+	kbRenderWindow_DX11 * renderView = new kbRenderWindow_DX11( hwnd, windowDimensions, 1.0f, 20000.0f );		// TODO - NEAR/FAR PLANE 
 
 	m_pDXGIFactory->CreateSwapChain( m_pD3DDevice, &sd, &renderView->m_pSwapChain );
 
@@ -1088,6 +1086,8 @@ void kbRenderer_DX11::ReturnRenderTexture_Internal( const kbRenderTexture *const
  *	kbRenderer_DX11::Shutdown_Internal
  */
 void kbRenderer_DX11::Shutdown_Internal() {
+
+	g_pD3D11Renderer = nullptr;
 
 	for ( int i = 0; i < Max_Num_Textures; i++ ) {
 		if ( m_pTextures[i] != nullptr ) {
@@ -1237,7 +1237,7 @@ void kbRenderer_DX11::RenderScene() {
 		D3D11_VIEWPORT viewport;
 	
 		if ( IsRenderingToHMD() ) {
-			viewport.TopLeftX = ( float )m_EyeRenderViewport[m_HMDPass].Pos.x;
+/*			viewport.TopLeftX = ( float )m_EyeRenderViewport[m_HMDPass].Pos.x;
 			viewport.TopLeftY = ( float )m_EyeRenderViewport[m_HMDPass].Pos.y;
 			viewport.Width = ( float )m_EyeRenderViewport[m_HMDPass].Size.w;
 			viewport.Height = ( float )m_EyeRenderViewport[m_HMDPass].Size.h;
@@ -1468,7 +1468,9 @@ void kbRenderer_DX11::RenderScene() {
 				renderObject.m_Materials = m_DebugModels[i].m_Materials;
 				renderObject.m_Position = m_DebugModels[i].m_Position;
 				renderObject.m_Orientation = m_DebugModels[i].m_Orientation;
-				renderObject.m_Scale = m_DebugModels[i].m_Scale;
+
+				// Hack: Negate the effects of m_GlobalModelScale_RenderThread in SetConstantsBuffer
+				renderObject.m_Scale = m_EditorIconScale_RenderThread * ( m_DebugModels[i].m_Scale ) / m_GlobalModelScale_RenderThread;
 				renderObject.m_EntityId = m_DebugModels[i].m_EntityId;
 				for ( int j = 0; j < renderObject.m_pModel->NumMeshes(); j++ ) {
 					kbRenderSubmesh newMesh( &renderObject, j, RP_Debug, 0.0f );
@@ -2051,7 +2053,7 @@ void kbRenderer_DX11::RenderMousePickerIds() {
 		renderObject.m_Materials = m_DebugModels[i].m_Materials;
 		renderObject.m_Position = m_DebugModels[i].m_Position;
 		renderObject.m_Orientation = m_DebugModels[i].m_Orientation;
-		renderObject.m_Scale = m_DebugModels[i].m_Scale;
+		renderObject.m_Scale = m_EditorIconScale_RenderThread * ( m_DebugModels[i].m_Scale ) / m_GlobalModelScale_RenderThread;
 		renderObject.m_EntityId = m_DebugModels[i].m_EntityId;
 		for ( int j = 0; j < renderObject.m_pModel->NumMeshes(); j++ ) {
 			kbRenderSubmesh newMesh( &renderObject, j, RP_MousePicker, 0.0f );
@@ -3541,10 +3543,8 @@ void kbRenderer_DX11::RenderDebugBillboards( const bool bIsEntityIdPass ) {
 	kbShader * pShader = nullptr;
 	if ( bIsEntityIdPass ) {
 		pShader = m_pMousePickerIdShader;
-
 	} else {
 		pShader = m_pDebugShader;
-
 	}
 
 	m_pDeviceContext->PSSetShader( (ID3D11PixelShader *)pShader->GetPixelShader(), nullptr, 0 );
@@ -3564,7 +3564,7 @@ void kbRenderer_DX11::RenderDebugBillboards( const bool bIsEntityIdPass ) {
 
 		const kbMat4 preRotationMatrix = m_pCurrentRenderWindow->GetCameraRotation().ToMat4();
 		kbMat4 mvpMatrix;
-		mvpMatrix.MakeScale( currBillBoard.m_Scale );
+		mvpMatrix.MakeScale( currBillBoard.m_Scale * m_EditorIconScale_RenderThread );
 		mvpMatrix[3] = currBillBoard.m_Position;
 		mvpMatrix = preRotationMatrix * mvpMatrix * m_pCurrentRenderWindow->GetViewProjectionMatrix();
 		SetShaderMat4( "mvpMatrix", mvpMatrix, pByteBuffer, pShader->GetShaderVarBindings() );
@@ -3886,7 +3886,7 @@ void kbRenderer_DX11::RT_Render2DQuad( const kbVec2 & origin, const kbVec2 & siz
 ID3D11Buffer * kbRenderer_DX11::SetConstantBuffer( const kbShaderVarBindings_t & shaderVarBindings, const kbShaderParamOverrides_t * shaderParamOverrides, const kbRenderObject *const pRenderObject, byte *const pInMappedBufferData ) {
 	kbMat4 worldMatrix;
 	if ( pRenderObject != nullptr ) {
-		worldMatrix.MakeScale( pRenderObject->m_Scale );
+		worldMatrix.MakeScale( pRenderObject->m_Scale * m_GlobalModelScale_RenderThread );
 		worldMatrix *= pRenderObject->m_Orientation.ToMat4();
 		worldMatrix[3] = pRenderObject->m_Position;
 	} else {

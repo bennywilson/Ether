@@ -101,13 +101,13 @@ public:
 
 protected:
 
-	virtual void								InitGame_Internal();
-	virtual void								PlayGame_Internal();
-	virtual void								StopGame_Internal();
-	virtual void								LevelLoaded_Internal();
+	virtual void								InitGame_Internal() override;
+	virtual void								PlayGame_Internal() override;
+	virtual void								StopGame_Internal() override;
+	virtual void								LevelLoaded_Internal() override;
 
-	virtual void								AddGameEntity_Internal( kbGameEntity *const pEntity );
-	virtual void								Update_Internal( const float deltaTimeSec );
+	virtual void								AddGameEntity_Internal( kbGameEntity *const pEntity ) override;
+	virtual void								PreUpdate_Internal() override;
 
 	void										ProcessInput( const float deltaTimeSec );
 	void										UpdateWorld( const float deltaTimeSec );

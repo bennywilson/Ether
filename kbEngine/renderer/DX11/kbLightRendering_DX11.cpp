@@ -251,8 +251,8 @@ void kbRenderer_DX11::RenderShadow( const kbRenderLight *const pLight, kbMat4 sp
 	frustumPlanes[3].PlanesIntersect( dummyPoint, lowerRight, frustumPlanes[2] );
 	frustumPlanes[0].PlanesIntersect( dummyPoint, lowerLeft, frustumPlanes[3] );
 
-	const float DistToFarCorner = kbRenderer_DX11::Far_Plane / ( camDir.Dot( upperLeft ) );
-	const float NearCornerDist = ( ( kbRenderer_DX11::Near_Plane ) * DistToFarCorner ) / kbRenderer_DX11::Far_Plane;
+	const float DistToFarCorner = m_RenderWindowList[0]->GetFarPlane() / ( camDir.Dot( upperLeft ) );
+	const float NearCornerDist = ( ( m_RenderWindowList[0]->GetNearPlane() ) * DistToFarCorner ) / m_RenderWindowList[0]->GetFarPlane();
 
 	if ( debuggingShadowBounds ) {
 		vertexLayout lines[8];

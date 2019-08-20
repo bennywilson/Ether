@@ -95,6 +95,7 @@ protected:
 	virtual void								Update_Internal( const float DeltaTimeSeconds ) override;
 
 	virtual void								EditorChange( const std::string & propertyName ) override;
+
 private:
 
 	std::vector<kbVectorAnimEvent>				m_LightColorCurve;

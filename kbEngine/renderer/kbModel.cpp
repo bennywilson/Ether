@@ -11,6 +11,7 @@
 #include "kbIntersectionTests.h"
 #include "kbModel.h"
 #include "kbRenderer.h"
+#include "DX11/kbRenderer_DX11.h"			// HACK
 
 #pragma pack( push, packing )
 #pragma pack( 1 )
@@ -117,9 +118,15 @@ bool kbModel::LoadMS3D() {
 	modelFile.open( m_FullFileName, std::ifstream::in | std::ifstream::binary );
 	kbErrorCheck( modelFile.good(), "kbModel::LoadMS3D() - Failed to load model %s", m_FullFileName.c_str() );
 	
+	bool spitIt =  false;
+	if ( m_FullFileName.find("olaf") != std::string::npos ) {
+		spitIt = true;
+		kbLog("Processing...		%s", m_FullFileName.c_str());
+	}
+
 	// Find the file size
 	modelFile.seekg( 0, std::ifstream::end );
-	std::streamoff fileSize = modelFile.tellg();
+	const std::streamoff fileSize = modelFile.tellg();
 	modelFile.seekg( 0, std::ifstream::beg );
 
 	// Load file into memory
@@ -332,10 +339,18 @@ bool kbModel::LoadMS3D() {
 			const char *const pWeights = (const char *)pPtr;
 			pPtr += sizeof( char )  * 3;
 
-			tempVertexBoneData[i].weights[0] = pWeights[0];
-			tempVertexBoneData[i].weights[1] = pWeights[1];
-			tempVertexBoneData[i].weights[2] = pWeights[2];
-			tempVertexBoneData[i].weights[3] = 100 - pWeights[0] - pWeights[1] - pWeights[2];
+
+			if ( pWeights[0] == pWeights[1] == pWeights[2] == 0 ) {
+				tempVertexBoneData[i].weights[0] = 255;
+				tempVertexBoneData[i].weights[1] = 0;
+				tempVertexBoneData[i].weights[2] = 0;
+				tempVertexBoneData[i].weights[3] = 0;
+			} else {
+				tempVertexBoneData[i].weights[0] = pWeights[0];
+				tempVertexBoneData[i].weights[1] = pWeights[1];
+				tempVertexBoneData[i].weights[2] = pWeights[2];    
+				tempVertexBoneData[i].weights[3] = 100 - pWeights[0] - pWeights[1] - pWeights[2];
+			}
 
 			const uint *const pExtra = (uint*) pPtr;
 			pPtr += sizeof( uint ) * 2;
@@ -1005,18 +1020,22 @@ void kbModel::SwapTexture( const UINT meshIdx, const kbTexture * pTexture, const
 /**
  *	kbModel::RayIntersection
  */
-kbModelIntersection_t kbModel::RayIntersection( const kbVec3 & inRayOrigin, const kbVec3 & inRayDirection, const kbVec3 & modelTranslation, const kbQuat & modelOrientation ) const {
+kbModelIntersection_t kbModel::RayIntersection( const kbVec3 & inRayOrigin, const kbVec3 & inRayDirection, const kbVec3 & modelTranslation, const kbQuat & modelOrientation, const kbVec3 & scale ) const {
 	kbModelIntersection_t intersectionInfo;
 
-	kbMat4 inverseModelRotation = modelOrientation.ToMat4();
-	inverseModelRotation.TransposeSelf();
+	kbMat4 inverseModelRotation;
+	inverseModelRotation.MakeScale( scale );
+	inverseModelRotation = inverseModelRotation * modelOrientation.ToMat4();
+	const XMMATRIX xmInverse = XMMatrixInverse( nullptr, XMMATRIXFromkbMat4( inverseModelRotation ) );
+	inverseModelRotation = kbMat4FromXMMATRIX( xmInverse );
+
 	const kbVec3 rayStart = ( inRayOrigin - modelTranslation ) * inverseModelRotation;
 	const kbVec3 rayDir = inRayDirection.Normalized() * inverseModelRotation;
 	float t = FLT_MAX;
 
 	for ( int iMesh = 0; iMesh < m_Meshes.size(); iMesh++ ) {
 		for ( int iVert = 0; iVert < m_Meshes[iMesh].m_Vertices.size(); iVert += 3 ) {
-			
+
 			const kbVec3 & v0 = m_Meshes[iMesh].m_Vertices[iVert+0];
 			const kbVec3 & v1 = m_Meshes[iMesh].m_Vertices[iVert+1];
 			const kbVec3 & v2 = m_Meshes[iMesh].m_Vertices[iVert+2];
@@ -1105,8 +1124,13 @@ void kbModel::SetBoneMatrices( std::vector<AnimatedBone_t> & bones, const float 
 			if ( animTime >= nextTime ) {
 				if ( bIsLooping ) {
 					// Looped
-					prevKey = jointData.m_RotationKeyFrames.size() - 1;
-					nextKey = 1;
+					prevKey = (int)jointData.m_RotationKeyFrames.size() - 1;
+
+					if ( jointData.m_RotationKeyFrames.size() > 1 ) {
+						nextKey = 1;
+					} else {
+						nextKey = 0;
+					}
 				} else {
 					prevKey = nextKey = (int) jointData.m_RotationKeyFrames.size() - 1;
 				}

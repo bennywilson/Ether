@@ -61,6 +61,8 @@ public:
 
     const widgetCBInputObject &                             GetInput() const { return m_WidgetInputObject; }
 
+	bool													IsGameUpdating() const { return m_bGameUpdating; }
+
 private:
 
 	void													SaveLevel_Internal( const std::string & fileName, const bool bForceSave );
@@ -93,6 +95,7 @@ private:
 
 	bool													m_bIsRunning;
 	bool													m_bRightMouseButtonDragged;
+	bool													m_bGameUpdating;
 
 	// Stores a copy of the current undo action's id.  The level is dirty if the two values don't match
 	UINT64													m_UndoIDAtLastSave;

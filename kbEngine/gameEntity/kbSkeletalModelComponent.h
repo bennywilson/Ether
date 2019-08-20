@@ -74,10 +74,15 @@ public:
 
 	const kbString *							GetCurAnimationName() const;
 
+	void										RegisterAnimEventListener( IAnimEventListener *const pListener );
+	void										UnregisterAnimEventListener( IAnimEventListener *const pListener );
+
 protected:
 
 	virtual void								SetEnable_Internal( const bool isEnabled ) override;
 	virtual void								Update_Internal( const float DeltaTime ) override;
+
+	std::vector<IAnimEventListener*>			m_AnimEventListeners;
 
 	// Editor
 	class kbModel *								m_pModel;

@@ -140,10 +140,11 @@ void EtherGame::LevelLoaded_Internal() {
 }
 
 /**
- *	EtherGame::Update_Internal
+ *	EtherGame::PreUpdate_Internal
  */
-void EtherGame::Update_Internal( float DT ) {
+void EtherGame::PreUpdate_Internal() {
 
+	const float DT = GetFrameDT();
 	if ( IsConsoleActive() == false ) {
 		ProcessInput( DT );
 	}

@@ -37,6 +37,8 @@ public:
 
 	void	operator *=(const float rhs ) { x *= rhs, y *= rhs; }
 
+	kbVec2 operator -() const { return kbVec2( -x, -y ); }
+
 	void operator /=( const float rhs )  { x /= rhs, y /= rhs; }
 
 	bool Compare( const kbVec2 & op2, const float epsilon = 0.0001f ) const { return fabs( x - op2.x ) < epsilon && fabs( y - op2.y ) < epsilon; }

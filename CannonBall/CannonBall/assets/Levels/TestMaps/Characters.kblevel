@@ -2,7 +2,7 @@ kbGameEntity 0 0 0 0 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		Name = "Entity_13"
+		Name = "Entity_18"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
 		Position = 0.000000 0.000000 0.000000
 		Scale = 1.000000 1.000000 1.000000
@@ -10,8 +10,8 @@ kbGameEntity 0 0 0 0 {
 	kbEditorLevelSettingsComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		MainCameraPosition = -194.030411 2.081777 -72.172752
-		MainCameraRotation = 0.093583 -0.617787 -0.074389 0.777205
+		MainCameraPosition = -4.000311 2.350000 15.034235
+		MainCameraRotation = -0.030848 -0.706434 0.030848 0.706434
 	}
 }
 kbGameEntity 0 0 0 0 {
@@ -82,7 +82,7 @@ kbGameEntity 0 0 0 0 {
 						LifeTime =  -1.000000
 						ParamName = "shadowParams"
 						Texture = NULL
-						Vector = -0.000500 0.000000 0.000000 0.000000
+						Vector = -0.000100 0.000000 0.000000 0.000000
 					}
 					kbShaderParamComponent { 
 						Enabled = 0
@@ -100,10 +100,10 @@ kbGameEntity 0 0 0 0 {
 					}
 			}
 		CascadedShadowSplits = 4
+ 10.000000
+ 30.000000
+ 50.000000
  100.000000
- 200.000000
- 500.000000
- 1000.000000
 	}
 }
 kbGameEntity 0 0 0 0 {
@@ -111,9 +111,9 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "Snolaf"
-		Orientation = 0.000000 0.000000 0.000000 1.000000
-		Position = 15.000000 -5.052967 -31.904041
-		Scale = 0.100000 0.100000 0.100000
+		Orientation = 0.000000 0.708929 0.000000 -0.705280
+		Position = 3.967520 0.000000 -10.850559
+		Scale = 1.000000 1.000000 1.000000
 	}
 	kbSkeletalModelComponent { 
 		Enabled = 1
@@ -136,8 +136,17 @@ kbGameEntity 0 0 0 0 {
 			}
 		RenderPass = LightingPass
 		TranslucencySortBias =  0.000000
-		Animations = 0
-		DebugAnimIndex = -1
+		Animations = 1
+			kbAnimComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Animation = .\assets\models\characters\snolaf\snolaf_wave_temp.kbanim.ms3d
+				AnimationEvent = 0
+				AnimationName = ""
+				IsLooping = 1
+				TimeScale =  1.760000
+			}
+		DebugAnimIndex = 0
 		Model = .\assets\models\characters\snolaf\snolaf.ms3d
 	}
 	kbSkeletalModelComponent { 
@@ -156,7 +165,7 @@ kbGameEntity 0 0 0 0 {
 						LifeTime =  -1.000000
 						ParamName = "outlineParams"
 						Texture = NULL
-						Vector = 0.400000 2.000000 0.750000 5.000000
+						Vector = 0.020000 0.100000 0.750000 5.000000
 					}
 					kbShaderParamComponent { 
 						Enabled = 0
@@ -168,8 +177,17 @@ kbGameEntity 0 0 0 0 {
 			}
 		RenderPass = LightingPass
 		TranslucencySortBias =  0.000000
-		Animations = 0
-		DebugAnimIndex = -1
+		Animations = 1
+			kbAnimComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Animation = .\assets\models\characters\snolaf\snolaf_wave_temp.kbanim.ms3d
+				AnimationEvent = 0
+				AnimationName = ""
+				IsLooping = 1
+				TimeScale =  1.760000
+			}
+		DebugAnimIndex = 0
 		Model = .\assets\models\characters\snolaf\snolaf.ms3d
 	}
 }
@@ -178,9 +196,9 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "Floor"
-		Orientation = 0.707000 0.000000 0.000000 -0.707000
-		Position = -59.252071 -6.153631 -70.755234
-		Scale = 200.000000 200.000000 200.000000
+		Orientation = -0.707000 0.000000 0.000000 0.707000
+		Position = 0.000000 0.000001 0.000000
+		Scale = 10000.000000 10000.000000 10000.000000
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -197,7 +215,7 @@ kbGameEntity 0 0 0 0 {
 						Enabled = 0
 						LifeTime =  -1.000000
 						ParamName = "shaderTexture"
-						Texture = ..\..\kbengine\assets\textures\white.bmp
+						Texture = .\assets\test\woodfloor_basic.bmp
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 			}
@@ -211,9 +229,9 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "Jumping Jack Sheep"
-		Orientation = 0.000000 0.000000 0.000000 1.000000
-		Position = -60.873001 -5.148248 -45.215355
-		Scale = 0.100000 0.100000 0.100000
+		Orientation = 0.000000 -0.730372 0.000000 0.683049
+		Position = 4.322352 0.000000 -9.099039
+		Scale = 1.000000 1.000000 1.000000
 	}
 	kbSkeletalModelComponent { 
 		Enabled = 1
@@ -250,7 +268,7 @@ kbGameEntity 0 0 0 0 {
 		Model = .\assets\models\characters\sheep\sheep.ms3d
 	}
 	kbSkeletalModelComponent { 
-		Enabled = 1
+		Enabled = 0
 		LifeTime =  -1.000000
 		CastsShadow = 0
 		Materials = 1
@@ -265,7 +283,7 @@ kbGameEntity 0 0 0 0 {
 						LifeTime =  -1.000000
 						ParamName = "outlineParams"
 						Texture = NULL
-						Vector = 0.400000 5.000000 0.800000 5.000000
+						Vector = 0.025000 0.100000 0.800000 5.000000
 					}
 					kbShaderParamComponent { 
 						Enabled = 0
@@ -297,11 +315,11 @@ kbGameEntity 0 0 0 0 {
 		LifeTime =  -1.000000
 		Name = "Fox"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
-		Position = -19.300009 -6.326632 -31.904041
-		Scale = 0.100000 0.100000 0.100000
+		Position = 2.000000 0.000000 0.000000
+		Scale = 1.000000 1.000000 1.000000
 	}
 	kbSkeletalModelComponent { 
-		Enabled = 1
+		Enabled = 0
 		LifeTime =  -1.000000
 		CastsShadow = 1
 		Materials = 1
@@ -326,7 +344,7 @@ kbGameEntity 0 0 0 0 {
 		Model = .\assets\models\characters\fox\fox.ms3d
 	}
 	kbSkeletalModelComponent { 
-		Enabled = 1
+		Enabled = 0
 		LifeTime =  -1.000000
 		CastsShadow = 0
 		Materials = 1
@@ -341,7 +359,7 @@ kbGameEntity 0 0 0 0 {
 						LifeTime =  -1.000000
 						ParamName = "outlineParams"
 						Texture = NULL
-						Vector = 0.400000 2.000000 0.650000 5.000000
+						Vector = 0.020000 0.200000 0.650000 5.000000
 					}
 					kbShaderParamComponent { 
 						Enabled = 0
@@ -362,13 +380,321 @@ kbGameEntity 0 0 0 0 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		Name = "Run It Sheep"
-		Orientation = 0.000000 0.000000 0.000000 1.000000
-		Position = -103.846992 -5.148248 -45.215355
-		Scale = 0.100000 0.100000 0.100000
+		Name = "Player"
+		Orientation = 0.000000 -0.998759 0.000000 0.049814
+		Position = -0.000311 0.000000 15.034235
+		Scale = 1.000000 1.000000 1.000000
 	}
 	kbSkeletalModelComponent { 
 		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 1
+		Materials = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\character\characterbase.kbshader
+				ShaderParams = 1
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorTexture"
+						Texture = .\assets\models\characters\sheep\sheep.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		RenderPass = LightingPass
+		TranslucencySortBias =  0.000000
+		Animations = 9
+			kbAnimComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Animation = .\assets\models\characters\sheep\sheep_run_basic.kbanim.ms3d
+				AnimationEvent = 0
+				AnimationName = "Run_Basic"
+				IsLooping = 1
+				TimeScale =  10.000000
+			}
+			kbAnimComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Animation = .\assets\models\characters\sheep\sheep_idleleft_basic.kbanim.ms3d
+				AnimationEvent = 0
+				AnimationName = "IdleLeft_Basic"
+				IsLooping = 1
+				TimeScale =  2.000000
+			}
+			kbAnimComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Animation = .\assets\models\characters\sheep\sheep_idleright_basic.kbanim.ms3d
+				AnimationEvent = 0
+				AnimationName = "IdleRight_Basic"
+				IsLooping = 1
+				TimeScale =  2.000000
+			}
+			kbAnimComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Animation = .\assets\models\characters\sheep\sheep_punchleft_basic.kbanim.ms3d
+				AnimationEvent = 0
+				AnimationName = "PunchLeft_Basic"
+				IsLooping = 0
+				TimeScale =  15.000000
+			}
+			kbAnimComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Animation = .\assets\models\characters\sheep\sheep_kickleft_basic.kbanim.ms3d
+				AnimationEvent = 0
+				AnimationName = "KickLeft_Basic"
+				IsLooping = 0
+				TimeScale =  15.000000
+			}
+			kbAnimComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Animation = .\assets\models\characters\sheep\sheep_punchright_basic.kbanim.ms3d
+				AnimationEvent = 0
+				AnimationName = "PunchRight_Basic"
+				IsLooping = 0
+				TimeScale =  15.000000
+			}
+			kbAnimComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Animation = .\assets\models\characters\sheep\sheep_kickright_basic.kbanim.ms3d
+				AnimationEvent = 0
+				AnimationName = "KickRight_Basic"
+				IsLooping = 0
+				TimeScale =  15.000000
+			}
+			kbAnimComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Animation = .\assets\models\characters\sheep\sheep_cannonball.kbanim.ms3d
+				AnimationEvent = 4
+					kbAnimEvent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						EventName = "CannonBall_Impact"
+						EventTime =  4.350000
+						EventValue =  1.000000
+					}
+					kbAnimEvent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						EventName = "CannonBall_VO"
+						EventTime =  0.100000
+						EventValue =  0.000000
+					}
+					kbAnimEvent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						EventName = "CannonBall_JumpSmear"
+						EventTime =  0.750000
+						EventValue =  0.050000
+					}
+					kbAnimEvent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						EventName = "CannonBall_DropSmear"
+						EventTime =  4.450000
+						EventValue =  0.050000
+					}
+				AnimationName = "CannonBall"
+				IsLooping = 0
+				TimeScale =  5.000000
+			}
+			kbAnimComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Animation = .\assets\models\characters\sheep\sheep_cannonballwindup.kbanim.ms3d
+				AnimationEvent = 0
+				AnimationName = "CannonBallWindUp"
+				IsLooping = 0
+				TimeScale =  1.000000
+			}
+		DebugAnimIndex = -1
+		Model = .\assets\models\characters\sheep\sheep.ms3d
+	}
+	kbSkeletalModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		Materials = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\character\characteroutline.kbshader
+				ShaderParams = 3
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "outlineParams"
+						Texture = NULL
+						Vector = 0.025000 0.100000 0.800000 5.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorTexture"
+						Texture = .\assets\models\characters\sheep\sheep.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "smearParams"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		RenderPass = Post-LightingPass
+		TranslucencySortBias =  0.000000
+		Animations = 9
+			kbAnimComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Animation = .\assets\models\characters\sheep\sheep_run_basic.kbanim.ms3d
+				AnimationEvent = 0
+				AnimationName = "Run_Basic"
+				IsLooping = 1
+				TimeScale =  10.000000
+			}
+			kbAnimComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Animation = .\assets\models\characters\sheep\sheep_idleleft_basic.kbanim.ms3d
+				AnimationEvent = 0
+				AnimationName = "IdleLeft_Basic"
+				IsLooping = 1
+				TimeScale =  2.000000
+			}
+			kbAnimComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Animation = .\assets\models\characters\sheep\sheep_idleright_basic.kbanim.ms3d
+				AnimationEvent = 0
+				AnimationName = "IdleRight_Basic"
+				IsLooping = 1
+				TimeScale =  2.000000
+			}
+			kbAnimComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Animation = .\assets\models\characters\sheep\sheep_punchleft_basic.kbanim.ms3d
+				AnimationEvent = 0
+				AnimationName = "PunchLeft_Basic"
+				IsLooping = 0
+				TimeScale =  15.000000
+			}
+			kbAnimComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Animation = .\assets\models\characters\sheep\sheep_kickleft_basic.kbanim.ms3d
+				AnimationEvent = 0
+				AnimationName = "KickLeft_Basic"
+				IsLooping = 0
+				TimeScale =  15.000000
+			}
+			kbAnimComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Animation = .\assets\models\characters\sheep\sheep_punchright_basic.kbanim.ms3d
+				AnimationEvent = 0
+				AnimationName = "PunchRight_Basic"
+				IsLooping = 0
+				TimeScale =  15.000000
+			}
+			kbAnimComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Animation = .\assets\models\characters\sheep\sheep_kickright_basic.kbanim.ms3d
+				AnimationEvent = 0
+				AnimationName = "KickRight_Basic"
+				IsLooping = 0
+				TimeScale =  15.000000
+			}
+			kbAnimComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Animation = .\assets\models\characters\sheep\sheep_cannonball.kbanim.ms3d
+				AnimationEvent = 0
+				AnimationName = "CannonBall"
+				IsLooping = 0
+				TimeScale =  5.000000
+			}
+			kbAnimComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Animation = .\assets\models\characters\sheep\sheep_cannonballwindup.kbanim.ms3d
+				AnimationEvent = 0
+				AnimationName = "CannonBallWindUp"
+				IsLooping = 0
+				TimeScale =  1.000000
+			}
+		DebugAnimIndex = -1
+		Model = .\assets\models\characters\sheep\sheep.ms3d
+	}
+	KungFuSheepComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		DummyTemp = 0
+		Health =  10.000000
+		MaxRotateSpeed =  15.000000
+		MaxRunSpeed =  3.000000
+		CannonBallImpactFX = 846208613 1165520682 3641600641 3993117100
+		CannonBallImpactSound = 1
+			kbSoundData { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Radius =  -1.000000
+				Volume =  1.000000
+				WaveFile = .\assets\sounds\impacts\impact_large_wood.wav
+			}
+		CannonBallVO = 1
+			kbSoundData { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Radius =  -1.000000
+				Volume =  1.000000
+				WaveFile = .\assets\sounds\sheep\sheep_vo_cannonball.wav
+			}
+		DropSmearMagnitude =  2.500000
+		JumpSmearMagnitude =  -2.500000
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Level"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = -190.244919 3.031295 -71.296104
+		Scale = 1.000000 1.000000 1.000000
+	}
+	kbLevelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		EditorIconScale =  0.500000
+		GlobalModelScale =  0.005000
+		LevelType = 2D
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Run It Sheep"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = -2.000000 0.000000 0.000000
+		Scale = 1.000000 1.000000 1.000000
+	}
+	kbSkeletalModelComponent { 
+		Enabled = 0
 		LifeTime =  -1.000000
 		CastsShadow = 1
 		Materials = 1
@@ -402,7 +728,7 @@ kbGameEntity 0 0 0 0 {
 		Model = .\assets\models\characters\sheep\sheep.ms3d
 	}
 	kbSkeletalModelComponent { 
-		Enabled = 1
+		Enabled = 0
 		LifeTime =  -1.000000
 		CastsShadow = 0
 		Materials = 1
@@ -441,5 +767,447 @@ kbGameEntity 0 0 0 0 {
 			}
 		DebugAnimIndex = 0
 		Model = .\assets\models\characters\sheep\sheep.ms3d
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Camera"
+		Orientation = -0.030848 -0.706434 0.030848 0.706434
+		Position = -4.000311 2.350000 15.034235
+		Scale = 1.000000 1.000000 1.000000
+	}
+	CannonCameraComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		DummyTemp = 0
+		Health =  10.000000
+		FarPlane =  1000.000000
+		LookAtOffset = 0.000000 2.000000 0.000000
+		MovementMode = Follow
+		NearPlane =  0.250000
+		PositionOffset = -4.000000 2.350000 0.000000
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Snolaf"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 4.000000 0.000000 0.000000
+		Scale = 1.000000 1.000000 1.000000
+	}
+	kbSkeletalModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 1
+		Materials = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\character\characterbase.kbshader
+				ShaderParams = 1
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorTexture"
+						Texture = .\assets\models\characters\snolaf\snolaf_color.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		RenderPass = LightingPass
+		TranslucencySortBias =  0.000000
+		Animations = 0
+		DebugAnimIndex = -1
+		Model = .\assets\models\characters\snolaf\snolaf.ms3d
+	}
+	kbSkeletalModelComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		Materials = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\character\characteroutline.kbshader
+				ShaderParams = 2
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "outlineParams"
+						Texture = NULL
+						Vector = 0.020000 0.100000 0.750000 5.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorTexture"
+						Texture = .\assets\models\characters\snolaf\snolaf_color.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		RenderPass = LightingPass
+		TranslucencySortBias =  0.000000
+		Animations = 0
+		DebugAnimIndex = -1
+		Model = .\assets\models\characters\snolaf\snolaf.ms3d
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Jumping Jack Sheep"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 0.000000 0.000000 0.000000
+		Scale = 1.000000 1.000000 1.000000
+	}
+	kbSkeletalModelComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		CastsShadow = 1
+		Materials = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\character\characterbase.kbshader
+				ShaderParams = 1
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorTexture"
+						Texture = .\assets\models\characters\sheep\sheep.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		RenderPass = LightingPass
+		TranslucencySortBias =  0.000000
+		Animations = 1
+			kbAnimComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Animation = .\assets\models\characters\sheep\sheep_jumpingjacks.kbanim.ms3d
+				AnimationEvent = 0
+				AnimationName = ""
+				IsLooping = 1
+				TimeScale =  2.000000
+			}
+		DebugAnimIndex = 0
+		Model = .\assets\models\characters\sheep\sheep.ms3d
+	}
+	kbSkeletalModelComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		Materials = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\character\characteroutline.kbshader
+				ShaderParams = 2
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "outlineParams"
+						Texture = NULL
+						Vector = 0.025000 0.100000 0.800000 5.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorTexture"
+						Texture = .\assets\models\characters\sheep\sheep.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		RenderPass = Post-LightingPass
+		TranslucencySortBias =  0.000000
+		Animations = 1
+			kbAnimComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Animation = .\assets\models\characters\sheep\sheep_jumpingjacks.kbanim.ms3d
+				AnimationEvent = 0
+				AnimationName = ""
+				IsLooping = 1
+				TimeScale =  2.000000
+			}
+		DebugAnimIndex = 0
+		Model = .\assets\models\characters\sheep\sheep.ms3d
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Jumping Jack Sheep"
+		Orientation = 0.000000 -0.730372 0.000000 0.683049
+		Position = 4.489497 0.000000 -6.605713
+		Scale = 1.000000 1.000000 1.000000
+	}
+	kbSkeletalModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 1
+		Materials = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\character\characterbase.kbshader
+				ShaderParams = 1
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorTexture"
+						Texture = .\assets\models\characters\sheep\sheep.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		RenderPass = LightingPass
+		TranslucencySortBias =  0.000000
+		Animations = 1
+			kbAnimComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Animation = .\assets\models\characters\sheep\sheep_jumpingjacks.kbanim.ms3d
+				AnimationEvent = 0
+				AnimationName = ""
+				IsLooping = 1
+				TimeScale =  2.000000
+			}
+		DebugAnimIndex = 0
+		Model = .\assets\models\characters\sheep\sheep.ms3d
+	}
+	kbSkeletalModelComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		Materials = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\character\characteroutline.kbshader
+				ShaderParams = 2
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "outlineParams"
+						Texture = NULL
+						Vector = 0.025000 0.100000 0.800000 5.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorTexture"
+						Texture = .\assets\models\characters\sheep\sheep.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		RenderPass = Post-LightingPass
+		TranslucencySortBias =  0.000000
+		Animations = 1
+			kbAnimComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Animation = .\assets\models\characters\sheep\sheep_jumpingjacks.kbanim.ms3d
+				AnimationEvent = 0
+				AnimationName = ""
+				IsLooping = 1
+				TimeScale =  2.000000
+			}
+		DebugAnimIndex = 0
+		Model = .\assets\models\characters\sheep\sheep.ms3d
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Snolaf"
+		Orientation = 0.000000 0.708929 0.000000 -0.705280
+		Position = 4.000000 0.000000 -4.556848
+		Scale = 1.000000 1.000000 1.000000
+	}
+	kbSkeletalModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 1
+		Materials = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\character\characterbase.kbshader
+				ShaderParams = 1
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorTexture"
+						Texture = .\assets\models\characters\snolaf\snolaf_color.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		RenderPass = LightingPass
+		TranslucencySortBias =  0.000000
+		Animations = 1
+			kbAnimComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Animation = .\assets\models\characters\snolaf\snolaf_wave_temp.kbanim.ms3d
+				AnimationEvent = 0
+				AnimationName = ""
+				IsLooping = 1
+				TimeScale =  2.000000
+			}
+		DebugAnimIndex = 0
+		Model = .\assets\models\characters\snolaf\snolaf.ms3d
+	}
+	kbSkeletalModelComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		Materials = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\character\characteroutline.kbshader
+				ShaderParams = 2
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "outlineParams"
+						Texture = NULL
+						Vector = 0.020000 0.100000 0.750000 5.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorTexture"
+						Texture = .\assets\models\characters\snolaf\snolaf_color.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		RenderPass = LightingPass
+		TranslucencySortBias =  0.000000
+		Animations = 1
+			kbAnimComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Animation = .\assets\models\characters\snolaf\snolaf_wave_temp.kbanim.ms3d
+				AnimationEvent = 0
+				AnimationName = ""
+				IsLooping = 1
+				TimeScale =  2.000000
+			}
+		DebugAnimIndex = 0
+		Model = .\assets\models\characters\snolaf\snolaf.ms3d
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Entity_17"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = -0.424150 0.314745 8.137279
+		Scale = 1.000000 1.000000 1.000000
+	}
+	kbParticleComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "r"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 0.000000 0.000000 0.000000
+		Scale = 0.100000 0.100000 0.100000
+		AlphaOverLife = 0
+		ColorOverLife = 0
+		EndColor = 1.000000 1.000000 1.000000 1.000000
+		Gravity = 0.000000 0.000000 0.000000
+		MaterialList = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = ..\..\kbengine\assets\shaders\basicparticle.kbshader
+				ShaderParams = 1
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "shaderTexture"
+						Texture = ..\..\kbengine\assets\textures\flare.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		MaxBurstCount = 35
+		MaxDuration =  3.000000
+		MaxEndRotationRate =  0.000000
+		MaxEndSize = 3.000000 3.000000 3.000000
+		MaxEndVelocity = 0.000000 0.000000 5.000000
+		MaxSpawnRate =  2.000000
+		MaxStart3DOffset = 0.000000 0.000000 0.000000
+		MaxStart3DRotation = 0.000000 0.000000 0.000000
+		MaxStartRotationRate =  0.000000
+		MaxStartSize = 3.000000 3.000000 3.000000
+		MaxStartVelocity = 2.000000 5.000000 2.000000
+		MinBurstCount = 25
+		MinDuration =  3.000000
+		MinEndRotationRate =  0.000000
+		MinEndSize = 3.000000 3.000000 3.000000
+		MinEndVelocity = 0.000000 5.000000 0.000000
+		MinSpawnRate =  1.000000
+		MinStart3DOffset = 0.000000 0.000000 0.000000
+		MinStart3DRotation = 0.000000 0.000000 0.000000
+		MinStartRotationRate =  0.000000
+		MinStartSize = 3.000000 3.000000 3.000000
+		MinStartVelocity = -2.000000 5.000000 -2.000000
+		ModelEmitter = 0
+		ParticleBillboardType = FaceCamera
+		StartColor = 1.000000 1.000000 1.000000 1.000000
+		StartDelay =  0.000000
+		TotalDuration =  -1.000000
+		TranslucencySortBias =  0.000000
+		VelocityCurve = 0
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Sky"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = -0.730686 -0.498480 5.646349
+		Scale = 5000.000000 5000.000000 5000.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		Materials = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\basic\unlit.kbshader
+				ShaderParams = 1
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorTexture"
+						Texture = .\assets\test\checkerboard.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		RenderPass = Post-LightingPass
+		TranslucencySortBias =  0.000000
+		Model = ..\..\kbengine\assets\models\editor\invertedcube.ms3d
 	}
 }

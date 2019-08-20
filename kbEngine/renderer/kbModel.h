@@ -134,7 +134,7 @@ public:
 	size_t										NumVertices() const { return m_NumVertices; }
 	UINT										VertexStride() const { return m_Stride; }
 
-	kbModelIntersection_t						RayIntersection( const kbVec3 & rayOrigin, const kbVec3 & rayDirection, const kbVec3 & modelTranslation, const kbQuat & modelOrientation ) const;
+	kbModelIntersection_t						RayIntersection( const kbVec3 & rayOrigin, const kbVec3 & rayDirection, const kbVec3 & modelTranslation, const kbQuat & modelOrientation, const kbVec3 & scale ) const;
 
 	void										Animate( std::vector<kbBoneMatrix_t> & outMatrices, const float time, const kbAnimation *const pAnimation, const bool bLoopAnim );
 	void										BlendAnimations( std::vector<kbBoneMatrix_t> & outMatrices, const kbAnimation *const pFromAnim, const float fromAnimTime, const bool bFromAnimLoops, const kbAnimation *const pToAnim, const float ToAnimTime, const bool bToAnimLoops, const float normalizedBlendTime );

@@ -61,6 +61,7 @@ const static size_t g_NumEditorCamSpeedBindings = sizeof( g_EditorCamSpeedBindin
 kbEditor::kbEditor() :
 	Fl_Window( 0, 0, GetSystemMetrics( SM_CXFULLSCREEN ), GetSystemMetrics( SM_CYFULLSCREEN ) ) {
 
+	m_bGameUpdating = false;
 	const float editorInitStartTime = g_GlobalTimer.TimeElapsedSeconds();
 
 	outputCB = kbEditor::OutputCB;
@@ -103,11 +104,11 @@ kbEditor::kbEditor() :
 
 	mainMenuBar->add( "Edit/Delete", FL_Delete, DeleteEntitiesCB );
 
-	mainMenuBar->add( "File/Quit",   FL_CTRL+'q', Close, this );
+	mainMenuBar->add( "File/Quit", 0, Close, this );
 	mainMenuBar->add( "Edit/Change", FL_CTRL+'c', nullptr ) ;
 	mainMenuBar->add( "Edit/Submenu/Aaa" );
 	mainMenuBar->add( "Edit/Submenu/Bbb" );
-	mainMenuBar->add( "Add/Entity", FL_CTRL+'g', CreateGameEntity, this );
+	mainMenuBar->add( "Add/Entity", 0, CreateGameEntity, this );
 		
 	std::map<std::string, const kbTypeInfoClass *> & componentMap = g_NameToTypeInfoMap->GetClassMap(); 
 	std::map<std::string, const kbTypeInfoClass *>::iterator iter;
@@ -118,8 +119,8 @@ kbEditor::kbEditor() :
 		mainMenuBar->add( MenuName.c_str(), FL_CTRL+'g', AddComponent, (void*)iter->second);	// Hack cast - unfortunate
 	}
 	
-	mainMenuBar->add( "Play/Play Game From Here", FL_CTRL+'g', PlayGameFromHere );
-	mainMenuBar->add( "Play/Stop Game", 0, StopGame );
+	mainMenuBar->add( "Play/Play Game From Here", FL_CTRL+'p', PlayGameFromHere );
+	mainMenuBar->add( "Play/Stop Game",  FL_CTRL+'q', StopGame );
 
 	// buttons
 	const int buttonSpacing = 5;
@@ -370,12 +371,18 @@ void kbEditor::Update() {
 		return;
 	}
 
+	if ( m_bGameUpdating && GetAsyncKeyState( VK_BACK ) ) {
+		StopGame( nullptr, nullptr );
+	}
+
 	for ( int i = 0; i < m_UpdateWidgets.size(); i++ ) {
 		m_UpdateWidgets[i]->Update();
 	}
 
 	// Wait for rendering to complete, sync up any game objects that need it and kick off a new scene to render
-	g_pRenderer->WaitForRenderingToComplete();
+	if ( g_pRenderer != nullptr) {
+		g_pRenderer->WaitForRenderingToComplete();
+	}
 
 	// Update editor entities and components
 	for ( int i = 0; i < m_GameEntities.size(); i++ ) {
@@ -479,6 +486,10 @@ void kbEditor::Update() {
 	// Update editor entities and components
 	for ( int i = 0; i < m_GameEntities.size(); i++ ) {
 		m_GameEntities[i]->Update( DT );
+	}
+
+	if ( m_pGame != nullptr && m_bGameUpdating ) {
+		m_pGame->HackEditorUpdate( DT, m_pMainTab->GetEditorWindowCamera() );
 	}
 
 	// Update title bar dirty status
@@ -989,7 +1000,9 @@ void kbEditor::PlayGameFromHere( class Fl_Widget *, void * ) {
 		return;
 	}
 
-	std::vector< const kbGameEntity * > GameEntitiesList;
+	g_Editor->m_bGameUpdating = true;
+	g_pGame->HackEditorInit( g_Editor->m_pMainTab->GetEditorWindow()->GetWindowHandle(), g_Editor->m_GameEntities );
+	/*std::vector< const kbGameEntity * > GameEntitiesList;
 
 	for ( int i = 0; i < g_Editor->m_GameEntities.size(); i++ ) {
 		GameEntitiesList.push_back( g_Editor->m_GameEntities[i]->GetGameEntity() );
@@ -1003,7 +1016,32 @@ void kbEditor::PlayGameFromHere( class Fl_Widget *, void * ) {
 	widgetCB.widgetType = WidgetCB_GameStarted;
 	g_Editor->BroadcastEvent( widgetCB );
 	g_Editor->show();
-	Fl::check();
+	Fl::check();*/
+}
+
+/**
+ *	kbEditor::StopGame
+ */
+void kbEditor::StopGame( class Fl_Widget *, void * ) {
+	if ( g_Editor == nullptr || g_Editor->m_pGame == nullptr ) {
+		return;
+	}
+
+	g_Editor->m_bGameUpdating = false;
+	ShowCursor( true );
+
+	g_pGame->HackEditorShutdown();
+	/*
+	g_Editor->m_pGame->StopGame();
+
+	delete g_Editor->m_pGameWindow;
+	g_Editor->m_pGameWindow = nullptr;
+
+	g_pRenderer->SetRenderWindow( nullptr );
+
+	widgetCBObject widgetCB;
+	widgetCB.widgetType = WidgetCB_GameStopped;
+	g_Editor->BroadcastEvent( widgetCB );*/
 }
 
 /**
@@ -1027,26 +1065,6 @@ void kbEditor::DeleteEntitiesCB( class Fl_Widget *, void * ) {
 
 	std::vector<kbEditorEntity *> SelectedObjects = g_Editor->GetSelectedObjects();
 	g_Editor->DeleteEntities( SelectedObjects );
-}
-
-/**
- *	kbEditor::StopGame
- */
-void kbEditor::StopGame( class Fl_Widget *, void * ) {
-	if ( g_Editor == nullptr || g_Editor->m_pGame == nullptr || g_Editor->m_pGame->IsPlaying() == false ) {
-		return;
-	}
-
-	g_Editor->m_pGame->StopGame();
-
-	delete g_Editor->m_pGameWindow;
-	g_Editor->m_pGameWindow = nullptr;
-
-	g_pRenderer->SetRenderWindow( nullptr );
-
-	widgetCBObject widgetCB;
-	widgetCB.widgetType = WidgetCB_GameStopped;
-	g_Editor->BroadcastEvent( widgetCB );
 }
 
 /**

@@ -3,7 +3,7 @@
 //
 // Base Renderer Class
 //
-// 2018 kbEngine 2.0
+// 2018-2019 kbEngine 2.0
 //==============================================================================
 #ifndef _KBRENDERER_H_
 #define _KBRENDERER_H_
@@ -138,6 +138,9 @@ public:
 	virtual void												BeginFrame();
 	virtual void												EndFrame();
 
+	float														GetNearPlane() const { return m_NearPlane_RenderThread; }
+	float														GetFarPlane() const { return m_FarPlane_RenderThread; }
+
 	uint														GetViewPixelWidth() const { return m_ViewPixelWidth; }
 	uint														GetViewPixelHeight() const { return m_ViewPixelHeight; }
 	float														GetFViewPixelWidth() const { return m_fViewPixelWidth; }
@@ -192,6 +195,11 @@ private:
 	kbVec3														m_CameraPosition_GameThread;
 	kbQuat														m_CameraRotation_GameThread;
 
+	float														m_NearPlane_GameThread;
+	float														m_NearPlane_RenderThread;
+	float														m_FarPlane_GameThread;
+	float														m_FarPlane_RenderThread;
+
 	std::map<const kbGameComponent *, kbRenderObject *>			m_RenderObjectMap;
 	std::map<const kbLightComponent *, kbRenderLight *>			m_RenderLightMap;
 	std::map<const void *, kbRenderObject *>					m_RenderParticleMap;
@@ -243,17 +251,21 @@ public:
 
 	void										Shutdown();
 
+	void										SetWorldAndEditorIconScale( const float newWorldScale, const float editorIconScale ) { m_GlobalModelScale_GameThread = newWorldScale, m_EditorIconScale_GameThread = editorIconScale; }
+
 	virtual void								LoadTexture( const char * name, int index, int width = -1, int height = -1 );
 
 	virtual int									CreateRenderView( HWND hwnd ) = 0;
-	virtual void								SetRenderWindow( HWND hwnd ) = 0
-;
+	virtual void								SetRenderWindow( HWND hwnd ) = 0;
+
 	void										RegisterRenderHook( kbRenderHook *const pHook );
 	void										UnregisterRenderHook( kbRenderHook *const pHook );
 
 	// View Transform
 	virtual void								SetRenderViewTransform( const HWND hwnd, const kbVec3 & position, const kbQuat & rotation );
 	virtual void								GetRenderViewTransform( const HWND hwnd, kbVec3 & position, kbQuat & rotation );
+
+	void										SetNearFarPlane( const HWND hwnd, const float near, const float far );
 
 	void										AddRenderObject( const kbRenderObject & renderObjectToAdd );
 	void										UpdateRenderObject( const kbRenderObject & renderObjectToUpdate );
@@ -352,6 +364,12 @@ protected:
 
 	int											Back_Buffer_Width;
 	int											Back_Buffer_Height;
+
+	float										m_GlobalModelScale_GameThread;
+	float										m_GlobalModelScale_RenderThread;
+
+	float										m_EditorIconScale_GameThread;
+	float										m_EditorIconScale_RenderThread;
 
 	kbRenderWindow *							m_pCurrentRenderWindow;    // the render window BeginScene was called with
 	std::vector<kbRenderWindow *>				m_RenderWindowList;

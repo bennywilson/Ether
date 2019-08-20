@@ -222,6 +222,34 @@ kbString kbGameComponent::GetOwnerName() const {
 }
 
 /**
+ *	kbGameComponent::GetOwnerPosition
+ */
+kbVec3 kbGameComponent::GetOwnerPosition() const {
+	return ((kbGameEntity*)GetOwner())->GetPosition();
+}
+
+/**
+ *	kbGameComponent::GetOwnerRotation
+ */
+kbQuat kbGameComponent::GetOwnerRotation() const {
+	return ((kbGameEntity*)GetOwner())->GetOrientation();
+}
+
+/**
+ *	kbGameComponent::SetOwnerPosition
+ */
+void kbGameComponent::SetOwnerPosition( const kbVec3 & position ) {
+	GetOwner()->SetPosition( position );
+}
+
+/**
+ *	kbGameComponent::SetOwnerRotation
+ */
+void kbGameComponent::SetOwnerRotation( const kbQuat & rotation ) {
+	GetOwner()->SetOrientation( rotation );
+}
+
+/**
  *	kbTransformComponent::Constructor
  */
 void kbTransformComponent::Constructor() {

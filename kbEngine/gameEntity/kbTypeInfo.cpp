@@ -1,7 +1,7 @@
 //==============================================================================
 // kbTypeInfo.cpp
 //
-// 2016-2018 kbEngine 2.0
+// 2016-2019 kbEngine 2.0
 //==============================================================================
 #include "kbCore.h"
 #include "kbVector.h"
@@ -10,6 +10,7 @@
 #include "kbGameEntityHeader.h"
 #include "kbRenderer_Defs.h"
 #include "kbMaterial.h"
+#include "kbLevelComponent.h"
 
 using namespace std;
 
@@ -66,7 +67,6 @@ EClothType_Enum EClothType_EnumClass;
 ECollisionType_Enum ECollisionType_EnumClass;
 
 EBillboardType_Enum EBillboardType_EnumClass;
-
 
 DEFINE_KBCLASS(kbComponent)
 
@@ -133,5 +133,7 @@ DEFINE_KBCLASS(kbPlayerStartComponent)
 DEFINE_KBCLASS(kbSoundData)
 
 DEFINE_KBCLASS(kbDebugSphereCollision)
+
+DEFINE_KBCLASS(kbLevelComponent)
 
 typedef kbResource * kbResourcePtr;

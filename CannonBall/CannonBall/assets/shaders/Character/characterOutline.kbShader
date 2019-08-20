@@ -9,6 +9,7 @@ cbuffer matrixBuffer {
 	float4x4	boneList[128];
 	float4		cameraPos;
 	float4		outlineParams;		// x: Thickness, y: Push back, z: Outline Color Factor, w: Mip-Level
+	float4		smearParams;
 };
 
 kbShaderState {
@@ -36,9 +37,9 @@ struct pixelInput {
 //-------------------------------------
 struct PS_OUTPUT {
 	float4 Color			: SV_TARGET0;
-	float4 Normal			: SV_TARGET1;
+/*	float4 Normal			: SV_TARGET1;
 	float4 Specular			: SV_TARGET2;
-	float2 Depth			: SV_TARGET3;
+	float2 Depth			: SV_TARGET3;*/
 };
 
 
@@ -61,6 +62,10 @@ pixelInput vertexShader( vertexInput input ) {
 	float4 Pos = mul( input.position, blendedMat );
 	Pos = mul( Pos, modelMatrix );
 	Pos /= Pos.w;
+
+	if ( dot( output.normal.xyz, smearParams.xyz ) > 0 ) {
+		Pos.xyz += smearParams.xyz;
+	}
 
 	Pos.xyz += output.normal.xyz * outlineParams.x;
 
@@ -90,10 +95,10 @@ SamplerState DefaultSampler;
 	output.Color.xyz = colorTex.xyz;
 	output.Color.w = 0;//colorTex.w *A 0.55;
 	output.Color.w = -1.0f;
-	output.Specular = float4( 0.0f, 1.0f, 0.0f, 0.0f );
-	output.Depth.r = input.position2.x / input.position2.y;
+//	output.Specular = float4( 0.0f, 1.0f, 0.0f, 0.0f );
+//	output.Depth.r = input.position2.x / input.position2.y;
 
-	output.Normal.xyz = normalize( input.normal );
+	//output.Normal.xyz = normalize( input.normal );
 
 	return output;
 }

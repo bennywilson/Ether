@@ -159,7 +159,7 @@ kbCollisionInfo_t kbCollisionManager::PerformLineCheck( const kbVec3 & start, co
 				kbWarning( "kbCollisionManager::PerformLineCheck() - Entity %s is missing a kbStaticModelComponent", pOwner->GetName().c_str() );
 				continue;
 			}
-			kbModelIntersection_t intersection = pStaticModel->GetModel()->RayIntersection( start, rayDir, pOwner->GetPosition(), pOwner->GetOrientation() );
+			kbModelIntersection_t intersection = pStaticModel->GetModel()->RayIntersection( start, rayDir, pOwner->GetPosition(), pOwner->GetOrientation(), kbVec3::one );
 			if ( intersection.hasIntersection && intersection.t < LineLength && intersection.t < collisionInfo.m_T ) {
 				collisionInfo.m_bHit = true;
 				collisionInfo.m_HitLocation = start + rayDir * intersection.t;

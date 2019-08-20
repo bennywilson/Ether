@@ -2,7 +2,7 @@
 // kbManipulator.cpp
 //
 //
-// 2016-2018 kbEngine 2.0
+// 2016-2019 kbEngine 2.0
 //===================================================================================================
 #include "kbCore.h"
 #include "kbVector.h"
@@ -34,9 +34,10 @@ kbManipulator::~kbManipulator() {
  */
 bool kbManipulator::AttemptMouseGrab( const kbVec3 & rayOrigin, const kbVec3 & rayDirection, const kbQuat & cameraOrientation ) {
 
-	kbModel *const pModel = m_pModels[m_ManipulatorMode];
+	const kbModel *const pModel = m_pModels[m_ManipulatorMode];
 
-	kbModelIntersection_t intersection = pModel->RayIntersection( rayOrigin, rayDirection, m_Position, m_Orientation );
+	extern float g_EditorIconScale;
+	const kbModelIntersection_t intersection = pModel->RayIntersection( rayOrigin, rayDirection, m_Position, m_Orientation, kbVec3( g_EditorIconScale, g_EditorIconScale, g_EditorIconScale ) );
 
 	if ( intersection.hasIntersection ) {
 		m_SelectedGroup = intersection.meshNum;

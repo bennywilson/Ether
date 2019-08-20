@@ -1,40 +1,33 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="stdafx.cpp" />
-    <ClCompile Include="CannonBall.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="CannonBall\CannonGame.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="CannonBall\CannonTypeInfoGeneratedClasses.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
+    <ClInclude Include="Source\Game\CannonPlayer.h">
+      <Filter>Source\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="stdafx.h">
+      <Filter>Source\Win</Filter>
+    </ClInclude>
+    <ClInclude Include="targetver.h">
+      <Filter>Source\Win</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource.h">
+      <Filter>Source\Win</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Game\CannonTypeInfoGeneratedClasses.h">
+      <Filter>Source\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Game\CannonGame.h">
+      <Filter>Source\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Win\CannonBall.h">
+      <Filter>Source\Win</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Game\KungFuSheep\KungFuSheep.h">
+      <Filter>Source\Game\KungFuSheep</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="GameBase.h" />
-    <ClInclude Include="Resource.h" />
-    <ClInclude Include="stdafx.h" />
-    <ClInclude Include="targetver.h" />
-    <ClInclude Include="CannonBall.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CannonBall\CannonGame.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CannonBall\CannonTypeInfoGeneratedClasses.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="ReadMe.txt" />
-    <None Include="small.ico" />
-    <None Include="CannonBall.ico" />
     <None Include="assets\shaders\Character\CharacterBase.kbShader">
-      <Filter>Shaders\Characters</Filter>
-    </None>
-    <None Include="assets\shaders\Character\characterOutline_NoSkinning.kbShader">
       <Filter>Shaders\Characters</Filter>
     </None>
     <None Include="assets\shaders\Character\characterOutline.kbShader">
@@ -43,13 +36,19 @@
     <None Include="assets\shaders\Environment\environmentBase.kbShader">
       <Filter>Shaders\Environment</Filter>
     </None>
+    <None Include="CannonBall.ico">
+      <Filter>Source\Win</Filter>
+    </None>
+    <None Include="small.ico">
+      <Filter>Source\Win</Filter>
+    </None>
+    <None Include="assets\shaders\Basic\unlit.kbShader">
+      <Filter>Shaders\Basic</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Shaders">
       <UniqueIdentifier>{5bdba277-345a-40c2-adf9-24d886f33156}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files">
-      <UniqueIdentifier>{42d305e5-2225-43a6-81e1-d480981991c3}</UniqueIdentifier>
     </Filter>
     <Filter Include="Shaders\Characters">
       <UniqueIdentifier>{70eff587-d687-4d3d-bc0a-66bfd60b2f09}</UniqueIdentifier>
@@ -57,8 +56,45 @@
     <Filter Include="Shaders\Environment">
       <UniqueIdentifier>{743a5ff9-3b82-431f-9187-09f5990986b1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source">
+      <UniqueIdentifier>{0c57f1d9-3818-4a43-a5eb-0eb7091f4c82}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Game">
+      <UniqueIdentifier>{a0750529-3dd1-424d-9a64-19495e9b2c07}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Win">
+      <UniqueIdentifier>{79a132ad-a0fc-4c2e-abb1-ef8e3a2ed775}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shaders\Basic">
+      <UniqueIdentifier>{e21a0861-7d59-438f-960e-94799d7a6341}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Game\KungFuSheep">
+      <UniqueIdentifier>{3f6a96da-5862-455d-b5e2-b4f7a692dc25}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="CannonBall.rc" />
+    <ClCompile Include="Source\Game\CannonPlayer.cpp">
+      <Filter>Source\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="stdafx.cpp">
+      <Filter>Source\Win</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Game\CannonTypeInfoGeneratedClasses.cpp">
+      <Filter>Source\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Game\CannonGame.cpp">
+      <Filter>Source\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Win\CannonBall.cpp">
+      <Filter>Source\Win</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Game\KungFuSheep\KungFuSheep.cpp">
+      <Filter>Source\Game\KungFuSheep</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="CannonBall.rc">
+      <Filter>Source\Win</Filter>
+    </ResourceCompile>
   </ItemGroup>
 </Project>

@@ -3,7 +3,7 @@
 //
 // Renderer implementation using DX11 API
 //
-// 2016-2018 kbEngine 2.0
+// 2016-2019 kbEngine 2.0
 //==============================================================================
 #ifndef _KBRENDERER_DX11_H_
 #define _KBRENDERER_DX11_H_
@@ -388,9 +388,6 @@ public:
 
 	virtual kbVec2i								GetEntityIdAtScreenPosition( const uint x, const uint y ) override;
 
-	const static float							Near_Plane;
-	const static float							Far_Plane;
-
 	virtual void								SetGlobalShaderParam( const kbShaderParamOverrides_t::kbShaderParam_t & shaderParam ) override;
 	virtual void								SetGlobalShaderParam( const kbShaderParamOverrides_t & shaderParam ) override;
 
@@ -571,5 +568,8 @@ inline kbQuat ovrQuatTokbQuat( const ovrQuatf & inQuat ) {
 }
 
 extern kbRenderer_DX11 * g_pD3D11Renderer;
+
+XMMATRIX & XMMATRIXFromkbMat4( kbMat4 & matrix );
+kbMat4 & kbMat4FromXMMATRIX( FXMMATRIX & matrix );
 
 #endif

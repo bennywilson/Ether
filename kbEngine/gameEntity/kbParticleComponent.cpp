@@ -568,7 +568,6 @@ void kbParticleComponent::SetEnable_Internal( const bool isEnabled ) {
 void kbModelEmitter::Constructor() {
 	m_pModel = nullptr;
 
-
 }
 
 /**

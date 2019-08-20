@@ -97,6 +97,11 @@ public:
 
 	kbGameEntity *								GetOwner() const { return (kbGameEntity *) Super::GetOwner(); }
 	kbString									GetOwnerName() const;
+	kbVec3										GetOwnerPosition() const;
+	kbQuat										GetOwnerRotation() const;
+	
+	void										SetOwnerPosition( const kbVec3 & position );
+	void										SetOwnerRotation( const kbQuat & rotation );
 
 	float										GetStartingLifeTime() const { return m_StartingLifeTime; }
 	float										GetLifeTimeRemaining() const { return m_LifeTimeRemaining; }
@@ -229,6 +234,14 @@ private:
 };
 
 /**
+ *  IAnimEventListener
+ */
+class IAnimEventListener abstract {
+public:
+	virtual void							OnAnimEvent( const kbAnimEvent & animEvent ) = 0;
+};
+
+/**
  *	kbVectorAnimEvent
  */
 class kbVectorAnimEvent : public kbGameComponent {
@@ -270,6 +283,112 @@ class kbEditorLevelSettingsComponent : public kbGameComponent {
 public:
 	kbVec3									m_CameraPosition;
 	kbQuat									m_CameraRotation;
+};
+
+/**
+ *	IStateMachine
+ */
+template<typename StateEnum>
+class StateMachineNode abstract {
+
+//-------------------------------------------------------------------------------------------------------------------------------------------------------------
+public:
+
+	StateMachineNode() : m_RequestedState( (StateEnum)0 ), m_bHasStateChangeRequest( false ) { }
+
+	virtual void BeginState( const StateEnum previousState ) { }
+	virtual void UpdateState() { }
+	virtual void EndState( const StateEnum nextState ) { }
+
+	bool HasStateChangeRequest() const { return m_bHasStateChangeRequest; }
+	StateEnum GetAndClearRequestedStateChange() { m_bHasStateChangeRequest = false; return m_RequestedState; }
+
+protected:
+
+	void RequestStateChange( const StateEnum requestedState ) { m_bHasStateChangeRequest = true, m_RequestedState = requestedState; }
+
+private:
+
+	StateEnum m_RequestedState;
+	bool m_bHasStateChangeRequest;
+};
+
+template<typename StateClass, typename StateEnum>
+class IStateMachine abstract {
+
+//-------------------------------------------------------------------------------------------------------------------------------------------------------------
+public:
+
+	IStateMachine() : m_CurrentState( StateEnum::NumStates ) {
+		ZeroMemory( m_States, sizeof( m_States ) );
+	}
+
+	virtual ~IStateMachine() {
+		for ( int i = 0; i < StateEnum::NumStates; i++ ) {
+			delete m_States[i];
+		}
+	}
+
+	void UpdateStateMachine() {
+
+		// This condition is valid if state hasn't been set yet
+		if ( m_CurrentState >= StateEnum::NumStates ) {
+			return;
+		}
+
+		bool stateChanged = false;
+		if ( m_States[m_CurrentState]->HasStateChangeRequest() ) {
+			const StateEnum requestedState = m_States[m_CurrentState]->GetAndClearRequestedStateChange();
+			if ( requestedState != m_CurrentState ) {
+				m_States[m_CurrentState]->EndState( requestedState );
+
+				const StateEnum previousState = m_CurrentState;
+				m_CurrentState = requestedState;
+				m_States[m_CurrentState]->BeginState( previousState );
+				stateChanged = true;
+
+				StateChangeCallback( previousState, m_CurrentState );
+			}
+		}
+		
+		if ( stateChanged == false ) {
+			m_States[m_CurrentState]->UpdateState();
+		}
+	}
+
+protected:
+
+	void InitializeStates( StateClass * stateNodes[StateEnum::NumStates] ) {
+
+		for ( int i = 0; i < StateEnum::NumStates; i++ ) {
+			delete m_States[i];
+			m_States[i] = stateNodes[i];
+		}
+	}
+
+	void RequestStateChange( const StateEnum newState ) {
+
+		if ( newState < (StateEnum)(0) || newState >= StateEnum::NumStates ) {
+			kbError( "IStateMachine::RequestStateChange() - Invalid State requested" );
+		}
+
+		if ( m_CurrentState != StateEnum::NumStates ) {
+			m_States[m_CurrentState]->EndState( newState );
+		}
+
+		const StateEnum previousState = m_CurrentState;
+		m_CurrentState = newState;
+		m_States[m_CurrentState]->BeginState( previousState );
+
+		StateChangeCallback( previousState, m_CurrentState );
+	}
+
+	virtual void StateChangeCallback( const StateEnum previousState, const StateEnum nextState ) { }
+
+private:
+
+	StateClass * m_States[StateEnum::NumStates];
+	StateEnum m_CurrentState;
 };
 
 #endif
