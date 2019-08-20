@@ -53,16 +53,18 @@ class CannonCameraShakeComponent : public kbActorComponent {
 
 //---------------------------------------------------------------------------------------------------
 public:
+
 	float										GetDuration() const { return m_Duration; }
 	kbVec2										GetAmplitude() const { return kbVec2( m_AmplitudeX, m_AmplitudeY ); }
 	kbVec2										GetFrequency() const { return kbVec2( m_FrequencyX, m_FrequencyY ); }
 
 private:
+
 	float										m_Duration;
 	float										m_AmplitudeX;
-	float										m_FrequencyX;
-
 	float										m_AmplitudeY;
+
+	float										m_FrequencyX;
 	float										m_FrequencyY;
 };
 

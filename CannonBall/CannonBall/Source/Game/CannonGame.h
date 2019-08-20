@@ -35,21 +35,16 @@ protected:
 	virtual void								PreUpdate_Internal() override;
 	virtual void								PostUpdate_Internal() override;
 
-	virtual kbGameEntity *						CreatePlayer( const int netId, const kbGUID & prefabGUID, const kbVec3 & desiredLocation );
+	virtual kbGameEntity *						CreatePlayer( const int netId, const kbGUID & prefabGUID, const kbVec3 & desiredLocation ) override;
 
-	void										ProcessInput( const float deltaTimeSec );
-
-	void										AddPrefabToEntity( const kbPackage *const pPrefab, const std::string & prefabName, kbGameEntity *const pEntity, 
-																   const bool bComponentsOnly );
-
-	virtual void								HackEditorInit( HWND hwnd, std::vector<class kbEditorEntity *> & editorEntities );
-	virtual void								HackEditorUpdate( const float DT, kbCamera *const pCamera );
-	virtual void								HackEditorShutdown();
+	virtual void								HackEditorInit( HWND hwnd, std::vector<class kbEditorEntity *> & editorEntities ) override;
+	virtual void								HackEditorUpdate( const float DT, kbCamera *const pCamera ) override;
+	virtual void								HackEditorShutdown() override;
 
 protected:
 
 	virtual void								RenderSync() override;
-	virtual void								RenderHookCallBack( kbRenderTexture *const pSrc, kbRenderTexture *const pDst );
+	virtual void								RenderHookCallBack( kbRenderTexture *const pSrc, kbRenderTexture *const pDst ) override;
 
 	kbCamera									m_Camera;
 
@@ -58,6 +53,10 @@ protected:
 	class kbLevelComponent *					m_pLevelComp;
 	class CannonCameraComponent *				m_pMainCamera;
 	class CannonPlayerComponent *				m_pPlayerComp;
+
+private:
+
+	void										ProcessInput( const float deltaTimeSec );
 };
 
 extern CannonGame * g_pCannonGame;

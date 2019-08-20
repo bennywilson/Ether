@@ -160,13 +160,6 @@ void CannonGame::ProcessInput( const float DT ) {
 }
 
 /**
- *	CannonGame::AddPrefabToEntity
- */
-void CannonGame::AddPrefabToEntity( const kbPackage *const pPrefabPackage, const std::string & prefabName, kbGameEntity *const pEntity, const bool bComponentsOnly ) {
-	
-}
-
-/**
  *	CannonGame::RenderSync
  */
 void CannonGame::RenderSync() {

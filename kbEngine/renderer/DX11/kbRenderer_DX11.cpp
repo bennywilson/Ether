@@ -954,7 +954,7 @@ int kbRenderer_DX11::CreateRenderView( HWND hwnd )
 
 	sd.BufferDesc.Width = Back_Buffer_Width;
 	sd.BufferDesc.Height = Back_Buffer_Height;
-	sd.BufferDesc.RefreshRate.Numerator = 0;
+	sd.BufferDesc.RefreshRate.Numerator = 120;
 	sd.BufferDesc.RefreshRate.Denominator = 1;
 	sd.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;//DXGI_FORMAT_B8G8R8A8_UNORM;
 	sd.BufferDesc.ScanlineOrdering = DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED;
@@ -967,13 +967,13 @@ int kbRenderer_DX11::CreateRenderView( HWND hwnd )
 	sd.BufferCount = 2;
 	sd.OutputWindow = hwnd;
 	sd.Windowed = TRUE;
-	sd.SwapEffect = DXGI_SWAP_EFFECT_SEQUENTIAL;
+	sd.SwapEffect = DXGI_SWAP_EFFECT_FLIP_SEQUENTIAL ;
 	sd.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;
 
 	RECT windowDimensions;
 	GetClientRect( hwnd, &windowDimensions );
 
-	kbRenderWindow_DX11 * renderView = new kbRenderWindow_DX11( hwnd, windowDimensions, 1.0f, 20000.0f );
+	kbRenderWindow_DX11 * renderView = new kbRenderWindow_DX11( hwnd, windowDimensions, 1.0f, 20000.0f );		// TODO - NEAR/FAR PLANE 
 
 	m_pDXGIFactory->CreateSwapChain( m_pD3DDevice, &sd, &renderView->m_pSwapChain );
 

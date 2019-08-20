@@ -62,17 +62,17 @@ void CannonPlayerComponent::Update_Internal( const float DeltaTime ) {
 void CannonCameraComponent::Constructor() {
 
 	// Editor
-	m_MoveMode = MoveMode_Follow;
-	m_LookAtOffset.Set( 0.0f, 0.0f, 0.0f );
+	m_NearPlane = 1.0f;
+	m_FarPlane = 20000.0f;		// TODO - NEAR/FAR PLANE - Tie into renderer properly
 	m_PositionOffset.Set( 0.0f, 0.0f, 0.0f );
+	m_LookAtOffset.Set( 0.0f, 0.0f, 0.0f );
 
+	m_MoveMode = MoveMode_Follow;
 	m_pTarget = nullptr;
 
 	// Game
-	m_NearPlane = 1.0f;
-	m_FarPlane = 20000.0f;
-
 	m_CameraShakeStartTime = -1.0f;
+	m_CameraShakeStartingOffset.Set( 0.0f, 0.0f );
 	m_CameraShakeDuration = 0.0f;
 	m_CameraShakeAmplitude.Set( 0.0f, 0.0f );
 	m_CameraShakeFrequency.Set( 0.0f, 0.0f );
@@ -86,17 +86,6 @@ void CannonCameraComponent::SetEnable_Internal( const bool bEnable ) {
 
 	m_pTarget = nullptr;
 	g_pRenderer->SetNearFarPlane( nullptr, m_NearPlane, m_FarPlane );
-	if ( bEnable ) {
-		switch( m_MoveMode ) {
-			case MoveMode_None : {
-			}
-			break;
-
-			case MoveMode_Follow : {
-			}
-			break;
-		}
-	}
 }
 
 /**
@@ -159,8 +148,7 @@ void CannonCameraComponent::Update_Internal( const float DeltaTime ) {
 	}
 
 	switch( m_MoveMode ) {
-		case MoveMode_None : {
-				
+		case MoveMode_None : {	
 		}
 		break;
 
@@ -190,8 +178,8 @@ void CannonCameraComponent::Update_Internal( const float DeltaTime ) {
 void CannonCameraShakeComponent::Constructor() {
 	m_Duration = 1.0f;
 	m_AmplitudeX = 0.025f;
-	m_FrequencyX = 15.0f;
-
 	m_AmplitudeY = 0.019f;
+
+	m_FrequencyX = 15.0f;
 	m_FrequencyY = 10.0f;
 }

@@ -234,7 +234,7 @@ private:
 };
 
 /**
- *  kbEditorLevelSettingsComponent
+ *  IAnimEventListener
  */
 class IAnimEventListener abstract {
 public:

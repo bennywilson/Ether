@@ -118,9 +118,15 @@ bool kbModel::LoadMS3D() {
 	modelFile.open( m_FullFileName, std::ifstream::in | std::ifstream::binary );
 	kbErrorCheck( modelFile.good(), "kbModel::LoadMS3D() - Failed to load model %s", m_FullFileName.c_str() );
 	
+	bool spitIt =  false;
+	if ( m_FullFileName.find("olaf") != std::string::npos ) {
+		spitIt = true;
+		kbLog("Processing...		%s", m_FullFileName.c_str());
+	}
+
 	// Find the file size
 	modelFile.seekg( 0, std::ifstream::end );
-	std::streamoff fileSize = modelFile.tellg();
+	const std::streamoff fileSize = modelFile.tellg();
 	modelFile.seekg( 0, std::ifstream::beg );
 
 	// Load file into memory
@@ -333,10 +339,18 @@ bool kbModel::LoadMS3D() {
 			const char *const pWeights = (const char *)pPtr;
 			pPtr += sizeof( char )  * 3;
 
-			tempVertexBoneData[i].weights[0] = pWeights[0];
-			tempVertexBoneData[i].weights[1] = pWeights[1];
-			tempVertexBoneData[i].weights[2] = pWeights[2];
-			tempVertexBoneData[i].weights[3] = 100 - pWeights[0] - pWeights[1] - pWeights[2];
+
+			if ( pWeights[0] == pWeights[1] == pWeights[2] == 0 ) {
+				tempVertexBoneData[i].weights[0] = 255;
+				tempVertexBoneData[i].weights[1] = 0;
+				tempVertexBoneData[i].weights[2] = 0;
+				tempVertexBoneData[i].weights[3] = 0;
+			} else {
+				tempVertexBoneData[i].weights[0] = pWeights[0];
+				tempVertexBoneData[i].weights[1] = pWeights[1];
+				tempVertexBoneData[i].weights[2] = pWeights[2];    
+				tempVertexBoneData[i].weights[3] = 100 - pWeights[0] - pWeights[1] - pWeights[2];
+			}
 
 			const uint *const pExtra = (uint*) pPtr;
 			pPtr += sizeof( uint ) * 2;
