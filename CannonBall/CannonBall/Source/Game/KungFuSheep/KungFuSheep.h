@@ -29,21 +29,15 @@ namespace KungFuSheepState {
 template<typename T>
 class KungFuSheepStateBase;
 
-class KungFuSheepComponent : public CannonPlayerComponent, IStateMachine<KungFuSheepStateBase<KungFuSheepState::SheepStates_t>, KungFuSheepState::SheepStates_t> {
-	KB_DECLARE_COMPONENT( KungFuSheepComponent, CannonPlayerComponent );
+class KungFuSheepComponent : public CannonActorComponent, IStateMachine<KungFuSheepStateBase<KungFuSheepState::SheepStates_t>, KungFuSheepState::SheepStates_t> {
+	KB_DECLARE_COMPONENT( KungFuSheepComponent, CannonActorComponent );
 
 	friend class KungFuSheepStateBase<KungFuSheepState::SheepStates_t>;
 
 //---------------------------------------------------------------------------------------------------'
 public:
 
-	kbVec3										GetTargetFacingDirection() const { return m_TargetFacingDirection; }
-	void										SetTargetFacingDirection( const kbVec3 & targetDir ) { m_TargetFacingDirection = targetDir; }
 
-	bool										IsPlayingAnim( const kbString animName ) const;
-
-	void										PlayAnimation( const kbString animName, const float animBlendInLen, const bool bRestartIfAlreadyPlaying = false, const kbString nextAnim = kbString::EmptyString, const float nextAnimBlendInLen = 0.0f );
-	bool										HasFinishedAnim() const;
 
 protected:
 
@@ -61,32 +55,20 @@ private:
 	float										m_DropSmearMagnitude;
 
 	// Game
-	float										m_AnimSmearStartTime;
-	float										m_AnimSmearDuration;
-	kbVec4										m_AnimSmearVec;
-	kbVec3										m_TargetFacingDirection;
+
+//---------------------------------------------------------------------------------------------------
 
 	// IAnimEventListener
 	virtual void								OnAnimEvent( const kbAnimEvent & animEvent ) override;
 };
 
 template<typename T>
-class KungFuSheepStateBase : public StateMachineNode<T> {
+class KungFuSheepStateBase : public CannonBallCharacterState<T> {
 
 //---------------------------------------------------------------------------------------------------'
 public:
 
-	KungFuSheepStateBase( KungFuSheepComponent *const pPlayerComponent ) : m_pPlayerComponent( pPlayerComponent ) { }
-
-protected:
-
-	void PlayAnimation( const kbString animationName, const float BlendInLength, const bool bRestartIfAlreadyPlaying = false, const kbString nextAnim = kbString::EmptyString, const float nextAnimBlendInLen = 0.0f ) {
-		kbErrorCheck( m_pPlayerComponent != nullptr, "KungFuSheepStateBase::PlayAnimation() - NULL player component" );
-		m_pPlayerComponent->PlayAnimation( animationName, BlendInLength, bRestartIfAlreadyPlaying, nextAnim, nextAnimBlendInLen );
-	}
-	
-	KungFuSheepComponent * m_pPlayerComponent;
-
+	KungFuSheepStateBase( CannonActorComponent *const pPlayerComponent ) : CannonBallCharacterState( pPlayerComponent ) { }
 };
 
 

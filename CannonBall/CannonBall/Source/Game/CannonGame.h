@@ -52,7 +52,7 @@ protected:
 
 	class kbLevelComponent *					m_pLevelComp;
 	class CannonCameraComponent *				m_pMainCamera;
-	class CannonPlayerComponent *				m_pPlayerComp;
+	class CannonActorComponent *				m_pPlayerComp;
 
 private:
 

@@ -86,7 +86,10 @@ void CannonGame::LevelLoaded_Internal() {
 		}
 
 		if ( m_pPlayerComp == nullptr ) {
-			m_pPlayerComp = (CannonPlayerComponent*)pCurEnt->GetComponentByType( CannonPlayerComponent::GetType() );
+			CannonActorComponent *const pActor = (CannonActorComponent*)pCurEnt->GetComponentByType( CannonActorComponent::GetType() );
+			if ( pActor->IsPlayer() ) {
+				m_pPlayerComp = pActor;
+			}
 		}
 	}
 
@@ -187,7 +190,7 @@ void CannonGame::HackEditorInit( HWND hwnd, std::vector<class kbEditorEntity *> 
 		kbGameEntity *const pCurEnt = editorEntities[i]->GetGameEntity();
 
 		if ( m_pPlayerComp == nullptr ) {
-			m_pPlayerComp = (CannonPlayerComponent*)pCurEnt->GetComponentByType( CannonPlayerComponent::GetType() );
+			m_pPlayerComp = (CannonActorComponent*)pCurEnt->GetComponentByType( CannonActorComponent::GetType() );
 		}
 
 		if ( m_pMainCamera == nullptr ) {

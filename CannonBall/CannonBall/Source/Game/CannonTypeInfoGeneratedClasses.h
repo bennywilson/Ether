@@ -13,9 +13,9 @@ GenerateEnum(
 )
 
 GenerateClass(
-	CannonPlayerComponent,
-	AddField( "MaxRunSpeed", KBTYPEINFO_FLOAT, CannonPlayerComponent, m_MaxRunSpeed, false, "" )
-	AddField( "MaxRotateSpeed", KBTYPEINFO_FLOAT, CannonPlayerComponent, m_MaxRotateSpeed, false, "" )
+	CannonActorComponent,
+	AddField( "MaxRunSpeed", KBTYPEINFO_FLOAT, CannonActorComponent, m_MaxRunSpeed, false, "" )
+	AddField( "MaxRotateSpeed", KBTYPEINFO_FLOAT, CannonActorComponent, m_MaxRotateSpeed, false, "" )
 )
 
 GenerateClass(
@@ -25,6 +25,11 @@ GenerateClass(
 	AddField("CannonBallImpactSound", KBTYPEINFO_STRUCT, KungFuSheepComponent, m_CannonBallImpactSound, true, "kbSoundData")
 	AddField("JumpSmearMagnitude", KBTYPEINFO_FLOAT, KungFuSheepComponent, m_JumpSmearMagnitude, false, "")
 	AddField("DropSmearMagnitude", KBTYPEINFO_FLOAT, KungFuSheepComponent, m_DropSmearMagnitude, false, "")
+)
+
+GenerateClass(
+	KungFuSnolafComponent,
+	AddField("Dummy", KBTYPEINFO_FLOAT, KungFuSnolafComponent, m_Dummy, false, "")
 )
 
 GenerateClass(

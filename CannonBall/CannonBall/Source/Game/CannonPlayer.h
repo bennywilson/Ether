@@ -7,17 +7,27 @@
 #define _KBCANNONPLAYER_H_
 
 /**
- *	CannonPlayerComponent
+ *	CannonActorComponent
  */
-class CannonPlayerComponent : public kbActorComponent, IAnimEventListener {
+class CannonActorComponent : public kbActorComponent, IAnimEventListener {
 
-	KB_DECLARE_COMPONENT( CannonPlayerComponent, kbActorComponent );
+	KB_DECLARE_COMPONENT( CannonActorComponent, kbActorComponent );
 
 //---------------------------------------------------------------------------------------------------
 public:
 
 	float										GetMaxRunSpeed() const { return m_MaxRunSpeed; }
 	float										GetMaxRotateSpeed() const { return m_MaxRotateSpeed; }
+
+	kbVec3										GetTargetFacingDirection() const { return m_TargetFacingDirection; }
+	void										SetTargetFacingDirection( const kbVec3 & targetDir ) { m_TargetFacingDirection = targetDir; }
+
+	bool										IsPlayingAnim( const kbString animName ) const;
+
+	void										PlayAnimation( const kbString animName, const float animBlendInLen, const bool bRestartIfAlreadyPlaying = false, const kbString nextAnim = kbString::EmptyString, const float nextAnimBlendInLen = 0.0f );
+	bool										HasFinishedAnim() const;
+
+	bool										IsPlayer() const { return m_bIsPlayer; }
 
 protected:
 
@@ -30,6 +40,13 @@ protected:
 
 	// Game
 	std::vector<kbSkeletalModelComponent *>		m_SkelModelsList;
+	kbVec3										m_TargetFacingDirection;
+
+	float										m_AnimSmearDuration;
+	kbVec4										m_AnimSmearVec;
+	float										m_AnimSmearStartTime;
+
+	bool										m_bIsPlayer;
 
 //---------------------------------------------------------------------------------------------------
 	// IAnimEventListener
@@ -106,5 +123,18 @@ private:
 	kbVec2										m_CameraShakeFrequency;
 };
 
+template<typename T>
+class CannonBallCharacterState : public StateMachineNode<T> {
+
+//---------------------------------------------------------------------------------------------------'
+public:
+
+	CannonBallCharacterState( CannonActorComponent *const pActorComponent ) : m_pActorComponent( pActorComponent ) { }
+
+protected:
+
+	CannonActorComponent * m_pActorComponent;
+
+};
 
 #endif

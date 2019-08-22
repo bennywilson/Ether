@@ -10,17 +10,25 @@
 #include "kbEditorEntity.h"
 
 /**
- *	CannonPlayerComponent::Constructor
+ *	CannonActorComponent::Constructor
  */
- void CannonPlayerComponent::Constructor() {
+ void CannonActorComponent::Constructor() {
 	m_MaxRunSpeed = 3.0f;
 	m_MaxRotateSpeed = 15.0f;
+
+	m_TargetFacingDirection.Set( 0.0f, 0.0f, -1.0f );
+
+	m_AnimSmearDuration = 0.1f;
+	m_AnimSmearVec.Set( 0.0f, 0.0f, 0.0f, 0.0f );
+	m_AnimSmearStartTime = -1.0f;
+
+	m_bIsPlayer = false;
 }
 
 /**
- *	CannonPlayerComponent::SetEnable_Internal
+ *	CannonActorComponent::SetEnable_Internal
  */
-void CannonPlayerComponent::SetEnable_Internal( const bool bEnable ) {
+void CannonActorComponent::SetEnable_Internal( const bool bEnable ) {
 	Super::SetEnable_Internal( bEnable );
 
 	if ( bEnable ) {
@@ -39,6 +47,8 @@ void CannonPlayerComponent::SetEnable_Internal( const bool bEnable ) {
 				m_SkelModelsList[i]->RegisterAnimEventListener( this );
 			}
 
+			const static kbString smearParam = "smearParams";
+			m_SkelModelsList[1]->SetMaterialParamVector( 0, smearParam.stl_str(), kbVec4::zero );
 		}
 	} else {
 		for ( int i = 0; i < m_SkelModelsList.size(); i++ ) {
@@ -50,10 +60,52 @@ void CannonPlayerComponent::SetEnable_Internal( const bool bEnable ) {
 }
 
 /**
- *	CannonPlayerComponent::Update_Internal
+ *	CannonActorComponent::Update_Internal
  */
-void CannonPlayerComponent::Update_Internal( const float DeltaTime ) {
-	Super::Update_Internal( DeltaTime );
+void CannonActorComponent::Update_Internal( const float DT ) {
+	Super::Update_Internal( DT );
+
+	const kbQuat curRot = GetOwnerRotation();
+
+	kbMat4 facingMat;
+	facingMat.LookAt( GetOwnerPosition(), GetOwnerPosition() + m_TargetFacingDirection, kbVec3::up );
+
+	const kbQuat targetRot = kbQuatFromMatrix( facingMat );
+	GetOwner()->SetOrientation( curRot.Slerp( curRot, targetRot, DT * m_MaxRotateSpeed ) );
+}
+
+/**
+ *	CannonActorComponent::PlayAnimation
+ */
+void CannonActorComponent::PlayAnimation( const kbString animName, const float animBlendInLen, const bool bRestartIfAlreadyPlaying, const kbString nextAnimName, const float nextAnimBlendInLen ) {
+	for ( int i = 0; i < m_SkelModelsList.size(); i++ ) {
+		kbSkeletalModelComponent *const pSkelModel = m_SkelModelsList[i];
+		pSkelModel->PlayAnimation( animName, animBlendInLen, bRestartIfAlreadyPlaying, nextAnimName, nextAnimBlendInLen );
+	}
+}
+
+/**
+ *	CannonActorComponent::HasFinishedAnim
+ */
+bool CannonActorComponent::HasFinishedAnim() const {
+	if ( m_SkelModelsList.size() == 0 ) {
+		kbWarning( "KungFuSheepComponent::HasFinishedAnim() - Called with empty m_SkelModels list" );
+		return true;
+	}
+
+	return m_SkelModelsList[0]->HasFinishedAnimation();
+}
+
+
+/**
+ *	CannonActorComponent::IsPlayingAnim
+ */
+bool CannonActorComponent::IsPlayingAnim( const kbString animName ) const {
+	if ( m_SkelModelsList.size() == 0 ) {
+		return false;
+	}
+
+	return m_SkelModelsList[0]->IsPlaying( animName );
 }
 
 /**
@@ -98,7 +150,7 @@ void CannonCameraComponent::FindTarget() {
 		std::vector<kbEditorEntity *> &	gameEnts = g_Editor->GetGameEntities();
 		for ( int i = 0; i < gameEnts.size(); i++ ) {
 			const kbGameEntity *const pEnt = gameEnts[i]->GetGameEntity();
-			const kbComponent *const pComp = pEnt->GetComponentByType( CannonPlayerComponent::GetType() );
+			const kbComponent *const pComp = pEnt->GetComponentByType( CannonActorComponent::GetType() );
 			if ( pComp != nullptr ) {
 				m_pTarget = (kbGameEntity*)pComp->GetOwner();
 				break;
@@ -108,7 +160,7 @@ void CannonCameraComponent::FindTarget() {
 		const std::vector<kbGameEntity*> & GameEnts = g_pGame->GetGameEntities();
 		for ( int i = 0; i < (int) GameEnts.size(); i++ ) {
 			const kbGameEntity *const pEnt = GameEnts[i];
-			const kbComponent *const pComp = pEnt->GetComponentByType( CannonPlayerComponent::GetType() );
+			const kbComponent *const pComp = pEnt->GetComponentByType( CannonActorComponent::GetType() );
 			if ( pComp != nullptr ) {
 				m_pTarget = (kbGameEntity*)pComp->GetOwner();
 				break;
