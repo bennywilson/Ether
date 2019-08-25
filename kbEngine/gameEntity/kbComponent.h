@@ -358,11 +358,13 @@ public:
 
 protected:
 
-	void InitializeStates( StateClass * stateNodes[StateEnum::NumStates] ) {
+	void InitializeStates( StateClass *const stateNodes[StateEnum::NumStates] ) {
 
 		for ( int i = 0; i < StateEnum::NumStates; i++ ) {
 			delete m_States[i];
 			m_States[i] = stateNodes[i];
+
+			kbErrorCheck( m_States[i] != nullptr, "IStateMachine::InitializeStates() - NULL state.  Please call InitializeStates with proper values" );
 		}
 	}
 
@@ -375,6 +377,8 @@ protected:
 		if ( m_CurrentState != StateEnum::NumStates ) {
 			m_States[m_CurrentState]->EndState( newState );
 		}
+
+		kbErrorCheck( m_States[newState] != nullptr, "IStateMachine::RequestStateChange() - NULL state.  Please call InitializeStates with proper values" );
 
 		const StateEnum previousState = m_CurrentState;
 		m_CurrentState = newState;

@@ -87,7 +87,7 @@ void CannonGame::LevelLoaded_Internal() {
 
 		if ( m_pPlayerComp == nullptr ) {
 			CannonActorComponent *const pActor = (CannonActorComponent*)pCurEnt->GetComponentByType( CannonActorComponent::GetType() );
-			if ( pActor->IsPlayer() ) {
+			if ( pActor != nullptr && pActor->IsPlayer() ) {
 				m_pPlayerComp = pActor;
 			}
 		}
@@ -225,4 +225,11 @@ void CannonGame::HackEditorUpdate( const float DT, kbCamera *const pEditorCam ) 
 void CannonGame::HackEditorShutdown() {
 	m_pPlayerComp = nullptr;
 	m_pMainCamera = nullptr;
+}
+
+/**
+ *	CannonLevelComponent::Constructor
+ */
+void CannonLevelComponent::Constructor() {
+	m_Dummy2 = -1;
 }

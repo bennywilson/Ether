@@ -25,6 +25,12 @@
     <ClInclude Include="Source\Game\KungFuSheep\KungFuSheep.h">
       <Filter>Source\Game\KungFuSheep</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Game\KungFuSheep\KungFuSnolaf.h">
+      <Filter>Source\Game\KungFuSheep</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Game\KungFuSheep\KungFuLevelComponent.h">
+      <Filter>Source\Game\KungFuSheep</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="assets\shaders\Character\CharacterBase.kbShader">
@@ -44,6 +50,9 @@
     </None>
     <None Include="assets\shaders\Basic\unlit.kbShader">
       <Filter>Shaders\Basic</Filter>
+    </None>
+    <None Include="assets\shaders\FX\Particle_BlendAdd.kbShader">
+      <Filter>Shaders</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -89,6 +98,12 @@
       <Filter>Source\Win</Filter>
     </ClCompile>
     <ClCompile Include="Source\Game\KungFuSheep\KungFuSheep.cpp">
+      <Filter>Source\Game\KungFuSheep</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Game\KungFuSheep\KungFuSnolaf.cpp">
+      <Filter>Source\Game\KungFuSheep</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Game\KungFuSheep\KungFuLevelComponent.cpp">
       <Filter>Source\Game\KungFuSheep</Filter>
     </ClCompile>
   </ItemGroup>

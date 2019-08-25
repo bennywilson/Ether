@@ -19,6 +19,27 @@ class KungFuSnolafStateIdle : public KungFuSnolafStateBase<T> {
 //---------------------------------------------------------------------------------------------------
 public:
 	KungFuSnolafStateIdle( CannonActorComponent *const pPlayerComponent ) : KungFuSnolafStateBase( pPlayerComponent ) { }
+
+
+	virtual void BeginState( T ) override {
+
+		static const kbString Idle_Anim( "Idle_1" );
+		m_pActorComponent->PlayAnimation( Idle_Anim, 0.05f );
+	}
+
+	virtual void UpdateState() override {
+
+		if ( GetTarget() != nullptr ) {
+			RotateTowardTarget();
+
+			if ( GetDistanceToTarget() > 2.0f ) {
+				RequestStateChange( KungFuSnolafState::Run );
+				return;
+			}
+		}
+	}
+
+	virtual void EndState( T ) override { }
 };
 
 /**
@@ -30,10 +51,48 @@ class KungFuSnolafStateRun : public KungFuSnolafStateBase<T> {
 //---------------------------------------------------------------------------------------------------
 public:
 	KungFuSnolafStateRun( CannonActorComponent *const pPlayerComponent ) : KungFuSnolafStateBase( pPlayerComponent ) { }
+
+	virtual void BeginState( T ) override {
+
+		static const kbString Run_Anim( "Run" );
+		m_pActorComponent->PlayAnimation( Run_Anim, 0.05f );
+
+		GetSnolaf()->EnableSmallLoveHearts( true );
+	}
+
+	virtual void UpdateState() override {
+
+		const float frameDT = g_pGame->GetFrameDT();
+
+		if ( GetTarget() != nullptr ) {
+			RotateTowardTarget();
+
+			if ( GetDistanceToTarget() < 0.75f ) {
+				RequestStateChange( KungFuSnolafState::Hug );
+				return;
+			} else {
+				kbVec3 moveDir( 0.0f, 0.0f, 0.0f );
+				if ( IsTargetOnLeft() ) {
+					moveDir.z = 1.0f;
+				} else {
+					moveDir.z = -1.0f;
+				}
+
+				const kbVec3 targetPos = m_pActorComponent->GetOwnerPosition() + moveDir * frameDT * m_pActorComponent->GetMaxRunSpeed();
+				m_pActorComponent->SetOwnerPosition( targetPos );
+			}
+		} else {
+			RequestStateChange( KungFuSnolafState::Idle );
+		}
+	}
+
+	virtual void EndState( T ) override {
+		GetSnolaf()->EnableSmallLoveHearts( false );
+	}
 };
 
 /**
- *	KungFuSnolafStateHug
+ *	KungFuSnolafStateHug - Warm Hugs!
  */
 template<typename T>
 class KungFuSnolafStateHug : public KungFuSnolafStateBase<T> {
@@ -41,8 +100,47 @@ class KungFuSnolafStateHug : public KungFuSnolafStateBase<T> {
 //---------------------------------------------------------------------------------------------------
 public:
 	KungFuSnolafStateHug( CannonActorComponent *const pPlayerComponent ) : KungFuSnolafStateBase( pPlayerComponent ) { }
-};
 
+	virtual void BeginState( T ) override {
+
+		static const kbString HugLeft_Anim( "Hug_Left" );
+		static const kbString HugRight_Anim( "Hug_Right" );
+
+		if ( GetTarget() == nullptr ) {
+			RequestStateChange( KungFuSnolafState::Idle );
+			return;
+
+		}
+
+		if ( IsTargetOnLeft() ) {
+			m_pActorComponent->PlayAnimation( HugLeft_Anim, 0.05f );
+		} else {
+			m_pActorComponent->PlayAnimation( HugRight_Anim, 0.05f );
+		}
+
+		GetSnolaf()->EnableLargeLoveHearts( true );
+	}
+
+	virtual void UpdateState() override {
+
+		const float frameDT = g_pGame->GetFrameDT();
+		
+		if ( GetTarget() == nullptr ) {
+			RequestStateChange( KungFuSnolafState::Idle );
+			return;
+		}
+			
+		if ( GetDistanceToTarget() > 2.5f ) {
+			RequestStateChange( KungFuSnolafState::Run );
+			return;
+		}
+
+	}
+
+	virtual void EndState( T ) override {
+		GetSnolaf()->EnableLargeLoveHearts( false );
+	}
+};
 
 /**
  *	KungFuSnolafStateDead
@@ -60,9 +158,9 @@ public:
  *	KungFuSnolafComponent::Constructor
  */
 void KungFuSnolafComponent::Constructor() {
-
+	m_pSmallLoveHearts = nullptr;
+	m_pLargeLoveHearts = nullptr;
 }
-
 
 /**
  *	KungFuSnolafComponent::SetEnable_Internal
@@ -73,17 +171,36 @@ void KungFuSnolafComponent::SetEnable_Internal( const bool bEnable ) {
 	// Make sure sheep package is loaded
 	g_ResourceManager.GetPackage( "./assets/Packages/Sheep.kbPkg" );
 
+	m_pSmallLoveHearts = nullptr;
 	if ( bEnable ) {
 		if ( m_SkelModelsList.size() > 1 ) {
 			const static kbString smearParam = "smearParams";
 			m_SkelModelsList[1]->SetMaterialParamVector( 0, smearParam.stl_str(), kbVec4::zero );
 		}
 
-		KungFuSnolafStateBase<KungFuSnolafState::SnolafState_T> * snolafStates[] = {
-			new KungFuSnolafStateIdle<KungFuSnolafState::SnolafState_T>( this ),
-			new KungFuSnolafStateRun<KungFuSnolafState::SnolafState_T>( this ),
-			new KungFuSnolafStateHug<KungFuSnolafState::SnolafState_T>( this ),
-			new KungFuSnolafStateDead<KungFuSnolafState::SnolafState_T>( this )
+		static const kbString SmallLoveHearts( "Small_LoveHearts" );
+		static const kbString LargeLoveHearts( "Large_LoveHearts" );
+
+		for ( int i = 0; i < GetOwner()->NumComponents(); i++ ) {
+			kbParticleComponent *const pParticle = (kbParticleComponent*) GetOwner()->GetComponent(i);
+			if ( pParticle == nullptr ) {
+				continue;
+			}
+
+			if ( pParticle->GetName() == SmallLoveHearts.stl_str() ) {
+				m_pSmallLoveHearts = pParticle;
+				m_pSmallLoveHearts->EnableNewSpawns( false );
+			} else if ( pParticle->GetName() == LargeLoveHearts.stl_str() ) {
+				m_pLargeLoveHearts = pParticle;
+				m_pLargeLoveHearts->EnableNewSpawns( false );
+			}
+		}
+
+		KungFuSnolafStateBase<KungFuSnolafState::SnolafState_t> * snolafStates[] = {
+			new KungFuSnolafStateIdle<KungFuSnolafState::SnolafState_t>( this ),
+			new KungFuSnolafStateRun<KungFuSnolafState::SnolafState_t>( this ),
+			new KungFuSnolafStateHug<KungFuSnolafState::SnolafState_t>( this ),
+			new KungFuSnolafStateDead<KungFuSnolafState::SnolafState_t>( this )
 		};
 
 		InitializeStates( snolafStates );
@@ -105,5 +222,26 @@ void KungFuSnolafComponent::Update_Internal( const float DT ) {
 	Super::Update_Internal( DT );
 
 	UpdateStateMachine();
+}
 
+/**
+ *	KungFuSnolafComponent::EnableSmallLoveHearts
+ */
+void KungFuSnolafComponent::EnableSmallLoveHearts( const bool bEnable ) {
+	if ( m_pSmallLoveHearts == nullptr ) {
+		return;
+	}
+
+	m_pSmallLoveHearts->EnableNewSpawns( bEnable );
+}
+
+/**
+ *	KungFuSnolafComponent::EnableLargeLoveHearts
+ */
+void KungFuSnolafComponent::EnableLargeLoveHearts( const bool bEnable ) {
+	if ( m_pLargeLoveHearts == nullptr ) {
+		return;
+	}
+
+	m_pLargeLoveHearts->EnableNewSpawns( bEnable );
 }

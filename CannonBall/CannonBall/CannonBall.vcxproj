@@ -90,6 +90,7 @@
     <None Include="assets\shaders\Character\CharacterBase.kbShader" />
     <None Include="assets\shaders\Character\characterOutline.kbShader" />
     <None Include="assets\shaders\Environment\environmentBase.kbShader" />
+    <None Include="assets\shaders\FX\Particle_BlendAdd.kbShader" />
     <None Include="CannonBall.ico" />
     <None Include="small.ico" />
   </ItemGroup>
@@ -98,6 +99,8 @@
     <ClInclude Include="Source\Game\CannonGame.h" />
     <ClInclude Include="Source\Game\CannonPlayer.h" />
     <ClInclude Include="Source\Game\CannonTypeInfoGeneratedClasses.h" />
+    <ClInclude Include="Source\Game\KungFuSheep\KungFuLevelComponent.h" />
+    <ClInclude Include="Source\Game\KungFuSheep\KungFuSnolaf.h" />
     <ClInclude Include="Source\Game\KungFuSheep\KungFuSheep.h" />
     <ClInclude Include="Source\Win\CannonBall.h" />
     <ClInclude Include="stdafx.h" />
@@ -107,7 +110,9 @@
     <ClCompile Include="Source\Game\CannonGame.cpp" />
     <ClCompile Include="Source\Game\CannonPlayer.cpp" />
     <ClCompile Include="Source\Game\CannonTypeInfoGeneratedClasses.cpp" />
+    <ClCompile Include="Source\Game\KungFuSheep\KungFuLevelComponent.cpp" />
     <ClCompile Include="Source\Game\KungFuSheep\KungFuSheep.cpp" />
+    <ClCompile Include="Source\Game\KungFuSheep\KungFuSnolaf.cpp" />
     <ClCompile Include="Source\Win\CannonBall.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>

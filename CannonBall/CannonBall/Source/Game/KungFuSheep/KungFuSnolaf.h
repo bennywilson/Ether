@@ -11,7 +11,7 @@
  *	KungFuSheepState
  */
 namespace KungFuSnolafState {
-	enum SnolafState_T {
+	enum SnolafState_t {
 		Idle = 0,
 		Run,
 		Hug,
@@ -27,11 +27,15 @@ namespace KungFuSnolafState {
 template<typename T>
 class KungFuSnolafStateBase;
 
-class KungFuSnolafComponent : public CannonActorComponent, IStateMachine<KungFuSnolafStateBase<KungFuSnolafState::SnolafState_T>, KungFuSnolafState::SnolafState_T> {
+class KungFuSnolafComponent : public CannonActorComponent, IStateMachine<KungFuSnolafStateBase<KungFuSnolafState::SnolafState_t>, KungFuSnolafState::SnolafState_t> {
 	KB_DECLARE_COMPONENT( KungFuSnolafComponent, CannonActorComponent );
 
 //---------------------------------------------------------------------------------------------------'
 public:
+
+	void										EnableSmallLoveHearts( const bool bEnable );
+	void										EnableLargeLoveHearts( const bool bEnable );
+
 
 protected:
 
@@ -44,7 +48,8 @@ private:
 	int											m_Dummy;
 
 	// Game
-
+	kbParticleComponent *						m_pSmallLoveHearts;
+	kbParticleComponent *						m_pLargeLoveHearts;
 
 //---------------------------------------------------------------------------------------------------
 	// IAnimEventListener
@@ -59,6 +64,46 @@ public:
 
 	KungFuSnolafStateBase( CannonActorComponent *const pPlayerComponent ) : CannonBallCharacterState( pPlayerComponent ) { }
 
+protected:
+	KungFuSnolafComponent *	GetSnolaf() const { return (KungFuSnolafComponent*)m_pActorComponent; }
+	CannonActorComponent *	GetTarget() const { return g_pCannonGame->GetPlayer(); }
+
+	float GetDistanceToTarget() {
+
+		if ( GetTarget() == nullptr ) {
+			return -1.0f;
+		}
+
+		const kbVec3 targetPos = GetTarget()->GetOwnerPosition();
+		const kbVec3 snolafPos = m_pActorComponent->GetOwnerPosition();
+
+		if ( targetPos.Compare( snolafPos ) == true ) {
+			return 0.0f;
+		}
+
+		return ( targetPos - snolafPos ).Length();
+	}
+
+	void RotateTowardTarget() {
+		if ( GetTarget() == nullptr ) {
+			return;
+		}
+
+		const kbVec3 targetPos = GetTarget()->GetOwnerPosition();
+		const kbVec3 snolafPos = m_pActorComponent->GetOwnerPosition();
+
+		m_pActorComponent->SetTargetFacingDirection( ( snolafPos - targetPos ).Normalized() );
+	}
+
+	bool IsTargetOnLeft() const {
+		if ( GetTarget() == nullptr ) {
+			return false;
+		}
+
+		const kbVec3 targetPos = GetTarget()->GetOwnerPosition();
+		const kbVec3 snolafPos = m_pActorComponent->GetOwnerPosition();
+		return ( targetPos.z > snolafPos.z );
+	}
 };
 
 

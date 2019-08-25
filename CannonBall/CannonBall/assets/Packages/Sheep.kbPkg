@@ -40,7 +40,7 @@ kbPrefab 1 {
 					EventTime =  1.000000
 					EventValue = 0.000000 0.000000 0.000000
 				}
-			EndColor = 1.000000 1.000000 1.000000 1.000000
+			EndColor = 1.000000 1.000000 1.000000 0.000000
 			Gravity = 0.000000 -1.000000 0.000000
 			MaterialList = 1
 				kbMaterialComponent { 
@@ -88,7 +88,7 @@ kbPrefab 1 {
 			MinStartVelocity = -2.000000 0.500000 -2.000000
 			ModelEmitter = 0
 			ParticleBillboardType = FaceCamera
-			StartColor = 1.000000 1.000000 1.000000 1.000000
+			StartColor = 1.000000 1.000000 1.000000 0.000000
 			StartDelay =  0.000000
 			TotalDuration =  3.000000
 			TranslucencySortBias =  0.000000

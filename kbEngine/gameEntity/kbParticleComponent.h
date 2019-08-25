@@ -79,7 +79,8 @@ public:
 	virtual void												RenderSync();
 
 	void														StopParticleSystem();
-	void														StopNewSpawns() { m_bIsSpawning = false; }
+
+	void														EnableNewSpawns( const bool bEnable );
 
 	// Hack wasn't picking up from the package file
 	void														SetBillboardType( const EBillboardType inBBType ) { m_ParticleBillboardType = inBBType; }

@@ -12,6 +12,23 @@
 #include "kbRenderer.h"
 
 
+class CannonCameraComponent;
+class CannonActorComponent;
+class kbLevelComponent;
+
+/**
+ *	CannonLevelComponent
+ */
+class CannonLevelComponent : public kbLevelComponent {
+
+//-------------------------------------------------------------------------------------------------------------------------------------------------------------
+public:
+	KB_DECLARE_COMPONENT( CannonLevelComponent, kbLevelComponent );
+
+private:
+	int											m_Dummy2;
+};
+
 /**
  *	CannonGame
  */
@@ -22,7 +39,9 @@ public:
 												CannonGame();
 	virtual										~CannonGame();
 
-	class CannonCameraComponent *				GetMainCamera() const { return m_pMainCamera; }
+	CannonCameraComponent *						GetMainCamera() const { return m_pMainCamera; }
+
+	CannonActorComponent *						GetPlayer() const { return m_pPlayerComp; }
 
 protected:
 
@@ -50,9 +69,9 @@ protected:
 
 	kbTimer										m_GameStartTimer;
 
-	class kbLevelComponent *					m_pLevelComp;
-	class CannonCameraComponent *				m_pMainCamera;
-	class CannonActorComponent *				m_pPlayerComp;
+	kbLevelComponent *							m_pLevelComp;
+	CannonCameraComponent *						m_pMainCamera;
+	CannonActorComponent *						m_pPlayerComp;
 
 private:
 

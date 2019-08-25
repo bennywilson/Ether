@@ -541,6 +541,7 @@ void kbParticleComponent::SetEnable_Internal( const bool isEnabled ) {
 	Super::SetEnable_Internal( isEnabled );
 
 	if ( isEnabled ) {
+		m_bIsSpawning = true;
 		if ( m_StartDelay > 0 ) {
 			m_StartDelayRemaining = m_StartDelay;
 		} else {
@@ -560,6 +561,19 @@ void kbParticleComponent::SetEnable_Internal( const bool isEnabled ) {
 	} else {
 		g_pRenderer->RemoveParticle( m_RenderObject );
 	}
+}
+
+/**
+ *	kbParticleComponent::EnableNewSpawns
+ */
+void kbParticleComponent::EnableNewSpawns( const bool bEnable ) {
+
+	if ( m_bIsSpawning == bEnable ) {
+		return;
+	}
+
+	m_bIsSpawning = bEnable;
+	m_LeftOverTime = 0.0f;
 }
 
 /**

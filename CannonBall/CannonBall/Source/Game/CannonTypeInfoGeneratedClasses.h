@@ -49,3 +49,13 @@ GenerateClass(
 	AddField( "AmplitudeY", KBTYPEINFO_FLOAT, CannonCameraShakeComponent, m_AmplitudeY, false, "" )
 	AddField( "FrequencyY", KBTYPEINFO_FLOAT, CannonCameraShakeComponent, m_FrequencyY, false, "" )
 )
+
+GenerateClass(
+	CannonLevelComponent,
+	AddField( "Dummy2", KBTYPEINFO_FLOAT, CannonLevelComponent, m_Dummy2, false, "" )
+)
+
+GenerateClass(
+	KungFuLevelComponent,
+	AddField( "Dummy", KBTYPEINFO_FLOAT, KungFuLevelComponent, m_Dummy, false, "" )
+)

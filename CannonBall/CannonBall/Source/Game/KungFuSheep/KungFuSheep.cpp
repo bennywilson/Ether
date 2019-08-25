@@ -310,33 +310,24 @@ void KungFuSheepComponent::Update_Internal( const float DT ) {
 	Super::Update_Internal( DT );
 
 	UpdateStateMachine();
-	
 
-	const kbQuat curRot = GetOwnerRotation();
-
-	kbMat4 facingMat;
-	facingMat.LookAt( GetOwnerPosition(), GetOwnerPosition() + m_TargetFacingDirection, kbVec3::up );
-
-	const kbQuat targetRot = kbQuatFromMatrix( facingMat );
-	GetOwner()->SetOrientation( curRot.Slerp( curRot, targetRot, DT * m_MaxRotateSpeed ) ); 
-	
 	// Anim Smear
-	if (m_AnimSmearStartTime > 0.0f) {
+	if ( m_AnimSmearStartTime > 0.0f ) {
 		const float elapsedTime = g_GlobalTimer.TimeElapsedSeconds() - m_AnimSmearStartTime;
-		if (elapsedTime > m_AnimSmearDuration) {
+		if ( elapsedTime > m_AnimSmearDuration ) {
 			m_AnimSmearStartTime = -1.0f;
 			const static kbString smearParam = "smearParams";
-			m_SkelModelsList[1]->SetMaterialParamVector(0, smearParam.stl_str(), kbVec4::zero);
+			m_SkelModelsList[1]->SetMaterialParamVector(0, smearParam.stl_str(), kbVec4::zero );
 		}
 		else {
-			const float strength = 1.0f - kbClamp(elapsedTime / m_AnimSmearDuration, 0.0f, 1.0f);
+			const float strength = 1.0f - kbClamp( elapsedTime / m_AnimSmearDuration, 0.0f, 1.0f );
 			const static kbString smearParam = "smearParams";
 			kbVec4 smearVec = m_AnimSmearVec;
 			smearVec.x *= strength;
 			smearVec.y *= strength;
 			smearVec.z *= strength;
 
-			m_SkelModelsList[1]->SetMaterialParamVector(0, smearParam.stl_str(), smearVec);
+			m_SkelModelsList[1]->SetMaterialParamVector( 0, smearParam.stl_str(), smearVec );
 		}
 	}
 }
