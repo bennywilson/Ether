@@ -1053,7 +1053,7 @@ void EtherFireEntity::Update( const float DeltaTime ) {
 		m_ScorchState = 4;
 
 		kbParticleComponent *const pParticle = (kbParticleComponent*)m_pEmberEntity->GetComponentByType( kbParticleComponent::GetType() );
-		pParticle->StopNewSpawns();
+		pParticle->EnableNewSpawns( false );
 
 	} else if ( m_ScorchState == 4 ) {
 		fireFade = firePos = 1.0f - kbClamp( ( currentTimeSeconds - m_FadeOutStartTime ) / m_NextStateChangeTime, 0.0f, 1.0f );

@@ -182,10 +182,11 @@ void KungFuSnolafComponent::SetEnable_Internal( const bool bEnable ) {
 		static const kbString LargeLoveHearts( "Large_LoveHearts" );
 
 		for ( int i = 0; i < GetOwner()->NumComponents(); i++ ) {
-			kbParticleComponent *const pParticle = (kbParticleComponent*) GetOwner()->GetComponent(i);
-			if ( pParticle == nullptr ) {
+			if ( GetOwner()->GetComponent(i)->IsA( kbParticleComponent::GetType() ) == false ) {
 				continue;
 			}
+
+			kbParticleComponent *const pParticle = (kbParticleComponent*) GetOwner()->GetComponent(i);
 
 			if ( pParticle->GetName() == SmallLoveHearts.stl_str() ) {
 				m_pSmallLoveHearts = pParticle;

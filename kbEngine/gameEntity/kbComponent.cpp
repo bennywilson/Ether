@@ -396,7 +396,7 @@ float kbAnimEvent::Evaluate( const std::vector<kbAnimEvent> & eventList, const f
 /**
  *	kbVectorAnimEvent::Evaluate
  */
-kbVec3 kbVectorAnimEvent::Evaluate( const std::vector<kbVectorAnimEvent> & eventList, const float t ) {
+kbVec4 kbVectorAnimEvent::Evaluate( const std::vector<kbVectorAnimEvent> & eventList, const float t ) {
 	if ( eventList.size() == 0 ) {
 		kbWarning( "kbVectorAnimEvent::Evaluate() - Empty event list" );
 		return kbVec3::zero;

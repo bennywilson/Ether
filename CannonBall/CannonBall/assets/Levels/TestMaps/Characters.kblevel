@@ -2,7 +2,7 @@ kbGameEntity 0 0 0 0 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		Name = "Entity_22"
+		Name = "Entity_24"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
 		Position = 0.000000 0.000000 0.000000
 		Scale = 1.000000 1.000000 1.000000
@@ -10,8 +10,8 @@ kbGameEntity 0 0 0 0 {
 	kbEditorLevelSettingsComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		MainCameraPosition = -10.855879 2.016655 14.169847
-		MainCameraRotation = 0.229044 -0.430218 0.113823 -0.865734
+		MainCameraPosition = -18.419256 0.751677 15.842572
+		MainCameraRotation = 0.191387 -0.238925 0.048096 -0.950775
 	}
 }
 kbGameEntity 0 0 0 0 {
@@ -1584,8 +1584,8 @@ kbGameEntity 0 0 0 0 {
 		LifeTime =  -1.000000
 		Name = "Entity_21"
 		Orientation = 0.000000 0.000000 0.707000 0.707000
-		Position = -19.297626 0.820851 18.454176
-		Scale = 256.000000 256.000000 256.000000
+		Position = -19.364004 0.334361 16.600504
+		Scale = 128.000000 128.000000 128.000000
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -1597,7 +1597,7 @@ kbGameEntity 0 0 0 0 {
 				LifeTime =  -1.000000
 				CullModeOverride = None
 				Shader = .\assets\shaders\fx\decal_blend.kbshader
-				ShaderParams = 2
+				ShaderParams = 4
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
@@ -1611,6 +1611,20 @@ kbGameEntity 0 0 0 0 {
 						ParamName = "ProjectionTex"
 						Texture = .\assets\fx\footprints\snolaf_footprint_1.tif
 						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorMultiplier"
+						Texture = NULL
+						Vector = 1.000000 1.000000 1.000000 1.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = ""
+						Texture = NULL
+						Vector = 1.000000 1.000000 1.000000 1.000000
 					}
 			}
 		RenderPass = LightingPass

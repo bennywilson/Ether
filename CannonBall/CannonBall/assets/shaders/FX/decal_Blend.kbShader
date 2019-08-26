@@ -10,6 +10,7 @@ cbuffer matrixBuffer {
 	matrix inverseViewProjection;
 	matrix inverseModelMatrix;
 	float4 cameraPosition;
+	float4 colorMultiplier;
 }
 
 kbShaderState {
@@ -96,5 +97,5 @@ float4 pixelShader( pixelInput input ) : SV_TARGET {
 	if ( finalUV.x < 0.01f || finalUV.x > 0.99f || finalUV.y < 0.01f || finalUV.y > 0.99f )
 		clip(-1);
 
-	return ProjectionTex.Sample( DefaultSamplerState, finalUV );
+	return ProjectionTex.Sample( DefaultSamplerState, finalUV ) * colorMultiplier;
 }

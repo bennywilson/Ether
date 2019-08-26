@@ -43,6 +43,27 @@ private:
 	kbVec4										m_Vector;
 };
 
+/**
+ *	kbShaderModifierComponent
+ */
+class kbShaderModifierComponent : public kbGameComponent {
+
+	KB_DECLARE_COMPONENT( kbShaderModifierComponent, kbGameComponent );
+
+//---------------------------------------------------------------------------------------------------
+protected:
+
+	virtual void									SetEnable_Internal( const bool isEnabled ) override;
+	virtual void									Update_Internal( const float DeltaTime ) override;
+
+	// Editor
+	std::vector<kbVectorAnimEvent>					m_ShaderVectorEvents;
+
+	// Runtime
+	class kbModelComponent *						m_pModelComponent;
+	float											m_StartTime;
+	float											m_AnimationLengthSec;
+};
 
 /**
  *	kbMaterialComponent

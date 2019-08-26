@@ -7,7 +7,7 @@ kbPrefab 1 {
 			LifeTime =  -1.000000
 			Name = "Entity_21"
 			Orientation = 0.000000 0.000000 0.707000 0.707000
-			Position = -19.297626 0.820851 18.454176
+			Position = -19.364006 0.334361 16.600504
 			Scale = 32 32 32
 		}
 		kbStaticModelComponent { 
@@ -20,7 +20,7 @@ kbPrefab 1 {
 					LifeTime =  -1.000000
 					CullModeOverride = None
 					Shader = .\assets\shaders\fx\decal_blend.kbshader
-					ShaderParams = 2
+					ShaderParams = 4
 						kbShaderParamComponent { 
 							Enabled = 0
 							LifeTime =  -1.000000
@@ -35,10 +35,50 @@ kbPrefab 1 {
 							Texture = .\assets\fx\footprints\snolaf_footprint_1.tif
 							Vector = 0.000000 0.000000 0.000000 0.000000
 						}
+						kbShaderParamComponent { 
+							Enabled = 0
+							LifeTime =  -1.000000
+							ParamName = "colorMultiplier"
+							Texture = NULL
+							Vector = 1.000000 1.000000 1.000000 1.000000
+						}
+						kbShaderParamComponent { 
+							Enabled = 0
+							LifeTime =  -1.000000
+							ParamName = ""
+							Texture = NULL
+							Vector = 1.000000 1.000000 1.000000 1.000000
+						}
 				}
 			RenderPass = LightingPass
 			TranslucencySortBias =  0.000000
 			Model = ..\..\kbengine\assets\models\unitcube.ms3d
+		}
+		kbShaderModifierComponent { 
+			Enabled = 1
+			LifeTime =  -1.000000
+			ShaderVectorEvents = 3
+				kbVectorAnimEvent { 
+					Enabled = 0
+					LifeTime =  -1.000000
+					EventName = "colorMultiplier"
+					EventTime =  0.000000
+					EventValue = 1.000000 1.000000 1.000000 1
+				}
+				kbVectorAnimEvent { 
+					Enabled = 0
+					LifeTime =  -1.000000
+					EventName = ""
+					EventTime =  1.000000
+					EventValue = 1.000000 1.000000 1.000000 1 
+				}
+				kbVectorAnimEvent { 
+					Enabled = 0
+					LifeTime =  -1.000000
+					EventName = ""
+					EventTime =  1.500000
+					EventValue = 1.000000 1.000000 1.000000 0
+				}
 		}
 	}
 }

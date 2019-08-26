@@ -136,4 +136,6 @@ DEFINE_KBCLASS(kbDebugSphereCollision)
 
 DEFINE_KBCLASS(kbLevelComponent)
 
+DEFINE_KBCLASS(kbShaderModifierComponent)
+
 typedef kbResource * kbResourcePtr;

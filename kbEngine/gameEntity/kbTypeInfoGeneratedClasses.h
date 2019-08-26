@@ -68,7 +68,7 @@ GenerateClass(
 	kbVectorAnimEvent,
 	AddField( "EventName", KBTYPEINFO_KBSTRING, kbVectorAnimEvent, m_EventName, false, "" )
 	AddField( "EventTime", KBTYPEINFO_FLOAT, kbVectorAnimEvent, m_EventTime, false, "" )
-	AddField( "EventValue", KBTYPEINFO_VECTOR, kbVectorAnimEvent, m_EventValue, false, "" )
+	AddField( "EventValue", KBTYPEINFO_VECTOR4, kbVectorAnimEvent, m_EventValue, false, "" )
 )
 
 
@@ -333,4 +333,9 @@ GenerateClass(
 	AddField( "LevelType", KBTYPEINFO_ENUM, kbLevelComponent, m_LevelType, false, "ELevelType" )
 	AddField( "GlobalModelScale", KBTYPEINFO_FLOAT, kbLevelComponent, m_GlobalModelScale, false, "" )
 	AddField( "EditorIconScale", KBTYPEINFO_FLOAT, kbLevelComponent, m_EditorIconScale, false, "" )
+)
+
+GenerateClass(
+	kbShaderModifierComponent,
+	AddField( "ShaderVectorEvents", KBTYPEINFO_STRUCT, kbShaderModifierComponent, m_ShaderVectorEvents, true, "kbVectorAnimEvent" )
 )
