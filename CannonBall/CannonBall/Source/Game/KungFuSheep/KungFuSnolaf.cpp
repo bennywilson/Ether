@@ -169,7 +169,7 @@ void KungFuSnolafComponent::SetEnable_Internal( const bool bEnable ) {
 	Super::SetEnable_Internal( bEnable );
 
 	// Make sure sheep package is loaded
-	g_ResourceManager.GetPackage( "./assets/Packages/Sheep.kbPkg" );
+	g_ResourceManager.GetPackage( "./assets/Packages/Snolaf.kbPkg" );
 
 	m_pSmallLoveHearts = nullptr;
 	if ( bEnable ) {
@@ -213,6 +213,17 @@ void KungFuSnolafComponent::SetEnable_Internal( const bool bEnable ) {
 */
 void KungFuSnolafComponent::OnAnimEvent( const kbAnimEvent & animEvent ) {
 
+	static const kbString LeftFootStep( "Step_LeftFoot" );
+	static const kbString RightFootStep( "Step_RightFoot" );
+
+	if ( animEvent.GetEventName() == LeftFootStep || animEvent.GetEventName() == RightFootStep ) {
+		if ( m_FootStepImpactFX.GetEntity() != nullptr ) {
+			kbGameEntity *const pFootStepFX = g_pGame->CreateEntity( m_FootStepImpactFX.GetEntity() );
+			pFootStepFX->SetPosition( GetOwnerPosition() );
+		//	pFootStepFX->SetOrientation( GetOwnerRotation() );
+		//	pFootStepFX->DeleteWhenComponentsAreInactive( true );
+		}
+	}
 }
 
  /**

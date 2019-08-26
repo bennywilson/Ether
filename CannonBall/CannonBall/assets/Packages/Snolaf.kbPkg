@@ -1,0 +1,45 @@
+FX 1
+kbPrefab 1 {
+	Step_Impact_1
+	kbGameEntity 949543359 1324466742 3669717892 833517135 {
+		kbTransformComponent { 
+			Enabled = 0
+			LifeTime =  -1.000000
+			Name = "Entity_21"
+			Orientation = 0.000000 0.000000 0.707000 0.707000
+			Position = -19.297626 0.820851 18.454176
+			Scale = 32 32 32
+		}
+		kbStaticModelComponent { 
+			Enabled = 1
+			LifeTime =  -1.000000
+			CastsShadow = 0
+			Materials = 1
+				kbMaterialComponent { 
+					Enabled = 1
+					LifeTime =  -1.000000
+					CullModeOverride = None
+					Shader = .\assets\shaders\fx\decal_blend.kbshader
+					ShaderParams = 2
+						kbShaderParamComponent { 
+							Enabled = 0
+							LifeTime =  -1.000000
+							ParamName = "cameraPosition"
+							Texture = NULL
+							Vector = 0.000000 0.000000 0.000000 0.000000
+						}
+						kbShaderParamComponent { 
+							Enabled = 0
+							LifeTime =  -1.000000
+							ParamName = "ProjectionTex"
+							Texture = .\assets\fx\footprints\snolaf_footprint_1.tif
+							Vector = 0.000000 0.000000 0.000000 0.000000
+						}
+				}
+			RenderPass = LightingPass
+			TranslucencySortBias =  0.000000
+			Model = ..\..\kbengine\assets\models\unitcube.ms3d
+		}
+	}
+}
+}

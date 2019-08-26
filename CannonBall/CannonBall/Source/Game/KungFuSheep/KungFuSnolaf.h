@@ -45,7 +45,7 @@ protected:
 private:
 
 	// Data
-	int											m_Dummy;
+	kbGameEntityPtr								m_FootStepImpactFX;
 
 	// Game
 	kbParticleComponent *						m_pSmallLoveHearts;
@@ -65,6 +65,7 @@ public:
 	KungFuSnolafStateBase( CannonActorComponent *const pPlayerComponent ) : CannonBallCharacterState( pPlayerComponent ) { }
 
 protected:
+
 	KungFuSnolafComponent *	GetSnolaf() const { return (KungFuSnolafComponent*)m_pActorComponent; }
 	CannonActorComponent *	GetTarget() const { return g_pCannonGame->GetPlayer(); }
 

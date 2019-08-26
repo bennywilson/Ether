@@ -29,7 +29,7 @@ GenerateClass(
 
 GenerateClass(
 	KungFuSnolafComponent,
-	AddField("Dummy", KBTYPEINFO_FLOAT, KungFuSnolafComponent, m_Dummy, false, "")
+	AddField("StepImpactFX", KBTYPEINFO_GAMEENTITY, KungFuSnolafComponent, m_FootStepImpactFX, false, "")
 )
 
 GenerateClass(
