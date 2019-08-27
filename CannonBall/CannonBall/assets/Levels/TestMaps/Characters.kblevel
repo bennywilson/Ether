@@ -2,7 +2,7 @@ kbGameEntity 0 0 0 0 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		Name = "Entity_24"
+		Name = "Entity_25"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
 		Position = 0.000000 0.000000 0.000000
 		Scale = 1.000000 1.000000 1.000000
@@ -10,8 +10,8 @@ kbGameEntity 0 0 0 0 {
 	kbEditorLevelSettingsComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		MainCameraPosition = -18.419256 0.751677 15.842572
-		MainCameraRotation = 0.191387 -0.238925 0.048096 -0.950775
+		MainCameraPosition = -3.422829 2.625757 14.712481
+		MainCameraRotation = -0.155845 -0.601369 0.121052 0.774219
 	}
 }
 kbGameEntity 0 0 0 0 {
@@ -364,7 +364,7 @@ kbGameEntity 0 0 0 0 {
 		LifeTime =  -1.000000
 		Name = "Player"
 		Orientation = 0.000000 -1.000000 0.000000 0.000000
-		Position = -0.000311 0.000000 9.963918
+		Position = -0.025984 0.000000 12.536115
 		Scale = 1.000000 1.000000 1.000000
 	}
 	kbSkeletalModelComponent { 
@@ -759,7 +759,7 @@ kbGameEntity 0 0 0 0 {
 		LifeTime =  -1.000000
 		Name = "Camera"
 		Orientation = -0.030848 -0.706434 0.030848 0.706434
-		Position = -4.000311 2.350000 9.963918
+		Position = -4.025984 2.350000 12.536115
 		Scale = 1.000000 1.000000 1.000000
 	}
 	CannonCameraComponent { 
@@ -779,7 +779,7 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "Snolaf"
-		Orientation = 0.000000 -1.000000 0.000000 0.000000
+		Orientation = 0.000000 1.000000 0.000000 0.000000
 		Position = -0.000312 0.000000 15.034235
 		Scale = 1.000000 1.000000 1.000000
 	}
@@ -814,7 +814,7 @@ kbGameEntity 0 0 0 0 {
 						Enabled = 0
 						LifeTime =  -1.000000
 						EventName = "Step_LeftFoot"
-						EventTime =  0.000000
+						EventTime =  0.100000
 						EventValue =  0.000000
 					}
 					kbAnimEvent { 
@@ -942,7 +942,7 @@ kbGameEntity 0 0 0 0 {
 		Scale = 1.000000 1.000000 1.000000
 		AlphaOverLife = 0
 		ColorOverLife = 0
-		EndColor = 1.000000 1.000000 1.000000 1.000000
+		EndColor = 1.000000 1.000000 1.000000 0.000000
 		Gravity = 0.000000 0.000000 0.000000
 		MaterialList = 1
 			kbMaterialComponent { 
@@ -973,7 +973,7 @@ kbGameEntity 0 0 0 0 {
 		MaxEndVelocity = 0.000000 0.000000 0.000000
 		MaxSpawnRate =  1.000000
 		MaxStart3DOffset = 0.000000 0.000000 0.000000
-		MaxStart3DRotation = 0.000000 0.000000 0.000000
+		MaxStart3DRotation = 0.000000 0.000000 10.000000
 		MaxStartRotationRate =  0.000000
 		MaxStartSize = 0.750000 0.750000 0.750000
 		MaxStartVelocity = 2.000000 5.000000 2.000000
@@ -1630,5 +1630,85 @@ kbGameEntity 0 0 0 0 {
 		RenderPass = LightingPass
 		TranslucencySortBias =  0.000000
 		Model = ..\..\kbengine\assets\models\unitcube.ms3d
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Entity_21"
+		Orientation = 0.000000 0.000000 0.707000 0.707000
+		Position = -18.104427 -1.361654 9.475666
+		Scale = 32.000000 32.000000 32.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		Materials = 1
+			kbMaterialComponent { 
+				Enabled = 1
+				LifeTime =  -1.000000
+				CullModeOverride = None
+				Shader = .\assets\shaders\fx\decal_blend.kbshader
+				ShaderParams = 4
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "cameraPosition"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "ProjectionTex"
+						Texture = .\assets\fx\footprints\snolaf_footprint_1.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorMultiplier"
+						Texture = NULL
+						Vector = 1.000000 1.000000 1.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = ""
+						Texture = NULL
+						Vector = 1.000000 1.000000 1.000000 1.000000
+					}
+			}
+		RenderPass = LightingPass
+		TranslucencySortBias =  0.000000
+		Model = ..\..\kbengine\assets\models\unitcube.ms3d
+	}
+	kbShaderModifierComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		ShaderVectorEvents = 3
+			kbVectorAnimEvent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				EventName = "colorMultiplier"
+				EventTime =  0.000000
+				EventValue = 1.000000 1.000000 1.000000 1.000000
+			}
+			kbVectorAnimEvent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				EventName = ""
+				EventTime =  1.000000
+				EventValue = 1.000000 1.000000 1.000000 1.000000
+			}
+			kbVectorAnimEvent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				EventName = ""
+				EventTime =  1.500000
+				EventValue = 1.000000 1.000000 1.000000 0.000000
+			}
 	}
 }

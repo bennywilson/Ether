@@ -403,9 +403,9 @@ void kbGameEntity::RenderSync() {
 void kbGameEntity::CalculateWorldMatrix( kbMat4 & inOutMatrix ) const {
 
 	kbMat4 scaleMat( kbMat4::identity );
-	scaleMat[0].x = GetScale().x;
-	scaleMat[1].y = GetScale().y;
-	scaleMat[2].z = GetScale().z;
+	scaleMat[0].x = GetScale().x * 0.005000f;
+	scaleMat[1].y = GetScale().y* 0.005000f;
+	scaleMat[2].z = GetScale().z* 0.005000f;
 
 	inOutMatrix = scaleMat * GetOrientation().ToMat4();
 	inOutMatrix[3] = GetPosition();

@@ -216,11 +216,20 @@ void KungFuSnolafComponent::OnAnimEvent( const kbAnimEvent & animEvent ) {
 
 	static const kbString LeftFootStep( "Step_LeftFoot" );
 	static const kbString RightFootStep( "Step_RightFoot" );
+	static const kbString LeftFootBone( "L_Foot" );
+	static const kbString RightFootBone( "R_Foot" );
 
 	if ( animEvent.GetEventName() == LeftFootStep || animEvent.GetEventName() == RightFootStep ) {
 		if ( m_FootStepImpactFX.GetEntity() != nullptr ) {
 			kbGameEntity *const pFootStepFX = g_pGame->CreateEntity( m_FootStepImpactFX.GetEntity() );
-			pFootStepFX->SetPosition( GetOwnerPosition() );
+
+			const kbString footBone = ( animEvent.GetEventName() == LeftFootStep ) ? ( LeftFootBone ) : ( RightFootBone );
+			kbVec3 decalPosition = kbVec3::zero;
+			kbLog( "FOot bone is %s", footBone.c_str() );
+			//const kbString boneName
+			m_SkelModelsList[0]->GetBoneWorldPosition( footBone, decalPosition  ) ;
+
+			pFootStepFX->SetPosition( decalPosition );
 		//	pFootStepFX->SetOrientation( GetOwnerRotation() );
 		//	pFootStepFX->DeleteWhenComponentsAreInactive( true );
 		}
