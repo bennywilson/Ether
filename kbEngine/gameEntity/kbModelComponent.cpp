@@ -2,7 +2,7 @@
 // kbModelComponent.cpp
 //
 //
-// 2016-2018 kbEngine 2.0
+// 2016-2019 kbEngine 2.0
 //===================================================================================================
 #include "kbCore.h"
 #include "kbVector.h"
@@ -286,7 +286,6 @@ void kbShaderModifierComponent::SetEnable_Internal( const bool bEnable ) {
 			break;
 		}
 		m_AnimationLengthSec = m_ShaderVectorEvents[m_ShaderVectorEvents.size() - 1].GetEventTime();
-		kbLog( "Anim len = %f", m_AnimationLengthSec );
 		m_StartTime = g_GlobalTimer.TimeElapsedSeconds();
 	}
 }

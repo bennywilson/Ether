@@ -7,6 +7,9 @@
 #include "kbCore.h"
 #include "kbVector.h"
 #include "kbModel.h"
+#include "kbGameEntityHeader.h"
+#include "kbComponent.h"
+#include "kbLevelComponent.h"
 #include "kbManipulator.h"
 #include "DX11/kbRenderer_DX11.h"
 
@@ -36,8 +39,8 @@ bool kbManipulator::AttemptMouseGrab( const kbVec3 & rayOrigin, const kbVec3 & r
 
 	const kbModel *const pModel = m_pModels[m_ManipulatorMode];
 
-	extern float g_EditorIconScale;
-	const kbModelIntersection_t intersection = pModel->RayIntersection( rayOrigin, rayDirection, m_Position, m_Orientation, kbVec3( g_EditorIconScale, g_EditorIconScale, g_EditorIconScale ) );
+	const float modelScale = kbLevelComponent::GetGlobalModelScale();
+	const kbModelIntersection_t intersection = pModel->RayIntersection( rayOrigin, rayDirection, m_Position, m_Orientation, kbVec3( modelScale, modelScale, modelScale ) );
 
 	if ( intersection.hasIntersection ) {
 		m_SelectedGroup = intersection.meshNum;

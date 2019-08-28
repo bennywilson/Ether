@@ -145,43 +145,50 @@ void kbSkeletalModelComponent::Update_Internal( const float DeltaTime ) {
 			kbAnimComponent & CurAnim = m_Animations[m_CurrentAnimation];
 
 			bool bAnimIsFinished = false;
-			const float maxLength = CurAnim.m_pAnimation->GetLengthInSeconds();
-			const float prevAnimTime = fmod( CurAnim.m_CurrentAnimationTime, maxLength );
+			const float curAnimLenSec = CurAnim.m_pAnimation->GetLengthInSeconds();
+			const float prevAnimTime = CurAnim.m_CurrentAnimationTime;
 
+			bool bOutput = false;
+			if ( CurAnim.m_bIsLooping && CurAnim.m_AnimEvents.size() > 0 ) {
+				bOutput = true;
+			}
 
 			if ( CurAnim.m_bIsLooping == false ) {
-				if ( CurAnim.m_CurrentAnimationTime >= CurAnim.m_pAnimation->GetLengthInSeconds() ) {
+				if ( CurAnim.m_CurrentAnimationTime >= curAnimLenSec ) {
 
 #if DEBUG_ANIMS
 				if ( bOutput ) kbLog( "	Cur anim is finished!" );
 #endif
-					CurAnim.m_CurrentAnimationTime = CurAnim.m_pAnimation->GetLengthInSeconds();
+					CurAnim.m_CurrentAnimationTime = curAnimLenSec;
 					bAnimIsFinished = true;
 				}
 			}
 
 			if ( m_NextAnimation == -1 ) {
-				
-	
+
 				CurAnim.m_CurrentAnimationTime += DeltaTime * CurAnim.m_TimeScale;
-				const float curAnimTime = fmod( CurAnim.m_CurrentAnimationTime, maxLength );
+
+				if ( CurAnim.m_bIsLooping ) {
+					CurAnim.m_CurrentAnimationTime = fmod( CurAnim.m_CurrentAnimationTime, curAnimLenSec );
+				}
+
+				const float curAnimTime = CurAnim.m_CurrentAnimationTime;
 #if DEBUG_ANIMS
 				if ( bOutput ) { kbLog( "		prevAnimTime = %f - Cur anim time = %f.  DeltaT and all that was %f", prevAnimTime, CurAnim.m_CurrentAnimationTime ); }
 #endif
 
 				for ( int iAnimEvent = 0; iAnimEvent < CurAnim.m_AnimEvents.size(); iAnimEvent++ ) {
 					auto & curEvent = CurAnim.m_AnimEvents[iAnimEvent];
+					const float animEventTime = curEvent.GetEventTime();
 
-					if ( curEvent.GetEventTime() > prevAnimTime && curEvent.GetEventTime() <= curAnimTime ) {
+					if ( ( animEventTime > prevAnimTime && animEventTime <= curAnimTime ) ||
+						 ( prevAnimTime > curAnimTime && animEventTime < curAnimTime ) ) {
+
 						for ( int iListener = 0; iListener < m_AnimEventListeners.size(); iListener++ ) {
 							IAnimEventListener *const pCurListener = m_AnimEventListeners[iListener];	
 							m_AnimEventListeners[iListener]->OnAnimEvent( curEvent );
 						}
 					}
-				}
-
-				if ( m_BindToLocalSpaceMatrices.size() == 0 ) {
-					m_BindToLocalSpaceMatrices.resize( m_pModel->NumBones() );
 				}
 
 #if DEBUG_ANIMS
@@ -199,19 +206,21 @@ void kbSkeletalModelComponent::Update_Internal( const float DeltaTime ) {
 					PlayAnimation( CurAnim.m_DesiredNextAnimation, CurAnim.m_DesiredNextAnimBlendLength, true );
 				}
 			} else {
-				if ( m_BindToLocalSpaceMatrices.size() == 0 ) {
-					m_BindToLocalSpaceMatrices.resize( m_pModel->NumBones() );
-				}
 
 				if ( bAnimIsFinished == false ) {
-					const float prevAnimTime = fmod( CurAnim.m_CurrentAnimationTime, maxLength );
+					const float prevAnimTime = fmod( CurAnim.m_CurrentAnimationTime, curAnimLenSec );
 	
 					CurAnim.m_CurrentAnimationTime += DeltaTime * CurAnim.m_TimeScale;
-					float curAnimTime = fmod( CurAnim.m_CurrentAnimationTime, maxLength );
+					if ( CurAnim.m_bIsLooping ) {
+						CurAnim.m_CurrentAnimationTime = fmod( CurAnim.m_CurrentAnimationTime, curAnimLenSec );
+					}
 
 					for ( int iAnimEvent = 0; iAnimEvent < CurAnim.m_AnimEvents.size(); iAnimEvent++ ) {
 						auto & curEvent = CurAnim.m_AnimEvents[iAnimEvent];
-						if ( curEvent.GetEventTime() > prevAnimTime && curEvent.GetEventTime() <= curAnimTime  ) {
+						const float animEventTime = curEvent.GetEventTime() * CurAnim.m_TimeScale;
+
+						if ( ( animEventTime > prevAnimTime && animEventTime <= CurAnim.m_CurrentAnimationTime ) ||
+							 ( prevAnimTime > CurAnim.m_CurrentAnimationTime && animEventTime < CurAnim.m_CurrentAnimationTime  ) ) {
 							for ( int iListener = 0; iListener < m_AnimEventListeners.size(); iListener++ ) {
 								IAnimEventListener *const pCurListener = m_AnimEventListeners[iListener];	
 								m_AnimEventListeners[iListener]->OnAnimEvent( curEvent );
@@ -221,7 +230,8 @@ void kbSkeletalModelComponent::Update_Internal( const float DeltaTime ) {
 				}
 
 				kbAnimComponent & NextAnim = m_Animations[m_NextAnimation];
-				const float prevNextAnimTime = fmod( NextAnim.m_CurrentAnimationTime, NextAnim.m_pAnimation->GetLengthInSeconds() );
+				const float nextAnimLenSec = NextAnim.m_pAnimation->GetLengthInSeconds() / NextAnim.m_TimeScale;
+				const float prevNextAnimTime = fmod( NextAnim.m_CurrentAnimationTime, nextAnimLenSec );
 
 #if DEBUG_ANIMS
 				if ( bOutput ) { kbLog( "		Cur anim is %s.  time = %f.  DeltaT was %f.  Next anim is %s.  Next anim time is %f", CurAnim.m_AnimationName.c_str(), CurAnim.m_CurrentAnimationTime, DeltaTime * CurAnim.m_TimeScale, NextAnim.m_AnimationName.c_str(), NextAnim.m_CurrentAnimationTime ); }
@@ -233,11 +243,18 @@ void kbSkeletalModelComponent::Update_Internal( const float DeltaTime ) {
 				} else {
 					NextAnim.m_CurrentAnimationTime += DeltaTime * NextAnim.m_TimeScale;
 				}
-				const float nextAnimTime = fmod( NextAnim.m_CurrentAnimationTime, NextAnim.m_pAnimation->GetLengthInSeconds() );
+
+				if ( NextAnim.m_bIsLooping ) {
+					NextAnim.m_CurrentAnimationTime = fmod( NextAnim.m_CurrentAnimationTime, nextAnimLenSec );
+				}
+
 				for ( int iAnimEvent = 0; iAnimEvent < NextAnim.m_AnimEvents.size(); iAnimEvent++ ) {
 					auto & curEvent = NextAnim.m_AnimEvents[iAnimEvent];
 
-					if ( curEvent.GetEventTime() > prevNextAnimTime && curEvent.GetEventTime() <= nextAnimTime ) {
+					const float animEventTime = curEvent.GetEventTime();
+
+					if ( ( animEventTime > prevNextAnimTime && animEventTime <= NextAnim.m_CurrentAnimationTime ) ||
+						 ( prevNextAnimTime > NextAnim.m_CurrentAnimationTime && animEventTime < NextAnim.m_CurrentAnimationTime ) ) {
 						for ( int iListener = 0; iListener < m_AnimEventListeners.size(); iListener++ ) {
 							IAnimEventListener *const pCurListener = m_AnimEventListeners[iListener];	
 							m_AnimEventListeners[iListener]->OnAnimEvent( curEvent );

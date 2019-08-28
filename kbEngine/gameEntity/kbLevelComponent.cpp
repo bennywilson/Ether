@@ -11,8 +11,10 @@
 #include "kbRenderer.h"
 #include "kbLevelComponent.h"
 
-float g_GlobalModelScale = 1.0f;
-float g_EditorIconScale = 1.0f;
+
+float kbLevelComponent::s_GlobalModelScale = 1.0f;
+float kbLevelComponent::s_EditorIconScale = 1.0f;
+
 
 /**
  *	kbLevelComponent::Constructor
@@ -31,13 +33,13 @@ void kbLevelComponent::SetEnable_Internal( const bool bEnable ) {
 
 	if ( bEnable ) {
 		g_pRenderer->SetWorldAndEditorIconScale( m_GlobalModelScale, m_EditorIconScale );
-		g_GlobalModelScale = m_GlobalModelScale;
-		g_EditorIconScale = m_EditorIconScale;	
+		s_GlobalModelScale = m_GlobalModelScale;
+		s_EditorIconScale = m_EditorIconScale;	
 	} else {
 		g_pRenderer->SetWorldAndEditorIconScale( 1.0f, 1.0f );
 
-		g_GlobalModelScale = 1.0f;
-		g_EditorIconScale = 1.0f;
+		s_GlobalModelScale = 1.0f;
+		s_EditorIconScale = 1.0f;
 	}
 }
 

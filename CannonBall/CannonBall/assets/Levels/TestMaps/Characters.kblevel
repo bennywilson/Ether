@@ -10,8 +10,8 @@ kbGameEntity 0 0 0 0 {
 	kbEditorLevelSettingsComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		MainCameraPosition = -3.422829 2.625757 14.712481
-		MainCameraRotation = -0.155845 -0.601369 0.121052 0.774219
+		MainCameraPosition = -3.927786 2.526060 14.584562
+		MainCameraRotation = -0.058842 -0.797960 0.078967 0.594611
 	}
 }
 kbGameEntity 0 0 0 0 {
@@ -814,14 +814,14 @@ kbGameEntity 0 0 0 0 {
 						Enabled = 0
 						LifeTime =  -1.000000
 						EventName = "Step_LeftFoot"
-						EventTime =  0.100000
+						EventTime =  1.250000
 						EventValue =  0.000000
 					}
 					kbAnimEvent { 
 						Enabled = 0
 						LifeTime =  -1.000000
 						EventName = "Step_RightFoot"
-						EventTime =  0.500000
+						EventTime =  3.000000
 						EventValue =  0.000000
 					}
 				AnimationName = "Run"
@@ -969,25 +969,25 @@ kbGameEntity 0 0 0 0 {
 		MaxBurstCount = 0
 		MaxDuration =  3.000000
 		MaxEndRotationRate =  0.000000
-		MaxEndSize = 0.750000 0.750000 0.750000
+		MaxEndSize = 0.450000 0.450000 0.450000
 		MaxEndVelocity = 0.000000 0.000000 0.000000
 		MaxSpawnRate =  1.000000
 		MaxStart3DOffset = 0.000000 0.000000 0.000000
 		MaxStart3DRotation = 0.000000 0.000000 10.000000
 		MaxStartRotationRate =  0.000000
-		MaxStartSize = 0.750000 0.750000 0.750000
-		MaxStartVelocity = 2.000000 5.000000 2.000000
+		MaxStartSize = 0.450000 0.450000 0.450000
+		MaxStartVelocity = 1.000000 5.000000 1.000000
 		MinBurstCount = 0
 		MinDuration =  3.000000
 		MinEndRotationRate =  0.000000
-		MinEndSize = 0.500000 0.500000 0.500000
+		MinEndSize = 0.350000 0.350000 0.350000
 		MinEndVelocity = 0.000000 0.000000 0.000000
 		MinSpawnRate =  1.000000
 		MinStart3DOffset = 0.000000 0.000000 0.000000
 		MinStart3DRotation = 0.000000 0.000000 0.000000
 		MinStartRotationRate =  0.000000
-		MinStartSize = 0.500000 0.500000 0.500000
-		MinStartVelocity = -2.000000 5.000000 -2.000000
+		MinStartSize = 0.350000 0.350000 0.350000
+		MinStartVelocity = -1.000000 5.000000 -1.000000
 		ModelEmitter = 0
 		ParticleBillboardType = FaceCamera
 		StartColor = 1.000000 1.000000 1.000000 1.000000
@@ -1032,25 +1032,25 @@ kbGameEntity 0 0 0 0 {
 		MaxBurstCount = 0
 		MaxDuration =  3.000000
 		MaxEndRotationRate =  0.000000
-		MaxEndSize = 0.750000 0.750000 0.750000
+		MaxEndSize = 0.390000 0.390000 0.390000
 		MaxEndVelocity = 0.000000 0.000000 0.000000
 		MaxSpawnRate =  5.000000
 		MaxStart3DOffset = 0.000000 0.000000 0.000000
 		MaxStart3DRotation = 0.000000 0.000000 0.000000
 		MaxStartRotationRate =  0.000000
-		MaxStartSize = 0.750000 0.750000 0.750000
-		MaxStartVelocity = 2.000000 5.000000 2.000000
+		MaxStartSize = 0.390000 0.390000 0.390000
+		MaxStartVelocity = 1.000000 5.000000 1.000000
 		MinBurstCount = 0
 		MinDuration =  3.000000
 		MinEndRotationRate =  0.000000
-		MinEndSize = 0.500000 0.500000 0.500000
+		MinEndSize = 0.350000 0.350000 0.350000
 		MinEndVelocity = 0.000000 0.000000 0.000000
 		MinSpawnRate =  5.000000
 		MinStart3DOffset = 0.000000 0.000000 0.000000
 		MinStart3DRotation = 0.000000 0.000000 0.000000
 		MinStartRotationRate =  0.000000
-		MinStartSize = 0.500000 0.500000 0.500000
-		MinStartVelocity = -2.000000 5.000000 -2.000000
+		MinStartSize = 0.350000 0.350000 0.350000
+		MinStartVelocity = -1.000000 5.000000 -1.000000
 		ModelEmitter = 0
 		ParticleBillboardType = FaceCamera
 		StartColor = 1.000000 1.000000 1.000000 1.000000
@@ -1403,79 +1403,6 @@ kbGameEntity 0 0 0 0 {
 		RenderPass = Post-LightingPass
 		TranslucencySortBias =  0.000000
 		Model = ..\..\kbengine\assets\models\editor\invertedcube.ms3d
-	}
-}
-kbGameEntity 0 0 0 0 {
-	kbTransformComponent { 
-		Enabled = 0
-		LifeTime =  -1.000000
-		Name = "Entity_18"
-		Orientation = 0.000000 0.000000 0.000000 1.000000
-		Position = 0.428892 1.239270 23.211464
-		Scale = 1.000000 1.000000 1.000000
-	}
-	kbParticleComponent { 
-		Enabled = 1
-		LifeTime =  -1.000000
-		Name = ""
-		Orientation = 0.000000 0.000000 0.000000 1.000000
-		Position = 0.000000 5.000000 0.000000
-		Scale = 1.000000 1.000000 1.000000
-		AlphaOverLife = 0
-		ColorOverLife = 0
-		EndColor = 1.000000 1.000000 1.000000 1.000000
-		Gravity = 0.000000 0.000000 0.000000
-		MaterialList = 1
-			kbMaterialComponent { 
-				Enabled = 1
-				LifeTime =  -1.000000
-				CullModeOverride = None
-				Shader = .\assets\shaders\fx\particle_blendadd.kbshader
-				ShaderParams = 2
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "colorMultplier"
-						Texture = NULL
-						Vector = 1.000000 1.000000 1.000000 1.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "shaderTexture"
-						Texture = .\assets\fx\heart\hearts_1.tif
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-			}
-		MaxBurstCount = 0
-		MaxDuration =  3.000000
-		MaxEndRotationRate =  0.000000
-		MaxEndSize = 0.750000 0.750000 0.750000
-		MaxEndVelocity = 0.000000 0.000000 0.000000
-		MaxSpawnRate =  5.000000
-		MaxStart3DOffset = 0.000000 0.000000 0.000000
-		MaxStart3DRotation = 0.000000 0.000000 0.000000
-		MaxStartRotationRate =  0.000000
-		MaxStartSize = 0.750000 0.750000 0.750000
-		MaxStartVelocity = 2.000000 5.000000 2.000000
-		MinBurstCount = 0
-		MinDuration =  3.000000
-		MinEndRotationRate =  0.000000
-		MinEndSize = 0.500000 0.500000 0.500000
-		MinEndVelocity = 0.000000 0.000000 0.000000
-		MinSpawnRate =  5.000000
-		MinStart3DOffset = 0.000000 0.000000 0.000000
-		MinStart3DRotation = 0.000000 0.000000 0.000000
-		MinStartRotationRate =  0.000000
-		MinStartSize = 0.500000 0.500000 0.500000
-		MinStartVelocity = -2.000000 5.000000 -2.000000
-		ModelEmitter = 0
-		ParticleBillboardType = FaceCamera
-		StartColor = 1.000000 1.000000 1.000000 1.000000
-		StartDelay =  0.000000
-		TotalDuration =  -1.000000
-		TranslucencySortBias =  0.000000
-		VelocityCurve = 0
 	}
 }
 kbGameEntity 0 0 0 0 {
