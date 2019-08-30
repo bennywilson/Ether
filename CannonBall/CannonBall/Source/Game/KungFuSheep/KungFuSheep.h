@@ -34,7 +34,7 @@ class KungFuSheepComponent : public CannonActorComponent, IStateMachine<KungFuSh
 
 	friend class KungFuSheepStateBase<KungFuSheepState::SheepStates_t>;
 
-//---------------------------------------------------------------------------------------------------'
+//---------------------------------------------------------------------------------------------------
 public:
 
 

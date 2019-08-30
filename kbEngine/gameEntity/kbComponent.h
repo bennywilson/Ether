@@ -25,7 +25,7 @@ public:
 	virtual	bool								IsA( const void *const type ) const { return false; }
 
 protected:
-	virtual void								CollectAncestorTypeInfo_Internal( std::vector< class kbTypeInfoClass * > & collection ) { }
+	virtual void								CollectAncestorTypeInfo_Internal( std::vector<class kbTypeInfoClass *> & collection ) { }
 };
 
 /**
@@ -329,7 +329,7 @@ public:
 		}
 	}
 
-	void UpdateStateMachine() {
+	virtual void UpdateStateMachine() {
 
 		// This condition is valid if state hasn't been set yet
 		if ( m_CurrentState >= StateEnum::NumStates ) {
@@ -355,8 +355,6 @@ public:
 			m_States[m_CurrentState]->UpdateState();
 		}
 	}
-
-protected:
 
 	void InitializeStates( StateClass *const stateNodes[StateEnum::NumStates] ) {
 
@@ -387,6 +385,7 @@ protected:
 		StateChangeCallback( previousState, m_CurrentState );
 	}
 
+protected:
 	virtual void StateChangeCallback( const StateEnum previousState, const StateEnum nextState ) { }
 
 private:
