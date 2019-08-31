@@ -7,6 +7,7 @@
 #include "kbLevelDirector.h"
 #include "CannonGame.h"
 #include "KungFuLevelComponent.h"
+#include "CannonPlayer.h"
 
 namespace KungFuGame {
 
@@ -30,8 +31,11 @@ class KungFuGame_BaseState : public StateMachineNode<KungFuGame::eKungFuGame_Sta
 public:
 	KungFuGame_BaseState( KungFuLevelComponent *const pLevelComponent ) : m_pLevelComponent( pLevelComponent ) { }
 
+	virtual KungFuLevelComponent::AttackInfo_t PerformAttack( CannonActorComponent *const pAttacker ) { KungFuLevelComponent::AttackInfo_t ret; return ret; }
+
 protected:
 	KungFuLevelComponent * m_pLevelComponent;
+
 };
 
 
@@ -80,18 +84,46 @@ class KungFuGame_GameplayState : public KungFuGame_BaseState {
 public:
 	KungFuGame_GameplayState( KungFuLevelComponent *const pLevelComponent ) : KungFuGame_BaseState( pLevelComponent ) { }
 
+	virtual KungFuLevelComponent::AttackInfo_t PerformAttack( CannonActorComponent *const pAttackerComp ) override { 
+
+		kbErrorCheck( pAttackerComp != nullptr, "KungFuGame_GameplayState::PerformAttack() - null attacker" );
+		KungFuLevelComponent::AttackInfo_t retVal;
+
+		const kbVec3 attackerPos = pAttackerComp->GetOwnerPosition();
+		for ( int i = 0; i < g_pCannonGame->GetGameEntities().size(); i++ ) {
+			kbGameEntity *const pTargetEnt = g_pCannonGame->GetGameEntities()[i];
+			CannonActorComponent *const pTargetComp = pTargetEnt->GetComponent<CannonActorComponent>();
+			if ( pTargetComp == nullptr || pTargetComp == pAttackerComp ) {
+				continue;
+			}
+
+			const kbVec3 targetPos = pTargetComp->GetOwnerPosition();
+			if ( ( attackerPos - targetPos ).Length() > 1.0f ) {
+				continue;
+			}
+
+			const kbVec3 vecToTarget = ( targetPos - attackerPos ).Normalized();
+			const kbVec3 attackerFacingDir = pAttackerComp->GetOwnerRotation().ToMat4()[2].ToVec3();
+			if ( vecToTarget.Dot( attackerFacingDir ) > 0.0f ) {
+				continue;
+			}
+
+			retVal.m_bHit = true;
+		}
+		return retVal;
+	}
+
 private:
 	virtual void BeginState( KungFuGame::eKungFuGame_State previousState ) override {
-		kbLog( "Gameplay state begin!");
+
 	}
 
 	virtual void UpdateState() override {
-		kbLog( "Update State yo!");
 
 	}
 
 	virtual void EndState( KungFuGame::eKungFuGame_State nextState ) override {
-		kbLog( "End State!");
+
 	}
 };
 
@@ -108,6 +140,16 @@ public:
 
 	virtual void UpdateStateMachine() override {
 		kbLevelDirector::UpdateStateMachine();
+	}
+
+	KungFuLevelComponent::AttackInfo_t PerformAttack( CannonActorComponent *const pAttacker ) {
+
+		KungFuLevelComponent::AttackInfo_t attackInfo;
+		if ( this->m_CurrentState < 0 || m_CurrentState >= KungFuGame::NumStates ) {
+			return attackInfo;
+		}
+
+		return m_States[m_CurrentState]->PerformAttack( pAttacker );
 	}
 };
 
@@ -150,4 +192,11 @@ void KungFuLevelComponent::Update_Internal( const float DeltaTime ) {
 	Super::Update_Internal( DeltaTime );
 
 	g_pKungFuDirector->UpdateStateMachine();
+}
+
+/**
+ *	KungFuLevelComponent::Update_Internal
+ */
+KungFuLevelComponent::AttackInfo_t KungFuLevelComponent::PerformAttack( CannonActorComponent *const pAttacker ) {
+	return g_pKungFuDirector->PerformAttack( pAttacker );
 }

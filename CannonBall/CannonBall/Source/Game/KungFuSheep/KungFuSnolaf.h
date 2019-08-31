@@ -53,7 +53,7 @@ private:
 
 //---------------------------------------------------------------------------------------------------
 	// IAnimEventListener
-	virtual void								OnAnimEvent( const kbAnimEvent & animEvent ) override;
+	virtual void								OnAnimEvent( const kbAnimEventInfo_t & animEvent ) override;
 };
 
 template<typename T>

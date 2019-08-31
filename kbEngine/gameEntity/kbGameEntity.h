@@ -123,6 +123,16 @@ public:
 	kbActorComponent *							GetActorComponent() const { return m_pActorComponent; }
 	kbComponent *								GetComponentByType( const void *const pTypeInfoClass ) const;
 
+	template<typename T>
+	T *	GetComponent() const {
+		for ( int i = 0; i < m_Components.size(); i++ ) {
+			if ( m_Components[i]->IsA( T::GetType() ) ) {
+				return (T*)m_Components[i];
+			}
+		}
+		return nullptr;
+	}
+
 	const std::vector<kbGameEntity*> &			GetChildEntities() const { return m_ChildEntities; }
 
 	const uint									GetEntityId() const { return m_EntityId; }

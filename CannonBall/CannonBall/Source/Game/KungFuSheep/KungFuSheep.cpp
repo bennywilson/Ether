@@ -7,6 +7,7 @@
 #include "CannonGame.h"
 #include "CannonPlayer.h"
 #include "KungFuSheep.h"
+#include "KungFuLevelComponent.h"
 #include "kbEditor.h"
 #include "kbEditorEntity.h"
 
@@ -262,13 +263,16 @@ void KungFuSheepComponent::SetEnable_Internal( const bool bEnable ) {
 /**
 *	KungFuSheepComponent::OnAnimEvent
 */
-void KungFuSheepComponent::OnAnimEvent( const kbAnimEvent & animEvent ) {
+void KungFuSheepComponent::OnAnimEvent( const kbAnimEventInfo_t & animEventInfo ) {
 
 	const static kbString CannonBallImpact = "CannonBall_Impact";
 	const static kbString CannonBallVO = "CannonBall_VO";
 	const static kbString CannonBallJumpSmear = "CannonBall_JumpSmear";
 	const static kbString CannonBallDropSmear = "CannonBall_DropSmear";
+	const static kbString PunchAttack = "Punch_Attack";
+	const static kbString KickAttack = "Kick_Attack";
 
+	const kbAnimEvent & animEvent = animEventInfo.m_AnimEvent;
 	const kbString & animEventName = animEvent.GetEventName();
 	const float animEventVal = animEvent.GetEventValue();
 
@@ -296,10 +300,24 @@ void KungFuSheepComponent::OnAnimEvent( const kbAnimEvent & animEvent ) {
 		m_AnimSmearStartTime = g_GlobalTimer.TimeElapsedSeconds();
 		m_AnimSmearVec.Set( 0.0f, m_JumpSmearMagnitude, 0.0f, 0.0f );
 		m_AnimSmearDuration = animEventVal;
-	} else if (animEventName == CannonBallDropSmear) {
+	} else if ( animEventName == CannonBallDropSmear ) {
 		m_AnimSmearStartTime = g_GlobalTimer.TimeElapsedSeconds();
 		m_AnimSmearVec.Set( 0.0f, m_DropSmearMagnitude, 0.0f, 0.0f);
 		m_AnimSmearDuration = animEventVal;
+	} else if ( animEventName == PunchAttack || animEventName == KickAttack ) {
+		kbErrorCheck( g_pCannonGame->GetLevelComponent()->IsA( KungFuLevelComponent::GetType() ) == true, "KungFuSheepComponent::OnAnimEvent() - Level Component needs to be a KungFuLevelComponent" );
+		KungFuLevelComponent *const pLevelComponent = (KungFuLevelComponent*) g_pCannonGame->GetLevelComponent();
+		
+		const KungFuLevelComponent::AttackInfo_t attackInfo = pLevelComponent->PerformAttack( this );
+		if ( attackInfo.m_bHit ) {
+			if ( m_BasicAttackImpactSound.size() > 0 ) {
+				m_BasicAttackImpactSound[rand() % m_BasicAttackImpactSound.size()].PlaySoundAtPosition( GetOwnerPosition() );
+			}
+		}
+
+		if ( m_AttackVO.size() > 0 ) {
+			m_AttackVO[rand() % m_AttackVO.size()].PlaySoundAtPosition( GetOwnerPosition() );
+		}
 	}
 }
 

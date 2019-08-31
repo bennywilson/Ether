@@ -184,9 +184,10 @@ void kbSkeletalModelComponent::Update_Internal( const float DeltaTime ) {
 					if ( ( animEventTime > prevAnimTime && animEventTime <= curAnimTime ) ||
 						 ( prevAnimTime > curAnimTime && animEventTime < curAnimTime ) ) {
 
+						const kbAnimEventInfo_t animEventInfo( curEvent, this );
 						for ( int iListener = 0; iListener < m_AnimEventListeners.size(); iListener++ ) {
-							IAnimEventListener *const pCurListener = m_AnimEventListeners[iListener];	
-							m_AnimEventListeners[iListener]->OnAnimEvent( curEvent );
+							IAnimEventListener *const pCurListener = m_AnimEventListeners[iListener];
+							m_AnimEventListeners[iListener]->OnAnimEvent( animEventInfo );
 						}
 					}
 				}
@@ -221,17 +222,19 @@ void kbSkeletalModelComponent::Update_Internal( const float DeltaTime ) {
 
 						if ( ( animEventTime > prevAnimTime && animEventTime <= CurAnim.m_CurrentAnimationTime ) ||
 							 ( prevAnimTime > CurAnim.m_CurrentAnimationTime && animEventTime < CurAnim.m_CurrentAnimationTime  ) ) {
+
+							const kbAnimEventInfo_t animEventInfo( curEvent, this );
 							for ( int iListener = 0; iListener < m_AnimEventListeners.size(); iListener++ ) {
 								IAnimEventListener *const pCurListener = m_AnimEventListeners[iListener];	
-								m_AnimEventListeners[iListener]->OnAnimEvent( curEvent );
+								m_AnimEventListeners[iListener]->OnAnimEvent( animEventInfo );
 							}
 						}
 					}
 				}
 
 				kbAnimComponent & NextAnim = m_Animations[m_NextAnimation];
-				const float nextAnimLenSec = NextAnim.m_pAnimation->GetLengthInSeconds() / NextAnim.m_TimeScale;
-				const float prevNextAnimTime = fmod( NextAnim.m_CurrentAnimationTime, nextAnimLenSec );
+				const float nextAnimLenSec = NextAnim.m_pAnimation->GetLengthInSeconds();
+				const float prevNextAnimTime = NextAnim.m_CurrentAnimationTime;
 
 #if DEBUG_ANIMS
 				if ( bOutput ) { kbLog( "		Cur anim is %s.  time = %f.  DeltaT was %f.  Next anim is %s.  Next anim time is %f", CurAnim.m_AnimationName.c_str(), CurAnim.m_CurrentAnimationTime, DeltaTime * CurAnim.m_TimeScale, NextAnim.m_AnimationName.c_str(), NextAnim.m_CurrentAnimationTime ); }
@@ -255,9 +258,11 @@ void kbSkeletalModelComponent::Update_Internal( const float DeltaTime ) {
 
 					if ( ( animEventTime > prevNextAnimTime && animEventTime <= NextAnim.m_CurrentAnimationTime ) ||
 						 ( prevNextAnimTime > NextAnim.m_CurrentAnimationTime && animEventTime < NextAnim.m_CurrentAnimationTime ) ) {
+
+						const kbAnimEventInfo_t animEventInfo( curEvent, this );
 						for ( int iListener = 0; iListener < m_AnimEventListeners.size(); iListener++ ) {
 							IAnimEventListener *const pCurListener = m_AnimEventListeners[iListener];	
-							m_AnimEventListeners[iListener]->OnAnimEvent( curEvent );
+							m_AnimEventListeners[iListener]->OnAnimEvent( animEventInfo );
 						}
 					}
 				}

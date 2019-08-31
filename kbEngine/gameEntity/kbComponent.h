@@ -236,9 +236,16 @@ private:
 /**
  *  IAnimEventListener
  */
+struct kbAnimEventInfo_t {
+	kbAnimEventInfo_t( const kbAnimEvent & animEvent, const kbComponent *const pOwnerComponent ) : m_AnimEvent( animEvent ), m_pComponent( pOwnerComponent ) { }
+	const kbAnimEvent & m_AnimEvent;
+	const kbComponent * m_pComponent;
+};
+
 class IAnimEventListener abstract {
 public:
-	virtual void							OnAnimEvent( const kbAnimEvent & animEvent ) = 0;
+
+	virtual void							OnAnimEvent( const kbAnimEventInfo_t & animEvent ) = 0;
 };
 
 /**
@@ -387,8 +394,6 @@ public:
 
 protected:
 	virtual void StateChangeCallback( const StateEnum previousState, const StateEnum nextState ) { }
-
-private:
 
 	StateClass * m_States[StateEnum::NumStates];
 	StateEnum m_CurrentState;

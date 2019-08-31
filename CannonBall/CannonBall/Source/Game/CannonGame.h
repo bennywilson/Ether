@@ -43,6 +43,8 @@ public:
 
 	CannonActorComponent *						GetPlayer() const { return m_pPlayerComp; }
 
+	kbLevelComponent *							GetLevelComponent() const { return m_pLevelComp; }
+
 protected:
 
 	virtual void								InitGame_Internal() override;

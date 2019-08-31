@@ -38,6 +38,9 @@ protected:
 	float										m_MaxRunSpeed;
 	float										m_MaxRotateSpeed;
 
+	std::vector<kbSoundData>					m_AttackVO;
+	std::vector<kbSoundData>					m_BattleChatterVO;
+
 	// Game
 	std::vector<kbSkeletalModelComponent *>		m_SkelModelsList;
 	kbVec3										m_TargetFacingDirection;
@@ -50,7 +53,7 @@ protected:
 
 //---------------------------------------------------------------------------------------------------
 	// IAnimEventListener
-	virtual void								OnAnimEvent( const kbAnimEvent & animEvent ) { }
+	virtual void								OnAnimEvent( const kbAnimEventInfo_t & animEvent ) override { }
 };
 
 /**

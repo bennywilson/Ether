@@ -17,6 +17,14 @@ class KungFuLevelComponent : public CannonLevelComponent {
 //-------------------------------------------------------------------------------------------------------------------------------------------------------------
 public:
 
+	struct AttackInfo_t {
+		AttackInfo_t() : m_pHitComponent( nullptr ), m_bHit( false ) { }
+		kbGameComponent * m_pHitComponent;
+		bool m_bHit;
+	};
+
+	AttackInfo_t								PerformAttack( CannonActorComponent *const pAttacker );
+
 protected:
 
 	virtual void								SetEnable_Internal( const bool bEnable ) override;

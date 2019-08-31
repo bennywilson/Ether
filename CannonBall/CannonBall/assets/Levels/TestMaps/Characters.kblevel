@@ -2,7 +2,7 @@ kbGameEntity 0 0 0 0 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		Name = "Entity_25"
+		Name = "Entity_24"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
 		Position = 0.000000 0.000000 0.000000
 		Scale = 1.000000 1.000000 1.000000
@@ -568,7 +568,14 @@ kbGameEntity 0 0 0 0 {
 				Enabled = 0
 				LifeTime =  -1.000000
 				Animation = .\assets\models\characters\sheep\sheep_punchleft_basic.kbanim.ms3d
-				AnimationEvent = 0
+				AnimationEvent = 1
+					kbAnimEvent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						EventName = "Punch_Attack"
+						EventTime =  0.100000
+						EventValue =  0.000000
+					}
 				AnimationName = "PunchLeft_Basic"
 				IsLooping = 0
 				TimeScale =  15.000000
@@ -577,7 +584,14 @@ kbGameEntity 0 0 0 0 {
 				Enabled = 0
 				LifeTime =  -1.000000
 				Animation = .\assets\models\characters\sheep\sheep_kickleft_basic.kbanim.ms3d
-				AnimationEvent = 0
+				AnimationEvent = 1
+					kbAnimEvent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						EventName = "Kick_Attack"
+						EventTime =  0.100000
+						EventValue =  0.000000
+					}
 				AnimationName = "KickLeft_Basic"
 				IsLooping = 0
 				TimeScale =  15.000000
@@ -586,7 +600,14 @@ kbGameEntity 0 0 0 0 {
 				Enabled = 0
 				LifeTime =  -1.000000
 				Animation = .\assets\models\characters\sheep\sheep_punchright_basic.kbanim.ms3d
-				AnimationEvent = 0
+				AnimationEvent = 1
+					kbAnimEvent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						EventName = "Punch_Attack"
+						EventTime =  0.100000
+						EventValue =  0.000000
+					}
 				AnimationName = "PunchRight_Basic"
 				IsLooping = 0
 				TimeScale =  15.000000
@@ -595,7 +616,14 @@ kbGameEntity 0 0 0 0 {
 				Enabled = 0
 				LifeTime =  -1.000000
 				Animation = .\assets\models\characters\sheep\sheep_kickright_basic.kbanim.ms3d
-				AnimationEvent = 0
+				AnimationEvent = 1
+					kbAnimEvent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						EventName = "Kick_Attack"
+						EventTime =  0.100000
+						EventValue =  0.000000
+					}
 				AnimationName = "KickRight_Basic"
 				IsLooping = 0
 				TimeScale =  15.000000
@@ -626,6 +654,43 @@ kbGameEntity 0 0 0 0 {
 		LifeTime =  -1.000000
 		DummyTemp = 0
 		Health =  10.000000
+		AttackImpactSound = 5
+			kbSoundData { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Radius =  -1.000000
+				Volume =  1.000000
+				WaveFile = .\assets\sounds\impacts\woodimpact_1.wav
+			}
+			kbSoundData { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Radius =  -1.000000
+				Volume =  1.000000
+				WaveFile = .\assets\sounds\impacts\woodimpact_2.wav
+			}
+			kbSoundData { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Radius =  -1.000000
+				Volume =  1.000000
+				WaveFile = .\assets\sounds\impacts\woodimpact_3.wav
+			}
+			kbSoundData { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Radius =  -1.000000
+				Volume =  1.000000
+				WaveFile = .\assets\sounds\impacts\woodimpact_4.wav
+			}
+			kbSoundData { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Radius =  -1.000000
+				Volume =  1.000000
+				WaveFile = .\assets\sounds\impacts\woodimpact_5.wav
+			}
+		BattleChatterVO = 0
 		MaxRotateSpeed =  15.000000
 		MaxRunSpeed =  3.000000
 		CannonBallImpactFX = 846208613 1165520682 3641600641 3993117100
@@ -1064,6 +1129,8 @@ kbGameEntity 0 0 0 0 {
 		LifeTime =  -1.000000
 		DummyTemp = 0
 		Health =  10.000000
+		AttackVO = 0
+		BattleChatterVO = 0
 		MaxRotateSpeed =  15.000000
 		MaxRunSpeed =  3.000000
 		StepImpactFX = 949543359 1324466742 3669717892 833517135

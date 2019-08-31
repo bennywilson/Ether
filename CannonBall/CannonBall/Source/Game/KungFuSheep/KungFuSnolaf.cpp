@@ -212,13 +212,14 @@ void KungFuSnolafComponent::SetEnable_Internal( const bool bEnable ) {
 /**
 *	KungFuSnolafComponent::OnAnimEvent
 */
-void KungFuSnolafComponent::OnAnimEvent( const kbAnimEvent & animEvent ) {
+void KungFuSnolafComponent::OnAnimEvent( const kbAnimEventInfo_t & animEventInfo ) {
 
 	static const kbString LeftFootStep( "Step_LeftFoot" );
 	static const kbString RightFootStep( "Step_RightFoot" );
 	static const kbString LeftFootBone( "L_Foot" );
 	static const kbString RightFootBone( "R_Foot" );
 
+	const kbAnimEvent & animEvent = animEventInfo.m_AnimEvent;
 	if ( animEvent.GetEventName() == LeftFootStep || animEvent.GetEventName() == RightFootStep ) {
 		if ( m_FootStepImpactFX.GetEntity() != nullptr ) {
 			kbGameEntity *const pFootStepFX = g_pGame->CreateEntity( m_FootStepImpactFX.GetEntity() );
