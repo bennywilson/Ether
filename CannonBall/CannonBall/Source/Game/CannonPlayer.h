@@ -32,6 +32,8 @@ public:
 	virtual void								TakeDamage( const float amount, CannonActorComponent *const pAttacker ) { }
 	virtual bool								IsDead() const { return m_Health <= 0.0f; }
 
+	void										ApplyAnimSmear( const kbVec3 smearVec, const float durationSec );
+
 protected:
 
 	virtual void								SetEnable_Internal( const bool bEnable ) override;

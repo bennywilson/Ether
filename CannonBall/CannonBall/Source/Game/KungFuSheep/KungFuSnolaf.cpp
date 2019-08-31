@@ -64,26 +64,49 @@ public:
 
 		const float frameDT = g_pGame->GetFrameDT();
 
-		if ( GetTarget() != nullptr ) {
-			RotateTowardTarget();
+		if ( GetTarget() == nullptr ) {
+			RequestStateChange( KungFuSnolafState::Idle );
+			return;
+		}
 
-			if ( GetDistanceToTarget() < 0.75f ) {
-				RequestStateChange( KungFuSnolafState::Hug );
-				return;
-			} else {
-				kbVec3 moveDir( 0.0f, 0.0f, 0.0f );
-				if ( IsTargetOnLeft() ) {
-					moveDir.z = 1.0f;
-				} else {
-					moveDir.z = -1.0f;
+		const kbVec3 snolafPos = m_pActorComponent->GetOwnerPosition();
+		const kbVec3 snolafFacingDir = m_pActorComponent->GetOwnerRotation().ToMat4()[2].ToVec3();
+
+		// Look for actors to hug
+		for ( int i = 0; i < g_pCannonGame->GetGameEntities().size(); i++ ) {
+
+			kbGameEntity *const pGameEnt = g_pCannonGame->GetGameEntities()[i];
+			CannonActorComponent *const pTargetActor = pGameEnt->GetComponent<CannonActorComponent>();
+			if ( pTargetActor == nullptr || pTargetActor == m_pActorComponent ) {
+				continue;
+			}
+
+			const kbVec3 targetPos = pTargetActor->GetOwnerPosition();
+			const kbVec3 vSnolafToTarget = targetPos - snolafPos;
+			const float snolafToTargetDist = ( targetPos - snolafPos ).Length();
+			if ( snolafToTargetDist < 0.75f ) {
+
+				if ( vSnolafToTarget.Dot( snolafFacingDir ) > 0.0f ) {
+					continue;
 				}
 
-				const kbVec3 targetPos = m_pActorComponent->GetOwnerPosition() + moveDir * frameDT * m_pActorComponent->GetMaxRunSpeed();
-				m_pActorComponent->SetOwnerPosition( targetPos );
+				RequestStateChange( KungFuSnolafState::Hug );
+				return;
 			}
-		} else {
-			RequestStateChange( KungFuSnolafState::Idle );
 		}
+
+		// Move towards target
+
+		RotateTowardTarget();
+
+		kbVec3 moveDir( 0.0f, 0.0f, 0.0f );
+		if ( IsTargetOnLeft() ) {
+			moveDir.z = 1.0f;
+		} else {
+			moveDir.z = -1.0f;
+		}
+		const kbVec3 newSnolafPos = m_pActorComponent->GetOwnerPosition() + moveDir * frameDT * m_pActorComponent->GetMaxRunSpeed();
+		m_pActorComponent->SetOwnerPosition( newSnolafPos );
 	}
 
 	virtual void EndState( T ) override {
@@ -129,8 +152,34 @@ public:
 			RequestStateChange( KungFuSnolafState::Idle );
 			return;
 		}
-			
-		if ( GetDistanceToTarget() > 2.5f ) {
+
+		const kbVec3 snolafPos = m_pActorComponent->GetOwnerPosition();
+		const kbVec3 snolafFacingDir = m_pActorComponent->GetOwnerRotation().ToMat4()[2].ToVec3();
+
+		bool bAnyoneInFront = false;
+		for ( int i = 0; i < g_pCannonGame->GetGameEntities().size(); i++ ) {
+
+			kbGameEntity *const pGameEnt = g_pCannonGame->GetGameEntities()[i];
+			CannonActorComponent *const pTargetActor = pGameEnt->GetComponent<CannonActorComponent>();
+			if ( pTargetActor == nullptr || pTargetActor == m_pActorComponent ) {
+				continue;
+			}
+
+			const kbVec3 targetPos = pTargetActor->GetOwnerPosition();
+			const kbVec3 vSnolafToTarget = targetPos - snolafPos;
+			const float snolafToTargetDist = ( targetPos - snolafPos ).Length();
+			if ( snolafToTargetDist < 1.25f ) {
+
+				if ( vSnolafToTarget.Dot( snolafFacingDir ) > 0.0f ) {
+					continue;
+				}
+
+				bAnyoneInFront = true;
+				break;
+			}
+		}
+
+		if ( bAnyoneInFront== false ) {
 			RequestStateChange( KungFuSnolafState::Run );
 			return;
 		}
@@ -150,68 +199,135 @@ class KungFuSnolafStateDead : public KungFuSnolafStateBase<T> {
 
 //---------------------------------------------------------------------------------------------------
 public:
-	KungFuSnolafStateDead( CannonActorComponent *const pPlayerComponent ) : KungFuSnolafStateBase( pPlayerComponent ), m_DeathStartTime( -1.0f ) { }
+	KungFuSnolafStateDead( CannonActorComponent *const pPlayerComponent ) : KungFuSnolafStateBase( pPlayerComponent ) { }
 
 	virtual void BeginState( T ) override {
-	//	kbLog( "Dead yo" );
+
+		GetSnolaf()->EnableSmallLoveHearts( false );
+		GetSnolaf()->EnableLargeLoveHearts( false );
 
 		const int numDeaths = 2;
-		const int deathSelection = rand() % numDeaths;
+		m_DeathSelection = rand() % numDeaths;
 
-		if ( deathSelection == 0 ) {
-			const kbString Death_FlyBackwards_1( "Death_FlyBackwards_1" );
-			m_pActorComponent->PlayAnimation( Death_FlyBackwards_1, 0.05f );
-		} else if ( deathSelection == 1 ) {
+		m_OwnerStartPos = GetSnolaf()->GetOwnerPosition();
+		m_OwnerStartRotation = m_pActorComponent->GetOwnerRotation();
+
+		kbGameEntity *const pOwner = GetSnolaf()->GetOwner();
+		for ( int i = 0; i < pOwner->NumComponents(); i++ ) {
+			kbParticleComponent *const pParticle = pOwner->GetComponent( i )->GetAs<kbParticleComponent>();
+			if ( pParticle == nullptr ) {
+				continue;
+			}
+
+			pParticle->Enable( false );
+		}
+
+		if ( m_DeathSelection == 0 ) {
+
+			m_Velocity = kbVec3Rand( m_MinLinearVelocity, m_MaxLinearVelocity );
+			if ( m_Velocity.x < 0.0f ) {
+				m_Velocity.x -= 0.0025f;
+			} else {
+				m_Velocity.x += 0.0025f;
+			}
+
+			kbMat4 worldMatrix;
+			m_pActorComponent->GetOwner()->CalculateWorldMatrix( worldMatrix );
+			const XMMATRIX inverseMat = XMMatrixInverse( nullptr, XMMATRIXFromkbMat4( worldMatrix ) );
+			worldMatrix = kbMat4FromXMMATRIX( inverseMat );
+			m_Velocity = m_Velocity * worldMatrix;
+
+			m_RotationAxis = kbVec3( kbfrand() - 1.3f, 0.0f, 0.0f );
+			if ( m_RotationAxis.LengthSqr() < 0.01f ) {
+				m_RotationAxis.Set( 1.0f, 0.0f, 0.0f );
+			} else {
+				m_RotationAxis.Normalize();
+			}
+			m_RotationSpeed = kbfrand() * ( m_MaxAngularVelocity - m_MinAngularVelocity ) + m_MinAngularVelocity;
+
+			const kbVec3 initialSnolafOffset = m_Velocity.Normalized() * 3.333f;
+			m_OwnerPosOverride = m_pActorComponent->GetOwnerPosition() + initialSnolafOffset;
+			m_OwnerStartPos = m_OwnerPosOverride;
+			GetSnolaf()->ApplyAnimSmear( -initialSnolafOffset * 0.75f, 0.067f );
+			UpdateFlyingDeath( 0.0f );
+		} else if ( m_DeathSelection == 1 ) {
 			KungFuSnolafComponent *const pSnolaf = m_pActorComponent->GetAs<KungFuSnolafComponent>();
 			pSnolaf->DoPoofDeath();
 		}
 
 		m_DeathStartTime = g_GlobalTimer.TimeElapsedSeconds();
-	/*	static const kbString HugLeft_Anim( "Hug_Left" );
-		static const kbString HugRight_Anim( "Hug_Right" );
 
-		if ( GetTarget() == nullptr ) {
-			RequestStateChange( KungFuSnolafState::Idle );
-			return;
+	}
 
+	void UpdateFlyingDeath( const float dt ) {
+		
+		kbGameEntity *const pOwner = m_pActorComponent->GetOwner();
+		const float curTime = g_GlobalTimer.TimeElapsedSeconds();
+		const float elapsedDeathTime = curTime - m_DeathStartTime;
+
+		m_OwnerPosOverride.x += m_Velocity.x * dt;
+		m_OwnerPosOverride.z += m_Velocity.z * dt;
+
+		m_OwnerPosOverride.y = m_OwnerStartPos.y + m_Velocity.y * elapsedDeathTime - ( 0.5f * -m_Gravity.y * elapsedDeathTime * elapsedDeathTime );
+
+		m_pActorComponent->SetOwnerPosition( m_OwnerPosOverride );
+
+		const static kbString spine3BoneName( "Spine3" );
+		kbSkeletalModelComponent *const pSnolafComp = pOwner->GetComponent<kbSkeletalModelComponent>();
+		kbVec3 spine3WorldPos = kbVec3::zero;
+
+		if ( pSnolafComp->GetBoneWorldPosition( spine3BoneName, spine3WorldPos ) ) {
+
+			kbVec3 vecOffset = m_OwnerPosOverride - spine3WorldPos;
+			pOwner->SetPosition( m_OwnerPosOverride + vecOffset );
 		}
 
-		if ( IsTargetOnLeft() ) {
-			m_pActorComponent->PlayAnimation( HugLeft_Anim, 0.05f );
-		} else {
-			m_pActorComponent->PlayAnimation( HugRight_Anim, 0.05f );
-		}*
-
-		GetSnolaf()->EnableLargeLoveHearts( true );*/
+		m_CurRotationAngle += m_RotationSpeed * dt;
+		kbQuat rot;
+		rot.FromAxisAngle( m_RotationAxis, m_CurRotationAngle );
+		rot =  m_OwnerStartRotation * rot;
+		m_pActorComponent->SetOwnerRotation( rot );
 	}
 
 	virtual void UpdateState() override {
 
+		kbGameEntity *const pOwner = m_pActorComponent->GetOwner();
 		const float curTime = g_GlobalTimer.TimeElapsedSeconds();
-		if ( curTime > m_DeathStartTime + 2.0f ) {
-			g_pCannonGame->RemoveGameEntity( this->m_pActorComponent->GetOwner() );
+		const float elapsedDeathTime = curTime - m_DeathStartTime;
+		if ( elapsedDeathTime > 2.0f ) {
+			g_pCannonGame->RemoveGameEntity( pOwner );
 			return;
 		}
-	/*	const float frameDT = g_pGame->GetFrameDT();
-		
-		if ( GetTarget() == nullptr ) {
-			RequestStateChange( KungFuSnolafState::Idle );
-			return;
+
+		const float dt = g_pGame->GetFrameDT();
+
+		if ( m_DeathSelection == 0 ) {
+			UpdateFlyingDeath( dt );
 		}
-			
-		if ( GetDistanceToTarget() > 2.5f ) {
-			RequestStateChange( KungFuSnolafState::Run );
-			return;
-		}*/
 
 	}
 
-	virtual void EndState( T ) override {
-	//	GetSnolaf()->EnableLargeLoveHearts( false );
-	}
+	virtual void EndState( T ) override { }
 
 private:
-	float m_DeathStartTime;
+
+	const kbVec3 m_MinLinearVelocity = kbVec3( -0.0075f, 0.015f, 0.03f );
+	const kbVec3 m_MaxLinearVelocity = kbVec3( 0.0075f, 0.025f, 0.02f );
+	const float m_MinAngularVelocity = 10.0f;
+	const float m_MaxAngularVelocity = 15.0f;
+	const kbVec3 m_Gravity = kbVec3( 0.0f, -20.0f, 0.0f );
+
+	kbVec3 m_OwnerStartPos = kbVec3::zero;
+	kbQuat m_OwnerStartRotation = kbQuat( 0.0f, 0.0f, 0.0f, 1.0f );
+	kbVec3 m_OwnerPosOverride = kbVec3::zero;
+
+	kbVec3 m_Velocity = kbVec3::zero;
+	kbVec3 m_RotationAxis = kbVec3( 1.0f, 0.0f, 0.0f );
+
+	float m_CurRotationAngle = 0.0f;
+	float m_RotationSpeed = 1.0f;
+	int m_DeathSelection = 0;
+	float m_DeathStartTime = 0.0f;
 };
 
 
@@ -287,7 +403,7 @@ void KungFuSnolafComponent::OnAnimEvent( const kbAnimEventInfo_t & animEventInfo
 
 			const kbString footBone = ( animEvent.GetEventName() == LeftFootStep ) ? ( LeftFootBone ) : ( RightFootBone );
 			kbVec3 decalPosition = kbVec3::zero;
-			kbLog( "FOot bone is %s", footBone.c_str() );
+
 			//const kbString boneName
 			m_SkelModelsList[0]->GetBoneWorldPosition( footBone, decalPosition  ) ;
 

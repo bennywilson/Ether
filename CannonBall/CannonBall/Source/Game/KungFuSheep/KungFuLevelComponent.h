@@ -17,13 +17,19 @@ class KungFuLevelComponent : public CannonLevelComponent {
 //-------------------------------------------------------------------------------------------------------------------------------------------------------------
 public:
 
-	struct AttackInfo_t {
-		AttackInfo_t() : m_pHitComponent( nullptr ), m_bHit( false ) { }
+	struct DealAttackInfo_t {
+		CannonActorComponent * m_pAttacker = nullptr;
+		float m_BaseDamage = 1.0f;
+		float m_Radius = 0.0f;
+	};
+
+	struct AttackHitInfo_t {
+		AttackHitInfo_t() : m_pHitComponent( nullptr ), m_bHit( false ) { }
 		kbGameComponent * m_pHitComponent;
 		bool m_bHit;
 	};
 
-	AttackInfo_t								PerformAttack( CannonActorComponent *const pAttacker );
+	AttackHitInfo_t								DoAttack( const DealAttackInfo_t & dealAttackInfo );
 
 	void										SpawnEnemy();
 

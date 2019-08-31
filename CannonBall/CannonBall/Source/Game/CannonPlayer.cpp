@@ -73,6 +73,27 @@ void CannonActorComponent::Update_Internal( const float DT ) {
 
 	const kbQuat targetRot = kbQuatFromMatrix( facingMat );
 	GetOwner()->SetOrientation( curRot.Slerp( curRot, targetRot, DT * m_MaxRotateSpeed ) );
+
+	
+	// Anim Smear
+	if ( m_AnimSmearStartTime > 0.0f ) {
+		const float elapsedTime = g_GlobalTimer.TimeElapsedSeconds() - m_AnimSmearStartTime;
+		if ( elapsedTime > m_AnimSmearDuration ) {
+			m_AnimSmearStartTime = -1.0f;
+			const static kbString smearParam = "smearParams";
+			m_SkelModelsList[1]->SetMaterialParamVector(0, smearParam.stl_str(), kbVec4::zero );
+		}
+		else {
+			const float strength = 1.0f - kbClamp( elapsedTime / m_AnimSmearDuration, 0.0f, 1.0f );
+			const static kbString smearParam = "smearParams";
+			kbVec4 smearVec = m_AnimSmearVec;
+			smearVec.x *= strength;
+			smearVec.y *= strength;
+			smearVec.z *= strength;
+
+			m_SkelModelsList[1]->SetMaterialParamVector( 0, smearParam.stl_str(), smearVec );
+		}
+	}
 }
 
 /**
@@ -97,6 +118,14 @@ bool CannonActorComponent::HasFinishedAnim() const {
 	return m_SkelModelsList[0]->HasFinishedAnimation();
 }
 
+/**
+ *	CannonActorComponent::ApplyAnimSmear
+ */
+void CannonActorComponent::ApplyAnimSmear( const kbVec3 smearVec, const float durationSec ) {
+	m_AnimSmearStartTime = g_GlobalTimer.TimeElapsedSeconds();
+	m_AnimSmearVec = smearVec;
+	m_AnimSmearDuration = durationSec;
+}
 
 /**
  *	CannonActorComponent::IsPlayingAnim

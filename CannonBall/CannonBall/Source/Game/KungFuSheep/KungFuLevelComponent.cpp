@@ -33,7 +33,7 @@ class KungFuGame_BaseState : public StateMachineNode<KungFuGame::eKungFuGame_Sta
 public:
 	KungFuGame_BaseState( KungFuLevelComponent *const pLevelComponent ) : m_pLevelComponent( pLevelComponent ) { }
 
-	virtual KungFuLevelComponent::AttackInfo_t PerformAttack( CannonActorComponent *const pAttacker ) { KungFuLevelComponent::AttackInfo_t ret; return ret; }
+	virtual KungFuLevelComponent::AttackHitInfo_t DoAttack( const KungFuLevelComponent::DealAttackInfo_t & dealAttackInfo ) { KungFuLevelComponent::AttackHitInfo_t ret; return ret; }
 
 protected:
 	KungFuLevelComponent * m_pLevelComponent;
@@ -86,11 +86,12 @@ class KungFuGame_GameplayState : public KungFuGame_BaseState {
 public:
 	KungFuGame_GameplayState( KungFuLevelComponent *const pLevelComponent ) : KungFuGame_BaseState( pLevelComponent ) { }
 
-	virtual KungFuLevelComponent::AttackInfo_t PerformAttack( CannonActorComponent *const pAttackerComp ) override { 
+	virtual KungFuLevelComponent::AttackHitInfo_t DoAttack( const KungFuLevelComponent::DealAttackInfo_t & dealAttackInfo ) override { 
 
-		kbErrorCheck( pAttackerComp != nullptr, "KungFuGame_GameplayState::PerformAttack() - null attacker" );
-		KungFuLevelComponent::AttackInfo_t retVal;
+		kbErrorCheck( dealAttackInfo.m_pAttacker != nullptr, "KungFuGame_GameplayState::DoAttack() - null attacker" );
+		KungFuLevelComponent::AttackHitInfo_t retVal;
 
+		const auto pAttackerComp = dealAttackInfo.m_pAttacker;
 		const kbVec3 attackerPos = pAttackerComp->GetOwnerPosition();
 		for ( int i = 0; i < g_pCannonGame->GetGameEntities().size(); i++ ) {
 			kbGameEntity *const pTargetEnt = g_pCannonGame->GetGameEntities()[i];
@@ -99,17 +100,29 @@ public:
 				continue;
 			}
 
+			if ( pTargetComp->IsDead() ) {
+				continue;
+			}
+
 			const kbVec3 targetPos = pTargetComp->GetOwnerPosition();
-			if ( ( attackerPos - targetPos ).Length() > 1.0f ) {
-				continue;
-			}
+			if ( dealAttackInfo.m_Radius == 0.0f ) {
 
-			const kbVec3 vecToTarget = ( targetPos - attackerPos ).Normalized();
-			const kbVec3 attackerFacingDir = pAttackerComp->GetOwnerRotation().ToMat4()[2].ToVec3();
-			if ( vecToTarget.Dot( attackerFacingDir ) > 0.0f ) {
-				continue;
-			}
+				// Slap a %@3$&!!
+				if ( ( attackerPos - targetPos ).Length() > 1.0f ) {
+					continue;
+				}
 
+				const kbVec3 vecToTarget = ( targetPos - attackerPos ).Normalized();
+				const kbVec3 attackerFacingDir = pAttackerComp->GetOwnerRotation().ToMat4()[2].ToVec3();
+				if ( vecToTarget.Dot( attackerFacingDir ) > 0.0f ) {
+					continue;
+				}
+			} else {
+				// Slap a %@3$&!!
+				if ( ( attackerPos - targetPos ).Length() > dealAttackInfo.m_Radius ) {
+					continue;
+				}
+			}
 			KungFuSheepComponent *const pAttackerSheep = pAttackerComp->GetAs<KungFuSheepComponent>();
 			if ( pAttackerSheep != nullptr ) {
 				pTargetComp->TakeDamage( 10000.0f, pAttackerSheep );
@@ -123,7 +136,10 @@ public:
 				}
 			}
 			retVal.m_bHit = true;
-			break;
+
+			if ( dealAttackInfo.m_Radius == 0.0f ) {
+				break;
+			}
 		}
 		return retVal;
 	}
@@ -149,11 +165,12 @@ private:
 			numSnolafs++;
 		}
 
-		if ( numSnolafs == 0 ) {
+		if ( numSnolafs < 7 && g_GlobalTimer.TimeElapsedSeconds() > m_LastSpawnTime + 0.25f ) {
 
 			KungFuLevelComponent *const pLevelComp = (KungFuLevelComponent*)g_pCannonGame->GetLevelComponent();
 			pLevelComp->SpawnEnemy();
 
+			m_LastSpawnTime = g_GlobalTimer.TimeElapsedSeconds();
 		}
 	}
 
@@ -162,6 +179,7 @@ private:
 	}
 
 	float m_GamePlayStartTime;
+	float m_LastSpawnTime = 0.0f;
 };
 
 /**
@@ -179,14 +197,14 @@ public:
 		kbLevelDirector::UpdateStateMachine();
 	}
 
-	KungFuLevelComponent::AttackInfo_t PerformAttack( CannonActorComponent *const pAttacker ) {
+	KungFuLevelComponent::AttackHitInfo_t DoAttack( const KungFuLevelComponent::DealAttackInfo_t attackInfo ) {
 
-		KungFuLevelComponent::AttackInfo_t attackInfo;
+		KungFuLevelComponent::AttackHitInfo_t attackHitInfo;
 		if ( this->m_CurrentState < 0 || m_CurrentState >= KungFuGame::NumStates ) {
-			return attackInfo;
+			return attackHitInfo;
 		}
 
-		return m_States[m_CurrentState]->PerformAttack( pAttacker );
+		return m_States[m_CurrentState]->DoAttack( attackInfo );
 	}
 };
 
@@ -237,8 +255,8 @@ void KungFuLevelComponent::Update_Internal( const float DeltaTime ) {
 /**
  *	KungFuLevelComponent::Update_Internal
  */
-KungFuLevelComponent::AttackInfo_t KungFuLevelComponent::PerformAttack( CannonActorComponent *const pAttacker ) {
-	return g_pKungFuDirector->PerformAttack( pAttacker );
+KungFuLevelComponent::AttackHitInfo_t KungFuLevelComponent::DoAttack( const KungFuLevelComponent::DealAttackInfo_t & attackInfo ) {
+	return g_pKungFuDirector->DoAttack( attackInfo );
 }
 
 /**
