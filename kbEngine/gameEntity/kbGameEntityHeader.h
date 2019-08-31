@@ -32,6 +32,8 @@ public: \
 	virtual const char * GetComponentClassName() const { return #className; } \
 	virtual const std::vector< class kbTypeInfoClass * > & GetTypeInfo() const { return className##_TypeInfoVar; } \
 	virtual bool IsA( const void *const type ) const { if ( type != (kbTypeInfoClass*)( &typeInfo ) ) { return Super::IsA( type ); } else { return true; } } \
+	template<typename T> \
+	T* GetAs() { if ( IsA( T::GetType() ) == false ) { return nullptr; } return (T*)this; } \
 	const static className##_TypeInfo * GetType() { return &typeInfo; } \
 	virtual kbComponent * Duplicate() const { return new className( *this ); }
 

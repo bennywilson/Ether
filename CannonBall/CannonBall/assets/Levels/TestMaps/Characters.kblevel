@@ -2,7 +2,7 @@ kbGameEntity 0 0 0 0 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		Name = "Entity_24"
+		Name = "Entity_27"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
 		Position = 0.000000 0.000000 0.000000
 		Scale = 1.000000 1.000000 1.000000
@@ -10,8 +10,8 @@ kbGameEntity 0 0 0 0 {
 	kbEditorLevelSettingsComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		MainCameraPosition = -3.927786 2.526060 14.584562
-		MainCameraRotation = -0.058842 -0.797960 0.078967 0.594611
+		MainCameraPosition = -18.701902 2.232450 19.413542
+		MainCameraRotation = -0.200792 -0.671742 0.196804 0.685356
 	}
 }
 kbGameEntity 0 0 0 0 {
@@ -653,7 +653,12 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 1
 		LifeTime =  -1.000000
 		DummyTemp = 0
-		Health =  10.000000
+		Health =  100.000000
+		AttackVO = 0
+		BattleChatterVO = 0
+		Health =  100.000000
+		MaxRotateSpeed =  15.000000
+		MaxRunSpeed =  3.000000
 		AttackImpactSound = 5
 			kbSoundData { 
 				Enabled = 0
@@ -690,9 +695,6 @@ kbGameEntity 0 0 0 0 {
 				Volume =  1.000000
 				WaveFile = .\assets\sounds\impacts\woodimpact_5.wav
 			}
-		BattleChatterVO = 0
-		MaxRotateSpeed =  15.000000
-		MaxRunSpeed =  3.000000
 		CannonBallImpactFX = 846208613 1165520682 3641600641 3993117100
 		CannonBallImpactSound = 1
 			kbSoundData { 
@@ -720,7 +722,7 @@ kbGameEntity 0 0 0 0 {
 		LifeTime =  -1.000000
 		Name = "Level"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
-		Position = -190.244919 3.031295 -71.296104
+		Position = 0.000000 0.000000 0.000000
 		Scale = 1.000000 1.000000 1.000000
 	}
 	KungFuLevelComponent { 
@@ -730,7 +732,8 @@ kbGameEntity 0 0 0 0 {
 		GlobalModelScale =  0.005000
 		LevelType = 2D
 		Dummy2 =  -nan
-		Dummy =  -nan
+		SheepPrefab = 0 0 0 0
+		SnolafPrefab = 314357658 1122514197 2466994618 463523205
 	}
 }
 kbGameEntity 0 0 0 0 {
@@ -869,7 +872,7 @@ kbGameEntity 0 0 0 0 {
 			}
 		RenderPass = LightingPass
 		TranslucencySortBias =  0.000000
-		Animations = 4
+		Animations = 5
 			kbAnimComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
@@ -920,6 +923,15 @@ kbGameEntity 0 0 0 0 {
 				IsLooping = 1
 				TimeScale =  5.000000
 			}
+			kbAnimComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Animation = .\assets\models\characters\snolaf\snolaf_fly_backwards_1.kbanim.ms3d
+				AnimationEvent = 0
+				AnimationName = "Death_FlyBackwards_1"
+				IsLooping = 0
+				TimeScale =  5.000000
+			}
 		DebugAnimIndex = -1
 		Model = .\assets\models\characters\snolaf\snolaf.ms3d
 	}
@@ -958,7 +970,7 @@ kbGameEntity 0 0 0 0 {
 			}
 		RenderPass = LightingPass
 		TranslucencySortBias =  0.000000
-		Animations = 4
+		Animations = 5
 			kbAnimComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
@@ -993,6 +1005,15 @@ kbGameEntity 0 0 0 0 {
 				AnimationEvent = 0
 				AnimationName = "Hug_Right"
 				IsLooping = 1
+				TimeScale =  5.000000
+			}
+			kbAnimComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Animation = .\assets\models\characters\snolaf\snolaf_fly_backwards_1.kbanim.ms3d
+				AnimationEvent = 0
+				AnimationName = "Snolaf_Death_FlyBackwards_1"
+				IsLooping = 0
 				TimeScale =  5.000000
 			}
 		DebugAnimIndex = -1
@@ -1128,11 +1149,13 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 1
 		LifeTime =  -1.000000
 		DummyTemp = 0
-		Health =  10.000000
+		Health =  100.000000
 		AttackVO = 0
 		BattleChatterVO = 0
+		Health =  100.000000
 		MaxRotateSpeed =  15.000000
 		MaxRunSpeed =  3.000000
+		PoofDeathFX = 0 0 0 0
 		StepImpactFX = 949543359 1324466742 3669717892 833517135
 	}
 }
@@ -1703,6 +1726,100 @@ kbGameEntity 0 0 0 0 {
 				EventName = ""
 				EventTime =  1.500000
 				EventValue = 1.000000 1.000000 1.000000 0.000000
+			}
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Entity_23"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = -13.445821 0.721128 21.090582
+		Scale = 1.000000 1.000000 1.000000
+	}
+	kbParticleComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		Name = "Poof_Death"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 0.000000 0.000000 0.000000
+		Scale = 1.000000 1.000000 1.000000
+		AlphaOverLife = 0
+		ColorOverLife = 0
+		EndColor = 1.000000 1.000000 1.000000 1.000000
+		Gravity = 0.000000 -2.000000 0.000000
+		MaterialList = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\fx\particle_blendadd.kbshader
+				ShaderParams = 2
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorMultplier"
+						Texture = NULL
+						Vector = 1.000000 1.000000 1.000000 1.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "shaderTexture"
+						Texture = .\assets\fx\explosions\snow_explosion_1.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		MaxBurstCount = 150
+		MaxDuration =  3.000000
+		MaxEndRotationRate =  0.000000
+		MaxEndSize = 0.100000 0.100000 0.100000
+		MaxEndVelocity = -2.000000 2.000000 2.000000
+		MaxSpawnRate =  0.000000
+		MaxStart3DOffset = 0.000000 0.000000 0.000000
+		MaxStart3DRotation = 0.000000 0.000000 0.000000
+		MaxStartRotationRate =  0.000000
+		MaxStartSize = 0.100000 0.100000 0.100000
+		MaxStartVelocity = 2.000000 2.000000 2.000000
+		MinBurstCount = 100
+		MinDuration =  3.000000
+		MinEndRotationRate =  0.000000
+		MinEndSize = 0.100000 0.100000 0.100000
+		MinEndVelocity = -2.000000 -0.250000 -2.000000
+		MinSpawnRate =  0.000000
+		MinStart3DOffset = 0.000000 0.000000 0.000000
+		MinStart3DRotation = 0.000000 0.000000 0.000000
+		MinStartRotationRate =  0.000000
+		MinStartSize = 0.100000 0.100000 0.100000
+		MinStartVelocity = -2.000000 -0.250000 -2.000000
+		ModelEmitter = 0
+		ParticleBillboardType = FaceCamera
+		StartColor = 1.000000 1.000000 1.000000 1.000000
+		StartDelay =  0.000000
+		TotalDuration =  -1.000000
+		TranslucencySortBias =  0.000000
+		VelocityCurve = 3
+			kbAnimEvent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				EventName = ""
+				EventTime =  0.000000
+				EventValue =  10.000000
+			}
+			kbAnimEvent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				EventName = ""
+				EventTime =  0.100000
+				EventValue =  1.000000
+			}
+			kbAnimEvent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				EventName = ""
+				EventTime =  1.000000
+				EventValue =  0.250000
 			}
 	}
 }

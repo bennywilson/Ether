@@ -36,6 +36,9 @@ public:
 	void										EnableSmallLoveHearts( const bool bEnable );
 	void										EnableLargeLoveHearts( const bool bEnable );
 
+	void										TakeDamage( const float amount, CannonActorComponent *const pAttacker );
+
+	void										DoPoofDeath();
 
 protected:
 
@@ -46,6 +49,7 @@ private:
 
 	// Data
 	kbGameEntityPtr								m_FootStepImpactFX;
+	kbGameEntityPtr								m_PoofDeathFX;
 
 	// Game
 	kbParticleComponent *						m_pSmallLoveHearts;

@@ -15,6 +15,7 @@
  void CannonActorComponent::Constructor() {
 	m_MaxRunSpeed = 3.0f;
 	m_MaxRotateSpeed = 15.0f;
+	m_Health = 100.0f;
 
 	m_TargetFacingDirection.Set( 0.0f, 0.0f, -1.0f );
 

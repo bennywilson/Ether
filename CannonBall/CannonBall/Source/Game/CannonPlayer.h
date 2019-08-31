@@ -29,6 +29,9 @@ public:
 
 	bool										IsPlayer() const { return m_bIsPlayer; }
 
+	virtual void								TakeDamage( const float amount, CannonActorComponent *const pAttacker ) { }
+	virtual bool								IsDead() const { return m_Health <= 0.0f; }
+
 protected:
 
 	virtual void								SetEnable_Internal( const bool bEnable ) override;
@@ -37,6 +40,7 @@ protected:
 	// Data
 	float										m_MaxRunSpeed;
 	float										m_MaxRotateSpeed;
+	float										m_Health;
 
 	std::vector<kbSoundData>					m_AttackVO;
 	std::vector<kbSoundData>					m_BattleChatterVO;

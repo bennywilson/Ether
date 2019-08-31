@@ -8,6 +8,8 @@
 #include "CannonGame.h"
 #include "KungFuLevelComponent.h"
 #include "CannonPlayer.h"
+#include "KungFuSheep.h"
+#include "KungFuSnolaf.h"
 
 namespace KungFuGame {
 
@@ -108,23 +110,58 @@ public:
 				continue;
 			}
 
+			KungFuSheepComponent *const pAttackerSheep = pAttackerComp->GetAs<KungFuSheepComponent>();
+			if ( pAttackerSheep != nullptr ) {
+				pTargetComp->TakeDamage( 10000.0f, pAttackerSheep );
+			} else {
+				KungFuSnolafComponent*const pAttackerSnolaf = pAttackerComp->GetAs<KungFuSnolafComponent>();
+				if ( pAttackerSnolaf != nullptr ) {
+					KungFuSheepComponent *const pTargetSheep = pTargetComp->GetAs<KungFuSheepComponent>();
+					if ( pTargetSheep != nullptr ) {
+
+					}
+				}
+			}
 			retVal.m_bHit = true;
+			break;
 		}
 		return retVal;
 	}
 
 private:
 	virtual void BeginState( KungFuGame::eKungFuGame_State previousState ) override {
-
+		m_GamePlayStartTime = g_GlobalTimer.TimeElapsedSeconds();
 	}
 
 	virtual void UpdateState() override {
 
+		if ( g_GlobalTimer.TimeElapsedSeconds() < m_GamePlayStartTime + 5.0f ) {
+			return;
+		}
+
+		int numSnolafs = 0;
+		for ( int i = 0; i < g_pCannonGame->GetGameEntities().size(); i++ ) {
+			kbGameEntity *const pTargetEnt = g_pCannonGame->GetGameEntities()[i];
+			KungFuSnolafComponent *const pSnolaf = pTargetEnt->GetComponent<KungFuSnolafComponent>();
+			if ( pSnolaf == nullptr ) {
+				continue;
+			}
+			numSnolafs++;
+		}
+
+		if ( numSnolafs == 0 ) {
+
+			KungFuLevelComponent *const pLevelComp = (KungFuLevelComponent*)g_pCannonGame->GetLevelComponent();
+			pLevelComp->SpawnEnemy();
+
+		}
 	}
 
 	virtual void EndState( KungFuGame::eKungFuGame_State nextState ) override {
 
 	}
+
+	float m_GamePlayStartTime;
 };
 
 /**
@@ -159,7 +196,6 @@ static KungFuSheep_Director * g_pKungFuDirector = nullptr;
  *	KungFuLevelComponent::Constructor
  */
 void KungFuLevelComponent::Constructor() {
-	m_Dummy = -1;
 }
 
 /**
@@ -191,6 +227,10 @@ void KungFuLevelComponent::SetEnable_Internal( const bool bEnable ) {
 void KungFuLevelComponent::Update_Internal( const float DeltaTime ) {
 	Super::Update_Internal( DeltaTime );
 
+	if ( g_UseEditor ) {
+		return;
+	}
+
 	g_pKungFuDirector->UpdateStateMachine();
 }
 
@@ -199,4 +239,22 @@ void KungFuLevelComponent::Update_Internal( const float DeltaTime ) {
  */
 KungFuLevelComponent::AttackInfo_t KungFuLevelComponent::PerformAttack( CannonActorComponent *const pAttacker ) {
 	return g_pKungFuDirector->PerformAttack( pAttacker );
+}
+
+/**
+ *	KungFuLevelComponent::SpawnEnemy
+ */
+void KungFuLevelComponent::SpawnEnemy() {
+
+	if ( m_SnolafPrefab.GetEntity() == nullptr ) {
+		return;
+	}
+
+	kbGameEntity *const pSnolaf = g_pGame->CreateEntity( m_SnolafPrefab.GetEntity() );
+	kbVec3 spawnOffset( 0.0f, 0.0f, 12.0f );
+	if ( rand() % 2 == 0 ) {
+		spawnOffset.z *=  -1.0f;
+	}
+	pSnolaf->SetPosition( g_pCannonGame->GetPlayer()->GetOwnerPosition() + spawnOffset );
+	pSnolaf->SetOrientation( GetOwnerRotation() );
 }

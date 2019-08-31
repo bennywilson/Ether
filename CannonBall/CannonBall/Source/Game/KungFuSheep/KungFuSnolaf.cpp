@@ -150,7 +150,68 @@ class KungFuSnolafStateDead : public KungFuSnolafStateBase<T> {
 
 //---------------------------------------------------------------------------------------------------
 public:
-	KungFuSnolafStateDead( CannonActorComponent *const pPlayerComponent ) : KungFuSnolafStateBase( pPlayerComponent ) { }
+	KungFuSnolafStateDead( CannonActorComponent *const pPlayerComponent ) : KungFuSnolafStateBase( pPlayerComponent ), m_DeathStartTime( -1.0f ) { }
+
+	virtual void BeginState( T ) override {
+	//	kbLog( "Dead yo" );
+
+		const int numDeaths = 2;
+		const int deathSelection = rand() % numDeaths;
+
+		if ( deathSelection == 0 ) {
+			const kbString Death_FlyBackwards_1( "Death_FlyBackwards_1" );
+			m_pActorComponent->PlayAnimation( Death_FlyBackwards_1, 0.05f );
+		} else if ( deathSelection == 1 ) {
+			KungFuSnolafComponent *const pSnolaf = m_pActorComponent->GetAs<KungFuSnolafComponent>();
+			pSnolaf->DoPoofDeath();
+		}
+
+		m_DeathStartTime = g_GlobalTimer.TimeElapsedSeconds();
+	/*	static const kbString HugLeft_Anim( "Hug_Left" );
+		static const kbString HugRight_Anim( "Hug_Right" );
+
+		if ( GetTarget() == nullptr ) {
+			RequestStateChange( KungFuSnolafState::Idle );
+			return;
+
+		}
+
+		if ( IsTargetOnLeft() ) {
+			m_pActorComponent->PlayAnimation( HugLeft_Anim, 0.05f );
+		} else {
+			m_pActorComponent->PlayAnimation( HugRight_Anim, 0.05f );
+		}*
+
+		GetSnolaf()->EnableLargeLoveHearts( true );*/
+	}
+
+	virtual void UpdateState() override {
+
+		const float curTime = g_GlobalTimer.TimeElapsedSeconds();
+		if ( curTime > m_DeathStartTime + 2.0f ) {
+			g_pCannonGame->RemoveGameEntity( this->m_pActorComponent->GetOwner() );
+			return;
+		}
+	/*	const float frameDT = g_pGame->GetFrameDT();
+		
+		if ( GetTarget() == nullptr ) {
+			RequestStateChange( KungFuSnolafState::Idle );
+			return;
+		}
+			
+		if ( GetDistanceToTarget() > 2.5f ) {
+			RequestStateChange( KungFuSnolafState::Run );
+			return;
+		}*/
+
+	}
+
+	virtual void EndState( T ) override {
+	//	GetSnolaf()->EnableLargeLoveHearts( false );
+	}
+
+private:
+	float m_DeathStartTime;
 };
 
 
@@ -266,4 +327,33 @@ void KungFuSnolafComponent::EnableLargeLoveHearts( const bool bEnable ) {
 	}
 
 	m_pLargeLoveHearts->EnableNewSpawns( bEnable );
+}
+
+/**
+ *	KungFuSnolafComponent::TakeDamage
+ */
+void KungFuSnolafComponent::TakeDamage( const float amount, CannonActorComponent *const pAttacker ) {
+
+	m_Health = -1.0f;
+	RequestStateChange( KungFuSnolafState::Dead );
+}
+
+/**
+ *	KungFuSnolafComponent::DoPoofDeath
+ */
+void KungFuSnolafComponent::DoPoofDeath() {
+
+	m_SkelModelsList[0]->Enable( false );
+	m_SkelModelsList[1]->Enable( false );
+
+	if ( m_PoofDeathFX.GetEntity() == nullptr ) {
+		return;
+	}
+
+	kbGameEntity *const pCannonBallImpact = g_pGame->CreateEntity( m_PoofDeathFX.GetEntity() );
+	pCannonBallImpact->SetPosition( GetOwnerPosition() );
+	pCannonBallImpact->SetOrientation( GetOwnerRotation() );
+	pCannonBallImpact->DeleteWhenComponentsAreInactive( true );
+
+	g_pCannonGame->RemoveGameEntity( this->GetOwner() );
 }

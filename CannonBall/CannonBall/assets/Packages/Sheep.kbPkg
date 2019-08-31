@@ -24,21 +24,21 @@ kbPrefab 1 {
 					LifeTime =  -1.000000
 					EventName = ""
 					EventTime =  0.000000
-					EventValue = 1.000000 1.000000 1.000000 1
+					EventValue = 1.000000 1.000000 1.000000 1.000000
 				}
 				kbVectorAnimEvent { 
 					Enabled = 0
 					LifeTime =  -1.000000
 					EventName = ""
 					EventTime =  0.500000
-					EventValue = 1.000000 1.000000 1.000000 1
+					EventValue = 1.000000 1.000000 1.000000 1.000000
 				}
 				kbVectorAnimEvent { 
 					Enabled = 0
 					LifeTime =  -1.000000
 					EventName = ""
 					EventTime =  1.000000
-					EventValue = 0.000000 0.000000 0.000000 1
+					EventValue = 0.000000 0.000000 0.000000 1.000000
 				}
 			EndColor = 1.000000 1.000000 1.000000 0.000000
 			Gravity = 0.000000 -1.000000 0.000000

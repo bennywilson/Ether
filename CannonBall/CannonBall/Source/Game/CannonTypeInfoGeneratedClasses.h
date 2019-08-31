@@ -16,6 +16,7 @@ GenerateClass(
 	CannonActorComponent,
 	AddField( "MaxRunSpeed", KBTYPEINFO_FLOAT, CannonActorComponent, m_MaxRunSpeed, false, "" )
 	AddField( "MaxRotateSpeed", KBTYPEINFO_FLOAT, CannonActorComponent, m_MaxRotateSpeed, false, "" )
+	AddField( "Health", KBTYPEINFO_FLOAT, CannonActorComponent, m_Health, false, "" )
 	AddField( "AttackVO", KBTYPEINFO_STRUCT, CannonActorComponent, m_AttackVO, true, "kbSoundData" )
 	AddField( "BattleChatterVO", KBTYPEINFO_STRUCT, CannonActorComponent, m_BattleChatterVO, true, "kbSoundData" )
 )
@@ -33,6 +34,7 @@ GenerateClass(
 GenerateClass(
 	KungFuSnolafComponent,
 	AddField( "StepImpactFX", KBTYPEINFO_GAMEENTITY, KungFuSnolafComponent, m_FootStepImpactFX, false, "" )
+	AddField( "PoofDeathFX", KBTYPEINFO_GAMEENTITY, KungFuSnolafComponent, m_PoofDeathFX, false, "" )
 )
 
 GenerateClass(
@@ -60,5 +62,6 @@ GenerateClass(
 
 GenerateClass(
 	KungFuLevelComponent,
-	AddField( "Dummy", KBTYPEINFO_FLOAT, KungFuLevelComponent, m_Dummy, false, "" )
+	AddField( "SnolafPrefab", KBTYPEINFO_GAMEENTITY, KungFuLevelComponent, m_SnolafPrefab, false, "" )
+	AddField( "SheepPrefab", KBTYPEINFO_GAMEENTITY, KungFuLevelComponent, m_SheepPrefab, false, "" )
 )

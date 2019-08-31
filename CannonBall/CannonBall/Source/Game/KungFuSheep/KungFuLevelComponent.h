@@ -25,6 +25,8 @@ public:
 
 	AttackInfo_t								PerformAttack( CannonActorComponent *const pAttacker );
 
+	void										SpawnEnemy();
+
 protected:
 
 	virtual void								SetEnable_Internal( const bool bEnable ) override;
@@ -32,7 +34,8 @@ protected:
 
 private:
 
-	int											m_Dummy;
+	kbGameEntityPtr								m_SnolafPrefab;
+	kbGameEntityPtr								m_SheepPrefab;
 };
 
 
