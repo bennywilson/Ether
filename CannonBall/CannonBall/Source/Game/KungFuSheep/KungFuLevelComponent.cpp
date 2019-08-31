@@ -118,7 +118,7 @@ public:
 					continue;
 				}
 			} else {
-				// Slap a %@3$&!!
+				// Slap that %@3$&!!
 				if ( ( attackerPos - targetPos ).Length() > dealAttackInfo.m_Radius ) {
 					continue;
 				}

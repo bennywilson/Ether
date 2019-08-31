@@ -12,6 +12,7 @@
 #include "kbModel.h"
 #include "kbModelComponent.h"
 #include "kbRenderer.h"
+#include "kbGame.h"
 
 KB_DEFINE_COMPONENT(kbModelComponent)
 
@@ -260,6 +261,9 @@ void kbMaterialComponent::SetShaderParamComponent( const kbShaderParamComponent 
  *	kbShaderModifierComponent::Constructor
  */
 void kbShaderModifierComponent::Constructor() {
+
+	m_bDisableWhenAnimDone = false;
+
 	m_pModelComponent = nullptr;
 	m_StartTime = -1.0f;
 	m_AnimationLengthSec = -1.0f;
@@ -296,6 +300,7 @@ void kbShaderModifierComponent::SetEnable_Internal( const bool bEnable ) {
 void kbShaderModifierComponent::Update_Internal( const float dt ) {
 
 	if ( m_pModelComponent == nullptr || m_ShaderVectorEvents.size() == 0 ) {
+		Enable( false );
 		return;
 	}
 
@@ -305,9 +310,10 @@ void kbShaderModifierComponent::Update_Internal( const float dt ) {
 	}
 
 	const float elapsedTime = g_GlobalTimer.TimeElapsedSeconds() - m_StartTime;
+	const kbVec4 shaderParam = kbVectorAnimEvent::Evaluate( m_ShaderVectorEvents, elapsedTime );
+	m_pModelComponent->SetMaterialParamVector( 0, m_ShaderVectorEvents[0].GetEventName().stl_str(), shaderParam );
 
-	if ( m_ShaderVectorEvents.size() > 0.0f ) {
-		const kbVec4 shaderParam = kbVectorAnimEvent::Evaluate( m_ShaderVectorEvents, elapsedTime );
-		m_pModelComponent->SetMaterialParamVector( 0, m_ShaderVectorEvents[0].GetEventName().stl_str(), shaderParam );
+	if ( elapsedTime > m_ShaderVectorEvents[m_ShaderVectorEvents.size() - 1].GetEventTime() && m_bDisableWhenAnimDone ) {
+		g_pGame->RemoveGameEntity( GetOwner() );
 	}
 }

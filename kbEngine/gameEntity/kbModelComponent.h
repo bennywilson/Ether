@@ -58,6 +58,7 @@ protected:
 
 	// Editor
 	std::vector<kbVectorAnimEvent>					m_ShaderVectorEvents;
+	bool											m_bDisableWhenAnimDone;
 
 	// Runtime
 	class kbModelComponent *						m_pModelComponent;

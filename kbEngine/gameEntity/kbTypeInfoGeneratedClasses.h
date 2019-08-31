@@ -338,4 +338,5 @@ GenerateClass(
 GenerateClass(
 	kbShaderModifierComponent,
 	AddField( "ShaderVectorEvents", KBTYPEINFO_STRUCT, kbShaderModifierComponent, m_ShaderVectorEvents, true, "kbVectorAnimEvent" )
+	AddField( "DisableWhenAnimIsDone", KBTYPEINFO_BOOL, kbShaderModifierComponent, m_bDisableWhenAnimDone, false, "" )
 )

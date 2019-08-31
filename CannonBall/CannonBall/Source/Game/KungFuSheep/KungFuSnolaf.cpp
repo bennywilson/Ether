@@ -408,8 +408,7 @@ void KungFuSnolafComponent::OnAnimEvent( const kbAnimEventInfo_t & animEventInfo
 			m_SkelModelsList[0]->GetBoneWorldPosition( footBone, decalPosition  ) ;
 
 			pFootStepFX->SetPosition( decalPosition );
-		//	pFootStepFX->SetOrientation( GetOwnerRotation() );
-		//	pFootStepFX->DeleteWhenComponentsAreInactive( true );
+			pFootStepFX->DeleteWhenComponentsAreInactive( true );
 		}
 	}
 }

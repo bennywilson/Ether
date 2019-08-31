@@ -10,7 +10,7 @@ kbGameEntity 0 0 0 0 {
 	kbEditorLevelSettingsComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		MainCameraPosition = -19.038595 2.448303 19.406782
+		MainCameraPosition = -19.375288 2.664156 19.400023
 		MainCameraRotation = -0.200792 -0.671742 0.196804 0.685356
 	}
 }
@@ -1705,6 +1705,7 @@ kbGameEntity 0 0 0 0 {
 	kbShaderModifierComponent { 
 		Enabled = 1
 		LifeTime =  -1.000000
+		DisableWhenAnimIsDone = 0
 		ShaderVectorEvents = 3
 			kbVectorAnimEvent { 
 				Enabled = 0

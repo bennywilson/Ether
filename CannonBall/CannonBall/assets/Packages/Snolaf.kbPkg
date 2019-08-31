@@ -57,6 +57,7 @@ kbPrefab 1 {
 		kbShaderModifierComponent { 
 			Enabled = 1
 			LifeTime =  -1.000000
+			DisableWhenAnimIsDone = 1
 			ShaderVectorEvents = 3
 				kbVectorAnimEvent { 
 					Enabled = 0
@@ -130,7 +131,7 @@ kbGameEntity 1180474321 1206754152 1921378463 1489227724 {
 		MaxBurstCount = 150
 		MaxDuration =  3.000000
 		MaxEndRotationRate =  0.000000
-		MaxEndSize = 0.075 0.075 0.075
+		MaxEndSize = 0.075000 0.075000 0.075000
 		MaxEndVelocity = -2.000000 2.000000 2.000000
 		MaxSpawnRate =  0.000000
 		MaxStart3DOffset = 0.000000 0.000000 0.000000
@@ -147,7 +148,7 @@ kbGameEntity 1180474321 1206754152 1921378463 1489227724 {
 		MinStart3DOffset = 0.000000 0.000000 0.000000
 		MinStart3DRotation = 0.000000 0.000000 0.000000
 		MinStartRotationRate =  0.000000
-		MinStartSize = 0.075 0.075 0.075
+		MinStartSize = 0.075000 0.075000 0.075000
 		MinStartVelocity = -2.000000 -0.250000 -2.000000
 		ModelEmitter = 0
 		ParticleBillboardType = FaceCamera
@@ -183,7 +184,7 @@ kbGameEntity 1180474321 1206754152 1921378463 1489227724 {
 		LifeTime =  -1.000000
 		Name = "LargeDustMist"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
-		Position = 0.000000 1.00000 0.000000
+		Position = 0.000000 1.000000 0.000000
 		Scale = 1.000000 1.000000 1.000000
 		AlphaOverLife = 0
 		ColorOverLife = 4
@@ -199,14 +200,14 @@ kbGameEntity 1180474321 1206754152 1921378463 1489227724 {
 				LifeTime =  -1.000000
 				EventName = ""
 				EventTime =  0.100000
-				EventValue = 0.10000 0.10000 0.10000 0.000000
+				EventValue = 0.100000 0.100000 0.100000 0.000000
 			}
 			kbVectorAnimEvent { 
 				Enabled = 0
 				LifeTime =  -1.000000
 				EventName = ""
 				EventTime =  0.750000
-				EventValue = 0.10000 0.10000 0.10000 0.000000
+				EventValue = 0.100000 0.100000 0.100000 0.000000
 			}
 			kbVectorAnimEvent { 
 				Enabled = 0
