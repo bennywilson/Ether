@@ -41,7 +41,7 @@ public:
 
 	void										DoPoofDeath();
 
-	bool										IsHugging() const { return m_CurrentState == KungFuSnolafState::Hug; }
+	KungFuSnolafState::SnolafState_t			GetState() const { return m_CurrentState; }
 
 protected:
 

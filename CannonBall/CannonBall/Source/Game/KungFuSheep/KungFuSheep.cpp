@@ -36,6 +36,10 @@ public:
 		} else {
 			m_pActorComponent->PlayAnimation( IdleR_Anim, 0.05f );
 		}
+
+		if ( prevState == KungFuSheepState::CannonBall ) {
+			m_LastCannonBallTime = g_GlobalTimer.TimeElapsedSeconds();
+		}
 	}
 
 	virtual void UpdateState() override {
@@ -55,6 +59,10 @@ public:
 			RequestStateChange( KungFuSheepState::Run );
 			m_pActorComponent->SetTargetFacingDirection( g_RightFacing );
 		}
+		/*
+		if ( m_LastCannonBallTime == -1.0f || g_GlobalTimer.TimeElapsedSeconds() > m_LastCannonBallTime + 5.0f ) {
+			RequestStateChange( KungFuSheepState::CannonBall );
+		}*/
 	}
 
 	virtual void EndState( T nextState ) override { }
@@ -239,10 +247,16 @@ public:
 				continue;
 			}
 
-			if ( pSnolaf->IsHugging() ) {
+			if ( pSnolaf->GetState() == KungFuSnolafState::Hug ) {
 				numHuggers++;
 			}
 		}
+		/*
+		if ( numHuggers > 5 ) {
+			RequestStateChange( KungFuSheepState::CannonBall );
+			return;
+		}
+		*/
 		if ( m_NumDirectionChanges > numHuggers ) {
 			RequestStateChange( KungFuSheepState::Idle );
 

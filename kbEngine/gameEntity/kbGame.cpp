@@ -13,6 +13,7 @@ kbGame * g_pGame = nullptr;
 
 kbConsoleVariable g_ShowPerfTimers( "showperftimers", false, kbConsoleVariable::Console_Bool, "Display game/engine perf timers", "ctrl p" );
 kbConsoleVariable g_ShowEntityInfo( "showentityinfo", false, kbConsoleVariable::Console_Bool, "Show entity info?", "" );
+kbConsoleVariable g_DumpEntityInfo( "dumpentityinfo", false, kbConsoleVariable::Console_Bool, "Dump entity info?", "" );
 kbConsoleVariable g_TimeScale( "timescale", (float)1.0f, kbConsoleVariable::Console_Float, "Dilate time", "" );
 kbConsoleVariable g_EnableHelpScreen( "help", false, kbConsoleVariable::Console_Bool, "Display help screen", "ctrl h" );
 
@@ -258,7 +259,7 @@ void kbGame::Update() {
 		
 				g_pRenderer->DrawDebugText( timing, 0.25f, curY, g_DebugTextSize, g_DebugTextSize, kbColor::green );
 			}
-		} else if ( g_ShowEntityInfo.GetBool() ) {
+		} else if ( g_ShowEntityInfo.GetBool()  || g_DumpEntityInfo.GetBool() ) {
 			float curY = g_DebugLineSpacing + 0.1f;
 			std::string NumEntities = "Num Entities: ";
 			NumEntities += std::to_string( (long long ) m_GameEntityList.size() );
@@ -266,14 +267,37 @@ void kbGame::Update() {
 			curY += g_DebugLineSpacing;
 			std::map<std::string, int> componentMap;
 
+			if ( g_DumpEntityInfo.GetBool() ) {
+				kbLog( "=============================================================================" );
+				kbLog( "Dumping entity and component info" );
+
+			}
+
 			for ( int i = 0; i < (int)m_GameEntityList.size(); i++ ) {
 				const kbGameEntity *const pCurEntity = m_GameEntityList[i];
+
+				if ( g_DumpEntityInfo.GetBool() ) {
+					kbLog( "Entity [%d] - %s", i, pCurEntity->GetName().c_str() );
+				}
+
 				for ( int iComp = 0; iComp < pCurEntity->NumComponents(); iComp++ ) {
-					const kbComponent *const pComponent = pCurEntity->GetComponent( iComp );
+					kbComponent *const pComponent = pCurEntity->GetComponent( iComp );
 					const std::string pComponentTypeName = pComponent->GetComponentClassName();
 					componentMap[pComponentTypeName]++;
+
+					if ( g_DumpEntityInfo.GetBool() ) {
+						kbTransformComponent * pTransformComponent = pComponent->GetAs<kbTransformComponent>();
+						if ( pTransformComponent != nullptr ) {
+							kbLog( "	Component [%d] - %s %s", iComp, pComponentTypeName.c_str(), pTransformComponent->GetName().c_str() );
+						} else {
+							kbLog( "	Component [%d] - %s", iComp, pComponentTypeName.c_str());
+						}
+					}
+
 				}
 			}
+
+			g_DumpEntityInfo.SetBool( false );
 
 			for ( std::map<std::string,int>::iterator it = componentMap.begin(); it != componentMap.end(); ++it ) {
 				std::string outputName = it->first;

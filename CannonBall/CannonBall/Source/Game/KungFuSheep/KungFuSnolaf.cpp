@@ -87,7 +87,7 @@ public:
 			const kbVec3 vSnolafToTarget = targetPos - snolafPos;
 			const float snolafToTargetDist = ( targetPos - snolafPos ).Length();
 			auto pSnolafComponent = pTargetActor->GetAs<KungFuSnolafComponent>();
-			if ( pSnolafComponent != nullptr && pSnolafComponent->IsHugging() == false ) {
+			if ( pSnolafComponent != nullptr && pSnolafComponent->GetState() != KungFuSnolafState::Hug && pSnolafComponent->GetState() != KungFuSnolafState::WatchCannonBall ) {
 				continue;
 			}
 
@@ -104,7 +104,7 @@ public:
 				dealAttackInfo.m_Radius = 0.0f;
 				dealAttackInfo.m_AttackType = KungFuGame::Hug;
 
-				KungFuLevelComponent *const pLevelComponent =  g_pCannonGame->GetLevelComponent<KungFuLevelComponent>();
+				KungFuLevelComponent *const pLevelComponent = g_pCannonGame->GetLevelComponent<KungFuLevelComponent>();
 				pLevelComponent->DoAttack( dealAttackInfo );
 
 				RequestStateChange( KungFuSnolafState::Hug );
