@@ -9,8 +9,8 @@
 #include "kbIntersectionTests.h"
 #include "kbLevelComponent.h"
 #include "DX11/kbRenderer_DX11.h"
-#include "CannonPlayer.h"
 #include "CannonGame.h"
+#include "CannonPlayer.h"
 #include <directxpackedvector.h>
 #include "kbEditorEntity.h"
 

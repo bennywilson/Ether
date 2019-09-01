@@ -73,6 +73,7 @@ public:
 	float										GetCurAnimLengthSeconds() const { if ( m_CurrentAnimation == -1 || m_Animations[m_CurrentAnimation].m_pAnimation == NULL ) return -1.0f; return m_Animations[m_CurrentAnimation].m_pAnimation->GetLengthInSeconds(); }
 
 	const kbString *							GetCurAnimationName() const;
+	const kbString *							GetNextAnimationName() const;
 
 	void										RegisterAnimEventListener( IAnimEventListener *const pListener );
 	void										UnregisterAnimEventListener( IAnimEventListener *const pListener );

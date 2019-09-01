@@ -379,6 +379,10 @@ public:
 			kbError( "IStateMachine::RequestStateChange() - Invalid State requested" );
 		}
 
+		if ( newState == m_CurrentState ) {
+			return;
+		}
+
 		if ( m_CurrentState != StateEnum::NumStates ) {
 			m_States[m_CurrentState]->EndState( newState );
 		}

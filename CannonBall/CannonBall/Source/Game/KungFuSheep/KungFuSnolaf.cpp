@@ -6,7 +6,9 @@
 #include <math.h>
 #include "CannonGame.h"
 #include "CannonPlayer.h"
+#include "KungFuLevelComponent.h"
 #include "KungFuSnolaf.h"
+#include "KungFuSheep.h"
 #include "kbEditor.h"
 #include "kbEditorEntity.h"
 
@@ -21,7 +23,7 @@ public:
 	KungFuSnolafStateIdle( CannonActorComponent *const pPlayerComponent ) : KungFuSnolafStateBase( pPlayerComponent ) { }
 
 
-	virtual void BeginState( T ) override {
+	virtual void BeginState( T prevState ) override {
 
 		static const kbString Idle_Anim( "Idle_1" );
 		m_pActorComponent->PlayAnimation( Idle_Anim, 0.05f );
@@ -84,11 +86,26 @@ public:
 			const kbVec3 targetPos = pTargetActor->GetOwnerPosition();
 			const kbVec3 vSnolafToTarget = targetPos - snolafPos;
 			const float snolafToTargetDist = ( targetPos - snolafPos ).Length();
-			if ( snolafToTargetDist < 0.75f ) {
+			auto pSnolafComponent = pTargetActor->GetAs<KungFuSnolafComponent>();
+			if ( pSnolafComponent != nullptr && pSnolafComponent->IsHugging() == false ) {
+				continue;
+			}
+
+			const float radius = ( pSnolafComponent != nullptr ) ? ( 0.5f ) : ( 0.75f );
+			if ( snolafToTargetDist < radius ) {
 
 				if ( vSnolafToTarget.Dot( snolafFacingDir ) > 0.0f ) {
 					continue;
 				}
+	
+				DealAttackInfo_t<KungFuGame::eAttackType> dealAttackInfo;
+				dealAttackInfo.m_BaseDamage = 999999.0f;
+				dealAttackInfo.m_pAttacker = m_pActorComponent;
+				dealAttackInfo.m_Radius = 0.0f;
+				dealAttackInfo.m_AttackType = KungFuGame::Hug;
+
+				KungFuLevelComponent *const pLevelComponent =  g_pCannonGame->GetLevelComponent<KungFuLevelComponent>();
+				pLevelComponent->DoAttack( dealAttackInfo );
 
 				RequestStateChange( KungFuSnolafState::Hug );
 				return;
@@ -96,7 +113,6 @@ public:
 		}
 
 		// Move towards target
-
 		RotateTowardTarget();
 
 		kbVec3 moveDir( 0.0f, 0.0f, 0.0f );
@@ -153,6 +169,12 @@ public:
 			return;
 		}
 
+		KungFuSheepComponent *const pSheep = GetTarget()->GetAs<KungFuSheepComponent>();
+		if ( pSheep->IsCannonBalling() ) {
+			RequestStateChange( KungFuSnolafState::WatchCannonBall );
+			return;
+		}
+
 		const kbVec3 snolafPos = m_pActorComponent->GetOwnerPosition();
 		const kbVec3 snolafFacingDir = m_pActorComponent->GetOwnerRotation().ToMat4()[2].ToVec3();
 
@@ -168,7 +190,7 @@ public:
 			const kbVec3 targetPos = pTargetActor->GetOwnerPosition();
 			const kbVec3 vSnolafToTarget = targetPos - snolafPos;
 			const float snolafToTargetDist = ( targetPos - snolafPos ).Length();
-			if ( snolafToTargetDist < 1.25f ) {
+			if ( snolafToTargetDist < 0.85f ) {
 
 				if ( vSnolafToTarget.Dot( snolafFacingDir ) > 0.0f ) {
 					continue;
@@ -179,7 +201,7 @@ public:
 			}
 		}
 
-		if ( bAnyoneInFront== false ) {
+		if ( bAnyoneInFront == false ) {
 			RequestStateChange( KungFuSnolafState::Run );
 			return;
 		}
@@ -190,6 +212,30 @@ public:
 		GetSnolaf()->EnableLargeLoveHearts( false );
 	}
 };
+
+
+/**
+ *	KungFuSnolafStateWatchCannonBall
+ */
+template<typename T>
+class KungFuSnolafStateWatchCannonBall : public KungFuSnolafStateBase<T> {
+
+//---------------------------------------------------------------------------------------------------
+public:
+	KungFuSnolafStateWatchCannonBall( CannonActorComponent *const pPlayerComponent ) : KungFuSnolafStateBase( pPlayerComponent ) { }
+
+
+	virtual void BeginState( T ) override {
+
+		static const kbString Watch_CannonBall( "Watch_CannonBall" );
+		m_pActorComponent->PlayAnimation( Watch_CannonBall, 0.05f );
+	}
+
+	virtual void UpdateState() override { }
+
+	virtual void EndState( T ) override { }
+};
+
 
 /**
  *	KungFuSnolafStateDead
@@ -245,7 +291,7 @@ public:
 			}
 			m_RotationSpeed = kbfrand() * ( m_MaxAngularVelocity - m_MinAngularVelocity ) + m_MinAngularVelocity;
 
-			const kbVec3 initialSnolafOffset = m_Velocity.Normalized() * 3.333f;
+			const kbVec3 initialSnolafOffset = m_Velocity.Normalized() * 2.0f;
 			m_OwnerPosOverride = m_pActorComponent->GetOwnerPosition() + initialSnolafOffset;
 			m_OwnerStartPos = m_OwnerPosOverride;
 			GetSnolaf()->ApplyAnimSmear( -initialSnolafOffset * 0.75f, 0.067f );
@@ -311,8 +357,8 @@ public:
 
 private:
 
-	const kbVec3 m_MinLinearVelocity = kbVec3( -0.0075f, 0.015f, 0.03f );
-	const kbVec3 m_MaxLinearVelocity = kbVec3( 0.0075f, 0.025f, 0.02f );
+	const kbVec3 m_MinLinearVelocity = kbVec3( -0.015f, 0.015f, 0.03f );
+	const kbVec3 m_MaxLinearVelocity = kbVec3( 0.015f, 0.025f, 0.02f );
 	const float m_MinAngularVelocity = 10.0f;
 	const float m_MaxAngularVelocity = 15.0f;
 	const kbVec3 m_Gravity = kbVec3( 0.0f, -20.0f, 0.0f );
@@ -378,7 +424,8 @@ void KungFuSnolafComponent::SetEnable_Internal( const bool bEnable ) {
 			new KungFuSnolafStateIdle<KungFuSnolafState::SnolafState_t>( this ),
 			new KungFuSnolafStateRun<KungFuSnolafState::SnolafState_t>( this ),
 			new KungFuSnolafStateHug<KungFuSnolafState::SnolafState_t>( this ),
-			new KungFuSnolafStateDead<KungFuSnolafState::SnolafState_t>( this )
+			new KungFuSnolafStateDead<KungFuSnolafState::SnolafState_t>( this ),
+			new KungFuSnolafStateWatchCannonBall<KungFuSnolafState::SnolafState_t>( this )
 		};
 
 		InitializeStates( snolafStates );
@@ -447,8 +494,16 @@ void KungFuSnolafComponent::EnableLargeLoveHearts( const bool bEnable ) {
 /**
  *	KungFuSnolafComponent::TakeDamage
  */
-void KungFuSnolafComponent::TakeDamage( const float amount, CannonActorComponent *const pAttacker ) {
+void KungFuSnolafComponent::TakeDamage( const DealAttackInfo_t<KungFuGame::eAttackType> & attackInfo ) {
 
+	if ( attackInfo.m_AttackType == KungFuGame::Shake ) {
+		// Shake 'n Bake only kills current huggers
+		if ( m_CurrentState == KungFuSnolafState::Hug ) {
+			m_Health = -1.0f;
+			RequestStateChange( KungFuSnolafState::Dead );
+		}
+		return;
+	}
 	m_Health = -1.0f;
 	RequestStateChange( KungFuSnolafState::Dead );
 }

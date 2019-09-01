@@ -16,6 +16,23 @@ class CannonCameraComponent;
 class CannonActorComponent;
 class kbLevelComponent;
 
+
+template<typename T>
+struct DealAttackInfo_t {
+	CannonActorComponent * m_pAttacker = nullptr;
+	float m_BaseDamage = 1.0f;
+	float m_Radius = 0.0f;
+	T m_AttackType = (T)0;
+};
+
+struct AttackHitInfo_t {
+	AttackHitInfo_t() : m_pHitComponent( nullptr ), m_bHit( false ) { }
+	kbGameComponent * m_pHitComponent;
+	bool m_bHit;
+};
+
+
+
 /**
  *	CannonLevelComponent
  */
@@ -43,7 +60,11 @@ public:
 
 	CannonActorComponent *						GetPlayer() const { return m_pPlayerComp; }
 
-	kbLevelComponent *							GetLevelComponent() const { return m_pLevelComp; }
+	template<typename T>
+	T *	GetLevelComponent() const {
+			kbErrorCheck( m_pLevelComp != nullptr && m_pLevelComp->IsA( T::GetType() ), "GetLevelComponent<T>() - Incorrect level component type" );
+			return (T*) m_pLevelComp;
+	}
 
 protected:
 

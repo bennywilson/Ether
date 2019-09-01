@@ -16,6 +16,7 @@ namespace KungFuSnolafState {
 		Run,
 		Hug,
 		Dead,
+		WatchCannonBall,
 		NumStates
 	};
 }
@@ -36,9 +37,11 @@ public:
 	void										EnableSmallLoveHearts( const bool bEnable );
 	void										EnableLargeLoveHearts( const bool bEnable );
 
-	void										TakeDamage( const float amount, CannonActorComponent *const pAttacker );
+	void										TakeDamage( const DealAttackInfo_t<KungFuGame::eAttackType> & dealAttackInfo );
 
 	void										DoPoofDeath();
+
+	bool										IsHugging() const { return m_CurrentState == KungFuSnolafState::Hug; }
 
 protected:
 

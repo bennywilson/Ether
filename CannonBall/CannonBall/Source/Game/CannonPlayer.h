@@ -25,11 +25,10 @@ public:
 	bool										IsPlayingAnim( const kbString animName ) const;
 
 	void										PlayAnimation( const kbString animName, const float animBlendInLen, const bool bRestartIfAlreadyPlaying = false, const kbString nextAnim = kbString::EmptyString, const float nextAnimBlendInLen = 0.0f );
-	bool										HasFinishedAnim() const;
+	bool										HasFinishedAnim( const kbString animName = kbString::EmptyString ) const;
 
 	bool										IsPlayer() const { return m_bIsPlayer; }
 
-	virtual void								TakeDamage( const float amount, CannonActorComponent *const pAttacker ) { }
 	virtual bool								IsDead() const { return m_Health <= 0.0f; }
 
 	void										ApplyAnimSmear( const kbVec3 smearVec, const float durationSec );

@@ -37,7 +37,8 @@ class KungFuSheepComponent : public CannonActorComponent, IStateMachine<KungFuSh
 //---------------------------------------------------------------------------------------------------
 public:
 
-
+	bool										IsCannonBalling() const;
+	void										TakeDamage( const DealAttackInfo_t<KungFuGame::eAttackType> & dealAttackInfo );
 
 protected:
 

@@ -13,7 +13,7 @@ kbPrefab 1 {
 		kbParticleComponent { 
 			Enabled = 1
 			LifeTime =  -1.000000
-			Name = "d"
+			Name = "Impact_Poof"
 			Orientation = 0.000000 0.000000 0.000000 1.000000
 			Position = 0.000000 0.000000 0.000000
 			Scale = 0.100000 0.100000 0.100000

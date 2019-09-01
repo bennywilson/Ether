@@ -7,6 +7,27 @@
 #define _KUNGFULEVELCOMPONENT_H_
 
 
+
+namespace KungFuGame {
+
+	enum eKungFuGame_State {
+		MainMenu = 0,
+		Intro,
+		Gameplay,
+		NumStates
+	 };
+
+	enum eAttackType {
+		Punch_Kick,
+		Hug,
+		Shake,
+		Cannonball,
+	};
+};
+
+
+
+
 /**
  *	KungFuLevelComponent
  */
@@ -17,19 +38,7 @@ class KungFuLevelComponent : public CannonLevelComponent {
 //-------------------------------------------------------------------------------------------------------------------------------------------------------------
 public:
 
-	struct DealAttackInfo_t {
-		CannonActorComponent * m_pAttacker = nullptr;
-		float m_BaseDamage = 1.0f;
-		float m_Radius = 0.0f;
-	};
-
-	struct AttackHitInfo_t {
-		AttackHitInfo_t() : m_pHitComponent( nullptr ), m_bHit( false ) { }
-		kbGameComponent * m_pHitComponent;
-		bool m_bHit;
-	};
-
-	AttackHitInfo_t								DoAttack( const DealAttackInfo_t & dealAttackInfo );
+	AttackHitInfo_t								DoAttack( const DealAttackInfo_t<KungFuGame::eAttackType> & dealAttackInfo );
 
 	void										SpawnEnemy();
 

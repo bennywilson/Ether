@@ -109,10 +109,23 @@ void CannonActorComponent::PlayAnimation( const kbString animName, const float a
 /**
  *	CannonActorComponent::HasFinishedAnim
  */
-bool CannonActorComponent::HasFinishedAnim() const {
+bool CannonActorComponent::HasFinishedAnim( const kbString animName ) const {
 	if ( m_SkelModelsList.size() == 0 ) {
 		kbWarning( "KungFuSheepComponent::HasFinishedAnim() - Called with empty m_SkelModels list" );
 		return true;
+	}
+
+	if ( animName != kbString::EmptyString ) {
+		const kbString * pCurAnim = m_SkelModelsList[0]->GetCurAnimationName();
+		const kbString * pNextAnim = m_SkelModelsList[0]->GetNextAnimationName();
+
+		if ( pCurAnim != nullptr && *pCurAnim == animName ) {
+			return m_SkelModelsList[0]->HasFinishedAnimation();
+		}
+
+		if ( pNextAnim != nullptr && *pNextAnim == animName ) {
+			return false;
+		}
 	}
 
 	return m_SkelModelsList[0]->HasFinishedAnimation();

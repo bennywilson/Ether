@@ -131,13 +131,13 @@ kbGameEntity 1180474321 1206754152 1921378463 1489227724 {
 		MaxBurstCount = 150
 		MaxDuration =  3.000000
 		MaxEndRotationRate =  0.000000
-		MaxEndSize = 0.075000 0.075000 0.075000
+		MaxEndSize = 0.105000 0.105000 0.105000
 		MaxEndVelocity = -2.000000 2.000000 2.000000
 		MaxSpawnRate =  0.000000
 		MaxStart3DOffset = 0.000000 0.000000 0.000000
 		MaxStart3DRotation = 0.000000 0.000000 0.000000
 		MaxStartRotationRate =  0.000000
-		MaxStartSize = 0.100000 0.100000 0.100000
+		MaxStartSize = 0.105000 0.105000 0.105000
 		MaxStartVelocity = 2.000000 2.000000 2.000000
 		MinBurstCount = 100
 		MinDuration =  3.000000
@@ -148,13 +148,13 @@ kbGameEntity 1180474321 1206754152 1921378463 1489227724 {
 		MinStart3DOffset = 0.000000 0.000000 0.000000
 		MinStart3DRotation = 0.000000 0.000000 0.000000
 		MinStartRotationRate =  0.000000
-		MinStartSize = 0.075000 0.075000 0.075000
+		MinStartSize = 0.100000 0.100000 0.100000
 		MinStartVelocity = -2.000000 -0.250000 -2.000000
 		ModelEmitter = 0
 		ParticleBillboardType = FaceCamera
 		StartColor = 1.000000 1.000000 1.000000 1.000000
 		StartDelay =  0.000000
-		TotalDuration =  -1.000000
+		TotalDuration =  5.000000
 		TranslucencySortBias =  0.000000
 		VelocityCurve = 3
 			kbAnimEvent { 
@@ -181,7 +181,7 @@ kbGameEntity 1180474321 1206754152 1921378463 1489227724 {
 	}
 	kbParticleComponent { 
 		Enabled = 1
-		LifeTime =  -1.000000
+		LifeTime =  5.000000
 		Name = "LargeDustMist"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
 		Position = 0.000000 1.000000 0.000000
@@ -266,7 +266,7 @@ kbGameEntity 1180474321 1206754152 1921378463 1489227724 {
 		ParticleBillboardType = FaceCamera
 		StartColor = 1.000000 1.000000 1.000000 0.000000
 		StartDelay =  0.000000
-		TotalDuration =  -1.000000
+		TotalDuration =  5.000000
 		TranslucencySortBias =  0.000000
 		VelocityCurve = 0
 	}
@@ -281,7 +281,7 @@ kbGameEntity 314357658 1122514197 2466994618 463523205 {
 		LifeTime =  -1.000000
 		Name = "Snolaf"
 		Orientation = 0.000000 1.000000 0.000000 0.000000
-		Position = -0.000312 0.000000 15.034235
+		Position = 0.283469 0.736469 17.968311
 		Scale = 1.000000 1.000000 1.000000
 	}
 	kbSkeletalModelComponent { 
@@ -305,7 +305,7 @@ kbGameEntity 314357658 1122514197 2466994618 463523205 {
 			}
 		RenderPass = LightingPass
 		TranslucencySortBias =  0.000000
-		Animations = 5
+		Animations = 6
 			kbAnimComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
@@ -365,6 +365,15 @@ kbGameEntity 314357658 1122514197 2466994618 463523205 {
 				IsLooping = 0
 				TimeScale =  5.000000
 			}
+			kbAnimComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Animation = .\assets\models\characters\snolaf\snolaf_watchcannonball.kbanim.ms3d
+				AnimationEvent = 0
+				AnimationName = "Watch_CannonBall"
+				IsLooping = 0
+				TimeScale =  4.250000
+			}
 		DebugAnimIndex = -1
 		Model = .\assets\models\characters\snolaf\snolaf.ms3d
 	}
@@ -403,7 +412,7 @@ kbGameEntity 314357658 1122514197 2466994618 463523205 {
 			}
 		RenderPass = LightingPass
 		TranslucencySortBias =  0.000000
-		Animations = 5
+		Animations = 6
 			kbAnimComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
@@ -448,6 +457,15 @@ kbGameEntity 314357658 1122514197 2466994618 463523205 {
 				AnimationName = "Death_FlyBackwards_1"
 				IsLooping = 0
 				TimeScale =  5.000000
+			}
+			kbAnimComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Animation = .\assets\models\characters\snolaf\snolaf_watchcannonball.kbanim.ms3d
+				AnimationEvent = 0
+				AnimationName = "Watch_CannonBall"
+				IsLooping = 0
+				TimeScale =  4.250000
 			}
 		DebugAnimIndex = -1
 		Model = .\assets\models\characters\snolaf\snolaf.ms3d

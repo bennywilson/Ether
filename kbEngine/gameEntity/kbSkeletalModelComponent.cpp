@@ -159,7 +159,7 @@ void kbSkeletalModelComponent::Update_Internal( const float DeltaTime ) {
 #if DEBUG_ANIMS
 				if ( bOutput ) kbLog( "	Cur anim is finished!" );
 #endif
-					CurAnim.m_CurrentAnimationTime = curAnimLenSec;
+					//CurAnim.m_CurrentAnimationTime = curAnimLenSec;
 					bAnimIsFinished = true;
 				}
 			}
@@ -184,6 +184,9 @@ void kbSkeletalModelComponent::Update_Internal( const float DeltaTime ) {
 					if ( ( animEventTime > prevAnimTime && animEventTime <= curAnimTime ) ||
 						 ( prevAnimTime > curAnimTime && animEventTime < curAnimTime ) ) {
 
+						if ( ( prevAnimTime > curAnimTime && animEventTime < curAnimTime ) ) {
+						//	kbLog( "	pat = %f curAnimTime = %f animEventTime = %f --> %s. DT = %f", prevAnimTime, curAnimTime, animEventTime, curEvent.GetEventName().c_str(), DeltaTIme );
+						}
 						const kbAnimEventInfo_t animEventInfo( curEvent, this );
 						for ( int iListener = 0; iListener < m_AnimEventListeners.size(); iListener++ ) {
 							IAnimEventListener *const pCurListener = m_AnimEventListeners[iListener];
@@ -470,13 +473,23 @@ void kbSkeletalModelComponent::SetModel( kbModel *const pModel ) {
 	g_pRenderer->UpdateRenderObject( m_RenderObject );
 }
 
-
 /**
  *	kbSkeletalModelComponent::GetCurAnimationName
  */
 const kbString * kbSkeletalModelComponent::GetCurAnimationName() const {
 	if ( m_CurrentAnimation >= 0 && m_CurrentAnimation < m_Animations.size() ) {
 		return &m_Animations[m_CurrentAnimation].GetAnimationName();
+	}
+
+	return nullptr;
+}
+
+/**
+ *	kbSkeletalModelComponent::GetNextAnimationName
+ */
+const kbString * kbSkeletalModelComponent::GetNextAnimationName() const {
+	if ( m_NextAnimation >= 0 && m_NextAnimation < m_Animations.size() ) {
+		return &m_Animations[m_NextAnimation].GetAnimationName();
 	}
 
 	return nullptr;
