@@ -396,6 +396,8 @@ void KungFuSnolafComponent::SetEnable_Internal( const bool bEnable ) {
 
 	m_pSmallLoveHearts = nullptr;
 	if ( bEnable ) {
+
+		// TODO: NEEDED?
 		if ( m_SkelModelsList.size() > 1 ) {
 			const static kbString smearParam = "smearParams";
 			m_SkelModelsList[1]->SetMaterialParamVector( 0, smearParam.stl_str(), kbVec4::zero );
@@ -467,6 +469,16 @@ void KungFuSnolafComponent::Update_Internal( const float DT ) {
 	Super::Update_Internal( DT );
 
 	UpdateStateMachine();
+
+	kbVec4 fxDot( 1.0f, 0.0f, 0.0f, 0.0f );
+	if ( m_CurrentState == KungFuSnolafState::Hug ) {
+		fxDot.Set( 0.0f, 1.0f, 0.0f, 0.0f );
+	} else if ( m_CurrentState == KungFuSnolafState::Dead ) {
+		fxDot.Set( 0.0f, 0.0f, 1.0f, 0.0f );
+	}
+		
+	const static kbString fxMapMaskParam = "fxMapMask";
+	m_SkelModelsList[0]->SetMaterialParamVector( 0, fxMapMaskParam.stl_str(), fxDot );
 }
 
 /**

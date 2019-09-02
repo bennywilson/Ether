@@ -281,7 +281,7 @@ kbGameEntity 314357658 1122514197 2466994618 463523205 {
 		LifeTime =  -1.000000
 		Name = "Snolaf"
 		Orientation = 0.000000 1.000000 0.000000 0.000000
-		Position = 0.283469 0.736469 17.968311
+		Position = -0.025984 0.000000 17.968311
 		Scale = 1.000000 1.000000 1.000000
 	}
 	kbSkeletalModelComponent { 
@@ -294,12 +294,26 @@ kbGameEntity 314357658 1122514197 2466994618 463523205 {
 				LifeTime =  -1.000000
 				CullModeOverride = ShaderDefault
 				Shader = .\assets\shaders\character\characterbase.kbshader
-				ShaderParams = 1
+				ShaderParams = 3
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
 						ParamName = "colorTexture"
 						Texture = .\assets\models\characters\snolaf\snolaf_color.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "fxMapMask"
+						Texture = NULL
+						Vector = 1.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "fxMap"
+						Texture = .\assets\models\characters\snolaf\snolaf_fxmap.tif
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 			}
@@ -372,7 +386,7 @@ kbGameEntity 314357658 1122514197 2466994618 463523205 {
 				AnimationEvent = 0
 				AnimationName = "Watch_CannonBall"
 				IsLooping = 0
-				TimeScale =  4.250000
+				TimeScale =  4.200000
 			}
 		DebugAnimIndex = -1
 		Model = .\assets\models\characters\snolaf\snolaf.ms3d
@@ -465,7 +479,7 @@ kbGameEntity 314357658 1122514197 2466994618 463523205 {
 				AnimationEvent = 0
 				AnimationName = "Watch_CannonBall"
 				IsLooping = 0
-				TimeScale =  4.250000
+				TimeScale = 4.2
 			}
 		DebugAnimIndex = -1
 		Model = .\assets\models\characters\snolaf\snolaf.ms3d

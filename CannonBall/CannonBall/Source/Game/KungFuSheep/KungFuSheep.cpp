@@ -461,6 +461,39 @@ void KungFuSheepComponent::Update_Internal( const float DT ) {
 	Super::Update_Internal( DT );
 
 	UpdateStateMachine();
+
+
+	{
+		static int blinkState = 0;
+		static float lastBlinkTime = g_GlobalTimer.TimeElapsedSeconds();
+		float curTime = g_GlobalTimer.TimeElapsedSeconds();
+		const float eyeOpenTime = ( m_CurrentState == KungFuSheepState::Hugged ) ? ( 1.0f ) : ( 2.0f );
+		const float eyeClosedTime = ( m_CurrentState == KungFuSheepState::Hugged ) ? ( 0.1f ) : ( 0.5f );
+		const static kbString fxMapMaskParam = "fxMapMask";
+		kbVec4 vFXMaskMapParam( 1.0f, 0.0f, 0.0f, 0.0f );
+		if ( blinkState == 0 ) {
+			if ( curTime > lastBlinkTime + eyeOpenTime ) {
+				blinkState = 1;
+				lastBlinkTime = curTime;
+			} else {
+
+				if ( m_CurrentState == KungFuSheepState::Hugged ) {
+					vFXMaskMapParam.Set( 0.0f, 0.0f, 1.0f, 0.0f );
+				} else {
+					vFXMaskMapParam.Set( 1.0f, 0.0f, 0.0f, 0.0f );
+				}
+			}
+		} else {
+			if ( curTime > lastBlinkTime + eyeClosedTime ) {
+				blinkState = 0;
+				lastBlinkTime = curTime;
+			} else {
+				vFXMaskMapParam.Set( 0.0f, 1.0f, 0.0f, 0.0f );
+			}
+		}
+
+		m_SkelModelsList[0]->SetMaterialParamVector( 0, fxMapMaskParam.stl_str(), vFXMaskMapParam );
+	}
 }
 
  /**

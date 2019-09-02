@@ -10,8 +10,8 @@ kbGameEntity 0 0 0 0 {
 	kbEditorLevelSettingsComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		MainCameraPosition = -17.253653 4.511777 18.500414
-		MainCameraRotation = -0.045930 -0.705591 0.045928 0.705636
+		MainCameraPosition = -1.442154 1.881498 19.385902
+		MainCameraRotation = -0.076580 -0.884356 0.156362 0.433130
 	}
 }
 kbGameEntity 0 0 0 0 {
@@ -377,13 +377,27 @@ kbGameEntity 0 0 0 0 {
 				LifeTime =  -1.000000
 				CullModeOverride = ShaderDefault
 				Shader = .\assets\shaders\character\characterbase.kbshader
-				ShaderParams = 1
+				ShaderParams = 3
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
 						ParamName = "colorTexture"
 						Texture = .\assets\models\characters\sheep\sheep.jpg
 						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "fxMap"
+						Texture = .\assets\models\characters\sheep\sheep_fx_map.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "fxMapMask"
+						Texture = NULL
+						Vector = 1.000000 0.000000 0.000000 0.000000
 					}
 			}
 		RenderPass = LightingPass
@@ -573,7 +587,7 @@ kbGameEntity 0 0 0 0 {
 						Enabled = 0
 						LifeTime =  -1.000000
 						EventName = "Punch_Attack"
-						EventTime =  0.75
+						EventTime =  0.750000
 						EventValue =  0.000000
 					}
 				AnimationName = "PunchLeft_Basic"
@@ -589,7 +603,7 @@ kbGameEntity 0 0 0 0 {
 						Enabled = 0
 						LifeTime =  -1.000000
 						EventName = "Kick_Attack"
-						EventTime =  0.75
+						EventTime =  0.750000
 						EventValue =  0.000000
 					}
 				AnimationName = "KickLeft_Basic"
@@ -605,7 +619,7 @@ kbGameEntity 0 0 0 0 {
 						Enabled = 0
 						LifeTime =  -1.000000
 						EventName = "Punch_Attack"
-						EventTime =  0.75
+						EventTime =  0.750000
 						EventValue =  0.000000
 					}
 				AnimationName = "PunchRight_Basic"
@@ -621,7 +635,7 @@ kbGameEntity 0 0 0 0 {
 						Enabled = 0
 						LifeTime =  -1.000000
 						EventName = "Kick_Attack"
-						EventTime =  0.75
+						EventTime =  0.750000
 						EventValue =  0.000000
 					}
 				AnimationName = "KickRight_Basic"
@@ -1131,12 +1145,26 @@ kbGameEntity 0 0 0 0 {
 				LifeTime =  -1.000000
 				CullModeOverride = ShaderDefault
 				Shader = .\assets\shaders\character\characterbase.kbshader
-				ShaderParams = 1
+				ShaderParams = 3
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
 						ParamName = "colorTexture"
 						Texture = .\assets\models\characters\snolaf\snolaf_color.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "fxMapMask"
+						Texture = NULL
+						Vector = 1.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "fxMap"
+						Texture = .\assets\models\characters\snolaf\snolaf_fxmap.tif
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 			}
@@ -1209,7 +1237,7 @@ kbGameEntity 0 0 0 0 {
 				AnimationEvent = 0
 				AnimationName = "Watch_CannonBall"
 				IsLooping = 0
-				TimeScale =  1.000000
+				TimeScale =  5.000000
 			}
 		DebugAnimIndex = -1
 		Model = .\assets\models\characters\snolaf\snolaf.ms3d
