@@ -160,6 +160,15 @@ GenerateClass(
 )
 
 GenerateClass( 
+	kbFlingPhysicsComponent,
+	AddField( "MinLinearVelocity", KBTYPEINFO_VECTOR, kbFlingPhysicsComponent, m_MinLinearVelocity, false, "" )
+	AddField( "MaxLinearVelocity", KBTYPEINFO_VECTOR, kbFlingPhysicsComponent, m_MaxLinearVelocity, false, "" )
+	AddField( "MinAngularSpeed", KBTYPEINFO_FLOAT, kbFlingPhysicsComponent, m_MinAngularSpeed, false, "" )
+	AddField( "MaxAngularSpeed", KBTYPEINFO_FLOAT, kbFlingPhysicsComponent, m_MaxAngularSpeed, false, "" )
+	AddField( "Gravity", KBTYPEINFO_VECTOR, kbFlingPhysicsComponent, m_MaxLinearVelocity, false, "" )
+)
+
+GenerateClass( 
 	kbLightComponent,
 	AddField( "Color", KBTYPEINFO_VECTOR4, kbLightComponent, m_Color, false, "" )
 	AddField( "CastsShadows", KBTYPEINFO_BOOL, kbLightComponent, m_bCastsShadow, false, "" )

@@ -252,7 +252,7 @@ public:
 		GetSnolaf()->EnableSmallLoveHearts( false );
 		GetSnolaf()->EnableLargeLoveHearts( false );
 
-		const int numDeaths = 2;
+		const int numDeaths = 3;
 		m_DeathSelection = rand() % numDeaths;
 
 		m_OwnerStartPos = GetSnolaf()->GetOwnerPosition();
@@ -268,8 +268,17 @@ public:
 			pParticle->Enable( false );
 		}
 
+				
+		const static kbString clipMapMaskParam = "clipMapMask";
+
+		kbMat4 worldMatrix;
+		m_pActorComponent->GetOwner()->CalculateWorldMatrix( worldMatrix );
+		const XMMATRIX inverseMat = XMMatrixInverse( nullptr, XMMATRIXFromkbMat4( worldMatrix ) );
+		worldMatrix = kbMat4FromXMMATRIX( inverseMat );
+
 		if ( m_DeathSelection == 0 ) {
 
+			// Super Fly Off
 			m_Velocity = kbVec3Rand( m_MinLinearVelocity, m_MaxLinearVelocity );
 			if ( m_Velocity.x < 0.0f ) {
 				m_Velocity.x -= 0.0025f;
@@ -277,10 +286,6 @@ public:
 				m_Velocity.x += 0.0025f;
 			}
 
-			kbMat4 worldMatrix;
-			m_pActorComponent->GetOwner()->CalculateWorldMatrix( worldMatrix );
-			const XMMATRIX inverseMat = XMMatrixInverse( nullptr, XMMATRIXFromkbMat4( worldMatrix ) );
-			worldMatrix = kbMat4FromXMMATRIX( inverseMat );
 			m_Velocity = m_Velocity * worldMatrix;
 
 			m_RotationAxis = kbVec3( kbfrand() - 1.3f, 0.0f, 0.0f );
@@ -297,8 +302,47 @@ public:
 			GetSnolaf()->ApplyAnimSmear( -initialSnolafOffset * 0.75f, 0.067f );
 			UpdateFlyingDeath( 0.0f );
 		} else if ( m_DeathSelection == 1 ) {
+
+			// Straight up poof, homie
 			KungFuSnolafComponent *const pSnolaf = m_pActorComponent->GetAs<KungFuSnolafComponent>();
 			pSnolaf->DoPoofDeath();
+		} else if ( m_DeathSelection == 2 ) {
+
+			
+			GetSnolaf()->SpawnAndFlingDecapHead();
+			// Super Fly Off
+			m_Velocity = kbVec3Rand( m_MinLinearVelocity, m_MaxLinearVelocity );
+			if ( m_Velocity.x < 0.0f ) {
+				m_Velocity.x -= 0.0025f;
+			} else {
+				m_Velocity.x += 0.0025f;
+			}
+
+			m_Velocity = 2.0f * m_Velocity * worldMatrix;
+
+			m_RotationAxis = kbVec3( kbfrand() - 1.3f, 0.0f, 0.0f );
+			if ( m_RotationAxis.LengthSqr() < 0.01f ) {
+				m_RotationAxis.Set( 1.0f, 0.0f, 0.0f );
+			} else {
+				m_RotationAxis.Normalize();
+			}
+			m_RotationSpeed = 0.15f * ( kbfrand() * ( m_MaxAngularVelocity - m_MinAngularVelocity ) + m_MinAngularVelocity );
+
+			const kbVec3 initialSnolafOffset = m_Velocity.Normalized() * 2.0f;
+			m_OwnerPosOverride = m_pActorComponent->GetOwnerPosition() + initialSnolafOffset;
+			m_OwnerStartPos = m_OwnerPosOverride;
+			GetSnolaf()->ApplyAnimSmear( -initialSnolafOffset * 0.75f, 0.067f );
+			UpdateFlyingDeath( 0.0f );
+
+			kbGameEntity *const pOwner = m_pActorComponent->GetOwner();
+			for ( int i = 0; i < pOwner->NumComponents(); i++ ) {
+				kbSkeletalModelComponent *const pSkelModelComp = pOwner->GetComponent(i)->GetAs<kbSkeletalModelComponent>();
+				if ( pSkelModelComp == nullptr ) {
+					continue;
+				}
+				pSkelModelComp->SetMaterialParamVector( 0, clipMapMaskParam.stl_str(), kbVec4( 1.0f, 0.0f, 0.0f, 0.0f ) );
+			}
+
 		}
 
 		m_DeathStartTime = g_GlobalTimer.TimeElapsedSeconds();
@@ -347,7 +391,7 @@ public:
 
 		const float dt = g_pGame->GetFrameDT();
 
-		if ( m_DeathSelection == 0 ) {
+		if ( m_DeathSelection == 0 || m_DeathSelection == 2 ) {
 			UpdateFlyingDeath( dt );
 		}
 
@@ -476,9 +520,11 @@ void KungFuSnolafComponent::Update_Internal( const float DT ) {
 	} else if ( m_CurrentState == KungFuSnolafState::Dead ) {
 		fxDot.Set( 0.0f, 0.0f, 1.0f, 0.0f );
 	}
-		
-	const static kbString fxMapMaskParam = "fxMapMask";
-	m_SkelModelsList[0]->SetMaterialParamVector( 0, fxMapMaskParam.stl_str(), fxDot );
+
+	if ( m_SkelModelsList.size() > 0 ) {
+		const static kbString fxMapMaskParam = "fxMapMask";
+		m_SkelModelsList[0]->SetMaterialParamVector( 0, fxMapMaskParam.stl_str(), fxDot );
+	}
 }
 
 /**
@@ -538,4 +584,26 @@ void KungFuSnolafComponent::DoPoofDeath() {
 	pCannonBallImpact->DeleteWhenComponentsAreInactive( true );
 
 	g_pCannonGame->RemoveGameEntity( this->GetOwner() );
+}
+
+/**
+ *	KungFuSnolafComponent::SpawnAndFlingDecapHead
+ */
+void KungFuSnolafComponent::SpawnAndFlingDecapHead() {
+
+	if ( m_DecapitatedHead.GetEntity() == nullptr ) {
+		return;
+	}
+
+	kbGameEntity *const pDecapHead = g_pGame->CreateEntity( m_DecapitatedHead.GetEntity() );
+	const kbVec3 headPos = GetOwnerPosition() + kbVec3( 0.0f, 1.75f, 0.0f );
+	pDecapHead->SetPosition( headPos );
+	pDecapHead->SetOrientation( GetOwnerRotation() );
+	pDecapHead->DeleteWhenComponentsAreInactive( true );
+
+	kbFlingPhysicsComponent *const pFlingComp = pDecapHead->GetComponent<kbFlingPhysicsComponent>();
+	if ( pFlingComp != nullptr ) {
+		pFlingComp->Enable( false );
+		pFlingComp->Enable( true );
+	}
 }

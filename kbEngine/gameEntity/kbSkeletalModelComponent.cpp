@@ -7,6 +7,7 @@
 #include "kbModel.h"
 #include "kbGameEntityHeader.h"
 #include "kbRenderer.h"
+#include "DX11/kbRenderer_DX11.h"			// HACK
 
 KB_DEFINE_COMPONENT(kbSkeletalModelComponent)
 
@@ -511,4 +512,89 @@ void kbSkeletalModelComponent::UnregisterAnimEventListener( IAnimEventListener *
 
 	kbErrorCheck( VectorContains( m_AnimEventListeners, pListener ) == true, "UnregisterAnimEventListener() - Listener not previously registered");
 	VectorRemoveFast( m_AnimEventListeners, pListener );
+}
+
+/**
+ *	kbFlingPhysicsComponent::Constructor
+ */
+void kbFlingPhysicsComponent::Constructor() {
+
+	// Editor
+	m_MinLinearVelocity.Set( -0.015f, 0.015f, 0.03f );
+	m_MaxLinearVelocity.Set( 0.015f, 0.025f, 0.035f );
+	m_MinAngularSpeed = 10.0f;
+	m_MaxAngularSpeed = 15.0f;
+	m_Gravity .Set( 0.0f, -20.0f, 0.0f );
+
+	// Run time
+	m_OwnerStartPos.Set( 0.0f, 0.0f, 0.0f );
+	m_OwnerStartRotation.Set( 0.0f, 0.0f, 0.0f, 1.0f );
+
+	m_Velocity.Set( 0.0f, 0.0f, 0.0f );
+	m_RotationAxis.Set( 1.0f, 0.0f, 0.0f );
+
+	m_CurRotationAngle = 0.0f;
+	m_RotationSpeed = 1.0f;
+
+	m_FlingStartTime = 0.0f;
+}
+
+/**
+ *	kbFlingPhysicsComponent::SetEnable_Internal
+ */
+void kbFlingPhysicsComponent::SetEnable_Internal( const bool bEnable ) {
+
+	Super::SetEnable_Internal( bEnable );
+
+	if ( bEnable ) {
+		m_OwnerStartPos = GetOwnerPosition();
+		m_OwnerStartRotation = GetOwnerRotation();
+
+		m_Velocity = kbVec3Rand( m_MinLinearVelocity, m_MaxLinearVelocity );
+
+		kbMat4 worldMatrix;
+		GetOwner()->CalculateWorldMatrix( worldMatrix );
+ 		const XMMATRIX inverseMat = XMMatrixInverse( nullptr, XMMATRIXFromkbMat4( worldMatrix ) );
+		worldMatrix = kbMat4FromXMMATRIX( inverseMat );
+		worldMatrix.TransposeSelf();
+		m_Velocity = m_Velocity * worldMatrix;
+
+		m_RotationAxis = kbVec3( kbfrand(), kbfrand(), kbfrand() );
+		if ( m_RotationAxis.LengthSqr() < 0.01f ) {
+			m_RotationAxis.Set( 1.0f, 0.0f, 0.0f );
+		} else {
+			m_RotationAxis.Normalize();
+		}
+		m_RotationSpeed = kbfrand( m_MinAngularSpeed, m_MaxAngularSpeed );
+		m_CurRotationAngle = 0;
+
+		m_FlingStartTime = g_GlobalTimer.TimeElapsedSeconds();
+	} else {
+		if ( g_UseEditor ) {
+			SetOwnerPosition( m_OwnerStartPos );
+			SetOwnerRotation( m_OwnerStartRotation );
+		}
+	}
+}
+
+/**
+ *	kbFlingPhysicsComponent::Update_Internal
+ */
+void kbFlingPhysicsComponent::Update_Internal( const float dt ) {
+	Super::Update_Internal( dt );
+
+	const float curTime = g_GlobalTimer.TimeElapsedSeconds();
+	const float elapsedDeathTime = curTime - m_FlingStartTime;
+
+	kbVec3 newPos = GetOwnerPosition();
+	newPos.x += m_Velocity.x * dt;
+	newPos.y = m_OwnerStartPos.y + m_Velocity.y * elapsedDeathTime - ( 0.5f * -m_Gravity.y * elapsedDeathTime * elapsedDeathTime );
+	newPos.z += m_Velocity.z * dt;
+	SetOwnerPosition( newPos );
+
+	m_CurRotationAngle += m_RotationSpeed * dt;
+	kbQuat rot;
+	rot.FromAxisAngle( m_RotationAxis, m_CurRotationAngle );
+	rot = m_OwnerStartRotation * rot;
+	SetOwnerRotation( rot );
 }

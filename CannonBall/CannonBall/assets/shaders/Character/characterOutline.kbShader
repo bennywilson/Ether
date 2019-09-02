@@ -10,6 +10,7 @@ cbuffer matrixBuffer {
 	float4		cameraPos;
 	float4		outlineParams;		// x: Thickness, y: Push back, z: Outline Color Factor, w: Mip-Level
 	float4		smearParams;
+	float4		clipMapMask;
 };
 
 kbShaderState {
@@ -88,8 +89,15 @@ pixelInput vertexShader( vertexInput input ) {
 Texture2D colorTexture;
 SamplerState DefaultSampler;
 
+Texture2D clipMap(white);
+
  PS_OUTPUT pixelShader( pixelInput	input ) {
 	PS_OUTPUT output = (PS_OUTPUT) 0;
+
+	const float4 clipMapTex = 1.0f - clipMap.Sample( DefaultSampler, input.uv );
+
+	const float clipDot = dot( clipMapMask, clipMapTex );
+	clip( 0.05f - clipDot );
 
 	const float4 colorTex = colorTexture.SampleLevel( DefaultSampler, input.uv, outlineParams.w ) * outlineParams.z;//0.75f;// * 0.5f;
 	output.Color.xyz = colorTex.xyz;

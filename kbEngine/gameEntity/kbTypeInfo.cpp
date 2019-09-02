@@ -94,6 +94,8 @@ DEFINE_KBCLASS(kbAnimComponent)
 
 DEFINE_KBCLASS(kbSkeletalModelComponent)
 
+DEFINE_KBCLASS(kbFlingPhysicsComponent)
+
 DEFINE_KBCLASS(kbGrass)
 
 DEFINE_KBCLASS(kbTerrainComponent)

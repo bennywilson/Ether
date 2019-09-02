@@ -102,4 +102,42 @@ protected:
 	float										m_DebugAnimTime;
 };
 
+/**
+ *	kbFlingPhysicsComponent
+ */
+class kbFlingPhysicsComponent: public kbGameComponent {
+
+	KB_DECLARE_COMPONENT( kbFlingPhysicsComponent, kbGameComponent );
+
+//---------------------------------------------------------------------------------------------------
+public:
+
+protected:
+
+	virtual void								SetEnable_Internal( const bool isEnabled ) override;
+	virtual void								Update_Internal( const float DeltaTime ) override;
+
+private:
+
+	// Editor
+	kbVec3										m_MinLinearVelocity;
+	kbVec3										m_MaxLinearVelocity;
+	float										m_MinAngularSpeed;
+	float										m_MaxAngularSpeed;
+	kbVec3										m_Gravity;
+
+	// Run time
+	kbVec3										m_OwnerStartPos;
+	kbQuat										m_OwnerStartRotation;
+
+	kbVec3										m_Velocity;
+	kbVec3										m_RotationAxis;
+
+	float										m_CurRotationAngle;
+	float										m_RotationSpeed;
+
+	float										m_FlingStartTime;
+
+};
+
 #endif

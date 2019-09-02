@@ -40,6 +40,7 @@ public:
 	void										TakeDamage( const DealAttackInfo_t<KungFuGame::eAttackType> & dealAttackInfo );
 
 	void										DoPoofDeath();
+	void										SpawnAndFlingDecapHead();
 
 	KungFuSnolafState::SnolafState_t			GetState() const { return m_CurrentState; }
 
@@ -53,6 +54,7 @@ private:
 	// Data
 	kbGameEntityPtr								m_FootStepImpactFX;
 	kbGameEntityPtr								m_PoofDeathFX;
+	kbGameEntityPtr								m_DecapitatedHead;
 
 	// Game
 	kbParticleComponent *						m_pSmallLoveHearts;
