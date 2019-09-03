@@ -17,6 +17,9 @@ class CannonActorComponent;
 class kbLevelComponent;
 
 
+/**
+ *	DealAttackInfo_t
+ */
 template<typename T>
 struct DealAttackInfo_t {
 	CannonActorComponent * m_pAttacker = nullptr;
@@ -25,10 +28,12 @@ struct DealAttackInfo_t {
 	T m_AttackType = (T)0;
 };
 
+/**
+ *	AttackHitInfo_t
+ */
 struct AttackHitInfo_t {
-	AttackHitInfo_t() : m_pHitComponent( nullptr ), m_bHit( false ) { }
-	kbGameComponent * m_pHitComponent;
-	bool m_bHit;
+	kbGameComponent * m_pHitComponent = nullptr;
+	bool m_bHit = false;
 };
 
 

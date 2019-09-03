@@ -12,6 +12,8 @@
 #include "kbEditor.h"
 #include "kbEditorEntity.h"
 
+#define CANNONBALL_STRESSTEST 1
+
 /**
  *	KungFuSheepStateIdle
  */
@@ -59,10 +61,14 @@ public:
 			RequestStateChange( KungFuSheepState::Run );
 			m_pActorComponent->SetTargetFacingDirection( g_RightFacing );
 		}
-		/*
-		if ( m_LastCannonBallTime == -1.0f || g_GlobalTimer.TimeElapsedSeconds() > m_LastCannonBallTime + 5.0f ) {
-			RequestStateChange( KungFuSheepState::CannonBall );
-		}*/
+
+#ifdef CANNONBALL_STRESSTEST
+		if ( g_UseEditor == false ) {
+			if ( m_LastCannonBallTime == -1.0f || g_GlobalTimer.TimeElapsedSeconds() > m_LastCannonBallTime + 5.0f ) {
+				RequestStateChange( KungFuSheepState::CannonBall );
+			}
+		}
+#endif
 	}
 
 	virtual void EndState( T nextState ) override { }
@@ -251,12 +257,13 @@ public:
 				numHuggers++;
 			}
 		}
-		/*
-		if ( numHuggers > 5 ) {
+#ifdef CANNONBALL_STRESSTEST
+		if ( g_UseEditor == false && numHuggers > 5 ) {
 			RequestStateChange( KungFuSheepState::CannonBall );
 			return;
 		}
-		*/
+#endif
+
 		if ( m_NumDirectionChanges > numHuggers ) {
 			RequestStateChange( KungFuSheepState::Idle );
 

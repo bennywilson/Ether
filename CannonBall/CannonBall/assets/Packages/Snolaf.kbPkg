@@ -7,7 +7,7 @@ kbPrefab 1 {
 			LifeTime =  -1.000000
 			Name = "Entity_21"
 			Orientation = 0.000000 0.000000 0.707000 0.707000
-			Position = -19.364006 0.334361 16.600504
+			Position = -6.400270 0.909384 1.147996
 			Scale = 32.000000 32.000000 32.000000
 		}
 		kbStaticModelComponent { 
@@ -40,7 +40,7 @@ kbPrefab 1 {
 							LifeTime =  -1.000000
 							ParamName = "colorMultiplier"
 							Texture = NULL
-							Vector = 1.000000 1.000000 1.000000 1.000000
+							Vector = 1.000000 1.000000 1.000000 0.000000
 						}
 						kbShaderParamComponent { 
 							Enabled = 0
@@ -57,7 +57,6 @@ kbPrefab 1 {
 		kbShaderModifierComponent { 
 			Enabled = 1
 			LifeTime =  -1.000000
-			DisableWhenAnimIsDone = 1
 			ShaderVectorEvents = 3
 				kbVectorAnimEvent { 
 					Enabled = 0
@@ -80,6 +79,11 @@ kbPrefab 1 {
 					EventTime =  1.500000
 					EventValue = 1.000000 1.000000 1.000000 0.000000
 				}
+		}
+		kbDeleteEntityComponent { 
+			Enabled = 1
+			LifeTime =  2.000000
+			Dummy =  1.000000
 		}
 	}
 }
@@ -662,7 +666,7 @@ kbGameEntity 2312584767 1139148529 3844446354 2946788253 {
 		LifeTime =  -1.000000
 		Name = "Entity_20"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
-		Position = 0.000000 3.000000 0.000000
+		Position = -7.102521 3.211290 12.792857
 		Scale = 1.000000 1.000000 1.000000
 	}
 	kbSkeletalModelComponent { 
@@ -772,13 +776,18 @@ kbGameEntity 2312584767 1139148529 3844446354 2946788253 {
 		Model = .\assets\models\characters\snolaf\snolaf_head.ms3d
 	}
 	kbFlingPhysicsComponent { 
-		Enabled = 1
+		Enabled = 0
 		LifeTime =  -1.000000
 		Gravity = 0.015000 0.025000 0.020000
 		MaxAngularSpeed =  15.000000
 		MaxLinearVelocity = 0.015000 0.025000 0.020000
 		MinAngularSpeed =  10.000000
 		MinLinearVelocity = -0.015000 0.015000 0.030000
+	}
+	kbDeleteEntityComponent { 
+		Enabled = 1
+		LifeTime =  3.000000
+		Dummy =  1.000000
 	}
 }
 }

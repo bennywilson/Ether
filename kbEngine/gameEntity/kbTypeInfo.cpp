@@ -140,4 +140,6 @@ DEFINE_KBCLASS(kbLevelComponent)
 
 DEFINE_KBCLASS(kbShaderModifierComponent)
 
+DEFINE_KBCLASS(kbDeleteEntityComponent)
+
 typedef kbResource * kbResourcePtr;

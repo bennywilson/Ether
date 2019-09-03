@@ -203,6 +203,21 @@ protected:
 };
 
 /**
+ *	kbDeleteEntityComponent
+ */
+class kbDeleteEntityComponent : public kbGameComponent {
+	KB_DECLARE_COMPONENT( kbDeleteEntityComponent, kbGameComponent );
+
+//-------------------------------------------------------------------------------------------------------------------------------------------------------------
+protected:
+	virtual void								LifeTimeExpired();
+
+private:
+	float										m_Dummy;
+};
+
+
+/**
  *	kbPlayerStartComponent
  */
 class kbPlayerStartComponent : public kbGameComponent {

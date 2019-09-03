@@ -336,7 +336,6 @@ GenerateClass(
 	AddField( "CollisionModel", KBTYPEINFO_STATICMODEL, kbDebugSphereCollision, m_pCollisionModel, false, "" )
 )
 
-
 GenerateClass(
 	kbLevelComponent,
 	AddField( "LevelType", KBTYPEINFO_ENUM, kbLevelComponent, m_LevelType, false, "ELevelType" )
@@ -347,5 +346,9 @@ GenerateClass(
 GenerateClass(
 	kbShaderModifierComponent,
 	AddField( "ShaderVectorEvents", KBTYPEINFO_STRUCT, kbShaderModifierComponent, m_ShaderVectorEvents, true, "kbVectorAnimEvent" )
-	AddField( "DisableWhenAnimIsDone", KBTYPEINFO_BOOL, kbShaderModifierComponent, m_bDisableWhenAnimDone, false, "" )
+)
+
+GenerateClass(
+	kbDeleteEntityComponent,
+	AddField( "Dummy", KBTYPEINFO_FLOAT, kbDeleteEntityComponent, m_Dummy, false, "" )
 )

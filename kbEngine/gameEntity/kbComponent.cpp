@@ -9,6 +9,7 @@
 #include "kbQuaternion.h"
 #include "kbBounds.h"
 #include "kbGameEntityHeader.h"
+#include "kbGame.h"
 
 KB_DEFINE_COMPONENT(kbComponent)
 KB_DEFINE_COMPONENT(kbTransformComponent)
@@ -345,6 +346,20 @@ void kbActorComponent::TakeDamage( const class kbDamageComponent *const pDamageC
 	}
 
 	m_CurrentHealth -= pDamageComponent->GetMaxDamage();
+}
+
+/**
+ *	kbDeleteEntityComponent::Constructor
+ */
+void kbDeleteEntityComponent::Constructor() {
+	m_Dummy = 1.0f;
+}
+
+/**
+ *	kbDeleteEntityComponent::LifeTimeExpired
+ */
+void kbDeleteEntityComponent::LifeTimeExpired() {
+	g_pGame->RemoveGameEntity( GetOwner() );
 }
 
 /**
