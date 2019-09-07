@@ -144,6 +144,7 @@ public:
 
 		static const kbString HugLeft_Anim( "Hug_Left" );
 		static const kbString HugRight_Anim( "Hug_Right" );
+		static const kbString HugForward_Anim( "Hug_Forward" );
 
 		if ( GetTarget() == nullptr ) {
 			RequestStateChange( KungFuSnolafState::Idle );
@@ -151,28 +152,38 @@ public:
 
 		}
 
-		if ( IsTargetOnLeft() ) {
-			m_pActorComponent->PlayAnimation( HugLeft_Anim, 0.05f );
+		KungFuSheepComponent *const pSheep = GetTarget()->GetAs<KungFuSheepComponent>();
+		if ( pSheep->IsCannonBalling() ) {
+			m_pActorComponent->PlayAnimation( HugForward_Anim, 0.05f );
+			m_bCanWatchCannonball = false;
 		} else {
-			m_pActorComponent->PlayAnimation( HugRight_Anim, 0.05f );
-		}
 
-		GetSnolaf()->EnableLargeLoveHearts( true );
+			if ( IsTargetOnLeft() ) {
+				m_pActorComponent->PlayAnimation( HugLeft_Anim, 0.05f );
+			} else {
+				m_pActorComponent->PlayAnimation( HugRight_Anim, 0.05f );
+			}
+
+			GetSnolaf()->EnableLargeLoveHearts( true );
+			m_bCanWatchCannonball = true;
+		}
 	}
 
 	virtual void UpdateState() override {
 
-		const float frameDT = g_pGame->GetFrameDT();
+ 		const float frameDT = g_pGame->GetFrameDT();
 		
 		if ( GetTarget() == nullptr ) {
 			RequestStateChange( KungFuSnolafState::Idle );
 			return;
 		}
 
-		KungFuSheepComponent *const pSheep = GetTarget()->GetAs<KungFuSheepComponent>();
-		if ( pSheep->IsCannonBalling() ) {
-			RequestStateChange( KungFuSnolafState::WatchCannonBall );
-			return;
+		if ( m_bCanWatchCannonball ) {
+			KungFuSheepComponent *const pSheep = GetTarget()->GetAs<KungFuSheepComponent>();
+			if ( pSheep->IsCannonBalling() ) {
+				RequestStateChange( KungFuSnolafState::WatchCannonBall );
+				return;
+			}
 		}
 
 		const kbVec3 snolafPos = m_pActorComponent->GetOwnerPosition();
@@ -205,12 +216,14 @@ public:
 			RequestStateChange( KungFuSnolafState::Run );
 			return;
 		}
-
 	}
 
 	virtual void EndState( T ) override {
 		GetSnolaf()->EnableLargeLoveHearts( false );
 	}
+
+private:
+	bool m_bCanWatchCannonball = false;
 };
 
 
@@ -252,8 +265,13 @@ public:
 		GetSnolaf()->EnableSmallLoveHearts( false );
 		GetSnolaf()->EnableLargeLoveHearts( false );
 
-		const int numDeaths = 3;
-		m_DeathSelection = rand() % numDeaths;
+		const DealAttackInfo_t<KungFuGame::eAttackType> & lastAttackInfo = GetSnolaf()->GetLastAttackInfo();
+		if ( lastAttackInfo.m_AttackType == KungFuGame::Shake ) {
+			m_DeathSelection = 0;
+		}  else {
+			const int numDeaths = 4;
+			m_DeathSelection = rand() % numDeaths;
+		}
 
 		m_OwnerStartPos = GetSnolaf()->GetOwnerPosition();
 		m_OwnerStartRotation = m_pActorComponent->GetOwnerRotation();
@@ -267,9 +285,6 @@ public:
 
 			pParticle->Enable( false );
 		}
-
-				
-		const static kbString clipMapMaskParam = "clipMapMask";
 
 		kbMat4 worldMatrix;
 		m_pActorComponent->GetOwner()->CalculateWorldMatrix( worldMatrix );
@@ -301,16 +316,16 @@ public:
 			m_OwnerStartPos = m_OwnerPosOverride;
 			GetSnolaf()->ApplyAnimSmear( -initialSnolafOffset * 0.75f, 0.067f );
 			UpdateFlyingDeath( 0.0f );
+
 		} else if ( m_DeathSelection == 1 ) {
 
 			// Straight up poof, homie
-			KungFuSnolafComponent *const pSnolaf = m_pActorComponent->GetAs<KungFuSnolafComponent>();
-			pSnolaf->DoPoofDeath();
+			GetSnolaf()->DoPoofDeath();
+
 		} else if ( m_DeathSelection == 2 ) {
 
-			
+			// Decapitation
 			GetSnolaf()->SpawnAndFlingDecapHead();
-			// Super Fly Off
 			m_Velocity = kbVec3Rand( m_MinLinearVelocity, m_MaxLinearVelocity );
 			if ( m_Velocity.x < 0.0f ) {
 				m_Velocity.x -= 0.0025f;
@@ -334,6 +349,7 @@ public:
 			GetSnolaf()->ApplyAnimSmear( -initialSnolafOffset * 0.75f, 0.067f );
 			UpdateFlyingDeath( 0.0f );
 
+			const static kbString clipMapMaskParam = "clipMapMask";
 			kbGameEntity *const pOwner = m_pActorComponent->GetOwner();
 			for ( int i = 0; i < pOwner->NumComponents(); i++ ) {
 				kbSkeletalModelComponent *const pSkelModelComp = pOwner->GetComponent(i)->GetAs<kbSkeletalModelComponent>();
@@ -342,7 +358,8 @@ public:
 				}
 				pSkelModelComp->SetMaterialParamVector( 0, clipMapMaskParam.stl_str(), kbVec4( 1.0f, 0.0f, 0.0f, 0.0f ) );
 			}
-
+		} else if ( m_DeathSelection == 3 ) {
+			GetSnolaf()->SpawnAndFlingTopAndBottomHalf();
 		}
 
 		m_DeathStartTime = g_GlobalTimer.TimeElapsedSeconds();
@@ -419,7 +436,6 @@ private:
 	int m_DeathSelection = 0;
 	float m_DeathStartTime = 0.0f;
 };
-
 
 /**
  *	KungFuSnolafComponent::Constructor
@@ -554,8 +570,9 @@ void KungFuSnolafComponent::EnableLargeLoveHearts( const bool bEnable ) {
  */
 void KungFuSnolafComponent::TakeDamage( const DealAttackInfo_t<KungFuGame::eAttackType> & attackInfo ) {
 
+	m_LastAttackInfo = attackInfo;
 	if ( attackInfo.m_AttackType == KungFuGame::Shake ) {
-		// Shake 'n Bake only kills current huggers
+		// Shake 'n Bake only kills huggers
 		if ( m_CurrentState == KungFuSnolafState::Hug ) {
 			m_Health = -1.0f;
 			RequestStateChange( KungFuSnolafState::Dead );
@@ -607,3 +624,42 @@ void KungFuSnolafComponent::SpawnAndFlingDecapHead() {
 		pFlingComp->Enable( true );
 	}
 }
+
+
+/**
+ *	KungFuSnolafComponent::SpawnAndFlingTopAndBottomHalf
+ */
+void KungFuSnolafComponent::SpawnAndFlingTopAndBottomHalf() {
+
+	m_SkelModelsList[0]->Enable( false );
+	m_SkelModelsList[1]->Enable( false );
+
+	if ( m_TopHalfOfBody.GetEntity() == nullptr || m_BottomHalfOfBody.GetEntity() == nullptr ) {
+		return;
+	}
+
+	kbGameEntity *const pTopHalf = g_pGame->CreateEntity( m_TopHalfOfBody.GetEntity() );
+	const kbVec3 topPos = GetOwnerPosition() + kbVec3( 0.0f, 1.0f, 0.0f );
+	pTopHalf->SetPosition( topPos );
+	pTopHalf->SetOrientation( GetOwnerRotation() );
+	pTopHalf->DeleteWhenComponentsAreInactive( true );
+
+	kbFlingPhysicsComponent *const pTopFlingComp = pTopHalf->GetComponent<kbFlingPhysicsComponent>();
+	if ( pTopFlingComp != nullptr ) {
+		pTopFlingComp->Enable( false );
+		pTopFlingComp->Enable( true );
+	}
+
+	kbGameEntity *const pBottomHalf = g_pGame->CreateEntity( m_BottomHalfOfBody.GetEntity() );
+	const kbVec3 bottomPos = GetOwnerPosition() + kbVec3( 0.0f, 0.2f, 0.0f );
+	pBottomHalf->SetPosition( bottomPos );
+	pBottomHalf->SetOrientation( GetOwnerRotation() );
+	pBottomHalf->DeleteWhenComponentsAreInactive( true );
+
+	kbFlingPhysicsComponent *const pBottomFlingComp = pBottomHalf->GetComponent<kbFlingPhysicsComponent>();
+	if ( pBottomFlingComp != nullptr ) {
+		pBottomFlingComp->Enable( false );
+		pBottomFlingComp->Enable( true );
+	}
+}
+

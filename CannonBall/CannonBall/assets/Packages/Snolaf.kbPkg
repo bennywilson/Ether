@@ -276,7 +276,7 @@ kbGameEntity 1180474321 1206754152 1921378463 1489227724 {
 	}
 }
 }
-Actors 2
+Actors 4
 kbPrefab 1 {
 	Snolaf_Base
 kbGameEntity 314357658 1122514197 2466994618 463523205 {
@@ -337,7 +337,7 @@ kbGameEntity 314357658 1122514197 2466994618 463523205 {
 			}
 		RenderPass = LightingPass
 		TranslucencySortBias =  0.000000
-		Animations = 6
+		Animations = 7
 			kbAnimComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
@@ -406,6 +406,15 @@ kbGameEntity 314357658 1122514197 2466994618 463523205 {
 				IsLooping = 0
 				TimeScale =  4.200000
 			}
+			kbAnimComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Animation = .\assets\models\characters\snolaf\snolaf_hug_forward.kbanim.ms3d
+				AnimationEvent = 0
+				AnimationName = "Hug_Forward"
+				IsLooping = 1
+				TimeScale =  3.000000
+			}
 		DebugAnimIndex = -1
 		Model = .\assets\models\characters\snolaf\snolaf.ms3d
 	}
@@ -458,7 +467,7 @@ kbGameEntity 314357658 1122514197 2466994618 463523205 {
 			}
 		RenderPass = LightingPass
 		TranslucencySortBias =  0.000000
-		Animations = 6
+		Animations = 7
 			kbAnimComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
@@ -512,6 +521,15 @@ kbGameEntity 314357658 1122514197 2466994618 463523205 {
 				AnimationName = "Watch_CannonBall"
 				IsLooping = 0
 				TimeScale =  4.200000
+			}
+			kbAnimComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Animation = .\assets\models\characters\snolaf\snolaf_hug_forward.kbanim.ms3d
+				AnimationEvent = 0
+				AnimationName = "Hug_Forward"
+				IsLooping = 0
+				TimeScale =  3.000000
 			}
 		DebugAnimIndex = -1
 		Model = .\assets\models\characters\snolaf\snolaf.ms3d
@@ -652,9 +670,11 @@ kbGameEntity 314357658 1122514197 2466994618 463523205 {
 		Health =  100.000000
 		MaxRotateSpeed =  15.000000
 		MaxRunSpeed =  3.000000
+		BottomHalf = 3754323986 1218384162 2695139754 2739970727
 		DecapHead = 2312584767 1139148529 3844446354 2946788253
 		PoofDeathFX = 1180474321 1206754152 1921378463 1489227724
 		StepImpactFX = 949543359 1324466742 3669717892 833517135
+		TopHalf = 2125691545 1130458748 632895138 4256000792
 	}
 }
 }
@@ -777,6 +797,308 @@ kbGameEntity 2312584767 1139148529 3844446354 2946788253 {
 	}
 	kbFlingPhysicsComponent { 
 		Enabled = 0
+		LifeTime =  -1.000000
+		Gravity = 0.015000 0.025000 0.020000
+		MaxAngularSpeed =  15.000000
+		MaxLinearVelocity = 0.015000 0.025000 0.020000
+		MinAngularSpeed =  10.000000
+		MinLinearVelocity = -0.015000 0.015000 0.030000
+	}
+	kbDeleteEntityComponent { 
+		Enabled = 1
+		LifeTime =  3.000000
+		Dummy =  1.000000
+	}
+}
+}
+kbPrefab 1 {
+	Snolaf_Physics_BottomHalf
+kbGameEntity 3754323986 1218384162 2695139754 2739970727 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Entity_20"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = -12.749211 2.362684 26.224957
+		Scale = 1.000000 1.000000 1.000000
+	}
+	kbSkeletalModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 1
+		Materials = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\character\characterbase.kbshader
+				ShaderParams = 5
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "fxMapMask"
+						Texture = NULL
+						Vector = 0.000000 0.000000 1.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "clipMapMask"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorTexture"
+						Texture = .\assets\models\characters\snolaf\snolaf_color.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "fxMap"
+						Texture = .\assets\models\characters\snolaf\snolaf_fxmap.tif
+						Vector = 0.000000 0.000000 1.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "clipMap"
+						Texture = ..\..\kbengine\assets\textures\white.bmp
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		RenderPass = LightingPass
+		TranslucencySortBias =  0.000000
+		Animations = 1
+			kbAnimComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Animation = .\assets\models\characters\snolaf\snowlaf_bottomhalf_flail.kbanim.ms3d
+				AnimationEvent = 0
+				AnimationName = ""
+				IsLooping = 1
+				TimeScale =  10.000000
+			}
+		DebugAnimIndex = 0
+		Model = .\assets\models\characters\snolaf\snolaf_bottomhalf.ms3d
+	}
+	kbSkeletalModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		Materials = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\character\characteroutline.kbshader
+				ShaderParams = 5
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "outlineParams"
+						Texture = NULL
+						Vector = 0.020000 0.100000 0.750000 5.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "smearParams"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "clipMapMask"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorTexture"
+						Texture = .\assets\models\characters\snolaf\snolaf_color.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "clipMap"
+						Texture = ..\..\kbengine\assets\textures\white.bmp
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		RenderPass = LightingPass
+		TranslucencySortBias =  0.000000
+		Animations = 1
+			kbAnimComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Animation = .\assets\models\characters\snolaf\snowlaf_bottomhalf_flail.kbanim.ms3d
+				AnimationEvent = 0
+				AnimationName = ""
+				IsLooping = 1
+				TimeScale =  10.000000
+			}
+		DebugAnimIndex = 0
+		Model = .\assets\models\characters\snolaf\snolaf_bottomhalf.ms3d
+	}
+	kbFlingPhysicsComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		Gravity = 0.015000 0.025000 0.020000
+		MaxAngularSpeed =  15.000000
+		MaxLinearVelocity = 0.015000 0.025000 0.020000
+		MinAngularSpeed =  10.000000
+		MinLinearVelocity = -0.015000 0.015000 0.030000
+	}
+	kbDeleteEntityComponent { 
+		Enabled = 1
+		LifeTime =  3.000000
+		Dummy =  1.000000
+	}
+}
+}
+kbPrefab 1 {
+	Snolaf_Physics_TopHalf
+kbGameEntity 2125691545 1130458748 632895138 4256000792 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Snolaf_Top_Half"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = -9.419888 2.023228 25.766031
+		Scale = 1.000000 1.000000 1.000000
+	}
+	kbSkeletalModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 1
+		Materials = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\character\characterbase.kbshader
+				ShaderParams = 5
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "fxMapMask"
+						Texture = NULL
+						Vector = 0.000000 0.000000 1.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "clipMapMask"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorTexture"
+						Texture = .\assets\models\characters\snolaf\snolaf_color.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "fxMap"
+						Texture = .\assets\models\characters\snolaf\snolaf_fxmap.tif
+						Vector = 0.000000 0.000000 1.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "clipMap"
+						Texture = ..\..\kbengine\assets\textures\white.bmp
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		RenderPass = LightingPass
+		TranslucencySortBias =  0.000000
+		Animations = 1
+			kbAnimComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Animation = .\assets\models\characters\snolaf\snolaf_tophalf_flail.kbanim.ms3d
+				AnimationEvent = 0
+				AnimationName = ""
+				IsLooping = 1
+				TimeScale =  5.000000
+			}
+		DebugAnimIndex = 0
+		Model = .\assets\models\characters\snolaf\snolaf_tophalf.ms3d
+	}
+	kbSkeletalModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		Materials = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\character\characteroutline.kbshader
+				ShaderParams = 5
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "outlineParams"
+						Texture = NULL
+						Vector = 0.020000 0.100000 0.750000 5.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "smearParams"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "clipMapMask"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorTexture"
+						Texture = .\assets\models\characters\snolaf\snolaf_color.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "clipMap"
+						Texture = ..\..\kbengine\assets\textures\white.bmp
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		RenderPass = LightingPass
+		TranslucencySortBias =  0.000000
+		Animations = 1
+			kbAnimComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Animation = .\assets\models\characters\snolaf\snolaf_tophalf_flail.kbanim.ms3d
+				AnimationEvent = 0
+				AnimationName = ""
+				IsLooping = 1
+				TimeScale =  5.000000
+			}
+		DebugAnimIndex = 0
+		Model = .\assets\models\characters\snolaf\snolaf_tophalf.ms3d
+	}
+	kbFlingPhysicsComponent { 
+		Enabled = 1
 		LifeTime =  -1.000000
 		Gravity = 0.015000 0.025000 0.020000
 		MaxAngularSpeed =  15.000000

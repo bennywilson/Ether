@@ -12,7 +12,7 @@
 #include "kbEditor.h"
 #include "kbEditorEntity.h"
 
-#define CANNONBALL_STRESSTEST 1
+//#define CANNONBALL_STRESSTEST 1
 
 /**
  *	KungFuSheepStateIdle
@@ -364,9 +364,6 @@ void KungFuSheepComponent::Constructor() {
  */
 void KungFuSheepComponent::SetEnable_Internal( const bool bEnable ) {
 	Super::SetEnable_Internal( bEnable );
-
-	// Make sure sheep package is loaded
-	g_ResourceManager.GetPackage( "./assets/Packages/Sheep.kbPkg" );
 
 	if ( bEnable ) {
 

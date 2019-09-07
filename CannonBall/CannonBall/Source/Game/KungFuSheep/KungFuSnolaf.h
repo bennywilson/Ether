@@ -41,8 +41,11 @@ public:
 
 	void										DoPoofDeath();
 	void										SpawnAndFlingDecapHead();
+	void										SpawnAndFlingTopAndBottomHalf();
+
 
 	KungFuSnolafState::SnolafState_t			GetState() const { return m_CurrentState; }
+	const DealAttackInfo_t<KungFuGame::eAttackType>	& GetLastAttackInfo() const { return m_LastAttackInfo; }
 
 protected:
 
@@ -55,10 +58,14 @@ private:
 	kbGameEntityPtr								m_FootStepImpactFX;
 	kbGameEntityPtr								m_PoofDeathFX;
 	kbGameEntityPtr								m_DecapitatedHead;
+	kbGameEntityPtr								m_TopHalfOfBody;
+	kbGameEntityPtr								m_BottomHalfOfBody;
 
 	// Game
 	kbParticleComponent *						m_pSmallLoveHearts;
 	kbParticleComponent *						m_pLargeLoveHearts;
+
+	DealAttackInfo_t<KungFuGame::eAttackType>	m_LastAttackInfo;
 
 //---------------------------------------------------------------------------------------------------
 	// IAnimEventListener

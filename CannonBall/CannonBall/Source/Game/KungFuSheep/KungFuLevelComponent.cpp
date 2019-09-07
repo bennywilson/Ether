@@ -214,6 +214,10 @@ void KungFuLevelComponent::SetEnable_Internal( const bool bEnable ) {
 	Super::SetEnable_Internal( bEnable );
 
 	if ( bEnable ) {
+		g_ResourceManager.GetPackage( "./assets/Packages/Snolaf.kbPkg" );
+		g_ResourceManager.GetPackage( "./assets/Packages/Sheep.kbPkg" );
+		g_ResourceManager.GetPackage( "./assets/Packages/3000Ton.kbPkg" );
+
 		g_pKungFuDirector = new KungFuSheep_Director();
 
 		KungFuGame_BaseState * pGameStates[] = {
