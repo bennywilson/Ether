@@ -358,7 +358,7 @@ kbGameEntity 0 0 0 0 {
 						Enabled = 0
 						LifeTime =  -1.000000
 						EventName = "CannonBall_Impact"
-						EventTime =  4.350000
+						EventTime =  4.750000
 						EventValue =  1.000000
 					}
 					kbAnimEvent { 
