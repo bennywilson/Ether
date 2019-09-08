@@ -351,7 +351,7 @@ kbGameEntity 0 0 0 0 {
 						Enabled = 0
 						LifeTime =  -1.000000
 						EventName = "CannonBall_JumpSmear"
-						EventTime =  0.750000
+						EventTime =  0.850000
 						EventValue =  0.050000
 					}
 					kbAnimEvent { 
@@ -596,7 +596,7 @@ kbGameEntity 0 0 0 0 {
 				WaveFile = .\assets\sounds\sheep\sheep_vo_cannonball.wav
 			}
 		DropSmearMagnitude =  2.500000
-		JumpSmearMagnitude =  -2.500000
+		JumpSmearMagnitude =  -2.0000
 	}
 }
 kbGameEntity 0 0 0 0 {
