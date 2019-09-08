@@ -1,8 +1,8 @@
-//===================================================================================================
+﻿//===================================================================================================
 // kbGame.cpp
 //
 //
-// 2016-2018 kbEngine 2.0
+// 2016-2019 kbEngine 2.0
 //===================================================================================================
 #include <sstream>
 #include <iomanip>
@@ -16,6 +16,7 @@ kbConsoleVariable g_ShowEntityInfo( "showentityinfo", false, kbConsoleVariable::
 kbConsoleVariable g_DumpEntityInfo( "dumpentityinfo", false, kbConsoleVariable::Console_Bool, "Dump entity info?", "" );
 kbConsoleVariable g_TimeScale( "timescale", (float)1.0f, kbConsoleVariable::Console_Float, "Dilate time", "" );
 kbConsoleVariable g_EnableHelpScreen( "help", false, kbConsoleVariable::Console_Bool, "Display help screen", "ctrl h" );
+kbConsoleVariable g_ShowFPS( "showfps", false, kbConsoleVariable::Console_Bool, "Show FPS", "ctrl f" );
 
 /**
  *	kbGame::kbGame
@@ -160,9 +161,9 @@ void kbGame::StopGame() {
  */
 void kbGame::Update() {
 
-	START_SCOPED_TIMER( GAME_THREAD );
+	START_SCOPED_TIMER(GAME_THREAD);
 
-	m_CurFrameDeltaTime = ( float ) m_Timer.TimeElapsedSeconds() * m_DeltaTimeScale;
+	m_CurFrameDeltaTime = m_Timer.TimeElapsedSeconds() * m_DeltaTimeScale;
 	m_Timer.Reset();
 
 	static int NumFrames = 0;
@@ -172,9 +173,10 @@ void kbGame::Update() {
 	static float FPS = 0;
 
 	if ( NumFrames > 100 ) {
-		FPS = (float)NumFrames / ( g_GlobalTimer.TimeElapsedSeconds() - StartTime );
+		const float curTime = g_GlobalTimer.TimeElapsedSeconds();
+		FPS = (float)NumFrames / ( curTime - StartTime );
 		NumFrames = 0;
-		StartTime = g_GlobalTimer.TimeElapsedSeconds();
+		StartTime = curTime;
 	}
 
 	if ( g_TimeScale.GetFloat() > 0.0f ) {
@@ -239,12 +241,13 @@ void kbGame::Update() {
 			}
 		}
 
-		std::string fpsString = "FPS: ";
-		std::stringstream stream;
-		stream << std::fixed << std::setprecision(2) << FPS;
-		fpsString += stream.str();
-		//g_pRenderer->DrawDebugText( fpsString, 0.85f, 0, g_DebugTextSize, g_DebugTextSize, kbColor::green );
-
+		if ( g_ShowFPS.GetBool() ) {
+			std::string fpsString = "FPS: ";
+			std::stringstream stream;
+			stream << std::fixed << std::setprecision(2) << FPS;
+			fpsString += stream.str();
+			g_pRenderer->DrawDebugText( fpsString, 0.85f, 0, g_DebugTextSize, g_DebugTextSize, kbColor::green );
+		}
 		if ( g_ShowPerfTimers.GetBool() ) {
 
 			float curY = g_DebugLineSpacing + 0.1f;
@@ -372,6 +375,18 @@ void kbGame::RemoveGameEntity( kbGameEntity *const pEntityToRemove ) {
 		}
 	}
 
+}
+
+/**
+ *	kbGame::SwapEntitiesByIdx
+ */
+void kbGame::SwapEntitiesByIdx( const size_t idx1, const size_t idx2 ) {
+	if ( idx1 < 0 || idx1 >= m_GameEntityList.size() || idx2 < 0 || idx2 >= m_GameEntityList.size() ) {
+		kbWarning( "kbGame::SwapEntitiesByIdx() - Invalid index(es) [%d], [%d]", idx1, idx2 );
+		return;
+	}
+
+	std::swap( m_GameEntityList[idx1], m_GameEntityList[idx2] ); 
 }
 
 /**

@@ -74,23 +74,31 @@ void CannonGame::LevelLoaded_Internal() {
 	m_pLevelComp = nullptr;
 	m_pMainCamera = nullptr;
 
+	int cameraIdx = -1;
 	const std::vector<kbGameEntity*> & GameEnts = GetGameEntities();
 	for ( int i = 0; i < GameEnts.size(); i++ ) {
 		kbGameEntity *const pCurEnt = GameEnts[i];
 		if ( m_pLevelComp == nullptr ) {
-			m_pLevelComp = (kbLevelComponent*)pCurEnt->GetComponentByType( kbLevelComponent::GetType() );
+			m_pLevelComp = pCurEnt->GetComponent<kbLevelComponent>();
 		}
 
 		if ( m_pMainCamera == nullptr ) {
-			m_pMainCamera = (CannonCameraComponent*)pCurEnt->GetComponentByType( CannonCameraComponent::GetType() );
+			m_pMainCamera = pCurEnt->GetComponent<CannonCameraComponent>();
+			if ( m_pMainCamera != nullptr ) {
+				cameraIdx = i;
+			}
 		}
 
 		if ( m_pPlayerComp == nullptr ) {
-			CannonActorComponent *const pActor = (CannonActorComponent*)pCurEnt->GetComponentByType( CannonActorComponent::GetType() );
+			CannonActorComponent *const pActor = pCurEnt->GetComponent<CannonActorComponent>();
 			if ( pActor != nullptr && pActor->IsPlayer() ) {
 				m_pPlayerComp = pActor;
 			}
 		}
+	}
+
+	if ( cameraIdx >= 0 ) {
+		SwapEntitiesByIdx( cameraIdx, GameEnts.size() - 1 );
 	}
 
 	kbWarningCheck( m_pLevelComp != nullptr, "CannonGame::LevelLoaded_Internal() - No level component found.");

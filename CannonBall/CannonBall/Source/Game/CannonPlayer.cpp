@@ -251,13 +251,12 @@ void CannonCameraComponent::Update_Internal( const float DeltaTime ) {
 				}
 			}
 
+			GetOwner()->SetPosition( m_pTarget->GetPosition() + m_PositionOffset );
+
 			kbMat4 cameraDestRot;
 			cameraDestRot.LookAt( GetOwner()->GetPosition(), m_pTarget->GetPosition() + m_LookAtOffset, kbVec3::up );
 			cameraDestRot.InvertFast();
 			GetOwner()->SetOrientation( kbQuatFromMatrix( cameraDestRot ) );
-
-			const kbVec3 cameraDestPos = m_pTarget->GetPosition() + m_PositionOffset;
-			GetOwner()->SetPosition( cameraDestPos + cameraDestRot[0].ToVec3() * camShakeOffset.x + cameraDestRot[1].ToVec3() * camShakeOffset.y );
 		}
 		break;
 	}

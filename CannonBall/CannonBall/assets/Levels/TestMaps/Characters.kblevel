@@ -687,27 +687,6 @@ kbGameEntity 0 0 0 0 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		Name = "Camera"
-		Orientation = -0.030848 -0.706434 0.030848 0.706434
-		Position = -4.025984 2.350000 12.536115
-		Scale = 1.000000 1.000000 1.000000
-	}
-	CannonCameraComponent { 
-		Enabled = 1
-		LifeTime =  -1.000000
-		DummyTemp = 0
-		Health =  10.000000
-		FarPlane =  1000.000000
-		LookAtOffset = 0.000000 2.000000 0.000000
-		MovementMode = Follow
-		NearPlane =  0.250000
-		PositionOffset = -4.000000 2.350000 0.000000
-	}
-}
-kbGameEntity 0 0 0 0 {
-	kbTransformComponent { 
-		Enabled = 0
-		LifeTime =  -1.000000
 		Name = "Jumping Jack Sheep"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
 		Position = 0.000000 0.000000 0.000000
@@ -820,5 +799,26 @@ kbGameEntity 0 0 0 0 {
 		RenderPass = Post-LightingPass
 		TranslucencySortBias =  0.000000
 		Model = ..\..\kbengine\assets\models\editor\invertedcube.ms3d
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Camera"
+		Orientation = -0.030848 -0.706434 0.030848 0.706434
+		Position = -4.025984 2.350000 12.536115
+		Scale = 1.000000 1.000000 1.000000
+	}
+	CannonCameraComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		DummyTemp = 0
+		Health =  10.000000
+		FarPlane =  1000.000000
+		LookAtOffset = 0.000000 2.000000 0.000000
+		MovementMode = Follow
+		NearPlane =  0.250000
+		PositionOffset = -4.000000 2.350000 0.000000
 	}
 }

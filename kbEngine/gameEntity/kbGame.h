@@ -80,6 +80,8 @@ protected:
 	const kbInput_t &											GetInput() const { return m_InputManager.GetInput(); }
 	bool														IsConsoleActive() const { return m_Console.IsActive(); }
 
+	virtual void												SwapEntitiesByIdx( const size_t idx1, const size_t idx2 );
+
 private:
 
 	void														DisplayDebugCommands();

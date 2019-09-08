@@ -194,7 +194,7 @@ void kbRenderWindow_DX11::BeginFrame_Internal() {
 }
 
 /**
- *	kbRenderWindow_DX11::EndFrame
+ *	kbRenderWindow_DX11::EndFrame_Internal
  */
 void kbRenderWindow_DX11::EndFrame_Internal() {
 	m_pSwapChain->Present( 1, 0 ); 
@@ -954,7 +954,7 @@ int kbRenderer_DX11::CreateRenderView( HWND hwnd )
 
 	sd.BufferDesc.Width = Back_Buffer_Width;
 	sd.BufferDesc.Height = Back_Buffer_Height;
-	sd.BufferDesc.RefreshRate.Numerator = 120;
+	sd.BufferDesc.RefreshRate.Numerator = 0;
 	sd.BufferDesc.RefreshRate.Denominator = 1;
 	sd.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;//DXGI_FORMAT_B8G8R8A8_UNORM;
 	sd.BufferDesc.ScanlineOrdering = DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED;
@@ -967,8 +967,8 @@ int kbRenderer_DX11::CreateRenderView( HWND hwnd )
 	sd.BufferCount = 2;
 	sd.OutputWindow = hwnd;
 	sd.Windowed = TRUE;
-	sd.SwapEffect = DXGI_SWAP_EFFECT_FLIP_SEQUENTIAL ;
-	sd.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;
+	sd.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;
+	sd.Flags = 0;
 
 	RECT windowDimensions;
 	GetClientRect( hwnd, &windowDimensions );
