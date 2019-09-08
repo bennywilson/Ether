@@ -2,7 +2,7 @@ kbGameEntity 0 0 0 0 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		Name = "Entity_21"
+		Name = "Entity_20"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
 		Position = 0.000000 0.000000 0.000000
 		Scale = 1.000000 1.000000 1.000000
@@ -10,8 +10,8 @@ kbGameEntity 0 0 0 0 {
 	kbEditorLevelSettingsComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		MainCameraPosition = -4.853435 3.389907 17.332897
-		MainCameraRotation = 0.075533 0.805844 -0.105355 -0.577763
+		MainCameraPosition = -4.974786 2.225758 16.075533
+		MainCameraRotation = 0.169905 0.704287 -0.179835 -0.665411
 	}
 }
 kbGameEntity 0 0 0 0 {
@@ -124,13 +124,34 @@ kbGameEntity 0 0 0 0 {
 				Enabled = 0
 				LifeTime =  -1.000000
 				CullModeOverride = ShaderDefault
-				Shader = ..\..\kbengine\assets\shaders\basictexture.kbshader
-				ShaderParams = 1
+				Shader = .\assets\shaders\environment\environmentbase.kbshader
+				ShaderParams = 4
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
-						ParamName = "shaderTexture"
+						ParamName = "diffuse"
 						Texture = .\assets\test\woodfloor_basic.bmp
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "normal"
+						Texture = ..\..\kbengine\assets\textures\defaultnormal.bmp
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "propertyMap"
+						Texture = ..\..\kbengine\assets\textures\black.bmp
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "emissiveMap"
+						Texture = ..\..\kbengine\assets\textures\black.bmp
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 			}

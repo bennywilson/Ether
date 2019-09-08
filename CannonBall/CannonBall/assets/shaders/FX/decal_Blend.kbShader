@@ -11,6 +11,7 @@ cbuffer matrixBuffer {
 	matrix inverseModelMatrix;
 	float4 cameraPosition;
 	float4 colorMultiplier;
+	float4 clipData;		// x - clip bias, y - uv border clip, 
 }
 
 kbShaderState {
@@ -76,14 +77,14 @@ Texture2D depthTexture(depthBuffer)				: register(t3);
 Texture2D ProjectionTex;
 
 float4 pixelShader( pixelInput input ) : SV_TARGET {
-	float4 diffuseColor = colorTexture.Sample( DefaultSamplerState, input.uv );
-	float4 normal = normalTexture.Sample( NormalSamplerState, input.uv );
-	
-	normal.xyz = normalize( normal.xyz );
 
 	float4 screenCoord = input.screenPos / input.screenPos.w;
 	float2 screenUV = screenCoord.xy * 0.5f + 0.5f;
 	screenUV.y = 1.0f - screenUV.y;
+
+	float4 normal = normalTexture.Sample( NormalSamplerState, screenUV );
+	clip( normal.w - clipData.x );
+
 	float4 worldPos = float4( screenCoord.xy, depthTexture.Sample( DepthSamplerState, screenUV ).r, 1 );
 	worldPos = mul( worldPos, inverseViewProjection );
 	worldPos /= worldPos.w;

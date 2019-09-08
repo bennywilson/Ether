@@ -45,9 +45,9 @@ kbPrefab 1 {
 						kbShaderParamComponent { 
 							Enabled = 0
 							LifeTime =  -1.000000
-							ParamName = ""
+							ParamName = "clipData"
 							Texture = NULL
-							Vector = 1.000000 1.000000 1.000000 1.000000
+							Vector = 0.100000 0.000000 0.000000 0.000000
 						}
 				}
 			RenderPass = LightingPass
@@ -104,7 +104,7 @@ kbGameEntity 1180474321 1206754152 1921378463 1489227724 {
 		LifeTime =  -1.000000
 		Name = "Poof_Death"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
-		Position = 0.000000 0.6500000 0.000000
+		Position = 0.000000 0.650000 0.000000
 		Scale = 1.000000 1.000000 1.000000
 		AlphaOverLife = 0
 		ColorOverLife = 0
@@ -188,7 +188,7 @@ kbGameEntity 1180474321 1206754152 1921378463 1489227724 {
 		LifeTime =  5.000000
 		Name = "LargeDustMist"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
-		Position = 0.000000 0.6500000 0.000000
+		Position = 0.000000 0.650000 0.000000
 		Scale = 1.000000 1.000000 1.000000
 		AlphaOverLife = 0
 		ColorOverLife = 4
@@ -662,7 +662,7 @@ kbGameEntity 314357658 1122514197 2466994618 463523205 {
 	}
 	kbDeleteEntityComponent { 
 		Enabled = 0
-		LifeTime =  0.0750000
+		LifeTime =  0.075000
 		Dummy =  1.000000
 	}
 	KungFuSnolafComponent { 

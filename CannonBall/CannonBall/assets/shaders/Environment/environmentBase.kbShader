@@ -57,13 +57,13 @@ pixelInput vertexShader( vertexInput input ) {
 	const float3 worldNormal = normalize( mul( ( input.normal.xyz * 2.0f ) - 1.0f, (float3x3)modelMatrix ) );
 	const float3 worldBitangent = normalize( cross( worldNormal, worldTangent ) );// * ( input.tangent.w * 2.0f - 1.0f );
 
-	output.TBN0 = float4(worldTangent.x, worldBitangent.x, worldNormal.x, 0 );
+	/*output.TBN0 = float4(worldTangent.x, worldBitangent.x, worldNormal.x, 0 );
 	output.TBN1 = float4(worldTangent.y, worldBitangent.y, worldNormal.y, 0 );
-	output.TBN2 = float4(worldTangent.z, worldBitangent.z, worldNormal.z, 0 );
+	output.TBN2 = float4(worldTangent.z, worldBitangent.z, worldNormal.z, 0 );*/
 		
-/*	output.TBN0.xyz = worldTangent;//float4(worldTangent.x, worldBitangent.x, worldNormal.x, 0 );
+	output.TBN0.xyz = worldTangent;//float4(worldTangent.x, worldBitangent.x, worldNormal.x, 0 );
 	output.TBN1.xyz = worldBitangent;//float4(worldTangent.y, worldBitangent.y, worldNormal.y, 0 );
-	output.TBN2.xyz = worldNormal;//float4(worldTangent.z, worldBitangent.z, worldNormal.z, 0 );*/
+	output.TBN2.xyz = worldNormal;//float4(worldTangent.z, worldBitangent.z, worldNormal.z, 0 );
 
 	return output;
 }
@@ -108,7 +108,7 @@ Texture2D emissiveMap(black)		: register(t3);
 	output.Normal.y = dot( tangentNormal, normalize( float3( input.TBN0.y, input.TBN1.y, input.TBN2.y ) ) );//		//mul( tangentNormal, TBN );
 	output.Normal.z = dot( tangentNormal, normalize( float3( input.TBN0.z, input.TBN1.z, input.TBN2.z ) ) );//		//mul( tangentNormal, TBN );
 	//output.Normal.xyz = input.TBN2.xyz;
-	output.Normal.w = 0.5f;//normalMap.w;
+	output.Normal.w = 1.0f;//normalMap.w;
 	return output;
 }
  
