@@ -104,7 +104,7 @@ kbGameEntity 1180474321 1206754152 1921378463 1489227724 {
 		LifeTime =  -1.000000
 		Name = "Poof_Death"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
-		Position = 0.000000 0.000000 0.000000
+		Position = 0.000000 0.6500000 0.000000
 		Scale = 1.000000 1.000000 1.000000
 		AlphaOverLife = 0
 		ColorOverLife = 0
@@ -188,7 +188,7 @@ kbGameEntity 1180474321 1206754152 1921378463 1489227724 {
 		LifeTime =  5.000000
 		Name = "LargeDustMist"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
-		Position = 0.000000 1.000000 0.000000
+		Position = 0.000000 0.6500000 0.000000
 		Scale = 1.000000 1.000000 1.000000
 		AlphaOverLife = 0
 		ColorOverLife = 4
@@ -284,8 +284,8 @@ kbGameEntity 314357658 1122514197 2466994618 463523205 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "Snolaf"
-		Orientation = 0.000000 0.000000 0.000000 1.000000
-		Position = -0.025984 0.000000 17.968311
+		Orientation = 0.000000 1.000000 0.000000 0.000000
+		Position = -1.192401 2.361588 16.092175
 		Scale = 1.000000 1.000000 1.000000
 	}
 	kbSkeletalModelComponent { 
@@ -659,6 +659,11 @@ kbGameEntity 314357658 1122514197 2466994618 463523205 {
 		TotalDuration =  -1.000000
 		TranslucencySortBias =  0.000000
 		VelocityCurve = 0
+	}
+	kbDeleteEntityComponent { 
+		Enabled = 0
+		LifeTime =  0.0750000
+		Dummy =  1.000000
 	}
 	KungFuSnolafComponent { 
 		Enabled = 1

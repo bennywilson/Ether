@@ -61,6 +61,8 @@ public:
 	std::vector<kbBoneMatrix_t> &				GetFinalBoneMatrices() { return m_BindToLocalSpaceMatrices; }
 	const std::vector<kbBoneMatrix_t> &			GetFinalBoneMatrices() const { return m_BindToLocalSpaceMatrices; }
 
+	void										SetAnimationTimeScaleMultiplier( const kbString & animationName, const float factor );
+
 	// Animation
 	void										PlayAnimation( const kbString & AnimationName, const float BlendLength, bool bRestartIfAlreadyPlaying, const kbString desiredNextAnimation = kbString::EmptyString, const float desiredNextAnimBlendLength = 0.0f );
 	bool										IsPlaying( const kbString & AnimationName ) const;
@@ -96,6 +98,8 @@ protected:
 	int											m_NextAnimation;
 	float										m_BlendStartTime;
 	float										m_BlendLength;
+
+	std::vector<float>							m_AnimationTimeScaleMultipliers;
 
 	// Debug
 	int											m_DebugAnimIdx;

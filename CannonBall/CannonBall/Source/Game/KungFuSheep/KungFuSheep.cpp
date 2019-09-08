@@ -198,6 +198,13 @@ public:
 	virtual void BeginState( T ) override {
 		m_NumDirectionChanges = 0;
 		m_CurrentDirection = 0;
+
+		static const kbString IdleL_Anim( "IdleLeft_Basic" );
+		static const kbString IdleR_Anim( "IdleRight_Basic" );
+
+		KungFuSheepComponent *const pSheep = m_pActorComponent->GetAs<KungFuSheepComponent>();
+		pSheep->SetAnimationTimeScaleMultiplier( IdleL_Anim, 2.0f );
+		pSheep->SetAnimationTimeScaleMultiplier( IdleR_Anim, 2.0f );
 	}
 
 	virtual void UpdateState() override {
@@ -277,7 +284,15 @@ public:
 		}
 	}
 
-	virtual void EndState( T nextState ) override { }
+	virtual void EndState( T nextState ) override {
+
+		static const kbString IdleL_Anim( "IdleLeft_Basic" );
+		static const kbString IdleR_Anim( "IdleRight_Basic" );
+
+		KungFuSheepComponent *const pSheep = m_pActorComponent->GetAs<KungFuSheepComponent>();
+		pSheep->SetAnimationTimeScaleMultiplier( IdleL_Anim, 1.0f );
+		pSheep->SetAnimationTimeScaleMultiplier( IdleR_Anim, 1.0f );
+	}
 
 	const float m_DirectionChangeWindowSec = 0.5f;
 	int m_NumDirectionChanges = 0;

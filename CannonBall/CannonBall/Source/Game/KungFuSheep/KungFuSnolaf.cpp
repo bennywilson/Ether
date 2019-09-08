@@ -534,7 +534,11 @@ void KungFuSnolafComponent::Update_Internal( const float DT ) {
 	if ( m_CurrentState == KungFuSnolafState::Hug ) {
 		fxDot.Set( 0.0f, 1.0f, 0.0f, 0.0f );
 	} else if ( m_CurrentState == KungFuSnolafState::Dead ) {
-		fxDot.Set( 0.0f, 0.0f, 1.0f, 0.0f );
+		kbDeleteEntityComponent *const pDeleteComp = GetComponent<kbDeleteEntityComponent>();
+		if ( pDeleteComp == nullptr )
+		{
+			fxDot.Set( 0.0f, 0.0f, 1.0f, 0.0f );
+		}
 	}
 
 	if ( m_SkelModelsList.size() > 0 ) {
@@ -588,9 +592,6 @@ void KungFuSnolafComponent::TakeDamage( const DealAttackInfo_t<KungFuGame::eAtta
  */
 void KungFuSnolafComponent::DoPoofDeath() {
 
-	m_SkelModelsList[0]->Enable( false );
-	m_SkelModelsList[1]->Enable( false );
-
 	if ( m_PoofDeathFX.GetEntity() == nullptr ) {
 		return;
 	}
@@ -600,7 +601,12 @@ void KungFuSnolafComponent::DoPoofDeath() {
 	pCannonBallImpact->SetOrientation( GetOwnerRotation() );
 	pCannonBallImpact->DeleteWhenComponentsAreInactive( true );
 
-	g_pCannonGame->RemoveGameEntity( this->GetOwner() );
+	kbDeleteEntityComponent *const pDeleteComponent = GetOwner()->GetComponent<kbDeleteEntityComponent>();
+	if ( pDeleteComponent != nullptr ) {
+		pDeleteComponent->Enable( true );
+	} else {
+		g_pCannonGame->RemoveGameEntity( GetOwner() );
+	}
 }
 
 /**

@@ -77,6 +77,11 @@ void kbSkeletalModelComponent::SetEnable_Internal( const bool isEnabled ) {
 		RefreshMaterials( false );
 
 		g_pRenderer->AddRenderObject( m_RenderObject );
+
+		m_AnimationTimeScaleMultipliers.resize( m_Animations.size() );
+		for ( int i = 0; i < m_AnimationTimeScaleMultipliers.size(); i++ ) {
+			m_AnimationTimeScaleMultipliers[i] = 1.0f;
+		}
 	} else {
 		g_pRenderer->RemoveRenderObject( m_RenderObject );
 	}
@@ -167,7 +172,7 @@ void kbSkeletalModelComponent::Update_Internal( const float DeltaTime ) {
 
 			if ( m_NextAnimation == -1 ) {
 
-				CurAnim.m_CurrentAnimationTime += DeltaTime * CurAnim.m_TimeScale;
+				CurAnim.m_CurrentAnimationTime += DeltaTime * CurAnim.m_TimeScale * m_AnimationTimeScaleMultipliers[m_CurrentAnimation];
 
 				if ( CurAnim.m_bIsLooping ) {
 					CurAnim.m_CurrentAnimationTime = fmod( CurAnim.m_CurrentAnimationTime, curAnimLenSec );
@@ -215,14 +220,14 @@ void kbSkeletalModelComponent::Update_Internal( const float DeltaTime ) {
 				if ( bAnimIsFinished == false ) {
 					const float prevAnimTime = fmod( CurAnim.m_CurrentAnimationTime, curAnimLenSec );
 	
-					CurAnim.m_CurrentAnimationTime += DeltaTime * CurAnim.m_TimeScale;
+					CurAnim.m_CurrentAnimationTime += DeltaTime * CurAnim.m_TimeScale * m_AnimationTimeScaleMultipliers[m_CurrentAnimation];
 					if ( CurAnim.m_bIsLooping ) {
 						CurAnim.m_CurrentAnimationTime = fmod( CurAnim.m_CurrentAnimationTime, curAnimLenSec );
 					}
 
 					for ( int iAnimEvent = 0; iAnimEvent < CurAnim.m_AnimEvents.size(); iAnimEvent++ ) {
 						auto & curEvent = CurAnim.m_AnimEvents[iAnimEvent];
-						const float animEventTime = curEvent.GetEventTime() * CurAnim.m_TimeScale;
+						const float animEventTime = curEvent.GetEventTime() * CurAnim.m_TimeScale * m_AnimationTimeScaleMultipliers[m_CurrentAnimation];
 
 						if ( ( animEventTime > prevAnimTime && animEventTime <= CurAnim.m_CurrentAnimationTime ) ||
 							 ( prevAnimTime > CurAnim.m_CurrentAnimationTime && animEventTime < CurAnim.m_CurrentAnimationTime  ) ) {
@@ -248,7 +253,7 @@ void kbSkeletalModelComponent::Update_Internal( const float DeltaTime ) {
 					// Sync the anims if they're both looping
 					NextAnim.m_CurrentAnimationTime = CurAnim.m_CurrentAnimationTime;
 				} else {
-					NextAnim.m_CurrentAnimationTime += DeltaTime * NextAnim.m_TimeScale;
+					NextAnim.m_CurrentAnimationTime += DeltaTime * NextAnim.m_TimeScale * m_AnimationTimeScaleMultipliers[m_NextAnimation];
 				}
 
 				if ( NextAnim.m_bIsLooping ) {
@@ -258,7 +263,7 @@ void kbSkeletalModelComponent::Update_Internal( const float DeltaTime ) {
 				for ( int iAnimEvent = 0; iAnimEvent < NextAnim.m_AnimEvents.size(); iAnimEvent++ ) {
 					auto & curEvent = NextAnim.m_AnimEvents[iAnimEvent];
 
-					const float animEventTime = curEvent.GetEventTime();
+					const float animEventTime = curEvent.GetEventTime() * m_AnimationTimeScaleMultipliers[m_NextAnimation];
 
 					if ( ( animEventTime > prevNextAnimTime && animEventTime <= NextAnim.m_CurrentAnimationTime ) ||
 						 ( prevNextAnimTime > NextAnim.m_CurrentAnimationTime && animEventTime < NextAnim.m_CurrentAnimationTime ) ) {
@@ -328,6 +333,7 @@ bool kbSkeletalModelComponent::GetBoneWorldPosition( const kbString & boneName, 
  *	kbSkeletalModelComponent::GetBoneWorldMatrix
  */
 bool kbSkeletalModelComponent::GetBoneWorldMatrix( const kbString & boneName, kbBoneMatrix_t & boneMatrix ) {
+
 	const int boneIdx = GetBoneIndex( boneName );
 	if ( boneIdx == -1 || boneIdx >= m_BindToLocalSpaceMatrices.size() ) {
 		return false;
@@ -340,6 +346,21 @@ bool kbSkeletalModelComponent::GetBoneWorldMatrix( const kbString & boneName, kb
 	boneMatrix *= WeaponMatrix;
 	return true;
 }
+
+/**
+ *	kbSkeletalModelComponent::SetAnimationTimeScaleMultiplier
+ */
+void kbSkeletalModelComponent::SetAnimationTimeScaleMultiplier( const kbString & animName, const float factor ) {
+
+	for ( int i = 0; i < m_Animations.size(); i++ ) {
+		const kbAnimComponent & anim = m_Animations[i];
+		if ( anim.m_AnimationName == animName ) {
+			m_AnimationTimeScaleMultipliers[i] = factor;
+			return;
+		}
+	}
+}
+
 
 /**
  *	kbSkeletalModelComponent::PlayAnimation

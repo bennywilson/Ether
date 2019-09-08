@@ -106,6 +106,7 @@ void CannonActorComponent::PlayAnimation( const kbString animName, const float a
  *	CannonActorComponent::HasFinishedAnim
  */
 bool CannonActorComponent::HasFinishedAnim( const kbString animName ) const {
+
 	if ( m_SkelModelsList.size() == 0 ) {
 		kbWarning( "KungFuSheepComponent::HasFinishedAnim() - Called with empty m_SkelModels list" );
 		return true;
@@ -125,6 +126,20 @@ bool CannonActorComponent::HasFinishedAnim( const kbString animName ) const {
 	}
 
 	return m_SkelModelsList[0]->HasFinishedAnimation();
+}
+
+/**
+ *	CannonActorComponent::SetAnimationTimeScaleMultiplier
+ */
+void CannonActorComponent::SetAnimationTimeScaleMultiplier( const kbString animName, const float multiplier ) {
+
+	if ( m_SkelModelsList.size() < 2 ) {
+		kbWarning( "KungFuSheepComponent::SetAnimationTimeMultiplier() - Needs at least 2 skeletal models" );
+		return;
+	}
+
+	m_SkelModelsList[0]->SetAnimationTimeScaleMultiplier( animName, multiplier );
+	m_SkelModelsList[1]->SetAnimationTimeScaleMultiplier( animName, multiplier );
 }
 
 /**

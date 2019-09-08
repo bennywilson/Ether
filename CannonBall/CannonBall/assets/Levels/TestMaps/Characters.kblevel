@@ -2,7 +2,7 @@ kbGameEntity 0 0 0 0 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		Name = "Entity_29"
+		Name = "Entity_21"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
 		Position = 0.000000 0.000000 0.000000
 		Scale = 1.000000 1.000000 1.000000
@@ -10,8 +10,8 @@ kbGameEntity 0 0 0 0 {
 	kbEditorLevelSettingsComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		MainCameraPosition = -8.839163 4.934377 19.650778
-		MainCameraRotation = 0.176551 0.702454 -0.186869 -0.663678
+		MainCameraPosition = -4.853435 3.389907 17.332897
+		MainCameraRotation = 0.075533 0.805844 -0.105355 -0.577763
 	}
 }
 kbGameEntity 0 0 0 0 {
@@ -245,7 +245,7 @@ kbGameEntity 0 0 0 0 {
 						LifeTime =  -1.000000
 						ParamName = "fxMapMask"
 						Texture = NULL
-						Vector = 1.000000 0.000000 0.000000 0.000000
+						Vector = 0.000000 1.000000 0.000000 0.000000
 					}
 			}
 		RenderPass = LightingPass
@@ -593,7 +593,7 @@ kbGameEntity 0 0 0 0 {
 		EditorIconScale =  0.500000
 		GlobalModelScale =  0.005000
 		LevelType = 2D
-		Dummy2 =  0
+		Dummy2 =  0.000000
 		SheepPrefab = 0 0 0 0
 		SnolafPrefab = 314357658 1122514197 2466994618 463523205
 	}
