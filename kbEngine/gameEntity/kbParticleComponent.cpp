@@ -47,8 +47,10 @@ void kbParticle_t::Shutdown() {
  *	kbParticleComponent::Initialize
  */
 void kbParticleComponent::Constructor() {
+	m_MaxParticlesToEmit = -1;
 	m_TotalDuration = -1.0f;
 	m_StartDelay = 0.0f;
+
 	m_MinParticleSpawnRate = 1.0f;
 	m_MaxParticleSpawnRate = 2.0f;
 	m_MinParticleStartVelocity.Set( -2.0f, 5.0f, -2.0f );
@@ -78,6 +80,7 @@ void kbParticleComponent::Constructor() {
 	m_MaxBurstCount = 0;
 	m_BurstCount = 0;
 	m_StartDelayRemaining = 0;
+	m_NumEmittedParticles = 0;
 	m_ParticleBillboardType = BT_FaceCamera;
 	m_Gravity.Set( 0.0f, 0.0f, 0.0f );
 	m_TranslucencySortBias = 0.0f;
@@ -338,7 +341,7 @@ void kbParticleComponent::Update_Internal( const float DeltaTime ) {
 
 	// Spawn particles
 	kbVec3 MyPosition = GetPosition();
-	while ( m_bIsSpawning && ( ( m_MaxParticleSpawnRate > 0 && TimeLeft >= NextSpawn ) || m_BurstCount > 0 ) ) {
+	while ( m_bIsSpawning && ( ( m_MaxParticleSpawnRate > 0 && TimeLeft >= NextSpawn ) || m_BurstCount > 0 ) && ( m_MaxParticlesToEmit <= 0 || m_NumEmittedParticles < m_MaxParticlesToEmit ) ) {
 
 		if ( m_MinStart3DOffset.Compare( kbVec3::zero ) == false || m_MaxStart3DOffset.Compare( kbVec3::zero ) == false ) {
 			const kbVec3 startingOffset = kbVec3Rand( m_MinStart3DOffset, m_MaxStart3DOffset );
@@ -422,6 +425,7 @@ void kbParticleComponent::Update_Internal( const float DeltaTime ) {
 			NextSpawn = invMaxSpawnRate + ( kbfrand() * ( invMinSpawnRate - invMaxSpawnRate ) );
 		}
 
+		m_NumEmittedParticles++;
 		m_Particles.push_back( newParticle );
 	}
 
@@ -542,6 +546,8 @@ void kbParticleComponent::SetEnable_Internal( const bool isEnabled ) {
 
 	if ( isEnabled ) {
 		m_bIsSpawning = true;
+		m_NumEmittedParticles = 0;
+
 		if ( m_StartDelay > 0 ) {
 			m_StartDelayRemaining = m_StartDelay;
 		} else {

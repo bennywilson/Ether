@@ -2,7 +2,7 @@ kbGameEntity 0 0 0 0 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		Name = "Entity_20"
+		Name = "Entity_22"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
 		Position = 0.000000 0.000000 0.000000
 		Scale = 1.000000 1.000000 1.000000
@@ -10,8 +10,8 @@ kbGameEntity 0 0 0 0 {
 	kbEditorLevelSettingsComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		MainCameraPosition = -4.974786 2.225758 16.075533
-		MainCameraRotation = 0.169905 0.704287 -0.179835 -0.665411
+		MainCameraPosition = -0.509876 9.606086 25.077244
+		MainCameraRotation = -0.115208 -0.798444 0.161853 0.568347
 	}
 }
 kbGameEntity 0 0 0 0 {
@@ -116,7 +116,7 @@ kbGameEntity 0 0 0 0 {
 		Scale = 10000.000000 10000.000000 10000.000000
 	}
 	kbStaticModelComponent { 
-		Enabled = 1
+		Enabled = 0
 		LifeTime =  -1.000000
 		CastsShadow = 0
 		Materials = 1
@@ -266,7 +266,7 @@ kbGameEntity 0 0 0 0 {
 						LifeTime =  -1.000000
 						ParamName = "fxMapMask"
 						Texture = NULL
-						Vector = 0.000000 1.000000 0.000000 0.000000
+						Vector = 1.000000 0.000000 0.000000 0.000000
 					}
 			}
 		RenderPass = LightingPass
@@ -596,7 +596,8 @@ kbGameEntity 0 0 0 0 {
 				WaveFile = .\assets\sounds\sheep\sheep_vo_cannonball.wav
 			}
 		DropSmearMagnitude =  2.500000
-		JumpSmearMagnitude =  -2.0000
+		JumpSmearMagnitude =  -2.000000
+		ShakeNBakeFX = 4226348206 1325904980 2380668328 2364791781
 	}
 }
 kbGameEntity 0 0 0 0 {
@@ -827,8 +828,8 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "Camera"
-		Orientation = -0.030848 -0.706434 0.030848 0.706434
-		Position = -4.025984 2.350000 12.536115
+		Orientation = -0.139290 -0.693252 0.139290 0.693252
+		Position = -8.025984 5.350000 12.536115
 		Scale = 1.000000 1.000000 1.000000
 	}
 	CannonCameraComponent { 
@@ -840,6 +841,107 @@ kbGameEntity 0 0 0 0 {
 		LookAtOffset = 0.000000 2.000000 0.000000
 		MovementMode = Follow
 		NearPlane =  0.250000
-		PositionOffset = -4.000000 2.350000 0.000000
+		PositionOffset = -8.000000 5.350000 0.000000
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "ShakeNBake"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 6.378634 4.313435 20.097363
+		Scale = 50.000000 50.000000 50.000000
+	}
+	kbParticleComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		Name = ""
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 0.000000 0.000000 0.000000
+		Scale = 50.000000 50.000000 50.000000
+		AlphaOverLife = 0
+		ColorOverLife = 0
+		EndColor = 1.000000 1.000000 1.000000 0.000000
+		Gravity = 0.000000 0.000000 0.000000
+		MaterialList = 0
+		MaxBurstCount = 0
+		MaxDuration =  0.250000
+		MaxEndRotationRate =  0.000000
+		MaxEndSize = 3.000000 3.000000 3.000000
+		MaxEndVelocity = 0.000000 0.000000 0.000000
+		MaxParticlesToEmit = -1
+		MaxSpawnRate =  50.000000
+		MaxStart3DOffset = 0.100000 0.100000 0.100000
+		MaxStart3DRotation = 0.000000 360.000000 0.000000
+		MaxStartRotationRate =  0.000000
+		MaxStartSize = 3.000000 3.000000 3.000000
+		MaxStartVelocity = 0.000000 2.000000 0.000000
+		MinBurstCount = 0
+		MinDuration =  0.150000
+		MinEndRotationRate =  0.000000
+		MinEndSize = 3.000000 3.000000 3.000000
+		MinEndVelocity = 0.000000 0.000000 0.000000
+		MinSpawnRate =  35.000000
+		MinStart3DOffset = -0.100000 -0.100000 -0.100000
+		MinStart3DRotation = 0.000000 5.000000 0.000000
+		MinStartRotationRate =  0.000000
+		MinStartSize = 1.000000 1.000000 1.000000
+		MinStartVelocity = 0.000000 1.000000 0.000000
+		ModelEmitter = 1
+			kbModelEmitter { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				MaterialList = 1
+					kbMaterialComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						CullModeOverride = ShaderDefault
+						Shader = .\assets\shaders\fx\wispscroller.kbshader
+						ShaderParams = 5
+							kbShaderParamComponent { 
+								Enabled = 0
+								LifeTime =  -1.000000
+								ParamName = "uvOffset"
+								Texture = NULL
+								Vector = 0.000000 0.000000 0.000000 0.000000
+							}
+							kbShaderParamComponent { 
+								Enabled = 0
+								LifeTime =  -1.000000
+								ParamName = "uvTileSpeed"
+								Texture = NULL
+								Vector = 1.000000 1.000000 0.000000 1.000000
+							}
+							kbShaderParamComponent { 
+								Enabled = 0
+								LifeTime =  -1.000000
+								ParamName = "colorMultiplier"
+								Texture = NULL
+								Vector = 1.000000 1.000000 1.000000 1.000000
+							}
+							kbShaderParamComponent { 
+								Enabled = 0
+								LifeTime =  -1.000000
+								ParamName = "particleColor"
+								Texture = NULL
+								Vector = 1.000000 0.000000 0.000000 0.000000
+							}
+							kbShaderParamComponent { 
+								Enabled = 0
+								LifeTime =  -1.000000
+								ParamName = "shaderTexture"
+								Texture = .\assets\fx\wisps\basicwisp.tif
+								Vector = 0.000000 0.000000 0.000000 0.000000
+							}
+					}
+				Model = .\assets\fx\curves\swirl_1.fbx
+			}
+		ParticleBillboardType = FaceCamera
+		StartColor = 1.000000 1.000000 1.000000 1.000000
+		StartDelay =  0.000000
+		TotalDuration =  -1.000000
+		TranslucencySortBias =  0.000000
+		VelocityCurve = 0
 	}
 }

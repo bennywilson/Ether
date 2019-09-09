@@ -40,6 +40,8 @@ public:
 	bool										IsCannonBalling() const;
 	void										TakeDamage( const DealAttackInfo_t<KungFuGame::eAttackType> & dealAttackInfo );
 
+	void										PlayShakeNBakeFX();
+
 protected:
 
 	virtual void								SetEnable_Internal( const bool bEnable ) override;
@@ -49,6 +51,7 @@ private:
 
 	// Data
 	kbGameEntityPtr								m_CannonBallImpactFX;
+	kbGameEntityPtr								m_ShakeNBakeFX;
 	std::vector<kbSoundData>					m_CannonBallVO;
 	std::vector<kbSoundData>					m_CannonBallImpactSound;
 

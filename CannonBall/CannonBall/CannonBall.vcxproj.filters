@@ -57,6 +57,9 @@
     <None Include="assets\shaders\FX\Particle_BlendAdd.kbShader">
       <Filter>Shaders\FX</Filter>
     </None>
+    <None Include="assets\shaders\FX\wispScroller.kbShader">
+      <Filter>Shaders\FX</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Shaders">

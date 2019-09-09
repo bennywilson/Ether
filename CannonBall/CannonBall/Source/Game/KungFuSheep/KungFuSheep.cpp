@@ -198,6 +198,7 @@ public:
 	virtual void BeginState( T ) override {
 		m_NumDirectionChanges = 0;
 		m_CurrentDirection = 0;
+		m_ShakeNBakeActivationStartTime = -1;
 
 		static const kbString IdleL_Anim( "IdleLeft_Basic" );
 		static const kbString IdleR_Anim( "IdleRight_Basic" );
@@ -271,9 +272,15 @@ public:
 		}
 #endif
 
-		if ( m_NumDirectionChanges > numHuggers ) {
-			RequestStateChange( KungFuSheepState::Idle );
+		if ( m_ShakeNBakeActivationStartTime < 0.0f && numHuggers > 0 && m_NumDirectionChanges > numHuggers ) {
+			m_ShakeNBakeActivationStartTime = g_GlobalTimer.TimeElapsedSeconds();
+			KungFuSheepComponent *const pSheep = m_pActorComponent->GetAs<KungFuSheepComponent>();
+			pSheep->PlayShakeNBakeFX();
+		}
 
+		if ( m_ShakeNBakeActivationStartTime > 0.0f && g_GlobalTimer.TimeElapsedSeconds() > m_ShakeNBakeActivationStartTime + 0.15f ) {
+
+			RequestStateChange( KungFuSheepState::Idle );
 			DealAttackInfo_t<KungFuGame::eAttackType> dealAttackInfo;
 			dealAttackInfo.m_BaseDamage = 999999.0f;
 			dealAttackInfo.m_pAttacker = m_pActorComponent;
@@ -298,7 +305,7 @@ public:
 	int m_NumDirectionChanges = 0;
 	int m_CurrentDirection = 0;
 	float m_LastDirectionChangeTime = 0.0f;
-
+	float m_ShakeNBakeActivationStartTime = -1.0f;
 };
 
 /**
@@ -535,4 +542,19 @@ void KungFuSheepComponent::TakeDamage( const DealAttackInfo_t<KungFuGame::eAttac
 	if ( pSnolaf != nullptr && m_CurrentState != KungFuSheepState::Attack ) {
 		RequestStateChange( KungFuSheepState::Hugged );
 	}
+}
+
+/**
+ *	KungFuSheepComponent::PlayShakeNBakeFX
+ */
+void KungFuSheepComponent::PlayShakeNBakeFX() {
+	if ( m_ShakeNBakeFX.GetEntity() == nullptr ) {
+		return;
+	}
+
+	kbGameEntity *const pShakeNBakeFX = g_pGame->CreateEntity( m_ShakeNBakeFX.GetEntity() );
+	pShakeNBakeFX->SetPosition( GetOwnerPosition() );
+	pShakeNBakeFX->SetOrientation( GetOwnerRotation() );
+	pShakeNBakeFX->DeleteWhenComponentsAreInactive( true );
+
 }

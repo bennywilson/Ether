@@ -1,4 +1,4 @@
-FX 1
+FX 2
 kbPrefab 1 {
 	CannonBall_Impact
 	kbGameEntity 846208613 1165520682 3641600641 3993117100 {
@@ -69,6 +69,7 @@ kbPrefab 1 {
 			MaxEndRotationRate =  0.500000
 			MaxEndSize = 5.700000 5.700000 5.700000
 			MaxEndVelocity = 0.000000 0.500000 0.000000
+			MaxParticlesToEmit = -1
 			MaxSpawnRate =  0.000000
 			MaxStart3DOffset = 0.000000 0.000000 0.000000
 			MaxStart3DRotation = 0.000000 0.000000 0.000000
@@ -119,6 +120,110 @@ kbPrefab 1 {
 			FrequencyX =  30.000000
 			FrequencyY =  40.000000
 		}
+	}
+}
+}
+kbPrefab 1 {
+	ShakeNBakeFX
+kbGameEntity 4226348206 1325904980 2380668328 2364791781 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "ShakeNBake"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 10.000000 2.000000 21.468822
+		Scale = 50.000000 50.000000 50.000000
+	}
+	kbParticleComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		Name = ""
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 0.000000 0.000000 0.000000
+		Scale = 50.000000 50.000000 50.000000
+		AlphaOverLife = 0
+		ColorOverLife = 0
+		EndColor = 1.000000 1.000000 1.000000 0.000000
+		Gravity = 0.000000 0.000000 0.000000
+		MaterialList = 0
+		MaxBurstCount = 0
+		MaxDuration =  0.25
+		MaxEndRotationRate =  0.000000
+		MaxEndSize = 3.000000 3.000000 3.000000
+		MaxEndVelocity = 0.000000 0.000000 0.000000
+		MaxParticlesToEmit = 10
+		MaxSpawnRate =  50.000000
+		MaxStart3DOffset = 0.100000 0.100000 0.100000
+		MaxStart3DRotation = 0.000000 360.000000 0.000000
+		MaxStartRotationRate =  0.000000
+		MaxStartSize = 3.000000 3.000000 3.000000
+		MaxStartVelocity = 0.000000 2.000000 0.000000
+		MinBurstCount = 0
+		MinDuration =  0.15
+		MinEndRotationRate =  0.000000
+		MinEndSize = 3.000000 3.000000 3.000000
+		MinEndVelocity = 0.000000 0.000000 0.000000
+		MinSpawnRate =  35.000000
+		MinStart3DOffset = -0.100000 -0.100000 -0.100000
+		MinStart3DRotation = 0.000000 5.000000 0.000000
+		MinStartRotationRate =  0.000000
+		MinStartSize = 1.000000 1.000000 1.000000
+		MinStartVelocity = 0.000000 1.000000 0.000000
+		ModelEmitter = 1
+			kbModelEmitter { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				MaterialList = 1
+					kbMaterialComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						CullModeOverride = ShaderDefault
+						Shader = .\assets\shaders\fx\wispscroller.kbshader
+						ShaderParams = 5
+							kbShaderParamComponent { 
+								Enabled = 0
+								LifeTime =  -1.000000
+								ParamName = "uvOffset"
+								Texture = NULL
+								Vector = 0.000000 0.000000 0.000000 0.000000
+							}
+							kbShaderParamComponent { 
+								Enabled = 0
+								LifeTime =  -1.000000
+								ParamName = "uvTileSpeed"
+								Texture = NULL
+								Vector = 1.000000 1.000000 0.000000 1.000000
+							}
+							kbShaderParamComponent { 
+								Enabled = 0
+								LifeTime =  -1.000000
+								ParamName = "colorMultiplier"
+								Texture = NULL
+								Vector = 1.000000 1.000000 1.000000 1.000000
+							}
+							kbShaderParamComponent { 
+								Enabled = 0
+								LifeTime =  -1.000000
+								ParamName = "particleColor"
+								Texture = NULL
+								Vector = 1.000000 0.000000 0.000000 0.000000
+							}
+							kbShaderParamComponent { 
+								Enabled = 0
+								LifeTime =  -1.000000
+								ParamName = "shaderTexture"
+								Texture = .\assets\fx\wisps\basicwisp.tif
+								Vector = 0.000000 0.000000 0.000000 0.000000
+							}
+					}
+				Model = .\assets\fx\curves\swirl_1.fbx
+			}
+		ParticleBillboardType = FaceCamera
+		StartColor = 1.000000 1.000000 1.000000 1.000000
+		StartDelay =  0.000000
+		TotalDuration =  3.000000
+		TranslucencySortBias =  0.000000
+		VelocityCurve = 0
 	}
 }
 }
