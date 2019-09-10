@@ -50,9 +50,9 @@ public:
 
 		const float curTime = g_GlobalTimer.TimeElapsedSeconds();
 
-		if ( input.IsKeyPressedOrDown( kbInput_t::KB_SPACE ) ) {
+		if ( input.WasKeyJustPressed( 'K' ) ) {
 			RequestStateChange( KungFuSheepState::Attack );
-		} else if ( input.IsKeyPressedOrDown( 'C' ) && curTime > m_LastCannonBallTime + 2.0f ) {
+		} else if ( input.IsKeyPressedOrDown( 'J' ) && curTime > m_LastCannonBallTime + 2.0f ) {
 			RequestStateChange( KungFuSheepState::CannonBall );
 		} else if ( input.IsKeyPressedOrDown( 'A' ) ) {
 			RequestStateChange( KungFuSheepState::Run );
@@ -100,7 +100,9 @@ public:
 		const float frameDT = g_pGame->GetFrameDT();
 		const kbVec3 & targetDir = m_pActorComponent->GetTargetFacingDirection();
 
-		if ( input.IsKeyPressedOrDown( 'C' ) ) {
+		if ( input.WasKeyJustPressed( 'K' ) ) {
+			RequestStateChange( KungFuSheepState::Attack );
+		} else if ( input.IsKeyPressedOrDown( 'J' ) ) {
 			RequestStateChange( KungFuSheepState::CannonBall );
 		} else if ( targetDir.z < 0.0f ) {
 			if ( input.IsKeyPressedOrDown( 'A' ) ) {
@@ -215,7 +217,7 @@ public:
 		const kbVec3 & targetDir = m_pActorComponent->GetTargetFacingDirection();
 		const float curTime = g_GlobalTimer.TimeElapsedSeconds();
 
-		if ( input.IsKeyPressedOrDown( 'C' ) ) {
+		if ( input.IsKeyPressedOrDown( 'J' ) ) {
 			RequestStateChange( KungFuSheepState::CannonBall );
 		} else if ( input.IsKeyPressedOrDown( 'A' ) ) {
 			if ( m_CurrentDirection == 1 ) {
@@ -540,7 +542,7 @@ void KungFuSheepComponent::TakeDamage( const DealAttackInfo_t<KungFuGame::eAttac
 
 	KungFuSnolafComponent *const pSnolaf = attackInfo.m_pAttacker->GetAs<KungFuSnolafComponent>();
 	if ( pSnolaf != nullptr && m_CurrentState != KungFuSheepState::Attack ) {
-		RequestStateChange( KungFuSheepState::Hugged );
+	//	RequestStateChange( KungFuSheepState::Hugged );
 	}
 }
 

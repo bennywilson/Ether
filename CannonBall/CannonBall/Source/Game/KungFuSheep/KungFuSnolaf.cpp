@@ -262,6 +262,8 @@ public:
 
 	virtual void BeginState( T ) override {
 
+		m_DeathStartTime = g_GlobalTimer.TimeElapsedSeconds();
+
 		GetSnolaf()->EnableSmallLoveHearts( false );
 		GetSnolaf()->EnableLargeLoveHearts( false );
 
@@ -361,9 +363,6 @@ public:
 		} else if ( m_DeathSelection == 3 ) {
 			GetSnolaf()->SpawnAndFlingTopAndBottomHalf();
 		}
-
-		m_DeathStartTime = g_GlobalTimer.TimeElapsedSeconds();
-
 	}
 
 	void UpdateFlyingDeath( const float dt ) {
@@ -405,13 +404,11 @@ public:
 			g_pCannonGame->RemoveGameEntity( pOwner );
 			return;
 		}
-
+		
 		const float dt = g_pGame->GetFrameDT();
-
 		if ( m_DeathSelection == 0 || m_DeathSelection == 2 ) {
 			UpdateFlyingDeath( dt );
 		}
-
 	}
 
 	virtual void EndState( T ) override { }

@@ -116,7 +116,7 @@ kbGameEntity 0 0 0 0 {
 		Scale = 10000.000000 10000.000000 10000.000000
 	}
 	kbStaticModelComponent { 
-		Enabled = 0
+		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadow = 0
 		Materials = 1
@@ -841,7 +841,7 @@ kbGameEntity 0 0 0 0 {
 		LookAtOffset = 0.000000 2.000000 0.000000
 		MovementMode = Follow
 		NearPlane =  0.250000
-		PositionOffset = -8.000000 5.350000 0.000000
+		PositionOffset = -4.000000 2.350000 0.000000
 	}
 }
 kbGameEntity 0 0 0 0 {
