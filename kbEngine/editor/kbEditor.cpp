@@ -838,14 +838,26 @@ void kbEditor::ScaleButtonCB( class Fl_Widget *, void * ) {
 	g_Editor->BroadcastEvent( cbObject );
 }
 
+void XFormEntities( kbManipulator & manipulator, const kbVec4 xForm ) {
+
+	manipulator.ApplyTransform( xForm );
+
+	std::vector<kbEditorEntity*> & entityList = g_Editor->GetGameEntities();
+	for ( int i = 0; i < entityList.size(); i++ ) {
+		if ( entityList[i]->IsSelected() ) {
+			entityList[i]->SetPosition( manipulator.GetPosition() );
+			entityList[i]->SetOrientation( manipulator.GetOrientation() );
+			entityList[i]->SetScale( manipulator.GetScale() );
+		}
+	}
+}
+
 /**
 *	kbEditor::XPlusAdjustButtonCB
 */
 void kbEditor::XPlusAdjustButtonCB( Fl_Widget *, void * ) {
 
-	kbManipulator & manipulator = g_Editor->m_pMainTab->GetManipulator();
-	const float xformAmt = (float) atof( g_Editor->m_pXFormInput->value() );
-	manipulator.ApplyTransform( kbVec4( 1.0f, 0.0f, 0.0f, xformAmt ) );
+	XFormEntities( g_Editor->m_pMainTab->GetManipulator(), kbVec3( 1.0f, 0.0f, 0.0f ) );
 }
 
 /**
@@ -853,9 +865,7 @@ void kbEditor::XPlusAdjustButtonCB( Fl_Widget *, void * ) {
 */
 void kbEditor::XNegAdjustButtonCB( Fl_Widget *, void * ) {
 
-	kbManipulator & manipulator = g_Editor->m_pMainTab->GetManipulator();
-	const float xformAmt = (float)atof( g_Editor->m_pXFormInput->value() );
-	manipulator.ApplyTransform( kbVec4( -1.0f, 0.0f, 0.0f, xformAmt ) );
+	XFormEntities( g_Editor->m_pMainTab->GetManipulator(), kbVec3( -1.0f, 0.0f, 0.0f ) );
 }
 
 /**
@@ -863,9 +873,7 @@ void kbEditor::XNegAdjustButtonCB( Fl_Widget *, void * ) {
 */
 void kbEditor::YPlusAdjustButtonCB( Fl_Widget *, void * ) {
 
-	kbManipulator & manipulator = g_Editor->m_pMainTab->GetManipulator();
-	const float xformAmt = (float)atof(g_Editor->m_pXFormInput->value());
-	manipulator.ApplyTransform( kbVec4( 0.0f, 1.0f, 0.0f, xformAmt ) );
+	XFormEntities( g_Editor->m_pMainTab->GetManipulator(), kbVec3( 0.0f, 1.0f, 0.0f ) );
 }
 
 /**
@@ -873,27 +881,23 @@ void kbEditor::YPlusAdjustButtonCB( Fl_Widget *, void * ) {
 */
 void kbEditor::YNegAdjustButtonCB( Fl_Widget *, void * ) {
 
-	kbManipulator & manipulator = g_Editor->m_pMainTab->GetManipulator();
-	const float xformAmt = (float)atof(g_Editor->m_pXFormInput->value());
-	manipulator.ApplyTransform( kbVec4( 0.0f, -1.0f, 0.0f, xformAmt ) );
+	XFormEntities( g_Editor->m_pMainTab->GetManipulator(), kbVec3( 0.0f, 1.0f, 0.0f ) );
 }
 
 /**
 *	kbEditor::ZPlusAdjustButtonCB
 */
 void kbEditor::ZPlusAdjustButtonCB( Fl_Widget *, void * ) {
-	kbManipulator & manipulator = g_Editor->m_pMainTab->GetManipulator();
-	const float xformAmt = (float)atof(g_Editor->m_pXFormInput->value());
-	manipulator.ApplyTransform( kbVec4( 0.0f, 0.0f, 1.0f, xformAmt ) );
+
+	XFormEntities( g_Editor->m_pMainTab->GetManipulator(), kbVec3( 0.0f, 0.0f, 1.0f ) );
 }
 
 /**
 *	kbEditor::ZNegAdjustButtonCB
 */
 void kbEditor::ZNegAdjustButtonCB(Fl_Widget *, void *) {
-	kbManipulator & manipulator = g_Editor->m_pMainTab->GetManipulator();
-	const float xformAmt = (float)atof( g_Editor->m_pXFormInput->value() );
-	manipulator.ApplyTransform( kbVec4( 0.0f, 0.0f, -1.0f, xformAmt ) );
+
+	XFormEntities( g_Editor->m_pMainTab->GetManipulator(), kbVec3( 0.0f, 0.0f, -1.0f ) );
 }
 
 /**

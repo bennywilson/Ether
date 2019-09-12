@@ -152,6 +152,7 @@ void kbManipulator::Update() {
 
 			const kbQuat rot( m_NextTransformFromInput.ToVec3(), m_NextTransformFromInput.a );
 			m_Orientation = ( m_LastOrientation * rot ).Normalized();
+			m_LastOrientation = m_Orientation;
 		}
 		else if (m_ManipulatorMode == kbManipulator::Scale) {
 			m_Scale += m_NextTransformFromInput.ToVec3();
