@@ -23,6 +23,8 @@ kbManipulator::kbManipulator() :
 	m_Orientation.Set( 0.0f, 0.0f, 0.0f, 1.0f );
 	m_Scale.Set( 1.0f, 1.0f, 1.0f );
 
+	m_NextTransformFromInput.Set( 0.0f, 0.0f, 0.0f, 0.0f );
+
 	memset( m_pModels, 0, sizeof( m_pModels ) );
 }
 
@@ -40,8 +42,13 @@ bool kbManipulator::AttemptMouseGrab( const kbVec3 & rayOrigin, const kbVec3 & r
 	const kbModel *const pModel = m_pModels[m_ManipulatorMode];
 
 	const float modelScale = kbLevelComponent::GetGlobalModelScale();
-	const kbModelIntersection_t intersection = pModel->RayIntersection( rayOrigin, rayDirection, m_Position, m_Orientation, kbVec3( modelScale, modelScale, modelScale ) );
+	kbModelIntersection_t intersection = pModel->RayIntersection( rayOrigin, rayDirection, m_Position, m_Orientation, kbVec3( modelScale, modelScale, modelScale ) );
 
+	if (intersection.hasIntersection == false)
+	{
+		intersection = pModel->RayIntersection(rayOrigin, -rayDirection, m_Position, m_Orientation, kbVec3(modelScale, modelScale, modelScale));
+
+	}
 	if ( intersection.hasIntersection ) {
 		m_SelectedGroup = intersection.meshNum;
 
@@ -134,6 +141,24 @@ void kbManipulator::Update() {
 	if ( g_pRenderer->DebugBillboardsEnabled() ) {
 		g_pRenderer->DrawModel( m_pModels[m_ManipulatorMode], m_ManipulatorMaterials, m_Position, m_Orientation, kbVec3::one, UINT16_MAX );
 	}
+
+	if ( m_NextTransformFromInput.ToVec3().Length() > 0.001f ) {
+		m_NextTransformFromInput *= m_NextTransformFromInput.w;
+		if ( m_ManipulatorMode == kbManipulator::Translate ) {
+
+			m_Position += m_NextTransformFromInput.ToVec3();
+		}
+		else if ( m_ManipulatorMode == kbManipulator::Rotate ) {
+
+			const kbQuat rot( m_NextTransformFromInput.ToVec3(), m_NextTransformFromInput.a );
+			m_Orientation = ( m_LastOrientation * rot ).Normalized();
+		}
+		else if (m_ManipulatorMode == kbManipulator::Scale) {
+			m_Scale += m_NextTransformFromInput.ToVec3();
+		}
+	}
+
+	m_NextTransformFromInput.Set( 0.0f, 0.0f, 0.0f, 0.0f );
 }
 
 /**
@@ -179,4 +204,12 @@ void kbManipulator::ProcessInput( const bool leftMouseDown ) {
 			break;
 		}
 	}
+}
+
+/**
+*	kbManipulator::ApplyTransform
+*/
+void kbManipulator::ApplyTransform( const kbVec4 & xForm ) {
+
+	m_NextTransformFromInput = xForm;
 }

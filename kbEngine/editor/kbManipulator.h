@@ -46,6 +46,8 @@
 	void										SetMode( const manipulatorMode_t newMode ) { m_ManipulatorMode = newMode; }
 	manipulatorMode_t							GetMode() const { return m_ManipulatorMode; }
 
+	void										ApplyTransform( const kbVec4 & xForm );	// xyz, w = magnitude
+
 private:
 
 	kbModel *									m_pModels[NumManipulators];
@@ -64,6 +66,8 @@ private:
 	int											m_SelectedGroup;
 
 	std::vector<kbShaderParamOverrides_t>		m_ManipulatorMaterials;
+
+	kbVec4										m_NextTransformFromInput;
 
 	// draw stuff
 	kbVec3 vecToGrabPoint;

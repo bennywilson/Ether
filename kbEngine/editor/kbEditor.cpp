@@ -139,10 +139,39 @@ kbEditor::kbEditor() :
 
 	Fl_Button *const scaleButton = new Fl_Button( curX, curY, TRSButtonWidth, buttonHeight, "S" );
 	scaleButton->callback( ScaleButtonCB );
-	curX += TRSButtonWidth + buttonSpacing;
+	curX += TRSButtonWidth * 3 + buttonSpacing;
+
+	const int AdjustButtonWidth = 12 * (int)strlen( "X+" );
+	Fl_Button *const xPlusAdjust = new Fl_Button( curX, curY, AdjustButtonWidth, buttonHeight, "X+" );
+	xPlusAdjust->callback( XPlusAdjustButtonCB );
+	curX += AdjustButtonWidth + buttonSpacing;
+
+	Fl_Button *const xNegAdjust = new Fl_Button(curX, curY, AdjustButtonWidth, buttonHeight, "X-");
+	xNegAdjust->callback(XPlusAdjustButtonCB);
+	curX += AdjustButtonWidth + buttonSpacing;
+
+	Fl_Button *const yPlusAdjust = new Fl_Button( curX, curY, AdjustButtonWidth, buttonHeight, "Y+" );
+	yPlusAdjust->callback( YPlusAdjustButtonCB );
+	curX += AdjustButtonWidth + buttonSpacing;
+
+	Fl_Button *const yNegAdjust = new Fl_Button( curX, curY, AdjustButtonWidth, buttonHeight, "Y-" );
+	yNegAdjust->callback( YNegAdjustButtonCB );
+	curX += AdjustButtonWidth + buttonSpacing;
+
+	Fl_Button *const zPlusAdjust = new Fl_Button( curX, curY, AdjustButtonWidth, buttonHeight, "Z+" );
+	zPlusAdjust->callback( ZPlusAdjustButtonCB );
+	curX += AdjustButtonWidth + buttonSpacing;
+
+	Fl_Button *const zNegAdjust = new Fl_Button( curX, curY, AdjustButtonWidth, buttonHeight, "Z-" );
+	zNegAdjust->callback( ZNegAdjustButtonCB );
+	curX += AdjustButtonWidth + buttonSpacing;
+
+	m_pXFormInput = new Fl_Input( curX, curY, AdjustButtonWidth, buttonHeight, "" );
+	m_pXFormInput->value( "0" );
+	curX += TRSButtonWidth * 3 + buttonSpacing;
 
 	const int speedButtonWidth = 85;
-	curX += (int)fl_width( "Cam Speed " );
+	curX += (int)fl_width( "Cam Speed" );
 	m_pSpeedChoice = new Fl_Choice( curX, curY, (int)fl_width( "x100000" ), buttonHeight, "Cam Speed:" );
 	for ( size_t i = 0; i < g_NumEditorCamSpeedBindings; i++ ) {
 		m_pSpeedChoice->add( g_EditorCamSpeedBindings[i].m_DisplayName.c_str() );
@@ -807,6 +836,64 @@ void kbEditor::ScaleButtonCB( class Fl_Widget *, void * ) {
 	widgetCBObject cbObject;
 	cbObject.widgetType = WidgetCB_ScaleButtonPressed;
 	g_Editor->BroadcastEvent( cbObject );
+}
+
+/**
+*	kbEditor::XPlusAdjustButtonCB
+*/
+void kbEditor::XPlusAdjustButtonCB( Fl_Widget *, void * ) {
+
+	kbManipulator & manipulator = g_Editor->m_pMainTab->GetManipulator();
+	const float xformAmt = (float) atof( g_Editor->m_pXFormInput->value() );
+	manipulator.ApplyTransform( kbVec4( 1.0f, 0.0f, 0.0f, xformAmt ) );
+}
+
+/**
+*	kbEditor::XNegAdjustButtonCB
+*/
+void kbEditor::XNegAdjustButtonCB( Fl_Widget *, void * ) {
+
+	kbManipulator & manipulator = g_Editor->m_pMainTab->GetManipulator();
+	const float xformAmt = (float)atof( g_Editor->m_pXFormInput->value() );
+	manipulator.ApplyTransform( kbVec4( -1.0f, 0.0f, 0.0f, xformAmt ) );
+}
+
+/**
+*	kbEditor::YPlusAdjustButtonCB
+*/
+void kbEditor::YPlusAdjustButtonCB( Fl_Widget *, void * ) {
+
+	kbManipulator & manipulator = g_Editor->m_pMainTab->GetManipulator();
+	const float xformAmt = (float)atof(g_Editor->m_pXFormInput->value());
+	manipulator.ApplyTransform( kbVec4( 0.0f, 1.0f, 0.0f, xformAmt ) );
+}
+
+/**
+*	kbEditor::YNegAdjustButtonCB
+*/
+void kbEditor::YNegAdjustButtonCB( Fl_Widget *, void * ) {
+
+	kbManipulator & manipulator = g_Editor->m_pMainTab->GetManipulator();
+	const float xformAmt = (float)atof(g_Editor->m_pXFormInput->value());
+	manipulator.ApplyTransform( kbVec4( 0.0f, -1.0f, 0.0f, xformAmt ) );
+}
+
+/**
+*	kbEditor::ZPlusAdjustButtonCB
+*/
+void kbEditor::ZPlusAdjustButtonCB( Fl_Widget *, void * ) {
+	kbManipulator & manipulator = g_Editor->m_pMainTab->GetManipulator();
+	const float xformAmt = (float)atof(g_Editor->m_pXFormInput->value());
+	manipulator.ApplyTransform( kbVec4( 0.0f, 0.0f, 1.0f, xformAmt ) );
+}
+
+/**
+*	kbEditor::ZNegAdjustButtonCB
+*/
+void kbEditor::ZNegAdjustButtonCB(Fl_Widget *, void *) {
+	kbManipulator & manipulator = g_Editor->m_pMainTab->GetManipulator();
+	const float xformAmt = (float)atof( g_Editor->m_pXFormInput->value() );
+	manipulator.ApplyTransform( kbVec4( 0.0f, 0.0f, -1.0f, xformAmt ) );
 }
 
 /**
