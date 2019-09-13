@@ -2,7 +2,7 @@ kbGameEntity 0 0 0 0 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		Name = "Entity_31"
+		Name = "Entity_25"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
 		Position = 0.000000 0.000000 0.000000
 		Scale = 1.000000 1.000000 1.000000
@@ -10,8 +10,8 @@ kbGameEntity 0 0 0 0 {
 	kbEditorLevelSettingsComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		MainCameraPosition = -29.526405 3.505399 34.066269
-		MainCameraRotation = 0.159183 0.450233 -0.081930 -0.874779
+		MainCameraPosition = -30.227774 3.372485 40.419201
+		MainCameraRotation = -0.308533 -0.469744 0.179501 0.807420
 	}
 }
 kbGameEntity 0 0 0 0 {
@@ -179,7 +179,7 @@ kbGameEntity 0 0 0 0 {
 		LifeTime =  -1.000000
 		Name = "Player"
 		Orientation = 0.000000 -1.000000 0.000000 0.000000
-		Position = -26.198284 -1.176130 35.608555
+		Position = -26.198284 0.323870 35.608555
 		Scale = 1.000000 1.000000 1.000000
 	}
 	kbSkeletalModelComponent { 
@@ -212,7 +212,7 @@ kbGameEntity 0 0 0 0 {
 						LifeTime =  -1.000000
 						ParamName = "fxMapMask"
 						Texture = NULL
-						Vector = 1.000000 0.000000 0.000000 0.000000
+						Vector = 0.000000 1.000000 0.000000 0.000000
 					}
 			}
 		RenderPass = LightingPass
@@ -742,7 +742,7 @@ kbGameEntity 0 0 0 0 {
 		LifeTime =  -1.000000
 		Name = "Camera"
 		Orientation = -0.030848 -0.706434 0.030848 0.706434
-		Position = -30.198284 1.173870 35.608555
+		Position = -30.198284 2.673870 35.608555
 		Scale = 1.000000 1.000000 1.000000
 	}
 	CannonCameraComponent { 
@@ -816,7 +816,7 @@ kbGameEntity 0 0 0 0 {
 						Enabled = 0
 						LifeTime =  -1.000000
 						ParamName = "Mat1Diffuse"
-						Texture = ..\..\kbengine\assets\textures\white.bmp
+						Texture = .\assets\test\foliage2.jpg
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 					kbShaderParamComponent { 
@@ -837,7 +837,7 @@ kbGameEntity 0 0 0 0 {
 						Enabled = 0
 						LifeTime =  -1.000000
 						ParamName = "Mat2Diffuse"
-						Texture = ..\..\kbengine\assets\textures\white.bmp
+						Texture = .\assets\test\foliage2.jpg
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 					kbShaderParamComponent { 
@@ -858,7 +858,7 @@ kbGameEntity 0 0 0 0 {
 						Enabled = 0
 						LifeTime =  -1.000000
 						ParamName = "Mat3Diffuse"
-						Texture = ..\..\kbengine\assets\textures\white.bmp
+						Texture = .\assets\test\foliage2.jpg
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 					kbShaderParamComponent { 
@@ -879,7 +879,7 @@ kbGameEntity 0 0 0 0 {
 						Enabled = 0
 						LifeTime =  -1.000000
 						ParamName = "Mat4Diffuse"
-						Texture = ..\..\kbengine\assets\textures\white.bmp
+						Texture = .\assets\test\foliage2.jpg
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 					kbShaderParamComponent { 
@@ -1069,9 +1069,86 @@ kbGameEntity 0 0 0 0 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		Name = "Entity_24"
+		Name = "Water Plane"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
-		Position = -26.198284 -1.176130 35.608555
-		Scale = 1.000000 1.000000 1.000000
+		Position = -26.198284 -0.676130 35.608555
+		Scale = 1000000.000000 2.000000 1000000.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		Materials = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = ..\..\kbengine\assets\shaders\basictexture.kbshader
+				ShaderParams = 1
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "shaderTexture"
+						Texture = .\assets\test\water1.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		RenderPass = LightingPass
+		TranslucencySortBias =  0.000000
+		Model = ..\..\kbengine\assets\models\unitcube.ms3d
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Bridge"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = -26.198284 0.223870 35.608555
+		Scale = 200.000000 25.000000 1000000.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 1
+		Materials = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\environment\environmentbase.kbshader
+				ShaderParams = 4
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "diffuse"
+						Texture = .\assets\test\wood1.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "normal"
+						Texture = ..\..\kbengine\assets\textures\defaultnormal.bmp
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "propertyMap"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "emissiveMap"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		RenderPass = LightingPass
+		TranslucencySortBias =  0.000000
+		Model = ..\..\kbengine\assets\models\unitcube.ms3d
 	}
 }
