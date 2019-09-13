@@ -429,7 +429,7 @@ void kbMainTab::EntityTransformedCB( const widgetCBObject *const widgetCBObj ) {
 }
 
 /**
- *	kbMainTab::ManipulatorClicked
+ *	kbMainTab::ManipulatorEvent
  */
 void kbMainTab::ManipulatorEvent( const bool bClicked, const kbVec2i & mouseXY ) {
 

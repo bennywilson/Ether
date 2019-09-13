@@ -32,6 +32,10 @@ struct pixelInput {
 	float3 worldPos		: TEXCOORD3;
 };
 
+kbShaderState {
+	cullMode			CullMode_None
+}
+
 
 /**
  *	vertexShader
@@ -40,7 +44,7 @@ pixelInput vertexShader( vertexInput input ) {
 	pixelInput output = (pixelInput)(0);
 
 	output.position = mul( input.position, modelMatrix );
-	output.worldPos.xyz = cameraPos.xyz + output.position.xyz * 999;
+
 	output.position += float4(cameraPos.xyz, 0);
 	output.position = mul( output.position, viewProjection);
 	output.position.z = output.position.w - 0.0001f;

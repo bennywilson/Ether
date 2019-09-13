@@ -141,25 +141,6 @@ void kbManipulator::Update() {
 	if ( g_pRenderer->DebugBillboardsEnabled() ) {
 		g_pRenderer->DrawModel( m_pModels[m_ManipulatorMode], m_ManipulatorMaterials, m_Position, m_Orientation, kbVec3::one, UINT16_MAX );
 	}
-
-	if ( m_NextTransformFromInput.ToVec3().Length() > 0.001f ) {
-		m_NextTransformFromInput *= m_NextTransformFromInput.w;
-		if ( m_ManipulatorMode == kbManipulator::Translate ) {
-
-			m_Position += m_NextTransformFromInput.ToVec3();
-		}
-		else if ( m_ManipulatorMode == kbManipulator::Rotate ) {
-
-			const kbQuat rot( m_NextTransformFromInput.ToVec3(), m_NextTransformFromInput.a );
-			m_Orientation = ( m_LastOrientation * rot ).Normalized();
-			m_LastOrientation = m_Orientation;
-		}
-		else if (m_ManipulatorMode == kbManipulator::Scale) {
-			m_Scale += m_NextTransformFromInput.ToVec3();
-		}
-	}
-
-	m_NextTransformFromInput.Set( 0.0f, 0.0f, 0.0f, 0.0f );
 }
 
 /**
@@ -213,4 +194,23 @@ void kbManipulator::ProcessInput( const bool leftMouseDown ) {
 void kbManipulator::ApplyTransform( const kbVec4 & xForm ) {
 
 	m_NextTransformFromInput = xForm;
+
+		if ( m_NextTransformFromInput.ToVec3().Length() > 0.001f ) {
+		m_NextTransformFromInput *= m_NextTransformFromInput.w;
+		if ( m_ManipulatorMode == kbManipulator::Translate ) {
+
+			m_Position += m_NextTransformFromInput.ToVec3();
+		}
+		else if ( m_ManipulatorMode == kbManipulator::Rotate ) {
+
+			const kbQuat rot( m_NextTransformFromInput.ToVec3(), m_NextTransformFromInput.a );
+			m_Orientation = ( m_LastOrientation * rot ).Normalized();
+			m_LastOrientation = m_Orientation;
+		}
+		else if (m_ManipulatorMode == kbManipulator::Scale) {
+			m_Scale += m_NextTransformFromInput.ToVec3();
+		}
+	}
+
+	m_NextTransformFromInput.Set( 0.0f, 0.0f, 0.0f, 0.0f );
 }

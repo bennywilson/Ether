@@ -147,7 +147,7 @@ kbEditor::kbEditor() :
 	curX += AdjustButtonWidth + buttonSpacing;
 
 	Fl_Button *const xNegAdjust = new Fl_Button(curX, curY, AdjustButtonWidth, buttonHeight, "X-");
-	xNegAdjust->callback(XPlusAdjustButtonCB);
+	xNegAdjust->callback(XNegAdjustButtonCB);
 	curX += AdjustButtonWidth + buttonSpacing;
 
 	Fl_Button *const yPlusAdjust = new Fl_Button( curX, curY, AdjustButtonWidth, buttonHeight, "Y+" );
@@ -841,7 +841,7 @@ void kbEditor::ScaleButtonCB( class Fl_Widget *, void * ) {
 void XFormEntities( kbManipulator & manipulator, const kbVec4 xForm ) {
 
 	manipulator.ApplyTransform( xForm );
-
+	
 	std::vector<kbEditorEntity*> & entityList = g_Editor->GetGameEntities();
 	for ( int i = 0; i < entityList.size(); i++ ) {
 		if ( entityList[i]->IsSelected() ) {
@@ -857,7 +857,7 @@ void XFormEntities( kbManipulator & manipulator, const kbVec4 xForm ) {
 */
 void kbEditor::XPlusAdjustButtonCB( Fl_Widget *, void * ) {
 
-	XFormEntities( g_Editor->m_pMainTab->GetManipulator(), kbVec3( 1.0f, 0.0f, 0.0f ) );
+	XFormEntities( g_Editor->m_pMainTab->GetManipulator(), kbVec4( 1.0f, 0.0f, 0.0f, (float)atof( g_Editor->m_pXFormInput->value() ) ) );
 }
 
 /**
@@ -865,7 +865,7 @@ void kbEditor::XPlusAdjustButtonCB( Fl_Widget *, void * ) {
 */
 void kbEditor::XNegAdjustButtonCB( Fl_Widget *, void * ) {
 
-	XFormEntities( g_Editor->m_pMainTab->GetManipulator(), kbVec3( -1.0f, 0.0f, 0.0f ) );
+	XFormEntities( g_Editor->m_pMainTab->GetManipulator(), kbVec4( -1.0f, 0.0f, 0.0f, (float)atof( g_Editor->m_pXFormInput->value() ) ) );
 }
 
 /**
@@ -873,7 +873,7 @@ void kbEditor::XNegAdjustButtonCB( Fl_Widget *, void * ) {
 */
 void kbEditor::YPlusAdjustButtonCB( Fl_Widget *, void * ) {
 
-	XFormEntities( g_Editor->m_pMainTab->GetManipulator(), kbVec3( 0.0f, 1.0f, 0.0f ) );
+	XFormEntities( g_Editor->m_pMainTab->GetManipulator(), kbVec4( 0.0f, 1.0f, 0.0f, (float)atof( g_Editor->m_pXFormInput->value() ) ) );
 }
 
 /**
@@ -881,7 +881,7 @@ void kbEditor::YPlusAdjustButtonCB( Fl_Widget *, void * ) {
 */
 void kbEditor::YNegAdjustButtonCB( Fl_Widget *, void * ) {
 
-	XFormEntities( g_Editor->m_pMainTab->GetManipulator(), kbVec3( 0.0f, 1.0f, 0.0f ) );
+	XFormEntities( g_Editor->m_pMainTab->GetManipulator(), kbVec4( 0.0f, -1.0f, 0.0f, (float)atof( g_Editor->m_pXFormInput->value() ) ) );
 }
 
 /**
@@ -889,7 +889,7 @@ void kbEditor::YNegAdjustButtonCB( Fl_Widget *, void * ) {
 */
 void kbEditor::ZPlusAdjustButtonCB( Fl_Widget *, void * ) {
 
-	XFormEntities( g_Editor->m_pMainTab->GetManipulator(), kbVec3( 0.0f, 0.0f, 1.0f ) );
+	XFormEntities( g_Editor->m_pMainTab->GetManipulator(), kbVec4( 0.0f, 0.0f, 1.0f, (float)atof( g_Editor->m_pXFormInput->value() ) ) );
 }
 
 /**
@@ -897,7 +897,7 @@ void kbEditor::ZPlusAdjustButtonCB( Fl_Widget *, void * ) {
 */
 void kbEditor::ZNegAdjustButtonCB(Fl_Widget *, void *) {
 
-	XFormEntities( g_Editor->m_pMainTab->GetManipulator(), kbVec3( 0.0f, 0.0f, -1.0f ) );
+	XFormEntities( g_Editor->m_pMainTab->GetManipulator(), kbVec4( 0.0f, 0.0f, -1.0f, (float)atof( g_Editor->m_pXFormInput->value() ) ) );
 }
 
 /**

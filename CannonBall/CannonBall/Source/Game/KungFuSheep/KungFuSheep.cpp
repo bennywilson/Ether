@@ -542,7 +542,7 @@ void KungFuSheepComponent::TakeDamage( const DealAttackInfo_t<KungFuGame::eAttac
 
 	KungFuSnolafComponent *const pSnolaf = attackInfo.m_pAttacker->GetAs<KungFuSnolafComponent>();
 	if ( pSnolaf != nullptr && m_CurrentState != KungFuSheepState::Attack ) {
-	//	RequestStateChange( KungFuSheepState::Hugged );
+		RequestStateChange( KungFuSheepState::Hugged );
 	}
 }
 

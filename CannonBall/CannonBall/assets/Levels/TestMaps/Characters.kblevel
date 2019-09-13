@@ -2,7 +2,7 @@ kbGameEntity 0 0 0 0 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		Name = "Entity_22"
+		Name = "Entity_31"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
 		Position = 0.000000 0.000000 0.000000
 		Scale = 1.000000 1.000000 1.000000
@@ -10,8 +10,8 @@ kbGameEntity 0 0 0 0 {
 	kbEditorLevelSettingsComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		MainCameraPosition = -0.509876 9.606086 25.077244
-		MainCameraRotation = -0.115208 -0.798444 0.161853 0.568347
+		MainCameraPosition = -29.526405 3.505399 34.066269
+		MainCameraRotation = 0.159183 0.450233 -0.081930 -0.874779
 	}
 }
 kbGameEntity 0 0 0 0 {
@@ -19,15 +19,15 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "Sun"
-		Orientation = -0.387471 0.172224 0.073930 0.902629
-		Position = -59.252071 6.522116 -71.278885
-		Scale = 1.000000 1.000000 1.000000
+		Orientation = -0.094081 0.923771 -0.123247 0.350152
+		Position = -26.198284 3.000000 35.608555
+		Scale = 0.000000 1.000000 1.000000
 	}
 	kbDirectionalLightComponent { 
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadows = 1
-		Color = 1.000000 1.000000 1.000000 1.000000
+		Color = 1.000000 1.000000 1.000000 0.000000
 		Materials = 1
 			kbMaterialComponent { 
 				Enabled = 0
@@ -110,60 +110,6 @@ kbGameEntity 0 0 0 0 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		Name = "Floor"
-		Orientation = -0.707000 0.000000 0.000000 0.707000
-		Position = 0.000000 0.000001 0.000000
-		Scale = 10000.000000 10000.000000 10000.000000
-	}
-	kbStaticModelComponent { 
-		Enabled = 1
-		LifeTime =  -1.000000
-		CastsShadow = 0
-		Materials = 1
-			kbMaterialComponent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				CullModeOverride = ShaderDefault
-				Shader = .\assets\shaders\environment\environmentbase.kbshader
-				ShaderParams = 4
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "diffuse"
-						Texture = .\assets\test\woodfloor_basic.bmp
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "normal"
-						Texture = ..\..\kbengine\assets\textures\defaultnormal.bmp
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "propertyMap"
-						Texture = ..\..\kbengine\assets\textures\black.bmp
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "emissiveMap"
-						Texture = ..\..\kbengine\assets\textures\black.bmp
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-			}
-		RenderPass = LightingPass
-		TranslucencySortBias =  0.000000
-		Model = ..\..\kbengine\assets\models\unitquad.ms3d
-	}
-}
-kbGameEntity 0 0 0 0 {
-	kbTransformComponent { 
-		Enabled = 0
-		LifeTime =  -1.000000
 		Name = "Fox"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
 		Position = 2.000000 0.000000 0.000000
@@ -233,7 +179,7 @@ kbGameEntity 0 0 0 0 {
 		LifeTime =  -1.000000
 		Name = "Player"
 		Orientation = 0.000000 -1.000000 0.000000 0.000000
-		Position = -0.025984 0.000000 12.536115
+		Position = -26.198284 -1.176130 35.608555
 		Scale = 1.000000 1.000000 1.000000
 	}
 	kbSkeletalModelComponent { 
@@ -794,42 +740,9 @@ kbGameEntity 0 0 0 0 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		Name = "Room Box"
-		Orientation = 0.000000 0.000000 0.000000 1.000000
-		Position = -0.730686 -0.498480 5.646349
-		Scale = 5000.000000 5000.000000 5000.000000
-	}
-	kbStaticModelComponent { 
-		Enabled = 1
-		LifeTime =  -1.000000
-		CastsShadow = 0
-		Materials = 1
-			kbMaterialComponent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				CullModeOverride = ShaderDefault
-				Shader = .\assets\shaders\basic\unlit.kbshader
-				ShaderParams = 1
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "colorTexture"
-						Texture = .\assets\test\checkerboard.jpg
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-			}
-		RenderPass = Post-LightingPass
-		TranslucencySortBias =  0.000000
-		Model = ..\..\kbengine\assets\models\editor\invertedcube.ms3d
-	}
-}
-kbGameEntity 0 0 0 0 {
-	kbTransformComponent { 
-		Enabled = 0
-		LifeTime =  -1.000000
 		Name = "Camera"
-		Orientation = -0.139290 -0.693252 0.139290 0.693252
-		Position = -8.025984 5.350000 12.536115
+		Orientation = -0.030848 -0.706434 0.030848 0.706434
+		Position = -30.198284 1.173870 35.608555
 		Scale = 1.000000 1.000000 1.000000
 	}
 	CannonCameraComponent { 
@@ -848,100 +761,317 @@ kbGameEntity 0 0 0 0 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		Name = "ShakeNBake"
-		Orientation = 0.000000 0.000000 0.000000 1.000000
-		Position = 6.378634 4.313435 20.097363
-		Scale = 50.000000 50.000000 50.000000
+		Name = "Terrain"
+		Orientation = 0.000000 -0.989478 0.000000 -0.144684
+		Position = -115.000000 -140.000000 212.000000
+		Scale = 10000.000000 0.000000 10000.000000
 	}
-	kbParticleComponent { 
+	kbTerrainComponent { 
 		Enabled = 1
 		LifeTime =  -1.000000
-		Name = ""
-		Orientation = 0.000000 0.000000 0.000000 1.000000
-		Position = 0.000000 0.000000 0.000000
-		Scale = 50.000000 50.000000 50.000000
-		AlphaOverLife = 0
-		ColorOverLife = 0
-		EndColor = 1.000000 1.000000 1.000000 0.000000
-		Gravity = 0.000000 0.000000 0.000000
-		MaterialList = 0
-		MaxBurstCount = 0
-		MaxDuration =  0.250000
-		MaxEndRotationRate =  0.000000
-		MaxEndSize = 3.000000 3.000000 3.000000
-		MaxEndVelocity = 0.000000 0.000000 0.000000
-		MaxParticlesToEmit = -1
-		MaxSpawnRate =  50.000000
-		MaxStart3DOffset = 0.100000 0.100000 0.100000
-		MaxStart3DRotation = 0.000000 360.000000 0.000000
-		MaxStartRotationRate =  0.000000
-		MaxStartSize = 3.000000 3.000000 3.000000
-		MaxStartVelocity = 0.000000 2.000000 0.000000
-		MinBurstCount = 0
-		MinDuration =  0.150000
-		MinEndRotationRate =  0.000000
-		MinEndSize = 3.000000 3.000000 3.000000
-		MinEndVelocity = 0.000000 0.000000 0.000000
-		MinSpawnRate =  35.000000
-		MinStart3DOffset = -0.100000 -0.100000 -0.100000
-		MinStart3DRotation = 0.000000 5.000000 0.000000
-		MinStartRotationRate =  0.000000
-		MinStartSize = 1.000000 1.000000 1.000000
-		MinStartVelocity = 0.000000 1.000000 0.000000
-		ModelEmitter = 1
-			kbModelEmitter { 
+		CastsShadow = 0
+		Materials = 1
+			kbMaterialComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
-				MaterialList = 1
-					kbMaterialComponent { 
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\terrain\basicterrain.kbshader
+				ShaderParams = 17
+					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
-						CullModeOverride = ShaderDefault
-						Shader = .\assets\shaders\fx\wispscroller.kbshader
-						ShaderParams = 5
-							kbShaderParamComponent { 
-								Enabled = 0
-								LifeTime =  -1.000000
-								ParamName = "uvOffset"
-								Texture = NULL
-								Vector = 0.000000 0.000000 0.000000 0.000000
-							}
-							kbShaderParamComponent { 
-								Enabled = 0
-								LifeTime =  -1.000000
-								ParamName = "uvTileSpeed"
-								Texture = NULL
-								Vector = 1.000000 1.000000 0.000000 1.000000
-							}
-							kbShaderParamComponent { 
-								Enabled = 0
-								LifeTime =  -1.000000
-								ParamName = "colorMultiplier"
-								Texture = NULL
-								Vector = 1.000000 1.000000 1.000000 1.000000
-							}
-							kbShaderParamComponent { 
-								Enabled = 0
-								LifeTime =  -1.000000
-								ParamName = "particleColor"
-								Texture = NULL
-								Vector = 1.000000 0.000000 0.000000 0.000000
-							}
-							kbShaderParamComponent { 
-								Enabled = 0
-								LifeTime =  -1.000000
-								ParamName = "shaderTexture"
-								Texture = .\assets\fx\wisps\basicwisp.tif
-								Vector = 0.000000 0.000000 0.000000 0.000000
-							}
+						ParamName = "mat1And2UVScale"
+						Texture = NULL
+						Vector = 1.000000 1.000000 1.000000 1.000000
 					}
-				Model = .\assets\fx\curves\swirl_1.fbx
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "mat3And4UVScale"
+						Texture = NULL
+						Vector = 1.000000 1.000000 1.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "specFactors"
+						Texture = NULL
+						Vector = 1.000000 1.000000 5.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "specPowerMultipliers"
+						Texture = NULL
+						Vector = 1.000000 3.000000 55.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "splatMap"
+						Texture = .\assets\terrain\kungfulevelterrain\terrain1_splatmap.bmp
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "Mat1Diffuse"
+						Texture = ..\..\kbengine\assets\textures\white.bmp
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "Mat1Normal"
+						Texture = ..\..\kbengine\assets\textures\defaultnormal.bmp
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "Mat1Specular"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "Mat2Diffuse"
+						Texture = ..\..\kbengine\assets\textures\white.bmp
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "Mat2Normal"
+						Texture = ..\..\kbengine\assets\textures\defaultnormal.bmp
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "Mat2Specular"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "Mat3Diffuse"
+						Texture = ..\..\kbengine\assets\textures\white.bmp
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "Mat3Normal"
+						Texture = ..\..\kbengine\assets\textures\defaultnormal.bmp
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "Mat3Specular"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "Mat4Diffuse"
+						Texture = ..\..\kbengine\assets\textures\white.bmp
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "Mat4Normal"
+						Texture = ..\..\kbengine\assets\textures\defaultnormal.bmp
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "Mat4Specular"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
 			}
-		ParticleBillboardType = FaceCamera
-		StartColor = 1.000000 1.000000 1.000000 1.000000
-		StartDelay =  0.000000
-		TotalDuration =  -1.000000
+		RenderPass = LightingPass
 		TranslucencySortBias =  0.000000
-		VelocityCurve = 0
+		Dimensions = 129
+		Grass = 0
+		HeightMap = .\assets\terrain\kungfulevelterrain\terrain1_height.bmp
+		HeightScale =  75550.000000
+		SplatMap = NULL
+		Width =  205600.000000
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Sky Box"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 0.000000 0.000000 0.000000
+		Scale = 999.000000 999.000000 999.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 1
+		Materials = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\skybox\skybox_gradient.kbshader
+				ShaderParams = 3
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "horizonColor"
+						Texture = NULL
+						Vector = 1.000000 0.900000 0.850000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "skyColor"
+						Texture = NULL
+						Vector = 0.750000 0.750000 1.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "diffuseTexture"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		RenderPass = Post-LightingPass
+		TranslucencySortBias =  0.000000
+		Model = .\assets\models\skyboxes\basicskybox.fbx
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "CloudDome"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 0.000000 0.000000 0.000000
+		Scale = 999.000000 999.000000 999.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		Materials = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\skybox\skybox_clouds.kbshader
+				ShaderParams = 9
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "cloudTileOffset"
+						Texture = NULL
+						Vector = 5.000000 1.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "cloudScrollRate_AlphaStep"
+						Texture = NULL
+						Vector = 0.025000 0.010000 0.400000 0.750000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "cloudColor"
+						Texture = NULL
+						Vector = 1.000000 0.750000 0.650000 0.500000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "cloudEmissive"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 1.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "lightShaftsDir"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "lightShaftsColor"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "sunDiscColor"
+						Texture = NULL
+						Vector = 1.000000 1.000000 1.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "sunDiscParams"
+						Texture = NULL
+						Vector = 1.000000 1.000000 1.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "diffuseTexture"
+						Texture = .\assets\models\skyboxes\clouds_normalmap1.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		RenderPass = TranslucentWithDepthPass
+		TranslucencySortBias =  0.000000
+		Model = .\assets\models\skyboxes\basicskybox.fbx
+	}
+}
+kbGameEntity 2609040299 1100347930 3115268521 1892043160 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Light Shafts"
+		Orientation = -0.094081 0.923771 -0.123247 0.350152
+		Position = 0.000000 0.000000 0.000000
+		Scale = 999.000000 999.000000 99.000000
+	}
+	kbLightShaftsComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		BaseHeight =  0.750000
+		BaseWidth =  0.750000
+		Color = 0.005421 0.004000 0.000500 1.000000
+		Directional = 1
+		IterationHeight =  0.001500
+		IterationWidth =  0.001500
+		NumIteractions = 48
+		Texture = ..\..\kbengine\assets\textures\flare.jpg
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Entity_24"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = -26.198284 -1.176130 35.608555
+		Scale = 1.000000 1.000000 1.000000
 	}
 }
