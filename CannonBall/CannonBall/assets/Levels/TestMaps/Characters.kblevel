@@ -2,7 +2,7 @@ kbGameEntity 0 0 0 0 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		Name = "Entity_25"
+		Name = "Entity_26"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
 		Position = 0.000000 0.000000 0.000000
 		Scale = 1.000000 1.000000 1.000000
@@ -10,8 +10,8 @@ kbGameEntity 0 0 0 0 {
 	kbEditorLevelSettingsComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		MainCameraPosition = -30.227774 3.372485 40.419201
-		MainCameraRotation = -0.308533 -0.469744 0.179501 0.807420
+		MainCameraPosition = -27.352764 3.889765 51.646008
+		MainCameraRotation = -0.049389 -0.648122 0.042189 0.758761
 	}
 }
 kbGameEntity 0 0 0 0 {
@@ -212,7 +212,7 @@ kbGameEntity 0 0 0 0 {
 						LifeTime =  -1.000000
 						ParamName = "fxMapMask"
 						Texture = NULL
-						Vector = 0.000000 1.000000 0.000000 0.000000
+						Vector = 1.000000 0.000000 0.000000 0.000000
 					}
 			}
 		RenderPass = LightingPass
@@ -1150,5 +1150,24 @@ kbGameEntity 0 0 0 0 {
 		RenderPass = LightingPass
 		TranslucencySortBias =  0.000000
 		Model = ..\..\kbengine\assets\models\unitcube.ms3d
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Fog"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 6.818789 38.074856 14.711714
+		Scale = 1.000000 1.000000 1.000000
+	}
+	CannonFogComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		Clamp =  0.250000
+		Color = 1.000000 0.950000 0.850000 1.000000
+		EndDist =  300.000000
+		Shader = .\assets\shaders\postprocess\fog.kbshader
+		StartDist =  150.000000
 	}
 }

@@ -69,3 +69,12 @@ GenerateClass(
 	AddField( "SnolafPrefab", KBTYPEINFO_GAMEENTITY, KungFuLevelComponent, m_SnolafPrefab, false, "" )
 	AddField( "SheepPrefab", KBTYPEINFO_GAMEENTITY, KungFuLevelComponent, m_SheepPrefab, false, "" )
 )
+
+GenerateClass(
+	CannonFogComponent,
+	AddField( "Shader", KBTYPEINFO_SHADER, CannonFogComponent, m_pShader, false, "" )
+	AddField( "StartDist", KBTYPEINFO_FLOAT, CannonFogComponent, m_FogStartDist, false, "" )
+	AddField( "EndDist", KBTYPEINFO_FLOAT, CannonFogComponent, m_FogEndDist, false, "" )
+	AddField( "Clamp", KBTYPEINFO_FLOAT, CannonFogComponent, m_FogClamp, false, "" )
+	AddField( "Color", KBTYPEINFO_VECTOR4, CannonFogComponent, m_FogColor, false, "" )	
+)

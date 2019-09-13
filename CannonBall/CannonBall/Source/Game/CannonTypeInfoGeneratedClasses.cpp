@@ -33,3 +33,5 @@ DEFINE_KBCLASS(CannonCameraShakeComponent)
 DEFINE_KBCLASS(CannonLevelComponent)
 
 DEFINE_KBCLASS(KungFuLevelComponent)
+
+DEFINE_KBCLASS(CannonFogComponent)

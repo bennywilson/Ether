@@ -106,6 +106,29 @@ private:
 	void										ProcessInput( const float deltaTimeSec );
 };
 
+/**
+ *	CannonFogComponent
+ */
+class CannonFogComponent : public kbGameComponent, kbRenderHook {
+
+	KB_DECLARE_COMPONENT( CannonFogComponent, kbGameComponent );
+
+//-------------------------------------------------------------------------------------------------------------------------------------------------------------
+protected:
+
+	virtual void								SetEnable_Internal( const bool bEnable ) override;
+	virtual void								RenderHookCallBack( kbRenderTexture *const pSrc, kbRenderTexture *const pDst ) override;
+
+private:
+
+	kbShader *									m_pShader;
+	float										m_FogStartDist;
+	float										m_FogEndDist;
+	float										m_FogClamp;
+	kbColor										m_FogColor;					
+};
+
+
 extern CannonGame * g_pCannonGame;
 
 #endif

@@ -241,3 +241,52 @@ void CannonGame::HackEditorShutdown() {
 void CannonLevelComponent::Constructor() {
 	m_Dummy2 = -1;
 }
+
+/*
+ *	CannonFogComponent::Constructor
+ */
+void CannonFogComponent::Constructor() {
+	SetRenderPass( RP_Translucent );
+	m_pShader = nullptr;
+	m_FogStartDist = 300;
+	m_FogEndDist = 3000;
+	m_FogClamp = 1.0f;
+	m_FogColor = kbColor::white;
+}
+
+/**
+ *	CannonFogComponent::RenderHookCallBack
+ */
+void CannonFogComponent::RenderHookCallBack( kbRenderTexture *const pSrc, kbRenderTexture *const pDst ) {
+	//g_pRenderer->RT_ClearRenderTarget( pDst, kbColor::white );
+
+	if ( m_pShader == nullptr ) {
+		m_pShader = (kbShader *) g_ResourceManager.GetResource( "./assets/shaders/PostProcess/Fog.kbshader", true, true );
+	}
+
+	g_pRenderer->RT_SetRenderTarget( pDst );
+	kbShaderParamOverrides_t shaderParams;
+	shaderParams.SetVec4( "fog_Start_End_Clamp", kbVec4( m_FogStartDist, m_FogEndDist, m_FogClamp, 0.0f ) );
+	shaderParams.SetVec4( "fogColor", m_FogColor );
+
+	kbVec3 position;
+	kbQuat orientation;
+	g_pRenderer->GetRenderViewTransform( nullptr, position, orientation );
+
+	shaderParams.SetVec4( "cameraPosition", position );
+	g_pRenderer->RT_Render2DQuad( kbVec2( 0.5f, 0.5f ), kbVec2( 1.0f, 1.0f ), kbColor::white, m_pShader, &shaderParams );
+}
+
+/**
+ *	CannonFogComponent::SetEnable_Internal
+ */
+void CannonFogComponent::SetEnable_Internal( const bool bEnable ) {
+
+	Super::SetEnable_Internal( bEnable );
+
+	if ( bEnable ) {
+		g_pRenderer->RegisterRenderHook( this );
+	} else {
+		g_pRenderer->UnregisterRenderHook( this );
+	}
+}
