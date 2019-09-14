@@ -558,5 +558,4 @@ void KungFuSheepComponent::PlayShakeNBakeFX() {
 	pShakeNBakeFX->SetPosition( GetOwnerPosition() );
 	pShakeNBakeFX->SetOrientation( GetOwnerRotation() );
 	pShakeNBakeFX->DeleteWhenComponentsAreInactive( true );
-
 }

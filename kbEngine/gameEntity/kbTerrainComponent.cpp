@@ -204,7 +204,6 @@ void kbGrass::RefreshGrass() {
 	m_GrassShaderOverrides.SetVec4( "GrassData1", kbVec4( m_pOwningTerrainComponent->GetHeightScale(), m_pOwningTerrainComponent->GetOwner()->GetPosition().y, patchLen, 0.0f ) );
     m_GrassShaderOverrides.SetVec4( "fakeAOData", kbVec4( m_FakeAODarkness, m_FakeAOPower, 0.0f, 0.0f ) );
 
-
 	for ( int i = 0; i < m_ShaderParamList.size(); i++ ) {
 		if ( m_ShaderParamList[i].GetParamName().stl_str().empty() ) {
 			continue;
@@ -216,7 +215,6 @@ void kbGrass::RefreshGrass() {
 			m_GrassShaderOverrides.SetVec4( m_ShaderParamList[i].GetParamName().stl_str(), m_ShaderParamList[i].GetVector() );
 		}
 	}
-
 
 	const kbVec2 collisionMapPos = kbVec2( m_pOwningTerrainComponent->GetOwner()->GetPosition().x, m_pOwningTerrainComponent->GetOwner()->GetPosition().z );
 	m_GrassShaderOverrides.SetVec4( "collisionMapCenter", kbVec4( collisionMapPos.x, collisionMapPos.y, m_pOwningTerrainComponent->GetTerrainWidth() * 0.5f, 1.0f / ( m_pOwningTerrainComponent->GetTerrainWidth() * 0.5f ) ) );
@@ -262,16 +260,9 @@ void kbGrass::RefreshGrass() {
 						pVerts[iVert].uv.Set ( ( globalPointPos.x - terrainMin.x ) / m_pOwningTerrainComponent->GetTerrainWidth(), ( globalPointPos.z - terrainMin.z ) / m_pOwningTerrainComponent->GetTerrainWidth() );
 						pVerts[iVert].patchIndices[0] = rand() % 60;		// Randomized blade jitters
 						pVerts[iVert].patchIndices[1] = pVerts[iVert].patchIndices[2] = pVerts[iVert].patchIndices[3] = pVerts[iVert].patchIndices[0];
-						int randVal = rand() % 100;
+						const float randVal = kbfrand();
 
-						// Texture to use
-						if ( randVal > 96 ) {
-							pVerts[iVert].patchIndices[2] = 1;
-						} else if ( randVal > 90 ) {
-							pVerts[iVert].patchIndices[2] = 2;
-						} else {
-							pVerts[iVert].patchIndices[2] = 0;
-						}
+						pVerts[iVert].patchIndices[2] = 0;		// Unused I believe
 						iVert++;
 					}
 				}

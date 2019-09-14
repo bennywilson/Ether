@@ -66,6 +66,12 @@
     <None Include="assets\shaders\Skybox\skybox_Gradient.kbShader">
       <Filter>Shaders\Skybox</Filter>
     </None>
+    <None Include="assets\shaders\Terrain\basicGrass.kbShader">
+      <Filter>Shaders\Terrain</Filter>
+    </None>
+    <None Include="assets\shaders\Terrain\basicTerrain.kbShader">
+      <Filter>Shaders\Terrain</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Shaders">
@@ -97,6 +103,9 @@
     </Filter>
     <Filter Include="Shaders\Skybox">
       <UniqueIdentifier>{17db3547-c554-44e7-a039-5f31a369f378}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shaders\Terrain">
+      <UniqueIdentifier>{5c522b62-b221-4f05-9333-55d220bd65e2}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

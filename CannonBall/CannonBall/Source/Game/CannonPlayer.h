@@ -83,7 +83,7 @@ public:
 	kbVec2										GetAmplitude() const { return kbVec2( m_AmplitudeX, m_AmplitudeY ); }
 	kbVec2										GetFrequency() const { return kbVec2( m_FrequencyX, m_FrequencyY ); }
 
-	void										SetEnable_Internal( const bool bEnable ) { Super::SetEnable_Internal( bEnable ); if ( bEnable ) { Enable( false ); } }
+	void										SetEnable_Internal( const bool bEnable );
 
 private:
 
@@ -93,6 +93,8 @@ private:
 
 	float										m_FrequencyX;
 	float										m_FrequencyY;
+
+	bool										m_bActivateOnEnable;
 };
 
 /**

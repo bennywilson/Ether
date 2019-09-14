@@ -272,6 +272,10 @@ void CannonCameraComponent::Update_Internal( const float DeltaTime ) {
 			cameraDestRot.LookAt( GetOwner()->GetPosition(), m_pTarget->GetPosition() + m_LookAtOffset, kbVec3::up );
 			cameraDestRot.InvertFast();
 			GetOwner()->SetOrientation( kbQuatFromMatrix( cameraDestRot ) );
+
+			const kbVec3 cameraDestPos = m_pTarget->GetPosition() + m_PositionOffset;
+			GetOwner()->SetPosition( cameraDestPos + cameraDestRot[0].ToVec3() * camShakeOffset.x + cameraDestRot[1].ToVec3() * camShakeOffset.y );
+			GetOwner()->SetPosition( cameraDestPos + cameraDestRot[0].ToVec3() * camShakeOffset.x + cameraDestRot[1].ToVec3() * camShakeOffset.y );
 		}
 		break;
 	}
@@ -287,4 +291,25 @@ void CannonCameraShakeComponent::Constructor() {
 
 	m_FrequencyX = 15.0f;
 	m_FrequencyY = 10.0f;
+
+	m_bActivateOnEnable = false;
+}
+
+/**
+ *	CannonCameraShakeComponent::SetEnable_Internal
+ */
+void CannonCameraShakeComponent::SetEnable_Internal( const bool bEnable ) {
+	Super::SetEnable_Internal( bEnable ); 
+	
+	if ( bEnable ) {
+		// Disable so that this component doesn't prevent it's owning entity to linger past it's life time
+		Enable( false );
+
+		if ( m_bActivateOnEnable )  {
+			CannonCameraComponent *const pCam = (CannonCameraComponent*)g_pCannonGame->GetMainCamera();
+			if ( pCam != nullptr ) {
+				pCam->StartCameraShake( this );
+			}
+		}
+	} 
 }

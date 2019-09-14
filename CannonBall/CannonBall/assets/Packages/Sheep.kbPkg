@@ -114,8 +114,8 @@ kbPrefab 1 {
 			LifeTime =  -1.000000
 			DummyTemp = 0
 			Health =  10.000000
-			AmplitudeX =  0.050000
-			AmplitudeY =  0.040000
+			AmplitudeX =  0.090000
+			AmplitudeY =  0.070000
 			Duration =  0.700000
 			FrequencyX =  30.000000
 			FrequencyY =  40.000000
@@ -127,12 +127,24 @@ kbPrefab 1 {
 	ShakeNBakeFX
 kbGameEntity 4226348206 1325904980 2380668328 2364791781 {
 	kbTransformComponent { 
-		Enabled = 0
+		Enabled = 1
 		LifeTime =  -1.000000
 		Name = "ShakeNBake"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
 		Position = 10.000000 2.000000 21.468822
 		Scale = 50.000000 50.000000 50.000000
+	}
+	CannonCameraShakeComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		DummyTemp = 0
+		Health =  10.000000
+		AmplitudeX =  0.090000
+		AmplitudeY =  0.070000
+		Duration =  0.700000
+		FrequencyX =  30.000000
+		FrequencyY =  40.000000
+		ActivateOnEnable = 1
 	}
 	kbParticleComponent { 
 		Enabled = 1
