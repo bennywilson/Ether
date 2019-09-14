@@ -60,6 +60,12 @@
     <None Include="assets\shaders\FX\wispScroller.kbShader">
       <Filter>Shaders\FX</Filter>
     </None>
+    <None Include="assets\shaders\Skybox\skybox_Clouds.kbShader">
+      <Filter>Shaders\Skybox</Filter>
+    </None>
+    <None Include="assets\shaders\Skybox\skybox_Gradient.kbShader">
+      <Filter>Shaders\Skybox</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Shaders">
@@ -88,6 +94,9 @@
     </Filter>
     <Filter Include="Shaders\FX">
       <UniqueIdentifier>{60b0e1a5-c1fa-4460-8259-0ac42395716c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shaders\Skybox">
+      <UniqueIdentifier>{17db3547-c554-44e7-a039-5f31a369f378}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

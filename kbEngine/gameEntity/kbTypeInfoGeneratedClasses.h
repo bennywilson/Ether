@@ -211,6 +211,7 @@ GenerateClass(
 
 GenerateClass(
 	kbGrass,
+	AddField( "GrassShader", KBTYPEINFO_SHADER, kbGrass, m_pGrassShader, false, "" )
 	AddField( "GrassCellsPerTerrainSide", KBTYPEINFO_INT, kbGrass, m_GrassCellsPerTerrainSide, false, "" )
 	AddField( "PatchStartCullDistance", KBTYPEINFO_FLOAT, kbGrass, m_PatchStartCullDistance, false, "" )
 	AddField( "PatchEndCullDistance", KBTYPEINFO_FLOAT, kbGrass, m_PatchEndCullDistance, false, "" )

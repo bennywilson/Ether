@@ -3358,7 +3358,6 @@ void kbRenderer_DX11::RenderMesh( const kbRenderSubmesh *const pRenderMesh, cons
 		}
 	}
 
-
 	m_pDeviceContext->IASetInputLayout( (ID3D11InputLayout*)pShader->GetVertexLayout() );
 	m_pDeviceContext->VSSetShader( (ID3D11VertexShader *)pShader->GetVertexShader(), nullptr, 0 );
 	
@@ -3886,7 +3885,7 @@ void kbRenderer_DX11::RT_Render2DQuad( const kbVec2 & origin, const kbVec2 & siz
 ID3D11Buffer * kbRenderer_DX11::SetConstantBuffer( const kbShaderVarBindings_t & shaderVarBindings, const kbShaderParamOverrides_t * shaderParamOverrides, const kbRenderObject *const pRenderObject, byte *const pInMappedBufferData ) {
 	kbMat4 worldMatrix;
 	if ( pRenderObject != nullptr ) {
-		worldMatrix.MakeScale( pRenderObject->m_Scale * m_GlobalModelScale_RenderThread );
+		worldMatrix.MakeScale( pRenderObject->m_Scale );
 		worldMatrix *= pRenderObject->m_Orientation.ToMat4();
 		worldMatrix[3] = pRenderObject->m_Position;
 	} else {

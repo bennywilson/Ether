@@ -98,6 +98,7 @@ public:
 	kbGameEntity *								GetOwner() const { return (kbGameEntity *) Super::GetOwner(); }
 	kbString									GetOwnerName() const;
 	kbVec3										GetOwnerPosition() const;
+	kbVec3										GetOwnerScale() const;
 	kbQuat										GetOwnerRotation() const;
 	
 	template<typename T>

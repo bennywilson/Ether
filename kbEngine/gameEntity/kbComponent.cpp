@@ -230,6 +230,13 @@ kbVec3 kbGameComponent::GetOwnerPosition() const {
 }
 
 /**
+ *	kbGameComponent::GetOwnerScale
+ */
+kbVec3 kbGameComponent::GetOwnerScale() const {
+	return ((kbGameEntity*)GetOwner())->GetScale();
+}
+
+/**
  *	kbGameComponent::GetOwnerRotation
  */
 kbQuat kbGameComponent::GetOwnerRotation() const {

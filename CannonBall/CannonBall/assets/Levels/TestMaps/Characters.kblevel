@@ -2,7 +2,7 @@ kbGameEntity 0 0 0 0 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		Name = "Entity_26"
+		Name = "Entity_30"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
 		Position = 0.000000 0.000000 0.000000
 		Scale = 1.000000 1.000000 1.000000
@@ -10,8 +10,8 @@ kbGameEntity 0 0 0 0 {
 	kbEditorLevelSettingsComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		MainCameraPosition = -27.352764 3.889765 51.646008
-		MainCameraRotation = -0.049389 -0.648122 0.042189 0.758761
+		MainCameraPosition = 0.242349 -6.590078 -520.592773
+		MainCameraRotation = 0.003586 0.697275 -0.003488 -0.716786
 	}
 }
 kbGameEntity 0 0 0 0 {
@@ -19,8 +19,8 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "Sun"
-		Orientation = -0.094081 0.923771 -0.123247 0.350152
-		Position = -26.198284 3.000000 35.608555
+		Orientation = -0.119086 0.931479 -0.146306 0.311062
+		Position = 80.300003 -48.635265 -404.559143
 		Scale = 0.000000 1.000000 1.000000
 	}
 	kbDirectionalLightComponent { 
@@ -178,8 +178,8 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "Player"
-		Orientation = 0.000000 -1.000000 0.000000 0.000000
-		Position = -26.198284 0.323870 35.608555
+		Orientation = 0.000000 1.000000 0.000000 0.000000
+		Position = 77.104454 -52.635265 -404.559143
 		Scale = 1.000000 1.000000 1.000000
 	}
 	kbSkeletalModelComponent { 
@@ -741,8 +741,8 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "Camera"
-		Orientation = -0.030848 -0.706434 0.030848 0.706434
-		Position = -30.198284 2.673870 35.608555
+		Orientation = -0.030847 -0.706434 0.030847 0.706434
+		Position = 73.104454 -50.285267 -404.559143
 		Scale = 1.000000 1.000000 1.000000
 	}
 	CannonCameraComponent { 
@@ -763,8 +763,8 @@ kbGameEntity 0 0 0 0 {
 		LifeTime =  -1.000000
 		Name = "Terrain"
 		Orientation = 0.000000 -0.989478 0.000000 -0.144684
-		Position = -115.000000 -140.000000 212.000000
-		Scale = 10000.000000 0.000000 10000.000000
+		Position = -115.000000 -450.000000 0.000000
+		Scale = 1.000000 1.000000 1.000000
 	}
 	kbTerrainComponent { 
 		Enabled = 1
@@ -900,11 +900,99 @@ kbGameEntity 0 0 0 0 {
 		RenderPass = LightingPass
 		TranslucencySortBias =  0.000000
 		Dimensions = 129
-		Grass = 0
+		Grass = 1
+			kbGrass { 
+				Enabled = 1
+				LifeTime =  -1.000000
+				BladeMaxHeight =  25.000000
+				BladeMaxWidth =  1.050000
+				BladeMinHeight =  10.000000
+				BladeMinWidth =  0.850000
+				FakeAODarkness =  0.250000
+				FakeAOPower =  2.000000
+				GrassCellsPerTerrainSide = 30
+				GrassShader = .\assets\shaders\terrain\basicgrass.kbshader
+				MaxBladeJitterOffset =  0.000000
+				MaxPatchJitterOffset =  3.000000
+				PatchEndCullDistance =  2000.000000
+				PatchStartCullDistance =  200.000000
+				PatchesPerCellSide = 60
+				ShaderParams = 10
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "plant_1_2_size"
+						Texture = NULL
+						Vector = 1.200000 0.900000 1.300000 0.800000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "plant_3_size"
+						Texture = NULL
+						Vector = 1.300000 0.850000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "windTex1"
+						Texture = .\assets\fx\wind\wind_1.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "wind1_tile_speed"
+						Texture = NULL
+						Vector = 5.000000 5.000000 -0.010000 0.050000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "wind1_mag_lod"
+						Texture = NULL
+						Vector = 3.000000 3.000000 0.000000 5.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "windTex2"
+						Texture = .\assets\fx\wind\wind_2.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "wind2_tile_speed"
+						Texture = NULL
+						Vector = 5.000000 5.000000 0.050000 0.050000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "wind2_mag_lod"
+						Texture = NULL
+						Vector = 3.000000 3.000000 2.000000 5.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "grassDiffuseMap"
+						Texture = .\assets\terrain\foliage\grass_1.dds
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "noiseMap"
+						Texture = .\assets\fx\noise\noisemap.png
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
 		HeightMap = .\assets\terrain\kungfulevelterrain\terrain1_height.bmp
-		HeightScale =  75550.000000
+		HeightScale =  1024.000000
 		SplatMap = NULL
-		Width =  205600.000000
+		Width =  2048.000000
 	}
 }
 kbGameEntity 0 0 0 0 {
@@ -1048,7 +1136,7 @@ kbGameEntity 2609040299 1100347930 3115268521 1892043160 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "Light Shafts"
-		Orientation = -0.094081 0.923771 -0.123247 0.350152
+		Orientation = -0.109712 0.931479 -0.146306 0.311062
 		Position = 0.000000 0.000000 0.000000
 		Scale = 999.000000 999.000000 99.000000
 	}
@@ -1057,7 +1145,7 @@ kbGameEntity 2609040299 1100347930 3115268521 1892043160 {
 		LifeTime =  -1.000000
 		BaseHeight =  0.750000
 		BaseWidth =  0.750000
-		Color = 0.005421 0.004000 0.000500 1.000000
+		Color = 0.010000 0.008000 0.001000 1.000000
 		Directional = 1
 		IterationHeight =  0.001500
 		IterationWidth =  0.001500
@@ -1071,7 +1159,7 @@ kbGameEntity 0 0 0 0 {
 		LifeTime =  -1.000000
 		Name = "Water Plane"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
-		Position = -26.198284 -0.676130 35.608555
+		Position = -26.198284 -65.676132 35.608555
 		Scale = 1000000.000000 2.000000 1000000.000000
 	}
 	kbStaticModelComponent { 
@@ -1104,7 +1192,7 @@ kbGameEntity 0 0 0 0 {
 		LifeTime =  -1.000000
 		Name = "Bridge"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
-		Position = -26.198284 0.223870 35.608555
+		Position = 76.801712 -52.776131 35.608555
 		Scale = 200.000000 25.000000 1000000.000000
 	}
 	kbStaticModelComponent { 
@@ -1169,5 +1257,15 @@ kbGameEntity 0 0 0 0 {
 		EndDist =  300.000000
 		Shader = .\assets\shaders\postprocess\fog.kbshader
 		StartDist =  150.000000
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Entity_26"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 77.104454 -46.885265 -404.559143
+		Scale = 1.000000 1.000000 1.000000
 	}
 }

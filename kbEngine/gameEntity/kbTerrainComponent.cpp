@@ -65,6 +65,7 @@ void kbGrass::grassRenderObject_t::Shutdown() {
  */
 void kbGrass::Constructor() {
 
+	m_pGrassShader = nullptr;
 
 	m_GrassCellsPerTerrainSide = 1;
 	m_GrassCellLength = 0;
@@ -191,7 +192,11 @@ void kbGrass::RefreshGrass() {
 	const float patchLen = m_GrassCellLength / (float)m_PatchesPerCellSide;
 
 	m_GrassShaderOverrides.m_ParamOverrides.clear();
-	m_GrassShaderOverrides.m_pShader = (kbShader*)g_ResourceManager.GetResource( "./assets/Shaders/Environment/grass.kbshader", true, true );
+	if ( m_pGrassShader != nullptr ) {
+		m_GrassShaderOverrides.m_pShader = m_pGrassShader;
+	} else {
+		m_GrassShaderOverrides.m_pShader = (kbShader*)g_ResourceManager.GetResource( "./assets/Shaders/Environment/grass.kbshader", true, true );
+	}
 
 	m_GrassShaderOverrides.SetTexture( "heightMap", m_pOwningTerrainComponent->GetHeightMap() );
 	m_GrassShaderOverrides.SetVec4List( "bladeOffsets", bladeOffsets );
@@ -228,7 +233,7 @@ void kbGrass::RefreshGrass() {
 		const float halfCellLenSqr = sqrt( halfCellLen * halfCellLen );
 
 		const float halfTerrainWidth = m_pOwningTerrainComponent->GetTerrainWidth() * 0.5f;
-		const kbVec3 terrainMin = m_pOwningTerrainComponent->GetOwner()->GetPosition() - kbVec3( halfTerrainWidth, 0.0f, halfTerrainWidth );
+		const kbVec3 terrainMin = /*m_pOwningTerrainComponent->GetOwner()->GetPosition()*/ - kbVec3( halfTerrainWidth, 0.0f, halfTerrainWidth );
 
 		int cellIdx = 0;
 		for ( int yCell = 0; yCell < m_GrassCellsPerTerrainSide; yCell++ ) {
@@ -271,8 +276,10 @@ void kbGrass::RefreshGrass() {
 					}
 				}
 				renderObj.m_pModel->UnmapVertexBuffer();
-
-				m_GrassRenderObjects[cellIdx].m_RenderObject.m_Position = cellCenter;
+				kbMat4 rotMat = m_pOwningTerrainComponent->GetOwnerRotation().ToMat4();
+				m_GrassRenderObjects[cellIdx].m_RenderObject.m_Position = cellCenter * rotMat + m_pOwningTerrainComponent->GetOwnerPosition();
+				m_GrassRenderObjects[cellIdx].m_RenderObject.m_Scale =  m_pOwningTerrainComponent->GetOwnerScale();
+				m_GrassRenderObjects[cellIdx].m_RenderObject.m_Orientation = m_pOwningTerrainComponent->GetOwnerRotation();
 
 				auto & renderObjMatList = m_GrassRenderObjects[cellIdx].m_RenderObject.m_Materials;
 				renderObjMatList.clear();

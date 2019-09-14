@@ -43,7 +43,7 @@ void kbModelComponent::EditorChange( const std::string & propertyName ) {
 	m_RenderObject.m_Orientation = GetOwner()->GetOrientation();
 	m_RenderObject.m_Position = GetOwner()->GetPosition();
 	m_RenderObject.m_RenderPass = m_RenderPass;
-	m_RenderObject.m_Scale = GetOwner()->GetScale();
+	m_RenderObject.m_Scale = GetOwner()->GetScale() * kbLevelComponent::GetGlobalModelScale();
 	m_RenderObject.m_TranslucencySortBias = m_TranslucencySortBias;
 
 	// Editor Hack!

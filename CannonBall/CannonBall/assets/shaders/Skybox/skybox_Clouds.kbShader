@@ -131,8 +131,8 @@ PS_OUTPUT pixelShader( pixelInput	input ) {
 
 	float3 fromCam = normalize( input.worldPos - cameraPos.xyz );
 	float3 sunDir = lightShaftsDir.xyz;
-	float sunIntensity = saturate( ( dot( fromCam, sunDir ) - (sunDiscParams.x) ) / (1.0f - sunDiscParams.x) );
-	sunIntensity = pow( sunIntensity, 3.f ) * 1.5f;
+	float sunIntensity = dot( fromCam, sunDir ) ;//saturate( ( dot( fromCam, sunDir ) - (sunDiscParams.x) ) / (1.0f - sunDiscParams.x) );
+	sunIntensity = pow( sunIntensity, 1.f ) * 25.5f;
 
 	
 	if ( outColor.w < 0.45f ) {

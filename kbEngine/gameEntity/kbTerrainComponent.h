@@ -37,6 +37,7 @@ private:
 
 	void										RefreshGrass();
 
+	kbShader *									m_pGrassShader;
 	int											m_GrassCellsPerTerrainSide;
 
 	std::vector<kbShaderParamComponent>			m_ShaderParamList;

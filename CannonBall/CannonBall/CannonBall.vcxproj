@@ -93,6 +93,8 @@
     <None Include="assets\shaders\FX\decal_Blend.kbShader" />
     <None Include="assets\shaders\FX\Particle_BlendAdd.kbShader" />
     <None Include="assets\shaders\FX\wispScroller.kbShader" />
+    <None Include="assets\shaders\Skybox\skybox_Clouds.kbShader" />
+    <None Include="assets\shaders\Skybox\skybox_Gradient.kbShader" />
     <None Include="CannonBall.ico" />
     <None Include="small.ico" />
   </ItemGroup>
