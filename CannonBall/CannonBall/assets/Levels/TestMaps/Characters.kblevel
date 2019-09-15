@@ -10,8 +10,8 @@ kbGameEntity 0 0 0 0 {
 	kbEditorLevelSettingsComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		MainCameraPosition = 140.258224 -4.987031 -429.107056
-		MainCameraRotation = -0.011637 0.988105 0.119145 -0.096524
+		MainCameraPosition = 74.724861 -51.533920 -386.428680
+		MainCameraRotation = 0.194387 0.632429 -0.168238 -0.730714
 	}
 }
 kbGameEntity 0 0 0 0 {
@@ -212,7 +212,7 @@ kbGameEntity 0 0 0 0 {
 						LifeTime =  -1.000000
 						ParamName = "fxMapMask"
 						Texture = NULL
-						Vector = 1.000000 0.000000 0.000000 0.000000
+						Vector = 0.000000 1.000000 0.000000 0.000000
 					}
 			}
 		RenderPass = LightingPass
@@ -1466,7 +1466,7 @@ kbGameEntity 0 0 0 0 {
 						Enabled = 0
 						LifeTime =  -1.000000
 						ParamName = "propertyMap"
-						Texture = NULL
+						Texture = .\assets\models\environment\platforms\bridge_wooden_1_prop.tif
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 					kbShaderParamComponent { 
@@ -2438,7 +2438,7 @@ kbGameEntity 0 0 0 0 {
 						Enabled = 0
 						LifeTime =  -1.000000
 						ParamName = "propertyMap"
-						Texture = NULL
+						Texture = .\assets\models\environment\platforms\bridge_wooden_1_prop.tif
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 					kbShaderParamComponent { 
@@ -2492,7 +2492,7 @@ kbGameEntity 0 0 0 0 {
 						Enabled = 0
 						LifeTime =  -1.000000
 						ParamName = "propertyMap"
-						Texture = NULL
+						Texture = .\assets\models\environment\platforms\bridge_wooden_1_prop.tif
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 					kbShaderParamComponent { 
