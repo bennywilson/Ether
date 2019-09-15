@@ -168,6 +168,7 @@ public:
 				m_pActorComponent->PlayAnimation( KickR_Anim, 0.05f );
 			}
 		}
+
 	}
 
 	virtual void UpdateState() override {
@@ -202,6 +203,9 @@ public:
 		m_CurrentDirection = 0;
 		m_ShakeNBakeActivationStartTime = -1;
 
+		m_NumBaasPlayed = 0;
+		m_NextBaaTime = g_GlobalTimer.TimeElapsedSeconds() + kbfrand() * 1.0f;
+
 		static const kbString IdleL_Anim( "IdleLeft_Basic" );
 		static const kbString IdleR_Anim( "IdleRight_Basic" );
 
@@ -216,6 +220,13 @@ public:
 		const float frameDT = g_pGame->GetFrameDT();
 		const kbVec3 & targetDir = m_pActorComponent->GetTargetFacingDirection();
 		const float curTime = g_GlobalTimer.TimeElapsedSeconds();
+
+		// Baaa
+		if ( m_NumBaasPlayed < 12 && g_GlobalTimer.TimeElapsedSeconds() > m_NextBaaTime ) {
+			m_NumBaasPlayed++;
+			GetSheep()->PlayBaa( 0 );
+			m_NextBaaTime = g_GlobalTimer.TimeElapsedSeconds() + 3.0f + kbfrand();
+		}
 
 		if ( input.IsKeyPressedOrDown( 'J' ) ) {
 			RequestStateChange( KungFuSheepState::CannonBall );
@@ -308,6 +319,8 @@ public:
 	int m_CurrentDirection = 0;
 	float m_LastDirectionChangeTime = 0.0f;
 	float m_ShakeNBakeActivationStartTime = -1.0f;
+	int m_NumBaasPlayed = 0;
+	float m_NextBaaTime = 0.0f;
 };
 
 /**
@@ -381,6 +394,7 @@ public:
 void KungFuSheepComponent::Constructor() {
 	m_TargetFacingDirection.Set( 0.0f, 0.0f, -1.0f );
 	m_bIsPlayer = true;
+	m_LastVOTime = 0.0f;
 }
 
 /**
@@ -476,8 +490,8 @@ void KungFuSheepComponent::OnAnimEvent( const kbAnimEventInfo_t & animEventInfo 
 			}
 		}
 
-		if ( m_AttackVO.size() > 0 ) {
-			m_AttackVO[rand() % m_AttackVO.size()].PlaySoundAtPosition( GetOwnerPosition() );
+		if ( kbfrand() > 0.8f ) {
+			PlayAttackVO( 0 );
 		}
 	}
 }
@@ -550,6 +564,7 @@ void KungFuSheepComponent::TakeDamage( const DealAttackInfo_t<KungFuGame::eAttac
  *	KungFuSheepComponent::PlayShakeNBakeFX
  */
 void KungFuSheepComponent::PlayShakeNBakeFX() {
+
 	if ( m_ShakeNBakeFX.GetEntity() == nullptr ) {
 		return;
 	}
@@ -558,4 +573,20 @@ void KungFuSheepComponent::PlayShakeNBakeFX() {
 	pShakeNBakeFX->SetPosition( GetOwnerPosition() );
 	pShakeNBakeFX->SetOrientation( GetOwnerRotation() );
 	pShakeNBakeFX->DeleteWhenComponentsAreInactive( true );
+}
+
+/**
+ *	KungFuSheepComponent::PlayBaa
+ */
+void KungFuSheepComponent::PlayBaa( const int baaType ) {
+	
+	if ( m_BaaaVO.size() == 0 ) {
+		return;
+	}
+
+	if ( g_GlobalTimer.TimeElapsedSeconds() < m_LastVOTime + 1.0f ) {
+		return;
+	}
+
+	m_BaaaVO[rand() % m_BaaaVO.size()].PlaySoundAtPosition( GetOwnerPosition() );
 }

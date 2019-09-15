@@ -29,6 +29,7 @@ public:
 
 	void										ApplyAnimSmear( const kbVec3 smearVec, const float durationSec );
 
+	void										PlayAttackVO( const int pref );
 
 	bool										IsPlayer() const { return m_bIsPlayer; }
 	virtual bool								IsDead() const { return m_Health <= 0.0f; }
@@ -44,7 +45,6 @@ protected:
 	float										m_Health;
 
 	std::vector<kbSoundData>					m_AttackVO;
-	std::vector<kbSoundData>					m_BattleChatterVO;
 
 	// Game
 	std::vector<kbSkeletalModelComponent *>		m_SkelModelsList;
@@ -53,6 +53,8 @@ protected:
 	float										m_AnimSmearDuration;
 	kbVec4										m_AnimSmearVec;
 	float										m_AnimSmearStartTime;
+
+	float										m_LastVOTime;
 
 	bool										m_bIsPlayer;
 

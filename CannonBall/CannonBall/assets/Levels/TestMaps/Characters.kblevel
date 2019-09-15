@@ -2,7 +2,7 @@ kbGameEntity 0 0 0 0 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		Name = "Entity_49"
+		Name = "Entity_50"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
 		Position = 0.000000 0.000000 0.000000
 		Scale = 1.000000 1.000000 1.000000
@@ -10,8 +10,8 @@ kbGameEntity 0 0 0 0 {
 	kbEditorLevelSettingsComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		MainCameraPosition = 74.724861 -51.533920 -386.428680
-		MainCameraRotation = 0.194387 0.632429 -0.168238 -0.730714
+		MainCameraPosition = 77.515121 -48.183514 -398.140869
+		MainCameraRotation = 0.021293 0.974422 -0.197525 -0.105033
 	}
 }
 kbGameEntity 0 0 0 0 {
@@ -212,7 +212,7 @@ kbGameEntity 0 0 0 0 {
 						LifeTime =  -1.000000
 						ParamName = "fxMapMask"
 						Texture = NULL
-						Vector = 0.000000 1.000000 0.000000 0.000000
+						Vector = 1.000000 0.000000 0.000000 0.000000
 					}
 			}
 		RenderPass = LightingPass
@@ -397,12 +397,33 @@ kbGameEntity 0 0 0 0 {
 				Enabled = 0
 				LifeTime =  -1.000000
 				Animation = .\assets\models\characters\sheep\sheep_punchleft_basic.kbanim.ms3d
-				AnimationEvent = 1
+				AnimationEvent = 4
 					kbAnimEvent { 
 						Enabled = 0
 						LifeTime =  -1.000000
 						EventName = "Punch_Attack"
 						EventTime =  0.750000
+						EventValue =  0.000000
+					}
+					kbAnimEvent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						EventName = "Punch_Attack"
+						EventTime =  1.000000
+						EventValue =  0.000000
+					}
+					kbAnimEvent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						EventName = "Punch_Attack"
+						EventTime =  1.250000
+						EventValue =  0.000000
+					}
+					kbAnimEvent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						EventName = "Punch_Attack"
+						EventTime =  1.500000
 						EventValue =  0.000000
 					}
 				AnimationName = "PunchLeft_Basic"
@@ -413,12 +434,33 @@ kbGameEntity 0 0 0 0 {
 				Enabled = 0
 				LifeTime =  -1.000000
 				Animation = .\assets\models\characters\sheep\sheep_kickleft_basic.kbanim.ms3d
-				AnimationEvent = 1
+				AnimationEvent = 4
 					kbAnimEvent { 
 						Enabled = 0
 						LifeTime =  -1.000000
 						EventName = "Kick_Attack"
 						EventTime =  0.750000
+						EventValue =  0.000000
+					}
+					kbAnimEvent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						EventName = "Punch_Attack"
+						EventTime =  1.000000
+						EventValue =  0.000000
+					}
+					kbAnimEvent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						EventName = "Punch_Attack"
+						EventTime =  1.250000
+						EventValue =  0.000000
+					}
+					kbAnimEvent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						EventName = "Punch_Attack"
+						EventTime =  1.500000
 						EventValue =  0.000000
 					}
 				AnimationName = "KickLeft_Basic"
@@ -483,8 +525,42 @@ kbGameEntity 0 0 0 0 {
 		LifeTime =  -1.000000
 		DummyTemp = 0
 		Health =  100.000000
-		AttackVO = 0
-		BattleChatterVO = 0
+		AttackVO = 5
+			kbSoundData { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Radius =  -1.000000
+				Volume =  1.000000
+				WaveFile = .\assets\sounds\sheep\sheep_vo_battle_1.wav
+			}
+			kbSoundData { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Radius =  -1.000000
+				Volume =  1.000000
+				WaveFile = .\assets\sounds\sheep\sheep_vo_battle_2.wav
+			}
+			kbSoundData { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Radius =  -1.000000
+				Volume =  1.000000
+				WaveFile = .\assets\sounds\sheep\sheep_vo_battle_3.wav
+			}
+			kbSoundData { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Radius =  -1.000000
+				Volume =  1.000000
+				WaveFile = .\assets\sounds\sheep\sheep_vo_battle_4.wav
+			}
+			kbSoundData { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Radius =  -1.000000
+				Volume =  1.000000
+				WaveFile = .\assets\sounds\sheep\sheep_vo_battle_5.wav
+			}
 		Health =  100.000000
 		MaxRotateSpeed =  15.000000
 		MaxRunSpeed =  3.000000
@@ -523,6 +599,42 @@ kbGameEntity 0 0 0 0 {
 				Radius =  -1.000000
 				Volume =  1.000000
 				WaveFile = .\assets\sounds\impacts\woodimpact_5.wav
+			}
+		BaaVO = 5
+			kbSoundData { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Radius =  -1.000000
+				Volume =  1.000000
+				WaveFile = .\assets\sounds\sheep\sheep_vo_baa_1.wav
+			}
+			kbSoundData { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Radius =  -1.000000
+				Volume =  1.000000
+				WaveFile = .\assets\sounds\sheep\sheep_vo_baa_2.wav
+			}
+			kbSoundData { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Radius =  -1.000000
+				Volume =  1.000000
+				WaveFile = .\assets\sounds\sheep\sheep_vo_baa_3.wav
+			}
+			kbSoundData { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Radius =  -1.000000
+				Volume =  1.000000
+				WaveFile = .\assets\sounds\sheep\sheep_vo_baa_4.wav
+			}
+			kbSoundData { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Radius =  -1.000000
+				Volume =  1.000000
+				WaveFile = .\assets\sounds\sheep\sheep_vo_baa_5.wav
 			}
 		CannonBallImpactFX = 846208613 1165520682 3641600641 3993117100
 		CannonBallImpactSound = 1

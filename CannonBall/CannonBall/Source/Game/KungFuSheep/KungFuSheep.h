@@ -41,6 +41,7 @@ public:
 	void										TakeDamage( const DealAttackInfo_t<KungFuGame::eAttackType> & dealAttackInfo );
 
 	void										PlayShakeNBakeFX();
+	void										PlayBaa( const int baaType );
 
 protected:
 
@@ -52,15 +53,14 @@ private:
 	// Data
 	kbGameEntityPtr								m_CannonBallImpactFX;
 	kbGameEntityPtr								m_ShakeNBakeFX;
-	std::vector<kbSoundData>					m_CannonBallVO;
-	std::vector<kbSoundData>					m_CannonBallImpactSound;
 
+	std::vector<kbSoundData>					m_CannonBallVO;
+	std::vector<kbSoundData>					m_BaaaVO;
+	std::vector<kbSoundData>					m_CannonBallImpactSound;
 	std::vector<kbSoundData>					m_BasicAttackImpactSound;
 
 	float										m_JumpSmearMagnitude;
 	float										m_DropSmearMagnitude;
-
-	// Game
 
 //---------------------------------------------------------------------------------------------------
 
@@ -75,6 +75,10 @@ class KungFuSheepStateBase : public CannonBallCharacterState<T> {
 public:
 
 	KungFuSheepStateBase( CannonActorComponent *const pPlayerComponent ) : CannonBallCharacterState( pPlayerComponent ) { }
+
+protected:
+
+	KungFuSheepComponent *	GetSheep() const { return (KungFuSheepComponent*)m_pActorComponent; }
 };
 
 

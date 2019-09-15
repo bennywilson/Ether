@@ -23,6 +23,8 @@
 	m_AnimSmearVec.Set( 0.0f, 0.0f, 0.0f, 0.0f );
 	m_AnimSmearStartTime = -1.0f;
 
+	m_LastVOTime = 0.0f;
+
 	m_bIsPlayer = false;
 }
 
@@ -160,6 +162,24 @@ bool CannonActorComponent::IsPlayingAnim( const kbString animName ) const {
 	}
 
 	return m_SkelModelsList[0]->IsPlaying( animName );
+}
+
+/**
+ *	CannonActorComponent::PlayAttackVO
+ */
+void CannonActorComponent::PlayAttackVO( const int pref ) {
+
+	if ( m_AttackVO.size() == 0 ) {
+		return;
+	}
+
+	const float curTime = g_GlobalTimer.TimeElapsedSeconds();
+	if ( curTime < m_LastVOTime + 2.0f ) {
+		return;
+	}
+	m_LastVOTime = curTime;
+
+	m_AttackVO[rand() % m_AttackVO.size()].PlaySoundAtPosition( GetOwnerPosition() );
 }
 
 /**
