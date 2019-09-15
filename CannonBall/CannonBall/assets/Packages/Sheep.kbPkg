@@ -114,6 +114,7 @@ kbPrefab 1 {
 			LifeTime =  -1.000000
 			DummyTemp = 0
 			Health =  10.000000
+			ActivateOnEnable = 0
 			AmplitudeX =  0.090000
 			AmplitudeY =  0.070000
 			Duration =  0.700000
@@ -131,20 +132,8 @@ kbGameEntity 4226348206 1325904980 2380668328 2364791781 {
 		LifeTime =  -1.000000
 		Name = "ShakeNBake"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
-		Position = 10.000000 2.000000 21.468822
+		Position = 78.300247 -49.741188 -401.740479
 		Scale = 50.000000 50.000000 50.000000
-	}
-	CannonCameraShakeComponent { 
-		Enabled = 1
-		LifeTime =  -1.000000
-		DummyTemp = 0
-		Health =  10.000000
-		AmplitudeX =  0.090000
-		AmplitudeY =  0.070000
-		Duration =  0.700000
-		FrequencyX =  30.000000
-		FrequencyY =  40.000000
-		ActivateOnEnable = 1
 	}
 	kbParticleComponent { 
 		Enabled = 1
@@ -159,7 +148,7 @@ kbGameEntity 4226348206 1325904980 2380668328 2364791781 {
 		Gravity = 0.000000 0.000000 0.000000
 		MaterialList = 0
 		MaxBurstCount = 0
-		MaxDuration =  0.25
+		MaxDuration =  0.250000
 		MaxEndRotationRate =  0.000000
 		MaxEndSize = 3.000000 3.000000 3.000000
 		MaxEndVelocity = 0.000000 0.000000 0.000000
@@ -171,7 +160,7 @@ kbGameEntity 4226348206 1325904980 2380668328 2364791781 {
 		MaxStartSize = 3.000000 3.000000 3.000000
 		MaxStartVelocity = 0.000000 2.000000 0.000000
 		MinBurstCount = 0
-		MinDuration =  0.15
+		MinDuration =  0.150000
 		MinEndRotationRate =  0.000000
 		MinEndSize = 3.000000 3.000000 3.000000
 		MinEndVelocity = 0.000000 0.000000 0.000000
@@ -236,6 +225,46 @@ kbGameEntity 4226348206 1325904980 2380668328 2364791781 {
 		TotalDuration =  3.000000
 		TranslucencySortBias =  0.000000
 		VelocityCurve = 0
+	}
+	kbPlaySoundComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		MaxStartDelay =  0.0010000
+		MinStartDelay =  0.000000
+		SoundData = 3
+			kbSoundData { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Radius =  -1.000000
+				Volume =  1.000000
+				WaveFile = .\assets\sounds\randomfx\woosh1.wav
+			}
+			kbSoundData { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Radius =  -1.000000
+				Volume =  1.000000
+				WaveFile = .\assets\sounds\randomfx\woosh2.wav
+			}
+			kbSoundData { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Radius =  -1.000000
+				Volume =  1.000000
+				WaveFile = .\assets\sounds\randomfx\woosh3.wav
+			}
+	}
+	CannonCameraShakeComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		DummyTemp = 0
+		Health =  10.000000
+		ActivateOnEnable = 1
+		AmplitudeX =  0.090000
+		AmplitudeY =  0.070000
+		Duration =  0.700000
+		FrequencyX =  30.000000
+		FrequencyY =  40.000000
 	}
 }
 }

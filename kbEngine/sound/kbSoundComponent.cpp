@@ -2,7 +2,7 @@
 // kbSoundComponent.cpp
 //
 //
-// 2017-2018 kbEngine 2.0
+// 2017-2019 kbEngine 2.0
 //==============================================================================
 #include "kbCore.h"
 #include "kbVector.h"
@@ -41,4 +41,48 @@ void kbSoundData::PlaySoundAtPosition( const kbVec3 & soundPosition ) const {
 	}
 
 	g_pGame->GetSoundManager().PlayWave( m_pWaveFile, atten * m_Volume );
+}
+
+/**
+ *	kbPlaySoundComponent::Constructor
+ */
+void kbPlaySoundComponent::Constructor() {
+
+	m_MinStartDelay = 0.0f;
+	m_MaxStartDelay = 0.0f;	
+	m_TimeToPlay = 0.0f;
+}
+
+/**
+ *	kbPlaySoundComponent::SetEnable_Internal
+ */
+void kbPlaySoundComponent::SetEnable_Internal( const bool bEnable ) {
+
+	Super::SetEnable_Internal( bEnable );
+
+	if ( bEnable ) {
+		const float delay = kbfrand( m_MinStartDelay, m_MaxStartDelay );
+		m_TimeToPlay = g_GlobalTimer.TimeElapsedSeconds() + delay;
+	}
+}
+
+/**
+ *	kbPlaySoundComponent::Update_Internal
+ */
+void kbPlaySoundComponent::Update_Internal( const float DeltaTime ) {
+
+	Super::Update_Internal( DeltaTime );
+
+	if ( g_UseEditor == true ) {
+		return;
+	}
+
+	if ( g_GlobalTimer.TimeElapsedSeconds() >= m_TimeToPlay ) {
+
+		if ( m_SoundData.size() > 0 ) {
+			m_SoundData[rand() % m_SoundData.size()].PlaySoundAtPosition( GetOwnerPosition() ); 
+		}
+
+		Enable( false );
+	}
 }

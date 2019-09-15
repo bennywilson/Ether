@@ -334,6 +334,13 @@ GenerateClass(
 )
 
 GenerateClass(
+	kbPlaySoundComponent,
+	AddField( "MinStartDelay", KBTYPEINFO_FLOAT, kbPlaySoundComponent, m_MinStartDelay, false, "" )
+	AddField( "MaxStartDelay", KBTYPEINFO_FLOAT, kbPlaySoundComponent, m_MaxStartDelay, false, "" )
+	AddField( "SoundData", KBTYPEINFO_STRUCT, kbPlaySoundComponent, m_SoundData, true, "kbSoundData" )
+)
+
+GenerateClass(
 	kbDebugSphereCollision,
 	AddField( "CollisionModel", KBTYPEINFO_STATICMODEL, kbDebugSphereCollision, m_pCollisionModel, false, "" )
 )

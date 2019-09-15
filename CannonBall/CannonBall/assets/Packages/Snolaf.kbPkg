@@ -675,7 +675,6 @@ kbGameEntity 314357658 1122514197 2466994618 463523205 {
 		DummyTemp = 0
 		Health =  100.000000
 		AttackVO = 0
-		BattleChatterVO = 0
 		Health =  100.000000
 		MaxRotateSpeed =  15.000000
 		MaxRunSpeed =  3.000000

@@ -142,4 +142,6 @@ DEFINE_KBCLASS(kbShaderModifierComponent)
 
 DEFINE_KBCLASS(kbDeleteEntityComponent)
 
+DEFINE_KBCLASS(kbPlaySoundComponent)
+
 typedef kbResource * kbResourcePtr;

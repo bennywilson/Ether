@@ -276,6 +276,7 @@ kbPrefab 1 {
 			MaxEndRotationRate =  0.000000
 			MaxEndSize = 0.450000 0.450000 0.450000
 			MaxEndVelocity = 0.000000 0.000000 0.000000
+			MaxParticlesToEmit = -1
 			MaxSpawnRate =  1.000000
 			MaxStart3DOffset = 0.000000 0.000000 0.000000
 			MaxStart3DRotation = 0.000000 0.000000 10.000000
@@ -339,6 +340,7 @@ kbPrefab 1 {
 			MaxEndRotationRate =  0.000000
 			MaxEndSize = 0.390000 0.390000 0.390000
 			MaxEndVelocity = 0.000000 0.000000 0.000000
+			MaxParticlesToEmit = -1
 			MaxSpawnRate =  5.000000
 			MaxStart3DOffset = 0.000000 0.000000 0.000000
 			MaxStart3DRotation = 0.000000 0.000000 0.000000
@@ -645,6 +647,7 @@ kbGameEntity 3457190988 1240531568 1181983423 3782107432 {
 		MaxEndRotationRate =  0.000000
 		MaxEndSize = 0.450000 0.450000 0.450000
 		MaxEndVelocity = 0.000000 0.000000 0.000000
+		MaxParticlesToEmit = -1
 		MaxSpawnRate =  1.000000
 		MaxStart3DOffset = 0.000000 0.000000 0.000000
 		MaxStart3DRotation = 0.000000 0.000000 10.000000
@@ -708,6 +711,7 @@ kbGameEntity 3457190988 1240531568 1181983423 3782107432 {
 		MaxEndRotationRate =  0.000000
 		MaxEndSize = 0.390000 0.390000 0.390000
 		MaxEndVelocity = 0.000000 0.000000 0.000000
+		MaxParticlesToEmit = -1
 		MaxSpawnRate =  5.000000
 		MaxStart3DOffset = 0.000000 0.000000 0.000000
 		MaxStart3DRotation = 0.000000 0.000000 0.000000
