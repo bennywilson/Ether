@@ -2,7 +2,7 @@ kbGameEntity 0 0 0 0 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		Name = "Entity_50"
+		Name = "Entity_54"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
 		Position = 0.000000 0.000000 0.000000
 		Scale = 1.000000 1.000000 1.000000
@@ -525,7 +525,7 @@ kbGameEntity 0 0 0 0 {
 		LifeTime =  -1.000000
 		DummyTemp = 0
 		Health =  100.000000
-		AttackVO = 5
+		AttackVO = 3
 			kbSoundData { 
 				Enabled = 0
 				LifeTime =  -1.000000
@@ -539,20 +539,6 @@ kbGameEntity 0 0 0 0 {
 				Radius =  -1.000000
 				Volume =  1.000000
 				WaveFile = .\assets\sounds\sheep\sheep_vo_battle_2.wav
-			}
-			kbSoundData { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				Radius =  -1.000000
-				Volume =  1.000000
-				WaveFile = .\assets\sounds\sheep\sheep_vo_battle_3.wav
-			}
-			kbSoundData { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				Radius =  -1.000000
-				Volume =  1.000000
-				WaveFile = .\assets\sounds\sheep\sheep_vo_battle_4.wav
 			}
 			kbSoundData { 
 				Enabled = 0
