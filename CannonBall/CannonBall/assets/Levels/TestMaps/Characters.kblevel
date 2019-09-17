@@ -32,7 +32,7 @@ kbGameEntity 0 0 0 0 {
 				Enabled = 0
 				LifeTime =  -1.000000
 				CullModeOverride = ShaderDefault
-				Shader = .\assets\shaders\environment\environmentbase.kbshader
+				Shader = .\assets\shaders\environment\environmentSkinned.kbshader
 				ShaderParams = 4
 					kbShaderParamComponent { 
 						Enabled = 0

@@ -59,7 +59,7 @@ const static size_t g_NumEditorCamSpeedBindings = sizeof( g_EditorCamSpeedBindin
  * kbEditor
  */
 kbEditor::kbEditor() :
-	Fl_Window( 0, 0, GetSystemMetrics( SM_CXFULLSCREEN ), GetSystemMetrics( SM_CYFULLSCREEN ) ) {
+	Fl_Window( 0, 0, 1920 / 2, 1080 / 2 ) {
 
 	m_bGameUpdating = false;
 	const float editorInitStartTime = g_GlobalTimer.TimeElapsedSeconds();
@@ -73,8 +73,8 @@ kbEditor::kbEditor() :
 	m_pGame = nullptr;
 	m_pGameWindow = nullptr;
 
-	const int Screen_Width = GetSystemMetrics( SM_CXFULLSCREEN );
-	const int Screen_Height = GetSystemMetrics( SM_CYFULLSCREEN );
+	const int Screen_Width = 1920 / 2;
+	const int Screen_Height = 1080 / 2;
 	const int Menu_Bar_Height = 20;
 	const int Menu_Buttons_Height = 30;
 	const int Left_Panel = 200;
