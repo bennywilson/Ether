@@ -49,16 +49,28 @@ public:
 		const kbInput_t & input = g_pInputManager->GetInput();
 
 		const float curTime = g_GlobalTimer.TimeElapsedSeconds();
-
+		const float frameDT = g_pGame->GetFrameDT();
+		const float blockerCheckReach = frameDT * m_pActorComponent->GetMaxRunSpeed() * 20.0f;
 		if ( input.WasKeyJustPressed( 'K' ) ) {
 			RequestStateChange( KungFuSheepState::Attack );
 		} else if ( input.IsKeyPressedOrDown( 'J' ) && curTime > m_LastCannonBallTime + 2.0f ) {
 			RequestStateChange( KungFuSheepState::CannonBall );
 		} else if ( input.IsKeyPressedOrDown( 'A' ) ) {
-			RequestStateChange( KungFuSheepState::Run );
+							
+			// Run
+			const kbVec3 moveDir( 0.0f, 0.0f, 1 );
+			if ( CheckForBlocker( moveDir * blockerCheckReach ) == false ) {
+				RequestStateChange( KungFuSheepState::Run );
+			}
 			m_pActorComponent->SetTargetFacingDirection( g_LeftFacing );
+
 		} else if ( input.IsKeyPressedOrDown( 'D' ) ) {
-			RequestStateChange( KungFuSheepState::Run );
+							
+			// Run
+			const kbVec3 moveDir( 0.0f, 0.0f, -1 );
+			if ( CheckForBlocker( moveDir * blockerCheckReach ) == false ) {
+				RequestStateChange( KungFuSheepState::Run );
+			}
 			m_pActorComponent->SetTargetFacingDirection( g_RightFacing );
 		}
 
@@ -74,6 +86,7 @@ public:
 	virtual void EndState( T nextState ) override { }
 
 private:
+
 	float m_LastCannonBallTime = -1.0f;
 };
 
@@ -99,6 +112,7 @@ public:
 
 		const float frameDT = g_pGame->GetFrameDT();
 		const kbVec3 & targetDir = m_pActorComponent->GetTargetFacingDirection();
+		const float blockerCheckReach = frameDT * m_pActorComponent->GetMaxRunSpeed() * 20.0f;
 
 		if ( input.WasKeyJustPressed( 'K' ) ) {
 			RequestStateChange( KungFuSheepState::Attack );
@@ -108,10 +122,14 @@ public:
 			if ( input.IsKeyPressedOrDown( 'A' ) ) {
 				
 				// Run
-				const kbVec3 moveDir( 0.0f, 0.0f, -1 );
-				const kbVec3 targetPos = m_pActorComponent->GetOwnerPosition() - moveDir * frameDT * m_pActorComponent->GetMaxRunSpeed();
-				m_pActorComponent->SetOwnerPosition( targetPos );
+				const kbVec3 moveDir( 0.0f, 0.0f, 1 );
 
+				if ( CheckForBlocker( moveDir * blockerCheckReach ) == false ) {
+					const kbVec3 targetPos = m_pActorComponent->GetOwnerPosition() + moveDir * frameDT * m_pActorComponent->GetMaxRunSpeed();
+					m_pActorComponent->SetOwnerPosition( targetPos );
+				} else {
+					RequestStateChange( KungFuSheepState::Idle );
+				}
 			} else if ( input.IsKeyPressedOrDown( 'D' ) ) {
 				m_pActorComponent->SetTargetFacingDirection( g_RightFacing );
 			} else {
@@ -122,10 +140,14 @@ public:
 			if ( input.IsKeyPressedOrDown( 'D' ) ) {
 
 				// Run
-				const kbVec3 moveDir( 0.0f, 0.0f, 1 );
-				const kbVec3 targetPos = m_pActorComponent->GetOwnerPosition() - moveDir * frameDT * m_pActorComponent->GetMaxRunSpeed();
-				m_pActorComponent->SetOwnerPosition( targetPos );
+				const kbVec3 moveDir( 0.0f, 0.0f, -1 );
 
+				if ( CheckForBlocker( moveDir * blockerCheckReach ) == false ) {
+					const kbVec3 targetPos = m_pActorComponent->GetOwnerPosition() + moveDir * frameDT * m_pActorComponent->GetMaxRunSpeed();
+					m_pActorComponent->SetOwnerPosition( targetPos );
+				} else {
+					RequestStateChange( KungFuSheepState::Idle );
+				}
 			} else if ( input.IsKeyPressedOrDown( 'A' ) ) {
 				m_pActorComponent->SetTargetFacingDirection( g_LeftFacing );
 			} else {
@@ -168,7 +190,6 @@ public:
 				m_pActorComponent->PlayAnimation( KickR_Anim, 0.05f );
 			}
 		}
-
 	}
 
 	virtual void UpdateState() override {
@@ -212,6 +233,12 @@ public:
 		KungFuSheepComponent *const pSheep = m_pActorComponent->GetAs<KungFuSheepComponent>();
 		pSheep->SetAnimationTimeScaleMultiplier( IdleL_Anim, 2.0f );
 		pSheep->SetAnimationTimeScaleMultiplier( IdleR_Anim, 2.0f );
+
+		if ( kbfrand() > 0.5f ) {
+			GetSheep()->PlayBaa( 0 );
+			m_NextBaaTime = g_GlobalTimer.TimeElapsedSeconds() + 1 + 3.0f * kbfrand();
+			m_NumBaasPlayed = 1;
+		}
 	}
 
 	virtual void UpdateState() override {
@@ -222,7 +249,7 @@ public:
 		const float curTime = g_GlobalTimer.TimeElapsedSeconds();
 
 		// Baaa
-		if ( m_NumBaasPlayed < 12 && g_GlobalTimer.TimeElapsedSeconds() > m_NextBaaTime ) {
+		if ( m_NumBaasPlayed < 2 && g_GlobalTimer.TimeElapsedSeconds() > m_NextBaaTime ) {
 			m_NumBaasPlayed++;
 			GetSheep()->PlayBaa( 0 );
 			m_NextBaaTime = g_GlobalTimer.TimeElapsedSeconds() + 3.0f + kbfrand();

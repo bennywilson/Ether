@@ -97,15 +97,6 @@ public:
 				if ( vSnolafToTarget.Dot( snolafFacingDir ) > 0.0f ) {
 					continue;
 				}
-	
-				DealAttackInfo_t<KungFuGame::eAttackType> dealAttackInfo;
-				dealAttackInfo.m_BaseDamage = 999999.0f;
-				dealAttackInfo.m_pAttacker = m_pActorComponent;
-				dealAttackInfo.m_Radius = 0.0f;
-				dealAttackInfo.m_AttackType = KungFuGame::Hug;
-
-				KungFuLevelComponent *const pLevelComponent = g_pCannonGame->GetLevelComponent<KungFuLevelComponent>();
-				pLevelComponent->DoAttack( dealAttackInfo );
 
 				RequestStateChange( KungFuSnolafState::Hug );
 				return;
@@ -167,6 +158,9 @@ public:
 			GetSnolaf()->EnableLargeLoveHearts( true );
 			m_bCanWatchCannonball = true;
 		}
+
+		m_HugStartTime = g_GlobalTimer.TimeElapsedSeconds();
+		m_bFirstHitYet = false;
 	}
 
 	virtual void UpdateState() override {
@@ -178,12 +172,22 @@ public:
 			return;
 		}
 
-		if ( m_bCanWatchCannonball ) {
-			KungFuSheepComponent *const pSheep = GetTarget()->GetAs<KungFuSheepComponent>();
-			if ( pSheep->IsCannonBalling() ) {
-				RequestStateChange( KungFuSnolafState::WatchCannonBall );
-				return;
-			}
+		KungFuSheepComponent *const pSheep = GetTarget()->GetAs<KungFuSheepComponent>();
+		if ( m_bCanWatchCannonball && pSheep->IsCannonBalling() ) {
+			RequestStateChange( KungFuSnolafState::WatchCannonBall );
+			return;
+		}
+
+		if ( pSheep != nullptr && m_bFirstHitYet == false && g_GlobalTimer.TimeElapsedSeconds() > m_HugStartTime + 0.25f ) {
+			m_bFirstHitYet = true;
+			KungFuLevelComponent *const pLevelComponent = g_pCannonGame->GetLevelComponent<KungFuLevelComponent>();
+
+			DealAttackInfo_t<KungFuGame::eAttackType> dealAttackInfo;
+			dealAttackInfo.m_BaseDamage = 999999.0f;
+			dealAttackInfo.m_pAttacker = m_pActorComponent;
+			dealAttackInfo.m_Radius = 0.0f;
+			dealAttackInfo.m_AttackType = KungFuGame::Hug;
+			pLevelComponent->DoAttack( dealAttackInfo );		
 		}
 
 		const kbVec3 snolafPos = m_pActorComponent->GetOwnerPosition();
@@ -224,6 +228,8 @@ public:
 
 private:
 	bool m_bCanWatchCannonball = false;
+	float m_HugStartTime = 0.0f;
+	bool m_bFirstHitYet = false;
 };
 
 

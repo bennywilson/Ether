@@ -79,6 +79,34 @@ public:
 protected:
 
 	KungFuSheepComponent *	GetSheep() const { return (KungFuSheepComponent*)m_pActorComponent; }
+	
+	bool CheckForBlocker( const kbVec3 moveVec ) {
+
+
+		const float SheepZ = GetSheep()->GetOwnerPosition().z;
+		const kbVec3 SheepDest = GetSheep()->GetOwnerPosition() + moveVec;
+		//g_pRenderer->DrawLine( GetSheep()->GetOwnerPosition() ,  GetSheep()->GetOwnerPosition() + moveVec + kbVec3( 0, 1, 0 ) , kbColor::red );
+
+		for ( int i = 0; i < g_pCannonGame->GetGameEntities().size(); i++ ) {
+
+			kbGameEntity *const pGameEnt = g_pCannonGame->GetGameEntities()[i];
+			KungFuSnolafComponent *const pSnolaf = pGameEnt->GetComponent<KungFuSnolafComponent>();
+			if ( pSnolaf == nullptr || pSnolaf->IsDead() ) {
+				continue;
+			}
+
+			const kbVec3 snolafPos = pSnolaf->GetOwnerPosition();
+			if ( snolafPos.z < SheepZ && SheepDest.z <= snolafPos.z ) {
+				return true;
+			}
+
+			if ( snolafPos.z > SheepZ && SheepDest.z >= snolafPos.z ) {
+				return true;
+			}
+		}
+
+		return false;
+	}
 };
 
 
