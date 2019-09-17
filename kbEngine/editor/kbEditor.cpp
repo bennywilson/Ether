@@ -838,16 +838,21 @@ void kbEditor::ScaleButtonCB( class Fl_Widget *, void * ) {
 	g_Editor->BroadcastEvent( cbObject );
 }
 
-void XFormEntities( kbManipulator & manipulator, const kbVec4 xForm ) {
+void XFormEntities( const kbManipulator & manipulator, const kbVec4 xForm ) {
 
-	manipulator.ApplyTransform( xForm );
-	
 	std::vector<kbEditorEntity*> & entityList = g_Editor->GetGameEntities();
 	for ( int i = 0; i < entityList.size(); i++ ) {
 		if ( entityList[i]->IsSelected() ) {
-			entityList[i]->SetPosition( manipulator.GetPosition() );
-			entityList[i]->SetOrientation( manipulator.GetOrientation() );
-			entityList[i]->SetScale( manipulator.GetScale() );
+
+			if ( manipulator.GetMode() == kbManipulator::Translate ) {
+				entityList[i]->SetPosition( entityList[i]->GetPosition() + xForm.ToVec3() * xForm.w );
+			} else if ( manipulator.GetMode() == kbManipulator::Rotate ) {
+				kbQuat rot( xForm.ToVec3(), xForm.a );
+				rot = ( entityList[i]->GetOrientation() * rot ).Normalized();
+				entityList[i]->SetOrientation( rot );
+			} else if (manipulator.GetMode() == kbManipulator::Scale ) {
+				entityList[i]->SetScale( entityList[i]->GetScale() + xForm.ToVec3() * xForm.w );
+			}
 		}
 	}
 }
@@ -857,7 +862,7 @@ void XFormEntities( kbManipulator & manipulator, const kbVec4 xForm ) {
 */
 void kbEditor::XPlusAdjustButtonCB( Fl_Widget *, void * ) {
 
-	XFormEntities( g_Editor->m_pMainTab->GetManipulator(), kbVec4( 1.0f, 0.0f, 0.0f, (float)atof( g_Editor->m_pXFormInput->value() ) ) );
+	XFormEntities( g_Editor->m_pMainTab->m_Manipulator, kbVec4( 1.0f, 0.0f, 0.0f, (float)atof( g_Editor->m_pXFormInput->value() ) ) );
 }
 
 /**
@@ -865,7 +870,7 @@ void kbEditor::XPlusAdjustButtonCB( Fl_Widget *, void * ) {
 */
 void kbEditor::XNegAdjustButtonCB( Fl_Widget *, void * ) {
 
-	XFormEntities( g_Editor->m_pMainTab->GetManipulator(), kbVec4( -1.0f, 0.0f, 0.0f, (float)atof( g_Editor->m_pXFormInput->value() ) ) );
+	XFormEntities( g_Editor->m_pMainTab->m_Manipulator, kbVec4( -1.0f, 0.0f, 0.0f, (float)atof( g_Editor->m_pXFormInput->value() ) ) );
 }
 
 /**
@@ -873,7 +878,7 @@ void kbEditor::XNegAdjustButtonCB( Fl_Widget *, void * ) {
 */
 void kbEditor::YPlusAdjustButtonCB( Fl_Widget *, void * ) {
 
-	XFormEntities( g_Editor->m_pMainTab->GetManipulator(), kbVec4( 0.0f, 1.0f, 0.0f, (float)atof( g_Editor->m_pXFormInput->value() ) ) );
+	XFormEntities( g_Editor->m_pMainTab->m_Manipulator, kbVec4( 0.0f, 1.0f, 0.0f, (float)atof( g_Editor->m_pXFormInput->value() ) ) );
 }
 
 /**
@@ -881,7 +886,7 @@ void kbEditor::YPlusAdjustButtonCB( Fl_Widget *, void * ) {
 */
 void kbEditor::YNegAdjustButtonCB( Fl_Widget *, void * ) {
 
-	XFormEntities( g_Editor->m_pMainTab->GetManipulator(), kbVec4( 0.0f, -1.0f, 0.0f, (float)atof( g_Editor->m_pXFormInput->value() ) ) );
+	XFormEntities( g_Editor->m_pMainTab->m_Manipulator, kbVec4( 0.0f, -1.0f, 0.0f, (float)atof( g_Editor->m_pXFormInput->value() ) ) );
 }
 
 /**
@@ -889,7 +894,7 @@ void kbEditor::YNegAdjustButtonCB( Fl_Widget *, void * ) {
 */
 void kbEditor::ZPlusAdjustButtonCB( Fl_Widget *, void * ) {
 
-	XFormEntities( g_Editor->m_pMainTab->GetManipulator(), kbVec4( 0.0f, 0.0f, 1.0f, (float)atof( g_Editor->m_pXFormInput->value() ) ) );
+	XFormEntities( g_Editor->m_pMainTab->m_Manipulator, kbVec4( 0.0f, 0.0f, 1.0f, (float)atof(g_Editor->m_pXFormInput->value() ) ) );
 }
 
 /**
@@ -897,7 +902,7 @@ void kbEditor::ZPlusAdjustButtonCB( Fl_Widget *, void * ) {
 */
 void kbEditor::ZNegAdjustButtonCB(Fl_Widget *, void *) {
 
-	XFormEntities( g_Editor->m_pMainTab->GetManipulator(), kbVec4( 0.0f, 0.0f, -1.0f, (float)atof( g_Editor->m_pXFormInput->value() ) ) );
+	XFormEntities( g_Editor->m_pMainTab->m_Manipulator, kbVec4( 0.0f, 0.0f, -1.0f, (float)atof( g_Editor->m_pXFormInput->value() ) ) );
 }
 
 /**

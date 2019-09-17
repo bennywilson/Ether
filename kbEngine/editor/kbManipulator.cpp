@@ -23,8 +23,6 @@ kbManipulator::kbManipulator() :
 	m_Orientation.Set( 0.0f, 0.0f, 0.0f, 1.0f );
 	m_Scale.Set( 1.0f, 1.0f, 1.0f );
 
-	m_NextTransformFromInput.Set( 0.0f, 0.0f, 0.0f, 0.0f );
-
 	memset( m_pModels, 0, sizeof( m_pModels ) );
 }
 
@@ -187,31 +185,4 @@ void kbManipulator::ProcessInput( const bool leftMouseDown ) {
 			break;
 		}
 	}
-}
-
-/**
-*	kbManipulator::ApplyTransform
-*/
-void kbManipulator::ApplyTransform( const kbVec4 & xForm ) {
-
-	m_NextTransformFromInput = xForm;
-
-		if ( m_NextTransformFromInput.ToVec3().Length() > 0.001f ) {
-		m_NextTransformFromInput *= m_NextTransformFromInput.w;
-		if ( m_ManipulatorMode == kbManipulator::Translate ) {
-
-			m_Position += m_NextTransformFromInput.ToVec3();
-		}
-		else if ( m_ManipulatorMode == kbManipulator::Rotate ) {
-
-			const kbQuat rot( m_NextTransformFromInput.ToVec3(), m_NextTransformFromInput.a );
-			m_Orientation = ( m_LastOrientation * rot ).Normalized();
-			m_LastOrientation = m_Orientation;
-		}
-		else if (m_ManipulatorMode == kbManipulator::Scale) {
-			m_Scale += m_NextTransformFromInput.ToVec3();
-		}
-	}
-
-	m_NextTransformFromInput.Set( 0.0f, 0.0f, 0.0f, 0.0f );
 }

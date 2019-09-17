@@ -46,8 +46,6 @@
 	void										SetMode( const manipulatorMode_t newMode ) { m_ManipulatorMode = newMode; }
 	manipulatorMode_t							GetMode() const { return m_ManipulatorMode; }
 
-	void										ApplyTransform( const kbVec4 & xForm );	// xyz, w = magnitude
-
 private:
 
 	kbModel *									m_pModels[NumManipulators];
