@@ -444,6 +444,9 @@ void kbClothComponent::SetupCloth() {
 	m_Masses.insert( m_Masses.begin(), (int)m_BoneInfo.size(), kbClothMass_t() );
 	for ( int i = 0; i < m_Masses.size(); i++ ) {
 		m_Masses[i].m_Matrix = m_pSkeletalModel->GetRefBoneMatrix( m_BoneIndices[i] );
+		const kbVec3 org = m_Masses[i].m_Matrix.GetOrigin() * kbLevelComponent::GetGlobalModelScale();
+		m_Masses[i].m_Matrix.SetAxis( 3, org );
+
 		m_Masses[i].m_Matrix *= parentMatrix;
 		m_Masses[i].m_Matrix.SetAxis( 0, kbVec3( 1.0f, 0.0f, 0.0f ) );
 		m_Masses[i].m_Matrix.SetAxis( 1, kbVec3( 0.0f, 1.0f, 0.0f ) );

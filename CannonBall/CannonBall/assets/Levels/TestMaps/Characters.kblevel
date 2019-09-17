@@ -2,7 +2,7 @@ kbGameEntity 0 0 0 0 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		Name = "Entity_52"
+		Name = "Entity_50"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
 		Position = 0.000000 0.000000 0.000000
 		Scale = 1.000000 1.000000 1.000000
@@ -67,7 +67,7 @@ kbGameEntity 0 0 0 0 {
 		TranslucencySortBias =  0.000000
 		Animations = 0
 		DebugAnimIndex = -1
-		Model = .\assets\models\environment\banners\Banner_1.ms3d
+		Model = .\assets\models\environment\banners\banner_1.ms3d
 	}
 	kbClothComponent { 
 		Enabled = 1
@@ -924,12 +924,12 @@ kbGameEntity 0 0 0 0 {
 			}
 		ClothType = Square
 		Collision = 0
-		Gravity = 0.000000 -100.000000 0.000000
+		Gravity = 0.000000 -10.000000 0.000000
 		Height = 11
 		MaxWindGustDuration =  1.000000
-		MaxWindVelocity = 5.000000 30.000000 40.000000
+		MaxWindVelocity = 5.000000 11.000000 40.000000
 		MinWindGustDuration =  1.000000
-		MinWindVelocity = -5.000000 10.000000 10.000000
+		MinWindVelocity = -5.000000 8.000000 10.000000
 		NumIterations = 1
 		Width = 11
 	}
