@@ -19,6 +19,8 @@ void kbSoundData::Constructor() {
 	m_pWaveFile = nullptr;
 	m_Radius = -1.0f;
 	m_Volume = 1.0f;
+
+	m_bDebugPlaySound = false;
 }
 
 /**
@@ -41,6 +43,19 @@ void kbSoundData::PlaySoundAtPosition( const kbVec3 & soundPosition ) const {
 	}
 
 	g_pGame->GetSoundManager().PlayWave( m_pWaveFile, atten * m_Volume );
+}
+
+/**
+ *	kbSoundData::EditorChange
+ */
+void kbSoundData::EditorChange( const std::string & propertyName ) {
+
+	Super::EditorChange( propertyName );
+
+	if ( propertyName == "TestPlaySoundNow" ) {
+		m_bDebugPlaySound = false;
+		g_pGame->GetSoundManager().PlayWave( m_pWaveFile, m_Volume * m_Volume );
+	}
 }
 
 /**

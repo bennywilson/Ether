@@ -19,11 +19,15 @@ public:
 
 	void										PlaySoundAtPosition( const kbVec3 & soundPosition ) const;
 
+	virtual void								EditorChange( const std::string & propertyName ) override;
+
 private:
 
 	class kbWaveFile *							m_pWaveFile;
 	float										m_Radius;
 	float										m_Volume;
+
+	bool										m_bDebugPlaySound;
 };
 
 /**

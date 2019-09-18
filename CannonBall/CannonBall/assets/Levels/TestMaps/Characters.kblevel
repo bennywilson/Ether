@@ -2,7 +2,7 @@ kbGameEntity 0 0 0 0 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		Name = "Entity_50"
+		Name = "Entity_51"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
 		Position = 0.000000 0.000000 0.000000
 		Scale = 1.000000 1.000000 1.000000
@@ -10,8 +10,8 @@ kbGameEntity 0 0 0 0 {
 	kbEditorLevelSettingsComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		MainCameraPosition = 76.544014 -48.780994 -394.722107
-		MainCameraRotation = 0.102222 0.644584 -0.087553 -0.752593
+		MainCameraPosition = 79.726936 -50.265663 -399.225891
+		MainCameraRotation = -0.000002 0.989871 -0.000001 0.141969
 	}
 }
 kbGameEntity 0 0 0 0 {
@@ -32,7 +32,7 @@ kbGameEntity 0 0 0 0 {
 				Enabled = 0
 				LifeTime =  -1.000000
 				CullModeOverride = ShaderDefault
-				Shader = .\assets\shaders\environment\environmentSkinned.kbshader
+				Shader = .\assets\shaders\environment\environmentskinned.kbshader
 				ShaderParams = 4
 					kbShaderParamComponent { 
 						Enabled = 0
@@ -1450,45 +1450,43 @@ kbGameEntity 0 0 0 0 {
 				Enabled = 0
 				LifeTime =  -1.000000
 				Radius =  -1.000000
-				Volume =  1.000000
+				TestPlaySoundNow = 0
+				Volume =  0.500000
 				WaveFile = .\assets\sounds\sheep\sheep_vo_battle_1.wav
 			}
 			kbSoundData { 
 				Enabled = 0
 				LifeTime =  -1.000000
 				Radius =  -1.000000
-				Volume =  1.000000
+				TestPlaySoundNow = 0
+				Volume =  0.500000
 				WaveFile = .\assets\sounds\sheep\sheep_vo_battle_2.wav
 			}
 			kbSoundData { 
 				Enabled = 0
 				LifeTime =  -1.000000
 				Radius =  -1.000000
-				Volume =  1.000000
+				TestPlaySoundNow = 0
+				Volume =  0.750000
 				WaveFile = .\assets\sounds\sheep\sheep_vo_battle_5.wav
 			}
 		Health =  100.000000
 		MaxRotateSpeed =  15.000000
 		MaxRunSpeed =  3.000000
-		AttackImpactSound = 5
+		AttackImpactSound = 4
 			kbSoundData { 
 				Enabled = 0
 				LifeTime =  -1.000000
 				Radius =  -1.000000
-				Volume =  1.000000
-				WaveFile = .\assets\sounds\impacts\woodimpact_1.wav
-			}
-			kbSoundData { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				Radius =  -1.000000
-				Volume =  1.000000
+				TestPlaySoundNow = 0
+				Volume =  2.000000
 				WaveFile = .\assets\sounds\impacts\woodimpact_2.wav
 			}
 			kbSoundData { 
 				Enabled = 0
 				LifeTime =  -1.000000
 				Radius =  -1.000000
+				TestPlaySoundNow = 0
 				Volume =  1.000000
 				WaveFile = .\assets\sounds\impacts\woodimpact_3.wav
 			}
@@ -1496,6 +1494,7 @@ kbGameEntity 0 0 0 0 {
 				Enabled = 0
 				LifeTime =  -1.000000
 				Radius =  -1.000000
+				TestPlaySoundNow = 0
 				Volume =  1.000000
 				WaveFile = .\assets\sounds\impacts\woodimpact_4.wav
 			}
@@ -1503,6 +1502,7 @@ kbGameEntity 0 0 0 0 {
 				Enabled = 0
 				LifeTime =  -1.000000
 				Radius =  -1.000000
+				TestPlaySoundNow = 0
 				Volume =  1.000000
 				WaveFile = .\assets\sounds\impacts\woodimpact_5.wav
 			}
@@ -1511,6 +1511,7 @@ kbGameEntity 0 0 0 0 {
 				Enabled = 0
 				LifeTime =  -1.000000
 				Radius =  -1.000000
+				TestPlaySoundNow = 0
 				Volume =  1.000000
 				WaveFile = .\assets\sounds\sheep\sheep_vo_baa_1.wav
 			}
@@ -1518,6 +1519,7 @@ kbGameEntity 0 0 0 0 {
 				Enabled = 0
 				LifeTime =  -1.000000
 				Radius =  -1.000000
+				TestPlaySoundNow = 0
 				Volume =  1.000000
 				WaveFile = .\assets\sounds\sheep\sheep_vo_baa_2.wav
 			}
@@ -1525,6 +1527,7 @@ kbGameEntity 0 0 0 0 {
 				Enabled = 0
 				LifeTime =  -1.000000
 				Radius =  -1.000000
+				TestPlaySoundNow = 0
 				Volume =  1.000000
 				WaveFile = .\assets\sounds\sheep\sheep_vo_baa_3.wav
 			}
@@ -1532,14 +1535,16 @@ kbGameEntity 0 0 0 0 {
 				Enabled = 0
 				LifeTime =  -1.000000
 				Radius =  -1.000000
-				Volume =  1.000000
+				TestPlaySoundNow = 0
+				Volume =  0.700000
 				WaveFile = .\assets\sounds\sheep\sheep_vo_baa_4.wav
 			}
 			kbSoundData { 
 				Enabled = 0
 				LifeTime =  -1.000000
 				Radius =  -1.000000
-				Volume =  1.000000
+				TestPlaySoundNow = 0
+				Volume =  0.650000
 				WaveFile = .\assets\sounds\sheep\sheep_vo_baa_5.wav
 			}
 		CannonBallImpactFX = 846208613 1165520682 3641600641 3993117100
@@ -1548,7 +1553,8 @@ kbGameEntity 0 0 0 0 {
 				Enabled = 0
 				LifeTime =  -1.000000
 				Radius =  -1.000000
-				Volume =  0.100000
+				TestPlaySoundNow = 0
+				Volume =  0.500000
 				WaveFile = .\assets\sounds\impacts\impact_large_wood.wav
 			}
 		CannonBallVO = 1
@@ -1556,7 +1562,8 @@ kbGameEntity 0 0 0 0 {
 				Enabled = 0
 				LifeTime =  -1.000000
 				Radius =  -1.000000
-				Volume =  0.100000
+				TestPlaySoundNow = 0
+				Volume =  0.450000
 				WaveFile = .\assets\sounds\sheep\sheep_vo_cannonball.wav
 			}
 		DropSmearMagnitude =  2.500000
