@@ -156,7 +156,7 @@ private:
 			numSnolafs++;
 		}
 
-		if ( numSnolafs < 7 && g_GlobalTimer.TimeElapsedSeconds() > m_LastSpawnTime + 0.25f ) {
+		if ( numSnolafs < 0 && g_GlobalTimer.TimeElapsedSeconds() > m_LastSpawnTime + 0.25f ) {
 
 			KungFuLevelComponent *const pLevelComp = g_pCannonGame->GetLevelComponent<KungFuLevelComponent>();
 			pLevelComp->SpawnEnemy();

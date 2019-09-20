@@ -172,6 +172,41 @@ void kbClothComponent::Update_Internal( const float DeltaTime ) {
 
 		for ( int iCollision = 0; iCollision < m_CollisionSpheres.size(); iCollision++ ) {
 			kbBoneMatrix_t boneWorldMatrix;
+
+			if ( GetAsyncKeyState('I') ) {
+				m_CollisionSpheres[iCollision].m_Sphere.ToVec3() += kbVec3( 0.02f, 0.0f, 0.0f );
+			}
+			if ( GetAsyncKeyState('O') ) {
+				m_CollisionSpheres[iCollision].m_Sphere.ToVec3() += kbVec3( -0.02f, 0.0f, 0.0f );
+			}
+
+			if ( GetAsyncKeyState('K') ) {
+				m_CollisionSpheres[iCollision].m_Sphere.ToVec3() += kbVec3( 0.f, 0.02f, 0.0f );
+			}
+			if ( GetAsyncKeyState('L') ) {
+				m_CollisionSpheres[iCollision].m_Sphere.ToVec3() += kbVec3( 0.0f, -0.02f, 0.0f );
+			}
+
+			if ( GetAsyncKeyState('N') ) {
+				m_CollisionSpheres[iCollision].m_Sphere.ToVec3() += kbVec3( 0.0f, 0.0f, 0.02f );
+			}
+			if ( GetAsyncKeyState('M') ) {
+				m_CollisionSpheres[iCollision].m_Sphere.ToVec3() += kbVec3( 0.0f, 0.0f, -0.02f );
+			}
+
+			if ( GetAsyncKeyState(',') ) {
+				m_CollisionSpheres[iCollision].m_Sphere.ToVec3() += kbVec3( 0.0f, 0.0f, 0.02f );
+			}
+			if ( GetAsyncKeyState('.') ) {
+				m_CollisionSpheres[iCollision].m_Sphere.ToVec3() += kbVec3( 0.0f, 0.0f, -0.02f );
+			}
+
+			if ( GetAsyncKeyState('U') ) {
+				kbLog( "%f %f %f", m_CollisionSpheres[iCollision].m_Sphere.x, m_CollisionSpheres[iCollision].m_Sphere.y, m_CollisionSpheres[iCollision].m_Sphere.z );
+			}
+
+	//		kbLog( "%s looking for %s", pSkelModelComponent->GetModel()->GetFullFileName().c_str(), m_CollisionSpheres[iCollision].m_BoneName.c_str() );
+
 			if ( pSkelModelComponent->GetBoneWorldMatrix( m_CollisionSpheres[iCollision].m_BoneName, boneWorldMatrix ) ) {
 				boneWorldMatrix.m_Axis[0].Normalize();
 				boneWorldMatrix.m_Axis[1].Normalize();
@@ -548,4 +583,16 @@ void kbClothComponent::SetupCloth() {
 			newSpring.m_Length = ( m_Masses[curBoneIdx].m_Matrix.GetOrigin() - m_Masses[newSpring.m_MassIndices[1]].m_Matrix.GetOrigin() ).Length();			
 		}
 	}
+}
+
+/**
+ *	kbClothComponent::SetClothCollisionSphere
+ */
+void kbClothComponent::SetClothCollisionSphere( const int idx, const kbVec4 & sphere ) {
+
+	if ( idx < 0 || idx >= m_CollisionSpheres.size() ) {
+		return;
+	}
+
+	m_CollisionSpheres[idx].m_Sphere = sphere;
 }

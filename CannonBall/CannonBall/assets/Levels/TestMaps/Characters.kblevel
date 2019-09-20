@@ -2,7 +2,7 @@ kbGameEntity 0 0 0 0 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		Name = "Entity_55"
+		Name = "Entity_53"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
 		Position = 0.000000 0.000000 0.000000
 		Scale = 1.000000 1.000000 1.000000
@@ -10,8 +10,8 @@ kbGameEntity 0 0 0 0 {
 	kbEditorLevelSettingsComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		MainCameraPosition = 75.862892 -51.168774 -391.429871
-		MainCameraRotation = 0.059968 0.795488 -0.079818 -0.597689
+		MainCameraPosition = 76.797821 -48.457684 -392.608704
+		MainCameraRotation = 0.271238 0.252670 -0.074030 -0.925801
 	}
 }
 kbGameEntity 0 0 0 0 {
@@ -197,7 +197,7 @@ kbGameEntity 0 0 0 0 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		Name = "PlayerAA"
+		Name = "Player"
 		Orientation = 0.000000 1.000000 0.000000 0.000000
 		Position = 77.104454 -52.635265 -391.559143
 		Scale = 1.000000 1.000000 1.000000
@@ -232,7 +232,7 @@ kbGameEntity 0 0 0 0 {
 						LifeTime =  -1.000000
 						ParamName = "fxMapMask"
 						Texture = NULL
-						Vector = 1.000000 0.000000 0.000000 0.000000
+						Vector = 0.000000 1.000000 0.000000 0.000000
 					}
 			}
 			kbMaterialComponent { 
@@ -2702,10 +2702,10 @@ kbGameEntity 0 0 0 0 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		Name = "Banner"
+		Name = "HeadBand"
 		Orientation = 0.000000 0.000000 -0.717356 0.696707
 		Position = 77.104439 -48.485264 -391.809143
-		Scale = 0.500000 1.000000 1.000000
+		Scale = 1.450000 1.000000 1.000000
 	}
 	kbSkeletalModelComponent { 
 		Enabled = 1
@@ -2751,7 +2751,7 @@ kbGameEntity 0 0 0 0 {
 		TranslucencySortBias =  0.000000
 		Animations = 0
 		DebugAnimIndex = -1
-		Model = .\assets\models\environment\banners\banner_1.ms3d
+		Model = .\assets\models\characters\sheep\gear\Headband.ms3d
 	}
 	kbClothComponent { 
 		Enabled = 1
@@ -3601,13 +3601,19 @@ kbGameEntity 0 0 0 0 {
 			}
 			kbClothBone { 
 				Enabled = 0
-				LifeTime =  -1.000000
+				LifeTime = -1.000000
 				Anchored = 0
 				BoneName = "B10_10"
 				NeighborBones = 0
 			}
 		ClothType = Square
-		Collision = 0
+		Collision = 1
+			kbBoneCollisionSphere { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				BoneName = "Head"
+				Sphere = -0.200000 0.000000 -0.200000 0.250000
+			}
 		Gravity = 0.000000 -10.000000 0.000000
 		Height = 11
 		MaxWindGustDuration =  0.000000

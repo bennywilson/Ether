@@ -327,7 +327,7 @@ kbGameEntity 948620123 1076773710 873065897 3787095028 {
 		TranslucencySortBias =  0.000000
 		Animations = 0
 		DebugAnimIndex = -1
-		Model = .\assets\models\environment\banners\banner_1.ms3d
+		Model = .\assets\models\characters\sheep\gear\Headband.ms3d
 	}
 	kbClothComponent { 
 		Enabled = 1
@@ -1177,13 +1177,19 @@ kbGameEntity 948620123 1076773710 873065897 3787095028 {
 			}
 			kbClothBone { 
 				Enabled = 0
-				LifeTime =  -1.000000
+				LifeTime = -1.000000
 				Anchored = 0
 				BoneName = "B10_10"
 				NeighborBones = 0
 			}
 		ClothType = Square
-		Collision = 0
+		Collision = 1
+			kbBoneCollisionSphere { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				BoneName = "Head"
+				Sphere = 0.140000 -0.060000 0.279997 0.25
+			}
 		Gravity = 0.000000 -10.000000 0.000000
 		Height = 11
 		MaxWindGustDuration =  0.000000

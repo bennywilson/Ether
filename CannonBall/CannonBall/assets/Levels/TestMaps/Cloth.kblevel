@@ -1,0 +1,691 @@
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Entity_18"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 0.000000 0.000000 0.000000
+		Scale = 1.000000 1.000000 1.000000
+	}
+	kbEditorLevelSettingsComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		MainCameraPosition = 73.672676 -50.503284 -388.348694
+		MainCameraRotation = -0.116936 -0.860631 0.228946 0.439572
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Level"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 0.000000 0.000000 0.000000
+		Scale = 1.000000 1.000000 1.000000
+	}
+	KungFuLevelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		EditorIconScale =  0.500000
+		GlobalModelScale =  0.005000
+		LevelType = 2D
+		Dummy2 =  0.000000
+		SheepPrefab = 0 0 0 0
+		SnolafPrefab = 314357658 1122514197 2466994618 463523205
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Sun"
+		Orientation = -0.184883 0.522430 -0.037487 0.831553
+		Position = 80.300003 -48.635265 -404.559143
+		Scale = 0.000000 1.000000 1.000000
+	}
+	kbDirectionalLightComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadows = 1
+		Color = 1.000000 1.000000 1.000000 0.000000
+		Materials = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\lights\directionallighttoon.kbshader
+				ShaderParams = 9
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "lightColor"
+						Texture = NULL
+						Vector = 1.000000 1.000000 1.000000 1.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "diffuseColorBand"
+						Texture = NULL
+						Vector = 0.001000 0.370000 0.500000 0.500000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "specularColorBand"
+						Texture = NULL
+						Vector = 0.200000 0.300000 0.950000 0.050000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "rimParams"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "rimColor"
+						Texture = NULL
+						Vector = 0.350000 0.350000 0.350000 0.500000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "nonToonDiffuseScaleAndBias"
+						Texture = NULL
+						Vector = 0.900000 0.100000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "shadowParams"
+						Texture = NULL
+						Vector = -0.000100 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "noiseScaleBias1"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "noiseScaleBias2"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		CascadedShadowSplits = 4
+ 10.000000
+ 30.000000
+ 50.000000
+ 100.000000
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Player"
+		Orientation = 0.000000 1.000000 0.000000 0.000000
+		Position = 77.104454 -52.635265 -391.559143
+		Scale = 1.000000 1.000000 1.000000
+	}
+	kbSkeletalModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 1
+		Materials = 2
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\character\characterbase.kbshader
+				ShaderParams = 3
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorTexture"
+						Texture = .\assets\models\characters\sheep\sheep.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "fxMap"
+						Texture = .\assets\models\characters\sheep\sheep_fx_map.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "fxMapMask"
+						Texture = NULL
+						Vector = 1.000000 0.000000 0.000000 0.000000
+					}
+			}
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\character\characterbase.kbshader
+				ShaderParams = 5
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "fxMapMask"
+						Texture = NULL
+						Vector = 1.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "clipMapMask"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorTexture"
+						Texture = .\assets\models\characters\sheep\headband_black.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "fxMap"
+						Texture = ..\..\kbengine\assets\textures\white.bmp
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "clipMap"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		RenderPass = LightingPass
+		TranslucencySortBias =  0.000000
+		Animations = 9
+			kbAnimComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Animation = .\assets\models\characters\sheep\sheep_run_basic.kbanim.ms3d
+				AnimationEvent = 0
+				AnimationName = "Run_Basic"
+				IsLooping = 1
+				TimeScale =  10.000000
+			}
+			kbAnimComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Animation = .\assets\models\characters\sheep\sheep_idleleft_basic.kbanim.ms3d
+				AnimationEvent = 0
+				AnimationName = "IdleLeft_Basic"
+				IsLooping = 1
+				TimeScale =  2.000000
+			}
+			kbAnimComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Animation = .\assets\models\characters\sheep\sheep_idleright_basic.kbanim.ms3d
+				AnimationEvent = 0
+				AnimationName = "IdleRight_Basic"
+				IsLooping = 1
+				TimeScale =  2.000000
+			}
+			kbAnimComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Animation = .\assets\models\characters\sheep\sheep_punchleft_basic.kbanim.ms3d
+				AnimationEvent = 0
+				AnimationName = "PunchLeft_Basic"
+				IsLooping = 0
+				TimeScale =  15.000000
+			}
+			kbAnimComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Animation = .\assets\models\characters\sheep\sheep_kickleft_basic.kbanim.ms3d
+				AnimationEvent = 0
+				AnimationName = "KickLeft_Basic"
+				IsLooping = 0
+				TimeScale =  15.000000
+			}
+			kbAnimComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Animation = .\assets\models\characters\sheep\sheep_punchright_basic.kbanim.ms3d
+				AnimationEvent = 0
+				AnimationName = "PunchRight_Basic"
+				IsLooping = 0
+				TimeScale =  15.000000
+			}
+			kbAnimComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Animation = .\assets\models\characters\sheep\sheep_kickright_basic.kbanim.ms3d
+				AnimationEvent = 0
+				AnimationName = "KickRight_Basic"
+				IsLooping = 0
+				TimeScale =  15.000000
+			}
+			kbAnimComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Animation = .\assets\models\characters\sheep\sheep_cannonball.kbanim.ms3d
+				AnimationEvent = 4
+					kbAnimEvent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						EventName = "CannonBall_VO"
+						EventTime =  0.100000
+						EventValue =  0.000000
+					}
+					kbAnimEvent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						EventName = "CannonBall_JumpSmear"
+						EventTime =  0.850000
+						EventValue =  0.050000
+					}
+					kbAnimEvent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						EventName = "CannonBall_Impact"
+						EventTime =  4.750000
+						EventValue =  1.000000
+					}
+					kbAnimEvent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						EventName = "CannonBall_DropSmear"
+						EventTime =  4.450000
+						EventValue =  0.050000
+					}
+				AnimationName = "CannonBall"
+				IsLooping = 0
+				TimeScale =  5.000000
+			}
+			kbAnimComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Animation = .\assets\models\characters\sheep\sheep_cannonballwindup.kbanim.ms3d
+				AnimationEvent = 0
+				AnimationName = "CannonBallWindUp"
+				IsLooping = 0
+				TimeScale =  1.000000
+			}
+		DebugAnimIndex = -1
+		Model = .\assets\models\characters\sheep\sheep.ms3d
+	}
+	kbSkeletalModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		Materials = 2
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\character\characteroutline.kbshader
+				ShaderParams = 3
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "outlineParams"
+						Texture = NULL
+						Vector = 0.025000 0.100000 0.800000 5.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorTexture"
+						Texture = .\assets\models\characters\sheep\sheep.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "smearParams"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\fx\hackclip.kbshader
+				ShaderParams = 5
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "fxMapMask"
+						Texture = NULL
+						Vector = 1.000000 1.000000 1.000000 1.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "clipMapMask"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorTexture"
+						Texture = .\assets\models\characters\sheep\headband_black.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "fxMap"
+						Texture = ..\..\kbengine\assets\textures\white.bmp
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "clipMap"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		RenderPass = Post-LightingPass
+		TranslucencySortBias =  0.000000
+		Animations = 9
+			kbAnimComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Animation = .\assets\models\characters\sheep\sheep_run_basic.kbanim.ms3d
+				AnimationEvent = 0
+				AnimationName = "Run_Basic"
+				IsLooping = 1
+				TimeScale =  10.000000
+			}
+			kbAnimComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Animation = .\assets\models\characters\sheep\sheep_idleleft_basic.kbanim.ms3d
+				AnimationEvent = 0
+				AnimationName = "IdleLeft_Basic"
+				IsLooping = 1
+				TimeScale =  2.000000
+			}
+			kbAnimComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Animation = .\assets\models\characters\sheep\sheep_idleright_basic.kbanim.ms3d
+				AnimationEvent = 0
+				AnimationName = "IdleRight_Basic"
+				IsLooping = 1
+				TimeScale =  2.000000
+			}
+			kbAnimComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Animation = .\assets\models\characters\sheep\sheep_punchleft_basic.kbanim.ms3d
+				AnimationEvent = 4
+					kbAnimEvent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						EventName = "Punch_Attack"
+						EventTime =  0.750000
+						EventValue =  0.000000
+					}
+					kbAnimEvent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						EventName = "Punch_Attack"
+						EventTime =  1.000000
+						EventValue =  0.000000
+					}
+					kbAnimEvent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						EventName = "Punch_Attack"
+						EventTime =  1.250000
+						EventValue =  0.000000
+					}
+					kbAnimEvent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						EventName = "Punch_Attack"
+						EventTime =  1.500000
+						EventValue =  0.000000
+					}
+				AnimationName = "PunchLeft_Basic"
+				IsLooping = 0
+				TimeScale =  15.000000
+			}
+			kbAnimComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Animation = .\assets\models\characters\sheep\sheep_kickleft_basic.kbanim.ms3d
+				AnimationEvent = 4
+					kbAnimEvent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						EventName = "Kick_Attack"
+						EventTime =  0.750000
+						EventValue =  0.000000
+					}
+					kbAnimEvent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						EventName = "Punch_Attack"
+						EventTime =  1.000000
+						EventValue =  0.000000
+					}
+					kbAnimEvent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						EventName = "Punch_Attack"
+						EventTime =  1.250000
+						EventValue =  0.000000
+					}
+					kbAnimEvent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						EventName = "Punch_Attack"
+						EventTime =  1.500000
+						EventValue =  0.000000
+					}
+				AnimationName = "KickLeft_Basic"
+				IsLooping = 0
+				TimeScale =  15.000000
+			}
+			kbAnimComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Animation = .\assets\models\characters\sheep\sheep_punchright_basic.kbanim.ms3d
+				AnimationEvent = 1
+					kbAnimEvent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						EventName = "Punch_Attack"
+						EventTime =  0.750000
+						EventValue =  0.000000
+					}
+				AnimationName = "PunchRight_Basic"
+				IsLooping = 0
+				TimeScale =  15.000000
+			}
+			kbAnimComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Animation = .\assets\models\characters\sheep\sheep_kickright_basic.kbanim.ms3d
+				AnimationEvent = 1
+					kbAnimEvent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						EventName = "Kick_Attack"
+						EventTime =  0.750000
+						EventValue =  0.000000
+					}
+				AnimationName = "KickRight_Basic"
+				IsLooping = 0
+				TimeScale =  15.000000
+			}
+			kbAnimComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Animation = .\assets\models\characters\sheep\sheep_cannonball.kbanim.ms3d
+				AnimationEvent = 0
+				AnimationName = "CannonBall"
+				IsLooping = 0
+				TimeScale =  5.000000
+			}
+			kbAnimComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Animation = .\assets\models\characters\sheep\sheep_cannonballwindup.kbanim.ms3d
+				AnimationEvent = 0
+				AnimationName = "CannonBallWindUp"
+				IsLooping = 0
+				TimeScale =  1.000000
+			}
+		DebugAnimIndex = -1
+		Model = .\assets\models\characters\sheep\sheep.ms3d
+	}
+	KungFuSheepComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		DummyTemp = 0
+		Health =  100.000000
+		AttackVO = 3
+			kbSoundData { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Radius =  -1.000000
+				TestPlaySoundNow = 0
+				Volume =  0.500000
+				WaveFile = .\assets\sounds\sheep\sheep_vo_battle_1.wav
+			}
+			kbSoundData { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Radius =  -1.000000
+				TestPlaySoundNow = 0
+				Volume =  0.500000
+				WaveFile = .\assets\sounds\sheep\sheep_vo_battle_2.wav
+			}
+			kbSoundData { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Radius =  -1.000000
+				TestPlaySoundNow = 0
+				Volume =  0.750000
+				WaveFile = .\assets\sounds\sheep\sheep_vo_battle_5.wav
+			}
+		Health =  100.000000
+		MaxRotateSpeed =  15.000000
+		MaxRunSpeed =  3.000000
+		AttackImpactSound = 4
+			kbSoundData { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Radius =  -1.000000
+				TestPlaySoundNow = 0
+				Volume =  2.000000
+				WaveFile = .\assets\sounds\impacts\woodimpact_2.wav
+			}
+			kbSoundData { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Radius =  -1.000000
+				TestPlaySoundNow = 0
+				Volume =  1.000000
+				WaveFile = .\assets\sounds\impacts\woodimpact_3.wav
+			}
+			kbSoundData { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Radius =  -1.000000
+				TestPlaySoundNow = 0
+				Volume =  1.000000
+				WaveFile = .\assets\sounds\impacts\woodimpact_4.wav
+			}
+			kbSoundData { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Radius =  -1.000000
+				TestPlaySoundNow = 0
+				Volume =  1.000000
+				WaveFile = .\assets\sounds\impacts\woodimpact_5.wav
+			}
+		BaaVO = 5
+			kbSoundData { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Radius =  -1.000000
+				TestPlaySoundNow = 0
+				Volume =  1.000000
+				WaveFile = .\assets\sounds\sheep\sheep_vo_baa_1.wav
+			}
+			kbSoundData { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Radius =  -1.000000
+				TestPlaySoundNow = 0
+				Volume =  1.000000
+				WaveFile = .\assets\sounds\sheep\sheep_vo_baa_2.wav
+			}
+			kbSoundData { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Radius =  -1.000000
+				TestPlaySoundNow = 0
+				Volume =  1.000000
+				WaveFile = .\assets\sounds\sheep\sheep_vo_baa_3.wav
+			}
+			kbSoundData { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Radius =  -1.000000
+				TestPlaySoundNow = 0
+				Volume =  0.700000
+				WaveFile = .\assets\sounds\sheep\sheep_vo_baa_4.wav
+			}
+			kbSoundData { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Radius =  -1.000000
+				TestPlaySoundNow = 0
+				Volume =  0.650000
+				WaveFile = .\assets\sounds\sheep\sheep_vo_baa_5.wav
+			}
+		CannonBallImpactFX = 846208613 1165520682 3641600641 3993117100
+		CannonBallImpactSound = 1
+			kbSoundData { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Radius =  -1.000000
+				TestPlaySoundNow = 0
+				Volume =  0.500000
+				WaveFile = .\assets\sounds\impacts\impact_large_wood.wav
+			}
+		CannonBallVO = 1
+			kbSoundData { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Radius =  -1.000000
+				TestPlaySoundNow = 0
+				Volume =  0.450000
+				WaveFile = .\assets\sounds\sheep\sheep_vo_cannonball.wav
+			}
+		DropSmearMagnitude =  2.500000
+		HeadBand = 948620123 1076773710 873065897 3787095028
+		JumpSmearMagnitude =  -2.000000
+		ShakeNBakeFX = 4226348206 1325904980 2380668328 2364791781
+	}
+}

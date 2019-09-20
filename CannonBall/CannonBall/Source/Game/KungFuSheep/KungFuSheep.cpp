@@ -583,6 +583,16 @@ void KungFuSheepComponent::Update_Internal( const float DT ) {
 		m_HeadBandInstance[0].GetEntity()->SetPosition( boneMat.GetOrigin() + axis1 * 0.1f - axis3 * 0.15f );
 		m_HeadBandInstance[1].GetEntity()->SetPosition( boneMat.GetOrigin() + axis1 * 0.1f + axis2 * 0.01f - axis3 * 0.15f );
 	}
+
+	const kbVec3 curFacing = GetOwnerRotation().ToMat4()[2].ToVec3();
+	const float t = ( curFacing.z * 0.5f ) + 0.5f;
+	kbVec4 collisionSphere = kbLerp( kbVec4( 0.280000f, -0.080000f, 0.019997f, 0.25f ), kbVec4( 0.140f, -0.060f, 0.279997f, 0.25f ), t );
+	kbClothComponent *const pCloth1 = m_HeadBandInstance[0].GetEntity()->GetComponent<kbClothComponent>();
+	pCloth1->SetClothCollisionSphere( 0, collisionSphere );
+	
+	kbClothComponent *const pCloth2 = m_HeadBandInstance[1].GetEntity()->GetComponent<kbClothComponent>();
+	pCloth2->SetClothCollisionSphere( 0, collisionSphere );
+
 }
 
  /**
