@@ -279,9 +279,9 @@ kbGameEntity 948620123 1076773710 873065897 3787095028 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "Banner"
-		Orientation = 0.000000 0.000000 -0.342898 0.939373
-		Position = 77.104439 -51.485264 -391.809143
-		Scale = 0.330000 1.000000 1.000000
+		Orientation = 0.000000 0.000000 -0.717356 0.696707
+		Position = 77.104439 -48.485264 -391.809143
+		Scale = 0.500000 1.000000 1.000000
 	}
 	kbSkeletalModelComponent { 
 		Enabled = 1
@@ -298,7 +298,7 @@ kbGameEntity 948620123 1076773710 873065897 3787095028 {
 						Enabled = 0
 						LifeTime =  -1.000000
 						ParamName = "diffuse"
-						Texture = .\assets\models\characters\sheep\Headband_Black.jpg
+						Texture = .\assets\models\characters\sheep\headband_black.jpg
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 					kbShaderParamComponent { 
