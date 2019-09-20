@@ -443,6 +443,16 @@ void KungFuSheepComponent::SetEnable_Internal( const bool bEnable ) {
 
 		InitializeStates( sheepStates );
 		RequestStateChange( KungFuSheepState::Idle );
+
+		if ( GetOwner()->IsPrefab() == false ) {
+			m_HeadBandInstance[0].SetEntity( g_pGame->CreateEntity( m_HeadBand.GetEntity() ) );
+			m_HeadBandInstance[0].GetEntity()->SetPosition( GetOwnerPosition() );
+			m_HeadBandInstance[0].GetEntity()->SetOrientation( GetOwnerRotation() );
+
+			m_HeadBandInstance[1].SetEntity( g_pGame->CreateEntity( m_HeadBand.GetEntity() ) );
+			m_HeadBandInstance[1].GetEntity()->SetPosition( GetOwnerPosition() );
+			m_HeadBandInstance[1].GetEntity()->SetOrientation( GetOwnerRotation() );
+		}
 	}
 }
 
@@ -562,6 +572,16 @@ void KungFuSheepComponent::Update_Internal( const float DT ) {
 		}
 
 		m_SkelModelsList[0]->SetMaterialParamVector( 0, fxMapMaskParam.stl_str(), vFXMaskMapParam );
+	}
+
+	kbBoneMatrix_t boneMat;
+	if ( m_SkelModelsList[0]->GetBoneWorldMatrix( kbString( "Head" ), boneMat ) ) {
+		const kbVec3 axis1 = boneMat.GetAxis(0).Normalized();
+		const kbVec3 axis2 = boneMat.GetAxis(1).Normalized();
+		const kbVec3 axis3 = boneMat.GetAxis(2).Normalized();
+
+		m_HeadBandInstance[0].GetEntity()->SetPosition( boneMat.GetOrigin() + axis1 * 0.1f );
+		m_HeadBandInstance[1].GetEntity()->SetPosition( boneMat.GetOrigin() + axis1 * 0.1f + axis2 * 0.01f );
 	}
 }
 

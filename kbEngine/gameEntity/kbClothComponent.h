@@ -93,6 +93,7 @@ private:
 	int											m_NumConstrainIterations;
 
 	kbVec3										m_Gravity;
+
 	// Wind Data
 	kbVec3										m_MaxWindVelocity;
 	kbVec3										m_MinWindVelocity;

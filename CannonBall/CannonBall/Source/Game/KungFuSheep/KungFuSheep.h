@@ -62,6 +62,11 @@ private:
 	float										m_JumpSmearMagnitude;
 	float										m_DropSmearMagnitude;
 
+	kbGameEntityPtr								m_HeadBand;
+
+	// Run time
+	kbGameEntityPtr								m_HeadBandInstance[2];
+
 //---------------------------------------------------------------------------------------------------
 
 	// IAnimEventListener
