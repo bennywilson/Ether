@@ -117,12 +117,6 @@ bool kbModel::LoadMS3D() {
 	std::ifstream modelFile;
 	modelFile.open( m_FullFileName, std::ifstream::in | std::ifstream::binary );
 	kbErrorCheck( modelFile.good(), "kbModel::LoadMS3D() - Failed to load model %s", m_FullFileName.c_str() );
-	
-	bool spitIt =  false;
-	if ( m_FullFileName.find("olaf") != std::string::npos ) {
-		spitIt = true;
-		kbLog("Processing...		%s", m_FullFileName.c_str());
-	}
 
 	// Find the file size
 	modelFile.seekg( 0, std::ifstream::end );
@@ -260,8 +254,6 @@ bool kbModel::LoadMS3D() {
 		if ( it != boneNameToIdxMap.end() ) {
 			m_Bones[i].m_ParentIndex = it->second;
 		}
-
-		kbWarningCheck( i == 0 || m_Bones[i].m_ParentIndex != 65535, "kbModel::LoadMS3D() - Missing parent in model %s at index %d", m_FullFileName.c_str(), i );
 
 		m_Bones[i].m_RelativePosition.Set( pJoint->m_Position[0], pJoint->m_Position[1], -pJoint->m_Position[2] );
 
