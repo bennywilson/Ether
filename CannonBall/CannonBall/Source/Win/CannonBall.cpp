@@ -240,7 +240,7 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 	bool bRenderVR = false;
 	bool bUseVRTrackingOnly = false;
 
-	if ( GetAsyncKeyState( VK_MBUTTON ) ) {
+	if ( GetKeyState( VK_CAPITAL ) ) {
 		g_UseEditor = true;
 	}
 

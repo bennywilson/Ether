@@ -76,7 +76,7 @@ geometryShaderInput vertexShader( vertexInput input ) {
 SamplerState LinearSampler;
 SamplerState PointSampler;
 
-Texture2D grassMap					: register(t0);
+Texture2D grassMaskMap				: register(t0);
 Texture2D heightMap					: register(t1);
 Texture2D grassDiffuseMap			: register(t2);
 Texture2D noiseMap					: register(t3);
@@ -97,13 +97,18 @@ void CreateVertex( inout TriangleStream<pixelInput> OutputStream, float3 vertexW
 
  void CreateGrassBlade( const float3 bladeLocalOrigin, point geometryShaderInput input[1], inout TriangleStream<pixelInput> OutputStream, float lodScale, int grassNumber ) {
 
-	const float bladeWorldHeight = heightMap.SampleLevel( LinearSampler, clamp( input[0].uv, 0.01f, 0.99f ), 0.0f ).r * GrassData1.x;
+	float bladeWorldHeight = heightMap.SampleLevel( LinearSampler, clamp( input[0].uv, 0.01f, 0.99f ), 0.0f ).r * GrassData1.x;
 	const int4 IndexVector = D3DCOLORtoUBYTE4( input[0].bladeOffsetIndex );
 
 	const float3 bladeWorldOrigin = float3( 0.0f, bladeWorldHeight, 0.0f ) + bladeLocalOrigin + float3( bladeOffsets[IndexVector.x + grassNumber].z, 0.0f, bladeOffsets[IndexVector.x + grassNumber].w ) + input[0].position.xyz;
 
 	const float2 normalizedTerrainMapPos = float2( ( bladeWorldOrigin.x - collisionMapCenter.x ) * collisionMapCenter.w, ( bladeWorldOrigin.z - collisionMapCenter.y ) * collisionMapCenter.w );
 	const float2 terrainMapUV = ( normalizedTerrainMapPos * 0.5f ) + 0.5f;
+
+	const float4 grassMask = grassMaskMap.SampleLevel( PointSampler, terrainMapUV, 0.0f );
+	//if ( grassMask.x < 0.5f )
+	//	return;
+		
 
 	const float4 collisionMapVal = collisionMap.SampleLevel( PointSampler, terrainMapUV, 0.0f );
 	float collisionTime = abs( collisionMapVal.b );
@@ -150,7 +155,7 @@ void CreateVertex( inout TriangleStream<pixelInput> OutputStream, float3 vertexW
 	const float textureEndU = textureStartU + textureSize - textureUBorderSize - textureUBorderSize;
 	const float textureEndV = 1.0f - textureVBorderSize;
 
-	const float grassLength = ( ( GrassData0.w - GrassData0.z ) * noiseValues.x + GrassData0.z ) * lodScale * bladeHeightFactor;
+	const float grassLength = ( ( GrassData0.w - GrassData0.z ) * noiseValues.x + GrassData0.z ) * lodScale * bladeHeightFactor * grassMask.x;
 
 	float burnStartHeight = collisionMapVal.w + 99999.0f;
 	int numSegments = 3;

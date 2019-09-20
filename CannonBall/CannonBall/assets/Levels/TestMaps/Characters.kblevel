@@ -2,7 +2,7 @@ kbGameEntity 0 0 0 0 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		Name = "Entity_53"
+		Name = "Entity_57"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
 		Position = 0.000000 0.000000 0.000000
 		Scale = 1.000000 1.000000 1.000000
@@ -10,8 +10,8 @@ kbGameEntity 0 0 0 0 {
 	kbEditorLevelSettingsComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		MainCameraPosition = 76.797821 -48.457684 -392.608704
-		MainCameraRotation = 0.271238 0.252670 -0.074030 -0.925801
+		MainCameraPosition = 0.055344 -7.679648 -468.396240
+		MainCameraRotation = 0.360904 0.158739 -0.062488 -0.916867
 	}
 }
 kbGameEntity 0 0 0 0 {
@@ -232,7 +232,7 @@ kbGameEntity 0 0 0 0 {
 						LifeTime =  -1.000000
 						ParamName = "fxMapMask"
 						Texture = NULL
-						Vector = 0.000000 1.000000 0.000000 0.000000
+						Vector = 1.000000 0.000000 0.000000 0.000000
 					}
 			}
 			kbMaterialComponent { 
@@ -1107,7 +1107,7 @@ kbGameEntity 0 0 0 0 {
 				PatchEndCullDistance =  2000.000000
 				PatchStartCullDistance =  200.000000
 				PatchesPerCellSide = 60
-				ShaderParams = 11
+				ShaderParams = 12
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
@@ -1184,6 +1184,13 @@ kbGameEntity 0 0 0 0 {
 						ParamName = "plantSelection"
 						Texture = NULL
 						Vector = 0.750000 0.150000 1.000000 1.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "grassMaskMap"
+						Texture = .\assets\terrain\kungfulevelterrain\kungfuterrain_grassmask.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 			}
 		HeightMap = .\assets\terrain\kungfulevelterrain\terrain1_height.bmp
@@ -1356,11 +1363,11 @@ kbGameEntity 0 0 0 0 {
 		LifeTime =  -1.000000
 		Name = "Water Plane"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
-		Position = -26.198284 -66.176140 35.608555
+		Position = -26.198284 -76.176140 35.608555
 		Scale = 1000000.000000 2.000000 1000000.000000
 	}
 	kbStaticModelComponent { 
-		Enabled = 0
+		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadow = 0
 		Materials = 1
@@ -2751,7 +2758,7 @@ kbGameEntity 0 0 0 0 {
 		TranslucencySortBias =  0.000000
 		Animations = 0
 		DebugAnimIndex = -1
-		Model = .\assets\models\characters\sheep\gear\Headband.ms3d
+		Model = .\assets\models\characters\sheep\gear\headband.ms3d
 	}
 	kbClothComponent { 
 		Enabled = 1
@@ -3601,7 +3608,7 @@ kbGameEntity 0 0 0 0 {
 			}
 			kbClothBone { 
 				Enabled = 0
-				LifeTime = -1.000000
+				LifeTime =  -1.000000
 				Anchored = 0
 				BoneName = "B10_10"
 				NeighborBones = 0
