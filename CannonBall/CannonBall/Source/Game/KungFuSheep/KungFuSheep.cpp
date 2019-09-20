@@ -580,8 +580,8 @@ void KungFuSheepComponent::Update_Internal( const float DT ) {
 		const kbVec3 axis2 = boneMat.GetAxis(1).Normalized();
 		const kbVec3 axis3 = boneMat.GetAxis(2).Normalized();
 
-		m_HeadBandInstance[0].GetEntity()->SetPosition( boneMat.GetOrigin() + axis1 * 0.1f );
-		m_HeadBandInstance[1].GetEntity()->SetPosition( boneMat.GetOrigin() + axis1 * 0.1f + axis2 * 0.01f );
+		m_HeadBandInstance[0].GetEntity()->SetPosition( boneMat.GetOrigin() + axis1 * 0.1f - axis3 * 0.15f );
+		m_HeadBandInstance[1].GetEntity()->SetPosition( boneMat.GetOrigin() + axis1 * 0.1f + axis2 * 0.01f - axis3 * 0.15f );
 	}
 }
 

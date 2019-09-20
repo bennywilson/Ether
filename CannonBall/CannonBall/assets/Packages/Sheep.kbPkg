@@ -281,7 +281,7 @@ kbGameEntity 948620123 1076773710 873065897 3787095028 {
 		Name = "HeadBand"
 		Orientation = 0.000000 0.000000 -0.717356 0.696707
 		Position = 77.104439 -48.485264 -391.809143
-		Scale = 1.00000 1.000000 1.000000
+		Scale = 1.450000 1.000000 1.000000
 	}
 	kbSkeletalModelComponent { 
 		Enabled = 1
