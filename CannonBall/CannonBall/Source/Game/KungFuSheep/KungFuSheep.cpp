@@ -171,6 +171,9 @@ public:
 
 	virtual void BeginState( T ) override {
 
+		m_StartTime = g_GlobalTimer.TimeElapsedSeconds();
+		m_bQueueAttack = false;
+
 		static const kbString PunchL_Anim( "PunchLeft_Basic" );
 		static const kbString KickL_Anim( "KickLeft_Basic" );
 		static const kbString PunchR_Anim( "PunchRight_Basic" );
@@ -199,14 +202,29 @@ public:
 		static const kbString PunchR_Anim( "PunchRight_Basic" );
 		static const kbString KickR_Anim( "KickRight_Basic" );
 
+		if ( g_GlobalTimer.TimeElapsedSeconds() - m_StartTime > 0.15f ) {
+		
+			const kbInput_t & input = g_pInputManager->GetInput();
+			if ( input.WasKeyJustPressed( 'K' ) ) {
+				m_bQueueAttack = true;
+			}
+		}
 		if ( m_pActorComponent->IsPlayingAnim( PunchL_Anim ) == false &&
 			 m_pActorComponent->IsPlayingAnim( KickL_Anim ) == false &&
 			 m_pActorComponent->IsPlayingAnim( PunchR_Anim ) == false && 
 			 m_pActorComponent->IsPlayingAnim( KickR_Anim ) == false ) {
 			
-			RequestStateChange( KungFuSheepState::Idle );
+		//	kbLog( "Took %f sec", g_GlobalTimer.TimeElapsedSeconds() - m_StartTime );
+			if ( m_bQueueAttack ) {
+				BeginState( KungFuSheepState::Attack );
+			} else {
+				RequestStateChange( KungFuSheepState::Idle );
+			}
 		}
 	}
+
+	float m_StartTime;
+	bool m_bQueueAttack;
 };
 
 /**
@@ -574,6 +592,7 @@ void KungFuSheepComponent::Update_Internal( const float DT ) {
 		m_SkelModelsList[0]->SetMaterialParamVector( 0, fxMapMaskParam.stl_str(), vFXMaskMapParam );
 	}
 
+	// Headband
 	kbBoneMatrix_t boneMat;
 	if ( m_SkelModelsList[0]->GetBoneWorldMatrix( kbString( "Head" ), boneMat ) ) {
 		const kbVec3 axis1 = boneMat.GetAxis(0).Normalized();
@@ -592,7 +611,6 @@ void KungFuSheepComponent::Update_Internal( const float DT ) {
 	
 	kbClothComponent *const pCloth2 = m_HeadBandInstance[1].GetEntity()->GetComponent<kbClothComponent>();
 	pCloth2->SetClothCollisionSphere( 0, collisionSphere );
-
 }
 
  /**

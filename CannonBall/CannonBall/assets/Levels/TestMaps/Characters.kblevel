@@ -2,7 +2,7 @@ kbGameEntity 0 0 0 0 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		Name = "Entity_61"
+		Name = "Entity_59"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
 		Position = 0.000000 0.000000 0.000000
 		Scale = 1.000000 1.000000 1.000000
@@ -10,8 +10,8 @@ kbGameEntity 0 0 0 0 {
 	kbEditorLevelSettingsComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		MainCameraPosition = 75.946892 -43.720219 -265.489075
-		MainCameraRotation = 0.072556 0.834581 -0.113363 -0.534190
+		MainCameraPosition = 73.019485 -45.523476 -263.679382
+		MainCameraRotation = 0.088175 0.748636 -0.101689 -0.649175
 	}
 }
 kbGameEntity 0 0 0 0 {
@@ -323,7 +323,7 @@ kbGameEntity 0 0 0 0 {
 				AnimationEvent = 0
 				AnimationName = "KickLeft_Basic"
 				IsLooping = 0
-				TimeScale =  15.000000
+				TimeScale =  9.00000
 			}
 			kbAnimComponent { 
 				Enabled = 0
@@ -341,7 +341,7 @@ kbGameEntity 0 0 0 0 {
 				AnimationEvent = 0
 				AnimationName = "KickRight_Basic"
 				IsLooping = 0
-				TimeScale =  15.000000
+				TimeScale =  9.000000
 			}
 			kbAnimComponent { 
 				Enabled = 0
@@ -569,7 +569,7 @@ kbGameEntity 0 0 0 0 {
 					}
 				AnimationName = "KickLeft_Basic"
 				IsLooping = 0
-				TimeScale =  15.000000
+				TimeScale =  9.000000
 			}
 			kbAnimComponent { 
 				Enabled = 0
@@ -601,7 +601,7 @@ kbGameEntity 0 0 0 0 {
 					}
 				AnimationName = "KickRight_Basic"
 				IsLooping = 0
-				TimeScale =  15.000000
+				TimeScale =  9.000000
 			}
 			kbAnimComponent { 
 				Enabled = 0
@@ -1376,7 +1376,7 @@ kbGameEntity 0 0 0 0 {
 				LifeTime =  -1.000000
 				CullModeOverride = ShaderDefault
 				Shader = .\assets\shaders\water\water_skygradientreflection.kbshader
-				ShaderParams = 8
+				ShaderParams = 10
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
@@ -1389,7 +1389,7 @@ kbGameEntity 0 0 0 0 {
 						LifeTime =  -1.000000
 						ParamName = "horizonColor"
 						Texture = NULL
-						Vector = 1.000000 0.900000 0.850000 0.750000
+						Vector = 1.000000 0.900000 0.850000 0.500000
 					}
 					kbShaderParamComponent { 
 						Enabled = 0
@@ -1403,14 +1403,14 @@ kbGameEntity 0 0 0 0 {
 						LifeTime =  -1.000000
 						ParamName = "waterScaleAndSpeed_1"
 						Texture = NULL
-						Vector = 100.000000 100.000000 0.100000 0.000000
+						Vector = 300.000000 100.000000 0.100000 0.100000
 					}
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
 						ParamName = "waterScaleAndSpeed_2"
 						Texture = NULL
-						Vector = 300.000000 300.000000 0.250000 0.250000
+						Vector = 350.000000 75.000000 0.150000 0.150000
 					}
 					kbShaderParamComponent { 
 						Enabled = 0
@@ -1424,14 +1424,28 @@ kbGameEntity 0 0 0 0 {
 						LifeTime =  -1.000000
 						ParamName = "normalMap2"
 						Texture = .\assets\fx\wind\wind_2.jpg
-						Vector = 0.000000 0.000000 0.000000 0.000000
+						Vector = 0.000000 0.000000 0.250000 0.250000
 					}
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
 						ParamName = "spec_Factor_Power"
 						Texture = NULL
-						Vector = 0.150000 55.000000 0.000000 0.000000
+						Vector = 1.000000 100.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "normalStrengths"
+						Texture = NULL
+						Vector = 0.100000 0.030000 0.100000 0.050000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "sunColorFactor"
+						Texture = NULL
+						Vector = 200.000000 200.000000 200.000000 0.000000
 					}
 			}
 		RenderPass = Post-LightingPass
