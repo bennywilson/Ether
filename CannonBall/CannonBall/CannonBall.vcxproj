@@ -98,6 +98,8 @@
     <None Include="assets\shaders\Skybox\skybox_Gradient.kbShader" />
     <None Include="assets\shaders\Terrain\basicGrass.kbShader" />
     <None Include="assets\shaders\Terrain\basicTerrain.kbShader" />
+    <None Include="assets\shaders\Terrain\basicTerrain_Reflection.kbShader" />
+    <None Include="assets\shaders\Water\water_skygradientreflection.kbShader" />
     <None Include="CannonBall.ico" />
     <None Include="small.ico" />
   </ItemGroup>

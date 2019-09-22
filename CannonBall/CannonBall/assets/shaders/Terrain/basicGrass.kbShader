@@ -21,6 +21,7 @@ cbuffer ConstantBuffer1 {
 	float4 wind2_tile_speed;
 	float4 wind2_mag_lod;
 	float4 plantSelection;
+	float4 clipPlane;
 };
 
 
@@ -100,8 +101,10 @@ void CreateVertex( inout TriangleStream<pixelInput> OutputStream, float3 vertexW
 	float bladeWorldHeight = heightMap.SampleLevel( LinearSampler, clamp( input[0].uv, 0.01f, 0.99f ), 0.0f ).r * GrassData1.x;
 	const int4 IndexVector = D3DCOLORtoUBYTE4( input[0].bladeOffsetIndex );
 
-	const float3 bladeWorldOrigin = float3( 0.0f, bladeWorldHeight, 0.0f ) + bladeLocalOrigin + float3( bladeOffsets[IndexVector.x + grassNumber].z, 0.0f, bladeOffsets[IndexVector.x + grassNumber].w ) + input[0].position.xyz;
 
+	const float3 bladeWorldOrigin = float3( 0.0f, bladeWorldHeight, 0.0f ) + bladeLocalOrigin + float3( bladeOffsets[IndexVector.x + grassNumber].z, 0.0f, bladeOffsets[IndexVector.x + grassNumber].w ) + input[0].position.xyz;
+	if ( bladeWorldOrigin.y < clipPlane.w )
+		return;
 	const float2 normalizedTerrainMapPos = float2( ( bladeWorldOrigin.x - collisionMapCenter.x ) * collisionMapCenter.w, ( bladeWorldOrigin.z - collisionMapCenter.y ) * collisionMapCenter.w );
 	const float2 terrainMapUV = ( normalizedTerrainMapPos * 0.5f ) + 0.5f;
 

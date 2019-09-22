@@ -75,6 +75,12 @@
     <None Include="assets\shaders\Environment\environmentSkinned.kbShader">
       <Filter>Shaders\Environment</Filter>
     </None>
+    <None Include="assets\shaders\Water\water_skygradientreflection.kbShader">
+      <Filter>Shaders\Water</Filter>
+    </None>
+    <None Include="assets\shaders\Terrain\basicTerrain_Reflection.kbShader">
+      <Filter>Shaders\Terrain</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Shaders">
@@ -109,6 +115,9 @@
     </Filter>
     <Filter Include="Shaders\Terrain">
       <UniqueIdentifier>{5c522b62-b221-4f05-9333-55d220bd65e2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shaders\Water">
+      <UniqueIdentifier>{5738bacb-891d-472e-901f-8cf2e9efcdeb}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

@@ -1,7 +1,7 @@
 //==============================================================================
-// basicTerrain.kbShader
+// basicTerrain_Reflection.kbShader
 //
-// 2018 kbEngine 2.0
+// 2019 kbEngine 2.0
 //==============================================================================
 cbuffer matrixBuffer {
 	matrix modelMatrix;
@@ -10,8 +10,15 @@ cbuffer matrixBuffer {
 	float4 mat3And4UVScale;
 	float4 specFactors;
 	float4 specPowerMultipliers;
+	float4 reflectionParams;
+	float4 distortionScaleAndSpeed;
+	float4 time;
 	float4 clipPlane;
 };
+
+kbShaderState {
+	cullMode				CullMode_FrontFaces
+}
 
 //-------------------------------------
 struct vertexInput {
@@ -42,31 +49,6 @@ struct PS_OUTPUT {
 	float2 Depth			: SV_TARGET3;
 };
 
-
-/**
- *	vertexShader
- */
-pixelInput vertexShader( vertexInput input ) {
-	pixelInput output = (pixelInput)(0);
-
-	output.position = input.position;
-
-			output.worldPos.xyz = mul( output.position, modelMatrix ).xyz;
-	output.position = mul( output.position, mvpMatrix );
-	output.uv = input.uv;
-	output.position2 = output.position.zw;
-
-
-	output.tangent = ( input.tangent.xyz * 2.0f ) - 1.0f;
-	output.binormal = ( input.binormal.xyz * 2.0f ) - 1.0f;
-	output.normal = ( input.normal.xyz * 2.0f ) - 1.0f;
-
-	return output;
-}
-
-/**
- *	pixelShader
- */ 
 SamplerState SampleType;
 
 Texture2D splatMap		: register(t0);
@@ -86,6 +68,40 @@ Texture2D Mat3Specular	: register(t9);
 Texture2D Mat4Diffuse	: register(t10);
 Texture2D Mat4Normal	: register(t11);
 Texture2D Mat4Specular	: register(t12);
+Texture2D distortionMap				: register(t13);
+SamplerState PointSampler;
+/**
+ *	vertexShader
+ */
+pixelInput vertexShader( vertexInput input ) {
+	pixelInput output = (pixelInput)(0);
+
+	output.position = input.position;
+	if ( reflectionParams.y > 0 )
+		output.position.y *= -1.0f;
+
+	float3 distortion = float3( sin( input.position.x * 0.1f + time.x * 5.5f ), cos( input.position.y * 0.1f + time.x * 5.f), time.y );
+	float4 outPos = output.position;
+
+	outPos.xz += distortion.xz * 3.0f;
+		
+	output.worldPos.xyz = mul( outPos, modelMatrix ).xyz;
+	output.position = mul( outPos, mvpMatrix );
+	output.uv = input.uv;
+	output.position2 = output.position.zw;
+
+
+
+	output.tangent = ( input.tangent.xyz * 2.0f ) - 1.0f;
+	output.binormal = ( input.binormal.xyz * 2.0f ) - 1.0f;
+	output.normal = ( input.normal.xyz * 2.0f ) - 1.0f;
+
+	return output;
+}
+
+/**
+ *	pixelShader
+ */ 
 
 struct terrainMat_t {
 	float4 diffuse;
@@ -114,8 +130,9 @@ float4 BlendWeights( float4 val1, float4 val2, float4 val3, float4 val4, float4 
  PS_OUTPUT pixelShader( pixelInput	input )  {
  	PS_OUTPUT output = (PS_OUTPUT) 0;
 
-	if ( input.worldPos.y < clipPlane.w )
-		clip(-1);
+
+		if ( input.worldPos.y >= -76.0f )
+			clip(-1);
 
 	float3x3 tbn;
 	tbn[0] = input.tangent.xyz;

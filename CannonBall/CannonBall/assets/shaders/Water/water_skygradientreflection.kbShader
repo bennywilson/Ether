@@ -18,7 +18,16 @@ cbuffer matrixBuffer {
 	float4 spec_Factor_Power;
 	float4 normalStrengths;
 	float4 sunColorFactor;
+	float4 reflectedObjectColorFactor;
+	float4 reflectionNormalFactor;
 };
+
+kbShaderState {
+	srcblend Blend_SrcAlpha
+	dstBlend Blend_InvSrcAlpha
+	blendOp BlendOp_Add
+	colorWriteEnable ColorWriteEnable_rgb
+}
 
 //-------------------------------------
 struct vertexInput {
@@ -36,6 +45,8 @@ struct pixelInput {
 	float4 color			: COLOR;
 	float3 worldPosition	: TEXCOORD1;
 	float3 normal			: TEXCOORD2;
+	float4 screenPos		: TEXCOORD3;
+
 };
 
 //-------------------------------------
@@ -54,6 +65,7 @@ pixelInput vertexShader( vertexInput input ) {
 	pixelInput output = (pixelInput)(0);
 
 	output.position = mul( input.position, mvpMatrix );
+	output.screenPos = output.position;
 	output.uv = input.uv;
 	output.color = input.color;
 	output.worldPosition.xyz = mul( input.position, modelMatrix ).xyz;
@@ -65,14 +77,15 @@ pixelInput vertexShader( vertexInput input ) {
 /**
  *	pixelShader
  */
-Texture2D shaderTexture;
-SamplerState SampleType;
-
 SamplerState DiffuseSamplerState;
 Texture2D normalMap1				: register(t0);
 
 SamplerState NormalSamplerState;
 Texture2D normalMap2				: register(t1);
+
+Texture2D colorTexture(colorBuffer)	: register(t2);
+
+Texture2D screenNormal(normalBuffer)	: register(t3);
 
  float4 pixelShader( pixelInput	input ) : SV_TARGET {
  	PS_OUTPUT output = (PS_OUTPUT) 0;
@@ -90,9 +103,22 @@ Texture2D normalMap2				: register(t1);
 	const float3 reflectVec = 2 * dot( pointToEye, normal ) * normal - pointToEye;
 	float3 color = lerp( horizonColor.xyz * horizonColor.w, skyColor.xyz * skyColor.w, abs( reflectVec.y ) );
 
+	//color = 
+	//0.5f * ( color + reflectColor.xyz );
 	float3 sunDir = lightShaftsDir.xyz;
 	float spec = saturate( dot ( sunDir.xyz, reflectVec ) );
 	spec = pow( spec, spec_Factor_Power.y );
 	color += spec * spec_Factor_Power.x * lightShaftsColor.xyz * sunColorFactor.xyz;
-	return float4( color, 1.0f );
+
+	// Reflection
+	float2 screenUV = ( ( input.screenPos / input.screenPos.w ) * 0.5f + 0.5f ).xy;
+	screenUV.y *= -1.0f;
+
+	float4 reflectColor = colorTexture.Sample( NormalSamplerState, screenUV);// + normal.xz * reflectionNormalFactor.xy );
+	reflectColor.xyz *= reflectedObjectColorFactor.xyz * reflectedObjectColorFactor.w;
+	reflectColor.w = 1.0f;
+	
+	float lerpVal = 0.25f;
+	color = lerp( color, reflectColor.xyz, lerpVal );
+	return float4( color, 1 );
 }
