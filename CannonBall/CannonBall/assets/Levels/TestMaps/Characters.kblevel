@@ -2,7 +2,7 @@ kbGameEntity 0 0 0 0 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		Name = "Entity_59"
+		Name = "Entity_53"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
 		Position = 0.000000 0.000000 0.000000
 		Scale = 1.000000 1.000000 1.000000
@@ -28,6 +28,7 @@ kbGameEntity 0 0 0 0 {
 		LifeTime =  -1.000000
 		EditorIconScale =  0.500000
 		GlobalModelScale =  0.005000
+		GlobalVolumeScale =  0.750000
 		LevelType = 2D
 		Dummy2 =  0.000000
 		SheepPrefab = 0 0 0 0
@@ -232,7 +233,7 @@ kbGameEntity 0 0 0 0 {
 						LifeTime =  -1.000000
 						ParamName = "fxMapMask"
 						Texture = NULL
-						Vector = 1.000000 0.000000 0.000000 0.000000
+						Vector = 0.000000 1.000000 0.000000 0.000000
 					}
 			}
 			kbMaterialComponent { 
@@ -323,7 +324,7 @@ kbGameEntity 0 0 0 0 {
 				AnimationEvent = 0
 				AnimationName = "KickLeft_Basic"
 				IsLooping = 0
-				TimeScale =  9.00000
+				TimeScale =  9.000000
 			}
 			kbAnimComponent { 
 				Enabled = 0

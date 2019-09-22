@@ -12,9 +12,7 @@
 #include "kbLevelComponent.h"
 
 
-float kbLevelComponent::s_GlobalModelScale = 1.0f;
-float kbLevelComponent::s_EditorIconScale = 1.0f;
-
+static const kbLevelComponent * g_pLevelComponent = nullptr;
 
 /**
  *	kbLevelComponent::Constructor
@@ -23,6 +21,16 @@ void kbLevelComponent::Constructor() {
 	m_LevelType = LevelType_2D;
 	m_GlobalModelScale = 1.0f;
 	m_EditorIconScale = 1.0f;
+	m_GlobalVolumeScale = 1.0f;
+
+	g_pLevelComponent = this;
+}
+
+/**
+ *	kbLevelComponent::~kbLevelComponent
+ */
+kbLevelComponent::~kbLevelComponent() {
+	g_pLevelComponent = nullptr;
 }
 
 /**
@@ -33,13 +41,10 @@ void kbLevelComponent::SetEnable_Internal( const bool bEnable ) {
 
 	if ( bEnable ) {
 		g_pRenderer->SetWorldAndEditorIconScale( m_GlobalModelScale, m_EditorIconScale );
-		s_GlobalModelScale = m_GlobalModelScale;
-		s_EditorIconScale = m_EditorIconScale;	
+		g_pLevelComponent = this;	
 	} else {
 		g_pRenderer->SetWorldAndEditorIconScale( 1.0f, 1.0f );
-
-		s_GlobalModelScale = 1.0f;
-		s_EditorIconScale = 1.0f;
+		g_pLevelComponent = nullptr;
 	}
 }
 
@@ -52,4 +57,40 @@ void kbLevelComponent::EditorChange( const std::string & propertyName ) {
 	if ( propertyName == "WorldScale" || propertyName == "IconScale" ) {
 		g_pRenderer->SetWorldAndEditorIconScale( m_GlobalModelScale , m_EditorIconScale );
 	}
+}
+
+/**
+ *	kbLevelComponent::GetGlobalModelScale
+ */
+float kbLevelComponent::GetGlobalModelScale() {
+
+	if ( g_pLevelComponent == nullptr ) {
+		return 1;
+	}
+
+	return g_pLevelComponent->m_GlobalModelScale;
+}
+
+/**
+ *	kbLevelComponent::GetEditorIconScale
+ */
+float kbLevelComponent::GetEditorIconScale() {
+
+	if ( g_pLevelComponent == nullptr ) {
+		return 1;
+	}
+
+	return g_pLevelComponent->m_EditorIconScale;
+}
+
+/**
+ *	kbLevelComponent::GetGlobalVolumeScale
+ */
+float kbLevelComponent::GetGlobalVolumeScale() {
+
+	if ( g_pLevelComponent == nullptr ) {
+		return 1;
+	}
+
+	return g_pLevelComponent->m_GlobalVolumeScale;
 }
