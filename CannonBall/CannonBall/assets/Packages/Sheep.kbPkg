@@ -40,6 +40,7 @@ kbPrefab 1 {
 					EventTime =  1.000000
 					EventValue = 0.000000 0.000000 0.000000 1.000000
 				}
+			DebugPlayEntity = 0
 			EndColor = 1.000000 1.000000 1.000000 0.000000
 			Gravity = 0.000000 -1.000000 0.000000
 			MaterialList = 1
@@ -89,6 +90,8 @@ kbPrefab 1 {
 			MinStartVelocity = -2.000000 0.500000 -2.000000
 			ModelEmitter = 0
 			ParticleBillboardType = FaceCamera
+			RotationOverLife = 0
+			SizeOverLife = 0
 			StartColor = 1.000000 1.000000 1.000000 0.000000
 			StartDelay =  0.000000
 			TotalDuration =  3.000000
@@ -144,6 +147,7 @@ kbGameEntity 4226348206 1325904980 2380668328 2364791781 {
 		Scale = 50.000000 50.000000 50.000000
 		AlphaOverLife = 0
 		ColorOverLife = 0
+		DebugPlayEntity = 0
 		EndColor = 1.000000 1.000000 1.000000 0.000000
 		Gravity = 0.000000 0.000000 0.000000
 		MaterialList = 0
@@ -220,6 +224,8 @@ kbGameEntity 4226348206 1325904980 2380668328 2364791781 {
 				Model = .\assets\fx\curves\swirl_1.fbx
 			}
 		ParticleBillboardType = FaceCamera
+		RotationOverLife = 0
+		SizeOverLife = 0
 		StartColor = 1.000000 1.000000 1.000000 1.000000
 		StartDelay =  0.000000
 		TotalDuration =  3.000000
@@ -327,7 +333,7 @@ kbGameEntity 948620123 1076773710 873065897 3787095028 {
 		TranslucencySortBias =  0.000000
 		Animations = 0
 		DebugAnimIndex = -1
-		Model = .\assets\models\characters\sheep\gear\Headband.ms3d
+		Model = .\assets\models\characters\sheep\gear\headband.ms3d
 	}
 	kbClothComponent { 
 		Enabled = 1
@@ -1177,7 +1183,7 @@ kbGameEntity 948620123 1076773710 873065897 3787095028 {
 			}
 			kbClothBone { 
 				Enabled = 0
-				LifeTime = -1.000000
+				LifeTime =  -1.000000
 				Anchored = 0
 				BoneName = "B10_10"
 				NeighborBones = 0
@@ -1188,7 +1194,7 @@ kbGameEntity 948620123 1076773710 873065897 3787095028 {
 				Enabled = 0
 				LifeTime =  -1.000000
 				BoneName = "Head"
-				Sphere = 0.140000 -0.060000 0.279997 0.25
+				Sphere = 0.140000 -0.060000 0.279997 0.250000
 			}
 		Gravity = 0.000000 -10.000000 0.000000
 		Height = 11

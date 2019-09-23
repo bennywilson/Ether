@@ -369,6 +369,8 @@ public:
 		} else if ( m_DeathSelection == 3 ) {
 			GetSnolaf()->SpawnAndFlingTopAndBottomHalf();
 		}
+
+		m_bSpawnedSplash = false;
 	}
 
 	void UpdateFlyingDeath( const float dt ) {
@@ -415,6 +417,13 @@ public:
 		if ( m_DeathSelection == 0 || m_DeathSelection == 2 ) {
 			UpdateFlyingDeath( dt );
 		}
+
+		if ( m_DeathSelection == 0 ) {
+			if ( GetSnolaf()->GetOwnerPosition().y < -60.0f && m_bSpawnedSplash == false ) {
+				m_bSpawnedSplash = true;
+				GetSnolaf()->SpawnSplash();
+			}
+		}
 	}
 
 	virtual void EndState( T ) override { }
@@ -438,6 +447,8 @@ private:
 	float m_RotationSpeed = 1.0f;
 	int m_DeathSelection = 0;
 	float m_DeathStartTime = 0.0f;
+
+	bool m_bSpawnedSplash = false;
 };
 
 /**
@@ -453,9 +464,6 @@ void KungFuSnolafComponent::Constructor() {
  */
 void KungFuSnolafComponent::SetEnable_Internal( const bool bEnable ) {
 	Super::SetEnable_Internal( bEnable );
-
-	// Make sure sheep package is loaded
-	g_ResourceManager.GetPackage( "./assets/Packages/Snolaf.kbPkg" );
 
 	m_pSmallLoveHearts = nullptr;
 	if ( bEnable ) {
@@ -634,7 +642,6 @@ void KungFuSnolafComponent::SpawnAndFlingDecapHead() {
 	}
 }
 
-
 /**
  *	KungFuSnolafComponent::SpawnAndFlingTopAndBottomHalf
  */
@@ -672,3 +679,16 @@ void KungFuSnolafComponent::SpawnAndFlingTopAndBottomHalf() {
 	}
 }
 
+/**
+ *	KungFuSnolafComponent::SpawnSplash
+ */
+void KungFuSnolafComponent::SpawnSplash() {
+
+	if ( m_SplashFX.GetEntity() == nullptr ) {
+		return;
+	}
+
+	kbGameEntity *const pSplash = g_pGame->CreateEntity( m_SplashFX.GetEntity() );
+	pSplash->SetPosition( GetOwnerPosition() );
+	pSplash->DeleteWhenComponentsAreInactive( true );
+}

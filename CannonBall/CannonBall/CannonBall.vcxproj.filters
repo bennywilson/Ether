@@ -81,6 +81,9 @@
     <None Include="assets\shaders\Terrain\basicTerrain_Reflection.kbShader">
       <Filter>Shaders\Terrain</Filter>
     </None>
+    <None Include="assets\shaders\FX\splash.kbShader">
+      <Filter>Shaders\FX</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Shaders">

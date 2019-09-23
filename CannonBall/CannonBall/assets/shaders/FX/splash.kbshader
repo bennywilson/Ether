@@ -63,6 +63,6 @@ SamplerState SampleType;
 
 	float4 outColor = shaderTexture.Sample( SampleType, input.uv );
 
-//	outColor.w = 1.0f;
+	outColor.w *= 0.25f;
 	return outColor;
 }

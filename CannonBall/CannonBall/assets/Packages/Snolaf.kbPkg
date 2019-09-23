@@ -108,6 +108,7 @@ kbGameEntity 1180474321 1206754152 1921378463 1489227724 {
 		Scale = 1.000000 1.000000 1.000000
 		AlphaOverLife = 0
 		ColorOverLife = 0
+		DebugPlayEntity = 0
 		EndColor = 1.000000 1.000000 1.000000 1.000000
 		Gravity = 0.000000 -5.000000 0.000000
 		MaterialList = 1
@@ -157,6 +158,8 @@ kbGameEntity 1180474321 1206754152 1921378463 1489227724 {
 		MinStartVelocity = -2.000000 -0.250000 -2.000000
 		ModelEmitter = 0
 		ParticleBillboardType = FaceCamera
+		RotationOverLife = 0
+		SizeOverLife = 0
 		StartColor = 1.000000 1.000000 1.000000 1.000000
 		StartDelay =  0.000000
 		TotalDuration =  5.000000
@@ -221,6 +224,7 @@ kbGameEntity 1180474321 1206754152 1921378463 1489227724 {
 				EventTime =  1.000000
 				EventValue = 0.000000 0.000000 0.000000 0.000000
 			}
+		DebugPlayEntity = 0
 		EndColor = 1.000000 1.000000 1.000000 0.000000
 		Gravity = 0.000000 0.000000 0.000000
 		MaterialList = 1
@@ -270,6 +274,8 @@ kbGameEntity 1180474321 1206754152 1921378463 1489227724 {
 		MinStartVelocity = -1.000000 -1.000000 -1.000000
 		ModelEmitter = 0
 		ParticleBillboardType = FaceCamera
+		RotationOverLife = 0
+		SizeOverLife = 0
 		StartColor = 1.000000 1.000000 1.000000 0.000000
 		StartDelay =  0.000000
 		TotalDuration =  5.000000
@@ -545,6 +551,7 @@ kbGameEntity 314357658 1122514197 2466994618 463523205 {
 		Scale = 1.000000 1.000000 1.000000
 		AlphaOverLife = 0
 		ColorOverLife = 0
+		DebugPlayEntity = 0
 		EndColor = 1.000000 1.000000 1.000000 0.000000
 		Gravity = 0.000000 0.000000 0.000000
 		MaterialList = 1
@@ -594,6 +601,8 @@ kbGameEntity 314357658 1122514197 2466994618 463523205 {
 		MinStartVelocity = -1.000000 5.000000 -1.000000
 		ModelEmitter = 0
 		ParticleBillboardType = FaceCamera
+		RotationOverLife = 0
+		SizeOverLife = 0
 		StartColor = 1.000000 1.000000 1.000000 1.000000
 		StartDelay =  0.000000
 		TotalDuration =  -1.000000
@@ -609,6 +618,7 @@ kbGameEntity 314357658 1122514197 2466994618 463523205 {
 		Scale = 1.000000 1.000000 1.000000
 		AlphaOverLife = 0
 		ColorOverLife = 0
+		DebugPlayEntity = 0
 		EndColor = 1.000000 1.000000 1.000000 1.000000
 		Gravity = 0.000000 0.000000 0.000000
 		MaterialList = 1
@@ -658,6 +668,8 @@ kbGameEntity 314357658 1122514197 2466994618 463523205 {
 		MinStartVelocity = -1.000000 5.000000 -1.000000
 		ModelEmitter = 0
 		ParticleBillboardType = FaceCamera
+		RotationOverLife = 0
+		SizeOverLife = 0
 		StartColor = 1.000000 1.000000 1.000000 1.000000
 		StartDelay =  0.000000
 		TotalDuration =  -1.000000
@@ -681,6 +693,7 @@ kbGameEntity 314357658 1122514197 2466994618 463523205 {
 		BottomHalf = 3754323986 1218384162 2695139754 2739970727
 		DecapHead = 2312584767 1139148529 3844446354 2946788253
 		PoofDeathFX = 1180474321 1206754152 1921378463 1489227724
+		SplashFX = 804484872 1243614787 3759672203 2495881037
 		StepImpactFX = 949543359 1324466742 3669717892 833517135
 		TopHalf = 2125691545 1130458748 632895138 4256000792
 	}

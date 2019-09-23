@@ -156,7 +156,7 @@ private:
 			numSnolafs++;
 		}
 
-		if ( numSnolafs < 0 && g_GlobalTimer.TimeElapsedSeconds() > m_LastSpawnTime + 0.25f ) {
+		if ( numSnolafs < 7 && g_GlobalTimer.TimeElapsedSeconds() > m_LastSpawnTime + 0.25f ) {
 
 			KungFuLevelComponent *const pLevelComp = g_pCannonGame->GetLevelComponent<KungFuLevelComponent>();
 			pLevelComp->SpawnEnemy();
@@ -214,9 +214,13 @@ void KungFuLevelComponent::SetEnable_Internal( const bool bEnable ) {
 	Super::SetEnable_Internal( bEnable );
 
 	if ( bEnable ) {
-		g_ResourceManager.GetPackage( "./assets/Packages/Snolaf.kbPkg" );
-		g_ResourceManager.GetPackage( "./assets/Packages/Sheep.kbPkg" );
-		g_ResourceManager.GetPackage( "./assets/Packages/3000Ton.kbPkg" );
+
+		if ( g_UseEditor == false ) {
+			g_ResourceManager.GetPackage( "./assets/Packages/fx.kbPkg" );
+			g_ResourceManager.GetPackage( "./assets/Packages/Snolaf.kbPkg" );
+			g_ResourceManager.GetPackage( "./assets/Packages/Sheep.kbPkg" );
+			g_ResourceManager.GetPackage( "./assets/Packages/3000Ton.kbPkg" );
+		}
 
 		g_pKungFuDirector = new KungFuSheep_Director();
 

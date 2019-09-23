@@ -42,7 +42,7 @@ public:
 	void										DoPoofDeath();
 	void										SpawnAndFlingDecapHead();
 	void										SpawnAndFlingTopAndBottomHalf();
-
+	void										SpawnSplash();
 
 	KungFuSnolafState::SnolafState_t			GetState() const { return m_CurrentState; }
 	const DealAttackInfo_t<KungFuGame::eAttackType>	& GetLastAttackInfo() const { return m_LastAttackInfo; }
@@ -60,6 +60,7 @@ private:
 	kbGameEntityPtr								m_DecapitatedHead;
 	kbGameEntityPtr								m_TopHalfOfBody;
 	kbGameEntityPtr								m_BottomHalfOfBody;
+	kbGameEntityPtr								m_SplashFX;
 
 	// Game
 	kbParticleComponent *						m_pSmallLoveHearts;

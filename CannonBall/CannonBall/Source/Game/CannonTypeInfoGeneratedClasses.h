@@ -40,6 +40,7 @@ GenerateClass(
 	AddField( "DecapHead", KBTYPEINFO_GAMEENTITY, KungFuSnolafComponent, m_DecapitatedHead, false, "" )
 	AddField( "TopHalf", KBTYPEINFO_GAMEENTITY, KungFuSnolafComponent, m_TopHalfOfBody, false, "" )
 	AddField( "BottomHalf", KBTYPEINFO_GAMEENTITY, KungFuSnolafComponent, m_BottomHalfOfBody, false, "" )
+	AddField( "SplashFX", KBTYPEINFO_GAMEENTITY, KungFuSnolafComponent, m_SplashFX, false, "" )
 )
 
 GenerateClass(
