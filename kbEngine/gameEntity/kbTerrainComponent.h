@@ -58,6 +58,7 @@ private:
 
     float                                       m_FakeAODarkness;
     float                                       m_FakeAOPower;
+	float										m_FakeAOClipPlaneFadeStartDist;
 
 private:
 

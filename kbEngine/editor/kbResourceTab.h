@@ -70,6 +70,7 @@ private:
 	static void									EntitySelectedCB( Fl_Widget * pWidget, void * pUserData );
 	static void									ResourceSelectedCB( Fl_Widget * pWidget, void * pUserData );
 	static void									SavePackageCB( Fl_Widget * pWidget, void * pUserData );
+	static void									DeleteResouceCB( Fl_Widget * pWidget, void * pUserData );
 	static void									DeleteCB( Fl_Widget * pWidget, void * pUserData );
 	static void									ZoomToEntityCB( Fl_Widget * pWidget, void * pUserData );
 

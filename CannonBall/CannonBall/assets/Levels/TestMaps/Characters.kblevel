@@ -2,7 +2,7 @@ kbGameEntity 0 0 0 0 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		Name = "Entity_54"
+		Name = "Entity_55"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
 		Position = 0.000000 0.000000 0.000000
 		Scale = 1.000000 1.000000 1.000000
@@ -10,8 +10,8 @@ kbGameEntity 0 0 0 0 {
 	kbEditorLevelSettingsComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		MainCameraPosition = 23.085215 -17.542849 175.202881
-		MainCameraRotation = 0.126149 0.827593 -0.206052 -0.506674
+		MainCameraPosition = 69.428589 -50.238655 -309.818481
+		MainCameraRotation = 0.182512 0.070170 -0.013063 -0.980610
 	}
 }
 kbGameEntity 0 0 0 0 {
@@ -1106,6 +1106,7 @@ kbGameEntity 0 0 0 0 {
 				BladeMaxWidth =  0.350000
 				BladeMinHeight =  10.000000
 				BladeMinWidth =  0.250000
+				FakeAOClipPlaneFadeOutDist =  10.000000
 				FakeAODarkness =  0.000000
 				FakeAOPower =  2.000000
 				GrassCellsPerTerrainSide = 20
@@ -1197,7 +1198,7 @@ kbGameEntity 0 0 0 0 {
 						Enabled = 0
 						LifeTime =  -1.000000
 						ParamName = "grassMaskMap"
-						Texture = .\assets\terrain\kungfulevelterrain\kungfuterrain_grassmask.jpg
+						Texture = NULL
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 					kbShaderParamComponent { 
@@ -1467,7 +1468,7 @@ kbGameEntity 0 0 0 0 {
 						LifeTime =  -1.000000
 						ParamName = "reflectedObjectColorFactor"
 						Texture = NULL
-						Vector = 1.000000 1.000000 1.000000 0.250000
+						Vector = 1.000000 1.000000 1.000000 0.450000
 					}
 					kbShaderParamComponent { 
 						Enabled = 0
@@ -2807,7 +2808,7 @@ kbGameEntity 0 0 0 0 {
 		Scale = 1.450000 1.000000 1.000000
 	}
 	kbSkeletalModelComponent { 
-		Enabled = 1
+		Enabled = 0
 		LifeTime =  -1.000000
 		CastsShadow = 0
 		Materials = 1
@@ -2853,7 +2854,7 @@ kbGameEntity 0 0 0 0 {
 		Model = .\assets\models\characters\sheep\gear\headband.ms3d
 	}
 	kbClothComponent { 
-		Enabled = 1
+		Enabled = 0
 		LifeTime =  -1.000000
 		AddFakeOscillation = 1
 		AdditionalBoneInfo = 0
@@ -3729,7 +3730,7 @@ kbGameEntity 0 0 0 0 {
 		LifeTime =  -1.000000
 		Name = "Terrain - Reflection"
 		Orientation = -0.003617 -0.989169 0.024734 -0.144639
-		Position = -149.000000 449.000000 2.970000
+		Position = -249.000000 449.000000 2.970000
 		Scale = 1.000000 1.000000 1.000000
 	}
 	kbTerrainComponent { 
@@ -3913,5 +3914,38 @@ kbGameEntity 0 0 0 0 {
 		HeightScale =  1024.000000
 		SplatMap = NULL
 		Width =  2048.000000
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Entity_54"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 68.848328 -50.124573 -302.082550
+		Scale = 555.000000 555.000000 555.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		Materials = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\fx\splash.kbshader
+				ShaderParams = 1
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "shaderTexture"
+						Texture = .\assets\fx\splashes\splash_1.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		RenderPass = LightingPass
+		TranslucencySortBias =  0.000000
+		Model = ..\..\kbengine\assets\models\unit_cylinder_offset.fbx
 	}
 }

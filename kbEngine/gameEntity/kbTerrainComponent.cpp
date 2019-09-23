@@ -91,6 +91,7 @@ void kbGrass::Constructor() {
 
     m_FakeAODarkness = 0.25f;
     m_FakeAOPower = 2.0f;
+	m_FakeAOClipPlaneFadeStartDist = 0.0f;
 }
 
 /**
@@ -202,7 +203,7 @@ void kbGrass::RefreshGrass() {
 	m_GrassShaderOverrides.SetVec4List( "bladeOffsets", bladeOffsets );
 	m_GrassShaderOverrides.SetVec4( "GrassData0", kbVec4( m_PatchStartCullDistance, 1.0f / ( m_PatchEndCullDistance - m_PatchStartCullDistance ), m_BladeMinHeight, m_BladeMaxHeight ) );
 	m_GrassShaderOverrides.SetVec4( "GrassData1", kbVec4( m_pOwningTerrainComponent->GetHeightScale(), m_pOwningTerrainComponent->GetOwner()->GetPosition().y, patchLen, 0.0f ) );
-    m_GrassShaderOverrides.SetVec4( "fakeAOData", kbVec4( m_FakeAODarkness, m_FakeAOPower, 0.0f, 0.0f ) );
+    m_GrassShaderOverrides.SetVec4( "fakeAOData", kbVec4( m_FakeAODarkness, m_FakeAOPower, m_FakeAOClipPlaneFadeStartDist, 0.0f ) );
 
 	for ( int i = 0; i < m_ShaderParamList.size(); i++ ) {
 		if ( m_ShaderParamList[i].GetParamName().stl_str().empty() ) {

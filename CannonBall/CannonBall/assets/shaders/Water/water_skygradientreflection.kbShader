@@ -7,6 +7,7 @@
 cbuffer matrixBuffer {
 	matrix modelMatrix;
 	matrix mvpMatrix;
+	matrix inverseViewProjection;
 	float4 cameraPos;
 	float4 horizonColor;
 	float4 skyColor;
@@ -87,6 +88,8 @@ Texture2D colorTexture(colorBuffer)	: register(t2);
 
 Texture2D screenNormal(normalBuffer)	: register(t3);
 
+Texture2D depthTexture(depthBuffer)			: register(t4);
+
  float4 pixelShader( pixelInput	input ) : SV_TARGET {
  	PS_OUTPUT output = (PS_OUTPUT) 0;
 
@@ -118,7 +121,15 @@ Texture2D screenNormal(normalBuffer)	: register(t3);
 	reflectColor.xyz *= reflectedObjectColorFactor.xyz * reflectedObjectColorFactor.w;
 	reflectColor.w = 1.0f;
 	
-	float lerpVal = 0.25f;
+	float lerpVal = 0.0f;
+	{
+		float4 screenCoord = input.screenPos / input.screenPos.w;
+		float2 screenUV = screenCoord.xy * 0.5f + 0.5f;
+		screenUV.y = 1.0f - screenUV.y;
+		float depth = depthTexture.Sample( NormalSamplerState, screenUV ).r;
+		if ( depth < 0.9999f) lerpVal = 0.25f;
+	}
+	
 	color = lerp( color, reflectColor.xyz, lerpVal );
 	return float4( color, 1 );
 }

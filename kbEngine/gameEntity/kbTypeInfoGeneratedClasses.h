@@ -224,6 +224,7 @@ GenerateClass(
 	AddField( "MaxPatchJitterOffset", KBTYPEINFO_FLOAT, kbGrass, m_MaxPatchJitterOffset, false, "" )
     AddField( "FakeAODarkness", KBTYPEINFO_FLOAT, kbGrass, m_FakeAODarkness, false, "" )
     AddField( "FakeAOPower", KBTYPEINFO_FLOAT, kbGrass, m_FakeAOPower, false, "" )
+	AddField( "FakeAOClipPlaneFadeOutDist", KBTYPEINFO_FLOAT, kbGrass, m_FakeAOClipPlaneFadeStartDist, false, "" )
 	AddField( "ShaderParams", KBTYPEINFO_STRUCT, kbGrass, m_ShaderParamList, true, "kbShaderParamComponent" )
 )
 

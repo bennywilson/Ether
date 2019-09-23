@@ -96,6 +96,7 @@ void kbResourceTab::ResourceSelectedCB( Fl_Widget * widget, void * userData ) {
 		Fl_Menu_Item rclick_menu[] = {
 			{ SavePackageOption.c_str(),  0, SavePackageCB, ( void * ) (INT_PTR)folderIdx },		// Cast to INT_PTR then to void * fixes compile warning C4312
 			{ "Save All Changed Packages",  0, SavePackageCB, ( void * ) (INT_PTR)-1 },
+			{ "Delete Resource", 0, DeleteResouceCB, ( void * ) (INT_PTR)selectedItemIndex },
 			{ 0 }};
 
 		// Gray out save package option if it's not dirty
@@ -103,6 +104,9 @@ void kbResourceTab::ResourceSelectedCB( Fl_Widget * widget, void * userData ) {
 			rclick_menu[0].deactivate();
 		}
 
+		{//if ( selectedItemIndex < 0 ) {
+			rclick_menu[2].deactivate();
+		}
 		const Fl_Menu_Item * m = rclick_menu->popup( Fl::event_x(), Fl::event_y(), 0, 0, 0 );
 		if ( m ) {
 			m->do_callback( 0, m->user_data() );
@@ -155,6 +159,31 @@ void kbResourceTab::SavePackageCB( Fl_Widget * widget, void * userData ) {
 		g_ResourceManager.SavePackage( g_pResourceTab->m_SelectBrowserIdx[index]->m_FolderName );
 		ClearDirtyFlags( g_pResourceTab->m_SelectBrowserIdx[index] );
 	}
+
+	g_pResourceTab->RefreshResourcesTab();
+}
+
+/**
+ *	DeleteResouceCB - Called when user selects a resource in the resource tab
+ */
+void kbResourceTab::DeleteResouceCB( Fl_Widget * widget, void * userData ) {
+	/*Fl_Select_Browser *const selectBrowser = g_pResourceTab->m_pEntitySelectBrowser;
+	kbResourceTab *const pResourceTab = static_cast< kbResourceTab * >( userData );
+
+	const int selectedItemIndex = (INT_PTR)userData;
+    if ( selectedItemIndex == -1 ) {
+        return;
+    }
+
+	kbResourceTabFile_t * pResourceItem = pResourceTab->m_SelectBrowserIdx[selectedItemIndex];
+
+	if ( pResourceItem->m_pResource != nullptr ) {
+		const int areYouSure = fl_ask( "Really delete %s", pResourceItem->m_pResource->GetFullName().c_str() );
+		if ( areYouSure == 1 ) {
+			const char * fileName = pResourceItem->m_pResource->GetFullFileName().c_str();
+			DeleteFile( fileName );
+		}
+	}*/
 
 	g_pResourceTab->RefreshResourcesTab();
 }

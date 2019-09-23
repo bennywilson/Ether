@@ -12,7 +12,7 @@ cbuffer ConstantBuffer1 {
 	float4 bladeOffsets[64];
 	float4 wind;					// w unused
 	float4 time;
-	float4 fakeAOData;				// x - Darkness, y - power
+	float4 fakeAOData;				// x - Darkness, y - power, z - Clip Plane fade dist
 	float4 collisionMapCenter;		// x: Collision map world x, y: Collision map world y, z: Half terrain width, w: One over half terrain width
 	float4 plant_1_2_size;
 	float4 plant_3_size;
@@ -77,7 +77,7 @@ geometryShaderInput vertexShader( vertexInput input ) {
 SamplerState LinearSampler;
 SamplerState PointSampler;
 
-Texture2D grassMaskMap				: register(t0);
+Texture2D grassMaskMap(white)		: register(t0);
 Texture2D heightMap					: register(t1);
 Texture2D grassDiffuseMap			: register(t2);
 Texture2D noiseMap					: register(t3);
@@ -108,10 +108,6 @@ void CreateVertex( inout TriangleStream<pixelInput> OutputStream, float3 vertexW
 	const float2 normalizedTerrainMapPos = float2( ( bladeWorldOrigin.x - collisionMapCenter.x ) * collisionMapCenter.w, ( bladeWorldOrigin.z - collisionMapCenter.y ) * collisionMapCenter.w );
 	const float2 terrainMapUV = ( normalizedTerrainMapPos * 0.5f ) + 0.5f;
 
-	const float4 grassMask = grassMaskMap.SampleLevel( PointSampler, terrainMapUV, 0.0f );
-	//if ( grassMask.x < 0.5f )
-	//	return;
-		
 
 	const float4 collisionMapVal = collisionMap.SampleLevel( PointSampler, terrainMapUV, 0.0f );
 	float collisionTime = abs( collisionMapVal.b );
@@ -157,7 +153,7 @@ void CreateVertex( inout TriangleStream<pixelInput> OutputStream, float3 vertexW
 	const float textureStartU = textureSize * textureIdx + textureUBorderSize;
 	const float textureEndU = textureStartU + textureSize - textureUBorderSize - textureUBorderSize;
 	const float textureEndV = 1.0f - textureVBorderSize;
-
+	const float4 grassMask = grassMaskMap.SampleLevel( PointSampler, terrainMapUV, 0.0f );
 	const float grassLength = ( ( GrassData0.w - GrassData0.z ) * noiseValues.x + GrassData0.z ) * lodScale * bladeHeightFactor * grassMask.x;
 
 	float burnStartHeight = collisionMapVal.w + 99999.0f;
@@ -214,9 +210,13 @@ PS_OUTPUT pixelShader( pixelInput input, bool isFrontFace : SV_IsFrontFace )  {
  	PS_OUTPUT output = (PS_OUTPUT) 0;
 
 	float fakeAO = abs( ( 1.0f - input.uv.y ) * ( 1.0f - fakeAOData.x ) + fakeAOData.x );
-	fakeAO = pow( fakeAO, abs(fakeAOData.y) );
+	fakeAO = pow( fakeAO, abs( fakeAOData.y ) );
 
 	if ( input.uv.x >= 2.0f/8.0f ) fakeAO = 1;
+
+	const float distFromClip = abs( input.worldPosition.y - clipPlane.w ) / fakeAOData.z;
+	float clipFadeLerp = saturate( 1.0f - distFromClip );
+	fakeAO = lerp( fakeAO, 1.0f, clipFadeLerp );
 
 	float4 foliageColor = grassDiffuseMap.Sample( LinearSampler, input.uv );
 	clip( foliageColor.w - 0.5f );
