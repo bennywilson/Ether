@@ -206,6 +206,7 @@ static KungFuSheep_Director * g_pKungFuDirector = nullptr;
  */
 void KungFuLevelComponent::Constructor() {
 	m_WaterDropletFXStartTime = -1.0f;
+	m_LastWaterSplashSoundTime = 0.0f;
 }
 
 /**
@@ -384,4 +385,21 @@ void KungFuLevelComponent::DoWaterDropletScreenFX() {
 		static kbString colorFactor( "colorFactor" );
 		pSM->SetMaterialParamVector( 0, colorFactor.stl_str(), kbVec4( 1.0f, 1.0f, 1.0f, 1.0f ) );
 	}
+}
+
+/**
+ *	KungFuLevelComponent::DoSplashSound
+ */
+void KungFuLevelComponent::DoSplashSound() {
+
+	if ( m_WaterSplashSound.size() == 0 ) {
+		return;
+	}
+
+	if ( g_GlobalTimer.TimeElapsedSeconds() < m_LastWaterSplashSoundTime + 2.0f ) {
+		return;
+	}
+
+	m_LastWaterSplashSoundTime = g_GlobalTimer.TimeElapsedSeconds();
+	m_WaterSplashSound[rand() % m_WaterSplashSound.size()].PlaySoundAtPosition( kbVec3( 0.0f, 0.0f, 0.0f ) );
 }

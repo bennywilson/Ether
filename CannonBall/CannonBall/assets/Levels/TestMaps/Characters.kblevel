@@ -2,7 +2,7 @@ kbGameEntity 0 0 0 0 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		Name = "Entity_56"
+		Name = "Entity_61"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
 		Position = 0.000000 0.000000 0.000000
 		Scale = 1.000000 1.000000 1.000000
@@ -11,7 +11,7 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		MainCameraPosition = 73.398903 -49.764462 -312.241638
-		MainCameraRotation = -0.010897 -0.628612 0.008812 0.777592
+		MainCameraRotation = 0.040655 -0.124419 -0.005100 0.991383
 	}
 }
 kbGameEntity 0 0 0 0 {
@@ -34,6 +34,31 @@ kbGameEntity 0 0 0 0 {
 		SheepPrefab = 0 0 0 0
 		SnolafPrefab = 314357658 1122514197 2466994618 463523205
 		WaterDropletScreenFX = 3936461697 1285153374 3406925493 1594399155
+		WaterSplashSound = 3
+			kbSoundData { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Radius =  -1.000000
+				TestPlaySoundNow = 0
+				Volume =  1.000000
+				WaveFile = .\assets\sounds\randomfx\splash_1.wav
+			}
+			kbSoundData { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Radius =  -1.000000
+				TestPlaySoundNow = 0
+				Volume =  1.000000
+				WaveFile = .\assets\sounds\randomfx\splash_1.wav
+			}
+			kbSoundData { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Radius =  -1.000000
+				TestPlaySoundNow = 0
+				Volume =  1.000000
+				WaveFile = .\assets\sounds\randomfx\splash_1.wav
+			}
 	}
 }
 kbGameEntity 0 0 0 0 {

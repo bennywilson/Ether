@@ -43,6 +43,7 @@ public:
 	AttackHitInfo_t								DoAttack( const DealAttackInfo_t<KungFuGame::eAttackType> & dealAttackInfo );
 
 	void										DoWaterDropletScreenFX();
+	void										DoSplashSound();
 
 protected:
 
@@ -56,6 +57,7 @@ private:
 	kbGameEntityPtr								m_SheepPrefab;
 
 	kbGameEntityPtr								m_WaterDropletScreenFX;
+	std::vector<kbSoundData>					m_WaterSplashSound;
 
 	// Runtime
 	float										m_WaterDropletFXStartTime;
@@ -67,6 +69,8 @@ private:
 		float									m_InitialDelay;
 	};
 	waterSplashFX_t								m_WaterSplashFXInst[NumWaterSplashes];
+
+	float										m_LastWaterSplashSoundTime;
 };
 
 

@@ -72,6 +72,7 @@ GenerateClass(
 	AddField( "SnolafPrefab", KBTYPEINFO_GAMEENTITY, KungFuLevelComponent, m_SnolafPrefab, false, "" )
 	AddField( "SheepPrefab", KBTYPEINFO_GAMEENTITY, KungFuLevelComponent, m_SheepPrefab, false, "" )
 	AddField( "WaterDropletScreenFX", KBTYPEINFO_GAMEENTITY, KungFuLevelComponent, m_WaterDropletScreenFX, false, "" )
+	AddField( "WaterSplashSound", KBTYPEINFO_STRUCT, KungFuLevelComponent, m_WaterSplashSound, true, "kbSoundData" )
 )
 
 GenerateClass(

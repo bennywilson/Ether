@@ -692,9 +692,10 @@ void KungFuSnolafComponent::SpawnSplash() {
 	pSplash->SetPosition( GetOwnerPosition() );
 	pSplash->DeleteWhenComponentsAreInactive( true );
 	
-	{//if ( GetOwnerPosition().x > 80.0f ) {
+	KungFuLevelComponent *const pLevelComponent = g_pCannonGame->GetLevelComponent<KungFuLevelComponent>();
+	pLevelComponent->DoSplashSound();
 
-		KungFuLevelComponent *const pLevelComponent = g_pCannonGame->GetLevelComponent<KungFuLevelComponent>();
+	if ( kbfrand() > 0.75f ) {
 		pLevelComponent->DoWaterDropletScreenFX();
 	}
 }
