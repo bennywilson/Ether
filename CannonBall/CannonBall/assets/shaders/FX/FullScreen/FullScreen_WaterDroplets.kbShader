@@ -74,7 +74,7 @@ float4 pixelShader( pixelInput input ) : SV_TARGET {
 		textureColor1 = OverlayTexture.Sample( DiffuseSamplerState, waterDropUV );
 		textureColor1.xy = normalize( textureColor1.xy );
 		textureColor1.y = 1.0f - textureColor1.y;
-		uvOffset1 = normalFactor_scrollRate.xy * ( ( textureColor1.xy * 2.0f ) - 1.0f );
+		uvOffset1 = normalFactor_scrollRate.xy * 0.25f * ( ( textureColor1.xy * 2.0f ) - 1.0f );
 		uvOffset1.y = 1.0f - uvOffset1.y;
 	}
 
