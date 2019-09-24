@@ -363,10 +363,10 @@ void KungFuLevelComponent::DoWaterDropletScreenFX() {
 
 	m_WaterDropletFXStartTime = g_GlobalTimer.TimeElapsedSeconds();
 	m_WaterSplashFXInst[0].m_Duration = 1.5f;
-	m_WaterSplashFXInst[0].m_InitialDelay = 0.05f;
+	m_WaterSplashFXInst[0].m_InitialDelay = 1.0f;
 
 	m_WaterSplashFXInst[1].m_Duration = 2.0f;
-	m_WaterSplashFXInst[1].m_InitialDelay = 0.0f;
+	m_WaterSplashFXInst[1].m_InitialDelay = 0.75f;
 
 	//m_WaterDropletScreenFXInst.SetEntity( g_pGame->CreateEntity( m_WaterDropletScreenFX.GetEntity() ) );
 
