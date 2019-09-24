@@ -78,19 +78,11 @@ float4 pixelShader( pixelInput input ) : SV_TARGET {
 		uvOffset1.y = 1.0f - uvOffset1.y;
 	}
 
-	{
-		float2 waterDropUV = input.uv + startUVOffset.xy;
-		float2 waterDropUVOffset = normalFactor_scrollRate.zw;
-		waterDropUV += waterDropUVOffset;
-	
-		textureColor2 = OverlayTexture.Sample( DiffuseSamplerState, waterDropUV );
-		textureColor2.xy = normalize( textureColor2.xy );
-		textureColor2.y = 1.0f - textureColor2.y;
-		uvOffset2 = normalFactor_scrollRate.xy * 0.5f * ( ( textureColor2.xy * 2.0f ) - 1.0f );
-		uvOffset2.y = 1.0f - uvOffset1.y;
-	}
+	uvOffset2 = uvOffset1;
+	uvOffset2.y = 1.0f - uvOffset1.y;
 	finalUVOffset = lerp( uvOffset1, uvOffset2, textureColor1.z );
-	finalTextureColor = lerp( textureColor1, textureColor2, textureColor1.z );
+
+	finalTextureColor = textureColor1;
 
 	float4 finalColor = sceneTexture.Sample( DiffuseSamplerState, input.uv + ( finalUVOffset ) );
 	finalColor.w = finalTextureColor.z;

@@ -58,9 +58,15 @@ private:
 	kbGameEntityPtr								m_WaterDropletScreenFX;
 
 	// Runtime
-	kbGameEntityPtr								m_WaterDropletScreenFXInst;
 	float										m_WaterDropletFXStartTime;
-	float										m_WaterDropletDuration;
+
+	const static int NumWaterSplashes = 2;
+	struct waterSplashFX_t {
+		kbGameEntityPtr							m_Entity;
+		float									m_Duration;
+		float									m_InitialDelay;
+	};
+	waterSplashFX_t								m_WaterSplashFXInst[NumWaterSplashes];
 };
 
 

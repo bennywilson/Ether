@@ -247,6 +247,7 @@ GenerateEnum(
 
 GenerateClass(
 	kbParticleComponent,
+	AddField( "DebugPlayEntity", KBTYPEINFO_BOOL, kbParticleComponent, m_DebugPlayEntity, false, "" )
 	AddField( "TranslucencySortBias", KBTYPEINFO_FLOAT, kbParticleComponent, m_TranslucencySortBias, false, "" )
 	AddField( "MaterialList", KBTYPEINFO_STRUCT, kbParticleComponent, m_MaterialList, true, "kbMaterialComponent" )
 	AddField( "TotalDuration", KBTYPEINFO_FLOAT, kbParticleComponent, m_TotalDuration, false, "" )
@@ -273,6 +274,9 @@ GenerateClass(
 
 	AddField( "StartColor", KBTYPEINFO_VECTOR4, kbParticleComponent, m_ParticleStartColor, false, "" )
 	AddField( "EndColor", KBTYPEINFO_VECTOR4, kbParticleComponent, m_ParticleEndColor, false, "" )
+
+	AddField( "SizeOverLife", KBTYPEINFO_STRUCT, kbParticleComponent, m_SizeOverLifeTimeCurve, true, "kbVectorAnimEvent" )
+	AddField( "RotationOverLife", KBTYPEINFO_STRUCT, kbParticleComponent, m_RotationOverLifeTimeCurve, true, "kbVectorAnimEvent" )
 	AddField( "ColorOverLife", KBTYPEINFO_STRUCT, kbParticleComponent, m_ColorOverLifeTimeCurve, true, "kbVectorAnimEvent" )
 	AddField( "AlphaOverLife", KBTYPEINFO_STRUCT, kbParticleComponent, m_AlphaOverLifeTimeCurve, true, "kbAnimEvent" )
 

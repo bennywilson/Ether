@@ -80,6 +80,9 @@ public:
 	}
 
 	float x,y;
+
+	static const kbVec2 zero;
+	static const kbVec2 one;
 };
 
 kbVec2 operator *( const kbVec2 & op1, const float op2 );
