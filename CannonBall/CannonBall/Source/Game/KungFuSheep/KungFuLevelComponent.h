@@ -38,9 +38,11 @@ class KungFuLevelComponent : public CannonLevelComponent {
 //-------------------------------------------------------------------------------------------------------------------------------------------------------------
 public:
 
+	void										SpawnEnemy();
+
 	AttackHitInfo_t								DoAttack( const DealAttackInfo_t<KungFuGame::eAttackType> & dealAttackInfo );
 
-	void										SpawnEnemy();
+	void										DoWaterDropletScreenFX();
 
 protected:
 
@@ -49,8 +51,16 @@ protected:
 
 private:
 
+	// Data
 	kbGameEntityPtr								m_SnolafPrefab;
 	kbGameEntityPtr								m_SheepPrefab;
+
+	kbGameEntityPtr								m_WaterDropletScreenFX;
+
+	// Runtime
+	kbGameEntityPtr								m_WaterDropletScreenFXInst;
+	float										m_WaterDropletFXStartTime;
+	float										m_WaterDropletDuration;
 };
 
 

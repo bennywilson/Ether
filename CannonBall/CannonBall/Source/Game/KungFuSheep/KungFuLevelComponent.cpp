@@ -205,6 +205,7 @@ static KungFuSheep_Director * g_pKungFuDirector = nullptr;
  *	KungFuLevelComponent::Constructor
  */
 void KungFuLevelComponent::Constructor() {
+	m_WaterDropletFXStartTime = -1.0f;
 }
 
 /**
@@ -233,14 +234,28 @@ void KungFuLevelComponent::SetEnable_Internal( const bool bEnable ) {
 		g_pKungFuDirector->InitializeStates( pGameStates );
 		g_pKungFuDirector->RequestStateChange( KungFuGame::Gameplay );
 
+		kbErrorCheck( m_WaterDropletScreenFXInst.GetEntity() == nullptr, "KungFuLevelComponent::SetEnable_Internal() - Water Droplet Screen FX Instance already allocated" );
+		if ( m_WaterDropletScreenFX.GetEntity() != nullptr ) {
+			m_WaterDropletScreenFXInst.SetEntity( g_pGame->CreateEntity( m_WaterDropletScreenFX.GetEntity() ) );
+			kbStaticModelComponent *const pSM = m_WaterDropletScreenFXInst.GetEntity()->GetComponent<kbStaticModelComponent>();
+			pSM->Enable( false );
+		}
+
 	} else {
+
+		if ( m_WaterDropletScreenFXInst.GetEntity() != nullptr ) {
+			g_pGame->RemoveGameEntity( m_WaterDropletScreenFXInst.GetEntity() );
+			m_WaterDropletScreenFXInst.SetEntity( nullptr );
+		}
 		delete g_pKungFuDirector;
+		g_pKungFuDirector = nullptr;
 	}
 }
 
 /**
  *	KungFuLevelComponent::Update_Internal
  */
+const kbVec4 g_WaterDropletNormalFactorScroll( 0.1000f, 0.1000f, 0.00000f, -0.10000f );
 void KungFuLevelComponent::Update_Internal( const float DeltaTime ) {
 	Super::Update_Internal( DeltaTime );
 
@@ -249,6 +264,36 @@ void KungFuLevelComponent::Update_Internal( const float DeltaTime ) {
 	}
 
 	g_pKungFuDirector->UpdateStateMachine();
+
+
+	if ( m_WaterDropletFXStartTime > 0.0f ) {
+		float normalizedTime = ( g_GlobalTimer.TimeElapsedSeconds() - m_WaterDropletFXStartTime ) / m_WaterDropletDuration;
+		kbStaticModelComponent *const pSM = m_WaterDropletScreenFXInst.GetEntity()->GetComponent<kbStaticModelComponent>(); 
+
+		if ( normalizedTime > 1.0f ) {
+			pSM->Enable( false );
+			m_WaterDropletFXStartTime = -1.0f;
+		} else {
+
+			const float delayScrollTime = 0.1f;
+			if ( normalizedTime > delayScrollTime ) {
+				normalizedTime = kbClamp( ( normalizedTime - delayScrollTime ) * ( 1.0f / delayScrollTime ), 0.0f, 999.0f );
+				static kbString normalFactor_scrollRate( "normalFactor_scrollRate" );
+				kbVec4 scroll = g_WaterDropletNormalFactorScroll;
+				scroll.w = -normalizedTime * 0.01f;
+
+				pSM->SetMaterialParamVector( 0, normalFactor_scrollRate.stl_str(), scroll );
+
+				// Blend out time
+				{
+					const float blendOutStart = m_WaterDropletFXStartTime + ( m_WaterDropletDuration * 0.75f );
+					const float blendOutTime = kbClamp( ( g_GlobalTimer.TimeElapsedSeconds() - blendOutStart ) / ( m_WaterDropletDuration * 0.25f ), 0.0f, 1.0f );
+					static kbString colorFactor( "colorFactor" );
+					pSM->SetMaterialParamVector( 0.0f, colorFactor.stl_str(), kbVec4( 1.0f, 1.0f, 1.0f, 1.0f - blendOutTime ) );
+				}
+			}
+		}
+	}
 }
 
 /**
@@ -274,4 +319,30 @@ void KungFuLevelComponent::SpawnEnemy() {
 	}
 	pSnolaf->SetPosition( g_pCannonGame->GetPlayer()->GetOwnerPosition() + spawnOffset );
 	pSnolaf->SetOrientation( GetOwnerRotation() );
+}
+
+/**
+ *	KungFuLevelComponent::DoWaterDropletScreenFX
+ */
+void KungFuLevelComponent::DoWaterDropletScreenFX() {
+
+	if ( m_WaterDropletScreenFX.GetEntity() == nullptr || m_WaterDropletFXStartTime > 0.0f ) {
+		return;
+	}
+
+	m_WaterDropletFXStartTime = g_GlobalTimer.TimeElapsedSeconds();
+	m_WaterDropletDuration = 1.0f;
+	//m_WaterDropletScreenFXInst.SetEntity( g_pGame->CreateEntity( m_WaterDropletScreenFX.GetEntity() ) );
+	kbStaticModelComponent *const pSM = m_WaterDropletScreenFXInst.GetEntity()->GetComponent<kbStaticModelComponent>();
+	pSM->Enable( true );
+
+
+	static kbString startUVOffsetParam( "startUVOffset" );
+	pSM->SetMaterialParamVector( 0, startUVOffsetParam.stl_str(), kbVec4( kbfrand(), kbfrand(), 0.0f, 0.0f ) );
+
+	static kbString normalFactor_scrollRate( "normalFactor_scrollRate" );
+	pSM->SetMaterialParamVector( 0, normalFactor_scrollRate.stl_str(), kbVec4( g_WaterDropletNormalFactorScroll.x, g_WaterDropletNormalFactorScroll.y, 0.0f, 0.0f ) );
+
+	static kbString colorFactor( "colorFactor" );
+	pSM->SetMaterialParamVector( 0, colorFactor.stl_str(), kbVec4( 1.0f, 1.0f, 1.0f, 1.0f ) );
 }

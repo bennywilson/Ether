@@ -1,0 +1,100 @@
+//===================================================================================================
+// FullScreen_WaterDroplets.kbShader
+//
+//
+// 2019 kbEngine 2.0
+//===================================================================================================
+cbuffer matrixBuffer {
+	matrix				inverseViewProjection;
+	float4				cameraPosition;
+	float4				time;
+	float4				normalFactor_scrollRate;
+	float4				startUVOffset;
+	float4				colorFactor;
+
+	float4				normalFactor_scrollRat2;
+	float4				startUVOffset2;
+};
+
+kbShaderState {
+	srcBlend			Blend_SrcAlpha
+	dstBlend			Blend_InvSrcAlpha
+	colorwriteenable	colorwriteenable_rgb
+}
+
+//-------------------------------------
+struct vertexInput {
+	float4 position			: POSITION;
+	float2 uv				: TEXCOORD0;
+};
+
+//-------------------------------------
+struct pixelInput {
+	float4 position			: SV_POSITION;
+	float2 uv				: TEXCOORD0;
+	float4 position2		: TEXCOORD1;
+};
+
+/**
+ *	vertexShader
+ */
+pixelInput vertexShader( vertexInput input ) {
+	pixelInput output = (pixelInput)(0);
+
+	output.position = input.position;
+	output.uv = input.uv;
+	output.position2 = input.position;
+
+	return output;
+}
+
+/**
+ *	pixelShader
+ */
+SamplerState DiffuseSamplerState;
+Texture2D OverlayTexture(white)					: register(t0);
+
+Texture2D sceneTexture(scenecolor)				: register(t1);
+
+float4 pixelShader( pixelInput input ) : SV_TARGET {
+
+	float2 finalUVOffset = 0;
+	float2 uvOffset1 = 0;
+	float2 uvOffset2 = 0;
+
+	float4 textureColor1 = 0;
+	float4 textureColor2 = 0;
+	float4 finalTextureColor = 0;
+
+	{
+		float2 waterDropUV = input.uv + startUVOffset.xy;
+		float2 waterDropUVOffset = normalFactor_scrollRate.zw;
+		waterDropUV += waterDropUVOffset;
+	
+		textureColor1 = OverlayTexture.Sample( DiffuseSamplerState, waterDropUV );
+		textureColor1.xy = normalize( textureColor1.xy );
+		textureColor1.y = 1.0f - textureColor1.y;
+		uvOffset1 = normalFactor_scrollRate.xy * ( ( textureColor1.xy * 2.0f ) - 1.0f );
+		uvOffset1.y = 1.0f - uvOffset1.y;
+	}
+
+	{
+		float2 waterDropUV = input.uv + startUVOffset.xy;
+		float2 waterDropUVOffset = normalFactor_scrollRate.zw;
+		waterDropUV += waterDropUVOffset;
+	
+		textureColor2 = OverlayTexture.Sample( DiffuseSamplerState, waterDropUV );
+		textureColor2.xy = normalize( textureColor2.xy );
+		textureColor2.y = 1.0f - textureColor2.y;
+		uvOffset2 = normalFactor_scrollRate.xy * 0.5f * ( ( textureColor2.xy * 2.0f ) - 1.0f );
+		uvOffset2.y = 1.0f - uvOffset1.y;
+	}
+	finalUVOffset = lerp( uvOffset1, uvOffset2, textureColor1.z );
+	finalTextureColor = lerp( textureColor1, textureColor2, textureColor1.z );
+
+	float4 finalColor = sceneTexture.Sample( DiffuseSamplerState, input.uv + ( finalUVOffset ) );
+	finalColor.w = finalTextureColor.z;
+	clip( finalColor.w - 0.3f );
+	return finalColor * colorFactor;
+}
+

@@ -691,4 +691,10 @@ void KungFuSnolafComponent::SpawnSplash() {
 	kbGameEntity *const pSplash = g_pGame->CreateEntity( m_SplashFX.GetEntity() );
 	pSplash->SetPosition( GetOwnerPosition() );
 	pSplash->DeleteWhenComponentsAreInactive( true );
+	
+	{//if ( GetOwnerPosition().x > 80.0f ) {
+
+		KungFuLevelComponent *const pLevelComponent = g_pCannonGame->GetLevelComponent<KungFuLevelComponent>();
+		pLevelComponent->DoWaterDropletScreenFX();
+	}
 }

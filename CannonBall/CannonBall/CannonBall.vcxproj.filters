@@ -84,6 +84,12 @@
     <None Include="assets\shaders\FX\splash.kbShader">
       <Filter>Shaders\FX</Filter>
     </None>
+    <None Include="assets\shaders\FX\FullScreen\WaterDroplets.kbShader">
+      <Filter>Shaders\FX\FullScreen</Filter>
+    </None>
+    <None Include="assets\shaders\FX\FullScreen\FullScreen_WaterDroplets.kbShader">
+      <Filter>Shaders\FX\FullScreen</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Shaders">
@@ -121,6 +127,9 @@
     </Filter>
     <Filter Include="Shaders\Water">
       <UniqueIdentifier>{5738bacb-891d-472e-901f-8cf2e9efcdeb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shaders\FX\FullScreen">
+      <UniqueIdentifier>{85c44c92-50b8-41ad-8bf4-1a63990dd8b6}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
