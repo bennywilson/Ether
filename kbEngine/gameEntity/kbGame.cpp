@@ -24,6 +24,7 @@ kbConsoleVariable g_ShowFPS( "showfps", false, kbConsoleVariable::Console_Bool, 
 kbGame::kbGame() :
 	m_Hwnd( nullptr ),
 	m_pLocalPlayer( nullptr ),
+	m_pLevelComp( nullptr ),
 	m_bIsPlaying( false ),
 	m_bIsRunning( true ),
 	m_bHasFirstSyncCompleted( false ),
@@ -63,6 +64,8 @@ void kbGame::InitGame( HWND hwnd, const int backBufferWidth, const int backBuffe
 void kbGame::LoadMap( const std::string & mapName ) {
 	kbLog( "LoadMap() called on %s", mapName.c_str() );
 
+	m_pLevelComp = nullptr;
+
 	// Load map
 	if ( mapName.empty() == false ) {
 
@@ -101,6 +104,10 @@ void kbGame::LoadMap( const std::string & mapName ) {
 
 				kbGameEntity * gameEntity = inFile.ReadGameEntity();
 				while ( gameEntity != nullptr ) {
+
+					if ( m_pLevelComp == nullptr ) {
+						m_pLevelComp = gameEntity->GetComponent<kbLevelComponent>();
+					}
 					m_GameEntityList.push_back( gameEntity );
 					gameEntity = inFile.ReadGameEntity();
 				}
@@ -153,6 +160,8 @@ void kbGame::StopGame() {
 	m_GamePlayersList.clear();
 
 	m_bIsPlaying = false;
+
+	m_pLevelComp = nullptr;
 }
 
 

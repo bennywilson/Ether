@@ -6,6 +6,8 @@
 //===================================================================================================
 cbuffer matrixBuffer {
 	float4					normalizedScreenSize_Anchor;
+	float4					healthBarBounds;		// Normalized from 0-1 in UV space
+	float4					normalizedHealth;
 };
 
 kbShaderState {
@@ -56,10 +58,25 @@ pixelInput vertexShader( vertexInput input ) {
 SamplerState DiffuseSamplerState;
 Texture2D baseTexture(white)					: register(t0);
 
-Texture2D sceneTexture(scenecolor)				: register(t1);
+Texture2D fillTexture(white)					: register(t1);
+
+Texture2D sceneTexture(scenecolor)				: register(t2);
 
 float4 pixelShader( pixelInput input ) : SV_TARGET {
 
-	return baseTexture.Sample( DiffuseSamplerState, input.uv );
+	float4 frameColor = baseTexture.Sample( DiffuseSamplerState, input.uv );
+
+	float4 finalColor = frameColor;
+	
+	float uLen = healthBarBounds.z - healthBarBounds.x;
+	float rightEdge = healthBarBounds.x + ( uLen * normalizedHealth.x );
+	if ( input.uv.x > healthBarBounds.x && input.uv.x < rightEdge && input.uv.y > healthBarBounds.y && input.uv.y < healthBarBounds.w ) {
+		float2 barUV = ( input.uv - healthBarBounds.xy ) / ( healthBarBounds.zw - healthBarBounds.xy );
+		float4 barColor = fillTexture.Sample( DiffuseSamplerState, barUV );
+		finalColor = lerp( barColor, frameColor, frameColor.a );
+	
+	}
+
+	return finalColor;//baseTexture.Sample( DiffuseSamplerState, input.uv );
 }
 

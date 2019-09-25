@@ -25,10 +25,14 @@ protected:
 
 private:
 
+	// Editor
+	int										m_Dummy;
+
+	// Runtime
 	float									m_TargetNormalizedHealth;
 	float									m_CurrentNormalizedHealth;
 
-	int										m_Dummy;
+	kbStaticModelComponent *				m_pStaticModelComponent;
 };
 
 #endif

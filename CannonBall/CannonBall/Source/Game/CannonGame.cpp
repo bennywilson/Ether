@@ -21,7 +21,6 @@ CannonGame * g_pCannonGame = nullptr;
  */
 CannonGame::CannonGame() :
 	kbRenderHook( RP_FirstPerson ),
-	m_pLevelComp( nullptr ),
 	m_pMainCamera( nullptr ),
 	m_pPlayerComp( nullptr ) {
 
@@ -61,7 +60,6 @@ void CannonGame::InitGame_Internal() {
 void CannonGame::StopGame_Internal() {
 
 	m_pLocalPlayer = nullptr;
-	m_pLevelComp = nullptr;
 
 	g_pRenderer->UnregisterRenderHook( this );
 }
@@ -71,16 +69,12 @@ void CannonGame::StopGame_Internal() {
  */
 void CannonGame::LevelLoaded_Internal() {
 
-	m_pLevelComp = nullptr;
 	m_pMainCamera = nullptr;
 
 	int cameraIdx = -1;
 	const std::vector<kbGameEntity*> & GameEnts = GetGameEntities();
 	for ( int i = 0; i < GameEnts.size(); i++ ) {
 		kbGameEntity *const pCurEnt = GameEnts[i];
-		if ( m_pLevelComp == nullptr ) {
-			m_pLevelComp = pCurEnt->GetComponent<kbLevelComponent>();
-		}
 
 		if ( m_pMainCamera == nullptr ) {
 			m_pMainCamera = pCurEnt->GetComponent<CannonCameraComponent>();
@@ -101,7 +95,6 @@ void CannonGame::LevelLoaded_Internal() {
 		SwapEntitiesByIdx( cameraIdx, GameEnts.size() - 1 );
 	}
 
-	kbWarningCheck( m_pLevelComp != nullptr, "CannonGame::LevelLoaded_Internal() - No level component found.");
 	kbWarningCheck( m_pMainCamera != nullptr, "CannonGame::LevelLoaded_Internal() - No camera found.");
 	kbWarningCheck( m_pPlayerComp != nullptr, "CannonGame::LevelLoaded_Internal() - No player found.");
 }

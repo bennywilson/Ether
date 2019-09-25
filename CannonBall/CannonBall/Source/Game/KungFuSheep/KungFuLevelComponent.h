@@ -6,7 +6,7 @@
 #ifndef _KUNGFULEVELCOMPONENT_H_
 #define _KUNGFULEVELCOMPONENT_H_
 
-
+#include "CannonUI.h"
 
 namespace KungFuGame {
 
@@ -41,6 +41,7 @@ public:
 	void										SpawnEnemy();
 
 	AttackHitInfo_t								DoAttack( const DealAttackInfo_t<KungFuGame::eAttackType> & dealAttackInfo );
+	void										UpdateSheepHealthBar( const float healthVal );
 
 	void										DoWaterDropletScreenFX();
 	void										DoSplashSound();
@@ -71,6 +72,8 @@ private:
 	waterSplashFX_t								m_WaterSplashFXInst[NumWaterSplashes];
 
 	float										m_LastWaterSplashSoundTime;
+
+	CannonHealthBarUIComponent *				m_pHealthBar;
 };
 
 

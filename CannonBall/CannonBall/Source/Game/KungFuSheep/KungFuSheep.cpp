@@ -471,6 +471,9 @@ void KungFuSheepComponent::SetEnable_Internal( const bool bEnable ) {
 			m_HeadBandInstance[1].GetEntity()->SetPosition( GetOwnerPosition() );
 			m_HeadBandInstance[1].GetEntity()->SetOrientation( GetOwnerRotation() );
 		}
+
+		m_Health = 1.0f;
+		g_pCannonGame->GetLevelComponent<KungFuLevelComponent>()->UpdateSheepHealthBar( 1.0f );
 	}
 }
 
@@ -559,7 +562,6 @@ void KungFuSheepComponent::Update_Internal( const float DT ) {
 
 	UpdateStateMachine();
 
-
 	{
 		static int blinkState = 0;
 		static float lastBlinkTime = g_GlobalTimer.TimeElapsedSeconds();
@@ -611,6 +613,33 @@ void KungFuSheepComponent::Update_Internal( const float DT ) {
 	
 	kbClothComponent *const pCloth2 = m_HeadBandInstance[1].GetEntity()->GetComponent<kbClothComponent>();
 	pCloth2->SetClothCollisionSphere( 0, collisionSphere );
+
+	// Do health check
+	int numHuggers = 0;
+	for ( int i = 0; i < g_pCannonGame->GetGameEntities().size(); i++ ) {
+
+		kbGameEntity *const pEnt =  g_pCannonGame->GetGameEntities()[i];
+		if ( pEnt->GetActorComponent() == nullptr ) {
+			continue;
+		}
+
+		KungFuSnolafComponent *const pSnolaf = g_pCannonGame->GetGameEntities()[i]->GetActorComponent()->GetAs<KungFuSnolafComponent>();
+		if ( pSnolaf == nullptr ) {
+			continue;
+		}
+
+		if ( pSnolaf->GetState() == KungFuSnolafState::Hug ) {
+			numHuggers++;
+		}
+	}
+
+	if ( numHuggers > 0 ) {
+		const float healthDrain = DT * 0.01f * (float)numHuggers;
+		m_Health = kbSaturate( m_Health - healthDrain );
+
+		KungFuLevelComponent *const pLevelComponent = g_pCannonGame->GetLevelComponent<KungFuLevelComponent>();
+		pLevelComponent->UpdateSheepHealthBar( m_Health );
+	}
 }
 
  /**

@@ -65,12 +65,6 @@ public:
 
 	CannonActorComponent *						GetPlayer() const { return m_pPlayerComp; }
 
-	template<typename T>
-	T *	GetLevelComponent() const {
-			kbErrorCheck( m_pLevelComp != nullptr && m_pLevelComp->IsA( T::GetType() ), "GetLevelComponent<T>() - Incorrect level component type" );
-			return (T*) m_pLevelComp;
-	}
-
 protected:
 
 	virtual void								InitGame_Internal() override;
@@ -97,7 +91,6 @@ protected:
 
 	kbTimer										m_GameStartTimer;
 
-	kbLevelComponent *							m_pLevelComp;
 	CannonCameraComponent *						m_pMainCamera;
 	CannonActorComponent *						m_pPlayerComp;
 

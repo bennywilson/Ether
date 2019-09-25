@@ -2,7 +2,7 @@ kbGameEntity 0 0 0 0 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		Name = "Entity_63"
+		Name = "Entity_65"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
 		Position = 0.000000 0.000000 0.000000
 		Scale = 1.000000 1.000000 1.000000
@@ -11,7 +11,7 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		MainCameraPosition = 64.727898 -44.519325 -333.555054
-		MainCameraRotation = -0.089313 -0.308304 0.029090 0.946639
+		MainCameraRotation = -0.183072 -0.308521 0.060640 0.931463
 	}
 }
 kbGameEntity 0 0 0 0 {
@@ -3961,13 +3961,13 @@ kbGameEntity 0 0 0 0 {
 				LifeTime =  -1.000000
 				CullModeOverride = None
 				Shader = .\assets\shaders\ui\healthbarui_basic.kbshader
-				ShaderParams = 2
+				ShaderParams = 4
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
 						ParamName = "normalizedScreenSize_Anchor"
 						Texture = NULL
-						Vector = 0.200000 0.113778 0.000000 0.000000
+						Vector = 0.200000 0.122222 0.010000 0.010000
 					}
 					kbShaderParamComponent { 
 						Enabled = 0
@@ -3975,6 +3975,20 @@ kbGameEntity 0 0 0 0 {
 						ParamName = "baseTexture"
 						Texture = .\assets\ui\kungfusheep_healthbar.tif
 						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "fillTexture"
+						Texture = .\assets\ui\healhbar_fill_blue.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "healthBarBounds"
+						Texture = NULL
+						Vector = 0.310000 0.480000 0.850000 0.760000
 					}
 			}
 		RenderPass = UIPass
@@ -3984,9 +3998,10 @@ kbGameEntity 0 0 0 0 {
 	CannonHealthBarUIComponent { 
 		Enabled = 1
 		LifeTime =  -1.000000
-		AuthoredHeight = 512
+		AuthoredHeight = 550
 		AuthoredWidth = 1600
 		NormalizedAnchorPoint = 0.010000 0.010000 0.000000
 		UIToScreenSizeRatio = 0.200000 0.000000 0.000000
+		Dummy = 0
 	}
 }

@@ -6,6 +6,7 @@
 #include "kbGame.h"
 #include "kbLevelDirector.h"
 #include "CannonGame.h"
+#include "CannonUI.h"
 #include "KungFuLevelComponent.h"
 #include "CannonPlayer.h"
 #include "KungFuSheep.h"
@@ -207,6 +208,7 @@ static KungFuSheep_Director * g_pKungFuDirector = nullptr;
 void KungFuLevelComponent::Constructor() {
 	m_WaterDropletFXStartTime = -1.0f;
 	m_LastWaterSplashSoundTime = 0.0f;
+	m_pHealthBar = nullptr;
 }
 
 /**
@@ -215,6 +217,7 @@ void KungFuLevelComponent::Constructor() {
 void KungFuLevelComponent::SetEnable_Internal( const bool bEnable ) {
 	Super::SetEnable_Internal( bEnable );
 
+	m_pHealthBar = nullptr;
 	if ( bEnable ) {
 
 		if ( g_UseEditor == false ) {
@@ -279,6 +282,13 @@ void KungFuLevelComponent::Update_Internal( const float DeltaTime ) {
 
 	g_pKungFuDirector->UpdateStateMachine();
 
+	// Not all game entities are loaded in SetEnable_Internal unfortunately
+	if ( m_pHealthBar == nullptr ) {
+		for ( int i = 0; i < g_pCannonGame->GetGameEntities().size() && m_pHealthBar == nullptr; i++ ) {
+			kbGameEntity *const pTargetEnt = g_pCannonGame->GetGameEntities()[i];
+			m_pHealthBar = pTargetEnt->GetComponent<CannonHealthBarUIComponent>();
+		}
+	}
 
 	if ( m_WaterDropletFXStartTime > 0.0f ) {
 
@@ -329,12 +339,23 @@ void KungFuLevelComponent::Update_Internal( const float DeltaTime ) {
 }
 
 /**
- *	KungFuLevelComponent::Update_Internal
+ *	KungFuLevelComponent::DoAttack
  */
 AttackHitInfo_t KungFuLevelComponent::DoAttack( const DealAttackInfo_t<KungFuGame::eAttackType> & attackInfo ) {
 	return g_pKungFuDirector->DoAttack( attackInfo );
 }
 
+/**
+ *	KungFuLevelComponent::UpdateSheepHealthBar
+ */
+void KungFuLevelComponent::UpdateSheepHealthBar( const float healthVal ) {
+
+	if ( m_pHealthBar == nullptr ) {
+		return;
+	}
+
+	m_pHealthBar->SetTargetHealth( healthVal );
+}
 /**
  *	KungFuLevelComponent::SpawnEnemy
  */
