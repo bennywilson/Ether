@@ -5,6 +5,8 @@
 #include "kbComponent.h"
 #include "CannonGame.h"
 #include "CannonPlayer.h"
+#include "CannonUI.h"
+
 #include "KungFuSheep/KungFuLevelComponent.h"
 #include "KungFuSheep/KungFuSheep.h"
 #include "KungFuSheep/KungFuSnolaf.h"
@@ -35,3 +37,5 @@ DEFINE_KBCLASS(CannonLevelComponent)
 DEFINE_KBCLASS(KungFuLevelComponent)
 
 DEFINE_KBCLASS(CannonFogComponent)
+
+DEFINE_KBCLASS(CannonHealthBarUIComponent)

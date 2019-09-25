@@ -83,3 +83,8 @@ GenerateClass(
 	AddField( "Clamp", KBTYPEINFO_FLOAT, CannonFogComponent, m_FogClamp, false, "" )
 	AddField( "Color", KBTYPEINFO_VECTOR4, CannonFogComponent, m_FogColor, false, "" )	
 )
+
+GenerateClass(
+	CannonHealthBarUIComponent,
+	AddField( "Dummy", KBTYPEINFO_INT, CannonHealthBarUIComponent, m_Dummy, false, "" )
+)

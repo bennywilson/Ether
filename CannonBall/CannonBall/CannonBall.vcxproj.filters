@@ -31,6 +31,9 @@
     <ClInclude Include="Source\Game\KungFuSheep\KungFuLevelComponent.h">
       <Filter>Source\Game\KungFuSheep</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Game\CannonUI.h">
+      <Filter>Source\Game</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="assets\shaders\Character\CharacterBase.kbShader">
@@ -162,6 +165,9 @@
     </ClCompile>
     <ClCompile Include="Source\Game\KungFuSheep\KungFuLevelComponent.cpp">
       <Filter>Source\Game\KungFuSheep</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Game\CannonUI.cpp">
+      <Filter>Source\Game</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

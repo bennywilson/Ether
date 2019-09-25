@@ -2,7 +2,7 @@ kbGameEntity 0 0 0 0 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		Name = "Entity_59"
+		Name = "Entity_63"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
 		Position = 0.000000 0.000000 0.000000
 		Scale = 1.000000 1.000000 1.000000
@@ -3960,35 +3960,14 @@ kbGameEntity 0 0 0 0 {
 				Enabled = 1
 				LifeTime =  -1.000000
 				CullModeOverride = None
-				Shader = ..\..\kbengine\assets\shaders\uiwidget.kbshader
-				ShaderParams = 7
+				Shader = .\assets\shaders\ui\healthbarui_basic.kbshader
+				ShaderParams = 2
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
-						ParamName = "cameraPosition"
+						ParamName = "normalizedScreenSize_Anchor"
 						Texture = NULL
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "normalFactor_scrollRate"
-						Texture = NULL
-						Vector = 1.000000 1.000000 1.000000 1.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "startUVOffset"
-						Texture = NULL
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "colorFactor"
-						Texture = NULL
-						Vector = 1.000000 1.000000 1.000000 1.000000
+						Vector = 0.200000 0.113778 0.000000 0.000000
 					}
 					kbShaderParamComponent { 
 						Enabled = 0
@@ -3997,31 +3976,17 @@ kbGameEntity 0 0 0 0 {
 						Texture = .\assets\ui\kungfusheep_healthbar.tif
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "normalizedPos_AspectRatio"
-						Texture = NULL
-						Vector = 0.050000 0.050000 0.000000 3.125000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "normalizedScreenSize_Anchor"
-						Texture = NULL
-						Vector = 0.200000 0.113778 0.000000 0.000000
-					}
 			}
 		RenderPass = UIPass
 		TranslucencySortBias =  0.000000
 		Model = ..\..\kbengine\assets\models\unitquad.ms3d
 	}
-	kbUIComponent { 
+	CannonHealthBarUIComponent { 
 		Enabled = 1
 		LifeTime =  -1.000000
 		AuthoredHeight = 512
 		AuthoredWidth = 1600
-		NormalizedAnchorPoint = 0.000000 0.000000 0.000000
+		NormalizedAnchorPoint = 0.010000 0.010000 0.000000
 		UIToScreenSizeRatio = 0.200000 0.000000 0.000000
 	}
 }

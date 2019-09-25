@@ -112,6 +112,7 @@
     <ClInclude Include="Source\Game\CannonGame.h" />
     <ClInclude Include="Source\Game\CannonPlayer.h" />
     <ClInclude Include="Source\Game\CannonTypeInfoGeneratedClasses.h" />
+    <ClInclude Include="Source\Game\CannonUI.h" />
     <ClInclude Include="Source\Game\KungFuSheep\KungFuLevelComponent.h" />
     <ClInclude Include="Source\Game\KungFuSheep\KungFuSnolaf.h" />
     <ClInclude Include="Source\Game\KungFuSheep\KungFuSheep.h" />
@@ -123,6 +124,7 @@
     <ClCompile Include="Source\Game\CannonGame.cpp" />
     <ClCompile Include="Source\Game\CannonPlayer.cpp" />
     <ClCompile Include="Source\Game\CannonTypeInfoGeneratedClasses.cpp" />
+    <ClCompile Include="Source\Game\CannonUI.cpp" />
     <ClCompile Include="Source\Game\KungFuSheep\KungFuLevelComponent.cpp" />
     <ClCompile Include="Source\Game\KungFuSheep\KungFuSheep.cpp" />
     <ClCompile Include="Source\Game\KungFuSheep\KungFuSnolaf.cpp" />
