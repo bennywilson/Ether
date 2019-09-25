@@ -368,3 +368,11 @@ GenerateClass(
 	kbDeleteEntityComponent,
 	AddField( "Dummy", KBTYPEINFO_FLOAT, kbDeleteEntityComponent, m_Dummy, false, "" )
 )
+
+GenerateClass(
+	kbUIComponent,
+	AddField( "AuthoredWidth", KBTYPEINFO_INT, kbUIComponent, m_AuthoredWidth, false, "" )
+	AddField( "AuthoredHeight", KBTYPEINFO_INT, kbUIComponent, m_AuthoredHeight, false, "" )
+	AddField( "NormalizedAnchorPoint", KBTYPEINFO_VECTOR, kbUIComponent, m_NormalizedAnchorPt, false, "" )
+	AddField( "UIToScreenSizeRatio", KBTYPEINFO_VECTOR, kbUIComponent, m_UIToScreenSizeRatio, false, "" )
+)

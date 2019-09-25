@@ -160,6 +160,7 @@
     <ClInclude Include="gameEntity\kbTypeInfo.h" />
     <ClInclude Include="gameEntity\kbGameEntityHeader.h" />
     <ClInclude Include="gameEntity\kbTypeInfoGeneratedClasses.h" />
+    <ClInclude Include="gameEntity\kbUIComponent.h" />
     <ClInclude Include="math\kbMath.h" />
     <ClInclude Include="math\kbPlane.h" />
     <ClInclude Include="math\kbQuaternion.h" />
@@ -266,6 +267,7 @@
     <ClCompile Include="gameEntity\kbTypeInfo.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="gameEntity\kbUIComponent.cpp" />
     <ClCompile Include="math\kbMath.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>

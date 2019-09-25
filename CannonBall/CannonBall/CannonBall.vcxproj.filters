@@ -84,11 +84,14 @@
     <None Include="assets\shaders\FX\splash.kbShader">
       <Filter>Shaders\FX</Filter>
     </None>
-    <None Include="assets\shaders\FX\FullScreen\WaterDroplets.kbShader">
-      <Filter>Shaders\FX\FullScreen</Filter>
-    </None>
     <None Include="assets\shaders\FX\FullScreen\FullScreen_WaterDroplets.kbShader">
       <Filter>Shaders\FX\FullScreen</Filter>
+    </None>
+    <None Include="assets\shaders\UI\Basic_UI_Widget.kbShader">
+      <Filter>Shaders\UI</Filter>
+    </None>
+    <None Include="assets\shaders\FX\hackClip.kbShader">
+      <Filter>Shaders\FX</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -130,6 +133,9 @@
     </Filter>
     <Filter Include="Shaders\FX\FullScreen">
       <UniqueIdentifier>{85c44c92-50b8-41ad-8bf4-1a63990dd8b6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shaders\UI">
+      <UniqueIdentifier>{0cea3bc8-fb5c-4827-b78d-2908aad2fee7}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

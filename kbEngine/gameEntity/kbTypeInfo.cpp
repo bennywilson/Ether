@@ -144,4 +144,6 @@ DEFINE_KBCLASS(kbDeleteEntityComponent)
 
 DEFINE_KBCLASS(kbPlaySoundComponent)
 
+DEFINE_KBCLASS(kbUIComponent)
+
 typedef kbResource * kbResourcePtr;

@@ -11,9 +11,6 @@ cbuffer matrixBuffer {
 	float4				normalFactor_scrollRate;
 	float4				startUVOffset;
 	float4				colorFactor;
-
-	float4				normalFactor_scrollRat2;
-	float4				startUVOffset2;
 };
 
 kbShaderState {

@@ -93,7 +93,7 @@
     <None Include="assets\shaders\Environment\environmentSkinned.kbShader" />
     <None Include="assets\shaders\FX\decal_Blend.kbShader" />
     <None Include="assets\shaders\FX\FullScreen\FullScreen_WaterDroplets.kbShader" />
-    <None Include="assets\shaders\FX\FullScreen\WaterDroplets.kbShader" />
+    <None Include="assets\shaders\FX\hackClip.kbShader" />
     <None Include="assets\shaders\FX\Particle_BlendAdd.kbShader" />
     <None Include="assets\shaders\FX\splash.kbShader" />
     <None Include="assets\shaders\FX\wispScroller.kbShader" />
@@ -102,6 +102,7 @@
     <None Include="assets\shaders\Terrain\basicGrass.kbShader" />
     <None Include="assets\shaders\Terrain\basicTerrain.kbShader" />
     <None Include="assets\shaders\Terrain\basicTerrain_Reflection.kbShader" />
+    <None Include="assets\shaders\UI\Basic_UI_Widget.kbShader" />
     <None Include="assets\shaders\Water\water_skygradientreflection.kbShader" />
     <None Include="CannonBall.ico" />
     <None Include="small.ico" />
