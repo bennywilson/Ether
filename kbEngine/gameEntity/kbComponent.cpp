@@ -9,6 +9,7 @@
 #include "kbQuaternion.h"
 #include "kbBounds.h"
 #include "kbGameEntityHeader.h"
+#include "kbGame.h"
 
 KB_DEFINE_COMPONENT(kbComponent)
 KB_DEFINE_COMPONENT(kbTransformComponent)
@@ -229,6 +230,13 @@ kbVec3 kbGameComponent::GetOwnerPosition() const {
 }
 
 /**
+ *	kbGameComponent::GetOwnerScale
+ */
+kbVec3 kbGameComponent::GetOwnerScale() const {
+	return ((kbGameEntity*)GetOwner())->GetScale();
+}
+
+/**
  *	kbGameComponent::GetOwnerRotation
  */
 kbQuat kbGameComponent::GetOwnerRotation() const {
@@ -348,6 +356,20 @@ void kbActorComponent::TakeDamage( const class kbDamageComponent *const pDamageC
 }
 
 /**
+ *	kbDeleteEntityComponent::Constructor
+ */
+void kbDeleteEntityComponent::Constructor() {
+	m_Dummy = 1.0f;
+}
+
+/**
+ *	kbDeleteEntityComponent::LifeTimeExpired
+ */
+void kbDeleteEntityComponent::LifeTimeExpired() {
+	g_pGame->RemoveGameEntity( GetOwner() );
+}
+
+/**
  *	kbPlayerStartComponent::Constructor
  */
 void kbPlayerStartComponent::Constructor() {
@@ -396,7 +418,7 @@ float kbAnimEvent::Evaluate( const std::vector<kbAnimEvent> & eventList, const f
 /**
  *	kbVectorAnimEvent::Evaluate
  */
-kbVec3 kbVectorAnimEvent::Evaluate( const std::vector<kbVectorAnimEvent> & eventList, const float t ) {
+kbVec4 kbVectorAnimEvent::Evaluate( const std::vector<kbVectorAnimEvent> & eventList, const float t ) {
 	if ( eventList.size() == 0 ) {
 		kbWarning( "kbVectorAnimEvent::Evaluate() - Empty event list" );
 		return kbVec3::zero;

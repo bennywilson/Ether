@@ -16,6 +16,28 @@ class CannonCameraComponent;
 class CannonActorComponent;
 class kbLevelComponent;
 
+
+/**
+ *	DealAttackInfo_t
+ */
+template<typename T>
+struct DealAttackInfo_t {
+	CannonActorComponent * m_pAttacker = nullptr;
+	float m_BaseDamage = 1.0f;
+	float m_Radius = 0.0f;
+	T m_AttackType = (T)0;
+};
+
+/**
+ *	AttackHitInfo_t
+ */
+struct AttackHitInfo_t {
+	kbGameComponent * m_pHitComponent = nullptr;
+	bool m_bHit = false;
+};
+
+
+
 /**
  *	CannonLevelComponent
  */
@@ -51,6 +73,9 @@ protected:
 	virtual void								LevelLoaded_Internal() override;
 
 	virtual void								AddGameEntity_Internal( kbGameEntity *const pEntity ) override;
+	virtual void								RemoveGameEntity_Internal( kbGameEntity *const pEntity ) override;
+
+
 	virtual void								PreUpdate_Internal() override;
 	virtual void								PostUpdate_Internal() override;
 
@@ -69,7 +94,6 @@ protected:
 
 	kbTimer										m_GameStartTimer;
 
-	kbLevelComponent *							m_pLevelComp;
 	CannonCameraComponent *						m_pMainCamera;
 	CannonActorComponent *						m_pPlayerComp;
 
@@ -77,6 +101,29 @@ private:
 
 	void										ProcessInput( const float deltaTimeSec );
 };
+
+/**
+ *	CannonFogComponent
+ */
+class CannonFogComponent : public kbGameComponent, kbRenderHook {
+
+	KB_DECLARE_COMPONENT( CannonFogComponent, kbGameComponent );
+
+//-------------------------------------------------------------------------------------------------------------------------------------------------------------
+protected:
+
+	virtual void								SetEnable_Internal( const bool bEnable ) override;
+	virtual void								RenderHookCallBack( kbRenderTexture *const pSrc, kbRenderTexture *const pDst ) override;
+
+private:
+
+	kbShader *									m_pShader;
+	float										m_FogStartDist;
+	float										m_FogEndDist;
+	float										m_FogClamp;
+	kbColor										m_FogColor;					
+};
+
 
 extern CannonGame * g_pCannonGame;
 

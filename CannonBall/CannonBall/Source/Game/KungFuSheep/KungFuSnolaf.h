@@ -16,6 +16,8 @@ namespace KungFuSnolafState {
 		Run,
 		Hug,
 		Dead,
+		WatchCannonBall,
+		RunAway,
 		NumStates
 	};
 }
@@ -27,7 +29,7 @@ namespace KungFuSnolafState {
 template<typename T>
 class KungFuSnolafStateBase;
 
-class KungFuSnolafComponent : public CannonActorComponent, IStateMachine<KungFuSnolafStateBase<KungFuSnolafState::SnolafState_t>, KungFuSnolafState::SnolafState_t> {
+class KungFuSnolafComponent : public CannonActorComponent, public IStateMachine<KungFuSnolafStateBase<KungFuSnolafState::SnolafState_t>, KungFuSnolafState::SnolafState_t> {
 	KB_DECLARE_COMPONENT( KungFuSnolafComponent, CannonActorComponent );
 
 //---------------------------------------------------------------------------------------------------'
@@ -36,6 +38,15 @@ public:
 	void										EnableSmallLoveHearts( const bool bEnable );
 	void										EnableLargeLoveHearts( const bool bEnable );
 
+	void										TakeDamage( const DealAttackInfo_t<KungFuGame::eAttackType> & dealAttackInfo );
+
+	void										DoPoofDeath();
+	void										SpawnAndFlingDecapHead();
+	void										SpawnAndFlingTopAndBottomHalf();
+	void										SpawnSplash();
+
+	KungFuSnolafState::SnolafState_t			GetState() const { return m_CurrentState; }
+	const DealAttackInfo_t<KungFuGame::eAttackType>	& GetLastAttackInfo() const { return m_LastAttackInfo; }
 
 protected:
 
@@ -46,14 +57,21 @@ private:
 
 	// Data
 	kbGameEntityPtr								m_FootStepImpactFX;
+	kbGameEntityPtr								m_PoofDeathFX;
+	kbGameEntityPtr								m_DecapitatedHead;
+	kbGameEntityPtr								m_TopHalfOfBody;
+	kbGameEntityPtr								m_BottomHalfOfBody;
+	kbGameEntityPtr								m_SplashFX;
 
 	// Game
 	kbParticleComponent *						m_pSmallLoveHearts;
 	kbParticleComponent *						m_pLargeLoveHearts;
 
+	DealAttackInfo_t<KungFuGame::eAttackType>	m_LastAttackInfo;
+
 //---------------------------------------------------------------------------------------------------
 	// IAnimEventListener
-	virtual void								OnAnimEvent( const kbAnimEvent & animEvent ) override;
+	virtual void								OnAnimEvent( const kbAnimEventInfo_t & animEvent ) override;
 };
 
 template<typename T>

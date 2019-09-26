@@ -108,18 +108,9 @@ SamplerState SampleType;
 
  float4 pixelShader( pixelInput	input ) : SV_TARGET {
 	float4 finalColor = shaderTexture.Sample( SampleType, input.uv );
-	finalColor.xyz *= input.color.xyz;
+	finalColor.xyz *= finalColor.a * input.color.xyz;
 
-	if ( input.color.a < 0.5f ) {
-		finalColor.a *= saturate(input.color.a * 2.0f);
-		finalColor.xyz *= finalColor.a;		
-	} else {
-
-		//finalColor.xyz *= inputColor.xyz;;//( finalColor.a - 0.5f ) * 2.0f;
-		//finalColor.xyz = 1;
-		finalColor.w *= 1.0f - ((input.color.a * 2.0f) - 1.0f);
-	}
-	
+	finalColor.a *= input.color.a;
 
 	return finalColor;
 }

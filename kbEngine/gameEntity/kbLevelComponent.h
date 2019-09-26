@@ -23,21 +23,28 @@ class kbLevelComponent : public kbGameComponent {
 
 //-------------------------------------------------------------------------------------------------------------------------------------------------------------
 public:
+
+												~kbLevelComponent();
+
 	ELevelType									GetLevelType() const { return m_LevelType; }
 
+	static float								GetGlobalModelScale();
+	static float								GetEditorIconScale();
+	static float								GetGlobalVolumeScale();
+
 protected:
+
 	virtual void								EditorChange( const std::string & propertyName ) override;
 
 	virtual void								SetEnable_Internal( const bool bEnable ) override;
 
 private:
-	ELevelType									m_LevelType;
 
+	// Editor
+	ELevelType									m_LevelType;
 	float										m_GlobalModelScale;
 	float										m_EditorIconScale;
+	float										m_GlobalVolumeScale;
 };
 
-
-extern float g_GlobalModelScale;
-extern float g_EditorIconScale;
 #endif

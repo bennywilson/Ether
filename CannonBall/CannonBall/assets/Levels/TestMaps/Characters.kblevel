@@ -2,7 +2,7 @@ kbGameEntity 0 0 0 0 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		Name = "Entity_22"
+		Name = "Entity_59"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
 		Position = 0.000000 0.000000 0.000000
 		Scale = 1.000000 1.000000 1.000000
@@ -10,8 +10,55 @@ kbGameEntity 0 0 0 0 {
 	kbEditorLevelSettingsComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		MainCameraPosition = -10.855879 2.016655 14.169847
-		MainCameraRotation = 0.229044 -0.430218 0.113823 -0.865734
+		MainCameraPosition = 73.369316 -51.311008 -388.433472
+		MainCameraRotation = -0.069367 -0.766064 0.083889 0.633480
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Level"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 0.000000 0.000000 0.000000
+		Scale = 1.000000 1.000000 1.000000
+	}
+	KungFuLevelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		EditorIconScale =  0.500000
+		GlobalModelScale =  0.005000
+		GlobalVolumeScale =  0.750000
+		LevelType = 2D
+		Dummy2 =  0.000000
+		SheepPrefab = 3807537734 1283872403 1661460398 2211889957
+		SnolafPrefab = 314357658 1122514197 2466994618 463523205
+		WaterDropletScreenFX = 3936461697 1285153374 3406925493 1594399155
+		WaterSplashSound = 3
+			kbSoundData { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Radius =  -1.000000
+				TestPlaySoundNow = 0
+				Volume =  1.000000
+				WaveFile = .\assets\sounds\randomfx\splash_1.wav
+			}
+			kbSoundData { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Radius =  -1.000000
+				TestPlaySoundNow = 0
+				Volume =  1.000000
+				WaveFile = .\assets\sounds\randomfx\splash_1.wav
+			}
+			kbSoundData { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Radius =  -1.000000
+				TestPlaySoundNow = 0
+				Volume =  1.000000
+				WaveFile = .\assets\sounds\randomfx\splash_1.wav
+			}
 	}
 }
 kbGameEntity 0 0 0 0 {
@@ -19,15 +66,15 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "Sun"
-		Orientation = -0.387471 0.172224 0.073930 0.902629
-		Position = -59.252071 6.522116 -71.278885
-		Scale = 1.000000 1.000000 1.000000
+		Orientation = -0.184883 0.522430 -0.037487 0.831553
+		Position = 80.300003 -48.635265 -404.559143
+		Scale = 0.000000 1.000000 1.000000
 	}
 	kbDirectionalLightComponent { 
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadows = 1
-		Color = 1.000000 1.000000 1.000000 1.000000
+		Color = 1.000000 1.000000 1.000000 0.000000
 		Materials = 1
 			kbMaterialComponent { 
 				Enabled = 0
@@ -110,191 +157,6 @@ kbGameEntity 0 0 0 0 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		Name = "Snolaf"
-		Orientation = 0.000000 0.708929 0.000000 -0.705280
-		Position = 3.967520 0.000000 -10.850559
-		Scale = 1.000000 1.000000 1.000000
-	}
-	kbSkeletalModelComponent { 
-		Enabled = 1
-		LifeTime =  -1.000000
-		CastsShadow = 1
-		Materials = 1
-			kbMaterialComponent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				CullModeOverride = ShaderDefault
-				Shader = .\assets\shaders\character\characterbase.kbshader
-				ShaderParams = 1
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "colorTexture"
-						Texture = .\assets\models\characters\snolaf\snolaf_color.jpg
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-			}
-		RenderPass = LightingPass
-		TranslucencySortBias =  0.000000
-		Animations = 0
-		DebugAnimIndex = 0
-		Model = .\assets\models\characters\snolaf\snolaf.ms3d
-	}
-	kbSkeletalModelComponent { 
-		Enabled = 0
-		LifeTime =  -1.000000
-		CastsShadow = 0
-		Materials = 1
-			kbMaterialComponent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				CullModeOverride = ShaderDefault
-				Shader = .\assets\shaders\character\characteroutline.kbshader
-				ShaderParams = 2
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "outlineParams"
-						Texture = NULL
-						Vector = 0.020000 0.100000 0.750000 5.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "colorTexture"
-						Texture = .\assets\models\characters\snolaf\snolaf_color.jpg
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-			}
-		RenderPass = LightingPass
-		TranslucencySortBias =  0.000000
-		Animations = 0
-		DebugAnimIndex = 0
-		Model = .\assets\models\characters\snolaf\snolaf.ms3d
-	}
-}
-kbGameEntity 0 0 0 0 {
-	kbTransformComponent { 
-		Enabled = 0
-		LifeTime =  -1.000000
-		Name = "Floor"
-		Orientation = -0.707000 0.000000 0.000000 0.707000
-		Position = 0.000000 0.000001 0.000000
-		Scale = 10000.000000 10000.000000 10000.000000
-	}
-	kbStaticModelComponent { 
-		Enabled = 1
-		LifeTime =  -1.000000
-		CastsShadow = 0
-		Materials = 1
-			kbMaterialComponent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				CullModeOverride = ShaderDefault
-				Shader = ..\..\kbengine\assets\shaders\basictexture.kbshader
-				ShaderParams = 1
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "shaderTexture"
-						Texture = .\assets\test\woodfloor_basic.bmp
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-			}
-		RenderPass = LightingPass
-		TranslucencySortBias =  0.000000
-		Model = ..\..\kbengine\assets\models\unitquad.ms3d
-	}
-}
-kbGameEntity 0 0 0 0 {
-	kbTransformComponent { 
-		Enabled = 0
-		LifeTime =  -1.000000
-		Name = "Jumping Jack Sheep"
-		Orientation = 0.000000 -0.730372 0.000000 0.683049
-		Position = 4.322352 0.000000 -9.099039
-		Scale = 1.000000 1.000000 1.000000
-	}
-	kbSkeletalModelComponent { 
-		Enabled = 1
-		LifeTime =  -1.000000
-		CastsShadow = 1
-		Materials = 1
-			kbMaterialComponent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				CullModeOverride = ShaderDefault
-				Shader = .\assets\shaders\character\characterbase.kbshader
-				ShaderParams = 1
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "colorTexture"
-						Texture = .\assets\models\characters\sheep\sheep.jpg
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-			}
-		RenderPass = LightingPass
-		TranslucencySortBias =  0.000000
-		Animations = 1
-			kbAnimComponent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				Animation = .\assets\models\characters\sheep\sheep_jumpingjacks.kbanim.ms3d
-				AnimationEvent = 0
-				AnimationName = ""
-				IsLooping = 1
-				TimeScale =  2.000000
-			}
-		DebugAnimIndex = 0
-		Model = .\assets\models\characters\sheep\sheep.ms3d
-	}
-	kbSkeletalModelComponent { 
-		Enabled = 0
-		LifeTime =  -1.000000
-		CastsShadow = 0
-		Materials = 1
-			kbMaterialComponent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				CullModeOverride = ShaderDefault
-				Shader = .\assets\shaders\character\characteroutline.kbshader
-				ShaderParams = 2
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "outlineParams"
-						Texture = NULL
-						Vector = 0.025000 0.100000 0.800000 5.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "colorTexture"
-						Texture = .\assets\models\characters\sheep\sheep.jpg
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-			}
-		RenderPass = Post-LightingPass
-		TranslucencySortBias =  0.000000
-		Animations = 1
-			kbAnimComponent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				Animation = .\assets\models\characters\sheep\sheep_jumpingjacks.kbanim.ms3d
-				AnimationEvent = 0
-				AnimationName = ""
-				IsLooping = 1
-				TimeScale =  2.000000
-			}
-		DebugAnimIndex = 0
-		Model = .\assets\models\characters\sheep\sheep.ms3d
-	}
-}
-kbGameEntity 0 0 0 0 {
-	kbTransformComponent { 
-		Enabled = 0
-		LifeTime =  -1.000000
 		Name = "Fox"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
 		Position = 2.000000 0.000000 0.000000
@@ -356,316 +218,6 @@ kbGameEntity 0 0 0 0 {
 		Animations = 0
 		DebugAnimIndex = -1
 		Model = .\assets\models\characters\fox\fox.ms3d
-	}
-}
-kbGameEntity 0 0 0 0 {
-	kbTransformComponent { 
-		Enabled = 0
-		LifeTime =  -1.000000
-		Name = "Player"
-		Orientation = 0.000000 -1.000000 0.000000 0.000000
-		Position = -0.000311 0.000000 9.963918
-		Scale = 1.000000 1.000000 1.000000
-	}
-	kbSkeletalModelComponent { 
-		Enabled = 1
-		LifeTime =  -1.000000
-		CastsShadow = 1
-		Materials = 1
-			kbMaterialComponent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				CullModeOverride = ShaderDefault
-				Shader = .\assets\shaders\character\characterbase.kbshader
-				ShaderParams = 1
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "colorTexture"
-						Texture = .\assets\models\characters\sheep\sheep.jpg
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-			}
-		RenderPass = LightingPass
-		TranslucencySortBias =  0.000000
-		Animations = 9
-			kbAnimComponent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				Animation = .\assets\models\characters\sheep\sheep_run_basic.kbanim.ms3d
-				AnimationEvent = 0
-				AnimationName = "Run_Basic"
-				IsLooping = 1
-				TimeScale =  10.000000
-			}
-			kbAnimComponent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				Animation = .\assets\models\characters\sheep\sheep_idleleft_basic.kbanim.ms3d
-				AnimationEvent = 0
-				AnimationName = "IdleLeft_Basic"
-				IsLooping = 1
-				TimeScale =  2.000000
-			}
-			kbAnimComponent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				Animation = .\assets\models\characters\sheep\sheep_idleright_basic.kbanim.ms3d
-				AnimationEvent = 0
-				AnimationName = "IdleRight_Basic"
-				IsLooping = 1
-				TimeScale =  2.000000
-			}
-			kbAnimComponent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				Animation = .\assets\models\characters\sheep\sheep_punchleft_basic.kbanim.ms3d
-				AnimationEvent = 0
-				AnimationName = "PunchLeft_Basic"
-				IsLooping = 0
-				TimeScale =  15.000000
-			}
-			kbAnimComponent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				Animation = .\assets\models\characters\sheep\sheep_kickleft_basic.kbanim.ms3d
-				AnimationEvent = 0
-				AnimationName = "KickLeft_Basic"
-				IsLooping = 0
-				TimeScale =  15.000000
-			}
-			kbAnimComponent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				Animation = .\assets\models\characters\sheep\sheep_punchright_basic.kbanim.ms3d
-				AnimationEvent = 0
-				AnimationName = "PunchRight_Basic"
-				IsLooping = 0
-				TimeScale =  15.000000
-			}
-			kbAnimComponent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				Animation = .\assets\models\characters\sheep\sheep_kickright_basic.kbanim.ms3d
-				AnimationEvent = 0
-				AnimationName = "KickRight_Basic"
-				IsLooping = 0
-				TimeScale =  15.000000
-			}
-			kbAnimComponent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				Animation = .\assets\models\characters\sheep\sheep_cannonball.kbanim.ms3d
-				AnimationEvent = 4
-					kbAnimEvent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						EventName = "CannonBall_Impact"
-						EventTime =  4.350000
-						EventValue =  1.000000
-					}
-					kbAnimEvent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						EventName = "CannonBall_VO"
-						EventTime =  0.100000
-						EventValue =  0.000000
-					}
-					kbAnimEvent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						EventName = "CannonBall_JumpSmear"
-						EventTime =  0.750000
-						EventValue =  0.050000
-					}
-					kbAnimEvent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						EventName = "CannonBall_DropSmear"
-						EventTime =  4.450000
-						EventValue =  0.050000
-					}
-				AnimationName = "CannonBall"
-				IsLooping = 0
-				TimeScale =  5.000000
-			}
-			kbAnimComponent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				Animation = .\assets\models\characters\sheep\sheep_cannonballwindup.kbanim.ms3d
-				AnimationEvent = 0
-				AnimationName = "CannonBallWindUp"
-				IsLooping = 0
-				TimeScale =  1.000000
-			}
-		DebugAnimIndex = -1
-		Model = .\assets\models\characters\sheep\sheep.ms3d
-	}
-	kbSkeletalModelComponent { 
-		Enabled = 1
-		LifeTime =  -1.000000
-		CastsShadow = 0
-		Materials = 1
-			kbMaterialComponent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				CullModeOverride = ShaderDefault
-				Shader = .\assets\shaders\character\characteroutline.kbshader
-				ShaderParams = 3
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "outlineParams"
-						Texture = NULL
-						Vector = 0.025000 0.100000 0.800000 5.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "colorTexture"
-						Texture = .\assets\models\characters\sheep\sheep.jpg
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "smearParams"
-						Texture = NULL
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-			}
-		RenderPass = Post-LightingPass
-		TranslucencySortBias =  0.000000
-		Animations = 9
-			kbAnimComponent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				Animation = .\assets\models\characters\sheep\sheep_run_basic.kbanim.ms3d
-				AnimationEvent = 0
-				AnimationName = "Run_Basic"
-				IsLooping = 1
-				TimeScale =  10.000000
-			}
-			kbAnimComponent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				Animation = .\assets\models\characters\sheep\sheep_idleleft_basic.kbanim.ms3d
-				AnimationEvent = 0
-				AnimationName = "IdleLeft_Basic"
-				IsLooping = 1
-				TimeScale =  2.000000
-			}
-			kbAnimComponent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				Animation = .\assets\models\characters\sheep\sheep_idleright_basic.kbanim.ms3d
-				AnimationEvent = 0
-				AnimationName = "IdleRight_Basic"
-				IsLooping = 1
-				TimeScale =  2.000000
-			}
-			kbAnimComponent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				Animation = .\assets\models\characters\sheep\sheep_punchleft_basic.kbanim.ms3d
-				AnimationEvent = 0
-				AnimationName = "PunchLeft_Basic"
-				IsLooping = 0
-				TimeScale =  15.000000
-			}
-			kbAnimComponent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				Animation = .\assets\models\characters\sheep\sheep_kickleft_basic.kbanim.ms3d
-				AnimationEvent = 0
-				AnimationName = "KickLeft_Basic"
-				IsLooping = 0
-				TimeScale =  15.000000
-			}
-			kbAnimComponent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				Animation = .\assets\models\characters\sheep\sheep_punchright_basic.kbanim.ms3d
-				AnimationEvent = 0
-				AnimationName = "PunchRight_Basic"
-				IsLooping = 0
-				TimeScale =  15.000000
-			}
-			kbAnimComponent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				Animation = .\assets\models\characters\sheep\sheep_kickright_basic.kbanim.ms3d
-				AnimationEvent = 0
-				AnimationName = "KickRight_Basic"
-				IsLooping = 0
-				TimeScale =  15.000000
-			}
-			kbAnimComponent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				Animation = .\assets\models\characters\sheep\sheep_cannonball.kbanim.ms3d
-				AnimationEvent = 0
-				AnimationName = "CannonBall"
-				IsLooping = 0
-				TimeScale =  5.000000
-			}
-			kbAnimComponent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				Animation = .\assets\models\characters\sheep\sheep_cannonballwindup.kbanim.ms3d
-				AnimationEvent = 0
-				AnimationName = "CannonBallWindUp"
-				IsLooping = 0
-				TimeScale =  1.000000
-			}
-		DebugAnimIndex = -1
-		Model = .\assets\models\characters\sheep\sheep.ms3d
-	}
-	KungFuSheepComponent { 
-		Enabled = 1
-		LifeTime =  -1.000000
-		DummyTemp = 0
-		Health =  10.000000
-		MaxRotateSpeed =  15.000000
-		MaxRunSpeed =  3.000000
-		CannonBallImpactFX = 846208613 1165520682 3641600641 3993117100
-		CannonBallImpactSound = 1
-			kbSoundData { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				Radius =  -1.000000
-				Volume =  1.000000
-				WaveFile = .\assets\sounds\impacts\impact_large_wood.wav
-			}
-		CannonBallVO = 1
-			kbSoundData { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				Radius =  -1.000000
-				Volume =  1.000000
-				WaveFile = .\assets\sounds\sheep\sheep_vo_cannonball.wav
-			}
-		DropSmearMagnitude =  2.500000
-		JumpSmearMagnitude =  -2.500000
-	}
-}
-kbGameEntity 0 0 0 0 {
-	kbTransformComponent { 
-		Enabled = 0
-		LifeTime =  -1.000000
-		Name = "Level"
-		Orientation = 0.000000 0.000000 0.000000 1.000000
-		Position = -190.244919 3.031295 -71.296104
-		Scale = 1.000000 1.000000 1.000000
-	}
-	KungFuLevelComponent { 
-		Enabled = 1
-		LifeTime =  -1.000000
-		EditorIconScale =  0.500000
-		GlobalModelScale =  0.005000
-		LevelType = 2D
-		Dummy2 =  -nan
-		Dummy =  -nan
 	}
 }
 kbGameEntity 0 0 0 0 {
@@ -757,9 +309,94 @@ kbGameEntity 0 0 0 0 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
+		Name = "Jumping Jack Sheep"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 0.000000 0.000000 0.000000
+		Scale = 1.000000 1.000000 1.000000
+	}
+	kbSkeletalModelComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		CastsShadow = 1
+		Materials = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\character\characterbase.kbshader
+				ShaderParams = 1
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorTexture"
+						Texture = .\assets\models\characters\sheep\sheep.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		RenderPass = LightingPass
+		TranslucencySortBias =  0.000000
+		Animations = 1
+			kbAnimComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Animation = .\assets\models\characters\sheep\sheep_jumpingjacks.kbanim.ms3d
+				AnimationEvent = 0
+				AnimationName = ""
+				IsLooping = 1
+				TimeScale =  2.000000
+			}
+		DebugAnimIndex = 0
+		Model = .\assets\models\characters\sheep\sheep.ms3d
+	}
+	kbSkeletalModelComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		Materials = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\character\characteroutline.kbshader
+				ShaderParams = 2
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "outlineParams"
+						Texture = NULL
+						Vector = 0.025000 0.100000 0.800000 5.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorTexture"
+						Texture = .\assets\models\characters\sheep\sheep.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		RenderPass = Post-LightingPass
+		TranslucencySortBias =  0.000000
+		Animations = 1
+			kbAnimComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Animation = .\assets\models\characters\sheep\sheep_jumpingjacks.kbanim.ms3d
+				AnimationEvent = 0
+				AnimationName = ""
+				IsLooping = 1
+				TimeScale =  2.000000
+			}
+		DebugAnimIndex = 0
+		Model = .\assets\models\characters\sheep\sheep.ms3d
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
 		Name = "Camera"
-		Orientation = -0.030848 -0.706434 0.030848 0.706434
-		Position = -4.000311 2.350000 9.963918
+		Orientation = -0.030847 -0.706434 0.030847 0.706434
+		Position = 73.104454 -50.285267 -391.559143
 		Scale = 1.000000 1.000000 1.000000
 	}
 	CannonCameraComponent { 
@@ -778,87 +415,12 @@ kbGameEntity 0 0 0 0 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		Name = "Snolaf"
-		Orientation = 0.000000 -1.000000 0.000000 0.000000
-		Position = -0.000312 0.000000 15.034235
+		Name = "Terrain"
+		Orientation = 0.000000 -0.989478 0.000000 -0.144684
+		Position = -115.000000 -450.000000 0.000000
 		Scale = 1.000000 1.000000 1.000000
 	}
-	kbSkeletalModelComponent { 
-		Enabled = 1
-		LifeTime =  -1.000000
-		CastsShadow = 1
-		Materials = 1
-			kbMaterialComponent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				CullModeOverride = ShaderDefault
-				Shader = .\assets\shaders\character\characterbase.kbshader
-				ShaderParams = 1
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "colorTexture"
-						Texture = .\assets\models\characters\snolaf\snolaf_color.jpg
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-			}
-		RenderPass = LightingPass
-		TranslucencySortBias =  0.000000
-		Animations = 4
-			kbAnimComponent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				Animation = .\assets\models\characters\snolaf\snolaf_hugrun.kbanim.ms3d
-				AnimationEvent = 2
-					kbAnimEvent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						EventName = "Step_LeftFoot"
-						EventTime =  0.000000
-						EventValue =  0.000000
-					}
-					kbAnimEvent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						EventName = "Step_RightFoot"
-						EventTime =  0.500000
-						EventValue =  0.000000
-					}
-				AnimationName = "Run"
-				IsLooping = 1
-				TimeScale =  10.000000
-			}
-			kbAnimComponent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				Animation = .\assets\models\characters\snolaf\snolaf_idle1.kbanim.ms3d
-				AnimationEvent = 0
-				AnimationName = "Idle_1"
-				IsLooping = 1
-				TimeScale =  5.000000
-			}
-			kbAnimComponent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				Animation = .\assets\models\characters\snolaf\snolaf_hug_left.kbanim.ms3d
-				AnimationEvent = 0
-				AnimationName = "Hug_Left"
-				IsLooping = 1
-				TimeScale =  5.000000
-			}
-			kbAnimComponent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				Animation = .\assets\models\characters\snolaf\snolaf_hug_right.kbanim.ms3d
-				AnimationEvent = 0
-				AnimationName = "Hug_Right"
-				IsLooping = 1
-				TimeScale =  5.000000
-			}
-		DebugAnimIndex = -1
-		Model = .\assets\models\characters\snolaf\snolaf.ms3d
-	}
-	kbSkeletalModelComponent { 
+	kbTerrainComponent { 
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadow = 0
@@ -867,519 +429,310 @@ kbGameEntity 0 0 0 0 {
 				Enabled = 0
 				LifeTime =  -1.000000
 				CullModeOverride = ShaderDefault
-				Shader = .\assets\shaders\character\characteroutline.kbshader
+				Shader = .\assets\shaders\terrain\basicterrain.kbshader
+				ShaderParams = 18
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "mat1And2UVScale"
+						Texture = NULL
+						Vector = 1.000000 1.000000 1.000000 1.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "mat3And4UVScale"
+						Texture = NULL
+						Vector = 1.000000 1.000000 1.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "specFactors"
+						Texture = NULL
+						Vector = 1.000000 1.000000 5.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "specPowerMultipliers"
+						Texture = NULL
+						Vector = 1.000000 3.000000 55.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "splatMap"
+						Texture = .\assets\terrain\kungfulevelterrain\terrain1_splatmap.bmp
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "Mat1Diffuse"
+						Texture = .\assets\test\foliage2.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "Mat1Normal"
+						Texture = ..\..\kbengine\assets\textures\defaultnormal.bmp
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "Mat1Specular"
+						Texture = ..\..\kbengine\assets\textures\black.bmp
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "Mat2Diffuse"
+						Texture = .\assets\test\foliage2.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "Mat2Normal"
+						Texture = ..\..\kbengine\assets\textures\defaultnormal.bmp
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "Mat2Specular"
+						Texture = ..\..\kbengine\assets\textures\black.bmp
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "Mat3Diffuse"
+						Texture = .\assets\test\foliage2.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "Mat3Normal"
+						Texture = ..\..\kbengine\assets\textures\defaultnormal.bmp
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "Mat3Specular"
+						Texture = ..\..\kbengine\assets\textures\black.bmp
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "Mat4Diffuse"
+						Texture = .\assets\test\foliage2.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "Mat4Normal"
+						Texture = ..\..\kbengine\assets\textures\defaultnormal.bmp
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "Mat4Specular"
+						Texture = ..\..\kbengine\assets\textures\black.bmp
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "clipPlane"
+						Texture = NULL
+						Vector = 0.000000 1.000000 0.000000 -76.000000
+					}
+			}
+		RenderPass = LightingPass
+		TranslucencySortBias =  0.000000
+		Dimensions = 129
+		Grass = 1
+			kbGrass { 
+				Enabled = 1
+				LifeTime =  -1.000000
+				BladeMaxHeight =  11.000000
+				BladeMaxWidth =  0.350000
+				BladeMinHeight =  10.000000
+				BladeMinWidth =  0.250000
+				FakeAOClipPlaneFadeOutDist =  10.000000
+				FakeAODarkness =  0.000000
+				FakeAOPower =  2.000000
+				GrassCellsPerTerrainSide = 20
+				GrassShader = .\assets\shaders\terrain\basicgrass.kbshader
+				MaxBladeJitterOffset =  10.000000
+				MaxPatchJitterOffset =  10.000000
+				PatchEndCullDistance =  2000.000000
+				PatchStartCullDistance =  200.000000
+				PatchesPerCellSide = 60
+				ShaderParams = 13
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "plant_1_2_size"
+						Texture = NULL
+						Vector = 1.200000 0.900000 1.300000 0.800000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "plant_3_size"
+						Texture = NULL
+						Vector = 1.300000 0.850000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "windTex1"
+						Texture = .\assets\fx\wind\wind_1.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "wind1_tile_speed"
+						Texture = NULL
+						Vector = 5.000000 5.000000 -0.010000 0.050000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "wind1_mag_lod"
+						Texture = NULL
+						Vector = 2.000000 2.000000 0.000000 5.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "windTex2"
+						Texture = .\assets\fx\wind\wind_2.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "wind2_tile_speed"
+						Texture = NULL
+						Vector = 5.000000 5.000000 0.050000 0.050000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "wind2_mag_lod"
+						Texture = NULL
+						Vector = 2.000000 2.000000 1.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "grassDiffuseMap"
+						Texture = .\assets\terrain\foliage\grass_1.dds
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "noiseMap"
+						Texture = .\assets\fx\wind\wind_1.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "plantSelection"
+						Texture = NULL
+						Vector = 0.750000 0.150000 1.000000 1.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "grassMaskMap"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "clipPlane"
+						Texture = NULL
+						Vector = 0.000000 1.000000 0.000000 -78.000000
+					}
+			}
+		HeightMap = .\assets\terrain\kungfulevelterrain\terrain1_height.bmp
+		HeightScale =  1024.000000
+		SplatMap = NULL
+		Width =  2048.000000
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Sky Box"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 0.000000 0.000000 0.000000
+		Scale = 999.000000 999.000000 999.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 1
+		Materials = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\skybox\skybox_gradient.kbshader
 				ShaderParams = 3
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
-						ParamName = "outlineParams"
+						ParamName = "horizonColor"
 						Texture = NULL
-						Vector = 0.020000 0.100000 0.750000 5.000000
+						Vector = 1.000000 0.900000 0.850000 0.000000
 					}
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
-						ParamName = "colorTexture"
-						Texture = .\assets\models\characters\snolaf\snolaf_color.jpg
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "smearParams"
+						ParamName = "skyColor"
 						Texture = NULL
-						Vector = 0.000000 0.000000 0.000000 0.000000
+						Vector = 0.750000 0.750000 1.000000 0.000000
 					}
-			}
-		RenderPass = LightingPass
-		TranslucencySortBias =  0.000000
-		Animations = 4
-			kbAnimComponent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				Animation = .\assets\models\characters\snolaf\snolaf_hugrun.kbanim.ms3d
-				AnimationEvent = 0
-				AnimationName = "Run"
-				IsLooping = 1
-				TimeScale =  10.000000
-			}
-			kbAnimComponent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				Animation = .\assets\models\characters\snolaf\snolaf_idle1.kbanim.ms3d
-				AnimationEvent = 0
-				AnimationName = "Idle_1"
-				IsLooping = 1
-				TimeScale =  5.000000
-			}
-			kbAnimComponent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				Animation = .\assets\models\characters\snolaf\snolaf_hug_left.kbanim.ms3d
-				AnimationEvent = 0
-				AnimationName = "Hug_Left"
-				IsLooping = 1
-				TimeScale =  5.000000
-			}
-			kbAnimComponent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				Animation = .\assets\models\characters\snolaf\snolaf_hug_right.kbanim.ms3d
-				AnimationEvent = 0
-				AnimationName = "Hug_Right"
-				IsLooping = 1
-				TimeScale =  5.000000
-			}
-		DebugAnimIndex = -1
-		Model = .\assets\models\characters\snolaf\snolaf.ms3d
-	}
-	kbParticleComponent { 
-		Enabled = 1
-		LifeTime =  -1.000000
-		Name = "Small_LoveHearts"
-		Orientation = 0.000000 0.000000 0.000000 1.000000
-		Position = 0.000000 1.750000 0.000000
-		Scale = 1.000000 1.000000 1.000000
-		AlphaOverLife = 0
-		ColorOverLife = 0
-		EndColor = 1.000000 1.000000 1.000000 1.000000
-		Gravity = 0.000000 0.000000 0.000000
-		MaterialList = 1
-			kbMaterialComponent { 
-				Enabled = 1
-				LifeTime =  -1.000000
-				CullModeOverride = None
-				Shader = .\assets\shaders\fx\particle_blendadd.kbshader
-				ShaderParams = 2
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
-						ParamName = "colorMultplier"
+						ParamName = "diffuseTexture"
 						Texture = NULL
-						Vector = 1.000000 1.000000 1.000000 1.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "shaderTexture"
-						Texture = .\assets\fx\heart\hearts_1.tif
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-			}
-		MaxBurstCount = 0
-		MaxDuration =  3.000000
-		MaxEndRotationRate =  0.000000
-		MaxEndSize = 0.750000 0.750000 0.750000
-		MaxEndVelocity = 0.000000 0.000000 0.000000
-		MaxSpawnRate =  1.000000
-		MaxStart3DOffset = 0.000000 0.000000 0.000000
-		MaxStart3DRotation = 0.000000 0.000000 0.000000
-		MaxStartRotationRate =  0.000000
-		MaxStartSize = 0.750000 0.750000 0.750000
-		MaxStartVelocity = 2.000000 5.000000 2.000000
-		MinBurstCount = 0
-		MinDuration =  3.000000
-		MinEndRotationRate =  0.000000
-		MinEndSize = 0.500000 0.500000 0.500000
-		MinEndVelocity = 0.000000 0.000000 0.000000
-		MinSpawnRate =  1.000000
-		MinStart3DOffset = 0.000000 0.000000 0.000000
-		MinStart3DRotation = 0.000000 0.000000 0.000000
-		MinStartRotationRate =  0.000000
-		MinStartSize = 0.500000 0.500000 0.500000
-		MinStartVelocity = -2.000000 5.000000 -2.000000
-		ModelEmitter = 0
-		ParticleBillboardType = FaceCamera
-		StartColor = 1.000000 1.000000 1.000000 1.000000
-		StartDelay =  0.000000
-		TotalDuration =  -1.000000
-		TranslucencySortBias =  0.000000
-		VelocityCurve = 0
-	}
-	kbParticleComponent { 
-		Enabled = 1
-		LifeTime =  -1.000000
-		Name = "Large_LoveHearts"
-		Orientation = 0.000000 0.000000 0.000000 1.000000
-		Position = 0.000000 1.750000 0.000000
-		Scale = 1.000000 1.000000 1.000000
-		AlphaOverLife = 0
-		ColorOverLife = 0
-		EndColor = 1.000000 1.000000 1.000000 1.000000
-		Gravity = 0.000000 0.000000 0.000000
-		MaterialList = 1
-			kbMaterialComponent { 
-				Enabled = 1
-				LifeTime =  -1.000000
-				CullModeOverride = None
-				Shader = .\assets\shaders\fx\particle_blendadd.kbshader
-				ShaderParams = 2
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "colorMultplier"
-						Texture = NULL
-						Vector = 1.000000 1.000000 1.000000 1.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "shaderTexture"
-						Texture = .\assets\fx\heart\hearts_1.tif
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-			}
-		MaxBurstCount = 0
-		MaxDuration =  3.000000
-		MaxEndRotationRate =  0.000000
-		MaxEndSize = 0.750000 0.750000 0.750000
-		MaxEndVelocity = 0.000000 0.000000 0.000000
-		MaxSpawnRate =  5.000000
-		MaxStart3DOffset = 0.000000 0.000000 0.000000
-		MaxStart3DRotation = 0.000000 0.000000 0.000000
-		MaxStartRotationRate =  0.000000
-		MaxStartSize = 0.750000 0.750000 0.750000
-		MaxStartVelocity = 2.000000 5.000000 2.000000
-		MinBurstCount = 0
-		MinDuration =  3.000000
-		MinEndRotationRate =  0.000000
-		MinEndSize = 0.500000 0.500000 0.500000
-		MinEndVelocity = 0.000000 0.000000 0.000000
-		MinSpawnRate =  5.000000
-		MinStart3DOffset = 0.000000 0.000000 0.000000
-		MinStart3DRotation = 0.000000 0.000000 0.000000
-		MinStartRotationRate =  0.000000
-		MinStartSize = 0.500000 0.500000 0.500000
-		MinStartVelocity = -2.000000 5.000000 -2.000000
-		ModelEmitter = 0
-		ParticleBillboardType = FaceCamera
-		StartColor = 1.000000 1.000000 1.000000 1.000000
-		StartDelay =  0.000000
-		TotalDuration =  -1.000000
-		TranslucencySortBias =  0.000000
-		VelocityCurve = 0
-	}
-	KungFuSnolafComponent { 
-		Enabled = 1
-		LifeTime =  -1.000000
-		DummyTemp = 0
-		Health =  10.000000
-		MaxRotateSpeed =  15.000000
-		MaxRunSpeed =  3.000000
-		StepImpactFX = 949543359 1324466742 3669717892 833517135
-	}
-}
-kbGameEntity 0 0 0 0 {
-	kbTransformComponent { 
-		Enabled = 0
-		LifeTime =  -1.000000
-		Name = "Jumping Jack Sheep"
-		Orientation = 0.000000 0.000000 0.000000 1.000000
-		Position = 0.000000 0.000000 0.000000
-		Scale = 1.000000 1.000000 1.000000
-	}
-	kbSkeletalModelComponent { 
-		Enabled = 0
-		LifeTime =  -1.000000
-		CastsShadow = 1
-		Materials = 1
-			kbMaterialComponent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				CullModeOverride = ShaderDefault
-				Shader = .\assets\shaders\character\characterbase.kbshader
-				ShaderParams = 1
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "colorTexture"
-						Texture = .\assets\models\characters\sheep\sheep.jpg
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-			}
-		RenderPass = LightingPass
-		TranslucencySortBias =  0.000000
-		Animations = 1
-			kbAnimComponent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				Animation = .\assets\models\characters\sheep\sheep_jumpingjacks.kbanim.ms3d
-				AnimationEvent = 0
-				AnimationName = ""
-				IsLooping = 1
-				TimeScale =  2.000000
-			}
-		DebugAnimIndex = 0
-		Model = .\assets\models\characters\sheep\sheep.ms3d
-	}
-	kbSkeletalModelComponent { 
-		Enabled = 0
-		LifeTime =  -1.000000
-		CastsShadow = 0
-		Materials = 1
-			kbMaterialComponent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				CullModeOverride = ShaderDefault
-				Shader = .\assets\shaders\character\characteroutline.kbshader
-				ShaderParams = 2
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "outlineParams"
-						Texture = NULL
-						Vector = 0.025000 0.100000 0.800000 5.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "colorTexture"
-						Texture = .\assets\models\characters\sheep\sheep.jpg
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 			}
 		RenderPass = Post-LightingPass
 		TranslucencySortBias =  0.000000
-		Animations = 1
-			kbAnimComponent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				Animation = .\assets\models\characters\sheep\sheep_jumpingjacks.kbanim.ms3d
-				AnimationEvent = 0
-				AnimationName = ""
-				IsLooping = 1
-				TimeScale =  2.000000
-			}
-		DebugAnimIndex = 0
-		Model = .\assets\models\characters\sheep\sheep.ms3d
+		Model = .\assets\models\skyboxes\basicskybox.fbx
 	}
 }
 kbGameEntity 0 0 0 0 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		Name = "Jumping Jack Sheep"
-		Orientation = 0.000000 -0.730372 0.000000 0.683049
-		Position = 4.489497 0.000000 -6.605713
-		Scale = 1.000000 1.000000 1.000000
-	}
-	kbSkeletalModelComponent { 
-		Enabled = 1
-		LifeTime =  -1.000000
-		CastsShadow = 1
-		Materials = 1
-			kbMaterialComponent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				CullModeOverride = ShaderDefault
-				Shader = .\assets\shaders\character\characterbase.kbshader
-				ShaderParams = 1
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "colorTexture"
-						Texture = .\assets\models\characters\sheep\sheep.jpg
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-			}
-		RenderPass = LightingPass
-		TranslucencySortBias =  0.000000
-		Animations = 1
-			kbAnimComponent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				Animation = .\assets\models\characters\sheep\sheep_jumpingjacks.kbanim.ms3d
-				AnimationEvent = 0
-				AnimationName = ""
-				IsLooping = 1
-				TimeScale =  2.000000
-			}
-		DebugAnimIndex = 0
-		Model = .\assets\models\characters\sheep\sheep.ms3d
-	}
-	kbSkeletalModelComponent { 
-		Enabled = 0
-		LifeTime =  -1.000000
-		CastsShadow = 0
-		Materials = 1
-			kbMaterialComponent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				CullModeOverride = ShaderDefault
-				Shader = .\assets\shaders\character\characteroutline.kbshader
-				ShaderParams = 2
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "outlineParams"
-						Texture = NULL
-						Vector = 0.025000 0.100000 0.800000 5.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "colorTexture"
-						Texture = .\assets\models\characters\sheep\sheep.jpg
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-			}
-		RenderPass = Post-LightingPass
-		TranslucencySortBias =  0.000000
-		Animations = 1
-			kbAnimComponent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				Animation = .\assets\models\characters\sheep\sheep_jumpingjacks.kbanim.ms3d
-				AnimationEvent = 0
-				AnimationName = ""
-				IsLooping = 1
-				TimeScale =  2.000000
-			}
-		DebugAnimIndex = 0
-		Model = .\assets\models\characters\sheep\sheep.ms3d
-	}
-}
-kbGameEntity 0 0 0 0 {
-	kbTransformComponent { 
-		Enabled = 0
-		LifeTime =  -1.000000
-		Name = "Snolaf"
-		Orientation = 0.000000 0.708929 0.000000 -0.705280
-		Position = 4.000000 0.000000 -4.556848
-		Scale = 1.000000 1.000000 1.000000
-	}
-	kbSkeletalModelComponent { 
-		Enabled = 1
-		LifeTime =  -1.000000
-		CastsShadow = 1
-		Materials = 1
-			kbMaterialComponent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				CullModeOverride = ShaderDefault
-				Shader = .\assets\shaders\character\characterbase.kbshader
-				ShaderParams = 1
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "colorTexture"
-						Texture = .\assets\models\characters\snolaf\snolaf_color.jpg
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-			}
-		RenderPass = LightingPass
-		TranslucencySortBias =  0.000000
-		Animations = 0
-		DebugAnimIndex = 0
-		Model = .\assets\models\characters\snolaf\snolaf.ms3d
-	}
-	kbSkeletalModelComponent { 
-		Enabled = 0
-		LifeTime =  -1.000000
-		CastsShadow = 0
-		Materials = 1
-			kbMaterialComponent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				CullModeOverride = ShaderDefault
-				Shader = .\assets\shaders\character\characteroutline.kbshader
-				ShaderParams = 2
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "outlineParams"
-						Texture = NULL
-						Vector = 0.020000 0.100000 0.750000 5.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "colorTexture"
-						Texture = .\assets\models\characters\snolaf\snolaf_color.jpg
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-			}
-		RenderPass = LightingPass
-		TranslucencySortBias =  0.000000
-		Animations = 0
-		DebugAnimIndex = 0
-		Model = .\assets\models\characters\snolaf\snolaf.ms3d
-	}
-}
-kbGameEntity 0 0 0 0 {
-	kbTransformComponent { 
-		Enabled = 0
-		LifeTime =  -1.000000
-		Name = "Entity_17"
+		Name = "CloudDome"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
-		Position = -0.424150 0.314745 8.137279
-		Scale = 1.000000 1.000000 1.000000
-	}
-	kbParticleComponent { 
-		Enabled = 0
-		LifeTime =  -1.000000
-		Name = "r"
-		Orientation = 0.000000 0.000000 0.000000 1.000000
-		Position = 0.000000 0.000000 0.000000
-		Scale = 0.100000 0.100000 0.100000
-		AlphaOverLife = 0
-		ColorOverLife = 0
-		EndColor = 1.000000 1.000000 1.000000 1.000000
-		Gravity = 0.000000 0.000000 0.000000
-		MaterialList = 1
-			kbMaterialComponent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				CullModeOverride = ShaderDefault
-				Shader = ..\..\kbengine\assets\shaders\basicparticle.kbshader
-				ShaderParams = 1
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "shaderTexture"
-						Texture = ..\..\kbengine\assets\textures\flare.jpg
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-			}
-		MaxBurstCount = 35
-		MaxDuration =  3.000000
-		MaxEndRotationRate =  0.000000
-		MaxEndSize = 3.000000 3.000000 3.000000
-		MaxEndVelocity = 0.000000 0.000000 5.000000
-		MaxSpawnRate =  2.000000
-		MaxStart3DOffset = 0.000000 0.000000 0.000000
-		MaxStart3DRotation = 0.000000 0.000000 0.000000
-		MaxStartRotationRate =  0.000000
-		MaxStartSize = 3.000000 3.000000 3.000000
-		MaxStartVelocity = 2.000000 5.000000 2.000000
-		MinBurstCount = 25
-		MinDuration =  3.000000
-		MinEndRotationRate =  0.000000
-		MinEndSize = 3.000000 3.000000 3.000000
-		MinEndVelocity = 0.000000 5.000000 0.000000
-		MinSpawnRate =  1.000000
-		MinStart3DOffset = 0.000000 0.000000 0.000000
-		MinStart3DRotation = 0.000000 0.000000 0.000000
-		MinStartRotationRate =  0.000000
-		MinStartSize = 3.000000 3.000000 3.000000
-		MinStartVelocity = -2.000000 5.000000 -2.000000
-		ModelEmitter = 0
-		ParticleBillboardType = FaceCamera
-		StartColor = 1.000000 1.000000 1.000000 1.000000
-		StartDelay =  0.000000
-		TotalDuration =  -1.000000
-		TranslucencySortBias =  0.000000
-		VelocityCurve = 0
-	}
-}
-kbGameEntity 0 0 0 0 {
-	kbTransformComponent { 
-		Enabled = 0
-		LifeTime =  -1.000000
-		Name = "Sky"
-		Orientation = 0.000000 0.000000 0.000000 1.000000
-		Position = -0.730686 -0.498480 5.646349
-		Scale = 5000.000000 5000.000000 5000.000000
+		Position = 0.000000 1.000000 0.000000
+		Scale = 900.000000 900.000000 900.000000
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -1390,202 +743,107 @@ kbGameEntity 0 0 0 0 {
 				Enabled = 0
 				LifeTime =  -1.000000
 				CullModeOverride = ShaderDefault
-				Shader = .\assets\shaders\basic\unlit.kbshader
-				ShaderParams = 1
+				Shader = .\assets\shaders\skybox\skybox_clouds.kbshader
+				ShaderParams = 9
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
-						ParamName = "colorTexture"
-						Texture = .\assets\test\checkerboard.jpg
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-			}
-		RenderPass = Post-LightingPass
-		TranslucencySortBias =  0.000000
-		Model = ..\..\kbengine\assets\models\editor\invertedcube.ms3d
-	}
-}
-kbGameEntity 0 0 0 0 {
-	kbTransformComponent { 
-		Enabled = 0
-		LifeTime =  -1.000000
-		Name = "Entity_18"
-		Orientation = 0.000000 0.000000 0.000000 1.000000
-		Position = 0.428892 1.239270 23.211464
-		Scale = 1.000000 1.000000 1.000000
-	}
-	kbParticleComponent { 
-		Enabled = 1
-		LifeTime =  -1.000000
-		Name = ""
-		Orientation = 0.000000 0.000000 0.000000 1.000000
-		Position = 0.000000 5.000000 0.000000
-		Scale = 1.000000 1.000000 1.000000
-		AlphaOverLife = 0
-		ColorOverLife = 0
-		EndColor = 1.000000 1.000000 1.000000 1.000000
-		Gravity = 0.000000 0.000000 0.000000
-		MaterialList = 1
-			kbMaterialComponent { 
-				Enabled = 1
-				LifeTime =  -1.000000
-				CullModeOverride = None
-				Shader = .\assets\shaders\fx\particle_blendadd.kbshader
-				ShaderParams = 2
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "colorMultplier"
+						ParamName = "cloudTileOffset"
 						Texture = NULL
-						Vector = 1.000000 1.000000 1.000000 1.000000
+						Vector = 5.000000 1.000000 0.000000 0.000000
 					}
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
-						ParamName = "shaderTexture"
-						Texture = .\assets\fx\heart\hearts_1.tif
+						ParamName = "cloudScrollRate_AlphaStep"
+						Texture = NULL
+						Vector = 0.025000 0.010000 0.400000 0.750000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "cloudColor"
+						Texture = NULL
+						Vector = 1.000000 0.750000 0.650000 0.500000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "cloudEmissive"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 1.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "lightShaftsDir"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "lightShaftsColor"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "sunDiscColor"
+						Texture = NULL
+						Vector = 1.000000 1.000000 1.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "sunDiscParams"
+						Texture = NULL
+						Vector = 1.000000 1.000000 1.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "diffuseTexture"
+						Texture = .\assets\models\skyboxes\clouds_normalmap1.tif
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 			}
-		MaxBurstCount = 0
-		MaxDuration =  3.000000
-		MaxEndRotationRate =  0.000000
-		MaxEndSize = 0.750000 0.750000 0.750000
-		MaxEndVelocity = 0.000000 0.000000 0.000000
-		MaxSpawnRate =  5.000000
-		MaxStart3DOffset = 0.000000 0.000000 0.000000
-		MaxStart3DRotation = 0.000000 0.000000 0.000000
-		MaxStartRotationRate =  0.000000
-		MaxStartSize = 0.750000 0.750000 0.750000
-		MaxStartVelocity = 2.000000 5.000000 2.000000
-		MinBurstCount = 0
-		MinDuration =  3.000000
-		MinEndRotationRate =  0.000000
-		MinEndSize = 0.500000 0.500000 0.500000
-		MinEndVelocity = 0.000000 0.000000 0.000000
-		MinSpawnRate =  5.000000
-		MinStart3DOffset = 0.000000 0.000000 0.000000
-		MinStart3DRotation = 0.000000 0.000000 0.000000
-		MinStartRotationRate =  0.000000
-		MinStartSize = 0.500000 0.500000 0.500000
-		MinStartVelocity = -2.000000 5.000000 -2.000000
-		ModelEmitter = 0
-		ParticleBillboardType = FaceCamera
-		StartColor = 1.000000 1.000000 1.000000 1.000000
-		StartDelay =  0.000000
-		TotalDuration =  -1.000000
+		RenderPass = TranslucentWithDepthPass
 		TranslucencySortBias =  0.000000
-		VelocityCurve = 0
+		Model = .\assets\models\skyboxes\basicskybox.fbx
 	}
 }
-kbGameEntity 0 0 0 0 {
+kbGameEntity 2609040299 1100347930 3115268521 1892043160 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		Name = "Entity_19"
-		Orientation = 0.000000 0.000000 0.000000 1.000000
-		Position = -8.535524 1.000000 0.000000
-		Scale = 1.000000 1.000000 1.000000
+		Name = "Light Shafts"
+		Orientation = -0.184883 0.522430 -0.037487 0.831553
+		Position = 0.000000 0.000000 0.000000
+		Scale = 999.000000 999.000000 99.000000
 	}
-	kbParticleComponent { 
+	kbLightShaftsComponent { 
 		Enabled = 1
 		LifeTime =  -1.000000
-		Name = ""
-		Orientation = 0.000000 0.000000 0.000000 1.000000
-		Position = 0.000000 0.000000 0.000000
-		Scale = 25.000000 25.000000 25.000000
-		AlphaOverLife = 0
-		ColorOverLife = 0
-		EndColor = 1.000000 1.000000 1.000000 1.000000
-		Gravity = 0.000000 0.000000 0.000000
-		MaterialList = 0
-		MaxBurstCount = 0
-		MaxDuration =  3.000000
-		MaxEndRotationRate =  0.000000
-		MaxEndSize = 3.000000 3.000000 3.000000
-		MaxEndVelocity = 0.000000 0.000000 0.000000
-		MaxSpawnRate =  2.000000
-		MaxStart3DOffset = 0.000000 0.000000 0.000000
-		MaxStart3DRotation = 0.000000 0.000000 0.000000
-		MaxStartRotationRate =  0.000000
-		MaxStartSize = 3.000000 3.000000 3.000000
-		MaxStartVelocity = 0.000000 0.000000 0.000000
-		MinBurstCount = 0
-		MinDuration =  3.000000
-		MinEndRotationRate =  0.000000
-		MinEndSize = 3.000000 3.000000 3.000000
-		MinEndVelocity = 0.000000 0.000000 0.000000
-		MinSpawnRate =  1.000000
-		MinStart3DOffset = 0.000000 0.000000 0.000000
-		MinStart3DRotation = 0.000000 0.000000 0.000000
-		MinStartRotationRate =  0.000000
-		MinStartSize = 3.000000 3.000000 3.000000
-		MinStartVelocity = 0.000000 0.000000 0.000000
-		ModelEmitter = 1
-			kbModelEmitter { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				MaterialList = 1
-					kbMaterialComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						CullModeOverride = ShaderDefault
-						Shader = .\assets\shaders\fx\decal_blend.kbshader
-						ShaderParams = 5
-							kbShaderParamComponent { 
-								Enabled = 0
-								LifeTime =  -1.000000
-								ParamName = "edgeFadeColor"
-								Texture = NULL
-								Vector = 0.000000 0.000000 0.000000 0.000000
-							}
-							kbShaderParamComponent { 
-								Enabled = 0
-								LifeTime =  -1.000000
-								ParamName = "edgeFadeParams"
-								Texture = NULL
-								Vector = 0.000000 0.000000 0.000000 0.000000
-							}
-							kbShaderParamComponent { 
-								Enabled = 0
-								LifeTime =  -1.000000
-								ParamName = "distortionParams"
-								Texture = NULL
-								Vector = 0.000000 0.000000 0.000000 0.000000
-							}
-							kbShaderParamComponent { 
-								Enabled = 0
-								LifeTime =  -1.000000
-								ParamName = "cameraPosition"
-								Texture = NULL
-								Vector = 0.000000 0.000000 0.000000 0.000000
-							}
-							kbShaderParamComponent { 
-								Enabled = 0
-								LifeTime =  -1.000000
-								ParamName = "ProjectionTex"
-								Texture = .\assets\fx\heart\hearts_1.tif
-								Vector = 0.000000 0.000000 0.000000 0.000000
-							}
-					}
-				Model = ..\..\kbengine\assets\models\unitcube.ms3d
-			}
-		ParticleBillboardType = FaceCamera
-		StartColor = 1.000000 1.000000 1.000000 1.000000
-		StartDelay =  0.000000
-		TotalDuration =  -1.000000
-		TranslucencySortBias =  0.000000
-		VelocityCurve = 0
+		BaseHeight =  0.750000
+		BaseWidth =  0.750000
+		Color = 0.010000 0.008000 0.001000 1.000000
+		Directional = 1
+		IterationHeight =  0.001500
+		IterationWidth =  0.001500
+		NumIteractions = 48
+		Texture = ..\..\kbengine\assets\textures\flare.jpg
 	}
 }
 kbGameEntity 0 0 0 0 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		Name = "Entity_21"
-		Orientation = 0.000000 0.000000 0.707000 0.707000
-		Position = -19.297626 0.820851 18.454176
-		Scale = 256.000000 256.000000 256.000000
+		Name = "Water Plane"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = -26.198284 -76.176140 35.608555
+		Scale = 1000000.000000 2.000000 1000000.000000
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -1593,28 +851,2601 @@ kbGameEntity 0 0 0 0 {
 		CastsShadow = 0
 		Materials = 1
 			kbMaterialComponent { 
-				Enabled = 1
+				Enabled = 0
 				LifeTime =  -1.000000
-				CullModeOverride = None
-				Shader = .\assets\shaders\fx\decal_blend.kbshader
-				ShaderParams = 2
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\water\water_skygradientreflection.kbshader
+				ShaderParams = 12
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
-						ParamName = "cameraPosition"
-						Texture = NULL
+						ParamName = "shaderTexture"
+						Texture = .\assets\test\water1.jpg
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
-						ParamName = "ProjectionTex"
-						Texture = .\assets\fx\footprints\snolaf_footprint_1.tif
+						ParamName = "horizonColor"
+						Texture = NULL
+						Vector = 1.000000 0.900000 0.850000 0.500000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "skyColor"
+						Texture = NULL
+						Vector = 0.750000 0.750000 1.000000 0.750000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "waterScaleAndSpeed_1"
+						Texture = NULL
+						Vector = 300.000000 100.000000 0.100000 0.100000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "waterScaleAndSpeed_2"
+						Texture = NULL
+						Vector = 350.000000 75.000000 0.150000 0.150000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "normalMap1"
+						Texture = .\assets\fx\wind\wind_1.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "normalMap2"
+						Texture = .\assets\fx\wind\wind_2.jpg
+						Vector = 0.000000 0.000000 0.250000 0.250000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "spec_Factor_Power"
+						Texture = NULL
+						Vector = 1.000000 100.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "normalStrengths"
+						Texture = NULL
+						Vector = 0.100000 0.030000 0.100000 0.050000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "sunColorFactor"
+						Texture = NULL
+						Vector = 200.000000 200.000000 200.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "reflectedObjectColorFactor"
+						Texture = NULL
+						Vector = 1.000000 1.000000 1.000000 0.450000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "reflectionNormalFactor"
+						Texture = NULL
+						Vector = 0.200000 0.200000 0.000000 0.000000
+					}
+			}
+		RenderPass = Post-LightingPass
+		TranslucencySortBias =  0.000000
+		Model = ..\..\kbengine\assets\models\unitcube.ms3d
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Bridge"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 76.801712 -52.776131 35.608555
+		Scale = 200.000000 25.000000 1000000.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		CastsShadow = 1
+		Materials = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\environment\environmentbase.kbshader
+				ShaderParams = 4
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "diffuse"
+						Texture = .\assets\models\environment\platforms\bridge_wooden_1.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "normal"
+						Texture = ..\..\kbengine\assets\textures\defaultnormal.bmp
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "propertyMap"
+						Texture = .\assets\models\environment\platforms\bridge_wooden_1_prop.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "emissiveMap"
+						Texture = NULL
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 			}
 		RenderPass = LightingPass
 		TranslucencySortBias =  0.000000
 		Model = ..\..\kbengine\assets\models\unitcube.ms3d
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Fog"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 6.818789 38.074856 14.711714
+		Scale = 1.000000 1.000000 1.000000
+	}
+	CannonFogComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		Clamp =  0.250000
+		Color = 1.000000 0.950000 0.850000 1.000000
+		EndDist =  300.000000
+		Shader = .\assets\shaders\postprocess\fog.kbshader
+		StartDist =  150.000000
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Bridge"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 76.992683 -52.798882 -1195.392578
+		Scale = 250.000000 250.000000 250.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		Materials = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\environment\environmentbase.kbshader
+				ShaderParams = 4
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "diffuse"
+						Texture = .\assets\models\environment\platforms\bridge_wooden_1.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "normal"
+						Texture = ..\..\kbengine\assets\textures\defaultnormal.bmp
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "propertyMap"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "emissiveMap"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		RenderPass = LightingPass
+		TranslucencySortBias =  0.000000
+		Model = .\assets\models\environment\platforms\bridge_wooden_1.fbx
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Bridge"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 76.992683 -52.798882 -237.136353
+		Scale = 250.000000 250.000000 250.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		Materials = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\environment\environmentbase.kbshader
+				ShaderParams = 4
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "diffuse"
+						Texture = .\assets\models\environment\platforms\bridge_wooden_1.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "normal"
+						Texture = ..\..\kbengine\assets\textures\defaultnormal.bmp
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "propertyMap"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "emissiveMap"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		RenderPass = LightingPass
+		TranslucencySortBias =  0.000000
+		Model = .\assets\models\environment\platforms\bridge_wooden_1.fbx
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Bridge"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 76.992683 -52.798882 -410.614166
+		Scale = 250.000000 250.000000 250.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		Materials = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\environment\environmentbase.kbshader
+				ShaderParams = 4
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "diffuse"
+						Texture = .\assets\models\environment\platforms\bridge_wooden_1.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "normal"
+						Texture = ..\..\kbengine\assets\textures\defaultnormal.bmp
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "propertyMap"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "emissiveMap"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		RenderPass = LightingPass
+		TranslucencySortBias =  0.000000
+		Model = .\assets\models\environment\platforms\bridge_wooden_1.fbx
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Bridge"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 76.992683 -52.798882 -386.044403
+		Scale = 250.000000 250.000000 250.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		Materials = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\environment\environmentbase.kbshader
+				ShaderParams = 4
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "diffuse"
+						Texture = .\assets\models\environment\platforms\bridge_wooden_1.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "normal"
+						Texture = ..\..\kbengine\assets\textures\defaultnormal.bmp
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "propertyMap"
+						Texture = .\assets\models\environment\platforms\bridge_wooden_1_prop.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "emissiveMap"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		RenderPass = LightingPass
+		TranslucencySortBias =  0.000000
+		Model = .\assets\models\environment\platforms\bridge_wooden_1.fbx
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Bridge"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 76.992683 -52.798882 -377.764526
+		Scale = 250.000000 250.000000 250.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		Materials = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\environment\environmentbase.kbshader
+				ShaderParams = 4
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "diffuse"
+						Texture = .\assets\models\environment\platforms\bridge_wooden_1.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "normal"
+						Texture = ..\..\kbengine\assets\textures\defaultnormal.bmp
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "propertyMap"
+						Texture = .\assets\models\environment\platforms\bridge_wooden_1_prop.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "emissiveMap"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		RenderPass = LightingPass
+		TranslucencySortBias =  0.000000
+		Model = .\assets\models\environment\platforms\bridge_wooden_1.fbx
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Bridge"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 76.992683 -52.798882 -369.474640
+		Scale = 250.000000 250.000000 250.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		Materials = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\environment\environmentbase.kbshader
+				ShaderParams = 4
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "diffuse"
+						Texture = .\assets\models\environment\platforms\bridge_wooden_1.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "normal"
+						Texture = ..\..\kbengine\assets\textures\defaultnormal.bmp
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "propertyMap"
+						Texture = .\assets\models\environment\platforms\bridge_wooden_1_prop.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "emissiveMap"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		RenderPass = LightingPass
+		TranslucencySortBias =  0.000000
+		Model = .\assets\models\environment\platforms\bridge_wooden_1.fbx
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Bridge"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 76.992683 -52.798882 -361.184753
+		Scale = 250.000000 250.000000 250.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		Materials = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\environment\environmentbase.kbshader
+				ShaderParams = 4
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "diffuse"
+						Texture = .\assets\models\environment\platforms\bridge_wooden_1.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "normal"
+						Texture = ..\..\kbengine\assets\textures\defaultnormal.bmp
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "propertyMap"
+						Texture = .\assets\models\environment\platforms\bridge_wooden_1_prop.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "emissiveMap"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		RenderPass = LightingPass
+		TranslucencySortBias =  0.000000
+		Model = .\assets\models\environment\platforms\bridge_wooden_1.fbx
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Bridge"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 76.992683 -52.798882 -352.904755
+		Scale = 250.000000 250.000000 250.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		Materials = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\environment\environmentbase.kbshader
+				ShaderParams = 4
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "diffuse"
+						Texture = .\assets\models\environment\platforms\bridge_wooden_1.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "normal"
+						Texture = ..\..\kbengine\assets\textures\defaultnormal.bmp
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "propertyMap"
+						Texture = .\assets\models\environment\platforms\bridge_wooden_1_prop.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "emissiveMap"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		RenderPass = LightingPass
+		TranslucencySortBias =  0.000000
+		Model = .\assets\models\environment\platforms\bridge_wooden_1.fbx
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Bridge"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 76.992683 -52.798882 -344.635010
+		Scale = 250.000000 250.000000 250.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		Materials = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\environment\environmentbase.kbshader
+				ShaderParams = 4
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "diffuse"
+						Texture = .\assets\models\environment\platforms\bridge_wooden_1.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "normal"
+						Texture = ..\..\kbengine\assets\textures\defaultnormal.bmp
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "propertyMap"
+						Texture = .\assets\models\environment\platforms\bridge_wooden_1_prop.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "emissiveMap"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		RenderPass = LightingPass
+		TranslucencySortBias =  0.000000
+		Model = .\assets\models\environment\platforms\bridge_wooden_1.fbx
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Bridge"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 76.992683 -52.798882 -336.365143
+		Scale = 250.000000 250.000000 250.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		Materials = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\environment\environmentbase.kbshader
+				ShaderParams = 4
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "diffuse"
+						Texture = .\assets\models\environment\platforms\bridge_wooden_1.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "normal"
+						Texture = ..\..\kbengine\assets\textures\defaultnormal.bmp
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "propertyMap"
+						Texture = .\assets\models\environment\platforms\bridge_wooden_1_prop.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "emissiveMap"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		RenderPass = LightingPass
+		TranslucencySortBias =  0.000000
+		Model = .\assets\models\environment\platforms\bridge_wooden_1.fbx
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Bridge"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 76.992683 -52.798882 -328.095001
+		Scale = 250.000000 250.000000 250.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		Materials = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\environment\environmentbase.kbshader
+				ShaderParams = 4
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "diffuse"
+						Texture = .\assets\models\environment\platforms\bridge_wooden_1.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "normal"
+						Texture = ..\..\kbengine\assets\textures\defaultnormal.bmp
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "propertyMap"
+						Texture = .\assets\models\environment\platforms\bridge_wooden_1_prop.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "emissiveMap"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		RenderPass = LightingPass
+		TranslucencySortBias =  0.000000
+		Model = .\assets\models\environment\platforms\bridge_wooden_1.fbx
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Bridge"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 76.992683 -52.798882 -319.835083
+		Scale = 250.000000 250.000000 250.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		Materials = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\environment\environmentbase.kbshader
+				ShaderParams = 4
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "diffuse"
+						Texture = .\assets\models\environment\platforms\bridge_wooden_1.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "normal"
+						Texture = ..\..\kbengine\assets\textures\defaultnormal.bmp
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "propertyMap"
+						Texture = .\assets\models\environment\platforms\bridge_wooden_1_prop.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "emissiveMap"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		RenderPass = LightingPass
+		TranslucencySortBias =  0.000000
+		Model = .\assets\models\environment\platforms\bridge_wooden_1.fbx
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Bridge"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 76.992683 -52.798882 -311.555176
+		Scale = 250.000000 250.000000 250.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		Materials = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\environment\environmentbase.kbshader
+				ShaderParams = 4
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "diffuse"
+						Texture = .\assets\models\environment\platforms\bridge_wooden_1.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "normal"
+						Texture = ..\..\kbengine\assets\textures\defaultnormal.bmp
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "propertyMap"
+						Texture = .\assets\models\environment\platforms\bridge_wooden_1_prop.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "emissiveMap"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		RenderPass = LightingPass
+		TranslucencySortBias =  0.000000
+		Model = .\assets\models\environment\platforms\bridge_wooden_1.fbx
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Bridge"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 76.992683 -52.798882 -303.275269
+		Scale = 250.000000 250.000000 250.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		Materials = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\environment\environmentbase.kbshader
+				ShaderParams = 4
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "diffuse"
+						Texture = .\assets\models\environment\platforms\bridge_wooden_1.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "normal"
+						Texture = ..\..\kbengine\assets\textures\defaultnormal.bmp
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "propertyMap"
+						Texture = .\assets\models\environment\platforms\bridge_wooden_1_prop.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "emissiveMap"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		RenderPass = LightingPass
+		TranslucencySortBias =  0.000000
+		Model = .\assets\models\environment\platforms\bridge_wooden_1.fbx
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Bridge"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 76.992683 -52.798882 -294.995361
+		Scale = 250.000000 250.000000 250.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		Materials = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\environment\environmentbase.kbshader
+				ShaderParams = 4
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "diffuse"
+						Texture = .\assets\models\environment\platforms\bridge_wooden_1.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "normal"
+						Texture = ..\..\kbengine\assets\textures\defaultnormal.bmp
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "propertyMap"
+						Texture = .\assets\models\environment\platforms\bridge_wooden_1_prop.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "emissiveMap"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		RenderPass = LightingPass
+		TranslucencySortBias =  0.000000
+		Model = .\assets\models\environment\platforms\bridge_wooden_1.fbx
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Bridge"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 76.992683 -52.798882 -286.715454
+		Scale = 250.000000 250.000000 250.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		Materials = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\environment\environmentbase.kbshader
+				ShaderParams = 4
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "diffuse"
+						Texture = .\assets\models\environment\platforms\bridge_wooden_1.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "normal"
+						Texture = ..\..\kbengine\assets\textures\defaultnormal.bmp
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "propertyMap"
+						Texture = .\assets\models\environment\platforms\bridge_wooden_1_prop.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "emissiveMap"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		RenderPass = LightingPass
+		TranslucencySortBias =  0.000000
+		Model = .\assets\models\environment\platforms\bridge_wooden_1.fbx
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Bridge"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 76.992683 -52.798882 -278.435547
+		Scale = 250.000000 250.000000 250.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		Materials = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\environment\environmentbase.kbshader
+				ShaderParams = 4
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "diffuse"
+						Texture = .\assets\models\environment\platforms\bridge_wooden_1.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "normal"
+						Texture = ..\..\kbengine\assets\textures\defaultnormal.bmp
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "propertyMap"
+						Texture = .\assets\models\environment\platforms\bridge_wooden_1_prop.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "emissiveMap"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		RenderPass = LightingPass
+		TranslucencySortBias =  0.000000
+		Model = .\assets\models\environment\platforms\bridge_wooden_1.fbx
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Bridge"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 76.992683 -52.798882 -270.175629
+		Scale = 250.000000 250.000000 250.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		Materials = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\environment\environmentbase.kbshader
+				ShaderParams = 4
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "diffuse"
+						Texture = .\assets\models\environment\platforms\bridge_wooden_1.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "normal"
+						Texture = ..\..\kbengine\assets\textures\defaultnormal.bmp
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "propertyMap"
+						Texture = .\assets\models\environment\platforms\bridge_wooden_1_prop.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "emissiveMap"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		RenderPass = LightingPass
+		TranslucencySortBias =  0.000000
+		Model = .\assets\models\environment\platforms\bridge_wooden_1.fbx
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Bridge"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 76.992683 -52.798882 -261.915710
+		Scale = 250.000000 250.000000 250.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		Materials = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\environment\environmentbase.kbshader
+				ShaderParams = 4
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "diffuse"
+						Texture = .\assets\models\environment\platforms\bridge_wooden_1.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "normal"
+						Texture = ..\..\kbengine\assets\textures\defaultnormal.bmp
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "propertyMap"
+						Texture = .\assets\models\environment\platforms\bridge_wooden_1_prop.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "emissiveMap"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		RenderPass = LightingPass
+		TranslucencySortBias =  0.000000
+		Model = .\assets\models\environment\platforms\bridge_wooden_1.fbx
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Bridge"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 76.992683 -52.798882 -253.636124
+		Scale = 250.000000 250.000000 250.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		Materials = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\environment\environmentbase.kbshader
+				ShaderParams = 4
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "diffuse"
+						Texture = .\assets\models\environment\platforms\bridge_wooden_1.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "normal"
+						Texture = ..\..\kbengine\assets\textures\defaultnormal.bmp
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "propertyMap"
+						Texture = .\assets\models\environment\platforms\bridge_wooden_1_prop.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "emissiveMap"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		RenderPass = LightingPass
+		TranslucencySortBias =  0.000000
+		Model = .\assets\models\environment\platforms\bridge_wooden_1.fbx
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Bridge"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 76.992683 -52.798882 -245.396240
+		Scale = 250.000000 250.000000 250.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		Materials = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\environment\environmentbase.kbshader
+				ShaderParams = 4
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "diffuse"
+						Texture = .\assets\models\environment\platforms\bridge_wooden_1.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "normal"
+						Texture = ..\..\kbengine\assets\textures\defaultnormal.bmp
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "propertyMap"
+						Texture = .\assets\models\environment\platforms\bridge_wooden_1_prop.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "emissiveMap"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		RenderPass = LightingPass
+		TranslucencySortBias =  0.000000
+		Model = .\assets\models\environment\platforms\bridge_wooden_1.fbx
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Bridge"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 76.992683 -52.798882 -394.324280
+		Scale = 250.000000 250.000000 250.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		Materials = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\environment\environmentbase.kbshader
+				ShaderParams = 4
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "diffuse"
+						Texture = .\assets\models\environment\platforms\bridge_wooden_1.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "normal"
+						Texture = ..\..\kbengine\assets\textures\defaultnormal.bmp
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "propertyMap"
+						Texture = .\assets\models\environment\platforms\bridge_wooden_1_prop.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "emissiveMap"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		RenderPass = LightingPass
+		TranslucencySortBias =  0.000000
+		Model = .\assets\models\environment\platforms\bridge_wooden_1.fbx
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Bridge"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 76.992683 -52.798882 -402.614166
+		Scale = 250.000000 250.000000 250.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		Materials = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\environment\environmentbase.kbshader
+				ShaderParams = 4
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "diffuse"
+						Texture = .\assets\models\environment\platforms\bridge_wooden_1.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "normal"
+						Texture = ..\..\kbengine\assets\textures\defaultnormal.bmp
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "propertyMap"
+						Texture = .\assets\models\environment\platforms\bridge_wooden_1_prop.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "emissiveMap"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		RenderPass = LightingPass
+		TranslucencySortBias =  0.000000
+		Model = .\assets\models\environment\platforms\bridge_wooden_1.fbx
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "HeadBand"
+		Orientation = 0.000000 0.000000 -0.717356 0.696707
+		Position = 77.104439 -48.485264 -391.809143
+		Scale = 1.450000 1.000000 1.000000
+	}
+	kbSkeletalModelComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		Materials = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\environment\environmentskinned.kbshader
+				ShaderParams = 4
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "diffuse"
+						Texture = .\assets\models\characters\sheep\headband_black.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "normal"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "propertyMap"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "emissiveMap"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		RenderPass = LightingPass
+		TranslucencySortBias =  0.000000
+		Animations = 0
+		DebugAnimIndex = -1
+		Model = .\assets\models\characters\sheep\gear\headband.ms3d
+	}
+	kbClothComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		AddFakeOscillation = 1
+		AdditionalBoneInfo = 0
+		BoneInfo = 121
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 1
+				BoneName = "B00_00"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 1
+				BoneName = "B00_01"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 1
+				BoneName = "B00_02"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 1
+				BoneName = "B00_03"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 1
+				BoneName = "B00_04"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 1
+				BoneName = "B00_05"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 1
+				BoneName = "B00_06"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 1
+				BoneName = "B00_07"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 1
+				BoneName = "B00_08"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 1
+				BoneName = "B00_09"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 1
+				BoneName = "B00_10"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B01_00"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B01_01"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B01_02"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B01_03"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B01_04"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B01_05"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B01_06"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B01_07"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B01_08"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B01_09"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B01_10"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B02_00"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B02_01"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B02_02"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B02_03"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B02_04"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B02_05"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B02_06"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B02_07"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B02_08"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B02_09"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B02_10"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B03_00"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B03_01"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B03_02"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B03_03"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B03_04"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B03_05"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B03_06"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B03_07"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B03_08"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B03_09"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B03_10"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B04_00"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B04_01"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B04_02"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B04_03"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B04_04"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B04_05"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B04_06"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B04_07"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B04_08"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B04_09"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B04_10"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B05_00"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B05_01"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B05_02"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B05_03"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B05_04"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B05_05"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B05_06"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B05_07"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B05_08"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B05_09"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B05_10"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B06_00"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B06_01"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B06_02"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B06_03"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B06_04"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B06_05"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B06_06"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B06_07"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B06_08"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B06_09"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B06_10"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B07_00"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B07_01"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B07_02"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B07_03"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B07_04"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B07_05"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B07_06"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B07_07"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B07_08"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B07_09"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B07_10"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B08_00"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B08_01"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B08_02"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B08_03"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B08_04"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B08_05"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B08_06"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B08_07"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B08_08"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B08_09"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B08_10"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B09_00"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B09_01"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B09_02"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B09_03"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B09_04"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B09_05"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B09_06"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B09_07"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B09_08"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B09_09"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B09_10"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B10_00"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B10_01"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B10_02"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B10_03"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B10_04"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B10_05"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B10_06"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B10_07"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B10_08"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B10_09"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B10_10"
+				NeighborBones = 0
+			}
+		ClothType = Square
+		Collision = 1
+			kbBoneCollisionSphere { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				BoneName = "Head"
+				Sphere = -0.200000 0.000000 -0.200000 0.250000
+			}
+		Gravity = 0.000000 -10.000000 0.000000
+		Height = 11
+		MaxWindGustDuration =  0.000000
+		MaxWindVelocity = 1.000000 5.000000 -10.000000
+		MinWindGustDuration =  1.000000
+		MinWindVelocity = -1.000000 3.000000 -2.000000
+		NumIterations = 1
+		Width = 11
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Terrain - Reflection"
+		Orientation = -0.003617 -0.989169 0.024734 -0.144639
+		Position = -249.000000 449.000000 2.970000
+		Scale = 1.000000 1.000000 1.000000
+	}
+	kbTerrainComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		Materials = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\terrain\basicterrain_reflection.kbshader
+				ShaderParams = 23
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "mat1And2UVScale"
+						Texture = NULL
+						Vector = 1.000000 1.000000 1.000000 1.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "mat3And4UVScale"
+						Texture = NULL
+						Vector = 1.000000 1.000000 1.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "specFactors"
+						Texture = NULL
+						Vector = 1.000000 1.000000 5.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "specPowerMultipliers"
+						Texture = NULL
+						Vector = 1.000000 3.000000 55.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "reflectionParams"
+						Texture = NULL
+						Vector = 0.000000 1.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "splatMap"
+						Texture = .\assets\terrain\kungfulevelterrain\terrain1_splatmap.bmp
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "Mat1Diffuse"
+						Texture = .\assets\test\foliage2.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "Mat1Normal"
+						Texture = ..\..\kbengine\assets\textures\defaultnormal.bmp
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "Mat1Specular"
+						Texture = ..\..\kbengine\assets\textures\black.bmp
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "Mat2Diffuse"
+						Texture = .\assets\test\foliage2.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "Mat2Normal"
+						Texture = ..\..\kbengine\assets\textures\defaultnormal.bmp
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "Mat2Specular"
+						Texture = ..\..\kbengine\assets\textures\black.bmp
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "Mat3Diffuse"
+						Texture = .\assets\test\foliage2.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "Mat3Normal"
+						Texture = ..\..\kbengine\assets\textures\defaultnormal.bmp
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "Mat3Specular"
+						Texture = ..\..\kbengine\assets\textures\black.bmp
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "Mat4Diffuse"
+						Texture = .\assets\test\foliage2.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "Mat4Normal"
+						Texture = ..\..\kbengine\assets\textures\defaultnormal.bmp
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "Mat4Specular"
+						Texture = ..\..\kbengine\assets\textures\black.bmp
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "Diff,"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "Normal,"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "Spec,"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "distortionMap"
+						Texture = .\assets\fx\wind\wind_1.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "distortionScaleAndSpeed"
+						Texture = NULL
+						Vector = 55.000000 55.000000 555.000000 55.000000
+					}
+			}
+		RenderPass = LightingPass
+		TranslucencySortBias =  0.000000
+		Dimensions = 129
+		Grass = 0
+		HeightMap = .\assets\terrain\kungfulevelterrain\terrain1_height.bmp
+		HeightScale =  1024.000000
+		SplatMap = NULL
+		Width =  2048.000000
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		Name = "Screen Droplets"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 74.384018 -49.436947 -308.378693
+		Scale = 555.000000 555.000000 1.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 1
+		Materials = 1
+			kbMaterialComponent { 
+				Enabled = 1
+				LifeTime =  -1.000000
+				CullModeOverride = None
+				Shader = .\assets\shaders\ui\healthbarui_basic.kbshader
+				ShaderParams = 5
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "normalizedScreenSize_Anchor"
+						Texture = NULL
+						Vector = 0.200000 0.122222 0.020000 0.020000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "baseTexture"
+						Texture = .\assets\ui\kungfusheep_healthbar.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "fillTexture"
+						Texture = .\assets\ui\healhbar_fill_blue.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "healthBarBounds"
+						Texture = NULL
+						Vector = 0.310000 0.480000 0.810000 0.760000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "normalizedHealth"
+						Texture = NULL
+						Vector = 1.000000 0.000000 0.000000 0.000000
+					}
+			}
+		RenderPass = UIPass
+		TranslucencySortBias =  0.000000
+		Model = ..\..\kbengine\assets\models\unitquad.ms3d
+	}
+	CannonHealthBarUIComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		AuthoredHeight = 550
+		AuthoredWidth = 1600
+		NormalizedAnchorPoint = 0.020000 0.020000 0.000000
+		UIToScreenSizeRatio = 0.200000 0.000000 0.000000
+		Dummy = 0
 	}
 }

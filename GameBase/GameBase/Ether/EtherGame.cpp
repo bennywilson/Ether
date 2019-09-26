@@ -257,6 +257,15 @@ void EtherGame::AddGameEntity_Internal( kbGameEntity *const pEntity ) {
 }
 
 /**
+ *	EtherGame::RemoveEntity_Internal
+ */
+void EtherGame::RemoveGameEntity_Internal( kbGameEntity *const pEntity ) {
+
+//	kbGame::RemoveGameEntity_Internal( pEntity );
+
+}
+
+/**
  *	EtherGame::ProcessInput
  */
 void EtherGame::ProcessInput( const float DT ) {
@@ -1053,7 +1062,7 @@ void EtherFireEntity::Update( const float DeltaTime ) {
 		m_ScorchState = 4;
 
 		kbParticleComponent *const pParticle = (kbParticleComponent*)m_pEmberEntity->GetComponentByType( kbParticleComponent::GetType() );
-		pParticle->StopNewSpawns();
+		pParticle->EnableNewSpawns( false );
 
 	} else if ( m_ScorchState == 4 ) {
 		fireFade = firePos = 1.0f - kbClamp( ( currentTimeSeconds - m_FadeOutStartTime ) / m_NextStateChangeTime, 0.0f, 1.0f );

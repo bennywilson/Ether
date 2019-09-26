@@ -61,6 +61,7 @@ const static size_t g_NumEditorCamSpeedBindings = sizeof( g_EditorCamSpeedBindin
 kbEditor::kbEditor() :
 	Fl_Window( 0, 0, GetSystemMetrics( SM_CXFULLSCREEN ), GetSystemMetrics( SM_CYFULLSCREEN ) ) {
 
+
 	m_bGameUpdating = false;
 	const float editorInitStartTime = g_GlobalTimer.TimeElapsedSeconds();
 
@@ -139,10 +140,39 @@ kbEditor::kbEditor() :
 
 	Fl_Button *const scaleButton = new Fl_Button( curX, curY, TRSButtonWidth, buttonHeight, "S" );
 	scaleButton->callback( ScaleButtonCB );
-	curX += TRSButtonWidth + buttonSpacing;
+	curX += TRSButtonWidth * 3 + buttonSpacing;
+
+	const int AdjustButtonWidth = 12 * (int)strlen( "X+" );
+	Fl_Button *const xPlusAdjust = new Fl_Button( curX, curY, AdjustButtonWidth, buttonHeight, "X+" );
+	xPlusAdjust->callback( XPlusAdjustButtonCB );
+	curX += AdjustButtonWidth + buttonSpacing;
+
+	Fl_Button *const xNegAdjust = new Fl_Button(curX, curY, AdjustButtonWidth, buttonHeight, "X-");
+	xNegAdjust->callback(XNegAdjustButtonCB);
+	curX += AdjustButtonWidth + buttonSpacing;
+
+	Fl_Button *const yPlusAdjust = new Fl_Button( curX, curY, AdjustButtonWidth, buttonHeight, "Y+" );
+	yPlusAdjust->callback( YPlusAdjustButtonCB );
+	curX += AdjustButtonWidth + buttonSpacing;
+
+	Fl_Button *const yNegAdjust = new Fl_Button( curX, curY, AdjustButtonWidth, buttonHeight, "Y-" );
+	yNegAdjust->callback( YNegAdjustButtonCB );
+	curX += AdjustButtonWidth + buttonSpacing;
+
+	Fl_Button *const zPlusAdjust = new Fl_Button( curX, curY, AdjustButtonWidth, buttonHeight, "Z+" );
+	zPlusAdjust->callback( ZPlusAdjustButtonCB );
+	curX += AdjustButtonWidth + buttonSpacing;
+
+	Fl_Button *const zNegAdjust = new Fl_Button( curX, curY, AdjustButtonWidth, buttonHeight, "Z-" );
+	zNegAdjust->callback( ZNegAdjustButtonCB );
+	curX += AdjustButtonWidth + buttonSpacing;
+
+	m_pXFormInput = new Fl_Input( curX, curY, AdjustButtonWidth, buttonHeight, "" );
+	m_pXFormInput->value( "0" );
+	curX += TRSButtonWidth * 3 + buttonSpacing;
 
 	const int speedButtonWidth = 85;
-	curX += (int)fl_width( "Cam Speed " );
+	curX += (int)fl_width( "Cam Speed" );
 	m_pSpeedChoice = new Fl_Choice( curX, curY, (int)fl_width( "x100000" ), buttonHeight, "Cam Speed:" );
 	for ( size_t i = 0; i < g_NumEditorCamSpeedBindings; i++ ) {
 		m_pSpeedChoice->add( g_EditorCamSpeedBindings[i].m_DisplayName.c_str() );
@@ -807,6 +837,73 @@ void kbEditor::ScaleButtonCB( class Fl_Widget *, void * ) {
 	widgetCBObject cbObject;
 	cbObject.widgetType = WidgetCB_ScaleButtonPressed;
 	g_Editor->BroadcastEvent( cbObject );
+}
+
+void XFormEntities( const kbManipulator & manipulator, const kbVec4 xForm ) {
+
+	std::vector<kbEditorEntity*> & entityList = g_Editor->GetGameEntities();
+	for ( int i = 0; i < entityList.size(); i++ ) {
+		if ( entityList[i]->IsSelected() ) {
+
+			if ( manipulator.GetMode() == kbManipulator::Translate ) {
+				entityList[i]->SetPosition( entityList[i]->GetPosition() + xForm.ToVec3() * xForm.w );
+			} else if ( manipulator.GetMode() == kbManipulator::Rotate ) {
+				kbQuat rot( xForm.ToVec3(), xForm.a );
+				rot = ( entityList[i]->GetOrientation() * rot ).Normalized();
+				entityList[i]->SetOrientation( rot );
+			} else if (manipulator.GetMode() == kbManipulator::Scale ) {
+				entityList[i]->SetScale( entityList[i]->GetScale() + xForm.ToVec3() * xForm.w );
+			}
+		}
+	}
+}
+
+/**
+*	kbEditor::XPlusAdjustButtonCB
+*/
+void kbEditor::XPlusAdjustButtonCB( Fl_Widget *, void * ) {
+
+	XFormEntities( g_Editor->m_pMainTab->m_Manipulator, kbVec4( 1.0f, 0.0f, 0.0f, (float)atof( g_Editor->m_pXFormInput->value() ) ) );
+}
+
+/**
+*	kbEditor::XNegAdjustButtonCB
+*/
+void kbEditor::XNegAdjustButtonCB( Fl_Widget *, void * ) {
+
+	XFormEntities( g_Editor->m_pMainTab->m_Manipulator, kbVec4( -1.0f, 0.0f, 0.0f, (float)atof( g_Editor->m_pXFormInput->value() ) ) );
+}
+
+/**
+*	kbEditor::YPlusAdjustButtonCB
+*/
+void kbEditor::YPlusAdjustButtonCB( Fl_Widget *, void * ) {
+
+	XFormEntities( g_Editor->m_pMainTab->m_Manipulator, kbVec4( 0.0f, 1.0f, 0.0f, (float)atof( g_Editor->m_pXFormInput->value() ) ) );
+}
+
+/**
+*	kbEditor::YNegAdjustButtonCB
+*/
+void kbEditor::YNegAdjustButtonCB( Fl_Widget *, void * ) {
+
+	XFormEntities( g_Editor->m_pMainTab->m_Manipulator, kbVec4( 0.0f, -1.0f, 0.0f, (float)atof( g_Editor->m_pXFormInput->value() ) ) );
+}
+
+/**
+*	kbEditor::ZPlusAdjustButtonCB
+*/
+void kbEditor::ZPlusAdjustButtonCB( Fl_Widget *, void * ) {
+
+	XFormEntities( g_Editor->m_pMainTab->m_Manipulator, kbVec4( 0.0f, 0.0f, 1.0f, (float)atof(g_Editor->m_pXFormInput->value() ) ) );
+}
+
+/**
+*	kbEditor::ZNegAdjustButtonCB
+*/
+void kbEditor::ZNegAdjustButtonCB(Fl_Widget *, void *) {
+
+	XFormEntities( g_Editor->m_pMainTab->m_Manipulator, kbVec4( 0.0f, 0.0f, -1.0f, (float)atof( g_Editor->m_pXFormInput->value() ) ) );
 }
 
 /**

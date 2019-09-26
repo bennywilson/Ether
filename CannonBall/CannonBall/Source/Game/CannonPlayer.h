@@ -23,11 +23,16 @@ public:
 	void										SetTargetFacingDirection( const kbVec3 & targetDir ) { m_TargetFacingDirection = targetDir; }
 
 	bool										IsPlayingAnim( const kbString animName ) const;
-
 	void										PlayAnimation( const kbString animName, const float animBlendInLen, const bool bRestartIfAlreadyPlaying = false, const kbString nextAnim = kbString::EmptyString, const float nextAnimBlendInLen = 0.0f );
-	bool										HasFinishedAnim() const;
+	bool										HasFinishedAnim( const kbString animName = kbString::EmptyString ) const;
+	void										SetAnimationTimeScaleMultiplier( const kbString animName, const float multiplier );
+
+	void										ApplyAnimSmear( const kbVec3 smearVec, const float durationSec );
+
+	void										PlayAttackVO( const int pref );
 
 	bool										IsPlayer() const { return m_bIsPlayer; }
+	virtual bool								IsDead() const { return m_Health <= 0.0f; }
 
 protected:
 
@@ -37,6 +42,9 @@ protected:
 	// Data
 	float										m_MaxRunSpeed;
 	float										m_MaxRotateSpeed;
+	float										m_Health;
+
+	std::vector<kbSoundData>					m_AttackVO;
 
 	// Game
 	std::vector<kbSkeletalModelComponent *>		m_SkelModelsList;
@@ -46,11 +54,13 @@ protected:
 	kbVec4										m_AnimSmearVec;
 	float										m_AnimSmearStartTime;
 
+	float										m_LastVOTime;
+
 	bool										m_bIsPlayer;
 
 //---------------------------------------------------------------------------------------------------
 	// IAnimEventListener
-	virtual void								OnAnimEvent( const kbAnimEvent & animEvent ) { }
+	virtual void								OnAnimEvent( const kbAnimEventInfo_t & animEvent ) override { }
 };
 
 /**
@@ -75,6 +85,8 @@ public:
 	kbVec2										GetAmplitude() const { return kbVec2( m_AmplitudeX, m_AmplitudeY ); }
 	kbVec2										GetFrequency() const { return kbVec2( m_FrequencyX, m_FrequencyY ); }
 
+	void										SetEnable_Internal( const bool bEnable );
+
 private:
 
 	float										m_Duration;
@@ -83,6 +95,8 @@ private:
 
 	float										m_FrequencyX;
 	float										m_FrequencyY;
+
+	bool										m_bActivateOnEnable;
 };
 
 /**
@@ -97,12 +111,12 @@ public:
 	
 	void										StartCameraShake( const CannonCameraShakeComponent *const pCameraShakeComponent );
 
+	void										SetTarget( const kbGameEntity *const pTarget );
+
 protected:
 
 	virtual void								SetEnable_Internal( const bool bEnable ) override;
 	virtual void								Update_Internal( const float DeltaTime ) override;
-
-	void										FindTarget();
 
 private:
 

@@ -1,8 +1,8 @@
-//===================================================================================================
+﻿//===================================================================================================
 // kbGame.cpp
 //
 //
-// 2016-2018 kbEngine 2.0
+// 2016-2019 kbEngine 2.0
 //===================================================================================================
 #include <sstream>
 #include <iomanip>
@@ -13,8 +13,10 @@ kbGame * g_pGame = nullptr;
 
 kbConsoleVariable g_ShowPerfTimers( "showperftimers", false, kbConsoleVariable::Console_Bool, "Display game/engine perf timers", "ctrl p" );
 kbConsoleVariable g_ShowEntityInfo( "showentityinfo", false, kbConsoleVariable::Console_Bool, "Show entity info?", "" );
+kbConsoleVariable g_DumpEntityInfo( "dumpentityinfo", false, kbConsoleVariable::Console_Bool, "Dump entity info?", "" );
 kbConsoleVariable g_TimeScale( "timescale", (float)1.0f, kbConsoleVariable::Console_Float, "Dilate time", "" );
 kbConsoleVariable g_EnableHelpScreen( "help", false, kbConsoleVariable::Console_Bool, "Display help screen", "ctrl h" );
+kbConsoleVariable g_ShowFPS( "showfps", false, kbConsoleVariable::Console_Bool, "Show FPS", "ctrl f" );
 
 /**
  *	kbGame::kbGame
@@ -22,6 +24,7 @@ kbConsoleVariable g_EnableHelpScreen( "help", false, kbConsoleVariable::Console_
 kbGame::kbGame() :
 	m_Hwnd( nullptr ),
 	m_pLocalPlayer( nullptr ),
+	m_pLevelComp( nullptr ),
 	m_bIsPlaying( false ),
 	m_bIsRunning( true ),
 	m_bHasFirstSyncCompleted( false ),
@@ -61,6 +64,8 @@ void kbGame::InitGame( HWND hwnd, const int backBufferWidth, const int backBuffe
 void kbGame::LoadMap( const std::string & mapName ) {
 	kbLog( "LoadMap() called on %s", mapName.c_str() );
 
+	m_pLevelComp = nullptr;
+
 	// Load map
 	if ( mapName.empty() == false ) {
 
@@ -99,6 +104,10 @@ void kbGame::LoadMap( const std::string & mapName ) {
 
 				kbGameEntity * gameEntity = inFile.ReadGameEntity();
 				while ( gameEntity != nullptr ) {
+
+					if ( m_pLevelComp == nullptr ) {
+						m_pLevelComp = gameEntity->GetComponent<kbLevelComponent>();
+					}
 					m_GameEntityList.push_back( gameEntity );
 					gameEntity = inFile.ReadGameEntity();
 				}
@@ -151,6 +160,8 @@ void kbGame::StopGame() {
 	m_GamePlayersList.clear();
 
 	m_bIsPlaying = false;
+
+	m_pLevelComp = nullptr;
 }
 
 
@@ -159,9 +170,9 @@ void kbGame::StopGame() {
  */
 void kbGame::Update() {
 
-	START_SCOPED_TIMER( GAME_THREAD );
+	START_SCOPED_TIMER(GAME_THREAD);
 
-	m_CurFrameDeltaTime = ( float ) m_Timer.TimeElapsedSeconds() * m_DeltaTimeScale;
+	m_CurFrameDeltaTime = m_Timer.TimeElapsedSeconds() * m_DeltaTimeScale;
 	m_Timer.Reset();
 
 	static int NumFrames = 0;
@@ -171,9 +182,10 @@ void kbGame::Update() {
 	static float FPS = 0;
 
 	if ( NumFrames > 100 ) {
-		FPS = (float)NumFrames / ( g_GlobalTimer.TimeElapsedSeconds() - StartTime );
+		const float curTime = g_GlobalTimer.TimeElapsedSeconds();
+		FPS = (float)NumFrames / ( curTime - StartTime );
 		NumFrames = 0;
-		StartTime = g_GlobalTimer.TimeElapsedSeconds();
+		StartTime = curTime;
 	}
 
 	if ( g_TimeScale.GetFloat() > 0.0f ) {
@@ -238,12 +250,13 @@ void kbGame::Update() {
 			}
 		}
 
-		std::string fpsString = "FPS: ";
-		std::stringstream stream;
-		stream << std::fixed << std::setprecision(2) << FPS;
-		fpsString += stream.str();
-		//g_pRenderer->DrawDebugText( fpsString, 0.85f, 0, g_DebugTextSize, g_DebugTextSize, kbColor::green );
-
+		if ( g_ShowFPS.GetBool() ) {
+			std::string fpsString = "FPS: ";
+			std::stringstream stream;
+			stream << std::fixed << std::setprecision(2) << FPS;
+			fpsString += stream.str();
+			g_pRenderer->DrawDebugText( fpsString, 0.85f, 0, g_DebugTextSize, g_DebugTextSize, kbColor::green );
+		}
 		if ( g_ShowPerfTimers.GetBool() ) {
 
 			float curY = g_DebugLineSpacing + 0.1f;
@@ -258,7 +271,7 @@ void kbGame::Update() {
 		
 				g_pRenderer->DrawDebugText( timing, 0.25f, curY, g_DebugTextSize, g_DebugTextSize, kbColor::green );
 			}
-		} else if ( g_ShowEntityInfo.GetBool() ) {
+		} else if ( g_ShowEntityInfo.GetBool()  || g_DumpEntityInfo.GetBool() ) {
 			float curY = g_DebugLineSpacing + 0.1f;
 			std::string NumEntities = "Num Entities: ";
 			NumEntities += std::to_string( (long long ) m_GameEntityList.size() );
@@ -266,14 +279,37 @@ void kbGame::Update() {
 			curY += g_DebugLineSpacing;
 			std::map<std::string, int> componentMap;
 
+			if ( g_DumpEntityInfo.GetBool() ) {
+				kbLog( "=============================================================================" );
+				kbLog( "Dumping entity and component info" );
+
+			}
+
 			for ( int i = 0; i < (int)m_GameEntityList.size(); i++ ) {
 				const kbGameEntity *const pCurEntity = m_GameEntityList[i];
+
+				if ( g_DumpEntityInfo.GetBool() ) {
+					kbLog( "Entity [%d] - %s", i, pCurEntity->GetName().c_str() );
+				}
+
 				for ( int iComp = 0; iComp < pCurEntity->NumComponents(); iComp++ ) {
-					const kbComponent *const pComponent = pCurEntity->GetComponent( iComp );
+					kbComponent *const pComponent = pCurEntity->GetComponent( iComp );
 					const std::string pComponentTypeName = pComponent->GetComponentClassName();
 					componentMap[pComponentTypeName]++;
+
+					if ( g_DumpEntityInfo.GetBool() ) {
+						kbTransformComponent * pTransformComponent = pComponent->GetAs<kbTransformComponent>();
+						if ( pTransformComponent != nullptr ) {
+							kbLog( "	Component [%d] - %s %s", iComp, pComponentTypeName.c_str(), pTransformComponent->GetName().c_str() );
+						} else {
+							kbLog( "	Component [%d] - %s", iComp, pComponentTypeName.c_str());
+						}
+					}
+
 				}
 			}
+
+			g_DumpEntityInfo.SetBool( false );
 
 			for ( std::map<std::string,int>::iterator it = componentMap.begin(); it != componentMap.end(); ++it ) {
 				std::string outputName = it->first;
@@ -327,6 +363,8 @@ kbGameEntity * kbGame::CreateEntity( const kbGameEntity *const pPrefab, const bo
 		m_GamePlayersList.push_back( pSpawnedEntity );
 	}
 
+	AddGameEntity_Internal( pSpawnedEntity );
+
 	return pSpawnedEntity;
 }
 
@@ -334,6 +372,9 @@ kbGameEntity * kbGame::CreateEntity( const kbGameEntity *const pPrefab, const bo
  *	kbGame::RemoveGameEntity
  */
 void kbGame::RemoveGameEntity( kbGameEntity *const pEntityToRemove ) {
+
+	RemoveGameEntity_Internal( pEntityToRemove );
+
 	std::vector<kbGameEntity*>::iterator it;
 	it = find( m_GameEntityList.begin(), m_GameEntityList.end(), pEntityToRemove );
 
@@ -348,6 +389,18 @@ void kbGame::RemoveGameEntity( kbGameEntity *const pEntityToRemove ) {
 		}
 	}
 
+}
+
+/**
+ *	kbGame::SwapEntitiesByIdx
+ */
+void kbGame::SwapEntitiesByIdx( const size_t idx1, const size_t idx2 ) {
+	if ( idx1 < 0 || idx1 >= m_GameEntityList.size() || idx2 < 0 || idx2 >= m_GameEntityList.size() ) {
+		kbWarning( "kbGame::SwapEntitiesByIdx() - Invalid index(es) [%d], [%d]", idx1, idx2 );
+		return;
+	}
+
+	std::swap( m_GameEntityList[idx1], m_GameEntityList[idx2] ); 
 }
 
 /**

@@ -15,12 +15,15 @@
  void CannonActorComponent::Constructor() {
 	m_MaxRunSpeed = 3.0f;
 	m_MaxRotateSpeed = 15.0f;
+	m_Health = 100.0f;
 
 	m_TargetFacingDirection.Set( 0.0f, 0.0f, -1.0f );
 
 	m_AnimSmearDuration = 0.1f;
 	m_AnimSmearVec.Set( 0.0f, 0.0f, 0.0f, 0.0f );
 	m_AnimSmearStartTime = -1.0f;
+
+	m_LastVOTime = 0.0f;
 
 	m_bIsPlayer = false;
 }
@@ -72,6 +75,23 @@ void CannonActorComponent::Update_Internal( const float DT ) {
 
 	const kbQuat targetRot = kbQuatFromMatrix( facingMat );
 	GetOwner()->SetOrientation( curRot.Slerp( curRot, targetRot, DT * m_MaxRotateSpeed ) );
+
+	
+	// Anim Smear
+	if ( m_AnimSmearStartTime > 0.0f ) {
+		const float elapsedTime = g_GlobalTimer.TimeElapsedSeconds() - m_AnimSmearStartTime;
+		if ( elapsedTime > m_AnimSmearDuration ) {
+			m_AnimSmearStartTime = -1.0f;
+			const static kbString smearParam = "smearParams";
+			m_SkelModelsList[1]->SetMaterialParamVector(0, smearParam.stl_str(), kbVec4::zero );
+		}
+		else {
+			const float strength = 1.0f - kbClamp( elapsedTime / m_AnimSmearDuration, 0.0f, 1.0f );
+			const static kbString smearParam = "smearParams";
+			const kbVec4 smearVec = strength * m_AnimSmearVec;
+			m_SkelModelsList[1]->SetMaterialParamVector( 0, smearParam.stl_str(), smearVec );
+		}
+	}
 }
 
 /**
@@ -87,15 +107,51 @@ void CannonActorComponent::PlayAnimation( const kbString animName, const float a
 /**
  *	CannonActorComponent::HasFinishedAnim
  */
-bool CannonActorComponent::HasFinishedAnim() const {
+bool CannonActorComponent::HasFinishedAnim( const kbString animName ) const {
+
 	if ( m_SkelModelsList.size() == 0 ) {
 		kbWarning( "KungFuSheepComponent::HasFinishedAnim() - Called with empty m_SkelModels list" );
 		return true;
 	}
 
+	if ( animName != kbString::EmptyString ) {
+		const kbString * pCurAnim = m_SkelModelsList[0]->GetCurAnimationName();
+		const kbString * pNextAnim = m_SkelModelsList[0]->GetNextAnimationName();
+
+		if ( pCurAnim != nullptr && *pCurAnim == animName ) {
+			return m_SkelModelsList[0]->HasFinishedAnimation();
+		}
+
+		if ( pNextAnim != nullptr && *pNextAnim == animName ) {
+			return false;
+		}
+	}
+
 	return m_SkelModelsList[0]->HasFinishedAnimation();
 }
 
+/**
+ *	CannonActorComponent::SetAnimationTimeScaleMultiplier
+ */
+void CannonActorComponent::SetAnimationTimeScaleMultiplier( const kbString animName, const float multiplier ) {
+
+	if ( m_SkelModelsList.size() < 2 ) {
+		kbWarning( "KungFuSheepComponent::SetAnimationTimeMultiplier() - Needs at least 2 skeletal models" );
+		return;
+	}
+
+	m_SkelModelsList[0]->SetAnimationTimeScaleMultiplier( animName, multiplier );
+	m_SkelModelsList[1]->SetAnimationTimeScaleMultiplier( animName, multiplier );
+}
+
+/**
+ *	CannonActorComponent::ApplyAnimSmear
+ */
+void CannonActorComponent::ApplyAnimSmear( const kbVec3 smearVec, const float durationSec ) {
+	m_AnimSmearStartTime = g_GlobalTimer.TimeElapsedSeconds();
+	m_AnimSmearVec = smearVec;
+	m_AnimSmearDuration = durationSec;
+}
 
 /**
  *	CannonActorComponent::IsPlayingAnim
@@ -106,6 +162,24 @@ bool CannonActorComponent::IsPlayingAnim( const kbString animName ) const {
 	}
 
 	return m_SkelModelsList[0]->IsPlaying( animName );
+}
+
+/**
+ *	CannonActorComponent::PlayAttackVO
+ */
+void CannonActorComponent::PlayAttackVO( const int pref ) {
+
+	if ( m_AttackVO.size() == 0 ) {
+		return;
+	}
+
+	const float curTime = g_GlobalTimer.TimeElapsedSeconds();
+	if ( curTime < m_LastVOTime + 2.0f ) {
+		return;
+	}
+	m_LastVOTime = curTime;
+
+	m_AttackVO[rand() % m_AttackVO.size()].PlaySoundAtPosition( GetOwnerPosition() );
 }
 
 /**
@@ -140,34 +214,14 @@ void CannonCameraComponent::SetEnable_Internal( const bool bEnable ) {
 	g_pRenderer->SetNearFarPlane( nullptr, m_NearPlane, m_FarPlane );
 }
 
-/**
- *	CannonCameraComponent::FindTarget
- */
-void CannonCameraComponent::FindTarget() {
 
-	if ( g_UseEditor ) {
-		extern kbEditor * g_Editor;
-		std::vector<kbEditorEntity *> &	gameEnts = g_Editor->GetGameEntities();
-		for ( int i = 0; i < gameEnts.size(); i++ ) {
-			const kbGameEntity *const pEnt = gameEnts[i]->GetGameEntity();
-			const kbComponent *const pComp = pEnt->GetComponentByType( CannonActorComponent::GetType() );
-			if ( pComp != nullptr ) {
-				m_pTarget = (kbGameEntity*)pComp->GetOwner();
-				break;
-			}
-		}
-	} else {
-		const std::vector<kbGameEntity*> & GameEnts = g_pGame->GetGameEntities();
-		for ( int i = 0; i < (int) GameEnts.size(); i++ ) {
-			const kbGameEntity *const pEnt = GameEnts[i];
-			const kbComponent *const pComp = pEnt->GetComponentByType( CannonActorComponent::GetType() );
-			if ( pComp != nullptr ) {
-				m_pTarget = (kbGameEntity*)pComp->GetOwner();
-				break;
-			}
-		}
-	}
+/**
+ *	CannonCameraComponent::SetTarget
+ */
+void CannonCameraComponent::SetTarget( const kbGameEntity *const pTarget ) {
+	m_pTarget = pTarget;
 }
+
 
 /**
  *	CannonCameraComponent::StartCameraShake
@@ -205,20 +259,18 @@ void CannonCameraComponent::Update_Internal( const float DeltaTime ) {
 		break;
 
 		case MoveMode_Follow : {
-			if ( m_pTarget == nullptr ) {
-				FindTarget();
-				if ( m_pTarget == nullptr ) {
-					break;
-				}
+			if ( m_pTarget != nullptr ) {
+				GetOwner()->SetPosition( m_pTarget->GetPosition() + m_PositionOffset );
+
+				kbMat4 cameraDestRot;
+				cameraDestRot.LookAt( GetOwner()->GetPosition(), m_pTarget->GetPosition() + m_LookAtOffset, kbVec3::up );
+				cameraDestRot.InvertFast();
+				GetOwner()->SetOrientation( kbQuatFromMatrix( cameraDestRot ) );
+
+				const kbVec3 cameraDestPos = m_pTarget->GetPosition() + m_PositionOffset;
+				GetOwner()->SetPosition( cameraDestPos + cameraDestRot[0].ToVec3() * camShakeOffset.x + cameraDestRot[1].ToVec3() * camShakeOffset.y );
+				GetOwner()->SetPosition( cameraDestPos + cameraDestRot[0].ToVec3() * camShakeOffset.x + cameraDestRot[1].ToVec3() * camShakeOffset.y );
 			}
-
-			kbMat4 cameraDestRot;
-			cameraDestRot.LookAt( GetOwner()->GetPosition(), m_pTarget->GetPosition() + m_LookAtOffset, kbVec3::up );
-			cameraDestRot.InvertFast();
-			GetOwner()->SetOrientation( kbQuatFromMatrix( cameraDestRot ) );
-
-			const kbVec3 cameraDestPos = m_pTarget->GetPosition() + m_PositionOffset;
-			GetOwner()->SetPosition( cameraDestPos + cameraDestRot[0].ToVec3() * camShakeOffset.x + cameraDestRot[1].ToVec3() * camShakeOffset.y );
 		}
 		break;
 	}
@@ -234,4 +286,25 @@ void CannonCameraShakeComponent::Constructor() {
 
 	m_FrequencyX = 15.0f;
 	m_FrequencyY = 10.0f;
+
+	m_bActivateOnEnable = false;
+}
+
+/**
+ *	CannonCameraShakeComponent::SetEnable_Internal
+ */
+void CannonCameraShakeComponent::SetEnable_Internal( const bool bEnable ) {
+	Super::SetEnable_Internal( bEnable ); 
+	
+	if ( bEnable ) {
+		// Disable so that this component doesn't prevent it's owning entity to linger past it's life time
+		Enable( false );
+
+		if ( m_bActivateOnEnable )  {
+			CannonCameraComponent *const pCam = (CannonCameraComponent*)g_pCannonGame->GetMainCamera();
+			if ( pCam != nullptr ) {
+				pCam->StartCameraShake( this );
+			}
+		}
+	} 
 }

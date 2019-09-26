@@ -111,6 +111,9 @@
     <None Include="assets\Shaders\SSAO.kbShader">
       <Filter>Assets\Shaders</Filter>
     </None>
+    <None Include="assets\Shaders\basicFont.kbShader">
+      <Filter>Assets\Shaders</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="renderer\kbModel.h">
@@ -263,6 +266,12 @@
     <ClInclude Include="gameEntity\kbLevelComponent.h">
       <Filter>game\Components</Filter>
     </ClInclude>
+    <ClInclude Include="gameEntity\kbLevelDirector.h">
+      <Filter>game\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="gameEntity\kbUIComponent.h">
+      <Filter>game\Components</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="core\kbCore.cpp">
@@ -401,6 +410,12 @@
       <Filter>renderer</Filter>
     </ClCompile>
     <ClCompile Include="gameEntity\kbLevelComponent.cpp">
+      <Filter>game\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="gameEntity\kbLevelDirector.cpp">
+      <Filter>game\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="gameEntity\kbUIComponent.cpp">
       <Filter>game\Components</Filter>
     </ClCompile>
   </ItemGroup>

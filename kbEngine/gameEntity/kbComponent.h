@@ -25,7 +25,7 @@ public:
 	virtual	bool								IsA( const void *const type ) const { return false; }
 
 protected:
-	virtual void								CollectAncestorTypeInfo_Internal( std::vector< class kbTypeInfoClass * > & collection ) { }
+	virtual void								CollectAncestorTypeInfo_Internal( std::vector<class kbTypeInfoClass *> & collection ) { }
 };
 
 /**
@@ -98,8 +98,15 @@ public:
 	kbGameEntity *								GetOwner() const { return (kbGameEntity *) Super::GetOwner(); }
 	kbString									GetOwnerName() const;
 	kbVec3										GetOwnerPosition() const;
+	kbVec3										GetOwnerScale() const;
 	kbQuat										GetOwnerRotation() const;
 	
+	template<typename T>
+	T *	GetComponent() const {
+		return GetOwner()->GetComponent<T>();
+	}
+
+
 	void										SetOwnerPosition( const kbVec3 & position );
 	void										SetOwnerRotation( const kbQuat & rotation );
 
@@ -203,6 +210,21 @@ protected:
 };
 
 /**
+ *	kbDeleteEntityComponent
+ */
+class kbDeleteEntityComponent : public kbGameComponent {
+	KB_DECLARE_COMPONENT( kbDeleteEntityComponent, kbGameComponent );
+
+//-------------------------------------------------------------------------------------------------------------------------------------------------------------
+protected:
+	virtual void								LifeTimeExpired();
+
+private:
+	float										m_Dummy;
+};
+
+
+/**
  *	kbPlayerStartComponent
  */
 class kbPlayerStartComponent : public kbGameComponent {
@@ -236,9 +258,16 @@ private:
 /**
  *  IAnimEventListener
  */
+struct kbAnimEventInfo_t {
+	kbAnimEventInfo_t( const kbAnimEvent & animEvent, const kbComponent *const pOwnerComponent ) : m_AnimEvent( animEvent ), m_pComponent( pOwnerComponent ) { }
+	const kbAnimEvent & m_AnimEvent;
+	const kbComponent * m_pComponent;
+};
+
 class IAnimEventListener abstract {
 public:
-	virtual void							OnAnimEvent( const kbAnimEvent & animEvent ) = 0;
+
+	virtual void							OnAnimEvent( const kbAnimEventInfo_t & animEvent ) = 0;
 };
 
 /**
@@ -252,13 +281,13 @@ public:
 
 	const kbString							GetEventName() const { return m_EventName; }
 	float									GetEventTime() const { return m_EventTime; }
-	kbVec3									GetEventValue() const { return m_EventValue; }
+	kbVec4									GetEventValue() const { return m_EventValue; }
 
-	static kbVec3							Evaluate( const std::vector<kbVectorAnimEvent> & eventList, const float t );
+	static kbVec4							Evaluate( const std::vector<kbVectorAnimEvent> & eventList, const float t );
 
 private:
 	kbString								m_EventName;
-	kbVec3									m_EventValue;
+	kbVec4									m_EventValue;
 	float									m_EventTime;
 };
 
@@ -329,7 +358,7 @@ public:
 		}
 	}
 
-	void UpdateStateMachine() {
+	virtual void UpdateStateMachine() {
 
 		// This condition is valid if state hasn't been set yet
 		if ( m_CurrentState >= StateEnum::NumStates ) {
@@ -356,15 +385,13 @@ public:
 		}
 	}
 
-protected:
-
 	void InitializeStates( StateClass *const stateNodes[StateEnum::NumStates] ) {
 
 		for ( int i = 0; i < StateEnum::NumStates; i++ ) {
 			delete m_States[i];
 			m_States[i] = stateNodes[i];
 
-			kbErrorCheck( m_States[i] != nullptr, "IStateMachine::InitializeStates() - NULL state.  Please call InitializeStates with proper values" );
+			kbErrorCheck( stateNodes[i] != nullptr && m_States[i] != nullptr, "IStateMachine::InitializeStates() - NULL state.  Please call InitializeStates with proper values" );
 		}
 	}
 
@@ -372,6 +399,10 @@ protected:
 
 		if ( newState < (StateEnum)(0) || newState >= StateEnum::NumStates ) {
 			kbError( "IStateMachine::RequestStateChange() - Invalid State requested" );
+		}
+
+		if ( newState == m_CurrentState ) {
+			return;
 		}
 
 		if ( m_CurrentState != StateEnum::NumStates ) {
@@ -387,9 +418,10 @@ protected:
 		StateChangeCallback( previousState, m_CurrentState );
 	}
 
-	virtual void StateChangeCallback( const StateEnum previousState, const StateEnum nextState ) { }
+	StateEnum GetCurrentState() const { return m_CurrentState; }
 
-private:
+protected:
+	virtual void StateChangeCallback( const StateEnum previousState, const StateEnum nextState ) { }
 
 	StateClass * m_States[StateEnum::NumStates];
 	StateEnum m_CurrentState;

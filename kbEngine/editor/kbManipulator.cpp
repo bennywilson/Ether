@@ -7,6 +7,9 @@
 #include "kbCore.h"
 #include "kbVector.h"
 #include "kbModel.h"
+#include "kbGameEntityHeader.h"
+#include "kbComponent.h"
+#include "kbLevelComponent.h"
 #include "kbManipulator.h"
 #include "DX11/kbRenderer_DX11.h"
 
@@ -36,9 +39,14 @@ bool kbManipulator::AttemptMouseGrab( const kbVec3 & rayOrigin, const kbVec3 & r
 
 	const kbModel *const pModel = m_pModels[m_ManipulatorMode];
 
-	extern float g_EditorIconScale;
-	const kbModelIntersection_t intersection = pModel->RayIntersection( rayOrigin, rayDirection, m_Position, m_Orientation, kbVec3( g_EditorIconScale, g_EditorIconScale, g_EditorIconScale ) );
+	const float modelScale = kbLevelComponent::GetGlobalModelScale();
+	kbModelIntersection_t intersection = pModel->RayIntersection( rayOrigin, rayDirection, m_Position, m_Orientation, kbVec3( modelScale, modelScale, modelScale ) );
 
+	if (intersection.hasIntersection == false)
+	{
+		intersection = pModel->RayIntersection(rayOrigin, -rayDirection, m_Position, m_Orientation, kbVec3(modelScale, modelScale, modelScale));
+
+	}
 	if ( intersection.hasIntersection ) {
 		m_SelectedGroup = intersection.meshNum;
 
@@ -129,7 +137,8 @@ void kbManipulator::UpdateMouseDrag( const kbVec3 & rayOrigin, const kbVec3 & ra
  */
 void kbManipulator::Update() {
 	if ( g_pRenderer->DebugBillboardsEnabled() ) {
-		g_pRenderer->DrawModel( m_pModels[m_ManipulatorMode], m_ManipulatorMaterials, m_Position, m_Orientation, kbVec3::one, UINT16_MAX );
+		const kbVec3 modelScale( kbLevelComponent::GetGlobalModelScale(), kbLevelComponent::GetGlobalModelScale(), kbLevelComponent::GetGlobalModelScale() );
+		g_pRenderer->DrawModel( m_pModels[m_ManipulatorMode], m_ManipulatorMaterials, m_Position, m_Orientation, modelScale, UINT16_MAX );
 	}
 }
 

@@ -2,7 +2,7 @@
 // kbModelComponent.cpp
 //
 //
-// 2016-2018 kbEngine 2.0
+// 2016-2019 kbEngine 2.0
 //===================================================================================================
 #include "kbCore.h"
 #include "kbVector.h"
@@ -12,6 +12,7 @@
 #include "kbModel.h"
 #include "kbModelComponent.h"
 #include "kbRenderer.h"
+#include "kbGame.h"
 
 KB_DEFINE_COMPONENT(kbModelComponent)
 
@@ -42,7 +43,7 @@ void kbModelComponent::EditorChange( const std::string & propertyName ) {
 	m_RenderObject.m_Orientation = GetOwner()->GetOrientation();
 	m_RenderObject.m_Position = GetOwner()->GetPosition();
 	m_RenderObject.m_RenderPass = m_RenderPass;
-	m_RenderObject.m_Scale = GetOwner()->GetScale();
+	m_RenderObject.m_Scale = GetOwner()->GetScale() * kbLevelComponent::GetGlobalModelScale();
 	m_RenderObject.m_TranslucencySortBias = m_TranslucencySortBias;
 
 	// Editor Hack!
@@ -69,7 +70,7 @@ void kbModelComponent::PostLoad() {
 /**
  *	kbModelComponent::RefreshMaterials
  */
-void kbModelComponent::RefreshMaterials( const bool bRefreshRenderObejct ) {
+void kbModelComponent::RefreshMaterials( const bool bRefreshRenderObject ) {
 	m_RenderObject.m_Materials.clear();
 	for ( int i = 0; i < m_MaterialList.size(); i++ ) {
 		const kbMaterialComponent & matComp = m_MaterialList[i];
@@ -93,7 +94,7 @@ void kbModelComponent::RefreshMaterials( const bool bRefreshRenderObejct ) {
 		m_RenderObject.m_Materials.push_back( newShaderParams );
 	}
 
-	if ( IsEnabled() && m_RenderObject.m_pComponent != nullptr && bRefreshRenderObejct ) {
+	if ( IsEnabled() && m_RenderObject.m_pComponent != nullptr && bRefreshRenderObject ) {
 		g_pRenderer->UpdateRenderObject( m_RenderObject );
 	}
 }
@@ -254,4 +255,59 @@ void kbMaterialComponent::SetShaderParamComponent( const kbShaderParamComponent 
 	}
 
 	m_ShaderParamComponents.push_back( inParam );
+}
+
+/**
+ *	kbShaderModifierComponent::Constructor
+ */
+void kbShaderModifierComponent::Constructor() {
+
+	m_pModelComponent = nullptr;
+	m_StartTime = -1.0f;
+	m_AnimationLengthSec = -1.0f;
+}
+
+/**
+ *	kbShaderModifierComponent::SetEnable_Internal
+ */
+void kbShaderModifierComponent::SetEnable_Internal( const bool bEnable ) {
+	Super::SetEnable_Internal( bEnable );
+
+	if ( m_ShaderVectorEvents.size() == 0 ) {
+		return;
+	}
+
+	m_pModelComponent = nullptr;
+	if ( bEnable ) {
+
+		for ( int i = 0; i < GetOwner()->NumComponents(); i++ ) {
+			if ( GetOwner()->GetComponent(i)->IsA( kbModelComponent::GetType() ) == false ) {
+				continue;
+			}
+			m_pModelComponent = (kbModelComponent*)GetOwner()->GetComponent(i);
+			break;
+		}
+		m_AnimationLengthSec = m_ShaderVectorEvents[m_ShaderVectorEvents.size() - 1].GetEventTime();
+		m_StartTime = g_GlobalTimer.TimeElapsedSeconds();
+	}
+}
+
+/**
+ *	kbShaderModifierComponent::Update_Internal
+ */
+void kbShaderModifierComponent::Update_Internal( const float dt ) {
+
+	if ( m_pModelComponent == nullptr || m_ShaderVectorEvents.size() == 0 ) {
+		Enable( false );
+		return;
+	}
+
+	// hack - Update is called before enable some how
+	if ( m_AnimationLengthSec == 0.0f ) {
+		return;
+	}
+
+	const float elapsedTime = g_GlobalTimer.TimeElapsedSeconds() - m_StartTime;
+	const kbVec4 shaderParam = kbVectorAnimEvent::Evaluate( m_ShaderVectorEvents, elapsedTime );
+	m_pModelComponent->SetMaterialParamVector( 0, m_ShaderVectorEvents[0].GetEventName().stl_str(), shaderParam );
 }

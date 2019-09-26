@@ -162,9 +162,10 @@ void kbWarningCheck( const bool bExpression, const char *const msg, ... ) {
 		return;
 	}
 
+	messageType = Message_Warning;
 	va_list args;
 	va_start( args, msg );
-	kbWarning( msg, args );
+	WriteToFile( msg, args );
 	va_end( args );
 }
 

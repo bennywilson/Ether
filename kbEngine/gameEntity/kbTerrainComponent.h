@@ -37,6 +37,7 @@ private:
 
 	void										RefreshGrass();
 
+	kbShader *									m_pGrassShader;
 	int											m_GrassCellsPerTerrainSide;
 
 	std::vector<kbShaderParamComponent>			m_ShaderParamList;
@@ -57,6 +58,7 @@ private:
 
     float                                       m_FakeAODarkness;
     float                                       m_FakeAOPower;
+	float										m_FakeAOClipPlaneFadeStartDist;
 
 private:
 

@@ -3,7 +3,7 @@
 //
 // Renderer implementation using DX11 API
 //
-// 2016-2018 kbEngine 2.0
+// 2016-2019 kbEngine 2.0
 //==============================================================================
 #include <D3Dcompiler.h>
 #include <d3d11_1.h>
@@ -194,7 +194,7 @@ void kbRenderWindow_DX11::BeginFrame_Internal() {
 }
 
 /**
- *	kbRenderWindow_DX11::EndFrame
+ *	kbRenderWindow_DX11::EndFrame_Internal
  */
 void kbRenderWindow_DX11::EndFrame_Internal() {
 	m_pSwapChain->Present( 1, 0 ); 
@@ -394,6 +394,7 @@ kbRenderer_DX11::kbRenderer_DX11() :
 	m_pSimpleAdditiveShader( nullptr ),
 	m_pGodRayIterationShader( nullptr ),
 	m_pMousePickerIdShader( nullptr ),
+	m_pBasicFont( nullptr ),
 	m_pBasicSamplerState( nullptr ),
 	m_pNormalMapSamplerState( nullptr ),
 	m_pShadowMapSamplerState( nullptr ),
@@ -726,6 +727,8 @@ void kbRenderer_DX11::Init_Internal( HWND hwnd, const int frameWidth, const int 
 
 	m_pSSAO = (kbShader*) g_ResourceManager.GetResource( "../../kbEngine/assets/Shaders/SSAO.kbShader", true, true );
 
+	m_pBasicFont = (kbShader*) g_ResourceManager.GetResource( "../../kbEngine/assets/Shaders/basicFont.kbShader", true, true );
+
 	// Non-resource managed shaders
 	m_pSkinnedDirectionalLightShadowShader->SetVertexShaderFunctionName( "skinnedVertexMain" );
 	m_pSkinnedDirectionalLightShadowShader->SetPixelShaderFunctionName( "skinnedPixelMain" );
@@ -954,7 +957,7 @@ int kbRenderer_DX11::CreateRenderView( HWND hwnd )
 
 	sd.BufferDesc.Width = Back_Buffer_Width;
 	sd.BufferDesc.Height = Back_Buffer_Height;
-	sd.BufferDesc.RefreshRate.Numerator = 120;
+	sd.BufferDesc.RefreshRate.Numerator = 0;
 	sd.BufferDesc.RefreshRate.Denominator = 1;
 	sd.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;//DXGI_FORMAT_B8G8R8A8_UNORM;
 	sd.BufferDesc.ScanlineOrdering = DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED;
@@ -967,8 +970,8 @@ int kbRenderer_DX11::CreateRenderView( HWND hwnd )
 	sd.BufferCount = 2;
 	sd.OutputWindow = hwnd;
 	sd.Windowed = TRUE;
-	sd.SwapEffect = DXGI_SWAP_EFFECT_FLIP_SEQUENTIAL ;
-	sd.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;
+	sd.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;
+	sd.Flags = 0;
 
 	RECT windowDimensions;
 	GetClientRect( hwnd, &windowDimensions );
@@ -1930,37 +1933,70 @@ void kbRenderer_DX11::RenderDebugText() {
 			const int characterIndex = currentCharacter - ' ' + 32;
 			const float charRow = ( float )( characterIndex / 16 ) / 16.0f;
 			const float charCol = ( float )( characterIndex % 16 ) / 16.0f;
-			pDebugTextVB[iVert + 0].position.x = startX;
-			pDebugTextVB[iVert + 0].position.y = startY;
+
+			// Drop Shadow
+			const float width = 0.005f;
+			const float height = 0.01f;
+			pDebugTextVB[iVert + 0].position.x = startX - width;
+			pDebugTextVB[iVert + 0].position.y = startY - height;
 			pDebugTextVB[iVert + 0].position.z = 0.0f;
 			pDebugTextVB[iVert + 0].uv.x = charCol;
 			pDebugTextVB[iVert + 0].uv.y = charRow;
-			pDebugTextVB[iVert + 0].SetColor( textColor );
+			pDebugTextVB[iVert + 0].SetColor( kbColor::black );
 
-			pDebugTextVB[iVert + 1].position.x = startX + charW;
-			pDebugTextVB[iVert + 1].position.y = startY;
+			pDebugTextVB[iVert + 1].position.x = startX + charW + width;
+			pDebugTextVB[iVert + 1].position.y = startY - height;
 			pDebugTextVB[iVert + 1].position.z = 0.0f;
 			pDebugTextVB[iVert + 1].uv.x = charCol + ( 1.0f / 16.0f );
 			pDebugTextVB[iVert + 1].uv.y = charRow;
-			pDebugTextVB[iVert + 1].SetColor( textColor );
+			pDebugTextVB[iVert + 1].SetColor( kbColor::black );
 
-			pDebugTextVB[iVert + 2].position.x = startX + charW;
-			pDebugTextVB[iVert + 2].position.y = startY + charW;
+			pDebugTextVB[iVert + 2].position.x = startX + charW + width;
+			pDebugTextVB[iVert + 2].position.y = startY + charW + height;
 			pDebugTextVB[iVert + 2].position.z = 0.0f;
 			pDebugTextVB[iVert + 2].uv.x = charCol + ( 1.0f / 16.0f );
 			pDebugTextVB[iVert + 2].uv.y = charRow + ( 1.0f / 16.0f );
-			pDebugTextVB[iVert + 2].SetColor( textColor );
+			pDebugTextVB[iVert + 2].SetColor( kbColor::black );
 
-			pDebugTextVB[iVert + 3].position.x = startX;
-			pDebugTextVB[iVert + 3].position.y = startY + charW;
+			pDebugTextVB[iVert + 3].position.x = startX - width;
+			pDebugTextVB[iVert + 3].position.y = startY + charW + width;
 			pDebugTextVB[iVert + 3].position.z = 0.0f;
 			pDebugTextVB[iVert + 3].uv.x = charCol;
 			pDebugTextVB[iVert + 3].uv.y = charRow + ( 1.0f / 16.0f );
-			pDebugTextVB[iVert + 3].SetColor( textColor );
+			pDebugTextVB[iVert + 3].SetColor( kbColor::black );
+
+			// Texture
+			pDebugTextVB[iVert + 4].position.x = startX;
+			pDebugTextVB[iVert + 4].position.y = startY;
+			pDebugTextVB[iVert + 4].position.z = 0.0f;
+			pDebugTextVB[iVert + 4].uv.x = charCol;
+			pDebugTextVB[iVert + 4].uv.y = charRow;
+			pDebugTextVB[iVert + 4].SetColor( textColor );
+
+			pDebugTextVB[iVert + 5].position.x = startX + charW;
+			pDebugTextVB[iVert + 5].position.y = startY;
+			pDebugTextVB[iVert + 5].position.z = 0.0f;
+			pDebugTextVB[iVert + 5].uv.x = charCol + ( 1.0f / 16.0f );
+			pDebugTextVB[iVert + 5].uv.y = charRow;
+			pDebugTextVB[iVert + 5].SetColor( textColor );
+
+			pDebugTextVB[iVert + 6].position.x = startX + charW;
+			pDebugTextVB[iVert + 6].position.y = startY + charW;
+			pDebugTextVB[iVert + 6].position.z = 0.0f;
+			pDebugTextVB[iVert + 6].uv.x = charCol + ( 1.0f / 16.0f );
+			pDebugTextVB[iVert + 6].uv.y = charRow + ( 1.0f / 16.0f );
+			pDebugTextVB[iVert + 6].SetColor( textColor );
+
+			pDebugTextVB[iVert + 7].position.x = startX;
+			pDebugTextVB[iVert + 7].position.y = startY + charW;
+			pDebugTextVB[iVert + 7].position.z = 0.0f;
+			pDebugTextVB[iVert + 7].uv.x = charCol;
+			pDebugTextVB[iVert + 7].uv.y = charRow + ( 1.0f / 16.0f );
+			pDebugTextVB[iVert + 7].SetColor( textColor );
 
 			startX += charSpacing;
 
-			iVert += 4;
+			iVert += 8;
 		}
 	}
 
@@ -1971,7 +2007,7 @@ void kbRenderer_DX11::RenderDebugText() {
 	const unsigned int offset = 0;
 
 
-	m_RenderState.SetDepthStencilState( false, kbRenderState::DepthWriteMaskZero, kbRenderState::CompareLess, false );
+	m_RenderState.SetDepthStencilState( false, kbRenderState::DepthWriteMaskZero, kbRenderState::CompareAlways, false );
 
 	ID3D11Buffer * const vertexBuffer = ( ID3D11Buffer * const ) m_DebugText->m_VertexBuffer.GetBufferPtr();
 	ID3D11Buffer * const indexBuffer = ( ID3D11Buffer * const ) m_DebugText->m_IndexBuffer.GetBufferPtr();
@@ -1985,12 +2021,12 @@ void kbRenderer_DX11::RenderDebugText() {
 
 	m_pDeviceContext->PSSetShaderResources( 0, 1, &pShaderResourceView );
 	m_pDeviceContext->PSSetSamplers( 0, 1, &m_pBasicSamplerState );
-	m_pDeviceContext->IASetInputLayout( (ID3D11InputLayout*)m_pSimpleAdditiveShader->GetVertexLayout() );
-	m_pDeviceContext->VSSetShader( (ID3D11VertexShader *)m_pSimpleAdditiveShader->GetVertexShader(), nullptr, 0 );
-	m_pDeviceContext->PSSetShader( (ID3D11PixelShader *)m_pSimpleAdditiveShader->GetPixelShader(), nullptr, 0 );
-	m_RenderState.SetBlendState( m_pSimpleAdditiveShader );
+	m_pDeviceContext->IASetInputLayout( (ID3D11InputLayout*)m_pBasicFont->GetVertexLayout() );
+	m_pDeviceContext->VSSetShader( (ID3D11VertexShader *)m_pBasicFont->GetVertexShader(), nullptr, 0 );
+	m_pDeviceContext->PSSetShader( (ID3D11PixelShader *)m_pBasicFont->GetPixelShader(), nullptr, 0 );
+	m_RenderState.SetBlendState( m_pBasicFont );
 
-	const kbShaderVarBindings_t & shaderVarBindings = m_pSimpleAdditiveShader->GetShaderVarBindings();
+	const kbShaderVarBindings_t & shaderVarBindings = m_pBasicFont->GetShaderVarBindings();
 	ID3D11Buffer *const pConstantBuffer = GetConstantBuffer( shaderVarBindings.m_ConstantBufferSizeBytes );
 
 	D3D11_MAPPED_SUBRESOURCE mappedResource;
@@ -2561,6 +2597,7 @@ void kbRenderer_DX11::RenderConsole() {
 	m_pDeviceContext->IASetInputLayout( (ID3D11InputLayout*)m_pOpaqueQuadShader->GetVertexLayout() );
 	m_pDeviceContext->VSSetShader( (ID3D11VertexShader *)m_pDebugShader->GetVertexShader(), nullptr, 0 );
 	m_pDeviceContext->PSSetShader( (ID3D11PixelShader *)m_pDebugShader->GetPixelShader(), nullptr, 0 );
+	m_RenderState.SetBlendState( m_pDebugShader );
 
 	const auto & varBindings = m_pDebugShader->GetShaderVarBindings();
 	ID3D11Buffer *const pConstantBuffer = GetConstantBuffer( varBindings.m_ConstantBufferSizeBytes );
@@ -3290,6 +3327,12 @@ void kbRenderer_DX11::RenderMesh( const kbRenderSubmesh *const pRenderMesh, cons
 
 	const kbRenderObject * pRenderObject = pRenderMesh->GetRenderObject();
 	const kbModel *const pModel = pRenderObject->m_pModel;
+	const kbModel::mesh_t & pMesh = pModel->GetMeshes()[pRenderMesh->GetMeshIdx()];
+
+	if ( pModel->IsPointCloud() == false && pMesh.m_NumTriangles == 0 ) {
+		kbWarning( "kbRenderer_DX11::RenderMesh() - Mesh %s has 0 triangles", pModel->GetFullName().c_str() );
+		return;
+	}
 
 	kbErrorCheck( pRenderObject != nullptr && pRenderObject->m_pModel != nullptr, "kbRenderer_DX11::RenderMesh() - no model found" );
 	//kbErrorCheck( pModel->GetMaterials().size() > 0, "kbRenderer_DX11::RenderMesh() - No materials found for model %s", pRenderObject->m_pModel->GetFullName().c_str() );
@@ -3308,7 +3351,7 @@ void kbRenderer_DX11::RenderMesh( const kbRenderSubmesh *const pRenderMesh, cons
 	    m_pDeviceContext->IASetPrimitiveTopology( D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST );
     }
 
-	const kbModel::mesh_t & pMesh = pModel->GetMeshes()[pRenderMesh->GetMeshIdx()];
+
 	const kbMaterial *const pMeshMaterial = ( pMesh.m_MaterialIndex < pModel->GetMaterials().size() ) ? ( &pModel->GetMaterials()[pMesh.m_MaterialIndex] ) : ( nullptr );
 
 	// Get Shader
@@ -3357,7 +3400,6 @@ void kbRenderer_DX11::RenderMesh( const kbRenderSubmesh *const pRenderMesh, cons
 			kbError( "kbRenderer_DX11::RenderMesh() - Unsupported culling mode" );
 		}
 	}
-
 
 	m_pDeviceContext->IASetInputLayout( (ID3D11InputLayout*)pShader->GetVertexLayout() );
 	m_pDeviceContext->VSSetShader( (ID3D11VertexShader *)pShader->GetVertexShader(), nullptr, 0 );
@@ -3861,6 +3903,7 @@ void kbRenderer_DX11::RT_Render2DQuad( const kbVec2 & origin, const kbVec2 & siz
 	}
 
 	m_RenderState.SetBlendState( pShader );
+	m_RenderState.SetDepthStencilState( false, kbRenderState::DepthWriteMaskZero, kbRenderState::CompareAlways, false );
 
 	ID3D11ShaderResourceView *const pShaderResourceView = (ID3D11ShaderResourceView*)m_pTextures[0]->GetGPUTexture();
 	m_pDeviceContext->PSSetShaderResources( 0, 1, &pShaderResourceView );
@@ -3886,7 +3929,7 @@ void kbRenderer_DX11::RT_Render2DQuad( const kbVec2 & origin, const kbVec2 & siz
 ID3D11Buffer * kbRenderer_DX11::SetConstantBuffer( const kbShaderVarBindings_t & shaderVarBindings, const kbShaderParamOverrides_t * shaderParamOverrides, const kbRenderObject *const pRenderObject, byte *const pInMappedBufferData ) {
 	kbMat4 worldMatrix;
 	if ( pRenderObject != nullptr ) {
-		worldMatrix.MakeScale( pRenderObject->m_Scale * m_GlobalModelScale_RenderThread );
+		worldMatrix.MakeScale( pRenderObject->m_Scale );
 		worldMatrix *= pRenderObject->m_Orientation.ToMat4();
 		worldMatrix[3] = pRenderObject->m_Position;
 	} else {

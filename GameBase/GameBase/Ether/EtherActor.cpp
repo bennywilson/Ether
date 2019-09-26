@@ -211,7 +211,7 @@ void EtherLightAnimatorComponent::Update_Internal( const float DT ) {
 		elapsedTime = fmod( elapsedTime, lastEventTime );
 	}
 
-	kbVec3 lightColor = kbVec3::zero;
+	kbVec4 lightColor = kbVec4::zero;
 	for ( int i = 1; i < m_LightColorCurve.size(); i++ ) {
 		const float eventTime = m_LightColorCurve[i].GetEventTime();
 		if ( elapsedTime < eventTime ) {

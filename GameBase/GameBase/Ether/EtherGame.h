@@ -107,6 +107,8 @@ protected:
 	virtual void								LevelLoaded_Internal() override;
 
 	virtual void								AddGameEntity_Internal( kbGameEntity *const pEntity ) override;
+	virtual void								RemoveGameEntity_Internal( kbGameEntity *const pEntity ) override;
+
 	virtual void								PreUpdate_Internal() override;
 
 	void										ProcessInput( const float deltaTimeSec );

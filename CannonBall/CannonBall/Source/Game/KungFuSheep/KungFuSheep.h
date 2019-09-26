@@ -34,10 +34,16 @@ class KungFuSheepComponent : public CannonActorComponent, IStateMachine<KungFuSh
 
 	friend class KungFuSheepStateBase<KungFuSheepState::SheepStates_t>;
 
-//---------------------------------------------------------------------------------------------------'
+//---------------------------------------------------------------------------------------------------
 public:
 
+	bool										IsCannonBalling() const;
+	void										TakeDamage( const DealAttackInfo_t<KungFuGame::eAttackType> & dealAttackInfo );
 
+	void										PlayShakeNBakeFX();
+	void										PlayBaa( const int baaType );
+
+	void										SpawnSplash();
 
 protected:
 
@@ -48,18 +54,26 @@ private:
 
 	// Data
 	kbGameEntityPtr								m_CannonBallImpactFX;
+	kbGameEntityPtr								m_ShakeNBakeFX;
+	kbGameEntityPtr								m_SplashFX;
+
 	std::vector<kbSoundData>					m_CannonBallVO;
+	std::vector<kbSoundData>					m_BaaaVO;
 	std::vector<kbSoundData>					m_CannonBallImpactSound;
+	std::vector<kbSoundData>					m_BasicAttackImpactSound;
 
 	float										m_JumpSmearMagnitude;
 	float										m_DropSmearMagnitude;
 
-	// Game
+	kbGameEntityPtr								m_HeadBand;
+
+	// Run time
+	kbGameEntityPtr								m_HeadBandInstance[2];
 
 //---------------------------------------------------------------------------------------------------
 
 	// IAnimEventListener
-	virtual void								OnAnimEvent( const kbAnimEvent & animEvent ) override;
+	virtual void								OnAnimEvent( const kbAnimEventInfo_t & animEvent ) override;
 };
 
 template<typename T>
@@ -69,6 +83,38 @@ class KungFuSheepStateBase : public CannonBallCharacterState<T> {
 public:
 
 	KungFuSheepStateBase( CannonActorComponent *const pPlayerComponent ) : CannonBallCharacterState( pPlayerComponent ) { }
+
+protected:
+
+	KungFuSheepComponent *	GetSheep() const { return (KungFuSheepComponent*)m_pActorComponent; }
+	
+	bool CheckForBlocker( const kbVec3 moveVec ) {
+
+
+		const float SheepZ = GetSheep()->GetOwnerPosition().z;
+		const kbVec3 SheepDest = GetSheep()->GetOwnerPosition() + moveVec;
+		//g_pRenderer->DrawLine( GetSheep()->GetOwnerPosition() ,  GetSheep()->GetOwnerPosition() + moveVec + kbVec3( 0, 1, 0 ) , kbColor::red );
+
+		for ( int i = 0; i < g_pCannonGame->GetGameEntities().size(); i++ ) {
+
+			kbGameEntity *const pGameEnt = g_pCannonGame->GetGameEntities()[i];
+			KungFuSnolafComponent *const pSnolaf = pGameEnt->GetComponent<KungFuSnolafComponent>();
+			if ( pSnolaf == nullptr || pSnolaf->IsDead() ) {
+				continue;
+			}
+
+			const kbVec3 snolafPos = pSnolaf->GetOwnerPosition();
+			if ( snolafPos.z < SheepZ && SheepDest.z <= snolafPos.z ) {
+				return true;
+			}
+
+			if ( snolafPos.z > SheepZ && SheepDest.z >= snolafPos.z ) {
+				return true;
+			}
+		}
+
+		return false;
+	}
 };
 
 

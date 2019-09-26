@@ -73,6 +73,8 @@ public:
 
 	void										AddForceToMass( const int massIdx, const kbVec3 & force ) { m_Masses[massIdx].m_FrameForces += force; }
 
+	void										SetClothCollisionSphere( const int idx, const kbVec4 & sphere );
+
 protected:
 
 	virtual void								RunSimulation( const float DeltaTime );
@@ -93,6 +95,7 @@ private:
 	int											m_NumConstrainIterations;
 
 	kbVec3										m_Gravity;
+
 	// Wind Data
 	kbVec3										m_MaxWindVelocity;
 	kbVec3										m_MinWindVelocity;

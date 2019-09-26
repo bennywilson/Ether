@@ -90,8 +90,21 @@
     <None Include="assets\shaders\Character\CharacterBase.kbShader" />
     <None Include="assets\shaders\Character\characterOutline.kbShader" />
     <None Include="assets\shaders\Environment\environmentBase.kbShader" />
+    <None Include="assets\shaders\Environment\environmentSkinned.kbShader" />
     <None Include="assets\shaders\FX\decal_Blend.kbShader" />
+    <None Include="assets\shaders\FX\FullScreen\FullScreen_WaterDroplets.kbShader" />
+    <None Include="assets\shaders\FX\hackClip.kbShader" />
     <None Include="assets\shaders\FX\Particle_BlendAdd.kbShader" />
+    <None Include="assets\shaders\FX\splash.kbShader" />
+    <None Include="assets\shaders\FX\wispScroller.kbShader" />
+    <None Include="assets\shaders\Lights\directionalLightToon.kbShader" />
+    <None Include="assets\shaders\Skybox\skybox_Clouds.kbShader" />
+    <None Include="assets\shaders\Skybox\skybox_Gradient.kbShader" />
+    <None Include="assets\shaders\Terrain\basicGrass.kbShader" />
+    <None Include="assets\shaders\Terrain\basicTerrain.kbShader" />
+    <None Include="assets\shaders\Terrain\basicTerrain_Reflection.kbShader" />
+    <None Include="assets\shaders\UI\Basic_UI_Widget.kbShader" />
+    <None Include="assets\shaders\Water\water_skygradientreflection.kbShader" />
     <None Include="CannonBall.ico" />
     <None Include="small.ico" />
   </ItemGroup>
@@ -100,6 +113,7 @@
     <ClInclude Include="Source\Game\CannonGame.h" />
     <ClInclude Include="Source\Game\CannonPlayer.h" />
     <ClInclude Include="Source\Game\CannonTypeInfoGeneratedClasses.h" />
+    <ClInclude Include="Source\Game\CannonUI.h" />
     <ClInclude Include="Source\Game\KungFuSheep\KungFuLevelComponent.h" />
     <ClInclude Include="Source\Game\KungFuSheep\KungFuSnolaf.h" />
     <ClInclude Include="Source\Game\KungFuSheep\KungFuSheep.h" />
@@ -111,6 +125,7 @@
     <ClCompile Include="Source\Game\CannonGame.cpp" />
     <ClCompile Include="Source\Game\CannonPlayer.cpp" />
     <ClCompile Include="Source\Game\CannonTypeInfoGeneratedClasses.cpp" />
+    <ClCompile Include="Source\Game\CannonUI.cpp" />
     <ClCompile Include="Source\Game\KungFuSheep\KungFuLevelComponent.cpp" />
     <ClCompile Include="Source\Game\KungFuSheep\KungFuSheep.cpp" />
     <ClCompile Include="Source\Game\KungFuSheep\KungFuSnolaf.cpp" />

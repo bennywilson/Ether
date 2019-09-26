@@ -67,6 +67,13 @@ public:
 	virtual void												HackEditorUpdate( const float DT, kbCamera *const pCamera ) { };
 	virtual void												HackEditorShutdown() { }
 
+	
+	template<typename T>
+	T *	GetLevelComponent() const {
+			kbErrorCheck( m_pLevelComp != nullptr && m_pLevelComp->IsA( T::GetType() ), "GetLevelComponent<T>() - Incorrect level component type" );
+			return (T*) m_pLevelComp;
+	}
+
 protected:
 
 	virtual void												InitGame_Internal() = 0;
@@ -76,9 +83,12 @@ protected:
 	virtual void												PostUpdate_Internal() { };
 	virtual void												LevelLoaded_Internal() = 0;
 	virtual void												AddGameEntity_Internal( kbGameEntity *const pEntity ) = 0;
+	virtual void												RemoveGameEntity_Internal( kbGameEntity *const pEntity ) = 0;
 
 	const kbInput_t &											GetInput() const { return m_InputManager.GetInput(); }
 	bool														IsConsoleActive() const { return m_Console.IsActive(); }
+
+	virtual void												SwapEntitiesByIdx( const size_t idx1, const size_t idx2 );
 
 private:
 
@@ -97,6 +107,7 @@ protected:
 private:
 
 	std::string													m_MapName;
+	kbLevelComponent *											m_pLevelComp;
 
 	std::vector<kbGameEntity *>									m_GameEntityList;
 	std::vector<kbGameEntity *>									m_GamePlayersList;

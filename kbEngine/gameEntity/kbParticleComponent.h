@@ -32,6 +32,7 @@ struct kbParticle_t {
 	float														m_StartRotation;
 	float														m_EndRotation;
 	float														m_Randoms[3];
+	kbVec3														m_RotationAxis;
 
 	class kbModelEmitter *										m_pSrcModelEmitter;
 
@@ -98,6 +99,7 @@ private:
 	// Editable
 	std::vector<kbMaterialComponent>							m_MaterialList;
 	float														m_TotalDuration;
+	int															m_MaxParticlesToEmit;
 	float														m_StartDelay;
 	float														m_MinParticleSpawnRate;				// Particles per second
 	float														m_MaxParticleSpawnRate;				// Particles per second
@@ -122,6 +124,8 @@ private:
 	float														m_ParticleMaxDuration;
 	kbVec4														m_ParticleStartColor;
 	kbVec4														m_ParticleEndColor;
+	std::vector<kbVectorAnimEvent>								m_SizeOverLifeTimeCurve;
+	std::vector<kbVectorAnimEvent>								m_RotationOverLifeTimeCurve;
 	std::vector<kbVectorAnimEvent>								m_ColorOverLifeTimeCurve;
 	std::vector<kbAnimEvent>									m_AlphaOverLifeTimeCurve;
 	kbVec3														m_Gravity;
@@ -130,13 +134,14 @@ private:
 	EBillboardType												m_ParticleBillboardType;
 	std::vector<kbModelEmitter>									m_ModelEmitter;
 	float														m_TranslucencySortBias;
-
+	bool														m_DebugPlayEntity;
 
 	// Non-editable
 	float														m_LeftOverTime;
 	float														m_TimeAlive;
 	int															m_BurstCount;
 	float														m_StartDelayRemaining;
+	int															m_NumEmittedParticles;
 
 	kbRenderObject												m_RenderObject;
 

@@ -97,6 +97,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <None Include="assets\Shaders\alphaParticles.kbShader" />
+    <None Include="assets\Shaders\basicFont.kbShader" />
     <None Include="assets\Shaders\basicMultiplyBlend.kbShader" />
     <None Include="assets\Shaders\basicParticle.kbShader" />
     <None Include="assets\Shaders\basicShader.kbShader" />
@@ -148,6 +149,7 @@
     <ClInclude Include="gameEntity\kbGame.h" />
     <ClInclude Include="gameEntity\kbGameEntity.h" />
     <ClInclude Include="gameEntity\kbLevelComponent.h" />
+    <ClInclude Include="gameEntity\kbLevelDirector.h" />
     <ClInclude Include="gameEntity\kbLightComponent.h" />
     <ClInclude Include="gameEntity\kbModelComponent.h" />
     <ClInclude Include="gameEntity\kbParticleComponent.h" />
@@ -159,6 +161,7 @@
     <ClInclude Include="gameEntity\kbTypeInfo.h" />
     <ClInclude Include="gameEntity\kbGameEntityHeader.h" />
     <ClInclude Include="gameEntity\kbTypeInfoGeneratedClasses.h" />
+    <ClInclude Include="gameEntity\kbUIComponent.h" />
     <ClInclude Include="math\kbMath.h" />
     <ClInclude Include="math\kbPlane.h" />
     <ClInclude Include="math\kbQuaternion.h" />
@@ -239,6 +242,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="gameEntity\kbLevelComponent.cpp" />
+    <ClCompile Include="gameEntity\kbLevelDirector.cpp" />
     <ClCompile Include="gameEntity\kbLightComponent.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
@@ -264,6 +268,7 @@
     <ClCompile Include="gameEntity\kbTypeInfo.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="gameEntity\kbUIComponent.cpp" />
     <ClCompile Include="math\kbMath.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>

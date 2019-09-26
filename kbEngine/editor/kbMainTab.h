@@ -13,6 +13,8 @@
  */
 class kbMainTab : public kbWidget, public Fl_Tabs {
 
+	friend class kbEditor;
+
 //-------------------------------------------------------------------------------------------------------------------------------------------------------------
 public:
 
@@ -37,13 +39,15 @@ private:
 	void													EntityTransformedCB( const widgetCBObject *const widgetCBObject );
 	void													ManipulatorEvent( const bool bClicked, const kbVec2i & mouseXY );
 
+	kbManipulator &											GetManipulator() { return m_Manipulator; }
+
 	kbEditorWindow *										GetCurrentWindow();
 
 	kbEditorWindow *										m_pEditorWindow;
 	kbEditorWindow *										m_pModelViewerWindow;
 	kbEditorWindow *										m_pGameWindow;
 
-	std::vector< Fl_Group * >								m_Groups;
+	std::vector<Fl_Group *>									m_Groups;
 
 	//
 	const kbModel *											m_pCurrentlySelectedResource;

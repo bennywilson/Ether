@@ -57,7 +57,7 @@ void kbStaticModelComponent::SetEnable_Internal( const bool isEnabled ) {
 		m_RenderObject.m_pModel = m_pModel;
 		m_RenderObject.m_Position = GetOwner()->GetPosition();
 		m_RenderObject.m_RenderPass = m_RenderPass;
-		m_RenderObject.m_Scale = GetOwner()->GetScale();
+		m_RenderObject.m_Scale = GetOwner()->GetScale() * kbLevelComponent::GetGlobalModelScale();
 		m_RenderObject.m_TranslucencySortBias = m_TranslucencySortBias;
 
 		RefreshMaterials( false );
@@ -78,7 +78,7 @@ void kbStaticModelComponent::Update_Internal( const float DeltaTime ) {
 	if ( m_pModel != nullptr && GetOwner()->IsDirty() ) {
 		m_RenderObject.m_Position = GetOwner()->GetPosition();
 		m_RenderObject.m_Orientation = GetOwner()->GetOrientation();
-		m_RenderObject.m_Scale = GetOwner()->GetScale();
+		m_RenderObject.m_Scale = GetOwner()->GetScale() * kbLevelComponent::GetGlobalModelScale();
 		m_RenderObject.m_pModel = m_pModel;
 
 		g_pRenderer->UpdateRenderObject( m_RenderObject );

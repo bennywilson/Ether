@@ -94,6 +94,8 @@ DEFINE_KBCLASS(kbAnimComponent)
 
 DEFINE_KBCLASS(kbSkeletalModelComponent)
 
+DEFINE_KBCLASS(kbFlingPhysicsComponent)
+
 DEFINE_KBCLASS(kbGrass)
 
 DEFINE_KBCLASS(kbTerrainComponent)
@@ -135,5 +137,13 @@ DEFINE_KBCLASS(kbSoundData)
 DEFINE_KBCLASS(kbDebugSphereCollision)
 
 DEFINE_KBCLASS(kbLevelComponent)
+
+DEFINE_KBCLASS(kbShaderModifierComponent)
+
+DEFINE_KBCLASS(kbDeleteEntityComponent)
+
+DEFINE_KBCLASS(kbPlaySoundComponent)
+
+DEFINE_KBCLASS(kbUIComponent)
 
 typedef kbResource * kbResourcePtr;

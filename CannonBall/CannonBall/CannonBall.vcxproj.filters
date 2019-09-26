@@ -31,6 +31,9 @@
     <ClInclude Include="Source\Game\KungFuSheep\KungFuLevelComponent.h">
       <Filter>Source\Game\KungFuSheep</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Game\CannonUI.h">
+      <Filter>Source\Game</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="assets\shaders\Character\CharacterBase.kbShader">
@@ -56,6 +59,45 @@
     </None>
     <None Include="assets\shaders\FX\Particle_BlendAdd.kbShader">
       <Filter>Shaders\FX</Filter>
+    </None>
+    <None Include="assets\shaders\FX\wispScroller.kbShader">
+      <Filter>Shaders\FX</Filter>
+    </None>
+    <None Include="assets\shaders\Skybox\skybox_Clouds.kbShader">
+      <Filter>Shaders\Skybox</Filter>
+    </None>
+    <None Include="assets\shaders\Skybox\skybox_Gradient.kbShader">
+      <Filter>Shaders\Skybox</Filter>
+    </None>
+    <None Include="assets\shaders\Terrain\basicGrass.kbShader">
+      <Filter>Shaders\Terrain</Filter>
+    </None>
+    <None Include="assets\shaders\Terrain\basicTerrain.kbShader">
+      <Filter>Shaders\Terrain</Filter>
+    </None>
+    <None Include="assets\shaders\Environment\environmentSkinned.kbShader">
+      <Filter>Shaders\Environment</Filter>
+    </None>
+    <None Include="assets\shaders\Water\water_skygradientreflection.kbShader">
+      <Filter>Shaders\Water</Filter>
+    </None>
+    <None Include="assets\shaders\Terrain\basicTerrain_Reflection.kbShader">
+      <Filter>Shaders\Terrain</Filter>
+    </None>
+    <None Include="assets\shaders\FX\splash.kbShader">
+      <Filter>Shaders\FX</Filter>
+    </None>
+    <None Include="assets\shaders\FX\FullScreen\FullScreen_WaterDroplets.kbShader">
+      <Filter>Shaders\FX\FullScreen</Filter>
+    </None>
+    <None Include="assets\shaders\UI\Basic_UI_Widget.kbShader">
+      <Filter>Shaders\UI</Filter>
+    </None>
+    <None Include="assets\shaders\FX\hackClip.kbShader">
+      <Filter>Shaders\FX</Filter>
+    </None>
+    <None Include="assets\shaders\Lights\directionalLightToon.kbShader">
+      <Filter>Shaders\Lights</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -86,6 +128,24 @@
     <Filter Include="Shaders\FX">
       <UniqueIdentifier>{60b0e1a5-c1fa-4460-8259-0ac42395716c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Shaders\Skybox">
+      <UniqueIdentifier>{17db3547-c554-44e7-a039-5f31a369f378}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shaders\Terrain">
+      <UniqueIdentifier>{5c522b62-b221-4f05-9333-55d220bd65e2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shaders\Water">
+      <UniqueIdentifier>{5738bacb-891d-472e-901f-8cf2e9efcdeb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shaders\FX\FullScreen">
+      <UniqueIdentifier>{85c44c92-50b8-41ad-8bf4-1a63990dd8b6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shaders\UI">
+      <UniqueIdentifier>{0cea3bc8-fb5c-4827-b78d-2908aad2fee7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shaders\Lights">
+      <UniqueIdentifier>{d3f9c7e5-6250-474e-81fe-64ce5723590b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Game\CannonPlayer.cpp">
@@ -111,6 +171,9 @@
     </ClCompile>
     <ClCompile Include="Source\Game\KungFuSheep\KungFuLevelComponent.cpp">
       <Filter>Source\Game\KungFuSheep</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Game\CannonUI.cpp">
+      <Filter>Source\Game</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

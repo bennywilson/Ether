@@ -81,6 +81,9 @@ private:
 	kbEditorWindow *										m_pGameWindow;
 	Fl_Choice *												m_pSpeedChoice;
 
+	Fl_Input *												m_pXFormInput;
+	float													m_XFormAmount;
+
 	// widgets
 	class kbMainTab *										m_pMainTab;
 	class kbResourceTab *									m_pResourceTab;
@@ -116,6 +119,12 @@ private:
 	static void												TranslationButtonCB( Fl_Widget *, void * );
 	static void												RotationButtonCB( Fl_Widget *, void * );
 	static void												ScaleButtonCB( Fl_Widget *, void * );
+	static void												XPlusAdjustButtonCB( Fl_Widget *, void * );
+	static void												YPlusAdjustButtonCB( Fl_Widget *, void * );
+	static void												ZPlusAdjustButtonCB( Fl_Widget *, void * );
+	static void												XNegAdjustButtonCB(Fl_Widget *, void *);
+	static void												YNegAdjustButtonCB(Fl_Widget *, void *);
+	static void												ZNegAdjustButtonCB(Fl_Widget *, void *);
 	static void												AdjustCameraSpeedCB( Fl_Widget *, void * );
 	static void												ToggleIconsCB( Fl_Widget *, void * );
 	static void												OutputCB( kbOutputMessageType_t, const char * );

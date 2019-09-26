@@ -106,7 +106,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 		wc.cbWndExtra    = 0;
 		RegisterClass(&wc);
 
-		DWORD wsStyle = WS_POPUP | WS_OVERLAPPEDWINDOW;
+		DWORD wsStyle = WS_POPUP | WS_OVERLAPPEDWINDOW | WS_MAXIMIZE;
 
 		if ( MonitorIdx > 0 ) {
 			EnumDisplayMonitors( nullptr, nullptr, EnumDisplayMonitorsCB, 0 );
@@ -240,7 +240,7 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 	bool bRenderVR = false;
 	bool bUseVRTrackingOnly = false;
 
-	if ( GetAsyncKeyState( VK_MBUTTON ) ) {
+	if ( GetKeyState( VK_CAPITAL ) ) {
 		g_UseEditor = true;
 	}
 

@@ -2,12 +2,15 @@
 // kbVector.cpp
 //
 //
-// 2016-2018 kbEngine 2.0
+// 2016-2019 kbEngine 2.0
 //===================================================================================================
 #include "kbCore.h"
 #include "kbVector.h"
 #include "kbPlane.h"
 #include "kbQuaternion.h"
+
+const kbVec2 kbVec2::zero( 0.0f, 0.0f );
+const kbVec2 kbVec2::one( 1.0f, 1.0f );
 
 const kbVec3 kbVec3::right( 1.0f, 0.0f, 0.0f );
 const kbVec3 kbVec3::up( 0.0f, 1.0f, 0.0f );

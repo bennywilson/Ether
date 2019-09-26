@@ -6,7 +6,10 @@
 //==============================================================================
 #include "kbCore.h"
 #include "kbSoundManager.h"
-
+#include "kbQuaternion.h"
+#include "kbVector.h"
+#include "kbGameEntityHeader.h"
+#include "kbLevelComponent.h"
 
 /**
  *	kbWave::kbWave
@@ -295,7 +298,7 @@ void kbSoundManager::PlayWave( kbWaveFile *const pWaveFile, const float inVolume
 	HRESULT hr = pVoice->m_pVoice->SubmitSourceBuffer( &buffer );
 	kbErrorCheck( SUCCEEDED( hr ), "kbSoundManager::PlayWave() - Failed to submit audio buffer" );
 
-	pVoice->m_pVoice->SetVolume( inVolume );
+	pVoice->m_pVoice->SetVolume( inVolume * kbLevelComponent::GetGlobalVolumeScale() );
 
 	pVoice->m_pVoice->SetFrequencyRatio( m_FrequencyRatio );
 	hr = pVoice->m_pVoice->Start( 0 );

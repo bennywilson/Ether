@@ -6,6 +6,29 @@
 #ifndef _KUNGFULEVELCOMPONENT_H_
 #define _KUNGFULEVELCOMPONENT_H_
 
+#include "CannonUI.h"
+
+namespace KungFuGame {
+
+	enum eKungFuGame_State {
+		MainMenu = 0,
+		Intro,
+		Gameplay,
+		PlayerDead,
+		Paused,
+		NumStates
+	 };
+
+	enum eAttackType {
+		Punch_Kick,
+		Hug,
+		Shake,
+		Cannonball,
+	};
+};
+
+
+
 
 /**
  *	KungFuLevelComponent
@@ -17,6 +40,15 @@ class KungFuLevelComponent : public CannonLevelComponent {
 //-------------------------------------------------------------------------------------------------------------------------------------------------------------
 public:
 
+	void										SpawnEnemy();
+	void										SpawnSheep();
+
+	AttackHitInfo_t								DoAttack( const DealAttackInfo_t<KungFuGame::eAttackType> & dealAttackInfo );
+	void										UpdateSheepHealthBar( const float healthVal );
+
+	void										DoWaterDropletScreenFX();
+	void										DoSplashSound();
+
 protected:
 
 	virtual void								SetEnable_Internal( const bool bEnable ) override;
@@ -24,7 +56,27 @@ protected:
 
 private:
 
-	int											m_Dummy;
+	// Data
+	kbGameEntityPtr								m_SnolafPrefab;
+	kbGameEntityPtr								m_SheepPrefab;
+
+	kbGameEntityPtr								m_WaterDropletScreenFX;
+	std::vector<kbSoundData>					m_WaterSplashSound;
+
+	// Runtime
+	float										m_WaterDropletFXStartTime;
+
+	const static int NumWaterSplashes = 2;
+	struct waterSplashFX_t {
+		kbGameEntityPtr							m_Entity;
+		float									m_Duration;
+		float									m_InitialDelay;
+	};
+	waterSplashFX_t								m_WaterSplashFXInst[NumWaterSplashes];
+
+	float										m_LastWaterSplashSoundTime;
+
+	CannonHealthBarUIComponent *				m_pHealthBar;
 };
 
 

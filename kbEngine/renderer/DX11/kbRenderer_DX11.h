@@ -489,6 +489,7 @@ private:
 	kbShader *									m_pGodRayIterationShader;
 	kbShader *									m_pMousePickerIdShader;
 	kbShader *									m_pSSAO;
+	kbShader *									m_pBasicFont;
 
 	// Non-resource managed shaders (Game assets cannot reference these).  These have to be manually released
 	kbShader *									m_pSkinnedDirectionalLightShadowShader;

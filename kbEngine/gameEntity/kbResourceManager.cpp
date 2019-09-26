@@ -498,7 +498,6 @@ void kbResourceManager::DumpPackageInfo() {
 void kbResourceManager::Shutdown() {
 	for ( auto it = m_ResourcesMap.begin(); it != m_ResourcesMap.end(); ++it ) {
 		kbResource *const pResource = it->second;
-		kbLog( "Deleting %s", it->first.c_str() );
 		pResource->Release();
 		delete pResource;
 	}

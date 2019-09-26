@@ -65,6 +65,8 @@ private:
 
 	std::vector<kbShaderParamOverrides_t>		m_ManipulatorMaterials;
 
+	kbVec4										m_NextTransformFromInput;
+
 	// draw stuff
 	kbVec3 vecToGrabPoint;
 	kbVec3 vecToNewPoint;

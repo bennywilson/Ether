@@ -2,7 +2,7 @@
 // kbGameEntity.cpp
 //
 //
-// 2016-2018 kbEngine 2.0
+// 2016-2019 kbEngine 2.0
 //===================================================================================================
 #include "kbCore.h"
 #include "kbVector.h"
@@ -403,9 +403,11 @@ void kbGameEntity::RenderSync() {
 void kbGameEntity::CalculateWorldMatrix( kbMat4 & inOutMatrix ) const {
 
 	kbMat4 scaleMat( kbMat4::identity );
-	scaleMat[0].x = GetScale().x;
-	scaleMat[1].y = GetScale().y;
-	scaleMat[2].z = GetScale().z;
+
+	const float modelScale = kbLevelComponent::GetGlobalModelScale();
+	scaleMat[0].x = GetScale().x * modelScale;
+	scaleMat[1].y = GetScale().y * modelScale;
+	scaleMat[2].z = GetScale().z * modelScale;
 
 	inOutMatrix = scaleMat * GetOrientation().ToMat4();
 	inOutMatrix[3] = GetPosition();

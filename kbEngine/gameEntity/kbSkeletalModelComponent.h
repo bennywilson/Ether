@@ -61,6 +61,8 @@ public:
 	std::vector<kbBoneMatrix_t> &				GetFinalBoneMatrices() { return m_BindToLocalSpaceMatrices; }
 	const std::vector<kbBoneMatrix_t> &			GetFinalBoneMatrices() const { return m_BindToLocalSpaceMatrices; }
 
+	void										SetAnimationTimeScaleMultiplier( const kbString & animationName, const float factor );
+
 	// Animation
 	void										PlayAnimation( const kbString & AnimationName, const float BlendLength, bool bRestartIfAlreadyPlaying, const kbString desiredNextAnimation = kbString::EmptyString, const float desiredNextAnimBlendLength = 0.0f );
 	bool										IsPlaying( const kbString & AnimationName ) const;
@@ -73,6 +75,7 @@ public:
 	float										GetCurAnimLengthSeconds() const { if ( m_CurrentAnimation == -1 || m_Animations[m_CurrentAnimation].m_pAnimation == NULL ) return -1.0f; return m_Animations[m_CurrentAnimation].m_pAnimation->GetLengthInSeconds(); }
 
 	const kbString *							GetCurAnimationName() const;
+	const kbString *							GetNextAnimationName() const;
 
 	void										RegisterAnimEventListener( IAnimEventListener *const pListener );
 	void										UnregisterAnimEventListener( IAnimEventListener *const pListener );
@@ -96,9 +99,49 @@ protected:
 	float										m_BlendStartTime;
 	float										m_BlendLength;
 
+	std::vector<float>							m_AnimationTimeScaleMultipliers;
+
 	// Debug
 	int											m_DebugAnimIdx;
 	float										m_DebugAnimTime;
+};
+
+/**
+ *	kbFlingPhysicsComponent
+ */
+class kbFlingPhysicsComponent: public kbGameComponent {
+
+	KB_DECLARE_COMPONENT( kbFlingPhysicsComponent, kbGameComponent );
+
+//---------------------------------------------------------------------------------------------------
+public:
+
+protected:
+
+	virtual void								SetEnable_Internal( const bool isEnabled ) override;
+	virtual void								Update_Internal( const float DeltaTime ) override;
+
+private:
+
+	// Editor
+	kbVec3										m_MinLinearVelocity;
+	kbVec3										m_MaxLinearVelocity;
+	float										m_MinAngularSpeed;
+	float										m_MaxAngularSpeed;
+	kbVec3										m_Gravity;
+
+	// Run time
+	kbVec3										m_OwnerStartPos;
+	kbQuat										m_OwnerStartRotation;
+
+	kbVec3										m_Velocity;
+	kbVec3										m_RotationAxis;
+
+	float										m_CurRotationAngle;
+	float										m_RotationSpeed;
+
+	float										m_FlingStartTime;
+
 };
 
 #endif

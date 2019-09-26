@@ -68,7 +68,7 @@ GenerateClass(
 	kbVectorAnimEvent,
 	AddField( "EventName", KBTYPEINFO_KBSTRING, kbVectorAnimEvent, m_EventName, false, "" )
 	AddField( "EventTime", KBTYPEINFO_FLOAT, kbVectorAnimEvent, m_EventTime, false, "" )
-	AddField( "EventValue", KBTYPEINFO_VECTOR, kbVectorAnimEvent, m_EventValue, false, "" )
+	AddField( "EventValue", KBTYPEINFO_VECTOR4, kbVectorAnimEvent, m_EventValue, false, "" )
 )
 
 
@@ -160,6 +160,15 @@ GenerateClass(
 )
 
 GenerateClass( 
+	kbFlingPhysicsComponent,
+	AddField( "MinLinearVelocity", KBTYPEINFO_VECTOR, kbFlingPhysicsComponent, m_MinLinearVelocity, false, "" )
+	AddField( "MaxLinearVelocity", KBTYPEINFO_VECTOR, kbFlingPhysicsComponent, m_MaxLinearVelocity, false, "" )
+	AddField( "MinAngularSpeed", KBTYPEINFO_FLOAT, kbFlingPhysicsComponent, m_MinAngularSpeed, false, "" )
+	AddField( "MaxAngularSpeed", KBTYPEINFO_FLOAT, kbFlingPhysicsComponent, m_MaxAngularSpeed, false, "" )
+	AddField( "Gravity", KBTYPEINFO_VECTOR, kbFlingPhysicsComponent, m_MaxLinearVelocity, false, "" )
+)
+
+GenerateClass( 
 	kbLightComponent,
 	AddField( "Color", KBTYPEINFO_VECTOR4, kbLightComponent, m_Color, false, "" )
 	AddField( "CastsShadows", KBTYPEINFO_BOOL, kbLightComponent, m_bCastsShadow, false, "" )
@@ -202,6 +211,7 @@ GenerateClass(
 
 GenerateClass(
 	kbGrass,
+	AddField( "GrassShader", KBTYPEINFO_SHADER, kbGrass, m_pGrassShader, false, "" )
 	AddField( "GrassCellsPerTerrainSide", KBTYPEINFO_INT, kbGrass, m_GrassCellsPerTerrainSide, false, "" )
 	AddField( "PatchStartCullDistance", KBTYPEINFO_FLOAT, kbGrass, m_PatchStartCullDistance, false, "" )
 	AddField( "PatchEndCullDistance", KBTYPEINFO_FLOAT, kbGrass, m_PatchEndCullDistance, false, "" )
@@ -214,6 +224,7 @@ GenerateClass(
 	AddField( "MaxPatchJitterOffset", KBTYPEINFO_FLOAT, kbGrass, m_MaxPatchJitterOffset, false, "" )
     AddField( "FakeAODarkness", KBTYPEINFO_FLOAT, kbGrass, m_FakeAODarkness, false, "" )
     AddField( "FakeAOPower", KBTYPEINFO_FLOAT, kbGrass, m_FakeAOPower, false, "" )
+	AddField( "FakeAOClipPlaneFadeOutDist", KBTYPEINFO_FLOAT, kbGrass, m_FakeAOClipPlaneFadeStartDist, false, "" )
 	AddField( "ShaderParams", KBTYPEINFO_STRUCT, kbGrass, m_ShaderParamList, true, "kbShaderParamComponent" )
 )
 
@@ -236,12 +247,14 @@ GenerateEnum(
 
 GenerateClass(
 	kbParticleComponent,
+	AddField( "DebugPlayEntity", KBTYPEINFO_BOOL, kbParticleComponent, m_DebugPlayEntity, false, "" )
 	AddField( "TranslucencySortBias", KBTYPEINFO_FLOAT, kbParticleComponent, m_TranslucencySortBias, false, "" )
 	AddField( "MaterialList", KBTYPEINFO_STRUCT, kbParticleComponent, m_MaterialList, true, "kbMaterialComponent" )
 	AddField( "TotalDuration", KBTYPEINFO_FLOAT, kbParticleComponent, m_TotalDuration, false, "" )
 	AddField( "StartDelay", KBTYPEINFO_FLOAT, kbParticleComponent, m_StartDelay, false, "" )
 	AddField( "MinSpawnRate", KBTYPEINFO_FLOAT, kbParticleComponent, m_MinParticleSpawnRate, false, "" )
 	AddField( "MaxSpawnRate", KBTYPEINFO_FLOAT, kbParticleComponent, m_MaxParticleSpawnRate, false, "" )
+	AddField( "MaxParticlesToEmit", KBTYPEINFO_INT, kbParticleComponent, m_MaxParticlesToEmit, false, "" )
 
 	AddField( "MinDuration", KBTYPEINFO_FLOAT, kbParticleComponent, m_ParticleMinDuration, false, "" )
 	AddField( "MaxDuration", KBTYPEINFO_FLOAT, kbParticleComponent, m_ParticleMaxDuration, false, "" )
@@ -261,6 +274,9 @@ GenerateClass(
 
 	AddField( "StartColor", KBTYPEINFO_VECTOR4, kbParticleComponent, m_ParticleStartColor, false, "" )
 	AddField( "EndColor", KBTYPEINFO_VECTOR4, kbParticleComponent, m_ParticleEndColor, false, "" )
+
+	AddField( "SizeOverLife", KBTYPEINFO_STRUCT, kbParticleComponent, m_SizeOverLifeTimeCurve, true, "kbVectorAnimEvent" )
+	AddField( "RotationOverLife", KBTYPEINFO_STRUCT, kbParticleComponent, m_RotationOverLifeTimeCurve, true, "kbVectorAnimEvent" )
 	AddField( "ColorOverLife", KBTYPEINFO_STRUCT, kbParticleComponent, m_ColorOverLifeTimeCurve, true, "kbVectorAnimEvent" )
 	AddField( "AlphaOverLife", KBTYPEINFO_STRUCT, kbParticleComponent, m_AlphaOverLifeTimeCurve, true, "kbAnimEvent" )
 
@@ -320,6 +336,14 @@ GenerateClass(
 	AddField( "WaveFile", KBTYPEINFO_SOUNDWAVE, kbSoundData, m_pWaveFile, false, "" )
 	AddField( "Radius", KBTYPEINFO_FLOAT, kbSoundData, m_Radius, false, "" )
 	AddField( "Volume", KBTYPEINFO_FLOAT, kbSoundData, m_Volume, false, "" )
+	AddField( "TestPlaySoundNow", KBTYPEINFO_BOOL, kbSoundData, m_bDebugPlaySound, false, "" )
+)
+
+GenerateClass(
+	kbPlaySoundComponent,
+	AddField( "MinStartDelay", KBTYPEINFO_FLOAT, kbPlaySoundComponent, m_MinStartDelay, false, "" )
+	AddField( "MaxStartDelay", KBTYPEINFO_FLOAT, kbPlaySoundComponent, m_MaxStartDelay, false, "" )
+	AddField( "SoundData", KBTYPEINFO_STRUCT, kbPlaySoundComponent, m_SoundData, true, "kbSoundData" )
 )
 
 GenerateClass(
@@ -327,10 +351,28 @@ GenerateClass(
 	AddField( "CollisionModel", KBTYPEINFO_STATICMODEL, kbDebugSphereCollision, m_pCollisionModel, false, "" )
 )
 
-
 GenerateClass(
 	kbLevelComponent,
 	AddField( "LevelType", KBTYPEINFO_ENUM, kbLevelComponent, m_LevelType, false, "ELevelType" )
 	AddField( "GlobalModelScale", KBTYPEINFO_FLOAT, kbLevelComponent, m_GlobalModelScale, false, "" )
 	AddField( "EditorIconScale", KBTYPEINFO_FLOAT, kbLevelComponent, m_EditorIconScale, false, "" )
+	AddField( "GlobalVolumeScale", KBTYPEINFO_FLOAT, kbLevelComponent, m_GlobalVolumeScale, false, "" )
+)
+
+GenerateClass(
+	kbShaderModifierComponent,
+	AddField( "ShaderVectorEvents", KBTYPEINFO_STRUCT, kbShaderModifierComponent, m_ShaderVectorEvents, true, "kbVectorAnimEvent" )
+)
+
+GenerateClass(
+	kbDeleteEntityComponent,
+	AddField( "Dummy", KBTYPEINFO_FLOAT, kbDeleteEntityComponent, m_Dummy, false, "" )
+)
+
+GenerateClass(
+	kbUIComponent,
+	AddField( "AuthoredWidth", KBTYPEINFO_INT, kbUIComponent, m_AuthoredWidth, false, "" )
+	AddField( "AuthoredHeight", KBTYPEINFO_INT, kbUIComponent, m_AuthoredHeight, false, "" )
+	AddField( "NormalizedAnchorPoint", KBTYPEINFO_VECTOR, kbUIComponent, m_NormalizedAnchorPt, false, "" )
+	AddField( "UIToScreenSizeRatio", KBTYPEINFO_VECTOR, kbUIComponent, m_UIToScreenSizeRatio, false, "" )
 )
