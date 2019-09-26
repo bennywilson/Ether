@@ -152,15 +152,10 @@ struct vertexLayout {
 	}
 };
 
-struct kbVertexHash
-{
-     size_t operator()( const vertexLayout & key ) const
-     {
-		 size_t hash = ((int)key.color[0] << 24) | ((int)key.color[1] << 16) | ((int)key.color[2] << 8) | ((int)key.color[3]);
-		 hash ^= ((int)key.normal[0] << 24) | ((int)key.normal[1] << 16) | ((int)key.normal[2] << 8) | ((int)key.normal[3]);
-		 hash ^= ((int)key.tangent[0] << 24) | ((int)key.tangent[1] << 16) | ((int)key.tangent[2] << 8) | ((int)key.tangent[3]);
-
-		 return hash;
+struct kbVertexHash {
+     size_t operator()( const vertexLayout & key ) const {
+		 float val = key.position.x + key.position.y + key.position.z;
+		 return (INT_PTR)val;
      }
  };
 
