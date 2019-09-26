@@ -257,6 +257,15 @@ void EtherGame::AddGameEntity_Internal( kbGameEntity *const pEntity ) {
 }
 
 /**
+ *	EtherGame::RemoveEntity_Internal
+ */
+void EtherGame::RemoveGameEntity_Internal( kbGameEntity *const pEntity ) {
+
+//	kbGame::RemoveGameEntity_Internal( pEntity );
+
+}
+
+/**
  *	EtherGame::ProcessInput
  */
 void EtherGame::ProcessInput( const float DT ) {

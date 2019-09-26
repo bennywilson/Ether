@@ -3327,6 +3327,12 @@ void kbRenderer_DX11::RenderMesh( const kbRenderSubmesh *const pRenderMesh, cons
 
 	const kbRenderObject * pRenderObject = pRenderMesh->GetRenderObject();
 	const kbModel *const pModel = pRenderObject->m_pModel;
+	const kbModel::mesh_t & pMesh = pModel->GetMeshes()[pRenderMesh->GetMeshIdx()];
+
+	if ( pModel->IsPointCloud() == false && pMesh.m_NumTriangles == 0 ) {
+		kbWarning( "kbRenderer_DX11::RenderMesh() - Mesh %s has 0 triangles", pModel->GetFullName().c_str() );
+		return;
+	}
 
 	kbErrorCheck( pRenderObject != nullptr && pRenderObject->m_pModel != nullptr, "kbRenderer_DX11::RenderMesh() - no model found" );
 	//kbErrorCheck( pModel->GetMaterials().size() > 0, "kbRenderer_DX11::RenderMesh() - No materials found for model %s", pRenderObject->m_pModel->GetFullName().c_str() );
@@ -3345,7 +3351,7 @@ void kbRenderer_DX11::RenderMesh( const kbRenderSubmesh *const pRenderMesh, cons
 	    m_pDeviceContext->IASetPrimitiveTopology( D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST );
     }
 
-	const kbModel::mesh_t & pMesh = pModel->GetMeshes()[pRenderMesh->GetMeshIdx()];
+
 	const kbMaterial *const pMeshMaterial = ( pMesh.m_MaterialIndex < pModel->GetMaterials().size() ) ? ( &pModel->GetMaterials()[pMesh.m_MaterialIndex] ) : ( nullptr );
 
 	// Get Shader
@@ -3897,6 +3903,7 @@ void kbRenderer_DX11::RT_Render2DQuad( const kbVec2 & origin, const kbVec2 & siz
 	}
 
 	m_RenderState.SetBlendState( pShader );
+	m_RenderState.SetDepthStencilState( false, kbRenderState::DepthWriteMaskZero, kbRenderState::CompareAlways, false );
 
 	ID3D11ShaderResourceView *const pShaderResourceView = (ID3D11ShaderResourceView*)m_pTextures[0]->GetGPUTexture();
 	m_pDeviceContext->PSSetShaderResources( 0, 1, &pShaderResourceView );

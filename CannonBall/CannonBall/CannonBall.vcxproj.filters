@@ -96,6 +96,9 @@
     <None Include="assets\shaders\FX\hackClip.kbShader">
       <Filter>Shaders\FX</Filter>
     </None>
+    <None Include="assets\shaders\Lights\directionalLightToon.kbShader">
+      <Filter>Shaders\Lights</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Shaders">
@@ -139,6 +142,9 @@
     </Filter>
     <Filter Include="Shaders\UI">
       <UniqueIdentifier>{0cea3bc8-fb5c-4827-b78d-2908aad2fee7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shaders\Lights">
+      <UniqueIdentifier>{d3f9c7e5-6250-474e-81fe-64ce5723590b}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

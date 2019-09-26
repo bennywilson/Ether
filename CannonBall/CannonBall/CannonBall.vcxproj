@@ -97,6 +97,7 @@
     <None Include="assets\shaders\FX\Particle_BlendAdd.kbShader" />
     <None Include="assets\shaders\FX\splash.kbShader" />
     <None Include="assets\shaders\FX\wispScroller.kbShader" />
+    <None Include="assets\shaders\Lights\directionalLightToon.kbShader" />
     <None Include="assets\shaders\Skybox\skybox_Clouds.kbShader" />
     <None Include="assets\shaders\Skybox\skybox_Gradient.kbShader" />
     <None Include="assets\shaders\Terrain\basicGrass.kbShader" />

@@ -2,7 +2,7 @@ kbGameEntity 0 0 0 0 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		Name = "Entity_60"
+		Name = "Entity_59"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
 		Position = 0.000000 0.000000 0.000000
 		Scale = 1.000000 1.000000 1.000000
@@ -484,7 +484,7 @@ kbGameEntity 0 0 0 0 {
 						Enabled = 0
 						LifeTime =  -1.000000
 						ParamName = "Mat1Specular"
-						Texture = NULL
+						Texture = ..\..\kbengine\assets\textures\black.bmp
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 					kbShaderParamComponent { 
@@ -505,7 +505,7 @@ kbGameEntity 0 0 0 0 {
 						Enabled = 0
 						LifeTime =  -1.000000
 						ParamName = "Mat2Specular"
-						Texture = NULL
+						Texture = ..\..\kbengine\assets\textures\black.bmp
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 					kbShaderParamComponent { 
@@ -526,7 +526,7 @@ kbGameEntity 0 0 0 0 {
 						Enabled = 0
 						LifeTime =  -1.000000
 						ParamName = "Mat3Specular"
-						Texture = NULL
+						Texture = ..\..\kbengine\assets\textures\black.bmp
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 					kbShaderParamComponent { 
@@ -547,7 +547,7 @@ kbGameEntity 0 0 0 0 {
 						Enabled = 0
 						LifeTime =  -1.000000
 						ParamName = "Mat4Specular"
-						Texture = NULL
+						Texture = ..\..\kbengine\assets\textures\black.bmp
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 					kbShaderParamComponent { 
@@ -565,7 +565,7 @@ kbGameEntity 0 0 0 0 {
 			kbGrass { 
 				Enabled = 1
 				LifeTime =  -1.000000
-				BladeMaxHeight =  25.000000
+				BladeMaxHeight =  11.000000
 				BladeMaxWidth =  0.350000
 				BladeMinHeight =  10.000000
 				BladeMinWidth =  0.250000
@@ -647,7 +647,7 @@ kbGameEntity 0 0 0 0 {
 						Enabled = 0
 						LifeTime =  -1.000000
 						ParamName = "noiseMap"
-						Texture = .\assets\fx\noise\noisemap.png
+						Texture = .\assets\fx\wind\wind_1.jpg
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 					kbShaderParamComponent { 
@@ -3267,7 +3267,7 @@ kbGameEntity 0 0 0 0 {
 						Enabled = 0
 						LifeTime =  -1.000000
 						ParamName = "Mat1Specular"
-						Texture = NULL
+						Texture = ..\..\kbengine\assets\textures\black.bmp
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 					kbShaderParamComponent { 
@@ -3288,7 +3288,7 @@ kbGameEntity 0 0 0 0 {
 						Enabled = 0
 						LifeTime =  -1.000000
 						ParamName = "Mat2Specular"
-						Texture = NULL
+						Texture = ..\..\kbengine\assets\textures\black.bmp
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 					kbShaderParamComponent { 
@@ -3309,7 +3309,7 @@ kbGameEntity 0 0 0 0 {
 						Enabled = 0
 						LifeTime =  -1.000000
 						ParamName = "Mat3Specular"
-						Texture = NULL
+						Texture = ..\..\kbengine\assets\textures\black.bmp
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 					kbShaderParamComponent { 
@@ -3330,7 +3330,7 @@ kbGameEntity 0 0 0 0 {
 						Enabled = 0
 						LifeTime =  -1.000000
 						ParamName = "Mat4Specular"
-						Texture = NULL
+						Texture = ..\..\kbengine\assets\textures\black.bmp
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 					kbShaderParamComponent { 
