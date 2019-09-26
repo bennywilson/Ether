@@ -97,6 +97,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <None Include="assets\Shaders\alphaParticles.kbShader" />
+    <None Include="assets\Shaders\basicFont.kbShader" />
     <None Include="assets\Shaders\basicMultiplyBlend.kbShader" />
     <None Include="assets\Shaders\basicParticle.kbShader" />
     <None Include="assets\Shaders\basicShader.kbShader" />

@@ -377,6 +377,22 @@ class KungFuSheepStateDead : public KungFuSheepStateBase<T> {
 //---------------------------------------------------------------------------------------------------
 public:
 	KungFuSheepStateDead( CannonActorComponent *const pPlayerComponent ) : KungFuSheepStateBase( pPlayerComponent ) { }
+
+	virtual void BeginState( T ) override {
+		kbFlingPhysicsComponent *const pFlingPhysics = GetSheep()->GetComponent<kbFlingPhysicsComponent>();
+		pFlingPhysics->Enable( true );
+		m_bSplashDone = false;
+	}
+
+	virtual void UpdateState() override {
+
+		if ( m_bSplashDone == false && GetSheep()->GetOwnerPosition().y < -60.0f ) {
+			m_bSplashDone = true;
+			GetSheep()->SpawnSplash();
+		}
+	};
+
+	bool m_bSplashDone = false;
 };
 
 /**
@@ -473,7 +489,17 @@ void KungFuSheepComponent::SetEnable_Internal( const bool bEnable ) {
 		}
 
 		m_Health = 1.0f;
-		g_pCannonGame->GetLevelComponent<KungFuLevelComponent>()->UpdateSheepHealthBar( 1.0f );
+		if ( g_UseEditor == false ) {
+			g_pCannonGame->GetLevelComponent<KungFuLevelComponent>()->UpdateSheepHealthBar( 1.0f );
+		}
+	} else {
+		if ( m_HeadBandInstance[0].GetEntity() != nullptr ) {
+			g_pGame->RemoveGameEntity( m_HeadBandInstance[0].GetEntity() );
+			g_pGame->RemoveGameEntity( m_HeadBandInstance[1].GetEntity() );
+
+			m_HeadBandInstance[0].SetEntity( nullptr );
+			m_HeadBandInstance[1].SetEntity( nullptr );
+		}
 	}
 }
 
@@ -560,7 +586,9 @@ void KungFuSheepComponent::OnAnimEvent( const kbAnimEventInfo_t & animEventInfo 
 void KungFuSheepComponent::Update_Internal( const float DT ) {
 	Super::Update_Internal( DT );
 
-	UpdateStateMachine();
+	if ( DT > 0.0f ) {
+		UpdateStateMachine();
+	}
 
 	{
 		static int blinkState = 0;
@@ -615,30 +643,36 @@ void KungFuSheepComponent::Update_Internal( const float DT ) {
 	pCloth2->SetClothCollisionSphere( 0, collisionSphere );
 
 	// Do health check
-	int numHuggers = 0;
-	for ( int i = 0; i < g_pCannonGame->GetGameEntities().size(); i++ ) {
+	if ( m_Health > 0.0f ) {
+		int numHuggers = 0;
+		for ( int i = 0; i < g_pCannonGame->GetGameEntities().size(); i++ ) {
 
-		kbGameEntity *const pEnt =  g_pCannonGame->GetGameEntities()[i];
-		if ( pEnt->GetActorComponent() == nullptr ) {
-			continue;
+			kbGameEntity *const pEnt =  g_pCannonGame->GetGameEntities()[i];
+			if ( pEnt->GetActorComponent() == nullptr ) {
+				continue;
+			}
+
+			KungFuSnolafComponent *const pSnolaf = g_pCannonGame->GetGameEntities()[i]->GetActorComponent()->GetAs<KungFuSnolafComponent>();
+			if ( pSnolaf == nullptr ) {
+				continue;
+			}
+
+			if ( pSnolaf->GetState() == KungFuSnolafState::Hug ) {
+				numHuggers++;
+			}
 		}
 
-		KungFuSnolafComponent *const pSnolaf = g_pCannonGame->GetGameEntities()[i]->GetActorComponent()->GetAs<KungFuSnolafComponent>();
-		if ( pSnolaf == nullptr ) {
-			continue;
+		if ( numHuggers > 0 ) {
+			const float healthDrain = DT * 0.05f * (float)numHuggers;
+			m_Health = kbSaturate( m_Health - healthDrain );
+
+			KungFuLevelComponent *const pLevelComponent = g_pCannonGame->GetLevelComponent<KungFuLevelComponent>();
+			pLevelComponent->UpdateSheepHealthBar( m_Health );
+
+			if ( m_Health == 0.0f ) {
+				RequestStateChange( KungFuSheepState::Dead );
+			}
 		}
-
-		if ( pSnolaf->GetState() == KungFuSnolafState::Hug ) {
-			numHuggers++;
-		}
-	}
-
-	if ( numHuggers > 0 ) {
-		const float healthDrain = DT * 0.01f * (float)numHuggers;
-		m_Health = kbSaturate( m_Health - healthDrain );
-
-		KungFuLevelComponent *const pLevelComponent = g_pCannonGame->GetLevelComponent<KungFuLevelComponent>();
-		pLevelComponent->UpdateSheepHealthBar( m_Health );
 	}
 }
 
@@ -693,4 +727,24 @@ void KungFuSheepComponent::PlayBaa( const int baaType ) {
 	}
 
 	m_BaaaVO[rand() % m_BaaaVO.size()].PlaySoundAtPosition( GetOwnerPosition() );
+}
+
+/**
+ *	KungFuSheepComponent::SpawnSplash
+ */	
+void KungFuSheepComponent::SpawnSplash() {
+	if ( m_SplashFX.GetEntity() == nullptr ) {
+		return;
+	}
+
+	kbGameEntity *const pSplash = g_pGame->CreateEntity( m_SplashFX.GetEntity() );
+	pSplash->SetPosition( GetOwnerPosition() );
+	pSplash->DeleteWhenComponentsAreInactive( true );
+	
+	KungFuLevelComponent *const pLevelComponent = g_pCannonGame->GetLevelComponent<KungFuLevelComponent>();
+	pLevelComponent->DoSplashSound();
+
+	if ( kbfrand() > 0.75f ) {
+		pLevelComponent->DoWaterDropletScreenFX();
+	}
 }

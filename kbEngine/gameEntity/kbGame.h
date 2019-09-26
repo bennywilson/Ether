@@ -83,6 +83,7 @@ protected:
 	virtual void												PostUpdate_Internal() { };
 	virtual void												LevelLoaded_Internal() = 0;
 	virtual void												AddGameEntity_Internal( kbGameEntity *const pEntity ) = 0;
+	virtual void												RemoveGameEntity_Internal( kbGameEntity *const pEntity ) = 0;
 
 	const kbInput_t &											GetInput() const { return m_InputManager.GetInput(); }
 	bool														IsConsoleActive() const { return m_Console.IsActive(); }

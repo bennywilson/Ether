@@ -214,34 +214,14 @@ void CannonCameraComponent::SetEnable_Internal( const bool bEnable ) {
 	g_pRenderer->SetNearFarPlane( nullptr, m_NearPlane, m_FarPlane );
 }
 
-/**
- *	CannonCameraComponent::FindTarget
- */
-void CannonCameraComponent::FindTarget() {
 
-	if ( g_UseEditor ) {
-		extern kbEditor * g_Editor;
-		std::vector<kbEditorEntity *> &	gameEnts = g_Editor->GetGameEntities();
-		for ( int i = 0; i < gameEnts.size(); i++ ) {
-			const kbGameEntity *const pEnt = gameEnts[i]->GetGameEntity();
-			const kbComponent *const pComp = pEnt->GetComponentByType( CannonActorComponent::GetType() );
-			if ( pComp != nullptr ) {
-				m_pTarget = (kbGameEntity*)pComp->GetOwner();
-				break;
-			}
-		}
-	} else {
-		const std::vector<kbGameEntity*> & GameEnts = g_pGame->GetGameEntities();
-		for ( int i = 0; i < (int) GameEnts.size(); i++ ) {
-			const kbGameEntity *const pEnt = GameEnts[i];
-			const kbComponent *const pComp = pEnt->GetComponentByType( CannonActorComponent::GetType() );
-			if ( pComp != nullptr ) {
-				m_pTarget = (kbGameEntity*)pComp->GetOwner();
-				break;
-			}
-		}
-	}
+/**
+ *	CannonCameraComponent::SetTarget
+ */
+void CannonCameraComponent::SetTarget( const kbGameEntity *const pTarget ) {
+	m_pTarget = pTarget;
 }
+
 
 /**
  *	CannonCameraComponent::StartCameraShake
@@ -279,23 +259,18 @@ void CannonCameraComponent::Update_Internal( const float DeltaTime ) {
 		break;
 
 		case MoveMode_Follow : {
-			if ( m_pTarget == nullptr ) {
-				FindTarget();
-				if ( m_pTarget == nullptr ) {
-					break;
-				}
+			if ( m_pTarget != nullptr ) {
+				GetOwner()->SetPosition( m_pTarget->GetPosition() + m_PositionOffset );
+
+				kbMat4 cameraDestRot;
+				cameraDestRot.LookAt( GetOwner()->GetPosition(), m_pTarget->GetPosition() + m_LookAtOffset, kbVec3::up );
+				cameraDestRot.InvertFast();
+				GetOwner()->SetOrientation( kbQuatFromMatrix( cameraDestRot ) );
+
+				const kbVec3 cameraDestPos = m_pTarget->GetPosition() + m_PositionOffset;
+				GetOwner()->SetPosition( cameraDestPos + cameraDestRot[0].ToVec3() * camShakeOffset.x + cameraDestRot[1].ToVec3() * camShakeOffset.y );
+				GetOwner()->SetPosition( cameraDestPos + cameraDestRot[0].ToVec3() * camShakeOffset.x + cameraDestRot[1].ToVec3() * camShakeOffset.y );
 			}
-
-			GetOwner()->SetPosition( m_pTarget->GetPosition() + m_PositionOffset );
-
-			kbMat4 cameraDestRot;
-			cameraDestRot.LookAt( GetOwner()->GetPosition(), m_pTarget->GetPosition() + m_LookAtOffset, kbVec3::up );
-			cameraDestRot.InvertFast();
-			GetOwner()->SetOrientation( kbQuatFromMatrix( cameraDestRot ) );
-
-			const kbVec3 cameraDestPos = m_pTarget->GetPosition() + m_PositionOffset;
-			GetOwner()->SetPosition( cameraDestPos + cameraDestRot[0].ToVec3() * camShakeOffset.x + cameraDestRot[1].ToVec3() * camShakeOffset.y );
-			GetOwner()->SetPosition( cameraDestPos + cameraDestRot[0].ToVec3() * camShakeOffset.x + cameraDestRot[1].ToVec3() * camShakeOffset.y );
 		}
 		break;
 	}

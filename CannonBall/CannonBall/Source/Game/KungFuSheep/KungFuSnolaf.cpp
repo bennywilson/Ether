@@ -452,6 +452,43 @@ private:
 };
 
 /**
+ *	KungFuSnolafStateRunAway
+ */
+template<typename T>
+class KungFuSnolafStateRunAway : public KungFuSnolafStateBase<T> {
+
+//---------------------------------------------------------------------------------------------------
+public:
+	KungFuSnolafStateRunAway( CannonActorComponent *const pPlayerComponent ) : KungFuSnolafStateBase( pPlayerComponent ) { }
+
+	virtual void BeginState( T ) override {
+
+		static const kbString Run_Anim( "Run" );
+		m_pActorComponent->PlayAnimation( Run_Anim, 0.05f );
+
+		kbVec3 snolafFacingDir = GetSnolaf()->GetTargetFacingDirection();
+		snolafFacingDir *= -1.0f;
+		GetSnolaf()->SetTargetFacingDirection( snolafFacingDir );
+
+		GetSnolaf()->EnableSmallLoveHearts( false );
+		GetSnolaf()->EnableLargeLoveHearts( false );
+	}
+
+	virtual void UpdateState() override {
+
+		const float frameDT = g_pGame->GetFrameDT();
+
+		const kbVec3 moveDir = GetSnolaf()->GetTargetFacingDirection();
+		const kbVec3 newSnolafPos = m_pActorComponent->GetOwnerPosition() - moveDir * frameDT * m_pActorComponent->GetMaxRunSpeed();
+		m_pActorComponent->SetOwnerPosition( newSnolafPos );
+	}
+
+	virtual void EndState( T ) override {
+	}
+};
+
+
+/**
  *	KungFuSnolafComponent::Constructor
  */
 void KungFuSnolafComponent::Constructor() {
@@ -498,7 +535,8 @@ void KungFuSnolafComponent::SetEnable_Internal( const bool bEnable ) {
 			new KungFuSnolafStateRun<KungFuSnolafState::SnolafState_t>( this ),
 			new KungFuSnolafStateHug<KungFuSnolafState::SnolafState_t>( this ),
 			new KungFuSnolafStateDead<KungFuSnolafState::SnolafState_t>( this ),
-			new KungFuSnolafStateWatchCannonBall<KungFuSnolafState::SnolafState_t>( this )
+			new KungFuSnolafStateWatchCannonBall<KungFuSnolafState::SnolafState_t>( this ),
+			new KungFuSnolafStateRunAway<KungFuSnolafState::SnolafState_t>( this )
 		};
 
 		InitializeStates( snolafStates );
@@ -539,7 +577,9 @@ void KungFuSnolafComponent::OnAnimEvent( const kbAnimEventInfo_t & animEventInfo
 void KungFuSnolafComponent::Update_Internal( const float DT ) {
 	Super::Update_Internal( DT );
 
-	UpdateStateMachine();
+	if ( DT > 0.0f ) {
+		UpdateStateMachine();
+	}
 
 	kbVec4 fxDot( 1.0f, 0.0f, 0.0f, 0.0f );
 	if ( m_CurrentState == KungFuSnolafState::Hug ) {

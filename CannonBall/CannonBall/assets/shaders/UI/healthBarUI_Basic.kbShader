@@ -69,10 +69,14 @@ float4 pixelShader( pixelInput input ) : SV_TARGET {
 	float4 finalColor = frameColor;
 	
 	float uLen = healthBarBounds.z - healthBarBounds.x;
-	float rightEdge = healthBarBounds.x + ( uLen * normalizedHealth.x );
-	if ( input.uv.x > healthBarBounds.x && input.uv.x < rightEdge && input.uv.y > healthBarBounds.y && input.uv.y < healthBarBounds.w ) {
+	if ( input.uv.x > healthBarBounds.x && input.uv.x < healthBarBounds.z && input.uv.y > healthBarBounds.y && input.uv.y < healthBarBounds.w ) {
 		float2 barUV = ( input.uv - healthBarBounds.xy ) / ( healthBarBounds.zw - healthBarBounds.xy );
 		float4 barColor = fillTexture.Sample( DiffuseSamplerState, barUV );
+
+		float rightEdge = healthBarBounds.x + ( uLen * normalizedHealth.x );
+		if ( input.uv.x > rightEdge ) {
+			barColor = 0;
+		}
 		finalColor = lerp( barColor, frameColor, frameColor.a );
 	
 	}

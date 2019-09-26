@@ -43,6 +43,8 @@ public:
 	void										PlayShakeNBakeFX();
 	void										PlayBaa( const int baaType );
 
+	void										SpawnSplash();
+
 protected:
 
 	virtual void								SetEnable_Internal( const bool bEnable ) override;
@@ -53,6 +55,7 @@ private:
 	// Data
 	kbGameEntityPtr								m_CannonBallImpactFX;
 	kbGameEntityPtr								m_ShakeNBakeFX;
+	kbGameEntityPtr								m_SplashFX;
 
 	std::vector<kbSoundData>					m_CannonBallVO;
 	std::vector<kbSoundData>					m_BaaaVO;

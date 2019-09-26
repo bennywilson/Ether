@@ -14,6 +14,8 @@ namespace KungFuGame {
 		MainMenu = 0,
 		Intro,
 		Gameplay,
+		PlayerDead,
+		Paused,
 		NumStates
 	 };
 
@@ -39,6 +41,7 @@ class KungFuLevelComponent : public CannonLevelComponent {
 public:
 
 	void										SpawnEnemy();
+	void										SpawnSheep();
 
 	AttackHitInfo_t								DoAttack( const DealAttackInfo_t<KungFuGame::eAttackType> & dealAttackInfo );
 	void										UpdateSheepHealthBar( const float healthVal );

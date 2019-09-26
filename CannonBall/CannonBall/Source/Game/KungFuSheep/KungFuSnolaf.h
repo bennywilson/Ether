@@ -17,6 +17,7 @@ namespace KungFuSnolafState {
 		Hug,
 		Dead,
 		WatchCannonBall,
+		RunAway,
 		NumStates
 	};
 }
@@ -28,7 +29,7 @@ namespace KungFuSnolafState {
 template<typename T>
 class KungFuSnolafStateBase;
 
-class KungFuSnolafComponent : public CannonActorComponent, IStateMachine<KungFuSnolafStateBase<KungFuSnolafState::SnolafState_t>, KungFuSnolafState::SnolafState_t> {
+class KungFuSnolafComponent : public CannonActorComponent, public IStateMachine<KungFuSnolafStateBase<KungFuSnolafState::SnolafState_t>, KungFuSnolafState::SnolafState_t> {
 	KB_DECLARE_COMPONENT( KungFuSnolafComponent, CannonActorComponent );
 
 //---------------------------------------------------------------------------------------------------'

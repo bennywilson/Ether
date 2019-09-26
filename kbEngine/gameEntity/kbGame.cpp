@@ -363,6 +363,8 @@ kbGameEntity * kbGame::CreateEntity( const kbGameEntity *const pPrefab, const bo
 		m_GamePlayersList.push_back( pSpawnedEntity );
 	}
 
+	AddGameEntity_Internal( pSpawnedEntity );
+
 	return pSpawnedEntity;
 }
 
@@ -370,6 +372,9 @@ kbGameEntity * kbGame::CreateEntity( const kbGameEntity *const pPrefab, const bo
  *	kbGame::RemoveGameEntity
  */
 void kbGame::RemoveGameEntity( kbGameEntity *const pEntityToRemove ) {
+
+	RemoveGameEntity_Internal( pEntityToRemove );
+
 	std::vector<kbGameEntity*>::iterator it;
 	it = find( m_GameEntityList.begin(), m_GameEntityList.end(), pEntityToRemove );
 

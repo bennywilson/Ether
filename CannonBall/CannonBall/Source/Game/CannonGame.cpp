@@ -125,18 +125,34 @@ void CannonGame::PostUpdate_Internal() {
  *	CannonGame::AddGameEntity_Internal
  */
 void CannonGame::AddGameEntity_Internal( kbGameEntity *const pEntity ) {
+
 	if ( pEntity == nullptr ) {
-		kbLog( "CannonGame::AddGameEntity_Internal() - nullptr Entity" );
+		kbWarning( "CannonGame::AddGameEntity_Internal() - nullptr Entity" );
+		return;
+	}
+
+	if ( m_pLocalPlayer == nullptr || m_pPlayerComp == nullptr ) {
+		CannonActorComponent *const pActor = pEntity->GetComponent<CannonActorComponent>();
+		if ( pActor != nullptr && pActor->IsPlayer() ) {
+			m_pLocalPlayer = pEntity;
+			m_pPlayerComp = pActor;
+		}
+	}
+}
+
+/**
+ *	CannonGame::RemoveGameEntity_Internal
+ */
+void CannonGame::RemoveGameEntity_Internal( kbGameEntity *const pEntity ) {
+
+	if ( pEntity == nullptr ) {
+		kbWarning( "CannonGame::RemoveGameEntity_Internal() - nullptr Entity" );
 		return;
 	}
 
 	if ( pEntity == m_pLocalPlayer ) {
-
-		m_Camera.m_Position.y = 256.0f;
-		m_pLocalPlayer->SetPosition( m_Camera.m_Position );
-
-		const kbMat4 orientation( kbVec4( 0.0f, 0.0f, -1.0f, 0.0f ), kbVec4( 0.0f, 1.0f, 0.0f, 0.0f ), kbVec4( -1.0f, 0.0f, 0.0f, 0.0f ), kbVec3::zero );
-		m_pLocalPlayer->SetOrientation( kbQuatFromMatrix( orientation ) );
+		m_pLocalPlayer = nullptr;
+		m_pPlayerComp = nullptr;
 	}
 }
 

@@ -42,7 +42,7 @@ pixelInput vertexShader( vertexInput input ) {
 
 	output.position = mul( input.position, mvpMatrix );
 	output.uv = input.uv;
-	output.color = float4(1,0,0,0);
+	output.color = input.color;
 
 	return output;
 }

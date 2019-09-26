@@ -391,7 +391,7 @@ public:
 			delete m_States[i];
 			m_States[i] = stateNodes[i];
 
-			kbErrorCheck( m_States[i] != nullptr, "IStateMachine::InitializeStates() - NULL state.  Please call InitializeStates with proper values" );
+			kbErrorCheck( stateNodes[i] != nullptr && m_States[i] != nullptr, "IStateMachine::InitializeStates() - NULL state.  Please call InitializeStates with proper values" );
 		}
 	}
 
@@ -417,6 +417,8 @@ public:
 
 		StateChangeCallback( previousState, m_CurrentState );
 	}
+
+	StateEnum GetCurrentState() const { return m_CurrentState; }
 
 protected:
 	virtual void StateChangeCallback( const StateEnum previousState, const StateEnum nextState ) { }

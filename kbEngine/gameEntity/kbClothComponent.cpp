@@ -68,9 +68,13 @@ void kbClothComponent::Constructor() {
 /**
  *	kbClothComponent::Update_Internal
  */
-void kbClothComponent::Update_Internal( const float DeltaTime ) {
-	Super::Update_Internal( DeltaTime );
+void kbClothComponent::Update_Internal( const float dt ) {
+	Super::Update_Internal( dt );
 
+	float DeltaTime = dt;
+	if ( DeltaTime == 0.0f ) {
+		DeltaTime = 0.016f;
+	}
 	// Dont start sim for a few frames in case the entity is teleported
 	m_CurrentTickFrame++;
 	if ( m_CurrentTickFrame < 5 ) {

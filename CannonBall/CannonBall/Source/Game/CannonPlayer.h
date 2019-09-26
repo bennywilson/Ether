@@ -111,12 +111,12 @@ public:
 	
 	void										StartCameraShake( const CannonCameraShakeComponent *const pCameraShakeComponent );
 
+	void										SetTarget( const kbGameEntity *const pTarget );
+
 protected:
 
 	virtual void								SetEnable_Internal( const bool bEnable ) override;
 	virtual void								Update_Internal( const float DeltaTime ) override;
-
-	void										FindTarget();
 
 private:
 
