@@ -181,8 +181,8 @@ kbGameEntity 0 0 0 0 {
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 			}
+		RenderOrderBias =  0.000000
 		RenderPass = LightingPass
-		TranslucencySortBias =  0.000000
 		Animations = 0
 		DebugAnimIndex = -1
 		Model = .\assets\models\characters\fox\fox.ms3d
@@ -213,8 +213,8 @@ kbGameEntity 0 0 0 0 {
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 			}
+		RenderOrderBias =  0.000000
 		RenderPass = Post-LightingPass
-		TranslucencySortBias =  0.000000
 		Animations = 0
 		DebugAnimIndex = -1
 		Model = .\assets\models\characters\fox\fox.ms3d
@@ -248,8 +248,8 @@ kbGameEntity 0 0 0 0 {
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 			}
+		RenderOrderBias =  0.000000
 		RenderPass = LightingPass
-		TranslucencySortBias =  0.000000
 		Animations = 1
 			kbAnimComponent { 
 				Enabled = 0
@@ -289,8 +289,8 @@ kbGameEntity 0 0 0 0 {
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 			}
+		RenderOrderBias =  0.000000
 		RenderPass = Post-LightingPass
-		TranslucencySortBias =  0.000000
 		Animations = 1
 			kbAnimComponent { 
 				Enabled = 0
@@ -333,8 +333,8 @@ kbGameEntity 0 0 0 0 {
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 			}
+		RenderOrderBias =  0.000000
 		RenderPass = LightingPass
-		TranslucencySortBias =  0.000000
 		Animations = 1
 			kbAnimComponent { 
 				Enabled = 0
@@ -374,8 +374,8 @@ kbGameEntity 0 0 0 0 {
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 			}
+		RenderOrderBias =  0.000000
 		RenderPass = Post-LightingPass
-		TranslucencySortBias =  0.000000
 		Animations = 1
 			kbAnimComponent { 
 				Enabled = 0
@@ -558,8 +558,8 @@ kbGameEntity 0 0 0 0 {
 						Vector = 0.000000 1.000000 0.000000 -76.000000
 					}
 			}
+		RenderOrderBias =  0.000000
 		RenderPass = LightingPass
-		TranslucencySortBias =  0.000000
 		Dimensions = 129
 		Grass = 1
 			kbGrass { 
@@ -720,8 +720,8 @@ kbGameEntity 0 0 0 0 {
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 			}
+		RenderOrderBias =  0.000000
 		RenderPass = Post-LightingPass
-		TranslucencySortBias =  0.000000
 		Model = .\assets\models\skyboxes\basicskybox.fbx
 	}
 }
@@ -809,8 +809,8 @@ kbGameEntity 0 0 0 0 {
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 			}
+		RenderOrderBias =  0.000000
 		RenderPass = TranslucentWithDepthPass
-		TranslucencySortBias =  0.000000
 		Model = .\assets\models\skyboxes\basicskybox.fbx
 	}
 }
@@ -941,8 +941,8 @@ kbGameEntity 0 0 0 0 {
 						Vector = 0.200000 0.200000 0.000000 0.000000
 					}
 			}
+		RenderOrderBias =  0.000000
 		RenderPass = Post-LightingPass
-		TranslucencySortBias =  0.000000
 		Model = ..\..\kbengine\assets\models\unitcube.ms3d
 	}
 }
@@ -995,8 +995,8 @@ kbGameEntity 0 0 0 0 {
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 			}
+		RenderOrderBias =  0.000000
 		RenderPass = LightingPass
-		TranslucencySortBias =  0.000000
 		Model = ..\..\kbengine\assets\models\unitcube.ms3d
 	}
 }
@@ -1068,8 +1068,8 @@ kbGameEntity 0 0 0 0 {
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 			}
+		RenderOrderBias =  0.000000
 		RenderPass = LightingPass
-		TranslucencySortBias =  0.000000
 		Model = .\assets\models\environment\platforms\bridge_wooden_1.fbx
 	}
 }
@@ -1122,8 +1122,8 @@ kbGameEntity 0 0 0 0 {
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 			}
+		RenderOrderBias =  0.000000
 		RenderPass = LightingPass
-		TranslucencySortBias =  0.000000
 		Model = .\assets\models\environment\platforms\bridge_wooden_1.fbx
 	}
 }
@@ -1176,8 +1176,8 @@ kbGameEntity 0 0 0 0 {
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 			}
+		RenderOrderBias =  0.000000
 		RenderPass = LightingPass
-		TranslucencySortBias =  0.000000
 		Model = .\assets\models\environment\platforms\bridge_wooden_1.fbx
 	}
 }
@@ -1230,8 +1230,8 @@ kbGameEntity 0 0 0 0 {
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 			}
+		RenderOrderBias =  0.000000
 		RenderPass = LightingPass
-		TranslucencySortBias =  0.000000
 		Model = .\assets\models\environment\platforms\bridge_wooden_1.fbx
 	}
 }
@@ -1284,8 +1284,8 @@ kbGameEntity 0 0 0 0 {
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 			}
+		RenderOrderBias =  0.000000
 		RenderPass = LightingPass
-		TranslucencySortBias =  0.000000
 		Model = .\assets\models\environment\platforms\bridge_wooden_1.fbx
 	}
 }
@@ -1338,8 +1338,8 @@ kbGameEntity 0 0 0 0 {
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 			}
+		RenderOrderBias =  0.000000
 		RenderPass = LightingPass
-		TranslucencySortBias =  0.000000
 		Model = .\assets\models\environment\platforms\bridge_wooden_1.fbx
 	}
 }
@@ -1392,8 +1392,8 @@ kbGameEntity 0 0 0 0 {
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 			}
+		RenderOrderBias =  0.000000
 		RenderPass = LightingPass
-		TranslucencySortBias =  0.000000
 		Model = .\assets\models\environment\platforms\bridge_wooden_1.fbx
 	}
 }
@@ -1446,8 +1446,8 @@ kbGameEntity 0 0 0 0 {
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 			}
+		RenderOrderBias =  0.000000
 		RenderPass = LightingPass
-		TranslucencySortBias =  0.000000
 		Model = .\assets\models\environment\platforms\bridge_wooden_1.fbx
 	}
 }
@@ -1500,8 +1500,8 @@ kbGameEntity 0 0 0 0 {
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 			}
+		RenderOrderBias =  0.000000
 		RenderPass = LightingPass
-		TranslucencySortBias =  0.000000
 		Model = .\assets\models\environment\platforms\bridge_wooden_1.fbx
 	}
 }
@@ -1554,8 +1554,8 @@ kbGameEntity 0 0 0 0 {
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 			}
+		RenderOrderBias =  0.000000
 		RenderPass = LightingPass
-		TranslucencySortBias =  0.000000
 		Model = .\assets\models\environment\platforms\bridge_wooden_1.fbx
 	}
 }
@@ -1608,8 +1608,8 @@ kbGameEntity 0 0 0 0 {
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 			}
+		RenderOrderBias =  0.000000
 		RenderPass = LightingPass
-		TranslucencySortBias =  0.000000
 		Model = .\assets\models\environment\platforms\bridge_wooden_1.fbx
 	}
 }
@@ -1662,8 +1662,8 @@ kbGameEntity 0 0 0 0 {
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 			}
+		RenderOrderBias =  0.000000
 		RenderPass = LightingPass
-		TranslucencySortBias =  0.000000
 		Model = .\assets\models\environment\platforms\bridge_wooden_1.fbx
 	}
 }
@@ -1716,8 +1716,8 @@ kbGameEntity 0 0 0 0 {
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 			}
+		RenderOrderBias =  0.000000
 		RenderPass = LightingPass
-		TranslucencySortBias =  0.000000
 		Model = .\assets\models\environment\platforms\bridge_wooden_1.fbx
 	}
 }
@@ -1770,8 +1770,8 @@ kbGameEntity 0 0 0 0 {
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 			}
+		RenderOrderBias =  0.000000
 		RenderPass = LightingPass
-		TranslucencySortBias =  0.000000
 		Model = .\assets\models\environment\platforms\bridge_wooden_1.fbx
 	}
 }
@@ -1824,8 +1824,8 @@ kbGameEntity 0 0 0 0 {
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 			}
+		RenderOrderBias =  0.000000
 		RenderPass = LightingPass
-		TranslucencySortBias =  0.000000
 		Model = .\assets\models\environment\platforms\bridge_wooden_1.fbx
 	}
 }
@@ -1878,8 +1878,8 @@ kbGameEntity 0 0 0 0 {
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 			}
+		RenderOrderBias =  0.000000
 		RenderPass = LightingPass
-		TranslucencySortBias =  0.000000
 		Model = .\assets\models\environment\platforms\bridge_wooden_1.fbx
 	}
 }
@@ -1932,8 +1932,8 @@ kbGameEntity 0 0 0 0 {
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 			}
+		RenderOrderBias =  0.000000
 		RenderPass = LightingPass
-		TranslucencySortBias =  0.000000
 		Model = .\assets\models\environment\platforms\bridge_wooden_1.fbx
 	}
 }
@@ -1986,8 +1986,8 @@ kbGameEntity 0 0 0 0 {
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 			}
+		RenderOrderBias =  0.000000
 		RenderPass = LightingPass
-		TranslucencySortBias =  0.000000
 		Model = .\assets\models\environment\platforms\bridge_wooden_1.fbx
 	}
 }
@@ -2040,8 +2040,8 @@ kbGameEntity 0 0 0 0 {
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 			}
+		RenderOrderBias =  0.000000
 		RenderPass = LightingPass
-		TranslucencySortBias =  0.000000
 		Model = .\assets\models\environment\platforms\bridge_wooden_1.fbx
 	}
 }
@@ -2094,8 +2094,8 @@ kbGameEntity 0 0 0 0 {
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 			}
+		RenderOrderBias =  0.000000
 		RenderPass = LightingPass
-		TranslucencySortBias =  0.000000
 		Model = .\assets\models\environment\platforms\bridge_wooden_1.fbx
 	}
 }
@@ -2148,8 +2148,8 @@ kbGameEntity 0 0 0 0 {
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 			}
+		RenderOrderBias =  0.000000
 		RenderPass = LightingPass
-		TranslucencySortBias =  0.000000
 		Model = .\assets\models\environment\platforms\bridge_wooden_1.fbx
 	}
 }
@@ -2202,8 +2202,8 @@ kbGameEntity 0 0 0 0 {
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 			}
+		RenderOrderBias =  0.000000
 		RenderPass = LightingPass
-		TranslucencySortBias =  0.000000
 		Model = .\assets\models\environment\platforms\bridge_wooden_1.fbx
 	}
 }
@@ -2256,8 +2256,8 @@ kbGameEntity 0 0 0 0 {
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 			}
+		RenderOrderBias =  0.000000
 		RenderPass = LightingPass
-		TranslucencySortBias =  0.000000
 		Model = .\assets\models\environment\platforms\bridge_wooden_1.fbx
 	}
 }
@@ -2310,8 +2310,8 @@ kbGameEntity 0 0 0 0 {
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 			}
+		RenderOrderBias =  0.000000
 		RenderPass = LightingPass
-		TranslucencySortBias =  0.000000
 		Animations = 0
 		DebugAnimIndex = -1
 		Model = .\assets\models\characters\sheep\gear\headband.ms3d
@@ -3369,8 +3369,8 @@ kbGameEntity 0 0 0 0 {
 						Vector = 55.000000 55.000000 555.000000 55.000000
 					}
 			}
+		RenderOrderBias =  0.000000
 		RenderPass = LightingPass
-		TranslucencySortBias =  0.000000
 		Dimensions = 129
 		Grass = 0
 		HeightMap = .\assets\terrain\kungfulevelterrain\terrain1_height.bmp
@@ -3449,8 +3449,8 @@ kbGameEntity 0 0 0 0 {
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 			}
+		RenderOrderBias =  0.000000
 		RenderPass = UIPass
-		TranslucencySortBias =  0.000000
 		Model = ..\..\kbengine\assets\models\unitquad.ms3d
 	}
 	CannonHealthBarUIComponent { 
@@ -3541,8 +3541,8 @@ kbGameEntity 0 0 0 0 {
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 			}
+		RenderOrderBias =  1.000000
 		RenderPass = UIPass
-		TranslucencySortBias =  0.000000
 		Model = ..\..\kbengine\assets\models\unitquad.ms3d
 	}
 	CannonBallUIComponent { 
@@ -3595,8 +3595,8 @@ kbGameEntity 0 0 0 0 {
 						Vector = 0.000000 0.000000 0.000000 0.250000
 					}
 			}
+		RenderOrderBias =  0.000000
 		RenderPass = UIPass
-		TranslucencySortBias =  0.000000
 		Model = ..\..\kbengine\assets\models\unitquad.ms3d
 	}
 }

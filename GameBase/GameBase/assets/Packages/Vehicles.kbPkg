@@ -16,7 +16,7 @@ kbPrefab 1 {
 			CastsShadow = 0
 			Materials = 0
 			RenderPass = LightingPass
-			TranslucencySortBias =  0.000000
+			RenderOrderBias =  0.000000
 			Model = .\assets\models\vehicles\jet.ms3d
 			ShaderOverride = 0
 				
@@ -56,7 +56,7 @@ kbPrefab 1 {
 			StartColor = 0.500000 0.300000 0.250000 1.000000
 			StartDelay =  0.000000
 			TotalDuration =  -1.000000
-			TranslucencySortBias =  0.000000
+			RenderOrderBias =  0.000000
 			VelocityCurve = 0
 		}
 	}

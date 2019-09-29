@@ -47,6 +47,8 @@ public:
 
 	void									SetFill( const float newHealth );
 
+	void									CannonBallActivatedCB();
+
 protected:
 
 	virtual void							SetEnable_Internal( const bool bEnable ) override;

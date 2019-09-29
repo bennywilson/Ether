@@ -138,7 +138,7 @@ kbGameEntity 0 0 0 0 {
 					}
 			}
 		RenderPass = Post-LightingPass
-		TranslucencySortBias =  -1.000000
+		RenderOrderBias =  -1.000000
 		Model = .\assets\models\skydomes\skydomes.ms3d
 		ShaderOverride = 1
 			.\assets\shaders\skybox\skybox.kbshader
@@ -190,7 +190,7 @@ kbGameEntity 0 0 0 0 {
 					}
 			}
 		RenderPass = LightingPass
-		TranslucencySortBias =  -1.000000
+		RenderOrderBias =  -1.000000
 		Model = .\assets\models\architecture\bricks.ms3d
 		ShaderOverride = 0
 			
@@ -329,7 +329,7 @@ kbGameEntity 0 0 0 0 {
 					}
 			}
 		RenderPass = LightingPass
-		TranslucencySortBias =  -1.000000
+		RenderOrderBias =  -1.000000
 		Dimensions = 129
 		Grass = 1
 			kbGrass { 

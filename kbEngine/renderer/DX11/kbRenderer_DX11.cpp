@@ -1619,8 +1619,17 @@ void kbRenderer_DX11::PreRenderCullAndSort() {
 	// Sort translucent meshes by depth
 	std::vector<kbRenderSubmesh> & visibleTranslucentMeshes = m_pCurrentRenderWindow->GetVisibleSubMeshes( RP_Translucent );
 	std::sort( visibleTranslucentMeshes.begin(), visibleTranslucentMeshes.end(), []( kbRenderSubmesh & op1, kbRenderSubmesh & op2 ) {
-		const float op1Dist = op1.GetDistFromCamera() + op1.GetRenderObject()->m_TranslucencySortBias;
-		const float op2Dist = op2.GetDistFromCamera() + op2.GetRenderObject()->m_TranslucencySortBias;
+		const float op1Dist = op1.GetDistFromCamera() + op1.GetRenderObject()->m_RenderOrderBias;
+		const float op2Dist = op2.GetDistFromCamera() + op2.GetRenderObject()->m_RenderOrderBias;
+
+		return op1Dist > op2Dist;
+	});
+
+	// Sort UI by Render Order Bias
+	std::vector<kbRenderSubmesh> & visibleUIMeshes = m_pCurrentRenderWindow->GetVisibleSubMeshes( RP_UI );
+	std::sort( visibleUIMeshes.begin(), visibleUIMeshes.end(), []( kbRenderSubmesh & op1, kbRenderSubmesh & op2 ) {
+		const float op1Dist = op1.GetRenderObject()->m_RenderOrderBias;
+		const float op2Dist = op2.GetRenderObject()->m_RenderOrderBias;
 
 		return op1Dist > op2Dist;
 	});

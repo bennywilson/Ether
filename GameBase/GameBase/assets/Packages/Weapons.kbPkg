@@ -469,7 +469,7 @@ kbGameEntity 292847838 1140569109 1236968083 2365837966 {
 					}
 			}
 		RenderPass = LightingPass
-		TranslucencySortBias =  0.000000
+		RenderOrderBias =  0.000000
 		Model = .\assets\models\items\el_rifle_fp.ms3d
 		ShaderOverride = 0
 			

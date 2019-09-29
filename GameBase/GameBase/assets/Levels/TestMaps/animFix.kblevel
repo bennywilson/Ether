@@ -75,7 +75,7 @@ kbGameEntity 0 0 0 0 {
 					}
 			}
 		RenderPass = LightingPass
-		TranslucencySortBias =  0.000000
+		RenderOrderBias =  0.000000
 		Model = .\assets\test\skintest.ms3d
 		Animations = 1
 			kbAnimComponent { 

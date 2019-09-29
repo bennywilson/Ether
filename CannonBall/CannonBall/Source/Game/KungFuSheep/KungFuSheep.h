@@ -45,6 +45,9 @@ public:
 
 	void										SpawnSplash();
 
+	float										GetCannonBallMeterFill() const { return m_CannonBallMeter; }
+	void										CannonBallActivatedCB();
+
 protected:
 
 	virtual void								SetEnable_Internal( const bool bEnable ) override;

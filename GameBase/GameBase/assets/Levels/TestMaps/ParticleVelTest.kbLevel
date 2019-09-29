@@ -89,7 +89,7 @@ kbGameEntity 0 0 0 0 {
 		StartColor = 1.000000 1.000000 1.000000 1.000000
 		StartDelay =  0.000000
 		TotalDuration =  10.000000
-		TranslucencySortBias =  0.000000
+		RenderOrderBias =  0.000000
 		VelocityCurve = 3
 			kbAnimEvent { 
 				Enabled = 0
@@ -202,7 +202,7 @@ kbGameEntity 0 0 0 0 {
 		StartColor = 1.000000 1.000000 1.000000 1.000000
 		StartDelay =  0.000000
 		TotalDuration =  2.000000
-		TranslucencySortBias =  -1.000000
+		RenderOrderBias =  -1.000000
 		VelocityCurve = 3
 			kbAnimEvent { 
 				Enabled = 0
@@ -301,7 +301,7 @@ kbGameEntity 0 0 0 0 {
 		StartColor = 0.080000 0.080000 0.080000 0.010000
 		StartDelay =  0.000000
 		TotalDuration =  10.000000
-		TranslucencySortBias =  1.000000
+		RenderOrderBias =  1.000000
 		VelocityCurve = 3
 			kbAnimEvent { 
 				Enabled = 0

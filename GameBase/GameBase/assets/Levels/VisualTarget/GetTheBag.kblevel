@@ -13,7 +13,7 @@ kbGameEntity 0 0 0 0 {
 		CastsShadow = 0
 		RenderPass = LightingPass
 		ShaderParams = 0
-		TranslucencySortBias =  0.000000
+		RenderOrderBias =  0.000000
 		Model = .\assets\visualtarget\getthebag\gina\gina_street.ms3d
 		ShaderOverride = 12
 			.\assets\shaders\character\characterbase.kbshader
@@ -104,7 +104,7 @@ kbGameEntity 0 0 0 0 {
 		CastsShadow = 0
 		RenderPass = Post-LightingPass
 		ShaderParams = 0
-		TranslucencySortBias =  0.000000
+		RenderOrderBias =  0.000000
 		Model = .\assets\models\test\invertedcube2.ms3d
 		ShaderOverride = 1
 			.\assets\shaders\skybox\skybox.kbshader

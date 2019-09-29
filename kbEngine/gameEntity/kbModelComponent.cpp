@@ -21,7 +21,7 @@ KB_DEFINE_COMPONENT(kbModelComponent)
  */
 void kbModelComponent::Constructor() {
 	m_RenderPass = RP_Lighting;
-	m_TranslucencySortBias = 0.0f;
+	m_RenderOrderBias = 0.0f;
 	m_bCastsShadow = false;
 }
 
@@ -44,7 +44,7 @@ void kbModelComponent::EditorChange( const std::string & propertyName ) {
 	m_RenderObject.m_Position = GetOwner()->GetPosition();
 	m_RenderObject.m_RenderPass = m_RenderPass;
 	m_RenderObject.m_Scale = GetOwner()->GetScale() * kbLevelComponent::GetGlobalModelScale();
-	m_RenderObject.m_TranslucencySortBias = m_TranslucencySortBias;
+	m_RenderObject.m_RenderOrderBias = m_RenderOrderBias;
 
 	// Editor Hack!
 	if ( propertyName == "Materials" ) {

@@ -26,7 +26,7 @@ kbGameEntity 0 0 0 0 {
 					}
 			}
 		RenderPass = Post-LightingPass
-		TranslucencySortBias =  -1.000000
+		RenderOrderBias =  -1.000000
 		Model = .\assets\models\skydomes\skydomes.ms3d
 	}
 }
@@ -146,7 +146,7 @@ kbGameEntity 0 0 0 0 {
 					}
 			}
 		RenderPass = LightingPass
-		TranslucencySortBias =  0.000000
+		RenderOrderBias =  0.000000
 		Model = .\assets\models\environment\crate_1_destructible.fbx
 		Animations = 0
 		DebugAnimIndex = -1
@@ -229,7 +229,7 @@ kbGameEntity 0 0 0 0 {
 					}
 			}
 		RenderPass = LightingPass
-		TranslucencySortBias =  0.000000
+		RenderOrderBias =  0.000000
 		Model = .\assets\models\environment\crate_1_destructible.fbx
 		Animations = 0
 		DebugAnimIndex = -1
@@ -312,7 +312,7 @@ kbGameEntity 0 0 0 0 {
 					}
 			}
 		RenderPass = LightingPass
-		TranslucencySortBias =  0.000000
+		RenderOrderBias =  0.000000
 		Model = .\assets\models\environment\crate_1_destructible.fbx
 		Animations = 0
 		DebugAnimIndex = -1
@@ -395,7 +395,7 @@ kbGameEntity 0 0 0 0 {
 					}
 			}
 		RenderPass = LightingPass
-		TranslucencySortBias =  0.000000
+		RenderOrderBias =  0.000000
 		Model = .\assets\models\environment\crate_1_destructible.fbx
 		Animations = 0
 		DebugAnimIndex = -1
@@ -478,7 +478,7 @@ kbGameEntity 0 0 0 0 {
 					}
 			}
 		RenderPass = LightingPass
-		TranslucencySortBias =  0.000000
+		RenderOrderBias =  0.000000
 		Model = .\assets\models\environment\crate_1_destructible.fbx
 		Animations = 0
 		DebugAnimIndex = -1
@@ -561,7 +561,7 @@ kbGameEntity 0 0 0 0 {
 					}
 			}
 		RenderPass = LightingPass
-		TranslucencySortBias =  0.000000
+		RenderOrderBias =  0.000000
 		Model = .\assets\models\environment\crate_1_destructible.fbx
 		Animations = 0
 		DebugAnimIndex = -1
@@ -644,7 +644,7 @@ kbGameEntity 0 0 0 0 {
 					}
 			}
 		RenderPass = LightingPass
-		TranslucencySortBias =  0.000000
+		RenderOrderBias =  0.000000
 		Model = .\assets\models\environment\crate_1_destructible.fbx
 		Animations = 0
 		DebugAnimIndex = -1
@@ -804,7 +804,7 @@ kbGameEntity 0 0 0 0 {
 					}
 			}
 		RenderPass = LightingPass
-		TranslucencySortBias =  -1.000000
+		RenderOrderBias =  -1.000000
 		Dimensions = 129
 		Grass = 1
 			kbGrass { 
@@ -966,7 +966,7 @@ kbGameEntity 0 0 0 0 {
 		StartColor = 1.000000 1.000000 1.000000 1.000000
 		StartDelay =  0.000000
 		TotalDuration =  0.500000
-		TranslucencySortBias =  0.000000
+		RenderOrderBias =  0.000000
 		VelocityCurve = 0
 	}
 	kbParticleComponent { 
@@ -1019,7 +1019,7 @@ kbGameEntity 0 0 0 0 {
 		StartColor = 0.250000 0.250000 0.250000 0.250000
 		StartDelay =  0.000000
 		TotalDuration =  2.000000
-		TranslucencySortBias =  0.000000
+		RenderOrderBias =  0.000000
 		VelocityCurve = 0
 	}
 }
@@ -1089,7 +1089,7 @@ kbGameEntity 0 0 0 0 {
 		StartColor = 1.000000 1.000000 1.000000 1.000000
 		StartDelay =  0.000000
 		TotalDuration =  0.500000
-		TranslucencySortBias =  0.000000
+		RenderOrderBias =  0.000000
 		VelocityCurve = 0
 	}
 	kbParticleComponent { 
@@ -1149,7 +1149,7 @@ kbGameEntity 0 0 0 0 {
 		StartColor = 1.000000 1.000000 1.000000 1.000000
 		StartDelay =  0.000000
 		TotalDuration =  0.500000
-		TranslucencySortBias =  0.000000
+		RenderOrderBias =  0.000000
 		VelocityCurve = 0
 	}
 }
@@ -1202,7 +1202,7 @@ kbGameEntity 0 0 0 0 {
 					}
 			}
 		RenderPass = LightingPass
-		TranslucencySortBias =  0.000000
+		RenderOrderBias =  0.000000
 		Model = .\assets\models\environment\barrel_elp_destructible.fbx
 		Animations = 0
 		DebugAnimIndex = -1
@@ -1285,7 +1285,7 @@ kbGameEntity 0 0 0 0 {
 					}
 			}
 		RenderPass = LightingPass
-		TranslucencySortBias =  0.000000
+		RenderOrderBias =  0.000000
 		Model = .\assets\models\environment\barrel_elp_destructible.fbx
 		Animations = 0
 		DebugAnimIndex = -1
@@ -1382,7 +1382,7 @@ kbGameEntity 0 0 0 0 {
 					}
 			}
 		RenderPass = LightingPass
-		TranslucencySortBias =  0.000000
+		RenderOrderBias =  0.000000
 		Model = .\assets\models\environment\crate_1_destructible.fbx
 		Animations = 0
 		DebugAnimIndex = -1
@@ -1465,7 +1465,7 @@ kbGameEntity 0 0 0 0 {
 					}
 			}
 		RenderPass = LightingPass
-		TranslucencySortBias =  0.000000
+		RenderOrderBias =  0.000000
 		Model = .\assets\models\environment\crate_1_destructible.fbx
 		Animations = 0
 		DebugAnimIndex = -1
@@ -1548,7 +1548,7 @@ kbGameEntity 0 0 0 0 {
 					}
 			}
 		RenderPass = LightingPass
-		TranslucencySortBias =  0.000000
+		RenderOrderBias =  0.000000
 		Model = .\assets\models\environment\barrel_elp.fbx
 	}
 }
@@ -1758,7 +1758,7 @@ kbGameEntity 0 0 0 0 {
 		StartColor = 1.000000 1.000000 1.000000 1.000000
 		StartDelay =  0.000000
 		TotalDuration =  10.000000
-		TranslucencySortBias =  0.000000
+		RenderOrderBias =  0.000000
 		VelocityCurve = 3
 			kbAnimEvent { 
 				Enabled = 0
@@ -1874,7 +1874,7 @@ kbGameEntity 0 0 0 0 {
 		StartColor = 1.000000 1.000000 1.000000 1.000000
 		StartDelay =  0.000000
 		TotalDuration =  10.000000
-		TranslucencySortBias =  -1.000000
+		RenderOrderBias =  -1.000000
 		VelocityCurve = 3
 			kbAnimEvent { 
 				Enabled = 0
@@ -1976,7 +1976,7 @@ kbGameEntity 0 0 0 0 {
 		StartColor = 0.080000 0.080000 0.080000 0.010000
 		StartDelay =  0.000000
 		TotalDuration =  10.000000
-		TranslucencySortBias =  1.000000
+		RenderOrderBias =  1.000000
 		VelocityCurve = 3
 			kbAnimEvent { 
 				Enabled = 0
@@ -2078,7 +2078,7 @@ kbGameEntity 0 0 0 0 {
 					}
 			}
 		RenderPass = TranslucentWithDepthPass
-		TranslucencySortBias =  0.000000
+		RenderOrderBias =  0.000000
 		Model = .\assets\models\skydomes\clouddome.fbx
 	}
 }

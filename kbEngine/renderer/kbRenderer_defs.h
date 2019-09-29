@@ -327,7 +327,7 @@ public:
 													m_pModel( nullptr ),
 													m_RenderPass( RP_Lighting ),
 													m_CullMode( CullMode_ShaderDefault ),
-													m_TranslucencySortBias( 0.0f ),
+													m_RenderOrderBias( 0.0f ),
 													m_EntityId( 0 ),
 													m_CullDistance( -1.0f ),
 													m_bCastsShadow( false ),
@@ -340,7 +340,7 @@ public:
 	std::vector<kbShaderParamOverrides_t>		m_Materials;
 	ERenderPass									m_RenderPass;
 	ECullMode									m_CullMode;
-	float										m_TranslucencySortBias;
+	float										m_RenderOrderBias;
 	kbVec3										m_Position;
 	kbQuat										m_Orientation;
 	kbVec3										m_Scale;

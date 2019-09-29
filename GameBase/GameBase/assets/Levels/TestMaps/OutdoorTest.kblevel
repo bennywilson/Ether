@@ -138,7 +138,7 @@ kbGameEntity 0 0 0 0 {
 					}
 			}
 		RenderPass = Post-LightingPass
-		TranslucencySortBias =  -1.000000
+		RenderOrderBias =  -1.000000
 		Model = .\assets\models\skydomes\skydomes.ms3d
 		ShaderOverride = 1
 			.\assets\shaders\skybox\skybox.kbshader
@@ -208,7 +208,7 @@ kbGameEntity 0 0 0 0 {
 				ShaderParams = 0
 			}
 		RenderPass = LightingPass
-		TranslucencySortBias =  -1.000000
+		RenderOrderBias =  -1.000000
 		Model = .\assets\models\vehicles\jet.ms3d
 		ShaderOverride = 1
 			..\..\kbengine\assets\shaders\basicshader.kbshader
@@ -255,7 +255,7 @@ kbGameEntity 0 0 0 0 {
 		CastsShadow = 0
 		Materials = 0
 		RenderPass = LightingPass
-		TranslucencySortBias =  0.000000
+		RenderOrderBias =  0.000000
 		Model = NULL
 		ShaderOverride = 0
 			
@@ -339,7 +339,7 @@ kbGameEntity 0 0 0 0 {
 		CastsShadow = 0
 		Materials = 0
 		RenderPass = LightingPass
-		TranslucencySortBias =  0.000000
+		RenderOrderBias =  0.000000
 		Model = NULL
 		ShaderOverride = 0
 			
@@ -443,7 +443,7 @@ kbGameEntity 0 0 0 0 {
 					}
 			}
 		RenderPass = LightingPass
-		TranslucencySortBias =  -1.000000
+		RenderOrderBias =  -1.000000
 		Model = .\assets\models\architecture\bricks.ms3d
 		ShaderOverride = 0
 			
@@ -554,7 +554,7 @@ kbGameEntity 0 0 0 0 {
 					}
 			}
 		RenderPass = LightingPass
-		TranslucencySortBias =  0.000000
+		RenderOrderBias =  0.000000
 		Model = NULL
 		ShaderOverride = 0
 			
@@ -707,7 +707,7 @@ kbGameEntity 0 0 0 0 {
 					}
 			}
 		RenderPass = Post-LightingPass
-		TranslucencySortBias =  -5.000000
+		RenderOrderBias =  -5.000000
 		Model = ..\..\kbengine\assets\models\unitquad.ms3d
 		ShaderOverride = 0
 			
@@ -858,7 +858,7 @@ kbGameEntity 0 0 0 0 {
 					}
 			}
 		RenderPass = LightingPass
-		TranslucencySortBias =  0.000000
+		RenderOrderBias =  0.000000
 		Model = .\assets\models\environment\crate_1_destructible.fbx
 		ShaderOverride = 0
 			
@@ -879,7 +879,7 @@ kbGameEntity 0 0 0 0 {
 		CastsShadow = 0
 		Materials = 0
 		RenderPass = LightingPass
-		TranslucencySortBias =  0.000000
+		RenderOrderBias =  0.000000
 		Model = NULL
 		ShaderOverride = 0
 			
@@ -937,7 +937,7 @@ kbGameEntity 0 0 0 0 {
 					}
 			}
 		RenderPass = LightingPass
-		TranslucencySortBias =  0.000000
+		RenderOrderBias =  0.000000
 		Model = .\assets\models\environment\crate_1_destructible.fbx
 		ShaderOverride = 0
 			
@@ -1072,7 +1072,7 @@ kbGameEntity 0 0 0 0 {
 					}
 			}
 		RenderPass = LightingPass
-		TranslucencySortBias =  -1.000000
+		RenderOrderBias =  -1.000000
 		Dimensions = 129
 		Grass = 1
 			kbGrass { 

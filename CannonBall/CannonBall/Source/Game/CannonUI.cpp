@@ -166,3 +166,11 @@ void CannonBallUIComponent::SetFill( const float fill ) {
 		m_NextSparkAnimUpdateTime = g_GlobalTimer.TimeElapsedSeconds() + 0.25f;
 	}
 }
+
+
+/**
+ *	CannonBallUIComponent::CannonBallActivatedCB
+ */
+void CannonBallUIComponent::CannonBallActivatedCB() {
+	m_CurrentFill = m_TargetFill = 0.0f;
+}

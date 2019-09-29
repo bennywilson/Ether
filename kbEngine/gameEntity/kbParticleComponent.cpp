@@ -83,7 +83,7 @@ void kbParticleComponent::Constructor() {
 	m_NumEmittedParticles = 0;
 	m_ParticleBillboardType = BT_FaceCamera;
 	m_Gravity.Set( 0.0f, 0.0f, 0.0f );
-	m_TranslucencySortBias = 0.0f;
+	m_RenderOrderBias = 0.0f;
 	m_DebugPlayEntity = false;
 
 	m_LeftOverTime = 0.0f;
@@ -402,7 +402,7 @@ void kbParticleComponent::Update_Internal( const float DeltaTime ) {
 				renderObj.m_pModel = pModelEmitter->GetModel();
 				renderObj.m_Materials = pModelEmitter->GetShaderParamOverrides();
 				renderObj.m_RenderPass = RP_Translucent;
-				renderObj.m_TranslucencySortBias = 0;
+				renderObj.m_RenderOrderBias = 0;
 				renderObj.m_Position = newParticle.m_Position;
 
 				renderObj.m_Scale = kbVec3::one;
@@ -519,7 +519,7 @@ void kbParticleComponent::RenderSync() {
 	m_RenderObject.m_RenderPass = RP_Translucent;
 	m_RenderObject.m_Position = GetPosition();
 	m_RenderObject.m_Orientation = kbQuat( 0.0f, 0.0f, 0.0f, 1.0f );
-	m_RenderObject.m_TranslucencySortBias = m_TranslucencySortBias;
+	m_RenderObject.m_RenderOrderBias = m_RenderOrderBias;
 
 	// Update materials
 	m_RenderObject.m_Materials.clear();

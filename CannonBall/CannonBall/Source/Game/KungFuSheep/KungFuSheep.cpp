@@ -53,7 +53,7 @@ public:
 		const float blockerCheckReach = frameDT * m_pActorComponent->GetMaxRunSpeed() * 20.0f;
 		if ( input.WasKeyJustPressed( 'K' ) ) {
 			RequestStateChange( KungFuSheepState::Attack );
-		} else if ( input.IsKeyPressedOrDown( 'J' ) && curTime > m_LastCannonBallTime + 2.0f ) {
+		} else if ( input.IsKeyPressedOrDown( 'J' ) && curTime > m_LastCannonBallTime + 2.0f && GetSheep()->GetCannonBallMeterFill() >= 1.0f ) {
 			RequestStateChange( KungFuSheepState::CannonBall );
 		} else if ( input.IsKeyPressedOrDown( 'A' ) ) {
 							
@@ -116,7 +116,7 @@ public:
 
 		if ( input.WasKeyJustPressed( 'K' ) ) {
 			RequestStateChange( KungFuSheepState::Attack );
-		} else if ( input.IsKeyPressedOrDown( 'J' ) ) {
+		} else if ( input.IsKeyPressedOrDown( 'J' ) && GetSheep()->GetCannonBallMeterFill() >= 1.0f ) {
 			RequestStateChange( KungFuSheepState::CannonBall );
 		} else if ( targetDir.z < 0.0f ) {
 			if ( input.IsKeyPressedOrDown( 'A' ) ) {
@@ -273,7 +273,7 @@ public:
 			m_NextBaaTime = g_GlobalTimer.TimeElapsedSeconds() + 3.0f + kbfrand();
 		}
 
-		if ( input.IsKeyPressedOrDown( 'J' ) ) {
+		if ( input.IsKeyPressedOrDown( 'J' ) && GetSheep()->GetCannonBallMeterFill() >= 1.0f ) {
 			RequestStateChange( KungFuSheepState::CannonBall );
 		} else if ( input.IsKeyPressedOrDown( 'A' ) ) {
 			if ( m_CurrentDirection == 1 ) {
@@ -427,6 +427,8 @@ public:
 		m_pActorComponent->SetTargetFacingDirection( kbVec3( -1.0f, 0.0f, 0.0f ) );
 
 		m_StartCannonBallTime = g_GlobalTimer.TimeElapsedSeconds();
+
+		GetSheep()->CannonBallActivatedCB();
 	}
 
 	virtual void UpdateState() override {
@@ -495,7 +497,7 @@ void KungFuSheepComponent::SetEnable_Internal( const bool bEnable ) {
 		if ( g_UseEditor == false ) {
 			KungFuLevelComponent *const pLevelComp = g_pCannonGame->GetLevelComponent<KungFuLevelComponent>();
 			pLevelComp->UpdateSheepHealthBar( 1.0f );
-			pLevelComp->UpdateCannonBallMeter( m_CannonBallMeter );
+			pLevelComp->UpdateCannonBallMeter( m_CannonBallMeter, false );
 		}
 	} else {
 		if ( m_HeadBandInstance[0].GetEntity() != nullptr ) {
@@ -579,7 +581,7 @@ void KungFuSheepComponent::OnAnimEvent( const kbAnimEventInfo_t & animEventInfo 
 			}
 
 			m_CannonBallMeter += 0.1f;
-			g_pGame->GetLevelComponent<KungFuLevelComponent>()->UpdateCannonBallMeter( m_CannonBallMeter );
+			g_pGame->GetLevelComponent<KungFuLevelComponent>()->UpdateCannonBallMeter( m_CannonBallMeter, false );
 
 		}
 
@@ -749,11 +751,21 @@ void KungFuSheepComponent::SpawnSplash() {
 	kbGameEntity *const pSplash = g_pGame->CreateEntity( m_SplashFX.GetEntity() );
 	pSplash->SetPosition( GetOwnerPosition() );
 	pSplash->DeleteWhenComponentsAreInactive( true );
-	
+
 	KungFuLevelComponent *const pLevelComponent = g_pCannonGame->GetLevelComponent<KungFuLevelComponent>();
 	pLevelComponent->DoSplashSound();
 
 	if ( kbfrand() > 0.75f ) {
 		pLevelComponent->DoWaterDropletScreenFX();
 	}
+}
+
+/**
+ *	KungFuSheepComponent::CannonBallActivatedCB
+ */	
+void KungFuSheepComponent::CannonBallActivatedCB() {
+	m_CannonBallMeter = 0.0f;
+	
+	KungFuLevelComponent *const pLevelComponent = g_pCannonGame->GetLevelComponent<KungFuLevelComponent>();
+	pLevelComponent->UpdateCannonBallMeter( 0.0f, true );
 }

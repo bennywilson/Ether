@@ -133,7 +133,7 @@ private:
 	int															m_MaxBurstCount;
 	EBillboardType												m_ParticleBillboardType;
 	std::vector<kbModelEmitter>									m_ModelEmitter;
-	float														m_TranslucencySortBias;
+	float														m_RenderOrderBias;
 	bool														m_DebugPlayEntity;
 
 	// Non-editable

@@ -95,7 +95,7 @@ kbPrefab 1 {
 			StartColor = 1.000000 1.000000 1.000000 0.000000
 			StartDelay =  0.000000
 			TotalDuration =  3.000000
-			TranslucencySortBias =  0.000000
+			RenderOrderBias =  0.000000
 			VelocityCurve = 2
 				kbAnimEvent { 
 					Enabled = 0
@@ -229,7 +229,7 @@ kbGameEntity 4226348206 1325904980 2380668328 2364791781 {
 		StartColor = 1.000000 1.000000 1.000000 0.500000
 		StartDelay =  0.000000
 		TotalDuration =  3.000000
-		TranslucencySortBias =  0.000000
+		RenderOrderBias =  0.000000
 		VelocityCurve = 0
 	}
 	kbPlaySoundComponent { 
@@ -330,7 +330,7 @@ kbGameEntity 948620123 1076773710 873065897 3787095028 {
 					}
 			}
 		RenderPass = LightingPass
-		TranslucencySortBias =  0.000000
+		RenderOrderBias =  0.000000
 		Animations = 0
 		DebugAnimIndex = -1
 		Model = .\assets\models\characters\sheep\gear\headband.ms3d
@@ -1295,7 +1295,7 @@ kbGameEntity 3807537734 1283872403 1661460398 2211889957 {
 					}
 			}
 		RenderPass = LightingPass
-		TranslucencySortBias =  0.000000
+		RenderOrderBias =  0.000000
 		Animations = 9
 			kbAnimComponent { 
 				Enabled = 0
@@ -1485,7 +1485,7 @@ kbGameEntity 3807537734 1283872403 1661460398 2211889957 {
 					}
 			}
 		RenderPass = Post-LightingPass
-		TranslucencySortBias =  0.000000
+		RenderOrderBias =  0.000000
 		Animations = 9
 			kbAnimComponent { 
 				Enabled = 0

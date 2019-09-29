@@ -58,7 +58,7 @@ void kbStaticModelComponent::SetEnable_Internal( const bool isEnabled ) {
 		m_RenderObject.m_Position = GetOwner()->GetPosition();
 		m_RenderObject.m_RenderPass = m_RenderPass;
 		m_RenderObject.m_Scale = GetOwner()->GetScale() * kbLevelComponent::GetGlobalModelScale();
-		m_RenderObject.m_TranslucencySortBias = m_TranslucencySortBias;
+		m_RenderObject.m_RenderOrderBias = m_RenderOrderBias;
 
 		RefreshMaterials( false );
 

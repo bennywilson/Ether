@@ -58,7 +58,7 @@ kbPrefab 1 {
 			StartColor = 1.000000 0.400000 0.700000 1.000000
 			StartDelay =  0.000000
 			TotalDuration =  0.500000
-			TranslucencySortBias =  0.000000
+			RenderOrderBias =  0.000000
 			VelocityCurve = 0
 		}
 	}
@@ -123,7 +123,7 @@ kbGameEntity 288884920 1074764317 1666654870 1595214297 {
 		StartColor = 1.000000 1.000000 1.000000 1.000000
 		StartDelay =  0.000000
 		TotalDuration =  2.000000
-		TranslucencySortBias =  0.000000
+		RenderOrderBias =  0.000000
 		VelocityCurve = 0
 	}
 }
@@ -182,7 +182,7 @@ kbGameEntity 749854598 1122407100 2268504468 2469228342 {
 		StartColor = 1.000000 1.000000 1.000000 1.000000
 		StartDelay =  0.000000
 		TotalDuration =  3.500000
-		TranslucencySortBias =  0.000000
+		RenderOrderBias =  0.000000
 		VelocityCurve = 0
 	}
 }
@@ -241,7 +241,7 @@ kbGameEntity 834051548 1161303702 3343001743 2051538980 {
 		StartColor = 1.000000 1.000000 1.000000 1.000000
 		StartDelay =  0.000000
 		TotalDuration =  3.500000
-		TranslucencySortBias =  0.000000
+		RenderOrderBias =  0.000000
 		VelocityCurve = 0
 	}
 }
@@ -306,7 +306,7 @@ kbGameEntity 4227010865 2632918935 1228561351 3287441000 {
 		StartColor = 1.000000 1.000000 1.000000 1.000000
 		StartDelay =  0.000000
 		TotalDuration =  0.500000
-		TranslucencySortBias =  0.000000
+		RenderOrderBias =  0.000000
 		VelocityCurve = 0
 	}
 	kbParticleComponent { 
@@ -357,7 +357,7 @@ kbGameEntity 4227010865 2632918935 1228561351 3287441000 {
 		StartColor = 0.250000 0.250000 0.250000 0.250000
 		StartDelay =  0.000000
 		TotalDuration =  2.000000
-		TranslucencySortBias =  0.000000
+		RenderOrderBias =  0.000000
 		VelocityCurve = 0
 	}
 }
@@ -428,7 +428,7 @@ kbGameEntity 2914882686 1195769252 1420378815 2077859665 {
 		StartColor = 1.000000 1.000000 1.000000 0.500000
 		StartDelay =  0.000000
 		TotalDuration =  0.500000
-		TranslucencySortBias =  0.000000
+		RenderOrderBias =  0.000000
 		VelocityCurve = 0
 	}
 	kbParticleComponent { 
@@ -486,7 +486,7 @@ kbGameEntity 2914882686 1195769252 1420378815 2077859665 {
 		StartColor = 0.100000 0.100000 0.100000 1.000000
 		StartDelay =  0.000000
 		TotalDuration =  0.100000
-		TranslucencySortBias =  0.000000
+		RenderOrderBias =  0.000000
 		VelocityCurve = 0
 	}
 }
@@ -592,7 +592,7 @@ kbGameEntity 3435494227 1100605259 3092233134 3410369480 {
 					}
 			}
 		RenderPass = Post-LightingPass
-		TranslucencySortBias =  0.000000
+		RenderOrderBias =  0.000000
 		Model = ..\..\kbengine\assets\models\unitquad.ms3d
 		ShaderOverride = 0
 			
@@ -692,7 +692,7 @@ kbGameEntity 931791909 1148045401 1211467707 767381942 {
 					}
 			}
 		RenderPass = Post-LightingPass
-		TranslucencySortBias =  -5.000000
+		RenderOrderBias =  -5.000000
 		Model = ..\..\kbengine\assets\models\unitquad.ms3d
 		ShaderOverride = 0
 			
@@ -758,7 +758,7 @@ kbGameEntity 1199553285 1083518041 1518451114 1990211042 {
 		StartColor = 1.000000 1.000000 1.000000 0.000000
 		StartDelay =  0.000000
 		TotalDuration =  -1.000000
-		TranslucencySortBias =  0.000000
+		RenderOrderBias =  0.000000
 		VelocityCurve = 0
 	}
 }
@@ -879,7 +879,7 @@ kbGameEntity 1529798310 1082595041 1391599796 3574967169 {
 		StartColor = 1.000000 1.000000 1.000000 1.000000
 		StartDelay =  0.000000
 		TotalDuration =  10.000000
-		TranslucencySortBias =  0.000000
+		RenderOrderBias =  0.000000
 		VelocityCurve = 3
 			kbAnimEvent { 
 				Enabled = 0
@@ -993,7 +993,7 @@ kbGameEntity 1529798310 1082595041 1391599796 3574967169 {
 		StartColor = 1.000000 1.000000 1.000000 1.000000
 		StartDelay =  0.000000
 		TotalDuration =  10.000000
-		TranslucencySortBias =  -1.000000
+		RenderOrderBias =  -1.000000
 		VelocityCurve = 3
 			kbAnimEvent { 
 				Enabled = 0
@@ -1093,7 +1093,7 @@ kbGameEntity 1529798310 1082595041 1391599796 3574967169 {
 		StartColor = 0.080000 0.080000 0.080000 0.010000
 		StartDelay =  0.000000
 		TotalDuration =  10.000000
-		TranslucencySortBias =  1.000000
+		RenderOrderBias =  1.000000
 		VelocityCurve = 3
 			kbAnimEvent { 
 				Enabled = 0

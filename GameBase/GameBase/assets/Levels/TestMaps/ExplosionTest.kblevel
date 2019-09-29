@@ -106,7 +106,7 @@ kbGameEntity 0 0 0 0 {
 		StartColor = 1.000000 1.000000 1.000000 1.000000
 		StartDelay =  0.000000
 		TotalDuration =  5.000000
-		TranslucencySortBias =  0.000000
+		RenderOrderBias =  0.000000
 		VelocityCurve = 3
 			kbAnimEvent { 
 				Enabled = 0
@@ -187,7 +187,7 @@ kbGameEntity 0 0 0 0 {
 		StartColor = 1.000000 1.000000 1.000000 1.000000
 		StartDelay =  0.000000
 		TotalDuration =  5.000000
-		TranslucencySortBias =  1.000000
+		RenderOrderBias =  1.000000
 		VelocityCurve = 3
 			kbAnimEvent { 
 				Enabled = 0
@@ -240,7 +240,7 @@ kbGameEntity 0 0 0 0 {
 					}
 			}
 		RenderPass = LightingPass
-		TranslucencySortBias =  0.000000
+		RenderOrderBias =  0.000000
 		Model = .\assets\models\test\invertedcube.ms3d
 		ShaderOverride = 0
 			
@@ -385,7 +385,7 @@ kbGameEntity 0 0 0 0 {
 		StartColor = 1.000000 1.000000 1.000000 1.000000
 		StartDelay =  0.000000
 		TotalDuration =  -1.000000
-		TranslucencySortBias =  0.000000
+		RenderOrderBias =  0.000000
 		VelocityCurve = 0
 	}
 	kbParticleComponent { 
@@ -480,7 +480,7 @@ kbGameEntity 0 0 0 0 {
 		StartColor = 1.000000 1.000000 1.000000 1.000000
 		StartDelay =  0.000000
 		TotalDuration =  -1.000000
-		TranslucencySortBias =  -1.000000
+		RenderOrderBias =  -1.000000
 		VelocityCurve = 0
 	}
 	kbParticleComponent { 
@@ -575,7 +575,7 @@ kbGameEntity 0 0 0 0 {
 		StartColor = 1.000000 1.000000 1.000000 1.000000
 		StartDelay =  0.000000
 		TotalDuration =  -1.000000
-		TranslucencySortBias =  -1.000000
+		RenderOrderBias =  -1.000000
 		VelocityCurve = 0
 	}
 }

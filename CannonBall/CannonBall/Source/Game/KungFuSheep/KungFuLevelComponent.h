@@ -45,7 +45,7 @@ public:
 
 	AttackHitInfo_t								DoAttack( const DealAttackInfo_t<KungFuGame::eAttackType> & dealAttackInfo );
 	void										UpdateSheepHealthBar( const float healthVal );
-	void										UpdateCannonBallMeter( const float value );
+	void										UpdateCannonBallMeter( const float value, const bool bActivated );
 
 	void										DoWaterDropletScreenFX();
 	void										DoSplashSound();

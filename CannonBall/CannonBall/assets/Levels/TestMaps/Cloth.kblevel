@@ -211,7 +211,7 @@ kbGameEntity 0 0 0 0 {
 					}
 			}
 		RenderPass = LightingPass
-		TranslucencySortBias =  0.000000
+		RenderOrderBias =  0.000000
 		Animations = 9
 			kbAnimComponent { 
 				Enabled = 0
@@ -401,7 +401,7 @@ kbGameEntity 0 0 0 0 {
 					}
 			}
 		RenderPass = Post-LightingPass
-		TranslucencySortBias =  0.000000
+		RenderOrderBias =  0.000000
 		Animations = 9
 			kbAnimComponent { 
 				Enabled = 0

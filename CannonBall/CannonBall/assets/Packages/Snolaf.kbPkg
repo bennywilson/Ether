@@ -51,7 +51,7 @@ kbPrefab 1 {
 						}
 				}
 			RenderPass = LightingPass
-			TranslucencySortBias =  0.000000
+			RenderOrderBias =  0.000000
 			Model = ..\..\kbengine\assets\models\unitcube.ms3d
 		}
 		kbShaderModifierComponent { 
@@ -163,7 +163,7 @@ kbGameEntity 1180474321 1206754152 1921378463 1489227724 {
 		StartColor = 1.000000 1.000000 1.000000 1.000000
 		StartDelay =  0.000000
 		TotalDuration =  5.000000
-		TranslucencySortBias =  0.000000
+		RenderOrderBias =  0.000000
 		VelocityCurve = 3
 			kbAnimEvent { 
 				Enabled = 0
@@ -279,7 +279,7 @@ kbGameEntity 1180474321 1206754152 1921378463 1489227724 {
 		StartColor = 1.000000 1.000000 1.000000 0.000000
 		StartDelay =  0.000000
 		TotalDuration =  5.000000
-		TranslucencySortBias =  0.000000
+		RenderOrderBias =  0.000000
 		VelocityCurve = 0
 	}
 }
@@ -344,7 +344,7 @@ kbGameEntity 314357658 1122514197 2466994618 463523205 {
 					}
 			}
 		RenderPass = LightingPass
-		TranslucencySortBias =  0.000000
+		RenderOrderBias =  0.000000
 		Animations = 7
 			kbAnimComponent { 
 				Enabled = 0
@@ -474,7 +474,7 @@ kbGameEntity 314357658 1122514197 2466994618 463523205 {
 					}
 			}
 		RenderPass = LightingPass
-		TranslucencySortBias =  0.000000
+		RenderOrderBias =  0.000000
 		Animations = 7
 			kbAnimComponent { 
 				Enabled = 0
@@ -606,7 +606,7 @@ kbGameEntity 314357658 1122514197 2466994618 463523205 {
 		StartColor = 1.000000 1.000000 1.000000 1.000000
 		StartDelay =  0.000000
 		TotalDuration =  -1.000000
-		TranslucencySortBias =  0.000000
+		RenderOrderBias =  0.000000
 		VelocityCurve = 0
 	}
 	kbParticleComponent { 
@@ -673,7 +673,7 @@ kbGameEntity 314357658 1122514197 2466994618 463523205 {
 		StartColor = 1.000000 1.000000 1.000000 1.000000
 		StartDelay =  0.000000
 		TotalDuration =  -1.000000
-		TranslucencySortBias =  0.000000
+		RenderOrderBias =  0.000000
 		VelocityCurve = 0
 	}
 	kbDeleteEntityComponent { 
@@ -758,7 +758,7 @@ kbGameEntity 2312584767 1139148529 3844446354 2946788253 {
 					}
 			}
 		RenderPass = LightingPass
-		TranslucencySortBias =  0.000000
+		RenderOrderBias =  0.000000
 		Animations = 0
 		DebugAnimIndex = -1
 		Model = .\assets\models\characters\snolaf\snolaf_head.ms3d
@@ -811,7 +811,7 @@ kbGameEntity 2312584767 1139148529 3844446354 2946788253 {
 					}
 			}
 		RenderPass = LightingPass
-		TranslucencySortBias =  0.000000
+		RenderOrderBias =  0.000000
 		Animations = 0
 		DebugAnimIndex = -1
 		Model = .\assets\models\characters\snolaf\snolaf_head.ms3d
@@ -891,7 +891,7 @@ kbGameEntity 3754323986 1218384162 2695139754 2739970727 {
 					}
 			}
 		RenderPass = LightingPass
-		TranslucencySortBias =  0.000000
+		RenderOrderBias =  0.000000
 		Animations = 1
 			kbAnimComponent { 
 				Enabled = 0
@@ -953,7 +953,7 @@ kbGameEntity 3754323986 1218384162 2695139754 2739970727 {
 					}
 			}
 		RenderPass = LightingPass
-		TranslucencySortBias =  0.000000
+		RenderOrderBias =  0.000000
 		Animations = 1
 			kbAnimComponent { 
 				Enabled = 0
@@ -1042,7 +1042,7 @@ kbGameEntity 2125691545 1130458748 632895138 4256000792 {
 					}
 			}
 		RenderPass = LightingPass
-		TranslucencySortBias =  0.000000
+		RenderOrderBias =  0.000000
 		Animations = 1
 			kbAnimComponent { 
 				Enabled = 0
@@ -1104,7 +1104,7 @@ kbGameEntity 2125691545 1130458748 632895138 4256000792 {
 					}
 			}
 		RenderPass = LightingPass
-		TranslucencySortBias =  0.000000
+		RenderOrderBias =  0.000000
 		Animations = 1
 			kbAnimComponent { 
 				Enabled = 0

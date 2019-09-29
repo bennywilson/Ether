@@ -115,7 +115,7 @@ kbPrefab 1 {
 			StartColor = 1.000000 1.000000 1.000000 1.000000
 			StartDelay =  0.000000
 			TotalDuration =  5.000000
-			TranslucencySortBias =  0.000000
+			RenderOrderBias =  0.000000
 			VelocityCurve = 0
 		}
 		kbParticleComponent { 
@@ -182,7 +182,7 @@ kbPrefab 1 {
 			StartColor = 1.000000 1.000000 1.000000 0.250000
 			StartDelay =  0.000000
 			TotalDuration =  5.000000
-			TranslucencySortBias =  0.000000
+			RenderOrderBias =  0.000000
 			VelocityCurve = 3
 				kbAnimEvent { 
 					Enabled = 0
@@ -276,7 +276,7 @@ kbGameEntity 3936461697 1285153374 3406925493 1594399155 {
 					}
 			}
 		RenderPass = UIPass
-		TranslucencySortBias =  0.000000
+		RenderOrderBias =  0.000000
 		Model = ..\..\kbengine\assets\models\unitquad.ms3d
 	}
 }

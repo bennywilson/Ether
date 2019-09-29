@@ -408,10 +408,8 @@ void KungFuLevelComponent::Update_Internal( const float DeltaTime ) {
 
 	// Not all game entities are loaded in SetEnable_Internal unfortunately
 	if ( m_pHealthBarUI == nullptr || m_pCannonBallUI == nullptr ) {
-
 		m_pHealthBarUI = nullptr;
 		m_pCannonBallUI = nullptr;
-
 		for ( int i = 0; i < g_pCannonGame->GetGameEntities().size() && ( m_pHealthBarUI == nullptr || m_pCannonBallUI == nullptr ); i++ ) {
 			kbGameEntity *const pTargetEnt = g_pCannonGame->GetGameEntities()[i];
 			if ( m_pHealthBarUI == nullptr ) {
@@ -494,13 +492,17 @@ void KungFuLevelComponent::UpdateSheepHealthBar( const float healthVal ) {
 /**
  *	KungFuLevelComponent::UpdateCannonBallMeter
  */
-void KungFuLevelComponent::UpdateCannonBallMeter( const float fillVal ) {
+void KungFuLevelComponent::UpdateCannonBallMeter( const float fillVal, const bool bActivated ) {
 
 	if ( m_pCannonBallUI == nullptr ) {
 		return;
 	}
 
-	m_pCannonBallUI->SetFill( fillVal );
+	if ( bActivated ) {
+		m_pCannonBallUI->CannonBallActivatedCB();
+	} else {
+		m_pCannonBallUI->SetFill( fillVal );
+	}
 }
 
 

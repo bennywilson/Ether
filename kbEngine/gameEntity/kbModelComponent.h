@@ -117,7 +117,7 @@ public:
 protected:
 
 	enum ERenderPass							m_RenderPass;
-	float										m_TranslucencySortBias;
+	float										m_RenderOrderBias;
 
 	std::vector<kbMaterialComponent>			m_MaterialList;
 

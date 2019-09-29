@@ -133,7 +133,7 @@ GenerateClass(
 GenerateClass(
 	kbModelComponent,
 	AddField( "RenderPass", KBTYPEINFO_ENUM, kbModelComponent, m_RenderPass, false, "ERenderPass" )
-	AddField( "TranslucencySortBias", KBTYPEINFO_FLOAT, kbModelComponent, m_TranslucencySortBias, false, "" )
+	AddField( "RenderOrderBias", KBTYPEINFO_FLOAT, kbModelComponent, m_RenderOrderBias, false, "" )
 	AddField( "CastsShadow", KBTYPEINFO_BOOL, kbModelComponent, m_bCastsShadow, false, "" )
 	AddField( "Materials", KBTYPEINFO_STRUCT, kbModelComponent, m_MaterialList, true, "kbMaterialComponent" )
 )
@@ -248,7 +248,7 @@ GenerateEnum(
 GenerateClass(
 	kbParticleComponent,
 	AddField( "DebugPlayEntity", KBTYPEINFO_BOOL, kbParticleComponent, m_DebugPlayEntity, false, "" )
-	AddField( "TranslucencySortBias", KBTYPEINFO_FLOAT, kbParticleComponent, m_TranslucencySortBias, false, "" )
+	AddField( "RenderOrderBias", KBTYPEINFO_FLOAT, kbParticleComponent, m_RenderOrderBias, false, "" )
 	AddField( "MaterialList", KBTYPEINFO_STRUCT, kbParticleComponent, m_MaterialList, true, "kbMaterialComponent" )
 	AddField( "TotalDuration", KBTYPEINFO_FLOAT, kbParticleComponent, m_TotalDuration, false, "" )
 	AddField( "StartDelay", KBTYPEINFO_FLOAT, kbParticleComponent, m_StartDelay, false, "" )

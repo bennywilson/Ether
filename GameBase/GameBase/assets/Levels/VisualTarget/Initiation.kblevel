@@ -13,7 +13,7 @@ kbGameEntity 0 0 0 0 {
 		CastsShadow = 1
 		Materials = 0
 		RenderPass = LightingPass
-		TranslucencySortBias =  0.000000
+		RenderOrderBias =  0.000000
 		Model = NULL
 		ShaderOverride = 0
 			
@@ -613,7 +613,7 @@ kbGameEntity 0 0 0 0 {
 					}
 			}
 		RenderPass = LightingPass
-		TranslucencySortBias =  0.000000
+		RenderOrderBias =  0.000000
 		Model = .\assets\visualtarget\initiation\enviro\prison_interior.ms3d
 		ShaderOverride = 15
 			.\assets\shaders\environment\environmentbase.kbshader
@@ -675,7 +675,7 @@ kbGameEntity 0 0 0 0 {
 		CastsShadow = 1
 		Materials = 0
 		RenderPass = LightingPass
-		TranslucencySortBias =  0.000000
+		RenderOrderBias =  0.000000
 		Model = .\assets\visualtarget\initiation\other\maletarget.ms3d
 		ShaderOverride = 10
 			.\assets\shaders\character\characterbase.kbshader
@@ -717,7 +717,7 @@ kbGameEntity 0 0 0 0 {
 		CastsShadow = 1
 		Materials = 0
 		RenderPass = LightingPass
-		TranslucencySortBias =  0.000000
+		RenderOrderBias =  0.000000
 		Model = NULL
 		ShaderOverride = 0
 			
@@ -876,7 +876,7 @@ kbGameEntity 0 0 0 0 {
 		CastsShadow = 1
 		Materials = 0
 		RenderPass = LightingPass
-		TranslucencySortBias =  0.000000
+		RenderOrderBias =  0.000000
 		Model = .\assets\visualtarget\initiation\enviro\jailcelldoor.ms3d
 		ShaderOverride = 1
 			.\assets\shaders\environment\environmentbase.kbshader
@@ -898,7 +898,7 @@ kbGameEntity 0 0 0 0 {
 		CastsShadow = 1
 		Materials = 0
 		RenderPass = LightingPass
-		TranslucencySortBias =  0.000000
+		RenderOrderBias =  0.000000
 		Model = .\assets\visualtarget\initiation\enviro\jailcelldoor.ms3d
 		ShaderOverride = 2
 			.\assets\shaders\environment\environmentbase.kbshader
@@ -921,7 +921,7 @@ kbGameEntity 0 0 0 0 {
 		CastsShadow = 1
 		Materials = 0
 		RenderPass = LightingPass
-		TranslucencySortBias =  0.000000
+		RenderOrderBias =  0.000000
 		Model = .\assets\visualtarget\initiation\enviro\jailcelldoor.ms3d
 		ShaderOverride = 1
 			.\assets\shaders\environment\environmentbase.kbshader
@@ -943,7 +943,7 @@ kbGameEntity 0 0 0 0 {
 		CastsShadow = 1
 		Materials = 0
 		RenderPass = LightingPass
-		TranslucencySortBias =  0.000000
+		RenderOrderBias =  0.000000
 		Model = .\assets\visualtarget\initiation\enviro\jailcelldoor.ms3d
 		ShaderOverride = 1
 			.\assets\shaders\environment\environmentbase.kbshader
@@ -965,7 +965,7 @@ kbGameEntity 0 0 0 0 {
 		CastsShadow = 1
 		Materials = 0
 		RenderPass = LightingPass
-		TranslucencySortBias =  0.000000
+		RenderOrderBias =  0.000000
 		Model = .\assets\visualtarget\initiation\enviro\jailcelldoor.ms3d
 		ShaderOverride = 1
 			.\assets\shaders\environment\environmentbase.kbshader
@@ -987,7 +987,7 @@ kbGameEntity 0 0 0 0 {
 		CastsShadow = 1
 		Materials = 0
 		RenderPass = LightingPass
-		TranslucencySortBias =  0.000000
+		RenderOrderBias =  0.000000
 		Model = .\assets\visualtarget\initiation\enviro\jailcelldoor.ms3d
 		ShaderOverride = 1
 			.\assets\shaders\environment\environmentbase.kbshader
@@ -1009,7 +1009,7 @@ kbGameEntity 0 0 0 0 {
 		CastsShadow = 1
 		Materials = 0
 		RenderPass = LightingPass
-		TranslucencySortBias =  0.000000
+		RenderOrderBias =  0.000000
 		Model = .\assets\visualtarget\initiation\enviro\jailcelldoor.ms3d
 		ShaderOverride = 1
 			.\assets\shaders\environment\environmentbase.kbshader
@@ -1031,7 +1031,7 @@ kbGameEntity 0 0 0 0 {
 		CastsShadow = 1
 		Materials = 0
 		RenderPass = LightingPass
-		TranslucencySortBias =  0.000000
+		RenderOrderBias =  0.000000
 		Model = .\assets\visualtarget\initiation\enviro\jailcelldoor.ms3d
 		ShaderOverride = 1
 			.\assets\shaders\environment\environmentbase.kbshader
@@ -1053,7 +1053,7 @@ kbGameEntity 0 0 0 0 {
 		CastsShadow = 1
 		Materials = 0
 		RenderPass = LightingPass
-		TranslucencySortBias =  0.000000
+		RenderOrderBias =  0.000000
 		Model = .\assets\visualtarget\initiation\enviro\jailcelldoor.ms3d
 		ShaderOverride = 1
 			.\assets\shaders\environment\environmentbase.kbshader
@@ -1075,7 +1075,7 @@ kbGameEntity 0 0 0 0 {
 		CastsShadow = 1
 		Materials = 0
 		RenderPass = LightingPass
-		TranslucencySortBias =  0.000000
+		RenderOrderBias =  0.000000
 		Model = .\assets\visualtarget\initiation\enviro\jailcelldoor.ms3d
 		ShaderOverride = 1
 			.\assets\shaders\environment\environmentbase.kbshader
@@ -1097,7 +1097,7 @@ kbGameEntity 0 0 0 0 {
 		CastsShadow = 1
 		Materials = 0
 		RenderPass = LightingPass
-		TranslucencySortBias =  0.000000
+		RenderOrderBias =  0.000000
 		Model = .\assets\visualtarget\initiation\enviro\jailcelldoor.ms3d
 		ShaderOverride = 1
 			.\assets\shaders\environment\environmentbase.kbshader
@@ -1119,7 +1119,7 @@ kbGameEntity 0 0 0 0 {
 		CastsShadow = 1
 		Materials = 0
 		RenderPass = LightingPass
-		TranslucencySortBias =  0.000000
+		RenderOrderBias =  0.000000
 		Model = .\assets\visualtarget\initiation\enviro\jailcelldoor.ms3d
 		ShaderOverride = 1
 			.\assets\shaders\environment\environmentbase.kbshader
@@ -1141,7 +1141,7 @@ kbGameEntity 0 0 0 0 {
 		CastsShadow = 1
 		Materials = 0
 		RenderPass = LightingPass
-		TranslucencySortBias =  0.000000
+		RenderOrderBias =  0.000000
 		Model = .\assets\visualtarget\initiation\enviro\jailcelldoor.ms3d
 		ShaderOverride = 1
 			.\assets\shaders\environment\environmentbase.kbshader
@@ -1163,7 +1163,7 @@ kbGameEntity 0 0 0 0 {
 		CastsShadow = 1
 		Materials = 0
 		RenderPass = LightingPass
-		TranslucencySortBias =  0.000000
+		RenderOrderBias =  0.000000
 		Model = .\assets\visualtarget\initiation\enviro\jailcelldoor.ms3d
 		ShaderOverride = 1
 			.\assets\shaders\environment\environmentbase.kbshader
@@ -1185,7 +1185,7 @@ kbGameEntity 0 0 0 0 {
 		CastsShadow = 1
 		Materials = 0
 		RenderPass = LightingPass
-		TranslucencySortBias =  0.000000
+		RenderOrderBias =  0.000000
 		Model = .\assets\visualtarget\initiation\enviro\jailcelldoor.ms3d
 		ShaderOverride = 1
 			.\assets\shaders\environment\environmentbase.kbshader
@@ -1207,7 +1207,7 @@ kbGameEntity 0 0 0 0 {
 		CastsShadow = 1
 		Materials = 0
 		RenderPass = LightingPass
-		TranslucencySortBias =  0.000000
+		RenderOrderBias =  0.000000
 		Model = .\assets\visualtarget\initiation\enviro\jailcelldoor.ms3d
 		ShaderOverride = 1
 			.\assets\shaders\environment\environmentbase.kbshader
@@ -1229,7 +1229,7 @@ kbGameEntity 0 0 0 0 {
 		CastsShadow = 1
 		Materials = 0
 		RenderPass = LightingPass
-		TranslucencySortBias =  0.000000
+		RenderOrderBias =  0.000000
 		Model = .\assets\visualtarget\initiation\enviro\jailcelldoor.ms3d
 		ShaderOverride = 1
 			.\assets\shaders\environment\environmentbase.kbshader
@@ -1251,7 +1251,7 @@ kbGameEntity 0 0 0 0 {
 		CastsShadow = 1
 		Materials = 0
 		RenderPass = LightingPass
-		TranslucencySortBias =  0.000000
+		RenderOrderBias =  0.000000
 		Model = .\assets\visualtarget\initiation\enviro\jailcelldoor.ms3d
 		ShaderOverride = 1
 			.\assets\shaders\environment\environmentbase.kbshader
@@ -1273,7 +1273,7 @@ kbGameEntity 0 0 0 0 {
 		CastsShadow = 1
 		Materials = 0
 		RenderPass = LightingPass
-		TranslucencySortBias =  0.000000
+		RenderOrderBias =  0.000000
 		Model = .\assets\visualtarget\initiation\enviro\jailcelldoor.ms3d
 		ShaderOverride = 1
 			.\assets\shaders\environment\environmentbase.kbshader
@@ -1295,7 +1295,7 @@ kbGameEntity 0 0 0 0 {
 		CastsShadow = 1
 		Materials = 0
 		RenderPass = LightingPass
-		TranslucencySortBias =  0.000000
+		RenderOrderBias =  0.000000
 		Model = .\assets\visualtarget\initiation\enviro\jailcelldoor.ms3d
 		ShaderOverride = 1
 			.\assets\shaders\environment\environmentbase.kbshader
@@ -1317,7 +1317,7 @@ kbGameEntity 0 0 0 0 {
 		CastsShadow = 1
 		Materials = 0
 		RenderPass = LightingPass
-		TranslucencySortBias =  0.000000
+		RenderOrderBias =  0.000000
 		Model = .\assets\visualtarget\initiation\enviro\jailcelldoor.ms3d
 		ShaderOverride = 1
 			.\assets\shaders\environment\environmentbase.kbshader
@@ -1339,7 +1339,7 @@ kbGameEntity 0 0 0 0 {
 		CastsShadow = 1
 		Materials = 0
 		RenderPass = LightingPass
-		TranslucencySortBias =  0.000000
+		RenderOrderBias =  0.000000
 		Model = .\assets\visualtarget\initiation\enviro\jailcelldoor.ms3d
 		ShaderOverride = 1
 			.\assets\shaders\environment\environmentbase.kbshader
@@ -1361,7 +1361,7 @@ kbGameEntity 0 0 0 0 {
 		CastsShadow = 1
 		Materials = 0
 		RenderPass = LightingPass
-		TranslucencySortBias =  0.000000
+		RenderOrderBias =  0.000000
 		Model = .\assets\visualtarget\initiation\enviro\jailcelldoor.ms3d
 		ShaderOverride = 1
 			.\assets\shaders\environment\environmentbase.kbshader
@@ -1383,7 +1383,7 @@ kbGameEntity 0 0 0 0 {
 		CastsShadow = 1
 		Materials = 0
 		RenderPass = LightingPass
-		TranslucencySortBias =  0.000000
+		RenderOrderBias =  0.000000
 		Model = .\assets\visualtarget\initiation\enviro\jailcelldoor.ms3d
 		ShaderOverride = 1
 			.\assets\shaders\environment\environmentbase.kbshader
@@ -1405,7 +1405,7 @@ kbGameEntity 0 0 0 0 {
 		CastsShadow = 1
 		Materials = 0
 		RenderPass = LightingPass
-		TranslucencySortBias =  0.000000
+		RenderOrderBias =  0.000000
 		Model = .\assets\visualtarget\initiation\enviro\jailcelldoor.ms3d
 		ShaderOverride = 1
 			.\assets\shaders\environment\environmentbase.kbshader
@@ -1427,7 +1427,7 @@ kbGameEntity 0 0 0 0 {
 		CastsShadow = 1
 		Materials = 0
 		RenderPass = LightingPass
-		TranslucencySortBias =  0.000000
+		RenderOrderBias =  0.000000
 		Model = .\assets\visualtarget\initiation\enviro\jailcelldoor.ms3d
 		ShaderOverride = 1
 			.\assets\shaders\environment\environmentbase.kbshader
@@ -1449,7 +1449,7 @@ kbGameEntity 0 0 0 0 {
 		CastsShadow = 1
 		Materials = 0
 		RenderPass = LightingPass
-		TranslucencySortBias =  0.000000
+		RenderOrderBias =  0.000000
 		Model = .\assets\visualtarget\initiation\enviro\jailcelldoor.ms3d
 		ShaderOverride = 1
 			.\assets\shaders\environment\environmentbase.kbshader
@@ -1471,7 +1471,7 @@ kbGameEntity 0 0 0 0 {
 		CastsShadow = 1
 		Materials = 0
 		RenderPass = LightingPass
-		TranslucencySortBias =  0.000000
+		RenderOrderBias =  0.000000
 		Model = .\assets\visualtarget\initiation\enviro\jailcelldoor.ms3d
 		ShaderOverride = 1
 			.\assets\shaders\environment\environmentbase.kbshader
@@ -1493,7 +1493,7 @@ kbGameEntity 0 0 0 0 {
 		CastsShadow = 1
 		Materials = 0
 		RenderPass = LightingPass
-		TranslucencySortBias =  0.000000
+		RenderOrderBias =  0.000000
 		Model = .\assets\visualtarget\initiation\enviro\jailcelldoor.ms3d
 		ShaderOverride = 1
 			.\assets\shaders\environment\environmentbase.kbshader
@@ -1515,7 +1515,7 @@ kbGameEntity 0 0 0 0 {
 		CastsShadow = 1
 		Materials = 0
 		RenderPass = LightingPass
-		TranslucencySortBias =  0.000000
+		RenderOrderBias =  0.000000
 		Model = .\assets\visualtarget\initiation\enviro\jailcelldoor.ms3d
 		ShaderOverride = 1
 			.\assets\shaders\environment\environmentbase.kbshader
@@ -1537,7 +1537,7 @@ kbGameEntity 0 0 0 0 {
 		CastsShadow = 1
 		Materials = 0
 		RenderPass = LightingPass
-		TranslucencySortBias =  0.000000
+		RenderOrderBias =  0.000000
 		Model = .\assets\visualtarget\initiation\enviro\jailcelldoor.ms3d
 		ShaderOverride = 1
 			.\assets\shaders\environment\environmentbase.kbshader
@@ -1559,7 +1559,7 @@ kbGameEntity 0 0 0 0 {
 		CastsShadow = 1
 		Materials = 0
 		RenderPass = LightingPass
-		TranslucencySortBias =  0.000000
+		RenderOrderBias =  0.000000
 		Model = .\assets\visualtarget\initiation\enviro\jailcelldoor.ms3d
 		ShaderOverride = 1
 			.\assets\shaders\environment\environmentbase.kbshader
@@ -1581,7 +1581,7 @@ kbGameEntity 0 0 0 0 {
 		CastsShadow = 1
 		Materials = 0
 		RenderPass = LightingPass
-		TranslucencySortBias =  0.000000
+		RenderOrderBias =  0.000000
 		Model = .\assets\visualtarget\initiation\enviro\jailcelldoor.ms3d
 		ShaderOverride = 1
 			.\assets\shaders\environment\environmentbase.kbshader
@@ -1603,7 +1603,7 @@ kbGameEntity 0 0 0 0 {
 		CastsShadow = 1
 		Materials = 0
 		RenderPass = LightingPass
-		TranslucencySortBias =  0.000000
+		RenderOrderBias =  0.000000
 		Model = .\assets\visualtarget\initiation\enviro\jailcelldoor.ms3d
 		ShaderOverride = 1
 			.\assets\shaders\environment\environmentbase.kbshader
@@ -1625,7 +1625,7 @@ kbGameEntity 0 0 0 0 {
 		CastsShadow = 1
 		Materials = 0
 		RenderPass = LightingPass
-		TranslucencySortBias =  0.000000
+		RenderOrderBias =  0.000000
 		Model = .\assets\visualtarget\initiation\enviro\jailcelldoor.ms3d
 		ShaderOverride = 1
 			.\assets\shaders\environment\environmentbase.kbshader
@@ -1647,7 +1647,7 @@ kbGameEntity 0 0 0 0 {
 		CastsShadow = 1
 		Materials = 0
 		RenderPass = LightingPass
-		TranslucencySortBias =  0.000000
+		RenderOrderBias =  0.000000
 		Model = .\assets\visualtarget\initiation\enviro\jailcelldoor.ms3d
 		ShaderOverride = 1
 			.\assets\shaders\environment\environmentbase.kbshader
@@ -1669,7 +1669,7 @@ kbGameEntity 0 0 0 0 {
 		CastsShadow = 1
 		Materials = 0
 		RenderPass = LightingPass
-		TranslucencySortBias =  0.000000
+		RenderOrderBias =  0.000000
 		Model = .\assets\visualtarget\initiation\enviro\jailcelldoor.ms3d
 		ShaderOverride = 1
 			.\assets\shaders\environment\environmentbase.kbshader
@@ -1691,7 +1691,7 @@ kbGameEntity 0 0 0 0 {
 		CastsShadow = 1
 		Materials = 0
 		RenderPass = LightingPass
-		TranslucencySortBias =  0.000000
+		RenderOrderBias =  0.000000
 		Model = .\assets\visualtarget\initiation\enviro\jailcelldoor.ms3d
 		ShaderOverride = 1
 			.\assets\shaders\environment\environmentbase.kbshader
@@ -1713,7 +1713,7 @@ kbGameEntity 0 0 0 0 {
 		CastsShadow = 1
 		Materials = 0
 		RenderPass = LightingPass
-		TranslucencySortBias =  0.000000
+		RenderOrderBias =  0.000000
 		Model = .\assets\visualtarget\initiation\enviro\jailcelldoor.ms3d
 		ShaderOverride = 1
 			.\assets\shaders\environment\environmentbase.kbshader
@@ -1735,7 +1735,7 @@ kbGameEntity 0 0 0 0 {
 		CastsShadow = 1
 		Materials = 0
 		RenderPass = LightingPass
-		TranslucencySortBias =  0.000000
+		RenderOrderBias =  0.000000
 		Model = .\assets\visualtarget\initiation\enviro\jailcelldoor.ms3d
 		ShaderOverride = 1
 			.\assets\shaders\environment\environmentbase.kbshader
@@ -1757,7 +1757,7 @@ kbGameEntity 0 0 0 0 {
 		CastsShadow = 1
 		Materials = 0
 		RenderPass = LightingPass
-		TranslucencySortBias =  0.000000
+		RenderOrderBias =  0.000000
 		Model = .\assets\visualtarget\initiation\enviro\jailcelldoor.ms3d
 		ShaderOverride = 1
 			.\assets\shaders\environment\environmentbase.kbshader
@@ -1779,7 +1779,7 @@ kbGameEntity 0 0 0 0 {
 		CastsShadow = 1
 		Materials = 0
 		RenderPass = LightingPass
-		TranslucencySortBias =  0.000000
+		RenderOrderBias =  0.000000
 		Model = .\assets\visualtarget\initiation\enviro\jailcelldoor.ms3d
 		ShaderOverride = 1
 			.\assets\shaders\environment\environmentbase.kbshader
@@ -1801,7 +1801,7 @@ kbGameEntity 0 0 0 0 {
 		CastsShadow = 1
 		Materials = 0
 		RenderPass = LightingPass
-		TranslucencySortBias =  0.000000
+		RenderOrderBias =  0.000000
 		Model = .\assets\visualtarget\initiation\enviro\jailcelldoor.ms3d
 		ShaderOverride = 1
 			.\assets\shaders\environment\environmentbase.kbshader
@@ -1823,7 +1823,7 @@ kbGameEntity 0 0 0 0 {
 		CastsShadow = 1
 		Materials = 0
 		RenderPass = LightingPass
-		TranslucencySortBias =  0.000000
+		RenderOrderBias =  0.000000
 		Model = .\assets\visualtarget\initiation\enviro\jailcelldoor.ms3d
 		ShaderOverride = 1
 			.\assets\shaders\environment\environmentbase.kbshader
@@ -1845,7 +1845,7 @@ kbGameEntity 0 0 0 0 {
 		CastsShadow = 1
 		Materials = 0
 		RenderPass = LightingPass
-		TranslucencySortBias =  0.000000
+		RenderOrderBias =  0.000000
 		Model = .\assets\visualtarget\initiation\enviro\jailcelldoor.ms3d
 		ShaderOverride = 1
 			.\assets\shaders\environment\environmentbase.kbshader
@@ -1867,7 +1867,7 @@ kbGameEntity 0 0 0 0 {
 		CastsShadow = 1
 		Materials = 0
 		RenderPass = LightingPass
-		TranslucencySortBias =  0.000000
+		RenderOrderBias =  0.000000
 		Model = .\assets\visualtarget\initiation\enviro\jailcelldoor.ms3d
 		ShaderOverride = 1
 			.\assets\shaders\environment\environmentbase.kbshader
@@ -1889,7 +1889,7 @@ kbGameEntity 0 0 0 0 {
 		CastsShadow = 1
 		Materials = 0
 		RenderPass = LightingPass
-		TranslucencySortBias =  0.000000
+		RenderOrderBias =  0.000000
 		Model = .\assets\visualtarget\initiation\enviro\jailcelldoor.ms3d
 		ShaderOverride = 1
 			.\assets\shaders\environment\environmentbase.kbshader
@@ -1911,7 +1911,7 @@ kbGameEntity 0 0 0 0 {
 		CastsShadow = 1
 		Materials = 0
 		RenderPass = LightingPass
-		TranslucencySortBias =  0.000000
+		RenderOrderBias =  0.000000
 		Model = .\assets\visualtarget\initiation\enviro\jailcelldoor.ms3d
 		ShaderOverride = 1
 			.\assets\shaders\environment\environmentbase.kbshader
@@ -1933,7 +1933,7 @@ kbGameEntity 0 0 0 0 {
 		CastsShadow = 0
 		Materials = 0
 		RenderPass = LightingPass
-		TranslucencySortBias =  0.000000
+		RenderOrderBias =  0.000000
 		Model = .\assets\visualtarget\initiation\enviro\cell.ms3d
 		ShaderOverride = 1
 			.\assets\shaders\environment\environmentbase.kbshader
@@ -1955,7 +1955,7 @@ kbGameEntity 0 0 0 0 {
 		CastsShadow = 0
 		Materials = 0
 		RenderPass = LightingPass
-		TranslucencySortBias =  0.000000
+		RenderOrderBias =  0.000000
 		Model = .\assets\visualtarget\initiation\enviro\ceilinglight.ms3d
 		ShaderOverride = 3
 			.\assets\shaders\environment\environmentbase.kbshader
@@ -1979,7 +1979,7 @@ kbGameEntity 0 0 0 0 {
 		CastsShadow = 0
 		Materials = 0
 		RenderPass = LightingPass
-		TranslucencySortBias =  0.000000
+		RenderOrderBias =  0.000000
 		Model = .\assets\visualtarget\initiation\enviro\ceilinglight.ms3d
 		ShaderOverride = 3
 			.\assets\shaders\environment\environmentbase.kbshader
@@ -2003,7 +2003,7 @@ kbGameEntity 0 0 0 0 {
 		CastsShadow = 0
 		Materials = 0
 		RenderPass = LightingPass
-		TranslucencySortBias =  0.000000
+		RenderOrderBias =  0.000000
 		Model = .\assets\visualtarget\initiation\enviro\ceilinglight.ms3d
 		ShaderOverride = 3
 			.\assets\shaders\environment\environmentbase.kbshader
@@ -2027,7 +2027,7 @@ kbGameEntity 0 0 0 0 {
 		CastsShadow = 0
 		Materials = 0
 		RenderPass = LightingPass
-		TranslucencySortBias =  0.000000
+		RenderOrderBias =  0.000000
 		Model = .\assets\visualtarget\initiation\enviro\ceilinglight.ms3d
 		ShaderOverride = 3
 			.\assets\shaders\environment\environmentbase.kbshader
@@ -2051,7 +2051,7 @@ kbGameEntity 0 0 0 0 {
 		CastsShadow = 0
 		Materials = 0
 		RenderPass = LightingPass
-		TranslucencySortBias =  0.000000
+		RenderOrderBias =  0.000000
 		Model = .\assets\visualtarget\initiation\enviro\ceilinglight.ms3d
 		ShaderOverride = 3
 			.\assets\shaders\environment\environmentbase.kbshader
@@ -2075,7 +2075,7 @@ kbGameEntity 0 0 0 0 {
 		CastsShadow = 0
 		Materials = 0
 		RenderPass = LightingPass
-		TranslucencySortBias =  0.000000
+		RenderOrderBias =  0.000000
 		Model = .\assets\visualtarget\initiation\enviro\ceilinglight.ms3d
 		ShaderOverride = 3
 			.\assets\shaders\environment\environmentbase.kbshader
@@ -2099,7 +2099,7 @@ kbGameEntity 0 0 0 0 {
 		CastsShadow = 0
 		Materials = 0
 		RenderPass = LightingPass
-		TranslucencySortBias =  0.000000
+		RenderOrderBias =  0.000000
 		Model = .\assets\visualtarget\initiation\enviro\ceilinglight.ms3d
 		ShaderOverride = 3
 			.\assets\shaders\environment\environmentbase.kbshader
@@ -2123,7 +2123,7 @@ kbGameEntity 0 0 0 0 {
 		CastsShadow = 0
 		Materials = 0
 		RenderPass = LightingPass
-		TranslucencySortBias =  0.000000
+		RenderOrderBias =  0.000000
 		Model = .\assets\visualtarget\initiation\enviro\rail.ms3d
 		ShaderOverride = 1
 			.\assets\shaders\environment\environmentbase.kbshader
@@ -2145,7 +2145,7 @@ kbGameEntity 0 0 0 0 {
 		CastsShadow = 0
 		Materials = 0
 		RenderPass = LightingPass
-		TranslucencySortBias =  0.000000
+		RenderOrderBias =  0.000000
 		Model = .\assets\visualtarget\initiation\enviro\rail.ms3d
 		ShaderOverride = 1
 			.\assets\shaders\environment\environmentbase.kbshader
@@ -2167,7 +2167,7 @@ kbGameEntity 0 0 0 0 {
 		CastsShadow = 0
 		Materials = 0
 		RenderPass = LightingPass
-		TranslucencySortBias =  0.000000
+		RenderOrderBias =  0.000000
 		Model = .\assets\visualtarget\initiation\enviro\rail.ms3d
 		ShaderOverride = 1
 			.\assets\shaders\environment\environmentbase.kbshader
@@ -2189,7 +2189,7 @@ kbGameEntity 0 0 0 0 {
 		CastsShadow = 0
 		Materials = 0
 		RenderPass = LightingPass
-		TranslucencySortBias =  0.000000
+		RenderOrderBias =  0.000000
 		Model = .\assets\visualtarget\initiation\enviro\rail.ms3d
 		ShaderOverride = 1
 			.\assets\shaders\environment\environmentbase.kbshader
@@ -2211,7 +2211,7 @@ kbGameEntity 0 0 0 0 {
 		CastsShadow = 0
 		Materials = 0
 		RenderPass = LightingPass
-		TranslucencySortBias =  0.000000
+		RenderOrderBias =  0.000000
 		Model = .\assets\visualtarget\initiation\enviro\rail.ms3d
 		ShaderOverride = 1
 			.\assets\shaders\environment\environmentbase.kbshader
@@ -2233,7 +2233,7 @@ kbGameEntity 0 0 0 0 {
 		CastsShadow = 0
 		Materials = 0
 		RenderPass = LightingPass
-		TranslucencySortBias =  0.000000
+		RenderOrderBias =  0.000000
 		Model = .\assets\visualtarget\initiation\enviro\rail.ms3d
 		ShaderOverride = 1
 			.\assets\shaders\environment\environmentbase.kbshader
@@ -2255,7 +2255,7 @@ kbGameEntity 0 0 0 0 {
 		CastsShadow = 0
 		Materials = 0
 		RenderPass = LightingPass
-		TranslucencySortBias =  0.000000
+		RenderOrderBias =  0.000000
 		Model = .\assets\visualtarget\initiation\enviro\rail.ms3d
 		ShaderOverride = 1
 			.\assets\shaders\environment\environmentbase.kbshader
@@ -2277,7 +2277,7 @@ kbGameEntity 0 0 0 0 {
 		CastsShadow = 0
 		Materials = 0
 		RenderPass = LightingPass
-		TranslucencySortBias =  0.000000
+		RenderOrderBias =  0.000000
 		Model = .\assets\visualtarget\initiation\enviro\rail.ms3d
 		ShaderOverride = 1
 			.\assets\shaders\environment\environmentbase.kbshader
@@ -2299,7 +2299,7 @@ kbGameEntity 0 0 0 0 {
 		CastsShadow = 0
 		Materials = 0
 		RenderPass = LightingPass
-		TranslucencySortBias =  0.000000
+		RenderOrderBias =  0.000000
 		Model = .\assets\visualtarget\initiation\enviro\rail.ms3d
 		ShaderOverride = 1
 			.\assets\shaders\environment\environmentbase.kbshader
@@ -2321,7 +2321,7 @@ kbGameEntity 0 0 0 0 {
 		CastsShadow = 0
 		Materials = 0
 		RenderPass = LightingPass
-		TranslucencySortBias =  0.000000
+		RenderOrderBias =  0.000000
 		Model = .\assets\visualtarget\initiation\enviro\rail.ms3d
 		ShaderOverride = 1
 			.\assets\shaders\environment\environmentbase.kbshader
@@ -2343,7 +2343,7 @@ kbGameEntity 0 0 0 0 {
 		CastsShadow = 0
 		Materials = 0
 		RenderPass = LightingPass
-		TranslucencySortBias =  0.000000
+		RenderOrderBias =  0.000000
 		Model = .\assets\visualtarget\initiation\enviro\rail.ms3d
 		ShaderOverride = 1
 			.\assets\shaders\environment\environmentbase.kbshader
@@ -2365,7 +2365,7 @@ kbGameEntity 0 0 0 0 {
 		CastsShadow = 0
 		Materials = 0
 		RenderPass = LightingPass
-		TranslucencySortBias =  0.000000
+		RenderOrderBias =  0.000000
 		Model = .\assets\visualtarget\initiation\enviro\rail.ms3d
 		ShaderOverride = 1
 			.\assets\shaders\environment\environmentbase.kbshader
@@ -2387,7 +2387,7 @@ kbGameEntity 0 0 0 0 {
 		CastsShadow = 0
 		Materials = 0
 		RenderPass = LightingPass
-		TranslucencySortBias =  0.000000
+		RenderOrderBias =  0.000000
 		Model = .\assets\visualtarget\initiation\enviro\rail.ms3d
 		ShaderOverride = 1
 			.\assets\shaders\environment\environmentbase.kbshader
@@ -2409,7 +2409,7 @@ kbGameEntity 0 0 0 0 {
 		CastsShadow = 0
 		Materials = 0
 		RenderPass = LightingPass
-		TranslucencySortBias =  0.000000
+		RenderOrderBias =  0.000000
 		Model = .\assets\visualtarget\initiation\enviro\rail.ms3d
 		ShaderOverride = 1
 			.\assets\shaders\environment\environmentbase.kbshader
@@ -2431,7 +2431,7 @@ kbGameEntity 0 0 0 0 {
 		CastsShadow = 0
 		Materials = 0
 		RenderPass = LightingPass
-		TranslucencySortBias =  0.000000
+		RenderOrderBias =  0.000000
 		Model = .\assets\visualtarget\initiation\enviro\rail.ms3d
 		ShaderOverride = 1
 			.\assets\shaders\environment\environmentbase.kbshader
@@ -2453,7 +2453,7 @@ kbGameEntity 0 0 0 0 {
 		CastsShadow = 0
 		Materials = 0
 		RenderPass = LightingPass
-		TranslucencySortBias =  0.000000
+		RenderOrderBias =  0.000000
 		Model = .\assets\visualtarget\initiation\enviro\rail.ms3d
 		ShaderOverride = 1
 			.\assets\shaders\environment\environmentbase.kbshader
@@ -2475,7 +2475,7 @@ kbGameEntity 0 0 0 0 {
 		CastsShadow = 0
 		Materials = 0
 		RenderPass = LightingPass
-		TranslucencySortBias =  0.000000
+		RenderOrderBias =  0.000000
 		Model = .\assets\visualtarget\initiation\enviro\rail.ms3d
 		ShaderOverride = 1
 			.\assets\shaders\environment\environmentbase.kbshader
@@ -2497,7 +2497,7 @@ kbGameEntity 0 0 0 0 {
 		CastsShadow = 0
 		Materials = 0
 		RenderPass = LightingPass
-		TranslucencySortBias =  0.000000
+		RenderOrderBias =  0.000000
 		Model = .\assets\visualtarget\initiation\enviro\rail.ms3d
 		ShaderOverride = 1
 			.\assets\shaders\environment\environmentbase.kbshader
@@ -2519,7 +2519,7 @@ kbGameEntity 0 0 0 0 {
 		CastsShadow = 0
 		Materials = 0
 		RenderPass = LightingPass
-		TranslucencySortBias =  0.000000
+		RenderOrderBias =  0.000000
 		Model = .\assets\visualtarget\initiation\enviro\rail.ms3d
 		ShaderOverride = 1
 			.\assets\shaders\environment\environmentbase.kbshader
@@ -2541,7 +2541,7 @@ kbGameEntity 0 0 0 0 {
 		CastsShadow = 0
 		Materials = 0
 		RenderPass = LightingPass
-		TranslucencySortBias =  0.000000
+		RenderOrderBias =  0.000000
 		Model = .\assets\visualtarget\initiation\enviro\rail.ms3d
 		ShaderOverride = 1
 			.\assets\shaders\environment\environmentbase.kbshader
@@ -2563,7 +2563,7 @@ kbGameEntity 0 0 0 0 {
 		CastsShadow = 0
 		Materials = 0
 		RenderPass = LightingPass
-		TranslucencySortBias =  0.000000
+		RenderOrderBias =  0.000000
 		Model = .\assets\visualtarget\initiation\enviro\rail.ms3d
 		ShaderOverride = 1
 			.\assets\shaders\environment\environmentbase.kbshader
@@ -2585,7 +2585,7 @@ kbGameEntity 0 0 0 0 {
 		CastsShadow = 0
 		Materials = 0
 		RenderPass = LightingPass
-		TranslucencySortBias =  0.000000
+		RenderOrderBias =  0.000000
 		Model = .\assets\visualtarget\initiation\enviro\rail.ms3d
 		ShaderOverride = 1
 			.\assets\shaders\environment\environmentbase.kbshader
@@ -2607,7 +2607,7 @@ kbGameEntity 0 0 0 0 {
 		CastsShadow = 0
 		Materials = 0
 		RenderPass = LightingPass
-		TranslucencySortBias =  0.000000
+		RenderOrderBias =  0.000000
 		Model = .\assets\visualtarget\initiation\enviro\rail.ms3d
 		ShaderOverride = 1
 			.\assets\shaders\environment\environmentbase.kbshader
@@ -2629,7 +2629,7 @@ kbGameEntity 0 0 0 0 {
 		CastsShadow = 0
 		Materials = 0
 		RenderPass = LightingPass
-		TranslucencySortBias =  0.000000
+		RenderOrderBias =  0.000000
 		Model = .\assets\visualtarget\initiation\enviro\rail.ms3d
 		ShaderOverride = 1
 			.\assets\shaders\environment\environmentbase.kbshader
@@ -2651,7 +2651,7 @@ kbGameEntity 0 0 0 0 {
 		CastsShadow = 0
 		Materials = 0
 		RenderPass = LightingPass
-		TranslucencySortBias =  0.000000
+		RenderOrderBias =  0.000000
 		Model = .\assets\visualtarget\initiation\enviro\rail.ms3d
 		ShaderOverride = 1
 			.\assets\shaders\environment\environmentbase.kbshader
@@ -2673,7 +2673,7 @@ kbGameEntity 0 0 0 0 {
 		CastsShadow = 0
 		Materials = 0
 		RenderPass = LightingPass
-		TranslucencySortBias =  0.000000
+		RenderOrderBias =  0.000000
 		Model = .\assets\visualtarget\initiation\enviro\rail.ms3d
 		ShaderOverride = 1
 			.\assets\shaders\environment\environmentbase.kbshader
@@ -2817,7 +2817,7 @@ kbGameEntity 0 0 0 0 {
 		CastsShadow = 0
 		Materials = 0
 		RenderPass = TranlucentPass
-		TranslucencySortBias =  0.000000
+		RenderOrderBias =  0.000000
 		Model = NULL
 		ShaderOverride = 0
 			
@@ -2838,7 +2838,7 @@ kbGameEntity 0 0 0 0 {
 		CastsShadow = 0
 		Materials = 0
 		RenderPass = TranlucentPass
-		TranslucencySortBias =  0.000000
+		RenderOrderBias =  0.000000
 		Model = NULL
 		ShaderOverride = 0
 			
@@ -2859,7 +2859,7 @@ kbGameEntity 0 0 0 0 {
 		CastsShadow = 0
 		Materials = 0
 		RenderPass = TranlucentPass
-		TranslucencySortBias =  0.000000
+		RenderOrderBias =  0.000000
 		Model = NULL
 		ShaderOverride = 0
 			
@@ -2880,7 +2880,7 @@ kbGameEntity 0 0 0 0 {
 		CastsShadow = 0
 		Materials = 0
 		RenderPass = TranlucentPass
-		TranslucencySortBias =  0.000000
+		RenderOrderBias =  0.000000
 		Model = NULL
 		ShaderOverride = 0
 			
@@ -2901,7 +2901,7 @@ kbGameEntity 0 0 0 0 {
 		CastsShadow = 0
 		Materials = 0
 		RenderPass = LightingPass
-		TranslucencySortBias =  0.000000
+		RenderOrderBias =  0.000000
 		Model = .\assets\visualtarget\initiation\enviro\pipe.ms3d
 		ShaderOverride = 1
 			.\assets\shaders\environment\environmentbase.kbshader
@@ -2923,7 +2923,7 @@ kbGameEntity 0 0 0 0 {
 		CastsShadow = 1
 		Materials = 0
 		RenderPass = LightingPass
-		TranslucencySortBias =  0.000000
+		RenderOrderBias =  0.000000
 		Model = ..\..\kbengine\assets\editor\cube.ms3d
 		ShaderOverride = 1
 			.\assets\shaders\environment\environmentbase.kbshader
@@ -2992,7 +2992,7 @@ kbGameEntity 0 0 0 0 {
 		CastsShadow = 0
 		Materials = 0
 		RenderPass = LightingPass
-		TranslucencySortBias =  0.000000
+		RenderOrderBias =  0.000000
 		Model = .\assets\visualtarget\initiation\other\brunette.ms3d
 		ShaderOverride = 4
 			.\assets\shaders\character\characterbase.kbshader
@@ -3028,7 +3028,7 @@ kbGameEntity 0 0 0 0 {
 		CastsShadow = 0
 		Materials = 0
 		RenderPass = LightingPass
-		TranslucencySortBias =  0.000000
+		RenderOrderBias =  0.000000
 		Model = .\assets\visualtarget\initiation\other\female_blond.ms3d
 		ShaderOverride = 4
 			.\assets\shaders\character\characterbase.kbshader
@@ -3064,7 +3064,7 @@ kbGameEntity 0 0 0 0 {
 		CastsShadow = 0
 		Materials = 0
 		RenderPass = LightingPass
-		TranslucencySortBias =  0.000000
+		RenderOrderBias =  0.000000
 		Model = .\assets\visualtarget\initiation\other\brunette.ms3d
 		ShaderOverride = 4
 			.\assets\shaders\character\characterbase.kbshader
@@ -3100,7 +3100,7 @@ kbGameEntity 0 0 0 0 {
 		CastsShadow = 0
 		Materials = 0
 		RenderPass = LightingPass
-		TranslucencySortBias =  0.000000
+		RenderOrderBias =  0.000000
 		Model = .\assets\visualtarget\initiation\other\brunette.ms3d
 		ShaderOverride = 4
 			.\assets\shaders\character\characterbase.kbshader
