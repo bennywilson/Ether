@@ -90,14 +90,20 @@
     <None Include="assets\shaders\FX\FullScreen\FullScreen_WaterDroplets.kbShader">
       <Filter>Shaders\FX\FullScreen</Filter>
     </None>
-    <None Include="assets\shaders\UI\Basic_UI_Widget.kbShader">
-      <Filter>Shaders\UI</Filter>
-    </None>
     <None Include="assets\shaders\FX\hackClip.kbShader">
       <Filter>Shaders\FX</Filter>
     </None>
     <None Include="assets\shaders\Lights\directionalLightToon.kbShader">
       <Filter>Shaders\Lights</Filter>
+    </None>
+    <None Include="assets\shaders\UI\healthBarUI_Basic.kbShader">
+      <Filter>Shaders\UI</Filter>
+    </None>
+    <None Include="assets\shaders\UI\cannonBallUI_Basic.kbShader">
+      <Filter>Shaders\UI</Filter>
+    </None>
+    <None Include="assets\shaders\UI\ui_Basic.kbShader">
+      <Filter>Shaders\UI</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

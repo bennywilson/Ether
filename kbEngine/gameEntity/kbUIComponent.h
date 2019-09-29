@@ -31,6 +31,12 @@ protected:
 	void										FindStaticModelComponent();
 	void										RefreshMaterial();
 
+	int											GetAuthoredWidth() const { return m_AuthoredWidth; }
+	int											GetAuthoredHeight() const { return m_AuthoredHeight; }
+	const kbVec3 &								GetNormalizedAnchorPt() const { return m_NormalizedAnchorPt; }
+	const kbVec3 &								GetUIToScreenSizeRatio() const { return m_UIToScreenSizeRatio; }
+	const kbVec2 &								GetNormalizedScreenSize() const { return m_NormalizedScreenSize; }
+
 private:
 
 	// Editor
@@ -40,6 +46,8 @@ private:
 	kbVec3										m_UIToScreenSizeRatio;
 
 	// Runtime
+	kbVec2										m_NormalizedScreenSize;
+
 protected:
 	kbStaticModelComponent *					m_pStaticModelComponent;
 };

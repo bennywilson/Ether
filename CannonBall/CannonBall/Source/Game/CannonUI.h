@@ -26,13 +26,46 @@ protected:
 private:
 
 	// Editor
-	int										m_Dummy;
+	float									m_HealthBarWarningFlashThreshold;
+	float									m_HealthBarWarningFlashSpeed;
 
 	// Runtime
 	float									m_TargetNormalizedHealth;
 	float									m_CurrentNormalizedHealth;
-
-	kbStaticModelComponent *				m_pStaticModelComponent;
+	float									m_StartFlashTime;
 };
+
+/**
+ *	CannonBallUIComponent
+ */
+class CannonBallUIComponent : public kbUIComponent {
+
+	KB_DECLARE_COMPONENT( CannonBallUIComponent, kbUIComponent );
+
+//---------------------------------------------------------------------------------------------------
+public:
+
+	void									SetFill( const float newHealth );
+
+protected:
+
+	virtual void							SetEnable_Internal( const bool bEnable ) override;
+	virtual void							Update_Internal( const float DeltaTime ) override;
+
+private:
+
+	// Editor
+	kbVec3									m_SparkRelativePosition;
+	kbVec3									m_SparkRelativeSize;
+
+	// Runtime
+	kbStaticModelComponent *				m_pSparkModel;
+
+	float									m_CurrentFill;
+	float									m_TargetFill;
+
+	float									m_NextSparkAnimUpdateTime;
+};
+
 
 #endif

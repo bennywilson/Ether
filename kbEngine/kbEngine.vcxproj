@@ -120,6 +120,7 @@
     <None Include="assets\Shaders\SSAO.kbShader" />
     <None Include="assets\Shaders\uberPostProcess.kbShader" />
     <None Include="assets\Shaders\UIManipulator.kbShader" />
+    <None Include="assets\Shaders\uiWidget.kbShader" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="app\kbApp.h" />

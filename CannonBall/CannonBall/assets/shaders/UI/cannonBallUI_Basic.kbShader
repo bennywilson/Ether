@@ -1,14 +1,12 @@
 //===================================================================================================
-// healthBarUI_Basic.kbShader
+// cannonBallUI_Basic.kbShader
 //
 //
 // 2019 kbEngine 2.0
 //===================================================================================================
 cbuffer matrixBuffer {
 	float4					normalizedScreenSize_Anchor;
-	float4					healthBarBounds;		// Normalized from 0-1 in UV space
-	float4					normalizedHealth;
-	float4					barTextureWeights;			// 
+	float4					meterFill;
 };
 
 kbShaderState {
@@ -57,11 +55,8 @@ pixelInput vertexShader( vertexInput input ) {
  *	pixelShader
  */
 SamplerState DiffuseSamplerState;
+
 Texture2D baseTexture(white)					: register(t0);
-
-Texture2D fillTexture_1(white)					: register(t1);
-
-Texture2D fillTexture_2(white)					: register(t2);
 
 Texture2D sceneTexture(scenecolor)				: register(t3);
 
@@ -71,21 +66,12 @@ float4 pixelShader( pixelInput input ) : SV_TARGET {
 
 	float4 finalColor = frameColor;
 	
-	float uLen = healthBarBounds.z - healthBarBounds.x;
-	if ( input.uv.x > healthBarBounds.x && input.uv.x < healthBarBounds.z && input.uv.y > healthBarBounds.y && input.uv.y < healthBarBounds.w ) {
-		float2 barUV = ( input.uv - healthBarBounds.xy ) / ( healthBarBounds.zw - healthBarBounds.xy );
-		float4 barColor1 = fillTexture_1.Sample( DiffuseSamplerState, barUV );
-		float4 barColor2 = fillTexture_2.Sample( DiffuseSamplerState, barUV );
+	const float fill = meterFill.x;
+	float2 fillUV = float2( 0.0f, 1.0f ) + float2( fill, -fill );
 
-		float rightEdge = healthBarBounds.x + ( uLen * normalizedHealth.x );
-		if ( input.uv.x > rightEdge ) {
-			barColor1 = barColor2 = float4( 0.0f, 0.0f, 0.0f, 1.0f );
-		}
-		float4 barColor = barColor1 * barTextureWeights.x + barColor2 * barTextureWeights.y;
-		finalColor = lerp( barColor, frameColor, frameColor.a );
-	
+	if ( input.uv.y < fillUV.y ) {
+		finalColor.a *= 0.25f;
 	}
-
-	return finalColor;//baseTexture.Sample( DiffuseSamplerState, input.uv );
+	return finalColor;
 }
 

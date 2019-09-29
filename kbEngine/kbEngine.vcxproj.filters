@@ -114,6 +114,9 @@
     <None Include="assets\Shaders\basicFont.kbShader">
       <Filter>Assets\Shaders</Filter>
     </None>
+    <None Include="assets\Shaders\uiWidget.kbShader">
+      <Filter>Assets\Shaders</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="renderer\kbModel.h">

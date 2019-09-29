@@ -87,5 +87,12 @@ GenerateClass(
 
 GenerateClass(
 	CannonHealthBarUIComponent,
-	AddField( "Dummy", KBTYPEINFO_INT, CannonHealthBarUIComponent, m_Dummy, false, "" )
+	AddField( "HealthBarWarningFlashThreshold", KBTYPEINFO_FLOAT, CannonHealthBarUIComponent, m_HealthBarWarningFlashThreshold, false, "" )
+	AddField( "HealthBarWarningFlashSpeed", KBTYPEINFO_FLOAT, CannonHealthBarUIComponent, m_HealthBarWarningFlashSpeed, false, "" )
+)
+
+GenerateClass(
+	CannonBallUIComponent,
+	AddField( "SparkRelativePosition", KBTYPEINFO_VECTOR, CannonBallUIComponent, m_SparkRelativePosition, false, "" )
+	AddField( "SparkRelativeSize", KBTYPEINFO_VECTOR, CannonBallUIComponent, m_SparkRelativeSize, false, "" )
 )

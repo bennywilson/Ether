@@ -2,7 +2,7 @@ kbGameEntity 0 0 0 0 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		Name = "Entity_59"
+		Name = "Entity_58"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
 		Position = 0.000000 0.000000 0.000000
 		Scale = 1.000000 1.000000 1.000000
@@ -11,7 +11,7 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		MainCameraPosition = 73.369316 -51.311008 -388.433472
-		MainCameraRotation = -0.069367 -0.766064 0.083889 0.633480
+		MainCameraRotation = -0.018409 -0.643917 0.015504 0.764717
 	}
 }
 kbGameEntity 0 0 0 0 {
@@ -3383,7 +3383,7 @@ kbGameEntity 0 0 0 0 {
 	kbTransformComponent { 
 		Enabled = 1
 		LifeTime =  -1.000000
-		Name = "Screen Droplets"
+		Name = "Health UI"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
 		Position = 74.384018 -49.436947 -308.378693
 		Scale = 555.000000 555.000000 1.000000
@@ -3398,7 +3398,7 @@ kbGameEntity 0 0 0 0 {
 				LifeTime =  -1.000000
 				CullModeOverride = None
 				Shader = .\assets\shaders\ui\healthbarui_basic.kbshader
-				ShaderParams = 5
+				ShaderParams = 7
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
@@ -3416,8 +3416,8 @@ kbGameEntity 0 0 0 0 {
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
-						ParamName = "fillTexture"
-						Texture = .\assets\ui\healhbar_fill_blue.jpg
+						ParamName = "fillTexture_1"
+						Texture = .\assets\ui\healthbar_fill_blue.jpg
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 					kbShaderParamComponent { 
@@ -3434,6 +3434,20 @@ kbGameEntity 0 0 0 0 {
 						Texture = NULL
 						Vector = 1.000000 0.000000 0.000000 0.000000
 					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "barTextureWeights"
+						Texture = NULL
+						Vector = 1.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "fillTexture_2"
+						Texture = .\assets\ui\healthbar_fill_red.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
 			}
 		RenderPass = UIPass
 		TranslucencySortBias =  0.000000
@@ -3446,6 +3460,143 @@ kbGameEntity 0 0 0 0 {
 		AuthoredWidth = 1600
 		NormalizedAnchorPoint = 0.020000 0.020000 0.000000
 		UIToScreenSizeRatio = 0.200000 0.000000 0.000000
-		Dummy = 0
+		HealthBarWarningFlashSpeed =  15.000000
+		HealthBarWarningFlashThreshold =  0.400000
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		Name = "Cannonball UI"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 74.384018 -49.436947 -308.378693
+		Scale = 555.000000 555.000000 1.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		Materials = 1
+			kbMaterialComponent { 
+				Enabled = 1
+				LifeTime =  -1.000000
+				CullModeOverride = None
+				Shader = .\assets\shaders\ui\cannonballui_basic.kbshader
+				ShaderParams = 8
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "normalizedScreenSize_Anchor"
+						Texture = NULL
+						Vector = 0.060000 0.079687 0.020000 0.200000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "healthBarBounds"
+						Texture = NULL
+						Vector = 0.310000 0.480000 0.810000 0.760000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "normalizedHealth"
+						Texture = NULL
+						Vector = 1.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "barTextureWeights"
+						Texture = NULL
+						Vector = 1.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "baseTexture"
+						Texture = .\assets\ui\cannonball_ui_baselayer.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "fillTexture_1"
+						Texture = .\assets\ui\healthbar_fill_blue.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "fillTexture_2"
+						Texture = .\assets\ui\healthbar_fill_red.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "meterFill"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		RenderPass = UIPass
+		TranslucencySortBias =  0.000000
+		Model = ..\..\kbengine\assets\models\unitquad.ms3d
+	}
+	CannonBallUIComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		AuthoredHeight = 1530
+		AuthoredWidth = 2048
+		NormalizedAnchorPoint = 0.020000 0.200000 0.000000
+		UIToScreenSizeRatio = 0.060000 0.000000 0.000000
+		SparkRelativePosition = 0.400000 -0.400000 0.000000
+		SparkRelativeSize = 1.000000 1.000000 0.250000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		Materials = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\ui\ui_basic.kbshader
+				ShaderParams = 4
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "normalizedScreenSize_Anchor"
+						Texture = NULL
+						Vector = 0.060000 0.079687 0.044000 0.168125
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "meterFill"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "baseTexture"
+						Texture = .\assets\ui\spark_1.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorFactor"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.250000
+					}
+			}
+		RenderPass = UIPass
+		TranslucencySortBias =  0.000000
+		Model = ..\..\kbengine\assets\models\unitquad.ms3d
 	}
 }

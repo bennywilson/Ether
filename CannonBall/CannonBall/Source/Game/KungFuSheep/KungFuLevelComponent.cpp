@@ -229,26 +229,7 @@ private:
 
 		static float x = 0.42f;
 		static float y = 0.47f;
-		if ( input.WasKeyJustPressed('J') ) {
-			x -= 0.01f;
-		}
-		if ( input.WasKeyJustPressed('K') ) {
-			x += 0.01f;
-		}
-		if ( input.WasKeyJustPressed('I') ) {
-			y += 0.01f;
-		}
-		if ( input.WasKeyJustPressed('M') ) {
-			y -= 0.01f;
-		}
 		static float textMult = 1.05f;
-		if ( input.WasKeyJustPressed('Y') ) {
-			textMult += 0.01f;
-		}
-		if ( input.WasKeyJustPressed('U') ) {
-			textMult += 0.01f;
-		}
-
 		g_pRenderer->DrawDebugText( "Paused", x, y, textSize * textMult, textSize * textMult, kbColor::black );
 		g_pRenderer->DrawDebugText( "Paused", 0.42f, 0.47f, textSize * 1.0f, textSize * 1.0f, kbColor::white );
 
@@ -346,7 +327,8 @@ static KungFuSheep_Director * g_pKungFuDirector = nullptr;
 void KungFuLevelComponent::Constructor() {
 	m_WaterDropletFXStartTime = -1.0f;
 	m_LastWaterSplashSoundTime = 0.0f;
-	m_pHealthBar = nullptr;
+	m_pHealthBarUI = nullptr;
+	m_pCannonBallUI = nullptr;
 }
 
 /**
@@ -355,7 +337,9 @@ void KungFuLevelComponent::Constructor() {
 void KungFuLevelComponent::SetEnable_Internal( const bool bEnable ) {
 	Super::SetEnable_Internal( bEnable );
 
-	m_pHealthBar = nullptr;
+	m_pHealthBarUI = nullptr;
+	m_pCannonBallUI = nullptr;
+
 	if ( bEnable ) {
 
 		if ( g_UseEditor == false ) {
@@ -423,10 +407,20 @@ void KungFuLevelComponent::Update_Internal( const float DeltaTime ) {
 	g_pKungFuDirector->UpdateStateMachine();
 
 	// Not all game entities are loaded in SetEnable_Internal unfortunately
-	if ( m_pHealthBar == nullptr ) {
-		for ( int i = 0; i < g_pCannonGame->GetGameEntities().size() && m_pHealthBar == nullptr; i++ ) {
+	if ( m_pHealthBarUI == nullptr || m_pCannonBallUI == nullptr ) {
+
+		m_pHealthBarUI = nullptr;
+		m_pCannonBallUI = nullptr;
+
+		for ( int i = 0; i < g_pCannonGame->GetGameEntities().size() && ( m_pHealthBarUI == nullptr || m_pCannonBallUI == nullptr ); i++ ) {
 			kbGameEntity *const pTargetEnt = g_pCannonGame->GetGameEntities()[i];
-			m_pHealthBar = pTargetEnt->GetComponent<CannonHealthBarUIComponent>();
+			if ( m_pHealthBarUI == nullptr ) {
+				m_pHealthBarUI = pTargetEnt->GetComponent<CannonHealthBarUIComponent>();
+			}
+
+			if ( m_pCannonBallUI == nullptr ) {
+				m_pCannonBallUI = pTargetEnt->GetComponent<CannonBallUIComponent>();
+			}
 		}
 	}
 
@@ -490,12 +484,25 @@ AttackHitInfo_t KungFuLevelComponent::DoAttack( const DealAttackInfo_t<KungFuGam
  */
 void KungFuLevelComponent::UpdateSheepHealthBar( const float healthVal ) {
 
-	if ( m_pHealthBar == nullptr ) {
+	if ( m_pHealthBarUI == nullptr ) {
 		return;
 	}
 
-	m_pHealthBar->SetTargetHealth( healthVal );
+	m_pHealthBarUI->SetTargetHealth( healthVal );
 }
+
+/**
+ *	KungFuLevelComponent::UpdateCannonBallMeter
+ */
+void KungFuLevelComponent::UpdateCannonBallMeter( const float fillVal ) {
+
+	if ( m_pCannonBallUI == nullptr ) {
+		return;
+	}
+
+	m_pCannonBallUI->SetFill( fillVal );
+}
+
 
 /**
  *	KungFuLevelComponent::SpawnSheep

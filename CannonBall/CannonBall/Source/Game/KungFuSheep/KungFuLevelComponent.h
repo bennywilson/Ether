@@ -45,6 +45,7 @@ public:
 
 	AttackHitInfo_t								DoAttack( const DealAttackInfo_t<KungFuGame::eAttackType> & dealAttackInfo );
 	void										UpdateSheepHealthBar( const float healthVal );
+	void										UpdateCannonBallMeter( const float value );
 
 	void										DoWaterDropletScreenFX();
 	void										DoSplashSound();
@@ -76,7 +77,8 @@ private:
 
 	float										m_LastWaterSplashSoundTime;
 
-	CannonHealthBarUIComponent *				m_pHealthBar;
+	CannonHealthBarUIComponent *				m_pHealthBarUI;
+	CannonBallUIComponent *						m_pCannonBallUI;
 };
 
 

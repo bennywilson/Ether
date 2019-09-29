@@ -103,7 +103,9 @@
     <None Include="assets\shaders\Terrain\basicGrass.kbShader" />
     <None Include="assets\shaders\Terrain\basicTerrain.kbShader" />
     <None Include="assets\shaders\Terrain\basicTerrain_Reflection.kbShader" />
-    <None Include="assets\shaders\UI\Basic_UI_Widget.kbShader" />
+    <None Include="assets\shaders\UI\cannonBallUI_Basic.kbShader" />
+    <None Include="assets\shaders\UI\healthBarUI_Basic.kbShader" />
+    <None Include="assets\shaders\UI\ui_Basic.kbShader" />
     <None Include="assets\shaders\Water\water_skygradientreflection.kbShader" />
     <None Include="CannonBall.ico" />
     <None Include="small.ico" />

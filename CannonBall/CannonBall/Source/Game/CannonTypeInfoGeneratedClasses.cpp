@@ -39,3 +39,5 @@ DEFINE_KBCLASS(KungFuLevelComponent)
 DEFINE_KBCLASS(CannonFogComponent)
 
 DEFINE_KBCLASS(CannonHealthBarUIComponent)
+
+DEFINE_KBCLASS(CannonBallUIComponent)

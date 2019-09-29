@@ -204,7 +204,7 @@ kbGameEntity 4226348206 1325904980 2380668328 2364791781 {
 								LifeTime =  -1.000000
 								ParamName = "colorMultiplier"
 								Texture = NULL
-								Vector = 1.000000 1.000000 1.000000 1.000000
+								Vector = 1.000000 1.000000 1.000000 0.500000
 							}
 							kbShaderParamComponent { 
 								Enabled = 0
@@ -226,7 +226,7 @@ kbGameEntity 4226348206 1325904980 2380668328 2364791781 {
 		ParticleBillboardType = FaceCamera
 		RotationOverLife = 0
 		SizeOverLife = 0
-		StartColor = 1.000000 1.000000 1.000000 1.000000
+		StartColor = 1.000000 1.000000 1.000000 0.500000
 		StartDelay =  0.000000
 		TotalDuration =  3.000000
 		TranslucencySortBias =  0.000000
@@ -1654,7 +1654,7 @@ kbGameEntity 3807537734 1283872403 1661460398 2211889957 {
 		Enabled = 1
 		LifeTime =  -1.000000
 		DummyTemp = 0
-		Health =  1.000000
+		Health =  100.000000
 		AttackVO = 3
 			kbSoundData { 
 				Enabled = 0
@@ -1680,7 +1680,7 @@ kbGameEntity 3807537734 1283872403 1661460398 2211889957 {
 				Volume =  0.750000
 				WaveFile = .\assets\sounds\sheep\sheep_vo_battle_5.wav
 			}
-		Health =  1.000000
+		Health =  100.000000
 		MaxRotateSpeed =  15.000000
 		MaxRunSpeed =  3.000000
 		AttackImpactSound = 4

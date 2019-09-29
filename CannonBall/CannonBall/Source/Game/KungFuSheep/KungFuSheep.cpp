@@ -456,6 +456,8 @@ void KungFuSheepComponent::Constructor() {
 	m_TargetFacingDirection.Set( 0.0f, 0.0f, -1.0f );
 	m_bIsPlayer = true;
 	m_LastVOTime = 0.0f;
+
+	m_CannonBallMeter = 0.0f;
 }
 
 /**
@@ -489,8 +491,11 @@ void KungFuSheepComponent::SetEnable_Internal( const bool bEnable ) {
 		}
 
 		m_Health = 1.0f;
+		m_CannonBallMeter = 0.0f;
 		if ( g_UseEditor == false ) {
-			g_pCannonGame->GetLevelComponent<KungFuLevelComponent>()->UpdateSheepHealthBar( 1.0f );
+			KungFuLevelComponent *const pLevelComp = g_pCannonGame->GetLevelComponent<KungFuLevelComponent>();
+			pLevelComp->UpdateSheepHealthBar( 1.0f );
+			pLevelComp->UpdateCannonBallMeter( m_CannonBallMeter );
 		}
 	} else {
 		if ( m_HeadBandInstance[0].GetEntity() != nullptr ) {
@@ -572,6 +577,10 @@ void KungFuSheepComponent::OnAnimEvent( const kbAnimEventInfo_t & animEventInfo 
 			if ( m_BasicAttackImpactSound.size() > 0 ) {
 				m_BasicAttackImpactSound[rand() % m_BasicAttackImpactSound.size()].PlaySoundAtPosition( GetOwnerPosition() );
 			}
+
+			m_CannonBallMeter += 0.1f;
+			g_pGame->GetLevelComponent<KungFuLevelComponent>()->UpdateCannonBallMeter( m_CannonBallMeter );
+
 		}
 
 		if ( kbfrand() > 0.8f ) {
