@@ -60,13 +60,23 @@ private:
 	kbVec3									m_SparkRelativePosition;
 	kbVec3									m_SparkRelativeSize;
 
+	kbVec3									m_BoomRelativePosition;
+	kbVec3									m_BoomRelativeSize;
+
+	kbVec3									m_SmokeRelativePosition;
+	kbVec3									m_SmokeRelativeSize;
+
 	// Runtime
 	kbStaticModelComponent *				m_pSparkModel;
+	kbStaticModelComponent *				m_pBoomModel;
+	kbStaticModelComponent *				m_pSmokeModel;
 
 	float									m_CurrentFill;
 	float									m_TargetFill;
 
 	float									m_NextSparkAnimUpdateTime;
+	float									m_CannonBallActivatedStartTime;
+	float									m_NextSmokeCloudUpdateTime;
 };
 
 

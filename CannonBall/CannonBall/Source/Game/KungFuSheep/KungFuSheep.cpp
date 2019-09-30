@@ -427,8 +427,6 @@ public:
 		m_pActorComponent->SetTargetFacingDirection( kbVec3( -1.0f, 0.0f, 0.0f ) );
 
 		m_StartCannonBallTime = g_GlobalTimer.TimeElapsedSeconds();
-
-		GetSheep()->CannonBallActivatedCB();
 	}
 
 	virtual void UpdateState() override {
@@ -446,6 +444,7 @@ public:
 
 	virtual void EndState( T nextState ) override {
 		m_pActorComponent->SetTargetFacingDirection( m_OldFacingDirection );
+		GetSheep()->CannonBallActivatedCB();
 	}
 
 	float m_StartCannonBallTime = 0.0f;
@@ -684,6 +683,12 @@ void KungFuSheepComponent::Update_Internal( const float DT ) {
 				RequestStateChange( KungFuSheepState::Dead );
 			}
 		}
+	}
+
+	if ( GetAsyncKeyState( 'C' ) ) {
+		m_CannonBallMeter = 2.0f;
+		KungFuLevelComponent *const pLevelComponent = g_pCannonGame->GetLevelComponent<KungFuLevelComponent>();
+		pLevelComponent->UpdateCannonBallMeter( m_CannonBallMeter, false );
 	}
 }
 

@@ -3473,6 +3473,20 @@ kbGameEntity 0 0 0 0 {
 		Position = 74.384018 -49.436947 -308.378693
 		Scale = 555.000000 555.000000 1.000000
 	}
+	CannonBallUIComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		AuthoredHeight = 1530
+		AuthoredWidth = 2048
+		NormalizedAnchorPoint = 0.020000 0.200000 0.000000
+		UIToScreenSizeRatio = 0.060000 0.000000 0.000000
+		BoomRelativePosition = -0.300000 0.150000 0.000000
+		BoomRelativeSize = 2.000000 0.500000 0.250000
+		SmokeRelativePosition = -0.300000 -0.500000 0.000000
+		SmokeRelativeSize = 2.000000 2.000000 1.000000
+		SparkRelativePosition = 0.400000 -0.400000 0.000000
+		SparkRelativeSize = 1.000000 1.000000 0.250000
+	}
 	kbStaticModelComponent { 
 		Enabled = 1
 		LifeTime =  -1.000000
@@ -3545,16 +3559,6 @@ kbGameEntity 0 0 0 0 {
 		RenderPass = UIPass
 		Model = ..\..\kbengine\assets\models\unitquad.ms3d
 	}
-	CannonBallUIComponent { 
-		Enabled = 1
-		LifeTime =  -1.000000
-		AuthoredHeight = 1530
-		AuthoredWidth = 2048
-		NormalizedAnchorPoint = 0.020000 0.200000 0.000000
-		UIToScreenSizeRatio = 0.060000 0.000000 0.000000
-		SparkRelativePosition = 0.400000 -0.400000 0.000000
-		SparkRelativeSize = 1.000000 1.000000 0.250000
-	}
 	kbStaticModelComponent { 
 		Enabled = 1
 		LifeTime =  -1.000000
@@ -3593,6 +3597,87 @@ kbGameEntity 0 0 0 0 {
 						ParamName = "colorFactor"
 						Texture = NULL
 						Vector = 0.000000 0.000000 0.000000 0.250000
+					}
+			}
+		RenderOrderBias =  0.000000
+		RenderPass = UIPass
+		Model = ..\..\kbengine\assets\models\unitquad.ms3d
+	}
+	kbStaticModelComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		Materials = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\ui\ui_basic.kbshader
+				ShaderParams = 4
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "normalizedScreenSize_Anchor"
+						Texture = NULL
+						Vector = 0.120000 0.039844 0.002000 0.211953
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "rotationAngle"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "baseTexture"
+						Texture = .\assets\ui\boom!.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorFactor"
+						Texture = NULL
+						Vector = 1.000000 1.000000 1.000000 1.000000
+					}
+			}
+		RenderOrderBias =  -0.100000
+		RenderPass = UIPass
+		Model = ..\..\kbengine\assets\models\unitquad.ms3d
+	}
+	kbStaticModelComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		Materials = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\ui\animatedchannelui.kbshader
+				ShaderParams = 3
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "normalizedScreenSize_Anchor"
+						Texture = NULL
+						Vector = 0.120000 0.159375 0.002000 0.160156
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "channelMask"
+						Texture = NULL
+						Vector = 1.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "baseTexture"
+						Texture = .\assets\ui\animated_clouds.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 			}
 		RenderOrderBias =  0.000000

@@ -95,4 +95,8 @@ GenerateClass(
 	CannonBallUIComponent,
 	AddField( "SparkRelativePosition", KBTYPEINFO_VECTOR, CannonBallUIComponent, m_SparkRelativePosition, false, "" )
 	AddField( "SparkRelativeSize", KBTYPEINFO_VECTOR, CannonBallUIComponent, m_SparkRelativeSize, false, "" )
+	AddField( "BoomRelativePosition", KBTYPEINFO_VECTOR, CannonBallUIComponent, m_BoomRelativePosition, false, "" )
+	AddField( "BoomRelativeSize", KBTYPEINFO_VECTOR, CannonBallUIComponent, m_BoomRelativeSize, false, "" )
+	AddField( "SmokeRelativePosition", KBTYPEINFO_VECTOR, CannonBallUIComponent, m_SmokeRelativePosition, false, "" )
+	AddField( "SmokeRelativeSize", KBTYPEINFO_VECTOR, CannonBallUIComponent, m_SmokeRelativeSize, false, "" )
 )
