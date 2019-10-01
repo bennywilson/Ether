@@ -284,6 +284,31 @@ kbComponent * kbFile::ReadComponent( kbGameEntity *const pGameEntity, const std:
 						break;
 					}
 
+					case KBTYPEINFO_TEXTURE : {
+						std::vector<class kbTexture *>	& textureList = *( std::vector< kbTexture *> *)( &pCurrentComponentAsBytePtr[currentVar->Offset()] );
+			
+						textureList.resize( atoi( nextToken.c_str() ) );
+						int size = (int)textureList.size();
+						while( size > 0 ) {
+							m_CurrentReadPos++;
+							size /= 10;
+						}
+
+						for ( int i = 0; i < textureList.size(); i++ ) {
+							while ( m_Buffer[m_CurrentReadPos] == ' ' || m_Buffer[m_CurrentReadPos] == '\n' || m_Buffer[m_CurrentReadPos] == '\r' || m_Buffer[m_CurrentReadPos] == '\t' ) {
+								m_CurrentReadPos++;
+							}
+							nextStringPos = m_Buffer.find_first_of( " {\n\r\t", m_CurrentReadPos );
+							nextToken = m_Buffer.substr( m_CurrentReadPos, nextStringPos - m_CurrentReadPos );
+			
+							const kbTypeInfoVar * pVar = currentVar;
+							textureList[i] = (kbTexture*)g_ResourceManager.GetResource( nextToken, m_bLoadAssetsImmediately, true );
+							m_CurrentReadPos = nextStringPos;
+						}
+			
+						currentVar = nullptr;
+						break;
+					}
 					default: {
 						byte *const arrayBytePtr = &pCurrentComponentAsBytePtr[currentVar->Offset()];
 						
@@ -571,6 +596,16 @@ void kbFile::WriteComponent( const kbComponent *const pCurComponent, std::string
 					break;
 				}
 
+				case KBTYPEINFO_TEXTURE : {
+					std::vector< class kbTexture * > * textureList = ( std::vector< class kbTexture * > *)( byteOffsetToVar );
+					m_Buffer += std::to_string( textureList->size() ) + "\n\t" + curTab;
+		
+					for ( int i = 0; i < textureList->size(); i++ ) {
+						WriteProperty( pNextField->second.Type(), pNextField->second.GetStructName(), (byte*)&(*textureList)[i], m_Buffer );
+						m_Buffer += "\n" ;
+					}
+					break;
+				}
 				default : {
 					const size_t vectorSize = g_NameToTypeInfoMap->GetVectorSize( byteOffsetToVar, pNextField->second.GetStructName() );
 					m_Buffer += std::to_string( vectorSize );

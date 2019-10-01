@@ -80,4 +80,74 @@ private:
 };
 
 
+/**
+ *	CannonUIWidget
+ */
+class CannonUIWidget : public kbGameComponent {
+public:
+
+	KB_DECLARE_COMPONENT( CannonUIWidget, kbGameComponent );
+
+//-------------------------------------------------------------------------------------------------------------------------------------------------------------
+public:
+
+	void									SetParent( const kbUIComponent *const pParent );
+
+	void									SetRelativePosition( const kbVec3 & newPos ) { m_RelativePosition = newPos; }
+	void									SetRelativeSize( const kbVec3 & newSize ) { m_RelativeSize = newSize; }
+
+protected:
+
+	virtual void							SetEnable_Internal( const bool bEnable ) override;
+	virtual void							Update_Internal( const float DeltaTime ) override;
+
+private:
+
+	// Editor
+	kbVec3									m_RelativePosition;
+	kbVec3									m_RelativeSize;
+	std::vector<kbMaterialComponent> 		m_Materials;
+	
+	// Runtime
+	kbStaticModelComponent *				m_pModel;
+	const kbUIComponent *					m_pParent;
+	kbGameEntity							m_GameEntity;
+};
+
+/**
+ *	CannonBallPauseMenuUIComponent
+ */
+class CannonBallPauseMenuUIComponent : public kbUIComponent {
+
+	KB_DECLARE_COMPONENT( CannonBallPauseMenuUIComponent, kbUIComponent );
+
+//---------------------------------------------------------------------------------------------------
+public:
+	enum ePauseMenuOptions {
+		MasterVolume,
+		Brightness,
+		VideoQuality,
+		BackToGame,
+		ExitToMainMenu,
+		NumOptions
+	};
+
+protected:
+
+	virtual void							SetEnable_Internal( const bool bEnable ) override;
+	virtual void							Update_Internal( const float DeltaTime ) override;
+
+private:
+
+	// Editor
+	std::vector<CannonUIWidget>				m_Widgets;
+	kbVec3									m_WidgetSize;
+	kbVec3									m_StartingWidgetAnchorPt;
+	float									m_SpaceBetweenWidgets;
+
+	// Runtime
+	kbGameEntity							m_Entity;
+};
+
+
 #endif

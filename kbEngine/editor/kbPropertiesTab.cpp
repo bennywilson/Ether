@@ -445,6 +445,12 @@ void kbPropertiesTab::ArrayResizeCB( Fl_Widget * widget, void * voidPtr ) {
 			break;
 		}
 
+		case KBTYPEINFO_TEXTURE : {
+			std::vector<kbTexture *> * textureList = ( std::vector<kbTexture *> *)( userData->m_pVariablePtr );
+			textureList->resize( fieldValue ); 
+			break;
+		}
+
 		default : {
 			g_NameToTypeInfoMap->ResizeVector( userData->m_pVariablePtr, userData->m_StructName, fieldValue );
 			break;
@@ -626,6 +632,21 @@ void kbPropertiesTab::RefreshComponent( kbEditorEntity *const pEntity, kbCompone
 					break;
 				}
 
+				case KBTYPEINFO_TEXTURE : {
+					const std::vector<class kbTexture *> *const textureList = ( std::vector<class kbTexture *> *)( byteOffsetToVar );
+
+					pArraySizeInput->value( std::to_string( textureList->size()).c_str() );
+					pArraySizeInput->textsize( FontSize() );
+					m_pEntityProperties->add( pArraySizeInput );
+
+					if ( propertyMetaData && propertyMetaData->bExpanded ) {
+						for ( int i = 0; i < textureList->size(); i++ ) {
+							RefreshProperty( pEntity, pNextField->first, pNextField->second.Type(), pNextField->second.GetStructName(), pComponent, (byte*)&(*textureList)[i], pParentComponent, startX, curY, inputHeight );
+							curY += LineSpacing();
+						}
+					}
+					break;
+				}
 				default:
 					const size_t vectorSize = g_NameToTypeInfoMap->GetVectorSize( byteOffsetToVar, pNextField->second.GetStructName() );
 					pArraySizeInput->value( std::to_string( vectorSize ).c_str() );

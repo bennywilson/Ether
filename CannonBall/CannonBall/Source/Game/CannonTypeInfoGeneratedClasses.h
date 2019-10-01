@@ -100,3 +100,18 @@ GenerateClass(
 	AddField( "SmokeRelativePosition", KBTYPEINFO_VECTOR, CannonBallUIComponent, m_SmokeRelativePosition, false, "" )
 	AddField( "SmokeRelativeSize", KBTYPEINFO_VECTOR, CannonBallUIComponent, m_SmokeRelativeSize, false, "" )
 )
+
+GenerateClass(
+	CannonUIWidget,
+	AddField( "RelativePosition", KBTYPEINFO_VECTOR, CannonUIWidget, m_RelativePosition, false, "" )
+	AddField( "RelativeSize", KBTYPEINFO_VECTOR, CannonUIWidget, m_RelativeSize, false, "" )
+	AddField( "Materials", KBTYPEINFO_STRUCT, CannonUIWidget, m_Materials, true, "kbMaterialComponent" )
+)
+
+GenerateClass(
+	CannonBallPauseMenuUIComponent,
+	AddField( "Widgets", KBTYPEINFO_STRUCT, CannonBallPauseMenuUIComponent, m_Widgets, true, "CannonUIWidget" )
+	AddField( "WidgetSize", KBTYPEINFO_VECTOR, CannonBallPauseMenuUIComponent, m_WidgetSize, false, "" )
+	AddField( "StartingWidgetAnchor", KBTYPEINFO_VECTOR, CannonBallPauseMenuUIComponent, m_StartingWidgetAnchorPt, false, "" )
+	AddField( "SpaceBetweenWidgets", KBTYPEINFO_FLOAT, CannonBallPauseMenuUIComponent, m_SpaceBetweenWidgets, false, "" )
+)

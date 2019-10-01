@@ -313,15 +313,6 @@ void kbGameEntity::AddComponent( kbComponent *const pComponent, int indexToInser
 	}
 
 	kbEntity::AddComponent( pComponent, indexToInsertAt );
-
-	if ( m_bIsPrefab == false ) {
-		if ( pComponent->IsEnabled() ) {
-			pComponent->Enable( false );
-			pComponent->Enable( true );
-		} else {
-			pComponent->Enable( false );
-		}
-	}
 }
 
 /**

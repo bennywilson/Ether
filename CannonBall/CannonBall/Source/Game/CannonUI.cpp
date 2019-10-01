@@ -123,7 +123,7 @@ void CannonBallUIComponent::Update_Internal( const float dt ) {
 	const float ScreenPixelWidth = (float)g_pRenderer->GetBackBufferWidth();
 	const float ScreenPixelHeight = (float)g_pRenderer->GetBackBufferHeight();
 
-	const kbVec2 normalizedScreenSize = GetNormalizedScreenSize();
+	const kbVec3 normalizedScreenSize = GetNormalizedScreenSize();
 	const kbVec2 normalizedAnchorPt( GetNormalizedAnchorPt().x, GetNormalizedAnchorPt().y );
 
 	static const kbString normalizedScreenSize_Anchor( "normalizedScreenSize_Anchor" );
@@ -232,4 +232,142 @@ void CannonBallUIComponent::CannonBallActivatedCB() {
 
 	m_CannonBallActivatedStartTime = g_GlobalTimer.TimeElapsedSeconds();
 	m_NextSmokeCloudUpdateTime = m_CannonBallActivatedStartTime + 0.2f;
+}
+
+/**
+ *	CannonUIWidget::Constructor
+ */
+void CannonUIWidget::Constructor() {
+	m_RelativePosition.Set( 0.0f, 0.0f, 0.0f );
+	m_RelativeSize.Set( 0.5f, 0.5f, 1.0f );
+
+	m_pModel = nullptr;
+	m_pParent = nullptr;
+}
+
+/**
+ *	CannonUIWidget::SetParent
+ */
+void CannonUIWidget::SetParent( const kbUIComponent *const pParent ) {
+
+	kbErrorCheck( pParent != nullptr, "CannonUIWidget::UpdateFromParent() - null parent" );
+
+	m_pParent = pParent;
+}
+
+/**
+ *	CannonUIWidget::SetEnable_Internal
+ */
+void CannonUIWidget::SetEnable_Internal( const bool bEnable ) {
+
+	Super::SetEnable_Internal( bEnable );
+
+	static kbModel * pUnitQuad = nullptr;
+	if ( pUnitQuad == nullptr ) {
+		pUnitQuad = (kbModel*)g_ResourceManager.GetResource( "../../kbEngine/assets/Models/UnitQuad.ms3d", true, true );
+	}
+
+	if ( GetOwner() == nullptr ) {
+		return;
+	}
+
+	if ( bEnable ) {
+		if ( m_pModel == nullptr ) {
+			m_pModel = new kbStaticModelComponent();
+			m_GameEntity.AddComponent( m_pModel );
+		}
+
+		m_pModel->SetModel( pUnitQuad );
+		m_pModel->SetMaterials( m_Materials );
+		m_pModel->SetRenderPass( RP_UI );
+		m_pModel->Enable( false );
+		m_pModel->Enable( true );
+	} else {
+		if ( m_pModel != nullptr ) {
+			m_pModel->Enable( false );
+			//delete m_pModel;
+			//m_pModel = nullptr;
+		}
+	}
+}
+
+/**
+ *	CannonUIWidget::Update_Internal
+ */
+void CannonUIWidget::Update_Internal( const float dt ) {
+
+	static const kbString normalizedScreenSize_Anchor( "normalizedScreenSize_Anchor" );
+
+	const kbVec3 parentStart = m_pParent->GetNormalizedAnchorPt();
+	const kbVec3 parentEnd = parentStart + m_pParent->GetNormalizedScreenSize();
+	const kbVec3 widgetAbsPos = parentStart + ( parentEnd - parentStart ) * m_RelativePosition;
+	const kbVec3 widgetAbsSize = m_pParent->GetNormalizedScreenSize() * m_RelativeSize;
+
+	m_pModel->SetMaterialParamVector( 0, normalizedScreenSize_Anchor.stl_str(), kbVec4( widgetAbsSize.x, widgetAbsSize.y, widgetAbsPos.x, widgetAbsPos.y ) );
+	m_pModel->SetRenderOrderBias( m_pParent->GetStaticModelComponent()->GetRenderOrderBias() );
+	m_pModel->RefreshMaterials( true );
+}
+
+
+/**
+ *	CannonBallPauseMenuUIComponent::Constructor
+ */
+void CannonBallPauseMenuUIComponent::Constructor() {
+	m_WidgetSize.Set( 0.1f, 0.1f, 1.0f );
+	m_StartingWidgetAnchorPt.Set( 0.0f, 0.0f, 0.0f );
+	m_SpaceBetweenWidgets = 0.05f;
+}
+
+/**
+ *	CannonBallPauseMenuUIComponent::SetEnable_Internal
+ */
+void CannonBallPauseMenuUIComponent::SetEnable_Internal( const bool bEnable ) {
+
+	Super::SetEnable_Internal( bEnable );
+
+	if ( bEnable ) {
+
+		m_pStaticModelComponent->Enable( true );
+		for ( int i = 0; i < m_Widgets.size(); i++ ) {
+			m_Entity.AddComponent( &m_Widgets[i] );
+			m_Widgets[i].SetParent( this );
+			m_Widgets[i].Enable( false );
+			m_Widgets[i].Enable( true );
+		}
+	} else {
+		for ( int i = 0; i < m_Widgets.size(); i++ ) {
+			m_Entity.RemoveComponent( &m_Widgets[i] );
+			m_Widgets[i].SetParent( this );
+			m_Widgets[i].Enable( false );
+		}
+	}
+}
+
+/**
+ *	CannonBallPauseMenuUIComponent::Update_Internal
+ */
+void CannonBallPauseMenuUIComponent::Update_Internal( const float DT ) {
+
+	Super::Update_Internal( DT );
+
+	kbVec3 nextPos = this->m_StartingWidgetAnchorPt;
+	for ( size_t i = 0; i < m_Widgets.size(); i++ ) {
+		m_Widgets[i].SetRelativeSize( m_WidgetSize );
+		m_Widgets[i].SetRelativePosition( nextPos );
+		nextPos.y += m_SpaceBetweenWidgets;
+
+		m_Widgets[i].Update( DT );
+	}
+/*	
+	const static kbString baseTexture( "baseTexture" );
+	static const kbString normalizedScreenSize_Anchor( "normalizedScreenSize_Anchor" );
+	float nexty = 0.0f;
+
+	for ( int i = 0; i < NumOptions; i++ ) {
+
+		kbStaticModelComponent *const pNewOptionModel = m_OptionModels[i];
+		pNewOptionModel->SetMaterialParamTexture( 0, baseTexture.stl_str(), m_OptionImages[i] );
+		pNewOptionModel->SetMaterialParamVector( 0, normalizedScreenSize_Anchor.stl_str(), kbVec4( 0.1f, 0.1f, 0.5f, nexty ) );
+		nexty += 0.1f;
+	}*/
 }

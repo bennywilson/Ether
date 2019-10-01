@@ -114,9 +114,16 @@ public:
 
 	void										RefreshMaterials( const bool bUpdateRenderObject );
 
+	float										GetRenderOrderBias() const { return m_RenderOrderBias; }
+	void										SetRenderOrderBias( const float newBias ) { m_RenderOrderBias = newBias; RefreshMaterials( true ); }
+
+	void										SetMaterials( const std::vector<kbMaterialComponent> & materialList ) { m_MaterialList = materialList; }
+	
+	enum ERenderPass							GetRenderPass() const { return m_RenderPass; }
+	void										SetRenderPass( const ERenderPass newPass ) { m_RenderPass = newPass; }
 protected:
 
-	enum ERenderPass							m_RenderPass;
+	ERenderPass									m_RenderPass;
 	float										m_RenderOrderBias;
 
 	std::vector<kbMaterialComponent>			m_MaterialList;

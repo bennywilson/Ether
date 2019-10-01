@@ -41,3 +41,7 @@ DEFINE_KBCLASS(CannonFogComponent)
 DEFINE_KBCLASS(CannonHealthBarUIComponent)
 
 DEFINE_KBCLASS(CannonBallUIComponent)
+
+DEFINE_KBCLASS(CannonUIWidget)
+
+DEFINE_KBCLASS(CannonBallPauseMenuUIComponent)

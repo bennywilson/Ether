@@ -121,6 +121,8 @@ public:
 	kbVec3 operator *( const class kbMat4 & ) const;
 	kbVec3 operator *( const float op2 ) const { return kbVec3( x * op2, y * op2, z * op2 ); }
 
+	kbVec3 operator *( const kbVec3 & op2 ) const { return kbVec3( x * op2.x, y * op2.y, z * op2.z ); }
+
 	void operator *=( const float op ) { x *= op, y *= op, z *= op; }
 
 	void operator /=( const float rhs )  { x /= rhs, y /= rhs, z /= rhs; }

@@ -19,7 +19,7 @@ void kbUIComponent::Constructor() {
 	m_AuthoredHeight = 128;
 	m_NormalizedAnchorPt.Set( 0.05f, 0.05f, 0.0f );
 	m_UIToScreenSizeRatio.Set( 0.1f, 0.0f, 0.0f );
-	m_NormalizedScreenSize.Set( 0.f, 0.0f );
+	m_NormalizedScreenSize.Set( 0.f, 0.0f, 0.0f );
 
 	m_pStaticModelComponent = nullptr;
 }
@@ -85,6 +85,7 @@ void kbUIComponent::RefreshMaterial() {
 	const float screenWidthPixel = m_NormalizedScreenSize.x * ScreenPixelWidth;
 	const float screenHeightPixel = screenWidthPixel / aspectRatio;
 	m_NormalizedScreenSize.y = screenHeightPixel / ScreenPixelHeight;
+	m_NormalizedScreenSize.z = 1.0f;
 
 	static kbString normalizedScreenSize_Anchor( "normalizedScreenSize_Anchor" );
 	m_pStaticModelComponent->SetMaterialParamVector( 0, normalizedScreenSize_Anchor.stl_str(), 

@@ -25,6 +25,12 @@ public:
 
 	virtual void								EditorChange( const std::string & propertyName ) override;
 
+	const kbVec3 &								GetNormalizedAnchorPt() const { return m_NormalizedAnchorPt; }
+	const kbVec3 &								GetUIToScreenSizeRatio() const { return m_UIToScreenSizeRatio; }
+	const kbVec3 &								GetNormalizedScreenSize() const { return m_NormalizedScreenSize; }
+
+	const kbStaticModelComponent *				GetStaticModelComponent() const { return m_pStaticModelComponent; }
+
 protected:
 
 	virtual void								SetEnable_Internal( const bool isEnabled ) override;
@@ -33,9 +39,6 @@ protected:
 
 	int											GetAuthoredWidth() const { return m_AuthoredWidth; }
 	int											GetAuthoredHeight() const { return m_AuthoredHeight; }
-	const kbVec3 &								GetNormalizedAnchorPt() const { return m_NormalizedAnchorPt; }
-	const kbVec3 &								GetUIToScreenSizeRatio() const { return m_UIToScreenSizeRatio; }
-	const kbVec2 &								GetNormalizedScreenSize() const { return m_NormalizedScreenSize; }
 
 private:
 
@@ -46,7 +49,7 @@ private:
 	kbVec3										m_UIToScreenSizeRatio;
 
 	// Runtime
-	kbVec2										m_NormalizedScreenSize;
+	kbVec3										m_NormalizedScreenSize;
 
 protected:
 	kbStaticModelComponent *					m_pStaticModelComponent;
