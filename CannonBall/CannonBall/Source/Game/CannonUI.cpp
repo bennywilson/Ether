@@ -186,9 +186,7 @@ void CannonBallUIComponent::Update_Internal( const float dt ) {
 			if ( curTime > m_NextSmokeCloudUpdateTime ) {
 				m_NextSmokeCloudUpdateTime = curTime + 0.2f;
 				idx = ( idx + 1 ) % 4;
-
-				const float randSize = kbfrand() + normalizedScreenSize.x * 0.1f;
-				randomOffset.Set( kbfrand() * normalizedScreenSize.x * 0.25f, kbfrand() * normalizedScreenSize.x * 0.25f );
+				randomOffset.Set( ( kbfrand() - 0.5f ) * normalizedScreenSize.x * 0.5f, ( kbfrand() - 0.5f ) * normalizedScreenSize.x * 0.5f );
 			}
 			kbVec4 textureMask = kbVec4::zero;
 			textureMask[idx] = 1.0f;

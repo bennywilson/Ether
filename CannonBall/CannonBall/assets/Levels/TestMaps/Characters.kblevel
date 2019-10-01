@@ -3653,7 +3653,7 @@ kbGameEntity 0 0 0 0 {
 		CastsShadow = 0
 		Materials = 1
 			kbMaterialComponent { 
-				Enabled = 0
+				Enabled = 0u
 				LifeTime =  -1.000000
 				CullModeOverride = ShaderDefault
 				Shader = .\assets\shaders\ui\animatedchannelui.kbshader
@@ -3676,7 +3676,7 @@ kbGameEntity 0 0 0 0 {
 						Enabled = 0
 						LifeTime =  -1.000000
 						ParamName = "baseTexture"
-						Texture = .\assets\ui\animated_clouds.tif
+						Texture = .\assets\ui\animated_smoke_1.tif
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 			}
