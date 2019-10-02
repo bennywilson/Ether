@@ -217,6 +217,17 @@ private:
 	virtual void BeginState( KungFuGame::eKungFuGame_State previousState ) override {
 
 		g_pGame->SetDeltaTimeScale( 0.0f );
+
+		for ( int i = 0; i < g_pCannonGame->GetGameEntities().size(); i++ ) {
+
+			kbGameEntity *const pEnt = g_pCannonGame->GetGameEntities()[i];
+			CannonBallPauseMenuUIComponent *const pPauseMenu = pEnt->GetComponent<CannonBallPauseMenuUIComponent>();
+			if ( pPauseMenu == nullptr ) {
+				continue;
+			}
+
+			pPauseMenu->Enable( true );
+		}
 	}
 
 	virtual void UpdateState() override {
@@ -225,18 +236,21 @@ private:
 			RequestStateChange( KungFuGame::Gameplay );
 		}
 
-		const float textSize = g_DebugTextSize * 2.0f;
-
-		static float x = 0.42f;
-		static float y = 0.47f;
-		static float textMult = 1.05f;
-		g_pRenderer->DrawDebugText( "Paused", x, y, textSize * textMult, textSize * textMult, kbColor::black );
-		g_pRenderer->DrawDebugText( "Paused", 0.42f, 0.47f, textSize * 1.0f, textSize * 1.0f, kbColor::white );
-
 	}
 
 	virtual void EndState( KungFuGame::eKungFuGame_State nextState ) override {
 		g_pGame->SetDeltaTimeScale( 1.0f );
+
+		for ( int i = 0; i < g_pCannonGame->GetGameEntities().size(); i++ ) {
+
+			kbGameEntity *const pEnt = g_pCannonGame->GetGameEntities()[i];
+			CannonBallPauseMenuUIComponent *const pPauseMenu = pEnt->GetComponent<CannonBallPauseMenuUIComponent>();
+			if ( pPauseMenu == nullptr ) {
+				continue;
+			}
+
+			pPauseMenu->Enable( false );
+		}
 	}
 
 };

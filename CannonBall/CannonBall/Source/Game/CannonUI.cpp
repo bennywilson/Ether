@@ -253,6 +253,10 @@ void CannonUIWidget::SetParent( const kbUIComponent *const pParent ) {
 	kbErrorCheck( pParent != nullptr, "CannonUIWidget::UpdateFromParent() - null parent" );
 
 	m_pParent = pParent;
+	
+	if ( m_pModel != nullptr && pParent != nullptr && pParent->GetStaticModelComponent() != nullptr ) {
+		m_pModel->SetRenderOrderBias( m_pParent->GetStaticModelComponent()->GetRenderOrderBias() - 1.0f );
+	}
 }
 
 /**
@@ -304,7 +308,7 @@ void CannonUIWidget::Update_Internal( const float dt ) {
 	const kbVec3 widgetAbsSize = m_pParent->GetNormalizedScreenSize() * m_RelativeSize;
 
 	m_pModel->SetMaterialParamVector( 0, normalizedScreenSize_Anchor.stl_str(), kbVec4( widgetAbsSize.x, widgetAbsSize.y, widgetAbsPos.x, widgetAbsPos.y ) );
-	m_pModel->SetRenderOrderBias( m_pParent->GetStaticModelComponent()->GetRenderOrderBias() );
+	m_pModel->SetRenderOrderBias( m_pParent->GetStaticModelComponent()->GetRenderOrderBias() - 1.0f );
 	m_pModel->RefreshMaterials( true );
 }
 
@@ -339,6 +343,10 @@ void CannonBallPauseMenuUIComponent::SetEnable_Internal( const bool bEnable ) {
 			m_Entity.RemoveComponent( &m_Widgets[i] );
 			m_Widgets[i].SetParent( this );
 			m_Widgets[i].Enable( false );
+		}
+
+		if ( m_pStaticModelComponent != nullptr ) {
+			m_pStaticModelComponent->Enable( false );
 		}
 	}
 }

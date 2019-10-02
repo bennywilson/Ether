@@ -52,11 +52,15 @@ void kbUIComponent::SetEnable_Internal( const bool bEnable ) {
 
 	if ( bEnable ) {
 		FindStaticModelComponent();
+		m_pStaticModelComponent->Enable( true );
 		RefreshMaterial();
 	} else {
-		m_pStaticModelComponent = nullptr;
-	}
 
+		if ( m_pStaticModelComponent != nullptr ) {
+			m_pStaticModelComponent->Enable( false );
+			m_pStaticModelComponent = nullptr;
+		}
+	}
 }
 
 /**

@@ -3695,7 +3695,7 @@ kbGameEntity 0 0 0 0 {
 		Scale = 555.000000 555.000000 1.000000
 	}
 	kbStaticModelComponent { 
-		Enabled = 1
+		Enabled = 0
 		LifeTime =  -1.000000
 		CastsShadow = 0
 		Materials = 1
@@ -3739,7 +3739,7 @@ kbGameEntity 0 0 0 0 {
 		Model = ..\..\kbengine\assets\models\unitquad.ms3d
 	}
 	CannonBallPauseMenuUIComponent { 
-		Enabled = 1
+		Enabled = 0
 		LifeTime =  -1.000000
 		AuthoredHeight = 128
 		AuthoredWidth = 128
@@ -3750,7 +3750,7 @@ kbGameEntity 0 0 0 0 {
 		WidgetSize = 0.100000 0.050000 1.000000
 		Widgets = 5
 			CannonUIWidget { 
-				Enabled = 1
+				Enabled = 0
 				LifeTime =  -1.000000
 				Materials = 1
 					kbMaterialComponent { 
@@ -3792,7 +3792,7 @@ kbGameEntity 0 0 0 0 {
 				RelativeSize = 0.100000 0.050000 1.000000
 			}
 			CannonUIWidget { 
-				Enabled = 1
+				Enabled = 0
 				LifeTime =  -1.000000
 				Materials = 1
 					kbMaterialComponent { 
@@ -3834,7 +3834,7 @@ kbGameEntity 0 0 0 0 {
 				RelativeSize = 0.100000 0.050000 1.000000
 			}
 			CannonUIWidget { 
-				Enabled = 1
+				Enabled = 0
 				LifeTime =  -1.000000
 				Materials = 1
 					kbMaterialComponent { 
@@ -3876,7 +3876,7 @@ kbGameEntity 0 0 0 0 {
 				RelativeSize = 0.100000 0.050000 1.000000
 			}
 			CannonUIWidget { 
-				Enabled = 1
+				Enabled = 0
 				LifeTime =  -1.000000
 				Materials = 1
 					kbMaterialComponent { 
@@ -3918,7 +3918,7 @@ kbGameEntity 0 0 0 0 {
 				RelativeSize = 0.100000 0.050000 1.000000
 			}
 			CannonUIWidget { 
-				Enabled = 1
+				Enabled = 0
 				LifeTime =  -1.000000
 				Materials = 1
 					kbMaterialComponent { 
