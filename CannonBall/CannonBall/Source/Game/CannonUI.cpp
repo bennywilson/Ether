@@ -260,6 +260,26 @@ void CannonUIWidget::SetParent( const kbUIComponent *const pParent ) {
 }
 
 /**
+ *	CannonUIWidget::GetBaseTextureDimensions
+ */
+kbVec2i	CannonUIWidget::GetBaseTextureDimensions() const {
+	kbVec2i retDim( -1, -1 );
+	if ( m_pModel == nullptr ) {
+		return retDim;
+	}
+
+	const kbShaderParamComponent *const pComp = m_pModel->GetShaderParamComponent( 0, kbString( "baseTexture" ) );
+	if ( pComp == nullptr || pComp->GetTexture() == nullptr ) {
+		return retDim;
+	}
+
+	retDim.x = pComp->GetTexture()->GetWidth();
+	retDim.y = pComp->GetTexture()->GetHeight();
+	return retDim;
+}
+
+
+/**
  *	CannonUIWidget::SetEnable_Internal
  */
 void CannonUIWidget::SetEnable_Internal( const bool bEnable ) {
@@ -305,7 +325,18 @@ void CannonUIWidget::Update_Internal( const float dt ) {
 	const kbVec3 parentStart = m_pParent->GetNormalizedAnchorPt();
 	const kbVec3 parentEnd = parentStart + m_pParent->GetNormalizedScreenSize();
 	const kbVec3 widgetAbsPos = parentStart + ( parentEnd - parentStart ) * m_RelativePosition;
-	const kbVec3 widgetAbsSize = m_pParent->GetNormalizedScreenSize() * m_RelativeSize;
+	kbVec3 widgetAbsSize = m_pParent->GetNormalizedScreenSize() * m_RelativeSize;
+
+	const kbShaderParamComponent *const pComp = m_pModel->GetShaderParamComponent( 0, kbString( "baseTexture" ) );
+	const kbTexture *const pTex = pComp->GetTexture();
+	const float aspectRatio = (float)pTex->GetWidth() / (float)pTex->GetHeight();
+
+	const float ScreenPixelWidth = (float)g_pRenderer->GetBackBufferWidth();
+	const float ScreenPixelHeight = (float)g_pRenderer->GetBackBufferHeight();
+
+	const float screenWidthPixel = widgetAbsSize.x * ScreenPixelWidth;
+	const float screenHeightPixel = screenWidthPixel / aspectRatio;
+	widgetAbsSize.y = screenHeightPixel / ScreenPixelHeight;
 
 	m_pModel->SetMaterialParamVector( 0, normalizedScreenSize_Anchor.stl_str(), kbVec4( widgetAbsSize.x, widgetAbsSize.y, widgetAbsPos.x, widgetAbsPos.y ) );
 	m_pModel->SetRenderOrderBias( m_pParent->GetStaticModelComponent()->GetRenderOrderBias() - 1.0f );
@@ -358,24 +389,32 @@ void CannonBallPauseMenuUIComponent::Update_Internal( const float DT ) {
 
 	Super::Update_Internal( DT );
 
-	kbVec3 nextPos = this->m_StartingWidgetAnchorPt;
+	const float ScreenPixelWidth = (float)g_pRenderer->GetBackBufferWidth();
+	const float ScreenPixelHeight = (float)g_pRenderer->GetBackBufferHeight();
+
+	kbVec3 nextPos = m_StartingWidgetAnchorPt;
 	for ( size_t i = 0; i < m_Widgets.size(); i++ ) {
-		m_Widgets[i].SetRelativeSize( m_WidgetSize );
-		m_Widgets[i].SetRelativePosition( nextPos );
+
+		CannonUIWidget & widget = m_Widgets[i];
+		const kbVec2i textureDim = widget.GetBaseTextureDimensions();
+		kbVec3 targetWidgetSize = m_WidgetSize;
+		kbVec3 targetWidgetPos = nextPos;
+		if ( textureDim.x > 0 ) {
+
+			// Height is fixed by design, so calculate Width
+			const float baseTextureAspectRatio = (float)textureDim.x / (float)textureDim.y;
+			const float pixelHeight = targetWidgetSize.y * ScreenPixelHeight;
+			const float targetPixelWidth = pixelHeight * baseTextureAspectRatio;
+			targetWidgetSize.x = (float)targetPixelWidth / ScreenPixelWidth;
+
+			// Right Justify
+			targetWidgetPos.x -= targetWidgetSize.x;
+		}	
+
+		widget.SetRelativeSize( targetWidgetSize );
+		widget.SetRelativePosition( targetWidgetPos );
 		nextPos.y += m_SpaceBetweenWidgets;
 
-		m_Widgets[i].Update( DT );
+		widget.Update( DT );
 	}
-/*	
-	const static kbString baseTexture( "baseTexture" );
-	static const kbString normalizedScreenSize_Anchor( "normalizedScreenSize_Anchor" );
-	float nexty = 0.0f;
-
-	for ( int i = 0; i < NumOptions; i++ ) {
-
-		kbStaticModelComponent *const pNewOptionModel = m_OptionModels[i];
-		pNewOptionModel->SetMaterialParamTexture( 0, baseTexture.stl_str(), m_OptionImages[i] );
-		pNewOptionModel->SetMaterialParamVector( 0, normalizedScreenSize_Anchor.stl_str(), kbVec4( 0.1f, 0.1f, 0.5f, nexty ) );
-		nexty += 0.1f;
-	}*/
 }

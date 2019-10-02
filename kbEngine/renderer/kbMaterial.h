@@ -31,6 +31,9 @@ public:
 
 	const uint8_t *								GetCPUTexture( unsigned int & width, unsigned int & height );
 
+	uint										GetWidth() const { return m_TextureWidth; }
+	uint										GetHeight() const { return m_TextureHeight; }
+
 private:
 
 	virtual bool								Load_Internal();

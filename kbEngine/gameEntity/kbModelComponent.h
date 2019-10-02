@@ -83,6 +83,7 @@ public:
 
 	void										SetShader( kbShader *const pShader ) { m_pShader = pShader; }
 	void										SetShaderParamComponent( const kbShaderParamComponent & inParam );
+	const kbShaderParamComponent *				GetShaderParamComponent( const kbString & name );
 
 private:
 
@@ -111,6 +112,7 @@ public:
 	void										SetMaterialParamVector( const int idx, const std::string & paramName, const kbVec4 paramValue );
 	void										SetMaterialParamTexture( const int idx, const std::string & paramName, kbTexture *const pTexture );
 	void										SetMaterialParamTexture( const int idx, const std::string & paramName, kbRenderTexture *const pTexture );
+	const kbShaderParamComponent *				GetShaderParamComponent( const int idx, const kbString & name );
 
 	void										RefreshMaterials( const bool bUpdateRenderObject );
 

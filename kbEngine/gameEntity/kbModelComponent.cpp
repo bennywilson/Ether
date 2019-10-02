@@ -134,7 +134,7 @@ void kbModelComponent::SetMaterialParamTexture( const int idx, const std::string
 }
 
 /**
- *	kbModelComponent:SetMaterialParamTexture
+ *	kbModelComponent::SetMaterialParamTexture
  */
 void kbModelComponent::SetMaterialParamTexture( const int idx, const std::string & paramName, kbRenderTexture *const pRenderTexture ) {
 	if ( idx < 0 || idx > 32 || idx >= m_MaterialList.size() ) {
@@ -151,6 +151,18 @@ void kbModelComponent::SetMaterialParamTexture( const int idx, const std::string
 	if ( IsEnabled() ) {
 		g_pRenderer->UpdateRenderObject( m_RenderObject );
 	}
+}
+
+/**
+ *	kbModelComponent::GetShaderParamComponent
+ */
+const kbShaderParamComponent * kbModelComponent::GetShaderParamComponent( const int idx, const kbString & name ) {
+	if ( idx < 0 || idx > 32 || idx >= m_MaterialList.size() ) {
+		kbWarning( "kbModelComponent::SetMaterialParamVector() called on invalid index" );
+		return nullptr;
+	}
+
+	return m_MaterialList[idx].GetShaderParamComponent( name );
 }
 
 /**
@@ -256,6 +268,21 @@ void kbMaterialComponent::SetShaderParamComponent( const kbShaderParamComponent 
 
 	m_ShaderParamComponents.push_back( inParam );
 }
+
+/**
+ *	kbMaterialComponent::GetShaderParamComponent
+ */
+const kbShaderParamComponent * kbMaterialComponent::GetShaderParamComponent( const kbString & name ) {
+
+	for ( int i = 0; i < m_ShaderParamComponents.size(); i++ ) {
+		if ( m_ShaderParamComponents[i].GetParamName() == name) {
+			return &m_ShaderParamComponents[i];
+		}
+	}
+
+	return nullptr;
+}
+
 
 /**
  *	kbShaderModifierComponent::Constructor
