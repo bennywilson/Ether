@@ -3695,7 +3695,7 @@ kbGameEntity 0 0 0 0 {
 		Scale = 555.000000 555.000000 1.000000
 	}
 	kbStaticModelComponent { 
-		Enabled = 1
+		Enabled = 0
 		LifeTime =  -1.000000
 		CastsShadow = 0
 		Materials = 1
@@ -3739,7 +3739,7 @@ kbGameEntity 0 0 0 0 {
 		Model = ..\..\kbengine\assets\models\unitquad.ms3d
 	}
 	CannonBallPauseMenuUIComponent { 
-		Enabled = 1
+		Enabled = 0
 		LifeTime =  -1.000000
 		AuthoredHeight = 128
 		AuthoredWidth = 128
@@ -3750,133 +3750,7 @@ kbGameEntity 0 0 0 0 {
 		WidgetSize = 0.100000 0.150000 1.000000
 		Widgets = 5
 			CannonUIWidget { 
-				Enabled = 1
-				LifeTime =  -1.000000
-				Materials = 1
-					kbMaterialComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						CullModeOverride = ShaderDefault
-						Shader = .\assets\shaders\ui\ui_basic.kbshader
-						ShaderParams = 4
-							kbShaderParamComponent { 
-								Enabled = 0
-								LifeTime =  -1.000000
-								ParamName = "normalizedScreenSize_Anchor"
-								Texture = NULL
-								Vector = 0.000000 0.000000 0.000000 0.000000
-							}
-							kbShaderParamComponent { 
-								Enabled = 0
-								LifeTime =  -1.000000
-								ParamName = "colorFactor"
-								Texture = NULL
-								Vector = 1.000000 1.000000 1.000000 1.000000
-							}
-							kbShaderParamComponent { 
-								Enabled = 0
-								LifeTime =  -1.000000
-								ParamName = "rotationAngle"
-								Texture = NULL
-								Vector = 0.000000 0.000000 0.000000 0.000000
-							}
-							kbShaderParamComponent { 
-								Enabled = 0
-								LifeTime =  -1.000000
-								ParamName = "baseTexture"
-								Texture = .\assets\ui\pausemenu\volume.tif
-								Vector = 0.000000 0.000000 0.000000 0.000000
-							}
-					}
-				RelativePosition = 0.331250 0.300000 0.000000
-				RelativeSize = 0.168750 0.150000 1.000000
-			}
-			CannonUIWidget { 
-				Enabled = 1
-				LifeTime =  -1.000000
-				Materials = 1
-					kbMaterialComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						CullModeOverride = ShaderDefault
-						Shader = .\assets\shaders\ui\ui_basic.kbshader
-						ShaderParams = 4
-							kbShaderParamComponent { 
-								Enabled = 0
-								LifeTime =  -1.000000
-								ParamName = "normalizedScreenSize_Anchor"
-								Texture = NULL
-								Vector = 0.000000 0.000000 0.000000 0.000000
-							}
-							kbShaderParamComponent { 
-								Enabled = 0
-								LifeTime =  -1.000000
-								ParamName = "colorFactor"
-								Texture = NULL
-								Vector = 1.000000 1.000000 1.000000 1.000000
-							}
-							kbShaderParamComponent { 
-								Enabled = 0
-								LifeTime =  -1.000000
-								ParamName = "rotationAngle"
-								Texture = NULL
-								Vector = 0.000000 0.000000 0.000000 0.000000
-							}
-							kbShaderParamComponent { 
-								Enabled = 0
-								LifeTime =  -1.000000
-								ParamName = "baseTexture"
-								Texture = .\assets\ui\pausemenu\brightness.tif
-								Vector = 0.000000 0.000000 0.000000 0.000000
-							}
-					}
-				RelativePosition = 0.250830 0.400000 0.000000
-				RelativeSize = 0.249170 0.150000 1.000000
-			}
-			CannonUIWidget { 
-				Enabled = 1
-				LifeTime =  -1.000000
-				Materials = 1
-					kbMaterialComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						CullModeOverride = ShaderDefault
-						Shader = .\assets\shaders\ui\ui_basic.kbshader
-						ShaderParams = 4
-							kbShaderParamComponent { 
-								Enabled = 0
-								LifeTime =  -1.000000
-								ParamName = "normalizedScreenSize_Anchor"
-								Texture = NULL
-								Vector = 0.000000 0.000000 0.000000 0.000000
-							}
-							kbShaderParamComponent { 
-								Enabled = 0
-								LifeTime =  -1.000000
-								ParamName = "colorFactor"
-								Texture = NULL
-								Vector = 1.000000 1.000000 1.000000 1.000000
-							}
-							kbShaderParamComponent { 
-								Enabled = 0
-								LifeTime =  -1.000000
-								ParamName = "rotationAngle"
-								Texture = NULL
-								Vector = 0.000000 0.000000 0.000000 0.000000
-							}
-							kbShaderParamComponent { 
-								Enabled = 0
-								LifeTime =  -1.000000
-								ParamName = "baseTexture"
-								Texture = .\assets\ui\pausemenu\videoquality.tif
-								Vector = 0.000000 0.000000 0.000000 0.000000
-							}
-					}
-				RelativePosition = 0.201392 0.500000 0.000000
-				RelativeSize = 0.298608 0.150000 1.000000
-			}
-			CannonUIWidget { 
-				Enabled = 1
+				Enabled = 0
 				LifeTime =  -1.000000
 				Materials = 1
 					kbMaterialComponent { 
@@ -3918,7 +3792,133 @@ kbGameEntity 0 0 0 0 {
 				RelativeSize = 0.168750 0.150000 1.000000
 			}
 			CannonUIWidget { 
-				Enabled = 1
+				Enabled = 0
+				LifeTime =  -1.000000
+				Materials = 1
+					kbMaterialComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						CullModeOverride = ShaderDefault
+						Shader = .\assets\shaders\ui\ui_basic.kbshader
+						ShaderParams = 4
+							kbShaderParamComponent { 
+								Enabled = 0
+								LifeTime =  -1.000000
+								ParamName = "normalizedScreenSize_Anchor"
+								Texture = NULL
+								Vector = 0.000000 0.000000 0.000000 0.000000
+							}
+							kbShaderParamComponent { 
+								Enabled = 0
+								LifeTime =  -1.000000
+								ParamName = "colorFactor"
+								Texture = NULL
+								Vector = 1.000000 1.000000 1.000000 1.000000
+							}
+							kbShaderParamComponent { 
+								Enabled = 0
+								LifeTime =  -1.000000
+								ParamName = "rotationAngle"
+								Texture = NULL
+								Vector = 0.000000 0.000000 0.000000 0.000000
+							}
+							kbShaderParamComponent { 
+								Enabled = 0
+								LifeTime =  -1.000000
+								ParamName = "baseTexture"
+								Texture = .\assets\ui\pausemenu\volume.tif
+								Vector = 0.000000 0.000000 0.000000 0.000000
+							}
+					}
+				RelativePosition = 0.331250 0.300000 0.000000
+				RelativeSize = 0.168750 0.150000 1.000000
+			}
+			CannonUIWidget { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Materials = 1
+					kbMaterialComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						CullModeOverride = ShaderDefault
+						Shader = .\assets\shaders\ui\ui_basic.kbshader
+						ShaderParams = 4
+							kbShaderParamComponent { 
+								Enabled = 0
+								LifeTime =  -1.000000
+								ParamName = "normalizedScreenSize_Anchor"
+								Texture = NULL
+								Vector = 0.000000 0.000000 0.000000 0.000000
+							}
+							kbShaderParamComponent { 
+								Enabled = 0
+								LifeTime =  -1.000000
+								ParamName = "colorFactor"
+								Texture = NULL
+								Vector = 1.000000 1.000000 1.000000 1.000000
+							}
+							kbShaderParamComponent { 
+								Enabled = 0
+								LifeTime =  -1.000000
+								ParamName = "rotationAngle"
+								Texture = NULL
+								Vector = 0.000000 0.000000 0.000000 0.000000
+							}
+							kbShaderParamComponent { 
+								Enabled = 0
+								LifeTime =  -1.000000
+								ParamName = "baseTexture"
+								Texture = .\assets\ui\pausemenu\brightness.tif
+								Vector = 0.000000 0.000000 0.000000 0.000000
+							}
+					}
+				RelativePosition = 0.250830 0.400000 0.000000
+				RelativeSize = 0.249170 0.150000 1.000000
+			}
+			CannonUIWidget { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Materials = 1
+					kbMaterialComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						CullModeOverride = ShaderDefault
+						Shader = .\assets\shaders\ui\ui_basic.kbshader
+						ShaderParams = 4
+							kbShaderParamComponent { 
+								Enabled = 0
+								LifeTime =  -1.000000
+								ParamName = "normalizedScreenSize_Anchor"
+								Texture = NULL
+								Vector = 0.000000 0.000000 0.000000 0.000000
+							}
+							kbShaderParamComponent { 
+								Enabled = 0
+								LifeTime =  -1.000000
+								ParamName = "colorFactor"
+								Texture = NULL
+								Vector = 1.000000 1.000000 1.000000 1.000000
+							}
+							kbShaderParamComponent { 
+								Enabled = 0
+								LifeTime =  -1.000000
+								ParamName = "rotationAngle"
+								Texture = NULL
+								Vector = 0.000000 0.000000 0.000000 0.000000
+							}
+							kbShaderParamComponent { 
+								Enabled = 0
+								LifeTime =  -1.000000
+								ParamName = "baseTexture"
+								Texture = .\assets\ui\pausemenu\videoquality.tif
+								Vector = 0.000000 0.000000 0.000000 0.000000
+							}
+					}
+				RelativePosition = 0.201392 0.500000 0.000000
+				RelativeSize = 0.298608 0.150000 1.000000
+			}
+			CannonUIWidget { 
+				Enabled = 0
 				LifeTime =  -1.000000
 				Materials = 1
 					kbMaterialComponent { 

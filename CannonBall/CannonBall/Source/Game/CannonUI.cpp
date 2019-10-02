@@ -263,6 +263,7 @@ void CannonUIWidget::SetParent( const kbUIComponent *const pParent ) {
  *	CannonUIWidget::GetBaseTextureDimensions
  */
 kbVec2i	CannonUIWidget::GetBaseTextureDimensions() const {
+
 	kbVec2i retDim( -1, -1 );
 	if ( m_pModel == nullptr ) {
 		return retDim;

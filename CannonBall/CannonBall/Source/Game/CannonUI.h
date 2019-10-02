@@ -126,10 +126,10 @@ class CannonBallPauseMenuUIComponent : public kbUIComponent {
 //---------------------------------------------------------------------------------------------------
 public:
 	enum ePauseMenuOptions {
+		BackToGame,
 		MasterVolume,
 		Brightness,
 		VideoQuality,
-		BackToGame,
 		ExitToMainMenu,
 		NumOptions
 	};
