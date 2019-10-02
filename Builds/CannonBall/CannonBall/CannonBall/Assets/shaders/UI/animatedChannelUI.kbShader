@@ -1,0 +1,69 @@
+//===================================================================================================
+// animatedChannelUI.kbShader
+//
+//
+// 2019 kbEngine 2.0
+//===================================================================================================
+cbuffer matrixBuffer {
+	float4					normalizedScreenSize_Anchor;
+	float4					channelMask;
+};
+
+kbShaderState {
+	srcBlend				Blend_SrcAlpha
+	dstBlend				Blend_InvSrcAlpha
+	colorwriteenable		colorwriteenable_rgb
+}
+
+//-------------------------------------
+struct vertexInput {
+	float4 position			: POSITION;
+	float2 uv				: TEXCOORD0;
+};
+
+//-------------------------------------
+struct pixelInput {
+	float4 position			: SV_POSITION;
+	float2 uv				: TEXCOORD0;
+	float4 position2		: TEXCOORD1;
+};
+
+/**
+ *	vertexShader
+ */
+pixelInput vertexShader( vertexInput input ) {
+	pixelInput output = (pixelInput)(0);
+
+	output.position = input.position;
+	output.position.xy *= normalizedScreenSize_Anchor.xy;
+
+	// Offset so upper left-hand corner is the origin
+	output.position.xy += float2( normalizedScreenSize_Anchor.x, -normalizedScreenSize_Anchor.y );
+
+	// Move to the anchor point
+	float2 offset = ( normalizedScreenSize_Anchor.zw * 2.0f ) - 1.0f;
+	offset.y *= -1.0f;
+	output.position.xy += offset;
+	
+	output.uv = input.uv;
+	output.position2 = input.position;
+
+	return output;
+}
+
+/**
+ *	pixelShader
+ */
+SamplerState DiffuseSamplerState;
+
+Texture2D baseTexture(white)					: register(t0);
+
+Texture2D sceneTexture(scenecolor)				: register(t3);
+
+float4 pixelShader( pixelInput input ) : SV_TARGET {
+
+	float4 animatedTex = baseTexture.Sample( DiffuseSamplerState, input.uv );
+	const float maskDot = dot( channelMask, animatedTex );
+	return maskDot;
+}
+

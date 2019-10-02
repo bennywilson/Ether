@@ -1,0 +1,283 @@
+Splashes 1
+kbPrefab 1 {
+	WaterSplash_1
+	kbGameEntity 804484872 1243614787 3759672203 2495881037 {
+		kbTransformComponent { 
+			Enabled = 1
+			LifeTime =  -1.000000
+			Name = "WaterSplash_1"
+			Orientation = 0.000000 0.000000 0.000000 1.000000
+			Position = 73.684242 -57.253990 -306.444397
+			Scale = 50.000000 50.000000 50.000000
+		}
+		kbParticleComponent { 
+			Enabled = 0
+			LifeTime =  -1.000000
+			Name = ""
+			Orientation = 0.000000 0.000000 0.000000 1.000000
+			Position = 0.000000 0.000000 0.000000
+			Scale = 50.000000 50.000000 50.000000
+			AlphaOverLife = 0
+			ColorOverLife = 0
+			DebugPlayEntity = 0
+			EndColor = 1.000000 1.000000 1.000000 0.000000
+			Gravity = 0.000000 0.000000 0.000000
+			MaterialList = 0
+			MaxBurstCount = 0
+			MaxDuration =  1.000000
+			MaxEndRotationRate =  5.000000
+			MaxEndSize = 3.000000 3.000000 3.000000
+			MaxEndVelocity = 0.000000 0.000000 0.000000
+			MaxParticlesToEmit = 5
+			MaxSpawnRate =  5.000000
+			MaxStart3DOffset = 0.100000 0.100000 0.100000
+			MaxStart3DRotation = 0.000000 180.000000 0.000000
+			MaxStartRotationRate =  55.000000
+			MaxStartSize = 1.330000 1.330000 1.330000
+			MaxStartVelocity = 0.000000 0.000000 0.000000
+			MinBurstCount = 0
+			MinDuration =  0.500000
+			MinEndRotationRate =  5.000000
+			MinEndSize = 3.000000 3.000000 3.000000
+			MinEndVelocity = 0.000000 0.000000 0.000000
+			MinSpawnRate =  4.000000
+			MinStart3DOffset = -0.100000 -0.100000 -0.100000
+			MinStart3DRotation = 0.000000 -180.000000 0.000000
+			MinStartRotationRate =  55.000000
+			MinStartSize = 1.000000 1.000000 1.000000
+			MinStartVelocity = 0.000000 0.000000 0.000000
+			ModelEmitter = 1
+				kbModelEmitter { 
+					Enabled = 0
+					LifeTime =  -1.000000
+					MaterialList = 1
+						kbMaterialComponent { 
+							Enabled = 0
+							LifeTime =  -1.000000
+							CullModeOverride = ShaderDefault
+							Shader = .\assets\shaders\fx\splash.kbshader
+							ShaderParams = 1
+								kbShaderParamComponent { 
+									Enabled = 0
+									LifeTime =  -1.000000
+									ParamName = "shaderTexture"
+									Texture = .\assets\fx\splashes\splash_1.tif
+									Vector = 0.000000 0.000000 0.000000 0.000000
+								}
+						}
+					Model = .\assets\models\shapes\tapered_cone_1.fbx
+				}
+			ParticleBillboardType = FaceCamera
+			RotationOverLife = 2
+				kbVectorAnimEvent { 
+					Enabled = 0
+					LifeTime =  -1.000000
+					EventName = ""
+					EventTime =  0.000000
+					EventValue = 1.000000 1.000000 1.000000 1.000000
+				}
+				kbVectorAnimEvent { 
+					Enabled = 0
+					LifeTime =  -1.000000
+					EventName = ""
+					EventTime =  1.000000
+					EventValue = 2.000000 2.000000 2.000000 2.000000
+				}
+			SizeOverLife = 4
+				kbVectorAnimEvent { 
+					Enabled = 0
+					LifeTime =  -1.000000
+					EventName = ""
+					EventTime =  0.000000
+					EventValue = 300.000000 55.000000 300.000000 55.000000
+				}
+				kbVectorAnimEvent { 
+					Enabled = 0
+					LifeTime =  -1.000000
+					EventName = ""
+					EventTime =  0.150000
+					EventValue = 450.000000 450.000000 450.000000 500.000000
+				}
+				kbVectorAnimEvent { 
+					Enabled = 0
+					LifeTime =  -1.000000
+					EventName = ""
+					EventTime =  0.250000
+					EventValue = 445.000000 445.000000 445.000000 0.000000
+				}
+				kbVectorAnimEvent { 
+					Enabled = 0
+					LifeTime =  -1.000000
+					EventName = ""
+					EventTime =  0.750000
+					EventValue = 0.000000 0.000000 0.000000 0.000000
+				}
+			StartColor = 1.000000 1.000000 1.000000 1.000000
+			StartDelay =  0.000000
+			TotalDuration =  5.000000
+			RenderOrderBias =  0.000000
+			VelocityCurve = 0
+		}
+		kbParticleComponent { 
+			Enabled = 1
+			LifeTime =  -1.000000
+			Name = ""
+			Orientation = 0.000000 0.000000 0.000000 1.000000
+			Position = 0.000000 0.000000 0.000000
+			Scale = 1.000000 1.000000 1.000000
+			AlphaOverLife = 0
+			ColorOverLife = 0
+			DebugPlayEntity = 0
+			EndColor = 1.000000 1.000000 1.000000 0.250000
+			Gravity = 0.000000 -20.000000 0.000000
+			MaterialList = 1
+				kbMaterialComponent { 
+					Enabled = 0
+					LifeTime =  -1.000000
+					CullModeOverride = ShaderDefault
+					Shader = .\assets\shaders\fx\particle_blendadd.kbshader
+					ShaderParams = 2
+						kbShaderParamComponent { 
+							Enabled = 0
+							LifeTime =  -1.000000
+							ParamName = "colorMultplier"
+							Texture = NULL
+							Vector = 1.000000 1.000000 1.000000 1.000000
+						}
+						kbShaderParamComponent { 
+							Enabled = 0
+							LifeTime =  -1.000000
+							ParamName = "shaderTexture"
+							Texture = .\assets\fx\splashes\waterdroplets.tif
+							Vector = 0.000000 0.000000 0.000000 0.000000
+						}
+				}
+			MaxBurstCount = 0
+			MaxDuration =  3.000000
+			MaxEndRotationRate =  0.000000
+			MaxEndSize = 0.075000 0.075000 0.075000
+			MaxEndVelocity = 0.000000 0.000000 0.000000
+			MaxParticlesToEmit = 200
+			MaxSpawnRate =  900.000000
+			MaxStart3DOffset = 0.000000 0.000000 0.000000
+			MaxStart3DRotation = 0.000000 0.000000 0.000000
+			MaxStartRotationRate =  0.000000
+			MaxStartSize = 0.150000 0.150000 0.150000
+			MaxStartVelocity = 5.000000 20.000000 5.000000
+			MinBurstCount = 0
+			MinDuration =  3.000000
+			MinEndRotationRate =  0.000000
+			MinEndSize = 0.050000 0.050000 0.050000
+			MinEndVelocity = 0.000000 0.000000 0.000000
+			MinSpawnRate =  800.000000
+			MinStart3DOffset = 0.000000 0.000000 0.000000
+			MinStart3DRotation = 0.000000 0.000000 0.000000
+			MinStartRotationRate =  0.000000
+			MinStartSize = 0.100000 0.100000 0.100000
+			MinStartVelocity = -5.000000 15.000000 -5.000000
+			ModelEmitter = 0
+			ParticleBillboardType = FaceCamera
+			RotationOverLife = 0
+			SizeOverLife = 0
+			StartColor = 1.000000 1.000000 1.000000 0.250000
+			StartDelay =  0.000000
+			TotalDuration =  5.000000
+			RenderOrderBias =  0.000000
+			VelocityCurve = 3
+				kbAnimEvent { 
+					Enabled = 0
+					LifeTime =  -1.000000
+					EventName = ""
+					EventTime =  0.000000
+					EventValue =  2.000000
+				}
+				kbAnimEvent { 
+					Enabled = 0
+					LifeTime =  -1.000000
+					EventName = ""
+					EventTime =  0.150000
+					EventValue =  1.000000
+				}
+				kbAnimEvent { 
+					Enabled = 0
+					LifeTime =  -1.000000
+					EventName = ""
+					EventTime =  1.000000
+					EventValue =  1.000000
+				}
+		}
+	}
+}
+}
+FullScreen 1
+kbPrefab 1 {
+	WaterDroplets_1
+kbGameEntity 3936461697 1285153374 3406925493 1594399155 {
+	kbTransformComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		Name = "Screen Droplets"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 68.996651 -49.961926 -306.625702
+		Scale = 555.000000 555.000000 1.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 1
+		Materials = 1
+			kbMaterialComponent { 
+				Enabled = 1
+				LifeTime =  -1.000000
+				CullModeOverride = None
+				Shader = .\assets\shaders\fx\fullscreen\fullscreen_waterdroplets.kbshader
+				ShaderParams = 6
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "cameraPosition"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "fog_Start_End_Clamp"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "fogColor"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "OverlayTexture"
+						Texture = .\assets\fx\fullscreen\screendroplets_1.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "normalFactor_scrollRate"
+						Texture = NULL
+						Vector = 0.050000 0.050000 0.000000 -0.100000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "startUVOffset"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		RenderPass = UIPass
+		RenderOrderBias =  0.000000
+		Model = ..\..\kbengine\assets\models\unitquad.ms3d
+	}
+}
+}

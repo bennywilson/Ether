@@ -40,6 +40,7 @@ kbPrefab 1 {
 					EventTime =  1.000000
 					EventValue = 0.000000 0.000000 0.000000 1.000000
 				}
+			DebugPlayEntity = 0
 			EndColor = 1.000000 1.000000 1.000000 0.000000
 			Gravity = 0.000000 -1.000000 0.000000
 			MaterialList = 1
@@ -89,10 +90,12 @@ kbPrefab 1 {
 			MinStartVelocity = -2.000000 0.500000 -2.000000
 			ModelEmitter = 0
 			ParticleBillboardType = FaceCamera
+			RotationOverLife = 0
+			SizeOverLife = 0
 			StartColor = 1.000000 1.000000 1.000000 0.000000
 			StartDelay =  0.000000
 			TotalDuration =  3.000000
-			TranslucencySortBias =  0.000000
+			RenderOrderBias =  0.000000
 			VelocityCurve = 2
 				kbAnimEvent { 
 					Enabled = 0
@@ -144,6 +147,7 @@ kbGameEntity 4226348206 1325904980 2380668328 2364791781 {
 		Scale = 50.000000 50.000000 50.000000
 		AlphaOverLife = 0
 		ColorOverLife = 0
+		DebugPlayEntity = 0
 		EndColor = 1.000000 1.000000 1.000000 0.000000
 		Gravity = 0.000000 0.000000 0.000000
 		MaterialList = 0
@@ -200,7 +204,7 @@ kbGameEntity 4226348206 1325904980 2380668328 2364791781 {
 								LifeTime =  -1.000000
 								ParamName = "colorMultiplier"
 								Texture = NULL
-								Vector = 1.000000 1.000000 1.000000 1.000000
+								Vector = 1.000000 1.000000 1.000000 0.500000
 							}
 							kbShaderParamComponent { 
 								Enabled = 0
@@ -220,22 +224,25 @@ kbGameEntity 4226348206 1325904980 2380668328 2364791781 {
 				Model = .\assets\fx\curves\swirl_1.fbx
 			}
 		ParticleBillboardType = FaceCamera
-		StartColor = 1.000000 1.000000 1.000000 1.000000
+		RotationOverLife = 0
+		SizeOverLife = 0
+		StartColor = 1.000000 1.000000 1.000000 0.500000
 		StartDelay =  0.000000
 		TotalDuration =  3.000000
-		TranslucencySortBias =  0.000000
+		RenderOrderBias =  0.000000
 		VelocityCurve = 0
 	}
 	kbPlaySoundComponent { 
 		Enabled = 1
 		LifeTime =  -1.000000
-		MaxStartDelay =  0.0010000
+		MaxStartDelay =  0.001000
 		MinStartDelay =  0.000000
 		SoundData = 3
 			kbSoundData { 
 				Enabled = 0
 				LifeTime =  -1.000000
 				Radius =  -1.000000
+				TestPlaySoundNow = 0
 				Volume =  1.000000
 				WaveFile = .\assets\sounds\randomfx\woosh1.wav
 			}
@@ -243,6 +250,7 @@ kbGameEntity 4226348206 1325904980 2380668328 2364791781 {
 				Enabled = 0
 				LifeTime =  -1.000000
 				Radius =  -1.000000
+				TestPlaySoundNow = 0
 				Volume =  1.000000
 				WaveFile = .\assets\sounds\randomfx\woosh2.wav
 			}
@@ -250,6 +258,7 @@ kbGameEntity 4226348206 1325904980 2380668328 2364791781 {
 				Enabled = 0
 				LifeTime =  -1.000000
 				Radius =  -1.000000
+				TestPlaySoundNow = 0
 				Volume =  1.000000
 				WaveFile = .\assets\sounds\randomfx\woosh3.wav
 			}
@@ -265,6 +274,1513 @@ kbGameEntity 4226348206 1325904980 2380668328 2364791781 {
 		Duration =  0.700000
 		FrequencyX =  30.000000
 		FrequencyY =  40.000000
+	}
+}
+}
+Gear 1
+kbPrefab 1 {
+	Headband
+kbGameEntity 948620123 1076773710 873065897 3787095028 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "HeadBand"
+		Orientation = 0.000000 0.000000 -0.717356 0.696707
+		Position = 77.104439 -48.485264 -391.809143
+		Scale = 1.450000 1.000000 1.000000
+	}
+	kbSkeletalModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		Materials = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\environment\environmentskinned.kbshader
+				ShaderParams = 4
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "diffuse"
+						Texture = .\assets\models\characters\sheep\headband_black.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "normal"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "propertyMap"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "emissiveMap"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		RenderPass = LightingPass
+		RenderOrderBias =  0.000000
+		Animations = 0
+		DebugAnimIndex = -1
+		Model = .\assets\models\characters\sheep\gear\headband.ms3d
+	}
+	kbClothComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		AddFakeOscillation = 1
+		AdditionalBoneInfo = 0
+		BoneInfo = 121
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 1
+				BoneName = "B00_00"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 1
+				BoneName = "B00_01"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 1
+				BoneName = "B00_02"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 1
+				BoneName = "B00_03"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 1
+				BoneName = "B00_04"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 1
+				BoneName = "B00_05"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 1
+				BoneName = "B00_06"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 1
+				BoneName = "B00_07"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 1
+				BoneName = "B00_08"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 1
+				BoneName = "B00_09"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 1
+				BoneName = "B00_10"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B01_00"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B01_01"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B01_02"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B01_03"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B01_04"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B01_05"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B01_06"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B01_07"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B01_08"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B01_09"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B01_10"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B02_00"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B02_01"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B02_02"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B02_03"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B02_04"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B02_05"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B02_06"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B02_07"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B02_08"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B02_09"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B02_10"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B03_00"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B03_01"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B03_02"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B03_03"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B03_04"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B03_05"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B03_06"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B03_07"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B03_08"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B03_09"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B03_10"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B04_00"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B04_01"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B04_02"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B04_03"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B04_04"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B04_05"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B04_06"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B04_07"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B04_08"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B04_09"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B04_10"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B05_00"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B05_01"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B05_02"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B05_03"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B05_04"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B05_05"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B05_06"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B05_07"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B05_08"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B05_09"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B05_10"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B06_00"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B06_01"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B06_02"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B06_03"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B06_04"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B06_05"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B06_06"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B06_07"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B06_08"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B06_09"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B06_10"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B07_00"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B07_01"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B07_02"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B07_03"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B07_04"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B07_05"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B07_06"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B07_07"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B07_08"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B07_09"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B07_10"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B08_00"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B08_01"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B08_02"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B08_03"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B08_04"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B08_05"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B08_06"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B08_07"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B08_08"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B08_09"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B08_10"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B09_00"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B09_01"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B09_02"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B09_03"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B09_04"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B09_05"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B09_06"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B09_07"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B09_08"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B09_09"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B09_10"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B10_00"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B10_01"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B10_02"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B10_03"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B10_04"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B10_05"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B10_06"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B10_07"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B10_08"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B10_09"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "B10_10"
+				NeighborBones = 0
+			}
+		ClothType = Square
+		Collision = 1
+			kbBoneCollisionSphere { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				BoneName = "Head"
+				Sphere = 0.140000 -0.060000 0.279997 0.250000
+			}
+		Gravity = 0.000000 -10.000000 0.000000
+		Height = 11
+		MaxWindGustDuration =  0.000000
+		MaxWindVelocity = 1.000000 5.000000 -10.000000
+		MinWindGustDuration =  1.000000
+		MinWindVelocity = -1.000000 3.000000 -2.000000
+		NumIterations = 1
+		Width = 11
+	}
+}
+}
+Actors 1
+kbPrefab 1 {
+	KungFuSheep
+kbGameEntity 3807537734 1283872403 1661460398 2211889957 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Player"
+		Orientation = 0.000000 1.000000 0.000000 0.000000
+		Position = 77.104454 -52.635265 -391.559143
+		Scale = 1.000000 1.000000 1.000000
+	}
+	kbSkeletalModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 1
+		Materials = 2
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\character\characterbase.kbshader
+				ShaderParams = 3
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorTexture"
+						Texture = .\assets\models\characters\sheep\sheep.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "fxMap"
+						Texture = .\assets\models\characters\sheep\sheep_fx_map.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "fxMapMask"
+						Texture = NULL
+						Vector = 0.000000 1.000000 0.000000 0.000000
+					}
+			}
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\character\characterbase.kbshader
+				ShaderParams = 5
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "fxMapMask"
+						Texture = NULL
+						Vector = 1.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "clipMapMask"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorTexture"
+						Texture = .\assets\models\characters\sheep\headband_black.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "fxMap"
+						Texture = ..\..\kbengine\assets\textures\white.bmp
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "clipMap"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		RenderPass = LightingPass
+		RenderOrderBias =  0.000000
+		Animations = 9
+			kbAnimComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Animation = .\assets\models\characters\sheep\sheep_run_basic.kbanim.ms3d
+				AnimationEvent = 0
+				AnimationName = "Run_Basic"
+				IsLooping = 1
+				TimeScale =  10.000000
+			}
+			kbAnimComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Animation = .\assets\models\characters\sheep\sheep_idleleft_basic.kbanim.ms3d
+				AnimationEvent = 0
+				AnimationName = "IdleLeft_Basic"
+				IsLooping = 1
+				TimeScale =  2.000000
+			}
+			kbAnimComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Animation = .\assets\models\characters\sheep\sheep_idleright_basic.kbanim.ms3d
+				AnimationEvent = 0
+				AnimationName = "IdleRight_Basic"
+				IsLooping = 1
+				TimeScale =  2.000000
+			}
+			kbAnimComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Animation = .\assets\models\characters\sheep\sheep_punchleft_basic.kbanim.ms3d
+				AnimationEvent = 0
+				AnimationName = "PunchLeft_Basic"
+				IsLooping = 0
+				TimeScale =  15.000000
+			}
+			kbAnimComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Animation = .\assets\models\characters\sheep\sheep_kickleft_basic.kbanim.ms3d
+				AnimationEvent = 0
+				AnimationName = "KickLeft_Basic"
+				IsLooping = 0
+				TimeScale =  9.000000
+			}
+			kbAnimComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Animation = .\assets\models\characters\sheep\sheep_punchright_basic.kbanim.ms3d
+				AnimationEvent = 0
+				AnimationName = "PunchRight_Basic"
+				IsLooping = 0
+				TimeScale =  15.000000
+			}
+			kbAnimComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Animation = .\assets\models\characters\sheep\sheep_kickright_basic.kbanim.ms3d
+				AnimationEvent = 0
+				AnimationName = "KickRight_Basic"
+				IsLooping = 0
+				TimeScale =  9.000000
+			}
+			kbAnimComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Animation = .\assets\models\characters\sheep\sheep_cannonball.kbanim.ms3d
+				AnimationEvent = 4
+					kbAnimEvent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						EventName = "CannonBall_VO"
+						EventTime =  0.100000
+						EventValue =  0.000000
+					}
+					kbAnimEvent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						EventName = "CannonBall_JumpSmear"
+						EventTime =  0.850000
+						EventValue =  0.050000
+					}
+					kbAnimEvent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						EventName = "CannonBall_Impact"
+						EventTime =  4.750000
+						EventValue =  1.000000
+					}
+					kbAnimEvent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						EventName = "CannonBall_DropSmear"
+						EventTime =  4.450000
+						EventValue =  0.050000
+					}
+				AnimationName = "CannonBall"
+				IsLooping = 0
+				TimeScale =  5.000000
+			}
+			kbAnimComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Animation = .\assets\models\characters\sheep\sheep_cannonballwindup.kbanim.ms3d
+				AnimationEvent = 0
+				AnimationName = "CannonBallWindUp"
+				IsLooping = 0
+				TimeScale =  1.000000
+			}
+		DebugAnimIndex = -1
+		Model = .\assets\models\characters\sheep\sheep.ms3d
+	}
+	kbSkeletalModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		Materials = 2
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\character\characteroutline.kbshader
+				ShaderParams = 3
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "outlineParams"
+						Texture = NULL
+						Vector = 0.025000 0.100000 0.800000 5.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorTexture"
+						Texture = .\assets\models\characters\sheep\sheep.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "smearParams"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\fx\hackclip.kbshader
+				ShaderParams = 5
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "fxMapMask"
+						Texture = NULL
+						Vector = 1.000000 1.000000 1.000000 1.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "clipMapMask"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorTexture"
+						Texture = .\assets\models\characters\sheep\headband_black.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "fxMap"
+						Texture = ..\..\kbengine\assets\textures\white.bmp
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "clipMap"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		RenderPass = Post-LightingPass
+		RenderOrderBias =  0.000000
+		Animations = 9
+			kbAnimComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Animation = .\assets\models\characters\sheep\sheep_run_basic.kbanim.ms3d
+				AnimationEvent = 0
+				AnimationName = "Run_Basic"
+				IsLooping = 1
+				TimeScale =  10.000000
+			}
+			kbAnimComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Animation = .\assets\models\characters\sheep\sheep_idleleft_basic.kbanim.ms3d
+				AnimationEvent = 0
+				AnimationName = "IdleLeft_Basic"
+				IsLooping = 1
+				TimeScale =  2.000000
+			}
+			kbAnimComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Animation = .\assets\models\characters\sheep\sheep_idleright_basic.kbanim.ms3d
+				AnimationEvent = 0
+				AnimationName = "IdleRight_Basic"
+				IsLooping = 1
+				TimeScale =  2.000000
+			}
+			kbAnimComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Animation = .\assets\models\characters\sheep\sheep_punchleft_basic.kbanim.ms3d
+				AnimationEvent = 4
+					kbAnimEvent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						EventName = "Punch_Attack"
+						EventTime =  0.750000
+						EventValue =  0.000000
+					}
+					kbAnimEvent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						EventName = "Punch_Attack"
+						EventTime =  1.000000
+						EventValue =  0.000000
+					}
+					kbAnimEvent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						EventName = "Punch_Attack"
+						EventTime =  1.250000
+						EventValue =  0.000000
+					}
+					kbAnimEvent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						EventName = "Punch_Attack"
+						EventTime =  1.500000
+						EventValue =  0.000000
+					}
+				AnimationName = "PunchLeft_Basic"
+				IsLooping = 0
+				TimeScale =  15.000000
+			}
+			kbAnimComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Animation = .\assets\models\characters\sheep\sheep_kickleft_basic.kbanim.ms3d
+				AnimationEvent = 4
+					kbAnimEvent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						EventName = "Kick_Attack"
+						EventTime =  0.750000
+						EventValue =  0.000000
+					}
+					kbAnimEvent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						EventName = "Punch_Attack"
+						EventTime =  1.000000
+						EventValue =  0.000000
+					}
+					kbAnimEvent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						EventName = "Punch_Attack"
+						EventTime =  1.250000
+						EventValue =  0.000000
+					}
+					kbAnimEvent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						EventName = "Punch_Attack"
+						EventTime =  1.500000
+						EventValue =  0.000000
+					}
+				AnimationName = "KickLeft_Basic"
+				IsLooping = 0
+				TimeScale =  9.000000
+			}
+			kbAnimComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Animation = .\assets\models\characters\sheep\sheep_punchright_basic.kbanim.ms3d
+				AnimationEvent = 1
+					kbAnimEvent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						EventName = "Punch_Attack"
+						EventTime =  0.750000
+						EventValue =  0.000000
+					}
+				AnimationName = "PunchRight_Basic"
+				IsLooping = 0
+				TimeScale =  15.000000
+			}
+			kbAnimComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Animation = .\assets\models\characters\sheep\sheep_kickright_basic.kbanim.ms3d
+				AnimationEvent = 1
+					kbAnimEvent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						EventName = "Kick_Attack"
+						EventTime =  0.750000
+						EventValue =  0.000000
+					}
+				AnimationName = "KickRight_Basic"
+				IsLooping = 0
+				TimeScale =  9.000000
+			}
+			kbAnimComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Animation = .\assets\models\characters\sheep\sheep_cannonball.kbanim.ms3d
+				AnimationEvent = 0
+				AnimationName = "CannonBall"
+				IsLooping = 0
+				TimeScale =  5.000000
+			}
+			kbAnimComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Animation = .\assets\models\characters\sheep\sheep_cannonballwindup.kbanim.ms3d
+				AnimationEvent = 0
+				AnimationName = "CannonBallWindUp"
+				IsLooping = 0
+				TimeScale =  1.000000
+			}
+		DebugAnimIndex = -1
+		Model = .\assets\models\characters\sheep\sheep.ms3d
+	}
+	kbFlingPhysicsComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Gravity = 0.015000 0.025000 0.020000
+		MaxAngularSpeed =  2.000000
+		MaxLinearVelocity = 0.015000 0.025000 0.020000
+		MinAngularSpeed =  0.500000
+		MinLinearVelocity = -0.015000 0.015000 0.030000
+	}
+	KungFuSheepComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		DummyTemp = 0
+		Health =  100.000000
+		AttackVO = 3
+			kbSoundData { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Radius =  -1.000000
+				TestPlaySoundNow = 0
+				Volume =  0.500000
+				WaveFile = .\assets\sounds\sheep\sheep_vo_battle_1.wav
+			}
+			kbSoundData { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Radius =  -1.000000
+				TestPlaySoundNow = 0
+				Volume =  0.500000
+				WaveFile = .\assets\sounds\sheep\sheep_vo_battle_2.wav
+			}
+			kbSoundData { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Radius =  -1.000000
+				TestPlaySoundNow = 0
+				Volume =  0.750000
+				WaveFile = .\assets\sounds\sheep\sheep_vo_battle_5.wav
+			}
+		Health =  100.000000
+		MaxRotateSpeed =  15.000000
+		MaxRunSpeed =  3.000000
+		AttackImpactSound = 4
+			kbSoundData { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Radius =  -1.000000
+				TestPlaySoundNow = 0
+				Volume =  2.000000
+				WaveFile = .\assets\sounds\impacts\woodimpact_2.wav
+			}
+			kbSoundData { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Radius =  -1.000000
+				TestPlaySoundNow = 0
+				Volume =  1.000000
+				WaveFile = .\assets\sounds\impacts\woodimpact_3.wav
+			}
+			kbSoundData { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Radius =  -1.000000
+				TestPlaySoundNow = 0
+				Volume =  1.000000
+				WaveFile = .\assets\sounds\impacts\woodimpact_4.wav
+			}
+			kbSoundData { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Radius =  -1.000000
+				TestPlaySoundNow = 0
+				Volume =  1.000000
+				WaveFile = .\assets\sounds\impacts\woodimpact_5.wav
+			}
+		BaaVO = 5
+			kbSoundData { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Radius =  -1.000000
+				TestPlaySoundNow = 0
+				Volume =  1.000000
+				WaveFile = .\assets\sounds\sheep\sheep_vo_baa_1.wav
+			}
+			kbSoundData { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Radius =  -1.000000
+				TestPlaySoundNow = 0
+				Volume =  1.000000
+				WaveFile = .\assets\sounds\sheep\sheep_vo_baa_2.wav
+			}
+			kbSoundData { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Radius =  -1.000000
+				TestPlaySoundNow = 0
+				Volume =  1.000000
+				WaveFile = .\assets\sounds\sheep\sheep_vo_baa_3.wav
+			}
+			kbSoundData { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Radius =  -1.000000
+				TestPlaySoundNow = 0
+				Volume =  0.700000
+				WaveFile = .\assets\sounds\sheep\sheep_vo_baa_4.wav
+			}
+			kbSoundData { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Radius =  -1.000000
+				TestPlaySoundNow = 0
+				Volume =  0.650000
+				WaveFile = .\assets\sounds\sheep\sheep_vo_baa_5.wav
+			}
+		CannonBallImpactFX = 846208613 1165520682 3641600641 3993117100
+		CannonBallImpactSound = 1
+			kbSoundData { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Radius =  -1.000000
+				TestPlaySoundNow = 0
+				Volume =  0.500000
+				WaveFile = .\assets\sounds\impacts\impact_large_wood.wav
+			}
+		CannonBallVO = 1
+			kbSoundData { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Radius =  -1.000000
+				TestPlaySoundNow = 0
+				Volume =  0.450000
+				WaveFile = .\assets\sounds\sheep\sheep_vo_cannonball.wav
+			}
+		DropSmearMagnitude =  2.500000
+		HeadBand = 948620123 1076773710 873065897 3787095028
+		JumpSmearMagnitude =  -2.000000
+		ShakeNBakeFX = 4226348206 1325904980 2380668328 2364791781
+		SplashFX = 804484872 1243614787 3759672203 2495881037
 	}
 }
 }

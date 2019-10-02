@@ -10,6 +10,7 @@ cbuffer matrixBuffer {
 	float4 mat3And4UVScale;
 	float4 specFactors;
 	float4 specPowerMultipliers;
+	float4 clipPlane;
 };
 
 //-------------------------------------
@@ -30,6 +31,7 @@ struct pixelInput {
 	float3 tangent			: TEXCOORD2;
 	float3 binormal			: TEXCOORD3;
 	float3 normal			: TEXCOORD4;
+	float3 worldPos			: TEXCOORD5;
 };
 
 //-------------------------------------
@@ -47,7 +49,10 @@ struct PS_OUTPUT {
 pixelInput vertexShader( vertexInput input ) {
 	pixelInput output = (pixelInput)(0);
 
-	output.position = mul( input.position, mvpMatrix );
+	output.position = input.position;
+
+			output.worldPos.xyz = mul( output.position, modelMatrix ).xyz;
+	output.position = mul( output.position, mvpMatrix );
 	output.uv = input.uv;
 	output.position2 = output.position.zw;
 
@@ -108,6 +113,9 @@ float4 BlendWeights( float4 val1, float4 val2, float4 val3, float4 val4, float4 
 
  PS_OUTPUT pixelShader( pixelInput	input )  {
  	PS_OUTPUT output = (PS_OUTPUT) 0;
+
+	if ( input.worldPos.y < clipPlane.w )
+		clip(-1);
 
 	float3x3 tbn;
 	tbn[0] = input.tangent.xyz;

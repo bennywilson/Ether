@@ -55,7 +55,7 @@ pixelInput vertexShader( vertexInput input ) {
    float BlendWeightsArray[4] = (float[4])input.boneWeights;
    int   IndexArray[4]        = (int[4])IndexVector;
 
-   Pos = mul( input.position, boneList[IndexArray[0]] );
+   Pos = mul( input.position, boneList[IndexArray[2]] );
 
 	output.position = mul( Pos, mvpMatrix );
 	output.uv = input.uv;
