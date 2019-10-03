@@ -103,8 +103,8 @@ GenerateClass(
 
 GenerateClass(
 	CannonUIWidget,
-	AddField( "RelativePosition", KBTYPEINFO_VECTOR, CannonUIWidget, m_RelativePosition, false, "" )
-	AddField( "RelativeSize", KBTYPEINFO_VECTOR, CannonUIWidget, m_RelativeSize, false, "" )
+	AddField( "RelativePosition", KBTYPEINFO_VECTOR, CannonUIWidget, m_StartingPosition, false, "" )
+	AddField( "RelativeSize", KBTYPEINFO_VECTOR, CannonUIWidget, m_StartingSize, false, "" )
 	AddField( "Materials", KBTYPEINFO_STRUCT, CannonUIWidget, m_Materials, true, "kbMaterialComponent" )
 	AddField( "ChildWidgets", KBTYPEINFO_STRUCT, CannonUIWidget, m_ChildWidgets, true, "CannonUIWidget" )
 
@@ -112,7 +112,8 @@ GenerateClass(
 
 GenerateClass(
 	CannonUISlider,
-	AddField( "Dummy", KBTYPEINFO_INT, CannonUISlider, m_Dummy, false, "" )
+	AddField( "SliderBoundsMin", KBTYPEINFO_VECTOR, CannonUISlider, m_SliderBoundsMin, false, "" )
+	AddField( "SliderBoundsMax", KBTYPEINFO_VECTOR, CannonUISlider, m_SliderBoundsMax, false, "" )
 )
 
 GenerateClass(

@@ -248,19 +248,45 @@ void CannonBallUIComponent::CannonBallActivatedCB() {
  *	CannonUIWidget::Constructor
  */
 void CannonUIWidget::Constructor() {
+
+	m_StartingPosition.Set( 0.0f, 0.0f, 0.0f );
+	m_StartingSize.Set( 0.5f, 0.5f, 1.0f );
+
 	m_RelativePosition.Set( 0.0f, 0.0f, 0.0f );
 	m_RelativeSize.Set( 0.5f, 0.5f, 1.0f );
 
 	m_AbsolutePosition.Set( 0.0f, 0.0f, 0.0f );
-	m_RelativeSize.Set( 0.5f, 0.5f, 1.0f );
+	m_AbsoluteSize.Set( 0.5f, 0.5f, 1.0f );
 
 	m_pModel = nullptr;
 }
 
 /**
- *	CannonUIWidget::Recalculate
+ *	CannonUIWidget::RecalculateOld
  */
-void CannonUIWidget::Recalculate( const kbUIComponent *const pParent ) {
+void CannonUIWidget::SetRelativePosition( const kbVec3 & newPos ) {
+
+	m_RelativePosition = newPos;
+
+	m_AbsolutePosition = m_CachedParentPosition + m_CachedParentSize * m_RelativePosition;
+	m_AbsoluteSize = m_CachedParentSize * m_RelativeSize;
+}
+
+/**
+ *	CannonUIWidget::RecalculateOld
+ */
+void CannonUIWidget::SetRelativeSize( const kbVec3 & newSize ) {
+
+	m_RelativeSize = newSize;
+
+	m_AbsolutePosition = m_CachedParentPosition + m_CachedParentSize * m_RelativePosition;
+	m_AbsoluteSize = m_CachedParentSize * m_RelativeSize;
+}
+
+/**
+ *	CannonUIWidget::RecalculateOld
+ */
+void CannonUIWidget::RecalculateOld( const kbUIComponent *const pParent ) {
 
 	kbErrorCheck( pParent != nullptr, "CannonUIWidget::UpdateFromParent() - null parent" );
 	
@@ -268,10 +294,11 @@ void CannonUIWidget::Recalculate( const kbUIComponent *const pParent ) {
 		m_pModel->SetRenderOrderBias( pParent->GetStaticModelComponent()->GetRenderOrderBias() - 1.0f );
 	}
 
-	const kbVec3 parentStart = pParent->GetNormalizedAnchorPt();
-	const kbVec3 parentEnd = parentStart + pParent->GetNormalizedScreenSize();
-	m_AbsolutePosition = parentStart + ( parentEnd - parentStart ) * m_RelativePosition;
-	m_AbsoluteSize = pParent->GetNormalizedScreenSize() * m_RelativeSize;
+	m_CachedParentPosition = pParent->GetNormalizedAnchorPt();
+	m_CachedParentSize = pParent->GetNormalizedScreenSize();
+
+	m_AbsolutePosition = m_CachedParentPosition + m_CachedParentSize * m_RelativePosition;
+	m_AbsoluteSize = m_CachedParentSize * m_RelativeSize;
 
 	for ( int i = 0; i < m_ChildWidgets.size(); i++ ) {
 		m_ChildWidgets[i].Recalculate( this );
@@ -289,9 +316,11 @@ void CannonUIWidget::Recalculate( const CannonUIWidget *const pParent ) {
 		m_pModel->SetRenderOrderBias( pParent->m_pModel ->GetRenderOrderBias() - 1.0f );
 	}
 
-	const kbVec3 parentStart = pParent->GetAbsolutePosition();
-	m_AbsolutePosition = parentStart + pParent->GetAbsoluteSize() * m_RelativePosition;
-	m_AbsoluteSize = pParent->GetAbsoluteSize() * m_RelativeSize;
+	m_CachedParentPosition = pParent->GetAbsolutePosition();
+	m_CachedParentSize = pParent->GetAbsoluteSize();
+
+	m_AbsolutePosition = m_CachedParentPosition + m_CachedParentSize * m_RelativePosition;
+	m_AbsoluteSize = m_CachedParentSize * m_RelativeSize;
 
 	for ( int i = 0; i < m_ChildWidgets.size(); i++ ) {
 		m_ChildWidgets[i].Recalculate( this );
@@ -334,6 +363,9 @@ void CannonUIWidget::SetEnable_Internal( const bool bEnable ) {
 	if ( GetOwner() == nullptr ) {
 		return;
 	}
+
+	m_RelativePosition = m_StartingPosition;
+	m_RelativeSize = m_StartingSize;
 
 	if ( bEnable ) {
 		if ( m_pModel == nullptr ) {
@@ -422,7 +454,12 @@ void CannonUIWidget::Update_Internal( const float dt ) {
  *	CannonUISlider::Constructor
  */
 void CannonUISlider::Constructor() {
+	
+	m_SliderBoundsMin.Set( 0.0f, 0.0f, 0.0f );
+	m_SliderBoundsMax.Set( 1.0f, 1.0f, 1.0f );
 
+	m_CalculatedSliderBoundsMin.Set( 0.0f, 0.0f, 0.0f );
+	m_CalculatedSliderBoundsMax.Set( 1.0f, 1.0f, 1.0f );
 }
 
 /**
@@ -434,6 +471,32 @@ void CannonUISlider::SetEnable_Internal( const bool bEnable ) {
 }
 
 /**
+ *	CannonUISlider::RecalculateOld
+ */
+void CannonUISlider::RecalculateOld( const kbUIComponent *const pParent ) {
+
+	Super::RecalculateOld( pParent );
+	m_CalculatedSliderBoundsMin = m_ChildWidgets[0].GetRelativeSize() * m_SliderBoundsMin + m_ChildWidgets[1].GetRelativePosition();
+	m_CalculatedSliderBoundsMax = m_ChildWidgets[0].GetRelativeSize() * m_SliderBoundsMax + m_ChildWidgets[1].GetRelativePosition();
+
+	kbLog( "Calculated Bounds is %f %f %f, %f %f %f", m_CalculatedSliderBoundsMin.x, m_CalculatedSliderBoundsMin.y, m_CalculatedSliderBoundsMin.z, m_CalculatedSliderBoundsMax.x, m_CalculatedSliderBoundsMax.y, m_CalculatedSliderBoundsMax.z );
+
+}
+
+/**
+ *	CannonUISlider::Recalculate
+ */
+void CannonUISlider::Recalculate( const CannonUIWidget *const pParent ) {
+
+	Super::Recalculate( pParent );
+
+		kbLog( "2. Calculated Bounds is %f %f %f, %f %f %f", m_CalculatedSliderBoundsMin.x, m_CalculatedSliderBoundsMin.y, m_CalculatedSliderBoundsMin.z, m_CalculatedSliderBoundsMax.x, m_CalculatedSliderBoundsMax.y, m_CalculatedSliderBoundsMax.z );
+
+	m_CalculatedSliderBoundsMin = m_ChildWidgets[0].GetRelativeSize() * m_SliderBoundsMin + m_ChildWidgets[1].GetRelativePosition();
+	m_CalculatedSliderBoundsMax = m_ChildWidgets[0].GetRelativeSize() * m_SliderBoundsMax + m_ChildWidgets[1].GetRelativePosition();
+}
+
+/**
  *	CannonUISlider::Update_Internal
  */
 void CannonUISlider::Update_Internal( const float dt ) {
@@ -441,14 +504,17 @@ void CannonUISlider::Update_Internal( const float dt ) {
 	Super::Update_Internal( dt );
 
 	kbVec3 curPos = m_ChildWidgets[1].GetRelativePosition();
+	bool bMove = 0.0f;
+
 	if ( GetAsyncKeyState( VK_LEFT ) ) {
-		curPos.x -= 0.01f;
+		curPos.x -= 0.02f;
 	}
 
 		if ( GetAsyncKeyState( VK_RIGHT ) ) {
-		curPos.x += 0.01f;
+		curPos.x += 0.02f;
 	}
 
+	curPos.x = kbClamp( curPos.x, m_CalculatedSliderBoundsMin.x, m_CalculatedSliderBoundsMax.x );
 	m_ChildWidgets[1].SetRelativePosition( curPos );
 	//kbLog( "CannonUISlider Child = %f %f %f, %f %f %f", GetAbsolutePosition().x, GetAbsolutePosition().y, GetAbsolutePosition().z, GetAbsoluteSize().x, GetAbsoluteSize().y, GetAbsoluteSize().z );
 }
@@ -476,14 +542,14 @@ void CannonBallPauseMenuUIComponent::SetEnable_Internal( const bool bEnable ) {
 			m_Entity.AddComponent( &m_Widgets[i] );
 			m_Widgets[i].Enable( false );
 			m_Widgets[i].Enable( true );
-			m_Widgets[i].Recalculate( this );
+			m_Widgets[i].RecalculateOld( this );
 		}
 
 		for ( int i = 0; i < m_SliderWidgets.size(); i++ ) {
 			m_Entity.AddComponent( &m_SliderWidgets[i] );
 			m_SliderWidgets[i].Enable( false );
 			m_SliderWidgets[i].Enable( true );
-			m_SliderWidgets[i].Recalculate( this );
+			m_SliderWidgets[i].RecalculateOld( this );
 		}
 	} else {
 		for ( int i = 0; i < m_Widgets.size(); i++ ) {
@@ -533,7 +599,7 @@ void CannonBallPauseMenuUIComponent::Update_Internal( const float DT ) {
 		widget.SetRelativePosition( targetWidgetPos );
 		nextPos.y += m_SpaceBetweenWidgets;
 
-		widget.Recalculate( this );
+		widget.RecalculateOld( this );
 		widget.Update( DT );
 	}
 
@@ -558,7 +624,7 @@ void CannonBallPauseMenuUIComponent::Update_Internal( const float DT ) {
 		widget.SetRelativeSize( targetWidgetSize );
 		widget.SetRelativePosition( targetWidgetPos );
 		nextPos.y += m_SpaceBetweenWidgets;
-		widget.Recalculate( this );
+//		widget.RecalculateOld( this );
 		widget.Update( DT );
 	}
 }

@@ -6,7 +6,7 @@
 #include "kbGame.h"
 #include "kbLevelDirector.h"
 #include "CannonGame.h"
-#include "CannonUI.h"
+#include "UI/CannonUI.h"
 #include "KungFuLevelComponent.h"
 #include "CannonPlayer.h"
 #include "KungFuSheep.h"

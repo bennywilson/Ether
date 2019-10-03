@@ -5,7 +5,7 @@
 #include "kbComponent.h"
 #include "CannonGame.h"
 #include "CannonPlayer.h"
-#include "CannonUI.h"
+#include "UI/CannonUI.h"
 
 #include "KungFuSheep/KungFuLevelComponent.h"
 #include "KungFuSheep/KungFuSheep.h"

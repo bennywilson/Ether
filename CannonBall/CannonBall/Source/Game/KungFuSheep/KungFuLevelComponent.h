@@ -6,7 +6,7 @@
 #ifndef _KUNGFULEVELCOMPONENT_H_
 #define _KUNGFULEVELCOMPONENT_H_
 
-#include "CannonUI.h"
+#include "UI/CannonUI.h"
 
 namespace KungFuGame {
 

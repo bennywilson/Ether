@@ -31,8 +31,8 @@
     <ClInclude Include="Source\Game\KungFuSheep\KungFuLevelComponent.h">
       <Filter>Source\Game\KungFuSheep</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Game\CannonUI.h">
-      <Filter>Source\Game</Filter>
+    <ClInclude Include="Source\Game\UI\CannonUI.h">
+      <Filter>Source\Game\UI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -155,6 +155,9 @@
     <Filter Include="Shaders\Lights">
       <UniqueIdentifier>{d3f9c7e5-6250-474e-81fe-64ce5723590b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\Game\UI">
+      <UniqueIdentifier>{d538ecf2-4e7c-4de5-bfcb-5d364d6bc3f5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Game\CannonPlayer.cpp">
@@ -181,8 +184,8 @@
     <ClCompile Include="Source\Game\KungFuSheep\KungFuLevelComponent.cpp">
       <Filter>Source\Game\KungFuSheep</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Game\CannonUI.cpp">
-      <Filter>Source\Game</Filter>
+    <ClCompile Include="Source\Game\UI\CannonUI.cpp">
+      <Filter>Source\Game\UI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
