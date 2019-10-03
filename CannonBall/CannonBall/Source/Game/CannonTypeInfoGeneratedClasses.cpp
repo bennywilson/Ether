@@ -44,4 +44,6 @@ DEFINE_KBCLASS(CannonBallUIComponent)
 
 DEFINE_KBCLASS(CannonUIWidget)
 
+DEFINE_KBCLASS(CannonUISlider)
+
 DEFINE_KBCLASS(CannonBallPauseMenuUIComponent)

@@ -37,14 +37,10 @@ pixelInput vertexShader( vertexInput input ) {
 	output.position = input.position;
 	output.position.xy *= normalizedScreenSize_Anchor.xy;
 
-	// Offset so upper left-hand corner is the origin
-	output.position.xy += float2( normalizedScreenSize_Anchor.x, -normalizedScreenSize_Anchor.y );
-
 	// Move to the anchor point
-	float2 offset = ( normalizedScreenSize_Anchor.zw * 2.0f ) - 1.0f;
+	float2 offset = normalizedScreenSize_Anchor.zw * 2.0f - 1.0f;
 	offset.y *= -1.0f;
 	output.position.xy += offset;
-	
 	output.uv = input.uv;
 	output.position2 = input.position;
 

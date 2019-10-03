@@ -105,6 +105,9 @@
     <None Include="assets\shaders\UI\ui_Basic.kbShader">
       <Filter>Shaders\UI</Filter>
     </None>
+    <None Include="assets\shaders\UI\animatedChannelUI.kbShader">
+      <Filter>Shaders\UI</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Shaders">

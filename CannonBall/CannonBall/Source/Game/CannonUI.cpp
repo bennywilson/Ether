@@ -8,6 +8,11 @@
 #include "CannonUI.h"
 
 
+kbGameEntity & GetUIGameEntity() {
+	static kbGameEntity g_UIGameEntity;
+	return g_UIGameEntity;
+}
+
 /**
  *	CannonHealthBarUIComponent::Constructor
  */
@@ -154,8 +159,8 @@ void CannonBallUIComponent::Update_Internal( const float dt ) {
 		m_pSparkModel->SetMaterialParamVector( 0, normalizedScreenSize_Anchor.stl_str(), 
 			kbVec4( screenSize.x * randomScaleFactor.x,
 					screenSize.y * randomScaleFactor.y,
-					screenPos.x + ( 1.0f - randomScaleFactor.x ) * 0.5f * screenSize.x,
-					screenPos.y + ( 1.0f - randomScaleFactor.y ) * 0.5f * screenSize.y ) );
+					screenPos.x + 0.5f * screenSize.x + screenSize.x * randomScaleFactor.x * 0.05f,
+					screenPos.y + 0.5f * screenSize.y + screenSize.y * randomScaleFactor.y * 0.05f ) );
 	}
 
 	if ( m_pSmokeModel != nullptr ) {
@@ -163,7 +168,10 @@ void CannonBallUIComponent::Update_Internal( const float dt ) {
 		const kbVec2 screenSize = kbVec2( normalizedScreenSize.x * m_SmokeRelativeSize.x, normalizedScreenSize.y * m_SmokeRelativeSize.y );
 		const kbVec2 screenPos = normalizedAnchorPt + kbVec2( GetNormalizedScreenSize().x * m_SmokeRelativePosition.x, GetNormalizedScreenSize().y * m_SmokeRelativePosition.y );
 		m_pSmokeModel->SetMaterialParamVector( 0, normalizedScreenSize_Anchor.stl_str(), 
-							kbVec4( screenSize.x, screenSize.y, screenPos.x + ( 1.0f - 1.0f ) * 0.5f * screenSize.x, screenPos.y + ( 1.0f - 1.0f ) * 0.5f * screenSize.y ) );
+							kbVec4( screenSize.x, 
+									screenSize.y, 
+									screenPos.x + 0.5f * screenSize.x,
+									screenPos.y + 0.5f * screenSize.y ) );
 	}
 
 	if ( m_CannonBallActivatedStartTime > 0.0f ) {
@@ -186,7 +194,7 @@ void CannonBallUIComponent::Update_Internal( const float dt ) {
 			if ( curTime > m_NextSmokeCloudUpdateTime ) {
 				m_NextSmokeCloudUpdateTime = curTime + 0.2f;
 				idx = ( idx + 1 ) % 4;
-				randomOffset.Set( ( kbfrand() - 0.5f ) * normalizedScreenSize.x * 0.5f, ( kbfrand() - 0.5f ) * normalizedScreenSize.x * 0.5f );
+				randomOffset.Set( ( kbfrand() - 0.5f ) * normalizedScreenSize.x * 12.0f, ( kbfrand() - 0.5f ) * normalizedScreenSize.x * 14.0f );
 			}
 			kbVec4 textureMask = kbVec4::zero;
 			textureMask[idx] = 1.0f;
@@ -198,7 +206,9 @@ void CannonBallUIComponent::Update_Internal( const float dt ) {
 		const kbVec2 screenSize = kbVec2( normalizedScreenSize.x * m_BoomRelativeSize.x, normalizedScreenSize.y * m_BoomRelativeSize.y );
 		const kbVec2 screenPos = normalizedAnchorPt + kbVec2( GetNormalizedScreenSize().x * m_BoomRelativePosition.x, GetNormalizedScreenSize().y * m_BoomRelativePosition.y );
 		m_pBoomModel->SetMaterialParamVector( 0, normalizedScreenSize_Anchor.stl_str(), 
-							kbVec4( screenSize.x, screenSize.y, screenPos.x + randomOffset.x, screenPos.y + randomOffset.y ) );
+							kbVec4( screenSize.x, screenSize.y, 
+								   screenPos.x + 0.5f * screenSize.x + screenSize.x * randomOffset.x,
+								   screenPos.y + 0.5f * screenSize.y + screenSize.y * randomOffset.y ) );
 	} else {
 		m_pBoomModel->Enable( false );
 		m_pSmokeModel->Enable( false );
@@ -241,21 +251,50 @@ void CannonUIWidget::Constructor() {
 	m_RelativePosition.Set( 0.0f, 0.0f, 0.0f );
 	m_RelativeSize.Set( 0.5f, 0.5f, 1.0f );
 
+	m_AbsolutePosition.Set( 0.0f, 0.0f, 0.0f );
+	m_RelativeSize.Set( 0.5f, 0.5f, 1.0f );
+
 	m_pModel = nullptr;
-	m_pParent = nullptr;
 }
 
 /**
- *	CannonUIWidget::SetParent
+ *	CannonUIWidget::Recalculate
  */
-void CannonUIWidget::SetParent( const kbUIComponent *const pParent ) {
+void CannonUIWidget::Recalculate( const kbUIComponent *const pParent ) {
 
 	kbErrorCheck( pParent != nullptr, "CannonUIWidget::UpdateFromParent() - null parent" );
-
-	m_pParent = pParent;
 	
 	if ( m_pModel != nullptr && pParent != nullptr && pParent->GetStaticModelComponent() != nullptr ) {
-		m_pModel->SetRenderOrderBias( m_pParent->GetStaticModelComponent()->GetRenderOrderBias() - 1.0f );
+		m_pModel->SetRenderOrderBias( pParent->GetStaticModelComponent()->GetRenderOrderBias() - 1.0f );
+	}
+
+	const kbVec3 parentStart = pParent->GetNormalizedAnchorPt();
+	const kbVec3 parentEnd = parentStart + pParent->GetNormalizedScreenSize();
+	m_AbsolutePosition = parentStart + ( parentEnd - parentStart ) * m_RelativePosition;
+	m_AbsoluteSize = pParent->GetNormalizedScreenSize() * m_RelativeSize;
+
+	for ( int i = 0; i < m_ChildWidgets.size(); i++ ) {
+		m_ChildWidgets[i].Recalculate( this );
+	}
+}
+
+/**
+ *	CannonUIWidget::Recalculate
+ */
+void CannonUIWidget::Recalculate( const CannonUIWidget *const pParent ) {
+
+	kbErrorCheck( pParent != nullptr, "CannonUIWidget::UpdateFromParent() - null parent" );
+	
+	if ( m_pModel != nullptr && pParent != nullptr && pParent->m_pModel != nullptr ) {
+		m_pModel->SetRenderOrderBias( pParent->m_pModel ->GetRenderOrderBias() - 1.0f );
+	}
+
+	const kbVec3 parentStart = pParent->GetAbsolutePosition();
+	m_AbsolutePosition = parentStart + pParent->GetAbsoluteSize() * m_RelativePosition;
+	m_AbsoluteSize = pParent->GetAbsoluteSize() * m_RelativeSize;
+
+	for ( int i = 0; i < m_ChildWidgets.size(); i++ ) {
+		m_ChildWidgets[i].Recalculate( this );
 	}
 }
 
@@ -299,7 +338,7 @@ void CannonUIWidget::SetEnable_Internal( const bool bEnable ) {
 	if ( bEnable ) {
 		if ( m_pModel == nullptr ) {
 			m_pModel = new kbStaticModelComponent();
-			m_GameEntity.AddComponent( m_pModel );
+			GetUIGameEntity().AddComponent( m_pModel );
 		}
 
 		m_pModel->SetModel( pUnitQuad );
@@ -307,12 +346,28 @@ void CannonUIWidget::SetEnable_Internal( const bool bEnable ) {
 		m_pModel->SetRenderPass( RP_UI );
 		m_pModel->Enable( false );
 		m_pModel->Enable( true );
+
+		for ( size_t i = 0; i < m_ChildWidgets.size(); i++ ) {
+		//	m_ChildWidgets[i].Recalculate( this );
+			GetUIGameEntity().AddComponent( &m_ChildWidgets[i] );		// Note these children are responsible for removing themselves when disabled (see code block below)
+			m_ChildWidgets[i].Enable( false );
+			m_ChildWidgets[i].Enable( true );
+		}
+
+
 	} else {
 		if ( m_pModel != nullptr ) {
 			m_pModel->Enable( false );
 			//delete m_pModel;
 			//m_pModel = nullptr;
 		}
+
+		for ( size_t i = 0; i < m_ChildWidgets.size(); i++ ) {
+			m_ChildWidgets[i].Enable( false );
+		}
+
+		GetUIGameEntity().RemoveComponent( this );
+		GetUIGameEntity().RemoveComponent( m_pModel );
 	}
 }
 
@@ -321,16 +376,27 @@ void CannonUIWidget::SetEnable_Internal( const bool bEnable ) {
  */
 void CannonUIWidget::Update_Internal( const float dt ) {
 
+	Super::Update_Internal( dt );
+
+	if ( m_pModel == nullptr ) {
+		return;
+	}
+
 	static const kbString normalizedScreenSize_Anchor( "normalizedScreenSize_Anchor" );
 
-	const kbVec3 parentStart = m_pParent->GetNormalizedAnchorPt();
-	const kbVec3 parentEnd = parentStart + m_pParent->GetNormalizedScreenSize();
-	const kbVec3 widgetAbsPos = parentStart + ( parentEnd - parentStart ) * m_RelativePosition;
-	kbVec3 widgetAbsSize = m_pParent->GetNormalizedScreenSize() * m_RelativeSize;
+	kbVec3 parentEnd = kbVec3::one;
+	kbVec3 widgetAbsPos = m_AbsolutePosition;
+	kbVec3 widgetAbsSize = m_AbsoluteSize;
+//	float renderOrderBias = 0.0f;
 
+	float aspectRatio = 1.0f;
 	const kbShaderParamComponent *const pComp = m_pModel->GetShaderParamComponent( 0, kbString( "baseTexture" ) );
-	const kbTexture *const pTex = pComp->GetTexture();
-	const float aspectRatio = (float)pTex->GetWidth() / (float)pTex->GetHeight();
+	if ( pComp != nullptr ) {
+		const kbTexture *const pTex = pComp->GetTexture();
+		if ( pComp != nullptr ) {
+			aspectRatio = (float)pTex->GetWidth() / (float)pTex->GetHeight();
+		}
+	}
 
 	const float ScreenPixelWidth = (float)g_pRenderer->GetBackBufferWidth();
 	const float ScreenPixelHeight = (float)g_pRenderer->GetBackBufferHeight();
@@ -339,11 +405,53 @@ void CannonUIWidget::Update_Internal( const float dt ) {
 	const float screenHeightPixel = screenWidthPixel / aspectRatio;
 	widgetAbsSize.y = screenHeightPixel / ScreenPixelHeight;
 
-	m_pModel->SetMaterialParamVector( 0, normalizedScreenSize_Anchor.stl_str(), kbVec4( widgetAbsSize.x, widgetAbsSize.y, widgetAbsPos.x, widgetAbsPos.y ) );
-	m_pModel->SetRenderOrderBias( m_pParent->GetStaticModelComponent()->GetRenderOrderBias() - 1.0f );
+	m_pModel->SetMaterialParamVector( 0, normalizedScreenSize_Anchor.stl_str(), 
+			kbVec4( widgetAbsSize.x, 
+					widgetAbsSize.y,
+					widgetAbsPos.x + widgetAbsSize.x * 0.5f,
+					widgetAbsPos.y + widgetAbsSize.y * 0.5f ) );
+	//m_pModel->SetRenderOrderBias( renderOrderBias );
 	m_pModel->RefreshMaterials( true );
+
+	for ( size_t i = 0; i < m_ChildWidgets.size(); i++ ) {
+		m_ChildWidgets[i].Update_Internal( dt );
+	}
 }
 
+/**
+ *	CannonUISlider::Constructor
+ */
+void CannonUISlider::Constructor() {
+
+}
+
+/**
+ *	CannonUISlider::SetEnable_Internal
+ */
+void CannonUISlider::SetEnable_Internal( const bool bEnable ) {
+
+	Super::SetEnable_Internal( bEnable );
+}
+
+/**
+ *	CannonUISlider::Update_Internal
+ */
+void CannonUISlider::Update_Internal( const float dt ) {
+
+	Super::Update_Internal( dt );
+
+	kbVec3 curPos = m_ChildWidgets[1].GetRelativePosition();
+	if ( GetAsyncKeyState( VK_LEFT ) ) {
+		curPos.x -= 0.01f;
+	}
+
+		if ( GetAsyncKeyState( VK_RIGHT ) ) {
+		curPos.x += 0.01f;
+	}
+
+	m_ChildWidgets[1].SetRelativePosition( curPos );
+	//kbLog( "CannonUISlider Child = %f %f %f, %f %f %f", GetAbsolutePosition().x, GetAbsolutePosition().y, GetAbsolutePosition().z, GetAbsoluteSize().x, GetAbsoluteSize().y, GetAbsoluteSize().z );
+}
 
 /**
  *	CannonBallPauseMenuUIComponent::Constructor
@@ -366,17 +474,26 @@ void CannonBallPauseMenuUIComponent::SetEnable_Internal( const bool bEnable ) {
 		m_pStaticModelComponent->Enable( true );
 		for ( int i = 0; i < m_Widgets.size(); i++ ) {
 			m_Entity.AddComponent( &m_Widgets[i] );
-			m_Widgets[i].SetParent( this );
 			m_Widgets[i].Enable( false );
 			m_Widgets[i].Enable( true );
+			m_Widgets[i].Recalculate( this );
+		}
+
+		for ( int i = 0; i < m_SliderWidgets.size(); i++ ) {
+			m_Entity.AddComponent( &m_SliderWidgets[i] );
+			m_SliderWidgets[i].Enable( false );
+			m_SliderWidgets[i].Enable( true );
+			m_SliderWidgets[i].Recalculate( this );
 		}
 	} else {
 		for ( int i = 0; i < m_Widgets.size(); i++ ) {
 			m_Entity.RemoveComponent( &m_Widgets[i] );
-			m_Widgets[i].SetParent( this );
 			m_Widgets[i].Enable( false );
 		}
-
+		for ( int i = 0; i < m_SliderWidgets.size(); i++ ) {
+			m_Entity.AddComponent( &m_SliderWidgets[i] );
+			m_SliderWidgets[i].Enable( false );
+		}
 		if ( m_pStaticModelComponent != nullptr ) {
 			m_pStaticModelComponent->Enable( false );
 		}
@@ -416,6 +533,33 @@ void CannonBallPauseMenuUIComponent::Update_Internal( const float DT ) {
 		widget.SetRelativePosition( targetWidgetPos );
 		nextPos.y += m_SpaceBetweenWidgets;
 
+		widget.Recalculate( this );
+		widget.Update( DT );
+	}
+
+	for ( size_t i = 0; i < m_SliderWidgets.size(); i++ ) {
+
+		CannonUIWidget & widget = m_SliderWidgets[i];
+		const kbVec2i textureDim = widget.GetBaseTextureDimensions();
+		kbVec3 targetWidgetSize = m_WidgetSize;
+		kbVec3 targetWidgetPos = nextPos;
+		if ( textureDim.x > 0 ) {
+
+			// Height is fixed by design, so calculate Width
+			const float baseTextureAspectRatio = (float)textureDim.x / (float)textureDim.y;
+			const float pixelHeight = targetWidgetSize.y * ScreenPixelHeight;
+			const float targetPixelWidth = pixelHeight * baseTextureAspectRatio;
+			targetWidgetSize.x = (float)targetPixelWidth / ScreenPixelWidth;
+
+			// Right Justify
+			targetWidgetPos.x -= targetWidgetSize.x;
+		}	
+
+		widget.SetRelativeSize( targetWidgetSize );
+		widget.SetRelativePosition( targetWidgetPos );
+		nextPos.y += m_SpaceBetweenWidgets;
+		widget.Recalculate( this );
 		widget.Update( DT );
 	}
 }
+
