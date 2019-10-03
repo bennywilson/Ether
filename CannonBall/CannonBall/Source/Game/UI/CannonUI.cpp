@@ -557,7 +557,7 @@ void CannonBallPauseMenuUIComponent::SetEnable_Internal( const bool bEnable ) {
 			m_Widgets[i].Enable( false );
 		}
 		for ( int i = 0; i < m_SliderWidgets.size(); i++ ) {
-			m_Entity.AddComponent( &m_SliderWidgets[i] );
+			m_Entity.RemoveComponent( &m_SliderWidgets[i] );
 			m_SliderWidgets[i].Enable( false );
 		}
 		if ( m_pStaticModelComponent != nullptr ) {
