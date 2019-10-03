@@ -94,10 +94,13 @@ void kbUIComponent::RefreshMaterial() {
 	m_NormalizedScreenSize.y = screenHeightPixel / ScreenPixelHeight;
 	m_NormalizedScreenSize.z = 1.0f;
 
+//	kbLog( "%f %f %f %f", m_NormalizedScreenSize.x, m_NormalizedScreenSize.y,m_NormalizedAnchorPt.x - m_NormalizedScreenSize.x * 0.5f,m_NormalizedAnchorPt.y - m_NormalizedScreenSize.y * 0.5f);
 	static kbString normalizedScreenSize_Anchor( "normalizedScreenSize_Anchor" );
-	m_pStaticModelComponent->SetMaterialParamVector( 0, normalizedScreenSize_Anchor.stl_str(), 
-		kbVec4( m_NormalizedScreenSize.x,
-			    m_NormalizedScreenSize.y,
-				m_NormalizedAnchorPt.x,
-				m_NormalizedAnchorPt.y ) );
+
+	const kbVec4 sizeAndPos = kbVec4( m_NormalizedScreenSize.x,
+								m_NormalizedScreenSize.y,
+								m_NormalizedAnchorPt.x + m_NormalizedScreenSize.x * 0.5f,		// Upper left corner to anchor
+								m_NormalizedAnchorPt.y + m_NormalizedScreenSize.y * 0.5f );		// Upper left corner to anchor
+
+	m_pStaticModelComponent->SetMaterialParamVector( 0, normalizedScreenSize_Anchor.stl_str(), sizeAndPos );
 }

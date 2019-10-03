@@ -94,6 +94,7 @@ void kbModelComponent::RefreshMaterials( const bool bRefreshRenderObject ) {
 		m_RenderObject.m_Materials.push_back( newShaderParams );
 	}
 
+	m_RenderObject.m_RenderOrderBias = m_RenderOrderBias;
 	if ( IsEnabled() && m_RenderObject.m_pComponent != nullptr && bRefreshRenderObject ) {
 		g_pRenderer->UpdateRenderObject( m_RenderObject );
 	}
