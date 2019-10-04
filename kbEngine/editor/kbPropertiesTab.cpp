@@ -692,7 +692,7 @@ void kbPropertiesTab::RefreshEntity() {
 	Fl::delete_widget( m_pEntityProperties );
 	Fl::delete_widget( m_pResourceProperties );
 
-	m_CallBackData.empty();
+	(void*)m_CallBackData.empty();
 	size_t previousCapacity = m_CallBackData.capacity();
 
 	m_pPropertiesTab->redraw();

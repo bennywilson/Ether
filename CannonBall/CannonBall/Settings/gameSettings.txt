@@ -1,0 +1,17 @@
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Entity_1271"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 0.000000 0.000000 0.000000
+		Scale = 1.000000 1.000000 1.000000
+	}
+	CannonBallGameSettingsComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Brightness = 100
+		MasterVolume = 100
+		VideoQuality = 100
+	}
+}

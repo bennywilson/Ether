@@ -60,6 +60,7 @@
       <TreatWarningAsError>false</TreatWarningAsError>
       <BufferSecurityCheck>false</BufferSecurityCheck>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <AdditionalOptions>/std:c++17 %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -76,6 +77,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>_XM_NO_INTRINSICS_;WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <AdditionalOptions>/std:c++17 %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -120,6 +122,7 @@
     <ClInclude Include="Source\Game\KungFuSheep\KungFuSnolaf.h" />
     <ClInclude Include="Source\Game\KungFuSheep\KungFuSheep.h" />
     <ClInclude Include="Source\Game\UI\CannonUI.h" />
+    <ClInclude Include="Source\Game\UI\CannonUIWidgets.h" />
     <ClInclude Include="Source\Win\CannonBall.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
@@ -132,6 +135,7 @@
     <ClCompile Include="Source\Game\KungFuSheep\KungFuSheep.cpp" />
     <ClCompile Include="Source\Game\KungFuSheep\KungFuSnolaf.cpp" />
     <ClCompile Include="Source\Game\UI\CannonUI.cpp" />
+    <ClCompile Include="Source\Game\UI\CannonUIWidget.cpp" />
     <ClCompile Include="Source\Win\CannonBall.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>

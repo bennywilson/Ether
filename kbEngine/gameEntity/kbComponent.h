@@ -427,4 +427,40 @@ protected:
 	StateEnum m_CurrentState;
 };
 
+/**
+ *	ISingleton
+ */
+template <typename T>
+class ISingleton {
+
+//-------------------------------------------------------------------------------------------------------------------------------------------------------------
+public:
+
+	ISingleton()  {
+		kbErrorCheck( m_pInstance == nullptr, "Multiple instances of an ISingleton" );
+	}
+
+	static T * Get() {
+		if ( m_pInstance == nullptr ) {
+			m_pInstance = new T();
+		}
+
+		return m_pInstance;
+	}
+
+	static bool InstanceExists() {
+		return m_pInstance != nullptr;
+	}
+
+protected:
+
+	static void InitializeSingletonInstance( T *const pInstance ) {
+		kbErrorCheck( m_pInstance == nullptr, "Multiple instances of an ISingleton" );
+		m_pInstance = pInstance;
+	}
+
+private:
+	inline static T * m_pInstance = nullptr;
+};
+
 #endif

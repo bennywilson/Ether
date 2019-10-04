@@ -268,6 +268,7 @@ void kbSoundManager::PlayWave( kbWaveFile *const pWaveFile, const float inVolume
 
 	kbVoiceData_t * pVoice = nullptr;
 
+	const float finalVolume = inVolume * kbLevelComponent::GetGlobalVolumeScale() * kbSoundManager::GetMasterVolume();
 	for ( int iVoice = 0; iVoice < MAX_VOICES; iVoice++ ) {
 		if ( m_Voices[iVoice].m_bInUse == true ) {
 			continue;
@@ -298,7 +299,7 @@ void kbSoundManager::PlayWave( kbWaveFile *const pWaveFile, const float inVolume
 	HRESULT hr = pVoice->m_pVoice->SubmitSourceBuffer( &buffer );
 	kbErrorCheck( SUCCEEDED( hr ), "kbSoundManager::PlayWave() - Failed to submit audio buffer" );
 
-	pVoice->m_pVoice->SetVolume( inVolume * kbLevelComponent::GetGlobalVolumeScale() );
+	pVoice->m_pVoice->SetVolume( finalVolume );
 
 	pVoice->m_pVoice->SetFrequencyRatio( m_FrequencyRatio );
 	hr = pVoice->m_pVoice->Start( 0 );

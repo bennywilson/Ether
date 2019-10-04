@@ -124,3 +124,10 @@ GenerateClass(
 	AddField( "StartingWidgetAnchor", KBTYPEINFO_VECTOR, CannonBallPauseMenuUIComponent, m_StartingWidgetAnchorPt, false, "" )
 	AddField( "SpaceBetweenWidgets", KBTYPEINFO_FLOAT, CannonBallPauseMenuUIComponent, m_SpaceBetweenWidgets, false, "" )
 )
+
+GenerateClass(
+	CannonBallGameSettingsComponent,
+	AddField( "MasterVolume", KBTYPEINFO_INT, CannonBallGameSettingsComponent, m_Volume, false, "" )
+	AddField( "Brightness", KBTYPEINFO_INT, CannonBallGameSettingsComponent, m_Brightness, false, "" )
+	AddField( "VideoQuality", KBTYPEINFO_INT, CannonBallGameSettingsComponent, m_VisualQuality, false, "" )
+)

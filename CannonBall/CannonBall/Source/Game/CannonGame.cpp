@@ -11,6 +11,7 @@
 #include "DX11/kbRenderer_DX11.h"
 #include "CannonGame.h"
 #include "CannonPlayer.h"
+#include "UI/CannonUI.h"
 #include <directxpackedvector.h>
 #include "kbEditorEntity.h"
 
@@ -28,6 +29,8 @@ CannonGame::CannonGame() :
 
 	kbErrorCheck( g_pCannonGame == nullptr, "CannonGame::CannonGame() - g_pCannonGame is not nullptr" );
 	g_pCannonGame = this;
+
+	CannonBallGameSettingsComponent::Get();
 }
 
 /**

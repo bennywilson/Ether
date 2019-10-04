@@ -63,6 +63,9 @@ public:
 
 	void										SetFrequencyRatio( const float frequencyRatio );
 
+	static float								GetMasterVolume() { return s_MasterVolume; }
+	static void									SetMasterVolume( const float newVolume ) { s_MasterVolume = newVolume; }
+
 private:
 
 	IXAudio2 *									m_pXAudioEngine;
@@ -79,6 +82,8 @@ private:
 	}											m_Voices[MAX_VOICES];
 
 	bool										m_bInitialized;
+
+	inline static float							s_MasterVolume = 1.0f;
 };
 
 
