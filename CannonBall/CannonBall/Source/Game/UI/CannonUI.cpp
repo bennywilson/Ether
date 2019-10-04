@@ -267,16 +267,16 @@ void CannonBallPauseMenuUIComponent::SetEnable_Internal( const bool bEnable ) {
 			m_Entity.AddComponent( &m_Widgets[i] );
 			m_Widgets[i].Enable( false );
 			m_Widgets[i].Enable( true );
-			m_Widgets[i].RecalculateOld( this, true );
 		}
 
 		for ( int i = 0; i < m_SliderWidgets.size(); i++ ) {
 			m_Entity.AddComponent( &m_SliderWidgets[i] );
 			m_SliderWidgets[i].Enable( false );
 			m_SliderWidgets[i].Enable( true );
-			m_SliderWidgets[i].RecalculateOld( this, true );
 			m_SliderWidgets[i].RegisterEventListener( this );
 		}
+
+		RecalculateChildrenTransform();
 
 		m_SliderWidgets[0].SetNormalizedValue( kbSoundManager::GetMasterVolume() );
 
@@ -303,12 +303,9 @@ void CannonBallPauseMenuUIComponent::SetEnable_Internal( const bool bEnable ) {
 }
 
 /**
- *	CannonBallPauseMenuUIComponent::Update_Internal
+ *	CannonBallPauseMenuUIComponent::RecalculateChildrenTransform
  */
-void CannonBallPauseMenuUIComponent::Update_Internal( const float DT ) {
-
-	Super::Update_Internal( DT );
-
+void CannonBallPauseMenuUIComponent::RecalculateChildrenTransform() {
 	const float ScreenPixelWidth = (float)g_pRenderer->GetBackBufferWidth();
 	const float ScreenPixelHeight = (float)g_pRenderer->GetBackBufferHeight();
 
@@ -336,7 +333,6 @@ void CannonBallPauseMenuUIComponent::Update_Internal( const float DT ) {
 		nextPos.y += m_SpaceBetweenWidgets;
 
 		widget.RecalculateOld( this, false );
-		widget.Update( DT );
 	}
 
 	for ( size_t i = 0; i < m_SliderWidgets.size(); i++ ) {
@@ -363,6 +359,72 @@ void CannonBallPauseMenuUIComponent::Update_Internal( const float DT ) {
 
 		nextPos.y += m_SpaceBetweenWidgets;
 		widget.RecalculateOld( this, false );
+	}
+}
+
+/**
+ *	CannonBallPauseMenuUIComponent::Update_Internal
+ */
+void CannonBallPauseMenuUIComponent::Update_Internal( const float DT ) {
+
+	Super::Update_Internal( DT );
+
+	RecalculateChildrenTransform();
+
+//	const float ScreenPixelWidth = (float)g_pRenderer->GetBackBufferWidth();
+//	const float ScreenPixelHeight = (float)g_pRenderer->GetBackBufferHeight();
+
+	//kbVec3 nextPos = m_StartingWidgetAnchorPt;
+	for ( size_t i = 0; i < m_Widgets.size(); i++ ) {
+
+		CannonUIWidget & widget = m_Widgets[i];
+	/*	const kbVec2i textureDim = widget.GetBaseTextureDimensions();
+		kbVec3 targetWidgetSize = m_WidgetSize;
+		kbVec3 targetWidgetPos = nextPos;
+		if ( textureDim.x > 0 ) {
+
+			// Height is fixed by design, so calculate Width
+			const float baseTextureAspectRatio = (float)textureDim.x / (float)textureDim.y;
+			const float pixelHeight = targetWidgetSize.y * ScreenPixelHeight;
+			const float targetPixelWidth = pixelHeight * baseTextureAspectRatio;
+			targetWidgetSize.x = (float)targetPixelWidth / ScreenPixelWidth;
+
+			// Right Justify
+		//	targetWidgetPos.x -= targetWidgetSize.x;
+		}	
+
+		widget.SetRelativeSize( targetWidgetSize );
+		widget.SetRelativePosition( targetWidgetPos );
+		nextPos.y += m_SpaceBetweenWidgets;
+
+		widget.RecalculateOld( this, false );*/
+		widget.Update( DT );
+	}
+
+	for ( size_t i = 0; i < m_SliderWidgets.size(); i++ ) {
+
+		CannonUIWidget & widget = m_SliderWidgets[i];
+		/*const kbVec2i textureDim = widget.GetBaseTextureDimensions();
+		kbVec3 targetWidgetSize = m_WidgetSize;
+		kbVec3 targetWidgetPos = nextPos;
+
+		if ( textureDim.x > 0 ) {
+
+			// Height is fixed by design, so calculate Width
+			const float baseTextureAspectRatio = (float)textureDim.x / (float)textureDim.y;
+			const float pixelHeight = targetWidgetSize.y * ScreenPixelHeight;
+			const float targetPixelWidth = pixelHeight * baseTextureAspectRatio;
+			targetWidgetSize.x = (float)targetPixelWidth / ScreenPixelWidth;
+
+			// Right Justify
+		//	targetWidgetPos.x -= targetWidgetSize.x;
+		}	
+
+		widget.SetRelativeSize( targetWidgetSize );
+		widget.SetRelativePosition( targetWidgetPos );
+
+		nextPos.y += m_SpaceBetweenWidgets;
+		widget.RecalculateOld( this, false );*/
 		widget.Update( DT );
 	}
 }

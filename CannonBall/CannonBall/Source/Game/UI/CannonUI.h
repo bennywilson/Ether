@@ -108,6 +108,8 @@ protected:
 
 private:
 
+	void									RecalculateChildrenTransform();
+
 	// Editor
 	std::vector<CannonUISlider>				m_SliderWidgets;
 	std::vector<CannonUIWidget>				m_Widgets;

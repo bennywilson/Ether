@@ -426,11 +426,15 @@ float CannonUISlider::GetNormalizedValue() {
  */
 void CannonUISlider::SetNormalizedValue( const float newValue ) {
 
+	kbLog( "Setting normalized %f", newValue );
 	if ( m_ChildWidgets.size() < 2 ) {
 		return;
 	}
 
+
 	kbVec3 relativePos = m_ChildWidgets[1].GetRelativePosition();
 	relativePos.x = m_CalculatedSliderBoundsMin.x + ( m_CalculatedSliderBoundsMax.x - m_CalculatedSliderBoundsMin.x ) * newValue;
+
+	kbLog( "	%f %f %f", m_CalculatedSliderBoundsMin.x, m_CalculatedSliderBoundsMax.x, newValue );
 	m_ChildWidgets[1].SetRelativePosition( relativePos );
 }
