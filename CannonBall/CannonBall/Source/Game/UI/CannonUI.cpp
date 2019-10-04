@@ -326,6 +326,9 @@ void CannonBallPauseMenuUIComponent::Update_Internal( const float DT ) {
 			const float pixelHeight = targetWidgetSize.y * ScreenPixelHeight;
 			const float targetPixelWidth = pixelHeight * baseTextureAspectRatio;
 			targetWidgetSize.x = (float)targetPixelWidth / ScreenPixelWidth;
+
+			// Right Justify
+		//	targetWidgetPos.x -= targetWidgetSize.x;
 		}	
 
 		widget.SetRelativeSize( targetWidgetSize );
@@ -352,13 +355,12 @@ void CannonBallPauseMenuUIComponent::Update_Internal( const float DT ) {
 			targetWidgetSize.x = (float)targetPixelWidth / ScreenPixelWidth;
 
 			// Right Justify
-			targetWidgetPos.x -= targetWidgetSize.x;
+		//	targetWidgetPos.x -= targetWidgetSize.x;
 		}	
 
 		widget.SetRelativeSize( targetWidgetSize );
-
-		kbLog( "%d - Setting rel pos %f %f %f", i, targetWidgetPos.x, targetWidgetPos.y, targetWidgetPos.z );
 		widget.SetRelativePosition( targetWidgetPos );
+
 		nextPos.y += m_SpaceBetweenWidgets;
 		widget.RecalculateOld( this, false );
 		widget.Update( DT );

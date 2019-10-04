@@ -236,7 +236,7 @@ void CannonUIWidget::Update_Internal( const float dt ) {
 	}
 
 	if ( m_Anchor == CannonUIWidget::MiddleRight ) {
-		widgetAbsPos.x -= widgetAbsSize.x * 0.5f;
+		widgetAbsPos.x -= widgetAbsSize.x;
 	}
 
 	m_pModel->SetMaterialParamVector( 0, normalizedScreenSize_Anchor.stl_str(), 
@@ -293,11 +293,11 @@ void CannonUISlider::RecalculateOld( const kbUIComponent *const pParent, const b
 		m_ChildWidgets[i].RecalculateOld( pParent, bFull );
 	}
 
+	const float spaceBetweenLabelAndSlider = 0.05f;
+
 	if ( bFull ) {
 		kbVec3 pos = m_RelativePosition;
-		pos.x = m_RelativePosition.x + m_RelativeSize.x + 0.05f;
-
-		m_ChildWidgets[0].SetRelativePosition( pos );
+		pos.x = m_RelativePosition.x + m_RelativeSize.x + spaceBetweenLabelAndSlider;
 		m_ChildWidgets[1].SetRelativePosition( pos );
 	} else {
 		kbVec3 pos = m_ChildWidgets[0].GetRelativePosition();
@@ -312,10 +312,10 @@ void CannonUISlider::RecalculateOld( const kbUIComponent *const pParent, const b
 		m_CalculatedSliderBoundsMin.Set( 0.0f, 0.0f, 0.0f );
 		m_CalculatedSliderBoundsMax.Set( 0.0f, 0.0f, 0.0f );
 	} else {
-		m_CalculatedSliderBoundsMin = GetRelativePosition() + GetRelativeSize() + 0.05f;
+		m_CalculatedSliderBoundsMin = GetRelativePosition() + spaceBetweenLabelAndSlider;
 		m_CalculatedSliderBoundsMax = m_CalculatedSliderBoundsMin + m_ChildWidgets[0].GetRelativeSize();
 
-		m_ChildWidgets[0].SetRelativePosition( GetRelativePosition() + kbVec3( GetRelativeSize().x + 0.05f, 0.0f, 0.0f ) );
+		m_ChildWidgets[0].SetRelativePosition( GetRelativePosition() + kbVec3( spaceBetweenLabelAndSlider, 0.0f, 0.0f ) );
 
 		if ( bFull ) {
 			m_ChildWidgets[1].SetRelativePosition( GetRelativePosition() + kbVec3( GetRelativeSize().x + 0.05f, 0.0f, 0.0f ) );

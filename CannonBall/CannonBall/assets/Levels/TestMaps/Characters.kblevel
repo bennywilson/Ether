@@ -4073,7 +4073,7 @@ kbGameEntity 0 0 0 0 {
 				Enabled = 1
 				LifeTime =  -1.000000
 				Anchor = MiddleRight
-				AxisLock = LockAll
+				AxisLock = LockYAxis
 				ChildWidgets = 0
 				Materials = 1
 					kbMaterialComponent { 
@@ -4118,7 +4118,7 @@ kbGameEntity 0 0 0 0 {
 				Enabled = 1
 				LifeTime =  -1.000000
 				Anchor = MiddleRight
-				AxisLock = LockAll
+				AxisLock = LockYAxis
 				ChildWidgets = 0
 				Materials = 1
 					kbMaterialComponent { 
@@ -4163,7 +4163,7 @@ kbGameEntity 0 0 0 0 {
 				Enabled = 1
 				LifeTime =  -1.000000
 				Anchor = MiddleRight
-				AxisLock = LockAll
+				AxisLock = LockYAxis
 				ChildWidgets = 0
 				Materials = 1
 					kbMaterialComponent { 
