@@ -267,14 +267,14 @@ void CannonBallPauseMenuUIComponent::SetEnable_Internal( const bool bEnable ) {
 			m_Entity.AddComponent( &m_Widgets[i] );
 			m_Widgets[i].Enable( false );
 			m_Widgets[i].Enable( true );
-			m_Widgets[i].RecalculateOld( this );
+			m_Widgets[i].RecalculateOld( this, true );
 		}
 
 		for ( int i = 0; i < m_SliderWidgets.size(); i++ ) {
 			m_Entity.AddComponent( &m_SliderWidgets[i] );
 			m_SliderWidgets[i].Enable( false );
 			m_SliderWidgets[i].Enable( true );
-			m_SliderWidgets[i].RecalculateOld( this );
+			m_SliderWidgets[i].RecalculateOld( this, true );
 			m_SliderWidgets[i].RegisterEventListener( this );
 		}
 
@@ -326,16 +326,13 @@ void CannonBallPauseMenuUIComponent::Update_Internal( const float DT ) {
 			const float pixelHeight = targetWidgetSize.y * ScreenPixelHeight;
 			const float targetPixelWidth = pixelHeight * baseTextureAspectRatio;
 			targetWidgetSize.x = (float)targetPixelWidth / ScreenPixelWidth;
-
-			// Right Justify
-			targetWidgetPos.x -= targetWidgetSize.x;
 		}	
 
 		widget.SetRelativeSize( targetWidgetSize );
 		widget.SetRelativePosition( targetWidgetPos );
 		nextPos.y += m_SpaceBetweenWidgets;
 
-		widget.RecalculateOld( this );
+		widget.RecalculateOld( this, false );
 		widget.Update( DT );
 	}
 
@@ -345,6 +342,7 @@ void CannonBallPauseMenuUIComponent::Update_Internal( const float DT ) {
 		const kbVec2i textureDim = widget.GetBaseTextureDimensions();
 		kbVec3 targetWidgetSize = m_WidgetSize;
 		kbVec3 targetWidgetPos = nextPos;
+
 		if ( textureDim.x > 0 ) {
 
 			// Height is fixed by design, so calculate Width
@@ -358,9 +356,11 @@ void CannonBallPauseMenuUIComponent::Update_Internal( const float DT ) {
 		}	
 
 		widget.SetRelativeSize( targetWidgetSize );
+
+		kbLog( "%d - Setting rel pos %f %f %f", i, targetWidgetPos.x, targetWidgetPos.y, targetWidgetPos.z );
 		widget.SetRelativePosition( targetWidgetPos );
 		nextPos.y += m_SpaceBetweenWidgets;
-//		widget.RecalculateOld( this );
+		widget.RecalculateOld( this, false );
 		widget.Update( DT );
 	}
 }

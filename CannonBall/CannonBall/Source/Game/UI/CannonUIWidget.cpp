@@ -15,6 +15,9 @@ void CannonUIWidget::Constructor() {
 	m_StartingPosition.Set( 0.0f, 0.0f, 0.0f );
 	m_StartingSize.Set( 0.5f, 0.5f, 1.0f );
 
+	m_Anchor = CannonUIWidget::MiddleLeft;
+	m_AxisLock = CannonUIWidget::LockAll;
+
 	m_RelativePosition.Set( 0.0f, 0.0f, 0.0f );
 	m_RelativeSize.Set( 0.5f, 0.5f, 1.0f );
 
@@ -52,14 +55,17 @@ void CannonUIWidget::FireEvent() {
 
 
 /**
- *	CannonUIWidget::RecalculateOld
+ *	CannonUIWidget::SetRelativePosition
  */
 void CannonUIWidget::SetRelativePosition( const kbVec3 & newPos ) {
 
 	m_RelativePosition = newPos;
-
 	m_AbsolutePosition = m_CachedParentPosition + m_CachedParentSize * m_RelativePosition;
 	m_AbsoluteSize = m_CachedParentSize * m_RelativeSize;
+
+	for ( size_t i = 0; i < m_ChildWidgets.size(); i++ ) {
+		m_ChildWidgets[i].Recalculate( this, false );
+	}
 }
 
 /**
@@ -68,15 +74,18 @@ void CannonUIWidget::SetRelativePosition( const kbVec3 & newPos ) {
 void CannonUIWidget::SetRelativeSize( const kbVec3 & newSize ) {
 
 	m_RelativeSize = newSize;
-
 	m_AbsolutePosition = m_CachedParentPosition + m_CachedParentSize * m_RelativePosition;
 	m_AbsoluteSize = m_CachedParentSize * m_RelativeSize;
+
+	for ( size_t i = 0; i < m_ChildWidgets.size(); i++ ) {
+		m_ChildWidgets[i].Recalculate( this, false );
+	}
 }
 
 /**
  *	CannonUIWidget::RecalculateOld
  */
-void CannonUIWidget::RecalculateOld( const kbUIComponent *const pParent ) {
+void CannonUIWidget::RecalculateOld( const kbUIComponent *const pParent, const bool bFull ) {
 
 	kbErrorCheck( pParent != nullptr, "CannonUIWidget::UpdateFromParent() - null parent" );
 	
@@ -91,14 +100,14 @@ void CannonUIWidget::RecalculateOld( const kbUIComponent *const pParent ) {
 	m_AbsoluteSize = m_CachedParentSize * m_RelativeSize;
 
 	for ( int i = 0; i < m_ChildWidgets.size(); i++ ) {
-		m_ChildWidgets[i].Recalculate( this );
+		m_ChildWidgets[i].RecalculateOld( pParent, bFull );
 	}
 }
 
 /**
  *	CannonUIWidget::Recalculate
  */
-void CannonUIWidget::Recalculate( const CannonUIWidget *const pParent ) {
+void CannonUIWidget::Recalculate( const CannonUIWidget *const pParent, const bool bFull ) {
 
 	kbErrorCheck( pParent != nullptr, "CannonUIWidget::UpdateFromParent() - null parent" );
 	
@@ -113,7 +122,7 @@ void CannonUIWidget::Recalculate( const CannonUIWidget *const pParent ) {
 	m_AbsoluteSize = m_CachedParentSize * m_RelativeSize;
 
 	for ( int i = 0; i < m_ChildWidgets.size(); i++ ) {
-		m_ChildWidgets[i].Recalculate( this );
+		m_ChildWidgets[i].Recalculate( this, bFull );
 	}
 }
 
@@ -170,7 +179,6 @@ void CannonUIWidget::SetEnable_Internal( const bool bEnable ) {
 		m_pModel->Enable( true );
 
 		for ( size_t i = 0; i < m_ChildWidgets.size(); i++ ) {
-		//	m_ChildWidgets[i].Recalculate( this );
 			GetUIGameEntity().AddComponent( &m_ChildWidgets[i] );		// Note these children are responsible for removing themselves when disabled (see code block below)
 			m_ChildWidgets[i].Enable( false );
 			m_ChildWidgets[i].Enable( true );
@@ -180,8 +188,6 @@ void CannonUIWidget::SetEnable_Internal( const bool bEnable ) {
 	} else {
 		if ( m_pModel != nullptr ) {
 			m_pModel->Enable( false );
-			//delete m_pModel;
-			//m_pModel = nullptr;
 		}
 
 		for ( size_t i = 0; i < m_ChildWidgets.size(); i++ ) {
@@ -220,12 +226,18 @@ void CannonUIWidget::Update_Internal( const float dt ) {
 		}
 	}
 
-	const float ScreenPixelWidth = (float)g_pRenderer->GetBackBufferWidth();
-	const float ScreenPixelHeight = (float)g_pRenderer->GetBackBufferHeight();
+	const float BackBufferWidth = (float)g_pRenderer->GetBackBufferWidth();
+	const float BackBufferHeight = (float)g_pRenderer->GetBackBufferHeight();
 
-	const float screenWidthPixel = widgetAbsSize.x * ScreenPixelWidth;
-	const float screenHeightPixel = screenWidthPixel / aspectRatio;
-	widgetAbsSize.y = screenHeightPixel / ScreenPixelHeight;
+	if ( m_AxisLock == LockYAxis ) {
+		const float widgetPixelHeight = widgetAbsSize.y * BackBufferHeight;
+		const float widgetPixelWidth = widgetPixelHeight * aspectRatio;
+		widgetAbsSize.x = widgetPixelWidth / BackBufferWidth;
+	}
+
+	if ( m_Anchor == CannonUIWidget::MiddleRight ) {
+		widgetAbsPos.x -= widgetAbsSize.x * 0.5f;
+	}
 
 	m_pModel->SetMaterialParamVector( 0, normalizedScreenSize_Anchor.stl_str(), 
 			kbVec4( widgetAbsSize.x, 
@@ -263,27 +275,103 @@ void CannonUISlider::SetEnable_Internal( const bool bEnable ) {
 /**
  *	CannonUISlider::RecalculateOld
  */
-void CannonUISlider::RecalculateOld( const kbUIComponent *const pParent ) {
+void CannonUISlider::RecalculateOld( const kbUIComponent *const pParent, const bool bFull ) {
 
-	Super::RecalculateOld( pParent );
-	m_CalculatedSliderBoundsMin = m_ChildWidgets[0].GetRelativeSize() * m_SliderBoundsMin + m_ChildWidgets[1].GetRelativePosition();
-	m_CalculatedSliderBoundsMax = m_ChildWidgets[0].GetRelativeSize() * m_SliderBoundsMax + m_ChildWidgets[1].GetRelativePosition();
+	kbErrorCheck( pParent != nullptr, "CannonUIWidget::UpdateFromParent() - null parent" );
+	
+	if ( m_pModel != nullptr && pParent != nullptr && pParent->GetStaticModelComponent() != nullptr ) {
+		m_pModel->SetRenderOrderBias( pParent->GetStaticModelComponent()->GetRenderOrderBias() - 1.0f );
+	}
 
-	kbLog( "Calculated Bounds is %f %f %f, %f %f %f", m_CalculatedSliderBoundsMin.x, m_CalculatedSliderBoundsMin.y, m_CalculatedSliderBoundsMin.z, m_CalculatedSliderBoundsMax.x, m_CalculatedSliderBoundsMax.y, m_CalculatedSliderBoundsMax.z );
+	m_CachedParentPosition = pParent->GetNormalizedAnchorPt();
+	m_CachedParentSize = pParent->GetNormalizedScreenSize();
 
+	m_AbsolutePosition = m_CachedParentPosition + m_CachedParentSize * m_RelativePosition;
+	m_AbsoluteSize = m_CachedParentSize * m_RelativeSize;
+
+	for ( int i = 0; i < m_ChildWidgets.size(); i++ ) {
+		m_ChildWidgets[i].RecalculateOld( pParent, bFull );
+	}
+
+	if ( bFull ) {
+		kbVec3 pos = m_RelativePosition;
+		pos.x = m_RelativePosition.x + m_RelativeSize.x + 0.05f;
+
+		m_ChildWidgets[0].SetRelativePosition( pos );
+		m_ChildWidgets[1].SetRelativePosition( pos );
+	} else {
+		kbVec3 pos = m_ChildWidgets[0].GetRelativePosition();
+		pos.y = m_RelativePosition.y;
+
+		pos = m_ChildWidgets[1].GetRelativePosition();
+		pos.y = m_RelativePosition.y;
+		m_ChildWidgets[1].SetRelativePosition( pos );
+	}
+	
+	if ( m_ChildWidgets.size() < 2 ) {
+		m_CalculatedSliderBoundsMin.Set( 0.0f, 0.0f, 0.0f );
+		m_CalculatedSliderBoundsMax.Set( 0.0f, 0.0f, 0.0f );
+	} else {
+		m_CalculatedSliderBoundsMin = GetRelativePosition() + GetRelativeSize() + 0.05f;
+		m_CalculatedSliderBoundsMax = m_CalculatedSliderBoundsMin + m_ChildWidgets[0].GetRelativeSize();
+
+		m_ChildWidgets[0].SetRelativePosition( GetRelativePosition() + kbVec3( GetRelativeSize().x + 0.05f, 0.0f, 0.0f ) );
+
+		if ( bFull ) {
+			m_ChildWidgets[1].SetRelativePosition( GetRelativePosition() + kbVec3( GetRelativeSize().x + 0.05f, 0.0f, 0.0f ) );
+		}
+	}
 }
 
 /**
  *	CannonUISlider::Recalculate
  */
-void CannonUISlider::Recalculate( const CannonUIWidget *const pParent ) {
+void CannonUISlider::Recalculate( const CannonUIWidget *const pParent, const bool bFull ) {
 
-	Super::Recalculate( pParent );
+	kbErrorCheck( pParent != nullptr, "CannonUIWidget::UpdateFromParent() - null parent" );
 
-		kbLog( "2. Calculated Bounds is %f %f %f, %f %f %f", m_CalculatedSliderBoundsMin.x, m_CalculatedSliderBoundsMin.y, m_CalculatedSliderBoundsMin.z, m_CalculatedSliderBoundsMax.x, m_CalculatedSliderBoundsMax.y, m_CalculatedSliderBoundsMax.z );
+	if ( m_pModel != nullptr && pParent != nullptr && pParent->GetStaticModel() != nullptr ) {
+		m_pModel->SetRenderOrderBias( pParent->GetStaticModel() ->GetRenderOrderBias() - 1.0f );
+	}
 
-	m_CalculatedSliderBoundsMin = m_ChildWidgets[0].GetRelativeSize() * m_SliderBoundsMin + m_ChildWidgets[1].GetRelativePosition();
-	m_CalculatedSliderBoundsMax = m_ChildWidgets[0].GetRelativeSize() * m_SliderBoundsMax + m_ChildWidgets[1].GetRelativePosition();
+	m_CachedParentPosition = pParent->GetAbsolutePosition();
+	m_CachedParentSize = pParent->GetAbsoluteSize();
+
+	m_AbsolutePosition = m_CachedParentPosition + m_CachedParentSize * m_RelativePosition;
+	m_AbsoluteSize = m_CachedParentSize * m_RelativeSize;
+
+	for ( int i = 0; i < m_ChildWidgets.size(); i++ ) {
+		m_ChildWidgets[i].Recalculate( pParent, bFull );
+	}
+
+	if ( bFull ) {
+		kbVec3 pos = m_RelativePosition;
+		pos.x = m_RelativePosition.x + m_RelativeSize.x + 0.05f;
+
+		m_ChildWidgets[0].SetRelativePosition( pos );
+		m_ChildWidgets[1].SetRelativePosition( pos );
+	} else {
+		kbVec3 pos = m_ChildWidgets[0].GetRelativePosition();
+		pos.y = m_RelativePosition.y;
+
+		pos = m_ChildWidgets[1].GetRelativePosition();
+		pos.y = m_RelativePosition.y;
+		m_ChildWidgets[1].SetRelativePosition( pos );
+	}
+
+	if ( m_ChildWidgets.size() < 2 ) {
+		m_CalculatedSliderBoundsMin.Set( 0.0f, 0.0f, 0.0f );
+		m_CalculatedSliderBoundsMax.Set( 0.0f, 0.0f, 0.0f );
+	} else {
+		m_CalculatedSliderBoundsMin = GetRelativePosition() + GetRelativeSize() + 0.05f;
+		m_CalculatedSliderBoundsMax = m_CalculatedSliderBoundsMin + m_ChildWidgets[0].GetRelativeSize();
+
+		m_ChildWidgets[0].SetRelativePosition( GetRelativePosition() + kbVec3( GetRelativeSize().x + 0.05f, 0.0f, 0.0f ) );
+
+		if ( bFull ) {
+			m_ChildWidgets[1].SetRelativePosition( GetRelativePosition() + kbVec3( GetRelativeSize().x + 0.05f, 0.0f, 0.0f ) );
+		}
+	}
 }
 
 /**
@@ -293,25 +381,27 @@ void CannonUISlider::Update_Internal( const float dt ) {
 
 	Super::Update_Internal( dt );
 
-	kbVec3 curPos = m_ChildWidgets[1].GetRelativePosition();
-	bool bMove = 0.0f;
+	if ( m_ChildWidgets.size() > 1 ) {
+		kbVec3 curPos = m_ChildWidgets[1].GetRelativePosition();
+		bool bMove = 0.0f;
 
-	bool bFireEvent = false;
-	if ( GetAsyncKeyState( VK_LEFT ) ) {
-		curPos.x -= 0.02f;
-		bFireEvent = true;
-	}
+		bool bFireEvent = false;
+		if ( GetAsyncKeyState( VK_LEFT ) ) {
+			curPos.x -= 0.02f;
+			bFireEvent = true;
+		}
 
-		if ( GetAsyncKeyState( VK_RIGHT ) ) {
-		curPos.x += 0.02f;
-		bFireEvent = true;
-	}
+			if ( GetAsyncKeyState( VK_RIGHT ) ) {
+			curPos.x += 0.02f;
+			bFireEvent = true;
+		}
 
-	curPos.x = kbClamp( curPos.x, m_CalculatedSliderBoundsMin.x, m_CalculatedSliderBoundsMax.x );
-	m_ChildWidgets[1].SetRelativePosition( curPos );
+		curPos.x = kbClamp( curPos.x, m_CalculatedSliderBoundsMin.x, m_CalculatedSliderBoundsMax.x );
+		m_ChildWidgets[1].SetRelativePosition( curPos );
 
-	if ( bFireEvent ) {
-		FireEvent();
+		if ( bFireEvent ) {
+			FireEvent();
+		}
 	}
 	//kbLog( "CannonUISlider Child = %f %f %f, %f %f %f", GetAbsolutePosition().x, GetAbsolutePosition().y, GetAbsolutePosition().z, GetAbsoluteSize().x, GetAbsoluteSize().y, GetAbsoluteSize().z );
 }

@@ -22,6 +22,10 @@ ELevelType_Enum ELevelType_EnumClass;
 
 ECameraMoveMode_Enum ECameraMoveMode_EnumClass;
 
+eWidgetAnchor_Enum EWidgetAnchor_EnumClass;
+
+eWidgetAxisLock_Enum EWidgetAxisLock_EnumClass;
+
 DEFINE_KBCLASS(CannonActorComponent)
 
 DEFINE_KBCLASS(KungFuSheepComponent)

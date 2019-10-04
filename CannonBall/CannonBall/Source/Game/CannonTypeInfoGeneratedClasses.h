@@ -6,6 +6,26 @@ GenerateEnum(
 	AddEnumField( LevelType_2D, "2D" )
 )
 
+GenerateEnum(
+	eWidgetAnchor, "eWidgetAnchor",
+	AddEnumField( TopLeft, "TopLeft" )
+	AddEnumField( MiddleLeft, "MiddleLeft" )
+	AddEnumField( BottomLeft, "BottomLeft" )
+	AddEnumField( TopCenter, "TopCenter" )
+	AddEnumField( MiddleCenter, "MiddleCenter" )
+	AddEnumField( BottomCenter, "BottomCenter" )
+	AddEnumField( TopRight, "TopRight" )
+	AddEnumField( MiddleRight, "MiddleRight" )
+	AddEnumField( BottomRight, "BottomRight" )
+)
+
+GenerateEnum(
+	eWidgetAxisLock, "eWidgetAxisLock",
+	AddEnumField( LockAll, "LockAll" )
+	AddEnumField( LockXAxis, "LockXAxis" )
+	AddEnumField( LockYAxis, "LockYAxis" )
+)
+
 GenerateEnum( 
 	ECameraMoveMode, "ECameraMoveMode",
 	AddEnumField( MoveMode_None, "None" )
@@ -103,6 +123,8 @@ GenerateClass(
 
 GenerateClass(
 	CannonUIWidget,
+	AddField( "Anchor", KBTYPEINFO_ENUM, CannonUIWidget, m_Anchor, false, "eWidgetAnchor" )
+	AddField( "AxisLock", KBTYPEINFO_ENUM, CannonUIWidget, m_AxisLock, false, "eWidgetAxisLock" )
 	AddField( "RelativePosition", KBTYPEINFO_VECTOR, CannonUIWidget, m_StartingPosition, false, "" )
 	AddField( "RelativeSize", KBTYPEINFO_VECTOR, CannonUIWidget, m_StartingSize, false, "" )
 	AddField( "Materials", KBTYPEINFO_STRUCT, CannonUIWidget, m_Materials, true, "kbMaterialComponent" )

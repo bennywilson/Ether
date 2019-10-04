@@ -27,8 +27,26 @@ class CannonUIWidget : public kbGameComponent {
 //-------------------------------------------------------------------------------------------------------------------------------------------------------------
 public:
 
-	virtual void							RecalculateOld( const kbUIComponent *const pParent );
-	virtual void							Recalculate( const CannonUIWidget *const pParent );
+	enum eWidgetAnchor {
+		TopLeft,
+		MiddleLeft,
+		BottomLeft,
+		TopCenter,
+		MiddleCenter,
+		BottomCenter,
+		TopRight,
+		MiddleRight,
+		BottomRight
+	};
+
+	enum eWidgetAxisLock {
+		LockAll,
+		LockXAxis,
+		LockYAxis
+	};
+
+	virtual void							RecalculateOld( const kbUIComponent *const pParent, const bool bFull );
+	virtual void							Recalculate( const CannonUIWidget *const pParent, const bool bFull );
 
 	void									SetRelativePosition( const kbVec3 & newPos );
 	void									SetRelativeSize( const kbVec3 & newSize );
@@ -46,6 +64,8 @@ public:
 
 	void									RegisterEventListener( IUIWidgetListener * pListener );
 	void									UnregisterEventListener( IUIWidgetListener * pListener );
+
+	const kbStaticModelComponent *			GetStaticModel() const { return m_pModel; }
 
 protected:
 
@@ -65,9 +85,12 @@ private:
 	// Editor
 	kbVec3									m_StartingPosition;
 	kbVec3									m_StartingSize;
-
+	eWidgetAnchor							m_Anchor;
+	eWidgetAxisLock							m_AxisLock;
 
 	// Runtime
+protected:
+
 	kbVec3									m_RelativePosition;
 	kbVec3									m_RelativeSize;
 	kbVec3									m_AbsolutePosition;
@@ -76,6 +99,8 @@ private:
 
 	kbVec3									m_CachedParentPosition;
 	kbVec3									m_CachedParentSize;
+
+private:
 
 	std::vector<IUIWidgetListener*>			m_EventListeners;
 };
@@ -90,8 +115,8 @@ class CannonUISlider : public CannonUIWidget {
 //-------------------------------------------------------------------------------------------------------------------------------------------------------------
 public:
 	
-	virtual void							RecalculateOld( const kbUIComponent *const pParent ) override;
-	virtual void							Recalculate( const CannonUIWidget *const pParent ) override;
+	virtual void							RecalculateOld( const kbUIComponent *const pParent, const bool bFull ) override;
+	virtual void							Recalculate( const CannonUIWidget *const pParent, const bool bFull ) override;
 
 	float									GetNormalizedValue();
 	void									SetNormalizedValue( const float newValue );

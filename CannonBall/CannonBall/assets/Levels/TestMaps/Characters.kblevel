@@ -2,7 +2,7 @@ kbGameEntity 0 0 0 0 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		Name = "Entity_69"
+		Name = "Entity_65"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
 		Position = 0.000000 0.000000 0.000000
 		Scale = 1.000000 1.000000 1.000000
@@ -11,7 +11,7 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		MainCameraPosition = 73.369316 -51.311008 -388.433472
-		MainCameraRotation = -0.018253 -0.651532 0.015687 0.758240
+		MainCameraRotation = -0.078446 -0.606054 0.060241 0.789250
 	}
 }
 kbGameEntity 0 0 0 0 {
@@ -3745,14 +3745,18 @@ kbGameEntity 0 0 0 0 {
 		AuthoredWidth = 128
 		NormalizedAnchorPoint = 0.250000 0.050000 0.000000
 		UIToScreenSizeRatio = 0.500000 0.500000 0.000000
-		SliderWidgets = 1
+		SliderWidgets = 2
 			CannonUISlider { 
 				Enabled = 1
 				LifeTime =  -1.000000
+				Anchor = MiddleRight
+				AxisLock = LockYAxis
 				ChildWidgets = 2
 					CannonUIWidget { 
 						Enabled = 1
 						LifeTime =  -1.000000
+						Anchor = MiddleLeft
+						AxisLock = LockAll
 						ChildWidgets = 0
 						Materials = 1
 							kbMaterialComponent { 
@@ -3790,12 +3794,14 @@ kbGameEntity 0 0 0 0 {
 										Vector = 0.000000 0.000000 0.000000 0.000000
 									}
 							}
-						RelativePosition = 1.000000 0.150000 0.000000
-						RelativeSize = 1.500000 1.000000 1.000000
+						RelativePosition = 0.000000 0.000000 0.000000
+						RelativeSize = 0.350000 0.075000 1.000000
 					}
 					CannonUIWidget { 
 						Enabled = 1
 						LifeTime =  -1.000000
+						Anchor = MiddleLeft
+						AxisLock = LockYAxis
 						ChildWidgets = 0
 						Materials = 1
 							kbMaterialComponent { 
@@ -3833,7 +3839,7 @@ kbGameEntity 0 0 0 0 {
 										Vector = 0.000000 0.000000 0.000000 0.000000
 									}
 							}
-						RelativePosition = 1.000000 0.150000 0.000000
+						RelativePosition = 0.000000 0.000000 0.000000
 						RelativeSize = 0.100000 0.100000 0.100000
 					}
 				Materials = 1
@@ -3874,15 +3880,155 @@ kbGameEntity 0 0 0 0 {
 					}
 				RelativePosition = 0.223145 0.700000 0.000000
 				RelativeSize = 0.276855 0.150000 1.000000
-				Dummy = 0
+				SliderBoundsMax = 1.000000 1.000000 1.000000
+				SliderBoundsMin = 0.000000 0.000000 0.000000
+			}
+			CannonUISlider { 
+				Enabled = 1
+				LifeTime =  -1.000000
+				Anchor = MiddleRight
+				AxisLock = LockYAxis
+				ChildWidgets = 2
+					CannonUIWidget { 
+						Enabled = 1
+						LifeTime =  -1.000000
+						Anchor = MiddleLeft
+						AxisLock = LockAll
+						ChildWidgets = 0
+						Materials = 1
+							kbMaterialComponent { 
+								Enabled = 0
+								LifeTime =  -1.000000
+								CullModeOverride = ShaderDefault
+								Shader = .\assets\shaders\ui\ui_basic.kbshader
+								ShaderParams = 4
+									kbShaderParamComponent { 
+										Enabled = 0
+										LifeTime =  -1.000000
+										ParamName = "normalizedScreenSize_Anchor"
+										Texture = NULL
+										Vector = 0.000000 0.000000 0.000000 0.000000
+									}
+									kbShaderParamComponent { 
+										Enabled = 0
+										LifeTime =  -1.000000
+										ParamName = "colorFactor"
+										Texture = NULL
+										Vector = 1.000000 1.000000 1.000000 1.000000
+									}
+									kbShaderParamComponent { 
+										Enabled = 0
+										LifeTime =  -1.000000
+										ParamName = "rotationAngle"
+										Texture = NULL
+										Vector = 0.000000 0.000000 0.000000 0.000000
+									}
+									kbShaderParamComponent { 
+										Enabled = 0
+										LifeTime =  -1.000000
+										ParamName = "baseTexture"
+										Texture = .\assets\ui\widgets\sliderbar.tif
+										Vector = 0.000000 0.000000 0.000000 0.000000
+									}
+							}
+						RelativePosition = 0.000000 0.000000 0.000000
+						RelativeSize = 0.350000 0.075000 1.000000
+					}
+					CannonUIWidget { 
+						Enabled = 1
+						LifeTime =  -1.000000
+						Anchor = MiddleLeft
+						AxisLock = LockYAxis
+						ChildWidgets = 0
+						Materials = 1
+							kbMaterialComponent { 
+								Enabled = 0
+								LifeTime =  -1.000000
+								CullModeOverride = ShaderDefault
+								Shader = .\assets\shaders\ui\ui_basic.kbshader
+								ShaderParams = 4
+									kbShaderParamComponent { 
+										Enabled = 0
+										LifeTime =  -1.000000
+										ParamName = "normalizedScreenSize_Anchor"
+										Texture = NULL
+										Vector = 0.000000 0.000000 0.000000 0.000000
+									}
+									kbShaderParamComponent { 
+										Enabled = 0
+										LifeTime =  -1.000000
+										ParamName = "colorFactor"
+										Texture = NULL
+										Vector = 1.000000 1.000000 1.000000 1.000000
+									}
+									kbShaderParamComponent { 
+										Enabled = 0
+										LifeTime =  -1.000000
+										ParamName = "rotationAngle"
+										Texture = NULL
+										Vector = 0.000000 0.000000 0.000000 0.000000
+									}
+									kbShaderParamComponent { 
+										Enabled = 0
+										LifeTime =  -1.000000
+										ParamName = "baseTexture"
+										Texture = .\assets\ui\widgets\sliderknob.tif
+										Vector = 0.000000 0.000000 0.000000 0.000000
+									}
+							}
+						RelativePosition = 0.000000 0.000000 0.000000
+						RelativeSize = 0.100000 0.100000 0.100000
+					}
+				Materials = 1
+					kbMaterialComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						CullModeOverride = ShaderDefault
+						Shader = .\assets\shaders\ui\ui_basic.kbshader
+						ShaderParams = 4
+							kbShaderParamComponent { 
+								Enabled = 0
+								LifeTime =  -1.000000
+								ParamName = "normalizedScreenSize_Anchor"
+								Texture = NULL
+								Vector = 0.000000 0.000000 0.000000 0.000000
+							}
+							kbShaderParamComponent { 
+								Enabled = 0
+								LifeTime =  -1.000000
+								ParamName = "colorFactor"
+								Texture = NULL
+								Vector = 1.000000 1.000000 1.000000 1.000000
+							}
+							kbShaderParamComponent { 
+								Enabled = 0
+								LifeTime =  -1.000000
+								ParamName = "rotationAngle"
+								Texture = NULL
+								Vector = 0.000000 0.000000 0.000000 0.000000
+							}
+							kbShaderParamComponent { 
+								Enabled = 0
+								LifeTime =  -1.000000
+								ParamName = "baseTexture"
+								Texture = .\assets\ui\pausemenu\brightness.tif
+								Vector = 0.000000 0.000000 0.000000 0.000000
+							}
+					}
+				RelativePosition = 0.223145 0.700000 0.000000
+				RelativeSize = 0.276855 0.150000 1.000000
+				SliderBoundsMax = 1.000000 1.000000 1.000000
+				SliderBoundsMin = 0.000000 0.000000 0.000000
 			}
 		SpaceBetweenWidgets =  0.100000
 		StartingWidgetAnchor = 0.500000 0.300000 0.000000
-		WidgetSize = 0.100000 0.150000 1.000000
+		WidgetSize = 0.100000 0.050000 1.000000
 		Widgets = 4
 			CannonUIWidget { 
 				Enabled = 1
 				LifeTime =  -1.000000
+				Anchor = MiddleRight
+				AxisLock = LockYAxis
 				ChildWidgets = 0
 				Materials = 1
 					kbMaterialComponent { 
@@ -3926,6 +4072,8 @@ kbGameEntity 0 0 0 0 {
 			CannonUIWidget { 
 				Enabled = 1
 				LifeTime =  -1.000000
+				Anchor = MiddleRight
+				AxisLock = LockAll
 				ChildWidgets = 0
 				Materials = 1
 					kbMaterialComponent { 
@@ -3969,6 +4117,8 @@ kbGameEntity 0 0 0 0 {
 			CannonUIWidget { 
 				Enabled = 1
 				LifeTime =  -1.000000
+				Anchor = MiddleRight
+				AxisLock = LockAll
 				ChildWidgets = 0
 				Materials = 1
 					kbMaterialComponent { 
@@ -4012,6 +4162,8 @@ kbGameEntity 0 0 0 0 {
 			CannonUIWidget { 
 				Enabled = 1
 				LifeTime =  -1.000000
+				Anchor = MiddleRight
+				AxisLock = LockAll
 				ChildWidgets = 0
 				Materials = 1
 					kbMaterialComponent { 
