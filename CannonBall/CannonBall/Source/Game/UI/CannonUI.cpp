@@ -243,9 +243,12 @@ void CannonBallUIComponent::CannonBallActivatedCB() {
  *	CannonBallPauseMenuUIComponent::Constructor
  */
 void CannonBallPauseMenuUIComponent::Constructor() {
+
 	m_WidgetSize.Set( 0.1f, 0.1f, 1.0f );
 	m_StartingWidgetAnchorPt.Set( 0.0f, 0.0f, 0.0f );
 	m_SpaceBetweenWidgets = 0.05f;
+
+	m_SelectedWidgetIdx = 0;
 }
 
 /**
@@ -256,7 +259,6 @@ void CannonBallPauseMenuUIComponent::SetEnable_Internal( const bool bEnable ) {
 	Super::SetEnable_Internal( bEnable );
 
 	if ( bEnable ) {
-
 		m_pStaticModelComponent->Enable( true );
 		for ( int i = 0; i < m_Widgets.size(); i++ ) {
 			m_Entity.AddComponent( &m_Widgets[i] );
@@ -270,6 +272,16 @@ void CannonBallPauseMenuUIComponent::SetEnable_Internal( const bool bEnable ) {
 			m_SliderWidgets[i].Enable( true );
 			m_SliderWidgets[i].RegisterEventListener( this );
 		}
+
+		m_WidgetList.clear();
+		m_WidgetList.push_back( &m_Widgets[0] );
+		m_WidgetList.push_back( &m_SliderWidgets[0] );
+		m_WidgetList.push_back( &m_SliderWidgets[1] );
+		m_WidgetList.push_back( &m_SliderWidgets[2] );
+		m_WidgetList.push_back( &m_Widgets[1] );
+
+		m_SelectedWidgetIdx = 0;
+		m_WidgetList[m_SelectedWidgetIdx]->SetFocus( true );
 
 		RecalculateChildrenTransform();
 
@@ -294,6 +306,10 @@ void CannonBallPauseMenuUIComponent::SetEnable_Internal( const bool bEnable ) {
 			pGameSettings->m_Volume = (int)kbClamp( m_SliderWidgets[0].GetNormalizedValue() * 100.0f, 0.0f, 100.0f );
 			pGameSettings->SaveSettings();
 		}
+
+		if ( m_WidgetList.size() > 0 ) {
+			m_WidgetList[m_SelectedWidgetIdx]->SetFocus( false );
+		}
 	}
 }
 
@@ -301,26 +317,23 @@ void CannonBallPauseMenuUIComponent::SetEnable_Internal( const bool bEnable ) {
  *	CannonBallPauseMenuUIComponent::RecalculateChildrenTransform
  */
 void CannonBallPauseMenuUIComponent::RecalculateChildrenTransform() {
+
 	const float ScreenPixelWidth = (float)g_pRenderer->GetBackBufferWidth();
 	const float ScreenPixelHeight = (float)g_pRenderer->GetBackBufferHeight();
 
 	kbVec3 nextPos = m_StartingWidgetAnchorPt;
-	for ( size_t i = 0; i < m_Widgets.size(); i++ ) {
-
-		kbUIWidget & widget = m_Widgets[i];
+	for ( size_t i = 0; i < m_WidgetList.size(); i++ ) {
+		kbUIWidget & widget = *m_WidgetList[i];
 		const kbVec2i textureDim = widget.GetBaseTextureDimensions();
 		kbVec3 targetWidgetSize = m_WidgetSize;
 		kbVec3 targetWidgetPos = nextPos;
-		if ( textureDim.x > 0 ) {
 
+		if ( textureDim.x > 0 ) {
 			// Height is fixed by design, so calculate Width
 			const float baseTextureAspectRatio = (float)textureDim.x / (float)textureDim.y;
 			const float pixelHeight = targetWidgetSize.y * ScreenPixelHeight;
 			const float targetPixelWidth = pixelHeight * baseTextureAspectRatio;
 			targetWidgetSize.x = (float)targetPixelWidth / ScreenPixelWidth;
-
-			// Right Justify
-		//	targetWidgetPos.x -= targetWidgetSize.x;
 		}	
 
 		widget.SetRelativeSize( targetWidgetSize );
@@ -330,23 +343,18 @@ void CannonBallPauseMenuUIComponent::RecalculateChildrenTransform() {
 		widget.RecalculateOld( this, false );
 	}
 
-	for ( size_t i = 0; i < m_SliderWidgets.size(); i++ ) {
-
+	/*for ( size_t i = 0; i < m_SliderWidgets.size(); i++ ) {
 		kbUIWidget & widget = m_SliderWidgets[i];
 		const kbVec2i textureDim = widget.GetBaseTextureDimensions();
 		kbVec3 targetWidgetSize = m_WidgetSize;
 		kbVec3 targetWidgetPos = nextPos;
 
 		if ( textureDim.x > 0 ) {
-
 			// Height is fixed by design, so calculate Width
 			const float baseTextureAspectRatio = (float)textureDim.x / (float)textureDim.y;
 			const float pixelHeight = targetWidgetSize.y * ScreenPixelHeight;
 			const float targetPixelWidth = pixelHeight * baseTextureAspectRatio;
 			targetWidgetSize.x = (float)targetPixelWidth / ScreenPixelWidth;
-
-			// Right Justify
-		//	targetWidgetPos.x -= targetWidgetSize.x;
 		}	
 
 		widget.SetRelativeSize( targetWidgetSize );
@@ -354,7 +362,7 @@ void CannonBallPauseMenuUIComponent::RecalculateChildrenTransform() {
 
 		nextPos.y += m_SpaceBetweenWidgets;
 		widget.RecalculateOld( this, false );
-	}
+	}*/
 }
 
 /**
@@ -363,6 +371,23 @@ void CannonBallPauseMenuUIComponent::RecalculateChildrenTransform() {
 void CannonBallPauseMenuUIComponent::Update_Internal( const float DT ) {
 
 	Super::Update_Internal( DT );
+
+	const kbInput_t & input = g_pInputManager->GetInput();
+	if ( input.WasArrowJustPressed( kbInput_t::Up ) ) {
+		m_WidgetList[m_SelectedWidgetIdx]->SetFocus( false );
+		m_SelectedWidgetIdx--;
+		if ( m_SelectedWidgetIdx < 0 ) {
+			m_SelectedWidgetIdx = (int)m_WidgetList.size() - 1;
+		}
+		m_WidgetList[m_SelectedWidgetIdx]->SetFocus( true );
+	} else if ( input.WasArrowJustPressed( kbInput_t::Down ) ) {
+		m_WidgetList[m_SelectedWidgetIdx]->SetFocus( false );
+		m_SelectedWidgetIdx++;
+		if ( m_SelectedWidgetIdx >= m_WidgetList.size() ) {
+			m_SelectedWidgetIdx = 0;
+		}
+		m_WidgetList[m_SelectedWidgetIdx]->SetFocus( true );
+	}
 
 	RecalculateChildrenTransform();
 

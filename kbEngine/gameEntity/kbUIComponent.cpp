@@ -39,7 +39,6 @@ kbUIComponent::~kbUIComponent() {
 	m_UIToScreenSizeRatio.Set( 0.1f, 0.0f, 0.0f );
 }
 
-
 /**
  *	kbUIComponent::EditorChange
  */
@@ -129,13 +128,14 @@ void kbUIWidget::Constructor() {
 	m_AbsoluteSize.Set( 0.5f, 0.5f, 1.0f );
 
 	m_pModel = nullptr;
+
+	m_bHasFocus = false;
 }
 
 /**
  *	kbUIWidget::RegisterEventListener
  */
 void kbUIWidget::RegisterEventListener( IUIWidgetListener *const pListener ) {
-
 	m_EventListeners.push_back( pListener );
 }
 
@@ -143,29 +143,31 @@ void kbUIWidget::RegisterEventListener( IUIWidgetListener *const pListener ) {
  *	kbUIWidget::UnregisterEventListener
  */
 void kbUIWidget::UnregisterEventListener( IUIWidgetListener *const pListener ) {
-
 	VectorRemoveFast( m_EventListeners, pListener );
 }
 
 /**
- *	kbUIWidget::UnregisterEventListener
+ *	kbUIWidget::FireEvent
  */
 void kbUIWidget::FireEvent() {
-
 	for ( int i = 0; i < m_EventListeners.size(); i++ ) {
 		m_EventListeners[i]->WidgetEventCB( this );
 	}
 }
 
+/**
+ *	kbUIComponent::SetFocus
+ */
+void kbUIWidget::SetFocus( const bool bHasFocus ) {
+	m_bHasFocus = bHasFocus;
+}
 
 /**
  *	kbUIWidget::SetRelativePosition
  */
 void kbUIWidget::SetRelativePosition( const kbVec3 & newPos ) {
-
 	m_RelativePosition = newPos;
 	m_AbsolutePosition = m_CachedParentPosition + m_CachedParentSize * m_RelativePosition;
-	m_AbsoluteSize = m_CachedParentSize * m_RelativeSize;
 
 	for ( size_t i = 0; i < m_ChildWidgets.size(); i++ ) {
 		m_ChildWidgets[i].Recalculate( this, false );
@@ -178,7 +180,6 @@ void kbUIWidget::SetRelativePosition( const kbVec3 & newPos ) {
 void kbUIWidget::SetRelativeSize( const kbVec3 & newSize ) {
 
 	m_RelativeSize = newSize;
-	m_AbsolutePosition = m_CachedParentPosition + m_CachedParentSize * m_RelativePosition;
 	m_AbsoluteSize = m_CachedParentSize * m_RelativeSize;
 
 	for ( size_t i = 0; i < m_ChildWidgets.size(); i++ ) {
@@ -190,7 +191,6 @@ void kbUIWidget::SetRelativeSize( const kbVec3 & newSize ) {
  *	kbUIWidget::RecalculateOld
  */
 void kbUIWidget::RecalculateOld( const kbUIComponent *const pParent, const bool bFull ) {
-
 	kbErrorCheck( pParent != nullptr, "kbUIWidget::UpdateFromParent() - null parent" );
 	
 /*	if ( m_pModel != nullptr && pParent != nullptr && pParent->GetStaticModelComponent() != nullptr ) {
@@ -215,15 +215,8 @@ void kbUIWidget::RecalculateOld( const kbUIComponent *const pParent, const bool 
  *	kbUIWidget::Recalculate
  */
 void kbUIWidget::Recalculate( const kbUIWidget *const pParent, const bool bFull ) {
-
 	kbErrorCheck( pParent != nullptr, "kbUIWidget::UpdateFromParent() - null parent" );
 	
-	/*if ( m_pModel != nullptr && pParent != nullptr && pParent->m_pModel != nullptr ) {
-				kbLog( "Setting render oreder bias to %f", pParent->m_pModel->GetRenderOrderBias() - 1.0f );
-
-		m_pModel->SetRenderOrderBias( pParent->m_pModel ->GetRenderOrderBias() - 1.0f );
-	}*/
-
 	m_CachedParentPosition = pParent->GetAbsolutePosition();
 	m_CachedParentSize = pParent->GetAbsoluteSize();
 
@@ -370,6 +363,10 @@ void kbUIWidget::Update_Internal( const float dt ) {
 
 	if ( m_Anchor == kbUIWidget::MiddleRight ) {
 		widgetAbsPos.x -= widgetAbsSize.x;
+	}
+
+	if ( HasFocus() ) {
+		widgetAbsSize = widgetAbsSize * kbVec3( 1.25f, 1.25f, 1.25f );
 	}
 
 	m_pModel->SetMaterialParamVector( 0, normalizedScreenSize_Anchor.stl_str(), 
@@ -521,29 +518,30 @@ void kbUISlider::Update_Internal( const float dt ) {
 
 	Super::Update_Internal( dt );
 
-	if ( m_ChildWidgets.size() > 1 ) {
-		kbVec3 curPos = m_ChildWidgets[1].GetRelativePosition();
-		bool bMove = 0.0f;
+	if ( HasFocus() ) {
+		if ( m_ChildWidgets.size() > 1 ) {
+			kbVec3 curPos = m_ChildWidgets[1].GetRelativePosition();
+			bool bMove = 0.0f;
 
-		bool bFireEvent = false;
-		if ( GetAsyncKeyState( VK_LEFT ) ) {
-			curPos.x -= 0.02f;
-			bFireEvent = true;
-		}
+			bool bFireEvent = false;
+			if ( GetAsyncKeyState( VK_LEFT ) ) {
+				curPos.x -= 0.02f;
+				bFireEvent = true;
+			}
 
-			if ( GetAsyncKeyState( VK_RIGHT ) ) {
-			curPos.x += 0.02f;
-			bFireEvent = true;
-		}
+				if ( GetAsyncKeyState( VK_RIGHT ) ) {
+				curPos.x += 0.02f;
+				bFireEvent = true;
+			}
 
-		curPos.x = kbClamp( curPos.x, m_CalculatedSliderBoundsMin.x, m_CalculatedSliderBoundsMax.x );
-		m_ChildWidgets[1].SetRelativePosition( curPos );
+			curPos.x = kbClamp( curPos.x, m_CalculatedSliderBoundsMin.x, m_CalculatedSliderBoundsMax.x );
+			m_ChildWidgets[1].SetRelativePosition( curPos );
 
-		if ( bFireEvent ) {
-			FireEvent();
+			if ( bFireEvent ) {
+				FireEvent();
+			}
 		}
 	}
-	//kbLog( "kbUISlider Child = %f %f %f, %f %f %f", GetAbsolutePosition().x, GetAbsolutePosition().y, GetAbsolutePosition().z, GetAbsoluteSize().x, GetAbsoluteSize().y, GetAbsoluteSize().z );
 }
 
 

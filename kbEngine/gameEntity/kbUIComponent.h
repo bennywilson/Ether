@@ -50,6 +50,7 @@ private:
 
 	// Runtime
 	kbVec3										m_NormalizedScreenSize;
+	bool										m_bHasFocus;
 
 protected:
 	kbStaticModelComponent *					m_pStaticModelComponent;
@@ -120,6 +121,9 @@ public:
 
 	const kbStaticModelComponent *			GetStaticModel() const { return m_pModel; }
 
+	virtual void								SetFocus( const bool bHasFocus );
+	bool										HasFocus() const { return m_bHasFocus; }
+
 protected:
 
 	virtual void							SetEnable_Internal( const bool bEnable ) override;
@@ -156,6 +160,7 @@ protected:
 private:
 
 	std::vector<IUIWidgetListener*>			m_EventListeners;
+	bool									m_bHasFocus;
 };
 
 /**

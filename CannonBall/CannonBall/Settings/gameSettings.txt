@@ -2,7 +2,7 @@ kbGameEntity 0 0 0 0 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		Name = "Entity_66"
+		Name = "Entity_175"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
 		Position = 0.000000 0.000000 0.000000
 		Scale = 1.000000 1.000000 1.000000
@@ -11,7 +11,7 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Brightness = 100
-		MasterVolume = 16
+		MasterVolume = 0
 		VideoQuality = 100
 	}
 }

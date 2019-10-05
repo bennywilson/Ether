@@ -112,6 +112,10 @@ private:
 	kbVec3									m_StartingWidgetAnchorPt;
 	float									m_SpaceBetweenWidgets;
 
+	// Runtime
+	std::vector<kbUIWidget*>				m_WidgetList;
+	int										m_SelectedWidgetIdx;
+
 	kbGameEntity							m_Entity;
 };
 
