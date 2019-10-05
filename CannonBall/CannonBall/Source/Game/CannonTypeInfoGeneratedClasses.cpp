@@ -22,10 +22,6 @@ ELevelType_Enum ELevelType_EnumClass;
 
 ECameraMoveMode_Enum ECameraMoveMode_EnumClass;
 
-eWidgetAnchor_Enum EWidgetAnchor_EnumClass;
-
-eWidgetAxisLock_Enum EWidgetAxisLock_EnumClass;
-
 DEFINE_KBCLASS(CannonActorComponent)
 
 DEFINE_KBCLASS(KungFuSheepComponent)
@@ -45,10 +41,6 @@ DEFINE_KBCLASS(CannonFogComponent)
 DEFINE_KBCLASS(CannonHealthBarUIComponent)
 
 DEFINE_KBCLASS(CannonBallUIComponent)
-
-DEFINE_KBCLASS(CannonUIWidget)
-
-DEFINE_KBCLASS(CannonUISlider)
 
 DEFINE_KBCLASS(CannonBallPauseMenuUIComponent)
 

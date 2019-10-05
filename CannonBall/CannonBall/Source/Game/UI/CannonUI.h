@@ -6,8 +6,6 @@
 #ifndef _KBCANNONUI_H_
 #define _KBCANNONUI_H_
 
-#include "CannonUIWidgets.h"
-
 /**
  *	CannonHealthBarUIComponent
  */
@@ -104,15 +102,15 @@ protected:
 	virtual void							SetEnable_Internal( const bool bEnable ) override;
 	virtual void							Update_Internal( const float DeltaTime ) override;
 
-	virtual void							WidgetEventCB( CannonUIWidget *const pWidget );
+	virtual void							WidgetEventCB( kbUIWidget *const pWidget );
 
 private:
 
 	void									RecalculateChildrenTransform();
 
 	// Editor
-	std::vector<CannonUISlider>				m_SliderWidgets;
-	std::vector<CannonUIWidget>				m_Widgets;
+	std::vector<kbUISlider>					m_SliderWidgets;
+	std::vector<kbUIWidget>					m_Widgets;
 	kbVec3									m_WidgetSize;
 	kbVec3									m_StartingWidgetAnchorPt;
 	float									m_SpaceBetweenWidgets;
@@ -139,7 +137,5 @@ public:
 	int										m_Brightness;
 	int										m_VisualQuality;
 };
-
-kbGameEntity & GetUIGameEntity();
 
 #endif

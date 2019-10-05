@@ -34,9 +34,6 @@
     <ClInclude Include="Source\Game\UI\CannonUI.h">
       <Filter>Source\Game\UI</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Game\UI\CannonUIWidgets.h">
-      <Filter>Source\Game\UI</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="assets\shaders\Character\CharacterBase.kbShader">
@@ -188,9 +185,6 @@
       <Filter>Source\Game\KungFuSheep</Filter>
     </ClCompile>
     <ClCompile Include="Source\Game\UI\CannonUI.cpp">
-      <Filter>Source\Game\UI</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Game\UI\CannonUIWidget.cpp">
       <Filter>Source\Game\UI</Filter>
     </ClCompile>
   </ItemGroup>

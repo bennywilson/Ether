@@ -6,26 +6,6 @@ GenerateEnum(
 	AddEnumField( LevelType_2D, "2D" )
 )
 
-GenerateEnum(
-	eWidgetAnchor, "eWidgetAnchor",
-	AddEnumField( TopLeft, "TopLeft" )
-	AddEnumField( MiddleLeft, "MiddleLeft" )
-	AddEnumField( BottomLeft, "BottomLeft" )
-	AddEnumField( TopCenter, "TopCenter" )
-	AddEnumField( MiddleCenter, "MiddleCenter" )
-	AddEnumField( BottomCenter, "BottomCenter" )
-	AddEnumField( TopRight, "TopRight" )
-	AddEnumField( MiddleRight, "MiddleRight" )
-	AddEnumField( BottomRight, "BottomRight" )
-)
-
-GenerateEnum(
-	eWidgetAxisLock, "eWidgetAxisLock",
-	AddEnumField( LockAll, "LockAll" )
-	AddEnumField( LockXAxis, "LockXAxis" )
-	AddEnumField( LockYAxis, "LockYAxis" )
-)
-
 GenerateEnum( 
 	ECameraMoveMode, "ECameraMoveMode",
 	AddEnumField( MoveMode_None, "None" )
@@ -122,26 +102,9 @@ GenerateClass(
 )
 
 GenerateClass(
-	CannonUIWidget,
-	AddField( "Anchor", KBTYPEINFO_ENUM, CannonUIWidget, m_Anchor, false, "eWidgetAnchor" )
-	AddField( "AxisLock", KBTYPEINFO_ENUM, CannonUIWidget, m_AxisLock, false, "eWidgetAxisLock" )
-	AddField( "RelativePosition", KBTYPEINFO_VECTOR, CannonUIWidget, m_StartingPosition, false, "" )
-	AddField( "RelativeSize", KBTYPEINFO_VECTOR, CannonUIWidget, m_StartingSize, false, "" )
-	AddField( "Materials", KBTYPEINFO_STRUCT, CannonUIWidget, m_Materials, true, "kbMaterialComponent" )
-	AddField( "ChildWidgets", KBTYPEINFO_STRUCT, CannonUIWidget, m_ChildWidgets, true, "CannonUIWidget" )
-
-)
-
-GenerateClass(
-	CannonUISlider,
-	AddField( "SliderBoundsMin", KBTYPEINFO_VECTOR, CannonUISlider, m_SliderBoundsMin, false, "" )
-	AddField( "SliderBoundsMax", KBTYPEINFO_VECTOR, CannonUISlider, m_SliderBoundsMax, false, "" )
-)
-
-GenerateClass(
 	CannonBallPauseMenuUIComponent,
-	AddField( "SliderWidgets", KBTYPEINFO_STRUCT, CannonBallPauseMenuUIComponent, m_SliderWidgets, true, "CannonUISlider" )
-	AddField( "Widgets", KBTYPEINFO_STRUCT, CannonBallPauseMenuUIComponent, m_Widgets, true, "CannonUIWidget" )
+	AddField( "SliderWidgets", KBTYPEINFO_STRUCT, CannonBallPauseMenuUIComponent, m_SliderWidgets, true, "kbUISlider" )
+	AddField( "Widgets", KBTYPEINFO_STRUCT, CannonBallPauseMenuUIComponent, m_Widgets, true, "kbUIWidget" )
 	AddField( "WidgetSize", KBTYPEINFO_VECTOR, CannonBallPauseMenuUIComponent, m_WidgetSize, false, "" )
 	AddField( "StartingWidgetAnchor", KBTYPEINFO_VECTOR, CannonBallPauseMenuUIComponent, m_StartingWidgetAnchorPt, false, "" )
 	AddField( "SpaceBetweenWidgets", KBTYPEINFO_FLOAT, CannonBallPauseMenuUIComponent, m_SpaceBetweenWidgets, false, "" )

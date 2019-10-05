@@ -3746,13 +3746,13 @@ kbGameEntity 0 0 0 0 {
 		NormalizedAnchorPoint = 0.250000 0.050000 0.000000
 		UIToScreenSizeRatio = 0.500000 0.500000 0.000000
 		SliderWidgets = 3
-			CannonUISlider { 
+			kbUISlider { 
 				Enabled = 1
 				LifeTime =  -1.000000
 				Anchor = MiddleRight
 				AxisLock = LockYAxis
 				ChildWidgets = 2
-					CannonUIWidget { 
+					kbUIWidget { 
 						Enabled = 1
 						LifeTime =  -1.000000
 						Anchor = MiddleLeft
@@ -3797,7 +3797,7 @@ kbGameEntity 0 0 0 0 {
 						RelativePosition = 0.000000 0.000000 0.000000
 						RelativeSize = 0.350000 0.075000 1.000000
 					}
-					CannonUIWidget { 
+					kbUIWidget { 
 						Enabled = 1
 						LifeTime =  -1.000000
 						Anchor = MiddleLeft
@@ -3883,13 +3883,13 @@ kbGameEntity 0 0 0 0 {
 				SliderBoundsMax = 1.000000 1.000000 1.000000
 				SliderBoundsMin = 0.000000 0.000000 0.000000
 			}
-			CannonUISlider { 
+			kbUISlider { 
 				Enabled = 1
 				LifeTime =  -1.000000
 				Anchor = MiddleRight
 				AxisLock = LockYAxis
 				ChildWidgets = 2
-					CannonUIWidget { 
+					kbUIWidget { 
 						Enabled = 1
 						LifeTime =  -1.000000
 						Anchor = MiddleLeft
@@ -3934,7 +3934,7 @@ kbGameEntity 0 0 0 0 {
 						RelativePosition = 0.000000 0.000000 0.000000
 						RelativeSize = 0.350000 0.075000 1.000000
 					}
-					CannonUIWidget { 
+					kbUIWidget { 
 						Enabled = 1
 						LifeTime =  -1.000000
 						Anchor = MiddleLeft
@@ -4020,13 +4020,13 @@ kbGameEntity 0 0 0 0 {
 				SliderBoundsMax = 1.000000 1.000000 1.000000
 				SliderBoundsMin = 0.000000 0.000000 0.000000
 			}
-			CannonUISlider { 
+			kbUISlider { 
 				Enabled = 1
 				LifeTime =  -1.000000
 				Anchor = MiddleRight
 				AxisLock = LockYAxis
 				ChildWidgets = 2
-					CannonUIWidget { 
+					kbUIWidget { 
 						Enabled = 1
 						LifeTime =  -1.000000
 						Anchor = MiddleLeft
@@ -4071,7 +4071,7 @@ kbGameEntity 0 0 0 0 {
 						RelativePosition = 0.000000 0.000000 0.000000
 						RelativeSize = 0.350000 0.075000 1.000000
 					}
-					CannonUIWidget { 
+					kbUIWidget { 
 						Enabled = 1
 						LifeTime =  -1.000000
 						Anchor = MiddleLeft
@@ -4161,7 +4161,7 @@ kbGameEntity 0 0 0 0 {
 		StartingWidgetAnchor = 0.500000 0.300000 0.000000
 		WidgetSize = 0.100000 0.050000 1.000000
 		Widgets = 2
-			CannonUIWidget { 
+			kbUIWidget { 
 				Enabled = 1
 				LifeTime =  -1.000000
 				Anchor = MiddleRight
@@ -4206,7 +4206,7 @@ kbGameEntity 0 0 0 0 {
 				RelativePosition = 0.331250 0.300000 0.000000
 				RelativeSize = 0.168750 0.150000 1.000000
 			}
-			CannonUIWidget { 
+			kbUIWidget { 
 				Enabled = 1
 				LifeTime =  -1.000000
 				Anchor = MiddleRight

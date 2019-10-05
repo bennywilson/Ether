@@ -8,11 +8,6 @@
 #include "CannonUI.h"
 
 
-kbGameEntity & GetUIGameEntity() {
-	static kbGameEntity g_UIGameEntity;
-	return g_UIGameEntity;
-}
-
 /**
  *	CannonHealthBarUIComponent::Constructor
  */
@@ -312,7 +307,7 @@ void CannonBallPauseMenuUIComponent::RecalculateChildrenTransform() {
 	kbVec3 nextPos = m_StartingWidgetAnchorPt;
 	for ( size_t i = 0; i < m_Widgets.size(); i++ ) {
 
-		CannonUIWidget & widget = m_Widgets[i];
+		kbUIWidget & widget = m_Widgets[i];
 		const kbVec2i textureDim = widget.GetBaseTextureDimensions();
 		kbVec3 targetWidgetSize = m_WidgetSize;
 		kbVec3 targetWidgetPos = nextPos;
@@ -337,7 +332,7 @@ void CannonBallPauseMenuUIComponent::RecalculateChildrenTransform() {
 
 	for ( size_t i = 0; i < m_SliderWidgets.size(); i++ ) {
 
-		CannonUIWidget & widget = m_SliderWidgets[i];
+		kbUIWidget & widget = m_SliderWidgets[i];
 		const kbVec2i textureDim = widget.GetBaseTextureDimensions();
 		kbVec3 targetWidgetSize = m_WidgetSize;
 		kbVec3 targetWidgetPos = nextPos;
@@ -377,7 +372,7 @@ void CannonBallPauseMenuUIComponent::Update_Internal( const float DT ) {
 	//kbVec3 nextPos = m_StartingWidgetAnchorPt;
 	for ( size_t i = 0; i < m_Widgets.size(); i++ ) {
 
-		CannonUIWidget & widget = m_Widgets[i];
+		kbUIWidget & widget = m_Widgets[i];
 	/*	const kbVec2i textureDim = widget.GetBaseTextureDimensions();
 		kbVec3 targetWidgetSize = m_WidgetSize;
 		kbVec3 targetWidgetPos = nextPos;
@@ -403,7 +398,7 @@ void CannonBallPauseMenuUIComponent::Update_Internal( const float DT ) {
 
 	for ( size_t i = 0; i < m_SliderWidgets.size(); i++ ) {
 
-		CannonUIWidget & widget = m_SliderWidgets[i];
+		kbUIWidget & widget = m_SliderWidgets[i];
 		/*const kbVec2i textureDim = widget.GetBaseTextureDimensions();
 		kbVec3 targetWidgetSize = m_WidgetSize;
 		kbVec3 targetWidgetPos = nextPos;
@@ -432,7 +427,7 @@ void CannonBallPauseMenuUIComponent::Update_Internal( const float DT ) {
 /**
  *	CannonBallPauseMenuUIComponent::WidgetEventCB
  */
-void CannonBallPauseMenuUIComponent::WidgetEventCB( CannonUIWidget *const pWidget ) {
+void CannonBallPauseMenuUIComponent::WidgetEventCB( kbUIWidget *const pWidget ) {
 
 	if ( pWidget == &m_SliderWidgets[0] ) {
 
