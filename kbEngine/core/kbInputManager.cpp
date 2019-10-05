@@ -193,7 +193,7 @@ void kbInputManager::Update( const float DeltaTime ) {
 	}
 
 	for ( int i = 0; i < 4; i++ ) {
-		static size_t arrowList[] = { VK_UP, VK_LEFT, VK_RIGHT, VK_DOWN };
+		static int arrowList[] = { VK_UP, VK_LEFT, VK_RIGHT, VK_DOWN };
 
 		if ( GetAsyncKeyState(arrowList[i]) ) {	
 			if ( m_Input.ArrowState[i].m_Action == kbInput_t::KA_None ) {

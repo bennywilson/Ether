@@ -249,6 +249,8 @@ void CannonBallPauseMenuUIComponent::Constructor() {
 	m_SpaceBetweenWidgets = 0.05f;
 
 	m_SelectedWidgetIdx = 0;
+
+	m_bHackSlidersInit = false;
 }
 
 /**
@@ -287,6 +289,10 @@ void CannonBallPauseMenuUIComponent::SetEnable_Internal( const bool bEnable ) {
 
 		m_SliderWidgets[0].SetNormalizedValue( kbSoundManager::GetMasterVolume() );
 
+		m_SliderWidgets[1].SetNormalizedValue( CannonBallGameSettingsComponent::Get()->m_Brightness / 100.0f );
+		m_SliderWidgets[2].SetNormalizedValue( CannonBallGameSettingsComponent::Get()->m_VisualQuality / 100.0f );
+		m_bHackSlidersInit = true;
+
 	} else {
 		for ( int i = 0; i < m_Widgets.size(); i++ ) {
 			m_Entity.RemoveComponent( &m_Widgets[i] );
@@ -301,9 +307,11 @@ void CannonBallPauseMenuUIComponent::SetEnable_Internal( const bool bEnable ) {
 			m_pStaticModelComponent->Enable( false );
 		}
 
-		if ( m_SliderWidgets.size() > 0 ) {
+		if ( m_SliderWidgets.size() > 0 && m_bHackSlidersInit == true ) {
 			CannonBallGameSettingsComponent *const pGameSettings = CannonBallGameSettingsComponent::Get();
 			pGameSettings->m_Volume = (int)kbClamp( m_SliderWidgets[0].GetNormalizedValue() * 100.0f, 0.0f, 100.0f );
+			pGameSettings->m_Brightness = (int)kbClamp( m_SliderWidgets[1].GetNormalizedValue() * 100.0f, 0.0f, 100.0f );
+			pGameSettings->m_VisualQuality = (int)kbClamp( m_SliderWidgets[2].GetNormalizedValue() * 100.0f, 0.0f, 100.0f );
 			pGameSettings->SaveSettings();
 		}
 

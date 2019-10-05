@@ -115,6 +115,7 @@ private:
 	// Runtime
 	std::vector<kbUIWidget*>				m_WidgetList;
 	int										m_SelectedWidgetIdx;
+	bool									m_bHackSlidersInit;
 
 	kbGameEntity							m_Entity;
 };
