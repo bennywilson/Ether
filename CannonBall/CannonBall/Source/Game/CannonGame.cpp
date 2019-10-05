@@ -30,7 +30,7 @@ CannonGame::CannonGame() :
 	kbErrorCheck( g_pCannonGame == nullptr, "CannonGame::CannonGame() - g_pCannonGame is not nullptr" );
 	g_pCannonGame = this;
 
-	CannonBallGameSettingsComponent::Get();
+	kbSoundManager::SetMasterVolume( CannonBallGameSettingsComponent::Get()->m_Volume / 100.0f );
 }
 
 /**

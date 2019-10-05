@@ -366,60 +366,13 @@ void CannonBallPauseMenuUIComponent::Update_Internal( const float DT ) {
 
 	RecalculateChildrenTransform();
 
-//	const float ScreenPixelWidth = (float)g_pRenderer->GetBackBufferWidth();
-//	const float ScreenPixelHeight = (float)g_pRenderer->GetBackBufferHeight();
-
-	//kbVec3 nextPos = m_StartingWidgetAnchorPt;
 	for ( size_t i = 0; i < m_Widgets.size(); i++ ) {
-
 		kbUIWidget & widget = m_Widgets[i];
-	/*	const kbVec2i textureDim = widget.GetBaseTextureDimensions();
-		kbVec3 targetWidgetSize = m_WidgetSize;
-		kbVec3 targetWidgetPos = nextPos;
-		if ( textureDim.x > 0 ) {
-
-			// Height is fixed by design, so calculate Width
-			const float baseTextureAspectRatio = (float)textureDim.x / (float)textureDim.y;
-			const float pixelHeight = targetWidgetSize.y * ScreenPixelHeight;
-			const float targetPixelWidth = pixelHeight * baseTextureAspectRatio;
-			targetWidgetSize.x = (float)targetPixelWidth / ScreenPixelWidth;
-
-			// Right Justify
-		//	targetWidgetPos.x -= targetWidgetSize.x;
-		}	
-
-		widget.SetRelativeSize( targetWidgetSize );
-		widget.SetRelativePosition( targetWidgetPos );
-		nextPos.y += m_SpaceBetweenWidgets;
-
-		widget.RecalculateOld( this, false );*/
 		widget.Update( DT );
 	}
 
 	for ( size_t i = 0; i < m_SliderWidgets.size(); i++ ) {
-
 		kbUIWidget & widget = m_SliderWidgets[i];
-		/*const kbVec2i textureDim = widget.GetBaseTextureDimensions();
-		kbVec3 targetWidgetSize = m_WidgetSize;
-		kbVec3 targetWidgetPos = nextPos;
-
-		if ( textureDim.x > 0 ) {
-
-			// Height is fixed by design, so calculate Width
-			const float baseTextureAspectRatio = (float)textureDim.x / (float)textureDim.y;
-			const float pixelHeight = targetWidgetSize.y * ScreenPixelHeight;
-			const float targetPixelWidth = pixelHeight * baseTextureAspectRatio;
-			targetWidgetSize.x = (float)targetPixelWidth / ScreenPixelWidth;
-
-			// Right Justify
-		//	targetWidgetPos.x -= targetWidgetSize.x;
-		}	
-
-		widget.SetRelativeSize( targetWidgetSize );
-		widget.SetRelativePosition( targetWidgetPos );
-
-		nextPos.y += m_SpaceBetweenWidgets;
-		widget.RecalculateOld( this, false );*/
 		widget.Update( DT );
 	}
 }
@@ -449,6 +402,10 @@ void CannonBallGameSettingsComponent::Constructor() {
  *	CannonBallGameSettingsComponent::SaveSettings
  */
 void CannonBallGameSettingsComponent::SaveSettings() {
+
+	if ( g_UseEditor == true ) {
+		return;
+	}
 
 	// Save Editor Settings
 	kbFile outFile;

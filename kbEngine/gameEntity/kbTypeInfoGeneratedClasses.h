@@ -376,3 +376,40 @@ GenerateClass(
 	AddField( "NormalizedAnchorPoint", KBTYPEINFO_VECTOR, kbUIComponent, m_NormalizedAnchorPt, false, "" )
 	AddField( "UIToScreenSizeRatio", KBTYPEINFO_VECTOR, kbUIComponent, m_UIToScreenSizeRatio, false, "" )
 )
+
+GenerateEnum(
+	eWidgetAnchor, "eWidgetAnchor",
+	AddEnumField( TopLeft, "TopLeft" )
+	AddEnumField( MiddleLeft, "MiddleLeft" )
+	AddEnumField( BottomLeft, "BottomLeft" )
+	AddEnumField( TopCenter, "TopCenter" )
+	AddEnumField( MiddleCenter, "MiddleCenter" )
+	AddEnumField( BottomCenter, "BottomCenter" )
+	AddEnumField( TopRight, "TopRight" )
+	AddEnumField( MiddleRight, "MiddleRight" )
+	AddEnumField( BottomRight, "BottomRight" )
+)
+
+GenerateEnum(
+	eWidgetAxisLock, "eWidgetAxisLock",
+	AddEnumField( LockAll, "LockAll" )
+	AddEnumField( LockXAxis, "LockXAxis" )
+	AddEnumField( LockYAxis, "LockYAxis" )
+)
+
+GenerateClass(
+	kbUIWidget,
+	AddField( "Anchor", KBTYPEINFO_ENUM, kbUIWidget, m_Anchor, false, "eWidgetAnchor" )
+	AddField( "AxisLock", KBTYPEINFO_ENUM, kbUIWidget, m_AxisLock, false, "eWidgetAxisLock" )
+	AddField( "RelativePosition", KBTYPEINFO_VECTOR, kbUIWidget, m_StartingPosition, false, "" )
+	AddField( "RelativeSize", KBTYPEINFO_VECTOR, kbUIWidget, m_StartingSize, false, "" )
+	AddField( "Materials", KBTYPEINFO_STRUCT, kbUIWidget, m_Materials, true, "kbMaterialComponent" )
+	AddField( "ChildWidgets", KBTYPEINFO_STRUCT, kbUIWidget, m_ChildWidgets, true, "kbUIWidget" )
+
+)
+
+GenerateClass(
+	kbUISlider,
+	AddField( "SliderBoundsMin", KBTYPEINFO_VECTOR, kbUISlider, m_SliderBoundsMin, false, "" )
+	AddField( "SliderBoundsMax", KBTYPEINFO_VECTOR, kbUISlider, m_SliderBoundsMax, false, "" )
+)

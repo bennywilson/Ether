@@ -68,6 +68,10 @@ ECollisionType_Enum ECollisionType_EnumClass;
 
 EBillboardType_Enum EBillboardType_EnumClass;
 
+eWidgetAnchor_Enum EWidgetAnchor_EnumClass;
+
+eWidgetAxisLock_Enum EWidgetAxisLock_EnumClass;
+
 DEFINE_KBCLASS(kbComponent)
 
 DEFINE_KBCLASS(kbEditorGlobalSettingsComponent)
@@ -145,5 +149,9 @@ DEFINE_KBCLASS(kbDeleteEntityComponent)
 DEFINE_KBCLASS(kbPlaySoundComponent)
 
 DEFINE_KBCLASS(kbUIComponent)
+
+DEFINE_KBCLASS(kbUIWidget)
+
+DEFINE_KBCLASS(kbUISlider)
 
 typedef kbResource * kbResourcePtr;

@@ -3,8 +3,8 @@
 //
 // 2019 kbEngine 2.0
 //==============================================================================
-#ifndef _KBCANNONUI_H_
-#define _KBCANNONUI_H_
+#ifndef _CANNONUI_H_
+#define _CANNONUI_H_
 
 /**
  *	CannonHealthBarUIComponent
@@ -15,16 +15,13 @@ class CannonHealthBarUIComponent : public kbUIComponent {
 
 //---------------------------------------------------------------------------------------------------
 public:
-
 	void									SetTargetHealth( const float meterFill );
 
 protected:
-
 	virtual void							SetEnable_Internal( const bool bEnable ) override;
 	virtual void							Update_Internal( const float DeltaTime ) override;
 
 private:
-
 	// Editor
 	float									m_HealthBarWarningFlashThreshold;
 	float									m_HealthBarWarningFlashSpeed;

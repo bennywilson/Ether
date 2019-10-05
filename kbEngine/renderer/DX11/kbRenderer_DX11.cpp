@@ -1431,10 +1431,10 @@ void kbRenderer_DX11::RenderScene() {
 		PLACE_GPU_TIME_STAMP( "Post-Process" );
 
 		{
-			m_RenderState.SetDepthStencilState(	true,
+			m_RenderState.SetDepthStencilState(	false,
 										kbRenderState::DepthWriteMaskZero,
 										kbRenderState::CompareLess,
-										true,
+										false,
 										0xff,
 										0x0,
 										kbRenderState::StencilKeep,
