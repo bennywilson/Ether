@@ -427,7 +427,7 @@ private:
 
 	void										RenderScreenSpaceQuads();
 	void										RenderScreenSpaceQuadImmediate( const int start_x, const int start_y, const int size_x, const int size_y, 
-																				const int textureIndex, kbShader * pShader = nullptr );
+																				const int textureIndex, kbShader * pShader = nullptr, kbShaderParamOverrides_t * pParamOverrides = nullptr );
 	void										RenderDebugLines();
 	void										RenderPretransformedDebugLines();
 	void										RenderDebugBillboards( const bool bIsEntityIdPass );
@@ -474,6 +474,7 @@ private:
 
 	kbShader *									m_pOpaqueQuadShader;
 	kbShader *									m_pTranslucentShader;
+	kbShader *									m_pScreenTintShader;
 	kbShader *									m_pMultiplyBlendShader;
 	kbShader *									m_pBasicShader;
 	kbShader *									m_pDebugShader;

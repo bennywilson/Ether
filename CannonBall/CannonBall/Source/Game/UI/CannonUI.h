@@ -94,6 +94,8 @@ public:
 		NumOptions
 	};
 
+	bool									CloseRequested() const { return m_bRequestClose; }
+
 protected:
 
 	virtual void							SetEnable_Internal( const bool bEnable ) override;
@@ -111,11 +113,14 @@ private:
 	kbVec3									m_WidgetSize;
 	kbVec3									m_StartingWidgetAnchorPt;
 	float									m_SpaceBetweenWidgets;
+	std::vector<kbSoundData>				m_VolumeSliderTestWav;
 
 	// Runtime
 	std::vector<kbUIWidget*>				m_WidgetList;
 	int										m_SelectedWidgetIdx;
 	bool									m_bHackSlidersInit;
+
+	bool									m_bRequestClose;
 
 	kbGameEntity							m_Entity;
 };

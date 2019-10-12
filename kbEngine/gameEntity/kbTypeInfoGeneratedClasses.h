@@ -336,6 +336,7 @@ GenerateClass(
 	AddField( "WaveFile", KBTYPEINFO_SOUNDWAVE, kbSoundData, m_pWaveFile, false, "" )
 	AddField( "Radius", KBTYPEINFO_FLOAT, kbSoundData, m_Radius, false, "" )
 	AddField( "Volume", KBTYPEINFO_FLOAT, kbSoundData, m_Volume, false, "" )
+	AddField( "Looping", KBTYPEINFO_BOOL, kbSoundData, m_bLooping, false, "" )
 	AddField( "TestPlaySoundNow", KBTYPEINFO_BOOL, kbSoundData, m_bDebugPlaySound, false, "" )
 )
 

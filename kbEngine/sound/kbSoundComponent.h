@@ -17,17 +17,25 @@ class kbSoundData : public kbGameComponent {
 //---------------------------------------------------------------------------------------------------
 public:
 
-	void										PlaySoundAtPosition( const kbVec3 & soundPosition ) const;
+	virtual										~kbSoundData();
+
+	void										PlaySoundAtPosition( const kbVec3 & soundPosition );
+	void										StopSound();
 
 	virtual void								EditorChange( const std::string & propertyName ) override;
 
 private:
 
+	// Editor
 	class kbWaveFile *							m_pWaveFile;
 	float										m_Radius;
 	float										m_Volume;
 
+	bool										m_bLooping;
 	bool										m_bDebugPlaySound;
+
+	// Runtime
+	int											m_SoundId;
 };
 
 /**

@@ -10,6 +10,7 @@
 #include "kbGameEntityHeader.h"
 #include "kbUIComponent.h"
 #include "kbRenderer.h"
+#include "kbInputManager.h"
 
 kbGameEntity & GetUIGameEntity() {
 	static kbGameEntity m_GameEnt;
@@ -144,6 +145,15 @@ void kbUIWidget::RegisterEventListener( IUIWidgetListener *const pListener ) {
  */
 void kbUIWidget::UnregisterEventListener( IUIWidgetListener *const pListener ) {
 	VectorRemoveFast( m_EventListeners, pListener );
+}
+
+/**
+ *	kbUIWidget::SetAdditiveTextureFactor
+ */
+void kbUIWidget::SetAdditiveTextureFactor( const float factor ) {
+
+	static const kbString additiveTextureParams( "additiveTextureParams" );
+	m_pModel->SetMaterialParamVector( 0, additiveTextureParams.stl_str(), kbVec4( factor, 0.0f, 0.0f, 0.0f ) );
 }
 
 /**
@@ -365,20 +375,23 @@ void kbUIWidget::Update_Internal( const float dt ) {
 		widgetAbsPos.x -= widgetAbsSize.x;
 	}
 
-	if ( HasFocus() ) {
-		widgetAbsSize = widgetAbsSize * kbVec3( 1.25f, 1.25f, 1.25f );
-	}
-
 	m_pModel->SetMaterialParamVector( 0, normalizedScreenSize_Anchor.stl_str(), 
 			kbVec4( widgetAbsSize.x, 
 					widgetAbsSize.y,
 					widgetAbsPos.x + widgetAbsSize.x * 0.5f,
 					widgetAbsPos.y + widgetAbsSize.y * 0.5f ) );
-	//m_pModel->SetRenderOrderBias( renderOrderBias );
+
 	m_pModel->RefreshMaterials( true );
 
 	for ( size_t i = 0; i < m_ChildWidgets.size(); i++ ) {
 		m_ChildWidgets[i].Update_Internal( dt );
+	}
+
+	if ( HasFocus() ) {
+		const kbInput_t & input = g_pInputManager->GetInput();
+		if ( input.WasNonCharKeyJustPressed( kbInput_t::Return ) ) {
+			FireEvent();
+		}
 	}
 }
 
@@ -448,7 +461,7 @@ void kbUISlider::RecalculateOld( const kbUIComponent *const pParent, const bool 
 		m_CalculatedSliderBoundsMax.Set( 0.0f, 0.0f, 0.0f );
 	} else {
 		m_CalculatedSliderBoundsMin = GetRelativePosition() + spaceBetweenLabelAndSlider;
-		m_CalculatedSliderBoundsMax = m_CalculatedSliderBoundsMin + m_ChildWidgets[0].GetRelativeSize();
+		m_CalculatedSliderBoundsMax = m_CalculatedSliderBoundsMin + m_ChildWidgets[0].GetRelativeSize() * 0.9f;	// Hack
 
 		m_ChildWidgets[0].SetRelativePosition( GetRelativePosition() + kbVec3( spaceBetweenLabelAndSlider, 0.0f, 0.0f ) );
 
@@ -524,13 +537,14 @@ void kbUISlider::Update_Internal( const float dt ) {
 			bool bMove = 0.0f;
 
 			bool bFireEvent = false;
-			if ( GetAsyncKeyState( VK_LEFT ) ) {
-				curPos.x -= 0.02f;
+			const kbInput_t & input = g_pInputManager->GetInput();
+			if ( input.IsArrowPressedOrDown( kbInput_t::Left ) ) {
+				curPos.x -= 0.01f;
 				bFireEvent = true;
 			}
 
-				if ( GetAsyncKeyState( VK_RIGHT ) ) {
-				curPos.x += 0.02f;
+			if ( input.IsArrowPressedOrDown( kbInput_t::Right ) ) {
+				curPos.x += 0.01f;
 				bFireEvent = true;
 			}
 

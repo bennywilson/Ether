@@ -21,12 +21,22 @@ void kbSoundData::Constructor() {
 	m_Volume = 1.0f;
 
 	m_bDebugPlaySound = false;
+	m_bLooping = false;
+
+	m_SoundId = -1;
+}
+
+/**
+ *	kbSoundData::~kbSoundData
+ */
+kbSoundData::~kbSoundData() {
+	StopSound();
 }
 
 /**
  *	kbSoundData::PlaySoundAtPosition
  */
-void kbSoundData::PlaySoundAtPosition( const kbVec3 & soundPosition ) const {
+void kbSoundData::PlaySoundAtPosition( const kbVec3 & soundPosition ) {
 
 	kbVec3 currentCameraPosition;
 	kbQuat currentCameraRotation;
@@ -42,7 +52,18 @@ void kbSoundData::PlaySoundAtPosition( const kbVec3 & soundPosition ) const {
 		}
 	}
 
-	g_pGame->GetSoundManager().PlayWave( m_pWaveFile, atten * m_Volume );
+	m_SoundId = g_pGame->GetSoundManager().PlayWave( m_pWaveFile, atten * m_Volume, m_bLooping );
+}
+
+/**
+ *	kbSoundData::StopSound
+ */
+void kbSoundData::StopSound() {
+
+	if ( m_SoundId != -1 ) {
+		g_pGame->GetSoundManager().StopWave( m_SoundId );
+	}
+	m_SoundId = -1;
 }
 
 /**

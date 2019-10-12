@@ -38,6 +38,7 @@ public:
 
 	bool														IsPlaying() const { return m_bIsPlaying; }
 	bool														IsRunning() const { return m_bIsRunning; }
+	void														RequestQuitGame();
 
 	const std::string &											GetMapName() const { return m_MapName; }
 

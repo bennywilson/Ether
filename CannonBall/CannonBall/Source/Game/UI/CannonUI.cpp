@@ -189,7 +189,7 @@ void CannonBallUIComponent::Update_Internal( const float dt ) {
 			if ( curTime > m_NextSmokeCloudUpdateTime ) {
 				m_NextSmokeCloudUpdateTime = curTime + 0.2f;
 				idx = ( idx + 1 ) % 4;
-				randomOffset.Set( ( kbfrand() - 0.5f ) * normalizedScreenSize.x * 12.0f, ( kbfrand() - 0.5f ) * normalizedScreenSize.x * 14.0f );
+				randomOffset.Set( ( kbfrand() - 0.5f ) * normalizedScreenSize.x * 7.0f, ( kbfrand() - 0.5f ) * normalizedScreenSize.x * 14.0f );
 			}
 			kbVec4 textureMask = kbVec4::zero;
 			textureMask[idx] = 1.0f;
@@ -244,13 +244,17 @@ void CannonBallUIComponent::CannonBallActivatedCB() {
  */
 void CannonBallPauseMenuUIComponent::Constructor() {
 
+	// Editor
 	m_WidgetSize.Set( 0.1f, 0.1f, 1.0f );
 	m_StartingWidgetAnchorPt.Set( 0.0f, 0.0f, 0.0f );
 	m_SpaceBetweenWidgets = 0.05f;
 
+	// Runtime
 	m_SelectedWidgetIdx = 0;
 
 	m_bHackSlidersInit = false;
+
+	m_bRequestClose = false;
 }
 
 /**
@@ -266,6 +270,7 @@ void CannonBallPauseMenuUIComponent::SetEnable_Internal( const bool bEnable ) {
 			m_Entity.AddComponent( &m_Widgets[i] );
 			m_Widgets[i].Enable( false );
 			m_Widgets[i].Enable( true );
+			m_Widgets[i].RegisterEventListener( this );
 		}
 
 		for ( int i = 0; i < m_SliderWidgets.size(); i++ ) {
@@ -282,22 +287,28 @@ void CannonBallPauseMenuUIComponent::SetEnable_Internal( const bool bEnable ) {
 		m_WidgetList.push_back( &m_SliderWidgets[2] );
 		m_WidgetList.push_back( &m_Widgets[1] );
 
+		for ( int i = 0;  i< m_WidgetList.size(); i++ ) {
+			m_WidgetList[i]->SetAdditiveTextureFactor( 0.0f );
+		}
+
 		m_SelectedWidgetIdx = 0;
 		m_WidgetList[m_SelectedWidgetIdx]->SetFocus( true );
+		m_WidgetList[m_SelectedWidgetIdx]->SetAdditiveTextureFactor( 1.0f );
 
 		RecalculateChildrenTransform();
 
-		m_SliderWidgets[0].SetNormalizedValue( kbSoundManager::GetMasterVolume() );
-
-		m_SliderWidgets[1].SetNormalizedValue( CannonBallGameSettingsComponent::Get()->m_Brightness / 100.0f );
-		m_SliderWidgets[2].SetNormalizedValue( CannonBallGameSettingsComponent::Get()->m_VisualQuality / 100.0f );
+		m_SliderWidgets[0].SetNormalizedValue( g_pCannonGame->GetSoundManager().GetMasterVolume() );
+		m_SliderWidgets[1].SetNormalizedValue( CannonBallGameSettingsComponent::Get()->m_VisualQuality / 100.0f );
+		m_SliderWidgets[2].SetNormalizedValue( CannonBallGameSettingsComponent::Get()->m_Brightness / 100.0f );
 		m_bHackSlidersInit = true;
 
 	} else {
 		for ( int i = 0; i < m_Widgets.size(); i++ ) {
 			m_Entity.RemoveComponent( &m_Widgets[i] );
 			m_Widgets[i].Enable( false );
+			m_Widgets[i].UnregisterEventListener( this );
 		}
+
 		for ( int i = 0; i < m_SliderWidgets.size(); i++ ) {
 			m_Entity.RemoveComponent( &m_SliderWidgets[i] );
 			m_SliderWidgets[i].Enable( false );
@@ -310,15 +321,21 @@ void CannonBallPauseMenuUIComponent::SetEnable_Internal( const bool bEnable ) {
 		if ( m_SliderWidgets.size() > 0 && m_bHackSlidersInit == true ) {
 			CannonBallGameSettingsComponent *const pGameSettings = CannonBallGameSettingsComponent::Get();
 			pGameSettings->m_Volume = (int)kbClamp( m_SliderWidgets[0].GetNormalizedValue() * 100.0f, 0.0f, 100.0f );
-			pGameSettings->m_Brightness = (int)kbClamp( m_SliderWidgets[1].GetNormalizedValue() * 100.0f, 0.0f, 100.0f );
-			pGameSettings->m_VisualQuality = (int)kbClamp( m_SliderWidgets[2].GetNormalizedValue() * 100.0f, 0.0f, 100.0f );
+			pGameSettings->m_VisualQuality = (int)kbClamp( m_SliderWidgets[1].GetNormalizedValue() * 100.0f, 0.0f, 100.0f );
+			pGameSettings->m_Brightness = (int)kbClamp( m_SliderWidgets[2].GetNormalizedValue() * 100.0f, 0.0f, 100.0f );
 			pGameSettings->SaveSettings();
 		}
 
 		if ( m_WidgetList.size() > 0 ) {
 			m_WidgetList[m_SelectedWidgetIdx]->SetFocus( false );
 		}
+
+		for ( int i = 0; i < m_VolumeSliderTestWav.size(); i++ ) {
+			m_VolumeSliderTestWav[i].StopSound();
+		}
 	}
+
+	m_bRequestClose = false;
 }
 
 /**
@@ -350,27 +367,6 @@ void CannonBallPauseMenuUIComponent::RecalculateChildrenTransform() {
 
 		widget.RecalculateOld( this, false );
 	}
-
-	/*for ( size_t i = 0; i < m_SliderWidgets.size(); i++ ) {
-		kbUIWidget & widget = m_SliderWidgets[i];
-		const kbVec2i textureDim = widget.GetBaseTextureDimensions();
-		kbVec3 targetWidgetSize = m_WidgetSize;
-		kbVec3 targetWidgetPos = nextPos;
-
-		if ( textureDim.x > 0 ) {
-			// Height is fixed by design, so calculate Width
-			const float baseTextureAspectRatio = (float)textureDim.x / (float)textureDim.y;
-			const float pixelHeight = targetWidgetSize.y * ScreenPixelHeight;
-			const float targetPixelWidth = pixelHeight * baseTextureAspectRatio;
-			targetWidgetSize.x = (float)targetPixelWidth / ScreenPixelWidth;
-		}	
-
-		widget.SetRelativeSize( targetWidgetSize );
-		widget.SetRelativePosition( targetWidgetPos );
-
-		nextPos.y += m_SpaceBetweenWidgets;
-		widget.RecalculateOld( this, false );
-	}*/
 }
 
 /**
@@ -381,6 +377,9 @@ void CannonBallPauseMenuUIComponent::Update_Internal( const float DT ) {
 	Super::Update_Internal( DT );
 
 	const kbInput_t & input = g_pInputManager->GetInput();
+
+	bool bNewOptionSelected = false;
+	int prevSelected = m_SelectedWidgetIdx;
 	if ( input.WasArrowJustPressed( kbInput_t::Up ) ) {
 		m_WidgetList[m_SelectedWidgetIdx]->SetFocus( false );
 		m_SelectedWidgetIdx--;
@@ -388,6 +387,7 @@ void CannonBallPauseMenuUIComponent::Update_Internal( const float DT ) {
 			m_SelectedWidgetIdx = (int)m_WidgetList.size() - 1;
 		}
 		m_WidgetList[m_SelectedWidgetIdx]->SetFocus( true );
+		bNewOptionSelected = true;
 	} else if ( input.WasArrowJustPressed( kbInput_t::Down ) ) {
 		m_WidgetList[m_SelectedWidgetIdx]->SetFocus( false );
 		m_SelectedWidgetIdx++;
@@ -395,6 +395,21 @@ void CannonBallPauseMenuUIComponent::Update_Internal( const float DT ) {
 			m_SelectedWidgetIdx = 0;
 		}
 		m_WidgetList[m_SelectedWidgetIdx]->SetFocus( true );
+		bNewOptionSelected = true;
+	}
+
+	if ( bNewOptionSelected ) {
+
+		m_WidgetList[m_SelectedWidgetIdx]->SetAdditiveTextureFactor( 1.0f );
+		m_WidgetList[prevSelected]->SetAdditiveTextureFactor( 0.0f );
+
+		if ( m_WidgetList[m_SelectedWidgetIdx] == &m_SliderWidgets[0] && m_VolumeSliderTestWav.size() > 0 ) {
+			m_VolumeSliderTestWav[rand() % m_VolumeSliderTestWav.size()].PlaySoundAtPosition( kbVec3::zero );
+		} else if ( m_WidgetList[prevSelected] == &m_SliderWidgets[0] ) {
+			for ( int i = 0; i < m_VolumeSliderTestWav.size(); i++ ) {
+				m_VolumeSliderTestWav[i].StopSound();
+			}
+		}
 	}
 
 	RecalculateChildrenTransform();
@@ -416,8 +431,19 @@ void CannonBallPauseMenuUIComponent::Update_Internal( const float DT ) {
 void CannonBallPauseMenuUIComponent::WidgetEventCB( kbUIWidget *const pWidget ) {
 
 	if ( pWidget == &m_SliderWidgets[0] ) {
-
-		kbSoundManager::SetMasterVolume( m_SliderWidgets[0].GetNormalizedValue() );
+		// Volume
+		g_pCannonGame->GetSoundManager().SetMasterVolume( m_SliderWidgets[0].GetNormalizedValue() );
+	} else if ( pWidget == &m_SliderWidgets[2] ) {
+		// Brightness
+		kbShaderParamOverrides_t shaderParam;
+		shaderParam.SetVec4( "globalTint", kbVec4( 0.0f, 0.0f, 0.0f, 1.0f - m_SliderWidgets[2].GetNormalizedValue() ) );
+		g_pRenderer->SetGlobalShaderParam( shaderParam );
+	} else if ( pWidget == &m_Widgets[0] ) {
+		// Close Pause menu
+		m_bRequestClose = true;
+	} else if ( pWidget == &m_Widgets[1] ) { 
+		// Exit Game
+		g_pCannonGame->RequestQuitGame();
 	}
 }
 

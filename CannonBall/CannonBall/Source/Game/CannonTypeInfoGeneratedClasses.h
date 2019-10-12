@@ -70,6 +70,7 @@ GenerateClass(
 
 GenerateClass(
 	KungFuLevelComponent,
+	AddField( "LevelMusic", KBTYPEINFO_STRUCT, KungFuLevelComponent, m_LevelMusic, true, "kbSoundData" )
 	AddField( "SnolafPrefab", KBTYPEINFO_GAMEENTITY, KungFuLevelComponent, m_SnolafPrefab, false, "" )
 	AddField( "SheepPrefab", KBTYPEINFO_GAMEENTITY, KungFuLevelComponent, m_SheepPrefab, false, "" )
 	AddField( "WaterDropletScreenFX", KBTYPEINFO_GAMEENTITY, KungFuLevelComponent, m_WaterDropletScreenFX, false, "" )
@@ -108,6 +109,7 @@ GenerateClass(
 	AddField( "WidgetSize", KBTYPEINFO_VECTOR, CannonBallPauseMenuUIComponent, m_WidgetSize, false, "" )
 	AddField( "StartingWidgetAnchor", KBTYPEINFO_VECTOR, CannonBallPauseMenuUIComponent, m_StartingWidgetAnchorPt, false, "" )
 	AddField( "SpaceBetweenWidgets", KBTYPEINFO_FLOAT, CannonBallPauseMenuUIComponent, m_SpaceBetweenWidgets, false, "" )
+	AddField( "TestSound", KBTYPEINFO_STRUCT, CannonBallPauseMenuUIComponent, m_VolumeSliderTestWav, true, "kbSoundData" )
 )
 
 GenerateClass(

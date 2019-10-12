@@ -2,7 +2,7 @@ kbGameEntity 0 0 0 0 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		Name = "Entity_65"
+		Name = "Entity_61"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
 		Position = 0.000000 0.000000 0.000000
 		Scale = 1.000000 1.000000 1.000000
@@ -31,6 +31,16 @@ kbGameEntity 0 0 0 0 {
 		GlobalVolumeScale =  0.750000
 		LevelType = 2D
 		Dummy2 =  0.000000
+		LevelMusic = 1
+			kbSoundData { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Looping = 1
+				Radius =  -1.000000
+				TestPlaySoundNow = 0
+				Volume =  1.000000
+				WaveFile = .\assets\sounds\music\testvolumeloop.wav
+			}
 		SheepPrefab = 3807537734 1283872403 1661460398 2211889957
 		SnolafPrefab = 314357658 1122514197 2466994618 463523205
 		WaterDropletScreenFX = 3936461697 1285153374 3406925493 1594399155
@@ -38,6 +48,7 @@ kbGameEntity 0 0 0 0 {
 			kbSoundData { 
 				Enabled = 0
 				LifeTime =  -1.000000
+				Looping = 0
 				Radius =  -1.000000
 				TestPlaySoundNow = 0
 				Volume =  1.000000
@@ -46,6 +57,7 @@ kbGameEntity 0 0 0 0 {
 			kbSoundData { 
 				Enabled = 0
 				LifeTime =  -1.000000
+				Looping = 0
 				Radius =  -1.000000
 				TestPlaySoundNow = 0
 				Volume =  1.000000
@@ -54,6 +66,7 @@ kbGameEntity 0 0 0 0 {
 			kbSoundData { 
 				Enabled = 0
 				LifeTime =  -1.000000
+				Looping = 0
 				Radius =  -1.000000
 				TestPlaySoundNow = 0
 				Volume =  1.000000
@@ -3404,7 +3417,7 @@ kbGameEntity 0 0 0 0 {
 						LifeTime =  -1.000000
 						ParamName = "normalizedScreenSize_Anchor"
 						Texture = NULL
-						Vector = 0.200000 0.122222 0.100000 0.081111
+						Vector = 0.200000 0.122222 0.120000 0.081111
 					}
 					kbShaderParamComponent { 
 						Enabled = 0
@@ -3458,7 +3471,7 @@ kbGameEntity 0 0 0 0 {
 		LifeTime =  -1.000000
 		AuthoredHeight = 550
 		AuthoredWidth = 1600
-		NormalizedAnchorPoint = 0.000000 0.020000 0.000000
+		NormalizedAnchorPoint = 0.020000 0.020000 0.000000
 		UIToScreenSizeRatio = 0.200000 0.000000 0.000000
 		HealthBarWarningFlashSpeed =  15.000000
 		HealthBarWarningFlashThreshold =  0.400000
@@ -3478,7 +3491,7 @@ kbGameEntity 0 0 0 0 {
 		LifeTime =  -1.000000
 		AuthoredHeight = 1530
 		AuthoredWidth = 2048
-		NormalizedAnchorPoint = 0.020000 0.200000 0.000000
+		NormalizedAnchorPoint = 0.020000 0.180000 0.000000
 		UIToScreenSizeRatio = 0.060000 0.000000 0.000000
 		BoomRelativePosition = -0.300000 0.150000 0.000000
 		BoomRelativeSize = 2.000000 0.500000 0.250000
@@ -3503,7 +3516,7 @@ kbGameEntity 0 0 0 0 {
 						LifeTime =  -1.000000
 						ParamName = "normalizedScreenSize_Anchor"
 						Texture = NULL
-						Vector = 0.060000 0.079687 0.050000 0.239844
+						Vector = 0.060000 0.079687 0.050000 0.219844
 					}
 					kbShaderParamComponent { 
 						Enabled = 0
@@ -3575,7 +3588,7 @@ kbGameEntity 0 0 0 0 {
 						LifeTime =  -1.000000
 						ParamName = "normalizedScreenSize_Anchor"
 						Texture = NULL
-						Vector = 0.060000 0.079687 0.077000 0.211953
+						Vector = 0.060000 0.079687 0.077000 0.191953
 					}
 					kbShaderParamComponent { 
 						Enabled = 0
@@ -3663,7 +3676,7 @@ kbGameEntity 0 0 0 0 {
 						LifeTime =  -1.000000
 						ParamName = "normalizedScreenSize_Anchor"
 						Texture = NULL
-						Vector = 0.120000 0.159375 0.062000 0.239844
+						Vector = 0.120000 0.159375 0.062000 0.219844
 					}
 					kbShaderParamComponent { 
 						Enabled = 0
@@ -3695,7 +3708,7 @@ kbGameEntity 0 0 0 0 {
 		Scale = 555.000000 555.000000 1.000000
 	}
 	kbStaticModelComponent { 
-		Enabled = 1
+		Enabled = 0
 		LifeTime =  -1.000000
 		CastsShadow = 0
 		Materials = 1
@@ -3739,7 +3752,7 @@ kbGameEntity 0 0 0 0 {
 		Model = ..\..\kbengine\assets\models\unitquad.ms3d
 	}
 	CannonBallPauseMenuUIComponent { 
-		Enabled = 1
+		Enabled = 0
 		LifeTime =  -1.000000
 		AuthoredHeight = 128
 		AuthoredWidth = 128
@@ -3747,13 +3760,13 @@ kbGameEntity 0 0 0 0 {
 		UIToScreenSizeRatio = 0.500000 0.500000 0.000000
 		SliderWidgets = 3
 			kbUISlider { 
-				Enabled = 1
+				Enabled = 0
 				LifeTime =  -1.000000
 				Anchor = MiddleRight
 				AxisLock = LockYAxis
 				ChildWidgets = 2
 					kbUIWidget { 
-						Enabled = 1
+						Enabled = 0
 						LifeTime =  -1.000000
 						Anchor = MiddleLeft
 						AxisLock = LockAll
@@ -3764,7 +3777,7 @@ kbGameEntity 0 0 0 0 {
 								LifeTime =  -1.000000
 								CullModeOverride = ShaderDefault
 								Shader = .\assets\shaders\ui\ui_basic.kbshader
-								ShaderParams = 4
+								ShaderParams = 5
 									kbShaderParamComponent { 
 										Enabled = 0
 										LifeTime =  -1.000000
@@ -3793,12 +3806,19 @@ kbGameEntity 0 0 0 0 {
 										Texture = .\assets\ui\widgets\sliderbar.tif
 										Vector = 0.000000 0.000000 0.000000 0.000000
 									}
+									kbShaderParamComponent { 
+										Enabled = 0
+										LifeTime =  -1.000000
+										ParamName = "additiveTextureParams"
+										Texture = NULL
+										Vector = 0.000000 0.000000 0.000000 0.000000
+									}
 							}
 						RelativePosition = 0.000000 0.000000 0.000000
 						RelativeSize = 0.350000 0.075000 1.000000
 					}
 					kbUIWidget { 
-						Enabled = 1
+						Enabled = 0
 						LifeTime =  -1.000000
 						Anchor = MiddleLeft
 						AxisLock = LockYAxis
@@ -3809,7 +3829,7 @@ kbGameEntity 0 0 0 0 {
 								LifeTime =  -1.000000
 								CullModeOverride = ShaderDefault
 								Shader = .\assets\shaders\ui\ui_basic.kbshader
-								ShaderParams = 4
+								ShaderParams = 5
 									kbShaderParamComponent { 
 										Enabled = 0
 										LifeTime =  -1.000000
@@ -3838,6 +3858,13 @@ kbGameEntity 0 0 0 0 {
 										Texture = .\assets\ui\widgets\sliderknob.tif
 										Vector = 0.000000 0.000000 0.000000 0.000000
 									}
+									kbShaderParamComponent { 
+										Enabled = 0
+										LifeTime =  -1.000000
+										ParamName = "additiveTextureParams"
+										Texture = NULL
+										Vector = 0.000000 0.000000 0.000000 0.000000
+									}
 							}
 						RelativePosition = 0.000000 0.000000 0.000000
 						RelativeSize = 0.100000 0.100000 0.100000
@@ -3848,7 +3875,7 @@ kbGameEntity 0 0 0 0 {
 						LifeTime =  -1.000000
 						CullModeOverride = ShaderDefault
 						Shader = .\assets\shaders\ui\ui_basic.kbshader
-						ShaderParams = 4
+						ShaderParams = 6
 							kbShaderParamComponent { 
 								Enabled = 0
 								LifeTime =  -1.000000
@@ -3877,6 +3904,20 @@ kbGameEntity 0 0 0 0 {
 								Texture = NULL
 								Vector = 1.000000 1.000000 1.000000 1.000000
 							}
+							kbShaderParamComponent { 
+								Enabled = 0
+								LifeTime =  -1.000000
+								ParamName = "additiveTextureParams"
+								Texture = NULL
+								Vector = 0.000000 0.000000 0.000000 0.000000
+							}
+							kbShaderParamComponent { 
+								Enabled = 0
+								LifeTime =  -1.000000
+								ParamName = "additiveTexture"
+								Texture = .\assets\ui\widgets\textglow_1.tif
+								Vector = 0.000000 0.000000 0.000000 0.000000
+							}
 					}
 				RelativePosition = 0.223145 0.700000 0.000000
 				RelativeSize = 0.276855 0.150000 1.000000
@@ -3884,13 +3925,13 @@ kbGameEntity 0 0 0 0 {
 				SliderBoundsMin = 0.000000 0.000000 0.000000
 			}
 			kbUISlider { 
-				Enabled = 1
+				Enabled = 0
 				LifeTime =  -1.000000
 				Anchor = MiddleRight
 				AxisLock = LockYAxis
 				ChildWidgets = 2
 					kbUIWidget { 
-						Enabled = 1
+						Enabled = 0
 						LifeTime =  -1.000000
 						Anchor = MiddleLeft
 						AxisLock = LockAll
@@ -3901,7 +3942,7 @@ kbGameEntity 0 0 0 0 {
 								LifeTime =  -1.000000
 								CullModeOverride = ShaderDefault
 								Shader = .\assets\shaders\ui\ui_basic.kbshader
-								ShaderParams = 4
+								ShaderParams = 5
 									kbShaderParamComponent { 
 										Enabled = 0
 										LifeTime =  -1.000000
@@ -3930,12 +3971,19 @@ kbGameEntity 0 0 0 0 {
 										Texture = .\assets\ui\widgets\sliderbar.tif
 										Vector = 0.000000 0.000000 0.000000 0.000000
 									}
+									kbShaderParamComponent { 
+										Enabled = 0
+										LifeTime =  -1.000000
+										ParamName = "additiveTextureParams"
+										Texture = NULL
+										Vector = 0.000000 0.000000 0.000000 0.000000
+									}
 							}
 						RelativePosition = 0.000000 0.000000 0.000000
 						RelativeSize = 0.350000 0.075000 1.000000
 					}
 					kbUIWidget { 
-						Enabled = 1
+						Enabled = 0
 						LifeTime =  -1.000000
 						Anchor = MiddleLeft
 						AxisLock = LockYAxis
@@ -3946,7 +3994,7 @@ kbGameEntity 0 0 0 0 {
 								LifeTime =  -1.000000
 								CullModeOverride = ShaderDefault
 								Shader = .\assets\shaders\ui\ui_basic.kbshader
-								ShaderParams = 4
+								ShaderParams = 5
 									kbShaderParamComponent { 
 										Enabled = 0
 										LifeTime =  -1.000000
@@ -3975,6 +4023,13 @@ kbGameEntity 0 0 0 0 {
 										Texture = .\assets\ui\widgets\sliderknob.tif
 										Vector = 0.000000 0.000000 0.000000 0.000000
 									}
+									kbShaderParamComponent { 
+										Enabled = 0
+										LifeTime =  -1.000000
+										ParamName = "additiveTextureParams"
+										Texture = NULL
+										Vector = 0.000000 0.000000 0.000000 0.000000
+									}
 							}
 						RelativePosition = 0.000000 0.000000 0.000000
 						RelativeSize = 0.100000 0.100000 0.100000
@@ -3985,7 +4040,7 @@ kbGameEntity 0 0 0 0 {
 						LifeTime =  -1.000000
 						CullModeOverride = ShaderDefault
 						Shader = .\assets\shaders\ui\ui_basic.kbshader
-						ShaderParams = 4
+						ShaderParams = 6
 							kbShaderParamComponent { 
 								Enabled = 0
 								LifeTime =  -1.000000
@@ -4014,6 +4069,20 @@ kbGameEntity 0 0 0 0 {
 								Texture = NULL
 								Vector = 1.000000 1.000000 1.000000 1.000000
 							}
+							kbShaderParamComponent { 
+								Enabled = 0
+								LifeTime =  -1.000000
+								ParamName = "additiveTextureParams"
+								Texture = NULL
+								Vector = 0.000000 0.000000 0.000000 0.000000
+							}
+							kbShaderParamComponent { 
+								Enabled = 0
+								LifeTime =  -1.000000
+								ParamName = "additiveTexture"
+								Texture = .\assets\ui\widgets\textglow_1.tif
+								Vector = 0.000000 0.000000 0.000000 0.000000
+							}
 					}
 				RelativePosition = 0.223145 0.700000 0.000000
 				RelativeSize = 0.276855 0.150000 1.000000
@@ -4021,13 +4090,13 @@ kbGameEntity 0 0 0 0 {
 				SliderBoundsMin = 0.000000 0.000000 0.000000
 			}
 			kbUISlider { 
-				Enabled = 1
+				Enabled = 0
 				LifeTime =  -1.000000
 				Anchor = MiddleRight
 				AxisLock = LockYAxis
 				ChildWidgets = 2
 					kbUIWidget { 
-						Enabled = 1
+						Enabled = 0
 						LifeTime =  -1.000000
 						Anchor = MiddleLeft
 						AxisLock = LockAll
@@ -4038,7 +4107,7 @@ kbGameEntity 0 0 0 0 {
 								LifeTime =  -1.000000
 								CullModeOverride = ShaderDefault
 								Shader = .\assets\shaders\ui\ui_basic.kbshader
-								ShaderParams = 4
+								ShaderParams = 5
 									kbShaderParamComponent { 
 										Enabled = 0
 										LifeTime =  -1.000000
@@ -4067,12 +4136,19 @@ kbGameEntity 0 0 0 0 {
 										Texture = .\assets\ui\widgets\sliderbar.tif
 										Vector = 0.000000 0.000000 0.000000 0.000000
 									}
+									kbShaderParamComponent { 
+										Enabled = 0
+										LifeTime =  -1.000000
+										ParamName = "additiveTextureParams"
+										Texture = NULL
+										Vector = 0.000000 0.000000 0.000000 0.000000
+									}
 							}
 						RelativePosition = 0.000000 0.000000 0.000000
 						RelativeSize = 0.350000 0.075000 1.000000
 					}
 					kbUIWidget { 
-						Enabled = 1
+						Enabled = 0
 						LifeTime =  -1.000000
 						Anchor = MiddleLeft
 						AxisLock = LockYAxis
@@ -4083,7 +4159,7 @@ kbGameEntity 0 0 0 0 {
 								LifeTime =  -1.000000
 								CullModeOverride = ShaderDefault
 								Shader = .\assets\shaders\ui\ui_basic.kbshader
-								ShaderParams = 4
+								ShaderParams = 5
 									kbShaderParamComponent { 
 										Enabled = 0
 										LifeTime =  -1.000000
@@ -4112,6 +4188,13 @@ kbGameEntity 0 0 0 0 {
 										Texture = .\assets\ui\widgets\sliderknob.tif
 										Vector = 0.000000 0.000000 0.000000 0.000000
 									}
+									kbShaderParamComponent { 
+										Enabled = 0
+										LifeTime =  -1.000000
+										ParamName = "additiveTextureParams"
+										Texture = NULL
+										Vector = 0.000000 0.000000 0.000000 0.000000
+									}
 							}
 						RelativePosition = 0.000000 0.000000 0.000000
 						RelativeSize = 0.100000 0.100000 0.100000
@@ -4122,7 +4205,7 @@ kbGameEntity 0 0 0 0 {
 						LifeTime =  -1.000000
 						CullModeOverride = ShaderDefault
 						Shader = .\assets\shaders\ui\ui_basic.kbshader
-						ShaderParams = 4
+						ShaderParams = 6
 							kbShaderParamComponent { 
 								Enabled = 0
 								LifeTime =  -1.000000
@@ -4151,6 +4234,20 @@ kbGameEntity 0 0 0 0 {
 								Texture = .\assets\ui\pausemenu\brightness.tif
 								Vector = 0.000000 0.000000 0.000000 0.000000
 							}
+							kbShaderParamComponent { 
+								Enabled = 0
+								LifeTime =  -1.000000
+								ParamName = "additiveTextureParams"
+								Texture = NULL
+								Vector = 0.000000 0.000000 0.000000 0.000000
+							}
+							kbShaderParamComponent { 
+								Enabled = 0
+								LifeTime =  -1.000000
+								ParamName = "additiveTexture"
+								Texture = .\assets\ui\widgets\textglow_1.tif
+								Vector = 0.000000 0.000000 0.000000 0.000000
+							}
 					}
 				RelativePosition = 0.223145 0.700000 0.000000
 				RelativeSize = 0.276855 0.150000 1.000000
@@ -4159,10 +4256,20 @@ kbGameEntity 0 0 0 0 {
 			}
 		SpaceBetweenWidgets =  0.100000
 		StartingWidgetAnchor = 0.500000 0.300000 0.000000
+		TestSound = 1
+			kbSoundData { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Looping = 1
+				Radius =  -1.000000
+				TestPlaySoundNow = 0
+				Volume =  1.000000
+				WaveFile = .\assets\sounds\music\testvolumeloop.wav
+			}
 		WidgetSize = 0.100000 0.050000 1.000000
 		Widgets = 2
 			kbUIWidget { 
-				Enabled = 1
+				Enabled = 0
 				LifeTime =  -1.000000
 				Anchor = MiddleRight
 				AxisLock = LockYAxis
@@ -4173,7 +4280,7 @@ kbGameEntity 0 0 0 0 {
 						LifeTime =  -1.000000
 						CullModeOverride = ShaderDefault
 						Shader = .\assets\shaders\ui\ui_basic.kbshader
-						ShaderParams = 4
+						ShaderParams = 6
 							kbShaderParamComponent { 
 								Enabled = 0
 								LifeTime =  -1.000000
@@ -4202,12 +4309,26 @@ kbGameEntity 0 0 0 0 {
 								Texture = .\assets\ui\pausemenu\back.tif
 								Vector = 0.000000 0.000000 0.000000 0.000000
 							}
+							kbShaderParamComponent { 
+								Enabled = 0
+								LifeTime =  -1.000000
+								ParamName = "additiveTextureParams"
+								Texture = NULL
+								Vector = 0.000000 0.000000 0.000000 0.000000
+							}
+							kbShaderParamComponent { 
+								Enabled = 0
+								LifeTime =  -1.000000
+								ParamName = "additiveTexture"
+								Texture = .\assets\ui\widgets\textglow_1.tif
+								Vector = 0.000000 0.000000 0.000000 0.000000
+							}
 					}
 				RelativePosition = 0.331250 0.300000 0.000000
 				RelativeSize = 0.168750 0.150000 1.000000
 			}
 			kbUIWidget { 
-				Enabled = 1
+				Enabled = 0
 				LifeTime =  -1.000000
 				Anchor = MiddleRight
 				AxisLock = LockYAxis
@@ -4218,7 +4339,7 @@ kbGameEntity 0 0 0 0 {
 						LifeTime =  -1.000000
 						CullModeOverride = ShaderDefault
 						Shader = .\assets\shaders\ui\ui_basic.kbshader
-						ShaderParams = 4
+						ShaderParams = 6
 							kbShaderParamComponent { 
 								Enabled = 0
 								LifeTime =  -1.000000
@@ -4245,6 +4366,20 @@ kbGameEntity 0 0 0 0 {
 								LifeTime =  -1.000000
 								ParamName = "baseTexture"
 								Texture = .\assets\ui\pausemenu\quit.tif
+								Vector = 0.000000 0.000000 0.000000 0.000000
+							}
+							kbShaderParamComponent { 
+								Enabled = 0
+								LifeTime =  -1.000000
+								ParamName = "additiveTextureParams"
+								Texture = NULL
+								Vector = 0.000000 0.000000 0.000000 0.000000
+							}
+							kbShaderParamComponent { 
+								Enabled = 0
+								LifeTime =  -1.000000
+								ParamName = "additiveTexture"
+								Texture = .\assets\ui\widgets\textglow_1.tif
 								Vector = 0.000000 0.000000 0.000000 0.000000
 							}
 					}

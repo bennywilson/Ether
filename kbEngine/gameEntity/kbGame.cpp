@@ -164,6 +164,14 @@ void kbGame::StopGame() {
 	m_pLevelComp = nullptr;
 }
 
+/**
+ *  kbGame::RequestQuitGame
+ */
+void kbGame::RequestQuitGame() {
+
+	StopGame();
+	m_bIsRunning = false;
+}
 
 /**
  *	kbGame::Update
@@ -440,8 +448,7 @@ bool kbGame::ProcessCommand( const std::string & InCommand ) {
 				LoadMap( commandParams[0] );
 			}
 		} else if ( finalCommand == "exit" ) {
-			StopGame();
-			m_bIsRunning = false;
+			RequestQuitGame();
 		}
 		return true;
 	}

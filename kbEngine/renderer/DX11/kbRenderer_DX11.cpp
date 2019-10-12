@@ -381,6 +381,7 @@ kbRenderer_DX11::kbRenderer_DX11() :
 	m_pConsoleQuad( nullptr ),
 	m_pOpaqueQuadShader( nullptr ),
 	m_pTranslucentShader( nullptr ),
+	m_pScreenTintShader( nullptr ),
 	m_pMultiplyBlendShader( nullptr ),
 	m_pBasicParticleShader( nullptr ),
 	m_pBasicShader( nullptr ),
@@ -419,6 +420,10 @@ kbRenderer_DX11::kbRenderer_DX11() :
 
 	m_OculusTexture[0] = m_OculusTexture[1] = nullptr;
 	g_pD3D11Renderer = this;
+
+	kbShaderParamOverrides_t shaderParam;
+	shaderParam.SetVec4( "globalTint", kbVec4( 0.0f, 0.0f, 0.0f, 0.0f ) );
+	SetGlobalShaderParam( shaderParam );
 }
 
 /**
@@ -708,6 +713,7 @@ void kbRenderer_DX11::Init_Internal( HWND hwnd, const int frameWidth, const int 
 	m_pBasicShader = (kbShader *)g_ResourceManager.GetResource( "../../kbEngine/assets/Shaders/BasicShader.kbshader", true, true );	
 	m_pOpaqueQuadShader = (kbShader *) g_ResourceManager.GetResource( "../../kbEngine/assets/Shaders/basicTexture.kbshader", true, true );
 	m_pTranslucentShader = (kbShader *) g_ResourceManager.GetResource( "../../kbEngine/assets/Shaders/basicTranslucency.kbshader", true, true );
+	m_pScreenTintShader = (kbShader *) g_ResourceManager.GetResource( "../../kbEngine/assets/Shaders/screenTint.kbShader", true, true );
 	m_pMultiplyBlendShader = (kbShader *) g_ResourceManager.GetResource( "../../kbEngine/assets/Shaders/basicMultiplyBlend.kbshader", true, true );
 	m_pBasicParticleShader = (kbShader *) g_ResourceManager.GetResource( "../../kbEngine/assets/Shaders/basicParticle.kbshader", true, true );
 	m_pMissingShader = (kbShader *) g_ResourceManager.GetResource( "../../kbEngine/assets/Shaders/missingShader.kbshader", true, true );
@@ -1455,9 +1461,10 @@ void kbRenderer_DX11::RenderScene() {
 			PLACE_GPU_TIME_STAMP( "UI" );
 		}
 
+		RenderScreenSpaceQuadImmediate( 0, 0, Back_Buffer_Width, Back_Buffer_Height, -1, m_pScreenTintShader );
 
 		m_RenderState.SetDepthStencilState();
-	
+
 		if ( m_ViewMode == ViewMode_Shaded ) {
 			START_SCOPED_RENDER_TIMER( RENDER_DEBUG )
 			RenderDebugBillboards( false );
@@ -2805,7 +2812,7 @@ void kbRenderer_DX11::ReadShaderFile( std::string & shaderText, kbShaderVarBindi
 
 	// Param defaults
 	kbTexture *const pWhiteTex = (kbTexture*)g_ResourceManager.GetResource( "../../kbEngine/assets/Textures/white.bmp", true, true );
-	kbTexture *const pBlackTex = (kbTexture*)g_ResourceManager.GetResource( "../../kbEngine/assets/Textures/black.bmp", true, true );
+	kbTexture *const pBlackTex = (kbTexture*)g_ResourceManager.GetResource( "../../kbEngine/assets/Textures/black_alpha.tif", true, true );
 	kbTexture *const pDefaultNormal = (kbTexture*)g_ResourceManager.GetResource( "../../kbEngine/assets/Textures/defaultNormal.bmp", true, true );
 	kbTexture *const pNoiseTex = (kbTexture*)g_ResourceManager.GetResource( "../../kbEngine/assets/Textures/noise.jpg", true, true );
 
@@ -3278,17 +3285,13 @@ void kbRenderer_DX11::RenderScreenSpaceQuads() {
 /**
  *	kbRenderer_DX11::RenderScreenSpaceImmediate
  */
-void kbRenderer_DX11::RenderScreenSpaceQuadImmediate( const int start_x, const int start_y, const int size_x, const int size_y, const int textureIndex, kbShader * pShader ) {
+void kbRenderer_DX11::RenderScreenSpaceQuadImmediate( const int start_x, const int start_y, const int size_x, const int size_y, const int textureIndex, kbShader * pShader, kbShaderParamOverrides_t * pShaderParams  ) {
 	const unsigned int stride = sizeof( vertexLayout );
 	const unsigned int offset = 0;
 	const float xScale = size_x / m_RenderWindowList[0]->GetFViewPixelWidth();
 	const float yScale =  size_y / m_RenderWindowList[0]->GetFViewPixelHeight();
 	const float xPos = xScale + start_x / m_RenderWindowList[0]->GetFViewPixelHalfWidth();
 	const float yPos = yScale + start_y / m_RenderWindowList[0]->GetFViewPixelHalfHeight();
-
-	if ( m_pTextures[textureIndex] == nullptr ) {
-		return;
-	}
 
 	if ( pShader == nullptr ) {
 		pShader = m_pDebugShader;
@@ -3299,9 +3302,12 @@ void kbRenderer_DX11::RenderScreenSpaceQuadImmediate( const int start_x, const i
 
 	m_pDeviceContext->RSSetState( m_pDefaultRasterizerState );
 
-	ID3D11ShaderResourceView *const pShaderResourceView = (ID3D11ShaderResourceView*)m_pTextures[textureIndex]->GetGPUTexture();
+	if ( textureIndex >= 0 ) {
 
-	m_pDeviceContext->PSSetShaderResources( 0, 1, &pShaderResourceView );
+		ID3D11ShaderResourceView *const pShaderResourceView = (ID3D11ShaderResourceView*)m_pTextures[textureIndex]->GetGPUTexture();
+		m_pDeviceContext->PSSetShaderResources( 0, 1, &pShaderResourceView );
+	}
+
 	m_pDeviceContext->PSSetSamplers( 0, 1, &m_pBasicSamplerState );
 	m_pDeviceContext->IASetInputLayout( (ID3D11InputLayout*)pShader->GetVertexLayout() );
 	m_pDeviceContext->VSSetShader( (ID3D11VertexShader *)pShader->GetVertexShader(), nullptr, 0 );
@@ -3314,6 +3320,10 @@ void kbRenderer_DX11::RenderScreenSpaceQuadImmediate( const int start_x, const i
 	HRESULT hr = m_pDeviceContext->Map( pConstantBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource );
 	kbErrorCheck( SUCCEEDED(hr), "kbRenderer_DX11::RenderScreenSpaceQuadImmediate() - Failed to map matrix buffer" );
 	
+	kbShaderParamOverrides_t nullParams;
+	byte * pMappedData = (byte*)mappedResource.pData;
+	SetConstantBuffer( varBindings, &nullParams, nullptr, pMappedData );	// For global params
+
 	kbMat4 mvpMatrix;
 	
 	mvpMatrix.MakeIdentity();
@@ -3325,6 +3335,7 @@ void kbRenderer_DX11::RenderScreenSpaceQuadImmediate( const int start_x, const i
 
 	m_pDeviceContext->Unmap( pConstantBuffer, 0 );
 	m_pDeviceContext->VSSetConstantBuffers( 0, 1, &pConstantBuffer );
+	m_pDeviceContext->PSSetConstantBuffers( 0, 1, &pConstantBuffer );
 
 	m_pDeviceContext->Draw( 6, 0 );
 }

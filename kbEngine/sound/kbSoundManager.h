@@ -57,14 +57,15 @@ public:
 												kbSoundManager();
 												~kbSoundManager();
 
-	void										PlayWave( kbWaveFile *const pWaveFile, const float volume );
+	int											PlayWave( kbWaveFile *const pWaveFile, const float volume, const bool bLoop = false );
+	void										StopWave( const int id );
 
 	void										Update();
 
 	void										SetFrequencyRatio( const float frequencyRatio );
 
-	static float								GetMasterVolume() { return s_MasterVolume; }
-	static void									SetMasterVolume( const float newVolume ) { s_MasterVolume = newVolume; }
+	float										GetMasterVolume() { return m_MasterVolume; }
+	void										SetMasterVolume( const float newVolume );
 
 private:
 
@@ -83,7 +84,7 @@ private:
 
 	bool										m_bInitialized;
 
-	inline static float							s_MasterVolume = 1.0f;
+	float										m_MasterVolume = 1.0f;
 };
 
 

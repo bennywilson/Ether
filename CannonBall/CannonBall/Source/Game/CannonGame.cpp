@@ -29,8 +29,6 @@ CannonGame::CannonGame() :
 
 	kbErrorCheck( g_pCannonGame == nullptr, "CannonGame::CannonGame() - g_pCannonGame is not nullptr" );
 	g_pCannonGame = this;
-
-	kbSoundManager::SetMasterVolume( CannonBallGameSettingsComponent::Get()->m_Volume / 100.0f );
 }
 
 /**
@@ -55,6 +53,12 @@ void CannonGame::PlayGame_Internal() {
 void CannonGame::InitGame_Internal() {
 
 	m_GameStartTimer.Reset();
+
+	GetSoundManager().SetMasterVolume( CannonBallGameSettingsComponent::Get()->m_Volume / 100.0f );
+
+	kbShaderParamOverrides_t shaderParam;
+	shaderParam.SetVec4( "globalTint", kbVec4( 0.0f, 0.0f, 0.0f, 1.0f - ( CannonBallGameSettingsComponent::Get()->m_Brightness / 100.0f ) ) );
+	g_pRenderer->SetGlobalShaderParam( shaderParam );
 }
 
 /**

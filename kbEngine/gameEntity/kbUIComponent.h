@@ -121,8 +121,10 @@ public:
 
 	const kbStaticModelComponent *			GetStaticModel() const { return m_pModel; }
 
-	virtual void								SetFocus( const bool bHasFocus );
-	bool										HasFocus() const { return m_bHasFocus; }
+	void									SetAdditiveTextureFactor( const float factor );
+
+	virtual void							SetFocus( const bool bHasFocus );
+	bool									HasFocus() const { return m_bHasFocus; }
 
 protected:
 

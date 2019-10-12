@@ -149,6 +149,13 @@ void kbInputManager::Update( const float DeltaTime ) {
 			m_Input.ArrowState[i].m_Action = kbInput_t::KA_None;
 		}
 	}
+
+	for ( int i = 0; i < kbInput_t::Num_NonCharKeys; i++ ) {
+		if ( m_Input.NonCharKeyState[i].m_Action == kbInput_t::KA_JustReleased ) {
+			m_Input.NonCharKeyState[i].m_Action = kbInput_t::KA_None;
+		}
+	}
+
 	KeyComboBitField_t combo;
 
 	if ( GetAsyncKeyState( VK_LCONTROL ) ) {
@@ -208,6 +215,26 @@ void kbInputManager::Update( const float DeltaTime ) {
 				m_Input.ArrowState[i].m_LastActionTimeSec = g_GlobalTimer.TimeElapsedSeconds();
 			} else {
 				m_Input.ArrowState[i].m_Action = kbInput_t::KA_None;
+			}
+		}
+	}
+
+	for ( int i = 0; i < kbInput_t::Num_NonCharKeys; i++ ) {
+		static int NonCharKeyList[] = { VK_ESCAPE, VK_RETURN };
+
+		if ( GetAsyncKeyState(NonCharKeyList[i]) ) {	
+			if ( m_Input.NonCharKeyState[i].m_Action == kbInput_t::KA_None ) {
+				m_Input.NonCharKeyState[i].m_Action = kbInput_t::KA_JustPressed;
+				m_Input.NonCharKeyState[i].m_LastActionTimeSec = g_GlobalTimer.TimeElapsedSeconds();
+			} else {
+				m_Input.NonCharKeyState[i].m_Action = kbInput_t::KA_Down;
+			}
+		} else {
+			if ( m_Input.NonCharKeyState[i].m_Action == kbInput_t::KA_Down ) {
+				m_Input.NonCharKeyState[i].m_Action = kbInput_t::KA_JustReleased;
+				m_Input.NonCharKeyState[i].m_LastActionTimeSec = g_GlobalTimer.TimeElapsedSeconds();
+			} else {
+				m_Input.NonCharKeyState[i].m_Action = kbInput_t::KA_None;
 			}
 		}
 	}

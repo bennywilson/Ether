@@ -40,7 +40,7 @@ class KungFuLevelComponent : public CannonLevelComponent {
 //-------------------------------------------------------------------------------------------------------------------------------------------------------------
 public:
 
-	void										SpawnEnemy();
+	void										SpawnEnemy( const bool bSpawnLeft );
 	void										SpawnSheep();
 
 	AttackHitInfo_t								DoAttack( const DealAttackInfo_t<KungFuGame::eAttackType> & dealAttackInfo );
@@ -50,6 +50,8 @@ public:
 	void										DoWaterDropletScreenFX();
 	void										DoSplashSound();
 
+	void										SetPlayLevelMusic( const bool bPlay );
+
 protected:
 
 	virtual void								SetEnable_Internal( const bool bEnable ) override;
@@ -58,6 +60,8 @@ protected:
 private:
 
 	// Data
+	std::vector<kbSoundData>					m_LevelMusic;
+
 	kbGameEntityPtr								m_SnolafPrefab;
 	kbGameEntityPtr								m_SheepPrefab;
 

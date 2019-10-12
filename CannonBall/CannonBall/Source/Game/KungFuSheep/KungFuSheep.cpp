@@ -495,7 +495,7 @@ void KungFuSheepComponent::SetEnable_Internal( const bool bEnable ) {
 		m_CannonBallMeter = 0.0f;
 		if ( g_UseEditor == false ) {
 			KungFuLevelComponent *const pLevelComp = g_pCannonGame->GetLevelComponent<KungFuLevelComponent>();
-			pLevelComp->UpdateSheepHealthBar( 1.0f );
+			pLevelComp->UpdateSheepHealthBar( m_Health );
 			pLevelComp->UpdateCannonBallMeter( m_CannonBallMeter, false );
 		}
 	} else {
@@ -579,7 +579,7 @@ void KungFuSheepComponent::OnAnimEvent( const kbAnimEventInfo_t & animEventInfo 
 				m_BasicAttackImpactSound[rand() % m_BasicAttackImpactSound.size()].PlaySoundAtPosition( GetOwnerPosition() );
 			}
 
-			m_CannonBallMeter += 0.1f;
+			m_CannonBallMeter += 0.25f;
 			g_pGame->GetLevelComponent<KungFuLevelComponent>()->UpdateCannonBallMeter( m_CannonBallMeter, false );
 
 		}

@@ -8,6 +8,7 @@ cbuffer matrixBuffer {
 	float4					normalizedScreenSize_Anchor;
 	float4					colorFactor;
 	float4					rotationAngle;
+	float4					additiveTextureParams;
 };
 
 kbShaderState {
@@ -52,7 +53,7 @@ pixelInput vertexShader( vertexInput input ) {
 	float2 offset = normalizedScreenSize_Anchor.zw * 2.0f - 1.0f;
 	offset.y *= -1.0f;
 	output.position.xy += offset;
-	
+
 	output.uv = input.uv;
 	output.position2 = input.position;
 
@@ -66,10 +67,12 @@ SamplerState DiffuseSamplerState;
 
 Texture2D baseTexture(white)					: register(t0);
 
-Texture2D sceneTexture(scenecolor)				: register(t3);
+Texture2D additiveTexture(black)				: register(t1);
 
 float4 pixelShader( pixelInput input ) : SV_TARGET {
 
-	return baseTexture.Sample( DiffuseSamplerState, input.uv ) * colorFactor;
+	float4 additiveColor = additiveTexture.Sample( DiffuseSamplerState, input.uv ) * additiveTextureParams.x;
+	float4 baseColor = baseTexture.Sample( DiffuseSamplerState, input.uv );
+	return ( baseColor + additiveColor ) * colorFactor;
 }
 
