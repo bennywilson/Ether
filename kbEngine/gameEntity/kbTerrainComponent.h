@@ -62,6 +62,7 @@ private:
 
 private:
 
+	// Editor
 	float										m_GrassCellLength;
 
 	struct grassRenderObject_t {
@@ -78,6 +79,7 @@ private:
 
 	kbShaderParamOverrides_t					m_GrassShaderOverrides;
 
+	// Runtime
 	kbTerrainComponent *						m_pOwningTerrainComponent;
 
 	bool										m_bUpdatePointCloud;
@@ -108,6 +110,10 @@ public:
 	float										GetTerrainWidth() const { return m_TerrainWidth; }
 
 	void										SetCollisionMap( const kbRenderTexture *const pTexture );
+
+	static void									SetTerrainLOD( const float lod );
+
+	void										RegenerateTerrain() { m_bRegenerateTerrain = true; }
 
 protected:
 

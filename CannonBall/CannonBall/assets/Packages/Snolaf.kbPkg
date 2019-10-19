@@ -50,8 +50,8 @@ kbPrefab 1 {
 							Vector = 0.100000 0.000000 0.000000 0.000000
 						}
 				}
-			RenderPass = LightingPass
 			RenderOrderBias =  0.000000
+			RenderPass = LightingPass
 			Model = ..\..\kbengine\assets\models\unitcube.ms3d
 		}
 		kbShaderModifierComponent { 
@@ -158,12 +158,12 @@ kbGameEntity 1180474321 1206754152 1921378463 1489227724 {
 		MinStartVelocity = -2.000000 -0.250000 -2.000000
 		ModelEmitter = 0
 		ParticleBillboardType = FaceCamera
+		RenderOrderBias =  0.000000
 		RotationOverLife = 0
 		SizeOverLife = 0
 		StartColor = 1.000000 1.000000 1.000000 1.000000
 		StartDelay =  0.000000
 		TotalDuration =  5.000000
-		RenderOrderBias =  0.000000
 		VelocityCurve = 3
 			kbAnimEvent { 
 				Enabled = 0
@@ -274,12 +274,12 @@ kbGameEntity 1180474321 1206754152 1921378463 1489227724 {
 		MinStartVelocity = -1.000000 -1.000000 -1.000000
 		ModelEmitter = 0
 		ParticleBillboardType = FaceCamera
+		RenderOrderBias =  0.000000
 		RotationOverLife = 0
 		SizeOverLife = 0
 		StartColor = 1.000000 1.000000 1.000000 0.000000
 		StartDelay =  0.000000
 		TotalDuration =  5.000000
-		RenderOrderBias =  0.000000
 		VelocityCurve = 0
 	}
 }
@@ -343,8 +343,8 @@ kbGameEntity 314357658 1122514197 2466994618 463523205 {
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 			}
-		RenderPass = LightingPass
 		RenderOrderBias =  0.000000
+		RenderPass = LightingPass
 		Animations = 7
 			kbAnimComponent { 
 				Enabled = 0
@@ -473,8 +473,8 @@ kbGameEntity 314357658 1122514197 2466994618 463523205 {
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 			}
-		RenderPass = LightingPass
 		RenderOrderBias =  0.000000
+		RenderPass = LightingPass
 		Animations = 7
 			kbAnimComponent { 
 				Enabled = 0
@@ -601,12 +601,12 @@ kbGameEntity 314357658 1122514197 2466994618 463523205 {
 		MinStartVelocity = -1.000000 5.000000 -1.000000
 		ModelEmitter = 0
 		ParticleBillboardType = FaceCamera
+		RenderOrderBias =  0.000000
 		RotationOverLife = 0
 		SizeOverLife = 0
 		StartColor = 1.000000 1.000000 1.000000 1.000000
 		StartDelay =  0.000000
 		TotalDuration =  -1.000000
-		RenderOrderBias =  0.000000
 		VelocityCurve = 0
 	}
 	kbParticleComponent { 
@@ -668,18 +668,13 @@ kbGameEntity 314357658 1122514197 2466994618 463523205 {
 		MinStartVelocity = -1.000000 5.000000 -1.000000
 		ModelEmitter = 0
 		ParticleBillboardType = FaceCamera
+		RenderOrderBias =  0.000000
 		RotationOverLife = 0
 		SizeOverLife = 0
 		StartColor = 1.000000 1.000000 1.000000 1.000000
 		StartDelay =  0.000000
 		TotalDuration =  -1.000000
-		RenderOrderBias =  0.000000
 		VelocityCurve = 0
-	}
-	kbDeleteEntityComponent { 
-		Enabled = 0
-		LifeTime =  0.075000
-		Dummy =  1.000000
 	}
 	KungFuSnolafComponent { 
 		Enabled = 1
@@ -689,7 +684,7 @@ kbGameEntity 314357658 1122514197 2466994618 463523205 {
 		AttackVO = 0
 		Health =  100.000000
 		MaxRotateSpeed =  15.000000
-		MaxRunSpeed =  3.000000
+		MaxRunSpeed =  4.000000
 		BottomHalf = 3754323986 1218384162 2695139754 2739970727
 		DecapHead = 2312584767 1139148529 3844446354 2946788253
 		PoofDeathFX = 1180474321 1206754152 1921378463 1489227724
@@ -757,8 +752,8 @@ kbGameEntity 2312584767 1139148529 3844446354 2946788253 {
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 			}
-		RenderPass = LightingPass
 		RenderOrderBias =  0.000000
+		RenderPass = LightingPass
 		Animations = 0
 		DebugAnimIndex = -1
 		Model = .\assets\models\characters\snolaf\snolaf_head.ms3d
@@ -810,8 +805,8 @@ kbGameEntity 2312584767 1139148529 3844446354 2946788253 {
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 			}
-		RenderPass = LightingPass
 		RenderOrderBias =  0.000000
+		RenderPass = LightingPass
 		Animations = 0
 		DebugAnimIndex = -1
 		Model = .\assets\models\characters\snolaf\snolaf_head.ms3d
@@ -890,8 +885,8 @@ kbGameEntity 3754323986 1218384162 2695139754 2739970727 {
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 			}
-		RenderPass = LightingPass
 		RenderOrderBias =  0.000000
+		RenderPass = LightingPass
 		Animations = 1
 			kbAnimComponent { 
 				Enabled = 0
@@ -952,8 +947,8 @@ kbGameEntity 3754323986 1218384162 2695139754 2739970727 {
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 			}
-		RenderPass = LightingPass
 		RenderOrderBias =  0.000000
+		RenderPass = LightingPass
 		Animations = 1
 			kbAnimComponent { 
 				Enabled = 0
@@ -1041,8 +1036,8 @@ kbGameEntity 2125691545 1130458748 632895138 4256000792 {
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 			}
-		RenderPass = LightingPass
 		RenderOrderBias =  0.000000
+		RenderPass = LightingPass
 		Animations = 1
 			kbAnimComponent { 
 				Enabled = 0
@@ -1103,8 +1098,8 @@ kbGameEntity 2125691545 1130458748 632895138 4256000792 {
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 			}
-		RenderPass = LightingPass
 		RenderOrderBias =  0.000000
+		RenderPass = LightingPass
 		Animations = 1
 			kbAnimComponent { 
 				Enabled = 0

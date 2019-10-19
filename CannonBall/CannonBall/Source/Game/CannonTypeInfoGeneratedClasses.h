@@ -70,6 +70,7 @@ GenerateClass(
 
 GenerateClass(
 	KungFuLevelComponent,
+	AddField( "LevelLength", KBTYPEINFO_FLOAT, KungFuLevelComponent, m_LevelLength, false, "" )
 	AddField( "LevelMusic", KBTYPEINFO_STRUCT, KungFuLevelComponent, m_LevelMusic, true, "kbSoundData" )
 	AddField( "SnolafPrefab", KBTYPEINFO_GAMEENTITY, KungFuLevelComponent, m_SnolafPrefab, false, "" )
 	AddField( "SheepPrefab", KBTYPEINFO_GAMEENTITY, KungFuLevelComponent, m_SheepPrefab, false, "" )

@@ -25,12 +25,13 @@ kbGame::kbGame() :
 	m_Hwnd( nullptr ),
 	m_pLocalPlayer( nullptr ),
 	m_pLevelComp( nullptr ),
+	m_DeltaTimeScale( 1.0f ),
+	m_CurFrameDeltaTime( 0.0f ),
+
 	m_bIsPlaying( false ),
 	m_bIsRunning( true ),
-	m_bHasFirstSyncCompleted( false ),
-	m_pParticleManager( new kbParticleManager() ),
-	m_DeltaTimeScale( 1.0f ),
-	m_CurFrameDeltaTime( 0.0f ) {
+	m_bQuitGameRequested( false ),
+	m_bHasFirstSyncCompleted( false ) {
 
 	g_pGame = this;
 	m_Console.RegisterCommandProcessor( this );
@@ -40,8 +41,6 @@ kbGame::kbGame() :
  *	kbGame::~kbGame
  */
 kbGame::~kbGame() {
-	delete m_pParticleManager;
-	m_pParticleManager = nullptr;
 	m_Console.RemoveCommandProcessor( this );
 }
 
@@ -100,7 +99,7 @@ void kbGame::LoadMap( const std::string & mapName ) {
 					m_GameEntityList[i]->RenderSync();
 				}
 
-				m_pParticleManager->RenderSync();
+				m_ParticleManager.RenderSync();
 
 				kbGameEntity * gameEntity = inFile.ReadGameEntity();
 				while ( gameEntity != nullptr ) {
@@ -169,8 +168,7 @@ void kbGame::StopGame() {
  */
 void kbGame::RequestQuitGame() {
 
-	StopGame();
-	m_bIsRunning = false;
+	m_bQuitGameRequested = true;
 }
 
 /**
@@ -241,7 +239,7 @@ void kbGame::Update() {
 				m_GameEntityList[i]->RenderSync();
 			}
 
-			m_pParticleManager->RenderSync();
+			m_ParticleManager.RenderSync();
 			g_pRenderer->RenderSync();
 
 
@@ -353,6 +351,11 @@ void kbGame::Update() {
 
 	kbConsoleVarManager::GetConsoleVarManager()->Update();
 	m_Console.Update( m_CurFrameDeltaTime, m_InputManager.GetInput() );
+
+	if ( m_bQuitGameRequested ) {
+		StopGame();
+		m_bIsRunning = false;
+	}
 }
 
 /**

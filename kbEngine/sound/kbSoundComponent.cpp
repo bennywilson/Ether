@@ -52,7 +52,10 @@ void kbSoundData::PlaySoundAtPosition( const kbVec3 & soundPosition ) {
 		}
 	}
 
-	m_SoundId = g_pGame->GetSoundManager().PlayWave( m_pWaveFile, atten * m_Volume, m_bLooping );
+	const int waveId = g_pGame->GetSoundManager().PlayWave( m_pWaveFile, atten * m_Volume, m_bLooping );
+	if ( m_bLooping ) {
+		m_SoundId = waveId;
+	}
 }
 
 /**

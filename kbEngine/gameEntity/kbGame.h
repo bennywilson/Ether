@@ -51,7 +51,7 @@ public:
 	kbGameEntity *												CreateEntity( const kbGameEntity *const pPrefab, const bool bIsPlayer = false );
 	void														RemoveGameEntity( kbGameEntity *const pNewEntity );
 
-	kbParticleManager *											GetParticleManager() { return m_pParticleManager; }
+	kbParticleManager &											GetParticleManager() { return m_ParticleManager; }
 	kbSoundManager &											GetSoundManager() { return m_SoundManager; }
 
 	bool														ProcessCommand( const std::string & command );
@@ -101,7 +101,7 @@ protected:
 	kbGameEntity *												m_pLocalPlayer;
 	kbTimer														m_Timer;
 
-	kbParticleManager *											m_pParticleManager;
+	kbParticleManager 											m_ParticleManager;
 	kbInputManager												m_InputManager;
 	kbSoundManager												m_SoundManager;
 
@@ -123,7 +123,7 @@ private:
 
 	bool														m_bIsPlaying;
 	bool														m_bIsRunning;
-
+	bool														m_bQuitGameRequested;
 	bool														m_bHasFirstSyncCompleted;
 };
 

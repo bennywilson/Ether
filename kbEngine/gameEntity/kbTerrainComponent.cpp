@@ -2,7 +2,7 @@
 // kbTerrainComponent.cpp
 //
 //
-// 2016-2018 kbEngine 2.0
+// 2016-2019 kbEngine 2.0
 //===================================================================================================
 #include "kbCore.h"
 #include "kbVector.h"
@@ -10,8 +10,34 @@
 #include "kbGameEntityHeader.h"
 #include "kbTerrainComponent.h"
 #include "kbRenderer.h"
+#include "kbGame.h"
 
 KB_DEFINE_COMPONENT(kbTerrainComponent)
+
+static float g_TerrainLOD = 1.0f;
+
+void kbTerrainComponent::SetTerrainLOD( const float lod ) {
+	g_TerrainLOD = lod;
+
+	if ( g_pGame == nullptr ) {
+		return;
+	}
+
+	const std::vector<kbGameEntity*> & gameEnts = g_pGame->GetGameEntities();
+	for ( int i = 0; i < gameEnts.size(); i++ ) {
+
+		kbGameEntity *const pEnt = gameEnts[i];
+		for ( int iComp = 0; iComp < pEnt->NumComponents(); iComp++ ) {
+			kbTerrainComponent *const pTerrain = pEnt->GetComponent(iComp)->GetAs<kbTerrainComponent>();
+			if ( pTerrain == nullptr ) {
+				continue;
+			}
+
+			pTerrain->RegenerateTerrain();
+		}
+	}
+
+}
 
 struct patchVertLayout {
 	kbVec3 position;
@@ -166,6 +192,8 @@ void kbGrass::RefreshGrass() {
 
 	std::vector<kbVec4> bladeOffsets;
 
+	const float PatchesPerCellSide = kbClamp( (float)m_PatchesPerCellSide * g_TerrainLOD, 1.0f, 99999999.0f );
+
 	//float grassCellHalfSize = ( m_DistanceBetweenPatches / 2.0f ) * 0.95f;
 	for ( int i = 0; i < 64; i++ ) {
 
@@ -190,7 +218,7 @@ void kbGrass::RefreshGrass() {
 	}
 
 	m_GrassCellLength = m_pOwningTerrainComponent->GetTerrainWidth() / (float)m_GrassCellsPerTerrainSide;
-	const float patchLen = m_GrassCellLength / (float)m_PatchesPerCellSide;
+	const float patchLen = m_GrassCellLength / (float)PatchesPerCellSide;
 
 	m_GrassShaderOverrides.m_ParamOverrides.clear();
 	if ( m_pGrassShader != nullptr ) {
@@ -251,8 +279,8 @@ void kbGrass::RefreshGrass() {
 				patchVertLayout *const pVerts = (patchVertLayout *) renderObj.m_pModel->MapVertexBuffer();
 
 				int iVert = 0;
-				for ( int startY = 0; startY < m_PatchesPerCellSide; startY ++ ) {
-					for ( int startX = 0; startX < m_PatchesPerCellSide; startX ++) {
+				for ( int startY = 0; startY < PatchesPerCellSide; startY ++ ) {
+					for ( int startX = 0; startX < PatchesPerCellSide; startX ++) {
 						const kbVec3 patchJitterOffset = kbVec3( m_MaxPatchJitterOffset * kbfrand(), 0.0f, m_MaxPatchJitterOffset * kbfrand() );
 						kbVec3 localPointPos = patchJitterOffset + kbVec3( patchLen * startX, 0.0f, patchLen * startY ) - halfCell;
 						pVerts[iVert].position = localPointPos;
@@ -616,6 +644,10 @@ void kbTerrainComponent::RenderSync() {
 
 	if ( m_bRegenerateTerrain ) {
 		GenerateTerrain();
+		for ( int i = 0; i < m_Grass.size(); i++ ) {
+			m_Grass[i].m_bUpdatePointCloud = true;
+			m_Grass[i].RefreshGrass();
+		}
 		m_bRegenerateTerrain = false;
 	}
 

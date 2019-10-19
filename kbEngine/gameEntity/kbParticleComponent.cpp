@@ -36,7 +36,7 @@ void kbParticle_t::Shutdown() {
 
 	if ( m_RenderObject.m_pComponent != nullptr ) {
 		g_pRenderer->RemoveRenderObject( m_RenderObject );
-		g_pGame->GetParticleManager()->ReturnComponentToPool( m_RenderObject.m_pComponent );
+		g_pGame->GetParticleManager().ReturnComponentToPool( m_RenderObject.m_pComponent );
 	}
 
 	m_RenderObject.m_pComponent = nullptr;
@@ -390,7 +390,7 @@ void kbParticleComponent::Update_Internal( const float DeltaTime ) {
 		newParticle.m_EndRotation = kbfrand( m_MinEndRotationRate, m_MaxEndRotationRate );
 
 		if ( IsModelEmitter() && m_ModelEmitter.size() ) {
-			const kbGameComponent *const pComponent = g_pGame->GetParticleManager()->GetComponentFromPool();
+			const kbGameComponent *const pComponent = g_pGame->GetParticleManager().GetComponentFromPool();
 			if ( pComponent != nullptr ) {
 				const int randIdx = rand() % m_ModelEmitter.size();
 				kbModelEmitter *const pModelEmitter = &m_ModelEmitter[randIdx];
@@ -494,7 +494,7 @@ void kbParticleComponent::RenderSync() {
 		StopParticleSystem();
 		Enable( false );
 		if ( m_bIsPooled ) {
-			g_pGame->GetParticleManager()->ReturnParticleComponent( this );
+			g_pGame->GetParticleManager().ReturnParticleComponent( this );
 		}
 		return;
 	}

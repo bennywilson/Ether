@@ -1950,69 +1950,38 @@ void kbRenderer_DX11::RenderDebugText() {
 			const float charRow = ( float )( characterIndex / 16 ) / 16.0f;
 			const float charCol = ( float )( characterIndex % 16 ) / 16.0f;
 
-			// Drop Shadow
-			const float width = 0.005f;
-			const float height = 0.01f;
-			pDebugTextVB[iVert + 0].position.x = startX - width;
-			pDebugTextVB[iVert + 0].position.y = startY - height;
+			// Texture
+			pDebugTextVB[iVert + 0].position.x = startX;
+			pDebugTextVB[iVert + 0].position.y = startY;
 			pDebugTextVB[iVert + 0].position.z = 0.0f;
 			pDebugTextVB[iVert + 0].uv.x = charCol;
 			pDebugTextVB[iVert + 0].uv.y = charRow;
-			pDebugTextVB[iVert + 0].SetColor( kbColor::black );
+			pDebugTextVB[iVert + 0].SetColor( textColor );
 
-			pDebugTextVB[iVert + 1].position.x = startX + charW + width;
-			pDebugTextVB[iVert + 1].position.y = startY - height;
+			pDebugTextVB[iVert + 1].position.x = startX + charW;
+			pDebugTextVB[iVert + 1].position.y = startY;
 			pDebugTextVB[iVert + 1].position.z = 0.0f;
 			pDebugTextVB[iVert + 1].uv.x = charCol + ( 1.0f / 16.0f );
 			pDebugTextVB[iVert + 1].uv.y = charRow;
-			pDebugTextVB[iVert + 1].SetColor( kbColor::black );
+			pDebugTextVB[iVert + 1].SetColor( textColor );
 
-			pDebugTextVB[iVert + 2].position.x = startX + charW + width;
-			pDebugTextVB[iVert + 2].position.y = startY + charW + height;
+			pDebugTextVB[iVert + 2].position.x = startX + charW;
+			pDebugTextVB[iVert + 2].position.y = startY + charW;
 			pDebugTextVB[iVert + 2].position.z = 0.0f;
 			pDebugTextVB[iVert + 2].uv.x = charCol + ( 1.0f / 16.0f );
 			pDebugTextVB[iVert + 2].uv.y = charRow + ( 1.0f / 16.0f );
-			pDebugTextVB[iVert + 2].SetColor( kbColor::black );
+			pDebugTextVB[iVert + 2].SetColor( textColor );
 
-			pDebugTextVB[iVert + 3].position.x = startX - width;
-			pDebugTextVB[iVert + 3].position.y = startY + charW + width;
+			pDebugTextVB[iVert + 3].position.x = startX;
+			pDebugTextVB[iVert + 3].position.y = startY + charW;
 			pDebugTextVB[iVert + 3].position.z = 0.0f;
 			pDebugTextVB[iVert + 3].uv.x = charCol;
 			pDebugTextVB[iVert + 3].uv.y = charRow + ( 1.0f / 16.0f );
-			pDebugTextVB[iVert + 3].SetColor( kbColor::black );
-
-			// Texture
-			pDebugTextVB[iVert + 4].position.x = startX;
-			pDebugTextVB[iVert + 4].position.y = startY;
-			pDebugTextVB[iVert + 4].position.z = 0.0f;
-			pDebugTextVB[iVert + 4].uv.x = charCol;
-			pDebugTextVB[iVert + 4].uv.y = charRow;
-			pDebugTextVB[iVert + 4].SetColor( textColor );
-
-			pDebugTextVB[iVert + 5].position.x = startX + charW;
-			pDebugTextVB[iVert + 5].position.y = startY;
-			pDebugTextVB[iVert + 5].position.z = 0.0f;
-			pDebugTextVB[iVert + 5].uv.x = charCol + ( 1.0f / 16.0f );
-			pDebugTextVB[iVert + 5].uv.y = charRow;
-			pDebugTextVB[iVert + 5].SetColor( textColor );
-
-			pDebugTextVB[iVert + 6].position.x = startX + charW;
-			pDebugTextVB[iVert + 6].position.y = startY + charW;
-			pDebugTextVB[iVert + 6].position.z = 0.0f;
-			pDebugTextVB[iVert + 6].uv.x = charCol + ( 1.0f / 16.0f );
-			pDebugTextVB[iVert + 6].uv.y = charRow + ( 1.0f / 16.0f );
-			pDebugTextVB[iVert + 6].SetColor( textColor );
-
-			pDebugTextVB[iVert + 7].position.x = startX;
-			pDebugTextVB[iVert + 7].position.y = startY + charW;
-			pDebugTextVB[iVert + 7].position.z = 0.0f;
-			pDebugTextVB[iVert + 7].uv.x = charCol;
-			pDebugTextVB[iVert + 7].uv.y = charRow + ( 1.0f / 16.0f );
-			pDebugTextVB[iVert + 7].SetColor( textColor );
+			pDebugTextVB[iVert + 3].SetColor( textColor );
 
 			startX += charSpacing;
 
-			iVert += 8;
+			iVert += 4;
 		}
 	}
 
@@ -3350,7 +3319,11 @@ void kbRenderer_DX11::RenderMesh( const kbRenderSubmesh *const pRenderMesh, cons
 	const kbModel::mesh_t & pMesh = pModel->GetMeshes()[pRenderMesh->GetMeshIdx()];
 
 	if ( pModel->IsPointCloud() == false && pMesh.m_NumTriangles == 0 ) {
-		kbWarning( "kbRenderer_DX11::RenderMesh() - Mesh %s has 0 triangles", pModel->GetFullName().c_str() );
+		//kbWarning( "kbRenderer_DX11::RenderMesh() - Mesh %s has 0 triangles", pModel->GetFullName().c_str() );
+		return;
+	}
+
+	if ( pRenderObject->m_bIsSkinnedModel && pRenderObject->m_MatrixList.size() == 0 ) {
 		return;
 	}
 

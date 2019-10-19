@@ -35,6 +35,8 @@ class KungFuSnolafComponent : public CannonActorComponent, public IStateMachine<
 //---------------------------------------------------------------------------------------------------'
 public:
 
+	void										ResetFromPool();
+
 	void										EnableSmallLoveHearts( const bool bEnable );
 	void										EnableLargeLoveHearts( const bool bEnable );
 
@@ -68,6 +70,8 @@ private:
 	kbParticleComponent *						m_pLargeLoveHearts;
 
 	DealAttackInfo_t<KungFuGame::eAttackType>	m_LastAttackInfo;
+
+	float										m_DeathTimer;
 
 //---------------------------------------------------------------------------------------------------
 	// IAnimEventListener

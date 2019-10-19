@@ -54,11 +54,16 @@ void CannonGame::InitGame_Internal() {
 
 	m_GameStartTimer.Reset();
 
-	GetSoundManager().SetMasterVolume( CannonBallGameSettingsComponent::Get()->m_Volume / 100.0f );
+	CannonBallGameSettingsComponent *const pGameSettings = CannonBallGameSettingsComponent::Get();
+
+	GetSoundManager().SetMasterVolume( pGameSettings->m_Volume / 100.0f );
 
 	kbShaderParamOverrides_t shaderParam;
-	shaderParam.SetVec4( "globalTint", kbVec4( 0.0f, 0.0f, 0.0f, 1.0f - ( CannonBallGameSettingsComponent::Get()->m_Brightness / 100.0f ) ) );
+	shaderParam.SetVec4( "globalTint", kbVec4( 0.0f, 0.0f, 0.0f, 1.0f - ( pGameSettings->m_Brightness / 100.0f ) ) );
 	g_pRenderer->SetGlobalShaderParam( shaderParam );
+
+	const float LOD = (float)pGameSettings->m_VisualQuality / 100.0f;
+	kbTerrainComponent::SetTerrainLOD( LOD );
 }
 
 /**
@@ -123,7 +128,7 @@ void CannonGame::PreUpdate_Internal() {
 void CannonGame::PostUpdate_Internal() {
 
 	// Update renderer cam
-	if ( m_pMainCamera != nullptr ) {
+	if ( m_pMainCamera != nullptr && m_pMainCamera->GetOwner() != nullptr ) {
 		g_pD3D11Renderer->SetRenderViewTransform( nullptr, m_pMainCamera->GetOwner()->GetPosition(), m_pMainCamera->GetOwner()->GetOrientation() );
 	}
 }

@@ -318,12 +318,18 @@ void CannonBallPauseMenuUIComponent::SetEnable_Internal( const bool bEnable ) {
 			m_pStaticModelComponent->Enable( false );
 		}
 
+		CannonBallGameSettingsComponent *const pGameSettings = CannonBallGameSettingsComponent::Get();
+		const int prevQuality = pGameSettings->m_VisualQuality;
 		if ( m_SliderWidgets.size() > 0 && m_bHackSlidersInit == true ) {
-			CannonBallGameSettingsComponent *const pGameSettings = CannonBallGameSettingsComponent::Get();
 			pGameSettings->m_Volume = (int)kbClamp( m_SliderWidgets[0].GetNormalizedValue() * 100.0f, 0.0f, 100.0f );
 			pGameSettings->m_VisualQuality = (int)kbClamp( m_SliderWidgets[1].GetNormalizedValue() * 100.0f, 0.0f, 100.0f );
 			pGameSettings->m_Brightness = (int)kbClamp( m_SliderWidgets[2].GetNormalizedValue() * 100.0f, 0.0f, 100.0f );
 			pGameSettings->SaveSettings();
+		}
+
+		if ( prevQuality != pGameSettings->m_VisualQuality ) {
+			const float LOD = (float)pGameSettings->m_VisualQuality / 100.0f;
+			kbTerrainComponent::SetTerrainLOD( LOD );
 		}
 
 		if ( m_WidgetList.size() > 0 ) {

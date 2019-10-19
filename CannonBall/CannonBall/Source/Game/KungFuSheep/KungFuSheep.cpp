@@ -12,7 +12,7 @@
 #include "kbEditor.h"
 #include "kbEditorEntity.h"
 
-//#define CANNONBALL_STRESSTEST 1
+#define CANNONBALL_STRESSTEST 0
 
 /**
  *	KungFuSheepStateIdle
@@ -74,7 +74,7 @@ public:
 			m_pActorComponent->SetTargetFacingDirection( g_RightFacing );
 		}
 
-#ifdef CANNONBALL_STRESSTEST
+#if CANNONBALL_STRESSTEST
 		if ( g_UseEditor == false ) {
 			if ( m_LastCannonBallTime == -1.0f || g_GlobalTimer.TimeElapsedSeconds() > m_LastCannonBallTime + 5.0f ) {
 				RequestStateChange( KungFuSheepState::CannonBall );
@@ -323,7 +323,7 @@ public:
 				numHuggers++;
 			}
 		}
-#ifdef CANNONBALL_STRESSTEST
+#if CANNONBALL_STRESSTEST
 		if ( g_UseEditor == false && numHuggers > 5 ) {
 			RequestStateChange( KungFuSheepState::CannonBall );
 			return;
@@ -653,6 +653,7 @@ void KungFuSheepComponent::Update_Internal( const float DT ) {
 	pCloth2->SetClothCollisionSphere( 0, collisionSphere );
 
 	// Do health check
+#if !CANNONBALL_STRESSTEST
 	if ( m_Health > 0.0f ) {
 		int numHuggers = 0;
 		for ( int i = 0; i < g_pCannonGame->GetGameEntities().size(); i++ ) {
@@ -684,6 +685,7 @@ void KungFuSheepComponent::Update_Internal( const float DT ) {
 			}
 		}
 	}
+#endif
 
 	if ( GetAsyncKeyState( 'C' ) ) {
 		m_CannonBallMeter = 2.0f;

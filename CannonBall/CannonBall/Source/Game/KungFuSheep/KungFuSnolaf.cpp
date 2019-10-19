@@ -408,10 +408,10 @@ public:
 		kbGameEntity *const pOwner = m_pActorComponent->GetOwner();
 		const float curTime = g_GlobalTimer.TimeElapsedSeconds();
 		const float elapsedDeathTime = curTime - m_DeathStartTime;
-		if ( elapsedDeathTime > 2.0f ) {
-			g_pCannonGame->RemoveGameEntity( pOwner );
+	/*	if ( elapsedDeathTime > 2.0f ) {
+	/		g_pCannonGame->RemoveGameEntity( pOwner );
 			return;
-		}
+		}*/
 		
 		const float dt = g_pGame->GetFrameDT();
 		if ( m_DeathSelection == 0 || m_DeathSelection == 2 ) {
@@ -581,13 +581,22 @@ void KungFuSnolafComponent::Update_Internal( const float DT ) {
 		UpdateStateMachine();
 	}
 
+	if ( IsDead() ) {
+		if ( m_DeathTimer < 0.0f ) {
+			m_DeathTimer = 0.0f;
+		}
+
+		m_DeathTimer += DT;
+		if ( m_DeathTimer > 3.0f ) {
+			g_pCannonGame->GetLevelComponent<KungFuLevelComponent>()->ReturnSnolafToPool(  this );
+		}
+	}
 	kbVec4 fxDot( 1.0f, 0.0f, 0.0f, 0.0f );
 	if ( m_CurrentState == KungFuSnolafState::Hug ) {
 		fxDot.Set( 0.0f, 1.0f, 0.0f, 0.0f );
 	} else if ( m_CurrentState == KungFuSnolafState::Dead ) {
 		kbDeleteEntityComponent *const pDeleteComp = GetComponent<kbDeleteEntityComponent>();
-		if ( pDeleteComp == nullptr )
-		{
+		if ( pDeleteComp == nullptr ) {
 			fxDot.Set( 0.0f, 0.0f, 1.0f, 0.0f );
 		}
 	}
@@ -596,6 +605,37 @@ void KungFuSnolafComponent::Update_Internal( const float DT ) {
 		const static kbString fxMapMaskParam = "fxMapMask";
 		m_SkelModelsList[0]->SetMaterialParamVector( 0, fxMapMaskParam.stl_str(), fxDot );
 	}
+}
+
+/**
+ *	KungFuSnolafComponent::ResetFromPool
+ */
+void KungFuSnolafComponent::ResetFromPool() {
+
+	m_AnimSmearDuration = 0.0f;
+	m_AnimSmearVec = kbVec3::zero;
+	m_AnimSmearStartTime = -1.0f;
+	m_DeathTimer = -1.0f;
+
+	for ( int i = 0; i < GetOwner()->NumComponents(); i++ ) {
+		kbFlingPhysicsComponent *const pFling = GetOwner()->GetComponent(i)->GetAs<kbFlingPhysicsComponent>();
+		if ( pFling != nullptr ) {
+			pFling->Enable( false );
+			continue;
+		}
+
+		GetOwner()->GetComponent(i)->Enable( false );
+		GetOwner()->GetComponent(i)->Enable( true );
+	}
+
+	const static kbString clipMapMaskParam = "clipMapMask";
+	m_SkelModelsList[0]->SetMaterialParamVector( 0, clipMapMaskParam.stl_str(), kbVec4( 0.0f, 0.0f, 0.0f, 0.0f ) );
+	m_SkelModelsList[1]->SetMaterialParamVector( 0, clipMapMaskParam.stl_str(), kbVec4( 0.0f, 0.0f, 0.0f, 0.0f ) );
+				
+	const static kbString smearParam = "smearParams";
+	m_SkelModelsList[1]->SetMaterialParamVector( 0, smearParam.stl_str(), kbVec4::zero );
+
+	m_Health = 1.0f;
 }
 
 /**
@@ -636,6 +676,13 @@ void KungFuSnolafComponent::TakeDamage( const DealAttackInfo_t<KungFuGame::eAtta
 	}
 	m_Health = -1.0f;
 	RequestStateChange( KungFuSnolafState::Dead );
+
+
+	static int numKilled = 0;
+	numKilled++;
+	if ( numKilled % 1000 == 0 ) {
+		kbLog( "Num Snolafs killed = %d", numKilled );
+	}
 }
 
 /**
@@ -652,12 +699,8 @@ void KungFuSnolafComponent::DoPoofDeath() {
 	pCannonBallImpact->SetOrientation( GetOwnerRotation() );
 	pCannonBallImpact->DeleteWhenComponentsAreInactive( true );
 
-	kbDeleteEntityComponent *const pDeleteComponent = GetOwner()->GetComponent<kbDeleteEntityComponent>();
-	if ( pDeleteComponent != nullptr ) {
-		pDeleteComponent->Enable( true );
-	} else {
-		g_pCannonGame->RemoveGameEntity( GetOwner() );
-	}
+	m_SkelModelsList[0]->Enable( false );
+	m_SkelModelsList[1]->Enable( false );
 }
 
 /**

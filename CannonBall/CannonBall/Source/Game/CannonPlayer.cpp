@@ -83,7 +83,7 @@ void CannonActorComponent::Update_Internal( const float DT ) {
 		if ( elapsedTime > m_AnimSmearDuration ) {
 			m_AnimSmearStartTime = -1.0f;
 			const static kbString smearParam = "smearParams";
-			m_SkelModelsList[1]->SetMaterialParamVector(0, smearParam.stl_str(), kbVec4::zero );
+			m_SkelModelsList[1]->SetMaterialParamVector( 0, smearParam.stl_str(), kbVec4::zero );
 		}
 		else {
 			const float strength = 1.0f - kbClamp( elapsedTime / m_AnimSmearDuration, 0.0f, 1.0f );
