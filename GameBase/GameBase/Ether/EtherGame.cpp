@@ -102,7 +102,7 @@ void EtherGame::InitGame_Internal() {
 			}
 
 			const kbParticleComponent *const pParticleComponent = static_cast<kbParticleComponent*>( pCurParticleEntity->GetComponent( i ) );
-			m_pParticleManager->PoolParticleComponent( pParticleComponent, 16 );
+			m_ParticleManager.PoolParticleComponent( pParticleComponent, 16 );
 		}
 	}
 	m_GameStartTimer.Reset();
@@ -536,14 +536,14 @@ void EtherGame::RenderSync() {
 
 	if ( HasFirstSyncCompleted() == false ) {
 
-		m_pParticleManager->SetCustomAtlasTexture( 0, "./assets/FX/fx_atlas.jpg" );
+		m_ParticleManager.SetCustomAtlasTexture( 0, "./assets/FX/fx_atlas.jpg" );
 
-		m_pParticleManager->SetCustomAtlasShader( 1, "./assets/shaders/FX/shellTrailParticle.kbShader" );
-		m_pParticleManager->SetCustomAtlasTexture( 1, "./assets/FX/SmokeTrailAtlas.dds" );
+		m_ParticleManager.SetCustomAtlasShader( 1, "./assets/shaders/FX/shellTrailParticle.kbShader" );
+		m_ParticleManager.SetCustomAtlasTexture( 1, "./assets/FX/SmokeTrailAtlas.dds" );
 
 		g_ResourceManager.GetResource( "../../kbEngine/assets/Shaders/basicParticle.kbShader", true, true );
-		m_pParticleManager->SetCustomAtlasShader( 2, "../../kbEngine/assets/Shaders/basicParticle.kbShader" );
-		m_pParticleManager->SetCustomAtlasTexture( 2, "./assets/FX/MuzzleFlashes/BasicOrange_MuzzleFlash.jpg" );
+		m_ParticleManager.SetCustomAtlasShader( 2, "../../kbEngine/assets/Shaders/basicParticle.kbShader" );
+		m_ParticleManager.SetCustomAtlasTexture( 2, "./assets/FX/MuzzleFlashes/BasicOrange_MuzzleFlash.jpg" );
 
 		// Bullet Hole FX
 		m_pBulletHoleRenderTexture = g_pRenderer->RT_GetRenderTexture( 4096, 4096, eTextureFormat::KBTEXTURE_R8G8B8A8, false );

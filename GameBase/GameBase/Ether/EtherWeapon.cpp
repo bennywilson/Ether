@@ -81,7 +81,7 @@ void EtherProjectileComponent::Update_Internal( const float DeltaTime ) {
 		ParticleInfo.m_UVs[0].Set( 0.125f, 0.0f );
 		ParticleInfo.m_UVs[1].Set( 0.25f, 0.125f );
 		ParticleInfo.m_Type = BT_AxialBillboard;
-		g_pGame->GetParticleManager()->AddQuad( 0, ParticleInfo );
+		g_pGame->GetParticleManager().AddQuad( 0, ParticleInfo );
 	} else {
 		kbParticleManager::CustomParticleAtlasInfo_t ParticleInfo;
 		ParticleInfo.m_Position = GetOwner()->GetPosition();
@@ -92,7 +92,7 @@ void EtherProjectileComponent::Update_Internal( const float DeltaTime ) {
 		ParticleInfo.m_UVs[0].Set( 0.5f, 0.0f );
 		ParticleInfo.m_UVs[1].Set( 0.625f, 0.125f );
 		ParticleInfo.m_Type = BT_FaceCamera;
-		g_pGame->GetParticleManager()->AddQuad( 0, ParticleInfo );
+		g_pGame->GetParticleManager().AddQuad( 0, ParticleInfo );
 	}
 
 	const kbVec3 oldPosition = GetOwner()->GetPosition();
@@ -668,7 +668,7 @@ void kbAnimatedQuadComponent::UpdateAnimation( const kbVec3 & pPosition ) {
 	ParticleInfo.m_Type = BT_FaceCamera;
 	ParticleInfo.m_Color.Set( 1.0f, 1.0f, 1.0f, 1.0f );
 	ParticleInfo.m_Position = pPosition;
-	g_pGame->GetParticleManager()->AddQuad( 2, ParticleInfo );
+	g_pGame->GetParticleManager().AddQuad( 2, ParticleInfo );
 }
 
 /**
