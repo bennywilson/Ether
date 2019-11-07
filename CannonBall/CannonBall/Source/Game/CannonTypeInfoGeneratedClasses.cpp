@@ -42,6 +42,8 @@ DEFINE_KBCLASS(CannonHealthBarUIComponent)
 
 DEFINE_KBCLASS(CannonBallUIComponent)
 
+DEFINE_KBCLASS(CannonBallYesNoPromptComponent)
+
 DEFINE_KBCLASS(CannonBallPauseMenuUIComponent)
 
 DEFINE_KBCLASS(CannonBallGameSettingsComponent)

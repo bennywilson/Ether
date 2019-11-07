@@ -12,7 +12,8 @@
 #include "kbEditor.h"
 #include "kbEditorEntity.h"
 
-#define CANNONBALL_STRESSTEST 0
+kbConsoleVariable g_CannonBallTest( "cbstresstest", false, kbConsoleVariable::Console_Bool, "Cannon ball stress test", "" );
+
 
 /**
  *	KungFuSheepStateIdle
@@ -74,13 +75,11 @@ public:
 			m_pActorComponent->SetTargetFacingDirection( g_RightFacing );
 		}
 
-#if CANNONBALL_STRESSTEST
-		if ( g_UseEditor == false ) {
+		if ( g_CannonBallTest.GetBool() && g_UseEditor == false ) {
 			if ( m_LastCannonBallTime == -1.0f || g_GlobalTimer.TimeElapsedSeconds() > m_LastCannonBallTime + 5.0f ) {
 				RequestStateChange( KungFuSheepState::CannonBall );
 			}
 		}
-#endif
 	}
 
 	virtual void EndState( T nextState ) override { }
@@ -315,7 +314,7 @@ public:
 			}
 
 			KungFuSnolafComponent *const pSnolaf = g_pCannonGame->GetGameEntities()[i]->GetActorComponent()->GetAs<KungFuSnolafComponent>();
-			if ( pSnolaf == nullptr ) {
+			if ( pSnolaf == nullptr || pSnolaf->IsEnabled() == false ) {
 				continue;
 			}
 
@@ -323,12 +322,11 @@ public:
 				numHuggers++;
 			}
 		}
-#if CANNONBALL_STRESSTEST
-		if ( g_UseEditor == false && numHuggers > 5 ) {
+
+		if ( g_CannonBallTest.GetBool() && g_UseEditor == false && numHuggers > 5 ) {
 			RequestStateChange( KungFuSheepState::CannonBall );
 			return;
 		}
-#endif
 
 		if ( m_ShakeNBakeActivationStartTime < 0.0f && numHuggers > 0 && m_NumDirectionChanges > numHuggers ) {
 			m_ShakeNBakeActivationStartTime = g_GlobalTimer.TimeElapsedSeconds();
@@ -530,7 +528,7 @@ void KungFuSheepComponent::OnAnimEvent( const kbAnimEventInfo_t & animEventInfo 
 		DealAttackInfo_t<KungFuGame::eAttackType >dealAttackInfo;
 		dealAttackInfo.m_BaseDamage = 999999.0f;
 		dealAttackInfo.m_pAttacker = this;
-		dealAttackInfo.m_Radius = 10.0f;
+		dealAttackInfo.m_Radius = 999999999.0f;
 		dealAttackInfo.m_AttackType = KungFuGame::Cannonball;
 
 		KungFuLevelComponent *const pLevelComponent = g_pCannonGame->GetLevelComponent<KungFuLevelComponent>();
@@ -653,8 +651,7 @@ void KungFuSheepComponent::Update_Internal( const float DT ) {
 	pCloth2->SetClothCollisionSphere( 0, collisionSphere );
 
 	// Do health check
-#if !CANNONBALL_STRESSTEST
-	if ( m_Health > 0.0f ) {
+	if ( g_CannonBallTest.GetBool() == false && m_Health > 0.0f ) {
 		int numHuggers = 0;
 		for ( int i = 0; i < g_pCannonGame->GetGameEntities().size(); i++ ) {
 
@@ -685,7 +682,6 @@ void KungFuSheepComponent::Update_Internal( const float DT ) {
 			}
 		}
 	}
-#endif
 
 	if ( GetAsyncKeyState( 'C' ) ) {
 		m_CannonBallMeter = 2.0f;

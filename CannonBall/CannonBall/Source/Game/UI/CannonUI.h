@@ -126,6 +126,15 @@ private:
 };
 
 /**
+ *	CannonBallYesNoPromptComponent
+ */
+class CannonBallYesNoPromptComponent : public kbUIWidget {
+
+	KB_DECLARE_COMPONENT( CannonBallYesNoPromptComponent, kbUIWidget );
+
+};
+
+/**
  *	CannonBallGameSettingsComponent
  */
 class CannonBallGameSettingsComponent : public kbGameComponent, public ISingleton<CannonBallGameSettingsComponent> {

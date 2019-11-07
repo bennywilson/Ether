@@ -510,3 +510,10 @@ CannonBallGameSettingsComponent * CannonBallGameSettingsComponent::Get() {
 
 	return pInstance;
 }
+
+/**
+ *	CannonBallYesNoPromptComponent::Constructor
+ */
+void CannonBallYesNoPromptComponent::Constructor() {
+
+}

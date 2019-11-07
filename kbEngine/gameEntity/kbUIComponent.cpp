@@ -357,7 +357,7 @@ void kbUIWidget::Update_Internal( const float dt ) {
 	const kbShaderParamComponent *const pComp = m_pModel->GetShaderParamComponent( 0, kbString( "baseTexture" ) );
 	if ( pComp != nullptr ) {
 		const kbTexture *const pTex = pComp->GetTexture();
-		if ( pComp != nullptr ) {
+		if ( pTex != nullptr ) {
 			aspectRatio = (float)pTex->GetWidth() / (float)pTex->GetHeight();
 		}
 	}

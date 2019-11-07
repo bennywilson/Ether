@@ -101,7 +101,7 @@ public:
 				continue;
 			}
 
-			if ( pTargetComp->IsDead() ) {
+			if ( pTargetComp->IsDead() || pTargetComp->IsEnabled() == false ) {
 				continue;
 			}
 

@@ -595,6 +595,8 @@ void kbParticleComponent::SetEnable_Internal( const bool isEnabled ) {
 
 	} else {
 		g_pRenderer->RemoveParticle( m_RenderObject );
+		m_Particles.clear();
+		m_LeftOverTime = 0.0f;
 	}
 }
 
