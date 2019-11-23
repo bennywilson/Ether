@@ -247,7 +247,7 @@ public:
 												kbRenderer();
 	virtual										~kbRenderer();
 
-	virtual void								Init( HWND, const int width, const int height, const bool bUseHMD, const bool bUseHMDTrackingOnly );
+	virtual void								Init( HWND, const int width, const int height );
 
 	void										Shutdown();
 
@@ -347,10 +347,10 @@ public:
 	virtual void								RT_CopyRenderTarget( kbRenderTexture *const pSrcTexture, kbRenderTexture *const pDstTexture ) = 0;
 	virtual kbRenderTargetMap					RT_MapRenderTarget( kbRenderTexture *const pDstTexture ) = 0;
 	virtual void								RT_UnmapRenderTarget( kbRenderTexture *const pDstTexture ) = 0;
-
+ 
 private:
 
-	virtual void								Init_Internal( HWND, const int width, const int height, const bool bUseHMD, const bool bUseHMDTrackingOnly ) = 0;
+	virtual void								Init_Internal( HWND, const int width, const int height ) = 0;
 	virtual bool								LoadTexture_Internal( const char * name, int index, int width = -1, int height = -1 ) = 0;
 	virtual void								RenderSync_Internal() = 0;
 	virtual void								Shutdown_Internal() = 0;

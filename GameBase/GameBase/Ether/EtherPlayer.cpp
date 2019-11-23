@@ -346,8 +346,8 @@ void EtherPlayerComponent::HandleMovement( const kbInput_t & Input, const float 
 		movementVec += rightVec;
 	}
 
-	movementVec += forwardVec * Input.LeftStickY;
-	movementVec += rightVec * Input.LeftStickX;
+	movementVec += forwardVec * Input.m_LeftStick.y;
+	movementVec += rightVec * Input.m_LeftStick.x;
 	
 
 	
@@ -383,13 +383,13 @@ void EtherPlayerComponent::HandleMovement( const kbInput_t & Input, const float 
 		}
 	}
 
-	if ( abs( Input.MouseDeltaX ) > 0 || abs( Input.MouseDeltaY ) > 0 || Input.RightStickY != 0 || Input.RightStickX != 0 ) {
+	if ( abs( Input.MouseDeltaX ) > 0 || abs( Input.MouseDeltaY ) > 0 || Input.m_RightStick.y != 0 || Input.m_RightStick.x != 0 ) {
 
 		bMoved = true;
 
 		const float StickSensitivity = 350.0f;
-		float DeltaX = Input.MouseDeltaX + ( Input.RightStickX * StickSensitivity * DT );
-		float DeltaY = Input.MouseDeltaY + ( -Input.RightStickY * StickSensitivity * DT );
+		float DeltaX = Input.MouseDeltaX + ( Input.m_RightStick.x * StickSensitivity * DT );
+		float DeltaY = Input.MouseDeltaY + ( -Input.m_RightStick.y * StickSensitivity * DT );
 		const float rotationMagnitude = 0.01f;
 		const float minPitch = 0.24f;	// where 0 is looking straight up and PI is looking straight down
 		const float maxPitch = 2.9f;
@@ -397,10 +397,6 @@ void EtherPlayerComponent::HandleMovement( const kbInput_t & Input, const float 
 		const float epsilon = 0.001f;
 
 		float pitchDelta = kbClamp( DeltaY * -rotationMagnitude, -maxRotationAmount, maxRotationAmount );
-
-		if ( g_pD3D11Renderer->IsRenderingToHMD() ) {
-			pitchDelta = 0.0f;
-		}
 
 		float curRotationAboutX = acos(forwardVec.Dot(kbVec3::up));
 

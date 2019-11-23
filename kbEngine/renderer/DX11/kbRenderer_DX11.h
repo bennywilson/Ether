@@ -11,8 +11,6 @@
 #include <D3D11.h>
 #include <DirectXMath.h>
 #include "kbRenderer.h"
-#include "OVR_CAPI.h"
-#include "OVR_CAPI_D3D.h"
 #include "kbVector.h"
 #include "kbQuaternion.h"
 #include "kbBounds.h"
@@ -378,14 +376,6 @@ public:
 															ID3D11PixelShader *& pixelShader, ID3D11InputLayout *& vertexLayout, const std::string & vertexShaderFunc, 
 															const std::string & pixelShaderFunc, struct kbShaderVarBindings_t * pShaderBindings = nullptr );
 
-	// Oculus
-	bool										IsRenderingToHMD() const { return m_bRenderToHMD; }
-	bool										IsUsingHMDTrackingOnly() const { return m_bUsingHMDTrackingOnly; }
-	int											GetFrameNum() const { return m_FrameNum; }
-	const ovrPosef *							GetOvrEyePose() const { return m_EyeRenderPose; }
-	const kbMat4 *								GetEyeMatrices() const { return ((kbRenderWindow_DX11*)m_RenderWindowList[0])->m_EyeMatrices; }
-
-
 	virtual kbVec2i								GetEntityIdAtScreenPosition( const uint x, const uint y ) override;
 
 	virtual void								SetGlobalShaderParam( const kbShaderParamOverrides_t::kbShaderParam_t & shaderParam ) override;
@@ -403,7 +393,7 @@ public:
 
 private:
 
-	virtual void								Init_Internal( HWND, const int width, const int height, const bool bUseHMD, const bool bUseHMDTrackingOnly ) override;
+	virtual void								Init_Internal( HWND, const int width, const int height ) override;
 	virtual bool								LoadTexture_Internal( const char * name, int index, int width = -1, int height = -1 ) override;
 
 	virtual kbRenderTexture *					GetRenderTexture_Internal( const int width, const int height, const eTextureFormat texFormat, const bool bIsCPUAccessible ) override;
@@ -412,8 +402,6 @@ private:
 	virtual void								RenderSync_Internal() override;
 
 	virtual void								Shutdown_Internal() override;
-
-	bool										InitializeOculus();
 
 	void										ReadShaderFile( std::string & shaderText, kbShaderVarBindings_t *const pShaderBindings );
 
@@ -523,52 +511,11 @@ private:
 	ID3D11Buffer *								m_DebugVertexBuffer;
 	ID3D11Buffer *								m_DebugPreTransformedVertexBuffer;
 
-	// Oculus Rift
-	ovrSession									m_ovrSession;
-	int											m_HMDPass;
-	ovrRecti									m_EyeRenderViewport[2];
-	ovrEyeRenderDesc							m_EyeRenderDesc[2];
-	ovrPosef									m_EyeRenderPose[2];
-	class kbOculusTexture *						m_OculusTexture[2];
-    ovrMirrorTexture							m_MirrorTexture;
-	ovrHmdDesc									m_HMDDesc;
-	double										m_SensorSampleTime;
-	bool										m_bRenderToHMD;
-	bool										m_bUsingHMDTrackingOnly;
-	// End of Oculus Rift
-
 	kbModel	*									m_DebugText;
 	int											m_FrameNum;
 };
 
 extern ID3D11Device * g_pD3DDevice;
-
-
-
-inline ovrVector3f kbVec3ToovrVec( const kbVec3 & inVec ) {
-	ovrVector3f returnVec;
-	memcpy( &returnVec, &inVec, sizeof( ovrVector3f ) );
-	return returnVec;
-}
-
-inline kbVec3 ovrVecTokbVec3( const ovrVector3f & inVec ) {
-	kbVec3 returnVec;
-	memcpy( &returnVec, &inVec, sizeof( ovrVector3f ) );
-	return returnVec;
-}
-
-inline ovrQuatf kbQuatToovrQuat( const kbQuat & inQuat ) {
-	ovrQuatf returnQuat;
-	memcpy( &returnQuat, &inQuat, sizeof( returnQuat ) );
-	return returnQuat;
-}
-
-inline kbQuat ovrQuatTokbQuat( const ovrQuatf & inQuat ) {
-	kbQuat returnQuat;
-	memcpy( &returnQuat, &inQuat, sizeof( returnQuat ) );
-	return returnQuat;
-}
-
 extern kbRenderer_DX11 * g_pD3D11Renderer;
 
 XMMATRIX & XMMATRIXFromkbMat4( kbMat4 & matrix );

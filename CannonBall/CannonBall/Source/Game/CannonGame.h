@@ -127,4 +127,60 @@ private:
 
 extern CannonGame * g_pCannonGame;
 
+inline bool WasAttackJustPressed() {
+	const kbInput_t & input = g_pInputManager->GetInput();
+	return input.WasKeyJustPressed( 'K' ) || input.GamepadButtonStates[12].m_Action == kbInput_t::KA_JustPressed;
+}
+
+inline bool WasSpecialAttackPressed() {
+	const kbInput_t & input = g_pInputManager->GetInput();
+	return input.WasKeyJustPressed( 'J' ) || input.LeftTrigger > 0.1f || input.RightTrigger > 0.1f;
+}
+
+inline kbVec2 GetLeftStick() {
+	const kbInput_t & input = g_pInputManager->GetInput();
+	kbVec2 leftStick = kbVec2::zero;
+
+	if ( input.IsKeyPressedOrDown( 'A' ) ) {
+		leftStick.x = -1.0f;
+	} else if ( input.IsKeyPressedOrDown( 'D' ) ) {
+		leftStick.x = 1.0f;
+	} else {
+		leftStick.x = input.m_LeftStick.x;
+	}
+
+	if ( input.IsKeyPressedOrDown( 'W' ) ) {
+		leftStick.y = 1.0f;
+	} else if ( input.IsKeyPressedOrDown( 'S' ) ) {
+		leftStick.y = -1.0f;
+	} else {
+		leftStick.y = input.m_LeftStick.y;
+	}
+
+	return leftStick;
+}
+inline kbVec2 GetPrevLeftStick() {
+	const kbInput_t & input = g_pInputManager->GetInput();
+	kbVec2 leftStick = kbVec2::zero;
+
+	if ( input.IsKeyPressedOrDown( 'A' ) ) {
+		leftStick.x = -1.0f;
+	} else if ( input.IsKeyPressedOrDown( 'D' ) ) {
+		leftStick.x = 1.0f;
+	} else {
+		leftStick.x = input.m_PrevLeftStick.x;
+	}
+
+	if ( input.IsKeyPressedOrDown( 'W' ) ) {
+		leftStick.y = 1.0f;
+	} else if ( input.IsKeyPressedOrDown( 'S' ) ) {
+		leftStick.y = -1.0f;
+	} else {
+		leftStick.y = input.m_PrevLeftStick.y;
+	}
+
+	return leftStick;
+}
+
+
 #endif

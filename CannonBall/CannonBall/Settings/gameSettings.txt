@@ -11,7 +11,7 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Brightness = 100
-		MasterVolume = 100
+		MasterVolume = 83
 		VideoQuality = 100
 	}
 }

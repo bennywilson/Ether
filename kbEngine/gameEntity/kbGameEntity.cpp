@@ -366,6 +366,15 @@ void kbGameEntity::Update( const float DeltaTime ) {
 }
 
 /**
+ *	kbGameEntity::EnableAllComponents
+ */
+void kbGameEntity::EnableAllComponents() {
+	for ( int i = 0; i < m_Components.size(); i++ ) {
+		m_Components[i]->Enable( true );
+	}
+}
+
+/**
  *	kbGameEntity::DisableAllComponents
  */
 void kbGameEntity::DisableAllComponents() {

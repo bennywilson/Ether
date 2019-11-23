@@ -68,7 +68,7 @@
     </Link>
     <Lib>
       <OutputFile>./lib/kbEngineD.lib</OutputFile>
-      <AdditionalDependencies>libovr.lib; libfbxsdk-md.lib</AdditionalDependencies>
+      <AdditionalDependencies>libfbxsdk-md.lib</AdditionalDependencies>
     </Lib>
     <ProjectReference>
       <LinkLibraryDependencies>false</LinkLibraryDependencies>
@@ -94,7 +94,7 @@
     </Link>
     <Lib>
       <OutputFile>./lib/kbEngine.lib</OutputFile>
-      <AdditionalDependencies>libovr.lib;libfbxsdk-md.lib</AdditionalDependencies>
+      <AdditionalDependencies>libfbxsdk-md.lib</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>

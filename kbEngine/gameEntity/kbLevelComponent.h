@@ -40,6 +40,8 @@ protected:
 
 private:
 
+	virtual void								UpdateDebugAndCheats() { }
+
 	// Editor
 	ELevelType									m_LevelType;
 	float										m_GlobalModelScale;

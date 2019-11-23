@@ -2,7 +2,7 @@
 // kbInputManager.cpp
 //
 //
-// 2017 kbEngine 2.0
+// 2017-2019 kbEngine 2.0
 //==================================================================================================
 #include <Windows.h>
 #include <sstream>
@@ -25,6 +25,11 @@ kbInputManager::kbInputManager() :
 	if ( g_pInputManager != nullptr ) {
 		kbError( "kbInputManager::kbInputManager() - g_pInputManager has already been set" );
 	}
+
+	m_Input.m_LeftStick.Set( 0.0f, 0.0f );
+	m_Input.m_PrevLeftStick.Set( 0.0f, 0.0f );
+	m_Input.m_RightStick.Set( 0.0f, 0.0f );
+	m_Input.m_PrevRightStick.Set( 0.0f, 0.0f );
 
 	g_pInputManager = this;
 }
@@ -92,10 +97,12 @@ void kbInputManager::Update( const float DeltaTime ) {
 
 	XINPUT_STATE InputState = { 0 };
 
-	m_Input.LeftStickX = 0.0f;
-	m_Input.LeftStickY = 0.0f;
-	m_Input.RightStickX = 0.0f;
-	m_Input.RightStickY = 0.0f;
+	m_Input.m_PrevLeftStick = m_Input.m_LeftStick;
+	m_Input.m_PrevRightStick = m_Input.m_RightStick;
+
+	m_Input.m_LeftStick.Set( 0.0f, 0.0f );
+	m_Input.m_RightStick.Set( 0.0f, 0.0f );
+
 	m_Input.MouseDeltaX = 0;
 	m_Input.MouseDeltaY = 0;
 
@@ -104,23 +111,25 @@ void kbInputManager::Update( const float DeltaTime ) {
 			XINPUT_GAMEPAD & pGamePad = InputState.Gamepad;
 
 			if ( abs( pGamePad.sThumbLX ) > XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE ) {
-				m_Input.LeftStickX = pGamePad.sThumbLX / 32767.0f;
+				m_Input.m_LeftStick.x = pGamePad.sThumbLX / 32767.0f;
 			}
 
 			if ( abs( pGamePad.sThumbLY ) > XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE ) {
-				m_Input.LeftStickY = pGamePad.sThumbLY / 32767.0f;
+				m_Input.m_LeftStick.y = pGamePad.sThumbLY / 32767.0f;
 			}
 
 			if ( abs( pGamePad.sThumbRX ) > XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE ) {
-				m_Input.RightStickX = pGamePad.sThumbRX / 32767.0f;
+				m_Input.m_RightStick.x = pGamePad.sThumbRX / 32767.0f;
 			}
 
 			if ( abs( pGamePad.sThumbRY ) > XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE ) {
-				m_Input.RightStickY = pGamePad.sThumbRY / 32767.0f;
+				m_Input.m_RightStick.y = pGamePad.sThumbRY / 32767.0f;
 			}
 
 			if ( pGamePad.bLeftTrigger > XINPUT_GAMEPAD_TRIGGER_THRESHOLD ) {
 				m_Input.LeftTrigger = (float)pGamePad.bLeftTrigger / (float)255;
+			} else {
+				m_Input.LeftTrigger = 0.0f;
 			}
 
 			if ( pGamePad.bRightTrigger > XINPUT_GAMEPAD_TRIGGER_THRESHOLD ) {
@@ -134,6 +143,24 @@ void kbInputManager::Update( const float DeltaTime ) {
 			} else {
 				m_Input.RightTriggerPressed = false;
 				m_Input.RightTrigger = 0.0f; 
+			}
+
+			for ( uint iButton = 0; iButton < 16; iButton++ ) {
+				if ( pGamePad.wButtons & ( 1 << iButton ) ) {
+
+					if ( m_Input.GamepadButtonStates[iButton].m_Action == kbInput_t::KA_JustPressed ) {
+						m_Input.KeyState[iButton].m_Action = kbInput_t::KA_Down;
+					} else {
+						m_Input.GamepadButtonStates[iButton].m_Action = kbInput_t::KA_JustPressed;
+						m_Input.KeyState[iButton].m_LastActionTimeSec = g_GlobalTimer.TimeElapsedSeconds();
+					}
+				} else {
+					if ( m_Input.GamepadButtonStates[iButton].m_Action != kbInput_t::KA_JustReleased ) {
+						m_Input.GamepadButtonStates[iButton].m_Action = kbInput_t::KA_JustReleased;
+					} else {
+						m_Input.GamepadButtonStates[iButton].m_Action = kbInput_t::KA_None;
+					}
+				}
 			}
 		}
 	}
@@ -220,7 +247,9 @@ void kbInputManager::Update( const float DeltaTime ) {
 	}
 
 	for ( int i = 0; i < kbInput_t::Num_NonCharKeys; i++ ) {
-		static int NonCharKeyList[] = { VK_ESCAPE, VK_RETURN };
+
+		// Note: This list's order must match kbNonCharKey_t
+		static int NonCharKeyList[] = { VK_ESCAPE, VK_LCONTROL, VK_RCONTROL, VK_RETURN };
 
 		if ( GetAsyncKeyState(NonCharKeyList[i]) ) {	
 			if ( m_Input.NonCharKeyState[i].m_Action == kbInput_t::KA_None ) {
@@ -327,19 +356,19 @@ void kbInputManager::Update( const float DeltaTime ) {
 	}
 
 	if ( GetAsyncKeyState( VK_LEFT ) ) {
-		m_Input.LeftStickX = -1.0f;
+		m_Input.m_LeftStick.x = -1.0f;
 	}
 
 	if ( GetAsyncKeyState( VK_RIGHT ) ) {
-		m_Input.LeftStickX = 1.0f;
+		m_Input.m_LeftStick.x = 1.0f;
 	}
 
 	if ( GetAsyncKeyState( VK_UP ) ) {
-		m_Input.LeftStickY = 1.0f;
+		m_Input.m_LeftStick.y = 1.0f;
 	}
 
 	if ( GetAsyncKeyState( VK_DOWN ) ) {
-		m_Input.LeftStickY = -1.0f;
+		m_Input.m_LeftStick.y = -1.0f;
 	}
 }
 

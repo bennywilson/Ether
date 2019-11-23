@@ -170,11 +170,8 @@ void kbRenderer_DX11::RenderLight( const kbRenderLight *const pLight ) {
 	SetShaderVec4( "lightPosition", kbVec4( pLight->m_Position.x, pLight->m_Position.y, pLight->m_Position.z, pLight->m_Radius ), pMappedData, varBindings );
 
 	kbMat4 mvpMatrix;
-	if ( m_bRenderToHMD ) {
-		mvpMatrix.MakeScale( kbVec3( 0.5f, 1.0f, 1.0f ) );
-	} else {
-		mvpMatrix.MakeIdentity();
-	}
+	mvpMatrix.MakeIdentity();
+
 	SetShaderMat4( "mvpMatrix", mvpMatrix, pMappedData, varBindings );
 
 	m_pDeviceContext->Unmap( pConstBuffer, 0 );
@@ -214,12 +211,6 @@ void kbRenderer_DX11::RenderShadow( const kbRenderLight *const pLight, kbMat4 sp
 	const float clearColor[] = { 1.0f, 1.0f, 1.0f, 1.0f };
 	m_pDeviceContext->ClearRenderTargetView( GetRenderTarget_DX11(SHADOW_BUFFER)->m_pRenderTargetView, clearColor );
 	m_pDeviceContext->ClearDepthStencilView( GetRenderTarget_DX11(SHADOW_BUFFER_DEPTH)->m_pDepthStencilView , D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1, 0 );
-
-	if ( m_bRenderToHMD ) {
-		const float color[] = { 1.0f, 1.0f, 1.0f, 1.0f };
-		m_pDeviceContext->ClearRenderTargetView( GetRenderTarget_DX11(SHADOW_BUFFER)->m_pRenderTargetView, color );
-		return;
-	}
 
 	const float shadowBufferSize = (float) GetRenderTarget_DX11(SHADOW_BUFFER)->GetWidth();
 	const float halfShadowBufferSize = shadowBufferSize * 0.5f;
@@ -393,22 +384,13 @@ void kbRenderer_DX11::RenderShadow( const kbRenderLight *const pLight, kbMat4 sp
 	}
 
 	D3D11_VIEWPORT viewport;
-	if ( m_bRenderToHMD ) {
+	viewport.Width = (float)Back_Buffer_Width;
+	viewport.Height = (float)Back_Buffer_Height;
+	viewport.MinDepth = 0.0f;
+	viewport.MaxDepth = 1.0f;
+	viewport.TopLeftX = 0;
+	viewport.TopLeftY = 0;
 
-		viewport.TopLeftX = ( float )m_EyeRenderViewport[m_HMDPass].Pos.x;
-		viewport.TopLeftY = ( float )m_EyeRenderViewport[m_HMDPass].Pos.y;
-		viewport.Width = ( float )m_EyeRenderViewport[m_HMDPass].Size.w;
-		viewport.Height = ( float )m_EyeRenderViewport[m_HMDPass].Size.h;
-		viewport.MinDepth = 0;
-		viewport.MaxDepth = 1.0f;
-	} else {
-		viewport.Width = (float)Back_Buffer_Width;
-		viewport.Height = (float)Back_Buffer_Height;
-		viewport.MinDepth = 0.0f;
-		viewport.MaxDepth = 1.0f;
-		viewport.TopLeftX = 0;
-		viewport.TopLeftY = 0;
-	}
 	m_pDeviceContext->RSSetViewports( 1, &viewport );
 
 	m_pCurrentRenderWindow->HackSetViewMatrix( oldViewMatrix );
@@ -422,10 +404,6 @@ void kbRenderer_DX11::RenderShadow( const kbRenderLight *const pLight, kbMat4 sp
  *	kbRenderer_DX11::RenderLightShaft
  */
 void kbRenderer_DX11::RenderLightShafts() {
-
-	if ( m_bRenderToHMD ) {
-		return;	
-	}
 
 	if ( g_ShowLightShafts.GetBool() == false ) {
 		return;
@@ -560,22 +538,13 @@ void kbRenderer_DX11::RenderLightShafts() {
 			const kbMat4 mvpMatrix = kbMat4::identity;
 
 			D3D11_VIEWPORT viewport;
-			if ( m_bRenderToHMD ) {
+			viewport.Width = (float)Back_Buffer_Width;
+			viewport.Height = (float)Back_Buffer_Height;
+			viewport.MinDepth = 0.0f;
+			viewport.MaxDepth = 1.0f;
+			viewport.TopLeftX = 0;
+			viewport.TopLeftY = 0;
 
-				viewport.TopLeftX = (float)m_EyeRenderViewport[m_HMDPass].Pos.x;
-				viewport.TopLeftY = (float)m_EyeRenderViewport[m_HMDPass].Pos.y;
-				viewport.Width = (float)m_EyeRenderViewport[m_HMDPass].Size.w;
-				viewport.Height = (float)m_EyeRenderViewport[m_HMDPass].Size.h;
-				viewport.MinDepth = 0;
-				viewport.MaxDepth = 1.0f;
-			} else {
-				viewport.Width = (float)Back_Buffer_Width;
-				viewport.Height = (float)Back_Buffer_Height;
-				viewport.MinDepth = 0.0f;
-				viewport.MaxDepth = 1.0f;
-				viewport.TopLeftX = 0;
-				viewport.TopLeftY = 0;
-			}
 			m_pDeviceContext->RSSetViewports( 1, &viewport );
 			m_pDeviceContext->OMSetRenderTargets( 1, &GetAccumBuffer( m_iAccumBuffer )->m_pRenderTargetView, nullptr );
 
@@ -605,23 +574,13 @@ void kbRenderer_DX11::RenderLightShafts() {
 	}
 
 	D3D11_VIEWPORT viewport;
-	if ( m_bRenderToHMD ) {
+	viewport.Width = (float) Back_Buffer_Width;
+	viewport.Height = (float) Back_Buffer_Height;
+	viewport.MinDepth = 0.0f;
+	viewport.MaxDepth = 1.0f;
+	viewport.TopLeftX = 0;
+	viewport.TopLeftY = 0;
 
-		viewport.TopLeftX = (float) m_EyeRenderViewport[m_HMDPass].Pos.x;
-		viewport.TopLeftY = (float) m_EyeRenderViewport[m_HMDPass].Pos.y;
-		viewport.Width = (float) m_EyeRenderViewport[m_HMDPass].Size.w;
-		viewport.Height = (float) m_EyeRenderViewport[m_HMDPass].Size.h;
-		viewport.MinDepth = 0;
-		viewport.MaxDepth = 1.0f;
-	} else {
-		viewport.Width = (float) Back_Buffer_Width;
-		viewport.Height = (float) Back_Buffer_Height;
-		viewport.MinDepth = 0.0f;
-		viewport.MaxDepth = 1.0f;
-		viewport.TopLeftX = 0;
-		viewport.TopLeftY = 0;
-	}
 	m_pDeviceContext->RSSetViewports( 1, &viewport );
-
 	m_pDeviceContext->OMSetRenderTargets( 1, &GetAccumBuffer( m_iAccumBuffer )->m_pRenderTargetView, nullptr );
 }

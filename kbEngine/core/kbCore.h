@@ -284,6 +284,8 @@ struct kbInput_t {
 
 	enum kbNonCharKey_t {
 		Escape = 0,
+		LCtrl,
+		RCtrl,
 		Return,
 		Num_NonCharKeys,
 	};
@@ -306,12 +308,15 @@ struct kbInput_t {
 
 	kbKeyState_t	KeyState[256];
 	kbKeyState_t	ArrowState[4];
+	kbKeyState_t	GamepadButtonStates[16];
 	kbKeyState_t	NonCharKeyState[Num_NonCharKeys];
 
-	float			LeftStickX;
-	float			LeftStickY;
-	float			RightStickX;
-	float			RightStickY;
+	kbVec2			m_LeftStick;
+	kbVec2			m_PrevLeftStick;
+
+	kbVec2			m_RightStick;
+	kbVec2			m_PrevRightStick;
+
 	float			LeftTrigger;
 	float			RightTrigger;
 	bool			RightTriggerPressed;

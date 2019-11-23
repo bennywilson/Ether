@@ -309,7 +309,7 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 		g_pRenderer->SetRenderWindow(nullptr);
 	} else {
 		g_pRenderer = new kbRenderer_DX11();
-		g_pRenderer->Init( hWnd, backBufferWidth, backBufferHeight, bRenderVR, bUseVRTrackingOnly );
+		g_pRenderer->Init( hWnd, backBufferWidth, backBufferHeight );
 
 		pGame = new EtherGame();//( g_pRenderer->IsRenderingToHMD() ) ? ( new EtherVRGame() ) : ( new EtherGame() );
 		std::vector< const kbGameEntity * > GameEntitiesList;

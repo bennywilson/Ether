@@ -14,7 +14,6 @@
 
 kbConsoleVariable g_CannonBallTest( "cbstresstest", false, kbConsoleVariable::Console_Bool, "Cannon ball stress test", "" );
 
-
 /**
  *	KungFuSheepStateIdle
  */
@@ -52,11 +51,13 @@ public:
 		const float curTime = g_GlobalTimer.TimeElapsedSeconds();
 		const float frameDT = g_pGame->GetFrameDT();
 		const float blockerCheckReach = frameDT * m_pActorComponent->GetMaxRunSpeed() * 20.0f;
-		if ( input.WasKeyJustPressed( 'K' ) ) {
+		const kbVec2 leftStick = GetLeftStick();
+
+		if ( WasAttackJustPressed()  ) {
 			RequestStateChange( KungFuSheepState::Attack );
-		} else if ( input.IsKeyPressedOrDown( 'J' ) && curTime > m_LastCannonBallTime + 2.0f && GetSheep()->GetCannonBallMeterFill() >= 1.0f ) {
+		} else if ( WasSpecialAttackPressed() && curTime > m_LastCannonBallTime + 2.0f && GetSheep()->GetCannonBallMeterFill() >= 1.0f ) {
 			RequestStateChange( KungFuSheepState::CannonBall );
-		} else if ( input.IsKeyPressedOrDown( 'A' ) ) {
+		} else if ( leftStick.x < 0.0f ) {
 							
 			// Run
 			const kbVec3 moveDir( 0.0f, 0.0f, 1 );
@@ -65,7 +66,7 @@ public:
 			}
 			m_pActorComponent->SetTargetFacingDirection( g_LeftFacing );
 
-		} else if ( input.IsKeyPressedOrDown( 'D' ) ) {
+		} else if ( leftStick.x > 0.0f ) {
 							
 			// Run
 			const kbVec3 moveDir( 0.0f, 0.0f, -1 );
@@ -108,17 +109,18 @@ public:
 	virtual void UpdateState() override {
 
 		const kbInput_t & input = g_pInputManager->GetInput();
+		const kbVec2 leftStick = GetLeftStick();
 
 		const float frameDT = g_pGame->GetFrameDT();
 		const kbVec3 & targetDir = m_pActorComponent->GetTargetFacingDirection();
 		const float blockerCheckReach = frameDT * m_pActorComponent->GetMaxRunSpeed() * 20.0f;
 
-		if ( input.WasKeyJustPressed( 'K' ) ) {
+		if ( WasAttackJustPressed() ) {
 			RequestStateChange( KungFuSheepState::Attack );
-		} else if ( input.IsKeyPressedOrDown( 'J' ) && GetSheep()->GetCannonBallMeterFill() >= 1.0f ) {
+		} else if ( WasSpecialAttackPressed() && GetSheep()->GetCannonBallMeterFill() >= 1.0f ) {
 			RequestStateChange( KungFuSheepState::CannonBall );
 		} else if ( targetDir.z < 0.0f ) {
-			if ( input.IsKeyPressedOrDown( 'A' ) ) {
+			if ( leftStick.x < 0.0f ) {
 				
 				// Run
 				const kbVec3 moveDir( 0.0f, 0.0f, 1 );
@@ -129,14 +131,14 @@ public:
 				} else {
 					RequestStateChange( KungFuSheepState::Idle );
 				}
-			} else if ( input.IsKeyPressedOrDown( 'D' ) ) {
+			} else if ( leftStick.x > 0.0f ) {
 				m_pActorComponent->SetTargetFacingDirection( g_RightFacing );
 			} else {
 				RequestStateChange( KungFuSheepState::Idle );
 			}
 
 		} else {
-			if ( input.IsKeyPressedOrDown( 'D' ) ) {
+			if ( leftStick.x > 0.0f ) {
 
 				// Run
 				const kbVec3 moveDir( 0.0f, 0.0f, -1 );
@@ -147,7 +149,7 @@ public:
 				} else {
 					RequestStateChange( KungFuSheepState::Idle );
 				}
-			} else if ( input.IsKeyPressedOrDown( 'A' ) ) {
+			} else if ( leftStick.x < 0.0f ) {
 				m_pActorComponent->SetTargetFacingDirection( g_LeftFacing );
 			} else {
 				RequestStateChange( KungFuSheepState::Idle );
@@ -204,7 +206,7 @@ public:
 		if ( g_GlobalTimer.TimeElapsedSeconds() - m_StartTime > 0.15f ) {
 		
 			const kbInput_t & input = g_pInputManager->GetInput();
-			if ( input.WasKeyJustPressed( 'K' ) ) {
+			if ( WasAttackJustPressed() ) {
 				m_bQueueAttack = true;
 			}
 		}
@@ -272,16 +274,17 @@ public:
 			m_NextBaaTime = g_GlobalTimer.TimeElapsedSeconds() + 3.0f + kbfrand();
 		}
 
-		if ( input.IsKeyPressedOrDown( 'J' ) && GetSheep()->GetCannonBallMeterFill() >= 1.0f ) {
+		const kbVec2 leftStick = GetLeftStick();
+		if ( WasSpecialAttackPressed() && GetSheep()->GetCannonBallMeterFill() >= 1.0f ) {
 			RequestStateChange( KungFuSheepState::CannonBall );
-		} else if ( input.IsKeyPressedOrDown( 'A' ) ) {
+		} else if ( leftStick.x < 0.0f ) {
 			if ( m_CurrentDirection == 1 ) {
 				m_CurrentDirection = 0;
 				m_NumDirectionChanges++;
 				m_LastDirectionChangeTime = curTime;
 			}
 			m_pActorComponent->SetTargetFacingDirection( g_LeftFacing );
-		} else if ( input.IsKeyPressedOrDown( 'D' ) ) {
+		} else if ( leftStick.x > 0.0f ) {
 
 			if ( m_CurrentDirection == 0 ) {
 				m_CurrentDirection = 1;
@@ -449,6 +452,34 @@ public:
 };
 
 /**
+ *	KungFuSheepStateCinema
+ */
+template<typename T>
+class KungFuSheepStateCinema : public KungFuSheepStateBase<T> {
+
+//---------------------------------------------------------------------------------------------------
+public:
+	KungFuSheepStateCinema( CannonActorComponent *const pPlayerComponent ) : KungFuSheepStateBase( pPlayerComponent ) { }
+
+	virtual void BeginState( T ) override {
+	}
+
+	virtual void UpdateState() override {
+	}
+
+	virtual void EndState( T nextState ) override {
+	}
+
+	const float m_DirectionChangeWindowSec = 0.5f;
+	int m_NumDirectionChanges = 0;
+	int m_CurrentDirection = 0;
+	float m_LastDirectionChangeTime = 0.0f;
+	float m_ShakeNBakeActivationStartTime = -1.0f;
+	int m_NumBaasPlayed = 0;
+	float m_NextBaaTime = 0.0f;
+};
+
+/**
  *	KungFuSheepComponent::Constructor
  */
 void KungFuSheepComponent::Constructor() {
@@ -473,7 +504,8 @@ void KungFuSheepComponent::SetEnable_Internal( const bool bEnable ) {
 			new KungFuSheepStateAttack<KungFuSheepState::SheepStates_t>( this ),
 			new KungFuSheepStateHugged<KungFuSheepState::SheepStates_t>( this ),
 			new KungFuSheepStateDead<KungFuSheepState::SheepStates_t>( this ),
-			new KungFuSheepStateCannonBall<KungFuSheepState::SheepStates_t>( this )
+			new KungFuSheepStateCannonBall<KungFuSheepState::SheepStates_t>( this ),
+			new KungFuSheepStateCinema<KungFuSheepState::SheepStates_t>( this )
 		};
 
 		InitializeStates( sheepStates );
@@ -674,8 +706,7 @@ void KungFuSheepComponent::Update_Internal( const float DT ) {
 			const float healthDrain = DT * 0.05f * (float)numHuggers;
 			m_Health = kbSaturate( m_Health - healthDrain );
 
-			KungFuLevelComponent *const pLevelComponent = g_pCannonGame->GetLevelComponent<KungFuLevelComponent>();
-			pLevelComponent->UpdateSheepHealthBar( m_Health );
+			KungFuLevelComponent::Get()->UpdateSheepHealthBar( m_Health );
 
 			if ( m_Health == 0.0f ) {
 				RequestStateChange( KungFuSheepState::Dead );
@@ -685,8 +716,7 @@ void KungFuSheepComponent::Update_Internal( const float DT ) {
 
 	if ( GetAsyncKeyState( 'C' ) ) {
 		m_CannonBallMeter = 2.0f;
-		KungFuLevelComponent *const pLevelComponent = g_pCannonGame->GetLevelComponent<KungFuLevelComponent>();
-		pLevelComponent->UpdateCannonBallMeter( m_CannonBallMeter, false );
+		KungFuLevelComponent::Get()->UpdateCannonBallMeter( m_CannonBallMeter, false );
 	}
 }
 
@@ -702,6 +732,11 @@ bool KungFuSheepComponent::IsCannonBalling() const {
   */
 void KungFuSheepComponent::TakeDamage( const DealAttackInfo_t<KungFuGame::eAttackType> & attackInfo ) {
 	
+	if ( attackInfo.m_AttackType == KungFuGame::DebugDeath ) {
+		RequestStateChange( KungFuSheepState::Dead );
+		return;
+	}
+
 	if ( IsCannonBalling() ) {
 		return;
 	}
@@ -755,11 +790,10 @@ void KungFuSheepComponent::SpawnSplash() {
 	pSplash->SetPosition( GetOwnerPosition() );
 	pSplash->DeleteWhenComponentsAreInactive( true );
 
-	KungFuLevelComponent *const pLevelComponent = g_pCannonGame->GetLevelComponent<KungFuLevelComponent>();
-	pLevelComponent->DoSplashSound();
+	KungFuLevelComponent::Get()->DoSplashSound();
 
 	if ( kbfrand() > 0.75f ) {
-		pLevelComponent->DoWaterDropletScreenFX();
+		KungFuLevelComponent::Get()->DoWaterDropletScreenFX();
 	}
 }
 
@@ -769,6 +803,13 @@ void KungFuSheepComponent::SpawnSplash() {
 void KungFuSheepComponent::CannonBallActivatedCB() {
 	m_CannonBallMeter = 0.0f;
 	
-	KungFuLevelComponent *const pLevelComponent = g_pCannonGame->GetLevelComponent<KungFuLevelComponent>();
-	pLevelComponent->UpdateCannonBallMeter( 0.0f, true );
+	KungFuLevelComponent::Get()->UpdateCannonBallMeter( 0.0f, true );
+}
+
+/**
+ *	KungFuSheepComponent::ExternalRequestStateChange
+ */	
+void KungFuSheepComponent::ExternalRequestStateChange( const KungFuSheepState::SheepStates_t requestedState ) {
+
+	RequestStateChange( requestedState);
 }
