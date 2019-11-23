@@ -15,11 +15,6 @@
 #include "DX11/kbRenderer_DX11.h"
 #include <directxpackedvector.h>
 
-// oculus
-#include "OVR_CAPI_D3D.h"
-#include "OVR_Math.h"
-using namespace OVR;
-
 kbConsoleVariable g_NoEnemies( "noenemies", false, kbConsoleVariable::Console_Bool, "Remove enemies", "" );
 kbConsoleVariable g_LockMouse( "lockmouse", true, kbConsoleVariable::Console_Int, "Locks mouse", "" );
 kbConsoleVariable g_ShowPos( "showpos", false, kbConsoleVariable::Console_Bool, "Displays player position", "" );
@@ -172,56 +167,22 @@ void EtherGame::PreUpdate_Internal() {
 			break;
 		}
 	}
-
-	if ( ( g_pD3D11Renderer->IsRenderingToHMD() || g_pD3D11Renderer->IsUsingHMDTrackingOnly() ) && g_pD3D11Renderer->GetFrameNum() > 0 ) {
 	
-		kbVec3 eyePos[2];
+	if ( m_pLocalPlayer != nullptr && m_pLocalPlayer->GetChildEntities().size() > 0 ) {
+		kbGameEntity *const pEntity = m_pLocalPlayer->GetChildEntities()[0];
+		EtherWeaponComponent *const pPlayerWeapon = static_cast<EtherWeaponComponent*>( pEntity->GetComponentByType( EtherWeaponComponent::GetType() ) );
+		if ( pPlayerWeapon != nullptr ) {
 	
-		const ovrPosef * eyeRenderPose = g_pD3D11Renderer->GetOvrEyePose();
-		float eyeX = 200.0f * ( ( eyeRenderPose[0].Position.x + eyeRenderPose[1].Position.x ) * 0.5f );
-	
-		kbMat4 camMatrix = m_Camera.m_Rotation.ToMat4();
-		m_HMDWorldOffset = camMatrix[0].ToVec3() * eyeX;
-	
-		for ( int eye = 0; eye < 2; eye++ ) {
-			Vector3f curEyePos = eyeRenderPose[eye].Position;
-			curEyePos.x += eyeX;
-	
-			if ( m_pLocalPlayer != nullptr && m_pLocalPlayer->GetChildEntities().size() > 0 ) {
-				kbGameEntity *const pEntity = m_pLocalPlayer->GetChildEntities()[0];
-				EtherWeaponComponent *const pPlayerWeapon = static_cast<EtherWeaponComponent*>( pEntity->GetComponentByType( EtherWeaponComponent::GetType() ) );
-				if ( pPlayerWeapon != nullptr ) {
-	
-					kbVec3 curPos( 5.5f, -10.0f, 3.0f );	// Weapon offset from camera
-					curPos += m_HMDWorldOffset; 
-					kbTransformComponent *const pTrans = static_cast<kbTransformComponent*>( pPlayerWeapon->GetOwner()->GetComponent(0) );
-					pTrans->SetPosition( kbVec3( curPos.x, curPos.y, curPos.z ) );
-				}
-			}
-	
-			eyePos[eye] = ovrVecTokbVec3( curEyePos );
+			static kbVec3 curPos( 7.75f, -6.5f, 8.0f );	// Weapon offset from camera
+			static float updateAmt = 1.0f;
+			kbTransformComponent *const pTrans = static_cast<kbTransformComponent*>( pPlayerWeapon->GetOwner()->GetComponent(0) );
+			pTrans->SetPosition( kbVec3( curPos.x, curPos.y, curPos.z ) );
 		}
-	
-		// Update renderer cam
-		g_pD3D11Renderer->SetRenderViewTransform( nullptr, m_Camera.m_Position + m_HMDWorldOffset, m_Camera.m_Rotation );
-	
-	} else {
-		if ( m_pLocalPlayer != nullptr && m_pLocalPlayer->GetChildEntities().size() > 0 ) {
-			kbGameEntity *const pEntity = m_pLocalPlayer->GetChildEntities()[0];
-			EtherWeaponComponent *const pPlayerWeapon = static_cast<EtherWeaponComponent*>( pEntity->GetComponentByType( EtherWeaponComponent::GetType() ) );
-			if ( pPlayerWeapon != nullptr ) {
-		
-				static kbVec3 curPos( 7.75f, -6.5f, 8.0f );	// Weapon offset from camera
-				static float updateAmt = 1.0f;
-				kbTransformComponent *const pTrans = static_cast<kbTransformComponent*>( pPlayerWeapon->GetOwner()->GetComponent(0) );
-				pTrans->SetPosition( kbVec3( curPos.x, curPos.y, curPos.z ) );
-			}
-		}
-
-		// Update renderer cam
-		g_pD3D11Renderer->SetRenderViewTransform( nullptr, m_Camera.m_Position, m_Camera.m_Rotation );
 	}
 
+	// Update renderer cam
+	g_pD3D11Renderer->SetRenderViewTransform( nullptr, m_Camera.m_Position, m_Camera.m_Rotation );
+	
 	if ( g_ShowPos.GetBool() ) {
 		std::string PlayerPos;
 		PlayerPos += "x:";
@@ -608,6 +569,10 @@ void EtherGame::RenderHookCallBack( kbRenderTexture *const pSrc, kbRenderTexture
 	static kbVec3 terrainPos;
 	static float terrainWidth;
 	static float halfTerrainWidth;
+
+	static bool dont = false;
+	if (dont == false)
+		return;
 
 	// Initialize
 	static kbTerrainComponent * pTerrain = nullptr;

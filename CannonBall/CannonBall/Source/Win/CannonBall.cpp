@@ -237,9 +237,6 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 
 	std::string mapName;
 
-	bool bRenderVR = false;
-	bool bUseVRTrackingOnly = false;
-
 	if ( GetKeyState( VK_CAPITAL ) ) {
 		g_UseEditor = true;
 	}
@@ -278,10 +275,6 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 
 			} else if ( cmdArg1 == "monitor2" ) {
 				MonitorIdx = 1;
-			} else if ( cmdArg1 == "usevr" ) {
-				bRenderVR = true;
-			} else if ( cmdArg1 == "usevrtrackingonly" ) {
-				bUseVRTrackingOnly = true;
 			} else {
 				mapName = cmdArg1;
 			}
@@ -312,7 +305,7 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 		g_pRenderer->SetRenderWindow( nullptr );
 	} else {
 		g_pRenderer = new kbRenderer_DX11();
-		g_pRenderer->Init( hWnd, backBufferWidth, backBufferHeight, bRenderVR, bUseVRTrackingOnly );
+		g_pRenderer->Init( hWnd, backBufferWidth, backBufferHeight );
 
 		pGame = new CannonGame();//( g_pRenderer->IsRenderingToHMD() ) ? ( new EtherVRGame() ) : ( new CannonGame() );
 		std::vector< const kbGameEntity * > GameEntitiesList;

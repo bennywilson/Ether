@@ -93,6 +93,8 @@ public:
 
 	// Updates
 	void										Update( const float DeltaTime );
+
+	void										EnableAllComponents();
 	void										DisableAllComponents();
 
 	void										RenderSync();

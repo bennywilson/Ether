@@ -18,6 +18,7 @@ namespace KungFuSheepState {
 		Hugged,
 		Dead,
 		CannonBall,
+		Cinema,
 		NumStates
 	};
 }
@@ -33,6 +34,7 @@ class KungFuSheepComponent : public CannonActorComponent, IStateMachine<KungFuSh
 	KB_DECLARE_COMPONENT( KungFuSheepComponent, CannonActorComponent );
 
 	friend class KungFuSheepStateBase<KungFuSheepState::SheepStates_t>;
+	friend class KungFuLevelComponent;
 
 //---------------------------------------------------------------------------------------------------
 public:
@@ -47,6 +49,8 @@ public:
 
 	float										GetCannonBallMeterFill() const { return m_CannonBallMeter; }
 	void										CannonBallActivatedCB();
+
+	void										ExternalRequestStateChange( const KungFuSheepState::SheepStates_t ); 
 
 protected:
 
@@ -103,7 +107,7 @@ protected:
 
 			kbGameEntity *const pGameEnt = g_pCannonGame->GetGameEntities()[i];
 			KungFuSnolafComponent *const pSnolaf = pGameEnt->GetComponent<KungFuSnolafComponent>();
-			if ( pSnolaf == nullptr || pSnolaf->IsDead() ) {
+			if ( pSnolaf == nullptr || pSnolaf->IsDead() || pSnolaf->IsEnabled() == false ) {
 				continue;
 			}
 

@@ -389,7 +389,7 @@ void kbUIWidget::Update_Internal( const float dt ) {
 
 	if ( HasFocus() ) {
 		const kbInput_t & input = g_pInputManager->GetInput();
-		if ( input.WasNonCharKeyJustPressed( kbInput_t::Return ) ) {
+		if ( input.GamepadButtonStates[12].m_Action == kbInput_t::KA_JustPressed|| input.WasNonCharKeyJustPressed( kbInput_t::Return ) ) {
 			FireEvent();
 		}
 	}
@@ -538,12 +538,12 @@ void kbUISlider::Update_Internal( const float dt ) {
 
 			bool bFireEvent = false;
 			const kbInput_t & input = g_pInputManager->GetInput();
-			if ( input.IsArrowPressedOrDown( kbInput_t::Left ) ) {
+			if ( input.IsArrowPressedOrDown( kbInput_t::Left ) || input.IsKeyPressedOrDown( 'A' ) || input.m_LeftStick.x < -0.5f ) {
 				curPos.x -= 0.01f;
 				bFireEvent = true;
 			}
 
-			if ( input.IsArrowPressedOrDown( kbInput_t::Right ) ) {
+			if ( input.IsArrowPressedOrDown( kbInput_t::Right ) || input.IsKeyPressedOrDown( 'D' ) || input.m_LeftStick.x > 0.5f ) {
 				curPos.x += 0.01f;
 				bFireEvent = true;
 			}

@@ -33,11 +33,6 @@ DXGI_FORMAT kbTextureFormatToDXGITextureFormat[NUM_TEXTURE_FORMATS] = {
 	DXGI_FORMAT_R16G16_UINT,
 };
 
-// oculus
-#include "OVR_CAPI_D3D.h"
-#include "OVR_Math.h"
-using namespace OVR;
-
 #if _DEBUG
 #pragma comment( lib, "dxguid.lib")
 const UINT GCreateDebugD3DDevice = true;
@@ -63,99 +58,6 @@ kbGPUTimeStamp::GPUTimeStamp_t							kbGPUTimeStamp::m_TimeStamps[kbGPUTimeStamp
 std::map<kbString, kbGPUTimeStamp::GPUTimeStamp_t * >	kbGPUTimeStamp::m_TimeStampMap;
 std::vector<kbGPUTimeStamp::GPUTimeStamp_t * >			kbGPUTimeStamp::m_TimeStampsThisFrame;
 bool													kbGPUTimeStamp::m_bActiveThisFrame = false;
-
-/**
- *	kbOculusTexture
- */
-class kbOculusTexture {
-
-//-------------------------------------------------------------------------------------------------------------------------------------------------------------
-public:
-
-    kbOculusTexture() :
-        m_Session( nullptr ),
-        m_TextureChain( nullptr ) {
-    }
-
-	~kbOculusTexture() {
-		for ( int i = 0; i < (int)m_TexRtv.size(); i++ ) {
-		    SAFE_RELEASE( m_TexRtv[i] );
-		}
-
-		if ( m_TextureChain ) {
-		    ovr_DestroyTextureSwapChain( m_Session, m_TextureChain );
-		}
-
-		for ( int i = 0; i < (int)m_Texture2D.size(); i++ ) {
-			SAFE_RELEASE( m_Texture2D[i] );
-		}
-    }
-
-	bool Init( ovrSession session, const int width, int const height ) {
-	    m_Session = session;
-	
-	    ovrTextureSwapChainDesc desc = {};
-	    desc.Type = ovrTexture_2D;
-	    desc.ArraySize = 1;
-	    desc.Format = OVR_FORMAT_R8G8B8A8_UNORM_SRGB;
-	    desc.Width = width;
-	    desc.Height = height;
-	    desc.MipLevels = 1;
-	    desc.SampleCount = 1;
-	    desc.MiscFlags = ovrTextureMisc_DX_Typeless;
-	    desc.BindFlags = ovrTextureBind_DX_RenderTarget;
-	    desc.StaticImage = ovrFalse;
-	
-	    ovrResult result = ovr_CreateTextureSwapChainDX( m_Session , g_pD3DDevice, &desc, &m_TextureChain );
-	    if ( OVR_SUCCESS( result ) == false ) {
-	        return false;
-		}
-
-	    int textureCount = 0;
-	    ovr_GetTextureSwapChainLength( m_Session, m_TextureChain, &textureCount );
-	    for ( int i = 0; i < textureCount; i++ ) {
-			ID3D11Texture2D* tex = nullptr;
-			ovr_GetTextureSwapChainBufferDX( m_Session, m_TextureChain, i, IID_PPV_ARGS( &tex ) );
-			D3D11_RENDER_TARGET_VIEW_DESC rtvd = {};
-			rtvd.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
-			rtvd.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2D;
-			ID3D11RenderTargetView* rtv;
-			g_pD3DDevice->CreateRenderTargetView( tex, &rtvd, &rtv );
-			m_TexRtv.push_back( rtv );
-			m_Texture2D.push_back( tex );
-	    }
-	
-	    return true;
-	}
-
-	ovrTextureSwapChain GetTextureChain() {
-		return m_TextureChain; 
-	}
-
-	ID3D11RenderTargetView * GetRTV() {
-		int index = 0;
-		ovr_GetTextureSwapChainCurrentIndex( m_Session, m_TextureChain, &index );
-		return m_TexRtv[index];
-	}
-
-	ID3D11Texture2D * GetTexture2D() {
-		int index = 0;
-		ovr_GetTextureSwapChainCurrentIndex( m_Session, m_TextureChain, &index );
-		return m_Texture2D[index];
-	}
-
-    void Commit() {
-        ovr_CommitTextureSwapChain( m_Session, m_TextureChain);
-    }
-
-private:
-
-	ovrSession									m_Session;
-	ovrTextureSwapChain							m_TextureChain;
-	std::vector<ID3D11RenderTargetView*>		m_TexRtv;
-	std::vector<ID3D11Texture2D*>				m_Texture2D;
-
-};
 
 //-------------------------------------------------------------------------------------------------------------------------------------
 //	kbRenderWindow
@@ -403,12 +305,6 @@ kbRenderer_DX11::kbRenderer_DX11() :
 	m_DebugVertexBuffer( nullptr ),
 	m_DebugPreTransformedVertexBuffer( nullptr ),
 	m_pOffScreenRenderTargetTexture( nullptr ),
-	m_ovrSession( nullptr ),
-	m_HMDPass( 0 ),
-	m_bRenderToHMD( false ),
-	m_SensorSampleTime( 0.0 ),
-	m_MirrorTexture( nullptr ),
-	m_bUsingHMDTrackingOnly( false ),
 	m_FrameNum( 0 ),
 	m_DebugText( nullptr ) {
 
@@ -418,7 +314,6 @@ kbRenderer_DX11::kbRenderer_DX11() :
 
 	ZeroMemory( m_pTextures, sizeof(m_pTextures) );
 
-	m_OculusTexture[0] = m_OculusTexture[1] = nullptr;
 	g_pD3D11Renderer = this;
 
 	kbShaderParamOverrides_t shaderParam;
@@ -436,7 +331,7 @@ kbRenderer_DX11::~kbRenderer_DX11() {
 /**
  *	kbRenderer_DX11::Init
  */
-void kbRenderer_DX11::Init_Internal( HWND hwnd, const int frameWidth, const int frameHeight, const bool bUseHMD, const bool bUseHMDTrackingOnly ) {
+void kbRenderer_DX11::Init_Internal( HWND hwnd, const int frameWidth, const int frameHeight ) {
 
 	kbLog( "Initializing kbRenderer_DX11" );
 
@@ -451,31 +346,19 @@ void kbRenderer_DX11::Init_Internal( HWND hwnd, const int frameWidth, const int 
 	HRESULT hr = CreateDXGIFactory1( __uuidof(IDXGIFactory), (void**)&m_pDXGIFactory );
 	kbErrorCheck( SUCCEEDED( hr ), "kbRenderer_DX11::Init_Internal() - Failed to create DXGI Factory" );
 
-	// Initialize HMD if desired
-	if ( bUseHMD || bUseHMDTrackingOnly ) {
-		m_bRenderToHMD = bUseHMDTrackingOnly == false;
-		m_bUsingHMDTrackingOnly = bUseHMDTrackingOnly;
-		if ( InitializeOculus() == false ) {
-			m_bRenderToHMD = false;
-			m_bUsingHMDTrackingOnly = false;
-		}
-	}
+	Back_Buffer_Width = frameWidth;
+	Back_Buffer_Height = frameHeight;
 
-	if ( m_bRenderToHMD == false ) {
-		Back_Buffer_Width = frameWidth;
-		Back_Buffer_Height = frameHeight;
-
-		hr = D3D11CreateDevice( nullptr,
-								D3D_DRIVER_TYPE_HARDWARE,
-								nullptr,
-								Flags,
-								nullptr,
-								0,
-								D3D11_SDK_VERSION,
-								&m_pD3DDevice,
-								nullptr,
-								&m_pDeviceContext );
-	}
+	hr = D3D11CreateDevice( nullptr,
+							D3D_DRIVER_TYPE_HARDWARE,
+							nullptr,
+							Flags,
+							nullptr,
+							0,
+							D3D11_SDK_VERSION,
+							&m_pD3DDevice,
+							nullptr,
+							&m_pDeviceContext );
 
 	kbErrorCheck( SUCCEEDED( hr ), "kbRenderer_DX11::Init_Internal() - Failed to create D3D11 Device and swap chain" );
 
@@ -487,9 +370,8 @@ void kbRenderer_DX11::Init_Internal( HWND hwnd, const int frameWidth, const int 
 	CreateRenderView( hwnd );
 
 	// create render targets
-	const int deferredRTWidth = ( m_bRenderToHMD )?( m_EyeRenderViewport[0].Size.w * 2 ):( Back_Buffer_Width );
-	const int deferredRTHeight = ( m_bRenderToHMD )?( m_EyeRenderViewport[0].Size.h ):( Back_Buffer_Height );
-
+	const int deferredRTWidth = Back_Buffer_Width;
+	const int deferredRTHeight = Back_Buffer_Height;
 /*
 	KBTEXTURE_NULLFORMAT,
 	KBTEXTURE_R8G8B8A8,
@@ -865,94 +747,6 @@ void kbRenderer_DX11::Init_Internal( HWND hwnd, const int frameWidth, const int 
 }
 
 /**
- *	kbRenderer_DX11::InitializeOculus
- */
-bool kbRenderer_DX11::InitializeOculus() {
-
-	ovrInitParams initParams = { ovrInit_RequestVersion, OVR_MINOR_VERSION, NULL, 0, 0 };
-	ovrResult result = ovr_Initialize( &initParams );
-	if ( OVR_SUCCESS( result ) == false ) {
-		return false;
-	}
-
-	ovrGraphicsLuid luid;
-	result = ovr_Create( &m_ovrSession, &luid );
-	if (OVR_SUCCESS( result ) == false) {
-		return false;
-	}
-
-	m_HMDDesc = ovr_GetHmdDesc( m_ovrSession );
-
-	// Find the adapter
-	IDXGIAdapter * pAdapter = nullptr;
-	for ( unsigned int iAdapter = 0; m_pDXGIFactory->EnumAdapters( iAdapter, &pAdapter) != DXGI_ERROR_NOT_FOUND; ++iAdapter ) {
-		DXGI_ADAPTER_DESC adapterDesc;
-		pAdapter->GetDesc(&adapterDesc);
-
-		if ( memcmp(&adapterDesc.AdapterLuid, (void *)&luid, sizeof( LUID ) ) == 0 )
-			break;
-
-		SAFE_RELEASE( pAdapter );
-	}
-
-	if ( pAdapter == nullptr ) {
-		return false;
-	}
-
-	// Create Device
-	unsigned int flags = (GCreateDebugD3DDevice) ? (D3D11_CREATE_DEVICE_DEBUG) : (0);
-	HRESULT hr = D3D11CreateDevice(
-		pAdapter,
-		D3D_DRIVER_TYPE_UNKNOWN,
-		0,
-		flags,
-		0,
-		0,
-		D3D11_SDK_VERSION,
-		&m_pD3DDevice,
-		nullptr,
-		&m_pDeviceContext
-	);
-
-	if ( hr != ERROR_SUCCESS ) {
-		kbError( "Failed to create oc device" );
-	}
-
-	g_pD3DDevice = m_pD3DDevice;
-
-	m_OculusTexture[0] = new kbOculusTexture();
-	if ( m_OculusTexture[0]->Init( m_ovrSession, 1920 / 2, 1080 ) == false ) {
-		kbError( "Failed to init oculus texture" );
-	}
-	
-	m_EyeRenderViewport[0].Pos.x = 0;
-	m_EyeRenderViewport[0].Pos.y = 0;
-	m_EyeRenderViewport[0].Size.w = 1920 / 2;
-	m_EyeRenderViewport[0].Size.h = 1080;
-
-	m_OculusTexture[1] = new kbOculusTexture();
-	if ( m_OculusTexture[1]->Init( m_ovrSession, 1920 / 2, 1080 ) == false ) {
-		kbError( "Failed to init oculus texture" );
-	}
-	
-	m_EyeRenderViewport[1].Pos.x = 0;
-	m_EyeRenderViewport[1].Pos.y = 0;
-	m_EyeRenderViewport[1].Size.w = 1920 / 2;
-	m_EyeRenderViewport[1].Size.h = 1080;
-
-    ovrMirrorTextureDesc mirrorDesc = {};	
-	mirrorDesc.Format = OVR_FORMAT_R8G8B8A8_UNORM_SRGB;
-    mirrorDesc.Width = Back_Buffer_Width;
-    mirrorDesc.Height = Back_Buffer_Height;
-    result = ovr_CreateMirrorTextureDX( m_ovrSession, g_pD3DDevice, &mirrorDesc, &m_MirrorTexture );
-    if ( OVR_SUCCESS( result ) == false )  {
-		kbError( "kbRenderer_DX11::InitializeOculus() - Failed to create mirror texture" );
-    }
-
-	return true;
-}
-
-/*
  * kbRenderer_DX11::CreateRenderView
  */
 int kbRenderer_DX11::CreateRenderView( HWND hwnd )
@@ -1130,18 +924,6 @@ void kbRenderer_DX11::Shutdown_Internal() {
 	SAFE_RELEASE( m_pBloomGatherShader );
 	SAFE_RELEASE( m_pBloomBlur );
 
-	if ( m_bRenderToHMD ) {
-		delete m_OculusTexture[0];
-		m_OculusTexture[0] = nullptr;
-
-		delete m_OculusTexture[1];
-		m_OculusTexture[1] = nullptr;
-
-		ovr_DestroyMirrorTexture( m_ovrSession, m_MirrorTexture );
-		ovr_Destroy( m_ovrSession );
-		ovr_Shutdown();
-	}
-
 	SAFE_RELEASE( m_pDefaultRasterizerState );
 	SAFE_RELEASE( m_pFrontFaceCullingRasterizerState );
 	SAFE_RELEASE( m_pNoFaceCullingRasterizerState );
@@ -1219,11 +1001,11 @@ void kbRenderer_DX11::RenderScene() {
 	const float colorClear[] = { 0.0f, 0.0f, 0.0f, 0.0f };
 	const float depthClear[] = { 1.0f, 1.0f, 1.0f, 1.0f };
 
-	const int numRenderPasses = ( IsRenderingToHMD() ) ? ( 2 ) : ( 1 );
+	const int numRenderPasses = 1;
 
 	m_pCurrentRenderWindow->BeginFrame();
 
-	for ( m_HMDPass = 0; m_HMDPass < numRenderPasses; m_HMDPass++ ) {
+	for ( int i = 0; i < numRenderPasses; i++ ) {
 
 		{
 			START_SCOPED_RENDER_TIMER( RENDER_THREAD_CLEAR_BUFFERS );
@@ -1244,61 +1026,14 @@ void kbRenderer_DX11::RenderScene() {
 		}
 
 		D3D11_VIEWPORT viewport;
-	
-		if ( IsRenderingToHMD() ) {
-/*			viewport.TopLeftX = ( float )m_EyeRenderViewport[m_HMDPass].Pos.x;
-			viewport.TopLeftY = ( float )m_EyeRenderViewport[m_HMDPass].Pos.y;
-			viewport.Width = ( float )m_EyeRenderViewport[m_HMDPass].Size.w;
-			viewport.Height = ( float )m_EyeRenderViewport[m_HMDPass].Size.h;
-			viewport.MinDepth = 0;
-			viewport.MaxDepth = 1.0f;
-		
-			const ovrMatrix4f proj = ovrMatrix4f_Projection( m_EyeRenderDesc[m_HMDPass].Fov, kbRenderer_DX11::Near_Plane, kbRenderer_DX11::Far_Plane, ovrProjection_None );
-			// HACK TODO
-/*			memcpy( &m_pCurrentRenderWindow->m_ProjectionMatrix, &proj, sizeof( ovrMatrix4f ) );
-			m_pCurrentRenderWindow->m_ProjectionMatrix.TransposeSelf();
-
-			m_pCurrentRenderWindow->m_ProjectionMatrix[2].z *= -1.0f;
-			m_pCurrentRenderWindow->m_ProjectionMatrix[2].w *= -1.0f;
-
-			m_pCurrentRenderWindow->m_ViewMatrix = m_pCurrentRenderWindow->m_EyeMatrices[m_HMDPass];
-			m_pCurrentRenderWindow->m_ViewProjectionMatrix = m_pCurrentRenderWindow->m_ViewMatrix * m_pCurrentRenderWindow->m_ProjectionMatrix;
-		
-			FXMMATRIX inverseProj = XMMatrixInverse( nullptr, XMMATRIXFromkbMat4( m_pCurrentRenderWindow->m_ViewProjectionMatrix ) );
-			m_pCurrentRenderWindow->m_InverseViewProjectionMatrix = kbMat4FromXMMATRIX( inverseProj );
-
-			FXMMATRIX inverseView = XMMatrixInverse( nullptr, XMMATRIXFromkbMat4( m_pCurrentRenderWindow->m_ViewMatrix ) );
-			m_pCurrentRenderWindow->m_CameraPosition.x = inverseView.m[3][0];
-			m_pCurrentRenderWindow->m_CameraPosition.y = inverseView.m[3][1];
-			m_pCurrentRenderWindow->m_CameraPosition.z = inverseView.m[3][2];*/
-
-
-		} else {
-			viewport.Width = (float)Back_Buffer_Width;
-			viewport.Height = (float)Back_Buffer_Height;
-			viewport.MinDepth = 0.0f;
-			viewport.MaxDepth = 1.0f;
-			viewport.TopLeftX = 0;
-			viewport.TopLeftY = 0;
-/*
-			if ( IsUsingHMDTrackingOnly() ) {
-			/	m_pCurrentRenderWindow->m_ViewMatrix = m_pCurrentRenderWindow->m_EyeMatrices[m_HMDPass];
-				m_pCurrentRenderWindow->m_ViewProjectionMatrix = m_pCurrentRenderWindow->m_ViewMatrix * m_pCurrentRenderWindow->m_ProjectionMatrix;
-
-				XMMATRIX inverseProj = XMMatrixInverse( nullptr, XMMATRIXFromkbMat4( m_pCurrentRenderWindow->m_ViewProjectionMatrix ) );
-				m_pCurrentRenderWindow->m_InverseViewProjectionMatrix = kbMat4FromXMMATRIX( inverseProj );
-			}
-
-			if ( this->IsUsingHMDTrackingOnly() ) {
-				XMMATRIX inverseView = XMMatrixInverse( nullptr, XMMATRIXFromkbMat4( m_pCurrentRenderWindow->m_ViewMatrix ) );
-				m_pCurrentRenderWindow->m_CameraPosition.x = inverseView.m[3][0];
-				m_pCurrentRenderWindow->m_CameraPosition.y = inverseView.m[3][1];
-				m_pCurrentRenderWindow->m_CameraPosition.z = inverseView.m[3][2];
-			}*/
-		}
+		viewport.Width = (float)Back_Buffer_Width;
+		viewport.Height = (float)Back_Buffer_Height;
+		viewport.MinDepth = 0.0f;
+		viewport.MaxDepth = 1.0f;
+		viewport.TopLeftX = 0;
+		viewport.TopLeftY = 0;
 	
 		{
-
 			for ( int iHook = 0; iHook < m_RenderHooks[RP_FirstPerson].size(); iHook++ ) {
 				m_RenderHooks[RP_FirstPerson][iHook]->RenderHookCallBack( nullptr, nullptr );
 			}
@@ -1490,10 +1225,6 @@ void kbRenderer_DX11::RenderScene() {
 		}
 	
 		m_RenderState.SetDepthStencilState();
-
-		if ( IsRenderingToHMD() || this->IsUsingHMDTrackingOnly() ) {
-			m_OculusTexture[m_HMDPass]->Commit();
-		}
 	}
 
 	RenderDebugText();
@@ -1509,43 +1240,8 @@ void kbRenderer_DX11::RenderScene() {
 
 	PLACE_GPU_TIME_STAMP( "Debug Rendering" );
 
-	if ( IsUsingHMDTrackingOnly() || IsRenderingToHMD() ) {
-		// Initialize our single full screen Fov layer.
-		ovrLayerEyeFov ld;
-		ld.Header.Type = ovrLayerType_EyeFov;
-		ld.Header.Flags = 0;
-	
-		for ( int eye = 0; eye < 2; ++eye ) {
-			ld.ColorTexture[eye] = m_OculusTexture[eye]->GetTextureChain();
-			ld.Viewport[eye] = m_EyeRenderViewport[eye];
-			ld.Fov[eye] = m_HMDDesc.DefaultEyeFov[eye];
-			ld.RenderPose[eye] = m_EyeRenderPose[eye];
-			ld.SensorSampleTime = m_SensorSampleTime;
-		}
-
-		ovrLayerHeader* layers = &ld.Header;
-		ovrResult result = ovr_SubmitFrame( m_ovrSession, m_FrameNum - 1, nullptr, &layers, 1 );		// hack: need the frame number to start at 0
-
-		if ( IsUsingHMDTrackingOnly() == false ) {
-			// Render mirror
-			ID3D11Texture2D* tex = nullptr;
-			ID3D11Texture2D * pBackBuffer = nullptr;
-			((kbRenderWindow_DX11*)m_pCurrentRenderWindow)->m_pSwapChain->GetBuffer( 0, __uuidof(ID3D11Texture2D), (LPVOID*) &pBackBuffer );
-			ovr_GetMirrorTextureBufferDX( m_ovrSession, m_MirrorTexture, IID_PPV_ARGS(&tex) );
-			m_pDeviceContext->CopyResource( pBackBuffer, tex );
-			tex->Release();
-			((kbRenderWindow_DX11*)m_pCurrentRenderWindow)->m_pSwapChain->Present( 0, 0 );
-		}
-
-		if ( GetAsyncKeyState( VK_SPACE ) ) {
-		   ovr_RecenterTrackingOrigin( m_ovrSession );
-		}
-	} 
-
-	if ( IsRenderingToHMD() == false || IsUsingHMDTrackingOnly() == true ) {
-		START_SCOPED_RENDER_TIMER( RENDER_PRESENT );
-		m_pCurrentRenderWindow->EndFrame();
-	}
+	START_SCOPED_RENDER_TIMER( RENDER_PRESENT );
+	m_pCurrentRenderWindow->EndFrame();
 
 	PLACE_GPU_TIME_STAMP( "End Frame" );
 	kbGPUTimeStamp::EndFrame( m_pDeviceContext );
@@ -2178,9 +1874,6 @@ void kbRenderer_DX11::DrawTexture( ID3D11ShaderResourceView *const pShaderResour
  *	kbRenderer_DX11::RenderSSAO
  */
 void kbRenderer_DX11::RenderSSAO() {
-	if ( m_bRenderToHMD == true ) {
-		return;
-	}
 
 	D3D11_VIEWPORT viewport;
 	viewport.TopLeftX = 0.0f;
@@ -2243,9 +1936,6 @@ void kbRenderer_DX11::RenderSSAO() {
  *	kbRenderer_DX11::RenderBloom
  */
 void kbRenderer_DX11::RenderBloom() {
-	if ( m_bRenderToHMD == true ) {
-		return;
-	}
 
 	D3D11_VIEWPORT viewport;
 	viewport.TopLeftX = 0.0f;
@@ -2287,11 +1977,8 @@ void kbRenderer_DX11::RenderBloom() {
 		kbErrorCheck( SUCCEEDED(hr), "Failed to map matrix buffer" );
 
 		kbMat4 mvpMatrix;
-		if ( m_bRenderToHMD ) {
-			mvpMatrix.MakeScale( kbVec3( 0.5f, 1.0f, 1.0f ) );
-		} else {
-			mvpMatrix.MakeIdentity();
-		}
+		mvpMatrix.MakeIdentity();
+
 		SetShaderMat4( "mvpMatrix", mvpMatrix, mappedResource.pData, varBindings );
 
 		m_pDeviceContext->Unmap( pConstantBuffer, 0 );
@@ -2341,11 +2028,8 @@ void kbRenderer_DX11::RenderBloom() {
 		kbErrorCheck( SUCCEEDED(hr), "Failed to map matrix buffer" );
 
 		kbMat4 mvpMatrix;
-		if ( m_bRenderToHMD ) {
-			mvpMatrix.MakeScale( kbVec3( 0.5f, 1.0f, 1.0f ) );
-		} else {
-			mvpMatrix.MakeIdentity();
-		}
+		mvpMatrix.MakeIdentity();
+
 		SetShaderMat4( "mvpMatrix", mvpMatrix, (byte*) mappedResource.pData, varBindings );
 		SetShaderInt( "numSamples", 5, (byte*) mappedResource.pData, varBindings );
 
@@ -2394,12 +2078,8 @@ void kbRenderer_DX11::RenderBloom() {
 		kbErrorCheck( SUCCEEDED(hr), "Failed to map matrix buffer" );
 
 		kbMat4 mvpMatrix;
-		if ( m_bRenderToHMD ) {
-			mvpMatrix.MakeScale( kbVec3( 0.5f, 1.0f, 1.0f ) );
-		} else {
-			mvpMatrix.MakeIdentity();
-		}
-
+		mvpMatrix.MakeIdentity();
+		
 		SetShaderMat4( "mvpMatrix", mvpMatrix, (byte*) mappedResource.pData, varBindings );
 		SetShaderInt( "numSamples", 5, (byte*) mappedResource.pData, varBindings );
 
@@ -2493,12 +2173,7 @@ void kbRenderer_DX11::RenderPostProcess() {
 
 	RenderBloom();
 
-	if ( m_bRenderToHMD == false ) {
-		m_pDeviceContext->OMSetRenderTargets( 1, &((kbRenderWindow_DX11*)m_pCurrentRenderWindow)->m_pRenderTargetView, m_pDepthStencilView );
-	} else {
-		ID3D11RenderTargetView *const rtv = m_OculusTexture[m_HMDPass]->GetRTV();
-		m_pDeviceContext->OMSetRenderTargets( 1, &rtv, nullptr );
-	}
+	m_pDeviceContext->OMSetRenderTargets( 1, &((kbRenderWindow_DX11*)m_pCurrentRenderWindow)->m_pRenderTargetView, m_pDepthStencilView );
 
 	const unsigned int stride = sizeof( vertexLayout );
 	const unsigned int offset = 0;
@@ -2531,11 +2206,7 @@ void kbRenderer_DX11::RenderPostProcess() {
 	kbErrorCheck( SUCCEEDED(hr), "Failed to map matrix buffer" );
 	
 	kbMat4 mvpMatrix;
-	if ( m_bRenderToHMD ) {
-		mvpMatrix.MakeScale( kbVec3( 0.5f, 1.0f, 1.0f ) );
-	} else {
-		mvpMatrix.MakeIdentity();
-	}
+	mvpMatrix.MakeIdentity();
 
 	SetShaderMat4( "mvpMatrix", mvpMatrix, mappedResource.pData, varBindings );
 	SetShaderMat4( "inverseProjection", m_pCurrentRenderWindow->GetInverseProjectionMatrix(), mappedResource.pData, varBindings );	
@@ -2561,14 +2232,10 @@ void kbRenderer_DX11::RenderPostProcess() {
  *	kbRenderer_DX11::RenderConsole
  */
 void kbRenderer_DX11::RenderConsole() {
-	if ( m_bRenderToHMD == false ) {
-		kbRenderWindow_DX11 *const pCurWindow = (kbRenderWindow_DX11*)m_pCurrentRenderWindow;
-		m_pDeviceContext->OMSetRenderTargets( 1, &pCurWindow->m_pRenderTargetView, m_pDepthStencilView );
-	} else {
-		ID3D11RenderTargetView *const rtv = m_OculusTexture[0]->GetRTV();
-		m_pDeviceContext->OMSetRenderTargets( 1, &rtv, nullptr );
-	}
 
+	kbRenderWindow_DX11 *const pCurWindow = (kbRenderWindow_DX11*)m_pCurrentRenderWindow;
+	m_pDeviceContext->OMSetRenderTargets( 1, &pCurWindow->m_pRenderTargetView, m_pDepthStencilView );
+	
 	const unsigned int stride = sizeof( vertexLayout );
 	const unsigned int offset = 0;
 
@@ -2595,9 +2262,6 @@ void kbRenderer_DX11::RenderConsole() {
 	SetShaderMat4( "viewMatrix", m_pCurrentRenderWindow->GetViewMatrix(), mappedResource.pData, varBindings );
 
 	kbMat4 mvpMatrix = kbMat4::identity;
-	if ( m_bRenderToHMD ) {
-		mvpMatrix.MakeScale( kbVec3( 0.5f, 1.0f, 1.0f ) );
-	}
 	SetShaderMat4( "mvpMatrix", mvpMatrix, mappedResource.pData, varBindings );
 	SetShaderMat4( "projection", m_pCurrentRenderWindow->GetViewProjectionMatrix(), mappedResource.pData, varBindings );
 	SetShaderMat4( "inverseProjection", m_pCurrentRenderWindow->GetInverseProjectionMatrix(), mappedResource.pData, varBindings );
@@ -2639,41 +2303,6 @@ bool kbRenderer_DX11::LoadTexture_Internal( const char * name, int index, int wi
  *	kbRenderer_DX11:RenderSync_Internal
  */
 void kbRenderer_DX11::RenderSync_Internal() {
-
-	// Oculus
-	if ( IsRenderingToHMD() || IsUsingHMDTrackingOnly() ) {	
-
-		m_EyeRenderDesc[0] = ovr_GetRenderDesc( m_ovrSession, ovrEye_Left, m_HMDDesc.DefaultEyeFov[0] );
-		m_EyeRenderDesc[1] = ovr_GetRenderDesc( m_ovrSession, ovrEye_Right, m_HMDDesc.DefaultEyeFov[1] );
-
-		// Get both eye poses simultaneously, with IPD offset already included. 
-		ovrPosef HmdToEyePose[2] = { m_EyeRenderDesc[0].HmdToEyePose, m_EyeRenderDesc[1].HmdToEyePose };
-		ovr_GetEyePoses( m_ovrSession, m_FrameNum, ovrTrue, HmdToEyePose, m_EyeRenderPose, &m_SensorSampleTime );
-
-		for ( int iEye = 0; iEye < 2; iEye++ ) {
-
-			const kbMat4 gameCameraMatrix = m_RenderWindowList[0]->GetCameraRotation().ToMat4();
-			const kbVec3 rightVec = gameCameraMatrix[0].ToVec3();
-			const kbVec3 forwardVec = kbVec3( gameCameraMatrix[2].ToVec3().x, 0.0f, gameCameraMatrix[2].ToVec3().z ).Normalized();
-			float gameCameraYaw = acos( forwardVec.Dot( kbVec3::forward ) );
-
-			const Matrix4f rollPitchYaw = Matrix4f::RotationY( kbPI + gameCameraYaw );
-			const Quatf orientation = m_EyeRenderPose[iEye].Orientation;
-			Matrix4f finalRollPitchYaw  = rollPitchYaw * Matrix4f(m_EyeRenderPose[iEye].Orientation);
-			finalRollPitchYaw.M[0][0] *= -1.0f;
-			finalRollPitchYaw.M[0][1] *= -1.0f;
-			finalRollPitchYaw.M[0][2] *= -1.0f;
-			const Vector3f finalUp = finalRollPitchYaw.Transform(Vector3f(0,1,0));
-			const Vector3f finalForward = finalRollPitchYaw.Transform(Vector3f(0,0,1));
-			const Vector3f shiftedEyePos = rollPitchYaw.Transform( m_EyeRenderPose[iEye].Position ) + 
-										   Vector3f( m_RenderWindowList[0]->GetCameraPosition().x, m_RenderWindowList[0]->GetCameraPosition().y, m_RenderWindowList[0]->GetCameraPosition().z );
-			
-			const Matrix4f view = Matrix4f::LookAtLH(shiftedEyePos, shiftedEyePos - finalForward, finalUp);
-			
-			memcpy( &((kbRenderWindow_DX11*)m_RenderWindowList[0])->m_EyeMatrices[iEye], &view, sizeof( Matrix4f ) );
-			((kbRenderWindow_DX11*)m_RenderWindowList[0])->m_EyeMatrices[iEye].TransposeSelf();
-		}
-	}
 
 	extern kbConsoleVariable g_ShowPerfTimers;
 	if ( g_ShowPerfTimers.GetBool() ) {

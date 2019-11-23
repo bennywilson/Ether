@@ -421,6 +421,7 @@ public:
 	StateEnum GetCurrentState() const { return m_CurrentState; }
 
 protected:
+
 	virtual void StateChangeCallback( const StateEnum previousState, const StateEnum nextState ) { }
 
 	StateClass * m_States[StateEnum::NumStates];
@@ -448,18 +449,13 @@ public:
 		return m_pInstance;
 	}
 
-	static bool InstanceExists() {
-		return m_pInstance != nullptr;
-	}
-
-protected:
-
-	static void InitializeSingletonInstance( T *const pInstance ) {
-		kbErrorCheck( m_pInstance == nullptr, "Multiple instances of an ISingleton" );
-		m_pInstance = pInstance;
+	static void DeleteSingleton() {
+		delete m_pInstance;
+		m_pInstance = nullptr;
 	}
 
 private:
+
 	inline static T * m_pInstance = nullptr;
 };
 

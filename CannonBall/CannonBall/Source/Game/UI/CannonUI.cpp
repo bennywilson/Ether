@@ -382,11 +382,12 @@ void CannonBallPauseMenuUIComponent::Update_Internal( const float DT ) {
 
 	Super::Update_Internal( DT );
 
-	const kbInput_t & input = g_pInputManager->GetInput();
-
 	bool bNewOptionSelected = false;
 	int prevSelected = m_SelectedWidgetIdx;
-	if ( input.WasArrowJustPressed( kbInput_t::Up ) ) {
+	const kbVec2 LeftStick = GetLeftStick();
+	const kbVec2 PrevLeftStick = GetPrevLeftStick();
+
+	if ( LeftStick.y > 0.5f && PrevLeftStick.y <= 0.5f ) {
 		m_WidgetList[m_SelectedWidgetIdx]->SetFocus( false );
 		m_SelectedWidgetIdx--;
 		if ( m_SelectedWidgetIdx < 0 ) {
@@ -394,7 +395,7 @@ void CannonBallPauseMenuUIComponent::Update_Internal( const float DT ) {
 		}
 		m_WidgetList[m_SelectedWidgetIdx]->SetFocus( true );
 		bNewOptionSelected = true;
-	} else if ( input.WasArrowJustPressed( kbInput_t::Down ) ) {
+	} else if ( LeftStick.y < -0.5f && PrevLeftStick.y >= -0.5f ) {
 		m_WidgetList[m_SelectedWidgetIdx]->SetFocus( false );
 		m_SelectedWidgetIdx++;
 		if ( m_SelectedWidgetIdx >= m_WidgetList.size() ) {
@@ -488,8 +489,8 @@ void CannonBallGameSettingsComponent::SaveSettings() {
  */
 CannonBallGameSettingsComponent * CannonBallGameSettingsComponent::Get() {
 
-	if ( InstanceExists() == true ) {
-		return ISingleton<CannonBallGameSettingsComponent>::Get();
+	if ( s_pInstance != nullptr ) {
+		return s_pInstance;
 	}
 
 	CannonBallGameSettingsComponent * pInstance = nullptr;
@@ -497,18 +498,17 @@ CannonBallGameSettingsComponent * CannonBallGameSettingsComponent::Get() {
 	kbFile gameSettingsFile;
 	if ( gameSettingsFile.Open( "./Settings/gameSettings.txt", kbFile::FT_Read ) ) {
 		kbGameEntity *const gameEntity = gameSettingsFile.ReadGameEntity();
-		pInstance = (CannonBallGameSettingsComponent*)gameEntity->GetComponent<CannonBallGameSettingsComponent>();
+		s_pInstance = (CannonBallGameSettingsComponent*)gameEntity->GetComponent<CannonBallGameSettingsComponent>();
 		gameSettingsFile.Close();
 	}
 
-	if ( pInstance == nullptr ) {
-		pInstance = new CannonBallGameSettingsComponent();
+	if ( s_pInstance == nullptr ) {
+		s_pInstance = new CannonBallGameSettingsComponent();
 	}
 
-	InitializeSingletonInstance( pInstance );
-	pInstance->SaveSettings();
+	s_pInstance->SaveSettings();
 
-	return pInstance;
+	return s_pInstance;
 }
 
 /**

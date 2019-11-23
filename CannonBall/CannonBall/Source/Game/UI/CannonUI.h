@@ -152,6 +152,10 @@ public:
 	int										m_Volume;
 	int										m_Brightness;
 	int										m_VisualQuality;
+
+private:
+
+	inline static CannonBallGameSettingsComponent *	s_pInstance = nullptr;
 };
 
 #endif

@@ -3467,7 +3467,7 @@ kbGameEntity 0 0 0 0 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		Name = "Entity_1060"
+		Name = "Yes_No_Prompt"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
 		Position = 74.198746 -53.702869 -382.945374
 		Scale = 1.000000 1.000000 1.000000

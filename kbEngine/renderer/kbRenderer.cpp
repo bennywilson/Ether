@@ -3,7 +3,7 @@
 //
 // Renderer implementation
 //
-// 2018 kbEngine 2.0
+// 2018-2019 kbEngine 2.0
 //==============================================================================
 #include <stdio.h>
 #include <math.h>
@@ -255,12 +255,12 @@ kbRenderer::~kbRenderer() {
 /**
  *	kbRenderer::Init
  */
-void kbRenderer::Init( HWND hwnd, const int width, const int height, const bool bUseHMD, const bool bUseHMDTrackingOnly ) {
+void kbRenderer::Init( HWND hwnd, const int width, const int height ) {
 
 	kbLog( "Initializing kbRenderer" );
 	const float startInitTime = g_GlobalTimer.TimeElapsedSeconds();
 
-	Init_Internal( hwnd, width, height, bUseHMD, bUseHMDTrackingOnly );
+	Init_Internal( hwnd, width, height );
 
 	// Kick off render thread
 	m_pRenderJob = new kbRenderJob();
