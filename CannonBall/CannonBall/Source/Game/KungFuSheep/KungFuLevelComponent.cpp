@@ -541,6 +541,8 @@ void KungFuLevelComponent::Update_Internal( const float DeltaTime ) {
 			m_WaterDropletFXStartTime = -1.0f;
 		}
 	}
+
+	UpdateDebugAndCheats();
 }
 
 /**
@@ -737,6 +739,7 @@ void KungFuLevelComponent::UpdateDebugAndCheats() {
 		damageInfo.m_AttackType = KungFuGame::DebugDeath;
 
 		m_pSheep->TakeDamage( damageInfo );
+		g_pCannonGame->GetMainCamera()->SetTarget( nullptr );
 	}
 }
 

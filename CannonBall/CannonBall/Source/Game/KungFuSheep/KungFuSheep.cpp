@@ -734,6 +734,7 @@ void KungFuSheepComponent::TakeDamage( const DealAttackInfo_t<KungFuGame::eAttac
 	
 	if ( attackInfo.m_AttackType == KungFuGame::DebugDeath ) {
 		RequestStateChange( KungFuSheepState::Dead );
+		m_Health = -1000.0f;
 		return;
 	}
 
