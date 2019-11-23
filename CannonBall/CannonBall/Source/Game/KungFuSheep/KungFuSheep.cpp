@@ -713,11 +713,6 @@ void KungFuSheepComponent::Update_Internal( const float DT ) {
 			}
 		}
 	}
-
-	if ( GetAsyncKeyState( 'C' ) ) {
-		m_CannonBallMeter = 2.0f;
-		KungFuLevelComponent::Get()->UpdateCannonBallMeter( m_CannonBallMeter, false );
-	}
 }
 
  /**

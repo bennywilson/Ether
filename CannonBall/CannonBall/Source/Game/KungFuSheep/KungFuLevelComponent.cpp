@@ -730,16 +730,23 @@ void KungFuLevelComponent::ReturnSnolafToPool( KungFuSnolafComponent *const pSno
 void KungFuLevelComponent::UpdateDebugAndCheats() {
 
 	const auto input = g_pInputManager->GetInput();
-	if ( input.IsKeyPressedOrDown( 'D' ) && input.IsNonCharKeyPressedOrDown( kbInput_t::LCtrl ) ) {
+	if ( input.IsNonCharKeyPressedOrDown( kbInput_t::LCtrl ) ) {
 
-		DealAttackInfo_t<KungFuGame::eAttackType> damageInfo;
-		damageInfo.m_BaseDamage = 999999.0f;
-		damageInfo.m_pAttacker = nullptr;
-		damageInfo.m_Radius = 10.0f;
-		damageInfo.m_AttackType = KungFuGame::DebugDeath;
+		if ( input.IsKeyPressedOrDown( 'D' ) ) {
+			DealAttackInfo_t<KungFuGame::eAttackType> damageInfo;
+			damageInfo.m_BaseDamage = 999999.0f;
+			damageInfo.m_pAttacker = nullptr;
+			damageInfo.m_Radius = 10.0f;
+			damageInfo.m_AttackType = KungFuGame::DebugDeath;
 
-		m_pSheep->TakeDamage( damageInfo );
-		g_pCannonGame->GetMainCamera()->SetTarget( nullptr );
+			m_pSheep->TakeDamage( damageInfo );
+			g_pCannonGame->GetMainCamera()->SetTarget( nullptr );
+		}
+
+		if ( input.IsKeyPressedOrDown( 'C' ) ) {
+			m_pSheep->m_CannonBallMeter = 2.0f;
+			KungFuLevelComponent::Get()->UpdateCannonBallMeter( m_pSheep->m_CannonBallMeter, false );
+		}
 	}
 }
 
