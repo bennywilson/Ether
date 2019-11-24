@@ -323,11 +323,16 @@ class StateMachineNode abstract {
 //-------------------------------------------------------------------------------------------------------------------------------------------------------------
 public:
 
-	StateMachineNode() : m_RequestedState( (StateEnum)0 ), m_bHasStateChangeRequest( false ) { }
+	StateMachineNode() : m_RequestedState( (StateEnum)0 ), m_StateStartTime( -1.0f ), m_bHasStateChangeRequest( false ) { }
 
-	virtual void BeginState( const StateEnum previousState ) { }
-	virtual void UpdateState() { }
-	virtual void EndState( const StateEnum nextState ) { }
+	void BeginState( const StateEnum previousState ) {
+		m_StateStartTime = g_GlobalTimer.TimeElapsedSeconds();
+		BeginState_Internal( previousState );
+	}
+	void UpdateState() { UpdateState_Internal(); }
+	void EndState( const StateEnum nextState ) { EndState_Internal( nextState ); }
+
+	float GetTimeSinceStateBegan() const { return g_GlobalTimer.TimeElapsedSeconds() - m_StateStartTime; }
 
 	bool HasStateChangeRequest() const { return m_bHasStateChangeRequest; }
 	StateEnum GetAndClearRequestedStateChange() { m_bHasStateChangeRequest = false; return m_RequestedState; }
@@ -338,7 +343,13 @@ protected:
 
 private:
 
+	virtual void BeginState_Internal( const StateEnum previousState ) { }
+	virtual void UpdateState_Internal() { }
+	virtual void EndState_Internal( const StateEnum nextState ) { }
+
 	StateEnum m_RequestedState;
+
+	float m_StateStartTime;
 	bool m_bHasStateChangeRequest;
 };
 

@@ -27,7 +27,7 @@ class KungFuSheepStateIdle : public KungFuSheepStateBase<T> {
 public:
 	KungFuSheepStateIdle( CannonActorComponent *const pPlayerComponent ) : KungFuSheepStateBase( pPlayerComponent ) { }
 
-	virtual void BeginState( T prevState ) override {
+	virtual void BeginState_Internal( T prevState ) override {
 
 		static const kbString IdleL_Anim( "IdleLeft_Basic" );
 		static const kbString IdleR_Anim( "IdleRight_Basic" );
@@ -44,7 +44,7 @@ public:
 		}
 	}
 
-	virtual void UpdateState() override {
+	virtual void UpdateState_Internal() override {
 
 		const kbInput_t & input = g_pInputManager->GetInput();
 
@@ -83,7 +83,7 @@ public:
 		}
 	}
 
-	virtual void EndState( T nextState ) override { }
+	virtual void EndState_Internal( T nextState ) override { }
 
 private:
 
@@ -100,13 +100,13 @@ class KungFuSheepStateRun : public KungFuSheepStateBase<T> {
 public:
 	KungFuSheepStateRun( CannonActorComponent *const pPlayerComponent ) : KungFuSheepStateBase( pPlayerComponent ) { }
 
-	virtual void BeginState( T ) override {
+	virtual void BeginState_Internal( T ) override {
 
 		static const kbString Run_Anim( "Run_Basic" );
 		m_pActorComponent->PlayAnimation( Run_Anim, 0.05f, false );
 	}
 
-	virtual void UpdateState() override {
+	virtual void UpdateState_Internal() override {
 
 		const kbInput_t & input = g_pInputManager->GetInput();
 		const kbVec2 leftStick = GetLeftStick();
@@ -157,7 +157,7 @@ public:
 		}
 	}
 
-	virtual void EndState( T ) override { }
+	virtual void EndState_Internal( T ) override { }
 };
 
 /**
@@ -170,7 +170,7 @@ class KungFuSheepStateAttack : public KungFuSheepStateBase<T> {
 public:
 	KungFuSheepStateAttack( CannonActorComponent *const pPlayerComponent ) : KungFuSheepStateBase( pPlayerComponent ) { }
 
-	virtual void BeginState( T ) override {
+	virtual void BeginState_Internal( T ) override {
 
 		m_StartTime = g_GlobalTimer.TimeElapsedSeconds();
 		m_bQueueAttack = false;
@@ -196,7 +196,7 @@ public:
 		}
 	}
 
-	virtual void UpdateState() override {
+	virtual void UpdateState_Internal() override {
 
 		static const kbString PunchL_Anim( "PunchLeft_Basic" );
 		static const kbString KickL_Anim( "KickLeft_Basic" );
@@ -238,7 +238,7 @@ class KungFuSheepStateHugged : public KungFuSheepStateBase<T> {
 public:
 	KungFuSheepStateHugged( CannonActorComponent *const pPlayerComponent ) : KungFuSheepStateBase( pPlayerComponent ) { }
 
-	virtual void BeginState( T ) override {
+	virtual void BeginState_Internal( T ) override {
 		m_NumDirectionChanges = 0;
 		m_CurrentDirection = 0;
 		m_ShakeNBakeActivationStartTime = -1;
@@ -254,13 +254,13 @@ public:
 		pSheep->SetAnimationTimeScaleMultiplier( IdleR_Anim, 2.0f );
 
 		if ( kbfrand() > 0.5f ) {
-			GetSheep()->PlayBaa( 0 );
+			GetSheep()->PlayBaa( -1 );
 			m_NextBaaTime = g_GlobalTimer.TimeElapsedSeconds() + 1 + 3.0f * kbfrand();
 			m_NumBaasPlayed = 1;
 		}
 	}
 
-	virtual void UpdateState() override {
+	virtual void UpdateState_Internal() override {
 		const kbInput_t & input = g_pInputManager->GetInput();
 
 		const float frameDT = g_pGame->GetFrameDT();
@@ -270,7 +270,7 @@ public:
 		// Baaa
 		if ( m_NumBaasPlayed < 2 && g_GlobalTimer.TimeElapsedSeconds() > m_NextBaaTime ) {
 			m_NumBaasPlayed++;
-			GetSheep()->PlayBaa( 0 );
+			GetSheep()->PlayBaa( -1 );
 			m_NextBaaTime = g_GlobalTimer.TimeElapsedSeconds() + 3.0f + kbfrand();
 		}
 
@@ -350,7 +350,7 @@ public:
 		}
 	}
 
-	virtual void EndState( T nextState ) override {
+	virtual void EndState_Internal( T nextState ) override {
 
 		static const kbString IdleL_Anim( "IdleLeft_Basic" );
 		static const kbString IdleR_Anim( "IdleRight_Basic" );
@@ -379,13 +379,13 @@ class KungFuSheepStateDead : public KungFuSheepStateBase<T> {
 public:
 	KungFuSheepStateDead( CannonActorComponent *const pPlayerComponent ) : KungFuSheepStateBase( pPlayerComponent ) { }
 
-	virtual void BeginState( T ) override {
+	virtual void BeginState_Internal( T ) override {
 		kbFlingPhysicsComponent *const pFlingPhysics = GetSheep()->GetComponent<kbFlingPhysicsComponent>();
 		pFlingPhysics->Enable( true );
 		m_bSplashDone = false;
 	}
 
-	virtual void UpdateState() override {
+	virtual void UpdateState_Internal() override {
 
 		if ( m_bSplashDone == false && GetSheep()->GetOwnerPosition().y < -60.0f ) {
 			m_bSplashDone = true;
@@ -408,7 +408,7 @@ public:
 	
 	kbVec3 m_OldFacingDirection;
 
-	virtual void BeginState( T prevState ) override {
+	virtual void BeginState_Internal( T prevState ) override {
 
 		static const kbString CannonBall_Anim( "CannonBall" );
 		static const kbString CannonBallWindUp_Anim( "CannonBallWindUp" );
@@ -430,7 +430,7 @@ public:
 		m_StartCannonBallTime = g_GlobalTimer.TimeElapsedSeconds();
 	}
 
-	virtual void UpdateState() override {
+	virtual void UpdateState_Internal() override {
 		
 		// Hack to avoid exiting Cannonball early.  Not sure if needed at this point
 		if ( g_GlobalTimer.TimeElapsedSeconds() < m_StartCannonBallTime + 1.0f ) {
@@ -443,7 +443,7 @@ public:
 		}
 	}
 
-	virtual void EndState( T nextState ) override {
+	virtual void EndState_Internal( T nextState ) override {
 		m_pActorComponent->SetTargetFacingDirection( m_OldFacingDirection );
 		GetSheep()->CannonBallActivatedCB();
 	}
@@ -461,13 +461,13 @@ class KungFuSheepStateCinema : public KungFuSheepStateBase<T> {
 public:
 	KungFuSheepStateCinema( CannonActorComponent *const pPlayerComponent ) : KungFuSheepStateBase( pPlayerComponent ) { }
 
-	virtual void BeginState( T ) override {
+	virtual void BeginState_Internal( T ) override {
 	}
 
-	virtual void UpdateState() override {
+	virtual void UpdateState_Internal() override {
 	}
 
-	virtual void EndState( T nextState ) override {
+	virtual void EndState_Internal( T nextState ) override {
 	}
 
 	const float m_DirectionChangeWindowSec = 0.5f;
@@ -771,7 +771,11 @@ void KungFuSheepComponent::PlayBaa( const int baaType ) {
 		return;
 	}
 
-	m_BaaaVO[rand() % m_BaaaVO.size()].PlaySoundAtPosition( GetOwnerPosition() );
+	if ( baaType == -1 ) {
+		m_BaaaVO[rand() % m_BaaaVO.size()].PlaySoundAtPosition( GetOwnerPosition() );
+	} else {
+		m_BaaaVO[baaType].PlaySoundAtPosition( GetOwnerPosition() );
+	}
 }
 
 /**

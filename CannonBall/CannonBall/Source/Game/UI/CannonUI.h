@@ -126,6 +126,35 @@ private:
 };
 
 /**
+ *	CannonBallMainMenuComponent
+ */
+class CannonBallMainMenuComponent : public kbUIWidget {
+
+	KB_DECLARE_COMPONENT( CannonBallMainMenuComponent, kbUIWidget );
+
+//---------------------------------------------------------------------------------------------------
+public:
+
+	virtual void							SetEnable_Internal( const bool bEnable ) override;
+	virtual void							Update_Internal( const float DeltaTime ) override;
+
+	virtual void							WidgetEventCB( kbUIWidget *const pWidget );
+
+	void									SetAnimationFrame( const int idx );
+
+protected:
+
+	// Editor
+	std::vector<kbSoundData>				m_ActionVO;
+
+
+	// Runtime
+	int										m_AnimationState;
+	float									m_TimeAnimStateBegan;
+	kbVec3									m_StartRelativePos;
+};
+
+/**
  *	CannonBallYesNoPromptComponent
  */
 class CannonBallYesNoPromptComponent : public kbUIWidget {

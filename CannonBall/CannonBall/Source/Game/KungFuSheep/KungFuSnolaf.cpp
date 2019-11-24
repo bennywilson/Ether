@@ -23,13 +23,13 @@ public:
 	KungFuSnolafStateIdle( CannonActorComponent *const pPlayerComponent ) : KungFuSnolafStateBase( pPlayerComponent ) { }
 
 
-	virtual void BeginState( T prevState ) override {
+	virtual void BeginState_Internal( T prevState ) override {
 
 		static const kbString Idle_Anim( "Idle_1" );
 		m_pActorComponent->PlayAnimation( Idle_Anim, 0.05f );
 	}
 
-	virtual void UpdateState() override {
+	virtual void UpdateState_Internal() override {
 
 		if ( GetTarget() != nullptr ) {
 			RotateTowardTarget();
@@ -41,7 +41,7 @@ public:
 		}
 	}
 
-	virtual void EndState( T ) override { }
+	virtual void EndState_Internal( T ) override { }
 };
 
 /**
@@ -54,7 +54,7 @@ class KungFuSnolafStateRun : public KungFuSnolafStateBase<T> {
 public:
 	KungFuSnolafStateRun( CannonActorComponent *const pPlayerComponent ) : KungFuSnolafStateBase( pPlayerComponent ) { }
 
-	virtual void BeginState( T ) override {
+	virtual void BeginState_Internal( T ) override {
 
 		static const kbString Run_Anim( "Run" );
 		m_pActorComponent->PlayAnimation( Run_Anim, 0.05f );
@@ -62,7 +62,7 @@ public:
 		GetSnolaf()->EnableSmallLoveHearts( true );
 	}
 
-	virtual void UpdateState() override {
+	virtual void UpdateState_Internal() override {
 
 		const float frameDT = g_pGame->GetFrameDT();
 
@@ -116,7 +116,7 @@ public:
 		m_pActorComponent->SetOwnerPosition( newSnolafPos );
 	}
 
-	virtual void EndState( T ) override {
+	virtual void EndState_Internal( T ) override {
 		GetSnolaf()->EnableSmallLoveHearts( false );
 	}
 };
@@ -131,7 +131,7 @@ class KungFuSnolafStateHug : public KungFuSnolafStateBase<T> {
 public:
 	KungFuSnolafStateHug( CannonActorComponent *const pPlayerComponent ) : KungFuSnolafStateBase( pPlayerComponent ) { }
 
-	virtual void BeginState( T ) override {
+	virtual void BeginState_Internal( T ) override {
 
 		static const kbString HugLeft_Anim( "Hug_Left" );
 		static const kbString HugRight_Anim( "Hug_Right" );
@@ -163,7 +163,7 @@ public:
 		m_bFirstHitYet = false;
 	}
 
-	virtual void UpdateState() override {
+	virtual void UpdateState_Internal() override {
 
  		const float frameDT = g_pGame->GetFrameDT();
 		
@@ -222,7 +222,7 @@ public:
 		}
 	}
 
-	virtual void EndState( T ) override {
+	virtual void EndState_Internal( T ) override {
 		GetSnolaf()->EnableLargeLoveHearts( false );
 	}
 
@@ -244,15 +244,15 @@ public:
 	KungFuSnolafStateWatchCannonBall( CannonActorComponent *const pPlayerComponent ) : KungFuSnolafStateBase( pPlayerComponent ) { }
 
 
-	virtual void BeginState( T ) override {
+	virtual void BeginState_Internal( T ) override {
 
 		static const kbString Watch_CannonBall( "Watch_CannonBall" );
 		m_pActorComponent->PlayAnimation( Watch_CannonBall, 0.05f );
 	}
 
-	virtual void UpdateState() override { }
+	virtual void UpdateState_Internal() override { }
 
-	virtual void EndState( T ) override { }
+	virtual void EndState_Internal( T ) override { }
 };
 
 
@@ -266,7 +266,7 @@ class KungFuSnolafStateDead : public KungFuSnolafStateBase<T> {
 public:
 	KungFuSnolafStateDead( CannonActorComponent *const pPlayerComponent ) : KungFuSnolafStateBase( pPlayerComponent ) { }
 
-	virtual void BeginState( T ) override {
+	virtual void BeginState_Internal( T ) override {
 
 		m_DeathStartTime = g_GlobalTimer.TimeElapsedSeconds();
 
@@ -403,7 +403,7 @@ public:
 		m_pActorComponent->SetOwnerRotation( rot );
 	}
 
-	virtual void UpdateState() override {
+	virtual void UpdateState_Internal() override {
 
 		kbGameEntity *const pOwner = m_pActorComponent->GetOwner();
 		const float curTime = g_GlobalTimer.TimeElapsedSeconds();
@@ -426,7 +426,7 @@ public:
 		}
 	}
 
-	virtual void EndState( T ) override { }
+	virtual void EndState_Internal( T ) override { }
 
 private:
 
@@ -461,7 +461,7 @@ class KungFuSnolafStateRunAway : public KungFuSnolafStateBase<T> {
 public:
 	KungFuSnolafStateRunAway( CannonActorComponent *const pPlayerComponent ) : KungFuSnolafStateBase( pPlayerComponent ) { }
 
-	virtual void BeginState( T ) override {
+	virtual void BeginState_Internal( T ) override {
 
 		static const kbString Run_Anim( "Run" );
 		m_pActorComponent->PlayAnimation( Run_Anim, 0.05f );
@@ -474,7 +474,7 @@ public:
 		GetSnolaf()->EnableLargeLoveHearts( false );
 	}
 
-	virtual void UpdateState() override {
+	virtual void UpdateState_Internal() override {
 
 		const float frameDT = g_pGame->GetFrameDT();
 
@@ -483,7 +483,7 @@ public:
 		m_pActorComponent->SetOwnerPosition( newSnolafPos );
 	}
 
-	virtual void EndState( T ) override {
+	virtual void EndState_Internal( T ) override {
 	}
 };
 

@@ -62,4 +62,12 @@ private:
 	float										m_TimeToPlay;
 };
 
+inline void PlayRandomSound( std::vector<kbSoundData> & soundData, const kbVec3 & pos = kbVec3::zero ) {
+	
+	if ( soundData.size() == 0 ) {
+		return;
+	}
+
+	soundData[rand() % soundData.size()].PlaySoundAtPosition( pos );
+}
 #endif

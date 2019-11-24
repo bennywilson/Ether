@@ -2,7 +2,7 @@ kbGameEntity 0 0 0 0 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		Name = "Entity_113"
+		Name = "Entity_114"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
 		Position = 0.000000 0.000000 0.000000
 		Scale = 1.000000 1.000000 1.000000
@@ -11,7 +11,7 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		MainCameraPosition = 75.857582 -50.936531 -381.998199
-		MainCameraRotation = 0.251358 0.393251 -0.112687 -0.877197
+		MainCameraRotation = 0.020571 0.974892 -0.101825 -0.196964
 	}
 }
 kbGameEntity 0 0 0 0 {
@@ -32,7 +32,16 @@ kbGameEntity 0 0 0 0 {
 		LevelType = 2D
 		Dummy2 =  0.000000
 		LevelLength =  100.000000
-		LevelMusic = 1
+		LevelMusic = 2
+			kbSoundData { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Looping = 0
+				Radius =  -1.000000
+				TestPlaySoundNow = 0
+				Volume =  1.000000
+				WaveFile = .\assets\sounds\music\kungfusheep_intro.wav
+			}
 			kbSoundData { 
 				Enabled = 0
 				LifeTime =  -1.000000
@@ -3657,5 +3666,143 @@ kbGameEntity 0 0 0 0 {
 		Animations = 0
 		DebugAnimIndex = -1
 		Model = .\assets\models\characters\fox\fox.ms3d
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		Name = "MainMenu_UI"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 74.384018 -49.436947 -308.378693
+		Scale = 555.000000 555.000000 1.000000
+	}
+	CannonBallMainMenuComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		Anchor = MiddleLeft
+		AxisLock = LockYAxis
+		ChildWidgets = 1
+			kbUIWidget { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchor = MiddleLeft
+				AxisLock = LockYAxis
+				ChildWidgets = 0
+				Materials = 1
+					kbMaterialComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						CullModeOverride = ShaderDefault
+						Shader = .\assets\shaders\ui\ui_basic.kbshader
+						ShaderParams = 6
+							kbShaderParamComponent { 
+								Enabled = 0
+								LifeTime =  -1.000000
+								ParamName = "normalizedScreenSize_Anchor"
+								Texture = NULL
+								Vector = 0.000000 0.000000 0.000000 0.000000
+							}
+							kbShaderParamComponent { 
+								Enabled = 0
+								LifeTime =  -1.000000
+								ParamName = "colorFactor"
+								Texture = NULL
+								Vector = 1.000000 1.000000 1.000000 1.000000
+							}
+							kbShaderParamComponent { 
+								Enabled = 0
+								LifeTime =  -1.000000
+								ParamName = "rotationAngle"
+								Texture = NULL
+								Vector = 0.000000 0.000000 0.000000 0.000000
+							}
+							kbShaderParamComponent { 
+								Enabled = 0
+								LifeTime =  -1.000000
+								ParamName = "additiveTextureParams"
+								Texture = NULL
+								Vector = 0.000000 0.000000 0.000000 0.000000
+							}
+							kbShaderParamComponent { 
+								Enabled = 0
+								LifeTime =  -1.000000
+								ParamName = "baseTexture"
+								Texture = .\assets\ui\mainmenu\mainmenu_action.tif
+								Vector = 0.000000 0.000000 0.000000 0.000000
+							}
+							kbShaderParamComponent { 
+								Enabled = 0
+								LifeTime =  -1.000000
+								ParamName = "additiveTexture"
+								Texture = NULL
+								Vector = 0.000000 0.000000 0.000000 0.000000
+							}
+					}
+				RelativePosition = 0.000000 0.000000 0.000000
+				RelativeSize = 1.000000 1.000000 1.000000
+			}
+		Materials = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\ui\ui_basic.kbshader
+				ShaderParams = 6
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "normalizedScreenSize_Anchor"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorFactor"
+						Texture = NULL
+						Vector = 1.000000 1.000000 1.000000 1.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "rotationAngle"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "additiveTextureParams"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "baseTexture"
+						Texture = .\assets\ui\mainmenu\mainmenu.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "additiveTexture"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		RelativePosition = 0.060000 0.100000 0.000000
+		RelativeSize = 0.750000 0.750000 1.000000
+		ActionVO = 1
+			kbSoundData { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Looping = 0
+				Radius =  -1.000000
+				TestPlaySoundNow = 0
+				Volume =  1.000000
+				WaveFile = .\assets\sounds\menus\action_vo.wav
+			}
 	}
 }

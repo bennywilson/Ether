@@ -141,6 +141,8 @@ protected:
 
 private:
 
+	virtual void							EditorChange( const std::string & propertyName ) override;
+
 	// Editor
 	kbVec3									m_StartingPosition;
 	kbVec3									m_StartingSize;
