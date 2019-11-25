@@ -51,7 +51,7 @@ public:
 	void										DoWaterDropletScreenFX();
 	void										DoSplashSound();
 
-	void										SetPlayLevelMusic( const bool bPlay );
+	void										SetPlayLevelMusic( const int idx, const bool bPlay );
 
 	float										GetDistancePlayerHasTraveled();
 
@@ -138,7 +138,7 @@ private:
 
 	CannonHealthBarUIComponent *				m_pHealthBarUI;
 	CannonBallUIComponent *						m_pCannonBallUI;
-
+	CannonBallMainMenuComponent *				m_pMainMenuUI;
 };
 
 #endif

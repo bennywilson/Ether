@@ -160,9 +160,19 @@ void kbUIWidget::SetAdditiveTextureFactor( const float factor ) {
  *	kbUIWidget::FireEvent
  */
 void kbUIWidget::FireEvent() {
+
 	for ( int i = 0; i < m_EventListeners.size(); i++ ) {
 		m_EventListeners[i]->WidgetEventCB( this );
 	}
+}
+
+/**
+ *	kbUIWidget::EditorChange
+ */
+void kbUIWidget::EditorChange( const std::string & propertyName ) {
+
+	Super::EditorChange( propertyName );
+
 }
 
 /**
@@ -225,15 +235,19 @@ void kbUIWidget::RecalculateOld( const kbUIComponent *const pParent, const bool 
  *	kbUIWidget::Recalculate
  */
 void kbUIWidget::Recalculate( const kbUIWidget *const pParent, const bool bFull ) {
-	kbErrorCheck( pParent != nullptr, "kbUIWidget::UpdateFromParent() - null parent" );
-	
-	m_CachedParentPosition = pParent->GetAbsolutePosition();
-	m_CachedParentSize = pParent->GetAbsoluteSize();
+
+	if ( pParent != nullptr ) {
+		m_CachedParentPosition = pParent->GetAbsolutePosition();
+		m_CachedParentSize = pParent->GetAbsoluteSize();
+		SetRenderOrderBias( pParent->GetRenderOrderBias() - 1.0f );
+	} else {
+		m_CachedParentPosition = kbVec3::zero;
+		m_CachedParentSize = kbVec3::one;
+		SetRenderOrderBias( 0.0f );
+	}
 
 	m_AbsolutePosition = m_CachedParentPosition + m_CachedParentSize * m_RelativePosition;
 	m_AbsoluteSize = m_CachedParentSize * m_RelativeSize;
-
-	SetRenderOrderBias( pParent->GetRenderOrderBias() - 1.0f );
 
 	for ( int i = 0; i < m_ChildWidgets.size(); i++ ) {
 		m_ChildWidgets[i].Recalculate( this, bFull );

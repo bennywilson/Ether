@@ -455,6 +455,93 @@ void CannonBallPauseMenuUIComponent::WidgetEventCB( kbUIWidget *const pWidget ) 
 }
 
 /**
+ *	CannonBallMainMenuComponent::Constructor
+ */
+void CannonBallMainMenuComponent::Constructor() {
+	m_AnimationState = 0;
+	m_TimeAnimStateBegan = -1.0f;
+	m_StartRelativePos.Set( -1.0f, -1.0f, 0.0f );
+}
+
+/**
+ *	CannonBallMainMenuComponent::SetEnable_Internal
+ */
+void CannonBallMainMenuComponent::SetEnable_Internal( const bool bEnable ) {
+
+	Super::SetEnable_Internal( bEnable );
+
+	if ( bEnable ) {
+
+		if ( g_UseEditor == false ) {
+			if ( m_StartRelativePos.x < 0 ) {
+				m_StartRelativePos = m_RelativePosition;
+			} else {
+				m_RelativePosition = m_StartRelativePos;
+			}
+		}
+		SetAnimationFrame( 0 );
+		Recalculate( nullptr, true );
+	}
+}
+
+/**
+ *	CannonBallMainMenuComponent::Update_Internal
+ */
+void CannonBallMainMenuComponent::Update_Internal( const float dt ) {
+
+	Super::Update_Internal( dt );
+
+	const float animStateSecElapsed = g_GlobalTimer.TimeElapsedSeconds() - m_TimeAnimStateBegan;
+	if ( m_AnimationState == 1 ) {
+		if ( animStateSecElapsed > 1.0f ) {
+			SetAnimationFrame( 2 );
+		}
+	} else if ( m_AnimationState == 2 ) {
+		SetAnimationFrame( 3 );
+	} else if ( m_AnimationState == 3 ) {
+
+		if ( animStateSecElapsed > 0.33f ) {
+			this->m_RelativePosition.x -= dt * 0.85f;
+			Recalculate( nullptr, true );
+
+			if ( m_RelativePosition.x + m_RelativeSize.x <= 0.0f ) {
+				GetOwner()->DisableAllComponents();
+			}
+		}
+	}
+}
+
+/**
+ *	CannonBallMainMenuComponent::SetAnimationFrame
+ */
+void CannonBallMainMenuComponent::SetAnimationFrame( const int idx ) {
+
+	m_AnimationState = idx;
+	m_TimeAnimStateBegan = g_GlobalTimer.TimeElapsedSeconds();
+
+	if ( m_AnimationState == 0 ) {
+		m_ChildWidgets[0].Enable( false );
+		m_pModel->Enable( true );
+		m_RelativePosition.x = 0.060000f;
+	} else if ( m_AnimationState == 1 ) {
+
+		PlayRandomSound( m_ActionVO );
+	} else if ( m_AnimationState == 2 ) {
+		m_ChildWidgets[0].Enable( true );
+	//	Recalculate( nullptr, true );
+	} else if ( m_AnimationState == 3 ) {
+		m_pModel->Enable( false );
+	}
+}
+
+/**
+ *	CannonBallMainMenuComponent::WidgetEventCB
+ */
+void CannonBallMainMenuComponent::WidgetEventCB( kbUIWidget *const pWidget ) {
+
+}
+
+/**
  *	CannonBallGameSettingsComponent::Constructor
  */
 void CannonBallGameSettingsComponent::Constructor() {

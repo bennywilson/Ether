@@ -114,6 +114,11 @@ GenerateClass(
 )
 
 GenerateClass(
+	CannonBallMainMenuComponent,
+	AddField( "ActionVO", KBTYPEINFO_STRUCT, CannonBallMainMenuComponent, m_ActionVO, true, "kbSoundData" )
+)
+
+GenerateClass(
 	CannonBallYesNoPromptComponent,
 )
 
