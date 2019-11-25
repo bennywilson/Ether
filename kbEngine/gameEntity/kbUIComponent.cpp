@@ -173,7 +173,6 @@ void kbUIWidget::EditorChange( const std::string & propertyName ) {
 
 	Super::EditorChange( propertyName );
 
-	kbLog( "Change! %s", propertyName.c_str() );
 }
 
 /**

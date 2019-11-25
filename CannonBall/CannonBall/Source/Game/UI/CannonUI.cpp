@@ -459,6 +459,7 @@ void CannonBallPauseMenuUIComponent::WidgetEventCB( kbUIWidget *const pWidget ) 
  */
 void CannonBallMainMenuComponent::Constructor() {
 	m_AnimationState = 0;
+	m_TimeAnimStateBegan = -1.0f;
 	m_StartRelativePos.Set( -1.0f, -1.0f, 0.0f );
 }
 
