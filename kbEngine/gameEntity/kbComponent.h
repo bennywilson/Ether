@@ -394,7 +394,7 @@ public:
 				m_States[m_CurrentState]->BeginState( m_PreviousState );
 				stateChanged = true;
 
-				StateChangeCallback( m_PreviousState, m_CurrentState );
+				StateChangeCB( m_PreviousState, m_CurrentState );
 			}
 		}
 		
@@ -439,14 +439,14 @@ public:
 		m_CurrentState = newState;
 		m_States[m_CurrentState]->BeginState( m_PreviousState );
 
-		StateChangeCallback( m_PreviousState, m_CurrentState );
+		StateChangeCB( m_PreviousState, m_CurrentState );
 	}
 
 	StateEnum GetCurrentState() const { return m_CurrentState; }
 
 protected:
 
-	virtual void StateChangeCallback( const StateEnum previousState, const StateEnum nextState ) { }
+	virtual void StateChangeCB( const StateEnum previousState, const StateEnum nextState ) { }
 
 	virtual void InitializeStateMachine_Internal() { }
 	virtual void ShutdownStateMachine_Internal() { }

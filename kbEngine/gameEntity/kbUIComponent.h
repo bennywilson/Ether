@@ -55,7 +55,7 @@ protected:
 	int											GetAuthoredWidth() const { return m_AuthoredWidth; }
 	int											GetAuthoredHeight() const { return m_AuthoredHeight; }
 
-	virtual void								InputCallBack( const kbInput_t & input ) { }
+	virtual void								InputCB( const kbInput_t & input ) override { }
 	void										FireEvent( const kbInput_t *const pInput = nullptr );
 
 private:
@@ -150,7 +150,7 @@ private:
 
 	virtual void							EditorChange( const std::string & propertyName ) override;
 	
-	virtual void							InputCallBack( const kbInput_t & input );
+	virtual void							InputCB( const kbInput_t & input ) override;
 
 	// Editor
 	kbVec3									m_StartingPosition;

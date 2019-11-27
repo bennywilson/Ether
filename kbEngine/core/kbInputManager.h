@@ -84,7 +84,7 @@ class IInputListener abstract {
 
 protected:
 
-	virtual void InputCallBack( const kbInput_t & input ) = 0;
+	virtual void InputCB( const kbInput_t & input ) = 0;
 };
 
 class kbInputManager {

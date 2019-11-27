@@ -109,7 +109,7 @@ private:
 
 	void									RecalculateChildrenTransform();
 
-	virtual void							InputCallBack( const kbInput_t & input ) override;
+	virtual void							InputCB( const kbInput_t & input ) override;
 
 	// Editor
 	std::vector<kbUISlider>					m_SliderWidgets;
@@ -169,7 +169,7 @@ protected:
 
 private:
 		
-	virtual void							InputCallBack( const kbInput_t & input ) override;
+	virtual void							InputCB( const kbInput_t & input ) override;
 
 };
 

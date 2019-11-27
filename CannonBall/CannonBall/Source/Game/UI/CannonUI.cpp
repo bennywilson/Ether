@@ -379,9 +379,9 @@ void CannonBallPauseMenuUIComponent::RecalculateChildrenTransform() {
 }
 
 /**
- *	CannonBallPauseMenuUIComponent::InputCallback
+ *	CannonBallPauseMenuUIComponent::InputCB
  */
-void CannonBallPauseMenuUIComponent::InputCallBack( const kbInput_t & input ) {
+void CannonBallPauseMenuUIComponent::InputCB( const kbInput_t & input ) {
 
 	bool bNewOptionSelected = false;
 	int prevSelected = m_SelectedWidgetIdx;
@@ -480,9 +480,9 @@ void CannonBallMainMenuComponent::Constructor() {
 }
 
 /**
- *	CannonBallMainMenuComponent::InputCallBack
+ *	CannonBallMainMenuComponent::InputCB
  */
-void CannonBallMainMenuComponent::InputCallBack( const kbInput_t & input ) {
+void CannonBallMainMenuComponent::InputCB( const kbInput_t & input ) {
 
 	if ( m_AnimationState != 0 ) {
 		return;

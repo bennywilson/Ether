@@ -204,9 +204,9 @@ void kbUIWidget::EditorChange( const std::string & propertyName ) {
 }
 
 /**
- *	kbUIWidget::InputCallBack
+ *	kbUIWidget::InputCB
  */
-void kbUIWidget::InputCallBack( const kbInput_t & input ) {
+void kbUIWidget::InputCB( const kbInput_t & input ) {
 
 }
 

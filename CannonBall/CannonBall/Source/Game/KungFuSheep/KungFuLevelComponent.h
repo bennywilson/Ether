@@ -133,7 +133,7 @@ public:
 
 	virtual void								UpdateStateMachine() override;
 
-	virtual void								StateChangeCallback( const KungFuGame::eKungFuGame_State previousState, const KungFuGame::eKungFuGame_State nextState );
+	virtual void								StateChangeCB( const KungFuGame::eKungFuGame_State previousState, const KungFuGame::eKungFuGame_State nextState );
 	virtual void								WidgetEventCB( kbUIWidget *const pWidget, const kbInput_t *const pInput );
 
 	AttackHitInfo_t								DoAttack( const DealAttackInfo_t<KungFuGame::eAttackType> attackInfo );

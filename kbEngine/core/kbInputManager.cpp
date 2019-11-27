@@ -372,7 +372,7 @@ void kbInputManager::Update( const float DeltaTime ) {
 	}
 
 	for ( size_t i = 0; i < m_InputListeners.size(); i++ ) {
-		m_InputListeners[i]->InputCallBack( m_Input );
+		m_InputListeners[i]->InputCB( m_Input );
 	}
 }
 

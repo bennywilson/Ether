@@ -68,11 +68,6 @@ private:
 		pSheep->PlayAnimation( JumpingJacks_Anim, 0.15f );
 		pSheep->SetTargetFacingDirection( kbVec3( -1.0f, 0.0f, -1.0f ).Normalized() );
 		pSheep->SetOwnerPosition( g_SheepStartPos );
-
-//		const kbInput_t & input = g_pInputManager->GetInput();
-	//	if ( input.IsNonCharKeyPressedOrDown( kbInput_t::Return ) || WasAttackJustPressed() || WasSpecialAttackPressed() || WasStartButtonPressed() ) {
-		//	RequestStateChange( KungFuGame::Intro );
-	//	}
 	}
 
 	virtual void EndState_Internal( KungFuGame::eKungFuGame_State nextState ) override {
@@ -785,6 +780,7 @@ void KungFuLevelComponent::RemoveSheep() {
 	g_pGame->RemoveGameEntity( m_pSheep->GetOwner() );
 	m_pSheep = nullptr;
 }
+
 /**
  *	KungFuLevelComponent::UpdateDebugAndCheats
  */
@@ -907,9 +903,9 @@ AttackHitInfo_t KungFuSheepDirector::DoAttack( const DealAttackInfo_t<KungFuGame
 }
 
 /**
- *	KungFuSheepDirector::StateChangeCallback
+ *	KungFuSheepDirector::StateChangeCB
  */
-void KungFuSheepDirector::StateChangeCallback( const KungFuGame::eKungFuGame_State previousState, const KungFuGame::eKungFuGame_State nextState ) {
+void KungFuSheepDirector::StateChangeCB( const KungFuGame::eKungFuGame_State previousState, const KungFuGame::eKungFuGame_State nextState ) {
 
 	if ( nextState == KungFuGame::Gameplay ) {
 		if ( m_pHealthBarUI != nullptr ) {
@@ -957,6 +953,5 @@ void KungFuSheepDirector::StateChangeCallback( const KungFuGame::eKungFuGame_Sta
  */
 void KungFuSheepDirector::WidgetEventCB( kbUIWidget *const pWidget, const kbInput_t *const pInput ) {
 	
-	kbLog( "Call back!");
 	m_States[m_CurrentState]->WidgetEventCB( pWidget, pInput );
 }
