@@ -539,8 +539,11 @@ void KungFuSnolafComponent::SetEnable_Internal( const bool bEnable ) {
 			new KungFuSnolafStateRunAway<KungFuSnolafState::SnolafState_t>( this )
 		};
 
-		InitializeStates( snolafStates );
+		InitializeStateMachine( snolafStates );
 		RequestStateChange( KungFuSnolafState::Idle );
+	} else {
+
+		ShutdownStateMachine();
 	}
 }
 

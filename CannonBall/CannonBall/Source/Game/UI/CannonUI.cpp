@@ -302,6 +302,7 @@ void CannonBallPauseMenuUIComponent::SetEnable_Internal( const bool bEnable ) {
 		m_SliderWidgets[2].SetNormalizedValue( CannonBallGameSettingsComponent::Get()->m_Brightness / 100.0f );
 		m_bHackSlidersInit = true;
 
+		g_pInputManager->RegisterInputListener( this );
 	} else {
 		for ( int i = 0; i < m_Widgets.size(); i++ ) {
 			m_Entity.RemoveComponent( &m_Widgets[i] );
@@ -339,6 +340,8 @@ void CannonBallPauseMenuUIComponent::SetEnable_Internal( const bool bEnable ) {
 		for ( int i = 0; i < m_VolumeSliderTestWav.size(); i++ ) {
 			m_VolumeSliderTestWav[i].StopSound();
 		}
+
+		g_pInputManager->UnregisterInputListener( this );
 	}
 
 	m_bRequestClose = false;
@@ -376,16 +379,14 @@ void CannonBallPauseMenuUIComponent::RecalculateChildrenTransform() {
 }
 
 /**
- *	CannonBallPauseMenuUIComponent::Update_Internal
+ *	CannonBallPauseMenuUIComponent::InputCB
  */
-void CannonBallPauseMenuUIComponent::Update_Internal( const float DT ) {
-
-	Super::Update_Internal( DT );
+void CannonBallPauseMenuUIComponent::InputCB( const kbInput_t & input ) {
 
 	bool bNewOptionSelected = false;
 	int prevSelected = m_SelectedWidgetIdx;
-	const kbVec2 LeftStick = GetLeftStick();
-	const kbVec2 PrevLeftStick = GetPrevLeftStick();
+	const kbVec2 LeftStick = GetLeftStick( &input );
+	const kbVec2 PrevLeftStick = GetPrevLeftStick( &input );
 
 	if ( LeftStick.y > 0.5f && PrevLeftStick.y <= 0.5f ) {
 		m_WidgetList[m_SelectedWidgetIdx]->SetFocus( false );
@@ -419,6 +420,19 @@ void CannonBallPauseMenuUIComponent::Update_Internal( const float DT ) {
 		}
 	}
 
+	if ( input.IsNonCharKeyPressedOrDown( kbInput_t::Return ) || WasAttackJustPressed() || WasSpecialAttackPressed() || WasStartButtonPressed() ) {
+
+		FireEvent();
+	}
+}
+
+/**
+ *	CannonBallPauseMenuUIComponent::Update_Internal
+ */
+void CannonBallPauseMenuUIComponent::Update_Internal( const float DT ) {
+
+	Super::Update_Internal( DT );
+
 	RecalculateChildrenTransform();
 
 	for ( size_t i = 0; i < m_Widgets.size(); i++ ) {
@@ -435,7 +449,7 @@ void CannonBallPauseMenuUIComponent::Update_Internal( const float DT ) {
 /**
  *	CannonBallPauseMenuUIComponent::WidgetEventCB
  */
-void CannonBallPauseMenuUIComponent::WidgetEventCB( kbUIWidget *const pWidget ) {
+void CannonBallPauseMenuUIComponent::WidgetEventCB( kbUIWidget *const pWidget, const kbInput_t *const pInput  ) {
 
 	if ( pWidget == &m_SliderWidgets[0] ) {
 		// Volume
@@ -461,6 +475,41 @@ void CannonBallMainMenuComponent::Constructor() {
 	m_AnimationState = 0;
 	m_TimeAnimStateBegan = -1.0f;
 	m_StartRelativePos.Set( -1.0f, -1.0f, 0.0f );
+
+	m_MainMenuIdx = 0;
+}
+
+/**
+ *	CannonBallMainMenuComponent::InputCB
+ */
+void CannonBallMainMenuComponent::InputCB( const kbInput_t & input ) {
+
+	if ( m_AnimationState != 0 ) {
+		return;
+	}
+
+	const kbVec2 & leftStick = GetLeftStick( &input );
+	const kbVec2 & prevLeftStick = GetPrevLeftStick( &input );
+
+	if ( leftStick.y > 0.5f && prevLeftStick.y <= 0.5f ) {
+		m_MainMenuIdx = m_MainMenuIdx - 1;
+		if ( m_MainMenuIdx < 0 ) {
+			m_MainMenuIdx = 2;
+		}
+	} else if ( leftStick.y < -0.5f && prevLeftStick.y >= -0.5f ) {
+		m_MainMenuIdx = m_MainMenuIdx + 1;
+		if ( m_MainMenuIdx > 2 ) {
+			m_MainMenuIdx = 0;
+		}
+	}
+
+	kbVec3 relPos = m_ChildWidgets[1].GetRelativePosition();
+	relPos.y = 0.53f + 0.17f * m_MainMenuIdx;
+	m_ChildWidgets[1].SetRelativePosition( relPos );
+
+	if ( input.IsNonCharKeyPressedOrDown( kbInput_t::Return ) || WasAttackJustPressed() || WasSpecialAttackPressed() || WasStartButtonPressed() ) {
+		FireEvent( &input );
+	}
 }
 
 /**
@@ -481,6 +530,10 @@ void CannonBallMainMenuComponent::SetEnable_Internal( const bool bEnable ) {
 		}
 		SetAnimationFrame( 0 );
 		Recalculate( nullptr, true );
+
+		kbVec3 relPos = m_ChildWidgets[1].GetRelativePosition();
+		relPos.y = 0.53f + 0.17f * m_MainMenuIdx;
+		m_ChildWidgets[1].SetRelativePosition( relPos );
 	}
 }
 

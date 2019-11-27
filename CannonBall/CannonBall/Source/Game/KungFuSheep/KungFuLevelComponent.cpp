@@ -14,16 +14,6 @@
 static const kbVec3 g_SheepStartPos( 77.10445f, -52.6362f, -396.559f ) ;
 static const kbQuat g_SheepStartRot( 0.0f, 1.0f, 0.0f, 0.0f );
 
-bool WasStartButtonPressed() {
-	const kbInput_t & input = g_pInputManager->GetInput();
-	return input.WasNonCharKeyJustPressed( kbInput_t::Escape ) || input.GamepadButtonStates[4].m_Action == kbInput_t::KA_JustPressed;
-}
-
-bool WasBackButtonPressed() {
-	const kbInput_t & input = g_pInputManager->GetInput();
-	return input.WasNonCharKeyJustPressed( kbInput_t::Escape ) || input.GamepadButtonStates[5].m_Action == kbInput_t::KA_JustPressed;
-}
-
 /**
  *	KungFuGame_MainMenuState
  */
@@ -31,15 +21,33 @@ class KungFuGame_MainMenuState : public KungFuGame_BaseState {
 
 //---------------------------------------------------------------------------------------------------
 public:
+
 	KungFuGame_MainMenuState( KungFuLevelComponent *const pLevelComponent ) : KungFuGame_BaseState( pLevelComponent ) { }
 
 private:
+
+	virtual void WidgetEventCB( kbUIWidget *const pWidget, const kbInput_t * pInput ) override {
+
+		if ( pInput == nullptr || WasConfirmationButtonPressed( pInput ) == false ) {
+			return;
+		}
+
+		const auto pMainMenu = pWidget->GetAs<CannonBallMainMenuComponent>();
+		if ( pMainMenu != nullptr ) {
+			if ( pMainMenu->GetSelectedIndex() == 0 ) {
+				RequestStateChange( KungFuGame::Intro );
+			} else if ( pMainMenu->GetSelectedIndex() == 1 ) {
+				RequestStateChange( KungFuGame::Paused );
+			} else {
+				g_pCannonGame->RequestQuitGame();
+			}
+		}
+	}
 
 	const kbVec3 m_CameraStartPos = kbVec3( 73.104454f, -50.285267f, -391.559143f );
 	const kbQuat m_CameraStartRot = kbQuat( -0.030847f, -0.706434f, 0.030847f, 0.706434f );
 
 	virtual void BeginState_Internal( KungFuGame::eKungFuGame_State previousState ) override {
-		m_bSpawnedSheep = false;
 
 		if ( g_pCannonGame->GetMainCamera() != nullptr ) {
 			g_pCannonGame->GetMainCamera()->SetTarget( nullptr );
@@ -49,27 +57,23 @@ private:
 	}
 
 	virtual void UpdateState_Internal() override {
-		if ( m_bSpawnedSheep == false ) {
-			m_bSpawnedSheep = true;
-			m_pSheep = m_pLevelComponent->SpawnSheep();
-			m_pSheep->ExternalRequestStateChange( KungFuSheepState::Cinema );
 
-			static const kbString JumpingJacks_Anim( "JumpingJacks" );
-			m_pSheep->PlayAnimation( JumpingJacks_Anim, 0.15f );
-			m_pSheep->SetTargetFacingDirection( kbVec3( -1.0f, 0.0f, -1.0f ).Normalized() );
+		auto pSheep = KungFuLevelComponent::Get()->GetSheep();
+		if ( pSheep == nullptr ) {
+			pSheep = m_pLevelComponent->SpawnSheep();
 		}
+		pSheep->ExternalRequestStateChange( KungFuSheepState::Cinema );
 
-		const kbInput_t & input = g_pInputManager->GetInput();
-		if ( input.IsNonCharKeyPressedOrDown( kbInput_t::Return ) || WasAttackJustPressed() || WasSpecialAttackPressed() || WasStartButtonPressed() ) {
-			RequestStateChange( KungFuGame::Intro );
-		}
+		static const kbString JumpingJacks_Anim( "JumpingJacks" );
+		pSheep->PlayAnimation( JumpingJacks_Anim, 0.15f );
+		pSheep->SetTargetFacingDirection( kbVec3( -1.0f, 0.0f, -1.0f ).Normalized() );
+		pSheep->SetOwnerPosition( g_SheepStartPos );
 	}
 
 	virtual void EndState_Internal( KungFuGame::eKungFuGame_State nextState ) override {
 	}
 
 	KungFuSheepComponent * m_pSheep = nullptr;
-	bool m_bSpawnedSheep = false;
 };
 
 /**
@@ -149,6 +153,7 @@ class KungFuGame_GameplayState : public KungFuGame_BaseState {
 
 //---------------------------------------------------------------------------------------------------
 public:
+
 	KungFuGame_GameplayState( KungFuLevelComponent *const pLevelComponent ) : KungFuGame_BaseState( pLevelComponent ) { }
 
 	virtual AttackHitInfo_t DoAttack( const DealAttackInfo_t<KungFuGame::eAttackType> & dealAttackInfo ) override { 
@@ -243,7 +248,7 @@ private:
 		}
 
 		const kbInput_t & input = g_pInputManager->GetInput();
-		if ( WasStartButtonPressed() ) {
+		if ( WasStartButtonPressed() || input.WasNonCharKeyJustPressed( kbInput_t::Escape ) ) {
 			RequestStateChange( KungFuGame::Paused );
 			return;
 		}
@@ -285,7 +290,6 @@ private:
 	}
 
 	virtual void EndState_Internal( KungFuGame::eKungFuGame_State nextState ) override {
-
 	}
 
 	float m_GamePlayStartTime;
@@ -306,9 +310,13 @@ public:
 	}
 
 private:
+
+
 	virtual void BeginState_Internal( KungFuGame::eKungFuGame_State previousState ) override {
 
-		g_pGame->SetDeltaTimeScale( 0.0f );
+		if ( previousState != KungFuGame::MainMenu ) {
+			g_pGame->SetDeltaTimeScale( 0.0f );
+		}
 
 		m_pPauseMenu = nullptr;
 		for ( int i = 0; i < g_pCannonGame->GetGameEntities().size(); i++ ) {
@@ -326,13 +334,8 @@ private:
 	}
 
 	virtual void UpdateState_Internal() override {
-		const kbInput_t & input = g_pInputManager->GetInput();
-		
-		if ( WasBackButtonPressed() || m_pPauseMenu->CloseRequested() ) {
-			RequestStateChange( KungFuGame::Gameplay );
-			return;
-		}
 	}
+
 
 	virtual void EndState_Internal( KungFuGame::eKungFuGame_State nextState ) override {
 		g_pGame->SetDeltaTimeScale( 1.0f );
@@ -350,6 +353,29 @@ private:
 
 		KungFuLevelComponent *const pLevelComp = g_pCannonGame->GetLevelComponent<KungFuLevelComponent>();
 		pLevelComp->SetPlayLevelMusic( 1, true );
+
+		if ( nextState == KungFuGame::MainMenu && KungFuSheepDirector::Get()->GetPreviousState() == KungFuGame::Gameplay ) {
+			KungFuLevelComponent::Get()->RemoveSheep();
+		}
+	}
+
+	virtual void WidgetEventCB( kbUIWidget *const pWidget, const kbInput_t * pInput ) override {
+	
+		const auto pPauseMenu = KungFuSheepDirector::Get()->GetPauseMenu();
+		kbErrorCheck( pPauseMenu != nullptr, "KungFuGame_PausedState::WidgetEventCB() - null pause menu component" );
+
+		if ( WasConfirmationButtonPressed( pInput ) ) {
+			if ( pPauseMenu->GetSelectedWidgetIdx() == 0 ) {
+				if ( KungFuSheepDirector::Get()->GetPreviousState() == KungFuGame::MainMenu ) {
+					RequestStateChange( KungFuGame::MainMenu );
+				} else {
+					RequestStateChange( KungFuGame::Gameplay );
+				}
+			} else if ( pPauseMenu->GetSelectedWidgetIdx() == 4 ) {
+				RequestStateChange( KungFuGame::MainMenu );
+			}
+			return;
+		}
 
 	}
 
@@ -394,22 +420,7 @@ private:
 
 	virtual void EndState_Internal( KungFuGame::eKungFuGame_State nextState ) override {
 
-		for ( int i = 0; i < g_pCannonGame->GetGameEntities().size(); i++ ) {
-
-			kbGameEntity *const pTargetEnt = g_pCannonGame->GetGameEntities()[i];
-			if ( pTargetEnt->GetComponent<KungFuSheepComponent>() ) {
-				g_pGame->RemoveGameEntity( pTargetEnt );
-				continue;
-			}
-
-			if ( pTargetEnt->GetComponent<KungFuSnolafComponent>() ) {
-				pTargetEnt->DisableAllComponents();
-				g_pGame->GetLevelComponent<KungFuLevelComponent>()->ReturnSnolafToPool( pTargetEnt->GetComponent<KungFuSnolafComponent>() );
-			}
-		}
-
-		const auto pLevelComp = g_pGame->GetLevelComponent<KungFuLevelComponent>();
-		pLevelComp->SetPlayLevelMusic( 1, false );
+		KungFuLevelComponent::Get()->RemoveSheep();
 	}
 
 	float m_StateStartTime;
@@ -459,7 +470,7 @@ void KungFuLevelComponent::SetEnable_Internal( const bool bEnable ) {
 			new KungFuGame_PausedState( this ),
 		};
 
-		KungFuSheepDirector::Get()->InitializeStates( pGameStates );
+		KungFuSheepDirector::Get()->InitializeStateMachine( pGameStates );
 		KungFuSheepDirector::Get()->RequestStateChange( KungFuGame::MainMenu );
 
 		if ( m_WaterDropletScreenFX.GetEntity() != nullptr ) {
@@ -501,6 +512,7 @@ void KungFuLevelComponent::SetEnable_Internal( const bool bEnable ) {
 			g_pGame->RemoveGameEntity( pSnolaf );
 		}
 		m_SnolafPool.clear();
+
 		KungFuSheepDirector::DeleteSingleton();
 	}
 }
@@ -764,6 +776,11 @@ void KungFuLevelComponent::ReturnSnolafToPool( KungFuSnolafComponent *const pSno
 //	kbLog( "Snolaf returned.  Pool size = %d", m_SnolafPool.size() );
 }
 
+void KungFuLevelComponent::RemoveSheep() {
+	g_pGame->RemoveGameEntity( m_pSheep->GetOwner() );
+	m_pSheep = nullptr;
+}
+
 /**
  *	KungFuLevelComponent::UpdateDebugAndCheats
  */
@@ -790,14 +807,14 @@ void KungFuLevelComponent::UpdateDebugAndCheats() {
 	}
 }
 
-
 /**
  *	KungFuSheepDirector::KungFuSheepDirector
  */
 KungFuSheepDirector::KungFuSheepDirector() :
 	m_pHealthBarUI( nullptr ),
 	m_pCannonBallUI( nullptr ),
-	m_pMainMenuUI( nullptr ) {
+	m_pMainMenuUI( nullptr ),
+	m_pPauseMenuUI( nullptr ) {
 }
 
 /**
@@ -805,6 +822,27 @@ KungFuSheepDirector::KungFuSheepDirector() :
  */
 KungFuSheepDirector::~KungFuSheepDirector() {
 
+}
+
+/**
+ *	KungFuSheepDirector::InitializeStateMachine_Internal
+ */
+void KungFuSheepDirector::InitializeStateMachine_Internal() {
+
+	kbLevelDirector::InitializeStateMachine_Internal();
+}
+
+/**
+ *	KungFuSheepDirector::ShutdownStateMachine_Internal
+ */
+void KungFuSheepDirector::ShutdownStateMachine_Internal() {
+
+	kbLevelDirector::ShutdownStateMachine_Internal();
+	if ( m_pHealthBarUI != nullptr ) {
+
+		m_pMainMenuUI->UnregisterEventListener( this );
+		m_pPauseMenuUI->UnregisterEventListener( this );
+	}
 }
 
 /**
@@ -817,8 +855,9 @@ void KungFuSheepDirector::UpdateStateMachine() {
 		m_pHealthBarUI = nullptr;
 		m_pCannonBallUI = nullptr;
 		m_pMainMenuUI = nullptr;
+		m_pPauseMenuUI = nullptr;
 
-		for ( int i = 0; i < g_pCannonGame->GetGameEntities().size() && ( m_pHealthBarUI == nullptr || m_pCannonBallUI == nullptr ); i++ ) {
+		for ( int i = 0; i < g_pCannonGame->GetGameEntities().size(); i++ ) {
 			kbGameEntity *const pTargetEnt = g_pCannonGame->GetGameEntities()[i];
 			if ( m_pHealthBarUI == nullptr ) {
 				m_pHealthBarUI = pTargetEnt->GetComponent<CannonHealthBarUIComponent>();
@@ -830,6 +869,16 @@ void KungFuSheepDirector::UpdateStateMachine() {
 
 			if ( m_pMainMenuUI == nullptr ) {
 				m_pMainMenuUI = pTargetEnt->GetComponent<CannonBallMainMenuComponent>();
+				if ( m_pMainMenuUI ) {
+					m_pMainMenuUI->RegisterEventListener( this );
+				}
+			}
+
+			if ( m_pPauseMenuUI == nullptr ) {
+				m_pPauseMenuUI = pTargetEnt->GetComponent<CannonBallPauseMenuUIComponent>();
+				if ( m_pPauseMenuUI ) {
+					m_pPauseMenuUI->RegisterEventListener( this );
+				}
 			}
 		}
 
@@ -854,9 +903,9 @@ AttackHitInfo_t KungFuSheepDirector::DoAttack( const DealAttackInfo_t<KungFuGame
 }
 
 /**
- *	KungFuSheepDirector::StateChangeCallback
+ *	KungFuSheepDirector::StateChangeCB
  */
-void KungFuSheepDirector::StateChangeCallback( const KungFuGame::eKungFuGame_State previousState, const KungFuGame::eKungFuGame_State nextState ) {
+void KungFuSheepDirector::StateChangeCB( const KungFuGame::eKungFuGame_State previousState, const KungFuGame::eKungFuGame_State nextState ) {
 
 	if ( nextState == KungFuGame::Gameplay ) {
 		if ( m_pHealthBarUI != nullptr ) {
@@ -871,9 +920,38 @@ void KungFuSheepDirector::StateChangeCallback( const KungFuGame::eKungFuGame_Sta
 			m_pMainMenuUI->GetOwner()->DisableAllComponents();
 			m_pMainMenuUI->GetOwner()->EnableAllComponents();
 		}
+
+		for ( int i = 0; i < g_pCannonGame->GetGameEntities().size(); i++ ) {
+
+			kbGameEntity *const pTargetEnt = g_pCannonGame->GetGameEntities()[i];
+			if ( pTargetEnt->GetComponent<KungFuSheepComponent>() ) {
+				continue;
+			}
+
+			if ( pTargetEnt->GetComponent<KungFuSnolafComponent>() ) {
+				pTargetEnt->DisableAllComponents();
+				g_pGame->GetLevelComponent<KungFuLevelComponent>()->ReturnSnolafToPool( pTargetEnt->GetComponent<KungFuSnolafComponent>() );
+			}
+		}
+
+		const auto pLevelComp = g_pGame->GetLevelComponent<KungFuLevelComponent>();
+		pLevelComp->SetPlayLevelMusic( 1, false );
+
 	} else if ( nextState == KungFuGame::Intro ) {
 		if ( m_pMainMenuUI != nullptr ) {
 			m_pMainMenuUI->SetAnimationFrame( 1 );
 		}
+	} else if ( previousState == KungFuGame::MainMenu && nextState == KungFuGame::Paused ) {
+		if ( m_pMainMenuUI != nullptr ) {
+			m_pMainMenuUI->GetOwner()->DisableAllComponents();
+		}
 	}
+}
+
+/**
+ *	KungFuSheepDirector::WidgetEventCB
+ */
+void KungFuSheepDirector::WidgetEventCB( kbUIWidget *const pWidget, const kbInput_t *const pInput ) {
+	
+	m_States[m_CurrentState]->WidgetEventCB( pWidget, pInput );
 }

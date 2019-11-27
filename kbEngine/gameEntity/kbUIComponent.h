@@ -10,11 +10,23 @@
 #include "kbRenderer_defs.h"
 #include "kbRenderBuffer.h"
 #include "kbModel.h"
+#include "kbInputManager.h"
+
+/**
+ *	IUIWidgetListener
+ */
+class IUIWidgetListener abstract {
+
+//-------------------------------------------------------------------------------------------------------------------------------------------------------------
+public:
+	virtual void WidgetEventCB( class kbUIWidget *const pWidget, const kbInput_t *const pInput ) = 0;
+
+};
 
 /**
  *	kbUIComponent
  */
-class kbUIComponent : public kbGameComponent {
+class kbUIComponent : public kbGameComponent, public IInputListener {
 
 	KB_DECLARE_COMPONENT( kbUIComponent, kbGameComponent );
 
@@ -31,6 +43,9 @@ public:
 
 	const kbStaticModelComponent *				GetStaticModelComponent() const { return m_pStaticModelComponent; }
 
+	void										RegisterEventListener( IUIWidgetListener *const pListener );
+	void										UnregisterEventListener( IUIWidgetListener *const pListener );
+
 protected:
 
 	virtual void								SetEnable_Internal( const bool isEnabled ) override;
@@ -39,6 +54,9 @@ protected:
 
 	int											GetAuthoredWidth() const { return m_AuthoredWidth; }
 	int											GetAuthoredHeight() const { return m_AuthoredHeight; }
+
+	virtual void								InputCB( const kbInput_t & input ) override { }
+	void										FireEvent( const kbInput_t *const pInput = nullptr );
 
 private:
 
@@ -49,6 +67,7 @@ private:
 	kbVec3										m_UIToScreenSizeRatio;
 
 	// Runtime
+	std::vector<IUIWidgetListener*>				m_EventListeners;
 	kbVec3										m_NormalizedScreenSize;
 	bool										m_bHasFocus;
 
@@ -56,22 +75,10 @@ protected:
 	kbStaticModelComponent *					m_pStaticModelComponent;
 };
 
-
-/**
- *	IUIWidgetListener
- */
-class IUIWidgetListener abstract {
-
-//-------------------------------------------------------------------------------------------------------------------------------------------------------------
-public:
-	virtual void WidgetEventCB( class kbUIWidget *const pWidget ) = 0;
-
-};
-
 /**
  *	kbUIWidget
  */
-class kbUIWidget : public kbGameComponent {
+class kbUIWidget : public kbGameComponent, public IInputListener {
 
 	KB_DECLARE_COMPONENT( kbUIWidget, kbGameComponent );
 
@@ -131,7 +138,7 @@ protected:
 	virtual void							SetEnable_Internal( const bool bEnable ) override;
 	virtual void							Update_Internal( const float DeltaTime ) override;
 
-	void									FireEvent();
+	void									FireEvent( const kbInput_t *const pInput = nullptr );
 
 	// Editor
 protected:
@@ -142,6 +149,8 @@ protected:
 private:
 
 	virtual void							EditorChange( const std::string & propertyName ) override;
+	
+	virtual void							InputCB( const kbInput_t & input ) override;
 
 	// Editor
 	kbVec3									m_StartingPosition;

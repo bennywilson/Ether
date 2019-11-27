@@ -149,13 +149,13 @@ void kbInputManager::Update( const float DeltaTime ) {
 				if ( pGamePad.wButtons & ( 1 << iButton ) ) {
 
 					if ( m_Input.GamepadButtonStates[iButton].m_Action == kbInput_t::KA_JustPressed ) {
-						m_Input.KeyState[iButton].m_Action = kbInput_t::KA_Down;
-					} else {
+						m_Input.GamepadButtonStates[iButton].m_Action = kbInput_t::KA_Down;
+					} else if ( m_Input.GamepadButtonStates[iButton].m_Action != kbInput_t::KA_Down ) {
 						m_Input.GamepadButtonStates[iButton].m_Action = kbInput_t::KA_JustPressed;
-						m_Input.KeyState[iButton].m_LastActionTimeSec = g_GlobalTimer.TimeElapsedSeconds();
+						m_Input.GamepadButtonStates[iButton].m_LastActionTimeSec = g_GlobalTimer.TimeElapsedSeconds();
 					}
 				} else {
-					if ( m_Input.GamepadButtonStates[iButton].m_Action != kbInput_t::KA_JustReleased ) {
+					if ( m_Input.GamepadButtonStates[iButton].m_Action == kbInput_t::KA_JustPressed || m_Input.GamepadButtonStates[iButton].m_Action == kbInput_t::KA_Down ) {
 						m_Input.GamepadButtonStates[iButton].m_Action = kbInput_t::KA_JustReleased;
 					} else {
 						m_Input.GamepadButtonStates[iButton].m_Action = kbInput_t::KA_None;
@@ -370,6 +370,10 @@ void kbInputManager::Update( const float DeltaTime ) {
 	if ( GetAsyncKeyState( VK_DOWN ) ) {
 		m_Input.m_LeftStick.y = -1.0f;
 	}
+
+	for ( size_t i = 0; i < m_InputListeners.size(); i++ ) {
+		m_InputListeners[i]->InputCB( m_Input );
+	}
 }
 
 /**
@@ -441,4 +445,30 @@ void kbInputManager::UnmapCallback( kbIInputCallback * pCB ) {
 	}
 
 */
+}
+
+/**
+ *	kbInputManager::RegisterInputListener
+ */
+void kbInputManager::RegisterInputListener( IInputListener *const pListener ) {
+
+	kbErrorCheck( pListener != nullptr, "kbInputManager::RegisterInputListener() - null pListener" );
+//	kbErrorCheck( VectorFind( m_InputListeners, pListener ) == m_InputListeners.end(), "kbInputManager::RegisterInputListener() - pListener already registered" ); 
+
+	if ( VectorFind( m_InputListeners, pListener ) != m_InputListeners.end() ) {
+		return;
+	}
+
+	m_InputListeners.push_back( pListener );
+}
+
+/**
+ *	kbInputManager::UnregisterInputListener
+ */
+void kbInputManager::UnregisterInputListener( IInputListener *const pListener ) {
+
+	kbErrorCheck( pListener != nullptr, "kbInputManager::UnregisterInputListener() - null pListener" );
+	//kbErrorCheck( VectorFind( m_InputListeners, pListener ) != m_InputListeners.end(), "kbInputManager::RegisterInputListener() - pListener already registered" ); 
+
+	VectorRemoveFast( m_InputListeners, pListener );
 }

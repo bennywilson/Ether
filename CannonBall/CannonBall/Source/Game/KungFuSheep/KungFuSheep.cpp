@@ -508,7 +508,7 @@ void KungFuSheepComponent::SetEnable_Internal( const bool bEnable ) {
 			new KungFuSheepStateCinema<KungFuSheepState::SheepStates_t>( this )
 		};
 
-		InitializeStates( sheepStates );
+		InitializeStateMachine( sheepStates );
 		RequestStateChange( KungFuSheepState::Idle );
 
 		if ( GetOwner()->IsPrefab() == false ) {
@@ -536,6 +536,8 @@ void KungFuSheepComponent::SetEnable_Internal( const bool bEnable ) {
 			m_HeadBandInstance[0].SetEntity( nullptr );
 			m_HeadBandInstance[1].SetEntity( nullptr );
 		}
+
+		ShutdownStateMachine();
 	}
 }
 

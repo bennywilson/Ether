@@ -127,18 +127,41 @@ private:
 
 extern CannonGame * g_pCannonGame;
 
-inline bool WasAttackJustPressed() {
-	const kbInput_t & input = g_pInputManager->GetInput();
+inline bool WasAttackJustPressed( const kbInput_t *const pInput = nullptr ) {
+	const kbInput_t & input = ( pInput == nullptr )?( g_pInputManager->GetInput() ) : ( *pInput );
 	return input.WasKeyJustPressed( 'K' ) || input.GamepadButtonStates[12].m_Action == kbInput_t::KA_JustPressed;
 }
 
-inline bool WasSpecialAttackPressed() {
-	const kbInput_t & input = g_pInputManager->GetInput();
+inline bool WasSpecialAttackPressed( const kbInput_t *const pInput = nullptr ) {
+	const kbInput_t & input = ( pInput == nullptr )?( g_pInputManager->GetInput() ) : ( *pInput );
 	return input.WasKeyJustPressed( 'J' ) || input.LeftTrigger > 0.1f || input.RightTrigger > 0.1f;
 }
 
-inline kbVec2 GetLeftStick() {
-	const kbInput_t & input = g_pInputManager->GetInput();
+inline bool WasStartButtonPressed( const kbInput_t *const pInput = nullptr ) {
+	const kbInput_t & input = ( pInput == nullptr )?( g_pInputManager->GetInput() ) : ( *pInput );
+	return input.GamepadButtonStates[4].m_Action == kbInput_t::KA_JustPressed;
+}
+
+inline bool WasBackButtonPressed( const kbInput_t *const pInput = nullptr ) {
+	const kbInput_t & input = ( pInput == nullptr )?( g_pInputManager->GetInput() ) : ( *pInput );
+	return input.WasNonCharKeyJustPressed( kbInput_t::Escape ) || input.GamepadButtonStates[5].m_Action == kbInput_t::KA_JustPressed;
+}
+
+inline bool WasConfirmationButtonPressed( const kbInput_t *const pInput = nullptr ) {
+	if ( WasStartButtonPressed( pInput ) || WasAttackJustPressed( pInput ) ) {
+		return true;
+	}
+
+	const kbInput_t & input = ( pInput == nullptr )?( g_pInputManager->GetInput() ) : ( *pInput );
+	if ( input.WasNonCharKeyJustPressed( kbInput_t::Return ) ) {
+		return true;
+	}
+
+	return false;
+}
+
+inline kbVec2 GetLeftStick( const kbInput_t *const pInput = nullptr ) {
+	const kbInput_t & input = ( pInput == nullptr )?( g_pInputManager->GetInput() ) : ( *pInput );
 	kbVec2 leftStick = kbVec2::zero;
 
 	if ( input.IsKeyPressedOrDown( 'A' ) ) {
@@ -159,8 +182,9 @@ inline kbVec2 GetLeftStick() {
 
 	return leftStick;
 }
-inline kbVec2 GetPrevLeftStick() {
-	const kbInput_t & input = g_pInputManager->GetInput();
+
+inline kbVec2 GetPrevLeftStick( const kbInput_t *const pInput = nullptr ) {
+	const kbInput_t & input = ( pInput == nullptr )?( g_pInputManager->GetInput() ) : ( *pInput );
 	kbVec2 leftStick = kbVec2::zero;
 
 	if ( input.IsKeyPressedOrDown( 'A' ) ) {

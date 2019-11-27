@@ -88,24 +88,28 @@ public:
 	enum ePauseMenuOptions {
 		BackToGame,
 		MasterVolume,
-		Brightness,
 		VideoQuality,
+		Brightness,
 		ExitToMainMenu,
 		NumOptions
 	};
 
 	bool									CloseRequested() const { return m_bRequestClose; }
+	int										GetSelectedWidgetIdx() const { return m_SelectedWidgetIdx; }
+
 
 protected:
 
 	virtual void							SetEnable_Internal( const bool bEnable ) override;
 	virtual void							Update_Internal( const float DeltaTime ) override;
 
-	virtual void							WidgetEventCB( kbUIWidget *const pWidget );
+	virtual void							WidgetEventCB( kbUIWidget *const pWidget, const kbInput_t *const pInput );
 
 private:
 
 	void									RecalculateChildrenTransform();
+
+	virtual void							InputCB( const kbInput_t & input ) override;
 
 	// Editor
 	std::vector<kbUISlider>					m_SliderWidgets;
@@ -135,12 +139,20 @@ class CannonBallMainMenuComponent : public kbUIWidget {
 //---------------------------------------------------------------------------------------------------
 public:
 
+	enum eMainMenuOptions {
+		PlayGame,
+		Settings,
+		Quit
+	};
+
 	virtual void							SetEnable_Internal( const bool bEnable ) override;
 	virtual void							Update_Internal( const float DeltaTime ) override;
 
 	virtual void							WidgetEventCB( kbUIWidget *const pWidget );
 
 	void									SetAnimationFrame( const int idx );
+
+	int										GetSelectedIndex() const { return m_MainMenuIdx; }
 
 protected:
 
@@ -152,6 +164,13 @@ protected:
 	int										m_AnimationState;
 	float									m_TimeAnimStateBegan;
 	kbVec3									m_StartRelativePos;
+
+	int										m_MainMenuIdx;
+
+private:
+		
+	virtual void							InputCB( const kbInput_t & input ) override;
+
 };
 
 /**
