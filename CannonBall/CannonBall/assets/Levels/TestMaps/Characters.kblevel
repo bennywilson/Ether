@@ -2,7 +2,7 @@ kbGameEntity 0 0 0 0 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		Name = "Entity_114"
+		Name = "Entity_115"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
 		Position = 0.000000 0.000000 0.000000
 		Scale = 1.000000 1.000000 1.000000
@@ -39,7 +39,7 @@ kbGameEntity 0 0 0 0 {
 				Looping = 0
 				Radius =  -1.000000
 				TestPlaySoundNow = 0
-				Volume =  1.000000
+				Volume =  2.000000
 				WaveFile = .\assets\sounds\music\kungfusheep_intro.wav
 			}
 			kbSoundData { 
@@ -3411,7 +3411,7 @@ kbGameEntity 0 0 0 0 {
 				RelativePosition = 0.331250 0.300000 0.000000
 				RelativeSize = 0.168750 0.150000 1.000000
 			}
-			kbUIWidget { 
+						kbUIWidget { 
 				Enabled = 0
 				LifeTime =  -1.000000
 				Anchor = MiddleRight
@@ -3682,7 +3682,7 @@ kbGameEntity 0 0 0 0 {
 		LifeTime =  -1.000000
 		Anchor = MiddleLeft
 		AxisLock = LockYAxis
-		ChildWidgets = 1
+		ChildWidgets = 2
 			kbUIWidget { 
 				Enabled = 0
 				LifeTime =  -1.000000
@@ -3741,6 +3741,65 @@ kbGameEntity 0 0 0 0 {
 					}
 				RelativePosition = 0.000000 0.000000 0.000000
 				RelativeSize = 1.000000 1.000000 1.000000
+			}
+			kbUIWidget { 
+				Enabled = 1
+				LifeTime =  -1.000000
+				Anchor = MiddleLeft
+				AxisLock = LockAll
+				ChildWidgets = 0
+				Materials = 1
+					kbMaterialComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						CullModeOverride = ShaderDefault
+						Shader = .\assets\shaders\ui\ui_basic.kbshader
+						ShaderParams = 6
+							kbShaderParamComponent { 
+								Enabled = 0
+								LifeTime =  -1.000000
+								ParamName = "normalizedScreenSize_Anchor"
+								Texture = NULL
+								Vector = 0.000000 0.000000 0.000000 0.000000
+							}
+							kbShaderParamComponent { 
+								Enabled = 0
+								LifeTime =  -1.000000
+								ParamName = "colorFactor"
+								Texture = NULL
+								Vector = 1.000000 1.000000 1.000000 1.000000
+							}
+							kbShaderParamComponent { 
+								Enabled = 0
+								LifeTime =  -1.000000
+								ParamName = "rotationAngle"
+								Texture = NULL
+								Vector = 0.000000 0.000000 0.000000 0.000000
+							}
+							kbShaderParamComponent { 
+								Enabled = 0
+								LifeTime =  -1.000000
+								ParamName = "additiveTextureParams"
+								Texture = NULL
+								Vector = 0.000000 0.000000 0.000000 0.000000
+							}
+							kbShaderParamComponent { 
+								Enabled = 0
+								LifeTime =  -1.000000
+								ParamName = "baseTexture"
+								Texture = ..\..\kbengine\assets\textures\white.bmp
+								Vector = 0.000000 0.000000 0.000000 0.000000
+							}
+							kbShaderParamComponent { 
+								Enabled = 0
+								LifeTime =  -1.000000
+								ParamName = "additiveTexture"
+								Texture = NULL
+								Vector = 0.000000 0.000000 0.000000 0.000000
+							}
+					}
+				RelativePosition = 0.050000 0.530000 0.000000
+				RelativeSize = 0.050000 0.100000 1.000000
 			}
 		Materials = 1
 			kbMaterialComponent { 

@@ -41,6 +41,30 @@ kbUIComponent::~kbUIComponent() {
 }
 
 /**
+ *	kbUIComponent::RegisterEventListener
+ */
+void kbUIComponent::RegisterEventListener( IUIWidgetListener *const pListener ) {
+	m_EventListeners.push_back( pListener );
+}
+
+/**
+ *	kbUIComponent::UnregisterEventListener
+ */
+void kbUIComponent::UnregisterEventListener( IUIWidgetListener *const pListener ) {
+	VectorRemoveFast( m_EventListeners, pListener );
+}
+
+/**
+ *	kbUIComponent::FireEvent
+ */
+void kbUIComponent::FireEvent( const kbInput_t *const pInput ) {
+
+	for ( int i = 0; i < m_EventListeners.size(); i++ ) {
+		m_EventListeners[i]->WidgetEventCB( nullptr, pInput );
+	}
+}
+
+/**
  *	kbUIComponent::EditorChange
  */
 void kbUIComponent::EditorChange( const std::string & propertyName ) {
@@ -62,12 +86,16 @@ void kbUIComponent::SetEnable_Internal( const bool bEnable ) {
 			m_pStaticModelComponent->Enable( true );
 		}
 		RefreshMaterial();
+
+		g_pInputManager->RegisterInputListener( this );
 	} else {
 
 		if ( m_pStaticModelComponent != nullptr ) {
 			m_pStaticModelComponent->Enable( false );
 			m_pStaticModelComponent = nullptr;
 		}
+
+		g_pInputManager->UnregisterInputListener( this );
 	}
 }
 
@@ -159,10 +187,10 @@ void kbUIWidget::SetAdditiveTextureFactor( const float factor ) {
 /**
  *	kbUIWidget::FireEvent
  */
-void kbUIWidget::FireEvent() {
+void kbUIWidget::FireEvent( const kbInput_t *const pInput ) {
 
 	for ( int i = 0; i < m_EventListeners.size(); i++ ) {
-		m_EventListeners[i]->WidgetEventCB( this );
+		m_EventListeners[i]->WidgetEventCB( this, pInput );
 	}
 }
 
@@ -172,6 +200,13 @@ void kbUIWidget::FireEvent() {
 void kbUIWidget::EditorChange( const std::string & propertyName ) {
 
 	Super::EditorChange( propertyName );
+
+}
+
+/**
+ *	kbUIWidget::InputCallBack
+ */
+void kbUIWidget::InputCallBack( const kbInput_t & input ) {
 
 }
 
@@ -334,6 +369,7 @@ void kbUIWidget::SetEnable_Internal( const bool bEnable ) {
 			m_ChildWidgets[i].Enable( true );
 		}
 
+		g_pInputManager->RegisterInputListener( this );
 
 	} else {
 		if ( m_pModel != nullptr ) {
@@ -346,6 +382,8 @@ void kbUIWidget::SetEnable_Internal( const bool bEnable ) {
 
 		GetUIGameEntity().RemoveComponent( this );
 		GetUIGameEntity().RemoveComponent( m_pModel );
+
+		g_pInputManager->UnregisterInputListener( this );
 	}
 }
 
@@ -404,7 +442,7 @@ void kbUIWidget::Update_Internal( const float dt ) {
 	if ( HasFocus() ) {
 		const kbInput_t & input = g_pInputManager->GetInput();
 		if ( input.GamepadButtonStates[12].m_Action == kbInput_t::KA_JustPressed|| input.WasNonCharKeyJustPressed( kbInput_t::Return ) ) {
-			FireEvent();
+			FireEvent( &input );
 		}
 	}
 }

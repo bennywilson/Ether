@@ -112,6 +112,8 @@ public:
 
 	virtual AttackHitInfo_t DoAttack( const DealAttackInfo_t<KungFuGame::eAttackType> & dealAttackInfo ) { AttackHitInfo_t ret; return ret; }
 
+	virtual void WidgetEventCB( kbUIWidget *const pWidget, const kbInput_t *const pInput ) { }
+
 protected:
 	KungFuLevelComponent * m_pLevelComponent;
 };
@@ -120,7 +122,7 @@ protected:
 /**
  *	KungFuSheepDirector
  */
-class KungFuSheepDirector : public kbLevelDirector<KungFuGame_BaseState, KungFuGame::eKungFuGame_State>, public ISingleton<KungFuSheepDirector>  {
+class KungFuSheepDirector : public kbLevelDirector<KungFuGame_BaseState, KungFuGame::eKungFuGame_State>, public ISingleton<KungFuSheepDirector>, public IUIWidgetListener {
 
 //---------------------------------------------------------------------------------------------------
 public:
@@ -131,14 +133,23 @@ public:
 	virtual void								UpdateStateMachine() override;
 
 	virtual void								StateChangeCallback( const KungFuGame::eKungFuGame_State previousState, const KungFuGame::eKungFuGame_State nextState );
+	virtual void								WidgetEventCB( kbUIWidget *const pWidget, const kbInput_t *const pInput );
 
 	AttackHitInfo_t								DoAttack( const DealAttackInfo_t<KungFuGame::eAttackType> attackInfo );
+
+	CannonBallPauseMenuUIComponent *			GetPauseMenu() const { return m_pPauseMenuUI; }
+
+protected:
+
+	virtual void								InitializeStateMachine_Internal();
+	virtual void								ShutdownStateMachine_Internal();
 
 private:
 
 	CannonHealthBarUIComponent *				m_pHealthBarUI;
 	CannonBallUIComponent *						m_pCannonBallUI;
 	CannonBallMainMenuComponent *				m_pMainMenuUI;
+	CannonBallPauseMenuUIComponent *			m_pPauseMenuUI;
 };
 
 #endif

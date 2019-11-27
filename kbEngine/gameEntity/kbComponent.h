@@ -361,13 +361,20 @@ public:
 
 	IStateMachine() : m_CurrentState( StateEnum::NumStates ) {
 		ZeroMemory( m_States, sizeof( m_States ) );
+		m_CurrentState = (StateEnum)0;
+		m_PreviousState = (StateEnum)0;
 	}
 
 	virtual ~IStateMachine() {
+
+		ShutdownStateMachine();
+
 		for ( int i = 0; i < StateEnum::NumStates; i++ ) {
 			delete m_States[i];
 		}
 	}
+
+	StateEnum GetPreviousState() const { return (StateEnum) m_PreviousState; }
 
 	virtual void UpdateStateMachine() {
 
@@ -382,12 +389,12 @@ public:
 			if ( requestedState != m_CurrentState ) {
 				m_States[m_CurrentState]->EndState( requestedState );
 
-				const StateEnum previousState = m_CurrentState;
+				m_PreviousState = m_CurrentState;
 				m_CurrentState = requestedState;
-				m_States[m_CurrentState]->BeginState( previousState );
+				m_States[m_CurrentState]->BeginState( m_PreviousState );
 				stateChanged = true;
 
-				StateChangeCallback( previousState, m_CurrentState );
+				StateChangeCallback( m_PreviousState, m_CurrentState );
 			}
 		}
 		
@@ -396,7 +403,7 @@ public:
 		}
 	}
 
-	void InitializeStates( StateClass *const stateNodes[StateEnum::NumStates] ) {
+	void InitializeStateMachine( StateClass *const stateNodes[StateEnum::NumStates] ) {
 
 		for ( int i = 0; i < StateEnum::NumStates; i++ ) {
 			delete m_States[i];
@@ -404,6 +411,12 @@ public:
 
 			kbErrorCheck( stateNodes[i] != nullptr && m_States[i] != nullptr, "IStateMachine::InitializeStates() - NULL state.  Please call InitializeStates with proper values" );
 		}
+
+		InitializeStateMachine_Internal();
+	}
+
+	void ShutdownStateMachine() {
+		ShutdownStateMachine_Internal();
 	}
 
 	void RequestStateChange( const StateEnum newState ) {
@@ -422,11 +435,11 @@ public:
 
 		kbErrorCheck( m_States[newState] != nullptr, "IStateMachine::RequestStateChange() - NULL state.  Please call InitializeStates with proper values" );
 
-		const StateEnum previousState = m_CurrentState;
+		m_PreviousState = m_CurrentState;
 		m_CurrentState = newState;
-		m_States[m_CurrentState]->BeginState( previousState );
+		m_States[m_CurrentState]->BeginState( m_PreviousState );
 
-		StateChangeCallback( previousState, m_CurrentState );
+		StateChangeCallback( m_PreviousState, m_CurrentState );
 	}
 
 	StateEnum GetCurrentState() const { return m_CurrentState; }
@@ -435,8 +448,12 @@ protected:
 
 	virtual void StateChangeCallback( const StateEnum previousState, const StateEnum nextState ) { }
 
+	virtual void InitializeStateMachine_Internal() { }
+	virtual void ShutdownStateMachine_Internal() { }
+
 	StateClass * m_States[StateEnum::NumStates];
 	StateEnum m_CurrentState;
+	StateEnum m_PreviousState;
 };
 
 /**

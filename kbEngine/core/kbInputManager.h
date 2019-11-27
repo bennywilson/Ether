@@ -2,7 +2,7 @@
 // kbInputManager.h
 //
 //
-// 2017 kbEngine 2.0
+// 2017-2019 kbEngine 2.0
 //===================================================================================================
 #ifndef _KBINPUTMANAGER_H_
 #define _KBINPUTMANAGER_H_
@@ -78,6 +78,15 @@ typedef DWORD ( WINAPI* LPXINPUTGETCAPABILITIES )( DWORD dwUserIndex, DWORD dwFl
 typedef void ( WINAPI* LPXINPUTENABLE )( BOOL bEnable );
 typedef DWORD ( WINAPI* LPXINPUTGETSTATE )( DWORD dwUserIndex, XINPUT_STATE* pState );
 
+class IInputListener abstract {
+
+	friend class kbInputManager;
+
+protected:
+
+	virtual void InputCallBack( const kbInput_t & input ) = 0;
+};
+
 class kbInputManager {
 public:
 
@@ -105,6 +114,9 @@ public:
 
 	kbVec2i										GetMouseCursorPosition() const { return kbVec2i( m_Input.AbsCursorX, m_Input.AbsCursorY ); }
 
+	void										RegisterInputListener( IInputListener *const pListener );
+	void										UnregisterInputListener( IInputListener *const pListener );
+
 private:
 
 	LPXINPUTENABLE								m_FuncXInputEnable;
@@ -119,6 +131,8 @@ private:
 	KeyComboMapType								m_KeyComboToCallbackMap;
 
 	eMouseBehavior_t							m_MouseBehavior;
+
+	std::vector<IInputListener*>				m_InputListeners;
 };
 
 extern kbInputManager * g_pInputManager;

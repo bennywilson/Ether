@@ -293,7 +293,9 @@ struct kbInput_t {
 	const static char KB_SPACE = 32;
 
 	bool IsKeyPressedOrDown( const char key ) const { return KeyState[key].m_Action == KA_JustPressed || KeyState[key].m_Action == KA_Down; }
-	bool WasKeyJustPressed( const char key ) const { return KeyState[key].m_Action == KA_JustPressed; }
+	bool WasKeyJustPressed( const char key, const bool bConsumeInput = true ) const { 	
+		return KeyState[key].m_Action == KA_JustPressed;
+	}
 
 	bool IsArrowPressedOrDown( const kbArrow_t arrow ) const { return ArrowState[arrow].m_Action == KA_JustPressed || ArrowState[arrow].m_Action == KA_Down; }
 	bool WasArrowJustPressed( const kbArrow_t arrow ) const { return ArrowState[arrow].m_Action == KA_JustPressed; }
