@@ -61,8 +61,9 @@ private:
 		auto pSheep = KungFuLevelComponent::Get()->GetSheep();
 		if ( pSheep == nullptr ) {
 			pSheep = m_pLevelComponent->SpawnSheep();
-			pSheep->ExternalRequestStateChange( KungFuSheepState::Cinema );
 		}
+		pSheep->ExternalRequestStateChange( KungFuSheepState::Cinema );
+
 		static const kbString JumpingJacks_Anim( "JumpingJacks" );
 		pSheep->PlayAnimation( JumpingJacks_Anim, 0.15f );
 		pSheep->SetTargetFacingDirection( kbVec3( -1.0f, 0.0f, -1.0f ).Normalized() );
@@ -421,6 +422,8 @@ private:
 	}
 
 	virtual void EndState_Internal( KungFuGame::eKungFuGame_State nextState ) override {
+
+		KungFuLevelComponent::Get()->RemoveSheep();
 	}
 
 	float m_StateStartTime;
@@ -776,6 +779,10 @@ void KungFuLevelComponent::ReturnSnolafToPool( KungFuSnolafComponent *const pSno
 //	kbLog( "Snolaf returned.  Pool size = %d", m_SnolafPool.size() );
 }
 
+void KungFuLevelComponent::RemoveSheep() {
+	g_pGame->RemoveGameEntity( m_pSheep->GetOwner() );
+	m_pSheep = nullptr;
+}
 /**
  *	KungFuLevelComponent::UpdateDebugAndCheats
  */

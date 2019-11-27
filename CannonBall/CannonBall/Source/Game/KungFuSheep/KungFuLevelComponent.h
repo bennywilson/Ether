@@ -56,6 +56,7 @@ public:
 	float										GetDistancePlayerHasTraveled();
 
 	void										ReturnSnolafToPool( class KungFuSnolafComponent *const pSnolaf );
+	void										RemoveSheep();
 
 	static KungFuLevelComponent *				Get() { return s_Inst; }
 
