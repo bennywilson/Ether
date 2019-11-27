@@ -295,7 +295,6 @@ private:
 	}
 
 	virtual void EndState_Internal( KungFuGame::eKungFuGame_State nextState ) override {
-
 	}
 
 	float m_GamePlayStartTime;
@@ -360,6 +359,9 @@ private:
 		KungFuLevelComponent *const pLevelComp = g_pCannonGame->GetLevelComponent<KungFuLevelComponent>();
 		pLevelComp->SetPlayLevelMusic( 1, true );
 
+		if ( nextState == KungFuGame::MainMenu && KungFuSheepDirector::Get()->GetPreviousState() == KungFuGame::Gameplay ) {
+			KungFuLevelComponent::Get()->RemoveSheep();
+		}
 	}
 
 	virtual void WidgetEventCB( kbUIWidget *const pWidget, const kbInput_t * pInput ) override {

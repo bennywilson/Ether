@@ -484,6 +484,10 @@ void CannonBallMainMenuComponent::Constructor() {
  */
 void CannonBallMainMenuComponent::InputCallBack( const kbInput_t & input ) {
 
+	if ( m_AnimationState != 0 ) {
+		return;
+	}
+
 	const kbVec2 & leftStick = GetLeftStick( &input );
 	const kbVec2 & prevLeftStick = GetPrevLeftStick( &input );
 

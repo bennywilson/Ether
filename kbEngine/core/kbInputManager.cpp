@@ -149,13 +149,13 @@ void kbInputManager::Update( const float DeltaTime ) {
 				if ( pGamePad.wButtons & ( 1 << iButton ) ) {
 
 					if ( m_Input.GamepadButtonStates[iButton].m_Action == kbInput_t::KA_JustPressed ) {
-						m_Input.KeyState[iButton].m_Action = kbInput_t::KA_Down;
-					} else {
+						m_Input.GamepadButtonStates[iButton].m_Action = kbInput_t::KA_Down;
+					} else if ( m_Input.GamepadButtonStates[iButton].m_Action != kbInput_t::KA_Down ) {
 						m_Input.GamepadButtonStates[iButton].m_Action = kbInput_t::KA_JustPressed;
-						m_Input.KeyState[iButton].m_LastActionTimeSec = g_GlobalTimer.TimeElapsedSeconds();
+						m_Input.GamepadButtonStates[iButton].m_LastActionTimeSec = g_GlobalTimer.TimeElapsedSeconds();
 					}
 				} else {
-					if ( m_Input.GamepadButtonStates[iButton].m_Action != kbInput_t::KA_JustReleased ) {
+					if ( m_Input.GamepadButtonStates[iButton].m_Action == kbInput_t::KA_JustPressed || m_Input.GamepadButtonStates[iButton].m_Action == kbInput_t::KA_Down ) {
 						m_Input.GamepadButtonStates[iButton].m_Action = kbInput_t::KA_JustReleased;
 					} else {
 						m_Input.GamepadButtonStates[iButton].m_Action = kbInput_t::KA_None;
