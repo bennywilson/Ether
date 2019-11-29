@@ -57,8 +57,8 @@ kbPrefab 1 {
 							Vector = 0.000000 0.000000 0.000000 0.000000
 						}
 				}
-			RenderPass = LightingPass
 			RenderOrderBias =  0.000000
+			RenderPass = LightingPass
 			Animations = 6
 				kbAnimComponent { 
 					Enabled = 0
@@ -178,8 +178,8 @@ kbPrefab 1 {
 							Vector = 0.000000 0.000000 0.000000 0.000000
 						}
 				}
-			RenderPass = LightingPass
 			RenderOrderBias =  0.000000
+			RenderPass = LightingPass
 			Animations = 6
 				kbAnimComponent { 
 					Enabled = 0
@@ -297,12 +297,12 @@ kbPrefab 1 {
 			MinStartVelocity = -1.000000 5.000000 -1.000000
 			ModelEmitter = 0
 			ParticleBillboardType = FaceCamera
+			RenderOrderBias =  0.000000
 			RotationOverLife = 0
 			SizeOverLife = 0
 			StartColor = 1.000000 1.000000 1.000000 1.000000
 			StartDelay =  0.000000
 			TotalDuration =  -1.000000
-			RenderOrderBias =  0.000000
 			VelocityCurve = 0
 		}
 		kbParticleComponent { 
@@ -364,12 +364,12 @@ kbPrefab 1 {
 			MinStartVelocity = -1.000000 5.000000 -1.000000
 			ModelEmitter = 0
 			ParticleBillboardType = FaceCamera
+			RenderOrderBias =  0.000000
 			RotationOverLife = 0
 			SizeOverLife = 0
 			StartColor = 1.000000 1.000000 1.000000 1.000000
 			StartDelay =  0.000000
 			TotalDuration =  -1.000000
-			RenderOrderBias =  0.000000
 			VelocityCurve = 0
 		}
 	}
@@ -434,8 +434,8 @@ kbGameEntity 3457190988 1240531568 1181983423 3782107432 {
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 			}
-		RenderPass = LightingPass
 		RenderOrderBias =  0.000000
+		RenderPass = LightingPass
 		Animations = 6
 			kbAnimComponent { 
 				Enabled = 0
@@ -555,8 +555,8 @@ kbGameEntity 3457190988 1240531568 1181983423 3782107432 {
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 			}
-		RenderPass = LightingPass
 		RenderOrderBias =  0.000000
+		RenderPass = LightingPass
 		Animations = 6
 			kbAnimComponent { 
 				Enabled = 0
@@ -674,12 +674,12 @@ kbGameEntity 3457190988 1240531568 1181983423 3782107432 {
 		MinStartVelocity = -1.000000 5.000000 -1.000000
 		ModelEmitter = 0
 		ParticleBillboardType = FaceCamera
+		RenderOrderBias =  0.000000
 		RotationOverLife = 0
 		SizeOverLife = 0
 		StartColor = 1.000000 1.000000 1.000000 1.000000
 		StartDelay =  0.000000
 		TotalDuration =  1.000000
-		RenderOrderBias =  0.000000
 		VelocityCurve = 0
 	}
 	kbParticleComponent { 
@@ -741,12 +741,12 @@ kbGameEntity 3457190988 1240531568 1181983423 3782107432 {
 		MinStartVelocity = -1.000000 5.000000 -1.000000
 		ModelEmitter = 0
 		ParticleBillboardType = FaceCamera
+		RenderOrderBias =  0.000000
 		RotationOverLife = 0
 		SizeOverLife = 0
 		StartColor = 1.000000 1.000000 1.000000 1.000000
 		StartDelay =  0.000000
 		TotalDuration =  -1.000000
-		RenderOrderBias =  0.000000
 		VelocityCurve = 0
 	}
 }
