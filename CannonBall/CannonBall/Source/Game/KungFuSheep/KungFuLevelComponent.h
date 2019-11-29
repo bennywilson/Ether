@@ -26,6 +26,13 @@ namespace KungFuGame {
 		Cannonball,
 		DebugDeath
 	};
+
+	const float kPrehugLengthSec = 1.0f;
+	const float kDistToHugSheep = 0.75f;
+	const float kDistToHugSnolaf = 0.5f;
+	const float kDistToChase = kDistToHugSheep + 0.05f;
+	const float kDistBetweenSnolafs = 0.75f;
+	const float kTimeUntilRequeueReady = 0.0f;
 };
 
 
@@ -140,6 +147,9 @@ public:
 
 	CannonBallPauseMenuUIComponent *			GetPauseMenu() const { return m_pPauseMenuUI; }
 
+	int											GetNumHuggers() const { return m_NumHuggers; }
+	int											GetNumPrehuggers() const { return m_NumPrehuggers; }
+	int											GetNumHuggersAndPrehuggers() const { return m_NumHuggers + m_NumPrehuggers; }
 protected:
 
 	virtual void								InitializeStateMachine_Internal();
@@ -151,6 +161,9 @@ private:
 	CannonBallUIComponent *						m_pCannonBallUI;
 	CannonBallMainMenuComponent *				m_pMainMenuUI;
 	CannonBallPauseMenuUIComponent *			m_pPauseMenuUI;
+
+	int											m_NumHuggers;
+	int											m_NumPrehuggers;
 };
 
 #endif

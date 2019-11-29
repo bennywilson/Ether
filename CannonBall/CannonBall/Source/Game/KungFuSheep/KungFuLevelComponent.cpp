@@ -14,6 +14,9 @@
 static const kbVec3 g_SheepStartPos( 77.10445f, -52.6362f, -396.559f ) ;
 static const kbQuat g_SheepStartRot( 0.0f, 1.0f, 0.0f, 0.0f );
 
+static bool g_bSkipMainMenuAndIntro = false;
+
+
 /**
  *	KungFuGame_MainMenuState
  */
@@ -62,6 +65,15 @@ private:
 		if ( pSheep == nullptr ) {
 			pSheep = m_pLevelComponent->SpawnSheep();
 		}
+
+		if ( g_bSkipMainMenuAndIntro ) {
+
+			static const kbString IdleL_Anim( "IdleLeft_Basic" );
+			pSheep->PlayAnimation( IdleL_Anim, 0.2f );
+			RequestStateChange( KungFuGame::Intro );
+			return;
+		}
+
 		pSheep->ExternalRequestStateChange( KungFuSheepState::Cinema );
 
 		static const kbString JumpingJacks_Anim( "JumpingJacks" );
@@ -93,6 +105,11 @@ private:
 	}
 
 	virtual void UpdateState_Internal() override {
+
+		if ( g_bSkipMainMenuAndIntro ) {
+			RequestStateChange( KungFuGame::Gameplay );
+			return;
+		}
 
 		auto pSheep = KungFuLevelComponent::Get()->GetSheep();
 
@@ -665,7 +682,7 @@ void KungFuLevelComponent::SpawnEnemy( const bool bSpawnLeft, const int waveSize
 	}
 
 	const float startSpawnDist = 9.5f;
-	const float spawnOffsets = 1.0f;
+	const float spawnOffsets = KungFuGame::kDistBetweenSnolafs;
 	kbVec3 nextNegZSpawnPos = g_pCannonGame->GetPlayer()->GetOwnerPosition() + kbVec3( 0.0f, 0.0f, -startSpawnDist );
 	kbVec3 nextPosZSpawnPos = g_pCannonGame->GetPlayer()->GetOwnerPosition() + kbVec3( 0.0f, 0.0f, startSpawnDist );
 
@@ -814,7 +831,9 @@ KungFuSheepDirector::KungFuSheepDirector() :
 	m_pHealthBarUI( nullptr ),
 	m_pCannonBallUI( nullptr ),
 	m_pMainMenuUI( nullptr ),
-	m_pPauseMenuUI( nullptr ) {
+	m_pPauseMenuUI( nullptr ),
+	m_NumHuggers( 0 ),
+	m_NumPrehuggers( 0 ) {
 }
 
 /**
@@ -830,6 +849,14 @@ KungFuSheepDirector::~KungFuSheepDirector() {
 void KungFuSheepDirector::InitializeStateMachine_Internal() {
 
 	kbLevelDirector::InitializeStateMachine_Internal();
+
+	m_pHealthBarUI = nullptr;
+	m_pMainMenuUI = nullptr;
+	m_pPauseMenuUI = nullptr;
+	m_pCannonBallUI = nullptr;
+
+	m_NumHuggers = 0;
+	m_NumPrehuggers = 0;
 }
 
 /**
@@ -887,6 +914,29 @@ void KungFuSheepDirector::UpdateStateMachine() {
 			m_pCannonBallUI->GetOwner()->DisableAllComponents();
 		}
 	}
+
+	m_NumHuggers = 0;
+	m_NumPrehuggers = 0;
+	for ( int i = 0; i < g_pCannonGame->GetGameEntities().size(); i++ ) {
+
+		kbGameEntity *const pEnt =  g_pCannonGame->GetGameEntities()[i];
+		if ( pEnt->GetActorComponent() == nullptr ) {
+			continue;
+		}
+
+		KungFuSnolafComponent *const pSnolaf = pEnt->GetActorComponent()->GetAs<KungFuSnolafComponent>();
+		if ( pSnolaf == nullptr || pSnolaf->IsEnabled() == false ) {
+			continue;
+		}
+
+		if ( pSnolaf->GetState() == KungFuSnolafState::Hug ) {
+			m_NumHuggers++;
+		} else if ( pSnolaf->GetState() == KungFuSnolafState::Prehug ) {
+			m_NumPrehuggers++;
+		}
+	}
+
+	kbLog( "Num huggers = %d %d", m_NumHuggers, m_NumPrehuggers );
 }
 
 /**
@@ -906,6 +956,30 @@ AttackHitInfo_t KungFuSheepDirector::DoAttack( const DealAttackInfo_t<KungFuGame
  *	KungFuSheepDirector::StateChangeCB
  */
 void KungFuSheepDirector::StateChangeCB( const KungFuGame::eKungFuGame_State previousState, const KungFuGame::eKungFuGame_State nextState ) {
+
+	if ( g_bSkipMainMenuAndIntro ) {
+
+		m_pHealthBarUI->GetOwner()->EnableAllComponents();
+		m_pCannonBallUI->GetOwner()->EnableAllComponents();
+		m_pMainMenuUI->GetOwner()->DisableAllComponents();
+	
+		if ( nextState == KungFuGame::MainMenu ) {
+			for ( int i = 0; i < g_pCannonGame->GetGameEntities().size(); i++ ) {
+
+				kbGameEntity *const pTargetEnt = g_pCannonGame->GetGameEntities()[i];
+				if ( pTargetEnt->GetComponent<KungFuSheepComponent>() ) {
+					continue;
+				}
+
+				if ( pTargetEnt->GetComponent<KungFuSnolafComponent>() ) {
+					pTargetEnt->DisableAllComponents();
+					g_pGame->GetLevelComponent<KungFuLevelComponent>()->ReturnSnolafToPool( pTargetEnt->GetComponent<KungFuSnolafComponent>() );
+				}
+			}
+		}
+
+		return;
+	}
 
 	if ( nextState == KungFuGame::Gameplay ) {
 		if ( m_pHealthBarUI != nullptr ) {
