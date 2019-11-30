@@ -11,11 +11,7 @@
 #include "KungFuSheep.h"
 #include "KungFuSnolaf.h"
 
-static const kbVec3 g_SheepStartPos( 77.10445f, -52.6362f, -396.559f ) ;
-static const kbQuat g_SheepStartRot( 0.0f, 1.0f, 0.0f, 0.0f );
-
 static bool g_bSkipMainMenuAndIntro = false;
-
 
 /**
  *	KungFuGame_MainMenuState
@@ -79,7 +75,7 @@ private:
 		static const kbString JumpingJacks_Anim( "JumpingJacks" );
 		pSheep->PlayAnimation( JumpingJacks_Anim, 0.15f );
 		pSheep->SetTargetFacingDirection( kbVec3( -1.0f, 0.0f, -1.0f ).Normalized() );
-		pSheep->SetOwnerPosition( g_SheepStartPos );
+		pSheep->SetOwnerPosition( KungFuGame::kSheepStartPos );
 	}
 
 	virtual void EndState_Internal( KungFuGame::eKungFuGame_State nextState ) override {
@@ -246,8 +242,7 @@ private:
 	virtual void BeginState_Internal( KungFuGame::eKungFuGame_State previousState ) override {
 
 		if ( previousState == KungFuGame::Paused ) {
-			KungFuLevelComponent *const pLevelComp = g_pCannonGame->GetLevelComponent<KungFuLevelComponent>();
-			pLevelComp->SetPlayLevelMusic( 1, false );
+			KungFuLevelComponent::Get()->SetPlayLevelMusic( 1, false );
 		} else if ( previousState == KungFuGame::Intro ) {
 			m_NumSnolafsKilled = 0;
 			m_GamePlayStartTime = g_GlobalTimer.TimeElapsedSeconds();
@@ -282,17 +277,19 @@ private:
 
 			numSnolafs++;
 		}
-		//kbLog( "Num SNo = %d", numSnolafs );
+		
+		auto pLevelComponent = KungFuLevelComponent::Get();
 		if ( m_NumSnolafsKilled == 0 ) {
 
 			if ( numSnolafs == 0 ) {
-				KungFuLevelComponent *const pLevelComp = g_pCannonGame->GetLevelComponent<KungFuLevelComponent>();
-				pLevelComp->SpawnEnemy( true, 1 );
+				pLevelComponent->SpawnEnemy( true, 1 );
 			}
-		} else if ( numSnolafs == 0 && g_GlobalTimer.TimeElapsedSeconds() > m_LastSpawnTime + 0.25f ) {
+		} else if ( g_GlobalTimer.TimeElapsedSeconds() > m_LastSpawnTime + KungFuGame::kTimeBetweenSnolafWaves ) {
 
-			KungFuLevelComponent *const pLevelComp = g_pCannonGame->GetLevelComponent<KungFuLevelComponent>();
-			pLevelComp->SpawnEnemy( false, 5 );
+			const float distTraveled = pLevelComponent->GetDistancePlayerHasTraveled();
+			const float normalizedDistTraveled = kbSaturate( distTraveled / KungFuGame::kLevelLength );
+			const int numToSpawn = (int)( normalizedDistTraveled * KungFuGame::kMaxSnolafWaveSize );
+			pLevelComponent->SpawnEnemy( false, numToSpawn );
 
 			m_LastSpawnTime = g_GlobalTimer.TimeElapsedSeconds();
 		}
@@ -301,7 +298,7 @@ private:
 			RequestStateChange( KungFuGame::PlayerDead );
 		}
 
-		//kbLog( "Travel dist = %f", g_pCannonGame->GetLevelComponent<KungFuLevelComponent>()->GetDistancePlayerHasTraveled() );
+		kbLog( "Travel dist = %.f.  Time = %f", pLevelComponent->GetDistancePlayerHasTraveled(), (float)( g_GlobalTimer.TimeElapsedSeconds() - m_GamePlayStartTime ) );
 	}
 
 	virtual void EndState_Internal( KungFuGame::eKungFuGame_State nextState ) override {
@@ -663,8 +660,8 @@ void KungFuLevelComponent::UpdateCannonBallMeter( const float fillVal, const boo
 KungFuSheepComponent * KungFuLevelComponent::SpawnSheep() {
 	kbGameEntity *const sheep = g_pGame->CreateEntity( m_SheepPrefab.GetEntity() );
 
-	sheep->SetPosition( g_SheepStartPos );
-	sheep->SetOrientation( g_SheepStartRot );
+	sheep->SetPosition( KungFuGame::kSheepStartPos );
+	sheep->SetOrientation( KungFuGame::kSheepStartRot );
 
 	m_pSheep = sheep->GetComponent<KungFuSheepComponent>();
 	return m_pSheep;
@@ -681,19 +678,23 @@ void KungFuLevelComponent::SpawnEnemy( const bool bSpawnLeft, const int waveSize
 
 	const float startSpawnDist = 9.5f;
 	const float spawnOffsets = KungFuGame::kDistBetweenSnolafs;
-	kbVec3 nextNegZSpawnPos = g_pCannonGame->GetPlayer()->GetOwnerPosition() + kbVec3( 0.0f, 0.0f, -startSpawnDist );
-	kbVec3 nextPosZSpawnPos = g_pCannonGame->GetPlayer()->GetOwnerPosition() + kbVec3( 0.0f, 0.0f, startSpawnDist );
-
+	kbVec3 nextZSpawnPos = kbVec3( 0.0f, 0.0f, startSpawnDist );
+	const auto sheepPos = KungFuLevelComponent::Get()->GetSheep()->GetOwnerPosition();
+	int lastDir = -1;
 	for ( int i = 0; i < waveSize; i++ ) {
 		kbVec3 spawnPos = kbVec3::zero;
-		if ( bSpawnLeft == false && rand() % 2 == 0 ) {
-			spawnPos = nextNegZSpawnPos;
-			nextNegZSpawnPos.z -= spawnOffsets;
+		const int nextDir = rand() % 2;
+		if ( nextDir == lastDir || lastDir == -1 ) {
+			nextZSpawnPos.z += spawnOffsets;
 		} else {
-			spawnPos = nextPosZSpawnPos;
-			nextPosZSpawnPos.z += spawnOffsets;
+			nextZSpawnPos.z += 2.0f * spawnOffsets;
 		}
 
+		if ( bSpawnLeft == false && nextDir == 0 ) {
+			spawnPos = sheepPos - nextZSpawnPos;
+		} else {
+			spawnPos = sheepPos + nextZSpawnPos;
+		}
 		//kbLog( "Snolaf popped of list of size %d", m_SnolafPool.size() );
 
 		kbGameEntity *const pSnolaf = m_SnolafPool.back();
@@ -775,7 +776,7 @@ void KungFuLevelComponent::SetPlayLevelMusic( const int idx, const bool bPlay ) 
  */
 float KungFuLevelComponent::GetDistancePlayerHasTraveled() {
 
-	return ( g_pCannonGame->GetPlayer()->GetOwnerPosition() - g_SheepStartPos ).Length();
+	return ( g_pCannonGame->GetPlayer()->GetOwnerPosition() - KungFuGame::kSheepStartPos ).Length();
 }
 
 /**
@@ -933,8 +934,6 @@ void KungFuSheepDirector::UpdateStateMachine() {
 			m_NumPrehuggers++;
 		}
 	}
-
-	kbLog( "Num huggers = %d %d", m_NumHuggers, m_NumPrehuggers );
 }
 
 /**

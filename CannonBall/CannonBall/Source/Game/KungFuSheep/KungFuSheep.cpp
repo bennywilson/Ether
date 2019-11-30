@@ -345,7 +345,7 @@ public:
 			m_pActorComponent->PlayAnimation( IdleR_Anim, 0.05f );
 		}
 
-		if ( m_ShakeNBakeActivationStartTime < 0.0f && numSnolafHuggers > 0 && m_NumDirectionChanges > numSnolafHuggers ) {
+		if ( m_ShakeNBakeActivationStartTime < 0.0f && numSnolafHuggers > 0 && m_NumDirectionChanges > min( KungFuGame::kMaxNumRequiredShakeBakeTurns, numSnolafHuggers ) ) {
 			m_ShakeNBakeActivationStartTime = g_GlobalTimer.TimeElapsedSeconds();
 			KungFuSheepComponent *const pSheep = m_pActorComponent->GetAs<KungFuSheepComponent>();
 			pSheep->PlayShakeNBakeFX();
@@ -813,7 +813,7 @@ void KungFuSheepComponent::PlayBaa( const int baaType ) {
  */	
 void KungFuSheepComponent::HitASnolaf() {
 
-	m_CannonBallMeter += 0.25f;
+	m_CannonBallMeter += KungFuGame::kMeterFillPerSnolafKill;
 	KungFuLevelComponent::Get()->UpdateCannonBallMeter( m_CannonBallMeter, false );
 
 	if ( m_BasicAttackImpactSound.size() > 0 ) {

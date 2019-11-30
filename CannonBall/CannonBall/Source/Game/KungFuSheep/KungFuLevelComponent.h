@@ -27,7 +27,7 @@ namespace KungFuGame {
 		DebugDeath
 	};
 
-	const float kPrehugLengthSec = 0.1f;
+	const float kPrehugLengthSec = 0.067f;
 	const float kDistToHugSheep = 0.75f;
 	const float kDistToHugSnolaf = 0.5f;
 	const float kSheepAttackDist = 0.75f;
@@ -35,6 +35,16 @@ namespace KungFuGame {
 	const float kDistBetweenSnolafs = 0.75f;
 	const float kTimeUntilRequeueReady = 0.0f;
 	const float kSheepAttackAnimTimeScale = 20.0f;
+	const float kMeterFillPerSnolafKill = 0.125f;
+	const int kMaxNumRequiredShakeBakeTurns = 6;
+
+	const float kTimeBetweenSnolafWaves = 6.0f;
+	const int kMaxSnolafWaveSize = 12;
+
+	const kbVec3 kSheepStartPos( 77.10445f, -52.6362f, -396.559f );
+	const kbQuat kSheepStartRot( 0.0f, 1.0f, 0.0f, 0.0f );
+	
+	const float kLevelLength = 165.0f;
 };
 
 
