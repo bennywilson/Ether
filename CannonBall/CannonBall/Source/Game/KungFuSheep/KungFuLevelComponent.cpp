@@ -99,7 +99,6 @@ public:
 
 private:
 	virtual void BeginState_Internal( KungFuGame::eKungFuGame_State previousState ) override {
-		
 
 		m_CurrentState = 0;
 	}
@@ -195,7 +194,7 @@ public:
 			if ( dealAttackInfo.m_Radius == 0.0f ) {
 
 				// Slap a %@3$&!!
-				if ( ( attackerPos - targetPos ).Length() > 1.0f ) {
+				if ( ( attackerPos - targetPos ).Length() > KungFuGame::kSheepAttackDist ) {
 					continue;
 				}
 
@@ -216,11 +215,11 @@ public:
 				if ( pTargetSnolaf != nullptr ) {
 					pTargetSnolaf->TakeDamage( dealAttackInfo );
 					if ( pTargetSnolaf->IsDead() ) {
-						numSnolafsKilled++;
+						m_NumSnolafsKilled++;
 
-						if ( numSnolafsKilled == 1 ) {
+						if ( m_NumSnolafsKilled == 1 ) {
 							KungFuLevelComponent *const pLevelComp = g_pCannonGame->GetLevelComponent<KungFuLevelComponent>();
-							pLevelComp->SetPlayLevelMusic( 1, true );
+							KungFuLevelComponent::Get()->SetPlayLevelMusic( 1, true );
 						}
 					}
 				}
@@ -246,15 +245,14 @@ private:
 
 	virtual void BeginState_Internal( KungFuGame::eKungFuGame_State previousState ) override {
 
-		if ( previousState != KungFuGame::Paused ) {
+		if ( previousState == KungFuGame::Paused ) {
+			KungFuLevelComponent *const pLevelComp = g_pCannonGame->GetLevelComponent<KungFuLevelComponent>();
+			pLevelComp->SetPlayLevelMusic( 1, false );
+		} else if ( previousState == KungFuGame::Intro ) {
+			m_NumSnolafsKilled = 0;
 			m_GamePlayStartTime = g_GlobalTimer.TimeElapsedSeconds();
 			m_bFirstUpdate = true;
 		}
-
-		KungFuLevelComponent *const pLevelComp = g_pCannonGame->GetLevelComponent<KungFuLevelComponent>();
-		pLevelComp->SetPlayLevelMusic( 1, false );
-
-		numSnolafsKilled = 0;
 	}
 
 	virtual void UpdateState_Internal() override {
@@ -285,7 +283,7 @@ private:
 			numSnolafs++;
 		}
 		//kbLog( "Num SNo = %d", numSnolafs );
-		if ( numSnolafsKilled == 0 ) {
+		if ( m_NumSnolafsKilled == 0 ) {
 
 			if ( numSnolafs == 0 ) {
 				KungFuLevelComponent *const pLevelComp = g_pCannonGame->GetLevelComponent<KungFuLevelComponent>();
@@ -312,7 +310,7 @@ private:
 	float m_GamePlayStartTime;
 	float m_LastSpawnTime = 0.0f;
 	bool m_bFirstUpdate = false;
-	int numSnolafsKilled = 0;
+	int m_NumSnolafsKilled = 0;
 };
 
 /**

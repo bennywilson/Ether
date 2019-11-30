@@ -42,8 +42,6 @@ public:
 		if ( prevState == KungFuSheepState::CannonBall ) {
 			m_LastCannonBallTime = g_GlobalTimer.TimeElapsedSeconds();
 		}
-
-		kbLog( "Entered Idle ");
 	}
 
 	virtual void UpdateState_Internal() override {
@@ -105,8 +103,6 @@ public:
 	KungFuSheepStateRun( CannonActorComponent *const pPlayerComponent ) : KungFuSheepStateBase( pPlayerComponent ) { }
 
 	virtual void BeginState_Internal( T ) override {
-
-				kbLog( "Entered Run ");
 
 		static const kbString Run_Anim( "Run_Basic" );
 		m_pActorComponent->PlayAnimation( Run_Anim, 0.05f, false );
@@ -270,8 +266,6 @@ public:
 
 	virtual void BeginState_Internal( T ) override {
 
-				kbLog( "Entered Hugged ");
-
 		m_NumDirectionChanges = 0;
 		m_CurrentDirection = 0;
 		m_ShakeNBakeActivationStartTime = -1;
@@ -299,6 +293,16 @@ public:
 		const float frameDT = g_pGame->GetFrameDT();
 		const kbVec3 & targetDir = m_pActorComponent->GetTargetFacingDirection();
 		const float curTime = g_GlobalTimer.TimeElapsedSeconds();
+
+		const int numSnolafHuggers = KungFuSheepDirector::Get()->GetNumHuggers();
+		if ( g_CannonBallTest.GetBool() && g_UseEditor == false && numSnolafHuggers > 5 ) {
+			RequestStateChange( KungFuSheepState::CannonBall );
+			return;
+		}
+
+		if ( numSnolafHuggers == 0 ) {
+			RequestStateChange( KungFuSheepState::Idle );
+		}
 
 		// Baaa
 		if ( m_NumBaasPlayed < 2 && g_GlobalTimer.TimeElapsedSeconds() > m_NextBaaTime ) {
@@ -339,30 +343,6 @@ public:
 			m_pActorComponent->PlayAnimation( IdleL_Anim, 0.05f );
 		} else {
 			m_pActorComponent->PlayAnimation( IdleR_Anim, 0.05f );
-		}
-
-/*		int numHuggers = 0;
-		for ( int i = 0; i < g_pCannonGame->GetGameEntities().size(); i++ ) {
-
-			kbGameEntity *const pEnt =  g_pCannonGame->GetGameEntities()[i];
-			if ( pEnt->GetActorComponent() == nullptr ) {
-				continue;
-			}
-
-			KungFuSnolafComponent *const pSnolaf = g_pCannonGame->GetGameEntities()[i]->GetActorComponent()->GetAs<KungFuSnolafComponent>();
-			if ( pSnolaf == nullptr || pSnolaf->IsEnabled() == false ) {
-				continue;
-			}
-
-			if ( pSnolaf->GetState() == KungFuSnolafState::Hug || pSnolaf->GetState() == KungFuSnolafState::PreHug ) {
-				numHuggers++;
-			}
-		}*/
-
-		const int numSnolafHuggers = KungFuSheepDirector::Get()->GetNumHuggers();
-		if ( g_CannonBallTest.GetBool() && g_UseEditor == false && numSnolafHuggers > 5 ) {
-			RequestStateChange( KungFuSheepState::CannonBall );
-			return;
 		}
 
 		if ( m_ShakeNBakeActivationStartTime < 0.0f && numSnolafHuggers > 0 && m_NumDirectionChanges > numSnolafHuggers ) {
@@ -562,6 +542,21 @@ void KungFuSheepComponent::SetEnable_Internal( const bool bEnable ) {
 			pLevelComp->UpdateSheepHealthBar( m_Health );
 			pLevelComp->UpdateCannonBallMeter( m_CannonBallMeter, false );
 		}
+
+		static const kbString PunchLeft_Basic( "PunchLeft_Basic" );
+		static const kbString PunchRight_Basic( "PunchRight_Basic" );
+		static const kbString KickLeft_Basic( "KickLeft_Basic" );
+		static const kbString KickRight_Basic( "KickRight_Basic" );
+
+		m_SkelModelsList[0]->SetAnimationTimeScaleMultiplier( PunchLeft_Basic, KungFuGame::kSheepAttackAnimTimeScale );
+		m_SkelModelsList[0]->SetAnimationTimeScaleMultiplier( PunchRight_Basic, KungFuGame::kSheepAttackAnimTimeScale );
+		m_SkelModelsList[0]->SetAnimationTimeScaleMultiplier( KickLeft_Basic, KungFuGame::kSheepAttackAnimTimeScale );
+		m_SkelModelsList[0]->SetAnimationTimeScaleMultiplier( KickRight_Basic, KungFuGame::kSheepAttackAnimTimeScale );
+		m_SkelModelsList[1]->SetAnimationTimeScaleMultiplier( PunchLeft_Basic, KungFuGame::kSheepAttackAnimTimeScale );
+		m_SkelModelsList[1]->SetAnimationTimeScaleMultiplier( PunchRight_Basic, KungFuGame::kSheepAttackAnimTimeScale );
+		m_SkelModelsList[1]->SetAnimationTimeScaleMultiplier( KickLeft_Basic, KungFuGame::kSheepAttackAnimTimeScale );
+		m_SkelModelsList[1]->SetAnimationTimeScaleMultiplier( KickRight_Basic, KungFuGame::kSheepAttackAnimTimeScale );
+
 	} else {
 		if ( m_HeadBandInstance[0].GetEntity() != nullptr ) {
 			g_pGame->RemoveGameEntity( m_HeadBandInstance[0].GetEntity() );

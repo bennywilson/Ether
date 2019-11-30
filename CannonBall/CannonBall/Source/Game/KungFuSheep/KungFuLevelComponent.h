@@ -27,12 +27,14 @@ namespace KungFuGame {
 		DebugDeath
 	};
 
-	const float kPrehugLengthSec = 1.0f;
+	const float kPrehugLengthSec = 0.1f;
 	const float kDistToHugSheep = 0.75f;
 	const float kDistToHugSnolaf = 0.5f;
+	const float kSheepAttackDist = 0.75f;
 	const float kDistToChase = kDistToHugSheep + 0.05f;
 	const float kDistBetweenSnolafs = 0.75f;
 	const float kTimeUntilRequeueReady = 0.0f;
+	const float kSheepAttackAnimTimeScale = 20.0f;
 };
 
 
