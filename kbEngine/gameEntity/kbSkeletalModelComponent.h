@@ -80,6 +80,9 @@ public:
 	void										RegisterAnimEventListener( IAnimEventListener *const pListener );
 	void										UnregisterAnimEventListener( IAnimEventListener *const pListener );
 
+	void										RegisterSyncSkelModel( kbSkeletalModelComponent *const pSkelModel );
+	void										UnregisterSyncSkelModel( kbSkeletalModelComponent *const pSkelModel );
+
 protected:
 
 	virtual void								SetEnable_Internal( const bool isEnabled ) override;
@@ -100,6 +103,9 @@ protected:
 	float										m_BlendLength;
 
 	std::vector<float>							m_AnimationTimeScaleMultipliers;
+
+	std::vector<kbSkeletalModelComponent*>		m_SyncedSkelModels;
+	kbSkeletalModelComponent *					m_pSyncParent;
 
 	// Debug
 	int											m_DebugAnimIdx;

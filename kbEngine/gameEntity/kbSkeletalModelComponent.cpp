@@ -31,6 +31,8 @@ void kbSkeletalModelComponent::Constructor() {
 	m_CurrentAnimation = -1;
 	m_NextAnimation = -1;
 
+	m_pSyncParent = nullptr;
+
 	m_BlendStartTime = 0.0f;
 	m_BlendLength = 1.0f;
 
@@ -93,7 +95,7 @@ void kbSkeletalModelComponent::SetEnable_Internal( const bool isEnabled ) {
 void kbSkeletalModelComponent::Update_Internal( const float DeltaTime ) {
 	Super::Update_Internal( DeltaTime );
 
-	if ( m_pModel != nullptr ) {
+	if ( m_pModel != nullptr && m_pSyncParent == nullptr ) {
 		if ( m_BindToLocalSpaceMatrices.size() != m_pModel->NumBones() ) {
 			m_BindToLocalSpaceMatrices.resize( m_pModel->NumBones() );
 		}
@@ -293,6 +295,10 @@ void kbSkeletalModelComponent::Update_Internal( const float DeltaTime ) {
 	m_RenderObject.m_pModel = m_pModel;
 	m_RenderObject.m_RenderPass = m_RenderPass;
 	g_pRenderer->UpdateRenderObject( m_RenderObject );
+
+	for ( int i = 0; i < m_SyncedSkelModels.size(); i++ ) {
+		m_SyncedSkelModels[i]->m_BindToLocalSpaceMatrices = m_BindToLocalSpaceMatrices;
+	}
 }
 
 /**
@@ -534,6 +540,27 @@ void kbSkeletalModelComponent::UnregisterAnimEventListener( IAnimEventListener *
 	kbErrorCheck( VectorContains( m_AnimEventListeners, pListener ) == true, "UnregisterAnimEventListener() - Listener not previously registered");
 	VectorRemoveFast( m_AnimEventListeners, pListener );
 }
+
+/**
+ *	kbSkeletalModelComponent::RegisterSyncSkelModel
+ */
+void kbSkeletalModelComponent::RegisterSyncSkelModel( kbSkeletalModelComponent *const pSkelModel ) {
+
+	if ( VectorFind( m_SyncedSkelModels, pSkelModel ) != m_SyncedSkelModels.end() ) {
+		return;
+	}
+	m_SyncedSkelModels.push_back( pSkelModel );
+	pSkelModel->m_pSyncParent = this;
+}
+
+/**
+ *	kbSkeletalModelComponent::UnregisterSyncSkelModel
+ */
+void kbSkeletalModelComponent::UnregisterSyncSkelModel( kbSkeletalModelComponent *const pSkelModel ) {
+	VectorRemoveFast( m_SyncedSkelModels, pSkelModel );
+	pSkelModel->m_pSyncParent = nullptr;
+}
+
 
 /**
  *	kbFlingPhysicsComponent::Constructor

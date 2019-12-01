@@ -690,10 +690,10 @@ void KungFuLevelComponent::SpawnEnemy( const bool bSpawnLeft, const int waveSize
 		}
 
 	}
-	kbVec3 nextZSpawnPos = kbVec3( 0.0f, 0.0f, startSpawnDist );
+
 	const auto sheepPos = KungFuLevelComponent::Get()->GetSheep()->GetOwnerPosition();
 	int lastDir = -1;
-	int curSubWaveSize = 0;
+	int curSubWaveSize = -1;
 	int curDir = 0;
 	int numConseq = 1;
 
@@ -702,7 +702,7 @@ void KungFuLevelComponent::SpawnEnemy( const bool bSpawnLeft, const int waveSize
 		float offsetMultiplier = 1.0f;
 
 		curSubWaveSize++;
-		if ( curSubWaveSize == -1 || curSubWaveSize > subWaveSize ) {
+		if ( curSubWaveSize == 0 || curSubWaveSize > subWaveSize ) {
 			curDir = rand() % 2;
 			if ( curSubWaveSize > 0 && curDir != lastDir && subWaveSize > 1 ) {
 				offsetMultiplier = numConseq * KungFuGame::kSubWaveDirChangeOffsetMult;

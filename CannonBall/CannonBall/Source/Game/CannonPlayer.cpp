@@ -50,6 +50,7 @@ void CannonActorComponent::SetEnable_Internal( const bool bEnable ) {
 				m_SkelModelsList[i]->RegisterAnimEventListener( this );
 			}
 
+			m_SkelModelsList[0]->RegisterSyncSkelModel( m_SkelModelsList[1] );
 			const static kbString smearParam = "smearParams";
 			m_SkelModelsList[1]->SetMaterialParamVector( 0, smearParam.stl_str(), kbVec4::zero );
 		}
@@ -58,6 +59,9 @@ void CannonActorComponent::SetEnable_Internal( const bool bEnable ) {
 			m_SkelModelsList[i]->UnregisterAnimEventListener( this );
 		}
 
+		if ( m_SkelModelsList.size() > 1 ) {
+			m_SkelModelsList[0]->UnregisterSyncSkelModel( m_SkelModelsList[1] );
+		}
 		m_SkelModelsList.clear();
 	}
 }
@@ -76,7 +80,6 @@ void CannonActorComponent::Update_Internal( const float DT ) {
 	const kbQuat targetRot = kbQuatFromMatrix( facingMat );
 	GetOwner()->SetOrientation( curRot.Slerp( curRot, targetRot, DT * m_MaxRotateSpeed ) );
 
-	
 	// Anim Smear
 	if ( m_AnimSmearStartTime > 0.0f ) {
 		const float elapsedTime = g_GlobalTimer.TimeElapsedSeconds() - m_AnimSmearStartTime;
@@ -98,9 +101,9 @@ void CannonActorComponent::Update_Internal( const float DT ) {
  *	CannonActorComponent::PlayAnimation
  */
 void CannonActorComponent::PlayAnimation( const kbString animName, const float animBlendInLen, const bool bRestartIfAlreadyPlaying, const kbString nextAnimName, const float nextAnimBlendInLen ) {
-	for ( int i = 0; i < m_SkelModelsList.size(); i++ ) {
-		kbSkeletalModelComponent *const pSkelModel = m_SkelModelsList[i];
-		pSkelModel->PlayAnimation( animName, animBlendInLen, bRestartIfAlreadyPlaying, nextAnimName, nextAnimBlendInLen );
+
+	if ( m_SkelModelsList.size() > 0 ) {
+		m_SkelModelsList[0]->PlayAnimation( animName, animBlendInLen, bRestartIfAlreadyPlaying, nextAnimName, nextAnimBlendInLen );
 	}
 }
 
