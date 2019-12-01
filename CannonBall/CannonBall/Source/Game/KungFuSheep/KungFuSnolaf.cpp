@@ -248,14 +248,13 @@ public:
 
 		if ( pSheep != nullptr && m_bFirstHitYet == false && g_GlobalTimer.TimeElapsedSeconds() > m_HugStartTime + 0.25f ) {
 			m_bFirstHitYet = true;
-			KungFuLevelComponent *const pLevelComponent = g_pCannonGame->GetLevelComponent<KungFuLevelComponent>();
 
 			DealAttackInfo_t<KungFuGame::eAttackType> dealAttackInfo;
 			dealAttackInfo.m_BaseDamage = 999999.0f;
 			dealAttackInfo.m_pAttacker = m_pActorComponent;
 			dealAttackInfo.m_Radius = 0.0f;
 			dealAttackInfo.m_AttackType = KungFuGame::Hug;
-			pLevelComponent->DoAttack( dealAttackInfo );		
+			KungFuSheepDirector::Get()->DoAttack( dealAttackInfo );		
 		}
 
 		const kbVec3 snolafPos = m_pActorComponent->GetOwnerPosition();
@@ -743,8 +742,11 @@ void KungFuSnolafComponent::TakeDamage( const DealAttackInfo_t<KungFuGame::eAtta
 
 	m_LastAttackInfo = attackInfo;
 	if ( attackInfo.m_AttackType == KungFuGame::Shake ) {
-		// Shake 'n Bake only kills huggers
-		if ( m_CurrentState == KungFuSnolafState::Hug || m_CurrentState == KungFuSnolafState::Prehug ) {
+		
+		const kbVec3 attackerPos = attackInfo.m_pAttacker->GetOwnerPosition();
+		const kbVec3 ourPos = GetOwnerPosition();
+		if ( m_CurrentState == KungFuSnolafState::Hug || m_CurrentState == KungFuSnolafState::Prehug ||
+			( attackerPos - ourPos ).Length() < KungFuGame::kShakeNBakeRadius ) {
 			m_Health = -1.0f;
 			RequestStateChange( KungFuSnolafState::Dead );
 		}

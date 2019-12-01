@@ -214,15 +214,14 @@ public:
 		static const kbString KickR_Anim( "KickRight_Basic" );
 
 		if ( m_bHitSnolaf == false ) {
-			KungFuLevelComponent *const pLevelComponent = KungFuLevelComponent::Get();
-		
+
 			DealAttackInfo_t<KungFuGame::eAttackType> dealAttackInfo;
 			dealAttackInfo.m_BaseDamage = 999999.0f;
 			dealAttackInfo.m_pAttacker = this->GetSheep();
 			dealAttackInfo.m_Radius = 0.0f;
 			dealAttackInfo.m_AttackType = KungFuGame::Punch_Kick;
 
-			const AttackHitInfo_t attackInfo = pLevelComponent->DoAttack( dealAttackInfo );
+			const AttackHitInfo_t attackInfo = KungFuSheepDirector::Get()->DoAttack( dealAttackInfo );
 			if ( attackInfo.m_bHit ) {
 				GetSheep()->HitASnolaf();
 				m_bHitSnolaf = true;
@@ -282,14 +281,13 @@ public:
 
 		if ( kbfrand() > 0.5f ) {
 			GetSheep()->PlayBaa( -1 );
-			m_NextBaaTime = g_GlobalTimer.TimeElapsedSeconds() + 1 + 3.0f * kbfrand();
+			m_NextBaaTime = g_GlobalTimer.TimeElapsedSeconds() + 2 + 3.0f * kbfrand();
 			m_NumBaasPlayed = 1;
 		}
 	}
 
 	virtual void UpdateState_Internal() override {
-		const kbInput_t & input = g_pInputManager->GetInput();
-
+	
 		const float frameDT = g_pGame->GetFrameDT();
 		const kbVec3 & targetDir = m_pActorComponent->GetTargetFacingDirection();
 		const float curTime = g_GlobalTimer.TimeElapsedSeconds();
@@ -311,17 +309,18 @@ public:
 			m_NextBaaTime = g_GlobalTimer.TimeElapsedSeconds() + 3.0f + kbfrand();
 		}
 
+		const kbInput_t & input = g_pInputManager->GetInput();
 		const kbVec2 leftStick = GetLeftStick();
 		if ( WasSpecialAttackPressed() && GetSheep()->GetCannonBallMeterFill() >= 1.0f ) {
 			RequestStateChange( KungFuSheepState::CannonBall );
-		} else if ( leftStick.x < 0.0f ) {
+		} else if ( leftStick.x < 0.0f || input.GamepadButtonStates[8].m_Action == kbInput_t::Down ) {
 			if ( m_CurrentDirection == 1 ) {
 				m_CurrentDirection = 0;
 				m_NumDirectionChanges++;
 				m_LastDirectionChangeTime = curTime;
 			}
 			m_pActorComponent->SetTargetFacingDirection( g_LeftFacing );
-		} else if ( leftStick.x > 0.0f ) {
+		} else if ( leftStick.x > 0.0f || input.GamepadButtonStates[9].m_Action == kbInput_t::Down ) {
 
 			if ( m_CurrentDirection == 0 ) {
 				m_CurrentDirection = 1;
@@ -357,10 +356,9 @@ public:
 			DealAttackInfo_t<KungFuGame::eAttackType> dealAttackInfo;
 			dealAttackInfo.m_BaseDamage = 999999.0f;
 			dealAttackInfo.m_pAttacker = m_pActorComponent;
-			dealAttackInfo.m_Radius = 10.0f;
+			dealAttackInfo.m_Radius = 99999999.0f;
 			dealAttackInfo.m_AttackType = KungFuGame::Shake;
-			KungFuLevelComponent *const pLevelComponent = g_pCannonGame->GetLevelComponent<KungFuLevelComponent>();
-			const AttackHitInfo_t attackInfo = pLevelComponent->DoAttack( dealAttackInfo );
+			const AttackHitInfo_t attackInfo = KungFuSheepDirector::Get()->DoAttack( dealAttackInfo );
 		}
 	}
 
@@ -393,10 +391,12 @@ class KungFuSheepStateDead : public KungFuSheepStateBase<T> {
 public:
 	KungFuSheepStateDead( CannonActorComponent *const pPlayerComponent ) : KungFuSheepStateBase( pPlayerComponent ) { }
 
-	virtual void BeginState_Internal( T ) override {
+	virtual void BeginState_Internal( T prevState ) override {
 		kbFlingPhysicsComponent *const pFlingPhysics = GetSheep()->GetComponent<kbFlingPhysicsComponent>();
 		pFlingPhysics->Enable( true );
 		m_bSplashDone = false;
+
+		kbLog( "Dead from %d ", (int) prevState );
 	}
 
 	virtual void UpdateState_Internal() override {
@@ -406,6 +406,10 @@ public:
 			GetSheep()->SpawnSplash();
 		}
 	};
+	
+	virtual void EndState_Internal( T nextState ) override {
+		kbLog( "Dead to %d", (int) nextState );
+	}
 
 	bool m_bSplashDone = false;
 };
@@ -594,8 +598,7 @@ void KungFuSheepComponent::OnAnimEvent( const kbAnimEventInfo_t & animEventInfo 
 		dealAttackInfo.m_Radius = 999999999.0f;
 		dealAttackInfo.m_AttackType = KungFuGame::Cannonball;
 
-		KungFuLevelComponent *const pLevelComponent = g_pCannonGame->GetLevelComponent<KungFuLevelComponent>();
-		const AttackHitInfo_t attackInfo = pLevelComponent->DoAttack( dealAttackInfo );
+		const AttackHitInfo_t attackInfo = KungFuSheepDirector::Get()->DoAttack( dealAttackInfo );
 
 		if ( m_CannonBallImpactFX.GetEntity() != nullptr ) {
 			kbGameEntity *const pCannonBallImpact = g_pGame->CreateEntity( m_CannonBallImpactFX.GetEntity() );
@@ -746,7 +749,9 @@ void KungFuSheepComponent::Update_Internal( const float DT ) {
 	}
 
 	if ( KungFuSheepDirector::Get()->GetNumHuggers() > 0 && IsCannonBalling() == false ) {
-		RequestStateChange( KungFuSheepState::Hugged );
+		if ( GetCurrentState() != KungFuSheepState::Hugged && IsDead() == false ) {
+			RequestStateChange( KungFuSheepState::Hugged );
+		}
 	}
 }
 
@@ -786,6 +791,9 @@ void KungFuSheepComponent::PlayShakeNBakeFX() {
 	pShakeNBakeFX->SetPosition( GetOwnerPosition() );
 	pShakeNBakeFX->SetOrientation( GetOwnerRotation() );
 	pShakeNBakeFX->DeleteWhenComponentsAreInactive( true );
+
+	m_CannonBallMeter += KungFuGame::kShakeNBakeCannonBallBonus;
+	KungFuLevelComponent::Get()->UpdateCannonBallMeter( m_CannonBallMeter, false );
 }
 
 /**
@@ -801,6 +809,7 @@ void KungFuSheepComponent::PlayBaa( const int baaType ) {
 		return;
 	}
 
+	m_LastVOTime = g_GlobalTimer.TimeElapsedSeconds();
 	if ( baaType == -1 ) {
 		m_BaaaVO[rand() % m_BaaaVO.size()].PlaySoundAtPosition( GetOwnerPosition() );
 	} else {
@@ -854,5 +863,5 @@ void KungFuSheepComponent::CannonBallActivatedCB() {
  */	
 void KungFuSheepComponent::ExternalRequestStateChange( const KungFuSheepState::SheepStates_t requestedState ) {
 
-	RequestStateChange( requestedState);
+	RequestStateChange( requestedState );
 }

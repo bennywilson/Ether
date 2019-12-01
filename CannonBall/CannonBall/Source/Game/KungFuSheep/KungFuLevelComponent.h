@@ -30,17 +30,27 @@ namespace KungFuGame {
 	const float kPrehugLengthSec = 0.067f;
 	const float kDistToHugSheep = 0.75f;
 	const float kDistToHugSnolaf = 0.5f;
-	const float kSheepAttackDist = 0.75f;
 	const float kDistToChase = kDistToHugSheep + 0.05f;
-	const float kDistBetweenSnolafs = 0.75f;
 	const float kTimeUntilRequeueReady = 0.0f;
 	const float kSheepAttackAnimTimeScale = 20.0f;
 	const float kMeterFillPerSnolafKill = 0.125f;
-	const int kMaxNumRequiredShakeBakeTurns = 6;
 
+	// Bonus
+	const float kShakeNBakeCannonBallBonus = 0.125f;
+
+	// Sheep Attack
+	const float kShakeNBakeRadius = 3.0f;
+	const float kSheepAttackDist = 0.75f;
+	const int kMaxNumRequiredShakeBakeTurns = 4;
+
+	// Wave
+	const int kSnolafPoolSize = 100;
+	const int kMaxSnolafWaveSize = 20;
 	const float kTimeBetweenSnolafWaves = 6.0f;
-	const int kMaxSnolafWaveSize = 12;
+	const float kDistBetweenSnolafs = 0.75f;
+	const float kSubWaveDirChangeOffsetMult = 1.f;
 
+	// Movement
 	const kbVec3 kSheepStartPos( 77.10445f, -52.6362f, -396.559f );
 	const kbQuat kSheepStartRot( 0.0f, 1.0f, 0.0f, 0.0f );
 	
@@ -63,7 +73,6 @@ public:
 	class KungFuSheepComponent *				SpawnSheep();
 	KungFuSheepComponent *						GetSheep() const { return m_pSheep; }
 
-	AttackHitInfo_t								DoAttack( const DealAttackInfo_t<KungFuGame::eAttackType> & dealAttackInfo );
 	void										UpdateSheepHealthBar( const float healthVal );
 	void										UpdateCannonBallMeter( const float value, const bool bActivated );
 
@@ -116,6 +125,7 @@ private:
 	CannonBallUIComponent *						m_pCannonBallUI;
 
 	std::vector<kbGameEntity*>					m_SnolafPool;
+	KungFuSnolafComponent *						m_EndSnolafs[2];
 	KungFuSheepComponent *						m_pSheep;
 
 	static KungFuLevelComponent *				s_Inst;
