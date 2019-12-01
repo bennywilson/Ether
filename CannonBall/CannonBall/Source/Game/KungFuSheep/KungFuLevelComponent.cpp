@@ -705,7 +705,7 @@ void KungFuLevelComponent::SpawnEnemy( const bool bSpawnLeft, const int waveSize
 		if ( curSubWaveSize == 0 || curSubWaveSize > subWaveSize ) {
 			curDir = rand() % 2;
 			if ( curSubWaveSize > 0 && curDir != lastDir && subWaveSize > 1 ) {
-				offsetMultiplier = numConseq * KungFuGame::kSubWaveDirChangeOffsetMult;
+				offsetMultiplier = KungFuGame::kSubWaveDirChangeOffsetMult;
 				numConseq = 1;
 			} else {
 				numConseq++;
@@ -714,13 +714,16 @@ void KungFuLevelComponent::SpawnEnemy( const bool bSpawnLeft, const int waveSize
 			lastDir = curDir;
 		} 
 
-		nextLeftSpawnPos.z += spawnOffsets * offsetMultiplier;
-		nextRightSpawnPos.z -= spawnOffsets * offsetMultiplier; 
-	
 		kbVec3 spawnPos = kbVec3::zero;
 		if ( bSpawnLeft == false && curDir == 0 ) {
+			nextRightSpawnPos.z -= spawnOffsets * offsetMultiplier; 
+			nextLeftSpawnPos.z += spawnOffsets;
+
 			spawnPos = sheepPos + nextRightSpawnPos;
 		} else {
+			nextLeftSpawnPos.z += spawnOffsets * offsetMultiplier;
+			nextRightSpawnPos.z -= spawnOffsets; 
+	
 			spawnPos = sheepPos + nextLeftSpawnPos;
 		}
 		//kbLog( "Snolaf popped of list of size %d", m_SnolafPool.size() );

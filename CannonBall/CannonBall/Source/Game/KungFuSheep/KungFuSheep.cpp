@@ -749,7 +749,7 @@ void KungFuSheepComponent::Update_Internal( const float DT ) {
 	}
 
 	if ( KungFuSheepDirector::Get()->GetNumHuggers() > 0 && IsCannonBalling() == false ) {
-		if ( GetCurrentState() != KungFuSheepState::Hugged && IsDead() == false ) {
+		if ( GetCurrentState() != KungFuSheepState::Attack && GetCurrentState() != KungFuSheepState::Hugged && IsDead() == false ) {
 			RequestStateChange( KungFuSheepState::Hugged );
 		}
 	}

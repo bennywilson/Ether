@@ -32,7 +32,6 @@ namespace KungFuGame {
 	const float kDistToHugSnolaf = 0.5f;
 	const float kDistToChase = kDistToHugSheep + 0.05f;
 	const float kTimeUntilRequeueReady = 0.0f;
-	const float kSheepAttackAnimTimeScale = 20.0f;
 	const float kMeterFillPerSnolafKill = 0.125f;
 
 	// Bonus
@@ -42,13 +41,14 @@ namespace KungFuGame {
 	const float kShakeNBakeRadius = 3.0f;
 	const float kSheepAttackDist = 0.75f;
 	const int kMaxNumRequiredShakeBakeTurns = 4;
+	const float kSheepAttackAnimTimeScale = 15.0f;
 
 	// Wave
 	const int kSnolafPoolSize = 100;
-	const int kMaxSnolafWaveSize = 15;
+	const int kMaxSnolafWaveSize = 20;
 	const float kTimeBetweenSnolafWaves = 6.0f;
-	const float kDistBetweenSnolafs = 0.75f;
-	const float kSubWaveDirChangeOffsetMult = 1.f;
+	const float kDistBetweenSnolafs = 1.0f;
+	const float kSubWaveDirChangeOffsetMult = 3.f;
 
 	// Movement
 	const kbVec3 kSheepStartPos( 77.10445f, -52.6362f, -396.559f );
