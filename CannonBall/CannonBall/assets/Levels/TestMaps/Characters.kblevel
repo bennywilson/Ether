@@ -601,7 +601,7 @@ kbGameEntity 0 0 0 0 {
 				MaxPatchJitterOffset =  10.000000
 				PatchEndCullDistance =  2000.000000
 				PatchStartCullDistance =  200.000000
-				PatchesPerCellSide = 50
+				PatchesPerCellSide = 45
 				ShaderParams = 13
 					kbShaderParamComponent { 
 						Enabled = 0
@@ -3558,7 +3558,7 @@ kbGameEntity 0 0 0 0 {
 		LifeTime =  -1.000000
 		Name = "Fox"
 		Orientation = 0.000000 1.000000 0.000000 0.000000
-		Position = 77.066940 -52.500000 -379.951324
+		Position = 77.066940 -52000.500000 -379.951324
 		Scale = 1.000000 1.000000 1.000000
 	}
 	kbSkeletalModelComponent { 

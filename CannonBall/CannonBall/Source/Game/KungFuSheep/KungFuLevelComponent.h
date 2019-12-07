@@ -44,14 +44,15 @@ namespace KungFuGame {
 	const float kSheepAttackAnimTimeScale = 15.0f;
 
 	// Wave
-	const int kSnolafPoolSize = 100;
-	const int kMaxSnolafWaveSize = 20;
+	const int kSnolafPoolSize = 50;
+	const int kMaxSnolafWaveSize = 12;
 	const float kTimeBetweenSnolafWaves = 6.0f;
 	const float kDistBetweenSnolafs = 1.0f;
-	const float kSubWaveDirChangeOffsetMult = 3.f;
+	const float kSubWaveDirChangeInitialOffset = 2.f;
+	const float kSubWaveDirChangePerSnolafOffset = 0.25f;
 
 	// Movement
-	const kbVec3 kSheepStartPos( 77.10445f, -52.6362f, -396.559f );
+	const kbVec3 kSheepStartPos( 77.10445f, -52.6362f, -398.0f );
 	const kbQuat kSheepStartRot( 0.0f, 1.0f, 0.0f, 0.0f );
 	
 	const float kLevelLength = 165.0f;

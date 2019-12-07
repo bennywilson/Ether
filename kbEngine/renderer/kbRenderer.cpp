@@ -178,7 +178,7 @@ void kbRenderWindow::BeginFrame() {
 	
 	m_ViewMatrix = translationMatrix * rotationMatrix;
 
-	m_ProjectionMatrix.CreatePerspectiveMatrix( kbToRadians( 95.0f ), m_fViewPixelWidth / m_fViewPixelHeight, m_NearPlane_RenderThread, m_FarPlane_RenderThread );
+	m_ProjectionMatrix.CreatePerspectiveMatrix( kbToRadians( 95 ), m_fViewPixelWidth / m_fViewPixelHeight, m_NearPlane_RenderThread, m_FarPlane_RenderThread );
 
 	m_ViewProjectionMatrix = m_ViewMatrix * m_ProjectionMatrix;
 	

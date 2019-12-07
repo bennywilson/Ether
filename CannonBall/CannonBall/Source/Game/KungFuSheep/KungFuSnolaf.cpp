@@ -754,13 +754,6 @@ void KungFuSnolafComponent::TakeDamage( const DealAttackInfo_t<KungFuGame::eAtta
 	}
 	m_Health = -1.0f;
 	RequestStateChange( KungFuSnolafState::Dead );
-
-
-	static int numKilled = 0;
-	numKilled++;
-	if ( numKilled % 1000 == 0 ) {
-		kbLog( "Num Snolafs killed = %d", numKilled );
-	}
 }
 
 /**

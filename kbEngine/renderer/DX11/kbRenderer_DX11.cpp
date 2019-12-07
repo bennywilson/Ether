@@ -99,7 +99,7 @@ void kbRenderWindow_DX11::BeginFrame_Internal() {
  *	kbRenderWindow_DX11::EndFrame_Internal
  */
 void kbRenderWindow_DX11::EndFrame_Internal() {
-	m_pSwapChain->Present( 1, 0 ); 
+	m_pSwapChain->Present( 0, 0 ); 
 }
 
 /**
