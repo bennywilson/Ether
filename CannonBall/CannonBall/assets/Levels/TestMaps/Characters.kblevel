@@ -2,7 +2,7 @@ kbGameEntity 0 0 0 0 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		Name = "Entity_114"
+		Name = "Entity_112"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
 		Position = 0.000000 0.000000 0.000000
 		Scale = 1.000000 1.000000 1.000000
@@ -843,7 +843,7 @@ kbGameEntity 2609040299 1100347930 3115268521 1892043160 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "Light Shafts"
-		Orientation = -0.665527 0.415641 0.441600 0.435093
+		Orientation = -0.654443 0.426550 0.431072 0.451593
 		Position = -0.650000 5.000000 0.000000
 		Scale = 999.000000 999.000000 99.000000
 	}
