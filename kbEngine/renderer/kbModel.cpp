@@ -1082,7 +1082,7 @@ int	kbModel::GetBoneIndex( const kbString & BoneName ) const {
 }
 
 /**
- *	kbAnimation::SetBoneMatrices
+ *	kbModel::SetBoneMatrices
  */
 void kbModel::SetBoneMatrices( std::vector<AnimatedBone_t> & bones, const float time, const kbAnimation *const pAnimation, const bool bIsLooping ) {
 	if ( m_Bones.size() == 0 ) {
@@ -1304,8 +1304,6 @@ bool kbAnimation::Load_Internal() {
 
 	m_JointKeyFrameData.resize( numJoints );
 
-	kbLog( "Anim %s", m_FullFileName.c_str() );
-
 	for ( unsigned i = 0; i < numJoints; i++ ) {
 		const ms3dBone_t * pJoint = ( ms3dBone_t * ) pPtr;
 		pPtr += sizeof( ms3dBone_t );
@@ -1351,6 +1349,8 @@ bool kbAnimation::Load_Internal() {
 	}
 
 	delete[] pMemoryFileBuffer;
+
+		kbLog( "Anim %s - %f", m_FullFileName.c_str(), this->m_LengthInSeconds );
 
 	return true;
 }

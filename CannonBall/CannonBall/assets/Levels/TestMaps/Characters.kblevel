@@ -2,7 +2,7 @@ kbGameEntity 0 0 0 0 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		Name = "Entity_112"
+		Name = "Entity_114"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
 		Position = 0.000000 0.000000 0.000000
 		Scale = 1.000000 1.000000 1.000000
@@ -10,8 +10,8 @@ kbGameEntity 0 0 0 0 {
 	kbEditorLevelSettingsComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		MainCameraPosition = 61.550663 -49.385162 -298.372620
-		MainCameraRotation = 0.031584 0.696493 -0.030717 -0.716210
+		MainCameraPosition = 46.369129 -35.612606 -366.645020
+		MainCameraRotation = 0.010672 0.651656 -0.009172 -0.758384
 	}
 }
 kbGameEntity 0 0 0 0 {
@@ -338,7 +338,7 @@ kbGameEntity 0 0 0 0 {
 		Scale = 1.000000 1.000000 1.000000
 	}
 	kbSkeletalModelComponent { 
-		Enabled = 1
+		Enabled = 0
 		LifeTime =  -1.000000
 		CastsShadow = 1
 		Materials = 1
@@ -419,7 +419,7 @@ kbGameEntity 0 0 0 0 {
 		LifeTime =  -1.000000
 		Name = "Camera"
 		Orientation = -0.030847 -0.706434 0.030847 0.706434
-		Position = 71.104454 -50.285267 -391.559143
+		Position = 66.170456 0.000000 -391.101135
 		Scale = 1.000000 1.000000 1.000000
 	}
 	CannonCameraComponent { 
@@ -2289,9 +2289,9 @@ kbGameEntity 0 0 0 0 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		Name = "Terrain - Reflection"
-		Orientation = -0.003617 -0.989169 0.024734 -0.144639
-		Position = 200.000000 449.000000 0.000000
+		Name = "Terrain Reflection"
+		Orientation = 0.000000 -0.989478 0.000000 -0.144639
+		Position = 200.000000 450.000000 0.000000
 		Scale = 1.000000 1.000000 1.000000
 	}
 	kbTerrainComponent { 
@@ -2475,7 +2475,7 @@ kbGameEntity 0 0 0 0 {
 		HeightMap = .\assets\terrain\kungfulevelterrain\terrain1_height.bmp
 		HeightScale =  1024.000000
 		SplatMap = NULL
-		Width =  2048.000000
+		Width =  2000.000000
 	}
 }
 kbGameEntity 0 0 0 0 {
@@ -3680,7 +3680,7 @@ kbGameEntity 0 0 0 0 {
 		Scale = 555.000000 555.000000 1.000000
 	}
 	CannonBallMainMenuComponent { 
-		Enabled = 0
+		Enabled = 1
 		LifeTime =  -1.000000
 		Anchor = MiddleLeft
 		AxisLock = LockYAxis
@@ -3745,7 +3745,7 @@ kbGameEntity 0 0 0 0 {
 				RelativeSize = 1.000000 1.000000 1.000000
 			}
 			kbUIWidget { 
-				Enabled = 0
+				Enabled = 1
 				LifeTime =  -1.000000
 				Anchor = MiddleLeft
 				AxisLock = LockAll

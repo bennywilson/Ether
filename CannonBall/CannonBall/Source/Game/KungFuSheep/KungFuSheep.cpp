@@ -105,7 +105,7 @@ public:
 	virtual void BeginState_Internal( T ) override {
 
 		static const kbString Run_Anim( "Run_Basic" );
-		m_pActorComponent->PlayAnimation( Run_Anim, 0.05f, false );
+		m_pActorComponent->PlayAnimation( Run_Anim, 0.15f, false );
 	}
 
 	virtual void UpdateState_Internal() override {
@@ -552,14 +552,14 @@ void KungFuSheepComponent::SetEnable_Internal( const bool bEnable ) {
 		static const kbString KickLeft_Basic( "KickLeft_Basic" );
 		static const kbString KickRight_Basic( "KickRight_Basic" );
 
-		m_SkelModelsList[0]->SetAnimationTimeScaleMultiplier( PunchLeft_Basic, KungFuGame::kSheepAttackAnimTimeScale );
-		m_SkelModelsList[0]->SetAnimationTimeScaleMultiplier( PunchRight_Basic, KungFuGame::kSheepAttackAnimTimeScale );
-		m_SkelModelsList[0]->SetAnimationTimeScaleMultiplier( KickLeft_Basic, KungFuGame::kSheepAttackAnimTimeScale );
-		m_SkelModelsList[0]->SetAnimationTimeScaleMultiplier( KickRight_Basic, KungFuGame::kSheepAttackAnimTimeScale );
-		m_SkelModelsList[1]->SetAnimationTimeScaleMultiplier( PunchLeft_Basic, KungFuGame::kSheepAttackAnimTimeScale );
-		m_SkelModelsList[1]->SetAnimationTimeScaleMultiplier( PunchRight_Basic, KungFuGame::kSheepAttackAnimTimeScale );
-		m_SkelModelsList[1]->SetAnimationTimeScaleMultiplier( KickLeft_Basic, KungFuGame::kSheepAttackAnimTimeScale );
-		m_SkelModelsList[1]->SetAnimationTimeScaleMultiplier( KickRight_Basic, KungFuGame::kSheepAttackAnimTimeScale );
+		m_SkelModelsList[0]->SetAnimationTimeScaleMultiplier( PunchLeft_Basic, KungFuGame::kSheepPunchAnimTimeScale );
+		m_SkelModelsList[0]->SetAnimationTimeScaleMultiplier( PunchRight_Basic, KungFuGame::kSheepPunchAnimTimeScale );
+		m_SkelModelsList[0]->SetAnimationTimeScaleMultiplier( KickLeft_Basic, KungFuGame::kSheepKickAnimTimeScale );
+		m_SkelModelsList[0]->SetAnimationTimeScaleMultiplier( KickRight_Basic, KungFuGame::kSheepKickAnimTimeScale );
+		m_SkelModelsList[1]->SetAnimationTimeScaleMultiplier( PunchLeft_Basic, KungFuGame::kSheepPunchAnimTimeScale );
+		m_SkelModelsList[1]->SetAnimationTimeScaleMultiplier( PunchRight_Basic, KungFuGame::kSheepPunchAnimTimeScale );
+		m_SkelModelsList[1]->SetAnimationTimeScaleMultiplier( KickLeft_Basic, KungFuGame::kSheepKickAnimTimeScale );
+		m_SkelModelsList[1]->SetAnimationTimeScaleMultiplier( KickRight_Basic, KungFuGame::kSheepKickAnimTimeScale );
 
 	} else {
 		if ( m_HeadBandInstance[0].GetEntity() != nullptr ) {

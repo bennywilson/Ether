@@ -11,7 +11,7 @@
 #include "KungFuSheep.h"
 #include "KungFuSnolaf.h"
 
-static const bool g_bSkipMainMenuAndIntro = true;
+static const bool g_bSkipMainMenuAndIntro = false;
 
 /**
  *	KungFuGame_MainMenuState
@@ -43,20 +43,21 @@ private:
 		}
 	}
 
-	const kbVec3 m_CameraStartPos = kbVec3( 73.104454f, -50.285267f, -391.559143f );
-	const kbQuat m_CameraStartRot = kbQuat( -0.030847f, -0.706434f, 0.030847f, 0.706434f );
-
+	bool m_bCameraSet = false;
 	virtual void BeginState_Internal( KungFuGame::eKungFuGame_State previousState ) override {
-
-		if ( g_pCannonGame->GetMainCamera() != nullptr ) {
-			g_pCannonGame->GetMainCamera()->SetTarget( nullptr );
-			g_pCannonGame->GetMainCamera()->SetOwnerPosition( m_CameraStartPos );
-			g_pCannonGame->GetMainCamera()->SetOwnerRotation( m_CameraStartRot );
-		}
+		m_bCameraSet = false;
 	}
 
 	virtual void UpdateState_Internal() override {
 
+		if ( m_bCameraSet == false ) {
+			if ( g_pCannonGame->GetMainCamera() != nullptr ) {
+				m_bCameraSet = true;
+				g_pCannonGame->GetMainCamera()->SetTarget( nullptr );
+				g_pCannonGame->GetMainCamera()->SetOwnerPosition( KungFuGame::kCameraStartPos );
+				g_pCannonGame->GetMainCamera()->SetOwnerRotation( KungFuGame::kCameraRotation );
+			}
+		}
 		auto pSheep = KungFuLevelComponent::Get()->GetSheep();
 		if ( pSheep == nullptr ) {
 			pSheep = m_pLevelComponent->SpawnSheep();
@@ -256,6 +257,9 @@ private:
 			m_bFirstUpdate = false;
 			g_pCannonGame->GetMainCamera()->SetTarget( g_pCannonGame->GetPlayer()->GetOwner() );
 		}
+
+		kbLog( "Pos = %f %f %f", g_pCannonGame->GetMainCamera()->GetOwnerPosition().x, g_pCannonGame->GetMainCamera()->GetOwnerPosition().y, g_pCannonGame->GetMainCamera()->GetOwnerPosition().z );
+		kbLog( "Rot = %f %f %f %f", g_pCannonGame->GetMainCamera()->GetOwnerRotation().x, g_pCannonGame->GetMainCamera()->GetOwnerRotation().y, g_pCannonGame->GetMainCamera()->GetOwnerRotation().z, g_pCannonGame->GetMainCamera()->GetOwnerRotation().w );
 
 		const kbInput_t & input = g_pInputManager->GetInput();
 		if ( WasStartButtonPressed() || input.WasNonCharKeyJustPressed( kbInput_t::Escape ) ) {

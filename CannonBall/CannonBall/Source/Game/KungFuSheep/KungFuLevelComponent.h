@@ -27,6 +27,9 @@ namespace KungFuGame {
 		DebugDeath
 	};
 
+	// Camera
+	const kbVec3 kCameraStartPos = kbVec3( 66.170448f, -49.412132f, -391.558990f );
+	const kbQuat kCameraRotation = kbQuat( -0.023375f, -0.706720f, 0.023375f, 0.706720f );
 	const float kPrehugLengthSec = 0.067f;
 	const float kDistToHugSheep = 0.75f;
 	const float kDistToHugSnolaf = 0.5f;
@@ -41,7 +44,8 @@ namespace KungFuGame {
 	const float kShakeNBakeRadius = 3.0f;
 	const float kSheepAttackDist = 0.75f;
 	const int kMaxNumRequiredShakeBakeTurns = 4;
-	const float kSheepAttackAnimTimeScale = 15.0f;
+	const float kSheepPunchAnimTimeScale = 15.0f;
+	const float kSheepKickAnimTimeScale = 8.9999f;
 
 	// Wave
 	const int kSnolafPoolSize = 50;
