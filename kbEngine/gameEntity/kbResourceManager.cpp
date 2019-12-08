@@ -46,7 +46,8 @@ void kbResource::Load() {
 		}
 	}
 
-	const float curLoadTime = g_GlobalTimer.TimeElapsedSeconds() - loadStartTime;
+	m_LastLoadTime = g_GlobalTimer.TimeElapsedSeconds();
+	const float curLoadTime = m_LastLoadTime - loadStartTime;
 	static float totalLoadTime = 0.0f;
 	totalLoadTime += curLoadTime;
 	// kbLog( "It took %f seconds to load %s.  Total resource load time = %f", curLoadTime, GetFullFileName().c_str(), totalLoadTime );

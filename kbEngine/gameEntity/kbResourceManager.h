@@ -18,10 +18,12 @@ class kbResource {
 //---------------------------------------------------------------------------------------------------
 public:
 
-												kbResource() { m_bIsLoaded = false; }
+												kbResource() { m_LastLoadTime = -1.0f, m_bIsLoaded = false; }
 	virtual										~kbResource() = 0 { }
 
 	virtual kbTypeInfoType_t					GetType() const = 0;
+
+	float										GetLastLoadTime() const { return m_LastLoadTime; }
 
 	void										Load();
 	void										Release();		// note: It's preferable to use SAFE_RELEASE( kbResourceInstance ) instead of calling this directly
@@ -38,6 +40,8 @@ protected:
 	std::string									m_Name;
 	std::string									m_FullFileName;
 	kbString									m_FullName;
+
+	float										m_LastLoadTime;
 
 	bool										m_bIsLoaded;
 };

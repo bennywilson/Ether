@@ -2,7 +2,7 @@ kbGameEntity 0 0 0 0 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		Name = "Entity_115"
+		Name = "Entity_113"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
 		Position = 0.000000 0.000000 0.000000
 		Scale = 1.000000 1.000000 1.000000
@@ -10,8 +10,8 @@ kbGameEntity 0 0 0 0 {
 	kbEditorLevelSettingsComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		MainCameraPosition = 75.857582 -50.936531 -381.998199
-		MainCameraRotation = 0.020571 0.974892 -0.101825 -0.196964
+		MainCameraPosition = 66.170456 -48.811192 -391.101135
+		MainCameraRotation = 0.009988 0.704234 -0.009912 -0.709828
 	}
 }
 kbGameEntity 0 0 0 0 {
@@ -334,11 +334,11 @@ kbGameEntity 0 0 0 0 {
 		LifeTime =  -1.000000
 		Name = "Jumping Jack Sheep"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
-		Position = 0.000000 0.000000 0.000000
+		Position = 77.104454 -52.635265 -391.559143
 		Scale = 1.000000 1.000000 1.000000
 	}
 	kbSkeletalModelComponent { 
-		Enabled = 0
+		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadow = 1
 		Materials = 1
@@ -419,7 +419,7 @@ kbGameEntity 0 0 0 0 {
 		LifeTime =  -1.000000
 		Name = "Camera"
 		Orientation = -0.030847 -0.706434 0.030847 0.706434
-		Position = 73.104454 -50.285267 -391.559143
+		Position = 71.104454 -50.285267 -391.559143
 		Scale = 1.000000 1.000000 1.000000
 	}
 	CannonCameraComponent { 
@@ -427,11 +427,11 @@ kbGameEntity 0 0 0 0 {
 		LifeTime =  -1.000000
 		DummyTemp = 0
 		Health =  10.000000
-		FarPlane =  1000.000000
-		LookAtOffset = 0.000000 2.000000 0.000000
+		FarPlane =  7000.000000
+		LookAtOffset = 0.000000 3.000000 0.000000
 		MovementMode = Follow
 		NearPlane =  0.250000
-		PositionOffset = -4.000000 2.350000 0.000000
+		PositionOffset = -10.933998 3.824068 0
 	}
 }
 kbGameEntity 0 0 0 0 {
@@ -440,7 +440,7 @@ kbGameEntity 0 0 0 0 {
 		LifeTime =  -1.000000
 		Name = "Terrain"
 		Orientation = 0.000000 -0.989478 0.000000 -0.144684
-		Position = -115.000000 -450.000000 0.000000
+		Position = 200.000000 -700.000000 000.000000
 		Scale = 1.000000 1.000000 1.000000
 	}
 	kbTerrainComponent { 
@@ -583,6 +583,7 @@ kbGameEntity 0 0 0 0 {
 			}
 		RenderOrderBias =  0.000000
 		RenderPass = LightingPass
+		DebugRegenTerrain = 0
 		Dimensions = 129
 		Grass = 1
 			kbGrass { 
@@ -600,7 +601,7 @@ kbGameEntity 0 0 0 0 {
 				MaxBladeJitterOffset =  10.000000
 				MaxPatchJitterOffset =  10.000000
 				PatchEndCullDistance =  2000.000000
-				PatchStartCullDistance =  200.000000
+				PatchStartCullDistance =  500.000000
 				PatchesPerCellSide = 45
 				ShaderParams = 13
 					kbShaderParamComponent { 
@@ -696,9 +697,9 @@ kbGameEntity 0 0 0 0 {
 					}
 			}
 		HeightMap = .\assets\terrain\kungfulevelterrain\terrain1_height.bmp
-		HeightScale =  1024.000000
+		HeightScale =  1300.000000
 		SplatMap = NULL
-		Width =  2048.000000
+		Width =  2000.000000
 	}
 }
 kbGameEntity 0 0 0 0 {
@@ -842,15 +843,15 @@ kbGameEntity 2609040299 1100347930 3115268521 1892043160 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "Light Shafts"
-		Orientation = -0.184883 0.522430 -0.037487 0.831553
-		Position = 0.000000 0.000000 0.000000
+		Orientation = 0.131819 -0.631999 0.056614 -0.761575
+		Position = 0.000000 5.000000 0.000000
 		Scale = 999.000000 999.000000 99.000000
 	}
 	kbLightShaftsComponent { 
 		Enabled = 1
 		LifeTime =  -1.000000
-		BaseHeight =  0.750000
-		BaseWidth =  0.750000
+		BaseHeight =  0.500000
+		BaseWidth =  0.500000
 		Color = 0.010000 0.008000 0.001000 1.000000
 		Directional = 1
 		IterationHeight =  0.001500
@@ -2180,7 +2181,7 @@ kbGameEntity 0 0 0 0 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		Name = "Bridge"
+		Name = "BridgeS"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
 		Position = 76.992683 -52.798882 -394.324280
 		Scale = 250.000000 250.000000 250.000000
@@ -2290,7 +2291,7 @@ kbGameEntity 0 0 0 0 {
 		LifeTime =  -1.000000
 		Name = "Terrain - Reflection"
 		Orientation = -0.003617 -0.989169 0.024734 -0.144639
-		Position = -249.000000 449.000000 2.970000
+		Position = 200.000000 449.000000 0.000000
 		Scale = 1.000000 1.000000 1.000000
 	}
 	kbTerrainComponent { 
@@ -2468,6 +2469,7 @@ kbGameEntity 0 0 0 0 {
 			}
 		RenderOrderBias =  0.000000
 		RenderPass = LightingPass
+		DebugRegenTerrain = 0
 		Dimensions = 129
 		Grass = 0
 		HeightMap = .\assets\terrain\kungfulevelterrain\terrain1_height.bmp
@@ -3411,7 +3413,7 @@ kbGameEntity 0 0 0 0 {
 				RelativePosition = 0.331250 0.300000 0.000000
 				RelativeSize = 0.168750 0.150000 1.000000
 			}
-						kbUIWidget { 
+			kbUIWidget { 
 				Enabled = 0
 				LifeTime =  -1.000000
 				Anchor = MiddleRight
@@ -3678,7 +3680,7 @@ kbGameEntity 0 0 0 0 {
 		Scale = 555.000000 555.000000 1.000000
 	}
 	CannonBallMainMenuComponent { 
-		Enabled = 1
+		Enabled = 0
 		LifeTime =  -1.000000
 		Anchor = MiddleLeft
 		AxisLock = LockYAxis
@@ -3743,7 +3745,7 @@ kbGameEntity 0 0 0 0 {
 				RelativeSize = 1.000000 1.000000 1.000000
 			}
 			kbUIWidget { 
-				Enabled = 1
+				Enabled = 0
 				LifeTime =  -1.000000
 				Anchor = MiddleLeft
 				AxisLock = LockAll

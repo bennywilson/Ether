@@ -11,7 +11,7 @@
 #include "KungFuSheep.h"
 #include "KungFuSnolaf.h"
 
-static const bool g_bSkipMainMenuAndIntro = false;
+static const bool g_bSkipMainMenuAndIntro = true;
 
 /**
  *	KungFuGame_MainMenuState

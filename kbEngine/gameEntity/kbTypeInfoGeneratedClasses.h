@@ -236,6 +236,7 @@ GenerateClass(
 	AddField( "Dimensions", KBTYPEINFO_INT, kbTerrainComponent, m_TerrainDimensions, false, "" )
 	AddField( "SplatMap", KBTYPEINFO_TEXTURE, kbTerrainComponent, m_pSplatMap, false, "" )
 	AddField( "Grass", KBTYPEINFO_STRUCT, kbTerrainComponent, m_Grass, true, "kbGrass" )
+	AddField( "DebugRegenTerrain", KBTYPEINFO_BOOL, kbTerrainComponent, m_bDebugForceRegenTerrain, false, "" )
 )
 
 GenerateEnum(
