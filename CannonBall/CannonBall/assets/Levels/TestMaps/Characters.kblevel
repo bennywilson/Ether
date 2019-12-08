@@ -2,7 +2,7 @@ kbGameEntity 0 0 0 0 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		Name = "Entity_113"
+		Name = "Entity_114"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
 		Position = 0.000000 0.000000 0.000000
 		Scale = 1.000000 1.000000 1.000000
@@ -10,8 +10,8 @@ kbGameEntity 0 0 0 0 {
 	kbEditorLevelSettingsComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		MainCameraPosition = 66.170456 -48.811192 -391.101135
-		MainCameraRotation = 0.009988 0.704234 -0.009912 -0.709828
+		MainCameraPosition = 61.550663 -49.385162 -298.372620
+		MainCameraRotation = 0.031584 0.696493 -0.030717 -0.716210
 	}
 }
 kbGameEntity 0 0 0 0 {
@@ -89,8 +89,8 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "Sun"
-		Orientation = -0.184883 0.522430 -0.037487 0.831553
-		Position = 80.300003 -48.635265 -404.559143
+		Orientation = -0.188645 0.346812 -0.000009 0.918768
+		Position = 80.300003 -18.935291 -404.559143
 		Scale = 0.000000 1.000000 1.000000
 	}
 	kbDirectionalLightComponent { 
@@ -428,10 +428,10 @@ kbGameEntity 0 0 0 0 {
 		DummyTemp = 0
 		Health =  10.000000
 		FarPlane =  7000.000000
-		LookAtOffset = 0.000000 3.000000 0.000000
+		LookAtOffset = 0.000000 2.500000 0.000000
 		MovementMode = Follow
 		NearPlane =  0.250000
-		PositionOffset = -10.933998 3.824068 0
+		PositionOffset = -10.933998 3.224068 0.000000
 	}
 }
 kbGameEntity 0 0 0 0 {
@@ -440,7 +440,7 @@ kbGameEntity 0 0 0 0 {
 		LifeTime =  -1.000000
 		Name = "Terrain"
 		Orientation = 0.000000 -0.989478 0.000000 -0.144684
-		Position = 200.000000 -700.000000 000.000000
+		Position = 200.000000 -600.000000 0.000000
 		Scale = 1.000000 1.000000 1.000000
 	}
 	kbTerrainComponent { 
@@ -697,7 +697,7 @@ kbGameEntity 0 0 0 0 {
 					}
 			}
 		HeightMap = .\assets\terrain\kungfulevelterrain\terrain1_height.bmp
-		HeightScale =  1300.000000
+		HeightScale =  1024.000000
 		SplatMap = NULL
 		Width =  2000.000000
 	}
@@ -843,8 +843,8 @@ kbGameEntity 2609040299 1100347930 3115268521 1892043160 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "Light Shafts"
-		Orientation = 0.131819 -0.631999 0.056614 -0.761575
-		Position = 0.000000 5.000000 0.000000
+		Orientation = -0.665527 0.415641 0.441600 0.435093
+		Position = -0.650000 5.000000 0.000000
 		Scale = 999.000000 999.000000 99.000000
 	}
 	kbLightShaftsComponent { 
