@@ -184,6 +184,12 @@ public:
 		static const kbString PunchR_Anim( "PunchRight_Basic" );
 		static const kbString KickR_Anim( "KickRight_Basic" );
 
+		const kbVec2 leftStick = GetLeftStick();
+		if ( leftStick.x > 0.5f ) {
+			m_pActorComponent->SetTargetFacingDirection( g_RightFacing );
+		} else if ( leftStick.x < -0.5f ) {
+			m_pActorComponent->SetTargetFacingDirection( g_LeftFacing );
+		}
 		const kbVec3 & targetDir = m_pActorComponent->GetTargetFacingDirection();
 		if ( targetDir.z < 0.0f ) {
 			if ( rand() % 2 == 0 ) {

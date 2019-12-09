@@ -49,7 +49,7 @@ namespace KungFuGame {
 
 	// Wave
 	const int kSnolafPoolSize = 50;
-	const int kMaxSnolafWaveSize = 12;
+	const int kMaxSnolafWaveSize = 20;
 	const float kTimeBetweenSnolafWaves = 6.0f;
 	const float kDistBetweenSnolafs = 1.0f;
 	const float kSubWaveDirChangeInitialOffset = 2.f;
