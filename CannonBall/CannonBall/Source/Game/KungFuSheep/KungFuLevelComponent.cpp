@@ -440,6 +440,20 @@ private:
 	float m_StateStartTime;
 };
 
+
+/**
+ *	KungFuGame_OutroState
+ */
+class KungFuGame_OutroState : public KungFuGame_BaseState {
+
+//---------------------------------------------------------------------------------------------------
+public:
+
+	KungFuGame_OutroState( KungFuLevelComponent *const pLevelComponent ) : KungFuGame_BaseState( pLevelComponent ) { }
+
+private:
+
+};
 KungFuLevelComponent * KungFuLevelComponent::s_Inst = nullptr;
 
 /**
@@ -485,6 +499,7 @@ void KungFuLevelComponent::SetEnable_Internal( const bool bEnable ) {
 			new KungFuGame_GameplayState( this ),
 			new KungFuGame_PlayerDeadState( this ),
 			new KungFuGame_PausedState( this ),
+			new KungFuGame_OutroState( this ),
 		};
 
 		KungFuSheepDirector::Get()->InitializeStateMachine( pGameStates );
@@ -708,7 +723,7 @@ void KungFuLevelComponent::SpawnEnemy( const bool bSpawnLeft, const int waveSize
 		curSubWaveSize++;
 		if ( curSubWaveSize == 0 || curSubWaveSize >= subWaveSize ) {
 			curDir = rand() % 2;
-			if ( curSubWaveSize > 0 && curDir != lastDir && subWaveSize > 1 ) {
+			if ( curSubWaveSize > 0 && curDir != lastDir && subWaveSize > 1 || numConseq > 4 ) {
 				offsetAdd = KungFuGame::kSubWaveDirChangeInitialOffset;
 				offsetMultiplier = KungFuGame::kSubWaveDirChangePerSnolafOffset;
 				numConseq = 1;

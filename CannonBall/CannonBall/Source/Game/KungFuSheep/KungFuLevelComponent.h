@@ -16,6 +16,7 @@ namespace KungFuGame {
 		Gameplay,
 		PlayerDead,
 		Paused,
+		Outro,
 		NumStates
 	 };
 
