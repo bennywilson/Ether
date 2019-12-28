@@ -7,6 +7,7 @@ cbuffer matrixBuffer {
 	matrix modelMatrix;
 	matrix mvpMatrix;
 	float4 cameraPos;
+	float4 uvScale;
 };
 
 kbShaderState {
@@ -49,7 +50,7 @@ pixelInput vertexShader( vertexInput input ) {
 	pixelInput output = (pixelInput)(0);
 
 	output.position = mul( input.position, mvpMatrix );
-	output.uv = input.uv;
+	output.uv = input.uv * uvScale.xy;
 	output.color = input.color;
 	output.position2 = output.position.zw;
 
@@ -94,7 +95,7 @@ Texture2D emissiveMap(black)		: register(t3);
 
 	output.Depth.r = input.position2.x / input.position2.y;
 
-
+		
 	output.Specular = float4( propertyMapValues.x, max( 1.0f, propertyMapValues.y * 450.f ), emissive.x, emissive.y );
 	
 	float3x3 TBN = float3x3( normalize( input.TBN0.xyz ), normalize( input.TBN1.xyz ), normalize( input.TBN2.xyz ) );

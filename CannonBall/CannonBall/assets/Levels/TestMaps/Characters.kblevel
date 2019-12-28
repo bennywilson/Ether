@@ -4135,3 +4135,221 @@ kbGameEntity 0 0 0 0 {
 		VelocityCurve = 0
 	}
 }
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Moose"
+		Orientation = 0.000000 0.613430 0.000000 0.789749
+		Position = 33.645111 -0.950806 -65.364624
+		Scale = 1.500000 1.500000 1.500000
+	}
+	kbSkeletalModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 1
+		Materials = 2
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\character\characterbase.kbshader
+				ShaderParams = 5
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorTexture"
+						Texture = .\assets\models\characters\moose\moose_body_color.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "fxMapMask"
+						Texture = NULL
+						Vector = 1.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "fxMap"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "clipMapMask"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "clipMap"
+						Texture = .\assets\models\characters\snolaf\snolaf_clipmap.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\character\characterbase.kbshader
+				ShaderParams = 5
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "fxMapMask"
+						Texture = NULL
+						Vector = 1.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "clipMapMask"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorTexture"
+						Texture = .\assets\models\characters\moose\moose_head_color.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "fxMap"
+						Texture = .\assets\models\characters\moose\moose_head_fx.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "clipMap"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		RenderOrderBias =  0.000000
+		RenderPass = LightingPass
+		Animations = 1
+			kbAnimComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Animation = .\assets\models\characters\moose\moose_wait.kbanim.ms3d
+				AnimationEvent = 0
+				AnimationName = ""
+				IsLooping = 1
+				TimeScale =  1.500000
+			}
+		DebugAnimIndex = 0
+		Model = .\assets\models\characters\moose\moose.ms3d
+	}
+	kbSkeletalModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		Materials = 2
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\character\characteroutline.kbshader
+				ShaderParams = 5
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "outlineParams"
+						Texture = NULL
+						Vector = 0.010000 0.050000 0.500000 5.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorTexture"
+						Texture = .\assets\models\characters\moose\moose_body_color.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "smearParams"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "clipMapMask"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "clipMap"
+						Texture = .\assets\models\characters\snolaf\snolaf_clipmap.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\character\characteroutline.kbshader
+				ShaderParams = 5
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "outlineParams"
+						Texture = NULL
+						Vector = 0.010000 0.050000 0.500000 5.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "smearParams"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "clipMapMask"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorTexture"
+						Texture = .\assets\models\characters\moose\moose_head_color.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "clipMap"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		RenderOrderBias =  0.000000
+		RenderPass = Post-LightingPass
+		Animations = 1
+			kbAnimComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Animation = .\assets\models\characters\moose\moose_wait.kbanim.ms3d
+				AnimationEvent = 0
+				AnimationName = ""
+				IsLooping = 1
+				TimeScale =  1.500000
+			}
+		DebugAnimIndex = 0
+		Model = .\assets\models\characters\moose\moose.ms3d
+	}
+}
