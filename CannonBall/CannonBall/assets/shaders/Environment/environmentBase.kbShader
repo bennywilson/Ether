@@ -7,7 +7,7 @@ cbuffer matrixBuffer {
 	matrix modelMatrix;
 	matrix mvpMatrix;
 	float4 cameraPos;
-	float4 uvScale;
+	float4 uvScale = (1,1,1,1);
 };
 
 kbShaderState {

@@ -2400,6 +2400,19 @@ void kbRenderer_DX11::ReadShaderFile( std::string & shaderText, kbShaderVarBindi
 
         constantBufferStrings.push_back( bufferBlock.substr( startPos, endPos - startPos ) );
 
+		// Comment out default params
+		if ( bufferBlock[startPos] == '=' ) {
+			const auto shaderTextIdx = startBlock + startPos + 1;
+			shaderText[shaderTextIdx] = '/';
+			shaderText[shaderTextIdx+1] = '*';
+			endPos++;
+		} else if ( bufferBlock[endPos] == ')' ) {
+			const auto shaderTextIdx = startBlock + endPos + 1;
+			shaderText[shaderTextIdx-1] = '*';
+			shaderText[shaderTextIdx] = '/';
+			endPos++;
+		}
+
         startPos = bufferBlock.find_first_not_of( delimiters, endPos );
         endPos = bufferBlock.find_first_of( delimiters, startPos );
     }
@@ -2438,7 +2451,30 @@ void kbRenderer_DX11::ReadShaderFile( std::string & shaderText, kbShaderVarBindi
 				break;
 			}
 		}
-		pShaderBindings->m_VarBindings.push_back( kbShaderVarBindings_t::binding_t( varName, currOffset, bIsUserDefinedVar ) );
+
+		kbVec4 defaultVal = kbVec4::zero;
+		bool bDefaultValueFound = false;
+		if ( i + 2 < constantBufferStrings.size() && constantBufferStrings[i+2] == "=" ) {
+			bDefaultValueFound = true;
+
+			std::string & processString = constantBufferStrings[i+3];
+
+			size_t startIdx = 0;
+			size_t endIdx = processString.find_first_of( ",", startIdx );
+			int nextElementIdx = 0;
+			while ( startIdx < processString.size() && endIdx <= processString.size() ) {
+				std::string sVal = processString.substr( startIdx, endIdx - startIdx ) ;
+				defaultVal[nextElementIdx] = std::stof( sVal );
+				nextElementIdx++;
+				startIdx = endIdx + 1;
+				endIdx = processString.find_first_of( ",", startIdx );
+				if ( endIdx == std::string::npos && startIdx < processString.size() ) {
+					endIdx = processString.size();
+				}
+			}
+		}
+
+		pShaderBindings->m_VarBindings.push_back( kbShaderVarBindings_t::binding_t( varName, currOffset, bDefaultValueFound, defaultVal, bIsUserDefinedVar ) );
 
 		if ( constantBufferStrings[i] == "matrix" || constantBufferStrings[i] == "float4x4" ) {
 			currOffset += 64 * count;
@@ -2446,6 +2482,10 @@ void kbRenderer_DX11::ReadShaderFile( std::string & shaderText, kbShaderVarBindi
 			currOffset += 16 * count;
 		} else {
 			currOffset += 4 * count;
+		}
+
+		if ( bDefaultValueFound ) {
+			i += 2;
 		}
 	}
 
@@ -3694,7 +3734,14 @@ ID3D11Buffer * kbRenderer_DX11::SetConstantBuffer( const kbShaderVarBindings_t &
                 }
             }
 
-			if ( bGlobalVarSet == false  ) {
+			if ( bGlobalVarSet == false ) {
+				bool bVarSet = false;
+
+				if ( bindings[i].m_bHasDefaultValue ) {
+					kbVec4 *const pVecOffset = (kbVec4*)pVarByteOffset;
+					*pVecOffset = bindings[i].m_DefaultValue;
+				}
+
 				for ( int iOverride = 0; iOverride < paramOverrides->size(); iOverride++ ) {
 					const kbShaderParamOverrides_t::kbShaderParam_t & curOverride = (*paramOverrides)[iOverride];
 					const std::string & overrideVarName = curOverride.m_VarName;

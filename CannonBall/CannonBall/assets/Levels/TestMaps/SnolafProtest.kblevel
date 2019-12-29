@@ -10,8 +10,8 @@ kbGameEntity 0 0 0 0 {
 	kbEditorLevelSettingsComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		MainCameraPosition = 36.740868 0.675561 -63.529987
-		MainCameraRotation = -0.114700 0.518478 -0.070424 0.844432
+		MainCameraPosition = 39.495827 1.817914 -64.223572
+		MainCameraRotation = 0.052485 -0.808519 0.072967 -0.581565
 	}
 }
 kbGameEntity 0 0 0 0 {
@@ -130,8 +130,8 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "Camera"
-		Orientation = -0.060483 0.844209 -0.097517 0.523588
-		Position = 37.042065 1.578874 -59.639610
+		Orientation = 0.052485 -0.808519 0.072967 -0.581565
+		Position = 39.495827 1.817914 -64.223572
 		Scale = 1.000000 1.000000 1.000000
 	}
 	CannonCameraComponent { 
@@ -1557,7 +1557,7 @@ kbGameEntity 0 0 0 0 {
 		Name = "Parking Lot"
 		Orientation = -0.500000 0.500002 -0.500000 0.499998
 		Position = 27.048147 -1.274325 -62.242966
-		Scale = 3000.000000 3000.000000 3000.000000
+		Scale = 50000.000000 50000.000000 50000.000000
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -1603,7 +1603,7 @@ kbGameEntity 0 0 0 0 {
 						LifeTime =  -1.000000
 						ParamName = "uvScale"
 						Texture = NULL
-						Vector = 1.000000 1.000000 0.000000 0.000000
+						Vector = 55.000000 55.000000 0.000000 0.000000
 					}
 			}
 		RenderOrderBias =  0.000000
@@ -1616,8 +1616,8 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "Stiltz"
-		Orientation = 0.000000 0.963558 0.000000 0.267499
-		Position = 33.345116 -0.950806 -60.164612
+		Orientation = -0.000000 0.932039 0.000000 0.362358
+		Position = 33.345116 -0.950806 -65.764610
 		Scale = 1.500000 1.500000 1.500000
 	}
 	kbSkeletalModelComponent { 
@@ -1884,8 +1884,8 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "Wey Bey"
-		Orientation = 0.000000 0.613430 0.000000 0.789749
-		Position = 33.645111 -0.950806 -68.364624
+		Orientation = 0.000000 0.872549 0.000000 0.488526
+		Position = 33.645111 -0.950806 -70.064629
 		Scale = 1.000000 1.000000 1.000000
 	}
 	kbSkeletalModelComponent { 
@@ -2018,8 +2018,8 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "Moose"
-		Orientation = 0.000000 0.613430 0.000000 0.789749
-		Position = 33.645111 -0.950806 -65.364624
+		Orientation = 0.000000 0.819419 0.000000 0.573195
+		Position = 33.645111 -0.950806 -68.664635
 		Scale = 1.500000 1.500000 1.500000
 	}
 	kbSkeletalModelComponent { 
@@ -2236,8 +2236,8 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "Fuzzy"
-		Orientation = 0.000000 0.758101 0.000000 0.652137
-		Position = 33.645111 -0.950806 -55.364624
+		Orientation = 0.000000 0.531522 0.000000 0.847045
+		Position = 33.645111 -0.950806 -64.564621
 		Scale = 1.500000 1.500000 1.500000
 	}
 	kbSkeletalModelComponent { 
@@ -2371,7 +2371,7 @@ kbGameEntity 0 0 0 0 {
 		LifeTime =  -1.000000
 		Name = "Pinky"
 		Orientation = 0.000000 0.758101 0.000000 0.652137
-		Position = 33.645111 -0.950806 -61.364624
+		Position = 33.645111 -0.950806 -67.364624
 		Scale = 1.500000 1.500000 1.500000
 	}
 	kbSkeletalModelComponent { 

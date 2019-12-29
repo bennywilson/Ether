@@ -370,7 +370,6 @@ bool kbModel::LoadMS3D() {
 
 		kbErrorCheck( ibIndex == m_Meshes[i].m_IndexBufferIndex, "kbModel::Load_Internal() - Index buffer mismatch" );
 
-		const kbMaterial & modelMaterial = GetMaterials()[m_Meshes[i].m_MaterialIndex];
 		for ( uint iTris = 0; iTris < m_Meshes[i].m_NumTriangles; iTris++ ) {
 			
 			const int triangleIndex = m_Meshes[i].m_TriangleIndices[iTris];
@@ -386,6 +385,7 @@ bool kbModel::LoadMS3D() {
 
 				// TODO: We probably want vertex colors even if not cpu only
 				if ( m_bCPUAccessOnly ) {
+					const kbMaterial & modelMaterial = GetMaterials()[m_Meshes[i].m_MaterialIndex];
 					newVert.SetColor( modelMaterial.GetDiffuseColor() );
 				} else {
 					const vertexBoneData & boneData = tempVertexBoneData[currentTriangle.m_VertexIndices[j]];
