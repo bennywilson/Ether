@@ -2,7 +2,7 @@ kbGameEntity 0 0 0 0 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		Name = "Entity_43"
+		Name = "Entity_42"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
 		Position = 0.000000 0.000000 0.000000
 		Scale = 1.000000 1.000000 1.000000
@@ -10,8 +10,8 @@ kbGameEntity 0 0 0 0 {
 	kbEditorLevelSettingsComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		MainCameraPosition = 36.820690 1.237008 -55.469349
-		MainCameraRotation = -0.117047 0.669782 -0.108091 0.725265
+		MainCameraPosition = 36.740868 0.675561 -63.529987
+		MainCameraRotation = -0.114700 0.518478 -0.070424 0.844432
 	}
 }
 kbGameEntity 0 0 0 0 {
@@ -2293,13 +2293,13 @@ kbGameEntity 0 0 0 0 {
 			kbAnimComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
-				Animation = .\assets\models\characters\moose\moose_wait.kbanim.ms3d
+				Animation = .\assets\models\characters\fuzzy\fuzzy_earflap.kbanim.ms3d
 				AnimationEvent = 0
 				AnimationName = ""
 				IsLooping = 1
 				TimeScale =  1.500000
 			}
-		DebugAnimIndex = -1
+		DebugAnimIndex = 0
 		Model = .\assets\models\characters\fuzzy\fuzzy.ms3d
 	}
 	kbSkeletalModelComponent { 
@@ -2355,13 +2355,13 @@ kbGameEntity 0 0 0 0 {
 			kbAnimComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
-				Animation = .\assets\models\characters\moose\moose_wait.kbanim.ms3d
+				Animation = .\assets\models\characters\fuzzy\fuzzy_earflap.kbanim.ms3d
 				AnimationEvent = 0
 				AnimationName = ""
 				IsLooping = 1
 				TimeScale =  1.500000
 			}
-		DebugAnimIndex = -1
+		DebugAnimIndex = 0
 		Model = .\assets\models\characters\fuzzy\fuzzy.ms3d
 	}
 }
@@ -2427,13 +2427,13 @@ kbGameEntity 0 0 0 0 {
 			kbAnimComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
-				Animation = .\assets\models\characters\moose\moose_wait.kbanim.ms3d
+				Animation = .\assets\models\characters\pinkystiltz\pinky_wingflag.kbanim.ms3d
 				AnimationEvent = 0
 				AnimationName = ""
 				IsLooping = 1
-				TimeScale =  1.500000
+				TimeScale =  3.000000
 			}
-		DebugAnimIndex = -1
+		DebugAnimIndex = 0
 		Model = .\assets\models\characters\pinkystiltz\pinky.ms3d
 	}
 	kbSkeletalModelComponent { 
@@ -2489,13 +2489,13 @@ kbGameEntity 0 0 0 0 {
 			kbAnimComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
-				Animation = .\assets\models\characters\moose\moose_wait.kbanim.ms3d
+				Animation = .\assets\models\characters\pinkystiltz\pinky_wingflag.kbanim.ms3d
 				AnimationEvent = 0
 				AnimationName = ""
 				IsLooping = 1
-				TimeScale =  1.500000
+				TimeScale =  3.000000
 			}
-		DebugAnimIndex = -1
+		DebugAnimIndex = 0
 		Model = .\assets\models\characters\pinkystiltz\pinky.ms3d
 	}
 }
