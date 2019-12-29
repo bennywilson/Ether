@@ -11,7 +11,19 @@
 #include "KungFuSheep.h"
 #include "KungFuSnolaf.h"
 
-static const bool g_bSkipMainMenuAndIntro = false;
+namespace KungFuGame {
+
+	enum eSkipCheats {
+		Skip_None,
+		Skip_MainMenuAndInto,
+		Skip_ToEnd
+	};
+
+};
+
+KungFuGame::eSkipCheats g_SkipCheat = KungFuGame::Skip_ToEnd;
+
+#include "Cinema\Outro.inl"
 
 /**
  *	KungFuGame_MainMenuState
@@ -53,7 +65,7 @@ private:
 		if ( m_bCameraSet == false ) {
 			if ( g_pCannonGame->GetMainCamera() != nullptr ) {
 				m_bCameraSet = true;
-				g_pCannonGame->GetMainCamera()->SetTarget( nullptr );
+				g_pCannonGame->GetMainCamera()->SetTarget( nullptr, -1.0f );
 				g_pCannonGame->GetMainCamera()->SetOwnerPosition( KungFuGame::kCameraStartPos );
 				g_pCannonGame->GetMainCamera()->SetOwnerRotation( KungFuGame::kCameraRotation );
 			}
@@ -63,11 +75,15 @@ private:
 			pSheep = m_pLevelComponent->SpawnSheep();
 		}
 
-		if ( g_bSkipMainMenuAndIntro ) {
+		if ( g_SkipCheat == KungFuGame::Skip_MainMenuAndInto || g_SkipCheat == KungFuGame::Skip_ToEnd ) {
 
 			static const kbString IdleL_Anim( "IdleLeft_Basic" );
 			pSheep->PlayAnimation( IdleL_Anim, 0.2f );
 			RequestStateChange( KungFuGame::Intro );
+
+			if ( g_SkipCheat == KungFuGame::Skip_ToEnd ) {
+				pSheep->SetOwnerPosition( kbVec3( 77.10445f, -52.6362f, KungFuGame::kOutroStartZ ) );
+			}
 			return;
 		}
 
@@ -102,7 +118,7 @@ private:
 
 	virtual void UpdateState_Internal() override {
 
-		if ( g_bSkipMainMenuAndIntro ) {
+		if ( g_SkipCheat == KungFuGame::Skip_MainMenuAndInto || g_SkipCheat == KungFuGame::Skip_ToEnd ) {
 			RequestStateChange( KungFuGame::Gameplay );
 			return;
 		}
@@ -255,11 +271,18 @@ private:
 
 		if ( m_bFirstUpdate ) {
 			m_bFirstUpdate = false;
-			g_pCannonGame->GetMainCamera()->SetTarget( g_pCannonGame->GetPlayer()->GetOwner() );
+			g_pCannonGame->GetMainCamera()->SetTarget( g_pCannonGame->GetPlayer()->GetOwner(), -1.0f );
 		}
 
-		kbLog( "Pos = %f %f %f", g_pCannonGame->GetMainCamera()->GetOwnerPosition().x, g_pCannonGame->GetMainCamera()->GetOwnerPosition().y, g_pCannonGame->GetMainCamera()->GetOwnerPosition().z );
-		kbLog( "Rot = %f %f %f %f", g_pCannonGame->GetMainCamera()->GetOwnerRotation().x, g_pCannonGame->GetMainCamera()->GetOwnerRotation().y, g_pCannonGame->GetMainCamera()->GetOwnerRotation().z, g_pCannonGame->GetMainCamera()->GetOwnerRotation().w );
+		const auto pKungFuSheep = KungFuLevelComponent::Get()->GetSheep();
+		//kbLog( "Sheep pos is %f %f %f", pKungFuSheep->GetOwnerPosition().x, pKungFuSheep->GetOwnerPosition().y, pKungFuSheep->GetOwnerPosition().z );
+		if ( pKungFuSheep->GetOwnerPosition().z > KungFuGame::kOutroStartZ ) {
+			kbLog( "Switching thang:");
+			RequestStateChange( KungFuGame::Outro );
+			return;
+		}
+		// kbLog( "Pos = %f %f %f", g_pCannonGame->GetMainCamera()->GetOwnerPosition().x, g_pCannonGame->GetMainCamera()->GetOwnerPosition().y, g_pCannonGame->GetMainCamera()->GetOwnerPosition().z );
+		// kbLog( "Rot = %f %f %f %f", g_pCannonGame->GetMainCamera()->GetOwnerRotation().x, g_pCannonGame->GetMainCamera()->GetOwnerRotation().y, g_pCannonGame->GetMainCamera()->GetOwnerRotation().z, g_pCannonGame->GetMainCamera()->GetOwnerRotation().w );
 
 		const kbInput_t & input = g_pInputManager->GetInput();
 		if ( WasStartButtonPressed() || input.WasNonCharKeyJustPressed( kbInput_t::Escape ) ) {
@@ -283,7 +306,7 @@ private:
 		}
 		
 		auto pLevelComponent = KungFuLevelComponent::Get();
-		if ( m_NumSnolafsKilled == 0 ) {
+		if ( m_NumSnolafsKilled == 0 && g_SkipCheat != KungFuGame::Skip_ToEnd ) {
 
 			if ( numSnolafs == 0 ) {
 				pLevelComponent->SpawnEnemy( true, 1 );
@@ -410,7 +433,7 @@ private:
 
 	virtual void BeginState_Internal( KungFuGame::eKungFuGame_State previousState ) override {
 
-		g_pCannonGame->GetMainCamera()->SetTarget( nullptr );
+		g_pCannonGame->GetMainCamera()->SetTarget( nullptr, -1.0f );
 
 		for ( int i = 0; i < g_pCannonGame->GetGameEntities().size(); i++ ) {
 			kbGameEntity *const pTargetEnt = g_pCannonGame->GetGameEntities()[i];
@@ -441,21 +464,7 @@ private:
 };
 
 
-/**
- *	KungFuGame_OutroState
- */
-class KungFuGame_OutroState : public KungFuGame_BaseState {
-
-//---------------------------------------------------------------------------------------------------
-public:
-
-	KungFuGame_OutroState( KungFuLevelComponent *const pLevelComponent ) : KungFuGame_BaseState( pLevelComponent ) { }
-
-private:
-
-};
 KungFuLevelComponent * KungFuLevelComponent::s_Inst = nullptr;
-
 /**
  *	KungFuLevelComponent::Constructor
  */
@@ -469,6 +478,7 @@ void KungFuLevelComponent::Constructor() {
 
 	m_EndSnolafs[0] = m_EndSnolafs[1] = nullptr;
 	m_pSheep = nullptr;
+	m_p3000Ton = nullptr;
 }
 
 /**
@@ -483,7 +493,7 @@ void KungFuLevelComponent::SetEnable_Internal( const bool bEnable ) {
 
 	if ( bEnable ) {
 
-		kbErrorCheck( s_Inst == nullptr, "KungFuLevelComponent::SetEnable_Internal() - Multiple enabled instanes of KungFuLevelComponent" );
+		kbErrorCheck( s_Inst == nullptr, "KungFuLevelComponent::SetEnable_Internal() - Multiple enabled instances of KungFuLevelComponent" );
 		s_Inst = this;
 
 		if ( g_UseEditor == false ) {
@@ -515,8 +525,6 @@ void KungFuLevelComponent::SetEnable_Internal( const bool bEnable ) {
 				pSM->Enable( false );
 			}
 		}
-
-		// SetPlayLevelMusic( true );
 
 		for ( int i = 0; i < KungFuGame::kSnolafPoolSize; i++ ) {
 			kbGameEntity *const pSnolaf = g_pGame->CreateEntity( m_SnolafPrefab.GetEntity() );
@@ -565,6 +573,21 @@ void KungFuLevelComponent::Update_Internal( const float DeltaTime ) {
 		return;
 	}
 
+	if ( m_p3000Ton == nullptr ) {
+		// SetPlayLevelMusic( true );
+		static const kbString BossName( "3000 Ton" );
+		for ( int i = 0; i < g_pCannonGame->GetGameEntities().size(); i++ ) {
+			kbGameEntity *const pEnt = g_pCannonGame->GetGameEntities()[i];
+			if ( pEnt->GetName() == BossName ) {
+				m_p3000Ton = pEnt->GetComponent<CannonActorComponent>();
+			}
+		}
+	}
+
+	const auto pSheep = GetSheep();
+	if ( pSheep != nullptr ) {
+		g_pRenderer->DrawDebugText( std::to_string( pSheep->GetOwnerPosition().z ), 0.75f, 0.1f, g_DebugTextSize, g_DebugTextSize, kbColor::red ); 
+	}
 	KungFuSheepDirector::Get()->UpdateStateMachine();
 
 	// Not all game entities are loaded in SetEnable_Internal unfortunately
@@ -837,6 +860,16 @@ float KungFuLevelComponent::GetDistancePlayerHasTraveled() {
 }
 
 /**
+ *	KungFuLevelComponent::GetSnolafFromPool
+ */
+KungFuSnolafComponent * KungFuLevelComponent::GetSnolafFromPool() {
+	kbGameEntity *const pSnolaf = m_SnolafPool.back();	
+	pSnolaf->GetComponent<KungFuSnolafComponent>()->ResetFromPool();
+	m_SnolafPool.pop_back();//g_pGame->CreateEntity( m_SnolafPrefab.GetEntity() );
+	return pSnolaf->GetComponent<KungFuSnolafComponent>();
+}
+
+/**
  *	KungFuLevelComponent::ReturnSnolafToPool
  */
 void KungFuLevelComponent::ReturnSnolafToPool( KungFuSnolafComponent *const pSnolafComp ) {
@@ -876,7 +909,7 @@ void KungFuLevelComponent::UpdateDebugAndCheats() {
 			damageInfo.m_AttackType = KungFuGame::DebugDeath;
 
 			m_pSheep->TakeDamage( damageInfo );
-			g_pCannonGame->GetMainCamera()->SetTarget( nullptr );
+			g_pCannonGame->GetMainCamera()->SetTarget( nullptr, -1.0f );
 		}
 
 		if ( input.IsKeyPressedOrDown( 'C' ) ) {
@@ -1017,7 +1050,7 @@ AttackHitInfo_t KungFuSheepDirector::DoAttack( const DealAttackInfo_t<KungFuGame
  */
 void KungFuSheepDirector::StateChangeCB( const KungFuGame::eKungFuGame_State previousState, const KungFuGame::eKungFuGame_State nextState ) {
 
-	if ( g_bSkipMainMenuAndIntro ) {
+	if ( g_SkipCheat == KungFuGame::Skip_MainMenuAndInto || g_SkipCheat == KungFuGame::Skip_ToEnd ) {
 
 		m_pHealthBarUI->GetOwner()->EnableAllComponents();
 		m_pCannonBallUI->GetOwner()->EnableAllComponents();

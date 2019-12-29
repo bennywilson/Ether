@@ -720,8 +720,8 @@ void kbResourceTab::EntitySelectedCB( Fl_Widget * pWidget, void * pUserData ) {
 
 	} else if ( Fl::event_button() == FL_RIGHT_MOUSE ) {
 		
-		const std::string DeleteEntity = "Delete entity " + g_pResourceTab->m_EntityList[selectedItemIndex].m_pEntity->GetGameEntity()->GetName();
-		const std::string ZoomToEntity = "Zoom to entity " + g_pResourceTab->m_EntityList[selectedItemIndex].m_pEntity->GetGameEntity()->GetName();
+		const std::string DeleteEntity = "Delete entity " + g_pResourceTab->m_EntityList[selectedItemIndex].m_pEntity->GetGameEntity()->GetName().stl_str();
+		const std::string ZoomToEntity = "Zoom to entity " + g_pResourceTab->m_EntityList[selectedItemIndex].m_pEntity->GetGameEntity()->GetName().stl_str();
 
 
 		Fl_Menu_Item rclick_menu[] = {

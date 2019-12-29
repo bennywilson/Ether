@@ -2,7 +2,7 @@ kbGameEntity 0 0 0 0 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		Name = "Entity_114"
+		Name = "Entity_115"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
 		Position = 0.000000 0.000000 0.000000
 		Scale = 1.000000 1.000000 1.000000
@@ -10,8 +10,8 @@ kbGameEntity 0 0 0 0 {
 	kbEditorLevelSettingsComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		MainCameraPosition = 68.005905 -51.628273 -234.021576
-		MainCameraRotation = 0.041348 0.712513 -0.042140 -0.699171
+		MainCameraPosition = 69.349281 -49.023411 -238.082153
+		MainCameraRotation = 0.113342 0.666191 -0.103463 -0.729821
 	}
 }
 kbGameEntity 0 0 0 0 {
@@ -3559,8 +3559,8 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "Fox"
-		Orientation = 0.000000 1.000000 0.000000 0.000000
-		Position = 77.066940 -52000.500000 -379.951324
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 76.992683 -52.599991 -233.828537
 		Scale = 1.000000 1.000000 1.000000
 	}
 	kbSkeletalModelComponent { 
@@ -3680,7 +3680,7 @@ kbGameEntity 0 0 0 0 {
 		Scale = 555.000000 555.000000 1.000000
 	}
 	CannonBallMainMenuComponent { 
-		Enabled = 1
+		Enabled = 0
 		LifeTime =  -1.000000
 		Anchor = MiddleLeft
 		AxisLock = LockYAxis
@@ -3745,7 +3745,7 @@ kbGameEntity 0 0 0 0 {
 				RelativeSize = 1.000000 1.000000 1.000000
 			}
 			kbUIWidget { 
-				Enabled = 1
+				Enabled = 0
 				LifeTime =  -1.000000
 				Anchor = MiddleLeft
 				AxisLock = LockAll
@@ -3871,13 +3871,13 @@ kbGameEntity 0 0 0 0 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		Name = "3000 Ton"
+		Name = "Outro Camera 1"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
-		Position = 75.058189 -52.299961 -232.628464
+		Position = 76.992683 -52.599991 -237.628464
 		Scale = 25.000000 25.000000 25.000000
 	}
 	kbSkeletalModelComponent { 
-		Enabled = 1
+		Enabled = 0
 		LifeTime =  -1.000000
 		CastsShadow = 1
 		Materials = 1
@@ -3939,7 +3939,7 @@ kbGameEntity 0 0 0 0 {
 		Model = .\assets\models\characters\3000ton\3000ton.ms3d
 	}
 	kbSkeletalModelComponent { 
-		Enabled = 1
+		Enabled = 0
 		LifeTime =  -1.000000
 		CastsShadow = 0
 		Materials = 1
@@ -4139,16 +4139,27 @@ kbGameEntity 0 0 0 0 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
+<<<<<<< Updated upstream
 		Name = "Moose"
 		Orientation = 0.000000 0.613430 0.000000 0.789749
 		Position = 33.645111 -0.950806 -65.364624
 		Scale = 1.500000 1.500000 1.500000
+=======
+		Name = "3000 Ton"
+		Orientation = 0.000000 1.000000 0.000000 0.000000
+		Position = 76.992683 -52.599991 -232.628464
+		Scale = 25.000000 25.000000 25.000000
+>>>>>>> Stashed changes
 	}
 	kbSkeletalModelComponent { 
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadow = 1
+<<<<<<< Updated upstream
 		Materials = 2
+=======
+		Materials = 1
+>>>>>>> Stashed changes
 			kbMaterialComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
@@ -4159,7 +4170,11 @@ kbGameEntity 0 0 0 0 {
 						Enabled = 0
 						LifeTime =  -1.000000
 						ParamName = "colorTexture"
+<<<<<<< Updated upstream
 						Texture = .\assets\models\characters\moose\moose_body_color.jpg
+=======
+						Texture = .\assets\models\characters\3000ton\3000ton_colormap.jpg
+>>>>>>> Stashed changes
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 					kbShaderParamComponent { 
@@ -4167,12 +4182,17 @@ kbGameEntity 0 0 0 0 {
 						LifeTime =  -1.000000
 						ParamName = "fxMapMask"
 						Texture = NULL
+<<<<<<< Updated upstream
 						Vector = 1.000000 0.000000 0.000000 0.000000
+=======
+						Vector = 0.000000 1.000000 0.000000 0.000000
+>>>>>>> Stashed changes
 					}
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
 						ParamName = "fxMap"
+<<<<<<< Updated upstream
 						Texture = NULL
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
@@ -4202,6 +4222,9 @@ kbGameEntity 0 0 0 0 {
 						LifeTime =  -1.000000
 						ParamName = "fxMapMask"
 						Texture = NULL
+=======
+						Texture = .\assets\models\characters\3000ton\3000ton_fxmap_1.tif
+>>>>>>> Stashed changes
 						Vector = 1.000000 0.000000 0.000000 0.000000
 					}
 					kbShaderParamComponent { 
@@ -4214,6 +4237,7 @@ kbGameEntity 0 0 0 0 {
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
+<<<<<<< Updated upstream
 						ParamName = "colorTexture"
 						Texture = .\assets\models\characters\moose\moose_head_color.jpg
 						Vector = 0.000000 0.000000 0.000000 0.000000
@@ -4228,6 +4252,8 @@ kbGameEntity 0 0 0 0 {
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
+=======
+>>>>>>> Stashed changes
 						ParamName = "clipMap"
 						Texture = NULL
 						Vector = 0.000000 0.000000 0.000000 0.000000
@@ -4235,6 +4261,7 @@ kbGameEntity 0 0 0 0 {
 			}
 		RenderOrderBias =  0.000000
 		RenderPass = LightingPass
+<<<<<<< Updated upstream
 		Animations = 1
 			kbAnimComponent { 
 				Enabled = 0
@@ -4247,11 +4274,35 @@ kbGameEntity 0 0 0 0 {
 			}
 		DebugAnimIndex = 0
 		Model = .\assets\models\characters\moose\moose.ms3d
+=======
+		Animations = 2
+			kbAnimComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Animation = .\assets\models\characters\3000ton\3000ton_kungfu_idle.kbanim.ms3d
+				AnimationEvent = 0
+				AnimationName = "Idle"
+				IsLooping = 1
+				TimeScale =  1.000000
+			}
+			kbAnimComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Animation = .\assets\models\characters\3000ton\kungfusheep\snolaf_squash_snolafs.kbanim.ms3d
+				AnimationEvent = 0
+				AnimationName = "Squash Snolafs"
+				IsLooping = 0
+				TimeScale =  5.000000
+			}
+		DebugAnimIndex = -1
+		Model = .\assets\models\characters\3000ton\3000ton.ms3d
+>>>>>>> Stashed changes
 	}
 	kbSkeletalModelComponent { 
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadow = 0
+<<<<<<< Updated upstream
 		Materials = 2
 			kbMaterialComponent { 
 				Enabled = 0
@@ -4295,6 +4346,9 @@ kbGameEntity 0 0 0 0 {
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 			}
+=======
+		Materials = 1
+>>>>>>> Stashed changes
 			kbMaterialComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
@@ -4306,7 +4360,11 @@ kbGameEntity 0 0 0 0 {
 						LifeTime =  -1.000000
 						ParamName = "outlineParams"
 						Texture = NULL
+<<<<<<< Updated upstream
 						Vector = 0.010000 0.050000 0.500000 5.000000
+=======
+						Vector = 0.020000 0.100000 0.750000 5.000000
+>>>>>>> Stashed changes
 					}
 					kbShaderParamComponent { 
 						Enabled = 0
@@ -4326,7 +4384,11 @@ kbGameEntity 0 0 0 0 {
 						Enabled = 0
 						LifeTime =  -1.000000
 						ParamName = "colorTexture"
+<<<<<<< Updated upstream
 						Texture = .\assets\models\characters\moose\moose_head_color.jpg
+=======
+						Texture = .\assets\models\characters\3000ton\3000ton_colormap.jpg
+>>>>>>> Stashed changes
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 					kbShaderParamComponent { 
@@ -4338,6 +4400,7 @@ kbGameEntity 0 0 0 0 {
 					}
 			}
 		RenderOrderBias =  0.000000
+<<<<<<< Updated upstream
 		RenderPass = Post-LightingPass
 		Animations = 1
 			kbAnimComponent { 
@@ -4353,3 +4416,39 @@ kbGameEntity 0 0 0 0 {
 		Model = .\assets\models\characters\moose\moose.ms3d
 	}
 }
+=======
+		RenderPass = LightingPass
+		Animations = 2
+			kbAnimComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Animation = .\assets\models\characters\3000ton\3000ton_kungfu_idle.kbanim.ms3d
+				AnimationEvent = 0
+				AnimationName = "Run"
+				IsLooping = 1
+				TimeScale =  1.000000
+			}
+			kbAnimComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Animation = .\assets\models\characters\3000ton\kungfusheep\snolaf_squash_snolafs.kbanim.ms3d
+				AnimationEvent = 0
+				AnimationName = "Squash Snolafs"
+				IsLooping = 0
+				TimeScale =  5.000000
+			}
+		DebugAnimIndex = -1
+		Model = .\assets\models\characters\3000ton\3000ton.ms3d
+	}
+	CannonActorComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		DummyTemp = 0
+		Health =  10.000000
+		AttackVO = 0
+		Health =  100.000000
+		MaxRotateSpeed =  15.000000
+		MaxRunSpeed =  3.000000
+	}
+}
+>>>>>>> Stashed changes

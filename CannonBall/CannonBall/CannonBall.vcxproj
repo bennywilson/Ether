@@ -112,6 +112,9 @@
     <None Include="assets\shaders\Water\water_skygradientreflection.kbShader" />
     <None Include="CannonBall.ico" />
     <None Include="small.ico" />
+    <None Include="Source\Game\KungFuSheep\Cinema\Outro.inl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Resource.h" />

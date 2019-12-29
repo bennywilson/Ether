@@ -558,6 +558,26 @@ public:
 	}
 };
 
+/**
+ *	KungFuSnolafStateCinema
+ */
+template<typename T>
+class KungFuSnolafStateCinema : public KungFuSnolafStateBase<T> {
+
+//---------------------------------------------------------------------------------------------------
+public:
+	KungFuSnolafStateCinema( CannonActorComponent *const pPlayerComponent ) : KungFuSnolafStateBase( pPlayerComponent ) { }
+
+	virtual void BeginState_Internal( T ) override {
+
+	}
+
+	virtual void UpdateState_Internal() override {
+	}
+
+	virtual void EndState_Internal( T ) override {
+	}
+};
 
 /**
  *	KungFuSnolafComponent::Constructor
@@ -608,7 +628,8 @@ void KungFuSnolafComponent::SetEnable_Internal( const bool bEnable ) {
 			new KungFuSnolafStateHug<KungFuSnolafState::SnolafState_t>( this ),
 			new KungFuSnolafStateDead<KungFuSnolafState::SnolafState_t>( this ),
 			new KungFuSnolafStateWatchCannonBall<KungFuSnolafState::SnolafState_t>( this ),
-			new KungFuSnolafStateRunAway<KungFuSnolafState::SnolafState_t>( this )
+			new KungFuSnolafStateRunAway<KungFuSnolafState::SnolafState_t>( this ),
+			new KungFuSnolafStateCinema<KungFuSnolafState::SnolafState_t>( this )
 		};
 
 		InitializeStateMachine( snolafStates );

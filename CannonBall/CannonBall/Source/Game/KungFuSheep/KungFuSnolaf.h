@@ -19,6 +19,7 @@ namespace KungFuSnolafState {
 		Dead,
 		WatchCannonBall,
 		RunAway,
+		Cinema,
 		NumStates
 	};
 }

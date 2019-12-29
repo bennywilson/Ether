@@ -61,6 +61,10 @@ namespace KungFuGame {
 	const kbQuat kSheepStartRot( 0.0f, 1.0f, 0.0f, 0.0f );
 	
 	const float kLevelLength = 165.0f;
+
+	// Cinema
+	const float kOutroStartZ = -250.0f;
+	const kbVec3 kFoxPos = kbVec3( 77.10445f, -52.6362f, -233.828537f );
 };
 
 
@@ -78,6 +82,7 @@ public:
 	void										SpawnEnemy( const bool bSpawnLeft, const int waveSize );
 	class KungFuSheepComponent *				SpawnSheep();
 	KungFuSheepComponent *						GetSheep() const { return m_pSheep; }
+	CannonActorComponent *						Get3000Ton() const { return m_p3000Ton; }
 
 	void										UpdateSheepHealthBar( const float healthVal );
 	void										UpdateCannonBallMeter( const float value, const bool bActivated );
@@ -89,6 +94,7 @@ public:
 
 	float										GetDistancePlayerHasTraveled();
 
+	class KungFuSnolafComponent *				GetSnolafFromPool();
 	void										ReturnSnolafToPool( class KungFuSnolafComponent *const pSnolaf );
 	void										RemoveSheep();
 
@@ -133,6 +139,7 @@ private:
 	std::vector<kbGameEntity*>					m_SnolafPool;
 	KungFuSnolafComponent *						m_EndSnolafs[2];
 	KungFuSheepComponent *						m_pSheep;
+	CannonActorComponent *						m_p3000Ton;
 
 	static KungFuLevelComponent *				s_Inst;
 };

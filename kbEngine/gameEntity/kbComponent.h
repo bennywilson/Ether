@@ -135,7 +135,7 @@ public:
 	void										SetScale( const kbVec3 & newScale ) { m_Scale = newScale; }
 	void										SetOrientation( const kbQuat & newOrientation ) { m_Orientation = newOrientation; }
 
-	const std::string &							GetName() const { return m_Name.stl_str(); }
+	const kbString &							GetName() const { return m_Name.stl_str(); }
 	const kbVec3								GetPosition() const;
 	const kbVec3								GetScale() const;
 	const kbQuat								GetOrientation() const;

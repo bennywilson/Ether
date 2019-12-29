@@ -1205,7 +1205,7 @@ void kbEditor::RightClickOnMainTab() {
 	std::string DuplicateMessage = "Duplicate Entity";
 
 	if ( g_Editor->GetSelectedObjects().size() > 0 ) {
-		DuplicateMessage += g_Editor->GetSelectedObjects()[0]->GetGameEntity()->GetName();
+		DuplicateMessage += g_Editor->GetSelectedObjects()[0]->GetGameEntity()->GetName().stl_str();
 	}
 
 	if ( prefab == nullptr ) {

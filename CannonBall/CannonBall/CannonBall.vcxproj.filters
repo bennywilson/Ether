@@ -108,6 +108,9 @@
     <None Include="assets\shaders\UI\animatedChannelUI.kbShader">
       <Filter>Shaders\UI</Filter>
     </None>
+    <None Include="Source\Game\KungFuSheep\Cinema\Outro.inl">
+      <Filter>Source\Game\KungFuSheep\Cinema</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Shaders">
@@ -157,6 +160,9 @@
     </Filter>
     <Filter Include="Source\Game\UI">
       <UniqueIdentifier>{d538ecf2-4e7c-4de5-bfcb-5d364d6bc3f5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Game\KungFuSheep\Cinema">
+      <UniqueIdentifier>{f514aa6c-41b4-44ee-a063-2409a75641a6}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

@@ -111,7 +111,7 @@ public:
 	
 	void										StartCameraShake( const CannonCameraShakeComponent *const pCameraShakeComponent );
 
-	void										SetTarget( const kbGameEntity *const pTarget );
+	void										SetTarget( const kbGameEntity *const pTarget, const float blendRate );
 
 protected:
 
@@ -129,6 +129,9 @@ private:
 	// Game
 	ECameraMoveMode								m_MoveMode;
 	const kbGameEntity *						m_pTarget;
+	float										m_SwitchTargetBlendSpeed;
+	float										m_SwitchTargetCurT;
+	kbVec3										m_SwitchTargetStartPos;
 
 	float										m_CameraShakeStartTime;
 	kbVec2										m_CameraShakeStartingOffset;

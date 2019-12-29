@@ -100,7 +100,7 @@ public:
 	void										RenderSync();
 
 	// Accessors
-	const std::string &							GetName() const { return m_pTransformComponent->GetName(); }
+	const kbString &							GetName() const { return m_pTransformComponent->GetName(); }
 
 	const kbVec3								GetPosition() const;
 	void										SetPosition( const kbVec3 & newPosition ) { m_pTransformComponent->SetPosition( newPosition ); MarkAsDirty(); }
