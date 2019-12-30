@@ -581,7 +581,7 @@ void CannonBallMainMenuComponent::SetAnimationFrame( const int idx ) {
 		PlayRandomSound( m_ActionVO );
 	} else if ( m_AnimationState == 2 ) {
 		m_ChildWidgets[0].Enable( true );
-	//	Recalculate( nullptr, true );
+		Recalculate( nullptr, true );
 	} else if ( m_AnimationState == 3 ) {
 		m_pModel->Enable( false );
 	}

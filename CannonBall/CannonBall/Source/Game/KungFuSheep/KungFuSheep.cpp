@@ -745,7 +745,7 @@ void KungFuSheepComponent::Update_Internal( const float DT ) {
 		}
 
 		if ( numHuggers > 0 ) {
-			const float healthDrain = DT * 0.05f * (float)numHuggers;
+			const float healthDrain = DT * 0.05f * (float) kbClamp( numHuggers, 0, KungFuGame::kMaxHuggerDamageMultiplier );
 			m_Health = kbSaturate( m_Health - healthDrain );
 
 			KungFuLevelComponent::Get()->UpdateSheepHealthBar( m_Health );
@@ -827,7 +827,7 @@ void KungFuSheepComponent::PlayBaa( const int baaType ) {
 
 /**
  *	KungFuSheepComponent::HitASnolaf
- */	
+ */
 void KungFuSheepComponent::HitASnolaf() {
 
 	m_CannonBallMeter += KungFuGame::kMeterFillPerSnolafKill;
@@ -840,7 +840,7 @@ void KungFuSheepComponent::HitASnolaf() {
 
 /**
  *	KungFuSheepComponent::SpawnSplash
- */	
+ */
 void KungFuSheepComponent::SpawnSplash() {
 	if ( m_SplashFX.GetEntity() == nullptr ) {
 		return;
@@ -854,6 +854,31 @@ void KungFuSheepComponent::SpawnSplash() {
 
 	if ( kbfrand() > 0.75f ) {
 		KungFuLevelComponent::Get()->DoWaterDropletScreenFX();
+	}
+}
+
+/**
+ *	KungFuSheepComponent::PlayCannonBallFX
+ */
+void KungFuSheepComponent::PlayCannonBallFX( const kbVec3 location ) {
+
+	if ( m_CannonBallImpactFX.GetEntity() == nullptr ) {
+		return;
+	}
+
+	kbGameEntity *const pCannonBallImpact = g_pGame->CreateEntity( m_CannonBallImpactFX.GetEntity() );
+	pCannonBallImpact->SetPosition( location );
+	pCannonBallImpact->SetOrientation( GetOwnerRotation() );
+	pCannonBallImpact->DeleteWhenComponentsAreInactive( true );
+
+	CannonCameraShakeComponent *const pCamShakeComponent = (CannonCameraShakeComponent*)pCannonBallImpact->GetComponentByType( CannonCameraShakeComponent::GetType() );
+	CannonCameraComponent *const pCam = (CannonCameraComponent*)g_pCannonGame->GetMainCamera();
+	if ( pCamShakeComponent != nullptr && pCam != nullptr ) {
+		pCam->StartCameraShake( pCamShakeComponent );
+	}
+
+	if ( m_CannonBallImpactSound.size() > 0 ) {
+		m_CannonBallImpactSound[rand() % m_CannonBallImpactSound.size()].PlaySoundAtPosition( GetOwnerPosition() );
 	}
 }
 

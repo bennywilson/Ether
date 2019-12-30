@@ -400,13 +400,13 @@ GenerateEnum(
 )
 
 GenerateClass(
-	kbUIWidget,
-	AddField( "Anchor", KBTYPEINFO_ENUM, kbUIWidget, m_Anchor, false, "eWidgetAnchor" )
-	AddField( "AxisLock", KBTYPEINFO_ENUM, kbUIWidget, m_AxisLock, false, "eWidgetAxisLock" )
-	AddField( "RelativePosition", KBTYPEINFO_VECTOR, kbUIWidget, m_StartingPosition, false, "" )
-	AddField( "RelativeSize", KBTYPEINFO_VECTOR, kbUIWidget, m_StartingSize, false, "" )
-	AddField( "Materials", KBTYPEINFO_STRUCT, kbUIWidget, m_Materials, true, "kbMaterialComponent" )
-	AddField( "ChildWidgets", KBTYPEINFO_STRUCT, kbUIWidget, m_ChildWidgets, true, "kbUIWidget" )
+	kbUIWidgetComponent,
+	AddField( "Anchor", KBTYPEINFO_ENUM, kbUIWidgetComponent, m_Anchor, false, "eWidgetAnchor" )
+	AddField( "AxisLock", KBTYPEINFO_ENUM, kbUIWidgetComponent, m_AxisLock, false, "eWidgetAxisLock" )
+	AddField( "RelativePosition", KBTYPEINFO_VECTOR, kbUIWidgetComponent, m_StartingPosition, false, "" )
+	AddField( "RelativeSize", KBTYPEINFO_VECTOR, kbUIWidgetComponent, m_StartingSize, false, "" )
+	AddField( "Materials", KBTYPEINFO_STRUCT, kbUIWidgetComponent, m_Materials, true, "kbMaterialComponent" )
+	AddField( "ChildWidgets", KBTYPEINFO_STRUCT, kbUIWidgetComponent, m_ChildWidgets, true, "kbUIWidgetComponent" )
 
 )
 

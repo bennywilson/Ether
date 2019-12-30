@@ -48,6 +48,9 @@ namespace KungFuGame {
 	const float kSheepPunchAnimTimeScale = 15.0f;
 	const float kSheepKickAnimTimeScale = 8.9999f;
 
+	// Snolaf Attack
+	const int kMaxHuggerDamageMultiplier = 4;
+
 	// Wave
 	const int kSnolafPoolSize = 50;
 	const int kMaxSnolafWaveSize = 20;
@@ -66,6 +69,7 @@ namespace KungFuGame {
 	const float kOutroStartZ = -250.0f;
 	const kbVec3 kFoxPos = kbVec3( 77.10445f, -52.6362f, -233.828537f );
 	const kbVec3 kTreyTonStartPos = kbVec3( 76.992683f, -52.599991f, -227.628464f );
+	const kbVec3 kSheepFinalPos = kFoxPos + kbVec3( 0.0f, 0.0f, -5.0f );
 };
 
 

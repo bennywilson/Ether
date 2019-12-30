@@ -11,7 +11,10 @@ public:
 		SheepSnolafFaceOff,
 		TreyTonPounce,
 		TreyTonTitle,
-		TreyTonPounce2
+		TreyTonPounce2,
+		SheepDodge,
+		TreyTonExit,
+		Dance
 	} m_State;
 
 	kbGameEntityPtr m_p3000TonTitleEntity;
@@ -33,25 +36,21 @@ public:
 		static kbString sPounce_1( "Pounce_1" );
 		static kbString sPounce_1_Smear( "Pounce_1_Smear" );
 		const kbString eventName = animEvent.m_AnimEvent.GetEventName();
+		auto pSheep = KungFuLevelComponent::Get()->GetSheep();
 		if ( eventName == sPounce_1 ) {
 			m_pSnolafGuards[0]->RequestStateChange( KungFuSnolafState::Dead );
 			m_pSnolafGuards[1]->RequestStateChange( KungFuSnolafState::Dead );
 			m_pSnolafGuards[2]->RequestStateChange( KungFuSnolafState::Dead );
 
+			kbGameEntityPtr pEnt = g_pGame->GetEntityByName( kbString( "3000 Ton Smash Snolaf Pos" ) );
+			pSheep->PlayCannonBallFX( pEnt.GetEntity()->GetPosition() );
+	
 			// Give sheep big eyes
-			KungFuLevelComponent::Get()->GetSheep()->SetOverrideFXMaskParameters( kbVec4( 0.0f, 0.0f, 1.0f, 0.0f ) );
+			pSheep->SetOverrideFXMaskParameters( kbVec4( 0.0f, 0.0f, 1.0f, 0.0f ) );
 
-			// Cam Shake
-			CannonCameraShakeComponent camShake;
-			camShake.m_AmplitudeX = 0.09f;
-			camShake.m_AmplitudeY = 0.07f;
-			camShake.m_Duration = 0.7f;
-			camShake.m_FrequencyX = 30.0f;
-			camShake.m_FrequencyY = 40.0f;
-			g_pCannonGame->GetMainCamera()->StartCameraShake( &camShake );
 		} else if ( eventName == sPounce_1_Smear ) {
 			auto pTreyTon = KungFuLevelComponent::Get()->Get3000Ton()->GetComponent<CannonActorComponent>();
-			pTreyTon->ApplyAnimSmear( kbVec3( 0.0f, 5.0f, 5.0f ), 0.067f );
+			pTreyTon->ApplyAnimSmear( kbVec3( 0.0f, 5.0f, 0.0f ), 0.067f );
 		}
 	}
 
@@ -127,6 +126,7 @@ public:
 		}
 
 		static const kbString sPounce_1( "Pounce_1" );
+		static const kbString sPounce_2( "Pounce_2" );
 
 		auto pSheep = KungFuLevelComponent::Get()->GetSheep();
 		auto p3000Ton = KungFuLevelComponent::Get()->Get3000Ton();
@@ -152,14 +152,14 @@ public:
 
 			case SheepSnolafFaceOff : {
 				ChangeState( TreyTonPounce );
-				p3000Ton->PlayAnimation( sPounce_1, 0.15f );
+				p3000Ton->PlayAnimation( sPounce_1, -1.0f );
 
 				break;
 			}
 
 			case TreyTonPounce : {
 
-				if ( GetStateTime() > 1.76f ) {
+				if ( GetStateTime() > 1.0f ) {
 
 					const kbVec3 posOffset = kbVec3( 0.0f, 0.0f, -13.0f ) + kbVec3( -10.933998f, 3.224068f,  10.000000f ) * 0.3f;
 
@@ -168,6 +168,7 @@ public:
 					pCamera->SetPositionOffset( posOffset, lerpSpeed );
 					pCamera->SetLookAtOffset( kbVec3( 0.0f, 0.0f, -8.0f ), lerpSpeed );
 					ChangeState( TreyTonTitle );
+
 				}
 				/*if ( p3000Ton->HasFinishedAnim( sSquashSnolafs ) ) {
 					ChangeState( TreyTonTitle );
@@ -179,6 +180,9 @@ public:
 
 				const float DisplayTitleTime = 0.5f;
 				const float HideTitleTime = 3.5f;
+				const float ZoomOutSpeed = 3.0f;
+				const kbVec3 TreyTonLandSpot( 76.992683f, -52.626686f, -235.728653f );
+
 
 				if ( GetStateTime() > DisplayTitleTime ) {
 					if ( m_p3000TonTitleEntity.GetEntity() != nullptr ) {
@@ -187,8 +191,8 @@ public:
 				}
 
 				if ( GetStateTime() > HideTitleTime ) {
-					const float ZoomOutSpeed = 3.0f;
-					const kbVec3 TreyTonLandSpot( 76.992683f, -52.626686f, -235.728653f );
+
+
 					auto pCamera = g_pCannonGame->GetMainCamera();
 					pCamera->SetLookAtOffset( kbVec3( 0.000000f, 2.500000f, 0.000000f ), ZoomOutSpeed );
 					pCamera->SetPositionOffset( kbVec3( -10.933998f, 3.224068f, 0.000000f ), ZoomOutSpeed );
@@ -201,13 +205,54 @@ public:
 						m_p3000TonTitleEntity.GetEntity()->GetComponent<kbUIWidgetComponent>()->Enable( false );
 					}
 
+					p3000Ton->SetOwnerPosition( TreyTonLandSpot );
+					p3000Ton->PlayAnimation( sPounce_2, 0.0f );
+
+					pSheep->PlayAnimation( kbString( "Watch3000Ton" ), 1.15f );
+
 					ChangeState( TreyTonPounce2 );
 				}
 				break;
 			}
 
 			case TreyTonPounce2 : {
+				if ( GetStateTime() > 1.6f ) {
+					pSheep->PlayBaa( 2 );
+					ChangeState( SheepDodge );
+					pSheep->SetOverrideFXMaskParameters( kbVec4( 1.0f, 0.0f, 0.0f, 0.0f ) );
+				}
+				break;
+			}
 
+			case SheepDodge:
+			{
+				const float sheepHopRate = 1.75f;
+				const float sheepTargetZ = -242.f;
+				 
+				if ( GetStateTime() > 0.1f ) {
+					kbVec3 sheepPos = pSheep->GetOwnerPosition();
+					sheepPos.z += sheepHopRate * g_pGame->GetFrameDT();
+					if ( sheepPos.z >= sheepTargetZ ) {
+						sheepPos.z = sheepTargetZ;
+						ChangeState( TreyTonExit );
+					}
+					pSheep->SetOwnerPosition( sheepPos );
+				}
+			}
+
+			case TreyTonExit :
+			{
+				if ( GetStateTime() > 2.0f ) {
+					pSheep->PlayAnimation( kbString( "Run_Basic" ), 0.15f );
+					kbVec3 sheepPos = pSheep->GetOwnerPosition();
+					sheepPos.z += pSheep->GetMaxRunSpeed() * g_pGame->GetFrameDT();
+					if ( sheepPos.z >= KungFuGame::kSheepFinalPos.z ) {
+						sheepPos.z = KungFuGame::kSheepFinalPos.z;
+						pSheep->PlayAnimation( kbString( "IdleLeft_Basic" ), 0.0f );
+						ChangeState( Dance );
+					}
+					pSheep->SetOwnerPosition( sheepPos );
+				}
 			}
 		}
 	}

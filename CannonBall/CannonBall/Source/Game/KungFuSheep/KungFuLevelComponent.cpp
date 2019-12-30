@@ -15,7 +15,7 @@ namespace KungFuGame {
 
 	enum eSkipCheats {
 		Skip_None,
-		Skip_MainMenuAndInto,
+		Skip_MainMenuAndIntro,
 		Skip_ToEnd
 	};
 
@@ -75,7 +75,7 @@ private:
 			pSheep = m_pLevelComponent->SpawnSheep();
 		}
 
-		if ( g_SkipCheat == KungFuGame::Skip_MainMenuAndInto || g_SkipCheat == KungFuGame::Skip_ToEnd ) {
+		if ( g_SkipCheat == KungFuGame::Skip_MainMenuAndIntro || g_SkipCheat == KungFuGame::Skip_ToEnd ) {
 
 			static const kbString IdleL_Anim( "IdleLeft_Basic" );
 			pSheep->PlayAnimation( IdleL_Anim, 0.2f );
@@ -118,7 +118,7 @@ private:
 
 	virtual void UpdateState_Internal() override {
 
-		if ( g_SkipCheat == KungFuGame::Skip_MainMenuAndInto || g_SkipCheat == KungFuGame::Skip_ToEnd ) {
+		if ( g_SkipCheat == KungFuGame::Skip_MainMenuAndIntro || g_SkipCheat == KungFuGame::Skip_ToEnd ) {
 			RequestStateChange( KungFuGame::Gameplay );
 			return;
 		}
@@ -157,7 +157,7 @@ private:
 			}
 		} else if ( m_CurrentState == 3 ) {
 
-			if ( GetTimeSinceStateBegan() > 7.2f ) {
+			if ( GetTimeSinceStateBegan() > 7.8f ) {
 				pSheep->PlayBaa( 0 );
 				m_CurrentState = 4;
 			}
@@ -1050,7 +1050,7 @@ AttackHitInfo_t KungFuSheepDirector::DoAttack( const DealAttackInfo_t<KungFuGame
  */
 void KungFuSheepDirector::StateChangeCB( const KungFuGame::eKungFuGame_State previousState, const KungFuGame::eKungFuGame_State nextState ) {
 
-	if ( g_SkipCheat == KungFuGame::Skip_MainMenuAndInto || g_SkipCheat == KungFuGame::Skip_ToEnd ) {
+	if ( g_SkipCheat == KungFuGame::Skip_MainMenuAndIntro || g_SkipCheat == KungFuGame::Skip_ToEnd ) {
 
 		m_pHealthBarUI->GetOwner()->EnableAllComponents();
 		m_pCannonBallUI->GetOwner()->EnableAllComponents();

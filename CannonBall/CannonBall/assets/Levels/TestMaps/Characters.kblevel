@@ -2,7 +2,7 @@ kbGameEntity 0 0 0 0 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		Name = "Entity_117"
+		Name = "Entity_118"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
 		Position = 0.000000 0.000000 0.000000
 		Scale = 1.000000 1.000000 1.000000
@@ -3680,7 +3680,7 @@ kbGameEntity 0 0 0 0 {
 		Scale = 555.000000 555.000000 1.000000
 	}
 	CannonBallMainMenuComponent { 
-		Enabled = 0
+		Enabled = 1
 		LifeTime =  -1.000000
 		Anchor = MiddleLeft
 		AxisLock = LockYAxis
@@ -3745,7 +3745,7 @@ kbGameEntity 0 0 0 0 {
 				RelativeSize = 1.000000 1.000000 1.000000
 			}
 			kbUIWidgetComponent { 
-				Enabled = 0
+				Enabled = 1
 				LifeTime =  -1.000000
 				Anchor = MiddleLeft
 				AxisLock = LockAll
@@ -4212,14 +4212,14 @@ kbGameEntity 0 0 0 0 {
 						Enabled = 0
 						LifeTime =  -1.000000
 						EventName = "Pounce_1"
-						EventTime =  0.900000
+						EventTime =  0.100000
 						EventValue =  0.000000
 					}
 					kbAnimEvent { 
 						Enabled = 0
 						LifeTime =  -1.000000
 						EventName = "Pounce_1_Smear"
-						EventTime =  0.900000
+						EventTime =  0.100000
 						EventValue =  0.000000
 					}
 				AnimationName = "Pounce_1"
@@ -4233,7 +4233,7 @@ kbGameEntity 0 0 0 0 {
 				AnimationEvent = 0
 				AnimationName = "Pounce_2"
 				IsLooping = 0
-				TimeScale =  1.000000
+				TimeScale =  3.200000
 			}
 		DebugAnimIndex = -1
 		Model = .\assets\models\characters\3000ton\3000ton.ms3d

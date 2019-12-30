@@ -46,6 +46,7 @@ public:
 	void										PlayBaa( const int baaType );
 	void										HitASnolaf();
 
+	void										PlayCannonBallFX( const kbVec3 location );
 	void										SpawnSplash();
 
 	float										GetCannonBallMeterFill() const { return m_CannonBallMeter; }

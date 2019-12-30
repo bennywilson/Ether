@@ -150,7 +150,7 @@ DEFINE_KBCLASS(kbPlaySoundComponent)
 
 DEFINE_KBCLASS(kbUIComponent)
 
-DEFINE_KBCLASS(kbUIWidget)
+DEFINE_KBCLASS(kbUIWidgetComponent)
 
 DEFINE_KBCLASS(kbUISlider)
 

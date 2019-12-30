@@ -403,6 +403,22 @@ void kbGame::RemoveGameEntity( kbGameEntity *const pEntityToRemove ) {
 }
 
 /**
+ *	kbGame::GetEntityByName
+ */
+kbGameEntityPtr kbGame::GetEntityByName( const kbString entName ) {
+
+	for ( int i = 0; i < m_GameEntityList.size(); i++ ) {
+		if ( m_GameEntityList[i]->GetName() == entName ) {
+			kbGameEntityPtr retEntity;
+			retEntity.SetEntity( m_GameEntityList[i] );
+			return kbGameEntityPtr( retEntity );
+		}
+	}
+
+	return kbGameEntityPtr();
+}
+
+/**
  *	kbGame::SwapEntitiesByIdx
  */
 void kbGame::SwapEntitiesByIdx( const size_t idx1, const size_t idx2 ) {
