@@ -2,7 +2,7 @@ kbGameEntity 0 0 0 0 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		Name = "Entity_118"
+		Name = "Entity_117"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
 		Position = 0.000000 0.000000 0.000000
 		Scale = 1.000000 1.000000 1.000000
@@ -3686,7 +3686,7 @@ kbGameEntity 0 0 0 0 {
 		AxisLock = LockYAxis
 		ChildWidgets = 2
 			kbUIWidgetComponent { 
-				Enabled = 0
+				Enabled = 1
 				LifeTime =  -1.000000
 				Anchor = MiddleLeft
 				AxisLock = LockYAxis
@@ -4193,7 +4193,7 @@ kbGameEntity 0 0 0 0 {
 			}
 		RenderOrderBias =  0.000000
 		RenderPass = LightingPass
-		Animations = 3
+		Animations = 4
 			kbAnimComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
@@ -4234,6 +4234,15 @@ kbGameEntity 0 0 0 0 {
 				AnimationName = "Pounce_2"
 				IsLooping = 0
 				TimeScale =  3.200000
+			}
+			kbAnimComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Animation = .\assets\models\characters\3000ton\kungfusheep\karatepose.kbanim.ms3d
+				AnimationEvent = 0
+				AnimationName = "KaratePose"
+				IsLooping = 0
+				TimeScale =  1.000000
 			}
 		DebugAnimIndex = -1
 		Model = .\assets\models\characters\3000ton\3000ton.ms3d
@@ -4287,7 +4296,7 @@ kbGameEntity 0 0 0 0 {
 			}
 		RenderOrderBias =  0.000000
 		RenderPass = LightingPass
-		Animations = 3
+		Animations = 4
 			kbAnimComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
@@ -4312,6 +4321,15 @@ kbGameEntity 0 0 0 0 {
 				Animation = .\assets\models\characters\3000ton\kungfusheep\pounce_2.kbanim.ms3d
 				AnimationEvent = 0
 				AnimationName = "Pounce_2"
+				IsLooping = 0
+				TimeScale =  1.000000
+			}
+			kbAnimComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Animation = .\assets\models\characters\3000ton\kungfusheep\karatepose.kbanim.ms3d
+				AnimationEvent = 0
+				AnimationName = "KaratePose"
 				IsLooping = 0
 				TimeScale =  1.000000
 			}

@@ -35,6 +35,7 @@ public:
 
 	KungFuGame_MainMenuState( KungFuLevelComponent *const pLevelComponent ) : KungFuGame_BaseState( pLevelComponent ) { }
 
+
 private:
 
 	virtual void WidgetEventCB( kbUIWidgetComponent *const pWidget, const kbInput_t * pInput ) override {
@@ -277,7 +278,6 @@ private:
 		const auto pKungFuSheep = KungFuLevelComponent::Get()->GetSheep();
 		//kbLog( "Sheep pos is %f %f %f", pKungFuSheep->GetOwnerPosition().x, pKungFuSheep->GetOwnerPosition().y, pKungFuSheep->GetOwnerPosition().z );
 		if ( pKungFuSheep->GetOwnerPosition().z > KungFuGame::kOutroStartZ ) {
-			kbLog( "Switching thang:");
 			RequestStateChange( KungFuGame::Outro );
 			return;
 		}

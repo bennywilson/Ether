@@ -249,7 +249,6 @@ void CannonCameraComponent::SetTarget( const kbGameEntity *const pTarget, const 
 		if ( m_pTarget != nullptr ) {
 			m_SwitchTargetStartPos = m_pTarget->GetPosition();
 			m_SwitchTargetCurT = 0.0f;
-			kbLog( "Old Pos = %.2f %.2f %.2f.  New target pos is %.2f %.2f %.2f", m_SwitchTargetStartPos.x, m_SwitchTargetStartPos.y, m_SwitchTargetStartPos.z, pTarget->GetPosition().x, pTarget->GetPosition().y, pTarget->GetPosition().z );
 
 		} else {
 			m_SwitchTargetBlendSpeed = -1.0f;

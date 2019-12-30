@@ -277,7 +277,7 @@ void kbUIWidgetComponent::Recalculate( const kbUIWidgetComponent *const pParent,
 		SetRenderOrderBias( pParent->GetRenderOrderBias() - 1.0f );
 	} else {
 		m_CachedParentPosition = kbVec3::zero;
-		m_CachedParentSize = kbVec3::one;
+		m_CachedParentSize.Set( 1.0f, 1.0f, 1.0f );
 		SetRenderOrderBias( 0.0f );
 	}
 
