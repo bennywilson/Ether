@@ -357,7 +357,7 @@ void CannonBallPauseMenuUIComponent::RecalculateChildrenTransform() {
 
 	kbVec3 nextPos = m_StartingWidgetAnchorPt;
 	for ( size_t i = 0; i < m_WidgetList.size(); i++ ) {
-		kbUIWidget & widget = *m_WidgetList[i];
+		kbUIWidgetComponent & widget = *m_WidgetList[i];
 		const kbVec2i textureDim = widget.GetBaseTextureDimensions();
 		kbVec3 targetWidgetSize = m_WidgetSize;
 		kbVec3 targetWidgetPos = nextPos;
@@ -436,12 +436,12 @@ void CannonBallPauseMenuUIComponent::Update_Internal( const float DT ) {
 	RecalculateChildrenTransform();
 
 	for ( size_t i = 0; i < m_Widgets.size(); i++ ) {
-		kbUIWidget & widget = m_Widgets[i];
+		kbUIWidgetComponent & widget = m_Widgets[i];
 		widget.Update( DT );
 	}
 
 	for ( size_t i = 0; i < m_SliderWidgets.size(); i++ ) {
-		kbUIWidget & widget = m_SliderWidgets[i];
+		kbUIWidgetComponent & widget = m_SliderWidgets[i];
 		widget.Update( DT );
 	}
 }
@@ -449,7 +449,7 @@ void CannonBallPauseMenuUIComponent::Update_Internal( const float DT ) {
 /**
  *	CannonBallPauseMenuUIComponent::WidgetEventCB
  */
-void CannonBallPauseMenuUIComponent::WidgetEventCB( kbUIWidget *const pWidget, const kbInput_t *const pInput  ) {
+void CannonBallPauseMenuUIComponent::WidgetEventCB( kbUIWidgetComponent *const pWidget, const kbInput_t *const pInput  ) {
 
 	if ( pWidget == &m_SliderWidgets[0] ) {
 		// Volume
@@ -590,7 +590,7 @@ void CannonBallMainMenuComponent::SetAnimationFrame( const int idx ) {
 /**
  *	CannonBallMainMenuComponent::WidgetEventCB
  */
-void CannonBallMainMenuComponent::WidgetEventCB( kbUIWidget *const pWidget ) {
+void CannonBallMainMenuComponent::WidgetEventCB( kbUIWidgetComponent *const pWidget ) {
 
 }
 

@@ -684,7 +684,9 @@ void KungFuSheepComponent::Update_Internal( const float DT ) {
 				lastBlinkTime = curTime;
 			} else {
 
-				if ( m_CurrentState == KungFuSheepState::Hugged ) {
+				if ( m_OverridenFXMaskParams.r >= 0.0f && m_OverridenFXMaskParams.g >= 0.0f && m_OverridenFXMaskParams.b >= 0.0f && m_OverridenFXMaskParams.a >= 0.0f ) {
+					vFXMaskMapParam.Set( m_OverridenFXMaskParams.x, m_OverridenFXMaskParams.y, m_OverridenFXMaskParams.z, m_OverridenFXMaskParams.w );
+				} else if ( m_CurrentState == KungFuSheepState::Hugged ) {
 					vFXMaskMapParam.Set( 0.0f, 0.0f, 1.0f, 0.0f );
 				} else {
 					vFXMaskMapParam.Set( 1.0f, 0.0f, 0.0f, 0.0f );

@@ -2,7 +2,7 @@ kbGameEntity 0 0 0 0 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		Name = "Entity_115"
+		Name = "Entity_117"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
 		Position = 0.000000 0.000000 0.000000
 		Scale = 1.000000 1.000000 1.000000
@@ -10,8 +10,8 @@ kbGameEntity 0 0 0 0 {
 	kbEditorLevelSettingsComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		MainCameraPosition = 69.349281 -49.023411 -238.082153
-		MainCameraRotation = 0.113342 0.666191 -0.103463 -0.729821
+		MainCameraPosition = 71.377953 -50.669586 -228.221039
+		MainCameraRotation = 0.048054 0.579899 -0.034297 -0.812546
 	}
 }
 kbGameEntity 0 0 0 0 {
@@ -2851,7 +2851,7 @@ kbGameEntity 0 0 0 0 {
 				Anchor = MiddleRight
 				AxisLock = LockYAxis
 				ChildWidgets = 2
-					kbUIWidget { 
+					kbUIWidgetComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
 						Anchor = MiddleLeft
@@ -2903,7 +2903,7 @@ kbGameEntity 0 0 0 0 {
 						RelativePosition = 0.000000 0.000000 0.000000
 						RelativeSize = 0.350000 0.075000 1.000000
 					}
-					kbUIWidget { 
+					kbUIWidgetComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
 						Anchor = MiddleLeft
@@ -3016,7 +3016,7 @@ kbGameEntity 0 0 0 0 {
 				Anchor = MiddleRight
 				AxisLock = LockYAxis
 				ChildWidgets = 2
-					kbUIWidget { 
+					kbUIWidgetComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
 						Anchor = MiddleLeft
@@ -3068,7 +3068,7 @@ kbGameEntity 0 0 0 0 {
 						RelativePosition = 0.000000 0.000000 0.000000
 						RelativeSize = 0.350000 0.075000 1.000000
 					}
-					kbUIWidget { 
+					kbUIWidgetComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
 						Anchor = MiddleLeft
@@ -3181,7 +3181,7 @@ kbGameEntity 0 0 0 0 {
 				Anchor = MiddleRight
 				AxisLock = LockYAxis
 				ChildWidgets = 2
-					kbUIWidget { 
+					kbUIWidgetComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
 						Anchor = MiddleLeft
@@ -3233,7 +3233,7 @@ kbGameEntity 0 0 0 0 {
 						RelativePosition = 0.000000 0.000000 0.000000
 						RelativeSize = 0.350000 0.075000 1.000000
 					}
-					kbUIWidget { 
+					kbUIWidgetComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
 						Anchor = MiddleLeft
@@ -3354,7 +3354,7 @@ kbGameEntity 0 0 0 0 {
 			}
 		WidgetSize = 0.100000 0.050000 1.000000
 		Widgets = 2
-			kbUIWidget { 
+			kbUIWidgetComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
 				Anchor = MiddleRight
@@ -3413,7 +3413,7 @@ kbGameEntity 0 0 0 0 {
 				RelativePosition = 0.331250 0.300000 0.000000
 				RelativeSize = 0.168750 0.150000 1.000000
 			}
-			kbUIWidget { 
+			kbUIWidgetComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
 				Anchor = MiddleRight
@@ -3489,7 +3489,7 @@ kbGameEntity 0 0 0 0 {
 		Anchor = MiddleLeft
 		AxisLock = LockAll
 		ChildWidgets = 1
-			kbUIWidget { 
+			kbUIWidgetComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
 				Anchor = MiddleLeft
@@ -3685,7 +3685,7 @@ kbGameEntity 0 0 0 0 {
 		Anchor = MiddleLeft
 		AxisLock = LockYAxis
 		ChildWidgets = 2
-			kbUIWidget { 
+			kbUIWidgetComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
 				Anchor = MiddleLeft
@@ -3744,7 +3744,7 @@ kbGameEntity 0 0 0 0 {
 				RelativePosition = 0.000000 0.000000 0.000000
 				RelativeSize = 1.000000 1.000000 1.000000
 			}
-			kbUIWidget { 
+			kbUIWidgetComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
 				Anchor = MiddleLeft
@@ -4141,7 +4141,7 @@ kbGameEntity 0 0 0 0 {
 		LifeTime =  -1.000000
 		Name = "3000 Ton"
 		Orientation = 0.000000 1.000000 0.000000 0.000000
-		Position = 76.992683 -52.599991 -232.628464
+		Position = 76.992683 -52.599991 -227.628464
 		Scale = 25.000000 25.000000 25.000000
 	}
 	kbSkeletalModelComponent { 
@@ -4193,24 +4193,47 @@ kbGameEntity 0 0 0 0 {
 			}
 		RenderOrderBias =  0.000000
 		RenderPass = LightingPass
-		Animations = 2
+		Animations = 3
 			kbAnimComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
 				Animation = .\assets\models\characters\3000ton\3000ton_kungfu_idle.kbanim.ms3d
 				AnimationEvent = 0
 				AnimationName = "Idle"
-				IsLooping = 1
+				IsLooping = 0
 				TimeScale =  1.000000
 			}
 			kbAnimComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
-				Animation = .\assets\models\characters\3000ton\kungfusheep\snolaf_squash_snolafs.kbanim.ms3d
-				AnimationEvent = 0
-				AnimationName = "Squash Snolafs"
+				Animation = .\assets\models\characters\3000ton\kungfusheep\pounce_1.kbanim.ms3d
+				AnimationEvent = 2
+					kbAnimEvent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						EventName = "Pounce_1"
+						EventTime =  0.900000
+						EventValue =  0.000000
+					}
+					kbAnimEvent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						EventName = "Pounce_1_Smear"
+						EventTime =  0.900000
+						EventValue =  0.000000
+					}
+				AnimationName = "Pounce_1"
 				IsLooping = 0
-				TimeScale =  5.000000
+				TimeScale =  1.000000
+			}
+			kbAnimComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Animation = .\assets\models\characters\3000ton\kungfusheep\pounce_2.kbanim.ms3d
+				AnimationEvent = 0
+				AnimationName = "Pounce_2"
+				IsLooping = 0
+				TimeScale =  1.000000
 			}
 		DebugAnimIndex = -1
 		Model = .\assets\models\characters\3000ton\3000ton.ms3d
@@ -4264,7 +4287,7 @@ kbGameEntity 0 0 0 0 {
 			}
 		RenderOrderBias =  0.000000
 		RenderPass = LightingPass
-		Animations = 2
+		Animations = 3
 			kbAnimComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
@@ -4277,11 +4300,20 @@ kbGameEntity 0 0 0 0 {
 			kbAnimComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
-				Animation = .\assets\models\characters\3000ton\kungfusheep\snolaf_squash_snolafs.kbanim.ms3d
+				Animation = .\assets\models\characters\3000ton\kungfusheep\pounce_1.kbanim.ms3d
 				AnimationEvent = 0
-				AnimationName = "Squash Snolafs"
+				AnimationName = "Pounce_1"
 				IsLooping = 0
-				TimeScale =  5.000000
+				TimeScale =  1.000000
+			}
+			kbAnimComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Animation = .\assets\models\characters\3000ton\kungfusheep\pounce_2.kbanim.ms3d
+				AnimationEvent = 0
+				AnimationName = "Pounce_2"
+				IsLooping = 0
+				TimeScale =  1.000000
 			}
 		DebugAnimIndex = -1
 		Model = .\assets\models\characters\3000ton\3000ton.ms3d
@@ -4290,10 +4322,89 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 1
 		LifeTime =  -1.000000
 		DummyTemp = 0
-		Health =  10.000000
+		Health =  100.000000
 		AttackVO = 0
 		Health =  100.000000
 		MaxRotateSpeed =  15.000000
 		MaxRunSpeed =  3.000000
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "3000 Ton Title"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 64.338379 -48.487957 -232.317795
+		Scale = 1.000000 1.000000 1.000000
+	}
+	kbUIWidgetComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Anchor = MiddleLeft
+		AxisLock = LockAll
+		ChildWidgets = 0
+		Materials = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\ui\ui_basic.kbshader
+				ShaderParams = 6
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "normalizedScreenSize_Anchor"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorFactor"
+						Texture = NULL
+						Vector = 1.000000 1.000000 1.000000 1.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "rotationAngle"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "additiveTextureParams"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "baseTexture"
+						Texture = .\assets\ui\kungfusheep\3000ton_title.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "additiveTexture"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		RelativePosition = 0.000000 0.000000 0.000000
+		RelativeSize = 1.000000 1.000000 1.000000
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "3000 Ton Smash Snolaf Pos"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 76.992683 -52.626686 -235.728653
+		Scale = 1.000000 1.000000 1.000000
 	}
 }

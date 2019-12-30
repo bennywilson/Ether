@@ -24,6 +24,7 @@
 	m_AnimSmearStartTime = -1.0f;
 
 	m_LastVOTime = 0.0f;
+	m_OverridenFXMaskParams.Set( -1.0f, -1.0f, -1.0f, -1.0f );
 
 	m_bIsPlayer = false;
 }
@@ -33,6 +34,8 @@
  */
 void CannonActorComponent::SetEnable_Internal( const bool bEnable ) {
 	Super::SetEnable_Internal( bEnable );
+
+	m_OverridenFXMaskParams.Set( -1.0f, -1.0f, -1.0f, -1.0f );
 
 	if ( bEnable ) {
 		m_SkelModelsList.clear();
@@ -157,6 +160,13 @@ void CannonActorComponent::ApplyAnimSmear( const kbVec3 smearVec, const float du
 }
 
 /**
+ *	CannonActorComponent::SetOverrideFXMaskParameters
+ */
+void CannonActorComponent::SetOverrideFXMaskParameters( const kbVec4 & fxParams ) {
+	m_OverridenFXMaskParams = fxParams;
+}
+
+/**
  *	CannonActorComponent::IsPlayingAnim
  */
 bool CannonActorComponent::IsPlayingAnim( const kbString animName ) const {
@@ -206,7 +216,17 @@ void CannonCameraComponent::Constructor() {
 	m_CameraShakeAmplitude.Set( 0.0f, 0.0f );
 	m_CameraShakeFrequency.Set( 0.0f, 0.0f );
 
-	m_SwitchTargetBlendSpeed = -1.0f;
+	m_SwitchTargetCurT= 1.0f;
+	m_SwitchTargetBlendSpeed = 1.0f;
+	m_SwitchTargetStartPos.Set( 0.0f, 0.0f, 0.0f );
+
+	m_SwitchLookAtOffsetCurT = 1.0f;
+	m_SwitchLookAtOffsetBlendSpeed = 1.0f;
+	m_LookAtOffsetTarget.Set( 0.0f, 0.0f, 0.0f );
+
+	m_SwitchPosOffsetBlendSpeed = 1.0f;
+	m_SwitchPosOffsetCurT = 1.0f;
+	m_PosOffsetTarget.Set( 0.0f, 0.0f, 0.0f );
 }
 
 /**
@@ -237,6 +257,36 @@ void CannonCameraComponent::SetTarget( const kbGameEntity *const pTarget, const 
 	}
 
 	m_pTarget = pTarget;
+}
+
+/**
+ *	CannonCameraComponent::SetPositionOffset
+ */
+void CannonCameraComponent::SetPositionOffset( const kbVec3 & posOffset, const float blendRate ) {
+	
+	if ( blendRate < 0.0f ) {
+		m_SwitchPosOffsetCurT = 1.0f;
+		m_PositionOffset = posOffset;
+	} else {
+		m_SwitchPosOffsetCurT = 0.0f;
+		m_SwitchPosOffsetBlendSpeed = blendRate;
+		m_PosOffsetTarget = posOffset;
+	}
+}
+
+/**
+ *	CannonCameraComponent::SetLookAtOffset
+ */
+void CannonCameraComponent::SetLookAtOffset( const kbVec3 & lookAtOffset, const float blendRate ) {
+
+	if ( blendRate < 0.0f ) {
+		m_SwitchLookAtOffsetCurT = 1.0f;
+		m_LookAtOffset = lookAtOffset;
+	} else {
+		m_SwitchLookAtOffsetBlendSpeed = blendRate;
+		m_SwitchLookAtOffsetCurT = 0.0f;
+		m_LookAtOffsetTarget = lookAtOffset;
+	}
 }
 
 /**
@@ -277,23 +327,41 @@ void CannonCameraComponent::Update_Internal( const float DeltaTime ) {
 		case MoveMode_Follow : {
 			if ( m_pTarget != nullptr ) {
 
+				// Target blend to
 				kbVec3 targetPosition = m_pTarget->GetPosition();
-				if ( m_SwitchTargetBlendSpeed > 0 ) {
+				if ( m_SwitchTargetCurT < 1.0f ) {
 					m_SwitchTargetCurT += m_SwitchTargetBlendSpeed * g_pGame->GetFrameDT();
 					targetPosition = kbLerp( m_SwitchTargetStartPos, targetPosition, kbSaturate( m_SwitchTargetCurT ) );
-					kbLog( "target pos = %.2f %.2f %.2f -- %.2f %.2f %.2f", targetPosition.x, targetPosition.y, targetPosition.z, m_SwitchTargetStartPos.x, m_SwitchTargetStartPos.y, m_SwitchTargetStartPos.z );
-					if ( ( targetPosition - m_SwitchTargetStartPos ).Length() < 0.0001f ) {
-						m_SwitchTargetBlendSpeed = -1.0f;
+				}
+
+				// LookAt offset blend
+				kbVec3 lookAtOffset = m_LookAtOffset;
+				if ( m_SwitchLookAtOffsetCurT < 1.0f ) {
+					m_SwitchLookAtOffsetCurT += m_SwitchLookAtOffsetBlendSpeed * g_pGame->GetFrameDT();
+					lookAtOffset = kbLerp( m_LookAtOffset, m_LookAtOffsetTarget, kbSaturate( m_SwitchLookAtOffsetCurT ) );
+					if ( m_SwitchLookAtOffsetCurT > 1.0f ) {
+						m_LookAtOffset = m_LookAtOffsetTarget;
 					}
 				}
-				GetOwner()->SetPosition( targetPosition + m_PositionOffset );
+
+				// Position offset blend
+				kbVec3 positionOffset = m_PositionOffset;
+				if ( m_SwitchPosOffsetCurT < 1.0f ) {
+					m_SwitchPosOffsetCurT += m_SwitchPosOffsetBlendSpeed * g_pGame->GetFrameDT();
+					positionOffset = kbLerp( m_PositionOffset, m_PosOffsetTarget, kbSaturate( m_SwitchPosOffsetCurT ) );
+					if ( m_SwitchPosOffsetCurT >= 1.0f ) {
+						m_PositionOffset = m_PosOffsetTarget;
+					}
+				}
+
+				GetOwner()->SetPosition( targetPosition + positionOffset );
 
 				kbMat4 cameraDestRot;
-				cameraDestRot.LookAt( GetOwner()->GetPosition(), targetPosition + m_LookAtOffset, kbVec3::up );
+				cameraDestRot.LookAt( GetOwner()->GetPosition(), targetPosition + lookAtOffset, kbVec3::up );
 				cameraDestRot.InvertFast();
 				GetOwner()->SetOrientation( kbQuatFromMatrix( cameraDestRot ) );
 
-				const kbVec3 cameraDestPos = targetPosition + m_PositionOffset;
+				const kbVec3 cameraDestPos = targetPosition + positionOffset;
 				GetOwner()->SetPosition( cameraDestPos + cameraDestRot[0].ToVec3() * camShakeOffset.x + cameraDestRot[1].ToVec3() * camShakeOffset.y );
 				GetOwner()->SetPosition( cameraDestPos + cameraDestRot[0].ToVec3() * camShakeOffset.x + cameraDestRot[1].ToVec3() * camShakeOffset.y );
 			}

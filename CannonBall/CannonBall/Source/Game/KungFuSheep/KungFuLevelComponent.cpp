@@ -37,7 +37,7 @@ public:
 
 private:
 
-	virtual void WidgetEventCB( kbUIWidget *const pWidget, const kbInput_t * pInput ) override {
+	virtual void WidgetEventCB( kbUIWidgetComponent *const pWidget, const kbInput_t * pInput ) override {
 
 		if ( pInput == nullptr || WasConfirmationButtonPressed( pInput ) == false ) {
 			return;
@@ -396,7 +396,7 @@ private:
 		}
 	}
 
-	virtual void WidgetEventCB( kbUIWidget *const pWidget, const kbInput_t * pInput ) override {
+	virtual void WidgetEventCB( kbUIWidgetComponent *const pWidget, const kbInput_t * pInput ) override {
 	
 		const auto pPauseMenu = KungFuSheepDirector::Get()->GetPauseMenu();
 		kbErrorCheck( pPauseMenu != nullptr, "KungFuGame_PausedState::WidgetEventCB() - null pause menu component" );
@@ -1118,7 +1118,7 @@ void KungFuSheepDirector::StateChangeCB( const KungFuGame::eKungFuGame_State pre
 /**
  *	KungFuSheepDirector::WidgetEventCB
  */
-void KungFuSheepDirector::WidgetEventCB( kbUIWidget *const pWidget, const kbInput_t *const pInput ) {
+void KungFuSheepDirector::WidgetEventCB( kbUIWidgetComponent *const pWidget, const kbInput_t *const pInput ) {
 	
 	m_States[m_CurrentState]->WidgetEventCB( pWidget, pInput );
 }
