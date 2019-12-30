@@ -35,6 +35,8 @@ public:
 
 		static kbString sPounce_1( "Pounce_1" );
 		static kbString sPounce_1_Smear( "Pounce_1_Smear" );
+		static kbString sPounce_2_Impact_1( "Pounce_2_Impact_1" );
+
 		const kbString eventName = animEvent.m_AnimEvent.GetEventName();
 		auto pSheep = KungFuLevelComponent::Get()->GetSheep();
 		if ( eventName == sPounce_1 ) {
@@ -50,7 +52,15 @@ public:
 
 		} else if ( eventName == sPounce_1_Smear ) {
 			auto pTreyTon = KungFuLevelComponent::Get()->Get3000Ton()->GetComponent<CannonActorComponent>();
-			pTreyTon->ApplyAnimSmear( kbVec3( 0.0f, 5.0f, 0.0f ), 0.067f );
+			pTreyTon->ApplyAnimSmear( kbVec3( 0.0f, 10.0f, 0.0f ), 0.067f );
+		} else if ( eventName == sPounce_2_Impact_1 ) {
+			kbVec3 fxPos = pSheep->GetOwnerPosition();
+			fxPos.z =  KungFuGame::kOutroStartZ + 7.0f;
+
+			pSheep->PlayCannonBallFX( fxPos );
+
+			auto pTreyTon = KungFuLevelComponent::Get()->Get3000Ton()->GetComponent<CannonActorComponent>();
+			pTreyTon->ApplyAnimSmear( kbVec3( 0.0f, 10.0f, 0.0f ), 0.067f );
 		}
 	}
 
@@ -151,8 +161,11 @@ public:
 			}
 
 			case SheepSnolafFaceOff : {
-				ChangeState( TreyTonPounce );
-				p3000Ton->PlayAnimation( sPounce_1, -1.0f );
+
+				if ( GetStateTime() > 3.0f ) {
+					ChangeState( TreyTonPounce );
+					p3000Ton->PlayAnimation( sPounce_1, -1.0f );
+				}
 
 				break;
 			}

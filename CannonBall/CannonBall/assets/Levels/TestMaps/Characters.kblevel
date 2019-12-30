@@ -10,8 +10,8 @@ kbGameEntity 0 0 0 0 {
 	kbEditorLevelSettingsComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		MainCameraPosition = 71.377953 -50.669586 -228.221039
-		MainCameraRotation = 0.048054 0.579899 -0.034297 -0.812546
+		MainCameraPosition = 70.369415 -50.669586 -233.948502
+		MainCameraRotation = 0.058046 0.754740 -0.067406 -0.649965
 	}
 }
 kbGameEntity 0 0 0 0 {
@@ -3686,7 +3686,7 @@ kbGameEntity 0 0 0 0 {
 		AxisLock = LockYAxis
 		ChildWidgets = 2
 			kbUIWidgetComponent { 
-				Enabled = 1
+				Enabled = 0
 				LifeTime =  -1.000000
 				Anchor = MiddleLeft
 				AxisLock = LockYAxis
@@ -4230,7 +4230,21 @@ kbGameEntity 0 0 0 0 {
 				Enabled = 0
 				LifeTime =  -1.000000
 				Animation = .\assets\models\characters\3000ton\kungfusheep\pounce_2.kbanim.ms3d
-				AnimationEvent = 0
+				AnimationEvent = 2
+					kbAnimEvent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						EventName = "Pounce_2_Impact_1"
+						EventTime =  6.7600000
+						EventValue =  0.000000
+					}
+					kbAnimEvent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						EventName = "Pounce_2_Smear"
+						EventTime =  0.000000
+						EventValue =  0.000000
+					}
 				AnimationName = "Pounce_2"
 				IsLooping = 0
 				TimeScale =  3.200000
