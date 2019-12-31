@@ -94,6 +94,7 @@ public:
 
 	void										DoWaterDropletScreenFX();
 	void										DoSplashSound();
+	kbGameEntityPtr								GetPresent( const int idx ) { return m_PresentsEnt[idx]; }
 
 	void										SetPlayLevelMusic( const int idx, const bool bPlay );
 
@@ -145,6 +146,8 @@ private:
 	KungFuSnolafComponent *						m_EndSnolafs[2];
 	KungFuSheepComponent *						m_pSheep;
 	CannonActorComponent *						m_p3000Ton;
+
+	kbGameEntityPtr								m_PresentsEnt[2];
 
 	static KungFuLevelComponent *				s_Inst;
 };

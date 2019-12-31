@@ -18,7 +18,7 @@ public:
 	} m_State;
 
 	kbGameEntityPtr m_p3000TonTitleEntity;
-	KungFuSnolafComponent * m_pSnolafGuards[3];
+	KungFuSnolafComponent * m_pSnolafGuards[2];
 	float m_StateStartTime;
 
 	KungFuGame_OutroState( KungFuLevelComponent *const pLevelComponent ) : KungFuGame_BaseState( pLevelComponent ) {
@@ -42,13 +42,15 @@ public:
 		if ( eventName == sPounce_1 ) {
 			m_pSnolafGuards[0]->RequestStateChange( KungFuSnolafState::Dead );
 			m_pSnolafGuards[1]->RequestStateChange( KungFuSnolafState::Dead );
-			m_pSnolafGuards[2]->RequestStateChange( KungFuSnolafState::Dead );
 
 			kbGameEntityPtr pEnt = g_pGame->GetEntityByName( kbString( "3000 Ton Smash Snolaf Pos" ) );
 			pSheep->PlayCannonBallFX( pEnt.GetEntity()->GetPosition() );
 	
 			// Give sheep big eyes
 			pSheep->SetOverrideFXMaskParameters( kbVec4( 0.0f, 0.0f, 1.0f, 0.0f ) );
+
+			KungFuLevelComponent::Get()->GetPresent(0).GetEntity()->GetComponent<kbFlingPhysicsComponent>()->Enable( true );
+			KungFuLevelComponent::Get()->GetPresent(1).GetEntity()->GetComponent<kbFlingPhysicsComponent>()->Enable( true );
 
 		} else if ( eventName == sPounce_1_Smear ) {
 			auto pTreyTon = KungFuLevelComponent::Get()->Get3000Ton()->GetComponent<CannonActorComponent>();
@@ -93,23 +95,23 @@ public:
 		pSheep->ExternalRequestStateChange( KungFuSheepState::Cinema );
 
 		static const kbString Run_Anim( "Run_Basic" );
+		static const kbString sOfferPresent_1( "OfferPresent_1" );
+		static const kbString sOfferPresent_2( "OfferPresent_2" );
+
 		pSheep->PlayAnimation( Run_Anim, 0.15f );
 		pSheep->SetTargetFacingDirection( kbVec3( 0.0f, 0.0f, -1.0f ) );
 
 		m_pSnolafGuards[0] = KungFuLevelComponent::Get()->GetSnolafFromPool();
-		m_pSnolafGuards[0]->SetOwnerPosition( KungFuGame::kFoxPos + kbVec3( 0.0f, 0.0f, 1.0f ) );
+		m_pSnolafGuards[0]->SetOwnerPosition( KungFuGame::kFoxPos + kbVec3( 0.0f, 0.0f, -1.6f ) );
 		m_pSnolafGuards[0]->RequestStateChange( KungFuSnolafState::Cinema );
-		m_pSnolafGuards[0]->SetTargetFacingDirection( kbVec3( 0.0f, 0.0f, 1.0f ) );
+		m_pSnolafGuards[0]->SetTargetFacingDirection( kbVec3( 0.0f, 0.0f, -1.0f ) );
+		m_pSnolafGuards[0]->PlayAnimation( sOfferPresent_1, 0.0f );
 
 		m_pSnolafGuards[1] = KungFuLevelComponent::Get()->GetSnolafFromPool();
-		m_pSnolafGuards[1]->SetOwnerPosition( KungFuGame::kFoxPos + kbVec3( 0.0f, 0.0f, -0.6f ) );
+		m_pSnolafGuards[1]->SetOwnerPosition( KungFuGame::kFoxPos + kbVec3( 0.0f, 0.0f, -2.9f ) );
 		m_pSnolafGuards[1]->RequestStateChange( KungFuSnolafState::Cinema );
 		m_pSnolafGuards[1]->SetTargetFacingDirection( kbVec3( 0.0f, 0.0f, 1.0f ) );
-
-		m_pSnolafGuards[2] = KungFuLevelComponent::Get()->GetSnolafFromPool();
-		m_pSnolafGuards[2]->SetOwnerPosition( KungFuGame::kFoxPos + kbVec3( 0.0f, 0.0f, -1.0f ) );
-		m_pSnolafGuards[2]->RequestStateChange( KungFuSnolafState::Cinema );
-		m_pSnolafGuards[2]->SetTargetFacingDirection( kbVec3( 0.0f, 0.0f, -1.0f ) );
+		m_pSnolafGuards[1]->PlayAnimation( sOfferPresent_1, 0.0f );
 
 		auto p3000Ton = KungFuLevelComponent::Get()->Get3000Ton();
 		p3000Ton->SetOwnerPosition( KungFuGame::kTreyTonStartPos );
@@ -125,6 +127,9 @@ public:
 
 		static const kbString s3000TonTitle( "3000 Ton Title" );
 		m_p3000TonTitleEntity = g_pGame->GetEntityByName( s3000TonTitle );
+
+		KungFuLevelComponent::Get()->GetPresent(0).GetEntity()->GetComponent<kbSkeletalModelComponent>()->Enable( true );
+		KungFuLevelComponent::Get()->GetPresent(1).GetEntity()->GetComponent<kbSkeletalModelComponent>()->Enable( true );
 	}
 
 	virtual void UpdateState_Internal() override {
@@ -162,7 +167,7 @@ public:
 
 			case SheepSnolafFaceOff : {
 
-				if ( GetStateTime() > 3.0f ) {
+				if ( GetStateTime() > 1.25f ) {
 					ChangeState( TreyTonPounce );
 					p3000Ton->PlayAnimation( sPounce_1, -1.0f );
 				}
@@ -284,6 +289,11 @@ public:
 		auto pCamera = g_pCannonGame->GetMainCamera();
 		pCamera->SetLookAtOffset( kbVec3( 0.000000f, 2.500000f, 0.000000f ), -1.0f );
 		pCamera->SetPositionOffset( kbVec3( -10.933998f, 3.224068f, 0.000000f ), -1.0f );
+
+		KungFuLevelComponent::Get()->GetPresent(0).GetEntity()->GetComponent<kbSkeletalModelComponent>()->Enable( false );
+		KungFuLevelComponent::Get()->GetPresent(1).GetEntity()->GetComponent<kbSkeletalModelComponent>()->Enable( false );
+		KungFuLevelComponent::Get()->GetPresent(0).GetEntity()->GetComponent<kbFlingPhysicsComponent>()->Enable( false );
+		KungFuLevelComponent::Get()->GetPresent(1).GetEntity()->GetComponent<kbFlingPhysicsComponent>()->Enable( false );
 	}
 
 private:

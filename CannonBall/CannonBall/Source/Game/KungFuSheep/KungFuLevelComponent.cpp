@@ -573,17 +573,27 @@ void KungFuLevelComponent::Update_Internal( const float DeltaTime ) {
 		return;
 	}
 
-	if ( m_p3000Ton == nullptr ) {
+	if ( m_p3000Ton == nullptr || m_PresentsEnt[0].GetEntity() == nullptr ) {
 		// SetPlayLevelMusic( true );
-		static const kbString BossName( "3000 Ton" );
+		static const kbString sBossName( "3000 Ton" );
+		static const kbString sPresent_1( "Present_1" );
+		static const kbString sPresent_2( "Present_2" );
+
 		for ( int i = 0; i < g_pCannonGame->GetGameEntities().size(); i++ ) {
 			kbGameEntity *const pEnt = g_pCannonGame->GetGameEntities()[i];
-			if ( pEnt->GetName() == BossName ) {
+			if ( pEnt->GetName() == sBossName ) {
 				m_p3000Ton = pEnt->GetComponent<CannonActorComponent>();
+			} else if ( pEnt->GetName() == sPresent_1 ) {
+				m_PresentsEnt[0].SetEntity( pEnt );
+			} else if ( pEnt->GetName() == sPresent_2 ) {
+				m_PresentsEnt[1].SetEntity( pEnt );
 			}
 		}
 	}
 
+	if ( m_PresentsEnt[0].GetEntity() == nullptr ) {
+
+	}
 	const auto pSheep = GetSheep();
 	if ( pSheep != nullptr ) {
 		g_pRenderer->DrawDebugText( std::to_string( pSheep->GetOwnerPosition().z ), 0.75f, 0.1f, g_DebugTextSize, g_DebugTextSize, kbColor::red ); 

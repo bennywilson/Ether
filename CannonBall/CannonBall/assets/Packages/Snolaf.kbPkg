@@ -345,7 +345,7 @@ kbGameEntity 314357658 1122514197 2466994618 463523205 {
 			}
 		RenderOrderBias =  0.000000
 		RenderPass = LightingPass
-		Animations = 7
+		Animations = 11
 			kbAnimComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
@@ -423,6 +423,42 @@ kbGameEntity 314357658 1122514197 2466994618 463523205 {
 				IsLooping = 1
 				TimeScale =  3.000000
 			}
+			kbAnimComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Animation = .\assets\models\characters\snolaf\kungfusheep\offerpresent_1.kbanim.ms3d
+				AnimationEvent = 0
+				AnimationName = "OfferPresent_1"
+				IsLooping = 0
+				TimeScale =  1.000000
+			}
+			kbAnimComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Animation = .\assets\models\characters\snolaf\kungfusheep\offerpresent_2.kbanim.ms3d
+				AnimationEvent = 0
+				AnimationName = "OfferPresent_2"
+				IsLooping = 0
+				TimeScale =  1.000000
+			}
+			kbAnimComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Animation = .\assets\models\characters\snolaf\kungfusheep\staredown_1.kbanim.ms3d
+				AnimationEvent = 0
+				AnimationName = "StareDown_1"
+				IsLooping = 0
+				TimeScale =  1.000000
+			}
+			kbAnimComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Animation = .\assets\models\characters\snolaf\kungfusheep\staredown_2.kbanim.ms3d
+				AnimationEvent = 0
+				AnimationName = "StareDown_2"
+				IsLooping = 0
+				TimeScale =  1.000000
+			}
 		DebugAnimIndex = -1
 		Model = .\assets\models\characters\snolaf\snolaf.ms3d
 	}
@@ -475,7 +511,7 @@ kbGameEntity 314357658 1122514197 2466994618 463523205 {
 			}
 		RenderOrderBias =  0.000000
 		RenderPass = LightingPass
-		Animations = 7
+		Animations = 11
 			kbAnimComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
@@ -538,6 +574,42 @@ kbGameEntity 314357658 1122514197 2466994618 463523205 {
 				AnimationName = "Hug_Forward"
 				IsLooping = 0
 				TimeScale =  3.000000
+			}
+			kbAnimComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Animation = .\assets\models\characters\snolaf\kungfusheep\offerpresent_1.kbanim.ms3d
+				AnimationEvent = 0
+				AnimationName = "OfferPresent_1"
+				IsLooping = 0
+				TimeScale =  1.000000
+			}
+			kbAnimComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Animation = .\assets\models\characters\snolaf\kungfusheep\offerpresent_2.kbanim.ms3d
+				AnimationEvent = 0
+				AnimationName = "OfferPresent_2"
+				IsLooping = 0
+				TimeScale =  1.000000
+			}
+			kbAnimComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Animation = .\assets\models\characters\snolaf\kungfusheep\staredown_1.kbanim.ms3d
+				AnimationEvent = 0
+				AnimationName = "StareDown_1"
+				IsLooping = 0
+				TimeScale =  1.000000
+			}
+			kbAnimComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Animation = .\assets\models\characters\snolaf\kungfusheep\staredown_2.kbanim.ms3d
+				AnimationEvent = 0
+				AnimationName = "StareDown_2"
+				IsLooping = 0
+				TimeScale =  1.000000
 			}
 		DebugAnimIndex = -1
 		Model = .\assets\models\characters\snolaf\snolaf.ms3d
