@@ -232,25 +232,28 @@ public:
 			}
 
 			case TreyTonPounce2 : {
+
+				// Start Pounce2
 				if ( GetStateTime() > 0.15f ) {
 					p3000Ton->PlayAnimation( sPounce_2, 0.15f, false );
 				}
+
+				// Sheep starts watching 3000 Tons' pounce
 				if ( GetStateTime() > 0.85f ) {
 					pSheep->PlayAnimation( kbString( "Watch3000Ton" ), 0.5f, false );
 				}
 
+				// Play baa
 				if ( GetStateTime() > 1.6f ) {
 					pSheep->PlayBaa( 2 );
 					ChangeState( SheepDodge );
-					pSheep->SetOverrideFXMaskParameters( kbVec4( 1.0f, 0.0f, 0.0f, 0.0f ) );
-					pSheep->SetOverrideFXMaskParameters( kbVec4( 1.0f, 0.0f, 0.0f, 0.0f ) );
 				}
 				break;
 			}
 
 			case SheepDodge:
 			{
-				const float sheepHopRate = 3.1f;
+				const float sheepHopRate = 4.0f;
 				const float sheepTargetZ = -241.8f;
 				 
 				if ( GetStateTime() > 0.25f ) {
@@ -258,14 +261,19 @@ public:
 					sheepPos.z += sheepHopRate * g_pGame->GetFrameDT();
 					if ( sheepPos.z >= sheepTargetZ ) {
 						sheepPos.z = sheepTargetZ;
-						ChangeState( TreyTonExit );
+						pSheep->SetOverrideFXMaskParameters( kbVec4( 1.0f, 0.0f, 0.0f, 0.0f ) );
+						pSheep->SetOverrideFXMaskParameters( kbVec4( 1.0f, 0.0f, 0.0f, 0.0f ) );
 					}
 					pSheep->SetOwnerPosition( sheepPos );
+
+					if ( GetStateTime() > 1.65f ) {
+						ChangeState( TreyTonExit );
+					}
 				}
+				break;
 			}
 
-			case TreyTonExit :
-			{
+			case TreyTonExit : {
 				if ( GetStateTime() > 2.0f ) {
 					pSheep->PlayAnimation( kbString( "Run_Basic" ), 0.15f );
 					kbVec3 sheepPos = pSheep->GetOwnerPosition();
