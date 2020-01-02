@@ -14,15 +14,27 @@ public:
 		TreyTonPounce2,
 		SheepDodge,
 		TreyTonExit,
-		Dance
+		Dance,
+		Snolaf_Reenter,
+		Disrespect,
+		DanceStare,
+		Title_Snolaf,
+		Title_Sheep,
+		Title_Fox,
+		Painted_Title,
+		FadeOut
 	} m_State;
 
 	kbGameEntityPtr m_p3000TonTitleEntity;
+	kbGameEntityPtr m_pTitle;
+
 	KungFuSnolafComponent * m_pSnolafGuards[2];
+	KungFuSnolafComponent * m_pLastSnolaf;
 	float m_StateStartTime;
 
 	KungFuGame_OutroState( KungFuLevelComponent *const pLevelComponent ) : KungFuGame_BaseState( pLevelComponent ) {
-
+		m_pSnolafGuards[0] = m_pSnolafGuards[1] = nullptr;
+		m_pLastSnolaf = nullptr;
 	}
 
 	void ChangeState( const eOutroState_States newState ) {
@@ -61,6 +73,9 @@ public:
 
 			pSheep->PlayCannonBallFX( fxPos );
 
+			// Smash bridge
+			KungFuLevelComponent::Get()->DoBreakBridgeEffect( true );
+
 			auto pTreyTon = KungFuLevelComponent::Get()->Get3000Ton()->GetComponent<CannonActorComponent>();
 			pTreyTon->ApplyAnimSmear( kbVec3( 0.0f, 10.0f, 0.0f ), 0.067f );
 		}
@@ -72,7 +87,9 @@ public:
 
 	virtual void BeginState_Internal( KungFuGame::eKungFuGame_State previousState ) override {
 		
-		static kbString sOutroCam1 = kbString( "Outro Camera 1" );
+		static kbString sOutroCam1( "Outro Camera 1" );
+		static kbString sCry( "Cry" );
+
 		for ( int i = 0; i < g_pCannonGame->GetGameEntities().size(); i++ ) {
 
 			kbGameEntity *const pTargetEnt = g_pCannonGame->GetGameEntities()[i];
@@ -91,7 +108,8 @@ public:
 
 		ChangeState( SheepInitialWalkUp );
 
-		auto pSheep = KungFuLevelComponent::Get()->GetSheep();
+		auto pLevelComp = KungFuLevelComponent::Get();
+		auto pSheep = pLevelComp->GetSheep();
 		pSheep->ExternalRequestStateChange( KungFuSheepState::Cinema );
 
 		static const kbString Run_Anim( "Run_Basic" );
@@ -128,8 +146,17 @@ public:
 		static const kbString s3000TonTitle( "3000 Ton Title" );
 		m_p3000TonTitleEntity = g_pGame->GetEntityByName( s3000TonTitle );
 
-		KungFuLevelComponent::Get()->GetPresent(0).GetEntity()->GetComponent<kbSkeletalModelComponent>()->Enable( true );
-		KungFuLevelComponent::Get()->GetPresent(1).GetEntity()->GetComponent<kbSkeletalModelComponent>()->Enable( true );
+		static const kbString sTitle( "Title" );
+		m_pTitle = g_pGame->GetEntityByName( sTitle );
+
+		auto pFox = pLevelComp->GetFox();
+		pFox->PlayAnimation( sCry, 0.0f );
+		pFox->SetTargetFacingDirection( kbVec3( -1.0f, 0.0f, 0.0f ) );
+
+		pLevelComp->GetPresent(0).GetEntity()->GetComponent<kbSkeletalModelComponent>()->Enable( true );
+		pLevelComp->GetPresent(1).GetEntity()->GetComponent<kbSkeletalModelComponent>()->Enable( true );
+
+		m_pLastSnolaf = nullptr;
 	}
 
 	virtual void UpdateState_Internal() override {
@@ -142,10 +169,14 @@ public:
 
 		static const kbString sPounce_1( "Pounce_1" );
 		static const kbString sPounce_2( "Pounce_2" );
+		static const kbString sFoxStare( "Stare" );
+		static const kbString sDance( "Dance" );
+		static const kbString sDisrespect( "Disrespect" );
 
 		auto pSheep = KungFuLevelComponent::Get()->GetSheep();
 		auto p3000Ton = KungFuLevelComponent::Get()->Get3000Ton();
 		auto pCamera = g_pCannonGame->GetMainCamera();
+		auto pFox = KungFuLevelComponent::Get()->GetFox()->GetComponent<CannonActorComponent>();
 
 		const float SheepPullUpZ = KungFuGame::kOutroStartZ + 7.0f;
 
@@ -201,7 +232,6 @@ public:
 				const float ZoomOutSpeed = 3.0f;
 				const kbVec3 TreyTonLandSpot( 76.992683f, -52.626686f, -235.728653f );
 
-
 				if ( GetStateTime() > DisplayTitleTime ) {
 					if ( m_p3000TonTitleEntity.GetEntity() != nullptr ) {
 						m_p3000TonTitleEntity.GetEntity()->GetComponent<kbUIWidgetComponent>()->Enable( true );
@@ -209,7 +239,6 @@ public:
 				}
 
 				if ( GetStateTime() > HideTitleTime ) {
-
 
 					auto pCamera = g_pCannonGame->GetMainCamera();
 					pCamera->SetLookAtOffset( kbVec3( 0.000000f, 2.500000f, 0.000000f ), ZoomOutSpeed );
@@ -219,6 +248,7 @@ public:
 					if ( pOutroCamEnt.GetEntity() != nullptr ) {
 						pCamera->SetTarget( pOutroCamEnt.GetEntity(), ZoomOutSpeed );
 					}
+
 					if ( m_p3000TonTitleEntity.GetEntity() != nullptr ) {
 						m_p3000TonTitleEntity.GetEntity()->GetComponent<kbUIWidgetComponent>()->Enable( false );
 					}
@@ -251,8 +281,7 @@ public:
 				break;
 			}
 
-			case SheepDodge:
-			{
+			case SheepDodge: {
 				const float sheepHopRate = 4.0f;
 				const float sheepTargetZ = -241.8f;
 				 
@@ -266,6 +295,10 @@ public:
 					}
 					pSheep->SetOwnerPosition( sheepPos );
 
+					if ( GetStateTime() > 1.2f ) {
+						pFox->GetComponent<CannonActorComponent>()->PlayAnimation( sFoxStare, 0.15f, false );
+					}
+
 					if ( GetStateTime() > 1.65f ) {
 						ChangeState( TreyTonExit );
 					}
@@ -274,17 +307,155 @@ public:
 			}
 
 			case TreyTonExit : {
-				if ( GetStateTime() > 2.0f ) {
+				bool bFin = true;
+				const float StareAtCamLen = 1.0f;
+				if ( GetStateTime() > StareAtCamLen ) {
 					pSheep->PlayAnimation( kbString( "Run_Basic" ), 0.15f );
 					kbVec3 sheepPos = pSheep->GetOwnerPosition();
 					sheepPos.z += pSheep->GetMaxRunSpeed() * g_pGame->GetFrameDT();
 					if ( sheepPos.z >= KungFuGame::kSheepFinalPos.z ) {
 						sheepPos.z = KungFuGame::kSheepFinalPos.z;
 						pSheep->PlayAnimation( kbString( "IdleLeft_Basic" ), 0.0f );
-						ChangeState( Dance );
+					} else {
+						bFin = false;
 					}
 					pSheep->SetOwnerPosition( sheepPos );
+				} else {
+					bFin = false;
 				}
+
+				if ( GetStateTime() > StareAtCamLen + 0.15f ) {
+					pFox->SetTargetFacingDirection( kbVec3( 0.0f, 0.0f, 1.0f ) );
+					pFox->PlayAnimation( kbString( "Walk" ), 0.15f );
+
+					kbVec3 foxPos = pFox->GetOwnerPosition();
+					foxPos.z -= pFox->GetMaxRunSpeed() * g_pGame->GetFrameDT();
+					const kbVec3 targetPos = KungFuGame::kSheepFinalPos + kbVec3( 0.0f, 0.0f, 2.2f );
+					if ( foxPos.z <= targetPos.z ) {
+						foxPos.z = targetPos.z;
+						pFox->PlayAnimation( kbString( "Idle" ), 0.15f );
+					} else {
+						bFin = false;
+					}
+					pFox->SetOwnerPosition( foxPos );
+				}
+
+				if ( bFin ) {
+					ChangeState( Dance );
+					pFox->PlayAnimation( sDance, 0.15f );
+					pFox->SetTargetFacingDirection( kbVec3( -1.f, 0.0f, 0.0f ) );
+
+					pSheep->PlayAnimation( sDance, 0.15f );
+					pSheep->SetTargetFacingDirection( kbVec3( -1.f, 0.0f, 0.0f ) );
+				} else {
+					bFin = false;
+				}
+				break;
+			}
+
+			case Dance : {
+
+				if ( GetStateTime() > 1.0f ) {
+					m_pLastSnolaf = KungFuLevelComponent::Get()->GetSnolafFromPool();
+					m_pLastSnolaf->SetOwnerPosition( kbVec3( 76.99268f, -52.6362f, -226.846f ) );
+					m_pLastSnolaf->RequestStateChange( KungFuSnolafState::Cinema );
+					m_pLastSnolaf->SetTargetFacingDirection( kbVec3( 0.0f, 0.0f, 1.0f ) );
+					m_pLastSnolaf->PlayAnimation( kbString( "Reenter" ), 0.0f );
+					ChangeState( Snolaf_Reenter );
+				}
+				break;
+			}
+			case Snolaf_Reenter : {
+
+				const float SnolafPeerLen = 3.0f;
+				const float SnolafRunMultiplier = 2.0f;
+
+				if ( GetStateTime() > SnolafPeerLen ) {
+					const kbVec3 snolafTargetPos = KungFuGame::kSheepFinalPos + kbVec3( 0.0f, 0.0f, 1.1f );
+					kbVec3 snolafCurPos = m_pLastSnolaf->GetOwnerPosition();
+					if ( snolafCurPos.z > snolafTargetPos.z ) {
+						m_pLastSnolaf->PlayAnimation( kbString( "Run" ), 0.15f );
+						snolafCurPos.z -= m_pLastSnolaf->GetMaxRunSpeed() * g_pGame->GetFrameDT() * SnolafRunMultiplier;
+					} else {
+						m_pLastSnolaf->PlayAnimation( kbString( "Dance" ), 0.15f );
+						m_pLastSnolaf->SetTargetFacingDirection( kbVec3( -1.0f, 0.0f, 0.0f ) );
+						ChangeState( DanceStare );
+					}
+					m_pLastSnolaf->SetOwnerPosition( snolafCurPos );
+				} else {
+					// Move Snolaf to edge of screen
+					if ( GetStateTime() > 0.5f ) {
+						m_pLastSnolaf->SetOwnerPosition( kbVec3( 76.99268f, -52.6362f, -227.846f ) );
+					}
+				}
+				break;
+			}
+
+			case DanceStare : {
+
+				const float FoxStareTime = 1.5f;
+				const float SheepStareTime = 1.25f;
+
+				if ( GetStateTime() > SheepStareTime ) {
+					pSheep->PlayAnimation( kbString( "Dance_Stare" ), 0.15f );
+				}
+
+				if ( GetStateTime() > FoxStareTime ) {
+					pFox->PlayAnimation( kbString( "Dance_Stare" ), 0.15f );
+					ChangeState( Disrespect );
+				}	
+				break;
+			}
+
+			case Disrespect : {
+				if ( GetStateTime() > 1.45f ) {
+					pSheep->PlayAnimation( kbString( "Disrespect" ), 0.15f );
+				}
+
+				if ( GetStateTime() > 1.5f ) {
+					pFox->PlayAnimation( kbString( "Disrespect" ), 0.15f );
+					pFox->SetTargetFacingDirection( kbVec3( 0.0f, 0.0f, 1.0f ) );
+				}
+				if ( GetStateTime() > 3.2f ) {
+					pFox->PlayAnimation( kbString( "Slap Snolaf" ), 0.15f, false );
+					pSheep->PlayAnimation( kbString( "Slap Snolaf" ), 0.15f, false );
+					ChangeState( Title_Snolaf );
+				}
+				break;
+			}
+
+			case Title_Snolaf : {
+				if ( GetStateTime() > 0.25f ) {
+					m_pLastSnolaf->PlayAnimation( kbString( "Title" ), 0.15f );
+					ChangeState( Title_Sheep );
+				}
+
+				break;
+			}
+
+			case Title_Sheep : {
+				if ( GetStateTime() > 1.0f ) {
+					pSheep->PlayAnimation( kbString( "Title" ), 0.15f );
+					ChangeState( Title_Fox );
+				}
+				break;
+			}
+
+			case Title_Fox : {
+				if ( GetStateTime() > 1.0f ) {
+					pFox->PlayAnimation( kbString( "Title" ), 0.15f );
+					ChangeState( Painted_Title );
+				}
+				break;
+			}
+
+			case Painted_Title : {
+				if ( GetStateTime() > 2.0f ) {
+					if ( m_pTitle.GetEntity() != nullptr ) {
+						m_pTitle.GetEntity()->GetComponent<kbUIWidgetComponent>()->Enable( true );
+					}
+				}
+				break;
 			}
 		}
 	}
@@ -302,6 +473,13 @@ public:
 		KungFuLevelComponent::Get()->GetPresent(1).GetEntity()->GetComponent<kbSkeletalModelComponent>()->Enable( false );
 		KungFuLevelComponent::Get()->GetPresent(0).GetEntity()->GetComponent<kbFlingPhysicsComponent>()->Enable( false );
 		KungFuLevelComponent::Get()->GetPresent(1).GetEntity()->GetComponent<kbFlingPhysicsComponent>()->Enable( false );
+		KungFuLevelComponent::Get()->GetPresent(0).GetEntity()->GetComponent<kbFlingPhysicsComponent>()->ResetToStartPos();
+		KungFuLevelComponent::Get()->GetPresent(1).GetEntity()->GetComponent<kbFlingPhysicsComponent>()->ResetToStartPos();
+		KungFuLevelComponent::Get()->DoBreakBridgeEffect( false );
+
+		if ( m_pTitle.GetEntity() != nullptr ) {
+			m_pTitle.GetEntity()->GetComponent<kbUIWidgetComponent>()->Enable( false );
+		}
 	}
 
 private:

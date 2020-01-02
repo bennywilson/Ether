@@ -88,6 +88,7 @@ public:
 	class KungFuSheepComponent *				SpawnSheep();
 	KungFuSheepComponent *						GetSheep() const { return m_pSheep; }
 	CannonActorComponent *						Get3000Ton() const { return m_p3000Ton; }
+	CannonActorComponent *						GetFox() const { return m_pFox; }
 
 	void										UpdateSheepHealthBar( const float healthVal );
 	void										UpdateCannonBallMeter( const float value, const bool bActivated );
@@ -95,6 +96,7 @@ public:
 	void										DoWaterDropletScreenFX();
 	void										DoSplashSound();
 	kbGameEntityPtr								GetPresent( const int idx ) { return m_PresentsEnt[idx]; }
+	void										DoBreakBridgeEffect( const bool bBreakIt );
 
 	void										SetPlayLevelMusic( const int idx, const bool bPlay );
 
@@ -126,6 +128,7 @@ private:
 	kbGameEntityPtr								m_WaterDropletScreenFX;
 	std::vector<kbSoundData>					m_WaterSplashSound;
 
+
 	// Runtime
 	float										m_WaterDropletFXStartTime;
 
@@ -146,8 +149,10 @@ private:
 	KungFuSnolafComponent *						m_EndSnolafs[2];
 	KungFuSheepComponent *						m_pSheep;
 	CannonActorComponent *						m_p3000Ton;
+	CannonActorComponent *						m_pFox;
 
 	kbGameEntityPtr								m_PresentsEnt[2];
+	kbGameEntityPtr								m_BridgeBreakDecal;
 
 	static KungFuLevelComponent *				s_Inst;
 };

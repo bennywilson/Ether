@@ -578,7 +578,8 @@ void KungFuLevelComponent::Update_Internal( const float DeltaTime ) {
 		static const kbString sBossName( "3000 Ton" );
 		static const kbString sPresent_1( "Present_1" );
 		static const kbString sPresent_2( "Present_2" );
-
+		static const kbString sBreakBridgeDecal( "Bridge Decal" );
+		static const kbString sFox( "Fox" );
 		for ( int i = 0; i < g_pCannonGame->GetGameEntities().size(); i++ ) {
 			kbGameEntity *const pEnt = g_pCannonGame->GetGameEntities()[i];
 			if ( pEnt->GetName() == sBossName ) {
@@ -587,6 +588,10 @@ void KungFuLevelComponent::Update_Internal( const float DeltaTime ) {
 				m_PresentsEnt[0].SetEntity( pEnt );
 			} else if ( pEnt->GetName() == sPresent_2 ) {
 				m_PresentsEnt[1].SetEntity( pEnt );
+			} else if ( pEnt->GetName() == sBreakBridgeDecal ) {
+				m_BridgeBreakDecal.SetEntity( pEnt );
+			} else if ( pEnt->GetName() == sFox ) {
+				m_pFox = pEnt->GetComponent<CannonActorComponent>();
 			}
 		}
 	}
@@ -596,7 +601,7 @@ void KungFuLevelComponent::Update_Internal( const float DeltaTime ) {
 	}
 	const auto pSheep = GetSheep();
 	if ( pSheep != nullptr ) {
-		g_pRenderer->DrawDebugText( std::to_string( pSheep->GetOwnerPosition().z ), 0.75f, 0.1f, g_DebugTextSize, g_DebugTextSize, kbColor::red ); 
+	//	g_pRenderer->DrawDebugText( std::to_string( pSheep->GetOwnerPosition().z ), 0.75f, 0.1f, g_DebugTextSize, g_DebugTextSize, kbColor::red ); 
 	}
 	KungFuSheepDirector::Get()->UpdateStateMachine();
 
@@ -847,6 +852,14 @@ void KungFuLevelComponent::DoSplashSound() {
 
 	m_LastWaterSplashSoundTime = g_GlobalTimer.TimeElapsedSeconds();
 	m_WaterSplashSound[rand() % m_WaterSplashSound.size()].PlaySoundAtPosition( kbVec3( 0.0f, 0.0f, 0.0f ) );
+}
+
+/**
+ *	KungFuLevelComponent::DoBreakBridgeEffect
+ */
+void KungFuLevelComponent::DoBreakBridgeEffect( const bool bBreakIt ) {
+
+	m_BridgeBreakDecal.GetEntity()->GetComponent<kbStaticModelComponent>()->Enable( bBreakIt );
 }
 
 /**

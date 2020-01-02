@@ -8,6 +8,7 @@ cbuffer matrixBuffer {
 	matrix mvpMatrix;
 	float4 cameraPos;
 	float4 uvScale = (1,1,1,1);
+	float4 clipMask = (1,0,0,0);
 };
 
 kbShaderState {
@@ -82,6 +83,7 @@ Texture2D propertyMap(white)		: register(t2);
 
 Texture2D emissiveMap(black)		: register(t3);
 
+Texture2D clipMap(white)			: register(t4);
 
  PS_OUTPUT pixelShader( pixelInput	input, bool IsFrontFace	: SV_IsFrontFace ) {
  	PS_OUTPUT output = (PS_OUTPUT) 0;
@@ -89,6 +91,8 @@ Texture2D emissiveMap(black)		: register(t3);
 	const float4 normalMap = normal.Sample( diffuseSampler, input.uv );
 	const float4 propertyMapValues = propertyMap.Sample( diffuseSampler, input.uv );
 	const float4 emissive = emissiveMap.Sample( diffuseSampler, input.uv );
+	const float clipMask = clipMap.Sample( diffuseSampler, input.uv ).r;
+	clip( clipMask - 0.001f );
 
 	output.Color = diffuse.Sample( diffuseSampler, input.uv );
 	output.Color.w = emissive.z;

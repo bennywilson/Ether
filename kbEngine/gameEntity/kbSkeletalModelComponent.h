@@ -122,6 +122,8 @@ class kbFlingPhysicsComponent: public kbGameComponent {
 //---------------------------------------------------------------------------------------------------
 public:
 
+	void										ResetToStartPos() { SetOwnerPosition( m_OwnerStartPos ); SetOwnerRotation( m_OwnerStartRotation ); }
+
 protected:
 
 	virtual void								SetEnable_Internal( const bool isEnabled ) override;

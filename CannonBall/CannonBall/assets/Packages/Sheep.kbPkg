@@ -1217,7 +1217,7 @@ kbGameEntity 3807537734 1283872403 1661460398 2211889957 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		Name = "Player"
+		Name = "Kung-Fu Sheep"
 		Orientation = 0.000000 1.000000 0.000000 0.000000
 		Position = 77.104454 -52.635265 -391.559143
 		Scale = 1.000000 1.000000 1.000000
@@ -1299,7 +1299,7 @@ kbGameEntity 3807537734 1283872403 1661460398 2211889957 {
 			}
 		RenderOrderBias =  0.000000
 		RenderPass = LightingPass
-		Animations = 11
+		Animations = 16
 			kbAnimComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
@@ -1425,7 +1425,52 @@ kbGameEntity 3807537734 1283872403 1661460398 2211889957 {
 				AnimationEvent = 0
 				AnimationName = "Watch3000Ton"
 				IsLooping = 0
-				TimeScale =  1.7500000
+				TimeScale =  1.750000
+			}
+			kbAnimComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Animation = .\assets\models\characters\sheep\kungfusheep\sheep_dance.kbanim.ms3d
+				AnimationEvent = 0
+				AnimationName = "Dance"
+				IsLooping = 1
+				TimeScale =  5.000000
+			}
+			kbAnimComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Animation = .\assets\models\characters\sheep\kungfusheep\sheep_dance_stare.kbanim.ms3d
+				AnimationEvent = 0
+				AnimationName = "Dance_Stare"
+				IsLooping = 1
+				TimeScale =  5.000000
+			}
+			kbAnimComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Animation = .\assets\models\characters\sheep\kungfusheep\sheep_disrespect.kbanim.ms3d
+				AnimationEvent = 0
+				AnimationName = "Disrespect"
+				IsLooping = 1
+				TimeScale =  5.000000
+			}
+			kbAnimComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Animation = .\assets\models\characters\sheep\kungfusheep\sheep_slap.kbanim.ms3d
+				AnimationEvent = 0
+				AnimationName = "Slap Snolaf"
+				IsLooping = 0
+				TimeScale =  5.000000
+			}
+			kbAnimComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Animation = .\assets\models\characters\sheep\kungfusheep\sheep_title.kbanim.ms3d
+				AnimationEvent = 0
+				AnimationName = "Title"
+				IsLooping = 0
+				TimeScale =  1.000000
 			}
 		DebugAnimIndex = -1
 		Model = .\assets\models\characters\sheep\sheep.ms3d
@@ -1507,7 +1552,7 @@ kbGameEntity 3807537734 1283872403 1661460398 2211889957 {
 			}
 		RenderOrderBias =  0.000000
 		RenderPass = Post-LightingPass
-		Animations = 11
+		Animations = 16
 			kbAnimComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
@@ -1676,6 +1721,51 @@ kbGameEntity 3807537734 1283872403 1661460398 2211889957 {
 				AnimationName = "Watch3000Ton"
 				IsLooping = 0
 				TimeScale =  0.500000
+			}
+			kbAnimComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Animation = .\assets\models\characters\sheep\kungfusheep\sheep_dance.kbanim.ms3d
+				AnimationEvent = 0
+				AnimationName = "Dance"
+				IsLooping = 1
+				TimeScale =  5.000000
+			}
+			kbAnimComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Animation = .\assets\models\characters\sheep\kungfusheep\sheep_dance_stare.kbanim.ms3d
+				AnimationEvent = 0
+				AnimationName = "Dance_Stare"
+				IsLooping = 1
+				TimeScale =  5.000000
+			}
+			kbAnimComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Animation = .\assets\models\characters\sheep\kungfusheep\sheep_disrespect.kbanim.ms3d
+				AnimationEvent = 0
+				AnimationName = "Disrespect"
+				IsLooping = 1
+				TimeScale =  1.000000
+			}
+			kbAnimComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Animation = .\assets\models\characters\sheep\kungfusheep\sheep_slap.kbanim.ms3d
+				AnimationEvent = 0
+				AnimationName = "Slap_Snolaf"
+				IsLooping = 0
+				TimeScale =  1.000000
+			}
+			kbAnimComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Animation = .\assets\models\characters\sheep\kungfusheep\sheep_title.kbanim.ms3d
+				AnimationEvent = 0
+				AnimationName = "Title"
+				IsLooping = 0
+				TimeScale =  1.000000
 			}
 		DebugAnimIndex = -1
 		Model = .\assets\models\characters\sheep\sheep.ms3d

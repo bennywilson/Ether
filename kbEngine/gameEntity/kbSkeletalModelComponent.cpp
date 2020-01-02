@@ -618,9 +618,8 @@ void kbFlingPhysicsComponent::SetEnable_Internal( const bool bEnable ) {
 
 		m_FlingStartTime = g_GlobalTimer.TimeElapsedSeconds();
 	} else {
-		{
-			SetOwnerPosition( m_OwnerStartPos );
-			SetOwnerRotation( m_OwnerStartRotation );
+		if ( g_UseEditor ) {
+			ResetToStartPos();
 		}
 	}
 }
