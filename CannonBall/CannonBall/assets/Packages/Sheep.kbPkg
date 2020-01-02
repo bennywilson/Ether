@@ -1461,7 +1461,7 @@ kbGameEntity 3807537734 1283872403 1661460398 2211889957 {
 				AnimationEvent = 0
 				AnimationName = "Slap Snolaf"
 				IsLooping = 0
-				TimeScale =  5.000000
+				TimeScale =  8.000000
 			}
 			kbAnimComponent { 
 				Enabled = 0

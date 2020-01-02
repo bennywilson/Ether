@@ -365,6 +365,7 @@ public:
 				}
 				break;
 			}
+
 			case Snolaf_Reenter : {
 
 				const float SnolafPeerLen = 3.0f;
@@ -385,7 +386,7 @@ public:
 				} else {
 					// Move Snolaf to edge of screen
 					if ( GetStateTime() > 0.5f ) {
-						m_pLastSnolaf->SetOwnerPosition( kbVec3( 76.99268f, -52.6362f, -227.846f ) );
+						m_pLastSnolaf->SetOwnerPosition( kbVec3( 76.99268f, -52.6362f, -228.5f ) );
 					}
 				}
 				break;
@@ -416,7 +417,7 @@ public:
 					pFox->PlayAnimation( kbString( "Disrespect" ), 0.15f );
 					pFox->SetTargetFacingDirection( kbVec3( 0.0f, 0.0f, 1.0f ) );
 				}
-				if ( GetStateTime() > 3.2f ) {
+				if ( GetStateTime() > 3.8f ) {
 					pFox->PlayAnimation( kbString( "Slap Snolaf" ), 0.15f, false );
 					pSheep->PlayAnimation( kbString( "Slap Snolaf" ), 0.15f, false );
 					ChangeState( Title_Snolaf );

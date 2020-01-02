@@ -3671,8 +3671,8 @@ kbGameEntity 0 0 0 0 {
 				Animation = .\assets\models\characters\fox\kungfusheep\disrespect.kbanim.ms3d
 				AnimationEvent = 0
 				AnimationName = "Disrespect"
-				IsLooping = 0
-				TimeScale =  1.000000
+				IsLooping = 1
+				TimeScale =  5.000000
 			}
 			kbAnimComponent { 
 				Enabled = 0
@@ -3681,7 +3681,7 @@ kbGameEntity 0 0 0 0 {
 				AnimationEvent = 0
 				AnimationName = "Slap Snolaf"
 				IsLooping = 0
-				TimeScale =  5.000000
+				TimeScale =  8.000000
 			}
 			kbAnimComponent { 
 				Enabled = 0
@@ -3699,7 +3699,7 @@ kbGameEntity 0 0 0 0 {
 				AnimationEvent = 0
 				AnimationName = "Title"
 				IsLooping = 0
-				TimeScale =  1.000000
+				TimeScale =  5.000000
 			}
 		DebugAnimIndex = 7
 		Model = .\assets\models\characters\fox\fox.ms3d
