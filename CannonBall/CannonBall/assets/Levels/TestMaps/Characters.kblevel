@@ -2,7 +2,7 @@ kbGameEntity 0 0 0 0 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		Name = "Entity_123"
+		Name = "Entity_126"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
 		Position = 0.000000 0.000000 0.000000
 		Scale = 1.000000 1.000000 1.000000
@@ -10,8 +10,8 @@ kbGameEntity 0 0 0 0 {
 	kbEditorLevelSettingsComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		MainCameraPosition = 56.377514 -44.444977 -218.610962
-		MainCameraRotation = 0.080192 0.911123 -0.212443 -0.343935
+		MainCameraPosition = 72.907303 -50.191467 -233.738647
+		MainCameraRotation = 0.043203 0.680339 -0.040238 -0.730516
 	}
 }
 kbGameEntity 0 0 0 0 {
@@ -3671,7 +3671,7 @@ kbGameEntity 0 0 0 0 {
 				Animation = .\assets\models\characters\fox\kungfusheep\disrespect.kbanim.ms3d
 				AnimationEvent = 0
 				AnimationName = "Disrespect"
-				IsLooping = 1
+				IsLooping = 0
 				TimeScale =  5.000000
 			}
 			kbAnimComponent { 
@@ -3701,7 +3701,7 @@ kbGameEntity 0 0 0 0 {
 				IsLooping = 0
 				TimeScale =  5.000000
 			}
-		DebugAnimIndex = 7
+		DebugAnimIndex = 0
 		Model = .\assets\models\characters\fox\fox.ms3d
 	}
 	kbSkeletalModelComponent { 
@@ -3790,8 +3790,82 @@ kbGameEntity 0 0 0 0 {
 				IsLooping = 0
 				TimeScale =  1.000000
 			}
-		DebugAnimIndex = 2
+		DebugAnimIndex = 1
 		Model = .\assets\models\characters\fox\fox.ms3d
+	}
+	kbParticleComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		Name = ""
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 0.000000 1.000000 0.000000
+		Scale = 1.000000 1.000000 1.000000
+		AlphaOverLife = 0
+		ColorOverLife = 0
+		DebugPlayEntity = 0
+		EndColor = 1.000000 1.000000 1.000000 1.000000
+		Gravity = 0.000000 -5.000000 0.000000
+		MaterialList = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\fx\particle_blendadd.kbshader
+				ShaderParams = 2
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorMultplier"
+						Texture = NULL
+						Vector = 1.000000 1.000000 1.000000 1.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "shaderTexture"
+						Texture = .\assets\fx\splashes\waterdroplets.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		MaxBurstCount = 0
+		MaxDuration =  3.000000
+		MaxEndRotationRate =  0.000000
+		MaxEndSize = 3.000000 3.000000 3.000000
+		MaxEndVelocity = 0.000000 0.000000 0.000000
+		MaxParticlesToEmit = -1
+		MaxSpawnRate =  12.000000
+		MaxStart3DOffset = 0.000000 0.000000 0.000000
+		MaxStart3DRotation = 0.000000 0.000000 0.000000
+		MaxStartRotationRate =  0.000000
+		MaxStartSize = 0.100000 0.100000 0.100000
+		MaxStartVelocity = 1.000000 2.000000 3.000000
+		MinBurstCount = 0
+		MinDuration =  3.000000
+		MinEndRotationRate =  0.000000
+		MinEndSize = 3.000000 3.000000 3.000000
+		MinEndVelocity = 0.000000 0.000000 0.000000
+		MinSpawnRate =  10.000000
+		MinStart3DOffset = 0.000000 0.000000 0.000000
+		MinStart3DRotation = 0.000000 0.000000 0.000000
+		MinStartRotationRate =  0.000000
+		MinStartSize = 0.050000 0.050000 0.050000
+		MinStartVelocity = -1.000000 2.000000 -3.000000
+		ModelEmitter = 0
+		ParticleBillboardType = FaceCamera
+		RenderOrderBias =  0.000000
+		RotationOverLife = 0
+		SizeOverLife = 1
+			kbVectorAnimEvent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				EventName = ""
+				EventTime =  0.000000
+				EventValue = 1.000000 1.000000 1.000000 1.000000
+			}
+		StartColor = 1.000000 1.000000 1.000000 1.000000
+		StartDelay =  0.000000
+		TotalDuration =  -1.000000
+		VelocityCurve = 0
 	}
 	CannonActorComponent { 
 		Enabled = 1
@@ -4933,5 +5007,124 @@ kbGameEntity 0 0 0 0 {
 			}
 		RelativePosition = 0.000000 0.000000 0.000000
 		RelativeSize = 1.000000 1.000000 1.000000
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Bridge Explosion FX"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 76.922363 -52.571632 -243.064667
+		Scale = 1.000000 1.000000 1.000000
+	}
+	kbParticleComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = ""
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 0.000000 0.000000 0.000000
+		Scale = 1.000000 1.000000 1.000000
+		AlphaOverLife = 0
+		ColorOverLife = 0
+		DebugPlayEntity = 0
+		EndColor = 0.500000 0.500000 0.500000 1.000000
+		Gravity = 0.000000 -15.000000 0.000000
+		MaterialList = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\fx\particle_blendadd.kbshader
+				ShaderParams = 2
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorMultplier"
+						Texture = NULL
+						Vector = 1.000000 1.000000 1.000000 1.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "shaderTexture"
+						Texture = .\assets\fx\wood\wood_splinter.dds
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		MaxBurstCount = 45
+		MaxDuration =  3.000000
+		MaxEndRotationRate =  10.000000
+		MaxEndSize = 0.500000 0.500000 0.500000
+		MaxEndVelocity = 0.000000 0.000000 0.000000
+		MaxParticlesToEmit = -1
+		MaxSpawnRate =  0.000000
+		MaxStart3DOffset = 0.000000 0.000000 0.000000
+		MaxStart3DRotation = 0.000000 0.000000 0.000000
+		MaxStartRotationRate =  10.000000
+		MaxStartSize = 0.500000 0.500000 0.500000
+		MaxStartVelocity = 5.000000 10.000000 5.000000
+		MinBurstCount = 35
+		MinDuration =  2.000000
+		MinEndRotationRate =  -10.000000
+		MinEndSize = 0.500000 0.500000 0.500000
+		MinEndVelocity = 0.000000 0.000000 0.000000
+		MinSpawnRate =  0.000000
+		MinStart3DOffset = 0.000000 0.000000 0.000000
+		MinStart3DRotation = 0.000000 0.000000 0.000000
+		MinStartRotationRate =  -10.000000
+		MinStartSize = 0.100000 0.100000 0.100000
+		MinStartVelocity = -5.000000 10.000000 -5.000000
+		ModelEmitter = 0
+		ParticleBillboardType = FaceCamera
+		RenderOrderBias =  0.000000
+		RotationOverLife = 0
+		SizeOverLife = 1
+			kbVectorAnimEvent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				EventName = ""
+				EventTime =  0.000000
+				EventValue = 1.000000 1.000000 1.000000 1.000000
+			}
+		StartColor = 0.500000 0.500000 0.500000 1.000000
+		StartDelay =  0.000000
+		TotalDuration =  3.000000
+		VelocityCurve = 5
+			kbAnimEvent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				EventName = ""
+				EventTime =  0.050000
+				EventValue =  3.500000
+			}
+			kbAnimEvent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				EventName = ""
+				EventTime =  0.060000
+				EventValue =  2.500000
+			}
+			kbAnimEvent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				EventName = ""
+				EventTime =  0.070000
+				EventValue =  1.800000
+			}
+			kbAnimEvent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				EventName = ""
+				EventTime =  0.100000
+				EventValue =  1.000000
+			}
+			kbAnimEvent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				EventName = ""
+				EventTime =  1.000000
+				EventValue =  1.000000
+			}
 	}
 }

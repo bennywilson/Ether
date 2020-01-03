@@ -306,7 +306,7 @@ private:
 		}
 		
 		auto pLevelComponent = KungFuLevelComponent::Get();
-		if ( m_NumSnolafsKilled == 0 && g_SkipCheat != KungFuGame::Skip_ToEnd ) {
+		if ( m_NumSnolafsKilled == 0 ) {
 
 			if ( numSnolafs == 0 ) {
 				pLevelComponent->SpawnEnemy( true, 1 );
@@ -316,7 +316,7 @@ private:
 			const float distTraveled = pLevelComponent->GetDistancePlayerHasTraveled();
 			const float normalizedDistTraveled = kbSaturate( distTraveled / KungFuGame::kLevelLength );
 			const int numToSpawn = ( (int)( normalizedDistTraveled * KungFuGame::kMaxSnolafWaveSize ) + 1 ) & 0xfffffffe;
-			pLevelComponent->SpawnEnemy( false, numToSpawn );
+			//pLevelComponent->SpawnEnemy( false, numToSpawn );
 
 			m_LastSpawnTime = g_GlobalTimer.TimeElapsedSeconds();
 		}
@@ -580,6 +580,8 @@ void KungFuLevelComponent::Update_Internal( const float DeltaTime ) {
 		static const kbString sPresent_2( "Present_2" );
 		static const kbString sBreakBridgeDecal( "Bridge Decal" );
 		static const kbString sFox( "Fox" );
+		static const kbString sBridgeExplosionFX( "Bridge Explosion FX" );
+
 		for ( int i = 0; i < g_pCannonGame->GetGameEntities().size(); i++ ) {
 			kbGameEntity *const pEnt = g_pCannonGame->GetGameEntities()[i];
 			if ( pEnt->GetName() == sBossName ) {
@@ -592,6 +594,8 @@ void KungFuLevelComponent::Update_Internal( const float DeltaTime ) {
 				m_BridgeBreakDecal.SetEntity( pEnt );
 			} else if ( pEnt->GetName() == sFox ) {
 				m_pFox = pEnt->GetComponent<CannonActorComponent>();
+			} else if ( pEnt->GetName() == sBridgeExplosionFX ) {
+				m_BridgeExplosionFX.SetEntity( pEnt );
 			}
 		}
 	}
@@ -860,6 +864,7 @@ void KungFuLevelComponent::DoSplashSound() {
 void KungFuLevelComponent::DoBreakBridgeEffect( const bool bBreakIt ) {
 
 	m_BridgeBreakDecal.GetEntity()->GetComponent<kbStaticModelComponent>()->Enable( bBreakIt );
+	m_BridgeExplosionFX.GetEntity()->GetComponent<kbParticleComponent>()->Enable( bBreakIt );
 }
 
 /**

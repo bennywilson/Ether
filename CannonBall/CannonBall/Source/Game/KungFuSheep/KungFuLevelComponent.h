@@ -153,6 +153,7 @@ private:
 
 	kbGameEntityPtr								m_PresentsEnt[2];
 	kbGameEntityPtr								m_BridgeBreakDecal;
+	kbGameEntityPtr								m_BridgeExplosionFX;
 
 	static KungFuLevelComponent *				s_Inst;
 };
@@ -198,6 +199,7 @@ public:
 	int											GetNumHuggers() const { return m_NumHuggers; }
 	int											GetNumPrehuggers() const { return m_NumPrehuggers; }
 	int											GetNumHuggersAndPrehuggers() const { return m_NumHuggers + m_NumPrehuggers; }
+
 protected:
 
 	virtual void								InitializeStateMachine_Internal();

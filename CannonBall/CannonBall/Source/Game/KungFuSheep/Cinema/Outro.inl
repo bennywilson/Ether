@@ -149,9 +149,11 @@ public:
 		static const kbString sTitle( "Title" );
 		m_pTitle = g_pGame->GetEntityByName( sTitle );
 
+		// Fox
 		auto pFox = pLevelComp->GetFox();
 		pFox->PlayAnimation( sCry, 0.0f );
 		pFox->SetTargetFacingDirection( kbVec3( -1.0f, 0.0f, 0.0f ) );
+		pFox->GetComponent<kbParticleComponent>()->Enable( true );
 
 		pLevelComp->GetPresent(0).GetEntity()->GetComponent<kbSkeletalModelComponent>()->Enable( true );
 		pLevelComp->GetPresent(1).GetEntity()->GetComponent<kbSkeletalModelComponent>()->Enable( true );
@@ -217,6 +219,7 @@ public:
 					pCamera->SetPositionOffset( posOffset, lerpSpeed );
 					pCamera->SetLookAtOffset( kbVec3( 0.0f, 0.0f, -8.0f ), lerpSpeed );
 					ChangeState( TreyTonTitle );
+					pFox->GetComponent<kbParticleComponent>()->Enable( false );
 
 				}
 				/*if ( p3000Ton->HasFinishedAnim( sSquashSnolafs ) ) {
@@ -334,6 +337,7 @@ public:
 					if ( foxPos.z <= targetPos.z ) {
 						foxPos.z = targetPos.z;
 						pFox->PlayAnimation( kbString( "Idle" ), 0.15f );
+
 					} else {
 						bFin = false;
 					}
@@ -357,7 +361,7 @@ public:
 
 				if ( GetStateTime() > 1.0f ) {
 					m_pLastSnolaf = KungFuLevelComponent::Get()->GetSnolafFromPool();
-					m_pLastSnolaf->SetOwnerPosition( kbVec3( 76.99268f, -52.6362f, -226.846f ) );
+					m_pLastSnolaf->SetOwnerPosition( kbVec3( 76.99268f, -52.6362f, -223.046f ) );	// Spawn Snolaf offscreen
 					m_pLastSnolaf->RequestStateChange( KungFuSnolafState::Cinema );
 					m_pLastSnolaf->SetTargetFacingDirection( kbVec3( 0.0f, 0.0f, 1.0f ) );
 					m_pLastSnolaf->PlayAnimation( kbString( "Reenter" ), 0.0f );
@@ -368,7 +372,7 @@ public:
 
 			case Snolaf_Reenter : {
 
-				const float SnolafPeerLen = 3.0f;
+				const float SnolafPeerLen = 2.0f;
 				const float SnolafRunMultiplier = 2.0f;
 
 				if ( GetStateTime() > SnolafPeerLen ) {
@@ -386,7 +390,7 @@ public:
 				} else {
 					// Move Snolaf to edge of screen
 					if ( GetStateTime() > 0.5f ) {
-						m_pLastSnolaf->SetOwnerPosition( kbVec3( 76.99268f, -52.6362f, -228.5f ) );
+						m_pLastSnolaf->SetOwnerPosition( kbVec3( 76.99268f, -52.6362f, -228.25f ) );
 					}
 				}
 				break;
@@ -409,7 +413,7 @@ public:
 			}
 
 			case Disrespect : {
-				if ( GetStateTime() > 1.45f ) {
+				if ( GetStateTime() > 1.2f ) {
 					pSheep->PlayAnimation( kbString( "Disrespect" ), 0.15f );
 				}
 
@@ -481,6 +485,9 @@ public:
 		if ( m_pTitle.GetEntity() != nullptr ) {
 			m_pTitle.GetEntity()->GetComponent<kbUIWidgetComponent>()->Enable( false );
 		}
+		
+		auto pFox = KungFuLevelComponent::Get()->GetFox();
+		pFox->GetComponent<kbParticleComponent>()->Enable( false );
 	}
 
 private:

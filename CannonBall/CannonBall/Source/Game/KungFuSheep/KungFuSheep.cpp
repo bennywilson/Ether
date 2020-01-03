@@ -735,7 +735,7 @@ void KungFuSheepComponent::Update_Internal( const float DT ) {
 			}
 
 			KungFuSnolafComponent *const pSnolaf = g_pCannonGame->GetGameEntities()[i]->GetActorComponent()->GetAs<KungFuSnolafComponent>();
-			if ( pSnolaf == nullptr ) {
+			if ( pSnolaf == nullptr || pSnolaf->IsDead() == true || pSnolaf->IsEnabled() == false ) {
 				continue;
 			}
 
