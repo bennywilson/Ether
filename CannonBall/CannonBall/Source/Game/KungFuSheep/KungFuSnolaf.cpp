@@ -703,7 +703,11 @@ void KungFuSnolafComponent::Update_Internal( const float DT ) {
 
 	if ( m_SkelModelsList.size() > 0 ) {
 		const static kbString fxMapMaskParam = "fxMapMask";
-		m_SkelModelsList[0]->SetMaterialParamVector( 0, fxMapMaskParam.stl_str(), fxDot );
+		if ( m_OverridenFXMaskParams.r >= 0.0f && m_OverridenFXMaskParams.g >= 0.0f && m_OverridenFXMaskParams.b >= 0.0f && m_OverridenFXMaskParams.a >= 0.0f ) {
+			m_SkelModelsList[0]->SetMaterialParamVector( 0, fxMapMaskParam.stl_str(), m_OverridenFXMaskParams );
+		} else {
+			m_SkelModelsList[0]->SetMaterialParamVector( 0, fxMapMaskParam.stl_str(), fxDot );
+		}
 	}
 }
 

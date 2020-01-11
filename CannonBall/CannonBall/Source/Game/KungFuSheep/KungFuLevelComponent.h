@@ -69,7 +69,8 @@ namespace KungFuGame {
 	const float kOutroStartZ = -250.0f;
 	const kbVec3 kFoxPos = kbVec3( 77.10445f, -52.6362f, -233.828537f );
 	const kbVec3 kTreyTonStartPos = kbVec3( 76.992683f, -52.599991f, -227.628464f );
-	const kbVec3 kSheepFinalPos = kFoxPos + kbVec3( 0.0f, 0.0f, -5.0f );
+	const kbVec3 kFoxFinalPos = kbVec3( 77.10445f, -52.6362f, -236.5f );
+	const kbVec3 kSheepFinalPos = kFoxFinalPos + kbVec3( 0.0f, 0.0f, -2.0f );
 };
 
 

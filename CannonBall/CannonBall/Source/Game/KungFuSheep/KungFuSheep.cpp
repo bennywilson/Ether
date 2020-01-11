@@ -885,6 +885,15 @@ void KungFuSheepComponent::PlayCannonBallFX( const kbVec3 location ) {
 }
 
 /**
+ *	KungFuSheepComponent::PlayImpactSound
+ */
+void KungFuSheepComponent::PlayImpactSound() {
+	if ( m_BasicAttackImpactSound.size() > 0 ) {
+		m_BasicAttackImpactSound[rand() % m_BasicAttackImpactSound.size()].PlaySoundAtPosition( GetOwnerPosition() );
+	}
+}
+
+/**
  *	KungFuSheepComponent::CannonBallActivatedCB
  */	
 void KungFuSheepComponent::CannonBallActivatedCB() {

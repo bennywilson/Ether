@@ -45,6 +45,7 @@ public:
 	void										PlayShakeNBakeFX();
 	void										PlayBaa( const int baaType );
 	void										HitASnolaf();
+	void										PlayImpactSound();
 
 	void										PlayCannonBallFX( const kbVec3 location );
 	void										SpawnSplash();

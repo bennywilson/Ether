@@ -585,6 +585,8 @@ void kbFlingPhysicsComponent::Constructor() {
 	m_RotationSpeed = 1.0f;
 
 	m_FlingStartTime = 0.0f;
+	
+	m_bOwnerStartSet = false;
 }
 
 /**
@@ -597,6 +599,7 @@ void kbFlingPhysicsComponent::SetEnable_Internal( const bool bEnable ) {
 	if ( bEnable ) {
 		m_OwnerStartPos = GetOwnerPosition();
 		m_OwnerStartRotation = GetOwnerRotation();
+		m_bOwnerStartSet = true;
 
 		m_Velocity = kbVec3Rand( m_MinLinearVelocity, m_MaxLinearVelocity );
 

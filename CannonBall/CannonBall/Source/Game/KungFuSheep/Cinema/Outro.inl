@@ -48,6 +48,7 @@ public:
 		static kbString sPounce_1( "Pounce_1" );
 		static kbString sPounce_1_Smear( "Pounce_1_Smear" );
 		static kbString sPounce_2_Impact_1( "Pounce_2_Impact_1" );
+		static kbString sSlapSound( "SlapSound" );
 
 		const kbString eventName = animEvent.m_AnimEvent.GetEventName();
 		auto pSheep = KungFuLevelComponent::Get()->GetSheep();
@@ -78,6 +79,8 @@ public:
 
 			auto pTreyTon = KungFuLevelComponent::Get()->Get3000Ton()->GetComponent<CannonActorComponent>();
 			pTreyTon->ApplyAnimSmear( kbVec3( 0.0f, 10.0f, 0.0f ), 0.067f );
+		} else if ( eventName == sSlapSound ) {
+			pSheep->PlayImpactSound();
 		}
 	}
 
@@ -154,6 +157,7 @@ public:
 		pFox->PlayAnimation( sCry, 0.0f );
 		pFox->SetTargetFacingDirection( kbVec3( -1.0f, 0.0f, 0.0f ) );
 		pFox->GetComponent<kbParticleComponent>()->Enable( true );
+		pFox->GetComponent<kbSkeletalModelComponent>()->RegisterAnimEventListener( this );
 
 		pLevelComp->GetPresent(0).GetEntity()->GetComponent<kbSkeletalModelComponent>()->Enable( true );
 		pLevelComp->GetPresent(1).GetEntity()->GetComponent<kbSkeletalModelComponent>()->Enable( true );
@@ -333,9 +337,8 @@ public:
 
 					kbVec3 foxPos = pFox->GetOwnerPosition();
 					foxPos.z -= pFox->GetMaxRunSpeed() * g_pGame->GetFrameDT();
-					const kbVec3 targetPos = KungFuGame::kSheepFinalPos + kbVec3( 0.0f, 0.0f, 2.2f );
-					if ( foxPos.z <= targetPos.z ) {
-						foxPos.z = targetPos.z;
+					if ( foxPos.z <= KungFuGame::kFoxFinalPos.z ) {
+						foxPos.z = KungFuGame::kFoxFinalPos.z;
 						pFox->PlayAnimation( kbString( "Idle" ), 0.15f );
 
 					} else {
@@ -432,6 +435,7 @@ public:
 			case Title_Snolaf : {
 				if ( GetStateTime() > 0.25f ) {
 					m_pLastSnolaf->PlayAnimation( kbString( "Title" ), 0.15f );
+					m_pLastSnolaf->SetOverrideFXMaskParameters( kbVec4( 0.0f, 0.0f, 0.0f, 1.0f ) ) ;
 					ChangeState( Title_Sheep );
 				}
 
@@ -440,8 +444,12 @@ public:
 
 			case Title_Sheep : {
 				if ( GetStateTime() > 1.0f ) {
-					pSheep->PlayAnimation( kbString( "Title" ), 0.15f );
+
 					ChangeState( Title_Fox );
+				} else if ( GetStateTime() > 0.6f ) {
+					pFox->PlayAnimation( kbString( "Water_Dive" ), 0.15f );
+				} else if ( GetStateTime() > 0.3f ) {
+					pSheep->PlayAnimation( kbString( "Water_Dive" ), 0.15f );
 				}
 				break;
 			}
@@ -450,6 +458,8 @@ public:
 				if ( GetStateTime() > 1.0f ) {
 					pFox->PlayAnimation( kbString( "Title" ), 0.15f );
 					ChangeState( Painted_Title );
+				} else if ( GetStateTime() > 0.5f ) {
+					pSheep->PlayAnimation( kbString( "Title" ), 0.15f );
 				}
 				break;
 			}
@@ -457,7 +467,7 @@ public:
 			case Painted_Title : {
 				if ( GetStateTime() > 2.0f ) {
 					if ( m_pTitle.GetEntity() != nullptr ) {
-						m_pTitle.GetEntity()->GetComponent<kbUIWidgetComponent>()->Enable( true );
+				//		m_pTitle.GetEntity()->GetComponent<kbUIWidgetComponent>()->Enable( true );
 					}
 				}
 				break;
@@ -488,6 +498,9 @@ public:
 		
 		auto pFox = KungFuLevelComponent::Get()->GetFox();
 		pFox->GetComponent<kbParticleComponent>()->Enable( false );
+		pFox->GetComponent<kbSkeletalModelComponent>()->UnregisterAnimEventListener( this );
+
+		m_pLastSnolaf->SetOverrideFXMaskParameters( kbVec4( -1.0f, -1.0f, -1.0f, -1.0f ) );
 	}
 
 private:

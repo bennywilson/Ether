@@ -88,11 +88,12 @@ void kbResourceTab::ResourceSelectedCB( Fl_Widget * widget, void * userData ) {
 
 	if ( Fl::event_button() == FL_RIGHT_MOUSE ) {
 		int folderIdx = selectedItemIndex;
+
 		while( folderIdx > 0 && GetFileExtension( g_pResourceTab->m_SelectBrowserIdx[selectedItemIndex]->m_FolderName ) != "kbPkg" ) {
 			folderIdx--;
 		}
 
-		const std::string SavePackageOption = "Save Package " + g_pResourceTab->m_SelectBrowserIdx[selectedItemIndex]->m_FolderName;
+		const std::string SavePackageOption = "Save Package " +	 g_pResourceTab->m_SelectBrowserIdx[selectedItemIndex]->m_FolderName;
 		Fl_Menu_Item rclick_menu[] = {
 			{ SavePackageOption.c_str(),  0, SavePackageCB, ( void * ) (INT_PTR)folderIdx },		// Cast to INT_PTR then to void * fixes compile warning C4312
 			{ "Save All Changed Packages",  0, SavePackageCB, ( void * ) (INT_PTR)-1 },

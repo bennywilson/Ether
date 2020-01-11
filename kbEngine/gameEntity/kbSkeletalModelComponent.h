@@ -122,7 +122,7 @@ class kbFlingPhysicsComponent: public kbGameComponent {
 //---------------------------------------------------------------------------------------------------
 public:
 
-	void										ResetToStartPos() { SetOwnerPosition( m_OwnerStartPos ); SetOwnerRotation( m_OwnerStartRotation ); }
+	void										ResetToStartPos() { if ( m_bOwnerStartSet ) { SetOwnerPosition( m_OwnerStartPos ); SetOwnerRotation( m_OwnerStartRotation ); } }
 
 protected:
 
@@ -150,6 +150,7 @@ private:
 
 	float										m_FlingStartTime;
 
+	bool										m_bOwnerStartSet;
 };
 
 #endif

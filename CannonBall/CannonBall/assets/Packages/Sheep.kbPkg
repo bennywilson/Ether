@@ -1299,7 +1299,7 @@ kbGameEntity 3807537734 1283872403 1661460398 2211889957 {
 			}
 		RenderOrderBias =  0.000000
 		RenderPass = LightingPass
-		Animations = 16
+		Animations = 17
 			kbAnimComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
@@ -1470,7 +1470,16 @@ kbGameEntity 3807537734 1283872403 1661460398 2211889957 {
 				AnimationEvent = 0
 				AnimationName = "Title"
 				IsLooping = 0
-				TimeScale =  1.000000
+				TimeScale =  5.000000
+			}
+			kbAnimComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Animation = .\assets\models\characters\sheep\kungfusheep\sheep_dive_in.kbanim.ms3d
+				AnimationEvent = 0
+				AnimationName = "Water_Dive"
+				IsLooping = 0
+				TimeScale =  5.500000
 			}
 		DebugAnimIndex = -1
 		Model = .\assets\models\characters\sheep\sheep.ms3d
@@ -1765,7 +1774,7 @@ kbGameEntity 3807537734 1283872403 1661460398 2211889957 {
 				AnimationEvent = 0
 				AnimationName = "Title"
 				IsLooping = 0
-				TimeScale =  1.000000
+				TimeScale =  5.000000
 			}
 		DebugAnimIndex = -1
 		Model = .\assets\models\characters\sheep\sheep.ms3d
