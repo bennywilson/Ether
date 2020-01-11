@@ -277,7 +277,7 @@ public:
 				}
 
 				// Play baa
-				if ( GetStateTime() > 1.6f ) {
+				if ( GetStateTime() > 1.25f ) {
 					pSheep->PlayBaa( 2 );
 					ChangeState( SheepDodge );
 				}
@@ -288,7 +288,7 @@ public:
 				const float sheepHopRate = 4.0f;
 				const float sheepTargetZ = -241.8f;
 				 
-				if ( GetStateTime() > 0.25f ) {
+				if ( GetStateTime() > 0.5f ) {
 					kbVec3 sheepPos = pSheep->GetOwnerPosition();
 					sheepPos.z += sheepHopRate * g_pGame->GetFrameDT();
 					if ( sheepPos.z >= sheepTargetZ ) {

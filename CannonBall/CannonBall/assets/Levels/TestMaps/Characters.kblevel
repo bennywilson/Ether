@@ -3663,7 +3663,7 @@ kbGameEntity 191628142 1164611098 2253314479 1292534890 {
 				AnimationEvent = 0
 				AnimationName = "Dance"
 				IsLooping = 1
-				TimeScale =  5.000000
+				TimeScale =  6.000000
 			}
 			kbAnimComponent { 
 				Enabled = 0
@@ -3690,7 +3690,7 @@ kbGameEntity 191628142 1164611098 2253314479 1292534890 {
 				AnimationEvent = 0
 				AnimationName = "Dance_Stare"
 				IsLooping = 1
-				TimeScale =  5.000000
+				TimeScale = 4.500000
 			}
 			kbAnimComponent { 
 				Enabled = 0
@@ -4443,7 +4443,7 @@ kbGameEntity 1671951467 1280881932 1698058926 3039328037 {
 						Enabled = 0
 						LifeTime =  -1.000000
 						EventName = "Pounce_2_Impact_1"
-						EventTime =  6.760000
+						EventTime =  7.60000
 						EventValue =  0.000000
 					}
 					kbAnimEvent { 
@@ -4455,7 +4455,7 @@ kbGameEntity 1671951467 1280881932 1698058926 3039328037 {
 					}
 				AnimationName = "Pounce_2"
 				IsLooping = 0
-				TimeScale =  3.200000
+				TimeScale =  4.000000
 			}
 			kbAnimComponent { 
 				Enabled = 0
