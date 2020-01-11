@@ -1,8 +1,8 @@
-kbGameEntity 2151247907 1292665565 4171926151 2158121979 {
+kbGameEntity 2775964364 1302534255 3440046519 3212499142 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		Name = "Entity_223"
+		Name = "Entity_224"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
 		Position = 0.000000 0.000000 0.000000
 		Scale = 1.000000 1.000000 1.000000
@@ -3888,7 +3888,7 @@ kbGameEntity 968885140 1085284001 2323485569 3680011406 {
 		Scale = 555.000000 555.000000 1.000000
 	}
 	CannonBallMainMenuComponent { 
-		Enabled = 0
+		Enabled = 1
 		LifeTime =  -1.000000
 		Anchor = MiddleLeft
 		AxisLock = LockYAxis
@@ -3953,7 +3953,7 @@ kbGameEntity 968885140 1085284001 2323485569 3680011406 {
 				RelativeSize = 1.000000 1.000000 1.000000
 			}
 			kbUIWidgetComponent { 
-				Enabled = 0
+				Enabled = 1
 				LifeTime =  -1.000000
 				Anchor = MiddleLeft
 				AxisLock = LockAll
@@ -4455,7 +4455,7 @@ kbGameEntity 1671951467 1280881932 1698058926 3039328037 {
 					}
 				AnimationName = "Pounce_2"
 				IsLooping = 0
-				TimeScale = 3.200000
+				TimeScale =  3.200000
 			}
 			kbAnimComponent { 
 				Enabled = 0

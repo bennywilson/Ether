@@ -89,6 +89,10 @@ public:
 				continue;
 			}
 
+			if ( pTargetActor->GetAs<KungFuSheepComponent>() == nullptr && pTargetActor->GetAs<KungFuSnolafComponent>() == nullptr ) {
+				continue;
+			}
+
 			const kbVec3 targetPos = pTargetActor->GetOwnerPosition();
 			const kbVec3 vSnolafToTarget = targetPos - snolafPos;
 			const float snolafToTargetDist = ( targetPos - snolafPos ).Length();
