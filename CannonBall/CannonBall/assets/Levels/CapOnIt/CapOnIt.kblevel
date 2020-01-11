@@ -1,8 +1,8 @@
-kbGameEntity 0 0 0 0 {
+kbGameEntity 1928134921 1135154981 2517915283 477964414 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		Name = "Entity_56"
+		Name = "Entity_57"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
 		Position = 0.000000 0.000000 0.000000
 		Scale = 1.000000 1.000000 1.000000
@@ -10,11 +10,11 @@ kbGameEntity 0 0 0 0 {
 	kbEditorLevelSettingsComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		MainCameraPosition = 43.432350 1.739036 -61.037220
-		MainCameraRotation = 0.005877 -0.992530 0.109624 -0.053214
+		MainCameraPosition = 45.562122 1.727292 -62.455589
+		MainCameraRotation = -0.061099 0.890249 -0.125456 0.433571
 	}
 }
-kbGameEntity 0 0 0 0 {
+kbGameEntity 2561115260 1228692146 2376756898 3661388025 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
@@ -33,19 +33,19 @@ kbGameEntity 0 0 0 0 {
 		Dummy2 =  0.000000
 	}
 }
-kbGameEntity 0 0 0 0 {
+kbGameEntity 1643600849 1184981828 175597246 2541424857 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "Sun"
-		Orientation = -0.282709 0.275574 -0.271523 0.877730
-		Position = 80.300003 -18.935291 -404.559143
+		Orientation = -0.117925 0.662645 -0.373822 0.638163
+		Position = 48.745110 0.049194 -63.278778
 		Scale = 0.000000 1.000000 1.000000
 	}
 	kbDirectionalLightComponent { 
 		Enabled = 1
 		LifeTime =  -1.000000
-		CastsShadows = 0
+		CastsShadows = 1
 		Color = 1.000000 1.000000 1.000000 0.000000
 		Materials = 1
 			kbMaterialComponent { 
@@ -125,7 +125,7 @@ kbGameEntity 0 0 0 0 {
  100.000000
 	}
 }
-kbGameEntity 0 0 0 0 {
+kbGameEntity 2220157052 1131632348 4235081873 529504057 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
@@ -146,7 +146,7 @@ kbGameEntity 0 0 0 0 {
 		PositionOffset = -10.933998 3.224068 0.000000
 	}
 }
-kbGameEntity 0 0 0 0 {
+kbGameEntity 2441638175 1233138649 139161755 1550720735 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
@@ -414,7 +414,7 @@ kbGameEntity 0 0 0 0 {
 		Width =  2000.000000
 	}
 }
-kbGameEntity 0 0 0 0 {
+kbGameEntity 597977086 1189042720 3325426854 2132426501 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
@@ -461,7 +461,7 @@ kbGameEntity 0 0 0 0 {
 		Model = .\assets\models\skyboxes\basicskybox.fbx
 	}
 }
-kbGameEntity 0 0 0 0 {
+kbGameEntity 324302517 1259281246 1957660836 707256396 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
@@ -572,7 +572,7 @@ kbGameEntity 2609040299 1100347930 3115268521 1892043160 {
 		Texture = ..\..\kbengine\assets\textures\flare.jpg
 	}
 }
-kbGameEntity 0 0 0 0 {
+kbGameEntity 4067003929 1304875844 1308154030 795133169 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
@@ -591,7 +591,7 @@ kbGameEntity 0 0 0 0 {
 		StartDist =  150.000000
 	}
 }
-kbGameEntity 0 0 0 0 {
+kbGameEntity 3252072927 1238051614 2870579349 3822145437 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
@@ -676,7 +676,7 @@ kbGameEntity 0 0 0 0 {
 		HealthBarWarningFlashThreshold =  0.400000
 	}
 }
-kbGameEntity 0 0 0 0 {
+kbGameEntity 3635556473 1325315403 2901815460 1094748096 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
@@ -897,7 +897,7 @@ kbGameEntity 0 0 0 0 {
 		Model = ..\..\kbengine\assets\models\unitquad.ms3d
 	}
 }
-kbGameEntity 0 0 0 0 {
+kbGameEntity 814405738 1136800807 3211751063 227262500 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
@@ -958,7 +958,7 @@ kbGameEntity 0 0 0 0 {
 		Model = .\assets\test\protest\protestsign.fbx
 	}
 }
-kbGameEntity 0 0 0 0 {
+kbGameEntity 3068943288 1210331050 2767323564 2149826675 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
@@ -1092,11 +1092,11 @@ kbGameEntity 0 0 0 0 {
 		Model = .\assets\models\characters\fox\fox.ms3d
 	}
 }
-kbGameEntity 0 0 0 0 {
+kbGameEntity 3208229365 1140405931 1546453898 3645477328 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		Name = "Sheep"
+		Name = "Sheep "
 		Orientation = 0.000000 0.440536 0.000000 -0.897735
 		Position = 43.845100 -0.080806 -57.964630
 		Scale = 20.000000 20.000000 20.000000
@@ -1226,13 +1226,13 @@ kbGameEntity 0 0 0 0 {
 		Model = .\assets\models\characters\3000ton\3000ton.ms3d
 	}
 }
-kbGameEntity 0 0 0 0 {
+kbGameEntity 3141647090 1233159040 4286079901 1631305340 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "Building"
 		Orientation = 0.000000 -0.707103 0.000000 -0.707111
-		Position = 17.592171 0.931669 -145.198395
+		Position = 24.592171 0.931669 -117.198395
 		Scale = 500.000000 500.000000 500.000000
 	}
 	kbStaticModelComponent { 
@@ -1287,7 +1287,7 @@ kbGameEntity 0 0 0 0 {
 		Model = .\assets\test\protest\protestwall.fbx
 	}
 }
-kbGameEntity 0 0 0 0 {
+kbGameEntity 2658312087 1105891085 1117472189 4079199159 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
@@ -1348,7 +1348,7 @@ kbGameEntity 0 0 0 0 {
 		Model = ..\..\kbengine\assets\models\unitquad.ms3d
 	}
 }
-kbGameEntity 0 0 0 0 {
+kbGameEntity 1197036451 1223598974 1413883274 2543969239 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
@@ -1402,7 +1402,7 @@ kbGameEntity 0 0 0 0 {
 		Model = ..\..\kbengine\assets\models\unitcube.ms3d
 	}
 }
-kbGameEntity 0 0 0 0 {
+kbGameEntity 2998090947 1240844969 1132527236 2479737880 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
@@ -1463,7 +1463,7 @@ kbGameEntity 0 0 0 0 {
 		Model = .\assets\test\protest\protestsidewalk.fbx
 	}
 }
-kbGameEntity 0 0 0 0 {
+kbGameEntity 1970307355 1273316706 4259626393 2104335704 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
@@ -1517,7 +1517,7 @@ kbGameEntity 0 0 0 0 {
 		Model = ..\..\kbengine\assets\models\unitsphere.ms3d
 	}
 }
-kbGameEntity 0 0 0 0 {
+kbGameEntity 3285376042 1173532524 4008339345 218202370 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
@@ -1550,7 +1550,7 @@ kbGameEntity 0 0 0 0 {
 		Model = ..\..\kbengine\assets\models\unitquad.ms3d
 	}
 }
-kbGameEntity 0 0 0 0 {
+kbGameEntity 2967821061 1309684389 1322860456 2285116752 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
@@ -1611,7 +1611,7 @@ kbGameEntity 0 0 0 0 {
 		Model = ..\..\kbengine\assets\models\unitquad.ms3d
 	}
 }
-kbGameEntity 0 0 0 0 {
+kbGameEntity 2873216965 1317414018 2733364641 636058161 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
@@ -1624,7 +1624,7 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadow = 1
-		Materials = 1
+		Materials = 2
 			kbMaterialComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
@@ -1667,6 +1667,20 @@ kbGameEntity 0 0 0 0 {
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 			}
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = ..\..\kbengine\assets\shaders\basictexture.kbshader
+				ShaderParams = 1
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "shaderTexture"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
 		RenderOrderBias =  0.000000
 		RenderPass = LightingPass
 		Animations = 2
@@ -1689,13 +1703,13 @@ kbGameEntity 0 0 0 0 {
 				TimeScale =  3.000000
 			}
 		DebugAnimIndex = 1
-		Model = .\assets\models\characters\pinkystiltz\pinky.ms3d
+		Model = .\assets\models\characters\pinkystiltz\caponit\pinky_glasses.ms3d
 	}
 	kbSkeletalModelComponent { 
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadow = 0
-		Materials = 1
+		Materials = 2
 			kbMaterialComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
@@ -1738,6 +1752,13 @@ kbGameEntity 0 0 0 0 {
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 			}
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\fx\hackclip.kbshader
+				ShaderParams = 0
+			}
 		RenderOrderBias =  0.000000
 		RenderPass = Post-LightingPass
 		Animations = 2
@@ -1760,10 +1781,10 @@ kbGameEntity 0 0 0 0 {
 				TimeScale =  3.000000
 			}
 		DebugAnimIndex = 1
-		Model = .\assets\models\characters\pinkystiltz\pinky.ms3d
+		Model = .\assets\models\characters\pinkystiltz\caponit\pinky_glasses.ms3d
 	}
 }
-kbGameEntity 0 0 0 0 {
+kbGameEntity 1523862904 1286826173 4127139758 510473877 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
@@ -1897,7 +1918,7 @@ kbGameEntity 0 0 0 0 {
 		Model = .\assets\models\characters\snolaf\snolaf.ms3d
 	}
 }
-kbGameEntity 0 0 0 0 {
+kbGameEntity 432587849 1117158438 936942464 1991105879 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
@@ -2049,7 +2070,7 @@ kbGameEntity 0 0 0 0 {
 		Model = .\assets\models\characters\weybey\weybey.ms3d
 	}
 }
-kbGameEntity 0 0 0 0 {
+kbGameEntity 2135548629 1127071460 3823229830 186927188 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
@@ -2313,7 +2334,7 @@ kbGameEntity 0 0 0 0 {
 		MaxRunSpeed =  3.000000
 	}
 }
-kbGameEntity 0 0 0 0 {
+kbGameEntity 3697614205 1200109748 1492866217 1498340756 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
@@ -2447,7 +2468,7 @@ kbGameEntity 0 0 0 0 {
 		Model = .\assets\models\characters\fuzzy\fuzzy.ms3d
 	}
 }
-kbGameEntity 0 0 0 0 {
+kbGameEntity 1271332412 1277503649 4258710711 547751815 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
@@ -2460,7 +2481,7 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadow = 1
-		Materials = 1
+		Materials = 2
 			kbMaterialComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
@@ -2500,6 +2521,20 @@ kbGameEntity 0 0 0 0 {
 						LifeTime =  -1.000000
 						ParamName = "clipMap"
 						Texture = .\assets\models\characters\snolaf\snolaf_clipmap.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = ..\..\kbengine\assets\shaders\basictexture.kbshader
+				ShaderParams = 1
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "shaderTexture"
+						Texture = NULL
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 			}
@@ -2543,13 +2578,13 @@ kbGameEntity 0 0 0 0 {
 				TimeScale =  3.000000
 			}
 		DebugAnimIndex = 3
-		Model = .\assets\models\characters\pinkystiltz\pinky.ms3d
+		Model = .\assets\models\characters\pinkystiltz\caponit\pinky_glasses.ms3d
 	}
 	kbSkeletalModelComponent { 
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadow = 0
-		Materials = 1
+		Materials = 2
 			kbMaterialComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
@@ -2592,6 +2627,13 @@ kbGameEntity 0 0 0 0 {
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 			}
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\fx\hackclip.kbshader
+				ShaderParams = 0
+			}
 		RenderOrderBias =  0.000000
 		RenderPass = Post-LightingPass
 		Animations = 1
@@ -2605,7 +2647,7 @@ kbGameEntity 0 0 0 0 {
 				TimeScale =  3.000000
 			}
 		DebugAnimIndex = 0
-		Model = .\assets\models\characters\pinkystiltz\pinky.ms3d
+		Model = .\assets\models\characters\pinkystiltz\caponit\pinky_glasses.ms3d
 	}
 	CannonActorComponent { 
 		Enabled = 1
@@ -2618,7 +2660,7 @@ kbGameEntity 0 0 0 0 {
 		MaxRunSpeed =  3.000000
 	}
 }
-kbGameEntity 0 0 0 0 {
+kbGameEntity 3370622857 1340971269 1146031039 2237082840 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
@@ -2693,7 +2735,7 @@ kbGameEntity 0 0 0 0 {
 		Model = .\assets\models\environment\furniture\table.fbx
 	}
 }
-kbGameEntity 0 0 0 0 {
+kbGameEntity 661689572 1169354626 2293661836 755897137 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
@@ -2827,7 +2869,7 @@ kbGameEntity 0 0 0 0 {
 		Model = .\assets\test\protest\sheep_protest.ms3d
 	}
 }
-kbGameEntity 0 0 0 0 {
+kbGameEntity 3976237604 1087611978 143201180 2629761151 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
@@ -2888,13 +2930,13 @@ kbGameEntity 0 0 0 0 {
 		Model = .\assets\test\protest\protestwall.fbx
 	}
 }
-kbGameEntity 0 0 0 0 {
+kbGameEntity 543793597 1267162040 1336708484 3413680430 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "Building"
 		Orientation = 0.000000 -0.707103 0.000000 -0.707111
-		Position = 17.592171 0.931669 -90.198395
+		Position = 24.592171 0.931669 -94.198395
 		Scale = 500.000000 500.000000 500.000000
 	}
 	kbStaticModelComponent { 
@@ -2949,68 +2991,7 @@ kbGameEntity 0 0 0 0 {
 		Model = .\assets\test\protest\protestwall.fbx
 	}
 }
-kbGameEntity 0 0 0 0 {
-	kbTransformComponent { 
-		Enabled = 0
-		LifeTime =  -1.000000
-		Name = "Building"
-		Orientation = 0.000000 -0.707103 0.000000 -0.707111
-		Position = 17.592171 0.931669 -115.198395
-		Scale = 500.000000 500.000000 500.000000
-	}
-	kbStaticModelComponent { 
-		Enabled = 1
-		LifeTime =  -1.000000
-		CastsShadow = 0
-		Materials = 1
-			kbMaterialComponent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				CullModeOverride = ShaderDefault
-				Shader = .\assets\shaders\environment\environmentbase.kbshader
-				ShaderParams = 5
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "diffuse"
-						Texture = .\assets\test\protest\payupmedcenter_wall.tif
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "normal"
-						Texture = NULL
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "propertyMap"
-						Texture = NULL
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "emissiveMap"
-						Texture = NULL
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "uvScale"
-						Texture = NULL
-						Vector = 2.000000 2.000000 2.000000 0.000000
-					}
-			}
-		RenderOrderBias =  0.000000
-		RenderPass = LightingPass
-		Model = .\assets\test\protest\protestwall.fbx
-	}
-}
-kbGameEntity 0 0 0 0 {
+kbGameEntity 1004537689 1314564211 4106102940 3087665647 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
@@ -3071,7 +3052,7 @@ kbGameEntity 0 0 0 0 {
 		Model = .\assets\test\protest\protestwall.fbx
 	}
 }
-kbGameEntity 0 0 0 0 {
+kbGameEntity 478991751 1332443498 3149549447 76209188 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
@@ -3132,7 +3113,7 @@ kbGameEntity 0 0 0 0 {
 		Model = .\assets\test\protest\protestwall.fbx
 	}
 }
-kbGameEntity 0 0 0 0 {
+kbGameEntity 2873717124 1305609683 3697408164 1810918353 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
@@ -3193,7 +3174,7 @@ kbGameEntity 0 0 0 0 {
 		Model = .\assets\test\protest\protestwall.fbx
 	}
 }
-kbGameEntity 0 0 0 0 {
+kbGameEntity 2518141452 1314571492 3464648590 1520505284 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
@@ -3254,7 +3235,7 @@ kbGameEntity 0 0 0 0 {
 		Model = .\assets\test\protest\protestwall.fbx
 	}
 }
-kbGameEntity 0 0 0 0 {
+kbGameEntity 499006990 1331458534 1296538795 1263123974 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
@@ -3264,7 +3245,7 @@ kbGameEntity 0 0 0 0 {
 		Scale = 1.000000 1.000000 1.000000
 	}
 }
-kbGameEntity 0 0 0 0 {
+kbGameEntity 1086442947 1220724142 3051994243 1084846812 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
@@ -3274,7 +3255,7 @@ kbGameEntity 0 0 0 0 {
 		Scale = 1.000000 1.000000 1.000000
 	}
 }
-kbGameEntity 0 0 0 0 {
+kbGameEntity 1968957027 1141877011 3093584024 307375010 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
@@ -3284,7 +3265,7 @@ kbGameEntity 0 0 0 0 {
 		Scale = 1.000000 1.000000 1.000000
 	}
 }
-kbGameEntity 0 0 0 0 {
+kbGameEntity 867735533 1076904212 2739087013 651448942 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
@@ -3294,7 +3275,7 @@ kbGameEntity 0 0 0 0 {
 		Scale = 1.000000 1.000000 1.000000
 	}
 }
-kbGameEntity 0 0 0 0 {
+kbGameEntity 238258813 1243884716 1830359225 2117690295 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
@@ -3302,5 +3283,31 @@ kbGameEntity 0 0 0 0 {
 		Orientation = 0.000000 0.010396 0.000000 0.999946
 		Position = 43.145103 0.049194 -54.664619
 		Scale = 1.000000 1.000000 1.000000
+	}
+}
+kbGameEntity 874797625 1080135036 1907367090 225947753 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Cinematic 1: "
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 53.335854 0.276566 -61.102020
+		Scale = 1.000000 1.000000 1.000000
+	}
+	kbCinematicComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		Actions = 1
+			kbCinematicAction { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				ActionDuration = 0.000000 0.000000 0.000000 0.000000
+				ActionStartTime = 0.000000 0.000000 0.000000 0.000000
+				ActionType = Override
+				EntityParam = 3370622857 1340971269 1146031039 2237082840
+				FloatParam =  0.000000
+				StringParam = ""
+				VectorParam = 0.000000 0.000000 0.000000 0.000000
+			}
 	}
 }

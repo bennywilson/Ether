@@ -415,3 +415,26 @@ GenerateClass(
 	AddField( "SliderBoundsMin", KBTYPEINFO_VECTOR, kbUISlider, m_SliderBoundsMin, false, "" )
 	AddField( "SliderBoundsMax", KBTYPEINFO_VECTOR, kbUISlider, m_SliderBoundsMax, false, "" )
 )
+
+GenerateEnum( 
+	eCinematicActionType, "eCinematicActionType",
+	AddEnumField( CineAction_Override, "Override" )
+	AddEnumField( CineAction_Animate, "Animate" )
+	AddEnumField( CineAction_MoveTo, "MoveTo" )
+)
+
+GenerateClass(
+	kbCinematicAction,
+	AddField( "ActionType", KBTYPEINFO_ENUM, kbCinematicAction, m_CineActionType, false, "eCinematicActionType" )
+	AddField( "ActionStartTime", KBTYPEINFO_VECTOR4, kbCinematicAction, m_ActionStartTime, false, "" )
+	AddField( "ActionDuration", KBTYPEINFO_VECTOR4, kbCinematicAction, m_ActionDuration, false, "" )
+	AddField( "StringParam", KBTYPEINFO_KBSTRING, kbCinematicAction, m_sCineParam, false, "" )
+	AddField( "FloatParam", KBTYPEINFO_FLOAT, kbCinematicAction, m_fCineParam, false, "" )
+	AddField( "EntityParam", KBTYPEINFO_GAMEENTITY, kbCinematicAction, m_pCineParam, false, "" )
+	AddField( "VectorParam", KBTYPEINFO_VECTOR4, kbCinematicAction, m_vCineParam, false, "" )
+)
+
+GenerateClass(
+	kbCinematicComponent,
+	AddField( "Actions", KBTYPEINFO_STRUCT, kbCinematicComponent, m_Actions, true, "kbCinematicAction" )
+)

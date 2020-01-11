@@ -211,6 +211,10 @@ kbGameEntity::kbGameEntity( const kbGUID *const guid, const bool bIsPrefab ) :
 		}
 	}
 
+	if ( m_GUID.IsValid() == false ) {
+		CoCreateGuid( &m_GUID.m_Guid );
+	}
+
 	kbGameEntityPtr entityPtr;
 	entityPtr.SetEntity( this );
 }
@@ -262,6 +266,10 @@ kbGameEntity::kbGameEntity( const kbGameEntity * pGameEntity, const bool bIsPref
 		} else {
 			kbError( "kbGameEntity::kbGameEntity() - Prefab created with invalid GUID" );
 		}
+	}
+
+	if ( m_GUID.IsValid() == false ) {
+		CoCreateGuid( &m_GUID.m_Guid );
 	}
 
 	kbGameEntityPtr entityPtr;

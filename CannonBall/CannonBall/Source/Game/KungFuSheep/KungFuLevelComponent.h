@@ -52,8 +52,8 @@ namespace KungFuGame {
 	const int kMaxHuggerDamageMultiplier = 4;
 
 	// Wave
-	const int kSnolafPoolSize = 50;
-	const int kMaxSnolafWaveSize = 10;
+	const int kSnolafPoolSize = 150;
+	const int kMaxSnolafWaveSize = 35;
 	const float kTimeBetweenSnolafWaves = 6.0f;
 	const float kDistBetweenSnolafs = 1.0f;
 	const float kSubWaveDirChangeInitialOffset = 2.f;

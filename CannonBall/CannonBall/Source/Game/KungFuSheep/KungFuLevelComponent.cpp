@@ -316,7 +316,7 @@ private:
 			const float distTraveled = pLevelComponent->GetDistancePlayerHasTraveled();
 			const float normalizedDistTraveled = kbSaturate( distTraveled / KungFuGame::kLevelLength );
 			const int numToSpawn = ( (int)( normalizedDistTraveled * KungFuGame::kMaxSnolafWaveSize ) + 1 ) & 0xfffffffe;
-			//pLevelComponent->SpawnEnemy( false, numToSpawn );
+			pLevelComponent->SpawnEnemy( false, numToSpawn );
 
 			m_LastSpawnTime = g_GlobalTimer.TimeElapsedSeconds();
 		}

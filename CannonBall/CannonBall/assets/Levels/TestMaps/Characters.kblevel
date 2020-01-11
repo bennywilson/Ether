@@ -1,8 +1,8 @@
-kbGameEntity 0 0 0 0 {
+kbGameEntity 2151247907 1292665565 4171926151 2158121979 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		Name = "Entity_126"
+		Name = "Entity_223"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
 		Position = 0.000000 0.000000 0.000000
 		Scale = 1.000000 1.000000 1.000000
@@ -10,11 +10,11 @@ kbGameEntity 0 0 0 0 {
 	kbEditorLevelSettingsComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		MainCameraPosition = 72.907303 -50.191467 -233.738647
-		MainCameraRotation = 0.043203 0.680339 -0.040238 -0.730516
+		MainCameraPosition = 60.324245 -48.281776 -223.914551
+		MainCameraRotation = -0.054564 -0.720826 0.057119 0.688600
 	}
 }
-kbGameEntity 0 0 0 0 {
+kbGameEntity 537364968 1092523782 2953639826 2626478307 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
@@ -84,7 +84,7 @@ kbGameEntity 0 0 0 0 {
 			}
 	}
 }
-kbGameEntity 0 0 0 0 {
+kbGameEntity 1976988906 1203222253 3781998738 4272724285 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
@@ -176,7 +176,7 @@ kbGameEntity 0 0 0 0 {
  100.000000
 	}
 }
-kbGameEntity 0 0 0 0 {
+kbGameEntity 1885576596 1149139774 1438397868 2777957068 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
@@ -243,7 +243,7 @@ kbGameEntity 0 0 0 0 {
 		Model = .\assets\models\characters\fox\fox.ms3d
 	}
 }
-kbGameEntity 0 0 0 0 {
+kbGameEntity 3770717614 1082378895 1017600913 1440694734 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
@@ -328,7 +328,7 @@ kbGameEntity 0 0 0 0 {
 		Model = .\assets\models\characters\sheep\sheep.ms3d
 	}
 }
-kbGameEntity 0 0 0 0 {
+kbGameEntity 1990723014 1121141820 2053275829 709430198 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
@@ -413,7 +413,7 @@ kbGameEntity 0 0 0 0 {
 		Model = .\assets\models\characters\sheep\sheep.ms3d
 	}
 }
-kbGameEntity 0 0 0 0 {
+kbGameEntity 2760744939 1124379877 2772631961 2644415108 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
@@ -434,7 +434,7 @@ kbGameEntity 0 0 0 0 {
 		PositionOffset = -10.933998 3.224068 0.000000
 	}
 }
-kbGameEntity 0 0 0 0 {
+kbGameEntity 3724832574 1271670935 1013321910 1020909332 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
@@ -596,13 +596,13 @@ kbGameEntity 0 0 0 0 {
 				FakeAOClipPlaneFadeOutDist =  10.000000
 				FakeAODarkness =  0.000000
 				FakeAOPower =  2.000000
-				GrassCellsPerTerrainSide = 16
+				GrassCellsPerTerrainSide = 20
 				GrassShader = .\assets\shaders\terrain\basicgrass.kbshader
 				MaxBladeJitterOffset =  10.000000
 				MaxPatchJitterOffset =  10.000000
 				PatchEndCullDistance =  2000.000000
 				PatchStartCullDistance =  500.000000
-				PatchesPerCellSide = 45
+				PatchesPerCellSide = 50
 				ShaderParams = 13
 					kbShaderParamComponent { 
 						Enabled = 0
@@ -702,7 +702,7 @@ kbGameEntity 0 0 0 0 {
 		Width =  2000.000000
 	}
 }
-kbGameEntity 0 0 0 0 {
+kbGameEntity 2029969210 1301275982 4090249868 2310134928 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
@@ -749,7 +749,7 @@ kbGameEntity 0 0 0 0 {
 		Model = .\assets\models\skyboxes\basicskybox.fbx
 	}
 }
-kbGameEntity 0 0 0 0 {
+kbGameEntity 3508025232 1223702064 110153635 2743637305 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
@@ -860,7 +860,7 @@ kbGameEntity 2609040299 1100347930 3115268521 1892043160 {
 		Texture = ..\..\kbengine\assets\textures\flare.jpg
 	}
 }
-kbGameEntity 0 0 0 0 {
+kbGameEntity 1573001468 1200901198 3941368968 167243547 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
@@ -913,13 +913,13 @@ kbGameEntity 0 0 0 0 {
 						LifeTime =  -1.000000
 						ParamName = "waterScaleAndSpeed_2"
 						Texture = NULL
-						Vector = 350.000000 75.000000 0.150000 0.150000
+						Vector = 300.000000 100.000000 0.110000 0.110000
 					}
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
 						ParamName = "normalMap1"
-						Texture = .\assets\fx\wind\wind_1.jpg
+						Texture = .\assets\fx\wind\wind_2.jpg
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 					kbShaderParamComponent { 
@@ -934,14 +934,14 @@ kbGameEntity 0 0 0 0 {
 						LifeTime =  -1.000000
 						ParamName = "spec_Factor_Power"
 						Texture = NULL
-						Vector = 1.000000 100.000000 0.000000 0.000000
+						Vector = 1.000000 500.000000 0.000000 0.000000
 					}
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
 						ParamName = "normalStrengths"
 						Texture = NULL
-						Vector = 0.100000 0.030000 0.100000 0.050000
+						Vector = 0.050000 0.050000 0.050000 0.050000
 					}
 					kbShaderParamComponent { 
 						Enabled = 0
@@ -970,7 +970,7 @@ kbGameEntity 0 0 0 0 {
 		Model = ..\..\kbengine\assets\models\unitcube.ms3d
 	}
 }
-kbGameEntity 0 0 0 0 {
+kbGameEntity 2623485304 1164391352 3750140854 1068688934 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
@@ -1024,7 +1024,7 @@ kbGameEntity 0 0 0 0 {
 		Model = ..\..\kbengine\assets\models\unitcube.ms3d
 	}
 }
-kbGameEntity 0 0 0 0 {
+kbGameEntity 767131152 1284206386 1410219432 2984081115 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
@@ -1036,14 +1036,14 @@ kbGameEntity 0 0 0 0 {
 	CannonFogComponent { 
 		Enabled = 1
 		LifeTime =  -1.000000
-		Clamp =  0.250000
+		Clamp =  0.300000
 		Color = 1.000000 0.950000 0.850000 1.000000
-		EndDist =  300.000000
+		EndDist =  1000.000000
 		Shader = .\assets\shaders\postprocess\fog.kbshader
-		StartDist =  150.000000
+		StartDist =  300.000000
 	}
 }
-kbGameEntity 0 0 0 0 {
+kbGameEntity 3587713139 1101448007 952628641 366038443 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
@@ -1097,7 +1097,7 @@ kbGameEntity 0 0 0 0 {
 		Model = .\assets\models\environment\platforms\bridge_wooden_1.fbx
 	}
 }
-kbGameEntity 0 0 0 0 {
+kbGameEntity 3565500909 1121129338 2565412495 3171246714 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
@@ -1151,7 +1151,7 @@ kbGameEntity 0 0 0 0 {
 		Model = .\assets\models\environment\platforms\bridge_wooden_1.fbx
 	}
 }
-kbGameEntity 0 0 0 0 {
+kbGameEntity 1792756094 1339018376 1629935014 1681887078 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
@@ -1205,7 +1205,7 @@ kbGameEntity 0 0 0 0 {
 		Model = .\assets\models\environment\platforms\bridge_wooden_1.fbx
 	}
 }
-kbGameEntity 0 0 0 0 {
+kbGameEntity 2285083070 1261831113 2537240763 2965023321 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
@@ -1259,7 +1259,7 @@ kbGameEntity 0 0 0 0 {
 		Model = .\assets\models\environment\platforms\bridge_wooden_1.fbx
 	}
 }
-kbGameEntity 0 0 0 0 {
+kbGameEntity 768408979 1309698659 1845970622 3862184246 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
@@ -1313,7 +1313,7 @@ kbGameEntity 0 0 0 0 {
 		Model = .\assets\models\environment\platforms\bridge_wooden_1.fbx
 	}
 }
-kbGameEntity 0 0 0 0 {
+kbGameEntity 2073227036 1116953487 4028886406 3411107857 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
@@ -1367,7 +1367,7 @@ kbGameEntity 0 0 0 0 {
 		Model = .\assets\models\environment\platforms\bridge_wooden_1.fbx
 	}
 }
-kbGameEntity 0 0 0 0 {
+kbGameEntity 55202556 1308462375 1187601583 263077682 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
@@ -1421,7 +1421,7 @@ kbGameEntity 0 0 0 0 {
 		Model = .\assets\models\environment\platforms\bridge_wooden_1.fbx
 	}
 }
-kbGameEntity 0 0 0 0 {
+kbGameEntity 4022515928 1092104471 769233583 338184870 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
@@ -1475,7 +1475,7 @@ kbGameEntity 0 0 0 0 {
 		Model = .\assets\models\environment\platforms\bridge_wooden_1.fbx
 	}
 }
-kbGameEntity 0 0 0 0 {
+kbGameEntity 219122931 1274720638 2606058668 789972547 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
@@ -1529,7 +1529,7 @@ kbGameEntity 0 0 0 0 {
 		Model = .\assets\models\environment\platforms\bridge_wooden_1.fbx
 	}
 }
-kbGameEntity 0 0 0 0 {
+kbGameEntity 4011769355 1323333596 3975013820 4133016020 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
@@ -1583,7 +1583,7 @@ kbGameEntity 0 0 0 0 {
 		Model = .\assets\models\environment\platforms\bridge_wooden_1.fbx
 	}
 }
-kbGameEntity 0 0 0 0 {
+kbGameEntity 476150570 1178077505 3921805720 167556555 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
@@ -1637,7 +1637,7 @@ kbGameEntity 0 0 0 0 {
 		Model = .\assets\models\environment\platforms\bridge_wooden_1.fbx
 	}
 }
-kbGameEntity 0 0 0 0 {
+kbGameEntity 3063563567 1178136607 3804988817 1241362735 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
@@ -1691,7 +1691,7 @@ kbGameEntity 0 0 0 0 {
 		Model = .\assets\models\environment\platforms\bridge_wooden_1.fbx
 	}
 }
-kbGameEntity 0 0 0 0 {
+kbGameEntity 3012410846 1176812014 2847639957 2265530542 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
@@ -1745,7 +1745,7 @@ kbGameEntity 0 0 0 0 {
 		Model = .\assets\models\environment\platforms\bridge_wooden_1.fbx
 	}
 }
-kbGameEntity 0 0 0 0 {
+kbGameEntity 4000087732 1074056295 37780884 2473222410 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
@@ -1799,7 +1799,7 @@ kbGameEntity 0 0 0 0 {
 		Model = .\assets\models\environment\platforms\bridge_wooden_1.fbx
 	}
 }
-kbGameEntity 0 0 0 0 {
+kbGameEntity 1081531102 1122866535 398672021 3386659937 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
@@ -1853,7 +1853,7 @@ kbGameEntity 0 0 0 0 {
 		Model = .\assets\models\environment\platforms\bridge_wooden_1.fbx
 	}
 }
-kbGameEntity 0 0 0 0 {
+kbGameEntity 3477824963 1325410563 4085668241 505532259 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
@@ -1907,7 +1907,7 @@ kbGameEntity 0 0 0 0 {
 		Model = .\assets\models\environment\platforms\bridge_wooden_1.fbx
 	}
 }
-kbGameEntity 0 0 0 0 {
+kbGameEntity 559386017 1316716511 3755778214 2045459382 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
@@ -1961,7 +1961,7 @@ kbGameEntity 0 0 0 0 {
 		Model = .\assets\models\environment\platforms\bridge_wooden_1.fbx
 	}
 }
-kbGameEntity 0 0 0 0 {
+kbGameEntity 1289487901 1188375855 920596138 4184004917 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
@@ -2015,7 +2015,7 @@ kbGameEntity 0 0 0 0 {
 		Model = .\assets\models\environment\platforms\bridge_wooden_1.fbx
 	}
 }
-kbGameEntity 0 0 0 0 {
+kbGameEntity 714109186 1210138278 3860640913 4056027296 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
@@ -2069,7 +2069,7 @@ kbGameEntity 0 0 0 0 {
 		Model = .\assets\models\environment\platforms\bridge_wooden_1.fbx
 	}
 }
-kbGameEntity 0 0 0 0 {
+kbGameEntity 994630907 1178801820 4058844581 1161728672 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
@@ -2123,7 +2123,7 @@ kbGameEntity 0 0 0 0 {
 		Model = .\assets\models\environment\platforms\bridge_wooden_1.fbx
 	}
 }
-kbGameEntity 0 0 0 0 {
+kbGameEntity 3881373922 1111186753 3037939894 2663332882 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
@@ -2184,7 +2184,7 @@ kbGameEntity 0 0 0 0 {
 		Model = .\assets\models\environment\platforms\bridge_wooden_1.fbx
 	}
 }
-kbGameEntity 0 0 0 0 {
+kbGameEntity 1745036657 1226122723 137629842 2847967967 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
@@ -2238,7 +2238,7 @@ kbGameEntity 0 0 0 0 {
 		Model = .\assets\models\environment\platforms\bridge_wooden_1.fbx
 	}
 }
-kbGameEntity 0 0 0 0 {
+kbGameEntity 211241734 1165433459 2859075761 1636992949 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
@@ -2292,7 +2292,7 @@ kbGameEntity 0 0 0 0 {
 		Model = .\assets\models\environment\platforms\bridge_wooden_1.fbx
 	}
 }
-kbGameEntity 0 0 0 0 {
+kbGameEntity 4064300683 1237974457 595275413 2837674043 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
@@ -2485,7 +2485,7 @@ kbGameEntity 0 0 0 0 {
 		Width =  2000.000000
 	}
 }
-kbGameEntity 0 0 0 0 {
+kbGameEntity 1978605751 1112739685 1112578947 1060765009 {
 	kbTransformComponent { 
 		Enabled = 1
 		LifeTime =  -1.000000
@@ -2570,7 +2570,7 @@ kbGameEntity 0 0 0 0 {
 		HealthBarWarningFlashThreshold =  0.400000
 	}
 }
-kbGameEntity 0 0 0 0 {
+kbGameEntity 532414885 1151596207 2684383880 3979752438 {
 	kbTransformComponent { 
 		Enabled = 1
 		LifeTime =  -1.000000
@@ -2791,7 +2791,7 @@ kbGameEntity 0 0 0 0 {
 		Model = ..\..\kbengine\assets\models\unitquad.ms3d
 	}
 }
-kbGameEntity 0 0 0 0 {
+kbGameEntity 3694840569 1275494847 809542060 2421163822 {
 	kbTransformComponent { 
 		Enabled = 1
 		LifeTime =  -1.000000
@@ -3481,7 +3481,7 @@ kbGameEntity 0 0 0 0 {
 			}
 	}
 }
-kbGameEntity 0 0 0 0 {
+kbGameEntity 4065076881 1263085194 3586377395 3441874589 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
@@ -3561,7 +3561,7 @@ kbGameEntity 0 0 0 0 {
 		 = 
 	}
 }
-kbGameEntity 0 0 0 0 {
+kbGameEntity 191628142 1164611098 2253314479 1292534890 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
@@ -3627,7 +3627,7 @@ kbGameEntity 0 0 0 0 {
 				AnimationEvent = 0
 				AnimationName = "Cry"
 				IsLooping = 1
-				TimeScale =  1.000000
+				TimeScale =  2.000000
 			}
 			kbAnimComponent { 
 				Enabled = 0
@@ -3761,7 +3761,7 @@ kbGameEntity 0 0 0 0 {
 				AnimationEvent = 0
 				AnimationName = "Cry"
 				IsLooping = 1
-				TimeScale =  1.000000
+				TimeScale =  2.000000
 			}
 			kbAnimComponent { 
 				Enabled = 0
@@ -3790,7 +3790,7 @@ kbGameEntity 0 0 0 0 {
 				IsLooping = 0
 				TimeScale =  1.000000
 			}
-		DebugAnimIndex = 1
+		DebugAnimIndex = 0
 		Model = .\assets\models\characters\fox\fox.ms3d
 	}
 	kbParticleComponent { 
@@ -3823,7 +3823,7 @@ kbGameEntity 0 0 0 0 {
 						Enabled = 0
 						LifeTime =  -1.000000
 						ParamName = "shaderTexture"
-						Texture = .\assets\fx\splashes\waterdroplets.tif
+						Texture = .\assets\fx\splashes\splash_velocity_1.tif
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 			}
@@ -3834,24 +3834,24 @@ kbGameEntity 0 0 0 0 {
 		MaxEndVelocity = 0.000000 0.000000 0.000000
 		MaxParticlesToEmit = -1
 		MaxSpawnRate =  12.000000
-		MaxStart3DOffset = 0.000000 0.000000 0.000000
+		MaxStart3DOffset = -0.300000 0.100000 0.000000
 		MaxStart3DRotation = 0.000000 0.000000 0.000000
 		MaxStartRotationRate =  0.000000
-		MaxStartSize = 0.100000 0.100000 0.100000
-		MaxStartVelocity = 1.000000 2.000000 3.000000
+		MaxStartSize = 0.060000 0.060000 0.060000
+		MaxStartVelocity = 2.000000 2.000000 -1.000000
 		MinBurstCount = 0
 		MinDuration =  3.000000
 		MinEndRotationRate =  0.000000
-		MinEndSize = 3.000000 3.000000 3.000000
+		MinEndSize = 0.000000 3.000000 3.000000
 		MinEndVelocity = 0.000000 0.000000 0.000000
 		MinSpawnRate =  10.000000
-		MinStart3DOffset = 0.000000 0.000000 0.000000
+		MinStart3DOffset = -0.300000 0.100000 0.000000
 		MinStart3DRotation = 0.000000 0.000000 0.000000
 		MinStartRotationRate =  0.000000
 		MinStartSize = 0.050000 0.050000 0.050000
-		MinStartVelocity = -1.000000 2.000000 -3.000000
+		MinStartVelocity = -2.000000 2.000000 0.000000
 		ModelEmitter = 0
-		ParticleBillboardType = FaceCamera
+		ParticleBillboardType = AlignAlongVelocity
 		RenderOrderBias =  0.000000
 		RotationOverLife = 0
 		SizeOverLife = 1
@@ -3878,7 +3878,7 @@ kbGameEntity 0 0 0 0 {
 		MaxRunSpeed =  3.000000
 	}
 }
-kbGameEntity 0 0 0 0 {
+kbGameEntity 968885140 1085284001 2323485569 3680011406 {
 	kbTransformComponent { 
 		Enabled = 1
 		LifeTime =  -1.000000
@@ -4075,7 +4075,7 @@ kbGameEntity 0 0 0 0 {
 			}
 	}
 }
-kbGameEntity 0 0 0 0 {
+kbGameEntity 3622350630 1299414661 2143524754 2655535189 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
@@ -4343,7 +4343,7 @@ kbGameEntity 0 0 0 0 {
 		VelocityCurve = 0
 	}
 }
-kbGameEntity 0 0 0 0 {
+kbGameEntity 1671951467 1280881932 1698058926 3039328037 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
@@ -4455,7 +4455,7 @@ kbGameEntity 0 0 0 0 {
 					}
 				AnimationName = "Pounce_2"
 				IsLooping = 0
-				TimeScale =  3.200000
+				TimeScale = 3.200000
 			}
 			kbAnimComponent { 
 				Enabled = 0
@@ -4543,7 +4543,7 @@ kbGameEntity 0 0 0 0 {
 				Animation = .\assets\models\characters\3000ton\kungfusheep\pounce_2.kbanim.ms3d
 				AnimationEvent = 0
 				AnimationName = "Pounce_2"
-				IsLooping = 0
+				IsLooping = 1
 				TimeScale =  1.000000
 			}
 			kbAnimComponent { 
@@ -4569,7 +4569,7 @@ kbGameEntity 0 0 0 0 {
 		MaxRunSpeed =  3.000000
 	}
 }
-kbGameEntity 0 0 0 0 {
+kbGameEntity 2813763918 1107914595 2561660852 2373538385 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
@@ -4638,7 +4638,7 @@ kbGameEntity 0 0 0 0 {
 		RelativeSize = 1.000000 1.000000 1.000000
 	}
 }
-kbGameEntity 0 0 0 0 {
+kbGameEntity 2834549981 1318015840 1209716610 144016064 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
@@ -4648,7 +4648,7 @@ kbGameEntity 0 0 0 0 {
 		Scale = 1.000000 1.000000 1.000000
 	}
 }
-kbGameEntity 0 0 0 0 {
+kbGameEntity 1235986948 1232903237 4084947108 3961454180 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
@@ -4667,7 +4667,7 @@ kbGameEntity 0 0 0 0 {
 		MinLinearVelocity = -1.000000 1.000000 -1.000000
 	}
 	kbSkeletalModelComponent { 
-		Enabled = 1
+		Enabled = 0
 		LifeTime =  -1.000000
 		CastsShadow = 0
 		Materials = 1
@@ -4713,7 +4713,7 @@ kbGameEntity 0 0 0 0 {
 		Model = .\assets\models\props\presents\present.ms3d
 	}
 }
-kbGameEntity 0 0 0 0 {
+kbGameEntity 2173328964 1105303046 1808318377 1249498279 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
@@ -4778,7 +4778,7 @@ kbGameEntity 0 0 0 0 {
 		Model = .\assets\models\props\presents\present.ms3d
 	}
 }
-kbGameEntity 0 0 0 0 {
+kbGameEntity 2823924498 1217103692 1108638655 59959439 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
@@ -4832,7 +4832,7 @@ kbGameEntity 0 0 0 0 {
 		Model = .\assets\models\environment\platforms\bridge_wooden_1.fbx
 	}
 }
-kbGameEntity 0 0 0 0 {
+kbGameEntity 4121860101 1338733555 581251478 2312240592 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
@@ -4886,7 +4886,7 @@ kbGameEntity 0 0 0 0 {
 		Model = .\assets\models\environment\platforms\bridge_wooden_1.fbx
 	}
 }
-kbGameEntity 0 0 0 0 {
+kbGameEntity 2451017232 1334201149 744927158 3925545539 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
@@ -4940,7 +4940,7 @@ kbGameEntity 0 0 0 0 {
 		Model = ..\..\kbengine\assets\models\unitcube.ms3d
 	}
 }
-kbGameEntity 0 0 0 0 {
+kbGameEntity 2879835413 1222479798 1490986381 1570850169 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
@@ -5009,7 +5009,7 @@ kbGameEntity 0 0 0 0 {
 		RelativeSize = 1.000000 1.000000 1.000000
 	}
 }
-kbGameEntity 0 0 0 0 {
+kbGameEntity 3733824195 1207903711 1401863562 1523924579 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000

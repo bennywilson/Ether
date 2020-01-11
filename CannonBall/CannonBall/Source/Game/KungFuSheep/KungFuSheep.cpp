@@ -169,6 +169,7 @@ template<typename T>
 class KungFuSheepStateAttack : public KungFuSheepStateBase<T> {
 
 	bool m_bHitSnolaf = false;
+	bool m_bFirstHit = true;
 
 //---------------------------------------------------------------------------------------------------
 public:
@@ -205,10 +206,11 @@ public:
 			}
 		}
 
-		if ( kbfrand() > 0.8f ) {
+		if ( kbfrand() > 0.8f || m_bFirstHit ) {
 			GetSheep()->PlayAttackVO( 0 );
 		}
 
+		m_bFirstHit = false;
 		m_bHitSnolaf = false;
 	}
 

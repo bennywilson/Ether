@@ -94,3 +94,41 @@ float kbLevelComponent::GetGlobalVolumeScale() {
 
 	return g_pLevelComponent->m_GlobalVolumeScale;
 }
+
+/**
+ *	kbCinematicAction
+ */
+void kbCinematicAction::Constructor() {
+	m_fCineParam = 0.0f;
+}
+
+/**
+ *	kbCinematicComponent::~kbCinematicComponent
+ */
+kbCinematicComponent::~kbCinematicComponent() {
+
+}
+
+/**
+ *	kbCinematicComponent::Constructori
+ */
+void kbCinematicComponent::Constructor() {
+
+}
+
+/**
+ *	kbCinematicComponent::SetEnable_Internal
+ */
+void kbCinematicComponent::SetEnable_Internal( const bool bEnable ) {
+
+	Super::SetEnable_Internal( true );
+}
+
+/**
+ *	kbCinematicComponent::Update_Internal
+ */
+void kbCinematicComponent::Update_Internal( const float dt ) {
+	
+	Super::Update_Internal( dt );
+
+}

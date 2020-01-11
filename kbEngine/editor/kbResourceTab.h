@@ -2,7 +2,7 @@
 // kbResourceTab.h
 //
 //
-// 2016-2018 kbEngine 2.0
+// 2016-2019 kbEngine 2.0
 //===================================================================================================
 #ifndef _KBRESOURCETAB_H_
 #define _KBRESOURCETAB_H_
@@ -40,6 +40,7 @@ public:
 	void										PostRendererInit();
 
 	kbPrefab *									GetSelectedPrefab() const;
+	kbGameEntityPtr								GetSelectedGameEntity();
 
 	void										AddPrefab( kbPrefab * prefab, const std::string & PackageName, const std::string & Folder, const std::string & PrefabName );
 	void										MarkPrefabDirty( kbPrefab * prefab );
@@ -52,7 +53,12 @@ private:
 	void										RebuildResourceFolderListText();
 	unsigned int								FontSize()	const { return 10; }
 
+	Fl_Tabs *									m_pOuterTab;
+
+	Fl_Group *									m_pResourceGroup;
 	Fl_Select_Browser *							m_pResourceSelectBrowser;
+
+	Fl_Group *									m_pEntityGroup;
 	Fl_Select_Browser *							m_pEntitySelectBrowser;
 
 	std::vector<kbResourceTabFile_t>			m_ResourceFolderList;
@@ -76,5 +82,7 @@ private:
 
 	static void									ResourceManagerCB( const kbResourceManager::CallbackReason Reason );
 };
+
+extern kbResourceTab * g_pResourceTab;
 
 #endif

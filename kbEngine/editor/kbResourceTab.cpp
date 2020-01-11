@@ -2,7 +2,7 @@
 // kbResourceTab.cpp
 //
 //
-// 2016-2018 kbEngine 2.0
+// 2016-2019 kbEngine 2.0
 //===================================================================================================
 #include <queue>
 #include "kbCore.h"
@@ -199,25 +199,25 @@ kbResourceTab::kbResourceTab( int x, int y, int w, int h ) :
 	const int Display_Width = DisplayWidth();
 	const int Display_Height = h - kbEditor::TabHeight();
 
-	Fl_Tabs *const resourceTabs  = new Fl_Tabs( x, y, w, Display_Height );
+	m_pOuterTab = new Fl_Tabs( x, y, w, Display_Height );
 
 	{
-		Fl_Group *const resourceGroup = new Fl_Group( x, Top_Border, w, Display_Height, "Resources" );
+		m_pResourceGroup = new Fl_Group( x, Top_Border, w, Display_Height, "Resources" );
 		m_pResourceSelectBrowser = new Fl_Select_Browser( 5, Top_Border + 5, Display_Width, Display_Height , "" );
 		m_pResourceSelectBrowser->callback( &ResourceSelectedCB, this );
 		m_pResourceSelectBrowser->textsize( FontSize() );
-		resourceGroup->end();
+		m_pResourceGroup->end();
 	}
 
 	{
-		Fl_Group *const resourceGroup = new Fl_Group( 0, Top_Border, Display_Width, Display_Height, "Entities" );
+		m_pEntityGroup = new Fl_Group( 0, Top_Border, Display_Width, Display_Height, "Entities" );
 		m_pEntitySelectBrowser = new Fl_Select_Browser( 5, Top_Border + 5, Display_Width, Display_Height , "" );
 		m_pEntitySelectBrowser->callback( *EntitySelectedCB, this );
 		m_pEntitySelectBrowser->textsize( FontSize() );
-	    resourceGroup->end();
+	    m_pEntityGroup->end();
 	}
 
-	resourceTabs->end();
+	m_pOuterTab->end();
 
 	end();
 
@@ -645,6 +645,26 @@ kbPrefab * kbResourceTab::GetSelectedPrefab() const {
 	}
 
 	return m_SelectBrowserIdx[value]->m_pPrefab;
+}
+
+/**
+ *	kbResourceTab::GetSelectedGameEntity
+ */
+kbGameEntityPtr	kbResourceTab::GetSelectedGameEntity() {
+	kbGameEntityPtr retEnt;
+
+	if ( m_pOuterTab->value() == m_pResourceGroup ) {
+	//	kbLog( "Resource select browser has focus" );
+	} else if ( m_pOuterTab->value() == m_pEntityGroup ) {
+
+		const int selectedItemIndex = g_pResourceTab->m_pEntitySelectBrowser->value() - 1;
+
+		if ( selectedItemIndex >= 0 && selectedItemIndex < g_pResourceTab->m_EntityList.size() ) {
+			retEnt.SetEntity( g_pResourceTab->m_EntityList[selectedItemIndex].m_pEntity->GetGameEntity() );
+		}
+	}
+
+	return retEnt;
 }
 
 /**
