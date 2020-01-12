@@ -625,6 +625,9 @@ void KungFuLevelComponent::Update_Internal( const float DeltaTime ) {
 		}
 	}
 
+	m_pCannonBallUI->GetOwner()->DisableAllComponents();
+	m_pHealthBarUI->GetOwner()->DisableAllComponents();
+
 	if ( m_WaterDropletFXStartTime > 0.0f ) {
 
 		int numFinished = 0;

@@ -93,6 +93,8 @@ public:
 		static kbString sOutroCam1( "Outro Camera 1" );
 		static kbString sCry( "Cry" );
 
+		KungFuLevelComponent::Get()->SetPlayLevelMusic( 1, true );
+
 		for ( int i = 0; i < g_pCannonGame->GetGameEntities().size(); i++ ) {
 
 			kbGameEntity *const pTargetEnt = g_pCannonGame->GetGameEntities()[i];
@@ -465,9 +467,9 @@ public:
 			}
 
 			case Painted_Title : {
-				if ( GetStateTime() > 2.0f ) {
+				if ( GetStateTime() > 1.0f ) {
 					if ( m_pTitle.GetEntity() != nullptr ) {
-				//		m_pTitle.GetEntity()->GetComponent<kbUIWidgetComponent>()->Enable( true );
+						m_pTitle.GetEntity()->GetComponent<kbUIWidgetComponent>()->Enable( true );
 					}
 				}
 				break;

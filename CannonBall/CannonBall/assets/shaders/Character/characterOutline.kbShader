@@ -93,7 +93,7 @@ Texture2D clipMap(white);
 
  PS_OUTPUT pixelShader( pixelInput	input ) {
 	PS_OUTPUT output = (PS_OUTPUT) 0;
-
+//clip(-1);
 	const float4 clipMapTex = 1.0f - clipMap.Sample( DefaultSampler, input.uv );
 
 	const float clipDot = dot( clipMapMask, clipMapTex );

@@ -4,11 +4,13 @@
 // 2019 kbEngine 2.0
 //==============================================================================
 cbuffer matrixBuffer {
-   matrix		modelMatrix;
-   matrix		mvpMatrix;
-   float4		fxMapMask;
-   float4		clipMapMask;
-   float4x4		boneList[128];
+	matrix		modelMatrix;
+	matrix		mvpMatrix;
+	float4		fxMapMask;
+	float4		clipMapMask;
+	float4		hatchParams = (0,0,0,0);
+	float4x4	boneList[128];
+	float4		sunDir;
 };
 
 kbShaderState {
@@ -30,6 +32,8 @@ struct pixelInput {
 	float2      uv			: TEXCOORD0;
 	float2      position2	: TEXCOORD1;
 	float3      normal		: TEXCOORD2;
+	float3		localPos	: TEXCOORD3;
+	float3		localNormal	: TEXCOORD4;
 };
 
 struct pixelInput2 {
@@ -37,6 +41,8 @@ struct pixelInput2 {
 	float2      uv			: TEXCOORD0;
 	float2      position2	: TEXCOORD1;
 	float3      normal		: TEXCOORD2;
+	float3		localPos	: TEXCOORD3;
+	float3		localNormal	: TEXCOORD4;
 	bool		IsFrontFace	: SV_IsFrontFace;
 };
 //-------------------------------------
@@ -72,6 +78,9 @@ pixelInput vertexShader( vertexInput input ) {
 	output.normal.xyz = mul( ( input.normal.xyz * 2.0f ) - 1.0f, (float3x3)blendedMat );
 	output.normal.xyz = normalize( mul( output.normal.xyz , (float3x3)modelMatrix ) );
 
+	output.localPos = input.position.xyz;
+	output.localNormal = (input.normal.xyz * 2.0f ) - 1.0f;
+
 	return output;
 }
 
@@ -84,6 +93,49 @@ SamplerState SampleType;
 Texture2D fxMap(white);
 
 Texture2D clipMap(white);
+
+Texture2D hatchTexture1;
+Texture2D hatchTexture2;
+
+
+float3 Hatching(float2 _uv, half _intensity)
+{
+
+	_intensity = 1.0f - _intensity;
+	_intensity = _intensity * 0.6f + 0.4f;
+
+    half3 hatch0 = hatchTexture1.Sample( SampleType, _uv ).rgb;
+    half3 hatch1 = hatchTexture2.Sample( SampleType, _uv ).rgb;
+
+	if ( _intensity == 0 ) return hatch0.x;
+
+	hatch0 = ( hatch0 * 0.9f ) + 0.1f;
+	hatch1 = ( hatch1 * 0.9f ) + 0.1f;
+
+    half3 overbright = max(0, _intensity - 1.0);
+
+    half3 weightsA = saturate((_intensity * 6.0) + half3(-0, -1, -2));
+    half3 weightsB = saturate((_intensity * 6.0) + half3(-3, -4, -5));
+
+    weightsA.xy -= weightsA.yz;
+    weightsA.z -= weightsB.x;
+    weightsB.xy -= weightsB.zy;
+
+    hatch0 = hatch0 * weightsA;
+    hatch1 = hatch1 * weightsB;
+
+    half3 hatching = overbright + hatch0.r +
+    	hatch0.g + hatch0.b +
+    	hatch1.r + hatch1.g +
+    	hatch1.b;
+
+hatching = hatching * (1.0f - hatchParams.w) + hatchParams.w;//+ 0.3f;
+//hatching = 1.0f - hatching;
+
+//hatching = pow( abs(hatching), abs(1.f));
+//hatching = 1.0f - hatching;
+    return saturate(hatching * 1.1f);
+}
 
  PS_OUTPUT pixelShader( pixelInput2	input ) {
 	PS_OUTPUT output = (PS_OUTPUT) 0;
@@ -104,6 +156,33 @@ Texture2D clipMap(white);
 	output.Normal.xyz = normalize( input.normal );
 	if ( input.IsFrontFace == false ) {
 	   output.Normal *= -1.0f;
+	}
+
+	float hatchDot = saturate( dot( sunDir.xyz, output.Normal.xyz ) );
+	hatchDot = ( hatchDot * 0.9f ) + 0.1f;
+
+	if ( hatchParams.x > 0 ) {
+		// Tri-planar mapping
+		const float textureScale = hatchParams.y;
+		const float sharpness = hatchParams.z;
+
+		float3 localPos = input.localPos;
+		float3 localNormal = input.localNormal;
+
+		float2 yUV = localPos.xz / textureScale;
+		float2 xUV = localPos.zy / textureScale;
+		float2 zUV = localPos.xy / textureScale;
+
+		float3 hatchY = Hatching( yUV, hatchDot );
+		float3 hatchX = Hatching( xUV, hatchDot );
+		float3 hatchZ = Hatching( zUV, hatchDot );
+
+		float3 blendWeights = pow( abs( localNormal), sharpness );
+		blendWeights = blendWeights / ( blendWeights.x + blendWeights.y + blendWeights.z );
+
+		float3 finalHatch = hatchX * blendWeights.x + hatchY * blendWeights.y + hatchZ * blendWeights.z;
+
+		// output.Color.xyz *= finalHatch;//saturate( hatching + hatchParams.x );
 	}
 
 	return output;
