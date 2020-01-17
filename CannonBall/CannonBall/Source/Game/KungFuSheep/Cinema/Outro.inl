@@ -49,6 +49,7 @@ public:
 		static kbString sPounce_1_Smear( "Pounce_1_Smear" );
 		static kbString sPounce_2_Impact_1( "Pounce_2_Impact_1" );
 		static kbString sSlapSound( "SlapSound" );
+		static kbString sHitCamera( "HitCamera" );
 
 		const kbString eventName = animEvent.m_AnimEvent.GetEventName();
 		auto pSheep = KungFuLevelComponent::Get()->GetSheep();
@@ -81,6 +82,8 @@ public:
 			pTreyTon->ApplyAnimSmear( kbVec3( 0.0f, 10.0f, 0.0f ), 0.067f );
 		} else if ( eventName == sSlapSound ) {
 			pSheep->PlayImpactSound();
+		} else if ( eventName == sHitCamera ) {
+			pSheep->PlayCameraShake();
 		}
 	}
 
@@ -164,7 +167,9 @@ public:
 		pLevelComp->GetPresent(0).GetEntity()->GetComponent<kbSkeletalModelComponent>()->Enable( true );
 		pLevelComp->GetPresent(1).GetEntity()->GetComponent<kbSkeletalModelComponent>()->Enable( true );
 
-		m_pLastSnolaf = nullptr;
+		m_pLastSnolaf = KungFuLevelComponent::Get()->GetSnolafFromPool();
+		m_pLastSnolaf->GetComponent<kbSkeletalModelComponent>()->RegisterAnimEventListener( this );
+		m_pLastSnolaf->GetComponent<KungFuSnolafComponent>()->RequestStateChange( KungFuSnolafState::Cinema );
 	}
 
 	virtual void UpdateState_Internal() override {
@@ -365,7 +370,7 @@ public:
 			case Dance : {
 
 				if ( GetStateTime() > 1.0f ) {
-					m_pLastSnolaf = KungFuLevelComponent::Get()->GetSnolafFromPool();
+
 					m_pLastSnolaf->SetOwnerPosition( kbVec3( 76.99268f, -52.6362f, -223.046f ) );	// Spawn Snolaf offscreen
 					m_pLastSnolaf->RequestStateChange( KungFuSnolafState::Cinema );
 					m_pLastSnolaf->SetTargetFacingDirection( kbVec3( 0.0f, 0.0f, 1.0f ) );
@@ -503,6 +508,12 @@ public:
 		pFox->GetComponent<kbSkeletalModelComponent>()->UnregisterAnimEventListener( this );
 
 		m_pLastSnolaf->SetOverrideFXMaskParameters( kbVec4( -1.0f, -1.0f, -1.0f, -1.0f ) );
+		m_pLastSnolaf->GetComponent<kbSkeletalModelComponent>()->UnregisterAnimEventListener( this );
+		KungFuLevelComponent::Get()->ReturnSnolafToPool( m_pLastSnolaf );
+		m_pLastSnolaf = nullptr;
+
+		KungFuLevelComponent::Get()->ReturnSnolafToPool( m_pSnolafGuards[0] );
+		KungFuLevelComponent::Get()->ReturnSnolafToPool( m_pSnolafGuards[1] );
 	}
 
 private:

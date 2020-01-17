@@ -873,14 +873,21 @@ void KungFuSheepComponent::PlayCannonBallFX( const kbVec3 location ) {
 	pCannonBallImpact->SetOrientation( GetOwnerRotation() );
 	pCannonBallImpact->DeleteWhenComponentsAreInactive( true );
 
-	CannonCameraShakeComponent *const pCamShakeComponent = (CannonCameraShakeComponent*)pCannonBallImpact->GetComponentByType( CannonCameraShakeComponent::GetType() );
-	CannonCameraComponent *const pCam = (CannonCameraComponent*)g_pCannonGame->GetMainCamera();
-	if ( pCamShakeComponent != nullptr && pCam != nullptr ) {
-		pCam->StartCameraShake( pCamShakeComponent );
-	}
+	PlayCameraShake();
 
 	if ( m_CannonBallImpactSound.size() > 0 ) {
 		m_CannonBallImpactSound[rand() % m_CannonBallImpactSound.size()].PlaySoundAtPosition( GetOwnerPosition() );
+	}
+}
+
+/**
+ *	KungFuSheepComponent::PlayCameraShake
+ */
+void KungFuSheepComponent::PlayCameraShake() {
+	CannonCameraShakeComponent *const pCamShakeComponent = (CannonCameraShakeComponent*)m_CannonBallImpactFX.GetEntity()->GetComponentByType( CannonCameraShakeComponent::GetType() );
+	CannonCameraComponent *const pCam = (CannonCameraComponent*)g_pCannonGame->GetMainCamera();
+	if ( pCamShakeComponent != nullptr && pCam != nullptr ) {
+		pCam->StartCameraShake( pCamShakeComponent );
 	}
 }
 

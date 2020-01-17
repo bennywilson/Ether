@@ -48,6 +48,8 @@ public:
 	void										PlayImpactSound();
 
 	void										PlayCannonBallFX( const kbVec3 location );
+	void										PlayCameraShake();
+
 	void										SpawnSplash();
 
 	float										GetCannonBallMeterFill() const { return m_CannonBallMeter; }

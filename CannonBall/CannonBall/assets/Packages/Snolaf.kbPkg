@@ -347,7 +347,7 @@ kbGameEntity 314357658 1122514197 2466994618 463523205 {
 						LifeTime =  -1.000000
 						ParamName = "hatchParams"
 						Texture = NULL
-						Vector = 1.000000 100.000000 5.000000 0.3500000
+						Vector = 1.000000 100.000000 5.000000 0.350000
 					}
 					kbShaderParamComponent { 
 						Enabled = 0
@@ -502,7 +502,14 @@ kbGameEntity 314357658 1122514197 2466994618 463523205 {
 				Enabled = 0
 				LifeTime =  -1.000000
 				Animation = .\assets\models\characters\snolaf\kungfusheep\title.kbanim.ms3d
-				AnimationEvent = 0
+				AnimationEvent = 1
+					kbAnimEvent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						EventName = "HitCamera"
+						EventTime =  2.20000
+						EventValue =  0.000000
+					}
 				AnimationName = "Title"
 				IsLooping = 0
 				TimeScale =  5.000000
