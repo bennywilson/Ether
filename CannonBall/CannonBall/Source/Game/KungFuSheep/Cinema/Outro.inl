@@ -248,6 +248,7 @@ public:
 
 				if ( GetStateTime() > DisplayTitleTime ) {
 					if ( m_p3000TonTitleEntity.GetEntity() != nullptr ) {
+						g_pGame->SetDeltaTimeScale( 0.0f );
 						m_p3000TonTitleEntity.GetEntity()->GetComponent<kbUIWidgetComponent>()->Enable( true );
 					}
 				}
@@ -264,6 +265,7 @@ public:
 					}
 
 					if ( m_p3000TonTitleEntity.GetEntity() != nullptr ) {
+						g_pGame->SetDeltaTimeScale( 1.0f );
 						m_p3000TonTitleEntity.GetEntity()->GetComponent<kbUIWidgetComponent>()->Enable( false );
 					}
 
