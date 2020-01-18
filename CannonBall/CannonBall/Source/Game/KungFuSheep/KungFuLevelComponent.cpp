@@ -305,20 +305,22 @@ private:
 			numSnolafs++;
 		}
 		
-		auto pLevelComponent = KungFuLevelComponent::Get();
-		if ( m_NumSnolafsKilled == 0 ) {
+		if ( g_SkipCheat != KungFuGame::Skip_ToEnd ) {
+			auto pLevelComponent = KungFuLevelComponent::Get();
+			if ( m_NumSnolafsKilled == 0 ) {
 
-			if ( numSnolafs == 0 ) {
-				pLevelComponent->SpawnEnemy( true, 1 );
+				if ( numSnolafs == 0 ) {
+					pLevelComponent->SpawnEnemy( true, 1 );
+				}
+			} else if ( g_GlobalTimer.TimeElapsedSeconds() > m_LastSpawnTime + KungFuGame::kTimeBetweenSnolafWaves ) {
+
+				const float distTraveled = pLevelComponent->GetDistancePlayerHasTraveled();
+				const float normalizedDistTraveled = kbSaturate( distTraveled / KungFuGame::kLevelLength );
+				const int numToSpawn = ( (int)( normalizedDistTraveled * KungFuGame::kMaxSnolafWaveSize ) + 1 ) & 0xfffffffe;
+				pLevelComponent->SpawnEnemy( false, numToSpawn );
+
+				m_LastSpawnTime = g_GlobalTimer.TimeElapsedSeconds();
 			}
-		} else if ( g_GlobalTimer.TimeElapsedSeconds() > m_LastSpawnTime + KungFuGame::kTimeBetweenSnolafWaves ) {
-
-			const float distTraveled = pLevelComponent->GetDistancePlayerHasTraveled();
-			const float normalizedDistTraveled = kbSaturate( distTraveled / KungFuGame::kLevelLength );
-			const int numToSpawn = ( (int)( normalizedDistTraveled * KungFuGame::kMaxSnolafWaveSize ) + 1 ) & 0xfffffffe;
-			pLevelComponent->SpawnEnemy( false, numToSpawn );
-
-			m_LastSpawnTime = g_GlobalTimer.TimeElapsedSeconds();
 		}
 
 		if ( g_pCannonGame->GetPlayer()->IsDead() ) {

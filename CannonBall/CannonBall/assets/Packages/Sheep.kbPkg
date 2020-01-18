@@ -1259,7 +1259,7 @@ kbGameEntity 3807537734 1283872403 1661460398 2211889957 {
 						LifeTime =  -1.000000
 						ParamName = "hatchParams"
 						Texture = NULL
-						Vector = 1.000000 100.000000 5.000000 0.350000
+						Vector = 1.000000 100.000000 55.000000 0.350000
 					}
 					kbShaderParamComponent { 
 						Enabled = 0

@@ -1,8 +1,8 @@
-kbGameEntity 1565875854 1198426122 2704030889 1753037118 {
+kbGameEntity 2970145866 1273422823 595192712 502921127 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		Name = "Entity_225"
+		Name = "Entity_226"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
 		Position = 0.000000 0.000000 0.000000
 		Scale = 1.000000 1.000000 1.000000
@@ -4681,7 +4681,7 @@ kbGameEntity 2813763918 1107914595 2561660852 2373538385 {
 						Enabled = 0
 						LifeTime =  -1.000000
 						ParamName = "baseTexture"
-						Texture = .\assets\ui\kungfusheep\3000ton_title.jpg
+						Texture = .\assets\ui\kungfusheep\3000ton_title.tif
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 					kbShaderParamComponent { 
