@@ -1,8 +1,8 @@
-kbGameEntity 3109283906 1279698183 2758583462 2345222375 {
+kbGameEntity 2803678983 1264994369 3542044306 4199785883 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		Name = "Entity_225"
+		Name = "Entity_227"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
 		Position = 0.000000 0.000000 0.000000
 		Scale = 1.000000 1.000000 1.000000
@@ -10,8 +10,8 @@ kbGameEntity 3109283906 1279698183 2758583462 2345222375 {
 	kbEditorLevelSettingsComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		MainCameraPosition = 70.547897 -50.932735 -234.338318
-		MainCameraRotation = 0.042185 0.698388 -0.041304 -0.713280
+		MainCameraPosition = 69.346451 -50.489849 -230.754150
+		MainCameraRotation = 0.086998 0.787269 -0.114216 -0.599662
 	}
 }
 kbGameEntity 537364968 1092523782 2953639826 2626478307 {
@@ -3925,7 +3925,7 @@ kbGameEntity 968885140 1085284001 2323485569 3680011406 {
 		Scale = 555.000000 555.000000 1.000000
 	}
 	CannonBallMainMenuComponent { 
-		Enabled = 0
+		Enabled = 1
 		LifeTime =  -1.000000
 		Anchor = MiddleLeft
 		AxisLock = LockYAxis
@@ -3990,7 +3990,7 @@ kbGameEntity 968885140 1085284001 2323485569 3680011406 {
 				RelativeSize = 1.000000 1.000000 1.000000
 			}
 			kbUIWidgetComponent { 
-				Enabled = 0
+				Enabled = 1
 				LifeTime =  -1.000000
 				Anchor = MiddleLeft
 				AxisLock = LockAll
