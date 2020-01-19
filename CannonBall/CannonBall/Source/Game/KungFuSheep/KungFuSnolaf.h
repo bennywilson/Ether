@@ -17,6 +17,7 @@ namespace KungFuSnolafState {
 		Prehug,
 		Hug,
 		Dead,
+		ForcePoofDeath,
 		WatchCannonBall,
 		RunAway,
 		Cinema,

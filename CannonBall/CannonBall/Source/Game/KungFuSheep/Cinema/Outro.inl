@@ -54,8 +54,8 @@ public:
 		const kbString eventName = animEvent.m_AnimEvent.GetEventName();
 		auto pSheep = KungFuLevelComponent::Get()->GetSheep();
 		if ( eventName == sPounce_1 ) {
-			m_pSnolafGuards[0]->RequestStateChange( KungFuSnolafState::Dead );
-			m_pSnolafGuards[1]->RequestStateChange( KungFuSnolafState::Dead );
+			m_pSnolafGuards[0]->RequestStateChange( KungFuSnolafState::ForcePoofDeath );
+			m_pSnolafGuards[1]->RequestStateChange( KungFuSnolafState::ForcePoofDeath );
 
 			kbGameEntityPtr pEnt = g_pGame->GetEntityByName( kbString( "3000 Ton Smash Snolaf Pos" ) );
 			pSheep->PlayCannonBallFX( pEnt.GetEntity()->GetPosition() );

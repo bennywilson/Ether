@@ -330,7 +330,6 @@ public:
 	virtual void EndState_Internal( T ) override { }
 };
 
-
 /**
  *	KungFuSnolafStateDead
  */
@@ -527,6 +526,31 @@ private:
 };
 
 /**
+ *	KungFuSnolafStatePoofDeath
+ */
+template<typename T>
+class KungFuSnolafStatePoofDeath : public KungFuSnolafStateBase<T> {
+
+//---------------------------------------------------------------------------------------------------
+public:
+	KungFuSnolafStatePoofDeath( CannonActorComponent *const pPlayerComponent ) : KungFuSnolafStateBase( pPlayerComponent ) { }
+
+	virtual void BeginState_Internal( T ) override {
+
+		GetSnolaf()->EnableSmallLoveHearts( false );
+		GetSnolaf()->EnableLargeLoveHearts( false );
+
+		GetSnolaf()->DoPoofDeath();
+	}
+
+	virtual void UpdateState_Internal() override {
+
+	}
+
+	virtual void EndState_Internal( T ) override { }
+};
+
+/**
  *	KungFuSnolafStateRunAway
  */
 template<typename T>
@@ -631,6 +655,7 @@ void KungFuSnolafComponent::SetEnable_Internal( const bool bEnable ) {
 			new KungFuSnolafeStatePrehug<KungFuSnolafState::SnolafState_t>( this ),
 			new KungFuSnolafStateHug<KungFuSnolafState::SnolafState_t>( this ),
 			new KungFuSnolafStateDead<KungFuSnolafState::SnolafState_t>( this ),
+			new KungFuSnolafStatePoofDeath<KungFuSnolafState::SnolafState_t>( this ),
 			new KungFuSnolafStateWatchCannonBall<KungFuSnolafState::SnolafState_t>( this ),
 			new KungFuSnolafStateRunAway<KungFuSnolafState::SnolafState_t>( this ),
 			new KungFuSnolafStateCinema<KungFuSnolafState::SnolafState_t>( this )
