@@ -469,6 +469,7 @@ public:
 					ChangeState( Painted_Title );
 				} else if ( GetStateTime() > 0.5f ) {
 					pSheep->PlayAnimation( kbString( "Title" ), 0.15f );
+					pSheep->EnableHeadBand( false );
 				}
 				break;
 			}
@@ -492,6 +493,9 @@ public:
 		auto pCamera = g_pCannonGame->GetMainCamera();
 		pCamera->SetLookAtOffset( kbVec3( 0.000000f, 2.500000f, 0.000000f ), -1.0f );
 		pCamera->SetPositionOffset( kbVec3( -10.933998f, 3.224068f, 0.000000f ), -1.0f );
+
+		auto pSheep = KungFuLevelComponent::Get()->GetSheep();
+		pSheep->EnableHeadBand( true );
 
 		KungFuLevelComponent::Get()->GetPresent(0).GetEntity()->GetComponent<kbSkeletalModelComponent>()->Enable( false );
 		KungFuLevelComponent::Get()->GetPresent(1).GetEntity()->GetComponent<kbSkeletalModelComponent>()->Enable( false );

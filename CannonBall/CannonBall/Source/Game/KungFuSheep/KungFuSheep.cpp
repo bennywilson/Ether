@@ -892,6 +892,17 @@ void KungFuSheepComponent::PlayCameraShake() {
 }
 
 /**
+ *	KungFuSheepComponent::EnableHeadBand
+ */
+void KungFuSheepComponent::EnableHeadBand( const bool bEnable ) {
+
+	if ( m_HeadBandInstance[0].GetEntity() != nullptr ) {
+		m_HeadBandInstance[0].GetEntity()->GetComponent<kbSkeletalModelComponent>()->Enable( bEnable );
+		m_HeadBandInstance[1].GetEntity()->GetComponent<kbSkeletalModelComponent>()->Enable( bEnable );
+	}
+}
+
+/**
  *	KungFuSheepComponent::PlayImpactSound
  */
 void KungFuSheepComponent::PlayImpactSound() {

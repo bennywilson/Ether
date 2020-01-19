@@ -1,8 +1,8 @@
-kbGameEntity 2970145866 1273422823 595192712 502921127 {
+kbGameEntity 3109283906 1279698183 2758583462 2345222375 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		Name = "Entity_226"
+		Name = "Entity_225"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
 		Position = 0.000000 0.000000 0.000000
 		Scale = 1.000000 1.000000 1.000000
@@ -10,8 +10,8 @@ kbGameEntity 2970145866 1273422823 595192712 502921127 {
 	kbEditorLevelSettingsComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		MainCameraPosition = 73.662903 -50.688900 -234.181213
-		MainCameraRotation = 0.152541 0.623852 -0.125859 -0.756108
+		MainCameraPosition = 70.547897 -50.932735 -234.338318
+		MainCameraRotation = 0.042185 0.698388 -0.041304 -0.713280
 	}
 }
 kbGameEntity 537364968 1092523782 2953639826 2626478307 {
@@ -3925,7 +3925,7 @@ kbGameEntity 968885140 1085284001 2323485569 3680011406 {
 		Scale = 555.000000 555.000000 1.000000
 	}
 	CannonBallMainMenuComponent { 
-		Enabled = 1
+		Enabled = 0
 		LifeTime =  -1.000000
 		Anchor = MiddleLeft
 		AxisLock = LockYAxis
@@ -3990,7 +3990,7 @@ kbGameEntity 968885140 1085284001 2323485569 3680011406 {
 				RelativeSize = 1.000000 1.000000 1.000000
 			}
 			kbUIWidgetComponent { 
-				Enabled = 1
+				Enabled = 0
 				LifeTime =  -1.000000
 				Anchor = MiddleLeft
 				AxisLock = LockAll
@@ -5184,5 +5184,74 @@ kbGameEntity 3733824195 1207903711 1401863562 1523924579 {
 				EventTime =  1.000000
 				EventValue =  1.000000
 			}
+	}
+}
+kbGameEntity 2684646162 1162908266 836236475 2683629200 {
+	kbTransformComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		Name = "TV Overlay"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 74.384018 -49.436947 -308.378693
+		Scale = 555.000000 555.000000 1.000000
+	}
+	kbUIWidgetComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Anchor = TopLeft
+		AxisLock = LockAll
+		ChildWidgets = 0
+		Materials = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\ui\ui_basic.kbshader
+				ShaderParams = 6
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "normalizedScreenSize_Anchor"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorFactor"
+						Texture = NULL
+						Vector = 1.000000 1.000000 1.000000 1.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "rotationAngle"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "additiveTextureParams"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "baseTexture"
+						Texture = .\assets\ui\kungfusheep\tv_overlay.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "additiveTexture"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		RelativePosition = 0.000000 0.000000 0.000000
+		RelativeSize = 1.000000 1.000000 1.000000
 	}
 }

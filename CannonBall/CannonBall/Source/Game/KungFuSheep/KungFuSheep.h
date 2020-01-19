@@ -50,6 +50,8 @@ public:
 	void										PlayCannonBallFX( const kbVec3 location );
 	void										PlayCameraShake();
 
+	void										EnableHeadBand( const bool bEnable );
+
 	void										SpawnSplash();
 
 	float										GetCannonBallMeterFill() const { return m_CannonBallMeter; }
