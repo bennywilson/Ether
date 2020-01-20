@@ -257,7 +257,9 @@ void CannonBallPauseMenuUIComponent::Constructor() {
 	m_bRequestClose = false;
 }
 
-const kbVec3 g_CheckMarkPos[] = {  kbVec3( 0.4f, 0.365f, 0.0f ), kbVec3( 0.3519f, 0.4399f, 0.0f ), kbVec3( 0.31f, 0.5f, 0.0f ), kbVec3( 0.32f, 0.58f, 0.0f ), kbVec3( 0.4f, 0.65f, 0.0f ) }; 
+const kbVec3 g_CheckMarkPos[] = {  kbVec3( 0.400000f, 0.287480f, 0.000000f ), kbVec3( 0.3600704f, 0.353173f, 0.000000f ), kbVec3(0.325628f, 0.415369f, 0.000000f ), kbVec3( 0.322864f, 0.484983f, 0.000000f ), kbVec3( 0.400000f, 0.557629f, 0.000000f ) }; 
+kbVec3 g_Offsets[] = { kbVec3::zero, kbVec3::zero, kbVec3::zero, kbVec3::zero, kbVec3::zero, kbVec3::zero };
+/*
 
 /**
  *	CannonBallPauseMenuUIComponent::SetEnable_Internal
@@ -355,7 +357,10 @@ void CannonBallPauseMenuUIComponent::RecalculateChildrenTransform() {
 	const float ScreenPixelWidth = (float)g_pRenderer->GetBackBufferWidth();
 	const float ScreenPixelHeight = (float)g_pRenderer->GetBackBufferHeight();
 
+	static float sliderOffset = 0.03f;
+
 	kbVec3 nextPos = m_StartingWidgetAnchorPt;
+	nextPos.x -= sliderOffset;	// hack!
 	for ( size_t i = 0; i < m_WidgetList.size(); i++ ) {
 		kbUIWidgetComponent & widget = *m_WidgetList[i];
 		const kbVec2i textureDim = widget.GetBaseTextureDimensions();
@@ -416,7 +421,7 @@ void CannonBallPauseMenuUIComponent::InputCB( const kbInput_t & input ) {
 			}
 		}
 
-		m_Widgets.back().SetRelativePosition( g_CheckMarkPos[m_SelectedWidgetIdx] );
+		m_Widgets.back().SetRelativePosition( g_CheckMarkPos[m_SelectedWidgetIdx] + g_Offsets[m_SelectedWidgetIdx] );
 	}
 
 	if ( input.IsNonCharKeyPressedOrDown( kbInput_t::Return ) || WasAttackJustPressed() || WasSpecialAttackPressed() || WasStartButtonPressed() ) {
@@ -433,7 +438,37 @@ void CannonBallPauseMenuUIComponent::Update_Internal( const float DT ) {
 	Super::Update_Internal( DT );
 
 	RecalculateChildrenTransform();
+/*
+	static int offsetIdx = 0;
+	if ( GetAsyncKeyState( '0' ) ) {
+		offsetIdx = 0;
+	} else if ( GetAsyncKeyState( '1' ) ) {
+		offsetIdx = 1;
+	} else if ( GetAsyncKeyState( '2' ) ) {
+		offsetIdx = 2;
+	} else if ( GetAsyncKeyState( '3' ) ) {
+		offsetIdx = 3;
+	} else if ( GetAsyncKeyState( '4' ) ) {
+		offsetIdx = 4;
+	}
 
+	static float speed = 0.25f;
+	if ( GetAsyncKeyState('U')) {
+		g_Offsets[offsetIdx].y += DT * speed;
+	} else if ( GetAsyncKeyState('I')) {
+		g_Offsets[offsetIdx].y -= DT * speed;
+	} else if ( GetAsyncKeyState('J')) {
+		g_Offsets[offsetIdx].x -= DT * speed;
+	} else if ( GetAsyncKeyState('K')) {
+		g_Offsets[offsetIdx].x += DT * speed;
+	}
+
+	kbLog( "------" );
+	for ( int i = 0; i < 5; i++ ) {
+		kbLog( "%d: %f %f %f", i, g_CheckMarkPos[i].x + g_Offsets[i].x, g_CheckMarkPos[i].y + g_Offsets[i].y, g_CheckMarkPos[i].z + g_Offsets[i].z );
+	}
+		m_Widgets.back().SetRelativePosition( g_CheckMarkPos[m_SelectedWidgetIdx] + g_Offsets[m_SelectedWidgetIdx] );
+		*/
 	for ( size_t i = 0; i < m_Widgets.size(); i++ ) {
 		kbUIWidgetComponent & widget = m_Widgets[i];
 		widget.Update( DT );

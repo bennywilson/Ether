@@ -1,8 +1,8 @@
-kbGameEntity 3666259139 1074263486 4191895443 3968661989 {
+kbGameEntity 3029240395 1199103925 954790317 144456754 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		Name = "Entity_226"
+		Name = "Entity_225"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
 		Position = 0.000000 0.000000 0.000000
 		Scale = 1.000000 1.000000 1.000000
@@ -11,7 +11,7 @@ kbGameEntity 3666259139 1074263486 4191895443 3968661989 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		MainCameraPosition = 69.346451 -50.489849 -230.754150
-		MainCameraRotation = -0.041010 -0.948463 0.137709 0.282441
+		MainCameraRotation = -0.049545 0.741683 -0.055124 0.666643
 	}
 }
 kbGameEntity 537364968 1092523782 2953639826 2626478307 {
@@ -2816,7 +2816,7 @@ kbGameEntity 3694840569 1275494847 809542060 2421163822 {
 						LifeTime =  -1.000000
 						ParamName = "normalizedScreenSize_Anchor"
 						Texture = NULL
-						Vector = 0.500000 0.888889 0.500000 0.494444
+						Vector = 0.500000 0.750912 0.500000 0.425456
 					}
 					kbShaderParamComponent { 
 						Enabled = 0
@@ -2847,8 +2847,8 @@ kbGameEntity 3694840569 1275494847 809542060 2421163822 {
 	CannonBallPauseMenuUIComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		AuthoredHeight = 128
-		AuthoredWidth = 128
+		AuthoredHeight = 1132
+		AuthoredWidth = 1340
 		NormalizedAnchorPoint = 0.250000 0.050000 0.000000
 		UIToScreenSizeRatio = 0.500000 0.500000 0.000000
 		SliderWidgets = 3
@@ -2907,7 +2907,7 @@ kbGameEntity 3694840569 1275494847 809542060 2421163822 {
 										Vector = 0.000000 0.000000 0.000000 0.000000
 									}
 							}
-						RelativePosition = 0.000000 0.000000 0.000000
+						RelativePosition = 0.400000 0.000000 0.000000
 						RelativeSize = 0.330000 0.075000 1.000000
 					}
 					kbUIWidgetComponent { 
