@@ -177,7 +177,7 @@ inline kbVec2 GetLeftStick( const kbInput_t *const pInput = nullptr ) {
 	} else if ( input.IsKeyPressedOrDown( 'S' ) ) {
 		retLeftStick.y = -1.0f;
 	} else {
-		retLeftStick.y = input.m_LeftStick.x;
+		retLeftStick.y = input.m_LeftStick.y;
 	}
 
 	return retLeftStick;

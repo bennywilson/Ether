@@ -1,8 +1,8 @@
-kbGameEntity 1636260796 1282262338 2216571040 1242479711 {
+kbGameEntity 3666259139 1074263486 4191895443 3968661989 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		Name = "Entity_225"
+		Name = "Entity_226"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
 		Position = 0.000000 0.000000 0.000000
 		Scale = 1.000000 1.000000 1.000000
@@ -11,7 +11,7 @@ kbGameEntity 1636260796 1282262338 2216571040 1242479711 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		MainCameraPosition = 69.346451 -50.489849 -230.754150
-		MainCameraRotation = 0.086998 0.787269 -0.114216 -0.599662
+		MainCameraRotation = -0.041010 -0.948463 0.137709 0.282441
 	}
 }
 kbGameEntity 537364968 1092523782 2953639826 2626478307 {
@@ -2869,7 +2869,7 @@ kbGameEntity 3694840569 1275494847 809542060 2421163822 {
 								Enabled = 0
 								LifeTime =  -1.000000
 								CullModeOverride = ShaderDefault
-								Shader = .\assets\shaders\ui\ui_basic.kbshader
+								Shader = .\assets\shaders\ui\ui_additive.kbshader
 								ShaderParams = 5
 									kbShaderParamComponent { 
 										Enabled = 0
@@ -2908,7 +2908,7 @@ kbGameEntity 3694840569 1275494847 809542060 2421163822 {
 									}
 							}
 						RelativePosition = 0.000000 0.000000 0.000000
-						RelativeSize = 0.350000 0.075000 1.000000
+						RelativeSize = 0.330000 0.075000 1.000000
 					}
 					kbUIWidgetComponent { 
 						Enabled = 0
@@ -2967,7 +2967,7 @@ kbGameEntity 3694840569 1275494847 809542060 2421163822 {
 						Enabled = 0
 						LifeTime =  -1.000000
 						CullModeOverride = ShaderDefault
-						Shader = .\assets\shaders\ui\ui_basic.kbshader
+						Shader = .\assets\shaders\ui\ui_additive.kbshader
 						ShaderParams = 6
 							kbShaderParamComponent { 
 								Enabled = 0
@@ -2987,7 +2987,7 @@ kbGameEntity 3694840569 1275494847 809542060 2421163822 {
 								Enabled = 0
 								LifeTime =  -1.000000
 								ParamName = "baseTexture"
-								Texture = .\assets\ui\pausemenu\volume.tif
+								Texture = ..\..\kbengine\assets\textures\black.bmp
 								Vector = 0.000000 0.000000 0.000000 0.000000
 							}
 							kbShaderParamComponent { 
@@ -3034,7 +3034,7 @@ kbGameEntity 3694840569 1275494847 809542060 2421163822 {
 								Enabled = 0
 								LifeTime =  -1.000000
 								CullModeOverride = ShaderDefault
-								Shader = .\assets\shaders\ui\ui_basic.kbshader
+								Shader = .\assets\shaders\ui\ui_additive.kbshader
 								ShaderParams = 5
 									kbShaderParamComponent { 
 										Enabled = 0
@@ -3073,7 +3073,7 @@ kbGameEntity 3694840569 1275494847 809542060 2421163822 {
 									}
 							}
 						RelativePosition = 0.000000 0.000000 0.000000
-						RelativeSize = 0.350000 0.075000 1.000000
+						RelativeSize = 0.330000 0.075000 1.000000
 					}
 					kbUIWidgetComponent { 
 						Enabled = 0
@@ -3086,7 +3086,7 @@ kbGameEntity 3694840569 1275494847 809542060 2421163822 {
 								Enabled = 0
 								LifeTime =  -1.000000
 								CullModeOverride = ShaderDefault
-								Shader = .\assets\shaders\ui\ui_basic.kbshader
+								Shader = .\assets\shaders\ui\ui_additive.kbshader
 								ShaderParams = 5
 									kbShaderParamComponent { 
 										Enabled = 0
@@ -3152,7 +3152,7 @@ kbGameEntity 3694840569 1275494847 809542060 2421163822 {
 								Enabled = 0
 								LifeTime =  -1.000000
 								ParamName = "baseTexture"
-								Texture = .\assets\ui\pausemenu\videoquality.tif
+								Texture = ..\..\kbengine\assets\textures\ui_additive.bmp
 								Vector = 0.000000 0.000000 0.000000 0.000000
 							}
 							kbShaderParamComponent { 
@@ -3199,7 +3199,7 @@ kbGameEntity 3694840569 1275494847 809542060 2421163822 {
 								Enabled = 0
 								LifeTime =  -1.000000
 								CullModeOverride = ShaderDefault
-								Shader = .\assets\shaders\ui\ui_basic.kbshader
+								Shader = .\assets\shaders\ui\ui_additive.kbshader
 								ShaderParams = 5
 									kbShaderParamComponent { 
 										Enabled = 0
@@ -3238,7 +3238,7 @@ kbGameEntity 3694840569 1275494847 809542060 2421163822 {
 									}
 							}
 						RelativePosition = 0.000000 0.000000 0.000000
-						RelativeSize = 0.350000 0.075000 1.000000
+						RelativeSize = 0.330000 0.075000 1.000000
 					}
 					kbUIWidgetComponent { 
 						Enabled = 0
@@ -3297,7 +3297,7 @@ kbGameEntity 3694840569 1275494847 809542060 2421163822 {
 						Enabled = 0
 						LifeTime =  -1.000000
 						CullModeOverride = ShaderDefault
-						Shader = .\assets\shaders\ui\ui_basic.kbshader
+						Shader = .\assets\shaders\ui\ui_additive.kbshader
 						ShaderParams = 6
 							kbShaderParamComponent { 
 								Enabled = 0
@@ -3324,7 +3324,7 @@ kbGameEntity 3694840569 1275494847 809542060 2421163822 {
 								Enabled = 0
 								LifeTime =  -1.000000
 								ParamName = "baseTexture"
-								Texture = .\assets\ui\pausemenu\brightness.tif
+								Texture = ..\..\kbengine\assets\textures\black.bmp
 								Vector = 0.000000 0.000000 0.000000 0.000000
 							}
 							kbShaderParamComponent { 
@@ -3360,7 +3360,7 @@ kbGameEntity 3694840569 1275494847 809542060 2421163822 {
 				WaveFile = .\assets\sounds\music\testvolumeloop.wav
 			}
 		WidgetSize = 0.100000 0.050000 1.000000
-		Widgets = 2
+		Widgets = 3
 			kbUIWidgetComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
@@ -3372,7 +3372,7 @@ kbGameEntity 3694840569 1275494847 809542060 2421163822 {
 						Enabled = 0
 						LifeTime =  -1.000000
 						CullModeOverride = ShaderDefault
-						Shader = .\assets\shaders\ui\ui_basic.kbshader
+						Shader = .\assets\shaders\ui\ui_additive.kbshader
 						ShaderParams = 6
 							kbShaderParamComponent { 
 								Enabled = 0
@@ -3399,7 +3399,7 @@ kbGameEntity 3694840569 1275494847 809542060 2421163822 {
 								Enabled = 0
 								LifeTime =  -1.000000
 								ParamName = "baseTexture"
-								Texture = .\assets\ui\pausemenu\back.tif
+								Texture = ..\..\kbengine\assets\textures\black.bmp
 								Vector = 0.000000 0.000000 0.000000 0.000000
 							}
 							kbShaderParamComponent { 
@@ -3431,7 +3431,7 @@ kbGameEntity 3694840569 1275494847 809542060 2421163822 {
 						Enabled = 0
 						LifeTime =  -1.000000
 						CullModeOverride = ShaderDefault
-						Shader = .\assets\shaders\ui\ui_basic.kbshader
+						Shader = .\assets\shaders\ui\ui_additive.kbshader
 						ShaderParams = 6
 							kbShaderParamComponent { 
 								Enabled = 0
@@ -3458,7 +3458,7 @@ kbGameEntity 3694840569 1275494847 809542060 2421163822 {
 								Enabled = 0
 								LifeTime =  -1.000000
 								ParamName = "baseTexture"
-								Texture = .\assets\ui\pausemenu\quit.tif
+								Texture = ..\..\kbengine\assets\textures\black.bmp
 								Vector = 0.000000 0.000000 0.000000 0.000000
 							}
 							kbShaderParamComponent { 
@@ -3478,6 +3478,65 @@ kbGameEntity 3694840569 1275494847 809542060 2421163822 {
 					}
 				RelativePosition = 0.299280 0.600000 0.000000
 				RelativeSize = 0.200720 0.150000 1.000000
+			}
+			kbUIWidgetComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchor = TopLeft
+				AxisLock = LockAll
+				ChildWidgets = 0
+				Materials = 1
+					kbMaterialComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						CullModeOverride = ShaderDefault
+						Shader = .\assets\shaders\ui\ui_additive.kbshader
+						ShaderParams = 6
+							kbShaderParamComponent { 
+								Enabled = 0
+								LifeTime =  -1.000000
+								ParamName = "normalizedScreenSize_Anchor"
+								Texture = NULL
+								Vector = 0.000000 0.000000 0.000000 0.000000
+							}
+							kbShaderParamComponent { 
+								Enabled = 0
+								LifeTime =  -1.000000
+								ParamName = "colorFactor"
+								Texture = NULL
+								Vector = 1.000000 1.000000 1.000000 1.000000
+							}
+							kbShaderParamComponent { 
+								Enabled = 0
+								LifeTime =  -1.000000
+								ParamName = "rotationAngle"
+								Texture = NULL
+								Vector = 0.000000 0.000000 0.000000 0.000000
+							}
+							kbShaderParamComponent { 
+								Enabled = 0
+								LifeTime =  -1.000000
+								ParamName = "additiveTextureParams"
+								Texture = NULL
+								Vector = 0.000000 0.000000 0.000000 0.000000
+							}
+							kbShaderParamComponent { 
+								Enabled = 0
+								LifeTime =  -1.000000
+								ParamName = "baseTexture"
+								Texture = .\assets\ui\widgets\checkmark.jpg
+								Vector = 0.000000 0.000000 0.000000 0.000000
+							}
+							kbShaderParamComponent { 
+								Enabled = 0
+								LifeTime =  -1.000000
+								ParamName = "additiveTexture"
+								Texture = NULL
+								Vector = 0.000000 0.000000 0.000000 0.000000
+							}
+					}
+				RelativePosition = 0.375000 0.400000 0.000000
+				RelativeSize = 0.030000 0.050000 1.000000
 			}
 	}
 }

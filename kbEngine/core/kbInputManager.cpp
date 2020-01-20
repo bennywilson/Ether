@@ -111,19 +111,19 @@ void kbInputManager::Update( const float DeltaTime ) {
 			XINPUT_GAMEPAD & pGamePad = InputState.Gamepad;
 
 			if ( abs( pGamePad.sThumbLX ) > XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE ) {
-				m_Input.m_LeftStick.x = pGamePad.sThumbLX / 32767.0f;
+				m_Input.m_LeftStick.x = kbSaturate( pGamePad.sThumbLX / 32767.0f ) * 2.0f - 1.0f;
 			}
 
 			if ( abs( pGamePad.sThumbLY ) > XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE ) {
-				m_Input.m_LeftStick.y = pGamePad.sThumbLY / 32767.0f;
+				m_Input.m_LeftStick.y = kbSaturate( pGamePad.sThumbLY / 32767.0f ) * 2.0f - 1.0f;
 			}
 
 			if ( abs( pGamePad.sThumbRX ) > XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE ) {
-				m_Input.m_RightStick.x = pGamePad.sThumbRX / 32767.0f;
+				m_Input.m_RightStick.x = kbSaturate( pGamePad.sThumbRX / 32767.0f ) * 2.0f - 1.0f;
 			}
 
 			if ( abs( pGamePad.sThumbRY ) > XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE ) {
-				m_Input.m_RightStick.y = pGamePad.sThumbRY / 32767.0f;
+				m_Input.m_RightStick.y = kbSaturate(  pGamePad.sThumbRY / 32767.0f ) * 2.0f - 1.0f;
 			}
 
 			if ( pGamePad.bLeftTrigger > XINPUT_GAMEPAD_TRIGGER_THRESHOLD ) {

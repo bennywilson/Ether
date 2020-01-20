@@ -257,6 +257,8 @@ void CannonBallPauseMenuUIComponent::Constructor() {
 	m_bRequestClose = false;
 }
 
+const kbVec3 g_CheckMarkPos[] = {  kbVec3( 0.4f, 0.365f, 0.0f ), kbVec3( 0.3519f, 0.4399f, 0.0f ), kbVec3( 0.31f, 0.5f, 0.0f ), kbVec3( 0.32f, 0.58f, 0.0f ), kbVec3( 0.4f, 0.65f, 0.0f ) }; 
+
 /**
  *	CannonBallPauseMenuUIComponent::SetEnable_Internal
  */
@@ -287,13 +289,8 @@ void CannonBallPauseMenuUIComponent::SetEnable_Internal( const bool bEnable ) {
 		m_WidgetList.push_back( &m_SliderWidgets[2] );
 		m_WidgetList.push_back( &m_Widgets[1] );
 
-		for ( int i = 0;  i< m_WidgetList.size(); i++ ) {
-			m_WidgetList[i]->SetAdditiveTextureFactor( 0.0f );
-		}
-
 		m_SelectedWidgetIdx = 0;
 		m_WidgetList[m_SelectedWidgetIdx]->SetFocus( true );
-		m_WidgetList[m_SelectedWidgetIdx]->SetAdditiveTextureFactor( 1.0f );
 
 		RecalculateChildrenTransform();
 
@@ -303,6 +300,9 @@ void CannonBallPauseMenuUIComponent::SetEnable_Internal( const bool bEnable ) {
 		m_bHackSlidersInit = true;
 
 		g_pInputManager->RegisterInputListener( this );
+
+		m_Widgets.back().SetRelativePosition( g_CheckMarkPos[m_SelectedWidgetIdx] );
+		m_Widgets.back().SetRenderOrderBias( -5.0f );
 	} else {
 		for ( int i = 0; i < m_Widgets.size(); i++ ) {
 			m_Entity.RemoveComponent( &m_Widgets[i] );
@@ -408,9 +408,6 @@ void CannonBallPauseMenuUIComponent::InputCB( const kbInput_t & input ) {
 
 	if ( bNewOptionSelected ) {
 
-		m_WidgetList[m_SelectedWidgetIdx]->SetAdditiveTextureFactor( 1.0f );
-		m_WidgetList[prevSelected]->SetAdditiveTextureFactor( 0.0f );
-
 		if ( m_WidgetList[m_SelectedWidgetIdx] == &m_SliderWidgets[0] && m_VolumeSliderTestWav.size() > 0 ) {
 			m_VolumeSliderTestWav[rand() % m_VolumeSliderTestWav.size()].PlaySoundAtPosition( kbVec3::zero );
 		} else if ( m_WidgetList[prevSelected] == &m_SliderWidgets[0] ) {
@@ -418,6 +415,8 @@ void CannonBallPauseMenuUIComponent::InputCB( const kbInput_t & input ) {
 				m_VolumeSliderTestWav[i].StopSound();
 			}
 		}
+
+		m_Widgets.back().SetRelativePosition( g_CheckMarkPos[m_SelectedWidgetIdx] );
 	}
 
 	if ( input.IsNonCharKeyPressedOrDown( kbInput_t::Return ) || WasAttackJustPressed() || WasSpecialAttackPressed() || WasStartButtonPressed() ) {
