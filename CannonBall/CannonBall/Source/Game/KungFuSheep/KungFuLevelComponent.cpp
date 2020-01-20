@@ -21,7 +21,7 @@ namespace KungFuGame {
 
 };
 
-KungFuGame::eSkipCheats g_SkipCheat = KungFuGame::Skip_None;
+KungFuGame::eSkipCheats g_SkipCheat = KungFuGame::Skip_ToEnd;
 
 #include "Cinema\Outro.inl"
 
@@ -626,9 +626,6 @@ void KungFuLevelComponent::Update_Internal( const float DeltaTime ) {
 			}
 		}
 	}
-
-	m_pCannonBallUI->GetOwner()->DisableAllComponents();
-	m_pHealthBarUI->GetOwner()->DisableAllComponents();
 
 	if ( m_WaterDropletFXStartTime > 0.0f ) {
 

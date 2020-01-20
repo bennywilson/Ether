@@ -1,8 +1,8 @@
-kbGameEntity 2803678983 1264994369 3542044306 4199785883 {
+kbGameEntity 1636260796 1282262338 2216571040 1242479711 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		Name = "Entity_227"
+		Name = "Entity_225"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
 		Position = 0.000000 0.000000 0.000000
 		Scale = 1.000000 1.000000 1.000000
@@ -3992,15 +3992,15 @@ kbGameEntity 968885140 1085284001 2323485569 3680011406 {
 			kbUIWidgetComponent { 
 				Enabled = 1
 				LifeTime =  -1.000000
-				Anchor = MiddleLeft
-				AxisLock = LockAll
+				Anchor = TopLeft
+				AxisLock = LockYAxis
 				ChildWidgets = 0
 				Materials = 1
 					kbMaterialComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
 						CullModeOverride = ShaderDefault
-						Shader = .\assets\shaders\ui\ui_basic.kbshader
+						Shader = .\assets\shaders\ui\ui_additive.kbshader
 						ShaderParams = 6
 							kbShaderParamComponent { 
 								Enabled = 0
@@ -4034,7 +4034,7 @@ kbGameEntity 968885140 1085284001 2323485569 3680011406 {
 								Enabled = 0
 								LifeTime =  -1.000000
 								ParamName = "baseTexture"
-								Texture = ..\..\kbengine\assets\textures\white.bmp
+								Texture = .\assets\ui\widgets\checkmark.jpg
 								Vector = 0.000000 0.000000 0.000000 0.000000
 							}
 							kbShaderParamComponent { 
@@ -4045,8 +4045,8 @@ kbGameEntity 968885140 1085284001 2323485569 3680011406 {
 								Vector = 0.000000 0.000000 0.000000 0.000000
 							}
 					}
-				RelativePosition = 0.050000 0.530000 0.000000
-				RelativeSize = 0.050000 0.100000 1.000000
+				RelativePosition = 0.060000 0.850000 1.000000
+				RelativeSize = 0.070000 0.060000 1.000000
 			}
 		Materials = 1
 			kbMaterialComponent { 

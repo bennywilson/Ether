@@ -482,6 +482,9 @@ void CannonBallMainMenuComponent::Constructor() {
 /**
  *	CannonBallMainMenuComponent::InputCB
  */
+static float selectionStartX[] = { 0.06f, 0.21999f, 0.41999f };
+static float selectionOffset = 0.17f;
+
 void CannonBallMainMenuComponent::InputCB( const kbInput_t & input ) {
 
 	if ( m_AnimationState != 0 ) {
@@ -491,12 +494,12 @@ void CannonBallMainMenuComponent::InputCB( const kbInput_t & input ) {
 	const kbVec2 & leftStick = GetLeftStick( &input );
 	const kbVec2 & prevLeftStick = GetPrevLeftStick( &input );
 
-	if ( leftStick.y > 0.5f && prevLeftStick.y <= 0.5f ) {
+	if ( leftStick.x < -0.5f && prevLeftStick.x >= -0.5f ) {
 		m_MainMenuIdx = m_MainMenuIdx - 1;
 		if ( m_MainMenuIdx < 0 ) {
 			m_MainMenuIdx = 2;
 		}
-	} else if ( leftStick.y < -0.5f && prevLeftStick.y >= -0.5f ) {
+	} else if ( leftStick.x > 0.5f && prevLeftStick.x <= 0.5f ) {
 		m_MainMenuIdx = m_MainMenuIdx + 1;
 		if ( m_MainMenuIdx > 2 ) {
 			m_MainMenuIdx = 0;
@@ -504,7 +507,7 @@ void CannonBallMainMenuComponent::InputCB( const kbInput_t & input ) {
 	}
 
 	kbVec3 relPos = m_ChildWidgets[1].GetRelativePosition();
-	relPos.y = 0.53f + 0.17f * m_MainMenuIdx;
+	relPos.x = selectionStartX[m_MainMenuIdx];
 	m_ChildWidgets[1].SetRelativePosition( relPos );
 
 	if ( input.IsNonCharKeyPressedOrDown( kbInput_t::Return ) || WasAttackJustPressed() || WasSpecialAttackPressed() || WasStartButtonPressed() ) {
@@ -532,7 +535,7 @@ void CannonBallMainMenuComponent::SetEnable_Internal( const bool bEnable ) {
 		Recalculate( nullptr, true );
 
 		kbVec3 relPos = m_ChildWidgets[1].GetRelativePosition();
-		relPos.y = 0.53f + 0.17f * m_MainMenuIdx;
+		relPos.x = selectionStartX[m_MainMenuIdx];
 		m_ChildWidgets[1].SetRelativePosition( relPos );
 	}
 }

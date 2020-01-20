@@ -169,17 +169,7 @@ inline kbVec2 GetLeftStick( const kbInput_t *const pInput = nullptr ) {
 	} else if ( input.IsKeyPressedOrDown( 'D' ) ) {
 		retLeftStick.x = 1.0f;
 	} else {
-
-		if ( abs( input.m_LeftStick.x ) < 0.5f ) {
-			retLeftStick.x = 0.0f;
-		} else {
-
-			if ( input.m_LeftStick.x < 0.0f ) {
-				retLeftStick.x = input.m_LeftStick.x * 2.0f + 1.0f;
-			} else {
-				retLeftStick.x = input.m_LeftStick.x * 2.0f - 1.0f;
-			}
-		}
+		retLeftStick.x = input.m_LeftStick.x;
 	}
 
 	if ( input.IsKeyPressedOrDown( 'W' ) ) {
@@ -187,11 +177,7 @@ inline kbVec2 GetLeftStick( const kbInput_t *const pInput = nullptr ) {
 	} else if ( input.IsKeyPressedOrDown( 'S' ) ) {
 		retLeftStick.y = -1.0f;
 	} else {
-		if ( abs( input.m_LeftStick.y ) < 0.15f ) {
-			retLeftStick.y = 0.0f;
-		} else {
-			retLeftStick.y = input.m_LeftStick.y;
-		}
+		retLeftStick.y = input.m_LeftStick.x;
 	}
 
 	return retLeftStick;

@@ -114,6 +114,9 @@
     <None Include="Source\Game\KungFuSheep\Cinema\Outro.inl">
       <Filter>Source\Game\KungFuSheep\Cinema</Filter>
     </None>
+    <None Include="assets\shaders\UI\UI_Additive.kbShader">
+      <Filter>Shaders\UI</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Shaders">
