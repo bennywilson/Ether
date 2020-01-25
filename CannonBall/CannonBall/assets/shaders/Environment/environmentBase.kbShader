@@ -99,7 +99,6 @@ Texture2D clipMap(white)			: register(t4);
 
 	output.Depth.r = input.position2.x / input.position2.y;
 
-		
 	output.Specular = float4( propertyMapValues.x, max( 1.0f, propertyMapValues.y * 450.f ), emissive.x, emissive.y );
 	
 	float3x3 TBN = float3x3( normalize( input.TBN0.xyz ), normalize( input.TBN1.xyz ), normalize( input.TBN2.xyz ) );

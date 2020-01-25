@@ -236,13 +236,11 @@ public:
 			}
 		}
 
-		if ( g_GlobalTimer.TimeElapsedSeconds() - m_StartTime > KungFuGame::kTimeUntilRequeueReady ) {
-		
-			const kbInput_t & input = g_pInputManager->GetInput();
-			if ( WasAttackJustPressed() && KungFuSheepDirector::Get()->GetNumHuggersAndPrehuggers() == 0 ) {
-				m_bQueueAttack = true;
-			}
+		const kbInput_t & input = g_pInputManager->GetInput();
+		if ( WasAttackJustPressed() && KungFuSheepDirector::Get()->GetNumHuggersAndPrehuggers() == 0 ) {
+			m_bQueueAttack = true;
 		}
+
 		if ( m_pActorComponent->IsPlayingAnim( PunchL_Anim ) == false &&
 			 m_pActorComponent->IsPlayingAnim( KickL_Anim ) == false &&
 			 m_pActorComponent->IsPlayingAnim( PunchR_Anim ) == false && 
@@ -550,7 +548,7 @@ void KungFuSheepComponent::SetEnable_Internal( const bool bEnable ) {
 		m_Health = 1.0f;
 		m_CannonBallMeter = 0.0f;
 		if ( g_UseEditor == false ) {
-			KungFuLevelComponent *const pLevelComp = g_pCannonGame->GetLevelComponent<KungFuLevelComponent>();
+			KungFuLevelComponent* const pLevelComp = KungFuLevelComponent::Get();
 			pLevelComp->UpdateSheepHealthBar( m_Health );
 			pLevelComp->UpdateCannonBallMeter( m_CannonBallMeter, false );
 		}

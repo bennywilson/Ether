@@ -210,23 +210,23 @@ void CannonCameraComponent::Constructor() {
 	m_pTarget = nullptr;
 
 	// Game
+	m_SwitchTargetBlendSpeed = 1.0f;
+	m_SwitchTargetCurT = 1.0f;
+	m_SwitchTargetStartPos.Set( 0.0f, 0.0f, 0.0f );
+
+	m_SwitchPosOffsetBlendSpeed = 1.0f;
+	m_SwitchPosOffsetCurT = 1.0f;
+	m_PosOffsetTarget.Set( 0.0f, 0.0f, 0.0f );
+
+	m_SwitchLookAtOffsetBlendSpeed = 1.0f;
+	m_SwitchLookAtOffsetCurT = 1.0f;
+	m_LookAtOffsetTarget.Set( 0.0f, 0.0f, 0.0f );
+
 	m_CameraShakeStartTime = -1.0f;
 	m_CameraShakeStartingOffset.Set( 0.0f, 0.0f );
 	m_CameraShakeDuration = 0.0f;
 	m_CameraShakeAmplitude.Set( 0.0f, 0.0f );
 	m_CameraShakeFrequency.Set( 0.0f, 0.0f );
-
-	m_SwitchTargetCurT= 1.0f;
-	m_SwitchTargetBlendSpeed = 1.0f;
-	m_SwitchTargetStartPos.Set( 0.0f, 0.0f, 0.0f );
-
-	m_SwitchLookAtOffsetCurT = 1.0f;
-	m_SwitchLookAtOffsetBlendSpeed = 1.0f;
-	m_LookAtOffsetTarget.Set( 0.0f, 0.0f, 0.0f );
-
-	m_SwitchPosOffsetBlendSpeed = 1.0f;
-	m_SwitchPosOffsetCurT = 1.0f;
-	m_PosOffsetTarget.Set( 0.0f, 0.0f, 0.0f );
 }
 
 /**

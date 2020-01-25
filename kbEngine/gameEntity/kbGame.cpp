@@ -407,6 +407,7 @@ void kbGame::RemoveGameEntity( kbGameEntity *const pEntityToRemove ) {
  */
 kbGameEntityPtr kbGame::GetEntityByName( const kbString entName ) {
 
+	// TODO - Optimize
 	for ( int i = 0; i < m_GameEntityList.size(); i++ ) {
 		if ( m_GameEntityList[i]->GetName() == entName ) {
 			kbGameEntityPtr retEntity;

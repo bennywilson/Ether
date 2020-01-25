@@ -8,8 +8,10 @@ cbuffer matrixBuffer {
 	matrix		mvpMatrix;
 	float4		fxMapMask;
 	float4		clipMapMask;
-	float4		hatchParams = (0,0,0,0);
 	float4x4	boneList[128];
+
+	// Hatching
+	float4		hatchParams = (0,0,0,0);
 	float4		sunDir;
 };
 

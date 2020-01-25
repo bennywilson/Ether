@@ -16,7 +16,7 @@
  *	KungFuSnolafStateIdle
  */
 template<typename T>
-class KungFuSnolafStateIdle : public KungFuSnolafStateBase<T> {			
+class KungFuSnolafStateIdle : public KungFuSnolafStateBase<T> {
 
 //---------------------------------------------------------------------------------------------------
 public:
@@ -52,7 +52,7 @@ class KungFuSnolafStateRun : public KungFuSnolafStateBase<T> {
 
 //---------------------------------------------------------------------------------------------------
 private:
-	const float HugDelayTime = 0.1f;
+
 	float m_HugStartTime = -1.0f;
 
 public:
@@ -79,6 +79,7 @@ public:
 		const kbVec3 snolafPos = m_pActorComponent->GetOwnerPosition();
 		const kbVec3 snolafFacingDir = m_pActorComponent->GetOwnerRotation().ToMat4()[2].ToVec3();
 
+		// TODO - Optimize
 		// Look for actors to hug
 		bool bFoundHugger = false;
 		for ( int i = 0; i < g_pCannonGame->GetGameEntities().size(); i++ ) {
@@ -152,11 +153,13 @@ public:
 	virtual void UpdateState_Internal() override {
 		if ( GetTimeSinceStateBegan() > KungFuGame::kPrehugLengthSec ) {
 			RequestStateChange( KungFuSnolafState::Hug );
+			return;
 		}
 
 		const kbVec3 snolafPos = m_pActorComponent->GetOwnerPosition();
 		const kbVec3 snolafFacingDir = m_pActorComponent->GetOwnerRotation().ToMat4()[2].ToVec3();
 
+		// TODO - Optimize
 		bool bAnyoneInFront = false;
 		for ( int i = 0; i < g_pCannonGame->GetGameEntities().size(); i++ ) {
 
@@ -542,12 +545,6 @@ public:
 
 		GetSnolaf()->DoPoofDeath();
 	}
-
-	virtual void UpdateState_Internal() override {
-
-	}
-
-	virtual void EndState_Internal( T ) override { }
 };
 
 /**
@@ -581,9 +578,6 @@ public:
 		const kbVec3 newSnolafPos = m_pActorComponent->GetOwnerPosition() - moveDir * frameDT * m_pActorComponent->GetMaxRunSpeed();
 		m_pActorComponent->SetOwnerPosition( newSnolafPos );
 	}
-
-	virtual void EndState_Internal( T ) override {
-	}
 };
 
 /**
@@ -595,16 +589,6 @@ class KungFuSnolafStateCinema : public KungFuSnolafStateBase<T> {
 //---------------------------------------------------------------------------------------------------
 public:
 	KungFuSnolafStateCinema( CannonActorComponent *const pPlayerComponent ) : KungFuSnolafStateBase( pPlayerComponent ) { }
-
-	virtual void BeginState_Internal( T ) override {
-
-	}
-
-	virtual void UpdateState_Internal() override {
-	}
-
-	virtual void EndState_Internal( T ) override {
-	}
 };
 
 /**

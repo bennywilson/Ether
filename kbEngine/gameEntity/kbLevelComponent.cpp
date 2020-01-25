@@ -110,10 +110,9 @@ kbCinematicComponent::~kbCinematicComponent() {
 }
 
 /**
- *	kbCinematicComponent::Constructori
+ *	kbCinematicComponent::Constructor
  */
 void kbCinematicComponent::Constructor() {
-
 }
 
 /**

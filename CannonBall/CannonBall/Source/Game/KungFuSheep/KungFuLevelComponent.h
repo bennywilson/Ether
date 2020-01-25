@@ -28,6 +28,8 @@ namespace KungFuGame {
 		DebugDeath
 	};
 
+	// TODO - Optimize - Move static kbStrings here
+
 	// Camera
 	const kbVec3 kCameraStartPos = kbVec3( 66.170448f, -49.412132f, -391.558990f );
 	const kbQuat kCameraRotation = kbQuat( -0.023375f, -0.706720f, 0.023375f, 0.706720f );
@@ -35,7 +37,6 @@ namespace KungFuGame {
 	const float kDistToHugSheep = 0.75f;
 	const float kDistToHugSnolaf = 0.5f;
 	const float kDistToChase = kDistToHugSheep + 0.05f;
-	const float kTimeUntilRequeueReady = 0.0f;
 	const float kMeterFillPerSnolafKill = 0.125f;
 
 	// Bonus
@@ -101,7 +102,7 @@ public:
 
 	void										SetPlayLevelMusic( const int idx, const bool bPlay );
 
-	float										GetDistancePlayerHasTraveled();
+	float										GetPlayerTravelDistance();
 
 	class KungFuSnolafComponent *				GetSnolafFromPool();
 	void										ReturnSnolafToPool( class KungFuSnolafComponent *const pSnolaf );
@@ -207,6 +208,8 @@ protected:
 	virtual void								ShutdownStateMachine_Internal();
 
 private:
+
+	void										CollectUIElements();
 
 	CannonHealthBarUIComponent *				m_pHealthBarUI;
 	CannonBallUIComponent *						m_pCannonBallUI;
