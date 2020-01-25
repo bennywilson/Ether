@@ -236,6 +236,7 @@ GenerateClass(
 	AddField( "Dimensions", KBTYPEINFO_INT, kbTerrainComponent, m_TerrainDimensions, false, "" )
 	AddField( "SplatMap", KBTYPEINFO_TEXTURE, kbTerrainComponent, m_pSplatMap, false, "" )
 	AddField( "Grass", KBTYPEINFO_STRUCT, kbTerrainComponent, m_Grass, true, "kbGrass" )
+	AddField( "DebugRegenTerrain", KBTYPEINFO_BOOL, kbTerrainComponent, m_bDebugForceRegenTerrain, false, "" )
 )
 
 GenerateEnum(
@@ -399,13 +400,13 @@ GenerateEnum(
 )
 
 GenerateClass(
-	kbUIWidget,
-	AddField( "Anchor", KBTYPEINFO_ENUM, kbUIWidget, m_Anchor, false, "eWidgetAnchor" )
-	AddField( "AxisLock", KBTYPEINFO_ENUM, kbUIWidget, m_AxisLock, false, "eWidgetAxisLock" )
-	AddField( "RelativePosition", KBTYPEINFO_VECTOR, kbUIWidget, m_StartingPosition, false, "" )
-	AddField( "RelativeSize", KBTYPEINFO_VECTOR, kbUIWidget, m_StartingSize, false, "" )
-	AddField( "Materials", KBTYPEINFO_STRUCT, kbUIWidget, m_Materials, true, "kbMaterialComponent" )
-	AddField( "ChildWidgets", KBTYPEINFO_STRUCT, kbUIWidget, m_ChildWidgets, true, "kbUIWidget" )
+	kbUIWidgetComponent,
+	AddField( "Anchor", KBTYPEINFO_ENUM, kbUIWidgetComponent, m_Anchor, false, "eWidgetAnchor" )
+	AddField( "AxisLock", KBTYPEINFO_ENUM, kbUIWidgetComponent, m_AxisLock, false, "eWidgetAxisLock" )
+	AddField( "RelativePosition", KBTYPEINFO_VECTOR, kbUIWidgetComponent, m_StartingPosition, false, "" )
+	AddField( "RelativeSize", KBTYPEINFO_VECTOR, kbUIWidgetComponent, m_StartingSize, false, "" )
+	AddField( "Materials", KBTYPEINFO_STRUCT, kbUIWidgetComponent, m_Materials, true, "kbMaterialComponent" )
+	AddField( "ChildWidgets", KBTYPEINFO_STRUCT, kbUIWidgetComponent, m_ChildWidgets, true, "kbUIWidgetComponent" )
 
 )
 
@@ -413,4 +414,27 @@ GenerateClass(
 	kbUISlider,
 	AddField( "SliderBoundsMin", KBTYPEINFO_VECTOR, kbUISlider, m_SliderBoundsMin, false, "" )
 	AddField( "SliderBoundsMax", KBTYPEINFO_VECTOR, kbUISlider, m_SliderBoundsMax, false, "" )
+)
+
+GenerateEnum( 
+	eCinematicActionType, "eCinematicActionType",
+	AddEnumField( CineAction_Override, "Override" )
+	AddEnumField( CineAction_Animate, "Animate" )
+	AddEnumField( CineAction_MoveTo, "MoveTo" )
+)
+
+GenerateClass(
+	kbCinematicAction,
+	AddField( "ActionType", KBTYPEINFO_ENUM, kbCinematicAction, m_CineActionType, false, "eCinematicActionType" )
+	AddField( "ActionStartTime", KBTYPEINFO_VECTOR4, kbCinematicAction, m_ActionStartTime, false, "" )
+	AddField( "ActionDuration", KBTYPEINFO_VECTOR4, kbCinematicAction, m_ActionDuration, false, "" )
+	AddField( "StringParam", KBTYPEINFO_KBSTRING, kbCinematicAction, m_sCineParam, false, "" )
+	AddField( "FloatParam", KBTYPEINFO_FLOAT, kbCinematicAction, m_fCineParam, false, "" )
+	AddField( "EntityParam", KBTYPEINFO_GAMEENTITY, kbCinematicAction, m_pCineParam, false, "" )
+	AddField( "VectorParam", KBTYPEINFO_VECTOR4, kbCinematicAction, m_vCineParam, false, "" )
+)
+
+GenerateClass(
+	kbCinematicComponent,
+	AddField( "Actions", KBTYPEINFO_STRUCT, kbCinematicComponent, m_Actions, true, "kbCinematicAction" )
 )

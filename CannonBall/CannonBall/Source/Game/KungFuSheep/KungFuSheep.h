@@ -44,6 +44,13 @@ public:
 
 	void										PlayShakeNBakeFX();
 	void										PlayBaa( const int baaType );
+	void										HitASnolaf();
+	void										PlayImpactSound();
+
+	void										PlayCannonBallFX( const kbVec3 location );
+	void										PlayCameraShake();
+
+	void										EnableHeadBand( const bool bEnable );
 
 	void										SpawnSplash();
 
@@ -98,6 +105,9 @@ protected:
 	
 	bool CheckForBlocker( const kbVec3 moveVec ) {
 
+		if ( KungFuSheepDirector::Get()->GetNumHuggersAndPrehuggers() > 0 ) {
+			return true;
+		}
 
 		const float SheepZ = GetSheep()->GetOwnerPosition().z;
 		const kbVec3 SheepDest = GetSheep()->GetOwnerPosition() + moveVec;
@@ -112,11 +122,11 @@ protected:
 			}
 
 			const kbVec3 snolafPos = pSnolaf->GetOwnerPosition();
-			if ( snolafPos.z < SheepZ && SheepDest.z <= snolafPos.z ) {
+			if ( snolafPos.z < SheepZ && snolafPos.z > SheepDest.z ) {
 				return true;
 			}
 
-			if ( snolafPos.z > SheepZ && SheepDest.z >= snolafPos.z ) {
+			if ( snolafPos.z > SheepZ && snolafPos.z < SheepDest.z ) {
 				return true;
 			}
 		}

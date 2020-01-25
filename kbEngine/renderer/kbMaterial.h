@@ -57,13 +57,17 @@ struct kbShaderVarBindings_t {
 	size_t										m_ConstantBufferSizeBytes;
 
 	struct binding_t {
-		binding_t( const std::string & inName, const size_t offset, const bool bIsUserDefinedVar ) :
-			m_VarName ( inName ),
+		binding_t( const std::string & inName, const size_t offset, const bool bHasDefaultValue, const kbVec4 defaultValue, const bool bIsUserDefinedVar ) :
+			m_VarName( inName ),
 			m_VarByteOffset( offset ),
+			m_DefaultValue( defaultValue ),
+			m_bHasDefaultValue( bHasDefaultValue ),
 			m_bIsUserDefinedVar( bIsUserDefinedVar ) { }
 
 		std::string								m_VarName;
 		size_t									m_VarByteOffset;
+		kbVec4									m_DefaultValue;
+		bool									m_bHasDefaultValue;
 		bool									m_bIsUserDefinedVar;
 	};
 	std::vector<binding_t>						m_VarBindings;

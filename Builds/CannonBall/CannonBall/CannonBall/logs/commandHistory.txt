@@ -1,1 +1,2 @@
 sexit
+showfps 1

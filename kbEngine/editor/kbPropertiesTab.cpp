@@ -10,6 +10,7 @@
 #include "kbEditorEntity.h"
 #include "kbPropertiesTab.h"
 #include "FL/FL_Scroll.h"
+#include "kbResourceTab.h"
 
 kbPropertiesTab * g_pPropertiesTab = nullptr;
 
@@ -193,14 +194,11 @@ void kbPropertiesTab::PointerButtonCB( Fl_Widget * widget, void * voidPtr ) {
 	const std::string *const fieldName = (std::string * ) userData->m_pVariablePtr;
 	if ( userData->m_VariableType == KBTYPEINFO_GAMEENTITY ) {
 		const kbPrefab *const pPrefab = g_Editor->GetCurrentlySelectedPrefab();
-		kbGameEntityPtr & pEntityPtr = userData->m_GameEntityPtr;
+		kbGameEntityPtr & pEntityPtr = *(kbGameEntityPtr*)userData->m_pVariablePtr;
 
-		if ( pPrefab == nullptr ) {
-			if ( g_Editor->GetSelectedObjects().size() > 0 ) {
-				pEntityPtr.SetEntity( g_Editor->GetSelectedObjects()[0]->GetGameEntity() );
-			} else {
-				pEntityPtr.SetEntity( nullptr );
-			}
+		kbGameEntity *const pEntity = g_pResourceTab->GetSelectedGameEntity().GetEntity();
+		if ( pEntity || pPrefab == nullptr ) {
+			pEntityPtr.SetEntity( const_cast<kbGameEntity*>( g_pResourceTab->GetSelectedGameEntity().GetEntity() ) );
 		} else {
 			pEntityPtr.SetEntity( const_cast<kbGameEntity*>( pPrefab->GetGameEntity(0) ) );
 		}
@@ -208,9 +206,11 @@ void kbPropertiesTab::PointerButtonCB( Fl_Widget * widget, void * voidPtr ) {
 		if ( fieldName == nullptr ) {
 			kbWarning( "kbPropertiesTab::PointerButtonCB() - Field name is null!" );
 		} else {
-			userData->m_pComponent->EditorChange( *fieldName );
-			if ( userData->m_pParentComponent != nullptr ) {
-				userData->m_pParentComponent->EditorChange( *fieldName );
+			if ( userData->m_pComponent != nullptr ) {
+				userData->m_pComponent->EditorChange( *fieldName );
+				if ( userData->m_pParentComponent != nullptr ) {
+					userData->m_pParentComponent->EditorChange( *fieldName );
+				}
 			}
 		}
 
@@ -800,6 +800,7 @@ void kbPropertiesTab::RefreshProperty( kbEditorEntity *const pEntity, const std:
 
 		case KBTYPEINFO_GAMEENTITY : {
 			kbGameEntityPtr *const pEntityPtr = (kbGameEntityPtr*)byteOffsetToVar;
+			cbData.m_pVariablePtr = pEntityPtr;
 			kbGameEntity *const pEntity = pEntityPtr->GetEntity();
 			if ( pEntity == nullptr ) {
 				Fl_Text_Display * propertyNameLabel = new Fl_Text_Display( xPos + propertyNamePixelWidth, yPos, 0, inputHeight, "nullptr" );
@@ -818,6 +819,7 @@ void kbPropertiesTab::RefreshProperty( kbEditorEntity *const pEntity, const std:
 			cbData.m_VariableType = propertyType;
 			cbData.m_GameEntityPtr = *pEntityPtr;
 
+			kbLog( "Prop name is %s %d %d ", propertyName.c_str(), (UINT_PTR)pComponent, (UINT_PTR) pParentComponent );
 			m_CallBackData.push_back( cbData );
 			b1->callback( &PointerButtonCB, static_cast< void * >( &m_CallBackData[ m_CallBackData.size() - 1 ] ) );//static_cast< void * >( pComponent ) );
 			break;

@@ -162,25 +162,25 @@ inline bool WasConfirmationButtonPressed( const kbInput_t *const pInput = nullpt
 
 inline kbVec2 GetLeftStick( const kbInput_t *const pInput = nullptr ) {
 	const kbInput_t & input = ( pInput == nullptr )?( g_pInputManager->GetInput() ) : ( *pInput );
-	kbVec2 leftStick = kbVec2::zero;
+	kbVec2 retLeftStick = kbVec2::zero;
 
 	if ( input.IsKeyPressedOrDown( 'A' ) ) {
-		leftStick.x = -1.0f;
+		retLeftStick.x = -1.0f;
 	} else if ( input.IsKeyPressedOrDown( 'D' ) ) {
-		leftStick.x = 1.0f;
+		retLeftStick.x = 1.0f;
 	} else {
-		leftStick.x = input.m_LeftStick.x;
+		retLeftStick.x = input.m_LeftStick.x;
 	}
 
 	if ( input.IsKeyPressedOrDown( 'W' ) ) {
-		leftStick.y = 1.0f;
+		retLeftStick.y = 1.0f;
 	} else if ( input.IsKeyPressedOrDown( 'S' ) ) {
-		leftStick.y = -1.0f;
+		retLeftStick.y = -1.0f;
 	} else {
-		leftStick.y = input.m_LeftStick.y;
+		retLeftStick.y = input.m_LeftStick.y;
 	}
 
-	return leftStick;
+	return retLeftStick;
 }
 
 inline kbVec2 GetPrevLeftStick( const kbInput_t *const pInput = nullptr ) {

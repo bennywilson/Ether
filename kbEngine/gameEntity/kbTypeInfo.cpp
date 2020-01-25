@@ -150,8 +150,14 @@ DEFINE_KBCLASS(kbPlaySoundComponent)
 
 DEFINE_KBCLASS(kbUIComponent)
 
-DEFINE_KBCLASS(kbUIWidget)
+DEFINE_KBCLASS(kbUIWidgetComponent)
 
 DEFINE_KBCLASS(kbUISlider)
+
+eCinematicActionType_Enum eCinematicActionType_EnumClass;
+
+DEFINE_KBCLASS(kbCinematicAction)
+
+DEFINE_KBCLASS(kbCinematicComponent)
 
 typedef kbResource * kbResourcePtr;

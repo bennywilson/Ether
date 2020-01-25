@@ -370,7 +370,6 @@ bool kbModel::LoadMS3D() {
 
 		kbErrorCheck( ibIndex == m_Meshes[i].m_IndexBufferIndex, "kbModel::Load_Internal() - Index buffer mismatch" );
 
-		const kbMaterial & modelMaterial = GetMaterials()[m_Meshes[i].m_MaterialIndex];
 		for ( uint iTris = 0; iTris < m_Meshes[i].m_NumTriangles; iTris++ ) {
 			
 			const int triangleIndex = m_Meshes[i].m_TriangleIndices[iTris];
@@ -386,6 +385,7 @@ bool kbModel::LoadMS3D() {
 
 				// TODO: We probably want vertex colors even if not cpu only
 				if ( m_bCPUAccessOnly ) {
+					const kbMaterial & modelMaterial = GetMaterials()[m_Meshes[i].m_MaterialIndex];
 					newVert.SetColor( modelMaterial.GetDiffuseColor() );
 				} else {
 					const vertexBoneData & boneData = tempVertexBoneData[currentTriangle.m_VertexIndices[j]];
@@ -1082,7 +1082,7 @@ int	kbModel::GetBoneIndex( const kbString & BoneName ) const {
 }
 
 /**
- *	kbAnimation::SetBoneMatrices
+ *	kbModel::SetBoneMatrices
  */
 void kbModel::SetBoneMatrices( std::vector<AnimatedBone_t> & bones, const float time, const kbAnimation *const pAnimation, const bool bIsLooping ) {
 	if ( m_Bones.size() == 0 ) {
@@ -1304,8 +1304,6 @@ bool kbAnimation::Load_Internal() {
 
 	m_JointKeyFrameData.resize( numJoints );
 
-	kbLog( "Anim %s", m_FullFileName.c_str() );
-
 	for ( unsigned i = 0; i < numJoints; i++ ) {
 		const ms3dBone_t * pJoint = ( ms3dBone_t * ) pPtr;
 		pPtr += sizeof( ms3dBone_t );
@@ -1351,6 +1349,8 @@ bool kbAnimation::Load_Internal() {
 	}
 
 	delete[] pMemoryFileBuffer;
+
+		kbLog( "Anim %s - %f", m_FullFileName.c_str(), this->m_LengthInSeconds );
 
 	return true;
 }

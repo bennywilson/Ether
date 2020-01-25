@@ -19,7 +19,7 @@ class IUIWidgetListener abstract {
 
 //-------------------------------------------------------------------------------------------------------------------------------------------------------------
 public:
-	virtual void WidgetEventCB( class kbUIWidget *const pWidget, const kbInput_t *const pInput ) = 0;
+	virtual void WidgetEventCB( class kbUIWidgetComponent *const pWidget, const kbInput_t *const pInput ) = 0;
 
 };
 
@@ -76,11 +76,11 @@ protected:
 };
 
 /**
- *	kbUIWidget
+ *	kbUIWidgetComponent
  */
-class kbUIWidget : public kbGameComponent, public IInputListener {
+class kbUIWidgetComponent : public kbGameComponent, public IInputListener {
 
-	KB_DECLARE_COMPONENT( kbUIWidget, kbGameComponent );
+	KB_DECLARE_COMPONENT( kbUIWidgetComponent, kbGameComponent );
 
 //-------------------------------------------------------------------------------------------------------------------------------------------------------------
 public:
@@ -104,7 +104,7 @@ public:
 	};
 
 	virtual void							RecalculateOld( const kbUIComponent *const pParent, const bool bFull );
-	virtual void							Recalculate( const kbUIWidget *const pParent, const bool bFull );
+	virtual void							Recalculate( const kbUIWidgetComponent *const pParent, const bool bFull );
 
 	void									SetRenderOrderBias( const float bias );
 	float									GetRenderOrderBias() const;
@@ -144,7 +144,7 @@ protected:
 protected:
 
 	std::vector<kbMaterialComponent> 		m_Materials;
-	std::vector<kbUIWidget>					m_ChildWidgets;
+	std::vector<kbUIWidgetComponent>					m_ChildWidgets;
 
 private:
 
@@ -179,15 +179,15 @@ private:
 /**
  *	CannonUISlider
  */
-class kbUISlider : public kbUIWidget {
+class kbUISlider : public kbUIWidgetComponent {
 
-	KB_DECLARE_COMPONENT( kbUISlider, kbUIWidget );
+	KB_DECLARE_COMPONENT( kbUISlider, kbUIWidgetComponent );
 
 //-------------------------------------------------------------------------------------------------------------------------------------------------------------
 public:
 	
 	virtual void							RecalculateOld( const kbUIComponent *const pParent, const bool bFull ) override;
-	virtual void							Recalculate( const kbUIWidget *const pParent, const bool bFull ) override;
+	virtual void							Recalculate( const kbUIWidgetComponent *const pParent, const bool bFull ) override;
 
 	float									GetNormalizedValue();
 	void									SetNormalizedValue( const float newValue );

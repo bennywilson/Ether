@@ -29,6 +29,8 @@ public:
 
 	void										ApplyAnimSmear( const kbVec3 smearVec, const float durationSec );
 
+	void										SetOverrideFXMaskParameters( const kbVec4 & fxParams );
+
 	void										PlayAttackVO( const int pref );
 
 	bool										IsPlayer() const { return m_bIsPlayer; }
@@ -53,6 +55,8 @@ protected:
 	float										m_AnimSmearDuration;
 	kbVec4										m_AnimSmearVec;
 	float										m_AnimSmearStartTime;
+
+	kbVec4										m_OverridenFXMaskParams;
 
 	float										m_LastVOTime;
 
@@ -87,14 +91,14 @@ public:
 
 	void										SetEnable_Internal( const bool bEnable );
 
-private:
-
 	float										m_Duration;
 	float										m_AmplitudeX;
 	float										m_AmplitudeY;
 
 	float										m_FrequencyX;
 	float										m_FrequencyY;
+
+private:
 
 	bool										m_bActivateOnEnable;
 };
@@ -111,7 +115,9 @@ public:
 	
 	void										StartCameraShake( const CannonCameraShakeComponent *const pCameraShakeComponent );
 
-	void										SetTarget( const kbGameEntity *const pTarget );
+	void										SetTarget( const kbGameEntity *const pTarget, const float blendRate );
+	void										SetPositionOffset( const kbVec3 & posOffset, const float blendRate );
+	void										SetLookAtOffset( const kbVec3 & lookAtOffset, const float blendRate );
 
 protected:
 
@@ -129,6 +135,17 @@ private:
 	// Game
 	ECameraMoveMode								m_MoveMode;
 	const kbGameEntity *						m_pTarget;
+	float										m_SwitchTargetBlendSpeed;
+	float										m_SwitchTargetCurT;
+	kbVec3										m_SwitchTargetStartPos;
+
+	float										m_SwitchPosOffsetBlendSpeed;
+	float										m_SwitchPosOffsetCurT;
+	kbVec3										m_PosOffsetTarget;
+
+	float										m_SwitchLookAtOffsetBlendSpeed;
+	float										m_SwitchLookAtOffsetCurT;
+	kbVec3										m_LookAtOffsetTarget;
 
 	float										m_CameraShakeStartTime;
 	kbVec2										m_CameraShakeStartingOffset;

@@ -14,7 +14,7 @@ cbuffer matrixBuffer {
 };
 
 kbShaderState {
-	cullMode CullMode_BackFaces
+	cullMode CullMode_None
 	colorWriteEnable ColorWriteEnable_rgb
 }
 

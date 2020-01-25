@@ -108,16 +108,21 @@
     <None Include="assets\shaders\UI\animatedChannelUI.kbShader" />
     <None Include="assets\shaders\UI\cannonBallUI_Basic.kbShader" />
     <None Include="assets\shaders\UI\healthBarUI_Basic.kbShader" />
+    <None Include="assets\shaders\UI\UI_Additive.kbShader" />
     <None Include="assets\shaders\UI\ui_Basic.kbShader" />
     <None Include="assets\shaders\Water\water_skygradientreflection.kbShader" />
     <None Include="CannonBall.ico" />
     <None Include="small.ico" />
+    <None Include="Source\Game\KungFuSheep\Cinema\Outro.inl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Resource.h" />
     <ClInclude Include="Source\Game\CannonGame.h" />
     <ClInclude Include="Source\Game\CannonPlayer.h" />
     <ClInclude Include="Source\Game\CannonTypeInfoGeneratedClasses.h" />
+    <ClInclude Include="Source\Game\CapOnIt\CapOnItLevelComponent.h" />
     <ClInclude Include="Source\Game\KungFuSheep\KungFuLevelComponent.h" />
     <ClInclude Include="Source\Game\KungFuSheep\KungFuSnolaf.h" />
     <ClInclude Include="Source\Game\KungFuSheep\KungFuSheep.h" />
@@ -130,6 +135,7 @@
     <ClCompile Include="Source\Game\CannonGame.cpp" />
     <ClCompile Include="Source\Game\CannonPlayer.cpp" />
     <ClCompile Include="Source\Game\CannonTypeInfoGeneratedClasses.cpp" />
+    <ClCompile Include="Source\Game\CapOnIt\CapOnItLevelComponent.cpp" />
     <ClCompile Include="Source\Game\KungFuSheep\KungFuLevelComponent.cpp" />
     <ClCompile Include="Source\Game\KungFuSheep\KungFuSheep.cpp" />
     <ClCompile Include="Source\Game\KungFuSheep\KungFuSnolaf.cpp" />

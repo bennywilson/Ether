@@ -763,6 +763,8 @@ bool kbFile::WritePackage( const kbPackage & package ) {
 
 	std::string curTab = "\t";
 
+	kbLog( "Writing package %s", package.GetPackageName().c_str() );
+
 	for ( int i = 0; i < package.NumFolders(); i++ ) {
 
 		const std::vector< class kbPrefab * > & prefabs = package.GetPrefabsForFolder(i);

@@ -257,6 +257,10 @@ void CannonBallPauseMenuUIComponent::Constructor() {
 	m_bRequestClose = false;
 }
 
+const kbVec3 g_CheckMarkPos[] = {  kbVec3( 0.400000f, 0.287480f, 0.000000f ), kbVec3( 0.3600704f, 0.353173f, 0.000000f ), kbVec3(0.325628f, 0.415369f, 0.000000f ), kbVec3( 0.322864f, 0.484983f, 0.000000f ), kbVec3( 0.400000f, 0.557629f, 0.000000f ) }; 
+kbVec3 g_Offsets[] = { kbVec3::zero, kbVec3::zero, kbVec3::zero, kbVec3::zero, kbVec3::zero, kbVec3::zero };
+/*
+
 /**
  *	CannonBallPauseMenuUIComponent::SetEnable_Internal
  */
@@ -287,13 +291,8 @@ void CannonBallPauseMenuUIComponent::SetEnable_Internal( const bool bEnable ) {
 		m_WidgetList.push_back( &m_SliderWidgets[2] );
 		m_WidgetList.push_back( &m_Widgets[1] );
 
-		for ( int i = 0;  i< m_WidgetList.size(); i++ ) {
-			m_WidgetList[i]->SetAdditiveTextureFactor( 0.0f );
-		}
-
 		m_SelectedWidgetIdx = 0;
 		m_WidgetList[m_SelectedWidgetIdx]->SetFocus( true );
-		m_WidgetList[m_SelectedWidgetIdx]->SetAdditiveTextureFactor( 1.0f );
 
 		RecalculateChildrenTransform();
 
@@ -303,6 +302,9 @@ void CannonBallPauseMenuUIComponent::SetEnable_Internal( const bool bEnable ) {
 		m_bHackSlidersInit = true;
 
 		g_pInputManager->RegisterInputListener( this );
+
+		m_Widgets.back().SetRelativePosition( g_CheckMarkPos[m_SelectedWidgetIdx] );
+		m_Widgets.back().SetRenderOrderBias( -5.0f );
 	} else {
 		for ( int i = 0; i < m_Widgets.size(); i++ ) {
 			m_Entity.RemoveComponent( &m_Widgets[i] );
@@ -355,9 +357,12 @@ void CannonBallPauseMenuUIComponent::RecalculateChildrenTransform() {
 	const float ScreenPixelWidth = (float)g_pRenderer->GetBackBufferWidth();
 	const float ScreenPixelHeight = (float)g_pRenderer->GetBackBufferHeight();
 
+	static float sliderOffset = 0.03f;
+
 	kbVec3 nextPos = m_StartingWidgetAnchorPt;
+	nextPos.x -= sliderOffset;	// hack!
 	for ( size_t i = 0; i < m_WidgetList.size(); i++ ) {
-		kbUIWidget & widget = *m_WidgetList[i];
+		kbUIWidgetComponent & widget = *m_WidgetList[i];
 		const kbVec2i textureDim = widget.GetBaseTextureDimensions();
 		kbVec3 targetWidgetSize = m_WidgetSize;
 		kbVec3 targetWidgetPos = nextPos;
@@ -408,9 +413,6 @@ void CannonBallPauseMenuUIComponent::InputCB( const kbInput_t & input ) {
 
 	if ( bNewOptionSelected ) {
 
-		m_WidgetList[m_SelectedWidgetIdx]->SetAdditiveTextureFactor( 1.0f );
-		m_WidgetList[prevSelected]->SetAdditiveTextureFactor( 0.0f );
-
 		if ( m_WidgetList[m_SelectedWidgetIdx] == &m_SliderWidgets[0] && m_VolumeSliderTestWav.size() > 0 ) {
 			m_VolumeSliderTestWav[rand() % m_VolumeSliderTestWav.size()].PlaySoundAtPosition( kbVec3::zero );
 		} else if ( m_WidgetList[prevSelected] == &m_SliderWidgets[0] ) {
@@ -418,6 +420,8 @@ void CannonBallPauseMenuUIComponent::InputCB( const kbInput_t & input ) {
 				m_VolumeSliderTestWav[i].StopSound();
 			}
 		}
+
+		m_Widgets.back().SetRelativePosition( g_CheckMarkPos[m_SelectedWidgetIdx] + g_Offsets[m_SelectedWidgetIdx] );
 	}
 
 	if ( input.IsNonCharKeyPressedOrDown( kbInput_t::Return ) || WasAttackJustPressed() || WasSpecialAttackPressed() || WasStartButtonPressed() ) {
@@ -434,14 +438,44 @@ void CannonBallPauseMenuUIComponent::Update_Internal( const float DT ) {
 	Super::Update_Internal( DT );
 
 	RecalculateChildrenTransform();
+/*
+	static int offsetIdx = 0;
+	if ( GetAsyncKeyState( '0' ) ) {
+		offsetIdx = 0;
+	} else if ( GetAsyncKeyState( '1' ) ) {
+		offsetIdx = 1;
+	} else if ( GetAsyncKeyState( '2' ) ) {
+		offsetIdx = 2;
+	} else if ( GetAsyncKeyState( '3' ) ) {
+		offsetIdx = 3;
+	} else if ( GetAsyncKeyState( '4' ) ) {
+		offsetIdx = 4;
+	}
 
+	static float speed = 0.25f;
+	if ( GetAsyncKeyState('U')) {
+		g_Offsets[offsetIdx].y += DT * speed;
+	} else if ( GetAsyncKeyState('I')) {
+		g_Offsets[offsetIdx].y -= DT * speed;
+	} else if ( GetAsyncKeyState('J')) {
+		g_Offsets[offsetIdx].x -= DT * speed;
+	} else if ( GetAsyncKeyState('K')) {
+		g_Offsets[offsetIdx].x += DT * speed;
+	}
+
+	kbLog( "------" );
+	for ( int i = 0; i < 5; i++ ) {
+		kbLog( "%d: %f %f %f", i, g_CheckMarkPos[i].x + g_Offsets[i].x, g_CheckMarkPos[i].y + g_Offsets[i].y, g_CheckMarkPos[i].z + g_Offsets[i].z );
+	}
+		m_Widgets.back().SetRelativePosition( g_CheckMarkPos[m_SelectedWidgetIdx] + g_Offsets[m_SelectedWidgetIdx] );
+		*/
 	for ( size_t i = 0; i < m_Widgets.size(); i++ ) {
-		kbUIWidget & widget = m_Widgets[i];
+		kbUIWidgetComponent & widget = m_Widgets[i];
 		widget.Update( DT );
 	}
 
 	for ( size_t i = 0; i < m_SliderWidgets.size(); i++ ) {
-		kbUIWidget & widget = m_SliderWidgets[i];
+		kbUIWidgetComponent & widget = m_SliderWidgets[i];
 		widget.Update( DT );
 	}
 }
@@ -449,7 +483,7 @@ void CannonBallPauseMenuUIComponent::Update_Internal( const float DT ) {
 /**
  *	CannonBallPauseMenuUIComponent::WidgetEventCB
  */
-void CannonBallPauseMenuUIComponent::WidgetEventCB( kbUIWidget *const pWidget, const kbInput_t *const pInput  ) {
+void CannonBallPauseMenuUIComponent::WidgetEventCB( kbUIWidgetComponent *const pWidget, const kbInput_t *const pInput  ) {
 
 	if ( pWidget == &m_SliderWidgets[0] ) {
 		// Volume
@@ -482,6 +516,9 @@ void CannonBallMainMenuComponent::Constructor() {
 /**
  *	CannonBallMainMenuComponent::InputCB
  */
+static float selectionStartX[] = { 0.06f, 0.21999f, 0.41999f };
+static float selectionOffset = 0.17f;
+
 void CannonBallMainMenuComponent::InputCB( const kbInput_t & input ) {
 
 	if ( m_AnimationState != 0 ) {
@@ -491,12 +528,12 @@ void CannonBallMainMenuComponent::InputCB( const kbInput_t & input ) {
 	const kbVec2 & leftStick = GetLeftStick( &input );
 	const kbVec2 & prevLeftStick = GetPrevLeftStick( &input );
 
-	if ( leftStick.y > 0.5f && prevLeftStick.y <= 0.5f ) {
+	if ( leftStick.x < -0.5f && prevLeftStick.x >= -0.5f ) {
 		m_MainMenuIdx = m_MainMenuIdx - 1;
 		if ( m_MainMenuIdx < 0 ) {
 			m_MainMenuIdx = 2;
 		}
-	} else if ( leftStick.y < -0.5f && prevLeftStick.y >= -0.5f ) {
+	} else if ( leftStick.x > 0.5f && prevLeftStick.x <= 0.5f ) {
 		m_MainMenuIdx = m_MainMenuIdx + 1;
 		if ( m_MainMenuIdx > 2 ) {
 			m_MainMenuIdx = 0;
@@ -504,7 +541,7 @@ void CannonBallMainMenuComponent::InputCB( const kbInput_t & input ) {
 	}
 
 	kbVec3 relPos = m_ChildWidgets[1].GetRelativePosition();
-	relPos.y = 0.53f + 0.17f * m_MainMenuIdx;
+	relPos.x = selectionStartX[m_MainMenuIdx];
 	m_ChildWidgets[1].SetRelativePosition( relPos );
 
 	if ( input.IsNonCharKeyPressedOrDown( kbInput_t::Return ) || WasAttackJustPressed() || WasSpecialAttackPressed() || WasStartButtonPressed() ) {
@@ -532,7 +569,7 @@ void CannonBallMainMenuComponent::SetEnable_Internal( const bool bEnable ) {
 		Recalculate( nullptr, true );
 
 		kbVec3 relPos = m_ChildWidgets[1].GetRelativePosition();
-		relPos.y = 0.53f + 0.17f * m_MainMenuIdx;
+		relPos.x = selectionStartX[m_MainMenuIdx];
 		m_ChildWidgets[1].SetRelativePosition( relPos );
 	}
 }
@@ -581,7 +618,7 @@ void CannonBallMainMenuComponent::SetAnimationFrame( const int idx ) {
 		PlayRandomSound( m_ActionVO );
 	} else if ( m_AnimationState == 2 ) {
 		m_ChildWidgets[0].Enable( true );
-	//	Recalculate( nullptr, true );
+		Recalculate( nullptr, true );
 	} else if ( m_AnimationState == 3 ) {
 		m_pModel->Enable( false );
 	}
@@ -590,7 +627,7 @@ void CannonBallMainMenuComponent::SetAnimationFrame( const int idx ) {
 /**
  *	CannonBallMainMenuComponent::WidgetEventCB
  */
-void CannonBallMainMenuComponent::WidgetEventCB( kbUIWidget *const pWidget ) {
+void CannonBallMainMenuComponent::WidgetEventCB( kbUIWidgetComponent *const pWidget ) {
 
 }
 

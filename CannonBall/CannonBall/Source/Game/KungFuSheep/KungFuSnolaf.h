@@ -14,10 +14,13 @@ namespace KungFuSnolafState {
 	enum SnolafState_t {
 		Idle = 0,
 		Run,
+		Prehug,
 		Hug,
 		Dead,
+		ForcePoofDeath,
 		WatchCannonBall,
 		RunAway,
+		Cinema,
 		NumStates
 	};
 }

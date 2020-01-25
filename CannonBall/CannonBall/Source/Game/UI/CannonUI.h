@@ -103,7 +103,7 @@ protected:
 	virtual void							SetEnable_Internal( const bool bEnable ) override;
 	virtual void							Update_Internal( const float DeltaTime ) override;
 
-	virtual void							WidgetEventCB( kbUIWidget *const pWidget, const kbInput_t *const pInput );
+	virtual void							WidgetEventCB( kbUIWidgetComponent *const pWidget, const kbInput_t *const pInput );
 
 private:
 
@@ -113,14 +113,14 @@ private:
 
 	// Editor
 	std::vector<kbUISlider>					m_SliderWidgets;
-	std::vector<kbUIWidget>					m_Widgets;
+	std::vector<kbUIWidgetComponent>					m_Widgets;
 	kbVec3									m_WidgetSize;
 	kbVec3									m_StartingWidgetAnchorPt;
 	float									m_SpaceBetweenWidgets;
 	std::vector<kbSoundData>				m_VolumeSliderTestWav;
 
 	// Runtime
-	std::vector<kbUIWidget*>				m_WidgetList;
+	std::vector<kbUIWidgetComponent*>				m_WidgetList;
 	int										m_SelectedWidgetIdx;
 	bool									m_bHackSlidersInit;
 
@@ -132,9 +132,9 @@ private:
 /**
  *	CannonBallMainMenuComponent
  */
-class CannonBallMainMenuComponent : public kbUIWidget {
+class CannonBallMainMenuComponent : public kbUIWidgetComponent {
 
-	KB_DECLARE_COMPONENT( CannonBallMainMenuComponent, kbUIWidget );
+	KB_DECLARE_COMPONENT( CannonBallMainMenuComponent, kbUIWidgetComponent );
 
 //---------------------------------------------------------------------------------------------------
 public:
@@ -148,7 +148,7 @@ public:
 	virtual void							SetEnable_Internal( const bool bEnable ) override;
 	virtual void							Update_Internal( const float DeltaTime ) override;
 
-	virtual void							WidgetEventCB( kbUIWidget *const pWidget );
+	virtual void							WidgetEventCB( kbUIWidgetComponent *const pWidget );
 
 	void									SetAnimationFrame( const int idx );
 
@@ -176,9 +176,9 @@ private:
 /**
  *	CannonBallYesNoPromptComponent
  */
-class CannonBallYesNoPromptComponent : public kbUIWidget {
+class CannonBallYesNoPromptComponent : public kbUIWidgetComponent {
 
-	KB_DECLARE_COMPONENT( CannonBallYesNoPromptComponent, kbUIWidget );
+	KB_DECLARE_COMPONENT( CannonBallYesNoPromptComponent, kbUIWidgetComponent );
 
 };
 

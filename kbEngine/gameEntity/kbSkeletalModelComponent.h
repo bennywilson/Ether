@@ -80,6 +80,9 @@ public:
 	void										RegisterAnimEventListener( IAnimEventListener *const pListener );
 	void										UnregisterAnimEventListener( IAnimEventListener *const pListener );
 
+	void										RegisterSyncSkelModel( kbSkeletalModelComponent *const pSkelModel );
+	void										UnregisterSyncSkelModel( kbSkeletalModelComponent *const pSkelModel );
+
 protected:
 
 	virtual void								SetEnable_Internal( const bool isEnabled ) override;
@@ -101,6 +104,9 @@ protected:
 
 	std::vector<float>							m_AnimationTimeScaleMultipliers;
 
+	std::vector<kbSkeletalModelComponent*>		m_SyncedSkelModels;
+	kbSkeletalModelComponent *					m_pSyncParent;
+
 	// Debug
 	int											m_DebugAnimIdx;
 	float										m_DebugAnimTime;
@@ -115,6 +121,8 @@ class kbFlingPhysicsComponent: public kbGameComponent {
 
 //---------------------------------------------------------------------------------------------------
 public:
+
+	void										ResetToStartPos() { if ( m_bOwnerStartSet ) { SetOwnerPosition( m_OwnerStartPos ); SetOwnerRotation( m_OwnerStartRotation ); } }
 
 protected:
 
@@ -142,6 +150,7 @@ private:
 
 	float										m_FlingStartTime;
 
+	bool										m_bOwnerStartSet;
 };
 
 #endif

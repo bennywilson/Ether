@@ -1334,7 +1334,7 @@ kbGameEntity 3807537734 1283872403 1661460398 2211889957 {
 				AnimationEvent = 0
 				AnimationName = "PunchLeft_Basic"
 				IsLooping = 0
-				TimeScale =  15.000000
+				TimeScale =  1.000000
 			}
 			kbAnimComponent { 
 				Enabled = 0
@@ -1343,7 +1343,7 @@ kbGameEntity 3807537734 1283872403 1661460398 2211889957 {
 				AnimationEvent = 0
 				AnimationName = "KickLeft_Basic"
 				IsLooping = 0
-				TimeScale =  9.000000
+				TimeScale =  1.000000
 			}
 			kbAnimComponent { 
 				Enabled = 0
@@ -1352,7 +1352,7 @@ kbGameEntity 3807537734 1283872403 1661460398 2211889957 {
 				AnimationEvent = 0
 				AnimationName = "PunchRight_Basic"
 				IsLooping = 0
-				TimeScale =  15.000000
+				TimeScale =  1.000000
 			}
 			kbAnimComponent { 
 				Enabled = 0
@@ -1361,7 +1361,7 @@ kbGameEntity 3807537734 1283872403 1661460398 2211889957 {
 				AnimationEvent = 0
 				AnimationName = "KickRight_Basic"
 				IsLooping = 0
-				TimeScale =  9.000000
+				TimeScale =  1.000000
 			}
 			kbAnimComponent { 
 				Enabled = 0
@@ -1561,7 +1561,7 @@ kbGameEntity 3807537734 1283872403 1661460398 2211889957 {
 					}
 				AnimationName = "PunchLeft_Basic"
 				IsLooping = 0
-				TimeScale =  15.000000
+				TimeScale =  1.000000
 			}
 			kbAnimComponent { 
 				Enabled = 0
@@ -1598,7 +1598,7 @@ kbGameEntity 3807537734 1283872403 1661460398 2211889957 {
 					}
 				AnimationName = "KickLeft_Basic"
 				IsLooping = 0
-				TimeScale =  9.000000
+				TimeScale =  1.000000
 			}
 			kbAnimComponent { 
 				Enabled = 0
@@ -1614,7 +1614,7 @@ kbGameEntity 3807537734 1283872403 1661460398 2211889957 {
 					}
 				AnimationName = "PunchRight_Basic"
 				IsLooping = 0
-				TimeScale =  15.000000
+				TimeScale =  1.000000
 			}
 			kbAnimComponent { 
 				Enabled = 0
@@ -1630,7 +1630,7 @@ kbGameEntity 3807537734 1283872403 1661460398 2211889957 {
 					}
 				AnimationName = "KickRight_Basic"
 				IsLooping = 0
-				TimeScale =  9.000000
+				TimeScale =  1.000000
 			}
 			kbAnimComponent { 
 				Enabled = 0
@@ -1705,7 +1705,7 @@ kbGameEntity 3807537734 1283872403 1661460398 2211889957 {
 				WaveFile = .\assets\sounds\sheep\sheep_vo_battle_5.wav
 			}
 		Health =  100.000000
-		MaxRotateSpeed =  15.000000
+		MaxRotateSpeed =  25.000000
 		MaxRunSpeed =  3.000000
 		AttackImpactSound = 4
 			kbSoundData { 

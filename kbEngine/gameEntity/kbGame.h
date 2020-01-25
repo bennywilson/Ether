@@ -51,6 +51,8 @@ public:
 	kbGameEntity *												CreateEntity( const kbGameEntity *const pPrefab, const bool bIsPlayer = false );
 	void														RemoveGameEntity( kbGameEntity *const pNewEntity );
 
+	kbGameEntityPtr												GetEntityByName( const kbString name );
+
 	kbParticleManager &											GetParticleManager() { return m_ParticleManager; }
 	kbSoundManager &											GetSoundManager() { return m_SoundManager; }
 

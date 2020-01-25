@@ -135,7 +135,7 @@ public:
 	void										SetScale( const kbVec3 & newScale ) { m_Scale = newScale; }
 	void										SetOrientation( const kbQuat & newOrientation ) { m_Orientation = newOrientation; }
 
-	const std::string &							GetName() const { return m_Name.stl_str(); }
+	const kbString &							GetName() const { return m_Name; }
 	const kbVec3								GetPosition() const;
 	const kbVec3								GetScale() const;
 	const kbQuat								GetOrientation() const;
@@ -361,8 +361,8 @@ public:
 
 	IStateMachine() : m_CurrentState( StateEnum::NumStates ) {
 		ZeroMemory( m_States, sizeof( m_States ) );
-		m_CurrentState = (StateEnum)0;
-		m_PreviousState = (StateEnum)0;
+		m_CurrentState = (StateEnum)StateEnum::NumStates;
+		m_PreviousState = (StateEnum)StateEnum::NumStates;
 	}
 
 	virtual ~IStateMachine() {
@@ -443,6 +443,8 @@ public:
 	}
 
 	StateEnum GetCurrentState() const { return m_CurrentState; }
+	
+	bool IsInitialized() const { return m_CurrentState != StateEnum::NumStates; }
 
 protected:
 

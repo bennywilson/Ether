@@ -131,8 +131,11 @@ protected:
 	kbTexture *                                 m_pSplatMap;
     std::vector<kbGrass>                        m_Grass;
 
+	bool										m_bDebugForceRegenTerrain;
+
 	// Non-editor
 	kbModel										m_TerrainModel;
+	float										m_LastHeightMapLoadTime;
 
 	bool										m_bRegenerateTerrain;
 

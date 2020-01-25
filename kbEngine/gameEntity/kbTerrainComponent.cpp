@@ -332,9 +332,11 @@ void kbTerrainComponent::Constructor() {
 	m_HeightScale = 0.3f;
 	m_TerrainWidth = 256.0f;
 	m_TerrainDimensions = 16;
-	
+	m_bDebugForceRegenTerrain = false;
+
 	m_pSplatMap = nullptr;
 
+	m_LastHeightMapLoadTime = -1.0f;
 	m_bRegenerateTerrain = false;
 }
 
@@ -385,7 +387,9 @@ void kbTerrainComponent::EditorChange( const std::string & propertyName ) {
 
     RefreshMaterials();
 
-	g_pRenderer->UpdateRenderObject( m_RenderObject );
+	if ( IsEnabled() ) {
+		g_pRenderer->UpdateRenderObject( m_RenderObject );
+	}
 }
 
 /**
@@ -592,6 +596,10 @@ void kbTerrainComponent::SetEnable_Internal( const bool isEnabled ) {
 		return;
 	}
 
+	if ( m_LastHeightMapLoadTime == -1.0f && m_pHeightMap != nullptr ) {
+		m_LastHeightMapLoadTime = m_pHeightMap->GetLastLoadTime();
+	}
+
 	if ( isEnabled ) {
 		RefreshMaterials();
 		g_pRenderer->AddRenderObject( m_RenderObject );
@@ -615,10 +623,16 @@ void kbTerrainComponent::SetEnable_Internal( const bool isEnabled ) {
 void kbTerrainComponent::Update_Internal( const float DeltaTime ) {
 	Super::Update_Internal( DeltaTime );
 
-	if ( m_TerrainModel.GetMeshes().size() > 0 && ( GetOwner()->IsDirty() ) ) {
+	if ( m_pHeightMap != nullptr && m_pHeightMap->GetLastLoadTime() != m_LastHeightMapLoadTime ) {
+		m_LastHeightMapLoadTime = m_pHeightMap->GetLastLoadTime();
+		this->RegenerateTerrain();
+	}
 
+	if ( m_TerrainModel.GetMeshes().size() > 0 && ( GetOwner()->IsDirty() || m_bDebugForceRegenTerrain == true ) ) {
 		RefreshMaterials();
+		RegenerateTerrain();
 		g_pRenderer->UpdateRenderObject( m_RenderObject );
+		m_bDebugForceRegenTerrain = false;
 	}
 
 	kbVec3 currentCameraPosition;

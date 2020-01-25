@@ -34,6 +34,9 @@
     <ClInclude Include="Source\Game\UI\CannonUI.h">
       <Filter>Source\Game\UI</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Game\CapOnIt\CapOnItLevelComponent.h">
+      <Filter>Source\Game\CapOnIt</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="assets\shaders\Character\CharacterBase.kbShader">
@@ -108,6 +111,12 @@
     <None Include="assets\shaders\UI\animatedChannelUI.kbShader">
       <Filter>Shaders\UI</Filter>
     </None>
+    <None Include="Source\Game\KungFuSheep\Cinema\Outro.inl">
+      <Filter>Source\Game\KungFuSheep\Cinema</Filter>
+    </None>
+    <None Include="assets\shaders\UI\UI_Additive.kbShader">
+      <Filter>Shaders\UI</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Shaders">
@@ -158,6 +167,12 @@
     <Filter Include="Source\Game\UI">
       <UniqueIdentifier>{d538ecf2-4e7c-4de5-bfcb-5d364d6bc3f5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\Game\KungFuSheep\Cinema">
+      <UniqueIdentifier>{f514aa6c-41b4-44ee-a063-2409a75641a6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Game\CapOnIt">
+      <UniqueIdentifier>{a5680d7e-29af-4a0f-b5e2-5fd352fa6408}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Game\CannonPlayer.cpp">
@@ -186,6 +201,9 @@
     </ClCompile>
     <ClCompile Include="Source\Game\UI\CannonUI.cpp">
       <Filter>Source\Game\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Game\CapOnIt\CapOnItLevelComponent.cpp">
+      <Filter>Source\Game\CapOnIt</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

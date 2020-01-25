@@ -7,6 +7,8 @@ cbuffer matrixBuffer {
 	matrix modelMatrix;
 	matrix mvpMatrix;
 	float4 cameraPos;
+	float4 uvScale = (1,1,1,1);
+	float4 clipMask = (1,0,0,0);
 };
 
 kbShaderState {
@@ -49,7 +51,7 @@ pixelInput vertexShader( vertexInput input ) {
 	pixelInput output = (pixelInput)(0);
 
 	output.position = mul( input.position, mvpMatrix );
-	output.uv = input.uv;
+	output.uv = input.uv * uvScale.xy;
 	output.color = input.color;
 	output.position2 = output.position.zw;
 
@@ -81,6 +83,7 @@ Texture2D propertyMap(white)		: register(t2);
 
 Texture2D emissiveMap(black)		: register(t3);
 
+Texture2D clipMap(white)			: register(t4);
 
  PS_OUTPUT pixelShader( pixelInput	input, bool IsFrontFace	: SV_IsFrontFace ) {
  	PS_OUTPUT output = (PS_OUTPUT) 0;
@@ -88,12 +91,13 @@ Texture2D emissiveMap(black)		: register(t3);
 	const float4 normalMap = normal.Sample( diffuseSampler, input.uv );
 	const float4 propertyMapValues = propertyMap.Sample( diffuseSampler, input.uv );
 	const float4 emissive = emissiveMap.Sample( diffuseSampler, input.uv );
+	const float clipMask = clipMap.Sample( diffuseSampler, input.uv ).r;
+	clip( clipMask - 0.001f );
 
 	output.Color = diffuse.Sample( diffuseSampler, input.uv );
 	output.Color.w = emissive.z;
 
 	output.Depth.r = input.position2.x / input.position2.y;
-
 
 	output.Specular = float4( propertyMapValues.x, max( 1.0f, propertyMapValues.y * 450.f ), emissive.x, emissive.y );
 	

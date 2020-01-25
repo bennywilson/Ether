@@ -140,15 +140,15 @@ void kbUIComponent::RefreshMaterial() {
 
 
 /**
- *	kbUIWidget::Constructor
+ *	kbUIWidgetComponent::Constructor
  */
-void kbUIWidget::Constructor() {
+void kbUIWidgetComponent::Constructor() {
 
 	m_StartingPosition.Set( 0.0f, 0.0f, 0.0f );
 	m_StartingSize.Set( 0.5f, 0.5f, 1.0f );
 
-	m_Anchor = kbUIWidget::MiddleLeft;
-	m_AxisLock = kbUIWidget::LockAll;
+	m_Anchor = kbUIWidgetComponent::MiddleLeft;
+	m_AxisLock = kbUIWidgetComponent::LockAll;
 
 	m_RelativePosition.Set( 0.0f, 0.0f, 0.0f );
 	m_RelativeSize.Set( 0.5f, 0.5f, 1.0f );
@@ -162,32 +162,32 @@ void kbUIWidget::Constructor() {
 }
 
 /**
- *	kbUIWidget::RegisterEventListener
+ *	kbUIWidgetComponent::RegisterEventListener
  */
-void kbUIWidget::RegisterEventListener( IUIWidgetListener *const pListener ) {
+void kbUIWidgetComponent::RegisterEventListener( IUIWidgetListener *const pListener ) {
 	m_EventListeners.push_back( pListener );
 }
 
 /**
- *	kbUIWidget::UnregisterEventListener
+ *	kbUIWidgetComponent::UnregisterEventListener
  */
-void kbUIWidget::UnregisterEventListener( IUIWidgetListener *const pListener ) {
+void kbUIWidgetComponent::UnregisterEventListener( IUIWidgetListener *const pListener ) {
 	VectorRemoveFast( m_EventListeners, pListener );
 }
 
 /**
- *	kbUIWidget::SetAdditiveTextureFactor
+ *	kbUIWidgetComponent::SetAdditiveTextureFactor
  */
-void kbUIWidget::SetAdditiveTextureFactor( const float factor ) {
+void kbUIWidgetComponent::SetAdditiveTextureFactor( const float factor ) {
 
 	static const kbString additiveTextureParams( "additiveTextureParams" );
 	m_pModel->SetMaterialParamVector( 0, additiveTextureParams.stl_str(), kbVec4( factor, 0.0f, 0.0f, 0.0f ) );
 }
 
 /**
- *	kbUIWidget::FireEvent
+ *	kbUIWidgetComponent::FireEvent
  */
-void kbUIWidget::FireEvent( const kbInput_t *const pInput ) {
+void kbUIWidgetComponent::FireEvent( const kbInput_t *const pInput ) {
 
 	for ( int i = 0; i < m_EventListeners.size(); i++ ) {
 		m_EventListeners[i]->WidgetEventCB( this, pInput );
@@ -195,32 +195,32 @@ void kbUIWidget::FireEvent( const kbInput_t *const pInput ) {
 }
 
 /**
- *	kbUIWidget::EditorChange
+ *	kbUIWidgetComponent::EditorChange
  */
-void kbUIWidget::EditorChange( const std::string & propertyName ) {
+void kbUIWidgetComponent::EditorChange( const std::string & propertyName ) {
 
 	Super::EditorChange( propertyName );
 
 }
 
 /**
- *	kbUIWidget::InputCB
+ *	kbUIWidgetComponent::InputCB
  */
-void kbUIWidget::InputCB( const kbInput_t & input ) {
+void kbUIWidgetComponent::InputCB( const kbInput_t & input ) {
 
 }
 
 /**
  *	kbUIComponent::SetFocus
  */
-void kbUIWidget::SetFocus( const bool bHasFocus ) {
+void kbUIWidgetComponent::SetFocus( const bool bHasFocus ) {
 	m_bHasFocus = bHasFocus;
 }
 
 /**
- *	kbUIWidget::SetRelativePosition
+ *	kbUIWidgetComponent::SetRelativePosition
  */
-void kbUIWidget::SetRelativePosition( const kbVec3 & newPos ) {
+void kbUIWidgetComponent::SetRelativePosition( const kbVec3 & newPos ) {
 	m_RelativePosition = newPos;
 	m_AbsolutePosition = m_CachedParentPosition + m_CachedParentSize * m_RelativePosition;
 
@@ -230,9 +230,9 @@ void kbUIWidget::SetRelativePosition( const kbVec3 & newPos ) {
 }
 
 /**
- *	kbUIWidget::SetRelativeSize
+ *	kbUIWidgetComponent::SetRelativeSize
  */
-void kbUIWidget::SetRelativeSize( const kbVec3 & newSize ) {
+void kbUIWidgetComponent::SetRelativeSize( const kbVec3 & newSize ) {
 
 	m_RelativeSize = newSize;
 	m_AbsoluteSize = m_CachedParentSize * m_RelativeSize;
@@ -243,10 +243,10 @@ void kbUIWidget::SetRelativeSize( const kbVec3 & newSize ) {
 }
 
 /**
- *	kbUIWidget::RecalculateOld
+ *	kbUIWidgetComponent::RecalculateOld
  */
-void kbUIWidget::RecalculateOld( const kbUIComponent *const pParent, const bool bFull ) {
-	kbErrorCheck( pParent != nullptr, "kbUIWidget::UpdateFromParent() - null parent" );
+void kbUIWidgetComponent::RecalculateOld( const kbUIComponent *const pParent, const bool bFull ) {
+	kbErrorCheck( pParent != nullptr, "kbUIWidgetComponent::UpdateFromParent() - null parent" );
 	
 /*	if ( m_pModel != nullptr && pParent != nullptr && pParent->GetStaticModelComponent() != nullptr ) {
 		kbLog( "Setting render oreder bias to %f", pParent->GetStaticModelComponent()->GetRenderOrderBias() - 1.0f );
@@ -267,9 +267,9 @@ void kbUIWidget::RecalculateOld( const kbUIComponent *const pParent, const bool 
 }
 
 /**
- *	kbUIWidget::Recalculate
+ *	kbUIWidgetComponent::Recalculate
  */
-void kbUIWidget::Recalculate( const kbUIWidget *const pParent, const bool bFull ) {
+void kbUIWidgetComponent::Recalculate( const kbUIWidgetComponent *const pParent, const bool bFull ) {
 
 	if ( pParent != nullptr ) {
 		m_CachedParentPosition = pParent->GetAbsolutePosition();
@@ -277,7 +277,7 @@ void kbUIWidget::Recalculate( const kbUIWidget *const pParent, const bool bFull 
 		SetRenderOrderBias( pParent->GetRenderOrderBias() - 1.0f );
 	} else {
 		m_CachedParentPosition = kbVec3::zero;
-		m_CachedParentSize = kbVec3::one;
+		m_CachedParentSize.Set( 1.0f, 1.0f, 1.0f );
 		SetRenderOrderBias( 0.0f );
 	}
 
@@ -290,9 +290,9 @@ void kbUIWidget::Recalculate( const kbUIWidget *const pParent, const bool bFull 
 }
 
 /**
- *	kbUIWidget::SetRenderOrderBias
+ *	kbUIWidgetComponent::SetRenderOrderBias
  */
-void kbUIWidget::SetRenderOrderBias( const float bias ) {
+void kbUIWidgetComponent::SetRenderOrderBias( const float bias ) {
 
 	if ( m_pModel != nullptr ) {
 		m_pModel->SetRenderOrderBias( bias );
@@ -300,9 +300,9 @@ void kbUIWidget::SetRenderOrderBias( const float bias ) {
 }
 
 /**
- *	kbUIWidget::GetRenderOrderBias
+ *	kbUIWidgetComponent::GetRenderOrderBias
  */
-float kbUIWidget::GetRenderOrderBias() const {
+float kbUIWidgetComponent::GetRenderOrderBias() const {
 
 	if ( m_pModel == nullptr ) {
 		return 0.0f;
@@ -312,9 +312,9 @@ float kbUIWidget::GetRenderOrderBias() const {
 }
 
 /**
- *	kbUIWidget::GetBaseTextureDimensions
+ *	kbUIWidgetComponent::GetBaseTextureDimensions
  */
-kbVec2i	kbUIWidget::GetBaseTextureDimensions() const {
+kbVec2i	kbUIWidgetComponent::GetBaseTextureDimensions() const {
 
 	kbVec2i retDim( -1, -1 );
 	if ( m_pModel == nullptr ) {
@@ -332,9 +332,9 @@ kbVec2i	kbUIWidget::GetBaseTextureDimensions() const {
 }
 
 /**
- *	kbUIWidget::SetEnable_Internal
+ *	kbUIWidgetComponent::SetEnable_Internal
  */
-void kbUIWidget::SetEnable_Internal( const bool bEnable ) {
+void kbUIWidgetComponent::SetEnable_Internal( const bool bEnable ) {
 
 	Super::SetEnable_Internal( bEnable );
 
@@ -371,6 +371,10 @@ void kbUIWidget::SetEnable_Internal( const bool bEnable ) {
 
 		g_pInputManager->RegisterInputListener( this );
 
+		if ( GetOwner() != nullptr ) {
+			Recalculate( nullptr, true );
+		}
+
 	} else {
 		if ( m_pModel != nullptr ) {
 			m_pModel->Enable( false );
@@ -388,9 +392,9 @@ void kbUIWidget::SetEnable_Internal( const bool bEnable ) {
 }
 
 /**
- *	kbUIWidget::Update_Internal
+ *	kbUIWidgetComponent::Update_Internal
  */
-void kbUIWidget::Update_Internal( const float dt ) {
+void kbUIWidgetComponent::Update_Internal( const float dt ) {
 
 	Super::Update_Internal( dt );
 
@@ -423,7 +427,7 @@ void kbUIWidget::Update_Internal( const float dt ) {
 		widgetAbsSize.x = widgetPixelWidth / BackBufferWidth;
 	}
 
-	if ( m_Anchor == kbUIWidget::MiddleRight ) {
+	if ( m_Anchor == kbUIWidgetComponent::MiddleRight ) {
 		widgetAbsPos.x -= widgetAbsSize.x;
 	}
 
@@ -472,7 +476,7 @@ void kbUISlider::SetEnable_Internal( const bool bEnable ) {
  */
 void kbUISlider::RecalculateOld( const kbUIComponent *const pParent, const bool bFull ) {
 
-	kbErrorCheck( pParent != nullptr, "kbUIWidget::UpdateFromParent() - null parent" );
+	kbErrorCheck( pParent != nullptr, "kbUIWidgetComponent::UpdateFromParent() - null parent" );
 	
 	if ( m_pModel != nullptr && pParent != nullptr && pParent->GetStaticModelComponent() != nullptr ) {
 
@@ -526,9 +530,13 @@ void kbUISlider::RecalculateOld( const kbUIComponent *const pParent, const bool 
 /**
  *	kbUISlider::Recalculate
  */
-void kbUISlider::Recalculate( const kbUIWidget *const pParent, const bool bFull ) {
+void kbUISlider::Recalculate( const kbUIWidgetComponent *const pParent, const bool bFull ) {
 
-	kbErrorCheck( pParent != nullptr, "kbUIWidget::UpdateFromParent() - null parent" );
+	if ( pParent == nullptr ) {
+		return;
+	}
+
+	// kbErrorCheck( pParent != nullptr, "kbUIWidgetComponent::UpdateFromParent() - null parent" );
 
 	if ( m_pModel != nullptr && pParent != nullptr && pParent->GetStaticModel() != nullptr ) {
 		m_pModel->SetRenderOrderBias( pParent->GetStaticModel() ->GetRenderOrderBias() - 1.0f );

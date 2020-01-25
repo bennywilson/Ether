@@ -34,7 +34,7 @@ public:
 		if ( GetTarget() != nullptr ) {
 			RotateTowardTarget();
 
-			if ( GetDistanceToTarget() > 2.0f ) {
+			if ( GetDistanceToTarget() >= KungFuGame::kDistToChase ) {
 				RequestStateChange( KungFuSnolafState::Run );
 				return;
 			}
@@ -51,6 +51,10 @@ template<typename T>
 class KungFuSnolafStateRun : public KungFuSnolafStateBase<T> {
 
 //---------------------------------------------------------------------------------------------------
+private:
+
+	float m_HugStartTime = -1.0f;
+
 public:
 	KungFuSnolafStateRun( CannonActorComponent *const pPlayerComponent ) : KungFuSnolafStateBase( pPlayerComponent ) { }
 
@@ -60,6 +64,7 @@ public:
 		m_pActorComponent->PlayAnimation( Run_Anim, 0.05f );
 
 		GetSnolaf()->EnableSmallLoveHearts( true );
+		m_HugStartTime = -1.0f;
 	}
 
 	virtual void UpdateState_Internal() override {
@@ -74,7 +79,9 @@ public:
 		const kbVec3 snolafPos = m_pActorComponent->GetOwnerPosition();
 		const kbVec3 snolafFacingDir = m_pActorComponent->GetOwnerRotation().ToMat4()[2].ToVec3();
 
+		// TODO - Optimize
 		// Look for actors to hug
+		bool bFoundHugger = false;
 		for ( int i = 0; i < g_pCannonGame->GetGameEntities().size(); i++ ) {
 
 			kbGameEntity *const pGameEnt = g_pCannonGame->GetGameEntities()[i];
@@ -83,22 +90,27 @@ public:
 				continue;
 			}
 
+			if ( pTargetActor->GetAs<KungFuSheepComponent>() == nullptr && pTargetActor->GetAs<KungFuSnolafComponent>() == nullptr ) {
+				continue;
+			}
+
 			const kbVec3 targetPos = pTargetActor->GetOwnerPosition();
 			const kbVec3 vSnolafToTarget = targetPos - snolafPos;
 			const float snolafToTargetDist = ( targetPos - snolafPos ).Length();
 			auto pSnolafComponent = pTargetActor->GetAs<KungFuSnolafComponent>();
-			if ( pSnolafComponent != nullptr && pSnolafComponent->GetState() != KungFuSnolafState::Hug && pSnolafComponent->GetState() != KungFuSnolafState::WatchCannonBall ) {
+			if ( pSnolafComponent != nullptr && pSnolafComponent->GetState() != KungFuSnolafState::Prehug && pSnolafComponent->GetState() != KungFuSnolafState::Hug && pSnolafComponent->GetState() != KungFuSnolafState::WatchCannonBall ) {
 				continue;
 			}
 
-			const float radius = ( pSnolafComponent != nullptr ) ? ( 0.5f ) : ( 0.75f );
+			const float radius = ( pSnolafComponent != nullptr ) ? ( KungFuGame::kDistToHugSnolaf ) : ( KungFuGame::kDistToHugSheep );
 			if ( snolafToTargetDist < radius ) {
 
 				if ( vSnolafToTarget.Dot( snolafFacingDir ) > 0.0f ) {
 					continue;
 				}
 
-				RequestStateChange( KungFuSnolafState::Hug );
+				RequestStateChange( KungFuSnolafState::Prehug );
+
 				return;
 			}
 		}
@@ -122,6 +134,70 @@ public:
 };
 
 /**
+ *	KungFuSnolafeStatePrehug
+ */
+template<typename T>
+class KungFuSnolafeStatePrehug : public KungFuSnolafStateBase<T> {
+
+//---------------------------------------------------------------------------------------------------
+public:
+
+	KungFuSnolafeStatePrehug( CannonActorComponent *const pPlayerComponent ) : KungFuSnolafStateBase( pPlayerComponent ) { }
+
+	virtual void BeginState_Internal( T ) override {
+
+		static const kbString HugForward_Anim( "Hug_Forward" );
+		m_pActorComponent->PlayAnimation( HugForward_Anim, 0.15f );
+	}
+
+	virtual void UpdateState_Internal() override {
+		if ( GetTimeSinceStateBegan() > KungFuGame::kPrehugLengthSec ) {
+			RequestStateChange( KungFuSnolafState::Hug );
+			return;
+		}
+
+		const kbVec3 snolafPos = m_pActorComponent->GetOwnerPosition();
+		const kbVec3 snolafFacingDir = m_pActorComponent->GetOwnerRotation().ToMat4()[2].ToVec3();
+
+		// TODO - Optimize
+		bool bAnyoneInFront = false;
+		for ( int i = 0; i < g_pCannonGame->GetGameEntities().size(); i++ ) {
+
+			kbGameEntity *const pGameEnt = g_pCannonGame->GetGameEntities()[i];
+			CannonActorComponent *const pTargetActor = pGameEnt->GetComponent<CannonActorComponent>();
+			if ( pTargetActor == nullptr || pTargetActor == m_pActorComponent ) {
+				continue;
+			}
+
+			if ( pTargetActor->IsEnabled() == false || pTargetActor->IsDead() ) {
+				continue;
+			}
+
+			const kbVec3 targetPos = pTargetActor->GetOwnerPosition();
+			const kbVec3 vSnolafToTarget = targetPos - snolafPos;
+			const float snolafToTargetDist = ( targetPos - snolafPos ).Length();
+			if ( snolafToTargetDist < KungFuGame::kDistToChase ) {
+
+				if ( vSnolafToTarget.Dot( snolafFacingDir ) > 0.0f ) {
+					continue;
+				}
+
+				bAnyoneInFront = true;
+				break;
+			}
+		}
+
+		if ( bAnyoneInFront == false ) {
+			RequestStateChange( KungFuSnolafState::Run );
+			return;
+		}
+
+	}
+
+	virtual void EndState_Internal( T ) override { }
+};
+
+/**
  *	KungFuSnolafStateHug - Warm Hugs!
  */
 template<typename T>
@@ -140,12 +216,11 @@ public:
 		if ( GetTarget() == nullptr ) {
 			RequestStateChange( KungFuSnolafState::Idle );
 			return;
-
 		}
 
 		KungFuSheepComponent *const pSheep = GetTarget()->GetAs<KungFuSheepComponent>();
 		if ( pSheep->IsCannonBalling() ) {
-			m_pActorComponent->PlayAnimation( HugForward_Anim, 0.05f );
+			m_pActorComponent->PlayAnimation( HugForward_Anim, 0.15f );
 			m_bCanWatchCannonball = false;
 		} else {
 
@@ -180,14 +255,13 @@ public:
 
 		if ( pSheep != nullptr && m_bFirstHitYet == false && g_GlobalTimer.TimeElapsedSeconds() > m_HugStartTime + 0.25f ) {
 			m_bFirstHitYet = true;
-			KungFuLevelComponent *const pLevelComponent = g_pCannonGame->GetLevelComponent<KungFuLevelComponent>();
 
 			DealAttackInfo_t<KungFuGame::eAttackType> dealAttackInfo;
 			dealAttackInfo.m_BaseDamage = 999999.0f;
 			dealAttackInfo.m_pAttacker = m_pActorComponent;
 			dealAttackInfo.m_Radius = 0.0f;
 			dealAttackInfo.m_AttackType = KungFuGame::Hug;
-			pLevelComponent->DoAttack( dealAttackInfo );		
+			KungFuSheepDirector::Get()->DoAttack( dealAttackInfo );		
 		}
 
 		const kbVec3 snolafPos = m_pActorComponent->GetOwnerPosition();
@@ -202,10 +276,14 @@ public:
 				continue;
 			}
 
+			if ( pTargetActor->IsEnabled() == false || pTargetActor->IsDead() ) {
+				continue;
+			}
+
 			const kbVec3 targetPos = pTargetActor->GetOwnerPosition();
 			const kbVec3 vSnolafToTarget = targetPos - snolafPos;
 			const float snolafToTargetDist = ( targetPos - snolafPos ).Length();
-			if ( snolafToTargetDist < 0.85f ) {
+			if ( snolafToTargetDist < KungFuGame::kDistToChase ) {
 
 				if ( vSnolafToTarget.Dot( snolafFacingDir ) > 0.0f ) {
 					continue;
@@ -254,7 +332,6 @@ public:
 
 	virtual void EndState_Internal( T ) override { }
 };
-
 
 /**
  *	KungFuSnolafStateDead
@@ -452,6 +529,25 @@ private:
 };
 
 /**
+ *	KungFuSnolafStatePoofDeath
+ */
+template<typename T>
+class KungFuSnolafStatePoofDeath : public KungFuSnolafStateBase<T> {
+
+//---------------------------------------------------------------------------------------------------
+public:
+	KungFuSnolafStatePoofDeath( CannonActorComponent *const pPlayerComponent ) : KungFuSnolafStateBase( pPlayerComponent ) { }
+
+	virtual void BeginState_Internal( T ) override {
+
+		GetSnolaf()->EnableSmallLoveHearts( false );
+		GetSnolaf()->EnableLargeLoveHearts( false );
+
+		GetSnolaf()->DoPoofDeath();
+	}
+};
+
+/**
  *	KungFuSnolafStateRunAway
  */
 template<typename T>
@@ -482,11 +578,18 @@ public:
 		const kbVec3 newSnolafPos = m_pActorComponent->GetOwnerPosition() - moveDir * frameDT * m_pActorComponent->GetMaxRunSpeed();
 		m_pActorComponent->SetOwnerPosition( newSnolafPos );
 	}
-
-	virtual void EndState_Internal( T ) override {
-	}
 };
 
+/**
+ *	KungFuSnolafStateCinema
+ */
+template<typename T>
+class KungFuSnolafStateCinema : public KungFuSnolafStateBase<T> {
+
+//---------------------------------------------------------------------------------------------------
+public:
+	KungFuSnolafStateCinema( CannonActorComponent *const pPlayerComponent ) : KungFuSnolafStateBase( pPlayerComponent ) { }
+};
 
 /**
  *	KungFuSnolafComponent::Constructor
@@ -533,10 +636,13 @@ void KungFuSnolafComponent::SetEnable_Internal( const bool bEnable ) {
 		KungFuSnolafStateBase<KungFuSnolafState::SnolafState_t> * snolafStates[] = {
 			new KungFuSnolafStateIdle<KungFuSnolafState::SnolafState_t>( this ),
 			new KungFuSnolafStateRun<KungFuSnolafState::SnolafState_t>( this ),
+			new KungFuSnolafeStatePrehug<KungFuSnolafState::SnolafState_t>( this ),
 			new KungFuSnolafStateHug<KungFuSnolafState::SnolafState_t>( this ),
 			new KungFuSnolafStateDead<KungFuSnolafState::SnolafState_t>( this ),
+			new KungFuSnolafStatePoofDeath<KungFuSnolafState::SnolafState_t>( this ),
 			new KungFuSnolafStateWatchCannonBall<KungFuSnolafState::SnolafState_t>( this ),
-			new KungFuSnolafStateRunAway<KungFuSnolafState::SnolafState_t>( this )
+			new KungFuSnolafStateRunAway<KungFuSnolafState::SnolafState_t>( this ),
+			new KungFuSnolafStateCinema<KungFuSnolafState::SnolafState_t>( this )
 		};
 
 		InitializeStateMachine( snolafStates );
@@ -606,7 +712,11 @@ void KungFuSnolafComponent::Update_Internal( const float DT ) {
 
 	if ( m_SkelModelsList.size() > 0 ) {
 		const static kbString fxMapMaskParam = "fxMapMask";
-		m_SkelModelsList[0]->SetMaterialParamVector( 0, fxMapMaskParam.stl_str(), fxDot );
+		if ( m_OverridenFXMaskParams.r >= 0.0f && m_OverridenFXMaskParams.g >= 0.0f && m_OverridenFXMaskParams.b >= 0.0f && m_OverridenFXMaskParams.a >= 0.0f ) {
+			m_SkelModelsList[0]->SetMaterialParamVector( 0, fxMapMaskParam.stl_str(), m_OverridenFXMaskParams );
+		} else {
+			m_SkelModelsList[0]->SetMaterialParamVector( 0, fxMapMaskParam.stl_str(), fxDot );
+		}
 	}
 }
 
@@ -670,8 +780,11 @@ void KungFuSnolafComponent::TakeDamage( const DealAttackInfo_t<KungFuGame::eAtta
 
 	m_LastAttackInfo = attackInfo;
 	if ( attackInfo.m_AttackType == KungFuGame::Shake ) {
-		// Shake 'n Bake only kills huggers
-		if ( m_CurrentState == KungFuSnolafState::Hug ) {
+		
+		const kbVec3 attackerPos = attackInfo.m_pAttacker->GetOwnerPosition();
+		const kbVec3 ourPos = GetOwnerPosition();
+		if ( m_CurrentState == KungFuSnolafState::Hug || m_CurrentState == KungFuSnolafState::Prehug ||
+			( attackerPos - ourPos ).Length() < KungFuGame::kShakeNBakeRadius ) {
 			m_Health = -1.0f;
 			RequestStateChange( KungFuSnolafState::Dead );
 		}
@@ -679,13 +792,6 @@ void KungFuSnolafComponent::TakeDamage( const DealAttackInfo_t<KungFuGame::eAtta
 	}
 	m_Health = -1.0f;
 	RequestStateChange( KungFuSnolafState::Dead );
-
-
-	static int numKilled = 0;
-	numKilled++;
-	if ( numKilled % 1000 == 0 ) {
-		kbLog( "Num Snolafs killed = %d", numKilled );
-	}
 }
 
 /**
