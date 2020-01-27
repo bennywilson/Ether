@@ -1090,7 +1090,10 @@ void kbRenderer_DX11::RenderScene() {
 
 		RenderLights();
 	
+		PLACE_GPU_TIME_STAMP( "Lights" );
+
 		RenderSSAO();
+		PLACE_GPU_TIME_STAMP( "SSAO" );
 
 		{
 			START_SCOPED_RENDER_TIMER( RENDER_UNLIT )
@@ -1103,7 +1106,7 @@ void kbRenderer_DX11::RenderScene() {
 					kbRenderTexture *const pDst = m_pAccumBuffers[m_iAccumBuffer];
 					m_RenderHooks[RP_PostLighting][iHook]->RenderHookCallBack( pSrc, pDst );
 				}
-				PLACE_GPU_TIME_STAMP( "Post Lighting Render Hook" );
+				PLACE_GPU_TIME_STAMP( "Post-Lighting Render Hook" );
 			}
 
 			m_RenderState.SetDepthStencilState();
@@ -1130,11 +1133,15 @@ void kbRenderer_DX11::RenderScene() {
 				kbRenderTexture *const pDst = m_pAccumBuffers[m_iAccumBuffer];
 				m_RenderHooks[RP_Translucent][iHook]->RenderHookCallBack( pSrc, pDst );
 			}
-			PLACE_GPU_TIME_STAMP( "Post Lighting Render Hook" );
+			PLACE_GPU_TIME_STAMP( "Pre-Translucent Render Hook" );
 		}
 
 		RenderTranslucency();
+
+		PLACE_GPU_TIME_STAMP( "Translucency" );
+
 		RenderScreenSpaceQuads();
+		PLACE_GPU_TIME_STAMP( "Screen Space Quads" );
 
 		if ( m_ViewMode == ViewMode_Shaded ) {
 			// In World UI Pass
@@ -1147,7 +1154,7 @@ void kbRenderer_DX11::RenderScene() {
 			m_RenderState.SetBlendState();
 		}
 
-		PLACE_GPU_TIME_STAMP( "Transparency" );
+		PLACE_GPU_TIME_STAMP( "In-World UI" );
 
 		if ( m_ViewMode == ViewMode_Shaded ) {
 			RenderLightShafts();

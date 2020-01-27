@@ -737,7 +737,7 @@ void EtherAIManager::Update( const float DeltaTime ) {
 			const kbBounds attackerBounds( pTargetEntity->GetPosition() + kbVec3( 10.0f, 25.0f, 10.0f ), pTargetEntity->GetPosition() - kbVec3( 10.0f, 25.0f, 10.0f ) );
 			g_pRenderer->DrawBox( attackerBounds, kbColor::red );
 		
-			g_pRenderer->DrawDebugText( pTargetEntity->GetName(), 0.01f, 0.25f, 0.02f, 0.02f, kbColor::red );
+			g_pRenderer->DrawDebugText( pTargetEntity->GetName().stl_str(), 0.01f, 0.25f, 0.02f, 0.02f, kbColor::red );
 		
 			const EtherSkelModelComponent *const pSkelModelComponent = (EtherSkelModelComponent*)pTargetEntity->GetComponentByType( EtherSkelModelComponent::GetType() );
 			if ( pSkelModelComponent != nullptr && pSkelModelComponent->GetCurAnimationName() != nullptr ) {

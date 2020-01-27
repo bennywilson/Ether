@@ -515,7 +515,7 @@ void EtherGame::RenderSync() {
 
 		for ( int i = 0; i < GetGameEntities().size(); i++ ) {
 			kbGameEntity *const pEnt = GetGameEntities()[i];
-			if ( pEnt->GetName().find( "Holey_Wall" ) != std::string::npos ) {
+			if ( pEnt->GetName().stl_str().find( "Holey_Wall" ) != std::string::npos ) {
 				kbStaticModelComponent *const pSM = (kbStaticModelComponent*)pEnt->GetComponentByType( kbStaticModelComponent::GetType() );
 				if ( pSM != nullptr ) {
 	
@@ -538,7 +538,7 @@ void EtherGame::RenderSync() {
 
 		for ( int i = 0; i < GetGameEntities().size(); i++ ) {
 			kbGameEntity *const pEnt = GetGameEntities()[i];
-			if ( pEnt->GetName().find( "Terrain" ) != std::string::npos ) {
+			if ( pEnt->GetName().stl_str().find( "Terrain" ) != std::string::npos ) {
 				kbTerrainComponent *const pTerrain = (kbTerrainComponent*)pEnt->GetComponentByType( kbTerrainComponent::GetType() );
 				if ( pTerrain != nullptr ) {
 					pTerrain->SetCollisionMap( m_pGrassCollisionTexture );

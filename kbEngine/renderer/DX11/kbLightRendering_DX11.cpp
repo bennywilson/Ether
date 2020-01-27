@@ -186,7 +186,6 @@ void kbRenderer_DX11::RenderLight( const kbRenderLight *const pLight ) {
 	m_pDeviceContext->OMSetRenderTargets( 1, &GetAccumBuffer( m_iAccumBuffer )->m_pRenderTargetView, nullptr );
 	//m_RenderState.SetDepthStencilState();
 	m_RenderState.SetDepthStencilState( false, kbRenderState::DepthWriteMaskZero, kbRenderState::CompareAlways, false );
-	PLACE_GPU_TIME_STAMP( "Light Rendering" );
 }
 
 /**

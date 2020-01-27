@@ -4343,6 +4343,7 @@ kbGameEntity 3622350630 1299414661 2143524754 2655535189 {
 		MaxEndRotationRate =  0.000000
 		MaxEndSize = 0.450000 0.450000 0.450000
 		MaxEndVelocity = 0.000000 0.000000 0.000000
+		MaxNumParticles = -1
 		MaxParticlesToEmit = -1
 		MaxSpawnRate =  1.000000
 		MaxStart3DOffset = 0.000000 0.000000 0.000000
