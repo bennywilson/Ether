@@ -329,6 +329,8 @@ public:
 													m_CullMode( CullMode_ShaderDefault ),
 													m_RenderOrderBias( 0.0f ),
 													m_EntityId( 0 ),
+													m_VertBufferStartIndex( -1 ),
+													m_VertBufferIndexCount( -1 ),
 													m_CullDistance( -1.0f ),
 													m_bCastsShadow( false ),
 													m_bIsSkinnedModel( false ),
@@ -346,6 +348,9 @@ public:
 	kbVec3										m_Scale;
 	uint										m_EntityId;
 
+	int											m_VertBufferStartIndex;
+	int											m_VertBufferIndexCount;
+	
 	std::vector<kbBoneMatrix_t>					m_MatrixList;
 
 	float										m_CullDistance;

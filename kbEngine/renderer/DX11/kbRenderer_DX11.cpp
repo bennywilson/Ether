@@ -3126,7 +3126,10 @@ void kbRenderer_DX11::RenderMesh( const kbRenderSubmesh *const pRenderMesh, cons
 
     if ( pModel->IsPointCloud() == true ) {
     	m_pDeviceContext->Draw( (UINT)pModel->NumVertices(), 0 );
-    } else {
+    } else if ( pRenderObject->m_VertBufferStartIndex >= 0 && pRenderObject->m_VertBufferIndexCount >= 0 ) {
+		const int idxBuffer = pRenderObject->m_VertBufferStartIndex * 2;
+    	m_pDeviceContext->DrawIndexed( pRenderObject->m_VertBufferIndexCount, idxBuffer, pRenderObject->m_VertBufferStartIndex );
+	} else {
     	m_pDeviceContext->DrawIndexed( pMesh.m_NumTriangles * 3, pMesh.m_IndexBufferIndex, 0 );
     }
 }

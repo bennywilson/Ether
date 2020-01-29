@@ -103,9 +103,9 @@ void kbParticleComponent::Constructor() {
 kbParticleComponent::~kbParticleComponent() {
 	StopParticleSystem();
 
-	for ( int i = 0; i < NumParticleBuffers; i++ ) {
+	/*for ( int i = 0; i < NumParticleBuffers; i++ ) {
 		m_ParticleBuffer[i].Release();
-	}
+	}*/
 }
 
 /**
@@ -120,7 +120,7 @@ void kbParticleComponent::StopParticleSystem() {
 	}
 
 	g_pRenderer->RemoveParticle( m_RenderObject );
-	for ( int i = 0; i < NumParticleBuffers; i++ ) {
+	/*for ( int i = 0; i < NumParticleBuffers; i++ ) {
 		if ( m_ParticleBuffer[i].IsVertexBufferMapped() ) {
 			m_ParticleBuffer[i].UnmapVertexBuffer( 0 );
 		}
@@ -128,7 +128,7 @@ void kbParticleComponent::StopParticleSystem() {
 		if ( m_ParticleBuffer[i].IsIndexBufferMapped() ) {
 			m_ParticleBuffer[i].UnmapIndexBuffer();		// todo : don't need to map/remap index buffer
 		}
-	}
+	}*/
 	m_CurrentParticleBuffer = 255;
 	m_NumIndicesInCurrentBuffer = 0;
 	m_Particles.clear();
@@ -161,9 +161,9 @@ void kbParticleComponent::Update_Internal( const float DeltaTime ) {
 	}
 
 	const float eps = 0.00000001f;
-	if ( IsModelEmitter() == false && ( m_pVertexBuffer == nullptr || m_pIndexBuffer == nullptr ) ) {
+	/*if ( IsModelEmitter() == false && ( m_pVertexBuffer == nullptr || m_pIndexBuffer == nullptr ) ) {
 		return;
-	}
+	}*/
 
 	if ( m_MaxBurstCount <= 0 && ( m_MaxParticleSpawnRate <= eps || m_MinParticleSpawnRate < eps || m_MaxParticleSpawnRate < m_MinParticleSpawnRate || m_ParticleMinDuration <= eps ) ) {
 		return;
@@ -183,6 +183,14 @@ void kbParticleComponent::Update_Internal( const float DeltaTime ) {
 		case EBillboardType::BT_AxialBillboard : iBillboardType = 1; break;
 		case EBillboardType::BT_AlignAlongVelocity : iBillboardType = 1; break;
 		default: kbWarning( "kbParticleComponent::Update_Internal() - Invalid billboard type specified" ); break;
+	}
+
+	kbParticleVertex* pDstVerts = nullptr;
+	ushort* pDstIndices = nullptr;
+
+	if ( IsModelEmitter() == false ) {
+		kbParticleManager& particleMgr = g_pGame->GetParticleManager();
+		particleMgr.ReserveScratchBufferSpace( pDstVerts, pDstIndices, m_RenderObject, 1000 );
 	}
 
 	for ( int i = (int)m_Particles.size() - 1; i >= 0 ; i-- ) {
@@ -265,75 +273,75 @@ void kbParticleComponent::Update_Internal( const float DeltaTime ) {
 			continue;
 		}
 
-		m_pIndexBuffer[m_NumIndicesInCurrentBuffer + 2] = ( curVBPosition * 4 ) + 0;
-		m_pIndexBuffer[m_NumIndicesInCurrentBuffer + 1] = ( curVBPosition * 4 ) + 1;
-		m_pIndexBuffer[m_NumIndicesInCurrentBuffer + 0] = ( curVBPosition * 4 ) + 2;
-		m_pIndexBuffer[m_NumIndicesInCurrentBuffer + 5] = ( curVBPosition * 4 ) + 0;
-		m_pIndexBuffer[m_NumIndicesInCurrentBuffer + 4] = ( curVBPosition * 4 ) + 2;
-		m_pIndexBuffer[m_NumIndicesInCurrentBuffer + 3] = ( curVBPosition * 4 ) + 3;
+		pDstIndices[m_NumIndicesInCurrentBuffer + 2] = ( curVBPosition * 4 ) + 0;
+		pDstIndices[m_NumIndicesInCurrentBuffer + 1] = ( curVBPosition * 4 ) + 1;
+		pDstIndices[m_NumIndicesInCurrentBuffer + 0] = ( curVBPosition * 4 ) + 2;
+		pDstIndices[m_NumIndicesInCurrentBuffer + 5] = ( curVBPosition * 4 ) + 0;
+		pDstIndices[m_NumIndicesInCurrentBuffer + 4] = ( curVBPosition * 4 ) + 2;
+		pDstIndices[m_NumIndicesInCurrentBuffer + 3] = ( curVBPosition * 4 ) + 3;
 		m_NumIndicesInCurrentBuffer += 6;
 
-		m_pVertexBuffer[iVertex + 0].position = particle.m_Position;
-		m_pVertexBuffer[iVertex + 1].position = particle.m_Position;
-		m_pVertexBuffer[iVertex + 2].position = particle.m_Position;
-		m_pVertexBuffer[iVertex + 3].position = particle.m_Position;
+		pDstVerts[iVertex + 0].position = particle.m_Position;
+		pDstVerts[iVertex + 1].position = particle.m_Position;
+		pDstVerts[iVertex + 2].position = particle.m_Position;
+		pDstVerts[iVertex + 3].position = particle.m_Position;
 
-		m_pVertexBuffer[iVertex + 0].uv.Set( 0.0f, 0.0f );
-		m_pVertexBuffer[iVertex + 1].uv.Set( 1.0f, 0.0f );
-		m_pVertexBuffer[iVertex + 2].uv.Set( 1.0f, 1.0f );
-		m_pVertexBuffer[iVertex + 3].uv.Set( 0.0f, 1.0f );
+		pDstVerts[iVertex + 0].uv.Set( 0.0f, 0.0f );
+		pDstVerts[iVertex + 1].uv.Set( 1.0f, 0.0f );
+		pDstVerts[iVertex + 2].uv.Set( 1.0f, 1.0f );
+		pDstVerts[iVertex + 3].uv.Set( 0.0f, 1.0f );
 
 
-		m_pVertexBuffer[iVertex + 0].size = kbVec2( -curSize.x,  curSize.y );
-		m_pVertexBuffer[iVertex + 1].size = kbVec2(  curSize.x,  curSize.y );
-		m_pVertexBuffer[iVertex + 2].size = kbVec2(  curSize.x, -curSize.y );
-		m_pVertexBuffer[iVertex + 3].size = kbVec2( -curSize.x, -curSize.y );
+		pDstVerts[iVertex + 0].size = kbVec2( -curSize.x,  curSize.y );
+		pDstVerts[iVertex + 1].size = kbVec2(  curSize.x,  curSize.y );
+		pDstVerts[iVertex + 2].size = kbVec2(  curSize.x, -curSize.y );
+		pDstVerts[iVertex + 3].size = kbVec2( -curSize.x, -curSize.y );
 
-		memcpy(&m_pVertexBuffer[iVertex + 0].color, byteColor, sizeof(byteColor));
-		memcpy(&m_pVertexBuffer[iVertex + 1].color, byteColor, sizeof(byteColor));
-		memcpy(&m_pVertexBuffer[iVertex + 2].color, byteColor, sizeof(byteColor));
-		memcpy(&m_pVertexBuffer[iVertex + 3].color, byteColor, sizeof(byteColor));
+		memcpy(&pDstVerts[iVertex + 0].color, byteColor, sizeof(byteColor));
+		memcpy(&pDstVerts[iVertex + 1].color, byteColor, sizeof(byteColor));
+		memcpy(&pDstVerts[iVertex + 2].color, byteColor, sizeof(byteColor));
+		memcpy(&pDstVerts[iVertex + 3].color, byteColor, sizeof(byteColor));
 
 		if ( m_ParticleBillboardType == EBillboardType::BT_AlignAlongVelocity ) {
 			kbVec3 alignVec = kbVec3::up;
 			if ( curVelocity.LengthSqr() > 0.01f ) {
 				alignVec = curVelocity.Normalized();
-				m_pVertexBuffer[iVertex + 0].direction = alignVec;
-				m_pVertexBuffer[iVertex + 1].direction = alignVec;
-				m_pVertexBuffer[iVertex + 2].direction = alignVec;
-				m_pVertexBuffer[iVertex + 3].direction = alignVec;
+				pDstVerts[iVertex + 0].direction = alignVec;
+				pDstVerts[iVertex + 1].direction = alignVec;
+				pDstVerts[iVertex + 2].direction = alignVec;
+				pDstVerts[iVertex + 3].direction = alignVec;
 			}
 		} else {
-			m_pVertexBuffer[iVertex + 0].direction = direction;
-			m_pVertexBuffer[iVertex + 1].direction = direction;
-			m_pVertexBuffer[iVertex + 2].direction = direction;
-			m_pVertexBuffer[iVertex + 3].direction = direction;
+			pDstVerts[iVertex + 0].direction = direction;
+			pDstVerts[iVertex + 1].direction = direction;
+			pDstVerts[iVertex + 2].direction = direction;
+			pDstVerts[iVertex + 3].direction = direction;
 		}
 
-		m_pVertexBuffer[iVertex + 0].rotation = particle.m_Rotation;
-		m_pVertexBuffer[iVertex + 1].rotation = particle.m_Rotation;
-		m_pVertexBuffer[iVertex + 2].rotation = particle.m_Rotation;
-		m_pVertexBuffer[iVertex + 3].rotation = particle.m_Rotation;
+		pDstVerts[iVertex + 0].rotation = particle.m_Rotation;
+		pDstVerts[iVertex + 1].rotation = particle.m_Rotation;
+		pDstVerts[iVertex + 2].rotation = particle.m_Rotation;
+		pDstVerts[iVertex + 3].rotation = particle.m_Rotation;
 
-		m_pVertexBuffer[iVertex + 0].billboardType[0] = iBillboardType;
-		m_pVertexBuffer[iVertex + 1].billboardType[0] = iBillboardType;
-		m_pVertexBuffer[iVertex + 2].billboardType[0] = iBillboardType;
-		m_pVertexBuffer[iVertex + 3].billboardType[0] = iBillboardType;
+		pDstVerts[iVertex + 0].billboardType[0] = iBillboardType;
+		pDstVerts[iVertex + 1].billboardType[0] = iBillboardType;
+		pDstVerts[iVertex + 2].billboardType[0] = iBillboardType;
+		pDstVerts[iVertex + 3].billboardType[0] = iBillboardType;
 
-		m_pVertexBuffer[iVertex + 0].billboardType[1] = (byte)kbClamp( particle.m_Randoms[0] * 255.0f, 0.0f, 255.0f );
-		m_pVertexBuffer[iVertex + 1].billboardType[1] = m_pVertexBuffer[iVertex + 0].billboardType[1];
-		m_pVertexBuffer[iVertex + 2].billboardType[1] = m_pVertexBuffer[iVertex + 0].billboardType[1];
-		m_pVertexBuffer[iVertex + 3].billboardType[1] = m_pVertexBuffer[iVertex + 0].billboardType[1];
+		pDstVerts[iVertex + 0].billboardType[1] = (byte)kbClamp( particle.m_Randoms[0] * 255.0f, 0.0f, 255.0f );
+		pDstVerts[iVertex + 1].billboardType[1] = pDstVerts[iVertex + 0].billboardType[1];
+		pDstVerts[iVertex + 2].billboardType[1] = pDstVerts[iVertex + 0].billboardType[1];
+		pDstVerts[iVertex + 3].billboardType[1] = pDstVerts[iVertex + 0].billboardType[1];
 
-		m_pVertexBuffer[iVertex + 0].billboardType[2] = (byte)kbClamp( particle.m_Randoms[1] * 255.0f, 0.0f, 255.0f );
-		m_pVertexBuffer[iVertex + 1].billboardType[2] = m_pVertexBuffer[iVertex + 0].billboardType[2];
-		m_pVertexBuffer[iVertex + 2].billboardType[2] = m_pVertexBuffer[iVertex + 0].billboardType[2];
-		m_pVertexBuffer[iVertex + 3].billboardType[2] = m_pVertexBuffer[iVertex + 0].billboardType[2];
+		pDstVerts[iVertex + 0].billboardType[2] = (byte)kbClamp( particle.m_Randoms[1] * 255.0f, 0.0f, 255.0f );
+		pDstVerts[iVertex + 1].billboardType[2] = pDstVerts[iVertex + 0].billboardType[2];
+		pDstVerts[iVertex + 2].billboardType[2] = pDstVerts[iVertex + 0].billboardType[2];
+		pDstVerts[iVertex + 3].billboardType[2] = pDstVerts[iVertex + 0].billboardType[2];
 
-		m_pVertexBuffer[iVertex + 0].billboardType[3] = (byte)kbClamp( particle.m_Randoms[2] * 255.0f, 0.0f, 255.0f );
-		m_pVertexBuffer[iVertex + 1].billboardType[3] = m_pVertexBuffer[iVertex + 0].billboardType[3];
-		m_pVertexBuffer[iVertex + 2].billboardType[3] = m_pVertexBuffer[iVertex + 0].billboardType[3];
-		m_pVertexBuffer[iVertex + 3].billboardType[3] = m_pVertexBuffer[iVertex + 0].billboardType[3];
+		pDstVerts[iVertex + 0].billboardType[3] = (byte)kbClamp( particle.m_Randoms[2] * 255.0f, 0.0f, 255.0f );
+		pDstVerts[iVertex + 1].billboardType[3] = pDstVerts[iVertex + 0].billboardType[3];
+		pDstVerts[iVertex + 2].billboardType[3] = pDstVerts[iVertex + 0].billboardType[3];
+		pDstVerts[iVertex + 3].billboardType[3] = pDstVerts[iVertex + 0].billboardType[3];
 		iVertex += 4;
 		curVBPosition++;
 
@@ -503,7 +511,7 @@ void kbParticleComponent::RenderSync() {
 		return;
 	}
 
-	if ( m_ParticleBuffer[0].NumVertices() == 0 ) {
+	/*if ( m_ParticleBuffer[0].NumVertices() == 0 ) {
 		for ( int i = 0; i < NumParticleBuffers; i++ ) {
 			m_ParticleBuffer[i].CreateDynamicModel( NumParticleBufferVerts, NumParticleBufferVerts, nullptr, nullptr, sizeof(kbParticleVertex) );
 			m_pVertexBuffer = (kbParticleVertex*)m_ParticleBuffer[i].MapVertexBuffer();
@@ -512,10 +520,9 @@ void kbParticleComponent::RenderSync() {
 			}
 			m_ParticleBuffer[i].UnmapVertexBuffer();
 		}
-	}
+	}*/
 
 	m_RenderObject.m_pComponent = this;
-	m_RenderObject.m_pModel = nullptr;
 	m_RenderObject.m_RenderPass = RP_Translucent;
 	m_RenderObject.m_Position = GetPosition();
 	m_RenderObject.m_Orientation = kbQuat( 0.0f, 0.0f, 0.0f, 1.0f );
@@ -548,21 +555,20 @@ void kbParticleComponent::RenderSync() {
 		m_CurrentParticleBuffer = 0;
 	} else {
 		g_pRenderer->RemoveParticle( m_RenderObject );
-
-		m_ParticleBuffer[m_CurrentParticleBuffer].UnmapVertexBuffer( m_NumIndicesInCurrentBuffer );
-		m_ParticleBuffer[m_CurrentParticleBuffer].UnmapIndexBuffer();		// todo : don't need to map/remap index buffer
 	}
 
-	m_RenderObject.m_pModel = &m_ParticleBuffer[m_CurrentParticleBuffer];
-	g_pRenderer->AddParticle( m_RenderObject );
+//	m_RenderObject.m_pModel = &m_ParticleBuffer[m_CurrentParticleBuffer];
+	if ( m_NumIndicesInCurrentBuffer > 0 ) {
+		g_pRenderer->AddParticle( m_RenderObject );
+	}
 
 	m_CurrentParticleBuffer++;
 	if ( m_CurrentParticleBuffer >= NumParticleBuffers ) {
 		m_CurrentParticleBuffer = 0;
 	}
 
-	m_pVertexBuffer = (kbParticleVertex*)m_ParticleBuffer[m_CurrentParticleBuffer].MapVertexBuffer();
-	m_pIndexBuffer = (ushort*) m_ParticleBuffer[m_CurrentParticleBuffer].MapIndexBuffer();
+	//m_pVertexBuffer = (kbParticleVertex*)m_ParticleBuffer[m_CurrentParticleBuffer].MapVertexBuffer();
+	//m_pIndexBuffer = (ushort*) m_ParticleBuffer[m_CurrentParticleBuffer].MapIndexBuffer();
 
 	m_NumIndicesInCurrentBuffer = 0;
 }
