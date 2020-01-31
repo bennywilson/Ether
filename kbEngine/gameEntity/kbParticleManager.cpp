@@ -383,7 +383,7 @@ void kbParticleManager::ReserveScratchBufferSpace( kbParticleVertex*&  outVertex
 	kbErrorCheck( scratchBuffer.m_iCurModel >= 0, "kbParticleManager::ReserveScratchBufferSpace() - Scratch buffers are not initialized." );
 
 	const int outVBIdx = scratchBuffer.m_iVert;
-	const int outIBIdx = 2 * ( outVBIdx + 1 );
+	const int outIBIdx = 6 * ( outVBIdx / 4 );
 
 	inOutRenderObj.m_pModel = &scratchBuffer.m_RenderModel[scratchBuffer.m_iCurModel];
 	inOutRenderObj.m_VertBufferStartIndex = outVBIdx;

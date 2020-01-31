@@ -351,6 +351,7 @@ void kbParticleComponent::Update_Internal( const float DeltaTime ) {
 				m_pVertexBuffer[iVertex + 2].position.x, m_pVertexBuffer[iVertex + 2].position.y, m_pVertexBuffer[iVertex + 2].position.z,
 				m_pVertexBuffer[iVertex + 3].position.x, m_pVertexBuffer[iVertex + 3].position.y, m_pVertexBuffer[iVertex + 3].position.z );	*/												
 	}
+	m_RenderObject.m_VertBufferIndexCount = m_NumIndicesInCurrentBuffer;
 
 	m_TimeAlive += DeltaTime;
 	if ( m_TotalDuration > 0.0f && m_TimeAlive > m_TotalDuration && m_BurstCount <= 0 ) {
