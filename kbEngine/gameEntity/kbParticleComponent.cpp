@@ -38,7 +38,7 @@ void kbParticle_t::Shutdown() {
 		g_pRenderer->RemoveRenderObject( m_RenderObject );
 		g_pGame->GetParticleManager().ReturnComponentToPool( m_RenderObject.m_pComponent );
 	}
-
+	m_RenderObject.m_VertBufferIndexCount = 0;
 	m_RenderObject.m_pComponent = nullptr;
 	m_pSrcModelEmitter = nullptr;
 }
@@ -90,7 +90,6 @@ void kbParticleComponent::Constructor() {
 	m_pVertexBuffer = nullptr;
 	m_pIndexBuffer = nullptr;
 	m_CurrentParticleBuffer = 255;
-	m_NumIndicesInCurrentBuffer = 0;
 	m_bIsSpawning = true;
 
 	m_bIsPooled = false;
@@ -130,7 +129,6 @@ void kbParticleComponent::StopParticleSystem() {
 		}
 	}*/
 	m_CurrentParticleBuffer = 255;
-	m_NumIndicesInCurrentBuffer = 0;
 	m_Particles.clear();
 	m_LeftOverTime = 0.0f;
 
@@ -186,11 +184,11 @@ void kbParticleComponent::Update_Internal( const float DeltaTime ) {
 	}
 
 	kbParticleVertex* pDstVerts = nullptr;
-	ushort* pDstIndices = nullptr;
 
-	if ( IsModelEmitter() == false ) {
+	m_RenderObject.m_VertBufferIndexCount = (uint)m_Particles.size() * 6;
+	if ( IsModelEmitter() == false && m_Particles.size() > 0 ) {
 		kbParticleManager& particleMgr = g_pGame->GetParticleManager();
-		particleMgr.ReserveScratchBufferSpace( pDstVerts, pDstIndices, m_RenderObject, 1000 );
+		particleMgr.ReserveScratchBufferSpace( pDstVerts, m_RenderObject, m_Particles.size() * 4 );
 	}
 
 	for ( int i = (int)m_Particles.size() - 1; i >= 0 ; i-- ) {
@@ -273,14 +271,6 @@ void kbParticleComponent::Update_Internal( const float DeltaTime ) {
 			continue;
 		}
 
-		pDstIndices[m_NumIndicesInCurrentBuffer + 2] = ( curVBPosition * 4 ) + 0;
-		pDstIndices[m_NumIndicesInCurrentBuffer + 1] = ( curVBPosition * 4 ) + 1;
-		pDstIndices[m_NumIndicesInCurrentBuffer + 0] = ( curVBPosition * 4 ) + 2;
-		pDstIndices[m_NumIndicesInCurrentBuffer + 5] = ( curVBPosition * 4 ) + 0;
-		pDstIndices[m_NumIndicesInCurrentBuffer + 4] = ( curVBPosition * 4 ) + 2;
-		pDstIndices[m_NumIndicesInCurrentBuffer + 3] = ( curVBPosition * 4 ) + 3;
-		m_NumIndicesInCurrentBuffer += 6;
-
 		pDstVerts[iVertex + 0].position = particle.m_Position;
 		pDstVerts[iVertex + 1].position = particle.m_Position;
 		pDstVerts[iVertex + 2].position = particle.m_Position;
@@ -344,14 +334,7 @@ void kbParticleComponent::Update_Internal( const float DeltaTime ) {
 		pDstVerts[iVertex + 3].billboardType[3] = pDstVerts[iVertex + 0].billboardType[3];
 		iVertex += 4;
 		curVBPosition++;
-
-		/*kbLog( "Pos = (%f %f %f), (%f %f %f), (%f %f %f ), (%f %f %f )", 
-				m_pVertexBuffer[iVertex + 0].position.x, m_pVertexBuffer[iVertex + 0].position.y, m_pVertexBuffer[iVertex + 0].position.z,
-				m_pVertexBuffer[iVertex + 1].position.x, m_pVertexBuffer[iVertex + 1].position.y, m_pVertexBuffer[iVertex + 1].position.z,
-				m_pVertexBuffer[iVertex + 2].position.x, m_pVertexBuffer[iVertex + 2].position.y, m_pVertexBuffer[iVertex + 2].position.z,
-				m_pVertexBuffer[iVertex + 3].position.x, m_pVertexBuffer[iVertex + 3].position.y, m_pVertexBuffer[iVertex + 3].position.z );	*/												
 	}
-	m_RenderObject.m_VertBufferIndexCount = m_NumIndicesInCurrentBuffer;
 
 	m_TimeAlive += DeltaTime;
 	if ( m_TotalDuration > 0.0f && m_TimeAlive > m_TotalDuration && m_BurstCount <= 0 ) {
@@ -499,7 +482,7 @@ void kbParticleComponent::RenderSync() {
 		return;
 	}
 
-	if ( IsEnabled() == false || ( m_TotalDuration > 0.0f && m_TimeAlive > m_TotalDuration && m_NumIndicesInCurrentBuffer == 0 ) ) {
+	if ( IsEnabled() == false || ( m_TotalDuration > 0.0f && m_TimeAlive > m_TotalDuration && m_RenderObject.m_VertBufferIndexCount == 0 ) ) {
 		StopParticleSystem();
 		Enable( false );
 		if ( m_bIsPooled ) {
@@ -559,7 +542,7 @@ void kbParticleComponent::RenderSync() {
 	}
 
 //	m_RenderObject.m_pModel = &m_ParticleBuffer[m_CurrentParticleBuffer];
-	if ( m_NumIndicesInCurrentBuffer > 0 ) {
+	if ( m_RenderObject.m_VertBufferIndexCount > 0 ) {
 		g_pRenderer->AddParticle( m_RenderObject );
 	}
 
@@ -570,8 +553,6 @@ void kbParticleComponent::RenderSync() {
 
 	//m_pVertexBuffer = (kbParticleVertex*)m_ParticleBuffer[m_CurrentParticleBuffer].MapVertexBuffer();
 	//m_pIndexBuffer = (ushort*) m_ParticleBuffer[m_CurrentParticleBuffer].MapIndexBuffer();
-
-	m_NumIndicesInCurrentBuffer = 0;
 }
 
 /**

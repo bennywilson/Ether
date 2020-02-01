@@ -62,7 +62,7 @@ public:
 	const kbGameComponent *										GetComponentFromPool();
 	void														ReturnComponentToPool( const kbGameComponent* const );
 
-	void														ReserveScratchBufferSpace( kbParticleVertex*& outVertexBuffer, ushort*& outIndices, kbRenderObject& inOutRenderObj, const int numRequestedVerts );
+	void														ReserveScratchBufferSpace( kbParticleVertex*& outVertexBuffer, kbRenderObject& inOutRenderObj, const int numRequestedVerts );
 
 private:
 

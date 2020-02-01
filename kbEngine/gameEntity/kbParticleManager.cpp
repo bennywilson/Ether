@@ -26,10 +26,26 @@ kbParticleManager::kbParticleManager() {
 		m_ComponentPool[i] = new kbGameComponent();
 	}
 
+	const uint indexBufferMax = 6 * ( NumScratchBufferVerts / 4 );
 	m_ScratchParticleBuffers.resize( NumScratchBuffers );
 	for ( int i = 0; i < NumScratchBuffers; i++ ) {
+
+		auto& scratchBuf = m_ScratchParticleBuffers[i];
 		for ( int iModel = 0; iModel < NumCustomParticleBuffers; iModel++ ) {
-			m_ScratchParticleBuffers[i].m_RenderModel[iModel].CreateDynamicModel( NumScratchBufferVerts, NumScratchBufferVerts, nullptr, nullptr, sizeof(kbParticleVertex));
+			auto pModel = &scratchBuf.m_RenderModel[iModel];
+			pModel->CreateDynamicModel( NumScratchBufferVerts, indexBufferMax, nullptr, nullptr, sizeof(kbParticleVertex) );
+
+			ushort* const pIndexBuf = (ushort*)pModel->MapIndexBuffer();
+			for ( uint iBuf = 0, iVB = 0; iBuf < indexBufferMax; iBuf += 6, iVB += 4 ) {
+				pIndexBuf[iBuf + 0] = iVB + 2;
+				pIndexBuf[iBuf + 1] = iVB + 1;
+				pIndexBuf[iBuf + 2] = iVB + 0;
+				pIndexBuf[iBuf + 3] = iVB + 3;
+				pIndexBuf[iBuf + 4] = iVB + 2;
+				pIndexBuf[iBuf + 5] = iVB + 0;
+			}
+
+			pModel->UnmapIndexBuffer();
 		}
 	}
 }
@@ -273,7 +289,6 @@ void kbParticleManager::RenderSync() {
 		kbModel& finishedModel = (curBuffer.m_iCurModel >= 0 ) ? ( curBuffer.m_RenderModel[curBuffer.m_iCurModel] ) : ( curBuffer.m_RenderModel[0] );
 		if ( curBuffer.m_iCurModel >= 0 ) {
 			finishedModel.UnmapVertexBuffer( NumScratchBufferVerts );
-			finishedModel.UnmapIndexBuffer();		// todo : don't need to map/remap index buffer
 		} else {
 			curBuffer.m_iCurModel = 0;
 		}
@@ -282,7 +297,6 @@ void kbParticleManager::RenderSync() {
 
 		kbModel& nextModel = curBuffer.m_RenderModel[curBuffer.m_iCurModel];
 		curBuffer.m_pVertexBuffer = (kbParticleVertex*)nextModel.MapVertexBuffer();
-		curBuffer.m_pIndexBuffer = (ushort*)nextModel.MapIndexBuffer();
 		curBuffer.m_iVert = 0;
 	}
 }
@@ -377,7 +391,9 @@ void kbParticleManager::ReturnComponentToPool( const kbGameComponent *const pGam
 /**
  *	kbParticleManager::ReserveScratchBufferSpace	
  */
-void kbParticleManager::ReserveScratchBufferSpace( kbParticleVertex*&  outVertexBuffer, ushort*&  outIndexBuffer, kbRenderObject& inOutRenderObj, const int numRequestedVerts ) {
+void kbParticleManager::ReserveScratchBufferSpace( kbParticleVertex*&  outVertexBuffer, kbRenderObject& inOutRenderObj, const int numRequestedVerts ) {
+
+	kbErrorCheck( numRequestedVerts > 0, "kbParticleManager::ReserveScratchBufferSpace() - 0 verts requested" );
 
 	auto& scratchBuffer = m_ScratchParticleBuffers[0];
 	kbErrorCheck( scratchBuffer.m_iCurModel >= 0, "kbParticleManager::ReserveScratchBufferSpace() - Scratch buffers are not initialized." );
@@ -387,10 +403,9 @@ void kbParticleManager::ReserveScratchBufferSpace( kbParticleVertex*&  outVertex
 
 	inOutRenderObj.m_pModel = &scratchBuffer.m_RenderModel[scratchBuffer.m_iCurModel];
 	inOutRenderObj.m_VertBufferStartIndex = outVBIdx;
-	inOutRenderObj.m_VertBufferIndexCount = numRequestedVerts;
+	inOutRenderObj.m_VertBufferIndexCount = 6 * ( numRequestedVerts / 4);
 
 	outVertexBuffer = &scratchBuffer.m_pVertexBuffer[outVBIdx];
-	outIndexBuffer = &scratchBuffer.m_pIndexBuffer[outIBIdx];
 
 	scratchBuffer.m_iVert += numRequestedVerts;
 }
