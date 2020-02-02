@@ -31,6 +31,8 @@ kbParticleManager::kbParticleManager() {
 	for ( int i = 0; i < NumScratchBuffers; i++ ) {
 
 		auto& scratchBuf = m_ScratchParticleBuffers[i];
+		scratchBuf.m_iCurModel = 0;
+
 		for ( int iModel = 0; iModel < NumCustomParticleBuffers; iModel++ ) {
 			auto pModel = &scratchBuf.m_RenderModel[iModel];
 			pModel->CreateDynamicModel( NumScratchBufferVerts, indexBufferMax, nullptr, nullptr, sizeof(kbParticleVertex) );

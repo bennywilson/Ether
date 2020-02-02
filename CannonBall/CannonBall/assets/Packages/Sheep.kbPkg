@@ -61,7 +61,7 @@ kbPrefab 1 {
 							Enabled = 0
 							LifeTime =  -1.000000
 							ParamName = "shaderTexture"
-							Texture = .\assets\fx\smoke\smokeatlas_1.dds
+							Texture = .\assets\fx\smoke\smokeatlas_1.tif
 							Vector = 0.000000 0.000000 0.000000 0.000000
 						}
 				}
@@ -1272,7 +1272,7 @@ kbGameEntity 3807537734 1283872403 1661460398 2211889957 {
 						Enabled = 0
 						LifeTime =  -1.000000
 						ParamName = "hatchTexture2"
-						Texture = .\assets\fx\hatch\tam_2.tif
+						Texture = .\assets\fx\hatch\tam_2.jpg
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 			}

@@ -187,8 +187,10 @@ void kbParticleComponent::Update_Internal( const float DeltaTime ) {
 
 	m_RenderObject.m_VertBufferIndexCount = (uint)m_Particles.size() * 6;
 	if ( IsModelEmitter() == false && m_Particles.size() > 0 ) {
+
 		kbParticleManager& particleMgr = g_pGame->GetParticleManager();
-		particleMgr.ReserveScratchBufferSpace( pDstVerts, m_RenderObject, m_Particles.size() * 4 );
+		particleMgr.ReserveScratchBufferSpace( pDstVerts, m_RenderObject, (int)m_Particles.size() * 4 );
+		kbErrorCheck( pDstVerts != nullptr, "kbParticleComponent::Update_Internal() - pDstVerts is null" );
 	}
 
 	for ( int i = (int)m_Particles.size() - 1; i >= 0 ; i-- ) {
