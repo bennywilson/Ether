@@ -247,6 +247,9 @@
     <ClInclude Include="ether\EtherWorldGen.h">
       <Filter>Source Files\Ether</Filter>
     </ClInclude>
+    <ClInclude Include="Ether\EtherTV.h">
+      <Filter>Source Files\Ether\Game Logic</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -280,6 +283,9 @@
       <Filter>Source Files\Ether</Filter>
     </ClCompile>
     <ClCompile Include="Ether\EtherPlayer.cpp">
+      <Filter>Source Files\Ether\Game Logic</Filter>
+    </ClCompile>
+    <ClCompile Include="Ether\EtherTV.cpp">
       <Filter>Source Files\Ether\Game Logic</Filter>
     </ClCompile>
   </ItemGroup>

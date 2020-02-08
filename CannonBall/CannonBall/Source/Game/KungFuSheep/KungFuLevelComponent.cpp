@@ -21,7 +21,7 @@ namespace KungFuGame {
 
 };
 
-KungFuGame::eSkipCheats g_SkipCheat = KungFuGame::Skip_None;
+KungFuGame::eSkipCheats g_SkipCheat = KungFuGame::Skip_ToEnd;
 
 #include "Cinema\Outro.inl"
 

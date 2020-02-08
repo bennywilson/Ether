@@ -10,6 +10,7 @@ cbuffer matrixBuffer {
 	float4 lightAnimParam;		// lightAnimParam driven by EtherLightAnimatorComponent
 	float4 screenParams;		// x - 
 	float4 time;
+	float4 lineSpeedAndRadius = (0.1f,0.08f,0.01f,0.01f);
 };
 
 kbShaderState {
@@ -83,14 +84,14 @@ const float DistortOffset( const float2 uv, const float distortY, const float di
 float4 pixelShader( pixelInput	input ) : SV_TARGET {
 
 	float2 uv = input.uv;
-	float y = frac( -time.x * 0.1f );
-	uv.x += DistortOffset( input.uv, y, 0.01f, 0.21f, float2( 0.01f, 1.0f ) );
+	float y = frac( -time.x * lineSpeedAndRadius.x );
+	uv.x += DistortOffset( input.uv, y, lineSpeedAndRadius.z, 0.21f, float2( 0.01f, 1.0f ) );
 
 //	y = frac( -time.x * 0.2f );
 //	uv.x += DistortOffset( input.uv, y, 0.01f, 0.05f ,float2( 0.1f, 1.0f ) );
 
-	y = frac( time.x * 0.08f );
-	uv.x += DistortOffset( input.uv, y, 0.01f, 0.05f ,float2( 0.1f, 1.0f ) );
+	y = frac( time.x * lineSpeedAndRadius.y );
+	uv.x += DistortOffset( input.uv, y, lineSpeedAndRadius.w, 0.05f ,float2( 0.1f, 1.0f ) );
 
 	float4 color = screenColorTex.Sample( SampleType, uv );
 	float4 emissive = screenEmissiveTex.Sample( SampleType, uv );

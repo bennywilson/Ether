@@ -88,6 +88,6 @@ float4 pixelShader( pixelInput input ) : SV_TARGET {
 	float3 finalSpecColor = spec.xxx * lightColor.xyz * lightAttenuation;
 	float3 finalDiffuseColor = worldDiffuseColor.xyz * lightDotNormal * lightColor.xyz * lightAttenuation;
 
-	float3 finalColor = ( finalSpecColor + finalDiffuseColor ) * lerp( lightAnimParam.x, 1.0f, 0.5f ) * 0.5f;
-	return float4( finalColor, worldDiffuseColor.w );
+	float3 finalColor = ( finalSpecColor + finalDiffuseColor );// * lerp( lightAnimParam.x, 1.0f, 0.5f ) * 0.5f;
+	return saturate(float4( finalColor, worldDiffuseColor.w ));
 }

@@ -13,6 +13,8 @@ cbuffer matrixBuffer {
 	float4 edgeFadeParams;		// x: Start fade Dist, y: End fade Dist, z: Use Fade
 	float4 distortionParams;	// x: U offset, y: V offset, z: Magnitude
 	float4 cameraPosition;
+	float4 colorFactor = (1,1,1,1);
+	float4				lightAnimParam;		// lightAnimParam driven by EtherLightAnimatorComponent
 }
 
 kbShaderState {
@@ -75,7 +77,7 @@ Texture2D specularTexture(specularBuffer)		: register(t2);
 SamplerState DepthSamplerState;
 Texture2D depthTexture(depthBuffer)				: register(t3);
 
-Texture2D ProjectionTex;
+Texture2D ProjectionTex							: register(t4);
 
 float4 pixelShader( pixelInput input ) : SV_TARGET {
 	float4 diffuseColor = colorTexture.Sample( DefaultSamplerState, input.uv );
@@ -99,5 +101,5 @@ float4 pixelShader( pixelInput input ) : SV_TARGET {
 	if ( finalUV.x < 0.01f || finalUV.x > 0.99f || finalUV.y < 0.01f || finalUV.y > 0.99f )
 		clip(-1);
 
-	return ProjectionTex.Sample( DefaultSamplerState, finalUV );
+	return ProjectionTex.Sample( DefaultSamplerState, finalUV ) * colorFactor * lerp( lightAnimParam.x, 1.5f, 0.2f );
 }
