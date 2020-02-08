@@ -1,8 +1,8 @@
-kbGameEntity 771586944 1268093874 764489092 2385489553 {
+kbGameEntity 2637543870 1237038969 793998013 2570910196 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		Name = "Entity_53"
+		Name = "Entity_40"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
 		Position = 0.000000 0.000000 0.000000
 		Scale = 1.000000 1.000000 1.000000
@@ -796,7 +796,7 @@ kbGameEntity 1539666996 1073921903 3251711405 2591985252 {
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadows = 0
-		Color = 0.972578 0.972578 0.972578 1.000000
+		Color = 0.943884 0.943884 0.943884 1.000000
 		Materials = 0
 		LightRadius =  4.000000
 	}
@@ -896,7 +896,7 @@ kbGameEntity 480560206 1319462208 2014875023 1872152854 {
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadows = 0
-		Color = 0.972578 0.972578 0.972578 1.000000
+		Color = 0.943877 0.943877 0.943877 1.000000
 		Materials = 0
 		LightRadius =  4.000000
 	}
@@ -996,7 +996,7 @@ kbGameEntity 869242062 1156727719 657741206 2752403012 {
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadows = 0
-		Color = 0.972578 0.972578 0.972578 1.000000
+		Color = 0.943873 0.943873 0.943873 1.000000
 		Materials = 0
 		LightRadius =  4.000000
 	}
@@ -1096,7 +1096,7 @@ kbGameEntity 1044043731 1218053337 3183565988 2739138226 {
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadows = 0
-		Color = 0.972564 0.972564 0.972564 1.000000
+		Color = 0.943870 0.943870 0.943870 1.000000
 		Materials = 0
 		LightRadius =  4.000000
 	}
@@ -1196,7 +1196,7 @@ kbGameEntity 2591783041 1085017970 3399635387 2306051354 {
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadows = 0
-		Color = 0.972564 0.972564 0.972564 1.000000
+		Color = 0.943866 0.943866 0.943866 1.000000
 		Materials = 0
 		LightRadius =  4.000000
 	}

@@ -12,6 +12,8 @@
 #include "EtherWeapon.h"
 
 
+float EtherLightAnimatorComponent::s_GlobalMultiplier = 1.0f;
+
 /**
  *	EtherActorComponent::Constructor
  */
@@ -226,7 +228,7 @@ void EtherLightAnimatorComponent::Update_Internal( const float DT ) {
 	pLightComp->MarkAsDirty();
 
 	kbShaderParamOverrides_t shaderParam;
-	shaderParam.SetVec4( "lightAnimParam", lightColor );
+	shaderParam.SetVec4( "lightAnimParam", ( lightColor * s_GlobalMultiplier ) );
 	g_pRenderer->SetGlobalShaderParam( shaderParam );
 }
 

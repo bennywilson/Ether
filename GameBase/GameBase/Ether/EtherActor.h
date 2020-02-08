@@ -90,6 +90,10 @@ class EtherLightAnimatorComponent : public kbGameComponent {
 	KB_DECLARE_COMPONENT( EtherLightAnimatorComponent, kbGameComponent );
 
 //-------------------------------------------------------------------------------------------------------------------------------------------------------------
+public:
+	
+	static void									SetGlobalMultiplier( const float globalMultiplier ) { s_GlobalMultiplier = globalMultiplier; }
+
 protected:
 	virtual void								SetEnable_Internal( const bool bIsEnabled ) override;
 	virtual void								Update_Internal( const float DeltaTimeSeconds ) override;
@@ -101,6 +105,8 @@ private:
 	std::vector<kbVectorAnimEvent>				m_LightColorCurve;
 
 	float										m_StartTime;
+
+	static float								s_GlobalMultiplier;
 };
 
 #endif
