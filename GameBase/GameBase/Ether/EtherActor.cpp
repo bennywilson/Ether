@@ -223,12 +223,12 @@ void EtherLightAnimatorComponent::Update_Internal( const float DT ) {
 			break;
 		}
 	}
-
+	lightColor = lightColor * s_GlobalMultiplier;
 	pLightComp->SetColor( lightColor.x, lightColor.y, lightColor.z, 1.0f );
 	pLightComp->MarkAsDirty();
 
 	kbShaderParamOverrides_t shaderParam;
-	shaderParam.SetVec4( "lightAnimParam", ( lightColor * s_GlobalMultiplier ) );
+	shaderParam.SetVec4( "lightAnimParam", lightColor );
 	g_pRenderer->SetGlobalShaderParam( shaderParam );
 }
 
