@@ -101,5 +101,5 @@ float4 pixelShader( pixelInput input ) : SV_TARGET {
 	if ( finalUV.x < 0.01f || finalUV.x > 0.99f || finalUV.y < 0.01f || finalUV.y > 0.99f )
 		clip(-1);
 
-	return ProjectionTex.Sample( DefaultSamplerState, finalUV ) * colorFactor * lerp( lightAnimParam.x, 1.5f, 0.2f );
+	return ProjectionTex.Sample( DefaultSamplerState, finalUV ) * colorFactor * lerp( lightAnimParam.x, 2.0f, 0.2f );
 }

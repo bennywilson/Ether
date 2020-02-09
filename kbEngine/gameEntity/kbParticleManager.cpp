@@ -49,6 +49,11 @@ kbParticleManager::kbParticleManager() {
 
 			pModel->UnmapIndexBuffer();
 		}
+
+		scratchBuf.m_iCurModel = 0;
+		kbModel& nextModel = scratchBuf.m_RenderModel[scratchBuf.m_iCurModel];
+		scratchBuf.m_pVertexBuffer = (kbParticleVertex*)nextModel.MapVertexBuffer();
+		scratchBuf.m_iVert = 0;
 	}
 }
 
@@ -393,7 +398,7 @@ void kbParticleManager::ReturnComponentToPool( const kbGameComponent *const pGam
 /**
  *	kbParticleManager::ReserveScratchBufferSpace	
  */
-void kbParticleManager::ReserveScratchBufferSpace( kbParticleVertex*&  outVertexBuffer, kbRenderObject& inOutRenderObj, const int numRequestedVerts ) {
+void kbParticleManager::ReserveScratchBufferSpace( kbParticleVertex*& outVertexBuffer, kbRenderObject& inOutRenderObj, const int numRequestedVerts ) {
 
 	kbErrorCheck( numRequestedVerts > 0, "kbParticleManager::ReserveScratchBufferSpace() - 0 verts requested" );
 

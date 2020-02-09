@@ -1,4 +1,4 @@
-kbGameEntity 2924088362 1097264573 2257438620 1825569724 {
+kbGameEntity 1258237006 1225639122 2838399888 2064560172 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
@@ -394,7 +394,7 @@ kbGameEntity 2520444493 1325528206 2326593973 2159962233 {
 						Enabled = 0
 						LifeTime =  -1.000000
 						ParamName = "screenColorTex"
-						Texture = .\assets\tv\layer 91.png
+						Texture = .\assets\visualtarget\elp_ad\tv\tv_screen_diffuse.tif
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 					kbShaderParamComponent { 
@@ -499,132 +499,132 @@ kbGameEntity 2520444493 1325528206 2326593973 2159962233 {
 		MovieLength =  7.000000
 		Music = 0
 		SheepAndFoxClip = 126
-			.\assets\tv\layer 1.png
-.\assets\tv\layer 2.png
-.\assets\tv\layer 3.png
-.\assets\tv\layer 4.png
-.\assets\tv\layer 5.png
-.\assets\tv\layer 6.png
-.\assets\tv\layer 7.png
-.\assets\tv\layer 8.png
-.\assets\tv\layer 9.png
-.\assets\tv\layer 10.png
-.\assets\tv\layer 11.png
-.\assets\tv\layer 12.png
-.\assets\tv\layer 13.png
-.\assets\tv\layer 14.png
-.\assets\tv\layer 15.png
-.\assets\tv\layer 16.png
-.\assets\tv\layer 17.png
-.\assets\tv\layer 18.png
-.\assets\tv\layer 19.png
-.\assets\tv\layer 20.png
-.\assets\tv\layer 21.png
-.\assets\tv\layer 22.png
-.\assets\tv\layer 23.png
-.\assets\tv\layer 24.png
-.\assets\tv\layer 25.png
-.\assets\tv\layer 26.png
-.\assets\tv\layer 27.png
-.\assets\tv\layer 28.png
-.\assets\tv\layer 29.png
-.\assets\tv\layer 30.png
-.\assets\tv\layer 31.png
-.\assets\tv\layer 32.png
-.\assets\tv\layer 33.png
-.\assets\tv\layer 34.png
-.\assets\tv\layer 35.png
-.\assets\tv\layer 36.png
-.\assets\tv\layer 37.png
-.\assets\tv\layer 38.png
-.\assets\tv\layer 39.png
-.\assets\tv\layer 40.png
-.\assets\tv\layer 41.png
-.\assets\tv\layer 42.png
-.\assets\tv\layer 43.png
-.\assets\tv\layer 44.png
-.\assets\tv\layer 45.png
-.\assets\tv\layer 46.png
-.\assets\tv\layer 47.png
-.\assets\tv\layer 48.png
-.\assets\tv\layer 49.png
-.\assets\tv\layer 50.png
-.\assets\tv\layer 51.png
-.\assets\tv\layer 52.png
-.\assets\tv\layer 53.png
-.\assets\tv\layer 54.png
-.\assets\tv\layer 55.png
-.\assets\tv\layer 56.png
-.\assets\tv\layer 57.png
-.\assets\tv\layer 58.png
-.\assets\tv\layer 59.png
-.\assets\tv\layer 60.png
-.\assets\tv\layer 61.png
-.\assets\tv\layer 62.png
-.\assets\tv\layer 63.png
-.\assets\tv\layer 64.png
-.\assets\tv\layer 65.png
-.\assets\tv\layer 66.png
-.\assets\tv\layer 67.png
-.\assets\tv\layer 68.png
-.\assets\tv\layer 69.png
-.\assets\tv\layer 70.png
-.\assets\tv\layer 71.png
-.\assets\tv\layer 72.png
-.\assets\tv\layer 73.png
-.\assets\tv\layer 74.png
-.\assets\tv\layer 75.png
-.\assets\tv\layer 76.png
-.\assets\tv\layer 77.png
-.\assets\tv\layer 78.png
-.\assets\tv\layer 79.png
-.\assets\tv\layer 80.png
-.\assets\tv\layer 81.png
-.\assets\tv\layer 82.png
-.\assets\tv\layer 83.png
-.\assets\tv\layer 84.png
-.\assets\tv\layer 85.png
-.\assets\tv\layer 86.png
-.\assets\tv\layer 87.png
-.\assets\tv\layer 88.png
-.\assets\tv\layer 89.png
-.\assets\tv\layer 90.png
-.\assets\tv\layer 91.png
-.\assets\tv\layer 92.png
-.\assets\tv\layer 93.png
-.\assets\tv\layer 94.png
-.\assets\tv\layer 95.png
-.\assets\tv\layer 96.png
-.\assets\tv\layer 97.png
-.\assets\tv\layer 98.png
-.\assets\tv\layer 99.png
-.\assets\tv\layer 100.png
-.\assets\tv\layer 101.png
-.\assets\tv\layer 102.png
-.\assets\tv\layer 103.png
-.\assets\tv\layer 104.png
-.\assets\tv\layer 105.png
-.\assets\tv\layer 106.png
-.\assets\tv\layer 107.png
-.\assets\tv\layer 108.png
-.\assets\tv\layer 109.png
-.\assets\tv\layer 110.png
-.\assets\tv\layer 111.png
-.\assets\tv\layer 112.png
-.\assets\tv\layer 113.png
-.\assets\tv\layer 114.png
-.\assets\tv\layer 115.png
-.\assets\tv\layer 116.png
-.\assets\tv\layer 117.png
-.\assets\tv\layer 118.png
-.\assets\tv\layer 119.png
-.\assets\tv\layer 120.png
-.\assets\tv\layer 121.png
-.\assets\tv\layer 122.png
-.\assets\tv\layer 123.png
-.\assets\tv\layer 124.png
-.\assets\tv\layer 125.png
-.\assets\tv\layer 126.png
+			NULL
+1.png
+NULL
+2.png
+NULL
+3.png
+NULL
+4.png
+NULL
+5.png
+NULL
+6.png
+NULL
+7.png
+NULL
+8.png
+NULL
+9.png
+NULL
+10.png
+NULL
+11.png
+NULL
+12.png
+NULL
+13.png
+NULL
+14.png
+NULL
+15.png
+NULL
+16.png
+NULL
+17.png
+NULL
+18.png
+NULL
+19.png
+NULL
+20.png
+NULL
+21.png
+NULL
+22.png
+NULL
+23.png
+NULL
+24.png
+NULL
+25.png
+NULL
+26.png
+NULL
+27.png
+NULL
+28.png
+NULL
+29.png
+NULL
+30.png
+NULL
+31.png
+NULL
+32.png
+NULL
+33.png
+NULL
+34.png
+NULL
+35.png
+NULL
+36.png
+NULL
+37.png
+NULL
+38.png
+NULL
+39.png
+NULL
+40.png
+NULL
+41.png
+NULL
+42.png
+NULL
+43.png
+NULL
+44.png
+NULL
+45.png
+NULL
+46.png
+NULL
+47.png
+NULL
+48.png
+NULL
+49.png
+NULL
+50.png
+NULL
+51.png
+NULL
+52.png
+NULL
+53.png
+NULL
+54.png
+NULL
+55.png
+NULL
+56.png
+NULL
+57.png
+NULL
+58.png
+NULL
+59.png
+NULL
+60.png
+NULL
+61.png
+NULL
+62.png
+NULL
+63.png
 
 		VO = 0
 	}
@@ -796,7 +796,7 @@ kbGameEntity 1539666996 1073921903 3251711405 2591985252 {
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadows = 0
-		Color = 1.185683 1.185683 1.185683 1.000000
+		Color = 1.185159 1.185159 1.185159 1.000000
 		Materials = 0
 		LightRadius =  4.000000
 	}
@@ -896,7 +896,7 @@ kbGameEntity 480560206 1319462208 2014875023 1872152854 {
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadows = 0
-		Color = 1.185696 1.185696 1.185696 1.000000
+		Color = 1.185155 1.185155 1.185155 1.000000
 		Materials = 0
 		LightRadius =  4.000000
 	}
@@ -996,7 +996,7 @@ kbGameEntity 869242062 1156727719 657741206 2752403012 {
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadows = 0
-		Color = 1.185724 1.185724 1.185724 1.000000
+		Color = 1.185143 1.185143 1.185143 1.000000
 		Materials = 0
 		LightRadius =  4.000000
 	}
@@ -1096,7 +1096,7 @@ kbGameEntity 1044043731 1218053337 3183565988 2739138226 {
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadows = 0
-		Color = 1.185750 1.185750 1.185750 1.000000
+		Color = 1.185131 1.185131 1.185131 1.000000
 		Materials = 0
 		LightRadius =  4.000000
 	}
@@ -1196,7 +1196,7 @@ kbGameEntity 2591783041 1085017970 3399635387 2306051354 {
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadows = 0
-		Color = 1.185776 1.185776 1.185776 1.000000
+		Color = 1.185119 1.185119 1.185119 1.000000
 		Materials = 0
 		LightRadius =  4.000000
 	}
@@ -1612,7 +1612,7 @@ kbGameEntity 1912732400 1276217398 1617896089 1509958434 {
 						LifeTime =  -1.000000
 						ParamName = "colorFactor"
 						Texture = NULL
-						Vector = 0.250000 0.250000 0.500000 2.000000
+						Vector = 0.200000 0.200000 0.500000 2.000000
 					}
 					kbShaderParamComponent { 
 						Enabled = 0
