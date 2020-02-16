@@ -2,7 +2,7 @@
 // kbTerrainComponent.h
 //
 //
-// 2016-2018 kbEngine 2.0
+// 2016-2020 kbEngine 2.0
 //===================================================================================================
 #ifndef _KBTERRAINCOMPONENT_H_
 #define _KBTERRAINCOMPONENT_H_
@@ -33,19 +33,18 @@ protected:
 
 private:
 
-	void										SetOwningTerrainComponent( kbTerrainComponent *const pTerrain ) { m_pOwningTerrainComponent = pTerrain; m_bUpdateMaterial = true; m_bUpdatePointCloud = true; }
+	void										SetOwningTerrainComponent( kbTerrainComponent *const pTerrain ) { m_pOwningTerrainComponent = pTerrain; m_bUpdateMaterial = true; m_bUpdateVertexBuffers = true; }
 
 	void										RefreshGrass();
 
 	kbShader *									m_pGrassShader;
-	int											m_GrassCellsPerTerrainSide;
+	int											m_BatchesPerTerrainSide;
+	int											m_BladesPerBatchSide;
 
 	std::vector<kbShaderParamComponent>			m_ShaderParamList;
 
 	float										m_PatchStartCullDistance;
 	float										m_PatchEndCullDistance;
-
-	int											m_PatchesPerCellSide;
 
 	float										m_BladeMinWidth;
 	float										m_BladeMaxWidth;
@@ -82,7 +81,7 @@ private:
 	// Runtime
 	kbTerrainComponent *						m_pOwningTerrainComponent;
 
-	bool										m_bUpdatePointCloud;
+	bool										m_bUpdateVertexBuffers;
 	bool										m_bUpdateMaterial;
 };
 
@@ -127,6 +126,7 @@ protected:
 	float										m_HeightScale;
 	float										m_TerrainWidth;
 	int											m_TerrainDimensions;
+	int											m_HeightMapBlurRadius;
 
 	kbTexture *                                 m_pSplatMap;
     std::vector<kbGrass>                        m_Grass;

@@ -1,8 +1,8 @@
-kbGameEntity 3029240395 1199103925 954790317 144456754 {
+kbGameEntity 4043024756 1105719674 244238734 150834037 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		Name = "Entity_225"
+		Name = "Entity_224"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
 		Position = 0.000000 0.000000 0.000000
 		Scale = 1.000000 1.000000 1.000000
@@ -10,8 +10,8 @@ kbGameEntity 3029240395 1199103925 954790317 144456754 {
 	kbEditorLevelSettingsComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		MainCameraPosition = 69.346451 -50.489849 -230.754150
-		MainCameraRotation = -0.049545 0.741683 -0.055124 0.666643
+		MainCameraPosition = 728.453247 -8.820498 955.919189
+		MainCameraRotation = -0.072378 -0.787769 0.094336 0.604386
 	}
 }
 kbGameEntity 537364968 1092523782 2953639826 2626478307 {
@@ -596,13 +596,13 @@ kbGameEntity 3724832574 1271670935 1013321910 1020909332 {
 				FakeAOClipPlaneFadeOutDist =  10.000000
 				FakeAODarkness =  0.000000
 				FakeAOPower =  2.000000
-				GrassCellsPerTerrainSide = 20
-				GrassShader = .\assets\shaders\terrain\basicgrass.kbshader
+				BatchesPerTerrainSide = 1
+				GrassShader = .\assets\shaders\terrain\staticgrass.kbshader
 				MaxBladeJitterOffset =  10.000000
 				MaxPatchJitterOffset =  10.000000
 				PatchEndCullDistance =  2000.000000
 				PatchStartCullDistance =  500.000000
-				PatchesPerCellSide = 50
+				BladesPerPatchSide = 100
 				ShaderParams = 13
 					kbShaderParamComponent { 
 						Enabled = 0
@@ -685,7 +685,7 @@ kbGameEntity 3724832574 1271670935 1013321910 1020909332 {
 						Enabled = 0
 						LifeTime =  -1.000000
 						ParamName = "grassMaskMap"
-						Texture = NULL
+						Texture = .\assets\terrain\kungfulevelterrain\kungfuterrain_grassmask.jpg
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 					kbShaderParamComponent { 
@@ -695,6 +695,7 @@ kbGameEntity 3724832574 1271670935 1013321910 1020909332 {
 						Texture = NULL
 						Vector = 0.000000 1.000000 0.000000 -78.000000
 					}
+				UsePointCloud = 0
 			}
 		HeightMap = .\assets\terrain\kungfulevelterrain\terrain1_height.bmp
 		HeightScale =  1024.000000
@@ -3984,7 +3985,7 @@ kbGameEntity 968885140 1085284001 2323485569 3680011406 {
 		Scale = 555.000000 555.000000 1.000000
 	}
 	CannonBallMainMenuComponent { 
-		Enabled = 1
+		Enabled = 0
 		LifeTime =  -1.000000
 		Anchor = MiddleLeft
 		AxisLock = LockYAxis
@@ -4049,7 +4050,7 @@ kbGameEntity 968885140 1085284001 2323485569 3680011406 {
 				RelativeSize = 1.000000 1.000000 1.000000
 			}
 			kbUIWidgetComponent { 
-				Enabled = 1
+				Enabled = 0
 				LifeTime =  -1.000000
 				Anchor = TopLeft
 				AxisLock = LockYAxis
@@ -4343,7 +4344,6 @@ kbGameEntity 3622350630 1299414661 2143524754 2655535189 {
 		MaxEndRotationRate =  0.000000
 		MaxEndSize = 0.450000 0.450000 0.450000
 		MaxEndVelocity = 0.000000 0.000000 0.000000
-		MaxNumParticles = -1
 		MaxParticlesToEmit = -1
 		MaxSpawnRate =  1.000000
 		MaxStart3DOffset = 0.000000 0.000000 0.000000

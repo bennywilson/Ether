@@ -2,7 +2,7 @@
 // kbTerrainComponent.cpp
 //
 //
-// 2016-2019 kbEngine 2.0
+// 2016-2020 kbEngine 2.0
 //===================================================================================================
 #include "kbCore.h"
 #include "kbVector.h"
@@ -68,8 +68,6 @@ void kbGrass::grassRenderObject_t::Initialize( const kbVec3 & ownerPosition ) {
 	m_RenderObject.m_Position = ownerPosition;
 	m_RenderObject.m_Orientation.Set( 0.0f, 0.0f, 0.0f, 1.0f );
 	m_RenderObject.m_Scale.Set( 1.0f, 1.0f, 1.0f );
-//	m_RenderObject.m_EntityId
-//	m_RenderObject.m_MatrixList
 	m_RenderObject.m_bCastsShadow = false;
 }
 
@@ -93,13 +91,11 @@ void kbGrass::Constructor() {
 
 	m_pGrassShader = nullptr;
 
-	m_GrassCellsPerTerrainSide = 1;
-	m_GrassCellLength = 0;
+	m_BatchesPerTerrainSide = 1;
+	m_BladesPerBatchSide = 3;
 
 	m_PatchStartCullDistance = 200.0f;
 	m_PatchEndCullDistance = 300.0f;
-
-	m_PatchesPerCellSide = 3;
 
 	m_BladeMinWidth = 1.0f;
 	m_BladeMaxWidth = 2.0f;
@@ -109,15 +105,17 @@ void kbGrass::Constructor() {
 
 	m_MaxBladeJitterOffset = 0.0f;
 	m_MaxPatchJitterOffset = 0.0f;
+	
+    m_FakeAODarkness = 0.25f;
+    m_FakeAOPower = 2.0f;
+	m_FakeAOClipPlaneFadeStartDist = 0.0f;
+
+	m_GrassCellLength = 0;
 
 	m_pOwningTerrainComponent = nullptr;
 
 	m_bUpdateMaterial = false;
-	m_bUpdatePointCloud = false;
-
-    m_FakeAODarkness = 0.25f;
-    m_FakeAOPower = 2.0f;
-	m_FakeAOClipPlaneFadeStartDist = 0.0f;
+	m_bUpdateVertexBuffers = false;
 }
 
 /**
@@ -135,17 +133,17 @@ kbGrass::~kbGrass() {
 void kbGrass::EditorChange( const std::string & propertyName ) {
 	Super::EditorChange( propertyName );
 
-	if ( m_GrassCellsPerTerrainSide < 0 ) {
+	if ( m_BatchesPerTerrainSide < 0 ) {
 		kbWarning( "kbGrass::EditorChange() - Grass Cells Per Terrain Side must be greater than 0" );
-		m_GrassCellsPerTerrainSide = 1;
+		m_BatchesPerTerrainSide = 1;
 	}
 
     const std::string propertiesThatRegenGrass[5] = { "PatchStartCullDistance", "PatchEndCullDistance",
-		"PatchesPerCellSide", "MaxPatchJitterOffset", "MinPatchJitterOffset "};
+		"BladesPerPatchSide", "MaxPatchJitterOffset", "MinPatchJitterOffset "};
 
     for ( int i = 0; i < 5; i++ ) {
         if ( propertyName == propertiesThatRegenGrass[i] ) { 
-        	m_bUpdatePointCloud = true;
+        	m_bUpdateVertexBuffers = true;
         }
     }
 	m_bUpdateMaterial = true;
@@ -157,7 +155,7 @@ void kbGrass::EditorChange( const std::string & propertyName ) {
 void kbGrass::RenderSync() {
 	Super::RenderSync();
 
-	if ( m_bUpdateMaterial || m_bUpdatePointCloud ) {
+	if ( m_bUpdateMaterial || m_bUpdateVertexBuffers ) {
 		RefreshGrass();
 	}
 }
@@ -192,9 +190,6 @@ void kbGrass::RefreshGrass() {
 
 	std::vector<kbVec4> bladeOffsets;
 
-	const float PatchesPerCellSide = kbClamp( (float)m_PatchesPerCellSide * g_TerrainLOD, 1.0f, 99999999.0f );
-
-	//float grassCellHalfSize = ( m_DistanceBetweenPatches / 2.0f ) * 0.95f;
 	for ( int i = 0; i < 64; i++ ) {
 
 		kbMat4 matrix = kbMat4::identity;
@@ -217,8 +212,9 @@ void kbGrass::RefreshGrass() {
 		bladeOffsets.push_back( offset );
 	}
 
-	m_GrassCellLength = m_pOwningTerrainComponent->GetTerrainWidth() / (float)m_GrassCellsPerTerrainSide;
-	const float patchLen = m_GrassCellLength / (float)PatchesPerCellSide;
+	m_GrassCellLength = m_pOwningTerrainComponent->GetTerrainWidth() / (float)m_BatchesPerTerrainSide;
+	const float kBladesPerPatchSide = kbClamp( (float)m_BladesPerBatchSide * g_TerrainLOD, 1.0f, 99999999.0f );
+	const float kPatchLen = m_GrassCellLength / (float)kBladesPerPatchSide;
 
 	m_GrassShaderOverrides.m_ParamOverrides.clear();
 	if ( m_pGrassShader != nullptr ) {
@@ -230,7 +226,7 @@ void kbGrass::RefreshGrass() {
 	m_GrassShaderOverrides.SetTexture( "heightMap", m_pOwningTerrainComponent->GetHeightMap() );
 	m_GrassShaderOverrides.SetVec4List( "bladeOffsets", bladeOffsets );
 	m_GrassShaderOverrides.SetVec4( "GrassData0", kbVec4( m_PatchStartCullDistance, 1.0f / ( m_PatchEndCullDistance - m_PatchStartCullDistance ), m_BladeMinHeight, m_BladeMaxHeight ) );
-	m_GrassShaderOverrides.SetVec4( "GrassData1", kbVec4( m_pOwningTerrainComponent->GetHeightScale(), m_pOwningTerrainComponent->GetOwner()->GetPosition().y, patchLen, 0.0f ) );
+	m_GrassShaderOverrides.SetVec4( "GrassData1", kbVec4( m_pOwningTerrainComponent->GetHeightScale(), m_pOwningTerrainComponent->GetOwner()->GetPosition().y, kPatchLen, 0.0f ) );
     m_GrassShaderOverrides.SetVec4( "fakeAOData", kbVec4( m_FakeAODarkness, m_FakeAOPower, m_FakeAOClipPlaneFadeStartDist, 0.0f ) );
 
 	for ( int i = 0; i < m_ShaderParamList.size(); i++ ) {
@@ -248,55 +244,120 @@ void kbGrass::RefreshGrass() {
 	const kbVec2 collisionMapPos = kbVec2( m_pOwningTerrainComponent->GetOwner()->GetPosition().x, m_pOwningTerrainComponent->GetOwner()->GetPosition().z );
 	m_GrassShaderOverrides.SetVec4( "collisionMapCenter", kbVec4( collisionMapPos.x, collisionMapPos.y, m_pOwningTerrainComponent->GetTerrainWidth() * 0.5f, 1.0f / ( m_pOwningTerrainComponent->GetTerrainWidth() * 0.5f ) ) );
 
-	if ( m_bUpdatePointCloud ) {
+	struct pixelData {
+		byte r;
+		byte g;
+		byte b;
+		byte a;
+	};
+
+	kbTexture* pMaskTex = nullptr;
+	static kbString paramName( "grassMaskMap" );
+	for ( int i = 0; i < m_ShaderParamList.size(); i++ ) {
+		if ( m_ShaderParamList[i].GetParamName() != paramName ) {
+			continue;
+		}
+		pMaskTex = (kbTexture*)m_ShaderParamList[i].GetTexture();
+		break;
+	}
+
+	uint maskTextureWidth, maskTextureHeight;
+	const pixelData* const pMaskMap = ( pMaskTex != nullptr ) ? ( (pixelData *)pMaskTex->GetCPUTexture( maskTextureWidth, maskTextureHeight ) ) : ( nullptr );
+
+	uint heightMapTextureWidth, heightMapTextureHeight;
+	kbTexture* pHeightMapTex = m_pOwningTerrainComponent->GetAs<kbTerrainComponent>()->GetHeightMap();
+	const pixelData *const pHeightMap = ( pHeightMapTex != nullptr ) ? ( (pixelData *)pHeightMapTex->GetCPUTexture( heightMapTextureWidth, heightMapTextureHeight ) ) : ( nullptr );
+
+
+	const bool bUpdateGrass = m_bUpdateVertexBuffers && pMaskMap && pHeightMap;
+	m_bUpdateMaterial = false;
+	m_bUpdateVertexBuffers = false;
+
+	if ( bUpdateGrass ) {
 		for ( int i = 0; i < m_GrassRenderObjects.size(); i++ ) {
 			g_pRenderer->RemoveRenderObject( m_GrassRenderObjects[i].m_RenderObject );
 			m_GrassRenderObjects[i].Shutdown();
 		}
 		m_GrassRenderObjects.clear();
 
-		m_GrassRenderObjects.insert( m_GrassRenderObjects.begin(), m_GrassCellsPerTerrainSide * m_GrassCellsPerTerrainSide, grassRenderObject_t() );
-		const float halfCellLen = m_GrassCellLength * 0.5f;
-		const float halfCellLenSqr = sqrt( halfCellLen * halfCellLen );
+		const int kNumBladesPerCell = m_BladesPerBatchSide * m_BladesPerBatchSide;
+		const int kNumVertsPerBlade = 4;
+		const int kNumRequestedVerts = kNumBladesPerCell * kNumVertsPerBlade;
+		const int kNumRequestedIndexes = ( kNumRequestedVerts / 4 ) * 6;
+
+		if ( kNumRequestedIndexes >= USHRT_MAX ) {
+			kbWarning( "kbGrass::RefreshGrass() - Too many requested indices [%d]", kNumRequestedIndexes );
+			return;
+		}
+
+		m_GrassRenderObjects.insert( m_GrassRenderObjects.begin(), m_BatchesPerTerrainSide * m_BatchesPerTerrainSide, grassRenderObject_t() );
+		const float kHalfCellLen = m_GrassCellLength * 0.5f;
+		const float kHalfCellLenSqrt = sqrt( kHalfCellLen * kHalfCellLen );
 
 		const float halfTerrainWidth = m_pOwningTerrainComponent->GetTerrainWidth() * 0.5f;
 		const kbVec3 terrainMin = /*m_pOwningTerrainComponent->GetOwner()->GetPosition()*/ - kbVec3( halfTerrainWidth, 0.0f, halfTerrainWidth );
 
 		int cellIdx = 0;
-		for ( int yCell = 0; yCell < m_GrassCellsPerTerrainSide; yCell++ ) {
-			for ( int xCell = 0; xCell < m_GrassCellsPerTerrainSide; xCell++, cellIdx++ ) {
+		for ( int yCell = 0; yCell < m_BatchesPerTerrainSide; yCell++ ) {
+			for ( int xCell = 0; xCell < m_BatchesPerTerrainSide; xCell++, cellIdx++ ) {
 
 				grassRenderObject_t & renderObj = m_GrassRenderObjects[cellIdx];
 				renderObj.Initialize( m_pOwningTerrainComponent->GetOwner()->GetPosition() );
-				renderObj.m_RenderObject.m_CullDistance = m_PatchEndCullDistance + halfCellLenSqr;
+				renderObj.m_RenderObject.m_CullDistance = m_PatchEndCullDistance + kHalfCellLenSqrt;
 
 				const kbVec3 cellStart = terrainMin + kbVec3( m_GrassCellLength * xCell, 0.0f, m_GrassCellLength * yCell );
 				const kbVec3 cellCenter = cellStart + kbVec3( m_GrassCellLength * 0.5f, 0.0f, m_GrassCellLength * 0.5f );
 				const kbVec3 halfCell = kbVec3( m_GrassCellLength * 0.5f, 0.0f, m_GrassCellLength * 0.5f );
 
-				renderObj.m_pModel->CreatePointCloud( m_PatchesPerCellSide * m_PatchesPerCellSide, "./assets/Shaders/Environment/grass.kbshader", CullMode_None, sizeof(patchVertLayout) );
+				renderObj.m_pModel->CreateDynamicModel( kNumRequestedVerts, kNumRequestedIndexes, nullptr, nullptr, sizeof(vertexLayout) );
+				vertexLayout* const pVerts = (vertexLayout*) renderObj.m_pModel->MapVertexBuffer();
+				ushort* const pIndices = (ushort*) renderObj.m_pModel->MapIndexBuffer();
 
-				patchVertLayout *const pVerts = (patchVertLayout *) renderObj.m_pModel->MapVertexBuffer();
+				const kbVec2 cellUV( xCell / (float)m_BatchesPerTerrainSide, yCell / (float)m_BatchesPerTerrainSide );
+				const float bladeOffset = 1.0f / ( (float) m_BatchesPerTerrainSide * m_BladesPerBatchSide );
 
-				int iVert = 0;
-				for ( int startY = 0; startY < PatchesPerCellSide; startY ++ ) {
-					for ( int startX = 0; startX < PatchesPerCellSide; startX ++) {
-						const kbVec3 patchJitterOffset = kbVec3( m_MaxPatchJitterOffset * kbfrand(), 0.0f, m_MaxPatchJitterOffset * kbfrand() );
-						kbVec3 localPointPos = patchJitterOffset + kbVec3( patchLen * startX, 0.0f, patchLen * startY ) - halfCell;
-						pVerts[iVert].position = localPointPos;
+				int iCurIndex = 0;
+				int iCurVertex = 0;
+				const kbVec3 minPatchStart( -kHalfCellLen, 0.0f, -kHalfCellLen );
 
-						kbVec3 globalPointPos = cellStart + kbVec3( patchLen * startX, 0.0f, patchLen * startY ) + patchJitterOffset;
-						pVerts[iVert].uv.Set ( ( globalPointPos.x - terrainMin.x ) / m_pOwningTerrainComponent->GetTerrainWidth(), ( globalPointPos.z - terrainMin.z ) / m_pOwningTerrainComponent->GetTerrainWidth() );
-						pVerts[iVert].patchIndices[0] = rand() % 60;		// Randomized blade jitters
-						pVerts[iVert].patchIndices[1] = pVerts[iVert].patchIndices[2] = pVerts[iVert].patchIndices[3] = pVerts[iVert].patchIndices[0];
-						const float randVal = kbfrand();
+				for ( int yBlade = 0; yBlade < m_BladesPerBatchSide; yBlade++ ) {
+					for ( int xBlade = 0; xBlade < m_BladesPerBatchSide; xBlade++ ) {
 
-						pVerts[iVert].patchIndices[2] = 0;		// Unused I believe
-						iVert++;
+						kbVec2 uv = cellUV + kbVec2( bladeOffset * xBlade, bladeOffset * yBlade );
+
+						const int maskU = kbClamp( (int)( uv.x * maskTextureWidth ), 0, (int)maskTextureWidth );
+						const int maskV = kbClamp( (int)( uv.y * maskTextureHeight ), 0, (int)maskTextureHeight );
+						const int textureMaskIndex = static_cast<int>( ( maskV * maskTextureWidth ) + maskU );
+						if ( pMaskMap[textureMaskIndex].r < 32 ) {
+							continue;
+						}
+
+						const int heightMapU = kbClamp( (int)( uv.x * heightMapTextureWidth ), 0, (int)heightMapTextureWidth );
+						const int heightMapV = kbClamp( (int)( uv.y * heightMapTextureHeight ), 0, (int)heightMapTextureHeight );
+						const int heightMapIndex = static_cast<int>( ( heightMapV * heightMapTextureWidth ) + heightMapU );
+						const float height =  m_pOwningTerrainComponent->GetHeightScale() * ( ( (float)pHeightMap[heightMapIndex].r ) / 255.0f );
+
+						pVerts[iCurVertex + 0].position = minPatchStart + kbVec3( xBlade * kPatchLen, height, yBlade * kPatchLen ); 
+						pVerts[iCurVertex + 1].position = pVerts[iCurVertex + 0].position + kbVec3( 0.0f, 6.0f, 0.0f );
+						pVerts[iCurVertex + 2].position = pVerts[iCurVertex + 0].position + kbVec3( 0.45f, 6.0f, 0.0f );
+						pVerts[iCurVertex + 3].position = pVerts[iCurVertex + 0].position + kbVec3( 0.45f, 0.0f, 0.0f );
+
+						pIndices[iCurIndex + 0] = iCurVertex + 0;
+						pIndices[iCurIndex + 1] = iCurVertex + 1;
+						pIndices[iCurIndex + 2] = iCurVertex + 2;
+						pIndices[iCurIndex + 3] = iCurVertex + 2;
+						pIndices[iCurIndex + 4] = iCurVertex + 3;
+						pIndices[iCurIndex + 5] = iCurVertex + 0;
+
+						iCurIndex += 6;
+						iCurVertex += 4;
 					}
 				}
-				renderObj.m_pModel->UnmapVertexBuffer();
-				kbMat4 rotMat = m_pOwningTerrainComponent->GetOwnerRotation().ToMat4();
+
+				renderObj.m_pModel->UnmapVertexBuffer( iCurIndex );
+				renderObj.m_pModel->UnmapIndexBuffer();
+
+				const kbMat4 rotMat = m_pOwningTerrainComponent->GetOwnerRotation().ToMat4();
 				m_GrassRenderObjects[cellIdx].m_RenderObject.m_Position = cellCenter * rotMat + m_pOwningTerrainComponent->GetOwnerPosition();
 				m_GrassRenderObjects[cellIdx].m_RenderObject.m_Scale =  m_pOwningTerrainComponent->GetOwnerScale();
 				m_GrassRenderObjects[cellIdx].m_RenderObject.m_Orientation = m_pOwningTerrainComponent->GetOwnerRotation();
@@ -316,9 +377,6 @@ void kbGrass::RefreshGrass() {
 			g_pRenderer->UpdateRenderObject( m_GrassRenderObjects[i].m_RenderObject );
 		}
 	}
-
-	m_bUpdateMaterial = false;
-	m_bUpdatePointCloud = false;
 
 	kbLog( "Refreshing grass took %f seconds.", g_GlobalTimer.TimeElapsedSeconds() - startRefreshGrassTime );
 }
@@ -407,8 +465,7 @@ void kbTerrainComponent::GenerateTerrain() {
 
 	terrainNormals.clear();
 
-	unsigned int texWidth, texHeight;
-
+	uint texWidth, texHeight;
 	const pixelData *const pTextureBuffer = ( pixelData * )m_pHeightMap->GetCPUTexture( texWidth, texHeight );
 
 	// Build terrain here
@@ -428,7 +485,7 @@ void kbTerrainComponent::GenerateTerrain() {
 	std::vector<kbVec3> cpuVerts;
 	cpuVerts.resize( m_TerrainDimensions * m_TerrainDimensions );
 
-	int blurSampleSize = 1;
+	const int kBlurSample = kbClamp( m_HeightMapBlurRadius, 1, 128 );
 	int currentVert = 0;
 	for ( int startY = 0; startY < m_TerrainDimensions; startY++ ) {
 		for ( int startX = 0; startX < m_TerrainDimensions; startX++ ) {
@@ -439,20 +496,22 @@ void kbTerrainComponent::GenerateTerrain() {
 			float divisor = 0.0f;
 			float height = 0.0f;
 
-			for ( int tempY = 0; tempY < blurSampleSize; tempY++ ) {
+			for ( int tempY = 0; tempY < kBlurSample; tempY++ ) {
 
 				if ( tempY + startY >= m_TerrainDimensions ) {
 					break;
 				}
 
-				for ( int tempX = 0; tempX < blurSampleSize; tempX++ ) {
+				for ( int tempX = 0; tempX < kBlurSample; tempX++ ) {
 					if ( tempX + startX >= m_TerrainDimensions ) {
 						break;
 					}
 
 					const float u = (float)(startX + tempX) / (float)m_TerrainDimensions;
 					const float v = (float)(startY + tempY) / (float)m_TerrainDimensions;
-					const int textureIndex = static_cast<int>(( v * texWidth * texWidth ) + ( u * texWidth ) );
+					const int iU = (int)( u * texWidth );
+					const int iV = (int)( v * texHeight );
+					const int textureIndex = ( iV * texWidth ) + iU;
 
 					divisor += 1.0f;
 					height += ( float ) pTextureBuffer[textureIndex].r;
@@ -659,7 +718,7 @@ void kbTerrainComponent::RenderSync() {
 	if ( m_bRegenerateTerrain ) {
 		GenerateTerrain();
 		for ( int i = 0; i < m_Grass.size(); i++ ) {
-			m_Grass[i].m_bUpdatePointCloud = true;
+			m_Grass[i].m_bUpdateVertexBuffers = true;
 			m_Grass[i].RefreshGrass();
 		}
 		m_bRegenerateTerrain = false;

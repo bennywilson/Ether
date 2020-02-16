@@ -2726,7 +2726,7 @@ void kbRenderer_DX11::CreateShaderFromText( const std::string & fileName, const 
 
 	std::vector<D3D11_INPUT_ELEMENT_DESC> polygonLayout;
 
-	if ( fileName.find( "grass" ) != std::string::npos ) {
+	if ( fileName.find( "basicgrass" ) != std::string::npos ) {
 		polygonLayout.insert( polygonLayout.begin(), 3, D3D11_INPUT_ELEMENT_DESC() );
 
 		polygonLayout[0].SemanticName = "POSITION";

@@ -1,4 +1,4 @@
-kbGameEntity 0 0 0 0 {
+kbGameEntity 623326326 1315319640 3201193601 2157839712 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
@@ -11,10 +11,10 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		MainCameraPosition = -26.550282 57.877174 174.464935
-		MainCameraRotation = 0.011473 -0.957205 -0.038308 0.286636
+		MainCameraRotation = -0.033064 -0.947797 0.104681 0.299382
 	}
 }
-kbGameEntity 0 0 0 0 {
+kbGameEntity 2684760135 1235274289 3867540403 863225290 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
@@ -49,8 +49,8 @@ kbGameEntity 0 0 0 0 {
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 			}
-		RenderPass = LightingPass
 		RenderOrderBias =  -1.000000
+		RenderPass = LightingPass
 		Model = .\assets\models\architecture\bricks.ms3d
 	}
 	kbCollisionComponent { 
@@ -61,7 +61,7 @@ kbGameEntity 0 0 0 0 {
 		SphereCollision = 0
 	}
 }
-kbGameEntity 0 0 0 0 {
+kbGameEntity 4062407564 1083702726 667875738 1862398781 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
@@ -103,8 +103,8 @@ kbGameEntity 0 0 0 0 {
 						Vector = 0.750000 0.750000 1.000000 0.000000
 					}
 			}
-		RenderPass = Post-LightingPass
 		RenderOrderBias =  -1.000000
+		RenderPass = Post-LightingPass
 		Model = .\assets\models\skydomes\skydomes.ms3d
 	}
 }
@@ -130,7 +130,7 @@ kbGameEntity 2609040299 1100347930 3115268521 1892043160 {
 		Texture = ..\..\kbengine\assets\textures\flare.jpg
 	}
 }
-kbGameEntity 0 0 0 0 {
+kbGameEntity 3067787538 1211540350 3924203944 1056408603 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
@@ -145,7 +145,7 @@ kbGameEntity 0 0 0 0 {
 		Dummy =  0.000000
 	}
 }
-kbGameEntity 0 0 0 0 {
+kbGameEntity 609727154 1329707734 2977350547 540020250 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
@@ -194,8 +194,8 @@ kbGameEntity 0 0 0 0 {
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 			}
-		RenderPass = LightingPass
 		RenderOrderBias =  0.000000
+		RenderPass = LightingPass
 		Animations = 0
 		DebugAnimIndex = -1
 		Model = .\assets\models\environment\crate_1_destructible.fbx
@@ -231,7 +231,7 @@ kbGameEntity 0 0 0 0 {
 		SphereCollision = 0
 	}
 }
-kbGameEntity 0 0 0 0 {
+kbGameEntity 2153580423 1190776697 1643215805 85079061 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
@@ -280,8 +280,8 @@ kbGameEntity 0 0 0 0 {
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 			}
-		RenderPass = LightingPass
 		RenderOrderBias =  0.000000
+		RenderPass = LightingPass
 		Animations = 0
 		DebugAnimIndex = -1
 		Model = .\assets\models\environment\crate_1_destructible.fbx
@@ -317,7 +317,7 @@ kbGameEntity 0 0 0 0 {
 		SphereCollision = 0
 	}
 }
-kbGameEntity 0 0 0 0 {
+kbGameEntity 2379715632 1134154882 2413064086 102940244 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
@@ -366,8 +366,8 @@ kbGameEntity 0 0 0 0 {
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 			}
-		RenderPass = LightingPass
 		RenderOrderBias =  0.000000
+		RenderPass = LightingPass
 		Animations = 0
 		DebugAnimIndex = -1
 		Model = .\assets\models\environment\crate_1_destructible.fbx
@@ -403,7 +403,7 @@ kbGameEntity 0 0 0 0 {
 		SphereCollision = 0
 	}
 }
-kbGameEntity 0 0 0 0 {
+kbGameEntity 1540682480 1208239504 56659347 615485496 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
@@ -452,8 +452,8 @@ kbGameEntity 0 0 0 0 {
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 			}
-		RenderPass = LightingPass
 		RenderOrderBias =  0.000000
+		RenderPass = LightingPass
 		Animations = 0
 		DebugAnimIndex = -1
 		Model = .\assets\models\environment\crate_1_destructible.fbx
@@ -489,7 +489,7 @@ kbGameEntity 0 0 0 0 {
 		SphereCollision = 0
 	}
 }
-kbGameEntity 0 0 0 0 {
+kbGameEntity 3348813962 1324810512 2920274314 4168429122 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
@@ -538,8 +538,8 @@ kbGameEntity 0 0 0 0 {
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 			}
-		RenderPass = LightingPass
 		RenderOrderBias =  0.000000
+		RenderPass = LightingPass
 		Animations = 0
 		DebugAnimIndex = -1
 		Model = .\assets\models\environment\crate_1_destructible.fbx
@@ -575,7 +575,7 @@ kbGameEntity 0 0 0 0 {
 		SphereCollision = 0
 	}
 }
-kbGameEntity 0 0 0 0 {
+kbGameEntity 856652462 1085882770 2152433550 3655521610 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
@@ -624,8 +624,8 @@ kbGameEntity 0 0 0 0 {
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 			}
-		RenderPass = LightingPass
 		RenderOrderBias =  0.000000
+		RenderPass = LightingPass
 		Animations = 0
 		DebugAnimIndex = -1
 		Model = .\assets\models\environment\crate_1_destructible.fbx
@@ -661,7 +661,7 @@ kbGameEntity 0 0 0 0 {
 		SphereCollision = 0
 	}
 }
-kbGameEntity 0 0 0 0 {
+kbGameEntity 3479604823 1118398748 3603641786 1676556738 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
@@ -710,8 +710,8 @@ kbGameEntity 0 0 0 0 {
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 			}
-		RenderPass = LightingPass
 		RenderOrderBias =  0.000000
+		RenderPass = LightingPass
 		Animations = 0
 		DebugAnimIndex = -1
 		Model = .\assets\models\environment\crate_1_destructible.fbx
@@ -747,7 +747,7 @@ kbGameEntity 0 0 0 0 {
 		SphereCollision = 0
 	}
 }
-kbGameEntity 0 0 0 0 {
+kbGameEntity 2777182678 1136691435 2478462092 3595680757 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
@@ -757,7 +757,7 @@ kbGameEntity 0 0 0 0 {
 		Scale = 1.000000 1.000000 1.000000
 	}
 	kbTerrainComponent { 
-		Enabled = 0
+		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadow = 0
 		Materials = 1
@@ -873,8 +873,9 @@ kbGameEntity 0 0 0 0 {
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 			}
-		RenderPass = LightingPass
 		RenderOrderBias =  -1.000000
+		RenderPass = LightingPass
+		DebugRegenTerrain = 0
 		Dimensions = 129
 		Grass = 1
 			kbGrass { 
@@ -884,14 +885,16 @@ kbGameEntity 0 0 0 0 {
 				BladeMaxWidth =  1.050000
 				BladeMinHeight =  15.000000
 				BladeMinWidth =  0.850000
+				FakeAOClipPlaneFadeOutDist =  0.000000
 				FakeAODarkness =  0.250000
 				FakeAOPower =  2.000000
-				GrassCellsPerTerrainSide = 30
+				BatchesPerTerrainSide = 30
+				GrassShader = .\assets\shaders\environment\basicGrass.kbshader
 				MaxBladeJitterOffset =  1.000000
 				MaxPatchJitterOffset =  3.000000
 				PatchEndCullDistance =  1500.000000
 				PatchStartCullDistance =  200.000000
-				PatchesPerCellSide = 60
+				BladesPerPatchSide = 61
 				ShaderParams = 10
 					kbShaderParamComponent { 
 						Enabled = 0
@@ -963,6 +966,7 @@ kbGameEntity 0 0 0 0 {
 						Texture = .\assets\fx\noise\noisemap.png
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
+				UsePointCloud = 1
 			}
 		HeightMap = .\assets\terrain\basicterrain\terrain1_height.bmp
 		HeightScale =  1024.000000
@@ -977,7 +981,7 @@ kbGameEntity 0 0 0 0 {
 		SphereCollision = 0
 	}
 }
-kbGameEntity 0 0 0 0 {
+kbGameEntity 2376297055 1160482561 998792620 2707398338 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
@@ -995,6 +999,7 @@ kbGameEntity 0 0 0 0 {
 		Scale = 1.000000 1.000000 1.000000
 		AlphaOverLife = 0
 		ColorOverLife = 0
+		DebugPlayEntity = 0
 		EndColor = 1.000000 1.000000 1.000000 1.000000
 		Gravity = 0.000000 -100.500000 0.000000
 		MaterialList = 1
@@ -1017,6 +1022,7 @@ kbGameEntity 0 0 0 0 {
 		MaxEndRotationRate =  0.000000
 		MaxEndSize = 1.500000 1.500000 1.500000
 		MaxEndVelocity = 75.000000 -20.000000 -50.000000
+		MaxParticlesToEmit = -1
 		MaxSpawnRate =  2.000000
 		MaxStart3DOffset = 0.000000 0.000000 0.000000
 		MaxStart3DRotation = 0.000000 0.000000 0.000000
@@ -1036,10 +1042,12 @@ kbGameEntity 0 0 0 0 {
 		MinStartVelocity = -75.000000 -20.000000 -50.000000
 		ModelEmitter = 0
 		ParticleBillboardType = FaceCamera
+		RenderOrderBias =  0.000000
+		RotationOverLife = 0
+		SizeOverLife = 0
 		StartColor = 1.000000 1.000000 1.000000 1.000000
 		StartDelay =  0.000000
 		TotalDuration =  0.500000
-		RenderOrderBias =  0.000000
 		VelocityCurve = 0
 	}
 	kbParticleComponent { 
@@ -1051,6 +1059,7 @@ kbGameEntity 0 0 0 0 {
 		Scale = 2.000000 2.000000 2.000000
 		AlphaOverLife = 0
 		ColorOverLife = 0
+		DebugPlayEntity = 0
 		EndColor = 0.000000 0.000000 0.000000 0.000000
 		Gravity = 0.000000 0.000000 0.000000
 		MaterialList = 1
@@ -1073,6 +1082,7 @@ kbGameEntity 0 0 0 0 {
 		MaxEndRotationRate =  0.000000
 		MaxEndSize = 3.000000 3.000000 3.000000
 		MaxEndVelocity = 0.000000 0.000000 0.000000
+		MaxParticlesToEmit = -1
 		MaxSpawnRate =  0.000000
 		MaxStart3DOffset = 0.000000 0.000000 0.000000
 		MaxStart3DRotation = 0.000000 0.000000 0.000000
@@ -1092,14 +1102,16 @@ kbGameEntity 0 0 0 0 {
 		MinStartVelocity = -3.500000 -3.500000 -7.500000
 		ModelEmitter = 0
 		ParticleBillboardType = FaceCamera
+		RenderOrderBias =  0.000000
+		RotationOverLife = 0
+		SizeOverLife = 0
 		StartColor = 0.250000 0.250000 0.250000 0.250000
 		StartDelay =  0.000000
 		TotalDuration =  2.000000
-		RenderOrderBias =  0.000000
 		VelocityCurve = 0
 	}
 }
-kbGameEntity 0 0 0 0 {
+kbGameEntity 3902113471 1169662619 832725410 2557760662 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
@@ -1117,6 +1129,7 @@ kbGameEntity 0 0 0 0 {
 		Scale = 2.000000 2.000000 2.000000
 		AlphaOverLife = 0
 		ColorOverLife = 0
+		DebugPlayEntity = 0
 		EndColor = 1.000000 1.000000 1.000000 1.000000
 		Gravity = 0.000000 -100.500000 0.000000
 		MaterialList = 1
@@ -1146,6 +1159,7 @@ kbGameEntity 0 0 0 0 {
 		MaxEndRotationRate =  5.000000
 		MaxEndSize = 1.100000 1.100000 1.100000
 		MaxEndVelocity = 75.000000 -20.000000 -50.000000
+		MaxParticlesToEmit = -1
 		MaxSpawnRate =  2.000000
 		MaxStart3DOffset = 0.000000 0.000000 0.000000
 		MaxStart3DRotation = 0.000000 0.000000 0.000000
@@ -1165,10 +1179,12 @@ kbGameEntity 0 0 0 0 {
 		MinStartVelocity = -75.000000 -20.000000 -50.000000
 		ModelEmitter = 0
 		ParticleBillboardType = FaceCamera
+		RenderOrderBias =  0.000000
+		RotationOverLife = 0
+		SizeOverLife = 0
 		StartColor = 1.000000 1.000000 1.000000 1.000000
 		StartDelay =  0.000000
 		TotalDuration =  0.500000
-		RenderOrderBias =  0.000000
 		VelocityCurve = 0
 	}
 	kbParticleComponent { 
@@ -1180,6 +1196,7 @@ kbGameEntity 0 0 0 0 {
 		Scale = 0.200000 0.200000 0.200000
 		AlphaOverLife = 0
 		ColorOverLife = 0
+		DebugPlayEntity = 0
 		EndColor = 0.000000 0.000000 0.000000 0.000000
 		Gravity = 0.000000 -0.500000 0.000000
 		MaterialList = 1
@@ -1209,6 +1226,7 @@ kbGameEntity 0 0 0 0 {
 		MaxEndRotationRate =  0.500000
 		MaxEndSize = 3.500000 3.500000 3.500000
 		MaxEndVelocity = 0.500000 -7.000000 0.500000
+		MaxParticlesToEmit = -1
 		MaxSpawnRate =  2.000000
 		MaxStart3DOffset = 0.000000 0.000000 0.000000
 		MaxStart3DRotation = 0.000000 0.000000 0.000000
@@ -1228,14 +1246,16 @@ kbGameEntity 0 0 0 0 {
 		MinStartVelocity = -1.000000 -1.000000 -5.000000
 		ModelEmitter = 0
 		ParticleBillboardType = FaceCamera
+		RenderOrderBias =  0.000000
+		RotationOverLife = 0
+		SizeOverLife = 0
 		StartColor = 1.000000 1.000000 1.000000 1.000000
 		StartDelay =  0.000000
 		TotalDuration =  0.500000
-		RenderOrderBias =  0.000000
 		VelocityCurve = 0
 	}
 }
-kbGameEntity 0 0 0 0 {
+kbGameEntity 645894672 1195196527 1323814821 2016216173 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
@@ -1284,8 +1304,8 @@ kbGameEntity 0 0 0 0 {
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 			}
-		RenderPass = LightingPass
 		RenderOrderBias =  0.000000
+		RenderPass = LightingPass
 		Animations = 0
 		DebugAnimIndex = -1
 		Model = .\assets\models\environment\barrel_elp_destructible.fbx
@@ -1321,7 +1341,7 @@ kbGameEntity 0 0 0 0 {
 		SphereCollision = 0
 	}
 }
-kbGameEntity 0 0 0 0 {
+kbGameEntity 701014110 1214785469 758622128 2883329413 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
@@ -1370,8 +1390,8 @@ kbGameEntity 0 0 0 0 {
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 			}
-		RenderPass = LightingPass
 		RenderOrderBias =  0.000000
+		RenderPass = LightingPass
 		Animations = 0
 		DebugAnimIndex = -1
 		Model = .\assets\models\environment\barrel_elp_destructible.fbx
@@ -1421,7 +1441,7 @@ kbGameEntity 0 0 0 0 {
 		SphereCollision = 0
 	}
 }
-kbGameEntity 0 0 0 0 {
+kbGameEntity 1565930696 1108644281 4199951799 1496771234 {
 	kbTransformComponent { 
 		Enabled = 1
 		LifeTime =  -1.000000
@@ -1470,8 +1490,8 @@ kbGameEntity 0 0 0 0 {
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 			}
-		RenderPass = LightingPass
 		RenderOrderBias =  0.000000
+		RenderPass = LightingPass
 		Animations = 0
 		DebugAnimIndex = -1
 		Model = .\assets\models\environment\crate_1_destructible.fbx
@@ -1507,7 +1527,7 @@ kbGameEntity 0 0 0 0 {
 		SphereCollision = 0
 	}
 }
-kbGameEntity 0 0 0 0 {
+kbGameEntity 2757626317 1248501003 4109825973 1231443689 {
 	kbTransformComponent { 
 		Enabled = 1
 		LifeTime =  -1.000000
@@ -1556,8 +1576,8 @@ kbGameEntity 0 0 0 0 {
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 			}
-		RenderPass = LightingPass
 		RenderOrderBias =  0.000000
+		RenderPass = LightingPass
 		Animations = 0
 		DebugAnimIndex = -1
 		Model = .\assets\models\environment\crate_1_destructible.fbx
@@ -1593,7 +1613,7 @@ kbGameEntity 0 0 0 0 {
 		SphereCollision = 0
 	}
 }
-kbGameEntity 0 0 0 0 {
+kbGameEntity 4150815005 1330809450 709305785 2430392262 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
@@ -1642,12 +1662,12 @@ kbGameEntity 0 0 0 0 {
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 			}
-		RenderPass = LightingPass
 		RenderOrderBias =  0.000000
+		RenderPass = LightingPass
 		Model = .\assets\models\environment\barrel_elp.fbx
 	}
 }
-kbGameEntity 0 0 0 0 {
+kbGameEntity 2546241665 1110374423 1186513025 1633207150 {
 	kbTransformComponent { 
 		Enabled = 1
 		LifeTime =  -1.000000
@@ -1767,7 +1787,7 @@ kbGameEntity 0 0 0 0 {
  400.000000
 	}
 }
-kbGameEntity 0 0 0 0 {
+kbGameEntity 1419467922 1210111476 1493291655 57555978 {
 	kbTransformComponent { 
 		Enabled = 1
 		LifeTime =  -1.000000
@@ -1804,15 +1824,16 @@ kbGameEntity 0 0 0 0 {
 				LifeTime =  -1.000000
 				EventName = ""
 				EventTime =  0.000000
-				EventValue = 1.000000 0.740000 0.511000
+				EventValue = 1.000000 0.740000 0.511000 0.000000
 			}
 			kbVectorAnimEvent { 
 				Enabled = 0
 				LifeTime =  -1.000000
 				EventName = ""
 				EventTime =  0.400000
-				EventValue = 0.000000 0.000000 0.000000
+				EventValue = 0.000000 0.000000 0.000000 0.000000
 			}
+		DebugPlayEntity = 0
 		EndColor = 1.000000 1.000000 1.000000 1.000000
 		Gravity = 0.000000 0.000000 0.000000
 		MaterialList = 1
@@ -1842,6 +1863,7 @@ kbGameEntity 0 0 0 0 {
 		MaxEndRotationRate =  0.050000
 		MaxEndSize = 100.000000 100.000000 100.000000
 		MaxEndVelocity = 1.000000 1.000000 1.000000
+		MaxParticlesToEmit = -1
 		MaxSpawnRate =  0.000000
 		MaxStart3DOffset = 0.000000 0.000000 0.000000
 		MaxStart3DRotation = 0.000000 0.000000 0.000000
@@ -1861,10 +1883,12 @@ kbGameEntity 0 0 0 0 {
 		MinStartVelocity = -75.000000 -75.000000 -75.000000
 		ModelEmitter = 0
 		ParticleBillboardType = FaceCamera
+		RenderOrderBias =  0.000000
+		RotationOverLife = 0
+		SizeOverLife = 0
 		StartColor = 1.000000 1.000000 1.000000 1.000000
 		StartDelay =  0.000000
 		TotalDuration =  10.000000
-		RenderOrderBias =  0.000000
 		VelocityCurve = 3
 			kbAnimEvent { 
 				Enabled = 0
@@ -1916,22 +1940,23 @@ kbGameEntity 0 0 0 0 {
 				LifeTime =  -1.000000
 				EventName = ""
 				EventTime =  0.000000
-				EventValue = 1.000000 1.000000 1.000000
+				EventValue = 1.000000 1.000000 1.000000 0.000000
 			}
 			kbVectorAnimEvent { 
 				Enabled = 0
 				LifeTime =  -1.000000
 				EventName = ""
 				EventTime =  0.700000
-				EventValue = 1.000000 1.000000 1.000000
+				EventValue = 1.000000 1.000000 1.000000 0.000000
 			}
 			kbVectorAnimEvent { 
 				Enabled = 0
 				LifeTime =  -1.000000
 				EventName = ""
 				EventTime =  1.000000
-				EventValue = 0.000000 0.000000 0.000000
+				EventValue = 0.000000 0.000000 0.000000 0.000000
 			}
+		DebugPlayEntity = 0
 		EndColor = 0.000000 0.000000 0.000000 1.000000
 		Gravity = 0.000000 -120.000000 0.000000
 		MaterialList = 1
@@ -1961,6 +1986,7 @@ kbGameEntity 0 0 0 0 {
 		MaxEndRotationRate =  5.000000
 		MaxEndSize = 2.000000 2.000000 2.000000
 		MaxEndVelocity = 20.000000 20.000000 20.000000
+		MaxParticlesToEmit = -1
 		MaxSpawnRate =  0.000000
 		MaxStart3DOffset = 0.000000 0.000000 0.000000
 		MaxStart3DRotation = 0.000000 0.000000 0.000000
@@ -1980,10 +2006,12 @@ kbGameEntity 0 0 0 0 {
 		MinStartVelocity = -50.000000 -50.000000 -50.000000
 		ModelEmitter = 0
 		ParticleBillboardType = FaceCamera
+		RenderOrderBias =  -1.000000
+		RotationOverLife = 0
+		SizeOverLife = 0
 		StartColor = 1.000000 1.000000 1.000000 1.000000
 		StartDelay =  0.000000
 		TotalDuration =  10.000000
-		RenderOrderBias =  -1.000000
 		VelocityCurve = 3
 			kbAnimEvent { 
 				Enabled = 0
@@ -2037,6 +2065,7 @@ kbGameEntity 0 0 0 0 {
 				EventValue =  0.000000
 			}
 		ColorOverLife = 0
+		DebugPlayEntity = 0
 		EndColor = 0.080000 0.080000 0.080000 0.000000
 		Gravity = 0.000000 0.000000 0.000000
 		MaterialList = 1
@@ -2066,6 +2095,7 @@ kbGameEntity 0 0 0 0 {
 		MaxEndRotationRate =  0.050000
 		MaxEndSize = 50.000000 50.000000 50.000000
 		MaxEndVelocity = 0.000000 0.000000 0.000000
+		MaxParticlesToEmit = -1
 		MaxSpawnRate =  0.000000
 		MaxStart3DOffset = 0.000000 0.000000 0.000000
 		MaxStart3DRotation = 0.000000 0.000000 0.000000
@@ -2085,10 +2115,12 @@ kbGameEntity 0 0 0 0 {
 		MinStartVelocity = -15.000000 -15.000000 -15.000000
 		ModelEmitter = 0
 		ParticleBillboardType = FaceCamera
+		RenderOrderBias =  1.000000
+		RotationOverLife = 0
+		SizeOverLife = 0
 		StartColor = 0.080000 0.080000 0.080000 0.010000
 		StartDelay =  0.000000
 		TotalDuration =  10.000000
-		RenderOrderBias =  1.000000
 		VelocityCurve = 3
 			kbAnimEvent { 
 				Enabled = 0
@@ -2113,7 +2145,7 @@ kbGameEntity 0 0 0 0 {
 			}
 	}
 }
-kbGameEntity 0 0 0 0 {
+kbGameEntity 3701747512 1163289787 2408479655 433408048 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
@@ -2137,7 +2169,7 @@ kbGameEntity 0 0 0 0 {
 		Shader = .\assets\shaders\postprocess\antialiasing.kbshader
 	}
 }
-kbGameEntity 0 0 0 0 {
+kbGameEntity 2338254464 1157916964 3038209689 972273857 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
@@ -2147,7 +2179,7 @@ kbGameEntity 0 0 0 0 {
 		Scale = 1.000000 1.000000 1.000000
 	}
 }
-kbGameEntity 0 0 0 0 {
+kbGameEntity 2442618249 1105121967 935219371 3571834002 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
@@ -2217,12 +2249,12 @@ kbGameEntity 0 0 0 0 {
 						Vector = 1.000000 1.000000 1.000000 0.000000
 					}
 			}
-		RenderPass = TranslucentWithDepthPass
 		RenderOrderBias =  0.000000
+		RenderPass = TranslucentWithDepthPass
 		Model = .\assets\models\skydomes\clouddome.fbx
 	}
 }
-kbGameEntity 0 0 0 0 {
+kbGameEntity 2980156413 1215076524 3732003768 1053057015 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
@@ -2237,7 +2269,7 @@ kbGameEntity 0 0 0 0 {
 		Dummy =  0.000000
 	}
 }
-kbGameEntity 0 0 0 0 {
+kbGameEntity 269734645 1274790629 1497469086 349984893 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
@@ -2293,12 +2325,12 @@ kbGameEntity 0 0 0 0 {
 						Vector = 0.300000 0.200000 0.020000 0.000000
 					}
 			}
-		RenderPass = Post-LightingPass
 		RenderOrderBias =  0.000000
+		RenderPass = Post-LightingPass
 		Model = .\assets\models\skydomes\overheadcloudplane.fbx
 	}
 }
-kbGameEntity 0 0 0 0 {
+kbGameEntity 4264855506 1187012014 4267292338 1616097262 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
@@ -2333,12 +2365,12 @@ kbGameEntity 0 0 0 0 {
 						Vector = 1.000000 0.500000 0.000000 1.000000
 					}
 			}
-		RenderPass = Post-LightingPass
 		RenderOrderBias =  0.000000
+		RenderPass = Post-LightingPass
 		Model = .\assets\models\skydomes\clouddome.fbx
 	}
 }
-kbGameEntity 0 0 0 0 {
+kbGameEntity 2629465783 1143133156 1749541556 920377244 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
@@ -2562,8 +2594,8 @@ kbGameEntity 0 0 0 0 {
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 			}
-		RenderPass = LightingPass
 		RenderOrderBias =  0.000000
+		RenderPass = LightingPass
 		Animations = 0
 		DebugAnimIndex = -1
 		Model = .\assets\models\characters\izzy_combat\izzy.fbx
@@ -2678,14 +2710,14 @@ kbGameEntity 0 0 0 0 {
 						Vector = 0.100000 5.000000 0.000000 0.000000
 					}
 			}
-		RenderPass = LightingPass
 		RenderOrderBias =  0.000000
+		RenderPass = LightingPass
 		Animations = 0
 		DebugAnimIndex = -1
 		Model = .\assets\models\characters\izzy_combat\izzy.fbx
 	}
 }
-kbGameEntity 0 0 0 0 {
+kbGameEntity 1255545799 1283126257 1849205407 3559995901 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
@@ -2748,8 +2780,8 @@ kbGameEntity 0 0 0 0 {
 						Vector = 1.000000 0.000000 0.000000 0.000000
 					}
 			}
-		RenderPass = LightingPass
 		RenderOrderBias =  0.000000
+		RenderPass = LightingPass
 		Animations = 0
 		DebugAnimIndex = -1
 		Model = .\assets\models\environment\banners\elp_banner_2.ms3d
@@ -3623,7 +3655,7 @@ kbGameEntity 0 0 0 0 {
 		Health =  2.000000
 	}
 }
-kbGameEntity 0 0 0 0 {
+kbGameEntity 318731465 1085814525 1791496092 1278991560 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
@@ -3679,12 +3711,12 @@ kbGameEntity 0 0 0 0 {
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 			}
-		RenderPass = LightingPass
 		RenderOrderBias =  0.000000
+		RenderPass = LightingPass
 		Model = .\assets\models\test\unitcube.ms3d
 	}
 }
-kbGameEntity 0 0 0 0 {
+kbGameEntity 1134668651 1288449330 2861949591 3007038688 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
@@ -3719,8 +3751,8 @@ kbGameEntity 0 0 0 0 {
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 			}
-		RenderPass = LightingPass
 		RenderOrderBias =  -1.000000
+		RenderPass = LightingPass
 		Model = .\assets\models\architecture\bricks.ms3d
 	}
 	kbCollisionComponent { 
@@ -3731,7 +3763,7 @@ kbGameEntity 0 0 0 0 {
 		SphereCollision = 0
 	}
 }
-kbGameEntity 0 0 0 0 {
+kbGameEntity 2184261831 1122775830 3359644081 140937181 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
@@ -3871,12 +3903,12 @@ kbGameEntity 0 0 0 0 {
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 			}
-		RenderPass = LightingPass
 		RenderOrderBias =  0.000000
+		RenderPass = LightingPass
 		Model = .\assets\models\characters\cartel\soldier_basic_1.fbx
 	}
 }
-kbGameEntity 0 0 0 0 {
+kbGameEntity 2471021541 1264562379 3071714213 1619414369 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
@@ -3932,12 +3964,12 @@ kbGameEntity 0 0 0 0 {
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 			}
-		RenderPass = LightingPass
 		RenderOrderBias =  0.000000
+		RenderPass = LightingPass
 		Model = .\assets\models\test\unitcube.ms3d
 	}
 }
-kbGameEntity 0 0 0 0 {
+kbGameEntity 321721616 1316842256 1385971124 1256533937 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
@@ -3986,8 +4018,8 @@ kbGameEntity 0 0 0 0 {
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 			}
-		RenderPass = LightingPass
 		RenderOrderBias =  0.000000
+		RenderPass = LightingPass
 		Model = .\assets\models\test\rifle2.fbx
 	}
 }
