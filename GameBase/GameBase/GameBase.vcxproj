@@ -149,6 +149,7 @@
     <ClInclude Include="Ether\EtherAI.h" />
     <ClInclude Include="Ether\EtherPlayer.h" />
     <ClInclude Include="ether\EtherSkelModel.h" />
+    <ClInclude Include="Ether\EtherTV.h" />
     <ClInclude Include="Ether\EtherWeapon.h" />
     <ClInclude Include="Ether\EtherGame.h" />
     <ClInclude Include="Ether\EtherTypeInfoGeneratedClasses.h" />
@@ -163,6 +164,7 @@
     <ClCompile Include="Ether\EtherAI.cpp" />
     <ClCompile Include="Ether\EtherPlayer.cpp" />
     <ClCompile Include="Ether\EtherSkelModel.cpp" />
+    <ClCompile Include="Ether\EtherTV.cpp" />
     <ClCompile Include="Ether\EtherWeapon.cpp" />
     <ClCompile Include="Ether\EtherGame.cpp" />
     <ClCompile Include="Ether\EtherTypeInfoGeneratedClasses.cpp" />

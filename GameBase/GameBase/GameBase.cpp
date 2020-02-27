@@ -298,9 +298,9 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 	kbEditor * applicationEditor = nullptr;
 
 	if ( g_UseEditor ) {
-		pGame = new EtherGame();
 
 		applicationEditor = new kbEditor();
+		pGame = new EtherGame();
 		applicationEditor->SetGame( pGame );
 		if ( mapName.length() > 0 )
 		{

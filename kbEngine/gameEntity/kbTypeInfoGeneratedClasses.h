@@ -212,10 +212,10 @@ GenerateClass(
 GenerateClass(
 	kbGrass,
 	AddField( "GrassShader", KBTYPEINFO_SHADER, kbGrass, m_pGrassShader, false, "" )
-	AddField( "GrassCellsPerTerrainSide", KBTYPEINFO_INT, kbGrass, m_GrassCellsPerTerrainSide, false, "" )
+	AddField( "BatchesPerTerrainSide", KBTYPEINFO_INT, kbGrass, m_BatchesPerTerrainSide, false, "" )
+	AddField( "BladesPerPatchSide", KBTYPEINFO_INT, kbGrass, m_BladesPerBatchSide, false, "" )
 	AddField( "PatchStartCullDistance", KBTYPEINFO_FLOAT, kbGrass, m_PatchStartCullDistance, false, "" )
 	AddField( "PatchEndCullDistance", KBTYPEINFO_FLOAT, kbGrass, m_PatchEndCullDistance, false, "" )
-	AddField( "PatchesPerCellSide", KBTYPEINFO_INT, kbGrass, m_PatchesPerCellSide, false, "" )
 	AddField( "BladeMinWidth", KBTYPEINFO_FLOAT, kbGrass, m_BladeMinWidth, false, "" )
 	AddField( "BladeMaxWidth", KBTYPEINFO_FLOAT, kbGrass, m_BladeMaxWidth, false, "" )
 	AddField( "BladeMinHeight", KBTYPEINFO_FLOAT, kbGrass, m_BladeMinHeight, false, "" )

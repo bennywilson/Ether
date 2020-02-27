@@ -2726,7 +2726,7 @@ void kbRenderer_DX11::CreateShaderFromText( const std::string & fileName, const 
 
 	std::vector<D3D11_INPUT_ELEMENT_DESC> polygonLayout;
 
-	if ( fileName.find( "grass" ) != std::string::npos ) {
+	if ( fileName.find( "basicgrass" ) != std::string::npos ) {
 		polygonLayout.insert( polygonLayout.begin(), 3, D3D11_INPUT_ELEMENT_DESC() );
 
 		polygonLayout[0].SemanticName = "POSITION";
@@ -3126,7 +3126,16 @@ void kbRenderer_DX11::RenderMesh( const kbRenderSubmesh *const pRenderMesh, cons
 
     if ( pModel->IsPointCloud() == true ) {
     	m_pDeviceContext->Draw( (UINT)pModel->NumVertices(), 0 );
-    } else {
+    } else if ( pRenderObject->m_VertBufferStartIndex >= 0 && pRenderObject->m_VertBufferIndexCount >= 0 ) {
+		const int idxBuffer = 6 * ( pRenderObject->m_VertBufferStartIndex / 4 );
+    	m_pDeviceContext->DrawIndexed( pRenderObject->m_VertBufferIndexCount, 0, pRenderObject->m_VertBufferStartIndex );
+
+		/*
+			UINT IndexCount,
+			UINT StartIndexLocation,
+			INT BaseVertexLocation) = 0;
+		*/
+	} else {
     	m_pDeviceContext->DrawIndexed( pMesh.m_NumTriangles * 3, pMesh.m_IndexBufferIndex, 0 );
     }
 }

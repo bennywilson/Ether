@@ -9,6 +9,8 @@
 #include "EtherAI.h"
 #include "EtherPlayer.h"
 #include "EtherWeapon.h"
+#include "EtherTV.h"
+
 #include "EtherTypeInfoGeneratedClasses.h"
 
 using namespace std;
@@ -62,3 +64,5 @@ DEFINE_KBCLASS(EtherEnviroObject);
 DEFINE_KBCLASS(EtherEnviroInfo);
 
 DEFINE_KBCLASS(EtherTimeOfDayModifier);
+
+DEFINE_KBCLASS(EtherTVComponent);

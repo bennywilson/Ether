@@ -72,7 +72,7 @@ void * kbRenderBuffer::Map() {
 	g_pD3DDevice->GetImmediateContext( &pImmediateContext );
 
 	HRESULT hr = pImmediateContext->Map( m_pBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &resource );
-	kbErrorCheck( SUCCEEDED(hr), "kbRenderBuffer::CreateVertexBuffer() - Failed to create vertex buffer" );
+	kbErrorCheck( SUCCEEDED(hr), "kbRenderBuffer::Map() - Failed to map vertex buffer" );
 
 	pImmediateContext->Release();
 

@@ -1,8 +1,8 @@
-kbGameEntity 0 0 0 0 {
+kbGameEntity 1258237006 1225639122 2838399888 2064560172 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		Name = "Entity_58"
+		Name = "Entity_40"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
 		Position = 0.000000 0.000000 0.000000
 		Scale = 1.000000 1.000000 1.000000
@@ -10,17 +10,17 @@ kbGameEntity 0 0 0 0 {
 	kbEditorLevelSettingsComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		MainCameraPosition = -20.244102 14.859900 10.770185
-		MainCameraRotation = -0.009997 0.024996 -0.000251 0.999638
+		MainCameraPosition = -18.613129 15.649849 4.402210
+		MainCameraRotation = -0.054719 0.094717 -0.005215 0.993986
 	}
 }
-kbGameEntity 0 0 0 0 {
+kbGameEntity 3042522707 1280155724 3902548365 2415011237 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "Player Start"
-		Orientation = -0.009997 0.024996 -0.000251 0.999638
-		Position = -20.244102 14.859900 10.770185
+		Orientation = -0.054719 0.094717 -0.005215 0.993986
+		Position = -18.702314 15.597718 4.865842
 		Scale = 1.000000 1.000000 1.000000
 	}
 	kbPlayerStartComponent { 
@@ -29,7 +29,7 @@ kbGameEntity 0 0 0 0 {
 		Dummy =  0.000000
 	}
 }
-kbGameEntity 0 0 0 0 {
+kbGameEntity 4288942902 1200795292 2602116285 1491126087 {
 	kbTransformComponent { 
 		Enabled = 1
 		LifeTime =  -1.000000
@@ -110,7 +110,7 @@ kbGameEntity 0 0 0 0 {
 		CascadedShadowSplits = 0
 	}
 }
-kbGameEntity 0 0 0 0 {
+kbGameEntity 3881653555 1179314187 1649298324 207745515 {
 	kbTransformComponent { 
 		Enabled = 1
 		LifeTime =  -1.000000
@@ -123,7 +123,7 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		CastsShadows = 0
-		Color = 0.050000 0.050000 0.050000 1.000000
+		Color = 0.100000 5.000000 0.100000 1.000000
 		Materials = 1
 			kbMaterialComponent { 
 				Enabled = 0
@@ -191,20 +191,20 @@ kbGameEntity 0 0 0 0 {
 		CascadedShadowSplits = 0
 	}
 }
-kbGameEntity 0 0 0 0 {
+kbGameEntity 3705809049 1244564723 2587874736 1866208913 {
 	kbTransformComponent { 
 		Enabled = 1
 		LifeTime =  -1.000000
 		Name = "Key Light"
 		Orientation = 0.105435 -0.457894 0.722937 0.506536
-		Position = -14.744318 16.648991 9.356188
+		Position = -4.744318 16.648991 9.356188
 		Scale = 1.000000 1.000000 1.000000
 	}
 	kbDirectionalLightComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
 		CastsShadows = 1
-		Color = 0.100000 0.150000 0.200000 0.050000
+		Color = 0.200000 0.300000 0.400000 0.050000
 		Materials = 1
 			kbMaterialComponent { 
 				Enabled = 0
@@ -339,7 +339,7 @@ kbGameEntity 0 0 0 0 {
  100.000000
 	}
 }
-kbGameEntity 0 0 0 0 {
+kbGameEntity 2794095804 1282079916 3447545008 2374924096 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
@@ -363,61 +363,7 @@ kbGameEntity 0 0 0 0 {
 		Shader = .\assets\shaders\postprocess\antialiasing.kbshader
 	}
 }
-kbGameEntity 0 0 0 0 {
-	kbTransformComponent { 
-		Enabled = 0
-		LifeTime =  -1.000000
-		Name = "Room"
-		Orientation = 0.000000 0.000000 0.000000 1.000000
-		Position = -22.239201 20.220171 -5.270156
-		Scale = 25.000000 25.000000 25.000000
-	}
-	kbStaticModelComponent { 
-		Enabled = 1
-		LifeTime =  -1.000000
-		CastsShadow = 0
-		Materials = 1
-			kbMaterialComponent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				CullModeOverride = ShaderDefault
-				Shader = .\assets\shaders\environment\environmentbase.kbshader
-				ShaderParams = 4
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "diffuse"
-						Texture = .\assets\visualtarget\elp_ad\room\room_color.tif
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "normal"
-						Texture = NULL
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "propertyMap"
-						Texture = NULL
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "emissiveMap"
-						Texture = NULL
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-			}
-		RenderPass = LightingPass
-		RenderOrderBias =  0.000000
-		Model = .\assets\visualtarget\elp_ad\room\room.ms3d
-	}
-}
-kbGameEntity 0 0 0 0 {
+kbGameEntity 2520444493 1325528206 2326593973 2159962233 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
@@ -436,7 +382,7 @@ kbGameEntity 0 0 0 0 {
 				LifeTime =  -1.000000
 				CullModeOverride = ShaderDefault
 				Shader = .\assets\shaders\fx\tvscreen.kbshader
-				ShaderParams = 6
+				ShaderParams = 7
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
@@ -448,7 +394,7 @@ kbGameEntity 0 0 0 0 {
 						Enabled = 0
 						LifeTime =  -1.000000
 						ParamName = "screenColorTex"
-						Texture = .\assets\visualtarget\elp_ad\tv\tv_screen_diffuse.jpg
+						Texture = .\assets\visualtarget\elp_ad\tv\tv_screen_diffuse.tif
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 					kbShaderParamComponent { 
@@ -478,6 +424,13 @@ kbGameEntity 0 0 0 0 {
 						ParamName = "scanLineTex"
 						Texture = .\assets\visualtarget\elp_ad\tv\scanline.jpg
 						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "lineSpeedAndRadius"
+						Texture = NULL
+						Vector = 0.100000 0.080000 0.010000 0.010000
 					}
 			}
 			kbMaterialComponent { 
@@ -529,17 +482,159 @@ kbGameEntity 0 0 0 0 {
 						Vector = 2.500000 0.000000 0.000000 0.000000
 					}
 			}
-		RenderPass = LightingPass
 		RenderOrderBias =  0.000000
+		RenderPass = LightingPass
 		Model = .\assets\visualtarget\elp_ad\tv\tv.fbx
 	}
+	EtherTVComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		DummyTemp = 0
+		Health =  10.000000
+		m_Dummy = 1768833396
+		AdLength =  30.000000
+		DelayBeforeAd =  3.000000
+		ELPAd = .\assets\visualtarget\elp_ad\tv\tv_screen_diffuse.tif
+		GlitchDuration =  0.100000
+		MovieLength =  7.000000
+		Music = 0
+		SheepAndFoxClip = 126
+			NULL
+1.png
+NULL
+2.png
+NULL
+3.png
+NULL
+4.png
+NULL
+5.png
+NULL
+6.png
+NULL
+7.png
+NULL
+8.png
+NULL
+9.png
+NULL
+10.png
+NULL
+11.png
+NULL
+12.png
+NULL
+13.png
+NULL
+14.png
+NULL
+15.png
+NULL
+16.png
+NULL
+17.png
+NULL
+18.png
+NULL
+19.png
+NULL
+20.png
+NULL
+21.png
+NULL
+22.png
+NULL
+23.png
+NULL
+24.png
+NULL
+25.png
+NULL
+26.png
+NULL
+27.png
+NULL
+28.png
+NULL
+29.png
+NULL
+30.png
+NULL
+31.png
+NULL
+32.png
+NULL
+33.png
+NULL
+34.png
+NULL
+35.png
+NULL
+36.png
+NULL
+37.png
+NULL
+38.png
+NULL
+39.png
+NULL
+40.png
+NULL
+41.png
+NULL
+42.png
+NULL
+43.png
+NULL
+44.png
+NULL
+45.png
+NULL
+46.png
+NULL
+47.png
+NULL
+48.png
+NULL
+49.png
+NULL
+50.png
+NULL
+51.png
+NULL
+52.png
+NULL
+53.png
+NULL
+54.png
+NULL
+55.png
+NULL
+56.png
+NULL
+57.png
+NULL
+58.png
+NULL
+59.png
+NULL
+60.png
+NULL
+61.png
+NULL
+62.png
+NULL
+63.png
+
+		VO = 0
+	}
 }
-kbGameEntity 0 0 0 0 {
+kbGameEntity 3481915730 1320399406 1278207902 459037962 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "TV Light - Front"
-		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Orientation = 0.000000 0.778073 0.000000 -0.628174
 		Position = -21.988031 14.979537 16.050835
 		Scale = 1.000000 1.000000 1.000000
 	}
@@ -547,12 +642,12 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadows = 0
-		Color = 0.876933 0.876933 0.876933 1.000000
+		Color = 0.996462 0.996462 0.996462 1.000000
 		Materials = 0
 		LightRadius =  7.000000
 	}
 	EtherLightAnimatorComponent { 
-		Enabled = 1
+		Enabled = 0
 		LifeTime =  -1.000000
 		VelocityCurve = 11
 			kbVectorAnimEvent { 
@@ -560,744 +655,81 @@ kbGameEntity 0 0 0 0 {
 				LifeTime =  -1.000000
 				EventName = ""
 				EventTime =  0.000000
-				EventValue = 1.000000 1.000000 1.000000
+				EventValue = 1.000000 1.000000 1.000000 0.000000
 			}
 			kbVectorAnimEvent { 
 				Enabled = 0
 				LifeTime =  -1.000000
 				EventName = ""
 				EventTime =  0.250000
-				EventValue = 0.800000 0.800000 0.800000
+				EventValue = 0.800000 0.800000 0.800000 0.000000
 			}
 			kbVectorAnimEvent { 
 				Enabled = 0
 				LifeTime =  -1.000000
 				EventName = "0.2"
 				EventTime =  0.500000
-				EventValue = 0.970000 0.970000 0.970000
+				EventValue = 0.970000 0.970000 0.970000 0.000000
 			}
 			kbVectorAnimEvent { 
 				Enabled = 0
 				LifeTime =  -1.000000
 				EventName = ""
 				EventTime =  0.750000
-				EventValue = 1.000000 1.000000 1.000000
+				EventValue = 1.000000 1.000000 1.000000 0.000000
 			}
 			kbVectorAnimEvent { 
 				Enabled = 0
 				LifeTime =  -1.000000
 				EventName = ""
 				EventTime =  1.000000
-				EventValue = 0.920000 0.920000 0.920000
+				EventValue = 0.920000 0.920000 0.920000 0.000000
 			}
 			kbVectorAnimEvent { 
 				Enabled = 0
 				LifeTime =  -1.000000
 				EventName = ""
 				EventTime =  1.250000
-				EventValue = 0.950000 0.950000 0.950000
+				EventValue = 0.950000 0.950000 0.950000 0.000000
 			}
 			kbVectorAnimEvent { 
 				Enabled = 0
 				LifeTime =  -1.000000
 				EventName = ""
 				EventTime =  1.500000
-				EventValue = 0.850000 0.850000 0.850000
+				EventValue = 0.850000 0.850000 0.850000 0.000000
 			}
 			kbVectorAnimEvent { 
 				Enabled = 0
 				LifeTime =  -1.000000
 				EventName = ""
 				EventTime =  1.750000
-				EventValue = 0.980000 0.980000 0.980000
+				EventValue = 0.980000 0.980000 0.980000 0.000000
 			}
 			kbVectorAnimEvent { 
 				Enabled = 0
 				LifeTime =  -1.000000
 				EventName = ""
 				EventTime =  2.000000
-				EventValue = 0.910000 0.910000 0.910000
+				EventValue = 0.910000 0.910000 0.910000 0.000000
 			}
 			kbVectorAnimEvent { 
 				Enabled = 0
 				LifeTime =  -1.000000
 				EventName = ""
 				EventTime =  2.250000
-				EventValue = 0.800000 0.800000 0.800000
+				EventValue = 0.800000 0.800000 0.800000 0.000000
 			}
 			kbVectorAnimEvent { 
 				Enabled = 0
 				LifeTime =  -1.000000
 				EventName = ""
 				EventTime =  2.500000
-				EventValue = 0.950000 0.950000 0.950000
+				EventValue = 0.950000 0.950000 0.950000 0.000000
 			}
 	}
 }
-kbGameEntity 0 0 0 0 {
-	kbTransformComponent { 
-		Enabled = 0
-		LifeTime =  -1.000000
-		Name = "TV Light"
-		Orientation = 0.000000 0.000000 0.000000 1.000000
-		Position = -7.956398 6.988603 19.500000
-		Scale = 1.000000 1.000000 1.000000
-	}
-	kbPointLightComponent { 
-		Enabled = 1
-		LifeTime =  -1.000000
-		CastsShadows = 0
-		Color = 5.000000 5.000000 5.000000 0.000000
-		Materials = 1
-			kbMaterialComponent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				CullModeOverride = ShaderDefault
-				Shader = .\assets\shaders\lights\pointlight_flicker.kbshader
-				ShaderParams = 2
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "lightColor"
-						Texture = NULL
-						Vector = 5.000000 5.000000 5.000000 5.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = ""
-						Texture = NULL
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-			}
-		LightRadius =  6.000000
-	}
-}
-kbGameEntity 0 0 0 0 {
-	kbTransformComponent { 
-		Enabled = 0
-		LifeTime =  -1.000000
-		Name = "TV Light"
-		Orientation = 0.000000 0.000000 0.000000 1.000000
-		Position = -8.363581 13.065363 19.545458
-		Scale = 1.000000 1.000000 1.000000
-	}
-	kbPointLightComponent { 
-		Enabled = 1
-		LifeTime =  -1.000000
-		CastsShadows = 0
-		Color = 5.000000 5.000000 5.000000 0.000000
-		Materials = 1
-			kbMaterialComponent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				CullModeOverride = ShaderDefault
-				Shader = .\assets\shaders\lights\pointlight_flicker.kbshader
-				ShaderParams = 2
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "lightColor"
-						Texture = NULL
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "cameraPosition"
-						Texture = NULL
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-			}
-		LightRadius =  6.000000
-	}
-}
-kbGameEntity 0 0 0 0 {
-	kbTransformComponent { 
-		Enabled = 0
-		LifeTime =  -1.000000
-		Name = "TV Light"
-		Orientation = 0.000000 0.000000 0.000000 1.000000
-		Position = -8.342438 16.066900 19.545458
-		Scale = 1.000000 1.000000 1.000000
-	}
-	kbPointLightComponent { 
-		Enabled = 1
-		LifeTime =  -1.000000
-		CastsShadows = 0
-		Color = 5.000000 5.000000 5.000000 0.000000
-		Materials = 1
-			kbMaterialComponent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				CullModeOverride = ShaderDefault
-				Shader = .\assets\shaders\lights\pointlight_flicker.kbshader
-				ShaderParams = 2
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "lightColor"
-						Texture = NULL
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "cameraPosition"
-						Texture = NULL
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-			}
-		LightRadius =  8.000000
-	}
-}
-kbGameEntity 0 0 0 0 {
-	kbTransformComponent { 
-		Enabled = 0
-		LifeTime =  -1.000000
-		Name = "TV Light"
-		Orientation = 0.000000 0.000000 0.000000 1.000000
-		Position = -11.063482 22.711338 19.545458
-		Scale = 1.000000 1.000000 1.000000
-	}
-	kbPointLightComponent { 
-		Enabled = 1
-		LifeTime =  -1.000000
-		CastsShadows = 0
-		Color = 5.000000 5.000000 5.000000 0.000000
-		Materials = 1
-			kbMaterialComponent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				CullModeOverride = ShaderDefault
-				Shader = .\assets\shaders\lights\pointlight_flicker.kbshader
-				ShaderParams = 2
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "lightColor"
-						Texture = NULL
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "cameraPosition"
-						Texture = NULL
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-			}
-		LightRadius =  8.000000
-	}
-}
-kbGameEntity 0 0 0 0 {
-	kbTransformComponent { 
-		Enabled = 0
-		LifeTime =  -1.000000
-		Name = "TV Light"
-		Orientation = 0.000000 0.000000 0.000000 1.000000
-		Position = -7.054262 21.971981 19.545458
-		Scale = 1.000000 1.000000 1.000000
-	}
-	kbPointLightComponent { 
-		Enabled = 1
-		LifeTime =  -1.000000
-		CastsShadows = 0
-		Color = 5.000000 5.000000 5.000000 0.000000
-		Materials = 1
-			kbMaterialComponent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				CullModeOverride = ShaderDefault
-				Shader = .\assets\shaders\lights\pointlight_flicker.kbshader
-				ShaderParams = 2
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "lightColor"
-						Texture = NULL
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "cameraPosition"
-						Texture = NULL
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-			}
-		LightRadius =  8.000000
-	}
-}
-kbGameEntity 0 0 0 0 {
-	kbTransformComponent { 
-		Enabled = 0
-		LifeTime =  -1.000000
-		Name = "TV Light"
-		Orientation = 0.000000 0.000000 0.000000 1.000000
-		Position = -8.018772 18.914843 19.545458
-		Scale = 1.000000 1.000000 1.000000
-	}
-	kbPointLightComponent { 
-		Enabled = 1
-		LifeTime =  -1.000000
-		CastsShadows = 0
-		Color = 5.000000 5.000000 5.000000 0.000000
-		Materials = 1
-			kbMaterialComponent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				CullModeOverride = ShaderDefault
-				Shader = .\assets\shaders\lights\pointlight_flicker.kbshader
-				ShaderParams = 2
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "lightColor"
-						Texture = NULL
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "cameraPosition"
-						Texture = NULL
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-			}
-		LightRadius =  8.000000
-	}
-}
-kbGameEntity 0 0 0 0 {
-	kbTransformComponent { 
-		Enabled = 0
-		LifeTime =  -1.000000
-		Name = "TV Light"
-		Orientation = 0.000000 0.000000 0.000000 1.000000
-		Position = -15.018311 22.740553 19.545458
-		Scale = 1.000000 1.000000 1.000000
-	}
-	kbPointLightComponent { 
-		Enabled = 1
-		LifeTime =  -1.000000
-		CastsShadows = 0
-		Color = 5.000000 5.000000 5.000000 0.000000
-		Materials = 1
-			kbMaterialComponent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				CullModeOverride = ShaderDefault
-				Shader = .\assets\shaders\lights\pointlight_flicker.kbshader
-				ShaderParams = 2
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "lightColor"
-						Texture = NULL
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "cameraPosition"
-						Texture = NULL
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-			}
-		LightRadius =  8.000000
-	}
-}
-kbGameEntity 0 0 0 0 {
-	kbTransformComponent { 
-		Enabled = 0
-		LifeTime =  -1.000000
-		Name = "TV Light"
-		Orientation = 0.000000 0.000000 0.000000 1.000000
-		Position = -18.815304 22.740553 19.545458
-		Scale = 1.000000 1.000000 1.000000
-	}
-	kbPointLightComponent { 
-		Enabled = 1
-		LifeTime =  -1.000000
-		CastsShadows = 0
-		Color = 5.000000 5.000000 5.000000 0.000000
-		Materials = 1
-			kbMaterialComponent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				CullModeOverride = ShaderDefault
-				Shader = .\assets\shaders\lights\pointlight_flicker.kbshader
-				ShaderParams = 2
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "lightColor"
-						Texture = NULL
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "cameraPosition"
-						Texture = NULL
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-			}
-		LightRadius =  8.000000
-	}
-}
-kbGameEntity 0 0 0 0 {
-	kbTransformComponent { 
-		Enabled = 0
-		LifeTime =  -1.000000
-		Name = "TV Light"
-		Orientation = 0.000000 0.000000 0.000000 1.000000
-		Position = -22.539555 22.740553 19.545458
-		Scale = 1.000000 1.000000 1.000000
-	}
-	kbPointLightComponent { 
-		Enabled = 1
-		LifeTime =  -1.000000
-		CastsShadows = 0
-		Color = 5.000000 5.000000 5.000000 0.000000
-		Materials = 1
-			kbMaterialComponent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				CullModeOverride = ShaderDefault
-				Shader = .\assets\shaders\lights\pointlight_flicker.kbshader
-				ShaderParams = 2
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "lightColor"
-						Texture = NULL
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "cameraPosition"
-						Texture = NULL
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-			}
-		LightRadius =  8.000000
-	}
-}
-kbGameEntity 0 0 0 0 {
-	kbTransformComponent { 
-		Enabled = 0
-		LifeTime =  -1.000000
-		Name = "TV Light"
-		Orientation = 0.000000 0.000000 0.000000 1.000000
-		Position = -26.329559 22.740553 19.545458
-		Scale = 1.000000 1.000000 1.000000
-	}
-	kbPointLightComponent { 
-		Enabled = 1
-		LifeTime =  -1.000000
-		CastsShadows = 0
-		Color = 5.000000 5.000000 5.000000 0.000000
-		Materials = 1
-			kbMaterialComponent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				CullModeOverride = ShaderDefault
-				Shader = .\assets\shaders\lights\pointlight_flicker.kbshader
-				ShaderParams = 2
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "lightColor"
-						Texture = NULL
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "cameraPosition"
-						Texture = NULL
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-			}
-		LightRadius =  8.000000
-	}
-}
-kbGameEntity 0 0 0 0 {
-	kbTransformComponent { 
-		Enabled = 0
-		LifeTime =  -1.000000
-		Name = "TV Light"
-		Orientation = 0.000000 0.000000 0.000000 1.000000
-		Position = -29.800688 22.740553 19.545458
-		Scale = 1.000000 1.000000 1.000000
-	}
-	kbPointLightComponent { 
-		Enabled = 1
-		LifeTime =  -1.000000
-		CastsShadows = 0
-		Color = 5.000000 5.000000 5.000000 0.000000
-		Materials = 1
-			kbMaterialComponent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				CullModeOverride = ShaderDefault
-				Shader = .\assets\shaders\lights\pointlight_flicker.kbshader
-				ShaderParams = 2
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "lightColor"
-						Texture = NULL
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "cameraPosition"
-						Texture = NULL
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-			}
-		LightRadius =  8.000000
-	}
-}
-kbGameEntity 0 0 0 0 {
-	kbTransformComponent { 
-		Enabled = 0
-		LifeTime =  -1.000000
-		Name = "TV Light"
-		Orientation = 0.000000 0.000000 0.000000 1.000000
-		Position = -33.832413 22.647299 19.545458
-		Scale = 1.000000 1.000000 1.000000
-	}
-	kbPointLightComponent { 
-		Enabled = 1
-		LifeTime =  -1.000000
-		CastsShadows = 0
-		Color = 5.000000 5.000000 5.000000 0.000000
-		Materials = 1
-			kbMaterialComponent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				CullModeOverride = ShaderDefault
-				Shader = .\assets\shaders\lights\pointlight_flicker.kbshader
-				ShaderParams = 2
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "lightColor"
-						Texture = NULL
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "cameraPosition"
-						Texture = NULL
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-			}
-		LightRadius =  8.000000
-	}
-}
-kbGameEntity 0 0 0 0 {
-	kbTransformComponent { 
-		Enabled = 0
-		LifeTime =  -1.000000
-		Name = "TV Light"
-		Orientation = 0.000000 0.000000 0.000000 1.000000
-		Position = -37.271957 16.939112 19.545458
-		Scale = 1.000000 1.000000 1.000000
-	}
-	kbPointLightComponent { 
-		Enabled = 1
-		LifeTime =  -1.000000
-		CastsShadows = 0
-		Color = 5.000000 5.000000 5.000000 0.000000
-		Materials = 1
-			kbMaterialComponent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				CullModeOverride = ShaderDefault
-				Shader = .\assets\shaders\lights\pointlight_flicker.kbshader
-				ShaderParams = 2
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "lightColor"
-						Texture = NULL
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "cameraPosition"
-						Texture = NULL
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-			}
-		LightRadius =  8.000000
-	}
-}
-kbGameEntity 0 0 0 0 {
-	kbTransformComponent { 
-		Enabled = 0
-		LifeTime =  -1.000000
-		Name = "TV Light"
-		Orientation = 0.000000 0.000000 0.000000 1.000000
-		Position = -37.184639 20.467852 19.545458
-		Scale = 1.000000 1.000000 1.000000
-	}
-	kbPointLightComponent { 
-		Enabled = 1
-		LifeTime =  -1.000000
-		CastsShadows = 0
-		Color = 5.000000 5.000000 5.000000 0.000000
-		Materials = 1
-			kbMaterialComponent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				CullModeOverride = ShaderDefault
-				Shader = .\assets\shaders\lights\pointlight_flicker.kbshader
-				ShaderParams = 2
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "lightColor"
-						Texture = NULL
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "cameraPosition"
-						Texture = NULL
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-			}
-		LightRadius =  8.000000
-	}
-}
-kbGameEntity 0 0 0 0 {
-	kbTransformComponent { 
-		Enabled = 0
-		LifeTime =  -1.000000
-		Name = "TV Light"
-		Orientation = 0.000000 0.000000 0.000000 1.000000
-		Position = -36.917614 13.306496 19.545458
-		Scale = 1.000000 1.000000 1.000000
-	}
-	kbPointLightComponent { 
-		Enabled = 1
-		LifeTime =  -1.000000
-		CastsShadows = 0
-		Color = 5.000000 5.000000 5.000000 0.000000
-		Materials = 1
-			kbMaterialComponent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				CullModeOverride = ShaderDefault
-				Shader = .\assets\shaders\lights\pointlight_flicker.kbshader
-				ShaderParams = 2
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "lightColor"
-						Texture = NULL
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "cameraPosition"
-						Texture = NULL
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-			}
-		LightRadius =  8.000000
-	}
-}
-kbGameEntity 0 0 0 0 {
-	kbTransformComponent { 
-		Enabled = 0
-		LifeTime =  -1.000000
-		Name = "TV Light"
-		Orientation = 0.000000 0.000000 0.000000 1.000000
-		Position = -38.121349 9.314240 19.545458
-		Scale = 1.000000 1.000000 1.000000
-	}
-	kbPointLightComponent { 
-		Enabled = 1
-		LifeTime =  -1.000000
-		CastsShadows = 0
-		Color = 5.000000 5.000000 5.000000 0.000000
-		Materials = 1
-			kbMaterialComponent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				CullModeOverride = ShaderDefault
-				Shader = .\assets\shaders\lights\pointlight_flicker.kbshader
-				ShaderParams = 2
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "lightColor"
-						Texture = NULL
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "cameraPosition"
-						Texture = NULL
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-			}
-		LightRadius =  8.000000
-	}
-}
-kbGameEntity 0 0 0 0 {
-	kbTransformComponent { 
-		Enabled = 0
-		LifeTime =  -1.000000
-		Name = "TV Light"
-		Orientation = 0.000000 0.000000 0.000000 1.000000
-		Position = -7.956398 10.393926 19.500000
-		Scale = 1.000000 1.000000 1.000000
-	}
-	kbPointLightComponent { 
-		Enabled = 1
-		LifeTime =  -1.000000
-		CastsShadows = 0
-		Color = 5.000000 5.000000 5.000000 0.000000
-		Materials = 1
-			kbMaterialComponent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				CullModeOverride = ShaderDefault
-				Shader = .\assets\shaders\lights\pointlight_flicker.kbshader
-				ShaderParams = 2
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "lightColor"
-						Texture = NULL
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "cameraPosition"
-						Texture = NULL
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-			}
-		LightRadius =  6.000000
-	}
-}
-kbGameEntity 0 0 0 0 {
+kbGameEntity 477965583 1253916611 3453336754 2918260806 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
@@ -1346,112 +778,12 @@ kbGameEntity 0 0 0 0 {
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 			}
-		RenderPass = LightingPass
 		RenderOrderBias =  0.000000
+		RenderPass = LightingPass
 		Model = ..\..\kbengine\assets\models\unitquad.ms3d
 	}
 }
-kbGameEntity 0 0 0 0 {
-	kbTransformComponent { 
-		Enabled = 0
-		LifeTime =  -1.000000
-		Name = "TV Light - Wood Spec #7"
-		Orientation = 0.000000 0.000000 0.000000 1.000000
-		Position = -15.048956 11.918306 15.343484
-		Scale = 1.000000 1.000000 1.000000
-	}
-	kbPointLightComponent { 
-		Enabled = 1
-		LifeTime =  -1.000000
-		CastsShadows = 0
-		Color = 0.935864 0.935864 0.935864 1.000000
-		Materials = 0
-		LightRadius =  4.000000
-	}
-	EtherLightAnimatorComponent { 
-		Enabled = 1
-		LifeTime =  -1.000000
-		VelocityCurve = 11
-			kbVectorAnimEvent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				EventName = ""
-				EventTime =  0.000000
-				EventValue = 1.000000 1.000000 1.000000
-			}
-			kbVectorAnimEvent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				EventName = ""
-				EventTime =  0.250000
-				EventValue = 0.900000 0.900000 0.900000
-			}
-			kbVectorAnimEvent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				EventName = "0.2"
-				EventTime =  0.500000
-				EventValue = 0.970000 0.970000 0.970000
-			}
-			kbVectorAnimEvent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				EventName = ""
-				EventTime =  0.750000
-				EventValue = 1.000000 1.000000 1.000000
-			}
-			kbVectorAnimEvent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				EventName = ""
-				EventTime =  1.000000
-				EventValue = 0.920000 0.920000 0.920000
-			}
-			kbVectorAnimEvent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				EventName = ""
-				EventTime =  1.250000
-				EventValue = 0.950000 0.950000 0.950000
-			}
-			kbVectorAnimEvent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				EventName = ""
-				EventTime =  1.500000
-				EventValue = 0.930000 0.930000 0.930000
-			}
-			kbVectorAnimEvent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				EventName = ""
-				EventTime =  1.750000
-				EventValue = 0.980000 0.980000 0.980000
-			}
-			kbVectorAnimEvent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				EventName = ""
-				EventTime =  2.000000
-				EventValue = 0.910000 0.910000 0.910000
-			}
-			kbVectorAnimEvent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				EventName = ""
-				EventTime =  2.250000
-				EventValue = 0.900000 0.900000 0.900000
-			}
-			kbVectorAnimEvent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				EventName = ""
-				EventTime =  2.500000
-				EventValue = 0.950000 0.950000 0.950000
-			}
-	}
-}
-kbGameEntity 0 0 0 0 {
+kbGameEntity 1539666996 1073921903 3251711405 2591985252 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
@@ -1464,7 +796,7 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadows = 0
-		Color = 0.935888 0.935888 0.935888 1.000000
+		Color = 1.185159 1.185159 1.185159 1.000000
 		Materials = 0
 		LightRadius =  4.000000
 	}
@@ -1477,81 +809,81 @@ kbGameEntity 0 0 0 0 {
 				LifeTime =  -1.000000
 				EventName = ""
 				EventTime =  0.000000
-				EventValue = 1.000000 1.000000 1.000000
+				EventValue = 1.000000 1.000000 1.000000 0.000000
 			}
 			kbVectorAnimEvent { 
 				Enabled = 0
 				LifeTime =  -1.000000
 				EventName = ""
 				EventTime =  0.250000
-				EventValue = 0.900000 0.900000 0.900000
+				EventValue = 0.900000 0.900000 0.900000 0.000000
 			}
 			kbVectorAnimEvent { 
 				Enabled = 0
 				LifeTime =  -1.000000
 				EventName = "0.2"
 				EventTime =  0.500000
-				EventValue = 0.970000 0.970000 0.970000
+				EventValue = 0.970000 0.970000 0.970000 0.000000
 			}
 			kbVectorAnimEvent { 
 				Enabled = 0
 				LifeTime =  -1.000000
 				EventName = ""
 				EventTime =  0.750000
-				EventValue = 1.000000 1.000000 1.000000
+				EventValue = 1.000000 1.000000 1.000000 0.000000
 			}
 			kbVectorAnimEvent { 
 				Enabled = 0
 				LifeTime =  -1.000000
 				EventName = ""
 				EventTime =  1.000000
-				EventValue = 0.920000 0.920000 0.920000
+				EventValue = 0.920000 0.920000 0.920000 0.000000
 			}
 			kbVectorAnimEvent { 
 				Enabled = 0
 				LifeTime =  -1.000000
 				EventName = ""
 				EventTime =  1.250000
-				EventValue = 0.950000 0.950000 0.950000
+				EventValue = 0.950000 0.950000 0.950000 0.000000
 			}
 			kbVectorAnimEvent { 
 				Enabled = 0
 				LifeTime =  -1.000000
 				EventName = ""
 				EventTime =  1.500000
-				EventValue = 0.930000 0.930000 0.930000
+				EventValue = 0.930000 0.930000 0.930000 0.000000
 			}
 			kbVectorAnimEvent { 
 				Enabled = 0
 				LifeTime =  -1.000000
 				EventName = ""
 				EventTime =  1.750000
-				EventValue = 0.980000 0.980000 0.980000
+				EventValue = 0.980000 0.980000 0.980000 0.000000
 			}
 			kbVectorAnimEvent { 
 				Enabled = 0
 				LifeTime =  -1.000000
 				EventName = ""
 				EventTime =  2.000000
-				EventValue = 0.910000 0.910000 0.910000
+				EventValue = 0.910000 0.910000 0.910000 0.000000
 			}
 			kbVectorAnimEvent { 
 				Enabled = 0
 				LifeTime =  -1.000000
 				EventName = ""
 				EventTime =  2.250000
-				EventValue = 0.900000 0.900000 0.900000
+				EventValue = 0.900000 0.900000 0.900000 0.000000
 			}
 			kbVectorAnimEvent { 
 				Enabled = 0
 				LifeTime =  -1.000000
 				EventName = ""
 				EventTime =  2.500000
-				EventValue = 0.950000 0.950000 0.950000
+				EventValue = 0.950000 0.950000 0.950000 0.000000
 			}
 	}
 }
-kbGameEntity 0 0 0 0 {
+kbGameEntity 480560206 1319462208 2014875023 1872152854 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
@@ -1564,7 +896,7 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadows = 0
-		Color = 0.935916 0.935916 0.935916 1.000000
+		Color = 1.185155 1.185155 1.185155 1.000000
 		Materials = 0
 		LightRadius =  4.000000
 	}
@@ -1577,81 +909,81 @@ kbGameEntity 0 0 0 0 {
 				LifeTime =  -1.000000
 				EventName = ""
 				EventTime =  0.000000
-				EventValue = 1.000000 1.000000 1.000000
+				EventValue = 1.000000 1.000000 1.000000 0.000000
 			}
 			kbVectorAnimEvent { 
 				Enabled = 0
 				LifeTime =  -1.000000
 				EventName = ""
 				EventTime =  0.250000
-				EventValue = 0.900000 0.900000 0.900000
+				EventValue = 0.900000 0.900000 0.900000 0.000000
 			}
 			kbVectorAnimEvent { 
 				Enabled = 0
 				LifeTime =  -1.000000
 				EventName = "0.2"
 				EventTime =  0.500000
-				EventValue = 0.970000 0.970000 0.970000
+				EventValue = 0.970000 0.970000 0.970000 0.000000
 			}
 			kbVectorAnimEvent { 
 				Enabled = 0
 				LifeTime =  -1.000000
 				EventName = ""
 				EventTime =  0.750000
-				EventValue = 1.000000 1.000000 1.000000
+				EventValue = 1.000000 1.000000 1.000000 0.000000
 			}
 			kbVectorAnimEvent { 
 				Enabled = 0
 				LifeTime =  -1.000000
 				EventName = ""
 				EventTime =  1.000000
-				EventValue = 0.920000 0.920000 0.920000
+				EventValue = 0.920000 0.920000 0.920000 0.000000
 			}
 			kbVectorAnimEvent { 
 				Enabled = 0
 				LifeTime =  -1.000000
 				EventName = ""
 				EventTime =  1.250000
-				EventValue = 0.950000 0.950000 0.950000
+				EventValue = 0.950000 0.950000 0.950000 0.000000
 			}
 			kbVectorAnimEvent { 
 				Enabled = 0
 				LifeTime =  -1.000000
 				EventName = ""
 				EventTime =  1.500000
-				EventValue = 0.930000 0.930000 0.930000
+				EventValue = 0.930000 0.930000 0.930000 0.000000
 			}
 			kbVectorAnimEvent { 
 				Enabled = 0
 				LifeTime =  -1.000000
 				EventName = ""
 				EventTime =  1.750000
-				EventValue = 0.980000 0.980000 0.980000
+				EventValue = 0.980000 0.980000 0.980000 0.000000
 			}
 			kbVectorAnimEvent { 
 				Enabled = 0
 				LifeTime =  -1.000000
 				EventName = ""
 				EventTime =  2.000000
-				EventValue = 0.910000 0.910000 0.910000
+				EventValue = 0.910000 0.910000 0.910000 0.000000
 			}
 			kbVectorAnimEvent { 
 				Enabled = 0
 				LifeTime =  -1.000000
 				EventName = ""
 				EventTime =  2.250000
-				EventValue = 0.900000 0.900000 0.900000
+				EventValue = 0.900000 0.900000 0.900000 0.000000
 			}
 			kbVectorAnimEvent { 
 				Enabled = 0
 				LifeTime =  -1.000000
 				EventName = ""
 				EventTime =  2.500000
-				EventValue = 0.950000 0.950000 0.950000
+				EventValue = 0.950000 0.950000 0.950000 0.000000
 			}
 	}
 }
-kbGameEntity 0 0 0 0 {
+kbGameEntity 869242062 1156727719 657741206 2752403012 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
@@ -1664,7 +996,7 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadows = 0
-		Color = 0.935951 0.935951 0.935951 1.000000
+		Color = 1.185143 1.185143 1.185143 1.000000
 		Materials = 0
 		LightRadius =  4.000000
 	}
@@ -1677,81 +1009,81 @@ kbGameEntity 0 0 0 0 {
 				LifeTime =  -1.000000
 				EventName = ""
 				EventTime =  0.000000
-				EventValue = 1.000000 1.000000 1.000000
+				EventValue = 1.000000 1.000000 1.000000 0.000000
 			}
 			kbVectorAnimEvent { 
 				Enabled = 0
 				LifeTime =  -1.000000
 				EventName = ""
 				EventTime =  0.250000
-				EventValue = 0.900000 0.900000 0.900000
+				EventValue = 0.900000 0.900000 0.900000 0.000000
 			}
 			kbVectorAnimEvent { 
 				Enabled = 0
 				LifeTime =  -1.000000
 				EventName = "0.2"
 				EventTime =  0.500000
-				EventValue = 0.970000 0.970000 0.970000
+				EventValue = 0.970000 0.970000 0.970000 0.000000
 			}
 			kbVectorAnimEvent { 
 				Enabled = 0
 				LifeTime =  -1.000000
 				EventName = ""
 				EventTime =  0.750000
-				EventValue = 1.000000 1.000000 1.000000
+				EventValue = 1.000000 1.000000 1.000000 0.000000
 			}
 			kbVectorAnimEvent { 
 				Enabled = 0
 				LifeTime =  -1.000000
 				EventName = ""
 				EventTime =  1.000000
-				EventValue = 0.920000 0.920000 0.920000
+				EventValue = 0.920000 0.920000 0.920000 0.000000
 			}
 			kbVectorAnimEvent { 
 				Enabled = 0
 				LifeTime =  -1.000000
 				EventName = ""
 				EventTime =  1.250000
-				EventValue = 0.950000 0.950000 0.950000
+				EventValue = 0.950000 0.950000 0.950000 0.000000
 			}
 			kbVectorAnimEvent { 
 				Enabled = 0
 				LifeTime =  -1.000000
 				EventName = ""
 				EventTime =  1.500000
-				EventValue = 0.930000 0.930000 0.930000
+				EventValue = 0.930000 0.930000 0.930000 0.000000
 			}
 			kbVectorAnimEvent { 
 				Enabled = 0
 				LifeTime =  -1.000000
 				EventName = ""
 				EventTime =  1.750000
-				EventValue = 0.980000 0.980000 0.980000
+				EventValue = 0.980000 0.980000 0.980000 0.000000
 			}
 			kbVectorAnimEvent { 
 				Enabled = 0
 				LifeTime =  -1.000000
 				EventName = ""
 				EventTime =  2.000000
-				EventValue = 0.910000 0.910000 0.910000
+				EventValue = 0.910000 0.910000 0.910000 0.000000
 			}
 			kbVectorAnimEvent { 
 				Enabled = 0
 				LifeTime =  -1.000000
 				EventName = ""
 				EventTime =  2.250000
-				EventValue = 0.900000 0.900000 0.900000
+				EventValue = 0.900000 0.900000 0.900000 0.000000
 			}
 			kbVectorAnimEvent { 
 				Enabled = 0
 				LifeTime =  -1.000000
 				EventName = ""
 				EventTime =  2.500000
-				EventValue = 0.950000 0.950000 0.950000
+				EventValue = 0.950000 0.950000 0.950000 0.000000
 			}
 	}
 }
-kbGameEntity 0 0 0 0 {
+kbGameEntity 1044043731 1218053337 3183565988 2739138226 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
@@ -1764,7 +1096,7 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadows = 0
-		Color = 0.935979 0.935979 0.935979 1.000000
+		Color = 1.185131 1.185131 1.185131 1.000000
 		Materials = 0
 		LightRadius =  4.000000
 	}
@@ -1777,81 +1109,81 @@ kbGameEntity 0 0 0 0 {
 				LifeTime =  -1.000000
 				EventName = ""
 				EventTime =  0.000000
-				EventValue = 1.000000 1.000000 1.000000
+				EventValue = 1.000000 1.000000 1.000000 0.000000
 			}
 			kbVectorAnimEvent { 
 				Enabled = 0
 				LifeTime =  -1.000000
 				EventName = ""
 				EventTime =  0.250000
-				EventValue = 0.900000 0.900000 0.900000
+				EventValue = 0.900000 0.900000 0.900000 0.000000
 			}
 			kbVectorAnimEvent { 
 				Enabled = 0
 				LifeTime =  -1.000000
 				EventName = "0.2"
 				EventTime =  0.500000
-				EventValue = 0.970000 0.970000 0.970000
+				EventValue = 0.970000 0.970000 0.970000 0.000000
 			}
 			kbVectorAnimEvent { 
 				Enabled = 0
 				LifeTime =  -1.000000
 				EventName = ""
 				EventTime =  0.750000
-				EventValue = 1.000000 1.000000 1.000000
+				EventValue = 1.000000 1.000000 1.000000 0.000000
 			}
 			kbVectorAnimEvent { 
 				Enabled = 0
 				LifeTime =  -1.000000
 				EventName = ""
 				EventTime =  1.000000
-				EventValue = 0.920000 0.920000 0.920000
+				EventValue = 0.920000 0.920000 0.920000 0.000000
 			}
 			kbVectorAnimEvent { 
 				Enabled = 0
 				LifeTime =  -1.000000
 				EventName = ""
 				EventTime =  1.250000
-				EventValue = 0.950000 0.950000 0.950000
+				EventValue = 0.950000 0.950000 0.950000 0.000000
 			}
 			kbVectorAnimEvent { 
 				Enabled = 0
 				LifeTime =  -1.000000
 				EventName = ""
 				EventTime =  1.500000
-				EventValue = 0.930000 0.930000 0.930000
+				EventValue = 0.930000 0.930000 0.930000 0.000000
 			}
 			kbVectorAnimEvent { 
 				Enabled = 0
 				LifeTime =  -1.000000
 				EventName = ""
 				EventTime =  1.750000
-				EventValue = 0.980000 0.980000 0.980000
+				EventValue = 0.980000 0.980000 0.980000 0.000000
 			}
 			kbVectorAnimEvent { 
 				Enabled = 0
 				LifeTime =  -1.000000
 				EventName = ""
 				EventTime =  2.000000
-				EventValue = 0.910000 0.910000 0.910000
+				EventValue = 0.910000 0.910000 0.910000 0.000000
 			}
 			kbVectorAnimEvent { 
 				Enabled = 0
 				LifeTime =  -1.000000
 				EventName = ""
 				EventTime =  2.250000
-				EventValue = 0.900000 0.900000 0.900000
+				EventValue = 0.900000 0.900000 0.900000 0.000000
 			}
 			kbVectorAnimEvent { 
 				Enabled = 0
 				LifeTime =  -1.000000
 				EventName = ""
 				EventTime =  2.500000
-				EventValue = 0.950000 0.950000 0.950000
+				EventValue = 0.950000 0.950000 0.950000 0.000000
 			}
 	}
 }
-kbGameEntity 0 0 0 0 {
+kbGameEntity 2591783041 1085017970 3399635387 2306051354 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
@@ -1864,7 +1196,7 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadows = 0
-		Color = 0.936042 0.936042 0.936042 1.000000
+		Color = 1.185119 1.185119 1.185119 1.000000
 		Materials = 0
 		LightRadius =  4.000000
 	}
@@ -1877,81 +1209,81 @@ kbGameEntity 0 0 0 0 {
 				LifeTime =  -1.000000
 				EventName = ""
 				EventTime =  0.000000
-				EventValue = 1.000000 1.000000 1.000000
+				EventValue = 1.000000 1.000000 1.000000 0.000000
 			}
 			kbVectorAnimEvent { 
 				Enabled = 0
 				LifeTime =  -1.000000
 				EventName = ""
 				EventTime =  0.250000
-				EventValue = 0.900000 0.900000 0.900000
+				EventValue = 0.900000 0.900000 0.900000 0.000000
 			}
 			kbVectorAnimEvent { 
 				Enabled = 0
 				LifeTime =  -1.000000
 				EventName = "0.2"
 				EventTime =  0.500000
-				EventValue = 0.970000 0.970000 0.970000
+				EventValue = 0.970000 0.970000 0.970000 0.000000
 			}
 			kbVectorAnimEvent { 
 				Enabled = 0
 				LifeTime =  -1.000000
 				EventName = ""
 				EventTime =  0.750000
-				EventValue = 1.000000 1.000000 1.000000
+				EventValue = 1.000000 1.000000 1.000000 0.000000
 			}
 			kbVectorAnimEvent { 
 				Enabled = 0
 				LifeTime =  -1.000000
 				EventName = ""
 				EventTime =  1.000000
-				EventValue = 0.920000 0.920000 0.920000
+				EventValue = 0.920000 0.920000 0.920000 0.000000
 			}
 			kbVectorAnimEvent { 
 				Enabled = 0
 				LifeTime =  -1.000000
 				EventName = ""
 				EventTime =  1.250000
-				EventValue = 0.950000 0.950000 0.950000
+				EventValue = 0.950000 0.950000 0.950000 0.000000
 			}
 			kbVectorAnimEvent { 
 				Enabled = 0
 				LifeTime =  -1.000000
 				EventName = ""
 				EventTime =  1.500000
-				EventValue = 0.930000 0.930000 0.930000
+				EventValue = 0.930000 0.930000 0.930000 0.000000
 			}
 			kbVectorAnimEvent { 
 				Enabled = 0
 				LifeTime =  -1.000000
 				EventName = ""
 				EventTime =  1.750000
-				EventValue = 0.980000 0.980000 0.980000
+				EventValue = 0.980000 0.980000 0.980000 0.000000
 			}
 			kbVectorAnimEvent { 
 				Enabled = 0
 				LifeTime =  -1.000000
 				EventName = ""
 				EventTime =  2.000000
-				EventValue = 0.910000 0.910000 0.910000
+				EventValue = 0.910000 0.910000 0.910000 0.000000
 			}
 			kbVectorAnimEvent { 
 				Enabled = 0
 				LifeTime =  -1.000000
 				EventName = ""
 				EventTime =  2.250000
-				EventValue = 0.900000 0.900000 0.900000
+				EventValue = 0.900000 0.900000 0.900000 0.000000
 			}
 			kbVectorAnimEvent { 
 				Enabled = 0
 				LifeTime =  -1.000000
 				EventName = ""
 				EventTime =  2.500000
-				EventValue = 0.950000 0.950000 0.950000
+				EventValue = 0.950000 0.950000 0.950000 0.000000
 			}
 	}
 }
-kbGameEntity 0 0 0 0 {
+kbGameEntity 726203086 1149277469 4006986149 689795611 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
@@ -1993,12 +1325,12 @@ kbGameEntity 0 0 0 0 {
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 			}
-		RenderPass = LightingPass
 		RenderOrderBias =  0.000000
+		RenderPass = LightingPass
 		Model = .\assets\models\test\unitcube.ms3d
 	}
 }
-kbGameEntity 0 0 0 0 {
+kbGameEntity 795341263 1288693911 2955669648 1343079747 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
@@ -2040,12 +1372,12 @@ kbGameEntity 0 0 0 0 {
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 			}
-		RenderPass = LightingPass
 		RenderOrderBias =  0.000000
+		RenderPass = LightingPass
 		Model = .\assets\models\test\unitcube.ms3d
 	}
 }
-kbGameEntity 0 0 0 0 {
+kbGameEntity 3663082166 1211124302 2824000910 1660558197 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
@@ -2087,117 +1419,17 @@ kbGameEntity 0 0 0 0 {
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 			}
-		RenderPass = LightingPass
 		RenderOrderBias =  0.000000
+		RenderPass = LightingPass
 		Model = .\assets\models\test\unitcube.ms3d
 	}
 }
-kbGameEntity 0 0 0 0 {
-	kbTransformComponent { 
-		Enabled = 0
-		LifeTime =  -1.000000
-		Name = "TV Light - Wood Spec #1"
-		Orientation = 0.000000 0.000000 0.000000 1.000000
-		Position = -27.241579 11.918306 15.207022
-		Scale = 1.000000 1.000000 1.000000
-	}
-	kbPointLightComponent { 
-		Enabled = 1
-		LifeTime =  -1.000000
-		CastsShadows = 0
-		Color = 0.940544 0.940544 0.940544 1.000000
-		Materials = 0
-		LightRadius =  4.000000
-	}
-	EtherLightAnimatorComponent { 
-		Enabled = 1
-		LifeTime =  -1.000000
-		VelocityCurve = 11
-			kbVectorAnimEvent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				EventName = ""
-				EventTime =  0.000000
-				EventValue = 1.000000 1.000000 1.000000
-			}
-			kbVectorAnimEvent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				EventName = ""
-				EventTime =  0.250000
-				EventValue = 0.900000 0.900000 0.900000
-			}
-			kbVectorAnimEvent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				EventName = "0.2"
-				EventTime =  0.500000
-				EventValue = 0.970000 0.970000 0.970000
-			}
-			kbVectorAnimEvent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				EventName = ""
-				EventTime =  0.750000
-				EventValue = 1.000000 1.000000 1.000000
-			}
-			kbVectorAnimEvent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				EventName = ""
-				EventTime =  1.000000
-				EventValue = 0.920000 0.920000 0.920000
-			}
-			kbVectorAnimEvent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				EventName = ""
-				EventTime =  1.250000
-				EventValue = 0.950000 0.950000 0.950000
-			}
-			kbVectorAnimEvent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				EventName = ""
-				EventTime =  1.500000
-				EventValue = 0.930000 0.930000 0.930000
-			}
-			kbVectorAnimEvent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				EventName = ""
-				EventTime =  1.750000
-				EventValue = 0.980000 0.980000 0.980000
-			}
-			kbVectorAnimEvent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				EventName = ""
-				EventTime =  2.000000
-				EventValue = 0.910000 0.910000 0.910000
-			}
-			kbVectorAnimEvent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				EventName = ""
-				EventTime =  2.250000
-				EventValue = 0.900000 0.900000 0.900000
-			}
-			kbVectorAnimEvent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				EventName = ""
-				EventTime =  2.500000
-				EventValue = 0.950000 0.950000 0.950000
-			}
-	}
-}
-kbGameEntity 0 0 0 0 {
+kbGameEntity 1757293630 1128620869 973798304 547742351 {
 	kbTransformComponent { 
 		Enabled = 1
 		LifeTime =  -1.000000
 		Name = "Directional Fill 1"
-		Orientation = -0.323967 -0.366833 -0.211270 0.846075
+		Orientation = 0.216285 0.115728 0.324363 -0.913573
 		Position = -28.152912 18.301796 14.820478
 		Scale = 1.000000 1.000000 1.000000
 	}
@@ -2205,7 +1437,7 @@ kbGameEntity 0 0 0 0 {
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadows = 0
-		Color = 0.125000 0.125000 0.125000 1.000000
+		Color = 0.250000 0.250000 0.250000 0.000000
 		Materials = 1
 			kbMaterialComponent { 
 				Enabled = 0
@@ -2271,5 +1503,127 @@ kbGameEntity 0 0 0 0 {
 					}
 			}
 		CascadedShadowSplits = 0
+	}
+}
+kbGameEntity 1319195693 1184002260 3911485887 1743284140 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Room"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = -22.239201 20.220171 -5.270156
+		Scale = 25.000000 25.000000 25.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		Materials = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\environment\environmentbase.kbshader
+				ShaderParams = 4
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "diffuse"
+						Texture = .\assets\visualtarget\elp_ad\room\room_color.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "normal"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "propertyMap"
+						Texture = ..\..\kbengine\assets\textures\black.bmp
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "emissiveMap"
+						Texture = ..\..\kbengine\assets\textures\black.bmp
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		RenderOrderBias =  0.000000
+		RenderPass = LightingPass
+		Model = .\assets\visualtarget\elp_ad\room\room.ms3d
+	}
+}
+kbGameEntity 1912732400 1276217398 1617896089 1509958434 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Entity_55"
+		Orientation = 0.000000 -0.707108 0.000000 0.707106
+		Position = -23.001408 16.527582 39.355328
+		Scale = 20.000000 10.000000 15.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		Materials = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\fx\decal_blend.kbshader
+				ShaderParams = 6
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "edgeFadeColor"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "edgeFadeParams"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "distortionParams"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "cameraPosition"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorFactor"
+						Texture = NULL
+						Vector = 0.200000 0.200000 0.500000 2.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "ProjectionTex"
+						Texture = .\assets\tv\tv_glow.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		RenderOrderBias =  0.000000
+		RenderPass = LightingPass
+		Model = ..\..\kbengine\assets\models\unitcube.ms3d
 	}
 }

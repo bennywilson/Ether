@@ -308,13 +308,13 @@ kbGameEntity 2441638175 1233138649 139161755 1550720735 {
 				FakeAOClipPlaneFadeOutDist =  10.000000
 				FakeAODarkness =  0.000000
 				FakeAOPower =  2.000000
-				GrassCellsPerTerrainSide = 16
+				BatchesPerTerrainSide = 16
 				GrassShader = .\assets\shaders\terrain\basicgrass.kbshader
 				MaxBladeJitterOffset =  10.000000
 				MaxPatchJitterOffset =  10.000000
 				PatchEndCullDistance =  2000.000000
 				PatchStartCullDistance =  500.000000
-				PatchesPerCellSide = 45
+				BladesPerPatchSide = 45
 				ShaderParams = 13
 					kbShaderParamComponent { 
 						Enabled = 0
@@ -921,7 +921,7 @@ kbGameEntity 814405738 1136800807 3211751063 227262500 {
 						Enabled = 0
 						LifeTime =  -1.000000
 						ParamName = "diffuse"
-						Texture = .\assets\test\protest\protestsign.tif
+						Texture = .\assets\test\protest\protestsign.jpg
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 					kbShaderParamComponent { 

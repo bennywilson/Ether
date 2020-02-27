@@ -295,9 +295,10 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 	kbEditor * applicationEditor = nullptr;
 
 	if ( g_UseEditor ) {
-		pGame = new CannonGame();
 
 		applicationEditor = new kbEditor();
+
+		pGame = new CannonGame();
 		applicationEditor->SetGame( pGame );
 		if ( mapName.length() > 0 ) {
 			applicationEditor->LoadMap( mapName );
