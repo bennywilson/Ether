@@ -44,9 +44,7 @@ void InitializeKBEngine( char *const logName ) {
 
 	if ( g_LogFile == nullptr ) {
 		fopen_s( &g_LogFile, "logs/logfile2.txt", "w" );
-		if ( g_LogFile == nullptr ) {
-			exit( 0 );
-		}
+		kbErrorCheck( g_LogFile != nullptr, "InitializeKBEngine() - Cannot create log file" );
 	}
 
 	kbLog( "Initializing kbCore" );
