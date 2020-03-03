@@ -1,0 +1,210 @@
+//===================================================================================================
+// directionalLightToon.kbShader
+//
+// Note that the directional light shader is responsible for copying the glow mask from the color
+// buffer to the accumulation buffer
+//
+// 2018-2019 kbEngine 2.0
+//===================================================================================================
+cbuffer matrixBuffer {
+	matrix				mvpMatrix;
+	matrix				inverseViewProjection;
+	matrix				lightMatrix[4];
+	float4				splitDistances;
+	float4				lightDirection;
+	float4				lightPosition;
+	float4				lightColor;
+	float4				cameraPosition;
+	float4				diffuseColorBand;
+	float4				specularColorBand;
+	float4				rimParams;			// x: Lower dot, y: Upper dot, z: final multiplier
+	float4				rimColor;
+	float4				nonToonDiffuseScaleAndBias;
+	float4				shadowParams;		// x - depth bias
+	float4				noiseScaleBias1;
+	float4				noiseScaleBias2;
+};
+
+kbShaderState {
+	srcBlend Blend_One
+	dstBlend Blend_One
+	blendOp BlendOp_Add
+	srcBlendAlpha Blend_One			// For passing glow mask from scene color buffer to accumulation buffer
+	dstBlendAlpha Blend_Zero
+	blendOpAlpha BlendOp_Add
+}
+
+//-------------------------------------
+struct vertexInput {
+	float4 position      : POSITION;
+	float2 uv            : TEXCOORD0;
+};
+
+//-------------------------------------
+struct pixelInput {
+	float4 position      : SV_POSITION;
+	float4 position2     : TEXCOORD0;
+	float2 uv            : TEXCOORD1;
+};
+
+/**
+ *	vertexShader
+ */
+pixelInput vertexShader( vertexInput input ) {
+	pixelInput output = (pixelInput)(0);
+
+	output.position = input.position;
+	output.uv = mul( input.uv, (float2x2)mvpMatrix );
+	output.position2 = input.position;
+
+	return output;
+}
+
+/**
+ *	pixelShader
+ */
+SamplerState DiffuseSamplerState;
+Texture2D colorTexture(colorBuffer)				: register(t0);
+
+SamplerState NormalSamplerState;
+Texture2D normalTexture(normalBuffer)			: register(t1);
+
+Texture2D specularTexture(specularBuffer)		: register(t2);
+
+SamplerState DepthSamplerState;
+Texture2D depthTexture(depthBuffer)				: register(t3);
+
+SamplerState ShadowMapSamplerState;
+Texture2D ShadowMap(shadowBuffer)				: register(t4);
+
+Texture2D NoiseMap(noise);
+
+float4 pixelShader( pixelInput input ) : SV_TARGET {
+	float4 diffuseColor = colorTexture.Sample( DiffuseSamplerState, input.uv );
+	float4 normal = normalTexture.Sample( NormalSamplerState, input.uv );
+	float4 specColor = specularTexture.Sample( DiffuseSamplerState, input.uv );
+	
+	normal.xyz = normalize( normal.xyz );
+
+	float4 worldPos = float4( input.position2.xy, depthTexture.Sample( DepthSamplerState, input.uv ).r, 1 );
+	worldPos = mul( worldPos, inverseViewProjection );
+	worldPos /= worldPos.w;
+	
+	float3 toCameraVec = normalize( cameraPosition.xyz - worldPos.xyz );
+
+	// Shadow
+	float DistFromCamera = length( worldPos.xyz - cameraPosition.xyz );
+	
+	int index = 0;
+	float2 offset = float2( 0.0f, 0.0f );
+	
+	float noiseScale = noiseScaleBias2.z;
+	float noiseBias = noiseScaleBias2.w;
+
+	if ( DistFromCamera > splitDistances.z ) {
+	   index = 3.0f;
+	   offset.x += 0.5f;
+	   offset.y += 0.5f;
+		noiseScale = noiseScaleBias2.x;
+		noiseBias = noiseScaleBias2.y;
+	} else if ( DistFromCamera > splitDistances.y ) {
+	   index = 2.0f;
+	   offset.y += 0.5f;
+		noiseScale = noiseScaleBias1.z;
+		noiseBias = noiseScaleBias1.w;
+	} else if ( DistFromCamera > splitDistances.x ) {
+	   index = 1.0f;
+	   offset.x += 0.5f;
+		noiseScale = noiseScaleBias1.x;
+		noiseBias = noiseScaleBias1.y;
+	}  
+
+	float4 shadowTex = mul( worldPos, lightMatrix[index] );
+	shadowTex /= shadowTex.w;
+	shadowTex.xy *= 0.5f;
+	shadowTex.xy += offset;
+	float shadowFactor = 1.0f;
+
+	if ( DistFromCamera < splitDistances.w ) {
+
+		float3 noise = NoiseMap.Sample( DiffuseSamplerState, input.uv ).xyz;
+		noise.xy = noise.xy * noiseScale + noiseBias;// * 5.0f;//1.9f + 0.1f;
+
+		const float angle = noise.z * 3.14f;
+		const float theSin = sin(angle);
+		const float theCos = cos(angle);
+
+		float2 rot1 = float2( theCos, -theSin );
+		float2 rot2 = float2( theSin, theCos );
+		
+		float2 starttexSize = (1.0f / 4096.0f) * noise.xy;
+		float2 texSize = starttexSize;
+		texSize.x = dot(starttexSize, rot1);
+		texSize.y = dot(starttexSize, rot2);
+		float shadow1 = ShadowMap.Sample( ShadowMapSamplerState, shadowTex.xy + float2( -texSize.x, -texSize.y ) ).r;
+		float shadow2 = ShadowMap.Sample( ShadowMapSamplerState, shadowTex.xy + float2( texSize.x, -texSize.y ) ).r;
+		float shadow3 = ShadowMap.Sample( ShadowMapSamplerState, shadowTex.xy + float2( texSize.x, texSize.y ) ).r;
+		float shadow4 = ShadowMap.Sample( ShadowMapSamplerState, shadowTex.xy + float2( -texSize.x, texSize.y ) ).r;
+		float shadow5 = ShadowMap.Sample( ShadowMapSamplerState, shadowTex.xy ).r;
+
+		float pixelShadowDepth = shadowTex.z + shadowParams.x;
+
+//#define LOW_RES
+#ifdef LOW_RES
+		shadowFactor = sign( saturate( shadow1 - pixelShadowDepth ) ) +
+							sign( saturate( shadow2 - pixelShadowDepth ) ) +
+							sign( saturate( shadow3 - pixelShadowDepth ) ) +
+							sign( saturate( shadow4 - pixelShadowDepth ) ) +
+							sign( saturate( shadow5 - pixelShadowDepth ) );
+
+		shadowFactor = shadowFactor * 0.2F;
+#else
+		float shadow6 = ShadowMap.Sample( ShadowMapSamplerState, shadowTex.xy + float2( 0, -texSize.y ) ).r;
+		float shadow7 = ShadowMap.Sample( ShadowMapSamplerState, shadowTex.xy + float2( 0, texSize.y ) ).r;
+		float shadow8 = ShadowMap.Sample( ShadowMapSamplerState, shadowTex.xy + float2( texSize.x, 0 ) ).r;
+		float shadow9 = ShadowMap.Sample( ShadowMapSamplerState, shadowTex.xy + float2( -texSize.x, 0 ) ).r;
+
+		shadowFactor = sign( saturate( shadow1 - pixelShadowDepth ) ) +
+							sign( saturate( shadow2 - pixelShadowDepth ) ) +
+							sign( saturate( shadow3 - pixelShadowDepth ) ) +
+							sign( saturate( shadow4 - pixelShadowDepth ) ) +
+							sign( saturate( shadow5 - pixelShadowDepth ) ) +
+							sign( saturate( shadow6 - pixelShadowDepth ) ) +
+							sign( saturate( shadow7 - pixelShadowDepth ) ) +
+							sign( saturate( shadow8 - pixelShadowDepth ) ) +
+							sign( saturate( shadow9 - pixelShadowDepth ) );
+
+		shadowFactor = shadowFactor / 9;
+#endif
+
+	}
+
+	float diffuse = saturate( dot( normal.xyz, lightDirection.xyz ) ) * shadowFactor;
+//	diffuse = diffuse * 0.8f + 0.2f;	
+
+	float3 lightReflect = ( 2.0f * dot( normal.xyz, lightDirection.xyz ) * normal.xyz ) - lightDirection.xyz;
+	float spec = saturate( dot( lightReflect, toCameraVec ) ) * shadowFactor;
+	float3 rimLight = 0;
+
+	if ( normal.w <= 0.2f ) {
+		diffuse = smoothstep( diffuseColorBand.x, diffuseColorBand.y, diffuse ) * diffuseColorBand.z + diffuseColorBand.w;
+		const float oneMinusRimDot = 1.0f - dot( normal.xyz, toCameraVec );
+	 rimLight = 0;//rimColor.w * ( rimColor.xyz * smoothstep( rimParams.x, rimParams.y, oneMinusRimDot ) * lightColor.xyz );// * specColor.z;
+//if (  normal.w == 0 )
+	//		return float4( diffuseColor * lightColor );
+	//	spec = smoothstep( specularColorBand.x, specularColorBand.y, spec ) * specularColorBand.z + specularColorBand.w;
+	} else {
+//diffuse = ( diffuse * nonToonDiffuseScaleAndBias.x ) + nonToonDiffuseScaleAndBias.y;
+	}
+		
+	spec =0;// pow( abs( spec ), max( specColor.y, 1.0f ) ) * specColor.x * dot( lightColor.xyz, float3( 0.3f, 0.59f, 0.11f ) );
+	const float3 emissive = diffuseColor.xyz * diffuseColor.w;
+//	diffuseColor.w = max( max( emissive.x, emissive.y ), emissive.z );
+//	diffuseColor.w = diffuseColor.w - 1.0f;
+//	if ( diffuseColor.w > 0 ) diffuseColor.w += 1.0f;
+
+	float3 finalColor = diffuseColor.xyz * diffuse * lightColor.xyz;//+ spec.xxx + emissive * 0.2f;	// todo
+	//finalColor += rimLight.xyz * rimParams.z * shadowFactor;
+
+	return float4( finalColor, diffuseColor.w );
+}
