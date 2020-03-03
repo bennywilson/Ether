@@ -1,0 +1,51 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="stdafx.cpp" />
+    <ClCompile Include="Source\Win\Oxi.cpp">
+      <Filter>Source\Win</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Game\OxiGame.cpp">
+      <Filter>Source\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Game\OxiTypeInfoGeneratedClasses.cpp">
+      <Filter>Source\Game</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Resource.h" />
+    <ClInclude Include="stdafx.h" />
+    <ClInclude Include="targetver.h" />
+    <ClInclude Include="Source\Win\Oxi.h">
+      <Filter>Source\Win</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Game\OxiGame.h">
+      <Filter>Source\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Game\OxiTypeInfoGeneratedClasses.h">
+      <Filter>Source\Game</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="assets\shaders\UI\animatedChannelUI.kbShader" />
+    <None Include="small.ico" />
+    <None Include="Oxi.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Shaders">
+      <UniqueIdentifier>{223bf909-25ab-4709-b752-0f6f635b4d32}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source">
+      <UniqueIdentifier>{1979855b-c373-47f1-83d3-3f688abb9efa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Game">
+      <UniqueIdentifier>{d3b9086c-b7de-4edf-b66e-231f7e1bdc3e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Win">
+      <UniqueIdentifier>{6d1347ed-ee52-4032-8b8b-eb11065784c4}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Oxi.rc" />
+  </ItemGroup>
+</Project>

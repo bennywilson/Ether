@@ -1,15 +1,19 @@
-// kbViewer.cpp : Defines the entry point for the application.
+//===================================================================================================
+// Oxi.cpp
 //
+//
+// 2020 kbEngine 2.0
+//===================================================================================================
 
 #include "stdafx.h"
 #include <ShellAPI.h>
-#include "Trap.h"
+#include "Oxi.h"
 #include "kbCore.h"
 #include "kbApp.h"
 #include "kbJobManager.h"
 #include "DX11/kbRenderer_DX11.h"
 #include "kbEditor.h"
-#include "Trap/TrapGame.h"
+#include "OxiGame.h"
 #include "kbMath.h"
 #include "kbGameEntityHeader.h"
 
@@ -102,7 +106,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 		wc.cbWndExtra    = 0;
 		RegisterClass(&wc);
 
-		DWORD wsStyle = WS_POPUP | WS_OVERLAPPEDWINDOW;
+		DWORD wsStyle = WS_POPUP | WS_OVERLAPPEDWINDOW | WS_MAXIMIZE;
 
 		if ( MonitorIdx > 0 ) {
 			EnumDisplayMonitors( nullptr, nullptr, EnumDisplayMonitorsCB, 0 );
@@ -233,10 +237,7 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 
 	std::string mapName;
 
-	bool bRenderVR = false;
-	bool bUseVRTrackingOnly = false;
-
-	if ( GetAsyncKeyState( VK_MBUTTON ) ) {
+	if ( GetKeyState( VK_CAPITAL ) ) {
 		g_UseEditor = true;
 	}
 
@@ -274,10 +275,6 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 
 			} else if ( cmdArg1 == "monitor2" ) {
 				MonitorIdx = 1;
-			} else if ( cmdArg1 == "usevr" ) {
-				bRenderVR = true;
-			} else if ( cmdArg1 == "usevrtrackingonly" ) {
-				bUseVRTrackingOnly = true;
 			} else {
 				mapName = cmdArg1;
 			}
@@ -294,24 +291,24 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 
 	InitializeKBEngine();
 
-	TrapGame * pGame = nullptr;
+	OxiGame * pGame = nullptr;
 	kbEditor * applicationEditor = nullptr;
 
 	if ( g_UseEditor ) {
-		pGame = new TrapGame();
 
 		applicationEditor = new kbEditor();
+
+		pGame = new OxiGame();
 		applicationEditor->SetGame( pGame );
-		if ( mapName.length() > 0 )
-		{
+		if ( mapName.length() > 0 ) {
 			applicationEditor->LoadMap( mapName );
 		}
-		g_pRenderer->SetRenderWindow(nullptr);
+		g_pRenderer->SetRenderWindow( nullptr );
 	} else {
 		g_pRenderer = new kbRenderer_DX11();
-		g_pRenderer->Init( hWnd, backBufferWidth, backBufferHeight, bRenderVR, bUseVRTrackingOnly );
+		g_pRenderer->Init( hWnd, backBufferWidth, backBufferHeight );
 
-		pGame = new TrapGame();//( g_pRenderer->IsRenderingToHMD() ) ? ( new EtherVRGame() ) : ( new TrapGame() );
+		pGame = new OxiGame();//( g_pRenderer->IsRenderingToHMD() ) ? ( new EtherVRGame() ) : ( new OxiGame() );
 		std::vector< const kbGameEntity * > GameEntitiesList;
 		pGame->InitGame( hWnd, backBufferWidth, backBufferHeight, GameEntitiesList );
 		pGame->LoadMap( mapName );
