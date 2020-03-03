@@ -30,6 +30,15 @@
     <None Include="assets\shaders\UI\animatedChannelUI.kbShader" />
     <None Include="small.ico" />
     <None Include="Oxi.ico" />
+    <None Include="assets\Shaders\Character\Character_NoSkin.kbShader">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="assets\Shaders\Character\characterOutline_NoSkin.kbShader">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="assets\Shaders\Lights\directionalLightToon.kbShader">
+      <Filter>Shaders</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Shaders">

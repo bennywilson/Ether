@@ -89,6 +89,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <None Include="assets\Shaders\Character\characterOutline_NoSkin.kbShader" />
+    <None Include="assets\Shaders\Character\Character_NoSkin.kbShader" />
+    <None Include="assets\Shaders\Lights\directionalLightToon.kbShader" />
     <None Include="assets\shaders\UI\animatedChannelUI.kbShader" />
     <None Include="Oxi.ico" />
     <None Include="small.ico" />
