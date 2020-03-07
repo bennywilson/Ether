@@ -1,16 +1,19 @@
 //==============================================================================
-// characterBase.kbShader
+// Character_Static.kbShader
 //
-// 2018 kbEngine 2.0
+// 2020 kbEngine 2.0
 //==============================================================================
 cbuffer matrixBuffer {
-   matrix      modelMatrix;
-   matrix      mvpMatrix;
-   float4x4    boneList[128];
+	matrix		modelMatrix;
+	matrix		mvpMatrix;
+
+	// Hatching
+	float4		hatchParams = (0,0,0,0);
+	float4		sunDir;
 };
 
 kbShaderState {
-	cullMode CullMode_None
+	cullMode CullMode_BackFaces
 }
 
 //-------------------------------------
@@ -18,8 +21,7 @@ struct vertexInput {
 	float4 position			: POSITION;
 	float2 uv				: TEXCOORD0;
 	float4 normal			: NORMAL;
-	float4 blendIndices		: BLENDINDICES;
-	float4 boneWeights		: BLENDWEIGHT;
+	float4 tangent			: TANGENT;
 };
 
 //-------------------------------------
@@ -28,6 +30,7 @@ struct pixelInput {
 	float2      uv			: TEXCOORD0;
 	float2      position2	: TEXCOORD1;
 	float3      normal		: TEXCOORD2;
+	float3		tangent		: TEXCOORD3;
 };
 
 struct pixelInput2 {
@@ -35,6 +38,7 @@ struct pixelInput2 {
 	float2      uv			: TEXCOORD0;
 	float2      position2	: TEXCOORD1;
 	float3      normal		: TEXCOORD2;
+	float3		tangent		: TEXCOORD3;
 	bool		IsFrontFace	: SV_IsFrontFace;
 };
 //-------------------------------------
@@ -52,20 +56,21 @@ struct PS_OUTPUT {
 pixelInput vertexShader( vertexInput input ) {
 	pixelInput output = (pixelInput)(0);
 
-   float4 Pos = 0.0f;
+	float4 Pos = 0.0f;
 
-   int4 IndexVector = D3DCOLORtoUBYTE4(input.blendIndices);
-   float BlendWeightsArray[4] = (float[4])input.boneWeights;
-   int   IndexArray[4]        = (int[4])IndexVector;
 
-   Pos = mul( input.position, boneList[IndexArray[0]] );
-
-	output.position = mul( Pos, mvpMatrix );
+	output.position = mul( input.position, mvpMatrix );
 	output.uv = input.uv;
-	//output.color = 0;//input.color;
 	output.position2 = output.position.zw;
-	output.normal.xyz = mul( ( input.normal.xyz * 2.0f ) - 1.0f, (float3x3)boneList[IndexArray[0]] );
-	output.normal.xyz = mul( output.normal.xyz, (float3x3)modelMatrix );
+
+	const float3 tangent = ( input.tangent.xyz * 2.0f ) - 1.0f;
+	const float3 normal = ( input.normal.xyz * 2.0f ) - 1.0f;
+		
+	output.tangent.xyz = normalize( mul( cross( tangent, normal ), (float3x3)modelMatrix ) );
+	output.normal.xyz = normalize( mul( normal, (float3x3)modelMatrix ) );
+
+//	output.localPos = input.position.xyz;
+	//output.localNormal = (input.normal.xyz * 2.0f ) - 1.0f;
 
 	return output;
 }
@@ -73,22 +78,32 @@ pixelInput vertexShader( vertexInput input ) {
 /**
  *	pixelShader
  */
-Texture2D colorTexture;
+Texture2D colorTexture			: register(t0);
 SamplerState SampleType;
+
+Texture2D anisoNoiseTexture			: register(t1);
+
+float3 ShiftTangent( float3 T, float3 N, float shift ) {
+	float3 shiftedT = T + shift * N;
+	return normalize( shiftedT );	 
+}
 
  PS_OUTPUT pixelShader( pixelInput2	input ) {
 	PS_OUTPUT output = (PS_OUTPUT) 0;
 
-	const float4 colorTex = colorTexture.Sample( SampleType, input.uv );
-	output.Color.xyz = colorTex.xyz;
+	float noise = anisoNoiseTexture.Sample( SampleType, input.uv * float2( 5,2) ).r * 0.5f + 0.5f;
+	const float4 colorTex =0;// noise;//noiseTexture.Sample( SampleType, input.uv );
+
+	output.Color.xyz = colorTex.xyz;//25f;//input.normal;//colorTex.xyz;
 	output.Color.w = 0;//colorTex.w * 0.55;
-	output.Specular = float4( 0.2f, 19.0f, 0.0f, 0.0f );
+	output.Specular = float4( 0.2f, 150.0f, 0.0f, 0.0f );
 	output.Depth.r = input.position2.x / input.position2.y;
 
-	output.Normal.xyz = normalize( input.normal );
+	output.Normal.xyz = ShiftTangent( normalize( input.tangent.xyz ), normalize( input.normal.xyz ), noise );
+	output.Normal.w = 1.0f;
+
 	if ( input.IsFrontFace == false ) {
 	   output.Normal *= -1.0f;
 	}
-
 	return output;
 }
