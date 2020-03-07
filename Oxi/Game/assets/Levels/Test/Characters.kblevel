@@ -1,8 +1,8 @@
-kbGameEntity 4013465197 1262548083 2505123492 677471962 {
+kbGameEntity 2615938619 1103021430 2644040893 1311065470 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		Name = "Entity_15"
+		Name = "Entity_6"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
 		Position = 0.000000 0.000000 0.000000
 		Scale = 1.000000 1.000000 1.000000
@@ -10,8 +10,8 @@ kbGameEntity 4013465197 1262548083 2505123492 677471962 {
 	kbEditorLevelSettingsComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		MainCameraPosition = -16.764875 16.875572 26.651167
-		MainCameraRotation = 0.057686 0.704145 -0.057579 -0.705363
+		MainCameraPosition = -13.588674 16.753277 24.073351
+		MainCameraRotation = 0.091630 0.564840 -0.063292 -0.817652
 	}
 }
 kbGameEntity 2760744939 1124379877 2772631961 2644415108 {
@@ -19,8 +19,8 @@ kbGameEntity 2760744939 1124379877 2772631961 2644415108 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "Camera"
-		Orientation = 0.008515 0.678581 -0.007867 -0.734434
-		Position = -13.951099 16.910442 26.720259
+		Orientation = 0.102867 0.649159 -0.089224 -0.748365
+		Position = -23.296740 17.313295 27.128754
 		Scale = 1.000000 1.000000 1.000000
 	}
 	OxiCameraComponent { 
@@ -225,7 +225,7 @@ kbGameEntity 3450759493 1185158522 615061661 1045896309 {
 				Enabled = 0
 				LifeTime =  -1.000000
 				CullModeOverride = ShaderDefault
-				Shader = .\assets\shaders\character\character_static.kbshader
+				Shader = .\assets\shaders\character\character_clothing_static.kbshader
 				ShaderParams = 5
 					kbShaderParamComponent { 
 						Enabled = 0
@@ -294,7 +294,7 @@ kbGameEntity 3450759493 1185158522 615061661 1045896309 {
 						Enabled = 0
 						LifeTime =  -1.000000
 						ParamName = "anisoNoiseTexture"
-						Texture = NULL
+						Texture = .\assets\characters\hair\hair_aniso_noise.jpg
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 			}
