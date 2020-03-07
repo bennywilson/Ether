@@ -16,7 +16,7 @@ cbuffer matrixBuffer {
 	float4				lightColor;
 	float4				cameraPosition;
 	float4				diffuseColorBand;
-	float4				specularColorBand;
+	float4				hairSpecularColorBand;
 	float4				rimParams;			// x: Lower dot, y: Upper dot, z: final multiplier
 	float4				rimColor;
 	float4				nonToonDiffuseScaleAndBias;
@@ -181,30 +181,38 @@ float4 pixelShader( pixelInput input ) : SV_TARGET {
 
 	float diffuse = saturate( dot( normal.xyz, lightDirection.xyz ) ) * shadowFactor;
 //	diffuse = diffuse * 0.8f + 0.2f;	
-
-	float3 lightReflect = ( 2.0f * dot( normal.xyz, lightDirection.xyz ) * normal.xyz ) - lightDirection.xyz;
-	float spec = saturate( dot( lightReflect, toCameraVec ) ) * shadowFactor;
-	float3 rimLight = 0;
-
-	if ( normal.w <= 0.2f ) {
+	float rimLight = 0;
+	float3 specLightDirection = lightDirection.xyz;
+	float minSpecBand = 0.0f;
+	float maxSpecBand = 1.0f;
+	if ( normal.w == 0.0f ) {
 		diffuse = smoothstep( diffuseColorBand.x, diffuseColorBand.y, diffuse ) * diffuseColorBand.z + diffuseColorBand.w;
-		const float oneMinusRimDot = 1.0f - dot( normal.xyz, toCameraVec );
-	 rimLight = 0;//rimColor.w * ( rimColor.xyz * smoothstep( rimParams.x, rimParams.y, oneMinusRimDot ) * lightColor.xyz );// * specColor.z;
-//if (  normal.w == 0 )
-	//		return float4( diffuseColor * lightColor );
-	//	spec = smoothstep( specularColorBand.x, specularColorBand.y, spec ) * specularColorBand.z + specularColorBand.w;
-	} else {
-//diffuse = ( diffuse * nonToonDiffuseScaleAndBias.x ) + nonToonDiffuseScaleAndBias.y;
-	}
 		
-	spec =0;// pow( abs( spec ), max( specColor.y, 1.0f ) ) * specColor.x * dot( lightColor.xyz, float3( 0.3f, 0.59f, 0.11f ) );
+	} else if ( normal.w <= 1.0f ) {
+		specLightDirection = normalize( -toCameraVec + float3( 0.0f, 1.0f, 0.0f ) );
+		minSpecBand = hairSpecularColorBand.x;
+		maxSpecBand = hairSpecularColorBand.y;
+		float rimDot = saturate( abs(dot( normal.xyz, toCameraVec + float3( 0, 0.0, 0 ))) );
+		//oneMinusRimDot = pow()
+		//oneMinusRimDot *= 0.98f;
+		//rimLight = pow(1.0f - rimDot, 5);//(1.f - rimDot) * 0.5f;//smoothstep( 0.95f, 1.0f, rimDot );
+
+	} else {
+
+	}
+
+	float3 lightReflect = ( 2.0f * dot( normal.xyz, specLightDirection.xyz ) * normal.xyz ) - specLightDirection.xyz;
+	float spec = smoothstep( minSpecBand, maxSpecBand, saturate( dot( lightReflect, toCameraVec ) ) * shadowFactor );
+
+		
+	spec = pow( abs( spec ), max( specColor.y, 1.0f ) ) * specColor.x * dot( lightColor.xyz, float3( 0.3f, 0.59f, 0.11f ) );
 	const float3 emissive = diffuseColor.xyz * diffuseColor.w;
 //	diffuseColor.w = max( max( emissive.x, emissive.y ), emissive.z );
 //	diffuseColor.w = diffuseColor.w - 1.0f;
 //	if ( diffuseColor.w > 0 ) diffuseColor.w += 1.0f;
 
-	float3 finalColor = diffuseColor.xyz * diffuse * lightColor.xyz;//+ spec.xxx + emissive * 0.2f;	// todo
-	//finalColor += rimLight.xyz * rimParams.z * shadowFactor;
+	float3 finalColor = diffuseColor.xyz * diffuse * lightColor.xyz + spec.xxx + emissive * 0.2f;	// todo
+	finalColor += rimLight;/// * 0.001f;// * rimParams.z * shadowFactor;
 
 	return float4( finalColor, diffuseColor.w );
 }

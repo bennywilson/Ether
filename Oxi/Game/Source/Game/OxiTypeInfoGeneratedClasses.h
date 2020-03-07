@@ -1,5 +1,11 @@
 // AUTO GENERATED TYPE INFO //////////////////////////////////////////
 
+GenerateEnum( 
+	ECameraMoveMode, "ECameraMoveMode",
+	AddEnumField( MoveMode_None, "None" )
+	AddEnumField( MoveMode_Follow, "Follow" )
+)
+
 GenerateClass(
 	OxiCameraComponent,
 	AddField( "NearPlane", KBTYPEINFO_FLOAT, OxiCameraComponent, m_NearPlane, false, "" )

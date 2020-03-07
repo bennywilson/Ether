@@ -16,6 +16,8 @@ DEFINE_KBCLASS(OxiCameraComponent)
 
 DEFINE_KBCLASS(OxiCameraShakeComponent)
 
+ECameraMoveMode_Enum ECameraMoveMode_EnumClass;
+
 /*ELevelType_Enum ELevelType_EnumClass;
 
 ECameraMoveMode_Enum ECameraMoveMode_EnumClass;

@@ -39,6 +39,12 @@
     <None Include="assets\Shaders\Lights\directionalLightToon.kbShader">
       <Filter>Shaders</Filter>
     </None>
+    <None Include="assets\Shaders\Character\Character_Hair_Static.kbShader">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="assets\Shaders\Character\Character_Static.kbShader">
+      <Filter>Shaders</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Shaders">

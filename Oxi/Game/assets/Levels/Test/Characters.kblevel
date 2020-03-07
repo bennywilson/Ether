@@ -1,8 +1,8 @@
-kbGameEntity 1428128454 1087947573 3253906589 4133621182 {
+kbGameEntity 4013465197 1262548083 2505123492 677471962 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		Name = "Entity_13"
+		Name = "Entity_15"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
 		Position = 0.000000 0.000000 0.000000
 		Scale = 1.000000 1.000000 1.000000
@@ -10,8 +10,29 @@ kbGameEntity 1428128454 1087947573 3253906589 4133621182 {
 	kbEditorLevelSettingsComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		MainCameraPosition = -0.653894 16.831861 24.280552
-		MainCameraRotation = -0.120823 0.511505 -0.072914 0.847614
+		MainCameraPosition = -16.764875 16.875572 26.651167
+		MainCameraRotation = 0.057686 0.704145 -0.057579 -0.705363
+	}
+}
+kbGameEntity 2760744939 1124379877 2772631961 2644415108 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Camera"
+		Orientation = 0.008515 0.678581 -0.007867 -0.734434
+		Position = -13.951099 16.910442 26.720259
+		Scale = 1.000000 1.000000 1.000000
+	}
+	OxiCameraComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		DummyTemp = 0
+		Health =  10.000000
+		FarPlane =  7000.000000
+		LookAtOffset = 0.000000 2.500000 0.000000
+		MovementMode = Follow
+		NearPlane =  0.250000
+		PositionOffset = -10.933998 3.224068 0.000000
 	}
 }
 kbGameEntity 2624310662 1341093251 1912680632 2549499289 {
@@ -19,8 +40,8 @@ kbGameEntity 2624310662 1341093251 1912680632 2549499289 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "Sun"
-		Orientation = -0.437711 0.504055 -0.076348 0.740613
-		Position = -0.098972 -0.524487 17.921635
+		Orientation = -0.229767 -0.507633 0.380298 0.738166
+		Position = -0.098972 -2.124487 17.921635
 		Scale = 1.000000 1.000000 1.000000
 	}
 	kbDirectionalLightComponent { 
@@ -47,14 +68,14 @@ kbGameEntity 2624310662 1341093251 1912680632 2549499289 {
 						LifeTime =  -1.000000
 						ParamName = "diffuseColorBand"
 						Texture = NULL
-						Vector = 0.000000 0.100000 0.500000 0.500000
+						Vector = 0.000000 0.300000 0.500000 0.500000
 					}
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
-						ParamName = "specularColorBand"
+						ParamName = "hairSpecularColorBand"
 						Texture = NULL
-						Vector = 0.000000 0.000000 0.000000 0.000000
+						Vector = 0.800000 1.000000 0.000000 0.000000
 					}
 					kbShaderParamComponent { 
 						Enabled = 0
@@ -115,13 +136,139 @@ kbGameEntity 3450759493 1185158522 615061661 1045896309 {
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadow = 0
-		Materials = 4
+		Materials = 8
 			kbMaterialComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
 				CullModeOverride = ShaderDefault
-				Shader = .\assets\shaders\character\character_noskin.kbshader
+				Shader = .\assets\shaders\character\character_static.kbshader
 				ShaderParams = 5
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "hatchParams"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "sunDir"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorTexture"
+						Texture = .\assets\characters\icepick\base\icepick_pants.png
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "hatchTexture1"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "hatchTexture2"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\character\character_static.kbshader
+				ShaderParams = 5
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "hatchParams"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "sunDir"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorTexture"
+						Texture = .\assets\characters\icepick\base\icepick_jacket.png
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "hatchTexture1"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "hatchTexture2"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\character\character_static.kbshader
+				ShaderParams = 5
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "hatchParams"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "sunDir"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorTexture"
+						Texture = .\assets\characters\icepick\base\icepick_jacket.png
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "hatchTexture1"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "hatchTexture2"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\character\character_hair_static.kbshader
+				ShaderParams = 4
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
@@ -146,14 +293,7 @@ kbGameEntity 3450759493 1185158522 615061661 1045896309 {
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
-						ParamName = "hatchTexture1"
-						Texture = NULL
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "hatchTexture2"
+						ParamName = "anisoNoiseTexture"
 						Texture = NULL
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
@@ -162,7 +302,7 @@ kbGameEntity 3450759493 1185158522 615061661 1045896309 {
 				Enabled = 0
 				LifeTime =  -1.000000
 				CullModeOverride = ShaderDefault
-				Shader = .\assets\shaders\character\character_noskin.kbshader
+				Shader = .\assets\shaders\character\character_static.kbshader
 				ShaderParams = 5
 					kbShaderParamComponent { 
 						Enabled = 0
@@ -204,7 +344,7 @@ kbGameEntity 3450759493 1185158522 615061661 1045896309 {
 				Enabled = 0
 				LifeTime =  -1.000000
 				CullModeOverride = ShaderDefault
-				Shader = .\assets\shaders\character\character_noskin.kbshader
+				Shader = .\assets\shaders\character\character_static.kbshader
 				ShaderParams = 5
 					kbShaderParamComponent { 
 						Enabled = 0
@@ -246,7 +386,7 @@ kbGameEntity 3450759493 1185158522 615061661 1045896309 {
 				Enabled = 0
 				LifeTime =  -1.000000
 				CullModeOverride = ShaderDefault
-				Shader = .\assets\shaders\character\character_noskin.kbshader
+				Shader = .\assets\shaders\character\character_static.kbshader
 				ShaderParams = 5
 					kbShaderParamComponent { 
 						Enabled = 0
@@ -284,15 +424,57 @@ kbGameEntity 3450759493 1185158522 615061661 1045896309 {
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 			}
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\character\character_static.kbshader
+				ShaderParams = 5
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "hatchParams"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "sunDir"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorTexture"
+						Texture = .\assets\characters\icepick\base\icepick_pants.png
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "hatchTexture1"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "hatchTexture2"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
 		RenderOrderBias =  0.000000
 		RenderPass = LightingPass
 		Model = .\assets\characters\icepick\base\icepick_base.fbx
 	}
 	kbStaticModelComponent { 
-		Enabled = 1
+		Enabled = 0
 		LifeTime =  -1.000000
 		CastsShadow = 0
-		Materials = 4
+		Materials = 6
 			kbMaterialComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
@@ -425,6 +607,20 @@ kbGameEntity 3450759493 1185158522 615061661 1045896309 {
 						Texture = NULL
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
+			}
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = NULL
+				ShaderParams = 0
+			}
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = NULL
+				ShaderParams = 0
 			}
 		RenderOrderBias =  0.000000
 		RenderPass = Post-LightingPass
