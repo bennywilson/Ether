@@ -30,17 +30,23 @@
     <None Include="assets\shaders\UI\animatedChannelUI.kbShader" />
     <None Include="small.ico" />
     <None Include="Oxi.ico" />
-    <None Include="assets\Shaders\Character\characterOutline_NoSkin.kbShader">
-      <Filter>Shaders</Filter>
+    <None Include="assets\Shaders\Character\Character_Clothing_Static.kbShader">
+      <Filter>Shaders\Character</Filter>
     </None>
-    <None Include="assets\Shaders\Lights\directionalLightToon.kbShader">
-      <Filter>Shaders</Filter>
+    <None Include="assets\Shaders\FX\hackclip.kbshader">
+      <Filter>Shaders\FX</Filter>
     </None>
     <None Include="assets\Shaders\Character\Character_Hair_Static.kbShader">
-      <Filter>Shaders</Filter>
+      <Filter>Shaders\Character</Filter>
     </None>
     <None Include="assets\Shaders\Character\Character_Static.kbShader">
-      <Filter>Shaders</Filter>
+      <Filter>Shaders\Character</Filter>
+    </None>
+    <None Include="assets\Shaders\Character\characterOutline_NoSkin.kbShader">
+      <Filter>Shaders\Character</Filter>
+    </None>
+    <None Include="assets\Shaders\Lights\directionalLightToon.kbShader">
+      <Filter>Shaders\Character</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -55,6 +61,15 @@
     </Filter>
     <Filter Include="Source\Win">
       <UniqueIdentifier>{6d1347ed-ee52-4032-8b8b-eb11065784c4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shaders\Character">
+      <UniqueIdentifier>{20d112d9-c8d5-48f7-becb-18f2a1ee38fd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shaders\FX">
+      <UniqueIdentifier>{1a780bd7-d363-4e2e-97af-df5b107884c0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shaders\Lights">
+      <UniqueIdentifier>{1e96f692-cf20-4ed2-bad9-c947bd1dfc57}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

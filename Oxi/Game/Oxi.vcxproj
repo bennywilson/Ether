@@ -90,8 +90,10 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <None Include="assets\Shaders\Character\characterOutline_NoSkin.kbShader" />
+    <None Include="assets\Shaders\Character\Character_Clothing_Static.kbShader" />
     <None Include="assets\Shaders\Character\Character_Hair_Static.kbShader" />
     <None Include="assets\Shaders\Character\Character_Static.kbShader" />
+    <None Include="assets\Shaders\FX\hackclip.kbshader" />
     <None Include="assets\Shaders\Lights\directionalLightToon.kbShader" />
     <None Include="assets\shaders\UI\animatedChannelUI.kbShader" />
     <None Include="Oxi.ico" />

@@ -9,8 +9,6 @@ cbuffer matrixBuffer {
 	float4x4	boneList[128];
 	float4		cameraPos;
 	float4		outlineParams;		// x: Thickness, y: Push back, z: Outline Color Factor, w: Mip-Level
-	float4		smearParams;
-	float4		clipMapMask;
 };
 
 kbShaderState {
@@ -70,8 +68,6 @@ pixelInput vertexShader( vertexInput input ) {
  */
 Texture2D colorTexture;
 SamplerState DefaultSampler;
-
-Texture2D clipMap(white);
 
  PS_OUTPUT pixelShader( pixelInput	input ) {
 	PS_OUTPUT output = (PS_OUTPUT) 0;
