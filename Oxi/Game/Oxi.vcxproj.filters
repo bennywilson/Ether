@@ -46,7 +46,7 @@
       <Filter>Shaders\Character</Filter>
     </None>
     <None Include="assets\Shaders\Lights\directionalLightToon.kbShader">
-      <Filter>Shaders\Character</Filter>
+      <Filter>Shaders\Lights</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

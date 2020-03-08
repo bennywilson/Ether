@@ -187,6 +187,10 @@ float4 pixelShader( pixelInput input ) : SV_TARGET {
 	float maxSpecBand = 1.0f;
 	if ( normal.w == 0.0f ) {
 		diffuse = smoothstep( diffuseColorBand.x, diffuseColorBand.y, diffuse ) * diffuseColorBand.z + diffuseColorBand.w;
+
+	//	specLightDirection = normalize( -toCameraVec + float3( 0.0f, 1.0f, 0.0f ) );
+		minSpecBand = 0.2f;
+		maxSpecBand = 1.0f;
 		
 	} else if ( normal.w <= 1.0f ) {
 		specLightDirection = normalize( -toCameraVec + float3( 0.0f, 1.0f, 0.0f ) );
