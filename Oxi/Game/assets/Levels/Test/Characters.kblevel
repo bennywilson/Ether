@@ -1,4 +1,4 @@
-kbGameEntity 1775194037 1237452724 51050139 1390094553 {
+kbGameEntity 1889233784 1229996430 4274761094 3246745238 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
@@ -10,8 +10,8 @@ kbGameEntity 1775194037 1237452724 51050139 1390094553 {
 	kbEditorLevelSettingsComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		MainCameraPosition = -14.689821 16.410492 28.000605
-		MainCameraRotation = 0.058443 0.694765 -0.056812 -0.714604
+		MainCameraPosition = -23.520227 17.063976 26.420679
+		MainCameraRotation = -0.025241 -0.723610 0.026489 0.689238
 	}
 }
 kbGameEntity 2760744939 1124379877 2772631961 2644415108 {
@@ -246,7 +246,7 @@ kbGameEntity 3450759493 1185158522 615061661 1045896309 {
 						LifeTime =  -1.000000
 						ParamName = "specParams"
 						Texture = NULL
-						Vector = 5.000000 0.000000 1.000000 1.000000
+						Vector = 35.000000 55.000000 1.000000 1.000000
 					}
 			}
 			kbMaterialComponent { 
@@ -472,7 +472,7 @@ kbGameEntity 3450759493 1185158522 615061661 1045896309 {
 						LifeTime =  -1.000000
 						ParamName = "outlineParams"
 						Texture = NULL
-						Vector = 0.075000 1.000000 0.500000 8.000000
+						Vector = 0.050000 1.000000 0.500000 8.000000
 					}
 					kbShaderParamComponent { 
 						Enabled = 0
@@ -493,7 +493,7 @@ kbGameEntity 3450759493 1185158522 615061661 1045896309 {
 						LifeTime =  -1.000000
 						ParamName = "outlineParams"
 						Texture = NULL
-						Vector = 0.075000 1.000000 0.000000 0.000000
+						Vector = 0.050000 1.000000 0.000000 0.000000
 					}
 					kbShaderParamComponent { 
 						Enabled = 0

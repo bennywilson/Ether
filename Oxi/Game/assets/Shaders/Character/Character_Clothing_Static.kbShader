@@ -94,8 +94,8 @@ Texture2D normalMap					: register(t2);
 
 	output.Depth.r = input.position2.x / input.position2.y;
 
-	output.Normal.xyz = normalMap.Sample( SampleType, input.uv.xy * 2 ).xyz * 2.0f - 1.0f;//normalize( input.normal );
-	output.Normal.z *= 20.0f;
+	output.Normal.xyz = normalMap.Sample( SampleType, input.uv.xy * 3 ).xyz * 2.0f - 1.0f;//normalize( input.normal );
+	output.Normal.z *= 30.0f;
 	output.Normal.xyz = normalize( output.Normal.xyz );
 
 	const float3 xAxis = input.tangent.xyz;
