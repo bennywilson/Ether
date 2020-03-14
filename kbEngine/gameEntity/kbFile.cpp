@@ -737,7 +737,7 @@ void kbFile::WriteProperty( const kbTypeInfoType_t propertyType, const std::stri
 			int & enumIntValue = * ( (int*) byteOffsetToVar );
 
 			if ( enumIntValue < 0 || enumIntValue >= enumList->size() ) {
-				kbWarning( "Enum value out of range!" );
+				kbWarning( "Enum value out of range! for %s", structName.c_str() );
 				enumIntValue = 0;
 			}
 
