@@ -4,6 +4,8 @@
 //
 // 2016-2019 kbEngine 2.0
 //===================================================================================================
+#include <sstream>
+#include <iomanip>
 #include "kbCore.h"
 #include "kbVector.h"
 #include "kbQuaternion.h"
@@ -414,6 +416,27 @@ void kbEditor::Update() {
 		g_pRenderer->WaitForRenderingToComplete();
 	}
 
+	static int NumFrames = 0;
+	static float StartTime = g_GlobalTimer.TimeElapsedSeconds();
+
+	NumFrames++;
+	static float FPS = 0;
+
+	if ( NumFrames > 100 ) {
+		const float curTime = g_GlobalTimer.TimeElapsedSeconds();
+		FPS = (float)NumFrames / ( curTime - StartTime );
+		NumFrames = 0;
+		StartTime = curTime;
+	}
+	
+	{//if ( g_ShowFPS.GetBool() ) {
+		std::string fpsString = "FPS: ";
+		std::stringstream stream;
+		stream << std::fixed << std::setprecision(2) << FPS;
+		fpsString += stream.str();
+		g_pRenderer->DrawDebugText( fpsString, 0.85f, 0, g_DebugTextSize, g_DebugTextSize, kbColor::green );
+	}
+
 	// Update editor entities and components
 	for ( int i = 0; i < m_GameEntities.size(); i++ ) {
 		m_GameEntities[i]->RenderSync();
@@ -451,6 +474,8 @@ void kbEditor::Update() {
 	g_pRenderer->RenderSync();
 
 	g_ResourceManager.RenderSync();
+
+	g_pGame->GetParticleManager().RenderSync();
 
 	g_pRenderer->SetReadyToRender();
 

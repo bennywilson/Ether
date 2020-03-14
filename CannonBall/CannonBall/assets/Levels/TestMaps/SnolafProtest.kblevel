@@ -921,7 +921,7 @@ kbGameEntity 0 0 0 0 {
 						Enabled = 0
 						LifeTime =  -1.000000
 						ParamName = "diffuse"
-						Texture = .\assets\test\protest\protestsign.tif
+						Texture = .\assets\test\protest\protestsign.jpg
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 					kbShaderParamComponent { 

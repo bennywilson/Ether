@@ -122,6 +122,19 @@ GenerateClass(
 )
 
 GenerateClass(
+	EtherTVComponent,
+	AddField( "SheepAndFoxClip", KBTYPEINFO_TEXTURE, EtherTVComponent, m_SheepAndFoxClip, true, "" )
+	AddField( "ELPAd", KBTYPEINFO_TEXTURE, EtherTVComponent, m_pELPAd, false, "" )
+	AddField( "MovieLength", KBTYPEINFO_FLOAT, EtherTVComponent, m_MovieLen, false, "" )
+	AddField( "DelayBeforeAd", KBTYPEINFO_FLOAT, EtherTVComponent, m_DelayBeforeAd, false, "" )
+	AddField( "AdLength", KBTYPEINFO_FLOAT, EtherTVComponent, m_AdLength, false, "" )
+	AddField( "GlitchDuration", KBTYPEINFO_FLOAT, EtherTVComponent, m_GlitchDuration, false, "" )
+	AddField( "Music", KBTYPEINFO_STRUCT, EtherTVComponent, m_Music, true, "kbSoundData" )
+	AddField( "VO", KBTYPEINFO_STRUCT, EtherTVComponent, m_VO, true, "kbSoundData" )
+)
+
+
+GenerateClass(
 	EtherProjectileComponent,
 	AddField( "DamageAmount", KBTYPEINFO_FLOAT, EtherProjectileComponent, m_Damage, false, "" )
 	AddField( "Velocity", KBTYPEINFO_FLOAT, EtherProjectileComponent, m_Velocity, false, "" )

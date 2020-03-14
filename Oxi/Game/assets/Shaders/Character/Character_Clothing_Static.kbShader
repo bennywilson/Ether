@@ -1,0 +1,112 @@
+//==============================================================================
+// Character_Clothing_Static.kbShader
+//
+// 2020 kbEngine 2.0
+//==============================================================================
+cbuffer matrixBuffer {
+	matrix		modelMatrix;
+	matrix		mvpMatrix;
+	float4		specParams = (1,100,0,0);
+};
+
+kbShaderState {
+	cullMode CullMode_None
+}
+
+//-------------------------------------
+struct vertexInput {
+	float4 position			: POSITION;
+	float2 uv				: TEXCOORD0;
+	float4 normal			: NORMAL;
+	float4 tangent			: TANGENT;
+};
+
+//-------------------------------------
+struct pixelInput {
+	float4      position	: SV_POSITION;
+	float2      uv			: TEXCOORD0;
+	float2      position2	: TEXCOORD1;
+	float3      normal		: TEXCOORD2;
+	float3		tangent		: TEXCOORD3;
+	float3		bitangent	: TEXCOORD4;
+};
+
+struct pixelInput2 {
+	float4      position	: SV_POSITION;
+	float2      uv			: TEXCOORD0;
+	float2      position2	: TEXCOORD1;
+	float3      normal		: TEXCOORD2;
+	float3		tangent		: TEXCOORD3;
+	float3		bitangent	: TEXCOORD4;
+	bool		IsFrontFace	: SV_IsFrontFace;
+};
+//-------------------------------------
+struct PS_OUTPUT {
+	float4      Color		: SV_TARGET0;
+	float4      Normal		: SV_TARGET1;
+	float4		Specular	: SV_TARGET2;
+	float2      Depth		: SV_TARGET3;
+};
+
+
+/**
+ *	vertexShader
+ */
+pixelInput vertexShader( vertexInput input ) {
+	pixelInput output = (pixelInput)(0);
+
+	float4 Pos = 0.0f;
+
+
+	output.position = mul( input.position, mvpMatrix );
+	output.uv = input.uv;
+	output.position2 = output.position.zw;
+	float3 normal = ( input.normal.xyz * 2.0f ) - 1.0f;
+	output.normal.xyz = normalize( mul( normal, (float3x3)modelMatrix ) );
+
+	const float3 tangent = ( input.tangent.xyz * 2.0f ) - 1.0f;
+	output.tangent.xyz = normalize( mul( tangent, (float3x3)modelMatrix ) );
+	output.bitangent.xyz = cross( output.normal, output.tangent );
+
+	return output;
+}
+
+/**
+ *	pixelShader
+ */
+Texture2D colorTexture				: register(t0);
+SamplerState SampleType;
+
+Texture2D specTexture(black)		: register(t1);
+
+Texture2D normalMap					: register(t2);
+
+ PS_OUTPUT pixelShader( pixelInput2	input ) {
+	PS_OUTPUT output = (PS_OUTPUT) 0;
+
+	const float4 colorTex = colorTexture.Sample( SampleType, input.uv );
+	output.Color.xyz = colorTex.xyz;
+	output.Color.w = 0;//colorTex.w * 0.55;
+
+	const float4 specTex = specTexture.Sample( SampleType, input.uv );
+	output.Specular = float4( specTex.x * specParams.x, max( 1.0f, specTex.y * specParams.y ), 0.0f, 0.0f );
+	//	output.Specular = float4( 555, 1,0,0);//specTex.x * specParams.x, max( 1.0f, specTex.y * specParams.y ), 0.0f, 0.0f );
+
+	output.Depth.r = input.position2.x / input.position2.y;
+
+	output.Normal.xyz = normalMap.Sample( SampleType, input.uv.xy * 5.0f ).xyz * 2.0f - 1.0f;//normalize( input.normal );
+	output.Normal.z *= 5.0f;
+	output.Normal.xyz = normalize( output.Normal.xyz );
+
+	const float3 xAxis = input.tangent.xyz;
+	const float3 yAxis = input.bitangent.xyz;
+	const float3 zAxis = input.normal.xyz;
+
+	output.Normal.xyz = mul( output.Normal.xyz, float3x3( xAxis, yAxis, zAxis ) );
+//	output.Normal.xyz = normalize( input.normal.xyz );
+	if ( input.IsFrontFace == false ) {
+	   output.Normal *= -1.0f;
+	}
+
+	return output;
+}

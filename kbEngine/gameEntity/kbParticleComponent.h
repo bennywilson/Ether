@@ -151,7 +151,6 @@ private:
 	kbParticleVertex *											m_pVertexBuffer;
 	ushort *													m_pIndexBuffer;
 
-	unsigned int												m_NumIndicesInCurrentBuffer;
 	byte														m_CurrentParticleBuffer;
 
 	friend class kbParticleManager;

@@ -13,6 +13,8 @@
 static const uint NumParticleBufferVerts = 10000;
 static const uint NumCustomAtlases = 16;
 static const uint ComponentPoolSize = 1000;
+static const uint NumScratchBuffers = 4;
+static const uint NumScratchBufferVerts = 50000;
 
 /**
  *	kbParticleManager::kbParticleManager
@@ -23,6 +25,36 @@ kbParticleManager::kbParticleManager() {
 	for ( int i = 0; i < ComponentPoolSize; i++ ) {
 		m_ComponentPool[i] = new kbGameComponent();
 	}
+
+	const uint indexBufferMax = 6 * ( NumScratchBufferVerts / 4 );
+	m_ScratchParticleBuffers.resize( NumScratchBuffers );
+	for ( int i = 0; i < NumScratchBuffers; i++ ) {
+
+		auto& scratchBuf = m_ScratchParticleBuffers[i];
+		scratchBuf.m_iCurModel = 0;
+
+		for ( int iModel = 0; iModel < NumCustomParticleBuffers; iModel++ ) {
+			auto pModel = &scratchBuf.m_RenderModel[iModel];
+			pModel->CreateDynamicModel( NumScratchBufferVerts, indexBufferMax, nullptr, nullptr, sizeof(kbParticleVertex) );
+
+			ushort* const pIndexBuf = (ushort*)pModel->MapIndexBuffer();
+			for ( uint iBuf = 0, iVB = 0; iBuf < indexBufferMax; iBuf += 6, iVB += 4 ) {
+				pIndexBuf[iBuf + 0] = iVB + 2;
+				pIndexBuf[iBuf + 1] = iVB + 1;
+				pIndexBuf[iBuf + 2] = iVB + 0;
+				pIndexBuf[iBuf + 3] = iVB + 3;
+				pIndexBuf[iBuf + 4] = iVB + 2;
+				pIndexBuf[iBuf + 5] = iVB + 0;
+			}
+
+			pModel->UnmapIndexBuffer();
+		}
+
+		scratchBuf.m_iCurModel = 0;
+		kbModel& nextModel = scratchBuf.m_RenderModel[scratchBuf.m_iCurModel];
+		scratchBuf.m_pVertexBuffer = (kbParticleVertex*)nextModel.MapVertexBuffer();
+		scratchBuf.m_iVert = 0;
+	}
 }
 
 /**
@@ -31,7 +63,7 @@ kbParticleManager::kbParticleManager() {
 kbParticleManager::~kbParticleManager() {
 
 	for ( int i = 0; i < m_CustomAtlases.size(); i++ ) {
-		CustomAtlasParticles_t & curAtlas = m_CustomAtlases[i];
+		CustomAtlasParticle_t & curAtlas = m_CustomAtlases[i];
 		for ( int iBuffer = 0; iBuffer < NumCustomParticleBuffers; iBuffer++ ) {
 			curAtlas.m_RenderModel[iBuffer].Release();
 			delete curAtlas.m_RenderObject.m_pComponent;
@@ -54,11 +86,11 @@ kbParticleManager::~kbParticleManager() {
 /**
  *	kbParticleManager::SetCustomAtlasTexture
  */
-void kbParticleManager::SetCustomAtlasTexture( const uint atlasIdx, const std::string & atlasFileName ) {
+void kbParticleManager::SetCustomAtlasTexture( const uint atlasIdx, const std::string& atlasFileName ) {
 	kbErrorCheck( atlasIdx < m_CustomAtlases.size(), "kbParticleManager::SetCustomAtlasTexture() - Atlas index %d is out of range", atlasIdx );
 	kbErrorCheck( g_pRenderer->IsRenderingSynced(), "kbParticleManager::SetCustomAtlasTexture() - Rendering not synced" );
 
-	CustomAtlasParticles_t & curAtlas = m_CustomAtlases[atlasIdx];
+	CustomAtlasParticle_t& curAtlas = m_CustomAtlases[atlasIdx];
 	curAtlas.m_pAtlasTexture = (kbTexture *)g_ResourceManager.GetResource( atlasFileName.c_str(), true, true );
 
 	kbWarningCheck( curAtlas.m_pAtlasTexture  != nullptr, "kbParticleManager::SetCustomAtlasTexture() - Unable to find shader %s", atlasFileName.c_str() );
@@ -69,11 +101,11 @@ void kbParticleManager::SetCustomAtlasTexture( const uint atlasIdx, const std::s
 /**
  *	kbParticleManager::SetCustomAtlasShader
  */
-void kbParticleManager::SetCustomAtlasShader( const uint atlasIdx, const std::string & shaderFileName ) {
+void kbParticleManager::SetCustomAtlasShader( const uint atlasIdx, const std::string& shaderFileName ) {
 	kbErrorCheck( atlasIdx < m_CustomAtlases.size(), "kbParticleManager::SetCustomAtlasShader() - Atlas index %d is out of range", atlasIdx );
 	kbErrorCheck( g_pRenderer->IsRenderingSynced(), "kbParticleManager::SetCustomAtlasShader() - Rendering not synced" );
 
-	CustomAtlasParticles_t & curAtlas = m_CustomAtlases[atlasIdx];
+	CustomAtlasParticle_t& curAtlas = m_CustomAtlases[atlasIdx];
 	curAtlas.m_pAtlasShader = (kbShader *)g_ResourceManager.GetResource( shaderFileName.c_str(), true, true );
 
 	kbWarningCheck( curAtlas.m_pAtlasShader != nullptr, "kbParticleManager::SetCustomAtlasShader() - Unable to find shader %s", shaderFileName.c_str() );
@@ -170,7 +202,7 @@ void kbParticleManager::ReturnParticleComponent( kbParticleComponent *const pPar
 /**
  *	kbParticleManager::UpdateAtlas
  */
-void kbParticleManager::UpdateAtlas( CustomAtlasParticles_t & atlasInfo ) {
+void kbParticleManager::UpdateAtlas( CustomAtlasParticle_t& atlasInfo ) {
 
 	kbErrorCheck( g_pRenderer->IsRenderingSynced(), "kbParticleManager::UpdateAtlas() - Rendering isn't sync'd" );
 
@@ -227,7 +259,7 @@ void kbParticleManager::RenderSync() {
 
 	// Map/unmap buffers and pass it to the renderer
 	for ( int iAtlas = 0; iAtlas < NumCustomAtlases; iAtlas++ ) {
-		CustomAtlasParticles_t & curAtlas = m_CustomAtlases[iAtlas];
+		CustomAtlasParticle_t & curAtlas = m_CustomAtlases[iAtlas];
 		kbRenderObject & curRenderObj = curAtlas.m_RenderObject;
 		if ( curRenderObj.m_pComponent == nullptr ) {
 			curRenderObj.m_pComponent = new kbTransformComponent();
@@ -256,6 +288,24 @@ void kbParticleManager::RenderSync() {
 		curAtlas.m_pIndexBuffer = (ushort *)nextModel.MapIndexBuffer();
 		curAtlas.m_NumIndices = 0;
 	}
+
+	// Map/unmap buffers and pass it to the renderer
+	for ( int iScratch = 0; iScratch < m_ScratchParticleBuffers.size(); iScratch++ ) {
+		auto& curBuffer = m_ScratchParticleBuffers[iScratch];
+
+		kbModel& finishedModel = (curBuffer.m_iCurModel >= 0 ) ? ( curBuffer.m_RenderModel[curBuffer.m_iCurModel] ) : ( curBuffer.m_RenderModel[0] );
+		if ( curBuffer.m_iCurModel >= 0 ) {
+			finishedModel.UnmapVertexBuffer( NumScratchBufferVerts );
+		} else {
+			curBuffer.m_iCurModel = 0;
+		}
+
+		curBuffer.m_iCurModel = ( curBuffer.m_iCurModel + 1 ) % NumCustomParticleBuffers;
+
+		kbModel& nextModel = curBuffer.m_RenderModel[curBuffer.m_iCurModel];
+		curBuffer.m_pVertexBuffer = (kbParticleVertex*)nextModel.MapVertexBuffer();
+		curBuffer.m_iVert = 0;
+	}
 }
 
 /**
@@ -264,7 +314,7 @@ void kbParticleManager::RenderSync() {
 void kbParticleManager::AddQuad( const uint atlasIdx, const CustomParticleAtlasInfo_t & CustomParticleInfo ) {
 	
 	kbErrorCheck( atlasIdx < m_CustomAtlases.size(), "kbParticleManager::AddQuad() - Invalid atlasIdx %d", atlasIdx );
-	CustomAtlasParticles_t & curAtlas = m_CustomAtlases[atlasIdx];
+	CustomAtlasParticle_t& curAtlas = m_CustomAtlases[atlasIdx];
 
 	if ( curAtlas.m_pVertexBuffer == nullptr || curAtlas.m_pIndexBuffer == nullptr ) {
 		return;
@@ -343,4 +393,26 @@ void kbParticleManager::ReturnComponentToPool( const kbGameComponent *const pGam
 	}
 
 	m_ComponentPool.push_back( pGameComponent );
+}
+
+/**
+ *	kbParticleManager::ReserveScratchBufferSpace	
+ */
+void kbParticleManager::ReserveScratchBufferSpace( kbParticleVertex*& outVertexBuffer, kbRenderObject& inOutRenderObj, const int numRequestedVerts ) {
+
+	kbErrorCheck( numRequestedVerts > 0, "kbParticleManager::ReserveScratchBufferSpace() - 0 verts requested" );
+
+	auto& scratchBuffer = m_ScratchParticleBuffers[0];
+	kbErrorCheck( scratchBuffer.m_iCurModel >= 0, "kbParticleManager::ReserveScratchBufferSpace() - Scratch buffers are not initialized." );
+
+	const int outVBIdx = scratchBuffer.m_iVert;
+	const int outIBIdx = 6 * ( outVBIdx / 4 );
+
+	inOutRenderObj.m_pModel = &scratchBuffer.m_RenderModel[scratchBuffer.m_iCurModel];
+	inOutRenderObj.m_VertBufferStartIndex = outVBIdx;
+	inOutRenderObj.m_VertBufferIndexCount = 6 * ( numRequestedVerts / 4);
+
+	outVertexBuffer = &scratchBuffer.m_pVertexBuffer[outVBIdx];
+
+	scratchBuffer.m_iVert += numRequestedVerts;
 }

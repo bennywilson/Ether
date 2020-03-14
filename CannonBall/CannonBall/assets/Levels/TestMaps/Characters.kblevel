@@ -486,7 +486,7 @@ kbGameEntity 3724832574 1271670935 1013321910 1020909332 {
 						Enabled = 0
 						LifeTime =  -1.000000
 						ParamName = "splatMap"
-						Texture = .\assets\terrain\kungfulevelterrain\terrain1_splatmap.bmp
+						Texture = .\assets\terrain\kungfulevelterrain\terrain1_splatmap.jpg
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 					kbShaderParamComponent { 
@@ -664,7 +664,7 @@ kbGameEntity 3724832574 1271670935 1013321910 1020909332 {
 						Enabled = 0
 						LifeTime =  -1.000000
 						ParamName = "grassDiffuseMap"
-						Texture = .\assets\terrain\foliage\grass_1.dds
+						Texture = .\assets\terrain\foliage\grass_1.tif
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 					kbShaderParamComponent { 
@@ -2351,7 +2351,7 @@ kbGameEntity 4064300683 1237974457 595275413 2837674043 {
 						Enabled = 0
 						LifeTime =  -1.000000
 						ParamName = "splatMap"
-						Texture = .\assets\terrain\kungfulevelterrain\terrain1_splatmap.bmp
+						Texture = .\assets\terrain\kungfulevelterrain\terrain1_splatmap.jpg
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 					kbShaderParamComponent { 
@@ -3693,7 +3693,7 @@ kbGameEntity 191628142 1164611098 2253314479 1292534890 {
 						Enabled = 0
 						LifeTime =  -1.000000
 						ParamName = "hatchTexture2"
-						Texture = .\assets\fx\hatch\tam_2.tif
+						Texture = .\assets\fx\hatch\tam_2.jpg
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 			}
@@ -4513,7 +4513,7 @@ kbGameEntity 1671951467 1280881932 1698058926 3039328037 {
 						Enabled = 0
 						LifeTime =  -1.000000
 						ParamName = "hatchTexture2"
-						Texture = .\assets\fx\hatch\tam_2.tif
+						Texture = .\assets\fx\hatch\tam_2.jpg
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 			}
@@ -5166,7 +5166,7 @@ kbGameEntity 3733824195 1207903711 1401863562 1523924579 {
 						Enabled = 0
 						LifeTime =  -1.000000
 						ParamName = "shaderTexture"
-						Texture = .\assets\fx\wood\wood_splinter.dds
+						Texture = .\assets\fx\wood\wood_splinter.tif
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 			}

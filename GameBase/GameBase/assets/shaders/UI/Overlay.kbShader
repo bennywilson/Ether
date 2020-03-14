@@ -50,7 +50,7 @@ SamplerState DiffuseSamplerState;
 Texture2D OverlayTexture(white);
 
 float4 pixelShader( pixelInput input ) : SV_TARGET {
-	float4 outColor = OverlayTexture.Sample( DiffuseSamplerState, input.uv );
+	float4 outColor = OverlayTexture.Sample( DiffuseSamplerState, input.uv ) * 0.65f;
 	return outColor;
 }
 

@@ -59,8 +59,10 @@ public:
 	};
 	void														AddQuad( const uint atlasIdx, const CustomParticleAtlasInfo_t & CustomParticleInfo );
 
-	const kbGameComponent *											GetComponentFromPool();
-	void														ReturnComponentToPool( const kbGameComponent *const );
+	const kbGameComponent *										GetComponentFromPool();
+	void														ReturnComponentToPool( const kbGameComponent* const );
+
+	void														ReserveScratchBufferSpace( kbParticleVertex*& outVertexBuffer, kbRenderObject& inOutRenderObj, const int numRequestedVerts );
 
 private:
 
@@ -69,8 +71,8 @@ private:
 	static const int											NumCustomParticleBuffers = 3;
 	std::vector<CustomParticleAtlasInfo_t>						m_Particles;
 
-	struct CustomAtlasParticles_t {
-																CustomAtlasParticles_t() :
+	struct CustomAtlasParticle_t {
+																CustomAtlasParticle_t() :
 																	m_NumIndices( 0 ),
 																	m_pVertexBuffer( nullptr ),
 																	m_pIndexBuffer( nullptr ),
@@ -91,13 +93,30 @@ private:
 
 		int														m_iCurParticleModel;
 	};
-	std::vector<CustomAtlasParticles_t>							m_CustomAtlases;
+	std::vector<CustomAtlasParticle_t>							m_CustomAtlases;
+
+	struct ScratchBuffer_t {
+		ScratchBuffer_t() :
+			m_iVert( 0 ),
+			m_iCurModel( -1 ),
+			m_pVertexBuffer( nullptr ),
+			m_pIndexBuffer( nullptr ) { }
+
+		kbModel													m_RenderModel[NumCustomParticleBuffers];
+		uint													m_iVert;
+		int														m_iCurModel;
+
+		kbParticleVertex *										m_pVertexBuffer;
+		ushort *												m_pIndexBuffer;
+	};
+
+	std::vector<ScratchBuffer_t>								m_ScratchParticleBuffers;
 
 	std::vector<const kbGameComponent*>							m_ComponentPool;
 
 private:
 
-	void														UpdateAtlas( CustomAtlasParticles_t & atlasInfo );
+	void														UpdateAtlas( CustomAtlasParticle_t& atlasInfo );
 };
 
 #endif

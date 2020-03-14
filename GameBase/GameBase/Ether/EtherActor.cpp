@@ -12,6 +12,8 @@
 #include "EtherWeapon.h"
 
 
+float EtherLightAnimatorComponent::s_GlobalMultiplier = 1.0f;
+
 /**
  *	EtherActorComponent::Constructor
  */
@@ -221,7 +223,7 @@ void EtherLightAnimatorComponent::Update_Internal( const float DT ) {
 			break;
 		}
 	}
-
+	lightColor = lightColor * s_GlobalMultiplier;
 	pLightComp->SetColor( lightColor.x, lightColor.y, lightColor.z, 1.0f );
 	pLightComp->MarkAsDirty();
 

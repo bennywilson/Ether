@@ -432,8 +432,8 @@ void kbPropertiesTab::ArrayResizeCB( Fl_Widget * widget, void * voidPtr ) {
 	
 	const int fieldValue = atoi( inputText );
 
-	if ( fieldValue < 0 || fieldValue > 64 ) {
-		kbWarning( "Array value is not between 0 and 64" );
+	if ( fieldValue < 0 || fieldValue > 128 ) {
+		kbWarning( "Array value is not between 0 and 128" );
 		g_pPropertiesTab->RequestRefreshNextUpdate();
 		return;
 	}
