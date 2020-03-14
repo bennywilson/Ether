@@ -1,8 +1,8 @@
-kbGameEntity 1889233784 1229996430 4274761094 3246745238 {
+kbGameEntity 2764718849 1304041136 1473373071 869886 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		Name = "Entity_6"
+		Name = "Entity_7"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
 		Position = 0.000000 0.000000 0.000000
 		Scale = 1.000000 1.000000 1.000000
@@ -10,8 +10,8 @@ kbGameEntity 1889233784 1229996430 4274761094 3246745238 {
 	kbEditorLevelSettingsComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		MainCameraPosition = -23.520227 17.063976 26.420679
-		MainCameraRotation = -0.025241 -0.723610 0.026489 0.689238
+		MainCameraPosition = -12.457502 17.180124 27.240126
+		MainCameraRotation = 0.068967 0.729495 -0.074366 -0.676424
 	}
 }
 kbGameEntity 2760744939 1124379877 2772631961 2644415108 {
@@ -168,7 +168,7 @@ kbGameEntity 3450759493 1185158522 615061661 1045896309 {
 						Enabled = 0
 						LifeTime =  -1.000000
 						ParamName = "normalMap"
-						Texture = .\assets\characters\icepick\base\normal2.jpg
+						Texture = .\assets\characters\icepick\base\icepick_jacket_normal_2.tif
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 			}
@@ -238,7 +238,7 @@ kbGameEntity 3450759493 1185158522 615061661 1045896309 {
 						Enabled = 0
 						LifeTime =  -1.000000
 						ParamName = "normalMap"
-						Texture = .\assets\characters\icepick\base\icepick_jacket_normal.jpg
+						Texture = ..\..\kbengine\assets\textures\defaultnormal.bmp
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 					kbShaderParamComponent { 
@@ -246,7 +246,7 @@ kbGameEntity 3450759493 1185158522 615061661 1045896309 {
 						LifeTime =  -1.000000
 						ParamName = "specParams"
 						Texture = NULL
-						Vector = 35.000000 55.000000 1.000000 1.000000
+						Vector = 1.000000 100.000000 1.000000 1.000000
 					}
 			}
 			kbMaterialComponent { 
