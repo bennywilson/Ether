@@ -10,7 +10,7 @@ cbuffer matrixBuffer {
 	matrix inverseViewProjection;
 	matrix inverseModelMatrix;
 	float4 cameraPosition;
-	float4 colorMultiplier;
+	float4 colorMultiplier = (1,1,1,1);
 	float4 clipData;		// x - clip bias, y - uv border clip, 
 }
 

@@ -106,8 +106,8 @@ void CreateVertex( inout TriangleStream<pixelInput> OutputStream, float3 vertexW
 	if ( bladeWorldOrigin.y < clipPlane.w )
 		return;
 	const float2 normalizedTerrainMapPos = float2( ( bladeWorldOrigin.x - collisionMapCenter.x ) * collisionMapCenter.w, ( bladeWorldOrigin.z - collisionMapCenter.y ) * collisionMapCenter.w );
-	const float2 terrainMapUV = ( normalizedTerrainMapPos * 0.5f ) + 0.5f;
-
+	float2 terrainMapUV = ( normalizedTerrainMapPos * 0.5f ) + 0.5f;
+	terrainMapUV.y= 1.0f - terrainMapUV.y;
 
 	const float4 collisionMapVal = collisionMap.SampleLevel( PointSampler, terrainMapUV, 0.0f );
 	float collisionTime = abs( collisionMapVal.b );

@@ -103,10 +103,6 @@ Texture2D clipMap(white);
 	output.Color.xyz = colorTex.xyz;
 	output.Color.w = 0;//colorTex.w *A 0.55;
 	output.Color.w = -1.0f;
-//	output.Specular = float4( 0.0f, 1.0f, 0.0f, 0.0f );
-//	output.Depth.r = input.position2.x / input.position2.y;
-
-	//output.Normal.xyz = normalize( input.normal );
 
 	return output;
 }

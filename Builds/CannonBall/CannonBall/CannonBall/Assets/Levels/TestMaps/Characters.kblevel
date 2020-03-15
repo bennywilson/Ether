@@ -1,8 +1,8 @@
-kbGameEntity 0 0 0 0 {
+kbGameEntity 3029240395 1199103925 954790317 144456754 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		Name = "Entity_115"
+		Name = "Entity_225"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
 		Position = 0.000000 0.000000 0.000000
 		Scale = 1.000000 1.000000 1.000000
@@ -10,11 +10,11 @@ kbGameEntity 0 0 0 0 {
 	kbEditorLevelSettingsComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		MainCameraPosition = 75.857582 -50.936531 -381.998199
-		MainCameraRotation = 0.020571 0.974892 -0.101825 -0.196964
+		MainCameraPosition = 69.346451 -50.489849 -230.754150
+		MainCameraRotation = -0.049545 0.741683 -0.055124 0.666643
 	}
 }
-kbGameEntity 0 0 0 0 {
+kbGameEntity 537364968 1092523782 2953639826 2626478307 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
@@ -84,13 +84,13 @@ kbGameEntity 0 0 0 0 {
 			}
 	}
 }
-kbGameEntity 0 0 0 0 {
+kbGameEntity 1976988906 1203222253 3781998738 4272724285 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "Sun"
-		Orientation = -0.184883 0.522430 -0.037487 0.831553
-		Position = 80.300003 -48.635265 -404.559143
+		Orientation = -0.188645 0.346812 -0.000009 0.918768
+		Position = 80.300003 -18.935291 -404.559143
 		Scale = 0.000000 1.000000 1.000000
 	}
 	kbDirectionalLightComponent { 
@@ -176,7 +176,7 @@ kbGameEntity 0 0 0 0 {
  100.000000
 	}
 }
-kbGameEntity 0 0 0 0 {
+kbGameEntity 1885576596 1149139774 1438397868 2777957068 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
@@ -243,7 +243,7 @@ kbGameEntity 0 0 0 0 {
 		Model = .\assets\models\characters\fox\fox.ms3d
 	}
 }
-kbGameEntity 0 0 0 0 {
+kbGameEntity 3770717614 1082378895 1017600913 1440694734 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
@@ -328,13 +328,13 @@ kbGameEntity 0 0 0 0 {
 		Model = .\assets\models\characters\sheep\sheep.ms3d
 	}
 }
-kbGameEntity 0 0 0 0 {
+kbGameEntity 1990723014 1121141820 2053275829 709430198 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "Jumping Jack Sheep"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
-		Position = 0.000000 0.000000 0.000000
+		Position = 77.104454 -52.635265 -391.559143
 		Scale = 1.000000 1.000000 1.000000
 	}
 	kbSkeletalModelComponent { 
@@ -413,13 +413,13 @@ kbGameEntity 0 0 0 0 {
 		Model = .\assets\models\characters\sheep\sheep.ms3d
 	}
 }
-kbGameEntity 0 0 0 0 {
+kbGameEntity 2760744939 1124379877 2772631961 2644415108 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "Camera"
 		Orientation = -0.030847 -0.706434 0.030847 0.706434
-		Position = 73.104454 -50.285267 -391.559143
+		Position = 66.170456 0.000000 -391.101135
 		Scale = 1.000000 1.000000 1.000000
 	}
 	CannonCameraComponent { 
@@ -427,20 +427,20 @@ kbGameEntity 0 0 0 0 {
 		LifeTime =  -1.000000
 		DummyTemp = 0
 		Health =  10.000000
-		FarPlane =  1000.000000
-		LookAtOffset = 0.000000 2.000000 0.000000
+		FarPlane =  7000.000000
+		LookAtOffset = 0.000000 2.500000 0.000000
 		MovementMode = Follow
 		NearPlane =  0.250000
-		PositionOffset = -4.000000 2.350000 0.000000
+		PositionOffset = -10.933998 3.224068 0.000000
 	}
 }
-kbGameEntity 0 0 0 0 {
+kbGameEntity 3724832574 1271670935 1013321910 1020909332 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "Terrain"
 		Orientation = 0.000000 -0.989478 0.000000 -0.144684
-		Position = -115.000000 -450.000000 0.000000
+		Position = 200.000000 -600.000000 0.000000
 		Scale = 1.000000 1.000000 1.000000
 	}
 	kbTerrainComponent { 
@@ -486,7 +486,7 @@ kbGameEntity 0 0 0 0 {
 						Enabled = 0
 						LifeTime =  -1.000000
 						ParamName = "splatMap"
-						Texture = .\assets\terrain\kungfulevelterrain\terrain1_splatmap.bmp
+						Texture = .\assets\terrain\kungfulevelterrain\terrain1_splatmap.jpg
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 					kbShaderParamComponent { 
@@ -583,6 +583,7 @@ kbGameEntity 0 0 0 0 {
 			}
 		RenderOrderBias =  0.000000
 		RenderPass = LightingPass
+		DebugRegenTerrain = 0
 		Dimensions = 129
 		Grass = 1
 			kbGrass { 
@@ -600,8 +601,8 @@ kbGameEntity 0 0 0 0 {
 				MaxBladeJitterOffset =  10.000000
 				MaxPatchJitterOffset =  10.000000
 				PatchEndCullDistance =  2000.000000
-				PatchStartCullDistance =  200.000000
-				PatchesPerCellSide = 60
+				PatchStartCullDistance =  500.000000
+				PatchesPerCellSide = 50
 				ShaderParams = 13
 					kbShaderParamComponent { 
 						Enabled = 0
@@ -663,7 +664,7 @@ kbGameEntity 0 0 0 0 {
 						Enabled = 0
 						LifeTime =  -1.000000
 						ParamName = "grassDiffuseMap"
-						Texture = .\assets\terrain\foliage\grass_1.dds
+						Texture = .\assets\terrain\foliage\grass_1.tif
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 					kbShaderParamComponent { 
@@ -698,10 +699,10 @@ kbGameEntity 0 0 0 0 {
 		HeightMap = .\assets\terrain\kungfulevelterrain\terrain1_height.bmp
 		HeightScale =  1024.000000
 		SplatMap = NULL
-		Width =  2048.000000
+		Width =  2000.000000
 	}
 }
-kbGameEntity 0 0 0 0 {
+kbGameEntity 2029969210 1301275982 4090249868 2310134928 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
@@ -748,7 +749,7 @@ kbGameEntity 0 0 0 0 {
 		Model = .\assets\models\skyboxes\basicskybox.fbx
 	}
 }
-kbGameEntity 0 0 0 0 {
+kbGameEntity 3508025232 1223702064 110153635 2743637305 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
@@ -842,15 +843,15 @@ kbGameEntity 2609040299 1100347930 3115268521 1892043160 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "Light Shafts"
-		Orientation = -0.184883 0.522430 -0.037487 0.831553
-		Position = 0.000000 0.000000 0.000000
+		Orientation = -0.654443 0.426550 0.431072 0.451593
+		Position = -0.650000 5.000000 0.000000
 		Scale = 999.000000 999.000000 99.000000
 	}
 	kbLightShaftsComponent { 
 		Enabled = 1
 		LifeTime =  -1.000000
-		BaseHeight =  0.750000
-		BaseWidth =  0.750000
+		BaseHeight =  0.500000
+		BaseWidth =  0.500000
 		Color = 0.010000 0.008000 0.001000 1.000000
 		Directional = 1
 		IterationHeight =  0.001500
@@ -859,7 +860,7 @@ kbGameEntity 2609040299 1100347930 3115268521 1892043160 {
 		Texture = ..\..\kbengine\assets\textures\flare.jpg
 	}
 }
-kbGameEntity 0 0 0 0 {
+kbGameEntity 1573001468 1200901198 3941368968 167243547 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
@@ -912,13 +913,13 @@ kbGameEntity 0 0 0 0 {
 						LifeTime =  -1.000000
 						ParamName = "waterScaleAndSpeed_2"
 						Texture = NULL
-						Vector = 350.000000 75.000000 0.150000 0.150000
+						Vector = 300.000000 100.000000 0.110000 0.110000
 					}
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
 						ParamName = "normalMap1"
-						Texture = .\assets\fx\wind\wind_1.jpg
+						Texture = .\assets\fx\wind\wind_2.jpg
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 					kbShaderParamComponent { 
@@ -933,14 +934,14 @@ kbGameEntity 0 0 0 0 {
 						LifeTime =  -1.000000
 						ParamName = "spec_Factor_Power"
 						Texture = NULL
-						Vector = 1.000000 100.000000 0.000000 0.000000
+						Vector = 1.000000 500.000000 0.000000 0.000000
 					}
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
 						ParamName = "normalStrengths"
 						Texture = NULL
-						Vector = 0.100000 0.030000 0.100000 0.050000
+						Vector = 0.050000 0.050000 0.050000 0.050000
 					}
 					kbShaderParamComponent { 
 						Enabled = 0
@@ -969,7 +970,7 @@ kbGameEntity 0 0 0 0 {
 		Model = ..\..\kbengine\assets\models\unitcube.ms3d
 	}
 }
-kbGameEntity 0 0 0 0 {
+kbGameEntity 2623485304 1164391352 3750140854 1068688934 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
@@ -1023,7 +1024,7 @@ kbGameEntity 0 0 0 0 {
 		Model = ..\..\kbengine\assets\models\unitcube.ms3d
 	}
 }
-kbGameEntity 0 0 0 0 {
+kbGameEntity 767131152 1284206386 1410219432 2984081115 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
@@ -1035,14 +1036,14 @@ kbGameEntity 0 0 0 0 {
 	CannonFogComponent { 
 		Enabled = 1
 		LifeTime =  -1.000000
-		Clamp =  0.250000
+		Clamp =  0.300000
 		Color = 1.000000 0.950000 0.850000 1.000000
-		EndDist =  300.000000
+		EndDist =  1000.000000
 		Shader = .\assets\shaders\postprocess\fog.kbshader
-		StartDist =  150.000000
+		StartDist =  300.000000
 	}
 }
-kbGameEntity 0 0 0 0 {
+kbGameEntity 3587713139 1101448007 952628641 366038443 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
@@ -1096,13 +1097,13 @@ kbGameEntity 0 0 0 0 {
 		Model = .\assets\models\environment\platforms\bridge_wooden_1.fbx
 	}
 }
-kbGameEntity 0 0 0 0 {
+kbGameEntity 3565500909 1121129338 2565412495 3171246714 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "Bridge"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
-		Position = 76.992683 -52.798882 -237.136353
+		Position = 76.992683 -52.798882 -220.546371
 		Scale = 250.000000 250.000000 250.000000
 	}
 	kbStaticModelComponent { 
@@ -1150,7 +1151,7 @@ kbGameEntity 0 0 0 0 {
 		Model = .\assets\models\environment\platforms\bridge_wooden_1.fbx
 	}
 }
-kbGameEntity 0 0 0 0 {
+kbGameEntity 1792756094 1339018376 1629935014 1681887078 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
@@ -1204,7 +1205,7 @@ kbGameEntity 0 0 0 0 {
 		Model = .\assets\models\environment\platforms\bridge_wooden_1.fbx
 	}
 }
-kbGameEntity 0 0 0 0 {
+kbGameEntity 2285083070 1261831113 2537240763 2965023321 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
@@ -1258,7 +1259,7 @@ kbGameEntity 0 0 0 0 {
 		Model = .\assets\models\environment\platforms\bridge_wooden_1.fbx
 	}
 }
-kbGameEntity 0 0 0 0 {
+kbGameEntity 768408979 1309698659 1845970622 3862184246 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
@@ -1312,7 +1313,7 @@ kbGameEntity 0 0 0 0 {
 		Model = .\assets\models\environment\platforms\bridge_wooden_1.fbx
 	}
 }
-kbGameEntity 0 0 0 0 {
+kbGameEntity 2073227036 1116953487 4028886406 3411107857 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
@@ -1366,7 +1367,7 @@ kbGameEntity 0 0 0 0 {
 		Model = .\assets\models\environment\platforms\bridge_wooden_1.fbx
 	}
 }
-kbGameEntity 0 0 0 0 {
+kbGameEntity 55202556 1308462375 1187601583 263077682 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
@@ -1420,7 +1421,7 @@ kbGameEntity 0 0 0 0 {
 		Model = .\assets\models\environment\platforms\bridge_wooden_1.fbx
 	}
 }
-kbGameEntity 0 0 0 0 {
+kbGameEntity 4022515928 1092104471 769233583 338184870 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
@@ -1474,7 +1475,7 @@ kbGameEntity 0 0 0 0 {
 		Model = .\assets\models\environment\platforms\bridge_wooden_1.fbx
 	}
 }
-kbGameEntity 0 0 0 0 {
+kbGameEntity 219122931 1274720638 2606058668 789972547 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
@@ -1528,7 +1529,7 @@ kbGameEntity 0 0 0 0 {
 		Model = .\assets\models\environment\platforms\bridge_wooden_1.fbx
 	}
 }
-kbGameEntity 0 0 0 0 {
+kbGameEntity 4011769355 1323333596 3975013820 4133016020 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
@@ -1582,7 +1583,7 @@ kbGameEntity 0 0 0 0 {
 		Model = .\assets\models\environment\platforms\bridge_wooden_1.fbx
 	}
 }
-kbGameEntity 0 0 0 0 {
+kbGameEntity 476150570 1178077505 3921805720 167556555 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
@@ -1636,7 +1637,7 @@ kbGameEntity 0 0 0 0 {
 		Model = .\assets\models\environment\platforms\bridge_wooden_1.fbx
 	}
 }
-kbGameEntity 0 0 0 0 {
+kbGameEntity 3063563567 1178136607 3804988817 1241362735 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
@@ -1690,7 +1691,7 @@ kbGameEntity 0 0 0 0 {
 		Model = .\assets\models\environment\platforms\bridge_wooden_1.fbx
 	}
 }
-kbGameEntity 0 0 0 0 {
+kbGameEntity 3012410846 1176812014 2847639957 2265530542 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
@@ -1744,7 +1745,7 @@ kbGameEntity 0 0 0 0 {
 		Model = .\assets\models\environment\platforms\bridge_wooden_1.fbx
 	}
 }
-kbGameEntity 0 0 0 0 {
+kbGameEntity 4000087732 1074056295 37780884 2473222410 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
@@ -1798,7 +1799,7 @@ kbGameEntity 0 0 0 0 {
 		Model = .\assets\models\environment\platforms\bridge_wooden_1.fbx
 	}
 }
-kbGameEntity 0 0 0 0 {
+kbGameEntity 1081531102 1122866535 398672021 3386659937 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
@@ -1852,7 +1853,7 @@ kbGameEntity 0 0 0 0 {
 		Model = .\assets\models\environment\platforms\bridge_wooden_1.fbx
 	}
 }
-kbGameEntity 0 0 0 0 {
+kbGameEntity 3477824963 1325410563 4085668241 505532259 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
@@ -1906,7 +1907,7 @@ kbGameEntity 0 0 0 0 {
 		Model = .\assets\models\environment\platforms\bridge_wooden_1.fbx
 	}
 }
-kbGameEntity 0 0 0 0 {
+kbGameEntity 559386017 1316716511 3755778214 2045459382 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
@@ -1960,7 +1961,7 @@ kbGameEntity 0 0 0 0 {
 		Model = .\assets\models\environment\platforms\bridge_wooden_1.fbx
 	}
 }
-kbGameEntity 0 0 0 0 {
+kbGameEntity 1289487901 1188375855 920596138 4184004917 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
@@ -2014,7 +2015,7 @@ kbGameEntity 0 0 0 0 {
 		Model = .\assets\models\environment\platforms\bridge_wooden_1.fbx
 	}
 }
-kbGameEntity 0 0 0 0 {
+kbGameEntity 714109186 1210138278 3860640913 4056027296 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
@@ -2068,7 +2069,7 @@ kbGameEntity 0 0 0 0 {
 		Model = .\assets\models\environment\platforms\bridge_wooden_1.fbx
 	}
 }
-kbGameEntity 0 0 0 0 {
+kbGameEntity 994630907 1178801820 4058844581 1161728672 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
@@ -2122,11 +2123,11 @@ kbGameEntity 0 0 0 0 {
 		Model = .\assets\models\environment\platforms\bridge_wooden_1.fbx
 	}
 }
-kbGameEntity 0 0 0 0 {
+kbGameEntity 3881373922 1111186753 3037939894 2663332882 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		Name = "Bridge"
+		Name = "Breaking Bridge"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
 		Position = 76.992683 -52.798882 -245.396240
 		Scale = 250.000000 250.000000 250.000000
@@ -2141,7 +2142,7 @@ kbGameEntity 0 0 0 0 {
 				LifeTime =  -1.000000
 				CullModeOverride = ShaderDefault
 				Shader = .\assets\shaders\environment\environmentbase.kbshader
-				ShaderParams = 4
+				ShaderParams = 5
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
@@ -2170,17 +2171,24 @@ kbGameEntity 0 0 0 0 {
 						Texture = NULL
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "clipMap"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
 			}
 		RenderOrderBias =  0.000000
 		RenderPass = LightingPass
 		Model = .\assets\models\environment\platforms\bridge_wooden_1.fbx
 	}
 }
-kbGameEntity 0 0 0 0 {
+kbGameEntity 1745036657 1226122723 137629842 2847967967 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		Name = "Bridge"
+		Name = "BridgeS"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
 		Position = 76.992683 -52.798882 -394.324280
 		Scale = 250.000000 250.000000 250.000000
@@ -2230,7 +2238,7 @@ kbGameEntity 0 0 0 0 {
 		Model = .\assets\models\environment\platforms\bridge_wooden_1.fbx
 	}
 }
-kbGameEntity 0 0 0 0 {
+kbGameEntity 211241734 1165433459 2859075761 1636992949 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
@@ -2284,13 +2292,13 @@ kbGameEntity 0 0 0 0 {
 		Model = .\assets\models\environment\platforms\bridge_wooden_1.fbx
 	}
 }
-kbGameEntity 0 0 0 0 {
+kbGameEntity 4064300683 1237974457 595275413 2837674043 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		Name = "Terrain - Reflection"
-		Orientation = -0.003617 -0.989169 0.024734 -0.144639
-		Position = -249.000000 449.000000 2.970000
+		Name = "Terrain Reflection"
+		Orientation = 0.000000 -0.989478 0.000000 -0.144639
+		Position = 200.000000 450.000000 0.000000
 		Scale = 1.000000 1.000000 1.000000
 	}
 	kbTerrainComponent { 
@@ -2343,7 +2351,7 @@ kbGameEntity 0 0 0 0 {
 						Enabled = 0
 						LifeTime =  -1.000000
 						ParamName = "splatMap"
-						Texture = .\assets\terrain\kungfulevelterrain\terrain1_splatmap.bmp
+						Texture = .\assets\terrain\kungfulevelterrain\terrain1_splatmap.jpg
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 					kbShaderParamComponent { 
@@ -2468,15 +2476,16 @@ kbGameEntity 0 0 0 0 {
 			}
 		RenderOrderBias =  0.000000
 		RenderPass = LightingPass
+		DebugRegenTerrain = 0
 		Dimensions = 129
 		Grass = 0
 		HeightMap = .\assets\terrain\kungfulevelterrain\terrain1_height.bmp
 		HeightScale =  1024.000000
 		SplatMap = NULL
-		Width =  2048.000000
+		Width =  2000.000000
 	}
 }
-kbGameEntity 0 0 0 0 {
+kbGameEntity 1978605751 1112739685 1112578947 1060765009 {
 	kbTransformComponent { 
 		Enabled = 1
 		LifeTime =  -1.000000
@@ -2561,7 +2570,7 @@ kbGameEntity 0 0 0 0 {
 		HealthBarWarningFlashThreshold =  0.400000
 	}
 }
-kbGameEntity 0 0 0 0 {
+kbGameEntity 532414885 1151596207 2684383880 3979752438 {
 	kbTransformComponent { 
 		Enabled = 1
 		LifeTime =  -1.000000
@@ -2782,7 +2791,7 @@ kbGameEntity 0 0 0 0 {
 		Model = ..\..\kbengine\assets\models\unitquad.ms3d
 	}
 }
-kbGameEntity 0 0 0 0 {
+kbGameEntity 3694840569 1275494847 809542060 2421163822 {
 	kbTransformComponent { 
 		Enabled = 1
 		LifeTime =  -1.000000
@@ -2807,7 +2816,7 @@ kbGameEntity 0 0 0 0 {
 						LifeTime =  -1.000000
 						ParamName = "normalizedScreenSize_Anchor"
 						Texture = NULL
-						Vector = 0.500000 0.888889 0.500000 0.494444
+						Vector = 0.500000 0.750912 0.500000 0.425456
 					}
 					kbShaderParamComponent { 
 						Enabled = 0
@@ -2838,8 +2847,8 @@ kbGameEntity 0 0 0 0 {
 	CannonBallPauseMenuUIComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		AuthoredHeight = 128
-		AuthoredWidth = 128
+		AuthoredHeight = 1132
+		AuthoredWidth = 1340
 		NormalizedAnchorPoint = 0.250000 0.050000 0.000000
 		UIToScreenSizeRatio = 0.500000 0.500000 0.000000
 		SliderWidgets = 3
@@ -2849,7 +2858,7 @@ kbGameEntity 0 0 0 0 {
 				Anchor = MiddleRight
 				AxisLock = LockYAxis
 				ChildWidgets = 2
-					kbUIWidget { 
+					kbUIWidgetComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
 						Anchor = MiddleLeft
@@ -2860,7 +2869,7 @@ kbGameEntity 0 0 0 0 {
 								Enabled = 0
 								LifeTime =  -1.000000
 								CullModeOverride = ShaderDefault
-								Shader = .\assets\shaders\ui\ui_basic.kbshader
+								Shader = .\assets\shaders\ui\ui_additive.kbshader
 								ShaderParams = 5
 									kbShaderParamComponent { 
 										Enabled = 0
@@ -2898,10 +2907,10 @@ kbGameEntity 0 0 0 0 {
 										Vector = 0.000000 0.000000 0.000000 0.000000
 									}
 							}
-						RelativePosition = 0.000000 0.000000 0.000000
-						RelativeSize = 0.350000 0.075000 1.000000
+						RelativePosition = 0.400000 0.000000 0.000000
+						RelativeSize = 0.330000 0.075000 1.000000
 					}
-					kbUIWidget { 
+					kbUIWidgetComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
 						Anchor = MiddleLeft
@@ -2958,7 +2967,7 @@ kbGameEntity 0 0 0 0 {
 						Enabled = 0
 						LifeTime =  -1.000000
 						CullModeOverride = ShaderDefault
-						Shader = .\assets\shaders\ui\ui_basic.kbshader
+						Shader = .\assets\shaders\ui\ui_additive.kbshader
 						ShaderParams = 6
 							kbShaderParamComponent { 
 								Enabled = 0
@@ -2978,7 +2987,7 @@ kbGameEntity 0 0 0 0 {
 								Enabled = 0
 								LifeTime =  -1.000000
 								ParamName = "baseTexture"
-								Texture = .\assets\ui\pausemenu\volume.tif
+								Texture = ..\..\kbengine\assets\textures\black.bmp
 								Vector = 0.000000 0.000000 0.000000 0.000000
 							}
 							kbShaderParamComponent { 
@@ -3014,7 +3023,7 @@ kbGameEntity 0 0 0 0 {
 				Anchor = MiddleRight
 				AxisLock = LockYAxis
 				ChildWidgets = 2
-					kbUIWidget { 
+					kbUIWidgetComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
 						Anchor = MiddleLeft
@@ -3025,7 +3034,7 @@ kbGameEntity 0 0 0 0 {
 								Enabled = 0
 								LifeTime =  -1.000000
 								CullModeOverride = ShaderDefault
-								Shader = .\assets\shaders\ui\ui_basic.kbshader
+								Shader = .\assets\shaders\ui\ui_additive.kbshader
 								ShaderParams = 5
 									kbShaderParamComponent { 
 										Enabled = 0
@@ -3064,9 +3073,9 @@ kbGameEntity 0 0 0 0 {
 									}
 							}
 						RelativePosition = 0.000000 0.000000 0.000000
-						RelativeSize = 0.350000 0.075000 1.000000
+						RelativeSize = 0.330000 0.075000 1.000000
 					}
-					kbUIWidget { 
+					kbUIWidgetComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
 						Anchor = MiddleLeft
@@ -3077,7 +3086,7 @@ kbGameEntity 0 0 0 0 {
 								Enabled = 0
 								LifeTime =  -1.000000
 								CullModeOverride = ShaderDefault
-								Shader = .\assets\shaders\ui\ui_basic.kbshader
+								Shader = .\assets\shaders\ui\ui_additive.kbshader
 								ShaderParams = 5
 									kbShaderParamComponent { 
 										Enabled = 0
@@ -3143,7 +3152,7 @@ kbGameEntity 0 0 0 0 {
 								Enabled = 0
 								LifeTime =  -1.000000
 								ParamName = "baseTexture"
-								Texture = .\assets\ui\pausemenu\videoquality.tif
+								Texture = ..\..\kbengine\assets\textures\ui_additive.bmp
 								Vector = 0.000000 0.000000 0.000000 0.000000
 							}
 							kbShaderParamComponent { 
@@ -3179,7 +3188,7 @@ kbGameEntity 0 0 0 0 {
 				Anchor = MiddleRight
 				AxisLock = LockYAxis
 				ChildWidgets = 2
-					kbUIWidget { 
+					kbUIWidgetComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
 						Anchor = MiddleLeft
@@ -3190,7 +3199,7 @@ kbGameEntity 0 0 0 0 {
 								Enabled = 0
 								LifeTime =  -1.000000
 								CullModeOverride = ShaderDefault
-								Shader = .\assets\shaders\ui\ui_basic.kbshader
+								Shader = .\assets\shaders\ui\ui_additive.kbshader
 								ShaderParams = 5
 									kbShaderParamComponent { 
 										Enabled = 0
@@ -3229,9 +3238,9 @@ kbGameEntity 0 0 0 0 {
 									}
 							}
 						RelativePosition = 0.000000 0.000000 0.000000
-						RelativeSize = 0.350000 0.075000 1.000000
+						RelativeSize = 0.330000 0.075000 1.000000
 					}
-					kbUIWidget { 
+					kbUIWidgetComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
 						Anchor = MiddleLeft
@@ -3288,7 +3297,7 @@ kbGameEntity 0 0 0 0 {
 						Enabled = 0
 						LifeTime =  -1.000000
 						CullModeOverride = ShaderDefault
-						Shader = .\assets\shaders\ui\ui_basic.kbshader
+						Shader = .\assets\shaders\ui\ui_additive.kbshader
 						ShaderParams = 6
 							kbShaderParamComponent { 
 								Enabled = 0
@@ -3315,7 +3324,7 @@ kbGameEntity 0 0 0 0 {
 								Enabled = 0
 								LifeTime =  -1.000000
 								ParamName = "baseTexture"
-								Texture = .\assets\ui\pausemenu\brightness.tif
+								Texture = ..\..\kbengine\assets\textures\black.bmp
 								Vector = 0.000000 0.000000 0.000000 0.000000
 							}
 							kbShaderParamComponent { 
@@ -3351,8 +3360,8 @@ kbGameEntity 0 0 0 0 {
 				WaveFile = .\assets\sounds\music\testvolumeloop.wav
 			}
 		WidgetSize = 0.100000 0.050000 1.000000
-		Widgets = 2
-			kbUIWidget { 
+		Widgets = 3
+			kbUIWidgetComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
 				Anchor = MiddleRight
@@ -3363,7 +3372,7 @@ kbGameEntity 0 0 0 0 {
 						Enabled = 0
 						LifeTime =  -1.000000
 						CullModeOverride = ShaderDefault
-						Shader = .\assets\shaders\ui\ui_basic.kbshader
+						Shader = .\assets\shaders\ui\ui_additive.kbshader
 						ShaderParams = 6
 							kbShaderParamComponent { 
 								Enabled = 0
@@ -3390,7 +3399,7 @@ kbGameEntity 0 0 0 0 {
 								Enabled = 0
 								LifeTime =  -1.000000
 								ParamName = "baseTexture"
-								Texture = .\assets\ui\pausemenu\back.tif
+								Texture = ..\..\kbengine\assets\textures\black.bmp
 								Vector = 0.000000 0.000000 0.000000 0.000000
 							}
 							kbShaderParamComponent { 
@@ -3411,7 +3420,7 @@ kbGameEntity 0 0 0 0 {
 				RelativePosition = 0.331250 0.300000 0.000000
 				RelativeSize = 0.168750 0.150000 1.000000
 			}
-						kbUIWidget { 
+			kbUIWidgetComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
 				Anchor = MiddleRight
@@ -3422,7 +3431,7 @@ kbGameEntity 0 0 0 0 {
 						Enabled = 0
 						LifeTime =  -1.000000
 						CullModeOverride = ShaderDefault
-						Shader = .\assets\shaders\ui\ui_basic.kbshader
+						Shader = .\assets\shaders\ui\ui_additive.kbshader
 						ShaderParams = 6
 							kbShaderParamComponent { 
 								Enabled = 0
@@ -3449,7 +3458,7 @@ kbGameEntity 0 0 0 0 {
 								Enabled = 0
 								LifeTime =  -1.000000
 								ParamName = "baseTexture"
-								Texture = .\assets\ui\pausemenu\quit.tif
+								Texture = ..\..\kbengine\assets\textures\black.bmp
 								Vector = 0.000000 0.000000 0.000000 0.000000
 							}
 							kbShaderParamComponent { 
@@ -3470,9 +3479,68 @@ kbGameEntity 0 0 0 0 {
 				RelativePosition = 0.299280 0.600000 0.000000
 				RelativeSize = 0.200720 0.150000 1.000000
 			}
+			kbUIWidgetComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchor = TopLeft
+				AxisLock = LockAll
+				ChildWidgets = 0
+				Materials = 1
+					kbMaterialComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						CullModeOverride = ShaderDefault
+						Shader = .\assets\shaders\ui\ui_additive.kbshader
+						ShaderParams = 6
+							kbShaderParamComponent { 
+								Enabled = 0
+								LifeTime =  -1.000000
+								ParamName = "normalizedScreenSize_Anchor"
+								Texture = NULL
+								Vector = 0.000000 0.000000 0.000000 0.000000
+							}
+							kbShaderParamComponent { 
+								Enabled = 0
+								LifeTime =  -1.000000
+								ParamName = "colorFactor"
+								Texture = NULL
+								Vector = 1.000000 1.000000 1.000000 1.000000
+							}
+							kbShaderParamComponent { 
+								Enabled = 0
+								LifeTime =  -1.000000
+								ParamName = "rotationAngle"
+								Texture = NULL
+								Vector = 0.000000 0.000000 0.000000 0.000000
+							}
+							kbShaderParamComponent { 
+								Enabled = 0
+								LifeTime =  -1.000000
+								ParamName = "additiveTextureParams"
+								Texture = NULL
+								Vector = 0.000000 0.000000 0.000000 0.000000
+							}
+							kbShaderParamComponent { 
+								Enabled = 0
+								LifeTime =  -1.000000
+								ParamName = "baseTexture"
+								Texture = .\assets\ui\widgets\checkmark.jpg
+								Vector = 0.000000 0.000000 0.000000 0.000000
+							}
+							kbShaderParamComponent { 
+								Enabled = 0
+								LifeTime =  -1.000000
+								ParamName = "additiveTexture"
+								Texture = NULL
+								Vector = 0.000000 0.000000 0.000000 0.000000
+							}
+					}
+				RelativePosition = 0.375000 0.400000 0.000000
+				RelativeSize = 0.030000 0.050000 1.000000
+			}
 	}
 }
-kbGameEntity 0 0 0 0 {
+kbGameEntity 4065076881 1263085194 3586377395 3441874589 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
@@ -3487,7 +3555,7 @@ kbGameEntity 0 0 0 0 {
 		Anchor = MiddleLeft
 		AxisLock = LockAll
 		ChildWidgets = 1
-			kbUIWidget { 
+			kbUIWidgetComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
 				Anchor = MiddleLeft
@@ -3552,14 +3620,14 @@ kbGameEntity 0 0 0 0 {
 		 = 
 	}
 }
-kbGameEntity 0 0 0 0 {
+kbGameEntity 191628142 1164611098 2253314479 1292534890 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "Fox"
-		Orientation = 0.000000 1.000000 0.000000 0.000000
-		Position = 77.066940 -52000.500000 -379.951324
-		Scale = 1.000000 1.000000 1.000000
+		Orientation = 0.000000 -1.000000 0.000000 0.000000
+		Position = 76.992683 -52.599991 -233.828537
+		Scale = 0.750000 0.750000 0.750000
 	}
 	kbSkeletalModelComponent { 
 		Enabled = 1
@@ -3571,7 +3639,7 @@ kbGameEntity 0 0 0 0 {
 				LifeTime =  -1.000000
 				CullModeOverride = ShaderDefault
 				Shader = .\assets\shaders\character\characterbase.kbshader
-				ShaderParams = 5
+				ShaderParams = 8
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
@@ -3607,11 +3675,129 @@ kbGameEntity 0 0 0 0 {
 						Texture = .\assets\models\characters\snolaf\snolaf_clipmap.tif
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "hatchParams"
+						Texture = NULL
+						Vector = 1.000000 100.000000 5.000000 0.350000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "hatchTexture1"
+						Texture = .\assets\fx\hatch\tam_1.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "hatchTexture2"
+						Texture = .\assets\fx\hatch\tam_2.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
 			}
 		RenderOrderBias =  0.000000
 		RenderPass = LightingPass
-		Animations = 0
-		DebugAnimIndex = -1
+		Animations = 10
+			kbAnimComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Animation = .\assets\models\characters\fox\fox_cry.kbanim.ms3d
+				AnimationEvent = 0
+				AnimationName = "Cry"
+				IsLooping = 1
+				TimeScale =  2.000000
+			}
+			kbAnimComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Animation = .\assets\models\characters\fox\kungfusheep\fox_stare.kbanim.ms3d
+				AnimationEvent = 0
+				AnimationName = "Stare"
+				IsLooping = 0
+				TimeScale =  1.000000
+			}
+			kbAnimComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Animation = .\assets\models\characters\fox\fox_walk.kbanim.ms3d
+				AnimationEvent = 0
+				AnimationName = "Walk"
+				IsLooping = 1
+				TimeScale =  5.000000
+			}
+			kbAnimComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Animation = .\assets\models\characters\fox\fox_idle.kbanim.ms3d
+				AnimationEvent = 0
+				AnimationName = "Idle"
+				IsLooping = 0
+				TimeScale =  1.000000
+			}
+			kbAnimComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Animation = .\assets\models\characters\fox\kungfusheep\dance.kbanim.ms3d
+				AnimationEvent = 0
+				AnimationName = "Dance"
+				IsLooping = 1
+				TimeScale =  6.000000
+			}
+			kbAnimComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Animation = .\assets\models\characters\fox\kungfusheep\disrespect.kbanim.ms3d
+				AnimationEvent = 0
+				AnimationName = "Disrespect"
+				IsLooping = 0
+				TimeScale =  5.000000
+			}
+			kbAnimComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Animation = .\assets\models\characters\fox\kungfusheep\slap_snolaf.kbanim.ms3d
+				AnimationEvent = 1
+					kbAnimEvent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						EventName = "SlapSound"
+						EventTime =  0.760000
+						EventValue =  1.000000
+					}
+				AnimationName = "Slap Snolaf"
+				IsLooping = 0
+				TimeScale =  8.000000
+			}
+			kbAnimComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Animation = .\assets\models\characters\fox\kungfusheep\dance_stare.kbanim.ms3d
+				AnimationEvent = 0
+				AnimationName = "Dance_Stare"
+				IsLooping = 1
+				TimeScale =  4.500000
+			}
+			kbAnimComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Animation = .\assets\models\characters\fox\kungfusheep\fox_title.kbanim.ms3d
+				AnimationEvent = 0
+				AnimationName = "Title"
+				IsLooping = 0
+				TimeScale =  5.000000
+			}
+			kbAnimComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Animation = .\assets\models\characters\fox\kungfusheep\fox_dive.kbanim.ms3d
+				AnimationEvent = 0
+				AnimationName = "Water_Dive"
+				IsLooping = 0
+				TimeScale =  5.000000
+			}
+		DebugAnimIndex = 0
 		Model = .\assets\models\characters\fox\fox.ms3d
 	}
 	kbSkeletalModelComponent { 
@@ -3663,12 +3849,132 @@ kbGameEntity 0 0 0 0 {
 			}
 		RenderOrderBias =  0.000000
 		RenderPass = LightingPass
-		Animations = 0
-		DebugAnimIndex = -1
+		Animations = 4
+			kbAnimComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Animation = .\assets\models\characters\fox\fox_cry.kbanim.ms3d
+				AnimationEvent = 0
+				AnimationName = "Cry"
+				IsLooping = 1
+				TimeScale =  2.000000
+			}
+			kbAnimComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Animation = .\assets\models\characters\fox\kungfusheep\fox_stare.kbanim.ms3d
+				AnimationEvent = 0
+				AnimationName = "Stare"
+				IsLooping = 0
+				TimeScale =  1.000000
+			}
+			kbAnimComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Animation = .\assets\models\characters\fox\fox_walk.kbanim.ms3d
+				AnimationEvent = 0
+				AnimationName = ""
+				IsLooping = 1
+				TimeScale =  3.000000
+			}
+			kbAnimComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Animation = .\assets\models\characters\fox\fox_idle.kbanim.ms3d
+				AnimationEvent = 0
+				AnimationName = "Idle"
+				IsLooping = 0
+				TimeScale =  1.000000
+			}
+		DebugAnimIndex = 0
 		Model = .\assets\models\characters\fox\fox.ms3d
 	}
+	kbParticleComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		Name = ""
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 0.000000 1.000000 0.000000
+		Scale = 1.000000 1.000000 1.000000
+		AlphaOverLife = 0
+		ColorOverLife = 0
+		DebugPlayEntity = 0
+		EndColor = 1.000000 1.000000 1.000000 1.000000
+		Gravity = 0.000000 -5.000000 0.000000
+		MaterialList = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\fx\particle_blendadd.kbshader
+				ShaderParams = 2
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorMultplier"
+						Texture = NULL
+						Vector = 1.000000 1.000000 1.000000 1.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "shaderTexture"
+						Texture = .\assets\fx\splashes\splash_velocity_1.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		MaxBurstCount = 0
+		MaxDuration =  3.000000
+		MaxEndRotationRate =  0.000000
+		MaxEndSize = 3.000000 3.000000 3.000000
+		MaxEndVelocity = 0.000000 0.000000 0.000000
+		MaxParticlesToEmit = -1
+		MaxSpawnRate =  12.000000
+		MaxStart3DOffset = -0.300000 0.100000 0.000000
+		MaxStart3DRotation = 0.000000 0.000000 0.000000
+		MaxStartRotationRate =  0.000000
+		MaxStartSize = 0.060000 0.060000 0.060000
+		MaxStartVelocity = 2.000000 2.000000 -1.000000
+		MinBurstCount = 0
+		MinDuration =  3.000000
+		MinEndRotationRate =  0.000000
+		MinEndSize = 0.000000 3.000000 3.000000
+		MinEndVelocity = 0.000000 0.000000 0.000000
+		MinSpawnRate =  10.000000
+		MinStart3DOffset = -0.300000 0.100000 0.000000
+		MinStart3DRotation = 0.000000 0.000000 0.000000
+		MinStartRotationRate =  0.000000
+		MinStartSize = 0.050000 0.050000 0.050000
+		MinStartVelocity = -2.000000 2.000000 0.000000
+		ModelEmitter = 0
+		ParticleBillboardType = AlignAlongVelocity
+		RenderOrderBias =  0.000000
+		RotationOverLife = 0
+		SizeOverLife = 1
+			kbVectorAnimEvent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				EventName = ""
+				EventTime =  0.000000
+				EventValue = 1.000000 1.000000 1.000000 1.000000
+			}
+		StartColor = 1.000000 1.000000 1.000000 1.000000
+		StartDelay =  0.000000
+		TotalDuration =  -1.000000
+		VelocityCurve = 0
+	}
+	CannonActorComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		DummyTemp = 0
+		Health =  100.000000
+		AttackVO = 0
+		Health =  100.000000
+		MaxRotateSpeed =  15.000000
+		MaxRunSpeed =  3.000000
+	}
 }
-kbGameEntity 0 0 0 0 {
+kbGameEntity 968885140 1085284001 2323485569 3680011406 {
 	kbTransformComponent { 
 		Enabled = 1
 		LifeTime =  -1.000000
@@ -3683,7 +3989,7 @@ kbGameEntity 0 0 0 0 {
 		Anchor = MiddleLeft
 		AxisLock = LockYAxis
 		ChildWidgets = 2
-			kbUIWidget { 
+			kbUIWidgetComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
 				Anchor = MiddleLeft
@@ -3742,18 +4048,18 @@ kbGameEntity 0 0 0 0 {
 				RelativePosition = 0.000000 0.000000 0.000000
 				RelativeSize = 1.000000 1.000000 1.000000
 			}
-			kbUIWidget { 
+			kbUIWidgetComponent { 
 				Enabled = 1
 				LifeTime =  -1.000000
-				Anchor = MiddleLeft
-				AxisLock = LockAll
+				Anchor = TopLeft
+				AxisLock = LockYAxis
 				ChildWidgets = 0
 				Materials = 1
 					kbMaterialComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
 						CullModeOverride = ShaderDefault
-						Shader = .\assets\shaders\ui\ui_basic.kbshader
+						Shader = .\assets\shaders\ui\ui_additive.kbshader
 						ShaderParams = 6
 							kbShaderParamComponent { 
 								Enabled = 0
@@ -3787,7 +4093,7 @@ kbGameEntity 0 0 0 0 {
 								Enabled = 0
 								LifeTime =  -1.000000
 								ParamName = "baseTexture"
-								Texture = ..\..\kbengine\assets\textures\white.bmp
+								Texture = .\assets\ui\widgets\checkmark.jpg
 								Vector = 0.000000 0.000000 0.000000 0.000000
 							}
 							kbShaderParamComponent { 
@@ -3798,8 +4104,8 @@ kbGameEntity 0 0 0 0 {
 								Vector = 0.000000 0.000000 0.000000 0.000000
 							}
 					}
-				RelativePosition = 0.050000 0.530000 0.000000
-				RelativeSize = 0.050000 0.100000 1.000000
+				RelativePosition = 0.060000 0.850000 1.000000
+				RelativeSize = 0.070000 0.060000 1.000000
 			}
 		Materials = 1
 			kbMaterialComponent { 
@@ -3863,5 +4169,1149 @@ kbGameEntity 0 0 0 0 {
 				Volume =  1.000000
 				WaveFile = .\assets\sounds\menus\action_vo.wav
 			}
+	}
+}
+kbGameEntity 3622350630 1299414661 2143524754 2655535189 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Outro Camera 1"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 76.992683 -52.599991 -237.628464
+		Scale = 25.000000 25.000000 25.000000
+	}
+	kbSkeletalModelComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		CastsShadow = 1
+		Materials = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\character\characterbase.kbshader
+				ShaderParams = 5
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorTexture"
+						Texture = .\assets\models\characters\3000ton\3000ton_colormap.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "fxMapMask"
+						Texture = NULL
+						Vector = 0.000000 1.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "fxMap"
+						Texture = .\assets\models\characters\3000ton\3000ton_fxmap_1.tif
+						Vector = 1.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "clipMapMask"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "clipMap"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		RenderOrderBias =  0.000000
+		RenderPass = LightingPass
+		Animations = 1
+			kbAnimComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Animation = .\assets\models\characters\3000ton\3000ton_kungfu_idle.kbanim.ms3d
+				AnimationEvent = 0
+				AnimationName = ""
+				IsLooping = 1
+				TimeScale =  1.000000
+			}
+		DebugAnimIndex = 0
+		Model = .\assets\models\characters\3000ton\3000ton.ms3d
+	}
+	kbSkeletalModelComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		Materials = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\character\characteroutline.kbshader
+				ShaderParams = 5
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "outlineParams"
+						Texture = NULL
+						Vector = 0.020000 0.100000 0.750000 5.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "smearParams"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "clipMapMask"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorTexture"
+						Texture = .\assets\models\characters\3000ton\3000ton_colormap.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "clipMap"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		RenderOrderBias =  0.000000
+		RenderPass = LightingPass
+		Animations = 1
+			kbAnimComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Animation = .\assets\models\characters\3000ton\3000ton_kungfu_idle.kbanim.ms3d
+				AnimationEvent = 0
+				AnimationName = "Run"
+				IsLooping = 1
+				TimeScale =  1.000000
+			}
+		DebugAnimIndex = 0
+		Model = .\assets\models\characters\3000ton\3000ton.ms3d
+	}
+	kbParticleComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Small_LoveHearts"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 0.000000 1.750000 0.000000
+		Scale = 1.000000 1.000000 1.000000
+		AlphaOverLife = 0
+		ColorOverLife = 0
+		DebugPlayEntity = 0
+		EndColor = 1.000000 1.000000 1.000000 0.000000
+		Gravity = 0.000000 0.000000 0.000000
+		MaterialList = 1
+			kbMaterialComponent { 
+				Enabled = 1
+				LifeTime =  -1.000000
+				CullModeOverride = None
+				Shader = .\assets\shaders\fx\particle_blendadd.kbshader
+				ShaderParams = 2
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorMultplier"
+						Texture = NULL
+						Vector = 1.000000 1.000000 1.000000 1.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "shaderTexture"
+						Texture = .\assets\fx\heart\hearts_1.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		MaxBurstCount = 0
+		MaxDuration =  3.000000
+		MaxEndRotationRate =  0.000000
+		MaxEndSize = 0.450000 0.450000 0.450000
+		MaxEndVelocity = 0.000000 0.000000 0.000000
+		MaxNumParticles = -1
+		MaxParticlesToEmit = -1
+		MaxSpawnRate =  1.000000
+		MaxStart3DOffset = 0.000000 0.000000 0.000000
+		MaxStart3DRotation = 0.000000 0.000000 10.000000
+		MaxStartRotationRate =  0.000000
+		MaxStartSize = 0.450000 0.450000 0.450000
+		MaxStartVelocity = 1.000000 5.000000 1.000000
+		MinBurstCount = 0
+		MinDuration =  3.000000
+		MinEndRotationRate =  0.000000
+		MinEndSize = 0.350000 0.350000 0.350000
+		MinEndVelocity = 0.000000 0.000000 0.000000
+		MinSpawnRate =  1.000000
+		MinStart3DOffset = 0.000000 0.000000 0.000000
+		MinStart3DRotation = 0.000000 0.000000 0.000000
+		MinStartRotationRate =  0.000000
+		MinStartSize = 0.350000 0.350000 0.350000
+		MinStartVelocity = -1.000000 5.000000 -1.000000
+		ModelEmitter = 0
+		ParticleBillboardType = FaceCamera
+		RenderOrderBias =  0.000000
+		RotationOverLife = 0
+		SizeOverLife = 0
+		StartColor = 1.000000 1.000000 1.000000 1.000000
+		StartDelay =  0.000000
+		TotalDuration =  -1.000000
+		VelocityCurve = 0
+	}
+	kbParticleComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Large_LoveHearts"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 0.000000 1.750000 0.000000
+		Scale = 1.000000 1.000000 1.000000
+		AlphaOverLife = 0
+		ColorOverLife = 0
+		DebugPlayEntity = 0
+		EndColor = 1.000000 1.000000 1.000000 1.000000
+		Gravity = 0.000000 0.000000 0.000000
+		MaterialList = 1
+			kbMaterialComponent { 
+				Enabled = 1
+				LifeTime =  -1.000000
+				CullModeOverride = None
+				Shader = .\assets\shaders\fx\particle_blendadd.kbshader
+				ShaderParams = 2
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorMultplier"
+						Texture = NULL
+						Vector = 1.000000 1.000000 1.000000 1.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "shaderTexture"
+						Texture = .\assets\fx\heart\hearts_1.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		MaxBurstCount = 0
+		MaxDuration =  3.000000
+		MaxEndRotationRate =  0.000000
+		MaxEndSize = 0.390000 0.390000 0.390000
+		MaxEndVelocity = 0.000000 0.000000 0.000000
+		MaxParticlesToEmit = -1
+		MaxSpawnRate =  5.000000
+		MaxStart3DOffset = 0.000000 0.000000 0.000000
+		MaxStart3DRotation = 0.000000 0.000000 0.000000
+		MaxStartRotationRate =  0.000000
+		MaxStartSize = 0.390000 0.390000 0.390000
+		MaxStartVelocity = 1.000000 5.000000 1.000000
+		MinBurstCount = 0
+		MinDuration =  3.000000
+		MinEndRotationRate =  0.000000
+		MinEndSize = 0.350000 0.350000 0.350000
+		MinEndVelocity = 0.000000 0.000000 0.000000
+		MinSpawnRate =  5.000000
+		MinStart3DOffset = 0.000000 0.000000 0.000000
+		MinStart3DRotation = 0.000000 0.000000 0.000000
+		MinStartRotationRate =  0.000000
+		MinStartSize = 0.350000 0.350000 0.350000
+		MinStartVelocity = -1.000000 5.000000 -1.000000
+		ModelEmitter = 0
+		ParticleBillboardType = FaceCamera
+		RenderOrderBias =  0.000000
+		RotationOverLife = 0
+		SizeOverLife = 0
+		StartColor = 1.000000 1.000000 1.000000 1.000000
+		StartDelay =  0.000000
+		TotalDuration =  -1.000000
+		VelocityCurve = 0
+	}
+}
+kbGameEntity 1671951467 1280881932 1698058926 3039328037 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "3000 Ton"
+		Orientation = 0.000000 1.000000 0.000000 0.000000
+		Position = 76.992683 -52.599991 -227.628464
+		Scale = 25.000000 25.000000 25.000000
+	}
+	kbSkeletalModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 1
+		Materials = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\character\characterbase.kbshader
+				ShaderParams = 8
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorTexture"
+						Texture = .\assets\models\characters\3000ton\3000ton_colormap.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "fxMapMask"
+						Texture = NULL
+						Vector = 0.000000 1.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "fxMap"
+						Texture = .\assets\models\characters\3000ton\3000ton_fxmap_1.tif
+						Vector = 1.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "clipMapMask"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "clipMap"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "hatchParams"
+						Texture = NULL
+						Vector = 1.000000 100.000000 5.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "hatchTexture1"
+						Texture = .\assets\fx\hatch\tam_1.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "hatchTexture2"
+						Texture = .\assets\fx\hatch\tam_2.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		RenderOrderBias =  0.000000
+		RenderPass = LightingPass
+		Animations = 4
+			kbAnimComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Animation = .\assets\models\characters\3000ton\3000ton_kungfu_idle.kbanim.ms3d
+				AnimationEvent = 0
+				AnimationName = "Idle"
+				IsLooping = 0
+				TimeScale =  1.000000
+			}
+			kbAnimComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Animation = .\assets\models\characters\3000ton\kungfusheep\pounce_1.kbanim.ms3d
+				AnimationEvent = 2
+					kbAnimEvent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						EventName = "Pounce_1"
+						EventTime =  0.100000
+						EventValue =  0.000000
+					}
+					kbAnimEvent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						EventName = "Pounce_1_Smear"
+						EventTime =  0.100000
+						EventValue =  0.000000
+					}
+				AnimationName = "Pounce_1"
+				IsLooping = 0
+				TimeScale =  1.000000
+			}
+			kbAnimComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Animation = .\assets\models\characters\3000ton\kungfusheep\pounce_2.kbanim.ms3d
+				AnimationEvent = 2
+					kbAnimEvent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						EventName = "Pounce_2_Impact_1"
+						EventTime =  7.600000
+						EventValue =  0.000000
+					}
+					kbAnimEvent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						EventName = "Pounce_2_Smear"
+						EventTime =  0.000000
+						EventValue =  0.000000
+					}
+				AnimationName = "Pounce_2"
+				IsLooping = 0
+				TimeScale =  4.000000
+			}
+			kbAnimComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Animation = .\assets\models\characters\3000ton\kungfusheep\karatepose.kbanim.ms3d
+				AnimationEvent = 0
+				AnimationName = "KaratePose"
+				IsLooping = 0
+				TimeScale =  1.000000
+			}
+		DebugAnimIndex = -1
+		Model = .\assets\models\characters\3000ton\3000ton.ms3d
+	}
+	kbSkeletalModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		Materials = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\character\characteroutline.kbshader
+				ShaderParams = 5
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "outlineParams"
+						Texture = NULL
+						Vector = 0.020000 0.100000 0.750000 5.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "smearParams"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "clipMapMask"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorTexture"
+						Texture = .\assets\models\characters\3000ton\3000ton_colormap.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "clipMap"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		RenderOrderBias =  0.000000
+		RenderPass = LightingPass
+		Animations = 4
+			kbAnimComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Animation = .\assets\models\characters\3000ton\3000ton_kungfu_idle.kbanim.ms3d
+				AnimationEvent = 0
+				AnimationName = "Run"
+				IsLooping = 1
+				TimeScale =  1.000000
+			}
+			kbAnimComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Animation = .\assets\models\characters\3000ton\kungfusheep\pounce_1.kbanim.ms3d
+				AnimationEvent = 0
+				AnimationName = "Pounce_1"
+				IsLooping = 0
+				TimeScale =  1.000000
+			}
+			kbAnimComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Animation = .\assets\models\characters\3000ton\kungfusheep\pounce_2.kbanim.ms3d
+				AnimationEvent = 0
+				AnimationName = "Pounce_2"
+				IsLooping = 1
+				TimeScale =  1.000000
+			}
+			kbAnimComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Animation = .\assets\models\characters\3000ton\kungfusheep\karatepose.kbanim.ms3d
+				AnimationEvent = 0
+				AnimationName = "KaratePose"
+				IsLooping = 0
+				TimeScale =  1.000000
+			}
+		DebugAnimIndex = -1
+		Model = .\assets\models\characters\3000ton\3000ton.ms3d
+	}
+	CannonActorComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		DummyTemp = 0
+		Health =  100.000000
+		AttackVO = 0
+		Health =  100.000000
+		MaxRotateSpeed =  15.000000
+		MaxRunSpeed =  3.000000
+	}
+}
+kbGameEntity 2813763918 1107914595 2561660852 2373538385 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "3000 Ton Title"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 64.338379 -48.487957 -232.317795
+		Scale = 1.000000 1.000000 1.000000
+	}
+	kbUIWidgetComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Anchor = MiddleLeft
+		AxisLock = LockAll
+		ChildWidgets = 0
+		Materials = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\ui\ui_basic.kbshader
+				ShaderParams = 6
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "normalizedScreenSize_Anchor"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorFactor"
+						Texture = NULL
+						Vector = 1.000000 1.000000 1.000000 1.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "rotationAngle"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "additiveTextureParams"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "baseTexture"
+						Texture = .\assets\ui\kungfusheep\3000ton_title.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "additiveTexture"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		RelativePosition = 0.000000 0.000000 0.000000
+		RelativeSize = 1.000000 1.000000 1.000000
+	}
+}
+kbGameEntity 2834549981 1318015840 1209716610 144016064 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "3000 Ton Smash Snolaf Pos"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 76.992683 -52.626686 -235.728653
+		Scale = 1.000000 1.000000 1.000000
+	}
+}
+kbGameEntity 1235986948 1232903237 4084947108 3961454180 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Present_1"
+		Orientation = 0.000000 -0.585097 0.000000 0.810963
+		Position = 77.167183 -51.945030 -234.840240
+		Scale = 45.000000 45.000000 45.000000
+	}
+	kbFlingPhysicsComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Gravity = 1.000000 2.000000 1.000000
+		MaxAngularSpeed =  15.000000
+		MaxLinearVelocity = 1.000000 2.000000 1.000000
+		MinAngularSpeed =  10.000000
+		MinLinearVelocity = -1.000000 1.000000 -1.000000
+	}
+	kbSkeletalModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		Materials = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\environment\environmentskinned.kbshader
+				ShaderParams = 4
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "diffuse"
+						Texture = .\assets\models\props\presents\present_1.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "normal"
+						Texture = ..\..\kbengine\assets\textures\defaultnormal.bmp
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "propertyMap"
+						Texture = ..\..\kbengine\assets\textures\white.bmp
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "emissiveMap"
+						Texture = ..\..\kbengine\assets\textures\white.bmp
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		RenderOrderBias =  0.000000
+		RenderPass = LightingPass
+		Animations = 0
+		DebugAnimIndex = -1
+		Model = .\assets\models\props\presents\present.ms3d
+	}
+}
+kbGameEntity 2173328964 1105303046 1808318377 1249498279 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Present_2"
+		Orientation = 0.000000 -0.585097 0.000000 0.810963
+		Position = 77.167183 -51.945030 -237.240387
+		Scale = 45.000000 45.000000 45.000000
+	}
+	kbFlingPhysicsComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Gravity = 1.000000 2.000000 1.000000
+		MaxAngularSpeed =  15.000000
+		MaxLinearVelocity = 1.000000 2.000000 1.000000
+		MinAngularSpeed =  10.000000
+		MinLinearVelocity = -1.000000 1.000000 1.000000
+	}
+	kbSkeletalModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		Materials = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\environment\environmentskinned.kbshader
+				ShaderParams = 4
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "diffuse"
+						Texture = .\assets\models\props\presents\present_1.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "normal"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "propertyMap"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "emissiveMap"
+						Texture = ..\..\kbengine\assets\textures\white.bmp
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		RenderOrderBias =  0.000000
+		RenderPass = LightingPass
+		Animations = 0
+		DebugAnimIndex = -1
+		Model = .\assets\models\props\presents\present.ms3d
+	}
+}
+kbGameEntity 2823924498 1217103692 1108638655 59959439 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Bridge"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 76.992683 -52.798882 -237.136353
+		Scale = 250.000000 250.000000 250.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		Materials = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\environment\environmentbase.kbshader
+				ShaderParams = 4
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "diffuse"
+						Texture = .\assets\models\environment\platforms\bridge_wooden_1.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "normal"
+						Texture = ..\..\kbengine\assets\textures\defaultnormal.bmp
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "propertyMap"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "emissiveMap"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		RenderOrderBias =  0.000000
+		RenderPass = LightingPass
+		Model = .\assets\models\environment\platforms\bridge_wooden_1.fbx
+	}
+}
+kbGameEntity 4121860101 1338733555 581251478 2312240592 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Bridge"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 76.992683 -52.798882 -228.846329
+		Scale = 250.000000 250.000000 250.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		Materials = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\environment\environmentbase.kbshader
+				ShaderParams = 4
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "diffuse"
+						Texture = .\assets\models\environment\platforms\bridge_wooden_1.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "normal"
+						Texture = ..\..\kbengine\assets\textures\defaultnormal.bmp
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "propertyMap"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "emissiveMap"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		RenderOrderBias =  0.000000
+		RenderPass = LightingPass
+		Model = .\assets\models\environment\platforms\bridge_wooden_1.fbx
+	}
+}
+kbGameEntity 2451017232 1334201149 744927158 3925545539 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Bridge Decal"
+		Orientation = 0.408241 0.577358 0.408245 -0.577350
+		Position = 76.922363 -52.571632 -243.064667
+		Scale = 150.000000 175.000000 125.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		Materials = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\fx\decal_blend.kbshader
+				ShaderParams = 4
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "cameraPosition"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorMultiplier"
+						Texture = NULL
+						Vector = 0.750000 0.750000 0.750000 1.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "clipData"
+						Texture = NULL
+						Vector = 0.200000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "ProjectionTex"
+						Texture = .\assets\models\environment\platforms\bridge_decal.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		RenderOrderBias =  0.000000
+		RenderPass = Post-LightingPass
+		Model = ..\..\kbengine\assets\models\unitcube.ms3d
+	}
+}
+kbGameEntity 2879835413 1222479798 1490986381 1570850169 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Title"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 64.338379 -48.487957 -232.317795
+		Scale = 1.000000 1.000000 1.000000
+	}
+	kbUIWidgetComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Anchor = MiddleLeft
+		AxisLock = LockAll
+		ChildWidgets = 0
+		Materials = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\ui\ui_basic.kbshader
+				ShaderParams = 6
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "normalizedScreenSize_Anchor"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorFactor"
+						Texture = NULL
+						Vector = 1.000000 1.000000 1.000000 1.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "rotationAngle"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "additiveTextureParams"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "baseTexture"
+						Texture = .\assets\ui\kungfusheep\theshow_title.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "additiveTexture"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		RelativePosition = 0.000000 0.000000 0.000000
+		RelativeSize = 1.000000 1.000000 1.000000
+	}
+}
+kbGameEntity 3733824195 1207903711 1401863562 1523924579 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Bridge Explosion FX"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 76.922363 -52.571632 -243.064667
+		Scale = 1.000000 1.000000 1.000000
+	}
+	kbParticleComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = ""
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 0.000000 0.000000 0.000000
+		Scale = 1.000000 1.000000 1.000000
+		AlphaOverLife = 0
+		ColorOverLife = 0
+		DebugPlayEntity = 0
+		EndColor = 0.500000 0.500000 0.500000 1.000000
+		Gravity = 0.000000 -15.000000 0.000000
+		MaterialList = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\fx\particle_blendadd.kbshader
+				ShaderParams = 2
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorMultplier"
+						Texture = NULL
+						Vector = 1.000000 1.000000 1.000000 1.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "shaderTexture"
+						Texture = .\assets\fx\wood\wood_splinter.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		MaxBurstCount = 45
+		MaxDuration =  3.000000
+		MaxEndRotationRate =  10.000000
+		MaxEndSize = 0.500000 0.500000 0.500000
+		MaxEndVelocity = 0.000000 0.000000 0.000000
+		MaxParticlesToEmit = -1
+		MaxSpawnRate =  0.000000
+		MaxStart3DOffset = 0.000000 0.000000 0.000000
+		MaxStart3DRotation = 0.000000 0.000000 0.000000
+		MaxStartRotationRate =  10.000000
+		MaxStartSize = 0.500000 0.500000 0.500000
+		MaxStartVelocity = 5.000000 10.000000 5.000000
+		MinBurstCount = 35
+		MinDuration =  2.000000
+		MinEndRotationRate =  -10.000000
+		MinEndSize = 0.500000 0.500000 0.500000
+		MinEndVelocity = 0.000000 0.000000 0.000000
+		MinSpawnRate =  0.000000
+		MinStart3DOffset = 0.000000 0.000000 0.000000
+		MinStart3DRotation = 0.000000 0.000000 0.000000
+		MinStartRotationRate =  -10.000000
+		MinStartSize = 0.100000 0.100000 0.100000
+		MinStartVelocity = -5.000000 10.000000 -5.000000
+		ModelEmitter = 0
+		ParticleBillboardType = FaceCamera
+		RenderOrderBias =  0.000000
+		RotationOverLife = 0
+		SizeOverLife = 1
+			kbVectorAnimEvent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				EventName = ""
+				EventTime =  0.000000
+				EventValue = 1.000000 1.000000 1.000000 1.000000
+			}
+		StartColor = 0.500000 0.500000 0.500000 1.000000
+		StartDelay =  0.000000
+		TotalDuration =  3.000000
+		VelocityCurve = 5
+			kbAnimEvent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				EventName = ""
+				EventTime =  0.050000
+				EventValue =  3.500000
+			}
+			kbAnimEvent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				EventName = ""
+				EventTime =  0.060000
+				EventValue =  2.500000
+			}
+			kbAnimEvent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				EventName = ""
+				EventTime =  0.070000
+				EventValue =  1.800000
+			}
+			kbAnimEvent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				EventName = ""
+				EventTime =  0.100000
+				EventValue =  1.000000
+			}
+			kbAnimEvent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				EventName = ""
+				EventTime =  1.000000
+				EventValue =  1.000000
+			}
+	}
+}
+kbGameEntity 2684646162 1162908266 836236475 2683629200 {
+	kbTransformComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		Name = "TV Overlay"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 74.384018 -49.436947 -308.378693
+		Scale = 555.000000 555.000000 1.000000
+	}
+	kbUIWidgetComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Anchor = TopLeft
+		AxisLock = LockAll
+		ChildWidgets = 0
+		Materials = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\ui\ui_basic.kbshader
+				ShaderParams = 6
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "normalizedScreenSize_Anchor"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorFactor"
+						Texture = NULL
+						Vector = 1.000000 1.000000 1.000000 1.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "rotationAngle"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "additiveTextureParams"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "baseTexture"
+						Texture = .\assets\ui\kungfusheep\tv_overlay.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "additiveTexture"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		RelativePosition = 0.000000 0.000000 0.000000
+		RelativeSize = 1.000000 1.000000 1.000000
 	}
 }
