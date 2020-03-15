@@ -242,6 +242,7 @@ void kbGame::Update() {
 			m_ParticleManager.RenderSync();
 			g_pRenderer->RenderSync();
 
+			g_ResourceManager.RenderSync();
 
 			for ( int i = 0; i < m_RemoveEntityList.size(); i++ ) {
 				std::vector<kbGameEntity*>::iterator it;

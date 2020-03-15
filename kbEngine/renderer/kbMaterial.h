@@ -2,7 +2,7 @@
 // kbMaterial.h
 //
 //
-// 2016-2019 kbEngine 2.0
+// 2016 kbEngine 2.0
 //===================================================================================================
 #ifndef _KBMATERIAL_H_
 #define _KBMATERIAL_H_
@@ -27,9 +27,9 @@ public:
 
 	void										Release() { Release_Internal(); }		// todo: should be a resource like everything else
 
-	kbHWTexture *								GetGPUTexture() const { return m_pGPUTexture; }
+	kbHWTexture*								GetGPUTexture() const { return m_pGPUTexture; }
 
-	const uint8_t *								GetCPUTexture( unsigned int & width, unsigned int & height );
+	const uint8_t*								GetCPUTexture( unsigned int & width, unsigned int & height );
 
 	uint										GetWidth() const { return m_TextureWidth; }
 	uint										GetHeight() const { return m_TextureHeight; }

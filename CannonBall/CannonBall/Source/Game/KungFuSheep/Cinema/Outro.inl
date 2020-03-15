@@ -96,8 +96,8 @@ public:
 		static kbString sOutroCam1( "Outro Camera 1" );
 		static kbString sCry( "Cry" );
 
-		KungFuLevelComponent::Get()->SetPlayLevelMusic( 0, false );
-		KungFuLevelComponent::Get()->SetPlayLevelMusic( 0, true );
+		KungFuLevelComponent::Get()->SetPlayLevelMusic( 1, false );
+		KungFuLevelComponent::Get()->SetPlayLevelMusic( 1, true );
 
 		for ( int i = 0; i < g_pCannonGame->GetGameEntities().size(); i++ ) {
 

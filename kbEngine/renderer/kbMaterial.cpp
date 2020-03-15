@@ -2,7 +2,7 @@
 // kbMaterial.cpp
 //
 //
-// 2016-2018 kbEngine 2.0
+// 2016 kbEngine 2.0
 //===================================================================================================
 #include <Wincodec.h>
 #include "kbCore.h"
@@ -530,7 +530,7 @@ bool kbTexture::Load_Internal() {
 /**
  *	kbTexture::GetCPUTexture
  */
-const uint8_t * kbTexture::GetCPUTexture( unsigned int & width, unsigned int & height ) {
+const uint8_t* kbTexture::GetCPUTexture( unsigned int & width, unsigned int & height ) {
 
 	if ( m_bIsCPUTexture == false ) {
 

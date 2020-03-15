@@ -952,12 +952,17 @@ void kbModel::UnmapVertexBuffer( const INT NumIndices ) {
 
 	m_bVBIsMapped = false;
 	if ( m_bIsDynamicModel && NumIndices > -1 ) {
-		const INT NumTriangles = NumIndices / 3;
-		if ( NumTriangles > m_NumTriangles ) {
-			kbError( "kbModel Overflow" );
-		}
 
-		m_Meshes[0].m_NumTriangles = NumTriangles;
+		if ( this->IsPointCloud() ) {
+			m_NumVertices = NumIndices;
+		} else {
+			const INT NumTriangles = NumIndices / 3;
+			if ( NumTriangles > m_NumTriangles ) {
+				kbError( "kbModel Overflow" );
+			}
+
+			m_Meshes[0].m_NumTriangles = NumTriangles;
+		}
 	}
 
 	m_VertexBuffer.Unmap();
