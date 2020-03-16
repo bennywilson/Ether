@@ -1,8 +1,8 @@
-kbGameEntity 2303589463 1295891621 3492675515 2574686858 {
+kbGameEntity 4276357306 1262466834 1083212972 2849030385 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		Name = "Entity_224"
+		Name = "Entity_226"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
 		Position = 0.000000 0.000000 0.000000
 		Scale = 1.000000 1.000000 1.000000
@@ -10,8 +10,8 @@ kbGameEntity 2303589463 1295891621 3492675515 2574686858 {
 	kbEditorLevelSettingsComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		MainCameraPosition = 71.515747 -49.264378 -354.490234
-		MainCameraRotation = -0.167334 -0.700368 0.174503 0.671589
+		MainCameraPosition = 66.506256 -50.672279 -410.183533
+		MainCameraRotation = -0.071215 -0.691419 0.068802 0.715636
 	}
 }
 kbGameEntity 537364968 1092523782 2953639826 2626478307 {
@@ -989,7 +989,7 @@ kbGameEntity 2623485304 1164391352 3750140854 1068688934 {
 				LifeTime =  -1.000000
 				CullModeOverride = ShaderDefault
 				Shader = .\assets\shaders\environment\environmenttiled.kbshader
-				ShaderParams = 4
+				ShaderParams = 5
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
@@ -1016,6 +1016,13 @@ kbGameEntity 2623485304 1164391352 3750140854 1068688934 {
 						LifeTime =  -1.000000
 						ParamName = "emissiveMap"
 						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "tiledNormal"
+						Texture = .\assets\models\environment\materials\tiledwood_normal.jpg
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 			}
@@ -1062,7 +1069,7 @@ kbGameEntity 3587713139 1101448007 952628641 366038443 {
 				LifeTime =  -1.000000
 				CullModeOverride = ShaderDefault
 				Shader = .\assets\shaders\environment\environmenttiled.kbshader
-				ShaderParams = 4
+				ShaderParams = 5
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
@@ -1089,6 +1096,13 @@ kbGameEntity 3587713139 1101448007 952628641 366038443 {
 						LifeTime =  -1.000000
 						ParamName = "emissiveMap"
 						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "tiledNormal"
+						Texture = .\assets\models\environment\materials\tiledwood_normal.jpg
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 			}
@@ -1116,7 +1130,7 @@ kbGameEntity 3565500909 1121129338 2565412495 3171246714 {
 				LifeTime =  -1.000000
 				CullModeOverride = ShaderDefault
 				Shader = .\assets\shaders\environment\environmenttiled.kbshader
-				ShaderParams = 4
+				ShaderParams = 5
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
@@ -1145,6 +1159,13 @@ kbGameEntity 3565500909 1121129338 2565412495 3171246714 {
 						Texture = NULL
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "tiledNormal"
+						Texture = .\assets\models\environment\materials\tiledwood_normal.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
 			}
 		RenderOrderBias =  0.000000
 		RenderPass = LightingPass
@@ -1157,7 +1178,7 @@ kbGameEntity 1792756094 1339018376 1629935014 1681887078 {
 		LifeTime =  -1.000000
 		Name = "Bridge"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
-		Position = 76.992683 -52.798882 -413.873444
+		Position = 76.992638 -52.798882 -413.863678
 		Scale = 250.000000 250.000000 250.000000
 	}
 	kbStaticModelComponent { 
@@ -1170,7 +1191,7 @@ kbGameEntity 1792756094 1339018376 1629935014 1681887078 {
 				LifeTime =  -1.000000
 				CullModeOverride = ShaderDefault
 				Shader = .\assets\shaders\environment\environmenttiled.kbshader
-				ShaderParams = 5
+				ShaderParams = 8
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
@@ -1205,6 +1226,27 @@ kbGameEntity 1792756094 1339018376 1629935014 1681887078 {
 						ParamName = "tiledNormal"
 						Texture = .\assets\models\environment\materials\tiledwood_normal.jpg
 						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "vertexNoiseMap"
+						Texture = .\assets\models\environment\platforms\woodenbridge_noise.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "worldOffsetScale"
+						Texture = NULL
+						Vector = 0.025000 0.020000 0.010000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "uvScale_VertexNoiseScale"
+						Texture = NULL
+						Vector = 1.000000 1.000000 0.010000 0.010000
 					}
 			}
 		RenderOrderBias =  0.000000
@@ -1597,7 +1639,7 @@ kbGameEntity 4011769355 1323333596 3975013820 4133016020 {
 				LifeTime =  -1.000000
 				CullModeOverride = ShaderDefault
 				Shader = .\assets\shaders\environment\environmenttiled.kbshader
-				ShaderParams = 4
+				ShaderParams = 5
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
@@ -1624,6 +1666,13 @@ kbGameEntity 4011769355 1323333596 3975013820 4133016020 {
 						LifeTime =  -1.000000
 						ParamName = "emissiveMap"
 						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "tiledNormal"
+						Texture = .\assets\models\environment\materials\tiledwood_normal.jpg
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 			}
@@ -1651,7 +1700,7 @@ kbGameEntity 476150570 1178077505 3921805720 167556555 {
 				LifeTime =  -1.000000
 				CullModeOverride = ShaderDefault
 				Shader = .\assets\shaders\environment\environmenttiled.kbshader
-				ShaderParams = 4
+				ShaderParams = 5
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
@@ -1678,6 +1727,13 @@ kbGameEntity 476150570 1178077505 3921805720 167556555 {
 						LifeTime =  -1.000000
 						ParamName = "emissiveMap"
 						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "tiledNormal"
+						Texture = .\assets\models\environment\materials\tiledwood_normal.jpg
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 			}
@@ -1705,7 +1761,7 @@ kbGameEntity 3063563567 1178136607 3804988817 1241362735 {
 				LifeTime =  -1.000000
 				CullModeOverride = ShaderDefault
 				Shader = .\assets\shaders\environment\environmenttiled.kbshader
-				ShaderParams = 4
+				ShaderParams = 5
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
@@ -1732,6 +1788,13 @@ kbGameEntity 3063563567 1178136607 3804988817 1241362735 {
 						LifeTime =  -1.000000
 						ParamName = "emissiveMap"
 						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "tiledNormal"
+						Texture = .\assets\models\environment\materials\tiledwood_normal.jpg
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 			}
@@ -1759,7 +1822,7 @@ kbGameEntity 3012410846 1176812014 2847639957 2265530542 {
 				LifeTime =  -1.000000
 				CullModeOverride = ShaderDefault
 				Shader = .\assets\shaders\environment\environmenttiled.kbshader
-				ShaderParams = 4
+				ShaderParams = 5
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
@@ -1786,6 +1849,13 @@ kbGameEntity 3012410846 1176812014 2847639957 2265530542 {
 						LifeTime =  -1.000000
 						ParamName = "emissiveMap"
 						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "tiledNormal"
+						Texture = .\assets\models\environment\materials\tiledwood_normal.jpg
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 			}
@@ -1813,7 +1883,7 @@ kbGameEntity 4000087732 1074056295 37780884 2473222410 {
 				LifeTime =  -1.000000
 				CullModeOverride = ShaderDefault
 				Shader = .\assets\shaders\environment\environmenttiled.kbshader
-				ShaderParams = 4
+				ShaderParams = 5
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
@@ -1840,6 +1910,13 @@ kbGameEntity 4000087732 1074056295 37780884 2473222410 {
 						LifeTime =  -1.000000
 						ParamName = "emissiveMap"
 						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "tiledNormal"
+						Texture = .\assets\models\environment\materials\tiledwood_normal.jpg
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 			}
@@ -1867,7 +1944,7 @@ kbGameEntity 1081531102 1122866535 398672021 3386659937 {
 				LifeTime =  -1.000000
 				CullModeOverride = ShaderDefault
 				Shader = .\assets\shaders\environment\environmenttiled.kbshader
-				ShaderParams = 4
+				ShaderParams = 5
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
@@ -1896,58 +1973,11 @@ kbGameEntity 1081531102 1122866535 398672021 3386659937 {
 						Texture = NULL
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
-			}
-		RenderOrderBias =  0.000000
-		RenderPass = LightingPass
-		Model = .\assets\models\environment\platforms\bridge_wooden_1.fbx
-	}
-}
-kbGameEntity 3477824963 1325410563 4085668241 505532259 {
-	kbTransformComponent { 
-		Enabled = 0
-		LifeTime =  -1.000000
-		Name = "Bridge"
-		Orientation = 0.000000 0.000000 0.000000 1.000000
-		Position = 76.992683 -52.798882 -287.716431
-		Scale = 250.000000 250.000000 250.000000
-	}
-	kbStaticModelComponent { 
-		Enabled = 1
-		LifeTime =  -1.000000
-		CastsShadow = 0
-		Materials = 1
-			kbMaterialComponent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				CullModeOverride = ShaderDefault
-				Shader = .\assets\shaders\environment\environmenttiled.kbshader
-				ShaderParams = 4
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
-						ParamName = "diffuse"
-						Texture = .\assets\models\environment\platforms\bridge_wooden_1.tif
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "normal"
-						Texture = ..\..\kbengine\assets\textures\defaultnormal.bmp
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "propertyMap"
-						Texture = .\assets\models\environment\platforms\bridge_wooden_1_prop.tif
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "emissiveMap"
-						Texture = NULL
+						ParamName = "tiledNormal"
+						Texture = .\assets\models\environment\materials\tiledwood_normal.jpg
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 			}
@@ -1975,7 +2005,7 @@ kbGameEntity 559386017 1316716511 3755778214 2045459382 {
 				LifeTime =  -1.000000
 				CullModeOverride = ShaderDefault
 				Shader = .\assets\shaders\environment\environmenttiled.kbshader
-				ShaderParams = 4
+				ShaderParams = 5
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
@@ -2002,6 +2032,13 @@ kbGameEntity 559386017 1316716511 3755778214 2045459382 {
 						LifeTime =  -1.000000
 						ParamName = "emissiveMap"
 						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "tiledNormal"
+						Texture = .\assets\models\environment\materials\tiledwood_normal.jpg
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 			}
@@ -2029,7 +2066,7 @@ kbGameEntity 1289487901 1188375855 920596138 4184004917 {
 				LifeTime =  -1.000000
 				CullModeOverride = ShaderDefault
 				Shader = .\assets\shaders\environment\environmenttiled.kbshader
-				ShaderParams = 4
+				ShaderParams = 5
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
@@ -2056,6 +2093,13 @@ kbGameEntity 1289487901 1188375855 920596138 4184004917 {
 						LifeTime =  -1.000000
 						ParamName = "emissiveMap"
 						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "tiledNormal"
+						Texture = .\assets\models\environment\materials\tiledwood_normal.jpg
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 			}
@@ -2083,7 +2127,7 @@ kbGameEntity 714109186 1210138278 3860640913 4056027296 {
 				LifeTime =  -1.000000
 				CullModeOverride = ShaderDefault
 				Shader = .\assets\shaders\environment\environmenttiled.kbshader
-				ShaderParams = 4
+				ShaderParams = 5
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
@@ -2110,6 +2154,13 @@ kbGameEntity 714109186 1210138278 3860640913 4056027296 {
 						LifeTime =  -1.000000
 						ParamName = "emissiveMap"
 						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "tiledNormal"
+						Texture = .\assets\models\environment\materials\tiledwood_normal.jpg
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 			}
@@ -2137,7 +2188,7 @@ kbGameEntity 994630907 1178801820 4058844581 1161728672 {
 				LifeTime =  -1.000000
 				CullModeOverride = ShaderDefault
 				Shader = .\assets\shaders\environment\environmenttiled.kbshader
-				ShaderParams = 4
+				ShaderParams = 5
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
@@ -2164,6 +2215,13 @@ kbGameEntity 994630907 1178801820 4058844581 1161728672 {
 						LifeTime =  -1.000000
 						ParamName = "emissiveMap"
 						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "tiledNormal"
+						Texture = .\assets\models\environment\materials\tiledwood_normal.jpg
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 			}
@@ -2252,7 +2310,7 @@ kbGameEntity 1745036657 1226122723 137629842 2847967967 {
 				LifeTime =  -1.000000
 				CullModeOverride = ShaderDefault
 				Shader = .\assets\shaders\environment\environmenttiled.kbshader
-				ShaderParams = 5
+				ShaderParams = 7
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
@@ -2287,6 +2345,20 @@ kbGameEntity 1745036657 1226122723 137629842 2847967967 {
 						ParamName = "tiledNormal"
 						Texture = .\assets\models\environment\materials\tiledwood_normal.jpg
 						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = ""
+						Texture = .\assets\models\environment\platforms\woodenbridge_noise.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "worldOffsetScale"
+						Texture = NULL
+						Vector = 0.030000 0.000000 0.050000 0.000000
 					}
 			}
 		RenderOrderBias =  0.000000
@@ -2313,7 +2385,7 @@ kbGameEntity 211241734 1165433459 2859075761 1636992949 {
 				LifeTime =  -1.000000
 				CullModeOverride = ShaderDefault
 				Shader = .\assets\shaders\environment\environmenttiled.kbshader
-				ShaderParams = 5
+				ShaderParams = 7
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
@@ -2348,6 +2420,20 @@ kbGameEntity 211241734 1165433459 2859075761 1636992949 {
 						ParamName = "tiledNormal"
 						Texture = .\assets\models\environment\materials\tiledwood_normal.jpg
 						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "vertexNoiseMap"
+						Texture = .\assets\models\environment\platforms\woodenbridge_noise.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "worldOffsetScale"
+						Texture = NULL
+						Vector = 0.030000 0.000000 0.050000 0.000000
 					}
 			}
 		RenderOrderBias =  0.000000
@@ -4977,7 +5063,7 @@ kbGameEntity 2823924498 1217103692 1108638655 59959439 {
 				LifeTime =  -1.000000
 				CullModeOverride = ShaderDefault
 				Shader = .\assets\shaders\environment\environmentbase.kbshader
-				ShaderParams = 4
+				ShaderParams = 5
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
@@ -5004,6 +5090,13 @@ kbGameEntity 2823924498 1217103692 1108638655 59959439 {
 						LifeTime =  -1.000000
 						ParamName = "emissiveMap"
 						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "tiledNormal"
+						Texture = .\assets\models\environment\materials\tiledwood_normal.jpg
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 			}
@@ -5031,7 +5124,7 @@ kbGameEntity 4121860101 1338733555 581251478 2312240592 {
 				LifeTime =  -1.000000
 				CullModeOverride = ShaderDefault
 				Shader = .\assets\shaders\environment\environmentbase.kbshader
-				ShaderParams = 4
+				ShaderParams = 5
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
@@ -5060,6 +5153,13 @@ kbGameEntity 4121860101 1338733555 581251478 2312240592 {
 						Texture = NULL
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "tiledNormal"
+						Texture = .\assets\models\environment\materials\tiledwood_normal.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
 			}
 		RenderOrderBias =  0.000000
 		RenderPass = LightingPass
@@ -5085,7 +5185,7 @@ kbGameEntity 2451017232 1334201149 744927158 3925545539 {
 				LifeTime =  -1.000000
 				CullModeOverride = ShaderDefault
 				Shader = .\assets\shaders\fx\decal_blend.kbshader
-				ShaderParams = 4
+				ShaderParams = 5
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
@@ -5112,6 +5212,13 @@ kbGameEntity 2451017232 1334201149 744927158 3925545539 {
 						LifeTime =  -1.000000
 						ParamName = "ProjectionTex"
 						Texture = .\assets\models\environment\platforms\bridge_decal.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "tiledNormal"
+						Texture = .\assets\models\environment\materials\tiledwood_normal.jpg
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 			}
