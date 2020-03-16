@@ -624,7 +624,7 @@ bool kbModel::LoadFBX() {
 					triVert.SetTangent( tangent );
 				}
 
-				FbxGeometryElementBinormal *const pFBXVertBinormal = pFBXMesh->GetElementBinormal(0);
+			/*	FbxGeometryElementBinormal *const pFBXVertBinormal = pFBXMesh->GetElementBinormal(0);
 				if ( pFBXVertBinormal != nullptr ) {
 
 					auto mappingMode = pFBXVertBinormal->GetMappingMode();
@@ -635,8 +635,8 @@ bool kbModel::LoadFBX() {
 
 					const auto fbxBinormal = pFBXVertBinormal->GetDirectArray().GetAt(iCurVertex).mData;
 					kbVec4 binormal( (float)fbxBinormal[1], (float)fbxBinormal[2], -(float)fbxBinormal[0], 0.0f );
-					triVert.SetBitangent( binormal );
-				}
+			//		triVert.SetBitangent( binormal );
+				}*/
 
 				FbxGeometryElementUV *const pFBXVertUV = pFBXMesh->GetElementUV(0);
 				if ( pFBXVertUV != nullptr ) {
@@ -666,13 +666,13 @@ bool kbModel::LoadFBX() {
 					kbVec4 color( (float)fbxColor.mRed, (float)fbxColor.mGreen, (float)fbxColor.mBlue, (float)fbxColor.mAlpha );
 					triVert.SetColor(color);
 				}
-
+				/*		// todo this was required for destructibles to work
 				int boneIdx = vertToBone[iCtrlPt];
 				boneToBounds[boneIdx].AddPoint( triVert.position );
 				triVert.color[0] = (byte) boneIdx;
 				triVert.color[1] = (byte) boneIdx;
 				triVert.color[2] = (byte) boneIdx;
-				triVert.color[3] = (byte) boneIdx;
+				triVert.color[3] = (byte) boneIdx;*/
 
 				/*
 									newVert.color[0] = (byte)boneIndices[currentTriangle.m_VertexIndices[j]];

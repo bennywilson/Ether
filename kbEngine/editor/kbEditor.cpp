@@ -482,6 +482,53 @@ void kbEditor::Update() {
 	//m_pMainTab->GetCurrentWindow()->GetCamera().Update();
 
 	if ( GetFocus() == fl_xid( this ) ) {
+
+		/*if ( GetAsyncKeyState( 'C' ) ) {
+
+			kbEditorEntity* pMasterBridge = nullptr;
+			kbStaticModelComponent* pMasterComp = nullptr;
+			static kbString skMasterBridge( "Bridge - Master" );
+
+			for ( int i = 0; i < m_GameEntities.size(); i++ ) {
+				kbEditorEntity* const pEditorEntity = m_GameEntities[i];
+				if ( pEditorEntity == nullptr ) {
+					continue;
+				}
+
+				kbGameEntity* const pGameEnt = pEditorEntity->GetGameEntity();
+				if ( pGameEnt == nullptr ) {
+					continue;
+				}
+
+				if ( pGameEnt->GetName() == skMasterBridge ) {
+					pMasterBridge = m_GameEntities[i];
+					pMasterComp = pMasterBridge->GetGameEntity()->GetComponent<kbStaticModelComponent>();
+					break;
+				}
+			}
+			*/
+			if ( pMasterBridge != nullptr ) {
+				for ( int i = 0; i < m_GameEntities.size(); i++ ) {
+
+					kbEditorEntity* const pEditorEntity = m_GameEntities[i];
+					if ( pEditorEntity == nullptr ) {
+						continue;
+					}
+
+					kbGameEntity* const pGameEnt = pEditorEntity->GetGameEntity();
+					if ( pGameEnt == nullptr ) {
+						continue;
+					}
+					if ( pGameEnt->GetName().stl_str().find( "Bridge" ) != std::string::npos ) {
+						kbStaticModelComponent* pTargetComp = pGameEnt->GetComponent<kbStaticModelComponent>();
+						if ( pTargetComp != nullptr ) {
+							pTargetComp->CopyMaterialList( pMasterComp->GetMaterialList() );
+							continue;
+						}
+					}
+				}
+			}
+		}
 		// input
 		if ( GetAsyncKeyState( 'W' ) ) {
 			m_WidgetInputObject.keys.push_back( widgetCBInputObject::keyType_t::WidgetInput_Forward );

@@ -2,7 +2,7 @@
 // kbStaticModelComponent.cpp
 //
 //
-// 2016-2018 kbEngine 2.0
+// 2016 kbEngine 2.0
 //===================================================================================================
 #include "kbModel.h"
 #include "kbGameEntityHeader.h"

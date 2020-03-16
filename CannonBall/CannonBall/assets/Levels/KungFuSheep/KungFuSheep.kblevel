@@ -1,8 +1,8 @@
-kbGameEntity 4276357306 1262466834 1083212972 2849030385 {
+kbGameEntity 1325683841 1279250836 728756403 1119229638 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		Name = "Entity_226"
+		Name = "Entity_225"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
 		Position = 0.000000 0.000000 0.000000
 		Scale = 1.000000 1.000000 1.000000
@@ -10,8 +10,8 @@ kbGameEntity 4276357306 1262466834 1083212972 2849030385 {
 	kbEditorLevelSettingsComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		MainCameraPosition = 66.506256 -50.672279 -410.183533
-		MainCameraRotation = -0.071215 -0.691419 0.068802 0.715636
+		MainCameraPosition = 66.365013 -47.474987 -410.782410
+		MainCameraRotation = -0.118036 -0.600972 0.090326 0.785329
 	}
 }
 kbGameEntity 537364968 1092523782 2953639826 2626478307 {
@@ -989,7 +989,7 @@ kbGameEntity 2623485304 1164391352 3750140854 1068688934 {
 				LifeTime =  -1.000000
 				CullModeOverride = ShaderDefault
 				Shader = .\assets\shaders\environment\environmenttiled.kbshader
-				ShaderParams = 5
+				ShaderParams = 8
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
@@ -1024,6 +1024,27 @@ kbGameEntity 2623485304 1164391352 3750140854 1068688934 {
 						ParamName = "tiledNormal"
 						Texture = .\assets\models\environment\materials\tiledwood_normal.jpg
 						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "vertexNoiseMap"
+						Texture = .\assets\models\environment\platforms\woodenbridge_noise.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "worldOffsetScale"
+						Texture = NULL
+						Vector = 0.025000 0.020000 0.010000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "uvScale_VertexNoiseScale"
+						Texture = NULL
+						Vector = 1.000000 1.000000 0.010000 0.010000
 					}
 			}
 		RenderOrderBias =  0.000000
@@ -1069,7 +1090,7 @@ kbGameEntity 3587713139 1101448007 952628641 366038443 {
 				LifeTime =  -1.000000
 				CullModeOverride = ShaderDefault
 				Shader = .\assets\shaders\environment\environmenttiled.kbshader
-				ShaderParams = 5
+				ShaderParams = 8
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
@@ -1088,7 +1109,7 @@ kbGameEntity 3587713139 1101448007 952628641 366038443 {
 						Enabled = 0
 						LifeTime =  -1.000000
 						ParamName = "propertyMap"
-						Texture = NULL
+						Texture = .\assets\models\environment\platforms\bridge_wooden_1_prop.tif
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 					kbShaderParamComponent { 
@@ -1104,6 +1125,27 @@ kbGameEntity 3587713139 1101448007 952628641 366038443 {
 						ParamName = "tiledNormal"
 						Texture = .\assets\models\environment\materials\tiledwood_normal.jpg
 						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "vertexNoiseMap"
+						Texture = .\assets\models\environment\platforms\woodenbridge_noise.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "worldOffsetScale"
+						Texture = NULL
+						Vector = 0.025000 0.020000 0.010000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "uvScale_VertexNoiseScale"
+						Texture = NULL
+						Vector = 1.000000 1.000000 0.010000 0.010000
 					}
 			}
 		RenderOrderBias =  0.000000
@@ -1130,7 +1172,7 @@ kbGameEntity 3565500909 1121129338 2565412495 3171246714 {
 				LifeTime =  -1.000000
 				CullModeOverride = ShaderDefault
 				Shader = .\assets\shaders\environment\environmenttiled.kbshader
-				ShaderParams = 5
+				ShaderParams = 8
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
@@ -1149,7 +1191,7 @@ kbGameEntity 3565500909 1121129338 2565412495 3171246714 {
 						Enabled = 0
 						LifeTime =  -1.000000
 						ParamName = "propertyMap"
-						Texture = NULL
+						Texture = .\assets\models\environment\platforms\bridge_wooden_1_prop.tif
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 					kbShaderParamComponent { 
@@ -1165,6 +1207,27 @@ kbGameEntity 3565500909 1121129338 2565412495 3171246714 {
 						ParamName = "tiledNormal"
 						Texture = .\assets\models\environment\materials\tiledwood_normal.jpg
 						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "vertexNoiseMap"
+						Texture = .\assets\models\environment\platforms\woodenbridge_noise.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "worldOffsetScale"
+						Texture = NULL
+						Vector = 0.025000 0.020000 0.010000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "uvScale_VertexNoiseScale"
+						Texture = NULL
+						Vector = 1.000000 1.000000 0.010000 0.010000
 					}
 			}
 		RenderOrderBias =  0.000000
@@ -1258,7 +1321,7 @@ kbGameEntity 2285083070 1261831113 2537240763 2965023321 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		Name = "Bridge"
+		Name = "Bridge - Master"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
 		Position = 76.992683 -52.798882 -388.633514
 		Scale = 250.000000 250.000000 250.000000
@@ -1273,1119 +1336,7 @@ kbGameEntity 2285083070 1261831113 2537240763 2965023321 {
 				LifeTime =  -1.000000
 				CullModeOverride = ShaderDefault
 				Shader = .\assets\shaders\environment\environmenttiled.kbshader
-				ShaderParams = 5
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "diffuse"
-						Texture = .\assets\models\environment\platforms\bridge_wooden_1.tif
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "normal"
-						Texture = ..\..\kbengine\assets\textures\defaultnormal.bmp
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "propertyMap"
-						Texture = .\assets\models\environment\platforms\bridge_wooden_1_prop.tif
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "emissiveMap"
-						Texture = NULL
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "tiledNormal"
-						Texture = .\assets\models\environment\materials\tiledwood_normal.jpg
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-			}
-		RenderOrderBias =  0.000000
-		RenderPass = LightingPass
-		Model = .\assets\models\environment\platforms\bridge_wooden_1.fbx
-	}
-}
-kbGameEntity 768408979 1309698659 1845970622 3862184246 {
-	kbTransformComponent { 
-		Enabled = 0
-		LifeTime =  -1.000000
-		Name = "Bridge"
-		Orientation = 0.000000 0.000000 0.000000 1.000000
-		Position = 76.992683 -52.798882 -380.224487
-		Scale = 250.000000 250.000000 250.000000
-	}
-	kbStaticModelComponent { 
-		Enabled = 1
-		LifeTime =  -1.000000
-		CastsShadow = 0
-		Materials = 1
-			kbMaterialComponent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				CullModeOverride = ShaderDefault
-				Shader = .\assets\shaders\environment\environmenttiled.kbshader
-				ShaderParams = 5
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "diffuse"
-						Texture = .\assets\models\environment\platforms\bridge_wooden_1.tif
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "normal"
-						Texture = ..\..\kbengine\assets\textures\defaultnormal.bmp
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "propertyMap"
-						Texture = .\assets\models\environment\platforms\bridge_wooden_1_prop.tif
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "emissiveMap"
-						Texture = NULL
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "tiledNormal"
-						Texture = .\assets\models\environment\materials\tiledwood_normal.jpg
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-			}
-		RenderOrderBias =  0.000000
-		RenderPass = LightingPass
-		Model = .\assets\models\environment\platforms\bridge_wooden_1.fbx
-	}
-}
-kbGameEntity 2073227036 1116953487 4028886406 3411107857 {
-	kbTransformComponent { 
-		Enabled = 0
-		LifeTime =  -1.000000
-		Name = "Bridge"
-		Orientation = 0.000000 0.000000 0.000000 1.000000
-		Position = 76.992683 -52.798882 -371.814484
-		Scale = 250.000000 250.000000 250.000000
-	}
-	kbStaticModelComponent { 
-		Enabled = 1
-		LifeTime =  -1.000000
-		CastsShadow = 0
-		Materials = 1
-			kbMaterialComponent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				CullModeOverride = ShaderDefault
-				Shader = .\assets\shaders\environment\environmenttiled.kbshader
-				ShaderParams = 5
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "diffuse"
-						Texture = .\assets\models\environment\platforms\bridge_wooden_1.tif
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "normal"
-						Texture = ..\..\kbengine\assets\textures\defaultnormal.bmp
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "propertyMap"
-						Texture = .\assets\models\environment\platforms\bridge_wooden_1_prop.tif
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "emissiveMap"
-						Texture = NULL
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "tiledNormal"
-						Texture = .\assets\models\environment\materials\tiledwood_normal.jpg
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-			}
-		RenderOrderBias =  0.000000
-		RenderPass = LightingPass
-		Model = .\assets\models\environment\platforms\bridge_wooden_1.fbx
-	}
-}
-kbGameEntity 55202556 1308462375 1187601583 263077682 {
-	kbTransformComponent { 
-		Enabled = 0
-		LifeTime =  -1.000000
-		Name = "Bridge"
-		Orientation = 0.000000 0.000000 0.000000 1.000000
-		Position = 76.992683 -52.798882 -363.404480
-		Scale = 250.000000 250.000000 250.000000
-	}
-	kbStaticModelComponent { 
-		Enabled = 1
-		LifeTime =  -1.000000
-		CastsShadow = 0
-		Materials = 1
-			kbMaterialComponent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				CullModeOverride = ShaderDefault
-				Shader = .\assets\shaders\environment\environmenttiled.kbshader
-				ShaderParams = 5
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "diffuse"
-						Texture = .\assets\models\environment\platforms\bridge_wooden_1.tif
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "normal"
-						Texture = ..\..\kbengine\assets\textures\defaultnormal.bmp
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "propertyMap"
-						Texture = .\assets\models\environment\platforms\bridge_wooden_1_prop.tif
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "emissiveMap"
-						Texture = NULL
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "tiledNormal"
-						Texture = .\assets\models\environment\materials\tiledwood_normal.jpg
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-			}
-		RenderOrderBias =  0.000000
-		RenderPass = LightingPass
-		Model = .\assets\models\environment\platforms\bridge_wooden_1.fbx
-	}
-}
-kbGameEntity 4022515928 1092104471 769233583 338184870 {
-	kbTransformComponent { 
-		Enabled = 0
-		LifeTime =  -1.000000
-		Name = "Bridge"
-		Orientation = 0.000000 0.000000 0.000000 1.000000
-		Position = 76.992683 -52.798882 -354.994354
-		Scale = 250.000000 250.000000 250.000000
-	}
-	kbStaticModelComponent { 
-		Enabled = 1
-		LifeTime =  -1.000000
-		CastsShadow = 0
-		Materials = 1
-			kbMaterialComponent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				CullModeOverride = ShaderDefault
-				Shader = .\assets\shaders\environment\environmenttiled.kbshader
-				ShaderParams = 5
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "diffuse"
-						Texture = .\assets\models\environment\platforms\bridge_wooden_1.tif
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "normal"
-						Texture = ..\..\kbengine\assets\textures\defaultnormal.bmp
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "propertyMap"
-						Texture = .\assets\models\environment\platforms\bridge_wooden_1_prop.tif
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "emissiveMap"
-						Texture = NULL
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "tiledNormal"
-						Texture = .\assets\models\environment\materials\tiledwood_normal.jpg
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-			}
-		RenderOrderBias =  0.000000
-		RenderPass = LightingPass
-		Model = .\assets\models\environment\platforms\bridge_wooden_1.fbx
-	}
-}
-kbGameEntity 219122931 1274720638 2606058668 789972547 {
-	kbTransformComponent { 
-		Enabled = 0
-		LifeTime =  -1.000000
-		Name = "Bridge"
-		Orientation = 0.000000 0.000000 0.000000 1.000000
-		Position = 76.992683 -52.798882 -346.584961
-		Scale = 250.000000 250.000000 250.000000
-	}
-	kbStaticModelComponent { 
-		Enabled = 1
-		LifeTime =  -1.000000
-		CastsShadow = 0
-		Materials = 1
-			kbMaterialComponent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				CullModeOverride = ShaderDefault
-				Shader = .\assets\shaders\environment\environmenttiled.kbshader
-				ShaderParams = 5
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "diffuse"
-						Texture = .\assets\models\environment\platforms\bridge_wooden_1.tif
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "normal"
-						Texture = ..\..\kbengine\assets\textures\defaultnormal.bmp
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "propertyMap"
-						Texture = .\assets\models\environment\platforms\bridge_wooden_1_prop.tif
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "emissiveMap"
-						Texture = NULL
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "tiledNormal"
-						Texture = .\assets\models\environment\materials\tiledwood_normal.jpg
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-			}
-		RenderOrderBias =  0.000000
-		RenderPass = LightingPass
-		Model = .\assets\models\environment\platforms\bridge_wooden_1.fbx
-	}
-}
-kbGameEntity 4011769355 1323333596 3975013820 4133016020 {
-	kbTransformComponent { 
-		Enabled = 0
-		LifeTime =  -1.000000
-		Name = "Bridge"
-		Orientation = 0.000000 0.000000 0.000000 1.000000
-		Position = 76.992683 -52.798882 -338.175140
-		Scale = 250.000000 250.000000 250.000000
-	}
-	kbStaticModelComponent { 
-		Enabled = 1
-		LifeTime =  -1.000000
-		CastsShadow = 0
-		Materials = 1
-			kbMaterialComponent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				CullModeOverride = ShaderDefault
-				Shader = .\assets\shaders\environment\environmenttiled.kbshader
-				ShaderParams = 5
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "diffuse"
-						Texture = .\assets\models\environment\platforms\bridge_wooden_1.tif
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "normal"
-						Texture = ..\..\kbengine\assets\textures\defaultnormal.bmp
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "propertyMap"
-						Texture = .\assets\models\environment\platforms\bridge_wooden_1_prop.tif
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "emissiveMap"
-						Texture = NULL
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "tiledNormal"
-						Texture = .\assets\models\environment\materials\tiledwood_normal.jpg
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-			}
-		RenderOrderBias =  0.000000
-		RenderPass = LightingPass
-		Model = .\assets\models\environment\platforms\bridge_wooden_1.fbx
-	}
-}
-kbGameEntity 476150570 1178077505 3921805720 167556555 {
-	kbTransformComponent { 
-		Enabled = 0
-		LifeTime =  -1.000000
-		Name = "Bridge"
-		Orientation = 0.000000 0.000000 0.000000 1.000000
-		Position = 76.992683 -52.798882 -329.764984
-		Scale = 250.000000 250.000000 250.000000
-	}
-	kbStaticModelComponent { 
-		Enabled = 1
-		LifeTime =  -1.000000
-		CastsShadow = 0
-		Materials = 1
-			kbMaterialComponent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				CullModeOverride = ShaderDefault
-				Shader = .\assets\shaders\environment\environmenttiled.kbshader
-				ShaderParams = 5
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "diffuse"
-						Texture = .\assets\models\environment\platforms\bridge_wooden_1.tif
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "normal"
-						Texture = ..\..\kbengine\assets\textures\defaultnormal.bmp
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "propertyMap"
-						Texture = .\assets\models\environment\platforms\bridge_wooden_1_prop.tif
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "emissiveMap"
-						Texture = NULL
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "tiledNormal"
-						Texture = .\assets\models\environment\materials\tiledwood_normal.jpg
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-			}
-		RenderOrderBias =  0.000000
-		RenderPass = LightingPass
-		Model = .\assets\models\environment\platforms\bridge_wooden_1.fbx
-	}
-}
-kbGameEntity 3063563567 1178136607 3804988817 1241362735 {
-	kbTransformComponent { 
-		Enabled = 0
-		LifeTime =  -1.000000
-		Name = "Bridge"
-		Orientation = 0.000000 0.000000 0.000000 1.000000
-		Position = 76.992683 -52.798882 -321.354858
-		Scale = 250.000000 250.000000 250.000000
-	}
-	kbStaticModelComponent { 
-		Enabled = 1
-		LifeTime =  -1.000000
-		CastsShadow = 0
-		Materials = 1
-			kbMaterialComponent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				CullModeOverride = ShaderDefault
-				Shader = .\assets\shaders\environment\environmenttiled.kbshader
-				ShaderParams = 5
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "diffuse"
-						Texture = .\assets\models\environment\platforms\bridge_wooden_1.tif
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "normal"
-						Texture = ..\..\kbengine\assets\textures\defaultnormal.bmp
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "propertyMap"
-						Texture = .\assets\models\environment\platforms\bridge_wooden_1_prop.tif
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "emissiveMap"
-						Texture = NULL
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "tiledNormal"
-						Texture = .\assets\models\environment\materials\tiledwood_normal.jpg
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-			}
-		RenderOrderBias =  0.000000
-		RenderPass = LightingPass
-		Model = .\assets\models\environment\platforms\bridge_wooden_1.fbx
-	}
-}
-kbGameEntity 3012410846 1176812014 2847639957 2265530542 {
-	kbTransformComponent { 
-		Enabled = 0
-		LifeTime =  -1.000000
-		Name = "Bridge"
-		Orientation = 0.000000 0.000000 0.000000 1.000000
-		Position = 76.992683 -52.798882 -312.944641
-		Scale = 250.000000 250.000000 250.000000
-	}
-	kbStaticModelComponent { 
-		Enabled = 1
-		LifeTime =  -1.000000
-		CastsShadow = 0
-		Materials = 1
-			kbMaterialComponent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				CullModeOverride = ShaderDefault
-				Shader = .\assets\shaders\environment\environmenttiled.kbshader
-				ShaderParams = 5
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "diffuse"
-						Texture = .\assets\models\environment\platforms\bridge_wooden_1.tif
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "normal"
-						Texture = ..\..\kbengine\assets\textures\defaultnormal.bmp
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "propertyMap"
-						Texture = .\assets\models\environment\platforms\bridge_wooden_1_prop.tif
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "emissiveMap"
-						Texture = NULL
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "tiledNormal"
-						Texture = .\assets\models\environment\materials\tiledwood_normal.jpg
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-			}
-		RenderOrderBias =  0.000000
-		RenderPass = LightingPass
-		Model = .\assets\models\environment\platforms\bridge_wooden_1.fbx
-	}
-}
-kbGameEntity 4000087732 1074056295 37780884 2473222410 {
-	kbTransformComponent { 
-		Enabled = 0
-		LifeTime =  -1.000000
-		Name = "Bridge"
-		Orientation = 0.000000 0.000000 0.000000 1.000000
-		Position = 76.992683 -52.798882 -304.536499
-		Scale = 250.000000 250.000000 250.000000
-	}
-	kbStaticModelComponent { 
-		Enabled = 1
-		LifeTime =  -1.000000
-		CastsShadow = 0
-		Materials = 1
-			kbMaterialComponent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				CullModeOverride = ShaderDefault
-				Shader = .\assets\shaders\environment\environmenttiled.kbshader
-				ShaderParams = 5
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "diffuse"
-						Texture = .\assets\models\environment\platforms\bridge_wooden_1.tif
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "normal"
-						Texture = ..\..\kbengine\assets\textures\defaultnormal.bmp
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "propertyMap"
-						Texture = .\assets\models\environment\platforms\bridge_wooden_1_prop.tif
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "emissiveMap"
-						Texture = NULL
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "tiledNormal"
-						Texture = .\assets\models\environment\materials\tiledwood_normal.jpg
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-			}
-		RenderOrderBias =  0.000000
-		RenderPass = LightingPass
-		Model = .\assets\models\environment\platforms\bridge_wooden_1.fbx
-	}
-}
-kbGameEntity 1081531102 1122866535 398672021 3386659937 {
-	kbTransformComponent { 
-		Enabled = 0
-		LifeTime =  -1.000000
-		Name = "Bridge"
-		Orientation = 0.000000 0.000000 0.000000 1.000000
-		Position = 76.992683 -52.798882 -296.125610
-		Scale = 250.000000 250.000000 250.000000
-	}
-	kbStaticModelComponent { 
-		Enabled = 1
-		LifeTime =  -1.000000
-		CastsShadow = 0
-		Materials = 1
-			kbMaterialComponent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				CullModeOverride = ShaderDefault
-				Shader = .\assets\shaders\environment\environmenttiled.kbshader
-				ShaderParams = 5
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "diffuse"
-						Texture = .\assets\models\environment\platforms\bridge_wooden_1.tif
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "normal"
-						Texture = ..\..\kbengine\assets\textures\defaultnormal.bmp
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "propertyMap"
-						Texture = .\assets\models\environment\platforms\bridge_wooden_1_prop.tif
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "emissiveMap"
-						Texture = NULL
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "tiledNormal"
-						Texture = .\assets\models\environment\materials\tiledwood_normal.jpg
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-			}
-		RenderOrderBias =  0.000000
-		RenderPass = LightingPass
-		Model = .\assets\models\environment\platforms\bridge_wooden_1.fbx
-	}
-}
-kbGameEntity 559386017 1316716511 3755778214 2045459382 {
-	kbTransformComponent { 
-		Enabled = 0
-		LifeTime =  -1.000000
-		Name = "Bridge"
-		Orientation = 0.000000 0.000000 0.000000 1.000000
-		Position = 76.992683 -52.798882 -279.306396
-		Scale = 250.000000 250.000000 250.000000
-	}
-	kbStaticModelComponent { 
-		Enabled = 1
-		LifeTime =  -1.000000
-		CastsShadow = 0
-		Materials = 1
-			kbMaterialComponent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				CullModeOverride = ShaderDefault
-				Shader = .\assets\shaders\environment\environmenttiled.kbshader
-				ShaderParams = 5
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "diffuse"
-						Texture = .\assets\models\environment\platforms\bridge_wooden_1.tif
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "normal"
-						Texture = ..\..\kbengine\assets\textures\defaultnormal.bmp
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "propertyMap"
-						Texture = .\assets\models\environment\platforms\bridge_wooden_1_prop.tif
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "emissiveMap"
-						Texture = NULL
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "tiledNormal"
-						Texture = .\assets\models\environment\materials\tiledwood_normal.jpg
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-			}
-		RenderOrderBias =  0.000000
-		RenderPass = LightingPass
-		Model = .\assets\models\environment\platforms\bridge_wooden_1.fbx
-	}
-}
-kbGameEntity 1289487901 1188375855 920596138 4184004917 {
-	kbTransformComponent { 
-		Enabled = 0
-		LifeTime =  -1.000000
-		Name = "Bridge"
-		Orientation = 0.000000 0.000000 0.000000 1.000000
-		Position = 76.992683 -52.798882 -270.896332
-		Scale = 250.000000 250.000000 250.000000
-	}
-	kbStaticModelComponent { 
-		Enabled = 1
-		LifeTime =  -1.000000
-		CastsShadow = 0
-		Materials = 1
-			kbMaterialComponent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				CullModeOverride = ShaderDefault
-				Shader = .\assets\shaders\environment\environmenttiled.kbshader
-				ShaderParams = 5
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "diffuse"
-						Texture = .\assets\models\environment\platforms\bridge_wooden_1.tif
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "normal"
-						Texture = ..\..\kbengine\assets\textures\defaultnormal.bmp
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "propertyMap"
-						Texture = .\assets\models\environment\platforms\bridge_wooden_1_prop.tif
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "emissiveMap"
-						Texture = NULL
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "tiledNormal"
-						Texture = .\assets\models\environment\materials\tiledwood_normal.jpg
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-			}
-		RenderOrderBias =  0.000000
-		RenderPass = LightingPass
-		Model = .\assets\models\environment\platforms\bridge_wooden_1.fbx
-	}
-}
-kbGameEntity 714109186 1210138278 3860640913 4056027296 {
-	kbTransformComponent { 
-		Enabled = 0
-		LifeTime =  -1.000000
-		Name = "Bridge"
-		Orientation = 0.000000 0.000000 0.000000 1.000000
-		Position = 76.992683 -52.798882 -262.486267
-		Scale = 250.000000 250.000000 250.000000
-	}
-	kbStaticModelComponent { 
-		Enabled = 1
-		LifeTime =  -1.000000
-		CastsShadow = 0
-		Materials = 1
-			kbMaterialComponent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				CullModeOverride = ShaderDefault
-				Shader = .\assets\shaders\environment\environmenttiled.kbshader
-				ShaderParams = 5
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "diffuse"
-						Texture = .\assets\models\environment\platforms\bridge_wooden_1.tif
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "normal"
-						Texture = ..\..\kbengine\assets\textures\defaultnormal.bmp
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "propertyMap"
-						Texture = .\assets\models\environment\platforms\bridge_wooden_1_prop.tif
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "emissiveMap"
-						Texture = NULL
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "tiledNormal"
-						Texture = .\assets\models\environment\materials\tiledwood_normal.jpg
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-			}
-		RenderOrderBias =  0.000000
-		RenderPass = LightingPass
-		Model = .\assets\models\environment\platforms\bridge_wooden_1.fbx
-	}
-}
-kbGameEntity 994630907 1178801820 4058844581 1161728672 {
-	kbTransformComponent { 
-		Enabled = 0
-		LifeTime =  -1.000000
-		Name = "Bridge"
-		Orientation = 0.000000 0.000000 0.000000 1.000000
-		Position = 76.992683 -52.798882 -254.075882
-		Scale = 250.000000 250.000000 250.000000
-	}
-	kbStaticModelComponent { 
-		Enabled = 1
-		LifeTime =  -1.000000
-		CastsShadow = 0
-		Materials = 1
-			kbMaterialComponent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				CullModeOverride = ShaderDefault
-				Shader = .\assets\shaders\environment\environmenttiled.kbshader
-				ShaderParams = 5
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "diffuse"
-						Texture = .\assets\models\environment\platforms\bridge_wooden_1.tif
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "normal"
-						Texture = ..\..\kbengine\assets\textures\defaultnormal.bmp
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "propertyMap"
-						Texture = .\assets\models\environment\platforms\bridge_wooden_1_prop.tif
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "emissiveMap"
-						Texture = NULL
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "tiledNormal"
-						Texture = .\assets\models\environment\materials\tiledwood_normal.jpg
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-			}
-		RenderOrderBias =  0.000000
-		RenderPass = LightingPass
-		Model = .\assets\models\environment\platforms\bridge_wooden_1.fbx
-	}
-}
-kbGameEntity 3881373922 1111186753 3037939894 2663332882 {
-	kbTransformComponent { 
-		Enabled = 0
-		LifeTime =  -1.000000
-		Name = "Breaking Bridge"
-		Orientation = 0.000000 0.000000 0.000000 1.000000
-		Position = 76.992683 -52.798882 -245.666092
-		Scale = 250.000000 250.000000 250.000000
-	}
-	kbStaticModelComponent { 
-		Enabled = 1
-		LifeTime =  -1.000000
-		CastsShadow = 0
-		Materials = 1
-			kbMaterialComponent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				CullModeOverride = ShaderDefault
-				Shader = .\assets\shaders\environment\environmenttiled.kbshader
-				ShaderParams = 5
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "diffuse"
-						Texture = .\assets\models\environment\platforms\bridge_wooden_1.tif
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "normal"
-						Texture = ..\..\kbengine\assets\textures\defaultnormal.bmp
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "propertyMap"
-						Texture = .\assets\models\environment\platforms\bridge_wooden_1_prop.tif
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "emissiveMap"
-						Texture = NULL
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "clipMap"
-						Texture = NULL
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-			}
-		RenderOrderBias =  0.000000
-		RenderPass = LightingPass
-		Model = .\assets\models\environment\platforms\bridge_wooden_1.fbx
-	}
-}
-kbGameEntity 1745036657 1226122723 137629842 2847967967 {
-	kbTransformComponent { 
-		Enabled = 0
-		LifeTime =  -1.000000
-		Name = "BridgeS"
-		Orientation = 0.000000 0.000000 0.000000 1.000000
-		Position = 76.992683 -52.798882 -397.044159
-		Scale = 250.000000 250.000000 250.000000
-	}
-	kbStaticModelComponent { 
-		Enabled = 1
-		LifeTime =  -1.000000
-		CastsShadow = 0
-		Materials = 1
-			kbMaterialComponent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				CullModeOverride = ShaderDefault
-				Shader = .\assets\shaders\environment\environmenttiled.kbshader
-				ShaderParams = 7
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "diffuse"
-						Texture = .\assets\models\environment\platforms\bridge_wooden_1.tif
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "normal"
-						Texture = ..\..\kbengine\assets\textures\defaultnormal.bmp
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "propertyMap"
-						Texture = .\assets\models\environment\platforms\bridge_wooden_1_prop.tif
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "emissiveMap"
-						Texture = NULL
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "tiledNormal"
-						Texture = .\assets\models\environment\materials\tiledwood_normal.jpg
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = ""
-						Texture = .\assets\models\environment\platforms\woodenbridge_noise.tif
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "worldOffsetScale"
-						Texture = NULL
-						Vector = 0.030000 0.000000 0.050000 0.000000
-					}
-			}
-		RenderOrderBias =  0.000000
-		RenderPass = LightingPass
-		Model = .\assets\models\environment\platforms\bridge_wooden_1.fbx
-	}
-}
-kbGameEntity 211241734 1165433459 2859075761 1636992949 {
-	kbTransformComponent { 
-		Enabled = 0
-		LifeTime =  -1.000000
-		Name = "Bridge"
-		Orientation = 0.000000 0.000000 0.000000 1.000000
-		Position = 76.992683 -52.798882 -405.464020
-		Scale = 250.000000 250.000000 250.000000
-	}
-	kbStaticModelComponent { 
-		Enabled = 1
-		LifeTime =  -1.000000
-		CastsShadow = 0
-		Materials = 1
-			kbMaterialComponent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				CullModeOverride = ShaderDefault
-				Shader = .\assets\shaders\environment\environmenttiled.kbshader
-				ShaderParams = 7
+				ShaderParams = 8
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
@@ -2433,7 +1384,1490 @@ kbGameEntity 211241734 1165433459 2859075761 1636992949 {
 						LifeTime =  -1.000000
 						ParamName = "worldOffsetScale"
 						Texture = NULL
-						Vector = 0.030000 0.000000 0.050000 0.000000
+						Vector = 0.025000 0.020000 0.010000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "uvScale_VertexNoiseScale"
+						Texture = NULL
+						Vector = 1.000000 1.000000 0.010000 0.010000
+					}
+			}
+		RenderOrderBias =  0.000000
+		RenderPass = LightingPass
+		Model = .\assets\models\environment\platforms\bridge_wooden_1.fbx
+	}
+}
+kbGameEntity 768408979 1309698659 1845970622 3862184246 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Bridge"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 76.992683 -52.798882 -380.224487
+		Scale = 250.000000 250.000000 250.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		Materials = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\environment\environmenttiled.kbshader
+				ShaderParams = 8
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "diffuse"
+						Texture = .\assets\models\environment\platforms\bridge_wooden_1.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "normal"
+						Texture = ..\..\kbengine\assets\textures\defaultnormal.bmp
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "propertyMap"
+						Texture = .\assets\models\environment\platforms\bridge_wooden_1_prop.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "emissiveMap"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "tiledNormal"
+						Texture = .\assets\models\environment\materials\tiledwood_normal.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "vertexNoiseMap"
+						Texture = .\assets\models\environment\platforms\woodenbridge_noise.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "worldOffsetScale"
+						Texture = NULL
+						Vector = 0.025000 0.020000 0.010000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "uvScale_VertexNoiseScale"
+						Texture = NULL
+						Vector = 1.000000 1.000000 0.010000 0.010000
+					}
+			}
+		RenderOrderBias =  0.000000
+		RenderPass = LightingPass
+		Model = .\assets\models\environment\platforms\bridge_wooden_1.fbx
+	}
+}
+kbGameEntity 2073227036 1116953487 4028886406 3411107857 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Bridge"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 76.992683 -52.798882 -371.814484
+		Scale = 250.000000 250.000000 250.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		Materials = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\environment\environmenttiled.kbshader
+				ShaderParams = 8
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "diffuse"
+						Texture = .\assets\models\environment\platforms\bridge_wooden_1.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "normal"
+						Texture = ..\..\kbengine\assets\textures\defaultnormal.bmp
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "propertyMap"
+						Texture = .\assets\models\environment\platforms\bridge_wooden_1_prop.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "emissiveMap"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "tiledNormal"
+						Texture = .\assets\models\environment\materials\tiledwood_normal.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "vertexNoiseMap"
+						Texture = .\assets\models\environment\platforms\woodenbridge_noise.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "worldOffsetScale"
+						Texture = NULL
+						Vector = 0.025000 0.020000 0.010000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "uvScale_VertexNoiseScale"
+						Texture = NULL
+						Vector = 1.000000 1.000000 0.010000 0.010000
+					}
+			}
+		RenderOrderBias =  0.000000
+		RenderPass = LightingPass
+		Model = .\assets\models\environment\platforms\bridge_wooden_1.fbx
+	}
+}
+kbGameEntity 55202556 1308462375 1187601583 263077682 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Bridge"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 76.992683 -52.798882 -363.404480
+		Scale = 250.000000 250.000000 250.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		Materials = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\environment\environmenttiled.kbshader
+				ShaderParams = 8
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "diffuse"
+						Texture = .\assets\models\environment\platforms\bridge_wooden_1.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "normal"
+						Texture = ..\..\kbengine\assets\textures\defaultnormal.bmp
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "propertyMap"
+						Texture = .\assets\models\environment\platforms\bridge_wooden_1_prop.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "emissiveMap"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "tiledNormal"
+						Texture = .\assets\models\environment\materials\tiledwood_normal.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "vertexNoiseMap"
+						Texture = .\assets\models\environment\platforms\woodenbridge_noise.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "worldOffsetScale"
+						Texture = NULL
+						Vector = 0.025000 0.020000 0.010000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "uvScale_VertexNoiseScale"
+						Texture = NULL
+						Vector = 1.000000 1.000000 0.010000 0.010000
+					}
+			}
+		RenderOrderBias =  0.000000
+		RenderPass = LightingPass
+		Model = .\assets\models\environment\platforms\bridge_wooden_1.fbx
+	}
+}
+kbGameEntity 4022515928 1092104471 769233583 338184870 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Bridge"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 76.992683 -52.798882 -354.994354
+		Scale = 250.000000 250.000000 250.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		Materials = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\environment\environmenttiled.kbshader
+				ShaderParams = 8
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "diffuse"
+						Texture = .\assets\models\environment\platforms\bridge_wooden_1.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "normal"
+						Texture = ..\..\kbengine\assets\textures\defaultnormal.bmp
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "propertyMap"
+						Texture = .\assets\models\environment\platforms\bridge_wooden_1_prop.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "emissiveMap"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "tiledNormal"
+						Texture = .\assets\models\environment\materials\tiledwood_normal.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "vertexNoiseMap"
+						Texture = .\assets\models\environment\platforms\woodenbridge_noise.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "worldOffsetScale"
+						Texture = NULL
+						Vector = 0.025000 0.020000 0.010000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "uvScale_VertexNoiseScale"
+						Texture = NULL
+						Vector = 1.000000 1.000000 0.010000 0.010000
+					}
+			}
+		RenderOrderBias =  0.000000
+		RenderPass = LightingPass
+		Model = .\assets\models\environment\platforms\bridge_wooden_1.fbx
+	}
+}
+kbGameEntity 219122931 1274720638 2606058668 789972547 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Bridge"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 76.992683 -52.798882 -346.584961
+		Scale = 250.000000 250.000000 250.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		Materials = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\environment\environmenttiled.kbshader
+				ShaderParams = 8
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "diffuse"
+						Texture = .\assets\models\environment\platforms\bridge_wooden_1.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "normal"
+						Texture = ..\..\kbengine\assets\textures\defaultnormal.bmp
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "propertyMap"
+						Texture = .\assets\models\environment\platforms\bridge_wooden_1_prop.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "emissiveMap"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "tiledNormal"
+						Texture = .\assets\models\environment\materials\tiledwood_normal.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "vertexNoiseMap"
+						Texture = .\assets\models\environment\platforms\woodenbridge_noise.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "worldOffsetScale"
+						Texture = NULL
+						Vector = 0.025000 0.020000 0.010000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "uvScale_VertexNoiseScale"
+						Texture = NULL
+						Vector = 1.000000 1.000000 0.010000 0.010000
+					}
+			}
+		RenderOrderBias =  0.000000
+		RenderPass = LightingPass
+		Model = .\assets\models\environment\platforms\bridge_wooden_1.fbx
+	}
+}
+kbGameEntity 4011769355 1323333596 3975013820 4133016020 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Bridge"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 76.992683 -52.798882 -338.175140
+		Scale = 250.000000 250.000000 250.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		Materials = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\environment\environmenttiled.kbshader
+				ShaderParams = 8
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "diffuse"
+						Texture = .\assets\models\environment\platforms\bridge_wooden_1.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "normal"
+						Texture = ..\..\kbengine\assets\textures\defaultnormal.bmp
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "propertyMap"
+						Texture = .\assets\models\environment\platforms\bridge_wooden_1_prop.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "emissiveMap"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "tiledNormal"
+						Texture = .\assets\models\environment\materials\tiledwood_normal.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "vertexNoiseMap"
+						Texture = .\assets\models\environment\platforms\woodenbridge_noise.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "worldOffsetScale"
+						Texture = NULL
+						Vector = 0.025000 0.020000 0.010000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "uvScale_VertexNoiseScale"
+						Texture = NULL
+						Vector = 1.000000 1.000000 0.010000 0.010000
+					}
+			}
+		RenderOrderBias =  0.000000
+		RenderPass = LightingPass
+		Model = .\assets\models\environment\platforms\bridge_wooden_1.fbx
+	}
+}
+kbGameEntity 476150570 1178077505 3921805720 167556555 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Bridge"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 76.992683 -52.798882 -329.764984
+		Scale = 250.000000 250.000000 250.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		Materials = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\environment\environmenttiled.kbshader
+				ShaderParams = 8
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "diffuse"
+						Texture = .\assets\models\environment\platforms\bridge_wooden_1.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "normal"
+						Texture = ..\..\kbengine\assets\textures\defaultnormal.bmp
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "propertyMap"
+						Texture = .\assets\models\environment\platforms\bridge_wooden_1_prop.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "emissiveMap"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "tiledNormal"
+						Texture = .\assets\models\environment\materials\tiledwood_normal.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "vertexNoiseMap"
+						Texture = .\assets\models\environment\platforms\woodenbridge_noise.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "worldOffsetScale"
+						Texture = NULL
+						Vector = 0.025000 0.020000 0.010000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "uvScale_VertexNoiseScale"
+						Texture = NULL
+						Vector = 1.000000 1.000000 0.010000 0.010000
+					}
+			}
+		RenderOrderBias =  0.000000
+		RenderPass = LightingPass
+		Model = .\assets\models\environment\platforms\bridge_wooden_1.fbx
+	}
+}
+kbGameEntity 3063563567 1178136607 3804988817 1241362735 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Bridge"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 76.992683 -52.798882 -321.354858
+		Scale = 250.000000 250.000000 250.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		Materials = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\environment\environmenttiled.kbshader
+				ShaderParams = 8
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "diffuse"
+						Texture = .\assets\models\environment\platforms\bridge_wooden_1.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "normal"
+						Texture = ..\..\kbengine\assets\textures\defaultnormal.bmp
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "propertyMap"
+						Texture = .\assets\models\environment\platforms\bridge_wooden_1_prop.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "emissiveMap"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "tiledNormal"
+						Texture = .\assets\models\environment\materials\tiledwood_normal.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "vertexNoiseMap"
+						Texture = .\assets\models\environment\platforms\woodenbridge_noise.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "worldOffsetScale"
+						Texture = NULL
+						Vector = 0.025000 0.020000 0.010000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "uvScale_VertexNoiseScale"
+						Texture = NULL
+						Vector = 1.000000 1.000000 0.010000 0.010000
+					}
+			}
+		RenderOrderBias =  0.000000
+		RenderPass = LightingPass
+		Model = .\assets\models\environment\platforms\bridge_wooden_1.fbx
+	}
+}
+kbGameEntity 3012410846 1176812014 2847639957 2265530542 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Bridge"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 76.992683 -52.798882 -312.944641
+		Scale = 250.000000 250.000000 250.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		Materials = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\environment\environmenttiled.kbshader
+				ShaderParams = 8
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "diffuse"
+						Texture = .\assets\models\environment\platforms\bridge_wooden_1.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "normal"
+						Texture = ..\..\kbengine\assets\textures\defaultnormal.bmp
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "propertyMap"
+						Texture = .\assets\models\environment\platforms\bridge_wooden_1_prop.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "emissiveMap"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "tiledNormal"
+						Texture = .\assets\models\environment\materials\tiledwood_normal.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "vertexNoiseMap"
+						Texture = .\assets\models\environment\platforms\woodenbridge_noise.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "worldOffsetScale"
+						Texture = NULL
+						Vector = 0.025000 0.020000 0.010000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "uvScale_VertexNoiseScale"
+						Texture = NULL
+						Vector = 1.000000 1.000000 0.010000 0.010000
+					}
+			}
+		RenderOrderBias =  0.000000
+		RenderPass = LightingPass
+		Model = .\assets\models\environment\platforms\bridge_wooden_1.fbx
+	}
+}
+kbGameEntity 4000087732 1074056295 37780884 2473222410 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Bridge"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 76.992683 -52.798882 -304.536499
+		Scale = 250.000000 250.000000 250.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		Materials = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\environment\environmenttiled.kbshader
+				ShaderParams = 8
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "diffuse"
+						Texture = .\assets\models\environment\platforms\bridge_wooden_1.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "normal"
+						Texture = ..\..\kbengine\assets\textures\defaultnormal.bmp
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "propertyMap"
+						Texture = .\assets\models\environment\platforms\bridge_wooden_1_prop.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "emissiveMap"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "tiledNormal"
+						Texture = .\assets\models\environment\materials\tiledwood_normal.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "vertexNoiseMap"
+						Texture = .\assets\models\environment\platforms\woodenbridge_noise.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "worldOffsetScale"
+						Texture = NULL
+						Vector = 0.025000 0.020000 0.010000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "uvScale_VertexNoiseScale"
+						Texture = NULL
+						Vector = 1.000000 1.000000 0.010000 0.010000
+					}
+			}
+		RenderOrderBias =  0.000000
+		RenderPass = LightingPass
+		Model = .\assets\models\environment\platforms\bridge_wooden_1.fbx
+	}
+}
+kbGameEntity 1081531102 1122866535 398672021 3386659937 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Bridge"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 76.992683 -52.798882 -296.125610
+		Scale = 250.000000 250.000000 250.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		Materials = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\environment\environmenttiled.kbshader
+				ShaderParams = 8
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "diffuse"
+						Texture = .\assets\models\environment\platforms\bridge_wooden_1.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "normal"
+						Texture = ..\..\kbengine\assets\textures\defaultnormal.bmp
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "propertyMap"
+						Texture = .\assets\models\environment\platforms\bridge_wooden_1_prop.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "emissiveMap"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "tiledNormal"
+						Texture = .\assets\models\environment\materials\tiledwood_normal.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "vertexNoiseMap"
+						Texture = .\assets\models\environment\platforms\woodenbridge_noise.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "worldOffsetScale"
+						Texture = NULL
+						Vector = 0.025000 0.020000 0.010000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "uvScale_VertexNoiseScale"
+						Texture = NULL
+						Vector = 1.000000 1.000000 0.010000 0.010000
+					}
+			}
+		RenderOrderBias =  0.000000
+		RenderPass = LightingPass
+		Model = .\assets\models\environment\platforms\bridge_wooden_1.fbx
+	}
+}
+kbGameEntity 559386017 1316716511 3755778214 2045459382 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Bridge"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 76.992683 -52.798882 -287.715820
+		Scale = 250.000000 250.000000 250.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		Materials = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\environment\environmenttiled.kbshader
+				ShaderParams = 8
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "diffuse"
+						Texture = .\assets\models\environment\platforms\bridge_wooden_1.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "normal"
+						Texture = ..\..\kbengine\assets\textures\defaultnormal.bmp
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "propertyMap"
+						Texture = .\assets\models\environment\platforms\bridge_wooden_1_prop.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "emissiveMap"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "tiledNormal"
+						Texture = .\assets\models\environment\materials\tiledwood_normal.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "vertexNoiseMap"
+						Texture = .\assets\models\environment\platforms\woodenbridge_noise.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "worldOffsetScale"
+						Texture = NULL
+						Vector = 0.025000 0.020000 0.010000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "uvScale_VertexNoiseScale"
+						Texture = NULL
+						Vector = 1.000000 1.000000 0.010000 0.010000
+					}
+			}
+		RenderOrderBias =  0.000000
+		RenderPass = LightingPass
+		Model = .\assets\models\environment\platforms\bridge_wooden_1.fbx
+	}
+}
+kbGameEntity 1289487901 1188375855 920596138 4184004917 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Bridge"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 76.992683 -52.798882 -270.896332
+		Scale = 250.000000 250.000000 250.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		Materials = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\environment\environmenttiled.kbshader
+				ShaderParams = 8
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "diffuse"
+						Texture = .\assets\models\environment\platforms\bridge_wooden_1.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "normal"
+						Texture = ..\..\kbengine\assets\textures\defaultnormal.bmp
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "propertyMap"
+						Texture = .\assets\models\environment\platforms\bridge_wooden_1_prop.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "emissiveMap"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "tiledNormal"
+						Texture = .\assets\models\environment\materials\tiledwood_normal.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "vertexNoiseMap"
+						Texture = .\assets\models\environment\platforms\woodenbridge_noise.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "worldOffsetScale"
+						Texture = NULL
+						Vector = 0.025000 0.020000 0.010000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "uvScale_VertexNoiseScale"
+						Texture = NULL
+						Vector = 1.000000 1.000000 0.010000 0.010000
+					}
+			}
+		RenderOrderBias =  0.000000
+		RenderPass = LightingPass
+		Model = .\assets\models\environment\platforms\bridge_wooden_1.fbx
+	}
+}
+kbGameEntity 714109186 1210138278 3860640913 4056027296 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Bridge"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 76.992683 -52.798882 -262.486267
+		Scale = 250.000000 250.000000 250.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		Materials = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\environment\environmenttiled.kbshader
+				ShaderParams = 8
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "diffuse"
+						Texture = .\assets\models\environment\platforms\bridge_wooden_1.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "normal"
+						Texture = ..\..\kbengine\assets\textures\defaultnormal.bmp
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "propertyMap"
+						Texture = .\assets\models\environment\platforms\bridge_wooden_1_prop.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "emissiveMap"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "tiledNormal"
+						Texture = .\assets\models\environment\materials\tiledwood_normal.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "vertexNoiseMap"
+						Texture = .\assets\models\environment\platforms\woodenbridge_noise.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "worldOffsetScale"
+						Texture = NULL
+						Vector = 0.025000 0.020000 0.010000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "uvScale_VertexNoiseScale"
+						Texture = NULL
+						Vector = 1.000000 1.000000 0.010000 0.010000
+					}
+			}
+		RenderOrderBias =  0.000000
+		RenderPass = LightingPass
+		Model = .\assets\models\environment\platforms\bridge_wooden_1.fbx
+	}
+}
+kbGameEntity 994630907 1178801820 4058844581 1161728672 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Bridge"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 76.992683 -52.798882 -254.075882
+		Scale = 250.000000 250.000000 250.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		Materials = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\environment\environmenttiled.kbshader
+				ShaderParams = 8
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "diffuse"
+						Texture = .\assets\models\environment\platforms\bridge_wooden_1.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "normal"
+						Texture = ..\..\kbengine\assets\textures\defaultnormal.bmp
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "propertyMap"
+						Texture = .\assets\models\environment\platforms\bridge_wooden_1_prop.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "emissiveMap"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "tiledNormal"
+						Texture = .\assets\models\environment\materials\tiledwood_normal.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "vertexNoiseMap"
+						Texture = .\assets\models\environment\platforms\woodenbridge_noise.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "worldOffsetScale"
+						Texture = NULL
+						Vector = 0.025000 0.020000 0.010000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "uvScale_VertexNoiseScale"
+						Texture = NULL
+						Vector = 1.000000 1.000000 0.010000 0.010000
+					}
+			}
+		RenderOrderBias =  0.000000
+		RenderPass = LightingPass
+		Model = .\assets\models\environment\platforms\bridge_wooden_1.fbx
+	}
+}
+kbGameEntity 3881373922 1111186753 3037939894 2663332882 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Breaking Bridge"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 76.992683 -52.798882 -245.666092
+		Scale = 250.000000 250.000000 250.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		Materials = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\environment\environmenttiled.kbshader
+				ShaderParams = 8
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "diffuse"
+						Texture = .\assets\models\environment\platforms\bridge_wooden_1.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "normal"
+						Texture = ..\..\kbengine\assets\textures\defaultnormal.bmp
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "propertyMap"
+						Texture = .\assets\models\environment\platforms\bridge_wooden_1_prop.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "emissiveMap"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "tiledNormal"
+						Texture = .\assets\models\environment\materials\tiledwood_normal.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "vertexNoiseMap"
+						Texture = .\assets\models\environment\platforms\woodenbridge_noise.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "worldOffsetScale"
+						Texture = NULL
+						Vector = 0.025000 0.020000 0.010000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "uvScale_VertexNoiseScale"
+						Texture = NULL
+						Vector = 1.000000 1.000000 0.010000 0.010000
+					}
+			}
+		RenderOrderBias =  0.000000
+		RenderPass = LightingPass
+		Model = .\assets\models\environment\platforms\bridge_wooden_1.fbx
+	}
+}
+kbGameEntity 1745036657 1226122723 137629842 2847967967 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "BridgeS"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 76.992683 -52.798882 -397.044159
+		Scale = 250.000000 250.000000 250.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		Materials = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\environment\environmenttiled.kbshader
+				ShaderParams = 8
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "diffuse"
+						Texture = .\assets\models\environment\platforms\bridge_wooden_1.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "normal"
+						Texture = ..\..\kbengine\assets\textures\defaultnormal.bmp
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "propertyMap"
+						Texture = .\assets\models\environment\platforms\bridge_wooden_1_prop.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "emissiveMap"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "tiledNormal"
+						Texture = .\assets\models\environment\materials\tiledwood_normal.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "vertexNoiseMap"
+						Texture = .\assets\models\environment\platforms\woodenbridge_noise.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "worldOffsetScale"
+						Texture = NULL
+						Vector = 0.025000 0.020000 0.010000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "uvScale_VertexNoiseScale"
+						Texture = NULL
+						Vector = 1.000000 1.000000 0.010000 0.010000
+					}
+			}
+		RenderOrderBias =  0.000000
+		RenderPass = LightingPass
+		Model = .\assets\models\environment\platforms\bridge_wooden_1.fbx
+	}
+}
+kbGameEntity 211241734 1165433459 2859075761 1636992949 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Bridge"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 76.992683 -52.798882 -405.464020
+		Scale = 250.000000 250.000000 250.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		Materials = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\environment\environmenttiled.kbshader
+				ShaderParams = 8
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "diffuse"
+						Texture = .\assets\models\environment\platforms\bridge_wooden_1.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "normal"
+						Texture = ..\..\kbengine\assets\textures\defaultnormal.bmp
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "propertyMap"
+						Texture = .\assets\models\environment\platforms\bridge_wooden_1_prop.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "emissiveMap"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "tiledNormal"
+						Texture = .\assets\models\environment\materials\tiledwood_normal.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "vertexNoiseMap"
+						Texture = .\assets\models\environment\platforms\woodenbridge_noise.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "worldOffsetScale"
+						Texture = NULL
+						Vector = 0.025000 0.020000 0.010000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "uvScale_VertexNoiseScale"
+						Texture = NULL
+						Vector = 1.000000 1.000000 0.010000 0.010000
 					}
 			}
 		RenderOrderBias =  0.000000
@@ -5062,8 +5496,8 @@ kbGameEntity 2823924498 1217103692 1108638655 59959439 {
 				Enabled = 0
 				LifeTime =  -1.000000
 				CullModeOverride = ShaderDefault
-				Shader = .\assets\shaders\environment\environmentbase.kbshader
-				ShaderParams = 5
+				Shader = .\assets\shaders\environment\environmenttiled.kbshader
+				ShaderParams = 8
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
@@ -5082,7 +5516,7 @@ kbGameEntity 2823924498 1217103692 1108638655 59959439 {
 						Enabled = 0
 						LifeTime =  -1.000000
 						ParamName = "propertyMap"
-						Texture = NULL
+						Texture = .\assets\models\environment\platforms\bridge_wooden_1_prop.tif
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 					kbShaderParamComponent { 
@@ -5098,6 +5532,27 @@ kbGameEntity 2823924498 1217103692 1108638655 59959439 {
 						ParamName = "tiledNormal"
 						Texture = .\assets\models\environment\materials\tiledwood_normal.jpg
 						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "vertexNoiseMap"
+						Texture = .\assets\models\environment\platforms\woodenbridge_noise.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "worldOffsetScale"
+						Texture = NULL
+						Vector = 0.025000 0.020000 0.010000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "uvScale_VertexNoiseScale"
+						Texture = NULL
+						Vector = 1.000000 1.000000 0.010000 0.010000
 					}
 			}
 		RenderOrderBias =  0.000000
@@ -5123,8 +5578,8 @@ kbGameEntity 4121860101 1338733555 581251478 2312240592 {
 				Enabled = 0
 				LifeTime =  -1.000000
 				CullModeOverride = ShaderDefault
-				Shader = .\assets\shaders\environment\environmentbase.kbshader
-				ShaderParams = 5
+				Shader = .\assets\shaders\environment\environmenttiled.kbshader
+				ShaderParams = 8
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
@@ -5143,7 +5598,7 @@ kbGameEntity 4121860101 1338733555 581251478 2312240592 {
 						Enabled = 0
 						LifeTime =  -1.000000
 						ParamName = "propertyMap"
-						Texture = NULL
+						Texture = .\assets\models\environment\platforms\bridge_wooden_1_prop.tif
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 					kbShaderParamComponent { 
@@ -5159,6 +5614,27 @@ kbGameEntity 4121860101 1338733555 581251478 2312240592 {
 						ParamName = "tiledNormal"
 						Texture = .\assets\models\environment\materials\tiledwood_normal.jpg
 						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "vertexNoiseMap"
+						Texture = .\assets\models\environment\platforms\woodenbridge_noise.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "worldOffsetScale"
+						Texture = NULL
+						Vector = 0.025000 0.020000 0.010000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "uvScale_VertexNoiseScale"
+						Texture = NULL
+						Vector = 1.000000 1.000000 0.010000 0.010000
 					}
 			}
 		RenderOrderBias =  0.000000
@@ -5184,34 +5660,34 @@ kbGameEntity 2451017232 1334201149 744927158 3925545539 {
 				Enabled = 0
 				LifeTime =  -1.000000
 				CullModeOverride = ShaderDefault
-				Shader = .\assets\shaders\fx\decal_blend.kbshader
-				ShaderParams = 5
+				Shader = .\assets\shaders\environment\environmenttiled.kbshader
+				ShaderParams = 8
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
-						ParamName = "cameraPosition"
-						Texture = NULL
+						ParamName = "diffuse"
+						Texture = .\assets\models\environment\platforms\bridge_wooden_1.tif
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
-						ParamName = "colorMultiplier"
-						Texture = NULL
-						Vector = 0.750000 0.750000 0.750000 1.000000
+						ParamName = "normal"
+						Texture = ..\..\kbengine\assets\textures\defaultnormal.bmp
+						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
-						ParamName = "clipData"
-						Texture = NULL
-						Vector = 0.200000 0.000000 0.000000 0.000000
+						ParamName = "propertyMap"
+						Texture = .\assets\models\environment\platforms\bridge_wooden_1_prop.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
-						ParamName = "ProjectionTex"
-						Texture = .\assets\models\environment\platforms\bridge_decal.tif
+						ParamName = "emissiveMap"
+						Texture = NULL
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 					kbShaderParamComponent { 
@@ -5220,6 +5696,27 @@ kbGameEntity 2451017232 1334201149 744927158 3925545539 {
 						ParamName = "tiledNormal"
 						Texture = .\assets\models\environment\materials\tiledwood_normal.jpg
 						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "vertexNoiseMap"
+						Texture = .\assets\models\environment\platforms\woodenbridge_noise.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "worldOffsetScale"
+						Texture = NULL
+						Vector = 0.025000 0.020000 0.010000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "uvScale_VertexNoiseScale"
+						Texture = NULL
+						Vector = 1.000000 1.000000 0.010000 0.010000
 					}
 			}
 		RenderOrderBias =  0.000000
@@ -5482,5 +5979,87 @@ kbGameEntity 2684646162 1162908266 836236475 2683629200 {
 			}
 		RelativePosition = 0.000000 0.000000 0.000000
 		RelativeSize = 1.000000 1.000000 1.000000
+	}
+}
+kbGameEntity 3264686808 1200350240 4079841202 2261291308 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Bridge"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 76.992683 -52.798882 -279.306396
+		Scale = 250.000000 250.000000 250.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		Materials = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\environment\environmenttiled.kbshader
+				ShaderParams = 8
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "diffuse"
+						Texture = .\assets\models\environment\platforms\bridge_wooden_1.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "normal"
+						Texture = ..\..\kbengine\assets\textures\defaultnormal.bmp
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "propertyMap"
+						Texture = .\assets\models\environment\platforms\bridge_wooden_1_prop.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "emissiveMap"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "tiledNormal"
+						Texture = .\assets\models\environment\materials\tiledwood_normal.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "vertexNoiseMap"
+						Texture = .\assets\models\environment\platforms\woodenbridge_noise.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "worldOffsetScale"
+						Texture = NULL
+						Vector = 0.025000 0.020000 0.010000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "uvScale_VertexNoiseScale"
+						Texture = NULL
+						Vector = 1.000000 1.000000 0.010000 0.010000
+					}
+			}
+		RenderOrderBias =  0.000000
+		RenderPass = LightingPass
+		Model = .\assets\models\environment\platforms\bridge_wooden_1.fbx
 	}
 }

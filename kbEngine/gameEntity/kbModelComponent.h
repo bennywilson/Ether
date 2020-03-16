@@ -2,7 +2,7 @@
 // kbModelComponent.h
 //
 //
-// 2016-2019 kbEngine 2.0
+// 2016 kbEngine 2.0
 //==============================================================================
 #ifndef _KBMODELCOMPONENT_H_
 #define _KBMODELCOMPONENT_H_
@@ -38,8 +38,8 @@ public:
 private:
 
 	kbString									m_ParamName;
-	kbTexture *									m_pTexture;
-	kbRenderTexture *							m_pRenderTexture;
+	kbTexture*									m_pTexture;
+	kbRenderTexture*							m_pRenderTexture;
 	kbVec4										m_Vector;
 };
 
@@ -60,7 +60,7 @@ protected:
 	std::vector<kbVectorAnimEvent>					m_ShaderVectorEvents;
 
 	// Runtime
-	class kbModelComponent *						m_pModelComponent;
+	class kbModelComponent*							m_pModelComponent;
 	float											m_StartTime;
 	float											m_AnimationLengthSec;
 };
@@ -87,7 +87,7 @@ public:
 
 private:
 
-	kbShader *									m_pShader;
+	kbShader*									m_pShader;
 	ECullMode									m_CullModeOverride;
 	std::vector<kbShaderParamComponent>			m_ShaderParamComponents;
 };
@@ -112,7 +112,7 @@ public:
 	void										SetMaterialParamVector( const int idx, const std::string & paramName, const kbVec4 paramValue );
 	void										SetMaterialParamTexture( const int idx, const std::string & paramName, kbTexture *const pTexture );
 	void										SetMaterialParamTexture( const int idx, const std::string & paramName, kbRenderTexture *const pTexture );
-	const kbShaderParamComponent *				GetShaderParamComponent( const int idx, const kbString & name );
+	const kbShaderParamComponent*				GetShaderParamComponent( const int idx, const kbString & name );
 
 	void										RefreshMaterials( const bool bUpdateRenderObject );
 
@@ -123,6 +123,10 @@ public:
 	
 	enum ERenderPass							GetRenderPass() const { return m_RenderPass; }
 	void										SetRenderPass( const ERenderPass newPass ) { m_RenderPass = newPass; }
+
+	const std::vector<kbMaterialComponent> &	GetMaterialList() const { return m_MaterialList; }
+	void										CopyMaterialList( const std::vector<kbMaterialComponent> & matComp ) { m_MaterialList = matComp; }
+
 protected:
 
 	ERenderPass									m_RenderPass;
