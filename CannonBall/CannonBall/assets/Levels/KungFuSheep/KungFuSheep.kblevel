@@ -1,4 +1,4 @@
-kbGameEntity 3567917707 1110648759 2532813470 3436519510 {
+kbGameEntity 2303589463 1295891621 3492675515 2574686858 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
@@ -10,8 +10,8 @@ kbGameEntity 3567917707 1110648759 2532813470 3436519510 {
 	kbEditorLevelSettingsComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		MainCameraPosition = 69.346451 -50.489849 -230.754150
-		MainCameraRotation = -0.007496 -0.578052 0.005309 0.815948
+		MainCameraPosition = 71.515747 -49.264378 -354.490234
+		MainCameraRotation = -0.167334 -0.700368 0.174503 0.671589
 	}
 }
 kbGameEntity 537364968 1092523782 2953639826 2626478307 {
@@ -988,7 +988,7 @@ kbGameEntity 2623485304 1164391352 3750140854 1068688934 {
 				Enabled = 0
 				LifeTime =  -1.000000
 				CullModeOverride = ShaderDefault
-				Shader = .\assets\shaders\environment\environmentbase.kbshader
+				Shader = .\assets\shaders\environment\environmenttiled.kbshader
 				ShaderParams = 4
 					kbShaderParamComponent { 
 						Enabled = 0
@@ -1061,7 +1061,7 @@ kbGameEntity 3587713139 1101448007 952628641 366038443 {
 				Enabled = 0
 				LifeTime =  -1.000000
 				CullModeOverride = ShaderDefault
-				Shader = .\assets\shaders\environment\environmentbase.kbshader
+				Shader = .\assets\shaders\environment\environmenttiled.kbshader
 				ShaderParams = 4
 					kbShaderParamComponent { 
 						Enabled = 0
@@ -1103,7 +1103,7 @@ kbGameEntity 3565500909 1121129338 2565412495 3171246714 {
 		LifeTime =  -1.000000
 		Name = "Bridge"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
-		Position = 76.992683 -52.798882 -220.546371
+		Position = 76.992683 -52.798882 -220.436310
 		Scale = 250.000000 250.000000 250.000000
 	}
 	kbStaticModelComponent { 
@@ -1115,7 +1115,7 @@ kbGameEntity 3565500909 1121129338 2565412495 3171246714 {
 				Enabled = 0
 				LifeTime =  -1.000000
 				CullModeOverride = ShaderDefault
-				Shader = .\assets\shaders\environment\environmentbase.kbshader
+				Shader = .\assets\shaders\environment\environmenttiled.kbshader
 				ShaderParams = 4
 					kbShaderParamComponent { 
 						Enabled = 0
@@ -1157,7 +1157,7 @@ kbGameEntity 1792756094 1339018376 1629935014 1681887078 {
 		LifeTime =  -1.000000
 		Name = "Bridge"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
-		Position = 76.992683 -52.798882 -410.614166
+		Position = 76.992683 -52.798882 -413.873444
 		Scale = 250.000000 250.000000 250.000000
 	}
 	kbStaticModelComponent { 
@@ -1169,8 +1169,8 @@ kbGameEntity 1792756094 1339018376 1629935014 1681887078 {
 				Enabled = 0
 				LifeTime =  -1.000000
 				CullModeOverride = ShaderDefault
-				Shader = .\assets\shaders\environment\environmentbase.kbshader
-				ShaderParams = 4
+				Shader = .\assets\shaders\environment\environmenttiled.kbshader
+				ShaderParams = 5
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
@@ -1189,7 +1189,7 @@ kbGameEntity 1792756094 1339018376 1629935014 1681887078 {
 						Enabled = 0
 						LifeTime =  -1.000000
 						ParamName = "propertyMap"
-						Texture = NULL
+						Texture = .\assets\models\environment\platforms\bridge_wooden_1_prop.tif
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 					kbShaderParamComponent { 
@@ -1197,6 +1197,13 @@ kbGameEntity 1792756094 1339018376 1629935014 1681887078 {
 						LifeTime =  -1.000000
 						ParamName = "emissiveMap"
 						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "tiledNormal"
+						Texture = .\assets\models\environment\materials\tiledwood_normal.jpg
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 			}
@@ -1211,7 +1218,7 @@ kbGameEntity 2285083070 1261831113 2537240763 2965023321 {
 		LifeTime =  -1.000000
 		Name = "Bridge"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
-		Position = 76.992683 -52.798882 -386.044403
+		Position = 76.992683 -52.798882 -388.633514
 		Scale = 250.000000 250.000000 250.000000
 	}
 	kbStaticModelComponent { 
@@ -1223,8 +1230,8 @@ kbGameEntity 2285083070 1261831113 2537240763 2965023321 {
 				Enabled = 0
 				LifeTime =  -1.000000
 				CullModeOverride = ShaderDefault
-				Shader = .\assets\shaders\environment\environmentbase.kbshader
-				ShaderParams = 4
+				Shader = .\assets\shaders\environment\environmenttiled.kbshader
+				ShaderParams = 5
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
@@ -1251,6 +1258,13 @@ kbGameEntity 2285083070 1261831113 2537240763 2965023321 {
 						LifeTime =  -1.000000
 						ParamName = "emissiveMap"
 						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "tiledNormal"
+						Texture = .\assets\models\environment\materials\tiledwood_normal.jpg
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 			}
@@ -1265,7 +1279,7 @@ kbGameEntity 768408979 1309698659 1845970622 3862184246 {
 		LifeTime =  -1.000000
 		Name = "Bridge"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
-		Position = 76.992683 -52.798882 -377.764526
+		Position = 76.992683 -52.798882 -380.224487
 		Scale = 250.000000 250.000000 250.000000
 	}
 	kbStaticModelComponent { 
@@ -1277,8 +1291,8 @@ kbGameEntity 768408979 1309698659 1845970622 3862184246 {
 				Enabled = 0
 				LifeTime =  -1.000000
 				CullModeOverride = ShaderDefault
-				Shader = .\assets\shaders\environment\environmentbase.kbshader
-				ShaderParams = 4
+				Shader = .\assets\shaders\environment\environmenttiled.kbshader
+				ShaderParams = 5
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
@@ -1305,6 +1319,13 @@ kbGameEntity 768408979 1309698659 1845970622 3862184246 {
 						LifeTime =  -1.000000
 						ParamName = "emissiveMap"
 						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "tiledNormal"
+						Texture = .\assets\models\environment\materials\tiledwood_normal.jpg
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 			}
@@ -1319,7 +1340,7 @@ kbGameEntity 2073227036 1116953487 4028886406 3411107857 {
 		LifeTime =  -1.000000
 		Name = "Bridge"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
-		Position = 76.992683 -52.798882 -369.474640
+		Position = 76.992683 -52.798882 -371.814484
 		Scale = 250.000000 250.000000 250.000000
 	}
 	kbStaticModelComponent { 
@@ -1331,8 +1352,8 @@ kbGameEntity 2073227036 1116953487 4028886406 3411107857 {
 				Enabled = 0
 				LifeTime =  -1.000000
 				CullModeOverride = ShaderDefault
-				Shader = .\assets\shaders\environment\environmentbase.kbshader
-				ShaderParams = 4
+				Shader = .\assets\shaders\environment\environmenttiled.kbshader
+				ShaderParams = 5
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
@@ -1359,6 +1380,13 @@ kbGameEntity 2073227036 1116953487 4028886406 3411107857 {
 						LifeTime =  -1.000000
 						ParamName = "emissiveMap"
 						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "tiledNormal"
+						Texture = .\assets\models\environment\materials\tiledwood_normal.jpg
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 			}
@@ -1373,7 +1401,7 @@ kbGameEntity 55202556 1308462375 1187601583 263077682 {
 		LifeTime =  -1.000000
 		Name = "Bridge"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
-		Position = 76.992683 -52.798882 -361.184753
+		Position = 76.992683 -52.798882 -363.404480
 		Scale = 250.000000 250.000000 250.000000
 	}
 	kbStaticModelComponent { 
@@ -1385,8 +1413,8 @@ kbGameEntity 55202556 1308462375 1187601583 263077682 {
 				Enabled = 0
 				LifeTime =  -1.000000
 				CullModeOverride = ShaderDefault
-				Shader = .\assets\shaders\environment\environmentbase.kbshader
-				ShaderParams = 4
+				Shader = .\assets\shaders\environment\environmenttiled.kbshader
+				ShaderParams = 5
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
@@ -1413,6 +1441,13 @@ kbGameEntity 55202556 1308462375 1187601583 263077682 {
 						LifeTime =  -1.000000
 						ParamName = "emissiveMap"
 						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "tiledNormal"
+						Texture = .\assets\models\environment\materials\tiledwood_normal.jpg
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 			}
@@ -1427,7 +1462,7 @@ kbGameEntity 4022515928 1092104471 769233583 338184870 {
 		LifeTime =  -1.000000
 		Name = "Bridge"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
-		Position = 76.992683 -52.798882 -352.904755
+		Position = 76.992683 -52.798882 -354.994354
 		Scale = 250.000000 250.000000 250.000000
 	}
 	kbStaticModelComponent { 
@@ -1439,8 +1474,8 @@ kbGameEntity 4022515928 1092104471 769233583 338184870 {
 				Enabled = 0
 				LifeTime =  -1.000000
 				CullModeOverride = ShaderDefault
-				Shader = .\assets\shaders\environment\environmentbase.kbshader
-				ShaderParams = 4
+				Shader = .\assets\shaders\environment\environmenttiled.kbshader
+				ShaderParams = 5
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
@@ -1467,6 +1502,13 @@ kbGameEntity 4022515928 1092104471 769233583 338184870 {
 						LifeTime =  -1.000000
 						ParamName = "emissiveMap"
 						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "tiledNormal"
+						Texture = .\assets\models\environment\materials\tiledwood_normal.jpg
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 			}
@@ -1481,7 +1523,7 @@ kbGameEntity 219122931 1274720638 2606058668 789972547 {
 		LifeTime =  -1.000000
 		Name = "Bridge"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
-		Position = 76.992683 -52.798882 -344.635010
+		Position = 76.992683 -52.798882 -346.584961
 		Scale = 250.000000 250.000000 250.000000
 	}
 	kbStaticModelComponent { 
@@ -1493,8 +1535,8 @@ kbGameEntity 219122931 1274720638 2606058668 789972547 {
 				Enabled = 0
 				LifeTime =  -1.000000
 				CullModeOverride = ShaderDefault
-				Shader = .\assets\shaders\environment\environmentbase.kbshader
-				ShaderParams = 4
+				Shader = .\assets\shaders\environment\environmenttiled.kbshader
+				ShaderParams = 5
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
@@ -1523,6 +1565,13 @@ kbGameEntity 219122931 1274720638 2606058668 789972547 {
 						Texture = NULL
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "tiledNormal"
+						Texture = .\assets\models\environment\materials\tiledwood_normal.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
 			}
 		RenderOrderBias =  0.000000
 		RenderPass = LightingPass
@@ -1535,7 +1584,7 @@ kbGameEntity 4011769355 1323333596 3975013820 4133016020 {
 		LifeTime =  -1.000000
 		Name = "Bridge"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
-		Position = 76.992683 -52.798882 -336.365143
+		Position = 76.992683 -52.798882 -338.175140
 		Scale = 250.000000 250.000000 250.000000
 	}
 	kbStaticModelComponent { 
@@ -1547,7 +1596,7 @@ kbGameEntity 4011769355 1323333596 3975013820 4133016020 {
 				Enabled = 0
 				LifeTime =  -1.000000
 				CullModeOverride = ShaderDefault
-				Shader = .\assets\shaders\environment\environmentbase.kbshader
+				Shader = .\assets\shaders\environment\environmenttiled.kbshader
 				ShaderParams = 4
 					kbShaderParamComponent { 
 						Enabled = 0
@@ -1589,7 +1638,7 @@ kbGameEntity 476150570 1178077505 3921805720 167556555 {
 		LifeTime =  -1.000000
 		Name = "Bridge"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
-		Position = 76.992683 -52.798882 -328.095001
+		Position = 76.992683 -52.798882 -329.764984
 		Scale = 250.000000 250.000000 250.000000
 	}
 	kbStaticModelComponent { 
@@ -1601,7 +1650,7 @@ kbGameEntity 476150570 1178077505 3921805720 167556555 {
 				Enabled = 0
 				LifeTime =  -1.000000
 				CullModeOverride = ShaderDefault
-				Shader = .\assets\shaders\environment\environmentbase.kbshader
+				Shader = .\assets\shaders\environment\environmenttiled.kbshader
 				ShaderParams = 4
 					kbShaderParamComponent { 
 						Enabled = 0
@@ -1643,7 +1692,7 @@ kbGameEntity 3063563567 1178136607 3804988817 1241362735 {
 		LifeTime =  -1.000000
 		Name = "Bridge"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
-		Position = 76.992683 -52.798882 -319.835083
+		Position = 76.992683 -52.798882 -321.354858
 		Scale = 250.000000 250.000000 250.000000
 	}
 	kbStaticModelComponent { 
@@ -1655,7 +1704,7 @@ kbGameEntity 3063563567 1178136607 3804988817 1241362735 {
 				Enabled = 0
 				LifeTime =  -1.000000
 				CullModeOverride = ShaderDefault
-				Shader = .\assets\shaders\environment\environmentbase.kbshader
+				Shader = .\assets\shaders\environment\environmenttiled.kbshader
 				ShaderParams = 4
 					kbShaderParamComponent { 
 						Enabled = 0
@@ -1697,7 +1746,7 @@ kbGameEntity 3012410846 1176812014 2847639957 2265530542 {
 		LifeTime =  -1.000000
 		Name = "Bridge"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
-		Position = 76.992683 -52.798882 -311.555176
+		Position = 76.992683 -52.798882 -312.944641
 		Scale = 250.000000 250.000000 250.000000
 	}
 	kbStaticModelComponent { 
@@ -1709,7 +1758,7 @@ kbGameEntity 3012410846 1176812014 2847639957 2265530542 {
 				Enabled = 0
 				LifeTime =  -1.000000
 				CullModeOverride = ShaderDefault
-				Shader = .\assets\shaders\environment\environmentbase.kbshader
+				Shader = .\assets\shaders\environment\environmenttiled.kbshader
 				ShaderParams = 4
 					kbShaderParamComponent { 
 						Enabled = 0
@@ -1751,7 +1800,7 @@ kbGameEntity 4000087732 1074056295 37780884 2473222410 {
 		LifeTime =  -1.000000
 		Name = "Bridge"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
-		Position = 76.992683 -52.798882 -303.275269
+		Position = 76.992683 -52.798882 -304.536499
 		Scale = 250.000000 250.000000 250.000000
 	}
 	kbStaticModelComponent { 
@@ -1763,7 +1812,7 @@ kbGameEntity 4000087732 1074056295 37780884 2473222410 {
 				Enabled = 0
 				LifeTime =  -1.000000
 				CullModeOverride = ShaderDefault
-				Shader = .\assets\shaders\environment\environmentbase.kbshader
+				Shader = .\assets\shaders\environment\environmenttiled.kbshader
 				ShaderParams = 4
 					kbShaderParamComponent { 
 						Enabled = 0
@@ -1805,7 +1854,7 @@ kbGameEntity 1081531102 1122866535 398672021 3386659937 {
 		LifeTime =  -1.000000
 		Name = "Bridge"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
-		Position = 76.992683 -52.798882 -294.995361
+		Position = 76.992683 -52.798882 -296.125610
 		Scale = 250.000000 250.000000 250.000000
 	}
 	kbStaticModelComponent { 
@@ -1817,7 +1866,7 @@ kbGameEntity 1081531102 1122866535 398672021 3386659937 {
 				Enabled = 0
 				LifeTime =  -1.000000
 				CullModeOverride = ShaderDefault
-				Shader = .\assets\shaders\environment\environmentbase.kbshader
+				Shader = .\assets\shaders\environment\environmenttiled.kbshader
 				ShaderParams = 4
 					kbShaderParamComponent { 
 						Enabled = 0
@@ -1859,7 +1908,7 @@ kbGameEntity 3477824963 1325410563 4085668241 505532259 {
 		LifeTime =  -1.000000
 		Name = "Bridge"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
-		Position = 76.992683 -52.798882 -286.715454
+		Position = 76.992683 -52.798882 -287.716431
 		Scale = 250.000000 250.000000 250.000000
 	}
 	kbStaticModelComponent { 
@@ -1871,7 +1920,7 @@ kbGameEntity 3477824963 1325410563 4085668241 505532259 {
 				Enabled = 0
 				LifeTime =  -1.000000
 				CullModeOverride = ShaderDefault
-				Shader = .\assets\shaders\environment\environmentbase.kbshader
+				Shader = .\assets\shaders\environment\environmenttiled.kbshader
 				ShaderParams = 4
 					kbShaderParamComponent { 
 						Enabled = 0
@@ -1913,7 +1962,7 @@ kbGameEntity 559386017 1316716511 3755778214 2045459382 {
 		LifeTime =  -1.000000
 		Name = "Bridge"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
-		Position = 76.992683 -52.798882 -278.435547
+		Position = 76.992683 -52.798882 -279.306396
 		Scale = 250.000000 250.000000 250.000000
 	}
 	kbStaticModelComponent { 
@@ -1925,7 +1974,7 @@ kbGameEntity 559386017 1316716511 3755778214 2045459382 {
 				Enabled = 0
 				LifeTime =  -1.000000
 				CullModeOverride = ShaderDefault
-				Shader = .\assets\shaders\environment\environmentbase.kbshader
+				Shader = .\assets\shaders\environment\environmenttiled.kbshader
 				ShaderParams = 4
 					kbShaderParamComponent { 
 						Enabled = 0
@@ -1967,7 +2016,7 @@ kbGameEntity 1289487901 1188375855 920596138 4184004917 {
 		LifeTime =  -1.000000
 		Name = "Bridge"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
-		Position = 76.992683 -52.798882 -270.175629
+		Position = 76.992683 -52.798882 -270.896332
 		Scale = 250.000000 250.000000 250.000000
 	}
 	kbStaticModelComponent { 
@@ -1979,7 +2028,7 @@ kbGameEntity 1289487901 1188375855 920596138 4184004917 {
 				Enabled = 0
 				LifeTime =  -1.000000
 				CullModeOverride = ShaderDefault
-				Shader = .\assets\shaders\environment\environmentbase.kbshader
+				Shader = .\assets\shaders\environment\environmenttiled.kbshader
 				ShaderParams = 4
 					kbShaderParamComponent { 
 						Enabled = 0
@@ -2021,7 +2070,7 @@ kbGameEntity 714109186 1210138278 3860640913 4056027296 {
 		LifeTime =  -1.000000
 		Name = "Bridge"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
-		Position = 76.992683 -52.798882 -261.915710
+		Position = 76.992683 -52.798882 -262.486267
 		Scale = 250.000000 250.000000 250.000000
 	}
 	kbStaticModelComponent { 
@@ -2033,7 +2082,7 @@ kbGameEntity 714109186 1210138278 3860640913 4056027296 {
 				Enabled = 0
 				LifeTime =  -1.000000
 				CullModeOverride = ShaderDefault
-				Shader = .\assets\shaders\environment\environmentbase.kbshader
+				Shader = .\assets\shaders\environment\environmenttiled.kbshader
 				ShaderParams = 4
 					kbShaderParamComponent { 
 						Enabled = 0
@@ -2075,7 +2124,7 @@ kbGameEntity 994630907 1178801820 4058844581 1161728672 {
 		LifeTime =  -1.000000
 		Name = "Bridge"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
-		Position = 76.992683 -52.798882 -253.636124
+		Position = 76.992683 -52.798882 -254.075882
 		Scale = 250.000000 250.000000 250.000000
 	}
 	kbStaticModelComponent { 
@@ -2087,7 +2136,7 @@ kbGameEntity 994630907 1178801820 4058844581 1161728672 {
 				Enabled = 0
 				LifeTime =  -1.000000
 				CullModeOverride = ShaderDefault
-				Shader = .\assets\shaders\environment\environmentbase.kbshader
+				Shader = .\assets\shaders\environment\environmenttiled.kbshader
 				ShaderParams = 4
 					kbShaderParamComponent { 
 						Enabled = 0
@@ -2129,7 +2178,7 @@ kbGameEntity 3881373922 1111186753 3037939894 2663332882 {
 		LifeTime =  -1.000000
 		Name = "Breaking Bridge"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
-		Position = 76.992683 -52.798882 -245.396240
+		Position = 76.992683 -52.798882 -245.666092
 		Scale = 250.000000 250.000000 250.000000
 	}
 	kbStaticModelComponent { 
@@ -2141,7 +2190,7 @@ kbGameEntity 3881373922 1111186753 3037939894 2663332882 {
 				Enabled = 0
 				LifeTime =  -1.000000
 				CullModeOverride = ShaderDefault
-				Shader = .\assets\shaders\environment\environmentbase.kbshader
+				Shader = .\assets\shaders\environment\environmenttiled.kbshader
 				ShaderParams = 5
 					kbShaderParamComponent { 
 						Enabled = 0
@@ -2190,7 +2239,7 @@ kbGameEntity 1745036657 1226122723 137629842 2847967967 {
 		LifeTime =  -1.000000
 		Name = "BridgeS"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
-		Position = 76.992683 -52.798882 -394.324280
+		Position = 76.992683 -52.798882 -397.044159
 		Scale = 250.000000 250.000000 250.000000
 	}
 	kbStaticModelComponent { 
@@ -2202,8 +2251,8 @@ kbGameEntity 1745036657 1226122723 137629842 2847967967 {
 				Enabled = 0
 				LifeTime =  -1.000000
 				CullModeOverride = ShaderDefault
-				Shader = .\assets\shaders\environment\environmentbase.kbshader
-				ShaderParams = 4
+				Shader = .\assets\shaders\environment\environmenttiled.kbshader
+				ShaderParams = 5
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
@@ -2230,6 +2279,13 @@ kbGameEntity 1745036657 1226122723 137629842 2847967967 {
 						LifeTime =  -1.000000
 						ParamName = "emissiveMap"
 						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "tiledNormal"
+						Texture = .\assets\models\environment\materials\tiledwood_normal.jpg
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 			}
@@ -2244,7 +2300,7 @@ kbGameEntity 211241734 1165433459 2859075761 1636992949 {
 		LifeTime =  -1.000000
 		Name = "Bridge"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
-		Position = 76.992683 -52.798882 -402.614166
+		Position = 76.992683 -52.798882 -405.464020
 		Scale = 250.000000 250.000000 250.000000
 	}
 	kbStaticModelComponent { 
@@ -2256,8 +2312,8 @@ kbGameEntity 211241734 1165433459 2859075761 1636992949 {
 				Enabled = 0
 				LifeTime =  -1.000000
 				CullModeOverride = ShaderDefault
-				Shader = .\assets\shaders\environment\environmentbase.kbshader
-				ShaderParams = 4
+				Shader = .\assets\shaders\environment\environmenttiled.kbshader
+				ShaderParams = 5
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
@@ -2284,6 +2340,13 @@ kbGameEntity 211241734 1165433459 2859075761 1636992949 {
 						LifeTime =  -1.000000
 						ParamName = "emissiveMap"
 						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "tiledNormal"
+						Texture = .\assets\models\environment\materials\tiledwood_normal.jpg
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 			}
@@ -4901,7 +4964,7 @@ kbGameEntity 2823924498 1217103692 1108638655 59959439 {
 		LifeTime =  -1.000000
 		Name = "Bridge"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
-		Position = 76.992683 -52.798882 -237.136353
+		Position = 76.992683 -52.798882 -237.256287
 		Scale = 250.000000 250.000000 250.000000
 	}
 	kbStaticModelComponent { 

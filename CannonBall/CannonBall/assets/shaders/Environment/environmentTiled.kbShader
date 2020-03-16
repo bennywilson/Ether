@@ -1,5 +1,5 @@
 //==============================================================================
-// environmentBase.kbShader
+// environmentTiled.kbShader
 //
 // 2018 kbEngine 2.0
 //==============================================================================
@@ -85,10 +85,14 @@ Texture2D emissiveMap(black)		: register(t3);
 
 Texture2D clipMap(white)			: register(t4);
 
+Texture2D tiledNormal(defaultNormal) : register(t5);
+
  PS_OUTPUT pixelShader( pixelInput	input, bool IsFrontFace	: SV_IsFrontFace ) {
  	PS_OUTPUT output = (PS_OUTPUT) 0;
 
-	const float4 normalMap = normal.Sample( diffuseSampler, input.uv );
+	const float4 baseNormalMap = normal.Sample( diffuseSampler, input.uv );
+	const float4 tiledNormalMap = tiledNormal.Sample( diffuseSampler, input.uv * 0.5f );
+
 	const float4 propertyMapValues = propertyMap.Sample( diffuseSampler, input.uv );
 	const float4 emissive = emissiveMap.Sample( diffuseSampler, input.uv );
 	const float clipMask = clipMap.Sample( diffuseSampler, input.uv ).r;
@@ -107,7 +111,9 @@ Texture2D clipMap(white)			: register(t4);
 		TBN *= -1.0f;
 	}*/
 
-	float3 tangentNormal = normalize( normalMap.xyz * 2.0f - 1.0f );
+	float3 tangentNormal = tiledNormalMap.xyz * 2.0f - 1.0f;
+	tangentNormal.z *= 15.0f;
+	tangentNormal = normalize( tangentNormal.xyz );
 	output.Normal.x = dot( tangentNormal, normalize( float3( input.TBN0.x, input.TBN1.x, input.TBN2.x ) ) );//		//mul( tangentNormal, TBN );
 	output.Normal.y = dot( tangentNormal, normalize( float3( input.TBN0.y, input.TBN1.y, input.TBN2.y ) ) );//		//mul( tangentNormal, TBN );
 	output.Normal.z = dot( tangentNormal, normalize( float3( input.TBN0.z, input.TBN1.z, input.TBN2.z ) ) );//		//mul( tangentNormal, TBN );
