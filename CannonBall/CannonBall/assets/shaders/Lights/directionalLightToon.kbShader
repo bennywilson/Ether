@@ -4,7 +4,7 @@
 // Note that the directional light shader is responsible for copying the glow mask from the color
 // buffer to the accumulation buffer
 //
-// 2018-2019 kbEngine 2.0
+// 2018 kbEngine 2.0
 //===================================================================================================
 cbuffer matrixBuffer {
 	matrix				mvpMatrix;

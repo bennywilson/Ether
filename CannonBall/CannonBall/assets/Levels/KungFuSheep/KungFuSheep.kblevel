@@ -1,8 +1,8 @@
-kbGameEntity 1325683841 1279250836 728756403 1119229638 {
+kbGameEntity 3140572478 1299325484 2933885067 3746077575 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		Name = "Entity_225"
+		Name = "Entity_226"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
 		Position = 0.000000 0.000000 0.000000
 		Scale = 1.000000 1.000000 1.000000
@@ -10,8 +10,8 @@ kbGameEntity 1325683841 1279250836 728756403 1119229638 {
 	kbEditorLevelSettingsComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		MainCameraPosition = 66.365013 -47.474987 -410.782410
-		MainCameraRotation = -0.118036 -0.600972 0.090326 0.785329
+		MainCameraPosition = 72.184792 -52.370537 -405.204010
+		MainCameraRotation = -0.029482 -0.886268 0.056960 0.458711
 	}
 }
 kbGameEntity 537364968 1092523782 2953639826 2626478307 {
@@ -97,7 +97,7 @@ kbGameEntity 1976988906 1203222253 3781998738 4272724285 {
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadows = 1
-		Color = 1.000000 1.000000 1.000000 0.000000
+		Color = 0.800000 0.800000 0.800000 0.000000
 		Materials = 1
 			kbMaterialComponent { 
 				Enabled = 0
@@ -989,7 +989,7 @@ kbGameEntity 2623485304 1164391352 3750140854 1068688934 {
 				LifeTime =  -1.000000
 				CullModeOverride = ShaderDefault
 				Shader = .\assets\shaders\environment\environmenttiled.kbshader
-				ShaderParams = 8
+				ShaderParams = 9
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
@@ -1037,7 +1037,7 @@ kbGameEntity 2623485304 1164391352 3750140854 1068688934 {
 						LifeTime =  -1.000000
 						ParamName = "worldOffsetScale"
 						Texture = NULL
-						Vector = 0.025000 0.020000 0.010000 0.000000
+						Vector = 0.050000 0.050000 0.050000 0.000000
 					}
 					kbShaderParamComponent { 
 						Enabled = 0
@@ -1045,6 +1045,13 @@ kbGameEntity 2623485304 1164391352 3750140854 1068688934 {
 						ParamName = "uvScale_VertexNoiseScale"
 						Texture = NULL
 						Vector = 1.000000 1.000000 0.010000 0.010000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "AOMap"
+						Texture = .\assets\models\environment\platforms\bridge_wooden_1_ao.png
+						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 			}
 		RenderOrderBias =  0.000000
@@ -1090,7 +1097,7 @@ kbGameEntity 3587713139 1101448007 952628641 366038443 {
 				LifeTime =  -1.000000
 				CullModeOverride = ShaderDefault
 				Shader = .\assets\shaders\environment\environmenttiled.kbshader
-				ShaderParams = 8
+				ShaderParams = 9
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
@@ -1138,7 +1145,7 @@ kbGameEntity 3587713139 1101448007 952628641 366038443 {
 						LifeTime =  -1.000000
 						ParamName = "worldOffsetScale"
 						Texture = NULL
-						Vector = 0.025000 0.020000 0.010000 0.000000
+						Vector = 0.050000 0.050000 0.050000 0.000000
 					}
 					kbShaderParamComponent { 
 						Enabled = 0
@@ -1146,6 +1153,13 @@ kbGameEntity 3587713139 1101448007 952628641 366038443 {
 						ParamName = "uvScale_VertexNoiseScale"
 						Texture = NULL
 						Vector = 1.000000 1.000000 0.010000 0.010000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "AOMap"
+						Texture = .\assets\models\environment\platforms\bridge_wooden_1_ao.png
+						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 			}
 		RenderOrderBias =  0.000000
@@ -1172,7 +1186,7 @@ kbGameEntity 3565500909 1121129338 2565412495 3171246714 {
 				LifeTime =  -1.000000
 				CullModeOverride = ShaderDefault
 				Shader = .\assets\shaders\environment\environmenttiled.kbshader
-				ShaderParams = 8
+				ShaderParams = 9
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
@@ -1220,7 +1234,7 @@ kbGameEntity 3565500909 1121129338 2565412495 3171246714 {
 						LifeTime =  -1.000000
 						ParamName = "worldOffsetScale"
 						Texture = NULL
-						Vector = 0.025000 0.020000 0.010000 0.000000
+						Vector = 0.050000 0.050000 0.050000 0.000000
 					}
 					kbShaderParamComponent { 
 						Enabled = 0
@@ -1228,6 +1242,13 @@ kbGameEntity 3565500909 1121129338 2565412495 3171246714 {
 						ParamName = "uvScale_VertexNoiseScale"
 						Texture = NULL
 						Vector = 1.000000 1.000000 0.010000 0.010000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "AOMap"
+						Texture = .\assets\models\environment\platforms\bridge_wooden_1_ao.png
+						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 			}
 		RenderOrderBias =  0.000000
@@ -1239,7 +1260,7 @@ kbGameEntity 1792756094 1339018376 1629935014 1681887078 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		Name = "Bridge"
+		Name = "Bridge - Master"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
 		Position = 76.992638 -52.798882 -413.863678
 		Scale = 250.000000 250.000000 250.000000
@@ -1254,7 +1275,7 @@ kbGameEntity 1792756094 1339018376 1629935014 1681887078 {
 				LifeTime =  -1.000000
 				CullModeOverride = ShaderDefault
 				Shader = .\assets\shaders\environment\environmenttiled.kbshader
-				ShaderParams = 8
+				ShaderParams = 9
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
@@ -1302,7 +1323,7 @@ kbGameEntity 1792756094 1339018376 1629935014 1681887078 {
 						LifeTime =  -1.000000
 						ParamName = "worldOffsetScale"
 						Texture = NULL
-						Vector = 0.025000 0.020000 0.010000 0.000000
+						Vector = 0.050000 0.050000 0.050000 0.000000
 					}
 					kbShaderParamComponent { 
 						Enabled = 0
@@ -1310,6 +1331,13 @@ kbGameEntity 1792756094 1339018376 1629935014 1681887078 {
 						ParamName = "uvScale_VertexNoiseScale"
 						Texture = NULL
 						Vector = 1.000000 1.000000 0.010000 0.010000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "AOMap"
+						Texture = .\assets\models\environment\platforms\bridge_wooden_1_ao.png
+						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 			}
 		RenderOrderBias =  0.000000
@@ -1321,7 +1349,7 @@ kbGameEntity 2285083070 1261831113 2537240763 2965023321 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		Name = "Bridge - Master"
+		Name = "Bridge"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
 		Position = 76.992683 -52.798882 -388.633514
 		Scale = 250.000000 250.000000 250.000000
@@ -1336,7 +1364,7 @@ kbGameEntity 2285083070 1261831113 2537240763 2965023321 {
 				LifeTime =  -1.000000
 				CullModeOverride = ShaderDefault
 				Shader = .\assets\shaders\environment\environmenttiled.kbshader
-				ShaderParams = 8
+				ShaderParams = 9
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
@@ -1384,7 +1412,7 @@ kbGameEntity 2285083070 1261831113 2537240763 2965023321 {
 						LifeTime =  -1.000000
 						ParamName = "worldOffsetScale"
 						Texture = NULL
-						Vector = 0.025000 0.020000 0.010000 0.000000
+						Vector = 0.050000 0.050000 0.050000 0.000000
 					}
 					kbShaderParamComponent { 
 						Enabled = 0
@@ -1392,6 +1420,13 @@ kbGameEntity 2285083070 1261831113 2537240763 2965023321 {
 						ParamName = "uvScale_VertexNoiseScale"
 						Texture = NULL
 						Vector = 1.000000 1.000000 0.010000 0.010000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "AOMap"
+						Texture = .\assets\models\environment\platforms\bridge_wooden_1_ao.png
+						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 			}
 		RenderOrderBias =  0.000000
@@ -1418,7 +1453,7 @@ kbGameEntity 768408979 1309698659 1845970622 3862184246 {
 				LifeTime =  -1.000000
 				CullModeOverride = ShaderDefault
 				Shader = .\assets\shaders\environment\environmenttiled.kbshader
-				ShaderParams = 8
+				ShaderParams = 9
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
@@ -1466,7 +1501,7 @@ kbGameEntity 768408979 1309698659 1845970622 3862184246 {
 						LifeTime =  -1.000000
 						ParamName = "worldOffsetScale"
 						Texture = NULL
-						Vector = 0.025000 0.020000 0.010000 0.000000
+						Vector = 0.050000 0.050000 0.050000 0.000000
 					}
 					kbShaderParamComponent { 
 						Enabled = 0
@@ -1474,6 +1509,13 @@ kbGameEntity 768408979 1309698659 1845970622 3862184246 {
 						ParamName = "uvScale_VertexNoiseScale"
 						Texture = NULL
 						Vector = 1.000000 1.000000 0.010000 0.010000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "AOMap"
+						Texture = .\assets\models\environment\platforms\bridge_wooden_1_ao.png
+						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 			}
 		RenderOrderBias =  0.000000
@@ -1500,7 +1542,7 @@ kbGameEntity 2073227036 1116953487 4028886406 3411107857 {
 				LifeTime =  -1.000000
 				CullModeOverride = ShaderDefault
 				Shader = .\assets\shaders\environment\environmenttiled.kbshader
-				ShaderParams = 8
+				ShaderParams = 9
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
@@ -1548,7 +1590,7 @@ kbGameEntity 2073227036 1116953487 4028886406 3411107857 {
 						LifeTime =  -1.000000
 						ParamName = "worldOffsetScale"
 						Texture = NULL
-						Vector = 0.025000 0.020000 0.010000 0.000000
+						Vector = 0.050000 0.050000 0.050000 0.000000
 					}
 					kbShaderParamComponent { 
 						Enabled = 0
@@ -1556,6 +1598,13 @@ kbGameEntity 2073227036 1116953487 4028886406 3411107857 {
 						ParamName = "uvScale_VertexNoiseScale"
 						Texture = NULL
 						Vector = 1.000000 1.000000 0.010000 0.010000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "AOMap"
+						Texture = .\assets\models\environment\platforms\bridge_wooden_1_ao.png
+						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 			}
 		RenderOrderBias =  0.000000
@@ -1582,7 +1631,7 @@ kbGameEntity 55202556 1308462375 1187601583 263077682 {
 				LifeTime =  -1.000000
 				CullModeOverride = ShaderDefault
 				Shader = .\assets\shaders\environment\environmenttiled.kbshader
-				ShaderParams = 8
+				ShaderParams = 9
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
@@ -1630,7 +1679,7 @@ kbGameEntity 55202556 1308462375 1187601583 263077682 {
 						LifeTime =  -1.000000
 						ParamName = "worldOffsetScale"
 						Texture = NULL
-						Vector = 0.025000 0.020000 0.010000 0.000000
+						Vector = 0.050000 0.050000 0.050000 0.000000
 					}
 					kbShaderParamComponent { 
 						Enabled = 0
@@ -1638,6 +1687,13 @@ kbGameEntity 55202556 1308462375 1187601583 263077682 {
 						ParamName = "uvScale_VertexNoiseScale"
 						Texture = NULL
 						Vector = 1.000000 1.000000 0.010000 0.010000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "AOMap"
+						Texture = .\assets\models\environment\platforms\bridge_wooden_1_ao.png
+						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 			}
 		RenderOrderBias =  0.000000
@@ -1664,7 +1720,7 @@ kbGameEntity 4022515928 1092104471 769233583 338184870 {
 				LifeTime =  -1.000000
 				CullModeOverride = ShaderDefault
 				Shader = .\assets\shaders\environment\environmenttiled.kbshader
-				ShaderParams = 8
+				ShaderParams = 9
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
@@ -1712,7 +1768,7 @@ kbGameEntity 4022515928 1092104471 769233583 338184870 {
 						LifeTime =  -1.000000
 						ParamName = "worldOffsetScale"
 						Texture = NULL
-						Vector = 0.025000 0.020000 0.010000 0.000000
+						Vector = 0.050000 0.050000 0.050000 0.000000
 					}
 					kbShaderParamComponent { 
 						Enabled = 0
@@ -1720,6 +1776,13 @@ kbGameEntity 4022515928 1092104471 769233583 338184870 {
 						ParamName = "uvScale_VertexNoiseScale"
 						Texture = NULL
 						Vector = 1.000000 1.000000 0.010000 0.010000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "AOMap"
+						Texture = .\assets\models\environment\platforms\bridge_wooden_1_ao.png
+						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 			}
 		RenderOrderBias =  0.000000
@@ -1746,7 +1809,7 @@ kbGameEntity 219122931 1274720638 2606058668 789972547 {
 				LifeTime =  -1.000000
 				CullModeOverride = ShaderDefault
 				Shader = .\assets\shaders\environment\environmenttiled.kbshader
-				ShaderParams = 8
+				ShaderParams = 9
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
@@ -1794,7 +1857,7 @@ kbGameEntity 219122931 1274720638 2606058668 789972547 {
 						LifeTime =  -1.000000
 						ParamName = "worldOffsetScale"
 						Texture = NULL
-						Vector = 0.025000 0.020000 0.010000 0.000000
+						Vector = 0.050000 0.050000 0.050000 0.000000
 					}
 					kbShaderParamComponent { 
 						Enabled = 0
@@ -1802,6 +1865,13 @@ kbGameEntity 219122931 1274720638 2606058668 789972547 {
 						ParamName = "uvScale_VertexNoiseScale"
 						Texture = NULL
 						Vector = 1.000000 1.000000 0.010000 0.010000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "AOMap"
+						Texture = .\assets\models\environment\platforms\bridge_wooden_1_ao.png
+						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 			}
 		RenderOrderBias =  0.000000
@@ -1828,7 +1898,7 @@ kbGameEntity 4011769355 1323333596 3975013820 4133016020 {
 				LifeTime =  -1.000000
 				CullModeOverride = ShaderDefault
 				Shader = .\assets\shaders\environment\environmenttiled.kbshader
-				ShaderParams = 8
+				ShaderParams = 9
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
@@ -1876,7 +1946,7 @@ kbGameEntity 4011769355 1323333596 3975013820 4133016020 {
 						LifeTime =  -1.000000
 						ParamName = "worldOffsetScale"
 						Texture = NULL
-						Vector = 0.025000 0.020000 0.010000 0.000000
+						Vector = 0.050000 0.050000 0.050000 0.000000
 					}
 					kbShaderParamComponent { 
 						Enabled = 0
@@ -1884,6 +1954,13 @@ kbGameEntity 4011769355 1323333596 3975013820 4133016020 {
 						ParamName = "uvScale_VertexNoiseScale"
 						Texture = NULL
 						Vector = 1.000000 1.000000 0.010000 0.010000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "AOMap"
+						Texture = .\assets\models\environment\platforms\bridge_wooden_1_ao.png
+						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 			}
 		RenderOrderBias =  0.000000
@@ -1910,7 +1987,7 @@ kbGameEntity 476150570 1178077505 3921805720 167556555 {
 				LifeTime =  -1.000000
 				CullModeOverride = ShaderDefault
 				Shader = .\assets\shaders\environment\environmenttiled.kbshader
-				ShaderParams = 8
+				ShaderParams = 9
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
@@ -1958,7 +2035,7 @@ kbGameEntity 476150570 1178077505 3921805720 167556555 {
 						LifeTime =  -1.000000
 						ParamName = "worldOffsetScale"
 						Texture = NULL
-						Vector = 0.025000 0.020000 0.010000 0.000000
+						Vector = 0.050000 0.050000 0.050000 0.000000
 					}
 					kbShaderParamComponent { 
 						Enabled = 0
@@ -1966,6 +2043,13 @@ kbGameEntity 476150570 1178077505 3921805720 167556555 {
 						ParamName = "uvScale_VertexNoiseScale"
 						Texture = NULL
 						Vector = 1.000000 1.000000 0.010000 0.010000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "AOMap"
+						Texture = .\assets\models\environment\platforms\bridge_wooden_1_ao.png
+						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 			}
 		RenderOrderBias =  0.000000
@@ -1992,7 +2076,7 @@ kbGameEntity 3063563567 1178136607 3804988817 1241362735 {
 				LifeTime =  -1.000000
 				CullModeOverride = ShaderDefault
 				Shader = .\assets\shaders\environment\environmenttiled.kbshader
-				ShaderParams = 8
+				ShaderParams = 9
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
@@ -2040,7 +2124,7 @@ kbGameEntity 3063563567 1178136607 3804988817 1241362735 {
 						LifeTime =  -1.000000
 						ParamName = "worldOffsetScale"
 						Texture = NULL
-						Vector = 0.025000 0.020000 0.010000 0.000000
+						Vector = 0.050000 0.050000 0.050000 0.000000
 					}
 					kbShaderParamComponent { 
 						Enabled = 0
@@ -2048,6 +2132,13 @@ kbGameEntity 3063563567 1178136607 3804988817 1241362735 {
 						ParamName = "uvScale_VertexNoiseScale"
 						Texture = NULL
 						Vector = 1.000000 1.000000 0.010000 0.010000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "AOMap"
+						Texture = .\assets\models\environment\platforms\bridge_wooden_1_ao.png
+						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 			}
 		RenderOrderBias =  0.000000
@@ -2074,7 +2165,7 @@ kbGameEntity 3012410846 1176812014 2847639957 2265530542 {
 				LifeTime =  -1.000000
 				CullModeOverride = ShaderDefault
 				Shader = .\assets\shaders\environment\environmenttiled.kbshader
-				ShaderParams = 8
+				ShaderParams = 9
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
@@ -2122,7 +2213,7 @@ kbGameEntity 3012410846 1176812014 2847639957 2265530542 {
 						LifeTime =  -1.000000
 						ParamName = "worldOffsetScale"
 						Texture = NULL
-						Vector = 0.025000 0.020000 0.010000 0.000000
+						Vector = 0.050000 0.050000 0.050000 0.000000
 					}
 					kbShaderParamComponent { 
 						Enabled = 0
@@ -2130,6 +2221,13 @@ kbGameEntity 3012410846 1176812014 2847639957 2265530542 {
 						ParamName = "uvScale_VertexNoiseScale"
 						Texture = NULL
 						Vector = 1.000000 1.000000 0.010000 0.010000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "AOMap"
+						Texture = .\assets\models\environment\platforms\bridge_wooden_1_ao.png
+						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 			}
 		RenderOrderBias =  0.000000
@@ -2156,7 +2254,7 @@ kbGameEntity 4000087732 1074056295 37780884 2473222410 {
 				LifeTime =  -1.000000
 				CullModeOverride = ShaderDefault
 				Shader = .\assets\shaders\environment\environmenttiled.kbshader
-				ShaderParams = 8
+				ShaderParams = 9
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
@@ -2204,7 +2302,7 @@ kbGameEntity 4000087732 1074056295 37780884 2473222410 {
 						LifeTime =  -1.000000
 						ParamName = "worldOffsetScale"
 						Texture = NULL
-						Vector = 0.025000 0.020000 0.010000 0.000000
+						Vector = 0.050000 0.050000 0.050000 0.000000
 					}
 					kbShaderParamComponent { 
 						Enabled = 0
@@ -2212,6 +2310,13 @@ kbGameEntity 4000087732 1074056295 37780884 2473222410 {
 						ParamName = "uvScale_VertexNoiseScale"
 						Texture = NULL
 						Vector = 1.000000 1.000000 0.010000 0.010000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "AOMap"
+						Texture = .\assets\models\environment\platforms\bridge_wooden_1_ao.png
+						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 			}
 		RenderOrderBias =  0.000000
@@ -2238,7 +2343,7 @@ kbGameEntity 1081531102 1122866535 398672021 3386659937 {
 				LifeTime =  -1.000000
 				CullModeOverride = ShaderDefault
 				Shader = .\assets\shaders\environment\environmenttiled.kbshader
-				ShaderParams = 8
+				ShaderParams = 9
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
@@ -2286,7 +2391,7 @@ kbGameEntity 1081531102 1122866535 398672021 3386659937 {
 						LifeTime =  -1.000000
 						ParamName = "worldOffsetScale"
 						Texture = NULL
-						Vector = 0.025000 0.020000 0.010000 0.000000
+						Vector = 0.050000 0.050000 0.050000 0.000000
 					}
 					kbShaderParamComponent { 
 						Enabled = 0
@@ -2294,6 +2399,13 @@ kbGameEntity 1081531102 1122866535 398672021 3386659937 {
 						ParamName = "uvScale_VertexNoiseScale"
 						Texture = NULL
 						Vector = 1.000000 1.000000 0.010000 0.010000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "AOMap"
+						Texture = .\assets\models\environment\platforms\bridge_wooden_1_ao.png
+						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 			}
 		RenderOrderBias =  0.000000
@@ -2320,7 +2432,7 @@ kbGameEntity 559386017 1316716511 3755778214 2045459382 {
 				LifeTime =  -1.000000
 				CullModeOverride = ShaderDefault
 				Shader = .\assets\shaders\environment\environmenttiled.kbshader
-				ShaderParams = 8
+				ShaderParams = 9
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
@@ -2368,7 +2480,7 @@ kbGameEntity 559386017 1316716511 3755778214 2045459382 {
 						LifeTime =  -1.000000
 						ParamName = "worldOffsetScale"
 						Texture = NULL
-						Vector = 0.025000 0.020000 0.010000 0.000000
+						Vector = 0.050000 0.050000 0.050000 0.000000
 					}
 					kbShaderParamComponent { 
 						Enabled = 0
@@ -2376,6 +2488,13 @@ kbGameEntity 559386017 1316716511 3755778214 2045459382 {
 						ParamName = "uvScale_VertexNoiseScale"
 						Texture = NULL
 						Vector = 1.000000 1.000000 0.010000 0.010000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "AOMap"
+						Texture = .\assets\models\environment\platforms\bridge_wooden_1_ao.png
+						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 			}
 		RenderOrderBias =  0.000000
@@ -2402,7 +2521,7 @@ kbGameEntity 1289487901 1188375855 920596138 4184004917 {
 				LifeTime =  -1.000000
 				CullModeOverride = ShaderDefault
 				Shader = .\assets\shaders\environment\environmenttiled.kbshader
-				ShaderParams = 8
+				ShaderParams = 9
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
@@ -2450,7 +2569,7 @@ kbGameEntity 1289487901 1188375855 920596138 4184004917 {
 						LifeTime =  -1.000000
 						ParamName = "worldOffsetScale"
 						Texture = NULL
-						Vector = 0.025000 0.020000 0.010000 0.000000
+						Vector = 0.050000 0.050000 0.050000 0.000000
 					}
 					kbShaderParamComponent { 
 						Enabled = 0
@@ -2458,6 +2577,13 @@ kbGameEntity 1289487901 1188375855 920596138 4184004917 {
 						ParamName = "uvScale_VertexNoiseScale"
 						Texture = NULL
 						Vector = 1.000000 1.000000 0.010000 0.010000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "AOMap"
+						Texture = .\assets\models\environment\platforms\bridge_wooden_1_ao.png
+						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 			}
 		RenderOrderBias =  0.000000
@@ -2484,7 +2610,7 @@ kbGameEntity 714109186 1210138278 3860640913 4056027296 {
 				LifeTime =  -1.000000
 				CullModeOverride = ShaderDefault
 				Shader = .\assets\shaders\environment\environmenttiled.kbshader
-				ShaderParams = 8
+				ShaderParams = 9
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
@@ -2532,7 +2658,7 @@ kbGameEntity 714109186 1210138278 3860640913 4056027296 {
 						LifeTime =  -1.000000
 						ParamName = "worldOffsetScale"
 						Texture = NULL
-						Vector = 0.025000 0.020000 0.010000 0.000000
+						Vector = 0.050000 0.050000 0.050000 0.000000
 					}
 					kbShaderParamComponent { 
 						Enabled = 0
@@ -2540,6 +2666,13 @@ kbGameEntity 714109186 1210138278 3860640913 4056027296 {
 						ParamName = "uvScale_VertexNoiseScale"
 						Texture = NULL
 						Vector = 1.000000 1.000000 0.010000 0.010000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "AOMap"
+						Texture = .\assets\models\environment\platforms\bridge_wooden_1_ao.png
+						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 			}
 		RenderOrderBias =  0.000000
@@ -2566,7 +2699,7 @@ kbGameEntity 994630907 1178801820 4058844581 1161728672 {
 				LifeTime =  -1.000000
 				CullModeOverride = ShaderDefault
 				Shader = .\assets\shaders\environment\environmenttiled.kbshader
-				ShaderParams = 8
+				ShaderParams = 9
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
@@ -2614,7 +2747,7 @@ kbGameEntity 994630907 1178801820 4058844581 1161728672 {
 						LifeTime =  -1.000000
 						ParamName = "worldOffsetScale"
 						Texture = NULL
-						Vector = 0.025000 0.020000 0.010000 0.000000
+						Vector = 0.050000 0.050000 0.050000 0.000000
 					}
 					kbShaderParamComponent { 
 						Enabled = 0
@@ -2622,6 +2755,13 @@ kbGameEntity 994630907 1178801820 4058844581 1161728672 {
 						ParamName = "uvScale_VertexNoiseScale"
 						Texture = NULL
 						Vector = 1.000000 1.000000 0.010000 0.010000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "AOMap"
+						Texture = .\assets\models\environment\platforms\bridge_wooden_1_ao.png
+						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 			}
 		RenderOrderBias =  0.000000
@@ -2648,7 +2788,7 @@ kbGameEntity 3881373922 1111186753 3037939894 2663332882 {
 				LifeTime =  -1.000000
 				CullModeOverride = ShaderDefault
 				Shader = .\assets\shaders\environment\environmenttiled.kbshader
-				ShaderParams = 8
+				ShaderParams = 9
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
@@ -2696,7 +2836,7 @@ kbGameEntity 3881373922 1111186753 3037939894 2663332882 {
 						LifeTime =  -1.000000
 						ParamName = "worldOffsetScale"
 						Texture = NULL
-						Vector = 0.025000 0.020000 0.010000 0.000000
+						Vector = 0.050000 0.050000 0.050000 0.000000
 					}
 					kbShaderParamComponent { 
 						Enabled = 0
@@ -2704,6 +2844,13 @@ kbGameEntity 3881373922 1111186753 3037939894 2663332882 {
 						ParamName = "uvScale_VertexNoiseScale"
 						Texture = NULL
 						Vector = 1.000000 1.000000 0.010000 0.010000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "AOMap"
+						Texture = .\assets\models\environment\platforms\bridge_wooden_1_ao.png
+						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 			}
 		RenderOrderBias =  0.000000
@@ -2723,14 +2870,14 @@ kbGameEntity 1745036657 1226122723 137629842 2847967967 {
 	kbStaticModelComponent { 
 		Enabled = 1
 		LifeTime =  -1.000000
-		CastsShadow = 0
+		CastsShadow = 1
 		Materials = 1
 			kbMaterialComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
 				CullModeOverride = ShaderDefault
 				Shader = .\assets\shaders\environment\environmenttiled.kbshader
-				ShaderParams = 8
+				ShaderParams = 9
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
@@ -2778,7 +2925,7 @@ kbGameEntity 1745036657 1226122723 137629842 2847967967 {
 						LifeTime =  -1.000000
 						ParamName = "worldOffsetScale"
 						Texture = NULL
-						Vector = 0.025000 0.020000 0.010000 0.000000
+						Vector = 0.050000 0.050000 0.050000 0.000000
 					}
 					kbShaderParamComponent { 
 						Enabled = 0
@@ -2786,6 +2933,13 @@ kbGameEntity 1745036657 1226122723 137629842 2847967967 {
 						ParamName = "uvScale_VertexNoiseScale"
 						Texture = NULL
 						Vector = 1.000000 1.000000 0.010000 0.010000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "AOMap"
+						Texture = .\assets\models\environment\platforms\bridge_wooden_1_ao.png
+						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 			}
 		RenderOrderBias =  0.000000
@@ -2812,7 +2966,7 @@ kbGameEntity 211241734 1165433459 2859075761 1636992949 {
 				LifeTime =  -1.000000
 				CullModeOverride = ShaderDefault
 				Shader = .\assets\shaders\environment\environmenttiled.kbshader
-				ShaderParams = 8
+				ShaderParams = 9
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
@@ -2860,7 +3014,7 @@ kbGameEntity 211241734 1165433459 2859075761 1636992949 {
 						LifeTime =  -1.000000
 						ParamName = "worldOffsetScale"
 						Texture = NULL
-						Vector = 0.025000 0.020000 0.010000 0.000000
+						Vector = 0.050000 0.050000 0.050000 0.000000
 					}
 					kbShaderParamComponent { 
 						Enabled = 0
@@ -2868,6 +3022,13 @@ kbGameEntity 211241734 1165433459 2859075761 1636992949 {
 						ParamName = "uvScale_VertexNoiseScale"
 						Texture = NULL
 						Vector = 1.000000 1.000000 0.010000 0.010000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "AOMap"
+						Texture = .\assets\models\environment\platforms\bridge_wooden_1_ao.png
+						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 			}
 		RenderOrderBias =  0.000000
@@ -5497,7 +5658,7 @@ kbGameEntity 2823924498 1217103692 1108638655 59959439 {
 				LifeTime =  -1.000000
 				CullModeOverride = ShaderDefault
 				Shader = .\assets\shaders\environment\environmenttiled.kbshader
-				ShaderParams = 8
+				ShaderParams = 9
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
@@ -5545,7 +5706,7 @@ kbGameEntity 2823924498 1217103692 1108638655 59959439 {
 						LifeTime =  -1.000000
 						ParamName = "worldOffsetScale"
 						Texture = NULL
-						Vector = 0.025000 0.020000 0.010000 0.000000
+						Vector = 0.050000 0.050000 0.050000 0.000000
 					}
 					kbShaderParamComponent { 
 						Enabled = 0
@@ -5553,6 +5714,13 @@ kbGameEntity 2823924498 1217103692 1108638655 59959439 {
 						ParamName = "uvScale_VertexNoiseScale"
 						Texture = NULL
 						Vector = 1.000000 1.000000 0.010000 0.010000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "AOMap"
+						Texture = .\assets\models\environment\platforms\bridge_wooden_1_ao.png
+						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 			}
 		RenderOrderBias =  0.000000
@@ -5579,7 +5747,7 @@ kbGameEntity 4121860101 1338733555 581251478 2312240592 {
 				LifeTime =  -1.000000
 				CullModeOverride = ShaderDefault
 				Shader = .\assets\shaders\environment\environmenttiled.kbshader
-				ShaderParams = 8
+				ShaderParams = 9
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
@@ -5627,7 +5795,7 @@ kbGameEntity 4121860101 1338733555 581251478 2312240592 {
 						LifeTime =  -1.000000
 						ParamName = "worldOffsetScale"
 						Texture = NULL
-						Vector = 0.025000 0.020000 0.010000 0.000000
+						Vector = 0.050000 0.050000 0.050000 0.000000
 					}
 					kbShaderParamComponent { 
 						Enabled = 0
@@ -5635,6 +5803,13 @@ kbGameEntity 4121860101 1338733555 581251478 2312240592 {
 						ParamName = "uvScale_VertexNoiseScale"
 						Texture = NULL
 						Vector = 1.000000 1.000000 0.010000 0.010000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "AOMap"
+						Texture = .\assets\models\environment\platforms\bridge_wooden_1_ao.png
+						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 			}
 		RenderOrderBias =  0.000000
@@ -5661,7 +5836,7 @@ kbGameEntity 2451017232 1334201149 744927158 3925545539 {
 				LifeTime =  -1.000000
 				CullModeOverride = ShaderDefault
 				Shader = .\assets\shaders\environment\environmenttiled.kbshader
-				ShaderParams = 8
+				ShaderParams = 9
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
@@ -5709,7 +5884,7 @@ kbGameEntity 2451017232 1334201149 744927158 3925545539 {
 						LifeTime =  -1.000000
 						ParamName = "worldOffsetScale"
 						Texture = NULL
-						Vector = 0.025000 0.020000 0.010000 0.000000
+						Vector = 0.050000 0.050000 0.050000 0.000000
 					}
 					kbShaderParamComponent { 
 						Enabled = 0
@@ -5717,6 +5892,13 @@ kbGameEntity 2451017232 1334201149 744927158 3925545539 {
 						ParamName = "uvScale_VertexNoiseScale"
 						Texture = NULL
 						Vector = 1.000000 1.000000 0.010000 0.010000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "AOMap"
+						Texture = .\assets\models\environment\platforms\bridge_wooden_1_ao.png
+						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 			}
 		RenderOrderBias =  0.000000
@@ -6000,7 +6182,7 @@ kbGameEntity 3264686808 1200350240 4079841202 2261291308 {
 				LifeTime =  -1.000000
 				CullModeOverride = ShaderDefault
 				Shader = .\assets\shaders\environment\environmenttiled.kbshader
-				ShaderParams = 8
+				ShaderParams = 9
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
@@ -6048,7 +6230,7 @@ kbGameEntity 3264686808 1200350240 4079841202 2261291308 {
 						LifeTime =  -1.000000
 						ParamName = "worldOffsetScale"
 						Texture = NULL
-						Vector = 0.025000 0.020000 0.010000 0.000000
+						Vector = 0.050000 0.050000 0.050000 0.000000
 					}
 					kbShaderParamComponent { 
 						Enabled = 0
@@ -6057,9 +6239,55 @@ kbGameEntity 3264686808 1200350240 4079841202 2261291308 {
 						Texture = NULL
 						Vector = 1.000000 1.000000 0.010000 0.010000
 					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "AOMap"
+						Texture = .\assets\models\environment\platforms\bridge_wooden_1_ao.png
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
 			}
 		RenderOrderBias =  0.000000
 		RenderPass = LightingPass
 		Model = .\assets\models\environment\platforms\bridge_wooden_1.fbx
+	}
+}
+kbGameEntity 2796404806 1339267529 1596636317 2607264248 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Entity_224"
+		Orientation = -0.267603 -0.591557 0.310905 0.694108
+		Position = 73.002373 -53.844563 -412.785706
+		Scale = 1.000000 1.000000 1.000000
+	}
+	kbDirectionalLightComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadows = 0
+		Color = 0.250000 0.250000 0.250000 0.000000
+		Materials = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\lights\directionallightfill.kbshader
+				ShaderParams = 2
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "lightColor"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "cameraPosition"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		CascadedShadowSplits = 0
 	}
 }

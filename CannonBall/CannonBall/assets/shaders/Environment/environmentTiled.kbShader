@@ -70,11 +70,15 @@ Texture2D tiledNormal(defaultNormal)	: register(t5);
 Texture2D worldOffset					: register(t6);
 Texture2D vertexNoiseMap				: register(t7);
 
+Texture2D AOMap							: register(t8);
+
 pixelInput vertexShader( vertexInput input ) {
 	pixelInput output = (pixelInput)(0);
 
 	float4 worldPosition = mul( input.position, modelMatrix );
-	float4 vertexNoise = vertexNoiseMap.SampleLevel( diffuseSampler, frac(worldPosition.xz * uvScale_VertexNoiseScale.zw ), 0 ) * 2.0f - 1.0f;
+	float2 noiseUV = /*modelMatrix[3].xz +*/ input.color.xz;
+
+	float4 vertexNoise = vertexNoiseMap.SampleLevel( diffuseSampler, noiseUV, 0 ) * 2.0f - 1.0f;
 	vertexNoise *= input.color.xyzw;
 	worldPosition.xyz += vertexNoise.xyz * worldOffsetScale.xyz;//float3(0.05f, 0.01f, 0.05f );
 	output.position = mul( worldPosition, viewProjection );
@@ -103,7 +107,7 @@ pixelInput vertexShader( vertexInput input ) {
  PS_OUTPUT pixelShader( pixelInput	input, bool IsFrontFace	: SV_IsFrontFace ) {
  	PS_OUTPUT output = (PS_OUTPUT) 0;
 
-	const float4 baseNormalMap = normal.Sample( diffuseSampler, input.uv );
+	float4 baseNormalMap = tiledNormal.Sample( diffuseSampler, input.uv * 2 );
 	const float4 tiledNormalMap = tiledNormal.Sample( diffuseSampler, input.worldPos.zx * input.colorAndNormalUVScale.zw );
 
 	const float4 propertyMapValues = propertyMap.Sample( diffuseSampler, input.uv );
@@ -111,7 +115,8 @@ pixelInput vertexShader( vertexInput input ) {
 	const float clipMask = clipMap.Sample( diffuseSampler, input.uv ).r;
 	clip( clipMask - 0.001f );
 
-	output.Color = diffuse.Sample( diffuseSampler, input.uv );
+	const float aoMap = AOMap.Sample( diffuseSampler, input.uv ).r;
+	output.Color = diffuse.Sample( diffuseSampler, input.uv ) * ( aoMap * 0.5f + 0.5f );
 	output.Color.w = emissive.z;
 
 	output.Depth.r = input.position2.x / input.position2.y;
@@ -124,8 +129,8 @@ pixelInput vertexShader( vertexInput input ) {
 		TBN *= -1.0f;
 	}*/
 
-	float3 tangentNormal = tiledNormalMap.xyz * 2.0f - 1.0f;
-	tangentNormal.z *= 15.0f;
+	float3 tangentNormal = baseNormalMap.xyz * 2.0f - 1.0f;//tiledNormalMap.xyz * 2.0f - 1.0f;
+	tangentNormal.z *= 10.0f;
 	tangentNormal = normalize( tangentNormal.xyz );
 	output.Normal.x = dot( tangentNormal, normalize( float3( input.TBN0.x, input.TBN1.x, input.TBN2.x ) ) );//		//mul( tangentNormal, TBN );
 	output.Normal.y = dot( tangentNormal, normalize( float3( input.TBN0.y, input.TBN1.y, input.TBN2.y ) ) );//		//mul( tangentNormal, TBN );
