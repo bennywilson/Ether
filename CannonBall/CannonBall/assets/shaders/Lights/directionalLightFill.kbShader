@@ -86,8 +86,8 @@ float4 pixelShader( pixelInput input ) : SV_TARGET {
 
 	float diffuse = saturate( dot( normal.xyz, lightDirection.xyz ) );
 	diffuse = diffuse * 0.8f + 0.2f;	
-
-		
+	if ( normal.w == 0 )
+		diffuse = 0;
 	float3 finalColor = diffuseColor.xyz * diffuse * lightColor.xyz;	// todo
 	return float4( finalColor, diffuseColor.w );
 }

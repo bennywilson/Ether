@@ -116,7 +116,7 @@ pixelInput vertexShader( vertexInput input ) {
 	clip( clipMask - 0.001f );
 
 	const float aoMap = AOMap.Sample( diffuseSampler, input.uv ).r;
-	output.Color = diffuse.Sample( diffuseSampler, input.uv ) * ( aoMap * 0.5f + 0.5f );
+	output.Color = diffuse.Sample( diffuseSampler, input.uv ) * ( aoMap * 0.25f + 0.75f );
 	output.Color.w = emissive.z;
 
 	output.Depth.r = input.position2.x / input.position2.y;

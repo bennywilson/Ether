@@ -117,6 +117,9 @@
     <None Include="assets\shaders\UI\UI_Additive.kbShader">
       <Filter>Shaders\UI</Filter>
     </None>
+    <None Include="assets\shaders\Lights\directionalLightFill.kbShader">
+      <Filter>Shaders\Lights</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Shaders">
