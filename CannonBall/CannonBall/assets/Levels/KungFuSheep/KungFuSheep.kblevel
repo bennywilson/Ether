@@ -1,8 +1,8 @@
-kbGameEntity 827174629 1106415411 283544977 2444191727 {
+kbGameEntity 1358258694 1303140580 934891438 1817387198 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		Name = "Entity_230"
+		Name = "Entity_227"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
 		Position = 0.000000 0.000000 0.000000
 		Scale = 1.000000 1.000000 1.000000
@@ -10,8 +10,8 @@ kbGameEntity 827174629 1106415411 283544977 2444191727 {
 	kbEditorLevelSettingsComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		MainCameraPosition = 59.542999 -40.824638 -395.439758
-		MainCameraRotation = -0.247236 -0.649514 0.236488 0.679028
+		MainCameraPosition = 67.708801 -43.779007 -381.714783
+		MainCameraRotation = -0.149828 -0.679997 0.144934 0.702958
 	}
 }
 kbGameEntity 537364968 1092523782 2953639826 2626478307 {
@@ -3042,7 +3042,7 @@ kbGameEntity 4064300683 1237974457 595275413 2837674043 {
 		LifeTime =  -1.000000
 		Name = "Terrain Reflection"
 		Orientation = 0.000000 -0.989478 0.000000 -0.144639
-		Position = 200.000000 450.000000 0.000000
+		Position = 200.000000 442.000000 0.000000
 		Scale = 1.000000 1.000000 1.000000
 	}
 	kbTerrainComponent { 
@@ -6289,5 +6289,99 @@ kbGameEntity 2796404806 1339267529 1596636317 2607264248 {
 					}
 			}
 		CascadedShadowSplits = 0
+	}
+}
+kbGameEntity 668244355 1318246782 2582587290 747834976 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Fog Sheet - Big Island"
+		Orientation = 0.707106 -0.000000 0.000005 0.707108
+		Position = 108.000000 -57.000015 -394.300018
+		Scale = 10000.000000 10000.000000 10000.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		Materials = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\environment\waterfog.kbshader
+				ShaderParams = 3
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "noiseTexture1"
+						Texture = .\assets\fx\noise\painterlynoise_1.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "noiseTexture2"
+						Texture = .\assets\fx\noise\painterlynoise_1.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "noiseScroll"
+						Texture = NULL
+						Vector = 0.010000 0.010000 -0.060000 -0.020000
+					}
+			}
+		RenderOrderBias =  0.000000
+		RenderPass = LightingPass
+		Model = ..\..\kbengine\assets\models\unitquad.ms3d
+	}
+}
+kbGameEntity 3267922728 1074653367 2646064531 2894412977 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Fog Sheet - Little Island"
+		Orientation = 0.707106 -0.000000 0.000005 0.707108
+		Position = 201.000000 -66.000015 -357.000000
+		Scale = 10000.000000 10000.000000 10000.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		Materials = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\environment\waterfog.kbshader
+				ShaderParams = 3
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "noiseTexture1"
+						Texture = .\assets\fx\noise\painterlynoise_1.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "noiseTexture2"
+						Texture = .\assets\fx\noise\painterlynoise_1.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "noiseScroll"
+						Texture = NULL
+						Vector = 0.010000 0.010000 -0.060000 -0.020000
+					}
+			}
+		RenderOrderBias =  0.000000
+		RenderPass = LightingPass
+		Model = ..\..\kbengine\assets\models\unitquad.ms3d
 	}
 }

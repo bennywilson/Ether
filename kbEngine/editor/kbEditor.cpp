@@ -506,7 +506,7 @@ void kbEditor::Update() {
 					break;
 				}
 			}
-			*/
+			
 			if ( pMasterBridge != nullptr ) {
 				for ( int i = 0; i < m_GameEntities.size(); i++ ) {
 
@@ -528,7 +528,7 @@ void kbEditor::Update() {
 					}
 				}
 			}
-		}
+		}*/
 		// input
 		if ( GetAsyncKeyState( 'W' ) ) {
 			m_WidgetInputObject.keys.push_back( widgetCBInputObject::keyType_t::WidgetInput_Forward );

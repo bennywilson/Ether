@@ -91,8 +91,12 @@ kbRenderWindow_DX11::~kbRenderWindow_DX11() {
 void kbRenderWindow_DX11::BeginFrame_Internal() {
 	kbMat4 viewProjectionMatrix = GetViewProjectionMatrix();
 
-	XMMATRIX inverseProj = XMMatrixInverse( nullptr, XMMATRIXFromkbMat4( viewProjectionMatrix ) );
-	HackSetInverseViewProjectionMatrix( kbMat4FromXMMATRIX( inverseProj ) );
+	XMMATRIX inverseViewProj = XMMatrixInverse( nullptr, XMMATRIXFromkbMat4( viewProjectionMatrix ) );
+	HackSetInverseViewProjectionMatrix( kbMat4FromXMMATRIX(inverseViewProj) );
+
+	kbMat4 projectionMatrix = GetProjectionMatrix();
+	XMMATRIX inverseProj = XMMatrixInverse( nullptr, XMMATRIXFromkbMat4( projectionMatrix ) );
+	HackSetInverseProjectionMatrix( kbMat4FromXMMATRIX( inverseProj ) );
 }
 
 /**
@@ -2361,7 +2365,6 @@ kbString g_BuiltInShaderParams[] = {
 	"modelViewMatrix",
 	"viewMatrix",
 	"mvpMatrix",
-	"worldViewMatrix",
 	"projection",
 	"inverseProjection",
 	"inverseModelMatrix",
@@ -3654,10 +3657,13 @@ ID3D11Buffer * kbRenderer_DX11::SetConstantBuffer( const kbShaderVarBindings_t &
 
 			kbMat4 *const pMatOffset = (kbMat4*)pVarByteOffset;
 			*pMatOffset = billBoardedMatrix;
+		} else if ( varName == "inverseProjection" ) {
+			kbMat4 *const pMatOffset = (kbMat4*)pVarByteOffset;
+			*pMatOffset = worldMatrix * m_pCurrentRenderWindow->GetInverseProjectionMatrix();
 		} else if ( varName == "mvpMatrix" ) {
 			kbMat4 *const pMatOffset = (kbMat4*)pVarByteOffset;
 			*pMatOffset = worldMatrix * m_pCurrentRenderWindow->GetViewProjectionMatrix();
-		} else if ( varName == "worldViewMatrix" ) {
+		} else if ( varName == "modelViewMatrix" ) {
 			kbMat4 *const pMatOffset = (kbMat4*)pVarByteOffset;
 			*pMatOffset = worldMatrix * m_pCurrentRenderWindow->GetViewMatrix();
 		} else if ( varName == "vpMatrix" ) {

@@ -1,0 +1,101 @@
+//===================================================================================================
+// splash.kbShader
+//
+//
+// 2019 kbEngine 2.0
+//===================================================================================================
+cbuffer matrixBuffer {
+	matrix modelMatrix;
+	matrix modelViewMatrix;
+	matrix mvpMatrix;
+	matrix inverseViewProjection;
+	float4 cameraPos;
+	float4 time;
+
+	float4 noiseScroll;
+};
+
+kbShaderState {
+	srcBlend Blend_One
+	dstBlend Blend_One
+	blendOp BlendOp_Add
+
+	cullMode CullMode_None
+	colorWriteEnable ColorWriteEnable_rgb
+}
+
+//-------------------------------------
+struct vertexInput {
+	float4 position			: POSITION;
+	float2 uv				: TEXCOORD0;
+	float4 color			: COLOR;
+	float4 normal			: NORMAL;
+	float4 tangent			: TANGENT;
+};
+
+//-------------------------------------
+struct pixelInput {
+	float4 position			: SV_POSITION;
+	float2 uv				: TEXCOORD0;
+	float4 color			: COLOR;
+	float4 position2		: TEXCOORD1;
+	float3 normal			: TEXCOORD2;
+	float4 worldPos			: TEXCOORD3;
+};
+
+
+/**
+ *	vertexShader
+ */
+pixelInput vertexShader( vertexInput input ) {
+	pixelInput output = (pixelInput)(0);
+
+	output.worldPos = mul( input.position, modelMatrix );
+	output.position = mul( input.position, mvpMatrix );
+	output.uv = input.uv;
+	output.color = input.color;
+	output.position2 = output.position;
+	output.normal.xyz = mul( ( input.normal.xyz * 2.0f ) - 1.0f, (float3x3)modelMatrix );
+
+	return output;
+}
+
+/**
+ *	pixelShader
+ */
+SamplerState DefaultSamplerState;
+Texture2D colorTexture(colorBuffer)				: register(t0);
+
+SamplerState NormalSamplerState;
+Texture2D normalTexture(normalBuffer)			: register(t1);
+
+Texture2D specularTexture(specularBuffer)		: register(t2);
+
+SamplerState DepthSamplerState;
+Texture2D depthTexture(depthBuffer)				: register(t3);
+
+Texture2D noiseTexture1 : register(t4);
+Texture2D noiseTexture2 : register(t5);
+
+
+float4 pixelShader( pixelInput input ) : SV_Target {
+
+	float4 screenCoord = input.position2 / input.position2.w;
+	float2 screenUV = screenCoord.xy * 0.5f + 0.5f;
+	screenUV.y = 1.0f - screenUV.y;
+
+	float4 worldPos = float4( screenCoord.xy, depthTexture.Sample( DepthSamplerState, screenUV ).r, 1 );
+	worldPos = mul( worldPos, inverseViewProjection );
+	worldPos /= worldPos.w;
+float radius = 55.0f;
+float distTo = 1.0f - saturate( length(input.worldPos.xyz - worldPos.xyz) / radius );
+distTo = sin(distTo * 3.1f) * 1.7f * distTo;
+
+//	if ( length(cameraPos.xyz - worldPos.xyz) > 500.0f)
+	//	clip( -1 );
+	
+	float4 noise1 = noiseTexture1.Sample( DefaultSamplerState, input.uv + float2( noiseScroll.x, noiseScroll.y ) * time.x ) * 1;
+	float4 noise2 = noiseTexture1.Sample( DefaultSamplerState, input.uv.yx + float2( noiseScroll.z, noiseScroll.w ) * time.x ) * 1;
+	float val = pow(0.5, (noise1+noise2) * 2).x;
+	return val.xxxx * distTo;
+}
