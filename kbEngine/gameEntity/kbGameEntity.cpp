@@ -2,7 +2,7 @@
 // kbGameEntity.cpp
 //
 //
-// 2016-2019 kbEngine 2.0
+// 2016 kbEngine 2.0
 //===================================================================================================
 #include "kbCore.h"
 #include "kbVector.h"
@@ -458,7 +458,7 @@ const kbVec3 kbGameEntity::GetPosition() const {
 }
 
 /**
- *	kbGameEntity::GetComponent
+ *	kbGameEntity::GetComponentByType
  */
 kbComponent * kbGameEntity::GetComponentByType( const void *const pTypeInfoClass ) const {
 	if ( pTypeInfoClass == nullptr ) {

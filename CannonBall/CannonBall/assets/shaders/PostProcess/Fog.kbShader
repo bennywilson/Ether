@@ -63,6 +63,7 @@ Texture2D ShadowMap(shadowBuffer)				: register(t4);
 Texture2D NoiseTex(noise);
 float4 pixelShader( pixelInput input ) : SV_TARGET {
 
+	float4 normal = normalTexture.Sample( NormalSamplerState, input.uv );
 	float4 worldPosition = float4( input.position2.xy, depthTexture.Sample( DepthSamplerState, input.uv ).r, 1 );
 	worldPosition = mul( worldPosition, inverseViewProjection );
 	worldPosition /= worldPosition.w;
@@ -74,6 +75,16 @@ float4 pixelShader( pixelInput input ) : SV_TARGET {
 	fog = ( fog_Start_End_Clamp.y - z ) / ( fog_Start_End_Clamp.y - fog_Start_End_Clamp.x );
 	fog = 1.0f - saturate(fog);
 	fog *= fog_Start_End_Clamp.z;
-	sceneColor.xyz = lerp( sceneColor.xyz, fogColor.xyz, fog );
+	fog = pow(abs(fog), 1);
+
+	float3 finalFogColor = fogColor.xyz * fog * fogColor.w * sign( normal.w );
+
+	float fog2 = 0;
+	float height = saturate( ( worldPosition.y - -76.1751f ) / 100.0f ) * 0.95f;
+	height = pow(abs(height), 55.0f);
+	//finalFogColor += height;
+
+	sceneColor.xyz += finalFogColor;
 	return sceneColor;
+//	return float4(finalFogColor, 0);
 }

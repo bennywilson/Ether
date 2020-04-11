@@ -140,10 +140,10 @@ void kbGrass::EditorChange( const std::string & propertyName ) {
 		m_GrassCellsPerTerrainSide = 1;
 	}
 
-    const std::string propertiesThatRegenGrass[5] = { "PatchStartCullDistance", "PatchEndCullDistance",
-		"PatchesPerCellSide", "MaxPatchJitterOffset", "MinPatchJitterOffset "};
+    const std::string propertiesThatRegenGrass[7] = { "PatchStartCullDistance", "PatchEndCullDistance",
+		"PatchesPerCellSide", "MaxPatchJitterOffset", "MaxBladeJitterOffset", "MinPatchJitterOffset", "GrassCellsPerTerrainSide" };
 
-    for ( int i = 0; i < 5; i++ ) {
+    for ( int i = 0; i < 7; i++ ) {
         if ( propertyName == propertiesThatRegenGrass[i] ) { 
         	m_bUpdatePointCloud = true;
         }
@@ -315,9 +315,9 @@ void kbGrass::RefreshGrass() {
 				
 						if ( pGrassMaskMap != nullptr ) {
 
-							const int textureIndex = static_cast<int>(( curV * grassMaskWidth * grassMaskWidth ) + ( curU * grassMaskWidth ) );
-							if ( pGrassMaskMap[textureIndex].r < 128 ) {
-						//		kbLog( "Skipping" );
+							const int textureIndex = static_cast<int>(( (int)(curV * grassMaskWidth) * grassMaskWidth) + ( curU * grassMaskWidth ) );
+
+							if ( pGrassMaskMap[textureIndex].g == 0 ) {
 								continue;
 							}
 						}
@@ -345,7 +345,7 @@ void kbGrass::RefreshGrass() {
 					renderObj.m_pModel->UnmapVertexBuffer( iVert );
 					kbMat4 rotMat = m_pOwningTerrainComponent->GetOwnerRotation().ToMat4();
 					m_GrassRenderObjects[cellIdx].m_RenderObject.m_Position = cellCenter * rotMat + m_pOwningTerrainComponent->GetOwnerPosition();
-					m_GrassRenderObjects[cellIdx].m_RenderObject.m_Scale =  m_pOwningTerrainComponent->GetOwnerScale();
+					m_GrassRenderObjects[cellIdx].m_RenderObject.m_Scale = m_pOwningTerrainComponent->GetOwnerScale();
 					m_GrassRenderObjects[cellIdx].m_RenderObject.m_Orientation = m_pOwningTerrainComponent->GetOwnerRotation();
 
 					auto & renderObjMatList = m_GrassRenderObjects[cellIdx].m_RenderObject.m_Materials;
@@ -457,7 +457,7 @@ void kbTerrainComponent::GenerateTerrain() {
 
 	unsigned int texWidth, texHeight;
 
-	const pixelData *const pTextureBuffer = ( pixelData * )m_pHeightMap->GetCPUTexture( texWidth, texHeight );
+	const pixelData* const pTextureBuffer = (pixelData *)m_pHeightMap->GetCPUTexture( texWidth, texHeight );
 
 	// Build terrain here
 	const int numVerts = m_TerrainDimensions * m_TerrainDimensions;

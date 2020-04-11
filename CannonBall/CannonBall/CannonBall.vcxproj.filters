@@ -120,6 +120,21 @@
     <None Include="assets\shaders\Lights\directionalLightFill.kbShader">
       <Filter>Shaders\Lights</Filter>
     </None>
+    <None Include="assets\shaders\PostProcess\Fog.kbShader">
+      <Filter>Shaders\Post Process</Filter>
+    </None>
+    <None Include="assets\shaders\Environment\environmentTiled.kbShader">
+      <Filter>Shaders\Environment</Filter>
+    </None>
+    <None Include="assets\shaders\Environment\environmentTransparency.kbShader">
+      <Filter>Shaders\Environment</Filter>
+    </None>
+    <None Include="assets\shaders\Environment\depthFogSheet.kbShader">
+      <Filter>Shaders\Environment</Filter>
+    </None>
+    <None Include="assets\shaders\Environment\heightFogSheet.kbShader">
+      <Filter>Shaders\Environment</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Shaders">
@@ -175,6 +190,9 @@
     </Filter>
     <Filter Include="Source\Game\CapOnIt">
       <UniqueIdentifier>{a5680d7e-29af-4a0f-b5e2-5fd352fa6408}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shaders\Post Process">
+      <UniqueIdentifier>{e059f502-74ab-4e7d-a8ba-54a7e338408e}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

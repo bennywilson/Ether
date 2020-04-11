@@ -92,8 +92,12 @@
     <None Include="assets\shaders\Basic\unlit.kbShader" />
     <None Include="assets\shaders\Character\CharacterBase.kbShader" />
     <None Include="assets\shaders\Character\characterOutline.kbShader" />
+    <None Include="assets\shaders\Environment\depthFogSheet.kbShader" />
     <None Include="assets\shaders\Environment\environmentBase.kbShader" />
     <None Include="assets\shaders\Environment\environmentSkinned.kbShader" />
+    <None Include="assets\shaders\Environment\environmentTiled.kbShader" />
+    <None Include="assets\shaders\Environment\environmentTransparency.kbShader" />
+    <None Include="assets\shaders\Environment\heightFogSheet.kbShader" />
     <None Include="assets\shaders\FX\decal_Blend.kbShader" />
     <None Include="assets\shaders\FX\FullScreen\FullScreen_WaterDroplets.kbShader" />
     <None Include="assets\shaders\FX\hackClip.kbShader" />
@@ -102,6 +106,7 @@
     <None Include="assets\shaders\FX\wispScroller.kbShader" />
     <None Include="assets\shaders\Lights\directionalLightFill.kbShader" />
     <None Include="assets\shaders\Lights\directionalLightToon.kbShader" />
+    <None Include="assets\shaders\PostProcess\Fog.kbShader" />
     <None Include="assets\shaders\Skybox\skybox_Clouds.kbShader" />
     <None Include="assets\shaders\Skybox\skybox_Gradient.kbShader" />
     <None Include="assets\shaders\Terrain\basicGrass.kbShader" />

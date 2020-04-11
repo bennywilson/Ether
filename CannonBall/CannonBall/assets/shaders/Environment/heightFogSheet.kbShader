@@ -1,23 +1,28 @@
 //===================================================================================================
-// splash.kbShader
+// depthFogSheet.kbShader
 //
 //
-// 2019 kbEngine 2.0
+// 2020 kbEngine 2.0
 //===================================================================================================
 cbuffer matrixBuffer {
 	matrix modelMatrix;
 	matrix modelViewMatrix;
 	matrix mvpMatrix;
 	matrix inverseViewProjection;
-	float4 cameraPos;
+	float4 cameraPosition;
 	float4 time;
 
+	float4 noise1Color;	// xyz - color, w - min step
+	float4 noise2Color;  // xyz - color, w - min step
 	float4 noiseScroll;
+	float4 smoothStepsAndAlphaPower;
+
+	float4 fadeParams;		// x - fade dist, y - rand seed
 };
 
 kbShaderState {
-	srcBlend Blend_One
-	dstBlend Blend_One
+	srcBlend Blend_SrcAlpha
+	dstBlend Blend_InvSrcAlpha
 	blendOp BlendOp_Add
 
 	cullMode CullMode_None
@@ -87,15 +92,27 @@ float4 pixelShader( pixelInput input ) : SV_Target {
 	float4 worldPos = float4( screenCoord.xy, depthTexture.Sample( DepthSamplerState, screenUV ).r, 1 );
 	worldPos = mul( worldPos, inverseViewProjection );
 	worldPos /= worldPos.w;
-float radius = 55.0f;
-float distTo = 1.0f - saturate( length(input.worldPos.xyz - worldPos.xyz) / radius );
-distTo = sin(distTo * 3.1f) * 1.7f * distTo;
-
-//	if ( length(cameraPos.xyz - worldPos.xyz) > 500.0f)
-	//	clip( -1 );
 	
-	float4 noise1 = noiseTexture1.Sample( DefaultSamplerState, input.uv + float2( noiseScroll.x, noiseScroll.y ) * time.x ) * 1;
-	float4 noise2 = noiseTexture1.Sample( DefaultSamplerState, input.uv.yx + float2( noiseScroll.z, noiseScroll.w ) * time.x ) * 1;
-	float val = pow(0.5, (noise1+noise2) * 2).x;
-	return val.xxxx * distTo;
+	float fadeDist = 1;
+	{//if ( length( cameraPosition.xyz - worldPos.xyz ) <= length( cameraPosition.xyz - input.worldPos.xyz ) + 1.0f ) {
+		fadeDist = length( worldPos - input.worldPos );
+		fadeDist = saturate( fadeDist / fadeParams.x );
+	}
+	clip( input.worldPos.y + 76.1751f );
+
+	const float randTime = time.x + fadeParams.y;
+	float3 noise1 = noiseTexture1.Sample( DefaultSamplerState, input.uv + float2( noiseScroll.x, noiseScroll.y ) * randTime.x ).xyz;
+	noise1 = smoothstep( smoothStepsAndAlphaPower.x, 1.0f, noise1.x ) * noise1Color.xyz * noise1Color.w;
+
+	float3 noise2 = noiseTexture1.Sample( DefaultSamplerState, input.uv.yx + float2( noiseScroll.z, noiseScroll.w ) * randTime.x ).xyz;
+	noise2 = smoothstep( smoothStepsAndAlphaPower.y, 1.0f, noise2.x ) * noise2Color.xyz * noise2Color.w;
+
+	float3 finalNoise = (noise1 + noise2);
+
+	float uvFade = length( input.uv - float2( 0.5f, 0.5f ) ) / 0.5f;
+	uvFade = smoothstep( 0.00f, 0.5f, 1.0f - uvFade );
+
+	const float3 outColor = finalNoise.xyz * fadeDist * uvFade;
+	const float luminance = pow( abs( dot( outColor, float3( 0.3f, 0.69f, 0.11f ) ) ), abs( smoothStepsAndAlphaPower.z ) );
+	return float4(outColor, luminance);
 }

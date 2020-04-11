@@ -16,12 +16,13 @@ namespace KungFuGame {
 	enum eSkipCheats {
 		Skip_None,
 		Skip_MainMenuAndIntro,
-		Skip_ToEnd
+		Skip_ToEnd,
+		Skip_NoEnemies,
 	};
 
 };
 
-KungFuGame::eSkipCheats g_SkipCheat = KungFuGame::Skip_None;
+KungFuGame::eSkipCheats g_SkipCheat = KungFuGame::Skip_NoEnemies;
 
 #include "Cinema\Outro.inl"
 
@@ -80,7 +81,7 @@ private:
 			g_pCannonGame->GetMainCamera()->SetOwnerRotation( KungFuGame::kCameraRotation );
 		}
 
-		if ( g_SkipCheat == KungFuGame::Skip_MainMenuAndIntro || g_SkipCheat == KungFuGame::Skip_ToEnd ) {
+		if ( g_SkipCheat == KungFuGame::Skip_MainMenuAndIntro || g_SkipCheat == KungFuGame::Skip_ToEnd || g_SkipCheat == KungFuGame::Skip_NoEnemies ) {
 
 			static const kbString IdleL_Anim( "IdleLeft_Basic" );
 			pSheep->PlayAnimation( IdleL_Anim, 0.2f );
@@ -113,7 +114,7 @@ private:
 
 	virtual void UpdateState_Internal() override {
 
-		if ( g_SkipCheat == KungFuGame::Skip_MainMenuAndIntro || g_SkipCheat == KungFuGame::Skip_ToEnd ) {
+		if ( g_SkipCheat == KungFuGame::Skip_MainMenuAndIntro || g_SkipCheat == KungFuGame::Skip_ToEnd || g_SkipCheat == KungFuGame::Skip_NoEnemies ) {
 			RequestStateChange( KungFuGame::Gameplay );
 			return;
 		}
@@ -299,7 +300,7 @@ private:
 			numSnolafs++;
 		}
 		
-		if ( g_SkipCheat != KungFuGame::Skip_ToEnd ) {
+		if ( g_SkipCheat != KungFuGame::Skip_ToEnd && g_SkipCheat != KungFuGame::Skip_NoEnemies ) {
 			auto pLevelComponent = KungFuLevelComponent::Get();
 			if ( m_NumSnolafsKilled == 0 ) {
 
@@ -1082,7 +1083,7 @@ void KungFuSheepDirector::StateChangeCB( const KungFuGame::eKungFuGame_State pre
 		CollectUIElements();
 	}
 
-	if ( g_SkipCheat == KungFuGame::Skip_MainMenuAndIntro || g_SkipCheat == KungFuGame::Skip_ToEnd ) {
+	if ( g_SkipCheat == KungFuGame::Skip_MainMenuAndIntro || g_SkipCheat == KungFuGame::Skip_ToEnd || g_SkipCheat == KungFuGame::Skip_NoEnemies ) {
 
 		m_pHealthBarUI->GetOwner()->EnableAllComponents();
 		m_pCannonBallUI->GetOwner()->EnableAllComponents();
