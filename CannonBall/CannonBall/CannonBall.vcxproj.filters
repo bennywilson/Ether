@@ -132,9 +132,6 @@
     <None Include="assets\shaders\Environment\depthFogSheet.kbShader">
       <Filter>Shaders\Environment</Filter>
     </None>
-    <None Include="assets\shaders\Environment\heightFogSheet.kbShader">
-      <Filter>Shaders\Environment</Filter>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Shaders">

@@ -2,7 +2,7 @@
 // kbEditor.cpp
 //
 //
-// 2016-2019 kbEngine 2.0
+// 2016 kbEngine 2.0
 //===================================================================================================
 #include <sstream>
 #include <iomanip>
@@ -388,6 +388,13 @@ void kbEditor::LoadMap( const std::string & InMapName ) {
 	}
 
 	m_UndoStack.Reset();
+
+
+	std::sort(g_Editor->m_GameEntities.begin(), g_Editor->m_GameEntities.end(),
+			  [](const kbEditorEntity* a, const kbEditorEntity* b) -> bool {
+		return a->GetGameEntity()->GetName().stl_str().compare(b->GetGameEntity()->GetName().stl_str()) < 0 || a->GetGameEntity()->GetComponentByType( kbLevelComponent::GetType() );
+	});
+
 
 	m_pResourceTab->RefreshEntitiesTab();
 

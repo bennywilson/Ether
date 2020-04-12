@@ -97,7 +97,6 @@
     <None Include="assets\shaders\Environment\environmentSkinned.kbShader" />
     <None Include="assets\shaders\Environment\environmentTiled.kbShader" />
     <None Include="assets\shaders\Environment\environmentTransparency.kbShader" />
-    <None Include="assets\shaders\Environment\heightFogSheet.kbShader" />
     <None Include="assets\shaders\FX\decal_Blend.kbShader" />
     <None Include="assets\shaders\FX\FullScreen\FullScreen_WaterDroplets.kbShader" />
     <None Include="assets\shaders\FX\hackClip.kbShader" />
