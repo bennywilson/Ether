@@ -7,7 +7,7 @@ cbuffer matrixBuffer {
 	matrix		modelMatrix;
 	matrix		vpMatrix;
 	float4x4	boneList[128];
-	float4		cameraPos;
+	float4		cameraPosition;
 	float4		outlineParams;		// x: Thickness, y: Push back, z: Outline Color Factor, w: Mip-Level
 	float4		smearParams;
 	float4		clipMapMask;
@@ -70,7 +70,7 @@ pixelInput vertexShader( vertexInput input ) {
 
 	Pos.xyz += output.normal.xyz * outlineParams.x;
 
-	float3 fromCam = normalize( Pos.xyz - cameraPos.xyz );
+	float3 fromCam = normalize( Pos.xyz - cameraPosition.xyz );
 	Pos.xyz += fromCam * outlineParams.y;
 	
 	output.position = mul( Pos, vpMatrix );

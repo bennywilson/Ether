@@ -7,7 +7,7 @@ cbuffer matrixBuffer {
 	matrix				mvpMatrix;
 	matrix				modelMatrix;
 	matrix				viewProjection;
-	float4				cameraPos;
+	float4				cameraPosition;
 	float4				time;
 	float4				cloudTileOffset;
 	float4				cloudScrollRate_AlphaStep;
@@ -62,8 +62,8 @@ pixelInput vertexShader( vertexInput input ) {
 	pixelInput output = (pixelInput)(0);
 	input.position.y -= 0.2f;
 	output.position = mul( input.position, modelMatrix );
-	output.worldPos.xyz = cameraPos.xyz + output.position.xyz * 999;
-	output.position += float4(cameraPos.xyz, 0);
+	output.worldPos.xyz = cameraPosition.xyz + output.position.xyz * 999;
+	output.position += float4(cameraPosition.xyz, 0);
 	output.position = mul( output.position, viewProjection);
 	output.position.z = output.position.w - 0.0001f;
 
@@ -73,7 +73,7 @@ pixelInput vertexShader( vertexInput input ) {
 
 	output.position = mul( input.position, modelMatrix );
 
-	output.position += float4(cameraPos.xyz, 0);
+	output.position += float4(cameraPosition.xyz, 0);
 	output.position = mul( output.position, viewProjection);
 	output.position.z = output.position.w - 0.0001f;
 	*/
@@ -129,7 +129,7 @@ PS_OUTPUT pixelShader( pixelInput	input ) {
 	output.Color.xyz = diffuse * outColor.a * cloudColor.xyz + cloudEmissive.xyz * outColor.a;
 	output.Color.w = outColor.a;
 
-	float3 fromCam = normalize( input.worldPos - cameraPos.xyz );
+	float3 fromCam = normalize( input.worldPos - cameraPosition.xyz );
 	float3 sunDir = lightShaftsDir.xyz;
 	float sunIntensity = dot( fromCam, sunDir ) ;//saturate( ( dot( fromCam, sunDir ) - (sunDiscParams.x) ) / (1.0f - sunDiscParams.x) );
 	sunIntensity = pow( sunIntensity, 1.f ) * 25.5f;

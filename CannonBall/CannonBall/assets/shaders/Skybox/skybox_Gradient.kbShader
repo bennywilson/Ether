@@ -7,7 +7,7 @@ cbuffer matrixBuffer {
 	matrix mvpMatrix;
 	matrix modelMatrix;
 	matrix viewProjection;
-	float4 cameraPos;
+	float4 cameraPosition;
 	float4 time;
 	float4 horizonColor;
 	float4 skyColor;
@@ -45,7 +45,7 @@ pixelInput vertexShader( vertexInput input ) {
 
 	output.position = mul( input.position, modelMatrix );
 
-	output.position += float4(cameraPos.xyz, 0);
+	output.position += float4(cameraPosition.xyz, 0);
 	output.position = mul( output.position, viewProjection);
 	output.position.z = output.position.w - 0.0001f;
 

@@ -3114,9 +3114,9 @@ void kbRenderer_DX11::RenderMesh( const kbRenderSubmesh *const pRenderMesh, cons
 	ID3D11Buffer * pConstantBuffer = nullptr;
 	if ( pRenderObject->m_Materials.size() > 0 ) {
 		if ( pRenderObject->m_Materials.size() > pRenderMesh->GetMeshIdx() ) {
-			pConstantBuffer = SetConstantBuffer( shaderVarBindings, &pRenderObject->m_Materials[pRenderMesh->GetMeshIdx()], pRenderObject, nullptr );
+			pConstantBuffer = SetConstantBuffer( shaderVarBindings, &pRenderObject->m_Materials[pRenderMesh->GetMeshIdx()], pRenderObject, nullptr, pShader->GetFullName().c_str() );
 		} else {
-			pConstantBuffer = SetConstantBuffer( shaderVarBindings, &pRenderObject->m_Materials[0], pRenderObject, nullptr );
+			pConstantBuffer = SetConstantBuffer( shaderVarBindings, &pRenderObject->m_Materials[0], pRenderObject, nullptr, pShader->GetFullName().c_str() );
 		}
 	}
 
@@ -3607,7 +3607,7 @@ void kbRenderer_DX11::RT_Render2DQuad( const kbVec2 & origin, const kbVec2 & siz
 /**
  *	kbRenderer_DX11::SetConstantBuffer
  */
-ID3D11Buffer * kbRenderer_DX11::SetConstantBuffer( const kbShaderVarBindings_t & shaderVarBindings, const kbShaderParamOverrides_t * shaderParamOverrides, const kbRenderObject *const pRenderObject, byte *const pInMappedBufferData ) {
+ID3D11Buffer * kbRenderer_DX11::SetConstantBuffer( const kbShaderVarBindings_t & shaderVarBindings, const kbShaderParamOverrides_t * shaderParamOverrides, const kbRenderObject *const pRenderObject, byte *const pInMappedBufferData, const char* const pShaderName ) {
 	kbMat4 worldMatrix;
 	if ( pRenderObject != nullptr ) {
 		worldMatrix.MakeScale( pRenderObject->m_Scale );
@@ -3673,6 +3673,8 @@ ID3D11Buffer * kbRenderer_DX11::SetConstantBuffer( const kbShaderVarBindings_t &
 			kbMat4 *const pMatOffset = (kbMat4*)pVarByteOffset;
 			*pMatOffset = worldMatrix;
 		} else if ( varName == "cameraPos" ) {
+			kbError( "kbRenderer_DX11::SetConstantBuffer() - cameraPos is used in %s but is deprecated.  Use cameraPosition instead", ( pShaderName != nullptr ) ? ( pShaderName ) : ( "null" ) );
+		} else if (varName == "cameraPosition") {
 			kbVec4 *const pVecOffset = (kbVec4*)pVarByteOffset;
 			*pVecOffset = m_pCurrentRenderWindow->GetCameraPosition();
 		} else if ( varName == "viewProjection" ) {

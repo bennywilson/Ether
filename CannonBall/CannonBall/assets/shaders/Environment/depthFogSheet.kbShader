@@ -96,21 +96,30 @@ float4 pixelShader( pixelInput input ) : SV_Target {
 	float fadeDist = length( worldPos - input.worldPos );
 	fadeDist = saturate( fadeDist / fadeParams.x );
 
+	// Floor Fade
 	float floorFade = length( input.worldPos.y - fadeParams.z ) / fadeParams.w;
 	fadeDist = min( floorFade, fadeDist );
 
+	// Noise
 	const float randTime = time.x + fadeParams.y;
 	float3 noise1 = noiseTexture1.Sample( DefaultSamplerState, ( input.uv * noiseTile.xy ) + float2( noiseScroll.x, noiseScroll.y ) * randTime.x ).xyz;
 	noise1 = smoothstep( smoothStepsAndAlphaPower.x, 1.0f, noise1.x ) * noise1Color.xyz * noise1Color.w;
 
-	float3 noise2 = noiseTexture1.Sample( DefaultSamplerState, ( input.uv.yx * noiseTile.zw ) + float2( noiseScroll.w, noiseScroll.z ) * randTime.x ).xyz;
+	float3 noise2 = noiseTexture1.Sample( DefaultSamplerState, ( input.uv.yx * noiseTile.wz ) + float2( noiseScroll.w, noiseScroll.z ) * randTime.x ).xyz;
 	noise2 = smoothstep( smoothStepsAndAlphaPower.y, 1.0f, noise2.x ) * noise2Color.xyz * noise2Color.w;
 
+	// Fresnel fade
+	const float3 vecToCamera = normalize( cameraPosition.xyz - input.worldPos.xyz );
+	const float3 normal = normalize( -input.normal.xyz );
+	const float fresnelFade = pow( saturate( -dot( vecToCamera, normal ) ),3 );
+	//return float4( 1,1,1, fresnelFade.x );
+	// Shape Mask
 	const float4 shapeMask = shapeMaskTexture.Sample( DefaultSamplerState, input.uv ) * shapeMaskParams.y;
 	const float3 additiveMask = pow( abs( shapeMask.ggg ), abs( shapeMaskParams.z ) );
+
+	// Output
 	const float3 outColor = ( ( noise1 + noise2 ).xyz + additiveMask.xyz ) * fadeDist;
+	const float luminance = fresnelFade.x * pow( abs( dot( outColor, float3( 0.3f, 0.69f, 0.11f ) ) ), abs( smoothStepsAndAlphaPower.z ) )* pow( abs(shapeMask.r), shapeMaskParams.x );
 
-	const float luminance = pow( abs( dot( outColor, float3( 0.3f, 0.69f, 0.11f ) ) ), abs( smoothStepsAndAlphaPower.z ) )* pow( abs(shapeMask.r), shapeMaskParams.x );
-
-	return float4( outColor.xyz, luminance );
+	return float4( outColor, luminance );
 }

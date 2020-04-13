@@ -392,7 +392,14 @@ void kbEditor::LoadMap( const std::string & InMapName ) {
 
 	std::sort(g_Editor->m_GameEntities.begin(), g_Editor->m_GameEntities.end(),
 			  [](const kbEditorEntity* a, const kbEditorEntity* b) -> bool {
-		return a->GetGameEntity()->GetName().stl_str().compare(b->GetGameEntity()->GetName().stl_str()) < 0 || a->GetGameEntity()->GetComponentByType( kbLevelComponent::GetType() );
+
+		if ( a->GetGameEntity()->GetComponentByType( kbLevelComponent::GetType() ) ) {
+			return true;
+		} else if ( b->GetGameEntity()->GetComponentByType(kbLevelComponent::GetType() ) ) {
+			return false;
+		}
+
+		return a->GetGameEntity()->GetName().stl_str().compare(b->GetGameEntity()->GetName().stl_str()) < 0;
 	});
 
 

@@ -1,12 +1,11 @@
 //==============================================================================
-// environmentBase.kbShader
+// environmentSkinned.kbShader
 //
 // 2019 kbEngine 2.0
 //==============================================================================
 cbuffer matrixBuffer {
 	matrix modelMatrix;
 	matrix mvpMatrix;
-	float4 cameraPos;
 	float4x4 boneList[128];
 };
 

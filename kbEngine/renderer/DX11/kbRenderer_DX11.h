@@ -3,7 +3,7 @@
 //
 // Renderer implementation using DX11 API
 //
-// 2016-2019 kbEngine 2.0
+// 2016 kbEngine 2.0
 //==============================================================================
 #ifndef _KBRENDERER_DX11_H_
 #define _KBRENDERER_DX11_H_
@@ -431,7 +431,7 @@ private:
 	void										RenderDebugText();
 	void										RenderMousePickerIds();
 	void										Blit( kbRenderTexture *const src, kbRenderTexture *const dest );
-	ID3D11Buffer *								SetConstantBuffer( const kbShaderVarBindings_t & shaderBindings, const kbShaderParamOverrides_t * shaderParamOverrides, const kbRenderObject *const pRenderObject,  byte *const pInMappedBufferData );
+	ID3D11Buffer *								SetConstantBuffer( const kbShaderVarBindings_t& shaderBindings, const kbShaderParamOverrides_t* shaderParamOverrides, const kbRenderObject* const pRenderObject, byte* const pInMappedBufferData, const char* const pShaderName = nullptr );
 
 	ID3D11Buffer *								GetConstantBuffer( const size_t requestSize );
 	void										SetShaderMat4( const std::string & varName, const kbMat4 & inMatrix, void *const pBuffer, const kbShaderVarBindings_t & binding );

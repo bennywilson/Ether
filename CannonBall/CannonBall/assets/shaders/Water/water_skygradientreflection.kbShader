@@ -8,7 +8,7 @@ cbuffer matrixBuffer {
 	matrix modelMatrix;
 	matrix mvpMatrix;
 	matrix inverseViewProjection;
-	float4 cameraPos;
+	float4 cameraPosition;
 	float4 horizonColor;
 	float4 skyColor;
 	float4 waterScaleAndSpeed_1;
@@ -93,7 +93,7 @@ Texture2D depthTexture(depthBuffer)			: register(t4);
  float4 pixelShader( pixelInput	input ) : SV_TARGET {
  	PS_OUTPUT output = (PS_OUTPUT) 0;
 
-	const float3 pointToEye = normalize( cameraPos.xyz - input.worldPosition.xyz );
+	const float3 pointToEye = normalize( cameraPosition.xyz - input.worldPosition.xyz );
 	float3 normal = float3( 0.0f, 1.0f, 0.0f );
 	float3 nm1 = normalMap2.Sample( NormalSamplerState, ( input.uv * waterScaleAndSpeed_1.xy ) + waterScaleAndSpeed_1.zw * time.xx ).xyz;
 	nm1 = ( nm1 * 2.0f ) - 1.0f;

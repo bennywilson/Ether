@@ -1,5 +1,5 @@
 //==============================================================================
-// rtrt.kbShader
+// hackClip.kbShader
 //
 // 2019 kbEngine 2.0
 //==============================================================================
@@ -11,7 +11,6 @@ cbuffer matrixBuffer {
 	matrix projection;
 	matrix inverseProjection;
 	matrix viewProjection;
-	float4 cameraPos;
 };
 
 kbShaderState {
