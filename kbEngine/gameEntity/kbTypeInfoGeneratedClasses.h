@@ -234,6 +234,7 @@ GenerateClass(
 	AddField( "HeightScale", KBTYPEINFO_FLOAT, kbTerrainComponent, m_HeightScale, false, "" )
 	AddField( "Width", KBTYPEINFO_FLOAT, kbTerrainComponent, m_TerrainWidth, false, "" )
 	AddField( "Dimensions", KBTYPEINFO_INT, kbTerrainComponent, m_TerrainDimensions, false, "" )
+	AddField( "SmoothAmount", KBTYPEINFO_INT, kbTerrainComponent, m_TerrainSmoothAmount, false, "")
 	AddField( "SplatMap", KBTYPEINFO_TEXTURE, kbTerrainComponent, m_pSplatMap, false, "" )
 	AddField( "Grass", KBTYPEINFO_STRUCT, kbTerrainComponent, m_Grass, true, "kbGrass" )
 	AddField( "DebugRegenTerrain", KBTYPEINFO_BOOL, kbTerrainComponent, m_bDebugForceRegenTerrain, false, "" )

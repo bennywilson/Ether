@@ -127,6 +127,7 @@ protected:
 	float										m_HeightScale;
 	float										m_TerrainWidth;
 	int											m_TerrainDimensions;
+	int											m_TerrainSmoothAmount;
 
 	kbTexture *                                 m_pSplatMap;
     std::vector<kbGrass>                        m_Grass;

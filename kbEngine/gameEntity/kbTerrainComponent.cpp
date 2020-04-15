@@ -380,6 +380,7 @@ void kbTerrainComponent::Constructor() {
 	m_HeightScale = 0.3f;
 	m_TerrainWidth = 256.0f;
 	m_TerrainDimensions = 16;
+	m_TerrainSmoothAmount = 1;
 	m_bDebugForceRegenTerrain = false;
 
 	m_pSplatMap = nullptr;
@@ -421,9 +422,9 @@ void kbTerrainComponent::PostLoad() {
 void kbTerrainComponent::EditorChange( const std::string & propertyName ) {
 	Super::EditorChange( propertyName );
 
-    const std::string propertiesThatRegenTerrain[4] = { "HeightMap", "HeightScale", "Width", "Dimensions" };
+    const std::string propertiesThatRegenTerrain[5] = { "HeightMap", "HeightScale", "Width", "Dimensions", "SmoothAmount" };
 
-    for ( int i = 0; i < 4; i++ ) {
+    for ( int i = 0; i < 5; i++ ) {
         if ( propertyName == propertiesThatRegenTerrain[i] ) { 
         	m_bRegenerateTerrain = true;
         }
@@ -476,7 +477,6 @@ void kbTerrainComponent::GenerateTerrain() {
 	std::vector<kbVec3> cpuVerts;
 	cpuVerts.resize( m_TerrainDimensions * m_TerrainDimensions );
 
-	int blurSampleSize = 1;
 	int currentVert = 0;
 	for ( int startY = 0; startY < m_TerrainDimensions; startY++ ) {
 		for ( int startX = 0; startX < m_TerrainDimensions; startX++ ) {
@@ -486,7 +486,7 @@ void kbTerrainComponent::GenerateTerrain() {
 
 			float divisor = 0.0f;
 			float height = 0.0f;
-
+			const int blurSampleSize = max( m_TerrainSmoothAmount, 1 );
 			for ( int tempY = 0; tempY < blurSampleSize; tempY++ ) {
 
 				if ( tempY + startY >= m_TerrainDimensions ) {

@@ -1,8 +1,8 @@
-kbGameEntity 1042283099 1319353089 2945991576 1816789584 {
+kbGameEntity 1894424309 1320961563 3292774060 2275055838 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		Name = "Entity_242"
+		Name = "Entity_241"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
 		Position = 0.000000 0.000000 0.000000
 		Scale = 1.000000 1.000000 1.000000
@@ -10,8 +10,8 @@ kbGameEntity 1042283099 1319353089 2945991576 1816789584 {
 	kbEditorLevelSettingsComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		MainCameraPosition = 41.226936 -40.337929 -328.056183
-		MainCameraRotation = -0.066177 -0.713274 0.067970 0.694436
+		MainCameraPosition = 85.673904 -45.380264 -335.288910
+		MainCameraRotation = -0.014609 -0.683262 0.013671 0.729899
 	}
 }
 kbGameEntity 537364968 1092523782 2953639826 2626478307 {
@@ -1395,7 +1395,7 @@ kbGameEntity 3587713139 1101448007 952628641 366038443 {
 		LifeTime =  -1.000000
 		Name = "Bridge"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
-		Position = 76.992683 -52.798882 -1195.392578
+		Position = 76.992683 -52.798882 -279.392426
 		Scale = 250.000000 250.000000 250.000000
 	}
 	kbStaticModelComponent { 
@@ -5047,6 +5047,109 @@ kbGameEntity 1382854847 1098769840 3265570731 2926574033 {
 		Model = ..\..\kbengine\assets\models\unitquad.ms3d
 	}
 }
+kbGameEntity 733745145 1112844759 4043124892 1514363237 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Fog Sheet - Little Island Left Edge"
+		Orientation = 0.000000 -0.751280 0.000000 0.659983
+		Position = 187.000000 -67.199997 -319.000000
+		Scale = 2000.000000 2000.000000 2000.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		Materials = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\environment\depthfogsheet.kbshader
+				ShaderParams = 11
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "cameraPosition"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "noise1Color"
+						Texture = NULL
+						Vector = 0.992157 0.878431 0.866667 0.300000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "noise2Color"
+						Texture = NULL
+						Vector = 0.992157 0.878431 0.866667 0.300000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "noiseScroll"
+						Texture = NULL
+						Vector = 0.000000 0.063000 0.000000 0.075000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "noiseTile"
+						Texture = NULL
+						Vector = 0.000000 1.000000 1.000000 1.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "smoothStepsAndAlphaPower"
+						Texture = NULL
+						Vector = 0.000000 0.000000 2.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "fadeParams"
+						Texture = NULL
+						Vector = 7.000000 356.234009 -76.175102 2.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "shapeMaskParams"
+						Texture = NULL
+						Vector = 1.300000 1.000000 1.000000 1.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "noiseTexture1"
+						Texture = .\assets\fx\noise\painterlynoise_1.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "noiseTexture2"
+						Texture = .\assets\fx\noise\painterlynoise_1.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "shapeMaskTexture"
+						Texture = .\assets\fx\masks\smokemask_1.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		RenderOrderBias =  0.000000
+		RenderPass = LightingPass
+		Model = ..\..\kbengine\assets\models\unitquad.ms3d
+	}
+}
 kbGameEntity 709606348 1282493448 2558863031 1569122242 {
 	kbTransformComponent { 
 		Enabled = 0
@@ -5251,73 +5354,6 @@ kbGameEntity 3612139972 1154033389 429451442 2432470990 {
 		RenderOrderBias =  0.000000
 		RenderPass = LightingPass
 		Model = .\assets\terrain\kungfulevelterrain\littleislandfogplane.fbx
-	}
-}
-kbGameEntity 1885576596 1149139774 1438397868 2777957068 {
-	kbTransformComponent { 
-		Enabled = 0
-		LifeTime =  -1.000000
-		Name = "Fox"
-		Orientation = 0.000000 0.000000 0.000000 1.000000
-		Position = 2.000000 0.000000 0.000000
-		Scale = 1.000000 1.000000 1.000000
-	}
-	kbSkeletalModelComponent { 
-		Enabled = 0
-		LifeTime =  -1.000000
-		CastsShadow = 1
-		Materials = 1
-			kbMaterialComponent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				CullModeOverride = ShaderDefault
-				Shader = .\assets\shaders\character\characterbase.kbshader
-				ShaderParams = 1
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "colorTexture"
-						Texture = .\assets\models\characters\fox\fox_color.jpg
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-			}
-		RenderOrderBias =  0.000000
-		RenderPass = LightingPass
-		Animations = 0
-		DebugAnimIndex = -1
-		Model = .\assets\models\characters\fox\fox.ms3d
-	}
-	kbSkeletalModelComponent { 
-		Enabled = 0
-		LifeTime =  -1.000000
-		CastsShadow = 0
-		Materials = 1
-			kbMaterialComponent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				CullModeOverride = ShaderDefault
-				Shader = .\assets\shaders\character\characteroutline.kbshader
-				ShaderParams = 2
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "outlineParams"
-						Texture = NULL
-						Vector = 0.020000 0.200000 0.650000 5.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "colorTexture"
-						Texture = .\assets\models\characters\fox\fox_color.jpg
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-			}
-		RenderOrderBias =  0.000000
-		RenderPass = Post-LightingPass
-		Animations = 0
-		DebugAnimIndex = -1
-		Model = .\assets\models\characters\fox\fox.ms3d
 	}
 }
 kbGameEntity 191628142 1164611098 2253314479 1292534890 {
@@ -5672,6 +5708,73 @@ kbGameEntity 191628142 1164611098 2253314479 1292534890 {
 		Health =  100.000000
 		MaxRotateSpeed =  15.000000
 		MaxRunSpeed =  3.000000
+	}
+}
+kbGameEntity 1885576596 1149139774 1438397868 2777957068 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Fox"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 2.000000 0.000000 0.000000
+		Scale = 1.000000 1.000000 1.000000
+	}
+	kbSkeletalModelComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		CastsShadow = 1
+		Materials = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\character\characterbase.kbshader
+				ShaderParams = 1
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorTexture"
+						Texture = .\assets\models\characters\fox\fox_color.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		RenderOrderBias =  0.000000
+		RenderPass = LightingPass
+		Animations = 0
+		DebugAnimIndex = -1
+		Model = .\assets\models\characters\fox\fox.ms3d
+	}
+	kbSkeletalModelComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		Materials = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\character\characteroutline.kbshader
+				ShaderParams = 2
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "outlineParams"
+						Texture = NULL
+						Vector = 0.020000 0.200000 0.650000 5.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorTexture"
+						Texture = .\assets\models\characters\fox\fox_color.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		RenderOrderBias =  0.000000
+		RenderPass = Post-LightingPass
+		Animations = 0
+		DebugAnimIndex = -1
+		Model = .\assets\models\characters\fox\fox.ms3d
 	}
 }
 kbGameEntity 1978605751 1112739685 1112578947 1060765009 {
@@ -7339,7 +7442,7 @@ kbGameEntity 3724832574 1271670935 1013321910 1020909332 {
 		LifeTime =  -1.000000
 		Name = "Terrain"
 		Orientation = 0.000000 -0.989478 0.000000 -0.144684
-		Position = 200.000000 -600.000000 0.000000
+		Position = -70.000000 -600.000000 0.000000
 		Scale = 1.000000 1.000000 1.000000
 	}
 	kbTerrainComponent { 
@@ -7595,8 +7698,9 @@ kbGameEntity 3724832574 1271670935 1013321910 1020909332 {
 						Vector = 0.000000 1.000000 0.000000 -78.000000
 					}
 			}
-		HeightMap = .\assets\terrain\kungfulevelterrain\terrain1_height.bmp
+		HeightMap = .\assets\terrain\kungfulevelterrain\terrain1_height.tif
 		HeightScale =  1024.000000
+		SmoothAmount = 2
 		SplatMap = NULL
 		Width =  2000.000000
 	}
@@ -7607,7 +7711,7 @@ kbGameEntity 4064300683 1237974457 595275413 2837674043 {
 		LifeTime =  -1.000000
 		Name = "Terrain Reflection"
 		Orientation = 0.000000 -0.989478 0.000000 -0.144639
-		Position = 200.000000 442.000000 0.000000
+		Position = -70.000000 448.000000 0.000000
 		Scale = 1.000000 1.000000 1.000000
 	}
 	kbTerrainComponent { 
@@ -7620,7 +7724,7 @@ kbGameEntity 4064300683 1237974457 595275413 2837674043 {
 				LifeTime =  -1.000000
 				CullModeOverride = ShaderDefault
 				Shader = .\assets\shaders\terrain\basicterrain_reflection.kbshader
-				ShaderParams = 23
+				ShaderParams = 24
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
@@ -7782,6 +7886,13 @@ kbGameEntity 4064300683 1237974457 595275413 2837674043 {
 						Texture = NULL
 						Vector = 55.000000 55.000000 555.000000 55.000000
 					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "clipPlane"
+						Texture = NULL
+						Vector = -76.176140 0.000000 0.000000 0.000000
+					}
 			}
 		RenderOrderBias =  0.000000
 		RenderPass = LightingPass
@@ -7790,6 +7901,7 @@ kbGameEntity 4064300683 1237974457 595275413 2837674043 {
 		Grass = 0
 		HeightMap = .\assets\terrain\kungfulevelterrain\terrain1_height.bmp
 		HeightScale =  1024.000000
+		SmoothAmount = 1
 		SplatMap = NULL
 		Width =  2000.000000
 	}
@@ -7971,108 +8083,5 @@ kbGameEntity 1573001468 1200901198 3941368968 167243547 {
 		RenderOrderBias =  0.000000
 		RenderPass = Post-LightingPass
 		Model = ..\..\kbengine\assets\models\unitcube.ms3d
-	}
-}
-kbGameEntity 733745145 1112844759 4043124892 1514363237 {
-	kbTransformComponent { 
-		Enabled = 0
-		LifeTime =  -1.000000
-		Name = "Fog Sheet - Little Island Left Edge"
-		Orientation = 0.000000 -0.751280 0.000000 0.659983
-		Position = 187.000000 -67.199997 -319.000000
-		Scale = 2000.000000 2000.000000 2000.000000
-	}
-	kbStaticModelComponent { 
-		Enabled = 1
-		LifeTime =  -1.000000
-		CastsShadow = 0
-		Materials = 1
-			kbMaterialComponent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				CullModeOverride = ShaderDefault
-				Shader = .\assets\shaders\environment\depthfogsheet.kbshader
-				ShaderParams = 11
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "cameraPosition"
-						Texture = NULL
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "noise1Color"
-						Texture = NULL
-						Vector = 0.992157 0.878431 0.866667 0.300000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "noise2Color"
-						Texture = NULL
-						Vector = 0.992157 0.878431 0.866667 0.300000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "noiseScroll"
-						Texture = NULL
-						Vector = 0.000000 0.063000 0.000000 0.075000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "noiseTile"
-						Texture = NULL
-						Vector = 0.000000 1.000000 1.000000 1.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "smoothStepsAndAlphaPower"
-						Texture = NULL
-						Vector = 0.000000 0.000000 2.000000 0.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "fadeParams"
-						Texture = NULL
-						Vector = 7.000000 356.234009 -76.175102 2.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "shapeMaskParams"
-						Texture = NULL
-						Vector = 1.300000 1.000000 1.000000 1.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "noiseTexture1"
-						Texture = .\assets\fx\noise\painterlynoise_1.tif
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "noiseTexture2"
-						Texture = .\assets\fx\noise\painterlynoise_1.tif
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "shapeMaskTexture"
-						Texture = .\assets\fx\masks\smokemask_1.tif
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-			}
-		RenderOrderBias =  0.000000
-		RenderPass = LightingPass
-		Model = ..\..\kbengine\assets\models\unitquad.ms3d
 	}
 }
