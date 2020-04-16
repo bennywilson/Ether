@@ -509,7 +509,7 @@ void kbTerrainComponent::GenerateTerrain() {
 			height /= 255.0f;
 			height *= ( m_HeightScale / divisor );
 			pVerts[currentVert].Clear();
-			cpuVerts[currentVert] = kbVec3( -HalfTerrainWidth + ( startX * cellWidth ), height, -HalfTerrainWidth + ( startY * cellWidth ) );
+			cpuVerts[currentVert] = kbVec3( -HalfTerrainWidth + ( ( startX + 1 ) * cellWidth ), height, -HalfTerrainWidth + ( ( startY + 1 ) * cellWidth ) );
 			pVerts[currentVert].position = cpuVerts[currentVert];
 			cpuVerts[currentVert] += GetOwner()->GetPosition();
 
