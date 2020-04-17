@@ -96,8 +96,8 @@ kbGameEntity 1180474321 1206754152 1921378463 1489227724 {
 		LifeTime =  -1.000000
 		Name = "Entity_23"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
-		Position = -13.445821 0.721128 21.090582
-		Scale = 1.000000 1.000000 1.000000
+		Position = 4.807346 -34.277256 -336.787628
+		Scale = 55.000000 55.000000 55.000000
 	}
 	kbParticleComponent { 
 		Enabled = 1
@@ -188,7 +188,7 @@ kbGameEntity 1180474321 1206754152 1921378463 1489227724 {
 			}
 	}
 	kbParticleComponent { 
-		Enabled = 1
+		Enabled = 0
 		LifeTime =  5.000000
 		Name = "LargeDustMist"
 		Orientation = 0.000000 0.000000 0.000000 1.000000

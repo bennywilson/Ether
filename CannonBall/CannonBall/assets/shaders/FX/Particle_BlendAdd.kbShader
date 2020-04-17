@@ -75,7 +75,7 @@ pixelInput vertexShader( vertexInput input ) {
 	} else {
 	   // Axial
 	   float3 heading = input.rotationAndDirection.xyz;
-	   const float3 xAxis = normalize( cross( normalize( cameraPos.xyz - particleWorldPos ), heading ) );
+	   const float3 xAxis = normalize( cross( normalize( cameraPosition.xyz - particleWorldPos ), heading ) );
 	   const float3 yAxis = normalize( cross( heading, xAxis ) );
 	   billboardMatrix = float3x3( heading, xAxis, yAxis );
 	}
