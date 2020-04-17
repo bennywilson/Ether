@@ -1,8 +1,8 @@
-kbGameEntity 3761262009 1140195391 3417299901 3388716825 {
+kbGameEntity 2133381070 1125535352 1946646940 3757590085 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		Name = "Entity_241"
+		Name = "Entity_248"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
 		Position = 0.000000 0.000000 0.000000
 		Scale = 1.000000 1.000000 1.000000
@@ -10,8 +10,8 @@ kbGameEntity 3761262009 1140195391 3417299901 3388716825 {
 	kbEditorLevelSettingsComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		MainCameraPosition = 53.152306 -47.513741 -364.832886
-		MainCameraRotation = -0.055353 -0.718949 0.057635 0.690454
+		MainCameraPosition = 92.030838 -49.139679 -377.241058
+		MainCameraRotation = 0.053711 0.561146 -0.036524 -0.825164
 	}
 }
 kbGameEntity 537364968 1092523782 2953639826 2626478307 {
@@ -4120,7 +4120,419 @@ kbGameEntity 2047776077 1192542170 3859153058 3983100144 {
 		Model = ..\..\kbengine\assets\models\unitquad.ms3d
 	}
 }
-kbGameEntity 1669928719 1191418010 2308237487 2175436070 {
+kbGameEntity 853619494 1204828837 416750523 817760559 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Fog Sheet - Mountain 1"
+		Orientation = 0.000000 -0.099833 0.000000 0.995004
+		Position = 440.000000 127.100037 37.000000
+		Scale = 6500.000000 7000.000000 6500.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		Materials = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\environment\depthfogsheet.kbshader
+				ShaderParams = 11
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "cameraPosition"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "noise1Color"
+						Texture = NULL
+						Vector = 0.992157 0.878431 0.866667 0.150000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "noise2Color"
+						Texture = NULL
+						Vector = 0.992157 0.878431 0.866667 0.150000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "noiseScroll"
+						Texture = NULL
+						Vector = 0.000000 0.060000 0.000000 0.080000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "noiseTile"
+						Texture = NULL
+						Vector = 0.000000 1.000000 1.000000 1.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "smoothStepsAndAlphaPower"
+						Texture = NULL
+						Vector = 0.000000 0.000000 2.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "fadeParams"
+						Texture = NULL
+						Vector = 7.000000 3.000000 -78.175102 6.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "shapeMaskParams"
+						Texture = NULL
+						Vector = 1.300000 1.000000 1.000000 1.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "noiseTexture1"
+						Texture = .\assets\fx\noise\painterlynoise_1.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "noiseTexture2"
+						Texture = .\assets\fx\noise\painterlynoise_1.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "shapeMaskTexture"
+						Texture = .\assets\fx\masks\smokemask_1.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		RenderOrderBias =  0.000000
+		RenderPass = LightingPass
+		Model = ..\..\kbengine\assets\models\unitquad.ms3d
+	}
+}
+kbGameEntity 3554502441 1319981874 1829677244 41520799 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Fog Sheet - Mountain 1"
+		Orientation = 0.000000 -0.479425 0.000000 0.877583
+		Position = 689.000000 222.600006 -151.000000
+		Scale = 20000.000000 30000.000000 20000.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		Materials = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\environment\depthfogsheet.kbshader
+				ShaderParams = 11
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "cameraPosition"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "noise1Color"
+						Texture = NULL
+						Vector = 0.992157 0.878431 0.866667 0.200000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "noise2Color"
+						Texture = NULL
+						Vector = 0.992157 0.878431 0.866667 0.200000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "noiseScroll"
+						Texture = NULL
+						Vector = 0.000000 0.060000 0.000000 0.080000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "noiseTile"
+						Texture = NULL
+						Vector = 0.000000 1.000000 1.000000 1.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "smoothStepsAndAlphaPower"
+						Texture = NULL
+						Vector = 0.000000 0.000000 2.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "fadeParams"
+						Texture = NULL
+						Vector = 7.000000 3.000000 -78.175102 6.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "shapeMaskParams"
+						Texture = NULL
+						Vector = 1.000000 0.850000 1.000000 1.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "noiseTexture1"
+						Texture = .\assets\fx\noise\painterlynoise_1.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "noiseTexture2"
+						Texture = .\assets\fx\noise\painterlynoise_1.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "shapeMaskTexture"
+						Texture = .\assets\fx\masks\smokemask_1.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		RenderOrderBias =  0.000000
+		RenderPass = LightingPass
+		Model = ..\..\kbengine\assets\models\unitquad.ms3d
+	}
+}
+kbGameEntity 3014197294 1091740968 1417879695 1740425856 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Fog Sheet - Mountain 1"
+		Orientation = 0.000000 -0.295520 0.000000 0.955337
+		Position = 445.000000 51.100029 -123.000000
+		Scale = 10000.000000 10000.000000 10000.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		Materials = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\environment\depthfogsheet.kbshader
+				ShaderParams = 11
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "cameraPosition"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "noise1Color"
+						Texture = NULL
+						Vector = 0.992157 0.878431 0.866667 0.150000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "noise2Color"
+						Texture = NULL
+						Vector = 0.992157 0.878431 0.866667 0.150000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "noiseScroll"
+						Texture = NULL
+						Vector = 0.000000 0.060000 0.000000 0.080000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "noiseTile"
+						Texture = NULL
+						Vector = 0.000000 1.000000 1.000000 1.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "smoothStepsAndAlphaPower"
+						Texture = NULL
+						Vector = 0.000000 0.000000 2.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "fadeParams"
+						Texture = NULL
+						Vector = 7.000000 3.000000 -78.175102 6.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "shapeMaskParams"
+						Texture = NULL
+						Vector = 1.300000 1.000000 1.000000 1.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "noiseTexture1"
+						Texture = .\assets\fx\noise\painterlynoise_1.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "noiseTexture2"
+						Texture = .\assets\fx\noise\painterlynoise_1.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "shapeMaskTexture"
+						Texture = .\assets\fx\masks\smokemask_1.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		RenderOrderBias =  0.000000
+		RenderPass = LightingPass
+		Model = ..\..\kbengine\assets\models\unitquad.ms3d
+	}
+}
+kbGameEntity 2682987043 1217771814 4263817637 1943318049 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Fog Sheet - Mountain 1"
+		Orientation = 0.000000 -0.099833 0.000000 0.995004
+		Position = 235.000000 7.100029 -108.000000
+		Scale = 6500.000000 6000.000000 6500.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		Materials = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\environment\depthfogsheet.kbshader
+				ShaderParams = 11
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "cameraPosition"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "noise1Color"
+						Texture = NULL
+						Vector = 0.992157 0.878431 0.866667 0.150000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "noise2Color"
+						Texture = NULL
+						Vector = 0.992157 0.878431 0.866667 0.150000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "noiseScroll"
+						Texture = NULL
+						Vector = 0.000000 0.060000 0.000000 0.080000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "noiseTile"
+						Texture = NULL
+						Vector = 0.000000 1.000000 1.000000 1.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "smoothStepsAndAlphaPower"
+						Texture = NULL
+						Vector = 0.000000 0.000000 2.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "fadeParams"
+						Texture = NULL
+						Vector = 7.000000 3.000000 -78.175102 6.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "shapeMaskParams"
+						Texture = NULL
+						Vector = 1.300000 1.000000 1.000000 1.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "noiseTexture1"
+						Texture = .\assets\fx\noise\painterlynoise_1.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "noiseTexture2"
+						Texture = .\assets\fx\noise\painterlynoise_1.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "shapeMaskTexture"
+						Texture = .\assets\fx\masks\smokemask_1.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		RenderOrderBias =  0.000000
+		RenderPass = LightingPass
+		Model = ..\..\kbengine\assets\models\unitquad.ms3d
+	}
+}
+kbGameEntity 1306706246 1254393333 1064914105 2681943468 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
@@ -4945,6 +5357,116 @@ kbGameEntity 883698842 1138523683 3972306332 3679075679 {
 	}
 }
 kbGameEntity 3497519051 1100494036 1498467004 3966639082 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Fog Sheet - Mountain Cage"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 436.500000 -48.349960 -333.250000
+		Scale = 27000.000000 6000.000000 27000.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		Materials = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\environment\depthfogsheet.kbshader
+				ShaderParams = 12
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "cameraPosition"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "noise1Color"
+						Texture = NULL
+						Vector = 0.992157 0.878431 0.866667 0.100000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "noise2Color"
+						Texture = NULL
+						Vector = 0.992157 0.878431 0.866667 0.100000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "noiseScroll"
+						Texture = NULL
+						Vector = 0.000000 0.090000 0.000000 0.060000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "noiseTile"
+						Texture = NULL
+						Vector = 10.000000 1.000000 25.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "smoothStepsAndAlphaPower"
+						Texture = NULL
+						Vector = 0.000000 0.000000 2.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "fadeParams"
+						Texture = NULL
+						Vector = 2.000000 0.000000 -78.175102 3.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "shapeMaskParams"
+						Texture = NULL
+						Vector = 1.000000 1.000000 5.000000 1.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "noiseTexture1"
+						Texture = .\assets\fx\noise\painterlynoise_1.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "noiseTexture2"
+						Texture = .\assets\fx\noise\painterlynoise_1.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "shapeMaskTexture"
+						Texture = .\assets\fx\masks\smokemask_2.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "shapeMaskTile"
+						Texture = NULL
+						Vector = 1.000000 1.000000 0.000000 5.000000
+					}
+			}
+		RenderOrderBias =  0.000000
+		RenderPass = LightingPass
+		Model = .\assets\terrain\kungfulevelterrain\mountaincage.fbx
+	}
+}
+kbGameEntity 2318618914 1103474175 3405056657 3197447860 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
