@@ -533,7 +533,7 @@ kbGameEntity 314357658 1122514197 2466994618 463523205 {
 						LifeTime =  -1.000000
 						ParamName = "outlineParams"
 						Texture = NULL
-						Vector = 0.020000 0.100000 0.750000 5.000000
+						Vector = 0.025000 0.200000 0.325 5.000000
 					}
 					kbShaderParamComponent { 
 						Enabled = 0
@@ -901,7 +901,7 @@ kbGameEntity 2312584767 1139148529 3844446354 2946788253 {
 						LifeTime =  -1.000000
 						ParamName = "outlineParams"
 						Texture = NULL
-						Vector = 0.020000 0.100000 0.750000 5.000000
+						Vector = 0.025000 0.200000 0.325 5.000000
 					}
 					kbShaderParamComponent { 
 						Enabled = 0
@@ -1043,7 +1043,7 @@ kbGameEntity 3754323986 1218384162 2695139754 2739970727 {
 						LifeTime =  -1.000000
 						ParamName = "outlineParams"
 						Texture = NULL
-						Vector = 0.020000 0.100000 0.750000 5.000000
+						Vector = 0.025000 0.200000 0.325 5.000000
 					}
 					kbShaderParamComponent { 
 						Enabled = 0
@@ -1194,7 +1194,7 @@ kbGameEntity 2125691545 1130458748 632895138 4256000792 {
 						LifeTime =  -1.000000
 						ParamName = "outlineParams"
 						Texture = NULL
-						Vector = 0.020000 0.100000 0.750000 5.000000
+						Vector = 0.025000 0.200000 0.325 5.000000
 					}
 					kbShaderParamComponent { 
 						Enabled = 0

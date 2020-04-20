@@ -147,7 +147,7 @@ kbPrefab 1 {
 							LifeTime =  -1.000000
 							ParamName = "outlineParams"
 							Texture = NULL
-							Vector = 0.020000 0.100000 0.750000 5.000000
+							Vector = 0.025000 0.200000 0.325 5.000000
 						}
 						kbShaderParamComponent { 
 							Enabled = 0
@@ -524,7 +524,7 @@ kbGameEntity 3457190988 1240531568 1181983423 3782107432 {
 						LifeTime =  -1.000000
 						ParamName = "outlineParams"
 						Texture = NULL
-						Vector = 0.020000 0.100000 0.750000 5.000000
+						Vector = 0.025000 0.200000 0.325 5.000000
 					}
 					kbShaderParamComponent { 
 						Enabled = 0

@@ -475,6 +475,7 @@ void KungFuLevelComponent::Constructor() {
 
 	m_pSheep = nullptr;
 	m_p3000Ton = nullptr;
+
 	m_pFox = nullptr;
 }
 
@@ -662,6 +663,12 @@ void KungFuLevelComponent::Update_Internal( const float DeltaTime ) {
 		if ( numFinished == NumWaterSplashes ) {
 			m_WaterDropletFXStartTime = -1.0f;
 		}
+	}
+
+	{
+		kbShaderParamOverrides_t shaderParam;
+		shaderParam.SetVec4( "globalFogColor", kbVec4( 174.0f / 256.0f , 183.0f / 256.0f, 198.0f / 256.0f, 1.0f ) );
+		g_pRenderer->SetGlobalShaderParam(shaderParam);
 	}
 
 	UpdateDebugAndCheats();

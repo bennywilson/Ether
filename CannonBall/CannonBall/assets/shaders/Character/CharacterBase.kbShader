@@ -151,7 +151,7 @@ hatching = hatching * (1.0f - hatchParams.w) + hatchParams.w;//+ 0.3f;
 
 	const float maskDot = dot( fxMapMask, fxMapTex );
 	output.Color.xyz = colorTex.xyz * ( maskDot );
-	output.Color.w = 1;//colorTex.w * 0.55;
+	output.Color.w = 0;//colorTex.w * 0.55;
 	output.Specular = float4( 0.2f, 19.0f, 0.0f, 0.0f );
 	output.Depth.r = input.position2.x / input.position2.y;
 
@@ -159,7 +159,7 @@ hatching = hatching * (1.0f - hatchParams.w) + hatchParams.w;//+ 0.3f;
 	if ( input.IsFrontFace == false ) {
 	   output.Normal *= -1.0f;
 	}
-
+	output.Normal.w = 1.0f;
 	float hatchDot = saturate( dot( sunDir.xyz, output.Normal.xyz ) );
 	hatchDot = ( hatchDot * 0.9f ) + 0.1f;
 

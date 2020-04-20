@@ -6,7 +6,6 @@
 cbuffer matrixBuffer {
 	matrix modelMatrix;
 	matrix mvpMatrix;
-	float4 cameraPos;
 };
 
 kbShaderState {
