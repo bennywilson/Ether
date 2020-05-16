@@ -36,7 +36,6 @@ public:
 
 	KungFuGame_MainMenuState( KungFuLevelComponent *const pLevelComponent ) : KungFuGame_BaseState( pLevelComponent ) { }
 
-
 private:
 
 	virtual void WidgetEventCB( kbUIWidgetComponent *const pWidget, const kbInput_t * pInput ) override {
@@ -267,13 +266,25 @@ private:
 	}
 
 	virtual void UpdateState_Internal() override {
+		const auto pKungFuSheep = KungFuLevelComponent::Get()->GetSheep();
+		//g_pRenderer->DrawDebugText(gpuTimings, 0.55f, curY, g_DebugTextSize, g_DebugTextSize, kbColor::green);
+
+		std::string distanceTraveled = std::to_string( KungFuLevelComponent::Get()->GetPlayerTravelDistance() );
+		distanceTraveled += "   ";
+		distanceTraveled += std::to_string( pKungFuSheep->GetOwnerPosition().x );
+		distanceTraveled += ", ";
+		distanceTraveled += std::to_string(pKungFuSheep->GetOwnerPosition().y );
+		distanceTraveled += ", ";
+		distanceTraveled += std::to_string(pKungFuSheep->GetOwnerPosition().z );
+
+		g_pRenderer->DrawDebugText( distanceTraveled, 0.1f, 0.1f, g_DebugTextSize, g_DebugTextSize, kbColor::red );
 
 		if ( m_bFirstUpdate ) {
 			m_bFirstUpdate = false;
 			g_pCannonGame->GetMainCamera()->SetTarget( g_pCannonGame->GetPlayer()->GetOwner(), -1.0f );
 		}
 
-		const auto pKungFuSheep = KungFuLevelComponent::Get()->GetSheep();
+
 		if ( pKungFuSheep->GetOwnerPosition().z > KungFuGame::kOutroStartZ ) {
 			RequestStateChange( KungFuGame::Outro );
 			return;
@@ -591,11 +602,11 @@ void KungFuLevelComponent::Update_Internal( const float DeltaTime ) {
 	if ( m_p3000Ton == nullptr || m_PresentsEnt[0].GetEntity() == nullptr ) {
 
 		static const kbString sBossName( "3000 Ton" );
-		static const kbString sPresent_1( "Present_1" );
-		static const kbString sPresent_2( "Present_2" );
-		static const kbString sBreakBridgeDecal( "Bridge Decal" );
+		static const kbString sPresent_1( "Outro - Present_1" );
+		static const kbString sPresent_2( "Outro - Present_2" );
+		static const kbString sBreakBridgeDecal( "Outro - Bridge Decal" );
 		static const kbString sFox( "Fox" );
-		static const kbString sBridgeExplosionFX( "Bridge Explosion FX" );
+		static const kbString sBridgeExplosionFX( "Outro - Bridge Explosion FX" );
 
 		// TODO - Optimize
 		for ( int i = 0; i < g_pCannonGame->GetGameEntities().size(); i++ ) {

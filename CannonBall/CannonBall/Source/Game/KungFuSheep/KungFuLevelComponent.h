@@ -60,18 +60,21 @@ namespace KungFuGame {
 	const float kSubWaveDirChangeInitialOffset = 2.f;
 	const float kSubWaveDirChangePerSnolafOffset = 0.25f;
 
-	// Movement
+	// Movement	
 	const kbVec3 kSheepStartPos( 77.10445f, -52.6362f, -398.0f );
 	const kbQuat kSheepStartRot( 0.0f, 1.0f, 0.0f, 0.0f );
 	
 	const float kLevelLength = 165.0f;
 
 	// Cinema
-	const float kOutroStartZ = -250.0f;
-	const kbVec3 kFoxPos = kbVec3( 77.10445f, -52.6362f, -233.828537f );
-	const kbVec3 kTreyTonStartPos = kbVec3( 76.992683f, -52.599991f, -227.628464f );
-	const kbVec3 kFoxFinalPos = kbVec3( 77.10445f, -52.6362f, -236.5f );
+	const float kOutroStartZ = -297.0f;
+	const kbVec3 kFoxPos = kbVec3( 77.10445f, -52.6362f, -278.628601f );
+	const kbVec3 kTreyTonOffScreenPos = kbVec3( 76.992683f, -52.599991f, -270.628479f );
+	const kbVec3 kTreyTonJump1StartPos = kbVec3( 76.992683f, -52.599991f, -272.828479f );
+	const kbVec3 kTreyTonJump2StartPos = kbVec3( 76.992683f, -52.599991f, -280.828479f );
+	const kbVec3 kFoxFinalPos = kbVec3( 77.10445f, -52.6362f, -281.45f );
 	const kbVec3 kSheepFinalPos = kFoxFinalPos + kbVec3( 0.0f, 0.0f, -2.0f );
+	const kbVec3 kFinalSnolafEntryPos = KungFuGame::kFoxFinalPos + kbVec3( 0.0f, 0.0f, 8.25f );
 };
 
 
@@ -84,7 +87,6 @@ class KungFuLevelComponent : public CannonLevelComponent {
 
 //-------------------------------------------------------------------------------------------------------------------------------------------------------------
 public:
-
 
 	void										SpawnEnemy( const bool bSpawnLeft, const int waveSize );
 	class KungFuSheepComponent *				SpawnSheep();

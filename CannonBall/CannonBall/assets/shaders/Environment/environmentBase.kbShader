@@ -6,9 +6,9 @@
 cbuffer matrixBuffer {
 	matrix modelMatrix;
 	matrix mvpMatrix;
-	float4 cameraPos;
 	float4 uvScale = (1,1,1,1);
 	float4 clipMask = (1,0,0,0);
+	float4 colorFactor = (1,1,1,1);
 };
 
 kbShaderState {
@@ -94,7 +94,8 @@ Texture2D clipMap(white)			: register(t4);
 	const float clipMask = clipMap.Sample( diffuseSampler, input.uv ).r;
 	clip( clipMask - 0.001f );
 
-	output.Color = diffuse.Sample( diffuseSampler, input.uv );
+	output.Color = diffuse.Sample( diffuseSampler, input.uv ) * colorFactor.xyzw;
+	output.Color.xyz *= colorFactor.www;
 	output.Color.w = emissive.z;
 
 	output.Depth.r = input.position2.x / input.position2.y;

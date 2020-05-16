@@ -183,13 +183,13 @@ float4 pixelShader( pixelInput input ) : SV_TARGET {
 	}
 
 	float diffuse = saturate( dot( normal.xyz, lightDirection.xyz ) ) * shadowFactor;
-	diffuse = diffuse * 0.8f + 0.2f;	
 
 	float3 lightReflect = ( 2.0f * dot( normal.xyz, lightDirection.xyz ) * normal.xyz ) - lightDirection.xyz;
 	float spec = saturate( dot( lightReflect, toCameraVec ) ) * shadowFactor;
 	float3 rimLight = 0;
 
 	if ( normal.w > 0.51f ) {
+	diffuse = saturate( dot( normal.xyz, lightDirection.xyz ) );
 		diffuse = smoothstep( diffuseColorBand.x, diffuseColorBand.y, diffuse ) * diffuseColorBand.z + diffuseColorBand.w;
 
 		const float oneMinusRimDot = 1.0f - dot( normal.xyz, toCameraVec );

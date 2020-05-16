@@ -1,4 +1,4 @@
-kbGameEntity 2030669058 1325317939 984209324 1696830306 {
+kbGameEntity 2149965518 1286555462 2362291388 958893696 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
@@ -10,8 +10,8 @@ kbGameEntity 2030669058 1325317939 984209324 1696830306 {
 	kbEditorLevelSettingsComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		MainCameraPosition = 57.959412 -46.473953 -237.952606
-		MainCameraRotation = 0.107472 0.728758 -0.117604 -0.665982
+		MainCameraPosition = 68.069435 -51.028023 -294.370636
+		MainCameraRotation = -0.045153 0.822460 0.065939 -0.563182
 	}
 }
 kbGameEntity 537364968 1092523782 2953639826 2626478307 {
@@ -90,7 +90,7 @@ kbGameEntity 1671951467 1280881932 1698058926 3039328037 {
 		LifeTime =  -1.000000
 		Name = "3000 Ton"
 		Orientation = 0.000000 1.000000 0.000000 0.000000
-		Position = 76.992683 -52.599991 -227.628464
+		Position = 76.992683 -52.599991 -277.628479
 		Scale = 25.000000 25.000000 25.000000
 	}
 	kbSkeletalModelComponent { 
@@ -337,7 +337,7 @@ kbGameEntity 2834549981 1318015840 1209716610 144016064 {
 		LifeTime =  -1.000000
 		Name = "3000 Ton Smash Snolaf Pos"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
-		Position = 76.992683 -52.626686 -235.728653
+		Position = 76.992683 -52.626686 -285.728638
 		Scale = 1.000000 1.000000 1.000000
 	}
 }
@@ -2546,179 +2546,6 @@ kbGameEntity 1792756094 1339018376 1629935014 1681887078 {
 		Model = .\assets\models\environment\platforms\bridge_wooden_1.fbx
 	}
 }
-kbGameEntity 2451017232 1334201149 744927158 3925545539 {
-	kbTransformComponent { 
-		Enabled = 0
-		LifeTime =  -1.000000
-		Name = "Bridge Decal"
-		Orientation = 0.408241 0.577358 0.408245 -0.577350
-		Position = 76.922363 -52.571632 -243.064667
-		Scale = 150.000000 175.000000 125.000000
-	}
-	kbStaticModelComponent { 
-		Enabled = 0
-		LifeTime =  -1.000000
-		CastsShadow = 0
-		Materials = 1
-			kbMaterialComponent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				CullModeOverride = ShaderDefault
-				Shader = .\assets\shaders\fx\decal_blend.kbshader
-				ShaderParams = 4
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "cameraPosition"
-						Texture = NULL
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "colorMultiplier"
-						Texture = NULL
-						Vector = 1.000000 1.000000 1.000000 1.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "clipData"
-						Texture = NULL
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "ProjectionTex"
-						Texture = .\assets\models\environment\platforms\bridge_decal.tif
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-			}
-		RenderOrderBias =  0.000000
-		RenderPass = Post-LightingPass
-		Model = ..\..\kbengine\assets\models\unitcube.ms3d
-	}
-}
-kbGameEntity 3733824195 1207903711 1401863562 1523924579 {
-	kbTransformComponent { 
-		Enabled = 0
-		LifeTime =  -1.000000
-		Name = "Bridge Explosion FX"
-		Orientation = 0.000000 0.000000 0.000000 1.000000
-		Position = 76.922363 -52.571632 -243.064667
-		Scale = 1.000000 1.000000 1.000000
-	}
-	kbParticleComponent { 
-		Enabled = 0
-		LifeTime =  -1.000000
-		Name = ""
-		Orientation = 0.000000 0.000000 0.000000 1.000000
-		Position = 0.000000 0.000000 0.000000
-		Scale = 1.000000 1.000000 1.000000
-		AlphaOverLife = 0
-		ColorOverLife = 0
-		DebugPlayEntity = 0
-		EndColor = 0.500000 0.500000 0.500000 1.000000
-		Gravity = 0.000000 -15.000000 0.000000
-		MaterialList = 1
-			kbMaterialComponent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				CullModeOverride = ShaderDefault
-				Shader = .\assets\shaders\fx\particle_blendadd.kbshader
-				ShaderParams = 2
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "colorMultplier"
-						Texture = NULL
-						Vector = 1.000000 1.000000 1.000000 1.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "shaderTexture"
-						Texture = .\assets\fx\wood\wood_splinter.tif
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-			}
-		MaxBurstCount = 45
-		MaxDuration =  3.000000
-		MaxEndRotationRate =  10.000000
-		MaxEndSize = 0.500000 0.500000 0.500000
-		MaxEndVelocity = 0.000000 0.000000 0.000000
-		MaxParticlesToEmit = -1
-		MaxSpawnRate =  0.000000
-		MaxStart3DOffset = 0.000000 0.000000 0.000000
-		MaxStart3DRotation = 0.000000 0.000000 0.000000
-		MaxStartRotationRate =  10.000000
-		MaxStartSize = 0.500000 0.500000 0.500000
-		MaxStartVelocity = 5.000000 10.000000 5.000000
-		MinBurstCount = 35
-		MinDuration =  2.000000
-		MinEndRotationRate =  -10.000000
-		MinEndSize = 0.500000 0.500000 0.500000
-		MinEndVelocity = 0.000000 0.000000 0.000000
-		MinSpawnRate =  0.000000
-		MinStart3DOffset = 0.000000 0.000000 0.000000
-		MinStart3DRotation = 0.000000 0.000000 0.000000
-		MinStartRotationRate =  -10.000000
-		MinStartSize = 0.100000 0.100000 0.100000
-		MinStartVelocity = -5.000000 10.000000 -5.000000
-		ModelEmitter = 0
-		ParticleBillboardType = FaceCamera
-		RenderOrderBias =  0.000000
-		RotationOverLife = 0
-		SizeOverLife = 1
-			kbVectorAnimEvent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				EventName = ""
-				EventTime =  0.000000
-				EventValue = 1.000000 1.000000 1.000000 1.000000
-			}
-		StartColor = 0.500000 0.500000 0.500000 1.000000
-		StartDelay =  0.000000
-		TotalDuration =  3.000000
-		VelocityCurve = 5
-			kbAnimEvent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				EventName = ""
-				EventTime =  0.050000
-				EventValue =  3.500000
-			}
-			kbAnimEvent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				EventName = ""
-				EventTime =  0.060000
-				EventValue =  2.500000
-			}
-			kbAnimEvent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				EventName = ""
-				EventTime =  0.070000
-				EventValue =  1.800000
-			}
-			kbAnimEvent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				EventName = ""
-				EventTime =  0.100000
-				EventValue =  1.000000
-			}
-			kbAnimEvent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				EventName = ""
-				EventTime =  1.000000
-				EventValue =  1.000000
-			}
-	}
-}
 kbGameEntity 1745036657 1226122723 137629842 2847967967 {
 	kbTransformComponent { 
 		Enabled = 0
@@ -3261,109 +3088,6 @@ kbGameEntity 3554502441 1319981874 1829677244 41520799 {
 		Model = ..\..\kbengine\assets\models\unitquad.ms3d
 	}
 }
-kbGameEntity 2973205035 1214702110 2483726497 3560554174 {
-	kbTransformComponent { 
-		Enabled = 0
-		LifeTime =  -1.000000
-		Name = "Fog Sheet - Big Island Height 1"
-		Orientation = 0.000000 -0.644218 0.000000 0.764842
-		Position = 89.000000 -50.199997 -418.000000
-		Scale = 2500.000000 2700.000000 2500.000000
-	}
-	kbStaticModelComponent { 
-		Enabled = 1
-		LifeTime =  -1.000000
-		CastsShadow = 0
-		Materials = 1
-			kbMaterialComponent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				CullModeOverride = ShaderDefault
-				Shader = .\assets\shaders\environment\depthfogsheet.kbshader
-				ShaderParams = 11
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "cameraPosition"
-						Texture = NULL
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "noise1Color"
-						Texture = NULL
-						Vector = 0.992157 0.878431 0.866667 0.400000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "noise2Color"
-						Texture = NULL
-						Vector = 0.992157 0.878431 0.866667 0.400000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "noiseScroll"
-						Texture = NULL
-						Vector = 0.000000 0.060000 0.000000 0.080000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "noiseTile"
-						Texture = NULL
-						Vector = 0.000000 1.000000 1.000000 1.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "smoothStepsAndAlphaPower"
-						Texture = NULL
-						Vector = 0.000000 0.000000 2.000000 0.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "fadeParams"
-						Texture = NULL
-						Vector = 7.000000 3.000000 -76.175102 5.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "shapeMaskParams"
-						Texture = NULL
-						Vector = 1.300000 1.000000 1.000000 1.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "noiseTexture1"
-						Texture = .\assets\fx\noise\painterlynoise_1.tif
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "noiseTexture2"
-						Texture = .\assets\fx\noise\painterlynoise_1.tif
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "shapeMaskTexture"
-						Texture = .\assets\fx\masks\smokemask_1.tif
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-			}
-		RenderOrderBias =  0.000000
-		RenderPass = LightingPass
-		Model = ..\..\kbengine\assets\models\unitquad.ms3d
-	}
-}
 kbGameEntity 842322628 1166718604 4246679719 1807347399 {
 	kbTransformComponent { 
 		Enabled = 0
@@ -3570,14 +3294,14 @@ kbGameEntity 3309618454 1175489951 3965978518 1586159113 {
 		Model = ..\..\kbengine\assets\models\unitquad.ms3d
 	}
 }
-kbGameEntity 3622367683 1248508719 3458130618 1604224344 {
+kbGameEntity 2973205035 1214702110 2483726497 3560554174 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		Name = "Fog Sheet - Bridge 1"
-		Orientation = 0.000000 -0.717356 0.000000 0.696707
-		Position = 73.700005 -46.000000 -358.000000
-		Scale = 2000.000000 2000.000000 2000.000000
+		Name = "Fog Sheet - Big Island Height 1"
+		Orientation = 0.000000 -0.644218 0.000000 0.764842
+		Position = 89.000000 -50.199997 -418.000000
+		Scale = 2500.000000 2700.000000 2500.000000
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -3784,6 +3508,109 @@ kbGameEntity 2417037936 1305581954 2547979919 2616838157 {
 		Orientation = 0.000000 -0.717356 0.000000 0.696707
 		Position = 75.700005 -53.000000 -279.000000
 		Scale = 1000.000000 1000.000000 1000.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		Materials = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\environment\depthfogsheet.kbshader
+				ShaderParams = 11
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "cameraPosition"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "noise1Color"
+						Texture = NULL
+						Vector = 0.992157 0.878431 0.866667 0.400000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "noise2Color"
+						Texture = NULL
+						Vector = 0.992157 0.878431 0.866667 0.400000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "noiseScroll"
+						Texture = NULL
+						Vector = 0.000000 0.060000 0.000000 0.080000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "noiseTile"
+						Texture = NULL
+						Vector = 0.000000 1.000000 1.000000 1.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "smoothStepsAndAlphaPower"
+						Texture = NULL
+						Vector = 0.000000 0.000000 2.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "fadeParams"
+						Texture = NULL
+						Vector = 7.000000 3.000000 -76.175102 5.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "shapeMaskParams"
+						Texture = NULL
+						Vector = 1.300000 1.000000 1.000000 1.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "noiseTexture1"
+						Texture = .\assets\fx\noise\painterlynoise_1.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "noiseTexture2"
+						Texture = .\assets\fx\noise\painterlynoise_1.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "shapeMaskTexture"
+						Texture = .\assets\fx\masks\smokemask_1.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		RenderOrderBias =  0.000000
+		RenderPass = LightingPass
+		Model = ..\..\kbengine\assets\models\unitquad.ms3d
+	}
+}
+kbGameEntity 3622367683 1248508719 3458130618 1604224344 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Fog Sheet - Bridge 1"
+		Orientation = 0.000000 -0.717356 0.000000 0.696707
+		Position = 73.700005 -46.000000 -358.000000
+		Scale = 2000.000000 2000.000000 2000.000000
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -5959,7 +5786,7 @@ kbGameEntity 191628142 1164611098 2253314479 1292534890 {
 		LifeTime =  -1.000000
 		Name = "Fox"
 		Orientation = 0.000000 -1.000000 0.000000 0.000000
-		Position = 76.992683 -52.599991 -233.828537
+		Position = 76.992683 -52.599991 -278.628601
 		Scale = 0.750000 0.750000 0.750000
 	}
 	kbSkeletalModelComponent { 
@@ -6611,13 +6438,196 @@ kbGameEntity 968885140 1085284001 2323485569 3680011406 {
 			}
 	}
 }
+kbGameEntity 3712403711 1291694251 368117930 4217184777 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "New End Marker"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 77.104469 -52.636200 -297.951843
+		Scale = 1.000000 1.000000 1.000000
+	}
+}
+kbGameEntity 2451017232 1334201149 744927158 3925545539 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Outro - Bridge Decal"
+		Orientation = 0.408241 0.577358 0.408245 -0.577350
+		Position = 76.922363 -52.571632 -287.464752
+		Scale = 150.000000 175.000000 125.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		Materials = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\fx\decal_blend.kbshader
+				ShaderParams = 4
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "cameraPosition"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorMultiplier"
+						Texture = NULL
+						Vector = 1.000000 1.000000 1.000000 1.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "clipData"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "ProjectionTex"
+						Texture = .\assets\models\environment\platforms\bridge_decal.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		RenderOrderBias =  0.000000
+		RenderPass = Post-LightingPass
+		Model = ..\..\kbengine\assets\models\unitcube.ms3d
+	}
+}
+kbGameEntity 3733824195 1207903711 1401863562 1523924579 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Outro - Bridge Explosion FX"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 76.922363 -52.571632 -287.464752
+		Scale = 1.000000 1.000000 1.000000
+	}
+	kbParticleComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = ""
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 0.000000 0.000000 0.000000
+		Scale = 1.000000 1.000000 1.000000
+		AlphaOverLife = 0
+		ColorOverLife = 0
+		DebugPlayEntity = 0
+		EndColor = 0.500000 0.500000 0.500000 1.000000
+		Gravity = 0.000000 -15.000000 0.000000
+		MaterialList = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\fx\particle_blendadd.kbshader
+				ShaderParams = 2
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorMultplier"
+						Texture = NULL
+						Vector = 1.000000 1.000000 1.000000 1.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "shaderTexture"
+						Texture = .\assets\fx\wood\wood_splinter.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		MaxBurstCount = 45
+		MaxDuration =  3.000000
+		MaxEndRotationRate =  10.000000
+		MaxEndSize = 0.500000 0.500000 0.500000
+		MaxEndVelocity = 0.000000 0.000000 0.000000
+		MaxParticlesToEmit = -1
+		MaxSpawnRate =  0.000000
+		MaxStart3DOffset = 0.000000 0.000000 0.000000
+		MaxStart3DRotation = 0.000000 0.000000 0.000000
+		MaxStartRotationRate =  10.000000
+		MaxStartSize = 0.500000 0.500000 0.500000
+		MaxStartVelocity = 5.000000 10.000000 5.000000
+		MinBurstCount = 35
+		MinDuration =  2.000000
+		MinEndRotationRate =  -10.000000
+		MinEndSize = 0.500000 0.500000 0.500000
+		MinEndVelocity = 0.000000 0.000000 0.000000
+		MinSpawnRate =  0.000000
+		MinStart3DOffset = 0.000000 0.000000 0.000000
+		MinStart3DRotation = 0.000000 0.000000 0.000000
+		MinStartRotationRate =  -10.000000
+		MinStartSize = 0.100000 0.100000 0.100000
+		MinStartVelocity = -5.000000 10.000000 -5.000000
+		ModelEmitter = 0
+		ParticleBillboardType = FaceCamera
+		RenderOrderBias =  0.000000
+		RotationOverLife = 0
+		SizeOverLife = 1
+			kbVectorAnimEvent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				EventName = ""
+				EventTime =  0.000000
+				EventValue = 1.000000 1.000000 1.000000 1.000000
+			}
+		StartColor = 0.500000 0.500000 0.500000 1.000000
+		StartDelay =  0.000000
+		TotalDuration =  3.000000
+		VelocityCurve = 5
+			kbAnimEvent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				EventName = ""
+				EventTime =  0.050000
+				EventValue =  3.500000
+			}
+			kbAnimEvent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				EventName = ""
+				EventTime =  0.060000
+				EventValue =  2.500000
+			}
+			kbAnimEvent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				EventName = ""
+				EventTime =  0.070000
+				EventValue =  1.800000
+			}
+			kbAnimEvent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				EventName = ""
+				EventTime =  0.100000
+				EventValue =  1.000000
+			}
+			kbAnimEvent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				EventName = ""
+				EventTime =  1.000000
+				EventValue =  1.000000
+			}
+	}
+}
 kbGameEntity 3622350630 1299414661 2143524754 2655535189 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		Name = "Outro Camera 1"
+		Name = "Outro - Camera 1"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
-		Position = 76.992683 -52.599991 -237.628464
+		Position = 76.992683 -52.599991 -282.628479
 		Scale = 25.000000 25.000000 25.000000
 	}
 	kbSkeletalModelComponent { 
@@ -6877,6 +6887,136 @@ kbGameEntity 3622350630 1299414661 2143524754 2655535189 {
 		StartDelay =  0.000000
 		TotalDuration =  -1.000000
 		VelocityCurve = 0
+	}
+}
+kbGameEntity 1235986948 1232903237 4084947108 3961454180 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Outro - Present_1"
+		Orientation = 0.000000 -0.585097 0.000000 0.810963
+		Position = 77.167183 -51.945030 -279.640228
+		Scale = 45.000000 45.000000 45.000000
+	}
+	kbFlingPhysicsComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Gravity = 1.000000 2.000000 1.000000
+		MaxAngularSpeed =  15.000000
+		MaxLinearVelocity = 1.000000 2.000000 1.000000
+		MinAngularSpeed =  10.000000
+		MinLinearVelocity = -1.000000 1.000000 -1.000000
+	}
+	kbSkeletalModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		Materials = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\environment\environmentskinned.kbshader
+				ShaderParams = 4
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "diffuse"
+						Texture = .\assets\models\props\presents\present_1.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "normal"
+						Texture = ..\..\kbengine\assets\textures\defaultnormal.bmp
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "propertyMap"
+						Texture = ..\..\kbengine\assets\textures\white.bmp
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "emissiveMap"
+						Texture = ..\..\kbengine\assets\textures\white.bmp
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		RenderOrderBias =  0.000000
+		RenderPass = LightingPass
+		Animations = 0
+		DebugAnimIndex = -1
+		Model = .\assets\models\props\presents\present.ms3d
+	}
+}
+kbGameEntity 2173328964 1105303046 1808318377 1249498279 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Outro - Present_2"
+		Orientation = 0.000000 -0.585097 0.000000 0.810963
+		Position = 77.167183 -51.945030 -282.140381
+		Scale = 45.000000 45.000000 45.000000
+	}
+	kbFlingPhysicsComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Gravity = 1.000000 2.000000 1.000000
+		MaxAngularSpeed =  15.000000
+		MaxLinearVelocity = 1.000000 2.000000 1.000000
+		MinAngularSpeed =  10.000000
+		MinLinearVelocity = -1.000000 1.000000 1.000000
+	}
+	kbSkeletalModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		Materials = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\environment\environmentskinned.kbshader
+				ShaderParams = 4
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "diffuse"
+						Texture = .\assets\models\props\presents\present_1.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "normal"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "propertyMap"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "emissiveMap"
+						Texture = ..\..\kbengine\assets\textures\white.bmp
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		RenderOrderBias =  0.000000
+		RenderPass = LightingPass
+		Animations = 0
+		DebugAnimIndex = -1
+		Model = .\assets\models\props\presents\present.ms3d
 	}
 }
 kbGameEntity 3694840569 1275494847 809542060 2421163822 {
@@ -7628,136 +7768,6 @@ kbGameEntity 3694840569 1275494847 809542060 2421163822 {
 			}
 	}
 }
-kbGameEntity 1235986948 1232903237 4084947108 3961454180 {
-	kbTransformComponent { 
-		Enabled = 0
-		LifeTime =  -1.000000
-		Name = "Present_1"
-		Orientation = 0.000000 -0.585097 0.000000 0.810963
-		Position = 77.167183 -51.945030 -234.840240
-		Scale = 45.000000 45.000000 45.000000
-	}
-	kbFlingPhysicsComponent { 
-		Enabled = 0
-		LifeTime =  -1.000000
-		Gravity = 1.000000 2.000000 1.000000
-		MaxAngularSpeed =  15.000000
-		MaxLinearVelocity = 1.000000 2.000000 1.000000
-		MinAngularSpeed =  10.000000
-		MinLinearVelocity = -1.000000 1.000000 -1.000000
-	}
-	kbSkeletalModelComponent { 
-		Enabled = 1
-		LifeTime =  -1.000000
-		CastsShadow = 0
-		Materials = 1
-			kbMaterialComponent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				CullModeOverride = ShaderDefault
-				Shader = .\assets\shaders\environment\environmentskinned.kbshader
-				ShaderParams = 4
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "diffuse"
-						Texture = .\assets\models\props\presents\present_1.jpg
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "normal"
-						Texture = ..\..\kbengine\assets\textures\defaultnormal.bmp
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "propertyMap"
-						Texture = ..\..\kbengine\assets\textures\white.bmp
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "emissiveMap"
-						Texture = ..\..\kbengine\assets\textures\white.bmp
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-			}
-		RenderOrderBias =  0.000000
-		RenderPass = LightingPass
-		Animations = 0
-		DebugAnimIndex = -1
-		Model = .\assets\models\props\presents\present.ms3d
-	}
-}
-kbGameEntity 2173328964 1105303046 1808318377 1249498279 {
-	kbTransformComponent { 
-		Enabled = 0
-		LifeTime =  -1.000000
-		Name = "Present_2"
-		Orientation = 0.000000 -0.585097 0.000000 0.810963
-		Position = 77.167183 -51.945030 -237.240387
-		Scale = 45.000000 45.000000 45.000000
-	}
-	kbFlingPhysicsComponent { 
-		Enabled = 0
-		LifeTime =  -1.000000
-		Gravity = 1.000000 2.000000 1.000000
-		MaxAngularSpeed =  15.000000
-		MaxLinearVelocity = 1.000000 2.000000 1.000000
-		MinAngularSpeed =  10.000000
-		MinLinearVelocity = -1.000000 1.000000 1.000000
-	}
-	kbSkeletalModelComponent { 
-		Enabled = 1
-		LifeTime =  -1.000000
-		CastsShadow = 0
-		Materials = 1
-			kbMaterialComponent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				CullModeOverride = ShaderDefault
-				Shader = .\assets\shaders\environment\environmentskinned.kbshader
-				ShaderParams = 4
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "diffuse"
-						Texture = .\assets\models\props\presents\present_1.jpg
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "normal"
-						Texture = NULL
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "propertyMap"
-						Texture = NULL
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "emissiveMap"
-						Texture = ..\..\kbengine\assets\textures\white.bmp
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-			}
-		RenderOrderBias =  0.000000
-		RenderPass = LightingPass
-		Animations = 0
-		DebugAnimIndex = -1
-		Model = .\assets\models\props\presents\present.ms3d
-	}
-}
 kbGameEntity 2029969210 1301275982 4090249868 2310134928 {
 	kbTransformComponent { 
 		Enabled = 0
@@ -7838,7 +7848,7 @@ kbGameEntity 1976988906 1203222253 3781998738 4272724285 {
 						LifeTime =  -1.000000
 						ParamName = "diffuseColorBand"
 						Texture = NULL
-						Vector = 0.001000 0.370000 0.500000 0.500000
+						Vector = 0.001000 0.370000 0.200000 0.800000
 					}
 					kbShaderParamComponent { 
 						Enabled = 0

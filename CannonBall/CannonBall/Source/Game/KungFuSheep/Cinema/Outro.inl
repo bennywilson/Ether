@@ -32,9 +32,12 @@ public:
 	KungFuSnolafComponent * m_pLastSnolaf;
 	float m_StateStartTime;
 
+	float m_MusicStartTime;
+
 	KungFuGame_OutroState( KungFuLevelComponent *const pLevelComponent ) : KungFuGame_BaseState( pLevelComponent ) {
 		m_pSnolafGuards[0] = m_pSnolafGuards[1] = nullptr;
 		m_pLastSnolaf = nullptr;
+		m_MusicStartTime = 0.0f;
 	}
 
 	void ChangeState( const eOutroState_States newState ) {
@@ -92,12 +95,9 @@ public:
 	}
 
 	virtual void BeginState_Internal( KungFuGame::eKungFuGame_State previousState ) override {
-		
-		static kbString sOutroCam1( "Outro Camera 1" );
-		static kbString sCry( "Cry" );
 
-		KungFuLevelComponent::Get()->SetPlayLevelMusic( 1, false );
-		KungFuLevelComponent::Get()->SetPlayLevelMusic( 1, true );
+		static kbString sOutroCam1( "Outro - Camera 1" );
+		static kbString sCry( "Cry" );
 
 		for ( int i = 0; i < g_pCannonGame->GetGameEntities().size(); i++ ) {
 
@@ -141,7 +141,7 @@ public:
 		m_pSnolafGuards[1]->PlayAnimation( sOfferPresent_1, 0.0f );
 
 		auto p3000Ton = KungFuLevelComponent::Get()->Get3000Ton();
-		p3000Ton->SetOwnerPosition( KungFuGame::kTreyTonStartPos );
+		p3000Ton->SetOwnerPosition( KungFuGame::kTreyTonOffScreenPos );
 
 		auto p3000TonSkel = p3000Ton->GetComponent<kbSkeletalModelComponent>();
 		p3000TonSkel->RegisterAnimEventListener( this );
@@ -171,6 +171,8 @@ public:
 		m_pLastSnolaf = KungFuLevelComponent::Get()->GetSnolafFromPool();
 		m_pLastSnolaf->GetComponent<kbSkeletalModelComponent>()->RegisterAnimEventListener( this );
 		m_pLastSnolaf->GetComponent<KungFuSnolafComponent>()->RequestStateChange( KungFuSnolafState::Cinema );
+
+		m_MusicStartTime = g_GlobalTimer.TimeElapsedSeconds() + 0.75f;
 	}
 
 	virtual void UpdateState_Internal() override {
@@ -181,6 +183,11 @@ public:
 			}
 		}
 
+		if ( m_MusicStartTime > 0 && g_GlobalTimer.TimeElapsedSeconds() > m_MusicStartTime ) {
+			m_MusicStartTime = -1.0f;
+			KungFuLevelComponent::Get()->SetPlayLevelMusic( 1, false );
+			KungFuLevelComponent::Get()->SetPlayLevelMusic( 1, true );
+		}
 		static const kbString sPounce_1( "Pounce_1" );
 		static const kbString sPounce_2( "Pounce_2" );
 		static const kbString sFoxStare( "Stare" );
@@ -192,7 +199,7 @@ public:
 		auto pCamera = g_pCannonGame->GetMainCamera();
 		auto pFox = KungFuLevelComponent::Get()->GetFox()->GetComponent<CannonActorComponent>();
 
-		const float SheepPullUpZ = KungFuGame::kOutroStartZ + 7.0f;
+		const float SheepPullUpZ = KungFuGame::kOutroStartZ + 8.8f;
 
 		switch( m_State ) {
 
@@ -214,6 +221,7 @@ public:
 
 				if ( GetStateTime() > 1.25f ) {
 					ChangeState( TreyTonPounce );
+					p3000Ton->SetOwnerPosition( KungFuGame::kTreyTonJump1StartPos );
 					p3000Ton->PlayAnimation( sPounce_1, -1.0f );
 				}
 
@@ -245,7 +253,7 @@ public:
 				const float DisplayTitleTime = 0.5f;
 				const float HideTitleTime = 3.5f;
 				const float ZoomOutSpeed = 3.0f;
-				const kbVec3 TreyTonLandSpot( 76.992683f, -52.626686f, -235.728653f );
+				static const kbString sOutroCam1("Outro - Camera 1");
 
 				if ( GetStateTime() > DisplayTitleTime ) {
 					if ( m_p3000TonTitleEntity.GetEntity() != nullptr ) {
@@ -260,7 +268,7 @@ public:
 					pCamera->SetLookAtOffset( kbVec3( 0.000000f, 2.500000f, 0.000000f ), ZoomOutSpeed );
 					pCamera->SetPositionOffset( kbVec3( -10.933998f, 3.224068f, 0.000000f ), ZoomOutSpeed );
 
-					kbGameEntityPtr pOutroCamEnt = g_pGame->GetEntityByName( kbString( "Outro Camera 1" ) );
+					kbGameEntityPtr pOutroCamEnt = g_pGame->GetEntityByName( sOutroCam1 );
 					if ( pOutroCamEnt.GetEntity() != nullptr ) {
 						pCamera->SetTarget( pOutroCamEnt.GetEntity(), ZoomOutSpeed );
 					}
@@ -270,7 +278,7 @@ public:
 						m_p3000TonTitleEntity.GetEntity()->GetComponent<kbUIWidgetComponent>()->Enable( false );
 					}
 
-					p3000Ton->SetOwnerPosition( TreyTonLandSpot );
+					p3000Ton->SetOwnerPosition( KungFuGame::kTreyTonJump2StartPos );
 					p3000Ton->PlayAnimation( kbString( "KaratePose" ), 0.0f );
 
 					ChangeState( TreyTonPounce2 );
@@ -300,7 +308,7 @@ public:
 
 			case SheepDodge: {
 				const float sheepHopRate = 4.0f;
-				const float sheepTargetZ = -241.8f;
+				const float sheepTargetZ = -286.2f;
 				 
 				if ( GetStateTime() > 0.5f ) {
 					kbVec3 sheepPos = pSheep->GetOwnerPosition();
@@ -374,7 +382,7 @@ public:
 
 				if ( GetStateTime() > 1.0f ) {
 
-					m_pLastSnolaf->SetOwnerPosition( kbVec3( 76.99268f, -52.6362f, -223.046f ) );	// Spawn Snolaf offscreen
+					m_pLastSnolaf->SetOwnerPosition( KungFuGame::kFinalSnolafEntryPos + kbVec3( 0.0f, 0.0f, 2.0f ) );	// Spawn Snolaf offscreen
 					m_pLastSnolaf->RequestStateChange( KungFuSnolafState::Cinema );
 					m_pLastSnolaf->SetTargetFacingDirection( kbVec3( 0.0f, 0.0f, 1.0f ) );
 					m_pLastSnolaf->PlayAnimation( kbString( "Reenter" ), 0.0f );
@@ -403,7 +411,7 @@ public:
 				} else {
 					// Move Snolaf to edge of screen
 					if ( GetStateTime() > 0.5f ) {
-						m_pLastSnolaf->SetOwnerPosition( kbVec3( 76.99268f, -52.6362f, -228.25f ) );
+						m_pLastSnolaf->SetOwnerPosition( KungFuGame::kFinalSnolafEntryPos );
 					}
 				}
 				break;
@@ -476,10 +484,8 @@ public:
 			}
 
 			case Painted_Title : {
-				if ( GetStateTime() > 1.0f ) {
-					if ( m_pTitle.GetEntity() != nullptr ) {
-						m_pTitle.GetEntity()->GetComponent<kbUIWidgetComponent>()->Enable( true );
-					}
+				if ( GetStateTime() > 1.0f && m_pTitle.GetEntity() != nullptr ) {
+					m_pTitle.GetEntity()->GetComponent<kbUIWidgetComponent>()->Enable( true );
 				}
 				break;
 			}

@@ -214,14 +214,14 @@
     <ClCompile Include="Source\Game\KungFuSheep\KungFuSnolaf.cpp">
       <Filter>Source\Game\KungFuSheep</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Game\KungFuSheep\KungFuLevelComponent.cpp">
-      <Filter>Source\Game\KungFuSheep</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Game\UI\CannonUI.cpp">
       <Filter>Source\Game\UI</Filter>
     </ClCompile>
     <ClCompile Include="Source\Game\CapOnIt\CapOnItLevelComponent.cpp">
       <Filter>Source\Game\CapOnIt</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Game\KungFuSheep\KungFuLevelComponent.cpp">
+      <Filter>Source\Game\KungFuSheep</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

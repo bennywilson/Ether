@@ -1,0 +1,93 @@
+//===================================================================================================
+// basicGlow.kbShader
+//
+//
+// 2020 kbEngine 2.0
+//===================================================================================================
+cbuffer matrixBuffer {
+	matrix modelMatrix;
+	matrix modelViewMatrix;
+	matrix viewMatrix;
+	matrix mvpMatrix;
+	matrix projection;
+	matrix inverseViewProjection;
+	matrix viewProjection;
+	float4 fadeParams;										// x - fade dist, y - rand seed, z - clip plane height, w - clip plane fade distance
+	float4 colorTint = (1,1,1,1);
+};
+
+kbShaderState {
+	srcBlend Blend_One
+	dstBlend Blend_One
+	blendOp BlendOp_Add
+
+	colorWriteEnable ColorWriteEnable_rgb
+}
+
+//-------------------------------------
+struct vertexInput {
+	float4 position      : POSITION;
+	float2 uv            : TEXCOORD0;
+	float4 color         : COLOR;
+	float4 normal        : NORMAL;
+	float4 tangent       : TANGENT;
+};
+
+//-------------------------------------
+struct pixelInput {
+	float4 position      : SV_POSITION;
+	float2 uv            : TEXCOORD0;
+	float4 color         : COLOR;
+	float4 position2     : TEXCOORD1;
+	float3 normal        : TEXCOORD2;
+	float4 worldPos : TEXCOORD3;
+};
+
+//-------------------------------------
+struct PS_OUTPUT {
+	float4 Color         : SV_TARGET0;
+};
+
+/**
+ *	vertexShader
+ */
+pixelInput vertexShader( vertexInput input ) {
+	pixelInput output = (pixelInput)(0);
+
+	output.position = mul( input.position, mvpMatrix );
+	output.worldPos = mul( input.position, modelMatrix );
+	output.uv = input.uv;
+	output.color = input.color;
+	output.position2 = output.position;
+	output.normal.xyz = mul( ( input.normal.xyz * 2.0f ) - 1.0f, (float3x3)modelMatrix );
+
+	return output;
+}
+
+/**
+ *	pixelShader
+ */
+Texture2D shaderTexture							: register(t0);
+SamplerState SampleType;
+
+SamplerState DepthSamplerState;
+Texture2D depthTexture(depthBuffer)				: register(t1);
+
+float4 pixelShader( pixelInput	input ) : SV_TARGET {
+   float4 outColor = shaderTexture.Sample( SampleType, input.uv );
+
+   
+	float4 screenCoord = input.position2 / input.position2.w;
+	float2 screenUV = screenCoord.xy * 0.5f + 0.5f;
+	screenUV.y = 1.0f - screenUV.y;
+
+	float4 worldPos = float4( screenCoord.xy, depthTexture.Sample( DepthSamplerState, screenUV ).r, 1 );
+	worldPos = mul( worldPos, inverseViewProjection );
+	worldPos /= worldPos.w;
+	
+	// Soft fade against depth buffer
+	float fadeDist = length( worldPos - input.worldPos );
+	fadeDist = saturate( fadeDist / fadeParams.x );
+
+   return outColor * fadeDist * colorTint;
+}
