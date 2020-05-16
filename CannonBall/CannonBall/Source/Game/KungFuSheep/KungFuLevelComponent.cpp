@@ -682,6 +682,19 @@ void KungFuLevelComponent::Update_Internal( const float DeltaTime ) {
 		g_pRenderer->SetGlobalShaderParam(shaderParam);
 	}
 
+	{
+		float sunIntensity = 0.0f;
+		float travelDist = GetPlayerTravelDistance();
+		float startBlendInDist = 30.0f;
+		sunIntensity = kbSaturate( ( GetPlayerTravelDistance() - startBlendInDist ) / 75.0f );
+
+		kbShaderParamOverrides_t shaderParam;
+		shaderParam.SetVec4( "globalSunFactor", kbVec4( sunIntensity, sunIntensity, sunIntensity, sunIntensity ) );
+		g_pRenderer->SetGlobalShaderParam( shaderParam );
+
+		// globalSunFactor
+	}
+
 	UpdateDebugAndCheats();
 }
 
