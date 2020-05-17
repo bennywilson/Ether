@@ -1,8 +1,8 @@
-kbGameEntity 2060475715 1340292377 638030508 3360100029 {
+kbGameEntity 941954376 1149964179 359595453 2866791702 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		Name = "Entity_252"
+		Name = "Entity_250"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
 		Position = 0.000000 0.000000 0.000000
 		Scale = 1.000000 1.000000 1.000000
@@ -11,7 +11,7 @@ kbGameEntity 2060475715 1340292377 638030508 3360100029 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		MainCameraPosition = 69.965424 -50.718254 -303.325684
-		MainCameraRotation = 0.049957 0.416584 -0.022936 -0.907434
+		MainCameraRotation = -0.184776 -0.671896 0.178739 0.694598
 	}
 }
 kbGameEntity 537364968 1092523782 2953639826 2626478307 {
@@ -6239,7 +6239,7 @@ kbGameEntity 1978605751 1112739685 1112578947 1060765009 {
 						Enabled = 0
 						LifeTime =  -1.000000
 						ParamName = "fillTexture_2"
-						Texture = .\assets\ui\healthbar_fill_red.jpg
+						Texture = .\assets\ui\healthbar_fill_red.tif
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 			}
