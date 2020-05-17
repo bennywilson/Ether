@@ -679,7 +679,7 @@ void KungFuLevelComponent::Update_Internal( const float DeltaTime ) {
 	{
 		kbShaderParamOverrides_t shaderParam;
 		shaderParam.SetVec4( "globalFogColor", kbVec4( 174.0f / 256.0f , 183.0f / 256.0f, 198.0f / 256.0f, 1.0f ) );
-		g_pRenderer->SetGlobalShaderParam(shaderParam);
+		g_pRenderer->SetGlobalShaderParam( shaderParam );
 	}
 
 	{

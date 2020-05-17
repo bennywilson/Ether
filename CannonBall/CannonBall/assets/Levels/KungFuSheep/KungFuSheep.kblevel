@@ -1,8 +1,8 @@
-kbGameEntity 2859949030 1254562875 3328969630 1641608012 {
+kbGameEntity 2060475715 1340292377 638030508 3360100029 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		Name = "Entity_248"
+		Name = "Entity_252"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
 		Position = 0.000000 0.000000 0.000000
 		Scale = 1.000000 1.000000 1.000000
@@ -10,8 +10,8 @@ kbGameEntity 2859949030 1254562875 3328969630 1641608012 {
 	kbEditorLevelSettingsComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		MainCameraPosition = 70.004860 -50.718254 -303.842712
-		MainCameraRotation = 0.138441 0.283309 -0.041371 -0.948081
+		MainCameraPosition = 69.965424 -50.718254 -303.325684
+		MainCameraRotation = 0.049957 0.416584 -0.022936 -0.907434
 	}
 }
 kbGameEntity 537364968 1092523782 2953639826 2626478307 {
@@ -6211,7 +6211,7 @@ kbGameEntity 1978605751 1112739685 1112578947 1060765009 {
 						Enabled = 0
 						LifeTime =  -1.000000
 						ParamName = "fillTexture_1"
-						Texture = .\assets\ui\healthbar_fill_blue.jpg
+						Texture = .\assets\ui\healthbar_fill_blue.tif
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 					kbShaderParamComponent { 
@@ -6219,7 +6219,7 @@ kbGameEntity 1978605751 1112739685 1112578947 1060765009 {
 						LifeTime =  -1.000000
 						ParamName = "healthBarBounds"
 						Texture = NULL
-						Vector = 0.310000 0.480000 0.810000 0.760000
+						Vector = 0.310000 0.400000 0.940000 0.900000
 					}
 					kbShaderParamComponent { 
 						Enabled = 0
