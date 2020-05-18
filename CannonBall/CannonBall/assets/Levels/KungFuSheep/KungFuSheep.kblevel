@@ -1,8 +1,8 @@
-kbGameEntity 941954376 1149964179 359595453 2866791702 {
+kbGameEntity 4106793626 1127416926 1231552918 2151252165 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		Name = "Entity_250"
+		Name = "Entity_248"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
 		Position = 0.000000 0.000000 0.000000
 		Scale = 1.000000 1.000000 1.000000
@@ -2670,8 +2670,8 @@ kbGameEntity 532414885 1151596207 2684383880 3979752438 {
 		LifeTime =  -1.000000
 		AuthoredHeight = 1530
 		AuthoredWidth = 2048
-		NormalizedAnchorPoint = 0.020000 0.180000 0.000000
-		UIToScreenSizeRatio = 0.060000 0.000000 0.000000
+		NormalizedAnchorPoint = 0.175000 0.863000 0.000000
+		UIToScreenSizeRatio = 0.046000 0.000000 0.000000
 		BoomRelativePosition = -0.300000 0.150000 0.000000
 		BoomRelativeSize = 2.000000 0.500000 0.250000
 		SmokeRelativePosition = -0.300000 -0.500000 0.000000
@@ -2695,7 +2695,7 @@ kbGameEntity 532414885 1151596207 2684383880 3979752438 {
 						LifeTime =  -1.000000
 						ParamName = "normalizedScreenSize_Anchor"
 						Texture = NULL
-						Vector = 0.060000 0.079687 0.050000 0.219844
+						Vector = 0.046000 0.061094 0.198000 0.893547
 					}
 					kbShaderParamComponent { 
 						Enabled = 0
@@ -2767,7 +2767,7 @@ kbGameEntity 532414885 1151596207 2684383880 3979752438 {
 						LifeTime =  -1.000000
 						ParamName = "normalizedScreenSize_Anchor"
 						Texture = NULL
-						Vector = 0.060000 0.079687 0.077000 0.191953
+						Vector = 0.046000 0.061094 0.218700 0.872164
 					}
 					kbShaderParamComponent { 
 						Enabled = 0
@@ -2855,7 +2855,7 @@ kbGameEntity 532414885 1151596207 2684383880 3979752438 {
 						LifeTime =  -1.000000
 						ParamName = "normalizedScreenSize_Anchor"
 						Texture = NULL
-						Vector = 0.120000 0.159375 0.062000 0.219844
+						Vector = 0.092000 0.122187 0.207200 0.893547
 					}
 					kbShaderParamComponent { 
 						Enabled = 0
@@ -6198,7 +6198,7 @@ kbGameEntity 1978605751 1112739685 1112578947 1060765009 {
 						LifeTime =  -1.000000
 						ParamName = "normalizedScreenSize_Anchor"
 						Texture = NULL
-						Vector = 0.200000 0.122222 0.120000 0.081111
+						Vector = 0.200000 0.122222 0.120000 0.941111
 					}
 					kbShaderParamComponent { 
 						Enabled = 0
@@ -6252,7 +6252,7 @@ kbGameEntity 1978605751 1112739685 1112578947 1060765009 {
 		LifeTime =  -1.000000
 		AuthoredHeight = 550
 		AuthoredWidth = 1600
-		NormalizedAnchorPoint = 0.020000 0.020000 0.000000
+		NormalizedAnchorPoint = 0.020000 0.880000 0.000000
 		UIToScreenSizeRatio = 0.200000 0.000000 0.000000
 		HealthBarWarningFlashSpeed =  15.000000
 		HealthBarWarningFlashThreshold =  0.400000
