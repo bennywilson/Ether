@@ -60,8 +60,6 @@ Texture2D fillTexture_1(white)					: register(t1);
 
 Texture2D fillTexture_2(white)					: register(t2);
 
-Texture2D sceneTexture(scenecolor)				: register(t3);
-
 float4 pixelShader( pixelInput input ) : SV_TARGET {
 
 	float4 frameColor = baseTexture.Sample( DiffuseSamplerState, input.uv );
@@ -69,16 +67,16 @@ float4 pixelShader( pixelInput input ) : SV_TARGET {
 	float4 finalColor = frameColor;
 	
 	float uLen = healthBarBounds.z - healthBarBounds.x;
-	if ( input.uv.x > healthBarBounds.x && input.uv.x < healthBarBounds.z && input.uv.y > healthBarBounds.y && input.uv.y < healthBarBounds.w ) {
+	if ( input.uv.x >= healthBarBounds.x && input.uv.x <= healthBarBounds.z && input.uv.y >= healthBarBounds.y && input.uv.y <= healthBarBounds.w ) {
 		float2 barUV = ( input.uv - healthBarBounds.xy ) / ( healthBarBounds.zw - healthBarBounds.xy );
 		float4 barColor1 = fillTexture_1.Sample( DiffuseSamplerState, barUV );
 		float4 barColor2 = fillTexture_2.Sample( DiffuseSamplerState, barUV );
 
 		float rightEdge = healthBarBounds.x + ( uLen * normalizedHealth.x );
 		if ( input.uv.x > rightEdge ) {
-			barColor1 = barColor2 = float4( 0.0f, 0.0f, 0.0f, 1.0f );
+			barColor1 = barColor2 = float4( 0.0f, 0.0f, 0.0f, barColor1.w );
 		}
-		float4 barColor = barColor1 * barTextureWeights.x + barColor2 * barTextureWeights.y;
+		float4 barColor = barColor2 * barTextureWeights.x + barColor2 * barTextureWeights.y;
 		finalColor = lerp( barColor, frameColor, frameColor.a );
 	
 	}

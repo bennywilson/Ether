@@ -8,7 +8,7 @@ cbuffer ConstantBuffer1 {
 	matrix vpMatrix;
 	float4 GrassData0;				// x: PatchStartCullDistance, y: 1.0f / PatchStartCullDistance, z: min blade height, w: max blade height
 	float4 GrassData1;
-	float4 cameraPos;
+	float4 cameraPosition;
 	float4 bladeOffsets[64];
 	float4 wind;					// w unused
 	float4 time;
@@ -153,7 +153,7 @@ void CreateVertex( inout TriangleStream<pixelInput> OutputStream, float3 vertexW
 	const float textureStartU = textureSize * textureIdx + textureUBorderSize;
 	const float textureEndU = textureStartU + textureSize - textureUBorderSize - textureUBorderSize;
 	const float textureEndV = 1.0f - textureVBorderSize;
-	const float4 grassMask = grassMaskMap.SampleLevel( PointSampler, terrainMapUV, 0.0f );
+	const float4 grassMask = 1;//grassMaskMap.SampleLevel( PointSampler, terrainMapUV, 0.0f );
 	const float grassLength = ( ( GrassData0.w - GrassData0.z ) * noiseValues.x + GrassData0.z ) * lodScale * bladeHeightFactor * grassMask.x;
 
 	float burnStartHeight = collisionMapVal.w + 99999.0f;
@@ -186,7 +186,7 @@ void CreateVertex( inout TriangleStream<pixelInput> OutputStream, float3 vertexW
  [maxvertexcount(32)]
  void geometryShader( point geometryShaderInput input[1], inout TriangleStream<pixelInput> OutputStream ) {
 
-	float scale = 1.0f;//- saturate( ( length( cameraPos.xyz - input[0].position.xyz ) - GrassData0.x ) * GrassData0.y );
+	float scale = 1.0f;//- saturate( ( length( cameraPosition.xyz - input[0].position.xyz ) - GrassData0.x ) * GrassData0.y );
 	if ( scale == 0.0f ) {
 		return;
 	}

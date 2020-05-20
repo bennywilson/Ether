@@ -1521,7 +1521,7 @@ kbGameEntity 3807537734 1283872403 1661460398 2211889957 {
 						LifeTime =  -1.000000
 						ParamName = "outlineParams"
 						Texture = NULL
-						Vector = 0.025000 0.100000 0.800000 5.000000
+						Vector = 0.025000 0.200000 0.325 5.000000
 					}
 					kbShaderParamComponent { 
 						Enabled = 0
@@ -1581,7 +1581,7 @@ kbGameEntity 3807537734 1283872403 1661460398 2211889957 {
 					}
 			}
 		RenderOrderBias =  0.000000
-		RenderPass = Post-LightingPass
+		RenderPass = LightingPass
 		Animations = 16
 			kbAnimComponent { 
 				Enabled = 0

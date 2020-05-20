@@ -4,7 +4,7 @@
 // Note that the directional light shader is responsible for copying the glow mask from the color
 // buffer to the accumulation buffer
 //
-// 2018-2019 kbEngine 2.0
+// 2018 kbEngine 2.0
 //===================================================================================================
 cbuffer matrixBuffer {
 	matrix				mvpMatrix;
@@ -84,6 +84,9 @@ float4 pixelShader( pixelInput input ) : SV_TARGET {
 	float4 normal = normalTexture.Sample( NormalSamplerState, input.uv );
 	float4 specColor = specularTexture.Sample( DiffuseSamplerState, input.uv );
 	
+	if ( dot( normal.xyz, normal.xyz ) < 0.01f )
+		return diffuseColor;//clip( -1.0f );
+
 	normal.xyz = normalize( normal.xyz );
 
 	float4 worldPos = float4( input.position2.xy, depthTexture.Sample( DepthSamplerState, input.uv ).r, 1 );
@@ -180,13 +183,13 @@ float4 pixelShader( pixelInput input ) : SV_TARGET {
 	}
 
 	float diffuse = saturate( dot( normal.xyz, lightDirection.xyz ) ) * shadowFactor;
-	diffuse = diffuse * 0.8f + 0.2f;	
 
 	float3 lightReflect = ( 2.0f * dot( normal.xyz, lightDirection.xyz ) * normal.xyz ) - lightDirection.xyz;
 	float spec = saturate( dot( lightReflect, toCameraVec ) ) * shadowFactor;
 	float3 rimLight = 0;
 
-	if ( normal.w <= 0.2f ) {
+	if ( normal.w > 0.51f ) {
+	diffuse = saturate( dot( normal.xyz, lightDirection.xyz ) );
 		diffuse = smoothstep( diffuseColorBand.x, diffuseColorBand.y, diffuse ) * diffuseColorBand.z + diffuseColorBand.w;
 
 		const float oneMinusRimDot = 1.0f - dot( normal.xyz, toCameraVec );

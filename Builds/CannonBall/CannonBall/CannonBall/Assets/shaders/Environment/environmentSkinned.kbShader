@@ -1,12 +1,11 @@
 //==============================================================================
-// environmentBase.kbShader
+// environmentSkinned.kbShader
 //
 // 2019 kbEngine 2.0
 //==============================================================================
 cbuffer matrixBuffer {
 	matrix modelMatrix;
 	matrix mvpMatrix;
-	float4 cameraPos;
 	float4x4 boneList[128];
 };
 
@@ -110,7 +109,7 @@ Texture2D emissiveMap(black)		: register(t3);
 	output.Normal.y = dot( tangentNormal, normalize( float3( input.TBN0.y, input.TBN1.y, input.TBN2.y ) ) );//		//mul( tangentNormal, TBN );
 	output.Normal.z = dot( tangentNormal, normalize( float3( input.TBN0.z, input.TBN1.z, input.TBN2.z ) ) );//		//mul( tangentNormal, TBN );
 	//output.Normal.xyz = input.TBN2.xyz;
-	output.Normal.w = 1.0f;//normalMap.w;
+	output.Normal.w = 0.5f;//normalMap.w;
 	return output;
 }
  

@@ -8,7 +8,7 @@ cbuffer matrixBuffer {
 	matrix modelMatrix;
 	matrix mvpMatrix;
 	matrix inverseViewProjection;
-	float4 cameraPos;
+	float4 cameraPosition;
 	float4 horizonColor;
 	float4 skyColor;
 	float4 waterScaleAndSpeed_1;
@@ -21,6 +21,7 @@ cbuffer matrixBuffer {
 	float4 sunColorFactor;
 	float4 reflectedObjectColorFactor;
 	float4 reflectionNormalFactor;
+	float4 globalSunFactor = (1,1,1,1);
 };
 
 kbShaderState {
@@ -79,21 +80,21 @@ pixelInput vertexShader( vertexInput input ) {
  *	pixelShader
  */
 SamplerState DiffuseSamplerState;
-Texture2D normalMap1				: register(t0);
+Texture2D normalMap1					: register(t0);
 
 SamplerState NormalSamplerState;
-Texture2D normalMap2				: register(t1);
+Texture2D normalMap2					: register(t1);
 
-Texture2D colorTexture(colorBuffer)	: register(t2);
+Texture2D colorTexture(colorBuffer)		: register(t2);
 
 Texture2D screenNormal(normalBuffer)	: register(t3);
 
-Texture2D depthTexture(depthBuffer)			: register(t4);
+Texture2D depthTexture(depthBuffer)		: register(t4);
 
- float4 pixelShader( pixelInput	input ) : SV_TARGET {
- 	PS_OUTPUT output = (PS_OUTPUT) 0;
+float4 pixelShader( pixelInput	input ) : SV_TARGET {
+	PS_OUTPUT output = (PS_OUTPUT) 0;
 
-	const float3 pointToEye = normalize( cameraPos.xyz - input.worldPosition.xyz );
+	const float3 pointToEye = normalize( cameraPosition.xyz - input.worldPosition.xyz );
 	float3 normal = float3( 0.0f, 1.0f, 0.0f );
 	float3 nm1 = normalMap2.Sample( NormalSamplerState, ( input.uv * waterScaleAndSpeed_1.xy ) + waterScaleAndSpeed_1.zw * time.xx ).xyz;
 	nm1 = ( nm1 * 2.0f ) - 1.0f;
@@ -112,7 +113,7 @@ Texture2D depthTexture(depthBuffer)			: register(t4);
 	float3 sunDir = lightShaftsDir.xyz;
 	float spec = saturate( dot ( sunDir.xyz, reflectVec ) );
 	spec = pow( spec, spec_Factor_Power.y );
-	color += spec * spec_Factor_Power.x * lightShaftsColor.xyz * sunColorFactor.xyz;
+	color += spec * spec_Factor_Power.x * lightShaftsColor.xyz * sunColorFactor.xyz * globalSunFactor.xyz;
 
 	// Reflection
 	float2 screenUV = ( ( input.screenPos / input.screenPos.w ) * 0.5f + 0.5f ).xy;

@@ -2,7 +2,7 @@
 // basicTranslucency.kbShader
 //
 //
-// 2016-2018 kbEngine 2.0
+// 2016 kbEngine 2.0
 //===================================================================================================
 cbuffer matrixBuffer {
 	matrix modelMatrix;
@@ -10,9 +10,7 @@ cbuffer matrixBuffer {
 	matrix viewMatrix;
 	matrix mvpMatrix;
 	matrix projection;
-	matrix inverseProjection;
 	matrix viewProjection;
-	float4 cameraPos;
 };
 
 kbShaderState {
