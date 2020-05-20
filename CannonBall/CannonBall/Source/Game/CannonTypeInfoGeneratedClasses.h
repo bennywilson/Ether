@@ -76,6 +76,9 @@ GenerateClass(
 	AddField( "SheepPrefab", KBTYPEINFO_GAMEENTITY, KungFuLevelComponent, m_SheepPrefab, false, "" )
 	AddField( "WaterDropletScreenFX", KBTYPEINFO_GAMEENTITY, KungFuLevelComponent, m_WaterDropletScreenFX, false, "" )
 	AddField( "WaterSplashSound", KBTYPEINFO_STRUCT, KungFuLevelComponent, m_WaterSplashSound, true, "kbSoundData" )
+	AddField( "PortraitTexture", KBTYPEINFO_TEXTURE, KungFuLevelComponent, m_pBasePortraitTexture, false, "" )
+	AddField( "HuggedPortraitTexture", KBTYPEINFO_TEXTURE, KungFuLevelComponent, m_pHuggedPortraitTexture, false, "" )
+	AddField( "DeadPortraitTexture", KBTYPEINFO_TEXTURE, KungFuLevelComponent, m_pDeadPortriatTexture, false, "" )
 )
 
 GenerateClass(
@@ -90,7 +93,7 @@ GenerateClass(
 GenerateClass(
 	CannonHealthBarUIComponent,
 	AddField( "HealthBarWarningFlashThreshold", KBTYPEINFO_FLOAT, CannonHealthBarUIComponent, m_HealthBarWarningFlashThreshold, false, "" )
-	AddField( "HealthBarWarningFlashSpeed", KBTYPEINFO_FLOAT, CannonHealthBarUIComponent, m_HealthBarWarningFlashSpeed, false, "" )
+	AddField( "HealthBarWarningFlashSpeed", KBTYPEINFO_FLOAT, CannonHealthBarUIComponent, m_HealthBarWarningFlashSpeed, false, "" )	
 )
 
 GenerateClass(

@@ -103,7 +103,7 @@ void kbModelComponent::RefreshMaterials( const bool bRefreshRenderObject ) {
 /**
  *	kbModelComponent:SetMaterialParamVector
  */
-void kbModelComponent::SetMaterialParamVector( const int idx, const std::string & paramName, const kbVec4 paramValue ) {
+void kbModelComponent::SetMaterialParamVector( const int idx, const std::string & paramName, const kbVec4& paramValue ) {
 	if ( idx < 0 || idx > 32 || idx >= m_MaterialList.size() ) {
 		kbWarning( "kbModelComponent::SetMaterialParamVector() called on invalid index" );
 		return;

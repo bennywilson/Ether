@@ -49,6 +49,7 @@ struct EditorCamSpeedBind {
 };
 
 const static EditorCamSpeedBind g_EditorCamSpeedBindings[] = {
+	EditorCamSpeedBind( kbString( "0.05x" ), 0.05f ),
 	EditorCamSpeedBind( kbString( "0.25x" ), 0.25f ),
 	EditorCamSpeedBind( kbString( "1x" ), 1.0f ),
 	EditorCamSpeedBind( kbString( "5x" ), 5.0f ),

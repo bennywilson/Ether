@@ -46,7 +46,6 @@ void CannonHealthBarUIComponent::Update_Internal( const float DT ) {
 			weights.y = 1.0f - weights.x;
 		}
 		m_pStaticModelComponent->SetMaterialParamVector( 0, barTextureWeights.stl_str(), weights );
-		
 	}
 }
 

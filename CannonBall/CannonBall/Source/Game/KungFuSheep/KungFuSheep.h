@@ -88,7 +88,7 @@ private:
 //---------------------------------------------------------------------------------------------------
 
 	// IAnimEventListener
-	virtual void								OnAnimEvent( const kbAnimEventInfo_t & animEvent ) override;
+	virtual void								OnAnimEvent( const kbAnimEventInfo_t& animEvent ) override;
 };
 
 template<typename T>
@@ -97,11 +97,11 @@ class KungFuSheepStateBase : public CannonBallCharacterState<T> {
 //---------------------------------------------------------------------------------------------------'
 public:
 
-	KungFuSheepStateBase( CannonActorComponent *const pPlayerComponent ) : CannonBallCharacterState( pPlayerComponent ) { }
+	KungFuSheepStateBase( CannonActorComponent* const pPlayerComponent ) : CannonBallCharacterState( pPlayerComponent ) { }
 
 protected:
 
-	KungFuSheepComponent *	GetSheep() const { return (KungFuSheepComponent*)m_pActorComponent; }
+	KungFuSheepComponent* GetSheep() const { return (KungFuSheepComponent*)m_pActorComponent; }
 	
 	bool CheckForBlocker( const kbVec3 moveVec ) {
 

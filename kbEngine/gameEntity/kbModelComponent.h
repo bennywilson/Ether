@@ -24,16 +24,16 @@ class kbShaderParamComponent : public kbGameComponent {
 //---------------------------------------------------------------------------------------------------
 public:
 
-	const kbString &							GetParamName() const { return m_ParamName; }
-	const kbTexture *							GetTexture() const { return m_pTexture; }
-	const kbRenderTexture *						GetRenderTexture() const { return m_pRenderTexture; }
-	const kbVec4 &								GetVector() const { return m_Vector; }	
+	const kbString&								GetParamName() const { return m_ParamName; }
+	const kbTexture*							GetTexture() const { return m_pTexture; }
+	const kbRenderTexture*						GetRenderTexture() const { return m_pRenderTexture; }
+	const kbVec4&								GetVector() const { return m_Vector; }	
 
 
-	void										SetRenderTexture( kbRenderTexture *const pTexture ) { m_pRenderTexture = pTexture; }
-	void										SetParamName( const kbString & newName ) { m_ParamName = newName; }
-	void										SetTexture( kbTexture *const pTexture ) { m_pTexture = pTexture; }
-	void										SetVector( const kbVec4 & vector ) { m_Vector = vector; }
+	void										SetRenderTexture( kbRenderTexture* const pTexture ) { m_pRenderTexture = pTexture; }
+	void										SetParamName( const kbString& newName ) { m_ParamName = newName; }
+	void										SetTexture( kbTexture* const pTexture ) { m_pTexture = pTexture; }
+	void										SetVector( const kbVec4& vector ) { m_Vector = vector; }
 
 private:
 
@@ -75,15 +75,15 @@ class kbMaterialComponent : public kbGameComponent {
 //---------------------------------------------------------------------------------------------------
 public:
 
-	virtual void								EditorChange( const std::string & propertyName ) override;
+	virtual void								EditorChange( const std::string& propertyName ) override;
 
-	const kbShader *							GetShader() const { return m_pShader; }
-	const std::vector<kbShaderParamComponent> &	GetShaderParams() const { return m_ShaderParamComponents; }
+	const kbShader*								GetShader() const { return m_pShader; }
+	const std::vector<kbShaderParamComponent>&	GetShaderParams() const { return m_ShaderParamComponents; }
 	ECullMode									GetCullModeOverride() const { return m_CullModeOverride; }
 
-	void										SetShader( kbShader *const pShader ) { m_pShader = pShader; }
-	void										SetShaderParamComponent( const kbShaderParamComponent & inParam );
-	const kbShaderParamComponent *				GetShaderParamComponent( const kbString & name );
+	void										SetShader( kbShader* const pShader ) { m_pShader = pShader; }
+	void										SetShaderParamComponent( const kbShaderParamComponent& inParam );
+	const kbShaderParamComponent*				GetShaderParamComponent( const kbString& name );
 
 private:
 
@@ -104,28 +104,28 @@ public:
 
 	virtual										~kbModelComponent();
 
-	virtual void								EditorChange( const std::string & propertyName ) override;
+	virtual void								EditorChange( const std::string& propertyName ) override;
 	virtual void								PostLoad() override;
 
 	bool										GetCastsShadow() const { return m_bCastsShadow; }
 
-	void										SetMaterialParamVector( const int idx, const std::string & paramName, const kbVec4 paramValue );
-	void										SetMaterialParamTexture( const int idx, const std::string & paramName, kbTexture *const pTexture );
-	void										SetMaterialParamTexture( const int idx, const std::string & paramName, kbRenderTexture *const pTexture );
-	const kbShaderParamComponent*				GetShaderParamComponent( const int idx, const kbString & name );
+	void										SetMaterialParamVector( const int idx, const std::string& paramName, const kbVec4& paramValue );
+	void										SetMaterialParamTexture( const int idx, const std::string& paramName, kbTexture* const pTexture );
+	void										SetMaterialParamTexture( const int idx, const std::string& paramName, kbRenderTexture* const pTexture );
+	const kbShaderParamComponent*				GetShaderParamComponent( const int idx, const kbString& name );
 
 	void										RefreshMaterials( const bool bUpdateRenderObject );
 
 	float										GetRenderOrderBias() const { return m_RenderOrderBias; }
 	void										SetRenderOrderBias( const float newBias ) { m_RenderOrderBias = newBias; RefreshMaterials( true ); }
 
-	void										SetMaterials( const std::vector<kbMaterialComponent> & materialList ) { m_MaterialList = materialList; }
+	void										SetMaterials( const std::vector<kbMaterialComponent>& materialList ) { m_MaterialList = materialList; }
 	
 	enum ERenderPass							GetRenderPass() const { return m_RenderPass; }
 	void										SetRenderPass( const ERenderPass newPass ) { m_RenderPass = newPass; }
 
-	const std::vector<kbMaterialComponent> &	GetMaterialList() const { return m_MaterialList; }
-	void										CopyMaterialList( const std::vector<kbMaterialComponent> & matComp ) { m_MaterialList = matComp; }
+	const std::vector<kbMaterialComponent>&		GetMaterialList() const { return m_MaterialList; }
+	void										CopyMaterialList( const std::vector<kbMaterialComponent>& matComp ) { m_MaterialList = matComp; }
 
 protected:
 

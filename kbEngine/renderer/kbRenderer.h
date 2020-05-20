@@ -3,7 +3,7 @@
 //
 // Base Renderer Class
 //
-// 2018-2019 kbEngine 2.0
+// 2018 kbEngine 2.0
 //==============================================================================
 #ifndef _KBRENDERER_H_
 #define _KBRENDERER_H_
@@ -99,7 +99,7 @@ class kbRenderSubmesh {
 
 //-------------------------------------------------------------------------------------------------------------------------------------------------------------
 public:
-												kbRenderSubmesh( const kbRenderObject *const pInMesh, const int inMeshIdx, const ERenderPass renderPass, const float distFromCamera ) :
+												kbRenderSubmesh( const kbRenderObject* const pInMesh, const int inMeshIdx, const ERenderPass renderPass, const float distFromCamera ) :
 													m_pRenderObject( pInMesh ),
 													m_MeshIdx( inMeshIdx ),
 													m_RenderPass( renderPass ),
@@ -223,7 +223,7 @@ public:
 												~kbRenderHook();
 
 	ERenderPass									GetRenderPass() const { return m_RenderPass; }
-	virtual void								RenderHookCallBack( kbRenderTexture *const pSrc, kbRenderTexture *const pDst ) = 0;
+	virtual void								RenderHookCallBack( kbRenderTexture* const pSrc, kbRenderTexture* const pDst ) = 0;
 
 protected:
 
@@ -253,52 +253,52 @@ public:
 
 	void										SetWorldAndEditorIconScale( const float newWorldScale, const float editorIconScale ) { m_GlobalModelScale_GameThread = newWorldScale, m_EditorIconScale_GameThread = editorIconScale; }
 
-	virtual void								LoadTexture( const char * name, int index, int width = -1, int height = -1 );
+	virtual void								LoadTexture( const char* name, int index, int width = -1, int height = -1 );
 
 	virtual int									CreateRenderView( HWND hwnd ) = 0;
 	virtual void								SetRenderWindow( HWND hwnd ) = 0;
 
-	void										RegisterRenderHook( kbRenderHook *const pHook );
-	void										UnregisterRenderHook( kbRenderHook *const pHook );
+	void										RegisterRenderHook( kbRenderHook* const pHook );
+	void										UnregisterRenderHook( kbRenderHook* const pHook );
 
 	// View Transform
-	virtual void								SetRenderViewTransform( const HWND hwnd, const kbVec3 & position, const kbQuat & rotation );
-	virtual void								GetRenderViewTransform( const HWND hwnd, kbVec3 & position, kbQuat & rotation );
+	virtual void								SetRenderViewTransform( const HWND hwnd, const kbVec3& position, const kbQuat& rotation );
+	virtual void								GetRenderViewTransform( const HWND hwnd, kbVec3& position, kbQuat& rotation );
 
 	void										SetNearFarPlane( const HWND hwnd, const float near, const float far );
 
-	void										AddRenderObject( const kbRenderObject & renderObjectToAdd );
-	void										UpdateRenderObject( const kbRenderObject & renderObjectToUpdate );
-	void										RemoveRenderObject( const kbRenderObject & renderObjectToRemove );
+	void										AddRenderObject( const kbRenderObject& renderObjectToAdd );
+	void										UpdateRenderObject( const kbRenderObject& renderObjectToUpdate );
+	void										RemoveRenderObject( const kbRenderObject& renderObjectToRemove );
 	
 	// Lights
-	void										AddLight( const kbLightComponent *const pLightComponent, const kbVec3 & pos, const kbQuat & orientation );
-	void										UpdateLight( const kbLightComponent * pLightComponent, const kbVec3 & pos, const kbQuat & orientation );
-	void										RemoveLight( const kbLightComponent *const pLightComponent );
-	void										HackClearLight( const kbLightComponent *const pLightComponent );
+	void										AddLight( const kbLightComponent* const pLightComponent, const kbVec3& pos, const kbQuat& orientation );
+	void										UpdateLight( const kbLightComponent* pLightComponent, const kbVec3& pos, const kbQuat& orientation );
+	void										RemoveLight( const kbLightComponent* const pLightComponent );
+	void										HackClearLight( const kbLightComponent* const pLightComponent );
 
 	// Fog
-	void										UpdateFog( const kbColor & color, const float startDistance, const float endDistance );
+	void										UpdateFog( const kbColor& color, const float startDistance, const float endDistance );
 
 	// Particles
-	void										AddParticle( const kbRenderObject & renderObject );
-	void										RemoveParticle( const kbRenderObject & renderObject );
+	void										AddParticle( const kbRenderObject& renderObject );
+	void										RemoveParticle( const kbRenderObject& renderObject );
 
 	// Light Shafts
-	void										AddLightShafts( const kbLightShaftsComponent *const pComponent, const kbVec3 & pos, const kbQuat & orientation );
-	void										UpdateLightShafts( const kbLightShaftsComponent *const pComponent, const kbVec3 & pos, const kbQuat & orientation );
-	void										RemoveLightShafts( const kbLightShaftsComponent *const pComponent );
+	void										AddLightShafts( const kbLightShaftsComponent* const pComponent, const kbVec3& pos, const kbQuat& orientation );
+	void										UpdateLightShafts( const kbLightShaftsComponent* const pComponent, const kbVec3& pos, const kbQuat& orientation );
+	void										RemoveLightShafts( const kbLightShaftsComponent* const pComponent );
 
 	virtual void								SetGlobalShaderParam( const kbShaderParamOverrides_t::kbShaderParam_t & shaderParam ) = 0;
-	virtual void								SetGlobalShaderParam( const kbShaderParamOverrides_t & shaderParam ) = 0;
+	virtual void								SetGlobalShaderParam( const kbShaderParamOverrides_t& shaderParam ) = 0;
 
 	// Debug Drawing
 	virtual void								EnableDebugBillboards( const bool bEnable ) { m_bDebugBillboardsEnabled = bEnable; }
 	bool										DebugBillboardsEnabled() const { return m_bDebugBillboardsEnabled; }
 
 	void										EnableConsole( const bool bEnable ) { m_bConsoleEnabled = bEnable; }
-	void										DrawDebugText( const std::string & theString, const float X, const float Y, const float ScreenCharWidth, 
-															   const float ScreenCharHeight, const kbColor & color );
+	void										DrawDebugText( const std::string& theString, const float X, const float Y, const float ScreenCharWidth, 
+															   const float ScreenCharHeight, const kbColor& color );
 
 	virtual kbVec2i								GetEntityIdAtScreenPosition( const uint x, const uint y ) = 0;
 
@@ -313,13 +313,13 @@ public:
 	bool										IsRenderingSynced() const { return m_RenderThreadSync == 0; }
 
 	// Various Drawing commands
-	void										DrawScreenSpaceQuad( const int start_x, const int start_y, const int size_x, const int size_y, const int textureIndex, kbShader *const pShader = nullptr );
-	void										DrawLine( const kbVec3 & start, const kbVec3 & end, const kbColor & color, const bool bDepthTest = true );
-	void										DrawBox( const kbBounds & bounds, const kbColor & color, const bool bDepthTest = true );
-	void										DrawPreTransformedLine( const std::vector<kbVec3> & vertList, const kbColor & color );
-	void										DrawSphere( const kbVec3 & origin, const float radius, const int NumSegments, const kbColor & color );
-	void										DrawBillboard( const kbVec3 & position, const kbVec2 & size, const int textureIndex, kbShader *const pShader, const int entityId = -1 );
-	void										DrawModel( const kbModel *const pModel, const std::vector<kbShaderParamOverrides_t> & materials, const kbVec3 & start, const kbQuat & orientation, const kbVec3 & scale, const int entityId );
+	void										DrawScreenSpaceQuad( const int start_x, const int start_y, const int size_x, const int size_y, const int textureIndex, kbShader* const pShader = nullptr );
+	void										DrawLine( const kbVec3& start, const kbVec3& end, const kbColor& color, const bool bDepthTest = true );
+	void										DrawBox( const kbBounds& bounds, const kbColor& color, const bool bDepthTest = true );
+	void										DrawPreTransformedLine( const std::vector<kbVec3>& vertList, const kbColor& color );
+	void										DrawSphere( const kbVec3& origin, const float radius, const int NumSegments, const kbColor& color );
+	void										DrawBillboard( const kbVec3& position, const kbVec2& size, const int textureIndex, kbShader* const pShader, const int entityId = -1 );
+	void										DrawModel( const kbModel* const pModel, const std::vector<kbShaderParamOverrides_t>& materials, const kbVec3& start, const kbQuat& orientation, const kbVec3& scale, const int entityId );
 
 	//
 	enum kbViewMode_t {
@@ -337,26 +337,26 @@ public:
 	kbViewMode_t								m_ViewMode;
 
 	// Render thread functions
-	virtual void								RT_SetRenderTarget( kbRenderTexture *const pRenderTexture ) = 0;
-	virtual void								RT_ClearRenderTarget( kbRenderTexture *const pRenderTexture, const kbColor & color ) = 0;
+	virtual void								RT_SetRenderTarget( kbRenderTexture* const pRenderTexture ) = 0;
+	virtual void								RT_ClearRenderTarget( kbRenderTexture* const pRenderTexture, const kbColor& color ) = 0;
 	kbRenderTexture *							RT_GetRenderTexture( const int width, const int height, const eTextureFormat, const bool bRequiresCPUAccess );
-	virtual void								RT_ReturnRenderTexture( kbRenderTexture *const pRenderTexture );
-	virtual void								RT_RenderMesh( const kbModel *const pModel, kbShader * pShader, const kbShaderParamOverrides_t *const pShaderParams ) = 0;
-	virtual void								RT_Render2DLine( const kbVec3 & startPt, const kbVec3 & endPt, const kbColor & color, const float width, const kbShader * pShader, const struct kbShaderParamOverrides_t *const ShaderBindings = nullptr ) = 0;
-	virtual void								RT_Render2DQuad( const kbVec2 & origin, const kbVec2 & size, const kbColor & color, const kbShader * pShader, const struct kbShaderParamOverrides_t *const ShaderBindings = nullptr ) = 0;
-	virtual void								RT_CopyRenderTarget( kbRenderTexture *const pSrcTexture, kbRenderTexture *const pDstTexture ) = 0;
-	virtual kbRenderTargetMap					RT_MapRenderTarget( kbRenderTexture *const pDstTexture ) = 0;
-	virtual void								RT_UnmapRenderTarget( kbRenderTexture *const pDstTexture ) = 0;
+	virtual void								RT_ReturnRenderTexture( kbRenderTexture* const pRenderTexture );
+	virtual void								RT_RenderMesh( const kbModel* const pModel, kbShader * pShader, const kbShaderParamOverrides_t* const pShaderParams ) = 0;
+	virtual void								RT_Render2DLine( const kbVec3& startPt, const kbVec3& endPt, const kbColor& color, const float width, const kbShader* const pShader, const struct kbShaderParamOverrides_t* const ShaderBindings = nullptr ) = 0;
+	virtual void								RT_Render2DQuad( const kbVec2& origin, const kbVec2& size, const kbColor& color, const kbShader* const pShader, const struct kbShaderParamOverrides_t* const ShaderBindings = nullptr ) = 0;
+	virtual void								RT_CopyRenderTarget( kbRenderTexture* const pSrcTexture, kbRenderTexture* const pDstTexture ) = 0;
+	virtual kbRenderTargetMap					RT_MapRenderTarget( kbRenderTexture* const pDstTexture ) = 0;
+	virtual void								RT_UnmapRenderTarget( kbRenderTexture* const pDstTexture ) = 0;
  
 private:
 
 	virtual void								Init_Internal( HWND, const int width, const int height ) = 0;
-	virtual bool								LoadTexture_Internal( const char * name, int index, int width = -1, int height = -1 ) = 0;
+	virtual bool								LoadTexture_Internal( const char* const name, int index, int width = -1, int height = -1 ) = 0;
 	virtual void								RenderSync_Internal() = 0;
 	virtual void								Shutdown_Internal() = 0;
 	
 	virtual kbRenderTexture *					GetRenderTexture_Internal( const int width, const int height, const eTextureFormat texFormat, const bool bRequiresCPUAccess ) = 0;
-	virtual void								ReturnRenderTexture_Internal( const kbRenderTexture * ) = 0;
+	virtual void								ReturnRenderTexture_Internal( const kbRenderTexture* const ) = 0;
 
 	virtual void								RenderScene() = 0;
 

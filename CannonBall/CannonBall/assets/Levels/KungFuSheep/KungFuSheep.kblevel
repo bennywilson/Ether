@@ -1,8 +1,8 @@
-kbGameEntity 4106793626 1127416926 1231552918 2151252165 {
+kbGameEntity 239761533 1318716694 3936582591 3719488416 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		Name = "Entity_248"
+		Name = "Entity_249"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
 		Position = 0.000000 0.000000 0.000000
 		Scale = 1.000000 1.000000 1.000000
@@ -11,7 +11,7 @@ kbGameEntity 4106793626 1127416926 1231552918 2151252165 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		MainCameraPosition = 69.965424 -50.718254 -303.325684
-		MainCameraRotation = -0.184776 -0.671896 0.178739 0.694598
+		MainCameraRotation = -0.018145 -0.420225 0.008407 0.907200
 	}
 }
 kbGameEntity 537364968 1092523782 2953639826 2626478307 {
@@ -31,6 +31,8 @@ kbGameEntity 537364968 1092523782 2953639826 2626478307 {
 		GlobalVolumeScale =  0.750000
 		LevelType = 2D
 		Dummy2 =  0.000000
+		DeadPortraitTexture = .\assets\ui\kungfusheep_healthbar_dead.tif
+		HuggedPortraitTexture = .\assets\ui\kungfusheep_healthbar_hugged.tif
 		LevelLength =  100.000000
 		LevelMusic = 2
 			kbSoundData { 
@@ -51,6 +53,7 @@ kbGameEntity 537364968 1092523782 2953639826 2626478307 {
 				Volume =  1.000000
 				WaveFile = .\assets\sounds\music\testvolumeloop.wav
 			}
+		PortraitTexture = .\assets\ui\kungfusheep_healthbar.tif
 		SheepPrefab = 3807537734 1283872403 1661460398 2211889957
 		SnolafPrefab = 314357658 1122514197 2466994618 463523205
 		WaterDropletScreenFX = 3936461697 1285153374 3406925493 1594399155

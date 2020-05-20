@@ -55,6 +55,24 @@ void kbUIComponent::UnregisterEventListener( IUIWidgetListener *const pListener 
 }
 
 /**
+ *	kbUIComponent::SetMaterialParamVector
+ */
+void kbUIComponent::SetMaterialParamVector( const std::string& paramName, const kbVec4& paramValue ) {
+	kbErrorCheck( m_pStaticModelComponent != nullptr, "bUIComponent::SetMaterialParamVector() - m_pStaticModelComponent is NULL" );
+
+	m_pStaticModelComponent->SetMaterialParamVector( 0, paramName, paramValue );
+}
+
+/**
+ *	kbUIComponent::SetMaterialParamTexture
+ */
+void kbUIComponent::SetMaterialParamTexture( const std::string& paramName, kbTexture* const pTexture ) {
+	kbErrorCheck( m_pStaticModelComponent != nullptr, "bUIComponent::SetMaterialParamTexture() - m_pStaticModelComponent is NULL" );
+
+	m_pStaticModelComponent->SetMaterialParamTexture( 0, paramName, pTexture );
+}
+
+/**
  *	kbUIComponent::FireEvent
  */
 void kbUIComponent::FireEvent( const kbInput_t *const pInput ) {

@@ -276,8 +276,8 @@ private:
 		distanceTraveled += std::to_string(pKungFuSheep->GetOwnerPosition().y );
 		distanceTraveled += ", ";
 		distanceTraveled += std::to_string(pKungFuSheep->GetOwnerPosition().z );
-
-		g_pRenderer->DrawDebugText( distanceTraveled, 0.1f, 0.1f, g_DebugTextSize, g_DebugTextSize, kbColor::red );
+// 
+// 		g_pRenderer->DrawDebugText( distanceTraveled, 0.1f, 0.1f, g_DebugTextSize, g_DebugTextSize, kbColor::red );
 
 		if ( m_bFirstUpdate ) {
 			m_bFirstUpdate = false;
@@ -474,6 +474,10 @@ void KungFuLevelComponent::Constructor() {
 
 	// Editor
 	m_LevelLength = 100.0f;
+
+	m_pBasePortraitTexture = nullptr;
+	m_pHuggedPortraitTexture = nullptr;
+	m_pDeadPortriatTexture = nullptr;
 
 	// Runtime
 	m_WaterDropletFXStartTime = -1.0f;
@@ -676,12 +680,14 @@ void KungFuLevelComponent::Update_Internal( const float DeltaTime ) {
 		}
 	}
 
+	// Global Fog
 	{
 		kbShaderParamOverrides_t shaderParam;
 		shaderParam.SetVec4( "globalFogColor", kbVec4( 174.0f / 256.0f , 183.0f / 256.0f, 198.0f / 256.0f, 1.0f ) );
 		g_pRenderer->SetGlobalShaderParam( shaderParam );
 	}
 
+	// Global Sun
 	{
 		float sunIntensity = 0.0f;
 		float travelDist = GetPlayerTravelDistance();
@@ -695,6 +701,18 @@ void KungFuLevelComponent::Update_Internal( const float DeltaTime ) {
 		// globalSunFactor
 	}
 
+	// UI
+	{
+		if ( m_pSheep && m_pHealthBarUI && m_pHealthBarUI->GetStaticModelComponent() ) {
+			if ( m_pSheep->GetCurrentState() == KungFuSheepState::Hugged ) {
+				m_pHealthBarUI->SetMaterialParamTexture( "baseTexture", m_pHuggedPortraitTexture );
+			} else if ( m_pSheep->GetCurrentState() == KungFuSheepState::Dead ) {
+				m_pHealthBarUI->SetMaterialParamTexture( "baseTexture", m_pDeadPortriatTexture );			
+			} else {
+				m_pHealthBarUI->SetMaterialParamTexture("baseTexture", m_pBasePortraitTexture);
+			}
+		}
+	}
 	UpdateDebugAndCheats();
 }
 

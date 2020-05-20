@@ -79,7 +79,7 @@ namespace KungFuGame {
 
 
 /**
- *	KungFuLevelComponent
+ * 	KungFuLevelComponent
  */
 class KungFuLevelComponent : public CannonLevelComponent {
 
@@ -89,10 +89,10 @@ class KungFuLevelComponent : public CannonLevelComponent {
 public:
 
 	void										SpawnEnemy( const bool bSpawnLeft, const int waveSize );
-	class KungFuSheepComponent *				SpawnSheep();
-	KungFuSheepComponent *						GetSheep() const { return m_pSheep; }
-	CannonActorComponent *						Get3000Ton() const { return m_p3000Ton; }
-	CannonActorComponent *						GetFox() const { return m_pFox; }
+	class KungFuSheepComponent* 				SpawnSheep();
+	KungFuSheepComponent* 						GetSheep() const { return m_pSheep; }
+	CannonActorComponent* 						Get3000Ton() const { return m_p3000Ton; }
+	CannonActorComponent* 						GetFox() const { return m_pFox; }
 
 	void										UpdateSheepHealthBar( const float healthVal );
 	void										UpdateCannonBallMeter( const float value, const bool bActivated );
@@ -106,11 +106,11 @@ public:
 
 	float										GetPlayerTravelDistance();
 
-	class KungFuSnolafComponent *				GetSnolafFromPool();
-	void										ReturnSnolafToPool( class KungFuSnolafComponent *const pSnolaf );
+	class KungFuSnolafComponent* 				GetSnolafFromPool();
+	void										ReturnSnolafToPool( class KungFuSnolafComponent* const pSnolaf );
 	void										RemoveSheep();
 
-	static KungFuLevelComponent *				Get() { return s_Inst; }
+	static KungFuLevelComponent* 				Get() { return s_Inst; }
 
 protected:
 
@@ -132,6 +132,9 @@ private:
 	kbGameEntityPtr								m_WaterDropletScreenFX;
 	std::vector<kbSoundData>					m_WaterSplashSound;
 
+	kbTexture*									m_pBasePortraitTexture;
+	kbTexture*									m_pHuggedPortraitTexture;
+	kbTexture*									m_pDeadPortriatTexture;
 
 	// Runtime
 	float										m_WaterDropletFXStartTime;
@@ -146,42 +149,42 @@ private:
 
 	float										m_LastWaterSplashSoundTime;
 
-	CannonHealthBarUIComponent *				m_pHealthBarUI;
-	CannonBallUIComponent *						m_pCannonBallUI;
+	CannonHealthBarUIComponent* 				m_pHealthBarUI;
+	CannonBallUIComponent* 						m_pCannonBallUI;
 
 	std::vector<kbGameEntity*>					m_SnolafPool;
-	KungFuSnolafComponent *						m_EndSnolafs[2];
-	KungFuSheepComponent *						m_pSheep;
-	CannonActorComponent *						m_p3000Ton;
-	CannonActorComponent *						m_pFox;
+	KungFuSnolafComponent* 						m_EndSnolafs[2];
+	KungFuSheepComponent* 						m_pSheep;
+	CannonActorComponent* 						m_p3000Ton;
+	CannonActorComponent* 						m_pFox;
 
 	kbGameEntityPtr								m_PresentsEnt[2];
 	kbGameEntityPtr								m_BridgeBreakDecal;
 	kbGameEntityPtr								m_BridgeExplosionFX;
 
-	static KungFuLevelComponent *				s_Inst;
+	static KungFuLevelComponent* 				s_Inst;
 };
 
 /**
- *	KungFuGame_BaseState
+ * 	KungFuGame_BaseState
  */
 class KungFuGame_BaseState : public StateMachineNode<KungFuGame::eKungFuGame_State> {
 
 //---------------------------------------------------------------------------------------------------
 public:
-	KungFuGame_BaseState( KungFuLevelComponent *const pLevelComponent ) : m_pLevelComponent( pLevelComponent ) { }
+	KungFuGame_BaseState( KungFuLevelComponent* const pLevelComponent ) : m_pLevelComponent( pLevelComponent ) { }
 
 	virtual AttackHitInfo_t DoAttack( const DealAttackInfo_t<KungFuGame::eAttackType> & dealAttackInfo ) { AttackHitInfo_t ret; return ret; }
 
-	virtual void WidgetEventCB( kbUIWidgetComponent *const pWidget, const kbInput_t *const pInput ) { }
+	virtual void WidgetEventCB( kbUIWidgetComponent* const pWidget, const kbInput_t* const pInput ) { }
 
 protected:
-	KungFuLevelComponent * m_pLevelComponent;
+	KungFuLevelComponent* m_pLevelComponent;
 };
 
 
 /**
- *	KungFuSheepDirector
+ * 	KungFuSheepDirector
  */
 class KungFuSheepDirector : public kbLevelDirector<KungFuGame_BaseState, KungFuGame::eKungFuGame_State>, public ISingleton<KungFuSheepDirector>, public IUIWidgetListener {
 
@@ -194,11 +197,11 @@ public:
 	virtual void								UpdateStateMachine() override;
 
 	virtual void								StateChangeCB( const KungFuGame::eKungFuGame_State previousState, const KungFuGame::eKungFuGame_State nextState );
-	virtual void								WidgetEventCB( kbUIWidgetComponent *const pWidget, const kbInput_t *const pInput );
+	virtual void								WidgetEventCB( kbUIWidgetComponent* const pWidget, const kbInput_t* const pInput );
 
 	AttackHitInfo_t								DoAttack( const DealAttackInfo_t<KungFuGame::eAttackType> attackInfo );
 
-	CannonBallPauseMenuUIComponent *			GetPauseMenu() const { return m_pPauseMenuUI; }
+	CannonBallPauseMenuUIComponent* 			GetPauseMenu() const { return m_pPauseMenuUI; }
 
 	int											GetNumHuggers() const { return m_NumHuggers; }
 	int											GetNumPrehuggers() const { return m_NumPrehuggers; }
@@ -213,10 +216,10 @@ private:
 
 	void										CollectUIElements();
 
-	CannonHealthBarUIComponent *				m_pHealthBarUI;
-	CannonBallUIComponent *						m_pCannonBallUI;
-	CannonBallMainMenuComponent *				m_pMainMenuUI;
-	CannonBallPauseMenuUIComponent *			m_pPauseMenuUI;
+	CannonHealthBarUIComponent* 				m_pHealthBarUI;
+	CannonBallUIComponent* 						m_pCannonBallUI;
+	CannonBallMainMenuComponent* 				m_pMainMenuUI;
+	CannonBallPauseMenuUIComponent* 			m_pPauseMenuUI;
 
 	int											m_NumHuggers;
 	int											m_NumPrehuggers;

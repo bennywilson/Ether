@@ -65,7 +65,7 @@ float4 pixelShader( pixelInput input ) : SV_TARGET {
 	float4 frameColor = baseTexture.Sample( DiffuseSamplerState, input.uv );
 
 	float4 finalColor = frameColor;
-	
+
 	float uLen = healthBarBounds.z - healthBarBounds.x;
 	if ( input.uv.x >= healthBarBounds.x && input.uv.x <= healthBarBounds.z && input.uv.y >= healthBarBounds.y && input.uv.y <= healthBarBounds.w ) {
 		float2 barUV = ( input.uv - healthBarBounds.xy ) / ( healthBarBounds.zw - healthBarBounds.xy );
@@ -77,7 +77,7 @@ float4 pixelShader( pixelInput input ) : SV_TARGET {
 			barColor1 = barColor2 = float4( 0.0f, 0.0f, 0.0f, barColor1.w );
 		}
 		float4 barColor = barColor1 * barTextureWeights.x + barColor2 * barTextureWeights.y;
-		finalColor = lerp( barColor, frameColor, frameColor.a );
+		finalColor = lerp( barColor, frameColor, pow( abs( frameColor.a ), abs( 5.0f ) ));
 	
 	}
 

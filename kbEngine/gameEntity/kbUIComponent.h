@@ -19,7 +19,7 @@ class IUIWidgetListener abstract {
 
 //-------------------------------------------------------------------------------------------------------------------------------------------------------------
 public:
-	virtual void WidgetEventCB( class kbUIWidgetComponent *const pWidget, const kbInput_t *const pInput ) = 0;
+	virtual void WidgetEventCB( class kbUIWidgetComponent* const pWidget, const kbInput_t* const pInput ) = 0;
 
 };
 
@@ -35,16 +35,19 @@ public:
 
 												~kbUIComponent();
 
-	virtual void								EditorChange( const std::string & propertyName ) override;
+	virtual void								EditorChange( const std::string& propertyName ) override;
 
-	const kbVec3 &								GetNormalizedAnchorPt() const { return m_NormalizedAnchorPt; }
-	const kbVec3 &								GetUIToScreenSizeRatio() const { return m_UIToScreenSizeRatio; }
-	const kbVec3 &								GetNormalizedScreenSize() const { return m_NormalizedScreenSize; }
+	const kbVec3&								GetNormalizedAnchorPt() const { return m_NormalizedAnchorPt; }
+	const kbVec3&								GetUIToScreenSizeRatio() const { return m_UIToScreenSizeRatio; }
+	const kbVec3&								GetNormalizedScreenSize() const { return m_NormalizedScreenSize; }
 
 	const kbStaticModelComponent *				GetStaticModelComponent() const { return m_pStaticModelComponent; }
 
-	void										RegisterEventListener( IUIWidgetListener *const pListener );
-	void										UnregisterEventListener( IUIWidgetListener *const pListener );
+	void										RegisterEventListener( IUIWidgetListener* const pListener );
+	void										UnregisterEventListener( IUIWidgetListener* const pListener );
+
+	void										SetMaterialParamVector( const std::string& paramName, const kbVec4& paramValue );
+	void										SetMaterialParamTexture( const std::string& paramName, kbTexture* const pTexture );
 
 protected:
 
@@ -55,8 +58,8 @@ protected:
 	int											GetAuthoredWidth() const { return m_AuthoredWidth; }
 	int											GetAuthoredHeight() const { return m_AuthoredHeight; }
 
-	virtual void								InputCB( const kbInput_t & input ) override { }
-	void										FireEvent( const kbInput_t *const pInput = nullptr );
+	virtual void								InputCB( const kbInput_t& input ) override { }
+	void										FireEvent( const kbInput_t* const pInput = nullptr );
 
 private:
 
@@ -72,7 +75,7 @@ private:
 	bool										m_bHasFocus;
 
 protected:
-	kbStaticModelComponent *					m_pStaticModelComponent;
+	kbStaticModelComponent*						m_pStaticModelComponent;
 };
 
 /**
@@ -103,30 +106,30 @@ public:
 		LockYAxis
 	};
 
-	virtual void							RecalculateOld( const kbUIComponent *const pParent, const bool bFull );
-	virtual void							Recalculate( const kbUIWidgetComponent *const pParent, const bool bFull );
+	virtual void							RecalculateOld( const kbUIComponent* const pParent, const bool bFull );
+	virtual void							Recalculate( const kbUIWidgetComponent* const pParent, const bool bFull );
 
 	void									SetRenderOrderBias( const float bias );
 	float									GetRenderOrderBias() const;
 
-	void									SetRelativePosition( const kbVec3 & newPos );
-	void									SetRelativeSize( const kbVec3 & newSize );
+	void									SetRelativePosition( const kbVec3& newPos );
+	void									SetRelativeSize( const kbVec3& newSize );
 
-	const kbVec3 &							GetRelativePosition() const { return m_RelativePosition; }
-	const kbVec3 &							GetRelativeSize() const { return m_RelativeSize; }
+	const kbVec3&							GetRelativePosition() const { return m_RelativePosition; }
+	const kbVec3&							GetRelativeSize() const { return m_RelativeSize; }
 
-	const kbVec3 &							GetAbsolutePosition() const { return m_AbsolutePosition; }
-	const kbVec3 &							GetAbsoluteSize() const { return m_AbsoluteSize; }
+	const kbVec3&							GetAbsolutePosition() const { return m_AbsolutePosition; }
+	const kbVec3&							GetAbsoluteSize() const { return m_AbsoluteSize; }
 
-	const kbVec3 &							GetStartingPosition() const { return m_StartingPosition; }
-	const kbVec3 &							GetStartingSize() const { return m_StartingSize; }
+	const kbVec3&							GetStartingPosition() const { return m_StartingPosition; }
+	const kbVec3&							GetStartingSize() const { return m_StartingSize; }
 
 	kbVec2i									GetBaseTextureDimensions() const;
 
-	void									RegisterEventListener( IUIWidgetListener *const pListener );
-	void									UnregisterEventListener( IUIWidgetListener *const pListener );
+	void									RegisterEventListener( IUIWidgetListener* const pListener );
+	void									UnregisterEventListener( IUIWidgetListener* const pListener );
 
-	const kbStaticModelComponent *			GetStaticModel() const { return m_pModel; }
+	const kbStaticModelComponent*			GetStaticModel() const { return m_pModel; }
 
 	void									SetAdditiveTextureFactor( const float factor );
 
@@ -138,7 +141,7 @@ protected:
 	virtual void							SetEnable_Internal( const bool bEnable ) override;
 	virtual void							Update_Internal( const float DeltaTime ) override;
 
-	void									FireEvent( const kbInput_t *const pInput = nullptr );
+	void									FireEvent( const kbInput_t* const pInput = nullptr );
 
 	// Editor
 protected:
@@ -148,9 +151,9 @@ protected:
 
 private:
 
-	virtual void							EditorChange( const std::string & propertyName ) override;
+	virtual void							EditorChange( const std::string& propertyName ) override;
 	
-	virtual void							InputCB( const kbInput_t & input ) override;
+	virtual void							InputCB( const kbInput_t& input ) override;
 
 	// Editor
 	kbVec3									m_StartingPosition;
@@ -165,7 +168,7 @@ protected:
 	kbVec3									m_RelativeSize;
 	kbVec3									m_AbsolutePosition;
 	kbVec3									m_AbsoluteSize;
-	kbStaticModelComponent *				m_pModel;
+	kbStaticModelComponent*					m_pModel;
 
 	kbVec3									m_CachedParentPosition;
 	kbVec3									m_CachedParentSize;
@@ -186,8 +189,8 @@ class kbUISlider : public kbUIWidgetComponent {
 //-------------------------------------------------------------------------------------------------------------------------------------------------------------
 public:
 	
-	virtual void							RecalculateOld( const kbUIComponent *const pParent, const bool bFull ) override;
-	virtual void							Recalculate( const kbUIWidgetComponent *const pParent, const bool bFull ) override;
+	virtual void							RecalculateOld( const kbUIComponent* const pParent, const bool bFull ) override;
+	virtual void							Recalculate( const kbUIWidgetComponent* const pParent, const bool bFull ) override;
 
 	float									GetNormalizedValue();
 	void									SetNormalizedValue( const float newValue );

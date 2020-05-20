@@ -3,7 +3,7 @@
 //
 // Renderer implementation
 //
-// 2018-2019 kbEngine 2.0
+// 2018 kbEngine 2.0
 //==============================================================================
 #include <stdio.h>
 #include <math.h>
@@ -19,7 +19,7 @@
 const float g_DebugLineSpacing = 0.0165f + 0.007f;
 const float g_DebugTextSize = 0.0165f;
 
-kbRenderer * g_pRenderer = nullptr;
+kbRenderer* g_pRenderer = nullptr;
 
 /**
  *	kbRenderSubmesh::GetShader
@@ -349,14 +349,14 @@ void kbRenderer::RemoveRenderObject( const kbRenderObject & renderObjectToRemove
 	renderObj.m_bIsRemove = true;
 }
 
-/*
+/**
  *	kbRenderer::DrawDebugText
  */
-void kbRenderer::DrawDebugText( const std::string & theString, const float X, const float Y, const float ScreenCharW, const float ScreenCharH, const kbColor & Color ) {
+void kbRenderer::DrawDebugText( const std::string& theString, const float X, const float Y, const float ScreenCharW, const float ScreenCharH, const kbColor& Color ) {
 
 	m_DebugStrings_GameThread.push_back( kbTextInfo_t() );
 
-	kbTextInfo_t & newTextInfo = m_DebugStrings_GameThread[m_DebugStrings_GameThread.size() - 1];
+	kbTextInfo_t& newTextInfo = m_DebugStrings_GameThread[m_DebugStrings_GameThread.size() - 1];
 	newTextInfo.TextInfo = theString;
 	newTextInfo.screenX = X;
 	newTextInfo.screenY = Y;
