@@ -1,8 +1,8 @@
-kbGameEntity 239761533 1318716694 3936582591 3719488416 {
+kbGameEntity 2528587081 1314665003 2552556198 2118311366 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		Name = "Entity_249"
+		Name = "Entity_248"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
 		Position = 0.000000 0.000000 0.000000
 		Scale = 1.000000 1.000000 1.000000

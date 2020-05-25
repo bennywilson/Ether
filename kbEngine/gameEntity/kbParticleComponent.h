@@ -2,7 +2,7 @@
 // kbParticleComponent.h
 //
 //
-// 2016-2019 kbEngine 2.0
+// 2016 kbEngine 2.0
 //===================================================================================================
 #ifndef _KBPARTICLECOMPONENT_H_
 #define _KBPARTICLECOMPONENT_H_
@@ -23,8 +23,8 @@ struct kbParticle_t {
 
 	kbVec3														m_Position;
 	float														m_Rotation;
-	kbVec2														m_StartSize;
-	kbVec2														m_EndSize;
+	kbVec3														m_StartSize;
+	kbVec3														m_EndSize;
 	float														m_LifeLeft;
 	float														m_TotalLife;
 	kbVec3														m_StartVelocity;
@@ -75,7 +75,7 @@ public:
 
 	virtual														~kbParticleComponent();
 
-	virtual void												EditorChange( const std::string & propertyName );
+	virtual void												EditorChange( const std::string& propertyName );
 
 	virtual void												RenderSync();
 

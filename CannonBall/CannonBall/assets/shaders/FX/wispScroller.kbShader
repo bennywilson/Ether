@@ -1,5 +1,5 @@
 //===================================================================================================
-// additiveBlend.kbShader
+// wispScroller.kbShader
 //
 //
 // 2019 kbEngine 2.0
@@ -10,7 +10,8 @@ cbuffer matrixBuffer {
 	float4 uvOffset;
 	float4 uvTileSpeed;
 	float4 colorMultiplier;
-	float4 particleColor;
+	float4 noiseScaleAndBias = (5.5,1.0,0.0,0.0);
+	float4 noiseFadeParams = (0.25,0.3,0.5,0.0);			// x - Noise Fade Scale, y - Smooth Step Min, z - Smooth Stemp Max
 };
 
 kbShaderState {
@@ -56,8 +57,7 @@ pixelInput vertexShader( vertexInput input ) {
 
 	output.position = mul( input.position, mvpMatrix );
 	output.uv = input.uv;
-	output.color = colorMultiplier * particleColor;
-//output.color.w = particleColor.w;
+	output.color = colorMultiplier;
 	output.position2 = output.position.zw;
 	output.normal.xyz = mul( ( input.normal.xyz * 2.0f ) - 1.0f, (float3x3)modelMatrix );
 
@@ -70,24 +70,30 @@ pixelInput vertexShader( vertexInput input ) {
 Texture2D shaderTexture			: register(t0);
 SamplerState SampleType;
 
+Texture2D noiseTexture(white)			: register(t1);
+
  float4 pixelShader( pixelInput	input ) : SV_TARGET {
 
-
 	float time = 1.0f - input.color.w;
-	float2 uv = ( input.uv * uvTileSpeed.xy ) + float2(0.0f, -1.0f ) + uvTileSpeed.zw * time;
+	float2 uv = ( input.uv );//* uvTileSpeed.xy );//+ float2(0.0f, -1.0f ) + uvTileSpeed.zw * time;
 
-	float4 tex = shaderTexture.Sample( SampleType, uv );
+	const float4 tex = shaderTexture.Sample( SampleType, uv );
+	const float4 noise = noiseTexture.Sample( SampleType, uv * noiseScaleAndBias.xy + noiseScaleAndBias.zw );
+
 	float4 color = tex * input.color;
-
 	if ( uv.x < 0 || uv.x > 1 || uv.y < 0 || uv.y > 1 ) {
 		color = 0;
 	}
 
+	// Fade uv edges
+	float edgeAlpha = min( input.uv.y, input.uv.y );
+	edgeAlpha = saturate(edgeAlpha / 0.15f);
+	color.w *= edgeAlpha;	// Blended
 
-				float edgeAlpha = min( input.uv.y, input.uv.y );
-				edgeAlpha = saturate(edgeAlpha / 0.15f);
-				color.w *= edgeAlpha;	// Blended
-			//	color *= edgeAlpha * color.w;  // Additive
+	// Apply noise fade
+	color.w -= ( noise.r * noiseFadeParams.x );
+	color.w = smoothstep( noiseFadeParams.y, noiseFadeParams.z, color.w );
 
 	return color;
 }
+	

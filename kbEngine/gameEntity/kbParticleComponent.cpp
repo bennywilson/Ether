@@ -2,7 +2,7 @@
 // kbParticleComponent.cpp
 //
 //
-// 2016-2019 kbEngine 2.0
+// 2016 kbEngine 2.0
 //===================================================================================================
 #include "kbCore.h"
 #include "kbVector.h"
@@ -223,13 +223,14 @@ void kbParticleComponent::Update_Internal( const float DeltaTime ) {
 		const float curRotationRate = kbLerp( particle.m_StartRotation, particle.m_EndRotation, normalizedTime );
 		particle.m_Rotation += curRotationRate * DeltaTime;
 
-		kbVec2 curSize = kbVec2::zero;
+		kbVec3 curSize = kbVec3::zero;
 		if ( m_SizeOverLifeTimeCurve.size() == 0 ) {
 			curSize = kbLerp( particle.m_StartSize * scale.x, particle.m_EndSize * scale.y, normalizedTime );
 		} else {
 			kbVec3 eval = kbVectorAnimEvent::Evaluate( m_SizeOverLifeTimeCurve, normalizedTime ).ToVec3();
 			curSize.x = eval.x * particle.m_StartSize.x;
 			curSize.y = eval.y * particle.m_StartSize.y;
+			curSize.z = eval.z * particle.m_StartSize.z;
 		}
 
 		kbVec4 curColor = kbVec4::zero;
@@ -253,7 +254,7 @@ void kbParticleComponent::Update_Internal( const float DeltaTime ) {
 
 			renderObj.m_Position = particle.m_Position;
 			//renderObj.m_Orientation = kbQuat( 0.0f, 0.0f, 0.0f, 1.0f );	TODO
-			renderObj.m_Scale.Set( curSize.x, curSize.x, curSize.x );
+			renderObj.m_Scale.Set( curSize.x, curSize.y, curSize.z );
 			renderObj.m_Scale *= kbLevelComponent::GetGlobalModelScale();
 
 			if ( m_RotationOverLifeTimeCurve.size() > 0 ) {
@@ -371,10 +372,12 @@ void kbParticleComponent::Update_Internal( const float DeltaTime ) {
 		const float startSizeRand = kbfrand();
 		newParticle.m_StartSize.x = m_MinParticleStartSize.x + ( startSizeRand * ( m_MaxParticleStartSize.x - m_MinParticleStartSize.x ) );
 		newParticle.m_StartSize.y = m_MinParticleStartSize.y + ( startSizeRand * ( m_MaxParticleStartSize.y - m_MinParticleStartSize.y ) );
+		newParticle.m_StartSize.z = m_MinParticleStartSize.z + ( startSizeRand * ( m_MaxParticleStartSize.z - m_MinParticleStartSize.z ) );
 
 		const float endSizeRand = kbfrand();
 		newParticle.m_EndSize.x = m_MinParticleEndSize.x + ( endSizeRand * ( m_MaxParticleEndSize.x - m_MinParticleEndSize.x ) );
 		newParticle.m_EndSize.y = m_MinParticleEndSize.y + ( endSizeRand * ( m_MaxParticleEndSize.y - m_MinParticleEndSize.y ) );
+		newParticle.m_EndSize.z = m_MinParticleEndSize.z + ( endSizeRand * ( m_MaxParticleEndSize.z - m_MinParticleEndSize.z ) );
 
 		newParticle.m_Randoms[0] = kbfrand();
 		newParticle.m_Randoms[1] = kbfrand();
