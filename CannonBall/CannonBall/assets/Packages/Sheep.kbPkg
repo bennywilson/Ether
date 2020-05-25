@@ -141,39 +141,39 @@ kbGameEntity 4226348206 1325904980 2380668328 2364791781 {
 	kbParticleComponent { 
 		Enabled = 1
 		LifeTime =  -1.000000
-		Name = ""
+		Name = "Inner Swirl"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
 		Position = 0.000000 0.000000 0.000000
 		Scale = 50.000000 50.000000 50.000000
 		AlphaOverLife = 0
 		ColorOverLife = 0
 		DebugPlayEntity = 0
-		EndColor = 1.000000 1.000000 1.000000 1.000000
+		EndColor = 1.000000 1.000000 1.000000 0.000000
 		Gravity = 0.000000 0.000000 0.000000
 		MaterialList = 0
-		MaxBurstCount = 0
-		MaxDuration =  0.250000
+		MaxBurstCount = 1
 		MaxEndRotationRate =  0.000000
-		MaxEndSize = 2.000000 1.500000 2.000000
 		MaxEndVelocity = 0.000000 0.000000 0.000000
-		MaxParticlesToEmit = 10
-		MaxSpawnRate =  50.000000
-		MaxStart3DOffset = 0.100000 -0.450000 0.100000
+		MaxParticlesToEmit = 1
+		MaxSpawnRate =  1.0
 		MaxStart3DRotation = 0.000000 0.000000 0.000000
 		MaxStartRotationRate =  0.000000
-		MaxStartSize = 2.000000 1.500000 2.000000
-		MaxStartVelocity = 0.000000 2.000000 0.000000
-		MinBurstCount = 0
-		MinDuration =  0.150000
-		MinEndRotationRate =  0.000000
+		MinStartSize = 0.56 0.8 0.500000
+		MaxStartSize = 0.55 0.8 0.55
 		MinEndSize = 2.000000 1.500000 2.000000
+		MaxEndSize = 2.000000 1.500000 2.000000
+		MaxStartVelocity = 0.000000 0.000000 0.000000
+		MinBurstCount = 1
+		MinDuration =  0.25
+		MaxDuration =  0.25
+		MinEndRotationRate =  0.000000
 		MinEndVelocity = 0.000000 0.000000 0.000000
-		MinSpawnRate =  0.100000
+		MinSpawnRate =  1.0
 		MinStart3DOffset = -0.100000 -0.500000 -0.100000
+		MaxStart3DOffset = 0.100000 -0.450000 0.100000
 		MinStart3DRotation = 0.000000 0.000000 0.000000
 		MinStartRotationRate =  0.000000
-		MinStartSize = 2.000000 1.500000 2.000000
-		MinStartVelocity = 0.000000 1.000000 0.000000
+		MinStartVelocity = 0.000000 0.000000 0.000000
 		ModelEmitter = 1
 			kbModelEmitter { 
 				Enabled = 0
@@ -184,27 +184,13 @@ kbGameEntity 4226348206 1325904980 2380668328 2364791781 {
 						LifeTime =  -1.000000
 						CullModeOverride = ShaderDefault
 						Shader = .\assets\shaders\fx\wispscroller.kbshader
-						ShaderParams = 7
+						ShaderParams = 5
 							kbShaderParamComponent { 
 								Enabled = 0
 								LifeTime =  -1.000000
 								ParamName = "uvOffset"
 								Texture = NULL
 								Vector = 0.000000 0.000000 0.000000 0.000000
-							}
-							kbShaderParamComponent { 
-								Enabled = 0
-								LifeTime =  -1.000000
-								ParamName = "uvTileSpeed"
-								Texture = NULL
-								Vector = 20.000000 1.000000 0.000000 1.000000
-							}
-							kbShaderParamComponent { 
-								Enabled = 0
-								LifeTime =  -1.000000
-								ParamName = "colorMultiplier"
-								Texture = NULL
-								Vector = 1.000000 1.000000 1.000000 0.500000
 							}
 							kbShaderParamComponent { 
 								Enabled = 0
@@ -240,12 +226,258 @@ kbGameEntity 4226348206 1325904980 2380668328 2364791781 {
 		ParticleBillboardType = FaceCamera
 		RenderOrderBias =  0.000000
 		RotationOverLife = 0
-		SizeOverLife = 0
-		StartColor = 1.000000 1.000000 1.000000 1.000000
+		SizeOverLife = 3
+			kbVectorAnimEvent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				EventName = ""
+				EventTime =  0.000000
+				EventValue = 0.1 0.1 0.1 0.25
+			}
+			kbVectorAnimEvent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				EventName = ""
+				EventTime =  0.300000
+				EventValue = 2.0 2.0 2.0 1.000000
+			}
+			kbVectorAnimEvent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				EventName = ""
+				EventTime =  1.0
+				EventValue = 2.5 2.5 2.5 1.0
+			}
+		StartColor = 1.000000 1.000000 1.000000 1.0
 		StartDelay =  0.000000
 		TotalDuration =  5.000000
 		VelocityCurve = 0
 	}
+	kbParticleComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		Name = "Outer Swirl 1"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 0.000000 0.000000 0.000000
+		Scale = 50.000000 50.000000 50.000000
+		AlphaOverLife = 0
+		ColorOverLife = 0
+		DebugPlayEntity = 0
+		EndColor = 1.000000 1.000000 1.000000 0.000000
+		Gravity = 0.000000 0.000000 0.000000
+		MaterialList = 0
+		MaxBurstCount = 1
+		MaxEndRotationRate =  0.000000
+		MaxEndVelocity = 0.000000 0.000000 0.000000
+		MaxParticlesToEmit = 1
+		MaxSpawnRate =  1
+		MaxStart3DRotation = 0.000000 0.000000 0.000000
+		MaxStartRotationRate =  0.000000
+		MinStartSize = 0.56 0.8 0.500000
+		MaxStartSize = 0.55 0.8 0.55
+		MinEndSize = 2.000000 1.500000 2.000000
+		MaxEndSize = 2.000000 1.500000 2.000000
+		MaxStartVelocity = 0.000000 0.000000 0.000000
+		MinBurstCount = 1
+		MinDuration =  0.25
+		MaxDuration =  0.25
+		MinEndRotationRate =  0.000000
+		MinEndVelocity = 0.000000 0.000000 0.000000
+		MinSpawnRate =  0.100000
+		MinStart3DOffset = -0.100000 -0.500000 -0.100000
+		MaxStart3DOffset = 0.100000 -0.450000 0.100000
+		MinStart3DRotation = 0.000000 0.000000 0.000000
+		MinStartRotationRate =  0.000000
+		MinStartVelocity = 0.000000 0.000000 0.000000
+		ModelEmitter = 1
+			kbModelEmitter { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				MaterialList = 1
+					kbMaterialComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						CullModeOverride = ShaderDefault
+						Shader = .\assets\shaders\fx\wispscroller.kbshader
+						ShaderParams = 5
+							kbShaderParamComponent { 
+								Enabled = 0
+								LifeTime =  -1.000000
+								ParamName = "uvOffset"
+								Texture = NULL
+								Vector = 0.000000 0.000000 0.000000 0.000000
+							}
+							kbShaderParamComponent { 
+								Enabled = 0
+								LifeTime =  -1.000000
+								ParamName = "particleColor"
+								Texture = NULL
+								Vector = 1.000000 0.000000 0.000000 0.000000
+							}
+							kbShaderParamComponent { 
+								Enabled = 0
+								LifeTime =  -1.000000
+								ParamName = "shaderTexture"
+								Texture = .\assets\fx\wisps\windwisp.tif
+								Vector = 0.000000 0.000000 0.000000 0.000000
+							}
+							kbShaderParamComponent { 
+								Enabled = 0
+								LifeTime =  -1.000000
+								ParamName = "noiseParams"
+								Texture = NULL
+								Vector = 0.000000 0.000000 0.000000 0.000000
+							}
+							kbShaderParamComponent { 
+								Enabled = 0
+								LifeTime =  -1.000000
+								ParamName = "noiseTexture"
+								Texture = .\assets\fx\noise\noise_highcontrast.tif
+								Vector = 0.000000 0.000000 0.000000 0.000000
+							}
+					}
+				Model = .\assets\fx\curves\swirl_2.fbx
+			}
+
+		ParticleBillboardType = FaceCamera
+		RenderOrderBias =  0.000000
+		RotationOverLife = 0
+		SizeOverLife = 3
+			kbVectorAnimEvent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				EventName = ""
+				EventTime =  0.000000
+				EventValue = 0.1 0.1 0.1 0.25
+			}
+			kbVectorAnimEvent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				EventName = ""
+				EventTime =  0.300000
+				EventValue = 4.0 2.0 4.0 1.000000
+			}
+			kbVectorAnimEvent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				EventName = ""
+				EventTime =  1.0
+				EventValue = 10.5 2.6 10.5 1.0
+			}
+		StartColor = 1.000000 1.000000 1.000000 0.25
+		StartDelay =  0.1
+		TotalDuration =  5.000000
+		VelocityCurve = 0
+	}
+	kbParticleComponent { 
+			Enabled = 1
+			LifeTime =  -1.000000
+			Name = "Impact_Poof"
+			Orientation = 0.000000 0.000000 0.000000 1.000000
+			Position = 0.000000 0.000000 0.000000
+			Scale = 0.100000 0.100000 0.100000
+			AlphaOverLife = 0
+			ColorOverLife = 3
+				kbVectorAnimEvent { 
+					Enabled = 0
+					LifeTime =  -1.000000
+					EventName = ""
+					EventTime =  0.000000
+					EventValue = 0.05 0.05 0.05 0.2
+				}
+				kbVectorAnimEvent { 
+					Enabled = 0
+					LifeTime =  -1.000000
+					EventName = ""
+					EventTime =  0.100000
+					EventValue = 0.05 0.05 0.05 0.2
+				}
+				kbVectorAnimEvent { 
+					Enabled = 0
+					LifeTime =  -1.000000
+					EventName = ""
+					EventTime =  1.000000
+					EventValue = 0 0 0 0
+				}
+			DebugPlayEntity = 0
+			EndColor = 1.000000 1.000000 1.000000 0.000000
+			Gravity = 0.000000 0.000000 0.000000
+			MaterialList = 1
+				kbMaterialComponent { 
+					Enabled = 0
+					LifeTime =  -1.000000
+					CullModeOverride = ShaderDefault
+					Shader = .\assets\shaders\fx\particle_add.kbshader
+					ShaderParams = 2
+						kbShaderParamComponent { 
+							Enabled = 0
+							LifeTime =  -1.000000
+							ParamName = "colorMultplier"
+							Texture = NULL
+							Vector = 0.1 0.1 0.1 1.0
+						}
+						kbShaderParamComponent { 
+							Enabled = 0
+							LifeTime =  -1.000000
+							ParamName = "shaderTexture"
+							Texture = .\assets\fx\smoke\smokeatlas_1.tif
+							Vector = 0.000000 0.000000 0.000000 0.000000
+						}
+				}
+			MaxBurstCount = 255
+			MaxDuration =  0.25
+			MaxEndRotationRate =  0.500000
+			MaxEndSize = 5.700000 5.700000 5.700000
+			MaxEndVelocity = 0.000000 0.500000 0.000000
+			MaxParticlesToEmit = -1
+			MinSpawnRate =  255.000000
+			MaxSpawnRate =  255.000000
+			MaxStart3DOffset = 0.000000 0.000000 0.000000
+			MaxStart3DRotation = 0.000000 0.000000 0.000000
+			MaxStartRotationRate =  3.000000
+			MaxStartSize = 5.500000 5.500000 5.500000
+			MinBurstCount = 200
+			MinDuration =  0.500000
+			MinEndRotationRate =  -0.500000
+			MinEndSize = 5.500000 5.500000 5.500000
+			MinEndVelocity = 0.000000 0.100000 0.000000
+			MinStart3DOffset = 0.000000 0.000000 0.000000
+			MinStart3DRotation = 0.000000 0.000000 0.000000
+			MinStartRotationRate =  -3.000000
+			MinStartSize = 5.000000 5.000000 5.000000
+			MinStartVelocity = -2.000000 0.100000 -2.000000
+			MaxStartVelocity = 3.000000 0.1 3.000000
+			ModelEmitter = 0
+			ParticleBillboardType = FaceCamera
+			RenderOrderBias =  0.000000
+			RotationOverLife = 0
+			SizeOverLife = 0
+			StartColor = 1.0 1.0 1.0 1.0
+			StartDelay =  0.000000
+			TotalDuration =  0.15
+			VelocityCurve = 3
+				kbAnimEvent { 
+					Enabled = 0
+					LifeTime =  -1.000000
+					EventName = ""
+					EventTime =  0.000000
+					EventValue =  15.000000
+				}
+				kbAnimEvent { 
+					Enabled = 0
+					LifeTime =  -1.000000
+					EventName = ""
+					EventTime =  0.100000
+					EventValue =  5.000000
+				}
+				kbAnimEvent { 
+					Enabled = 0
+					LifeTime =  -1.000000
+					EventName = ""
+					EventTime =  1.00000
+					EventValue =  1
+				}
+		}
 	kbPlaySoundComponent { 
 		Enabled = 1
 		LifeTime =  -1.000000
