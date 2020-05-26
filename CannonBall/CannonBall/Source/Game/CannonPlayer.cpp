@@ -380,7 +380,10 @@ void CannonCameraShakeComponent::Constructor() {
 	m_FrequencyX = 15.0f;
 	m_FrequencyY = 10.0f;
 
+	m_ActivationDelaySeconds = 0.0f;
 	m_bActivateOnEnable = false;
+
+	m_ShakeStartTime = -1.0f;
 }
 
 /**
@@ -390,14 +393,24 @@ void CannonCameraShakeComponent::SetEnable_Internal( const bool bEnable ) {
 	Super::SetEnable_Internal( bEnable ); 
 	
 	if ( bEnable ) {
+		m_ShakeStartTime = g_GlobalTimer.TimeElapsedSeconds() + m_ActivationDelaySeconds;
+	}
+}
+
+/**
+ *	CannonCameraShakeComponent::Update_Internal
+ */
+void CannonCameraShakeComponent::Update_Internal( const float DeltaTime ) {
+
+	Super::Update_Internal( DeltaTime );
+
+	if ( m_bActivateOnEnable && g_GlobalTimer.TimeElapsedSeconds() > m_ShakeStartTime ) {
 		// Disable so that this component doesn't prevent it's owning entity to linger past it's life time
 		Enable( false );
 
-		if ( m_bActivateOnEnable )  {
-			CannonCameraComponent *const pCam = (CannonCameraComponent*)g_pCannonGame->GetMainCamera();
-			if ( pCam != nullptr ) {
-				pCam->StartCameraShake( this );
-			}
+		CannonCameraComponent *const pCam = (CannonCameraComponent*)g_pCannonGame->GetMainCamera();
+		if ( pCam != nullptr ) {
+			pCam->StartCameraShake( this );
 		}
 	} 
 }

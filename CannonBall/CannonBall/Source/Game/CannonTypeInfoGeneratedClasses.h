@@ -61,6 +61,7 @@ GenerateClass(
 	AddField( "AmplitudeY", KBTYPEINFO_FLOAT, CannonCameraShakeComponent, m_AmplitudeY, false, "" )
 	AddField( "FrequencyY", KBTYPEINFO_FLOAT, CannonCameraShakeComponent, m_FrequencyY, false, "" )
 	AddField( "ActivateOnEnable", KBTYPEINFO_BOOL, CannonCameraShakeComponent, m_bActivateOnEnable, false, "" )
+	AddField( "ActivationDelay", KBTYPEINFO_FLOAT, CannonCameraShakeComponent, m_ActivationDelaySeconds, false, "" )
 )
 
 GenerateClass(

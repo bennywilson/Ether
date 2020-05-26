@@ -9,7 +9,7 @@ cbuffer matrixBuffer {
 	matrix mvpMatrix;
 	float4 uvOffset;
 	float4 uvTileSpeed = (20.0,1.0,-2.0,0.0);
-	float4 colorMultiplier = (1.0,1.0,1.0,1.0f);
+	float4 colorMultiplier = (1.0,1.0,1.0,2.0f);
 	float4 noiseScaleAndBias = (0.25,1.0,0.0,0.0);
 	float4 noiseFadeParams = (1.0,0.5,0.8,0.0);			// x - Noise Fade Scale, y - Smooth Step Min, z - Smooth Step Max
 	float4 uvFadeParams = (0.1,0.5,0.0,0.0);				// xy - UV fade distance
@@ -106,7 +106,6 @@ Texture2D noiseTexture(white)			: register(t1);
 	float timeFade = saturate( min( time, 1.0f - time  ) / 0.25f );
 
 	color.w *= saturate( min( edgeAlpha.y, edgeAlpha.x ) ) * timeFade;
-	return color * colorMultiplier;
-//	return float4(1,1,1,color.w);//float4(color.xyz,1);
+	return saturate( color * colorMultiplier );
 }
 	

@@ -988,7 +988,7 @@ void KungFuLevelComponent::UpdateDebugAndCheats() {
 
 		if ( input.WasKeyJustPressed( 'S' ) ) {
 			static float lastPlayTime = 0.0f;
-			{//if ( g_GlobalTimer.TimeElapsedSeconds() - lastPlayTime > 1.0f) {
+			if ( g_GlobalTimer.TimeElapsedSeconds() - lastPlayTime > 2.0f) {
 				m_pSheep->PlayShakeNBakeFX();
 				lastPlayTime = g_GlobalTimer.TimeElapsedSeconds();
 			}

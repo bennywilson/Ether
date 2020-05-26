@@ -53,7 +53,7 @@ kbPrefab 1 {
 						kbShaderParamComponent { 
 							Enabled = 0
 							LifeTime =  -1.000000
-							ParamName = "colorMultplier"
+							ParamName = "colorMultiplier"
 							Texture = NULL
 							Vector = 1.000000 1.000000 1.000000 1.000000
 						}
@@ -184,13 +184,20 @@ kbGameEntity 4226348206 1325904980 2380668328 2364791781 {
 						LifeTime =  -1.000000
 						CullModeOverride = ShaderDefault
 						Shader = .\assets\shaders\fx\wispscroller.kbshader
-						ShaderParams = 5
+						ShaderParams = 6
 							kbShaderParamComponent { 
 								Enabled = 0
 								LifeTime =  -1.000000
 								ParamName = "uvOffset"
 								Texture = NULL
 								Vector = 0.000000 0.000000 0.000000 0.000000
+							}
+							kbShaderParamComponent { 
+								Enabled = 0
+								LifeTime =  -1.000000
+								ParamName = "colorMultiplier"
+								Texture = NULL
+								Vector = 1.0 1.0 1.0 2.0
 							}
 							kbShaderParamComponent { 
 								Enabled = 0
@@ -299,7 +306,14 @@ kbGameEntity 4226348206 1325904980 2380668328 2364791781 {
 						LifeTime =  -1.000000
 						CullModeOverride = ShaderDefault
 						Shader = .\assets\shaders\fx\wispscroller.kbshader
-						ShaderParams = 5
+						ShaderParams = 6
+							kbShaderParamComponent { 
+								Enabled = 0
+								LifeTime =  -1.000000
+								ParamName = "colorMultiplier"
+								Texture = NULL
+								Vector = 1.0 1.0 1.0 0.85
+							}
 							kbShaderParamComponent { 
 								Enabled = 0
 								LifeTime =  -1.000000
@@ -414,7 +428,7 @@ kbGameEntity 4226348206 1325904980 2380668328 2364791781 {
 							LifeTime =  -1.000000
 							ParamName = "colorMultplier"
 							Texture = NULL
-							Vector = 0.1 0.1 0.1 1.0
+							Vector = 1.0 1.0 1.0 1.0
 						}
 						kbShaderParamComponent { 
 							Enabled = 0
@@ -513,16 +527,17 @@ kbGameEntity 4226348206 1325904980 2380668328 2364791781 {
 			}
 	}
 	CannonCameraShakeComponent { 
-		Enabled = 0
+		Enabled = 1
 		LifeTime =  -1.000000
 		DummyTemp = 0
 		Health =  10.000000
 		ActivateOnEnable = 1
-		AmplitudeX =  0.090000
-		AmplitudeY =  0.070000
+		AmplitudeX =  0.180000
+		AmplitudeY =  0.080000
 		Duration =  0.700000
-		FrequencyX =  30.000000
-		FrequencyY =  40.000000
+		FrequencyX =  15.000000
+		FrequencyY =  20.000000
+		ActivationDelay = 0.2
 	}
 }
 }

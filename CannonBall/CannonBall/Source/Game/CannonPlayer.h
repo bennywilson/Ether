@@ -20,7 +20,7 @@ public:
 	float										GetMaxRotateSpeed() const { return m_MaxRotateSpeed; }
 
 	kbVec3										GetTargetFacingDirection() const { return m_TargetFacingDirection; }
-	void										SetTargetFacingDirection( const kbVec3 & targetDir ) { m_TargetFacingDirection = targetDir; }
+	void										SetTargetFacingDirection( const kbVec3& targetDir ) { m_TargetFacingDirection = targetDir; }
 
 	bool										IsPlayingAnim( const kbString animName ) const;
 	void										PlayAnimation( const kbString animName, const float animBlendInLen, const bool bRestartIfAlreadyPlaying = false, const kbString nextAnim = kbString::EmptyString, const float nextAnimBlendInLen = 0.0f );
@@ -29,7 +29,7 @@ public:
 
 	void										ApplyAnimSmear( const kbVec3 smearVec, const float durationSec );
 
-	void										SetOverrideFXMaskParameters( const kbVec4 & fxParams );
+	void										SetOverrideFXMaskParameters( const kbVec4& fxParams );
 
 	void										PlayAttackVO( const int pref );
 
@@ -64,7 +64,7 @@ protected:
 
 //---------------------------------------------------------------------------------------------------
 	// IAnimEventListener
-	virtual void								OnAnimEvent( const kbAnimEventInfo_t & animEvent ) override { }
+	virtual void								OnAnimEvent( const kbAnimEventInfo_t& animEvent ) override { }
 };
 
 /**
@@ -89,7 +89,8 @@ public:
 	kbVec2										GetAmplitude() const { return kbVec2( m_AmplitudeX, m_AmplitudeY ); }
 	kbVec2										GetFrequency() const { return kbVec2( m_FrequencyX, m_FrequencyY ); }
 
-	void										SetEnable_Internal( const bool bEnable );
+	void										SetEnable_Internal( const bool bEnable ) override;
+	void										Update_Internal( const float deltaTime ) override;
 
 	float										m_Duration;
 	float										m_AmplitudeX;
@@ -100,6 +101,8 @@ public:
 
 private:
 
+	float										m_ActivationDelaySeconds;
+	float										m_ShakeStartTime;
 	bool										m_bActivateOnEnable;
 };
 

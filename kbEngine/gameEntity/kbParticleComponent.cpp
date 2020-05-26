@@ -228,9 +228,9 @@ void kbParticleComponent::Update_Internal( const float DeltaTime ) {
 			curSize = kbLerp( particle.m_StartSize * scale.x, particle.m_EndSize * scale.y, normalizedTime );
 		} else {
 			kbVec3 eval = kbVectorAnimEvent::Evaluate( m_SizeOverLifeTimeCurve, normalizedTime ).ToVec3();
-			curSize.x = eval.x * particle.m_StartSize.x;
-			curSize.y = eval.y * particle.m_StartSize.y;
-			curSize.z = eval.z * particle.m_StartSize.z;
+			curSize.x = eval.x * particle.m_StartSize.x * scale.x;
+			curSize.y = eval.y * particle.m_StartSize.y * scale.y;
+			curSize.z = eval.z * particle.m_StartSize.z * scale.z;
 		}
 
 		kbVec4 curColor = kbVec4::zero;
@@ -378,6 +378,11 @@ void kbParticleComponent::Update_Internal( const float DeltaTime ) {
 		newParticle.m_EndSize.x = m_MinParticleEndSize.x + ( endSizeRand * ( m_MaxParticleEndSize.x - m_MinParticleEndSize.x ) );
 		newParticle.m_EndSize.y = m_MinParticleEndSize.y + ( endSizeRand * ( m_MaxParticleEndSize.y - m_MinParticleEndSize.y ) );
 		newParticle.m_EndSize.z = m_MinParticleEndSize.z + ( endSizeRand * ( m_MaxParticleEndSize.z - m_MinParticleEndSize.z ) );
+
+		if ( IsModelEmitter() ) {
+			kbLog( "StartSize = %f %f %f", newParticle.m_StartSize.x, newParticle.m_StartSize.y, newParticle.m_StartSize.z );
+			kbLog( "End = %f %f %f", newParticle.m_EndSize.x, newParticle.m_EndSize.y, newParticle.m_EndSize.z );
+		}
 
 		newParticle.m_Randoms[0] = kbfrand();
 		newParticle.m_Randoms[1] = kbfrand();
