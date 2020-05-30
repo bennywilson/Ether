@@ -97,9 +97,12 @@
     <None Include="assets\shaders\Environment\environmentSkinned.kbShader" />
     <None Include="assets\shaders\Environment\environmentTiled.kbShader" />
     <None Include="assets\shaders\Environment\environmentTransparency.kbShader" />
+    <None Include="assets\shaders\FX\basicGlow.kbShader" />
     <None Include="assets\shaders\FX\decal_Blend.kbShader" />
     <None Include="assets\shaders\FX\FullScreen\FullScreen_WaterDroplets.kbShader" />
     <None Include="assets\shaders\FX\hackClip.kbShader" />
+    <None Include="assets\shaders\FX\Particle_Add.kbShader" />
+    <None Include="assets\shaders\FX\Particle_Blend.kbShader" />
     <None Include="assets\shaders\FX\Particle_BlendAdd.kbShader" />
     <None Include="assets\shaders\FX\splash.kbShader" />
     <None Include="assets\shaders\FX\wispScroller.kbShader" />

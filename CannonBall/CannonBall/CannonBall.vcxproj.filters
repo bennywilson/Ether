@@ -132,6 +132,15 @@
     <None Include="assets\shaders\Environment\depthFogSheet.kbShader">
       <Filter>Shaders\Environment</Filter>
     </None>
+    <None Include="assets\shaders\FX\basicGlow.kbShader">
+      <Filter>Shaders\FX</Filter>
+    </None>
+    <None Include="assets\shaders\FX\Particle_Add.kbShader">
+      <Filter>Shaders\FX</Filter>
+    </None>
+    <None Include="assets\shaders\FX\Particle_Blend.kbShader">
+      <Filter>Shaders\FX</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Shaders">

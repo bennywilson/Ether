@@ -185,14 +185,6 @@ void kbParticleComponent::Update_Internal( const float DeltaTime ) {
 
 	kbParticleVertex* pDstVerts = nullptr;
 
-	m_RenderObject.m_VertBufferIndexCount = (uint)m_Particles.size() * 6;
-	if ( IsModelEmitter() == false && m_Particles.size() > 0 ) {
-
-		kbParticleManager& particleMgr = g_pGame->GetParticleManager();
-		particleMgr.ReserveScratchBufferSpace( pDstVerts, m_RenderObject, (int)m_Particles.size() * 4 );
-		kbErrorCheck( pDstVerts != nullptr, "kbParticleComponent::Update_Internal() - pDstVerts is null" );
-	}
-
 	for ( int i = (int)m_Particles.size() - 1; i >= 0 ; i-- ) {
 		kbParticle_t & particle = m_Particles[i];
 
@@ -205,7 +197,24 @@ void kbParticleComponent::Update_Internal( const float DeltaTime ) {
 				continue;
 			}
 		}
+	}
 
+	m_RenderObject.m_VertBufferIndexCount = (uint)m_Particles.size() * 6;
+	if (IsModelEmitter() == false && m_Particles.size() > 0)
+	{
+
+		kbParticleManager& particleMgr = g_pGame->GetParticleManager();
+		particleMgr.ReserveScratchBufferSpace(pDstVerts, m_RenderObject, (int)m_Particles.size() * 4);
+		kbErrorCheck(pDstVerts != nullptr, "kbParticleComponent::Update_Internal() - pDstVerts is null");
+
+		for (int i = 0; i < m_Particles.size() * 4; i++)
+		{
+			pDstVerts[i].position = kbVec3::zero;
+		}
+	}
+
+	for ( int i = (int)m_Particles.size() - 1; i >= 0 ; i-- ) {
+		kbParticle_t & particle = m_Particles[i];
 		const float normalizedTime = ( particle.m_TotalLife - particle.m_LifeLeft ) / particle.m_TotalLife;
 		kbVec3 curVelocity = kbVec3::zero;
 
