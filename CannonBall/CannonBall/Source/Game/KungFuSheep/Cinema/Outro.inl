@@ -73,9 +73,9 @@ public:
 			auto pTreyTon = KungFuLevelComponent::Get()->Get3000Ton()->GetComponent<CannonActorComponent>();
 			pTreyTon->ApplyAnimSmear( kbVec3( 0.0f, 10.0f, 0.0f ), 0.067f );
 		} else if ( eventName == sPounce_2_Impact_1 ) {
-			kbVec3 fxPos = pSheep->GetOwnerPosition();
-			fxPos.z =  KungFuGame::kOutroStartZ + 7.0f;
 
+			kbVec3 fxPos = pSheep->GetOwnerPosition();
+			fxPos.z =  KungFuGame::kOutroStartZ + 8.75f;
 			pSheep->PlayCannonBallFX( fxPos );
 
 			// Smash bridge
@@ -171,6 +171,7 @@ public:
 		m_pLastSnolaf = KungFuLevelComponent::Get()->GetSnolafFromPool();
 		m_pLastSnolaf->GetComponent<kbSkeletalModelComponent>()->RegisterAnimEventListener( this );
 		m_pLastSnolaf->GetComponent<KungFuSnolafComponent>()->RequestStateChange( KungFuSnolafState::Cinema );
+		m_pLastSnolaf->GetOwner()->DisableAllComponents();
 
 		m_MusicStartTime = g_GlobalTimer.TimeElapsedSeconds() + 0.75f;
 	}
@@ -382,6 +383,7 @@ public:
 
 				if ( GetStateTime() > 1.0f ) {
 
+					m_pLastSnolaf->GetOwner()->EnableAllComponents();
 					m_pLastSnolaf->SetOwnerPosition( KungFuGame::kFinalSnolafEntryPos + kbVec3( 0.0f, 0.0f, 2.0f ) );	// Spawn Snolaf offscreen
 					m_pLastSnolaf->RequestStateChange( KungFuSnolafState::Cinema );
 					m_pLastSnolaf->SetTargetFacingDirection( kbVec3( 0.0f, 0.0f, 1.0f ) );

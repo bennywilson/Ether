@@ -1,8 +1,8 @@
-kbGameEntity 68694288 1187096218 36683649 2598242303 {
+kbGameEntity 1744398775 1208941616 135111059 1160986169 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		Name = "Entity_52"
+		Name = "Entity_54"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
 		Position = 0.000000 0.000000 0.000000
 		Scale = 1.000000 1.000000 1.000000
@@ -10,8 +10,8 @@ kbGameEntity 68694288 1187096218 36683649 2598242303 {
 	kbEditorLevelSettingsComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		MainCameraPosition = 51.064819 -43.104843 -244.142639
-		MainCameraRotation = 0.290654 0.021216 -0.006451 -0.956571
+		MainCameraPosition = 44.483322 -48.539875 -236.305008
+		MainCameraRotation = -0.008855 0.468102 0.004685 -0.883618
 	}
 }
 kbGameEntity 537364968 1092523782 2953639826 2626478307 {
@@ -958,8 +958,8 @@ kbGameEntity 2760744939 1124379877 2772631961 2644415108 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "Camera"
-		Orientation = 0.024421 -0.211155 0.005273 -0.977133
-		Position = 65.205078 -48.588318 -259.640259
+		Orientation = -0.008855 0.468102 0.004685 -0.883618
+		Position = 44.483322 -48.539875 -236.305008
 		Scale = 1.000000 1.000000 1.000000
 	}
 	CannonCameraComponent { 
@@ -1265,7 +1265,7 @@ kbGameEntity 1629359571 1128553400 148554423 1651028256 {
 						Enabled = 0
 						LifeTime =  -1.000000
 						ParamName = "colorTexture"
-						Texture = .\assets\models\characters\kidskate\character_template.png
+						Texture = .\assets\models\characters\klansman\klansman.png
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 					kbShaderParamComponent { 
@@ -1321,7 +1321,7 @@ kbGameEntity 1629359571 1128553400 148554423 1651028256 {
 						Enabled = 0
 						LifeTime =  -1.000000
 						ParamName = "colorTexture"
-						Texture = .\assets\models\characters\kidskate\character_template.png
+						Texture = .\assets\models\characters\klansman\klansman.png
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 					kbShaderParamComponent { 
@@ -1345,14 +1345,14 @@ kbGameEntity 1629359571 1128553400 148554423 1651028256 {
 			kbAnimComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
-				Animation = .\assets\models\characters\magaman\magaman_testpose_1.kbanim.ms3d
+				Animation = .\assets\models\characters\klansman\klansman_run.kbanim.ms3d
 				AnimationEvent = 0
 				AnimationName = ""
 				IsLooping = 0
 				TimeScale =  1.000000
 			}
-		DebugAnimIndex = -1
-		Model = .\assets\models\characters\magaman\magaman.ms3d
+		DebugAnimIndex = 0
+		Model = .\assets\models\characters\klansman\klansman.ms3d
 	}
 	kbSkeletalModelComponent { 
 		Enabled = 1
@@ -1456,14 +1456,14 @@ kbGameEntity 1629359571 1128553400 148554423 1651028256 {
 			kbAnimComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
-				Animation = .\assets\models\characters\magaman\magaman_testpose_1.kbanim.ms3d
+				Animation = .\assets\models\characters\klansman\klansman_run.kbanim.ms3d
 				AnimationEvent = 0
 				AnimationName = ""
 				IsLooping = 0
 				TimeScale =  1.000000
 			}
-		DebugAnimIndex = -1
-		Model = .\assets\models\characters\magaman\magaman.ms3d
+		DebugAnimIndex = 0
+		Model = .\assets\models\characters\klansman\klansman.ms3d
 	}
 }
 kbGameEntity 3872875380 1143399982 3099341244 1341854221 {
@@ -1970,7 +1970,7 @@ kbGameEntity 3009369756 1236231139 3630281654 3522747833 {
 		Model = ..\..\kbengine\assets\models\unitquad.ms3d
 	}
 }
-kbGameEntity 1664337380 1336944862 1634871984 659637832 {
+kbGameEntity 4071324223 1281714801 3323369613 3696575293 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
@@ -2053,6 +2053,24 @@ kbGameEntity 1664337380 1336944862 1634871984 659637832 {
 	}
 }
 kbGameEntity 1897781022 1085448012 3048376235 3637439575 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Lamp 2 - Point Light"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 49.599503 -47.820705 -234.110413
+		Scale = 1.000000 1.000000 1.000000
+	}
+	kbPointLightComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadows = 0
+		Color = 1.000000 0.603922 0.000000 0.000000
+		Materials = 0
+		LightRadius =  3.000000
+	}
+}
+kbGameEntity 3417855255 1293713400 165116322 3833290114 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
@@ -2741,6 +2759,88 @@ kbGameEntity 1976988906 1203222253 3781998738 4272724285 {
  30.000000
  50.000000
  100.000000
+	}
+}
+kbGameEntity 1664337380 1336944862 1634871984 659637832 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Tiki"
+		Orientation = 0.775264 0.077907 0.589360 -0.213427
+		Position = 49.266254 -48.827839 -233.978470
+		Scale = 35.000000 55.000000 35.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		Materials = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\environment\environmentbase.kbshader
+				ShaderParams = 8
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "uvScale"
+						Texture = NULL
+						Vector = 1.000000 1.000000 1.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "clipMask"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorFactor"
+						Texture = NULL
+						Vector = 0.050000 0.050000 0.050000 1.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "diffuse"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "normal"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "propertyMap"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "emissiveMap"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "clipMap"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		RenderOrderBias =  0.000000
+		RenderPass = LightingPass
+		Model = .\assets\models\characters\klansman\tiki.fbx
 	}
 }
 kbGameEntity 2879835413 1222479798 1490986381 1570850169 {

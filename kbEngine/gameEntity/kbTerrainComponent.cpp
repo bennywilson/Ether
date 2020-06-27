@@ -316,7 +316,6 @@ void kbGrass::RefreshGrass() {
 						if ( pGrassMaskMap != nullptr ) {
 
 							const int textureIndex = static_cast<int>(( (int)(curV * grassMaskWidth) * grassMaskWidth) + ( curU * grassMaskWidth ) );
-
 							if ( pGrassMaskMap[textureIndex].g == 0 ) {
 								continue;
 							}

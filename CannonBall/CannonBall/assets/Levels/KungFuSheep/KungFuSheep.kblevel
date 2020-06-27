@@ -1,8 +1,8 @@
-kbGameEntity 2528587081 1314665003 2552556198 2118311366 {
+kbGameEntity 2557532070 1239803133 271569048 742035767 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		Name = "Entity_248"
+		Name = "Entity_251"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
 		Position = 0.000000 0.000000 0.000000
 		Scale = 1.000000 1.000000 1.000000
@@ -10,8 +10,8 @@ kbGameEntity 2528587081 1314665003 2552556198 2118311366 {
 	kbEditorLevelSettingsComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		MainCameraPosition = 69.965424 -50.718254 -303.325684
-		MainCameraRotation = -0.018145 -0.420225 0.008407 0.907200
+		MainCameraPosition = 57.887875 -48.017391 -284.849823
+		MainCameraRotation = 0.042628 0.790849 -0.055453 -0.608001
 	}
 }
 kbGameEntity 537364968 1092523782 2953639826 2626478307 {
@@ -340,7 +340,7 @@ kbGameEntity 2834549981 1318015840 1209716610 144016064 {
 		LifeTime =  -1.000000
 		Name = "3000 Ton Smash Snolaf Pos"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
-		Position = 76.992683 -52.626686 -285.728638
+		Position = 76.992683 -52.626686 -280.828644
 		Scale = 1.000000 1.000000 1.000000
 	}
 }

@@ -1,7 +1,7 @@
 //===================================================================================================
 // KungFuLevelComponent.cpp
 //
-// 2019 kbEngine 2.0
+// 2019-2020 kbEngine 2.0
 //===================================================================================================
 #include "kbGame.h"
 #include "CannonGame.h"
@@ -22,7 +22,7 @@ namespace KungFuGame {
 
 };
 
-KungFuGame::eSkipCheats g_SkipCheat = KungFuGame::Skip_MainMenuAndIntro;
+KungFuGame::eSkipCheats g_SkipCheat = KungFuGame::Skip_None;
 
 #include "Cinema\Outro.inl"
 
