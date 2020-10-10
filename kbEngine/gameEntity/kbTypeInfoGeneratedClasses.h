@@ -229,15 +229,22 @@ GenerateClass(
 )
 
 GenerateClass(
+	kbGrassZone,
+	AddField( "Center", KBTYPEINFO_VECTOR, kbGrassZone, m_Center, false, "" )
+	AddField( "Extents", KBTYPEINFO_VECTOR, kbGrassZone, m_Extents, false, "" )
+)
+
+GenerateClass(
 	kbTerrainComponent,
 	AddField( "HeightMap", KBTYPEINFO_TEXTURE, kbTerrainComponent, m_pHeightMap, false, "" )
 	AddField( "HeightScale", KBTYPEINFO_FLOAT, kbTerrainComponent, m_HeightScale, false, "" )
 	AddField( "Width", KBTYPEINFO_FLOAT, kbTerrainComponent, m_TerrainWidth, false, "" )
 	AddField( "Dimensions", KBTYPEINFO_INT, kbTerrainComponent, m_TerrainDimensions, false, "" )
-	AddField( "SmoothAmount", KBTYPEINFO_INT, kbTerrainComponent, m_TerrainSmoothAmount, false, "")
+	AddField( "SmoothAmount", KBTYPEINFO_INT, kbTerrainComponent, m_TerrainSmoothAmount, false, "" )
 	AddField( "SplatMap", KBTYPEINFO_TEXTURE, kbTerrainComponent, m_pSplatMap, false, "" )
 	AddField( "Grass", KBTYPEINFO_STRUCT, kbTerrainComponent, m_Grass, true, "kbGrass" )
 	AddField( "DebugRegenTerrain", KBTYPEINFO_BOOL, kbTerrainComponent, m_bDebugForceRegenTerrain, false, "" )
+	AddField( "GrassZones", KBTYPEINFO_STRUCT, kbTerrainComponent, m_GrassZones, true, "kbGrassZone" )
 )
 
 GenerateEnum(

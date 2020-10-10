@@ -87,7 +87,27 @@ private:
 };
 
 /**
- * kbTerrainComponent
+ *	kbGrassZone
+ */
+class kbGrassZone : public kbGameComponent {
+
+	KB_DECLARE_COMPONENT( kbGrassZone, kbGameComponent );
+
+//-------------------------------------------------------------------------------------------------------------------------------------------------------------
+public:
+
+	kbVec3										GetCenter() const { return m_Center; }
+	kbVec3										GetExtents() const { return m_Extents; }
+
+private:
+
+	kbVec3										m_Center;
+	kbVec3										m_Extents;
+};
+
+
+/**
+ *	kbTerrainComponent
  */
 class kbTerrainComponent : public kbModelComponent {
 
@@ -115,6 +135,8 @@ public:
 
 	void										RegenerateTerrain() { m_bRegenerateTerrain = true; }
 
+	const std::vector<kbGrassZone>				GetGrassZones() const { return m_GrassZones; }
+
 protected:
 
 	virtual void								SetEnable_Internal( const bool isEnabled ) override;
@@ -131,6 +153,7 @@ protected:
 
 	kbTexture *                                 m_pSplatMap;
     std::vector<kbGrass>                        m_Grass;
+	std::vector<kbGrassZone>					m_GrassZones;
 
 	bool										m_bDebugForceRegenTerrain;
 

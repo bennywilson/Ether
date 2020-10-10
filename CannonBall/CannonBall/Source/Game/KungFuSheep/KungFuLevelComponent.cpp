@@ -147,8 +147,9 @@ private:
 					targetPos.z = StartZ;
 					m_CurrentState = 3;
 
-					static const kbString IdleL_Anim( "IdleLeft_Basic" );
+					static const kbString IdleL_Anim( "Black Power" );
 					pSheep->PlayAnimation( IdleL_Anim, 0.2f );
+					KungFuLevelComponent::Get()->ShowBLM( true );
 				}
 				pSheep->SetOwnerPosition( targetPos );
 			}
@@ -157,6 +158,8 @@ private:
 			if ( GetTimeSinceStateBegan() > 7.8f ) {
 				pSheep->PlayBaa( 0 );
 				m_CurrentState = 4;
+				KungFuLevelComponent::Get()->ShowBLM( false );
+
 			}
 		} else if ( m_CurrentState == 4 ) {
 			if ( GetTimeSinceStateBegan() > 8.0f ) {
@@ -585,6 +588,16 @@ void KungFuLevelComponent::Update_Internal( const float DeltaTime ) {
 			if ( m_pCannonBallUI == nullptr ) {
 				m_pCannonBallUI = pTargetEnt->GetComponent<CannonBallUIComponent>();
 			}
+
+			if ( m_BLM.GetEntity()== nullptr )
+			{
+				static kbString BLM_Name( "#BLM" );
+				if ( pTargetEnt->GetName() == BLM_Name )
+				{
+					m_BLM.SetEntity( pTargetEnt );
+					pTargetEnt->DisableAllComponents();
+				}
+			}
 		}
 	}
 
@@ -917,6 +930,26 @@ void KungFuLevelComponent::SetPlayLevelMusic( const int idx, const bool bPlay ) 
 		m_LevelMusic[idx].PlaySoundAtPosition( kbVec3::zero );
 	} else {
 		m_LevelMusic[idx].StopSound();
+	}
+}
+
+/**
+ *	KungFuLevelComponent::ShowBLM
+ */
+void KungFuLevelComponent::ShowBLM( const bool bShow )
+{
+	if ( m_BLM.GetEntity() == nullptr )
+	{
+		return;
+	}
+
+	if ( bShow )
+	{
+		m_BLM.GetEntity()->EnableAllComponents();
+	}
+	else
+	{
+		m_BLM.GetEntity()->DisableAllComponents();
 	}
 }
 

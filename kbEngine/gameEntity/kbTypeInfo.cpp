@@ -160,4 +160,6 @@ DEFINE_KBCLASS(kbCinematicAction)
 
 DEFINE_KBCLASS(kbCinematicComponent)
 
+DEFINE_KBCLASS(kbGrassZone)
+
 typedef kbResource * kbResourcePtr;

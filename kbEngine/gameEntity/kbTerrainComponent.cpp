@@ -288,6 +288,10 @@ void kbGrass::RefreshGrass() {
 		const float halfTerrainWidth = m_pOwningTerrainComponent->GetTerrainWidth() * 0.5f;
 		const kbVec3 terrainMin = /*m_pOwningTerrainComponent->GetOwner()->GetPosition()*/ - kbVec3( halfTerrainWidth, 0.0f, halfTerrainWidth );
 
+		const kbMat4 ownerRot = m_pOwningTerrainComponent->GetOwner()->GetOrientation().ToMat4();
+		const kbVec3 ownerPos = m_pOwningTerrainComponent->GetOwner()->GetPosition();
+		const auto& grassZones = m_pOwningTerrainComponent->GetGrassZones();
+
 		int cellIdx = 0;
 		for ( int yCell = 0; yCell < m_GrassCellsPerTerrainSide; yCell++ ) {
 			for ( int xCell = 0; xCell < m_GrassCellsPerTerrainSide; xCell++, cellIdx++ ) {
@@ -312,7 +316,27 @@ void kbGrass::RefreshGrass() {
 						const float curU = kbSaturate( ( globalPointPos.x - terrainMin.x ) / m_pOwningTerrainComponent->GetTerrainWidth() );
 						const float curV = kbSaturate( ( globalPointPos.z - terrainMin.z ) / m_pOwningTerrainComponent->GetTerrainWidth() );
 
-				
+						bool bSkipIt = true;
+						const kbVec3 pointWorldPos = ownerRot.TransformPoint( globalPointPos ) + ownerPos;
+						for ( int i = 0; i < grassZones.size(); i++ ) {
+
+
+							kbVec3 boundsCenter = ownerRot.TransformPoint( grassZones[i].GetCenter() ) + ownerPos;
+							kbVec3 boundsExtent = grassZones[i].GetExtents();
+
+							const kbVec3 boundsMin = boundsCenter - boundsExtent;
+							const kbVec3 boundsMax = boundsCenter + boundsExtent;
+							const kbBounds grassBounds = kbBounds( boundsMin, boundsMax );
+							if ( grassBounds.ContainsPoint( pointWorldPos ) ) {
+								bSkipIt = false;
+								break;
+							}
+						}
+
+						if ( bSkipIt ) {
+							continue;			
+						}
+
 						if ( pGrassMaskMap != nullptr ) {
 
 							const int textureIndex = static_cast<int>(( (int)(curV * grassMaskWidth) * grassMaskWidth) + ( curU * grassMaskWidth ) );
@@ -682,18 +706,17 @@ void kbTerrainComponent::Update_Internal( const float DeltaTime ) {
 		m_bDebugForceRegenTerrain = false;
 	}
 
-	kbVec3 currentCameraPosition;
-	kbQuat currentCameraRotation;
-	g_pRenderer->GetRenderViewTransform( nullptr, currentCameraPosition, currentCameraRotation );
-	/*for ( int i = 0; i < terrainNormals.size(); i += 3 ) {
-		static float checkDist = 50000;
-		if ( ( currentCameraPosition - terrainNormals[i].position ).LengthSqr() > checkDist ) {
-			continue;
-		}
+/*
+	const kbMat4 ownerRot = GetOwnerRotation().ToMat4();
+	const kbVec3 ownerPos = GetOwnerPosition();
+	for ( int i = 0; i < m_GrassZones.size(); i++ ) {
 
-		g_pRenderer->DrawLine( terrainNormals[i].position, terrainNormals[i].position + terrainNormals[i + 0].normal * 5.0f, kbColor::red );
-		g_pRenderer->DrawLine( terrainNormals[i].position, terrainNormals[i].position + terrainNormals[i + 1].normal * 5.0f, kbColor::green );
-		g_pRenderer->DrawLine( terrainNormals[i].position, terrainNormals[i].position + terrainNormals[i + 2].normal * 5.0f, kbColor::blue );
+		kbVec3 boundsCenter = ownerRot.TransformPoint( m_GrassZones[i].GetCenter() ) + ownerPos;
+		kbVec3 boundsExtent = m_GrassZones[i].GetExtents();
+
+		const kbVec3 boundsMin = boundsCenter - boundsExtent;
+		const kbVec3 boundsMax = boundsCenter + boundsExtent;
+		g_pRenderer->DrawBox( kbBounds( boundsMin, boundsMax ), kbColor::red );
 	}*/
 }
 
@@ -731,4 +754,13 @@ void kbTerrainComponent::RefreshMaterials() {
 	m_RenderObject.m_pModel = &m_TerrainModel;
 	m_RenderObject.m_RenderPass = RP_Lighting;
 	m_RenderObject.m_pComponent = this;
+}
+
+/**
+ *	kbGrassZone::Constructor
+ */
+void kbGrassZone::Constructor() {
+
+	m_Center.Set( 0.0f, 0.0f, 0.0f );
+	m_Extents.Set( 100.0f, 100.0f, 100.0f );
 }

@@ -141,6 +141,9 @@
     <None Include="assets\shaders\FX\Particle_Blend.kbShader">
       <Filter>Shaders\FX</Filter>
     </None>
+    <None Include="assets\shaders\Environment\environmentTree.kbShader">
+      <Filter>Shaders\Environment</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Shaders">

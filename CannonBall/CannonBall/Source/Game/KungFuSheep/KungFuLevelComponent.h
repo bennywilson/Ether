@@ -104,6 +104,8 @@ public:
 
 	void										SetPlayLevelMusic( const int idx, const bool bPlay );
 
+	void										ShowBLM(const bool bShow);
+
 	float										GetPlayerTravelDistance();
 
 	class KungFuSnolafComponent* 				GetSnolafFromPool();
@@ -151,6 +153,8 @@ private:
 
 	CannonHealthBarUIComponent* 				m_pHealthBarUI;
 	CannonBallUIComponent* 						m_pCannonBallUI;
+
+	kbGameEntityPtr								m_BLM;
 
 	std::vector<kbGameEntity*>					m_SnolafPool;
 	KungFuSnolafComponent* 						m_EndSnolafs[2];
