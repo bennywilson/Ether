@@ -127,6 +127,11 @@ GenerateClass(
 )
 
 GenerateClass(
+	CannonBallScrollComponent,
+	AddField( "ScrollRate", KBTYPEINFO_VECTOR, CannonBallScrollComponent, m_ScrollRate, false, "" )
+)
+
+GenerateClass(
 	CannonBallGameSettingsComponent,
 	AddField( "MasterVolume", KBTYPEINFO_INT, CannonBallGameSettingsComponent, m_Volume, false, "" )
 	AddField( "Brightness", KBTYPEINFO_INT, CannonBallGameSettingsComponent, m_Brightness, false, "" )

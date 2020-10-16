@@ -11,6 +11,9 @@
 #include "KungFuSheep.h"
 #include "KungFuSnolaf.h"
 
+kbConsoleVariable g_CullGrass("cullgrass", false, kbConsoleVariable::Console_Bool, "", "");
+
+
 namespace KungFuGame {
 
 	enum eSkipCheats {
@@ -22,7 +25,7 @@ namespace KungFuGame {
 
 };
 
-KungFuGame::eSkipCheats g_SkipCheat = KungFuGame::Skip_None;
+KungFuGame::eSkipCheats g_SkipCheat = KungFuGame::Skip_ToEnd;
 
 #include "Cinema\Outro.inl"
 
@@ -68,6 +71,8 @@ private:
 		pSheep->PlayAnimation( JumpingJacks_Anim, 0.15f );
 		pSheep->SetTargetFacingDirection( kbVec3( -1.0f, 0.0f, -1.0f ).Normalized() );
 		pSheep->SetOwnerPosition( KungFuGame::kSheepStartPos );
+
+		KungFuLevelComponent::Get()->ShowCredits( false );
 	}
 
 	virtual void UpdateState_Internal() override {
@@ -589,14 +594,21 @@ void KungFuLevelComponent::Update_Internal( const float DeltaTime ) {
 				m_pCannonBallUI = pTargetEnt->GetComponent<CannonBallUIComponent>();
 			}
 
-			if ( m_BLM.GetEntity()== nullptr )
-			{
-				static kbString BLM_Name( "#BLM" );
-				if ( pTargetEnt->GetName() == BLM_Name )
-				{
+			if ( m_BLM.GetEntity() == nullptr ) {
+				static kbString sBLM( "#BLM" );
+				if ( pTargetEnt->GetName() == sBLM ) {
 					m_BLM.SetEntity( pTargetEnt );
 					pTargetEnt->DisableAllComponents();
 				}
+			}
+
+			if ( m_Credits.GetEntity() == nullptr ) {
+				static kbString sCredits( "#Credits" );
+				if ( pTargetEnt->GetName() == sCredits ) {
+					m_Credits.SetEntity( pTargetEnt );
+					pTargetEnt->DisableAllComponents();
+				}
+
 			}
 		}
 	}
@@ -936,20 +948,33 @@ void KungFuLevelComponent::SetPlayLevelMusic( const int idx, const bool bPlay ) 
 /**
  *	KungFuLevelComponent::ShowBLM
  */
-void KungFuLevelComponent::ShowBLM( const bool bShow )
-{
-	if ( m_BLM.GetEntity() == nullptr )
-	{
+void KungFuLevelComponent::ShowBLM( const bool bShow ) {
+
+	if ( m_BLM.GetEntity() == nullptr ) {
 		return;
 	}
 
-	if ( bShow )
-	{
+	if ( bShow ) {
 		m_BLM.GetEntity()->EnableAllComponents();
 	}
-	else
-	{
+	else {
 		m_BLM.GetEntity()->DisableAllComponents();
+	}
+}
+
+/**
+ *	KungFuLevelComponent::ShowCredits
+ */
+void KungFuLevelComponent::ShowCredits( const bool bShow ) {
+	kbGameEntity* const pEnt = m_Credits.GetEntity();
+	if ( pEnt == nullptr ) {
+		return;
+	}
+
+	if ( bShow ) {
+		pEnt->EnableAllComponents();
+	} else {
+		pEnt->DisableAllComponents();
 	}
 }
 
@@ -1024,6 +1049,29 @@ void KungFuLevelComponent::UpdateDebugAndCheats() {
 			if ( g_GlobalTimer.TimeElapsedSeconds() - lastPlayTime > 2.0f) {
 				m_pSheep->PlayShakeNBakeFX();
 				lastPlayTime = g_GlobalTimer.TimeElapsedSeconds();
+			}
+		}
+	}
+
+	static bool bOldGrass = false;
+	static kbString BGName( "BG Trees" );
+	if ( g_CullGrass.GetBool() != bOldGrass ) {
+		bOldGrass = g_CullGrass.GetBool();
+		g_bCullGrass = bOldGrass;
+
+		for ( int i = 0; i < g_pCannonGame->GetGameEntities().size(); i++ ) {
+			kbGameEntity *const pTargetEnt = g_pCannonGame->GetGameEntities()[i];
+			if ( pTargetEnt->GetName() == BGName ) {
+				if ( g_bCullGrass ) {
+					pTargetEnt->EnableAllComponents();
+				} else {
+					pTargetEnt->DisableAllComponents();
+				}
+			}
+
+			kbTerrainComponent* const pTerrain = pTargetEnt->GetComponent<kbTerrainComponent>();
+			if ( pTerrain != nullptr ) {
+				pTerrain->RegenerateTerrain();
 			}
 		}
 	}

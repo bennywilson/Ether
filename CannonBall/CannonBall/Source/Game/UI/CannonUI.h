@@ -94,7 +94,6 @@ public:
 		NumOptions
 	};
 
-	bool									CloseRequested() const { return m_bRequestClose; }
 	int										GetSelectedWidgetIdx() const { return m_SelectedWidgetIdx; }
 
 
@@ -113,18 +112,16 @@ private:
 
 	// Editor
 	std::vector<kbUISlider>					m_SliderWidgets;
-	std::vector<kbUIWidgetComponent>					m_Widgets;
+	std::vector<kbUIWidgetComponent>		m_Widgets;
 	kbVec3									m_WidgetSize;
 	kbVec3									m_StartingWidgetAnchorPt;
 	float									m_SpaceBetweenWidgets;
 	std::vector<kbSoundData>				m_VolumeSliderTestWav;
 
 	// Runtime
-	std::vector<kbUIWidgetComponent*>				m_WidgetList;
+	std::vector<kbUIWidgetComponent*>		m_WidgetList;
 	int										m_SelectedWidgetIdx;
 	bool									m_bHackSlidersInit;
-
-	bool									m_bRequestClose;
 
 	kbGameEntity							m_Entity;
 };
@@ -206,4 +203,18 @@ private:
 	inline static CannonBallGameSettingsComponent *	s_pInstance = nullptr;
 };
 
+
+/**
+ *	CannonBallScrollComponent
+ */
+class CannonBallScrollComponent : public kbUIWidgetComponent {
+
+	KB_DECLARE_COMPONENT( CannonBallScrollComponent, kbUIWidgetComponent );
+
+	virtual void							SetEnable_Internal( const bool bEnable ) override;
+	virtual void							Update_Internal( const float DeltaTime ) override;
+
+	// Editor
+	kbVec3									m_ScrollRate;
+};
 #endif

@@ -15,6 +15,7 @@
 KB_DEFINE_COMPONENT(kbTerrainComponent)
 
 static float g_TerrainLOD = 1.0f;
+bool g_bCullGrass = true;
 
 void kbTerrainComponent::SetTerrainLOD( const float lod ) {
 	g_TerrainLOD = lod;
@@ -192,7 +193,7 @@ void kbGrass::RefreshGrass() {
 
 	std::vector<kbVec4> bladeOffsets;
 
-	const float PatchesPerCellSide = kbClamp( (float)m_PatchesPerCellSide * g_TerrainLOD, 1.0f, 99999999.0f );
+	const float PatchesPerCellSide = kbClamp( (float)m_PatchesPerCellSide, 1.0f, 99999999.0f );
 
 	//float grassCellHalfSize = ( m_DistanceBetweenPatches / 2.0f ) * 0.95f;
 	for ( int i = 0; i < 64; i++ ) {
@@ -316,25 +317,26 @@ void kbGrass::RefreshGrass() {
 						const float curU = kbSaturate( ( globalPointPos.x - terrainMin.x ) / m_pOwningTerrainComponent->GetTerrainWidth() );
 						const float curV = kbSaturate( ( globalPointPos.z - terrainMin.z ) / m_pOwningTerrainComponent->GetTerrainWidth() );
 
-						bool bSkipIt = true;
-						const kbVec3 pointWorldPos = ownerRot.TransformPoint( globalPointPos ) + ownerPos;
-						for ( int i = 0; i < grassZones.size(); i++ ) {
+						if ( g_bCullGrass ) {
+							bool bSkipIt = true;
+							const kbVec3 pointWorldPos = ownerRot.TransformPoint( globalPointPos ) + ownerPos;
+							for ( int i = 0; i < grassZones.size(); i++ ) {
 
+								kbVec3 boundsCenter = ownerRot.TransformPoint( grassZones[i].GetCenter() ) + ownerPos;
+								kbVec3 boundsExtent = grassZones[i].GetExtents();
 
-							kbVec3 boundsCenter = ownerRot.TransformPoint( grassZones[i].GetCenter() ) + ownerPos;
-							kbVec3 boundsExtent = grassZones[i].GetExtents();
-
-							const kbVec3 boundsMin = boundsCenter - boundsExtent;
-							const kbVec3 boundsMax = boundsCenter + boundsExtent;
-							const kbBounds grassBounds = kbBounds( boundsMin, boundsMax );
-							if ( grassBounds.ContainsPoint( pointWorldPos ) ) {
-								bSkipIt = false;
-								break;
+								const kbVec3 boundsMin = boundsCenter - boundsExtent;
+								const kbVec3 boundsMax = boundsCenter + boundsExtent;
+								const kbBounds grassBounds = kbBounds( boundsMin, boundsMax );
+								if ( grassBounds.ContainsPoint( pointWorldPos ) ) {
+									bSkipIt = false;
+									break;
+								}
 							}
-						}
 
-						if ( bSkipIt ) {
-							continue;			
+							if ( bSkipIt ) {
+								continue;			
+							}
 						}
 
 						if ( pGrassMaskMap != nullptr ) {

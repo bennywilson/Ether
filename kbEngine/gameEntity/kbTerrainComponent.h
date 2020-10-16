@@ -167,4 +167,7 @@ private:
 	
 	void										GenerateTerrain();
 };
+
+extern bool g_bCullGrass;
+
 #endif

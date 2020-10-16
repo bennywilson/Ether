@@ -373,6 +373,7 @@ public:
 
 					pSheep->PlayAnimation( sDance, 0.15f );
 					pSheep->SetTargetFacingDirection( kbVec3( -1.f, 0.0f, 0.0f ) );
+					KungFuLevelComponent::Get()->ShowCredits( true );
 				} else {
 					bFin = false;
 				}

@@ -45,7 +45,7 @@ struct PS_OUTPUT {
 };
 
 
-/**
+/**^
  *	vertexShader
  */
  SamplerState diffuseSampler;
@@ -55,19 +55,9 @@ pixelInput vertexShader( vertexInput input ) {
 	pixelInput output = (pixelInput)(0);
 	const float3 heightMapVal = heightMap.SampleLevel( diffuseSampler, input.uv, 0.0f ).xyz;
 
+	float spreadScale = 2.0f;
 
-	output.position = mul( input.position, modelMatrix );
-	if ( input.color.x > 0.5f ) {
-		output.position.xz += Offsets_1.xy;
-	} else if ( input.color.y > 0.5f ) {
-		output.position.xz += Offsets_1.zw;
-	} else if ( input.color.z > 0.5f ) {
-		output.position.xz += Offsets_2.xy;
-	} else {
-		output.position.xz += Offsets_1.zw;
-	}
-
-	output.position = mul( output.position, viewProjection );
+	output.position = mul( input.position, mvpMatrix );
 
 	output.uv = input.uv;
 	output.color = input.color;

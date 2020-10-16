@@ -252,8 +252,6 @@ void CannonBallPauseMenuUIComponent::Constructor() {
 	m_SelectedWidgetIdx = 0;
 
 	m_bHackSlidersInit = false;
-
-	m_bRequestClose = false;
 }
 
 const kbVec3 g_CheckMarkPos[] = {  kbVec3( 0.400000f, 0.287480f, 0.000000f ), kbVec3( 0.3600704f, 0.353173f, 0.000000f ), kbVec3(0.325628f, 0.415369f, 0.000000f ), kbVec3( 0.322864f, 0.484983f, 0.000000f ), kbVec3( 0.400000f, 0.557629f, 0.000000f ) }; 
@@ -344,8 +342,6 @@ void CannonBallPauseMenuUIComponent::SetEnable_Internal( const bool bEnable ) {
 
 		g_pInputManager->UnregisterInputListener( this );
 	}
-
-	m_bRequestClose = false;
 }
 
 /**
@@ -494,7 +490,7 @@ void CannonBallPauseMenuUIComponent::WidgetEventCB( kbUIWidgetComponent *const p
 		g_pRenderer->SetGlobalShaderParam( shaderParam );
 	} else if ( pWidget == &m_Widgets[0] ) {
 		// Close Pause menu
-		m_bRequestClose = true;
+	//	m_bRequestClose = true;
 	} else if ( pWidget == &m_Widgets[1] ) { 
 		// Exit Game
 		g_pCannonGame->RequestQuitGame();
@@ -692,4 +688,35 @@ CannonBallGameSettingsComponent * CannonBallGameSettingsComponent::Get() {
  */
 void CannonBallYesNoPromptComponent::Constructor() {
 
+}
+
+/**
+ *	CannonBallScrollComponent::Constructor
+ */
+void CannonBallScrollComponent::Constructor() {
+	m_ScrollRate.Set( 0.0f, 0.0f, 0.0f );
+}
+
+/**
+ *	CannonBallScrollComponent::SetEnable_Internal
+ */
+void CannonBallScrollComponent::SetEnable_Internal( const bool bEnable ) {
+
+	Super::SetEnable_Internal( bEnable );
+	kbVec3 myPos = this->GetRelativePosition();
+	myPos.y = 1.0f;
+	myPos.z = 0.0f;
+	SetRelativePosition( myPos );
+}
+
+/**
+ *	CannonBallScrollComponent::Update_Internal
+ */
+void CannonBallScrollComponent::Update_Internal( const float DT ) {
+
+	Super::Update_Internal( DT );
+
+	kbVec3 myPos = this->GetRelativePosition();
+	myPos += m_ScrollRate * DT;
+	SetRelativePosition( myPos );
 }
