@@ -5,6 +5,7 @@
 // 2019 kbEngine 2.0
 //===================================================================================================
 
+#define KFBX_DLLINFO
 #include "stdafx.h"
 #include <ShellAPI.h>
 #include "CannonBall.h"

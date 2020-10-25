@@ -57,12 +57,12 @@ kbGameEntity 537364968 1092523782 2953639826 2626478307 {
 		SheepPrefab = 3807537734 1283872403 1661460398 2211889957
 		SnolafPrefab = 314357658 1122514197 2466994618 463523205
 		WaterDropletScreenFX = 3936461697 1285153374 3406925493 1594399155
-		WaterSplashSound = 3
+		WaterSplashSound = 5
 			kbSoundData { 
 				Enabled = 0
 				LifeTime =  -1.000000
 				Looping = 0
-				Radius =  -1.000000
+				Radius =  -3.000000
 				TestPlaySoundNow = 0
 				Volume =  1.000000
 				WaveFile = .\assets\sounds\randomfx\splash_1.wav
@@ -73,8 +73,8 @@ kbGameEntity 537364968 1092523782 2953639826 2626478307 {
 				Looping = 0
 				Radius =  -1.000000
 				TestPlaySoundNow = 0
-				Volume =  1.000000
-				WaveFile = .\assets\sounds\randomfx\splash_1.wav
+				Volume =  3.000000
+				WaveFile = .\assets\sounds\randomfx\splash_2.wav
 			}
 			kbSoundData { 
 				Enabled = 0
@@ -82,8 +82,26 @@ kbGameEntity 537364968 1092523782 2953639826 2626478307 {
 				Looping = 0
 				Radius =  -1.000000
 				TestPlaySoundNow = 0
-				Volume =  1.000000
-				WaveFile = .\assets\sounds\randomfx\splash_1.wav
+				Volume =  3.000000
+				WaveFile = .\assets\sounds\randomfx\splash_3.wav
+			}
+			kbSoundData { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Looping = 0
+				Radius =  -1.000000
+				TestPlaySoundNow = 0
+				Volume =  3.000000
+				WaveFile = .\assets\sounds\randomfx\splash_4.wav
+			}
+			kbSoundData { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Looping = 0
+				Radius =  -1.000000
+				TestPlaySoundNow = 0
+				Volume =  3.000000
+				WaveFile = .\assets\sounds\randomfx\splash_5.wav
 			}
 	}
 }

@@ -25,7 +25,7 @@ namespace KungFuGame {
 
 };
 
-KungFuGame::eSkipCheats g_SkipCheat = KungFuGame::Skip_ToEnd;
+KungFuGame::eSkipCheats g_SkipCheat = KungFuGame::Skip_None;
 
 #include "Cinema\Outro.inl"
 
@@ -500,6 +500,7 @@ void KungFuLevelComponent::Constructor() {
 	m_p3000Ton = nullptr;
 
 	m_pFox = nullptr;
+	kbLog("What?");
 }
 
 /**
@@ -916,7 +917,7 @@ void KungFuLevelComponent::DoSplashSound() {
 		return;
 	}
 
-	if ( g_GlobalTimer.TimeElapsedSeconds() < m_LastWaterSplashSoundTime + 2.0f ) {
+	if ( g_GlobalTimer.TimeElapsedSeconds() < m_LastWaterSplashSoundTime + 0.1f ) {
 		return;
 	}
 
@@ -975,6 +976,23 @@ void KungFuLevelComponent::ShowCredits( const bool bShow ) {
 		pEnt->EnableAllComponents();
 	} else {
 		pEnt->DisableAllComponents();
+	}
+}
+
+/**
+ *	KungFuLevelComponent::ShowCredits
+ */
+void KungFuLevelComponent::ShowHealthBar( const bool bShow ) {
+
+	if (m_pHealthBarUI == nullptr) {
+		return;
+	}
+
+	if ( bShow ) {
+		m_pHealthBarUI->Enable( true );
+	}
+	else {
+		m_pHealthBarUI->Enable( false );
 	}
 }
 

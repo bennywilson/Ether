@@ -173,6 +173,8 @@ public:
 		m_pLastSnolaf->GetComponent<KungFuSnolafComponent>()->RequestStateChange( KungFuSnolafState::Cinema );
 		m_pLastSnolaf->GetOwner()->DisableAllComponents();
 
+		KungFuLevelComponent::Get()->ShowHealthBar( false );
+
 		m_MusicStartTime = g_GlobalTimer.TimeElapsedSeconds() + 0.75f;
 	}
 

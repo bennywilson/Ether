@@ -99,13 +99,15 @@ public:
 
 	void										DoWaterDropletScreenFX();
 	void										DoSplashSound();
-	kbGameEntityPtr								GetPresent( const int idx ) { return m_PresentsEnt[idx]; }
+	kbGameEntityPtr					GetPresent( const int idx ) { return m_PresentsEnt[idx]; }
 	void										DoBreakBridgeEffect( const bool bBreakIt );
 
 	void										SetPlayLevelMusic( const int idx, const bool bPlay );
 
 	void										ShowBLM( const bool bShow );
 	void										ShowCredits( const bool bShowCredits );
+	
+	void										ShowHealthBar( const bool bShow );
 
 	float										GetPlayerTravelDistance();
 

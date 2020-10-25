@@ -5,6 +5,7 @@
 //
 // 2016-2019 kbEngine 2.0
 //==============================================================================
+#define KFBX_DLLINFO
 #include <fbxsdk.h>
 #include "kbCore.h"
 #include "kbVector.h"

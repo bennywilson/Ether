@@ -19,7 +19,7 @@ public:
 	float										GetMaxRunSpeed() const { return m_MaxRunSpeed; }
 	float										GetMaxRotateSpeed() const { return m_MaxRotateSpeed; }
 
-	kbVec3										GetTargetFacingDirection() const { return m_TargetFacingDirection; }
+	kbVec3									GetTargetFacingDirection() const { return m_TargetFacingDirection; }
 	void										SetTargetFacingDirection( const kbVec3& targetDir ) { m_TargetFacingDirection = targetDir; }
 
 	bool										IsPlayingAnim( const kbString animName ) const;
@@ -34,29 +34,29 @@ public:
 	void										PlayAttackVO( const int pref );
 
 	bool										IsPlayer() const { return m_bIsPlayer; }
-	virtual bool								IsDead() const { return m_Health <= 0.0f; }
+	virtual bool						IsDead() const { return m_Health <= 0.0f; }
 
 protected:
 
-	virtual void								SetEnable_Internal( const bool bEnable ) override;
-	virtual void								Update_Internal( const float DeltaTime ) override;
+	virtual void							SetEnable_Internal( const bool bEnable ) override;
+	virtual void							Update_Internal( const float DeltaTime ) override;
 
 	// Data
 	float										m_MaxRunSpeed;
 	float										m_MaxRotateSpeed;
 	float										m_Health;
 
-	std::vector<kbSoundData>					m_AttackVO;
+	std::vector<kbSoundData>	m_AttackVO;
 
 	// Game
 	std::vector<kbSkeletalModelComponent *>		m_SkelModelsList;
-	kbVec3										m_TargetFacingDirection;
+	kbVec3									m_TargetFacingDirection;
 
 	float										m_AnimSmearDuration;
-	kbVec4										m_AnimSmearVec;
+	kbVec4									m_AnimSmearVec;
 	float										m_AnimSmearStartTime;
 
-	kbVec4										m_OverridenFXMaskParams;
+	kbVec4									m_OverridenFXMaskParams;
 
 	float										m_LastVOTime;
 
