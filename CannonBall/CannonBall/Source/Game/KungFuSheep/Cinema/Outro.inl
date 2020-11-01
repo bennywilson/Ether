@@ -173,13 +173,13 @@ public:
 		m_pLastSnolaf->GetComponent<KungFuSnolafComponent>()->RequestStateChange( KungFuSnolafState::Cinema );
 		m_pLastSnolaf->GetOwner()->DisableAllComponents();
 
-		KungFuLevelComponent::Get()->ShowHealthBar( false );
-
 		m_MusicStartTime = g_GlobalTimer.TimeElapsedSeconds() + 0.75f;
 	}
 
 	virtual void UpdateState_Internal() override {
-		
+
+		KungFuLevelComponent::Get()->ShowHealthBar(false);
+
 		if ( g_SkipCheat == KungFuGame::Skip_ToEnd ) {
 			if ( g_pCannonGame->GetPlayer()->IsDead() ) {
 				RequestStateChange( KungFuGame::PlayerDead );

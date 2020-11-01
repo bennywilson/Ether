@@ -990,9 +990,11 @@ void KungFuLevelComponent::ShowHealthBar( const bool bShow ) {
 
 	if ( bShow ) {
 		m_pHealthBarUI->Enable( true );
+		m_pCannonBallUI->GetOwner()->EnableAllComponents();
 	}
 	else {
 		m_pHealthBarUI->Enable( false );
+		m_pCannonBallUI->GetOwner()->DisableAllComponents();
 	}
 }
 
