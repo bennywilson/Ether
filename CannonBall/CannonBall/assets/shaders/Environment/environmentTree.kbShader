@@ -60,7 +60,10 @@ pixelInput vertexShader( vertexInput input ) {
 	output.position = mul( input.position, mvpMatrix );
 
 	output.uv = input.uv;
-	output.color = input.color;
+	output.color = pow(input.position.y / 3.0f, 1.0f);
+	output.color = saturate(output.color);
+	output.color = (output.color * 0.75f) + 0.25f;
+//	output.color = 1;
 	output.position2 = output.position.zw;
 
 	const float3 worldTangent = -normalize( mul( (input.tangent.xyz * 2.0f ) - 1.0f, (float3x3)modelMatrix ) );
@@ -99,7 +102,7 @@ Texture2D emissiveMap(black)		: register(t4);
 	const float4 propertyMapValues = propertyMap.Sample( diffuseSampler, input.uv );
 	const float4 emissive = emissiveMap.Sample( diffuseSampler, input.uv );
 
-	output.Color = diffuse.Sample( diffuseSampler, input.uv ) * colorFactor.xyzw;
+	output.Color = input.color * diffuse.Sample( diffuseSampler, input.uv ) * colorFactor.xyzw * input.color;
 	output.Color.xyz *= colorFactor.www;
 	output.Color.w = emissive.z;
 

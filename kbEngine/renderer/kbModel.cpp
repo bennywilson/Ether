@@ -908,7 +908,7 @@ void kbModel::CreatePointCloud( const UINT numVertices, const std::string & shad
 	}
 
 	m_NumVertices = numVertices;
-	m_bIsDynamicModel = false;
+	m_bIsDynamicModel = true;
     m_bIsPointCloud = true;
 	m_NumTriangles = 0;
 	m_Stride = vertexSizeInBytes;

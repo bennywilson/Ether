@@ -10,6 +10,8 @@
 #include "CannonPlayer.h"
 #include "KungFuSheep.h"
 #include "KungFuSnolaf.h"
+#include "kbEditor.h"
+#include "kbEditorEntity.h"
 
 kbConsoleVariable g_CullGrass("cullgrass", false, kbConsoleVariable::Console_Bool, "", "");
 
@@ -577,7 +579,66 @@ const float g_WaterDropStartDelay[] = { 0.1f, 0.01f };
 void KungFuLevelComponent::Update_Internal( const float DeltaTime ) {
 	Super::Update_Internal( DeltaTime );
 
-	if ( g_UseEditor ) {
+	static bool bKeyDown = false;
+	if (bKeyDown == false)
+	{
+		if (GetAsyncKeyState('P'))
+		{
+			bKeyDown = true;
+			std::vector<kbGameEntity*> gameEnts;
+			if (g_UseEditor)
+			{
+				for (int i = 0; i < g_Editor->GetGameEntities().size(); i++)
+				{
+					gameEnts.push_back(g_Editor->GetGameEntities()[i]->GetGameEntity());
+				}
+			}
+			else
+			{
+				for (int i = 0; i < g_pGame->GetGameEntities().size(); i++)
+				{
+					gameEnts.push_back(g_pGame->GetGameEntities()[i]);
+				}
+			}
+
+			for (int i = 0; i < gameEnts.size(); i++)
+			{
+				static kbString TreeName("BG Trees");
+				kbGameEntity *const pTargetEnt = gameEnts[i];
+				if (pTargetEnt->GetName() != TreeName)
+				{	
+					continue;
+				}
+
+				static float minScale = 250.0f;
+				static float maxScale = 275.0f;
+				const float randScale = (kbfrand() * (maxScale - minScale)) + minScale;
+				kbVec3 scale = kbVec3Rand(kbVec3(randScale, randScale, randScale), kbVec3(randScale, randScale, randScale));
+				pTargetEnt->SetScale(scale);
+
+				kbMat4 rotationMat = kbMat4::identity;
+				rotationMat.MakeIdentity();
+
+				float randRot = kbfrand() * kbPI * 2.0f;
+				rotationMat[0][0] = cos(randRot);
+				rotationMat[2][0] = -sin(randRot);
+				rotationMat[0][2] = sin(randRot);
+				rotationMat[2][2] = cos(randRot);
+				pTargetEnt->SetOrientation(kbQuatFromMatrix(rotationMat));
+			}
+		}
+		else
+		{
+			bKeyDown = FALSE;
+		}
+	}
+	else if (GetAsyncKeyState('P') == false)
+	{
+		bKeyDown = false;
+	}
+
+	if ( g_UseEditor )
+	{
 		return;
 	}
 

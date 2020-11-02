@@ -145,7 +145,7 @@ void CreateVertex( inout TriangleStream<pixelInput> OutputStream, float3 vertexW
 		bladeHeightFactor = plant_3_size.y;
 	}
 
-	const float3 jitterOffset = bladeWidthFactor * float3( bladeOffsets[IndexVector.x + grassNumber].x, 0.0f, bladeOffsets[IndexVector.x + grassNumber].y );
+	const float3 jitterOffset = bladeWidthFactor * float3( 0, 0.0f, bladeOffsets[IndexVector.x + grassNumber].y );
 
 	const float textureUBorderSize = 0.005f;
 	const float textureVBorderSize = 0.03f;
