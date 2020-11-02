@@ -59,7 +59,11 @@ void CannonGame::InitGame_Internal() {
 	GetSoundManager().SetMasterVolume( pGameSettings->m_Volume / 100.0f );
 
 	kbShaderParamOverrides_t shaderParam;
-	shaderParam.SetVec4( "globalTint", kbVec4( 0.0f, 0.0f, 0.0f, 1.0f - ( pGameSettings->m_Brightness / 100.0f ) ) );
+
+	float brightness = (pGameSettings->m_Brightness / 100.0f);
+	brightness = (brightness * 0.5f) + 0.5;
+
+	shaderParam.SetVec4( "globalTint", kbVec4( 0.0f, 0.0f, 0.0f, 1.0f - brightness ) );
 	g_pRenderer->SetGlobalShaderParam( shaderParam );
 
 	const float LOD = (float)pGameSettings->m_VisualQuality / 100.0f;

@@ -556,13 +556,16 @@ void KungFuLevelComponent::SetEnable_Internal( const bool bEnable ) {
 				m_WaterSplashFXInst[i].m_Entity.SetEntity( nullptr );
 			}	
 		}
-		while( m_SnolafPool.size() > 0 ) {
-			kbGameEntity *const pSnolaf = m_SnolafPool.back();
-			m_SnolafPool.pop_back();
-			g_pGame->RemoveGameEntity( pSnolaf );
+		if (g_pCannonGame->IsPlaying())
+		{
+			while (m_SnolafPool.size() > 0)
+			{
+				kbGameEntity *const pSnolaf = m_SnolafPool.back();
+				m_SnolafPool.pop_back();
+				g_pGame->RemoveGameEntity(pSnolaf);
+			}
+			m_SnolafPool.clear();
 		}
-		m_SnolafPool.clear();
-
 		KungFuSheepDirector::DeleteSingleton();
 	}
 }

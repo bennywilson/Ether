@@ -148,6 +148,9 @@ void kbGame::LoadMap( const std::string & mapName ) {
 void kbGame::StopGame() {
 	StopGame_Internal();
 
+
+	m_bIsPlaying = false;
+
 	if ( g_pRenderer != nullptr ) {
 		g_pRenderer->WaitForRenderingToComplete();
 	}
@@ -157,8 +160,6 @@ void kbGame::StopGame() {
 	}
 	m_GameEntityList.clear();
 	m_GamePlayersList.clear();
-
-	m_bIsPlaying = false;
 
 	m_pLevelComp = nullptr;
 }

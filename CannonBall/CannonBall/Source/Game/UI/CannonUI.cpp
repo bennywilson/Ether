@@ -486,7 +486,9 @@ void CannonBallPauseMenuUIComponent::WidgetEventCB( kbUIWidgetComponent *const p
 	} else if ( pWidget == &m_SliderWidgets[2] ) {
 		// Brightness
 		kbShaderParamOverrides_t shaderParam;
-		shaderParam.SetVec4( "globalTint", kbVec4( 0.0f, 0.0f, 0.0f, 1.0f - m_SliderWidgets[2].GetNormalizedValue() ) );
+		float brightness = m_SliderWidgets[2].GetNormalizedValue();
+		brightness = (brightness * 0.5f) + 0.5f;
+		shaderParam.SetVec4( "globalTint", kbVec4( 0.0f, 0.0f, 0.0f, 1.0f - brightness) );
 		g_pRenderer->SetGlobalShaderParam( shaderParam );
 	} else if ( pWidget == &m_Widgets[0] ) {
 		// Close Pause menu

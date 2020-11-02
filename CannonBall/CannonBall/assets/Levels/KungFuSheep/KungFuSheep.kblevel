@@ -1,8 +1,8 @@
-kbGameEntity 3735982847 1076903637 221366676 3983195467 {
+kbGameEntity 3953658804 1106654608 1459480510 2990524390 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		Name = "Entity_506"
+		Name = "Entity_509"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
 		Position = 0.000000 0.000000 0.000000
 		Scale = 1.000000 1.000000 1.000000
@@ -10,8 +10,8 @@ kbGameEntity 3735982847 1076903637 221366676 3983195467 {
 	kbEditorLevelSettingsComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		MainCameraPosition = 423.749908 -23.671230 -235.399139
-		MainCameraRotation = -0.077915 0.220519 -0.017664 0.972105
+		MainCameraPosition = 199.640167 -24.426409 -287.946381
+		MainCameraRotation = 0.004735 -0.335301 -0.001674 0.942098
 	}
 }
 kbGameEntity 537364968 1092523782 2953639826 2626478307 {
@@ -575,9 +575,9 @@ kbGameEntity 1044486225 1170010943 3542630290 1689678171 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 -0.751563 0.000000 0.659661
+		Orientation = 0.000000 -0.631840 0.000000 0.775099
 		Position = 685.992676 -64.798882 -715.436279
-		Scale = 252.220001 252.220001 252.220001
+		Scale = 267.440002 267.440002 267.440002
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -657,9 +657,9 @@ kbGameEntity 1973203591 1241193918 2238767015 2616540576 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 -0.959412 0.000000 0.282007
+		Orientation = 0.000000 0.873721 0.000000 0.486427
 		Position = 420.992676 31.201118 -63.436310
-		Scale = 270.477509 270.477509 270.477509
+		Scale = 262.045013 262.045013 262.045013
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -739,9 +739,9 @@ kbGameEntity 4164805941 1271730840 248013747 387718828 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 -0.147430 0.000000 0.989073
+		Orientation = 0.000000 -0.943720 0.000000 0.330745
 		Position = 248.992676 -26.798882 -101.436310
-		Scale = 267.137512 267.137512 267.137512
+		Scale = 270.875000 270.875000 270.875000
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -821,9 +821,9 @@ kbGameEntity 2296621897 1218472836 3616536247 3053826791 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 -0.038004 0.000000 0.999278
+		Orientation = 0.000000 -0.290735 0.000000 0.956803
 		Position = 316.992676 -29.798882 -115.436310
-		Scale = 262.640015 262.640015 262.640015
+		Scale = 264.402496 264.402496 264.402496
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -903,9 +903,9 @@ kbGameEntity 2418219531 1234697947 1569402021 3344355722 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 -0.997568 0.000000 0.069687
+		Orientation = 0.000000 0.017592 0.000000 0.999845
 		Position = 677.992676 -33.798882 -520.436279
-		Scale = 262.932495 262.932495 262.932495
+		Scale = 256.859985 256.859985 256.859985
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -985,9 +985,9 @@ kbGameEntity 220221111 1228940191 1168620953 1995489799 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 0.312003 0.000000 0.950081
+		Orientation = 0.000000 0.302436 0.000000 0.953170
 		Position = 685.992676 -54.798882 -645.436279
-		Scale = 260.887512 260.887512 260.887512
+		Scale = 251.982498 251.982498 251.982498
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -1067,9 +1067,9 @@ kbGameEntity 224218093 1224027891 858253965 1362471206 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 0.028585 0.000000 0.999591
+		Orientation = 0.000000 0.929892 0.000000 0.367832
 		Position = 261.093079 55.601124 71.063599
-		Scale = 265.987488 265.987488 265.987488
+		Scale = 255.544998 255.544998 255.544998
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -1149,9 +1149,9 @@ kbGameEntity 917307947 1242318340 1677262229 3795820746 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 -0.999720 0.000000 0.023560
+		Orientation = 0.000000 -0.896502 0.000000 0.443040
 		Position = 685.992676 -44.798882 -760.436279
-		Scale = 271.024994 271.024994 271.024994
+		Scale = 254.615005 254.615005 254.615005
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -1231,9 +1231,9 @@ kbGameEntity 1964696115 1200595884 379652005 2509177556 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 -0.496277 0.000000 0.868164
+		Orientation = 0.000000 -0.905761 0.000000 0.423788
 		Position = 720.992676 -29.798882 -760.436279
-		Scale = 261.782501 261.782501 261.782501
+		Scale = 257.832489 257.832489 257.832489
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -1313,9 +1313,9 @@ kbGameEntity 827974286 1317793648 7154367 3706137940 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 -0.070627 0.000000 0.997503
+		Orientation = 0.000000 -0.259932 0.000000 0.965627
 		Position = 711.992676 -47.798882 -688.436279
-		Scale = 263.864990 263.864990 263.864990
+		Scale = 272.597504 272.597504 272.597504
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -1395,9 +1395,9 @@ kbGameEntity 909764437 1119777554 4286796422 1347089511 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 -0.891434 0.000000 0.453151
+		Orientation = 0.000000 0.831295 0.000000 0.555831
 		Position = 720.992676 -34.798882 -660.436279
-		Scale = 255.247498 255.247498 255.247498
+		Scale = 259.529999 259.529999 259.529999
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -1477,9 +1477,9 @@ kbGameEntity 2482731427 1107505136 961325449 4088914712 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 0.974315 0.000000 0.225189
+		Orientation = 0.000000 0.744055 0.000000 0.668118
 		Position = 770.992676 -0.798882 -537.436279
-		Scale = 271.262512 271.262512 271.262512
+		Scale = 250.824997 250.824997 250.824997
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -1559,9 +1559,9 @@ kbGameEntity 2191380541 1268119558 2465622416 724313954 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 0.754045 0.000000 0.656823
+		Orientation = 0.000000 -0.825311 0.000000 0.564679
 		Position = 552.992676 65.201118 -80.436310
-		Scale = 262.312500 262.312500 262.312500
+		Scale = 254.445007 254.445007 254.445007
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -1641,9 +1641,9 @@ kbGameEntity 3206402652 1295248284 2660645014 4152161678 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 -0.958879 0.000000 0.283815
+		Orientation = 0.000000 -0.403769 0.000000 0.914861
 		Position = 394.993164 34.801121 -50.736408
-		Scale = 253.032501 253.032501 253.032501
+		Scale = 273.845001 273.845001 273.845001
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -1723,9 +1723,9 @@ kbGameEntity 2831765132 1174453931 1675022741 1556899211 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 0.186764 0.000000 0.982405
+		Orientation = 0.000000 0.625243 0.000000 0.780430
 		Position = 630.992676 20.201118 -415.436310
-		Scale = 268.717499 268.717499 268.717499
+		Scale = 260.750000 260.750000 260.750000
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -1805,9 +1805,9 @@ kbGameEntity 692603997 1271881867 1483072644 3739935448 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 -0.998952 0.000000 0.045851
+		Orientation = 0.000000 0.768909 0.000000 0.639359
 		Position = 593.992676 51.201118 -330.436310
-		Scale = 255.264999 255.264999 255.264999
+		Scale = 254.264999 254.264999 254.264999
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -1887,9 +1887,9 @@ kbGameEntity 752088500 1084247609 967265437 564336157 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 0.684318 0.000000 0.729184
+		Orientation = 0.000000 -0.999311 0.000000 0.037062
 		Position = 477.992676 -3.798882 -159.436310
-		Scale = 269.600006 269.600006 269.600006
+		Scale = 264.880005 264.880005 264.880005
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -1969,9 +1969,9 @@ kbGameEntity 2513820397 1331210751 2315196802 552421344 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 0.846844 0.000000 0.531842
+		Orientation = 0.000000 -0.081591 0.000000 0.996666
 		Position = 357.992676 -24.798882 -123.436310
-		Scale = 271.489990 271.489990 271.489990
+		Scale = 271.195007 271.195007 271.195007
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -2051,9 +2051,9 @@ kbGameEntity 3285387924 1228452896 3350337438 943063931 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 -0.560263 0.000000 0.828315
+		Orientation = 0.000000 0.760610 0.000000 0.649209
 		Position = 276.992676 -39.798882 -115.436310
-		Scale = 258.559998 258.559998 258.559998
+		Scale = 266.290009 266.290009 266.290009
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -2133,9 +2133,9 @@ kbGameEntity 2485722808 1249633348 3427651201 948057380 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 0.690933 0.000000 0.722919
+		Orientation = 0.000000 -0.636455 0.000000 0.771314
 		Position = 753.992676 3.201118 -490.436279
-		Scale = 253.315002 253.315002 253.315002
+		Scale = 256.929993 256.929993 256.929993
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -2215,9 +2215,9 @@ kbGameEntity 3555939691 1292634236 3138637711 1011847492 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 -0.756105 0.000000 0.654451
+		Orientation = 0.000000 0.034237 0.000000 0.999414
 		Position = 608.992676 112.201118 -15.436310
-		Scale = 254.832504 254.832504 254.832504
+		Scale = 270.265015 270.265015 270.265015
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -2297,9 +2297,9 @@ kbGameEntity 3065276299 1246082626 719407031 4205355737 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 0.731972 0.000000 0.681334
+		Orientation = 0.000000 0.016021 0.000000 0.999872
 		Position = 197.992676 -32.798882 -103.436310
-		Scale = 273.872498 273.872498 273.872498
+		Scale = 253.622498 253.622498 253.622498
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -2379,9 +2379,9 @@ kbGameEntity 3137828776 1250883830 562048185 2827031039 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 -0.991513 0.000000 0.130007
+		Orientation = 0.000000 -0.127203 0.000000 0.991877
 		Position = 440.093079 -5.398876 -136.936401
-		Scale = 272.545013 272.545013 272.545013
+		Scale = 250.445007 250.445007 250.445007
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -2461,9 +2461,9 @@ kbGameEntity 320491236 1160981107 2614209679 3317781053 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 0.329262 0.000000 0.944239
+		Orientation = 0.000000 0.618600 0.000000 0.785706
 		Position = 642.093079 1.601124 -445.136353
-		Scale = 261.915009 261.915009 261.915009
+		Scale = 263.350006 263.350006 263.350006
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -2543,9 +2543,9 @@ kbGameEntity 1661559646 1237960994 1253154225 201681178 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 0.600923 0.000000 0.799307
+		Orientation = 0.000000 -0.090354 0.000000 0.995910
 		Position = 652.092957 -42.098877 -524.136230
-		Scale = 258.067505 258.067505 258.067505
+		Scale = 268.119995 268.119995 268.119995
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -2625,9 +2625,9 @@ kbGameEntity 1252188378 1261778701 1000664239 3859504431 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 -0.979603 0.000000 0.200941
+		Orientation = 0.000000 0.073447 0.000000 0.997299
 		Position = 699.392822 -47.798878 -740.336060
-		Scale = 272.802490 272.802490 272.802490
+		Scale = 250.949997 250.949997 250.949997
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -2707,9 +2707,9 @@ kbGameEntity 3020554293 1091463407 472932774 2804604365 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 0.661783 0.000000 0.749695
+		Orientation = 0.000000 -0.999163 0.000000 0.040830
 		Position = 681.392822 -51.498878 -571.736206
-		Scale = 266.822510 266.822510 266.822510
+		Scale = 263.967499 263.967499 263.967499
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -2789,9 +2789,9 @@ kbGameEntity 208889652 1213018374 48121268 1254466216 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 -0.946694 0.000000 0.322133
+		Orientation = 0.000000 0.632327 0.000000 0.774702
 		Position = 699.392822 -20.598881 -502.636261
-		Scale = 274.549988 274.549988 274.549988
+		Scale = 252.207504 252.207504 252.207504
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -2871,9 +2871,9 @@ kbGameEntity 955701741 1092992351 675286195 3852628332 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 0.270836 0.000000 0.962626
+		Orientation = 0.000000 -0.403769 0.000000 0.914861
 		Position = 728.992676 88.201118 -151.436310
-		Scale = 251.455002 251.455002 251.455002
+		Scale = 264.135010 264.135010 264.135010
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -2953,9 +2953,9 @@ kbGameEntity 2548515358 1231922342 3329228459 1188848864 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 0.520622 0.000000 0.853787
+		Orientation = 0.000000 -0.252644 0.000000 0.967559
 		Position = 377.192505 22.801119 -56.836334
-		Scale = 255.607498 255.607498 255.607498
+		Scale = 271.609985 271.609985 271.609985
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -3035,9 +3035,9 @@ kbGameEntity 2782730304 1075192960 759029149 3406019541 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 -0.803441 0.000000 0.595384
+		Orientation = 0.000000 -0.933656 0.000000 0.358172
 		Position = 425.992676 -34.798882 -170.436310
-		Scale = 253.820007 253.820007 253.820007
+		Scale = 253.645004 253.645004 253.645004
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -3117,9 +3117,9 @@ kbGameEntity 159457499 1318375233 2671241601 3838942131 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 0.302436 0.000000 0.953170
+		Orientation = 0.000000 -0.994467 0.000000 0.105049
 		Position = 300.192261 -36.998886 -114.536331
-		Scale = 250.630005 250.630005 250.630005
+		Scale = 259.662506 259.662506 259.662506
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -3199,9 +3199,9 @@ kbGameEntity 1373638270 1108436356 1289476771 208221600 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 0.721615 0.000000 0.692294
+		Orientation = 0.000000 -0.736876 0.000000 0.676028
 		Position = 438.992676 98.201118 63.563690
-		Scale = 270.915009 270.915009 270.915009
+		Scale = 258.497498 258.497498 258.497498
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -3281,9 +3281,9 @@ kbGameEntity 1301992394 1094747956 1198891693 2327066077 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 -0.194474 0.000000 0.980908
+		Orientation = 0.000000 0.102549 0.000000 0.994728
 		Position = 463.992676 43.201118 -41.436310
-		Scale = 252.945007 252.945007 252.945007
+		Scale = 253.024994 253.024994 253.024994
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -3363,9 +3363,9 @@ kbGameEntity 3290434918 1282263940 3170123190 3823563321 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 -0.385294 0.000000 0.922794
+		Orientation = 0.000000 0.370168 0.000000 0.928965
 		Position = 385.992676 64.201118 12.563690
-		Scale = 265.760010 265.760010 265.760010
+		Scale = 270.464996 270.464996 270.464996
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -3445,9 +3445,9 @@ kbGameEntity 1584897376 1238456261 4083557789 69699857 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 0.641530 0.000000 0.767098
+		Orientation = 0.000000 -0.550597 0.000000 0.834771
 		Position = 404.093079 -32.398876 -153.936401
-		Scale = 266.170013 266.170013 266.170013
+		Scale = 264.845001 264.845001 264.845001
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -3527,9 +3527,9 @@ kbGameEntity 3800337203 1213495073 2506633895 3074872813 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 0.312899 0.000000 0.949787
+		Orientation = 0.000000 0.988223 0.000000 0.153020
 		Position = 383.093079 14.601124 -77.936401
-		Scale = 250.112503 250.112503 250.112503
+		Scale = 269.295013 269.295013 269.295013
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -3609,9 +3609,9 @@ kbGameEntity 3540427654 1141537814 3446057102 1427522937 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 0.956803 0.000000 0.290736
+		Orientation = 0.000000 -0.827080 0.000000 0.562084
 		Position = 353.093079 40.601124 -19.936401
-		Scale = 253.722504 253.722504 253.722504
+		Scale = 263.795013 263.795013 263.795013
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -3691,9 +3691,9 @@ kbGameEntity 2502615216 1265983692 3773432220 1878790076 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 -0.662725 0.000000 0.748863
+		Orientation = 0.000000 0.830246 0.000000 0.557397
 		Position = 346.093079 7.601124 -67.936401
-		Scale = 262.672485 262.672485 262.672485
+		Scale = 271.339996 271.339996 271.339996
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -3773,9 +3773,9 @@ kbGameEntity 3073917625 1095045129 1798486696 61535603 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 -0.660133 0.000000 0.751149
+		Orientation = 0.000000 0.978451 0.000000 0.206477
 		Position = 297.093079 17.601124 -33.936401
-		Scale = 254.242493 254.242493 254.242493
+		Scale = 267.857513 267.857513 267.857513
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -3855,9 +3855,9 @@ kbGameEntity 2163332910 1119966914 3441976198 2339350714 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 -0.960818 0.000000 0.277181
+		Orientation = 0.000000 0.516862 0.000000 0.856069
 		Position = 223.093079 -29.398876 -110.936401
-		Scale = 254.037506 254.037506 254.037506
+		Scale = 268.892487 268.892487 268.892487
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -3937,9 +3937,9 @@ kbGameEntity 2610574660 1187087232 2896179115 3064041456 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 0.722919 0.000000 0.690933
+		Orientation = 0.000000 -0.823354 0.000000 0.567528
 		Position = 225.093079 -6.398876 -71.936401
-		Scale = 269.392487 269.392487 269.392487
+		Scale = 253.747498 253.747498 253.747498
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -4019,9 +4019,9 @@ kbGameEntity 3098217409 1263291805 2082524053 994001067 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 -0.401468 0.000000 0.915873
+		Orientation = 0.000000 0.549285 0.000000 0.835635
 		Position = 201.093079 -18.398876 -83.936401
-		Scale = 250.017502 250.017502 250.017502
+		Scale = 261.447510 261.447510 261.447510
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -4101,9 +4101,9 @@ kbGameEntity 698281382 1096066621 2466031517 4131520161 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 0.912306 0.000000 0.409509
+		Orientation = 0.000000 0.150847 0.000000 0.988557
 		Position = 458.992676 -58.798882 -250.436310
-		Scale = 264.510010 264.510010 264.510010
+		Scale = 250.354996 250.354996 250.354996
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -4183,9 +4183,9 @@ kbGameEntity 2091632545 1253528582 2480098476 1613334884 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 -0.469317 0.000000 0.883030
+		Orientation = 0.000000 0.633057 0.000000 0.774105
 		Position = 535.992798 38.001122 -169.536270
-		Scale = 273.192505 273.192505 273.192505
+		Scale = 263.062500 263.062500 263.062500
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -4265,9 +4265,9 @@ kbGameEntity 2842134341 1121483400 261226136 2644408545 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 0.002513 0.000000 0.999997
+		Orientation = 0.000000 -0.763052 0.000000 0.646337
 		Position = 638.992676 118.201118 -51.436310
-		Scale = 269.035004 269.035004 269.035004
+		Scale = 265.937500 265.937500 265.937500
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -4347,9 +4347,9 @@ kbGameEntity 2936374306 1091412954 1600807066 3603336150 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 -0.650880 0.000000 0.759180
+		Orientation = 0.000000 0.347590 0.000000 0.937647
 		Position = 647.992676 127.201118 -33.436310
-		Scale = 263.957489 263.957489 263.957489
+		Scale = 257.559998 257.559998 257.559998
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -4429,9 +4429,9 @@ kbGameEntity 1629306350 1320714421 138866104 2190997548 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 0.424642 0.000000 0.905361
+		Orientation = 0.000000 0.539535 0.000000 0.841963
 		Position = 266.992676 -1.798882 -54.436310
-		Scale = 259.432495 259.432495 259.432495
+		Scale = 267.512512 267.512512 267.512512
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -4511,9 +4511,9 @@ kbGameEntity 2448931391 1109982177 1745884070 3117595224 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 0.940668 0.000000 0.339329
+		Orientation = 0.000000 0.978774 0.000000 0.204940
 		Position = 323.992676 10.201118 -54.436310
-		Scale = 274.665009 274.665009 274.665009
+		Scale = 272.232513 272.232513 272.232513
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -4593,9 +4593,9 @@ kbGameEntity 664590325 1296107099 387716246 3515021143 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 0.595889 0.000000 0.803067
+		Orientation = 0.000000 -0.907484 0.000000 0.420086
 		Position = 355.992676 -44.798882 -150.436310
-		Scale = 267.100006 267.100006 267.100006
+		Scale = 250.262497 250.262497 250.262497
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -4675,9 +4675,9 @@ kbGameEntity 1027587079 1179307115 2862274213 3551016599 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 -0.927797 0.000000 0.373085
+		Orientation = 0.000000 -0.930699 0.000000 0.365787
 		Position = 373.093079 -42.398876 -155.936401
-		Scale = 264.457489 264.457489 264.457489
+		Scale = 270.959991 270.959991 270.959991
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -4757,9 +4757,9 @@ kbGameEntity 2836595168 1305688953 2226740608 527750267 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 -0.790540 0.000000 0.612410
+		Orientation = 0.000000 0.995591 0.000000 0.093796
 		Position = 590.992676 23.201118 -192.436310
-		Scale = 274.234985 274.234985 274.234985
+		Scale = 271.024994 271.024994 271.024994
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -4839,9 +4839,9 @@ kbGameEntity 3109965767 1287166947 322301076 2334963405 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 -0.918128 0.000000 0.396283
+		Orientation = 0.000000 -0.998723 0.000000 0.050558
 		Position = 323.992676 -4.798882 -75.436310
-		Scale = 252.962494 252.962494 252.962494
+		Scale = 257.375000 257.375000 257.375000
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -4921,9 +4921,9 @@ kbGameEntity 332899311 1289813312 2454809513 2025710473 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 0.904425 0.000000 0.426632
+		Orientation = 0.000000 0.993995 0.000000 0.109422
 		Position = 630.992676 -49.798882 -505.436279
-		Scale = 255.970001 255.970001 255.970001
+		Scale = 254.600006 254.600006 254.600006
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -5003,9 +5003,9 @@ kbGameEntity 1054284181 1195969845 3006543011 2776924565 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 0.243818 0.000000 0.969821
+		Orientation = 0.000000 -0.897335 0.000000 0.441349
 		Position = 565.992676 10.201118 -235.436310
-		Scale = 271.937500 271.937500 271.937500
+		Scale = 266.072510 266.072510 266.072510
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -5085,9 +5085,9 @@ kbGameEntity 2202893018 1246743236 2271726515 178278777 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 0.466263 0.000000 0.884646
+		Orientation = 0.000000 -0.996134 0.000000 0.087851
 		Position = 486.992676 -28.798882 -225.436310
-		Scale = 250.887497 250.887497 250.887497
+		Scale = 255.092499 255.092499 255.092499
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -5167,9 +5167,9 @@ kbGameEntity 834335294 1319755442 96108425 823220265 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 0.178115 0.000000 0.984010
+		Orientation = 0.000000 -0.638150 0.000000 0.769912
 		Position = 557.992676 10.201118 -328.436310
-		Scale = 267.272491 267.272491 267.272491
+		Scale = 259.054993 259.054993 259.054993
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -5249,9 +5249,9 @@ kbGameEntity 3981540230 1223575945 1969776781 1727431754 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 0.293440 0.000000 0.955978
+		Orientation = 0.000000 -0.051186 0.000000 0.998689
 		Position = 530.992676 -22.798882 -289.436310
-		Scale = 269.885010 269.885010 269.885010
+		Scale = 265.440002 265.440002 265.440002
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -5331,9 +5331,9 @@ kbGameEntity 2857325269 1172267972 1550368949 2827545140 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 -0.731330 0.000000 0.682024
+		Orientation = 0.000000 0.880808 0.000000 0.473473
 		Position = 485.992676 -46.798882 -265.436310
-		Scale = 252.992493 252.992493 252.992493
+		Scale = 253.812500 253.812500 253.812500
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -5413,9 +5413,9 @@ kbGameEntity 1942420724 1120199271 2519666353 1068704578 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 0.008168 0.000000 0.999967
+		Orientation = 0.000000 -0.707995 0.000000 0.706218
 		Position = 443.992676 -32.798882 -182.436310
-		Scale = 268.897491 268.897491 268.897491
+		Scale = 262.704987 262.704987 262.704987
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -5495,9 +5495,9 @@ kbGameEntity 3366845807 1147418142 345505412 2609220233 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 0.156124 0.000000 0.987737
+		Orientation = 0.000000 -0.986940 0.000000 0.161087
 		Position = 409.093079 -62.398876 -207.936401
-		Scale = 261.867493 261.867493 261.867493
+		Scale = 271.850006 271.850006 271.850006
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -5577,9 +5577,9 @@ kbGameEntity 3910140578 1307861602 4037034120 568223890 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 0.054009 0.000000 0.998540
+		Orientation = 0.000000 0.611417 0.000000 0.791309
 		Position = 452.093079 -50.398876 -236.936401
-		Scale = 253.925003 253.925003 253.925003
+		Scale = 250.557495 250.557495 250.557495
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -5659,9 +5659,9 @@ kbGameEntity 1915105017 1316969748 3639976862 1151915408 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 -0.270836 0.000000 0.962626
+		Orientation = 0.000000 0.989935 0.000000 0.141523
 		Position = 497.093079 9.601124 -155.936401
-		Scale = 254.809998 254.809998 254.809998
+		Scale = 272.692505 272.692505 272.692505
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -5741,9 +5741,9 @@ kbGameEntity 1299626291 1164694046 356457626 1125288367 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 0.179661 0.000000 0.983729
+		Orientation = 0.000000 0.651357 0.000000 0.758771
 		Position = 496.093079 15.601124 -141.936401
-		Scale = 250.184998 250.184998 250.184998
+		Scale = 274.082489 274.082489 274.082489
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -5823,9 +5823,9 @@ kbGameEntity 2173706223 1114051287 3615978886 3662643896 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 -0.928382 0.000000 0.371627
+		Orientation = 0.000000 0.273556 0.000000 0.961856
 		Position = 560.592957 1.001133 -385.236755
-		Scale = 259.392487 259.392487 259.392487
+		Scale = 250.309998 250.309998 250.309998
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -5905,9 +5905,9 @@ kbGameEntity 1101883742 1117009261 1157410985 2636293500 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 -0.650403 0.000000 0.759589
+		Orientation = 0.000000 0.075327 0.000000 0.997159
 		Position = 471.992676 -54.798882 -262.436310
-		Scale = 270.285004 270.285004 270.285004
+		Scale = 272.084991 272.084991 272.084991
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -5987,9 +5987,9 @@ kbGameEntity 3453778662 1198981260 753662354 68110769 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 -0.435420 0.000000 0.900228
+		Orientation = 0.000000 -0.954397 0.000000 0.298541
 		Position = 699.392822 -33.498878 -532.736206
-		Scale = 254.940002 254.940002 254.940002
+		Scale = 260.902496 260.902496 260.902496
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -6069,9 +6069,9 @@ kbGameEntity 1207226860 1169314865 2228213154 427964951 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 0.773110 0.000000 0.634272
+		Orientation = 0.000000 0.849672 0.000000 0.527312
 		Position = 720.992676 -44.798882 -730.436279
-		Scale = 270.385010 270.385010 270.385010
+		Scale = 254.380005 254.380005 254.380005
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -6151,9 +6151,9 @@ kbGameEntity 2068492048 1186941631 241020553 4267439801 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 0.467374 0.000000 0.884059
+		Orientation = 0.000000 -0.502809 0.000000 0.864398
 		Position = 555.992676 -19.798882 -395.436310
-		Scale = 259.959991 259.959991 259.959991
+		Scale = 258.644989 258.644989 258.644989
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -6233,9 +6233,9 @@ kbGameEntity 2662913000 1149766497 3659123848 3671939856 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 -0.999522 0.000000 0.030783
+		Orientation = 0.000000 0.566234 0.000000 0.824245
 		Position = 576.992676 30.201118 -320.436310
-		Scale = 266.024994 266.024994 266.024994
+		Scale = 263.802490 263.802490 263.802490
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -6315,9 +6315,9 @@ kbGameEntity 2633006044 1218469888 2590380980 350503454 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 0.750734 0.000000 0.660605
+		Orientation = 0.000000 0.982581 0.000000 0.185838
 		Position = 532.992676 -43.798882 -403.436310
-		Scale = 260.619995 260.619995 260.619995
+		Scale = 260.524994 260.524994 260.524994
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -6397,9 +6397,9 @@ kbGameEntity 851607705 1146611135 678922425 3188508683 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 -0.123463 0.000000 0.992349
+		Orientation = 0.000000 -0.810123 0.000000 0.586259
 		Position = 638.892639 47.101116 -191.336319
-		Scale = 269.274994 269.274994 269.274994
+		Scale = 257.007507 257.007507 257.007507
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -6479,9 +6479,9 @@ kbGameEntity 1716190913 1139080029 1561202331 381952986 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 0.192933 0.000000 0.981212
+		Orientation = 0.000000 0.868632 0.000000 0.495459
 		Position = 479.093079 -64.398880 -286.136353
-		Scale = 267.239990 267.239990 267.239990
+		Scale = 253.872498 253.872498 253.872498
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -6561,9 +6561,9 @@ kbGameEntity 2662395164 1321498803 1940995501 2588047024 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 0.102862 0.000000 0.994696
+		Orientation = 0.000000 0.290736 0.000000 0.956803
 		Position = 645.093079 -28.398876 -502.136353
-		Scale = 264.855011 264.855011 264.855011
+		Scale = 271.002502 271.002502 271.002502
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -6643,9 +6643,9 @@ kbGameEntity 893583051 1301004035 4062950299 81524948 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 -0.529179 0.000000 0.848510
+		Orientation = 0.000000 -0.984344 0.000000 0.176260
 		Position = 642.093079 13.601124 -430.136353
-		Scale = 253.592499 253.592499 253.592499
+		Scale = 273.222504 273.222504 273.222504
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -6725,9 +6725,9 @@ kbGameEntity 1020948851 1090800679 1729677243 2081110503 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 -0.994367 0.000000 0.105986
+		Orientation = 0.000000 -0.553740 0.000000 0.832689
 		Position = 730.093079 8.601124 -464.136353
-		Scale = 256.105011 256.105011 256.105011
+		Scale = 251.202499 251.202499 251.202499
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -6807,9 +6807,9 @@ kbGameEntity 1164247031 1213126125 357246617 2216307558 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 0.968348 0.000000 0.249603
+		Orientation = 0.000000 -0.845001 0.000000 0.534765
 		Position = 642.093079 -16.398876 -469.136353
-		Scale = 254.142502 254.142502 254.142502
+		Scale = 257.162506 257.162506 257.162506
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -6889,9 +6889,9 @@ kbGameEntity 4140054220 1275362905 368134800 1735554500 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 0.827786 0.000000 0.561044
+		Orientation = 0.000000 0.624997 0.000000 0.780627
 		Position = 585.093079 -48.398876 -453.136353
-		Scale = 265.207489 265.207489 265.207489
+		Scale = 267.407501 267.407501 267.407501
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -6971,9 +6971,9 @@ kbGameEntity 3583742829 1116075882 2168033973 3278468436 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 -0.526778 0.000000 0.850003
+		Orientation = 0.000000 0.442477 0.000000 0.896780
 		Position = 680.992676 -54.798882 -595.436279
-		Scale = 250.742493 250.742493 250.742493
+		Scale = 267.005005 267.005005 267.005005
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -7053,9 +7053,9 @@ kbGameEntity 2833775023 1188787768 146433931 2728578620 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 -0.995262 0.000000 0.097236
+		Orientation = 0.000000 0.133121 0.000000 0.991100
 		Position = 669.992676 9.201118 -447.436310
-		Scale = 251.757507 251.757507 251.757507
+		Scale = 262.207489 262.207489 262.207489
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -7135,9 +7135,9 @@ kbGameEntity 420060664 1332751792 653333911 3345979659 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 -0.030469 0.000000 0.999536
+		Orientation = 0.000000 -0.695913 0.000000 0.718126
 		Position = 499.093079 26.601124 -120.936401
-		Scale = 269.682495 269.682495 269.682495
+		Scale = 252.070007 252.070007 252.070007
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -7217,9 +7217,9 @@ kbGameEntity 445846512 1119550430 2062919577 1183612357 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 -0.411514 0.000000 0.911403
+		Orientation = 0.000000 0.092857 0.000000 0.995679
 		Position = 572.093079 130.601120 90.063599
-		Scale = 268.752502 268.752502 268.752502
+		Scale = 253.779999 253.779999 253.779999
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -7299,9 +7299,9 @@ kbGameEntity 1084036388 1305272104 3801834638 1695848793 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 0.990418 0.000000 0.138101
+		Orientation = 0.000000 -0.717251 0.000000 0.696815
 		Position = 586.093079 81.601120 -99.936401
-		Scale = 254.207504 254.207504 254.207504
+		Scale = 271.529999 271.529999 271.529999
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -7381,9 +7381,9 @@ kbGameEntity 3454631860 1085541006 2606286770 3319164544 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 0.528912 0.000000 0.848676
+		Orientation = 0.000000 0.341987 0.000000 0.939705
 		Position = 652.093079 82.601120 -240.936401
-		Scale = 258.927490 258.927490 258.927490
+		Scale = 256.462494 256.462494 256.462494
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -7463,9 +7463,9 @@ kbGameEntity 668399291 1098191130 3864987264 4257253700 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 0.799685 0.000000 0.600420
+		Orientation = 0.000000 0.131876 0.000000 0.991266
 		Position = 554.093079 3.601120 -255.936401
-		Scale = 266.089996 266.089996 266.089996
+		Scale = 271.292511 271.292511 271.292511
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -7545,9 +7545,9 @@ kbGameEntity 100717007 1341243643 2354110393 117303885 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 -0.998706 0.000000 0.050872
+		Orientation = 0.000000 0.348474 0.000000 0.937318
 		Position = 556.893127 7.601120 -314.136414
-		Scale = 264.220001 264.220001 264.220001
+		Scale = 265.700012 265.700012 265.700012
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -7627,9 +7627,9 @@ kbGameEntity 788582215 1341599313 1646306968 1713607669 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 0.705327 0.000000 0.708882
+		Orientation = 0.000000 0.690479 0.000000 0.723353
 		Position = 674.693176 98.001114 -252.736420
-		Scale = 262.804993 262.804993 262.804993
+		Scale = 253.460007 253.460007 253.460007
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -7709,9 +7709,9 @@ kbGameEntity 4135045707 1269057136 1960812451 267645047 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 -0.373085 0.000000 0.927797
+		Orientation = 0.000000 0.056519 0.000000 0.998402
 		Position = 714.392822 -24.498878 -547.736206
-		Scale = 258.002502 258.002502 258.002502
+		Scale = 258.670013 258.670013 258.670013
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -7791,9 +7791,9 @@ kbGameEntity 322889488 1186548541 633126277 1342015508 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 -0.999326 0.000000 0.036748
+		Orientation = 0.000000 -0.420086 0.000000 0.907484
 		Position = 720.992676 -24.798882 -570.436279
-		Scale = 271.677490 271.677490 271.677490
+		Scale = 252.122498 252.122498 252.122498
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -7873,9 +7873,9 @@ kbGameEntity 2618751255 1092094009 791724942 2889203607 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 -0.943095 0.000000 0.332523
+		Orientation = 0.000000 -0.975711 0.000000 0.219063
 		Position = 523.992676 63.201118 -56.436310
-		Scale = 261.912506 261.912506 261.912506
+		Scale = 273.647491 273.647491 273.647491
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -7955,9 +7955,9 @@ kbGameEntity 1645102296 1109996866 2398707598 390685742 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 -0.523034 0.000000 0.852312
+		Orientation = 0.000000 0.994695 0.000000 0.102862
 		Position = 527.792969 84.101105 -27.536312
-		Scale = 262.657501 262.657501 262.657501
+		Scale = 272.760010 272.760010 272.760010
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -8037,9 +8037,9 @@ kbGameEntity 151023386 1110341955 2592203654 2635039187 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 0.997503 0.000000 0.070627
+		Orientation = 0.000000 0.764472 0.000000 0.644657
 		Position = 241.093079 25.601124 -3.936401
-		Scale = 272.524994 272.524994 272.524994
+		Scale = 250.087494 250.087494 250.087494
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -8119,9 +8119,9 @@ kbGameEntity 1355909063 1283298738 1615063984 2928500318 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 0.178424 0.000000 0.983954
+		Orientation = 0.000000 -0.987392 0.000000 0.158296
 		Position = 575.992676 25.201118 -365.436310
-		Scale = 257.722504 257.722504 257.722504
+		Scale = 262.697510 262.697510 262.697510
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -8201,9 +8201,9 @@ kbGameEntity 1430703385 1180272348 1130569095 2118677060 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 0.977863 0.000000 0.209243
+		Orientation = 0.000000 0.286525 0.000000 0.958073
 		Position = 289.093079 29.601124 -23.936401
-		Scale = 264.497498 264.497498 264.497498
+		Scale = 256.695007 256.695007 256.695007
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -8283,9 +8283,9 @@ kbGameEntity 786918972 1295798235 2147584673 1881728545 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 -0.998106 0.000000 0.061536
+		Orientation = 0.000000 0.398877 0.000000 0.917004
 		Position = 393.093079 -10.398876 -107.936401
-		Scale = 255.037506 255.037506 255.037506
+		Scale = 258.785004 258.785004 258.785004
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -8365,9 +8365,9 @@ kbGameEntity 3288338155 1134062845 3553574577 3940553583 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 -0.631353 0.000000 0.775496
+		Orientation = 0.000000 0.725086 0.000000 0.688658
 		Position = 323.093079 -15.398876 -92.936401
-		Scale = 272.667511 272.667511 272.667511
+		Scale = 256.720001 256.720001 256.720001
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -8447,9 +8447,9 @@ kbGameEntity 2555403061 1087750066 2379075770 2493665343 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 0.770914 0.000000 0.636940
+		Orientation = 0.000000 0.731544 0.000000 0.681794
 		Position = 373.093079 -10.398876 -107.936401
-		Scale = 262.554993 262.554993 262.554993
+		Scale = 252.615005 252.615005 252.615005
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -8529,9 +8529,9 @@ kbGameEntity 3229526642 1156109811 3513458837 246230267 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 0.377453 0.000000 0.926029
+		Orientation = 0.000000 0.715498 0.000000 0.698615
 		Position = 348.093079 -10.398876 -92.936401
-		Scale = 272.557495 272.557495 272.557495
+		Scale = 260.644989 260.644989 260.644989
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -8611,9 +8611,9 @@ kbGameEntity 1626525760 1260039325 3350263985 1117096718 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 0.982522 0.000000 0.186147
+		Orientation = 0.000000 0.998404 0.000000 0.056518
 		Position = 368.093079 -5.398876 -97.936401
-		Scale = 256.220001 256.220001 256.220001
+		Scale = 250.529999 250.529999 250.529999
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -8693,9 +8693,9 @@ kbGameEntity 4240328255 1185584427 1441804982 3628360378 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 0.242294 0.000000 0.970203
+		Orientation = 0.000000 0.179661 0.000000 0.983729
 		Position = 699.392822 -37.798878 -584.336060
-		Scale = 273.339996 273.339996 273.339996
+		Scale = 260.345001 260.345001 260.345001
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -8775,9 +8775,9 @@ kbGameEntity 4076644214 1122421252 599331209 1118265972 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 -0.310809 0.000000 0.950472
+		Orientation = 0.000000 -0.953170 0.000000 0.302437
 		Position = 734.392822 -22.798878 -594.336060
-		Scale = 262.692505 262.692505 262.692505
+		Scale = 273.532501 273.532501 273.532501
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -8857,9 +8857,9 @@ kbGameEntity 4219797351 1104539451 2056165267 1266848498 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 -0.079712 0.000000 0.996818
+		Orientation = 0.000000 0.035806 0.000000 0.999359
 		Position = 724.392822 -12.798878 -514.336060
-		Scale = 256.247498 256.247498 256.247498
+		Scale = 274.982513 274.982513 274.982513
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -8939,9 +8939,9 @@ kbGameEntity 1063420613 1242444673 1093233834 3550058903 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 -0.950472 0.000000 0.310809
+		Orientation = 0.000000 0.411514 0.000000 0.911403
 		Position = 709.392822 -42.798878 -614.336060
-		Scale = 271.609985 271.609985 271.609985
+		Scale = 260.242493 260.242493 260.242493
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -9021,9 +9021,9 @@ kbGameEntity 2504454758 1080493358 3379334022 3417649133 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 0.550860 0.000000 0.834598
+		Orientation = 0.000000 0.905361 0.000000 0.424642
 		Position = 248.992676 13.201118 -36.436310
-		Scale = 268.782501 268.782501 268.782501
+		Scale = 271.799988 271.799988 271.799988
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -9103,9 +9103,9 @@ kbGameEntity 4110133156 1087248427 3463516062 1014585164 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 0.223658 0.000000 0.974668
+		Orientation = 0.000000 -0.516862 0.000000 0.856069
 		Position = 328.992676 28.201118 -26.436310
-		Scale = 274.929993 274.929993 274.929993
+		Scale = 271.350006 271.350006 271.350006
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -9185,9 +9185,9 @@ kbGameEntity 4115127341 1167791041 2586744724 99869418 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 -0.547446 0.000000 0.836841
+		Orientation = 0.000000 0.994951 0.000000 0.100362
 		Position = 328.992676 43.201118 -5.436310
-		Scale = 270.392487 270.392487 270.392487
+		Scale = 258.744995 258.744995 258.744995
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -9267,9 +9267,9 @@ kbGameEntity 2126569585 1265517711 609311419 129701528 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 0.239855 0.000000 0.970809
+		Orientation = 0.000000 0.282911 0.000000 0.959146
 		Position = 310.992676 34.201118 -11.436310
-		Scale = 261.950012 261.950012 261.950012
+		Scale = 265.910004 265.910004 265.910004
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -9349,9 +9349,9 @@ kbGameEntity 514093880 1325961967 291767428 395939679 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 0.524907 0.000000 0.851159
+		Orientation = 0.000000 0.857203 0.000000 0.514978
 		Position = 770.992676 -9.798882 -600.436279
-		Scale = 253.347504 253.347504 253.347504
+		Scale = 262.827515 262.827515 262.827515
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -9431,9 +9431,9 @@ kbGameEntity 2464091707 1284147838 3239917976 3192393050 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 -0.991877 0.000000 0.127203
+		Orientation = 0.000000 0.617613 0.000000 0.786483
 		Position = 770.992676 -6.798882 -570.436279
-		Scale = 257.345001 257.345001 257.345001
+		Scale = 251.362503 251.362503 251.362503
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -9513,9 +9513,9 @@ kbGameEntity 3297685248 1218103132 2191893640 1606883181 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 -0.317371 0.000000 0.948301
+		Orientation = 0.000000 -0.230084 0.000000 0.973171
 		Position = 487.092834 84.101105 5.763690
-		Scale = 253.207504 253.207504 253.207504
+		Scale = 256.554993 256.554993 256.554993
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -9595,9 +9595,9 @@ kbGameEntity 4182060354 1105862516 3981513374 3258393384 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 0.528379 0.000000 0.849009
+		Orientation = 0.000000 -0.231612 0.000000 0.972808
 		Position = 594.992676 38.201118 -262.436310
-		Scale = 253.217499 253.217499 253.217499
+		Scale = 258.790009 258.790009 258.790009
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -9677,9 +9677,9 @@ kbGameEntity 228350201 1154364820 172885179 1780615486 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 0.025758 0.000000 0.999668
+		Orientation = 0.000000 0.697265 0.000000 0.716813
 		Position = 469.992676 23.201118 -107.436310
-		Scale = 270.345001 270.345001 270.345001
+		Scale = 264.492493 264.492493 264.492493
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -9759,9 +9759,9 @@ kbGameEntity 2831449851 1224921716 1325165718 927815933 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 -0.953454 0.000000 0.301538
+		Orientation = 0.000000 -0.771314 0.000000 0.636455
 		Position = 470.392578 -21.998886 -202.736313
-		Scale = 267.712494 267.712494 267.712494
+		Scale = 253.050003 253.050003 253.050003
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -9841,9 +9841,9 @@ kbGameEntity 3079122191 1317054253 2552325049 4194834046 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 -0.973531 0.000000 0.228555
+		Orientation = 0.000000 0.983785 0.000000 0.179352
 		Position = 519.992676 28.201118 -142.436310
-		Scale = 262.147491 262.147491 262.147491
+		Scale = 254.567505 254.567505 254.567505
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -9923,9 +9923,9 @@ kbGameEntity 1425446580 1239008812 2413055893 3217000299 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 -0.762646 0.000000 0.646816
+		Orientation = 0.000000 -0.583456 0.000000 0.812145
 		Position = 649.992676 61.901119 -209.836304
-		Scale = 264.464996 264.464996 264.464996
+		Scale = 274.942505 274.942505 274.942505
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -10005,9 +10005,9 @@ kbGameEntity 1990911785 1224721971 2340258439 1384602010 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 0.841624 0.000000 0.540064
+		Orientation = 0.000000 -0.553740 0.000000 0.832689
 		Position = 580.392578 22.101116 -217.236298
-		Scale = 272.092499 272.092499 272.092499
+		Scale = 250.300003 250.300003 250.300003
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -10087,9 +10087,9 @@ kbGameEntity 2938781116 1238234431 1210661547 833069013 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 0.411801 0.000000 0.911274
+		Orientation = 0.000000 0.668118 0.000000 0.744055
 		Position = 478.992676 35.201118 -81.436310
-		Scale = 259.992493 259.992493 259.992493
+		Scale = 256.195007 256.195007 256.195007
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -10169,9 +10169,9 @@ kbGameEntity 1688200057 1097036024 1214342569 1707496362 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 0.993822 0.000000 0.110983
+		Orientation = 0.000000 0.713740 0.000000 0.700411
 		Position = 445.492615 17.601118 -88.136337
-		Scale = 270.122498 270.122498 270.122498
+		Scale = 259.102509 259.102509 259.102509
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -10251,9 +10251,9 @@ kbGameEntity 1228822976 1244568642 2270193833 426141476 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 -0.984947 0.000000 0.172857
+		Orientation = 0.000000 -0.564420 0.000000 0.825488
 		Position = 445.492615 10.201118 -110.336319
-		Scale = 267.522491 267.522491 267.522491
+		Scale = 257.672485 257.672485 257.672485
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -10333,9 +10333,9 @@ kbGameEntity 3544376895 1148498120 2291245961 3886922438 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 0.693880 0.000000 0.720091
+		Orientation = 0.000000 0.537682 0.000000 0.843148
 		Position = 369.093079 55.601124 1.063599
-		Scale = 273.045013 273.045013 273.045013
+		Scale = 274.785004 274.785004 274.785004
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -10415,9 +10415,9 @@ kbGameEntity 1130390836 1224006221 995051443 4239390522 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 0.954584 0.000000 0.297941
+		Orientation = 0.000000 -0.518206 0.000000 0.855256
 		Position = 394.993164 45.901123 -28.536404
-		Scale = 265.100006 265.100006 265.100006
+		Scale = 265.015015 265.015015 265.015015
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -10497,9 +10497,9 @@ kbGameEntity 1457021076 1154810577 512502424 3558090712 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 0.161707 0.000000 0.986839
+		Orientation = 0.000000 -0.978256 0.000000 0.207400
 		Position = 523.992676 38.201118 -121.436310
-		Scale = 266.387512 266.387512 266.387512
+		Scale = 250.387497 250.387497 250.387497
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -10579,9 +10579,9 @@ kbGameEntity 1903196012 1221379091 1681041807 2014745327 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 0.781019 0.000000 0.624507
+		Orientation = 0.000000 -0.631353 0.000000 0.775496
 		Position = 690.693237 106.801102 -276.336426
-		Scale = 265.954987 265.954987 265.954987
+		Scale = 272.954987 272.954987 272.954987
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -10661,9 +10661,9 @@ kbGameEntity 193930857 1315913638 4149947045 3497310546 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 -0.978516 0.000000 0.206170
+		Orientation = 0.000000 0.689797 0.000000 0.724003
 		Position = 683.293213 88.301117 -321.536621
-		Scale = 250.327499 250.327499 250.327499
+		Scale = 267.577515 267.577515 267.577515
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -10743,9 +10743,9 @@ kbGameEntity 2561598748 1116823112 2579091855 4052740332 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 -0.883471 0.000000 0.468485
+		Orientation = 0.000000 -0.983044 0.000000 0.183368
 		Position = 649.993103 77.201126 -332.636658
-		Scale = 250.037506 250.037506 250.037506
+		Scale = 262.815002 262.815002 262.815002
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -10825,9 +10825,9 @@ kbGameEntity 1281334129 1214633818 2503427205 2830420496 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 -0.643456 0.000000 0.765483
+		Orientation = 0.000000 0.403194 0.000000 0.915115
 		Position = 505.692993 -56.898865 -361.736694
-		Scale = 259.910004 259.910004 259.910004
+		Scale = 258.480011 258.480011 258.480011
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -10907,9 +10907,9 @@ kbGameEntity 1624720320 1168255041 3597235896 110939906 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 0.305729 0.000000 0.952119
+		Orientation = 0.000000 -0.965463 0.000000 0.260538
 		Position = 411.992676 -18.798882 -140.436310
-		Scale = 252.522507 252.522507 252.522507
+		Scale = 255.505005 255.505005 255.505005
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -10989,9 +10989,9 @@ kbGameEntity 756791660 1078956505 714979767 2599365483 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 -0.387033 0.000000 0.922066
+		Orientation = 0.000000 -0.999522 0.000000 0.031097
 		Position = 425.992676 -22.198883 -151.536301
-		Scale = 252.339996 252.339996 252.339996
+		Scale = 261.795013 261.795013 261.795013
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -11071,9 +11071,9 @@ kbGameEntity 161373036 1238415452 678099870 216895974 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 0.868632 0.000000 0.495459
+		Orientation = 0.000000 0.999739 0.000000 0.022618
 		Position = 350.892395 -54.398888 -165.436310
-		Scale = 268.540009 268.540009 268.540009
+		Scale = 268.394989 268.394989 268.394989
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -11153,9 +11153,9 @@ kbGameEntity 2229043784 1203241192 953394344 1288725417 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 0.151157 0.000000 0.988510
+		Orientation = 0.000000 -0.898580 0.000000 0.438810
 		Position = 343.492371 -18.298885 -106.936325
-		Scale = 263.017487 263.017487 263.017487
+		Scale = 266.005005 266.005005 266.005005
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -11235,9 +11235,9 @@ kbGameEntity 83629033 1245205318 966588843 703879171 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 -0.290134 0.000000 0.956986
+		Orientation = 0.000000 -0.998236 0.000000 0.059341
 		Position = 438.992676 58.201118 -16.436310
-		Scale = 261.782501 261.782501 261.782501
+		Scale = 265.647491 265.647491 265.647491
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -11317,9 +11317,9 @@ kbGameEntity 1279228683 1168836397 1688875665 1070481441 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 0.999705 0.000000 0.024502
+		Orientation = 0.000000 0.868164 0.000000 0.496277
 		Position = 575.992676 -19.798882 -415.436310
-		Scale = 256.377502 256.377502 256.377502
+		Scale = 272.602509 272.602509 272.602509
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -11399,9 +11399,9 @@ kbGameEntity 3250573350 1232597573 1242686885 4249686728 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 0.344643 0.000000 0.938734
+		Orientation = 0.000000 0.104112 0.000000 0.994566
 		Position = 530.992676 -16.798882 -353.436310
-		Scale = 255.812500 255.812500 255.812500
+		Scale = 253.697495 253.697495 253.697495
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -11481,9 +11481,9 @@ kbGameEntity 502251956 1076713558 1720654015 35225820 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 0.458184 0.000000 0.888857
+		Orientation = 0.000000 -0.306925 0.000000 0.951734
 		Position = 616.692993 66.101135 -343.736694
-		Scale = 254.695007 254.695007 254.695007
+		Scale = 271.394989 271.394989 271.394989
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -11563,9 +11563,9 @@ kbGameEntity 640172743 1184509128 2316614016 3703521606 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 0.949096 0.000000 0.314986
+		Orientation = 0.000000 -0.407215 0.000000 0.913332
 		Position = 571.692993 31.101135 -348.736694
-		Scale = 271.702515 271.702515 271.702515
+		Scale = 262.312500 262.312500 262.312500
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -11645,9 +11645,9 @@ kbGameEntity 971458145 1194353910 646725310 3081582100 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 -0.779447 0.000000 0.626468
+		Orientation = 0.000000 0.345233 0.000000 0.938517
 		Position = 609.093079 -46.398876 -481.136353
-		Scale = 258.902496 258.902496 258.902496
+		Scale = 261.217499 261.217499 261.217499
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -11727,9 +11727,9 @@ kbGameEntity 329494811 1338155044 1619624606 2738378846 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 0.565975 0.000000 0.824423
+		Orientation = 0.000000 0.983502 0.000000 0.180897
 		Position = 559.093079 -23.398876 -406.136353
-		Scale = 273.130005 273.130005 273.130005
+		Scale = 261.984985 261.984985 261.984985
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -11809,9 +11809,9 @@ kbGameEntity 3873839533 1175645394 4186705795 4175550918 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 -0.030469 0.000000 0.999536
+		Orientation = 0.000000 0.430322 0.000000 0.902675
 		Position = 629.992676 53.201118 -212.436310
-		Scale = 255.107498 255.107498 255.107498
+		Scale = 257.230011 257.230011 257.230011
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -11891,9 +11891,9 @@ kbGameEntity 4096295123 1244260559 3028297885 533029852 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 0.999716 0.000000 0.023560
+		Orientation = 0.000000 -0.902540 0.000000 0.430606
 		Position = 620.392578 36.001114 -198.736313
-		Scale = 255.554993 255.554993 255.554993
+		Scale = 251.975006 251.975006 251.975006
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -11973,9 +11973,9 @@ kbGameEntity 3060666714 1141809976 1396969372 2647237170 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 0.658243 0.000000 0.752806
+		Orientation = 0.000000 0.475133 0.000000 0.879914
 		Position = 665.992676 -54.798882 -550.436279
-		Scale = 267.575012 267.575012 267.575012
+		Scale = 264.130005 264.130005 264.130005
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -12055,9 +12055,9 @@ kbGameEntity 110046158 1164951269 3281566085 664698857 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 0.105674 0.000000 0.994401
+		Orientation = 0.000000 -0.130630 0.000000 0.991431
 		Position = 562.093079 63.601124 -114.936401
-		Scale = 255.339996 255.339996 255.339996
+		Scale = 251.402496 251.402496 251.402496
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -12137,9 +12137,9 @@ kbGameEntity 1961178477 1168463315 3089472952 2474156576 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 -0.890864 0.000000 0.454270
+		Orientation = 0.000000 0.663665 0.000000 0.748030
 		Position = 529.992676 11.201118 -204.436310
-		Scale = 266.535004 266.535004 266.535004
+		Scale = 258.522491 258.522491 258.522491
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -12219,9 +12219,9 @@ kbGameEntity 871566188 1205287198 3975230142 1098178083 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 -0.731116 0.000000 0.682254
+		Orientation = 0.000000 0.757747 0.000000 0.652548
 		Position = 543.992676 -3.798882 -350.436310
-		Scale = 254.437500 254.437500 254.437500
+		Scale = 268.452515 268.452515 268.452515
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -12301,9 +12301,9 @@ kbGameEntity 477344242 1097924849 40197812 3167290574 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 0.351123 0.000000 0.936329
+		Orientation = 0.000000 0.657533 0.000000 0.753426
 		Position = 600.992676 -39.798882 -465.436310
-		Scale = 263.690002 263.690002 263.690002
+		Scale = 263.584991 263.584991 263.584991
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -12383,9 +12383,9 @@ kbGameEntity 1149386127 1286859995 307643010 764046316 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 0.412373 0.000000 0.911015
+		Orientation = 0.000000 0.633543 0.000000 0.773708
 		Position = 397.192505 -27.198881 -131.836334
-		Scale = 252.737503 252.737503 252.737503
+		Scale = 260.154999 260.154999 260.154999
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -12465,9 +12465,9 @@ kbGameEntity 57845111 1331110559 3077769097 3638747920 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 0.806610 0.000000 0.591084
+		Orientation = 0.000000 0.457905 0.000000 0.889001
 		Position = 572.093079 78.601120 -59.936401
-		Scale = 252.699997 252.699997 252.699997
+		Scale = 256.327515 256.327515 256.327515
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -12547,9 +12547,9 @@ kbGameEntity 4166591736 1123887430 2243665043 428641866 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 0.808832 0.000000 0.588039
+		Orientation = 0.000000 0.377744 0.000000 0.925910
 		Position = 385.992676 5.201118 -90.436310
-		Scale = 263.695007 263.695007 263.695007
+		Scale = 254.532501 254.532501 254.532501
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -12629,9 +12629,9 @@ kbGameEntity 533575631 1089184057 177014449 3152671386 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 -0.172857 0.000000 0.984947
+		Orientation = 0.000000 0.314390 0.000000 0.949294
 		Position = 699.392822 -45.798878 -638.336060
-		Scale = 254.787506 254.787506 254.787506
+		Scale = 259.042511 259.042511 259.042511
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -12711,9 +12711,9 @@ kbGameEntity 3884522758 1208200974 1166914953 3932382334 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 0.046479 0.000000 0.998919
+		Orientation = 0.000000 -0.731544 0.000000 0.681794
 		Position = 505.093079 -52.398876 -329.136353
-		Scale = 273.492493 273.492493 273.492493
+		Scale = 254.304993 254.304993 254.304993
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -12793,9 +12793,9 @@ kbGameEntity 1086502331 1189126509 3638582423 3116537167 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 0.987884 0.000000 0.155193
+		Orientation = 0.000000 -0.075327 0.000000 0.997159
 		Position = 749.392822 -22.798878 -634.336060
-		Scale = 255.860001 255.860001 255.860001
+		Scale = 256.510010 256.510010 256.510010
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -12875,9 +12875,9 @@ kbGameEntity 2256683304 1271460259 3048989833 1829359748 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 -0.375124 0.000000 0.926974
+		Orientation = 0.000000 0.658952 0.000000 0.752185
 		Position = 594.992676 88.201118 -137.436310
-		Scale = 270.075012 270.075012 270.075012
+		Scale = 263.047485 263.047485 263.047485
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -12957,9 +12957,9 @@ kbGameEntity 3189354961 1316849540 4203364531 72718375 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 -0.774304 0.000000 0.632814
+		Orientation = 0.000000 -0.732186 0.000000 0.681104
 		Position = 619.093079 58.601120 -260.936401
-		Scale = 257.350006 257.350006 257.350006
+		Scale = 250.692505 250.692505 250.692505
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -13039,9 +13039,9 @@ kbGameEntity 2717980727 1111242164 2679768723 2968645553 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 -0.878567 0.000000 0.477619
+		Orientation = 0.000000 -0.226413 0.000000 0.974031
 		Position = 589.093079 33.601120 -245.936401
-		Scale = 255.362503 255.362503 255.362503
+		Scale = 261.359985 261.359985 261.359985
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -13121,9 +13121,9 @@ kbGameEntity 1446111534 1142295789 2688776602 3519205204 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 0.702426 0.000000 0.711756
+		Orientation = 0.000000 0.991876 0.000000 0.127203
 		Position = 569.093079 18.601120 -260.936401
-		Scale = 267.847504 267.847504 267.847504
+		Scale = 265.204987 265.204987 265.204987
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -13203,9 +13203,9 @@ kbGameEntity 2265399923 1304206009 3752730285 4062041231 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 -0.200633 0.000000 0.979666
+		Orientation = 0.000000 -0.891292 0.000000 0.453431
 		Position = 527.093079 -23.398876 -273.136353
-		Scale = 253.669998 253.669998 253.669998
+		Scale = 252.172501 252.172501 252.172501
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -13285,9 +13285,9 @@ kbGameEntity 562250174 1154478743 1668461211 3701632886 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 -0.362861 0.000000 0.931843
+		Orientation = 0.000000 0.654688 0.000000 0.755899
 		Position = 474.093079 -41.398876 -238.136353
-		Scale = 271.247498 271.247498 271.247498
+		Scale = 258.595001 258.595001 258.595001
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -13367,9 +13367,9 @@ kbGameEntity 274285427 1087797759 10163090 3332765537 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 -0.154262 0.000000 0.988030
+		Orientation = 0.000000 -0.003456 0.000000 0.999994
 		Position = 469.992676 73.201118 -7.436310
-		Scale = 268.635010 268.635010 268.635010
+		Scale = 264.464996 264.464996 264.464996
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -13449,9 +13449,9 @@ kbGameEntity 1108038776 1281994563 10173351 3062033820 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 0.576546 0.000000 0.817064
+		Orientation = 0.000000 -0.999378 0.000000 0.035179
 		Position = 504.992676 48.201118 -77.436310
-		Scale = 259.579987 259.579987 259.579987
+		Scale = 269.654999 269.654999 269.654999
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -13531,9 +13531,9 @@ kbGameEntity 1193858437 1329087914 2740629651 1833907126 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 0.160777 0.000000 0.986991
+		Orientation = 0.000000 -0.831120 0.000000 0.556093
 		Position = 499.992676 73.201118 -27.436310
-		Scale = 256.885010 256.885010 256.885010
+		Scale = 261.114990 261.114990 261.114990
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -13613,9 +13613,9 @@ kbGameEntity 1050762579 1103979964 2264620197 2190047829 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 0.917630 0.000000 0.397436
+		Orientation = 0.000000 -0.569079 0.000000 0.822283
 		Position = 365.992676 17.201118 -63.436310
-		Scale = 258.862488 258.862488 258.862488
+		Scale = 274.692505 274.692505 274.692505
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -13695,9 +13695,9 @@ kbGameEntity 3453622651 1090336694 3030830002 4179405803 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 0.908012 0.000000 0.418945
+		Orientation = 0.000000 -0.655163 0.000000 0.755488
 		Position = 377.992676 -59.798882 -173.436310
-		Scale = 261.410004 261.410004 261.410004
+		Scale = 260.390015 260.390015 260.390015
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -13777,9 +13777,9 @@ kbGameEntity 2335626765 1078419867 3565311653 3227657176 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 -0.955237 0.000000 0.295841
+		Orientation = 0.000000 0.748238 0.000000 0.663430
 		Position = 536.992676 -13.798882 -310.436310
-		Scale = 253.490005 253.490005 253.490005
+		Scale = 255.187500 255.187500 255.187500
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -13859,9 +13859,9 @@ kbGameEntity 1093456272 1216614796 3087424413 3939674416 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 -0.002513 0.000000 0.999997
+		Orientation = 0.000000 0.560523 0.000000 0.828139
 		Position = 511.992676 -48.798882 -350.436310
-		Scale = 269.045013 269.045013 269.045013
+		Scale = 255.877502 255.877502 255.877502
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -13941,9 +13941,9 @@ kbGameEntity 2674556955 1327360703 146117797 1459253598 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 0.303035 0.000000 0.952979
+		Orientation = 0.000000 0.496277 0.000000 0.868164
 		Position = 604.093079 43.601120 -275.936401
-		Scale = 259.117493 259.117493 259.117493
+		Scale = 253.132507 253.132507 253.132507
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -14023,9 +14023,9 @@ kbGameEntity 174754946 1243027175 3036577950 1057744990 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 0.395129 0.000000 0.918626
+		Orientation = 0.000000 0.976326 0.000000 0.216303
 		Position = 601.893127 47.601120 -304.136414
-		Scale = 255.617493 255.617493 255.617493
+		Scale = 257.677490 257.677490 257.677490
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -14105,9 +14105,9 @@ kbGameEntity 2450961470 1241625481 1415646631 1622862584 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 0.537947 0.000000 0.842979
+		Orientation = 0.000000 0.794372 0.000000 0.607431
 		Position = 576.893127 32.601120 -294.136414
-		Scale = 263.505005 263.505005 263.505005
+		Scale = 251.622498 251.622498 251.622498
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -14187,9 +14187,9 @@ kbGameEntity 1040543775 1206414251 2319479936 2468119101 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 -0.999562 0.000000 0.029841
+		Orientation = 0.000000 0.927797 0.000000 0.373085
 		Position = 605.592957 55.001133 -362.236755
-		Scale = 252.797501 252.797501 252.797501
+		Scale = 258.997498 258.997498 258.997498
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -14269,9 +14269,9 @@ kbGameEntity 4235171737 1112391499 3555517319 2488456130 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 0.136546 0.000000 0.990634
+		Orientation = 0.000000 -0.994098 0.000000 0.108485
 		Position = 590.592957 -19.998867 -427.236755
-		Scale = 251.937500 251.937500 251.937500
+		Scale = 273.480011 273.480011 273.480011
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -14351,9 +14351,9 @@ kbGameEntity 3897684924 1337000921 2202004355 2526129195 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 0.715059 0.000000 0.699065
+		Orientation = 0.000000 -0.932526 0.000000 0.361104
 		Position = 534.992676 -15.798882 -331.436310
-		Scale = 267.619995 267.619995 267.619995
+		Scale = 262.359985 262.359985 262.359985
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -14433,9 +14433,9 @@ kbGameEntity 2376637412 1200734601 2568205207 1180829240 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 0.732614 0.000000 0.680644
+		Orientation = 0.000000 0.608928 0.000000 0.793226
 		Position = 719.392822 -32.798878 -619.336060
-		Scale = 257.817505 257.817505 257.817505
+		Scale = 258.362488 258.362488 258.362488
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -14515,9 +14515,9 @@ kbGameEntity 1345158126 1092865522 2912675224 3880336963 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 0.027014 0.000000 0.999635
+		Orientation = 0.000000 0.240160 0.000000 0.970733
 		Position = 509.093079 -41.398876 -276.136353
-		Scale = 267.424988 267.424988 267.424988
+		Scale = 253.352493 253.352493 253.352493
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -14597,9 +14597,9 @@ kbGameEntity 2963517820 1154037976 3638255242 1996417924 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 0.460417 0.000000 0.887703
+		Orientation = 0.000000 -0.748863 0.000000 0.662725
 		Position = 555.392578 21.001114 -198.736313
-		Scale = 261.492493 261.492493 261.492493
+		Scale = 274.207489 274.207489 274.207489
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -14679,9 +14679,9 @@ kbGameEntity 4062691431 1198841581 793320578 2585277259 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 -0.746359 0.000000 0.665543
+		Orientation = 0.000000 0.988887 0.000000 0.148672
 		Position = 719.392822 -32.798878 -609.336060
-		Scale = 271.385010 271.385010 271.385010
+		Scale = 256.825012 256.825012 256.825012
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -14761,9 +14761,9 @@ kbGameEntity 2114086944 1228451408 3155674516 2602144730 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 -0.094734 0.000000 0.995503
+		Orientation = 0.000000 -0.732828 0.000000 0.680414
 		Position = 590.592957 15.001133 -397.236755
-		Scale = 267.452515 267.452515 267.452515
+		Scale = 259.127502 259.127502 259.127502
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -14843,9 +14843,9 @@ kbGameEntity 4125318166 1207730590 1737106874 1528544508 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 -0.122839 0.000000 0.992427
+		Orientation = 0.000000 0.021989 0.000000 0.999758
 		Position = 593.992676 -28.798882 -449.436310
-		Scale = 251.747498 251.747498 251.747498
+		Scale = 270.812500 270.812500 270.812500
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -14925,9 +14925,9 @@ kbGameEntity 2772512674 1098316445 5442444 1799965654 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 0.000942 0.000000 1.000000
+		Orientation = 0.000000 0.114417 0.000000 0.993433
 		Position = 475.093079 9.601124 -126.936401
-		Scale = 261.454987 261.454987 261.454987
+		Scale = 259.109985 259.109985 259.109985
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -15007,9 +15007,9 @@ kbGameEntity 1835167379 1274097167 3786631574 1089744470 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 0.009425 0.000000 0.999956
+		Orientation = 0.000000 -0.999522 0.000000 0.031097
 		Position = 458.992676 -37.798882 -217.436310
-		Scale = 270.057495 270.057495 270.057495
+		Scale = 261.202515 261.202515 261.202515
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -15089,9 +15089,9 @@ kbGameEntity 3052613644 1266435036 386165937 2081230601 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 0.170381 0.000000 0.985378
+		Orientation = 0.000000 0.579367 0.000000 0.815067
 		Position = 297.093079 -2.398876 -63.936401
-		Scale = 262.875000 262.875000 262.875000
+		Scale = 250.557495 250.557495 250.557495
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -15171,9 +15171,9 @@ kbGameEntity 2882126283 1171364196 1251293346 3017370973 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 0.236804 0.000000 0.971557
+		Orientation = 0.000000 -0.999559 0.000000 0.029527
 		Position = 452.093079 -12.398876 -155.936401
-		Scale = 254.832504 254.832504 254.832504
+		Scale = 254.282501 254.282501 254.282501
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -15253,9 +15253,9 @@ kbGameEntity 385929761 1235868286 1722403494 1552052051 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 0.352887 0.000000 0.935666
+		Orientation = 0.000000 0.576033 0.000000 0.817427
 		Position = 694.392822 -37.798878 -569.336060
-		Scale = 270.195007 270.195007 270.195007
+		Scale = 254.384995 254.384995 254.384995
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -15335,9 +15335,9 @@ kbGameEntity 2766244278 1256956303 885046460 3307253412 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 0.560003 0.000000 0.828491
+		Orientation = 0.000000 0.999785 0.000000 0.020419
 		Position = 660.093079 25.601124 -412.136353
-		Scale = 272.690002 272.690002 272.690002
+		Scale = 262.802490 262.802490 262.802490
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -15417,9 +15417,9 @@ kbGameEntity 3887620449 1099927541 2641421502 2229870655 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 0.664135 0.000000 0.747613
+		Orientation = 0.000000 -0.348768 0.000000 0.937209
 		Position = 628.992676 -23.798882 -469.436310
-		Scale = 271.207489 271.207489 271.207489
+		Scale = 269.542511 269.542511 269.542511
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -15499,9 +15499,9 @@ kbGameEntity 463484458 1181514457 486121377 2956133748 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 -0.896919 0.000000 0.442195
+		Orientation = 0.000000 0.617613 0.000000 0.786483
 		Position = 630.992676 48.201111 -162.436310
-		Scale = 259.117493 259.117493 259.117493
+		Scale = 269.765015 269.765015 269.765015
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -15581,9 +15581,9 @@ kbGameEntity 3662719131 1296707074 1011892664 1430743580 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 -0.888569 0.000000 0.458743
+		Orientation = 0.000000 0.068120 0.000000 0.997677
 		Position = 613.992676 36.201118 -395.436310
-		Scale = 253.419998 253.419998 253.419998
+		Scale = 253.652496 253.652496 253.652496
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -15663,9 +15663,9 @@ kbGameEntity 3708559392 1178030253 1722565797 2767480795 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 -0.144632 0.000000 0.989485
+		Orientation = 0.000000 0.875245 0.000000 0.483680
 		Position = 605.592957 0.001133 -422.236755
-		Scale = 250.442505 250.442505 250.442505
+		Scale = 261.852509 261.852509 261.852509
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -15745,9 +15745,9 @@ kbGameEntity 411500167 1221858193 3063014584 776124578 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 0.873109 0.000000 0.487524
+		Orientation = 0.000000 -0.941093 0.000000 0.338147
 		Position = 361.093079 -2.398876 -87.936401
-		Scale = 263.632507 263.632507 263.632507
+		Scale = 261.597504 261.597504 261.597504
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -15827,9 +15827,9 @@ kbGameEntity 1374880744 1278094750 1062983841 659815529 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 0.648970 0.000000 0.760814
+		Orientation = 0.000000 0.510393 0.000000 0.859941
 		Position = 495.392578 3.001114 -177.736313
-		Scale = 262.220001 262.220001 262.220001
+		Scale = 253.837494 253.837494 253.837494
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -15909,9 +15909,9 @@ kbGameEntity 2104653964 1320390211 59271070 4212808957 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 -0.925196 0.000000 0.379489
+		Orientation = 0.000000 0.186147 0.000000 0.982522
 		Position = 615.992676 -14.798882 -450.436310
-		Scale = 266.742493 266.742493 266.742493
+		Scale = 267.920013 267.920013 267.920013
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -15991,9 +15991,9 @@ kbGameEntity 2403590583 1246696205 2404055998 3139751519 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 0.865659 0.000000 0.500635
+		Orientation = 0.000000 0.400893 0.000000 0.916125
 		Position = 689.392822 -57.798878 -665.336060
-		Scale = 252.532501 252.532501 252.532501
+		Scale = 264.867493 264.867493 264.867493
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -16073,9 +16073,9 @@ kbGameEntity 572250127 1228790832 539073210 37994789 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 0.882735 0.000000 0.469872
+		Orientation = 0.000000 -0.541121 0.000000 0.840945
 		Position = 699.392822 -52.798878 -690.336060
-		Scale = 268.607513 268.607513 268.607513
+		Scale = 259.277496 259.277496 259.277496
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -16155,9 +16155,9 @@ kbGameEntity 3828626635 1092532810 637200558 1872888388 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 0.473750 0.000000 0.880659
+		Orientation = 0.000000 0.103799 0.000000 0.994598
 		Position = 618.992676 61.201118 -355.436310
-		Scale = 264.347504 264.347504 264.347504
+		Scale = 256.230011 256.230011 256.230011
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -16237,9 +16237,9 @@ kbGameEntity 785774929 1336710269 1611608743 2794750593 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 0.273859 0.000000 0.961770
+		Orientation = 0.000000 -0.964806 0.000000 0.262964
 		Position = 618.992676 56.201118 -285.436310
-		Scale = 268.054993 268.054993 268.054993
+		Scale = 259.269989 259.269989 259.269989
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -16319,9 +16319,9 @@ kbGameEntity 680800539 1141060494 3346107010 2624178124 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 0.822462 0.000000 0.568820
+		Orientation = 0.000000 0.037376 0.000000 0.999301
 		Position = 560.992798 53.001122 -169.536270
-		Scale = 250.384995 250.384995 250.384995
+		Scale = 252.657501 252.657501 252.657501
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -16401,9 +16401,9 @@ kbGameEntity 1919178057 1235088764 2956073889 2492794930 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 0.398877 0.000000 0.917004
+		Orientation = 0.000000 -0.105049 0.000000 0.994467
 		Position = 447.992676 -38.798882 -204.436310
-		Scale = 254.752502 254.752502 254.752502
+		Scale = 251.089996 251.089996 251.089996
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -16483,9 +16483,9 @@ kbGameEntity 3698182697 1246209801 2120657837 3873875509 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 -0.225189 0.000000 0.974315
+		Orientation = 0.000000 -0.349063 0.000000 0.937099
 		Position = 395.093079 -52.398876 -185.936401
-		Scale = 268.385010 268.385010 268.385010
+		Scale = 273.394989 273.394989 273.394989
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -16565,9 +16565,9 @@ kbGameEntity 3845287006 1214183100 2667975100 1560156055 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 -0.354356 0.000000 0.935111
+		Orientation = 0.000000 0.712638 0.000000 0.701531
 		Position = 524.992676 -25.798882 -316.436310
-		Scale = 272.537506 272.537506 272.537506
+		Scale = 251.434998 251.434998 251.434998
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -16647,9 +16647,9 @@ kbGameEntity 910019446 1216930713 461239995 1508301939 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 -0.974948 0.000000 0.222433
+		Orientation = 0.000000 -0.902269 0.000000 0.431173
 		Position = 538.093079 -61.398876 -417.136353
-		Scale = 273.769989 273.769989 273.769989
+		Scale = 264.375000 264.375000 264.375000
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -16729,9 +16729,9 @@ kbGameEntity 3539113296 1122157296 529393064 922534674 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 0.483405 0.000000 0.875397
+		Orientation = 0.000000 0.958163 0.000000 0.286224
 		Position = 415.093079 -47.398876 -185.936401
-		Scale = 252.419998 252.419998 252.419998
+		Scale = 272.242493 272.242493 272.242493
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -16811,9 +16811,9 @@ kbGameEntity 220749282 1120405019 3976618666 1417858953 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 -1.000419 0.000000 0.002826
+		Orientation = 0.000000 -0.926266 0.000000 0.376871
 		Position = 276.992676 -19.798882 -82.436310
-		Scale = 271.077515 271.077515 271.077515
+		Scale = 261.072510 261.072510 261.072510
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -16893,9 +16893,9 @@ kbGameEntity 4265148273 1290719219 3054643642 1341486593 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 -0.988462 0.000000 0.151468
+		Orientation = 0.000000 -0.793034 0.000000 0.609177
 		Position = 453.992676 -22.798882 -172.436310
-		Scale = 263.667511 263.667511 263.667511
+		Scale = 267.204987 267.204987 267.204987
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -16975,9 +16975,9 @@ kbGameEntity 3586170148 1193356933 196771761 835711809 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 -0.855256 0.000000 0.518206
+		Orientation = 0.000000 -0.990847 0.000000 0.134989
 		Position = 547.992676 -1.798882 -225.436310
-		Scale = 264.337494 264.337494 264.337494
+		Scale = 259.214996 259.214996 259.214996
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -17057,9 +17057,9 @@ kbGameEntity 2400639224 1331425525 2370108545 3665560519 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 0.836669 0.000000 0.547709
+		Orientation = 0.000000 0.061223 0.000000 0.998124
 		Position = 340.892395 -44.398888 -140.436310
-		Scale = 255.145004 255.145004 255.145004
+		Scale = 271.082489 271.082489 271.082489
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -17139,9 +17139,9 @@ kbGameEntity 611717501 1128120601 3765464451 1813774514 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 -0.826727 0.000000 0.562603
+		Orientation = 0.000000 -0.747195 0.000000 0.664605
 		Position = 504.992676 38.201118 -97.436310
-		Scale = 258.140015 258.140015 258.140015
+		Scale = 266.867493 266.867493 266.867493
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -17221,9 +17221,9 @@ kbGameEntity 4167376093 1310948644 832487573 2901313073 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 -0.779447 0.000000 0.626468
+		Orientation = 0.000000 -0.006283 0.000000 0.999980
 		Position = 509.093079 -26.398876 -243.136353
-		Scale = 274.154999 274.154999 274.154999
+		Scale = 263.522491 263.522491 263.522491
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -17303,9 +17303,9 @@ kbGameEntity 3500383344 1206482677 1053132972 2338320882 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 0.817064 0.000000 0.576546
+		Orientation = 0.000000 0.954958 0.000000 0.296742
 		Position = 554.992676 -1.798882 -292.436310
-		Scale = 267.182495 267.182495 267.182495
+		Scale = 273.690002 273.690002 273.690002
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -17385,9 +17385,9 @@ kbGameEntity 2451566310 1294542679 777997246 2940311080 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 0.999712 0.000000 0.024188
+		Orientation = 0.000000 -0.466263 0.000000 0.884646
 		Position = 561.692993 16.101135 -348.736694
-		Scale = 271.977509 271.977509 271.977509
+		Scale = 252.192505 252.192505 252.192505
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -17467,9 +17467,9 @@ kbGameEntity 1991487598 1138729998 1402636952 1712676866 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 0.948202 0.000000 0.317669
+		Orientation = 0.000000 -0.952693 0.000000 0.303933
 		Position = 546.692993 -3.898865 -328.736694
-		Scale = 261.005005 261.005005 261.005005
+		Scale = 270.369995 270.369995 270.369995
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -17549,9 +17549,9 @@ kbGameEntity 262113106 1115510653 3960069046 3058624892 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 0.450909 0.000000 0.892570
+		Orientation = 0.000000 0.146187 0.000000 0.989257
 		Position = 519.992676 23.201118 -172.436310
-		Scale = 253.699997 253.699997 253.699997
+		Scale = 261.082489 261.082489 261.082489
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -17631,9 +17631,9 @@ kbGameEntity 3925419578 1282605284 3126393513 3704580371 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 -0.101299 0.000000 0.994856
+		Orientation = 0.000000 -0.946694 0.000000 0.322133
 		Position = 379.093079 -27.398876 -128.936401
-		Scale = 267.809998 267.809998 267.809998
+		Scale = 255.335007 255.335007 255.335007
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -17713,9 +17713,9 @@ kbGameEntity 697876459 1171675318 654530473 520753522 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 -0.494640 0.000000 0.869098
+		Orientation = 0.000000 0.849838 0.000000 0.527045
 		Position = 395.992676 -44.798882 -170.436310
-		Scale = 273.692505 273.692505 273.692505
+		Scale = 255.397507 255.397507 255.397507
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -17795,9 +17795,9 @@ kbGameEntity 4260207389 1265834149 3844268448 2757200062 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 -0.970127 0.000000 0.242599
+		Orientation = 0.000000 0.167595 0.000000 0.985856
 		Position = 412.192505 2.801119 -91.836334
-		Scale = 257.222504 257.222504 257.222504
+		Scale = 252.654999 252.654999 252.654999
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -17877,9 +17877,9 @@ kbGameEntity 3992792813 1318421542 3811388551 2716948047 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 0.814885 0.000000 0.579623
+		Orientation = 0.000000 0.774503 0.000000 0.632570
 		Position = 529.992676 33.201118 -152.436310
-		Scale = 262.095001 262.095001 262.095001
+		Scale = 259.390015 259.390015 259.390015
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -17959,9 +17959,9 @@ kbGameEntity 349455216 1220897546 4056989577 2742085594 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 -0.900501 0.000000 0.434854
+		Orientation = 0.000000 -0.029841 0.000000 0.999555
 		Position = 373.093079 35.601124 -29.936401
-		Scale = 260.562500 260.562500 260.562500
+		Scale = 263.065002 263.065002 263.065002
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -18041,9 +18041,9 @@ kbGameEntity 2811434390 1184168573 1967294874 2671800235 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 0.698840 0.000000 0.715278
+		Orientation = 0.000000 -0.989165 0.000000 0.146808
 		Position = 477.992676 -13.798882 -189.436310
-		Scale = 253.190002 253.190002 253.190002
+		Scale = 274.734985 274.734985 274.734985
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -18123,9 +18123,9 @@ kbGameEntity 1995593733 1238127096 664446143 88781677 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 -0.863131 0.000000 0.504980
+		Orientation = 0.000000 -0.975985 0.000000 0.217837
 		Position = 570.592957 -4.998867 -397.236755
-		Scale = 262.595001 262.595001 262.595001
+		Scale = 271.524994 271.524994 271.524994
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -18205,9 +18205,9 @@ kbGameEntity 4219439425 1329091542 1181023934 605994804 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 0.987836 0.000000 0.155503
+		Orientation = 0.000000 0.964806 0.000000 0.262964
 		Position = 663.992676 -16.798882 -490.436279
-		Scale = 264.154999 264.154999 264.154999
+		Scale = 265.570007 265.570007 265.570007
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -18287,9 +18287,9 @@ kbGameEntity 1068720834 1339335357 3062984833 1156263520 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 0.182133 0.000000 0.983274
+		Orientation = 0.000000 0.979918 0.000000 0.199402
 		Position = 660.093079 13.601124 -439.136353
-		Scale = 254.242493 254.242493 254.242493
+		Scale = 251.192505 251.192505 251.192505
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -18369,9 +18369,9 @@ kbGameEntity 4134563871 1172076827 651989929 439357174 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 0.502537 0.000000 0.864556
+		Orientation = 0.000000 0.711977 0.000000 0.702203
 		Position = 535.692993 -33.898865 -378.736694
-		Scale = 259.644989 259.644989 259.644989
+		Scale = 259.707489 259.707489 259.707489
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -18451,9 +18451,9 @@ kbGameEntity 3618904580 1333985610 4193154480 2650313451 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 0.987441 0.000000 0.157986
+		Orientation = 0.000000 -0.913204 0.000000 0.407502
 		Position = 430.093079 -47.398876 -195.936401
-		Scale = 258.265015 258.265015 258.265015
+		Scale = 262.767487 262.767487 262.767487
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -18533,9 +18533,9 @@ kbGameEntity 2526829588 1313483683 3286518657 3732222155 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 -0.998920 0.000000 0.046479
+		Orientation = 0.000000 -0.051186 0.000000 0.998689
 		Position = 420.992676 -4.798882 -110.436310
-		Scale = 251.557495 251.557495 251.557495
+		Scale = 259.769989 259.769989 259.769989
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -18615,9 +18615,9 @@ kbGameEntity 1818864133 1085472271 3791184829 1400067246 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 0.583966 0.000000 0.811778
+		Orientation = 0.000000 0.642734 0.000000 0.766089
 		Position = 333.492371 -33.298885 -121.936325
-		Scale = 270.712494 270.712494 270.712494
+		Scale = 270.440002 270.440002 270.440002
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -18697,9 +18697,9 @@ kbGameEntity 2511965070 1130576134 3316509335 2515560682 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 0.943095 0.000000 0.332523
+		Orientation = 0.000000 0.460974 0.000000 0.887413
 		Position = 350.992676 22.201118 -48.436310
-		Scale = 257.015015 257.015015 257.015015
+		Scale = 252.847504 252.847504 252.847504
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -18779,9 +18779,9 @@ kbGameEntity 749522104 1219485321 613146767 3477816171 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 -0.718563 0.000000 0.695462
+		Orientation = 0.000000 0.969282 0.000000 0.245950
 		Position = 521.392578 -4.998886 -217.736313
-		Scale = 257.725006 257.725006 257.725006
+		Scale = 269.234985 269.234985 269.234985
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -18861,9 +18861,9 @@ kbGameEntity 2287595441 1086596807 745539716 920149852 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 -0.926029 0.000000 0.377453
+		Orientation = 0.000000 -0.354650 0.000000 0.934999
 		Position = 561.692993 6.101135 -368.736694
-		Scale = 254.977493 254.977493 254.977493
+		Scale = 267.464996 267.464996 267.464996
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -18943,9 +18943,9 @@ kbGameEntity 292510164 1208619109 554457477 2360966610 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 0.113169 0.000000 0.993576
+		Orientation = 0.000000 0.620573 0.000000 0.784149
 		Position = 220.992676 -43.798882 -144.436310
-		Scale = 265.602509 265.602509 265.602509
+		Scale = 258.257507 258.257507 258.257507
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -19025,9 +19025,9 @@ kbGameEntity 2201459478 1247883667 1691211396 2096529879 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 -0.331338 0.000000 0.943512
+		Orientation = 0.000000 0.340215 0.000000 0.940347
 		Position = 618.992676 66.201118 -310.436310
-		Scale = 272.304993 272.304993 272.304993
+		Scale = 271.332489 271.332489 271.332489
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -19107,9 +19107,9 @@ kbGameEntity 3746082696 1168938449 3153458306 1455422182 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 -0.902811 0.000000 0.430038
+		Orientation = 0.000000 0.064358 0.000000 0.997927
 		Position = 544.093079 -6.398880 -275.936401
-		Scale = 273.507507 273.507507 273.507507
+		Scale = 266.022491 266.022491 266.022491
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -19189,9 +19189,9 @@ kbGameEntity 1262639373 1079712114 1362251909 700032511 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 -0.557919 0.000000 0.829895
+		Orientation = 0.000000 -0.779447 0.000000 0.626468
 		Position = 569.992676 18.201118 -287.436310
-		Scale = 263.982513 263.982513 263.982513
+		Scale = 271.047485 271.047485 271.047485
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -19271,9 +19271,9 @@ kbGameEntity 665078873 1151772620 485085588 95823298 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 0.201864 0.000000 0.979414
+		Orientation = 0.000000 0.246559 0.000000 0.969128
 		Position = 203.093079 -59.398880 -155.936401
-		Scale = 265.727509 265.727509 265.727509
+		Scale = 257.649994 257.649994 257.649994
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -19353,9 +19353,9 @@ kbGameEntity 1049805968 1270448616 1792667313 1336576533 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 -0.068120 0.000000 0.997677
+		Orientation = 0.000000 -0.061850 0.000000 0.998085
 		Position = 310.992676 -58.798882 -147.436310
-		Scale = 256.097504 256.097504 256.097504
+		Scale = 261.674988 261.674988 261.674988
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -19435,9 +19435,9 @@ kbGameEntity 285894626 1136023689 2979292326 4129744747 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 0.971632 0.000000 0.236499
+		Orientation = 0.000000 0.315881 0.000000 0.948799
 		Position = 235.992676 -53.798882 -159.436310
-		Scale = 273.557495 273.557495 273.557495
+		Scale = 252.082504 252.082504 252.082504
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -19517,9 +19517,9 @@ kbGameEntity 2072010986 1118053557 4246926981 3846911393 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 -0.872342 0.000000 0.488895
+		Orientation = 0.000000 0.848677 0.000000 0.528912
 		Position = 265.992676 -48.798882 -144.436310
-		Scale = 266.032501 266.032501 266.032501
+		Scale = 261.417511 261.417511 261.417511
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -19599,9 +19599,9 @@ kbGameEntity 377751681 1171380649 3261306300 2929436576 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 -0.843485 0.000000 0.537152
+		Orientation = 0.000000 1.000892 0.000000 0.001883
 		Position = 253.093079 -14.398876 -75.936401
-		Scale = 269.385010 269.385010 269.385010
+		Scale = 271.367493 271.367493 271.367493
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -19681,9 +19681,9 @@ kbGameEntity 4254236872 1136176658 969917333 82703819 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 -0.947601 0.000000 0.319456
+		Orientation = 0.000000 0.698390 0.000000 0.715717
 		Position = 159.093079 -58.398876 -124.936401
-		Scale = 265.747498 265.747498 265.747498
+		Scale = 274.047485 274.047485 274.047485
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -19763,9 +19763,9 @@ kbGameEntity 1101684331 1259234139 1004157848 637156840 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 0.674406 0.000000 0.738361
+		Orientation = 0.000000 0.952979 0.000000 0.303035
 		Position = 185.093079 -58.398876 -131.936401
-		Scale = 265.839996 265.839996 265.839996
+		Scale = 251.497498 251.497498 251.497498
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -19845,9 +19845,9 @@ kbGameEntity 2808890169 1326103151 3442273459 1394317196 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 -0.675565 0.000000 0.737301
+		Orientation = 0.000000 -0.653500 0.000000 0.756927
 		Position = 631.893127 72.601120 -294.136414
-		Scale = 252.902496 252.902496 252.902496
+		Scale = 260.815002 260.815002 260.815002
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -19927,9 +19927,9 @@ kbGameEntity 4065840486 1082536837 2447828900 2739657321 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 0.974244 0.000000 0.225495
+		Orientation = 0.000000 -0.909845 0.000000 0.414947
 		Position = 649.093079 81.601120 -255.936401
-		Scale = 273.230011 273.230011 273.230011
+		Scale = 272.614990 272.614990 272.614990
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -20009,9 +20009,9 @@ kbGameEntity 4109026656 1302247033 1837038464 1259535143 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 -0.901455 0.000000 0.432873
+		Orientation = 0.000000 -0.282308 0.000000 0.959324
 		Position = 631.893127 72.601120 -274.136414
-		Scale = 254.132507 254.132507 254.132507
+		Scale = 260.295013 260.295013 260.295013
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -20091,9 +20091,9 @@ kbGameEntity 3042720806 1325828507 2033552790 3359692675 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 -0.800627 0.000000 0.599163
+		Orientation = 0.000000 -0.926502 0.000000 0.376289
 		Position = 649.093079 80.601120 -277.936401
-		Scale = 270.829987 270.829987 270.829987
+		Scale = 251.304993 251.304993 251.304993
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -20173,9 +20173,9 @@ kbGameEntity 368897474 1107170055 1552746934 2885098197 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 0.299141 0.000000 0.954209
+		Orientation = 0.000000 0.416090 0.000000 0.909323
 		Position = 520.992676 -53.798882 -393.436310
-		Scale = 261.642487 261.642487 261.642487
+		Scale = 267.605011 267.605011 267.605011
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -20255,9 +20255,9 @@ kbGameEntity 1494924455 1206240286 4276310962 1122023534 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 -0.773906 0.000000 0.633300
+		Orientation = 0.000000 0.855581 0.000000 0.517669
 		Position = 534.992676 -19.798882 -391.436310
-		Scale = 269.297485 269.297485 269.297485
+		Scale = 251.449997 251.449997 251.449997
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -20337,9 +20337,9 @@ kbGameEntity 1515721985 1204831821 958195382 1981655045 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 -0.846676 0.000000 0.532108
+		Orientation = 0.000000 0.452870 0.000000 0.891576
 		Position = 526.692993 -23.898865 -337.736694
-		Scale = 265.127502 265.127502 265.127502
+		Scale = 256.027496 256.027496 256.027496
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -20419,9 +20419,9 @@ kbGameEntity 4275671577 1338640302 2813535929 2655307871 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 0.533703 0.000000 0.845672
+		Orientation = 0.000000 0.603681 0.000000 0.797226
 		Position = 536.992676 -6.798882 -365.436310
-		Scale = 272.002502 272.002502 272.002502
+		Scale = 273.744995 273.744995 273.744995
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -20501,9 +20501,9 @@ kbGameEntity 1008805564 1261100027 2605679277 2596280025 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 0.662489 0.000000 0.749071
+		Orientation = 0.000000 0.689797 0.000000 0.724003
 		Position = 178.093079 -47.398876 -120.936401
-		Scale = 253.307495 253.307495 253.307495
+		Scale = 262.317505 262.317505 262.317505
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -20583,9 +20583,9 @@ kbGameEntity 4265546954 1150844997 374905529 3057930365 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 0.054009 0.000000 0.998540
+		Orientation = 0.000000 0.777475 0.000000 0.628913
 		Position = 435.093079 -57.398876 -225.936401
-		Scale = 253.925003 253.925003 253.925003
+		Scale = 273.352509 273.352509 273.352509
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -20665,9 +20665,9 @@ kbGameEntity 120888154 1113192776 139909535 4289524927 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 -0.243818 0.000000 0.969821
+		Orientation = 0.000000 -0.420371 0.000000 0.907352
 		Position = 296.992676 -24.798882 -95.436310
-		Scale = 263.130005 263.130005 263.130005
+		Scale = 259.312500 259.312500 259.312500
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -20747,9 +20747,9 @@ kbGameEntity 2326644644 1087221972 1409614245 2619902325 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 -0.985698 0.000000 0.168524
+		Orientation = 0.000000 -0.659424 0.000000 0.751771
 		Position = 509.992676 8.201118 -197.436310
-		Scale = 270.267487 270.267487 270.267487
+		Scale = 262.467499 262.467499 262.467499
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -20829,9 +20829,9 @@ kbGameEntity 3748604891 1256088780 2689217928 3515845574 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 0.408362 0.000000 0.912820
+		Orientation = 0.000000 0.558701 0.000000 0.829369
 		Position = 527.093079 -20.398876 -259.136353
-		Scale = 274.285004 274.285004 274.285004
+		Scale = 256.420013 256.420013 256.420013
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -20911,9 +20911,9 @@ kbGameEntity 1371026162 1192436520 1557337485 2058157744 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 0.803815 0.000000 0.594879
+		Orientation = 0.000000 0.675796 0.000000 0.737089
 		Position = 495.392578 -6.998886 -212.736313
-		Scale = 266.695007 266.695007 266.695007
+		Scale = 264.242493 264.242493 264.242493
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -20993,9 +20993,9 @@ kbGameEntity 2835361032 1168154435 1620059277 2009075596 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 -0.872496 0.000000 0.488621
+		Orientation = 0.000000 0.631840 0.000000 0.775099
 		Position = 522.692993 -31.898865 -365.736694
-		Scale = 270.822510 270.822510 270.822510
+		Scale = 253.632507 253.632507 253.632507
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -21075,9 +21075,9 @@ kbGameEntity 2796223756 1276561681 3023034776 3079968130 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 0.990418 0.000000 0.138101
+		Orientation = 0.000000 -0.312003 0.000000 0.950081
 		Position = 515.692993 -46.898865 -371.736694
-		Scale = 271.902496 271.902496 271.902496
+		Scale = 252.500000 252.500000 252.500000
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -21157,9 +21157,9 @@ kbGameEntity 3738908661 1212831972 1555450036 803680693 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 -0.992115 0.000000 0.125333
+		Orientation = 0.000000 0.999482 0.000000 0.032353
 		Position = 498.093079 -53.398876 -293.136353
-		Scale = 251.425003 251.425003 251.425003
+		Scale = 252.410004 252.410004 252.410004
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -21239,9 +21239,9 @@ kbGameEntity 3317407690 1170314121 1776288 2662214742 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 -0.992115 0.000000 0.125333
+		Orientation = 0.000000 0.923880 0.000000 0.382683
 		Position = 494.093079 -57.398876 -311.136353
-		Scale = 251.425003 251.425003 251.425003
+		Scale = 256.402496 256.402496 256.402496
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -21321,9 +21321,9 @@ kbGameEntity 1039049662 1130157431 1413352586 1304744963 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 0.299141 0.000000 0.954209
+		Orientation = 0.000000 0.669986 0.000000 0.742374
 		Position = 520.992676 -39.798882 -383.436310
-		Scale = 261.642487 261.642487 261.642487
+		Scale = 251.945007 251.945007 251.945007
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -21403,9 +21403,9 @@ kbGameEntity 940260974 1090928498 1096475540 482673818 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "BG Trees"
-		Orientation = 0.000000 -0.650403 0.000000 0.759589
+		Orientation = 0.000000 0.997524 0.000000 0.070314
 		Position = 458.992676 -58.798882 -250.436310
-		Scale = 270.285004 270.285004 270.285004
+		Scale = 260.864990 260.864990 260.864990
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
