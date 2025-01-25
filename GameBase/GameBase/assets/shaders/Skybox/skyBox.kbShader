@@ -1,13 +1,13 @@
 //==============================================================================
 // skyBox.kbShader
 //
-// 2017-2018 kbEngine 2.0
+// 2017-2025 kbEngine 2.0
 //==============================================================================
 cbuffer matrixBuffer {
 	matrix mvpMatrix;
 	matrix modelMatrix;
 	matrix viewProjection;
-	float4 cameraPos;
+	float4 cameraPosition;
 };
 
 //-------------------------------------
@@ -41,7 +41,7 @@ pixelInput vertexShader( vertexInput input ) {
 	pixelInput output = (pixelInput)(0);
 
 	output.position = mul( input.position, modelMatrix );
-	output.position += float4(cameraPos.xyz, 0);
+	output.position += float4(cameraPosition.xyz, 0);
 	output.position = mul( output.position, viewProjection);
 	output.position.z = output.position.w - 0.0001f;
 

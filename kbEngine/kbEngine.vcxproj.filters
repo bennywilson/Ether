@@ -19,9 +19,6 @@
     <Filter Include="editor">
       <UniqueIdentifier>{55dc3c1b-fe30-42a0-a860-1d8b1c1a854f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="renderer\DX11">
-      <UniqueIdentifier>{dbbb03a1-3486-4eeb-a86f-d770a9a1e72e}</UniqueIdentifier>
-    </Filter>
     <Filter Include="editor\Widgets">
       <UniqueIdentifier>{59266cd8-b001-4081-98e0-7a7cdf136d84}</UniqueIdentifier>
     </Filter>
@@ -39,6 +36,12 @@
     </Filter>
     <Filter Include="game\Components">
       <UniqueIdentifier>{b2e95899-c35e-4ebe-8295-d67321545428}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="renderer\dx12">
+      <UniqueIdentifier>{1cc76160-4ee5-4c14-8e93-9023f577e415}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="renderer\dx11">
+      <UniqueIdentifier>{dbbb03a1-3486-4eeb-a86f-d770a9a1e72e}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -153,7 +156,7 @@
       <Filter>renderer</Filter>
     </ClInclude>
     <ClInclude Include="renderer\DX11\kbRenderer_DX11.h">
-      <Filter>renderer\DX11</Filter>
+      <Filter>renderer\dx11</Filter>
     </ClInclude>
     <ClInclude Include="editor\kbWidget.h">
       <Filter>editor\Widgets</Filter>
@@ -278,6 +281,9 @@
     <ClInclude Include="gameEntity\kbUIComponent.h">
       <Filter>game\Components</Filter>
     </ClInclude>
+    <ClInclude Include="renderer\dx12\renderer_dx12.h">
+      <Filter>renderer\dx12</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="core\kbCore.cpp">
@@ -296,10 +302,10 @@
       <Filter>editor</Filter>
     </ClCompile>
     <ClCompile Include="renderer\DX11\kbRenderBuffer_DX11.cpp">
-      <Filter>renderer\DX11</Filter>
+      <Filter>renderer\dx11</Filter>
     </ClCompile>
     <ClCompile Include="renderer\DX11\kbRenderer_DX11.cpp">
-      <Filter>renderer\DX11</Filter>
+      <Filter>renderer\dx11</Filter>
     </ClCompile>
     <ClCompile Include="editor\kbResourceTab.cpp">
       <Filter>editor\Widgets</Filter>
@@ -371,7 +377,7 @@
       <Filter>game</Filter>
     </ClCompile>
     <ClCompile Include="renderer\DX11\kbLightRendering_DX11.cpp">
-      <Filter>renderer\DX11</Filter>
+      <Filter>renderer\dx11</Filter>
     </ClCompile>
     <ClCompile Include="math\kbPlane.cpp">
       <Filter>math</Filter>
@@ -423,6 +429,9 @@
     </ClCompile>
     <ClCompile Include="gameEntity\kbUIComponent.cpp">
       <Filter>game\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="renderer\dx12\renderer_dx12.cpp">
+      <Filter>renderer\dx12</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

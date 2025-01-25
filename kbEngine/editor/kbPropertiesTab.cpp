@@ -1,7 +1,7 @@
 //==============================================================================
 // kbPropertiesTab.cpp
 //
-// 2016-2018 kbEngine 2.0
+// 2016-2025 kbEngine 2.0
 //==============================================================================
 #include "kbCore.h"
 #include "kbVector.h"
@@ -689,17 +689,17 @@ void kbPropertiesTab::RefreshComponent( kbEditorEntity *const pEntity, kbCompone
 void kbPropertiesTab::RefreshEntity() {
 	
 	// note, must delete them both and readd them with the entity property first
-	Fl::delete_widget( m_pEntityProperties );
-	Fl::delete_widget( m_pResourceProperties );
+	Fl::delete_widget(m_pEntityProperties);
+	Fl::delete_widget(m_pResourceProperties);
 
-	(void*)m_CallBackData.empty();
+	m_CallBackData.clear();
 	size_t previousCapacity = m_CallBackData.capacity();
 
 	m_pPropertiesTab->redraw();
-	m_pEntityProperties = new Fl_Group( x() + kbEditor::PanelBorderSize(), y() + kbEditor::TabHeight() + kbEditor::PanelBorderSize(), w() - kbEditor::PanelBorderSize(2), h() - kbEditor::TabHeight(), "Entity Info" );
-	Fl_Scroll * scroller = new Fl_Scroll( x() + kbEditor::PanelBorderSize(), y() + kbEditor::TabHeight()+ kbEditor::PanelBorderSize(), w() - kbEditor::PanelBorderSize(2), h() - kbEditor::TabHeight() - kbEditor::PanelBorderSize(2), "" );
+	m_pEntityProperties = new Fl_Group(x() + kbEditor::PanelBorderSize(), y() + kbEditor::TabHeight() + kbEditor::PanelBorderSize(), w() - kbEditor::PanelBorderSize(2), h() - kbEditor::TabHeight(), "Entity Info");
+	Fl_Scroll *const scroller = new Fl_Scroll(x() + kbEditor::PanelBorderSize(), y() + kbEditor::TabHeight()+ kbEditor::PanelBorderSize(), w() - kbEditor::PanelBorderSize(2), h() - kbEditor::TabHeight() - kbEditor::PanelBorderSize(2), "");
 
-	if ( m_SelectedEntities.size() == 1 || m_pTempPrefabEntity != nullptr ) {	// todo: Don't display properties if multiple entities are selected
+	if  (m_SelectedEntities.size() == 1 || m_pTempPrefabEntity != nullptr) {	// todo: Don't display properties if multiple entities are selected
 		int curY = y() + kbEditor::TabHeight() + kbEditor::PanelBorderSize();
 		int startX = x() + kbEditor::PanelBorderSize();
 		int inputWidth = 50;
@@ -710,22 +710,22 @@ void kbPropertiesTab::RefreshEntity() {
 		kbEditorEntity * pEntity = ( m_SelectedEntities.size() > 0 ) ? ( m_SelectedEntities[0] ) : ( m_pTempPrefabEntity );
 		const kbGameEntity * pGameEntity = pEntity->GetGameEntity();
  
-		for ( size_t i = 0; i < pGameEntity->NumComponents(); i++ ) {
-			RefreshComponent( pEntity, const_cast<kbGameComponent *>( pGameEntity->GetComponent( i ) ), nullptr, startX, curY, inputHeight );
+		for (size_t i = 0; i < pGameEntity->NumComponents(); i++) {
+			RefreshComponent(pEntity, const_cast<kbGameComponent *>( pGameEntity->GetComponent( i ) ), nullptr, startX, curY, inputHeight);
 			curY += LineSpacing();
 		}
 	}
 
-	m_pPropertiesTab->add( m_pEntityProperties );
+	m_pPropertiesTab->add(m_pEntityProperties);
 
-	m_pResourceProperties = new Fl_Group( 0, y() + kbEditor::TabHeight(), DisplayWidth(), h(), "Resource Info" );
-	m_pPropertiesTab->add( m_pResourceProperties );
+	m_pResourceProperties = new Fl_Group( 0, y() + kbEditor::TabHeight(), DisplayWidth(), h(), "Resource Info");
+	m_pPropertiesTab->add(m_pResourceProperties);
 	scroller->end();
 	Fl::wait();
 
 	// hack - if the size of m_CallBackData has grown, recall this function so that pointers in m_CallBackData are valid
-	if ( previousCapacity < m_CallBackData.capacity() ) {
-		m_CallBackData.reserve( m_CallBackData.capacity() * 2 );
+	if (previousCapacity < m_CallBackData.capacity()) {
+		m_CallBackData.reserve(m_CallBackData.capacity() * 2);
 		RefreshEntity();
 	}
 }

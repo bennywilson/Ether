@@ -1,7 +1,7 @@
 //==============================================================================
 // particleAtlas.kbShader
 //
-// 2018 kbEngine 2.0
+// 2018-2025 kbEngine 2.0
 //==============================================================================
 cbuffer matrixBuffer {
 	matrix modelMatrix;
@@ -11,7 +11,7 @@ cbuffer matrixBuffer {
 	matrix projection;
 	matrix inverseProjection;
 	matrix viewProjection;
-	float4 cameraPos;
+	float4 cameraPosition;
 };
 
 kbShaderState {
@@ -58,7 +58,7 @@ pixelInput vertexShader( vertexInput input ) {
 
 	// Billboard
 	float3 up = float3( 0.0f, 1.0f, 0.0f );
-	const float3 zAxis = normalize( cameraPos.xyz - particleWorldPos );
+	const float3 zAxis = normalize( cameraPosition.xyz - particleWorldPos );
 	const float3 xAxis = normalize( cross( up, zAxis ) );
 	const float3 yAxis = normalize( cross( zAxis, xAxis ) );
 	billboardMatrix = float3x3( xAxis, yAxis, zAxis );

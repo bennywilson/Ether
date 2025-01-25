@@ -7,6 +7,8 @@
 #ifndef _KBCOMPONENT_H_
 #define _KBCOMPONENT_H_
 
+#include <vector>
+
 class kbGameEntity;
 
 /**

@@ -2,7 +2,7 @@
 // EtherSkelModel.cpp
 //
 //
-// 2016-2019 kbEngine 2.0
+// 2016-2025 kbEngine 2.0
 //===================================================================================================
 #include "EtherGame.h"
 #include "EtherSkelModel.h"
@@ -354,6 +354,7 @@ void EtherSkelModelComponent::Update_Internal( const float DeltaTime ) {
 		}
 	}
 
+	g_pRenderer->UpdateRenderObject(m_RenderObject);
 	Super::Update_Internal( DeltaTime );
 }
 

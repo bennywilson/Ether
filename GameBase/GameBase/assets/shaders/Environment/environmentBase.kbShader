@@ -1,12 +1,12 @@
 //==============================================================================
 // environmentBase.kbShader
 //
-// 2018-2019 kbEngine 2.0
+// 2018-2025 kbEngine 2.0
 //==============================================================================
 cbuffer matrixBuffer {
 	matrix modelMatrix;
 	matrix mvpMatrix;
-	float4 cameraPos;
+	float4 cameraPosition;
 };
 
 kbShaderState {

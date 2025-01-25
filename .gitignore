@@ -1,1 +1,13 @@
 /.vs/
+*.exe
+*.tlog
+*.obj
+*.db
+Oxi/Game/.vs/
+*.idb
+*.pdb
+Oxi/Game/Oxi/x64/
+*.user
+logfile.txt
+logfile2.txt
+commandhistory.txt
