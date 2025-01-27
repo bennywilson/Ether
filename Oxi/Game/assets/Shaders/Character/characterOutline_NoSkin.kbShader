@@ -1,13 +1,13 @@
 //==============================================================================
 // characterOutline.kbShader
 //
-// 2019 kbEngine 2.0
+// 2019-2025 kbEngine 2.0
 //==============================================================================
 cbuffer matrixBuffer {
 	matrix		modelMatrix;
 	matrix		vpMatrix;
 	float4x4	boneList[128];
-	float4		cameraPos;
+	float4		cameraPosition;
 	float4		outlineParams;		// x: Thickness, y: Push back, z: Outline Color Factor, w: Mip-Level
 };
 
@@ -50,7 +50,7 @@ pixelInput vertexShader( vertexInput input ) {
 	float4 Pos = mul( input.position, modelMatrix );
 	Pos.xyz += output.normal.xyz * outlineParams.x;
 
-	float3 fromCam = normalize( Pos.xyz - cameraPos.xyz );
+	float3 fromCam = normalize( Pos.xyz - cameraPosition.xyz );
 	Pos.xyz += fromCam * outlineParams.y;
 	
 	output.position = mul( Pos, vpMatrix );
@@ -72,7 +72,7 @@ SamplerState DefaultSampler;
  PS_OUTPUT pixelShader( pixelInput	input ) {
 	PS_OUTPUT output = (PS_OUTPUT) 0;
 
-	const float4 colorTex = colorTexture.SampleLevel( DefaultSampler, input.uv, outlineParams.w ) * outlineParams.z;//0.75f;// * 0.5f;
+	const float4 colorTex = colorTexture.SampleLevel( DefaultSampler, input.uv, outlineParams.w^ ) * outlineParams.z;//0.75f;// * 0.5f;
 	output.Color.xyz = colorTex.xyz;
 	output.Color.w = 0;//colorTex.w *A 0.55;
 

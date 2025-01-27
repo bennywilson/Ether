@@ -2,7 +2,7 @@
 // EtherGame.cpp
 //
 //
-// 2016-2018 kbEngine 2.0
+// 2016-2025 kbEngine 2.0
 //===================================================================================================
 #include "kbGame.h"
 #include "kbTypeInfo.h"
@@ -569,10 +569,6 @@ void EtherGame::RenderHookCallBack( kbRenderTexture *const pSrc, kbRenderTexture
 	static kbVec3 terrainPos;
 	static float terrainWidth;
 	static float halfTerrainWidth;
-
-	static bool dont = false;
-	if (dont == false)
-		return;
 
 	// Initialize
 	static kbTerrainComponent * pTerrain = nullptr;

@@ -1,14 +1,14 @@
 //==============================================================================
 // grass.kbShader
 //
-// 2018 kbEngine 2.0
+// 2018-2025 kbEngine 2.0
 //==============================================================================
 cbuffer ConstantBuffer1 {
 	matrix modelMatrix;
 	matrix vpMatrix;
 	float4 GrassData0;				// x: PatchStartCullDistance, y: 1.0f / PatchStartCullDistance, z: min blade height, w: max blade height
 	float4 GrassData1;
-	float4 cameraPos;
+	float4 cameraPosition;
 	float4 bladeOffsets[64];
 	float4 wind;					// w unused
 	float4 time;
@@ -221,7 +221,7 @@ void CreateVertex( inout TriangleStream<pixelInput> OutputStream, float3 vertexW
  [maxvertexcount(32)]
  void geometryShader( point geometryShaderInput input[1], inout TriangleStream<pixelInput> OutputStream ) {
 
-	float scale = 1.0f - saturate( ( length( cameraPos.xyz - input[0].position.xyz ) - GrassData0.x ) * GrassData0.y );
+	float scale = 1.0f - saturate( ( length( cameraPosition.xyz - input[0].position.xyz ) - GrassData0.x ) * GrassData0.y );
 	if ( scale == 0.0f ) {
 		return;
 	}

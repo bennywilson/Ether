@@ -2,7 +2,7 @@
 // kbCore.cpp
 //
 //
-// 2016-2018 kbEngine 2.0
+// 2016-2025 kbEngine 2.0
 //===================================================================================================
 #include <iostream>
 #include <cstdarg>
@@ -42,6 +42,7 @@ void InitializeKBEngine( char *const logName ) {
 		fopen_s( &g_LogFile, "logs/logfile.txt", "w" );
 	}
 
+	// TODO Force create folder if it doesn't exist
 	if ( g_LogFile == nullptr ) {
 		fopen_s( &g_LogFile, "logs/logfile2.txt", "w" );
 		kbErrorCheck( g_LogFile != nullptr, "InitializeKBEngine() - Cannot create log file" );
@@ -201,8 +202,16 @@ float kbfrand() {
 /**
  *	StringFromWString
  */
+#include <locale>
+#include <codecvt>
+#include <string>
 void StringFromWString( std::string & outString, const std::wstring & srcString ) {
-	outString = std::string( srcString.begin(), srcString.end() );
+	outString = WideCharToMultiByte(CP_ACP,
+		0,
+		srcString.c_str(),
+		-1,
+		NULL,
+		0, NULL, NULL);
 }
 
 /**

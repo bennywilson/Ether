@@ -2,10 +2,12 @@
 // kbVector.h
 //
 //
-// 2016-2019 kbEngine 2.0
+// 2016-2025 kbEngine 2.0
 //===================================================================================================
 #ifndef __KBVECTOR_H_
 #define __KBVECTOR_H_
+
+#include "kbCore.h"
 
 /**
  *	kbVec2i

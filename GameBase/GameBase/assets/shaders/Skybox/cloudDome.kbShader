@@ -1,13 +1,13 @@
 //==============================================================================
 // cloudDome.kbShader
 //
-// 2019	 kbEngine 2.0
+// 2019-2025 kbEngine 2.0
 //==============================================================================
 cbuffer matrixBuffer {
 	matrix mvpMatrix;
 	matrix modelMatrix;
 	matrix viewProjection;
-	float4 cameraPos;
+	float4 cameraPosition;
 	float4 time;
 };
 
@@ -49,8 +49,8 @@ pixelInput vertexShader( vertexInput input ) {
 	pixelInput output = (pixelInput)(0);
 
 	output.position = mul( input.position, modelMatrix );
-	output.worldPos.xyz = cameraPos.xyz + output.position.xyz * 999;
-	output.position += float4(cameraPos.xyz, 0);
+	output.worldPos.xyz = cameraPosition.xyz + output.position.xyz * 999;
+	output.position += float4(cameraPosition.xyz, 0);
 	output.position = mul( output.position, viewProjection);
 	output.position.z = output.position.w - 0.0001f;
 
@@ -89,7 +89,7 @@ SamplerState LinearSampler;
 	output.Color.xyz = saturate( pow( abs(totalCloud.xyz), abs( combinedCloudPower ) ) ) * combinedCloudFactor;
 	output.Color.w = dot( totalCloud.xyz, float3( 0.3, 0.59f, 0.11f ) );
 
-	float3 fromCam = normalize( input.worldPos - cameraPos.xyz );
+	float3 fromCam = normalize( input.worldPos - cameraPosition.xyz );
 	float3 sunDir = normalize( float3( -0.958466f, 0.268476f, 0.096246f ) );
 	float sunIntensity = saturate( ( dot( fromCam, sunDir ) - 0.98f ) / 0.02f );
 	sunIntensity = pow( sunIntensity, 15.f ) * 1.0f;

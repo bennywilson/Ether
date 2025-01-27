@@ -1,0 +1,110 @@
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Entity_17"
+		Orientation = 0.000000 0.999962 0.000000 0.008738
+		Position = 1.832346 2.273705 24.000000
+		Scale = 1.000000 1.000000 1.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 1
+		Materials = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Shader = ..\..\kbengine\assets\shaders\basictexture.kbshader
+				ShaderParams = 1
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "shaderTexture"
+						Texture = .\assets\test\diablo3char.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		RenderPass = LightingPass
+		RenderOrderBias =  0.000000
+		Model = .\assets\test\diablochar.diablo3
+		ShaderOverride = 0
+			
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Entity_18"
+		Orientation = -0.305549 -0.249261 -0.083219 0.915196
+		Position = -2.581053 8.435923 24.824654
+		Scale = 1.000000 1.000000 1.000000
+	}
+	kbDirectionalLightComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadows = 1
+		Color = 1.000000 1.000000 1.000000 1.000000
+		OverrideShader = NULL
+		ShaderParams = 0
+		CascadedShadowSplits = 4
+ 50.000000
+ 100.000000
+ 200.000000
+ 300.000000
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		Name = "Entity_19"
+		Orientation = -0.340447 0.236690 -0.088978 0.905625
+		Position = 6.197253 8.963827 23.281439
+		Scale = 1.000000 1.000000 1.000000
+	}
+	kbDirectionalLightComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadows = 0
+		Color = 1.000000 1.000000 1.000000 1.000000
+		OverrideShader = NULL
+		ShaderParams = 0
+		CascadedShadowSplits = 0
+	}
+}
+kbGameEntity 0 0 0 0 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Room"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 1.632983 18.333986 16.410515
+		Scale = 15.000000 15.000000 15.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		Materials = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Shader = ..\..\kbengine\assets\shaders\basictexture.kbshader
+				ShaderParams = 1
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "shaderTexture"
+						Texture = .\assets\test\purplevignette.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		RenderPass = LightingPass
+		RenderOrderBias =  0.000000
+		Model = .\assets\models\test\invertedcube2.ms3d
+		ShaderOverride = 0
+			
+	}
+}

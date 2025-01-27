@@ -15,7 +15,7 @@
 KB_DEFINE_COMPONENT(kbTerrainComponent)
 
 static float g_TerrainLOD = 1.0f;
-bool g_bCullGrass = true;
+bool g_bCullGrass = false;
 
 void kbTerrainComponent::SetTerrainLOD( const float lod ) {
 	g_TerrainLOD = lod;

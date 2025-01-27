@@ -1,0 +1,965 @@
+Players 1
+kbPrefab 1 {
+	Angelica
+	kbGameEntity 1290130885 1128207699 1608841648 1192264141 {
+		kbTransformComponent { 
+			Enabled = 0
+			LifeTime =  -1.000000
+			Name = "Isabella"
+			Orientation = 0.000000 0.000000 0.000000 1.000000
+			Position = 22.923193 143.452286 267.461517
+			Scale = 0.150000 0.150000 0.150000
+		}
+		kbCollisionComponent { 
+			Enabled = 1
+			LifeTime =  -1.000000
+			CollisionType = Sphere
+			Extent = 5.000000 5.000000 5.000000
+			SphereCollision = 0
+		}
+		EtherPlayerComponent { 
+			Enabled = 1
+			LifeTime =  -1.000000
+			DummyTemp = 0
+			Health =  100.000000
+			m_Dummy = -842150451
+			m_PlayerDummy = -842150451
+		}
+	}
+}
+}
+Enemies 1
+kbPrefab 1 {
+	Cartel_Warrior
+kbGameEntity 3296042617 1156675361 562646963 1803854321 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Cartel Warrior"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 0.000000 3.000000 24.000000
+		Scale = 0.100000 0.100000 0.100000
+	}
+	kbSkeletalModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 1
+		Materials = 0
+		RenderPass = LightingPass
+		RenderOrderBias =  0.000000
+		Model = .\assets\models\characters\cartel_warrior\cartel_warrior.ms3d
+		ShaderOverride = 0
+			
+		Animations = 11
+			kbAnimComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Animation = .\assets\models\characters\cartel_warrior\cartel_warrior_aim.kbanim.ms3d
+				AnimationEvent = 0
+				AnimationName = "Aim"
+				IsLooping = 1
+				TimeScale =  0.050000
+			}
+			kbAnimComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Animation = .\assets\models\characters\cartel_warrior\cartel_warrior_run.kbanim.ms3d
+				AnimationEvent = 0
+				AnimationName = "Run"
+				IsLooping = 1
+				TimeScale =  1.000000
+			}
+			kbAnimComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Animation = .\assets\models\characters\cartel_warrior\cartel_warrior_backpedal.kbanim.ms3d
+				AnimationEvent = 0
+				AnimationName = "BackPedal"
+				IsLooping = 1
+				TimeScale =  0.500000
+			}
+			kbAnimComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Animation = .\assets\models\characters\cartel_warrior\cartel_warrior_strafeleft.kbanim.ms3d
+				AnimationEvent = 0
+				AnimationName = "StrafeLeft"
+				IsLooping = 1
+				TimeScale =  1.000000
+			}
+			kbAnimComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Animation = .\assets\models\characters\cartel_warrior\cartel_warrior_straferight.kbanim.ms3d
+				AnimationEvent = 0
+				AnimationName = "StrafeRight"
+				IsLooping = 1
+				TimeScale =  1.000000
+			}
+			kbAnimComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Animation = .\assets\models\characters\cartel_warrior\cartel_warrior_death_backwards_1.kbanim.ms3d
+				AnimationEvent = 0
+				AnimationName = "Death_Back_1"
+				IsLooping = 0
+				TimeScale =  1.450000
+			}
+			kbAnimComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Animation = .\assets\models\characters\cartel_warrior\cartel_warrior_death_spin.kbanim.ms3d
+				AnimationEvent = 0
+				AnimationName = "Death_Spin"
+				IsLooping = 0
+				TimeScale =  1.500000
+			}
+			kbAnimComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Animation = .\assets\models\characters\cartel_warrior\cartel_warrior_death_flip.kbanim.ms3d
+				AnimationEvent = 0
+				AnimationName = "Death_Flip"
+				IsLooping = 0
+				TimeScale =  1.450000
+			}
+			kbAnimComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Animation = .\assets\models\characters\cartel_warrior\cartel_warrior_death_backwards_2.kbanim.ms3d
+				AnimationEvent = 0
+				AnimationName = "Death_Back_2"
+				IsLooping = 0
+				TimeScale =  1.450000
+			}
+			kbAnimComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Animation = .\assets\models\characters\cartel_warrior\cartel_warrior_death_kneelforward.kbanim.ms3d
+				AnimationEvent = 0
+				AnimationName = "Death_KneelForward"
+				IsLooping = 0
+				TimeScale =  1.650000
+			}
+			kbAnimComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Animation = .\assets\models\characters\cartel_warrior\cartel_warrior_death_forwardflip.kbanim.ms3d
+				AnimationEvent = 0
+				AnimationName = "Death_ForwardFlip"
+				IsLooping = 0
+				TimeScale =  0.400000
+			}
+		DebugAnimIndex = -1
+		IsFirstPersonModel = 0
+	}
+	kbClothComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		AdditionalBoneInfo = 0
+		BoneInfo = 48
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 1
+				BoneName = "back_00"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 1
+				BoneName = "back_01"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 1
+				BoneName = "back_02"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 1
+				BoneName = "back_03"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 1
+				BoneName = "back_04"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 1
+				BoneName = "back_05"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "back_10"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "back_11"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "back_12"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "back_13"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "back_14"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "back_15"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "back_20"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "back_21"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "back_22"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "back_23"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "back_24"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "back_25"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "back_30"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "back_31"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "back_32"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "back_33"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "back_34"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "back_35"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "back_40"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "back_41"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "back_42"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "back_43"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "back_44"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "back_45"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "back_50"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "back_51"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "back_52"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "back_53"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "back_54"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "back_55"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "back_60"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "back_61"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "back_62"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "back_63"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "back_64"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "back_65"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "back_70"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "back_71"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "back_72"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "back_73"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "back_74"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "back_75"
+				NeighborBones = 0
+			}
+		ClothType = Square
+		Collision = 2
+			kbBoneCollisionSphere { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				BoneName = "Bip01 Pelvis"
+				Sphere = -0.500000 -0.000000 -0.500000 2.500000
+			}
+			kbBoneCollisionSphere { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				BoneName = "Bip01 Pelvis"
+				Sphere = -0.500000 -0.000000 5.000000 2.500000
+			}
+		Height = 8
+		NumIterations = 1
+		Width = 6
+	}
+	kbClothComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		AdditionalBoneInfo = 0
+		BoneInfo = 42
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 1
+				BoneName = "front_00"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 1
+				BoneName = "front_01"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 1
+				BoneName = "front_02"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 1
+				BoneName = "front_03"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 1
+				BoneName = "front_04"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 1
+				BoneName = "front_05"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "front_10"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "front_11"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "front_12"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "front_13"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "front_14"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "front_15"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "front_20"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "front_21"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "front_22"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "front_23"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "front_24"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "front_25"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "front_30"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "front_31"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "front_32"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "front_33"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "front_34"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "front_35"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "front_40"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "front_41"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "front_42"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "front_43"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "front_44"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "front_45"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "front_50"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "front_51"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "front_52"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "front_53"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "front_54"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "front_55"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "front_60"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "front_61"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "front_62"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "front_63"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "front_64"
+				NeighborBones = 0
+			}
+			kbClothBone { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Anchored = 0
+				BoneName = "front_65"
+				NeighborBones = 0
+			}
+		ClothType = Square
+		Collision = 2
+			kbBoneCollisionSphere { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				BoneName = "Bip01 Pelvis"
+				Sphere = -0.500000 -0.000000 -0.500000 2.500000
+			}
+			kbBoneCollisionSphere { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				BoneName = "Bip01 Pelvis"
+				Sphere = -0.500000 -0.000000 5.000000 2.500000
+			}
+		Height = 7
+		NumIterations = 1
+		Width = 6
+	}
+	kbCollisionComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CollisionType = Sphere
+		Extent = 60.000000 10.000000 10.000000
+		SphereCollision = 18
+			kbBoneCollisionSphere { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				BoneName = "Bip01 Head"
+				Sphere = 0.000000 0.000000 0.000000 5.000000
+			}
+			kbBoneCollisionSphere { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				BoneName = "Bip01 Spine2"
+				Sphere = 0.000000 0.000000 0.000000 7.000000
+			}
+			kbBoneCollisionSphere { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				BoneName = "Bip01 Spine1"
+				Sphere = 0.000000 0.000000 0.000000 6.400000
+			}
+			kbBoneCollisionSphere { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				BoneName = "Bip01 Pelvis"
+				Sphere = 0.000000 0.000000 0.000000 6.400000
+			}
+			kbBoneCollisionSphere { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				BoneName = "Bip01 L UpperArm"
+				Sphere = 5.000000 0.000000 -15.000000 4.000000
+			}
+			kbBoneCollisionSphere { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				BoneName = "Bip01 L Forearm"
+				Sphere = 5.000000 0.000000 -10.000000 4.000000
+			}
+			kbBoneCollisionSphere { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				BoneName = "Bip01 L Hand"
+				Sphere = 5.000000 0.000000 0.000000 4.000000
+			}
+			kbBoneCollisionSphere { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				BoneName = "Bip01 L Finger1"
+				Sphere = 0.000000 0.000000 0.000000 4.000000
+			}
+			kbBoneCollisionSphere { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				BoneName = "Bip01 R UpperArm"
+				Sphere = 5.000000 0.000000 -15.000000 4.000000
+			}
+			kbBoneCollisionSphere { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				BoneName = "Bip01 R Forearm"
+				Sphere = 5.000000 0.000000 -10.000000 4.500000
+			}
+			kbBoneCollisionSphere { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				BoneName = "Bip01 R Hand"
+				Sphere = 5.000000 0.000000 0.000000 4.000000
+			}
+			kbBoneCollisionSphere { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				BoneName = "Bip01 R Finger1"
+				Sphere = 0.000000 0.000000 0.000000 4.000000
+			}
+			kbBoneCollisionSphere { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				BoneName = "Bip01 L Thigh"
+				Sphere = 0.000000 0.000000 -30.000000 5.500000
+			}
+			kbBoneCollisionSphere { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				BoneName = "Bip01 L Calf"
+				Sphere = 0.000000 0.000000 -15.000000 5.500000
+			}
+			kbBoneCollisionSphere { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				BoneName = "Bip01 L Foot"
+				Sphere = 0.000000 0.000000 0.000000 5.500000
+			}
+			kbBoneCollisionSphere { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				BoneName = "Bip01 R Thigh"
+				Sphere = 0.000000 0.000000 -30.000000 5.500000
+			}
+			kbBoneCollisionSphere { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				BoneName = "Bip01 R Calf"
+				Sphere = 0.000000 0.000000 -15.000000 5.500000
+			}
+			kbBoneCollisionSphere { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				BoneName = "Bip01 R Foot"
+				Sphere = 0.000000 0.000000 0.000000 5.500000
+			}
+	}
+	EtherEnemySoldierAIComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		DummyTemp = 0
+		Health =  5.000000
+		m_Dummy = 0
+		UpdateHz = 0
+		Projectile = 2459381576 1233845788 1100758177 1698127025
+		SecBetweenSprays =  5.000000
+		SecondsBetweenShots =  0.200000
+		SprayDurationSec =  1.500000
+	}
+	kbGameLogicComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		DummyTemp = 0
+	}
+}
+}

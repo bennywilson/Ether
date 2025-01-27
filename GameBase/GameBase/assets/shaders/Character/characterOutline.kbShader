@@ -1,14 +1,14 @@
 //==============================================================================
 // characterOutline.kbShader
 //
-// 2019 kbEngine 2.0
+// 2019-2025 kbEngine 2.0
 //==============================================================================
 cbuffer matrixBuffer {
 	matrix		modelMatrix;
 	matrix		mvpMatrix;
 	matrix		vpMatrix;
 	float4x4	boneList[128];
-	float4		cameraPos;
+	float4		cameraPosition;
 	float4		outlineParams;
 };
 
@@ -64,7 +64,7 @@ pixelInput vertexShader( vertexInput input ) {
 
 	Pos = input.position;
 	float3 objCenter = float3(  modelMatrix[3].xyz );
-	float distFromCam = length( cameraPos.xyz  - objCenter );
+	float distFromCam = length( cameraPosition.xyz  - objCenter );
 
 	float3 normal = (input.normal.xyz * 2.0f ) - 1.0f;
 	Pos.xyz +=  normal * outlineParams.x * 0.75f;//0.02f;
@@ -73,7 +73,7 @@ pixelInput vertexShader( vertexInput input ) {
 
 	output.position = mul( Pos, modelMatrix );
 
-	float3 fromCam = normalize( cameraPos.xyz  - output.position.xyz  );//output.position.xyz );
+	float3 fromCam = normalize( cameraPosition.xyz  - output.position.xyz  );//output.position.xyz );
 	output.position.xyz -= fromCam * outlineParams.y;//5;
 //	output.worldPos = output.position.xyz;
 	output.position = mul( output.position, vpMatrix );

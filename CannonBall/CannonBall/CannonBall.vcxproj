@@ -14,7 +14,7 @@
     <ProjectGuid>{00C43D40-0F98-498D-A494-1274FDE720F7}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>GameBase</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.22000.0</WindowsTargetPlatformVersion>
     <ProjectName>CannonBall</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -22,14 +22,14 @@
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <CharacterSet>Unicode</CharacterSet>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -44,7 +44,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
     <IncludePath>.\Source\Game;.\Source\Win;.\;C:\Program Files\Autodesk\FBX\FBX SDK\2020.0.1\include;..\..\kbEngine\External\OculusSDK\LibOVR\Include;..\..\kbEngine\External\OculusSDK\LibOVR\Include\Extras;..\..\kbEngine\Sound;..\..\kbEngine\external;..\..\kbEngine\gameEntity;..\..\kbEngine\boundingVolumes;..\..\kbEngine\math;C:\Program Files (x86)\Windows Kits\8.1\Include\shared;..\..\kbEngine\editor;..\..\kbEngine\renderer;..\..\kbEngine\app;..\..\kbEngine\core;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Program Files\Autodesk\FBX\FBX SDK\2020.0.1\lib\vs2017\x64\debug;C:\Program Files (x86)\Windows Kits\8.1\Lib\winv6.3\um\x64;..\..\kbEngine\lib;$(LibraryPath)</LibraryPath>
+    <LibraryPath>C:\Program Files\Autodesk\FBX\FBX SDK\2020.3.7\lib\x64\debug;C:\Program Files (x86)\Windows Kits\8.1\Lib\winv6.3\um\x64;..\..\kbEngine\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>

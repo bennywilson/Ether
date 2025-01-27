@@ -1,12 +1,12 @@
 //==============================================================================
 // environmentBase_SimpleNormal.kbShader
 //
-// 2019 kbEngine 2.0
+// 2019-2025 kbEngine 2.0
 //==============================================================================
 cbuffer matrixBuffer {
 	matrix modelMatrix;
 	matrix mvpMatrix;
-	float4 cameraPos;
+	float4 cameraPosition;
 	float4 colorMult;
 	float4 specMult;
 };

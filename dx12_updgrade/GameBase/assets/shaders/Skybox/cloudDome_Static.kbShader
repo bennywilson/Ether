@@ -1,0 +1,83 @@
+//==============================================================================
+// cloudDome.kbShader
+//
+// 2019-2025 kbEngine 2.0
+//==============================================================================
+cbuffer matrixBuffer {
+	matrix mvpMatrix;
+	matrix modelMatrix;
+	matrix viewProjection;
+	float4 cameraPosition;
+	float4 time;
+	float4 cloudColor;
+};
+
+//-------------------------------------
+struct vertexInput {
+	float4 position   : POSITION;
+	float2 uv         : TEXCOORD0;
+	float4 color      : COLOR;
+	float4 normal     : NORMAL;
+	float4 tangent    : TANGENT;
+};
+
+//-------------------------------------
+struct pixelInput {
+	float4 position		: SV_POSITION;
+	float2 uv			: TEXCOORD0;
+	float4 color		: COLOR;
+	float4 position2	: TEXCOORD1;
+	float3 normal		: TEXCOORD2;
+	float3 worldPos		: TEXCOORD3;
+};
+
+kbShaderState {
+	cullMode CullMode_None
+	srcblend Blend_One
+	dstBlend Blend_InvSrcAlpha
+	colorwriteenable colorwriteenable_rgb
+}
+
+//-------------------------------------
+struct PS_OUTPUT {
+	float4 Color		: SV_TARGET0;
+};
+
+/**
+ *	vertexShader
+ */
+pixelInput vertexShader( vertexInput input ) {
+	pixelInput output = (pixelInput)(0);
+
+	output.position = mul( input.position, modelMatrix );
+	output.worldPos.xyz = cameraPosition.xyz + output.position.xyz * 999;
+	output.position += float4(cameraPosition.xyz, 0);
+	output.position = mul( output.position, viewProjection);
+	output.position.z = output.position.w - 0.0001f;
+
+	output.uv = input.uv;
+	output.color = input.color;
+	output.position2 = output.position;
+	output.normal.xyz = mul( ( input.normal.xyz * 2.0f ) - 1.0f, (float3x3)modelMatrix );
+
+	return output;
+}
+
+
+Texture2D diffuseTexture;
+SamplerState LinearSampler;
+
+/**
+ *	pixelShader
+ */
+ PS_OUTPUT pixelShader( pixelInput	input ) {
+ 	PS_OUTPUT output = (PS_OUTPUT) 0;
+
+	float2 uv = input.uv * float2( -1.0f, 1.0f );
+
+	float4 textureSample =  diffuseTexture.Sample( LinearSampler, uv );//+ float2( time.x * 0.003f, 0.0f ) );;
+	output.Color.xyz = textureSample.xxx * textureSample.w * cloudColor.xyz * cloudColor.w;
+	output.Color.w = output.Color.w;
+
+	return output;
+}
