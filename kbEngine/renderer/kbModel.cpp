@@ -1160,9 +1160,9 @@ void kbModel::SetBoneMatrices( std::vector<AnimatedBone_t> & bones, const float 
  */
 void kbModel::Animate( std::vector<kbBoneMatrix_t> & outMatrices, const float time, const kbAnimation *const pAnimation, const bool bLoopAnim ) {
 	std::vector<AnimatedBone_t> tempBones;
-	SetBoneMatrices( tempBones, time, pAnimation, bLoopAnim );
+//	SetBoneMatrices( tempBones, time, pAnimation, bLoopAnim );
 
-	for ( int i = 0; i < tempBones.size(); i++ ) {
+/*	for ( int i = 0; i < tempBones.size(); i++ ) {
 
 		const int parent = m_Bones[i].m_ParentIndex;
 
@@ -1178,7 +1178,7 @@ void kbModel::Animate( std::vector<kbBoneMatrix_t> & outMatrices, const float ti
 
 		const kbBoneMatrix_t & invRef = GetInvRefBoneMatrix(i);
 		outMatrices[i] = invRef * tempBones[i].m_LocalSpaceMatrix;
-	}
+	}*/
 }
 
 /**

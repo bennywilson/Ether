@@ -1,0 +1,89 @@
+//==============================================================================
+// firstPersonHands.kbShader
+//
+// 2018 kbEngine 2.0
+//==============================================================================
+cbuffer matrixBuffer {
+	matrix	 modelMatrix;
+	matrix	 mvpMatrix;
+	float4	 time;
+	float4x4 boneList[128];
+};
+
+//-------------------------------------
+struct vertexInput {
+	float4 position			: POSITION;
+	float2 uv				: TEXCOORD0;
+	float4 normal			: NORMAL;
+	float4 blendIndices		: BLENDINDICES;
+	float4 boneWeights		: BLENDWEIGHT;
+};
+
+struct pixelInput {
+	float4 position			: SV_POSITION;
+	float2 uv				: TEXCOORD0;
+	float2 position2		: TEXCOORD1;
+	float3 normal			: TEXCOORD2;
+};
+
+//-------------------------------------
+struct PS_OUTPUT {
+	float4	Color			: SV_TARGET0;
+	float4	Normal			: SV_TARGET1;
+	float4	Specular		: SV_TARGET2;
+	float2	Depth			: SV_TARGET3;
+};
+
+
+/**
+ *	vertexShader
+ */
+pixelInput vertexShader( vertexInput input ) {
+	pixelInput output = (pixelInput)(0);
+
+	float4 Pos = 0.0f;
+
+	int4 IndexVector = D3DCOLORtoUBYTE4(input.blendIndices).zyxw;
+	float BlendWeightsArray[4] = (float[4])input.boneWeights;
+	int   IndexArray[4]        = (int[4])IndexVector;
+	
+	float4x4 blendedMat =	boneList[IndexArray[0]] * BlendWeightsArray[0] + boneList[IndexArray[1]] * BlendWeightsArray[1] +
+							boneList[IndexArray[2]] * BlendWeightsArray[2] + boneList[IndexArray[3]] * BlendWeightsArray[3];
+	
+	Pos = mul( input.position, boneList[IndexArray[0]] );
+//	Pos = mul( input.position, blendedMat );
+	
+	output.position = mul( Pos, mvpMatrix );
+	output.uv = input.uv;
+	output.position2 = output.position.zw;
+	output.normal.xyz = mul( ( input.normal.xyz * 2.0f ) - 1.0f, (float3x3)modelMatrix );
+	
+	return output;
+}
+
+/**
+ *	pixelShader
+ */
+Texture2D shaderTexture;
+SamplerState SampleType;
+
+ PS_OUTPUT pixelShader( pixelInput	input ) {
+	PS_OUTPUT output = (PS_OUTPUT) 0;
+
+	output.Color = shaderTexture.Sample( SampleType, input.uv );
+	float emissive = output.Color.w;
+	float movementSpeed = 2.0f;
+	float pulseFreq = 35.f;
+
+	output.Color.w = emissive * 0.75f * ( sin( emissive * pulseFreq + movementSpeed * time.x ) + 1.0f );
+
+	const float specAmt = ( emissive > 0.2f ) ? ( 0.0f ) : ( 0.35f );
+	output.Specular.x = specAmt * 1.0f;
+	output.Specular.y = 16.0f;
+	output.Specular.zw = 0.0f;
+	output.Depth.r = input.position2.x / input.position2.y;
+
+	output.Normal.xyz = normalize( input.normal );
+
+	return output;
+}

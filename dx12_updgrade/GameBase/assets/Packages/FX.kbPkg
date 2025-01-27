@@ -1,0 +1,1121 @@
+WeaponFX 4
+kbPrefab 1 {
+	BaseMuzzleFlash
+	kbGameEntity 3287441000 1228561351 2632918935 4227010865 {
+		kbTransformComponent { 
+			Enabled = 0
+			LifeTime =  -1.000000
+			Name = "Base Muzzle Flash"
+			Orientation = 0.000000 0.000000 0.000000 1.000000
+			Position = 0.000000 0.000000 0.000000
+			Scale = 1.000000 1.000000 1.000000
+		}
+		kbParticleComponent { 
+			Enabled = 1
+			LifeTime =  -1.000000
+			Name = ""
+			Orientation = 0.000000 0.000000 0.000000 1.000000
+			Position = 3.000000 -3.000000 15.000000
+			Scale = 0.250000 0.250000 0.250000
+			AlphaOverLife = 0
+			ColorOverLife = 0
+			EndColor = 0.000000 0.000000 0.000000 0.000000
+			Gravity = 0.000000 0.000000 0.000000
+			LockVelocity = 0
+			MaterialList = 1
+				kbMaterialComponent { 
+					Enabled = 0
+					LifeTime =  -1.000000
+					Shader = ..\..\kbengine\assets\shaders\basicparticle.kbshader
+					ShaderParams = 1
+						kbShaderParamComponent { 
+							Enabled = 0
+							LifeTime =  -1.000000
+							ParamName = "shaderTexture"
+							Texture = .\assets\fx\smoke.jpg
+							Vector = 0.000000 0.000000 0.000000 0.000000
+						}
+				}
+			MaxBurstCount = 0
+			MaxDuration =  0.050000
+			MaxEndRotationRate =  0.000000
+			MaxEndSize = 3.000000 3.000000 3.000000
+			MaxEndVelocity = 0.000000 0.000000 0.000000
+			MaxSpawnRate =  15.000000
+			MaxStartRotationRate =  0.000000
+			MaxStartSize = 3.000000 3.000000 3.000000
+			MaxStartVelocity = 0.000000 0.000000 0.000000
+			MinBurstCount = 0
+			MinDuration =  0.045000
+			MinEndRotationRate =  0.000000
+			MinEndSize = 3.000000 3.000000 3.000000
+			MinEndVelocity = 0.000000 0.000000 0.000000
+			MinSpawnRate =  14.500000
+			MinStartRotationRate =  0.000000
+			MinStartSize = 3.000000 3.000000 3.000000
+			MinStartVelocity = -0.000000 -0.000000 0.000000
+			ParticleBillboardType = FaceCamera
+			StartColor = 1.000000 0.400000 0.700000 1.000000
+			StartDelay =  0.000000
+			TotalDuration =  0.500000
+			RenderOrderBias =  0.000000
+			VelocityCurve = 0
+		}
+	}
+}
+}
+kbPrefab 1 {
+	BaseImpactFX
+kbGameEntity 288884920 1074764317 1666654870 1595214297 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Base Impact FX"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 0.000000 3.000000 24.000000
+		Scale = 1.000000 1.000000 1.000000
+	}
+	kbParticleComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		Name = ""
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 0.000000 0.000000 0.000000
+		Scale = 2.000000 2.000000 2.000000
+		AlphaOverLife = 0
+		ColorOverLife = 0
+		EndColor = 0.000000 0.000000 0.000000 0.000000
+		Gravity = 0.000000 0.000000 0.000000
+		LockVelocity = 0
+		MaterialList = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Shader = ..\..\kbengine\assets\shaders\basicparticle.kbshader
+				ShaderParams = 1
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "shaderTexture"
+						Texture = .\assets\fx\smoke.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		MaxBurstCount = 50
+		MaxDuration =  1.000000
+		MaxEndRotationRate =  0.000000
+		MaxEndSize = 3.000000 3.000000 3.000000
+		MaxEndVelocity = 0.000000 0.000000 0.000000
+		MaxSpawnRate =  0.000000
+		MaxStartRotationRate =  0.000000
+		MaxStartSize = 3.000000 3.000000 3.000000
+		MaxStartVelocity = 3.500000 3.500000 3.500000
+		MinBurstCount = 75
+		MinDuration =  1.000000
+		MinEndRotationRate =  0.000000
+		MinEndSize = 3.000000 3.000000 3.000000
+		MinEndVelocity = 0.000000 0.000000 0.000000
+		MinSpawnRate =  0.000000
+		MinStartRotationRate =  0.000000
+		MinStartSize = 1.200000 1.200000 1.200000
+		MinStartVelocity = -3.500000 -3.500000 -3.500000
+		ParticleBillboardType = FaceCamera
+		StartColor = 1.000000 1.000000 1.000000 1.000000
+		StartDelay =  0.000000
+		TotalDuration =  2.000000
+		RenderOrderBias =  0.000000
+		VelocityCurve = 0
+	}
+}
+}
+kbPrefab 1 {
+	GrenadeExplosion
+kbGameEntity 749854598 1122407100 2268504468 2469228342 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Grenade Explosion"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 0.000000 3.000000 24.000000
+		Scale = 1.000000 1.000000 1.000000
+	}
+	kbPointLightComponent { 
+		Enabled = 1
+		LifeTime =  0.125000
+		CastsShadows = 0
+		Color = 0.200000 1.800000 1.800000 1.000000
+		Materials = 0
+		LightRadius =  256.000000
+	}
+	kbParticleComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		Name = ""
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 0.000000 0.000000 0.000000
+		Scale = 5.000000 5.000000 5.000000
+		AlphaOverLife = 0
+		ColorOverLife = 0
+		EndColor = 0.000000 0.000000 0.000000 0.000000
+		Gravity = 0.000000 0.000000 0.000000
+		LockVelocity = 0
+		MaterialList = 0
+		MaxBurstCount = 50
+		MaxDuration =  1.000000
+		MaxEndRotationRate =  0.000000
+		MaxEndSize = 3.000000 3.000000 3.000000
+		MaxEndVelocity = 1.000000 1.000000 1.000000
+		MaxSpawnRate =  0.000000
+		MaxStartRotationRate =  0.000000
+		MaxStartSize = 3.000000 3.000000 3.000000
+		MaxStartVelocity = 35.500000 35.500000 35.500000
+		MinBurstCount = 75
+		MinDuration =  1.000000
+		MinEndRotationRate =  0.000000
+		MinEndSize = 3.000000 3.000000 3.000000
+		MinEndVelocity = -1.000000 -1.000000 -1.000000
+		MinSpawnRate =  0.000000
+		MinStartRotationRate =  0.000000
+		MinStartSize = 1.200000 1.200000 1.200000
+		MinStartVelocity = -35.500000 -35.500000 -35.500000
+		ParticleBillboardType = FaceCamera
+		StartColor = 1.000000 1.000000 1.000000 1.000000
+		StartDelay =  0.000000
+		TotalDuration =  3.500000
+		RenderOrderBias =  0.000000
+		VelocityCurve = 0
+	}
+}
+}
+kbPrefab 1 {
+	Airstrike_Explosion
+kbGameEntity 834051548 1161303702 3343001743 2051538980 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Grenade Explosion"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 0.000000 3.000000 24.000000
+		Scale = 1.000000 1.000000 1.000000
+	}
+	kbPointLightComponent { 
+		Enabled = 1
+		LifeTime =  0.350000
+		CastsShadows = 0
+		Color = 0.950000 0.600000 0.020000 1.000000
+		Materials = 0
+		LightRadius =  1024.000000
+	}
+	kbParticleComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		Name = ""
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 0.000000 0.000000 0.000000
+		Scale = 75.000000 75.000000 75.000000
+		AlphaOverLife = 0
+		ColorOverLife = 0
+		EndColor = 0.000000 0.000000 0.000000 0.000000
+		Gravity = 0.000000 0.000000 0.000000
+		LockVelocity = 0
+		MaterialList = 0
+		MaxBurstCount = 6
+		MaxDuration =  8.000000
+		MaxEndRotationRate =  0.000000
+		MaxEndSize = 3.000000 3.000000 3.000000
+		MaxEndVelocity = 1.000000 1.000000 1.000000
+		MaxSpawnRate =  0.000000
+		MaxStartRotationRate =  0.000000
+		MaxStartSize = 3.000000 3.000000 3.000000
+		MaxStartVelocity = 35.500000 35.500000 35.500000
+		MinBurstCount = 6
+		MinDuration =  6.000000
+		MinEndRotationRate =  0.000000
+		MinEndSize = 3.000000 3.000000 3.000000
+		MinEndVelocity = -1.000000 -1.000000 -1.000000
+		MinSpawnRate =  0.000000
+		MinStartRotationRate =  0.000000
+		MinStartSize = 1.200000 1.200000 1.200000
+		MinStartVelocity = -35.500000 -35.500000 -35.500000
+		ParticleBillboardType = FaceCamera
+		StartColor = 1.000000 1.000000 1.000000 1.000000
+		StartDelay =  0.000000
+		TotalDuration =  3.500000
+		RenderOrderBias =  0.000000
+		VelocityCurve = 0
+	}
+}
+}
+ImpactFX 2
+kbPrefab 1 {
+	ConcreteFX
+kbGameEntity 4227010865 2632918935 1228561351 3287441000 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Entity_24"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 46.211468 58.481571 147.883286
+		Scale = 1.000000 1.000000 1.000000
+	}
+	kbParticleComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		Name = ""
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 0.000000 0.000000 0.000000
+		Scale = 1.000000 1.000000 1.000000
+		AlphaOverLife = 0
+		ColorOverLife = 0
+		EndColor = 1.000000 1.000000 1.000000 1.000000
+		Gravity = 0.000000 -100.500000 0.000000
+		LockVelocity = 1
+		MaterialList = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Shader = .\assets\shaders\fx\particleatlas.kbshader
+				ShaderParams = 1
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "shaderTexture"
+						Texture = .\assets\fx\concreteparticles.dds
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		MaxBurstCount = 10
+		MaxDuration =  3.000000
+		MaxEndRotationRate =  0.000000
+		MaxEndSize = 1.500000 1.500000 1.500000
+		MaxEndVelocity = 75.000000 -20.000000 -50.000000
+		MaxSpawnRate =  2.000000
+		MaxStartRotationRate =  0.000000
+		MaxStartSize = 1.500000 1.500000 1.500000
+		MaxStartVelocity = 75.000000 50.000000 -20.000000
+		MinBurstCount = 10
+		MinDuration =  3.000000
+		MinEndRotationRate =  0.000000
+		MinEndSize = 1.000000 1.000000 1.000000
+		MinEndVelocity = 75.000000 -20.000000 -50.000000
+		MinSpawnRate =  1.000000
+		MinStartRotationRate =  0.000000
+		MinStartSize = 1.000000 1.000000 1.000000
+		MinStartVelocity = -75.000000 -20.000000 -50.000000
+		ParticleBillboardType = FaceCamera
+		StartColor = 1.000000 1.000000 1.000000 1.000000
+		StartDelay =  0.000000
+		TotalDuration =  0.500000
+		RenderOrderBias =  0.000000
+		VelocityCurve = 0
+	}
+	kbParticleComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		Name = ""
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 0.000000 0.000000 0.000000
+		Scale = 2.000000 2.000000 2.000000
+		AlphaOverLife = 0
+		ColorOverLife = 0
+		EndColor = 0.000000 0.000000 0.000000 0.000000
+		Gravity = 0.000000 0.000000 0.000000
+		LockVelocity = 0
+		MaterialList = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Shader = ..\..\kbengine\assets\shaders\basicparticle.kbshader
+				ShaderParams = 1
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "shaderTexture"
+						Texture = .\assets\fx\impactsmoke.dds
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		MaxBurstCount = 5
+		MaxDuration =  1.000000
+		MaxEndRotationRate =  0.000000
+		MaxEndSize = 3.000000 3.000000 3.000000
+		MaxEndVelocity = 0.000000 0.000000 0.000000
+		MaxSpawnRate =  0.000000
+		MaxStartRotationRate =  0.000000
+		MaxStartSize = 3.000000 3.000000 3.000000
+		MaxStartVelocity = 3.500000 3.500000 -5.500000
+		MinBurstCount = 4
+		MinDuration =  1.000000
+		MinEndRotationRate =  0.000000
+		MinEndSize = 3.000000 3.000000 3.000000
+		MinEndVelocity = 0.000000 0.000000 0.000000
+		MinSpawnRate =  0.000000
+		MinStartRotationRate =  0.000000
+		MinStartSize = 1.200000 1.200000 1.200000
+		MinStartVelocity = -3.500000 -3.500000 -7.500000
+		ParticleBillboardType = FaceCamera
+		StartColor = 0.250000 0.250000 0.250000 0.250000
+		StartDelay =  0.000000
+		TotalDuration =  2.000000
+		RenderOrderBias =  0.000000
+		VelocityCurve = 0
+	}
+}
+}
+kbPrefab 1 {
+	BasicWood
+kbGameEntity 2914882686 1195769252 1420378815 2077859665 {
+	kbTransformComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		Name = "Wood_Impact_1"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 64.022903 51.456993 -36.990131
+		Scale = 1.000000 1.000000 1.000000
+	}
+	kbParticleComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		Name = ""
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 0.000000 0.000000 0.000000
+		Scale = 3.000000 3.000000 3.000000
+		AlphaOverLife = 0
+		ColorOverLife = 0
+		EndColor = 1.000000 1.000000 1.000000 0.500000
+		Gravity = 0.000000 -100.500000 0.000000
+		LockVelocity = 1
+		MaterialList = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Shader = .\assets\shaders\fx\particle_blendadd.kbshader
+				ShaderParams = 2
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorMultplier"
+						Texture = NULL
+						Vector = 1.000000 1.000000 1.000000 1.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "shaderTexture"
+						Texture = .\assets\fx\wood\wood_splinter.dds
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		MaxBurstCount = 25
+		MaxDuration =  3.000000
+		MaxEndRotationRate =  5.000000
+		MaxEndSize = 1.100000 1.100000 1.100000
+		MaxEndVelocity = 75.000000 -20.000000 -50.000000
+		MaxSpawnRate =  2.000000
+		MaxStartRotationRate =  15.000000
+		MaxStartSize = 1.100000 1.100000 1.100000
+		MaxStartVelocity = 75.000000 50.000000 -20.000000
+		MinBurstCount = 20
+		MinDuration =  3.000000
+		MinEndRotationRate =  0.000000
+		MinEndSize = 0.500000 0.500000 0.500000
+		MinEndVelocity = 75.000000 -20.000000 -50.000000
+		MinSpawnRate =  1.000000
+		MinStartRotationRate =  2.000000
+		MinStartSize = 0.500000 0.500000 0.500000
+		MinStartVelocity = -75.000000 -20.000000 -50.000000
+		ParticleBillboardType = FaceCamera
+		StartColor = 1.000000 1.000000 1.000000 0.500000
+		StartDelay =  0.000000
+		TotalDuration =  0.500000
+		RenderOrderBias =  0.000000
+		VelocityCurve = 0
+	}
+	kbParticleComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		Name = ""
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 0.000000 0.000000 0.000000
+		Scale = 0.200000 0.200000 0.200000
+		AlphaOverLife = 0
+		ColorOverLife = 0
+		EndColor = 0.000000 0.000000 0.000000 0.000000
+		Gravity = 0.000000 -0.500000 0.000000
+		LockVelocity = 1
+		MaterialList = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Shader = .\assets\shaders\fx\particle_blendadd.kbshader
+				ShaderParams = 2
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "blendAddProps"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "shaderTexture"
+						Texture = .\assets\fx\smoke\smokeatlas_1.tga
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		MaxBurstCount = 75
+		MaxDuration =  0.100000
+		MaxEndRotationRate =  0.500000
+		MaxEndSize = 15.500000 15.500000 3.500000
+		MaxEndVelocity = 0.500000 -7.000000 0.500000
+		MaxSpawnRate =  2.000000
+		MaxStartRotationRate =  5.000000
+		MaxStartSize = 0.100000 0.100000 0.100000
+		MaxStartVelocity = 23.000000 23.000000 -10.000000
+		MinBurstCount = 50
+		MinDuration =  0.070000
+		MinEndRotationRate =  0.000000
+		MinEndSize = 13.900000 13.900000 13.900000
+		MinEndVelocity = -0.500000 -2.000000 -0.500000
+		MinSpawnRate =  1.000000
+		MinStartRotationRate =  0.200000
+		MinStartSize = 0.000000 0.000000 0.000000
+		MinStartVelocity = -18.000000 -18.000000 -5.000000
+		ParticleBillboardType = FaceCamera
+		StartColor = 0.100000 0.100000 0.100000 1.000000
+		StartDelay =  0.000000
+		TotalDuration =  0.100000
+		RenderOrderBias =  0.000000
+		VelocityCurve = 0
+	}
+}
+}
+Fire 4
+kbPrefab 1 {
+	Smoke_0
+kbGameEntity 3435494227 1100605259 3092233134 3410369480 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Smoke_0"
+		Orientation = 0.000000 0.707000 0.000000 0.707000
+		Position = 58.785175 26.030029 -60.218063
+		Scale = 25.000000 15.000000 5.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		Materials = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Shader = .\assets\shaders\fx\basicsmoke.kbshader
+				ShaderParams = 11
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "noiseScroll"
+						Texture = NULL
+						Vector = 0.100000 0.200000 0.200000 4.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "startSmokeColor"
+						Texture = NULL
+						Vector = 0.250000 0.250000 0.250000 3.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "endSmokeColor"
+						Texture = NULL
+						Vector = 0.100000 0.100000 0.100000 1.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "distortion_1_2"
+						Texture = NULL
+						Vector = 0.100000 0.100000 0.100000 0.100000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "distortion_3_AlphaScroll"
+						Texture = NULL
+						Vector = 0.100000 0.250000 0.100000 0.500000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "smokeDistortion"
+						Texture = NULL
+						Vector = 0.100000 0.100000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "additionalData"
+						Texture = NULL
+						Vector = 1.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "smokeNoiseMap"
+						Texture = .\assets\fx\noise\smokenoise1.dds
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "noiseMap1"
+						Texture = .\assets\fx\noise\smokenoise1.dds
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "noiseMap2"
+						Texture = .\assets\fx\noise\smokenoise2.png
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "noiseMap3"
+						Texture = .\assets\fx\noise\smokenoise3.png
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		RenderPass = Post-LightingPass
+		RenderOrderBias =  0.000000
+		Model = ..\..\kbengine\assets\models\unitquad.ms3d
+		ShaderOverride = 0
+			
+	}
+}
+}
+kbPrefab 1 {
+	Fire_0
+kbGameEntity 931791909 1148045401 1211467707 767381942 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Fire_0"
+		Orientation = 0.000000 0.707000 0.000000 0.707000
+		Position = 58.785179 26.030029 -60.218063
+		Scale = 20.000000 20.000000 20.000000
+	}
+	kbStaticModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		Materials = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Shader = .\assets\shaders\fx\basicfire.kbshader
+				ShaderParams = 10
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "fireNoiseMap"
+						Texture = .\assets\fx\noise\firenoise1.dds
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "noiseMap1"
+						Texture = .\assets\fx\noise\noise1.png
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "noiseMap2"
+						Texture = .\assets\fx\noise\noise2.png
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "noiseMap3"
+						Texture = .\assets\fx\noise\noise3.png
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "noiseScroll"
+						Texture = NULL
+						Vector = 1.000000 1.000000 1.000000 4.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "noiseDistortion_1_2"
+						Texture = NULL
+						Vector = 0.500000 1.000000 0.400000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "noiseDistortion_3_colorDistortion"
+						Texture = NULL
+						Vector = 0.100000 0.200000 1.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "startFireColor"
+						Texture = NULL
+						Vector = 1.000000 0.878000 0.450000 3.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "endFireColor"
+						Texture = NULL
+						Vector = 0.807000 0.180000 0.094000 1.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "additionalData"
+						Texture = NULL
+						Vector = 1.000000 1.000000 0.000000 0.000000
+					}
+			}
+		RenderPass = Post-LightingPass
+		RenderOrderBias =  -5.000000
+		Model = ..\..\kbengine\assets\models\unitquad.ms3d
+		ShaderOverride = 0
+			
+	}
+}
+}
+kbPrefab 1 {
+	Embers_0
+kbGameEntity 1199553285 1083518041 1518451114 1990211042 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Ember_0"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 58.785179 26.030029 -60.218063
+		Scale = 1.000000 1.000000 1.000000
+	}
+	kbParticleComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		Name = ""
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 0.000000 0.000000 0.000000
+		Scale = 1.000000 1.000000 1.000000
+		AlphaOverLife = 0
+		ColorOverLife = 0
+		EndColor = 0.000000 0.000000 0.000000 0.000000
+		Gravity = 0.000000 0.000000 0.000000
+		LockVelocity = 0
+		MaterialList = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Shader = .\assets\shaders\fx\emberparticle.kbshader
+				ShaderParams = 1
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "shaderTexture"
+						Texture = .\assets\fx\ember.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		MaxBurstCount = 0
+		MaxDuration =  3.000000
+		MaxEndRotationRate =  0.000000
+		MaxEndSize = 0.300000 0.300000 0.300000
+		MaxEndVelocity = 0.000000 8.000000 0.000000
+		MaxSpawnRate =  2.000000
+		MaxStartRotationRate =  0.000000
+		MaxStartSize = 0.500000 0.500000 0.500000
+		MaxStartVelocity = 0.000000 35.000000 0.000000
+		MinBurstCount = 0
+		MinDuration =  2.300000
+		MinEndRotationRate =  0.000000
+		MinEndSize = 0.200000 0.200000 0.200000
+		MinEndVelocity = 0.000000 5.000000 0.000000
+		MinSpawnRate =  1.265000
+		MinStartRotationRate =  0.000000
+		MinStartSize = 0.420000 0.450000 0.420000
+		MinStartVelocity = 0.000000 25.000000 0.000000
+		ParticleBillboardType = FaceCamera
+		StartColor = 1.000000 1.000000 1.000000 0.000000
+		StartDelay =  0.000000
+		TotalDuration =  -1.000000
+		RenderOrderBias =  0.000000
+		VelocityCurve = 0
+	}
+}
+}
+kbPrefab 1 {
+	FireLight_0
+kbGameEntity 2392815626 1128253038 2191027591 643962852 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Entity_30"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = -111.734367 17.850632 -177.551010
+		Scale = 1.000000 1.000000 1.000000
+	}
+	kbPointLightComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadows = 0
+		Color = 2.500000 1.500000 0.500000 1.000000
+		Materials = 0
+		LightRadius =  124.000000
+	}
+}
+}
+Explosions 1
+kbPrefab 1 {
+	FireExplosion_1
+kbGameEntity 1529798310 1082595041 1391599796 3574967169 {
+	kbTransformComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		Name = "Explosion"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = -76.673889 54.670017 19.859879
+		Scale = 1.000000 1.000000 1.000000
+	}
+	kbParticleComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		Name = ""
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 0.000000 0.000000 0.000000
+		Scale = 1.000000 1.000000 1.000000
+		AlphaOverLife = 2
+			kbAnimEvent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				EventName = ""
+				EventTime =  0.000000
+				EventValue =  1.000000
+			}
+			kbAnimEvent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				EventName = ""
+				EventTime =  1.000000
+				EventValue =  0.000000
+			}
+		ColorOverLife = 2
+			kbVectorAnimEvent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				EventName = ""
+				EventTime =  0.000000
+				EventValue = 1.000000 0.740000 0.511000
+			}
+			kbVectorAnimEvent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				EventName = ""
+				EventTime =  0.400000
+				EventValue = 0.000000 0.000000 0.000000
+			}
+		EndColor = 1.000000 1.000000 1.000000 1.000000
+		Gravity = 0.000000 0.000000 0.000000
+		LockVelocity = 0
+		MaterialList = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Shader = .\assets\shaders\fx\particle_blendadd.kbshader
+				ShaderParams = 2
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorMultplier"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "shaderTexture"
+						Texture = .\assets\fx\smoke\smokeatlas_1.dds
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		MaxBurstCount = 25
+		MaxDuration =  1.240000
+		MaxEndRotationRate =  0.050000
+		MaxEndSize = 100.000000 100.000000 100.000000
+		MaxEndVelocity = 1.000000 1.000000 1.000000
+		MaxSpawnRate =  0.000000
+		MaxStartRotationRate =  0.500000
+		MaxStartSize = 0.000000 0.000000 0.000000
+		MaxStartVelocity = 75.000000 75.000000 75.000000
+		MinBurstCount = 15
+		MinDuration =  0.500000
+		MinEndRotationRate =  -0.050000
+		MinEndSize = 80.000000 80.000000 80.000000
+		MinEndVelocity = -1.000000 -1.000000 -1.000000
+		MinSpawnRate =  0.000000
+		MinStartRotationRate =  -0.500000
+		MinStartSize = 0.000000 0.000000 0.000000
+		MinStartVelocity = -75.000000 -75.000000 -75.000000
+		ParticleBillboardType = FaceCamera
+		StartColor = 1.000000 1.000000 1.000000 1.000000
+		StartDelay =  0.000000
+		TotalDuration =  10.000000
+		RenderOrderBias =  0.000000
+		VelocityCurve = 3
+			kbAnimEvent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				EventName = ""
+				EventTime =  0.000000
+				EventValue =  1.000000
+			}
+			kbAnimEvent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				EventName = ""
+				EventTime =  0.050000
+				EventValue =  0.050000
+			}
+			kbAnimEvent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				EventName = ""
+				EventTime =  1.000000
+				EventValue =  0.000000
+			}
+	}
+	kbParticleComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		Name = "Sparks"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 0.000000 0.000000 0.000000
+		Scale = 1.000000 1.000000 1.000000
+		AlphaOverLife = 2
+			kbAnimEvent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				EventName = ""
+				EventTime =  0.000000
+				EventValue =  1.000000
+			}
+			kbAnimEvent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				EventName = ""
+				EventTime =  1.000000
+				EventValue =  0.510000
+			}
+		ColorOverLife = 3
+			kbVectorAnimEvent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				EventName = ""
+				EventTime =  0.000000
+				EventValue = 1.000000 1.000000 1.000000
+			}
+			kbVectorAnimEvent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				EventName = ""
+				EventTime =  0.700000
+				EventValue = 1.000000 1.000000 1.000000
+			}
+			kbVectorAnimEvent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				EventName = ""
+				EventTime =  1.000000
+				EventValue = 0.000000 0.000000 0.000000
+			}
+		EndColor = 0.000000 0.000000 0.000000 1.000000
+		Gravity = 0.000000 -120.000000 0.000000
+		LockVelocity = 0
+		MaterialList = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Shader = .\assets\shaders\fx\particle_blendadd.kbshader
+				ShaderParams = 2
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorMultplier"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "shaderTexture"
+						Texture = .\assets\fx\fire\emberatlas_1.dds
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		MaxBurstCount = 40
+		MaxDuration =  1.330000
+		MaxEndRotationRate =  5.000000
+		MaxEndSize = 2.000000 2.000000 2.000000
+		MaxEndVelocity = 20.000000 20.000000 20.000000
+		MaxSpawnRate =  0.000000
+		MaxStartRotationRate =  5.000000
+		MaxStartSize = 0.000000 0.000000 0.000000
+		MaxStartVelocity = 50.000000 50.000000 50.000000
+		MinBurstCount = 35
+		MinDuration =  0.500000
+		MinEndRotationRate =  -5.000000
+		MinEndSize = 2.000000 2.000000 2.000000
+		MinEndVelocity = -20.000000 -20.000000 -20.000000
+		MinSpawnRate =  0.000000
+		MinStartRotationRate =  -4.000000
+		MinStartSize = 0.000000 0.000000 0.000000
+		MinStartVelocity = -50.000000 -50.000000 -50.000000
+		ParticleBillboardType = FaceCamera
+		StartColor = 1.000000 1.000000 1.000000 1.000000
+		StartDelay =  0.000000
+		TotalDuration =  10.000000
+		RenderOrderBias =  -1.000000
+		VelocityCurve = 3
+			kbAnimEvent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				EventName = ""
+				EventTime =  0.000000
+				EventValue =  1.000000
+			}
+			kbAnimEvent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				EventName = ""
+				EventTime =  1.000000
+				EventValue =  1.000000
+			}
+			kbAnimEvent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				EventName = ""
+				EventTime =  1.000000
+				EventValue =  1.000000
+			}
+	}
+	kbParticleComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		Name = "Lingering Smoke"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 0.000000 0.000000 0.000000
+		Scale = 1.000000 1.000000 1.000000
+		AlphaOverLife = 3
+			kbAnimEvent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				EventName = ""
+				EventTime =  0.000000
+				EventValue =  0.000000
+			}
+			kbAnimEvent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				EventName = ""
+				EventTime =  0.250000
+				EventValue =  0.490000
+			}
+			kbAnimEvent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				EventName = ""
+				EventTime =  1.000000
+				EventValue =  0.000000
+			}
+		ColorOverLife = 0
+		EndColor = 0.080000 0.080000 0.080000 0.000000
+		Gravity = 0.000000 0.000000 0.000000
+		LockVelocity = 0
+		MaterialList = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Shader = .\assets\shaders\fx\particle_blendadd.kbshader
+				ShaderParams = 2
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorMultplier"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "shaderTexture"
+						Texture = .\assets\fx\smoke\smokeatlas_1.dds
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		MaxBurstCount = 15
+		MaxDuration =  6.000000
+		MaxEndRotationRate =  0.050000
+		MaxEndSize = 50.000000 50.000000 50.000000
+		MaxEndVelocity = 0.000000 0.000000 0.000000
+		MaxSpawnRate =  0.000000
+		MaxStartRotationRate =  0.200000
+		MaxStartSize = 30.000000 30.000000 30.000000
+		MaxStartVelocity = 15.000000 15.000000 15.000000
+		MinBurstCount = 5
+		MinDuration =  3.000000
+		MinEndRotationRate =  -0.050000
+		MinEndSize = 40.000000 40.000000 40.000000
+		MinEndVelocity = 0.000000 0.000000 0.000000
+		MinSpawnRate =  0.000000
+		MinStartRotationRate =  -0.200000
+		MinStartSize = 20.000000 20.000000 20.000000
+		MinStartVelocity = -15.000000 -15.000000 -15.000000
+		ParticleBillboardType = FaceCamera
+		StartColor = 0.080000 0.080000 0.080000 0.010000
+		StartDelay =  0.000000
+		TotalDuration =  10.000000
+		RenderOrderBias =  1.000000
+		VelocityCurve = 3
+			kbAnimEvent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				EventName = ""
+				EventTime =  0.000000
+				EventValue =  1.000000
+			}
+			kbAnimEvent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				EventName = ""
+				EventTime =  0.230000
+				EventValue =  0.100000
+			}
+			kbAnimEvent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				EventName = ""
+				EventTime =  1.000000
+				EventValue =  0.000000
+			}
+	}
+}
+}

@@ -354,7 +354,6 @@ void EtherSkelModelComponent::Update_Internal( const float DeltaTime ) {
 		}
 	}
 
-	g_pRenderer->UpdateRenderObject(m_RenderObject);
 	Super::Update_Internal( DeltaTime );
 }
 
@@ -572,7 +571,7 @@ void EtherDestructibleComponent::Update_Internal( const float deltaTime ) {
 	if ( m_bIsSimulating ) {
 		const float t = g_GlobalTimer.TimeElapsedSeconds() - m_SimStartTime;
 
-		if ( t > m_MaxLifeTime ) {
+		if ( t > 9999999 ) {
 			GetOwner()->DisableAllComponents();
 			m_bIsSimulating = false;
 		} else {

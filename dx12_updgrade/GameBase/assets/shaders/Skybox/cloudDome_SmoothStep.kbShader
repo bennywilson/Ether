@@ -1,0 +1,140 @@
+//==============================================================================
+// cloudDome_SmoothStep.kbShader
+//
+// 2019-2025 kbEngine 2.0
+//==============================================================================
+cbuffer matrixBuffer {
+	matrix				mvpMatrix;
+	matrix				modelMatrix;
+	matrix				viewProjection;
+	float4				cameraPosition;
+	float4				time;
+	float4				cloudTileOffset;
+	float4				cloudScrollRate_AlphaStep;
+	float4				cloudColor;
+	float4				cloudEmissive;
+	float4				lightShaftsDir;
+	float4				lightShaftsColor;
+	float4				sunDiscColor;
+	float4				sunDiscParams;		// x: Dot min
+};
+
+//-------------------------------------
+struct vertexInput {
+	float4 position		: POSITION;
+	float2 uv			: TEXCOORD0;
+	float4 color		: COLOR;
+	float4 normal		: NORMAL;
+	float4 tangent		: TANGENT;
+};
+
+//-------------------------------------
+struct pixelInput {
+	float4 position		: SV_POSITION;
+	float2 uv			: TEXCOORD0;
+	float4 color		: COLOR;
+	float4 position2	: TEXCOORD1;
+	float3 normal		: TEXCOORD2;
+	float3 worldPos		: TEXCOORD3;
+	float4 TBN0			: TEXCOORD4;
+	float4 TBN1			: TEXCOORD5;
+	float4 TBN2			: TEXCOORD6;
+};
+
+kbShaderState {
+	cullMode			CullMode_None
+	srcblend			Blend_One
+	dstBlend			Blend_InvSrcAlpha
+	blendOp				BlendOp_Add
+	colorwriteenable	colorwriteenable_rgb
+}
+
+//-------------------------------------
+struct PS_OUTPUT {
+	float4 Color		: SV_TARGET0;
+	float2 Depth		: SV_TARGET1;
+};
+
+/**
+ *	vertexShader
+ */
+pixelInput vertexShader( vertexInput input ) {
+	pixelInput output = (pixelInput)(0);
+	input.position.y -= 0.2f;
+	output.position = mul( input.position, modelMatrix );
+	output.worldPos.xyz = cameraPosition.xyz + output.position.xyz * 999;
+	output.position += float4(cameraPosition.xyz, 0);
+	output.position = mul( output.position, viewProjection);
+	output.position.z = output.position.w - 0.0001f;
+
+	output.uv = input.uv;
+	output.color = input.color;
+	output.position2 = output.position;
+	output.normal.xyz = mul( ( input.normal.xyz * 2.0f ) - 1.0f, (float3x3)modelMatrix );
+
+	const float3 worldTangent = normalize( mul( (input.tangent.xyz * 2.0f ) - 1.0f, (float3x3)modelMatrix ) );
+	const float3 worldNormal = normalize( mul( ( input.normal.xyz * 2.0f ) - 1.0f, (float3x3)modelMatrix ) );
+	const float3 worldBitangent = normalize( mul( ( input.color.xyz * 2.0f ) - 1.0f, (float3x3)modelMatrix ) );//normalize( cross( worldNormal, worldTangent ) ) * ( input.tangent.w * 2.0f - 1.0f );
+
+	output.TBN0 = float4(worldTangent.x, worldBitangent.x, worldNormal.x, 0 );
+	output.TBN1 = float4(worldTangent.y, worldBitangent.y, worldNormal.y, 0 );
+	output.TBN2 = float4(worldTangent.z, worldBitangent.z, worldNormal.z, 0 );
+
+	return output;
+}
+
+
+Texture2D diffuseTexture;
+SamplerState LinearSampler;
+
+/**
+ *	pixelShader
+ */
+PS_OUTPUT pixelShader( pixelInput	input ) {
+ 	PS_OUTPUT output = (PS_OUTPUT) 0;
+
+	float2 uv = input.uv * float2( cloudTileOffset.x, 1 ) + cloudTileOffset.zw;
+	float4 outColor = diffuseTexture.Sample( LinearSampler, uv + float2( time.x * cloudScrollRate_AlphaStep.x, 0.0f ) );
+	const float2 uv2 = input.uv * float2( cloudTileOffset.y, 1 ) + cloudTileOffset.zw;
+	float4 outColor2 = diffuseTexture.Sample( LinearSampler, uv2 + float2( time.x * cloudScrollRate_AlphaStep.y, 0.0f ) );
+	outColor = lerp( outColor, outColor2, 0.4f );
+	outColor.a = smoothstep( cloudScrollRate_AlphaStep.z, cloudScrollRate_AlphaStep.w, outColor.a );
+
+	const float edgeFade = 1.0f - smoothstep( 0.25f, 0.0f, input.uv.y );
+	outColor.a *= edgeFade * cloudColor.a;
+
+	float3 lightDir = 2000000.0f * lightShaftsDir.xyz;//normalize( float3( -0.958466f, 0.268476f, 0.096246f ) );
+	lightDir -= input.worldPos;
+	lightDir = normalize( lightDir );
+	
+	float3 normal = normalize( ( outColor.xyz * 2.0f ) - 1.0f );
+	normal.xy *= -1.0f;
+	float3 worldNormal;
+	worldNormal.x = dot( input.TBN0.xyz, normal );
+	worldNormal.y = dot( input.TBN1.xyz, normal );
+	worldNormal.z = dot( input.TBN2.xyz, normal );
+	worldNormal = normalize( worldNormal );
+
+	float diffuse = saturate( abs( 1.0 * dot( worldNormal, lightDir ) ) ) * 0.8f + 0.2f;
+	output.Color.xyz = diffuse * outColor.a * cloudColor.xyz + cloudEmissive.xyz * outColor.a;
+	output.Color.w = outColor.a;
+
+	float3 fromCam = normalize( input.worldPos - cameraPosition.xyz );
+	float3 sunDir = lightShaftsDir.xyz;
+	float sunIntensity = saturate( ( dot( fromCam, sunDir ) - (sunDiscParams.x) ) / (1.0f - sunDiscParams.x) );
+	sunIntensity = pow( sunIntensity, 3.f ) * 1.5f;
+
+	
+	if ( outColor.w < 0.45f ) {
+		output.Depth.r = 0;
+		output.Depth.g = 0.0f;
+		output.Color.xyz += sunIntensity * lightShaftsColor.xyz * sunDiscColor.xyz;
+
+	} else {
+		output.Color.xyz += sunIntensity * lightShaftsColor.xyz * sunDiscColor.xyz;
+		output.Depth.r = input.position2.z / input.position2.w;// / input.position2.y;
+		output.Depth.g = 1;
+	}
+
+	return output;
+}

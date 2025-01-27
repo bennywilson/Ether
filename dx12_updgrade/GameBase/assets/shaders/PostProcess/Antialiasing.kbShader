@@ -1,0 +1,119 @@
+//===================================================================================================
+// Antialiasing.kbShader
+//
+//
+// 2019 kbEngine 2.0
+//===================================================================================================
+cbuffer matrixBuffer {
+	matrix				inverseViewProjection;
+	float4				cameraPosition;
+	float4				fog_Start_End_Clamp;
+	float4				fogColor;
+};
+
+kbShaderState {
+	srcBlend Blend_One
+	dstBlend Blend_Zero
+	colorwriteenable colorwriteenable_rgb
+}
+
+//-------------------------------------
+struct vertexInput {
+	float4 position			: POSITION;
+	float2 uv				: TEXCOORD0;
+};
+
+//-------------------------------------
+struct pixelInput {
+	float4 position			: SV_POSITION;
+	float2 uv				: TEXCOORD0;
+	float4 position2		: TEXCOORD1;
+};
+
+/**
+ *	vertexShader
+ */
+pixelInput vertexShader( vertexInput input ) {
+	pixelInput output = (pixelInput)(0);
+
+	output.position = input.position;
+	output.uv = input.uv;
+	output.position2 = input.position;
+
+	return output;
+}
+
+/**
+ *	pixelShader
+ */
+SamplerState DiffuseSamplerState;
+Texture2D colorTexture(sceneColor)				: register(t0);
+
+SamplerState NormalSamplerState;
+Texture2D normalTexture(normalBuffer)			: register(t1);
+
+Texture2D specularTexture(specularBuffer)		: register(t2);
+
+SamplerState DepthSamplerState;
+Texture2D depthTexture(depthBuffer)				: register(t3);
+
+SamplerState ShadowMapSamplerState;
+Texture2D ShadowMap(shadowBuffer)				: register(t4);
+
+Texture2D colorBuf(colorBuffer)				: register(t5);
+
+Texture2D NoiseTex(noise);
+float4 pixelShader( pixelInput input ) : SV_TARGET {
+
+	float multiplier = 1.5f;
+	float2 pixelSize = float2( 1.0f / 1920.0f, 1.0f / 1080.0f ) * multiplier;
+	float depth1 = depthTexture.Sample( DepthSamplerState, input.uv + float2( -pixelSize.x, pixelSize.y ) ).r;
+	float depth2 = depthTexture.Sample( DepthSamplerState, input.uv + float2( pixelSize.x, pixelSize.y ) ).r;
+	float depth3 = depthTexture.Sample( DepthSamplerState, input.uv + float2( pixelSize.x, -pixelSize.y ) ).r;
+	float depth4 = depthTexture.Sample( DepthSamplerState, input.uv + float2( -pixelSize.x, -pixelSize.y ) ).r;
+
+	float4 sceneColor = colorTexture.Sample( DiffuseSamplerState, input.uv );
+		float4 sceneColor1 = colorTexture.Sample( DiffuseSamplerState, input.uv + float2( -pixelSize.x, pixelSize.y ) ).xyzw;
+		float4 sceneColor2 = colorTexture.Sample( DiffuseSamplerState, input.uv + float2( pixelSize.x, pixelSize.y ) ).xyzw;
+		float4 sceneColor3 = colorTexture.Sample( DiffuseSamplerState, input.uv + float2( pixelSize.x, -pixelSize.y ) ).xyzw;
+		float4 sceneColor4 = colorTexture.Sample( DiffuseSamplerState, input.uv + float2( -pixelSize.x, -pixelSize.y ) ).xyzw;
+
+	
+		float4 sceneColor5 = colorTexture.Sample( DiffuseSamplerState, input.uv + float2( -pixelSize.x, 0 ) ).xyzw;
+		float4 sceneColor6 = colorTexture.Sample( DiffuseSamplerState, input.uv + float2( pixelSize.x, 0) ).xyzw;
+		float4 sceneColor7 = colorTexture.Sample( DiffuseSamplerState, input.uv + float2( 0, -pixelSize.y ) ).xyzw;
+		float4 sceneColor8 = colorTexture.Sample( DiffuseSamplerState, input.uv + float2( 0, -pixelSize.y ) ).xyzw;
+
+	float a1 = colorBuf.Sample( DiffuseSamplerState, input.uv + float2( -pixelSize.x, pixelSize.y ) ).w;
+	float a2 = colorBuf.Sample( DiffuseSamplerState, input.uv + float2( pixelSize.x, pixelSize.y ) ).w;
+	float a3 = colorBuf.Sample( DiffuseSamplerState, input.uv + float2( pixelSize.x, -pixelSize.y ) ).w;
+	float a4 = colorBuf.Sample( DiffuseSamplerState, input.uv + float2( -pixelSize.x, -pixelSize.y ) ).w;
+
+	float a5 = colorBuf.Sample( DiffuseSamplerState, input.uv + float2( -pixelSize.x,0 ) ).w;
+	float a6 = colorBuf.Sample( DiffuseSamplerState, input.uv + float2( pixelSize.x, 0 ) ).w;
+	float a7 = colorBuf.Sample( DiffuseSamplerState, input.uv + float2( 0, -pixelSize.y ) ).w;
+	float a8 = colorBuf.Sample( DiffuseSamplerState, input.uv + float2( 0, -pixelSize.y ) ).w;
+
+
+	float zDepth = 0.03f;
+	if (
+			a1 < 0 ||
+			a2 < 0 ||
+			a3 < 0 ||
+			a4 < 0 ||
+			a5 < 0 ||
+			a6 < 0 ||
+			a7 < 0 ||
+			a8 < 0 ) {
+		
+		pixelSize = float2( 1.0f / 1920.0f, 1.0f / 1080.0f ) * multiplier;
+		float3 sceneColor1 = colorTexture.Sample( DiffuseSamplerState, input.uv + float2( -pixelSize.x, pixelSize.y ) ).xyz;
+		float3 sceneColor2 = colorTexture.Sample( DiffuseSamplerState, input.uv + float2( pixelSize.x, pixelSize.y ) ).xyz;
+		float3 sceneColor3 = colorTexture.Sample( DiffuseSamplerState, input.uv + float2( pixelSize.x, -pixelSize.y ) ).xyz;
+		float3 sceneColor4 = colorTexture.Sample( DiffuseSamplerState, input.uv + float2( -pixelSize.x, -pixelSize.y ) ).xyz;
+		sceneColor.xyz = ( sceneColor.xyz + sceneColor1.xyz + sceneColor2.xyz + sceneColor3.xyz + sceneColor4.xyz + sceneColor5.xyz + sceneColor6.xyz + sceneColor7.xyz + sceneColor8.xyz ) / 9;
+	}
+	
+
+	return sceneColor;
+}

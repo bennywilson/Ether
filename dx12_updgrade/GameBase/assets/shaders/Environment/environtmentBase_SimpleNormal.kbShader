@@ -1,0 +1,109 @@
+//==============================================================================
+// environmentBase_SimpleNormal.kbShader
+//
+// 2019-2025 kbEngine 2.0
+//==============================================================================
+cbuffer matrixBuffer {
+	matrix modelMatrix;
+	matrix mvpMatrix;
+	float4 cameraPosition;
+	float4 colorMult;
+	float4 specMult;
+};
+
+kbShaderState {
+	cullMode CullMode_BackFaces
+}
+
+//-------------------------------------
+struct vertexInput {
+	float4 position		: POSITION;
+	float2 uv			: TEXCOORD0;
+	float4 color		: COLOR;
+	float4 normal		: NORMAL;
+	float4 tangent		: TANGENT;
+};
+
+//-------------------------------------
+struct pixelInput {
+	float4 position		: SV_POSITION;
+	float2 uv			: TEXCOORD0;
+	float4 color		: COLOR;
+	float2 position2	: TEXCOORD1;
+	float4 TBN0			: TEXCOORD2;
+	float4 TBN1			: TEXCOORD3;
+	float4 TBN2			: TEXCOORD4;
+};
+
+//-------------------------------------
+struct PS_OUTPUT {
+	float4 Color		: SV_TARGET0;	// Albedo.rgb, Emissive.z
+	float4 Normal		: SV_TARGET1;	// Normal.rgb, Toon or environment
+	float4 Specular		: SV_TARGET2;	// Specular, Spec Power, Emissive.x, Emissive.y
+	float2 Depth		: SV_TARGET3;
+};
+
+
+/**
+ *	vertexShader
+ */
+pixelInput vertexShader( vertexInput input ) {
+	pixelInput output = (pixelInput)(0);
+
+	output.position = mul( input.position, mvpMatrix );
+	output.uv = input.uv;
+	output.color = input.color;
+	output.position2 = output.position.zw;
+
+	const float3 worldTangent = normalize( mul( (input.tangent.xyz * 2.0f ) - 1.0f, (float3x3)modelMatrix ) );
+	const float3 worldNormal = normalize( mul( ( input.normal.xyz * 2.0f ) - 1.0f, (float3x3)modelMatrix ) );
+	const float3 worldBitangent = normalize( cross( worldNormal, worldTangent ) ) * ( input.tangent.w * 2.0f - 1.0f );
+
+	output.TBN0.xyz = worldTangent;//float4(worldTangent.x, worldBitangent.x, worldNormal.x, 0 );
+	output.TBN1.xyz = worldBitangent;//float4(worldTangent.y, worldBitangent.y, worldNormal.y, 0 );
+	output.TBN2.xyz = worldNormal;//float4(worldTangent.z, worldBitangent.z, worldNormal.z, 0 );
+
+	return output;
+}
+
+/**
+ *	pixelShader
+ */
+Texture2D diffuse(white)			: register(t0);
+SamplerState diffuseSampler;
+
+Texture2D normal(defaultNormal)		: register(t1);
+SamplerState normalSampler;
+
+Texture2D propertyMap(white)		: register(t2);
+
+Texture2D emissiveMap(black)		: register(t3);
+
+
+ PS_OUTPUT pixelShader( pixelInput	input, bool IsFrontFace	: SV_IsFrontFace ) {
+ 	PS_OUTPUT output = (PS_OUTPUT) 0;
+
+	const float4 normalMap = normal.Sample( normalSampler, input.uv );
+	const float4 propertyMapValues = propertyMap.Sample( diffuseSampler, input.uv );
+	const float4 emissive = emissiveMap.Sample( diffuseSampler, input.uv );
+
+	output.Color = diffuse.Sample( diffuseSampler, input.uv );
+	output.Color.xyz *= colorMult.xyz;
+	output.Color.w = emissive.z;
+
+	output.Depth.r = input.position2.x / input.position2.y;
+
+
+	output.Specular = float4( propertyMapValues.x * specMult.x, max( 1.0f, propertyMapValues.y * 450.f ), emissive.x, emissive.y );
+	
+	float3x3 TBN = float3x3( normalize( input.TBN0.xyz ), normalize( input.TBN1.xyz ), normalize( input.TBN2.xyz ) );
+
+	/*if ( IsFrontFace == 0 ) {
+		TBN *= -1.0f;
+	}*/
+
+	output.Normal.xyz = normalize( input.TBN2.xyz );
+	output.Normal.w = 0.5f;//normalMap.w;
+	return output;
+}
+ 

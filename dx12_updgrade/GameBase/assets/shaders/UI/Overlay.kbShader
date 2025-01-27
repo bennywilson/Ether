@@ -1,0 +1,56 @@
+//===================================================================================================
+// Overlay.kbShader
+//
+//
+// 2019 kbEngine 2.0
+//===================================================================================================
+cbuffer matrixBuffer {
+	matrix				inverseViewProjection;
+	float4				cameraPosition;
+	float4				fog_Start_End_Clamp;
+	float4				fogColor;
+};
+
+kbShaderState {
+	srcBlend			Blend_SrcAlpha
+	dstBlend			Blend_InvSrcAlpha
+	colorwriteenable	colorwriteenable_rgb
+}
+
+//-------------------------------------
+struct vertexInput {
+	float4 position			: POSITION;
+	float2 uv				: TEXCOORD0;
+};
+
+//-------------------------------------
+struct pixelInput {
+	float4 position			: SV_POSITION;
+	float2 uv				: TEXCOORD0;
+	float4 position2		: TEXCOORD1;
+};
+
+/**
+ *	vertexShader
+ */
+pixelInput vertexShader( vertexInput input ) {
+	pixelInput output = (pixelInput)(0);
+
+	output.position = input.position;
+	output.uv = input.uv;
+	output.position2 = input.position;
+
+	return output;
+}
+
+/**
+ *	pixelShader
+ */
+SamplerState DiffuseSamplerState;
+Texture2D OverlayTexture(white);
+
+float4 pixelShader( pixelInput input ) : SV_TARGET {
+	float4 outColor = OverlayTexture.Sample( DiffuseSamplerState, input.uv ) * 0.65f;
+	return outColor;
+}
+
