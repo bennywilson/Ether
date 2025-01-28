@@ -60,8 +60,8 @@ void renderer_dx12::initialize(HWND hwnd, const uint32_t frame_width, const uint
 
 	UINT dxgiFactoryFlags = 0;
 
-		m_view_port = CD3DX12_VIEWPORT(0.f, 0.f, (float)frame_width, (float)frame_height);
-		m_scissor_rect = CD3DX12_RECT(0, 0, frame_width, frame_height);
+	m_view_port = CD3DX12_VIEWPORT(0.f, 0.f, (float)frame_width, (float)frame_height);
+	m_scissor_rect = CD3DX12_RECT(0, 0, frame_width, frame_height);
 
 #if defined(_DEBUG)
 	// Enable the debug layer (requires the Graphics Tools "optional feature").
@@ -141,7 +141,10 @@ void renderer_dx12::initialize(HWND hwnd, const uint32_t frame_width, const uint
 		rtv_handle.Offset(1, m_rtv_descriptor_size);
 	}
 
+	// Command List
 	check_result(m_device->CreateCommandAllocator(D3D12_COMMAND_LIST_TYPE_DIRECT, IID_PPV_ARGS(&m_command_allocator)));
+	check_result(m_device->CreateCommandList(0, D3D12_COMMAND_LIST_TYPE_DIRECT, m_command_allocator.Get(), nullptr, IID_PPV_ARGS(&m_command_list)));
+	m_command_list->Close();
 
 	// Create an empty root signature.
 	CD3DX12_ROOT_SIGNATURE_DESC rootSignatureDesc = {};
@@ -152,13 +155,6 @@ void renderer_dx12::initialize(HWND hwnd, const uint32_t frame_width, const uint
 	check_result(D3D12SerializeRootSignature(&rootSignatureDesc, D3D_ROOT_SIGNATURE_VERSION_1, &signature, &error));
 	check_result(m_device->CreateRootSignature(0, signature->GetBufferPointer(), signature->GetBufferSize(), IID_PPV_ARGS(&m_root_signature)));
 
-
-	// Command List
-	auto pipe = (pipeline_dx12*)load_pipeline("test_shader", L"C:/projects/Ether/dx12_updgrade/GameBase/assets/shaders/test_shader.hlsl");
-
-	check_result(m_device->CreateCommandList(0, D3D12_COMMAND_LIST_TYPE_DIRECT, m_command_allocator.Get(), pipe->m_pipeline_state.Get(), IID_PPV_ARGS(&m_command_list)));
-	m_command_list->Close();
-
 	// Fences	
 	check_result(m_device->CreateFence(0, D3D12_FENCE_FLAG_NONE, IID_PPV_ARGS(&m_fence)));
 	m_fence_value = 1;
@@ -168,6 +164,8 @@ void renderer_dx12::initialize(HWND hwnd, const uint32_t frame_width, const uint
 	if (m_fence_event == nullptr) {
 		check_result(HRESULT_FROM_WIN32(GetLastError()));
 	}
+
+	auto pipe = (pipeline_dx12*)load_pipeline("test_shader", L"C:/projects/Ether/dx12_updgrade/GameBase/assets/shaders/test_shader.hlsl");
 
 	kbLog("renderer_dx12 initialized");
 	todo_create_vertices();
@@ -233,46 +231,43 @@ void renderer_dx12::get_hardware_adapter(
 }
 
 void renderer_dx12::render() {
+	check_result(m_command_allocator->Reset());
+	check_result(m_command_list->Reset(m_command_allocator.Get(), nullptr));
 
-		pipeline_dx12* const pipe = (pipeline_dx12*)get_pipeline("test_shader");
+	m_command_list->SetGraphicsRootSignature(m_root_signature.Get());
+	m_command_list->RSSetViewports(1, &m_view_port);
+	m_command_list->RSSetScissorRects(1, &m_scissor_rect);
 
-		check_result(m_command_allocator->Reset());
-		check_result(m_command_list->Reset(m_command_allocator.Get(), pipe->m_pipeline_state.Get()));
+	// Indicate that the back buffer will be used as a render target.
+	m_command_list->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(m_render_targets[m_frame_index].Get(), D3D12_RESOURCE_STATE_PRESENT, D3D12_RESOURCE_STATE_RENDER_TARGET));
 
-		m_command_list->SetGraphicsRootSignature(m_root_signature.Get());
-		m_command_list->RSSetViewports(1, &m_view_port);
-		m_command_list->RSSetScissorRects(1, &m_scissor_rect);
+	CD3DX12_CPU_DESCRIPTOR_HANDLE rtv_handle(m_rtv_heap->GetCPUDescriptorHandleForHeapStart(), m_frame_index, m_rtv_descriptor_size);
+	m_command_list->OMSetRenderTargets(1, &rtv_handle, FALSE, nullptr);
 
-		// Indicate that the back buffer will be used as a render target.
-		m_command_list->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(m_render_targets[m_frame_index].Get(), D3D12_RESOURCE_STATE_PRESENT, D3D12_RESOURCE_STATE_RENDER_TARGET));
+	const float clearColor[] = { 1.0f, 0.2f, 0.4f, 1.0f };
+	m_command_list->ClearRenderTargetView(rtv_handle, clearColor, 0, nullptr);
 
-		CD3DX12_CPU_DESCRIPTOR_HANDLE rtv_handle(m_rtv_heap->GetCPUDescriptorHandleForHeapStart(), m_frame_index, m_rtv_descriptor_size);
-		m_command_list->OMSetRenderTargets(1, &rtv_handle, FALSE, nullptr);
+	pipeline_dx12* const pipe = (pipeline_dx12*)get_pipeline("test_shader");
+	m_command_list->SetPipelineState(pipe->m_pipeline_state.Get());
 
-		const float clearColor[] = { 1.0f, 0.2f, 0.4f, 1.0f };
-		m_command_list->ClearRenderTargetView(rtv_handle, clearColor, 0, nullptr);
-		m_command_list->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-		m_command_list->IASetVertexBuffers(0, 1, &m_vertex_buffer_view);
-		m_command_list->DrawInstanced(3, 1, 0, 0);
-
-
-		// Indicate that the back buffer will now be used to present.
-		m_command_list->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(m_render_targets[m_frame_index].Get(), D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PRESENT));
-
-		check_result(m_command_list->Close());
+	m_command_list->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	m_command_list->IASetVertexBuffers(0, 1, &m_vertex_buffer_view);
+	m_command_list->DrawInstanced(3, 1, 0, 0);
 
 
-	{
-		// Execute command lists
-		ID3D12CommandList* const command_lists[] = { m_command_list.Get() };
-		m_queue->ExecuteCommandLists(_countof(command_lists), command_lists);
+	// Indicate that the back buffer will now be used to present.
+	m_command_list->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(m_render_targets[m_frame_index].Get(), D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PRESENT));
+	check_result(m_command_list->Close());
 
-		// Present
-		check_result(m_swap_chain->Present(1, 0));
-	}
+	// Execute command lists
+	ID3D12CommandList* const command_lists[] = { m_command_list.Get() };
+	m_queue->ExecuteCommandLists(_countof(command_lists), command_lists);
+
+	// Present
+	check_result(m_swap_chain->Present(1, 0));
 
 	// Wait for previous frame (todo)
-	const UINT64 fence = m_fence_value;
+	const uint64_t fence = m_fence_value;
 	check_result(m_queue->Signal(m_fence.Get(), fence));
 	m_fence_value++;
 
@@ -298,7 +293,7 @@ pipeline* renderer_dx12::create_pipeline(const wstring& path) {
 	ComPtr<ID3DBlob> vertex_shader;
 	check_result(D3DCompileFromFile(path.c_str(), nullptr, nullptr, "vertex_shader", "vs_5_0", compileFlags, 0, &vertex_shader, ppErrorMsgs));
 
- 	ComPtr<ID3DBlob> pixel_shader;
+	ComPtr<ID3DBlob> pixel_shader;
 	check_result(D3DCompileFromFile(path.c_str(), nullptr, nullptr, "pixel_shader", "ps_5_0", compileFlags, 0, &pixel_shader, nullptr));
 
 	// Define the vertex input layout.
