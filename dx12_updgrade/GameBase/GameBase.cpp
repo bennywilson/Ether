@@ -234,9 +234,9 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 
 	std::string mapName;
 
-	bool use_dx12 = false;
+	bool use_dx12 = true;
 	if ( GetAsyncKeyState( VK_MBUTTON ) ) {
-		use_dx12 = true;
+		use_dx12 = false;
 		//g_UseEditor = true;
 	}
 
@@ -304,16 +304,20 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 		}
 		g_pRenderer->SetRenderWindow(nullptr);
 	} else {
-		g_pRenderer = new kbRenderer_DX11();
-		g_pRenderer->Init(hWnd, g_screen_width, g_screen_height);
+
+		if (!use_dx12) {
+			g_pRenderer = new kbRenderer_DX11();
+			g_pRenderer->Init(hWnd, g_screen_width, g_screen_height);
+			pGame = new EtherGame();//( g_pRenderer->IsRenderingToHMD() ) ? ( new EtherVRGame() ) : ( new EtherGame() );
+			std::vector<const kbGameEntity*> GameEntitiesList;
+			pGame->InitGame(hWnd, g_screen_width, g_screen_height, GameEntitiesList);
+			pGame->LoadMap(mapName);
+
+		}
 
 		g_renderer = new renderer_dx12();
 		g_renderer->initialize(hWnd, g_screen_width, g_screen_height);
 
-		pGame = new EtherGame();//( g_pRenderer->IsRenderingToHMD() ) ? ( new EtherVRGame() ) : ( new EtherGame() );
-		std::vector<const kbGameEntity *> GameEntitiesList;
-		pGame->InitGame(hWnd, g_screen_width, g_screen_height, GameEntitiesList);
-		pGame->LoadMap(mapName);
 	}
 
 	// Main message loop
@@ -345,10 +349,11 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 		g_pRenderer->WaitForRenderingToComplete();
 	}
 
-	pGame->StopGame();
-	delete pGame;
-	delete applicationEditor;
-
+	if (!use_dx12) {
+		pGame->StopGame();
+		delete pGame;
+		delete applicationEditor;
+	}
 	g_ResourceManager.Shutdown();
 
 	delete g_pRenderer;

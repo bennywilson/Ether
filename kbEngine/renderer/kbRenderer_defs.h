@@ -2,10 +2,9 @@
 // kbRenderer_defs.h
 //
 //
-// 2016-2019 kbEngine 2.0
+// 2025 kbEngine 2.0
 //===================================================================================================
-#ifndef _KBRENDERERDEFS_H_
-#define _KBRENDERERDEFS_H_
+#pragma once
 
 #include "kbJobManager.h"
 #include "kbVector.h"
@@ -475,5 +474,3 @@ enum kbColorWriteEnable {
 };
 
 kbColorWriteEnable operator |( const kbColorWriteEnable lhs, const kbColorWriteEnable rhs );
-
-#endif

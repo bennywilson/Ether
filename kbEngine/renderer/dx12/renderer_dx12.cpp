@@ -15,6 +15,8 @@
 #include <d3dcommon.h>
 #include "d3dx12.h"
 
+using namespace std;
+
 renderer* g_renderer = nullptr;
 
 renderer::renderer() {
@@ -35,9 +37,31 @@ void renderer::shut_down() {
 
 }
 
+pipeline* renderer::load_pipeline(const std::string& friendly_name, const std::wstring& path) {
+	pipeline* const new_pipeline = create_pipeline(path);
+	if (new_pipeline == nullptr) {
+		kbWarning("Unable to load pipeline %s", path.c_str());
+		return nullptr;
+	}
+	m_pipelines[friendly_name] = new_pipeline;
+
+	return new_pipeline;
+}
+
+pipeline* renderer::get_pipeline(const std::string& name) {
+	if (m_pipelines.find(name) == m_pipelines.end()) {
+		return nullptr;
+	}
+
+	return m_pipelines[name];
+}
+
 void renderer_dx12::initialize(HWND hwnd, const uint32_t frame_width, const uint32_t frame_height) {
 
 	UINT dxgiFactoryFlags = 0;
+
+		m_view_port = CD3DX12_VIEWPORT(0.f, 0.f, (float)frame_width, (float)frame_height);
+		m_scissor_rect = CD3DX12_RECT(0, 0, frame_width, frame_height);
 
 #if defined(_DEBUG)
 	// Enable the debug layer (requires the Graphics Tools "optional feature").
@@ -73,7 +97,7 @@ void renderer_dx12::initialize(HWND hwnd, const uint32_t frame_width, const uint
 
 	check_result(m_device->CreateCommandQueue(&queue_desc, IID_PPV_ARGS(&m_queue)));
 
-	// Swap Chaind
+	// Swap Chain
 	DXGI_SWAP_CHAIN_DESC1 swap_chain_desc = {};
 	swap_chain_desc.BufferCount = renderer_dx12::frame_count;
 	swap_chain_desc.Width = m_frame_width;
@@ -112,17 +136,30 @@ void renderer_dx12::initialize(HWND hwnd, const uint32_t frame_width, const uint
 
 	// Create a RTV for each frame.
 	for (uint32_t i = 0; i < renderer_dx12::frame_count; i++) {
-		check_result(m_swap_chain->GetBuffer(i, IID_PPV_ARGS(&m_renderTargets[i])));
-		m_device->CreateRenderTargetView(m_renderTargets[i].Get(), nullptr, rtv_handle);
+		check_result(m_swap_chain->GetBuffer(i, IID_PPV_ARGS(&m_render_targets[i])));
+		m_device->CreateRenderTargetView(m_render_targets[i].Get(), nullptr, rtv_handle);
 		rtv_handle.Offset(1, m_rtv_descriptor_size);
 	}
 
-	// Command List
 	check_result(m_device->CreateCommandAllocator(D3D12_COMMAND_LIST_TYPE_DIRECT, IID_PPV_ARGS(&m_command_allocator)));
-	check_result(m_device->CreateCommandList(0, D3D12_COMMAND_LIST_TYPE_DIRECT, m_command_allocator.Get(), nullptr, IID_PPV_ARGS(&m_command_list)));
+
+	// Create an empty root signature.
+	CD3DX12_ROOT_SIGNATURE_DESC rootSignatureDesc = {};
+	rootSignatureDesc.Init(0, nullptr, 0, nullptr, D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT);
+
+	ComPtr<ID3DBlob> signature;
+	ComPtr<ID3DBlob> error;
+	check_result(D3D12SerializeRootSignature(&rootSignatureDesc, D3D_ROOT_SIGNATURE_VERSION_1, &signature, &error));
+	check_result(m_device->CreateRootSignature(0, signature->GetBufferPointer(), signature->GetBufferSize(), IID_PPV_ARGS(&m_root_signature)));
+
+
+	// Command List
+	auto pipe = (pipeline_dx12*)load_pipeline("test_shader", L"C:/projects/Ether/dx12_updgrade/GameBase/assets/shaders/test_shader.hlsl");
+
+	check_result(m_device->CreateCommandList(0, D3D12_COMMAND_LIST_TYPE_DIRECT, m_command_allocator.Get(), pipe->m_pipeline_state.Get(), IID_PPV_ARGS(&m_command_list)));
 	m_command_list->Close();
 
-	// Freances	
+	// Fences	
 	check_result(m_device->CreateFence(0, D3D12_FENCE_FLAG_NONE, IID_PPV_ARGS(&m_fence)));
 	m_fence_value = 1;
 
@@ -132,7 +169,8 @@ void renderer_dx12::initialize(HWND hwnd, const uint32_t frame_width, const uint
 		check_result(HRESULT_FROM_WIN32(GetLastError()));
 	}
 
-	kbLog("Yodle!");
+	kbLog("renderer_dx12 initialized");
+	todo_create_vertices();
 }
 
 renderer_dx12::~renderer_dx12() {
@@ -196,27 +234,42 @@ void renderer_dx12::get_hardware_adapter(
 
 void renderer_dx12::render() {
 
-	check_result(m_command_allocator->Reset());
-	check_result(m_command_list->Reset(m_command_allocator.Get(), m_pipeline_state.Get()));
+		pipeline_dx12* const pipe = (pipeline_dx12*)get_pipeline("test_shader");
 
-	// Indicate that the back buffer will be used as a render target.
-	m_command_list->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(m_renderTargets[m_frame_index].Get(), D3D12_RESOURCE_STATE_PRESENT, D3D12_RESOURCE_STATE_RENDER_TARGET));
+		check_result(m_command_allocator->Reset());
+		check_result(m_command_list->Reset(m_command_allocator.Get(), pipe->m_pipeline_state.Get()));
 
-	CD3DX12_CPU_DESCRIPTOR_HANDLE rtv_handle(m_rtv_heap->GetCPUDescriptorHandleForHeapStart(), m_frame_index, m_rtv_descriptor_size);
-	const float clearColor[] = { 1.0f, 0.2f, 0.4f, 1.0f };
-	m_command_list->ClearRenderTargetView(rtv_handle, clearColor, 0, nullptr);
+		m_command_list->SetGraphicsRootSignature(m_root_signature.Get());
+		m_command_list->RSSetViewports(1, &m_view_port);
+		m_command_list->RSSetScissorRects(1, &m_scissor_rect);
 
-	// Indicate that the back buffer will now be used to present.
-	m_command_list->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(m_renderTargets[m_frame_index].Get(), D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PRESENT));
+		// Indicate that the back buffer will be used as a render target.
+		m_command_list->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(m_render_targets[m_frame_index].Get(), D3D12_RESOURCE_STATE_PRESENT, D3D12_RESOURCE_STATE_RENDER_TARGET));
 
-	check_result(m_command_list->Close());
+		CD3DX12_CPU_DESCRIPTOR_HANDLE rtv_handle(m_rtv_heap->GetCPUDescriptorHandleForHeapStart(), m_frame_index, m_rtv_descriptor_size);
+		m_command_list->OMSetRenderTargets(1, &rtv_handle, FALSE, nullptr);
 
-	// Execute command lists
-	ID3D12CommandList* const command_lists[] = { m_command_list.Get() };
-	m_queue->ExecuteCommandLists(_countof(command_lists), command_lists);
+		const float clearColor[] = { 1.0f, 0.2f, 0.4f, 1.0f };
+		m_command_list->ClearRenderTargetView(rtv_handle, clearColor, 0, nullptr);
+		m_command_list->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+		m_command_list->IASetVertexBuffers(0, 1, &m_vertex_buffer_view);
+		m_command_list->DrawInstanced(3, 1, 0, 0);
 
-	// Present
-	check_result(m_swap_chain->Present(1, 0));
+
+		// Indicate that the back buffer will now be used to present.
+		m_command_list->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(m_render_targets[m_frame_index].Get(), D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PRESENT));
+
+		check_result(m_command_list->Close());
+
+
+	{
+		// Execute command lists
+		ID3D12CommandList* const command_lists[] = { m_command_list.Get() };
+		m_queue->ExecuteCommandLists(_countof(command_lists), command_lists);
+
+		// Present
+		check_result(m_swap_chain->Present(1, 0));
+	}
 
 	// Wait for previous frame (todo)
 	const UINT64 fence = m_fence_value;
@@ -230,4 +283,91 @@ void renderer_dx12::render() {
 	}
 
 	m_frame_index = m_swap_chain->GetCurrentBackBufferIndex();
+}
+
+pipeline* renderer_dx12::create_pipeline(const wstring& path) {
+#if defined(_DEBUG)
+	// Enable better shader debugging with the graphics debugging tools.
+	UINT compileFlags = D3DCOMPILE_DEBUG | D3DCOMPILE_SKIP_OPTIMIZATION;
+#else
+	UINT compileFlags = 0;
+#endif
+
+	ID3DBlob** ppErrorMsgs = nullptr;
+
+	ComPtr<ID3DBlob> vertex_shader;
+	check_result(D3DCompileFromFile(path.c_str(), nullptr, nullptr, "vertex_shader", "vs_5_0", compileFlags, 0, &vertex_shader, ppErrorMsgs));
+
+ 	ComPtr<ID3DBlob> pixel_shader;
+	check_result(D3DCompileFromFile(path.c_str(), nullptr, nullptr, "pixel_shader", "ps_5_0", compileFlags, 0, &pixel_shader, nullptr));
+
+	// Define the vertex input layout.
+	D3D12_INPUT_ELEMENT_DESC inputElementDescs[] =
+	{
+		{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
+		{ "COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 12, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 }
+	};
+
+	// Describe and create the graphics pipeline state object (PSO).
+	D3D12_GRAPHICS_PIPELINE_STATE_DESC psoDesc = {};
+	psoDesc.InputLayout = { inputElementDescs, _countof(inputElementDescs) };
+	psoDesc.pRootSignature = m_root_signature.Get();
+	psoDesc.VS = CD3DX12_SHADER_BYTECODE(vertex_shader.Get());
+	psoDesc.PS = CD3DX12_SHADER_BYTECODE(pixel_shader.Get());
+	psoDesc.RasterizerState = CD3DX12_RASTERIZER_DESC(D3D12_DEFAULT);
+	psoDesc.BlendState = CD3DX12_BLEND_DESC(D3D12_DEFAULT);
+	psoDesc.DepthStencilState.DepthEnable = FALSE;
+	psoDesc.DepthStencilState.StencilEnable = FALSE;
+	psoDesc.SampleMask = UINT_MAX;
+	psoDesc.PrimitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;
+	psoDesc.NumRenderTargets = 1;
+	psoDesc.RTVFormats[0] = DXGI_FORMAT_R8G8B8A8_UNORM;
+	psoDesc.SampleDesc.Count = 1;
+	pipeline_dx12* const new_pipeline = new pipeline_dx12();
+	check_result(m_device->CreateGraphicsPipelineState(&psoDesc, IID_PPV_ARGS(&new_pipeline->m_pipeline_state)));
+
+	return (pipeline*)new_pipeline;
+}
+
+///
+/// 
+///
+void renderer_dx12::todo_create_vertices() {
+	// Create the vertex buffer.
+	{
+		const float aspect = 10.f / 9.f;
+		// Define the geometry for a triangle.
+		FVertex triangleVertices[] =
+		{
+			{ { 0.0f, 0.25f * aspect, 0.0f }, { 1.0f, 0.0f, 0.0f, 1.0f } },
+			{ { 0.25f, -0.25f * aspect, 0.0f }, { 0.0f, 1.0f, 0.0f, 1.0f } },
+			{ { -0.25f, -0.25f * aspect, 0.0f }, { 0.0f, 0.0f, 1.0f, 1.0f } }
+		};
+
+		const UINT vertexBufferSize = sizeof(triangleVertices);
+
+		// Note: using upload heaps to transfer static data like vert buffers is not 
+		// recommended. Every time the GPU needs it, the upload heap will be marshalled 
+		// over. Please read up on Default Heap usage. An upload heap is used here for 
+		// code simplicity and because there are very few verts to actually transfer.
+		check_result(m_device->CreateCommittedResource(
+			&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD),
+			D3D12_HEAP_FLAG_NONE,
+			&CD3DX12_RESOURCE_DESC::Buffer(vertexBufferSize),
+			D3D12_RESOURCE_STATE_GENERIC_READ,
+			nullptr,
+			IID_PPV_ARGS(&m_vertex_buffer)));
+
+		// Copy the triangle data to the vertex buffer.
+		UINT8* pVertexDataBegin = nullptr;
+		CD3DX12_RANGE read_range(0, 0);        // We do not intend to read from this resource on the CPU.
+		check_result(m_vertex_buffer->Map(0, &read_range, reinterpret_cast<void**>(&pVertexDataBegin)));
+		memcpy(pVertexDataBegin, triangleVertices, sizeof(triangleVertices));
+		m_vertex_buffer->Unmap(0, nullptr);
+
+		// Initialize the vertex buffer view.
+		m_vertex_buffer_view.BufferLocation = m_vertex_buffer->GetGPUVirtualAddress();
+		m_vertex_buffer_view.StrideInBytes = sizeof(FVertex);
+		m_vertex_buffer_view.SizeInBytes = vertexBufferSize;
+	}
 }

@@ -15,7 +15,7 @@
 #include <DirectXMath.h>
 #include <wrl/client.h>
 #include "kbVector.h"
-
+#include "d3dx12_core.h"
 #include "kbRenderer.h"
 
 using namespace DirectX;
@@ -26,6 +26,23 @@ inline void check_result(HRESULT hr) {
 		throw;
 	}
 }
+
+
+///
+/// FVertex
+///
+struct FVertex {
+	XMFLOAT3 position;
+	XMFLOAT4 color;
+};
+
+
+///
+/// pipeline
+///
+class pipeline {
+	std::string name;
+};
 
 ///
 ///	renderer
@@ -40,9 +57,23 @@ public:
 
 	virtual void render() = 0;
 
+	pipeline* load_pipeline(const std::string& friendly_name, const std::wstring& path);
+	pipeline* get_pipeline(const std::string& friendly_name);
+
 protected:
 	uint m_frame_width = 0;
 	uint m_frame_height = 0;
+
+private:
+	virtual pipeline* create_pipeline(const std::wstring& path) = 0;
+
+	std::unordered_map<std::string, pipeline*> m_pipelines;
+};
+
+class pipeline_dx12 : pipeline {
+	friend class renderer_dx12;
+
+	ComPtr<ID3D12PipelineState> m_pipeline_state;
 };
 
 ///
@@ -59,32 +90,45 @@ public:
 protected:
 	virtual void initialize(HWND hwnd, const uint32_t frameWidth, const uint32_t frameHeight) override;
 
+	void todo_create_vertices();
+
 private:
 	void get_hardware_adapter(
 		IDXGIFactory1* const factory,
 		IDXGIAdapter1** const out_adapter,
 		bool request_high_performance);
 
+	virtual pipeline* create_pipeline(const std::wstring& path) override;
+
+	static const UINT frame_count = 2;
+
+
 	ComPtr<ID3D12Device> m_device;
 	ComPtr<ID3D12CommandQueue> m_queue;
+
 	ComPtr<IDXGISwapChain3> m_swap_chain;
 	uint32_t m_frame_index = 0;
 
-	ComPtr<ID3D12CommandAllocator> m_command_allocator;
-	ComPtr<ID3D12GraphicsCommandList> m_command_list;
+	CD3DX12_VIEWPORT m_view_port;
+	CD3DX12_RECT m_scissor_rect;
 
 	ComPtr<ID3D12DescriptorHeap> m_rtv_heap;
 	uint32_t m_rtv_descriptor_size = 0;
 
-	static const UINT frame_count = 2;
-	ComPtr<ID3D12Resource> m_renderTargets[frame_count];
+	ComPtr<ID3D12CommandAllocator> m_command_allocator;
+	ComPtr<ID3D12GraphicsCommandList> m_command_list;
 
-	ComPtr<ID3D12PipelineState> m_pipeline_state;
+	ComPtr<ID3D12Resource> m_render_targets[frame_count];
+
+	ComPtr<ID3D12RootSignature> m_root_signature;
 
 	// Fences
 	ComPtr<ID3D12Fence> m_fence;
 	uint64_t m_fence_value = 0;
 	HANDLE m_fence_event;
+
+	ComPtr<ID3D12Resource> m_vertex_buffer;
+	D3D12_VERTEX_BUFFER_VIEW m_vertex_buffer_view;
 };
 
 extern renderer* g_renderer;
