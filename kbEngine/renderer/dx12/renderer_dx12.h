@@ -38,6 +38,8 @@ public:
 	virtual void initialize(HWND hwnd, const uint32_t frame_width, const uint32_t frame_height);
 	virtual void shut_down() = 0;
 
+	virtual void render() = 0;
+
 protected:
 	uint m_frame_width = 0;
 	uint m_frame_height = 0;
@@ -52,16 +54,16 @@ public:
 
 	virtual void shut_down() override;
 
-	static const UINT frame_count = 2;
+	virtual void render() override;
 
 protected:
 	virtual void initialize(HWND hwnd, const uint32_t frameWidth, const uint32_t frameHeight) override;
 
 private:
-	void GetHardwareAdapter(
-		IDXGIFactory1* pFactory,
-		IDXGIAdapter1** ppAdapter,
-		bool requestHighPerformanceAdapter);
+	void get_hardware_adapter(
+		IDXGIFactory1* const factory,
+		IDXGIAdapter1** const out_adapter,
+		bool request_high_performance);
 
 	ComPtr<ID3D12Device> m_device;
 	ComPtr<ID3D12CommandQueue> m_queue;
@@ -69,11 +71,20 @@ private:
 	uint32_t m_frame_index = 0;
 
 	ComPtr<ID3D12CommandAllocator> m_command_allocator;
+	ComPtr<ID3D12GraphicsCommandList> m_command_list;
 
 	ComPtr<ID3D12DescriptorHeap> m_rtv_heap;
 	uint32_t m_rtv_descriptor_size = 0;
 
+	static const UINT frame_count = 2;
 	ComPtr<ID3D12Resource> m_renderTargets[frame_count];
+
+	ComPtr<ID3D12PipelineState> m_pipeline_state;
+
+	// Fences
+	ComPtr<ID3D12Fence> m_fence;
+	uint64_t m_fence_value = 0;
+	HANDLE m_fence_event;
 };
 
 extern renderer* g_renderer;

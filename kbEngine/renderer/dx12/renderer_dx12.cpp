@@ -57,7 +57,7 @@ void renderer_dx12::initialize(HWND hwnd, const uint32_t frame_width, const uint
 	CreateDXGIFactory2(dxgiFactoryFlags, IID_PPV_ARGS(&factory));
 
 	ComPtr<IDXGIAdapter1> hw_adapter;
-	GetHardwareAdapter(factory.Get(), &hw_adapter, true);
+	get_hardware_adapter(factory.Get(), &hw_adapter, true);
 
 	// Device
 	check_result(D3D12CreateDevice(
@@ -73,9 +73,7 @@ void renderer_dx12::initialize(HWND hwnd, const uint32_t frame_width, const uint
 
 	check_result(m_device->CreateCommandQueue(&queue_desc, IID_PPV_ARGS(&m_queue)));
 
-	// Swap Chain
-
-
+	// Swap Chaind
 	DXGI_SWAP_CHAIN_DESC1 swap_chain_desc = {};
 	swap_chain_desc.BufferCount = renderer_dx12::frame_count;
 	swap_chain_desc.Width = m_frame_width;
@@ -94,11 +92,11 @@ void renderer_dx12::initialize(HWND hwnd, const uint32_t frame_width, const uint
 		&swap_chain
 	));
 
-	// Disable fullscreen
-	check_result(factory->MakeWindowAssociation(hwnd, DXGI_MWA_NO_ALT_ENTER));
-
 	check_result(swap_chain.As(&m_swap_chain));
 	m_frame_index = m_swap_chain->GetCurrentBackBufferIndex();
+
+	// Disable fullscreen
+	check_result(factory->MakeWindowAssociation(hwnd, DXGI_MWA_NO_ALT_ENTER));
 
 	// Render target view descriptor heap
 	D3D12_DESCRIPTOR_HEAP_DESC rtv_heap_desc = {};
@@ -108,92 +106,128 @@ void renderer_dx12::initialize(HWND hwnd, const uint32_t frame_width, const uint
 	check_result(m_device->CreateDescriptorHeap(&rtv_heap_desc, IID_PPV_ARGS(&m_rtv_heap)));
 
 	m_rtv_descriptor_size = m_device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV);
-	kbLog("renderer_dx12 initialized()");
 
 	// Frame resources
 	CD3DX12_CPU_DESCRIPTOR_HANDLE rtv_handle(m_rtv_heap->GetCPUDescriptorHandleForHeapStart());
 
 	// Create a RTV for each frame.
-	for (uint32_t n = 0; n < renderer_dx12::frame_count; n++) {
-		check_result(m_swap_chain->GetBuffer(n, IID_PPV_ARGS(&m_renderTargets[n])));
-		m_device->CreateRenderTargetView(m_renderTargets[n].Get(), nullptr, rtv_handle);
+	for (uint32_t i = 0; i < renderer_dx12::frame_count; i++) {
+		check_result(m_swap_chain->GetBuffer(i, IID_PPV_ARGS(&m_renderTargets[i])));
+		m_device->CreateRenderTargetView(m_renderTargets[i].Get(), nullptr, rtv_handle);
 		rtv_handle.Offset(1, m_rtv_descriptor_size);
 	}
 
+	// Command List
 	check_result(m_device->CreateCommandAllocator(D3D12_COMMAND_LIST_TYPE_DIRECT, IID_PPV_ARGS(&m_command_allocator)));
+	check_result(m_device->CreateCommandList(0, D3D12_COMMAND_LIST_TYPE_DIRECT, m_command_allocator.Get(), nullptr, IID_PPV_ARGS(&m_command_list)));
+	m_command_list->Close();
+
+	// Freances	
+	check_result(m_device->CreateFence(0, D3D12_FENCE_FLAG_NONE, IID_PPV_ARGS(&m_fence)));
+	m_fence_value = 1;
+
+	// Create an event handle to use for frame synchronization.
+	m_fence_event = CreateEvent(nullptr, FALSE, FALSE, nullptr);
+	if (m_fence_event == nullptr) {
+		check_result(HRESULT_FROM_WIN32(GetLastError()));
+	}
 
 	kbLog("Yodle!");
 }
 
 renderer_dx12::~renderer_dx12() {
-
 }
 
 void renderer_dx12::shut_down() {
 	renderer::shut_down();
-
 }
 
-void renderer_dx12::GetHardwareAdapter(
-	IDXGIFactory1* pFactory,
-	IDXGIAdapter1** ppAdapter,
-	bool requestHighPerformanceAdapter) {
-	*ppAdapter = nullptr;
+void renderer_dx12::get_hardware_adapter(
+	IDXGIFactory1* const factory,
+	IDXGIAdapter1** const out_adapter,
+	bool request_high_performance) {
+	*out_adapter = nullptr;
 
 	ComPtr<IDXGIAdapter1> adapter;
-
 	ComPtr<IDXGIFactory6> factory6;
-	if (SUCCEEDED(pFactory->QueryInterface(IID_PPV_ARGS(&factory6))))
-	{
+	if (SUCCEEDED(factory->QueryInterface(IID_PPV_ARGS(&factory6)))) {
 		for (
-			UINT adapterIndex = 0;
+			UINT adapter_index = 0;
 			SUCCEEDED(factory6->EnumAdapterByGpuPreference(
-				adapterIndex,
-				requestHighPerformanceAdapter == true ? DXGI_GPU_PREFERENCE_HIGH_PERFORMANCE : DXGI_GPU_PREFERENCE_UNSPECIFIED,
+				adapter_index,
+				request_high_performance == true ? DXGI_GPU_PREFERENCE_HIGH_PERFORMANCE : DXGI_GPU_PREFERENCE_UNSPECIFIED,
 				IID_PPV_ARGS(&adapter)));
-				++adapterIndex)
+				++adapter_index)
 		{
 			DXGI_ADAPTER_DESC1 desc;
 			adapter->GetDesc1(&desc);
 
-			if (desc.Flags & DXGI_ADAPTER_FLAG_SOFTWARE)
-			{
-				// Don't select the Basic Render Driver adapter.
-				// If you want a software adapter, pass in "/warp" on the command line.
+			if (desc.Flags & DXGI_ADAPTER_FLAG_SOFTWARE) {
 				continue;
 			}
 
 			// Check to see whether the adapter supports Direct3D 12, but don't create the
 			// actual device yet.
-			if (SUCCEEDED(D3D12CreateDevice(adapter.Get(), D3D_FEATURE_LEVEL_11_0, _uuidof(ID3D12Device), nullptr)))
-			{
+			if (SUCCEEDED(D3D12CreateDevice(adapter.Get(), D3D_FEATURE_LEVEL_11_0, _uuidof(ID3D12Device), nullptr))) {
 				break;
 			}
 		}
 	}
 
-	if (adapter.Get() == nullptr)
-	{
-		for (UINT adapterIndex = 0; SUCCEEDED(pFactory->EnumAdapters1(adapterIndex, &adapter)); ++adapterIndex)
-		{
+	if (adapter.Get() == nullptr) {
+		for (UINT adapter_index = 0; SUCCEEDED(factory->EnumAdapters1(adapter_index, &adapter)); ++adapter_index) {
 			DXGI_ADAPTER_DESC1 desc;
 			adapter->GetDesc1(&desc);
 
-			if (desc.Flags & DXGI_ADAPTER_FLAG_SOFTWARE)
-			{
-				// Don't select the Basic Render Driver adapter.
-				// If you want a software adapter, pass in "/warp" on the command line.
+			if (desc.Flags & DXGI_ADAPTER_FLAG_SOFTWARE) {
 				continue;
 			}
 
 			// Check to see whether the adapter supports Direct3D 12, but don't create the
 			// actual device yet.
-			if (SUCCEEDED(D3D12CreateDevice(adapter.Get(), D3D_FEATURE_LEVEL_11_0, _uuidof(ID3D12Device), nullptr)))
-			{
+			if (SUCCEEDED(D3D12CreateDevice(adapter.Get(), D3D_FEATURE_LEVEL_11_0, _uuidof(ID3D12Device), nullptr))) {
 				break;
 			}
 		}
 	}
 
-	*ppAdapter = adapter.Detach();
+	*out_adapter = adapter.Detach();
+}
+
+void renderer_dx12::render() {
+
+	check_result(m_command_allocator->Reset());
+	check_result(m_command_list->Reset(m_command_allocator.Get(), m_pipeline_state.Get()));
+
+	// Indicate that the back buffer will be used as a render target.
+	m_command_list->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(m_renderTargets[m_frame_index].Get(), D3D12_RESOURCE_STATE_PRESENT, D3D12_RESOURCE_STATE_RENDER_TARGET));
+
+	CD3DX12_CPU_DESCRIPTOR_HANDLE rtv_handle(m_rtv_heap->GetCPUDescriptorHandleForHeapStart(), m_frame_index, m_rtv_descriptor_size);
+	const float clearColor[] = { 1.0f, 0.2f, 0.4f, 1.0f };
+	m_command_list->ClearRenderTargetView(rtv_handle, clearColor, 0, nullptr);
+
+	// Indicate that the back buffer will now be used to present.
+	m_command_list->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(m_renderTargets[m_frame_index].Get(), D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PRESENT));
+
+	check_result(m_command_list->Close());
+
+	// Execute command lists
+	ID3D12CommandList* const command_lists[] = { m_command_list.Get() };
+	m_queue->ExecuteCommandLists(_countof(command_lists), command_lists);
+
+	// Present
+	check_result(m_swap_chain->Present(1, 0));
+
+	// Wait for previous frame (todo)
+	const UINT64 fence = m_fence_value;
+	check_result(m_queue->Signal(m_fence.Get(), fence));
+	m_fence_value++;
+
+	// Wait until the previous frame is finished.
+	if (m_fence->GetCompletedValue() < fence) {
+		check_result(m_fence->SetEventOnCompletion(fence, m_fence_event));
+		WaitForSingleObject(m_fence_event, INFINITE);
+	}
+
+	m_frame_index = m_swap_chain->GetCurrentBackBufferIndex();
 }

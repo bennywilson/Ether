@@ -234,11 +234,10 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 
 	std::string mapName;
 
-	bool bRenderVR = false;
-	bool bUseVRTrackingOnly = false;
-
+	bool use_dx12 = false;
 	if ( GetAsyncKeyState( VK_MBUTTON ) ) {
-		g_UseEditor = true;
+		use_dx12 = true;
+		//g_UseEditor = true;
 	}
 
 	if ( numArgs > 0 ) {
@@ -275,10 +274,6 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 
 			} else if ( cmdArg1 == "monitor2" ) {
 				MonitorIdx = 1;
-			} else if ( cmdArg1 == "usevr" ) {
-				bRenderVR = true;
-			} else if ( cmdArg1 == "usevrtrackingonly" ) {
-				bUseVRTrackingOnly = true;
 			} else {
 				mapName = cmdArg1;
 			}
@@ -330,10 +325,14 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 		}
 
 		try {
-			if (g_UseEditor) {
-				applicationEditor->Update();
+			if (use_dx12 == false) {
+				if (g_UseEditor) {
+					applicationEditor->Update();
+				} else {
+					pGame->Update();
+				}
 			} else {
-				pGame->Update();
+				g_renderer->render();
 			}
 
 		} catch(char* const string) {
