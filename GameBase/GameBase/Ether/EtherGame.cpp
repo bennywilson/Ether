@@ -207,6 +207,7 @@ void EtherGame::AddGameEntity_Internal( kbGameEntity *const pEntity ) {
 		return;
 	}
 
+
 	if ( pEntity == m_pLocalPlayer && m_pWorldGenComponent != nullptr ) {
 		kbVec3 groundPt;
 		m_Camera.m_Position.y = 256.0f;

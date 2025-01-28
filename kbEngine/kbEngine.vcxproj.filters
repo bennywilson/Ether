@@ -284,6 +284,9 @@
     <ClInclude Include="renderer\dx12\renderer_dx12.h">
       <Filter>renderer\dx12</Filter>
     </ClInclude>
+    <ClInclude Include="renderer\dx12\types_dx12.h">
+      <Filter>renderer\dx12</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="core\kbCore.cpp">
@@ -431,6 +434,9 @@
       <Filter>game\Components</Filter>
     </ClCompile>
     <ClCompile Include="renderer\dx12\renderer_dx12.cpp">
+      <Filter>renderer\dx12</Filter>
+    </ClCompile>
+    <ClCompile Include="renderer\dx12\types_dx12.cpp">
       <Filter>renderer\dx12</Filter>
     </ClCompile>
   </ItemGroup>

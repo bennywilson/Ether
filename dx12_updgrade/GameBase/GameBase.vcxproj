@@ -42,7 +42,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>C:\Program Files\Autodesk\FBX\FBX SDK\2019.0\include;..\..\kbEngine\renderer\dx12;..\..\kbEngine\Sound;..\..\kbEngine\external;..\..\kbEngine\gameEntity;..\..\kbEngine\boundingVolumes;..\..\kbEngine\math;C:\Program Files (x86)\Windows Kits\8.1\Include\shared;..\..\kbEngine\editor;..\..\kbEngine\renderer;..\..\kbEngine\app;..\..\kbEngine\core;$(IncludePath)</IncludePath>
+    <IncludePath>C:\Program Files\Autodesk\FBX\FBX SDK\2019.0\include;..\..\kbEngine\renderer\dx12/d3d12;..\..\kbEngine\renderer\dx12;..\..\kbEngine\Sound;..\..\kbEngine\external;..\..\kbEngine\gameEntity;..\..\kbEngine\boundingVolumes;..\..\kbEngine\math;C:\Program Files (x86)\Windows Kits\8.1\Include\shared;..\..\kbEngine\editor;..\..\kbEngine\renderer;..\..\kbEngine\app;..\..\kbEngine\core;$(IncludePath)</IncludePath>
     <LibraryPath>C:\Program Files\Autodesk\FBX\FBX SDK\2020.3.7\lib\x64\debug;C:\Program Files (x86)\Windows Kits\8.1\Lib\winv6.3\um\x64;..\..\kbEngine\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -146,31 +146,16 @@
     <None Include="small.ico" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Ether\EtherActor.h" />
-    <ClInclude Include="Ether\EtherAI.h" />
-    <ClInclude Include="Ether\EtherPlayer.h" />
-    <ClInclude Include="ether\EtherSkelModel.h" />
-    <ClInclude Include="Ether\EtherTV.h" />
-    <ClInclude Include="Ether\EtherWeapon.h" />
     <ClInclude Include="Ether\EtherGame.h" />
     <ClInclude Include="Ether\EtherTypeInfoGeneratedClasses.h" />
-    <ClInclude Include="ether\EtherWorldGen.h" />
     <ClInclude Include="GameBase.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Ether\EtherActor.cpp" />
-    <ClCompile Include="Ether\EtherAI.cpp" />
-    <ClCompile Include="Ether\EtherPlayer.cpp" />
-    <ClCompile Include="Ether\EtherSkelModel.cpp" />
-    <ClCompile Include="Ether\EtherTV.cpp" />
-    <ClCompile Include="Ether\EtherWeapon.cpp" />
     <ClCompile Include="Ether\EtherGame.cpp" />
     <ClCompile Include="Ether\EtherTypeInfoGeneratedClasses.cpp" />
-    <ClCompile Include="Ether\EtherTerrainGenJob.cpp" />
-    <ClCompile Include="Ether\EtherWorldGen.cpp" />
     <ClCompile Include="GameBase.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>

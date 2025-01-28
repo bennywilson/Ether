@@ -1,5 +1,5 @@
 //==============================================================================
-// renderer_dx12.h
+// RendererDx12.h
 //
 // Renderer implementation using DX12 API
 //
@@ -15,7 +15,7 @@
 #include <DirectXMath.h>
 #include <wrl/client.h>
 #include "kbVector.h"
-#include "d3dx12_core.h"
+#include "d3d12/d3dx12_core.h"
 #include "kbRenderer.h"
 
 using namespace DirectX;
@@ -27,7 +27,6 @@ inline void check_result(HRESULT hr) {
 	}
 }
 
-
 ///
 /// FVertex
 ///
@@ -35,7 +34,6 @@ struct FVertex {
 	XMFLOAT3 position;
 	XMFLOAT4 color;
 };
-
 
 ///
 /// pipeline
@@ -45,12 +43,12 @@ class pipeline {
 };
 
 ///
-///	renderer
+///	Renderer
 ///
-class renderer {
+class Renderer {
 public:
-	renderer();
-	~renderer();
+	Renderer();
+	~Renderer();
 
 	virtual void initialize(HWND hwnd, const uint32_t frame_width, const uint32_t frame_height);
 	virtual void shut_down() = 0;
@@ -71,17 +69,17 @@ private:
 };
 
 class pipeline_dx12 : pipeline {
-	friend class renderer_dx12;
+	friend class RendererDx12;
 
 	ComPtr<ID3D12PipelineState> m_pipeline_state;
 };
 
 ///
-///	renderer_dx12
+///	RendererDx12
 ///
-class renderer_dx12 : public renderer {
+class RendererDx12 : public Renderer {
 public:
-	~renderer_dx12();
+	~RendererDx12();
 
 	virtual void shut_down() override;
 
@@ -131,4 +129,4 @@ private:
 	D3D12_VERTEX_BUFFER_VIEW m_vertex_buffer_view;
 };
 
-extern renderer* g_renderer;
+extern Renderer* g_renderer;

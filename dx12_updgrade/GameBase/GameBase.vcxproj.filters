@@ -11,9 +11,6 @@
     <Filter Include="Source Files\Ether">
       <UniqueIdentifier>{fd45bb26-6704-427c-ab6b-da7d94e628c6}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Ether\Game Logic">
-      <UniqueIdentifier>{d013e3b1-f49d-42f2-ad7e-fda96d59834e}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Shaders\DamageGen">
       <UniqueIdentifier>{f2cee1ca-6a59-4e6f-95b9-d935b720001d}</UniqueIdentifier>
     </Filter>
@@ -226,29 +223,8 @@
     <ClInclude Include="Ether\EtherGame.h">
       <Filter>Source Files\Ether</Filter>
     </ClInclude>
-    <ClInclude Include="ether\EtherSkelModel.h">
-      <Filter>Source Files\Ether</Filter>
-    </ClInclude>
-    <ClInclude Include="Ether\EtherWeapon.h">
-      <Filter>Source Files\Ether\Game Logic</Filter>
-    </ClInclude>
-    <ClInclude Include="Ether\EtherPlayer.h">
-      <Filter>Source Files\Ether\Game Logic</Filter>
-    </ClInclude>
-    <ClInclude Include="Ether\EtherAI.h">
-      <Filter>Source Files\Ether\Game Logic</Filter>
-    </ClInclude>
-    <ClInclude Include="Ether\EtherActor.h">
-      <Filter>Source Files\Ether\Game Logic</Filter>
-    </ClInclude>
     <ClInclude Include="Ether\EtherTypeInfoGeneratedClasses.h">
       <Filter>Source Files\Ether</Filter>
-    </ClInclude>
-    <ClInclude Include="ether\EtherWorldGen.h">
-      <Filter>Source Files\Ether</Filter>
-    </ClInclude>
-    <ClInclude Include="Ether\EtherTV.h">
-      <Filter>Source Files\Ether\Game Logic</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -258,35 +234,11 @@
     <ClCompile Include="GameBase.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Ether\EtherSkelModel.cpp">
-      <Filter>Source Files\Ether</Filter>
-    </ClCompile>
-    <ClCompile Include="Ether\EtherWeapon.cpp">
-      <Filter>Source Files\Ether\Game Logic</Filter>
-    </ClCompile>
-    <ClCompile Include="Ether\EtherAI.cpp">
-      <Filter>Source Files\Ether\Game Logic</Filter>
-    </ClCompile>
-    <ClCompile Include="Ether\EtherActor.cpp">
-      <Filter>Source Files\Ether\Game Logic</Filter>
-    </ClCompile>
     <ClCompile Include="Ether\EtherTypeInfoGeneratedClasses.cpp">
-      <Filter>Source Files\Ether</Filter>
-    </ClCompile>
-    <ClCompile Include="Ether\EtherTerrainGenJob.cpp">
-      <Filter>Source Files\Ether</Filter>
-    </ClCompile>
-    <ClCompile Include="Ether\EtherWorldGen.cpp">
       <Filter>Source Files\Ether</Filter>
     </ClCompile>
     <ClCompile Include="Ether\EtherGame.cpp">
       <Filter>Source Files\Ether</Filter>
-    </ClCompile>
-    <ClCompile Include="Ether\EtherPlayer.cpp">
-      <Filter>Source Files\Ether\Game Logic</Filter>
-    </ClCompile>
-    <ClCompile Include="Ether\EtherTV.cpp">
-      <Filter>Source Files\Ether\Game Logic</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

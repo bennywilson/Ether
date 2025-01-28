@@ -239,6 +239,8 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 		use_dx12 = false;
 		//g_UseEditor = true;
 	}
+//////////////////	g_UseEditor = true;
+use_dx12 = false;
 
 	if ( numArgs > 0 ) {
 		for ( int i = 1; i < numArgs; i++ ) {
@@ -315,7 +317,7 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 
 		}
 
-		g_renderer = new renderer_dx12();
+		g_renderer = new RendererDx12();
 		g_renderer->initialize(hWnd, g_screen_width, g_screen_height);
 
 	}

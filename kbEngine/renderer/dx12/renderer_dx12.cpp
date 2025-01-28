@@ -1,5 +1,5 @@
 //==============================================================================
-// renderer_dx12.cpp
+// RendererDx12.cpp
 //
 // 2025 kbEngine 2.0
 //==============================================================================
@@ -13,31 +13,31 @@
 #include "kbComponent.h"
 #include "kbConsole.h"
 #include <d3dcommon.h>
-#include "d3dx12.h"
+#include "d3d12/d3dx12.h"
 
 using namespace std;
 
-renderer* g_renderer = nullptr;
+Renderer* g_renderer = nullptr;
 
-renderer::renderer() {
+Renderer::Renderer() {
 
 }
 
-renderer::~renderer() {
+Renderer::~Renderer() {
 	shut_down();
 }
 
-void renderer::initialize(HWND hwnd, const uint32_t frame_width, const uint32_t frame_height) {
+void Renderer::initialize(HWND hwnd, const uint32_t frame_width, const uint32_t frame_height) {
 	m_frame_width = frame_width;
 	m_frame_height = frame_height;
 }
 
 
-void renderer::shut_down() {
+void Renderer::shut_down() {
 
 }
 
-pipeline* renderer::load_pipeline(const std::string& friendly_name, const std::wstring& path) {
+pipeline* Renderer::load_pipeline(const std::string& friendly_name, const std::wstring& path) {
 	pipeline* const new_pipeline = create_pipeline(path);
 	if (new_pipeline == nullptr) {
 		kbWarning("Unable to load pipeline %s", path.c_str());
@@ -48,7 +48,7 @@ pipeline* renderer::load_pipeline(const std::string& friendly_name, const std::w
 	return new_pipeline;
 }
 
-pipeline* renderer::get_pipeline(const std::string& name) {
+pipeline* Renderer::get_pipeline(const std::string& name) {
 	if (m_pipelines.find(name) == m_pipelines.end()) {
 		return nullptr;
 	}
@@ -56,7 +56,7 @@ pipeline* renderer::get_pipeline(const std::string& name) {
 	return m_pipelines[name];
 }
 
-void renderer_dx12::initialize(HWND hwnd, const uint32_t frame_width, const uint32_t frame_height) {
+void RendererDx12::initialize(HWND hwnd, const uint32_t frame_width, const uint32_t frame_height) {
 
 	UINT dxgiFactoryFlags = 0;
 
@@ -99,7 +99,7 @@ void renderer_dx12::initialize(HWND hwnd, const uint32_t frame_width, const uint
 
 	// Swap Chain
 	DXGI_SWAP_CHAIN_DESC1 swap_chain_desc = {};
-	swap_chain_desc.BufferCount = renderer_dx12::frame_count;
+	swap_chain_desc.BufferCount = RendererDx12::frame_count;
 	swap_chain_desc.Width = m_frame_width;
 	swap_chain_desc.Height = m_frame_height;
 	swap_chain_desc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
@@ -124,7 +124,7 @@ void renderer_dx12::initialize(HWND hwnd, const uint32_t frame_width, const uint
 
 	// Render target view descriptor heap
 	D3D12_DESCRIPTOR_HEAP_DESC rtv_heap_desc = {};
-	rtv_heap_desc.NumDescriptors = renderer_dx12::frame_count;
+	rtv_heap_desc.NumDescriptors = RendererDx12::frame_count;
 	rtv_heap_desc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_RTV;
 	rtv_heap_desc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
 	check_result(m_device->CreateDescriptorHeap(&rtv_heap_desc, IID_PPV_ARGS(&m_rtv_heap)));
@@ -135,7 +135,7 @@ void renderer_dx12::initialize(HWND hwnd, const uint32_t frame_width, const uint
 	CD3DX12_CPU_DESCRIPTOR_HANDLE rtv_handle(m_rtv_heap->GetCPUDescriptorHandleForHeapStart());
 
 	// Create a RTV for each frame.
-	for (uint32_t i = 0; i < renderer_dx12::frame_count; i++) {
+	for (uint32_t i = 0; i < RendererDx12::frame_count; i++) {
 		check_result(m_swap_chain->GetBuffer(i, IID_PPV_ARGS(&m_render_targets[i])));
 		m_device->CreateRenderTargetView(m_render_targets[i].Get(), nullptr, rtv_handle);
 		rtv_handle.Offset(1, m_rtv_descriptor_size);
@@ -167,18 +167,18 @@ void renderer_dx12::initialize(HWND hwnd, const uint32_t frame_width, const uint
 
 	auto pipe = (pipeline_dx12*)load_pipeline("test_shader", L"C:/projects/Ether/dx12_updgrade/GameBase/assets/shaders/test_shader.hlsl");
 
-	kbLog("renderer_dx12 initialized");
+	kbLog("RendererDx12 initialized");
 	todo_create_vertices();
 }
 
-renderer_dx12::~renderer_dx12() {
+RendererDx12::~RendererDx12() {
 }
 
-void renderer_dx12::shut_down() {
-	renderer::shut_down();
+void RendererDx12::shut_down() {
+	Renderer::shut_down();
 }
 
-void renderer_dx12::get_hardware_adapter(
+void RendererDx12::get_hardware_adapter(
 	IDXGIFactory1* const factory,
 	IDXGIAdapter1** const out_adapter,
 	bool request_high_performance) {
@@ -230,7 +230,7 @@ void renderer_dx12::get_hardware_adapter(
 	*out_adapter = adapter.Detach();
 }
 
-void renderer_dx12::render() {
+void RendererDx12::render() {
 	check_result(m_command_allocator->Reset());
 	check_result(m_command_list->Reset(m_command_allocator.Get(), nullptr));
 
@@ -280,7 +280,7 @@ void renderer_dx12::render() {
 	m_frame_index = m_swap_chain->GetCurrentBackBufferIndex();
 }
 
-pipeline* renderer_dx12::create_pipeline(const wstring& path) {
+pipeline* RendererDx12::create_pipeline(const wstring& path) {
 #if defined(_DEBUG)
 	// Enable better shader debugging with the graphics debugging tools.
 	UINT compileFlags = D3DCOMPILE_DEBUG | D3DCOMPILE_SKIP_OPTIMIZATION;
@@ -318,16 +318,16 @@ pipeline* renderer_dx12::create_pipeline(const wstring& path) {
 	psoDesc.NumRenderTargets = 1;
 	psoDesc.RTVFormats[0] = DXGI_FORMAT_R8G8B8A8_UNORM;
 	psoDesc.SampleDesc.Count = 1;
-	pipeline_dx12* const new_pipeline = new pipeline_dx12();
-	check_result(m_device->CreateGraphicsPipelineState(&psoDesc, IID_PPV_ARGS(&new_pipeline->m_pipeline_state)));
+	pipeline_dx12* const pipe = new pipeline_dx12();
+	check_result(m_device->CreateGraphicsPipelineState(&psoDesc, IID_PPV_ARGS(&pipe->m_pipeline_state)));
 
-	return (pipeline*)new_pipeline;
+	return (pipeline*)pipe;
 }
 
 ///
 /// 
 ///
-void renderer_dx12::todo_create_vertices() {
+void RendererDx12::todo_create_vertices() {
 	// Create the vertex buffer.
 	{
 		const float aspect = 10.f / 9.f;
