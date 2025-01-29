@@ -41,6 +41,10 @@ struct FVertex {
 /// pipeline
 ///
 class pipeline {
+public:
+	virtual void release() = 0;
+
+private:
 	std::string name;
 };
 
@@ -55,25 +59,29 @@ public:
 	virtual void initialize(HWND hwnd, const uint32_t frame_width, const uint32_t frame_height);
 	virtual void shut_down() = 0;
 
-	virtual RenderBuffer* allocate_render_buffer() = 0;
-
 	virtual void render() = 0;
+
+	RenderBuffer* create_render_buffer();
 
 	pipeline* load_pipeline(const std::string& friendly_name, const std::wstring& path);
 	pipeline* get_pipeline(const std::string& friendly_name);
+
+private:
+	virtual pipeline* create_pipeline(const std::wstring& path) = 0;
+	virtual RenderBuffer* create_render_buffer_internal() = 0;
 
 protected:
 	uint m_frame_width = 0;
 	uint m_frame_height = 0;
 
 private:
-	virtual pipeline* create_pipeline(const std::wstring& path) = 0;
-
 	std::unordered_map<std::string, pipeline*> m_pipelines;
+	std::vector<class RenderBuffer*> m_render_buffers;
 };
 
-class pipeline_dx12 : pipeline {
+class pipeline_dx12 : public pipeline {
 	friend class RendererDx12;
+	virtual void release() {}
 
 	ComPtr<ID3D12PipelineState> m_pipeline_state;
 };
@@ -87,9 +95,9 @@ public:
 
 	virtual void shut_down() override;
 
-	virtual RenderBuffer* allocate_render_buffer();
-
 	virtual void render() override;
+
+	ComPtr<ID3D12Device> get_device() const { return m_device; }
 
 protected:
 	virtual void initialize(HWND hwnd, const uint32_t frameWidth, const uint32_t frameHeight) override;
@@ -103,6 +111,7 @@ private:
 		bool request_high_performance);
 
 	virtual pipeline* create_pipeline(const std::wstring& path) override;
+	virtual RenderBuffer* create_render_buffer_internal() override;
 
 	static const UINT frame_count = 2;
 

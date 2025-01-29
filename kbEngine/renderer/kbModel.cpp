@@ -449,7 +449,7 @@ bool kbModel::LoadMS3D() {
 
 		// D3D12
 		if (g_renderer != nullptr) {
-			auto* buffer = g_renderer->allocate_render_buffer();
+			auto* buffer = g_renderer->create_render_buffer();
 			buffer->write(verts);
 		}
 

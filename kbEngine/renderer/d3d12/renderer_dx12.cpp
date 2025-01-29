@@ -35,7 +35,22 @@ void Renderer::initialize(HWND hwnd, const uint32_t frame_width, const uint32_t 
 
 
 void Renderer::shut_down() {
+	for (auto& pipe: m_pipelines) {
+		delete pipe.second;
+	}
+	m_pipelines.clear();
 
+	for (size_t i = 0; i < m_render_buffers.size(); i++) {
+		m_render_buffers[i]->release();
+		delete m_render_buffers[i];
+	}
+	m_render_buffers.clear();
+}
+
+RenderBuffer* Renderer::create_render_buffer() {
+	RenderBuffer* const buffer = create_render_buffer_internal();
+	m_render_buffers.push_back(buffer);
+	return buffer;
 }
 
 pipeline* Renderer::load_pipeline(const std::string& friendly_name, const std::wstring& path) {
@@ -231,7 +246,7 @@ void RendererDx12::get_hardware_adapter(
 	*out_adapter = adapter.Detach();
 }
 
-RenderBuffer* RendererDx12::allocate_render_buffer() {
+RenderBuffer* RendererDx12::create_render_buffer_internal() {
 	return new RenderBuffer_D3D12();
 }
 

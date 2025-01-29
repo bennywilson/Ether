@@ -4,6 +4,7 @@
 #include "render_buffer.h"
 
 using namespace std;
+using namespace Microsoft::WRL;
 
 class RenderBuffer_D3D12 : public RenderBuffer {
 public:
@@ -14,5 +15,6 @@ public:
 	virtual void release();
 
 private:
-	Microsoft::WRL::ComPtr<ID3D12Resource> m_vertex_buffer;
+	ComPtr<ID3D12Resource> m_vertex_buffer;
+	D3D12_VERTEX_BUFFER_VIEW m_vertex_buffer_view;
 };

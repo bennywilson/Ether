@@ -8,7 +8,7 @@
 #include "kbApp.h"
 #include "kbJobManager.h"
 #include "DX11/kbRenderer_DX11.h"
-#include "DX12/renderer_dx12.h"
+#include "d3d12/renderer_dx12.h"
 #include "kbEditor.h"
 #include "Ether/EtherGame.h"
 #include "kbMath.h"
@@ -234,14 +234,14 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 
 	std::string mapName;
 
-	bool use_dx12 = true;
+	/*bool use_dx12 = true;
 	if ( GetAsyncKeyState( VK_MBUTTON ) ) {
 		use_dx12 = false;
 		//g_UseEditor = true;
 	}
 //////////////////	g_UseEditor = true;
 use_dx12 = false;
-
+*/
 	if ( numArgs > 0 ) {
 		for ( int i = 1; i < numArgs; i++ ) {
 			cmdArgs[i-1] = cmdLine[i];
@@ -307,7 +307,10 @@ use_dx12 = false;
 		g_pRenderer->SetRenderWindow(nullptr);
 	} else {
 
-		if (!use_dx12) {
+		g_renderer = new RendererDx12();
+		g_renderer->initialize(hWnd, g_screen_width, g_screen_height);
+
+		{//if (!use_dx12) {
 			g_pRenderer = new kbRenderer_DX11();
 			g_pRenderer->Init(hWnd, g_screen_width, g_screen_height);
 			pGame = new EtherGame();//( g_pRenderer->IsRenderingToHMD() ) ? ( new EtherVRGame() ) : ( new EtherGame() );
@@ -316,9 +319,6 @@ use_dx12 = false;
 			pGame->LoadMap(mapName);
 
 		}
-
-		g_renderer = new RendererDx12();
-		g_renderer->initialize(hWnd, g_screen_width, g_screen_height);
 
 	}
 
@@ -331,7 +331,9 @@ use_dx12 = false;
 		}
 
 		try {
-			if (use_dx12 == false) {
+static int fear = 1;
+
+			if (fear) {
 				if (g_UseEditor) {
 					applicationEditor->Update();
 				} else {
@@ -351,7 +353,7 @@ use_dx12 = false;
 		g_pRenderer->WaitForRenderingToComplete();
 	}
 
-	if (!use_dx12) {
+	{//if (!use_dx12) {
 		pGame->StopGame();
 		delete pGame;
 		delete applicationEditor;
@@ -364,6 +366,8 @@ use_dx12 = false;
 	ShutdownKBEngine();
 
 	kbConsoleVarManager::DeleteConsoleVarManager();
+
+	delete g_renderer;
 
 	return (int) msg.wParam;
 }
