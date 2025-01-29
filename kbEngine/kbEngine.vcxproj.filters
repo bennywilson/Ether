@@ -37,11 +37,11 @@
     <Filter Include="game\Components">
       <UniqueIdentifier>{b2e95899-c35e-4ebe-8295-d67321545428}</UniqueIdentifier>
     </Filter>
-    <Filter Include="renderer\dx12">
-      <UniqueIdentifier>{1cc76160-4ee5-4c14-8e93-9023f577e415}</UniqueIdentifier>
-    </Filter>
     <Filter Include="renderer\dx11">
       <UniqueIdentifier>{dbbb03a1-3486-4eeb-a86f-d770a9a1e72e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="renderer\d3d12">
+      <UniqueIdentifier>{1cc76160-4ee5-4c14-8e93-9023f577e415}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -281,11 +281,11 @@
     <ClInclude Include="gameEntity\kbUIComponent.h">
       <Filter>game\Components</Filter>
     </ClInclude>
-    <ClInclude Include="renderer\dx12\renderer_dx12.h">
-      <Filter>renderer\dx12</Filter>
+    <ClInclude Include="renderer\d3d12\renderer_dx12.h">
+      <Filter>renderer\d3d12</Filter>
     </ClInclude>
-    <ClInclude Include="renderer\dx12\types_dx12.h">
-      <Filter>renderer\dx12</Filter>
+    <ClInclude Include="renderer\d3d12\types_dx12.h">
+      <Filter>renderer\d3d12</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -433,11 +433,11 @@
     <ClCompile Include="gameEntity\kbUIComponent.cpp">
       <Filter>game\Components</Filter>
     </ClCompile>
-    <ClCompile Include="renderer\dx12\renderer_dx12.cpp">
-      <Filter>renderer\dx12</Filter>
+    <ClCompile Include="renderer\d3d12\renderer_dx12.cpp">
+      <Filter>renderer\d3d12</Filter>
     </ClCompile>
-    <ClCompile Include="renderer\dx12\types_dx12.cpp">
-      <Filter>renderer\dx12</Filter>
+    <ClCompile Include="renderer\d3d12\types_dx12.cpp">
+      <Filter>renderer\d3d12</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

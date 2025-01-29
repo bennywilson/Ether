@@ -3,7 +3,7 @@
 //
 // General model format based off of the ms3d specs
 //
-// 2016-2019 kbEngine 2.0
+// 2016-2025 kbEngine 2.0
 //==============================================================================
 #define KFBX_DLLINFO
 #include <fbxsdk.h>
@@ -13,6 +13,11 @@
 #include "kbModel.h"
 #include "kbRenderer.h"
 #include "DX11/kbRenderer_DX11.h"			// HACK
+#include "renderer_dx12.h"
+//#include <d3dcommon.h>
+//#include "d3dx12.h"
+#include "render_buffer.h"
+
 
 #pragma pack( push, packing )
 #pragma pack( 1 )
@@ -351,16 +356,6 @@ bool kbModel::LoadMS3D() {
 	}
 
 	// create index buffer
-	const uint numFinalTriangles = ibIndex / 3;
-
-	D3D11_BUFFER_DESC indexBufferDesc = { 0 };
-	indexBufferDesc.ByteWidth = sizeof( ushort ) * ibIndex;
-	indexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
-	indexBufferDesc.BindFlags = D3D11_BIND_INDEX_BUFFER;
-	indexBufferDesc.CPUAccessFlags = 0;
-	indexBufferDesc.MiscFlags = 0;
-	indexBufferDesc.StructureByteStride = 0;
-
 	m_CPUIndices.resize( ibIndex );
 
 	ibIndex = 0;
@@ -450,6 +445,12 @@ bool kbModel::LoadMS3D() {
 			verts[i].color[3] = m_CPUVertices[i].color[3];
 	
 			// color, normal, etc
+		}
+
+		// D3D12
+		if (g_renderer != nullptr) {
+			auto* buffer = g_renderer->allocate_render_buffer();
+			buffer->write(verts);
 		}
 
 		m_VertexBuffer.CreateVertexBuffer( verts );

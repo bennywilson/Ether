@@ -193,16 +193,6 @@ struct kbBoneMatrix_t {
 	kbVec3 m_Axis[4];
 };
 
-// platform switch here
-#include <D3D11.h>
-
-typedef ID3D11Buffer kbHWBuffer;
-typedef ID3D11ShaderResourceView kbHWTexture;
-typedef ID3D11VertexShader kbHWVertexShader;
-typedef ID3D11GeometryShader kbHWGeometryShader;
-typedef ID3D11PixelShader kbHWPixelShader;
-typedef ID3D11InputLayout kbHWVertexLayout;
-
 /**
  *	kbRenderJob
  */

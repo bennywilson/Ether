@@ -1,8 +1,8 @@
-//==============================================================================
-// RendererDx12.cpp
-//
-// 2025 kbEngine 2.0
-//==============================================================================
+///
+/// RendererDx12.cpp
+///
+/// 2025 kbEngine 2.0
+///
 #include <stdio.h>
 #include <sstream>
 #include <iomanip>
@@ -13,14 +13,15 @@
 #include "kbComponent.h"
 #include "kbConsole.h"
 #include <d3dcommon.h>
-#include "d3d12/d3dx12.h"
+#include "d3dx12.h"
+#include "types_dx12.h"
 
 using namespace std;
 
 Renderer* g_renderer = nullptr;
 
 Renderer::Renderer() {
-
+	g_renderer = this;
 }
 
 Renderer::~Renderer() {
@@ -228,6 +229,10 @@ void RendererDx12::get_hardware_adapter(
 	}
 
 	*out_adapter = adapter.Detach();
+}
+
+RenderBuffer* RendererDx12::allocate_render_buffer() {
+	return new RenderBuffer_D3D12();
 }
 
 void RendererDx12::render() {

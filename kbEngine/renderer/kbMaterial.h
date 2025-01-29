@@ -8,6 +8,7 @@
 #define _KBMATERIAL_H_
 
 #include <memory>
+#include "kbRenderBuffer.h"
 #include "kbRenderer_Defs.h"
 
 /**

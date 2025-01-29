@@ -15,7 +15,7 @@
 #include <DirectXMath.h>
 #include <wrl/client.h>
 #include "kbVector.h"
-#include "d3d12/d3dx12_core.h"
+#include "d3dx12_core.h"
 #include "kbRenderer.h"
 
 using namespace DirectX;
@@ -26,6 +26,8 @@ inline void check_result(HRESULT hr) {
 		throw;
 	}
 }
+
+class RenderBuffer;
 
 ///
 /// FVertex
@@ -52,6 +54,8 @@ public:
 
 	virtual void initialize(HWND hwnd, const uint32_t frame_width, const uint32_t frame_height);
 	virtual void shut_down() = 0;
+
+	virtual RenderBuffer* allocate_render_buffer() = 0;
 
 	virtual void render() = 0;
 
@@ -82,6 +86,8 @@ public:
 	~RendererDx12();
 
 	virtual void shut_down() override;
+
+	virtual RenderBuffer* allocate_render_buffer();
 
 	virtual void render() override;
 
