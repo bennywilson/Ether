@@ -48,10 +48,7 @@ pixelInput vertex_shader(vertexInput input) {
 ///
 ///	pixelShader
 ///
- PS_OUTPUT pixel_shader( pixelInput	input, bool IsFrontFace	: SV_IsFrontFace ) {
- 	PS_OUTPUT output = (PS_OUTPUT) 1;
-	output.color.xyz = shaderTexture.Sample( SampleType, input.uv ).xyz;
-	output.color.w = 1;
-	return output;
+ float4 pixel_shader( pixelInput	input, bool IsFrontFace	: SV_IsFrontFace ) : SV_TARGET {
+	return shaderTexture.Sample( SampleType, input.uv );
 }
  
