@@ -164,6 +164,6 @@ kbGameEntity 2304826171 1239496353 243933317 3983880952 {
 			}
 		RenderOrderBias =  0.000000
 		RenderPass = Post-LightingPass
-		Model = ..\..\kbengine\assets\models\unitcube.ms3d
+		Model = C:\projects\Ether\dx12_updgrade\GameBase\assets\Test\diablo.diablo3
 	}
 }

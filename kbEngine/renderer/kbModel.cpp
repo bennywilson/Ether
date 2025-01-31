@@ -855,6 +855,14 @@ bool kbModel::LoadDiablo3() {
 	m_VertexBuffer.CreateVertexBuffer( vertexList );
 	m_IndexBuffer.CreateIndexBuffer( indexList );
 
+	if (g_renderer) {
+		auto* vertex_buffer = g_renderer->create_render_buffer();
+		vertex_buffer->write_vertex_buffer(vertexList);
+
+		auto* index_buffer = g_renderer->create_render_buffer();
+		index_buffer->write_index_buffer(indexList);
+	}
+
 	m_Meshes.push_back( mesh_t() );
 	mesh_t & newMesh = m_Meshes[m_Meshes.size() - 1];
 	newMesh.m_IndexBufferIndex = 0;

@@ -10,10 +10,10 @@
 
 void RenderBuffer::write_vertex_buffer(const std::vector<vertexLayout>& vertices) {
 	m_num_elements = vertices.size();
-	m_size_bytes = m_num_elements * vertices.size();
+	m_size_bytes = m_num_elements * sizeof(vertexLayout);
 }
 
 void RenderBuffer::write_index_buffer(const std::vector<uint16_t>& indices) {
 	m_num_elements = indices.size();
-	m_size_bytes = m_num_elements * indices.size();
+	m_size_bytes = m_num_elements * sizeof(uint16_t);
 }

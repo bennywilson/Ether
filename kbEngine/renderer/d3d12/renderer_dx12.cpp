@@ -330,7 +330,7 @@ void RendererDx12::render() {
 	m_command_list->DrawIndexedInstanced(index_buffer->num_elements(), 1, 0, 0, 0);
 
 	m_command_list->SetGraphicsRootDescriptorTable(0, m_cbv_heap->GetGPUDescriptorHandleForHeapStart());
-	m_command_list->SetGraphicsRootDescriptorTable(0, m_sampler_heap->GetGPUDescriptorHandleForHeapStart());
+	m_command_list->SetGraphicsRootDescriptorTable(1, m_sampler_heap->GetGPUDescriptorHandleForHeapStart());
 
 
 	// Indicate that the back buffer will now be used to present.
@@ -384,13 +384,16 @@ pipeline* RendererDx12::create_pipeline(const wstring& path) {
 		{ "TANGENT", 0, DXGI_FORMAT_R8G8B8A8_UNORM, 0, 28, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
 	};
 
+auto raster = CD3DX12_RASTERIZER_DESC(D3D12_DEFAULT);
+raster.CullMode = D3D12_CULL_MODE_BACK;
+
 	// Describe and create the graphics pipeline state object (PSO).
 	D3D12_GRAPHICS_PIPELINE_STATE_DESC psoDesc = {};
 	psoDesc.InputLayout = { inputElementDescs, _countof(inputElementDescs) };
 	psoDesc.pRootSignature = m_root_signature.Get();
 	psoDesc.VS = CD3DX12_SHADER_BYTECODE(vertex_shader.Get());
 	psoDesc.PS = CD3DX12_SHADER_BYTECODE(pixel_shader.Get());
-	psoDesc.RasterizerState = CD3DX12_RASTERIZER_DESC(D3D12_DEFAULT);
+	psoDesc.RasterizerState = raster;
 	psoDesc.BlendState = CD3DX12_BLEND_DESC(D3D12_DEFAULT);
 	psoDesc.DepthStencilState.DepthEnable = FALSE;
 	psoDesc.DepthStencilState.StencilEnable = FALSE;
@@ -466,7 +469,7 @@ void RendererDx12::todo_create_texture() {
 	m_device->CreateSampler(&samplerDesc, m_sampler_heap->GetCPUDescriptorHandleForHeapStart());
 
 	// Create SRV for the city's diffuse texture.
-	/*auto descrip_size = m_device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
+	auto descrip_size = m_device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
 
 	CD3DX12_CPU_DESCRIPTOR_HANDLE srvHandle(m_cbv_heap->GetCPUDescriptorHandleForHeapStart(), 0, descrip_size);
 	D3D12_SHADER_RESOURCE_VIEW_DESC diffuseSrvDesc = {};
@@ -482,7 +485,7 @@ void RendererDx12::todo_create_texture() {
 	check_result(m_device->CreateCommittedResource(
 		&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD),
 		D3D12_HEAP_FLAG_NONE,
-		&CD3DX12_RESOURCE_DESC::Buffer(sizeof(float) * 4),
+		&CD3DX12_RESOURCE_DESC::Buffer(256),
 		D3D12_RESOURCE_STATE_GENERIC_READ,
 		nullptr,
 		IID_PPV_ARGS(&m_cbv_upload_heap)));
@@ -496,7 +499,7 @@ void RendererDx12::todo_create_texture() {
 				// Describe and create a constant buffer view (CBV).
 				D3D12_CONSTANT_BUFFER_VIEW_DESC cbvDesc = {};
 				cbvDesc.BufferLocation = m_cbv_upload_heap->GetGPUVirtualAddress();
-				cbvDesc.SizeInBytes = sizeof(float) * 4;
+				cbvDesc.SizeInBytes = 256;
 				m_device->CreateConstantBufferView(&cbvDesc, cbvSrvHandle);
 				cbvSrvHandle.Offset(descrip_size);
 	}

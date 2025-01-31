@@ -7,6 +7,14 @@ void RenderBuffer_D3D12::release() {}
 void RenderBuffer_D3D12::write_vertex_buffer(const std::vector<vertexLayout>& vertices) {
 	RenderBuffer::write_vertex_buffer(vertices);
 
+	vector<vertexLayout> new_verts;
+for (auto& vert: vertices) {
+	vertexLayout new_vert = vert;
+	new_vert.position.z *= -1;
+	new_vert.position.x *= -1;
+	new_vert.position.z += 1;
+	new_verts.push_back(new_vert);
+}
 	auto device = ((RendererDx12*)(g_renderer))->get_device();
 
 	const uint32_t buffer_size = size_bytes();
@@ -27,7 +35,7 @@ void RenderBuffer_D3D12::write_vertex_buffer(const std::vector<vertexLayout>& ve
 	UINT8* pVertexDataBegin = nullptr;
 	CD3DX12_RANGE read_range(0, 0);        // We do not intend to read from this resource on the CPU.
 	check_result(m_vertex_buffer->Map(0, &read_range, reinterpret_cast<void**>(&pVertexDataBegin)));
-	memcpy(pVertexDataBegin, vertices.data(), buffer_size);
+	memcpy(pVertexDataBegin, new_verts.data(), buffer_size);
 	m_vertex_buffer->Unmap(0, nullptr);
 
 	// Initialize the vertex buffer view.
