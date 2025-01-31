@@ -124,6 +124,8 @@ private:
 	ComPtr<ID3D12DescriptorHeap> m_cbv_heap;
 	ComPtr<ID3D12Resource> m_cbv_upload_heap;
 
+	ComPtr<ID3D12DescriptorHeap> m_srv_heap;
+
 	ComPtr<ID3D12DescriptorHeap> m_rtv_heap;
 	uint32_t m_rtv_descriptor_size = 0;
 

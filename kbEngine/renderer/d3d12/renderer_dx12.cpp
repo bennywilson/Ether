@@ -148,6 +148,13 @@ void RendererDx12::initialize(HWND hwnd, const uint32_t frame_width, const uint3
 
 	m_rtv_descriptor_size = m_device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV);
 
+	// Describe and create a shader resource view (SRV) heap for the texture.
+	D3D12_DESCRIPTOR_HEAP_DESC srvHeapDesc = {};
+	srvHeapDesc.NumDescriptors = 1;
+	srvHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV;
+	srvHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;
+	check_result(m_device->CreateDescriptorHeap(&srvHeapDesc, IID_PPV_ARGS(&m_srv_heap)));
+
 	D3D12_DESCRIPTOR_HEAP_DESC samplerHeapDesc = {};
 	samplerHeapDesc.NumDescriptors = 1;
 	samplerHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_SAMPLER;
@@ -311,8 +318,8 @@ void RendererDx12::render() {
 	CD3DX12_CPU_DESCRIPTOR_HANDLE rtv_handle(m_rtv_heap->GetCPUDescriptorHandleForHeapStart(), m_frame_index, m_rtv_descriptor_size);
 	m_command_list->OMSetRenderTargets(1, &rtv_handle, FALSE, nullptr);
 
-	const float clearColor[] = { 1.0f, 0.2f, 0.4f, 1.0f };
-	m_command_list->ClearRenderTargetView(rtv_handle, clearColor, 0, nullptr);
+	const float clear_color[] = { 1.0f, 0.2f, 0.4f, 1.0f };
+	m_command_list->ClearRenderTargetView(rtv_handle, clear_color, 0, nullptr);
 
 	pipeline_dx12* const pipe = (pipeline_dx12*)get_pipeline("test_shader");
 	m_command_list->SetPipelineState(pipe->m_pipeline_state.Get());
@@ -322,15 +329,18 @@ void RendererDx12::render() {
 	auto vertex_buffer = (RenderBuffer_D3D12*)get_render_buffer(0);
 	auto index_buffer = (RenderBuffer_D3D12*)get_render_buffer(1);
 
-	ID3D12DescriptorHeap* ppHeaps[] = { m_cbv_heap.Get(), m_sampler_heap.Get() };
+	ID3D12DescriptorHeap* ppHeaps[] = { m_srv_heap.Get() };
 	m_command_list->SetDescriptorHeaps(_countof(ppHeaps), ppHeaps);
+	m_command_list->SetGraphicsRootDescriptorTable(0, m_srv_heap->GetGPUDescriptorHandleForHeapStart());
+
+	//ID3D12DescriptorHeap* ppHeaps[] = { m_cbv_heap.Get(), m_sampler_heap.Get() };
+	//m_command_list->SetDescriptorHeaps(_countof(ppHeaps), ppHeaps);
 
 	m_command_list->IASetVertexBuffers(0, 1, &vertex_buffer->vertex_buffer_view());
 	m_command_list->IASetIndexBuffer(&index_buffer->index_buffer_view());
 	m_command_list->DrawIndexedInstanced(index_buffer->num_elements(), 1, 0, 0, 0);
 
-	m_command_list->SetGraphicsRootDescriptorTable(0, m_cbv_heap->GetGPUDescriptorHandleForHeapStart());
-	m_command_list->SetGraphicsRootDescriptorTable(1, m_sampler_heap->GetGPUDescriptorHandleForHeapStart());
+	//^m_command_list->SetGraphicsRootDescriptorTable(1, m_sampler_heap->GetGPUDescriptorHandleForHeapStart());
 
 
 	// Indicate that the back buffer will now be used to present.
@@ -426,24 +436,61 @@ void RendererDx12::todo_create_texture() {
 		static_cast<UINT>(subresources.size()));
 
 	// Create the GPU upload buffer.
-	CD3DX12_HEAP_PROPERTIES heapProps(D3D12_HEAP_TYPE_UPLOAD);
-
-	auto desc = CD3DX12_RESOURCE_DESC::Buffer(uploadBufferSize);
-
 	ComPtr<ID3D12Resource> uploadRes;
 	check_result(
 		m_device->CreateCommittedResource(
-			&heapProps,
+			&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD),
 			D3D12_HEAP_FLAG_NONE,
-			&desc,
+			&CD3DX12_RESOURCE_DESC::Buffer(uploadBufferSize),
 			D3D12_RESOURCE_STATE_GENERIC_READ,
 			nullptr,
-			IID_PPV_ARGS(uploadRes.GetAddressOf())));
+			IID_PPV_ARGS(&uploadRes)));
 
 	UpdateSubresources(m_command_list.Get(), tex.Get(), uploadRes.Get(),
 		0, 0, static_cast<UINT>(subresources.size()), subresources.data());
+	m_command_list->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(tex.Get(), D3D12_RESOURCE_STATE_COPY_DEST, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE));
 
-	auto barrier = CD3DX12_RESOURCE_BARRIER::Transition(tex.Get(),
+	// Describe and create a SRV for the texture.
+	D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc = {};
+	srvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
+	srvDesc.Format = DXGI_FORMAT_BC1_UNORM;
+	srvDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D;
+	srvDesc.Texture2D.MipLevels = 1;
+	m_device->CreateShaderResourceView(tex.Get(), &srvDesc, m_srv_heap->GetCPUDescriptorHandleForHeapStart());
+
+	// Close the command list and execute it to begin the initial GPU setup.
+	check_result(m_command_list->Close());
+	ID3D12CommandList* ppCommandLists[] = { m_command_list.Get() };
+	m_queue->ExecuteCommandLists(_countof(ppCommandLists), ppCommandLists);
+
+	check_result(m_device->CreateFence(0, D3D12_FENCE_FLAG_NONE, IID_PPV_ARGS(&m_fence)));
+	m_fence_value = 1;
+
+	// Create an event handle to use for frame synchronization.
+	m_fence_event = CreateEvent(nullptr, FALSE, FALSE, nullptr);
+	if (m_fence_event == nullptr)
+	{
+		check_result(HRESULT_FROM_WIN32(GetLastError()));
+	}
+
+	// Wait for previous frame (todo)
+	const uint64_t fence = m_fence_value;
+	check_result(m_queue->Signal(m_fence.Get(), fence));
+	m_fence_value++;
+
+	// Wait until the previous frame is finished.
+	if (m_fence->GetCompletedValue() < fence) {
+		check_result(m_fence->SetEventOnCompletion(fence, m_fence_event));
+		WaitForSingleObject(m_fence_event, INFINITE);
+	}
+
+
+	// Wait for the command list to execute; we are reusing the same command 
+	// list in our main loop but for now, we just want to wait for setup to 
+	// complete before continuing.
+
+	//WaitForPreviousFrame();
+/*	auto barrier = CD3DX12_RESOURCE_BARRIER::Transition(tex.Get(),
 		D3D12_RESOURCE_STATE_COPY_DEST, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
 	m_command_list->ResourceBarrier(1, &barrier);
 
@@ -485,7 +532,7 @@ void RendererDx12::todo_create_texture() {
 	check_result(m_device->CreateCommittedResource(
 		&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD),
 		D3D12_HEAP_FLAG_NONE,
-		&CD3DX12_RESOURCE_DESC::Buffer(256),
+		&CD3DX12_RESOURCE_DESC::Buffer(uploadBufferSize),
 		D3D12_RESOURCE_STATE_GENERIC_READ,
 		nullptr,
 		IID_PPV_ARGS(&m_cbv_upload_heap)));

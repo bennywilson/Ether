@@ -1,6 +1,9 @@
-SamplerState SampleType : register(s0);
-
+cbuffer matrixBuffer {
+	matrix modelMatrix;
+	matrix mvpMatrix;
+};
 Texture2D shaderTexture : register(t0);
+SamplerState SampleType : register(s0);
 
 //-------------------------------------
 struct vertexInput {
@@ -38,6 +41,7 @@ pixelInput vertex_shader(vertexInput input) {
 	output.position = mul( input.position, mvp );
 	output.color = input.color;
 	output.normal.xyz = input.normal.xyz;
+	output.uv = input.uv;
 	return output;
 }
 
@@ -46,8 +50,8 @@ pixelInput vertex_shader(vertexInput input) {
 ///
  PS_OUTPUT pixel_shader( pixelInput	input, bool IsFrontFace	: SV_IsFrontFace ) {
  	PS_OUTPUT output = (PS_OUTPUT) 1;
-	output.color.xyz = input.normal.xyz;//float4(1,1,1,1);//shaderTexture.Sample( SampleType, input.uv ).xyz;
-
+	output.color.xyz = shaderTexture.Sample( SampleType, input.uv ).xyz;
+	output.color.w = 1;
 	return output;
 }
  
