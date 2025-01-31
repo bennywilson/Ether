@@ -11,6 +11,8 @@ public:
 		release();
 	}
 
-	virtual void write(const std::vector<vertexLayout>& vertices) = 0;
+	virtual void write_vertex_buffer(const std::vector<vertexLayout>& vertices) = 0;
+	virtual void write_index_buffer(const std::vector<uint16_t>& indices) = 0;
+
 	virtual void release() {};
 };

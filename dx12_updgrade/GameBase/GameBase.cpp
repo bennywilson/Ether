@@ -295,18 +295,16 @@ use_dx12 = false;
 	EtherGame * pGame = nullptr;
 	kbEditor * applicationEditor = nullptr;
 
-	if ( g_UseEditor ) {
-
+	if (g_UseEditor) {
 		applicationEditor = new kbEditor();
 		pGame = new EtherGame();
 		applicationEditor->SetGame( pGame );
-		if ( mapName.length() > 0 )
-		{
+		g_pRenderer->SetRenderWindow(nullptr);
+
+		if (mapName.length() > 0) {
 			applicationEditor->LoadMap( mapName );
 		}
-		g_pRenderer->SetRenderWindow(nullptr);
 	} else {
-
 		g_renderer = new RendererDx12();
 		g_renderer->initialize(hWnd, g_screen_width, g_screen_height);
 
@@ -317,9 +315,7 @@ use_dx12 = false;
 			std::vector<const kbGameEntity*> GameEntitiesList;
 			pGame->InitGame(hWnd, g_screen_width, g_screen_height, GameEntitiesList);
 			pGame->LoadMap(mapName);
-
 		}
-
 	}
 
 	// Main message loop
@@ -331,7 +327,7 @@ use_dx12 = false;
 		}
 
 		try {
-static int fear = 1;
+static int fear = 0;
 
 			if (fear) {
 				if (g_UseEditor) {

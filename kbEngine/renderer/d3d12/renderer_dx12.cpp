@@ -271,9 +271,14 @@ void RendererDx12::render() {
 	m_command_list->SetPipelineState(pipe->m_pipeline_state.Get());
 
 	m_command_list->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-	m_command_list->IASetVertexBuffers(0, 1, &m_vertex_buffer_view);
-	m_command_list->DrawInstanced(3, 1, 0, 0);
 
+	auto vertex_buffer = (RenderBuffer_D3D12*)get_render_buffer(0);
+	auto index_buffer = (RenderBuffer_D3D12*)get_render_buffer(1);
+
+	m_command_list->IASetVertexBuffers(0, 1, &vertex_buffer->vertex_buffer_view());
+	m_command_list->IASetIndexBuffer(&index_buffer->index_buffer_view());
+	m_command_list->DrawIndexedInstanced(24, 1, 0, 0, 0);
+	//m_command_list->DrawInstanced(3, 1, 0, 0);
 
 	// Indicate that the back buffer will now be used to present.
 	m_command_list->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(m_render_targets[m_frame_index].Get(), D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PRESENT));
@@ -320,7 +325,10 @@ pipeline* RendererDx12::create_pipeline(const wstring& path) {
 	D3D12_INPUT_ELEMENT_DESC inputElementDescs[] =
 	{
 		{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
-		{ "COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 12, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 }
+		{ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 12, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
+		{ "COLOR", 0, DXGI_FORMAT_R8G8B8A8_UNORM, 0, 20, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
+		{ "NORMAL", 0, DXGI_FORMAT_R8G8B8A8_UNORM, 0, 24, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
+		{ "TANGENT", 0, DXGI_FORMAT_R8G8B8A8_UNORM, 0, 28, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
 	};
 
 	// Describe and create the graphics pipeline state object (PSO).

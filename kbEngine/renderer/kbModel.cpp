@@ -419,10 +419,10 @@ bool kbModel::LoadMS3D() {
 		}
 	}
 
-	if ( m_bCPUAccessOnly == false ) {
-		m_IndexBuffer.CreateIndexBuffer( m_CPUIndices );
+	if (m_bCPUAccessOnly == false) {
+		m_IndexBuffer.CreateIndexBuffer(m_CPUIndices);
 
-		std::vector<vertexLayout> verts( m_CPUVertices.size() );
+		std::vector<vertexLayout> verts(m_CPUVertices.size());
 
 		for ( uint i = 0; i < m_CPUVertices.size(); i++ ) {
 			verts[i].position = m_CPUVertices[i].position;
@@ -449,8 +449,11 @@ bool kbModel::LoadMS3D() {
 
 		// D3D12
 		if (g_renderer != nullptr) {
-			auto* buffer = g_renderer->create_render_buffer();
-			buffer->write(verts);
+			auto* vertex_buffer = g_renderer->create_render_buffer();
+			vertex_buffer->write_vertex_buffer(verts);
+			
+			auto* index_buffer = g_renderer->create_render_buffer();
+			index_buffer->write_index_buffer(m_CPUIndices);
 		}
 
 		m_VertexBuffer.CreateVertexBuffer( verts );

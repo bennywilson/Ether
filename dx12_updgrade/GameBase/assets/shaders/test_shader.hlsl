@@ -2,7 +2,10 @@
 //-------------------------------------
 struct vertexInput {
 	float4 position		: POSITION;
+	float2 uv			: TEXCOORD0;
 	float4 color		: COLOR;
+	float4 normal		: NORMAL;
+	float4 tangent		: TANGENT;
 };
 
 //-------------------------------------

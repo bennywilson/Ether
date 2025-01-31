@@ -66,6 +66,9 @@ public:
 	pipeline* load_pipeline(const std::string& friendly_name, const std::wstring& path);
 	pipeline* get_pipeline(const std::string& friendly_name);
 
+protected:
+	RenderBuffer* get_render_buffer(const size_t& buffer_index) { return m_render_buffers[buffer_index]; }
+
 private:
 	virtual pipeline* create_pipeline(const std::wstring& path) = 0;
 	virtual RenderBuffer* create_render_buffer_internal() = 0;
