@@ -27,6 +27,11 @@ struct PS_OUTPUT {
 pixelInput vertex_shader(vertexInput input) {
 	pixelInput output = (pixelInput)(0);
 	output.position = input.position;
+	matrix mvp= {	1.31353f, 0.f, 0.f, 0.f,
+					0.f, 2.14451f, 0.f, 0.f,
+					0.f, 0.f, 1.00005f, 1.f,
+					0.f, 0.f, 4.f, 5.f};
+	output.position = mul( input.position, mvp );
 	output.color = input.color;
 	return output;
 }

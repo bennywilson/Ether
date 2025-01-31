@@ -1,8 +1,7 @@
-///
 /// RendererDx12.cpp
 ///
 /// 2025 kbEngine 2.0
-///
+
 #include <stdio.h>
 #include <sstream>
 #include <iomanip>
@@ -277,7 +276,7 @@ void RendererDx12::render() {
 
 	m_command_list->IASetVertexBuffers(0, 1, &vertex_buffer->vertex_buffer_view());
 	m_command_list->IASetIndexBuffer(&index_buffer->index_buffer_view());
-	m_command_list->DrawIndexedInstanced(24, 1, 0, 0, 0);
+	m_command_list->DrawIndexedInstanced(index_buffer->num_elements(), 1, 0, 0, 0);
 	//m_command_list->DrawInstanced(3, 1, 0, 0);
 
 	// Indicate that the back buffer will now be used to present.
@@ -356,7 +355,7 @@ pipeline* RendererDx12::create_pipeline(const wstring& path) {
 /// 
 ///
 void RendererDx12::todo_create_vertices() {
-	// Create the vertex buffer.
+	/*// Create the vertex buffer.
 	{
 		const float aspect = 10.f / 9.f;
 		// Define the geometry for a triangle.
@@ -392,5 +391,5 @@ void RendererDx12::todo_create_vertices() {
 		m_vertex_buffer_view.BufferLocation = m_vertex_buffer->GetGPUVirtualAddress();
 		m_vertex_buffer_view.StrideInBytes = sizeof(FVertex);
 		m_vertex_buffer_view.SizeInBytes = vertexBufferSize;
-	}
+	}*/
 }

@@ -30,14 +30,6 @@ inline void check_result(HRESULT hr) {
 class RenderBuffer;
 
 ///
-/// FVertex
-///
-struct FVertex {
-	XMFLOAT3 position;
-	XMFLOAT4 color;
-};
-
-///
 /// pipeline
 ///
 class pipeline {

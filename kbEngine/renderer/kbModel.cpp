@@ -14,8 +14,6 @@
 #include "kbRenderer.h"
 #include "DX11/kbRenderer_DX11.h"			// HACK
 #include "renderer_dx12.h"
-//#include <d3dcommon.h>
-//#include "d3dx12.h"
 #include "render_buffer.h"
 
 

@@ -180,6 +180,7 @@
     <ClInclude Include="renderer\kbRenderBuffer.h" />
     <ClInclude Include="renderer\kbRenderer.h" />
     <ClInclude Include="renderer\kbRenderer_defs.h" />
+    <ClInclude Include="renderer\render_buffer.h" />
     <ClInclude Include="sound\kbSoundComponent.h" />
     <ClInclude Include="sound\kbSoundManager.h" />
   </ItemGroup>
@@ -307,6 +308,7 @@
     </ClCompile>
     <ClCompile Include="renderer\kbRenderer.cpp" />
     <ClCompile Include="renderer\kbRenderer_defs.cpp" />
+    <ClCompile Include="renderer\render_buffer.cpp" />
     <ClCompile Include="sound\kbSoundComponent.cpp" />
     <ClCompile Include="sound\kbSoundManager.cpp" />
   </ItemGroup>

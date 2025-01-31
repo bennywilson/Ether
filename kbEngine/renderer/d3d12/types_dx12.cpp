@@ -5,9 +5,11 @@
 void RenderBuffer_D3D12::release() {}
 
 void RenderBuffer_D3D12::write_vertex_buffer(const std::vector<vertexLayout>& vertices) {
+	RenderBuffer::write_vertex_buffer(vertices);
+
 	auto device = ((RendererDx12*)(g_renderer))->get_device();
 
-	const uint32_t buffer_size = (uint32_t)(vertices.size() * sizeof(vertexLayout));
+	const uint32_t buffer_size = size_bytes();
 
 	// Note: using upload heaps to transfer static data like vert buffers is not 
 	// recommended. Every time the GPU needs it, the upload heap will be marshalled 
@@ -35,9 +37,11 @@ void RenderBuffer_D3D12::write_vertex_buffer(const std::vector<vertexLayout>& ve
 }
 
 void RenderBuffer_D3D12::write_index_buffer(const std::vector<uint16_t>& indices) {
+	RenderBuffer::write_index_buffer(indices);
+
 	auto device = ((RendererDx12*)(g_renderer))->get_device();
 
-	const uint32_t buffer_size = (uint32_t)(indices.size() * sizeof(uint16_t));
+	const uint32_t buffer_size = size_bytes();
 
 	// Note: using upload heaps to transfer static data like vert buffers is not 
 	// recommended. Every time the GPU needs it, the upload heap will be marshalled 
