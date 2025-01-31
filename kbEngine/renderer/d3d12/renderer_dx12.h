@@ -40,9 +40,7 @@ private:
 	std::string name;
 };
 
-///
 ///	Renderer
-///
 class Renderer {
 public:
 	Renderer();
@@ -74,16 +72,16 @@ private:
 	std::vector<class RenderBuffer*> m_render_buffers;
 };
 
+///  pipeline_dx12
 class pipeline_dx12 : public pipeline {
 	friend class RendererDx12;
+
 	virtual void release() {}
 
 	ComPtr<ID3D12PipelineState> m_pipeline_state;
 };
 
-///
 ///	RendererDx12
-///
 class RendererDx12 : public Renderer {
 public:
 	~RendererDx12();
@@ -97,7 +95,8 @@ public:
 protected:
 	virtual void initialize(HWND hwnd, const uint32_t frameWidth, const uint32_t frameHeight) override;
 
-	void todo_create_vertices();
+	void todo_create_texture();
+	ComPtr<ID3D12Resource> tex;
 
 private:
 	void get_hardware_adapter(
@@ -120,6 +119,10 @@ private:
 	CD3DX12_VIEWPORT m_view_port;
 	CD3DX12_RECT m_scissor_rect;
 
+	ComPtr<ID3D12DescriptorHeap> m_sampler_heap;
+
+	ComPtr<ID3D12DescriptorHeap> m_cbv_heap;
+
 	ComPtr<ID3D12DescriptorHeap> m_rtv_heap;
 	uint32_t m_rtv_descriptor_size = 0;
 
@@ -134,9 +137,6 @@ private:
 	ComPtr<ID3D12Fence> m_fence;
 	uint64_t m_fence_value = 0;
 	HANDLE m_fence_event;
-
-	ComPtr<ID3D12Resource> m_vertex_buffer;
-	D3D12_VERTEX_BUFFER_VIEW m_vertex_buffer_view;
 };
 
 extern Renderer* g_renderer;

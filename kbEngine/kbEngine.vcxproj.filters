@@ -43,6 +43,9 @@
     <Filter Include="renderer\d3d12">
       <UniqueIdentifier>{1cc76160-4ee5-4c14-8e93-9023f577e415}</UniqueIdentifier>
     </Filter>
+    <Filter Include="renderer\d3d12\D3D">
+      <UniqueIdentifier>{54577363-fd50-45b7-85cf-78fa7fd505da}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="assets\Shaders\basicShader.kbShader">
@@ -444,6 +447,9 @@
     </ClCompile>
     <ClCompile Include="renderer\render_buffer.cpp">
       <Filter>renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="renderer\d3d12\d3d12_headers\DDSTextureLoader12.cpp">
+      <Filter>renderer\d3d12\D3D</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

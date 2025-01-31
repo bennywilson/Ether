@@ -1,3 +1,5 @@
+Texture2D shaderTexture;
+SamplerState SampleType;
 
 //-------------------------------------
 struct vertexInput {
@@ -40,8 +42,8 @@ pixelInput vertex_shader(vertexInput input) {
 ///	pixelShader
 ///
  PS_OUTPUT pixel_shader( pixelInput	input, bool IsFrontFace	: SV_IsFrontFace ) {
- 	PS_OUTPUT output = (PS_OUTPUT) 0;
-	output.color = float4(1,0,1,1);
+ 	PS_OUTPUT output = (PS_OUTPUT) 1;
+	output.color.xyz = shaderTexture.Sample( SampleType, input.uv ).xyz;
 
 	return output;
 }
