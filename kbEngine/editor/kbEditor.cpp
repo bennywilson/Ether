@@ -9,6 +9,7 @@
 #include "kbCore.h"
 #include "kbVector.h"
 #include "kbQuaternion.h"
+#include "render_defs.h"
 #include "DX11/kbRenderer_DX11.h"
 #include "kbGame.h"
 #include "kbModel.h"
@@ -26,6 +27,7 @@
 // fltk
 #pragma warning(push)
 #pragma warning(disable:4312)
+#pragma warning(disable:4099)
 #include "FL/fl_ask.h"
 #pragma warning(pop)
 

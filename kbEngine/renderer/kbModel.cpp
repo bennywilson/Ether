@@ -1,11 +1,7 @@
-//==============================================================================
-// kbModel.cpp
-//
-// General model format based off of the ms3d specs
-//
-// 2016-2025 kbEngine 2.0
-//==============================================================================
-#define KFBX_DLLINFO
+/// kbModel.cpp
+///
+/// 2016-2025 kbEngine
+
 #include <fbxsdk.h>
 #include "kbCore.h"
 #include "kbVector.h"
@@ -13,8 +9,8 @@
 #include "kbModel.h"
 #include "kbRenderer.h"
 #include "DX11/kbRenderer_DX11.h"			// HACK
-#include "renderer_dx12.h"
-#include "render_buffer.h"
+#include "renderer_d3d12.h"
+#include "render_defs.h"
 
 
 #pragma pack( push, packing )

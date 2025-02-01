@@ -1,12 +1,8 @@
-//==============================================================================
-// kbModel.h
-//
-// General model format based off of the ms3d specs
-//
-// 2016-2018 kbEngine 2.0
-//==============================================================================
-#ifndef _KBMODEL_H_
-#define _KBMODEL_H_
+/// kbModel.h
+///
+// 2016-2025 kbEngine 2.0
+
+#pragma once
 
 #include "kbCore.h"
 #include "kbBounds.h"
@@ -197,5 +193,3 @@ private:
 	std::vector<kbVec3>							m_DebugNormals;
 	std::vector<kbVec3>							m_DebugTangents;
 };
-
-#endif

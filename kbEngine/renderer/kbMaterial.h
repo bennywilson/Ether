@@ -1,11 +1,8 @@
-//===================================================================================================
-// kbMaterial.h
-//
-//
-// 2016 kbEngine 2.0
-//===================================================================================================
-#ifndef _KBMATERIAL_H_
-#define _KBMATERIAL_H_
+/// kbMaterial.h
+///
+/// 2016-2025 kbEngine 2.0
+
+#pragma once
 
 #include <memory>
 #include "kbRenderBuffer.h"
@@ -201,5 +198,3 @@ private:
 	kbColor										m_DiffuseColor;
 	ECullMode									m_CullingMode;
 };
-
-#endif

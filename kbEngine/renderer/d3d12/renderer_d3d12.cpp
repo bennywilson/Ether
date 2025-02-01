@@ -1,42 +1,23 @@
-/// RendererDx12.cpp
+/// renderer_d3d12.cpp
 ///
 /// 2025 kbEngine 2.0
 
-#include <stdio.h>
-#include <sstream>
-#include <iomanip>
 #include "kbCore.h"
-#include "renderer_dx12.h"
-#include "kbModel.h"
-#include "kbGameEntityHeader.h"
-#include "kbComponent.h"
-#include "kbConsole.h"
-#include <d3dcommon.h>
+#include "renderer_d3d12.h"
+#include <dxgi1_6.h>
+#include <d3dcompiler.h>
 #include "d3dx12.h"
-#include "types_dx12.h"
 #include "DDSTextureLoader12.h"
-//#include "ResourceUploadBatch.h"
+#include "d3d12_defs.h"
 
 using namespace std;
 
-Renderer* g_renderer = nullptr;
-
-Renderer::Renderer() {
-	g_renderer = this;
+Renderer* Renderer::create() {
+	return new RendererD3D12();
 }
-
-Renderer::~Renderer() {
-	shut_down();
-}
-
-void Renderer::initialize(HWND hwnd, const uint32_t frame_width, const uint32_t frame_height) {
-	m_frame_width = frame_width;
-	m_frame_height = frame_height;
-}
-
 
 void Renderer::shut_down() {
-	for (auto& pipe: m_pipelines) {
+	for (auto& pipe : m_pipelines) {
 		delete pipe.second;
 	}
 	m_pipelines.clear();
@@ -54,8 +35,8 @@ RenderBuffer* Renderer::create_render_buffer() {
 	return buffer;
 }
 
-pipeline* Renderer::load_pipeline(const std::string& friendly_name, const std::wstring& path) {
-	pipeline* const new_pipeline = create_pipeline(path);
+RenderPipeline* Renderer::load_pipeline(const std::string& friendly_name, const std::wstring& path) {
+	RenderPipeline* const new_pipeline = create_pipeline(path);
 	if (new_pipeline == nullptr) {
 		kbWarning("Unable to load pipeline %s", path.c_str());
 		return nullptr;
@@ -65,7 +46,7 @@ pipeline* Renderer::load_pipeline(const std::string& friendly_name, const std::w
 	return new_pipeline;
 }
 
-pipeline* Renderer::get_pipeline(const std::string& name) {
+RenderPipeline* Renderer::get_pipeline(const std::string& name) {
 	if (m_pipelines.find(name) == m_pipelines.end()) {
 		return nullptr;
 	}
@@ -73,7 +54,7 @@ pipeline* Renderer::get_pipeline(const std::string& name) {
 	return m_pipelines[name];
 }
 
-void RendererDx12::initialize(HWND hwnd, const uint32_t frame_width, const uint32_t frame_height) {
+void RendererD3D12::initialize(HWND hwnd, const uint32_t frame_width, const uint32_t frame_height) {
 
 	UINT dxgiFactoryFlags = 0;
 
@@ -116,7 +97,7 @@ void RendererDx12::initialize(HWND hwnd, const uint32_t frame_width, const uint3
 
 	// Swap Chain
 	DXGI_SWAP_CHAIN_DESC1 swap_chain_desc = {};
-	swap_chain_desc.BufferCount = RendererDx12::frame_count;
+	swap_chain_desc.BufferCount = RendererD3D12::frame_count;
 	swap_chain_desc.Width = m_frame_width;
 	swap_chain_desc.Height = m_frame_height;
 	swap_chain_desc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
@@ -141,7 +122,7 @@ void RendererDx12::initialize(HWND hwnd, const uint32_t frame_width, const uint3
 
 	// Render target view descriptor heap
 	D3D12_DESCRIPTOR_HEAP_DESC rtv_heap_desc = {};
-	rtv_heap_desc.NumDescriptors = RendererDx12::frame_count;
+	rtv_heap_desc.NumDescriptors = RendererD3D12::frame_count;
 	rtv_heap_desc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_RTV;
 	rtv_heap_desc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
 	check_result(m_device->CreateDescriptorHeap(&rtv_heap_desc, IID_PPV_ARGS(&m_rtv_heap)));
@@ -171,7 +152,7 @@ void RendererDx12::initialize(HWND hwnd, const uint32_t frame_width, const uint3
 	CD3DX12_CPU_DESCRIPTOR_HANDLE rtv_handle(m_rtv_heap->GetCPUDescriptorHandleForHeapStart());
 
 	// Create a RTV for each frame.
-	for (uint32_t i = 0; i < RendererDx12::frame_count; i++) {
+	for (uint32_t i = 0; i < RendererD3D12::frame_count; i++) {
 		check_result(m_swap_chain->GetBuffer(i, IID_PPV_ARGS(&m_render_targets[i])));
 		m_device->CreateRenderTargetView(m_render_targets[i].Get(), nullptr, rtv_handle);
 		rtv_handle.Offset(1, m_rtv_descriptor_size);
@@ -208,21 +189,21 @@ void RendererDx12::initialize(HWND hwnd, const uint32_t frame_width, const uint3
 	CD3DX12_VERSIONED_ROOT_SIGNATURE_DESC rootSignatureDesc = {};
 	rootSignatureDesc.Init_1_1(_countof(rootParameters), rootParameters, 1, &sampler, D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT);
 
-		ComPtr<ID3DBlob> signature;
-		ComPtr<ID3DBlob> error;
-		check_result(D3DX12SerializeVersionedRootSignature(&rootSignatureDesc, D3D_ROOT_SIGNATURE_VERSION_1, &signature, &error));
-		check_result(m_device->CreateRootSignature(0, signature->GetBufferPointer(), signature->GetBufferSize(), IID_PPV_ARGS(&m_root_signature)));
-
-/*
-		//Create an empty root signature.
-		CD3DX12_ROOT_SIGNATURE_DESC rootSignatureDesc = {};
-		rootSignatureDesc.Init(0, nullptr, 0, nullptr, D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT);
-
 	ComPtr<ID3DBlob> signature;
 	ComPtr<ID3DBlob> error;
-	check_result(D3D12SerializeRootSignature(&rootSignatureDesc, D3D_ROOT_SIGNATURE_VERSION_1, &signature, &error));
+	check_result(D3DX12SerializeVersionedRootSignature(&rootSignatureDesc, D3D_ROOT_SIGNATURE_VERSION_1, &signature, &error));
 	check_result(m_device->CreateRootSignature(0, signature->GetBufferPointer(), signature->GetBufferSize(), IID_PPV_ARGS(&m_root_signature)));
-*/
+
+	/*
+			//Create an empty root signature.
+			CD3DX12_ROOT_SIGNATURE_DESC rootSignatureDesc = {};
+			rootSignatureDesc.Init(0, nullptr, 0, nullptr, D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT);
+
+		ComPtr<ID3DBlob> signature;
+		ComPtr<ID3DBlob> error;
+		check_result(D3D12SerializeRootSignature(&rootSignatureDesc, D3D_ROOT_SIGNATURE_VERSION_1, &signature, &error));
+		check_result(m_device->CreateRootSignature(0, signature->GetBufferPointer(), signature->GetBufferSize(), IID_PPV_ARGS(&m_root_signature)));
+	*/
 	// Fences	
 	check_result(m_device->CreateFence(0, D3D12_FENCE_FLAG_NONE, IID_PPV_ARGS(&m_fence)));
 	m_fence_value = 1;
@@ -233,20 +214,20 @@ void RendererDx12::initialize(HWND hwnd, const uint32_t frame_width, const uint3
 		check_result(HRESULT_FROM_WIN32(GetLastError()));
 	}
 
-	auto pipe = (pipeline_dx12*)load_pipeline("test_shader", L"C:/projects/Ether/dx12_updgrade/GameBase/assets/shaders/test_shader.hlsl");
+	auto pipe = (RenderPipeline_D3D12*)load_pipeline("test_shader", L"C:/projects/Ether/dx12_updgrade/GameBase/assets/shaders/test_shader.hlsl");
 
-	kbLog("RendererDx12 initialized");
+	kbLog("RendererD3D12 initialized");
 	todo_create_texture();
 }
 
-RendererDx12::~RendererDx12() {
+RendererD3D12::~RendererD3D12() {
 }
 
-void RendererDx12::shut_down() {
+void RendererD3D12::shut_down() {
 	Renderer::shut_down();
 }
 
-void RendererDx12::get_hardware_adapter(
+void RendererD3D12::get_hardware_adapter(
 	IDXGIFactory1* const factory,
 	IDXGIAdapter1** const out_adapter,
 	bool request_high_performance) {
@@ -298,11 +279,11 @@ void RendererDx12::get_hardware_adapter(
 	*out_adapter = adapter.Detach();
 }
 
-RenderBuffer* RendererDx12::create_render_buffer_internal() {
+RenderBuffer* RendererD3D12::create_render_buffer_internal() {
 	return new RenderBuffer_D3D12();
 }
 
-void RendererDx12::render() {
+void RendererD3D12::render() {
 	check_result(m_command_allocator->Reset());
 	check_result(m_command_list->Reset(m_command_allocator.Get(), nullptr));
 
@@ -319,7 +300,7 @@ void RendererDx12::render() {
 	const float clear_color[] = { 1.0f, 0.2f, 0.4f, 1.0f };
 	m_command_list->ClearRenderTargetView(rtv_handle, clear_color, 0, nullptr);
 
-	pipeline_dx12* const pipe = (pipeline_dx12*)get_pipeline("test_shader");
+	RenderPipeline_D3D12* const pipe = (RenderPipeline_D3D12*)get_pipeline("test_shader");
 	m_command_list->SetPipelineState(pipe->m_pipeline_state.Get());
 
 	m_command_list->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
@@ -331,15 +312,9 @@ void RendererDx12::render() {
 	m_command_list->SetDescriptorHeaps(_countof(ppHeaps), ppHeaps);
 	m_command_list->SetGraphicsRootDescriptorTable(0, m_srv_heap->GetGPUDescriptorHandleForHeapStart());
 
-	//ID3D12DescriptorHeap* ppHeaps[] = { m_cbv_heap.Get(), m_sampler_heap.Get() };
-	//m_command_list->SetDescriptorHeaps(_countof(ppHeaps), ppHeaps);
-
 	m_command_list->IASetVertexBuffers(0, 1, &vertex_buffer->vertex_buffer_view());
 	m_command_list->IASetIndexBuffer(&index_buffer->index_buffer_view());
 	m_command_list->DrawIndexedInstanced(index_buffer->num_elements(), 1, 0, 0, 0);
-
-	//^m_command_list->SetGraphicsRootDescriptorTable(1, m_sampler_heap->GetGPUDescriptorHandleForHeapStart());
-
 
 	// Indicate that the back buffer will now be used to present.
 	m_command_list->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(m_render_targets[m_frame_index].Get(), D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PRESENT));
@@ -366,7 +341,7 @@ void RendererDx12::render() {
 	m_frame_index = m_swap_chain->GetCurrentBackBufferIndex();
 }
 
-pipeline* RendererDx12::create_pipeline(const wstring& path) {
+RenderPipeline* RendererD3D12::create_pipeline(const wstring& path) {
 #if defined(_DEBUG)
 	// Enable better shader debugging with the graphics debugging tools.
 	UINT compileFlags = D3DCOMPILE_DEBUG | D3DCOMPILE_SKIP_OPTIMIZATION;
@@ -392,8 +367,8 @@ pipeline* RendererDx12::create_pipeline(const wstring& path) {
 		{ "TANGENT", 0, DXGI_FORMAT_R8G8B8A8_UNORM, 0, 28, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
 	};
 
-auto raster = CD3DX12_RASTERIZER_DESC(D3D12_DEFAULT);
-raster.CullMode = D3D12_CULL_MODE_BACK;
+	auto raster = CD3DX12_RASTERIZER_DESC(D3D12_DEFAULT);
+	raster.CullMode = D3D12_CULL_MODE_BACK;
 
 	// Describe and create the graphics pipeline state object (PSO).
 	D3D12_GRAPHICS_PIPELINE_STATE_DESC psoDesc = {};
@@ -410,13 +385,13 @@ raster.CullMode = D3D12_CULL_MODE_BACK;
 	psoDesc.NumRenderTargets = 1;
 	psoDesc.RTVFormats[0] = DXGI_FORMAT_R8G8B8A8_UNORM;
 	psoDesc.SampleDesc.Count = 1;
-	pipeline_dx12* const pipe = new pipeline_dx12();
+	RenderPipeline_D3D12* const pipe = new RenderPipeline_D3D12();
 	check_result(m_device->CreateGraphicsPipelineState(&psoDesc, IID_PPV_ARGS(&pipe->m_pipeline_state)));
 
-	return (pipeline*)pipe;
+	return (RenderPipeline*)pipe;
 }
 
-void RendererDx12::todo_create_texture() {
+void RendererD3D12::todo_create_texture() {
 
 	std::unique_ptr<uint8_t[]> ddsData;
 	std::vector<D3D12_SUBRESOURCE_DATA> subresources;
@@ -481,83 +456,4 @@ void RendererDx12::todo_create_texture() {
 		check_result(m_fence->SetEventOnCompletion(fence, m_fence_event));
 		WaitForSingleObject(m_fence_event, INFINITE);
 	}
-
-
-	// Wait for the command list to execute; we are reusing the same command 
-	// list in our main loop but for now, we just want to wait for setup to 
-	// complete before continuing.
-
-	//WaitForPreviousFrame();
-/*	auto barrier = CD3DX12_RESOURCE_BARRIER::Transition(tex.Get(),
-		D3D12_RESOURCE_STATE_COPY_DEST, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
-	m_command_list->ResourceBarrier(1, &barrier);
-
-	check_result(m_command_list->Close());
-	ID3D12CommandList* const command_list[] = { m_command_list.Get() };
-	m_queue->ExecuteCommandLists(1, command_list);
-
-	const uint64_t fence = m_fence_value;
-	check_result(m_queue->Signal(m_fence.Get(), fence));
-	m_fence_value++;
-
-	// Describe and create a sampler.
-	D3D12_SAMPLER_DESC samplerDesc = {};
-	samplerDesc.Filter = D3D12_FILTER_MIN_MAG_MIP_LINEAR;
-	samplerDesc.AddressU = D3D12_TEXTURE_ADDRESS_MODE_WRAP;
-	samplerDesc.AddressV = D3D12_TEXTURE_ADDRESS_MODE_WRAP;
-	samplerDesc.AddressW = D3D12_TEXTURE_ADDRESS_MODE_WRAP;
-	samplerDesc.MinLOD = 0;
-	samplerDesc.MaxLOD = D3D12_FLOAT32_MAX;
-	samplerDesc.MipLODBias = 0.0f;
-	samplerDesc.MaxAnisotropy = 1;
-	samplerDesc.ComparisonFunc = D3D12_COMPARISON_FUNC_ALWAYS;
-	m_device->CreateSampler(&samplerDesc, m_sampler_heap->GetCPUDescriptorHandleForHeapStart());
-
-	// Create SRV for the city's diffuse texture.
-	auto descrip_size = m_device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
-
-	CD3DX12_CPU_DESCRIPTOR_HANDLE srvHandle(m_cbv_heap->GetCPUDescriptorHandleForHeapStart(), 0, descrip_size);
-	D3D12_SHADER_RESOURCE_VIEW_DESC diffuseSrvDesc = {};
-	diffuseSrvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
-	diffuseSrvDesc.Format = DXGI_FORMAT_BC1_UNORM;
-	diffuseSrvDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D;
-	diffuseSrvDesc.Texture2D.MipLevels = 1;
-	m_device->CreateShaderResourceView(tex.Get(), &diffuseSrvDesc, srvHandle);
-	srvHandle.Offset(descrip_size);
-
-
-	// Create an upload heap for the constant buffers.
-	check_result(m_device->CreateCommittedResource(
-		&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD),
-		D3D12_HEAP_FLAG_NONE,
-		&CD3DX12_RESOURCE_DESC::Buffer(uploadBufferSize),
-		D3D12_RESOURCE_STATE_GENERIC_READ,
-		nullptr,
-		IID_PPV_ARGS(&m_cbv_upload_heap)));
-
-
-
-	CD3DX12_CPU_DESCRIPTOR_HANDLE cbvSrvHandle(m_cbv_heap->GetCPUDescriptorHandleForHeapStart(), 1, descrip_size);    // Move past the SRV in slot 1.
-	//for (UINT i = 0; i < FrameCount; i++)
-	{
-		//FrameResource* pFrameResource = new FrameResource(m_device.Get(), CityRowCount, CityColumnCount);
-				// Describe and create a constant buffer view (CBV).
-				D3D12_CONSTANT_BUFFER_VIEW_DESC cbvDesc = {};
-				cbvDesc.BufferLocation = m_cbv_upload_heap->GetGPUVirtualAddress();
-				cbvDesc.SizeInBytes = 256;
-				m_device->CreateConstantBufferView(&cbvDesc, cbvSrvHandle);
-				cbvSrvHandle.Offset(descrip_size);
-	}
-/*
-* 
-	HRESULT __cdecl LoadDDSTextureFromFile(
-		_In_ ID3D12Device* d3dDevice,
-		_In_z_ const wchar_t* szFileName,
-		_Outptr_ ID3D12Resource** texture,
-		std::unique_ptr<uint8_t[]>& ddsData,
-		std::vector<D3D12_SUBRESOURCE_DATA>& subresources,
-		size_t maxsize = 0,
-		_Out_opt_ DDS_ALPHA_MODE* alphaMode = nullptr,
-		_Out_opt_ bool* isCubeMap = nullptr);
-* */
 }

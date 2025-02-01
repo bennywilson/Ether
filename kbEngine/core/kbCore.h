@@ -1,13 +1,9 @@
-//===================================================================================================
-// kbCore.h
-//
-//
-// 2016-2019 kbEngine 2.0
-//===================================================================================================
-#ifndef _CORE_H_
-#define _CORE_H_
+/// kbCore.h
+///
+/// 2016-2025 kbEngine 2.0
 
-#pragma warning( disable : 4482 )
+#pragma once
+#pragma warning(disable : 4482)
 
 #include <windows.h>
 #include <fstream>
@@ -461,4 +457,3 @@ struct kbTextParser {
 		}
 	}
 };
-#endif

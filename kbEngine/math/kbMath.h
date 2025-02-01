@@ -1,18 +1,13 @@
-//===================================================================================================
-// kbMath.h
-//
-//
-// 2016 kbEngine 2.0
-//===================================================================================================
-#ifndef __KBMATH_H_
-#define __KBMATH_H_
+/// kbMath.h
+///
+/// 2016-2025 kbEngine 2.0
 
-#include <math.h>
+#pragma once
 
-float Interpolate( float a, float b, float x );
-float SeededNoise( const float x, const float y );
-float SmoothNoise( const float x, const float y );
-float InterpolatedNoise( const float x, const float y );
-float NormalizedNoise( const float x, const float y );
+float SeededNoise(const float x, const float y);
 
-#endif
+float SmoothNoise(const float x, const float y);
+
+float InterpolatedNoise(const float x, const float y);
+
+float NormalizedNoise(const float x, const float y);

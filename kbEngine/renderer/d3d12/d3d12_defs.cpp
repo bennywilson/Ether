@@ -1,6 +1,6 @@
 #include "kbCore.h"
-#include "renderer_dx12.h"
-#include "types_dx12.h"
+#include "renderer_d3d12.h"
+#include "d3d12_defs.h"
 
 void RenderBuffer_D3D12::release() {}
 
@@ -15,7 +15,7 @@ for (auto& vert: vertices) {
 	new_vert.position.z += 1;
 	new_verts.push_back(new_vert);
 }
-	auto device = ((RendererDx12*)(g_renderer))->get_device();
+	auto device = ((RendererD3D12*)(g_renderer))->get_device();
 
 	const uint32_t buffer_size = size_bytes();
 
@@ -47,7 +47,7 @@ for (auto& vert: vertices) {
 void RenderBuffer_D3D12::write_index_buffer(const std::vector<uint16_t>& indices) {
 	RenderBuffer::write_index_buffer(indices);
 
-	auto device = ((RendererDx12*)(g_renderer))->get_device();
+	auto device = ((RendererD3D12*)(g_renderer))->get_device();
 
 	const uint32_t buffer_size = size_bytes();
 

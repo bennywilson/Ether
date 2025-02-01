@@ -37,7 +37,7 @@ pixelInput vertex_shader(vertexInput input) {
 	matrix mvp= {	1.31353f * 0.5, 0.f, 0.f, 0.f,
 					0.f, 2.14451f * 0.5, 0.f, 0.f,
 					0.f, 0.f, 1.00005f * 0.5, 1.f,
-					0.f, -3.f, 4.5f, 5.f};
+					-0.5f, -3.f, 4.5f, 5.f};
 	output.position = mul( input.position, mvp );
 	output.color = input.color;
 	output.normal.xyz = input.normal.xyz;

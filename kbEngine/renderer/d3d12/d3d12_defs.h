@@ -1,11 +1,25 @@
+/// render_buffer.h	
+///
+/// 2025 kbEngine 2.0
+
 #pragma once
+
 #include <wrl/client.h>
-#include "d3dx12_core.h"
-#include "render_buffer.h"
+#include "render_defs.h"
 
 using namespace std;
 using namespace Microsoft::WRL;
 
+/// RenderPipeline_D3D12
+class RenderPipeline_D3D12 : public RenderPipeline {
+	friend class RendererD3D12;
+
+	virtual void release() {}
+
+	ComPtr<ID3D12PipelineState> m_pipeline_state;
+};
+
+/// RenderBuffer_D3D12
 class RenderBuffer_D3D12 : public RenderBuffer {
 public:
 	RenderBuffer_D3D12() = default;

@@ -5,8 +5,6 @@
 //
 // 2018 kbEngine 2.0
 //==============================================================================
-#include <stdio.h>
-#include <math.h>
 #include "kbCore.h"
 #include "kbVector.h"
 #include "kbQuaternion.h"
@@ -14,7 +12,6 @@
 #include "kbGameEntityHeader.h"
 #include "kbComponent.h"
 #include "kbLightComponent.h"
-#include "kbConsole.h"
 
 const float g_DebugLineSpacing = 0.0165f + 0.007f;
 const float g_DebugTextSize = 0.0165f;

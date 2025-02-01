@@ -1,13 +1,10 @@
-//==============================================================================
-// kbRenderer.h
-//
-// Base Renderer Class
-//
-// 2018 kbEngine 2.0
-//==============================================================================
-#ifndef _KBRENDERER_H_
-#define _KBRENDERER_H_
+/// kbRenderer.h
+///
+/// 2018-2025 kbEngine 2.0
 
+#pragma once
+
+#include "render_defs.h"
 #include "kbRenderer_defs.h"
 #include "kbBounds.h"
 
@@ -458,5 +455,3 @@ protected:
 extern class kbRenderer * g_pRenderer;
 extern const float g_DebugTextSize;
 extern const float g_DebugLineSpacing;
-
-#endif

@@ -284,15 +284,46 @@
     <ClInclude Include="gameEntity\kbUIComponent.h">
       <Filter>game\Components</Filter>
     </ClInclude>
-    <ClInclude Include="renderer\d3d12\renderer_dx12.h">
+    <ClInclude Include="renderer\d3d12\renderer_d3d12.h">
       <Filter>renderer\d3d12</Filter>
     </ClInclude>
-    <ClInclude Include="renderer\d3d12\types_dx12.h">
+    <ClInclude Include="renderer\d3d12\d3d12_defs.h">
       <Filter>renderer\d3d12</Filter>
     </ClInclude>
-    <ClInclude Include="renderer\render_buffer.h">
+    <ClInclude Include="renderer\render_defs.h">
       <Filter>renderer</Filter>
     </ClInclude>
+    <ClInclude Include="renderer\d3d12\dxtk\DDS.h" />
+    <ClInclude Include="renderer\d3d12\dxtk\DDSTextureLoader12.h" />
+    <ClInclude Include="renderer\d3d12\dxtk\DirectXHelpers.h" />
+    <ClInclude Include="renderer\d3d12\dxtk\GraphicsMemory.h" />
+    <ClInclude Include="renderer\d3d12\dxtk\LoaderHelpers.h" />
+    <ClInclude Include="renderer\d3d12\dxtk\pch.h" />
+    <ClInclude Include="renderer\d3d12\dxtk\PlatformHelpers.h" />
+    <ClInclude Include="renderer\d3d12\dx12\d3d12.h" />
+    <ClInclude Include="renderer\d3d12\dx12\d3d12compatibility.h" />
+    <ClInclude Include="renderer\d3d12\dx12\d3d12sdklayers.h" />
+    <ClInclude Include="renderer\d3d12\dx12\d3d12shader.h" />
+    <ClInclude Include="renderer\d3d12\dx12\D3D12TokenizedProgramFormat.hpp" />
+    <ClInclude Include="renderer\d3d12\dx12\d3d12video.h" />
+    <ClInclude Include="renderer\d3d12\dx12\d3dcommon.h" />
+    <ClInclude Include="renderer\d3d12\dx12\d3dx12.h" />
+    <ClInclude Include="renderer\d3d12\dx12\d3dx12_barriers.h" />
+    <ClInclude Include="renderer\d3d12\dx12\d3dx12_check_feature_support.h" />
+    <ClInclude Include="renderer\d3d12\dx12\d3dx12_core.h" />
+    <ClInclude Include="renderer\d3d12\dx12\d3dx12_default.h" />
+    <ClInclude Include="renderer\d3d12\dx12\d3dx12_pipeline_state_stream.h" />
+    <ClInclude Include="renderer\d3d12\dx12\d3dx12_property_format_table.h" />
+    <ClInclude Include="renderer\d3d12\dx12\d3dx12_render_pass.h" />
+    <ClInclude Include="renderer\d3d12\dx12\d3dx12_resource_helpers.h" />
+    <ClInclude Include="renderer\d3d12\dx12\d3dx12_root_signature.h" />
+    <ClInclude Include="renderer\d3d12\dx12\d3dx12_state_object.h" />
+    <ClInclude Include="renderer\d3d12\dx12\DirectML.h" />
+    <ClInclude Include="renderer\d3d12\dx12\dxcore.h" />
+    <ClInclude Include="renderer\d3d12\dx12\dxcore_interface.h" />
+    <ClInclude Include="renderer\d3d12\dx12\dxgicommon.h" />
+    <ClInclude Include="renderer\d3d12\dx12\dxgiformat.h" />
+    <ClInclude Include="renderer\renderer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="core\kbCore.cpp">
@@ -439,17 +470,25 @@
     <ClCompile Include="gameEntity\kbUIComponent.cpp">
       <Filter>game\Components</Filter>
     </ClCompile>
-    <ClCompile Include="renderer\d3d12\renderer_dx12.cpp">
+    <ClCompile Include="renderer\d3d12\renderer_d3d12.cpp">
       <Filter>renderer\d3d12</Filter>
     </ClCompile>
-    <ClCompile Include="renderer\d3d12\types_dx12.cpp">
+    <ClCompile Include="renderer\d3d12\d3d12_defs.cpp">
       <Filter>renderer\d3d12</Filter>
     </ClCompile>
-    <ClCompile Include="renderer\render_buffer.cpp">
+    <ClCompile Include="renderer\render_defs.cpp">
       <Filter>renderer</Filter>
     </ClCompile>
-    <ClCompile Include="renderer\d3d12\d3d12_headers\DDSTextureLoader12.cpp">
-      <Filter>renderer\d3d12\D3D</Filter>
-    </ClCompile>
+    <ClCompile Include="renderer\d3d12\dxtk\DDSTextureLoader12.cpp" />
+    <ClCompile Include="renderer\renderer.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Midl Include="renderer\d3d12\dx12\d3d12.idl" />
+    <Midl Include="renderer\d3d12\dx12\d3d12compatibility.idl" />
+    <Midl Include="renderer\d3d12\dx12\d3d12sdklayers.idl" />
+    <Midl Include="renderer\d3d12\dx12\d3d12video.idl" />
+    <Midl Include="renderer\d3d12\dx12\d3dcommon.idl" />
+    <Midl Include="renderer\d3d12\dx12\dxgicommon.idl" />
+    <Midl Include="renderer\d3d12\dx12\dxgiformat.idl" />
   </ItemGroup>
 </Project>

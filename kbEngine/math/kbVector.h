@@ -7,7 +7,7 @@
 #ifndef __KBVECTOR_H_
 #define __KBVECTOR_H_
 
-#include "kbCore.h"
+//#include "kbCore.h"
 
 /**
  *	kbVec2i

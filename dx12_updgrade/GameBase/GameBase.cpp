@@ -8,7 +8,7 @@
 #include "kbApp.h"
 #include "kbJobManager.h"
 #include "DX11/kbRenderer_DX11.h"
-#include "d3d12/renderer_dx12.h"
+#include "renderer.h"
 #include "kbEditor.h"
 #include "Ether/EtherGame.h"
 #include "kbMath.h"
@@ -227,60 +227,8 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 	LoadString(hInstance, IDI_GAMEBASE, szWindowClass, MAX_LOADSTRING);
 	MyRegisterClass(hInstance);
 
-	// Command-line args	
-	int numArgs = 0;
-	LPWSTR * cmdLine = CommandLineToArgvW( GetCommandLineW(), &numArgs );
-	std::wstring cmdArgs[13];   // params passed in from the dashboard
-
 	std::string mapName;
-
-	/*bool use_dx12 = true;
-	if ( GetAsyncKeyState( VK_MBUTTON ) ) {
-		use_dx12 = false;
-		//g_UseEditor = true;
-	}
-//////////////////	g_UseEditor = true;
-use_dx12 = false;
-*/
-	if ( numArgs > 0 ) {
-		for ( int i = 1; i < numArgs; i++ ) {
-			cmdArgs[i-1] = cmdLine[i];
-		
-			std::string cmdArg1 = std::string( cmdArgs[i-1].begin(), cmdArgs[i-1].end() );
-
-			std::transform( cmdArg1.begin(), cmdArg1.end(), cmdArg1.begin(), ::tolower );
-
-			if ( cmdArg1 == "editor" ) {
-				g_UseEditor = true;
-			} else if ( cmdArg1 == "resx" ) {
-				if ( i + 1 < numArgs ) {
-					cmdArgs[i] = cmdLine[i+1];		
-					std::string cmdArg2 = std::string( cmdArgs[i].begin(), cmdArgs[i].end() );
-					g_screen_width = std::atoi( cmdArg2.c_str() );
-					i++;
-				}
-			} else if ( cmdArg1 == "resy" ) {
-				if ( i + 1 < numArgs ) {
-					cmdArgs[i] = cmdLine[i+1];		
-					std::string cmdArg2 = std::string( cmdArgs[i].begin(), cmdArgs[i].end() );
-					g_screen_height = std::atoi( cmdArg2.c_str() );
-					i++;
-				}
-			} else if ( cmdArg1 == "lowend" ) {
-				g_screen_width = 1024;
-				g_screen_height = 768;
-				extern kbConsoleVariable g_ShowShadows;
-				extern kbConsoleVariable g_ShowLightShafts;
-				g_ShowShadows.SetBool( false );
-				g_ShowLightShafts.SetBool( false );
-
-			} else if ( cmdArg1 == "monitor2" ) {
-				MonitorIdx = 1;
-			} else {
-				mapName = cmdArg1;
-			}
-		}
-	}
+	mapName = "test";
 
 	// Perform application initialization
 	if (!InitInstance(hInstance, nCmdShow))
@@ -300,18 +248,17 @@ use_dx12 = false;
 		pGame = new EtherGame();
 		applicationEditor->SetGame( pGame );
 		g_pRenderer->SetRenderWindow(nullptr);
-
 		if (mapName.length() > 0) {
 			applicationEditor->LoadMap( mapName );
 		}
 	} else {
-		g_renderer = new RendererDx12();
+		g_renderer = Renderer::create();
 		g_renderer->initialize(hWnd, g_screen_width, g_screen_height);
 
-		{//if (!use_dx12) {
+		{
 			g_pRenderer = new kbRenderer_DX11();
 			g_pRenderer->Init(hWnd, g_screen_width, g_screen_height);
-			pGame = new EtherGame();//( g_pRenderer->IsRenderingToHMD() ) ? ( new EtherVRGame() ) : ( new EtherGame() );
+			pGame = new EtherGame();
 			std::vector<const kbGameEntity*> GameEntitiesList;
 			pGame->InitGame(hWnd, g_screen_width, g_screen_height, GameEntitiesList);
 			pGame->LoadMap(mapName);
