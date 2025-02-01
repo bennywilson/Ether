@@ -1,11 +1,10 @@
-//==============================================================================
-// kbTypeInfo.cpp
-//
-// 2016-2019 kbEngine 2.0
-//==============================================================================
+/// kbTypeInfo.cpp
+///
+/// 2016-2025 kbEngine 2.0
+
 #include "kbCore.h"
 #include "kbVector.h"
-#include "kbQuaternion.h"
+//#include "kbQuaternion.h"
 #include "kbBounds.h"
 #include "kbGameEntityHeader.h"
 #include "kbRenderer_Defs.h"
@@ -14,15 +13,15 @@
 
 using namespace std;
 
-kbNameToTypeInfoMap * g_NameToTypeInfoMap = nullptr;
+kbNameToTypeInfoMap* g_NameToTypeInfoMap = nullptr;
 
 /**
  *	kbNameToTypeInfoMap::kbNameToTypeInfoMap()
  */
 kbNameToTypeInfoMap::kbNameToTypeInfoMap() {
-	RegisterVectorOperations<kbString>( "kbString" );
-	RegisterVectorOperations<float>( "float" );
-	RegisterVectorOperations<kbVec4>( "kbVec4" );
+	RegisterVectorOperations<kbString>("kbString");
+	RegisterVectorOperations<float>("float");
+	RegisterVectorOperations<kbVec4>("kbVec4");
 }
 
 /**
@@ -34,21 +33,21 @@ kbNameToTypeInfoMap::~kbNameToTypeInfoMap() {
 /**
  *	kbNameToTypeInfoMap::AddTypeInfo()
  */
-void kbNameToTypeInfoMap::AddTypeInfo( const kbTypeInfoClass *const classToAdd ) {
-	m_Map[ classToAdd->GetClassName() ] = classToAdd;
+void kbNameToTypeInfoMap::AddTypeInfo(const kbTypeInfoClass* const classToAdd) {
+	m_Map[classToAdd->GetClassName()] = classToAdd;
 }
 
 /**
  *	kbNameToTypeInfoMap::AddEnum()
  */
-void kbNameToTypeInfoMap::AddEnum( const std::string & enumName, const std::vector< std::string > & enumFields ) {
-	m_EnumMap[ enumName ] = enumFields;
+void kbNameToTypeInfoMap::AddEnum(const std::string& enumName, const std::vector< std::string >& enumFields) {
+	m_EnumMap[enumName] = enumFields;
 }
 
-kbComponent * ConstructClassFromName( const std::string & className ) {
-	const kbTypeInfoClass *const typeInfo = g_NameToTypeInfoMap->GetTypeInfoFromClassName( className );
+kbComponent* ConstructClassFromName(const std::string& className) {
+	const kbTypeInfoClass* const typeInfo = g_NameToTypeInfoMap->GetTypeInfoFromClassName(className);
 
-	if ( typeInfo == nullptr ) {
+	if (typeInfo == nullptr) {
 		return nullptr;
 	}
 
@@ -162,4 +161,4 @@ DEFINE_KBCLASS(kbCinematicComponent)
 
 DEFINE_KBCLASS(kbGrassZone)
 
-typedef kbResource * kbResourcePtr;
+typedef kbResource* kbResourcePtr;

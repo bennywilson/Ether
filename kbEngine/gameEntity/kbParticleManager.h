@@ -1,122 +1,106 @@
-//===================================================================================================
-// kbParticleManager.h
-//
-//
-// 2016-2019 kbEngine 2.0
-//===================================================================================================
-#ifndef _KBPARTICLEMANAGER_H_
-#define _KBPARTICLEMANAGER_H_
+/// kbParticleManager.h
+///
+/// 2016-2025 kbEngine 2.0
+
+#pragma once
 
 #include <vector>
 #include "kbGameEntityHeader.h"
 #include "kbParticleComponent.h"
 
-/**
- *	BufferedModel_t
- */
+/// BufferedModel_t
 struct BufferedModel_t {
+	BufferedModel_t();
+	~BufferedModel_t();
 
-																BufferedModel_t();
-																~BufferedModel_t();
+	void Release();
+	kbModel* m_pModels[3];
 
-	void														Release();
-	kbModel *													m_pModels[3];
-
-	int															m_CurrIdx;
+	int	m_CurrIdx;
 };
 
-/**
- *	kbParticleManager
- */
+/// kbParticleManager
 class kbParticleManager {
-
-//-------------------------------------------------------------------------------------------------------------------------------------------------------------
-
 public:
-				
-																kbParticleManager();
-																~kbParticleManager();
+	kbParticleManager();
+	~kbParticleManager();
 
-	void														SetCustomAtlasTexture( const uint atlasIdx, const std::string & atlasFileName );
-	void														SetCustomAtlasShader( const uint atlasIdx, const std::string & atlasFileName );
+	void SetCustomAtlasTexture(const uint atlasIdx, const std::string& atlasFileName);
+	void SetCustomAtlasShader(const uint atlasIdx, const std::string& atlasFileName);
 
-	void														PoolParticleComponent( const kbParticleComponent *const pParticle, const int PoolSize );
+	void PoolParticleComponent(const kbParticleComponent* const pParticle, const int PoolSize);
 
-	kbParticleComponent *										GetParticleComponent( const kbParticleComponent *const pParticle );
-	void														ReturnParticleComponent( kbParticleComponent *const pParticle );
+	kbParticleComponent* GetParticleComponent(const kbParticleComponent* const pParticle);
+	void ReturnParticleComponent(kbParticleComponent* const pParticle);
 
 	void														RenderSync();
 
 	struct CustomParticleAtlasInfo_t {
-		EBillboardType											m_Type;
-		kbVec3													m_Position;
-		kbVec3													m_Direction;
-		float													m_Rotation;
-		kbVec4													m_Color;
-		float													m_Width;
-		float													m_Height;
-		kbVec2													m_UVs[2];
+		EBillboardType m_Type;
+		kbVec3 m_Position;
+		kbVec3 m_Direction;
+		float m_Rotation;
+		kbVec4 m_Color;
+		float m_Width;
+		float m_Height;
+		kbVec2 m_UVs[2];
 	};
-	void														AddQuad( const uint atlasIdx, const CustomParticleAtlasInfo_t & CustomParticleInfo );
+	void AddQuad(const uint atlasIdx, const CustomParticleAtlasInfo_t& CustomParticleInfo);
 
-	const kbGameComponent *										GetComponentFromPool();
-	void														ReturnComponentToPool( const kbGameComponent* const );
+	const kbGameComponent* GetComponentFromPool();
+	void ReturnComponentToPool(const kbGameComponent* const);
 
-	void														ReserveScratchBufferSpace( kbParticleVertex*& outVertexBuffer, kbRenderObject& inOutRenderObj, const int numRequestedVerts );
+	void ReserveScratchBufferSpace(kbParticleVertex*& outVertexBuffer, kbRenderObject& inOutRenderObj, const int numRequestedVerts);
 
 private:
+	std::map<const kbParticleComponent*, std::vector< kbParticleComponent*>>	m_ParticlePools;
 
-	std::map<const kbParticleComponent *, std::vector< kbParticleComponent *>>	m_ParticlePools;
-
-	static const int											NumCustomParticleBuffers = 3;
-	std::vector<CustomParticleAtlasInfo_t>						m_Particles;
+	static const int NumCustomParticleBuffers = 3;
+	std::vector<CustomParticleAtlasInfo_t> m_Particles;
 
 	struct CustomAtlasParticle_t {
-																CustomAtlasParticle_t() :
-																	m_NumIndices( 0 ),
-																	m_pVertexBuffer( nullptr ),
-																	m_pIndexBuffer( nullptr ),
-																	m_pAtlasTexture( nullptr ),
-																	m_pAtlasShader( nullptr ),
-																	m_iCurParticleModel( -1 ) { }
+		CustomAtlasParticle_t() :
+			m_NumIndices(0),
+			m_pVertexBuffer(nullptr),
+			m_pIndexBuffer(nullptr),
+			m_pAtlasTexture(nullptr),
+			m_pAtlasShader(nullptr),
+			m_iCurParticleModel(-1) { }
 
-		kbRenderObject											m_RenderObject;
+		kbRenderObject	m_RenderObject;
 
-		kbModel													m_RenderModel[NumCustomParticleBuffers];
-		uint													m_NumIndices;
-	
-		kbParticleVertex *										m_pVertexBuffer;
-		ushort *												m_pIndexBuffer;
-		
-		kbTexture *												m_pAtlasTexture;
-		kbShader *												m_pAtlasShader;
+		kbModel	m_RenderModel[NumCustomParticleBuffers];
+		uint m_NumIndices;
 
-		int														m_iCurParticleModel;
+		kbParticleVertex* m_pVertexBuffer;
+		ushort* m_pIndexBuffer;
+
+		kbTexture* m_pAtlasTexture;
+		kbShader* m_pAtlasShader;
+
+		int m_iCurParticleModel;
 	};
-	std::vector<CustomAtlasParticle_t>							m_CustomAtlases;
+	std::vector<CustomAtlasParticle_t> m_CustomAtlases;
 
 	struct ScratchBuffer_t {
 		ScratchBuffer_t() :
-			m_iVert( 0 ),
-			m_iCurModel( -1 ),
-			m_pVertexBuffer( nullptr ),
-			m_pIndexBuffer( nullptr ) { }
+			m_iVert(0),
+			m_iCurModel(-1),
+			m_pVertexBuffer(nullptr),
+			m_pIndexBuffer(nullptr) { }
 
-		kbModel													m_RenderModel[NumCustomParticleBuffers];
-		uint													m_iVert;
-		int														m_iCurModel;
+		kbModel	m_RenderModel[NumCustomParticleBuffers];
+		uint m_iVert;
+		int	m_iCurModel;
 
-		kbParticleVertex *										m_pVertexBuffer;
-		ushort *												m_pIndexBuffer;
+		kbParticleVertex* m_pVertexBuffer;
+		ushort* m_pIndexBuffer;
 	};
 
-	std::vector<ScratchBuffer_t>								m_ScratchParticleBuffers;
+	std::vector<ScratchBuffer_t> m_ScratchParticleBuffers;
 
-	std::vector<const kbGameComponent*>							m_ComponentPool;
+	std::vector<const kbGameComponent*>	m_ComponentPool;
 
 private:
-
-	void														UpdateAtlas( CustomAtlasParticle_t& atlasInfo );
+	void UpdateAtlas(CustomAtlasParticle_t& atlasInfo);
 };
-
-#endif

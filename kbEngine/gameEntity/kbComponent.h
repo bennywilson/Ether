@@ -1,13 +1,11 @@
-//===================================================================================================
-// kbComponent.h
-//
-//
-// 2016-2019 kbEngine 2.0
-//===================================================================================================
-#ifndef _KBCOMPONENT_H_
-#define _KBCOMPONENT_H_
+/// kbComponent.h
+///
+/// 2016-2025 kbEngine 2.0
+
+#pragma once
 
 #include <vector>
+#include "kbQuaternion.h"
 
 class kbGameEntity;
 
@@ -17,7 +15,6 @@ class kbGameEntity;
  *					- Should never be used as a base class pointer.  Use kbComponent* instead
  */
 class kbBaseComponent {
-
 //-------------------------------------------------------------------------------------------------------------------------------------------------------------
 public:
 	virtual										~kbBaseComponent() = 0 { }
@@ -35,7 +32,6 @@ protected:
  *			    - A derived class' Initialize() function does NOT need to call their parent's Initialize()
  */
 class kbComponent : public kbBaseComponent {
-
 	friend class kbEntity;
 
 	KB_DECLARE_COMPONENT( kbComponent, kbBaseComponent );
@@ -487,8 +483,5 @@ public:
 	}
 
 private:
-
 	inline static T * m_pInstance = nullptr;
 };
-
-#endif
