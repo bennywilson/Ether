@@ -1,6 +1,6 @@
 /// kbMaterial.cpp
 ///
-/// 2016 kbEngine 2.0
+/// 2016-2025 kbEngine 2.0
 
 #include <Wincodec.h>
 #include "kbCore.h"
@@ -9,7 +9,7 @@
 #include "DX11/kbRenderer_DX11.h"	//	TODO HACK
 #include "kbMaterial.h"
 
-extern ID3D11DeviceContext * g_pImmediateContext;
+extern ID3D11DeviceContext* g_pImmediateContext;
 
 // Code to initialize a texture using the Windows Imaging Component from https://msdn.microsoft.com/en-us/library/windows/desktop/ff476904(v=vs.85).aspx
 template<class T> class ScopedObject {

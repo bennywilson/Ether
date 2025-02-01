@@ -1,9 +1,7 @@
-//===================================================================================================
-// kbJobManager.cpp
-//
-//
-// 2016-2018 kbEngine 2.0
-//===================================================================================================
+/// kbJobManager.cpp
+///
+// 2016-2025 kbEngine 2.0
+
 #include <Windows.h>
 #include "kbCore.h"
 #include "kbJobManager.h"
@@ -11,11 +9,8 @@
 kbJobManager * g_pJobManager = nullptr;
 
 
-/**
- *	SetThreadName
- */
+/// SetThreadName
 void SetThreadName( const char threadName[] ) {
-
 	// Code to name the thread from https://msdn.microsoft.com/en-us/library/windows/desktop/ms680552(v=vs.85).aspx
 	typedef struct tagTHREADNAME_INFO {
 		DWORD dwType; // must be 0x1000
@@ -39,6 +34,7 @@ void SetThreadName( const char threadName[] ) {
 	}
 }
 
+/// ThreadMain
 DWORD WINAPI ThreadMain( LPVOID lpParam ) {
 	const DWORD threadId = GetThreadId(GetCurrentThread());
 	kbLog( "Thread created with id %d", threadId );
@@ -59,9 +55,7 @@ DWORD WINAPI ThreadMain( LPVOID lpParam ) {
 	return 0;
 };
 
-/**
- *	kbJobManager
- */
+/// kbJobManager::kbJobManager
 kbJobManager::kbJobManager() :
 	m_JobQueueHead( nullptr ),
 	m_JobQueueTail( nullptr ),
@@ -77,9 +71,7 @@ kbJobManager::kbJobManager() :
 	}
 }
 
-/**
- *	~kbJobManager
- */
+/// kbJobManager::~kbJobManagers
 kbJobManager::~kbJobManager() {
 	m_bShutdownRequested = true;
 
@@ -92,9 +84,7 @@ kbJobManager::~kbJobManager() {
 	CloseHandle( m_Mutex );
 }
 
-/**
- *	kbJobManager::RegisterJob
- */
+/// kbJobManager::RegisterJob
 void kbJobManager::RegisterJob( kbJob * job ) {
 	job->m_bIsFinished = false;
 
@@ -113,9 +103,7 @@ void kbJobManager::RegisterJob( kbJob * job ) {
 	ReleaseMutex( m_Mutex );
 }
 
-/**
- *	kbJobManager::GrabJob
- */
+/// kbJobManager::GrabJob
 kbJob *	kbJobManager::GrabJob() {
 	WaitForSingleObject( m_Mutex, INFINITE );
 
