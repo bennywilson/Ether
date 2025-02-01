@@ -7,6 +7,7 @@
 #include <mmsystem.h>
 #include <mmreg.h>
 #include <XAudio2.h>
+#include "kbResourceManager.h"
 
 /// kbWaveFile
 class kbWaveFile : public kbResource {

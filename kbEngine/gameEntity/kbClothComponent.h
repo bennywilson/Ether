@@ -1,11 +1,8 @@
-//==============================================================================
-// kbClothComponent.h
-//
-//
-// 2016-2019 kbEngine 2.0
-//==============================================================================
-#ifndef _KBCLOTHCOMPONENT_H_
-#define _KBCLOTHCOMPONENT_H_
+/// kbClothComponent.h
+///
+/// 2016-2025 kbEngine 2.0
+
+#pragma once
 
 /**
  *	EClothType
@@ -114,6 +111,3 @@ private:
 	std::vector<kbClothMass_t>					m_Masses;	
 	std::vector<kbClothSpring_t>				m_Springs;
 };
-
-
-#endif

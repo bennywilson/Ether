@@ -1,60 +1,47 @@
-//===================================================================================================
-// kbMainTab.h
-//
-//
-// 2016-2018 kbEngine 2.0
-//===================================================================================================
-#ifndef _KBEDITORWINDOW_H_
-#define _KBEDITORWINDOW_H_
+/// kbMainTab.h
+///
+/// 2016-2025 kbEngine 2.0
+#pragma once
 
-
-/**
- *	kbMainTab
- */
+/// kbMainTab
 class kbMainTab : public kbWidget, public Fl_Tabs {
-
 	friend class kbEditor;
 
-//-------------------------------------------------------------------------------------------------------------------------------------------------------------
 public:
+	kbMainTab(int x, int y, int w, int h);
 
-															kbMainTab( int x, int y, int w, int h );
+	const kbEditorWindow* GetEditorWindow() const { return m_pEditorWindow; }
+	kbEditorWindow* GetGameWindow() const { return m_pGameWindow; }
 
-	const kbEditorWindow *									GetEditorWindow() const { return m_pEditorWindow; }
-	kbEditorWindow *										GetGameWindow() const { return m_pGameWindow; }
+	virtual void Update() override;
+	virtual void RenderSync() override;
 
-	virtual void											Update() override;
-	virtual void											RenderSync() override;
+	virtual void EventCB(const widgetCBObject* const widgetCBObject);
 
-	virtual void											EventCB( const widgetCBObject *const widgetCBObject );
+	kbCamera* GetEditorWindowCamera() const { return &m_pEditorWindow->GetCamera(); }
 
-	kbCamera *												GetEditorWindowCamera() const { return &m_pEditorWindow->GetCamera(); }
-
-	void													SetCameraSpeedMultiplier( const float newMultiplier ) { m_CameraMoveSpeedMultiplier = max( min( newMultiplier, 100.0f ), 0.1f ); }
+	void SetCameraSpeedMultiplier(const float newMultiplier) { m_CameraMoveSpeedMultiplier = max(min(newMultiplier, 100.0f), 0.1f); }
 
 private:
+	void InputCB(const widgetCBObject* const widgetCBObject);
+	void CameraMoveCB(const widgetCBInputObject* const widgetCBObject);
+	void EntityTransformedCB(const widgetCBObject* const widgetCBObject);
+	void ManipulatorEvent(const bool bClicked, const kbVec2i& mouseXY);
 
-	void													InputCB( const widgetCBObject *const widgetCBObject );
-	void													CameraMoveCB( const widgetCBInputObject *const widgetCBObject );
-	void													EntityTransformedCB( const widgetCBObject *const widgetCBObject );
-	void													ManipulatorEvent( const bool bClicked, const kbVec2i & mouseXY );
+	kbManipulator& GetManipulator() { return m_Manipulator; }
 
-	kbManipulator &											GetManipulator() { return m_Manipulator; }
+	kbEditorWindow* GetCurrentWindow();
 
-	kbEditorWindow *										GetCurrentWindow();
+	kbEditorWindow* m_pEditorWindow;
+	kbEditorWindow* m_pModelViewerWindow;
+	kbEditorWindow* m_pGameWindow;
 
-	kbEditorWindow *										m_pEditorWindow;
-	kbEditorWindow *										m_pModelViewerWindow;
-	kbEditorWindow *										m_pGameWindow;
-
-	std::vector<Fl_Group *>									m_Groups;
+	std::vector<Fl_Group*> m_Groups;
 
 	//
-	const kbModel *											m_pCurrentlySelectedResource;
+	const kbModel* m_pCurrentlySelectedResource;
 
-	kbManipulator											m_Manipulator;
+	kbManipulator m_Manipulator;
 
-	float													m_CameraMoveSpeedMultiplier;
+	float m_CameraMoveSpeedMultiplier;
 };
-
-#endif

@@ -1,13 +1,10 @@
-//===================================================================================================
-// kbMainTab.cpp
-//
-//
-// 2016-2018 kbEngine 2.0
-//===================================================================================================
+/// kbMainTab.cpp
+///
+/// 2016-2025 kbEngine 2.0
+
 #include "kbCore.h"
 #include "kbVector.h"
 #include "kbQuaternion.h"
-#include "kbIntersectionTests.h"
 #include "kbWidget.h"
 #include "kbEditor.h"
 #include "kbModel.h"

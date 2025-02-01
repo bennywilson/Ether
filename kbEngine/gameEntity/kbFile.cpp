@@ -1,15 +1,11 @@
-//===================================================================================================
-// kbFile.cpp
-//
-//
-// 2016-2019 kbEngine 2.0
-//===================================================================================================
+/// kbFile.cpp
+///
+/// 2016-2025 kbEngine 2.0
+
 #include <vector>
 #include <string>
 #include "kbCore.h"
-#include "kbVector.h"
 #include "kbQuaternion.h"
-#include "kbBounds.h"
 #include "kbGameEntityHeader.h"
 #include "kbFile.h"
 

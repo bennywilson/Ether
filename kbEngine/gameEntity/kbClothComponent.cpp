@@ -1,9 +1,8 @@
-//===================================================================================================
-// kbClothComponent.cpp
-//
-//
-// 2016-2019 kbEngine 2.0
-//===================================================================================================
+/// kbClothComponent.cpp
+///
+///
+/// 2016-2025 kbEngine 2.0
+
 #include "kbCore.h"
 #include "kbVector.h"
 #include "kbQuaternion.h"
@@ -21,29 +20,21 @@ kbConsoleVariable g_ClothGrav( "clothgravity", 0.0f, kbConsoleVariable::Console_
 kbConsoleVariable g_ClothSpring( "clothspring", 0.5f, kbConsoleVariable::Console_Float, "Cloth spring", "" );
 kbConsoleVariable g_ClothFriction( "clothFriction", 0.02f, kbConsoleVariable::Console_Float, "Cloth friction", "" );
 
-/**
- *	kbClothBone::Constructor
- */
+/// kbClothBone::Constructor
 void kbClothBone::Constructor() {
 	m_bIsAnchored = false;
 }
 
-/**
- *	kbBoneCollisionSphere::Constructor
- */
+/// kbBoneCollisionSphere::Constructor
 void kbBoneCollisionSphere::Constructor() {
 	m_Sphere.Set( 0.0f, 0.0f, 0.0f, 10.0f );
 }
 
-/**
- *	kbClothComponent::~kbClothComponent
- */
+/// kbClothComponent::~kbClothComponent
 kbClothComponent::~kbClothComponent() {
 }
 
-/**
- *	kbClothComponent::Initialize
- */
+/// kbClothComponent::Constructor
 void kbClothComponent::Constructor() {
 	m_ClothType = CT_None;
 	m_Width = 0;
@@ -65,9 +56,7 @@ void kbClothComponent::Constructor() {
 	m_CurrentTickFrame = 0;
 }
 
-/**
- *	kbClothComponent::Update_Internal
- */
+/// kbClothComponent::Update_Internal
 void kbClothComponent::Update_Internal( const float dt ) {
 	Super::Update_Internal( dt );
 
@@ -223,9 +212,7 @@ void kbClothComponent::Update_Internal( const float dt ) {
 	}
 }
 
-/**
- *	kbClothComponent::RunSimulation
- */
+/// kbClothComponent::RunSimulation
 void kbClothComponent::RunSimulation( const float inDeltaTime ) {
 
 	const float DeltaTime = kbClamp( inDeltaTime, 0.0f, 0.016f );
@@ -441,9 +428,7 @@ void kbClothComponent::RunSimulation( const float inDeltaTime ) {
 	}
 }
 
-/**
- *	kbClothComponent::SetupCloth
- */
+/// kbClothComponent::SetupCloth
 void kbClothComponent::SetupCloth() {
 	if ( m_pSkeletalModel == nullptr ) {// || m_BoneInfo.size() <= 2 || m_Width <= 2 || m_Height <= 2 ) {
 		return;
@@ -589,9 +574,7 @@ void kbClothComponent::SetupCloth() {
 	}
 }
 
-/**
- *	kbClothComponent::SetClothCollisionSphere
- */
+/// kbClothComponent::SetClothCollisionSphere
 void kbClothComponent::SetClothCollisionSphere( const int idx, const kbVec4 & sphere ) {
 
 	if ( idx < 0 || idx >= m_CollisionSpheres.size() ) {

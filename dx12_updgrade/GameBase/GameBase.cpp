@@ -1,4 +1,4 @@
-// kbViewer.cpp : Defines the entry point for the application.
+// GameBase.cpp : Defines the entry point for the application.
 //
 
 #include "stdafx.h"

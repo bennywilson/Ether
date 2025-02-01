@@ -1,6 +1,6 @@
 /// kbInputManager.h
 ///
-/// 2017-2019 kbEngine 2.0
+/// 2017-2025 kbEngine 2.0
 
 #pragma once
 
@@ -18,7 +18,6 @@ private:
 	virtual void InputKeyPressedCB(const int cbParam) = 0;
 	virtual const char* GetInputCBName() const = 0;
 };
-
 
 ///	KeyComboBitField_t - Represents a combination of pressed keys
 struct KeyComboBitField_t {
@@ -95,30 +94,29 @@ public:
 		MB_LockToWindow
 	};
 
-	void										SetMouseBehavior(const eMouseBehavior_t newMouseBehavior) { m_MouseBehavior = newMouseBehavior; }
-	eMouseBehavior_t							GetMouseBehavior() const { return m_MouseBehavior; }
+	void SetMouseBehavior(const eMouseBehavior_t newMouseBehavior) { m_MouseBehavior = newMouseBehavior; }
+	eMouseBehavior_t GetMouseBehavior() const { return m_MouseBehavior; }
 
-	kbVec2i										GetMouseCursorPosition() const { return kbVec2i(m_Input.AbsCursorX, m_Input.AbsCursorY); }
+	kbVec2i GetMouseCursorPosition() const { return kbVec2i(m_Input.AbsCursorX, m_Input.AbsCursorY); }
 
-	void										RegisterInputListener(IInputListener* const pListener);
-	void										UnregisterInputListener(IInputListener* const pListener);
-
-private:
-
-	LPXINPUTENABLE								m_FuncXInputEnable;
-	LPXINPUTGETSTATE							m_FuncXInputGetState;
-	HWND										m_Hwnd;
-
-	kbInput_t									m_Input;
-
-	KeyComboBitField_t							m_KeyComboBitField;
+	void RegisterInputListener(IInputListener* const pListener);
+	void UnregisterInputListener(IInputListener* const pListener);
 
 private:
-	KeyComboMapType								m_KeyComboToCallbackMap;
+	LPXINPUTENABLE m_FuncXInputEnable;
+	LPXINPUTGETSTATE m_FuncXInputGetState;
+	HWND m_Hwnd;
 
-	eMouseBehavior_t							m_MouseBehavior;
+	kbInput_t m_Input;
 
-	std::vector<IInputListener*>				m_InputListeners;
+	KeyComboBitField_t m_KeyComboBitField;
+
+private:
+	KeyComboMapType	m_KeyComboToCallbackMap;
+
+	eMouseBehavior_t m_MouseBehavior;
+
+	std::vector<IInputListener*> m_InputListeners;
 };
 
 extern kbInputManager* g_pInputManager;
