@@ -151,14 +151,9 @@ inline kbVec4 kbVec4Rand(const kbVec4& min, const kbVec4& max) {
 
 #define SAFE_RELEASE( object ) { if ( object != nullptr ) { object->Release(); object = nullptr; } }
 
-/**
- *  kbTimer
- */
+/// kbTimer
 class kbTimer {
-
-	//---------------------------------------------------------------------------------------------------
 public:
-
 	kbTimer() {
 		LARGE_INTEGER largeInt;
 		QueryPerformanceFrequency(&largeInt);
@@ -173,22 +168,22 @@ public:
 		m_Counter = largeInt.QuadPart;
 	}
 
-	float TimeElapsedMS() {
+	float TimeElapsedMS() const {
 		LARGE_INTEGER largeInt;
 		QueryPerformanceCounter(&largeInt);
 
 		return (float)((largeInt.QuadPart - m_Counter) / m_ClockFrequency);
 	}
 
-	float TimeElapsedSeconds() {
+	float TimeElapsedSeconds() const {
 		return TimeElapsedMS() / 1000.0f;
 	}
 
 private:
-
 	double										m_ClockFrequency;
 	__int64										m_Counter;
 };
+
 extern kbTimer g_GlobalTimer;
 
 enum ScopedTimerList_t {
@@ -228,7 +223,6 @@ enum ScopedTimerList_t {
 };
 
 struct kbScopedTimerData_t {
-
 	kbScopedTimerData_t(const ScopedTimerList_t timerIdx, char* const stringName);
 
 	kbString									m_ReadableName;
@@ -240,14 +234,9 @@ struct kbScopedTimerData_t {
 	int											m_FrameTimeIdx;
 };
 
-/**
- *	kbScopedTimer
- */
+/// kbScopedTimer
 class kbScopedTimer {
-
-	//---------------------------------------------------------------------------------------------------
 public:
-
 	kbScopedTimer(ScopedTimerList_t index);
 	~kbScopedTimer();
 
@@ -261,9 +250,7 @@ private:
 void UpdateScopedTimers();
 const kbScopedTimerData_t& GetScopedTimerData(const ScopedTimerList_t index);
 
-/**
- *  kbInput_t
- */
+/// kbInput_t
 struct kbInput_t {
 	kbInput_t() {
 		memset(this, 0, sizeof(kbInput_t));
@@ -333,7 +320,7 @@ struct kbInput_t {
 	bool			RightMouseButtonDown;
 };
 
-
+/// kbTextParser
 struct kbTextParser {
 	kbTextParser(std::string& inString) :
 		m_StringBuffer(inString),
