@@ -52,7 +52,6 @@ private:
 
 	ComPtr<ID3D12DescriptorHeap> m_sampler_heap;
 	
-	ComPtr<ID3D12Resource> m_constantBuffer;
 	UINT8* m_pCbvDataBegin;
 	
 	ComPtr<ID3D12DescriptorHeap> m_cbv_srv_heap;

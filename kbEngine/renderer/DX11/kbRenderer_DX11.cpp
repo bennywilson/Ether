@@ -953,11 +953,11 @@ void kbRenderer_DX11::Shutdown_Internal() {
 	if ( GCreateDebugD3DDevice ) {
 		kbLog( "" );
 		kbLog( "" );
-		kbLog( "  Reporting live D3D Objects..........................................................." );
-		ID3D11Debug * debugDev;
-		HRESULT hr = m_pD3DDevice->QueryInterface( __uuidof(ID3D11Debug), reinterpret_cast<void**>( &debugDev ) );
-		debugDev->ReportLiveDeviceObjects( D3D11_RLDO_DETAIL );
-		debugDev->Release();
+		kbLog( "  D3D11 Reporting live D3D Objects (Disabled)..........................................................." );
+	//	ID3D11Debug * debugDev;
+	//	HRESULT hr = m_pD3DDevice->QueryInterface( __uuidof(ID3D11Debug), reinterpret_cast<void**>( &debugDev ) );
+	//	debugDev->ReportLiveDeviceObjects( D3D11_RLDO_DETAIL );
+	//	debugDev->Release();
 	}
 
 	SAFE_RELEASE( m_pD3DDevice );

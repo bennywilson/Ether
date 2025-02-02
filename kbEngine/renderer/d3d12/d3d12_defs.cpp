@@ -2,8 +2,20 @@
 #include "renderer_d3d12.h"
 #include "d3d12_defs.h"
 
-void RenderBuffer_D3D12::release() {}
+/// RenderBuffer_D3D12::release
+void RenderBuffer_D3D12::release() {
+	m_vertex_buffer.Reset();
+	m_index_buffer.Reset();
+	/*if (m_vertex_buffer.Get()) {
+		SAFE_RELEASE(m_vertex_buffer);
+	}
 
+	if (m_index_buffer.Get()) {
+		SAFE_RELEASE(m_index_buffer);
+	}*/
+}
+
+/// RenderBuffer_D3D12::write_vertex_buffer
 void RenderBuffer_D3D12::write_vertex_buffer(const std::vector<vertexLayout>& vertices) {
 	RenderBuffer::write_vertex_buffer(vertices);
 
@@ -44,6 +56,7 @@ for (auto& vert: vertices) {
 	m_vertex_buffer_view.SizeInBytes = buffer_size;
 }
 
+/// RenderBuffer_D3D12::write_index_buffer
 void RenderBuffer_D3D12::write_index_buffer(const std::vector<uint16_t>& indices) {
 	RenderBuffer::write_index_buffer(indices);
 

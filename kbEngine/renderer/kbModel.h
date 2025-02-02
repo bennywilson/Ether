@@ -157,10 +157,6 @@ protected:
 	kbRenderBuffer								m_VertexBuffer;
 	kbRenderBuffer								m_IndexBuffer;
 
-	// D3D12
-	kbRenderBuffer*	m_vertex_buffer;
-	kbRenderBuffer* m_index_buffer;
-
 	kbBounds									m_Bounds;
 
 	std::vector<ushort>							m_CPUIndices;

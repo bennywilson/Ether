@@ -18,7 +18,7 @@ class RenderBuffer;
 class Renderer {
 public:
 	Renderer();
-	~Renderer();
+	virtual ~Renderer();
 
 	// temp
 	static Renderer* create();

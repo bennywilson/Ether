@@ -85,6 +85,7 @@ struct vertexLayout {
 /// RenderPipeline
 class RenderPipeline {
 public:
+	virtual ~RenderPipeline() = 0 {}
 	virtual void release() = 0;
 
 private:

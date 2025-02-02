@@ -13,8 +13,8 @@ using namespace Microsoft::WRL;
 /// RenderPipeline_D3D12
 class RenderPipeline_D3D12 : public RenderPipeline {
 	friend class RendererD3D12;
-
-	virtual void release() {}
+	~RenderPipeline_D3D12() { m_pipeline_state.Reset(); }
+	virtual void release() { m_pipeline_state.Reset();  }
 
 	ComPtr<ID3D12PipelineState> m_pipeline_state;
 };
@@ -29,12 +29,11 @@ public:
 
 	virtual void release();
 
-	
 	const D3D12_VERTEX_BUFFER_VIEW& vertex_buffer_view() const { return m_vertex_buffer_view; }
 	const D3D12_INDEX_BUFFER_VIEW& index_buffer_view() const { return m_index_buffer_view; }
 
 private:
-	ComPtr<ID3D12Resource> m_vertex_buffer;
+	ComPtr<ID3D12Resource> m_vertex_buffer;	// todo: share this resource with m_index_buffer
 	D3D12_VERTEX_BUFFER_VIEW m_vertex_buffer_view;
 
 	ComPtr<ID3D12Resource> m_index_buffer;
