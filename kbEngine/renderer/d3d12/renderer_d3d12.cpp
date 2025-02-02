@@ -131,22 +131,17 @@ void RendererD3D12::initialize(HWND hwnd, const uint32_t frame_width, const uint
 
 	// Describe and create a shader resource view (SRV) heap for the texture.
 	D3D12_DESCRIPTOR_HEAP_DESC srvHeapDesc = {};
-	srvHeapDesc.NumDescriptors = 1;
+	srvHeapDesc.NumDescriptors = 2;
 	srvHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV;
 	srvHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;
-	check_result(m_device->CreateDescriptorHeap(&srvHeapDesc, IID_PPV_ARGS(&m_srv_heap)));
+	check_result(m_device->CreateDescriptorHeap(&srvHeapDesc, IID_PPV_ARGS(&m_cbv_srv_heap)));
+	m_cbv_srv_heap->SetName(L"m_cbv_srv_heap");
 
 	D3D12_DESCRIPTOR_HEAP_DESC samplerHeapDesc = {};
 	samplerHeapDesc.NumDescriptors = 1;
 	samplerHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_SAMPLER;
 	samplerHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;
 	check_result(m_device->CreateDescriptorHeap(&samplerHeapDesc, IID_PPV_ARGS(&m_sampler_heap)));
-
-	D3D12_DESCRIPTOR_HEAP_DESC cbvSrvHeapDesc = {};
-	cbvSrvHeapDesc.NumDescriptors = 3;                            // CityMaterialCount + 1 for the SRVs.
-	cbvSrvHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV;
-	cbvSrvHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;
-	check_result(m_device->CreateDescriptorHeap(&cbvSrvHeapDesc, IID_PPV_ARGS(&m_cbv_heap)));
 
 	// Frame resources
 	CD3DX12_CPU_DESCRIPTOR_HANDLE rtv_handle(m_rtv_heap->GetCPUDescriptorHandleForHeapStart());
@@ -165,29 +160,18 @@ void RendererD3D12::initialize(HWND hwnd, const uint32_t frame_width, const uint
 
 
 
-	CD3DX12_DESCRIPTOR_RANGE1 ranges[1] = {};
+	CD3DX12_DESCRIPTOR_RANGE1 ranges[3] = {};
 	ranges[0].Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, 0, 0, D3D12_DESCRIPTOR_RANGE_FLAG_DATA_STATIC);
+	ranges[1].Init(D3D12_DESCRIPTOR_RANGE_TYPE_SAMPLER, 1, 0);
+	ranges[2].Init(D3D12_DESCRIPTOR_RANGE_TYPE_CBV, 1, 0, 0, D3D12_DESCRIPTOR_RANGE_FLAG_DATA_STATIC);
 
-	CD3DX12_ROOT_PARAMETER1 rootParameters[1] = {};
+	CD3DX12_ROOT_PARAMETER1 rootParameters[3] = {};
 	rootParameters[0].InitAsDescriptorTable(1, &ranges[0], D3D12_SHADER_VISIBILITY_PIXEL);
-
-	D3D12_STATIC_SAMPLER_DESC sampler = {};
-	sampler.Filter = D3D12_FILTER_MIN_MAG_MIP_POINT;
-	sampler.AddressU = D3D12_TEXTURE_ADDRESS_MODE_BORDER;
-	sampler.AddressV = D3D12_TEXTURE_ADDRESS_MODE_BORDER;
-	sampler.AddressW = D3D12_TEXTURE_ADDRESS_MODE_BORDER;
-	sampler.MipLODBias = 0;
-	sampler.MaxAnisotropy = 0;
-	sampler.ComparisonFunc = D3D12_COMPARISON_FUNC_NEVER;
-	sampler.BorderColor = D3D12_STATIC_BORDER_COLOR_TRANSPARENT_BLACK;
-	sampler.MinLOD = 0.0f;
-	sampler.MaxLOD = D3D12_FLOAT32_MAX;
-	sampler.ShaderRegister = 0;
-	sampler.RegisterSpace = 0;
-	sampler.ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
+	rootParameters[1].InitAsDescriptorTable(1, &ranges[1], D3D12_SHADER_VISIBILITY_PIXEL);
+	rootParameters[2].InitAsDescriptorTable(1, &ranges[2], D3D12_SHADER_VISIBILITY_VERTEX);
 
 	CD3DX12_VERSIONED_ROOT_SIGNATURE_DESC rootSignatureDesc = {};
-	rootSignatureDesc.Init_1_1(_countof(rootParameters), rootParameters, 1, &sampler, D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT);
+	rootSignatureDesc.Init_1_1(_countof(rootParameters), rootParameters, 0, nullptr, D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT);
 
 	ComPtr<ID3DBlob> signature;
 	ComPtr<ID3DBlob> error;
@@ -283,7 +267,29 @@ RenderBuffer* RendererD3D12::create_render_buffer_internal() {
 	return new RenderBuffer_D3D12();
 }
 
+
+
+struct Constant {
+	kbMat4 mvp;
+	kbMat4 padding[3];
+};
+Constant buffer;
+Constant* pBuffer;
+
 void RendererD3D12::render() {
+
+
+	pBuffer->mvp.MakeIdentity();
+	pBuffer->padding[0].MakeIdentity();
+	pBuffer->padding[1].MakeIdentity();
+	pBuffer->padding[2].MakeIdentity();
+
+	/*buffer.mvp.MakeIdentity();
+	buffer.padding[0].MakeIdentity();
+	buffer.padding[1].MakeIdentity();
+	buffer.padding[2].MakeIdentity();
+	memcpy(m_pCbvDataBegin, &buffer, sizeof(buffer));*/
+
 	check_result(m_command_allocator->Reset());
 	check_result(m_command_list->Reset(m_command_allocator.Get(), nullptr));
 
@@ -303,17 +309,27 @@ void RendererD3D12::render() {
 	RenderPipeline_D3D12* const pipe = (RenderPipeline_D3D12*)get_pipeline("test_shader");
 	m_command_list->SetPipelineState(pipe->m_pipeline_state.Get());
 
-	m_command_list->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
 
 	auto vertex_buffer = (RenderBuffer_D3D12*)get_render_buffer(0);
 	auto index_buffer = (RenderBuffer_D3D12*)get_render_buffer(1);
 
-	ID3D12DescriptorHeap* ppHeaps[] = { m_srv_heap.Get() };
+	ID3D12DescriptorHeap* ppHeaps[] = { m_cbv_srv_heap.Get(), m_sampler_heap.Get() };
 	m_command_list->SetDescriptorHeaps(_countof(ppHeaps), ppHeaps);
-	m_command_list->SetGraphicsRootDescriptorTable(0, m_srv_heap->GetGPUDescriptorHandleForHeapStart());
-
-	m_command_list->IASetVertexBuffers(0, 1, &vertex_buffer->vertex_buffer_view());
+	m_command_list->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	m_command_list->IASetIndexBuffer(&index_buffer->index_buffer_view());
+	m_command_list->IASetVertexBuffers(0, 1, &vertex_buffer->vertex_buffer_view());
+
+	m_command_list->SetGraphicsRootDescriptorTable(0, m_cbv_srv_heap->GetGPUDescriptorHandleForHeapStart());
+	m_command_list->SetGraphicsRootDescriptorTable(1, m_sampler_heap->GetGPUDescriptorHandleForHeapStart());
+	auto descriptor_size = m_device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
+
+	CD3DX12_GPU_DESCRIPTOR_HANDLE gpu_handle(m_cbv_srv_heap->GetGPUDescriptorHandleForHeapStart(), 1, descriptor_size);
+	m_command_list->SetGraphicsRootDescriptorTable(2, gpu_handle);
+
+
+
+
 	m_command_list->DrawIndexedInstanced(index_buffer->num_elements(), 1, 0, 0, 0);
 
 	// Indicate that the back buffer will now be used to present.
@@ -423,13 +439,62 @@ void RendererD3D12::todo_create_texture() {
 		0, 0, static_cast<UINT>(subresources.size()), subresources.data());
 	m_command_list->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(tex.Get(), D3D12_RESOURCE_STATE_COPY_DEST, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE));
 
-	// Describe and create a SRV for the texture.
+	// Create SRV 
 	D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc = {};
 	srvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
 	srvDesc.Format = DXGI_FORMAT_BC1_UNORM;
 	srvDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D;
 	srvDesc.Texture2D.MipLevels = 1;
-	m_device->CreateShaderResourceView(tex.Get(), &srvDesc, m_srv_heap->GetCPUDescriptorHandleForHeapStart());
+	m_device->CreateShaderResourceView(tex.Get(), &srvDesc, m_cbv_srv_heap->GetCPUDescriptorHandleForHeapStart());
+
+
+
+
+	check_result(m_device->CreateCommittedResource(
+		&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD),
+		D3D12_HEAP_FLAG_NONE,
+		&CD3DX12_RESOURCE_DESC::Buffer(sizeof(buffer)),
+		D3D12_RESOURCE_STATE_GENERIC_READ,
+		nullptr,
+		IID_PPV_ARGS(&m_cbvUploadHeap)));
+
+	// Map the constant buffers. Note that unlike D3D11, the resource 
+	// does not need to be unmapped for use by the GPU. In this sample, 
+	// the resource stays 'permenantly' mapped to avoid overhead with 
+	// mapping/unmapping each frame.
+	CD3DX12_RANGE readRange(0, 0);        // We do not intend to read from this resource on the CPU.
+	pBuffer = nullptr;
+	check_result(m_cbvUploadHeap->Map(0, &readRange, reinterpret_cast<void**>(&pBuffer)));
+	pBuffer->mvp.MakeIdentity();
+	pBuffer->padding[0].MakeIdentity();
+	pBuffer->padding[1].MakeIdentity();
+	pBuffer->padding[2].MakeIdentity();
+
+	////////////////////////////////////////////////////////
+	auto m_cbvSrvDescriptorSize = m_device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
+	CD3DX12_CPU_DESCRIPTOR_HANDLE cbvSrvHandle(m_cbv_srv_heap->GetCPUDescriptorHandleForHeapStart(), 1, m_cbvSrvDescriptorSize);    // Move past the SRVs.
+//	for (UINT i = 0; i < FrameCount; i++)
+	{
+		//FrameResource* pFrameResource = new FrameResource(m_device.Get(), CityRowCount, CityColumnCount, CityMaterialCount, CitySpacingInterval);
+
+		UINT64 cbOffset = 0;
+		//for (UINT j = 0; j < CityRowCount; j++)
+		{
+		//	for (UINT k = 0; k < CityColumnCount; k++)
+			{
+				// Describe and create a constant buffer view (CBV).
+				D3D12_CONSTANT_BUFFER_VIEW_DESC cbvDesc = {};
+				cbvDesc.BufferLocation = m_cbvUploadHeap->GetGPUVirtualAddress() + cbOffset;
+				cbvDesc.SizeInBytes = sizeof(buffer);
+				cbOffset += cbvDesc.SizeInBytes;
+				m_device->CreateConstantBufferView(&cbvDesc, cbvSrvHandle);
+				cbvSrvHandle.Offset(m_cbvSrvDescriptorSize);
+			}
+		}
+	}
+	////////////////////////////////////////////////////////
+
+
 
 	// Close the command list and execute it to begin the initial GPU setup.
 	check_result(m_command_list->Close());
@@ -456,4 +521,7 @@ void RendererD3D12::todo_create_texture() {
 		check_result(m_fence->SetEventOnCompletion(fence, m_fence_event));
 		WaitForSingleObject(m_fence_event, INFINITE);
 	}
+
+
+//	pBuffer->mvp.MakeIdentity();
 }

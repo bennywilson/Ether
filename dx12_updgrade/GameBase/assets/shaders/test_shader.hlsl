@@ -1,9 +1,9 @@
-cbuffer matrixBuffer {
+cbuffer matrixBuffer : register(b0) {
 	matrix modelMatrix;
-	matrix mvpMatrix;
+	matrix padding[3];
 };
-Texture2D shaderTexture : register(t0);
 SamplerState SampleType : register(s0);
+Texture2D shaderTexture : register(t0);
 
 //-------------------------------------
 struct vertexInput {
@@ -38,7 +38,7 @@ pixelInput vertex_shader(vertexInput input) {
 					0.f, 2.14451f * 0.5, 0.f, 0.f,
 					0.f, 0.f, 1.00005f * 0.5, 1.f,
 					-0.5f, -3.f, 4.5f, 5.f};
-	output.position = mul( input.position, mvp );
+	output.position = mul( input.position, modelMatrix );
 	output.color = input.color;
 	output.normal.xyz = input.normal.xyz;
 	output.uv = input.uv;

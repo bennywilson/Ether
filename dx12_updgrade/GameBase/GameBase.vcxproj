@@ -114,6 +114,12 @@
   <ItemGroup>
     <ResourceCompile Include="GameBase.rc" />
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="assets\shaders\test_shader.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+      <FileType>Document</FileType>
+    </Text>
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
