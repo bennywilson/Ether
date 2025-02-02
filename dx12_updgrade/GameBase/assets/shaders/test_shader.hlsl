@@ -49,7 +49,7 @@ pixelInput vertex_shader(vertexInput input) {
 	//const float3 normal = normalize(input.normal.xyz);
 	//const float3 light_dir = normalize(float3(0.0f, 1.0f, 0.0));
 	//const float nDotL = pow(saturate(dot(normal, light_dir)), 2.0);
-	return 1;
+	//return 1;
 	return albedo;// * nDotL;
 }
  
