@@ -280,6 +280,14 @@ void RendererD3D12::render() {
 
 
 	pBuffer->mvp.MakeIdentity();
+	static float offset = 0.f;
+	offset += 0.001f;
+
+	pBuffer->mvp[0].Set(1.31353f * 0.5, 0.f, 0.f, -0.5 + offset);
+	pBuffer->mvp[1].Set(0.f, 2.14451f * 0.5, 0.f, -3.f);
+	pBuffer->mvp[2].Set(0.f, 0.f, 1.00005f * 0.5, 4.5f);
+	pBuffer->mvp[3].Set(0.f, 0.0, 1.f, 5.f);
+
 	pBuffer->padding[0].MakeIdentity();
 	pBuffer->padding[1].MakeIdentity();
 	pBuffer->padding[2].MakeIdentity();
