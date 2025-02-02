@@ -21,7 +21,7 @@ static const uint NumScratchBufferVerts = 50000;
  */
 kbParticleManager::kbParticleManager() {
 
-	m_ComponentPool.resize( ComponentPoolSize );
+/*	m_ComponentPool.resize( ComponentPoolSize );
 	for ( int i = 0; i < ComponentPoolSize; i++ ) {
 		m_ComponentPool[i] = new kbGameComponent();
 	}
@@ -54,7 +54,7 @@ kbParticleManager::kbParticleManager() {
 		kbModel& nextModel = scratchBuf.m_RenderModel[scratchBuf.m_iCurModel];
 		scratchBuf.m_pVertexBuffer = (kbParticleVertex*)nextModel.MapVertexBuffer();
 		scratchBuf.m_iVert = 0;
-	}
+	}*/
 }
 
 /**

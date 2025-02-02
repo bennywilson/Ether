@@ -14,6 +14,7 @@ using namespace Microsoft::WRL;
 class RenderPipeline_D3D12 : public RenderPipeline {
 	friend class RendererD3D12;
 	~RenderPipeline_D3D12() { m_pipeline_state.Reset(); }
+
 	virtual void release() { m_pipeline_state.Reset();  }
 
 	ComPtr<ID3D12PipelineState> m_pipeline_state;

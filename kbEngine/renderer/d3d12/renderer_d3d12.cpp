@@ -120,38 +120,58 @@ void RendererD3D12::initialize(HWND hwnd, const uint32_t frame_width, const uint
 	// Command List
 	check_result(m_device->CreateCommandAllocator(D3D12_COMMAND_LIST_TYPE_DIRECT, IID_PPV_ARGS(&m_command_allocator)));
 	check_result(m_device->CreateCommandList(0, D3D12_COMMAND_LIST_TYPE_DIRECT, m_command_allocator.Get(), nullptr, IID_PPV_ARGS(&m_command_list)));
-	m_command_list->Close();
+	check_result(m_command_list->Close());
 
 
 
-	CD3DX12_DESCRIPTOR_RANGE1 ranges[3] = {};
-	ranges[0].Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, 0, 0, D3D12_DESCRIPTOR_RANGE_FLAG_DATA_STATIC);
-	ranges[1].Init(D3D12_DESCRIPTOR_RANGE_TYPE_SAMPLER, 1, 0);
-	ranges[2].Init(D3D12_DESCRIPTOR_RANGE_TYPE_CBV, 1, 0, 0, D3D12_DESCRIPTOR_RANGE_FLAG_DATA_STATIC);
+	CD3DX12_DESCRIPTOR_RANGE1 ranges[1] = {};
+	ranges[0].Init(D3D12_DESCRIPTOR_RANGE_TYPE_CBV, 1, 0, 0, D3D12_DESCRIPTOR_RANGE_FLAG_DATA_STATIC);
+//	ranges[1].Init(D3D12_DESCRIPTOR_RANGE_TYPE_CBV, 1, 0, 0, D3D12_DESCRIPTOR_RANGE_FLAG_DATA_STATIC);
 
-	CD3DX12_ROOT_PARAMETER1 rootParameters[3] = {};
-	rootParameters[0].InitAsDescriptorTable(1, &ranges[0], D3D12_SHADER_VISIBILITY_PIXEL);
-	rootParameters[1].InitAsDescriptorTable(1, &ranges[1], D3D12_SHADER_VISIBILITY_PIXEL);
-	rootParameters[2].InitAsDescriptorTable(1, &ranges[2], D3D12_SHADER_VISIBILITY_VERTEX);
+	CD3DX12_ROOT_PARAMETER1 rootParameters[1] = {};
+	rootParameters[0].InitAsDescriptorTable(1, &ranges[0], D3D12_SHADER_VISIBILITY_VERTEX);
+	//rootParameters[1].InitAsDescriptorTable(1, &ranges[1], D3D12_SHADER_VISIBILITY_VERTEX);
+	//rootParameters[3].InitAsConstants(1, 0, 0, D3D12_SHADER_VISIBILITY_PIXEL);
+	D3D12_STATIC_SAMPLER_DESC sampler = {};
+	sampler.Filter = D3D12_FILTER_MIN_MAG_MIP_POINT;
+	sampler.AddressU = D3D12_TEXTURE_ADDRESS_MODE_BORDER;
+	sampler.AddressV = D3D12_TEXTURE_ADDRESS_MODE_BORDER;
+	sampler.AddressW = D3D12_TEXTURE_ADDRESS_MODE_BORDER;
+	sampler.MipLODBias = 0;
+	sampler.MaxAnisotropy = 0;
+	sampler.ComparisonFunc = D3D12_COMPARISON_FUNC_NEVER;
+	sampler.BorderColor = D3D12_STATIC_BORDER_COLOR_TRANSPARENT_BLACK;
+	sampler.MinLOD = 0.0f;
+	sampler.MaxLOD = D3D12_FLOAT32_MAX;
+	sampler.ShaderRegister = 0;
+	sampler.RegisterSpace = 0;
+	sampler.ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
 
+	D3D12_ROOT_SIGNATURE_FLAGS rootSignatureFlags =
+		D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT |
+		D3D12_ROOT_SIGNATURE_FLAG_DENY_HULL_SHADER_ROOT_ACCESS |
+		D3D12_ROOT_SIGNATURE_FLAG_DENY_DOMAIN_SHADER_ROOT_ACCESS |
+		D3D12_ROOT_SIGNATURE_FLAG_DENY_GEOMETRY_SHADER_ROOT_ACCESS |
+		D3D12_ROOT_SIGNATURE_FLAG_DENY_PIXEL_SHADER_ROOT_ACCESS;
 	CD3DX12_VERSIONED_ROOT_SIGNATURE_DESC rootSignatureDesc = {};
-	rootSignatureDesc.Init_1_1(_countof(rootParameters), rootParameters, 0, nullptr, D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT);
+	rootSignatureDesc.Init_1_1(_countof(rootParameters), rootParameters, 0, nullptr, rootSignatureFlags	);
+
+	D3D12_FEATURE_DATA_ROOT_SIGNATURE featureData = {};
+
+	// This is the highest version the sample supports. If CheckFeatureSupport succeeds, the HighestVersion returned will not be greater than this.
+	featureData.HighestVersion = D3D_ROOT_SIGNATURE_VERSION_1_1;
+
+	if (FAILED(m_device->CheckFeatureSupport(D3D12_FEATURE_ROOT_SIGNATURE, &featureData, sizeof(featureData))))
+	{
+		featureData.HighestVersion = D3D_ROOT_SIGNATURE_VERSION_1_0;
+	}
 
 	ComPtr<ID3DBlob> signature;
 	ComPtr<ID3DBlob> error;
-	check_result(D3DX12SerializeVersionedRootSignature(&rootSignatureDesc, D3D_ROOT_SIGNATURE_VERSION_1, &signature, &error));
+	check_result(D3DX12SerializeVersionedRootSignature(&rootSignatureDesc, featureData.HighestVersion, &signature, &error));
 	check_result(m_device->CreateRootSignature(0, signature->GetBufferPointer(), signature->GetBufferSize(), IID_PPV_ARGS(&m_root_signature)));
+	m_root_signature->SetName(L"m_root_signature");
 
-	/*
-			//Create an empty root signature.
-			CD3DX12_ROOT_SIGNATURE_DESC rootSignatureDesc = {};
-			rootSignatureDesc.Init(0, nullptr, 0, nullptr, D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT);
-
-		ComPtr<ID3DBlob> signature;
-		ComPtr<ID3DBlob> error;
-		check_result(D3D12SerializeRootSignature(&rootSignatureDesc, D3D_ROOT_SIGNATURE_VERSION_1, &signature, &error));
-		check_result(m_device->CreateRootSignature(0, signature->GetBufferPointer(), signature->GetBufferSize(), IID_PPV_ARGS(&m_root_signature)));
-	*/
 	// Fences	
 	check_result(m_device->CreateFence(0, D3D12_FENCE_FLAG_NONE, IID_PPV_ARGS(&m_fence)));
 	m_fence_value = 1;
@@ -197,12 +217,10 @@ void RendererD3D12::shut_down() {
 	}
 
 
-	m_cbvUploadHeap->Unmap(0, nullptr);
+	m_constant_buffer->Unmap(0, nullptr);
 
 	m_root_signature.Reset();
-	//SAFE_RELEASE(m_root_sig(nature);
-	m_cbvUploadHeap.Reset();
-	//m_cbvUploadHeap.Reset();
+	m_cbv_upload_heap.Reset();
 	m_cbv_srv_heap.Reset();
 	m_sampler_heap.Reset();
 	m_rtv_heap.Reset();
@@ -286,23 +304,23 @@ struct Constant {
 	kbMat4 padding[3];
 };
 Constant buffer;
-Constant* pBuffer;
 
 /// RendererD3D12::render
 void RendererD3D12::render() {
 
-	pBuffer->mvp.MakeIdentity();
+	Constant* pIt = (Constant*)m_pCbvDataBegin;
+	pIt->mvp.MakeIdentity();
 	static float offset = 0.f;
 	offset += 0.001f;
 
-	pBuffer->mvp[0].Set(1.31353f * 0.5, 0.f, 0.f, -0.5 + offset);
-	pBuffer->mvp[1].Set(0.f, 2.14451f * 0.5, 0.f, -3.f);
-	pBuffer->mvp[2].Set(0.f, 0.f, 1.00005f * 0.5, 4.5f);
-	pBuffer->mvp[3].Set(0.f, 0.0, 1.f, 5.f);
+	pIt->mvp[0].Set(1.31353f * 0.5, 0.f, 0.f, -0.5f + offset);
+	pIt->mvp[1].Set(0.f, 2.14451f * 0.5, 0.f, -3.f);
+	pIt->mvp[2].Set(0.f, 0.f, 1.00005f * 0.5, 4.5f);
+	pIt->mvp[3].Set(0.f, 0.0, 1.f, 5.f);
 
-	pBuffer->padding[0].MakeIdentity();
-	pBuffer->padding[1].MakeIdentity();
-	pBuffer->padding[2].MakeIdentity();
+	pIt->padding[0].MakeIdentity();
+	pIt->padding[1].MakeIdentity();
+	pIt->padding[2].MakeIdentity();
 
 	check_result(m_command_allocator->Reset());
 	check_result(m_command_list->Reset(m_command_allocator.Get(), nullptr));
@@ -328,18 +346,19 @@ void RendererD3D12::render() {
 	auto vertex_buffer = (RenderBuffer_D3D12*)get_render_buffer(0);
 	auto index_buffer = (RenderBuffer_D3D12*)get_render_buffer(1);
 
-	ID3D12DescriptorHeap* ppHeaps[] = { m_cbv_srv_heap.Get(), m_sampler_heap.Get() };
+	ID3D12DescriptorHeap* ppHeaps[] = { m_cbv_srv_heap.Get() };//, m_sampler_heap.Get()
+
 	m_command_list->SetDescriptorHeaps(_countof(ppHeaps), ppHeaps);
 	m_command_list->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	m_command_list->IASetIndexBuffer(&index_buffer->index_buffer_view());
 	m_command_list->IASetVertexBuffers(0, 1, &vertex_buffer->vertex_buffer_view());
 
 	m_command_list->SetGraphicsRootDescriptorTable(0, m_cbv_srv_heap->GetGPUDescriptorHandleForHeapStart());
-	m_command_list->SetGraphicsRootDescriptorTable(1, m_sampler_heap->GetGPUDescriptorHandleForHeapStart());
-	auto descriptor_size = m_device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
+//	m_command_list->SetGraphicsRootDescriptorTable(1, m_sampler_heap->GetGPUDescriptorHandleForHeapStart());
+	//auto descriptor_size = m_device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
 
-	CD3DX12_GPU_DESCRIPTOR_HANDLE gpu_handle(m_cbv_srv_heap->GetGPUDescriptorHandleForHeapStart(), 1, descriptor_size);
-	m_command_list->SetGraphicsRootDescriptorTable(2, gpu_handle);
+	////CD3DX12_GPU_DESCRIPTOR_HANDLE gpu_handle(m_cbv_srv_heap->GetGPUDescriptorHandleForHeapStart(), 1, descriptor_size);
+	//m_command_list->SetGraphicsRootDescriptorTable(2, gpu_handle);
 
 
 
@@ -424,6 +443,18 @@ RenderPipeline* RendererD3D12::create_pipeline(const wstring& path) {
 
 /// RendererD3D12::todo_create_texture() {
 void RendererD3D12::todo_create_texture() {
+	// Wait for previous frame (todo)
+	{
+		const uint64_t fence = m_fence_value;
+		check_result(m_queue->Signal(m_fence.Get(), fence));
+		m_fence_value++;
+
+		// Wait until the previous frame is finished.
+		if (m_fence->GetCompletedValue() < fence) {
+			check_result(m_fence->SetEventOnCompletion(fence, m_fence_event));
+			WaitForSingleObject(m_fence_event, INFINITE);
+		}
+	}
 
 	std::unique_ptr<uint8_t[]> ddsData;
 	std::vector<D3D12_SUBRESOURCE_DATA> subresources;
@@ -455,53 +486,66 @@ void RendererD3D12::todo_create_texture() {
 		0, 0, static_cast<UINT>(subresources.size()), subresources.data());
 	m_command_list->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(tex.Get(), D3D12_RESOURCE_STATE_COPY_DEST, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE));
 
-	// Create SRV 
+	// Create SRV
+	/*auto m_cbvSrvDescriptorSize = m_device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
+	CD3DX12_CPU_DESCRIPTOR_HANDLE srvHandle(m_cbv_srv_heap->GetCPUDescriptorHandleForHeapStart(), 0, m_cbvSrvDescriptorSize);
 	D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc = {};
 	srvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
 	srvDesc.Format = DXGI_FORMAT_BC1_UNORM;
 	srvDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D;
 	srvDesc.Texture2D.MipLevels = 1;
-	m_device->CreateShaderResourceView(tex.Get(), &srvDesc, m_cbv_srv_heap->GetCPUDescriptorHandleForHeapStart());
-
-
-
-
+	m_device->CreateShaderResourceView(tex.Get(), &srvDesc, m_cbv_srv_heap->GetCPUDescriptorHandleForHeapStart());*/
+	/*
 	check_result(m_device->CreateCommittedResource(
 		&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD),
 		D3D12_HEAP_FLAG_NONE,
 		&CD3DX12_RESOURCE_DESC::Buffer(sizeof(buffer)),
 		D3D12_RESOURCE_STATE_GENERIC_READ,
 		nullptr,
-		IID_PPV_ARGS(&m_cbvUploadHeap)));
+		IID_PPV_ARGS(&m_cbv_upload_heap)));*/
 
 	// Map the constant buffers. Note that unlike D3D11, the resource 
 	// does not need to be unmapped for use by the GPU. In this sample, 
 	// the resource stays 'permenantly' mapped to avoid overhead with 
 	// mapping/unmapping each frame.
-	CD3DX12_RANGE readRange(0, 0);        // We do not intend to read from this resource on the CPU.
+/*	CD3DX12_RANGE readRange(0, 0);        // We do not intend to read from this resource on the CPU.
 	pBuffer = nullptr;
-	check_result(m_cbvUploadHeap->Map(0, &readRange, reinterpret_cast<void**>(&pBuffer)));
+	check_result(m_cbv_upload_heap->Map(0, &readRange, reinterpret_cast<void**>(&pBuffer)));
 	pBuffer->mvp.MakeIdentity();
 	pBuffer->padding[0].MakeIdentity();
 	pBuffer->padding[1].MakeIdentity();
-	pBuffer->padding[2].MakeIdentity();
+	pBuffer->padding[2].MakeIdentity();*/
 
-	////////////////////////////////////////////////////////
-	auto m_cbvSrvDescriptorSize = m_device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
-	CD3DX12_CPU_DESCRIPTOR_HANDLE cbvSrvHandle(m_cbv_srv_heap->GetCPUDescriptorHandleForHeapStart(), 1, m_cbvSrvDescriptorSize);
+	D3D12_DESCRIPTOR_HEAP_DESC cbvHeapDesc = {};
+	cbvHeapDesc.NumDescriptors = 1;
+	cbvHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;
+	cbvHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV;
+	check_result(m_device->CreateDescriptorHeap(&cbvHeapDesc, IID_PPV_ARGS(&m_cbv_srv_heap)));
+
+	// Create the constant buffer.
 	{
+		const UINT constantBufferSize = sizeof(buffer);    // CB size is required to be 256-byte aligned.
 
-		UINT64 cbOffset = 0;
-		// Describe and create a constant buffer view (CBV).
+		check_result(m_device->CreateCommittedResource(
+			&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD),
+			D3D12_HEAP_FLAG_NONE,
+			&CD3DX12_RESOURCE_DESC::Buffer(constantBufferSize),
+			D3D12_RESOURCE_STATE_GENERIC_READ,
+			nullptr,
+			IID_PPV_ARGS(&m_constant_buffer)));
+
+		// Describe and create a constant buffer view.
 		D3D12_CONSTANT_BUFFER_VIEW_DESC cbvDesc = {};
-		cbvDesc.BufferLocation = m_cbvUploadHeap->GetGPUVirtualAddress() + cbOffset;
-		cbvDesc.SizeInBytes = sizeof(buffer);
-		cbOffset += cbvDesc.SizeInBytes;
-		m_device->CreateConstantBufferView(&cbvDesc, cbvSrvHandle);
-		cbvSrvHandle.Offset(m_cbvSrvDescriptorSize);
-	}
-	////////////////////////////////////////////////////////
+		cbvDesc.BufferLocation = m_constant_buffer->GetGPUVirtualAddress();
+		cbvDesc.SizeInBytes = constantBufferSize;
+		m_device->CreateConstantBufferView(&cbvDesc, m_cbv_srv_heap->GetCPUDescriptorHandleForHeapStart());
 
+		// Map and initialize the constant buffer. We don't unmap this until the
+		// app closes. Keeping things mapped for the lifetime of the resource is okay.
+		CD3DX12_RANGE readRange(0, 0);        // We do not intend to read from this bufferresource on the CPU.
+		check_result(m_constant_buffer->Map(0, &readRange, reinterpret_cast<void**>(&m_pCbvDataBegin)));
+		memcpy(m_pCbvDataBegin, &buffer, sizeof(buffer));
+	}
 
 
 	// Close the command list and execute it to begin the initial GPU setup.
@@ -509,27 +553,16 @@ void RendererD3D12::todo_create_texture() {
 	ID3D12CommandList* ppCommandLists[] = { m_command_list.Get() };
 	m_queue->ExecuteCommandLists(_countof(ppCommandLists), ppCommandLists);
 
-	check_result(m_device->CreateFence(0, D3D12_FENCE_FLAG_NONE, IID_PPV_ARGS(&m_fence)));
-	m_fence_value = 1;
-
-	// Create an event handle to use for frame synchronization.
-	m_fence_event = CreateEvent(nullptr, FALSE, FALSE, nullptr);
-	if (m_fence_event == nullptr)
-	{
-		check_result(HRESULT_FROM_WIN32(GetLastError()));
-	}
-
 	// Wait for previous frame (todo)
-	const uint64_t fence = m_fence_value;
-	check_result(m_queue->Signal(m_fence.Get(), fence));
-	m_fence_value++;
+	{
+		const uint64_t fence = m_fence_value;
+		check_result(m_queue->Signal(m_fence.Get(), fence));
+		m_fence_value++;
 
-	// Wait until the previous frame is finished.
-	if (m_fence->GetCompletedValue() < fence) {
-		check_result(m_fence->SetEventOnCompletion(fence, m_fence_event));
-		WaitForSingleObject(m_fence_event, INFINITE);
+		// Wait until the previous frame is finished.
+		if (m_fence->GetCompletedValue() < fence) {
+			check_result(m_fence->SetEventOnCompletion(fence, m_fence_event));
+			WaitForSingleObject(m_fence_event, INFINITE);
+		}
 	}
-
-
-	//	pBuffer->mvp.MakeIdentity();
 }

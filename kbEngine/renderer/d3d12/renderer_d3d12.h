@@ -40,7 +40,6 @@ private:
 
 	static const UINT frame_count = 2;
 
-
 	ComPtr<ID3D12Device> m_device;
 	ComPtr<ID3D12CommandQueue> m_queue;
 
@@ -51,11 +50,9 @@ private:
 	CD3DX12_RECT m_scissor_rect;
 
 	ComPtr<ID3D12DescriptorHeap> m_sampler_heap;
-	
-	UINT8* m_pCbvDataBegin;
-	
+
 	ComPtr<ID3D12DescriptorHeap> m_cbv_srv_heap;
-	ComPtr<ID3D12Resource> m_cbvUploadHeap;
+	ComPtr<ID3D12Resource> m_cbv_upload_heap;
 	ComPtr<ID3D12DescriptorHeap> m_rtv_heap;
 	uint32_t m_rtv_descriptor_size = 0;
 
@@ -70,4 +67,9 @@ private:
 	ComPtr<ID3D12Fence> m_fence;
 	uint64_t m_fence_value = 0;
 	HANDLE m_fence_event;
+
+
+	//
+	ComPtr<ID3D12Resource> m_constant_buffer;
+	UINT8* m_pCbvDataBegin = nullptr;
 };

@@ -1,14 +1,10 @@
-//===================================================================================================
-// kbRenderBuffer.h
-//
-//
-// 2016-2025 kbEngine 2.0
-//===================================================================================================
+/// kbRenderBuffer.h
+///
+/// 2016-2025 kbEngine 2.0
+
 #pragma once
 
 #include "render_defs.h"
-#include "kbRenderer_defs.h"
-// platform switch here
 #include <D3D11.h>
 
 typedef ID3D11Buffer kbHWBuffer;
@@ -17,7 +13,6 @@ typedef ID3D11VertexShader kbHWVertexShader;
 typedef ID3D11GeometryShader kbHWGeometryShader;
 typedef ID3D11PixelShader kbHWPixelShader;
 typedef ID3D11InputLayout kbHWVertexLayout;
-
 
 /**
  *	kbRenderBuffer

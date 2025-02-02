@@ -97,9 +97,7 @@ class RenderBuffer {
 public:
 	RenderBuffer() = default;
 
-	~RenderBuffer() {
-		release();
-	}
+	virtual ~RenderBuffer() {}
 
 	virtual void release() {};
 
