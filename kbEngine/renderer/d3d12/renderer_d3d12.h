@@ -40,7 +40,6 @@ private:
 
 	static const UINT frame_count = 2;
 
-
 	ComPtr<ID3D12Device> m_device;
 	ComPtr<ID3D12CommandQueue> m_queue;
 

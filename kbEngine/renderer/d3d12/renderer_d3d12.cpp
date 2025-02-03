@@ -121,8 +121,6 @@ void RendererD3D12::initialize(HWND hwnd, const uint32_t frame_width, const uint
 	check_result(m_device->CreateCommandList(0, D3D12_COMMAND_LIST_TYPE_DIRECT, m_command_allocator.Get(), nullptr, IID_PPV_ARGS(&m_command_list)));
 	m_command_list->Close();
 
-
-
 	CD3DX12_DESCRIPTOR_RANGE1 ranges[3] = {};
 	ranges[0].Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, 0, 0, D3D12_DESCRIPTOR_RANGE_FLAG_DATA_STATIC);
 	ranges[1].Init(D3D12_DESCRIPTOR_RANGE_TYPE_SAMPLER, 1, 0);
@@ -166,9 +164,6 @@ RendererD3D12::~RendererD3D12() {
 void RendererD3D12::shut_down() {
 	Renderer::shut_down();
 
-
-	// Ensure that the GPU is no longer referencing resources that are about to be
-// cleaned up by the destructor.
 	{
 		const UINT64 fence = m_fence_value;
 		const UINT64 lastCompletedFence = m_fence->GetCompletedValue();
@@ -277,11 +272,11 @@ Constant* pBuffer;
 
 /// RendererD3D12::render
 void RendererD3D12::render() {
-	
+
 	// Update constant buffer
 	pBuffer->mvp[0].Set(1.31353f * 0.5f, 0.f, 0.f, -0.5f);
 	pBuffer->mvp[1].Set(0.f, 2.14451f * 0.5f, 0.f, -3.f);
-	pBuffer->mvp[2].Set(0.f, 0.f, 1.00005f *  0.5f, 4.5f);
+	pBuffer->mvp[2].Set(0.f, 0.f, 1.00005f * 0.5f, 4.5f);
 	pBuffer->mvp[3].Set(0.f, 0.f, 1.f, 5.f);
 
 	pBuffer->padding[0].MakeIdentity();
@@ -406,11 +401,12 @@ RenderPipeline* RendererD3D12::create_pipeline(const wstring& path) {
 
 /// RendererD3D12::todo_create_texture() {
 void RendererD3D12::todo_create_texture() {
-	std::unique_ptr<uint8_t[]> ddsData;
-	std::vector<D3D12_SUBRESOURCE_DATA> subresources;
 	check_result(m_command_allocator->Reset());
 	check_result(m_command_list->Reset(m_command_allocator.Get(), nullptr));
 
+	// Load texture 
+	std::unique_ptr<uint8_t[]> ddsData;
+	std::vector<D3D12_SUBRESOURCE_DATA> subresources;
 	check_result(LoadDDSTextureFromFile(
 		m_device.Get(),
 		L"C:/projects/Ether/dx12_updgrade/GameBase/assets/Test/diablo.dds",
@@ -418,26 +414,24 @@ void RendererD3D12::todo_create_texture() {
 		ddsData,
 		subresources));
 
-	const UINT64 uploadBufferSize = GetRequiredIntermediateSize(tex.Get(), 0,
-		static_cast<UINT>(subresources.size()));
-
-	// Create the GPU upload buffer.
-	ComPtr<ID3D12Resource> uploadRes;
+	// Create gpu upload buffer
+	const uint64_t upload_buff_size = GetRequiredIntermediateSize(tex.Get(), 0, (uint32_t)subresources.size());
+	ComPtr<ID3D12Resource> upload_resource;
 	check_result(
 		m_device->CreateCommittedResource(
 			&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD),
 			D3D12_HEAP_FLAG_NONE,
-			&CD3DX12_RESOURCE_DESC::Buffer(uploadBufferSize),
+			&CD3DX12_RESOURCE_DESC::Buffer(upload_buff_size),
 			D3D12_RESOURCE_STATE_GENERIC_READ,
 			nullptr,
-			IID_PPV_ARGS(&uploadRes)));
+			IID_PPV_ARGS(&upload_resource)));
 
-	UpdateSubresources(m_command_list.Get(), tex.Get(), uploadRes.Get(),
+	UpdateSubresources(m_command_list.Get(), tex.Get(), upload_resource.Get(),
 		0, 0, static_cast<UINT>(subresources.size()), subresources.data());
+
 	m_command_list->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(tex.Get(), D3D12_RESOURCE_STATE_COPY_DEST, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE));
 
-
-	// Describe and create a sampler.
+	// Sampler
 	D3D12_SAMPLER_DESC samplerDesc = {};
 	samplerDesc.Filter = D3D12_FILTER_MIN_MAG_MIP_LINEAR;
 	samplerDesc.AddressU = D3D12_TEXTURE_ADDRESS_MODE_WRAP;
@@ -450,8 +444,7 @@ void RendererD3D12::todo_create_texture() {
 	samplerDesc.ComparisonFunc = D3D12_COMPARISON_FUNC_ALWAYS;
 	m_device->CreateSampler(&samplerDesc, m_sampler_heap->GetCPUDescriptorHandleForHeapStart());
 
-
-	// Create SRV  for textures
+	// Texture srv
 	D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc = {};
 	srvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
 	srvDesc.Format = DXGI_FORMAT_BC1_UNORM;
@@ -461,6 +454,7 @@ void RendererD3D12::todo_create_texture() {
 	CD3DX12_CPU_DESCRIPTOR_HANDLE texHandle(m_cbv_srv_heap->GetCPUDescriptorHandleForHeapStart(), 0, m_device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_SAMPLER));
 	m_device->CreateShaderResourceView(tex.Get(), &srvDesc, texHandle);
 
+	// Constant buffer view upload heap
 	check_result(m_device->CreateCommittedResource(
 		&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD),
 		D3D12_HEAP_FLAG_NONE,
@@ -473,30 +467,19 @@ void RendererD3D12::todo_create_texture() {
 	pBuffer = nullptr;
 	check_result(m_cbv_upload_heap->Map(0, &readRange, reinterpret_cast<void**>(&pBuffer)));
 
+	// Constant buffer view
 	UINT64 cbOffset = 0;
-	////////////////////////////////////////////////////////
-	auto m_cbvSrvDescriptorSize = m_device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
-	CD3DX12_CPU_DESCRIPTOR_HANDLE cbvSrvHandle(m_cbv_srv_heap->GetCPUDescriptorHandleForHeapStart(), 1, m_cbvSrvDescriptorSize);    // Move past the SRVs.
-	//	for (UINT i = 0; i < FrameCount; i++)
-	{
-		//FrameResource* pFrameResource = new FrameResource(m_device.Get(), CityRowCount, CityColumnCount, CityMaterialCount, CitySpacingInterval);
+	const auto CBV_SRV_DESCRIPTOR_SIZE = m_device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
+	CD3DX12_CPU_DESCRIPTOR_HANDLE cbvSrvHandle(m_cbv_srv_heap->GetCPUDescriptorHandleForHeapStart(), 1, CBV_SRV_DESCRIPTOR_SIZE);    // Move past the SRVs.
 
+	D3D12_CONSTANT_BUFFER_VIEW_DESC cbvDesc = {};
+	cbvDesc.BufferLocation = m_cbv_upload_heap->GetGPUVirtualAddress() + cbOffset;
+	cbvDesc.SizeInBytes = sizeof(buffer);
+	m_device->CreateConstantBufferView(&cbvDesc, cbvSrvHandle);
 
-		//for (UINT j = 0; j < CityRowCount; j++)
-		{
-			//	for (UINT k = 0; k < CityColumnCount; k++)
-			{
-				// Describe and create a constant buffer view (CBV).
-				D3D12_CONSTANT_BUFFER_VIEW_DESC cbvDesc = {};
-				cbvDesc.BufferLocation = m_cbv_upload_heap->GetGPUVirtualAddress() + cbOffset;
-				cbvDesc.SizeInBytes = sizeof(buffer);
-				cbOffset += cbvDesc.SizeInBytes;
-				m_device->CreateConstantBufferView(&cbvDesc, cbvSrvHandle);
-				cbvSrvHandle.Offset(m_cbvSrvDescriptorSize);
-			}
-		}
-	}
-	////////////////////////////////////////////////////////
+	// For handling multiple cbv
+	// cbOffset += cbvDesc.SizeInBytes;
+	// cbvSrvHandle.Offset(CBV_SRV_DESCRIPTOR_SIZE);
 
 	// Close the command list and execute it to begin the initial GPU setup.
 	check_result(m_command_list->Close());
@@ -504,14 +487,6 @@ void RendererD3D12::todo_create_texture() {
 	m_queue->ExecuteCommandLists(_countof(ppCommandLists), ppCommandLists);
 
 	check_result(m_device->CreateFence(0, D3D12_FENCE_FLAG_NONE, IID_PPV_ARGS(&m_fence)));
-	m_fence_value = 1;
-
-	// Create an event handle to use for frame synchronization.
-	m_fence_event = CreateEvent(nullptr, FALSE, FALSE, nullptr);
-	if (m_fence_event == nullptr)
-	{
-		check_result(HRESULT_FROM_WIN32(GetLastError()));
-	}
 
 	// Wait for previous frame (todo)
 	const uint64_t fence = m_fence_value;
