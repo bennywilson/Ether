@@ -324,6 +324,8 @@
     <ClInclude Include="renderer\d3d12\dx12\dxgicommon.h" />
     <ClInclude Include="renderer\d3d12\dx12\dxgiformat.h" />
     <ClInclude Include="renderer\renderer.h" />
+    <ClInclude Include="renderer\vk\renderer_vk.h" />
+    <ClInclude Include="renderer\vk\vk_defs.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="core\kbCore.cpp">
@@ -481,6 +483,8 @@
     </ClCompile>
     <ClCompile Include="renderer\d3d12\dxtk\DDSTextureLoader12.cpp" />
     <ClCompile Include="renderer\renderer.cpp" />
+    <ClCompile Include="renderer\vk\renderer_vk.cpp" />
+    <ClCompile Include="renderer\vk\vk_defs.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Midl Include="renderer\d3d12\dx12\d3d12.idl" />

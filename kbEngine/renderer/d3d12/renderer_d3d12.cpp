@@ -30,6 +30,10 @@ void RendererD3D12::initialize(HWND hwnd, const uint32_t frame_width, const uint
 		debugController->EnableDebugLayer();
 		dxgiFactoryFlags |= DXGI_CREATE_FACTORY_DEBUG;
 	}
+	ComPtr<ID3D12Debug1> spDebugController1;
+	debugController->QueryInterface(IID_PPV_ARGS(&spDebugController1));
+	spDebugController1->SetEnableGPUBasedValidation(true);
+
 #endif
 	ComPtr<IDXGIFactory4> factory;
 	CreateDXGIFactory2(dxgiFactoryFlags, IID_PPV_ARGS(&factory));
@@ -296,7 +300,7 @@ void RendererD3D12::render() {
 	CD3DX12_CPU_DESCRIPTOR_HANDLE rtv_handle(m_rtv_heap->GetCPUDescriptorHandleForHeapStart(), m_frame_index, m_rtv_descriptor_size);
 	m_command_list->OMSetRenderTargets(1, &rtv_handle, FALSE, nullptr);
 
-	const float clear_color[] = { 1.0f, 0.2f, 0.4f, 1.0f };
+	const float clear_color[] = { 0.7f, 0.8f, 1.f, 1.0f };
 	m_command_list->ClearRenderTargetView(rtv_handle, clear_color, 0, nullptr);
 
 	RenderPipeline_D3D12* const pipe = (RenderPipeline_D3D12*)get_pipeline("test_shader");

@@ -212,6 +212,8 @@
     <ClInclude Include="renderer\kbRenderer_defs.h" />
     <ClInclude Include="renderer\renderer.h" />
     <ClInclude Include="renderer\render_defs.h" />
+    <ClInclude Include="renderer\vk\renderer_vk.h" />
+    <ClInclude Include="renderer\vk\vk_defs.h" />
     <ClInclude Include="sound\kbSoundComponent.h" />
     <ClInclude Include="sound\kbSoundManager.h" />
   </ItemGroup>
@@ -342,6 +344,8 @@
     <ClCompile Include="renderer\kbRenderer_defs.cpp" />
     <ClCompile Include="renderer\renderer.cpp" />
     <ClCompile Include="renderer\render_defs.cpp" />
+    <ClCompile Include="renderer\vk\renderer_vk.cpp" />
+    <ClCompile Include="renderer\vk\vk_defs.cpp" />
     <ClCompile Include="sound\kbSoundComponent.cpp" />
     <ClCompile Include="sound\kbSoundManager.cpp" />
   </ItemGroup>

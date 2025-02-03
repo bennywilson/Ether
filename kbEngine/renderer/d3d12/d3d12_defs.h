@@ -1,4 +1,4 @@
-/// render_buffer.h	
+/// d3d12_defs.h
 ///
 /// 2025 kbEngine 2.0
 
