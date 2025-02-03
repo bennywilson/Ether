@@ -25,17 +25,10 @@ void RendererD3D12::initialize(HWND hwnd, const uint32_t frame_width, const uint
 	m_scissor_rect = CD3DX12_RECT(0, 0, frame_width, frame_height);
 
 #if defined(_DEBUG)
-	// Enable the debug layer (requires the Graphics Tools "optional feature").
-	// NOTE: Enabling the debug layer after device creation will invalidate the active device.
-	{
-		ComPtr<ID3D12Debug> debugController;
-		if (SUCCEEDED(D3D12GetDebugInterface(IID_PPV_ARGS(&debugController))))
-		{
-			debugController->EnableDebugLayer();
-
-			// Enable additional debug layers.
-			dxgiFactoryFlags |= DXGI_CREATE_FACTORY_DEBUG;
-		}
+	ComPtr<ID3D12Debug> debugController;
+	if (SUCCEEDED(D3D12GetDebugInterface(IID_PPV_ARGS(&debugController)))) {
+		debugController->EnableDebugLayer();
+		dxgiFactoryFlags |= DXGI_CREATE_FACTORY_DEBUG;
 	}
 #endif
 	ComPtr<IDXGIFactory4> factory;
@@ -55,7 +48,6 @@ void RendererD3D12::initialize(HWND hwnd, const uint32_t frame_width, const uint
 	D3D12_COMMAND_QUEUE_DESC queue_desc = {};
 	queue_desc.Flags = D3D12_COMMAND_QUEUE_FLAG_NONE;
 	queue_desc.Type = D3D12_COMMAND_LIST_TYPE_DIRECT;
-
 	check_result(m_device->CreateCommandQueue(&queue_desc, IID_PPV_ARGS(&m_queue)));
 
 	// Swap Chain
@@ -76,35 +68,35 @@ void RendererD3D12::initialize(HWND hwnd, const uint32_t frame_width, const uint
 		nullptr,
 		&swap_chain
 	));
-
 	check_result(swap_chain.As(&m_swap_chain));
 	m_frame_index = m_swap_chain->GetCurrentBackBufferIndex();
 
 	// Disable fullscreen
 	check_result(factory->MakeWindowAssociation(hwnd, DXGI_MWA_NO_ALT_ENTER));
 
-	// Render target view descriptor heap
+	// RTV descriptor heap
 	D3D12_DESCRIPTOR_HEAP_DESC rtv_heap_desc = {};
 	rtv_heap_desc.NumDescriptors = RendererD3D12::frame_count;
 	rtv_heap_desc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_RTV;
 	rtv_heap_desc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
 	check_result(m_device->CreateDescriptorHeap(&rtv_heap_desc, IID_PPV_ARGS(&m_rtv_heap)));
-
 	m_rtv_descriptor_size = m_device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV);
 
-	// Describe and create a shader resource view (SRV) heap for the texture.
-	D3D12_DESCRIPTOR_HEAP_DESC srvHeapDesc = {};
-	srvHeapDesc.NumDescriptors = 2;
-	srvHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV;
-	srvHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;
-	check_result(m_device->CreateDescriptorHeap(&srvHeapDesc, IID_PPV_ARGS(&m_cbv_srv_heap)));
-	m_cbv_srv_heap->SetName(L"m_cbv_srv_heap");
+	// SRV descriptor heap
+	D3D12_DESCRIPTOR_HEAP_DESC srv_heap_desc = {};
+	srv_heap_desc.NumDescriptors = 2;
+	srv_heap_desc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV;
+	srv_heap_desc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;
+	check_result(m_device->CreateDescriptorHeap(&srv_heap_desc, IID_PPV_ARGS(&m_cbv_srv_heap)));
+	m_cbv_srv_heap->SetName(L"RendererD3D12::m_cbv_srv_heap");
 
-	D3D12_DESCRIPTOR_HEAP_DESC samplerHeapDesc = {};
-	samplerHeapDesc.NumDescriptors = 1;
-	samplerHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_SAMPLER;
-	samplerHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;
-	check_result(m_device->CreateDescriptorHeap(&samplerHeapDesc, IID_PPV_ARGS(&m_sampler_heap)));
+	// Sampler heap
+	D3D12_DESCRIPTOR_HEAP_DESC sampler_heap_desc = {};
+	sampler_heap_desc.NumDescriptors = 1;
+	sampler_heap_desc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_SAMPLER;
+	sampler_heap_desc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;
+	check_result(m_device->CreateDescriptorHeap(&sampler_heap_desc, IID_PPV_ARGS(&m_sampler_heap)));
+	m_sampler_heap->SetName(L"RendererD3D12::m_sampler_heap");
 
 	// Frame resources
 	CD3DX12_CPU_DESCRIPTOR_HANDLE rtv_handle(m_rtv_heap->GetCPUDescriptorHandleForHeapStart());
@@ -121,6 +113,7 @@ void RendererD3D12::initialize(HWND hwnd, const uint32_t frame_width, const uint
 	check_result(m_device->CreateCommandList(0, D3D12_COMMAND_LIST_TYPE_DIRECT, m_command_allocator.Get(), nullptr, IID_PPV_ARGS(&m_command_list)));
 	m_command_list->Close();
 
+	// Root signature
 	CD3DX12_DESCRIPTOR_RANGE1 ranges[3] = {};
 	ranges[0].Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, 0, 0, D3D12_DESCRIPTOR_RANGE_FLAG_DATA_STATIC);
 	ranges[1].Init(D3D12_DESCRIPTOR_RANGE_TYPE_SAMPLER, 1, 0);
@@ -131,8 +124,14 @@ void RendererD3D12::initialize(HWND hwnd, const uint32_t frame_width, const uint
 	rootParameters[1].InitAsDescriptorTable(1, &ranges[1], D3D12_SHADER_VISIBILITY_PIXEL);
 	rootParameters[2].InitAsDescriptorTable(1, &ranges[2], D3D12_SHADER_VISIBILITY_VERTEX);
 
+	const D3D12_ROOT_SIGNATURE_FLAGS signature_flags = D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT |
+		D3D12_ROOT_SIGNATURE_FLAG_DENY_HULL_SHADER_ROOT_ACCESS |
+		D3D12_ROOT_SIGNATURE_FLAG_DENY_DOMAIN_SHADER_ROOT_ACCESS |
+		D3D12_ROOT_SIGNATURE_FLAG_DENY_GEOMETRY_SHADER_ROOT_ACCESS;
+
+
 	CD3DX12_VERSIONED_ROOT_SIGNATURE_DESC rootSignatureDesc = {};
-	rootSignatureDesc.Init_1_1(_countof(rootParameters), rootParameters, 0, nullptr, D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT);
+	rootSignatureDesc.Init_1_1(_countof(rootParameters), rootParameters, 0, nullptr, signature_flags);
 
 	ComPtr<ID3DBlob> signature;
 	ComPtr<ID3DBlob> error;
@@ -150,9 +149,9 @@ void RendererD3D12::initialize(HWND hwnd, const uint32_t frame_width, const uint
 	}
 
 	auto pipe = (RenderPipeline_D3D12*)load_pipeline("test_shader", L"C:/projects/Ether/dx12_updgrade/GameBase/assets/shaders/test_shader.hlsl");
-
-	kbLog("RendererD3D12 initialized");
 	todo_create_texture();
+	// 	kbLog("RendererD3D12 initialized");
+
 }
 
 /// RendererD3D12::~RendererD3D12
@@ -399,7 +398,7 @@ RenderPipeline* RendererD3D12::create_pipeline(const wstring& path) {
 	return (RenderPipeline*)pipe;
 }
 
-/// RendererD3D12::todo_create_texture() {
+/// RendererD3D12::todo_create_texture
 void RendererD3D12::todo_create_texture() {
 	check_result(m_command_allocator->Reset());
 	check_result(m_command_list->Reset(m_command_allocator.Get(), nullptr));
@@ -432,27 +431,27 @@ void RendererD3D12::todo_create_texture() {
 	m_command_list->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(tex.Get(), D3D12_RESOURCE_STATE_COPY_DEST, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE));
 
 	// Sampler
-	D3D12_SAMPLER_DESC samplerDesc = {};
-	samplerDesc.Filter = D3D12_FILTER_MIN_MAG_MIP_LINEAR;
-	samplerDesc.AddressU = D3D12_TEXTURE_ADDRESS_MODE_WRAP;
-	samplerDesc.AddressV = D3D12_TEXTURE_ADDRESS_MODE_WRAP;
-	samplerDesc.AddressW = D3D12_TEXTURE_ADDRESS_MODE_WRAP;
-	samplerDesc.MinLOD = 0;
-	samplerDesc.MaxLOD = D3D12_FLOAT32_MAX;
-	samplerDesc.MipLODBias = 0.0f;
-	samplerDesc.MaxAnisotropy = 1;
-	samplerDesc.ComparisonFunc = D3D12_COMPARISON_FUNC_ALWAYS;
-	m_device->CreateSampler(&samplerDesc, m_sampler_heap->GetCPUDescriptorHandleForHeapStart());
+	D3D12_SAMPLER_DESC sampler_desc = {};
+	sampler_desc.Filter = D3D12_FILTER_MIN_MAG_MIP_LINEAR;
+	sampler_desc.AddressU = D3D12_TEXTURE_ADDRESS_MODE_WRAP;
+	sampler_desc.AddressV = D3D12_TEXTURE_ADDRESS_MODE_WRAP;
+	sampler_desc.AddressW = D3D12_TEXTURE_ADDRESS_MODE_WRAP;
+	sampler_desc.MinLOD = 0;
+	sampler_desc.MaxLOD = D3D12_FLOAT32_MAX;
+	sampler_desc.MipLODBias = 0.0f;
+	sampler_desc.MaxAnisotropy = 1;
+	sampler_desc.ComparisonFunc = D3D12_COMPARISON_FUNC_ALWAYS;
+	m_device->CreateSampler(&sampler_desc, m_sampler_heap->GetCPUDescriptorHandleForHeapStart());
 
 	// Texture srv
-	D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc = {};
-	srvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
-	srvDesc.Format = DXGI_FORMAT_BC1_UNORM;
-	srvDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D;
-	srvDesc.Texture2D.MipLevels = 1;
+	D3D12_SHADER_RESOURCE_VIEW_DESC srv_desc = {};
+	srv_desc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
+	srv_desc.Format = DXGI_FORMAT_BC1_UNORM;
+	srv_desc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D;
+	srv_desc.Texture2D.MipLevels = 1;
 
 	CD3DX12_CPU_DESCRIPTOR_HANDLE texHandle(m_cbv_srv_heap->GetCPUDescriptorHandleForHeapStart(), 0, m_device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_SAMPLER));
-	m_device->CreateShaderResourceView(tex.Get(), &srvDesc, texHandle);
+	m_device->CreateShaderResourceView(tex.Get(), &srv_desc, texHandle);
 
 	// Constant buffer view upload heap
 	check_result(m_device->CreateCommittedResource(

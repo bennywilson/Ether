@@ -40,31 +40,32 @@ private:
 
 	static const UINT frame_count = 2;
 
+	CD3DX12_VIEWPORT m_view_port;
+	CD3DX12_RECT m_scissor_rect;
+
 	ComPtr<ID3D12Device> m_device;
 	ComPtr<ID3D12CommandQueue> m_queue;
 
 	ComPtr<struct IDXGISwapChain3> m_swap_chain;
 	uint32_t m_frame_index = 0;
 
-	CD3DX12_VIEWPORT m_view_port;
-	CD3DX12_RECT m_scissor_rect;
-
-	ComPtr<ID3D12DescriptorHeap> m_sampler_heap;
-
-	ComPtr<ID3D12Resource> m_constantBuffer;
-	UINT8* m_pCbvDataBegin;
-
-	ComPtr<ID3D12DescriptorHeap> m_cbv_srv_heap;
-	ComPtr<ID3D12Resource> m_cbv_upload_heap;
-	ComPtr<ID3D12DescriptorHeap> m_rtv_heap;
-	uint32_t m_rtv_descriptor_size = 0;
-
 	ComPtr<ID3D12CommandAllocator> m_command_allocator;
 	ComPtr<ID3D12GraphicsCommandList> m_command_list;
 
-	ComPtr<ID3D12Resource> m_render_targets[frame_count];
-
 	ComPtr<ID3D12RootSignature> m_root_signature;
+
+	ComPtr<ID3D12DescriptorHeap> m_rtv_heap;
+	uint32_t m_rtv_descriptor_size = 0;
+
+	ComPtr<ID3D12DescriptorHeap> m_sampler_heap;
+
+	ComPtr<ID3D12DescriptorHeap> m_cbv_srv_heap;
+	ComPtr<ID3D12Resource> m_cbv_upload_heap;
+
+	ComPtr<ID3D12Resource> m_constantBuffer;
+	UINT8* m_cbv_data_begin = nullptr;
+
+	ComPtr<ID3D12Resource> m_render_targets[frame_count];
 
 	// Fences
 	ComPtr<ID3D12Fence> m_fence;
