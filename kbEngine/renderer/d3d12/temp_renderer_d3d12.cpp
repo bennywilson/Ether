@@ -2,7 +2,6 @@
 ///
 /// 2025 kbEngine 2.0
 
-#include <d3d12sdklayers.h>
 #include "kbCore.h"
 #include "renderer_d3d12.h"
 #include <dxgi1_6.h>
@@ -17,8 +16,46 @@ Renderer* Renderer::create() {
 	return new RendererD3D12();
 }
 
-/// RendererD3D12::initialize
+void Renderer::shut_down() {
+	for (auto& pipe : m_pipelines) {
+		delete pipe.second;
+	}
+	m_pipelines.clear();
+
+	for (size_t i = 0; i < m_render_buffers.size(); i++) {
+		m_render_buffers[i]->release();
+		delete m_render_buffers[i];
+	}
+	m_render_buffers.clear();
+}
+
+RenderBuffer* Renderer::create_render_buffer() {
+	RenderBuffer* const buffer = create_render_buffer_internal();
+	m_render_buffers.push_back(buffer);
+	return buffer;
+}
+
+RenderPipeline* Renderer::load_pipeline(const std::string& friendly_name, const std::wstring& path) {
+	RenderPipeline* const new_pipeline = create_pipeline(path);
+	if (new_pipeline == nullptr) {
+		kbWarning("Unable to load pipeline %s", path.c_str());
+		return nullptr;
+	}
+	m_pipelines[friendly_name] = new_pipeline;
+
+	return new_pipeline;
+}
+
+RenderPipeline* Renderer::get_pipeline(const std::string& name) {
+	if (m_pipelines.find(name) == m_pipelines.end()) {
+		return nullptr;
+	}
+
+	return m_pipelines[name];
+}
+
 void RendererD3D12::initialize(HWND hwnd, const uint32_t frame_width, const uint32_t frame_height) {
+
 	UINT dxgiFactoryFlags = 0;
 
 	m_view_port = CD3DX12_VIEWPORT(0.f, 0.f, (float)frame_width, (float)frame_height);
@@ -157,60 +194,13 @@ void RendererD3D12::initialize(HWND hwnd, const uint32_t frame_width, const uint
 	todo_create_texture();
 }
 
-/// RendererD3D12::~RendererD3D12
 RendererD3D12::~RendererD3D12() {
-	shut_down();	// function is virtual but called in ~Renderer which is UB
 }
 
-/// RendererD3D12::shut_down
 void RendererD3D12::shut_down() {
 	Renderer::shut_down();
-
-
-	// Ensure that the GPU is no longer referencing resources that are about to be
-// cleaned up by the destructor.
-	{
-		const UINT64 fence = m_fence_value;
-		const UINT64 lastCompletedFence = m_fence->GetCompletedValue();
-
-		// Signal and increment the fence value.
-		check_result(m_queue->Signal(m_fence.Get(), m_fence_value));
-		m_fence_value++;
-
-		// Wait until the previous frame is finished.
-		if (lastCompletedFence < fence)
-		{
-			check_result(m_fence->SetEventOnCompletion(fence, m_fence_event));
-			WaitForSingleObject(m_fence_event, INFINITE);
-		}
-	}
-
-
-	m_cbv_upload_heap->Unmap(0, nullptr);
-
-	m_root_signature.Reset();
-	m_cbv_upload_heap.Reset();
-	m_cbv_srv_heap.Reset();
-	m_sampler_heap.Reset();
-	m_rtv_heap.Reset();
-
-	m_command_allocator.Reset();
-	m_command_list.Reset();
-
-	m_swap_chain.Reset();
-	m_render_targets[0].Reset();
-	m_render_targets[1].Reset();
-	tex.Reset();
-
-	m_fence.Reset();
-	m_queue.Reset();
-	ID3D12DebugDevice* d3d_debug = nullptr;
-	m_device->QueryInterface(__uuidof(ID3D12DebugDevice), reinterpret_cast<void**>(&d3d_debug));
-	m_device.Reset();
-	d3d_debug->ReportLiveDeviceObjects(D3D12_RLDO_IGNORE_INTERNAL);
 }
 
-/// RendererD3D12::get_hardware_adapter
 void RendererD3D12::get_hardware_adapter(
 	IDXGIFactory1* const factory,
 	IDXGIAdapter1** const out_adapter,
@@ -263,7 +253,6 @@ void RendererD3D12::get_hardware_adapter(
 	*out_adapter = adapter.Detach();
 }
 
-/// RendererD3D12::create_render_buffer_internal
 RenderBuffer* RendererD3D12::create_render_buffer_internal() {
 	return new RenderBuffer_D3D12();
 }
@@ -275,19 +264,11 @@ struct Constant {
 Constant buffer;
 Constant* pBuffer;
 
-/// RendererD3D12::render
 void RendererD3D12::render() {
-	
-	// Update constant buffer
-	pBuffer->mvp[0].Set(1.31353f * 0.5f, 0.f, 0.f, -0.5f);
-	pBuffer->mvp[1].Set(0.f, 2.14451f * 0.5f, 0.f, -3.f);
-	pBuffer->mvp[2].Set(0.f, 0.f, 1.00005f *  0.5f, 4.5f);
-	pBuffer->mvp[3].Set(0.f, 0.f, 1.f, 5.f);
-
+	pBuffer->mvp.MakeIdentity();
 	pBuffer->padding[0].MakeIdentity();
 	pBuffer->padding[1].MakeIdentity();
 	pBuffer->padding[2].MakeIdentity();
-	//........................
 
 	check_result(m_command_allocator->Reset());
 	check_result(m_command_list->Reset(m_command_allocator.Get(), nullptr));
@@ -353,7 +334,6 @@ void RendererD3D12::render() {
 	m_frame_index = m_swap_chain->GetCurrentBackBufferIndex();
 }
 
-/// RendererD3D12::create_pipeline
 RenderPipeline* RendererD3D12::create_pipeline(const wstring& path) {
 #if defined(_DEBUG)
 	// Enable better shader debugging with the graphics debugging tools.
@@ -404,8 +384,8 @@ RenderPipeline* RendererD3D12::create_pipeline(const wstring& path) {
 	return (RenderPipeline*)pipe;
 }
 
-/// RendererD3D12::todo_create_texture() {
 void RendererD3D12::todo_create_texture() {
+
 	std::unique_ptr<uint8_t[]> ddsData;
 	std::vector<D3D12_SUBRESOURCE_DATA> subresources;
 	check_result(m_command_allocator->Reset());
@@ -467,28 +447,28 @@ void RendererD3D12::todo_create_texture() {
 		&CD3DX12_RESOURCE_DESC::Buffer(sizeof(buffer)),
 		D3D12_RESOURCE_STATE_GENERIC_READ,
 		nullptr,
-		IID_PPV_ARGS(&m_cbv_upload_heap)));
+		IID_PPV_ARGS(&m_cbvUploadHeap)));
 
 	CD3DX12_RANGE readRange(0, 0);        // We do not intend to read from this resource on the CPU.
 	pBuffer = nullptr;
-	check_result(m_cbv_upload_heap->Map(0, &readRange, reinterpret_cast<void**>(&pBuffer)));
+	check_result(m_cbvUploadHeap->Map(0, &readRange, reinterpret_cast<void**>(&pBuffer)));
 
 	UINT64 cbOffset = 0;
 	////////////////////////////////////////////////////////
 	auto m_cbvSrvDescriptorSize = m_device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
 	CD3DX12_CPU_DESCRIPTOR_HANDLE cbvSrvHandle(m_cbv_srv_heap->GetCPUDescriptorHandleForHeapStart(), 1, m_cbvSrvDescriptorSize);    // Move past the SRVs.
-	//	for (UINT i = 0; i < FrameCount; i++)
+//	for (UINT i = 0; i < FrameCount; i++)
 	{
 		//FrameResource* pFrameResource = new FrameResource(m_device.Get(), CityRowCount, CityColumnCount, CityMaterialCount, CitySpacingInterval);
 
 
 		//for (UINT j = 0; j < CityRowCount; j++)
 		{
-			//	for (UINT k = 0; k < CityColumnCount; k++)
+		//	for (UINT k = 0; k < CityColumnCount; k++)
 			{
 				// Describe and create a constant buffer view (CBV).
 				D3D12_CONSTANT_BUFFER_VIEW_DESC cbvDesc = {};
-				cbvDesc.BufferLocation = m_cbv_upload_heap->GetGPUVirtualAddress() + cbOffset;
+				cbvDesc.BufferLocation = m_cbvUploadHeap->GetGPUVirtualAddress() + cbOffset;
 				cbvDesc.SizeInBytes = sizeof(buffer);
 				cbOffset += cbvDesc.SizeInBytes;
 				m_device->CreateConstantBufferView(&cbvDesc, cbvSrvHandle);

@@ -51,12 +51,12 @@ private:
 	CD3DX12_RECT m_scissor_rect;
 
 	ComPtr<ID3D12DescriptorHeap> m_sampler_heap;
-
+	
 	ComPtr<ID3D12Resource> m_constantBuffer;
 	UINT8* m_pCbvDataBegin;
-
+	
 	ComPtr<ID3D12DescriptorHeap> m_cbv_srv_heap;
-	ComPtr<ID3D12Resource> m_cbv_upload_heap;
+	ComPtr<ID3D12Resource> m_cbvUploadHeap;
 	ComPtr<ID3D12DescriptorHeap> m_rtv_heap;
 	uint32_t m_rtv_descriptor_size = 0;
 
