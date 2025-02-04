@@ -12,10 +12,10 @@
 using namespace DirectX;
 using Microsoft::WRL::ComPtr;
 
-///	RendererD3D12
-class RendererD3D12 : public Renderer {
+///	Renderer_D3D12
+class Renderer_D3D12 : public Renderer {
 public:
-	~RendererD3D12();
+	~Renderer_D3D12();
 
 	virtual void shut_down() override;
 
@@ -37,8 +37,6 @@ private:
 
 	virtual RenderPipeline* create_pipeline(const std::wstring& path) override;
 	virtual RenderBuffer* create_render_buffer_internal() override;
-
-	static const UINT frame_count = 2;
 
 	CD3DX12_VIEWPORT m_view_port;
 	CD3DX12_RECT m_scissor_rect;
@@ -65,7 +63,7 @@ private:
 	ComPtr<ID3D12Resource> m_constantBuffer;
 	UINT8* m_cbv_data_begin = nullptr;
 
-	ComPtr<ID3D12Resource> m_render_targets[frame_count];
+	ComPtr<ID3D12Resource> m_render_targets[Renderer::max_frames()];
 
 	// Fences
 	ComPtr<ID3D12Fence> m_fence;

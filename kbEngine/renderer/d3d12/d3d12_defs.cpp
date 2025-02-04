@@ -31,7 +31,7 @@ for (auto& vert: vertices) {
 	new_vert.position.z += 1;
 	new_verts.push_back(new_vert);
 }
-	auto device = ((RendererD3D12*)(g_renderer))->get_device();
+	auto device = ((Renderer_D3D12*)(g_renderer))->get_device();
 
 	const uint32_t buffer_size = size_bytes();
 
@@ -64,7 +64,7 @@ for (auto& vert: vertices) {
 void RenderBuffer_D3D12::write_index_buffer(const std::vector<uint16_t>& indices) {
 	RenderBuffer::write_index_buffer(indices);
 
-	auto device = ((RendererD3D12*)(g_renderer))->get_device();
+	auto device = ((Renderer_D3D12*)(g_renderer))->get_device();
 
 	const uint32_t buffer_size = size_bytes();
 

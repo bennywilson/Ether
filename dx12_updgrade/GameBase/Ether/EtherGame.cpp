@@ -1,15 +1,9 @@
-//===================================================================================================
-// EtherGame.cpp
-//
-//
-// 2016-2025 kbEngine 2.0
-//===================================================================================================
+/// EtherGame.cpp
+///
+/// 2025 kbEngine 2.0
+
 #include "kbGame.h"
-#include "kbTypeInfo.h"
 #include "EtherGame.h"
-#include "kbIntersectionTests.h"
-#include "DX11/kbRenderer_DX11.h"
-#include <directxpackedvector.h>
 
 kbConsoleVariable g_NoEnemies( "noenemies", false, kbConsoleVariable::Console_Bool, "Remove enemies", "" );
 kbConsoleVariable g_LockMouse( "lockmouse", true, kbConsoleVariable::Console_Int, "Locks mouse", "" );
@@ -51,7 +45,7 @@ void EtherGame::LevelLoaded_Internal() {}
 
 void EtherGame::PreUpdate_Internal() {
 	ProcessInput(0.0166f);
-	g_pD3D11Renderer->SetRenderViewTransform(nullptr, m_Camera.m_Position, m_Camera.m_Rotation);
+	// Set render view
 }
 
 void EtherGame::AddGameEntity_Internal( kbGameEntity *const pEntity ) {}

@@ -4,6 +4,7 @@
 
 #pragma once
 
+#include <array>
 #include "render_defs.h"
 
 inline void check_result(HRESULT hr) {
@@ -20,8 +21,7 @@ public:
 	Renderer();
 	virtual ~Renderer();
 
-	// temp
-	static Renderer* create();
+	static constexpr uint32_t max_frames() { return 2; }
 
 	virtual void initialize(HWND hwnd, const uint32_t frame_width, const uint32_t frame_height);
 	virtual void shut_down() = 0;

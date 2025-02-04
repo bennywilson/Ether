@@ -1,18 +1,17 @@
-// GameBase.cpp : Defines the entry point for the application.
-//
+/// GameBase.cpp
+///
+/// 2025 kbEngine 2.0
 
 #include "stdafx.h"
-#include <ShellAPI.h>
 #include "GameBase.h"
 #include "kbCore.h"
-#include "kbApp.h"
-#include "kbJobManager.h"
-#include "DX11/kbRenderer_DX11.h"
 #include "renderer.h"
 #include "kbEditor.h"
 #include "Ether/EtherGame.h"
-#include "kbMath.h"
 #include "kbGameEntityHeader.h"
+#include <dxgi1_6.h>
+#include "renderer_d3d12.h"
+#include "renderer_vk.h"
 
 #define MAX_LOADSTRING 100
 
@@ -35,19 +34,8 @@ INT_PTR CALLBACK	About(HWND, UINT, WPARAM, LPARAM);
 HWND hWnd;
 
 bool destroyCalled = false;
-//
-//  FUNCTION: MyRegisterClass()
-//
-//  PURPOSE: Registers the window class.
-//
-//  COMMENTS:
-//
-//    This function and its usage are only necessary if you want this code
-//    to be compatible with Win32 systems prior to the 'RegisterClassEx'
-//    function that was added to Windows 95. It is important to call this function
-//    so that the application will get 'well formed' small icons associated
-//    with it.
-//
+
+/// MyRegisterClass
 ATOM MyRegisterClass(HINSTANCE hInstance)
 {
 	WNDCLASSEX wcex;
@@ -69,16 +57,7 @@ ATOM MyRegisterClass(HINSTANCE hInstance)
 	return RegisterClassEx(&wcex);
 }
 
-//
-//   FUNCTION: InitInstance(HINSTANCE, int)
-//
-//   PURPOSE: Saves instance handle and creates main window
-//
-//   COMMENTS:
-//
-//        In this function, we save the instance handle in a global variable and
-//        create and display the main program window.
-//
+/// EnumDisplayMonitorsCB
 BOOL CALLBACK EnumDisplayMonitorsCB(HMONITOR hMonitor, HDC hdcMonitor, LPRECT lprcMonitor, LPARAM dwData) {
 	static bool firstMonitor = false;
 	if (firstMonitor == false) {
@@ -89,6 +68,7 @@ BOOL CALLBACK EnumDisplayMonitorsCB(HMONITOR hMonitor, HDC hdcMonitor, LPRECT lp
 	return TRUE;
 }
 
+/// InitInstance
 BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 {
 	hInst = hInstance; // Store instance handle in our global variable
@@ -123,30 +103,18 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 	return TRUE;
 }
 
-//
-//  FUNCTION: WndProc(HWND, UINT, WPARAM, LPARAM)
-//
-//  PURPOSE:  Processes messages for the main window.
-//
-//  WM_COMMAND	- process the application menu
-//  WM_PAINT	- Paint the main window
-//  WM_DESTROY	- post a quit message and return
-//
-//
-LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
-{
+/// WndProc
+LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) {
 	int wmId, wmEvent;
 	PAINTSTRUCT ps;
 	HDC hdc;
 
-	switch (message)
-	{
+	switch (message) {
 		case WM_COMMAND:
 			wmId = LOWORD(wParam);
 			wmEvent = HIWORD(wParam);
 			// Parse the menu selections:
-			switch (wmId)
-			{
+			switch (wmId) {
 				case IDM_ABOUT:
 					DialogBox(hInst, MAKEINTRESOURCE(IDD_ABOUTBOX), hWnd, About);
 					break;
@@ -167,19 +135,15 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			//		PostQuitMessage(0);
 			break;
 
-		case WM_LBUTTONDOWN:
-		{
+		case WM_LBUTTONDOWN: {
 			return 0;
 		}
 
-		case WM_RBUTTONDOWN:
-		{
+		case WM_RBUTTONDOWN: {
 			return 0;
 		}
 
-		case WM_MOUSEWHEEL:
-		{
-
+		case WM_MOUSEWHEEL: {
 		}
 		return 0;
 		default:
@@ -188,18 +152,15 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	return 0;
 }
 
-// Message handler for about box.
-INT_PTR CALLBACK About(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
-{
+/// About
+INT_PTR CALLBACK About(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam) {
 	UNREFERENCED_PARAMETER(lParam);
-	switch (message)
-	{
+	switch (message) {
 		case WM_INITDIALOG:
 			return (INT_PTR)TRUE;
 
 		case WM_COMMAND:
-			if (LOWORD(wParam) == IDOK || LOWORD(wParam) == IDCANCEL)
-			{
+			if (LOWORD(wParam) == IDOK || LOWORD(wParam) == IDCANCEL) {
 				EndDialog(hDlg, LOWORD(wParam));
 				return (INT_PTR)TRUE;
 			}
@@ -208,13 +169,11 @@ INT_PTR CALLBACK About(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 	return (INT_PTR)FALSE;
 }
 
-
-
+/// _tWinMain
 int APIENTRY _tWinMain(HINSTANCE hInstance,
 					 HINSTANCE hPrevInstance,
 					 LPTSTR    lpCmdLine,
-					 int       nCmdShow)
-{
+					 int       nCmdShow) {
 	UNREFERENCED_PARAMETER(hPrevInstance);
 	UNREFERENCED_PARAMETER(lpCmdLine);
 
@@ -231,8 +190,7 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 	mapName = "test";
 
 	// Perform application initialization
-	if (!InitInstance(hInstance, nCmdShow))
-	{
+	if (!InitInstance(hInstance, nCmdShow)) {
 		return FALSE;
 	}
 
@@ -252,7 +210,9 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 			applicationEditor->LoadMap(mapName);
 		}
 	} else {
-		g_renderer = Renderer::create();
+//		g_renderer = new Renderer_VK();
+		g_renderer = new Renderer_D3D12();
+
 		g_renderer->initialize(hWnd, g_screen_width, g_screen_height);
 
 		{

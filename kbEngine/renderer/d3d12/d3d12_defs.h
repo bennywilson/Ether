@@ -12,7 +12,7 @@ using namespace Microsoft::WRL;
 
 /// RenderPipeline_D3D12
 class RenderPipeline_D3D12 : public RenderPipeline {
-	friend class RendererD3D12;
+	friend class Renderer_D3D12;
 	~RenderPipeline_D3D12() { m_pipeline_state.Reset(); }
 
 	virtual void release() { m_pipeline_state.Reset();  }

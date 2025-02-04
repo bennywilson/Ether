@@ -5,11 +5,12 @@
 #pragma once
 
 #include "renderer.h"
+#include <vulkan/vulkan.h>
 
-///	RendererVk
-class RendererVk : public Renderer {
+///	Renderer_VK
+class Renderer_VK : public Renderer {
 public:
-	virtual ~RendererVk();
+	virtual ~Renderer_VK();
 
 	virtual void shut_down() override;
 
@@ -17,4 +18,11 @@ public:
 
 protected:
 	virtual void initialize(HWND hwnd, const uint32_t frameWidth, const uint32_t frameHeight) override;
+
+private:
+	virtual RenderPipeline* create_pipeline(const std::wstring& path) override;
+	virtual RenderBuffer* create_render_buffer_internal() override;
+
+	VkInstance instance = VK_NULL_HANDLE;
+	std::vector<std::string> m_supported_extensions;
 };

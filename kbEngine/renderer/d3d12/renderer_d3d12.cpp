@@ -13,12 +13,8 @@
 
 using namespace std;
 
-Renderer* Renderer::create() {
-	return new RendererD3D12();
-}
-
-/// RendererD3D12::initialize
-void RendererD3D12::initialize(HWND hwnd, const uint32_t frame_width, const uint32_t frame_height) {
+/// Renderer_D3D12::initialize
+void Renderer_D3D12::initialize(HWND hwnd, const uint32_t frame_width, const uint32_t frame_height) {
 	UINT dxgiFactoryFlags = 0;
 
 	m_view_port = CD3DX12_VIEWPORT(0.f, 0.f, (float)frame_width, (float)frame_height);
@@ -56,7 +52,7 @@ void RendererD3D12::initialize(HWND hwnd, const uint32_t frame_width, const uint
 
 	// Swap Chain
 	DXGI_SWAP_CHAIN_DESC1 swap_chain_desc = {};
-	swap_chain_desc.BufferCount = RendererD3D12::frame_count;
+	swap_chain_desc.BufferCount = Renderer::max_frames();
 	swap_chain_desc.Width = m_frame_width;
 	swap_chain_desc.Height = m_frame_height;
 	swap_chain_desc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
@@ -80,7 +76,7 @@ void RendererD3D12::initialize(HWND hwnd, const uint32_t frame_width, const uint
 
 	// RTV descriptor heap
 	D3D12_DESCRIPTOR_HEAP_DESC rtv_heap_desc = {};
-	rtv_heap_desc.NumDescriptors = RendererD3D12::frame_count;
+	rtv_heap_desc.NumDescriptors = Renderer::max_frames();
 	rtv_heap_desc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_RTV;
 	rtv_heap_desc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
 	check_result(m_device->CreateDescriptorHeap(&rtv_heap_desc, IID_PPV_ARGS(&m_rtv_heap)));
@@ -92,7 +88,7 @@ void RendererD3D12::initialize(HWND hwnd, const uint32_t frame_width, const uint
 	srv_heap_desc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV;
 	srv_heap_desc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;
 	check_result(m_device->CreateDescriptorHeap(&srv_heap_desc, IID_PPV_ARGS(&m_cbv_srv_heap)));
-	m_cbv_srv_heap->SetName(L"RendererD3D12::m_cbv_srv_heap");
+	m_cbv_srv_heap->SetName(L"Renderer_D3D12::m_cbv_srv_heap");
 
 	// Sampler heap
 	D3D12_DESCRIPTOR_HEAP_DESC sampler_heap_desc = {};
@@ -100,13 +96,13 @@ void RendererD3D12::initialize(HWND hwnd, const uint32_t frame_width, const uint
 	sampler_heap_desc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_SAMPLER;
 	sampler_heap_desc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;
 	check_result(m_device->CreateDescriptorHeap(&sampler_heap_desc, IID_PPV_ARGS(&m_sampler_heap)));
-	m_sampler_heap->SetName(L"RendererD3D12::m_sampler_heap");
+	m_sampler_heap->SetName(L"Renderer_D3D12::m_sampler_heap");
 
 	// Frame resources
 	CD3DX12_CPU_DESCRIPTOR_HANDLE rtv_handle(m_rtv_heap->GetCPUDescriptorHandleForHeapStart());
 
 	// Create a RTV for each frame.
-	for (uint32_t i = 0; i < RendererD3D12::frame_count; i++) {
+	for (uint32_t i = 0; i < Renderer::max_frames(); i++) {
 		check_result(m_swap_chain->GetBuffer(i, IID_PPV_ARGS(&m_render_targets[i])));
 		m_device->CreateRenderTargetView(m_render_targets[i].Get(), nullptr, rtv_handle);
 		rtv_handle.Offset(1, m_rtv_descriptor_size);
@@ -154,17 +150,17 @@ void RendererD3D12::initialize(HWND hwnd, const uint32_t frame_width, const uint
 
 	auto pipe = (RenderPipeline_D3D12*)load_pipeline("test_shader", L"C:/projects/Ether/dx12_updgrade/GameBase/assets/shaders/test_shader.hlsl");
 	todo_create_texture();
-	// 	kbLog("RendererD3D12 initialized");
+	// 	kbLog("Renderer_D3D12 initialized");
 
 }
 
-/// RendererD3D12::~RendererD3D12
-RendererD3D12::~RendererD3D12() {
+/// Renderer_D3D12::~Renderer_D3D12
+Renderer_D3D12::~Renderer_D3D12() {
 	shut_down();	// function is virtual but called in ~Renderer which is UB
 }
 
-/// RendererD3D12::shut_down
-void RendererD3D12::shut_down() {
+/// Renderer_D3D12::shut_down
+void Renderer_D3D12::shut_down() {
 	Renderer::shut_down();
 
 	{
@@ -208,8 +204,8 @@ void RendererD3D12::shut_down() {
 	d3d_debug->ReportLiveDeviceObjects(D3D12_RLDO_IGNORE_INTERNAL);
 }
 
-/// RendererD3D12::get_hardware_adapter
-void RendererD3D12::get_hardware_adapter(
+/// Renderer_D3D12::get_hardware_adapter
+void Renderer_D3D12::get_hardware_adapter(
 	IDXGIFactory1* const factory,
 	IDXGIAdapter1** const out_adapter,
 	bool request_high_performance) {
@@ -261,8 +257,8 @@ void RendererD3D12::get_hardware_adapter(
 	*out_adapter = adapter.Detach();
 }
 
-/// RendererD3D12::create_render_buffer_internal
-RenderBuffer* RendererD3D12::create_render_buffer_internal() {
+/// Renderer_D3D12::create_render_buffer_internal
+RenderBuffer* Renderer_D3D12::create_render_buffer_internal() {
 	return new RenderBuffer_D3D12();
 }
 
@@ -273,8 +269,8 @@ struct Constant {
 Constant buffer;
 Constant* pBuffer;
 
-/// RendererD3D12::render
-void RendererD3D12::render() {
+/// Renderer_D3D12::render
+void Renderer_D3D12::render() {
 
 	// Update constant buffer
 	pBuffer->mvp[0].Set(1.31353f * 0.5f, 0.f, 0.f, -0.5f);
@@ -351,8 +347,8 @@ void RendererD3D12::render() {
 	m_frame_index = m_swap_chain->GetCurrentBackBufferIndex();
 }
 
-/// RendererD3D12::create_pipeline
-RenderPipeline* RendererD3D12::create_pipeline(const wstring& path) {
+/// Renderer_D3D12::create_pipeline
+RenderPipeline* Renderer_D3D12::create_pipeline(const wstring& path) {
 #if defined(_DEBUG)
 	// Enable better shader debugging with the graphics debugging tools.
 	UINT compileFlags = D3DCOMPILE_DEBUG | D3DCOMPILE_SKIP_OPTIMIZATION;
@@ -402,8 +398,8 @@ RenderPipeline* RendererD3D12::create_pipeline(const wstring& path) {
 	return (RenderPipeline*)pipe;
 }
 
-/// RendererD3D12::todo_create_texture
-void RendererD3D12::todo_create_texture() {
+/// Renderer_D3D12::todo_create_texture
+void Renderer_D3D12::todo_create_texture() {
 	check_result(m_command_allocator->Reset());
 	check_result(m_command_list->Reset(m_command_allocator.Get(), nullptr));
 
