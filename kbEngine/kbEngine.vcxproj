@@ -41,7 +41,7 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>C:\VulkanSDK\1.4.304.0\Include;C:\Program Files\Autodesk\FBX\FBX SDK\2020.3.7\include;./renderer/d3d12/dx12;./renderer/d3d12/dxtk;./renderer/d3d12;./sound;$(WindowsSDK_IncludePath);./External;./gameEntity;./boundingVolumes;./math;./core;C:\Program Files (x86)\Windows Kits\8.1\Include\shared;$(IncludePath);./renderer</IncludePath>
+    <IncludePath>./boundingVolumes;./core;./External;./gameEntity;./math;./renderer;./renderer/d3d12;./renderer/d3d12/dxtk;./renderer/d3d12/dx12;./sound;$(IncludePath);C:\Program Files\Autodesk\FBX\FBX SDK\2020.3.7\include;C:\VulkanSDK\1.4.304.0\Include</IncludePath>
     <LibraryPath>C:\VulkanSDK\1.4.304.0\Lib;C:\projects\Ether\kbEngine\lib;C:\Program Files\Autodesk\FBX\FBX SDK\2020.3.7\lib\x64\debug;C:\Program Files (x86)\Windows Kits\8.1\Lib\winv6.3\um\x64;C:\Program Files\Microsoft SDKs\Windows\v7.1\Lib\FL\x64;$(LibraryPath)</LibraryPath>
     <OutDir>.\lib\</OutDir>
     <TargetName>kbEngined</TargetName>
