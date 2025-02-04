@@ -47,7 +47,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>..\..\kbEngine\renderer\d3d12\dxtk;..\..\kbEngine\renderer\d3d12\dx12;..\..\kbEngine\renderer\d3d12;..\..\kbEngine\sound;..\..\kbEngine\external;..\..\kbEngine\gameEntity;..\..\kbEngine\boundingVolumes;..\..\kbEngine\math;..\..\kbEngine\editor;..\..\kbEngine\renderer;..\..\kbEngine\app;..\..\kbEngine\core;$(IncludePath);$(VCInstallDir)atlmfc\include</IncludePath>
+    <IncludePath>C:\VulkanSDK\1.4.304.0\Include;..\..\kbEngine\renderer\vk;..\..\kbEngine\renderer\d3d12\dxtk;..\..\kbEngine\renderer\d3d12\dx12;..\..\kbEngine\renderer\d3d12;..\..\kbEngine\sound;..\..\kbEngine\external;..\..\kbEngine\gameEntity;..\..\kbEngine\boundingVolumes;..\..\kbEngine\math;..\..\kbEngine\editor;..\..\kbEngine\renderer;..\..\kbEngine\app;..\..\kbEngine\core;$(IncludePath);$(VCInstallDir)atlmfc\include</IncludePath>
     <LibraryPath>./External/OculusSDK\LibOVR\Lib\Windows\x64\Release\VS2015;..\..\kbEngine\lib;$(LibraryPath);C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Lib\x64;$(VSInstallDir);$(VSInstallDir)lib\amd64</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -65,7 +65,7 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>xaudio2.lib;D3DCompiler.lib;winmm.lib;ws2_32.lib;Dwrite.lib;D2d1.lib;dxgi.lib;d3d11.lib;kbEngined.lib;fltkd.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>xaudio2.lib;winmm.lib;ws2_32.lib;Dwrite.lib;kbEngined.lib;fltkd.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalOptions>/ignore:4099 %(AdditionalOptions)</AdditionalOptions>
     </Link>
   </ItemDefinitionGroup>
@@ -85,7 +85,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>d3d12.lib;xaudio2.lib;D3DCompiler.lib;winmm.lib;D2d1.lib;Dwrite.lib;ws2_32.lib;dxgi.lib;d3d11.lib;kbEngine.lib;fltk.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>xaudio2.lib;;winmm.lib;Dwrite.lib;ws2_32.lib;kbEngine.lib;fltk.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalOptions>/ignore:4099 %(AdditionalOptions)</AdditionalOptions>
     </Link>
   </ItemDefinitionGroup>
