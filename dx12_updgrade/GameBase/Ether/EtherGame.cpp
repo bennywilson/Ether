@@ -20,7 +20,7 @@ EtherGame::EtherGame() :
 	m_CameraMode( Cam_FirstPerson ),
 	m_pPlayerComponent( nullptr ) {
 	m_Camera.m_Position.Set( 0.0f, 0.0, 10.0f );
-	kbErrorCheck( g_pEtherGame == nullptr, "EtherGame::EtherGame() - g_pEtherGame is not nullptr" );
+	blk::error_check( g_pEtherGame == nullptr, "EtherGame::EtherGame() - g_pEtherGame is not nullptr" );
 	g_pEtherGame = this;
 }
 
@@ -29,7 +29,7 @@ EtherGame::EtherGame() :
  */
 EtherGame::~EtherGame() {
 
-	kbErrorCheck( g_pEtherGame != nullptr, "EtherGame::~EtherGame() - g_pEtherGame is nullptr" );
+	blk::error_check( g_pEtherGame != nullptr, "EtherGame::~EtherGame() - g_pEtherGame is nullptr" );
 	g_pEtherGame = nullptr;
 }
 

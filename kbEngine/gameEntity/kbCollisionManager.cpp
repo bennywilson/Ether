@@ -3,6 +3,7 @@
 /// 2016-2025 kbEngine 2.0
 
 #include "kbCore.h"
+#include "containers.h"
 #include "kbVector.h"
 #include "kbQuaternion.h"
 #include "kbGameEntityHeader.h"
@@ -64,7 +65,7 @@ void kbCollisionComponent::Update_Internal( const float DeltaTime ) {
 void kbCollisionComponent::SetWorldSpaceCollisionSphere( const int idx, const kbVec4 & newSphere ) {
 
 	if ( idx < 0 || idx >= m_LocalSpaceCollisionSpheres.size() ) {
-		kbError( "kbCollisionComponent::SetWorldSpaceCollisionSphere() - Invalid idx %d provided", idx );
+		blk::error( "kbCollisionComponent::SetWorldSpaceCollisionSphere() - Invalid idx %d provided", idx );
 		return;
 	}
 	
@@ -102,7 +103,7 @@ kbCollisionManager::kbCollisionManager() {
  *	kbCollisionManager::~kbCollisionManager
  */
 kbCollisionManager::~kbCollisionManager() {
-	kbErrorCheck( m_CollisionComponents.size() == 0, "kbCollisionManager::~kbCollisionManager() - There are still %d registered components", (int)m_CollisionComponents.size() );
+	blk::error_check( m_CollisionComponents.size() == 0, "kbCollisionManager::~kbCollisionManager() - There are still %d registered components", (int)m_CollisionComponents.size() );
 }
 
 /**
@@ -154,7 +155,7 @@ kbCollisionInfo_t kbCollisionManager::PerformLineCheck( const kbVec3 & start, co
 			kbGameEntity *const pOwner = pCollision->GetOwner();
 			kbStaticModelComponent *const pStaticModel = (kbStaticModelComponent*)pOwner->GetComponentByType( kbStaticModelComponent::GetType() );
 			if ( pStaticModel == nullptr ) {
-				kbWarning( "kbCollisionManager::PerformLineCheck() - Entity %s is missing a kbStaticModelComponent", pOwner->GetName().c_str() );
+				blk::warning( "kbCollisionManager::PerformLineCheck() - Entity %s is missing a kbStaticModelComponent", pOwner->GetName().c_str() );
 				continue;
 			}
 			kbModelIntersection_t intersection = pStaticModel->GetModel()->RayIntersection( start, rayDir, pOwner->GetPosition(), pOwner->GetOrientation(), kbVec3::one );
@@ -211,5 +212,5 @@ void kbCollisionManager::RegisterComponent( kbCollisionComponent * Collision ) {
  *	kbCollisionManager::UnregisterComponent
  */
 void kbCollisionManager::UnregisterComponent( kbCollisionComponent * Collision ) {
-	VectorRemoveFast( m_CollisionComponents, Collision );
+	blk::std_remove_swap( m_CollisionComponents, Collision );
 }

@@ -87,13 +87,13 @@ kbParticleManager::~kbParticleManager() {
  *	kbParticleManager::SetCustomAtlasTexture
  */
 void kbParticleManager::SetCustomAtlasTexture( const uint atlasIdx, const std::string& atlasFileName ) {
-	kbErrorCheck( atlasIdx < m_CustomAtlases.size(), "kbParticleManager::SetCustomAtlasTexture() - Atlas index %d is out of range", atlasIdx );
-	kbErrorCheck( g_pRenderer->IsRenderingSynced(), "kbParticleManager::SetCustomAtlasTexture() - Rendering not synced" );
+	blk::error_check( atlasIdx < m_CustomAtlases.size(), "kbParticleManager::SetCustomAtlasTexture() - Atlas index %d is out of range", atlasIdx );
+	blk::error_check( g_pRenderer->IsRenderingSynced(), "kbParticleManager::SetCustomAtlasTexture() - Rendering not synced" );
 
 	CustomAtlasParticle_t& curAtlas = m_CustomAtlases[atlasIdx];
 	curAtlas.m_pAtlasTexture = (kbTexture *)g_ResourceManager.GetResource( atlasFileName.c_str(), true, true );
 
-	kbWarningCheck( curAtlas.m_pAtlasTexture  != nullptr, "kbParticleManager::SetCustomAtlasTexture() - Unable to find shader %s", atlasFileName.c_str() );
+	blk::warning_check( curAtlas.m_pAtlasTexture  != nullptr, "kbParticleManager::SetCustomAtlasTexture() - Unable to find shader %s", atlasFileName.c_str() );
 
 	UpdateAtlas( curAtlas );
 }
@@ -102,13 +102,13 @@ void kbParticleManager::SetCustomAtlasTexture( const uint atlasIdx, const std::s
  *	kbParticleManager::SetCustomAtlasShader
  */
 void kbParticleManager::SetCustomAtlasShader( const uint atlasIdx, const std::string& shaderFileName ) {
-	kbErrorCheck( atlasIdx < m_CustomAtlases.size(), "kbParticleManager::SetCustomAtlasShader() - Atlas index %d is out of range", atlasIdx );
-	kbErrorCheck( g_pRenderer->IsRenderingSynced(), "kbParticleManager::SetCustomAtlasShader() - Rendering not synced" );
+	blk::error_check( atlasIdx < m_CustomAtlases.size(), "kbParticleManager::SetCustomAtlasShader() - Atlas index %d is out of range", atlasIdx );
+	blk::error_check( g_pRenderer->IsRenderingSynced(), "kbParticleManager::SetCustomAtlasShader() - Rendering not synced" );
 
 	CustomAtlasParticle_t& curAtlas = m_CustomAtlases[atlasIdx];
 	curAtlas.m_pAtlasShader = (kbShader *)g_ResourceManager.GetResource( shaderFileName.c_str(), true, true );
 
-	kbWarningCheck( curAtlas.m_pAtlasShader != nullptr, "kbParticleManager::SetCustomAtlasShader() - Unable to find shader %s", shaderFileName.c_str() );
+	blk::warning_check( curAtlas.m_pAtlasShader != nullptr, "kbParticleManager::SetCustomAtlasShader() - Unable to find shader %s", shaderFileName.c_str() );
 	
 	UpdateAtlas( curAtlas );
 }
@@ -118,19 +118,19 @@ void kbParticleManager::SetCustomAtlasShader( const uint atlasIdx, const std::st
  */
 void kbParticleManager::PoolParticleComponent( const kbParticleComponent *const pParticleTemplate, const int PoolSize ) {
 	if ( pParticleTemplate == nullptr ) {
-		kbWarning( "kbParticleManager::PoolParticleComponent() - NULL particle passed in" );
+		blk::warning( "kbParticleManager::PoolParticleComponent() - NULL particle passed in" );
 		return;
 	}
 
 	if ( PoolSize < 1 ) {
-		kbWarning( "kbParticleManager::PoolParticleComponent() - Invalid pool size of %d specified", PoolSize );
+		blk::warning( "kbParticleManager::PoolParticleComponent() - Invalid pool size of %d specified", PoolSize );
 		return;
 	}
 
 	// Check if this pool already exists
 	std::map<const kbParticleComponent *, std::vector< kbParticleComponent *>>::iterator it = m_ParticlePools.find( pParticleTemplate );
 	if ( it != m_ParticlePools.end() ) {
-		kbWarning( "kbParticleManager::PoolParticleComponent() - Particle %s already pooled", pParticleTemplate->GetOwner()->GetName().c_str() );
+		blk::warning( "kbParticleManager::PoolParticleComponent() - Particle %s already pooled", pParticleTemplate->GetOwner()->GetName().c_str() );
 		return;
 	}
 
@@ -154,13 +154,13 @@ void kbParticleManager::PoolParticleComponent( const kbParticleComponent *const 
 kbParticleComponent * kbParticleManager::GetParticleComponent( const kbParticleComponent *const pParticleTemplate ) {
 
 	if ( pParticleTemplate == nullptr ) {
-		kbWarning( "kbParticleManager::GetParticleComponent() - NULL particle passed in" );
+		blk::warning( "kbParticleManager::GetParticleComponent() - NULL particle passed in" );
 		return nullptr;
 	}
 
 	std::map<const kbParticleComponent *, std::vector< kbParticleComponent *>>::iterator it = m_ParticlePools.find( pParticleTemplate );
 	if ( it == m_ParticlePools.end() ) {
-		kbWarning( "kbParticleManager::GetParticleComponent() - Particle %s not found in pooled", pParticleTemplate->GetOwner()->GetName().c_str() );
+		blk::warning( "kbParticleManager::GetParticleComponent() - Particle %s not found in pooled", pParticleTemplate->GetOwner()->GetName().c_str() );
 		return nullptr;
 	}
 
@@ -176,7 +176,7 @@ kbParticleComponent * kbParticleManager::GetParticleComponent( const kbParticleC
 void kbParticleManager::ReturnParticleComponent( kbParticleComponent *const pParticle ) {
 
 	if ( pParticle == nullptr ) {
-		kbError( "kbParticleManager::ReturnParticleComponent() - NULL particle passed in" );
+		blk::error( "kbParticleManager::ReturnParticleComponent() - NULL particle passed in" );
 		return;
 	}
 
@@ -184,7 +184,7 @@ void kbParticleManager::ReturnParticleComponent( kbParticleComponent *const pPar
 	pParticle->GetOwner()->RemoveComponent( pParticle );
 	const kbParticleComponent *const pParticleTemplate = pParticle->m_ParticleTemplate;
 	if ( pParticleTemplate == nullptr || pParticle->m_bIsPooled == false ) {
-		kbError( "kbParticleManager::ReturnParticleComponent() - Particle does not appear to be pooled" );
+		blk::error( "kbParticleManager::ReturnParticleComponent() - Particle does not appear to be pooled" );
 		return;
 	}
 
@@ -192,7 +192,7 @@ void kbParticleManager::ReturnParticleComponent( kbParticleComponent *const pPar
 
 	std::map<const kbParticleComponent *, std::vector< kbParticleComponent *>>::iterator it = m_ParticlePools.find( pParticleTemplate );
 	if ( it == m_ParticlePools.end() ) {
-		kbError( "kbParticleManager::ReturnParticleComponent() - Particle %s not found in pooled", pParticleTemplate->GetOwner()->GetName().c_str() );
+		blk::error( "kbParticleManager::ReturnParticleComponent() - Particle %s not found in pooled", pParticleTemplate->GetOwner()->GetName().c_str() );
 		return;
 	}
 	
@@ -204,7 +204,7 @@ void kbParticleManager::ReturnParticleComponent( kbParticleComponent *const pPar
  */
 void kbParticleManager::UpdateAtlas( CustomAtlasParticle_t& atlasInfo ) {
 
-	kbErrorCheck( g_pRenderer->IsRenderingSynced(), "kbParticleManager::UpdateAtlas() - Rendering isn't sync'd" );
+	blk::error_check( g_pRenderer->IsRenderingSynced(), "kbParticleManager::UpdateAtlas() - Rendering isn't sync'd" );
 
 	if ( atlasInfo.m_iCurParticleModel >= 0 ) {
 		g_pRenderer->RemoveParticle( atlasInfo.m_RenderObject );
@@ -313,7 +313,7 @@ void kbParticleManager::RenderSync() {
  */
 void kbParticleManager::AddQuad( const uint atlasIdx, const CustomParticleAtlasInfo_t & CustomParticleInfo ) {
 	
-	kbErrorCheck( atlasIdx < m_CustomAtlases.size(), "kbParticleManager::AddQuad() - Invalid atlasIdx %d", atlasIdx );
+	blk::error_check( atlasIdx < m_CustomAtlases.size(), "kbParticleManager::AddQuad() - Invalid atlasIdx %d", atlasIdx );
 	CustomAtlasParticle_t& curAtlas = m_CustomAtlases[atlasIdx];
 
 	if ( curAtlas.m_pVertexBuffer == nullptr || curAtlas.m_pIndexBuffer == nullptr ) {
@@ -374,7 +374,7 @@ void kbParticleManager::AddQuad( const uint atlasIdx, const CustomParticleAtlasI
  */
 const kbGameComponent * kbParticleManager::GetComponentFromPool() {
 	if ( m_ComponentPool.size() == 0 ) {
-		kbWarning( "kbParticleManager::GetComponentFromPool() - Component pool is empty" );
+		blk::warning( "kbParticleManager::GetComponentFromPool() - Component pool is empty" );
 		return nullptr;
 	}
 
@@ -388,7 +388,7 @@ const kbGameComponent * kbParticleManager::GetComponentFromPool() {
  */
 void kbParticleManager::ReturnComponentToPool( const kbGameComponent *const pGameComponent ) {
 	if ( pGameComponent == nullptr ) {
-		kbWarning( "kbParticleManager::ReturnComponentToPool() - null component passed in" );
+		blk::warning( "kbParticleManager::ReturnComponentToPool() - null component passed in" );
 		return;
 	}
 
@@ -400,10 +400,10 @@ void kbParticleManager::ReturnComponentToPool( const kbGameComponent *const pGam
  */
 void kbParticleManager::ReserveScratchBufferSpace( kbParticleVertex*& outVertexBuffer, kbRenderObject& inOutRenderObj, const int numRequestedVerts ) {
 
-	kbErrorCheck( numRequestedVerts > 0, "kbParticleManager::ReserveScratchBufferSpace() - 0 verts requested" );
+	blk::error_check( numRequestedVerts > 0, "kbParticleManager::ReserveScratchBufferSpace() - 0 verts requested" );
 
 	auto& scratchBuffer = m_ScratchParticleBuffers[0];
-	kbErrorCheck( scratchBuffer.m_iCurModel >= 0, "kbParticleManager::ReserveScratchBufferSpace() - Scratch buffers are not initialized." );
+	blk::error_check( scratchBuffer.m_iCurModel >= 0, "kbParticleManager::ReserveScratchBufferSpace() - Scratch buffers are not initialized." );
 
 	const int outVBIdx = scratchBuffer.m_iVert;
 	const int outIBIdx = 6 * ( outVBIdx / 4 );

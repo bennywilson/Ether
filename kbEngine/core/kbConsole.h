@@ -56,7 +56,7 @@ public:
 
 		const kbString varName(variableName);
 		if (pConsoleVarMgr->GetConsoleVarMap().find(varName) != pConsoleVarMgr->GetConsoleVarMap().end()) {
-			kbError("kbConsoleVariable %s already registered", variableName.c_str());
+			blk::error("kbConsoleVariable %s already registered", variableName.c_str());
 			return;
 		}
 

@@ -234,7 +234,7 @@ struct kbRenderState {
 		depthStencilDesc.BackFace.StencilFunc = GetDepthStencilCompareTest( backFaceComparisonTest );;
 
 		HRESULT hr = m_pDevice->CreateDepthStencilState( &depthStencilDesc, &m_pCurrentDepthStencilState );
-		kbErrorCheck( SUCCEEDED(hr), "kbDepthStencilState::SetDepthStencilState() Failed" );
+		blk::error_check( SUCCEEDED(hr), "kbDepthStencilState::SetDepthStencilState() Failed" );
 
 		m_pDeviceContext->OMSetDepthStencilState( m_pCurrentDepthStencilState, stencilRef );
 	}
@@ -341,7 +341,7 @@ struct kbRenderState {
 		BlendStateDesc.RenderTarget[0].RenderTargetWriteMask = GetD3DColorWriteEnable( renderTargetWriteMask );
 
 		HRESULT hr = m_pDevice->CreateBlendState( &BlendStateDesc, &m_pAlphaBlendState );
-		kbErrorCheck( SUCCEEDED( hr ), "kbRenderer_DX11::Init() - Failed to create additive blend state" );
+		blk::error_check( SUCCEEDED( hr ), "kbRenderer_DX11::Init() - Failed to create additive blend state" );
 
 		m_pDeviceContext->OMSetBlendState( m_pAlphaBlendState, nullptr, sampleMask );
 	}

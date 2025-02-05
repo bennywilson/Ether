@@ -6,6 +6,7 @@
 // 2018 kbEngine 2.0
 //==============================================================================
 #include "kbCore.h"
+#include "containers.h"
 #include "kbVector.h"
 #include "kbQuaternion.h"
 #include "kbRenderer.h"
@@ -106,7 +107,7 @@ void kbRenderer::SetRenderViewTransform( const HWND hwnd, const kbVec3 & positio
 	}
 
 	if ( viewIndex < 0 || viewIndex >= m_RenderWindowList.size() ) {
-		kbWarning( "kbRenderer::SetRenderViewTransform() - Invalid view index" );
+		blk::warning( "kbRenderer::SetRenderViewTransform() - Invalid view index" );
 		return;
 	}
 
@@ -132,7 +133,7 @@ void kbRenderer::GetRenderViewTransform( const HWND hwnd, kbVec3 & position, kbQ
 	}
 
 	if ( viewIndex < 0 || viewIndex >= m_RenderWindowList.size() ) {
-		kbError( "Invalid view index" );
+		blk::error( "Invalid view index" );
 	}
 
 	position = m_RenderWindowList[viewIndex]->m_CameraPosition;
@@ -157,7 +158,7 @@ void kbRenderer::SetNearFarPlane( const HWND hwnd, const float nearPlane, const 
 	}
 
 	if ( viewIndex < 0 || viewIndex >= m_RenderWindowList.size() ) {
-		kbError( "Invalid view index" );
+		blk::error( "Invalid view index" );
 	}
 
 	m_RenderWindowList[viewIndex]->m_NearPlane_GameThread = nearPlane;
@@ -254,7 +255,7 @@ kbRenderer::~kbRenderer() {
  */
 void kbRenderer::Init( HWND hwnd, const int width, const int height ) {
 
-	kbLog( "Initializing kbRenderer" );
+	blk::log( "Initializing kbRenderer" );
 	const float startInitTime = g_GlobalTimer.TimeElapsedSeconds();
 
 	Init_Internal( hwnd, width, height );
@@ -263,7 +264,7 @@ void kbRenderer::Init( HWND hwnd, const int width, const int height ) {
 	m_pRenderJob = new kbRenderJob();
 	g_pJobManager->RegisterJob( m_pRenderJob );
 
-	kbLog( "	Rendered Initialized.  Took %f seconds", g_GlobalTimer.TimeElapsedSeconds() - startInitTime );
+	blk::log( "	Rendered Initialized.  Took %f seconds", g_GlobalTimer.TimeElapsedSeconds() - startInitTime );
 }
 
 /**
@@ -271,7 +272,7 @@ void kbRenderer::Init( HWND hwnd, const int width, const int height ) {
  */
 void kbRenderer::Shutdown() {
 
-	kbLog( "Shutting down kbRenderer" );
+	blk::log( "Shutting down kbRenderer" );
 
 	// Wait for render thread to become idle
 	m_pRenderJob->RequestShutdown();
@@ -300,8 +301,8 @@ void kbRenderer::LoadTexture( const char * name, int index, int width, int heigh
  *	kbRenderer::AddRenderObject
  */
 void kbRenderer::AddRenderObject( const kbRenderObject & renderObjectToAdd ) {
-	kbErrorCheck( m_pCurrentRenderWindow != nullptr, "kbRenderer::AddRenderObject - NULL m_pCurrentRenderWindow" );
-	kbErrorCheck( renderObjectToAdd.m_pComponent != nullptr, "kbRenderer::AddRenderObject - NULL component" );
+	blk::error_check( m_pCurrentRenderWindow != nullptr, "kbRenderer::AddRenderObject - NULL m_pCurrentRenderWindow" );
+	blk::error_check( renderObjectToAdd.m_pComponent != nullptr, "kbRenderer::AddRenderObject - NULL component" );
 
 	m_RenderObjectList_GameThread.push_back( renderObjectToAdd );
 	kbRenderObject & renderObj = m_RenderObjectList_GameThread[m_RenderObjectList_GameThread.size() - 1];
@@ -314,8 +315,8 @@ void kbRenderer::AddRenderObject( const kbRenderObject & renderObjectToAdd ) {
  *	kbRenderer::UpdateRenderObject
  */
 void kbRenderer::UpdateRenderObject( const kbRenderObject & renderObjectToUpdate ) {
-	kbErrorCheck( m_pCurrentRenderWindow != nullptr, "kbRenderer::UpdateRenderObject() - NULL m_pCurrentRenderWindow" );
-	kbErrorCheck( renderObjectToUpdate.m_pComponent != nullptr, "kbRenderer::UpdateRenderObject() - NULL component" );
+	blk::error_check( m_pCurrentRenderWindow != nullptr, "kbRenderer::UpdateRenderObject() - NULL m_pCurrentRenderWindow" );
+	blk::error_check( renderObjectToUpdate.m_pComponent != nullptr, "kbRenderer::UpdateRenderObject() - NULL component" );
 
 	m_RenderObjectList_GameThread.push_back( renderObjectToUpdate );
 	kbRenderObject & renderObj = m_RenderObjectList_GameThread[m_RenderObjectList_GameThread.size() - 1];
@@ -328,8 +329,8 @@ void kbRenderer::UpdateRenderObject( const kbRenderObject & renderObjectToUpdate
  *	kbRenderer::RemoveRenderObject
  */
 void kbRenderer::RemoveRenderObject( const kbRenderObject & renderObjectToRemove ) {
-	kbErrorCheck( m_pCurrentRenderWindow != nullptr, "kbRenderer::RemoveRenderObject() - NULL m_pCurrentRenderWindow" );
-	kbErrorCheck( renderObjectToRemove.m_pComponent != nullptr, "kbRenderer::RemoveRenderObject - NULL component" );
+	blk::error_check( m_pCurrentRenderWindow != nullptr, "kbRenderer::RemoveRenderObject() - NULL m_pCurrentRenderWindow" );
+	blk::error_check( renderObjectToRemove.m_pComponent != nullptr, "kbRenderer::RemoveRenderObject - NULL component" );
 
 	// Remove duplicates
 	for ( int i = 0; i < m_RenderObjectList_GameThread.size(); i++ ) {
@@ -368,7 +369,7 @@ void kbRenderer::DrawDebugText( const std::string& theString, const float X, con
 void kbRenderer::AddLight( const kbLightComponent * pLightComponent, const kbVec3 & pos, const kbQuat & orientation ) {
 
 	if ( m_pCurrentRenderWindow == nullptr ) {
-		kbError( "kbRenderer::AddLight - nullptr Render Window" );
+		blk::error( "kbRenderer::AddLight - nullptr Render Window" );
 	}
 
 	kbRenderLight newLight;
@@ -405,7 +406,7 @@ void kbRenderer::AddLight( const kbLightComponent * pLightComponent, const kbVec
 void kbRenderer::UpdateLight( const kbLightComponent * pLightComponent, const kbVec3 & pos, const kbQuat & orientation ) {
 
 	if ( m_pCurrentRenderWindow == nullptr ) {
-		kbError( "kbRenderer::UpdateLight - nullptr Render Window" );
+		blk::error( "kbRenderer::UpdateLight - nullptr Render Window" );
 	}
 
 	for ( int i = 0; i < m_LightList_GameThread.size(); i++ ) {
@@ -458,7 +459,7 @@ void kbRenderer::UpdateLight( const kbLightComponent * pLightComponent, const kb
 void kbRenderer::RemoveLight( const kbLightComponent *const pLightComponent ) {
 	
 	if ( m_pCurrentRenderWindow == nullptr ) {
-		kbError( "kbRenderer::RemoveLight - nullptr Render Window" );
+		blk::error( "kbRenderer::RemoveLight - nullptr Render Window" );
 	}
 
 	kbRenderLight lightToRemove;
@@ -619,14 +620,14 @@ void kbRenderer::RenderSync() {
 			delete pRenderObject;
 		} else {
 			const kbGameComponent *const pComponent = m_RenderObjectList_GameThread[i].m_pComponent;
-			kbErrorCheck( pComponent != nullptr, "kbRenderer::RenderSync() - Adding/updating a render object with a nullptr component" );
+			blk::error_check( pComponent != nullptr, "kbRenderer::RenderSync() - Adding/updating a render object with a nullptr component" );
 
 			if ( m_RenderObjectList_GameThread[i].m_bIsFirstAdd == false ) {
 
 				// Updating a renderobject 
 				auto it = m_pCurrentRenderWindow->m_RenderObjectMap.find( pComponent );
 				if ( it == m_pCurrentRenderWindow->m_RenderObjectMap.end() || it->second == nullptr ) {
-					kbWarning( "kbRenderer::UpdateRenderObject - Error, Updating a RenderObject that doesn't exist. %s", pComponent->GetOwner()->GetName().c_str() );
+					blk::warning( "kbRenderer::UpdateRenderObject - Error, Updating a RenderObject that doesn't exist. %s", pComponent->GetOwner()->GetName().c_str() );
 					return;
 				}
 
@@ -641,7 +642,7 @@ void kbRenderer::RenderSync() {
 
 				// Adding new renderobject
 				renderObject = m_pCurrentRenderWindow->m_RenderObjectMap[pComponent];
-				kbWarningCheck( renderObject == nullptr, "kbRenderer::AddRenderObject() - Model %s already added", m_RenderObjectList_GameThread[i].m_pModel->GetFullName().c_str() );
+				blk::warning_check( renderObject == nullptr, "kbRenderer::AddRenderObject() - Model %s already added", m_RenderObjectList_GameThread[i].m_pModel->GetFullName().c_str() );
 
 				if ( pComponent->IsA( kbSkeletalModelComponent::GetType() ) && m_RenderObjectList_GameThread[i].m_pModel->NumBones() > 0 ) {
 
@@ -678,7 +679,7 @@ void kbRenderer::RenderSync() {
 
 				if ( renderLight != nullptr ) {
 					bIsFirstAdd = false;
-					kbError( "kbRenderer::AddLight - Warning, adding a render light that already exists" );
+					blk::error( "kbRenderer::AddLight - Warning, adding a render light that already exists" );
 				} else {
 					renderLight = new kbRenderLight;
 					m_pCurrentRenderWindow->m_RenderLightMap[m_LightList_GameThread[i].m_pLightComponent] = renderLight;
@@ -688,7 +689,7 @@ void kbRenderer::RenderSync() {
 				std::map< const kbLightComponent *, kbRenderLight * >::iterator it = m_pCurrentRenderWindow->m_RenderLightMap.find( m_LightList_GameThread[i].m_pLightComponent );
 
 				if ( it == m_pCurrentRenderWindow->m_RenderLightMap.end() || it->second == nullptr ) {
-					kbError( "kbRenderer::UpdateLight - Error, Updating a RenderObject that doesn't exist" );
+					blk::error( "kbRenderer::UpdateLight - Error, Updating a RenderObject that doesn't exist" );
 				} else {
 					renderLight = it->second;
 				}
@@ -715,7 +716,7 @@ void kbRenderer::RenderSync() {
 				renderParticle = particleMap[pComponent];
 
 				if ( renderParticle != nullptr ) {
-					kbWarning( "kbRenderer::AddParticle - Adding a particle that already exists" );
+					blk::warning( "kbRenderer::AddParticle - Adding a particle that already exists" );
 				} else {
 					renderParticle = new kbRenderObject;
 					particleMap[pComponent] = renderParticle;
@@ -723,7 +724,7 @@ void kbRenderer::RenderSync() {
 			} else {
 				std::map< const void *, kbRenderObject * >::iterator it = particleMap.find( pComponent );
 				if ( it == particleMap.end() || it->second == nullptr ) {
-					kbWarning( "kbRenderer::UpdateRenderObject - Error, Updating a RenderObject that doesn't exist" );
+					blk::warning( "kbRenderer::UpdateRenderObject - Error, Updating a RenderObject that doesn't exist" );
 				}
 
 				 renderParticle = it->second;
@@ -740,7 +741,7 @@ void kbRenderer::RenderSync() {
 			bool bAlreadyExists = false;
 			for ( int j = 0; j < m_LightShafts_RenderThread.size(); j++ ) {
 				if ( m_LightShafts_RenderThread[j].m_pLightShaftsComponent = m_LightShafts_GameThread[i].m_pLightShaftsComponent ) {
-					kbWarning( "kbRenderer::SetReadyToRender() - Adding light shafts that already exist" );
+					blk::warning( "kbRenderer::SetReadyToRender() - Adding light shafts that already exist" );
 					bAlreadyExists = true;
 					break;
 				}
@@ -760,7 +761,7 @@ void kbRenderer::RenderSync() {
 			}
 
 			if ( bExists == false ) {
-				kbError( "kbRenderer::SetReadyToRender() - Removing light shafts that do not exist" );
+				blk::error( "kbRenderer::SetReadyToRender() - Removing light shafts that do not exist" );
 			}
 		} else {
 			for ( int j = 0; j < m_LightShafts_RenderThread.size(); j++ ) {
@@ -1014,7 +1015,7 @@ void kbRenderer::RT_ReturnRenderTexture( kbRenderTexture *const pRenderTexture )
  *	kbRenderer::RegisterRenderHook
  */
 void kbRenderer::RegisterRenderHook( kbRenderHook *const pRenderHook ) {
-	kbErrorCheck( pRenderHook != nullptr, "kbRenderer::RegisterRenderHook() - NULL render hook" );
+	blk::error_check( pRenderHook != nullptr, "kbRenderer::RegisterRenderHook() - NULL render hook" );
 
 	m_RenderHooks[(int)pRenderHook->m_RenderPass].push_back( pRenderHook );
 }
@@ -1023,9 +1024,9 @@ void kbRenderer::RegisterRenderHook( kbRenderHook *const pRenderHook ) {
  *	kbRenderer::UnregisterRenderHook
  */
 void kbRenderer::UnregisterRenderHook( kbRenderHook *const pRenderHook ) {
-	kbErrorCheck(pRenderHook != nullptr, "kbRenderer::UnregisterRenderHook() - NULL render hook");
+	blk::error_check(pRenderHook != nullptr, "kbRenderer::UnregisterRenderHook() - NULL render hook");
 
-	VectorRemoveFast( m_RenderHooks[(int)pRenderHook->m_RenderPass], pRenderHook );
+	blk::std_remove_swap( m_RenderHooks[(int)pRenderHook->m_RenderPass], pRenderHook );
 
 }
 

@@ -195,10 +195,10 @@ void kbClothComponent::Update_Internal( const float dt ) {
 			}
 
 			if ( GetAsyncKeyState('U') ) {
-				kbLog( "%f %f %f", m_CollisionSpheres[iCollision].m_Sphere.x, m_CollisionSpheres[iCollision].m_Sphere.y, m_CollisionSpheres[iCollision].m_Sphere.z );
+				blk::log( "%f %f %f", m_CollisionSpheres[iCollision].m_Sphere.x, m_CollisionSpheres[iCollision].m_Sphere.y, m_CollisionSpheres[iCollision].m_Sphere.z );
 			}
 
-	//		kbLog( "%s looking for %s", pSkelModelComponent->GetModel()->GetFullFileName().c_str(), m_CollisionSpheres[iCollision].m_BoneName.c_str() );
+	//		blk::log( "%s looking for %s", pSkelModelComponent->GetModel()->GetFullFileName().c_str(), m_CollisionSpheres[iCollision].m_BoneName.c_str() );
 
 			if ( pSkelModelComponent->GetBoneWorldMatrix( m_CollisionSpheres[iCollision].m_BoneName, boneWorldMatrix ) ) {
 				boneWorldMatrix.m_Axis[0].Normalize();
@@ -442,7 +442,7 @@ void kbClothComponent::SetupCloth() {
 	for ( int i = 0; i < m_BoneIndices.size(); i++ ) {
 		m_BoneIndices[i] = m_pSkeletalModel->GetBoneIndex( m_BoneInfo[i].m_BoneName );
 		if ( m_BoneIndices[i] < 0 ) {
-			kbError( "Unable to find index for bone %s", m_BoneInfo[i].m_BoneName.c_str() );
+			blk::error( "Unable to find index for bone %s", m_BoneInfo[i].m_BoneName.c_str() );
 		}
 	}
 
@@ -452,7 +452,7 @@ void kbClothComponent::SetupCloth() {
 		const int curIdx = (int)m_BoneInfo.size() + i;
 		m_BoneIndices[curIdx] = m_pSkeletalModel->GetBoneIndex( m_AdditionalBoneInfo[i].m_BoneName );
 		if ( m_BoneIndices[curIdx] < 0 ) {
-			kbError( "Unable to find index for bone %s index is %d", m_AdditionalBoneInfo[i].m_BoneName.c_str(), i );
+			blk::error( "Unable to find index for bone %s index is %d", m_AdditionalBoneInfo[i].m_BoneName.c_str(), i );
 		}
 	}
 
@@ -560,7 +560,7 @@ void kbClothComponent::SetupCloth() {
 			}
 
 			if ( neighborIdx >= m_AdditionalBoneInfo.size() ) {
-				kbError( "Unable to find neighbor bone" );
+				blk::error( "Unable to find neighbor bone" );
 				continue;
 			}
 			neighborIdx += (int)m_BoneInfo.size();

@@ -170,7 +170,7 @@ public:
 		m_bAccepted( false ) {
 
 		if ( gCurrentDialogBox != nullptr ) {
-			kbError( "Dialog box already open.  Only one allowed at a time" );
+			blk::error( "Dialog box already open.  Only one allowed at a time" );
 		}
 	
 		gCurrentDialogBox = this;
@@ -187,8 +187,8 @@ public:
    }
 
    bool Run() {
-		kbErrorCheck( m_Fields.size() > 0, "Dialog box has no fields" );
-		kbErrorCheck( gCurrentDialogBox != nullptr, "Run called on an invalid dialog box" );
+		blk::error_check( m_Fields.size() > 0, "Dialog box has no fields" );
+		blk::error_check( gCurrentDialogBox != nullptr, "Run called on an invalid dialog box" );
 
 		const int ButtonHeight = fl_height() + kbEditor::PanelBorderSize() * 2;
 		const int popUpWidth = 600;
@@ -243,7 +243,7 @@ public:
 
 	const std::string & GetFieldEntry( const int fieldIdx ) const {
 		if ( fieldIdx < 0 || fieldIdx >= m_Fields.size() ) {
-			kbError( "Bad field idx %d for dialog box", fieldIdx );
+			blk::error( "Bad field idx %d for dialog box", fieldIdx );
 		}
 
 		return m_Fields[fieldIdx].m_FieldValue;

@@ -37,7 +37,7 @@ void SetThreadName( const char threadName[] ) {
 /// ThreadMain
 DWORD WINAPI ThreadMain( LPVOID lpParam ) {
 	const DWORD threadId = GetThreadId(GetCurrentThread());
-	kbLog( "Thread created with id %d", threadId );
+	blk::log( "Thread created with id %d", threadId );
 
 	const std::string threadName = "kbEngine Thread" + std::to_string( threadId );
 	SetThreadName( threadName.c_str() );

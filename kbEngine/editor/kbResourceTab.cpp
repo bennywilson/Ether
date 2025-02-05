@@ -4,6 +4,7 @@
 
 #include <queue>
 #include "kbCore.h"
+#include "containers.h"
 #include "kbWidget.h"
 #include "kbGameEntityHeader.h"
 #include "kbResourceTab.h"
@@ -295,7 +296,7 @@ void kbResourceTab::RebuildResourceFolderListText() {
 	std::vector<std::string> expandedDirectoryList;
 	std::vector<std::string> dirtyDirectoryList;
 
-	// kbLog( "---------------------------------" );
+	// blk::log( "---------------------------------" );
 	if (m_ResourceFolderList.size() > 0) {
 		std::queue<kbResourceTabFile_t*> q;
 		for (int i = 0; i < m_ResourceFolderList.size(); i++) {
@@ -321,7 +322,7 @@ void kbResourceTab::RebuildResourceFolderListText() {
 				dirtyDirectoryList.push_back(fullFolderName);
 			}
 
-			// kbLog( "---> Adding dir %s\n", pCurTab->m_FolderName.c_str() );
+			// blk::log( "---> Adding dir %s\n", pCurTab->m_FolderName.c_str() );
 			for (int j = 0; j < pCurTab->m_SubFolderList.size(); j++) {
 				q.push(&pCurTab->m_SubFolderList[j]);
 			}
@@ -358,7 +359,7 @@ void kbResourceTab::RebuildResourceFolderListText() {
 	FindResourcesRecursively(filePath, m_ResourceFolderList[m_ResourceFolderList.size() - 1]);
 
 	if (backUp.size() > 0) {
-		kbLog("Rebuilding folder info...\n");
+		blk::log("Rebuilding folder info...\n");
 		std::queue<kbResourceTabFile_t*> q;
 		for (int i = 0; i < m_ResourceFolderList.size(); i++) {
 			q.push(&m_ResourceFolderList[i]);
@@ -370,7 +371,7 @@ void kbResourceTab::RebuildResourceFolderListText() {
 
 			const std::string curFolderName = GetAbsoluteFolderName(m_ResourceFolderList, pCurTab);
 
-			if (VectorContains(expandedDirectoryList, curFolderName)) {
+			if (blk::std_contains(expandedDirectoryList, curFolderName)) {
 				pCurTab->m_bExpanded = true;
 
 				for (int i = 0; i < pCurTab->m_SubFolderList.size(); i++) {
@@ -382,7 +383,7 @@ void kbResourceTab::RebuildResourceFolderListText() {
 				}
 			}
 
-			if (VectorContains(dirtyDirectoryList, curFolderName)) {
+			if (blk::std_contains(dirtyDirectoryList, curFolderName)) {
 				pCurTab->m_bIsDirty = true;
 			}
 
@@ -443,7 +444,7 @@ void kbResourceTab::FindResourcesRecursively(const std::string& file, kbResource
 						if (strcmp(ext, ".kbPkg") == 0) {
 							// Add a package and its folders and prefab
 							kbPackage* const pPackage = g_ResourceManager.GetPackage(file + FindFileData.cFileName, false);		// MATERIALHACK - Need to lazy load these packages when used in editor
-							kbErrorCheck(pPackage != nullptr, "kbResourceTab::FindResourcesRecursively() - Failed to load package");
+							blk::error_check(pPackage != nullptr, "kbResourceTab::FindResourcesRecursively() - Failed to load package");
 
 							// Add Package
 							m_ResourceFolderList[0].m_SubFolderList.push_back(kbResourceTabFile_t());
@@ -585,7 +586,7 @@ void kbResourceTab::AddPrefab(kbPrefab* pPrefab, const std::string& PackageName,
 			// Search prefabs
 			for (int prefabIdx = 0; prefabIdx < subFolder.m_ResourceList.size(); prefabIdx++) {
 				if (PrefabName == subFolder.m_ResourceList[prefabIdx].m_pPrefab->GetPrefabName()) {
-					//kbError( "Prefab already exists" );
+					//blk::error( "Prefab already exists" );
 					kbResourceTabFile_t& itemToReplace = subFolder.m_ResourceList[prefabIdx];
 					itemToReplace.m_FolderName = pPrefab->GetPrefabName();
 					itemToReplace.m_pPrefab = pPrefab;
@@ -655,7 +656,7 @@ kbGameEntityPtr	kbResourceTab::GetSelectedGameEntity() {
 	kbGameEntityPtr retEnt;
 
 	if (m_pOuterTab->value() == m_pResourceGroup) {
-		//	kbLog( "Resource select browser has focus" );
+		//	blk::log( "Resource select browser has focus" );
 	}
 	else if (m_pOuterTab->value() == m_pEntityGroup) {
 

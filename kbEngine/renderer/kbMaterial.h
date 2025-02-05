@@ -15,11 +15,9 @@ public:
 	kbTexture();
 	explicit kbTexture(const kbString& fileName);
 
-	~kbTexture() { kbErrorCheck(m_pGPUTexture == nullptr, " kbTexture::~kbTexture() - Destructing a kbTexture that hasn't been released"); }
+	~kbTexture() { blk::error_check(m_pGPUTexture == nullptr, " kbTexture::~kbTexture() - Destructing a kbTexture that hasn't been released"); }
 
 	virtual kbTypeInfoType_t GetType() const { return KBTYPEINFO_TEXTURE; }
-
-	void Release() { Release_Internal(); }		// todo: should be a resource like everything else
 
 	kbHWTexture* GetGPUTexture() const { return m_pGPUTexture; }
 
@@ -29,8 +27,10 @@ public:
 	uint GetHeight() const { return m_TextureHeight; }
 
 private:
-	virtual bool Load_Internal();
-	virtual void Release_Internal();
+	virtual bool Load_Internal() { return load_internal();  }
+
+	virtual bool load_internal();
+	virtual void release_internal();
 
 	kbHWTexture* m_pGPUTexture;
 	std::unique_ptr<uint8_t[]> m_pCPUTexture;

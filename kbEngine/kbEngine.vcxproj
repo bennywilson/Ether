@@ -132,6 +132,7 @@
     <ClInclude Include="boundingVolumes\kbBounds.h" />
     <ClInclude Include="boundingVolumes\kbIntersectionTests.h" />
     <ClInclude Include="boundingVolumes\kbOctree.h" />
+    <ClInclude Include="core\containers.h" />
     <ClInclude Include="core\kbConsole.h" />
     <ClInclude Include="core\kbCore.h" />
     <ClInclude Include="core\kbInputManager.h" />

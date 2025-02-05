@@ -29,10 +29,10 @@ bool kbWaveFile::Load_Internal() {
 	m_hMMio = mmioOpen(pFileName, nullptr, MMIO_ALLOCBUF | MMIO_READ);
 
 	hr = ReadMMIO();
-	kbErrorCheck(SUCCEEDED(hr), "kbWaveFile::Load_Internal() - Failed to load wave %s", GetFullFileName().c_str());
+	blk::error_check(SUCCEEDED(hr), "kbWaveFile::Load_Internal() - Failed to load wave %s", GetFullFileName().c_str());
 
 	hr = ResetFile();
-	kbErrorCheck(SUCCEEDED(hr), "kbWaveFile::Load_Internal() - Failed to load wave %s", GetFullFileName().c_str());
+	blk::error_check(SUCCEEDED(hr), "kbWaveFile::Load_Internal() - Failed to load wave %s", GetFullFileName().c_str());
 
 	// After the reset, the size of the wav file is m_ck.cksize so store it now
 	m_dwSize = m_ck.cksize;
@@ -42,7 +42,7 @@ bool kbWaveFile::Load_Internal() {
 	m_pWaveDataBuffer = new BYTE[m_cbWaveSize];
 
 	hr = Read(m_pWaveDataBuffer, m_cbWaveSize, &m_cbWaveSize);
-	kbErrorCheck(SUCCEEDED(hr), "kbWaveFile::Load_Internal() - Failed to load wave %s", GetFullFileName().c_str());
+	blk::error_check(SUCCEEDED(hr), "kbWaveFile::Load_Internal() - Failed to load wave %s", GetFullFileName().c_str());
 
 	return true;
 }
@@ -69,27 +69,27 @@ HRESULT	kbWaveFile::ReadMMIO() {
 
 	MMRESULT MR = mmioDescend(m_hMMio, &m_ckRiff, NULL, 0);
 
-	kbErrorCheck(MR == 0, "kbWaveFile::ReadMMIO() - Error");
-	kbErrorCheck(m_ckRiff.ckid == FOURCC_RIFF && m_ckRiff.fccType == mmioFOURCC('W', 'A', 'V', 'E'), "kbWaveFile::ReadMMIO() - Error");
+	blk::error_check(MR == 0, "kbWaveFile::ReadMMIO() - Error");
+	blk::error_check(m_ckRiff.ckid == FOURCC_RIFF && m_ckRiff.fccType == mmioFOURCC('W', 'A', 'V', 'E'), "kbWaveFile::ReadMMIO() - Error");
 
 	// Search the input file for for the 'fmt ' chunk.
 	ckIn.ckid = mmioFOURCC('f', 'm', 't', ' ');
 
 	MR = mmioDescend(m_hMMio, &ckIn, &m_ckRiff, MMIO_FINDCHUNK);
-	kbErrorCheck(MR == 0, "kbWaveFile::ReadMMIO() - Error");
+	blk::error_check(MR == 0, "kbWaveFile::ReadMMIO() - Error");
 
 	// Expect the 'fmt' chunk to be at least as large as <PCMWAVEFORMAT>;
 	// if there are extra parameters at the end, we'll ignore them
-	kbErrorCheck(ckIn.cksize >= (LONG)sizeof(PCMWAVEFORMAT), "kbWaveFile::ReadMMIO() - Error");
+	blk::error_check(ckIn.cksize >= (LONG)sizeof(PCMWAVEFORMAT), "kbWaveFile::ReadMMIO() - Error");
 
 	LONG amtRead = mmioRead(m_hMMio, (HPSTR)&pcmWaveFormat, sizeof(pcmWaveFormat));
-	kbErrorCheck(amtRead == sizeof(pcmWaveFormat), "kbWaveFile::ReadMMIO() - Error");
+	blk::error_check(amtRead == sizeof(pcmWaveFormat), "kbWaveFile::ReadMMIO() - Error");
 
 	// Allocate the waveformatex, but if its not pcm format, read the next
 	// word, and thats how many extra bytes to allocate.
 	if (pcmWaveFormat.wf.wFormatTag == WAVE_FORMAT_PCM) {
 		m_pWaveFormat = reinterpret_cast<WAVEFORMATEX*>(new CHAR[sizeof(WAVEFORMATEX)]);
-		kbErrorCheck(m_pWaveFormat != nullptr, "kbWaveFile::ReadMMIO() - Error");
+		blk::error_check(m_pWaveFormat != nullptr, "kbWaveFile::ReadMMIO() - Error");
 
 		// Copy the bytes from the pcm structure to the waveformatex structure
 		memcpy(m_pWaveFormat, &pcmWaveFormat, sizeof(pcmWaveFormat));
@@ -100,10 +100,10 @@ HRESULT	kbWaveFile::ReadMMIO() {
 		// Read in length of extra bytes.
 		WORD cbExtraBytes = 0L;
 		amtRead = mmioRead(m_hMMio, (CHAR*)&cbExtraBytes, sizeof(WORD));
-		kbErrorCheck(amtRead == sizeof(WORD), "kbWaveFile::ReadMMIO() - Error");
+		blk::error_check(amtRead == sizeof(WORD), "kbWaveFile::ReadMMIO() - Error");
 
 		m_pWaveFormat = reinterpret_cast<WAVEFORMATEX*>(new CHAR[sizeof(WAVEFORMATEX) + cbExtraBytes]);
-		kbErrorCheck(m_pWaveFormat != nullptr, "kbWaveFile::ReadMMIO() - Error");
+		blk::error_check(m_pWaveFormat != nullptr, "kbWaveFile::ReadMMIO() - Error");
 
 		// Copy the bytes from the pcm structure to the waveformatex structure
 		memcpy(m_pWaveFormat, &pcmWaveFormat, sizeof(pcmWaveFormat));
@@ -111,11 +111,11 @@ HRESULT	kbWaveFile::ReadMMIO() {
 
 		// Now, read those extra bytes into the structure, if cbExtraAlloc != 0.
 		amtRead = mmioRead(m_hMMio, (CHAR*)(((BYTE*)&(m_pWaveFormat->cbSize)) + sizeof(WORD)), cbExtraBytes);
-		kbErrorCheck(amtRead == cbExtraBytes, "kbWaveFile::ReadMMIO() - Error");
+		blk::error_check(amtRead == cbExtraBytes, "kbWaveFile::ReadMMIO() - Error");
 	}
 
 	MR = mmioAscend(m_hMMio, &ckIn, 0);
-	kbErrorCheck(MR == 0, "kbWaveFile::ReadMMIO() - Error");
+	blk::error_check(MR == 0, "kbWaveFile::ReadMMIO() - Error");
 
 	return S_OK;
 }
@@ -129,12 +129,12 @@ HRESULT kbWaveFile::Read(BYTE* pBuffer, DWORD dwSizeToRead, DWORD* pdwSizeRead) 
 		return CO_E_NOTINITIALIZED;
 	}
 
-	kbErrorCheck(pBuffer != nullptr && pdwSizeRead != nullptr, "kbWaveFile::Read() - Error");
+	blk::error_check(pBuffer != nullptr && pdwSizeRead != nullptr, "kbWaveFile::Read() - Error");
 
 	*pdwSizeRead = 0;
 
 	MMRESULT MR = mmioGetInfo(m_hMMio, &mmioinfoIn, 0);
-	kbErrorCheck(MR == 0, "kbWaveFile::Read() - Error");
+	blk::error_check(MR == 0, "kbWaveFile::Read() - Error");
 
 
 	UINT cbDataIn = dwSizeToRead;
@@ -149,8 +149,8 @@ HRESULT kbWaveFile::Read(BYTE* pBuffer, DWORD dwSizeToRead, DWORD* pdwSizeRead) 
 		if (mmioinfoIn.pchNext == mmioinfoIn.pchEndRead)
 		{
 			MR = mmioAdvance(m_hMMio, &mmioinfoIn, MMIO_READ);
-			kbErrorCheck(MR == 0, "kbWaveFile::Read() - Error");
-			kbErrorCheck(mmioinfoIn.pchNext != mmioinfoIn.pchEndRead, "kbWaveFile::Read() - Error");
+			blk::error_check(MR == 0, "kbWaveFile::Read() - Error");
+			blk::error_check(mmioinfoIn.pchNext != mmioinfoIn.pchEndRead, "kbWaveFile::Read() - Error");
 		}
 
 		// Actual copy.
@@ -159,7 +159,7 @@ HRESULT kbWaveFile::Read(BYTE* pBuffer, DWORD dwSizeToRead, DWORD* pdwSizeRead) 
 	}
 
 	MR = mmioSetInfo(m_hMMio, &mmioinfoIn, 0);
-	kbErrorCheck(MR == 0, "kbWaveFile::Read() - Error");
+	blk::error_check(MR == 0, "kbWaveFile::Read() - Error");
 
 	*pdwSizeRead = cbDataIn;
 
@@ -176,32 +176,32 @@ HRESULT kbWaveFile::ResetFile() {
 
 	// Seek to the data
 	LONG MR = mmioSeek(m_hMMio, m_ckRiff.dwDataOffset + sizeof(FOURCC), SEEK_SET);
-	kbErrorCheck(MR != -1, "kbWaveFile::ResetFile()");
+	blk::error_check(MR != -1, "kbWaveFile::ResetFile()");
 
 	// Search the input file for the 'data' chunk.
 	m_ck.ckid = mmioFOURCC('d', 'a', 't', 'a');
 	MR = mmioDescend(m_hMMio, &m_ck, &m_ckRiff, MMIO_FINDCHUNK);
-	kbErrorCheck(MR == 0, "kbWaveFile::ResetFile()");
+	blk::error_check(MR == 0, "kbWaveFile::ResetFile()");
 
 	return S_OK;
 }
 
 /// kbSoundManager::kbSoundManager
 kbSoundManager::kbSoundManager() {
-	kbLog("Creating Audio Engine");
+	blk::log("Creating Audio Engine");
 
 	m_bInitialized = false;
 
 	HRESULT hr = XAudio2Create(&m_pXAudioEngine);
 	if (FAILED(hr)) {
-		kbWarning("kbSoundManager::kbSoundManager() - Failed to create XAudio2");
+		blk::warning("kbSoundManager::kbSoundManager() - Failed to create XAudio2");
 		return;
 	}
 
 	hr = m_pXAudioEngine->CreateMasteringVoice(&m_pMasteringVoice);
 
 	if (FAILED(hr)) {
-		kbWarning("kbSoundManager::kbSoundManager() - Failed to create a mastering voice");
+		blk::warning("kbSoundManager::kbSoundManager() - Failed to create a mastering voice");
 		return;
 	}
 
@@ -232,7 +232,7 @@ kbSoundManager::~kbSoundManager() {
 	m_pXAudioEngine->Release();
 	CoUninitialize();
 
-	kbLog("Audio Engine destroyed");
+	blk::log("Audio Engine destroyed");
 }
 
 /// kbSoundManager::PlayWave
@@ -249,7 +249,7 @@ int kbSoundManager::PlayWave(kbWaveFile* const pWaveFile, const float inVolume, 
 		if (m_Voices[iVoice].m_bInUse == true) {
 			continue;
 		}
-		kbErrorCheck(m_Voices[iVoice].m_pVoice == nullptr, "kbSoundManager::PlayWave() - Non null voice is in use.");
+		blk::error_check(m_Voices[iVoice].m_pVoice == nullptr, "kbSoundManager::PlayWave() - Non null voice is in use.");
 
 		pVoice = &m_Voices[iVoice];
 		pVoice->m_bInUse = true;
@@ -257,7 +257,7 @@ int kbSoundManager::PlayWave(kbWaveFile* const pWaveFile, const float inVolume, 
 		// Create the source voice
 		WAVEFORMATEX* const pwfx = pWaveFile->GetFormat();
 		HRESULT hr = m_pXAudioEngine->CreateSourceVoice(&pVoice->m_pVoice, pwfx);
-		kbErrorCheck(SUCCEEDED(hr), "kbSoundManager::PlayWave() - Failed to create a voice");
+		blk::error_check(SUCCEEDED(hr), "kbSoundManager::PlayWave() - Failed to create a voice");
 
 		break;
 	}
@@ -278,12 +278,12 @@ int kbSoundManager::PlayWave(kbWaveFile* const pWaveFile, const float inVolume, 
 	}
 
 	HRESULT hr = pVoice->m_pVoice->SubmitSourceBuffer(&buffer);
-	kbErrorCheck(SUCCEEDED(hr), "kbSoundManager::PlayWave() - Failed to submit audio buffer");
+	blk::error_check(SUCCEEDED(hr), "kbSoundManager::PlayWave() - Failed to submit audio buffer");
 
 	pVoice->m_pVoice->SetVolume(finalVolume);
 	pVoice->m_pVoice->SetFrequencyRatio(m_FrequencyRatio);
 	hr = pVoice->m_pVoice->Start(0);
-	kbErrorCheck(SUCCEEDED(hr), "kbSoundManager::PlayWave() - Failed to submit start voice");
+	blk::error_check(SUCCEEDED(hr), "kbSoundManager::PlayWave() - Failed to submit start voice");
 
 	return iVoice;
 }
@@ -291,7 +291,7 @@ int kbSoundManager::PlayWave(kbWaveFile* const pWaveFile, const float inVolume, 
 /// kbSoundManager::StopWave
 void kbSoundManager::StopWave(const int id) {
 
-	kbErrorCheck(id >= 0 && id < MAX_VOICES, "kbSoundManager::StopWave() - Called with invalid wave id");
+	blk::error_check(id >= 0 && id < MAX_VOICES, "kbSoundManager::StopWave() - Called with invalid wave id");
 
 	kbVoiceData_t* const pVoice = &m_Voices[id];
 	pVoice->m_pVoice->Stop();

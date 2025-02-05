@@ -129,7 +129,7 @@ void kbRenderer_DX11::RenderLight( const kbRenderLight *const pLight ) {
 
 	D3D11_MAPPED_SUBRESOURCE mappedResource;
 	HRESULT hr = m_pDeviceContext->Map( pConstBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource );
-	kbErrorCheck( SUCCEEDED(hr), "kbRenderer_DX11::RenderLight() - Failed to map matrix buffer" );
+	blk::error_check( SUCCEEDED(hr), "kbRenderer_DX11::RenderLight() - Failed to map matrix buffer" );
 
 	byte * pMappedData = (byte*)mappedResource.pData;
 	if ( pLightComponent->GetMaterialList().size() > 0 ) {
@@ -466,7 +466,7 @@ void kbRenderer_DX11::RenderLightShafts() {
 			D3D11_MAPPED_SUBRESOURCE mappedResource;
 
 			HRESULT hr = m_pDeviceContext->Map( pConstantBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource );
-			kbErrorCheck( SUCCEEDED(hr), "kbRenderer_DX11::RenderLightShafts() - Failed to map matrix buffer" );
+			blk::error_check( SUCCEEDED(hr), "kbRenderer_DX11::RenderLightShafts() - Failed to map matrix buffer" );
 
 			SetShaderMat4( "mvpMatrix", mvpMatrix, mappedResource.pData, varBindings );
 			SetShaderVec4( "color", CurLightShafts.m_Color, mappedResource.pData, varBindings );
@@ -520,7 +520,7 @@ void kbRenderer_DX11::RenderLightShafts() {
 
 				D3D11_MAPPED_SUBRESOURCE mappedResource;
 				HRESULT hr = m_pDeviceContext->Map( pConstantBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource );
-				kbErrorCheck( SUCCEEDED(hr), "kbRenderer_DX11::RenderLightShafts() - Failed to map matrix buffer" );
+				blk::error_check( SUCCEEDED(hr), "kbRenderer_DX11::RenderLightShafts() - Failed to map matrix buffer" );
 
 				SetShaderMat4( "mvpMatrix", mvpMatrix, mappedResource.pData, varBindings );
 
@@ -557,7 +557,7 @@ void kbRenderer_DX11::RenderLightShafts() {
 
 			D3D11_MAPPED_SUBRESOURCE mappedResource;
 			HRESULT hr = m_pDeviceContext->Map( pConstantBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource );
-			kbErrorCheck( SUCCEEDED(hr), "kbRenderer_DX11::RenderLightShafts() - Failed to map matrix buffer" );
+			blk::error_check( SUCCEEDED(hr), "kbRenderer_DX11::RenderLightShafts() - Failed to map matrix buffer" );
 
 			SetShaderMat4( "mvpMatrix", mvpMatrix, mappedResource.pData, varBindings );
 

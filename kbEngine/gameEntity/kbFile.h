@@ -4,6 +4,8 @@
 
 #pragma once
 
+#include <fstream>
+
 /// kbFile
 class kbFile {
 public:

@@ -150,8 +150,8 @@ void Renderer_D3D12::initialize(HWND hwnd, const uint32_t frame_width, const uin
 
 	auto pipe = (RenderPipeline_D3D12*)load_pipeline("test_shader", L"C:/projects/Ether/dx12_updgrade/GameBase/assets/shaders/test_shader.hlsl");
 	todo_create_texture();
-	// 	kbLog("Renderer_D3D12 initialized");
 
+	blk::log("Renderer_D3D12 initialized");
 }
 
 /// Renderer_D3D12::~Renderer_D3D12
@@ -198,10 +198,10 @@ void Renderer_D3D12::shut_down() {
 
 	m_fence.Reset();
 	m_queue.Reset();
-	ID3D12DebugDevice* d3d_debug = nullptr;
-	m_device->QueryInterface(__uuidof(ID3D12DebugDevice), reinterpret_cast<void**>(&d3d_debug));
+	//ID3D12DebugDevice* d3d_debug = nullptr;
+	//m_device->QueryInterface(__uuidof(ID3D12DebugDevice), reinterpret_cast<void**>(&d3d_debug));
+//d3d_debug->ReportLiveDeviceObjects(D3D12_RLDO_IGNORE_INTERNAL);
 	m_device.Reset();
-	d3d_debug->ReportLiveDeviceObjects(D3D12_RLDO_IGNORE_INTERNAL);
 }
 
 /// Renderer_D3D12::get_hardware_adapter

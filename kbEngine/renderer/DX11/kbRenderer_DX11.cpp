@@ -81,8 +81,8 @@ kbRenderWindow_DX11::kbRenderWindow_DX11( HWND inHwnd, const RECT & rect, const 
  *	kbRenderWindow_DX11::~kbRenderWindow_DX11
  */
 kbRenderWindow_DX11::~kbRenderWindow_DX11() {
-	kbErrorCheck( m_pSwapChain == nullptr, "kbRenderWindow::~kbRenderWindow() - Swap chain still exists" );
-	kbErrorCheck( m_pRenderTargetView == nullptr, "kbRenderWindow::~kbRenderWindow() - Target view still exists" );
+	blk::error_check( m_pSwapChain == nullptr, "kbRenderWindow::~kbRenderWindow() - Swap chain still exists" );
+	blk::error_check( m_pRenderTargetView == nullptr, "kbRenderWindow::~kbRenderWindow() - Target view still exists" );
 }
 
 /**
@@ -132,19 +132,19 @@ void kbGPUTimeStamp::Init( ID3D11DeviceContext *const DeviceContext ) {
 	for ( int i = 0; i < MaxTimeStamps; i++ ) {
 
 		hr = g_pD3DDevice->CreateQuery( &queryDesc, &m_TimeStamps[i].m_pQueries[0] );
-		kbErrorCheck( SUCCEEDED( hr ), "kbGPUTimeStamp_t::SetupTimeStamps(  - Failed to create query" );
+		blk::error_check( SUCCEEDED( hr ), "kbGPUTimeStamp_t::SetupTimeStamps(  - Failed to create query" );
 
 		hr = g_pD3DDevice->CreateQuery( &queryDesc, &m_TimeStamps[i].m_pQueries[1] );
-		kbErrorCheck( SUCCEEDED( hr ), "kbGPUTimeStamp_t::SetupTimeStamps(  - Failed to create query" );
+		blk::error_check( SUCCEEDED( hr ), "kbGPUTimeStamp_t::SetupTimeStamps(  - Failed to create query" );
 	}
 
 	queryDesc.Query = D3D11_QUERY_TIMESTAMP_DISJOINT;
 
 	hr = g_pD3DDevice->CreateQuery( &queryDesc, &m_pDisjointTimeStamps[0] );
-	kbErrorCheck( SUCCEEDED( hr ), "kbGPUTimeStamp_t::SetupTimeStamps(  - Failed to create query" );
+	blk::error_check( SUCCEEDED( hr ), "kbGPUTimeStamp_t::SetupTimeStamps(  - Failed to create query" );
 
 	hr = g_pD3DDevice->CreateQuery( &queryDesc, &m_pDisjointTimeStamps[1] );
-	kbErrorCheck( SUCCEEDED( hr ), "kbGPUTimeStamp_t::SetupTimeStamps(  - Failed to create query" );
+	blk::error_check( SUCCEEDED( hr ), "kbGPUTimeStamp_t::SetupTimeStamps(  - Failed to create query" );
 }
 
 /**
@@ -233,7 +233,7 @@ void kbGPUTimeStamp::PlaceTimeStamp( const kbString & timeStampName, ID3D11Devic
 	GPUTimeStamp_t * pCurTimeStamp = nullptr;
 	if ( it == m_TimeStampMap.end() ) {
 		if ( m_NumTimeStamps >= MaxTimeStamps ) {
-			kbError( "Ran out of GPU time stamps" );
+			blk::error( "Ran out of GPU time stamps" );
 			return;
 		}
 		pCurTimeStamp = &m_TimeStamps[m_NumTimeStamps];
@@ -251,7 +251,7 @@ void kbGPUTimeStamp::PlaceTimeStamp( const kbString & timeStampName, ID3D11Devic
  */
 eventMarker_t::eventMarker_t( const wchar_t *const name, ID3DUserDefinedAnnotation *const pAnnotation ) {
 
-	kbErrorCheck( name != nullptr && pAnnotation != nullptr, "eventMarker_t::eventMarker_t() - Invalid params" );
+	blk::error_check( name != nullptr && pAnnotation != nullptr, "eventMarker_t::eventMarker_t() - Invalid params" );
 	m_pEventMarker = pAnnotation;
 	m_pEventMarker->BeginEvent( name );
 }
@@ -337,7 +337,7 @@ kbRenderer_DX11::~kbRenderer_DX11() {
  */
 void kbRenderer_DX11::Init_Internal( HWND hwnd, const int frameWidth, const int frameHeight ) {
 
-	kbLog( "Initializing kbRenderer_DX11" );
+	blk::log( "Initializing kbRenderer_DX11" );
 
 	m_hwnd = hwnd;
 
@@ -348,7 +348,7 @@ void kbRenderer_DX11::Init_Internal( HWND hwnd, const int frameWidth, const int 
 		Flags |= D3D11_CREATE_DEVICE_DEBUG;
 
 	HRESULT hr = CreateDXGIFactory1( __uuidof(IDXGIFactory), (void**)&m_pDXGIFactory );
-	kbErrorCheck( SUCCEEDED( hr ), "kbRenderer_DX11::Init_Internal() - Failed to create DXGI Factory" );
+	blk::error_check( SUCCEEDED( hr ), "kbRenderer_DX11::Init_Internal() - Failed to create DXGI Factory" );
 
 	m_pDXGIFactory->MakeWindowAssociation(hwnd, DXGI_MWA_NO_ALT_ENTER);
 	Back_Buffer_Width = frameWidth;
@@ -365,7 +365,7 @@ void kbRenderer_DX11::Init_Internal( HWND hwnd, const int frameWidth, const int 
 							nullptr,
 							&m_pDeviceContext );
 
-	kbErrorCheck( SUCCEEDED( hr ), "kbRenderer_DX11::Init_Internal() - Failed to create D3D11 Device and swap chain" );
+	blk::error_check( SUCCEEDED( hr ), "kbRenderer_DX11::Init_Internal() - Failed to create D3D11 Device and swap chain" );
 
 	g_pD3DDevice = m_pD3DDevice;
 	g_pImmediateContext = m_pDeviceContext;
@@ -452,7 +452,7 @@ void kbRenderer_DX11::Init_Internal( HWND hwnd, const int frameWidth, const int 
 	depthBufferDesc.MiscFlags = 0;
 
 	hr = m_pD3DDevice->CreateTexture2D( &depthBufferDesc, nullptr, &m_pDepthStencilBuffer );
-	kbErrorCheck( SUCCEEDED( hr ), "kbRenderer_DX11::Init_Internal() - Failed to create DepthStencilBuffer" );
+	blk::error_check( SUCCEEDED( hr ), "kbRenderer_DX11::Init_Internal() - Failed to create DepthStencilBuffer" );
 
 	// specify the subresources of a texture that are accesible from a depth-stencil view
 	D3D11_DEPTH_STENCIL_VIEW_DESC depthStencilViewDesc;
@@ -463,7 +463,7 @@ void kbRenderer_DX11::Init_Internal( HWND hwnd, const int frameWidth, const int 
 	depthStencilViewDesc.Texture2D.MipSlice = 0;
 
 	hr = m_pD3DDevice->CreateDepthStencilView( m_pDepthStencilBuffer, &depthStencilViewDesc, &m_pDepthStencilView );
-	kbErrorCheck( SUCCEEDED( hr ), "kbRenderer_DX11::Init_Internal() - Failed to create DepthStencilView" );
+	blk::error_check( SUCCEEDED( hr ), "kbRenderer_DX11::Init_Internal() - Failed to create DepthStencilView" );
 
 	// bind render target view and depth stencil to output render pipeline
 	m_pDeviceContext->OMSetRenderTargets( 1, &((kbRenderWindow_DX11*)m_RenderWindowList[0])->m_pRenderTargetView, m_pDepthStencilView );
@@ -483,23 +483,23 @@ void kbRenderer_DX11::Init_Internal( HWND hwnd, const int frameWidth, const int 
 
 	// Create the default rasterizer state
 	hr = m_pD3DDevice->CreateRasterizerState( &rasterDesc, &m_pDefaultRasterizerState );
-	kbErrorCheck( SUCCEEDED( hr ), "kbRenderer_DX11::Init_Internal() - Failed to create default rasterizer state" );
+	blk::error_check( SUCCEEDED( hr ), "kbRenderer_DX11::Init_Internal() - Failed to create default rasterizer state" );
 
 	// Create front face culling rasterizer state
 	rasterDesc.CullMode = D3D11_CULL_FRONT;
 	hr = m_pD3DDevice->CreateRasterizerState( &rasterDesc, &m_pFrontFaceCullingRasterizerState );
-	kbErrorCheck( SUCCEEDED( hr ), "kbRenderer_DX11::Init_Internal() - Failed to create front face culling rasterizer state" );
+	blk::error_check( SUCCEEDED( hr ), "kbRenderer_DX11::Init_Internal() - Failed to create front face culling rasterizer state" );
 
 	// Create non-culling rasterizer state
 	rasterDesc.CullMode = D3D11_CULL_NONE;
 	// Create the rasterizer state from the description we just filled out.
 	hr = m_pD3DDevice->CreateRasterizerState( &rasterDesc, &m_pNoFaceCullingRasterizerState );
-	kbErrorCheck( SUCCEEDED( hr ), "kbRenderer_DX11::Init_Internal() - Failed to create non-culling rasterizer state" );
+	blk::error_check( SUCCEEDED( hr ), "kbRenderer_DX11::Init_Internal() - Failed to create non-culling rasterizer state" );
 
 	// Create a wireframe rasterizer state
 	rasterDesc.FillMode = D3D11_FILL_WIREFRAME;
 	hr = m_pD3DDevice->CreateRasterizerState( &rasterDesc, &m_pWireFrameRasterizerState );
-	kbErrorCheck( SUCCEEDED( hr ), "kbRenderer_DX11::Init_Internal() - Failed to create wireframe rasterizer state" );
+	blk::error_check( SUCCEEDED( hr ), "kbRenderer_DX11::Init_Internal() - Failed to create wireframe rasterizer state" );
 
 	// Now set the rasterizer state.
 	m_pDeviceContext->RSSetState( m_pDefaultRasterizerState );
@@ -590,7 +590,7 @@ void kbRenderer_DX11::Init_Internal( HWND hwnd, const int frameWidth, const int 
 
 		ID3D11Buffer * pNewConstantBuffer = nullptr;
 		hr = m_pD3DDevice->CreateBuffer( &matrixBufferDesc, nullptr, &pNewConstantBuffer );
-		kbErrorCheck( SUCCEEDED( hr ), "Failed to create matrix buffer" );
+		blk::error_check( SUCCEEDED( hr ), "Failed to create matrix buffer" );
 
 		m_ConstantBuffers.insert( std::pair<size_t, ID3D11Buffer*>( matrixBufferDesc.ByteWidth, pNewConstantBuffer ) );
 		matrixBufferDesc.ByteWidth += 16;
@@ -652,14 +652,14 @@ void kbRenderer_DX11::Init_Internal( HWND hwnd, const int frameWidth, const int 
 	samplerDesc.MaxLOD = D3D11_FLOAT32_MAX;
 
 	hr = m_pD3DDevice->CreateSamplerState( &samplerDesc, &m_pBasicSamplerState );
-	kbErrorCheck( SUCCEEDED( hr ), "kbRenderer_DX11::Init_Internal() - Failed to create basic sampler state" );
+	blk::error_check( SUCCEEDED( hr ), "kbRenderer_DX11::Init_Internal() - Failed to create basic sampler state" );
 
 	samplerDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_POINT;
 	hr = m_pD3DDevice->CreateSamplerState( &samplerDesc, &m_pNormalMapSamplerState );
-	kbErrorCheck( SUCCEEDED( hr ), "kbRenderer_DX11::Init_Internal() - Failed to create normal sampler state" );
+	blk::error_check( SUCCEEDED( hr ), "kbRenderer_DX11::Init_Internal() - Failed to create normal sampler state" );
 	
 	hr = m_pD3DDevice->CreateSamplerState( &samplerDesc, &m_pShadowMapSamplerState );
-	kbErrorCheck( SUCCEEDED( hr ), "kbRenderer_DX11::Init_Internal() - Failed to create shadowmap sampler state" );
+	blk::error_check( SUCCEEDED( hr ), "kbRenderer_DX11::Init_Internal() - Failed to create shadowmap sampler state" );
 
 	// debug vertex buffer
 	m_DepthLines_RenderThread.resize( 1024 * 1024 );
@@ -679,7 +679,7 @@ void kbRenderer_DX11::Init_Internal( HWND hwnd, const int frameWidth, const int 
 	debugLinesVertexData.SysMemSlicePitch = 0;
 
 	hr = g_pD3DDevice->CreateBuffer( &debugLinesVBDesc, &debugLinesVertexData, &m_DebugVertexBuffer );
-	kbErrorCheck( SUCCEEDED( hr ), "kbRenderer_DX11::Init_Internal() - Failed to create debug line vertex buffer" );
+	blk::error_check( SUCCEEDED( hr ), "kbRenderer_DX11::Init_Internal() - Failed to create debug line vertex buffer" );
 
 	m_DebugPreTransformedLines.resize( 1024 );
 	memset( m_DebugPreTransformedLines.data(), 0, sizeof( vertexLayout ) * m_DebugPreTransformedLines.size() );
@@ -696,7 +696,7 @@ void kbRenderer_DX11::Init_Internal( HWND hwnd, const int frameWidth, const int 
 	debugLinesVertexData.SysMemSlicePitch = 0;
 
 	hr = g_pD3DDevice->CreateBuffer( &debugLinesVBDesc, &debugLinesVertexData, &m_DebugPreTransformedVertexBuffer );
-	kbErrorCheck( SUCCEEDED( hr ), "kbRenderer_DX11::Init_Internal() - Failed to create pretransformed debug line vertex buffer" );
+	blk::error_check( SUCCEEDED( hr ), "kbRenderer_DX11::Init_Internal() - Failed to create pretransformed debug line vertex buffer" );
 
 	m_DepthLines_RenderThread.clear();
 
@@ -722,7 +722,7 @@ void kbRenderer_DX11::Init_Internal( HWND hwnd, const int frameWidth, const int 
 
 	LoadTexture( "../../kbEngine/assets/Textures/Editor/white.bmp", 0 );
 
-	kbLog( "  kbRenderer initialized" );
+	blk::log( "  kbRenderer initialized" );
 
 	SetRenderWindow( m_hwnd );
 
@@ -748,7 +748,7 @@ void kbRenderer_DX11::Init_Internal( HWND hwnd, const int frameWidth, const int 
 	m_DebugText->UnmapIndexBuffer();
 
 	hr = m_pDeviceContext->QueryInterface( __uuidof(m_pEventMarker), (void**)&m_pEventMarker );
-	kbErrorCheck( SUCCEEDED(hr), " kbRenderer_DX11::Initialize() - Failed to query user defined annotation" );
+	blk::error_check( SUCCEEDED(hr), " kbRenderer_DX11::Initialize() - Failed to query user defined annotation" );
 }
 
 /**
@@ -756,7 +756,7 @@ void kbRenderer_DX11::Init_Internal( HWND hwnd, const int frameWidth, const int 
  */
 int kbRenderer_DX11::CreateRenderView( HWND hwnd )
 {
-	kbErrorCheck( hwnd != nullptr, "nullptr window handle passed into kbRenderer_DX11::CreateRenderView" );
+	blk::error_check( hwnd != nullptr, "nullptr window handle passed into kbRenderer_DX11::CreateRenderView" );
 
 	DXGI_SWAP_CHAIN_DESC sd = { 0 };
 
@@ -854,7 +854,7 @@ kbRenderTexture * kbRenderer_DX11::GetRenderTexture_Internal( const int width, c
 	textureDesc.MiscFlags = 0;
 
 	HRESULT hr = m_pD3DDevice->CreateTexture2D( &textureDesc, nullptr, &rt.m_pRenderTargetTexture );
-	kbErrorCheck( SUCCEEDED(hr), "kbRenderer_DX11::CreateRenderTarget() - Failed to create 2D texture with format", (int)targetFormat );
+	blk::error_check( SUCCEEDED(hr), "kbRenderer_DX11::CreateRenderTarget() - Failed to create 2D texture with format", (int)targetFormat );
 
 	if ( bIsCPUAccessible ) {
 		return &rt;
@@ -867,7 +867,7 @@ kbRenderTexture * kbRenderer_DX11::GetRenderTexture_Internal( const int width, c
 	renderTargetViewDesc.Texture2D.MipSlice = 0;
 
 	hr = m_pD3DDevice->CreateRenderTargetView( rt.m_pRenderTargetTexture, &renderTargetViewDesc, &rt.m_pRenderTargetView );
-	kbErrorCheck( SUCCEEDED(hr), "kbRenderer_DX11::CreateRenderTarget() - Failed to create RTV with format", (int)targetFormat );
+	blk::error_check( SUCCEEDED(hr), "kbRenderer_DX11::CreateRenderTarget() - Failed to create RTV with format", (int)targetFormat );
 
 	// Shader resource view
 	D3D11_SHADER_RESOURCE_VIEW_DESC shaderResourceViewDesc;
@@ -877,7 +877,7 @@ kbRenderTexture * kbRenderer_DX11::GetRenderTexture_Internal( const int width, c
 	shaderResourceViewDesc.Texture2D.MipLevels = 1;
 
 	hr = m_pD3DDevice->CreateShaderResourceView( rt.m_pRenderTargetTexture, &shaderResourceViewDesc, &rt.m_pShaderResourceView );
-	kbErrorCheck( SUCCEEDED(hr), "kbRenderer_DX11::CreateRenderTarget() - Failed to create SRV texture for index", (int)targetFormat );
+	blk::error_check( SUCCEEDED(hr), "kbRenderer_DX11::CreateRenderTarget() - Failed to create SRV texture for index", (int)targetFormat );
 
 	return &rt;
 }
@@ -951,9 +951,9 @@ void kbRenderer_DX11::Shutdown_Internal() {
 	SAFE_RELEASE( m_pDeviceContext );
 
 	if ( GCreateDebugD3DDevice ) {
-		kbLog( "" );
-		kbLog( "" );
-		kbLog( "  D3D11 Reporting live D3D Objects (Disabled)..........................................................." );
+		blk::log( "" );
+		blk::log( "" );
+		blk::log( "  D3D11 Reporting live D3D Objects (Disabled)..........................................................." );
 	//	ID3D11Debug * debugDev;
 	//	HRESULT hr = m_pD3DDevice->QueryInterface( __uuidof(ID3D11Debug), reinterpret_cast<void**>( &debugDev ) );
 	//	debugDev->ReportLiveDeviceObjects( D3D11_RLDO_DETAIL );
@@ -962,7 +962,7 @@ void kbRenderer_DX11::Shutdown_Internal() {
 
 	SAFE_RELEASE( m_pD3DDevice );
 
-	kbLog( "  kbRenderer Shutdown" );
+	blk::log( "  kbRenderer Shutdown" );
 }
 
 /**
@@ -989,7 +989,7 @@ void kbRenderer_DX11::SetRenderWindow( HWND hwnd ) {
 		}
 	}
 
-	kbError( "SetRenderWindow called with a bad window handle" );
+	blk::error( "SetRenderWindow called with a bad window handle" );
 }
 
 /*
@@ -1525,7 +1525,7 @@ void kbRenderer_DX11::SetShaderMat4( const std::string & varName, const kbMat4 &
 		}
 	}
 
-	kbError( "Failed to set Shader var" );
+	blk::error( "Failed to set Shader var" );
 }
 
 /**
@@ -1541,7 +1541,7 @@ void kbRenderer_DX11::SetShaderVec4( const std::string & varName, const kbVec4 &
 			return;
 		}
 	}
-	kbError( "Failed to set Shader var" );
+	blk::error( "Failed to set Shader var" );
 }
 
 /**
@@ -1550,7 +1550,7 @@ void kbRenderer_DX11::SetShaderVec4( const std::string & varName, const kbVec4 &
 void kbRenderer_DX11::SetShaderFloat( const std::string & varName, const float inFloat, void *const pBuffer, const kbShaderVarBindings_t & binding ) {
 
 	const int varBindingIdx = GetVarBindingIndex( varName, binding );
-	kbErrorCheck( varBindingIdx >= 0, "kbRenderer_DX11::SetShaderFloat() - Failed to find binding for shader var %s", varName.c_str() );
+	blk::error_check( varBindingIdx >= 0, "kbRenderer_DX11::SetShaderFloat() - Failed to find binding for shader var %s", varName.c_str() );
 
 	float *const pFloat = (float*)( (byte*)pBuffer + binding.m_VarBindings[varBindingIdx].m_VarByteOffset );
 	*pFloat = inFloat;
@@ -1562,7 +1562,7 @@ void kbRenderer_DX11::SetShaderFloat( const std::string & varName, const float i
 void kbRenderer_DX11::SetShaderInt( const std::string & varName, const int inInt, void *const pBuffer, const kbShaderVarBindings_t & binding ) {
 
 	const int varBindingIdx = GetVarBindingIndex( varName, binding );
-	kbErrorCheck( varBindingIdx >= 0, "kbRenderer_DX11::SetShaderInt() - Failed to find binding for shader var %s", varName.c_str() );
+	blk::error_check( varBindingIdx >= 0, "kbRenderer_DX11::SetShaderInt() - Failed to find binding for shader var %s", varName.c_str() );
 
 	int *const pInt = (int*)( (byte*)pBuffer + binding.m_VarBindings[varBindingIdx].m_VarByteOffset );
 	*pInt = inInt;
@@ -1574,7 +1574,7 @@ void kbRenderer_DX11::SetShaderInt( const std::string & varName, const int inInt
 void kbRenderer_DX11::SetShaderVec4Array( const std::string & varName, const kbVec4 *const pSrcArray, const int arrayLen, void *const pBuffer, const kbShaderVarBindings_t & binding ) {
 
 	const int varBindingIdx = GetVarBindingIndex( varName, binding );
-	kbErrorCheck( varBindingIdx >= 0, "kbRenderer_DX11::SetShaderVec4Array() - Failed to find binding for shader var %s", varName.c_str() );
+	blk::error_check( varBindingIdx >= 0, "kbRenderer_DX11::SetShaderVec4Array() - Failed to find binding for shader var %s", varName.c_str() );
 
 	kbVec4 *const pDestArray = (kbVec4*)( (byte*)pBuffer + binding.m_VarBindings[varBindingIdx].m_VarByteOffset );
 	for ( int j = 0; j < arrayLen; j++ ) {
@@ -1588,7 +1588,7 @@ void kbRenderer_DX11::SetShaderVec4Array( const std::string & varName, const kbV
 void kbRenderer_DX11::SetShaderMat4Array( const std::string & varName, const kbMat4 *const pSrcArray, const int arrayLen, void *const pBuffer, const kbShaderVarBindings_t & binding ) {
 
 	const int varBindingIdx = GetVarBindingIndex( varName, binding );
-	kbErrorCheck( varBindingIdx >= 0, "kbRenderer_DX11::SetShaderMat4Array() - Failed to find binding for shader var %s", varName.c_str() );
+	blk::error_check( varBindingIdx >= 0, "kbRenderer_DX11::SetShaderMat4Array() - Failed to find binding for shader var %s", varName.c_str() );
 
 	kbMat4 *const pDestArray = (kbMat4*)( (byte*)pBuffer + binding.m_VarBindings[varBindingIdx].m_VarByteOffset );
 	for ( int j = 0; j < arrayLen; j++ ) {
@@ -1616,7 +1616,7 @@ int kbRenderer_DX11::GetVarBindingIndex( const std::string & varName, const kbSh
 ID3D11Buffer * kbRenderer_DX11::GetConstantBuffer( const size_t requestSize ) {
 	
 	std::map<size_t, ID3D11Buffer *>::iterator constantBufferIt = m_ConstantBuffers.find( requestSize );
-	kbErrorCheck( constantBufferIt != m_ConstantBuffers.end() && constantBufferIt->second != nullptr, "kbRenderer_DX11::GetConstantBuffer() - Could not find constant buffer of size %d", requestSize );
+	blk::error_check( constantBufferIt != m_ConstantBuffers.end() && constantBufferIt->second != nullptr, "kbRenderer_DX11::GetConstantBuffer() - Could not find constant buffer of size %d", requestSize );
 
 	return constantBufferIt->second;
 }
@@ -1825,7 +1825,7 @@ void kbRenderer_DX11::Blit( kbRenderTexture *const inSrc, kbRenderTexture *const
 	D3D11_MAPPED_SUBRESOURCE mappedResource;
 
 	HRESULT hr = m_pDeviceContext->Map( pConstantBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource );
-	kbErrorCheck( SUCCEEDED(hr), "Failed to map matrix buffer" );
+	blk::error_check( SUCCEEDED(hr), "Failed to map matrix buffer" );
 
 	SetShaderMat4( "mvpMatrix", kbMat4::identity, mappedResource.pData, varBindings );
 	m_pDeviceContext->Unmap( pConstantBuffer, 0 );
@@ -1855,7 +1855,7 @@ void kbRenderer_DX11::DrawTexture( ID3D11ShaderResourceView *const pShaderResour
 	ID3D11Buffer *const pConstantBuffer = GetConstantBuffer( varBindings.m_ConstantBufferSizeBytes );
 	D3D11_MAPPED_SUBRESOURCE mappedResource;
 	HRESULT hr = m_pDeviceContext->Map( pConstantBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource );
-	kbErrorCheck( SUCCEEDED(hr), "Failed to map matrix buffer" );
+	blk::error_check( SUCCEEDED(hr), "Failed to map matrix buffer" );
 	
 	//SShaderM
 	//ShaderConstantMatrices * dataPtr = ( ShaderConstantMatrices * ) mappedResource.pData;
@@ -1930,7 +1930,7 @@ void kbRenderer_DX11::RenderSSAO() {
 	
 	D3D11_MAPPED_SUBRESOURCE mappedResource;
 	HRESULT hr = m_pDeviceContext->Map( pConstantBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource );
-	kbErrorCheck( SUCCEEDED(hr), "kbRenderer_DX11::RenderSSAO() - Failed to map matrix buffer" );
+	blk::error_check( SUCCEEDED(hr), "kbRenderer_DX11::RenderSSAO() - Failed to map matrix buffer" );
 	byte * pMappedData = (byte*)mappedResource.pData;
 
 	SetConstantBuffer( varBindings, &shaderParams, nullptr, pMappedData );
@@ -1986,7 +1986,7 @@ void kbRenderer_DX11::RenderBloom() {
 		// Set constants
 		D3D11_MAPPED_SUBRESOURCE mappedResource;
 		HRESULT hr = m_pDeviceContext->Map( pConstantBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource );
-		kbErrorCheck( SUCCEEDED(hr), "Failed to map matrix buffer" );
+		blk::error_check( SUCCEEDED(hr), "Failed to map matrix buffer" );
 
 		kbMat4 mvpMatrix;
 		mvpMatrix.MakeIdentity();
@@ -2037,7 +2037,7 @@ void kbRenderer_DX11::RenderBloom() {
 		// Set constants
 		D3D11_MAPPED_SUBRESOURCE mappedResource;
 		HRESULT hr = m_pDeviceContext->Map( pConstantBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource );
-		kbErrorCheck( SUCCEEDED(hr), "Failed to map matrix buffer" );
+		blk::error_check( SUCCEEDED(hr), "Failed to map matrix buffer" );
 
 		kbMat4 mvpMatrix;
 		mvpMatrix.MakeIdentity();
@@ -2087,7 +2087,7 @@ void kbRenderer_DX11::RenderBloom() {
 		// Set constants
 		D3D11_MAPPED_SUBRESOURCE mappedResource;
 		HRESULT hr = m_pDeviceContext->Map( pConstantBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource );
-		kbErrorCheck( SUCCEEDED(hr), "Failed to map matrix buffer" );
+		blk::error_check( SUCCEEDED(hr), "Failed to map matrix buffer" );
 
 		kbMat4 mvpMatrix;
 		mvpMatrix.MakeIdentity();
@@ -2141,7 +2141,7 @@ void kbRenderer_DX11::RenderBloom() {
 		ID3D11Buffer *const pConstantBuffer = GetConstantBuffer( varBindings.m_ConstantBufferSizeBytes );
 		D3D11_MAPPED_SUBRESOURCE mappedResource;
 		HRESULT hr = m_pDeviceContext->Map( pConstantBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource );
-		kbErrorCheck( SUCCEEDED(hr), "Failed to map matrix buffer" );
+		blk::error_check( SUCCEEDED(hr), "Failed to map matrix buffer" );
 		SetShaderMat4( "mvpMatrix", mvpMatrix, mappedResource.pData, varBindings );
 		m_pDeviceContext->Unmap( pConstantBuffer, 0 );
 		m_pDeviceContext->VSSetConstantBuffers( 0, 1, &pConstantBuffer );
@@ -2215,7 +2215,7 @@ void kbRenderer_DX11::RenderPostProcess() {
 
 	D3D11_MAPPED_SUBRESOURCE mappedResource;
 	HRESULT hr = m_pDeviceContext->Map( pConstantBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource );
-	kbErrorCheck( SUCCEEDED(hr), "Failed to map matrix buffer" );
+	blk::error_check( SUCCEEDED(hr), "Failed to map matrix buffer" );
 	
 	kbMat4 mvpMatrix;
 	mvpMatrix.MakeIdentity();
@@ -2267,7 +2267,7 @@ void kbRenderer_DX11::RenderConsole() {
 	ID3D11Buffer *const pConstantBuffer = GetConstantBuffer( varBindings.m_ConstantBufferSizeBytes );
 	D3D11_MAPPED_SUBRESOURCE mappedResource;
 	HRESULT hr = m_pDeviceContext->Map( pConstantBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource );
-	kbErrorCheck( SUCCEEDED(hr), "Failed to map matrix buffer" );
+	blk::error_check( SUCCEEDED(hr), "Failed to map matrix buffer" );
 
 	SetShaderMat4( "modelMatrix", kbMat4::identity, mappedResource.pData, varBindings );
 	SetShaderMat4( "modelViewMatrix", kbMat4::identity, mappedResource.pData, varBindings );
@@ -2297,7 +2297,7 @@ void kbRenderer_DX11::RenderConsole() {
  */
 bool kbRenderer_DX11::LoadTexture_Internal( const char * name, int index, int width, int height ) {
 	if ( index < 0 || index >= Max_Num_Textures ) {
-		kbError( "Error - kbRenderer_DX11::LoadTexture() - Texture out of range with index %d", index );
+		blk::error( "Error - kbRenderer_DX11::LoadTexture() - Texture out of range with index %d", index );
 		return false;
 	}
 
@@ -2567,7 +2567,7 @@ void kbRenderer_DX11::ReadShaderFile( std::string & shaderText, kbShaderVarBindi
 				textureBinding.m_pDefaultRenderTexture = m_pRenderTargets[ACCUMULATION_BUFFER_1];
 				textureBinding.m_bIsUserDefinedVar = false;
 			} else {
-				kbWarning( "Default texture %s not found", defaultTexture.c_str() );
+				blk::warning( "Default texture %s not found", defaultTexture.c_str() );
 			}
 		} else {
 			textureBinding.m_bIsUserDefinedVar = true;
@@ -2638,7 +2638,7 @@ void kbRenderer_DX11::CreateShaderFromText( const std::string & fileName, const 
 
 				ID3D11Buffer * pConstantBuffer = nullptr;
 				hr = m_pD3DDevice->CreateBuffer( &matrixBufferDesc, nullptr, &pConstantBuffer );
-				kbErrorCheck( SUCCEEDED(hr), "Failed to create matrix buffer" );
+				blk::error_check( SUCCEEDED(hr), "Failed to create matrix buffer" );
 
 				m_ConstantBuffers.insert( std::pair<size_t, ID3D11Buffer*>( desiredByteWidth, pConstantBuffer ) );
 			}
@@ -2662,7 +2662,7 @@ void kbRenderer_DX11::CreateShaderFromText( const std::string & fileName, const 
 	} while ( FAILED(hr) && numTries < 4 );
 
 	if ( FAILED(hr) ) {
-		kbWarning( "kbRenderer_DX11::LoadShader() - Failed to load vertex shader : %s\n%s", fileName.c_str() , ( localBlobs.errorMessage != nullptr ) ? ( localBlobs.errorMessage->GetBufferPointer() ) : ( "No error message given" ) );
+		blk::warning( "kbRenderer_DX11::LoadShader() - Failed to load vertex shader : %s\n%s", fileName.c_str() , ( localBlobs.errorMessage != nullptr ) ? ( localBlobs.errorMessage->GetBufferPointer() ) : ( "No error message given" ) );
 		return;
 	}
 	SAFE_RELEASE( localBlobs.errorMessage );
@@ -2685,12 +2685,12 @@ void kbRenderer_DX11::CreateShaderFromText( const std::string & fileName, const 
         if ( SUCCEEDED(hr) ) {
     	    hr = m_pD3DDevice->CreateGeometryShader( localBlobs.geometryShaderBuffer->GetBufferPointer(), localBlobs.geometryShaderBuffer->GetBufferSize(), nullptr, &geometryShader );
 	        if ( FAILED(hr) ) {
-		        kbWarning( "kbRenderer_DX11::LoadShader() - Failed to create geometry shader %s", fileName.c_str() );
+		        blk::warning( "kbRenderer_DX11::LoadShader() - Failed to create geometry shader %s", fileName.c_str() );
 		        SAFE_RELEASE( vertexShader );
 		        return;
 	        }
         } else {
-			kbWarning( "kbRenderer_DX11::LoadShader() - Failed to load geometry shader : %s\n%s", fileName.c_str() , ( localBlobs.errorMessage != nullptr ) ? ( localBlobs.errorMessage->GetBufferPointer() ) : ( "No error message given" ) );
+			blk::warning( "kbRenderer_DX11::LoadShader() - Failed to load geometry shader : %s\n%s", fileName.c_str() , ( localBlobs.errorMessage != nullptr ) ? ( localBlobs.errorMessage->GetBufferPointer() ) : ( "No error message given" ) );
 		}
     }
     SAFE_RELEASE( localBlobs.errorMessage );
@@ -2709,7 +2709,7 @@ void kbRenderer_DX11::CreateShaderFromText( const std::string & fileName, const 
 	} while ( FAILED(hr) && numTries < 4 );
 
 	if ( FAILED(hr) ) {
-		kbWarning( "kbRenderer_DX11::LoadShader() - Failed to load pixel shader : %s\n%s", fileName.c_str(), ( localBlobs.errorMessage != nullptr ) ? localBlobs.errorMessage->GetBufferPointer() : ( "No error message given " ) );
+		blk::warning( "kbRenderer_DX11::LoadShader() - Failed to load pixel shader : %s\n%s", fileName.c_str(), ( localBlobs.errorMessage != nullptr ) ? localBlobs.errorMessage->GetBufferPointer() : ( "No error message given " ) );
 		return;
 	}
 
@@ -2717,13 +2717,13 @@ void kbRenderer_DX11::CreateShaderFromText( const std::string & fileName, const 
 
 	hr = m_pD3DDevice->CreateVertexShader( localBlobs.vertexShaderBuffer->GetBufferPointer(), localBlobs.vertexShaderBuffer->GetBufferSize(), nullptr, &vertexShader );
 	if ( FAILED(hr) ) {
-		kbWarning( "kbRenderer_DX11::LoadShader() - Failed to create vertex shader %s", fileName.c_str() );
+		blk::warning( "kbRenderer_DX11::LoadShader() - Failed to create vertex shader %s", fileName.c_str() );
 		return;
 	}
 
 	hr = m_pD3DDevice->CreatePixelShader( localBlobs.pixelShaderBuffer->GetBufferPointer(), localBlobs.pixelShaderBuffer->GetBufferSize(), nullptr, &pixelShader );
 	if ( FAILED(hr) ) {
-		kbWarning( "kbRenderer_DX11::LoadShader() - Failed to create pixel shader %s", fileName.c_str() );
+		blk::warning( "kbRenderer_DX11::LoadShader() - Failed to create pixel shader %s", fileName.c_str() );
 		SAFE_RELEASE( vertexShader );
 		return;
 	}
@@ -2897,7 +2897,7 @@ void kbRenderer_DX11::CreateShaderFromText( const std::string & fileName, const 
 
 	hr = m_pD3DDevice->CreateInputLayout( &polygonLayout[0], (UINT)polygonLayout.size(), localBlobs.vertexShaderBuffer->GetBufferPointer(), localBlobs.vertexShaderBuffer->GetBufferSize(), &vertexLayout );
 	if ( FAILED( hr ) ) {
-		kbWarning( "kbRenderer_DX11::LoadShader() - Failed to create input layout for %s", fileName.c_str() );
+		blk::warning( "kbRenderer_DX11::LoadShader() - Failed to create input layout for %s", fileName.c_str() );
 
 		SAFE_RELEASE( vertexShader )
 		SAFE_RELEASE( pixelShader );
@@ -2967,7 +2967,7 @@ void kbRenderer_DX11::RenderScreenSpaceQuadImmediate( const int start_x, const i
 	const auto & varBindings = pShader->GetShaderVarBindings();
 	ID3D11Buffer *const pConstantBuffer = GetConstantBuffer( varBindings.m_ConstantBufferSizeBytes );
 	HRESULT hr = m_pDeviceContext->Map( pConstantBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource );
-	kbErrorCheck( SUCCEEDED(hr), "kbRenderer_DX11::RenderScreenSpaceQuadImmediate() - Failed to map matrix buffer" );
+	blk::error_check( SUCCEEDED(hr), "kbRenderer_DX11::RenderScreenSpaceQuadImmediate() - Failed to map matrix buffer" );
 	
 	kbShaderParamOverrides_t nullParams;
 	byte * pMappedData = (byte*)mappedResource.pData;
@@ -2999,7 +2999,7 @@ void kbRenderer_DX11::RenderMesh( const kbRenderSubmesh *const pRenderMesh, cons
 	const kbModel::mesh_t & pMesh = pModel->GetMeshes()[pRenderMesh->GetMeshIdx()];
 
 	if ( pModel->IsPointCloud() == false && pMesh.m_NumTriangles == 0 ) {
-		//kbWarning( "kbRenderer_DX11::RenderMesh() - Mesh %s has 0 triangles", pModel->GetFullName().c_str() );
+		//blk::warning( "kbRenderer_DX11::RenderMesh() - Mesh %s has 0 triangles", pModel->GetFullName().c_str() );
 		return;
 	}
 
@@ -3007,8 +3007,8 @@ void kbRenderer_DX11::RenderMesh( const kbRenderSubmesh *const pRenderMesh, cons
 		return;
 	}
 
-	kbErrorCheck( pRenderObject != nullptr && pRenderObject->m_pModel != nullptr, "kbRenderer_DX11::RenderMesh() - no model found" );
-	//kbErrorCheck( pModel->GetMaterials().size() > 0, "kbRenderer_DX11::RenderMesh() - No materials found for model %s", pRenderObject->m_pModel->GetFullName().c_str() );
+	blk::error_check( pRenderObject != nullptr && pRenderObject->m_pModel != nullptr, "kbRenderer_DX11::RenderMesh() - no model found" );
+	//blk::error_check( pModel->GetMaterials().size() > 0, "kbRenderer_DX11::RenderMesh() - No materials found for model %s", pRenderObject->m_pModel->GetFullName().c_str() );
 
 	const UINT vertexStride = pModel->VertexStride();
 	const UINT vertexOffset = 0;
@@ -3070,7 +3070,7 @@ void kbRenderer_DX11::RenderMesh( const kbRenderSubmesh *const pRenderMesh, cons
 		} else if ( cullMode == CullMode_FrontFaces ) {
 			m_pDeviceContext->RSSetState( m_pFrontFaceCullingRasterizerState );
 		}  else {
-			kbError( "kbRenderer_DX11::RenderMesh() - Unsupported culling mode" );
+			blk::error( "kbRenderer_DX11::RenderMesh() - Unsupported culling mode" );
 		}
 	}
 
@@ -3085,7 +3085,7 @@ void kbRenderer_DX11::RenderMesh( const kbRenderSubmesh *const pRenderMesh, cons
 
 		D3D11_MAPPED_SUBRESOURCE mappedResource;
 		HRESULT hr = m_pDeviceContext->Map( pConstantBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource );
-		kbErrorCheck( SUCCEEDED(hr), "Failed to map matrix buffer" );
+		blk::error_check( SUCCEEDED(hr), "Failed to map matrix buffer" );
 		UINT *const pEntityId = (UINT*)mappedResource.pData;
 		*pEntityId = pRenderObject->m_EntityId;
 
@@ -3155,7 +3155,7 @@ void kbRenderer_DX11::RenderPretransformedDebugLines() {
 	D3D11_MAPPED_SUBRESOURCE mappedResource;
 	HRESULT hr = m_pDeviceContext->Map( m_DebugPreTransformedVertexBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource );
 
-	kbErrorCheck( SUCCEEDED(hr), "kbRenderer_DX11::RenderPretransformedDebugLines() - Failed to map debug lines" );
+	blk::error_check( SUCCEEDED(hr), "kbRenderer_DX11::RenderPretransformedDebugLines() - Failed to map debug lines" );
 
 	vertexLayout * vertices = ( vertexLayout * ) mappedResource.pData;
 	memcpy( vertices, m_DebugPreTransformedLines.data(), sizeof( vertexLayout ) * m_DebugPreTransformedLines.size() );
@@ -3179,7 +3179,7 @@ void kbRenderer_DX11::RenderPretransformedDebugLines() {
 	const auto & varBindings = m_pDebugShader->GetShaderVarBindings();
 	ID3D11Buffer *const pConstantBuffer = GetConstantBuffer( varBindings.m_ConstantBufferSizeBytes );
 	hr = m_pDeviceContext->Map( pConstantBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource );
-	kbErrorCheck( SUCCEEDED(hr), "kbRenderer_DX11::RenderPretransformedDebugLines() - Failed to map matrix buffer" );
+	blk::error_check( SUCCEEDED(hr), "kbRenderer_DX11::RenderPretransformedDebugLines() - Failed to map matrix buffer" );
 
 	SetShaderMat4( "mvpMatrix", kbMat4::identity, mappedResource.pData, varBindings );
 
@@ -3204,7 +3204,7 @@ void kbRenderer_DX11::RenderDebugLines() {
 
 		D3D11_MAPPED_SUBRESOURCE mappedResource;
 		HRESULT hr = m_pDeviceContext->Map( m_DebugVertexBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource );
-		kbErrorCheck( SUCCEEDED(hr), "kbRenderer_DX11::RenderDebugLines() - Failed to map debug vertex buffer" );
+		blk::error_check( SUCCEEDED(hr), "kbRenderer_DX11::RenderDebugLines() - Failed to map debug vertex buffer" );
 
 		vertexLayout * vertices = ( vertexLayout * ) mappedResource.pData;
 		memcpy( vertices, lineList.data(), sizeof( vertexLayout ) * lineList.size() );
@@ -3233,7 +3233,7 @@ void kbRenderer_DX11::RenderDebugLines() {
 		const auto & varBindings = m_pDebugShader->GetShaderVarBindings();
 		ID3D11Buffer *const pConstantBuffer = GetConstantBuffer( varBindings.m_ConstantBufferSizeBytes );
 		hr = m_pDeviceContext->Map( pConstantBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource );
-		kbErrorCheck( SUCCEEDED(hr), "kbRenderer_DX11::RenderDebugLines() - Failed to map matrix buffer" );
+		blk::error_check( SUCCEEDED(hr), "kbRenderer_DX11::RenderDebugLines() - Failed to map matrix buffer" );
 
 		SetShaderMat4( "mvpMatrix", m_pCurrentRenderWindow->GetViewProjectionMatrix(), mappedResource.pData, varBindings );
 
@@ -3282,7 +3282,7 @@ void kbRenderer_DX11::RenderDebugBillboards( const bool bIsEntityIdPass ) {
 		D3D11_MAPPED_SUBRESOURCE mappedResource;
 		ID3D11Buffer *const pConstantBuffer = GetConstantBuffer( varBindings.m_ConstantBufferSizeBytes );
 		HRESULT hr = m_pDeviceContext->Map( pConstantBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource );
-		kbErrorCheck( SUCCEEDED( hr ), "kbRenderer_DX11::RenderDebugBillboards() - Failed to map constans buffer" );
+		blk::error_check( SUCCEEDED( hr ), "kbRenderer_DX11::RenderDebugBillboards() - Failed to map constans buffer" );
 
 		byte *const pByteBuffer = (byte*) mappedResource.pData;
 
@@ -3300,7 +3300,7 @@ void kbRenderer_DX11::RenderDebugBillboards( const bool bIsEntityIdPass ) {
 
 			D3D11_MAPPED_SUBRESOURCE mappedResource;
 			HRESULT hr = m_pDeviceContext->Map( pConstantBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource );
-			kbErrorCheck( SUCCEEDED(hr), "Failed to map matrix buffer" );
+			blk::error_check( SUCCEEDED(hr), "Failed to map matrix buffer" );
 			UINT * pEntityId = (UINT*)mappedResource.pData;
 			*pEntityId = currBillBoard.m_EntityId;
 
@@ -3319,7 +3319,7 @@ void kbRenderer_DX11::RenderDebugBillboards( const bool bIsEntityIdPass ) {
  *	kbRenderer_DX11::GetEntityIdAtScreenPosition
  */
 kbVec2i kbRenderer_DX11::GetEntityIdAtScreenPosition( const uint x, const uint y ) {
-	kbErrorCheck( m_RenderThreadSync == 0, "kbRenderer_DX11::GetEntityIdAtScreenPosition() - Function can only be called during the sync." );
+	blk::error_check( m_RenderThreadSync == 0, "kbRenderer_DX11::GetEntityIdAtScreenPosition() - Function can only be called during the sync." );
 
 	D3D11_BOX box;
 	box.left = 0;
@@ -3450,7 +3450,7 @@ void kbRenderer_DX11::RT_Render2DLine( const kbVec3 & startPt, const kbVec3 & en
 	D3D11_MAPPED_SUBRESOURCE mappedResource;
 	HRESULT hr = m_pDeviceContext->Map( m_DebugVertexBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource );
 
-	kbErrorCheck( SUCCEEDED(hr), "kbRenderer_DX11::RT_Render2DLine() - Failed to map debug vertex buffer" );
+	blk::error_check( SUCCEEDED(hr), "kbRenderer_DX11::RT_Render2DLine() - Failed to map debug vertex buffer" );
 
 	kbVec3 finalStartPt = kbVec3( startPt.x * 2.0f - 1.0f, -( ( startPt.y * 2.0f) - 1.0f ), 0.0f );
 	kbVec3 finalEndPt = kbVec3( endPt.x * 2.0f - 1.0f, -( ( endPt.y * 2.0f) - 1.0f ), 0.0f );
@@ -3541,7 +3541,7 @@ void kbRenderer_DX11::RT_Render2DQuad( const kbVec2 & origin, const kbVec2 & siz
 	D3D11_MAPPED_SUBRESOURCE mappedResource;
 	HRESULT hr = m_pDeviceContext->Map( m_DebugVertexBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource );
 
-	kbErrorCheck( SUCCEEDED(hr), "kbRenderer_DX11::RT_Render2DQuad() - Failed to map debug vertex buffer" );
+	blk::error_check( SUCCEEDED(hr), "kbRenderer_DX11::RT_Render2DQuad() - Failed to map debug vertex buffer" );
 
 	const kbVec3 origin3D = kbVec3( (origin.x * 2.0f) - 1.0f, -((origin.y*2.0f) - 1.0f), 0.0f );
 
@@ -3626,7 +3626,7 @@ ID3D11Buffer * kbRenderer_DX11::SetConstantBuffer( const kbShaderVarBindings_t &
 	if ( pInMappedBufferData == nullptr ) {
 		pConstantBuffer = GetConstantBuffer( shaderVarBindings.m_ConstantBufferSizeBytes );
 		hr = m_pDeviceContext->Map( pConstantBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource );
-		kbErrorCheck( SUCCEEDED(hr), "kbRenderer_DX11::RenderDebugLines() - Failed to map matrix buffer" );
+		blk::error_check( SUCCEEDED(hr), "kbRenderer_DX11::RenderDebugLines() - Failed to map matrix buffer" );
 		constantPtr = (byte*) mappedResource.pData;
 	} else {
 		constantPtr = pInMappedBufferData;
@@ -3674,7 +3674,7 @@ ID3D11Buffer * kbRenderer_DX11::SetConstantBuffer( const kbShaderVarBindings_t &
 			kbMat4 *const pMatOffset = (kbMat4*)pVarByteOffset;
 			*pMatOffset = worldMatrix;
 		} else if ( varName == "cameraPos" ) {
-			kbError( "kbRenderer_DX11::SetConstantBuffer() - cameraPos is used in %s but is deprecated.  Use cameraPosition instead", ( pShaderName != nullptr ) ? ( pShaderName ) : ( "null" ) );
+			blk::error( "kbRenderer_DX11::SetConstantBuffer() - cameraPos is used in %s but is deprecated.  Use cameraPosition instead", ( pShaderName != nullptr ) ? ( pShaderName ) : ( "null" ) );
 		} else if (varName == "cameraPosition") {
 			kbVec4 *const pVecOffset = (kbVec4*)pVarByteOffset;
 			*pVecOffset = m_pCurrentRenderWindow->GetCameraPosition();

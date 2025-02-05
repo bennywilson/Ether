@@ -250,7 +250,7 @@ void kbMainTab::RenderSync() {
  */
 void kbMainTab::EventCB( const widgetCBObject * widgetCBObject ) {
 	if ( widgetCBObject == NULL ) {
-		kbError( "Error: kbMainTab::EventCB() - NULL widgetCBObject" );
+		blk::error( "Error: kbMainTab::EventCB() - NULL widgetCBObject" );
 	}
 
 	switch( widgetCBObject->widgetType ) {

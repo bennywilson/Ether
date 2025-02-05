@@ -145,7 +145,7 @@ void kbComponent::Constructor() {
 void kbComponent::SetOwner( kbEntity *const pGameEntity ) { 
 
 	if ( pGameEntity == nullptr ) {
-		kbError( "Initializing a kbComponent with a NULL game entity", GetComponentClassName() );
+		blk::error( "Initializing a kbComponent with a NULL game entity", GetComponentClassName() );
 	}
 
 	m_pOwner = pGameEntity;
@@ -395,7 +395,7 @@ void kbVectorAnimEvent::Constructor() {
  */
 float kbAnimEvent::Evaluate( const std::vector<kbAnimEvent> & eventList, const float t ) {
 	if ( eventList.size() == 0 ) {
-		kbWarning( "kbAnimEvent::Evaluate() - Empty event list" );
+		blk::warning( "kbAnimEvent::Evaluate() - Empty event list" );
 		return 0;
 	}
 
@@ -418,7 +418,7 @@ float kbAnimEvent::Evaluate( const std::vector<kbAnimEvent> & eventList, const f
  */
 kbVec4 kbVectorAnimEvent::Evaluate( const std::vector<kbVectorAnimEvent> & eventList, const float t ) {
 	if ( eventList.size() == 0 ) {
-		kbWarning( "kbVectorAnimEvent::Evaluate() - Empty event list" );
+		blk::warning( "kbVectorAnimEvent::Evaluate() - Empty event list" );
 		return kbVec3::zero;
 	}
 	
@@ -429,12 +429,12 @@ kbVec4 kbVectorAnimEvent::Evaluate( const std::vector<kbVectorAnimEvent> & event
 			}
 
 			const float lerp = ( t - eventList[i-1].GetEventTime() ) / ( eventList[i].GetEventTime() - eventList[i-1].GetEventTime() );
-		//	kbLog( "i = %d, lerp = %f.  time1 = %f, time2 = %f", i, lerp, eventList[i-1].GetEventTime(), t - eventList[i-1].GetEventTime() );
+		//	blk::log( "i = %d, lerp = %f.  time1 = %f, time2 = %f", i, lerp, eventList[i-1].GetEventTime(), t - eventList[i-1].GetEventTime() );
 			return kbLerp( eventList[i-1].GetEventValue(), eventList[i].GetEventValue(), lerp );
 		}
 	}
 
-//	kbLog( "Gah!");
+//	blk::log( "Gah!");
 	return eventList.back().GetEventValue();
 }
 

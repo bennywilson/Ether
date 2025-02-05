@@ -407,7 +407,7 @@ public:
 			delete m_States[i];
 			m_States[i] = stateNodes[i];
 
-			kbErrorCheck( stateNodes[i] != nullptr && m_States[i] != nullptr, "IStateMachine::InitializeStates() - NULL state.  Please call InitializeStates with proper values" );
+			blk::error_check( stateNodes[i] != nullptr && m_States[i] != nullptr, "IStateMachine::InitializeStates() - NULL state.  Please call InitializeStates with proper values" );
 		}
 
 		InitializeStateMachine_Internal();
@@ -420,7 +420,7 @@ public:
 	void RequestStateChange( const StateEnum newState ) {
 
 		if ( newState < (StateEnum)(0) || newState >= StateEnum::NumStates ) {
-			kbError( "IStateMachine::RequestStateChange() - Invalid State requested" );
+			blk::error( "IStateMachine::RequestStateChange() - Invalid State requested" );
 		}
 
 		if ( newState == m_CurrentState ) {
@@ -431,7 +431,7 @@ public:
 			m_States[m_CurrentState]->EndState( newState );
 		}
 
-		kbErrorCheck( m_States[newState] != nullptr, "IStateMachine::RequestStateChange() - NULL state.  Please call InitializeStates with proper values" );
+		blk::error_check( m_States[newState] != nullptr, "IStateMachine::RequestStateChange() - NULL state.  Please call InitializeStates with proper values" );
 
 		m_PreviousState = m_CurrentState;
 		m_CurrentState = newState;
@@ -466,7 +466,7 @@ class ISingleton {
 public:
 
 	ISingleton()  {
-		kbErrorCheck( m_pInstance == nullptr, "Multiple instances of an ISingleton" );
+		blk::error_check( m_pInstance == nullptr, "Multiple instances of an ISingleton" );
 	}
 
 	static T * Get() {

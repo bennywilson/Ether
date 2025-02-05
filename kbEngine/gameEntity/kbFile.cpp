@@ -25,12 +25,12 @@ kbFile::~kbFile() { }
 bool kbFile::Open(const std::string& fileName, const kbFileType_t fileType) {
 
 	if (fileName.empty()) {
-		kbWarning("kbFile::Open() - Empty file name");
+		blk::warning("kbFile::Open() - Empty file name");
 		return false;
 	}
 
 	if (fileType != FT_Read && fileType != FT_Write) {
-		kbWarning("kbFile::Open() - %s has an invalid file type", fileName.c_str());
+		blk::warning("kbFile::Open() - %s has an invalid file type", fileName.c_str());
 		return false;
 	}
 
@@ -74,7 +74,7 @@ bool kbFile::Open(const std::string& fileName, const kbFileType_t fileType) {
 /// kbFile::Close
 void kbFile::Close() {
 	if (m_FileType != FT_Write && m_FileType != FT_Read) {
-		kbWarning("kbFile::Close() - Tried to close %s with an invalid file type", m_FileName.c_str());
+		blk::warning("kbFile::Close() - Tried to close %s with an invalid file type", m_FileName.c_str());
 		return;
 	}
 
@@ -93,7 +93,7 @@ void kbFile::Close() {
 /// kbFile::ReadGameEntity
 kbGameEntity* kbFile::ReadGameEntity() {
 	if (m_FileType != FT_Read) {
-		kbWarning("kbFile::ReadGameEntity() - Tried to read from file %s, but the file does not have the correct type.", m_FileName.c_str());
+		blk::warning("kbFile::ReadGameEntity() - Tried to read from file %s, but the file does not have the correct type.", m_FileName.c_str());
 		return false;
 	}
 	return ReadGameEntity_Internal();
@@ -489,7 +489,7 @@ void kbFile::ReadProperty(const kbTypeInfoVar* const pTypeInfoVar, byte* const b
 			}
 
 			if (i == enumList->size()) {
-				kbWarning("Enum value out of range");
+				blk::warning("Enum value out of range");
 			}
 		}
 	}
@@ -508,12 +508,12 @@ bool kbFile::WriteGameEntity(const kbGameEntity* pGameObject) {
 /// kbFile::WriteGameEntity_Internal
 bool kbFile::WriteGameEntity_Internal(const kbGameEntity* pGameObject, std::string& curTab) {
 	if (m_FileType != FT_Write) {
-		kbWarning("kbFile::WriteGameEntity() - Tried to write to file %s, but the file does not have the correct type.", m_FileName.c_str());
+		blk::warning("kbFile::WriteGameEntity() - Tried to write to file %s, but the file does not have the correct type.", m_FileName.c_str());
 		return false;
 	}
 
 	if (pGameObject == NULL) {
-		kbWarning("kbFile::WriteGameEntity() - Tried to write to file %s, but the game object passed in is null.", m_FileName.c_str());
+		blk::warning("kbFile::WriteGameEntity() - Tried to write to file %s, but the game object passed in is null.", m_FileName.c_str());
 		return false;
 	}
 
@@ -712,7 +712,7 @@ void kbFile::WriteProperty(const kbTypeInfoType_t propertyType, const std::strin
 			int& enumIntValue = *((int*)byteOffsetToVar);
 
 			if (enumIntValue < 0 || enumIntValue >= enumList->size()) {
-				kbWarning("Enum value out of range! for %s", structName.c_str());
+				blk::warning("Enum value out of range! for %s", structName.c_str());
 				enumIntValue = 0;
 			}
 
@@ -725,18 +725,18 @@ void kbFile::WriteProperty(const kbTypeInfoType_t propertyType, const std::strin
 /// kbFile::WritePackage
 bool kbFile::WritePackage(const kbPackage& package) {
 	if (m_FileType != FT_Write) {
-		kbWarning("kbFile::WritePackage() - Tried to write to file %s, but the file does not have the correct type.", m_FileName.c_str());
+		blk::warning("kbFile::WritePackage() - Tried to write to file %s, but the file does not have the correct type.", m_FileName.c_str());
 		return false;
 	}
 
 	if (package.NumFolders() == 0) {
-		kbWarning("kbFile::WritePackage() - Tried to write to file %s with no folders, m_FileName.c_str() ");
+		blk::warning("kbFile::WritePackage() - Tried to write to file %s with no folders, m_FileName.c_str() ");
 		return false;
 	}
 
 	std::string curTab = "\t";
 
-	kbLog("Writing package %s", package.GetPackageName().c_str());
+	blk::log("Writing package %s", package.GetPackageName().c_str());
 
 	for (int i = 0; i < package.NumFolders(); i++) {
 		const std::vector< class kbPrefab* >& prefabs = package.GetPrefabsForFolder(i);
@@ -785,7 +785,7 @@ kbPackage* kbFile::ReadPackage(const bool bLoadAssetsImmediately) {
 	m_bLoadAssetsImmediately = bLoadAssetsImmediately;
 
 	if (m_FileType != FT_Read) {
-		kbWarning("kbFile::ReadPackage() - Tried to read to file %s, but the file does not have the correct type.", m_FileName.c_str());
+		blk::warning("kbFile::ReadPackage() - Tried to read to file %s, but the file does not have the correct type.", m_FileName.c_str());
 		return false;
 	}
 
@@ -806,19 +806,19 @@ kbPackage* kbFile::ReadPackage(const bool bLoadAssetsImmediately) {
 		const unsigned int NumPrefabsInFolder = std::stoi(nextToken);
 
 		if (NumPrefabsInFolder > 256) {
-			kbError("Too many prefabs in folder");
+			blk::error("Too many prefabs in folder");
 		}
 
 		for (unsigned int prefabIdx = 0; prefabIdx < NumPrefabsInFolder; prefabIdx++) {
 			ReadToken(nextToken);
 			if (nextToken != "kbPrefab") {
-				kbError("Expected 'kbPrefab' while reading file");
+				blk::error("Expected 'kbPrefab' while reading file");
 			}
 
 			ReadToken(nextToken);
 			const unsigned int NumEntitiesInPrefab = std::stoi(nextToken);
 			if (NumEntitiesInPrefab > 16) {
-				kbError("Too many entities in prefab");
+				blk::error("Too many entities in prefab");
 			}
 
 			kbPrefab* pPrefab = new kbPrefab();

@@ -5,6 +5,7 @@
 // 2016 kbEngine 2.0
 //===================================================================================================
 #include "kbCore.h"
+#include "containers.h"
 #include "kbVector.h"
 #include "kbQuaternion.h"
 #include "kbBounds.h"
@@ -59,7 +60,7 @@ void kbEntity::AddComponent( kbComponent *const pComponent, int indexToInsertAt 
 void kbEntity::RemoveComponent( kbComponent *const pComponent ) {
 
 	// TODO: This might move the game logic component from the back of the list!
-	VectorRemoveFast( m_Components, pComponent );
+	blk::std_remove_swap( m_Components, pComponent );
 }
 
 //===================================================================================================
@@ -115,7 +116,7 @@ void kbGameEntityPtr::SetEntity( kbGameEntity *const pGameEntity ) {
 
 		if ( GUIDToEntityIt != g_GUIDToEntityMap.cend() && GUIDToEntityIt->second != pGameEntity && GUIDToEntityIt->second != nullptr ) {
 
-			kbError( "kbGameEntityPtr::SetEntity() - Entities %s && %s share the same guid - %u %u %u %u", 
+			blk::error( "kbGameEntityPtr::SetEntity() - Entities %s && %s share the same guid - %u %u %u %u", 
 					  pGameEntity->GetName().c_str(), GUIDToEntityIt->second->GetName().c_str(),
 					  m_GUID.m_iGuid[0], m_GUID.m_iGuid[1], m_GUID.m_iGuid[2], m_GUID.m_iGuid[3] );
 		}
@@ -129,7 +130,7 @@ void kbGameEntityPtr::SetEntity( kbGameEntity *const pGameEntity ) {
 	std::unordered_map<int, kbGameEntity *>::const_iterator IDToEntityIt = g_IndexToEntityMap.find( m_EntityId );
 
 	if ( IDToEntityIt != g_IndexToEntityMap.cend() && IDToEntityIt->second != pGameEntity && IDToEntityIt->second != nullptr ) {
-		kbError( "kbGameEntityPtr::SetEntity() - Entities %s && %s share the same guid - %u %u %u %u", 
+		blk::error( "kbGameEntityPtr::SetEntity() - Entities %s && %s share the same guid - %u %u %u %u", 
 				 pGameEntity->GetName().c_str(), IDToEntityIt->second->GetName().c_str(),
 				 m_GUID.m_iGuid[0], m_GUID.m_iGuid[1], m_GUID.m_iGuid[2], m_GUID.m_iGuid[3] );
 	}
@@ -207,7 +208,7 @@ kbGameEntity::kbGameEntity( const kbGUID *const guid, const bool bIsPrefab ) :
 		} else if ( g_UseEditor == true ) {
 			CoCreateGuid( &m_GUID.m_Guid );
 		} else {
-			kbError( "kbGameEntity::kbGameEntity() - Prefab created with invalid GUID" );
+			blk::error( "kbGameEntity::kbGameEntity() - Prefab created with invalid GUID" );
 		}
 	}
 
@@ -238,7 +239,7 @@ kbGameEntity::kbGameEntity( const kbGameEntity * pGameEntity, const bool bIsPref
 		if ( i == 0 ) {
 			m_pTransformComponent = (kbTransformComponent*)newComponent;
 			if ( m_pTransformComponent->IsA( kbTransformComponent::GetType() ) == false ) {
-				kbError( "kbGameEntity::kbGameEntity() - Somehow the first component is not the transform component" );
+				blk::error( "kbGameEntity::kbGameEntity() - Somehow the first component is not the transform component" );
 			}
 		}
 	}
@@ -264,7 +265,7 @@ kbGameEntity::kbGameEntity( const kbGameEntity * pGameEntity, const bool bIsPref
 		} else if ( g_UseEditor == true ) {
 			CoCreateGuid( &m_GUID.m_Guid );
 		} else {
-			kbError( "kbGameEntity::kbGameEntity() - Prefab created with invalid GUID" );
+			blk::error( "kbGameEntity::kbGameEntity() - Prefab created with invalid GUID" );
 		}
 	}
 
@@ -298,7 +299,7 @@ kbGameEntity::~kbGameEntity() {
 		g_GUIDToEntityMap.erase( m_GUID );
 	} 
 
-	kbErrorCheck( m_EntityId != INVALID_ENTITYID, "kbGameEntity::~kbGameEntity() - Destroying entity with an invalid entity id" );
+	blk::error_check( m_EntityId != INVALID_ENTITYID, "kbGameEntity::~kbGameEntity() - Destroying entity with an invalid entity id" );
 	g_IndexToEntityMap.erase( m_EntityId );
 }
 
@@ -308,12 +309,12 @@ kbGameEntity::~kbGameEntity() {
 void kbGameEntity::AddComponent( kbComponent *const pComponent, int indexToInsertAt ) {
 
 	if ( pComponent == nullptr || pComponent->IsA( kbGameComponent::GetType() ) == false ) {
-		kbError( "%s is trying to add a null component or one that is not a kbGameComponent.", GetName().c_str() );
+		blk::error( "%s is trying to add a null component or one that is not a kbGameComponent.", GetName().c_str() );
 	}
 
 	if ( pComponent->IsA( kbActorComponent::GetType() ) ) {
 		if ( m_pActorComponent != nullptr ) {
-			kbError( "%s is trying to add multiple kbGameLogicComponent.", GetName().c_str() );
+			blk::error( "%s is trying to add multiple kbGameLogicComponent.", GetName().c_str() );
 			return;
 		}
 

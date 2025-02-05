@@ -1,4 +1,4 @@
-/// renderer_vk.h	
+/// renderer_vk.cpp
 ///
 /// 2025 kbEngine 2.0
 
@@ -47,42 +47,48 @@ void Renderer_VK::initialize(HWND hwnd, const uint32_t frameWidth, const uint32_
 		debugUtilsMessengerCI.messageType = VK_DEBUG_UTILS_MESSAGE_TYPE_GENERAL_BIT_EXT | VK_DEBUG_UTILS_MESSAGE_TYPE_VALIDATION_BIT_EXT;
 		debugUtilsMessengerCI.pfnUserCallback = nullptr;
 		debugUtilsMessengerCI.pNext = instanceCreateInfo.pNext;
-		instanceCreateInfo.pNext = &debugUtilsMessengerCI;
+		//instanceCreateInfo.pNext = &debugUtilsMessengerCI;
 	}
 
 	// Enable the debug utils extension if available (e.g. when debugging tools are present)
-	m_supported_extensions.push_back(VK_EXT_DEBUG_UTILS_EXTENSION_NAME);
-	/*
-		instanceCreateInfo.enabledExtensionCount = (uint32_t)m_supported_extensions.size();
-		instanceCreateInfo.ppEnabledExtensionNames = m_supported_extensions.data();
+	extensions.push_back(VK_EXT_DEBUG_UTILS_EXTENSION_NAME);
+	instanceCreateInfo.enabledExtensionCount = (uint32_t)extensions.size();
+	instanceCreateInfo.ppEnabledExtensionNames = extensions.data();
 
-		const char* validationLayerName = "VK_LAYER_KHRONOS_validation";
-		if (settings.validation) {
-			// Check if this layer is available at instance level
-			uint32_t instanceLayerCount;
-			vkEnumerateInstanceLayerProperties(&instanceLayerCount, nullptr);
-			std::vector<VkLayerProperties> instanceLayerProperties(instanceLayerCount);
-			vkEnumerateInstanceLayerProperties(&instanceLayerCount, instanceLayerProperties.data());
-			bool validationLayerPresent = false;
-			for (VkLayerProperties& layer : instanceLayerProperties) {
-				if (strcmp(layer.layerName, validationLayerName) == 0) {
-					validationLayerPresent = true;
-					break;
-				}
+
+	const char* validationLayerName = "VK_LAYER_KHRONOS_validation";
+	{
+		// Check if this layer is available at instance level
+		uint32_t instanceLayerCount;
+		vkEnumerateInstanceLayerProperties(&instanceLayerCount, nullptr);
+		std::vector<VkLayerProperties> instanceLayerProperties(instanceLayerCount);
+		vkEnumerateInstanceLayerProperties(&instanceLayerCount, instanceLayerProperties.data());
+		bool validationLayerPresent = false;
+		for (VkLayerProperties& layer : instanceLayerProperties) {
+			if (strcmp(layer.layerName, validationLayerName) == 0) {
+				validationLayerPresent = true;
+				break;
 			}
-			if (validationLayerPresent) {
-				instanceCreateInfo.ppEnabledLayerNames = &validationLayerName;
-				instanceCreateInfo.enabledLayerCount = 1;
-			} else {
-				std::cerr << "Validation layer VK_LAYER_KHRONOS_validation not present, validation is disabled";
-			}
-		}*/
-	VkResult result = vkCreateInstance(&instanceCreateInfo, nullptr, &instance);
-	
+		}
+		if (validationLayerPresent) {
+			instanceCreateInfo.ppEnabledLayerNames = &validationLayerName;
+			instanceCreateInfo.enabledLayerCount = 1;
+		} else {
+			//	std::cerr << "Validation layer VK_LAYER_KHRONOS_validation not present, validation is disabled";
+		}
+	}
+
+	//  Instance
+	check_vk(vkCreateInstance(&instanceCreateInfo, nullptr, &m_instance));
+
+	// Pipeline
+/*	VkPipelineCacheCreateInfo pipelineCacheCreateInfo = {};
+	pipelineCacheCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_CACHE_CREATE_INFO;
+	check_vk(vkCreatePipelineCache(m_device, &pipelineCacheCreateInfo, nullptr, &pipelineCache));*/
 }
 
 /// Renderer_VK::create_pipeline
-RenderPipeline* Renderer_VK::create_pipeline(const std::wstring & path) {
+RenderPipeline* Renderer_VK::create_pipeline(const std::wstring& path) {
 	RenderPipeline_VK* const pipe = new RenderPipeline_VK();
 	return pipe;
 }

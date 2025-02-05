@@ -92,7 +92,7 @@ void kbUndoStack::Push(kbUndoAction* const action) {
 	action->m_UndoActionId = m_NextUndoActionId++;
 	m_Stack[m_StackCurrent] = action;
 
-	//kbLog( "Push() ------------------------------------------" );
+	//blk::log( "Push() ------------------------------------------" );
 	DumpStack();
 }
 
@@ -117,7 +117,7 @@ void kbUndoStack::Undo() {
 		m_StackCurrent = g_UndoStackSize - 1;
 	}
 
-	//kbLog( "Undo() ------------------------------------------" );
+	//blk::log( "Undo() ------------------------------------------" );
 	DumpStack();
 }
 
@@ -143,7 +143,7 @@ void kbUndoStack::Redo() {
 	g_bEditorIsUndoingAnAction = false;
 
 
-	kbLog("Redo() ------------------------------------------");
+	blk::log("Redo() ------------------------------------------");
 	DumpStack();
 }
 
@@ -156,9 +156,9 @@ void kbUndoStack::DumpStack() {
 		bottomIdx += g_UndoStackSize;
 	}
 	/*
-		kbLog( "Stack Len = %d", m_StackLength );
-		kbLog( "Stack cur = %d", m_StackCurrent );
-		kbLog( "Stack top = %d", m_StackTop );
+		blk::log( "Stack Len = %d", m_StackLength );
+		blk::log( "Stack cur = %d", m_StackCurrent );
+		blk::log( "Stack top = %d", m_StackTop );
 
 		for ( int i = g_UndoStackSize - 1; i >= 0; i-- ) {
 
@@ -177,13 +177,13 @@ void kbUndoStack::DumpStack() {
 			kbUndoAction *const undoAction = m_Stack[i];
 
 			if ( dynamic_cast<kbUndoSelectActor*>( undoAction ) != NULL ) {
-				kbLog( "%d: Undoing to Select %d actors.	%s",  i, ((kbUndoSelectActor*) undoAction)->NumSelected(), buffer);
+				blk::log( "%d: Undoing to Select %d actors.	%s",  i, ((kbUndoSelectActor*) undoAction)->NumSelected(), buffer);
 			} else if ( dynamic_cast<kbUndoDeleteActor*>( undoAction ) != NULL ) {
-				kbLog( "%d: Undoing delete %d actors	%s",  i, ((kbUndoDeleteActor*)undoAction)->NumDeleted(), buffer);
+				blk::log( "%d: Undoing delete %d actors	%s",  i, ((kbUndoDeleteActor*)undoAction)->NumDeleted(), buffer);
 			} else if ( dynamic_cast<kbUndoDeleteComponent*>( undoAction ) != NULL ) {
-				kbLog( "%d: Undoing delete component	%s", g_UndoStackSize - 1 - i, buffer );
+				blk::log( "%d: Undoing delete component	%s", g_UndoStackSize - 1 - i, buffer );
 			} else {
-				kbLog( "%d: Undoing		%s", i, buffer );
+				blk::log( "%d: Undoing		%s", i, buffer );
 			}
 		}*/
 }

@@ -61,7 +61,7 @@ void kbGame::InitGame( HWND hwnd, const int backBufferWidth, const int backBuffe
  *  kbGame::LoadMap
  */
 void kbGame::LoadMap( const std::string & mapName ) {
-	kbLog( "LoadMap() called on %s", mapName.c_str() );
+	blk::log( "LoadMap() called on %s", mapName.c_str() );
 
 	m_pLevelComp = nullptr;
 
@@ -288,8 +288,8 @@ void kbGame::Update() {
 			std::map<std::string, int> componentMap;
 
 			if ( g_DumpEntityInfo.GetBool() ) {
-				kbLog( "=============================================================================" );
-				kbLog( "Dumping entity and component info" );
+				blk::log( "=============================================================================" );
+				blk::log( "Dumping entity and component info" );
 
 			}
 
@@ -297,7 +297,7 @@ void kbGame::Update() {
 				const kbGameEntity *const pCurEntity = m_GameEntityList[i];
 
 				if ( g_DumpEntityInfo.GetBool() ) {
-					kbLog( "Entity [%d] - %s", i, pCurEntity->GetName().c_str() );
+					blk::log( "Entity [%d] - %s", i, pCurEntity->GetName().c_str() );
 				}
 
 				for ( int iComp = 0; iComp < pCurEntity->NumComponents(); iComp++ ) {
@@ -308,9 +308,9 @@ void kbGame::Update() {
 					if ( g_DumpEntityInfo.GetBool() ) {
 						kbTransformComponent * pTransformComponent = pComponent->GetAs<kbTransformComponent>();
 						if ( pTransformComponent != nullptr ) {
-							kbLog( "	Component [%d] - %s %s", iComp, pComponentTypeName.c_str(), pTransformComponent->GetName().c_str() );
+							blk::log( "	Component [%d] - %s %s", iComp, pComponentTypeName.c_str(), pTransformComponent->GetName().c_str() );
 						} else {
-							kbLog( "	Component [%d] - %s", iComp, pComponentTypeName.c_str());
+							blk::log( "	Component [%d] - %s", iComp, pComponentTypeName.c_str());
 						}
 					}
 
@@ -365,7 +365,7 @@ void kbGame::Update() {
  */
 kbGameEntity * kbGame::CreateEntity( const kbGameEntity *const pPrefab, const bool bIsPlayer ) {
 	if ( pPrefab == nullptr ) {
-		kbError( "kbGame::CreateEntity() - nullptr prefab passed in" );
+		blk::error( "kbGame::CreateEntity() - nullptr prefab passed in" );
 		return nullptr;
 	}
 
@@ -426,7 +426,7 @@ kbGameEntityPtr kbGame::GetEntityByName( const kbString entName ) {
  */
 void kbGame::SwapEntitiesByIdx( const size_t idx1, const size_t idx2 ) {
 	if ( idx1 < 0 || idx1 >= m_GameEntityList.size() || idx2 < 0 || idx2 >= m_GameEntityList.size() ) {
-		kbWarning( "kbGame::SwapEntitiesByIdx() - Invalid index(es) [%d], [%d]", idx1, idx2 );
+		blk::warning( "kbGame::SwapEntitiesByIdx() - Invalid index(es) [%d], [%d]", idx1, idx2 );
 		return;
 	}
 

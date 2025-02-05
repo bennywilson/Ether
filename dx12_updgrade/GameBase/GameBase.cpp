@@ -196,7 +196,7 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 
 	hAccelTable = LoadAccelerators(hInstance, MAKEINTRESOURCE(IDI_GAMEBASE));
 
-	InitializeKBEngine();
+	blk::initialize_engine();
 
 	EtherGame* pGame = nullptr;
 	kbEditor* applicationEditor = nullptr;
@@ -210,7 +210,7 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 			applicationEditor->LoadMap(mapName);
 		}
 	} else {
-//		g_renderer = new Renderer_VK();
+	//	g_renderer = new Renderer_VK();
 		g_renderer = new Renderer_D3D12();
 
 		g_renderer->initialize(hWnd, g_screen_width, g_screen_height);
@@ -248,7 +248,7 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 
 		} catch (char* const string) {
 			// todo : output error to console
-			kbLog(string);
+			blk::log(string);
 		}
 	}
 
@@ -266,7 +266,7 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 	delete g_pRenderer;
 	g_pRenderer = nullptr;
 
-	ShutdownKBEngine();
+	blk::shutdown_engine();
 
 	kbConsoleVarManager::DeleteConsoleVarManager();
 

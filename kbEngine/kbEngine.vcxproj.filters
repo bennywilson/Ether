@@ -326,6 +326,7 @@
     <ClInclude Include="renderer\renderer.h" />
     <ClInclude Include="renderer\vk\renderer_vk.h" />
     <ClInclude Include="renderer\vk\vk_defs.h" />
+    <ClInclude Include="core\containers.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="core\kbCore.cpp">

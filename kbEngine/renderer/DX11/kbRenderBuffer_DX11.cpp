@@ -29,7 +29,7 @@ void kbRenderBuffer::CreateVertexBuffer( const int numVerts, const int vertexSiz
 	vertexBufferDesc.StructureByteStride = 0;
 
 	HRESULT hr = g_pD3DDevice->CreateBuffer( &vertexBufferDesc, NULL, &m_pBuffer );
-	kbErrorCheck( SUCCEEDED(hr), "kbRenderBuffer::CreateVertexBuffer() - Failed to create vertex buffer" );
+	blk::error_check( SUCCEEDED(hr), "kbRenderBuffer::CreateVertexBuffer() - Failed to create vertex buffer" );
 
 #if defined(_DEBUG)
 	static int BufferNum = 0;
@@ -52,7 +52,7 @@ void kbRenderBuffer::CreateIndexBuffer( const int numIndices ) {
 	indexBufferDesc.StructureByteStride = 0;
 
 	HRESULT hr = g_pD3DDevice->CreateBuffer( &indexBufferDesc, NULL, &m_pBuffer );
-	kbErrorCheck( SUCCEEDED(hr), "kbRenderBuffer::CreateIndexBuffer() - Failed to create index buffer" );
+	blk::error_check( SUCCEEDED(hr), "kbRenderBuffer::CreateIndexBuffer() - Failed to create index buffer" );
 
 #if defined(_DEBUG)
 	static int BufferNum = 0;
@@ -72,7 +72,7 @@ void * kbRenderBuffer::Map() {
 	g_pD3DDevice->GetImmediateContext( &pImmediateContext );
 
 	HRESULT hr = pImmediateContext->Map( m_pBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &resource );
-	kbErrorCheck( SUCCEEDED(hr), "kbRenderBuffer::Map() - Failed to map vertex buffer" );
+	blk::error_check( SUCCEEDED(hr), "kbRenderBuffer::Map() - Failed to map vertex buffer" );
 
 	pImmediateContext->Release();
 
@@ -115,7 +115,7 @@ void kbRenderBuffer::CreateVertexBuffer( const std::vector< vertexLayout > & ver
 	vertexData.SysMemSlicePitch = 0;
 
 	HRESULT hr = g_pD3DDevice->CreateBuffer( &vertexBufferDesc, &vertexData, &m_pBuffer );
-	kbErrorCheck( SUCCEEDED(hr), "kbRenderBuffer::CreateVertexBuffer() - Failed to create vertex buffer" );
+	blk::error_check( SUCCEEDED(hr), "kbRenderBuffer::CreateVertexBuffer() - Failed to create vertex buffer" );
 }
 
 /**
@@ -141,5 +141,5 @@ void kbRenderBuffer::CreateIndexBuffer( const std::vector<ushort> & indices ) {
 	indexData.SysMemSlicePitch = 0;
 
 	HRESULT hr = g_pD3DDevice->CreateBuffer( &indexBufferDesc, &indexData, &m_pBuffer );
-	kbErrorCheck( SUCCEEDED(hr), "kbRenderBuffer::CreateVertexBuffer() - Failed to create index buffer" );
+	blk::error_check( SUCCEEDED(hr), "kbRenderBuffer::CreateVertexBuffer() - Failed to create index buffer" );
 }

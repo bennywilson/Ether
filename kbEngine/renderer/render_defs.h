@@ -101,13 +101,16 @@ public:
 
 	virtual void release() {};
 
-	virtual void write_vertex_buffer(const std::vector<vertexLayout>& vertices);
-	virtual void write_index_buffer(const std::vector<uint16_t>& indices);
+	void write_vertex_buffer(const std::vector<vertexLayout>& vertices);
+	void write_index_buffer(const std::vector<uint16_t>& indices);
 
 	uint32_t num_elements() const { return m_num_elements; }
 	uint32_t size_bytes() const { return m_size_bytes; }
 
 private:
+	virtual void write_vb_internal(const std::vector<vertexLayout>& vertices) = 0;
+	virtual void write_ib_internal(const std::vector<uint16_t>& indices) = 0;
+
 	uint32_t m_num_elements = 0;
 	uint32_t m_size_bytes = 0;
 };

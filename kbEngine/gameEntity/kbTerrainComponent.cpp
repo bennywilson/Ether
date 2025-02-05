@@ -58,7 +58,7 @@ std::vector<debugNormal> terrainNormals;
  *	grassRenderObject_t::Initialize
  */
 void kbGrass::grassRenderObject_t::Initialize( const kbVec3 & ownerPosition ) {
-	kbErrorCheck( m_pModel == nullptr && m_pComponent == nullptr, "grassRenderObject_t::Initialize() - m_pModel or m_pComponent is not NULL" );
+	blk::error_check( m_pModel == nullptr && m_pComponent == nullptr, "grassRenderObject_t::Initialize() - m_pModel or m_pComponent is not NULL" );
 
 	m_pModel = new kbModel();
 	m_pComponent = new kbGameComponent();
@@ -78,7 +78,7 @@ void kbGrass::grassRenderObject_t::Initialize( const kbVec3 & ownerPosition ) {
  *	grassRenderObject_t::Shutdown
  */
 void kbGrass::grassRenderObject_t::Shutdown() {
-	kbErrorCheck( m_pModel != nullptr && m_pComponent != nullptr, "grassRenderObject_t::Initialize() - m_pModel or m_pComponent is not NULL" );
+	blk::error_check( m_pModel != nullptr && m_pComponent != nullptr, "grassRenderObject_t::Initialize() - m_pModel or m_pComponent is not NULL" );
 
 	delete m_pComponent;
 	m_pComponent = nullptr;
@@ -137,7 +137,7 @@ void kbGrass::EditorChange( const std::string & propertyName ) {
 	Super::EditorChange( propertyName );
 
 	if ( m_GrassCellsPerTerrainSide < 0 ) {
-		kbWarning( "kbGrass::EditorChange() - Grass Cells Per Terrain Side must be greater than 0" );
+		blk::warning( "kbGrass::EditorChange() - Grass Cells Per Terrain Side must be greater than 0" );
 		m_GrassCellsPerTerrainSide = 1;
 	}
 
@@ -393,7 +393,7 @@ void kbGrass::RefreshGrass() {
 	m_bUpdateMaterial = false;
 	m_bUpdatePointCloud = false;
 
-	kbLog( "Refreshing grass took %f seconds.", g_GlobalTimer.TimeElapsedSeconds() - startRefreshGrassTime );
+	blk::log( "Refreshing grass took %f seconds.", g_GlobalTimer.TimeElapsedSeconds() - startRefreshGrassTime );
 }
 
 /**
@@ -470,7 +470,7 @@ void kbTerrainComponent::EditorChange( const std::string & propertyName ) {
  *	kbTerrainComponent::GenerateTerrain
  */
 void kbTerrainComponent::GenerateTerrain() {
-    kbErrorCheck( m_pHeightMap != nullptr, "kbTerrainComponent::GenerateTerrain() - No height map file found for terrain component on entity %s", GetOwner()->GetName().c_str() );
+    blk::error_check( m_pHeightMap != nullptr, "kbTerrainComponent::GenerateTerrain() - No height map file found for terrain component on entity %s", GetOwner()->GetName().c_str() );
 
 	struct pixelData {
 		byte r;

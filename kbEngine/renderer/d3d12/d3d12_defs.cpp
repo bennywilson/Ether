@@ -6,23 +6,24 @@
 #include "renderer_d3d12.h"
 #include "d3d12_defs.h"
 
-/// RenderBuffer_D3D12::release
-void RenderBuffer_D3D12::release() {
-	m_vertex_buffer.Reset();
-	m_index_buffer.Reset();
-	/*if (m_vertex_buffer.Get()) {
-		SAFE_RELEASE(m_vertex_buffer);
-	}
-
-	if (m_index_buffer.Get()) {
-		SAFE_RELEASE(m_index_buffer);
-	}*/
+/// Texture_D3D12::load_internal
+bool Texture_D3D12::load_internal() {
+	return true;
 }
 
-/// RenderBuffer_D3D12::write_vertex_buffer
-void RenderBuffer_D3D12::write_vertex_buffer(const std::vector<vertexLayout>& vertices) {
-	RenderBuffer::write_vertex_buffer(vertices);
+/// Texture_D3D12::release_internal
+void Texture_D3D12::release_internal() {
 
+}
+
+
+/// RenderBuffer_D3D12::release
+void RenderBuffer_D3D12::release() {
+	m_buffer.Reset();
+}
+
+/// RenderBuffer_D3D12::write_vb_internal
+void RenderBuffer_D3D12::write_vb_internal(const std::vector<vertexLayout>& vertices) {
 	vector<vertexLayout> new_verts;
 for (auto& vert: vertices) {
 	vertexLayout new_vert = vert;
@@ -45,25 +46,23 @@ for (auto& vert: vertices) {
 		&CD3DX12_RESOURCE_DESC::Buffer(buffer_size),
 		D3D12_RESOURCE_STATE_GENERIC_READ,
 		nullptr,
-		IID_PPV_ARGS(&m_vertex_buffer)));
+		IID_PPV_ARGS(&m_buffer)));
 
 	// Copy the triangle data to the vertex buffer.
 	UINT8* pVertexDataBegin = nullptr;
 	CD3DX12_RANGE read_range(0, 0);        // We do not intend to read from this resource on the CPU.
-	check_result(m_vertex_buffer->Map(0, &read_range, reinterpret_cast<void**>(&pVertexDataBegin)));
+	check_result(m_buffer->Map(0, &read_range, reinterpret_cast<void**>(&pVertexDataBegin)));
 	memcpy(pVertexDataBegin, new_verts.data(), buffer_size);
-	m_vertex_buffer->Unmap(0, nullptr);
+	m_buffer->Unmap(0, nullptr);
 
 	// Initialize the vertex buffer view.
-	m_vertex_buffer_view.BufferLocation = m_vertex_buffer->GetGPUVirtualAddress();
+	m_vertex_buffer_view.BufferLocation = m_buffer->GetGPUVirtualAddress();
 	m_vertex_buffer_view.StrideInBytes = sizeof(vertexLayout);
 	m_vertex_buffer_view.SizeInBytes = buffer_size;
 }
 
-/// RenderBuffer_D3D12::write_index_buffer
-void RenderBuffer_D3D12::write_index_buffer(const std::vector<uint16_t>& indices) {
-	RenderBuffer::write_index_buffer(indices);
-
+/// RenderBuffer_D3D12::write_ib_internal
+void RenderBuffer_D3D12::write_ib_internal(const std::vector<uint16_t>& indices) {
 	auto device = ((Renderer_D3D12*)(g_renderer))->get_device();
 
 	const uint32_t buffer_size = size_bytes();
@@ -78,17 +77,18 @@ void RenderBuffer_D3D12::write_index_buffer(const std::vector<uint16_t>& indices
 		&CD3DX12_RESOURCE_DESC::Buffer(buffer_size),
 		D3D12_RESOURCE_STATE_GENERIC_READ,
 		nullptr,
-		IID_PPV_ARGS(&m_index_buffer)));
+		IID_PPV_ARGS(&m_buffer)));
 
 	// Copy the triangle data to the vertex buffer.
 	UINT8* index_buffer = nullptr;
 	CD3DX12_RANGE read_range(0, 0);        // We do not intend to read from this resource on the CPU.
-	check_result(m_index_buffer->Map(0, &read_range, reinterpret_cast<void**>(&index_buffer)));
+	check_result(m_buffer->Map(0, &read_range, reinterpret_cast<void**>(&index_buffer)));
 	memcpy(index_buffer, indices.data(), buffer_size);
-	m_index_buffer->Unmap(0, nullptr);
+	m_buffer->Unmap(0, nullptr);
 
-	// Initialize the vertex buffer view.
-	m_index_buffer_view.BufferLocation = m_index_buffer->GetGPUVirtualAddress();
+	// Initialize the index buffer view.
+	m_index_buffer_view.BufferLocation = m_buffer->GetGPUVirtualAddress();
 	m_index_buffer_view.Format = DXGI_FORMAT_R16_UINT;
 	m_index_buffer_view.SizeInBytes = buffer_size;
 }
+

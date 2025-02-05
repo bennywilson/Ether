@@ -6,6 +6,7 @@
 #include <sstream>
 #include <cctype>
 #include "kbCore.h"
+#include "containers.h"
 #include "kbInputManager.h"
 #include "kbConsole.h"
 
@@ -19,7 +20,7 @@ kbInputManager::kbInputManager() :
 	m_MouseBehavior(MB_LockToCenter) {
 
 	if (g_pInputManager != nullptr) {
-		kbError("kbInputManager::kbInputManager() - g_pInputManager has already been set");
+		blk::error("kbInputManager::kbInputManager() - g_pInputManager has already been set");
 	}
 
 	m_Input.m_LeftStick.Set(0.0f, 0.0f);
@@ -33,7 +34,7 @@ kbInputManager::kbInputManager() :
 ///	kbInputManager::~kbInputManager
 kbInputManager::~kbInputManager() {
 	if (g_pInputManager == nullptr) {
-		kbError("kbInputManager::~kbInputManager() - g_pInputManager was already nullptr");
+		blk::error("kbInputManager::~kbInputManager() - g_pInputManager was already nullptr");
 	}
 
 	g_pInputManager = nullptr;
@@ -404,10 +405,10 @@ void kbInputManager::MapKeysToCallback(const std::string& stringCombo, kbInputCa
 
 		if (curKey.size() != 1 || curKey[0] < '!' || curKey[0] > '}') {
 			if (curKey.size() == 0) {
-				kbError("kbInputManager::MapKeysToCallback() - %s mapped invalid key.", pCB->GetInputCBName());
+				blk::error("kbInputManager::MapKeysToCallback() - %s mapped invalid key.", pCB->GetInputCBName());
 			}
 			else {
-				kbError("kbInputManager::MapKeysToCallback() - %s mapped invalid key %d.", pCB->GetInputCBName(), curKey[0]);
+				blk::error("kbInputManager::MapKeysToCallback() - %s mapped invalid key %d.", pCB->GetInputCBName(), curKey[0]);
 			}
 			continue;
 		}
@@ -423,7 +424,7 @@ void kbInputManager::MapKeysToCallback(const std::string& stringCombo, kbInputCa
 
 	// Check if the key combination already exiwsts
 	if (m_KeyComboToCallbackMap.find(newComboKey) != m_KeyComboToCallbackMap.end()) {
-		kbError("kbInputManager::MapKeysToCallback() - %s mapped tried to map over an existing key combo %s with description %s.", pCB->GetInputCBName(), stringCombo, m_KeyComboToCallbackMap.find(newComboKey)->second.m_HelpDescription);
+		blk::error("kbInputManager::MapKeysToCallback() - %s mapped tried to map over an existing key combo %s with description %s.", pCB->GetInputCBName(), stringCombo, m_KeyComboToCallbackMap.find(newComboKey)->second.m_HelpDescription);
 		return;
 	}
 
@@ -445,7 +446,7 @@ void kbInputManager::MapKeysToCallback(const std::string& stringCombo, kbInputCa
 ///	kbInputManager::UnmapCallback
 void kbInputManager::UnmapCallback(kbInputCallback* pCB) {
 	/*	if ( stringCombo.length() == 0 || pCB == nullptr ) {
-			kbError( "kbInputManager::RegisterKeyToCallback() - Called with bad data" );
+			blk::error( "kbInputManager::RegisterKeyToCallback() - Called with bad data" );
 			return;
 		}
 
@@ -454,9 +455,9 @@ void kbInputManager::UnmapCallback(kbInputCallback* pCB) {
 
 ///	kbInputManager::RegisterInputListener
 void kbInputManager::RegisterInputListener(IInputListener* const pListener) {
-	kbErrorCheck(pListener != nullptr, "kbInputManager::RegisterInputListener() - null pListener");
+	blk::error_check(pListener != nullptr, "kbInputManager::RegisterInputListener() - null pListener");
 
-	if (VectorFind(m_InputListeners, pListener) != m_InputListeners.end()) {
+	if (blk::std_find(m_InputListeners, pListener) != m_InputListeners.end()) {
 		return;
 	}
 
@@ -466,8 +467,8 @@ void kbInputManager::RegisterInputListener(IInputListener* const pListener) {
 ///	kbInputManager::UnregisterInputListener
 void kbInputManager::UnregisterInputListener(IInputListener* const pListener) {
 
-	kbErrorCheck(pListener != nullptr, "kbInputManager::UnregisterInputListener() - null pListener");
-	//kbErrorCheck( VectorFind( m_InputListeners, pListener ) != m_InputListeners.end(), "kbInputManager::RegisterInputListener() - pListener already registered" ); 
+	blk::error_check(pListener != nullptr, "kbInputManager::UnregisterInputListener() - null pListener");
+	//blk::error_check( VectorFind( m_InputListeners, pListener ) != m_InputListeners.end(), "kbInputManager::RegisterInputListener() - pListener already registered" ); 
 
-	VectorRemoveFast(m_InputListeners, pListener);
+	blk::std_remove_swap(m_InputListeners, pListener);
 }

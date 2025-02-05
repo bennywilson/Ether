@@ -21,7 +21,7 @@ class kbRenderBuffer {
 public:
 	kbRenderBuffer() : m_pBuffer( nullptr ) { }
 	~kbRenderBuffer() {
-		kbWarningCheck( m_pBuffer == nullptr, "kbRenderBuffer::~kbRenderBuffer - Destructing a render buffer that hasn't been released" );
+		blk::warning_check( m_pBuffer == nullptr, "kbRenderBuffer::~kbRenderBuffer - Destructing a render buffer that hasn't been released" );
 	}
 
 	virtual void Release();

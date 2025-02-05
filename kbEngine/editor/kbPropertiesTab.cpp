@@ -138,7 +138,7 @@ void kbPropertiesTab::EventCB(const widgetCBObject* const widgetCBObject) {
 void kbPropertiesTab::CheckButtonCB(Fl_Widget* widget, void* voidPtr) {
 
 	propertiesTabCBData_t* const userData = static_cast<propertiesTabCBData_t*>(voidPtr);
-	kbErrorCheck(userData != nullptr, "bPropertiesTab::CheckButtonCB() - NULL userData");
+	blk::error_check(userData != nullptr, "bPropertiesTab::CheckButtonCB() - NULL userData");
 
 	Fl_Check_Button* const pCheckButton = static_cast<Fl_Check_Button*>(widget);
 
@@ -180,7 +180,7 @@ void kbPropertiesTab::CheckButtonCB(Fl_Widget* widget, void* voidPtr) {
 void kbPropertiesTab::PointerButtonCB(Fl_Widget* widget, void* voidPtr) {
 
 	propertiesTabCBData_t* const userData = static_cast<propertiesTabCBData_t*>(voidPtr);
-	kbErrorCheck(userData != nullptr, "kbPropertiesTab::PointerButtonCB() - null user data passed in");
+	blk::error_check(userData != nullptr, "kbPropertiesTab::PointerButtonCB() - null user data passed in");
 
 	const std::string* const fieldName = (std::string*)userData->m_pVariablePtr;
 	if (userData->m_VariableType == KBTYPEINFO_GAMEENTITY) {
@@ -196,7 +196,7 @@ void kbPropertiesTab::PointerButtonCB(Fl_Widget* widget, void* voidPtr) {
 		}
 
 		if (fieldName == nullptr) {
-			kbWarning("kbPropertiesTab::PointerButtonCB() - Field name is null!");
+			blk::warning("kbPropertiesTab::PointerButtonCB() - Field name is null!");
 		}
 		else {
 			if (userData->m_pComponent != nullptr) {
@@ -238,7 +238,7 @@ void kbPropertiesTab::PointerButtonCB(Fl_Widget* widget, void* voidPtr) {
 void kbPropertiesTab::ClearPointerButtonCB(Fl_Widget* widget, void* voidPtr) {
 
 	propertiesTabCBData_t* const userData = static_cast<propertiesTabCBData_t*>(voidPtr);
-	kbErrorCheck(userData != nullptr, "kbPropertiesTab::ClearPointerButtonCB() - null user data passed in");
+	blk::error_check(userData != nullptr, "kbPropertiesTab::ClearPointerButtonCB() - null user data passed in");
 
 	const std::string* const fieldName = (std::string*)userData->m_pVariablePtr;
 	if (userData->m_VariableType == KBTYPEINFO_GAMEENTITY) {
@@ -303,7 +303,7 @@ bool IsNumeric(const char* const cString) {
 ///  kbPropertiesTab::TextFieldCB
 void kbPropertiesTab::TextFieldCB(Fl_Widget* widget, void* voidPtr) {
 	propertiesTabCBData_t* const userData = static_cast<propertiesTabCBData_t*>(voidPtr);
-	kbErrorCheck(userData != nullptr, "kbPropertiesTab::TextFieldCB() - NULL userData passed in");
+	blk::error_check(userData != nullptr, "kbPropertiesTab::TextFieldCB() - NULL userData passed in");
 
 	Fl_Input* const inputField = (Fl_Input*)widget;
 	std::string inputValue = inputField->value();
@@ -399,7 +399,7 @@ void kbPropertiesTab::TextFieldCB(Fl_Widget* widget, void* voidPtr) {
  */
 void kbPropertiesTab::ArrayExpandCB(Fl_Widget* widet, void* userData) {
 
-	kbErrorCheck(userData != nullptr, "kbPropertiesTab::ArrayExpandCB() - NULL userData passed in");
+	blk::error_check(userData != nullptr, "kbPropertiesTab::ArrayExpandCB() - NULL userData passed in");
 
 	varMetaData_t* entry = static_cast<varMetaData_t*>(userData);
 	entry->bExpanded = !entry->bExpanded;
@@ -415,7 +415,7 @@ void kbPropertiesTab::ArrayExpandCB(Fl_Widget* widet, void* userData) {
 void kbPropertiesTab::ArrayResizeCB(Fl_Widget* widget, void* voidPtr) {
 
 	propertiesTabCBData_t* const userData = static_cast<propertiesTabCBData_t*>(voidPtr);
-	kbErrorCheck(userData != nullptr, "kbPropertiesTab::ArrayResizeCB() - NULL userData passed in");
+	blk::error_check(userData != nullptr, "kbPropertiesTab::ArrayResizeCB() - NULL userData passed in");
 
 	const Fl_Input* const inputField = (Fl_Input*)widget;
 	const char* const inputText = inputField->value();
@@ -427,7 +427,7 @@ void kbPropertiesTab::ArrayResizeCB(Fl_Widget* widget, void* voidPtr) {
 	const int fieldValue = atoi(inputText);
 
 	if (fieldValue < 0 || fieldValue > 128) {
-		kbWarning("Array value is not between 0 and 128");
+		blk::warning("Array value is not between 0 and 128");
 		g_pPropertiesTab->RequestRefreshNextUpdate();
 		return;
 	}
@@ -474,7 +474,7 @@ void kbPropertiesTab::ArrayResizeCB(Fl_Widget* widget, void* voidPtr) {
 void kbPropertiesTab::EnumCB(Fl_Widget* widget, void* voidPtr) {
 
 	propertiesTabCBData_t* const userData = static_cast<propertiesTabCBData_t*>(voidPtr);
-	kbErrorCheck(userData != nullptr, "kbPropertiesTab::EnumCB() - NULL userData passed in");
+	blk::error_check(userData != nullptr, "kbPropertiesTab::EnumCB() - NULL userData passed in");
 
 	Fl_Choice* const pDropDown = (Fl_Choice*)widget;
 	int dropDownValue = pDropDown->value();
@@ -827,7 +827,7 @@ void kbPropertiesTab::RefreshProperty(kbEditorEntity* const pEntity, const std::
 		cbData.m_VariableType = propertyType;
 		cbData.m_GameEntityPtr = *pEntityPtr;
 
-		kbLog("Prop name is %s %d %d ", propertyName.c_str(), (UINT_PTR)pComponent, (UINT_PTR)pParentComponent);
+		blk::log("Prop name is %s %d %d ", propertyName.c_str(), (UINT_PTR)pComponent, (UINT_PTR)pParentComponent);
 		m_CallBackData.push_back(cbData);
 		b1->callback(&PointerButtonCB, static_cast<void*>(&m_CallBackData[m_CallBackData.size() - 1]));//static_cast< void * >( pComponent ) );
 		break;

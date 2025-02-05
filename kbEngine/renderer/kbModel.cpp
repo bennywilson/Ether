@@ -3,6 +3,7 @@
 /// 2016-2025 kbEngine
 
 #include <fbxsdk.h>
+#include <fstream>
 #include "kbCore.h"
 #include "kbVector.h"
 #include "kbIntersectionTests.h"
@@ -12,9 +13,8 @@
 #include "renderer_d3d12.h"
 #include "render_defs.h"
 
-
-#pragma pack( push, packing )
-#pragma pack( 1 )
+#pragma pack(push, packing)
+#pragma pack(1)
 
 typedef struct {
 	char				m_ID[10];
@@ -116,7 +116,7 @@ bool kbModel::Load_Internal() {
 bool kbModel::LoadMS3D() {
 	std::ifstream modelFile;
 	modelFile.open( m_FullFileName, std::ifstream::in | std::ifstream::binary );
-	kbErrorCheck( modelFile.good(), "kbModel::LoadMS3D() - Failed to load model %s", m_FullFileName.c_str() );
+	blk::error_check( modelFile.good(), "kbModel::LoadMS3D() - Failed to load model %s", m_FullFileName.c_str() );
 
 	// Find the file size
 	modelFile.seekg( 0, std::ifstream::end );
@@ -134,7 +134,7 @@ bool kbModel::LoadMS3D() {
 	const ms3dHeader_t *const pHeader = (const ms3dHeader_t *) pPtr;
 	pPtr += sizeof( ms3dHeader_t );
 
-	kbErrorCheck( strncmp( pHeader->m_ID, "MS3D000000", 10 ) == 0, "kbModel::LoadResource_Internal - Invalid model header %d for %s", pHeader->m_ID, m_FullFileName.c_str() );
+	blk::error_check( strncmp( pHeader->m_ID, "MS3D000000", 10 ) == 0, "kbModel::LoadResource_Internal - Invalid model header %d for %s", pHeader->m_ID, m_FullFileName.c_str() );
 
 	// Vertices
 	m_Bounds.Reset();
@@ -358,7 +358,7 @@ bool kbModel::LoadMS3D() {
 
 	for ( uint i = 0; i < m_Meshes.size(); i++ ) {
 
-		kbErrorCheck( ibIndex == m_Meshes[i].m_IndexBufferIndex, "kbModel::Load_Internal() - Index buffer mismatch" );
+		blk::error_check( ibIndex == m_Meshes[i].m_IndexBufferIndex, "kbModel::Load_Internal() - Index buffer mismatch" );
 
 		for ( uint iTris = 0; iTris < m_Meshes[i].m_NumTriangles; iTris++ ) {
 			
@@ -467,7 +467,7 @@ FbxManager * g_pFBXSDKManager = nullptr;
 
 FbxAMatrix GetGeometryTransformation( FbxNode const* inNode ) {
 
-	kbErrorCheck( inNode != nullptr, "GetGeometryTransformation() - null mesh" );
+	blk::error_check( inNode != nullptr, "GetGeometryTransformation() - null mesh" );
 
 	const FbxVector4 lT = inNode->GetGeometricTranslation( FbxNode::eSourcePivot );
 	const FbxVector4 lR = inNode->GetGeometricRotation( FbxNode::eSourcePivot );
@@ -513,7 +513,7 @@ bool kbModel::LoadFBX() {
 	}
 
 	FbxNode * pRootNode = fbxData.pScene->GetRootNode();
-	kbErrorCheck( pRootNode != nullptr, "kbModel::LoadFBX() - Root node not found in %s", GetFullFileName().c_str() );
+	blk::error_check( pRootNode != nullptr, "kbModel::LoadFBX() - Root node not found in %s", GetFullFileName().c_str() );
 
 	std::unordered_map<vertexLayout, int, kbVertexHash> vertexMap;
 	std::vector<vertexLayout> vertexList;
@@ -560,7 +560,7 @@ bool kbModel::LoadFBX() {
 				kbColor boneColor( kbfrand() * 0.5f + 0.5f, kbfrand() * 0.5f + 0.5f, kbfrand() * 0.5f + 0.5f, 1.0f );
 				boneToColor[iCluster] = boneColor;
 
-			//	kbLog( "%s bone color is %f %f %f", curJointName.c_str(), boneColor.x, boneColor.y, boneColor.z, boneColor.w );
+			//	blk::log( "%s bone color is %f %f %f", curJointName.c_str(), boneColor.x, boneColor.y, boneColor.z, boneColor.w );
 
 				FbxAMatrix xformMat;
 				FbxAMatrix xformLinkMat;
@@ -569,13 +569,13 @@ bool kbModel::LoadFBX() {
 				pCurCluster->GetTransformMatrix( xformMat );
 				pCurCluster->GetTransformLinkMatrix( xformLinkMat );
 				globalBindPoseInverseMatrix = xformLinkMat.Inverse() * xformMat * geomXForm;
-				//kbLog( "Yay!");
+				//blk::log( "Yay!");
 
 				unsigned int numOfIndices = pCurCluster->GetControlPointIndicesCount();
 				int * pCtrlPtList = pCurCluster->GetControlPointIndices();
 				for (unsigned int i = 0; i < numOfIndices; ++i)
 				{
-				//	kbLog( "	Adding vertex %d", pCtrlPtList[i]);
+				//	blk::log( "	Adding vertex %d", pCtrlPtList[i]);
 					vertToBone[pCtrlPtList[i]] = iCluster;
 				}
 
@@ -598,10 +598,10 @@ bool kbModel::LoadFBX() {
 				FbxGeometryElementNormal *const pFBXVertNormal = pFBXMesh->GetElementNormal(0);
 				if ( pFBXVertNormal != nullptr ) {
 					auto mappingMode = pFBXVertNormal->GetMappingMode();
-					kbErrorCheck( mappingMode == FbxGeometryElement::eByPolygonVertex, "kbModel::LoadFBX() - Invalid vertex normal mapping mode" );
+					blk::error_check( mappingMode == FbxGeometryElement::eByPolygonVertex, "kbModel::LoadFBX() - Invalid vertex normal mapping mode" );
 
 					auto refMode = pFBXVertNormal->GetReferenceMode();
-					kbErrorCheck( refMode == FbxGeometryElement::eDirect, "kbModel::LoadFBX() - Invalid vertex normal reference mode" );
+					blk::error_check( refMode == FbxGeometryElement::eDirect, "kbModel::LoadFBX() - Invalid vertex normal reference mode" );
 
 					const auto fbxNormal = pFBXVertNormal->GetDirectArray().GetAt(iCurVertex).mData;
 					kbVec4 normal( (float)fbxNormal[1], (float)fbxNormal[2], -(float)fbxNormal[0], 0.0f );
@@ -613,10 +613,10 @@ bool kbModel::LoadFBX() {
 				if ( pFBXVertTangent != nullptr ) {
 
 					auto mappingMode = pFBXVertTangent->GetMappingMode();
-					kbErrorCheck( mappingMode == FbxGeometryElement::eByPolygonVertex, "kbModel::LoadFBX() - Invalid vertex tangent mapping mode" );
+					blk::error_check( mappingMode == FbxGeometryElement::eByPolygonVertex, "kbModel::LoadFBX() - Invalid vertex tangent mapping mode" );
 
 					auto refMode = pFBXVertTangent->GetReferenceMode();
-					kbErrorCheck( refMode == FbxGeometryElement::eDirect, "kbModel::LoadFBX() - Invalid vertex tangent reference mode" );
+					blk::error_check( refMode == FbxGeometryElement::eDirect, "kbModel::LoadFBX() - Invalid vertex tangent reference mode" );
 
 					const auto fbxTangent = pFBXVertTangent->GetDirectArray().GetAt(iCurVertex).mData;
 					kbVec4 tangent( (float)fbxTangent[1], (float)fbxTangent[2], -(float)fbxTangent[0], 0.0f );
@@ -627,10 +627,10 @@ bool kbModel::LoadFBX() {
 				if ( pFBXVertBinormal != nullptr ) {
 
 					auto mappingMode = pFBXVertBinormal->GetMappingMode();
-					kbErrorCheck( mappingMode == FbxGeometryElement::eByPolygonVertex, "kbModel::LoadFBX() - Invalid vertex binormal mapping mode" );
+					blk::error_check( mappingMode == FbxGeometryElement::eByPolygonVertex, "kbModel::LoadFBX() - Invalid vertex binormal mapping mode" );
 
 					auto refMode = pFBXVertBinormal->GetReferenceMode();
-					kbErrorCheck( refMode == FbxGeometryElement::eDirect, "kbModel::LoadFBX() - Invalid vertex binormal reference mode" );
+					blk::error_check( refMode == FbxGeometryElement::eDirect, "kbModel::LoadFBX() - Invalid vertex binormal reference mode" );
 
 					const auto fbxBinormal = pFBXVertBinormal->GetDirectArray().GetAt(iCurVertex).mData;
 					kbVec4 binormal( (float)fbxBinormal[1], (float)fbxBinormal[2], -(float)fbxBinormal[0], 0.0f );
@@ -641,10 +641,10 @@ bool kbModel::LoadFBX() {
 				if ( pFBXVertUV != nullptr ) {
 
 					auto uvMapMode = pFBXVertUV->GetMappingMode();
-					kbErrorCheck( uvMapMode == FbxGeometryElement::eByPolygonVertex, "kbModel::LoadFBX() - Invalid uvs mapping mode" );
+					blk::error_check( uvMapMode == FbxGeometryElement::eByPolygonVertex, "kbModel::LoadFBX() - Invalid uvs mapping mode" );
 
 					auto uvRefMode = pFBXVertUV->GetReferenceMode();
-					kbErrorCheck( uvRefMode == FbxGeometryElement::eIndexToDirect, "kbModel::LoadFBX() - Invalid uvs reference mode" );
+					blk::error_check( uvRefMode == FbxGeometryElement::eIndexToDirect, "kbModel::LoadFBX() - Invalid uvs reference mode" );
 
 					const int uvIndex = pFBXVertUV->GetIndexArray().GetAt(iCurVertex);
 					const auto fbxUV = pFBXVertUV->GetDirectArray().GetAt(uvIndex).mData;
@@ -655,10 +655,10 @@ bool kbModel::LoadFBX() {
 				if (pFBXVertColor != nullptr) {
 
 					auto mappingMode = pFBXVertColor->GetMappingMode();
-					kbErrorCheck(mappingMode == FbxGeometryElement::eByPolygonVertex, "kbModel::LoadFBX() - Invalid vertex color mapping mode");
+					blk::error_check(mappingMode == FbxGeometryElement::eByPolygonVertex, "kbModel::LoadFBX() - Invalid vertex color mapping mode");
 
 					auto refMode = pFBXVertColor->GetReferenceMode();
-					kbErrorCheck(refMode == FbxGeometryElement::eIndexToDirect, "kbModel::LoadFBX() - Invalid vertex color reference mode");
+					blk::error_check(refMode == FbxGeometryElement::eIndexToDirect, "kbModel::LoadFBX() - Invalid vertex color reference mode");
 
 					const int colorIndex = pFBXVertColor->GetIndexArray().GetAt(iCurVertex);
 					const auto fbxColor = pFBXVertColor->GetDirectArray().GetAt(colorIndex);
@@ -695,21 +695,21 @@ bool kbModel::LoadFBX() {
 /*
 	for ( int i = 0; i < pRootNode->GetChildCount(); i++ ) {
 		FbxNode * pCurNode = pRootNode->GetChild(i);
-		kbLog( "Processing parent node %s", pCurNode->GetName() );
+		blk::log( "Processing parent node %s", pCurNode->GetName() );
 
 		for ( int j = 0; j < pCurNode->GetChildCount(); j++ ) {
 			FbxNode * pRootBone = pCurNode->GetChild(j);
 			if ( pRootBone->GetNodeAttribute() == nullptr || pRootBone->GetNodeAttribute()->GetAttributeType() != FbxNodeAttribute::eSkeleton ) {
 				continue;
 			}
-			kbLog( "	Processing Root bone %s", pRootBone->GetName() );
+			blk::log( "	Processing Root bone %s", pRootBone->GetName() );
 					
 			for ( int l = 0; l < pRootBone->GetChildCount(); l++ ) {
 				FbxNode * pBoneNode = pRootBone->GetChild(l);
 				if ( pBoneNode->GetNodeAttribute() == nullptr || pBoneNode->GetNodeAttribute()->GetAttributeType() != FbxNodeAttribute::eSkeleton ) {
 					continue;
 				}
-				kbLog( "		Processing child bones %s", pBoneNode->GetName() );
+				blk::log( "		Processing child bones %s", pBoneNode->GetName() );
 			}
 		}
 	}*/
@@ -797,7 +797,7 @@ bool kbModel::LoadDiablo3() {
 
 	std::ifstream modelFile;
 	modelFile.open( m_FullFileName, std::ifstream::in );
-	kbErrorCheck( modelFile.good(), "kbModel::LoadDiablo3() - Failed to load model %s", m_FullFileName.c_str() );
+	blk::error_check( modelFile.good(), "kbModel::LoadDiablo3() - Failed to load model %s", m_FullFileName.c_str() );
 	fileReader.m_ModelText = std::string( ( std::istreambuf_iterator<char>(modelFile) ), std::istreambuf_iterator<char>() );
 
 	std::vector<vertexLayout> vertexList;
@@ -845,7 +845,7 @@ bool kbModel::LoadDiablo3() {
 
 		vertexList.push_back( newVert );
 		indexList.push_back( vertNum );
-		//kbLog( "%d, %d, (%f %f %f), (%f %f %f %f), (%f %f)", vertNum, vertIdx, vertPos.x, vertPos.y, vertPos.z, vertNormal.x, vertNormal.y, vertNormal.z, vertNormal.w, vertUV1.x, vertUV1.y );
+		//blk::log( "%d, %d, (%f %f %f), (%f %f %f %f), (%f %f)", vertNum, vertIdx, vertPos.x, vertPos.y, vertPos.z, vertNormal.x, vertNormal.y, vertNormal.z, vertNormal.w, vertUV1.x, vertUV1.y );
 	}
 
 	m_VertexBuffer.CreateVertexBuffer( vertexList );
@@ -942,7 +942,7 @@ void kbModel::CreatePointCloud( const UINT numVertices, const std::string & shad
  */
 void * kbModel::MapVertexBuffer() {
 
-	kbErrorCheck( m_bVBIsMapped == false, "kbModel::MapVertexBuffer() - Vertex buffer already mapped" );
+	blk::error_check( m_bVBIsMapped == false, "kbModel::MapVertexBuffer() - Vertex buffer already mapped" );
 
 	m_bVBIsMapped = true;
 	return m_VertexBuffer.Map();
@@ -965,7 +965,7 @@ void kbModel::UnmapVertexBuffer( const INT NumIndices ) {
 		} else {
 			const INT NumTriangles = NumIndices / 3;
 			if ( NumTriangles > m_NumTriangles ) {
-				kbError( "kbModel Overflow" );
+				blk::error( "kbModel Overflow" );
 			}
 
 			m_Meshes[0].m_NumTriangles = NumTriangles;
@@ -979,9 +979,9 @@ void kbModel::UnmapVertexBuffer( const INT NumIndices ) {
  *	kbModel::MapIndexBuffer
  */
 void * kbModel::MapIndexBuffer() {
-    kbErrorCheck( m_bIBIsMapped == false, "kbModel::MapIndexBuffer() - Index buffer is already mapped." );
-    kbErrorCheck( m_bIsDynamicModel == true, "kbModel::MapIndexBuffer() - Not a dynamic model." );
-    kbErrorCheck( m_bIsPointCloud == false, "kbModel::MapIndexBuffer() - Point clouds cannot be mapped." );
+    blk::error_check( m_bIBIsMapped == false, "kbModel::MapIndexBuffer() - Index buffer is already mapped." );
+    blk::error_check( m_bIsDynamicModel == true, "kbModel::MapIndexBuffer() - Not a dynamic model." );
+    blk::error_check( m_bIsPointCloud == false, "kbModel::MapIndexBuffer() - Point clouds cannot be mapped." );
 
 	m_bIBIsMapped = true;
 	return m_IndexBuffer.Map();
@@ -991,9 +991,9 @@ void * kbModel::MapIndexBuffer() {
  *	kbModel::UnmapIndexBuffer
  */
 void kbModel::UnmapIndexBuffer() {
-    kbErrorCheck( m_bIBIsMapped == true, "kbModel::UnmapIndexBuffer() - Index buffer was not mapped." );
-    kbErrorCheck( m_bIsDynamicModel == true, "kbModel::UnmapIndexBuffer() - Not a dynamic model." );
-    kbErrorCheck( m_bIsPointCloud == false, "kbModel::UnmapIndexBuffer() - Point clouds cannot be mapped." );
+    blk::error_check( m_bIBIsMapped == true, "kbModel::UnmapIndexBuffer() - Index buffer was not mapped." );
+    blk::error_check( m_bIsDynamicModel == true, "kbModel::UnmapIndexBuffer() - Not a dynamic model." );
+    blk::error_check( m_bIsPointCloud == false, "kbModel::UnmapIndexBuffer() - Point clouds cannot be mapped." );
 
 
 	m_bIBIsMapped = false;
@@ -1246,7 +1246,7 @@ bool kbAnimation::Load_Internal() {
 
 		if ( modelFile.fail() ) {
 			modelFile.close();
-			kbWarning( "kbModel::LoadResource_Internal - Failed to load model %s", m_FullFileName.c_str() );
+			blk::warning( "kbModel::LoadResource_Internal - Failed to load model %s", m_FullFileName.c_str() );
 			return false;
 		}
 	}
@@ -1268,7 +1268,7 @@ bool kbAnimation::Load_Internal() {
 	pPtr += sizeof( ms3dHeader_t );
 
 	if ( strncmp( pHeader->m_ID, "MS3D000000", 10 ) != 0 ) {
-		kbError( "Error: kbModel::LoadResource_Internal - Invalid model header %s", pHeader->m_ID );
+		blk::error( "Error: kbModel::LoadResource_Internal - Invalid model header %s", pHeader->m_ID );
 	}
 
 	ushort numVertices = *( ushort * ) pPtr;
@@ -1362,7 +1362,7 @@ bool kbAnimation::Load_Internal() {
 
 	delete[] pMemoryFileBuffer;
 
-		kbLog( "Anim %s - %f", m_FullFileName.c_str(), this->m_LengthInSeconds );
+		blk::log( "Anim %s - %f", m_FullFileName.c_str(), this->m_LengthInSeconds );
 
 	return true;
 }

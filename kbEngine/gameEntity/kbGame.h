@@ -64,7 +64,7 @@ public:
 
 	template<typename T>
 	T* GetLevelComponent() const {
-		kbErrorCheck(m_pLevelComp != nullptr && m_pLevelComp->IsA(T::GetType()), "GetLevelComponent<T>() - Incorrect level component type");
+		blk::error_check(m_pLevelComp != nullptr && m_pLevelComp->IsA(T::GetType()), "GetLevelComponent<T>() - Incorrect level component type");
 		return (T*)m_pLevelComp;
 	}
 
