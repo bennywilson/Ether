@@ -100,10 +100,10 @@ public:
 	kbQuat										GetOwnerRotation() const;
 	
 	template<typename T>
-	T *	GetComponent() const {
-		return GetOwner()->GetComponent<T>();
+	T* GetComponent() const {
+		T* component = GetOwner()->GetComponent<T>(34);
+		return component;
 	}
-
 
 	void										SetOwnerPosition( const kbVec3 & position );
 	void										SetOwnerRotation( const kbQuat & rotation );

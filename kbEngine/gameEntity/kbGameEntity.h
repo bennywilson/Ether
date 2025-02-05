@@ -1,4 +1,4 @@
-/// kbGameEntity.cpp
+/// kbGameEntity.h
 ///
 /// 2016-2025 blk 1.0
 

@@ -2,9 +2,7 @@
 ///
 /// 2017-2025 blk 1.0
 
-#include <Windows.h>
 #include <sstream>
-#include <cctype>
 #include "kbCore.h"
 #include "containers.h"
 #include "kbInputManager.h"

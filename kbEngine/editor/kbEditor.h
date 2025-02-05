@@ -26,74 +26,74 @@ enum widgetCBType_t;
  */
 class kbEditor : Fl_Window {
 
-//-------------------------------------------------------------------------------------------------------------------------------------------------------------
+	//-------------------------------------------------------------------------------------------------------------------------------------------------------------
 public:
-															kbEditor();
-															~kbEditor();
+	kbEditor();
+	~kbEditor();
 
 	void													UnloadMap();
-	void													LoadMap( const std::string & mapName );
-	void													SetGame( class kbGame * pGame ) { m_pGame = pGame; }
+	void													LoadMap(const std::string& mapName);
+	void													SetGame(class kbGame* pGame) { m_pGame = pGame; }
 
 	void													Update();
-	virtual int												handle( int theEvent );
+	virtual int												handle(int theEvent);
 
 	const bool												IsRunning() const { return m_bIsRunning; }
 	const bool												IsRunningGame() const { return m_pGame != nullptr && m_pGame->IsPlaying(); }
 
-	void													RegisterUpdate( kbWidget * const widget ) { m_UpdateWidgets.push_back( widget ); }
-	void													RegisterEvent( kbWidget *const widget, const widgetCBType_t eventType ) { m_EventReceivers[eventType].push_back( widget ); }
-	void													BroadcastEvent( const class widgetCBObject & cbObject );
+	void													RegisterUpdate(kbWidget* const widget) { m_UpdateWidgets.push_back(widget); }
+	void													RegisterEvent(kbWidget* const widget, const widgetCBType_t eventType) { m_EventReceivers[eventType].push_back(widget); }
+	void													BroadcastEvent(const class widgetCBObject& cbObject);
 
-	void													SetMainCameraPos( const kbVec3 & newCamPos );
+	void													SetMainCameraPos(const kbVec3& newCamPos);
 	kbVec3													GetMainCameraPos() const;
 
-	void													SetMainCameraRot( const kbQuat & newCamRot );
+	void													SetMainCameraRot(const kbQuat& newCamRot);
 	kbQuat													GetMainCameraRot() const;
 
-	void													AddEntity( kbEditorEntity *const pEditorEntity );
-	void													SelectEntities( std::vector< kbEditorEntity * > & entitiesToSelect, bool AppendToSelectedList );
+	void													AddEntity(kbEditorEntity* const pEditorEntity);
+	void													SelectEntities(std::vector< kbEditorEntity* >& entitiesToSelect, bool AppendToSelectedList);
 	void													DeselectEntities();
 
-	void													PushUndoAction( kbUndoAction * pUndoAction ) { m_UndoStack.Push( pUndoAction ); }
-	void													DeleteEntities( std::vector<kbEditorEntity*> & editorEntityList );
+	void													PushUndoAction(kbUndoAction* pUndoAction) { m_UndoStack.Push(pUndoAction); }
+	void													DeleteEntities(std::vector<kbEditorEntity*>& editorEntityList);
 
-	std::vector<kbEditorEntity *> &							GetGameEntities() { return m_GameEntities; }
-	std::vector<kbEditorEntity *> &							GetSelectedObjects() { return m_SelectedObjects; }
+	std::vector<kbEditorEntity*>& GetGameEntities() { return m_GameEntities; }
+	std::vector<kbEditorEntity*>& GetSelectedObjects() { return m_SelectedObjects; }
 
-	const kbPrefab *										GetCurrentlySelectedPrefab() const;
+	const kbPrefab* GetCurrentlySelectedPrefab() const;
 
-    const widgetCBInputObject &                             GetInput() const { return m_WidgetInputObject; }
+	const widgetCBInputObject& GetInput() const { return m_WidgetInputObject; }
 
 	bool													IsGameUpdating() const { return m_bGameUpdating; }
 
 private:
 
-	void													SaveLevel_Internal( const std::string & fileName, const bool bForceSave );
+	void													SaveLevel_Internal(const std::string& fileName, const bool bForceSave);
 
 	std::string												m_CurrentLevelFileName;
 
-	std::vector<kbWidget *>									m_UpdateWidgets;
-	std::map<widgetCBType_t, std::vector< kbWidget  *>>		m_EventReceivers;
-	std::vector<kbEditorEntity *>							m_GameEntities;
-	std::vector<kbEditorEntity *>							m_SelectedObjects;
-	std::vector<kbEditorEntity *>							m_RemovedEntities;
+	std::vector<kbWidget*>									m_UpdateWidgets;
+	std::map<widgetCBType_t, std::vector< kbWidget*>>		m_EventReceivers;
+	std::vector<kbEditorEntity*>							m_GameEntities;
+	std::vector<kbEditorEntity*>							m_SelectedObjects;
+	std::vector<kbEditorEntity*>							m_RemovedEntities;
 
 	kbUndoStack												m_UndoStack;
 
-	kbGame *												m_pGame;
-	kbEditorWindow *										m_pGameWindow;
-	class Fl_Choice *										m_pSpeedChoice;
+	kbGame* m_pGame;
+	kbEditorWindow* m_pGameWindow;
+	class Fl_Choice* m_pSpeedChoice;
 
-	class Fl_Input *										m_pXFormInput;
+	class Fl_Input* m_pXFormInput;
 	float													m_XFormAmount;
 
 	// widgets
-	class kbMainTab *										m_pMainTab;
-	class kbResourceTab *									m_pResourceTab;
-	class Fl_Text_Display *									m_pOutputText;
-	class kbPropertiesTab *									m_pPropertiesTab;
-	class Fl_Choice *										m_pViewModeChoice;
+	class kbMainTab* m_pMainTab;
+	class kbResourceTab* m_pResourceTab;
+	class Fl_Text_Display* m_pOutputText;
+	class kbPropertiesTab* m_pPropertiesTab;
+	class Fl_Choice* m_pViewModeChoice;
 
 	kbTimer													m_Timer;
 
@@ -110,51 +110,51 @@ private:
 	// internal functions and callbacks
 	void													ShutDown();
 
-	static void												NewLevel( Fl_Widget *, void * );
-	static void												OpenLevel( Fl_Widget *, void * );
-	static void												SaveLevelAs( Fl_Widget *, void * );
-	static void												SaveLevel( Fl_Widget *, void * );
+	static void												NewLevel(Fl_Widget*, void*);
+	static void												OpenLevel(Fl_Widget*, void*);
+	static void												SaveLevelAs(Fl_Widget*, void*);
+	static void												SaveLevel(Fl_Widget*, void*);
 
-	static void												Undo( Fl_Widget *, void * );
-	static void												Redo( Fl_Widget *, void * );
-	static void												Close( Fl_Widget *, void * );
-	static void												CreateGameEntity( Fl_Widget *, void * );
-	static void												AddComponent( Fl_Widget *, void * );
-	static void												TranslationButtonCB( Fl_Widget *, void * );
-	static void												RotationButtonCB( Fl_Widget *, void * );
-	static void												ScaleButtonCB( Fl_Widget *, void * );
-	static void												XPlusAdjustButtonCB( Fl_Widget *, void * );
-	static void												YPlusAdjustButtonCB( Fl_Widget *, void * );
-	static void												ZPlusAdjustButtonCB( Fl_Widget *, void * );
-	static void												XNegAdjustButtonCB(Fl_Widget *, void *);
-	static void												YNegAdjustButtonCB(Fl_Widget *, void *);
-	static void												ZNegAdjustButtonCB(Fl_Widget *, void *);
-	static void												AdjustCameraSpeedCB( Fl_Widget *, void * );
-	static void												ToggleIconsCB( Fl_Widget *, void * );
-	static void												OutputCB( kbOutputMessageType_t, const char * );
-	static void												PlayGameFromHere( Fl_Widget *, void * );
-	static void												StopGame( Fl_Widget *, void * );
-	static void												DeleteEntitiesCB( Fl_Widget *, void * );
-	static void												ViewModeChoiceCB( Fl_Widget *, void * );
+	static void												Undo(Fl_Widget*, void*);
+	static void												Redo(Fl_Widget*, void*);
+	static void												Close(Fl_Widget*, void*);
+	static void												CreateGameEntity(Fl_Widget*, void*);
+	static void												AddComponent(Fl_Widget*, void*);
+	static void												TranslationButtonCB(Fl_Widget*, void*);
+	static void												RotationButtonCB(Fl_Widget*, void*);
+	static void												ScaleButtonCB(Fl_Widget*, void*);
+	static void												XPlusAdjustButtonCB(Fl_Widget*, void*);
+	static void												YPlusAdjustButtonCB(Fl_Widget*, void*);
+	static void												ZPlusAdjustButtonCB(Fl_Widget*, void*);
+	static void												XNegAdjustButtonCB(Fl_Widget*, void*);
+	static void												YNegAdjustButtonCB(Fl_Widget*, void*);
+	static void												ZNegAdjustButtonCB(Fl_Widget*, void*);
+	static void												AdjustCameraSpeedCB(Fl_Widget*, void*);
+	static void												ToggleIconsCB(Fl_Widget*, void*);
+	static void												OutputCB(kbOutputMessageType_t, const char*);
+	static void												PlayGameFromHere(Fl_Widget*, void*);
+	static void												StopGame(Fl_Widget*, void*);
+	static void												DeleteEntitiesCB(Fl_Widget*, void*);
+	static void												ViewModeChoiceCB(Fl_Widget*, void*);
 
 	void													RightClickOnMainTab();
-    void                                                    RightClickOnOutputWindow();
+	void                                                    RightClickOnOutputWindow();
 
-	static void												DuplicateEntity( Fl_Widget *, void * );
-	static void												ReplaceCurrentlySelectedPrefab( Fl_Widget *, void * );
-	static void												AddEntityAsPrefab( Fl_Widget *, void * );
-	void													AddEntityAsPrefab_Internal( const std::string & PackageName, const std::string & FolderName, const std::string & PrefabeName );
-	static void												InsertSelectedPrefabIntoScene( Fl_Widget *, void * );
-    static void                                             ClearOutputBuffer( Fl_Widget *, void * pUseData );
+	static void												DuplicateEntity(Fl_Widget*, void*);
+	static void												ReplaceCurrentlySelectedPrefab(Fl_Widget*, void*);
+	static void												AddEntityAsPrefab(Fl_Widget*, void*);
+	void													AddEntityAsPrefab_Internal(const std::string& PackageName, const std::string& FolderName, const std::string& PrefabeName);
+	static void												InsertSelectedPrefabIntoScene(Fl_Widget*, void*);
+	static void                                             ClearOutputBuffer(Fl_Widget*, void* pUseData);
 
 public:
 
 	static const int										TabHeight() { return 25; }
-	static const int										PanelBorderSize( int Multiplier = 1 ) { return 5 * Multiplier; }
-	static const int										LineSpacing( int Multiplier = 1 ) { return Multiplier * ( fl_height() + PanelBorderSize() ); }
+	static const int										PanelBorderSize(int Multiplier = 1) { return 5 * Multiplier; }
+	static const int										LineSpacing(int Multiplier = 1) { return Multiplier * (fl_height() + PanelBorderSize()); }
 };
 
-extern kbEditor * g_Editor;
+extern kbEditor* g_Editor;
 
 /**
  * kbDialogBox
@@ -162,39 +162,39 @@ extern kbEditor * g_Editor;
 class kbDialogBox
 {
 
-//-------------------------------------------------------------------------------------------------------------------------------------------------------------
+	//-------------------------------------------------------------------------------------------------------------------------------------------------------------
 public:
 
-	kbDialogBox( const char *const title, const char *const acceptButtonName, const char *const cancelButtonName ) :
-		m_PopUpWindow( nullptr ),
-		m_Title( title ),
-		m_AcceptButtonName( acceptButtonName ),
-		m_CancelButtonName( cancelButtonName ),
-		m_LineNumber( 0 ),
-		m_bAccepted( false ) {
+	kbDialogBox(const char* const title, const char* const acceptButtonName, const char* const cancelButtonName) :
+		m_PopUpWindow(nullptr),
+		m_Title(title),
+		m_AcceptButtonName(acceptButtonName),
+		m_CancelButtonName(cancelButtonName),
+		m_LineNumber(0),
+		m_bAccepted(false) {
 
-		if ( gCurrentDialogBox != nullptr ) {
-			blk::error( "Dialog box already open.  Only one allowed at a time" );
+		if (gCurrentDialogBox != nullptr) {
+			blk::error("Dialog box already open.  Only one allowed at a time");
 		}
-	
+
 		gCurrentDialogBox = this;
-   }
+	}
 
-   ~kbDialogBox() {
+	~kbDialogBox() {
 		gCurrentDialogBox = nullptr;
-   }
+	}
 
-   void AddTextField( const char *const field ) {
+	void AddTextField(const char* const field) {
 		kbDialogBoxField newField;
 		newField.m_FieldName = field;
-		m_Fields.push_back( newField );
-   }
+		m_Fields.push_back(newField);
+	}
 
-   bool Run();
+	bool Run();
 
-	const std::string & GetFieldEntry( const int fieldIdx ) const {
-		if ( fieldIdx < 0 || fieldIdx >= m_Fields.size() ) {
-			blk::error( "Bad field idx %d for dialog box", fieldIdx );
+	const std::string& GetFieldEntry(const int fieldIdx) const {
+		if (fieldIdx < 0 || fieldIdx >= m_Fields.size()) {
+			blk::error("Bad field idx %d for dialog box", fieldIdx);
 		}
 
 		return m_Fields[fieldIdx].m_FieldValue;
@@ -202,13 +202,13 @@ public:
 
 private:
 
-	Fl_Window *    m_PopUpWindow;
+	Fl_Window* m_PopUpWindow;
 	int            m_LineNumber;
 
 	struct kbDialogBoxField {
 		std::string    m_FieldName;
 		std::string    m_FieldValue;
-		Fl_Input *     m_Input;
+		Fl_Input* m_Input;
 	};
 
 	std::string                      m_Title;
@@ -221,15 +221,15 @@ private:
 		m_PopUpWindow->hide();
 	}
 
-	static void AcceptButtonClicked( Fl_Widget*, void * userdata ) {
+	static void AcceptButtonClicked(Fl_Widget*, void* userdata) {
 		gCurrentDialogBox->m_bAccepted = true;
 		gCurrentDialogBox->Exit();
 	}
 
-	static void CancelButtonClicked( Fl_Widget*, void * userdata ) {
+	static void CancelButtonClicked(Fl_Widget*, void* userdata) {
 		gCurrentDialogBox->m_bAccepted = false;
 		gCurrentDialogBox->Exit();
 	}
 
-	static kbDialogBox * gCurrentDialogBox;
+	static kbDialogBox* gCurrentDialogBox;
 };

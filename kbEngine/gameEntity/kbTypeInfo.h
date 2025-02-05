@@ -73,7 +73,7 @@ public:
 
 	const kbTypeInfoClass* GetTypeInfoFromClassName(const std::string& name) { return m_Map[name]; }
 
-	std::map<std::string, const kbTypeInfoClass*> GetClassMap() const { return m_Map; }
+	const std::map<std::string, const kbTypeInfoClass*>& GetClassMap() const { return m_Map; }
 
 	const std::vector<std::string>* GetEnum(const std::string& name) { return &m_EnumMap[name]; }
 
@@ -142,7 +142,7 @@ public:
 	}
 
 private:
-	std::map<std::string, const kbTypeInfoClass*>	m_Map;
+	std::map<std::string, const kbTypeInfoClass*> m_Map;
 	std::map<std::string, std::vector< std::string>> m_EnumMap;
 
 	template<typename t>

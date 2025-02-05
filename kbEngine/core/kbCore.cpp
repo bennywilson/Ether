@@ -227,7 +227,7 @@ std::map<ScopedTimerList_t, struct kbScopedTimerData_t*> g_ScopedTimerMap;
 /**
  *	kbScopedTimerData_t::kbScopedTimerData_t
  */
-kbScopedTimerData_t::kbScopedTimerData_t(const ScopedTimerList_t timerIdx, char* const stringName) {
+kbScopedTimerData_t::kbScopedTimerData_t(const ScopedTimerList_t timerIdx, const char* const stringName) {
 	m_ReadableName = kbString(stringName);
 	memset(&m_FrameTimes, 0, sizeof(m_FrameTimes));
 	m_FrameTimeIdx = 0;

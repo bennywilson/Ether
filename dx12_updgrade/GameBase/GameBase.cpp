@@ -37,12 +37,10 @@ HWND hWnd;
 bool destroyCalled = false;
 
 /// MyRegisterClass
-ATOM MyRegisterClass(HINSTANCE hInstance)
-{
-	WNDCLASSEX wcex;
+ATOM MyRegisterClass(HINSTANCE hInstance) {
+	WNDCLASSEX wcex = {};
 
 	wcex.cbSize = sizeof(WNDCLASSEX);
-
 	wcex.style = CS_HREDRAW | CS_VREDRAW;
 	wcex.lpfnWndProc = WndProc;
 	wcex.cbClsExtra = 0;
@@ -70,13 +68,11 @@ BOOL CALLBACK EnumDisplayMonitorsCB(HMONITOR hMonitor, HDC hdcMonitor, LPRECT lp
 }
 
 /// InitInstance
-BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
-{
+BOOL InitInstance(HINSTANCE hInstance, int nCmdShow) {
 	hInst = hInstance; // Store instance handle in our global variable
-
-	if (g_UseEditor == false) {
-		// Window
-		WNDCLASS wc;
+	g_UseEditor = true;
+	if (g_UseEditor == false) {	
+		WNDCLASS wc = {};
 		memset(&wc, 0, sizeof(wc));
 		wc.lpszClassName = L"kbEngine";
 		wc.style = CS_OWNDC;
@@ -92,13 +88,14 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 
 		RECT winSize = { 0, 0, g_screen_width, g_screen_height };
 
-		//RECT winSize = { 0, 0, 800, 450 };
 		AdjustWindowRect(&winSize, wsStyle, false);
-		hWnd = CreateWindowA("kbEngine", "kbEngine",
-							 wsStyle | WS_VISIBLE,
-							 WindowStartX, 0,
-							 winSize.right - winSize.left, winSize.bottom - winSize.top,
-							 nullptr, nullptr, hInstance, nullptr);
+		hWnd = CreateWindowA(
+			"kbEngine", "kbEngine",
+			wsStyle | WS_VISIBLE,
+			WindowStartX, 0,
+			winSize.right - winSize.left, winSize.bottom - winSize.top,
+			nullptr, nullptr, hInstance, nullptr
+		);
 	}
 
 	return TRUE;
@@ -235,7 +232,7 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 		}
 
 		try {
-			static int fear = 0;
+			static int fear = 1;
 
 			if (fear) {
 				if (g_UseEditor) {

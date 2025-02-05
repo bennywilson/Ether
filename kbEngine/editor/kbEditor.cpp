@@ -127,7 +127,7 @@ kbEditor::kbEditor() :
 	mainMenuBar->add("Edit/Submenu/Bbb");
 	mainMenuBar->add("Add/Entity", 0, CreateGameEntity, this);
 
-	std::map<std::string, const kbTypeInfoClass*>& componentMap = g_NameToTypeInfoMap->GetClassMap();
+	std::map<std::string, const kbTypeInfoClass*> componentMap = g_NameToTypeInfoMap->GetClassMap();
 	std::map<std::string, const kbTypeInfoClass*>::iterator iter;
 
 	for (iter = componentMap.begin(); iter != componentMap.end(); ++iter) {

@@ -291,7 +291,8 @@ void Renderer_D3D12::render() {
 	m_command_list->RSSetScissorRects(1, &m_scissor_rect);
 
 	// Indicate that the back buffer will be used as a render target.
-	m_command_list->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(m_render_targets[m_frame_index].Get(), D3D12_RESOURCE_STATE_PRESENT, D3D12_RESOURCE_STATE_RENDER_TARGET));
+	auto rt_barrier = CD3DX12_RESOURCE_BARRIER::Transition(m_render_targets[m_frame_index].Get(), D3D12_RESOURCE_STATE_PRESENT, D3D12_RESOURCE_STATE_RENDER_TARGET);
+	m_command_list->ResourceBarrier(1, &rt_barrier);
 
 	CD3DX12_CPU_DESCRIPTOR_HANDLE rtv_handle(m_rtv_heap->GetCPUDescriptorHandleForHeapStart(), m_frame_index, m_rtv_descriptor_size);
 	m_command_list->OMSetRenderTargets(1, &rtv_handle, FALSE, nullptr);
@@ -323,7 +324,8 @@ void Renderer_D3D12::render() {
 	m_command_list->DrawIndexedInstanced(index_buffer->num_elements(), 1, 0, 0, 0);
 
 	// Indicate that the back buffer will now be used to present.
-	m_command_list->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(m_render_targets[m_frame_index].Get(), D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PRESENT));
+	auto res_barrier = CD3DX12_RESOURCE_BARRIER::Transition(m_render_targets[m_frame_index].Get(), D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PRESENT);
+	m_command_list->ResourceBarrier(1, &res_barrier);
 	check_result(m_command_list->Close());
 
 	// Execute command lists
@@ -416,11 +418,13 @@ void Renderer_D3D12::todo_create_texture() {
 	// Create gpu upload buffer
 	const uint64_t upload_buff_size = GetRequiredIntermediateSize(tex.Get(), 0, (uint32_t)subresources.size());
 	ComPtr<ID3D12Resource> upload_resource;
+	auto upload_heap_props = CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD);
+	auto upload_heap_buff_size = CD3DX12_RESOURCE_DESC::Buffer(upload_buff_size);
 	check_result(
 		m_device->CreateCommittedResource(
-			&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD),
+			&upload_heap_props,
 			D3D12_HEAP_FLAG_NONE,
-			&CD3DX12_RESOURCE_DESC::Buffer(upload_buff_size),
+			&upload_heap_buff_size,
 			D3D12_RESOURCE_STATE_GENERIC_READ,
 			nullptr,
 			IID_PPV_ARGS(&upload_resource)));
@@ -428,7 +432,8 @@ void Renderer_D3D12::todo_create_texture() {
 	UpdateSubresources(m_command_list.Get(), tex.Get(), upload_resource.Get(),
 		0, 0, static_cast<UINT>(subresources.size()), subresources.data());
 
-	m_command_list->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(tex.Get(), D3D12_RESOURCE_STATE_COPY_DEST, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE));
+	auto tex_barrier = CD3DX12_RESOURCE_BARRIER::Transition(tex.Get(), D3D12_RESOURCE_STATE_COPY_DEST, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
+	m_command_list->ResourceBarrier(1, &tex_barrier);
 
 	// Sampler
 	D3D12_SAMPLER_DESC sampler_desc = {};
@@ -454,10 +459,12 @@ void Renderer_D3D12::todo_create_texture() {
 	m_device->CreateShaderResourceView(tex.Get(), &srv_desc, texHandle);
 
 	// Constant buffer view upload heap
+	auto cbv_heap_props = CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD);
+	auto cbv_buffer_size = CD3DX12_RESOURCE_DESC::Buffer(sizeof(buffer));
 	check_result(m_device->CreateCommittedResource(
-		&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD),
+		&cbv_heap_props,
 		D3D12_HEAP_FLAG_NONE,
-		&CD3DX12_RESOURCE_DESC::Buffer(sizeof(buffer)),
+		&cbv_buffer_size,
 		D3D12_RESOURCE_STATE_GENERIC_READ,
 		nullptr,
 		IID_PPV_ARGS(&m_cbv_upload_heap)));

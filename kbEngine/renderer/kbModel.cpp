@@ -249,7 +249,7 @@ bool kbModel::LoadMS3D() {
 		boneNameToIdxMap[m_Bones[i].m_Name] = i;
 
 		// Find index to parent
-		const kbString parentName = pJoint->m_ParentName;
+		const kbString parentName(pJoint->m_ParentName);
 		auto it = boneNameToIdxMap.find( parentName );
 		if ( it != boneNameToIdxMap.end() ) {
 			m_Bones[i].m_ParentIndex = it->second;

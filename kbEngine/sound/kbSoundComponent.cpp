@@ -27,7 +27,7 @@ kbSoundData::~kbSoundData() {
 
 /// kbSoundData::PlaySoundAtPosition
 void kbSoundData::PlaySoundAtPosition(const kbVec3& soundPosition) {
-	blk::error(false, "Needs reimplementation");
+	blk::error("Needs reimplementation");
 
 	/*kbVec3 currentCameraPosition;
 	kbQuat currentCameraRotation;

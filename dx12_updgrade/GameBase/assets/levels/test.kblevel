@@ -1,8 +1,8 @@
-kbGameEntity 2658851420 1082714751 1372776098 2009480443 {
+kbGameEntity 2224009336 1119334815 565304233 3542784976 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		Name = "Entity_4"
+		Name = "Entity_3"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
 		Position = 0.000000 0.000000 0.000000
 		Scale = 1.000000 1.000000 1.000000
@@ -10,8 +10,8 @@ kbGameEntity 2658851420 1082714751 1372776098 2009480443 {
 	kbEditorLevelSettingsComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		MainCameraPosition = -0.102991 0.160878 -6.259481
-		MainCameraRotation = -0.019999 0.003250 0.000064 -0.999795
+		MainCameraPosition = -3.087735 0.348400 -9.722960
+		MainCameraRotation = -0.198137 0.071727 0.014539 -0.977438
 	}
 }
 kbGameEntity 1764334591 1323162396 784491408 67843932 {
@@ -158,12 +158,12 @@ kbGameEntity 2304826171 1239496353 243933317 3983880952 {
 						Enabled = 0
 						LifeTime =  -1.000000
 						ParamName = "shaderTexture"
-						Texture = ..\..\kbengine\assets\textures\white.bmp
+						Texture = .\assets\test\diablo.dds
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 			}
 		RenderOrderBias =  0.000000
 		RenderPass = Post-LightingPass
-		Model = C:\projects\Ether\dx12_updgrade\GameBase\assets\Test\diablo.diablo3
+		Model = c:\projects\ether\dx12_updgrade\gamebase\assets\test\diablo.diablo3
 	}
 }

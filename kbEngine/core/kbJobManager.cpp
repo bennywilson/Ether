@@ -6,47 +6,39 @@
 #include "kbCore.h"
 #include "kbJobManager.h"
 
-kbJobManager * g_pJobManager = nullptr;
-
+kbJobManager* g_pJobManager = nullptr;
 
 /// SetThreadName
-void SetThreadName( const char threadName[] ) {
-	// Code to name the thread from https://msdn.microsoft.com/en-us/library/windows/desktop/ms680552(v=vs.85).aspx
-	typedef struct tagTHREADNAME_INFO {
-		DWORD dwType; // must be 0x1000
-		LPCSTR szName; // pointer to name (in user addr space)
-		DWORD dwThreadID; // thread ID (-1=caller thread)
-		DWORD dwFlags; // reserved for future use, must be zero
-	} THREADNAME_INFO;
+void SetThreadName(const char threadName[]) {
+	struct THREADNAME_INFO {
+		DWORD dwType = 0x1000;
+		LPCSTR szName = nullptr;
+		DWORD dwThreadID = GetCurrentThreadId();
+		DWORD dwFlags = 0;
+	} thread_info;
+	thread_info.szName = threadName;
+	thread_info.dwThreadID = GetCurrentThreadId();
+	thread_info.dwFlags = 0;
 
-	THREADNAME_INFO info;
-    info.dwType = 0x1000;
-    info.szName = threadName;
-    info.dwThreadID = GetCurrentThreadId();
-    info.dwFlags = 0;
-
-	__try
-	{
-		RaiseException( 0x406D1388, 0, sizeof(info) / sizeof(ULONG_PTR), (ULONG_PTR*)&info ); 
-	}
-	__except (EXCEPTION_CONTINUE_EXECUTION)
-	{
+	__try {
+		RaiseException(0x406D1388, 0, sizeof(thread_info) / sizeof(ULONG_PTR), (ULONG_PTR*)&thread_info);
+	} __except (EXCEPTION_CONTINUE_EXECUTION) {
 	}
 }
 
 /// ThreadMain
-DWORD WINAPI ThreadMain( LPVOID lpParam ) {
+DWORD WINAPI ThreadMain(LPVOID lpParam) {
 	const DWORD threadId = GetThreadId(GetCurrentThread());
-	blk::log( "Thread created with id %d", threadId );
+	blk::log("Thread created with id %d", threadId);
 
-	const std::string threadName = "kbEngine Thread" + std::to_string( threadId );
-	SetThreadName( threadName.c_str() );
+	const std::string threadName = "kbEngine Thread" + std::to_string(threadId);
+	SetThreadName(threadName.c_str());
 
-	kbJobManager *const jobManager = (kbJobManager*)lpParam;
-	while( jobManager->IsShuttingDown() == false ) {
-		kbJob * newJob = jobManager->GrabJob();
+	kbJobManager* const jobManager = (kbJobManager*)lpParam;
+	while (jobManager->IsShuttingDown() == false) {
+		kbJob* newJob = jobManager->GrabJob();
 
-		if ( newJob != nullptr ) {
+		if (newJob != nullptr) {
 			newJob->Run();
 			newJob->MarkJobAsComplete();
 		}
@@ -57,40 +49,40 @@ DWORD WINAPI ThreadMain( LPVOID lpParam ) {
 
 /// kbJobManager::kbJobManager
 kbJobManager::kbJobManager() :
-	m_JobQueueHead( nullptr ),
-	m_JobQueueTail( nullptr ),
-	m_bShutdownRequested( false ) {
+	m_JobQueueHead(nullptr),
+	m_JobQueueTail(nullptr),
+	m_bShutdownRequested(false) {
 	g_pJobManager = this;
 
-	m_Mutex = CreateMutex( nullptr, FALSE, nullptr );
+	m_Mutex = CreateMutex(nullptr, FALSE, nullptr);
 
 	MemoryBarrier();
 
-	for ( int i = 0; i < MAX_NUM_THREADS; i++ ) {
-		m_Threads[i] = CreateThread( nullptr, 0, ThreadMain, this, 0, nullptr );
+	for (int i = 0; i < MAX_NUM_THREADS; i++) {
+		m_Threads[i] = CreateThread(nullptr, 0, ThreadMain, this, 0, nullptr);
 	}
 }
 
-/// kbJobManager::~kbJobManagers
+/// kbJobManager::~kbJobManager
 kbJobManager::~kbJobManager() {
 	m_bShutdownRequested = true;
 
-	WaitForMultipleObjects( MAX_NUM_THREADS, m_Threads, TRUE, INFINITE );
-	
-	for ( int i = 0; i < MAX_NUM_THREADS; i++ ) {
-		CloseHandle( m_Threads[i] );
+	WaitForMultipleObjects(MAX_NUM_THREADS, m_Threads, TRUE, INFINITE);
+
+	for (int i = 0; i < MAX_NUM_THREADS; i++) {
+		CloseHandle(m_Threads[i]);
 	}
 
-	CloseHandle( m_Mutex );
+	CloseHandle(m_Mutex);
 }
 
 /// kbJobManager::RegisterJob
-void kbJobManager::RegisterJob( kbJob * job ) {
+void kbJobManager::RegisterJob(kbJob* job) {
 	job->m_bIsFinished = false;
 
-	WaitForSingleObject( m_Mutex, INFINITE );
+	WaitForSingleObject(m_Mutex, INFINITE);
 
-	if ( m_JobQueueHead == nullptr ) {
+	if (m_JobQueueHead == nullptr) {
 		m_JobQueueHead = job;
 		m_JobQueueTail = job;
 		job->m_Next = nullptr;
@@ -100,25 +92,25 @@ void kbJobManager::RegisterJob( kbJob * job ) {
 		m_JobQueueTail->m_Next = nullptr;
 	}
 
-	ReleaseMutex( m_Mutex );
+	ReleaseMutex(m_Mutex);
 }
 
 /// kbJobManager::GrabJob
-kbJob *	kbJobManager::GrabJob() {
-	WaitForSingleObject( m_Mutex, INFINITE );
+kbJob* kbJobManager::GrabJob() {
+	WaitForSingleObject(m_Mutex, INFINITE);
 
-	kbJob * returnedJob = m_JobQueueHead;
+	kbJob* returnedJob = m_JobQueueHead;
 
-	if ( returnedJob != nullptr ) {
+	if (returnedJob != nullptr) {
 
 		m_JobQueueHead = returnedJob->m_Next;
 
-		if ( m_JobQueueHead == nullptr ) {
+		if (m_JobQueueHead == nullptr) {
 			m_JobQueueTail = nullptr;
 		}
 	}
 
-	ReleaseMutex( m_Mutex );
+	ReleaseMutex(m_Mutex);
 
 	return returnedJob;
 }

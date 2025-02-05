@@ -219,7 +219,7 @@ enum ScopedTimerList_t {
 };
 
 struct kbScopedTimerData_t {
-	kbScopedTimerData_t(const ScopedTimerList_t timerIdx, char* const stringName);
+	kbScopedTimerData_t(const ScopedTimerList_t timerIdx, const char* const stringName);
 
 	kbString									m_ReadableName;
 
@@ -359,12 +359,12 @@ struct kbTextParser {
 		}
 	}
 
-	bool ContainsKey(char* key) {
+	bool ContainsKey(const char* const key) const {
 		auto keyStartPos = m_StringBuffer.find(key, m_StartBlock /*TODO: Should confine scope of search shaderStateEndBlock - shaderStateStartBlock*/);
 		return (keyStartPos != std::string::npos);
 	}
 
-	bool GetValueForKey(std::string& outValue, char* key) {
+	bool GetValueForKey(std::string& outValue, const char* const key) const {
 		outValue.clear();
 		auto keyStartPos = m_StringBuffer.find(key, m_StartBlock /*TODO: Should confine scope of search shaderStateEndBlock - shaderStateStartBlock*/);
 		if (keyStartPos != std::string::npos) {

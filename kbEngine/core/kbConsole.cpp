@@ -3,7 +3,6 @@
 /// 2016-2025 blk 1.0
 
 #include <fstream>
-#include "kbInputManager.h"
 #include "kbConsole.h"
 
 /// kbConsoleVarManager::Initialize

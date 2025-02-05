@@ -4,7 +4,6 @@
 
 #pragma once
 
-#include "kbCore.h"
 #include "kbInputManager.h"
 
 /// kbConsoleVarManager

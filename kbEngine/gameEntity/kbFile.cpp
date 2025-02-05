@@ -94,7 +94,7 @@ void kbFile::Close() {
 kbGameEntity* kbFile::ReadGameEntity() {
 	if (m_FileType != FT_Read) {
 		blk::warning("kbFile::ReadGameEntity() - Tried to read from file %s, but the file does not have the correct type.", m_FileName.c_str());
-		return false;
+		return nullptr;
 	}
 	return ReadGameEntity_Internal();
 }
@@ -786,7 +786,7 @@ kbPackage* kbFile::ReadPackage(const bool bLoadAssetsImmediately) {
 
 	if (m_FileType != FT_Read) {
 		blk::warning("kbFile::ReadPackage() - Tried to read to file %s, but the file does not have the correct type.", m_FileName.c_str());
-		return false;
+		return nullptr;
 	}
 
 	std::string nextToken;

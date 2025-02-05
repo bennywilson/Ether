@@ -20,7 +20,6 @@ public:
 	void MarkJobAsComplete() { m_bIsFinished = true; }
 
 private:
-
 	kbJob* m_Next;
 	volatile int m_bIsFinished;
 };
@@ -35,7 +34,7 @@ public:
 
 	kbJob* GrabJob();
 
-	bool IsShuttingDown() { return m_bShutdownRequested; }
+	bool IsShuttingDown() const { return m_bShutdownRequested; }
 
 private:
 	kbJob* m_JobQueueHead;
