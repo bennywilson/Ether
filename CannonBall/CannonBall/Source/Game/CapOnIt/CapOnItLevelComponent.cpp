@@ -25,18 +25,18 @@ CapOnIt::eSkipCheats g_SkipCheat = CapOnIt::Skip_ToSkkt;
  */
 class CapOnIt_MainMenuState : public CapOnIt_BaseState {
 
-//---------------------------------------------------------------------------------------------------
+	//---------------------------------------------------------------------------------------------------
 public:
 
-	CapOnIt_MainMenuState( CapOnItLevelComponent *const pLevelComponent ) : CapOnIt_BaseState( pLevelComponent ) { }
+	CapOnIt_MainMenuState(CapOnItLevelComponent* const pLevelComponent) : CapOnIt_BaseState(pLevelComponent) { }
 
 
 private:
 
-	virtual void WidgetEventCB( kbUIWidgetComponent *const pWidget, const kbInput_t * pInput ) override {
+	virtual void WidgetEventCB(kbUIWidgetComponent* const pWidget, const kbInput_t* pInput) override {
 	}
 
-	virtual void BeginState_Internal( CapOnIt::eCapOnIt_State previousState ) override { }
+	virtual void BeginState_Internal(CapOnIt::eCapOnIt_State previousState) override { }
 
 	virtual void UpdateState_Internal() override {
 
@@ -73,12 +73,12 @@ private:
 		pSheep->SetOwnerPosition( KungFuGame::kSheepStartPos );*/
 	}
 
-	virtual void EndState_Internal( CapOnIt::eCapOnIt_State nextState ) override {
+	virtual void EndState_Internal(CapOnIt::eCapOnIt_State nextState) override {
 	}
 
 };
 
-CapOnItLevelComponent * CapOnItLevelComponent::s_Inst = nullptr;
+CapOnItLevelComponent* CapOnItLevelComponent::s_Inst = nullptr;
 
 /**
  *	CapOnItLevelComponent::Constructor
@@ -89,26 +89,23 @@ void CapOnItLevelComponent::Constructor() {
 /**
  *	CapOnItLevelComponent::SetEnable_Internal
  */
-void CapOnItLevelComponent::SetEnable_Internal( const bool bEnable ) {
-	Super::SetEnable_Internal( bEnable );
+void CapOnItLevelComponent::SetEnable_Internal(const bool bEnable) {
+	Super::SetEnable_Internal(bEnable);
 
-	if ( bEnable ) {
-
-		kbErrorCheck( s_Inst == nullptr, "KungFuLevelComponent::SetEnable_Internal() - Multiple enabled instances of KungFuLevelComponent" );
+	if (bEnable) {
+		blk::error_check(s_Inst == nullptr, "KungFuLevelComponent::SetEnable_Internal() - Multiple enabled instances of KungFuLevelComponent");
 		s_Inst = this;
-
 	} else {
-
 	}
 }
 
 /**
  *	CapOnItLevelComponent::Update_Internal
  */
-void CapOnItLevelComponent::Update_Internal( const float DeltaTime ) {
-	Super::Update_Internal( DeltaTime );
+void CapOnItLevelComponent::Update_Internal(const float DeltaTime) {
+	Super::Update_Internal(DeltaTime);
 
-	if ( g_UseEditor ) {
+	if (g_UseEditor) {
 		return;
 	}
 
@@ -183,14 +180,14 @@ void CapOnItDirector::UpdateStateMachine() {
 /**
  *	CapOnItDirector::StateChangeCB
  */
-void CapOnItDirector::StateChangeCB( const CapOnIt::eCapOnIt_State previousState, const CapOnIt::eCapOnIt_State nextState ) {
+void CapOnItDirector::StateChangeCB(const CapOnIt::eCapOnIt_State previousState, const CapOnIt::eCapOnIt_State nextState) {
 
 }
 
 /**
  *	CapOnItDirector::WidgetEventCB
  */
-void CapOnItDirector::WidgetEventCB( kbUIWidgetComponent *const pWidget, const kbInput_t *const pInput ) {
-	
-	m_States[m_CurrentState]->WidgetEventCB( pWidget, pInput );
+void CapOnItDirector::WidgetEventCB(kbUIWidgetComponent* const pWidget, const kbInput_t* const pInput) {
+
+	m_States[m_CurrentState]->WidgetEventCB(pWidget, pInput);
 }

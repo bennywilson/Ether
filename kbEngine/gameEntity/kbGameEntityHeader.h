@@ -1,14 +1,10 @@
-//===================================================================================================
-// kbGameEntityHeader.h
-//
-//
-// 2016-2019 blk 1.0
-//===================================================================================================
-#ifndef KBGAMEENTITYHEADER_H_
-#define KBGAMEENTITYHEADER_H_
+/// kbGameEntityHeader.h
+///
+/// 2016-2025 blk 1.0
 
-void CopyVarToComponent( const class kbComponent * Src, class kbComponent * Dst, const class kbTypeInfoVar * currentVar );
+#pragma once
 
+void CopyVarToComponent(const class kbComponent* Src, class kbComponent* Dst, const class kbTypeInfoVar* currentVar);
 
 #define DEFINE_KBCLASS(className) \
 	class className##_TypeInfo className::typeInfo; \
@@ -58,15 +54,3 @@ public: \
 #include "kbFile.h"
 
 #define KB_DEFINE_COMPONENT( className )
-
-/*
-className::className( const className & componentToCopy ) { \
-	Constructor(); \
-	for ( int i = 0; i < GetTypeInfo().size(); i++ ) { \
-		typedef std::map< std::string, kbTypeInfoVar >::const_iterator iteratorType; \
-		for (iteratorType it = GetTypeInfo()[i]->GetMemberFieldsMap().begin(); it != GetTypeInfo()[i]->GetMemberFieldsMap().end(); it++ ) { \
-			CopyVarToComponent( &componentToCopy, this, &it->second); \
-		} \
-	} \
-}*/
-#endif

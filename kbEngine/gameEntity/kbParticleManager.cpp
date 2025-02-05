@@ -13,7 +13,42 @@ static const uint NumScratchBuffers = 4;
 static const uint NumScratchBufferVerts = 50000;
 
 /// kbParticleManager::kbParticleManager
-kbParticleManager::kbParticleManager() { }
+kbParticleManager::kbParticleManager() {
+	m_ComponentPool.resize(ComponentPoolSize);
+	for (int i = 0; i < ComponentPoolSize; i++) {
+		m_ComponentPool[i] = new kbGameComponent();
+	}
+
+	const uint indexBufferMax = 6 * (NumScratchBufferVerts / 4);
+	m_ScratchParticleBuffers.resize(NumScratchBuffers);
+	for (int i = 0; i < NumScratchBuffers; i++) {
+
+		auto& scratchBuf = m_ScratchParticleBuffers[i];
+		scratchBuf.m_iCurModel = 0;
+
+		for (int iModel = 0; iModel < NumCustomParticleBuffers; iModel++) {
+			auto pModel = &scratchBuf.m_RenderModel[iModel];
+			pModel->CreateDynamicModel(NumScratchBufferVerts, indexBufferMax, nullptr, nullptr, sizeof(kbParticleVertex));
+
+			ushort* const pIndexBuf = (ushort*)pModel->MapIndexBuffer();
+			for (uint iBuf = 0, iVB = 0; iBuf < indexBufferMax; iBuf += 6, iVB += 4) {
+				pIndexBuf[iBuf + 0] = iVB + 2;
+				pIndexBuf[iBuf + 1] = iVB + 1;
+				pIndexBuf[iBuf + 2] = iVB + 0;
+				pIndexBuf[iBuf + 3] = iVB + 3;
+				pIndexBuf[iBuf + 4] = iVB + 2;
+				pIndexBuf[iBuf + 5] = iVB + 0;
+			}
+
+			pModel->UnmapIndexBuffer();
+		}
+
+		scratchBuf.m_iCurModel = 0;
+		kbModel& nextModel = scratchBuf.m_RenderModel[scratchBuf.m_iCurModel];
+		scratchBuf.m_pVertexBuffer = (kbParticleVertex*)nextModel.MapVertexBuffer();
+		scratchBuf.m_iVert = 0;
+	}
+}
 
 /// kbParticleManager::~kbParticleManager
 kbParticleManager::~kbParticleManager() {

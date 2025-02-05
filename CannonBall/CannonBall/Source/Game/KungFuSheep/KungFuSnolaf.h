@@ -87,11 +87,11 @@ class KungFuSnolafStateBase : public CannonBallCharacterState<T> {
 //---------------------------------------------------------------------------------------------------'
 public:
 
-	KungFuSnolafStateBase( CannonActorComponent *const pPlayerComponent ) : CannonBallCharacterState( pPlayerComponent ) { }
+	KungFuSnolafStateBase( CannonActorComponent *const pPlayerComponent ) : CannonBallCharacterState<T>( pPlayerComponent ) { }
 
 protected:
 
-	KungFuSnolafComponent *	GetSnolaf() const { return (KungFuSnolafComponent*)m_pActorComponent; }
+	KungFuSnolafComponent *	GetSnolaf() const { return (KungFuSnolafComponent*)this->m_pActorComponent; }
 	CannonActorComponent *	GetTarget() const { return g_pCannonGame->GetPlayer(); }
 
 	float GetDistanceToTarget() {
@@ -101,7 +101,7 @@ protected:
 		}
 
 		const kbVec3 targetPos = GetTarget()->GetOwnerPosition();
-		const kbVec3 snolafPos = m_pActorComponent->GetOwnerPosition();
+		const kbVec3 snolafPos = this->m_pActorComponent->GetOwnerPosition();
 
 		if ( targetPos.Compare( snolafPos ) == true ) {
 			return 0.0f;
@@ -116,9 +116,9 @@ protected:
 		}
 
 		const kbVec3 targetPos = GetTarget()->GetOwnerPosition();
-		const kbVec3 snolafPos = m_pActorComponent->GetOwnerPosition();
+		const kbVec3 snolafPos = this->m_pActorComponent->GetOwnerPosition();
 
-		m_pActorComponent->SetTargetFacingDirection( ( snolafPos - targetPos ).Normalized() );
+		this->m_pActorComponent->SetTargetFacingDirection( ( snolafPos - targetPos ).Normalized() );
 	}
 
 	bool IsTargetOnLeft() const {
@@ -127,7 +127,7 @@ protected:
 		}
 
 		const kbVec3 targetPos = GetTarget()->GetOwnerPosition();
-		const kbVec3 snolafPos = m_pActorComponent->GetOwnerPosition();
+		const kbVec3 snolafPos = this->m_pActorComponent->GetOwnerPosition();
 		return ( targetPos.z > snolafPos.z );
 	}
 };

@@ -290,7 +290,7 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 
 	hAccelTable = LoadAccelerators(hInstance, MAKEINTRESOURCE(IDI_GAMEBASE));
 
-	InitializeKBEngine();
+	blk::initialize_engine();
 
 	CannonGame * pGame = nullptr;
 	kbEditor * applicationEditor = nullptr;
@@ -332,7 +332,7 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 
 		} catch( char * string ) {
 			// todo : output error to console
-			kbLog( string );
+			blk::log( string );
 		}
 	}
 
@@ -349,7 +349,7 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 	delete g_pRenderer;
 	g_pRenderer = nullptr;
 
-	ShutdownKBEngine();
+	blk::shutdown_engine();
 
 	kbConsoleVarManager::DeleteConsoleVarManager();
 

@@ -458,9 +458,9 @@ void CannonBallPauseMenuUIComponent::Update_Internal( const float DT ) {
 		g_Offsets[offsetIdx].x += DT * speed;
 	}
 
-	kbLog( "------" );
+	blk::log( "------" );
 	for ( int i = 0; i < 5; i++ ) {
-		kbLog( "%d: %f %f %f", i, g_CheckMarkPos[i].x + g_Offsets[i].x, g_CheckMarkPos[i].y + g_Offsets[i].y, g_CheckMarkPos[i].z + g_Offsets[i].z );
+		blk::log( "%d: %f %f %f", i, g_CheckMarkPos[i].x + g_Offsets[i].x, g_CheckMarkPos[i].y + g_Offsets[i].y, g_CheckMarkPos[i].z + g_Offsets[i].z );
 	}
 		m_Widgets.back().SetRelativePosition( g_CheckMarkPos[m_SelectedWidgetIdx] + g_Offsets[m_SelectedWidgetIdx] );
 		*/

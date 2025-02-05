@@ -21,7 +21,7 @@ public:
 
 	virtual	~kbLevelDirector() { }
 
-	virtual void UpdateStateMachine() { IStateMachine::UpdateStateMachine(); }
+	virtual void UpdateStateMachine() { IStateMachine<T,C>::UpdateStateMachine(); }
 };
 
 #endif

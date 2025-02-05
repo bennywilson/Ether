@@ -36,7 +36,7 @@ protected:
 
 private:
 
-	void										CapOnItLevelComponent::UpdateDebugAndCheats();
+	void										UpdateDebugAndCheats();
 
 	static CapOnItLevelComponent *				s_Inst;
 };

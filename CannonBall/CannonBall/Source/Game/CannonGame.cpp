@@ -27,7 +27,7 @@ CannonGame::CannonGame() :
 
 	m_Camera.m_Position.Set( 0.0f, 2600.0f, 0.0f );
 
-	kbErrorCheck( g_pCannonGame == nullptr, "CannonGame::CannonGame() - g_pCannonGame is not nullptr" );
+	blk::error_check( g_pCannonGame == nullptr, "CannonGame::CannonGame() - g_pCannonGame is not nullptr" );
 	g_pCannonGame = this;
 }
 
@@ -36,7 +36,7 @@ CannonGame::CannonGame() :
  */
 CannonGame::~CannonGame() {
 
-	kbErrorCheck( g_pCannonGame != nullptr, "CannonGame::~CannonGame() - g_pCannonGame is nullptr" );
+	blk::error_check( g_pCannonGame != nullptr, "CannonGame::~CannonGame() - g_pCannonGame is nullptr" );
 	g_pCannonGame = nullptr;
 }
 
@@ -111,8 +111,8 @@ void CannonGame::LevelLoaded_Internal() {
 		SwapEntitiesByIdx( cameraIdx, GameEnts.size() - 1 );
 	}
 
-	kbWarningCheck( m_pMainCamera != nullptr, "CannonGame::LevelLoaded_Internal() - No camera found.");
-	kbWarningCheck( m_pPlayerComp != nullptr, "CannonGame::LevelLoaded_Internal() - No player found.");
+	blk::warning_check( m_pMainCamera != nullptr, "CannonGame::LevelLoaded_Internal() - No camera found.");
+	blk::warning_check( m_pPlayerComp != nullptr, "CannonGame::LevelLoaded_Internal() - No player found.");
 }
 
 /**
@@ -143,7 +143,7 @@ void CannonGame::PostUpdate_Internal() {
 void CannonGame::AddGameEntity_Internal( kbGameEntity *const pEntity ) {
 
 	if ( pEntity == nullptr ) {
-		kbWarning( "CannonGame::AddGameEntity_Internal() - nullptr Entity" );
+		blk::warning( "CannonGame::AddGameEntity_Internal() - nullptr Entity" );
 		return;
 	}
 
@@ -162,7 +162,7 @@ void CannonGame::AddGameEntity_Internal( kbGameEntity *const pEntity ) {
 void CannonGame::RemoveGameEntity_Internal( kbGameEntity *const pEntity ) {
 
 	if ( pEntity == nullptr ) {
-		kbWarning( "CannonGame::RemoveGameEntity_Internal() - nullptr Entity" );
+		blk::warning( "CannonGame::RemoveGameEntity_Internal() - nullptr Entity" );
 		return;
 	}
 

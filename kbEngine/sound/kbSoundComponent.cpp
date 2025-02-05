@@ -7,6 +7,7 @@
 #include "kbGameEntityHeader.h"
 #include "kbGame.h"
 #include "kbSoundComponent.h"
+#include "kbRenderer.h"
 
 ///	kbSoundData::Constructor
 void kbSoundData::Constructor() {
@@ -27,9 +28,9 @@ kbSoundData::~kbSoundData() {
 
 /// kbSoundData::PlaySoundAtPosition
 void kbSoundData::PlaySoundAtPosition(const kbVec3& soundPosition) {
-	blk::error("Needs reimplementation");
+	//blk::error("Needs reimplementation");
 
-	/*kbVec3 currentCameraPosition;
+	kbVec3 currentCameraPosition;
 	kbQuat currentCameraRotation;
 
 	g_pRenderer->GetRenderViewTransform(nullptr, currentCameraPosition, currentCameraRotation);
@@ -48,7 +49,7 @@ void kbSoundData::PlaySoundAtPosition(const kbVec3& soundPosition) {
 	const int waveId = g_pGame->GetSoundManager().PlayWave(m_pWaveFile, atten * m_Volume, m_bLooping);
 	if (m_bLooping) {
 		m_SoundId = waveId;
-	}*/
+	}
 }
 
 /// kbSoundData::StopSound

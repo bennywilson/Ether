@@ -2,10 +2,9 @@
 // CannonGame.h
 //
 //
-// 2019 kbEngine 2.0
+// 2019-2025 kbEngine 2.0
 //===================================================================================================
-#ifndef _CannonGame_H_
-#define _CannonGame_H_
+#pragma once
 
 #include "kbGame.h"
 #include "kbJobManager.h"
@@ -207,4 +206,3 @@ inline kbVec2 GetPrevLeftStick( const kbInput_t *const pInput = nullptr ) {
 }
 
 
-#endif

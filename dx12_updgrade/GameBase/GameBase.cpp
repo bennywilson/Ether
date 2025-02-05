@@ -70,7 +70,7 @@ BOOL CALLBACK EnumDisplayMonitorsCB(HMONITOR hMonitor, HDC hdcMonitor, LPRECT lp
 /// InitInstance
 BOOL InitInstance(HINSTANCE hInstance, int nCmdShow) {
 	hInst = hInstance; // Store instance handle in our global variable
-	g_UseEditor = true;
+//g_UseEditor = true;
 	if (g_UseEditor == false) {	
 		WNDCLASS wc = {};
 		memset(&wc, 0, sizeof(wc));
@@ -232,7 +232,7 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 		}
 
 		try {
-			static int fear = 1;
+			static int fear = 0;
 
 			if (fear) {
 				if (g_UseEditor) {

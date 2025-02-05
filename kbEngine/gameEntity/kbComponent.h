@@ -101,7 +101,7 @@ public:
 	
 	template<typename T>
 	T* GetComponent() const {
-		T* component = GetOwner()->GetComponent<T>(34);
+		T* component = (T*)GetOwner()->GetComponentByType(T::GetType());
 		return component;
 	}
 
