@@ -3,7 +3,7 @@
 //
 // Renderer implementation
 //
-// 2018 kbEngine 2.0
+// 2018 blk 1.0
 //==============================================================================
 #include "kbCore.h"
 #include "containers.h"

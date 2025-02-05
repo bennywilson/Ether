@@ -47,8 +47,8 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>C:\VulkanSDK\1.4.304.0\Include;..\..\kbEngine\renderer\vk;..\..\kbEngine\renderer\d3d12\dxtk;..\..\kbEngine\renderer\d3d12\dx12;..\..\kbEngine\renderer\d3d12;..\..\kbEngine\sound;..\..\kbEngine\external;..\..\kbEngine\gameEntity;..\..\kbEngine\boundingVolumes;..\..\kbEngine\math;..\..\kbEngine\editor;..\..\kbEngine\renderer;..\..\kbEngine\app;..\..\kbEngine\core;$(IncludePath);$(VCInstallDir)atlmfc\include</IncludePath>
-    <LibraryPath>./External/OculusSDK\LibOVR\Lib\Windows\x64\Release\VS2015;..\..\kbEngine\lib;$(LibraryPath);C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Lib\x64;$(VSInstallDir);$(VSInstallDir)lib\amd64</LibraryPath>
+    <IncludePath>..\..\kbEngine\app;..\..\kbEngine\boundingVolumes;..\..\kbEngine\core;..\..\kbEngine\editor;..\..\kbEngine\external;..\..\kbEngine\gameEntity;..\..\kbEngine\math;..\..\kbEngine\renderer;..\..\kbEngine\renderer\d3d12;..\..\kbEngine\renderer\d3d12\dxkt;..\..\kbEngine\renderer\d3d12\dx12;..\..\kbEngine\renderer\vk;..\..\kbEngine\Sound;C:\VulkanSDK\1.4.304.0\Include;$(IncludePath)</IncludePath>
+    <LibraryPath>..\..\kbEngine\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>

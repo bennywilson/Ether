@@ -1,6 +1,6 @@
 /// kbPlane.h
 ///
-/// 2017-2015 kbEngine 2.0
+/// 2017-2015 blk 1.0
 
 #pragma once
 

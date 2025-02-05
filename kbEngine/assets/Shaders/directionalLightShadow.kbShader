@@ -2,7 +2,7 @@
 // directionalLightShadow.kbShader
 //
 //
-// 2017-2018 kbEngine 2.0
+// 2017-2018 blk 1.0
 //===================================================================================================
 cbuffer matrixBuffer {
    matrix      mvpMatrix;

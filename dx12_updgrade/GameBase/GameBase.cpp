@@ -1,6 +1,6 @@
 /// GameBase.cpp
 ///
-/// 2025 kbEngine 2.0
+/// 2025 blk 1.0
 
 #include "stdafx.h"
 #include "GameBase.h"
@@ -10,6 +10,7 @@
 #include "Ether/EtherGame.h"
 #include "kbGameEntityHeader.h"
 #include <dxgi1_6.h>
+#include "dx11/kbRenderer_DX11.h"
 #include "renderer_d3d12.h"
 #include "renderer_vk.h"
 

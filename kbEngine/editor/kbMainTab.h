@@ -1,7 +1,12 @@
 /// kbMainTab.h
 ///
-/// 2016-2025 kbEngine 2.0
+/// 2016-2025 blk 1.0
 #pragma once
+
+#pragma warning(push)
+#pragma warning(disable:4312)
+#include <FL/Fl_Tabs.h>
+#pragma warning(pop)
 
 /// kbMainTab
 class kbMainTab : public kbWidget, public Fl_Tabs {

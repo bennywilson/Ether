@@ -2,7 +2,7 @@
 // kbManipulator.h
 //
 //
-// 2016-2018 kbEngine 2.0
+// 2016-2018 blk 1.0
 //===================================================================================================
 #ifndef _KBEDITORMANIPULATOR_H_
 #define _KBEDITORMANIPULATOR_H_

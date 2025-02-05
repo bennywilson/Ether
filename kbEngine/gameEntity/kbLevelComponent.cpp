@@ -1,6 +1,6 @@
 /// kbLevelComponent.cpp
 ///
-/// 2019-2025 kbEngine 2.0
+/// 2019-2025 blk 1.0
 
 #include "kbCore.h"
 #include "kbGameEntityHeader.h"

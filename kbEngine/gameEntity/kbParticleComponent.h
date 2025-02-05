@@ -2,7 +2,7 @@
 // kbParticleComponent.h
 //
 //
-// 2016 kbEngine 2.0
+// 2016 blk 1.0
 //===================================================================================================
 #ifndef _KBPARTICLECOMPONENT_H_
 #define _KBPARTICLECOMPONENT_H_

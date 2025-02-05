@@ -1,15 +1,19 @@
-//===================================================================================================
-// kbEditor.h
-//
-//
-// 2016-2018 kbEngine 2.0
-//===================================================================================================
-#ifndef _KBEDITOR_H_
-#define _KBEDITOR_H_
+/// kbEditor.h
+///
+// 2016-2025 blk 1.0
+
+#pragma once
 
 #include "kbWidget.h"
 #include "kbGame.h"
 #include "kbUndoAction.h"
+
+#pragma warning(push)
+#pragma warning(disable:4312)
+#include <fl/fl.h>
+#include <fL/fl_draw.h>
+#include <fl/fl_input.h>
+#pragma warning(pop)
 
 class kbWidget;
 class kbEditorEntity;
@@ -79,9 +83,9 @@ private:
 
 	kbGame *												m_pGame;
 	kbEditorWindow *										m_pGameWindow;
-	Fl_Choice *												m_pSpeedChoice;
+	class Fl_Choice *										m_pSpeedChoice;
 
-	Fl_Input *												m_pXFormInput;
+	class Fl_Input *										m_pXFormInput;
 	float													m_XFormAmount;
 
 	// widgets
@@ -186,60 +190,7 @@ public:
 		m_Fields.push_back( newField );
    }
 
-   bool Run() {
-		blk::error_check( m_Fields.size() > 0, "Dialog box has no fields" );
-		blk::error_check( gCurrentDialogBox != nullptr, "Run called on an invalid dialog box" );
-
-		const int ButtonHeight = fl_height() + kbEditor::PanelBorderSize() * 2;
-		const int popUpWidth = 600;
-		const int popUpHeight = ( ( int ) m_Fields.size() + 2 ) * kbEditor::LineSpacing() + ButtonHeight;
-		int dx, dy, w, h;
-		int MaxNameLength = 0;
-
-		for ( size_t i = 0; i < m_Fields.size(); i++ ) {
-			fl_text_extents( m_Fields[i].m_FieldName.c_str(), dx, dy, w, h );
-
-			if ( w > MaxNameLength ) {
-				MaxNameLength = w;
-			}
-		}
-
-		m_PopUpWindow = new Fl_Window( Fl::event_x(), Fl::event_y(), popUpWidth, popUpHeight );
-		const int StartX = 2 * kbEditor::PanelBorderSize() + MaxNameLength;
-		const int StartY = kbEditor::PanelBorderSize();
-
-		for ( int i = 0; i < m_Fields.size(); i++ ) {
-			m_Fields[i].m_Input = new Fl_Input( StartX, StartY + kbEditor::LineSpacing() * i, popUpWidth - ( MaxNameLength + kbEditor::PanelBorderSize() * 5 ), 20, m_Fields[i].m_FieldName.c_str() );
-		}
-
-		int MaxButtonNameLen = 0;
-		fl_text_extents( m_AcceptButtonName.c_str(), dx, dy, MaxButtonNameLen, h );
-		fl_text_extents( m_CancelButtonName.c_str(), dx, dy, w, h );
-
-		if ( w > MaxButtonNameLen ) {
-			MaxButtonNameLen = w;
-		}
-
-		Fl_Button *const pAcceptButton = new Fl_Button( StartX, StartY + kbEditor::LineSpacing( 4 ), MaxButtonNameLen + kbEditor::PanelBorderSize( 2 ), ButtonHeight, m_AcceptButtonName.c_str() );
-		Fl_Button *const pCancelButton = new Fl_Button( StartX + MaxButtonNameLen + kbEditor::PanelBorderSize()* 4, StartY + kbEditor::LineSpacing( 4 ), MaxButtonNameLen, ButtonHeight, m_CancelButtonName.c_str() );
-
-		pAcceptButton->callback( AcceptButtonClicked );
-		pCancelButton->callback( CancelButtonClicked );
-
-		m_PopUpWindow->show();
-
-		while( m_PopUpWindow->shown() ) { Fl::wait(); }
-
-		for ( size_t i = 0; i < m_Fields.size(); i++ ) {
-			m_Fields[i].m_FieldValue = m_Fields[i].m_Input->value();
-		}
-
-		delete m_PopUpWindow;
-		m_PopUpWindow = nullptr;
-		gCurrentDialogBox = nullptr;
-
-		return m_bAccepted;
-	}
+   bool Run();
 
 	const std::string & GetFieldEntry( const int fieldIdx ) const {
 		if ( fieldIdx < 0 || fieldIdx >= m_Fields.size() ) {
@@ -282,5 +233,3 @@ private:
 
 	static kbDialogBox * gCurrentDialogBox;
 };
-
-#endif

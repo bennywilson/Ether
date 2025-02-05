@@ -1,6 +1,6 @@
 /// kbPropertiesTab.cpp
 ///
-/// 2016-2025 kbEngine 2.0
+/// 2016-2025 blk 1.0
 
 #include "kbCore.h"
 #include "kbVector.h"
@@ -10,6 +10,14 @@
 #include "kbPropertiesTab.h"
 #include "FL/FL_Scroll.h"
 #include "kbResourceTab.h"
+
+#pragma warning(push)
+#pragma warning(disable:4312)
+#include <fl/fl_ask.h>
+#include <fl/fl_check_button.h>
+#include <fl/fl_choice.h>
+#include <fl/fl_text_display.h>
+#pragma warning(pop)
 
 kbPropertiesTab* g_pPropertiesTab = nullptr;
 

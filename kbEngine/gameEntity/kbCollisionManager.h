@@ -2,7 +2,7 @@
 // kbCollisionManager.h
 //
 //
-// 2016-2018 kbEngine 2.0
+// 2016-2018 blk 1.0
 //===================================================================================================
 #ifndef _KBCOLLISIONMANAGER_H_
 #define _KBCOLLISIONMANAGER_H_

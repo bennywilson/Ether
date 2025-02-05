@@ -1,9 +1,7 @@
-//===================================================================================================
-// kbGameEntity.cpp
-//
-//
-// 2016 kbEngine 2.0
-//===================================================================================================
+/// kbGameEntity.cpp
+///
+/// 2016-2025 blk 1.0
+/// 
 #include "kbCore.h"
 #include "containers.h"
 #include "kbVector.h"
@@ -16,14 +14,14 @@
  *	kbEntity::kbEntity
  */
 kbEntity::kbEntity() :
-	m_bIsDirty( false ) {
+	m_bIsDirty(false) {
 }
 
 /**
  *	kbEntity::PostLoad
  */
 void kbEntity::PostLoad() {
-	for ( int i = 0; i < m_Components.size(); i++ ) {
+	for (int i = 0; i < m_Components.size(); i++) {
 		m_Components[i]->PostLoad();
 	}
 }
@@ -31,67 +29,67 @@ void kbEntity::PostLoad() {
 /**
  *	kbEntity::AddComponent
  */
-void kbEntity::AddComponent( kbComponent *const pComponent, int indexToInsertAt ) {
-	pComponent->SetOwner( this );
+void kbEntity::AddComponent(kbComponent* const pComponent, int indexToInsertAt) {
+	pComponent->SetOwner(this);
 
 	const int lastComponentIdx = (int)m_Components.size();
-	if ( indexToInsertAt == -1 ) {
+	if (indexToInsertAt == -1) {
 		indexToInsertAt = lastComponentIdx;
 	}
 
-	if ( pComponent->IsA( kbGameLogicComponent::GetType() ) ) {
+	if (pComponent->IsA(kbGameLogicComponent::GetType())) {
 		indexToInsertAt = lastComponentIdx;
-	} else if ( m_Components.size() > 0 && indexToInsertAt == lastComponentIdx ) {
-		while( indexToInsertAt > 0 && m_Components[indexToInsertAt-1]->IsA( kbGameLogicComponent::GetType() ) ) {
+	} else if (m_Components.size() > 0 && indexToInsertAt == lastComponentIdx) {
+		while (indexToInsertAt > 0 && m_Components[indexToInsertAt - 1]->IsA(kbGameLogicComponent::GetType())) {
 			indexToInsertAt--;
 		}
 	}
 
-	if ( indexToInsertAt < 0 || indexToInsertAt >= m_Components.size() ) {
-		m_Components.push_back( pComponent );
+	if (indexToInsertAt < 0 || indexToInsertAt >= m_Components.size()) {
+		m_Components.push_back(pComponent);
 	} else {
-		m_Components.insert( m_Components.begin() + indexToInsertAt, pComponent );
+		m_Components.insert(m_Components.begin() + indexToInsertAt, pComponent);
 	}
 }
 
 /**
  *	kbEntity::RemoveComponent
  */
-void kbEntity::RemoveComponent( kbComponent *const pComponent ) {
+void kbEntity::RemoveComponent(kbComponent* const pComponent) {
 
 	// TODO: This might move the game logic component from the back of the list!
-	blk::std_remove_swap( m_Components, pComponent );
+	blk::std_remove_swap(m_Components, pComponent);
 }
 
 //===================================================================================================
 //	kbGameEntityPtr
 //===================================================================================================
-bool operator<( const kbGUID & a, const kbGUID & b ) {
-	return memcmp( &a, &b, sizeof(b) ) < 0;
+bool operator<(const kbGUID& a, const kbGUID& b) {
+	return memcmp(&a, &b, sizeof(b)) < 0;
 }
 
 struct EntPtrHash {
-	size_t operator()( const kbGUID & op ) const {
-		return std::hash<int>()( op.m_iGuid[0] ) ^ std::hash<int>()( op.m_iGuid[1] ) ^ std::hash<int>()( op.m_iGuid[2] ) ^ std::hash<int>()( op.m_iGuid[3] );
+	size_t operator()(const kbGUID& op) const {
+		return std::hash<int>()(op.m_iGuid[0]) ^ std::hash<int>()(op.m_iGuid[1]) ^ std::hash<int>()(op.m_iGuid[2]) ^ std::hash<int>()(op.m_iGuid[3]);
 	}
 };
 
-std::unordered_map<kbGUID, kbGameEntity *, EntPtrHash> g_GUIDToEntityMap;
-std::unordered_map<int, kbGameEntity *> g_IndexToEntityMap;
+std::unordered_map<kbGUID, kbGameEntity*, EntPtrHash> g_GUIDToEntityMap;
+std::unordered_map<int, kbGameEntity*> g_IndexToEntityMap;
 
 /**
  *	kbGameEntityPtr::SetEntity
  */
-void kbGameEntityPtr::SetEntity( const kbGUID & guid ) {
+void kbGameEntityPtr::SetEntity(const kbGUID& guid) {
 
 	m_GUID = guid;
 	m_EntityId = INVALID_ENTITYID;
 
-	std::unordered_map<kbGUID, kbGameEntity *, EntPtrHash>::const_iterator GUIDToEntityIt = g_GUIDToEntityMap.find( m_GUID );
-	if ( GUIDToEntityIt == g_GUIDToEntityMap.end() ) {
+	std::unordered_map<kbGUID, kbGameEntity*, EntPtrHash>::const_iterator GUIDToEntityIt = g_GUIDToEntityMap.find(m_GUID);
+	if (GUIDToEntityIt == g_GUIDToEntityMap.end()) {
 		g_GUIDToEntityMap[guid] = nullptr;
 	} else {
-		if ( GUIDToEntityIt->second != nullptr ) {
+		if (GUIDToEntityIt->second != nullptr) {
 			m_EntityId = GUIDToEntityIt->second->GetEntityId();
 		}
 	}
@@ -100,25 +98,25 @@ void kbGameEntityPtr::SetEntity( const kbGUID & guid ) {
 /**
  *	kbGameEntityPtr::SetEntity
  */
-void kbGameEntityPtr::SetEntity( kbGameEntity *const pGameEntity ) {
+void kbGameEntityPtr::SetEntity(kbGameEntity* const pGameEntity) {
 
-	if ( pGameEntity == nullptr ) {
+	if (pGameEntity == nullptr) {
 		m_EntityId = INVALID_ENTITYID;
-		ZeroMemory( &m_GUID, sizeof( m_GUID ) );
+		ZeroMemory(&m_GUID, sizeof(m_GUID));
 		return;
 	}
 
 	// Enter into guid map
 	m_GUID = pGameEntity->GetGUID();
 
-	if ( m_GUID.IsValid() ) {
-		std::unordered_map<kbGUID, kbGameEntity *, EntPtrHash>::const_iterator GUIDToEntityIt = g_GUIDToEntityMap.find( m_GUID );
+	if (m_GUID.IsValid()) {
+		std::unordered_map<kbGUID, kbGameEntity*, EntPtrHash>::const_iterator GUIDToEntityIt = g_GUIDToEntityMap.find(m_GUID);
 
-		if ( GUIDToEntityIt != g_GUIDToEntityMap.cend() && GUIDToEntityIt->second != pGameEntity && GUIDToEntityIt->second != nullptr ) {
+		if (GUIDToEntityIt != g_GUIDToEntityMap.cend() && GUIDToEntityIt->second != pGameEntity && GUIDToEntityIt->second != nullptr) {
 
-			blk::error( "kbGameEntityPtr::SetEntity() - Entities %s && %s share the same guid - %u %u %u %u", 
+			blk::error("kbGameEntityPtr::SetEntity() - Entities %s && %s share the same guid - %u %u %u %u",
 					  pGameEntity->GetName().c_str(), GUIDToEntityIt->second->GetName().c_str(),
-					  m_GUID.m_iGuid[0], m_GUID.m_iGuid[1], m_GUID.m_iGuid[2], m_GUID.m_iGuid[3] );
+					  m_GUID.m_iGuid[0], m_GUID.m_iGuid[1], m_GUID.m_iGuid[2], m_GUID.m_iGuid[3]);
 		}
 
 		g_GUIDToEntityMap[m_GUID] = pGameEntity;
@@ -127,12 +125,12 @@ void kbGameEntityPtr::SetEntity( kbGameEntity *const pGameEntity ) {
 	// Enter into entity index map
 	m_EntityId = pGameEntity->GetEntityId();
 
-	std::unordered_map<int, kbGameEntity *>::const_iterator IDToEntityIt = g_IndexToEntityMap.find( m_EntityId );
+	std::unordered_map<int, kbGameEntity*>::const_iterator IDToEntityIt = g_IndexToEntityMap.find(m_EntityId);
 
-	if ( IDToEntityIt != g_IndexToEntityMap.cend() && IDToEntityIt->second != pGameEntity && IDToEntityIt->second != nullptr ) {
-		blk::error( "kbGameEntityPtr::SetEntity() - Entities %s && %s share the same guid - %u %u %u %u", 
+	if (IDToEntityIt != g_IndexToEntityMap.cend() && IDToEntityIt->second != pGameEntity && IDToEntityIt->second != nullptr) {
+		blk::error("kbGameEntityPtr::SetEntity() - Entities %s && %s share the same guid - %u %u %u %u",
 				 pGameEntity->GetName().c_str(), IDToEntityIt->second->GetName().c_str(),
-				 m_GUID.m_iGuid[0], m_GUID.m_iGuid[1], m_GUID.m_iGuid[2], m_GUID.m_iGuid[3] );
+				 m_GUID.m_iGuid[0], m_GUID.m_iGuid[1], m_GUID.m_iGuid[2], m_GUID.m_iGuid[3]);
 	}
 
 	g_IndexToEntityMap[m_EntityId] = pGameEntity;
@@ -141,26 +139,26 @@ void kbGameEntityPtr::SetEntity( kbGameEntity *const pGameEntity ) {
 /**
  *	kbGameEntityPtr::GetEntity
  */
-kbGameEntity * kbGameEntityPtr::GetEntity() {
+kbGameEntity* kbGameEntityPtr::GetEntity() {
 
-	if ( m_EntityId != INVALID_ENTITYID ) {
+	if (m_EntityId != INVALID_ENTITYID) {
 
-		std::unordered_map<int, kbGameEntity *>::const_iterator it = g_IndexToEntityMap.find( m_EntityId );
-		if ( it != g_IndexToEntityMap.cend() ) {
+		std::unordered_map<int, kbGameEntity*>::const_iterator it = g_IndexToEntityMap.find(m_EntityId);
+		if (it != g_IndexToEntityMap.cend()) {
 			return it->second;
 		}
 	}
 
-	std::unordered_map<kbGUID, kbGameEntity *, EntPtrHash>::const_iterator it = g_GUIDToEntityMap.find( m_GUID );
-	if ( it == g_GUIDToEntityMap.cend() ) {
+	std::unordered_map<kbGUID, kbGameEntity*, EntPtrHash>::const_iterator it = g_GUIDToEntityMap.find(m_GUID);
+	if (it == g_GUIDToEntityMap.cend()) {
 		return nullptr;
 	}
 
 	return it->second;
 }
 
-const kbGameEntity * kbGameEntityPtr::GetEntity() const {
-	kbGameEntityPtr *const pThisNoConst = const_cast<kbGameEntityPtr*>( this );
+const kbGameEntity* kbGameEntityPtr::GetEntity() const {
+	kbGameEntityPtr* const pThisNoConst = const_cast<kbGameEntityPtr*>(this);
 	return pThisNoConst->GetEntity();
 }
 
@@ -181,100 +179,100 @@ uint g_EntityNumber = 0;
 /**
  *	kbGameEntity
  */
-kbGameEntity::kbGameEntity( const kbGUID *const guid, const bool bIsPrefab ) :
-	m_Bounds( kbVec3( -1.0f, -1.0f, -1.0f ), kbVec3( 1.0f, 1.0f, 1.0f ) ),
-	m_pActorComponent( nullptr ),
-	m_pOwnerEntity( nullptr ),
-	m_EntityId( g_EntityNumber++ ),
-	m_bIsPrefab( bIsPrefab ),
-	m_bDeleteWhenComponentsAreInactive( false ) {
+kbGameEntity::kbGameEntity(const kbGUID* const guid, const bool bIsPrefab) :
+	m_Bounds(kbVec3(-1.0f, -1.0f, -1.0f), kbVec3(1.0f, 1.0f, 1.0f)),
+	m_pActorComponent(nullptr),
+	m_pOwnerEntity(nullptr),
+	m_EntityId(g_EntityNumber++),
+	m_bIsPrefab(bIsPrefab),
+	m_bDeleteWhenComponentsAreInactive(false) {
 
 	m_pTransformComponent = new kbTransformComponent();
-	m_pTransformComponent->SetPosition( kbVec3::zero );
-	AddComponent( m_pTransformComponent );
+	m_pTransformComponent->SetPosition(kbVec3::zero);
+	AddComponent(m_pTransformComponent);
 
-	if ( bIsPrefab == false ) {
-		const std::string newName = "Entity_" + std::to_string( m_EntityId );
-		m_pTransformComponent->SetName( newName.c_str() );
+	if (bIsPrefab == false) {
+		const std::string newName = "Entity_" + std::to_string(m_EntityId);
+		m_pTransformComponent->SetName(newName.c_str());
 
-		if ( guid != nullptr ) {
+		if (guid != nullptr) {
 			m_GUID = *guid;
 		}
 	} else {
-		m_pTransformComponent->SetName( "Prefab" );
+		m_pTransformComponent->SetName("Prefab");
 
-		if ( guid != nullptr ) {
+		if (guid != nullptr) {
 			m_GUID = *guid;
-		} else if ( g_UseEditor == true ) {
-			CoCreateGuid( &m_GUID.m_Guid );
+		} else if (g_UseEditor == true) {
+			CoCreateGuid(&m_GUID.m_Guid);
 		} else {
-			blk::error( "kbGameEntity::kbGameEntity() - Prefab created with invalid GUID" );
+			blk::error("kbGameEntity::kbGameEntity() - Prefab created with invalid GUID");
 		}
 	}
 
-	if ( m_GUID.IsValid() == false ) {
-		CoCreateGuid( &m_GUID.m_Guid );
+	if (m_GUID.IsValid() == false) {
+		CoCreateGuid(&m_GUID.m_Guid);
 	}
 
 	kbGameEntityPtr entityPtr;
-	entityPtr.SetEntity( this );
+	entityPtr.SetEntity(this);
 }
 
 /**
  *	kbGameEntity::kbGameEntity( const kbGameEntity * )
  */
-kbGameEntity::kbGameEntity( const kbGameEntity * pGameEntity, const bool bIsPrefab, const kbGUID *const guid ) :
-	m_Bounds( pGameEntity->GetBounds() ),
-	m_pActorComponent( nullptr ),
-	m_pOwnerEntity( nullptr ),
-	m_EntityId( g_EntityNumber++ ),
-	m_bIsPrefab( bIsPrefab ),
-	m_bDeleteWhenComponentsAreInactive( false ) {
+kbGameEntity::kbGameEntity(const kbGameEntity* pGameEntity, const bool bIsPrefab, const kbGUID* const guid) :
+	m_Bounds(pGameEntity->GetBounds()),
+	m_pActorComponent(nullptr),
+	m_pOwnerEntity(nullptr),
+	m_EntityId(g_EntityNumber++),
+	m_bIsPrefab(bIsPrefab),
+	m_bDeleteWhenComponentsAreInactive(false) {
 
-	for ( int i = 0; i < pGameEntity->m_Components.size(); i++ ) {
-		const kbTypeInfoClass *const pTypeInfoClass = g_NameToTypeInfoMap->GetTypeInfoFromClassName( pGameEntity->m_Components[i]->GetComponentClassName() );
-		kbComponent * newComponent = pTypeInfoClass->ConstructInstance( pGameEntity->m_Components[i] );
-		AddComponent( newComponent );
+	for (int i = 0; i < pGameEntity->m_Components.size(); i++) {
+		const kbTypeInfoClass* const pTypeInfoClass = g_NameToTypeInfoMap->GetTypeInfoFromClassName(pGameEntity->m_Components[i]->GetComponentClassName());
+		kbComponent* newComponent = pTypeInfoClass->ConstructInstance(pGameEntity->m_Components[i]);
+		AddComponent(newComponent);
 
-		if ( i == 0 ) {
+		if (i == 0) {
 			m_pTransformComponent = (kbTransformComponent*)newComponent;
-			if ( m_pTransformComponent->IsA( kbTransformComponent::GetType() ) == false ) {
-				blk::error( "kbGameEntity::kbGameEntity() - Somehow the first component is not the transform component" );
+			if (m_pTransformComponent->IsA(kbTransformComponent::GetType()) == false) {
+				blk::error("kbGameEntity::kbGameEntity() - Somehow the first component is not the transform component");
 			}
 		}
 	}
 
-	if ( m_bIsPrefab == false ) {
-		for ( int i = 0; i < m_Components.size(); i++ ) {
-			if ( pGameEntity->m_Components[i]->IsEnabled() ) {
-				m_Components[i]->Enable( false );
-				m_Components[i]->Enable( true );
+	if (m_bIsPrefab == false) {
+		for (int i = 0; i < m_Components.size(); i++) {
+			if (pGameEntity->m_Components[i]->IsEnabled()) {
+				m_Components[i]->Enable(false);
+				m_Components[i]->Enable(true);
 			} else {
-				m_Components[i]->Enable( false );
+				m_Components[i]->Enable(false);
 			}
 		}
 	}
 
-	if ( bIsPrefab == false ) {
-		if ( guid != nullptr ) {
+	if (bIsPrefab == false) {
+		if (guid != nullptr) {
 			m_GUID = *guid;
 		}
 	} else {
-		if ( guid != nullptr ) {
+		if (guid != nullptr) {
 			m_GUID = *guid;
-		} else if ( g_UseEditor == true ) {
-			CoCreateGuid( &m_GUID.m_Guid );
+		} else if (g_UseEditor == true) {
+			CoCreateGuid(&m_GUID.m_Guid);
 		} else {
-			blk::error( "kbGameEntity::kbGameEntity() - Prefab created with invalid GUID" );
+			blk::error("kbGameEntity::kbGameEntity() - Prefab created with invalid GUID");
 		}
 	}
 
-	if ( m_GUID.IsValid() == false ) {
-		CoCreateGuid( &m_GUID.m_Guid );
+	if (m_GUID.IsValid() == false) {
+		CoCreateGuid(&m_GUID.m_Guid);
 	}
 
 	kbGameEntityPtr entityPtr;
-	entityPtr.SetEntity( this );
+	entityPtr.SetEntity(this);
 }
 
 /**
@@ -287,88 +285,88 @@ kbGameEntity::~kbGameEntity() {
 		m_Components[i]->Enable(false);
 	}
 
-	for ( int i = 0; i < m_Components.size(); i++ ) {
+	for (int i = 0; i < m_Components.size(); i++) {
 		delete m_Components[i];
 	}
 
-	for ( int i = 0; i < m_ChildEntities.size(); i++ ) {
+	for (int i = 0; i < m_ChildEntities.size(); i++) {
 		delete m_ChildEntities[i];
 	}
 
-	if ( m_GUID.IsValid() ) {
-		g_GUIDToEntityMap.erase( m_GUID );
-	} 
+	if (m_GUID.IsValid()) {
+		g_GUIDToEntityMap.erase(m_GUID);
+	}
 
-	blk::error_check( m_EntityId != INVALID_ENTITYID, "kbGameEntity::~kbGameEntity() - Destroying entity with an invalid entity id" );
-	g_IndexToEntityMap.erase( m_EntityId );
+	blk::error_check(m_EntityId != INVALID_ENTITYID, "kbGameEntity::~kbGameEntity() - Destroying entity with an invalid entity id");
+	g_IndexToEntityMap.erase(m_EntityId);
 }
 
 /**
  *	kbGameEntity::AddComponent
  */
-void kbGameEntity::AddComponent( kbComponent *const pComponent, int indexToInsertAt ) {
+void kbGameEntity::AddComponent(kbComponent* const pComponent, int indexToInsertAt) {
 
-	if ( pComponent == nullptr || pComponent->IsA( kbGameComponent::GetType() ) == false ) {
-		blk::error( "%s is trying to add a null component or one that is not a kbGameComponent.", GetName().c_str() );
+	if (pComponent == nullptr || pComponent->IsA(kbGameComponent::GetType()) == false) {
+		blk::error("%s is trying to add a null component or one that is not a kbGameComponent.", GetName().c_str());
 	}
 
-	if ( pComponent->IsA( kbActorComponent::GetType() ) ) {
-		if ( m_pActorComponent != nullptr ) {
-			blk::error( "%s is trying to add multiple kbGameLogicComponent.", GetName().c_str() );
+	if (pComponent->IsA(kbActorComponent::GetType())) {
+		if (m_pActorComponent != nullptr) {
+			blk::error("%s is trying to add multiple kbGameLogicComponent.", GetName().c_str());
 			return;
 		}
 
-		m_pActorComponent = static_cast<kbActorComponent*>( pComponent );
+		m_pActorComponent = static_cast<kbActorComponent*>(pComponent);
 	}
 
-	kbEntity::AddComponent( pComponent, indexToInsertAt );
+	kbEntity::AddComponent(pComponent, indexToInsertAt);
 }
 
 /**
  *	kbGameEntity::AddEntity
  */
-void kbGameEntity::AddEntity( kbGameEntity *const pEntity ) {
+void kbGameEntity::AddEntity(kbGameEntity* const pEntity) {
 	pEntity->m_pOwnerEntity = this;
-	m_ChildEntities.push_back( pEntity );
+	m_ChildEntities.push_back(pEntity);
 
 	// Make sure pEntity is not in kbGame's list as it will now be managed by this
-	g_pGame->RemoveGameEntity( pEntity );
+	g_pGame->RemoveGameEntity(pEntity);
 }
 
 /**
  *	kbGameEntity::Update
  */
-void kbGameEntity::Update( const float DeltaTime ) {
-	START_SCOPED_TIMER( GAME_ENTITY_UPDATE )
+void kbGameEntity::Update(const float DeltaTime) {
+	START_SCOPED_TIMER(GAME_ENTITY_UPDATE)
 
 	{
-		START_SCOPED_TIMER( COMPONENT_UPDATE )
+		START_SCOPED_TIMER(COMPONENT_UPDATE)
 
-		for ( int i = 0; i < m_Components.size(); i++ ) {
-			// todo: make sure entity is still valid before updating the next component (ex. projectile may have removed the entity)
-			if ( GetComponent(i)->IsEnabled() ) {
-				GetComponent(i)->Update( DeltaTime );
+			for (int i = 0; i < m_Components.size(); i++) {
+				// todo: make sure entity is still valid before updating the next component (ex. projectile may have removed the entity)
+				if (GetComponent(i)->IsEnabled()) {
+					GetComponent(i)->Update(DeltaTime);
+				}
 			}
-		}
 	}
 
-	for ( int i = 0; i < m_ChildEntities.size(); i++ ) {
-		m_ChildEntities[i]->Update( DeltaTime );
+	for (int i = 0; i < m_ChildEntities.size(); i++) {
+		m_ChildEntities[i]->Update(DeltaTime);
 	}
 
-	if ( m_bDeleteWhenComponentsAreInactive ) {
+	if (m_bDeleteWhenComponentsAreInactive) {
 		bool bActiveComponentsExist = false;
-		for ( int i = 1; i < m_Components.size(); i++ ) {
-			if ( m_Components[i]->IsEnabled() ) {
+		for (int i = 1; i < m_Components.size(); i++) {
+			if (m_Components[i]->IsEnabled()) {
 				bActiveComponentsExist = true;
 				break;
 			}
 		}
 
-		if ( bActiveComponentsExist == false ) {
-			g_pGame->RemoveGameEntity( this );
+		if (bActiveComponentsExist == false) {
+			g_pGame->RemoveGameEntity(this);
 			return;
-		}		
+		}
 	}
 
 	ClearDirty();
@@ -378,8 +376,8 @@ void kbGameEntity::Update( const float DeltaTime ) {
  *	kbGameEntity::EnableAllComponents
  */
 void kbGameEntity::EnableAllComponents() {
-	for ( int i = 0; i < m_Components.size(); i++ ) {
-		m_Components[i]->Enable( true );
+	for (int i = 0; i < m_Components.size(); i++) {
+		m_Components[i]->Enable(true);
 	}
 }
 
@@ -387,8 +385,8 @@ void kbGameEntity::EnableAllComponents() {
  *	kbGameEntity::DisableAllComponents
  */
 void kbGameEntity::DisableAllComponents() {
-	for ( int i = 0; i < m_Components.size(); i++ ) {
-		m_Components[i]->Enable( false );
+	for (int i = 0; i < m_Components.size(); i++) {
+		m_Components[i]->Enable(false);
 	}
 }
 
@@ -396,12 +394,12 @@ void kbGameEntity::DisableAllComponents() {
  *	kbGameEntity::RenderSync
  */
 void kbGameEntity::RenderSync() {
-	
-	for ( int i = 0; i < m_Components.size(); i++ ) {
+
+	for (int i = 0; i < m_Components.size(); i++) {
 		m_Components[i]->RenderSync();
 	}
 
-	for ( int i = 0; i < m_ChildEntities.size(); i++ ) {
+	for (int i = 0; i < m_ChildEntities.size(); i++) {
 		m_ChildEntities[i]->RenderSync();
 	}
 }
@@ -409,9 +407,9 @@ void kbGameEntity::RenderSync() {
 /**
  *	kbGameEntity::CalculateWorldMatrix
  */
-void kbGameEntity::CalculateWorldMatrix( kbMat4 & inOutMatrix ) const {
+void kbGameEntity::CalculateWorldMatrix(kbMat4& inOutMatrix) const {
 
-	kbMat4 scaleMat( kbMat4::identity );
+	kbMat4 scaleMat(kbMat4::identity);
 
 	const float modelScale = kbLevelComponent::GetGlobalModelScale();
 	scaleMat[0].x = GetScale().x * modelScale;
@@ -428,30 +426,30 @@ void kbGameEntity::CalculateWorldMatrix( kbMat4 & inOutMatrix ) const {
  */
 kbBounds kbGameEntity::GetWorldBounds() const {
 	kbBounds returnBounds = m_Bounds;
-	returnBounds.Scale( GetScale() );
-	returnBounds.Translate( GetPosition() ); 
-	return returnBounds; 
+	returnBounds.Scale(GetScale());
+	returnBounds.Translate(GetPosition());
+	return returnBounds;
 }
 
 /**
  *	kbGameEntity::GetOrientation
  */
 const kbQuat kbGameEntity::GetOrientation() const {
-	if ( m_pOwnerEntity != nullptr ) {
+	if (m_pOwnerEntity != nullptr) {
 		// This entity's orientation is in model space while the parent's is in world
 		return  m_pTransformComponent->GetOrientation() * m_pOwnerEntity->GetOrientation();
 	}
 
-	return m_pTransformComponent->GetOrientation(); 
+	return m_pTransformComponent->GetOrientation();
 }
 
 /**
  *	kbGameEntity::GetPosition
  */
 const kbVec3 kbGameEntity::GetPosition() const {
-	if ( m_pOwnerEntity != nullptr ) {
+	if (m_pOwnerEntity != nullptr) {
 		const kbQuat entityOrientation = GetOrientation();
-		const kbVec3 worldSpaceOffset = entityOrientation.ToMat4().TransformPoint( m_pTransformComponent->GetPosition() );
+		const kbVec3 worldSpaceOffset = entityOrientation.ToMat4().TransformPoint(m_pTransformComponent->GetPosition());
 		return worldSpaceOffset + m_pOwnerEntity->GetPosition();
 	}
 
@@ -461,13 +459,13 @@ const kbVec3 kbGameEntity::GetPosition() const {
 /**
  *	kbGameEntity::GetComponentByType
  */
-kbComponent * kbGameEntity::GetComponentByType( const void *const pTypeInfoClass ) const {
-	if ( pTypeInfoClass == nullptr ) {
+kbComponent* kbGameEntity::GetComponentByType(const void* const pTypeInfoClass) const {
+	if (pTypeInfoClass == nullptr) {
 		return nullptr;
 	}
 
-	for ( int i = 0; i < m_Components.size(); i++ ) {
-		if ( m_Components[i]->IsA( pTypeInfoClass ) ) {
+	for (int i = 0; i < m_Components.size(); i++) {
+		if (m_Components[i]->IsA(pTypeInfoClass)) {
 			return m_Components[i];
 		}
 	}

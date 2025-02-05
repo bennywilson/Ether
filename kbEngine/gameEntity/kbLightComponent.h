@@ -2,7 +2,7 @@
 // kbLightComponent.h
 //
 //
-// 2016-2019 kbEngine 2.0
+// 2016-2019 blk 1.0
 //===================================================================================================
 #ifndef _KBLIGHTCOMPONENT_H_
 #define _KBLIGHTCOMPONENT_H_

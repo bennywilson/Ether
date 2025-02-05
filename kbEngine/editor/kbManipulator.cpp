@@ -1,6 +1,6 @@
 /// kbManipulator.cpp
 ///
-/// 2016-2025 kbEngine 2.0
+/// 2016-2025 blk 1.0
 
 #include "kbCore.h"
 #include "kbVector.h"
@@ -10,7 +10,6 @@
 #include "kbLevelComponent.h"
 #include "kbManipulator.h"
 #include "DX11/kbRenderer_DX11.h"
-
 
 /// kbManipulator::kbManipulator
 kbManipulator::kbManipulator() :

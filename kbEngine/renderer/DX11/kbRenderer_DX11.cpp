@@ -3,7 +3,7 @@
 //
 // Renderer implementation using DX11 API
 //
-// 2016-2019 kbEngine 2.0
+// 2016-2019 blk 1.0
 //==============================================================================
 #include <D3Dcompiler.h>
 #include <d3d11_1.h>

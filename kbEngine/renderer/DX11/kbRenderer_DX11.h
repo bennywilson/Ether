@@ -3,7 +3,7 @@
 //
 // Renderer implementation using DX11 API
 //
-// 2016 kbEngine 2.0
+// 2016 blk 1.0
 //==============================================================================
 #ifndef _KBRENDERER_DX11_H_
 #define _KBRENDERER_DX11_H_

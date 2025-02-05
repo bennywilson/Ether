@@ -1,6 +1,6 @@
 /// kbCollisionManager.cpp
 ///
-/// 2016-2025 kbEngine 2.0
+/// 2016-2025 blk 1.0
 
 #include "kbCore.h"
 #include "containers.h"

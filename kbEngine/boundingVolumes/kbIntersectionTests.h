@@ -2,7 +2,7 @@
 // kbIntersectionTests.h
 //
 //
-// 2016-2018 kbEngine 2.0
+// 2016-2018 blk 1.0
 //===================================================================================================
 #ifndef _KBINTERSECTIONTESTS_H_
 #define _KBINTERSECTIONTESTS_H_

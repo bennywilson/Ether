@@ -2,7 +2,7 @@
 // cylindricalLight.kbShader
 //
 //
-// 2016-2017 kbEngine 2.0
+// 2016-2017 blk 1.0
 //===================================================================================================
 cbuffer matrixBuffer {
 	matrix               mvpMatrix;

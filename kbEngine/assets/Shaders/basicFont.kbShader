@@ -2,7 +2,7 @@
 // basicFont.kbShader
 //
 //
-// 2019 kbEngine 2.0
+// 2019 blk 1.0
 //===================================================================================================
 cbuffer matrixBuffer {
 	matrix mvpMatrix;

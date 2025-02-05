@@ -1,23 +1,11 @@
 /// kbParticleManager.h
 ///
-/// 2016-2025 kbEngine 2.0
+/// 2016-2025 blk 1.0
 
 #pragma once
 
 #include <vector>
 #include "kbGameEntityHeader.h"
-#include "kbParticleComponent.h"
-
-/// BufferedModel_t
-struct BufferedModel_t {
-	BufferedModel_t();
-	~BufferedModel_t();
-
-	void Release();
-	kbModel* m_pModels[3];
-
-	int	m_CurrIdx;
-};
 
 /// kbParticleManager
 class kbParticleManager {
@@ -33,7 +21,7 @@ public:
 	kbParticleComponent* GetParticleComponent(const kbParticleComponent* const pParticle);
 	void ReturnParticleComponent(kbParticleComponent* const pParticle);
 
-	void														RenderSync();
+	void RenderSync();
 
 	struct CustomParticleAtlasInfo_t {
 		EBillboardType m_Type;
@@ -53,7 +41,7 @@ public:
 	void ReserveScratchBufferSpace(kbParticleVertex*& outVertexBuffer, kbRenderObject& inOutRenderObj, const int numRequestedVerts);
 
 private:
-	std::map<const kbParticleComponent*, std::vector< kbParticleComponent*>>	m_ParticlePools;
+	std::map<const kbParticleComponent*, std::vector<kbParticleComponent*>> m_ParticlePools;
 
 	static const int NumCustomParticleBuffers = 3;
 	std::vector<CustomParticleAtlasInfo_t> m_Particles;

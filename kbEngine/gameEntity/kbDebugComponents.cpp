@@ -1,6 +1,6 @@
 /// kbDebugComponents.cpp
 ///
-/// 2018-2025 kbEngine 2.0
+/// 2018-2025 blk 1.0
 
 #include "kbCore.h"
 #include "kbVector.h"

@@ -1,6 +1,6 @@
 /// render_defs.cpp
 ///
-/// 2025 kbEngine 2.0
+/// 2025 blk 1.0
 
 #include <vector>
 #include "kbCore.h"

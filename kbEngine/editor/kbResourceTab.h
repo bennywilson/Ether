@@ -1,8 +1,13 @@
 /// kbResourceTab.h
 ///
-/// 2016-2025 kbEngine 2.0
+/// 2016-2025 blk 1.0
 
 #pragma once
+
+#pragma warning(push)
+#pragma warning(disable:4312)
+#include <fl/fl_tabs.h>
+#pragma warning(pop)
 
 /// kbResourceTabFile_t
 struct kbResourceTabFile_t {
@@ -46,7 +51,7 @@ private:
 	Fl_Tabs* m_pOuterTab;
 
 	Fl_Group* m_pResourceGroup;
-	Fl_Select_Browser* m_pResourceSelectBrowser;
+	class Fl_Select_Browser* m_pResourceSelectBrowser;
 
 	Fl_Group* m_pEntityGroup;
 	Fl_Select_Browser* m_pEntitySelectBrowser;

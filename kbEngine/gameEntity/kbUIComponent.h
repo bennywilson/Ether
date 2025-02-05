@@ -2,7 +2,7 @@
 // kbUIComponent.h
 //
 //
-// 2019 kbEngine 2.0
+// 2019 blk 1.0
 //===================================================================================================
 #ifndef _KBUICOMPONENT_H_
 #define _KBUICOMPONENT_H_

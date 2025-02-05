@@ -1,6 +1,6 @@
 /// kbInputManager.cpp
 ///
-/// 2017-2025 kbEngine 2.0
+/// 2017-2025 blk 1.0
 
 #include <Windows.h>
 #include <sstream>
@@ -8,7 +8,6 @@
 #include "kbCore.h"
 #include "containers.h"
 #include "kbInputManager.h"
-#include "kbConsole.h"
 
 kbInputManager* g_pInputManager = nullptr;
 

@@ -1,6 +1,6 @@
 /// kbResourceTab.cpp
 ///
-/// 2016-2025 kbEngine 2.0
+/// 2016-2025 blk 1.0
 
 #include <queue>
 #include "kbCore.h"
@@ -11,6 +11,13 @@
 #include "kbPropertiesTab.h"
 #include "kbEditor.h"
 #include "kbEditorEntity.h"
+
+#pragma warning(push)
+#pragma warning(disable:4312)
+#include <fl/fl_ask.h>
+#include <fl/fl_menu_item.h>
+#include <fl/fl_select_browser.h>
+#pragma warning(pop)
 
 kbResourceTab* g_pResourceTab = nullptr;
 

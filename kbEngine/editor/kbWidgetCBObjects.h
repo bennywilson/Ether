@@ -2,7 +2,7 @@
 // kbWidgetCBObjects.h
 //
 //
-// 2016-2017 kbEngine 2.0
+// 2016-2017 blk 1.0
 //===================================================================================================
 #ifndef _KBWIDGETCBOBJECTS_H_
 #define _KBWIDGETCBOBJECTS_H_

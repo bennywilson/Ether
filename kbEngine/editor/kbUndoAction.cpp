@@ -1,12 +1,17 @@
 /// kbUndoAction.cpp
 ///
-/// 2016-2025 kbEngine 2.0
+/// 2016-2025 blk 1.0
 
 #include <vector>
 #include "kbCore.h"
 #include "kbEditor.h"
 #include "kbEditorEntity.h"
 #include "kbUndoAction.h"
+
+#pragma warning(push)
+#pragma warning(disable:4312)
+#include <fl/fl_message.h>
+#pragma warning(pop)
 
 const int g_UndoStackSize = 15;
 extern bool g_bEditorIsUndoingAnAction;

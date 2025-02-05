@@ -1,7 +1,7 @@
 //==============================================================================
 // kbSkeletalModelComponent.h
 //
-// 2016-2019 kbEngine 2.0
+// 2016-2019 blk 1.0
 //==============================================================================
 #ifndef _KBSKELETALMODELCOMPONENT_H_
 #define _KBSKELETALMODELCOMPONENT_H_

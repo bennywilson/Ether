@@ -2,7 +2,7 @@
 // kbStaticModelComponent.h
 //
 //
-// 2016 kbEngine 2.0
+// 2016 blk 1.0
 //===================================================================================================
 #ifndef _KBSTATICMODELCOMPONENT_H_
 #define _KBSTATICMODELCOMPONENT_H_

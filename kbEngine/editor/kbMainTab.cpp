@@ -1,6 +1,6 @@
 /// kbMainTab.cpp
 ///
-/// 2016-2025 kbEngine 2.0
+/// 2016-2025 blk 1.0
 
 #include "kbCore.h"
 #include "kbVector.h"
@@ -11,7 +11,15 @@
 #include "kbGameEntityHeader.h"
 #include "kbEditorEntity.h"
 #include "kbManipulator.h"
+
 #include "kbMainTab.h"
+#pragma warning(push)
+#pragma warning(disable:4312)
+#include <fl/fl_button.h>
+#pragma warning(pop)
+
+// todo
+#include "DX11/kbRenderer_DX11.h"
 
 kbModel * model = nullptr;
 const float Base_Cam_Speed = 0.1f;
