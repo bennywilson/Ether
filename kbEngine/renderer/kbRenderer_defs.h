@@ -87,10 +87,10 @@ struct kbBoneMatrix_t {
 	}
 
 	void SetIdentity() {
-		m_Axis[0].Set( 1.0f, 0.0f, 0.0f );
-		m_Axis[1].Set( 0.0f, 1.0f, 0.0f );
-		m_Axis[2].Set( 0.0f, 0.0f, 1.0f );
-		m_Axis[3].Set( 0.0f, 0.0f, 0.0f );
+		m_Axis[0].set( 1.0f, 0.0f, 0.0f );
+		m_Axis[1].set( 0.0f, 1.0f, 0.0f );
+		m_Axis[2].set( 0.0f, 0.0f, 1.0f );
+		m_Axis[3].set( 0.0f, 0.0f, 0.0f );
 	}
 
 	const kbVec3& operator[]( const int index ) const { return GetAxis( index ); }
@@ -323,7 +323,7 @@ public:
 													m_IterationHeight( 0.0f ),
 													m_Operation( ROO_Add ),
 													m_bIsDirectional( true ) {
-														m_Rotation.Set( 0.0f, 0.0f, 0.0f, 1.0f );
+														m_Rotation.set( 0.0f, 0.0f, 0.0f, 1.0f );
 													}
 
 	const class kbLightShaftsComponent *		m_pLightShaftsComponent;

@@ -13,6 +13,7 @@
 #include "kbGameEntityHeader.h"
 #include "kbComponent.h"
 #include "kbLightComponent.h"
+#include "renderer.h"
 
 const float g_DebugLineSpacing = 0.0165f + 0.007f;
 const float g_DebugTextSize = 0.0165f;
@@ -50,11 +51,11 @@ kbRenderWindow::kbRenderWindow( HWND inHwnd, const RECT & windowDimensions, cons
 	m_fViewPixelHalfWidth( 0.0f ),
 	m_fViewPixelHalfHeight( 0.0f ) {
 
-	m_ProjectionMatrix.MakeIdentity();
-	m_InverseProjectionMatrix.MakeIdentity();
-	m_ViewMatrix.MakeIdentity();
-	m_ViewProjectionMatrix.MakeIdentity();
-	m_InverseViewProjectionMatrix.MakeIdentity();
+	m_ProjectionMatrix.make_identity();
+	m_InverseProjectionMatrix.make_identity();
+	m_ViewMatrix.make_identity();
+	m_ViewProjectionMatrix.make_identity();
+	m_InverseViewProjectionMatrix.make_identity();
 	m_CameraRotation.x = m_CameraRotation.y = m_CameraRotation.z = m_CameraRotation.w = 0.0f;
 
 	m_ViewPixelWidth = windowDimensions.right - windowDimensions.left;
@@ -63,7 +64,7 @@ kbRenderWindow::kbRenderWindow( HWND inHwnd, const RECT & windowDimensions, cons
 	m_fViewPixelHeight = static_cast<float>( m_ViewPixelHeight );
 	m_fViewPixelHalfWidth = m_fViewPixelWidth* 0.5f;
 	m_fViewPixelHalfHeight = m_fViewPixelHeight * 0.5f;
-	m_ProjectionMatrix.CreatePerspectiveMatrix( kbToRadians( 50.0f ), m_fViewPixelWidth / m_fViewPixelHeight, nearPlane, farPlane );
+	m_ProjectionMatrix.create_perspective_matrix( kbToRadians( 50.0f ), m_fViewPixelWidth / m_fViewPixelHeight, nearPlane, farPlane );
 }
 
 /**
@@ -172,11 +173,11 @@ void kbRenderWindow::BeginFrame() {
 	kbMat4 translationMatrix( kbMat4::identity );
 	translationMatrix[3].ToVec3() = -m_CameraPosition;
 	kbMat4 rotationMatrix = m_CameraRotation.ToMat4();
-	rotationMatrix.TransposeSelf();
+	rotationMatrix.transpose_self();
 	
 	m_ViewMatrix = translationMatrix * rotationMatrix;
 
-	m_ProjectionMatrix.CreatePerspectiveMatrix( kbToRadians( 50.0f ), m_fViewPixelWidth / m_fViewPixelHeight, m_NearPlane_RenderThread, m_FarPlane_RenderThread );
+	m_ProjectionMatrix.create_perspective_matrix( kbToRadians( 50.0f ), m_fViewPixelWidth / m_fViewPixelHeight, m_NearPlane_RenderThread, m_FarPlane_RenderThread );
 
 	m_ViewProjectionMatrix = m_ViewMatrix * m_ProjectionMatrix;
 	
@@ -201,7 +202,6 @@ void kbRenderWindow::Release() {
  *	kbRenderJob::Run()
  */
 void kbRenderJob::Run() {
-
 	SetThreadName( "Render thread" );
 	while( m_bRequestShutdown == false ) {
 		if ( g_pRenderer != nullptr && g_pRenderer->m_RenderThreadSync == 1 ) {
@@ -260,9 +260,11 @@ void kbRenderer::Init( HWND hwnd, const int width, const int height ) {
 
 	Init_Internal( hwnd, width, height );
 
-	// Kick off render thread
-	m_pRenderJob = new kbRenderJob();
-	g_pJobManager->RegisterJob( m_pRenderJob );
+	if (g_renderer == nullptr) {
+		// Kick off render thread
+		m_pRenderJob = new kbRenderJob();
+		g_pJobManager->RegisterJob(m_pRenderJob);
+	}
 
 	blk::log( "	Rendered Initialized.  Took %f seconds", g_GlobalTimer.TimeElapsedSeconds() - startInitTime );
 }
@@ -809,7 +811,7 @@ void kbRenderer::RenderSync() {
 void kbRenderer::DrawBillboard( const kbVec3 & position, const kbVec2 & size, const int textureIndex, kbShader *const pShader, const int entityId ) {
 	debugDrawObject_t billboard;
 	billboard.m_Position = position;
-	billboard.m_Scale.Set( size.x, size.y, size.x );
+	billboard.m_Scale.set( size.x, size.y, size.x );
 	billboard.m_pShader = pShader;
 	billboard.m_TextureIndex = textureIndex;
 	billboard.m_EntityId = entityId;

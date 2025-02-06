@@ -11,7 +11,7 @@
  */
 void kbBoneMatrix_t::Invert() {
 	kbVec3 Trans(-m_Axis[3] );
-	m_Axis[3].Set( 0.0f, 0.0f, 0.0f );
+	m_Axis[3].set( 0.0f, 0.0f, 0.0f );
 
 	TransposeUpper();
 
@@ -63,9 +63,9 @@ void kbBoneMatrix_t::SetFromQuat( const kbQuat & srcQuat ) {
  */
 void kbBoneMatrix_t::TransposeUpper() {
 	kbBoneMatrix_t transposedMat;
-	transposedMat.m_Axis[0].Set( m_Axis[0].x,  m_Axis[1].x,  m_Axis[2].x );
-	transposedMat.m_Axis[1].Set( m_Axis[0].y,  m_Axis[1].y,  m_Axis[2].y );
-	transposedMat.m_Axis[2].Set( m_Axis[0].z,  m_Axis[1].z,  m_Axis[2].z );
+	transposedMat.m_Axis[0].set( m_Axis[0].x,  m_Axis[1].x,  m_Axis[2].x );
+	transposedMat.m_Axis[1].set( m_Axis[0].y,  m_Axis[1].y,  m_Axis[2].y );
+	transposedMat.m_Axis[2].set( m_Axis[0].z,  m_Axis[1].z,  m_Axis[2].z );
 	transposedMat.m_Axis[3] = kbVec3::zero;
 	*this = transposedMat;
 }

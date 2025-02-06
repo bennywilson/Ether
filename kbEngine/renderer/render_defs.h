@@ -46,7 +46,7 @@ struct vertexLayout {
 		outNormal.y = ((outNormal.y / 255.0f) * 2.0f) - 1.0f;
 		outNormal.z = ((outNormal.z / 255.0f) * 2.0f) - 1.0f;
 
-		outNormal.Normalize();
+		outNormal.normalize_self();
 		return outNormal;
 	}
 
@@ -56,7 +56,7 @@ struct vertexLayout {
 		outTangent.y = ((outTangent.y / 255.0f) * 2.0f) - 1.0f;
 		outTangent.z = ((outTangent.z / 255.0f) * 2.0f) - 1.0f;
 
-		outTangent.Normalize();
+		outTangent.normalize_self();
 		return outTangent;
 	}
 
@@ -76,7 +76,7 @@ struct vertexLayout {
 
 	bool operator ==(const vertexLayout& op2) const {
 		const float epsilon = 0.0000000001f;
-		return  position.Compare(op2.position, epsilon) && uv.Compare(op2.uv, epsilon) &&
+		return position.compare(op2.position, epsilon) && uv.compare(op2.uv, epsilon) &&
 			kbCompareByte4(color, op2.color) &&
 			kbCompareByte4(normal, op2.normal) && kbCompareByte4(tangent, op2.tangent);
 	}

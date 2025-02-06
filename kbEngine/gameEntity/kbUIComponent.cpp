@@ -22,9 +22,9 @@ kbGameEntity& GetUIGameEntity() {
 void kbUIComponent::Constructor() {
 	m_AuthoredWidth = 128;
 	m_AuthoredHeight = 128;
-	m_NormalizedAnchorPt.Set(0.05f, 0.05f, 0.0f);
-	m_UIToScreenSizeRatio.Set(0.1f, 0.0f, 0.0f);
-	m_NormalizedScreenSize.Set(0.f, 0.0f, 0.0f);
+	m_NormalizedAnchorPt.set(0.05f, 0.05f, 0.0f);
+	m_UIToScreenSizeRatio.set(0.1f, 0.0f, 0.0f);
+	m_NormalizedScreenSize.set(0.f, 0.0f, 0.0f);
 
 	m_pStaticModelComponent = nullptr;
 }
@@ -35,8 +35,8 @@ void kbUIComponent::Constructor() {
 kbUIComponent::~kbUIComponent() {
 	m_AuthoredWidth = 128;
 	m_AuthoredHeight = 128;
-	m_NormalizedAnchorPt.Set(0.05f, 0.05f, 0.0f);
-	m_UIToScreenSizeRatio.Set(0.1f, 0.0f, 0.0f);
+	m_NormalizedAnchorPt.set(0.05f, 0.05f, 0.0f);
+	m_UIToScreenSizeRatio.set(0.1f, 0.0f, 0.0f);
 }
 
 /**
@@ -161,17 +161,17 @@ void kbUIComponent::RefreshMaterial() {
  */
 void kbUIWidgetComponent::Constructor() {
 
-	m_StartingPosition.Set(0.0f, 0.0f, 0.0f);
-	m_StartingSize.Set(0.5f, 0.5f, 1.0f);
+	m_StartingPosition.set(0.0f, 0.0f, 0.0f);
+	m_StartingSize.set(0.5f, 0.5f, 1.0f);
 
 	m_Anchor = kbUIWidgetComponent::MiddleLeft;
 	m_AxisLock = kbUIWidgetComponent::LockAll;
 
-	m_RelativePosition.Set(0.0f, 0.0f, 0.0f);
-	m_RelativeSize.Set(0.5f, 0.5f, 1.0f);
+	m_RelativePosition.set(0.0f, 0.0f, 0.0f);
+	m_RelativeSize.set(0.5f, 0.5f, 1.0f);
 
-	m_AbsolutePosition.Set(0.0f, 0.0f, 0.0f);
-	m_AbsoluteSize.Set(0.5f, 0.5f, 1.0f);
+	m_AbsolutePosition.set(0.0f, 0.0f, 0.0f);
+	m_AbsoluteSize.set(0.5f, 0.5f, 1.0f);
 
 	m_pModel = nullptr;
 
@@ -290,7 +290,7 @@ void kbUIWidgetComponent::Recalculate(const kbUIWidgetComponent* const pParent, 
 		SetRenderOrderBias(pParent->GetRenderOrderBias() - 1.0f);
 	} else {
 		m_CachedParentPosition = kbVec3::zero;
-		m_CachedParentSize.Set(1.0f, 1.0f, 1.0f);
+		m_CachedParentSize.set(1.0f, 1.0f, 1.0f);
 		SetRenderOrderBias(0.0f);
 	}
 
@@ -464,16 +464,13 @@ void kbUIWidgetComponent::Update_Internal(const float dt) {
 	}
 }
 
-/**
- *	kbUISlider::Constructor
- */
+/// kbUISlider::Constructor
 void kbUISlider::Constructor() {
+	m_SliderBoundsMin.set(0.0f, 0.0f, 0.0f);
+	m_SliderBoundsMax.set(1.0f, 1.0f, 1.0f);
 
-	m_SliderBoundsMin.Set(0.0f, 0.0f, 0.0f);
-	m_SliderBoundsMax.Set(1.0f, 1.0f, 1.0f);
-
-	m_CalculatedSliderBoundsMin.Set(0.0f, 0.0f, 0.0f);
-	m_CalculatedSliderBoundsMax.Set(1.0f, 1.0f, 1.0f);
+	m_CalculatedSliderBoundsMin.set(0.0f, 0.0f, 0.0f);
+	m_CalculatedSliderBoundsMax.set(1.0f, 1.0f, 1.0f);
 }
 
 /**
@@ -526,8 +523,8 @@ void kbUISlider::RecalculateOld(const kbUIComponent* const pParent, const bool b
 	}
 
 	if (m_ChildWidgets.size() < 2) {
-		m_CalculatedSliderBoundsMin.Set(0.0f, 0.0f, 0.0f);
-		m_CalculatedSliderBoundsMax.Set(0.0f, 0.0f, 0.0f);
+		m_CalculatedSliderBoundsMin.set(0.0f, 0.0f, 0.0f);
+		m_CalculatedSliderBoundsMax.set(0.0f, 0.0f, 0.0f);
 	} else {
 		m_CalculatedSliderBoundsMin = GetRelativePosition() + spaceBetweenLabelAndSlider;
 		m_CalculatedSliderBoundsMax = m_CalculatedSliderBoundsMin + m_ChildWidgets[0].GetRelativeSize() * 0.9f;	// Hack
@@ -583,8 +580,8 @@ void kbUISlider::Recalculate(const kbUIWidgetComponent* const pParent, const boo
 	}
 
 	if (m_ChildWidgets.size() < 2) {
-		m_CalculatedSliderBoundsMin.Set(0.0f, 0.0f, 0.0f);
-		m_CalculatedSliderBoundsMax.Set(0.0f, 0.0f, 0.0f);
+		m_CalculatedSliderBoundsMin.set(0.0f, 0.0f, 0.0f);
+		m_CalculatedSliderBoundsMax.set(0.0f, 0.0f, 0.0f);
 	} else {
 		m_CalculatedSliderBoundsMin = GetRelativePosition() + GetRelativeSize() + 0.05f;
 		m_CalculatedSliderBoundsMax = m_CalculatedSliderBoundsMin + m_ChildWidgets[0].GetRelativeSize();

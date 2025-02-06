@@ -57,7 +57,7 @@ public:
 		y /= rhs;
 	}
 
-	bool Compare(const kbVec2& op2, const float epsilon = 0.0001f) const {
+	bool compare(const kbVec2& op2, const float epsilon = 0.0001f) const {
 		return fabs(x - op2.x) < epsilon && fabs(y - op2.y) < epsilon;
 	}
 
@@ -117,21 +117,23 @@ public:
 /// kbVec3
 class kbVec3 {
 public:
+	kbVec3() :
+		x(0.f),
+		y(0.f),
+		z(0.f) {}
 
-	kbVec3() { }
-	kbVec3(const float initX, const float initY, const float initZ) {
-		x = initX;
-		y = initY;
-		z = initZ;
+	kbVec3(const float in_x, const float in_y, const float in_z) :
+		x(in_x),
+		y(in_y),
+		z(in_z) {}
+
+	void set(const float in_x, const float in_y, const float in_z) {
+		x = in_x;
+		y = in_y;
+		z = in_z;
 	}
 
-	void Set(const float initX, const float initY, const float initZ) {
-		x = initX;
-		y = initY;
-		z = initZ;
-	}
-
-	kbVec3	operator +(const kbVec3& rhs) const {
+	kbVec3 operator +(const kbVec3& rhs) const {
 		return kbVec3(x + rhs.x, y + rhs.y, z + rhs.z);
 	}
 
@@ -145,7 +147,7 @@ public:
 		return kbVec3(x + rhs, y + rhs, z + rhs);
 	}
 
-	kbVec3	operator -(const kbVec3& rhs) const {
+	kbVec3 operator -(const kbVec3& rhs) const {
 		return kbVec3(x - rhs.x, y - rhs.y, z - rhs.z);
 	}
 
@@ -189,52 +191,45 @@ public:
 		return kbVec3(x / rhs.x, y / rhs.y, z / rhs.z);
 	}
 
-	bool Compare(const kbVec3& op2, float epsilon = 0.0001f) const {
+	bool compare(const kbVec3& op2, float epsilon = 0.0001f) const {
 		return fabs(x - op2.x) < epsilon && fabs(y - op2.y) < epsilon && fabs(z - op2.z) < epsilon;
 	}
 
-	float Dot(const kbVec3& rhs) const {
+	float dot(const kbVec3& rhs) const {
 		return x * rhs.x + y * rhs.y + z * rhs.z;
 	}
 
-	kbVec3 Cross(const kbVec3& op2) const {
+	kbVec3 cross(const kbVec3& op2) const {
 		return kbVec3((y * op2.z) - (z * op2.y), (z * op2.x) - (x * op2.z), (x * op2.y) - (y * op2.x));
 	}
 
-	void MultiplyComponents(const kbVec3& op2) {
+	void multiply_components(const kbVec3& op2) {
 		x *= op2.x;
 		y *= op2.y;
 		z *= op2.z;
 	}
 
-	void AddComponents(const kbVec3& op2) {
-		x += op2.x;
-		y += op2.y;
-		z += op2.z;
-	}
+	float length() const { return sqrt(length_sqr()); }
+	float length_sqr() const { return (x * x + y * y + z * z); }
 
-	float Length() const { return sqrt(LengthSqr()); }
-	float LengthSqr() const { return (x * x + y * y + z * z); }
-
-	float Normalize() {
-		float len = Length();
+	float normalize_self() {
+		float len = length();
 		float invLength = 1.f / len;
 		x *= invLength;
 		y *= invLength;
 		z *= invLength;
 		return len;
 	}
-	kbVec3 Normalized() const {
+
+	kbVec3 normalize_safe() const {
 		kbVec3 returnVec = *this;
-		returnVec.Normalize();
+		returnVec.normalize_self();
 		return returnVec;
 	}
 
 	const float operator[](const int index) const { return (&x)[index]; }
 	float& operator[](const int index) { return (&x)[index]; }
-	float* ToFloat() const { return (float*)this; }
-
-	kbVec3 ToVecXZ() const { return kbVec3(x, 0.0f, z); }
+	float* ptr() const { return (float*)this; }
 
 	float x, y, z;
 
@@ -261,7 +256,7 @@ public:
 		w(1.f) {}
 
 	kbVec4(const kbVec3& inVec, float inW) :
-		x(inVec.x), 
+		x(inVec.x),
 		y(inVec.y),
 		z(inVec.z),
 		w(inW) {}
@@ -270,7 +265,7 @@ public:
 		x(initX),
 		y(initY),
 		z(initZ),
-		w(initW)  {}
+		w(initW) {}
 
 	void Set(const float inX, const float inY, const float inZ, const float inW) {
 		x = inX;
@@ -299,7 +294,7 @@ public:
 		x *= op2; y *= op2, z *= op2, w *= op2;
 	}
 
-	kbVec4 TransformPoint(const kbMat4& op2, bool bDivideByW = false) const;
+	kbVec4 transform_point(const kbMat4& op2, bool bDivideByW = false) const;
 
 	kbVec4 operator /(const float op2) const {
 		return kbVec4(x / op2, y / op2, z / op2, w / op2);
@@ -368,83 +363,60 @@ public:
 		mat[3] = wAxis;
 	}
 
-	void MakeIdentity() {
-		mat[0].x = 1.0f;
-		mat[0].y = 0.0f;
-		mat[0].z = 0.0f;
-		mat[0].w = 0.0f;
-
-		mat[1].x = 0.0f;
-		mat[1].y = 1.0f;
-		mat[1].z = 0.0f;
-		mat[1].w = 0.0f;
-
-		mat[2].x = 0.0f;
-		mat[2].y = 0.0f;
-		mat[2].z = 1.0f;
-		mat[2].w = 0.0f;
-
-		mat[3].x = 0.0f;
-		mat[3].y = 0.0f;
-		mat[3].z = 0.0f;
-		mat[3].w = 1.0f;
+	void make_identity() {
+		mat[0].Set(1.f, 0.f, 0.f, 0.f);
+		mat[1].Set(0.f, 1.f, 0.f, 0.f);
+		mat[2].Set(0.f, 0.f, 1.f, 0.f);
+		mat[3].Set(0.f, 0.f, 0.f, 1.f);
 	}
 
-	void MakeScale(const kbVec3& scale) {
-		mat[0].x = scale.x;
-		mat[0].y = 0.0f;
-		mat[0].z = 0.0f;
-		mat[0].w = 0.0f;
-
-		mat[1].x = 0.0f;
-		mat[1].y = scale.y;
-		mat[1].z = 0.0f;
-		mat[1].w = 0.0f;
-
-		mat[2].x = 0.0f;
-		mat[2].y = 0.0f;
-		mat[2].z = scale.z;
-		mat[2].w = 0.0f;
-
-		mat[3].x = 0.0f;
-		mat[3].y = 0.0f;
-		mat[3].z = 0.0f;
-		mat[3].w = 1.0f;
+	void make_scale(const kbVec3& scale) {
+		mat[0].Set(scale.x, 0.f, 0.f, 0.f);
+		mat[1].Set(0.f, scale.y, 0.f, 0.f);
+		mat[2].Set(0.f, 0.f, scale.z, 0.f);
+		mat[3].Set(0.f, 0.f, 0.f, 1.f);
 	}
 
-	void LookAt(const kbVec3& eye, const kbVec3& at, const kbVec3& up) {
+	void make_translation(const kbVec3& translation) {
+		mat[0].Set(1.f, 0.f, 0.f, 0.f);
+		mat[1].Set(0.f, 1.f, 0.f, 0.f);
+		mat[2].Set(0.f, 0.f, 1.f, 0.f);
+		mat[3].Set(translation.x, translation.y, translation.z, 1.f);
+	}
+
+	void look_at(const kbVec3& eye, const kbVec3& at, const kbVec3& up) {
 		kbVec3 z_axis = at - eye;
-		z_axis.Normalize();
+		z_axis.normalize_self();
 
-		kbVec3 x_axis = up.Cross(z_axis);
-		x_axis.Normalize();
+		kbVec3 x_axis = up.cross(z_axis);
+		x_axis.normalize_self();
 
-		kbVec3 y_axis = z_axis.Cross(x_axis);
-		y_axis.Normalize();
+		kbVec3 y_axis = z_axis.cross(x_axis);
+		y_axis.normalize_self();
 
-		MakeIdentity();
+		make_identity();
 
 		mat[0][0] = x_axis.x;
 		mat[1][0] = x_axis.y;
 		mat[2][0] = x_axis.z;
-		mat[3][0] = -(x_axis.Dot(eye));
+		mat[3][0] = -(x_axis.dot(eye));
 
 		mat[0][1] = y_axis.x;
 		mat[1][1] = y_axis.y;
 		mat[2][1] = y_axis.z;
-		mat[3][1] = -(y_axis.Dot(eye));
+		mat[3][1] = -(y_axis.dot(eye));
 
 		mat[0][2] = z_axis.x;
 		mat[1][2] = z_axis.y;
 		mat[2][2] = z_axis.z;
-		mat[3][2] = -(z_axis.Dot(eye));
+		mat[3][2] = -(z_axis.dot(eye));
 	}
 
-	void CreatePerspectiveMatrix(const float fov, const float aspect, const float zn, const float zf) {
+	void create_perspective_matrix(const float fov, const float aspect, const float zn, const float zf) {
 		const float yscale = 1.f / tanf(fov / 2.0f);
 		const float xscale = yscale / aspect;
 
-		MakeIdentity();
+		make_identity();
 
 		mat[0][0] = xscale;
 		mat[1][1] = yscale;
@@ -454,7 +426,7 @@ public:
 		mat[3][3] = 0;
 	}
 
-	kbMat4& TransposeSelf() {
+	kbMat4& transpose_self() {
 		kbMat4 transposedMat;
 		transposedMat[0][0] = mat[0][0];
 		transposedMat[0][1] = mat[1][0];
@@ -478,7 +450,7 @@ public:
 		return *this;
 	}
 
-	kbMat4& TransposeUpper() {
+	kbMat4& transpose_upper() {
 		kbMat4 transposedMat;
 		transposedMat[0][0] = mat[0][0];
 		transposedMat[0][1] = mat[1][0];
@@ -501,7 +473,7 @@ public:
 		return *this;
 	}
 
-	void InverseProjection() {
+	void inverse_projection() {
 		kbMat4 TempMatrix(*this);
 
 		float OneOverUpperDet = 1.f / ((mat[0][0] * mat[1][1]) - (mat[0][1] * mat[1][0]));
@@ -515,11 +487,11 @@ public:
 		mat[3][2] = -TempMatrix[3][2] * OneOverLowerDet;
 	}
 
-	void InvertFast() {
+	void inverse_fast() {
 		kbVec3 Trans(-mat[3][0], -mat[3][1], -mat[3][2]);
 
 		mat[3][0] = mat[3][1] = mat[3][2] = 0;
-		TransposeUpper();
+		transpose_upper();
 
 		Trans = Trans * *this;
 		mat[3][0] = Trans.x;
@@ -581,25 +553,24 @@ public:
 		return tempMatrix;
 	}
 
-	void OrthoLH(const float width, const float height, const float zn, const float zf) {
-		MakeIdentity();
+	void ortho_lh(const float width, const float height, const float near_plane, const float far_plane) {
+		make_identity();
 
 		mat[0].x = 2.f / width;
 		mat[1].y = 2.f / height;
-		mat[2].z = 1.f / (zf - zn);
-		mat[3].z = zn / (zn - zf);
+		mat[2].z = 1.f / (far_plane - near_plane);
+		mat[3].z = near_plane / (near_plane - far_plane);
 	}
 
-	kbVec3 TransformPoint(const kbVec3 Point) const;
+	kbVec3 transform_point(const kbVec3& point) const;
 
 	// Retrieve clip plane from projection matrices.  See // http://gamedevs.org/uploads/fast-extraction-viewing-frustum-planes-from-world-view-projection-matrix.pdf
-
-	void GetLeftClipPlane(class kbPlane& ClipPlane);
-	void GetRightClipPlane(class kbPlane& ClipPlane);
-	void GetTopClipPlane(class kbPlane& ClipPlane);
-	void GetBottomClipPlane(class kbPlane& ClipPlane);
-	void GetNearClipPlane(class kbPlane& ClipPlane);
-	void GetFarClipPlane(class kbPlane& ClipPlane);
+	void left_clip_plane(class kbPlane& out_plane);
+	void right_clip_plane(class kbPlane& out_plane);
+	void top_clip_plane(class kbPlane& out_plane);
+	void bottom_clip_plane(class kbPlane& out_plane);
+	void near_clip_plane(class kbPlane& out_plane);
+	void far_clip_plane(class kbPlane& out_plane);
 
 private:
 	kbVec4 mat[4];

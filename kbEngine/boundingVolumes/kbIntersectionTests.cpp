@@ -1,20 +1,16 @@
-//===================================================================================================
-// kbIntersectionTests.cpp
-//
-//
-// 2016-2018 blk 1.0
-//===================================================================================================
+/// kbIntersectionTests.cpp
+///
+/// 2016-2025 blk 1.0
+
 #include "kbCore.h"
 #include "kbVector.h"
 #include "kbIntersectionTests.h"
 #include "kbBounds.h"
 
-/**
- *	kbRayOBBIntersection
- */
+/// kbRayOBBIntersection
 bool kbRayOBBIntersection( const kbMat4 & orientation, const kbVec3 & origin, const kbVec3 & start, const kbVec3 & end, const kbVec3 & min, const kbVec3 & max ) {
 	kbMat4 transpose = orientation;
-	transpose.TransposeUpper();
+	transpose.transpose_upper();
 	//kbVec3 origin = ( max + min ) * 0.5f;
 
 	const kbVec3 p1 = ( start - origin ) * transpose;
@@ -91,8 +87,8 @@ bool kbRayTriIntersection( float & outT, const kbVec3 & rayOrigin, const kbVec3 
 
 	const kbVec3 e1 = v1 - v0;
 	const kbVec3 e2 = v2 - v0;
-	const kbVec3 p  = rayDirection.Cross( e2 );
-	const float a = e1.Dot( p );
+	const kbVec3 p  = rayDirection.cross( e2 );
+	const float a = e1.dot( p );
 	
 	if ( a > -kbEpsilon && a < kbEpsilon ) {
 		return false;
@@ -101,19 +97,19 @@ bool kbRayTriIntersection( float & outT, const kbVec3 & rayOrigin, const kbVec3 
 	const float f = 1.0f / a;
 
 	const kbVec3 s = rayOrigin - v0;
-	const float u = f * ( s.Dot( p ) );
+	const float u = f * ( s.dot( p ) );
 
 	if ( u < 0.0f || u > 1.0f ) {
 		return false;
 	}
 
-	const kbVec3 q = s.Cross( e1 );
-	const float v = f * ( rayDirection.Dot( q ) );
+	const kbVec3 q = s.cross( e1 );
+	const float v = f * ( rayDirection.dot( q ) );
 	if ( v < 0.0f || u + v > 1.0f ) {
 		return false;
 	}
 
-	outT = f * ( e2.Dot( q ) );
+	outT = f * ( e2.dot( q ) );
 
 	return true;
 }
@@ -125,12 +121,12 @@ bool kbRaySphereIntersection( kbVec3 & outIntersectionPt, const kbVec3 & rayOrig
 	const float sphereRadiusSqr = sphereRadius * sphereRadius;
 	const kbVec3 rayToSphereVec = sphereOrigin - rayOrigin;
 
-	const float rayLen = rayToSphereVec.LengthSqr();
+	const float rayLen = rayToSphereVec.length_sqr();
 	if ( rayLen < sphereRadiusSqr ) {
 		outIntersectionPt = rayOrigin;
 		return true;
 	}
-	const float rayDirDDotRayToSphere = rayDirection.Dot( rayToSphereVec );
+	const float rayDirDDotRayToSphere = rayDirection.dot( rayToSphereVec );
 
 	if ( rayDirDDotRayToSphere <= 0.0f ) {
 		return false;
@@ -139,7 +135,7 @@ bool kbRaySphereIntersection( kbVec3 & outIntersectionPt, const kbVec3 & rayOrig
 	const kbVec3 closestPtToSphere = rayOrigin + rayDirection * rayDirDDotRayToSphere;
 
 	const kbVec3 closestPtToSphereOrigin = closestPtToSphere - sphereOrigin;
-	const float sqrDistToCenter = closestPtToSphereOrigin.Dot( closestPtToSphereOrigin );
+	const float sqrDistToCenter = closestPtToSphereOrigin.dot( closestPtToSphereOrigin );
 	if ( sqrDistToCenter > sphereRadiusSqr ) {
 		return false;
 	}

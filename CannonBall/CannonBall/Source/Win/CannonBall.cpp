@@ -58,17 +58,17 @@ ATOM MyRegisterClass(HINSTANCE hInstance)
 
 	wcex.cbSize = sizeof(WNDCLASSEX);
 
-	wcex.style			= CS_HREDRAW | CS_VREDRAW;
-	wcex.lpfnWndProc	= WndProc;
-	wcex.cbClsExtra		= 0;
-	wcex.cbWndExtra		= 0;
-	wcex.hInstance		= hInstance;
-	wcex.hIcon			= LoadIcon(hInstance, MAKEINTRESOURCE(IDI_GAMEBASE));
-	wcex.hCursor		= LoadCursor(nullptr, IDC_ARROW);
-	wcex.hbrBackground	= (HBRUSH)(COLOR_WINDOW+1);
-	wcex.lpszMenuName	= MAKEINTRESOURCE(IDI_GAMEBASE);
-	wcex.lpszClassName	= szWindowClass;
-	wcex.hIconSm		= LoadIcon(wcex.hInstance, MAKEINTRESOURCE(IDI_SMALL));
+	wcex.style = CS_HREDRAW | CS_VREDRAW;
+	wcex.lpfnWndProc = WndProc;
+	wcex.cbClsExtra = 0;
+	wcex.cbWndExtra = 0;
+	wcex.hInstance = hInstance;
+	wcex.hIcon = LoadIcon(hInstance, MAKEINTRESOURCE(IDI_GAMEBASE));
+	wcex.hCursor = LoadCursor(nullptr, IDC_ARROW);
+	wcex.hbrBackground = (HBRUSH)(COLOR_WINDOW + 1);
+	wcex.lpszMenuName = MAKEINTRESOURCE(IDI_GAMEBASE);
+	wcex.lpszClassName = szWindowClass;
+	wcex.hIconSm = LoadIcon(wcex.hInstance, MAKEINTRESOURCE(IDI_SMALL));
 
 	return RegisterClassEx(&wcex);
 }
@@ -85,32 +85,32 @@ ATOM MyRegisterClass(HINSTANCE hInstance)
 //
 BOOL CALLBACK EnumDisplayMonitorsCB(HMONITOR hMonitor, HDC hdcMonitor, LPRECT lprcMonitor, LPARAM dwData) {
 	static bool firstMonitor = false;
-	if ( firstMonitor == false ) {
+	if (firstMonitor == false) {
 		firstMonitor = true;
 		WindowStartX += lprcMonitor->left;
 	}
 
 	return TRUE;
 }
- 
+
 BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 {
-   hInst = hInstance; // Store instance handle in our global variable
+	hInst = hInstance; // Store instance handle in our global variable
 
-	if ( g_UseEditor == false ) {
+	if (g_UseEditor == false) {
 		// Window
 		WNDCLASS wc;
 		memset(&wc, 0, sizeof(wc));
 		wc.lpszClassName = L"kbEngine";
-		wc.style         = CS_OWNDC;
-		wc.lpfnWndProc   = WndProc;
-		wc.cbWndExtra    = 0;
+		wc.style = CS_OWNDC;
+		wc.lpfnWndProc = WndProc;
+		wc.cbWndExtra = 0;
 		RegisterClass(&wc);
 
 		DWORD wsStyle = WS_POPUP | WS_OVERLAPPEDWINDOW | WS_MAXIMIZE;
 
-		if ( MonitorIdx > 0 ) {
-			EnumDisplayMonitors( nullptr, nullptr, EnumDisplayMonitorsCB, 0 );
+		if (MonitorIdx > 0) {
+			EnumDisplayMonitors(nullptr, nullptr, EnumDisplayMonitorsCB, 0);
 		}
 
 		RECT winSize = { 0, 0, backBufferWidth, backBufferHeight };
@@ -118,13 +118,13 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 		//RECT winSize = { 0, 0, 800, 450 };
 		AdjustWindowRect(&winSize, wsStyle, false);
 		hWnd = CreateWindowA("kbEngine", "kbEngine",
-							 wsStyle |WS_VISIBLE,
+							 wsStyle | WS_VISIBLE,
 							 WindowStartX, 0,
-							 winSize.right-winSize.left, winSize.bottom-winSize.top,
+							 winSize.right - winSize.left, winSize.bottom - winSize.top,
 							 nullptr, nullptr, hInstance, nullptr);
 	}
 
-  return TRUE;
+	return TRUE;
 }
 
 //
@@ -145,49 +145,49 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
 	switch (message)
 	{
-	case WM_COMMAND:
-		wmId    = LOWORD(wParam);
-		wmEvent = HIWORD(wParam);
-		// Parse the menu selections:
-		switch (wmId)
+		case WM_COMMAND:
+			wmId = LOWORD(wParam);
+			wmEvent = HIWORD(wParam);
+			// Parse the menu selections:
+			switch (wmId)
+			{
+				case IDM_ABOUT:
+					DialogBox(hInst, MAKEINTRESOURCE(IDD_ABOUTBOX), hWnd, About);
+					break;
+				case IDM_EXIT:
+					DestroyWindow(hWnd);
+					break;
+				default:
+					return DefWindowProc(hWnd, message, wParam, lParam);
+			}
+			break;
+		case WM_PAINT:
+			hdc = BeginPaint(hWnd, &ps);
+			// TODO: Add any drawing code here...
+			EndPaint(hWnd, &ps);
+			break;
+		case WM_DESTROY:
+			destroyCalled = true;
+			//		PostQuitMessage(0);
+			break;
+
+		case WM_LBUTTONDOWN:
 		{
-		case IDM_ABOUT:
-			DialogBox(hInst, MAKEINTRESOURCE(IDD_ABOUTBOX), hWnd, About);
-			break;
-		case IDM_EXIT:
-			DestroyWindow(hWnd);
-			break;
+			return 0;
+		}
+
+		case WM_RBUTTONDOWN:
+		{
+			return 0;
+		}
+
+		case WM_MOUSEWHEEL:
+		{
+
+		}
+		return 0;
 		default:
 			return DefWindowProc(hWnd, message, wParam, lParam);
-		}
-		break;
-	case WM_PAINT:
-		hdc = BeginPaint(hWnd, &ps);
-		// TODO: Add any drawing code here...
-		EndPaint(hWnd, &ps);
-		break;
-	case WM_DESTROY:
-      destroyCalled = true;
-//		PostQuitMessage(0);
-		break;
-
-	case WM_LBUTTONDOWN :
-	{
-		return 0;
-	}
-
-	case WM_RBUTTONDOWN :
-	{
-		return 0;
-	}
-
-	case WM_MOUSEWHEEL:
-		{
-
-		}
-		return 0;
-	default:
-		return DefWindowProc(hWnd, message, wParam, lParam);
 	}
 	return 0;
 }
@@ -198,16 +198,16 @@ INT_PTR CALLBACK About(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 	UNREFERENCED_PARAMETER(lParam);
 	switch (message)
 	{
-	case WM_INITDIALOG:
-		return (INT_PTR)TRUE;
-
-	case WM_COMMAND:
-		if (LOWORD(wParam) == IDOK || LOWORD(wParam) == IDCANCEL)
-		{
-			EndDialog(hDlg, LOWORD(wParam));
+		case WM_INITDIALOG:
 			return (INT_PTR)TRUE;
-		}
-		break;
+
+		case WM_COMMAND:
+			if (LOWORD(wParam) == IDOK || LOWORD(wParam) == IDCANCEL)
+			{
+				EndDialog(hDlg, LOWORD(wParam));
+				return (INT_PTR)TRUE;
+			}
+			break;
 	}
 	return (INT_PTR)FALSE;
 }
@@ -215,14 +215,14 @@ INT_PTR CALLBACK About(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 
 
 int APIENTRY _tWinMain(HINSTANCE hInstance,
-                     HINSTANCE hPrevInstance,
-                     LPTSTR    lpCmdLine,
-                     int       nCmdShow)
+					 HINSTANCE hPrevInstance,
+					 LPTSTR    lpCmdLine,
+					 int       nCmdShow)
 {
 	UNREFERENCED_PARAMETER(hPrevInstance);
 	UNREFERENCED_PARAMETER(lpCmdLine);
 
- 	// TODO: Place code here.
+	// TODO: Place code here.
 	MSG msg;
 	HACCEL hAccelTable;
 
@@ -233,48 +233,48 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 
 	// Command-line args	
 	int numArgs = 0;
-	LPWSTR * cmdLine = CommandLineToArgvW( GetCommandLineW(), &numArgs );
+	LPWSTR* cmdLine = CommandLineToArgvW(GetCommandLineW(), &numArgs);
 	std::wstring cmdArgs[13];   // params passed in from the dashboard
 
 	std::string mapName;
-
-	if ( GetKeyState( VK_CAPITAL ) ) {
+	g_UseEditor = true;
+	if (GetKeyState(VK_CAPITAL)) {
 		g_UseEditor = true;
 	}
 
-	if ( numArgs > 0 ) {
-		for ( int i = 1; i < numArgs; i++ ) {
-			cmdArgs[i-1] = cmdLine[i];
-		
-			std::string cmdArg1 = std::string( cmdArgs[i-1].begin(), cmdArgs[i-1].end() );
+	if (numArgs > 0) {
+		for (int i = 1; i < numArgs; i++) {
+			cmdArgs[i - 1] = cmdLine[i];
 
-			std::transform( cmdArg1.begin(), cmdArg1.end(), cmdArg1.begin(), ::tolower );
+			std::string cmdArg1 = std::string(cmdArgs[i - 1].begin(), cmdArgs[i - 1].end());
 
-			if ( cmdArg1 == "editor" ) {
+			std::transform(cmdArg1.begin(), cmdArg1.end(), cmdArg1.begin(), ::tolower);
+
+			if (cmdArg1 == "editor") {
 				g_UseEditor = true;
-			} else if ( cmdArg1 == "resx" ) {
-				if ( i + 1 < numArgs ) {
-					cmdArgs[i] = cmdLine[i+1];		
-					std::string cmdArg2 = std::string( cmdArgs[i].begin(), cmdArgs[i].end() );
-					backBufferWidth = std::atoi( cmdArg2.c_str() );
+			} else if (cmdArg1 == "resx") {
+				if (i + 1 < numArgs) {
+					cmdArgs[i] = cmdLine[i + 1];
+					std::string cmdArg2 = std::string(cmdArgs[i].begin(), cmdArgs[i].end());
+					backBufferWidth = std::atoi(cmdArg2.c_str());
 					i++;
 				}
-			} else if ( cmdArg1 == "resy" ) {
-				if ( i + 1 < numArgs ) {
-					cmdArgs[i] = cmdLine[i+1];		
-					std::string cmdArg2 = std::string( cmdArgs[i].begin(), cmdArgs[i].end() );
-					backBufferHeight = std::atoi( cmdArg2.c_str() );
+			} else if (cmdArg1 == "resy") {
+				if (i + 1 < numArgs) {
+					cmdArgs[i] = cmdLine[i + 1];
+					std::string cmdArg2 = std::string(cmdArgs[i].begin(), cmdArgs[i].end());
+					backBufferHeight = std::atoi(cmdArg2.c_str());
 					i++;
 				}
-			} else if ( cmdArg1 == "lowend" ) {
+			} else if (cmdArg1 == "lowend") {
 				backBufferWidth = 1024;
 				backBufferHeight = 768;
 				extern kbConsoleVariable g_ShowShadows;
 				extern kbConsoleVariable g_ShowLightShafts;
-				g_ShowShadows.SetBool( false );
-				g_ShowLightShafts.SetBool( false );
+				g_ShowShadows.SetBool(false);
+				g_ShowLightShafts.SetBool(false);
 
-			} else if ( cmdArg1 == "monitor2" ) {
+			} else if (cmdArg1 == "monitor2") {
 				MonitorIdx = 1;
 			} else {
 				mapName = cmdArg1;
@@ -292,51 +292,50 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 
 	blk::initialize_engine();
 
-	CannonGame * pGame = nullptr;
-	kbEditor * applicationEditor = nullptr;
-
-	if ( g_UseEditor ) {
+	CannonGame* pGame = nullptr;
+	kbEditor* applicationEditor = nullptr;
+	if (g_UseEditor) {
 
 		applicationEditor = new kbEditor();
 
 		pGame = new CannonGame();
-		applicationEditor->SetGame( pGame );
-		if ( mapName.length() > 0 ) {
-			applicationEditor->LoadMap( mapName );
+		applicationEditor->SetGame(pGame);
+		if (mapName.length() > 0) {
+			applicationEditor->LoadMap(mapName);
 		}
-		g_pRenderer->SetRenderWindow( nullptr );
+		g_pRenderer->SetRenderWindow(nullptr);
 	} else {
 		g_pRenderer = new kbRenderer_DX11();
-		g_pRenderer->Init( hWnd, backBufferWidth, backBufferHeight );
+		g_pRenderer->Init(hWnd, backBufferWidth, backBufferHeight);
 
 		pGame = new CannonGame();//( g_pRenderer->IsRenderingToHMD() ) ? ( new EtherVRGame() ) : ( new CannonGame() );
-		std::vector< const kbGameEntity * > GameEntitiesList;
-		pGame->InitGame( hWnd, backBufferWidth, backBufferHeight, GameEntitiesList );
-		pGame->LoadMap( mapName );
+		std::vector< const kbGameEntity* > GameEntitiesList;
+		pGame->InitGame(hWnd, backBufferWidth, backBufferHeight, GameEntitiesList);
+		pGame->LoadMap(mapName);
 	}
 
 	// Main message loop
-	PeekMessage( &msg, nullptr, 0, 0, PM_REMOVE );
-	while ( ( applicationEditor == nullptr || applicationEditor->IsRunning() ) && ( pGame == nullptr || pGame->IsRunning() ) && msg.message != WM_QUIT && destroyCalled == false ) {
-		if ( PeekMessage( &msg, nullptr, 0, 0, PM_REMOVE ) && !TranslateAccelerator( msg.hwnd, hAccelTable, &msg ) ) {
-			TranslateMessage( &msg );
-			DispatchMessage( &msg );
+	PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE);
+	while ((applicationEditor == nullptr || applicationEditor->IsRunning()) && (pGame == nullptr || pGame->IsRunning()) && msg.message != WM_QUIT && destroyCalled == false) {
+		if (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE) && !TranslateAccelerator(msg.hwnd, hAccelTable, &msg)) {
+			TranslateMessage(&msg);
+			DispatchMessage(&msg);
 		}
 
 		try {
-			if ( g_UseEditor ) {
+			if (g_UseEditor) {
 				applicationEditor->Update();
 			} else {
 				pGame->Update();
 			}
 
-		} catch( char * string ) {
+		} catch (char* string) {
 			// todo : output error to console
-			blk::log( string );
+			blk::log(string);
 		}
 	}
 
-	if ( g_pRenderer != nullptr ) {
+	if (g_pRenderer != nullptr) {
 		g_pRenderer->WaitForRenderingToComplete();
 	}
 
@@ -353,5 +352,5 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 
 	kbConsoleVarManager::DeleteConsoleVarManager();
 
-	return (int) msg.wParam;
+	return (int)msg.wParam;
 }

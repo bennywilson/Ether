@@ -44,10 +44,10 @@ void kbParticleComponent::Constructor() {
 
 	m_MinParticleSpawnRate = 1.0f;
 	m_MaxParticleSpawnRate = 2.0f;
-	m_MinParticleStartVelocity.Set(-2.0f, 5.0f, -2.0f);
-	m_MaxParticleStartVelocity.Set(2.0f, 5.0f, 2.0f);
-	m_MinParticleEndVelocity.Set(0.0f, 0.0f, 0.0f);
-	m_MaxParticleEndVelocity.Set(0.0f, 0.0f, 0.0f);
+	m_MinParticleStartVelocity.set(-2.0f, 5.0f, -2.0f);
+	m_MaxParticleStartVelocity.set(2.0f, 5.0f, 2.0f);
+	m_MinParticleEndVelocity.set(0.0f, 0.0f, 0.0f);
+	m_MaxParticleEndVelocity.set(0.0f, 0.0f, 0.0f);
 	m_MinStartRotationRate = 0;
 	m_MaxStartRotationRate = 0;
 	m_MinEndRotationRate = 0;
@@ -59,10 +59,10 @@ void kbParticleComponent::Constructor() {
 	m_MinStart3DOffset = kbVec3::zero;
 	m_MaxStart3DOffset = kbVec3::zero;
 
-	m_MinParticleStartSize.Set(3.0f, 3.0f, 3.0f);
-	m_MaxParticleStartSize.Set(3.0f, 3.0f, 3.0f);
-	m_MinParticleEndSize.Set(3.0f, 3.0f, 3.0f);
-	m_MaxParticleEndSize.Set(3.0f, 3.0f, 3.0f);
+	m_MinParticleStartSize.set(3.0f, 3.0f, 3.0f);
+	m_MaxParticleStartSize.set(3.0f, 3.0f, 3.0f);
+	m_MinParticleEndSize.set(3.0f, 3.0f, 3.0f);
+	m_MaxParticleEndSize.set(3.0f, 3.0f, 3.0f);
 	m_ParticleMinDuration = 3.0f;
 	m_ParticleMaxDuration = 3.0f;
 	m_ParticleStartColor.Set(1.0f, 1.0f, 1.0f, 1.0f);
@@ -73,7 +73,7 @@ void kbParticleComponent::Constructor() {
 	m_StartDelayRemaining = 0;
 	m_NumEmittedParticles = 0;
 	m_ParticleBillboardType = BT_FaceCamera;
-	m_Gravity.Set(0.0f, 0.0f, 0.0f);
+	m_Gravity.set(0.0f, 0.0f, 0.0f);
 	m_RenderOrderBias = 0.0f;
 	m_DebugPlayEntity = false;
 
@@ -245,7 +245,7 @@ void kbParticleComponent::Update_Internal(const float DeltaTime) {
 
 			renderObj.m_Position = particle.m_Position;
 			//renderObj.m_Orientation = kbQuat( 0.0f, 0.0f, 0.0f, 1.0f );	TODO
-			renderObj.m_Scale.Set(curSize.x, curSize.y, curSize.z);
+			renderObj.m_Scale.set(curSize.x, curSize.y, curSize.z);
 			renderObj.m_Scale *= kbLevelComponent::GetGlobalModelScale();
 
 			if (m_RotationOverLifeTimeCurve.size() > 0) {
@@ -288,8 +288,8 @@ void kbParticleComponent::Update_Internal(const float DeltaTime) {
 
 		if (m_ParticleBillboardType == EBillboardType::BT_AlignAlongVelocity) {
 			kbVec3 alignVec = kbVec3::up;
-			if (curVelocity.LengthSqr() > 0.01f) {
-				alignVec = curVelocity.Normalized();
+			if (curVelocity.length_sqr() > 0.01f) {
+				alignVec = curVelocity.normalize_safe();
 				pDstVerts[iVertex + 0].direction = alignVec;
 				pDstVerts[iVertex + 1].direction = alignVec;
 				pDstVerts[iVertex + 2].direction = alignVec;
@@ -346,7 +346,7 @@ void kbParticleComponent::Update_Internal(const float DeltaTime) {
 	// Spawn particles
 	kbVec3 MyPosition = GetPosition();
 	while (m_bIsSpawning && ((m_MaxParticleSpawnRate > 0 && TimeLeft >= NextSpawn) || m_BurstCount > 0) && (m_MaxParticlesToEmit <= 0 || m_NumEmittedParticles < m_MaxParticlesToEmit)) {
-		if (m_MinStart3DOffset.Compare(kbVec3::zero) == false || m_MaxStart3DOffset.Compare(kbVec3::zero) == false) {
+		if (m_MinStart3DOffset.compare(kbVec3::zero) == false || m_MaxStart3DOffset.compare(kbVec3::zero) == false) {
 			const kbVec3 startingOffset = kbVec3Rand(m_MinStart3DOffset, m_MaxStart3DOffset);
 			MyPosition += startingOffset;
 		}
@@ -406,7 +406,7 @@ void kbParticleComponent::Update_Internal(const float DeltaTime) {
 				renderObj.m_bIsRemove = false;
 
 				renderObj.m_Orientation = kbQuat(0.0f, 0.0f, 0.0f, 1.0f);
-				if (m_MinStart3DRotation.Compare(kbVec3::zero) == false || m_MaxStart3DRotation.Compare(kbVec3::zero) == false) {
+				if (m_MinStart3DRotation.compare(kbVec3::zero) == false || m_MaxStart3DRotation.compare(kbVec3::zero) == false) {
 					newParticle.m_RotationAxis = kbVec3Rand(m_MinStart3DRotation, m_MaxStart3DRotation);
 					kbQuat xAxis, yAxis, zAxis;
 					xAxis.FromAxisAngle(kbVec3(1.0f, 0.0f, 0.0f), kbToRadians(newParticle.m_RotationAxis.x));

@@ -49,10 +49,10 @@ void kbRenderer_DX11::RenderLight( const kbRenderLight *const pLight ) {
 
 	// Matrices that are scaled to 0 will produce a 0 depth in the projection shader and not shadow the pixel
 	kbMat4 splitMatrices[4] = { kbMat4::identity, kbMat4::identity, kbMat4::identity, kbMat4::identity };
-	splitMatrices[0].MakeScale( kbVec3::zero );
-	splitMatrices[1].MakeScale( kbVec3::zero );
-	splitMatrices[2].MakeScale( kbVec3::zero );
-	splitMatrices[3].MakeScale( kbVec3::zero );
+	splitMatrices[0].make_scale( kbVec3::zero );
+	splitMatrices[1].make_scale( kbVec3::zero );
+	splitMatrices[2].make_scale( kbVec3::zero );
+	splitMatrices[3].make_scale( kbVec3::zero );
 
 	if ( pLight->m_bCastsShadow ) {
 		RenderShadow( pLight, splitMatrices );
@@ -170,7 +170,7 @@ void kbRenderer_DX11::RenderLight( const kbRenderLight *const pLight ) {
 	SetShaderVec4( "lightPosition", kbVec4( pLight->m_Position.x, pLight->m_Position.y, pLight->m_Position.z, pLight->m_Radius ), pMappedData, varBindings );
 
 	kbMat4 mvpMatrix;
-	mvpMatrix.MakeIdentity();
+	mvpMatrix.make_identity();
 
 	SetShaderMat4( "mvpMatrix", mvpMatrix, pMappedData, varBindings );
 
@@ -215,7 +215,7 @@ void kbRenderer_DX11::RenderShadow( const kbRenderLight *const pLight, kbMat4 sp
 	const float halfShadowBufferSize = shadowBufferSize * 0.5f;
 
 	kbMat4 textureMatrix;
-	textureMatrix.MakeIdentity();
+	textureMatrix.make_identity();
 	textureMatrix[0].x = 0.5f;
 	textureMatrix[1].y = -0.5f;
 	textureMatrix[3].x = 0.5f + ( 0.5f / shadowBufferSize );
@@ -253,19 +253,19 @@ void kbRenderer_DX11::RenderShadow( const kbRenderLight *const pLight, kbMat4 sp
 		camDir = m_pCurrentRenderWindow->GetCameraRotation().ToMat4()[2].ToVec3();
 	}
 
-	frozenMatrix.GetLeftClipPlane( frustumPlanes[0] );
-	frozenMatrix.GetTopClipPlane( frustumPlanes[1] );
-	frozenMatrix.GetRightClipPlane( frustumPlanes[2]);
-	frozenMatrix.GetBottomClipPlane( frustumPlanes[3] );
-	frozenMatrix.GetNearClipPlane( frustumPlanes[4] );
-	frozenMatrix.GetFarClipPlane( frustumPlanes[5] );
+	frozenMatrix.left_clip_plane( frustumPlanes[0] );
+	frozenMatrix.top_clip_plane( frustumPlanes[1] );
+	frozenMatrix.right_clip_plane( frustumPlanes[2]);
+	frozenMatrix.bottom_clip_plane( frustumPlanes[3] );
+	frozenMatrix.near_clip_plane( frustumPlanes[4] );
+	frozenMatrix.far_clip_plane( frustumPlanes[5] );
 
 	frustumPlanes[1].PlanesIntersect( dummyPoint, upperLeft, frustumPlanes[0] );
 	frustumPlanes[2].PlanesIntersect( dummyPoint, upperRight, frustumPlanes[1] );
 	frustumPlanes[3].PlanesIntersect( dummyPoint, lowerRight, frustumPlanes[2] );
 	frustumPlanes[0].PlanesIntersect( dummyPoint, lowerLeft, frustumPlanes[3] );
 
-	const float DistToFarCorner = m_RenderWindowList[0]->GetFarPlane() / ( camDir.Dot( upperLeft ) );
+	const float DistToFarCorner = m_RenderWindowList[0]->GetFarPlane() / ( camDir.dot( upperLeft ) );
 	const float NearCornerDist = ( ( m_RenderWindowList[0]->GetNearPlane() ) * DistToFarCorner ) / m_RenderWindowList[0]->GetFarPlane();
 
 	if ( debuggingShadowBounds ) {
@@ -318,7 +318,7 @@ void kbRenderer_DX11::RenderShadow( const kbRenderLight *const pLight, kbMat4 sp
 		const float halfFOV = kbToRadians ( 75.0f ) * 0.5f;
 		const float distToCorner = pLight->m_CascadedShadowSplits[i] / ( cos( halfFOV ) );
 		kbVec3 cornerVert = frozenCameraPosition + distToCorner * upperLeft;
-		const float boundsLength = ( lookAtPoint - cornerVert ).Length();
+		const float boundsLength = ( lookAtPoint - cornerVert ).length();
 
 		// Debug Drawing -
 		if ( debuggingShadowBounds ) {
@@ -350,21 +350,21 @@ void kbRenderer_DX11::RenderShadow( const kbRenderLight *const pLight, kbMat4 sp
 		kbVec3 lightDir = -pLight->m_Orientation.ToMat4()[2].ToVec3();
 
 		kbMat4 lightViewMatrix;
-		lightViewMatrix.LookAt( lookAtPoint + lightDir * boundsLength * 10.0f, lookAtPoint, kbVec3( 0.0f, 1.0f, 0.0f ) );
+		lightViewMatrix.look_at( lookAtPoint + lightDir * boundsLength * 10.0f, lookAtPoint, kbVec3( 0.0f, 1.0f, 0.0f ) );
 
 		kbMat4 lightProjMatrix;
-		lightProjMatrix.OrthoLH( boundsLength * 2.0f, boundsLength * 2.0f, 10.0f, boundsLength * 40.0f );
+		lightProjMatrix.ortho_lh( boundsLength * 2.0f, boundsLength * 2.0f, 10.0f, boundsLength * 40.0f );
 
 		const kbMat4 lightViewProjMatrix = lightViewMatrix * lightProjMatrix;
 		const float texelSize = 2.0f / (shadowBufferSize * 0.5f);
 		kbVec4 projCenter( 0.0f, 0.0f, 0.0f, 1.0f );
-		projCenter = projCenter.TransformPoint( lightViewProjMatrix, true);
+		projCenter = projCenter.transform_point( lightViewProjMatrix, true);
 
 		const float fracX = fmod( projCenter.x, texelSize );
 		const float fracY = fmod( projCenter.y, texelSize );
         
 		kbMat4 offset;
-		offset.MakeIdentity();
+		offset.make_identity();
 		offset[3][0] = -fracX;
 		offset[3][1] = -fracY;
 
@@ -426,7 +426,7 @@ void kbRenderer_DX11::RenderLightShafts() {
 		const float HalfIterationHeight = CurLightShafts.m_IterationHeight * HeightMultiplier;
 
 		const kbVec3 worldVecToShaft = m_pCurrentRenderWindow->GetCameraPosition() + CurLightShafts.m_Rotation.ToMat4()[2].ToVec3() * -3000.0f;
-		kbVec4 shaftScreenPos = kbVec4( worldVecToShaft ).TransformPoint( m_pCurrentRenderWindow->GetViewProjectionMatrix(), false );
+		kbVec4 shaftScreenPos = kbVec4( worldVecToShaft ).transform_point( m_pCurrentRenderWindow->GetViewProjectionMatrix(), false );
 		if ( shaftScreenPos.w < 0.0f ) {
 			continue;
 		}
@@ -435,8 +435,8 @@ void kbRenderer_DX11::RenderLightShafts() {
 		// Generate Flare Mask
 		{
 			kbMat4 mvpMatrix;
-			mvpMatrix.MakeIdentity();
-			mvpMatrix.MakeScale( kbVec3( CurLightShafts.m_Width * 0.5f, HalfBaseHeight, 1.0f ) );
+			mvpMatrix.make_identity();
+			mvpMatrix.make_scale( kbVec3( CurLightShafts.m_Width * 0.5f, HalfBaseHeight, 1.0f ) );
 			mvpMatrix[3] = kbVec3((shaftScreenPos.x * 0.5f) + 0.5f, (shaftScreenPos.y * -0.5f) + 0.5f, 0.0f );
 			mvpMatrix[3].x -= CurLightShafts.m_Width * 0.25f;
 			mvpMatrix[3].y -= HalfBaseHeight * 0.5f;
@@ -508,8 +508,8 @@ void kbRenderer_DX11::RenderLightShafts() {
 			ID3D11Buffer *const pConstantBuffer = GetConstantBuffer( varBindings.m_ConstantBufferSizeBytes );
 
 			kbMat4 mvpMatrix;
-			mvpMatrix.MakeIdentity();
-			mvpMatrix.MakeScale( kbVec3( CurLightShafts.m_Width * 0.5f, HalfBaseHeight, 1.0f ) );
+			mvpMatrix.make_identity();
+			mvpMatrix.make_scale( kbVec3( CurLightShafts.m_Width * 0.5f, HalfBaseHeight, 1.0f ) );
 			mvpMatrix[3] = kbVec3(shaftScreenPos.x, shaftScreenPos.y, 0.0f );
 
 			for ( int itr = 0; itr < CurLightShafts.m_NumIterations; itr++ ) {

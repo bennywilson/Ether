@@ -116,7 +116,7 @@ public:
 
 		} else {
 			kbVec4 color( gameLocal->random.RandomFloat(), gameLocal->random.RandomFloat(), gameLocal->random.RandomFloat(), 0.0f );
-			color.Normalize();
+			color.normalize_self();
 			color *= 0.5f;
 			color.w = 1;
 			//gameLocal->GetRenderDebug()->DebugBounds( color, nodeBounds, vec3_origin, 60000 );

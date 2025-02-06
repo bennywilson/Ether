@@ -309,7 +309,7 @@ bool kbSkeletalModelComponent::GetBoneWorldPosition(const kbString& boneName, kb
 	GetOwner()->CalculateWorldMatrix(worldMatrix);
 
 	const kbVec3 localPos = m_pModel->GetRefBoneMatrix(boneIdx).GetOrigin() * m_BindToLocalSpaceMatrices[boneIdx];
-	outWorldPosition = worldMatrix.TransformPoint(localPos);
+	outWorldPosition = worldMatrix.transform_point(localPos);
 	return true;
 }
 
@@ -510,18 +510,18 @@ void kbSkeletalModelComponent::UnregisterSyncSkelModel(kbSkeletalModelComponent*
 /// kbFlingPhysicsComponent::Constructor
 void kbFlingPhysicsComponent::Constructor() {
 	// Editor
-	m_MinLinearVelocity.Set(-0.015f, 0.015f, 0.03f);
-	m_MaxLinearVelocity.Set(0.015f, 0.025f, 0.035f);
+	m_MinLinearVelocity.set(-0.015f, 0.015f, 0.03f);
+	m_MaxLinearVelocity.set(0.015f, 0.025f, 0.035f);
 	m_MinAngularSpeed = 10.0f;
 	m_MaxAngularSpeed = 15.0f;
-	m_Gravity.Set(0.0f, -20.0f, 0.0f);
+	m_Gravity.set(0.0f, -20.0f, 0.0f);
 
 	// Run time
-	m_OwnerStartPos.Set(0.0f, 0.0f, 0.0f);
-	m_OwnerStartRotation.Set(0.0f, 0.0f, 0.0f, 1.0f);
+	m_OwnerStartPos.set(0.0f, 0.0f, 0.0f);
+	m_OwnerStartRotation.set(0.0f, 0.0f, 0.0f, 1.0f);
 
-	m_Velocity.Set(0.0f, 0.0f, 0.0f);
-	m_RotationAxis.Set(1.0f, 0.0f, 0.0f);
+	m_Velocity.set(0.0f, 0.0f, 0.0f);
+	m_RotationAxis.set(1.0f, 0.0f, 0.0f);
 
 	m_CurRotationAngle = 0.0f;
 	m_RotationSpeed = 1.0f;
@@ -546,14 +546,14 @@ void kbFlingPhysicsComponent::SetEnable_Internal(const bool bEnable) {
 		GetOwner()->CalculateWorldMatrix(worldMatrix);
 		const XMMATRIX inverseMat = XMMatrixInverse(nullptr, XMMATRIXFromkbMat4(worldMatrix));
 		worldMatrix = kbMat4FromXMMATRIX(inverseMat);
-		worldMatrix.TransposeSelf();
+		worldMatrix.transpose_self();
 		m_Velocity = m_Velocity * worldMatrix;
 
 		m_RotationAxis = kbVec3(kbfrand(), kbfrand(), kbfrand());
-		if (m_RotationAxis.LengthSqr() < 0.01f) {
-			m_RotationAxis.Set(1.0f, 0.0f, 0.0f);
+		if (m_RotationAxis.length_sqr() < 0.01f) {
+			m_RotationAxis.set(1.0f, 0.0f, 0.0f);
 		} else {
-			m_RotationAxis.Normalize();
+			m_RotationAxis.normalize_self();
 		}
 		m_RotationSpeed = kbfrand(m_MinAngularSpeed, m_MaxAngularSpeed);
 		m_CurRotationAngle = 0;

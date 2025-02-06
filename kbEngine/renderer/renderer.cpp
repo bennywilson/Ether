@@ -8,8 +8,13 @@
 Renderer* g_renderer = nullptr;
 
 /// Renderer::Renderer
-Renderer::Renderer() {
+Renderer::Renderer() :
+	m_frame_width(0),
+	m_frame_height(0),
+	m_camera_position(0.f, 0.f, 0.f),
+	m_camera_rotation(0.f, 0.f, 0.f, 1.f) {
 	g_renderer = this;
+	m_camera_projection.make_identity();
 }
 
 /// Renderer::~Renderer
@@ -21,6 +26,12 @@ Renderer::~Renderer() {
 void Renderer::initialize(HWND hwnd, const uint32_t frame_width, const uint32_t frame_height) {
 	m_frame_width = frame_width;
 	m_frame_height = frame_height;
+
+	m_camera_projection.create_perspective_matrix(
+		kbToRadians(50.f),
+		m_frame_width / (float)m_frame_height,
+		0.1f, 10000.f
+	);
 }
 
 /// Renderer::shut_down
@@ -35,6 +46,12 @@ void Renderer::shut_down() {
 		delete m_render_buffers[i];
 	}
 	m_render_buffers.clear();
+}
+
+/// Renderer::set_camera_transform
+void Renderer::set_camera_transform(const kbVec3& position, const kbQuat& rotation) {
+	m_camera_position = position;
+	m_camera_rotation = rotation;
 }
 
 /// Renderer::create_render_buffer

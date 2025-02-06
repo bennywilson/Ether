@@ -23,7 +23,7 @@ public:
 		x = Normal.x;
 		y = Normal.y;
 		z = Normal.z;
-		w = Point.Dot(Normal);
+		w = Point.dot(Normal);
 	}
 
 	KBPLANE_Intersect Intersect(const kbVec3& startPt, const kbVec3& endPt, float& t, kbVec3& intersectionPt);

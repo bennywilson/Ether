@@ -23,7 +23,7 @@ kbConsoleVariable g_ShowCollision( "showcollision", false, kbConsoleVariable::Co
  */
 void kbCollisionComponent::Constructor() {
 	m_CollisionType = CollisionType_Sphere;
-	m_Extent.Set( 10.0f, 10.0f, 10.0f );
+	m_Extent.set( 10.0f, 10.0f, 10.0f );
 }
 
 /**
@@ -114,8 +114,8 @@ kbCollisionInfo_t kbCollisionManager::PerformLineCheck( const kbVec3 & start, co
 
 	float LineLength = 0.0f;
 	
-	if ( end.Compare( start ) == false ) {
-		LineLength = ( end - start ).Length();
+	if ( end.compare( start ) == false ) {
+		LineLength = ( end - start ).length();
 	} else {
 		// todo: Point check
 		return collisionInfo;
@@ -169,7 +169,7 @@ kbCollisionInfo_t kbCollisionManager::PerformLineCheck( const kbVec3 & start, co
 			kbGameEntity *const pCollisionOwner = pCollision->GetOwner();
 			kbVec3 intersectionPt;
 			if ( kbRaySphereIntersection( intersectionPt, start, rayDir, pCollisionOwner->GetPosition(), pCollision->m_Extent.x ) ) {
-				const float t = ( intersectionPt - start ).Length() / LineLength;
+				const float t = ( intersectionPt - start ).length() / LineLength;
 				if ( t < collisionInfo.m_T ) {
 
 					if ( pCollision->GetWorldSpaceCollisionSpheres().size() == 0 ) {
@@ -181,7 +181,7 @@ kbCollisionInfo_t kbCollisionManager::PerformLineCheck( const kbVec3 & start, co
 						for ( int iColSphere = 0; iColSphere < pCollision->GetWorldSpaceCollisionSpheres().size(); iColSphere++ ) {
 							const kbVec4 & curSphere = pCollision->GetWorldSpaceCollisionSpheres()[iColSphere];
 							if ( kbRaySphereIntersection( intersectionPt, start, rayDir, curSphere.ToVec3(), curSphere.a ) ) {
-								const float innerT = ( intersectionPt - start ).Length() / LineLength;
+								const float innerT = ( intersectionPt - start ).length() / LineLength;
 								if ( innerT < collisionInfo.m_T ) {
 									collisionInfo.m_bHit = true;
 									collisionInfo.m_HitLocation = intersectionPt;

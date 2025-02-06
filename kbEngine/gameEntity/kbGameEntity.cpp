@@ -449,7 +449,7 @@ const kbQuat kbGameEntity::GetOrientation() const {
 const kbVec3 kbGameEntity::GetPosition() const {
 	if (m_pOwnerEntity != nullptr) {
 		const kbQuat entityOrientation = GetOrientation();
-		const kbVec3 worldSpaceOffset = entityOrientation.ToMat4().TransformPoint(m_pTransformComponent->GetPosition());
+		const kbVec3 worldSpaceOffset = entityOrientation.ToMat4().transform_point(m_pTransformComponent->GetPosition());
 		return worldSpaceOffset + m_pOwnerEntity->GetPosition();
 	}
 

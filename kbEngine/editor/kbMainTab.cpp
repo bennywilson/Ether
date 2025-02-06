@@ -11,6 +11,7 @@
 #include "kbGameEntityHeader.h"
 #include "kbEditorEntity.h"
 #include "kbManipulator.h"
+#include "renderer.h"
 
 #include "kbMainTab.h"
 #pragma warning(push)
@@ -84,11 +85,8 @@ kbMainTab::kbMainTab(int x, int y, int w, int h) :
 	m_pCurrentlySelectedResource = nullptr;
 }
 
-/**
- *	kbMainTab::Update
- */
+/// kbMainTab::Update
 void kbMainTab::Update() {
-
 	if (g_Editor->IsRunningGame()) {
 		return;
 	}
@@ -103,6 +101,10 @@ void kbMainTab::Update() {
 
 	g_pRenderer->SetRenderViewTransform(pCurrentWindow->GetWindowHandle(), pCamera.m_Position, pCamera.m_Rotation);
 	g_pRenderer->SetRenderWindow(pCurrentWindow->GetWindowHandle());
+
+	if (g_renderer != nullptr) {
+		g_renderer->set_camera_transform(pCamera.m_Position, pCamera.m_Rotation);
+	}
 
 	if (pCurrentWindow == m_pModelViewerWindow) {
 		const float baseAxisLength = 2.0;
@@ -378,7 +380,7 @@ void kbMainTab::CameraMoveCB(const widgetCBInputObject* const inputObject) {
 		yRotation.FromAxisAngle(rightVec, inputObject->mouseDeltaY * -rotationMag);
 
 		camera.m_RotationTarget = camera.m_RotationTarget * yRotation * xRotation;
-		camera.m_RotationTarget.Normalize();
+		camera.m_RotationTarget.normalize_self();
 	}
 
 	// position
@@ -409,8 +411,8 @@ void kbMainTab::CameraMoveCB(const widgetCBInputObject* const inputObject) {
 
 			}
 
-			if (movementVec.LengthSqr() > 0.0001f) {
-				movementVec.Normalize();
+			if (movementVec.length_sqr() > 0.0001f) {
+				movementVec.normalize_self();
 				camera.m_Position += movementVec * movementMag;
 			}
 		}
@@ -461,14 +463,13 @@ void kbMainTab::ManipulatorEvent(const bool bClicked, const kbVec2i& mouseXY) {
 
 	// Persepctive mat
 	kbMat4 perspectiveMat;
-	perspectiveMat.CreatePerspectiveMatrix(kbToRadians(75.0f), windowWidth / windowHeight, 0.25f, 1000.0f);	// TODO - NEAR/FAR PLANE 
-	perspectiveMat.InverseProjection();
+	perspectiveMat.create_perspective_matrix(kbToRadians(75.0f), windowWidth / windowHeight, 0.25f, 1000.0f);	// TODO - NEAR/FAR PLANE 
+	perspectiveMat.inverse_projection();
 
 	// View mat
 	const kbMat4 modelViewMatrix(camera.m_Rotation, camera.m_Position);
-
 	const kbMat4 unitCubeToWorldMatrix = perspectiveMat * modelViewMatrix;
-	const kbVec4 ray = (mousePosition.TransformPoint(unitCubeToWorldMatrix, true) - camera.m_Position);
+	const kbVec4 ray = (mousePosition.transform_point(unitCubeToWorldMatrix, true) - camera.m_Position);
 
 	if (bClicked) {
 		if (m_Manipulator.AttemptMouseGrab(camera.m_Position, ray.ToVec3(), camera.m_Rotation) == false) {

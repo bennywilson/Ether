@@ -35,7 +35,7 @@ void kbSoundData::PlaySoundAtPosition(const kbVec3& soundPosition) {
 
 	g_pRenderer->GetRenderViewTransform(nullptr, currentCameraPosition, currentCameraRotation);
 
-	const float distToCamera = (currentCameraPosition - soundPosition).Length();
+	const float distToCamera = (currentCameraPosition - soundPosition).length();
 	float atten = 1.0f;
 	if (m_Radius > 0.0f) {
 		if (distToCamera > m_Radius) {

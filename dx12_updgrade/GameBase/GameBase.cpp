@@ -187,6 +187,10 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 	std::string mapName;
 	mapName = "test";
 
+	// Toggles
+	g_UseEditor = true;
+	bool use_d3d12 = false;
+
 	// Perform application initialization
 	if (!InitInstance(hInstance, nCmdShow)) {
 		return FALSE;
@@ -204,23 +208,27 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 		pGame = new EtherGame();
 		applicationEditor->SetGame(pGame);
 		g_pRenderer->SetRenderWindow(nullptr);
+
+		if (use_d3d12) {
+			g_renderer = new Renderer_D3D12();
+			g_renderer->initialize(applicationEditor->main_viewport_hwnd(), g_screen_width, g_screen_height);
+		}
+
 		if (mapName.length() > 0) {
 			applicationEditor->LoadMap(mapName);
 		}
 	} else {
-	//	g_renderer = new Renderer_VK();
-		g_renderer = new Renderer_D3D12();
-
-		g_renderer->initialize(hWnd, g_screen_width, g_screen_height);
-
-		{
-			g_pRenderer = new kbRenderer_DX11();
-			g_pRenderer->Init(hWnd, g_screen_width, g_screen_height);
-			pGame = new EtherGame();
-			std::vector<const kbGameEntity*> GameEntitiesList;
-			pGame->InitGame(hWnd, g_screen_width, g_screen_height, GameEntitiesList);
-			pGame->LoadMap(mapName);
+		if (use_d3d12) {
+			g_renderer = new Renderer_D3D12();
+			g_renderer->initialize(hWnd, g_screen_width, g_screen_height);
 		}
+		
+		g_pRenderer = new kbRenderer_DX11();
+		g_pRenderer->Init(hWnd, g_screen_width, g_screen_height);
+		pGame = new EtherGame();
+		std::vector<const kbGameEntity*> GameEntitiesList;
+		pGame->InitGame(hWnd, g_screen_width, g_screen_height, GameEntitiesList);
+		pGame->LoadMap(mapName);
 	}
 
 	// Main message loop
@@ -232,18 +240,15 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 		}
 
 		try {
-			static int fear = 0;
-
-			if (fear) {
-				if (g_UseEditor) {
-					applicationEditor->Update();
-				} else {
-					pGame->Update();
-				}
+			if (g_UseEditor) {
+				applicationEditor->Update();
 			} else {
+				pGame->Update();
+			}
+			
+			if (g_renderer != nullptr) {
 				g_renderer->render();
 			}
-
 		} catch (char* const string) {
 			// todo : output error to console
 			blk::log(string);

@@ -25,20 +25,20 @@ void CopyVarToComponent( const kbComponent * Src, kbComponent * Dst, const kbTyp
 			case KBTYPEINFO_SHADER : {
 				std::vector< class kbShader * >	& DestShaderList = *( std::vector< class kbShader * > *)( &DstByte[currentVar->Offset()] );
 				std::vector< class kbShader * >	& SrcShaderList = *( std::vector< class kbShader * > *)( &SrcByte[currentVar->Offset()] );
-			
+
 				DestShaderList = SrcShaderList;
 				break;
 			}
-		
+
 			default: {
 				byte *const SrcArrayPtr = &SrcByte[currentVar->Offset()];
 				byte *const DestArrayPtr = &DstByte[currentVar->Offset()];
 				const int arraySize = g_NameToTypeInfoMap->GetVectorSize( SrcByte, currentVar->GetStructName() );
 				g_NameToTypeInfoMap->ResizeVector( DestArrayPtr, currentVar->GetStructName(), arraySize );
 				for ( int i = 0; i < arraySize; i++ ) {
-		
+
 					byte *const Destin = (byte*)g_NameToTypeInfoMap->GetVectorElement( arrayBytePtr, currentVar->GetStructName(), i );
-		
+
 					if ( currentVar->Type() == KBTYPEINFO_STRUCT ) {
 						while ( m_Buffer[m_CurrentReadPos] != '{' ) {
 							m_CurrentReadPos++;
@@ -60,7 +60,7 @@ void CopyVarToComponent( const kbComponent * Src, kbComponent * Dst, const kbTyp
 			}
 		}	else {
 		switch( currentVar->Type() ) {
-			case KBTYPEINFO_BOOL : 
+			case KBTYPEINFO_BOOL :
 			{
 				const bool & srcBool = *(const bool*)&SrcByte[currentVar->Offset()];
 				bool & dstBool = *(bool*)&DstByte[currentVar->Offset()];
@@ -75,11 +75,11 @@ void CopyVarToComponent( const kbComponent * Src, kbComponent * Dst, const kbTyp
 				break;
 			}
 
-			case KBTYPEINFO_INT : 
+			case KBTYPEINFO_INT :
 			{
 				const int & srcInt = *( const int* )&SrcByte[currentVar->Offset()];
 				int & dstInt = *( int* )&DstByte[currentVar->Offset()];
-				dstInt = srcInt;				
+				dstInt = srcInt;
 				break;
 			}
 
@@ -119,7 +119,7 @@ void CopyVarToComponent( const kbComponent * Src, kbComponent * Dst, const kbTyp
 				destRef = srcRef;
 				break;
 			}
-				
+
 			case KBTYPEINFO_ENUM : {
 				int & srcEnum = *(int*)&SrcByte[currentVar->Offset()];
 				int & destEnum = *(int*)&DstByte[currentVar->Offset()];
@@ -132,7 +132,7 @@ void CopyVarToComponent( const kbComponent * Src, kbComponent * Dst, const kbTyp
 /**
  *	kbComponent::Constructor
  */
-void kbComponent::Constructor() {
+	void kbComponent::Constructor() {
 	m_pOwner = nullptr;
 	m_pOwningComponent = nullptr;
 	m_bIsDirty = false;
@@ -142,10 +142,10 @@ void kbComponent::Constructor() {
 /**
  *	kbComponent::SetOwner
  */
-void kbComponent::SetOwner( kbEntity *const pGameEntity ) { 
+void kbComponent::SetOwner(kbEntity* const pGameEntity) {
 
-	if ( pGameEntity == nullptr ) {
-		blk::error( "Initializing a kbComponent with a NULL game entity", GetComponentClassName() );
+	if (pGameEntity == nullptr) {
+		blk::error("Initializing a kbComponent with a NULL game entity", GetComponentClassName());
 	}
 
 	m_pOwner = pGameEntity;
@@ -162,21 +162,21 @@ void kbGameComponent::Constructor() {
 /**
  *	kbGameComponent::Enable
  */
-void kbGameComponent::Enable( const bool setEnabled ) {
+void kbGameComponent::Enable(const bool setEnabled) {
 
-	if ( m_IsEnabled == setEnabled ) {
+	if (m_IsEnabled == setEnabled) {
 		return;
 	}
 
 	m_IsEnabled = setEnabled;
 
-	if ( GetOwner() == nullptr || GetOwner()->IsPrefab() == true ) {
+	if (GetOwner() == nullptr || GetOwner()->IsPrefab() == true) {
 		return;
 	}
 
-	SetEnable_Internal( setEnabled );
+	SetEnable_Internal(setEnabled);
 
-	if ( setEnabled ) {
+	if (setEnabled) {
 		m_LifeTimeRemaining = m_StartingLifeTime;
 	}
 }
@@ -184,32 +184,32 @@ void kbGameComponent::Enable( const bool setEnabled ) {
 /**
  *	kbGameComponent::EditorChange
  */
-void kbGameComponent::EditorChange( const std::string & propertyName ) {
-	Super::EditorChange( propertyName );
+void kbGameComponent::EditorChange(const std::string& propertyName) {
+	Super::EditorChange(propertyName);
 
-	if ( propertyName == "Enabled" ) {
-		if ( GetOwner() == nullptr || GetOwner()->IsPrefab() == true ) {
+	if (propertyName == "Enabled") {
+		if (GetOwner() == nullptr || GetOwner()->IsPrefab() == true) {
 			return;
 		}
 
-		SetEnable_Internal( m_IsEnabled );
+		SetEnable_Internal(m_IsEnabled);
 	}
 }
 
 /**
  *	kbGameComponent::Update
  */
-void kbGameComponent::Update( const float DeltaTimeSeconds ) {
-	if ( m_LifeTimeRemaining >= 0.0f ) {
+void kbGameComponent::Update(const float DeltaTimeSeconds) {
+	if (m_LifeTimeRemaining >= 0.0f) {
 		m_LifeTimeRemaining -= DeltaTimeSeconds;
-		if ( m_LifeTimeRemaining < 0 ) {
-			Enable( false );
+		if (m_LifeTimeRemaining < 0) {
+			Enable(false);
 			LifeTimeExpired();
 			return;
 		}
 	}
 
-	Update_Internal( DeltaTimeSeconds ); 
+	Update_Internal(DeltaTimeSeconds);
 	m_bIsDirty = false;
 }
 
@@ -244,45 +244,45 @@ kbQuat kbGameComponent::GetOwnerRotation() const {
 /**
  *	kbGameComponent::SetOwnerPosition
  */
-void kbGameComponent::SetOwnerPosition( const kbVec3 & position ) {
-	GetOwner()->SetPosition( position );
+void kbGameComponent::SetOwnerPosition(const kbVec3& position) {
+	GetOwner()->SetPosition(position);
 }
 
 /**
  *	kbGameComponent::SetOwnerRotation
  */
-void kbGameComponent::SetOwnerRotation( const kbQuat & rotation ) {
-	GetOwner()->SetOrientation( rotation );
+void kbGameComponent::SetOwnerRotation(const kbQuat& rotation) {
+	GetOwner()->SetOrientation(rotation);
 }
 
 /**
  *	kbTransformComponent::Constructor
  */
 void kbTransformComponent::Constructor() {
-	m_Position.Set( 0.0f, 0.0f, 0.0f );
-	m_Scale.Set( 1.0f, 1.0f, 1.0f );
-	m_Orientation.Set( 0.0f, 0.0f, 0.0f, 1.0f );
+	m_Position.set(0.0f, 0.0f, 0.0f);
+	m_Scale.set(1.0f, 1.0f, 1.0f);
+	m_Orientation.set(0.0f, 0.0f, 0.0f, 1.0f);
 }
 
 /**
  *	kbTransformComponent::GetPosition
  */
 const kbVec3 kbTransformComponent::GetPosition() const {
-	if ( GetOwner()->GetComponent(0) == this ) {
+	if (GetOwner()->GetComponent(0) == this) {
 		return m_Position;
 	}
 
 	const kbMat4 parentRotation = GetOwner()->GetOrientation().ToMat4();
-	const kbVec3 worldPosition = parentRotation.TransformPoint( m_Position );
+	const kbVec3 worldPosition = parentRotation.transform_point(m_Position);
 
-	return parentRotation.TransformPoint( m_Position ) + GetOwner()->GetPosition();
+	return parentRotation.transform_point(m_Position) + GetOwner()->GetPosition();
 }
 
 /**
  *	kbTransformComponent::GetScale
  */
 const kbVec3 kbTransformComponent::GetScale() const {
-	if ( GetOwner()->GetComponent(0) == this ) {
+	if (GetOwner()->GetComponent(0) == this) {
 		return m_Scale;
 	}
 
@@ -293,7 +293,7 @@ const kbVec3 kbTransformComponent::GetScale() const {
  *	kbTransformComponent::GetOrientation
  */
 const kbQuat kbTransformComponent::GetOrientation() const {
-	if ( GetOwner()->GetComponent(0) == this ) {
+	if (GetOwner()->GetComponent(0) == this) {
 		return m_Orientation;
 	}
 
@@ -310,9 +310,9 @@ void kbGameLogicComponent::Constructor() {
 /**
  *	kbGameLogicComponent::Update_Internal
  */
-void kbGameLogicComponent::Update_Internal( const float DeltaTime ) {
-	START_SCOPED_TIMER( CLOTH_COMPONENT );
-	Super::Update_Internal( DeltaTime );
+void kbGameLogicComponent::Update_Internal(const float DeltaTime) {
+	START_SCOPED_TIMER(CLOTH_COMPONENT);
+	Super::Update_Internal(DeltaTime);
 }
 
 /**
@@ -334,10 +334,10 @@ void kbActorComponent::Constructor() {
 /**
  *	kbActorComponent::Constructor
  */
-void kbActorComponent::SetEnable_Internal( const bool bIsEnabled ) {
-	Super::SetEnable_Internal( bIsEnabled );
+void kbActorComponent::SetEnable_Internal(const bool bIsEnabled) {
+	Super::SetEnable_Internal(bIsEnabled);
 
-	if ( bIsEnabled ) {
+	if (bIsEnabled) {
 		m_CurrentHealth = m_MaxHealth;
 	}
 }
@@ -345,8 +345,8 @@ void kbActorComponent::SetEnable_Internal( const bool bIsEnabled ) {
 /**
  *	kbActorComponent::TakeDamage
  */
-void kbActorComponent::TakeDamage( const class kbDamageComponent *const pDamageComponent, const kbGameLogicComponent *const attackerComponent ) {
-	if ( pDamageComponent == nullptr ) {
+void kbActorComponent::TakeDamage(const class kbDamageComponent* const pDamageComponent, const kbGameLogicComponent* const attackerComponent) {
+	if (pDamageComponent == nullptr) {
 		return;
 	}
 
@@ -364,7 +364,7 @@ void kbDeleteEntityComponent::Constructor() {
  *	kbDeleteEntityComponent::LifeTimeExpired
  */
 void kbDeleteEntityComponent::LifeTimeExpired() {
-	g_pGame->RemoveGameEntity( GetOwner() );
+	g_pGame->RemoveGameEntity(GetOwner());
 }
 
 /**
@@ -390,64 +390,60 @@ void kbVectorAnimEvent::Constructor() {
 	m_EventValue = kbVec3::zero;
 }
 
-/**
- *	kbAnimEvent::Evaluate
- */
-float kbAnimEvent::Evaluate( const std::vector<kbAnimEvent> & eventList, const float t ) {
-	if ( eventList.size() == 0 ) {
-		blk::warning( "kbAnimEvent::Evaluate() - Empty event list" );
+/// kbAnimEvent::Evaluate
+float kbAnimEvent::Evaluate(const std::vector<kbAnimEvent>& eventList, const float t) {
+	if (eventList.size() == 0) {
+		blk::warning("kbAnimEvent::Evaluate() - Empty event list");
 		return 0;
 	}
 
-	for ( int i = 0; i < eventList.size(); i++ ) {
-		if ( t < eventList[i].GetEventTime() ) {
-			if ( i == 0 ) {
+	for (size_t i = 0; i < eventList.size(); i++) {
+		if (t < eventList[i].GetEventTime()) {
+			if (i == 0) {
 				return eventList[0].GetEventValue();
 			}
 
-			const float lerp = ( t - eventList[i-1].GetEventTime() ) / ( eventList[i].GetEventTime() - eventList[i-1].GetEventTime() );
-			return kbLerp( eventList[i-1].GetEventValue(), eventList[i].GetEventValue(), lerp );
+			const float lerp = (t - eventList[i - 1].GetEventTime()) / (eventList[i].GetEventTime() - eventList[i - 1].GetEventTime());
+			return kbLerp(eventList[i - 1].GetEventValue(), eventList[i].GetEventValue(), lerp);
 		}
 	}
 
 	return eventList.back().GetEventValue();
 }
 
-/**
- *	kbVectorAnimEvent::Evaluate
- */
-kbVec4 kbVectorAnimEvent::Evaluate( const std::vector<kbVectorAnimEvent> & eventList, const float t ) {
-	if ( eventList.size() == 0 ) {
-		blk::warning( "kbVectorAnimEvent::Evaluate() - Empty event list" );
+/// kbVectorAnimEvent::Evaluate
+kbVec4 kbVectorAnimEvent::Evaluate(const std::vector<kbVectorAnimEvent>& eventList, const float t) {
+	if (eventList.size() == 0) {
+		blk::warning("kbVectorAnimEvent::Evaluate() - Empty event list");
 		return kbVec3::zero;
 	}
-	
-	for ( int i = 0; i < eventList.size(); i++ ) {
-		if ( t < eventList[i].GetEventTime() ) {
-			if ( i == 0 ) {
+
+	for (int i = 0; i < eventList.size(); i++) {
+		if (t < eventList[i].GetEventTime()) {
+			if (i == 0) {
 				return eventList[0].GetEventValue();
 			}
 
-			const float lerp = ( t - eventList[i-1].GetEventTime() ) / ( eventList[i].GetEventTime() - eventList[i-1].GetEventTime() );
-		//	blk::log( "i = %d, lerp = %f.  time1 = %f, time2 = %f", i, lerp, eventList[i-1].GetEventTime(), t - eventList[i-1].GetEventTime() );
-			return kbLerp( eventList[i-1].GetEventValue(), eventList[i].GetEventValue(), lerp );
+			const float lerp = (t - eventList[i - 1].GetEventTime()) / (eventList[i].GetEventTime() - eventList[i - 1].GetEventTime());
+			//	blk::log( "i = %d, lerp = %f.  time1 = %f, time2 = %f", i, lerp, eventList[i-1].GetEventTime(), t - eventList[i-1].GetEventTime() );
+			return kbLerp(eventList[i - 1].GetEventValue(), eventList[i].GetEventValue(), lerp);
 		}
 	}
 
-//	blk::log( "Gah!");
+	//	blk::log( "Gah!");
 	return eventList.back().GetEventValue();
 }
 
 /**
  *	kbEditorGlobalSettingsComponent::Constructor
- */	
+ */
 void kbEditorGlobalSettingsComponent::Constructor() {
 	m_CameraSpeedIdx = 0;
 }
 
 /**
  *	kbEditorLevelSettingsComponent::Constructor
- */	
+ */
 void kbEditorLevelSettingsComponent::Constructor() {
 	m_CameraPosition = kbVec3::zero;
 	m_CameraRotation = kbQuat::identity;

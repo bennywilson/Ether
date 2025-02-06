@@ -717,6 +717,11 @@ void kbEditor::SelectEntities(std::vector< kbEditorEntity* >& entitiesToSelect, 
 	g_Editor->BroadcastEvent(entitySelectedCB);
 }
 
+/// kbEditor::main_viewport_hwnd
+HWND kbEditor::main_viewport_hwnd() const {
+	return fl_xid(m_pMainTab->GetCurrentWindow());
+}
+
 /// kbEditor::handle
 int kbEditor::handle(int theEvent) {
 	const int button = Fl::event_button();
@@ -903,7 +908,7 @@ void XFormEntities(const kbManipulator& manipulator, const kbVec4 xForm) {
 				entityList[i]->SetPosition(entityList[i]->GetPosition() + xForm.ToVec3() * xForm.w);
 			} else if (manipulator.GetMode() == kbManipulator::Rotate) {
 				kbQuat rot(xForm.ToVec3(), xForm.a);
-				rot = (entityList[i]->GetOrientation() * rot).Normalized();
+				rot = (entityList[i]->GetOrientation() * rot).normalize_safe();
 				entityList[i]->SetOrientation(rot);
 			} else if (manipulator.GetMode() == kbManipulator::Scale) {
 				entityList[i]->SetScale(entityList[i]->GetScale() + xForm.ToVec3() * xForm.w);

@@ -255,7 +255,7 @@ bool kbModel::LoadMS3D() {
 			m_Bones[i].m_ParentIndex = it->second;
 		}
 
-		m_Bones[i].m_RelativePosition.Set( pJoint->m_Position[0], pJoint->m_Position[1], -pJoint->m_Position[2] );
+		m_Bones[i].m_RelativePosition.set( pJoint->m_Position[0], pJoint->m_Position[1], -pJoint->m_Position[2] );
 
 		// Convert from euler angles to quaternions
 		kbQuat rotationX( kbVec3::right, pJoint->m_Rotation[0] ); 
@@ -403,7 +403,7 @@ bool kbModel::LoadMS3D() {
 					vertIndex = it->second;
 				}
 
-				m_CPUIndices[ibIndex + (2-j)] = vertIndex;
+				m_CPUIndices[(size_t)(ibIndex + (2-j))] = vertIndex;
 
 				// todo - Maybe should be editor only?
 				m_Meshes[i].m_Vertices.push_back( newVert.position );
@@ -592,7 +592,7 @@ bool kbModel::LoadFBX() {
 				const int iCtrlPt = pFBXMesh->GetPolygonVertex( iTri, iTriVert );
 				const FbxVector4 ctrlPt = pFBXMesh->GetControlPointAt(iCtrlPt);
 
-				triVert.position.Set( (float)ctrlPt[1], (float)ctrlPt[2], -(float)ctrlPt[0] );
+				triVert.position.set( (float)ctrlPt[1], (float)ctrlPt[2], -(float)ctrlPt[0] );
 				newMesh.m_Bounds.AddPoint( triVert.position );
 		
 				FbxGeometryElementNormal *const pFBXVertNormal = pFBXMesh->GetElementNormal(0);
@@ -825,7 +825,7 @@ bool kbModel::LoadDiablo3() {
 		fileReader.GetVec3();
 
 		vertexLayout newVert;
-		newVert.position.Set( vertPos.y, vertPos.x, vertPos.z );
+		newVert.position.set( vertPos.y, vertPos.x, vertPos.z );
 		newVert.normal[0] = (byte)vertNormal.x;
 		newVert.normal[1] = (byte)vertNormal.y;
 		newVert.normal[2] = (byte)vertNormal.z;
@@ -1028,17 +1028,17 @@ kbModelIntersection_t kbModel::RayIntersection( const kbVec3 & inRayOrigin, cons
 	kbModelIntersection_t intersectionInfo;
 
 	kbMat4 inverseModelRotation;
-	inverseModelRotation.MakeScale( scale );
+	inverseModelRotation.make_scale( scale );
 	inverseModelRotation = inverseModelRotation * modelOrientation.ToMat4();
 	const XMMATRIX xmInverse = XMMatrixInverse( nullptr, XMMATRIXFromkbMat4( inverseModelRotation ) );
 	inverseModelRotation = kbMat4FromXMMATRIX( xmInverse );
 
 	const kbVec3 rayStart = ( inRayOrigin - modelTranslation ) * inverseModelRotation;
-	const kbVec3 rayDir = inRayDirection.Normalized() * inverseModelRotation;
+	const kbVec3 rayDir = inRayDirection.normalize_safe() * inverseModelRotation;
 	float t = FLT_MAX;
 
 	for ( int iMesh = 0; iMesh < m_Meshes.size(); iMesh++ ) {
-		for ( int iVert = 0; iVert < m_Meshes[iMesh].m_Vertices.size(); iVert += 3 ) {
+		for ( size_t iVert = 0; iVert < m_Meshes[iMesh].m_Vertices.size(); iVert += 3 ) {
 
 			const kbVec3 & v0 = m_Meshes[iMesh].m_Vertices[iVert+0];
 			const kbVec3 & v1 = m_Meshes[iMesh].m_Vertices[iVert+1];
@@ -1055,7 +1055,7 @@ kbModelIntersection_t kbModel::RayIntersection( const kbVec3 & inRayOrigin, cons
 
 	if ( intersectionInfo.meshNum >= 0 ) {
 		intersectionInfo.hasIntersection = true;
-		intersectionInfo.intersectionPoint = inRayOrigin + intersectionInfo.t * inRayDirection.Normalized(); 
+		intersectionInfo.intersectionPoint = inRayOrigin + intersectionInfo.t * inRayDirection.normalize_safe(); 
 	}
 
 	return intersectionInfo;
@@ -1349,7 +1349,7 @@ bool kbAnimation::Load_Internal() {
 		}
 
 		for ( int iKey = 0; iKey < NumTranslationKeyFrames; iKey++ ) {
-			jointData.m_TranslationKeyFrames[iKey].m_Position.Set( positionKeyFrames[iKey].m_Position[0], positionKeyFrames[iKey].m_Position[1], -positionKeyFrames[iKey].m_Position[2] );
+			jointData.m_TranslationKeyFrames[iKey].m_Position.set( positionKeyFrames[iKey].m_Position[0], positionKeyFrames[iKey].m_Position[1], -positionKeyFrames[iKey].m_Position[2] );
 			jointData.m_TranslationKeyFrames[iKey].m_Time = positionKeyFrames[iKey].m_Time;
 
 			if ( jointData.m_TranslationKeyFrames[iKey].m_Time > m_LengthInSeconds )
@@ -1394,15 +1394,15 @@ kbBoneMatrix_t operator *( const kbBoneMatrix_t & op1, const kbBoneMatrix_t & op
 void kbModel::DrawDebugTBN( const kbVec3 & modelTranslation, const kbQuat & modelOrientation, const kbVec3 & scale ) {
 
 	kbMat4 modelMatrix;
-	modelMatrix.MakeScale( scale );
+	modelMatrix.make_scale( scale );
 	modelMatrix *= modelOrientation.ToMat4();
 	modelMatrix[3].Set( modelTranslation.x, modelTranslation.y, modelTranslation.z, 1.0f );
 
 	for ( int i = 0; i < m_DebugPositions.size(); i++ ) {
-		const kbVec3 worldPos = modelMatrix.TransformPoint( m_DebugPositions[i] );
+		const kbVec3 worldPos = modelMatrix.transform_point( m_DebugPositions[i] );
 		const kbVec3 worldNormal = m_DebugNormals[i] * modelMatrix;
 		const kbVec3 worldTangent = m_DebugTangents[i] * modelMatrix;
-		const kbVec3 worldBitangent = worldNormal.Cross( worldTangent ).Normalized();
+		const kbVec3 worldBitangent = worldNormal.cross( worldTangent ).normalize_safe();
 
 		g_pRenderer->DrawLine( worldPos, worldPos + worldTangent * 3.0f, kbColor::red );
 		g_pRenderer->DrawLine( worldPos, worldPos + worldBitangent * 3.0f, kbColor::green );

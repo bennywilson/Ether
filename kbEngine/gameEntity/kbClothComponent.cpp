@@ -42,9 +42,9 @@ void kbClothComponent::Constructor() {
 	m_pSkeletalModel = nullptr;
 	m_NumConstrainIterations = 1;
 
-	m_Gravity.Set( 0.0f, -100.0f, 0.0f );
-	m_MaxWindVelocity.Set( 20.0f, 160.0f, -9.0f );
-	m_MinWindVelocity.Set( 64.0f, 30.0f, -20.0f );
+	m_Gravity.set( 0.0f, -100.0f, 0.0f );
+	m_MaxWindVelocity.set( 20.0f, 160.0f, -9.0f );
+	m_MinWindVelocity.set( 64.0f, 30.0f, -20.0f );
 	m_MinWindGustDuration = 0.2f;
 	m_MaxWindGustDuration = 0.35f;
 	m_bAddFakeOscillation = false;
@@ -118,7 +118,7 @@ void kbClothComponent::Update_Internal( const float dt ) {
 		if ( m_Masses[i].m_bAnchored ) {
 			const kbBoneMatrix_t refBoneMatrix = pSkelModelComponent->GetBoneRefMatrix( BoneIndex );
 			const kbVec3 localBonePos = refBoneMatrix.GetAxis(3);
-			kbVec3 finalPosition = WorldMat.TransformPoint( localBonePos * FinalBoneMatrices[BoneIndex] );
+			kbVec3 finalPosition = WorldMat.transform_point( localBonePos * FinalBoneMatrices[BoneIndex] );
 			m_Masses[i].SetPosition( finalPosition );
 		}
 
@@ -201,9 +201,9 @@ void kbClothComponent::Update_Internal( const float dt ) {
 	//		blk::log( "%s looking for %s", pSkelModelComponent->GetModel()->GetFullFileName().c_str(), m_CollisionSpheres[iCollision].m_BoneName.c_str() );
 
 			if ( pSkelModelComponent->GetBoneWorldMatrix( m_CollisionSpheres[iCollision].m_BoneName, boneWorldMatrix ) ) {
-				boneWorldMatrix.m_Axis[0].Normalize();
-				boneWorldMatrix.m_Axis[1].Normalize();
-				boneWorldMatrix.m_Axis[2].Normalize();
+				boneWorldMatrix.m_Axis[0].normalize_self();
+				boneWorldMatrix.m_Axis[1].normalize_self();
+				boneWorldMatrix.m_Axis[2].normalize_self();
 
 				kbVec3 spherePos = m_CollisionSpheres[iCollision].m_Sphere.ToVec3() * boneWorldMatrix;
 				g_pRenderer->DrawSphere( spherePos, m_CollisionSpheres[iCollision].m_Sphere.w, 12, kbColor( 1.0f, 0.0f, 1.0f, 1.0f ) );
@@ -246,8 +246,8 @@ void kbClothComponent::RunSimulation( const float inDeltaTime ) {
 
 	kbBounds bounds( true );
 	bounds.AddPoint( BallPos ),
-	bounds.AddPoint( BallPos + kbVec3( 1.0f, 1.0f, 1.0f ).Normalized() * BallRad );
-	bounds.AddPoint( BallPos - ( kbVec3( 1.0f, 1.0f, 1.0f ).Normalized() * BallRad ) );
+	bounds.AddPoint( BallPos + kbVec3( 1.0f, 1.0f, 1.0f ).normalize_safe() * BallRad );
+	bounds.AddPoint( BallPos - ( kbVec3( 1.0f, 1.0f, 1.0f ).normalize_safe() * BallRad ) );
 
 	std::vector<kbVec4> CollisionSpheres;
 	kbVec4 newSphere( BallPos.x, BallPos.y, BallPos.z, 1.0f );
@@ -271,9 +271,9 @@ void kbClothComponent::RunSimulation( const float inDeltaTime ) {
 	for ( int iCollision = 0; iCollision < m_CollisionSpheres.size(); iCollision++ ) {
 		kbBoneMatrix_t boneWorldMatrix;
 		if ( pSkelModelComponent->GetBoneWorldMatrix( m_CollisionSpheres[iCollision].m_BoneName, boneWorldMatrix ) ) {
-			boneWorldMatrix.m_Axis[0].Normalize();
-			boneWorldMatrix.m_Axis[1].Normalize();
-			boneWorldMatrix.m_Axis[2].Normalize();
+			boneWorldMatrix.m_Axis[0].normalize_self();
+			boneWorldMatrix.m_Axis[1].normalize_self();
+			boneWorldMatrix.m_Axis[2].normalize_self();
 	
 			const kbVec3 spherePos = m_CollisionSpheres[iCollision].m_Sphere.ToVec3() * boneWorldMatrix;
 			CollisionSpheres.push_back( kbVec4( spherePos, m_CollisionSpheres[iCollision].m_Sphere.w ) );
@@ -318,8 +318,8 @@ void kbClothComponent::RunSimulation( const float inDeltaTime ) {
 		// ...
 		/*for ( int sphereIdx = 0; sphereIdx < CollisionSpheres.size(); sphereIdx++ ) {
 			const kbVec3 sphereToVert = newLocation - CollisionSpheres[sphereIdx].ToVec3();
-			if ( sphereToVert.LengthSqr() < ( CollisionSpheres[sphereIdx].w * CollisionSpheres[sphereIdx].w) ) {
-				newLocation = CollisionSpheres[sphereIdx].ToVec3() + sphereToVert.Normalized() * CollisionSpheres[sphereIdx].w;
+			if ( sphereToVert.length_sqr() < ( CollisionSpheres[sphereIdx].w * CollisionSpheres[sphereIdx].w) ) {
+				newLocation = CollisionSpheres[sphereIdx].ToVec3() + sphereToVert.normalize_safe() * CollisionSpheres[sphereIdx].w;
 			}
 		}*/
 		// ...
@@ -343,7 +343,7 @@ void kbClothComponent::RunSimulation( const float inDeltaTime ) {
 			const kbVec3 mass2Pos = m_Masses[mass2Idx].GetPosition();
 
 			const kbVec3 mass1ToMass2 = mass2Pos - mass1Pos;
-			const float distanceBetween = mass1ToMass2.Length();
+			const float distanceBetween = mass1ToMass2.length();
 			const float invDist = ( distanceBetween > 0.001f ) ? ( 1.0f / distanceBetween ) : ( 0.0f );
 			kbVec3 finalOffset = ( ( mass1ToMass2 * invDist ) * ( distanceBetween - m_Springs[iSpring].m_Length ) ) * g_ClothSpring.GetFloat();
 
@@ -369,10 +369,10 @@ void kbClothComponent::RunSimulation( const float inDeltaTime ) {
 
 			for ( int sphereIdx = 0; sphereIdx < CollisionSpheres.size(); sphereIdx++ ) {
 				const kbVec3 sphereToVert = newLocation - CollisionSpheres[sphereIdx].ToVec3();
-				const float	 lenSqr = sphereToVert.LengthSqr();
+				const float	 lenSqr = sphereToVert.length_sqr();
 				const float W = CollisionSpheres[sphereIdx].w;
 				if ( lenSqr < W * W ) {
-					newLocation = CollisionSpheres[sphereIdx].ToVec3() + sphereToVert.Normalized() * ( CollisionSpheres[sphereIdx].w );
+					newLocation = CollisionSpheres[sphereIdx].ToVec3() + sphereToVert.normalize_safe() * ( CollisionSpheres[sphereIdx].w );
 				}
 			}
 
@@ -389,10 +389,10 @@ void kbClothComponent::RunSimulation( const float inDeltaTime ) {
 
 			for ( int sphereIdx = 0; sphereIdx < CollisionSpheres.size(); sphereIdx++ ) {
 				const kbVec3 sphereToVert = newLocation - CollisionSpheres[sphereIdx].ToVec3();
-				const float	 lenSqr = sphereToVert.LengthSqr();
+				const float	 lenSqr = sphereToVert.length_sqr();
 				const float W = CollisionSpheres[sphereIdx].w;
 				if ( lenSqr < W * W ) {
-					newLocation = CollisionSpheres[sphereIdx].ToVec3() + sphereToVert.Normalized() * ( CollisionSpheres[sphereIdx].w );
+					newLocation = CollisionSpheres[sphereIdx].ToVec3() + sphereToVert.normalize_safe() * ( CollisionSpheres[sphereIdx].w );
 				}
 			}
 
@@ -408,19 +408,19 @@ void kbClothComponent::RunSimulation( const float inDeltaTime ) {
 		kbVec3 zAxis;
 
 		if ( curX < m_Width - 1 ) {
-			xAxis = ( m_Masses[massIdx + 1].GetPosition() - m_Masses[massIdx].GetPosition() ).Normalized();
+			xAxis = ( m_Masses[massIdx + 1].GetPosition() - m_Masses[massIdx].GetPosition() ).normalize_safe();
 		} else {
-			xAxis = ( m_Masses[massIdx].GetPosition() - m_Masses[massIdx - 1].GetPosition() ).Normalized();
+			xAxis = ( m_Masses[massIdx].GetPosition() - m_Masses[massIdx - 1].GetPosition() ).normalize_safe();
 		}
 
 		if ( curY > 0 ) {
-			yAxis = ( m_Masses[massIdx - m_Width].GetPosition() - m_Masses[massIdx].GetPosition() ).Normalized();
+			yAxis = ( m_Masses[massIdx - m_Width].GetPosition() - m_Masses[massIdx].GetPosition() ).normalize_safe();
 		} else {
-			yAxis = ( m_Masses[massIdx].GetPosition() - m_Masses[massIdx + m_Width].GetPosition() ).Normalized();
+			yAxis = ( m_Masses[massIdx].GetPosition() - m_Masses[massIdx + m_Width].GetPosition() ).normalize_safe();
 		}
 
-		zAxis = xAxis.Cross( yAxis ).Normalized();
-		yAxis = zAxis.Cross( xAxis ).Normalized();
+		zAxis = xAxis.cross( yAxis ).normalize_safe();
+		yAxis = zAxis.cross( xAxis ).normalize_safe();
 
 		m_Masses[massIdx].SetAxis( 0, xAxis );
 		m_Masses[massIdx].SetAxis( 1, yAxis );
@@ -511,7 +511,7 @@ void kbClothComponent::SetupCloth() {
 					kbClothSpring_t & newSpring = m_Springs[m_Springs.size() - 1];
 					newSpring.m_MassIndices[0] = curBoneIdx;
 					newSpring.m_MassIndices[1] = rightBoneIdx;
-					newSpring.m_Length = ( m_Masses[curBoneIdx].m_Matrix.GetOrigin() - m_Masses[rightBoneIdx].m_Matrix.GetOrigin() ).Length();
+					newSpring.m_Length = ( m_Masses[curBoneIdx].m_Matrix.GetOrigin() - m_Masses[rightBoneIdx].m_Matrix.GetOrigin() ).length();
 				}
 
 				if ( row < m_Height - 1 ) {
@@ -521,7 +521,7 @@ void kbClothComponent::SetupCloth() {
 					const int downBoneIdx = ( ( row + 1 ) * m_Width ) + col;
 					newSpring.m_MassIndices[0] = curBoneIdx;
 					newSpring.m_MassIndices[1] = downBoneIdx;
-					newSpring.m_Length = ( m_Masses[curBoneIdx].m_Matrix.GetOrigin() - m_Masses[downBoneIdx].m_Matrix.GetOrigin() ).Length();
+					newSpring.m_Length = ( m_Masses[curBoneIdx].m_Matrix.GetOrigin() - m_Masses[downBoneIdx].m_Matrix.GetOrigin() ).length();
 
 				/*	if ( col < m_Width - 1 ) {
 						m_Springs.push_back( kbClothSpring_t() );
@@ -530,7 +530,7 @@ void kbClothComponent::SetupCloth() {
 						const int bone2Idx = downBoneIdx + 1;
 						cross1.m_MassIndices[0] = curBoneIdx;
 						cross1.m_MassIndices[1] = bone2Idx;
-						cross1.m_Length = ( m_Masses[curBoneIdx].m_Matrix.GetOrigin() - m_Masses[bone2Idx].m_Matrix.GetOrigin() ).Length();
+						cross1.m_Length = ( m_Masses[curBoneIdx].m_Matrix.GetOrigin() - m_Masses[bone2Idx].m_Matrix.GetOrigin() ).length();
 					}
 
 					if ( col > 0 ) {
@@ -541,7 +541,7 @@ void kbClothComponent::SetupCloth() {
 						const int bone2Idx = downBoneIdx - 1;
 						cross1.m_MassIndices[0] = bone1Idx;
 						cross1.m_MassIndices[1] = bone2Idx;
-						cross1.m_Length = ( m_Masses[bone1Idx].m_Matrix.GetOrigin() - m_Masses[bone2Idx].m_Matrix.GetOrigin() ).Length();
+						cross1.m_Length = ( m_Masses[bone1Idx].m_Matrix.GetOrigin() - m_Masses[bone2Idx].m_Matrix.GetOrigin() ).length();
 					}*/
 				}
 			}
@@ -569,7 +569,7 @@ void kbClothComponent::SetupCloth() {
 			kbClothSpring_t & newSpring = m_Springs[m_Springs.size() - 1];
 			newSpring.m_MassIndices[0] = curBoneIdx;
 			newSpring.m_MassIndices[1] = neighborIdx;
-			newSpring.m_Length = ( m_Masses[curBoneIdx].m_Matrix.GetOrigin() - m_Masses[newSpring.m_MassIndices[1]].m_Matrix.GetOrigin() ).Length();			
+			newSpring.m_Length = ( m_Masses[curBoneIdx].m_Matrix.GetOrigin() - m_Masses[newSpring.m_MassIndices[1]].m_Matrix.GetOrigin() ).length();			
 		}
 	}
 }

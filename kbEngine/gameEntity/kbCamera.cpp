@@ -20,5 +20,5 @@ kbCamera::kbCamera() :
  */
 void kbCamera::Update() {
 	m_Rotation = kbQuat::Slerp( m_Rotation, m_RotationTarget, 0.33f );
-	m_Rotation.Normalize();
+	m_Rotation.normalize_self();
 }

@@ -514,16 +514,16 @@ void kbRenderer_DX11::Init_Internal( HWND hwnd, const int frameWidth, const int 
 	vertexBufferDesc.StructureByteStride = 0;
 
 	vertexColorLayout vertices[3];
-	vertices[0].position.Set( -1.0f, -1.0f, 0.0f );
+	vertices[0].position.set( -1.0f, -1.0f, 0.0f );
 	vertices[0].SetColor( kbVec4( 0.25f, 0.35f, 0.75f, 1.0f ) );
 	
-	vertices[1].position.Set( 0.0f, 1.0f, 0.0f );
+	vertices[1].position.set( 0.0f, 1.0f, 0.0f );
 	vertices[1].SetColor( kbVec4( 0.25f, 0.35f, 0.75f, 1.0f ) );
 
-	vertices[2].position.Set( 1.0f, -1.0f, 0.0f );
+	vertices[2].position.set( 1.0f, -1.0f, 0.0f );
 	vertices[2].SetColor( kbVec4( 0.25f, 0.35f, 0.75f, 1.0f ) );
 
-	D3D11_SUBRESOURCE_DATA vertexData;
+	D3D11_SUBRESOURCE_DATA vertexData = {};
 	vertexData.pSysMem = vertices;
 	vertexData.SysMemPitch = 0;
 	vertexData.SysMemSlicePitch = 0;
@@ -531,28 +531,28 @@ void kbRenderer_DX11::Init_Internal( HWND hwnd, const int frameWidth, const int 
 	vertexLayout fullScreenQuadVerts[6];
 
 	// Tri 1
-	fullScreenQuadVerts[2].position.Set( -1.0f, -1.0f, 0.0f );
+	fullScreenQuadVerts[2].position.set( -1.0f, -1.0f, 0.0f );
 	fullScreenQuadVerts[2].uv.Set( 0, 1 );
 	fullScreenQuadVerts[2].SetColor( kbVec4( 1.0f, 1.0f, 1.0f, 1.0f ) );
 	
-	fullScreenQuadVerts[1].position.Set( 1.0f, -1.0f, 0.0f );
+	fullScreenQuadVerts[1].position.set( 1.0f, -1.0f, 0.0f );
 	fullScreenQuadVerts[1].uv.Set( 1, 1 );
 	fullScreenQuadVerts[1].SetColor( kbVec4( 1.0f, 1.0f, 1.0f, 1.0f ) );
 
-	fullScreenQuadVerts[0].position.Set( 1.0f, 1.0f, 0.0f );
+	fullScreenQuadVerts[0].position.set( 1.0f, 1.0f, 0.0f );
 	fullScreenQuadVerts[0].uv.Set( 1, 0 );
 	fullScreenQuadVerts[0].SetColor( kbVec4( 1.0f, 1.0f, 1.0f, 1.0f ) );
 
 	// Tri 2
-	fullScreenQuadVerts[5].position.Set( 1.0f, 1.0f, 0.0f );
+	fullScreenQuadVerts[5].position.set( 1.0f, 1.0f, 0.0f );
 	fullScreenQuadVerts[5].uv.Set( 1, 0 );
 	fullScreenQuadVerts[5].SetColor( kbVec4( 1.0f, 1.0f, 1.0f, 1.0f ) );
 
-	fullScreenQuadVerts[4].position.Set( -1.0f, 1.0f, 0.0f );
+	fullScreenQuadVerts[4].position.set( -1.0f, 1.0f, 0.0f );
 	fullScreenQuadVerts[4].uv.Set( 0, 0 );
 	fullScreenQuadVerts[4].SetColor( kbVec4( 1.0f, 1.0f, 1.0f, 1.0f ) );
 
-	fullScreenQuadVerts[3].position.Set( -1.0f, -1.0f, 0.0f );
+	fullScreenQuadVerts[3].position.set( -1.0f, -1.0f, 0.0f );
 	fullScreenQuadVerts[3].uv.Set( 0, 1 );
 	fullScreenQuadVerts[3].SetColor( kbVec4( 1.0f, 1.0f, 1.0f, 1.0f ) );
 
@@ -578,7 +578,7 @@ void kbRenderer_DX11::Init_Internal( HWND hwnd, const int frameWidth, const int 
 	hr = m_pD3DDevice->CreateBuffer( &vertexBufferDesc, &vertexData, &m_pConsoleQuad );
 	
 	// Set up constant buffers
-	D3D11_BUFFER_DESC matrixBufferDesc;
+	D3D11_BUFFER_DESC matrixBufferDesc = {};
 	matrixBufferDesc.Usage = D3D11_USAGE_DYNAMIC;	// <-- TODO: Should be static?
 	matrixBufferDesc.ByteWidth = 16;
 	matrixBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
@@ -636,7 +636,7 @@ void kbRenderer_DX11::Init_Internal( HWND hwnd, const int frameWidth, const int 
 	m_pBloomBlur->Load();
 
 	// sampler state
-	D3D11_SAMPLER_DESC samplerDesc;
+	D3D11_SAMPLER_DESC samplerDesc = {};
 	samplerDesc.Filter = D3D11_FILTER_ANISOTROPIC;
 	samplerDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
 	samplerDesc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
@@ -785,7 +785,7 @@ int kbRenderer_DX11::CreateRenderView( HWND hwnd )
 
 	m_pDXGIFactory->CreateSwapChain( m_pD3DDevice, &sd, &renderView->m_pSwapChain );
 
-	ID3D11Texture2D * pBackBuffer;
+	ID3D11Texture2D* pBackBuffer = nullptr;
 	renderView->m_pSwapChain->GetBuffer( 0, __uuidof(ID3D11Texture2D), (LPVOID*) &pBackBuffer );
 	m_pD3DDevice->CreateRenderTargetView( pBackBuffer, nullptr, &renderView->m_pRenderTargetView );
 	pBackBuffer->Release();
@@ -861,7 +861,7 @@ kbRenderTexture * kbRenderer_DX11::GetRenderTexture_Internal( const int width, c
 	}
 
 	// Render target view
-	D3D11_RENDER_TARGET_VIEW_DESC renderTargetViewDesc;
+	D3D11_RENDER_TARGET_VIEW_DESC renderTargetViewDesc = {};
 	renderTargetViewDesc.Format = textureDesc.Format;
 	renderTargetViewDesc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2D;
 	renderTargetViewDesc.Texture2D.MipSlice = 0;
@@ -870,7 +870,7 @@ kbRenderTexture * kbRenderer_DX11::GetRenderTexture_Internal( const int width, c
 	blk::error_check( SUCCEEDED(hr), "kbRenderer_DX11::CreateRenderTarget() - Failed to create RTV with format", (int)targetFormat );
 
 	// Shader resource view
-	D3D11_SHADER_RESOURCE_VIEW_DESC shaderResourceViewDesc;
+	D3D11_SHADER_RESOURCE_VIEW_DESC shaderResourceViewDesc = {};
 	shaderResourceViewDesc.Format = textureDesc.Format;
 	shaderResourceViewDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
 	shaderResourceViewDesc.Texture2D.MostDetailedMip = 0;
@@ -1030,7 +1030,7 @@ void kbRenderer_DX11::RenderScene() {
 			m_pDeviceContext->RSSetState( m_pWireFrameRasterizerState );
 		}
 
-		D3D11_VIEWPORT viewport;
+		D3D11_VIEWPORT viewport = {};
 		viewport.Width = (float)Back_Buffer_Width;
 		viewport.Height = (float)Back_Buffer_Height;
 		viewport.MinDepth = 0.0f;
@@ -1274,7 +1274,7 @@ void kbRenderer_DX11::PreRenderCullAndSort() {
 
 		kbRenderObject & renderObj = *iter->second;
 
-		const float distToCamSqr = ( renderObj.m_Position - m_pCurrentRenderWindow->GetCameraPosition() ).LengthSqr();
+		const float distToCamSqr = ( renderObj.m_Position - m_pCurrentRenderWindow->GetCameraPosition() ).length_sqr();
 		if ( renderObj.m_CullDistance > 0 ) {
 			const float cullDistSqr = renderObj.m_CullDistance * renderObj.m_CullDistance;
 	
@@ -1316,7 +1316,7 @@ void kbRenderer_DX11::PreRenderCullAndSort() {
 	for ( auto iter = curMap.begin(); iter != curMap.end(); iter++ ) {
 
 		kbRenderObject & renderObj = *iter->second;
-		const float distToCamSqr = ( renderObj.m_Position - m_pCurrentRenderWindow->GetCameraPosition() ).LengthSqr();
+		const float distToCamSqr = ( renderObj.m_Position - m_pCurrentRenderWindow->GetCameraPosition() ).length_sqr();
 		if ( renderObj.m_CullDistance > 0 ) {
 			const float cullDistSqr = renderObj.m_CullDistance * renderObj.m_CullDistance;
 			
@@ -1726,7 +1726,7 @@ void kbRenderer_DX11::RenderDebugText() {
 	HRESULT hr = m_pDeviceContext->Map( pConstantBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource );
 
 	kbMat4 mvpMatrix;
-	mvpMatrix.MakeIdentity();
+	mvpMatrix.make_identity();
 	mvpMatrix[0].x = 2.0f;
 	mvpMatrix[1].y = -2.0f;
 	mvpMatrix[3].x = -1.0f;
@@ -1751,7 +1751,7 @@ void kbRenderer_DX11::RenderMousePickerIds() {
 	m_pDeviceContext->ClearRenderTargetView( GetRenderTarget_DX11(MOUSE_PICKER_BUFFER)->m_pRenderTargetView, color );
 	m_pDeviceContext->ClearDepthStencilView( m_pDepthStencilView, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1, 0 );
 
-	D3D11_VIEWPORT viewport;
+	D3D11_VIEWPORT viewport = {};
 	viewport.TopLeftX = 0.0f;
 	viewport.TopLeftY = 0.0f;
 	viewport.Width = ( float )GetRenderTarget_DX11(MOUSE_PICKER_BUFFER)->GetWidth();
@@ -1862,15 +1862,15 @@ void kbRenderer_DX11::DrawTexture( ID3D11ShaderResourceView *const pShaderResour
 	//ShaderConstantMatrices sourceBuffer;
 	
 	kbMat4 finalMatrix;
-	finalMatrix.MakeIdentity();
+	finalMatrix.make_identity();
 
 	kbVec3 screenSpaceSize = pixelSize;
-	screenSpaceSize.MultiplyComponents( kbVec3( 1.0f / renderTargetSize.x, 1.0f / renderTargetSize.y, 0.0f ) );
-	finalMatrix.MakeScale( screenSpaceSize );
+	screenSpaceSize.multiply_components( kbVec3( 1.0f / renderTargetSize.x, 1.0f / renderTargetSize.y, 0.0f ) );
+	finalMatrix.make_scale( screenSpaceSize );
 
 	kbVec3 screenSpacePosition = pixelPosition;
-	screenSpacePosition.MultiplyComponents( kbVec3( 2.0f / renderTargetSize.x, 2.0f / renderTargetSize.y, 0.0f ) );
-	screenSpacePosition.AddComponents( kbVec3( -1.0f + screenSpaceSize.x, -1.0f + screenSpaceSize.y, 0.0f ) );
+	screenSpacePosition.multiply_components( kbVec3( 2.0f / renderTargetSize.x, 2.0f / renderTargetSize.y, 0.0f ) );
+	screenSpacePosition = screenSpacePosition + kbVec3(-1.0f + screenSpaceSize.x, -1.0f + screenSpaceSize.y, 0.0f);
 	screenSpacePosition.y *= -1.0f;
 
 	finalMatrix[3] = screenSpacePosition;
@@ -1989,7 +1989,7 @@ void kbRenderer_DX11::RenderBloom() {
 		blk::error_check( SUCCEEDED(hr), "Failed to map matrix buffer" );
 
 		kbMat4 mvpMatrix;
-		mvpMatrix.MakeIdentity();
+		mvpMatrix.make_identity();
 
 		SetShaderMat4( "mvpMatrix", mvpMatrix, mappedResource.pData, varBindings );
 
@@ -2040,7 +2040,7 @@ void kbRenderer_DX11::RenderBloom() {
 		blk::error_check( SUCCEEDED(hr), "Failed to map matrix buffer" );
 
 		kbMat4 mvpMatrix;
-		mvpMatrix.MakeIdentity();
+		mvpMatrix.make_identity();
 
 		SetShaderMat4( "mvpMatrix", mvpMatrix, (byte*) mappedResource.pData, varBindings );
 		SetShaderInt( "numSamples", 5, (byte*) mappedResource.pData, varBindings );
@@ -2090,7 +2090,7 @@ void kbRenderer_DX11::RenderBloom() {
 		blk::error_check( SUCCEEDED(hr), "Failed to map matrix buffer" );
 
 		kbMat4 mvpMatrix;
-		mvpMatrix.MakeIdentity();
+		mvpMatrix.make_identity();
 		
 		SetShaderMat4( "mvpMatrix", mvpMatrix, (byte*) mappedResource.pData, varBindings );
 		SetShaderInt( "numSamples", 5, (byte*) mappedResource.pData, varBindings );
@@ -2218,7 +2218,7 @@ void kbRenderer_DX11::RenderPostProcess() {
 	blk::error_check( SUCCEEDED(hr), "Failed to map matrix buffer" );
 	
 	kbMat4 mvpMatrix;
-	mvpMatrix.MakeIdentity();
+	mvpMatrix.make_identity();
 
 	SetShaderMat4( "mvpMatrix", mvpMatrix, mappedResource.pData, varBindings );
 	SetShaderMat4( "inverseProjection", m_pCurrentRenderWindow->GetInverseProjectionMatrix(), mappedResource.pData, varBindings );	
@@ -2975,7 +2975,7 @@ void kbRenderer_DX11::RenderScreenSpaceQuadImmediate( const int start_x, const i
 
 	kbMat4 mvpMatrix;
 	
-	mvpMatrix.MakeIdentity();
+	mvpMatrix.make_identity();
 	mvpMatrix[0][0] = xScale;
 	mvpMatrix[1][1] = yScale;
 	mvpMatrix[3][0] = xPos - 1.0f;
@@ -3288,7 +3288,7 @@ void kbRenderer_DX11::RenderDebugBillboards( const bool bIsEntityIdPass ) {
 
 		const kbMat4 preRotationMatrix = m_pCurrentRenderWindow->GetCameraRotation().ToMat4();
 		kbMat4 mvpMatrix;
-		mvpMatrix.MakeScale( currBillBoard.m_Scale * m_EditorIconScale_RenderThread );
+		mvpMatrix.make_scale( currBillBoard.m_Scale * m_EditorIconScale_RenderThread );
 		mvpMatrix[3] = currBillBoard.m_Position;
 		mvpMatrix = preRotationMatrix * mvpMatrix * m_pCurrentRenderWindow->GetViewProjectionMatrix();
 		SetShaderMat4( "mvpMatrix", mvpMatrix, pByteBuffer, pShader->GetShaderVarBindings() );
@@ -3459,7 +3459,7 @@ void kbRenderer_DX11::RT_Render2DLine( const kbVec3 & startPt, const kbVec3 & en
 	finalStartPt.z = startPt.z;
 	finalEndPt.z = endPt.z;
 
-	perpLine.Normalize();
+	perpLine.normalize_self();
 	float swap = perpLine.x;
 	perpLine.x = perpLine.y;
 	perpLine.y = -swap;
@@ -3611,7 +3611,7 @@ void kbRenderer_DX11::RT_Render2DQuad( const kbVec2 & origin, const kbVec2 & siz
 ID3D11Buffer * kbRenderer_DX11::SetConstantBuffer( const kbShaderVarBindings_t & shaderVarBindings, const kbShaderParamOverrides_t * shaderParamOverrides, const kbRenderObject *const pRenderObject, byte *const pInMappedBufferData, const char* const pShaderName ) {
 	kbMat4 worldMatrix;
 	if ( pRenderObject != nullptr ) {
-		worldMatrix.MakeScale( pRenderObject->m_Scale );
+		worldMatrix.make_scale( pRenderObject->m_Scale );
 		worldMatrix *= pRenderObject->m_Orientation.ToMat4();
 		worldMatrix[3] = pRenderObject->m_Position;
 	} else {
@@ -3643,9 +3643,9 @@ ID3D11Buffer * kbRenderer_DX11::SetConstantBuffer( const kbShaderVarBindings_t &
 		const byte * pVarByteOffset = constantPtr + bindings[i].m_VarByteOffset;
 		if ( varName == "billboardedModelMatrix" ) {
 
-			kbVec3 camToObject = ( m_pCurrentRenderWindow->GetCameraPosition() - pRenderObject->m_Position ).Normalized();
-			const kbVec3 rightVec = kbVec3::up.Cross( camToObject ).Normalized();
-			camToObject = rightVec.Cross( kbVec3::up ).Normalized();
+			kbVec3 camToObject = ( m_pCurrentRenderWindow->GetCameraPosition() - pRenderObject->m_Position ).normalize_safe();
+			const kbVec3 rightVec = kbVec3::up.cross( camToObject ).normalize_safe();
+			camToObject = rightVec.cross( kbVec3::up ).normalize_safe();
 			kbMat4 billBoardedMatrix = kbMat4::identity;
 			billBoardedMatrix[0].Set( rightVec.x, rightVec.y, rightVec.z, 0.0f );
 			billBoardedMatrix[1].Set( 0.0f, 1.0f, 0.0f, 0.0f );
@@ -3653,7 +3653,7 @@ ID3D11Buffer * kbRenderer_DX11::SetConstantBuffer( const kbShaderVarBindings_t &
 			billBoardedMatrix[3].Set( pRenderObject->m_Position.x, pRenderObject->m_Position.y, pRenderObject->m_Position.z, 1.0f );
 
 			kbMat4 scaleMatrix;
-			scaleMatrix.MakeScale( pRenderObject->m_Scale );
+			scaleMatrix.make_scale( pRenderObject->m_Scale );
 			billBoardedMatrix = scaleMatrix * billBoardedMatrix;
 
 			kbMat4 *const pMatOffset = (kbMat4*)pVarByteOffset;
@@ -3692,7 +3692,7 @@ ID3D11Buffer * kbRenderer_DX11::SetConstantBuffer( const kbShaderVarBindings_t &
 			if ( pRenderObject != nullptr ) {
 				kbMat4 *const boneMatrices = (kbMat4*)pVarByteOffset;
 				for ( int i = 0; i < pRenderObject->m_MatrixList.size() && i < Max_Shader_Bones; i++ ) {
-					boneMatrices[i].MakeIdentity();
+					boneMatrices[i].make_identity();
 					boneMatrices[i][0] = pRenderObject->m_MatrixList[i].GetAxis(0);
 					boneMatrices[i][1] = pRenderObject->m_MatrixList[i].GetAxis(1);
 					boneMatrices[i][2] = pRenderObject->m_MatrixList[i].GetAxis(2);

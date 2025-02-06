@@ -213,7 +213,7 @@ void kbParticleManager::UpdateAtlas(CustomAtlasParticle_t& atlasInfo) {
 
 		atlasInfo.m_pVertexBuffer = (kbParticleVertex*)atlasInfo.m_RenderModel[iModel].MapVertexBuffer();
 		for (int iVert = 0; iVert < NumParticleBufferVerts; iVert++) {
-			atlasInfo.m_pVertexBuffer[iVert].position.Set(0.0f, 0.0f, 0.0f);
+			atlasInfo.m_pVertexBuffer[iVert].position.set(0.0f, 0.0f, 0.0f);
 		}
 		renderModel.UnmapVertexBuffer();
 		atlasInfo.m_pVertexBuffer = nullptr;

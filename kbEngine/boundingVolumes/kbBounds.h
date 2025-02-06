@@ -23,8 +23,8 @@ public:
 	}
 
 	void Set( const float minX, const float minY, const float minZ, const float maxX, const float maxY, const float maxZ ) {
-		m_Min.Set( minX, minY, minZ );
-		m_Max.Set( maxX, maxY, maxZ );
+		m_Min.set( minX, minY, minZ );
+		m_Max.set( maxX, maxY, maxZ );
 	}
 
 	void SetMaxMin( const kbVec3 & Max, const kbVec3 & Min ) {

@@ -16,8 +16,8 @@ KBPLANE_Intersect kbPlane::Intersect(const kbVec3& startPt, const kbVec3& endPt,
 
 	int side = 0;
 
-	float startDot = vToStartPt.Dot(planeNormal);
-	float endDot = vToEndPt.Dot(planeNormal);
+	float startDot = vToStartPt.dot(planeNormal);
+	float endDot = vToEndPt.dot(planeNormal);
 
 	if (startDot > 0 && endDot > 0) {
 		return PLANE_BOTH_IN;
@@ -32,14 +32,14 @@ KBPLANE_Intersect kbPlane::Intersect(const kbVec3& startPt, const kbVec3& endPt,
 	}
 
 	kbVec3 vecTo = endPt - startPt;
-	vecTo.Normalize();
+	vecTo.normalize_self();
 
-	float denominator = planeNormal.Dot(vecTo);
+	float denominator = planeNormal.dot(vecTo);
 
 	//	if (denominator == 0)	
 	//		return 0;
 
-	float numerator = knownPt.Dot(planeNormal) - startPt.Dot(planeNormal);
+	float numerator = knownPt.dot(planeNormal) - startPt.dot(planeNormal);
 	t = numerator / denominator;
 	intersectionPt = startPt + vecTo * t;
 
@@ -54,8 +54,8 @@ KBPLANE_Intersect kbPlane::Intersect(const kbVec3& startPt, const kbVec3& endPt,
 bool kbPlane::PlanesIntersect(kbVec3& KnownPoint, kbVec3& Direction, const kbPlane& op2) const {
 	// Compute line direction, perpendicular to both plane normals.
 	const kbPlane& op1 = *this;
-	Direction = op1.Cross(op2);
-	const float DirSqr = Direction.LengthSqr();
+	Direction = op1.cross(op2);
+	const float DirSqr = Direction.length_sqr();
 
 	const float EPSILON = 0.000001f;
 	if (DirSqr < EPSILON)
@@ -65,8 +65,8 @@ bool kbPlane::PlanesIntersect(kbVec3& KnownPoint, kbVec3& Direction, const kbPla
 	else
 	{
 		// Compute intersection.
-		KnownPoint = ((op2.Cross(Direction)) * op1.w + (Direction.Cross(op1)) * op2.w) / DirSqr;
-		Direction.Normalize();
+		KnownPoint = ((op2.cross(Direction)) * op1.w + (Direction.cross(op1)) * op2.w) / DirSqr;
+		Direction.normalize_self();
 		return true;
 	}
 }

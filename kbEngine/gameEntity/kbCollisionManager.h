@@ -1,11 +1,8 @@
-//===================================================================================================
-// kbCollisionManager.h
-//
-//
-// 2016-2018 blk 1.0
-//===================================================================================================
-#ifndef _KBCOLLISIONMANAGER_H_
-#define _KBCOLLISIONMANAGER_H_
+/// kbCollisionManager.h
+///
+/// 2016-2025 blk 1.0
+
+#pragma once
 
 #include "kbCore.h"
 
@@ -37,15 +34,12 @@ private:
 	kbVec4										m_Sphere;
 };
 
-/**
- *	kbCollisionComponent
- */
-class kbCollisionComponent : public kbGameComponent {
 
+ /// kbCollisionComponent
+class kbCollisionComponent : public kbGameComponent {
 	KB_DECLARE_COMPONENT( kbCollisionComponent, kbGameComponent );
 	friend class kbCollisionManager;
 
-//---------------------------------------------------------------------------------------------------
 public:
 	virtual										~kbCollisionComponent();
 
@@ -53,7 +47,7 @@ public:
 	const std::vector<kbVec4> &					GetWorldSpaceCollisionSpheres() const { return m_WorldSpaceCollisionSpheres; }
 	void										SetWorldSpaceCollisionSphere( const int idx, const kbVec4 & newSphere );
 
-	float										GetRadius() const { return m_Extent.Length(); }
+	float										GetRadius() const { return m_Extent.length(); }
 
 	struct customTriangle_t {
 		kbVec3									m_Vertex1;
@@ -111,5 +105,3 @@ private:
 };
 
 extern kbCollisionManager g_CollisionManager;
-
-#endif

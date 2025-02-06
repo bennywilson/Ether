@@ -163,22 +163,19 @@ Renderer_D3D12::~Renderer_D3D12() {
 void Renderer_D3D12::shut_down() {
 	Renderer::shut_down();
 
+	const UINT64 fence = m_fence_value;
+	const UINT64 lastCompletedFence = m_fence->GetCompletedValue();
+
+	// Signal and increment the fence value.
+	check_result(m_queue->Signal(m_fence.Get(), m_fence_value));
+	m_fence_value++;
+
+	// Wait until the previous frame is finished.
+	if (lastCompletedFence < fence)
 	{
-		const UINT64 fence = m_fence_value;
-		const UINT64 lastCompletedFence = m_fence->GetCompletedValue();
-
-		// Signal and increment the fence value.
-		check_result(m_queue->Signal(m_fence.Get(), m_fence_value));
-		m_fence_value++;
-
-		// Wait until the previous frame is finished.
-		if (lastCompletedFence < fence)
-		{
-			check_result(m_fence->SetEventOnCompletion(fence, m_fence_event));
+		check_result(m_fence->SetEventOnCompletion(fence, m_fence_event));
 			WaitForSingleObject(m_fence_event, INFINITE);
-		}
 	}
-
 
 	m_cbv_upload_heap->Unmap(0, nullptr);
 
@@ -271,16 +268,20 @@ Constant* pBuffer;
 
 /// Renderer_D3D12::render
 void Renderer_D3D12::render() {
-
 	// Update constant buffer
+
+	kbMat4 mvp;
+	mvp.make_identity();
+	//mvp.MakeScale
+	//m_camera_projection
 	pBuffer->mvp[0].Set(1.31353f * 0.5f, 0.f, 0.f, -0.5f);
 	pBuffer->mvp[1].Set(0.f, 2.14451f * 0.5f, 0.f, -3.f);
 	pBuffer->mvp[2].Set(0.f, 0.f, 1.00005f * 0.5f, 4.5f);
 	pBuffer->mvp[3].Set(0.f, 0.f, 1.f, 5.f);
 
-	pBuffer->padding[0].MakeIdentity();
-	pBuffer->padding[1].MakeIdentity();
-	pBuffer->padding[2].MakeIdentity();
+	pBuffer->padding[0].make_identity();
+	pBuffer->padding[1].make_identity();
+	pBuffer->padding[2].make_identity();
 	//........................
 
 	check_result(m_command_allocator->Reset());

@@ -9,13 +9,17 @@ class kbQuat {
 public:
 	kbQuat() { }
 	explicit kbQuat(const kbVec3& axis, const float angle) { FromAxisAngle(axis, angle); }
-	explicit kbQuat(const float x, const float y, const float z, const float w) { Set(x, y, z, w); }
+	explicit kbQuat(const float x, const float y, const float z, const float w) { set(x, y, z, w); }
 
 	float Length();
-	kbQuat& Normalize();
-	kbQuat Normalized() const { kbQuat returnQuat = *this; returnQuat.Normalize(); return returnQuat; }
+	kbQuat& normalize_self();
+	kbQuat normalize_safe() const {
+		kbQuat returnQuat = *this;
+		returnQuat.normalize_self();
+		return returnQuat;
+	}
 
-	void Set(const float inX, const float inY, const float inZ, const float inW) { x = inX, y = inY, z = inZ, w = inW; }
+	void set(const float inX, const float inY, const float inZ, const float inW) { x = inX, y = inY, z = inZ, w = inW; }
 
 	kbQuat operator*(const kbQuat&) const;
 	float operator|(const kbQuat&) const;
@@ -42,22 +46,19 @@ inline kbQuat kbQuatFromMatrix(const kbMat4& matrix) {
 						(matrix[0][2] - matrix[2][0]) / s,
 						(matrix[1][0] - matrix[0][1]) / s,
 						s / 4);
-	}
-	else if (matrix[0][0] > matrix[1][1] && matrix[0][0] > matrix[2][2]) {
+	} else if (matrix[0][0] > matrix[1][1] && matrix[0][0] > matrix[2][2]) {
 		const float s = sqrtf(1.0f + matrix[0][0] - matrix[1][1] - matrix[2][2]) * 2;
 		return kbQuat(s / 4.0f,
 						(matrix[1][0] + matrix[0][1]) / s,
 						(matrix[0][2] + matrix[2][0]) / s,
 						(matrix[2][1] - matrix[1][2]) / s);
-	}
-	else if (matrix[1][1] > matrix[2][2]) {
+	} else if (matrix[1][1] > matrix[2][2]) {
 		const float s = sqrtf(1.0f + matrix[1][1] - matrix[0][0] - matrix[2][2]) * 2.0f;
 		return kbQuat((matrix[1][0] + matrix[0][1]) / s,
 						s / 4,
 						(matrix[2][1] + matrix[1][2]) / 2,
 						(matrix[0][2] - matrix[2][0]) / s);
-	}
-	else {
+	} else {
 		const float s = sqrtf(1.0f + matrix[2][2] - matrix[0][0] - matrix[1][1]) * 2.0f;
 		return kbQuat((matrix[0][2] + matrix[2][0]) / s,
 						(matrix[2][1] + matrix[1][2]) / s,
@@ -75,8 +76,8 @@ inline float kbQuat::Length() {
 	return sqrtf((x * x) + (y * y) + (z * z) + (w * w));
 }
 
-/// Normalize
-inline kbQuat& kbQuat::Normalize() {
+/// normalize_self
+inline kbQuat& kbQuat::normalize_self() {
 	float length = Length();
 
 	if (length != 0.0f) {

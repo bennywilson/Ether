@@ -16,8 +16,8 @@ kbManipulator::kbManipulator() :
 	m_ManipulatorMode(kbManipulator::Translate),
 	m_SelectedGroup(-1) {
 
-	m_Orientation.Set(0.0f, 0.0f, 0.0f, 1.0f);
-	m_Scale.Set(1.0f, 1.0f, 1.0f);
+	m_Orientation.set(0.0f, 0.0f, 0.0f, 1.0f);
+	m_Scale.set(1.0f, 1.0f, 1.0f);
 
 	memset(m_pModels, 0, sizeof(m_pModels));
 }
@@ -27,16 +27,13 @@ kbManipulator::~kbManipulator() { }
 
 /// kbManipulator::AttemptMouseGrab
 bool kbManipulator::AttemptMouseGrab(const kbVec3& rayOrigin, const kbVec3& rayDirection, const kbQuat& cameraOrientation) {
-
 	const kbModel* const pModel = m_pModels[m_ManipulatorMode];
 
 	const float modelScale = kbLevelComponent::GetGlobalModelScale();
 	kbModelIntersection_t intersection = pModel->RayIntersection(rayOrigin, rayDirection, m_Position, m_Orientation, kbVec3(modelScale, modelScale, modelScale));
 
-	if (intersection.hasIntersection == false)
-	{
+	if (intersection.hasIntersection == false) {
 		intersection = pModel->RayIntersection(rayOrigin, -rayDirection, m_Position, m_Orientation, kbVec3(modelScale, modelScale, modelScale));
-
 	}
 	if (intersection.hasIntersection) {
 		m_SelectedGroup = intersection.meshNum;
@@ -61,15 +58,14 @@ bool kbManipulator::AttemptMouseGrab(const kbVec3& rayOrigin, const kbVec3& rayD
 
 /// kbManipulator::UpdateMouseDrag
 void kbManipulator::UpdateMouseDrag(const kbVec3& rayOrigin, const kbVec3& rayDirection, const kbQuat& cameraOrientation) {
-
 	if (m_SelectedGroup < 0 || m_SelectedGroup > 3) {
 		return;
 	}
 
 	// Find intersection point with the plane facing the camera that goes through the mouse grab point
 	const kbVec3 cameraPlaneNormal = cameraOrientation.ToMat4()[2].ToVec3();
-	const float d = m_MouseWorldGrabPoint.Dot(cameraPlaneNormal);
-	const float t = -(rayOrigin.Dot(cameraPlaneNormal) - d) / rayDirection.Dot(cameraPlaneNormal);
+	const float d = m_MouseWorldGrabPoint.dot(cameraPlaneNormal);
+	const float t = -(rayOrigin.dot(cameraPlaneNormal) - d) / rayDirection.dot(cameraPlaneNormal);
 	const kbVec3 camPlaneIntersection = rayOrigin + t * rayDirection;
 
 	// Find the normal of the plane we'd like to move the object along
@@ -78,34 +74,31 @@ void kbManipulator::UpdateMouseDrag(const kbVec3& rayOrigin, const kbVec3& rayDi
 
 	if (m_SelectedGroup < 3) {
 		const int planeNormalIndex = (m_SelectedGroup + 1) % 3;
-		movePlaneNormal = manipulatorMatrix[planeNormalIndex].ToVec3().Normalized();
+		movePlaneNormal = manipulatorMatrix[planeNormalIndex].ToVec3().normalize_safe();
 	}
 
 	if (m_ManipulatorMode == kbManipulator::Translate) {
-
 		if (m_SelectedGroup < 3) {
-			const float distFromPlane = camPlaneIntersection.Dot(movePlaneNormal) - m_MouseWorldGrabPoint.Dot(movePlaneNormal);
+			const float distFromPlane = camPlaneIntersection.dot(movePlaneNormal) - m_MouseWorldGrabPoint.dot(movePlaneNormal);
 			const kbVec3 intersectionPoint = camPlaneIntersection - (movePlaneNormal * distFromPlane);
 			const kbVec3 moveDirection = manipulatorMatrix[m_SelectedGroup].ToVec3();
 
-			const kbVec3 finalTranslation = (intersectionPoint - m_MouseWorldGrabPoint).Dot(moveDirection) * moveDirection;
+			const kbVec3 finalTranslation = (intersectionPoint - m_MouseWorldGrabPoint).dot(moveDirection) * moveDirection;
 			m_Position = (m_MouseWorldGrabPoint + finalTranslation) - m_MouseLocalGrabPoint;
-
 		}
 		else {
 			m_Position = camPlaneIntersection - m_MouseLocalGrabPoint;
 		}
 	}
 	else if (m_ManipulatorMode == kbManipulator::Rotate) {
-
-		const float rotationRadius = (m_MouseWorldGrabPoint - m_Position).Length();
-		vecToGrabPoint = (m_MouseWorldGrabPoint - m_Position).Normalized();
-		vecToNewPoint = (camPlaneIntersection - m_Position).Normalized();
+		const float rotationRadius = (m_MouseWorldGrabPoint - m_Position).length();
+		vecToGrabPoint = (m_MouseWorldGrabPoint - m_Position).normalize_safe();
+		vecToNewPoint = (camPlaneIntersection - m_Position).normalize_safe();
 
 		// find the angle between the old and new placements
-		float rotationAngle = acos(vecToGrabPoint.Dot(vecToNewPoint));
-		const kbVec3 crossTest = vecToGrabPoint.Cross(vecToNewPoint);
-		if ((crossTest.Dot(movePlaneNormal)) > 0.0f) {
+		float rotationAngle = acos(vecToGrabPoint.dot(vecToNewPoint));
+		const kbVec3 crossTest = vecToGrabPoint.cross(vecToNewPoint);
+		if ((crossTest.dot(movePlaneNormal)) > 0.0f) {
 			rotationAngle *= -1.0f;
 		}
 
@@ -113,14 +106,13 @@ void kbManipulator::UpdateMouseDrag(const kbVec3& rayOrigin, const kbVec3& rayDi
 		const kbQuat rot(rotationAxes[m_SelectedGroup], rotationAngle);
 
 		// Final rotation
-		m_Orientation = (m_LastOrientation * rot).Normalized();
-	}
-	else if (m_ManipulatorMode == kbManipulator::Scale) {
-		const float initialDist = (m_MouseLocalGrabPoint - m_Position).Length();
-		const float curDist = (camPlaneIntersection - m_MouseLocalGrabPoint).Length();
+		m_Orientation = (m_LastOrientation * rot).normalize_safe();
+	} else if (m_ManipulatorMode == kbManipulator::Scale) {
+		const float initialDist = (m_MouseLocalGrabPoint - m_Position).length();
+		const float curDist = (camPlaneIntersection - m_MouseLocalGrabPoint).length();
 		const float scaleAmount = curDist / initialDist;
 
-		m_Scale.Set(scaleAmount, scaleAmount, scaleAmount);
+		m_Scale.set(scaleAmount, scaleAmount, scaleAmount);
 	}
 }
 
@@ -158,14 +150,13 @@ void kbManipulator::RenderSync() {
 void kbManipulator::ProcessInput(const bool leftMouseDown) {
 	if (leftMouseDown == true && m_SelectedGroup != -1) {
 		switch (m_ManipulatorMode) {
-		case kbManipulator::Rotate:
-		{
-			const float rotationRadius = (m_MouseWorldGrabPoint - m_Position).Length();
+			case kbManipulator::Rotate: {
+				const float rotationRadius = (m_MouseWorldGrabPoint - m_Position).length();
 
-			// Draw vectors that show angle between old and new location
-			g_pRenderer->DrawLine(m_Position, m_Position + vecToGrabPoint * rotationRadius, kbColor::red);
-			g_pRenderer->DrawLine(m_Position, m_Position + vecToNewPoint * rotationRadius, kbColor::blue);
-		}
+				// Draw vectors that show angle between old and new location
+				g_pRenderer->DrawLine(m_Position, m_Position + vecToGrabPoint * rotationRadius, kbColor::red);
+				g_pRenderer->DrawLine(m_Position, m_Position + vecToNewPoint * rotationRadius, kbColor::blue);
+			}
 		break;
 		}
 	}
