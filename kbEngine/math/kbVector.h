@@ -394,11 +394,13 @@ public:
 		mat[3].set(0.f, 0.f, 0.f, 1.f);
 	}
 
-	void make_translation(const Vec3& translation) {
+	static Mat4 make_translation(const Vec3& translation) {
+		Mat4 mat;
 		mat[0].set(1.f, 0.f, 0.f, 0.f);
 		mat[1].set(0.f, 1.f, 0.f, 0.f);
 		mat[2].set(0.f, 0.f, 1.f, 0.f);
 		mat[3].set(translation.x, translation.y, translation.z, 1.f);
+		return mat;
 	}
 
 	void look_at(const Vec3& eye, const Vec3& at, const Vec3& up) {

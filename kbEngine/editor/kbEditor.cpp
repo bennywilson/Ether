@@ -6,15 +6,12 @@
 #pragma warning(disable:4312)
 #include <FL/FL_Window.h>
 #include <FL/Fl_Text_Display.h>
-#include <FL/Fl_Tabs.h>
 #include <FL/Fl_Button.h>
 #include <FL/Fl_Menu_Bar.h>
 #include <FL/Fl_Select_Browser.h>
 #include <FL/Fl_Input.h>
-#include <FL/Fl_Check_Button.h>
 #include <FL/Fl_File_Chooser.h>
 #include <FL/fl_ask.H>
-#include <FL/x.H>
 #pragma warning(pop)
 
 #include <iomanip>
@@ -23,11 +20,8 @@
 #include "containers.h"
 #include "kbVector.h"
 #include "kbQuaternion.h"
-#include "render_defs.h"
 #include "DX11/kbRenderer_DX11.h"
 #include "kbGame.h"
-#include "kbModel.h"
-#include "kbGameEntityHeader.h"
 #include "kbWidget.h"
 #include "kbManipulator.h"
 #include "kbMainTab.h"
@@ -35,7 +29,6 @@
 #include "kbTypeInfo.h"
 #include "kbPropertiesTab.h"
 #include "kbEditor.h"
-#include "kbModelComponent.h"
 #include "kbEditorEntity.h"
 
 // fltk
@@ -44,6 +37,12 @@
 #pragma warning(disable:4099)
 #include "FL/fl_ask.h"
 #pragma warning(pop)
+
+// shutdown cb
+static void shutdown_cb(Fl_Widget* widget, void* const data) {
+	kbEditor* const self = (kbEditor*)data;
+	self->shut_down();
+}
 
 kbEditor* g_Editor = nullptr;
 kbDialogBox* kbDialogBox::gCurrentDialogBox = nullptr;
@@ -183,6 +182,8 @@ kbEditor::kbEditor() :
 	zNegAdjust->callback(ZNegAdjustButtonCB);
 	curX += AdjustButtonWidth + buttonSpacing;
 
+	this->callback(shutdown_cb, this);
+
 	m_pXFormInput = new Fl_Input(curX, curY, AdjustButtonWidth, buttonHeight, "");
 	m_pXFormInput->value("0");
 	curX += TRSButtonWidth * 3 + buttonSpacing;
@@ -280,7 +281,7 @@ kbEditor::kbEditor() :
 
 /// ~kbEditor
 kbEditor::~kbEditor() {
-	ShutDown();
+	shut_down();
 }
 
 /// kbEditor::UnloadMap
@@ -619,8 +620,8 @@ void kbEditor::Update() {
 	}
 }
 
-// kbEditor::ShutDown
-void kbEditor::ShutDown() {
+// kbEditor::shut_down
+void kbEditor::shut_down() {
 	// Save Editor Settings
 	kbFile outFile;
 	outFile.Open("./assets/editorSettings.txt", kbFile::FT_Write);
@@ -814,7 +815,7 @@ int kbEditor::handle(int theEvent) {
 		}
 
 		if (updateCursor) {
-			POINT point;
+			POINT point = {};
 			point.x = (LONG)newMouseX;
 			point.y = (LONG)newMouseY;
 
@@ -835,8 +836,7 @@ int kbEditor::handle(int theEvent) {
 /// kbEditor::Close
 void kbEditor::Close(Fl_Widget* widget, void* thisPtr) {
 	kbEditor* editor = static_cast<kbEditor*>(thisPtr);
-
-	editor->ShutDown();
+	editor->shut_down();
 }
 
 /// kbEditor::CreateGameEntity

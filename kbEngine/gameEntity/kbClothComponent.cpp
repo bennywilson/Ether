@@ -401,13 +401,13 @@ void kbClothComponent::RunSimulation(const float inDeltaTime) {
 
 	// Update orientation
 	for (size_t massIdx = 0; massIdx < m_BoneInfo.size(); massIdx++) {
-		const int curX = massIdx % (size_t)m_Width;
-		const int curY = massIdx / (size_t)m_Width;
+		const size_t curX = massIdx % (size_t)m_Width;
+		const size_t curY = massIdx / (size_t)m_Width;
 		Vec3 xAxis;
 		Vec3 yAxis;
 		Vec3 zAxis;
 
-		if (curX < m_Width - 1) {
+		if (curX < (size_t)m_Width - 1) {
 			xAxis = (m_Masses[massIdx + 1].GetPosition() - m_Masses[massIdx].GetPosition()).normalize_safe();
 		} else {
 			xAxis = (m_Masses[massIdx].GetPosition() - m_Masses[massIdx - 1].GetPosition()).normalize_safe();

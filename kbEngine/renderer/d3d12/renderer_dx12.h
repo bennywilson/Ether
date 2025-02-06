@@ -17,19 +17,19 @@ class Renderer_Dx12 : public Renderer {
 public:
 	~Renderer_Dx12();
 
-	virtual void shut_down() override;
-
 	virtual void render() override;
 
 	ComPtr<ID3D12Device> get_device() const { return m_device; }
 
 protected:
-	virtual void initialize(HWND hwnd, const uint32_t frameWidth, const uint32_t frameHeight) override;
-
 	void todo_create_texture();
 	ComPtr<ID3D12Resource> tex;
 
 private:
+	virtual void initialize_internal(HWND hwnd, const uint32_t frameWidth, const uint32_t frameHeight) override;
+
+	virtual void shut_down_internal() override;
+
 	void get_hardware_adapter(
 		struct IDXGIFactory1* const factory,
 		struct IDXGIAdapter1** const out_adapter,

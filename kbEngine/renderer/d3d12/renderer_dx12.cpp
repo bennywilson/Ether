@@ -13,8 +13,14 @@
 
 using namespace std;
 
-/// Renderer_Dx12::initialize
-void Renderer_Dx12::initialize(HWND hwnd, const uint32_t frame_width, const uint32_t frame_height) {
+/// Renderer_Dx12::~Renderer_Dx12
+Renderer_Dx12::~Renderer_Dx12() {
+	shut_down();	// function is virtual but called in ~Renderer which is UB
+}
+
+
+/// Renderer_Dx12::initialize_internal
+void Renderer_Dx12::initialize_internal(HWND hwnd, const uint32_t frame_width, const uint32_t frame_height) {
 	UINT dxgiFactoryFlags = 0;
 
 	m_view_port = CD3DX12_VIEWPORT(0.f, 0.f, (float)frame_width, (float)frame_height);
@@ -154,15 +160,8 @@ void Renderer_Dx12::initialize(HWND hwnd, const uint32_t frame_width, const uint
 	blk::log("Renderer_Dx12 initialized");
 }
 
-/// Renderer_Dx12::~Renderer_Dx12
-Renderer_Dx12::~Renderer_Dx12() {
-	shut_down();	// function is virtual but called in ~Renderer which is UB
-}
-
-/// Renderer_Dx12::shut_down
-void Renderer_Dx12::shut_down() {
-	Renderer::shut_down();
-
+/// Renderer_Dx12::shut_down_internal
+void Renderer_Dx12::shut_down_internal() {
 	const UINT64 fence = m_fence_value;
 	const UINT64 lastCompletedFence = m_fence->GetCompletedValue();
 
@@ -174,7 +173,7 @@ void Renderer_Dx12::shut_down() {
 	if (lastCompletedFence < fence)
 	{
 		check_result(m_fence->SetEventOnCompletion(fence, m_fence_event));
-			WaitForSingleObject(m_fence_event, INFINITE);
+		WaitForSingleObject(m_fence_event, INFINITE);
 	}
 
 	m_cbv_upload_heap->Unmap(0, nullptr);
@@ -269,15 +268,31 @@ Constant* pBuffer;
 /// Renderer_Dx12::render
 void Renderer_Dx12::render() {
 	// Update constant buffer
+	m_camera_projection.make_identity();
+	m_camera_projection.create_perspective_matrix(
+	kbToRadians(50.),
+	1197 / (float)854,
+	1.f, 20000.f
+	);
 
-	Mat4 mvp;
-	mvp.make_identity();
+	const Mat4 trans = Mat4::make_translation(-m_camera_position);
+	Mat4 rot = m_camera_rotation.ToMat4();
+	rot.transpose_self();
+
+	Mat4 view_matrix = trans * rot;
+	Mat4 mvp_matrix =
+		view_matrix *
+		m_camera_projection;
+	mvp_matrix.transpose_self();
+
 	//mvp.MakeScale
 	//m_camera_projection
+	pBuffer->mvp = mvp_matrix;
+	/*
 	pBuffer->mvp[0].set(1.31353f * 0.5f, 0.f, 0.f, -0.5f);
 	pBuffer->mvp[1].set(0.f, 2.14451f * 0.5f, 0.f, -3.f);
 	pBuffer->mvp[2].set(0.f, 0.f, 1.00005f * 0.5f, 4.5f);
-	pBuffer->mvp[3].set(0.f, 0.f, 1.f, 5.f);
+	pBuffer->mvp[3].set(0.f, 0.f, 1.f, 5.f);*/
 
 	pBuffer->padding[0].make_identity();
 	pBuffer->padding[1].make_identity();

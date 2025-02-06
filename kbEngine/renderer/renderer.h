@@ -25,7 +25,7 @@ public:
 	static constexpr uint32_t max_frames() { return 2; }
 
 	virtual void initialize(HWND hwnd, const uint32_t frame_width, const uint32_t frame_height);
-	virtual void shut_down() = 0;
+	virtual void shut_down();
 
 	virtual void set_camera_transform(const Vec3& position, const kbQuat& rotation);
 
@@ -40,6 +40,9 @@ protected:
 	RenderBuffer* get_render_buffer(const size_t& buffer_index) { return m_render_buffers[buffer_index]; }
 
 private:
+	virtual void initialize_internal(HWND hwnd, const uint32_t frame_width, const uint32_t frame_height) = 0;
+	virtual void shut_down_internal() = 0;
+
 	virtual RenderPipeline* create_pipeline(const std::wstring& path) = 0;
 	virtual RenderBuffer* create_render_buffer_internal() = 0;
 

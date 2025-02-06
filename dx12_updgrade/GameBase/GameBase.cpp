@@ -128,6 +128,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) 
 			// TODO: Add any drawing code here...
 			EndPaint(hWnd, &ps);
 			break;
+		case WM_CLOSE:
 		case WM_DESTROY:
 			destroyCalled = true;
 			//		PostQuitMessage(0);
@@ -241,6 +242,9 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 
 		try {
 			if (g_UseEditor) {
+				if (!applicationEditor->IsRunning()) {
+					break;
+				}
 				applicationEditor->Update();
 			} else {
 				pGame->Update();
@@ -265,7 +269,7 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 		delete applicationEditor;
 	}
 	g_ResourceManager.Shutdown();
-
+	g_pRenderer->Shutdown();
 	delete g_pRenderer;
 	g_pRenderer = nullptr;
 

@@ -19,7 +19,6 @@ Renderer::Renderer() :
 
 /// Renderer::~Renderer
 Renderer::~Renderer() {
-	shut_down();
 }
 
 /// Renderer::initialize
@@ -27,11 +26,14 @@ void Renderer::initialize(HWND hwnd, const uint32_t frame_width, const uint32_t 
 	m_frame_width = frame_width;
 	m_frame_height = frame_height;
 
+	m_camera_projection.make_identity();
 	m_camera_projection.create_perspective_matrix(
-		kbToRadians(50.f),
-		m_frame_width / (float)m_frame_height,
+		kbToRadians(50.),
+		m_frame_height / (float)m_frame_width,
 		0.1f, 10000.f
 	);
+
+	initialize_internal(hwnd, frame_width, frame_height);
 }
 
 /// Renderer::shut_down
@@ -46,6 +48,8 @@ void Renderer::shut_down() {
 		delete m_render_buffers[i];
 	}
 	m_render_buffers.clear();
+
+	shut_down_internal();
 }
 
 /// Renderer::set_camera_transform

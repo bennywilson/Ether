@@ -27,6 +27,8 @@ public:
 	kbEditor();
 	~kbEditor();
 
+	void shut_down();
+
 	void UnloadMap();
 	void LoadMap(const std::string& mapName);
 	void SetGame(class kbGame* pGame) { m_pGame = pGame; }
@@ -104,7 +106,6 @@ private:
 	uint64_t m_UndoIDAtLastSave = 0;
 
 	// internal functions and callbacks
-	void ShutDown();
 
 	static void NewLevel(Fl_Widget*, void*);
 	static void OpenLevel(Fl_Widget*, void*);

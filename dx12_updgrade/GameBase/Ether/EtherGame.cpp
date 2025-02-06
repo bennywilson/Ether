@@ -12,7 +12,7 @@ kbConsoleVariable g_ShowPos("showpos", false, kbConsoleVariable::Console_Bool, "
 EtherGame* g_pEtherGame = nullptr;
 
 
- /// EtherGame::EtherGame
+/// EtherGame::EtherGame
 EtherGame::EtherGame() :
 	kbRenderHook(RP_FirstPerson),
 	m_CameraMode(Cam_FirstPerson),

@@ -4,8 +4,6 @@
 
 #include "kbCore.h"
 #include "kbSoundManager.h"
-#include "kbQuaternion.h"
-#include "kbVector.h"
 #include "kbGameEntityHeader.h"
 #include "kbLevelComponent.h"
 
