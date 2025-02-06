@@ -389,7 +389,7 @@ void kbEditor::LoadMap(const std::string& InMapName) {
 		SetMainCameraPos(pLevelSettings->m_CameraPosition);
 		SetMainCameraRot(pLevelSettings->m_CameraRotation);
 	} else {
-		SetMainCameraPos(kbVec3::zero);
+		SetMainCameraPos(Vec3::zero);
 		SetMainCameraRot(kbQuat::identity);
 	}
 
@@ -657,12 +657,12 @@ void kbEditor::BroadcastEvent(const widgetCBObject& cbObject) {
 }
 
 /// kbEditor::SetMainCameraPos
-void kbEditor::SetMainCameraPos(const kbVec3& newCamPos) {
+void kbEditor::SetMainCameraPos(const Vec3& newCamPos) {
 	m_pMainTab->GetEditorWindowCamera()->m_Position = newCamPos;
 }
 
 /// kbEditor::GetMainCameraPos
-kbVec3 kbEditor::GetMainCameraPos() const {
+Vec3 kbEditor::GetMainCameraPos() const {
 	return m_pMainTab->GetEditorWindowCamera()->m_Position;
 }
 
@@ -849,7 +849,7 @@ void kbEditor::CreateGameEntity(Fl_Widget* widget, void* thisPtr) {
 	}
 
 	kbEditorEntity* const pEditorEntity = new kbEditorEntity();
-	const kbVec3 entityLocation = editorCamera->m_Position + (editorCamera->m_Rotation.ToMat4()[2] * 4.0f).ToVec3();
+	const Vec3 entityLocation = editorCamera->m_Position + (editorCamera->m_Rotation.ToMat4()[2] * 4.0f).ToVec3();
 	pEditorEntity->SetPosition(entityLocation);
 
 	g_Editor->m_GameEntities.push_back(pEditorEntity);
@@ -899,7 +899,7 @@ void kbEditor::ScaleButtonCB(class Fl_Widget*, void*) {
 }
 
 /// XFormEntities
-void XFormEntities(const kbManipulator& manipulator, const kbVec4 xForm) {
+void XFormEntities(const kbManipulator& manipulator, const Vec4 xForm) {
 	std::vector<kbEditorEntity*>& entityList = g_Editor->GetGameEntities();
 	for (int i = 0; i < entityList.size(); i++) {
 		if (entityList[i]->IsSelected()) {
@@ -920,37 +920,37 @@ void XFormEntities(const kbManipulator& manipulator, const kbVec4 xForm) {
 /// kbEditor::XPlusAdjustButtonCB
 void kbEditor::XPlusAdjustButtonCB(Fl_Widget*, void*) {
 
-	XFormEntities(g_Editor->m_pMainTab->m_Manipulator, kbVec4(1.0f, 0.0f, 0.0f, (float)atof(g_Editor->m_pXFormInput->value())));
+	XFormEntities(g_Editor->m_pMainTab->m_Manipulator, Vec4(1.0f, 0.0f, 0.0f, (float)atof(g_Editor->m_pXFormInput->value())));
 }
 
 /// kbEditor::XNegAdjustButtonCB
 void kbEditor::XNegAdjustButtonCB(Fl_Widget*, void*) {
 
-	XFormEntities(g_Editor->m_pMainTab->m_Manipulator, kbVec4(-1.0f, 0.0f, 0.0f, (float)atof(g_Editor->m_pXFormInput->value())));
+	XFormEntities(g_Editor->m_pMainTab->m_Manipulator, Vec4(-1.0f, 0.0f, 0.0f, (float)atof(g_Editor->m_pXFormInput->value())));
 }
 
 /// kbEditor::YPlusAdjustButtonCB
 void kbEditor::YPlusAdjustButtonCB(Fl_Widget*, void*) {
 
-	XFormEntities(g_Editor->m_pMainTab->m_Manipulator, kbVec4(0.0f, 1.0f, 0.0f, (float)atof(g_Editor->m_pXFormInput->value())));
+	XFormEntities(g_Editor->m_pMainTab->m_Manipulator, Vec4(0.0f, 1.0f, 0.0f, (float)atof(g_Editor->m_pXFormInput->value())));
 }
 
 /// kbEditor::YNegAdjustButtonCB
 void kbEditor::YNegAdjustButtonCB(Fl_Widget*, void*) {
 
-	XFormEntities(g_Editor->m_pMainTab->m_Manipulator, kbVec4(0.0f, -1.0f, 0.0f, (float)atof(g_Editor->m_pXFormInput->value())));
+	XFormEntities(g_Editor->m_pMainTab->m_Manipulator, Vec4(0.0f, -1.0f, 0.0f, (float)atof(g_Editor->m_pXFormInput->value())));
 }
 
 /// kbEditor::ZPlusAdjustButtonCB
 void kbEditor::ZPlusAdjustButtonCB(Fl_Widget*, void*) {
 
-	XFormEntities(g_Editor->m_pMainTab->m_Manipulator, kbVec4(0.0f, 0.0f, 1.0f, (float)atof(g_Editor->m_pXFormInput->value())));
+	XFormEntities(g_Editor->m_pMainTab->m_Manipulator, Vec4(0.0f, 0.0f, 1.0f, (float)atof(g_Editor->m_pXFormInput->value())));
 }
 
 /// kbEditor::ZNegAdjustButtonCB
 void kbEditor::ZNegAdjustButtonCB(Fl_Widget*, void*) {
 
-	XFormEntities(g_Editor->m_pMainTab->m_Manipulator, kbVec4(0.0f, 0.0f, -1.0f, (float)atof(g_Editor->m_pXFormInput->value())));
+	XFormEntities(g_Editor->m_pMainTab->m_Manipulator, Vec4(0.0f, 0.0f, -1.0f, (float)atof(g_Editor->m_pXFormInput->value())));
 }
 
 /// kbEditor::AdjustCameraSpeedCB
@@ -1372,7 +1372,7 @@ void kbEditor::InsertSelectedPrefabIntoScene(Fl_Widget*, void* pUserdata) {
 		return;
 	}
 
-	const kbVec3 entityLocation = editorCamera->m_Position + (editorCamera->m_Rotation.ToMat4()[2] * 4.0f).ToVec3();
+	const Vec3 entityLocation = editorCamera->m_Position + (editorCamera->m_Rotation.ToMat4()[2] * 4.0f).ToVec3();
 
 	for (int i = 0; i < prefabToCreate->NumGameEntities(); i++) {
 		kbGameEntity* const pNewEntity = new kbGameEntity(prefabToCreate->m_GameEntities[i], false);

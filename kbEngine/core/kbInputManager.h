@@ -97,7 +97,7 @@ public:
 	void SetMouseBehavior(const eMouseBehavior_t newMouseBehavior) { m_MouseBehavior = newMouseBehavior; }
 	eMouseBehavior_t GetMouseBehavior() const { return m_MouseBehavior; }
 
-	kbVec2i GetMouseCursorPosition() const { return kbVec2i(m_Input.AbsCursorX, m_Input.AbsCursorY); }
+	Vec2i GetMouseCursorPosition() const { return Vec2i(m_Input.AbsCursorX, m_Input.AbsCursorY); }
 
 	void RegisterInputListener(IInputListener* const pListener);
 	void UnregisterInputListener(IInputListener* const pListener);

@@ -22,7 +22,7 @@ private:
 
 /// RenderPipeline_D3D12
 class RenderPipeline_D3D12 : public RenderPipeline {
-	friend class Renderer_D3D12;
+	friend class Renderer_Dx12;
 	~RenderPipeline_D3D12() { m_pipeline_state.Reset(); }
 
 	virtual void release() { m_pipeline_state.Reset();  }

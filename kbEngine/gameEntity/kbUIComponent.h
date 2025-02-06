@@ -37,16 +37,16 @@ public:
 
 	virtual void								EditorChange( const std::string& propertyName ) override;
 
-	const kbVec3&								GetNormalizedAnchorPt() const { return m_NormalizedAnchorPt; }
-	const kbVec3&								GetUIToScreenSizeRatio() const { return m_UIToScreenSizeRatio; }
-	const kbVec3&								GetNormalizedScreenSize() const { return m_NormalizedScreenSize; }
+	const Vec3&								GetNormalizedAnchorPt() const { return m_NormalizedAnchorPt; }
+	const Vec3&								GetUIToScreenSizeRatio() const { return m_UIToScreenSizeRatio; }
+	const Vec3&								GetNormalizedScreenSize() const { return m_NormalizedScreenSize; }
 
 	const kbStaticModelComponent *				GetStaticModelComponent() const { return m_pStaticModelComponent; }
 
 	void										RegisterEventListener( IUIWidgetListener* const pListener );
 	void										UnregisterEventListener( IUIWidgetListener* const pListener );
 
-	void										SetMaterialParamVector( const std::string& paramName, const kbVec4& paramValue );
+	void										SetMaterialParamVector( const std::string& paramName, const Vec4& paramValue );
 	void										SetMaterialParamTexture( const std::string& paramName, kbTexture* const pTexture );
 
 protected:
@@ -66,12 +66,12 @@ private:
 	// Editor
 	int											m_AuthoredWidth;
 	int											m_AuthoredHeight;
-	kbVec3										m_NormalizedAnchorPt;
-	kbVec3										m_UIToScreenSizeRatio;
+	Vec3										m_NormalizedAnchorPt;
+	Vec3										m_UIToScreenSizeRatio;
 
 	// Runtime
 	std::vector<IUIWidgetListener*>				m_EventListeners;
-	kbVec3										m_NormalizedScreenSize;
+	Vec3										m_NormalizedScreenSize;
 	bool										m_bHasFocus;
 
 protected:
@@ -112,19 +112,19 @@ public:
 	void									SetRenderOrderBias( const float bias );
 	float									GetRenderOrderBias() const;
 
-	void									SetRelativePosition( const kbVec3& newPos );
-	void									SetRelativeSize( const kbVec3& newSize );
+	void									SetRelativePosition( const Vec3& newPos );
+	void									SetRelativeSize( const Vec3& newSize );
 
-	const kbVec3&							GetRelativePosition() const { return m_RelativePosition; }
-	const kbVec3&							GetRelativeSize() const { return m_RelativeSize; }
+	const Vec3&							GetRelativePosition() const { return m_RelativePosition; }
+	const Vec3&							GetRelativeSize() const { return m_RelativeSize; }
 
-	const kbVec3&							GetAbsolutePosition() const { return m_AbsolutePosition; }
-	const kbVec3&							GetAbsoluteSize() const { return m_AbsoluteSize; }
+	const Vec3&							GetAbsolutePosition() const { return m_AbsolutePosition; }
+	const Vec3&							GetAbsoluteSize() const { return m_AbsoluteSize; }
 
-	const kbVec3&							GetStartingPosition() const { return m_StartingPosition; }
-	const kbVec3&							GetStartingSize() const { return m_StartingSize; }
+	const Vec3&							GetStartingPosition() const { return m_StartingPosition; }
+	const Vec3&							GetStartingSize() const { return m_StartingSize; }
 
-	kbVec2i									GetBaseTextureDimensions() const;
+	Vec2i									GetBaseTextureDimensions() const;
 
 	void									RegisterEventListener( IUIWidgetListener* const pListener );
 	void									UnregisterEventListener( IUIWidgetListener* const pListener );
@@ -156,22 +156,22 @@ private:
 	virtual void							InputCB( const kbInput_t& input ) override;
 
 	// Editor
-	kbVec3									m_StartingPosition;
-	kbVec3									m_StartingSize;
+	Vec3									m_StartingPosition;
+	Vec3									m_StartingSize;
 	eWidgetAnchor							m_Anchor;
 	eWidgetAxisLock							m_AxisLock;
 
 	// Runtime
 protected:
 
-	kbVec3									m_RelativePosition;
-	kbVec3									m_RelativeSize;
-	kbVec3									m_AbsolutePosition;
-	kbVec3									m_AbsoluteSize;
+	Vec3									m_RelativePosition;
+	Vec3									m_RelativeSize;
+	Vec3									m_AbsolutePosition;
+	Vec3									m_AbsoluteSize;
 	kbStaticModelComponent*					m_pModel;
 
-	kbVec3									m_CachedParentPosition;
-	kbVec3									m_CachedParentSize;
+	Vec3									m_CachedParentPosition;
+	Vec3									m_CachedParentSize;
 
 private:
 
@@ -201,12 +201,12 @@ protected:
 	virtual void							Update_Internal( const float DeltaTime ) override;
 
 	// Editor
-	kbVec3									m_SliderBoundsMin;
-	kbVec3									m_SliderBoundsMax;
+	Vec3									m_SliderBoundsMin;
+	Vec3									m_SliderBoundsMax;
 
 	// Runtime
-	kbVec3									m_CalculatedSliderBoundsMin;
-	kbVec3									m_CalculatedSliderBoundsMax;
+	Vec3									m_CalculatedSliderBoundsMin;
+	Vec3									m_CalculatedSliderBoundsMax;
 };
 
 #endif

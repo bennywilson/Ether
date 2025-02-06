@@ -27,7 +27,7 @@ public:
 	virtual void								EditorChange( const std::string & propertyName ) override;
 
 	void										SetColor( const kbColor & newColor ) { m_Color = newColor; }
-	void										SetColor( const float R, const float G, const float B, const float A ) { m_Color.Set( R, G, B, A ); }
+	void										SetColor( const float R, const float G, const float B, const float A ) { m_Color.set( R, G, B, A ); }
 
 	float										GetBrightness() const { return m_Brightness; }
 	const kbColor &								GetColor() const { return m_Color; }

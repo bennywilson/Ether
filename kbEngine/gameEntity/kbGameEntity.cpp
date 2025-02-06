@@ -180,7 +180,7 @@ uint g_EntityNumber = 0;
  *	kbGameEntity
  */
 kbGameEntity::kbGameEntity(const kbGUID* const guid, const bool bIsPrefab) :
-	m_Bounds(kbVec3(-1.0f, -1.0f, -1.0f), kbVec3(1.0f, 1.0f, 1.0f)),
+	m_Bounds(Vec3(-1.0f, -1.0f, -1.0f), Vec3(1.0f, 1.0f, 1.0f)),
 	m_pActorComponent(nullptr),
 	m_pOwnerEntity(nullptr),
 	m_EntityId(g_EntityNumber++),
@@ -188,7 +188,7 @@ kbGameEntity::kbGameEntity(const kbGUID* const guid, const bool bIsPrefab) :
 	m_bDeleteWhenComponentsAreInactive(false) {
 
 	m_pTransformComponent = new kbTransformComponent();
-	m_pTransformComponent->SetPosition(kbVec3::zero);
+	m_pTransformComponent->SetPosition(Vec3::zero);
 	AddComponent(m_pTransformComponent);
 
 	if (bIsPrefab == false) {
@@ -407,9 +407,9 @@ void kbGameEntity::RenderSync() {
 /**
  *	kbGameEntity::CalculateWorldMatrix
  */
-void kbGameEntity::CalculateWorldMatrix(kbMat4& inOutMatrix) const {
+void kbGameEntity::CalculateWorldMatrix(Mat4& inOutMatrix) const {
 
-	kbMat4 scaleMat(kbMat4::identity);
+	Mat4 scaleMat(Mat4::identity);
 
 	const float modelScale = kbLevelComponent::GetGlobalModelScale();
 	scaleMat[0].x = GetScale().x * modelScale;
@@ -446,10 +446,10 @@ const kbQuat kbGameEntity::GetOrientation() const {
 /**
  *	kbGameEntity::GetPosition
  */
-const kbVec3 kbGameEntity::GetPosition() const {
+const Vec3 kbGameEntity::GetPosition() const {
 	if (m_pOwnerEntity != nullptr) {
 		const kbQuat entityOrientation = GetOrientation();
-		const kbVec3 worldSpaceOffset = entityOrientation.ToMat4().transform_point(m_pTransformComponent->GetPosition());
+		const Vec3 worldSpaceOffset = entityOrientation.ToMat4().transform_point(m_pTransformComponent->GetPosition());
 		return worldSpaceOffset + m_pOwnerEntity->GetPosition();
 	}
 

@@ -71,7 +71,7 @@ private:
 		}
 		pSheep->ExternalRequestStateChange(KungFuSheepState::Cinema);
 		pSheep->PlayAnimation(JumpingJacks_Anim, 0.15f);
-		pSheep->SetTargetFacingDirection(kbVec3(-1.0f, 0.0f, -1.0f).normalize_safe());
+		pSheep->SetTargetFacingDirection(Vec3(-1.0f, 0.0f, -1.0f).normalize_safe());
 		pSheep->SetOwnerPosition(KungFuGame::kSheepStartPos);
 
 		KungFuLevelComponent::Get()->ShowCredits(false);
@@ -94,7 +94,7 @@ private:
 			RequestStateChange(KungFuGame::Intro);
 
 			if (g_SkipCheat == KungFuGame::Skip_ToEnd) {
-				pSheep->SetOwnerPosition(kbVec3(77.10445f, -52.6362f, KungFuGame::kOutroStartZ));
+				pSheep->SetOwnerPosition(Vec3(77.10445f, -52.6362f, KungFuGame::kOutroStartZ));
 			}
 			return;
 		}
@@ -139,7 +139,7 @@ private:
 			static const kbString Run_Anim("Run_Basic");
 
 			pSheep->PlayAnimation(Run_Anim, 0.15f);
-			pSheep->SetTargetFacingDirection(kbVec3(0.0f, 0.0f, -1.0f));
+			pSheep->SetTargetFacingDirection(Vec3(0.0f, 0.0f, -1.0f));
 			m_CurrentState = 2;
 
 		} else if (m_CurrentState == 2) {
@@ -149,7 +149,7 @@ private:
 				const float StartZ = -391.559f;
 
 				auto frameDt = g_pGame->GetFrameDT();
-				kbVec3 targetPos = pSheep->GetOwnerPosition() + kbVec3(0.0f, 0.0f, 1.0f) * frameDt * pSheep->GetMaxRunSpeed() * WalkSpeedMultiplier;
+				Vec3 targetPos = pSheep->GetOwnerPosition() + Vec3(0.0f, 0.0f, 1.0f) * frameDt * pSheep->GetMaxRunSpeed() * WalkSpeedMultiplier;
 				if (targetPos.z >= StartZ) {
 					targetPos.z = StartZ;
 					m_CurrentState = 3;
@@ -197,7 +197,7 @@ public:
 		AttackHitInfo_t retVal;
 
 		const auto pAttackerComp = dealAttackInfo.m_pAttacker;
-		const kbVec3 attackerPos = pAttackerComp->GetOwnerPosition();
+		const Vec3 attackerPos = pAttackerComp->GetOwnerPosition();
 
 		// TODO - Optimize
 		for (int i = 0; i < g_pCannonGame->GetGameEntities().size(); i++) {
@@ -211,7 +211,7 @@ public:
 				continue;
 			}
 
-			const kbVec3 targetPos = pTargetComp->GetOwnerPosition();
+			const Vec3 targetPos = pTargetComp->GetOwnerPosition();
 			if (dealAttackInfo.m_Radius == 0.0f) {
 
 				// Slap a %@3$&!!
@@ -219,8 +219,8 @@ public:
 					continue;
 				}
 
-				const kbVec3 vecToTarget = (targetPos - attackerPos).normalize_safe();
-				const kbVec3 attackerFacingDir = pAttackerComp->GetOwnerRotation().ToMat4()[2].ToVec3();
+				const Vec3 vecToTarget = (targetPos - attackerPos).normalize_safe();
+				const Vec3 attackerFacingDir = pAttackerComp->GetOwnerRotation().ToMat4()[2].ToVec3();
 				if (vecToTarget.dot(attackerFacingDir) > 0.0f) {
 					continue;
 				}
@@ -571,9 +571,9 @@ void KungFuLevelComponent::SetEnable_Internal(const bool bEnable) {
 /**
  *	KungFuLevelComponent::Update_Internal
  */
-const kbVec4 g_WaterDropletNormalFactorScroll[] = {
-		kbVec4(0.1000f, 0.1000f, 0.00000f, 0.01f),
-		kbVec4(0.1000f, 0.1000f, 0.00000f, 0.007f) };
+const Vec4 g_WaterDropletNormalFactorScroll[] = {
+		Vec4(0.1000f, 0.1000f, 0.00000f, 0.01f),
+		Vec4(0.1000f, 0.1000f, 0.00000f, 0.007f) };
 
 const float g_WaterDropStartDelay[] = { 0.1f, 0.01f };
 
@@ -613,10 +613,10 @@ void KungFuLevelComponent::Update_Internal(const float DeltaTime) {
 				static float minScale = 250.0f;
 				static float maxScale = 275.0f;
 				const float randScale = (kbfrand() * (maxScale - minScale)) + minScale;
-				kbVec3 scale = kbVec3Rand(kbVec3(randScale, randScale, randScale), kbVec3(randScale, randScale, randScale));
+				Vec3 scale = Vec3Rand(Vec3(randScale, randScale, randScale), Vec3(randScale, randScale, randScale));
 				pTargetEnt->SetScale(scale);
 
-				kbMat4 rotationMat = kbMat4::identity;
+				Mat4 rotationMat = Mat4::identity;
 				rotationMat.make_identity();
 
 				float randRot = kbfrand() * kbPI * 2.0f;
@@ -744,7 +744,7 @@ void KungFuLevelComponent::Update_Internal(const float DeltaTime) {
 				if (normalizedTime > delayScrollTime) {
 					normalizedTime = kbClamp((normalizedTime - delayScrollTime) * (1.0f / delayScrollTime), 0.0f, 999.0f);
 					static kbString normalFactor_scrollRate("normalFactor_scrollRate");
-					kbVec4 scroll = g_WaterDropletNormalFactorScroll[i];
+					Vec4 scroll = g_WaterDropletNormalFactorScroll[i];
 					scroll.w *= -normalizedTime;
 
 					pSM->SetMaterialParamVector(0, normalFactor_scrollRate.stl_str(), scroll);
@@ -754,7 +754,7 @@ void KungFuLevelComponent::Update_Internal(const float DeltaTime) {
 						const float blendOutStart = fxStartTime + (fxDuration * 0.75f);
 						const float blendOutTime = kbClamp((g_GlobalTimer.TimeElapsedSeconds() - blendOutStart) / (fxDuration * 0.25f), 0.0f, 1.0f);
 						static kbString colorFactor("colorFactor");
-						pSM->SetMaterialParamVector(0, colorFactor.stl_str(), kbVec4(1.0f, 1.0f, 1.0f, 1.0f - blendOutTime));
+						pSM->SetMaterialParamVector(0, colorFactor.stl_str(), Vec4(1.0f, 1.0f, 1.0f, 1.0f - blendOutTime));
 					}
 				}
 			}
@@ -768,7 +768,7 @@ void KungFuLevelComponent::Update_Internal(const float DeltaTime) {
 	// Global Fog
 	{
 		kbShaderParamOverrides_t shaderParam;
-		shaderParam.SetVec4("globalFogColor", kbVec4(174.0f / 256.0f, 183.0f / 256.0f, 198.0f / 256.0f, 1.0f));
+		shaderParam.SetVec4("globalFogColor", Vec4(174.0f / 256.0f, 183.0f / 256.0f, 198.0f / 256.0f, 1.0f));
 		g_pRenderer->SetGlobalShaderParam(shaderParam);
 	}
 
@@ -780,7 +780,7 @@ void KungFuLevelComponent::Update_Internal(const float DeltaTime) {
 		sunIntensity = kbSaturate((GetPlayerTravelDistance() - startBlendInDist) / 75.0f);
 
 		kbShaderParamOverrides_t shaderParam;
-		shaderParam.SetVec4("globalSunFactor", kbVec4(sunIntensity, sunIntensity, sunIntensity, sunIntensity));
+		shaderParam.SetVec4("globalSunFactor", Vec4(sunIntensity, sunIntensity, sunIntensity, sunIntensity));
 		g_pRenderer->SetGlobalShaderParam(shaderParam);
 
 		// globalSunFactor
@@ -863,8 +863,8 @@ void KungFuLevelComponent::SpawnEnemy(const bool bSpawnLeft, const int waveSize)
 	const float spawnOffsets = KungFuGame::kDistBetweenSnolafs;
 
 	const auto sheepPos = KungFuLevelComponent::Get()->GetSheep()->GetOwnerPosition();
-	kbVec3 nextLeftSpawnPos = sheepPos + kbVec3(0.0f, 0.0f, startSpawnDist);
-	kbVec3 nextRightSpawnPos = sheepPos + kbVec3(0.0f, 0.0f, -startSpawnDist);
+	Vec3 nextLeftSpawnPos = sheepPos + Vec3(0.0f, 0.0f, startSpawnDist);
+	Vec3 nextRightSpawnPos = sheepPos + Vec3(0.0f, 0.0f, -startSpawnDist);
 
 	if (m_EndSnolafs[0] != nullptr && m_EndSnolafs[0]->IsEnabled() && m_EndSnolafs[0]->IsDead() == false) {
 		const float leftSnolafZ = m_EndSnolafs[0]->GetOwnerPosition().z;
@@ -907,7 +907,7 @@ void KungFuLevelComponent::SpawnEnemy(const bool bSpawnLeft, const int waveSize)
 		m_SnolafPool.pop_back();//g_pGame->CreateEntity( m_SnolafPrefab.GetEntity() );
 		KungFuSnolafComponent* const pSnolafComp = pSnolaf->GetComponent<KungFuSnolafComponent>();
 
-		kbVec3 spawnPos = kbVec3::zero;
+		Vec3 spawnPos = Vec3::zero;
 		if (bSpawnLeft == false && curDir == 0) {
 
 			nextRightSpawnPos.z -= (spawnOffsets + offsetAdd) * offsetMultiplier;
@@ -957,13 +957,13 @@ void KungFuLevelComponent::DoWaterDropletScreenFX() {
 
 
 		static kbString startUVOffsetParam("startUVOffset");
-		pSM->SetMaterialParamVector(0, startUVOffsetParam.stl_str(), kbVec4(kbfrand(), kbfrand(), 0.0f, 0.0f));
+		pSM->SetMaterialParamVector(0, startUVOffsetParam.stl_str(), Vec4(kbfrand(), kbfrand(), 0.0f, 0.0f));
 
 		static kbString normalFactor_scrollRate("normalFactor_scrollRate");
-		pSM->SetMaterialParamVector(0, normalFactor_scrollRate.stl_str(), kbVec4(g_WaterDropletNormalFactorScroll[i].x, g_WaterDropletNormalFactorScroll[i].y, 0.0f, 0.0f));
+		pSM->SetMaterialParamVector(0, normalFactor_scrollRate.stl_str(), Vec4(g_WaterDropletNormalFactorScroll[i].x, g_WaterDropletNormalFactorScroll[i].y, 0.0f, 0.0f));
 
 		static kbString colorFactor("colorFactor");
-		pSM->SetMaterialParamVector(0, colorFactor.stl_str(), kbVec4(1.0f, 1.0f, 1.0f, 1.0f));
+		pSM->SetMaterialParamVector(0, colorFactor.stl_str(), Vec4(1.0f, 1.0f, 1.0f, 1.0f));
 	}
 }
 
@@ -981,7 +981,7 @@ void KungFuLevelComponent::DoSplashSound() {
 	}
 
 	m_LastWaterSplashSoundTime = g_GlobalTimer.TimeElapsedSeconds();
-	m_WaterSplashSound[rand() % m_WaterSplashSound.size()].PlaySoundAtPosition(kbVec3(0.0f, 0.0f, 0.0f));
+	m_WaterSplashSound[rand() % m_WaterSplashSound.size()].PlaySoundAtPosition(Vec3(0.0f, 0.0f, 0.0f));
 }
 
 /**
@@ -999,7 +999,7 @@ void KungFuLevelComponent::DoBreakBridgeEffect(const bool bBreakIt) {
 void KungFuLevelComponent::SetPlayLevelMusic(const int idx, const bool bPlay) {
 
 	if (bPlay) {
-		m_LevelMusic[idx].PlaySoundAtPosition(kbVec3::zero);
+		m_LevelMusic[idx].PlaySoundAtPosition(Vec3::zero);
 	} else {
 		m_LevelMusic[idx].StopSound();
 	}

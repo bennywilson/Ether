@@ -11,7 +11,7 @@ class kbSoundData : public kbGameComponent {
 public:
 	virtual	~kbSoundData();
 
-	void PlaySoundAtPosition(const kbVec3& soundPosition);
+	void PlaySoundAtPosition(const Vec3& soundPosition);
 	void StopSound();
 
 	virtual void EditorChange(const std::string& propertyName) override;
@@ -48,7 +48,7 @@ private:
 };
 
 /// PlayRandomSound
-inline void PlayRandomSound(std::vector<kbSoundData>& soundData, const kbVec3& pos = kbVec3::zero) {
+inline void PlayRandomSound(std::vector<kbSoundData>& soundData, const Vec3& pos = Vec3::zero) {
 	if (soundData.empty()) {
 		return;
 	}

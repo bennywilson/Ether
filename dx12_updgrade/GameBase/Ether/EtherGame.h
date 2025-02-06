@@ -19,7 +19,7 @@ public:
 	EtherGame();
 	virtual	~EtherGame();
 
-	virtual kbGameEntity* CreatePlayer(const int netId, const kbGUID& prefabGUID, const kbVec3& desiredLocation);
+	virtual kbGameEntity* CreatePlayer(const int netId, const kbGUID& prefabGUID, const Vec3& desiredLocation);
 
 	kbCamera& GetCamera() { return m_Camera; }
 	const eCameraMode_t& GetCameraMode() const { return m_CameraMode; }

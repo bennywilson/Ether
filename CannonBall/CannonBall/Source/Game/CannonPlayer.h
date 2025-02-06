@@ -19,17 +19,17 @@ public:
 	float										GetMaxRunSpeed() const { return m_MaxRunSpeed; }
 	float										GetMaxRotateSpeed() const { return m_MaxRotateSpeed; }
 
-	kbVec3									GetTargetFacingDirection() const { return m_TargetFacingDirection; }
-	void										SetTargetFacingDirection( const kbVec3& targetDir ) { m_TargetFacingDirection = targetDir; }
+	Vec3									GetTargetFacingDirection() const { return m_TargetFacingDirection; }
+	void										SetTargetFacingDirection( const Vec3& targetDir ) { m_TargetFacingDirection = targetDir; }
 
 	bool										IsPlayingAnim( const kbString animName ) const;
 	void										PlayAnimation( const kbString animName, const float animBlendInLen, const bool bRestartIfAlreadyPlaying = false, const kbString nextAnim = kbString::EmptyString, const float nextAnimBlendInLen = 0.0f );
 	bool										HasFinishedAnim( const kbString animName = kbString::EmptyString ) const;
 	void										SetAnimationTimeScaleMultiplier( const kbString animName, const float multiplier );
 
-	void										ApplyAnimSmear( const kbVec3 smearVec, const float durationSec );
+	void										ApplyAnimSmear( const Vec3 smearVec, const float durationSec );
 
-	void										SetOverrideFXMaskParameters( const kbVec4& fxParams );
+	void										SetOverrideFXMaskParameters( const Vec4& fxParams );
 
 	void										PlayAttackVO( const int pref );
 
@@ -50,13 +50,13 @@ protected:
 
 	// Game
 	std::vector<kbSkeletalModelComponent *>		m_SkelModelsList;
-	kbVec3									m_TargetFacingDirection;
+	Vec3									m_TargetFacingDirection;
 
 	float										m_AnimSmearDuration;
-	kbVec4									m_AnimSmearVec;
+	Vec4									m_AnimSmearVec;
 	float										m_AnimSmearStartTime;
 
-	kbVec4									m_OverridenFXMaskParams;
+	Vec4									m_OverridenFXMaskParams;
 
 	float										m_LastVOTime;
 
@@ -86,8 +86,8 @@ class CannonCameraShakeComponent : public kbActorComponent {
 public:
 
 	float										GetDuration() const { return m_Duration; }
-	kbVec2										GetAmplitude() const { return kbVec2( m_AmplitudeX, m_AmplitudeY ); }
-	kbVec2										GetFrequency() const { return kbVec2( m_FrequencyX, m_FrequencyY ); }
+	Vec2										GetAmplitude() const { return Vec2( m_AmplitudeX, m_AmplitudeY ); }
+	Vec2										GetFrequency() const { return Vec2( m_FrequencyX, m_FrequencyY ); }
 
 	void										SetEnable_Internal( const bool bEnable ) override;
 	void										Update_Internal( const float deltaTime ) override;
@@ -119,8 +119,8 @@ public:
 	void										StartCameraShake( const CannonCameraShakeComponent *const pCameraShakeComponent );
 
 	void										SetTarget( const kbGameEntity *const pTarget, const float blendRate );
-	void										SetPositionOffset( const kbVec3 & posOffset, const float blendRate );
-	void										SetLookAtOffset( const kbVec3 & lookAtOffset, const float blendRate );
+	void										SetPositionOffset( const Vec3 & posOffset, const float blendRate );
+	void										SetLookAtOffset( const Vec3 & lookAtOffset, const float blendRate );
 
 protected:
 
@@ -132,29 +132,29 @@ private:
 	// Editor
 	float										m_NearPlane;
 	float										m_FarPlane;
-	kbVec3										m_PositionOffset;
-	kbVec3										m_LookAtOffset;
+	Vec3										m_PositionOffset;
+	Vec3										m_LookAtOffset;
 
 	// Game
 	ECameraMoveMode								m_MoveMode;
 	const kbGameEntity *						m_pTarget;
 	float										m_SwitchTargetBlendSpeed;
 	float										m_SwitchTargetCurT;
-	kbVec3										m_SwitchTargetStartPos;
+	Vec3										m_SwitchTargetStartPos;
 
 	float										m_SwitchPosOffsetBlendSpeed;
 	float										m_SwitchPosOffsetCurT;
-	kbVec3										m_PosOffsetTarget;
+	Vec3										m_PosOffsetTarget;
 
 	float										m_SwitchLookAtOffsetBlendSpeed;
 	float										m_SwitchLookAtOffsetCurT;
-	kbVec3										m_LookAtOffsetTarget;
+	Vec3										m_LookAtOffsetTarget;
 
 	float										m_CameraShakeStartTime;
-	kbVec2										m_CameraShakeStartingOffset;
+	Vec2										m_CameraShakeStartingOffset;
 	float										m_CameraShakeDuration;
-	kbVec2										m_CameraShakeAmplitude;
-	kbVec2										m_CameraShakeFrequency;
+	Vec2										m_CameraShakeAmplitude;
+	Vec2										m_CameraShakeFrequency;
 };
 
 template<typename T>

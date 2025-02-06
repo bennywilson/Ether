@@ -15,11 +15,11 @@
  *	kbModelIntersection_t
  */
 struct kbModelIntersection_t {
-	kbModelIntersection_t() : t( FLT_MAX ), meshNum( -1 ), intersectionPoint( kbVec3::zero ), hasIntersection( false ) { }
+	kbModelIntersection_t() : t( FLT_MAX ), meshNum( -1 ), intersectionPoint( Vec3::zero ), hasIntersection( false ) { }
 
 	float	t;
 	int		meshNum;
-	kbVec3  intersectionPoint;
+	Vec3  intersectionPoint;
 	bool	hasIntersection;
 };
 
@@ -49,7 +49,7 @@ private:
 
 	struct kbTranslationKeyFrame_t {
 		float									m_Time;
-		kbVec3									m_Position;
+		Vec3									m_Position;
 	};
 
 	struct kbBoneKeyFrames_t {
@@ -62,12 +62,12 @@ private:
 };
 
 
-kbVec3 operator*( const kbVec3 & op1, const kbBoneMatrix_t & op2 );
+Vec3 operator*( const Vec3 & op1, const kbBoneMatrix_t & op2 );
 kbBoneMatrix_t operator *( const kbBoneMatrix_t & op1, const kbBoneMatrix_t & op2 );
 
 struct AnimatedBone_t {
 	kbQuat										m_JointSpaceRotation;
-	kbVec3										m_JointSpacePosition;
+	Vec3										m_JointSpacePosition;
 
 	kbBoneMatrix_t								m_LocalSpaceMatrix;		
 };
@@ -92,7 +92,7 @@ public:
 		unsigned int							m_IndexBufferIndex;
 		unsigned char							m_MaterialIndex;
 
-		std::vector< kbVec3 >					m_Vertices;
+		std::vector< Vec3 >					m_Vertices;
 	};
 
 
@@ -100,7 +100,7 @@ public:
 		kbString								m_Name;
 		unsigned short							m_ParentIndex;
 		kbQuat									m_RelativeRotation;
-		kbVec3									m_RelativePosition;
+		Vec3									m_RelativePosition;
 	};
 
 	void										CreateDynamicModel( const UINT numVertices, const UINT numIndices, kbShader *const pShaderToUse = nullptr, kbTexture *const pTextureToUse = nullptr, const UINT VertexSizeInBytes = sizeof( vertexLayout ) );
@@ -130,7 +130,7 @@ public:
 	size_t										NumVertices() const { return m_NumVertices; }
 	UINT										VertexStride() const { return m_Stride; }
 
-	kbModelIntersection_t						RayIntersection( const kbVec3 & rayOrigin, const kbVec3 & rayDirection, const kbVec3 & modelTranslation, const kbQuat & modelOrientation, const kbVec3 & scale ) const;
+	kbModelIntersection_t						RayIntersection( const Vec3 & rayOrigin, const Vec3 & rayDirection, const Vec3 & modelTranslation, const kbQuat & modelOrientation, const Vec3 & scale ) const;
 
 	void										Animate( std::vector<kbBoneMatrix_t> & outMatrices, const float time, const kbAnimation *const pAnimation, const bool bLoopAnim );
 	void										BlendAnimations( std::vector<kbBoneMatrix_t> & outMatrices, const kbAnimation *const pFromAnim, const float fromAnimTime, const bool bFromAnimLoops, const kbAnimation *const pToAnim, const float ToAnimTime, const bool bToAnimLoops, const float normalizedBlendTime );
@@ -142,7 +142,7 @@ public:
 	const kbBoneMatrix_t &						GetInvRefBoneMatrix( const int index ) const { return m_InvRefPose[index]; }
 
 	// Debug
-	void										DrawDebugTBN( const kbVec3 & modelTranslation, const kbQuat & modelOrientation, const kbVec3 & modelScale );
+	void										DrawDebugTBN( const Vec3 & modelTranslation, const kbQuat & modelOrientation, const Vec3 & modelScale );
 
 protected:
 
@@ -185,7 +185,7 @@ private:
 	virtual void								Load( const std::string & fileName ) { };
 
 	// Debug
-	std::vector<kbVec3>							m_DebugPositions;
-	std::vector<kbVec3>							m_DebugNormals;
-	std::vector<kbVec3>							m_DebugTangents;
+	std::vector<Vec3>							m_DebugPositions;
+	std::vector<Vec3>							m_DebugNormals;
+	std::vector<Vec3>							m_DebugTangents;
 };

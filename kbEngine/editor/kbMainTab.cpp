@@ -109,9 +109,9 @@ void kbMainTab::Update() {
 	if (pCurrentWindow == m_pModelViewerWindow) {
 		const float baseAxisLength = 2.0;
 
-		g_pRenderer->DrawLine(kbVec3::zero, kbVec3::right * baseAxisLength, kbColor::red);
-		g_pRenderer->DrawLine(kbVec3::zero, kbVec3::up * baseAxisLength, kbColor::green);
-		g_pRenderer->DrawLine(kbVec3::zero, kbVec3::forward * baseAxisLength, kbColor::blue);
+		g_pRenderer->DrawLine(Vec3::zero, Vec3::right * baseAxisLength, kbColor::red);
+		g_pRenderer->DrawLine(Vec3::zero, Vec3::up * baseAxisLength, kbColor::green);
+		g_pRenderer->DrawLine(Vec3::zero, Vec3::forward * baseAxisLength, kbColor::blue);
 
 	} else if (pCurrentWindow == m_pEditorWindow) {
 		for (int i = 0; i < g_Editor->GetGameEntities().size(); i++) {
@@ -127,12 +127,12 @@ void kbMainTab::Update() {
 				extern bool g_bBillboardsEnabled;
 				if (g_bBillboardsEnabled && (pCurrentComponent->IsA(kbDirectionalLightComponent::GetType()) || pCurrentComponent->IsA(kbLightShaftsComponent::GetType()))) {
 
-					const kbMat4 rotationMatrix = pGameEntity->GetOrientation().ToMat4();
-					const kbVec3 lightDirection = kbVec3(0, 0, 1.0f) * rotationMatrix;
+					const Mat4 rotationMatrix = pGameEntity->GetOrientation().ToMat4();
+					const Vec3 lightDirection = Vec3(0, 0, 1.0f) * rotationMatrix;
 
 					for (float x = -1.0f; x <= 1.0f; x += 1.0f) {
 						for (float y = -1.0f; y <= 1.0f; y += 1.0f) {
-							const kbVec3 lightPosition = kbVec3(x, y, 0.0f) * rotationMatrix;
+							const Vec3 lightPosition = Vec3(x, y, 0.0f) * rotationMatrix;
 							g_pRenderer->DrawLine(pGameEntity->GetPosition() + lightPosition, pGameEntity->GetPosition() + lightPosition + lightDirection * 3.0f, kbColor(0.43f, 0.2f, 0.43f, 1.0f));
 						}
 					}
@@ -142,7 +142,7 @@ void kbMainTab::Update() {
 				}
 			}
 
-			g_pRenderer->DrawBillboard(pCurrentEntity->GetPosition(), kbVec2(1.0f, 1.0f), iconIdx, nullptr, pCurrentEntity->GetGameEntity()->GetEntityId());
+			g_pRenderer->DrawBillboard(pCurrentEntity->GetPosition(), Vec2(1.0f, 1.0f), iconIdx, nullptr, pCurrentEntity->GetGameEntity()->GetEntityId());
 
 			if (pCurrentEntity->IsSelected() && g_pRenderer->DebugBillboardsEnabled()) {
 				g_pRenderer->DrawBox(pCurrentEntity->GetWorldBounds(), kbColor::yellow);
@@ -177,11 +177,11 @@ void kbMainTab::RenderSync() {
 
 	const float windowWidth = (float)windowRect.right - windowRect.left;
 	const float windowHeight = (float)windowRect.bottom - windowRect.top;
-	kbVec2i mouseXY(inputState.mouseX, inputState.mouseY);
+	Vec2i mouseXY(inputState.mouseX, inputState.mouseY);
 	mouseXY.x -= windowRect.left;
 	mouseXY.y -= y() + kbEditor::TabHeight();
 
-	kbVec2i mouseRenderBufferPos;
+	Vec2i mouseRenderBufferPos;
 	mouseRenderBufferPos.x = (int)(mouseXY.x * g_pRenderer->GetBackBufferWidth() / windowWidth);
 	mouseRenderBufferPos.y = (int)(mouseXY.y * g_pRenderer->GetBackBufferHeight() / windowHeight);
 
@@ -217,7 +217,7 @@ void kbMainTab::RenderSync() {
 		return;
 	}
 
-	const kbVec2i hitEntityId = g_pRenderer->GetEntityIdAtScreenPosition(mouseRenderBufferPos.x, mouseRenderBufferPos.y);
+	const Vec2i hitEntityId = g_pRenderer->GetEntityIdAtScreenPosition(mouseRenderBufferPos.x, mouseRenderBufferPos.y);
 	if (hitEntityId.x == UINT16_MAX) {
 		ManipulatorEvent(true, mouseXY);
 	} else {
@@ -241,7 +241,7 @@ void kbMainTab::RenderSync() {
 			return;
 		}
 
-		kbVec3 manipulatorPos(0.0f, 0.0f, 0.0f);
+		Vec3 manipulatorPos(0.0f, 0.0f, 0.0f);
 		for (int i = 0; i < g_Editor->GetSelectedObjects().size(); i++) {
 			manipulatorPos += g_Editor->GetSelectedObjects()[i]->GetPosition();
 		}
@@ -271,7 +271,7 @@ void kbMainTab::EventCB(const widgetCBObject* widgetCBObject) {
 
 			if (g_Editor->GetSelectedObjects().size() > 0 && g_bEditorIsUndoingAnAction) {
 
-				kbVec3 manipulatorPos(0.0f, 0.0f, 0.0f);
+				Vec3 manipulatorPos(0.0f, 0.0f, 0.0f);
 				for (int i = 0; i < g_Editor->GetSelectedObjects().size(); i++) {
 					manipulatorPos += g_Editor->GetSelectedObjects()[i]->GetPosition();
 				}
@@ -366,9 +366,9 @@ void kbMainTab::CameraMoveCB(const widgetCBInputObject* const inputObject) {
 	}
 
 	kbCamera& camera = pCurrentWindow->GetCamera();
-	const kbMat4 cameraMatrix = camera.m_RotationTarget.ToMat4();
-	const kbVec3 rightVec = cameraMatrix[0].ToVec3();
-	const kbVec3 forwardVec = cameraMatrix[2].ToVec3();
+	const Mat4 cameraMatrix = camera.m_RotationTarget.ToMat4();
+	const Vec3 rightVec = cameraMatrix[0].ToVec3();
+	const Vec3 forwardVec = cameraMatrix[2].ToVec3();
 
 	// rotation
 	if (inputObject->rightMouseButtonDown && (inputObject->mouseDeltaX != 0 || inputObject->mouseDeltaY != 0)) {
@@ -376,7 +376,7 @@ void kbMainTab::CameraMoveCB(const widgetCBInputObject* const inputObject) {
 		Fl::focus(nullptr);
 
 		kbQuat xRotation, yRotation;
-		xRotation.FromAxisAngle(kbVec3::up, inputObject->mouseDeltaX * -rotationMag);
+		xRotation.FromAxisAngle(Vec3::up, inputObject->mouseDeltaX * -rotationMag);
 		yRotation.FromAxisAngle(rightVec, inputObject->mouseDeltaY * -rotationMag);
 
 		camera.m_RotationTarget = camera.m_RotationTarget * yRotation * xRotation;
@@ -385,7 +385,7 @@ void kbMainTab::CameraMoveCB(const widgetCBInputObject* const inputObject) {
 
 	// position
 	if (inputObject->keys.size() > 0) {
-		kbVec3 movementVec(kbVec3::zero);
+		Vec3 movementVec(Vec3::zero);
 
 		for (int i = 0; i < inputObject->keys.size(); i++) {
 			switch (inputObject->keys[i]) {
@@ -438,7 +438,7 @@ void kbMainTab::EntityTransformedCB(const widgetCBObject* const widgetCBObj) {
 /**
  *	kbMainTab::ManipulatorEvent
  */
-void kbMainTab::ManipulatorEvent(const bool bClicked, const kbVec2i& mouseXY) {
+void kbMainTab::ManipulatorEvent(const bool bClicked, const Vec2i& mouseXY) {
 
 	RECT windowRect;
 
@@ -454,7 +454,7 @@ void kbMainTab::ManipulatorEvent(const bool bClicked, const kbVec2i& mouseXY) {
 	const float windowWidth = (float)windowRect.right - windowRect.left;//g_pRenderer->GetBackBufferWidth();
 	const float windowHeight = (float)windowRect.bottom - windowRect.top;//->GetBackBufferHeight();
 
-	kbVec4 mousePosition((float)mouseXY.x, (float)mouseXY.y, 0.0f, 1.0f);
+	Vec4 mousePosition((float)mouseXY.x, (float)mouseXY.y, 0.0f, 1.0f);
 
 	// Transform from screeen space to unit clip space
 	mousePosition.x = (((2.0f * mousePosition.x) / windowWidth) - 1.0f);
@@ -462,14 +462,14 @@ void kbMainTab::ManipulatorEvent(const bool bClicked, const kbVec2i& mouseXY) {
 	mousePosition.z = 1.0f;
 
 	// Persepctive mat
-	kbMat4 perspectiveMat;
+	Mat4 perspectiveMat;
 	perspectiveMat.create_perspective_matrix(kbToRadians(75.0f), windowWidth / windowHeight, 0.25f, 1000.0f);	// TODO - NEAR/FAR PLANE 
 	perspectiveMat.inverse_projection();
 
 	// View mat
-	const kbMat4 modelViewMatrix(camera.m_Rotation, camera.m_Position);
-	const kbMat4 unitCubeToWorldMatrix = perspectiveMat * modelViewMatrix;
-	const kbVec4 ray = (mousePosition.transform_point(unitCubeToWorldMatrix, true) - camera.m_Position);
+	const Mat4 modelViewMatrix(camera.m_Rotation, camera.m_Position);
+	const Mat4 unitCubeToWorldMatrix = perspectiveMat * modelViewMatrix;
+	const Vec4 ray = (mousePosition.transform_point(unitCubeToWorldMatrix, true) - camera.m_Position);
 
 	if (bClicked) {
 		if (m_Manipulator.AttemptMouseGrab(camera.m_Position, ray.ToVec3(), camera.m_Rotation) == false) {

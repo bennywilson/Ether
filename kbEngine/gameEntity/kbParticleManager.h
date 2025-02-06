@@ -25,13 +25,13 @@ public:
 
 	struct CustomParticleAtlasInfo_t {
 		EBillboardType m_Type;
-		kbVec3 m_Position;
-		kbVec3 m_Direction;
+		Vec3 m_Position;
+		Vec3 m_Direction;
 		float m_Rotation;
-		kbVec4 m_Color;
+		Vec4 m_Color;
 		float m_Width;
 		float m_Height;
-		kbVec2 m_UVs[2];
+		Vec2 m_UVs[2];
 	};
 	void AddQuad(const uint atlasIdx, const CustomParticleAtlasInfo_t& CustomParticleInfo);
 

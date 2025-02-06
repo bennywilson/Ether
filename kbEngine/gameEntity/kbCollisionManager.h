@@ -27,11 +27,11 @@ class kbBoneCollisionSphere : public kbGameComponent {
 //---------------------------------------------------------------------------------------------------
 public:
 	const kbString &							GetBoneName() const { return m_BoneName; }
-	const kbVec4 &								GetSphere() const { return m_Sphere; }
+	const Vec4 &								GetSphere() const { return m_Sphere; }
 
 private:
 	kbString									m_BoneName;
-	kbVec4										m_Sphere;
+	Vec4										m_Sphere;
 };
 
 
@@ -44,15 +44,15 @@ public:
 	virtual										~kbCollisionComponent();
 
 	const std::vector<kbBoneCollisionSphere> &	GetLocalSpaceCollisionSpheres() const { return m_LocalSpaceCollisionSpheres; }
-	const std::vector<kbVec4> &					GetWorldSpaceCollisionSpheres() const { return m_WorldSpaceCollisionSpheres; }
-	void										SetWorldSpaceCollisionSphere( const int idx, const kbVec4 & newSphere );
+	const std::vector<Vec4> &					GetWorldSpaceCollisionSpheres() const { return m_WorldSpaceCollisionSpheres; }
+	void										SetWorldSpaceCollisionSphere( const int idx, const Vec4 & newSphere );
 
 	float										GetRadius() const { return m_Extent.length(); }
 
 	struct customTriangle_t {
-		kbVec3									m_Vertex1;
-		kbVec3									m_Vertex2;
-		kbVec3									m_Vertex3;
+		Vec3									m_Vertex1;
+		Vec3									m_Vertex2;
+		Vec3									m_Vertex3;
 	};
 	void										SetCustomTriangleCollision( const std::vector<customTriangle_t> & inCollision );
 
@@ -63,9 +63,9 @@ protected:
 
 private:
 	ECollisionType								m_CollisionType;
-	kbVec3										m_Extent;
+	Vec3										m_Extent;
 
-	std::vector<kbVec4>							m_WorldSpaceCollisionSpheres;
+	std::vector<Vec4>							m_WorldSpaceCollisionSpheres;
 	std::vector<kbBoneCollisionSphere>			m_LocalSpaceCollisionSpheres;
 	std::vector<customTriangle_t>				m_CustomTriangleCollision;
 };
@@ -79,7 +79,7 @@ struct kbCollisionInfo_t {
 		m_pHitComponent( nullptr ),
 		m_bHit( false ) { }
 
-	kbVec3				m_HitLocation;
+	Vec3				m_HitLocation;
 	float				m_T;
 	kbGameComponent *	m_pHitComponent;
 	bool				m_bHit;
@@ -95,7 +95,7 @@ public:
 												kbCollisionManager();
 												~kbCollisionManager();
 
-	kbCollisionInfo_t							PerformLineCheck( const kbVec3 & start, const kbVec3 & end );
+	kbCollisionInfo_t							PerformLineCheck( const Vec3 & start, const Vec3 & end );
 
 	void										RegisterComponent( kbCollisionComponent * Collision );
 	void										UnregisterComponent( kbCollisionComponent * Collision );

@@ -26,14 +26,14 @@ kbManipulator::kbManipulator() :
 kbManipulator::~kbManipulator() { }
 
 /// kbManipulator::AttemptMouseGrab
-bool kbManipulator::AttemptMouseGrab(const kbVec3& rayOrigin, const kbVec3& rayDirection, const kbQuat& cameraOrientation) {
+bool kbManipulator::AttemptMouseGrab(const Vec3& rayOrigin, const Vec3& rayDirection, const kbQuat& cameraOrientation) {
 	const kbModel* const pModel = m_pModels[m_ManipulatorMode];
 
 	const float modelScale = kbLevelComponent::GetGlobalModelScale();
-	kbModelIntersection_t intersection = pModel->RayIntersection(rayOrigin, rayDirection, m_Position, m_Orientation, kbVec3(modelScale, modelScale, modelScale));
+	kbModelIntersection_t intersection = pModel->RayIntersection(rayOrigin, rayDirection, m_Position, m_Orientation, Vec3(modelScale, modelScale, modelScale));
 
 	if (intersection.hasIntersection == false) {
-		intersection = pModel->RayIntersection(rayOrigin, -rayDirection, m_Position, m_Orientation, kbVec3(modelScale, modelScale, modelScale));
+		intersection = pModel->RayIntersection(rayOrigin, -rayDirection, m_Position, m_Orientation, Vec3(modelScale, modelScale, modelScale));
 	}
 	if (intersection.hasIntersection) {
 		m_SelectedGroup = intersection.meshNum;
@@ -43,7 +43,7 @@ bool kbManipulator::AttemptMouseGrab(const kbVec3& rayOrigin, const kbVec3& rayD
 			/*	if ( m_ManipulatorMode == kbManipulator::Translate || m_ManipulatorMode == kbManipulator::Scale ) {
 					m_SelectedGroup /= 2;
 				}*/
-			kbVec3 worldSpaceGrabPoint = intersection.intersectionPoint;
+			Vec3 worldSpaceGrabPoint = intersection.intersectionPoint;
 			m_MouseLocalGrabPoint = worldSpaceGrabPoint - m_Position;
 			m_MouseWorldGrabPoint = worldSpaceGrabPoint;
 			m_LastOrientation = m_Orientation;
@@ -57,20 +57,20 @@ bool kbManipulator::AttemptMouseGrab(const kbVec3& rayOrigin, const kbVec3& rayD
 }
 
 /// kbManipulator::UpdateMouseDrag
-void kbManipulator::UpdateMouseDrag(const kbVec3& rayOrigin, const kbVec3& rayDirection, const kbQuat& cameraOrientation) {
+void kbManipulator::UpdateMouseDrag(const Vec3& rayOrigin, const Vec3& rayDirection, const kbQuat& cameraOrientation) {
 	if (m_SelectedGroup < 0 || m_SelectedGroup > 3) {
 		return;
 	}
 
 	// Find intersection point with the plane facing the camera that goes through the mouse grab point
-	const kbVec3 cameraPlaneNormal = cameraOrientation.ToMat4()[2].ToVec3();
+	const Vec3 cameraPlaneNormal = cameraOrientation.ToMat4()[2].ToVec3();
 	const float d = m_MouseWorldGrabPoint.dot(cameraPlaneNormal);
 	const float t = -(rayOrigin.dot(cameraPlaneNormal) - d) / rayDirection.dot(cameraPlaneNormal);
-	const kbVec3 camPlaneIntersection = rayOrigin + t * rayDirection;
+	const Vec3 camPlaneIntersection = rayOrigin + t * rayDirection;
 
 	// Find the normal of the plane we'd like to move the object along
-	const kbMat4 manipulatorMatrix = m_LastOrientation.ToMat4();
-	kbVec3 movePlaneNormal = kbVec3::up;
+	const Mat4 manipulatorMatrix = m_LastOrientation.ToMat4();
+	Vec3 movePlaneNormal = Vec3::up;
 
 	if (m_SelectedGroup < 3) {
 		const int planeNormalIndex = (m_SelectedGroup + 1) % 3;
@@ -80,10 +80,10 @@ void kbManipulator::UpdateMouseDrag(const kbVec3& rayOrigin, const kbVec3& rayDi
 	if (m_ManipulatorMode == kbManipulator::Translate) {
 		if (m_SelectedGroup < 3) {
 			const float distFromPlane = camPlaneIntersection.dot(movePlaneNormal) - m_MouseWorldGrabPoint.dot(movePlaneNormal);
-			const kbVec3 intersectionPoint = camPlaneIntersection - (movePlaneNormal * distFromPlane);
-			const kbVec3 moveDirection = manipulatorMatrix[m_SelectedGroup].ToVec3();
+			const Vec3 intersectionPoint = camPlaneIntersection - (movePlaneNormal * distFromPlane);
+			const Vec3 moveDirection = manipulatorMatrix[m_SelectedGroup].ToVec3();
 
-			const kbVec3 finalTranslation = (intersectionPoint - m_MouseWorldGrabPoint).dot(moveDirection) * moveDirection;
+			const Vec3 finalTranslation = (intersectionPoint - m_MouseWorldGrabPoint).dot(moveDirection) * moveDirection;
 			m_Position = (m_MouseWorldGrabPoint + finalTranslation) - m_MouseLocalGrabPoint;
 		}
 		else {
@@ -97,12 +97,12 @@ void kbManipulator::UpdateMouseDrag(const kbVec3& rayOrigin, const kbVec3& rayDi
 
 		// find the angle between the old and new placements
 		float rotationAngle = acos(vecToGrabPoint.dot(vecToNewPoint));
-		const kbVec3 crossTest = vecToGrabPoint.cross(vecToNewPoint);
+		const Vec3 crossTest = vecToGrabPoint.cross(vecToNewPoint);
 		if ((crossTest.dot(movePlaneNormal)) > 0.0f) {
 			rotationAngle *= -1.0f;
 		}
 
-		const kbVec3 rotationAxes[] = { manipulatorMatrix[1].ToVec3(), manipulatorMatrix[2].ToVec3(), manipulatorMatrix[0].ToVec3() };
+		const Vec3 rotationAxes[] = { manipulatorMatrix[1].ToVec3(), manipulatorMatrix[2].ToVec3(), manipulatorMatrix[0].ToVec3() };
 		const kbQuat rot(rotationAxes[m_SelectedGroup], rotationAngle);
 
 		// Final rotation
@@ -119,7 +119,7 @@ void kbManipulator::UpdateMouseDrag(const kbVec3& rayOrigin, const kbVec3& rayDi
 /// kbManipulator::Update
 void kbManipulator::Update() {
 	if (g_pRenderer->DebugBillboardsEnabled()) {
-		const kbVec3 modelScale(kbLevelComponent::GetGlobalModelScale(), kbLevelComponent::GetGlobalModelScale(), kbLevelComponent::GetGlobalModelScale());
+		const Vec3 modelScale(kbLevelComponent::GetGlobalModelScale(), kbLevelComponent::GetGlobalModelScale(), kbLevelComponent::GetGlobalModelScale());
 		g_pRenderer->DrawModel(m_pModels[m_ManipulatorMode], m_ManipulatorMaterials, m_Position, m_Orientation, modelScale, UINT16_MAX);
 	}
 }

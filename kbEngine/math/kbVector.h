@@ -4,43 +4,55 @@
 
 #pragma once
 
-///  kbVec2i
-class kbVec2i {
+/// Vec2i
+class Vec2i {
 public:
-	kbVec2i() { }
-	kbVec2i(const int inX, const int inY) : x(inX), y(inY) { }
-	void Set(const int inX, const int inY) { x = inX, y = inY; }
+	Vec2i() :
+		x(0),
+		y(0) {}
+
+	Vec2i(const int inX, const int inY) :
+		x(inX),
+		y(inY) {}
+
+	void set(const int inX, const int inY) {
+		x = inX;
+		y = inY;
+	}
 
 	int x, y;
 };
 
-///  kbVec2
-class kbVec2 {
+///  Vec2
+class Vec2 {
 public:
-	kbVec2() { }
-	kbVec2(const float initX, const float initY) :
+	Vec2() :
+		x(0.f),
+		y(0.f) {}
+
+	Vec2(const float initX, const float initY) :
 		x(initX),
 		y(initY) {}
 
-	void Set(const float initX, const float initY) {
+	void set(const float initX, const float initY) {
 		x = initX;
 		y = initY;
 	}
 
-	kbVec2 operator +(const kbVec2& rhs) const {
-		return kbVec2(x + rhs.x, y + rhs.y);
+	Vec2 operator +(const Vec2& rhs) const {
+		return Vec2(x + rhs.x, y + rhs.y);
 	}
 
-	void operator +=(const kbVec2& rhs) {
+	void operator +=(const Vec2& rhs) {
 		x += rhs.x;
 		y += rhs.y;
 	}
 
-	kbVec2 operator -(const kbVec2& rhs) const {
-		return kbVec2(x - rhs.x, y - rhs.y);
+	Vec2 operator -(const Vec2& rhs) const {
+		return Vec2(x - rhs.x, y - rhs.y);
 	}
 
-	void operator -=(const kbVec2& rhs) {
+	void operator -=(const Vec2& rhs) {
 		x -= rhs.x, y -= rhs.y;
 	}
 
@@ -48,8 +60,8 @@ public:
 		x *= rhs, y *= rhs;
 	}
 
-	kbVec2 operator -() const {
-		return kbVec2(-x, -y);
+	Vec2 operator -() const {
+		return Vec2(-x, -y);
 	}
 
 	void operator /=(const float rhs) {
@@ -57,15 +69,15 @@ public:
 		y /= rhs;
 	}
 
-	bool compare(const kbVec2& op2, const float epsilon = 0.0001f) const {
+	bool compare(const Vec2& op2, const float epsilon = 0.0001f) const {
 		return fabs(x - op2.x) < epsilon && fabs(y - op2.y) < epsilon;
 	}
 
 	const float operator[](const int index) const { return (&x)[index]; }
 	float& operator[](const int index) { return (&x)[index]; }
-	float* ToFloat() const { return (float*)this; }
+	float* ptr() const { return (float*)this; }
 
-	void Rotate(const float angle) {
+	void rotate(const float angle) {
 		const float rad = angle * (kbPI / 180.f);
 		const float cosAngle = cos(rad);
 		const float sinAngle = sin(rad);
@@ -75,20 +87,20 @@ public:
 
 		x = newX;
 		y = newY;
-		Normalize();
+		normalize_self();
 	}
 
-	float Length() {
+	float length() const {
 		return sqrt(x * x + y * y);
 	}
 
-	float LengthSqr() {
+	float length_sqr() const {
 		return (x * x + y * y);
 	}
 
-	void Normalize() {
-		float vectorLength = Length();
-		float invLength = 1.0f / vectorLength;
+	void normalize_self() {
+		float len = length();
+		float invLength = 1.f / len;
 		x *= invLength;
 		y *= invLength;
 	}
@@ -96,33 +108,33 @@ public:
 	float x;
 	float y;
 
-	static const kbVec2 zero;
-	static const kbVec2 one;
+	static const Vec2 zero;
+	static const Vec2 one;
 };
 
-kbVec2 operator *(const kbVec2& op1, const float op2);
-kbVec2 operator +(const kbVec2& op1, const float op2);
-kbVec2 operator /(const kbVec2& op1, const float op2);
+Vec2 operator *(const Vec2& op1, const float op2);
+Vec2 operator +(const Vec2& op1, const float op2);
+Vec2 operator /(const Vec2& op1, const float op2);
 
-/// kbVec3i
-class kbVec3i {
+/// Vec3i
+class Vec3i {
 public:
-	kbVec3i(const int inX, const int inY, const int inZ) : x(inX), y(inY), z(inZ) { }
+	Vec3i(const int inX, const int inY, const int inZ) : x(inX), y(inY), z(inZ) { }
 
 	int x;
 	int y;
 	int z;
 };
 
-/// kbVec3
-class kbVec3 {
+/// Vec3
+class Vec3 {
 public:
-	kbVec3() :
+	Vec3() :
 		x(0.f),
 		y(0.f),
 		z(0.f) {}
 
-	kbVec3(const float in_x, const float in_y, const float in_z) :
+	Vec3(const float in_x, const float in_y, const float in_z) :
 		x(in_x),
 		y(in_y),
 		z(in_z) {}
@@ -133,42 +145,44 @@ public:
 		z = in_z;
 	}
 
-	kbVec3 operator +(const kbVec3& rhs) const {
-		return kbVec3(x + rhs.x, y + rhs.y, z + rhs.z);
+	Vec3 operator +(const Vec3& rhs) const {
+		return Vec3(x + rhs.x, y + rhs.y, z + rhs.z);
 	}
 
-	void operator +=(const kbVec3& rhs) {
+	void operator +=(const Vec3& rhs) {
 		x += rhs.x;
 		y += rhs.y;
 		z += rhs.z;
 	}
 
-	kbVec3 operator +(const float rhs) const {
-		return kbVec3(x + rhs, y + rhs, z + rhs);
+	Vec3 operator +(const float rhs) const {
+		return Vec3(x + rhs, y + rhs, z + rhs);
 	}
 
-	kbVec3 operator -(const kbVec3& rhs) const {
-		return kbVec3(x - rhs.x, y - rhs.y, z - rhs.z);
+	Vec3 operator -(const Vec3& rhs) const {
+		return Vec3(x - rhs.x, y - rhs.y, z - rhs.z);
 	}
 
-	void operator -=(const kbVec3& rhs) {
+	void operator -=(const Vec3& rhs) {
 		x -= rhs.x;
 		y -= rhs.y;
 		z -= rhs.z;
 	}
 
-	kbVec3 operator -(const float rhs) const {
-		return kbVec3(x - rhs, y - rhs, z - rhs);
+	Vec3 operator -(const float rhs) const {
+		return Vec3(x - rhs, y - rhs, z - rhs);
 	}
 
-	kbVec3 operator -() const { return kbVec3(-x, -y, -z); }
+	Vec3 operator -() const { return Vec3(-x, -y, -z); }
 
-	kbVec3 operator *(const class kbMat4&) const;
-	kbVec3 operator *(const float op2) const {
-		return kbVec3(x * op2, y * op2, z * op2);
+
+	Vec3 operator *(const class Mat4&) const;
+
+	Vec3 operator *(const float op2) const {
+		return Vec3(x * op2, y * op2, z * op2);
 	}
-	kbVec3 operator *(const kbVec3& op2) const {
-		return kbVec3(x * op2.x, y * op2.y, z * op2.z);
+	Vec3 operator *(const Vec3& op2) const {
+		return Vec3(x * op2.x, y * op2.y, z * op2.z);
 	}
 
 	void operator *=(const float op) {
@@ -183,34 +197,39 @@ public:
 		z /= rhs;
 	}
 
-	kbVec3 operator /(const float rhs) const {
-		return kbVec3(x / rhs, y / rhs, z / rhs);
+	Vec3 operator /(const float rhs) const {
+		return Vec3(x / rhs, y / rhs, z / rhs);
 	};
 
-	kbVec3 operator / (const kbVec3& rhs) const {
-		return kbVec3(x / rhs.x, y / rhs.y, z / rhs.z);
+	Vec3 operator / (const Vec3& rhs) const {
+		return Vec3(x / rhs.x, y / rhs.y, z / rhs.z);
 	}
 
-	bool compare(const kbVec3& op2, float epsilon = 0.0001f) const {
+	bool compare(const Vec3& op2, float epsilon = 0.0001f) const {
 		return fabs(x - op2.x) < epsilon && fabs(y - op2.y) < epsilon && fabs(z - op2.z) < epsilon;
 	}
 
-	float dot(const kbVec3& rhs) const {
+	float dot(const Vec3& rhs) const {
 		return x * rhs.x + y * rhs.y + z * rhs.z;
 	}
 
-	kbVec3 cross(const kbVec3& op2) const {
-		return kbVec3((y * op2.z) - (z * op2.y), (z * op2.x) - (x * op2.z), (x * op2.y) - (y * op2.x));
+	Vec3 cross(const Vec3& op2) const {
+		return Vec3((y * op2.z) - (z * op2.y), (z * op2.x) - (x * op2.z), (x * op2.y) - (y * op2.x));
 	}
 
-	void multiply_components(const kbVec3& op2) {
+	void multiply_components(const Vec3& op2) {
 		x *= op2.x;
 		y *= op2.y;
 		z *= op2.z;
 	}
 
-	float length() const { return sqrt(length_sqr()); }
-	float length_sqr() const { return (x * x + y * y + z * z); }
+	float length() const {
+		return sqrt(length_sqr());
+	}
+
+	float length_sqr() const {
+		return (x * x + y * y + z * z);
+	}
 
 	float normalize_self() {
 		float len = length();
@@ -221,8 +240,8 @@ public:
 		return len;
 	}
 
-	kbVec3 normalize_safe() const {
-		kbVec3 returnVec = *this;
+	Vec3 normalize_safe() const {
+		Vec3 returnVec = *this;
 		returnVec.normalize_self();
 		return returnVec;
 	}
@@ -234,70 +253,70 @@ public:
 	float x, y, z;
 
 public:
-	static const kbVec3 zero;
-	static const kbVec3 right;
-	static const kbVec3 up;
-	static const kbVec3 down;
-	static const kbVec3 forward;
-	static const kbVec3 one;
+	static const Vec3 zero;
+	static const Vec3 right;
+	static const Vec3 up;
+	static const Vec3 down;
+	static const Vec3 forward;
+	static const Vec3 one;
 };
 
-kbVec3 operator *(const float op1, const kbVec3& op2);
+Vec3 operator *(const float op1, const Vec3& op2);
 
-/// kbVec4
-class kbVec4 {
+/// Vec4
+class Vec4 {
 public:
-	kbVec4() { }
+	Vec4() { }
 
-	kbVec4(const kbVec3& inVec) :
+	Vec4(const Vec3& inVec) :
 		x(inVec.x),
 		y(inVec.y),
 		z(inVec.z),
 		w(1.f) {}
 
-	kbVec4(const kbVec3& inVec, float inW) :
+	Vec4(const Vec3& inVec, float inW) :
 		x(inVec.x),
 		y(inVec.y),
 		z(inVec.z),
 		w(inW) {}
 
-	kbVec4(const float initX, const float initY, const float initZ, const float initW) :
+	Vec4(const float initX, const float initY, const float initZ, const float initW) :
 		x(initX),
 		y(initY),
 		z(initZ),
 		w(initW) {}
 
-	void Set(const float inX, const float inY, const float inZ, const float inW) {
+	void set(const float inX, const float inY, const float inZ, const float inW) {
 		x = inX;
 		y = inY;
 		z = inZ;
 		w = inW;
 	}
 
-	kbVec4 operator +(const kbVec4& op2) const {
-		return kbVec4(x + op2.x, y + op2.y, z + op2.z, w + op2.w);
+	Vec4 operator +(const Vec4& op2) const {
+		return Vec4(x + op2.x, y + op2.y, z + op2.z, w + op2.w);
 	}
 
-	void operator +=(const kbVec4& op2) {
+	void operator +=(const Vec4& op2) {
 		x += op2.x;
 		y += op2.y;
 		z += op2.z;w += op2.w;
 	}
-	kbVec4	operator -(const kbVec4& rhs) const {
-		return kbVec4(x - rhs.x, y - rhs.y, z - rhs.z, w - rhs.w);
+	Vec4	operator -(const Vec4& rhs) const {
+		return Vec4(x - rhs.x, y - rhs.y, z - rhs.z, w - rhs.w);
 	}
 
-	kbVec4 operator *(const float op2) const {
-		return kbVec4(x * op2, y * op2, z * op2, w * op2);
+	Vec4 operator *(const float op2) const {
+		return Vec4(x * op2, y * op2, z * op2, w * op2);
 	}
 	void operator *=(const float op2) {
 		x *= op2; y *= op2, z *= op2, w *= op2;
 	}
 
-	kbVec4 transform_point(const kbMat4& op2, bool bDivideByW = false) const;
+	Vec4 transform_point(const class Mat4& op2, bool bDivideByW = false) const;
 
-	kbVec4 operator /(const float op2) const {
-		return kbVec4(x / op2, y / op2, z / op2, w / op2);
+	Vec4 operator /(const float op2) const {
+		return Vec4(x / op2, y / op2, z / op2, w / op2);
 	}
 
 	void operator /=(const float op2) {
@@ -307,8 +326,8 @@ public:
 	const float operator[](const int index) const { return (&x)[index]; }
 	float& operator[](const int index) { return (&x)[index]; }
 
-	const kbVec3& ToVec3() const { return *(kbVec3*)this; }
-	kbVec3& ToVec3() { return *(kbVec3*)this; }
+	const Vec3& ToVec3() const { return *(Vec3*)this; }
+	Vec3& ToVec3() { return *(Vec3*)this; }
 
 	union {
 		struct {
@@ -321,23 +340,23 @@ public:
 	};
 
 public:
-	static const kbVec4 right;
-	static const kbVec4 up;
-	static const kbVec4 forward;
-	static const kbVec4 zero;
+	static const Vec4 right;
+	static const Vec4 up;
+	static const Vec4 forward;
+	static const Vec4 zero;
 };
 
-kbVec4 operator *(const float op1, const kbVec4& op2);
+Vec4 operator *(const float op1, const Vec4& op2);
 
 ///  kbColor
-class kbColor : public kbVec4 {
+class kbColor : public Vec4 {
 public:
 	kbColor() { }
 	kbColor(const float inX, const float inY, const float inZ, const float inW) :
-		kbVec4(inX, inY, inZ, inW) { }
+		Vec4(inX, inY, inZ, inW) { }
 
-	kbColor(const kbVec4& inVec) :
-		kbVec4(inVec.r, inVec.g, inVec.b, inVec.a) { }
+	kbColor(const Vec4& inVec) :
+		Vec4(inVec.r, inVec.g, inVec.b, inVec.a) { }
 
 	const static kbColor red;
 	const static kbColor green;
@@ -347,16 +366,14 @@ public:
 	const static kbColor black;
 };
 
-///  kbMat4
-class kbMat4 {
+///  Mat4
+class Mat4 {
 public:
+	Mat4() { }
+	explicit Mat4(const Vec4& xAxis, const Vec4& yAxis, const Vec4& zAxis, const Vec4& wAxis);
+	explicit Mat4(const class kbQuat& rotation, const Vec3& position);
 
-	kbMat4() { }
-
-	explicit kbMat4(const kbVec4& xAxis, const kbVec4& yAxis, const kbVec4& zAxis, const kbVec4& wAxis);
-	explicit kbMat4(const class kbQuat& rotation, const kbVec3& position);
-
-	void Set(const kbVec4& xAxis, const kbVec4& yAxis, const kbVec4& zAxis, const kbVec4& wAxis) {
+	void set(const Vec4& xAxis, const Vec4& yAxis, const Vec4& zAxis, const Vec4& wAxis) {
 		mat[0] = xAxis;
 		mat[1] = yAxis;
 		mat[2] = zAxis;
@@ -364,34 +381,34 @@ public:
 	}
 
 	void make_identity() {
-		mat[0].Set(1.f, 0.f, 0.f, 0.f);
-		mat[1].Set(0.f, 1.f, 0.f, 0.f);
-		mat[2].Set(0.f, 0.f, 1.f, 0.f);
-		mat[3].Set(0.f, 0.f, 0.f, 1.f);
+		mat[0].set(1.f, 0.f, 0.f, 0.f);
+		mat[1].set(0.f, 1.f, 0.f, 0.f);
+		mat[2].set(0.f, 0.f, 1.f, 0.f);
+		mat[3].set(0.f, 0.f, 0.f, 1.f);
 	}
 
-	void make_scale(const kbVec3& scale) {
-		mat[0].Set(scale.x, 0.f, 0.f, 0.f);
-		mat[1].Set(0.f, scale.y, 0.f, 0.f);
-		mat[2].Set(0.f, 0.f, scale.z, 0.f);
-		mat[3].Set(0.f, 0.f, 0.f, 1.f);
+	void make_scale(const Vec3& scale) {
+		mat[0].set(scale.x, 0.f, 0.f, 0.f);
+		mat[1].set(0.f, scale.y, 0.f, 0.f);
+		mat[2].set(0.f, 0.f, scale.z, 0.f);
+		mat[3].set(0.f, 0.f, 0.f, 1.f);
 	}
 
-	void make_translation(const kbVec3& translation) {
-		mat[0].Set(1.f, 0.f, 0.f, 0.f);
-		mat[1].Set(0.f, 1.f, 0.f, 0.f);
-		mat[2].Set(0.f, 0.f, 1.f, 0.f);
-		mat[3].Set(translation.x, translation.y, translation.z, 1.f);
+	void make_translation(const Vec3& translation) {
+		mat[0].set(1.f, 0.f, 0.f, 0.f);
+		mat[1].set(0.f, 1.f, 0.f, 0.f);
+		mat[2].set(0.f, 0.f, 1.f, 0.f);
+		mat[3].set(translation.x, translation.y, translation.z, 1.f);
 	}
 
-	void look_at(const kbVec3& eye, const kbVec3& at, const kbVec3& up) {
-		kbVec3 z_axis = at - eye;
+	void look_at(const Vec3& eye, const Vec3& at, const Vec3& up) {
+		Vec3 z_axis = at - eye;
 		z_axis.normalize_self();
 
-		kbVec3 x_axis = up.cross(z_axis);
+		Vec3 x_axis = up.cross(z_axis);
 		x_axis.normalize_self();
 
-		kbVec3 y_axis = z_axis.cross(x_axis);
+		Vec3 y_axis = z_axis.cross(x_axis);
 		y_axis.normalize_self();
 
 		make_identity();
@@ -426,8 +443,8 @@ public:
 		mat[3][3] = 0;
 	}
 
-	kbMat4& transpose_self() {
-		kbMat4 transposedMat;
+	Mat4& transpose_self() {
+		Mat4 transposedMat;
 		transposedMat[0][0] = mat[0][0];
 		transposedMat[0][1] = mat[1][0];
 		transposedMat[0][2] = mat[2][0];
@@ -450,8 +467,8 @@ public:
 		return *this;
 	}
 
-	kbMat4& transpose_upper() {
-		kbMat4 transposedMat;
+	Mat4& transpose_upper() {
+		Mat4 transposedMat;
 		transposedMat[0][0] = mat[0][0];
 		transposedMat[0][1] = mat[1][0];
 		transposedMat[0][2] = mat[2][0];
@@ -474,7 +491,7 @@ public:
 	}
 
 	void inverse_projection() {
-		kbMat4 TempMatrix(*this);
+		Mat4 TempMatrix(*this);
 
 		float OneOverUpperDet = 1.f / ((mat[0][0] * mat[1][1]) - (mat[0][1] * mat[1][0]));
 		mat[0][0] = TempMatrix[1][1] * OneOverUpperDet;
@@ -488,7 +505,7 @@ public:
 	}
 
 	void inverse_fast() {
-		kbVec3 Trans(-mat[3][0], -mat[3][1], -mat[3][2]);
+		Vec3 Trans(-mat[3][0], -mat[3][1], -mat[3][2]);
 
 		mat[3][0] = mat[3][1] = mat[3][2] = 0;
 		transpose_upper();
@@ -499,12 +516,12 @@ public:
 		mat[3][2] = Trans.z;
 	}
 
-	kbVec4& operator[](const int index) { return mat[index]; }
+	Vec4& operator[](const int index) { return mat[index]; }
 
-	const kbVec4& operator[](const int index) const { return mat[index]; }
+	const Vec4& operator[](const int index) const { return mat[index]; }
 
-	void operator *=(const kbMat4& op2) {
-		kbMat4 tempMatrix = *this;
+	void operator *=(const Mat4& op2) {
+		Mat4 tempMatrix = *this;
 
 		mat[0][0] = (tempMatrix[0][0] * op2[0][0]) + (tempMatrix[0][1] * op2[1][0]) + (tempMatrix[0][2] * op2[2][0]) + (tempMatrix[0][3] * op2[3][0]);
 		mat[1][0] = (tempMatrix[1][0] * op2[0][0]) + (tempMatrix[1][1] * op2[1][0]) + (tempMatrix[1][2] * op2[2][0]) + (tempMatrix[1][3] * op2[3][0]);
@@ -527,8 +544,8 @@ public:
 		mat[3][3] = (tempMatrix[3][0] * op2[0][3]) + (tempMatrix[3][1] * op2[1][3]) + (tempMatrix[3][2] * op2[2][3]) + (tempMatrix[3][3] * op2[3][3]);
 	}
 
-	kbMat4 operator*(const kbMat4& MatrixOperand) const {
-		kbMat4 tempMatrix;
+	Mat4 operator*(const Mat4& MatrixOperand) const {
+		Mat4 tempMatrix;
 
 		tempMatrix[0][0] = (mat[0][0] * MatrixOperand[0][0]) + (mat[0][1] * MatrixOperand[1][0]) + (mat[0][2] * MatrixOperand[2][0]) + (mat[0][3] * MatrixOperand[3][0]);
 		tempMatrix[1][0] = (mat[1][0] * MatrixOperand[0][0]) + (mat[1][1] * MatrixOperand[1][0]) + (mat[1][2] * MatrixOperand[2][0]) + (mat[1][3] * MatrixOperand[3][0]);
@@ -562,7 +579,7 @@ public:
 		mat[3].z = near_plane / (near_plane - far_plane);
 	}
 
-	kbVec3 transform_point(const kbVec3& point) const;
+	Vec3 transform_point(const Vec3& point) const;
 
 	// Retrieve clip plane from projection matrices.  See // http://gamedevs.org/uploads/fast-extraction-viewing-frustum-planes-from-world-view-projection-matrix.pdf
 	void left_clip_plane(class kbPlane& out_plane);
@@ -573,8 +590,8 @@ public:
 	void far_clip_plane(class kbPlane& out_plane);
 
 private:
-	kbVec4 mat[4];
+	Vec4 mat[4];
 
 public:
-	const static kbMat4 identity;
+	const static Mat4 identity;
 };

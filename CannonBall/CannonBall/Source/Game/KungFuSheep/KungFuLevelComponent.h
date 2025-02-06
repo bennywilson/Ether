@@ -31,7 +31,7 @@ namespace KungFuGame {
 	// TODO - Optimize - Move static kbStrings here
 
 	// Camera
-	const kbVec3 kCameraStartPos = kbVec3( 66.170448f, -49.412132f, -391.558990f );
+	const Vec3 kCameraStartPos = Vec3( 66.170448f, -49.412132f, -391.558990f );
 	const kbQuat kCameraRotation = kbQuat( -0.023375f, -0.706720f, 0.023375f, 0.706720f );
 	const float kPrehugLengthSec = 0.067f;
 	const float kDistToHugSheep = 0.75f;
@@ -61,20 +61,20 @@ namespace KungFuGame {
 	const float kSubWaveDirChangePerSnolafOffset = 0.25f;
 
 	// Movement	
-	const kbVec3 kSheepStartPos( 77.10445f, -52.6362f, -398.0f );
+	const Vec3 kSheepStartPos( 77.10445f, -52.6362f, -398.0f );
 	const kbQuat kSheepStartRot( 0.0f, 1.0f, 0.0f, 0.0f );
 	
 	const float kLevelLength = 165.0f;
 
 	// Cinema
 	const float kOutroStartZ = -297.0f;
-	const kbVec3 kFoxPos = kbVec3( 77.10445f, -52.6362f, -278.628601f );
-	const kbVec3 kTreyTonOffScreenPos = kbVec3( 76.992683f, -52.599991f, -270.628479f );
-	const kbVec3 kTreyTonJump1StartPos = kbVec3( 76.992683f, -52.599991f, -272.828479f );
-	const kbVec3 kTreyTonJump2StartPos = kbVec3( 76.992683f, -52.599991f, -280.828479f );
-	const kbVec3 kFoxFinalPos = kbVec3( 77.10445f, -52.6362f, -281.45f );
-	const kbVec3 kSheepFinalPos = kFoxFinalPos + kbVec3( 0.0f, 0.0f, -2.0f );
-	const kbVec3 kFinalSnolafEntryPos = KungFuGame::kFoxFinalPos + kbVec3( 0.0f, 0.0f, 8.25f );
+	const Vec3 kFoxPos = Vec3( 77.10445f, -52.6362f, -278.628601f );
+	const Vec3 kTreyTonOffScreenPos = Vec3( 76.992683f, -52.599991f, -270.628479f );
+	const Vec3 kTreyTonJump1StartPos = Vec3( 76.992683f, -52.599991f, -272.828479f );
+	const Vec3 kTreyTonJump2StartPos = Vec3( 76.992683f, -52.599991f, -280.828479f );
+	const Vec3 kFoxFinalPos = Vec3( 77.10445f, -52.6362f, -281.45f );
+	const Vec3 kSheepFinalPos = kFoxFinalPos + Vec3( 0.0f, 0.0f, -2.0f );
+	const Vec3 kFinalSnolafEntryPos = KungFuGame::kFoxFinalPos + Vec3( 0.0f, 0.0f, 8.25f );
 };
 
 

@@ -8,7 +8,7 @@
 class kbQuat {
 public:
 	kbQuat() { }
-	explicit kbQuat(const kbVec3& axis, const float angle) { FromAxisAngle(axis, angle); }
+	explicit kbQuat(const Vec3& axis, const float angle) { FromAxisAngle(axis, angle); }
 	explicit kbQuat(const float x, const float y, const float z, const float w) { set(x, y, z, w); }
 
 	float Length();
@@ -25,8 +25,8 @@ public:
 	float operator|(const kbQuat&) const;
 	inline bool	operator==(const kbQuat& a) const;
 
-	void FromAxisAngle(const kbVec3& axis, float angle);
-	kbMat4 ToMat4() const;
+	void FromAxisAngle(const Vec3& axis, float angle);
+	Mat4 ToMat4() const;
 
 	static kbQuat Slerp(const kbQuat& from, const kbQuat& to, float t);
 
@@ -37,7 +37,7 @@ public:
 };
 
 /// kbQuatFromMatrix
-inline kbQuat kbQuatFromMatrix(const kbMat4& matrix) {
+inline kbQuat kbQuatFromMatrix(const Mat4& matrix) {
 	float trace = matrix[0][0] + matrix[1][1] + matrix[2][2] + 1.0f;
 
 	if (trace > 0.00001f) {
@@ -129,7 +129,7 @@ inline bool	kbQuat::operator==(const kbQuat& op2) const {
 /*
  *	kbQuat::FromAxisAngle
  */
-inline void kbQuat::FromAxisAngle(const kbVec3& axis, float angle) {
+inline void kbQuat::FromAxisAngle(const Vec3& axis, float angle) {
 	const float sin_a = sin(angle / 2.0f);
 	const float cos_a = cos(angle / 2.0f);
 
@@ -142,8 +142,8 @@ inline void kbQuat::FromAxisAngle(const kbVec3& axis, float angle) {
 /*
  *	kbQuat::ToMat4
  */
-inline kbMat4 kbQuat::ToMat4() const {
-	kbMat4 mat;
+inline Mat4 kbQuat::ToMat4() const {
+	Mat4 mat;
 	const float xx = x * x;
 	const float xy = x * y;
 	const float xz = x * z;

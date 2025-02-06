@@ -40,7 +40,7 @@ private:
 	IDXGISwapChain *							m_pSwapChain;
 	ID3D11RenderTargetView *					m_pRenderTargetView;
 
-	kbMat4										m_EyeMatrices[2];
+	Mat4										m_EyeMatrices[2];
 };
 
 class kbRenderTexture_DX11 : public kbRenderTexture {
@@ -376,7 +376,7 @@ public:
 															ID3D11PixelShader *& pixelShader, ID3D11InputLayout *& vertexLayout, const std::string & vertexShaderFunc, 
 															const std::string & pixelShaderFunc, struct kbShaderVarBindings_t * pShaderBindings = nullptr );
 
-	virtual kbVec2i								GetEntityIdAtScreenPosition( const uint x, const uint y ) override;
+	virtual Vec2i								GetEntityIdAtScreenPosition( const uint x, const uint y ) override;
 
 	virtual void								SetGlobalShaderParam( const kbShaderParamOverrides_t::kbShaderParam_t & shaderParam ) override;
 	virtual void								SetGlobalShaderParam( const kbShaderParamOverrides_t & shaderParam ) override;
@@ -385,8 +385,8 @@ public:
 	virtual void								RT_SetRenderTarget( kbRenderTexture *const pRenderTexture ) override;
 	virtual void								RT_ClearRenderTarget( kbRenderTexture *const pRenderTexture, const kbColor & color ) override;
 	virtual void								RT_RenderMesh( const kbModel *const pModel, kbShader * pShader, const kbShaderParamOverrides_t *const pShaderParams ) override;
-	virtual void								RT_Render2DLine( const kbVec3 & startPt, const kbVec3 & endPt, const kbColor & color, const float width, const kbShader * pShader, const struct kbShaderParamOverrides_t *const ShaderBindings = nullptr ) override;
-	virtual void								RT_Render2DQuad( const kbVec2 & origin, const kbVec2 & size, const kbColor & color, const kbShader * pShader, const struct kbShaderParamOverrides_t *const ShaderBindings = nullptr );
+	virtual void								RT_Render2DLine( const Vec3 & startPt, const Vec3 & endPt, const kbColor & color, const float width, const kbShader * pShader, const struct kbShaderParamOverrides_t *const ShaderBindings = nullptr ) override;
+	virtual void								RT_Render2DQuad( const Vec2 & origin, const Vec2 & size, const kbColor & color, const kbShader * pShader, const struct kbShaderParamOverrides_t *const ShaderBindings = nullptr );
 	virtual void								RT_CopyRenderTarget( kbRenderTexture *const pSrcTexture, kbRenderTexture *const pDstTexture ) override;
 	virtual kbRenderTargetMap					RT_MapRenderTarget( kbRenderTexture *const pDstTexture ) override;
 	virtual void								RT_UnmapRenderTarget( kbRenderTexture *const pDstTexture ) override;
@@ -425,7 +425,7 @@ private:
 	void										RenderConsole();
 	void										RenderLights();
 	void										RenderLight( const kbRenderLight *const );
-	void										RenderShadow( const kbRenderLight *const, kbMat4 splitMatrices[] );
+	void										RenderShadow( const kbRenderLight *const, Mat4 splitMatrices[] );
 	void										RenderLightShafts();
 	void										RenderTranslucency();
 	void										RenderDebugText();
@@ -434,16 +434,16 @@ private:
 	ID3D11Buffer *								SetConstantBuffer( const kbShaderVarBindings_t& shaderBindings, const kbShaderParamOverrides_t* shaderParamOverrides, const kbRenderObject* const pRenderObject, byte* const pInMappedBufferData, const char* const pShaderName = nullptr );
 
 	ID3D11Buffer *								GetConstantBuffer( const size_t requestSize );
-	void										SetShaderMat4( const std::string & varName, const kbMat4 & inMatrix, void *const pBuffer, const kbShaderVarBindings_t & binding );
-	void										SetShaderVec4( const std::string & varName, const kbVec4 & inVec, void *const pBuffer, const kbShaderVarBindings_t & binding );
-	void										SetShaderMat4Array( const std::string & varName, const kbMat4 *const mat4Array, const int arrayLen, void *const pBuffer, const kbShaderVarBindings_t & binding );
-	void										SetShaderVec4Array( const std::string & varName, const kbVec4 *const vec4Array, const int arrayLen, void *const pBuffer, const kbShaderVarBindings_t & binding );
+	void										SetShaderMat4( const std::string & varName, const Mat4 & inMatrix, void *const pBuffer, const kbShaderVarBindings_t & binding );
+	void										SetShaderVec4( const std::string & varName, const Vec4 & inVec, void *const pBuffer, const kbShaderVarBindings_t & binding );
+	void										SetShaderMat4Array( const std::string & varName, const Mat4 *const mat4Array, const int arrayLen, void *const pBuffer, const kbShaderVarBindings_t & binding );
+	void										SetShaderVec4Array( const std::string & varName, const Vec4 *const vec4Array, const int arrayLen, void *const pBuffer, const kbShaderVarBindings_t & binding );
 	void										SetShaderFloat( const std::string & varName, const float inFloat, void *const pBuffer, const kbShaderVarBindings_t & binding );
 	void										SetShaderInt( const std::string & varName, const int inInt, void *const pBuffer, const kbShaderVarBindings_t & binding );
 	int											GetVarBindingIndex( const std::string & varName, const kbShaderVarBindings_t & binding );
 
-	void										DrawTexture( ID3D11ShaderResourceView *const pShaderResourceView, const kbVec3 & pixelPosition, 
-															 const kbVec3 & pixelSize, const kbVec3 & renderTargetSize );
+	void										DrawTexture( ID3D11ShaderResourceView *const pShaderResourceView, const Vec3 & pixelPosition, 
+															 const Vec3 & pixelSize, const Vec3 & renderTargetSize );
 
 	kbRenderTexture_DX11 *						GetRenderTarget_DX11( const eReservedRenderTargets target ) { return (kbRenderTexture_DX11*) m_pRenderTargets[target]; }
 	kbRenderTexture_DX11 *						GetAccumBuffer( const int index ) { return  (kbRenderTexture_DX11*) m_pAccumBuffers[index]; }
@@ -518,7 +518,7 @@ private:
 extern ID3D11Device * g_pD3DDevice;
 extern kbRenderer_DX11 * g_pD3D11Renderer;
 
-XMMATRIX & XMMATRIXFromkbMat4( kbMat4 & matrix );
-kbMat4 & kbMat4FromXMMATRIX( FXMMATRIX & matrix );
+XMMATRIX & XMMATRIXFromMat4( Mat4 & matrix );
+Mat4 & Mat4FromXMMATRIX( FXMMATRIX & matrix );
 
 #endif

@@ -95,8 +95,8 @@ public:
 
 	kbGameEntity *								GetOwner() const { return (kbGameEntity *) Super::GetOwner(); }
 	kbString									GetOwnerName() const;
-	kbVec3										GetOwnerPosition() const;
-	kbVec3										GetOwnerScale() const;
+	Vec3										GetOwnerPosition() const;
+	Vec3										GetOwnerScale() const;
 	kbQuat										GetOwnerRotation() const;
 	
 	template<typename T>
@@ -105,7 +105,7 @@ public:
 		return component;
 	}
 
-	void										SetOwnerPosition( const kbVec3 & position );
+	void										SetOwnerPosition( const Vec3 & position );
 	void										SetOwnerRotation( const kbQuat & rotation );
 
 	float										GetStartingLifeTime() const { return m_StartingLifeTime; }
@@ -129,21 +129,21 @@ class kbTransformComponent : public kbGameComponent {
 public:
 
 	void										SetName( const std::string newName ) { m_Name = newName; }
-	void										SetPosition( const kbVec3 & newPosition ) { m_Position = newPosition; }
-	void										SetScale( const kbVec3 & newScale ) { m_Scale = newScale; }
+	void										SetPosition( const Vec3 & newPosition ) { m_Position = newPosition; }
+	void										SetScale( const Vec3 & newScale ) { m_Scale = newScale; }
 	void										SetOrientation( const kbQuat & newOrientation ) { m_Orientation = newOrientation; }
 
 	const kbString &							GetName() const { return m_Name; }
-	const kbVec3								GetPosition() const;
-	const kbVec3								GetScale() const;
+	const Vec3								GetPosition() const;
+	const Vec3								GetScale() const;
 	const kbQuat								GetOrientation() const;
 
 protected:
 
 	kbString									m_Name;
 
-	kbVec3										m_Position;
-	kbVec3										m_Scale;
+	Vec3										m_Position;
+	Vec3										m_Scale;
 	kbQuat										m_Orientation;
 };
 
@@ -279,13 +279,13 @@ public:
 
 	const kbString							GetEventName() const { return m_EventName; }
 	float									GetEventTime() const { return m_EventTime; }
-	kbVec4									GetEventValue() const { return m_EventValue; }
+	Vec4									GetEventValue() const { return m_EventValue; }
 
-	static kbVec4							Evaluate( const std::vector<kbVectorAnimEvent> & eventList, const float t );
+	static Vec4							Evaluate( const std::vector<kbVectorAnimEvent> & eventList, const float t );
 
 private:
 	kbString								m_EventName;
-	kbVec4									m_EventValue;
+	Vec4									m_EventValue;
 	float									m_EventTime;
 };
 
@@ -308,7 +308,7 @@ class kbEditorLevelSettingsComponent : public kbGameComponent {
 
 //-------------------------------------------------------------------------------------------------------------------------------------------------------------
 public:
-	kbVec3									m_CameraPosition;
+	Vec3									m_CameraPosition;
 	kbQuat									m_CameraRotation;
 };
 

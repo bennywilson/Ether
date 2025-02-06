@@ -27,7 +27,7 @@ public:
 	virtual void initialize(HWND hwnd, const uint32_t frame_width, const uint32_t frame_height);
 	virtual void shut_down() = 0;
 
-	virtual void set_camera_transform(const kbVec3& position, const kbQuat& rotation);
+	virtual void set_camera_transform(const Vec3& position, const kbQuat& rotation);
 
 	virtual void render() = 0;
 
@@ -48,9 +48,9 @@ protected:
 	uint m_frame_height;
 
 	/// camera
-	kbVec3 m_camera_position;
+	Vec3 m_camera_position;
 	kbQuat m_camera_rotation;
-	kbMat4 m_camera_projection;
+	Mat4 m_camera_projection;
 
 private:
 	std::unordered_map<std::string, RenderPipeline*> m_pipelines;

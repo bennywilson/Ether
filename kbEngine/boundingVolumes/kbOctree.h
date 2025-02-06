@@ -39,9 +39,9 @@ public:
 					children[i].currentDepth = currentDepth + 1;
 				}
 
-				const kbVec3 minPt = nodeBounds.Min();
-				const kbVec3 midPt = nodeBounds.Center();
-				const kbVec3 maxPt = nodeBounds.Max();
+				const Vec3 minPt = nodeBounds.Min();
+				const Vec3 midPt = nodeBounds.Center();
+				const Vec3 maxPt = nodeBounds.Max();
 
 				children[0].nodeBounds.Set( minPt.x, minPt.y, midPt.z, midPt.x, midPt.y, maxPt.z );
 				children[1].nodeBounds.Set( midPt.x, minPt.y, midPt.z, maxPt.x, midPt.y, maxPt.z );
@@ -115,7 +115,7 @@ public:
 			assert( data.Num() == 0 );
 
 		} else {
-			kbVec4 color( gameLocal->random.RandomFloat(), gameLocal->random.RandomFloat(), gameLocal->random.RandomFloat(), 0.0f );
+			Vec4 color( gameLocal->random.RandomFloat(), gameLocal->random.RandomFloat(), gameLocal->random.RandomFloat(), 0.0f );
 			color.normalize_self();
 			color *= 0.5f;
 			color.w = 1;

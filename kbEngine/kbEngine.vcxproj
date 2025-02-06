@@ -204,7 +204,7 @@
     <ClInclude Include="renderer\d3d12\dxtk\LoaderHelpers.h" />
     <ClInclude Include="renderer\d3d12\dxtk\pch.h" />
     <ClInclude Include="renderer\d3d12\dxtk\PlatformHelpers.h" />
-    <ClInclude Include="renderer\d3d12\renderer_d3d12.h" />
+    <ClInclude Include="renderer\d3d12\renderer_dx12.h" />
     <ClInclude Include="renderer\d3d12\d3d12_defs.h" />
     <ClInclude Include="renderer\DX11\kbRenderer_DX11.h" />
     <ClInclude Include="renderer\kbMaterial.h" />
@@ -214,6 +214,8 @@
     <ClInclude Include="renderer\kbRenderer_defs.h" />
     <ClInclude Include="renderer\renderer.h" />
     <ClInclude Include="renderer\render_defs.h" />
+    <ClInclude Include="renderer\rt\renderer_rt.h" />
+    <ClInclude Include="renderer\sw\renderer_sw.h" />
     <ClInclude Include="renderer\vk\renderer_vk.h" />
     <ClInclude Include="renderer\vk\vk_defs.h" />
     <ClInclude Include="sound\kbSoundComponent.h" />
@@ -326,7 +328,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="renderer\d3d12\dxtk\DDSTextureLoader12.cpp" />
-    <ClCompile Include="renderer\d3d12\renderer_d3d12.cpp" />
+    <ClCompile Include="renderer\d3d12\renderer_dx12.cpp" />
     <ClCompile Include="renderer\d3d12\d3d12_defs.cpp" />
     <ClCompile Include="renderer\DX11\kbLightRendering_DX11.cpp" />
     <ClCompile Include="renderer\DX11\kbRenderBuffer_DX11.cpp">
@@ -346,6 +348,8 @@
     <ClCompile Include="renderer\kbRenderer_defs.cpp" />
     <ClCompile Include="renderer\renderer.cpp" />
     <ClCompile Include="renderer\render_defs.cpp" />
+    <ClCompile Include="renderer\rt\renderer_rt.cpp" />
+    <ClCompile Include="renderer\sw\renderer_sw.cpp" />
     <ClCompile Include="renderer\vk\renderer_vk.cpp" />
     <ClCompile Include="renderer\vk\vk_defs.cpp" />
     <ClCompile Include="sound\kbSoundComponent.cpp" />

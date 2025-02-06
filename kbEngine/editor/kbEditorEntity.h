@@ -37,14 +37,14 @@ public:
 
 	const kbBounds								GetWorldBounds() const;
 
-	const kbVec3								GetPosition() const;
-	void										SetPosition( const kbVec3 & newPosition );
+	const Vec3								GetPosition() const;
+	void										SetPosition( const Vec3 & newPosition );
 
 	const kbQuat								GetOrientation() const;
 	void										SetOrientation( const kbQuat & newOrientation );
 
-	const kbVec3								GetScale() const;
-	void										SetScale( const kbVec3 & newScale );
+	const Vec3								GetScale() const;
+	void										SetScale( const Vec3 & newScale );
 
 	kbGameEntity *								GetGameEntity() const;
 	void										SetGameEntity( kbGameEntity *const gameEntity ) { m_pGameEntity = gameEntity; m_PropertyMetaData.clear(); }

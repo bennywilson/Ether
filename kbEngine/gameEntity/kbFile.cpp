@@ -388,7 +388,7 @@ void kbFile::ReadProperty(const kbTypeInfoVar* const pTypeInfoVar, byte* const b
 
 		case KBTYPEINFO_VECTOR4:
 		{
-			kbVec4& theVec = *(kbVec4*)byteOffset;
+			Vec4& theVec = *(Vec4*)byteOffset;
 
 			theVec[0] = (float)atof(nextToken.c_str());
 
@@ -412,7 +412,7 @@ void kbFile::ReadProperty(const kbTypeInfoVar* const pTypeInfoVar, byte* const b
 
 		case KBTYPEINFO_VECTOR:
 		{
-			kbVec3& theVec = *(kbVec3*)byteOffset;
+			Vec3& theVec = *(Vec3*)byteOffset;
 
 			theVec[0] = (float)atof(nextToken.c_str());
 
@@ -646,7 +646,7 @@ void kbFile::WriteProperty(const kbTypeInfoType_t propertyType, const std::strin
 		}
 
 		case KBTYPEINFO_VECTOR4: {
-			kbVec4& vector = *(kbVec4*)byteOffsetToVar;
+			Vec4& vector = *(Vec4*)byteOffsetToVar;
 
 			sprintf_s(charBuffer, "%f %f %f %f", vector.x, vector.y, vector.z, vector.w);
 			writeBuffer += charBuffer;
@@ -654,7 +654,7 @@ void kbFile::WriteProperty(const kbTypeInfoType_t propertyType, const std::strin
 		}
 
 		case KBTYPEINFO_VECTOR: {
-			kbVec3& vector = *(kbVec3*)byteOffsetToVar;
+			Vec3& vector = *(Vec3*)byteOffsetToVar;
 			sprintf_s(charBuffer, "%f %f %f", vector.x, vector.y, vector.z);
 			writeBuffer += charBuffer;
 			break;

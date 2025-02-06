@@ -31,7 +31,7 @@ private:
 	void InputCB(const widgetCBObject* const widgetCBObject);
 	void CameraMoveCB(const widgetCBInputObject* const widgetCBObject);
 	void EntityTransformedCB(const widgetCBObject* const widgetCBObject);
-	void ManipulatorEvent(const bool bClicked, const kbVec2i& mouseXY);
+	void ManipulatorEvent(const bool bClicked, const Vec2i& mouseXY);
 
 	kbManipulator& GetManipulator() { return m_Manipulator; }
 

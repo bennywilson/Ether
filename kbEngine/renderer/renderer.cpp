@@ -49,7 +49,7 @@ void Renderer::shut_down() {
 }
 
 /// Renderer::set_camera_transform
-void Renderer::set_camera_transform(const kbVec3& position, const kbQuat& rotation) {
+void Renderer::set_camera_transform(const Vec3& position, const kbQuat& rotation) {
 	m_camera_position = position;
 	m_camera_rotation = rotation;
 }

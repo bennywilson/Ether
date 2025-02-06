@@ -72,8 +72,8 @@ public:
 			return;
 		}
 
-		const kbVec3 snolafPos = this->m_pActorComponent->GetOwnerPosition();
-		const kbVec3 snolafFacingDir = this->m_pActorComponent->GetOwnerRotation().ToMat4()[2].ToVec3();
+		const Vec3 snolafPos = this->m_pActorComponent->GetOwnerPosition();
+		const Vec3 snolafFacingDir = this->m_pActorComponent->GetOwnerRotation().ToMat4()[2].ToVec3();
 
 		// TODO - Optimize
 		// Look for actors to hug
@@ -90,8 +90,8 @@ public:
 				continue;
 			}
 
-			const kbVec3 targetPos = pTargetActor->GetOwnerPosition();
-			const kbVec3 vSnolafToTarget = targetPos - snolafPos;
+			const Vec3 targetPos = pTargetActor->GetOwnerPosition();
+			const Vec3 vSnolafToTarget = targetPos - snolafPos;
 			const float snolafToTargetDist = (targetPos - snolafPos).length();
 			auto pSnolafComponent = pTargetActor->GetAs<KungFuSnolafComponent>();
 			if (pSnolafComponent != nullptr && pSnolafComponent->GetState() != KungFuSnolafState::Prehug && pSnolafComponent->GetState() != KungFuSnolafState::Hug && pSnolafComponent->GetState() != KungFuSnolafState::WatchCannonBall) {
@@ -113,13 +113,13 @@ public:
 		// Move towards target
 		this->RotateTowardTarget();
 
-		kbVec3 moveDir(0.0f, 0.0f, 0.0f);
+		Vec3 moveDir(0.0f, 0.0f, 0.0f);
 		if (this->IsTargetOnLeft()) {
 			moveDir.z = 1.0f;
 		} else {
 			moveDir.z = -1.0f;
 		}
-		const kbVec3 newSnolafPos = this->m_pActorComponent->GetOwnerPosition() + moveDir * frameDT * this->m_pActorComponent->GetMaxRunSpeed();
+		const Vec3 newSnolafPos = this->m_pActorComponent->GetOwnerPosition() + moveDir * frameDT * this->m_pActorComponent->GetMaxRunSpeed();
 		this->m_pActorComponent->SetOwnerPosition(newSnolafPos);
 	}
 
@@ -151,8 +151,8 @@ public:
 			return;
 		}
 
-		const kbVec3 snolafPos = this->m_pActorComponent->GetOwnerPosition();
-		const kbVec3 snolafFacingDir = this->m_pActorComponent->GetOwnerRotation().ToMat4()[2].ToVec3();
+		const Vec3 snolafPos = this->m_pActorComponent->GetOwnerPosition();
+		const Vec3 snolafFacingDir = this->m_pActorComponent->GetOwnerRotation().ToMat4()[2].ToVec3();
 
 		// TODO - Optimize
 		bool bAnyoneInFront = false;
@@ -167,8 +167,8 @@ public:
 				continue;
 			}
 
-			const kbVec3 targetPos = pTargetActor->GetOwnerPosition();
-			const kbVec3 vSnolafToTarget = targetPos - snolafPos;
+			const Vec3 targetPos = pTargetActor->GetOwnerPosition();
+			const Vec3 vSnolafToTarget = targetPos - snolafPos;
 			const float snolafToTargetDist = (targetPos - snolafPos).length();
 			if (snolafToTargetDist < KungFuGame::kDistToChase) {
 				if (vSnolafToTarget.dot(snolafFacingDir) > 0.0f) {
@@ -257,8 +257,8 @@ public:
 			KungFuSheepDirector::Get()->DoAttack(dealAttackInfo);
 		}
 
-		const kbVec3 snolafPos = this->m_pActorComponent->GetOwnerPosition();
-		const kbVec3 snolafFacingDir = this->m_pActorComponent->GetOwnerRotation().ToMat4()[2].ToVec3();
+		const Vec3 snolafPos = this->m_pActorComponent->GetOwnerPosition();
+		const Vec3 snolafFacingDir = this->m_pActorComponent->GetOwnerRotation().ToMat4()[2].ToVec3();
 
 		bool bAnyoneInFront = false;
 		for (int i = 0; i < g_pCannonGame->GetGameEntities().size(); i++) {
@@ -273,8 +273,8 @@ public:
 				continue;
 			}
 
-			const kbVec3 targetPos = pTargetActor->GetOwnerPosition();
-			const kbVec3 vSnolafToTarget = targetPos - snolafPos;
+			const Vec3 targetPos = pTargetActor->GetOwnerPosition();
+			const Vec3 vSnolafToTarget = targetPos - snolafPos;
 			const float snolafToTargetDist = (targetPos - snolafPos).length();
 			if (snolafToTargetDist < KungFuGame::kDistToChase) {
 
@@ -364,15 +364,15 @@ public:
 			pParticle->Enable(false);
 		}
 
-		kbMat4 worldMatrix;
+		Mat4 worldMatrix;
 		this->m_pActorComponent->GetOwner()->CalculateWorldMatrix(worldMatrix);
-		const XMMATRIX inverseMat = XMMatrixInverse(nullptr, XMMATRIXFromkbMat4(worldMatrix));
-		worldMatrix = kbMat4FromXMMATRIX(inverseMat);
+		const XMMATRIX inverseMat = XMMatrixInverse(nullptr, XMMATRIXFromMat4(worldMatrix));
+		worldMatrix = Mat4FromXMMATRIX(inverseMat);
 
 		if (m_DeathSelection == 0) {
 
 			// Super Fly Off
-			m_Velocity = kbVec3Rand(m_MinLinearVelocity, m_MaxLinearVelocity);
+			m_Velocity = Vec3Rand(m_MinLinearVelocity, m_MaxLinearVelocity);
 			if (m_Velocity.x < 0.0f) {
 				m_Velocity.x -= 0.0025f;
 			} else {
@@ -381,7 +381,7 @@ public:
 
 			m_Velocity = m_Velocity * worldMatrix;
 
-			m_RotationAxis = kbVec3(kbfrand() - 1.3f, 0.0f, 0.0f);
+			m_RotationAxis = Vec3(kbfrand() - 1.3f, 0.0f, 0.0f);
 			if (m_RotationAxis.length_sqr() < 0.01f) {
 				m_RotationAxis.set(1.0f, 0.0f, 0.0f);
 			} else {
@@ -389,7 +389,7 @@ public:
 			}
 			m_RotationSpeed = kbfrand() * (m_MaxAngularVelocity - m_MinAngularVelocity) + m_MinAngularVelocity;
 
-			const kbVec3 initialSnolafOffset = m_Velocity.normalize_safe() * 2.0f;
+			const Vec3 initialSnolafOffset = m_Velocity.normalize_safe() * 2.0f;
 			m_OwnerPosOverride = this->m_pActorComponent->GetOwnerPosition() + initialSnolafOffset;
 			m_OwnerStartPos = m_OwnerPosOverride;
 			this->GetSnolaf()->ApplyAnimSmear(-initialSnolafOffset * 0.75f, 0.067f);
@@ -404,7 +404,7 @@ public:
 
 			// Decapitation
 			this->GetSnolaf()->SpawnAndFlingDecapHead();
-			m_Velocity = kbVec3Rand(m_MinLinearVelocity, m_MaxLinearVelocity);
+			m_Velocity = Vec3Rand(m_MinLinearVelocity, m_MaxLinearVelocity);
 			if (m_Velocity.x < 0.0f) {
 				m_Velocity.x -= 0.0025f;
 			} else {
@@ -413,7 +413,7 @@ public:
 
 			m_Velocity = 2.0f * m_Velocity * worldMatrix;
 
-			m_RotationAxis = kbVec3(kbfrand() - 1.3f, 0.0f, 0.0f);
+			m_RotationAxis = Vec3(kbfrand() - 1.3f, 0.0f, 0.0f);
 			if (m_RotationAxis.length_sqr() < 0.01f) {
 				m_RotationAxis.set(1.0f, 0.0f, 0.0f);
 			} else {
@@ -421,7 +421,7 @@ public:
 			}
 			m_RotationSpeed = 0.15f * (kbfrand() * (m_MaxAngularVelocity - m_MinAngularVelocity) + m_MinAngularVelocity);
 
-			const kbVec3 initialSnolafOffset = m_Velocity.normalize_safe() * 2.0f;
+			const Vec3 initialSnolafOffset = m_Velocity.normalize_safe() * 2.0f;
 			m_OwnerPosOverride = this->m_pActorComponent->GetOwnerPosition() + initialSnolafOffset;
 			m_OwnerStartPos = m_OwnerPosOverride;
 			this->GetSnolaf()->ApplyAnimSmear(-initialSnolafOffset * 0.75f, 0.067f);
@@ -434,7 +434,7 @@ public:
 				if (pSkelModelComp == nullptr) {
 					continue;
 				}
-				pSkelModelComp->SetMaterialParamVector(0, clipMapMaskParam.stl_str(), kbVec4(1.0f, 0.0f, 0.0f, 0.0f));
+				pSkelModelComp->SetMaterialParamVector(0, clipMapMaskParam.stl_str(), Vec4(1.0f, 0.0f, 0.0f, 0.0f));
 			}
 		} else if (m_DeathSelection == 3) {
 			this->GetSnolaf()->SpawnAndFlingTopAndBottomHalf();
@@ -458,11 +458,11 @@ public:
 
 		const static kbString spine3BoneName("Spine3");
 		kbSkeletalModelComponent* const pSnolafComp = pOwner->GetComponent<kbSkeletalModelComponent>();
-		kbVec3 spine3WorldPos = kbVec3::zero;
+		Vec3 spine3WorldPos = Vec3::zero;
 
 		if (pSnolafComp->GetBoneWorldPosition(spine3BoneName, spine3WorldPos)) {
 
-			kbVec3 vecOffset = m_OwnerPosOverride - spine3WorldPos;
+			Vec3 vecOffset = m_OwnerPosOverride - spine3WorldPos;
 			pOwner->SetPosition(m_OwnerPosOverride + vecOffset);
 		}
 
@@ -500,18 +500,18 @@ public:
 
 private:
 
-	const kbVec3 m_MinLinearVelocity = kbVec3(-0.015f, 0.015f, 0.03f);
-	const kbVec3 m_MaxLinearVelocity = kbVec3(0.015f, 0.025f, 0.02f);
+	const Vec3 m_MinLinearVelocity = Vec3(-0.015f, 0.015f, 0.03f);
+	const Vec3 m_MaxLinearVelocity = Vec3(0.015f, 0.025f, 0.02f);
 	const float m_MinAngularVelocity = 10.0f;
 	const float m_MaxAngularVelocity = 15.0f;
-	const kbVec3 m_Gravity = kbVec3(0.0f, -20.0f, 0.0f);
+	const Vec3 m_Gravity = Vec3(0.0f, -20.0f, 0.0f);
 
-	kbVec3 m_OwnerStartPos = kbVec3::zero;
+	Vec3 m_OwnerStartPos = Vec3::zero;
 	kbQuat m_OwnerStartRotation = kbQuat(0.0f, 0.0f, 0.0f, 1.0f);
-	kbVec3 m_OwnerPosOverride = kbVec3::zero;
+	Vec3 m_OwnerPosOverride = Vec3::zero;
 
-	kbVec3 m_Velocity = kbVec3::zero;
-	kbVec3 m_RotationAxis = kbVec3(1.0f, 0.0f, 0.0f);
+	Vec3 m_Velocity = Vec3::zero;
+	Vec3 m_RotationAxis = Vec3(1.0f, 0.0f, 0.0f);
 
 	float m_CurRotationAngle = 0.0f;
 	float m_RotationSpeed = 1.0f;
@@ -555,7 +555,7 @@ public:
 		static const kbString Run_Anim("Run");
 		this->m_pActorComponent->PlayAnimation(Run_Anim, 0.05f);
 
-		kbVec3 snolafFacingDir = this->GetSnolaf()->GetTargetFacingDirection();
+		Vec3 snolafFacingDir = this->GetSnolaf()->GetTargetFacingDirection();
 		snolafFacingDir *= -1.0f;
 		this->GetSnolaf()->SetTargetFacingDirection(snolafFacingDir);
 
@@ -567,8 +567,8 @@ public:
 
 		const float frameDT = g_pGame->GetFrameDT();
 
-		const kbVec3 moveDir = this->GetSnolaf()->GetTargetFacingDirection();
-		const kbVec3 newSnolafPos = this->m_pActorComponent->GetOwnerPosition() - moveDir * frameDT * this->m_pActorComponent->GetMaxRunSpeed();
+		const Vec3 moveDir = this->GetSnolaf()->GetTargetFacingDirection();
+		const Vec3 newSnolafPos = this->m_pActorComponent->GetOwnerPosition() - moveDir * frameDT * this->m_pActorComponent->GetMaxRunSpeed();
 		this->m_pActorComponent->SetOwnerPosition(newSnolafPos);
 	}
 };
@@ -604,7 +604,7 @@ void KungFuSnolafComponent::SetEnable_Internal(const bool bEnable) {
 		// TODO: NEEDED?
 		if (m_SkelModelsList.size() > 1) {
 			const static kbString smearParam("smearParams");
-			m_SkelModelsList[1]->SetMaterialParamVector(0, smearParam.stl_str(), kbVec4::zero);
+			m_SkelModelsList[1]->SetMaterialParamVector(0, smearParam.stl_str(), Vec4::zero);
 		}
 
 		static const kbString SmallLoveHearts("Small_LoveHearts");
@@ -662,7 +662,7 @@ void KungFuSnolafComponent::OnAnimEvent(const kbAnimEventInfo_t& animEventInfo) 
 			kbGameEntity* const pFootStepFX = g_pGame->CreateEntity(m_FootStepImpactFX.GetEntity());
 
 			const kbString footBone = (animEvent.GetEventName() == LeftFootStep) ? (LeftFootBone) : (RightFootBone);
-			kbVec3 decalPosition = kbVec3::zero;
+			Vec3 decalPosition = Vec3::zero;
 
 			//const kbString boneName
 			m_SkelModelsList[0]->GetBoneWorldPosition(footBone, decalPosition);
@@ -693,13 +693,13 @@ void KungFuSnolafComponent::Update_Internal(const float DT) {
 			g_pCannonGame->GetLevelComponent<KungFuLevelComponent>()->ReturnSnolafToPool(this);
 		}
 	}
-	kbVec4 fxDot(1.0f, 0.0f, 0.0f, 0.0f);
+	Vec4 fxDot(1.0f, 0.0f, 0.0f, 0.0f);
 	if (m_CurrentState == KungFuSnolafState::Hug) {
-		fxDot.Set(0.0f, 1.0f, 0.0f, 0.0f);
+		fxDot.set(0.0f, 1.0f, 0.0f, 0.0f);
 	} else if (m_CurrentState == KungFuSnolafState::Dead) {
 		kbDeleteEntityComponent* const pDeleteComp = GetComponent<kbDeleteEntityComponent>();
 		if (pDeleteComp == nullptr) {
-			fxDot.Set(0.0f, 0.0f, 1.0f, 0.0f);
+			fxDot.set(0.0f, 0.0f, 1.0f, 0.0f);
 		}
 	}
 
@@ -719,7 +719,7 @@ void KungFuSnolafComponent::Update_Internal(const float DT) {
 void KungFuSnolafComponent::ResetFromPool() {
 
 	m_AnimSmearDuration = 0.0f;
-	m_AnimSmearVec = kbVec3::zero;
+	m_AnimSmearVec = Vec3::zero;
 	m_AnimSmearStartTime = -1.0f;
 	m_DeathTimer = -1.0f;
 
@@ -735,11 +735,11 @@ void KungFuSnolafComponent::ResetFromPool() {
 	}
 
 	const static kbString clipMapMaskParam("clipMapMask");
-	m_SkelModelsList[0]->SetMaterialParamVector(0, clipMapMaskParam.stl_str(), kbVec4(0.0f, 0.0f, 0.0f, 0.0f));
-	m_SkelModelsList[1]->SetMaterialParamVector(0, clipMapMaskParam.stl_str(), kbVec4(0.0f, 0.0f, 0.0f, 0.0f));
+	m_SkelModelsList[0]->SetMaterialParamVector(0, clipMapMaskParam.stl_str(), Vec4(0.0f, 0.0f, 0.0f, 0.0f));
+	m_SkelModelsList[1]->SetMaterialParamVector(0, clipMapMaskParam.stl_str(), Vec4(0.0f, 0.0f, 0.0f, 0.0f));
 
 	const static kbString smearParam("smearParams");
-	m_SkelModelsList[1]->SetMaterialParamVector(0, smearParam.stl_str(), kbVec4::zero);
+	m_SkelModelsList[1]->SetMaterialParamVector(0, smearParam.stl_str(), Vec4::zero);
 
 	m_Health = 1.0f;
 }
@@ -774,8 +774,8 @@ void KungFuSnolafComponent::TakeDamage(const DealAttackInfo_t<KungFuGame::eAttac
 	m_LastAttackInfo = attackInfo;
 	if (attackInfo.m_AttackType == KungFuGame::Shake) {
 
-		const kbVec3 attackerPos = attackInfo.m_pAttacker->GetOwnerPosition();
-		const kbVec3 ourPos = GetOwnerPosition();
+		const Vec3 attackerPos = attackInfo.m_pAttacker->GetOwnerPosition();
+		const Vec3 ourPos = GetOwnerPosition();
 		if (m_CurrentState == KungFuSnolafState::Hug || m_CurrentState == KungFuSnolafState::Prehug ||
 			(attackerPos - ourPos).length() < KungFuGame::kShakeNBakeRadius) {
 			m_Health = -1.0f;
@@ -815,7 +815,7 @@ void KungFuSnolafComponent::SpawnAndFlingDecapHead() {
 	}
 
 	kbGameEntity* const pDecapHead = g_pGame->CreateEntity(m_DecapitatedHead.GetEntity());
-	const kbVec3 headPos = GetOwnerPosition() + kbVec3(0.0f, 1.75f, 0.0f);
+	const Vec3 headPos = GetOwnerPosition() + Vec3(0.0f, 1.75f, 0.0f);
 	pDecapHead->SetPosition(headPos);
 	pDecapHead->SetOrientation(GetOwnerRotation());
 	pDecapHead->DeleteWhenComponentsAreInactive(true);
@@ -840,7 +840,7 @@ void KungFuSnolafComponent::SpawnAndFlingTopAndBottomHalf() {
 	}
 
 	kbGameEntity* const pTopHalf = g_pGame->CreateEntity(m_TopHalfOfBody.GetEntity());
-	const kbVec3 topPos = GetOwnerPosition() + kbVec3(0.0f, 1.0f, 0.0f);
+	const Vec3 topPos = GetOwnerPosition() + Vec3(0.0f, 1.0f, 0.0f);
 	pTopHalf->SetPosition(topPos);
 	pTopHalf->SetOrientation(GetOwnerRotation());
 	pTopHalf->DeleteWhenComponentsAreInactive(true);
@@ -852,7 +852,7 @@ void KungFuSnolafComponent::SpawnAndFlingTopAndBottomHalf() {
 	}
 
 	kbGameEntity* const pBottomHalf = g_pGame->CreateEntity(m_BottomHalfOfBody.GetEntity());
-	const kbVec3 bottomPos = GetOwnerPosition() + kbVec3(0.0f, 0.2f, 0.0f);
+	const Vec3 bottomPos = GetOwnerPosition() + Vec3(0.0f, 0.2f, 0.0f);
 	pBottomHalf->SetPosition(bottomPos);
 	pBottomHalf->SetOrientation(GetOwnerRotation());
 	pBottomHalf->DeleteWhenComponentsAreInactive(true);

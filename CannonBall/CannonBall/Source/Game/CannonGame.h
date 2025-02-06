@@ -78,7 +78,7 @@ protected:
 	virtual void								PreUpdate_Internal() override;
 	virtual void								PostUpdate_Internal() override;
 
-	virtual kbGameEntity *						CreatePlayer( const int netId, const kbGUID & prefabGUID, const kbVec3 & desiredLocation ) override;
+	virtual kbGameEntity *						CreatePlayer( const int netId, const kbGUID & prefabGUID, const Vec3 & desiredLocation ) override;
 
 	virtual void								HackEditorInit( HWND hwnd, std::vector<class kbEditorEntity *> & editorEntities ) override;
 	virtual void								HackEditorUpdate( const float DT, kbCamera *const pCamera ) override;
@@ -159,9 +159,9 @@ inline bool WasConfirmationButtonPressed( const kbInput_t *const pInput = nullpt
 	return false;
 }
 
-inline kbVec2 GetLeftStick( const kbInput_t *const pInput = nullptr ) {
+inline Vec2 GetLeftStick( const kbInput_t *const pInput = nullptr ) {
 	const kbInput_t & input = ( pInput == nullptr )?( g_pInputManager->GetInput() ) : ( *pInput );
-	kbVec2 retLeftStick = kbVec2::zero;
+	Vec2 retLeftStick = Vec2::zero;
 
 	if ( input.IsKeyPressedOrDown( 'A' ) ) {
 		retLeftStick.x = -1.0f;
@@ -182,9 +182,9 @@ inline kbVec2 GetLeftStick( const kbInput_t *const pInput = nullptr ) {
 	return retLeftStick;
 }
 
-inline kbVec2 GetPrevLeftStick( const kbInput_t *const pInput = nullptr ) {
+inline Vec2 GetPrevLeftStick( const kbInput_t *const pInput = nullptr ) {
 	const kbInput_t & input = ( pInput == nullptr )?( g_pInputManager->GetInput() ) : ( *pInput );
-	kbVec2 leftStick = kbVec2::zero;
+	Vec2 leftStick = Vec2::zero;
 
 	if ( input.IsKeyPressedOrDown( 'A' ) ) {
 		leftStick.x = -1.0f;

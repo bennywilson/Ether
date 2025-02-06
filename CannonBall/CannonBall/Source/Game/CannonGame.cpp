@@ -63,7 +63,7 @@ void CannonGame::InitGame_Internal() {
 	float brightness = (pGameSettings->m_Brightness / 100.0f);
 	brightness = (brightness * 0.5f) + 0.5f;
 
-	shaderParam.SetVec4( "globalTint", kbVec4( 0.0f, 0.0f, 0.0f, 1.0f - brightness ) );
+	shaderParam.SetVec4( "globalTint", Vec4( 0.0f, 0.0f, 0.0f, 1.0f - brightness ) );
 	g_pRenderer->SetGlobalShaderParam( shaderParam );
 
 	const float LOD = (float)pGameSettings->m_VisualQuality / 100.0f;
@@ -175,7 +175,7 @@ void CannonGame::RemoveGameEntity_Internal( kbGameEntity *const pEntity ) {
 /**
  *	CannonGame::CreatePlayer
  */
-kbGameEntity * CannonGame::CreatePlayer( const int netId, const kbGUID & prefabGUID, const kbVec3 & DesiredLocation ) {
+kbGameEntity * CannonGame::CreatePlayer( const int netId, const kbGUID & prefabGUID, const Vec3 & DesiredLocation ) {
 
 	return nullptr;
 }
@@ -291,15 +291,15 @@ void CannonFogComponent::RenderHookCallBack( kbRenderTexture *const pSrc, kbRend
 
 	g_pRenderer->RT_SetRenderTarget( pDst );
 	kbShaderParamOverrides_t shaderParams;
-	shaderParams.SetVec4( "fog_Start_End_Clamp", kbVec4( m_FogStartDist, m_FogEndDist, m_FogClamp, 0.0f ) );
+	shaderParams.SetVec4( "fog_Start_End_Clamp", Vec4( m_FogStartDist, m_FogEndDist, m_FogClamp, 0.0f ) );
 	shaderParams.SetVec4( "fogColor", m_FogColor );
 
-	kbVec3 position;
+	Vec3 position;
 	kbQuat orientation;
 	g_pRenderer->GetRenderViewTransform( nullptr, position, orientation );
 
 	shaderParams.SetVec4( "cameraPosition", position );
-	g_pRenderer->RT_Render2DQuad( kbVec2( 0.5f, 0.5f ), kbVec2( 1.0f, 1.0f ), kbColor::white, m_pShader, &shaderParams );
+	g_pRenderer->RT_Render2DQuad( Vec2( 0.5f, 0.5f ), Vec2( 1.0f, 1.0f ), kbColor::white, m_pShader, &shaderParams );
 }
 
 /**

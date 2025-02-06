@@ -299,16 +299,16 @@ kbBoneMatrix_t kbSkeletalModelComponent::GetBoneRefMatrix(int index) {
 }
 
 /// kbSkeletalModelComponent::GetBoneWorldPosition
-bool kbSkeletalModelComponent::GetBoneWorldPosition(const kbString& boneName, kbVec3& outWorldPosition) {
+bool kbSkeletalModelComponent::GetBoneWorldPosition(const kbString& boneName, Vec3& outWorldPosition) {
 	const int boneIdx = GetBoneIndex(boneName);
 	if (boneIdx == -1 || boneIdx >= m_BindToLocalSpaceMatrices.size()) {
 		return false;
 	}
 
-	kbMat4 worldMatrix;
+	Mat4 worldMatrix;
 	GetOwner()->CalculateWorldMatrix(worldMatrix);
 
-	const kbVec3 localPos = m_pModel->GetRefBoneMatrix(boneIdx).GetOrigin() * m_BindToLocalSpaceMatrices[boneIdx];
+	const Vec3 localPos = m_pModel->GetRefBoneMatrix(boneIdx).GetOrigin() * m_BindToLocalSpaceMatrices[boneIdx];
 	outWorldPosition = worldMatrix.transform_point(localPos);
 	return true;
 }
@@ -320,7 +320,7 @@ bool kbSkeletalModelComponent::GetBoneWorldMatrix(const kbString& boneName, kbBo
 		return false;
 	}
 
-	kbMat4 WeaponMatrix;
+	Mat4 WeaponMatrix;
 	GetOwner()->CalculateWorldMatrix(WeaponMatrix);
 
 	boneMatrix = m_pModel->GetRefBoneMatrix(boneIdx) * m_BindToLocalSpaceMatrices[boneIdx];
@@ -540,16 +540,16 @@ void kbFlingPhysicsComponent::SetEnable_Internal(const bool bEnable) {
 		m_OwnerStartRotation = GetOwnerRotation();
 		m_bOwnerStartSet = true;
 
-		m_Velocity = kbVec3Rand(m_MinLinearVelocity, m_MaxLinearVelocity);
+		m_Velocity = Vec3Rand(m_MinLinearVelocity, m_MaxLinearVelocity);
 
-		kbMat4 worldMatrix;
+		Mat4 worldMatrix;
 		GetOwner()->CalculateWorldMatrix(worldMatrix);
-		const XMMATRIX inverseMat = XMMatrixInverse(nullptr, XMMATRIXFromkbMat4(worldMatrix));
-		worldMatrix = kbMat4FromXMMATRIX(inverseMat);
+		const XMMATRIX inverseMat = XMMatrixInverse(nullptr, XMMATRIXFromMat4(worldMatrix));
+		worldMatrix = Mat4FromXMMATRIX(inverseMat);
 		worldMatrix.transpose_self();
 		m_Velocity = m_Velocity * worldMatrix;
 
-		m_RotationAxis = kbVec3(kbfrand(), kbfrand(), kbfrand());
+		m_RotationAxis = Vec3(kbfrand(), kbfrand(), kbfrand());
 		if (m_RotationAxis.length_sqr() < 0.01f) {
 			m_RotationAxis.set(1.0f, 0.0f, 0.0f);
 		} else {
@@ -573,7 +573,7 @@ void kbFlingPhysicsComponent::Update_Internal(const float dt) {
 	const float curTime = g_GlobalTimer.TimeElapsedSeconds();
 	const float elapsedDeathTime = curTime - m_FlingStartTime;
 
-	kbVec3 newPos = GetOwnerPosition();
+	Vec3 newPos = GetOwnerPosition();
 	newPos.x += m_Velocity.x * dt;
 	newPos.y = m_OwnerStartPos.y + m_Velocity.y * elapsedDeathTime - (0.5f * -m_Gravity.y * elapsedDeathTime * elapsedDeathTime);
 	newPos.z += m_Velocity.z * dt;

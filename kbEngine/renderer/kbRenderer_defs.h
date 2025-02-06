@@ -34,18 +34,18 @@ enum ECullMode {
 
 struct vertexColorLayout {
 
-	kbVec3 position;
+	Vec3 position;
 	byte color[4];
 
-	void SetColor( const kbVec4 & inColor ) {
+	void SetColor( const Vec4 & inColor ) {
 		color[0] = (byte) ( inColor.z * 255.0f );
 		color[1] = (byte) ( inColor.y * 255.0f );
 		color[2] = (byte) ( inColor.x * 255.0f );
 		color[3] = (byte) ( inColor.w * 255.0f );
 	}
 
-	kbVec4 GetColor() const {
-		kbVec4 outColor( ( float ) color[2], ( float ) color[1], ( float ) color[0], ( float ) color[3] );
+	Vec4 GetColor() const {
+		Vec4 outColor( ( float ) color[2], ( float ) color[1], ( float ) color[0], ( float ) color[3] );
 		outColor.x = outColor.x / 255.0f;
 		outColor.y = outColor.y / 255.0f;
 		outColor.z = outColor.z / 255.0f;
@@ -57,18 +57,18 @@ struct vertexColorLayout {
 
 struct kbParticleVertex {
 
-	void SetColor( const kbVec4 & inColor ) {
+	void SetColor( const Vec4 & inColor ) {
 		color[0] = (byte) ( inColor.x * 255.0f );
 		color[1] = (byte) ( inColor.y * 255.0f );
 		color[2] = (byte) ( inColor.z * 255.0f );
 		color[3] = (byte) ( inColor.w * 255.0f );
 	}
 
-	kbVec3	position;
-	kbVec2  uv;
+	Vec3	position;
+	Vec2  uv;
 	byte	color[4];
-	kbVec2	size;
-	kbVec3	direction;
+	Vec2	size;
+	Vec3	direction;
 	float	rotation;
 	byte	billboardType[4];
 };
@@ -81,7 +81,7 @@ struct kbBoneMatrix_t {
 
 	kbBoneMatrix_t() { }
 
-	explicit kbBoneMatrix_t( const kbQuat & quat, const kbVec3 & pos ) {
+	explicit kbBoneMatrix_t( const kbQuat & quat, const Vec3 & pos ) {
 		SetFromQuat( quat );
 		m_Axis[3] = pos;
 	}
@@ -93,10 +93,10 @@ struct kbBoneMatrix_t {
 		m_Axis[3].set( 0.0f, 0.0f, 0.0f );
 	}
 
-	const kbVec3& operator[]( const int index ) const { return GetAxis( index ); }
-	const kbVec3 & GetAxis( const int axisIndex ) const { if ( axisIndex < 0 || axisIndex > 3 ) { blk::error("Doh!"); } return m_Axis[axisIndex]; }
-	const kbVec3 & GetOrigin() const { return m_Axis[3]; }
-	void SetAxis( const int axisIndex, const kbVec3 & inVec ) { if ( axisIndex < 0 || axisIndex > 3 ) { blk::error("Doh!"); } m_Axis[axisIndex] = inVec; }
+	const Vec3& operator[]( const int index ) const { return GetAxis( index ); }
+	const Vec3 & GetAxis( const int axisIndex ) const { if ( axisIndex < 0 || axisIndex > 3 ) { blk::error("Doh!"); } return m_Axis[axisIndex]; }
+	const Vec3 & GetOrigin() const { return m_Axis[3]; }
+	void SetAxis( const int axisIndex, const Vec3 & inVec ) { if ( axisIndex < 0 || axisIndex > 3 ) { blk::error("Doh!"); } m_Axis[axisIndex] = inVec; }
 	void SetFromQuat( const kbQuat & srcQuat );
 
 	void TransposeUpper();
@@ -104,9 +104,9 @@ struct kbBoneMatrix_t {
 	void Invert();
 
 	void operator*=( const kbBoneMatrix_t & op2 );
-	void operator*=( const kbMat4 & op2 );
+	void operator*=( const Mat4 & op2 );
 
-	kbVec3 m_Axis[4];
+	Vec3 m_Axis[4];
 };
 
 /**
@@ -141,8 +141,8 @@ struct kbShaderParamOverrides_t {
             SHADER_TEX,
         } m_Type;
 
-		std::vector<kbMat4> m_Mat4List;
-		std::vector<kbVec4> m_Vec4List;
+		std::vector<Mat4> m_Mat4List;
+		std::vector<Vec4> m_Vec4List;
 
         kbShaderParam_t() : m_pTexture( nullptr ), m_pRenderTexture( nullptr ) { }
         const class kbTexture *			m_pTexture;
@@ -169,38 +169,38 @@ struct kbShaderParamOverrides_t {
         return m_ParamOverrides[m_ParamOverrides.size() - 1];
     }
 
-    void SetMat4( const std::string & varName, const kbMat4 & newMat ) {
+    void SetMat4( const std::string & varName, const Mat4 & newMat ) {
         kbShaderParam_t & newParam = AllocateParam( varName );
         newParam.m_VarName = varName;
 		newParam.m_Mat4List.clear();
         newParam.m_Mat4List.push_back( newMat );
         newParam.m_Type = kbShaderParam_t::SHADER_MAT4;
-        newParam.m_VarSizeBytes = sizeof(kbMat4);
+        newParam.m_VarSizeBytes = sizeof(Mat4);
     }
 
-	void SetMat4List( const std::string & varName, const std::vector<kbMat4> & list ) {
+	void SetMat4List( const std::string & varName, const std::vector<Mat4> & list ) {
         kbShaderParam_t & newParam = AllocateParam( varName );
         newParam.m_VarName = varName;
         newParam.m_Mat4List = list;
         newParam.m_Type = kbShaderParam_t::SHADER_MAT4_LIST;
-        newParam.m_VarSizeBytes = sizeof(kbVec4);
+        newParam.m_VarSizeBytes = sizeof(Vec4);
 	}
 
-    void SetVec4( const std::string & varName, const kbVec4 & newVec ) {
+    void SetVec4( const std::string & varName, const Vec4 & newVec ) {
         kbShaderParam_t & newParam = AllocateParam( varName );
         newParam.m_VarName = varName;
 		newParam.m_Vec4List.clear();
         newParam.m_Vec4List.push_back( newVec );
         newParam.m_Type = kbShaderParam_t::SHADER_VEC4;
-        newParam.m_VarSizeBytes = sizeof(kbVec4);
+        newParam.m_VarSizeBytes = sizeof(Vec4);
     }
 
-	void SetVec4List( const std::string & varName, const std::vector<kbVec4> & list ) {
+	void SetVec4List( const std::string & varName, const std::vector<Vec4> & list ) {
         kbShaderParam_t & newParam = AllocateParam( varName );
         newParam.m_VarName = varName;
         newParam.m_Vec4List = list;
         newParam.m_Type = kbShaderParam_t::SHADER_VEC4_LIST;
-        newParam.m_VarSizeBytes = sizeof(kbVec4);
+        newParam.m_VarSizeBytes = sizeof(Vec4);
 	}
 
     void SetTexture( const std::string & varName, const kbTexture *const pTexture ) {
@@ -248,9 +248,9 @@ public:
 	ERenderPass									m_RenderPass;
 	ECullMode									m_CullMode;
 	float										m_RenderOrderBias;
-	kbVec3										m_Position;
+	Vec3										m_Position;
 	kbQuat										m_Orientation;
-	kbVec3										m_Scale;
+	Vec3										m_Scale;
 	uint										m_EntityId;
 
 	int											m_VertBufferStartIndex;
@@ -283,9 +283,9 @@ public:
 													}
 
 	const class kbLightComponent *				m_pLightComponent;
-	kbVec3										m_Position;
+	Vec3										m_Position;
 	kbQuat										m_Orientation;
-	kbVec4										m_Color;
+	Vec4										m_Color;
 	float										m_Radius;
 	float										m_Length;
 	float										m_CascadedShadowSplits[4];
@@ -314,7 +314,7 @@ public:
 													m_pLightShaftsComponent( nullptr ),
 													m_pTexture( nullptr ),
 													m_Color(0.0f, 0.0f, 0.0f, 1.0f ),
-													m_Pos( kbVec3::zero ),
+													m_Pos( Vec3::zero ),
 													m_Rotation( kbQuat::zero ),
 													m_Width( 0.0f ),
 													m_Height( 0.0f ),
@@ -329,7 +329,7 @@ public:
 	const class kbLightShaftsComponent *		m_pLightShaftsComponent;
 	class kbTexture *							m_pTexture;
 	kbColor										m_Color;
-	kbVec3										m_Pos;
+	Vec3										m_Pos;
 	kbQuat										m_Rotation;
 	float										m_Width;
 	float										m_Height;

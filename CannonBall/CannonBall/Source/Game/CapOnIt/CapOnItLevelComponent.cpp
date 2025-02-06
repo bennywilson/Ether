@@ -60,7 +60,7 @@ private:
 			RequestStateChange( KungFuGame::Intro );
 
 			if ( g_SkipCheat == KungFuGame::Skip_ToEnd ) {
-				pSheep->SetOwnerPosition( kbVec3( 77.10445f, -52.6362f, KungFuGame::kOutroStartZ ) );
+				pSheep->SetOwnerPosition( Vec3( 77.10445f, -52.6362f, KungFuGame::kOutroStartZ ) );
 			}
 			return;
 		}
@@ -69,7 +69,7 @@ private:
 
 		static const kbString JumpingJacks_Anim( "JumpingJacks" );
 		pSheep->PlayAnimation( JumpingJacks_Anim, 0.15f );
-		pSheep->SetTargetFacingDirection( kbVec3( -1.0f, 0.0f, -1.0f ).Normalized() );
+		pSheep->SetTargetFacingDirection( Vec3( -1.0f, 0.0f, -1.0f ).Normalized() );
 		pSheep->SetOwnerPosition( KungFuGame::kSheepStartPos );*/
 	}
 

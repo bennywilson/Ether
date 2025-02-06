@@ -43,8 +43,8 @@ public:
 	void RegisterEvent(kbWidget* const widget, const widgetCBType_t eventType) { m_EventReceivers[eventType].push_back(widget); }
 	void BroadcastEvent(const class widgetCBObject& cbObject);
 		 
-	void SetMainCameraPos(const kbVec3& newCamPos);
-	kbVec3 GetMainCameraPos() const;
+	void SetMainCameraPos(const Vec3& newCamPos);
+	Vec3 GetMainCameraPos() const;
 
 	void SetMainCameraRot(const kbQuat& newCamRot);
 	kbQuat GetMainCameraRot() const;

@@ -1,10 +1,10 @@
-/// renderer_d3d12.cpp
+/// Renderer_Dx12.cpp
 ///
 /// 2025 blk 1.0
 
 #include <d3d12sdklayers.h>
 #include "kbCore.h"
-#include "renderer_d3d12.h"
+#include "Renderer_Dx12.h"
 #include <dxgi1_6.h>
 #include <d3dcompiler.h>
 #include "d3dx12.h"
@@ -13,8 +13,8 @@
 
 using namespace std;
 
-/// Renderer_D3D12::initialize
-void Renderer_D3D12::initialize(HWND hwnd, const uint32_t frame_width, const uint32_t frame_height) {
+/// Renderer_Dx12::initialize
+void Renderer_Dx12::initialize(HWND hwnd, const uint32_t frame_width, const uint32_t frame_height) {
 	UINT dxgiFactoryFlags = 0;
 
 	m_view_port = CD3DX12_VIEWPORT(0.f, 0.f, (float)frame_width, (float)frame_height);
@@ -88,7 +88,7 @@ void Renderer_D3D12::initialize(HWND hwnd, const uint32_t frame_width, const uin
 	srv_heap_desc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV;
 	srv_heap_desc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;
 	check_result(m_device->CreateDescriptorHeap(&srv_heap_desc, IID_PPV_ARGS(&m_cbv_srv_heap)));
-	m_cbv_srv_heap->SetName(L"Renderer_D3D12::m_cbv_srv_heap");
+	m_cbv_srv_heap->SetName(L"Renderer_Dx12::m_cbv_srv_heap");
 
 	// Sampler heap
 	D3D12_DESCRIPTOR_HEAP_DESC sampler_heap_desc = {};
@@ -96,7 +96,7 @@ void Renderer_D3D12::initialize(HWND hwnd, const uint32_t frame_width, const uin
 	sampler_heap_desc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_SAMPLER;
 	sampler_heap_desc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;
 	check_result(m_device->CreateDescriptorHeap(&sampler_heap_desc, IID_PPV_ARGS(&m_sampler_heap)));
-	m_sampler_heap->SetName(L"Renderer_D3D12::m_sampler_heap");
+	m_sampler_heap->SetName(L"Renderer_Dx12::m_sampler_heap");
 
 	// Frame resources
 	CD3DX12_CPU_DESCRIPTOR_HANDLE rtv_handle(m_rtv_heap->GetCPUDescriptorHandleForHeapStart());
@@ -151,16 +151,16 @@ void Renderer_D3D12::initialize(HWND hwnd, const uint32_t frame_width, const uin
 	auto pipe = (RenderPipeline_D3D12*)load_pipeline("test_shader", L"C:/projects/Ether/dx12_updgrade/GameBase/assets/shaders/test_shader.hlsl");
 	todo_create_texture();
 
-	blk::log("Renderer_D3D12 initialized");
+	blk::log("Renderer_Dx12 initialized");
 }
 
-/// Renderer_D3D12::~Renderer_D3D12
-Renderer_D3D12::~Renderer_D3D12() {
+/// Renderer_Dx12::~Renderer_Dx12
+Renderer_Dx12::~Renderer_Dx12() {
 	shut_down();	// function is virtual but called in ~Renderer which is UB
 }
 
-/// Renderer_D3D12::shut_down
-void Renderer_D3D12::shut_down() {
+/// Renderer_Dx12::shut_down
+void Renderer_Dx12::shut_down() {
 	Renderer::shut_down();
 
 	const UINT64 fence = m_fence_value;
@@ -201,8 +201,8 @@ void Renderer_D3D12::shut_down() {
 	m_device.Reset();
 }
 
-/// Renderer_D3D12::get_hardware_adapter
-void Renderer_D3D12::get_hardware_adapter(
+/// Renderer_Dx12::get_hardware_adapter
+void Renderer_Dx12::get_hardware_adapter(
 	IDXGIFactory1* const factory,
 	IDXGIAdapter1** const out_adapter,
 	bool request_high_performance) {
@@ -254,30 +254,30 @@ void Renderer_D3D12::get_hardware_adapter(
 	*out_adapter = adapter.Detach();
 }
 
-/// Renderer_D3D12::create_render_buffer_internal
-RenderBuffer* Renderer_D3D12::create_render_buffer_internal() {
+/// Renderer_Dx12::create_render_buffer_internal
+RenderBuffer* Renderer_Dx12::create_render_buffer_internal() {
 	return new RenderBuffer_D3D12();
 }
 
 struct Constant {
-	kbMat4 mvp;
-	kbMat4 padding[3];
+	Mat4 mvp;
+	Mat4 padding[3];
 };
 Constant buffer;
 Constant* pBuffer;
 
-/// Renderer_D3D12::render
-void Renderer_D3D12::render() {
+/// Renderer_Dx12::render
+void Renderer_Dx12::render() {
 	// Update constant buffer
 
-	kbMat4 mvp;
+	Mat4 mvp;
 	mvp.make_identity();
 	//mvp.MakeScale
 	//m_camera_projection
-	pBuffer->mvp[0].Set(1.31353f * 0.5f, 0.f, 0.f, -0.5f);
-	pBuffer->mvp[1].Set(0.f, 2.14451f * 0.5f, 0.f, -3.f);
-	pBuffer->mvp[2].Set(0.f, 0.f, 1.00005f * 0.5f, 4.5f);
-	pBuffer->mvp[3].Set(0.f, 0.f, 1.f, 5.f);
+	pBuffer->mvp[0].set(1.31353f * 0.5f, 0.f, 0.f, -0.5f);
+	pBuffer->mvp[1].set(0.f, 2.14451f * 0.5f, 0.f, -3.f);
+	pBuffer->mvp[2].set(0.f, 0.f, 1.00005f * 0.5f, 4.5f);
+	pBuffer->mvp[3].set(0.f, 0.f, 1.f, 5.f);
 
 	pBuffer->padding[0].make_identity();
 	pBuffer->padding[1].make_identity();
@@ -350,8 +350,8 @@ void Renderer_D3D12::render() {
 	m_frame_index = m_swap_chain->GetCurrentBackBufferIndex();
 }
 
-/// Renderer_D3D12::create_pipeline
-RenderPipeline* Renderer_D3D12::create_pipeline(const wstring& path) {
+/// Renderer_Dx12::create_pipeline
+RenderPipeline* Renderer_Dx12::create_pipeline(const wstring& path) {
 #if defined(_DEBUG)
 	// Enable better shader debugging with the graphics debugging tools.
 	UINT compileFlags = D3DCOMPILE_DEBUG | D3DCOMPILE_SKIP_OPTIMIZATION;
@@ -401,8 +401,8 @@ RenderPipeline* Renderer_D3D12::create_pipeline(const wstring& path) {
 	return (RenderPipeline*)pipe;
 }
 
-/// Renderer_D3D12::todo_create_texture
-void Renderer_D3D12::todo_create_texture() {
+/// Renderer_Dx12::todo_create_texture
+void Renderer_Dx12::todo_create_texture() {
 	check_result(m_command_allocator->Reset());
 	check_result(m_command_list->Reset(m_command_allocator.Get(), nullptr));
 

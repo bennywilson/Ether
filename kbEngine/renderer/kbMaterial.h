@@ -48,7 +48,7 @@ struct kbShaderVarBindings_t {
 	size_t m_ConstantBufferSizeBytes;
 
 	struct binding_t {
-		binding_t(const std::string& inName, const size_t offset, const bool bHasDefaultValue, const kbVec4 defaultValue, const bool bIsUserDefinedVar) :
+		binding_t(const std::string& inName, const size_t offset, const bool bHasDefaultValue, const Vec4 defaultValue, const bool bIsUserDefinedVar) :
 			m_VarName(inName),
 			m_VarByteOffset(offset),
 			m_DefaultValue(defaultValue),
@@ -57,7 +57,7 @@ struct kbShaderVarBindings_t {
 
 		std::string	m_VarName;
 		size_t m_VarByteOffset;
-		kbVec4 m_DefaultValue;
+		Vec4 m_DefaultValue;
 		bool m_bHasDefaultValue;
 		bool m_bIsUserDefinedVar;
 	};
@@ -104,9 +104,9 @@ public:
 	void SetVertexShaderFunctionName(const std::string& inName) { m_VertexShaderFunctionName = inName; }
 	void SetPixelShaderFunctionName(const std::string& inName) { m_PixelShaderFunctionName = inName; }
 
-	void SetGlobalShaderParams(const std::vector<kbVec4>& shaderParams) { m_GlobalShaderParams_GameThread = shaderParams; }
+	void SetGlobalShaderParams(const std::vector<Vec4>& shaderParams) { m_GlobalShaderParams_GameThread = shaderParams; }
 	void CommitShaderParams();
-	const std::vector<kbVec4>& GetGlobalShaderParams() const { return m_GlobalShaderParams_RenderThread; }	// todo: check if render thread
+	const std::vector<Vec4>& GetGlobalShaderParams() const { return m_GlobalShaderParams_RenderThread; }	// todo: check if render thread
 
 	const kbShaderVarBindings_t& GetShaderVarBindings() const { return m_ShaderVarBindings; }
 
@@ -140,8 +140,8 @@ private:
 	std::string	m_VertexShaderFunctionName;
 	std::string	m_PixelShaderFunctionName;
 
-	std::vector<kbVec4>	m_GlobalShaderParams_GameThread;
-	std::vector<kbVec4>	m_GlobalShaderParams_RenderThread;
+	std::vector<Vec4>	m_GlobalShaderParams_GameThread;
+	std::vector<Vec4>	m_GlobalShaderParams_RenderThread;
 
 	kbShaderVarBindings_t m_ShaderVarBindings;
 

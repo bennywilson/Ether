@@ -887,7 +887,7 @@ void kbPropertiesTab::RefreshProperty(kbEditorEntity* const pEntity, const std::
 
 	case KBTYPEINFO_VECTOR:
 	{
-		kbVec3& vec = *(kbVec3*)byteOffsetToVar;
+		Vec3& vec = *(Vec3*)byteOffsetToVar;
 
 		Fl_Input* const X_Input = new Fl_Input(xPos + propertyNamePixelWidth, yPos, threeComponentFieldWidth, inputHeight);
 		Fl_Input* const Y_Input = new Fl_Input(xPos + propertyNamePixelWidth + threeComponentFieldWidth, yPos, threeComponentFieldWidth, inputHeight);
@@ -922,7 +922,7 @@ void kbPropertiesTab::RefreshProperty(kbEditorEntity* const pEntity, const std::
 
 	case KBTYPEINFO_VECTOR4:
 	{
-		kbVec4& color = *(kbVec4*)byteOffsetToVar;
+		Vec4& color = *(Vec4*)byteOffsetToVar;
 
 		Fl_Input* X_Input = new Fl_Input(xPos + propertyNamePixelWidth, yPos, fourComponentFieldWidth, inputHeight);
 		Fl_Input* Y_Input = new Fl_Input(xPos + propertyNamePixelWidth + fourComponentFieldWidth, yPos, fourComponentFieldWidth, inputHeight);

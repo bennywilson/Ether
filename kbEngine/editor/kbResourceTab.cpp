@@ -800,18 +800,18 @@ void kbResourceTab::ZoomToEntityCB(Fl_Widget* pWidget, void* pUserData) {
 
 	const float zoomDist = 75.0f;
 
-	const kbVec3 camPos = g_Editor->GetMainCameraPos();
-	kbVec3 vecTo = (camPos - pEditorEntity->GetPosition());
+	const Vec3 camPos = g_Editor->GetMainCameraPos();
+	Vec3 vecTo = (camPos - pEditorEntity->GetPosition());
 	vecTo.y = 0;
 	if (vecTo.length() < zoomDist) {
 		return;
 	}
 
-	const kbVec3 finalPos = pEditorEntity->GetPosition() + vecTo.normalize_safe() * zoomDist;
+	const Vec3 finalPos = pEditorEntity->GetPosition() + vecTo.normalize_safe() * zoomDist;
 	g_Editor->SetMainCameraPos(finalPos);
 
-	kbMat4 newRot;
-	newRot.look_at(finalPos, pEditorEntity->GetPosition(), kbVec3::up);
+	Mat4 newRot;
+	newRot.look_at(finalPos, pEditorEntity->GetPosition(), Vec3::up);
 	newRot.inverse_fast();
 	g_Editor->SetMainCameraRot(kbQuatFromMatrix(newRot));
 }

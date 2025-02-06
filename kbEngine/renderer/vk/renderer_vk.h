@@ -1,4 +1,4 @@
-/// renderer_vk.h	
+/// Renderer_Vk.h	
 ///
 /// 2025 blk 1.0
 
@@ -12,10 +12,10 @@
 		blk::error("Fatal : VkResult is \" %d \" in %s at line %d",res, __FILE__, __LINE__); \
 	}
 
-///	Renderer_VK
-class Renderer_VK : public Renderer {
+///	Renderer_Vk
+class Renderer_Vk : public Renderer {
 public:
-	virtual ~Renderer_VK();
+	virtual ~Renderer_Vk();
 
 	virtual void shut_down() override;
 

@@ -1,17 +1,14 @@
-//===================================================================================================
-// CannonPlayer.cpp
-//
-// 2019 kbEngine 2.0
-//===================================================================================================
+/// CannonPlayer.cpp
+///
+// 2019-2025 blk 1.0
+
 #include <math.h>
 #include "CannonGame.h"
 #include "CannonPlayer.h"
 #include "kbEditor.h"
 #include "kbEditorEntity.h"
 
-/**
- *	CannonActorComponent::Constructor
- */
+/// CannonActorComponent::Constructor
 void CannonActorComponent::Constructor() {
 	m_MaxRunSpeed = 3.0f;
 	m_MaxRotateSpeed = 15.0f;
@@ -20,22 +17,20 @@ void CannonActorComponent::Constructor() {
 	m_TargetFacingDirection.set(0.0f, 0.0f, -1.0f);
 
 	m_AnimSmearDuration = 0.1f;
-	m_AnimSmearVec.Set(0.0f, 0.0f, 0.0f, 0.0f);
+	m_AnimSmearVec.set(0.0f, 0.0f, 0.0f, 0.0f);
 	m_AnimSmearStartTime = -1.0f;
 
 	m_LastVOTime = 0.0f;
-	m_OverridenFXMaskParams.Set(-1.0f, -1.0f, -1.0f, -1.0f);
+	m_OverridenFXMaskParams.set(-1.0f, -1.0f, -1.0f, -1.0f);
 
 	m_bIsPlayer = false;
 }
 
-/**
- *	CannonActorComponent::SetEnable_Internal
- */
+/// CannonActorComponent::SetEnable_Internal
 void CannonActorComponent::SetEnable_Internal(const bool bEnable) {
 	Super::SetEnable_Internal(bEnable);
 
-	m_OverridenFXMaskParams.Set(-1.0f, -1.0f, -1.0f, -1.0f);
+	m_OverridenFXMaskParams.set(-1.0f, -1.0f, -1.0f, -1.0f);
 
 	if (bEnable) {
 		m_SkelModelsList.clear();
@@ -55,7 +50,7 @@ void CannonActorComponent::SetEnable_Internal(const bool bEnable) {
 
 			m_SkelModelsList[0]->RegisterSyncSkelModel(m_SkelModelsList[1]);
 			const static kbString smearParam("smearParams");
-			m_SkelModelsList[1]->SetMaterialParamVector(0, smearParam.stl_str(), kbVec4::zero);
+			m_SkelModelsList[1]->SetMaterialParamVector(0, smearParam.stl_str(), Vec4::zero);
 		}
 	} else {
 		for (int i = 0; i < m_SkelModelsList.size(); i++) {
@@ -69,16 +64,14 @@ void CannonActorComponent::SetEnable_Internal(const bool bEnable) {
 	}
 }
 
-/**
- *	CannonActorComponent::Update_Internal
- */
+/// CannonActorComponent::Update_Internal
 void CannonActorComponent::Update_Internal(const float DT) {
 	Super::Update_Internal(DT);
 
 	const kbQuat curRot = GetOwnerRotation();
 
-	kbMat4 facingMat;
-	facingMat.look_at(GetOwnerPosition(), GetOwnerPosition() + m_TargetFacingDirection, kbVec3::up);
+	Mat4 facingMat;
+	facingMat.look_at(GetOwnerPosition(), GetOwnerPosition() + m_TargetFacingDirection, Vec3::up);
 
 	const kbQuat targetRot = kbQuatFromMatrix(facingMat);
 	GetOwner()->SetOrientation(curRot.Slerp(curRot, targetRot, DT * m_MaxRotateSpeed));
@@ -89,19 +82,17 @@ void CannonActorComponent::Update_Internal(const float DT) {
 		if (elapsedTime > m_AnimSmearDuration) {
 			m_AnimSmearStartTime = -1.0f;
 			const static kbString smearParam("smearParams");
-			m_SkelModelsList[1]->SetMaterialParamVector(0, smearParam.stl_str(), kbVec4::zero);
+			m_SkelModelsList[1]->SetMaterialParamVector(0, smearParam.stl_str(), Vec4::zero);
 		} else {
 			const float strength = 1.0f - kbClamp(elapsedTime / m_AnimSmearDuration, 0.0f, 1.0f);
 			const static kbString smearParam("smearParams");
-			const kbVec4 smearVec = strength * m_AnimSmearVec;
+			const Vec4 smearVec = strength * m_AnimSmearVec;
 			m_SkelModelsList[1]->SetMaterialParamVector(0, smearParam.stl_str(), smearVec);
 		}
 	}
 }
 
-/**
- *	CannonActorComponent::PlayAnimation
- */
+/// CannonActorComponent::PlayAnimation
 void CannonActorComponent::PlayAnimation(const kbString animName, const float animBlendInLen, const bool bRestartIfAlreadyPlaying, const kbString nextAnimName, const float nextAnimBlendInLen) {
 
 	if (m_SkelModelsList.size() > 0) {
@@ -109,9 +100,7 @@ void CannonActorComponent::PlayAnimation(const kbString animName, const float an
 	}
 }
 
-/**
- *	CannonActorComponent::HasFinishedAnim
- */
+/// CannonActorComponent::HasFinishedAnim
 bool CannonActorComponent::HasFinishedAnim(const kbString animName) const {
 
 	if (m_SkelModelsList.size() == 0) {
@@ -135,9 +124,7 @@ bool CannonActorComponent::HasFinishedAnim(const kbString animName) const {
 	return m_SkelModelsList[0]->HasFinishedAnimation();
 }
 
-/**
- *	CannonActorComponent::SetAnimationTimeScaleMultiplier
- */
+/// CannonActorComponent::SetAnimationTimeScaleMultiplier
 void CannonActorComponent::SetAnimationTimeScaleMultiplier(const kbString animName, const float multiplier) {
 	if (m_SkelModelsList.size() < 2) {
 		blk::warning("KungFuSheepComponent::SetAnimationTimeMultiplier() - Needs at least 2 skeletal models");
@@ -149,25 +136,19 @@ void CannonActorComponent::SetAnimationTimeScaleMultiplier(const kbString animNa
 	m_SkelModelsList[1]->SetAnimationTimeScaleMultiplier(animName, multiplier);
 }
 
-/**
- *	CannonActorComponent::ApplyAnimSmear
- */
-void CannonActorComponent::ApplyAnimSmear(const kbVec3 smearVec, const float durationSec) {
+/// CannonActorComponent::ApplyAnimSmear
+void CannonActorComponent::ApplyAnimSmear(const Vec3 smearVec, const float durationSec) {
 	m_AnimSmearStartTime = g_GlobalTimer.TimeElapsedSeconds();
 	m_AnimSmearVec = smearVec;
 	m_AnimSmearDuration = durationSec;
 }
 
-/**
- *	CannonActorComponent::SetOverrideFXMaskParameters
- */
-void CannonActorComponent::SetOverrideFXMaskParameters(const kbVec4& fxParams) {
+/// CannonActorComponent::SetOverrideFXMaskParameters
+void CannonActorComponent::SetOverrideFXMaskParameters(const Vec4& fxParams) {
 	m_OverridenFXMaskParams = fxParams;
 }
 
-/**
- *	CannonActorComponent::IsPlayingAnim
- */
+/// CannonActorComponent::IsPlayingAnim
 bool CannonActorComponent::IsPlayingAnim(const kbString animName) const {
 	if (m_SkelModelsList.size() == 0) {
 		return false;
@@ -176,9 +157,7 @@ bool CannonActorComponent::IsPlayingAnim(const kbString animName) const {
 	return m_SkelModelsList[0]->IsPlaying(animName);
 }
 
-/**
- *	CannonActorComponent::PlayAttackVO
- */
+/// CannonActorComponent::PlayAttackVO
 void CannonActorComponent::PlayAttackVO(const int pref) {
 
 	if (m_AttackVO.size() == 0) {
@@ -194,11 +173,8 @@ void CannonActorComponent::PlayAttackVO(const int pref) {
 	m_AttackVO[rand() % m_AttackVO.size()].PlaySoundAtPosition(GetOwnerPosition());
 }
 
-/**
- *	CannonCameraComponent::Constructor
- */
+/// CannonActorComponent::Constructor
 void CannonCameraComponent::Constructor() {
-
 	// Editor
 	m_NearPlane = 1.0f;
 	m_FarPlane = 20000.0f;		// TODO - NEAR/FAR PLANE - Tie into renderer properly
@@ -222,15 +198,13 @@ void CannonCameraComponent::Constructor() {
 	m_LookAtOffsetTarget.set(0.0f, 0.0f, 0.0f);
 
 	m_CameraShakeStartTime = -1.0f;
-	m_CameraShakeStartingOffset.Set(0.0f, 0.0f);
+	m_CameraShakeStartingOffset.set(0.0f, 0.0f);
 	m_CameraShakeDuration = 0.0f;
-	m_CameraShakeAmplitude.Set(0.0f, 0.0f);
-	m_CameraShakeFrequency.Set(0.0f, 0.0f);
+	m_CameraShakeAmplitude.set(0.0f, 0.0f);
+	m_CameraShakeFrequency.set(0.0f, 0.0f);
 }
 
-/**
- *	CannonCameraComponent::SetEnable_Internal
- */
+/// CannonActorComponent::SetEnable_Internal
 void CannonCameraComponent::SetEnable_Internal(const bool bEnable) {
 	Super::SetEnable_Internal(bEnable);
 
@@ -238,9 +212,7 @@ void CannonCameraComponent::SetEnable_Internal(const bool bEnable) {
 	g_pRenderer->SetNearFarPlane(nullptr, m_NearPlane, m_FarPlane);
 }
 
-/**
- *	CannonCameraComponent::SetTarget
- */
+/// CannonActorComponent::SetTarget
 void CannonCameraComponent::SetTarget(const kbGameEntity* const pTarget, const float blendRate) {
 	m_SwitchTargetBlendSpeed = blendRate;
 
@@ -257,10 +229,8 @@ void CannonCameraComponent::SetTarget(const kbGameEntity* const pTarget, const f
 	m_pTarget = pTarget;
 }
 
-/**
- *	CannonCameraComponent::SetPositionOffset
- */
-void CannonCameraComponent::SetPositionOffset(const kbVec3& posOffset, const float blendRate) {
+/// CannonActorComponent::SetPositionOffset
+void CannonCameraComponent::SetPositionOffset(const Vec3& posOffset, const float blendRate) {
 
 	if (blendRate < 0.0f) {
 		m_SwitchPosOffsetCurT = 1.0f;
@@ -272,10 +242,8 @@ void CannonCameraComponent::SetPositionOffset(const kbVec3& posOffset, const flo
 	}
 }
 
-/**
- *	CannonCameraComponent::SetLookAtOffset
- */
-void CannonCameraComponent::SetLookAtOffset(const kbVec3& lookAtOffset, const float blendRate) {
+/// CannonActorComponent::SetLookAtOffset
+void CannonCameraComponent::SetLookAtOffset(const Vec3& lookAtOffset, const float blendRate) {
 
 	if (blendRate < 0.0f) {
 		m_SwitchLookAtOffsetCurT = 1.0f;
@@ -287,25 +255,21 @@ void CannonCameraComponent::SetLookAtOffset(const kbVec3& lookAtOffset, const fl
 	}
 }
 
-/**
- *	CannonCameraComponent::StartCameraShake
- */
+/// CannonActorComponent::StartCameraShake
 void CannonCameraComponent::StartCameraShake(const CannonCameraShakeComponent* const pCameraShakeComponent) {
 
 	m_CameraShakeStartTime = g_GlobalTimer.TimeElapsedSeconds();
-	m_CameraShakeStartingOffset = kbVec2Rand(-m_CameraShakeAmplitude, m_CameraShakeAmplitude);
+	m_CameraShakeStartingOffset = Vec2Rand(-m_CameraShakeAmplitude, m_CameraShakeAmplitude);
 	m_CameraShakeDuration = pCameraShakeComponent->GetDuration();
 	m_CameraShakeAmplitude = pCameraShakeComponent->GetAmplitude();
 	m_CameraShakeFrequency = pCameraShakeComponent->GetFrequency();
 }
 
-/**
- *	CannonCameraComponent::Update_Internal
- */
+/// CannonActorComponent::Update_Internal
 void CannonCameraComponent::Update_Internal(const float DeltaTime) {
 	Super::Update_Internal(DeltaTime);
 
-	kbVec2 camShakeOffset(0.0f, 0.0f);
+	Vec2 camShakeOffset(0.0f, 0.0f);
 	if (m_CameraShakeStartTime > 0.0f) {
 		const float elapsedTime = g_GlobalTimer.TimeElapsedSeconds() - m_CameraShakeStartTime;
 		if (elapsedTime > m_CameraShakeDuration) {
@@ -326,14 +290,14 @@ void CannonCameraComponent::Update_Internal(const float DeltaTime) {
 			if (m_pTarget != nullptr) {
 
 				// Target blend to
-				kbVec3 targetPosition = m_pTarget->GetPosition();
+				Vec3 targetPosition = m_pTarget->GetPosition();
 				if (m_SwitchTargetCurT < 1.0f) {
 					m_SwitchTargetCurT += m_SwitchTargetBlendSpeed * g_pGame->GetFrameDT();
 					targetPosition = kbLerp(m_SwitchTargetStartPos, targetPosition, kbSaturate(m_SwitchTargetCurT));
 				}
 
 				// LookAt offset blend
-				kbVec3 lookAtOffset = m_LookAtOffset;
+				Vec3 lookAtOffset = m_LookAtOffset;
 				if (m_SwitchLookAtOffsetCurT < 1.0f) {
 					m_SwitchLookAtOffsetCurT += m_SwitchLookAtOffsetBlendSpeed * g_pGame->GetFrameDT();
 					lookAtOffset = kbLerp(m_LookAtOffset, m_LookAtOffsetTarget, kbSaturate(m_SwitchLookAtOffsetCurT));
@@ -343,7 +307,7 @@ void CannonCameraComponent::Update_Internal(const float DeltaTime) {
 				}
 
 				// Position offset blend
-				kbVec3 positionOffset = m_PositionOffset;
+				Vec3 positionOffset = m_PositionOffset;
 				if (m_SwitchPosOffsetCurT < 1.0f) {
 					m_SwitchPosOffsetCurT += m_SwitchPosOffsetBlendSpeed * g_pGame->GetFrameDT();
 					positionOffset = kbLerp(m_PositionOffset, m_PosOffsetTarget, kbSaturate(m_SwitchPosOffsetCurT));
@@ -354,12 +318,12 @@ void CannonCameraComponent::Update_Internal(const float DeltaTime) {
 
 				GetOwner()->SetPosition(targetPosition + positionOffset);
 
-				kbMat4 cameraDestRot;
-				cameraDestRot.look_at(GetOwner()->GetPosition(), targetPosition + lookAtOffset, kbVec3::up);
+				Mat4 cameraDestRot;
+				cameraDestRot.look_at(GetOwner()->GetPosition(), targetPosition + lookAtOffset, Vec3::up);
 				cameraDestRot.inverse_fast();
 				GetOwner()->SetOrientation(kbQuatFromMatrix(cameraDestRot));
 
-				const kbVec3 cameraDestPos = targetPosition + positionOffset;
+				const Vec3 cameraDestPos = targetPosition + positionOffset;
 				GetOwner()->SetPosition(cameraDestPos + cameraDestRot[0].ToVec3() * camShakeOffset.x + cameraDestRot[1].ToVec3() * camShakeOffset.y);
 				GetOwner()->SetPosition(cameraDestPos + cameraDestRot[0].ToVec3() * camShakeOffset.x + cameraDestRot[1].ToVec3() * camShakeOffset.y);
 			}
@@ -368,9 +332,7 @@ void CannonCameraComponent::Update_Internal(const float DeltaTime) {
 	}
 }
 
-/**
- *	CannonCameraShakeComponent::Constructor
- */
+/// CannonCameraShakeComponent::Constructor
 void CannonCameraShakeComponent::Constructor() {
 	m_Duration = 1.0f;
 	m_AmplitudeX = 0.025f;
@@ -385,9 +347,7 @@ void CannonCameraShakeComponent::Constructor() {
 	m_ShakeStartTime = -1.0f;
 }
 
-/**
- *	CannonCameraShakeComponent::SetEnable_Internal
- */
+/// CannonCameraShakeComponent::SetEnable_Internal
 void CannonCameraShakeComponent::SetEnable_Internal(const bool bEnable) {
 	Super::SetEnable_Internal(bEnable);
 
@@ -396,11 +356,8 @@ void CannonCameraShakeComponent::SetEnable_Internal(const bool bEnable) {
 	}
 }
 
-/**
- *	CannonCameraShakeComponent::Update_Internal
- */
+/// CannonCameraShakeComponent::Update_Internal
 void CannonCameraShakeComponent::Update_Internal(const float DeltaTime) {
-
 	Super::Update_Internal(DeltaTime);
 
 	if (m_bActivateOnEnable && g_GlobalTimer.TimeElapsedSeconds() > m_ShakeStartTime) {

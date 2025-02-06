@@ -11,7 +11,7 @@
 #include "kbGameEntityHeader.h"
 #include <dxgi1_6.h>
 #include "dx11/kbRenderer_DX11.h"
-#include "renderer_d3d12.h"
+#include "Renderer_Dx12.h"
 #include "renderer_vk.h"
 
 #define MAX_LOADSTRING 100
@@ -189,7 +189,7 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 
 	// Toggles
 	g_UseEditor = true;
-	bool use_d3d12 = false;
+	bool use_d3d12 = true;
 
 	// Perform application initialization
 	if (!InitInstance(hInstance, nCmdShow)) {
@@ -210,7 +210,7 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 		g_pRenderer->SetRenderWindow(nullptr);
 
 		if (use_d3d12) {
-			g_renderer = new Renderer_D3D12();
+			g_renderer = new Renderer_Dx12();
 			g_renderer->initialize(applicationEditor->main_viewport_hwnd(), g_screen_width, g_screen_height);
 		}
 
@@ -219,7 +219,7 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 		}
 	} else {
 		if (use_d3d12) {
-			g_renderer = new Renderer_D3D12();
+			g_renderer = new Renderer_Dx12();
 			g_renderer->initialize(hWnd, g_screen_width, g_screen_height);
 		}
 		

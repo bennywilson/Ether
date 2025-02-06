@@ -118,16 +118,16 @@ inline float kbfrand(const float min, const float max) {
 	return min + (kbfrand() * (max - min));
 }
 
-inline kbVec2 kbVec2Rand(const kbVec2& min, const kbVec2& max) {
-	kbVec2 randVec;
+inline Vec2 Vec2Rand(const Vec2& min, const Vec2& max) {
+	Vec2 randVec;
 	randVec.x = min.x + (kbfrand() * (max.x - min.x));
 	randVec.y = min.y + (kbfrand() * (max.y - min.y));
 
 	return randVec;
 }
 
-inline kbVec3 kbVec3Rand(const kbVec3& min, const kbVec3& max) {
-	kbVec3 randVec;
+inline Vec3 Vec3Rand(const Vec3& min, const Vec3& max) {
+	Vec3 randVec;
 	randVec.x = min.x + (kbfrand() * (max.x - min.x));
 	randVec.y = min.y + (kbfrand() * (max.y - min.y));
 	randVec.z = min.z + (kbfrand() * (max.z - min.z));
@@ -135,8 +135,8 @@ inline kbVec3 kbVec3Rand(const kbVec3& min, const kbVec3& max) {
 	return randVec;
 }
 
-inline kbVec4 kbVec4Rand(const kbVec4& min, const kbVec4& max) {
-	kbVec4 randVec;
+inline Vec4 Vec4Rand(const Vec4& min, const Vec4& max) {
+	Vec4 randVec;
 	randVec.x = min.x + (kbfrand() * (max.x - min.x));
 	randVec.y = min.y + (kbfrand() * (max.y - min.y));
 	randVec.z = min.z + (kbfrand() * (max.z - min.z));
@@ -297,11 +297,11 @@ struct kbInput_t {
 	kbKeyState_t	GamepadButtonStates[16];
 	kbKeyState_t	NonCharKeyState[Num_NonCharKeys];
 
-	kbVec2			m_LeftStick;
-	kbVec2			m_PrevLeftStick;
+	Vec2			m_LeftStick;
+	Vec2			m_PrevLeftStick;
 
-	kbVec2			m_RightStick;
-	kbVec2			m_PrevRightStick;
+	Vec2			m_RightStick;
+	Vec2			m_PrevRightStick;
 
 	float			LeftTrigger;
 	float			RightTrigger;

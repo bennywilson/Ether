@@ -41,15 +41,15 @@ void kbTerrainComponent::SetTerrainLOD(const float lod) {
 }
 
 struct patchVertLayout {
-	kbVec3 position;
-	kbVec2 uv;
+	Vec3 position;
+	Vec2 uv;
 	byte patchIndices[4];
 };
 
 struct debugNormal
 {
-	kbVec3 normal;
-	kbVec3 position;
+	Vec3 normal;
+	Vec3 position;
 };
 std::vector<debugNormal> terrainNormals;
 
@@ -57,7 +57,7 @@ std::vector<debugNormal> terrainNormals;
 /**
  *	grassRenderObject_t::Initialize
  */
-void kbGrass::grassRenderObject_t::Initialize(const kbVec3& ownerPosition) {
+void kbGrass::grassRenderObject_t::Initialize(const Vec3& ownerPosition) {
 	blk::error_check(m_pModel == nullptr && m_pComponent == nullptr, "grassRenderObject_t::Initialize() - m_pModel or m_pComponent is not NULL");
 
 	m_pModel = new kbModel();
@@ -191,14 +191,14 @@ void kbGrass::RefreshGrass() {
 
 	const float startRefreshGrassTime = g_GlobalTimer.TimeElapsedSeconds();
 
-	std::vector<kbVec4> bladeOffsets;
+	std::vector<Vec4> bladeOffsets;
 
 	const float PatchesPerCellSide = kbClamp((float)m_PatchesPerCellSide, 1.0f, 99999999.0f);
 
 	//float grassCellHalfSize = ( m_DistanceBetweenPatches / 2.0f ) * 0.95f;
 	for (int i = 0; i < 64; i++) {
 
-		kbMat4 matrix = kbMat4::identity;
+		Mat4 matrix = Mat4::identity;
 		const float angle = 2.0f * kbfrand() * kbPI;
 		float cosPIOver2 = cos(angle);
 		float sinPIOver2 = sin(angle);
@@ -207,10 +207,10 @@ void kbGrass::RefreshGrass() {
 		matrix[0][2] = sinPIOver2;
 		matrix[2][2] = cosPIOver2;
 
-		kbVec4 startVec(0.0f, 0.0f, 1.0f, 0.0f);
+		Vec4 startVec(0.0f, 0.0f, 1.0f, 0.0f);
 		startVec = startVec.transform_point(matrix);
 
-		kbVec4 offset;
+		Vec4 offset;
 		offset.x = startVec.x;
 		offset.y = startVec.z;
 		offset.z = m_MaxBladeJitterOffset * kbfrand();
@@ -230,9 +230,9 @@ void kbGrass::RefreshGrass() {
 
 	m_GrassShaderOverrides.SetTexture("heightMap", m_pOwningTerrainComponent->GetHeightMap());
 	m_GrassShaderOverrides.SetVec4List("bladeOffsets", bladeOffsets);
-	m_GrassShaderOverrides.SetVec4("GrassData0", kbVec4(m_PatchStartCullDistance, 1.0f / (m_PatchEndCullDistance - m_PatchStartCullDistance), m_BladeMinHeight, m_BladeMaxHeight));
-	m_GrassShaderOverrides.SetVec4("GrassData1", kbVec4(m_pOwningTerrainComponent->GetHeightScale(), m_pOwningTerrainComponent->GetOwner()->GetPosition().y, patchLen, 0.0f));
-	m_GrassShaderOverrides.SetVec4("fakeAOData", kbVec4(m_FakeAODarkness, m_FakeAOPower, m_FakeAOClipPlaneFadeStartDist, 0.0f));
+	m_GrassShaderOverrides.SetVec4("GrassData0", Vec4(m_PatchStartCullDistance, 1.0f / (m_PatchEndCullDistance - m_PatchStartCullDistance), m_BladeMinHeight, m_BladeMaxHeight));
+	m_GrassShaderOverrides.SetVec4("GrassData1", Vec4(m_pOwningTerrainComponent->GetHeightScale(), m_pOwningTerrainComponent->GetOwner()->GetPosition().y, patchLen, 0.0f));
+	m_GrassShaderOverrides.SetVec4("fakeAOData", Vec4(m_FakeAODarkness, m_FakeAOPower, m_FakeAOClipPlaneFadeStartDist, 0.0f));
 
 	for (int i = 0; i < m_ShaderParamList.size(); i++) {
 		if (m_ShaderParamList[i].GetParamName().stl_str().empty()) {
@@ -246,8 +246,8 @@ void kbGrass::RefreshGrass() {
 		}
 	}
 
-	const kbVec2 collisionMapPos = kbVec2(m_pOwningTerrainComponent->GetOwner()->GetPosition().x, m_pOwningTerrainComponent->GetOwner()->GetPosition().z);
-	m_GrassShaderOverrides.SetVec4("collisionMapCenter", kbVec4(collisionMapPos.x, collisionMapPos.y, m_pOwningTerrainComponent->GetTerrainWidth() * 0.5f, 1.0f / (m_pOwningTerrainComponent->GetTerrainWidth() * 0.5f)));
+	const Vec2 collisionMapPos = Vec2(m_pOwningTerrainComponent->GetOwner()->GetPosition().x, m_pOwningTerrainComponent->GetOwner()->GetPosition().z);
+	m_GrassShaderOverrides.SetVec4("collisionMapCenter", Vec4(collisionMapPos.x, collisionMapPos.y, m_pOwningTerrainComponent->GetTerrainWidth() * 0.5f, 1.0f / (m_pOwningTerrainComponent->GetTerrainWidth() * 0.5f)));
 
 	struct pixelData {
 		byte r;
@@ -287,10 +287,10 @@ void kbGrass::RefreshGrass() {
 		const float halfCellLenSqr = sqrt(halfCellLen * halfCellLen);
 
 		const float halfTerrainWidth = m_pOwningTerrainComponent->GetTerrainWidth() * 0.5f;
-		const kbVec3 terrainMin = /*m_pOwningTerrainComponent->GetOwner()->GetPosition()*/ -kbVec3(halfTerrainWidth, 0.0f, halfTerrainWidth);
+		const Vec3 terrainMin = /*m_pOwningTerrainComponent->GetOwner()->GetPosition()*/ -Vec3(halfTerrainWidth, 0.0f, halfTerrainWidth);
 
-		const kbMat4 ownerRot = m_pOwningTerrainComponent->GetOwner()->GetOrientation().ToMat4();
-		const kbVec3 ownerPos = m_pOwningTerrainComponent->GetOwner()->GetPosition();
+		const Mat4 ownerRot = m_pOwningTerrainComponent->GetOwner()->GetOrientation().ToMat4();
+		const Vec3 ownerPos = m_pOwningTerrainComponent->GetOwner()->GetPosition();
 		const auto& grassZones = m_pOwningTerrainComponent->GetGrassZones();
 
 		int cellIdx = 0;
@@ -301,9 +301,9 @@ void kbGrass::RefreshGrass() {
 				renderObj.Initialize(m_pOwningTerrainComponent->GetOwner()->GetPosition());
 				renderObj.m_RenderObject.m_CullDistance = m_PatchEndCullDistance + halfCellLenSqr;
 
-				const kbVec3 cellStart = terrainMin + kbVec3(m_GrassCellLength * xCell, 0.0f, m_GrassCellLength * yCell);
-				const kbVec3 cellCenter = cellStart + kbVec3(m_GrassCellLength * 0.5f, 0.0f, m_GrassCellLength * 0.5f);
-				const kbVec3 halfCell = kbVec3(m_GrassCellLength * 0.5f, 0.0f, m_GrassCellLength * 0.5f);
+				const Vec3 cellStart = terrainMin + Vec3(m_GrassCellLength * xCell, 0.0f, m_GrassCellLength * yCell);
+				const Vec3 cellCenter = cellStart + Vec3(m_GrassCellLength * 0.5f, 0.0f, m_GrassCellLength * 0.5f);
+				const Vec3 halfCell = Vec3(m_GrassCellLength * 0.5f, 0.0f, m_GrassCellLength * 0.5f);
 
 				patchVertLayout* pVerts = nullptr;
 				bool bCreatedPointCloud = false;
@@ -312,21 +312,21 @@ void kbGrass::RefreshGrass() {
 				for (int startY = 0; startY < PatchesPerCellSide; startY++) {
 					for (int startX = 0; startX < PatchesPerCellSide; startX++) {
 
-						const kbVec3 patchJitterOffset = kbVec3(m_MaxPatchJitterOffset * kbfrand(), 0.0f, m_MaxPatchJitterOffset * kbfrand());
-						const kbVec3 globalPointPos = cellStart + kbVec3(patchLen * startX, 0.0f, patchLen * startY) + patchJitterOffset;
+						const Vec3 patchJitterOffset = Vec3(m_MaxPatchJitterOffset * kbfrand(), 0.0f, m_MaxPatchJitterOffset * kbfrand());
+						const Vec3 globalPointPos = cellStart + Vec3(patchLen * startX, 0.0f, patchLen * startY) + patchJitterOffset;
 						const float curU = kbSaturate((globalPointPos.x - terrainMin.x) / m_pOwningTerrainComponent->GetTerrainWidth());
 						const float curV = kbSaturate((globalPointPos.z - terrainMin.z) / m_pOwningTerrainComponent->GetTerrainWidth());
 
 						if (g_bCullGrass) {
 							bool bSkipIt = true;
-							const kbVec3 pointWorldPos = ownerRot.transform_point(globalPointPos) + ownerPos;
+							const Vec3 pointWorldPos = ownerRot.transform_point(globalPointPos) + ownerPos;
 							for (int i = 0; i < grassZones.size(); i++) {
 
-								kbVec3 boundsCenter = ownerRot.transform_point(grassZones[i].GetCenter()) + ownerPos;
-								kbVec3 boundsExtent = grassZones[i].GetExtents();
+								Vec3 boundsCenter = ownerRot.transform_point(grassZones[i].GetCenter()) + ownerPos;
+								Vec3 boundsExtent = grassZones[i].GetExtents();
 
-								const kbVec3 boundsMin = boundsCenter - boundsExtent;
-								const kbVec3 boundsMax = boundsCenter + boundsExtent;
+								const Vec3 boundsMin = boundsCenter - boundsExtent;
+								const Vec3 boundsMax = boundsCenter + boundsExtent;
 								const kbBounds grassBounds = kbBounds(boundsMin, boundsMax);
 								if (grassBounds.ContainsPoint(pointWorldPos)) {
 									bSkipIt = false;
@@ -354,10 +354,10 @@ void kbGrass::RefreshGrass() {
 							bCreatedPointCloud = true;
 						}
 
-						kbVec3 localPointPos = patchJitterOffset + kbVec3(patchLen * startX, 0.0f, patchLen * startY) - halfCell;
+						Vec3 localPointPos = patchJitterOffset + Vec3(patchLen * startX, 0.0f, patchLen * startY) - halfCell;
 						pVerts[iVert].position = localPointPos;
 
-						pVerts[iVert].uv.Set(curU, curV);
+						pVerts[iVert].uv.set(curU, curV);
 						pVerts[iVert].patchIndices[0] = rand() % 60;		// Randomized blade jitters
 						pVerts[iVert].patchIndices[1] = pVerts[iVert].patchIndices[2] = pVerts[iVert].patchIndices[3] = pVerts[iVert].patchIndices[0];
 						const float randVal = kbfrand();
@@ -368,7 +368,7 @@ void kbGrass::RefreshGrass() {
 				}
 				if (bCreatedPointCloud) {
 					renderObj.m_pModel->UnmapVertexBuffer(iVert);
-					kbMat4 rotMat = m_pOwningTerrainComponent->GetOwnerRotation().ToMat4();
+					Mat4 rotMat = m_pOwningTerrainComponent->GetOwnerRotation().ToMat4();
 					m_GrassRenderObjects[cellIdx].m_RenderObject.m_Position = cellCenter * rotMat + m_pOwningTerrainComponent->GetOwnerPosition();
 					m_GrassRenderObjects[cellIdx].m_RenderObject.m_Scale = m_pOwningTerrainComponent->GetOwnerScale();
 					m_GrassRenderObjects[cellIdx].m_RenderObject.m_Orientation = m_pOwningTerrainComponent->GetOwnerRotation();
@@ -499,7 +499,7 @@ void kbTerrainComponent::GenerateTerrain() {
 	m_TerrainModel.CreateDynamicModel(numVerts, numIndices);
 
 	vertexLayout* const pVerts = (vertexLayout*)m_TerrainModel.MapVertexBuffer();
-	std::vector<kbVec3> cpuVerts;
+	std::vector<Vec3> cpuVerts;
 	cpuVerts.resize((size_t)m_TerrainDimensions * m_TerrainDimensions);
 
 	int currentVert = 0;
@@ -534,13 +534,13 @@ void kbTerrainComponent::GenerateTerrain() {
 			height /= 255.0f;
 			height *= (m_HeightScale / divisor);
 			pVerts[currentVert].Clear();
-			cpuVerts[currentVert] = kbVec3(-HalfTerrainWidth + ((startX + 1) * cellWidth), height, -HalfTerrainWidth + ((startY + 1) * cellWidth));
+			cpuVerts[currentVert] = Vec3(-HalfTerrainWidth + ((startX + 1) * cellWidth), height, -HalfTerrainWidth + ((startY + 1) * cellWidth));
 			pVerts[currentVert].position = cpuVerts[currentVert];
 			cpuVerts[currentVert] += GetOwner()->GetPosition();
 
-			pVerts[currentVert].uv.Set((float)(startX) / (float)m_TerrainDimensions, (float)(startY) / (float)m_TerrainDimensions);
-			pVerts[currentVert].SetColor(kbVec4(1.0f, 1.0f, 1.0f, 1.0f));
-			pVerts[currentVert].SetNormal(kbVec4(0.0f, 1.0f, 0.0f, 0.0f));
+			pVerts[currentVert].uv.set((float)(startX) / (float)m_TerrainDimensions, (float)(startY) / (float)m_TerrainDimensions);
+			pVerts[currentVert].SetColor(Vec4(1.0f, 1.0f, 1.0f, 1.0f));
+			pVerts[currentVert].SetNormal(Vec4(0.0f, 1.0f, 0.0f, 0.0f));
 			currentVert++;
 		}
 	}
@@ -553,7 +553,7 @@ void kbTerrainComponent::GenerateTerrain() {
 		for (int startX = 0; startX < m_TerrainDimensions; startX++) {
 			int currentIndex = (startY * m_TerrainDimensions) + startX;
 
-			kbVec3 xVec, zVec;
+			Vec3 xVec, zVec;
 
 			if (startX < m_TerrainDimensions - 1) {
 				xVec = pVerts[currentIndex + 1].position - pVerts[currentIndex].position;
@@ -569,7 +569,7 @@ void kbTerrainComponent::GenerateTerrain() {
 
 			xVec.normalize_self();
 			zVec.normalize_self();
-			kbVec3 finalVec = xVec.cross(zVec).normalize_safe();
+			Vec3 finalVec = xVec.cross(zVec).normalize_safe();
 
 			xVec = finalVec.cross(zVec).normalize_safe();
 			zVec = xVec.cross(finalVec).normalize_safe();
@@ -647,7 +647,7 @@ void kbTerrainComponent::SetCollisionMap(const kbRenderTexture* const pTexture) 
 
 		kbGrass& grass = m_Grass[i];
 		grass.m_GrassShaderOverrides.SetTexture("collisionMap", pTexture);
-		grass.m_GrassShaderOverrides.SetVec4("collisionMapPixelWorldSize", kbVec4(GetTerrainWidth() / pTexture->GetWidth(), 0.0f, 0.0f, 0.0f));
+		grass.m_GrassShaderOverrides.SetVec4("collisionMapPixelWorldSize", Vec4(GetTerrainWidth() / pTexture->GetWidth(), 0.0f, 0.0f, 0.0f));
 
 		for (int cellIdx = 0; cellIdx < grass.m_GrassRenderObjects.size(); cellIdx++) {
 			auto& grassRenderObj = grass.m_GrassRenderObjects[cellIdx];
@@ -708,15 +708,15 @@ void kbTerrainComponent::Update_Internal(const float DeltaTime) {
 	}
 
 	/*
-		const kbMat4 ownerRot = GetOwnerRotation().ToMat4();
-		const kbVec3 ownerPos = GetOwnerPosition();
+		const Mat4 ownerRot = GetOwnerRotation().ToMat4();
+		const Vec3 ownerPos = GetOwnerPosition();
 		for ( int i = 0; i < m_GrassZones.size(); i++ ) {
 
-			kbVec3 boundsCenter = ownerRot.transform_point( m_GrassZones[i].GetCenter() ) + ownerPos;
-			kbVec3 boundsExtent = m_GrassZones[i].GetExtents();
+			Vec3 boundsCenter = ownerRot.transform_point( m_GrassZones[i].GetCenter() ) + ownerPos;
+			Vec3 boundsExtent = m_GrassZones[i].GetExtents();
 
-			const kbVec3 boundsMin = boundsCenter - boundsExtent;
-			const kbVec3 boundsMax = boundsCenter + boundsExtent;
+			const Vec3 boundsMin = boundsCenter - boundsExtent;
+			const Vec3 boundsMax = boundsCenter + boundsExtent;
 			g_pRenderer->DrawBox( kbBounds( boundsMin, boundsMax ), kbColor::red );
 		}*/
 }

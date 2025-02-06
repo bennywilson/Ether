@@ -5,31 +5,27 @@
 #include "kbGame.h"
 #include "EtherGame.h"
 
-kbConsoleVariable g_NoEnemies( "noenemies", false, kbConsoleVariable::Console_Bool, "Remove enemies", "" );
-kbConsoleVariable g_LockMouse( "lockmouse", true, kbConsoleVariable::Console_Int, "Locks mouse", "" );
-kbConsoleVariable g_ShowPos( "showpos", false, kbConsoleVariable::Console_Bool, "Displays player position", "" );
+kbConsoleVariable g_NoEnemies("noenemies", false, kbConsoleVariable::Console_Bool, "Remove enemies", "");
+kbConsoleVariable g_LockMouse("lockmouse", true, kbConsoleVariable::Console_Int, "Locks mouse", "");
+kbConsoleVariable g_ShowPos("showpos", false, kbConsoleVariable::Console_Bool, "Displays player position", "");
 
-EtherGame * g_pEtherGame = nullptr;
+EtherGame* g_pEtherGame = nullptr;
 
 
-/**
- *	EtherGame::EtherGame
- */
+ /// EtherGame::EtherGame
 EtherGame::EtherGame() :
-	kbRenderHook( RP_FirstPerson ),
-	m_CameraMode( Cam_FirstPerson ),
-	m_pPlayerComponent( nullptr ) {
-	m_Camera.m_Position.Set( 0.0f, 0.0, 10.0f );
-	blk::error_check( g_pEtherGame == nullptr, "EtherGame::EtherGame() - g_pEtherGame is not nullptr" );
+	kbRenderHook(RP_FirstPerson),
+	m_CameraMode(Cam_FirstPerson),
+	m_pPlayerComponent(nullptr) {
+	m_Camera.m_Position.set(0.0f, 0.0, 10.0f);
+	blk::error_check(g_pEtherGame == nullptr, "EtherGame::EtherGame() - g_pEtherGame is not nullptr");
 	g_pEtherGame = this;
 }
 
-/**
- *	EtherGame::~EtherGame
- */
+/// EtherGame::~EtherGame
 EtherGame::~EtherGame() {
 
-	blk::error_check( g_pEtherGame != nullptr, "EtherGame::~EtherGame() - g_pEtherGame is nullptr" );
+	blk::error_check(g_pEtherGame != nullptr, "EtherGame::~EtherGame() - g_pEtherGame is nullptr");
 	g_pEtherGame = nullptr;
 }
 
@@ -48,30 +44,30 @@ void EtherGame::PreUpdate_Internal() {
 	// Set render view
 }
 
-void EtherGame::AddGameEntity_Internal( kbGameEntity *const pEntity ) {}
+void EtherGame::AddGameEntity_Internal(kbGameEntity* const pEntity) {}
 
-void EtherGame::RemoveGameEntity_Internal( kbGameEntity *const pEntity ) {}
+void EtherGame::RemoveGameEntity_Internal(kbGameEntity* const pEntity) {}
 
-void EtherGame::ProcessInput( const float DT ) {
+void EtherGame::ProcessInput(const float DT) {
 
-	m_Camera.m_Position = kbVec3(0.0f, 0.0f, 0.0f);
+	m_Camera.m_Position = Vec3(0.0f, 0.0f, 0.0f);
 	m_Camera.m_Rotation = kbQuat(0.0f, 0.0f, 0.0f, -1.0f);
 	m_Camera.Update();
 
 }
 
-void EtherGame::UpdateWorld( const float DT ) {}
+void EtherGame::UpdateWorld(const float DT) {}
 
-kbGameEntity * EtherGame::CreatePlayer( const int netId, const kbGUID & prefabGUID, const kbVec3 & DesiredLocation ) {
+kbGameEntity* EtherGame::CreatePlayer(const int netId, const kbGUID& prefabGUID, const Vec3& DesiredLocation) {
 	return nullptr;
 }
 
 void EtherGame::RenderSync() {
 
-	if ( HasFirstSyncCompleted() == false ) {
+	if (HasFirstSyncCompleted() == false) {
 	}
 }
 
 static float g_TimeMultiplier = 0.95f / 0.016f;
-void EtherGame::RenderHookCallBack( kbRenderTexture *const pSrc, kbRenderTexture *const pDst ) {
+void EtherGame::RenderHookCallBack(kbRenderTexture* const pSrc, kbRenderTexture* const pDst) {
 }

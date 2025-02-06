@@ -27,20 +27,20 @@ public:
 	const kbString&								GetParamName() const { return m_ParamName; }
 	const kbTexture*							GetTexture() const { return m_pTexture; }
 	const kbRenderTexture*						GetRenderTexture() const { return m_pRenderTexture; }
-	const kbVec4&								GetVector() const { return m_Vector; }	
+	const Vec4&								GetVector() const { return m_Vector; }	
 
 
 	void										SetRenderTexture( kbRenderTexture* const pTexture ) { m_pRenderTexture = pTexture; }
 	void										SetParamName( const kbString& newName ) { m_ParamName = newName; }
 	void										SetTexture( kbTexture* const pTexture ) { m_pTexture = pTexture; }
-	void										SetVector( const kbVec4& vector ) { m_Vector = vector; }
+	void										SetVector( const Vec4& vector ) { m_Vector = vector; }
 
 private:
 
 	kbString									m_ParamName;
 	kbTexture*									m_pTexture;
 	kbRenderTexture*							m_pRenderTexture;
-	kbVec4										m_Vector;
+	Vec4										m_Vector;
 };
 
 /**
@@ -109,7 +109,7 @@ public:
 
 	bool										GetCastsShadow() const { return m_bCastsShadow; }
 
-	void										SetMaterialParamVector( const int idx, const std::string& paramName, const kbVec4& paramValue );
+	void										SetMaterialParamVector( const int idx, const std::string& paramName, const Vec4& paramValue );
 	void										SetMaterialParamTexture( const int idx, const std::string& paramName, kbTexture* const pTexture );
 	void										SetMaterialParamTexture( const int idx, const std::string& paramName, kbRenderTexture* const pTexture );
 	const kbShaderParamComponent*				GetShaderParamComponent( const int idx, const kbString& name );

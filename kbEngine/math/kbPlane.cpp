@@ -8,11 +8,11 @@
 /**
  *	kbPlane::Intesect
  */
-KBPLANE_Intersect kbPlane::Intersect(const kbVec3& startPt, const kbVec3& endPt, float& t, kbVec3& intersectionPt) {
-	kbVec3 planeNormal(x, y, z);
-	kbVec3 knownPt = planeNormal * w;
-	kbVec3 vToStartPt = startPt - knownPt;
-	kbVec3 vToEndPt = endPt - knownPt;
+KBPLANE_Intersect kbPlane::Intersect(const Vec3& startPt, const Vec3& endPt, float& t, Vec3& intersectionPt) {
+	Vec3 planeNormal(x, y, z);
+	Vec3 knownPt = planeNormal * w;
+	Vec3 vToStartPt = startPt - knownPt;
+	Vec3 vToEndPt = endPt - knownPt;
 
 	int side = 0;
 
@@ -31,7 +31,7 @@ KBPLANE_Intersect kbPlane::Intersect(const kbVec3& startPt, const kbVec3& endPt,
 		return PLANE_BOTH_OUT;	// for now
 	}
 
-	kbVec3 vecTo = endPt - startPt;
+	Vec3 vecTo = endPt - startPt;
 	vecTo.normalize_self();
 
 	float denominator = planeNormal.dot(vecTo);
@@ -51,7 +51,7 @@ KBPLANE_Intersect kbPlane::Intersect(const kbVec3& startPt, const kbVec3& endPt,
 	}
 }
 
-bool kbPlane::PlanesIntersect(kbVec3& KnownPoint, kbVec3& Direction, const kbPlane& op2) const {
+bool kbPlane::PlanesIntersect(Vec3& KnownPoint, Vec3& Direction, const kbPlane& op2) const {
 	// Compute line direction, perpendicular to both plane normals.
 	const kbPlane& op1 = *this;
 	Direction = op1.cross(op2);
@@ -71,7 +71,7 @@ bool kbPlane::PlanesIntersect(kbVec3& KnownPoint, kbVec3& Direction, const kbPla
 	}
 }
 
-float kbPlane::DotWithVec(const kbVec3& Vec)
+float kbPlane::DotWithVec(const Vec3& Vec)
 {
 	return (x * Vec.x) + (y * Vec.y) + (z * Vec.z) - w;
 }

@@ -93,16 +93,16 @@ void CopyVarToComponent( const kbComponent * Src, kbComponent * Dst, const kbTyp
 
 			case KBTYPEINFO_VECTOR4 :
 			{
-				const kbVec4 & srcVec = *(kbVec4*)&SrcByte[currentVar->Offset()];
-				kbVec4 & dstVec = *(kbVec4*)&DstByte[currentVar->Offset()];
+				const Vec4 & srcVec = *(Vec4*)&SrcByte[currentVar->Offset()];
+				Vec4 & dstVec = *(Vec4*)&DstByte[currentVar->Offset()];
 				dstVec = srcVec;
 				break;
 			}
 
 			case KBTYPEINFO_VECTOR :
 			{
-				const kbVec3 & srcVec = *(kbVec3*)&SrcByte[currentVar->Offset()];
-				kbVec3 & dstVec = *(kbVec3*)&DstByte[currentVar->Offset()];
+				const Vec3 & srcVec = *(Vec3*)&SrcByte[currentVar->Offset()];
+				Vec3 & dstVec = *(Vec3*)&DstByte[currentVar->Offset()];
 				dstVec = srcVec;
 				break;
 			}
@@ -223,14 +223,14 @@ kbString kbGameComponent::GetOwnerName() const {
 /**
  *	kbGameComponent::GetOwnerPosition
  */
-kbVec3 kbGameComponent::GetOwnerPosition() const {
+Vec3 kbGameComponent::GetOwnerPosition() const {
 	return ((kbGameEntity*)GetOwner())->GetPosition();
 }
 
 /**
  *	kbGameComponent::GetOwnerScale
  */
-kbVec3 kbGameComponent::GetOwnerScale() const {
+Vec3 kbGameComponent::GetOwnerScale() const {
 	return ((kbGameEntity*)GetOwner())->GetScale();
 }
 
@@ -244,7 +244,7 @@ kbQuat kbGameComponent::GetOwnerRotation() const {
 /**
  *	kbGameComponent::SetOwnerPosition
  */
-void kbGameComponent::SetOwnerPosition(const kbVec3& position) {
+void kbGameComponent::SetOwnerPosition(const Vec3& position) {
 	GetOwner()->SetPosition(position);
 }
 
@@ -267,13 +267,13 @@ void kbTransformComponent::Constructor() {
 /**
  *	kbTransformComponent::GetPosition
  */
-const kbVec3 kbTransformComponent::GetPosition() const {
+const Vec3 kbTransformComponent::GetPosition() const {
 	if (GetOwner()->GetComponent(0) == this) {
 		return m_Position;
 	}
 
-	const kbMat4 parentRotation = GetOwner()->GetOrientation().ToMat4();
-	const kbVec3 worldPosition = parentRotation.transform_point(m_Position);
+	const Mat4 parentRotation = GetOwner()->GetOrientation().ToMat4();
+	const Vec3 worldPosition = parentRotation.transform_point(m_Position);
 
 	return parentRotation.transform_point(m_Position) + GetOwner()->GetPosition();
 }
@@ -281,7 +281,7 @@ const kbVec3 kbTransformComponent::GetPosition() const {
 /**
  *	kbTransformComponent::GetScale
  */
-const kbVec3 kbTransformComponent::GetScale() const {
+const Vec3 kbTransformComponent::GetScale() const {
 	if (GetOwner()->GetComponent(0) == this) {
 		return m_Scale;
 	}
@@ -387,7 +387,7 @@ void kbAnimEvent::Constructor() {
  */
 void kbVectorAnimEvent::Constructor() {
 	m_EventTime = 0.0f;
-	m_EventValue = kbVec3::zero;
+	m_EventValue = Vec3::zero;
 }
 
 /// kbAnimEvent::Evaluate
@@ -412,10 +412,10 @@ float kbAnimEvent::Evaluate(const std::vector<kbAnimEvent>& eventList, const flo
 }
 
 /// kbVectorAnimEvent::Evaluate
-kbVec4 kbVectorAnimEvent::Evaluate(const std::vector<kbVectorAnimEvent>& eventList, const float t) {
+Vec4 kbVectorAnimEvent::Evaluate(const std::vector<kbVectorAnimEvent>& eventList, const float t) {
 	if (eventList.size() == 0) {
 		blk::warning("kbVectorAnimEvent::Evaluate() - Empty event list");
-		return kbVec3::zero;
+		return Vec3::zero;
 	}
 
 	for (int i = 0; i < eventList.size(); i++) {
@@ -445,6 +445,6 @@ void kbEditorGlobalSettingsComponent::Constructor() {
  *	kbEditorLevelSettingsComponent::Constructor
  */
 void kbEditorLevelSettingsComponent::Constructor() {
-	m_CameraPosition = kbVec3::zero;
+	m_CameraPosition = Vec3::zero;
 	m_CameraRotation = kbQuat::identity;
 }

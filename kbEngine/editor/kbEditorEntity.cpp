@@ -55,12 +55,12 @@ const kbBounds kbEditorEntity::GetWorldBounds() const {
 }
 
 /// kbEditorEntity::GetPosition
-const kbVec3 kbEditorEntity::GetPosition() const {
+const Vec3 kbEditorEntity::GetPosition() const {
 	return m_pGameEntity->GetPosition(); 
 }
 
 /// kbEditorEntity::SetPosition
-void kbEditorEntity::SetPosition( const kbVec3 & newPosition ) {
+void kbEditorEntity::SetPosition( const Vec3 & newPosition ) {
 	m_pGameEntity->SetPosition( newPosition ); 
 }
 
@@ -75,12 +75,12 @@ void kbEditorEntity::SetOrientation( const kbQuat & newOrientation ) {
 }
 
 /// kbEditorEntity::GetScale
-const kbVec3 kbEditorEntity::GetScale() const {
+const Vec3 kbEditorEntity::GetScale() const {
 	return m_pGameEntity->GetScale(); 
 }
 
 /// kbEditorEntity::SetScale
-void kbEditorEntity::SetScale( const kbVec3 & newScale ) {
+void kbEditorEntity::SetScale( const Vec3 & newScale ) {
 	m_pGameEntity->SetScale( newScale ); 
 }
 

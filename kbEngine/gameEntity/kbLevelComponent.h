@@ -76,7 +76,7 @@ private:
 	kbString									m_sCineParam;
 	float										m_fCineParam;
 	kbGameEntityPtr								m_pCineParam;
-	kbVec3										m_vCineParam;
+	Vec3										m_vCineParam;
 
 	float										m_ActionStartTime;
 	float										m_ActionDuration;

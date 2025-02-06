@@ -85,16 +85,16 @@ public:
 	// Accessors
 	const kbString& GetName() const { return m_pTransformComponent->GetName(); }
 
-	const kbVec3 GetPosition() const;
-	void SetPosition(const kbVec3& newPosition) { m_pTransformComponent->SetPosition(newPosition); MarkAsDirty(); }
+	const Vec3 GetPosition() const;
+	void SetPosition(const Vec3& newPosition) { m_pTransformComponent->SetPosition(newPosition); MarkAsDirty(); }
 
 	const kbQuat GetOrientation() const;
 	void SetOrientation(const kbQuat& newOrientation) { m_pTransformComponent->SetOrientation(newOrientation); MarkAsDirty(); }
 
-	const kbVec3 GetScale() const { return m_pTransformComponent->GetScale(); }
-	void SetScale(const kbVec3& newScale) { m_pTransformComponent->SetScale(newScale); MarkAsDirty(); }
+	const Vec3 GetScale() const { return m_pTransformComponent->GetScale(); }
+	void SetScale(const Vec3& newScale) { m_pTransformComponent->SetScale(newScale); MarkAsDirty(); }
 
-	void CalculateWorldMatrix(kbMat4& worldMatrix) const;
+	void CalculateWorldMatrix(Mat4& worldMatrix) const;
 
 	const kbBounds& GetBounds() const { return m_Bounds; }
 	kbBounds GetWorldBounds() const;

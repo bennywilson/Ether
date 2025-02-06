@@ -58,7 +58,7 @@ private:
 	struct grassRenderObject_t {
 		grassRenderObject_t() : m_pModel(nullptr), m_pComponent(nullptr) { }
 
-		void Initialize(const kbVec3& ownerPosition);
+		void Initialize(const Vec3& ownerPosition);
 		void Shutdown();
 
 		kbModel* m_pModel;
@@ -83,12 +83,12 @@ class kbGrassZone : public kbGameComponent {
 	KB_DECLARE_COMPONENT(kbGrassZone, kbGameComponent);
 
 public:
-	kbVec3 GetCenter() const { return m_Center; }
-	kbVec3 GetExtents() const { return m_Extents; }
+	Vec3 GetCenter() const { return m_Center; }
+	Vec3 GetExtents() const { return m_Extents; }
 
 private:
-	kbVec3 m_Center;
-	kbVec3 m_Extents;
+	Vec3 m_Center;
+	Vec3 m_Extents;
 };
 
 

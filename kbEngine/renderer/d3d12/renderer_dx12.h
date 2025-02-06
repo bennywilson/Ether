@@ -1,4 +1,4 @@
-/// renderer_d3d12.h	
+/// Renderer_Dx12.h	
 ///
 /// 2025 blk 1.0
 
@@ -12,10 +12,10 @@
 using namespace DirectX;
 using Microsoft::WRL::ComPtr;
 
-///	Renderer_D3D12
-class Renderer_D3D12 : public Renderer {
+///	Renderer_Dx12
+class Renderer_Dx12 : public Renderer {
 public:
-	~Renderer_D3D12();
+	~Renderer_Dx12();
 
 	virtual void shut_down() override;
 

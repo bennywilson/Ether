@@ -284,9 +284,6 @@
     <ClInclude Include="gameEntity\kbUIComponent.h">
       <Filter>game\Components</Filter>
     </ClInclude>
-    <ClInclude Include="renderer\d3d12\renderer_d3d12.h">
-      <Filter>renderer\d3d12</Filter>
-    </ClInclude>
     <ClInclude Include="renderer\d3d12\d3d12_defs.h">
       <Filter>renderer\d3d12</Filter>
     </ClInclude>
@@ -327,6 +324,9 @@
     <ClInclude Include="renderer\vk\renderer_vk.h" />
     <ClInclude Include="renderer\vk\vk_defs.h" />
     <ClInclude Include="core\containers.h" />
+    <ClInclude Include="renderer\rt\renderer_rt.h" />
+    <ClInclude Include="renderer\sw\renderer_sw.h" />
+    <ClInclude Include="renderer\d3d12\renderer_dx12.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="core\kbCore.cpp">
@@ -473,9 +473,6 @@
     <ClCompile Include="gameEntity\kbUIComponent.cpp">
       <Filter>game\Components</Filter>
     </ClCompile>
-    <ClCompile Include="renderer\d3d12\renderer_d3d12.cpp">
-      <Filter>renderer\d3d12</Filter>
-    </ClCompile>
     <ClCompile Include="renderer\d3d12\d3d12_defs.cpp">
       <Filter>renderer\d3d12</Filter>
     </ClCompile>
@@ -486,6 +483,9 @@
     <ClCompile Include="renderer\renderer.cpp" />
     <ClCompile Include="renderer\vk\renderer_vk.cpp" />
     <ClCompile Include="renderer\vk\vk_defs.cpp" />
+    <ClCompile Include="renderer\rt\renderer_rt.cpp" />
+    <ClCompile Include="renderer\sw\renderer_sw.cpp" />
+    <ClCompile Include="renderer\d3d12\renderer_dx12.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Midl Include="renderer\d3d12\dx12\d3d12.idl" />

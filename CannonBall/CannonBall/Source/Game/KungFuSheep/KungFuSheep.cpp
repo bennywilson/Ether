@@ -17,8 +17,8 @@ kbConsoleVariable g_CannonBallTest("cbstresstest", false, kbConsoleVariable::Con
 /**
  *	KungFuSheepStateIdle
  */
-const kbVec3 g_LeftFacing(-0.01f, 0.0f, -1.0f);
-const kbVec3 g_RightFacing(-0.01f, 0.0f, 1.0f);
+const Vec3 g_LeftFacing(-0.01f, 0.0f, -1.0f);
+const Vec3 g_RightFacing(-0.01f, 0.0f, 1.0f);
 
 template<typename T>
 class KungFuSheepStateIdle : public KungFuSheepStateBase<T> {
@@ -32,7 +32,7 @@ public:
 		static const kbString IdleL_Anim("IdleLeft_Basic");
 		static const kbString IdleR_Anim("IdleRight_Basic");
 
-		const kbVec3& targetDir = this->m_pActorComponent->GetTargetFacingDirection();
+		const Vec3& targetDir = this->m_pActorComponent->GetTargetFacingDirection();
 		if (targetDir.z < 0.0f) {
 			this->m_pActorComponent->PlayAnimation(IdleL_Anim, 0.05f);
 		} else {
@@ -72,10 +72,10 @@ public:
 	virtual void UpdateState_Internal() override {
 
 		const kbInput_t& input = g_pInputManager->GetInput();
-		const kbVec2 leftStick = GetLeftStick();
+		const Vec2 leftStick = GetLeftStick();
 
 		const float frameDT = g_pGame->GetFrameDT();
-		const kbVec3& targetDir = this->m_pActorComponent->GetTargetFacingDirection();
+		const Vec3& targetDir = this->m_pActorComponent->GetTargetFacingDirection();
 		const float blockerCheckReach = KungFuGame::kDistToChase;
 
 		if (WasAttackJustPressed()) {
@@ -86,10 +86,10 @@ public:
 			if (leftStick.x < 0.0f) {
 
 				// Run
-				const kbVec3 moveDir(0.0f, 0.0f, 1);
+				const Vec3 moveDir(0.0f, 0.0f, 1);
 
 				if (this->CheckForBlocker(moveDir * blockerCheckReach) == false) {
-					const kbVec3 targetPos = this->m_pActorComponent->GetOwnerPosition() + moveDir * frameDT * this->m_pActorComponent->GetMaxRunSpeed();
+					const Vec3 targetPos = this->m_pActorComponent->GetOwnerPosition() + moveDir * frameDT * this->m_pActorComponent->GetMaxRunSpeed();
 					this->m_pActorComponent->SetOwnerPosition(targetPos);
 				} else {
 					this->RequestStateChange(KungFuSheepState::Idle);
@@ -104,10 +104,10 @@ public:
 			if (leftStick.x > 0.0f) {
 
 				// Run
-				const kbVec3 moveDir(0.0f, 0.0f, -1);
+				const Vec3 moveDir(0.0f, 0.0f, -1);
 
 				if (this->CheckForBlocker(moveDir * blockerCheckReach) == false) {
-					const kbVec3 targetPos = this->m_pActorComponent->GetOwnerPosition() + moveDir * frameDT * this->m_pActorComponent->GetMaxRunSpeed();
+					const Vec3 targetPos = this->m_pActorComponent->GetOwnerPosition() + moveDir * frameDT * this->m_pActorComponent->GetMaxRunSpeed();
 					this->m_pActorComponent->SetOwnerPosition(targetPos);
 				} else {
 					this->RequestStateChange(KungFuSheepState::Idle);
@@ -146,13 +146,13 @@ public:
 		static const kbString PunchR_Anim("PunchRight_Basic");
 		static const kbString KickR_Anim("KickRight_Basic");
 
-		const kbVec2 leftStick = GetLeftStick();
+		const Vec2 leftStick = GetLeftStick();
 		if (leftStick.x > 0.5f) {
 			this->m_pActorComponent->SetTargetFacingDirection(g_RightFacing);
 		} else if (leftStick.x < -0.5f) {
 			this->m_pActorComponent->SetTargetFacingDirection(g_LeftFacing);
 		}
-		const kbVec3& targetDir = this->m_pActorComponent->GetTargetFacingDirection();
+		const Vec3& targetDir = this->m_pActorComponent->GetTargetFacingDirection();
 		if (targetDir.z < 0.0f) {
 			if (rand() % 2 == 0) {
 				this->m_pActorComponent->PlayAnimation(PunchL_Anim, 0.05f);
@@ -256,7 +256,7 @@ public:
 	virtual void UpdateState_Internal() override {
 
 		const float frameDT = g_pGame->GetFrameDT();
-		const kbVec3& targetDir = this->m_pActorComponent->GetTargetFacingDirection();
+		const Vec3& targetDir = this->m_pActorComponent->GetTargetFacingDirection();
 		const float curTime = g_GlobalTimer.TimeElapsedSeconds();
 
 		const int numSnolafHuggers = KungFuSheepDirector::Get()->GetNumHuggers();
@@ -277,7 +277,7 @@ public:
 		}
 
 		const kbInput_t& input = g_pInputManager->GetInput();
-		const kbVec2 leftStick = GetLeftStick();
+		const Vec2 leftStick = GetLeftStick();
 		if (WasSpecialAttackPressed() && this->GetSheep()->GetCannonBallMeterFill() >= 1.0f) {
 			this->RequestStateChange(KungFuSheepState::CannonBall);
 		} else if (leftStick.x < 0.0f || input.GamepadButtonStates[8].m_Action == kbInput_t::Down) {
@@ -389,7 +389,7 @@ class KungFuSheepStateCannonBall : public KungFuSheepStateBase<T> {
 public:
 	KungFuSheepStateCannonBall(CannonActorComponent* const pPlayerComponent) : KungFuSheepStateBase<T>(pPlayerComponent) { }
 
-	kbVec3 m_OldFacingDirection;
+	Vec3 m_OldFacingDirection;
 
 	virtual void BeginState_Internal(T prevState) override {
 
@@ -408,7 +408,7 @@ public:
 		}
 
 		m_OldFacingDirection = this->m_pActorComponent->GetTargetFacingDirection();
-		this->m_pActorComponent->SetTargetFacingDirection(kbVec3(-1.0f, 0.0f, 0.0f));
+		this->m_pActorComponent->SetTargetFacingDirection(Vec3(-1.0f, 0.0f, 0.0f));
 
 		m_StartCannonBallTime = g_GlobalTimer.TimeElapsedSeconds();
 	}
@@ -585,11 +585,11 @@ void KungFuSheepComponent::OnAnimEvent(const kbAnimEventInfo_t& animEventInfo) {
 		}
 	} else if (animEventName == CannonBallJumpSmear) {
 		m_AnimSmearStartTime = g_GlobalTimer.TimeElapsedSeconds();
-		m_AnimSmearVec.Set(0.0f, m_JumpSmearMagnitude, 0.0f, 0.0f);
+		m_AnimSmearVec.set(0.0f, m_JumpSmearMagnitude, 0.0f, 0.0f);
 		m_AnimSmearDuration = animEventVal;
 	} else if (animEventName == CannonBallDropSmear) {
 		m_AnimSmearStartTime = g_GlobalTimer.TimeElapsedSeconds();
-		m_AnimSmearVec.Set(0.0f, m_DropSmearMagnitude, 0.0f, 0.0f);
+		m_AnimSmearVec.set(0.0f, m_DropSmearMagnitude, 0.0f, 0.0f);
 		m_AnimSmearDuration = animEventVal;
 	} else if (animEventName == PunchAttack || animEventName == KickAttack) {
 
@@ -635,7 +635,7 @@ void KungFuSheepComponent::Update_Internal(const float DT) {
 		const float eyeOpenTime = (m_CurrentState == KungFuSheepState::Hugged) ? (1.0f) : (2.0f);
 		const float eyeClosedTime = (m_CurrentState == KungFuSheepState::Hugged) ? (0.1f) : (0.5f);
 		const static kbString fxMapMaskParam("fxMapMask");
-		kbVec4 vFXMaskMapParam(1.0f, 0.0f, 0.0f, 0.0f);
+		Vec4 vFXMaskMapParam(1.0f, 0.0f, 0.0f, 0.0f);
 		if (blinkState == 0) {
 			if (curTime > lastBlinkTime + eyeOpenTime) {
 				blinkState = 1;
@@ -643,11 +643,11 @@ void KungFuSheepComponent::Update_Internal(const float DT) {
 			} else {
 
 				if (m_OverridenFXMaskParams.r >= 0.0f && m_OverridenFXMaskParams.g >= 0.0f && m_OverridenFXMaskParams.b >= 0.0f && m_OverridenFXMaskParams.a >= 0.0f) {
-					vFXMaskMapParam.Set(m_OverridenFXMaskParams.x, m_OverridenFXMaskParams.y, m_OverridenFXMaskParams.z, m_OverridenFXMaskParams.w);
+					vFXMaskMapParam.set(m_OverridenFXMaskParams.x, m_OverridenFXMaskParams.y, m_OverridenFXMaskParams.z, m_OverridenFXMaskParams.w);
 				} else if (m_CurrentState == KungFuSheepState::Hugged) {
-					vFXMaskMapParam.Set(0.0f, 0.0f, 1.0f, 0.0f);
+					vFXMaskMapParam.set(0.0f, 0.0f, 1.0f, 0.0f);
 				} else {
-					vFXMaskMapParam.Set(1.0f, 0.0f, 0.0f, 0.0f);
+					vFXMaskMapParam.set(1.0f, 0.0f, 0.0f, 0.0f);
 				}
 			}
 		} else {
@@ -655,7 +655,7 @@ void KungFuSheepComponent::Update_Internal(const float DT) {
 				blinkState = 0;
 				lastBlinkTime = curTime;
 			} else {
-				vFXMaskMapParam.Set(0.0f, 1.0f, 0.0f, 0.0f);
+				vFXMaskMapParam.set(0.0f, 1.0f, 0.0f, 0.0f);
 			}
 		}
 
@@ -665,17 +665,17 @@ void KungFuSheepComponent::Update_Internal(const float DT) {
 	// Headband
 	kbBoneMatrix_t boneMat;
 	if (m_SkelModelsList[0]->GetBoneWorldMatrix(kbString("Head"), boneMat)) {
-		const kbVec3 axis1 = boneMat.GetAxis(0).normalize_safe();
-		const kbVec3 axis2 = boneMat.GetAxis(1).normalize_safe();
-		const kbVec3 axis3 = boneMat.GetAxis(2).normalize_safe();
+		const Vec3 axis1 = boneMat.GetAxis(0).normalize_safe();
+		const Vec3 axis2 = boneMat.GetAxis(1).normalize_safe();
+		const Vec3 axis3 = boneMat.GetAxis(2).normalize_safe();
 
 		m_HeadBandInstance[0].GetEntity()->SetPosition(boneMat.GetOrigin() + axis1 * 0.1f - axis3 * 0.15f);
 		m_HeadBandInstance[1].GetEntity()->SetPosition(boneMat.GetOrigin() + axis1 * 0.1f + axis2 * 0.01f - axis3 * 0.15f);
 	}
 
-	const kbVec3 curFacing = GetOwnerRotation().ToMat4()[2].ToVec3();
+	const Vec3 curFacing = GetOwnerRotation().ToMat4()[2].ToVec3();
 	const float t = (curFacing.z * 0.5f) + 0.5f;
-	kbVec4 collisionSphere = kbLerp(kbVec4(0.280000f, -0.080000f, 0.019997f, 0.25f), kbVec4(0.140f, -0.060f, 0.279997f, 0.25f), t);
+	Vec4 collisionSphere = kbLerp(Vec4(0.280000f, -0.080000f, 0.019997f, 0.25f), Vec4(0.140f, -0.060f, 0.279997f, 0.25f), t);
 	kbClothComponent* const pCloth1 = m_HeadBandInstance[0].GetEntity()->GetComponent<kbClothComponent>();
 	pCloth1->SetClothCollisionSphere(0, collisionSphere);
 
@@ -818,7 +818,7 @@ void KungFuSheepComponent::SpawnSplash() {
 /**
  *	KungFuSheepComponent::PlayCannonBallFX
  */
-void KungFuSheepComponent::PlayCannonBallFX(const kbVec3 location) {
+void KungFuSheepComponent::PlayCannonBallFX(const Vec3 location) {
 
 	if (m_CannonBallImpactFX.GetEntity() == nullptr) {
 		return;

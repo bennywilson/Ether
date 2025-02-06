@@ -21,7 +21,7 @@ kbNameToTypeInfoMap* g_NameToTypeInfoMap = nullptr;
 kbNameToTypeInfoMap::kbNameToTypeInfoMap() {
 	RegisterVectorOperations<kbString>("kbString");
 	RegisterVectorOperations<float>("float");
-	RegisterVectorOperations<kbVec4>("kbVec4");
+	RegisterVectorOperations<Vec4>("Vec4");
 }
 
 /**

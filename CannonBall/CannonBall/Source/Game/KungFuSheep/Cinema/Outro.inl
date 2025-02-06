@@ -64,17 +64,17 @@ public:
 			pSheep->PlayCannonBallFX( pEnt.GetEntity()->GetPosition() );
 	
 			// Give sheep big eyes
-			pSheep->SetOverrideFXMaskParameters( kbVec4( 0.0f, 0.0f, 1.0f, 0.0f ) );
+			pSheep->SetOverrideFXMaskParameters( Vec4( 0.0f, 0.0f, 1.0f, 0.0f ) );
 
 			KungFuLevelComponent::Get()->GetPresent(0).GetEntity()->GetComponent<kbFlingPhysicsComponent>()->Enable( true );
 			KungFuLevelComponent::Get()->GetPresent(1).GetEntity()->GetComponent<kbFlingPhysicsComponent>()->Enable( true );
 
 		} else if ( eventName == sPounce_1_Smear ) {
 			auto pTreyTon = KungFuLevelComponent::Get()->Get3000Ton()->GetComponent<CannonActorComponent>();
-			pTreyTon->ApplyAnimSmear( kbVec3( 0.0f, 10.0f, 0.0f ), 0.067f );
+			pTreyTon->ApplyAnimSmear( Vec3( 0.0f, 10.0f, 0.0f ), 0.067f );
 		} else if ( eventName == sPounce_2_Impact_1 ) {
 
-			kbVec3 fxPos = pSheep->GetOwnerPosition();
+			Vec3 fxPos = pSheep->GetOwnerPosition();
 			fxPos.z =  KungFuGame::kOutroStartZ + 8.75f;
 			pSheep->PlayCannonBallFX( fxPos );
 
@@ -82,7 +82,7 @@ public:
 			KungFuLevelComponent::Get()->DoBreakBridgeEffect( true );
 
 			auto pTreyTon = KungFuLevelComponent::Get()->Get3000Ton()->GetComponent<CannonActorComponent>();
-			pTreyTon->ApplyAnimSmear( kbVec3( 0.0f, 10.0f, 0.0f ), 0.067f );
+			pTreyTon->ApplyAnimSmear( Vec3( 0.0f, 10.0f, 0.0f ), 0.067f );
 		} else if ( eventName == sSlapSound ) {
 			pSheep->PlayImpactSound();
 		} else if ( eventName == sHitCamera ) {
@@ -126,18 +126,18 @@ public:
 		static const kbString sOfferPresent_2( "OfferPresent_2" );
 
 		pSheep->PlayAnimation( Run_Anim, 0.15f );
-		pSheep->SetTargetFacingDirection( kbVec3( 0.0f, 0.0f, -1.0f ) );
+		pSheep->SetTargetFacingDirection( Vec3( 0.0f, 0.0f, -1.0f ) );
 
 		m_pSnolafGuards[0] = KungFuLevelComponent::Get()->GetSnolafFromPool();
-		m_pSnolafGuards[0]->SetOwnerPosition( KungFuGame::kFoxPos + kbVec3( 0.0f, 0.0f, -1.6f ) );
+		m_pSnolafGuards[0]->SetOwnerPosition( KungFuGame::kFoxPos + Vec3( 0.0f, 0.0f, -1.6f ) );
 		m_pSnolafGuards[0]->RequestStateChange( KungFuSnolafState::Cinema );
-		m_pSnolafGuards[0]->SetTargetFacingDirection( kbVec3( 0.0f, 0.0f, -1.0f ) );
+		m_pSnolafGuards[0]->SetTargetFacingDirection( Vec3( 0.0f, 0.0f, -1.0f ) );
 		m_pSnolafGuards[0]->PlayAnimation( sOfferPresent_1, 0.0f );
 
 		m_pSnolafGuards[1] = KungFuLevelComponent::Get()->GetSnolafFromPool();
-		m_pSnolafGuards[1]->SetOwnerPosition( KungFuGame::kFoxPos + kbVec3( 0.0f, 0.0f, -2.9f ) );
+		m_pSnolafGuards[1]->SetOwnerPosition( KungFuGame::kFoxPos + Vec3( 0.0f, 0.0f, -2.9f ) );
 		m_pSnolafGuards[1]->RequestStateChange( KungFuSnolafState::Cinema );
-		m_pSnolafGuards[1]->SetTargetFacingDirection( kbVec3( 0.0f, 0.0f, 1.0f ) );
+		m_pSnolafGuards[1]->SetTargetFacingDirection( Vec3( 0.0f, 0.0f, 1.0f ) );
 		m_pSnolafGuards[1]->PlayAnimation( sOfferPresent_1, 0.0f );
 
 		auto p3000Ton = KungFuLevelComponent::Get()->Get3000Ton();
@@ -149,7 +149,7 @@ public:
 		p3000TonSkel->Enable( true );
 
 		auto p3000TonActor = p3000Ton->GetComponent<CannonActorComponent>();
-		p3000TonActor->SetTargetFacingDirection( kbVec3( 0.0f, 0.0f, 1.0f ) );
+		p3000TonActor->SetTargetFacingDirection( Vec3( 0.0f, 0.0f, 1.0f ) );
 		p3000TonActor->PlayAnimation( kbString( "Idle" ), 0.0f );
 
 		static const kbString s3000TonTitle( "3000 Ton Title" );
@@ -161,7 +161,7 @@ public:
 		// Fox
 		auto pFox = pLevelComp->GetFox();
 		pFox->PlayAnimation( sCry, 0.0f );
-		pFox->SetTargetFacingDirection( kbVec3( -1.0f, 0.0f, 0.0f ) );
+		pFox->SetTargetFacingDirection( Vec3( -1.0f, 0.0f, 0.0f ) );
 		pFox->GetComponent<kbParticleComponent>()->Enable( true );
 		pFox->GetComponent<kbSkeletalModelComponent>()->RegisterAnimEventListener( this );
 
@@ -208,7 +208,7 @@ public:
 
 			case SheepInitialWalkUp : {
 				auto frameDt = g_pGame->GetFrameDT();
-				kbVec3 targetPos = pSheep->GetOwnerPosition() + kbVec3( 0.0f, 0.0f, 1.0f ) * frameDt * pSheep->GetMaxRunSpeed();
+				Vec3 targetPos = pSheep->GetOwnerPosition() + Vec3( 0.0f, 0.0f, 1.0f ) * frameDt * pSheep->GetMaxRunSpeed();
 				if ( targetPos.z >= SheepPullUpZ ) {
 					targetPos.z = SheepPullUpZ;
 					ChangeState( SheepSnolafFaceOff );
@@ -235,12 +235,12 @@ public:
 
 				if ( GetStateTime() > 1.0f ) {
 
-					const kbVec3 posOffset = kbVec3( 0.0f, 0.0f, -13.0f ) + kbVec3( -10.933998f, 3.224068f,  10.000000f ) * 0.3f;
+					const Vec3 posOffset = Vec3( 0.0f, 0.0f, -13.0f ) + Vec3( -10.933998f, 3.224068f,  10.000000f ) * 0.3f;
 
 					const float lerpSpeed = 3.0f;
 					pCamera->SetTarget( p3000Ton->GetOwner(), lerpSpeed );
 					pCamera->SetPositionOffset( posOffset, lerpSpeed );
-					pCamera->SetLookAtOffset( kbVec3( 0.0f, 0.0f, -8.0f ), lerpSpeed );
+					pCamera->SetLookAtOffset( Vec3( 0.0f, 0.0f, -8.0f ), lerpSpeed );
 					ChangeState( TreyTonTitle );
 					pFox->GetComponent<kbParticleComponent>()->Enable( false );
 
@@ -268,8 +268,8 @@ public:
 				if ( GetStateTime() > HideTitleTime ) {
 
 					auto pCamera = g_pCannonGame->GetMainCamera();
-					pCamera->SetLookAtOffset( kbVec3( 0.000000f, 2.500000f, 0.000000f ), ZoomOutSpeed );
-					pCamera->SetPositionOffset( kbVec3( -10.933998f, 3.224068f, 0.000000f ), ZoomOutSpeed );
+					pCamera->SetLookAtOffset( Vec3( 0.000000f, 2.500000f, 0.000000f ), ZoomOutSpeed );
+					pCamera->SetPositionOffset( Vec3( -10.933998f, 3.224068f, 0.000000f ), ZoomOutSpeed );
 
 					kbGameEntityPtr pOutroCamEnt = g_pGame->GetEntityByName( sOutroCam1 );
 					if ( pOutroCamEnt.GetEntity() != nullptr ) {
@@ -314,12 +314,12 @@ public:
 				const float sheepTargetZ = -286.2f;
 				 
 				if ( GetStateTime() > 0.5f ) {
-					kbVec3 sheepPos = pSheep->GetOwnerPosition();
+					Vec3 sheepPos = pSheep->GetOwnerPosition();
 					sheepPos.z += sheepHopRate * g_pGame->GetFrameDT();
 					if ( sheepPos.z >= sheepTargetZ ) {
 						sheepPos.z = sheepTargetZ;
-						pSheep->SetOverrideFXMaskParameters( kbVec4( 1.0f, 0.0f, 0.0f, 0.0f ) );
-						pSheep->SetOverrideFXMaskParameters( kbVec4( 1.0f, 0.0f, 0.0f, 0.0f ) );
+						pSheep->SetOverrideFXMaskParameters( Vec4( 1.0f, 0.0f, 0.0f, 0.0f ) );
+						pSheep->SetOverrideFXMaskParameters( Vec4( 1.0f, 0.0f, 0.0f, 0.0f ) );
 					}
 					pSheep->SetOwnerPosition( sheepPos );
 
@@ -339,7 +339,7 @@ public:
 				const float StareAtCamLen = 1.0f;
 				if ( GetStateTime() > StareAtCamLen ) {
 					pSheep->PlayAnimation( kbString( "Run_Basic" ), 0.15f );
-					kbVec3 sheepPos = pSheep->GetOwnerPosition();
+					Vec3 sheepPos = pSheep->GetOwnerPosition();
 					sheepPos.z += pSheep->GetMaxRunSpeed() * g_pGame->GetFrameDT();
 					if ( sheepPos.z >= KungFuGame::kSheepFinalPos.z ) {
 						sheepPos.z = KungFuGame::kSheepFinalPos.z;
@@ -353,10 +353,10 @@ public:
 				}
 
 				if ( GetStateTime() > StareAtCamLen + 0.15f ) {
-					pFox->SetTargetFacingDirection( kbVec3( 0.0f, 0.0f, 1.0f ) );
+					pFox->SetTargetFacingDirection( Vec3( 0.0f, 0.0f, 1.0f ) );
 					pFox->PlayAnimation( kbString( "Walk" ), 0.15f );
 
-					kbVec3 foxPos = pFox->GetOwnerPosition();
+					Vec3 foxPos = pFox->GetOwnerPosition();
 					foxPos.z -= pFox->GetMaxRunSpeed() * g_pGame->GetFrameDT();
 					if ( foxPos.z <= KungFuGame::kFoxFinalPos.z ) {
 						foxPos.z = KungFuGame::kFoxFinalPos.z;
@@ -371,10 +371,10 @@ public:
 				if ( bFin ) {
 					ChangeState( Dance );
 					pFox->PlayAnimation( sDance, 0.15f );
-					pFox->SetTargetFacingDirection( kbVec3( -1.f, 0.0f, 0.0f ) );
+					pFox->SetTargetFacingDirection( Vec3( -1.f, 0.0f, 0.0f ) );
 
 					pSheep->PlayAnimation( sDance, 0.15f );
-					pSheep->SetTargetFacingDirection( kbVec3( -1.f, 0.0f, 0.0f ) );
+					pSheep->SetTargetFacingDirection( Vec3( -1.f, 0.0f, 0.0f ) );
 					KungFuLevelComponent::Get()->ShowCredits( true );
 				} else {
 					bFin = false;
@@ -387,9 +387,9 @@ public:
 				if ( GetStateTime() > 1.0f ) {
 
 					m_pLastSnolaf->GetOwner()->EnableAllComponents();
-					m_pLastSnolaf->SetOwnerPosition( KungFuGame::kFinalSnolafEntryPos + kbVec3( 0.0f, 0.0f, 2.0f ) );	// Spawn Snolaf offscreen
+					m_pLastSnolaf->SetOwnerPosition( KungFuGame::kFinalSnolafEntryPos + Vec3( 0.0f, 0.0f, 2.0f ) );	// Spawn Snolaf offscreen
 					m_pLastSnolaf->RequestStateChange( KungFuSnolafState::Cinema );
-					m_pLastSnolaf->SetTargetFacingDirection( kbVec3( 0.0f, 0.0f, 1.0f ) );
+					m_pLastSnolaf->SetTargetFacingDirection( Vec3( 0.0f, 0.0f, 1.0f ) );
 					m_pLastSnolaf->PlayAnimation( kbString( "Reenter" ), 0.0f );
 					ChangeState( Snolaf_Reenter );
 				}
@@ -402,14 +402,14 @@ public:
 				const float SnolafRunMultiplier = 2.0f;
 
 				if ( GetStateTime() > SnolafPeerLen ) {
-					const kbVec3 snolafTargetPos = KungFuGame::kSheepFinalPos + kbVec3( 0.0f, 0.0f, 1.1f );
-					kbVec3 snolafCurPos = m_pLastSnolaf->GetOwnerPosition();
+					const Vec3 snolafTargetPos = KungFuGame::kSheepFinalPos + Vec3( 0.0f, 0.0f, 1.1f );
+					Vec3 snolafCurPos = m_pLastSnolaf->GetOwnerPosition();
 					if ( snolafCurPos.z > snolafTargetPos.z ) {
 						m_pLastSnolaf->PlayAnimation( kbString( "Run" ), 0.15f );
 						snolafCurPos.z -= m_pLastSnolaf->GetMaxRunSpeed() * g_pGame->GetFrameDT() * SnolafRunMultiplier;
 					} else {
 						m_pLastSnolaf->PlayAnimation( kbString( "Dance" ), 0.15f );
-						m_pLastSnolaf->SetTargetFacingDirection( kbVec3( -1.0f, 0.0f, 0.0f ) );
+						m_pLastSnolaf->SetTargetFacingDirection( Vec3( -1.0f, 0.0f, 0.0f ) );
 						ChangeState( DanceStare );
 					}
 					m_pLastSnolaf->SetOwnerPosition( snolafCurPos );
@@ -445,7 +445,7 @@ public:
 
 				if ( GetStateTime() > 1.5f ) {
 					pFox->PlayAnimation( kbString( "Disrespect" ), 0.15f );
-					pFox->SetTargetFacingDirection( kbVec3( 0.0f, 0.0f, 1.0f ) );
+					pFox->SetTargetFacingDirection( Vec3( 0.0f, 0.0f, 1.0f ) );
 				}
 				if ( GetStateTime() > 3.8f ) {
 					pFox->PlayAnimation( kbString( "Slap Snolaf" ), 0.15f, false );
@@ -458,7 +458,7 @@ public:
 			case Title_Snolaf : {
 				if ( GetStateTime() > 0.25f ) {
 					m_pLastSnolaf->PlayAnimation( kbString( "Title" ), 0.15f );
-					m_pLastSnolaf->SetOverrideFXMaskParameters( kbVec4( 0.0f, 0.0f, 0.0f, 1.0f ) ) ;
+					m_pLastSnolaf->SetOverrideFXMaskParameters( Vec4( 0.0f, 0.0f, 0.0f, 1.0f ) ) ;
 					ChangeState( Title_Sheep );
 				}
 
@@ -503,8 +503,8 @@ public:
 		p3000TonSkel->UnregisterAnimEventListener( this );
 
 		auto pCamera = g_pCannonGame->GetMainCamera();
-		pCamera->SetLookAtOffset( kbVec3( 0.000000f, 2.500000f, 0.000000f ), -1.0f );
-		pCamera->SetPositionOffset( kbVec3( -10.933998f, 3.224068f, 0.000000f ), -1.0f );
+		pCamera->SetLookAtOffset( Vec3( 0.000000f, 2.500000f, 0.000000f ), -1.0f );
+		pCamera->SetPositionOffset( Vec3( -10.933998f, 3.224068f, 0.000000f ), -1.0f );
 
 		auto pSheep = KungFuLevelComponent::Get()->GetSheep();
 		pSheep->EnableHeadBand( true );
@@ -525,7 +525,7 @@ public:
 		pFox->GetComponent<kbParticleComponent>()->Enable( false );
 		pFox->GetComponent<kbSkeletalModelComponent>()->UnregisterAnimEventListener( this );
 
-		m_pLastSnolaf->SetOverrideFXMaskParameters( kbVec4( -1.0f, -1.0f, -1.0f, -1.0f ) );
+		m_pLastSnolaf->SetOverrideFXMaskParameters( Vec4( -1.0f, -1.0f, -1.0f, -1.0f ) );
 		m_pLastSnolaf->GetComponent<kbSkeletalModelComponent>()->UnregisterAnimEventListener( this );
 		KungFuLevelComponent::Get()->ReturnSnolafToPool( m_pLastSnolaf );
 		m_pLastSnolaf = nullptr;

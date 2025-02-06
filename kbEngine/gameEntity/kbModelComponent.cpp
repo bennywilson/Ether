@@ -79,7 +79,7 @@ void kbModelComponent::RefreshMaterials( const bool bRefreshRenderObject ) {
 		newShaderParams.m_pShader = matComp.GetShader();
 		newShaderParams.m_CullModeOverride = matComp.GetCullModeOverride();
 
-		auto srcShaderParams = matComp.GetShaderParams();
+		const auto& srcShaderParams = matComp.GetShaderParams();
 		for ( int j = 0; j < srcShaderParams.size(); j++ ) {
 			if ( srcShaderParams[j].GetTexture() != nullptr ) {
 				newShaderParams.SetTexture( srcShaderParams[j].GetParamName().stl_str(), srcShaderParams[j].GetTexture() );
@@ -103,7 +103,7 @@ void kbModelComponent::RefreshMaterials( const bool bRefreshRenderObject ) {
 /**
  *	kbModelComponent:SetMaterialParamVector
  */
-void kbModelComponent::SetMaterialParamVector( const int idx, const std::string & paramName, const kbVec4& paramValue ) {
+void kbModelComponent::SetMaterialParamVector( const int idx, const std::string & paramName, const Vec4& paramValue ) {
 	if ( idx < 0 || idx > 32 || idx >= m_MaterialList.size() ) {
 		blk::warning( "kbModelComponent::SetMaterialParamVector() called on invalid index" );
 		return;
@@ -172,7 +172,7 @@ const kbShaderParamComponent * kbModelComponent::GetShaderParamComponent( const 
 void kbShaderParamComponent::Constructor() {
 	m_pTexture = nullptr;
 	m_pRenderTexture = nullptr;
-	m_Vector.Set( 0.0f, 0.0f, 0.0f, 0.0f );
+	m_Vector.set( 0.0f, 0.0f, 0.0f, 0.0f );
 }
 
 /**
@@ -214,7 +214,7 @@ void kbMaterialComponent::EditorChange( const std::string & propertyName ) {
 			if ( boundParamFound == false ) {
 				kbShaderParamComponent newParam;
 				newParam.SetParamName( boundVarName );
-				newParam.SetVector( kbVec4::zero );
+				newParam.SetVector( Vec4::zero );
 				newParam.SetTexture( nullptr );
 				m_ShaderParamComponents.push_back( newParam );
 			}
@@ -239,7 +239,7 @@ void kbMaterialComponent::EditorChange( const std::string & propertyName ) {
 			if ( boundParamFound == false ) {
 				kbShaderParamComponent newParam;
 				newParam.SetParamName( boundTextureName );
-				newParam.SetVector( kbVec4::zero );
+				newParam.SetVector( Vec4::zero );
 				newParam.SetTexture( nullptr );
 				m_ShaderParamComponents.push_back( newParam );			
 			}
@@ -336,6 +336,6 @@ void kbShaderModifierComponent::Update_Internal( const float dt ) {
 	}
 
 	const float elapsedTime = g_GlobalTimer.TimeElapsedSeconds() - m_StartTime;
-	const kbVec4 shaderParam = kbVectorAnimEvent::Evaluate( m_ShaderVectorEvents, elapsedTime );
+	const Vec4 shaderParam = kbVectorAnimEvent::Evaluate( m_ShaderVectorEvents, elapsedTime );
 	m_pModelComponent->SetMaterialParamVector( 0, m_ShaderVectorEvents[0].GetEventName().stl_str(), shaderParam );
 }

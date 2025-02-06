@@ -23,10 +23,10 @@ public:
 	void Update();
 
 //private:
-	kbVec3	m_Position;
+	Vec3	m_Position;
 	kbQuat	m_Rotation;
 
-	kbMat4	m_EyeMats[2];
+	Mat4	m_EyeMats[2];
 
 	kbQuat	m_RotationTarget;
 };

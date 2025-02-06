@@ -40,7 +40,7 @@ public:
 	const std::vector<kbGameEntity*>& GetGameEntities() const { return m_GameEntityList; }
 	const std::vector<kbGameEntity*>& GetPlayersList() const { return m_GamePlayersList; }
 
-	virtual kbGameEntity* CreatePlayer(const int netId, const kbGUID& prefabGUID, const kbVec3& desiredLocation) = 0;
+	virtual kbGameEntity* CreatePlayer(const int netId, const kbGUID& prefabGUID, const Vec3& desiredLocation) = 0;
 	kbGameEntity* CreateEntity(const kbGameEntity* const pPrefab, const bool bIsPlayer = false);
 	void RemoveGameEntity(kbGameEntity* const pNewEntity);
 

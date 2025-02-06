@@ -249,7 +249,7 @@ void kbParticleManager::RenderSync() {
 
 		finishedModel.SwapTexture(0, curAtlas.m_pAtlasTexture, 0);
 
-		curRenderObj.m_Position = kbVec3::zero;
+		curRenderObj.m_Position = Vec3::zero;
 		curRenderObj.m_Orientation = kbQuat(0.0f, 0.0f, 0.0f, 1.0f);
 		curRenderObj.m_pModel = &finishedModel;
 		g_pRenderer->AddParticle(curRenderObj);
@@ -297,12 +297,12 @@ void kbParticleManager::AddQuad(const uint atlasIdx, const CustomParticleAtlasIn
 	curAtlas.m_pVertexBuffer[vertexIndex + 2].position = CustomParticleInfo.m_Position;
 	curAtlas.m_pVertexBuffer[vertexIndex + 3].position = CustomParticleInfo.m_Position;
 
-	curAtlas.m_pVertexBuffer[vertexIndex + 0].uv.Set(CustomParticleInfo.m_UVs[0].x, CustomParticleInfo.m_UVs[0].y);
-	curAtlas.m_pVertexBuffer[vertexIndex + 1].uv.Set(CustomParticleInfo.m_UVs[1].x, CustomParticleInfo.m_UVs[0].y);
-	curAtlas.m_pVertexBuffer[vertexIndex + 2].uv.Set(CustomParticleInfo.m_UVs[1].x, CustomParticleInfo.m_UVs[1].y);
-	curAtlas.m_pVertexBuffer[vertexIndex + 3].uv.Set(CustomParticleInfo.m_UVs[0].x, CustomParticleInfo.m_UVs[1].y);
+	curAtlas.m_pVertexBuffer[vertexIndex + 0].uv.set(CustomParticleInfo.m_UVs[0].x, CustomParticleInfo.m_UVs[0].y);
+	curAtlas.m_pVertexBuffer[vertexIndex + 1].uv.set(CustomParticleInfo.m_UVs[1].x, CustomParticleInfo.m_UVs[0].y);
+	curAtlas.m_pVertexBuffer[vertexIndex + 2].uv.set(CustomParticleInfo.m_UVs[1].x, CustomParticleInfo.m_UVs[1].y);
+	curAtlas.m_pVertexBuffer[vertexIndex + 3].uv.set(CustomParticleInfo.m_UVs[0].x, CustomParticleInfo.m_UVs[1].y);
 
-	kbVec4 color = CustomParticleInfo.m_Color;
+	Vec4 color = CustomParticleInfo.m_Color;
 	curAtlas.m_pVertexBuffer[vertexIndex + 0].SetColor(color);
 	curAtlas.m_pVertexBuffer[vertexIndex + 1].SetColor(color);
 	curAtlas.m_pVertexBuffer[vertexIndex + 2].SetColor(color);
@@ -316,10 +316,10 @@ void kbParticleManager::AddQuad(const uint atlasIdx, const CustomParticleAtlasIn
 	const float halfWidth = CustomParticleInfo.m_Width * 0.5f;
 	const float halfHeight = CustomParticleInfo.m_Height * 0.5f;
 
-	curAtlas.m_pVertexBuffer[vertexIndex + 0].size = kbVec2(-halfWidth, halfHeight);
-	curAtlas.m_pVertexBuffer[vertexIndex + 1].size = kbVec2(halfWidth, halfHeight);
-	curAtlas.m_pVertexBuffer[vertexIndex + 2].size = kbVec2(halfWidth, -halfHeight);
-	curAtlas.m_pVertexBuffer[vertexIndex + 3].size = kbVec2(-halfWidth, -halfHeight);
+	curAtlas.m_pVertexBuffer[vertexIndex + 0].size = Vec2(-halfWidth, halfHeight);
+	curAtlas.m_pVertexBuffer[vertexIndex + 1].size = Vec2(halfWidth, halfHeight);
+	curAtlas.m_pVertexBuffer[vertexIndex + 2].size = Vec2(halfWidth, -halfHeight);
+	curAtlas.m_pVertexBuffer[vertexIndex + 3].size = Vec2(-halfWidth, -halfHeight);
 
 	curAtlas.m_pVertexBuffer[vertexIndex + 0].direction = CustomParticleInfo.m_Direction;
 	curAtlas.m_pVertexBuffer[vertexIndex + 1].direction = CustomParticleInfo.m_Direction;

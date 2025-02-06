@@ -54,14 +54,14 @@ protected:
 private:
 
 	// Editor
-	kbVec3									m_SparkRelativePosition;
-	kbVec3									m_SparkRelativeSize;
+	Vec3									m_SparkRelativePosition;
+	Vec3									m_SparkRelativeSize;
 
-	kbVec3									m_BoomRelativePosition;
-	kbVec3									m_BoomRelativeSize;
+	Vec3									m_BoomRelativePosition;
+	Vec3									m_BoomRelativeSize;
 
-	kbVec3									m_SmokeRelativePosition;
-	kbVec3									m_SmokeRelativeSize;
+	Vec3									m_SmokeRelativePosition;
+	Vec3									m_SmokeRelativeSize;
 
 	// Runtime
 	kbStaticModelComponent *				m_pSparkModel;
@@ -113,8 +113,8 @@ private:
 	// Editor
 	std::vector<kbUISlider>					m_SliderWidgets;
 	std::vector<kbUIWidgetComponent>		m_Widgets;
-	kbVec3									m_WidgetSize;
-	kbVec3									m_StartingWidgetAnchorPt;
+	Vec3									m_WidgetSize;
+	Vec3									m_StartingWidgetAnchorPt;
 	float									m_SpaceBetweenWidgets;
 	std::vector<kbSoundData>				m_VolumeSliderTestWav;
 
@@ -160,7 +160,7 @@ protected:
 	// Runtime
 	int										m_AnimationState;
 	float									m_TimeAnimStateBegan;
-	kbVec3									m_StartRelativePos;
+	Vec3									m_StartRelativePos;
 
 	int										m_MainMenuIdx;
 
@@ -215,6 +215,6 @@ class CannonBallScrollComponent : public kbUIWidgetComponent {
 	virtual void							Update_Internal( const float DeltaTime ) override;
 
 	// Editor
-	kbVec3									m_ScrollRate;
+	Vec3									m_ScrollRate;
 };
 #endif

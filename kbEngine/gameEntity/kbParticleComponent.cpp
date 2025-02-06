@@ -53,11 +53,11 @@ void kbParticleComponent::Constructor() {
 	m_MinEndRotationRate = 0;
 	m_MaxEndRotationRate = 0;
 
-	m_MinStart3DRotation = kbVec3::zero;
-	m_MaxStart3DRotation = kbVec3::zero;
+	m_MinStart3DRotation = Vec3::zero;
+	m_MaxStart3DRotation = Vec3::zero;
 
-	m_MinStart3DOffset = kbVec3::zero;
-	m_MaxStart3DOffset = kbVec3::zero;
+	m_MinStart3DOffset = Vec3::zero;
+	m_MaxStart3DOffset = Vec3::zero;
 
 	m_MinParticleStartSize.set(3.0f, 3.0f, 3.0f);
 	m_MaxParticleStartSize.set(3.0f, 3.0f, 3.0f);
@@ -65,8 +65,8 @@ void kbParticleComponent::Constructor() {
 	m_MaxParticleEndSize.set(3.0f, 3.0f, 3.0f);
 	m_ParticleMinDuration = 3.0f;
 	m_ParticleMaxDuration = 3.0f;
-	m_ParticleStartColor.Set(1.0f, 1.0f, 1.0f, 1.0f);
-	m_ParticleEndColor.Set(1.0f, 1.0f, 1.0f, 1.0f);
+	m_ParticleStartColor.set(1.0f, 1.0f, 1.0f, 1.0f);
+	m_ParticleEndColor.set(1.0f, 1.0f, 1.0f, 1.0f);
 	m_MinBurstCount = 0;
 	m_MaxBurstCount = 0;
 	m_BurstCount = 0;
@@ -152,14 +152,14 @@ void kbParticleComponent::Update_Internal(const float DeltaTime) {
 		return;
 	}
 
-	kbVec3 currentCameraPosition;
+	Vec3 currentCameraPosition;
 	kbQuat currentCameraRotation;
 	g_pRenderer->GetRenderViewTransform(nullptr, currentCameraPosition, currentCameraRotation);
 
 	int iVertex = 0;
 	int curVBPosition = 0;
-	const kbVec3 scale = GetScale();
-	const kbVec3 direction = GetOrientation().ToMat4()[2].ToVec3();
+	const Vec3 scale = GetScale();
+	const Vec3 direction = GetOrientation().ToMat4()[2].ToVec3();
 	byte iBillboardType = 0;
 	switch (m_ParticleBillboardType) {
 		case EBillboardType::BT_FaceCamera: iBillboardType = 0; break;
@@ -191,14 +191,14 @@ void kbParticleComponent::Update_Internal(const float DeltaTime) {
 		blk::error_check(pDstVerts != nullptr, "kbParticleComponent::Update_Internal() - pDstVerts is null");
 
 		for (int i = 0; i < m_Particles.size() * 4; i++) {
-			pDstVerts[i].position = kbVec3::zero;
+			pDstVerts[i].position = Vec3::zero;
 		}
 	}
 
 	for (int i = (int)m_Particles.size() - 1; i >= 0; i--) {
 		kbParticle_t& particle = m_Particles[i];
 		const float normalizedTime = (particle.m_TotalLife - particle.m_LifeLeft) / particle.m_TotalLife;
-		kbVec3 curVelocity = kbVec3::zero;
+		Vec3 curVelocity = Vec3::zero;
 
 		if (m_VelocityOverLifeTimeCurve.size() == 0) {
 			curVelocity = kbLerp(particle.m_StartVelocity, particle.m_EndVelocity, normalizedTime);
@@ -214,17 +214,17 @@ void kbParticleComponent::Update_Internal(const float DeltaTime) {
 		const float curRotationRate = kbLerp(particle.m_StartRotation, particle.m_EndRotation, normalizedTime);
 		particle.m_Rotation += curRotationRate * DeltaTime;
 
-		kbVec3 curSize = kbVec3::zero;
+		Vec3 curSize = Vec3::zero;
 		if (m_SizeOverLifeTimeCurve.size() == 0) {
 			curSize = kbLerp(particle.m_StartSize * scale.x, particle.m_EndSize * scale.y, normalizedTime);
 		} else {
-			kbVec3 eval = kbVectorAnimEvent::Evaluate(m_SizeOverLifeTimeCurve, normalizedTime).ToVec3();
+			Vec3 eval = kbVectorAnimEvent::Evaluate(m_SizeOverLifeTimeCurve, normalizedTime).ToVec3();
 			curSize.x = eval.x * particle.m_StartSize.x * scale.x;
 			curSize.y = eval.y * particle.m_StartSize.y * scale.y;
 			curSize.z = eval.z * particle.m_StartSize.z * scale.z;
 		}
 
-		kbVec4 curColor = kbVec4::zero;
+		Vec4 curColor = Vec4::zero;
 		if (m_ColorOverLifeTimeCurve.size() == 0) {
 			curColor = kbLerp(m_ParticleStartColor, m_ParticleEndColor, normalizedTime);
 		} else {
@@ -249,11 +249,11 @@ void kbParticleComponent::Update_Internal(const float DeltaTime) {
 			renderObj.m_Scale *= kbLevelComponent::GetGlobalModelScale();
 
 			if (m_RotationOverLifeTimeCurve.size() > 0) {
-				const kbVec4 rotationFactor = kbVectorAnimEvent::Evaluate(m_RotationOverLifeTimeCurve, normalizedTime);
+				const Vec4 rotationFactor = kbVectorAnimEvent::Evaluate(m_RotationOverLifeTimeCurve, normalizedTime);
 				kbQuat xAxis, yAxis, zAxis;
-				xAxis.FromAxisAngle(kbVec3(1.0f, 0.0f, 0.0f), kbToRadians(particle.m_RotationAxis.x * rotationFactor.x));
-				yAxis.FromAxisAngle(kbVec3(0.0f, 1.0f, 0.0f), kbToRadians(particle.m_RotationAxis.y * rotationFactor.y));
-				zAxis.FromAxisAngle(kbVec3(0.0f, 0.0f, 1.0f), kbToRadians(particle.m_RotationAxis.z * rotationFactor.z));
+				xAxis.FromAxisAngle(Vec3(1.0f, 0.0f, 0.0f), kbToRadians(particle.m_RotationAxis.x * rotationFactor.x));
+				yAxis.FromAxisAngle(Vec3(0.0f, 1.0f, 0.0f), kbToRadians(particle.m_RotationAxis.y * rotationFactor.y));
+				zAxis.FromAxisAngle(Vec3(0.0f, 0.0f, 1.0f), kbToRadians(particle.m_RotationAxis.z * rotationFactor.z));
 				renderObj.m_Orientation = xAxis * yAxis * zAxis;
 			}
 
@@ -270,16 +270,16 @@ void kbParticleComponent::Update_Internal(const float DeltaTime) {
 		pDstVerts[iVertex + 2].position = particle.m_Position;
 		pDstVerts[iVertex + 3].position = particle.m_Position;
 
-		pDstVerts[iVertex + 0].uv.Set(0.0f, 0.0f);
-		pDstVerts[iVertex + 1].uv.Set(1.0f, 0.0f);
-		pDstVerts[iVertex + 2].uv.Set(1.0f, 1.0f);
-		pDstVerts[iVertex + 3].uv.Set(0.0f, 1.0f);
+		pDstVerts[iVertex + 0].uv.set(0.0f, 0.0f);
+		pDstVerts[iVertex + 1].uv.set(1.0f, 0.0f);
+		pDstVerts[iVertex + 2].uv.set(1.0f, 1.0f);
+		pDstVerts[iVertex + 3].uv.set(0.0f, 1.0f);
 
 
-		pDstVerts[iVertex + 0].size = kbVec2(-curSize.x, curSize.y);
-		pDstVerts[iVertex + 1].size = kbVec2(curSize.x, curSize.y);
-		pDstVerts[iVertex + 2].size = kbVec2(curSize.x, -curSize.y);
-		pDstVerts[iVertex + 3].size = kbVec2(-curSize.x, -curSize.y);
+		pDstVerts[iVertex + 0].size = Vec2(-curSize.x, curSize.y);
+		pDstVerts[iVertex + 1].size = Vec2(curSize.x, curSize.y);
+		pDstVerts[iVertex + 2].size = Vec2(curSize.x, -curSize.y);
+		pDstVerts[iVertex + 3].size = Vec2(-curSize.x, -curSize.y);
 
 		memcpy(&pDstVerts[iVertex + 0].color, byteColor, sizeof(byteColor));
 		memcpy(&pDstVerts[iVertex + 1].color, byteColor, sizeof(byteColor));
@@ -287,7 +287,7 @@ void kbParticleComponent::Update_Internal(const float DeltaTime) {
 		memcpy(&pDstVerts[iVertex + 3].color, byteColor, sizeof(byteColor));
 
 		if (m_ParticleBillboardType == EBillboardType::BT_AlignAlongVelocity) {
-			kbVec3 alignVec = kbVec3::up;
+			Vec3 alignVec = Vec3::up;
 			if (curVelocity.length_sqr() > 0.01f) {
 				alignVec = curVelocity.normalize_safe();
 				pDstVerts[iVertex + 0].direction = alignVec;
@@ -341,19 +341,19 @@ void kbParticleComponent::Update_Internal(const float DeltaTime) {
 	int currentListEnd = (int)m_Particles.size();
 	float NextSpawn = 0.0f;
 
-	kbMat4 ownerMatrix = GetOwner()->GetOrientation().ToMat4();
+	Mat4 ownerMatrix = GetOwner()->GetOrientation().ToMat4();
 
 	// Spawn particles
-	kbVec3 MyPosition = GetPosition();
+	Vec3 MyPosition = GetPosition();
 	while (m_bIsSpawning && ((m_MaxParticleSpawnRate > 0 && TimeLeft >= NextSpawn) || m_BurstCount > 0) && (m_MaxParticlesToEmit <= 0 || m_NumEmittedParticles < m_MaxParticlesToEmit)) {
-		if (m_MinStart3DOffset.compare(kbVec3::zero) == false || m_MaxStart3DOffset.compare(kbVec3::zero) == false) {
-			const kbVec3 startingOffset = kbVec3Rand(m_MinStart3DOffset, m_MaxStart3DOffset);
+		if (m_MinStart3DOffset.compare(Vec3::zero) == false || m_MaxStart3DOffset.compare(Vec3::zero) == false) {
+			const Vec3 startingOffset = Vec3Rand(m_MinStart3DOffset, m_MaxStart3DOffset);
 			MyPosition += startingOffset;
 		}
 
 		kbParticle_t newParticle;
-		newParticle.m_StartVelocity = kbVec3Rand(m_MinParticleStartVelocity, m_MaxParticleStartVelocity) * ownerMatrix;
-		newParticle.m_EndVelocity = kbVec3Rand(m_MinParticleEndVelocity, m_MaxParticleEndVelocity) * ownerMatrix;
+		newParticle.m_StartVelocity = Vec3Rand(m_MinParticleStartVelocity, m_MaxParticleStartVelocity) * ownerMatrix;
+		newParticle.m_EndVelocity = Vec3Rand(m_MinParticleEndVelocity, m_MaxParticleEndVelocity) * ownerMatrix;
 
 		newParticle.m_Position = MyPosition + newParticle.m_StartVelocity * TimeLeft;
 		newParticle.m_LifeLeft = m_ParticleMinDuration + (kbfrand() * (m_ParticleMaxDuration - m_ParticleMinDuration));
@@ -397,7 +397,7 @@ void kbParticleComponent::Update_Internal(const float DeltaTime) {
 				renderObj.m_RenderOrderBias = 0;
 				renderObj.m_Position = newParticle.m_Position;
 
-				renderObj.m_Scale = kbVec3::one;
+				renderObj.m_Scale = Vec3::one;
 				renderObj.m_EntityId = 0;
 				renderObj.m_CullDistance = -1;
 				renderObj.m_bCastsShadow = false;
@@ -406,12 +406,12 @@ void kbParticleComponent::Update_Internal(const float DeltaTime) {
 				renderObj.m_bIsRemove = false;
 
 				renderObj.m_Orientation = kbQuat(0.0f, 0.0f, 0.0f, 1.0f);
-				if (m_MinStart3DRotation.compare(kbVec3::zero) == false || m_MaxStart3DRotation.compare(kbVec3::zero) == false) {
-					newParticle.m_RotationAxis = kbVec3Rand(m_MinStart3DRotation, m_MaxStart3DRotation);
+				if (m_MinStart3DRotation.compare(Vec3::zero) == false || m_MaxStart3DRotation.compare(Vec3::zero) == false) {
+					newParticle.m_RotationAxis = Vec3Rand(m_MinStart3DRotation, m_MaxStart3DRotation);
 					kbQuat xAxis, yAxis, zAxis;
-					xAxis.FromAxisAngle(kbVec3(1.0f, 0.0f, 0.0f), kbToRadians(newParticle.m_RotationAxis.x));
-					yAxis.FromAxisAngle(kbVec3(0.0f, 1.0f, 0.0f), kbToRadians(newParticle.m_RotationAxis.y));
-					zAxis.FromAxisAngle(kbVec3(0.0f, 0.0f, 1.0f), kbToRadians(newParticle.m_RotationAxis.z));
+					xAxis.FromAxisAngle(Vec3(1.0f, 0.0f, 0.0f), kbToRadians(newParticle.m_RotationAxis.x));
+					yAxis.FromAxisAngle(Vec3(0.0f, 1.0f, 0.0f), kbToRadians(newParticle.m_RotationAxis.y));
+					zAxis.FromAxisAngle(Vec3(0.0f, 0.0f, 1.0f), kbToRadians(newParticle.m_RotationAxis.z));
 
 					renderObj.m_Orientation = xAxis * yAxis * zAxis;
 				}
@@ -516,7 +516,7 @@ void kbParticleComponent::RenderSync() {
 		kbShaderParamOverrides_t newShaderParams;
 		newShaderParams.m_pShader = matComp.GetShader();
 
-		auto srcShaderParams = matComp.GetShaderParams();
+		const auto& srcShaderParams = matComp.GetShaderParams();
 		for (int j = 0; j < srcShaderParams.size(); j++) {
 			if (srcShaderParams[j].GetTexture() != nullptr) {
 				newShaderParams.SetTexture(srcShaderParams[j].GetParamName().stl_str(), srcShaderParams[j].GetTexture());
@@ -607,7 +607,7 @@ void kbModelEmitter::Init() {
 		kbShaderParamOverrides_t newShaderParams;
 		newShaderParams.m_pShader = matComp.GetShader();
 
-		auto srcShaderParams = matComp.GetShaderParams();
+		const auto& srcShaderParams = matComp.GetShaderParams();
 		for (int j = 0; j < srcShaderParams.size(); j++) {
 			if (srcShaderParams[j].GetTexture() != nullptr) {
 				newShaderParams.SetTexture(srcShaderParams[j].GetParamName().stl_str(), srcShaderParams[j].GetTexture());

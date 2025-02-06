@@ -27,10 +27,10 @@ kbSoundData::~kbSoundData() {
 }
 
 /// kbSoundData::PlaySoundAtPosition
-void kbSoundData::PlaySoundAtPosition(const kbVec3& soundPosition) {
+void kbSoundData::PlaySoundAtPosition(const Vec3& soundPosition) {
 	//blk::error("Needs reimplementation");
 
-	kbVec3 currentCameraPosition;
+	Vec3 currentCameraPosition;
 	kbQuat currentCameraRotation;
 
 	g_pRenderer->GetRenderViewTransform(nullptr, currentCameraPosition, currentCameraRotation);

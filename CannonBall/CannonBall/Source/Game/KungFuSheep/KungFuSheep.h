@@ -52,7 +52,7 @@ public:
 	void										HitASnolaf();
 	void										PlayImpactSound();
 
-	void										PlayCannonBallFX(const kbVec3 location);
+	void										PlayCannonBallFX(const Vec3 location);
 	void										PlayCameraShake();
 
 	void										EnableHeadBand(const bool bEnable);
@@ -108,15 +108,15 @@ protected:
 
 	KungFuSheepComponent* GetSheep() const { return (KungFuSheepComponent*)this->m_pActorComponent; }
 
-	bool CheckForBlocker(const kbVec3 moveVec) {
+	bool CheckForBlocker(const Vec3 moveVec) {
 
 		if (KungFuSheepDirector::Get()->GetNumHuggersAndPrehuggers() > 0) {
 			return true;
 		}
 
 		const float SheepZ = GetSheep()->GetOwnerPosition().z;
-		const kbVec3 SheepDest = GetSheep()->GetOwnerPosition() + moveVec;
-		//g_pRenderer->DrawLine( GetSheep()->GetOwnerPosition() ,  GetSheep()->GetOwnerPosition() + moveVec + kbVec3( 0, 1, 0 ) , kbColor::red );
+		const Vec3 SheepDest = GetSheep()->GetOwnerPosition() + moveVec;
+		//g_pRenderer->DrawLine( GetSheep()->GetOwnerPosition() ,  GetSheep()->GetOwnerPosition() + moveVec + Vec3( 0, 1, 0 ) , kbColor::red );
 
 		for (int i = 0; i < g_pCannonGame->GetGameEntities().size(); i++) {
 
@@ -126,7 +126,7 @@ protected:
 				continue;
 			}
 
-			const kbVec3 snolafPos = pSnolaf->GetOwnerPosition();
+			const Vec3 snolafPos = pSnolaf->GetOwnerPosition();
 			if (snolafPos.z < SheepZ && snolafPos.z > SheepDest.z) {
 				return true;
 			}

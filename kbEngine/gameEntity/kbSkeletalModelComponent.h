@@ -56,7 +56,7 @@ public:
 	int											GetBoneIndex( const kbString & boneName );
 	kbBoneMatrix_t								GetBoneRefMatrix( const int index );
 
-	bool										GetBoneWorldPosition( const kbString & boneName, kbVec3 & outWorldPosition );
+	bool										GetBoneWorldPosition( const kbString & boneName, Vec3 & outWorldPosition );
 	bool										GetBoneWorldMatrix( const kbString & boneName, kbBoneMatrix_t & boneMatrix );
 	std::vector<kbBoneMatrix_t> &				GetFinalBoneMatrices() { return m_BindToLocalSpaceMatrices; }
 	const std::vector<kbBoneMatrix_t> &			GetFinalBoneMatrices() const { return m_BindToLocalSpaceMatrices; }
@@ -132,18 +132,18 @@ protected:
 private:
 
 	// Editor
-	kbVec3										m_MinLinearVelocity;
-	kbVec3										m_MaxLinearVelocity;
+	Vec3										m_MinLinearVelocity;
+	Vec3										m_MaxLinearVelocity;
 	float										m_MinAngularSpeed;
 	float										m_MaxAngularSpeed;
-	kbVec3										m_Gravity;
+	Vec3										m_Gravity;
 
 	// Run time
-	kbVec3										m_OwnerStartPos;
+	Vec3										m_OwnerStartPos;
 	kbQuat										m_OwnerStartRotation;
 
-	kbVec3										m_Velocity;
-	kbVec3										m_RotationAxis;
+	Vec3										m_Velocity;
+	Vec3										m_RotationAxis;
 
 	float										m_CurRotationAngle;
 	float										m_RotationSpeed;

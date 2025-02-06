@@ -50,7 +50,7 @@ void kbCollisionComponent::Update_Internal( const float DeltaTime ) {
 	Super::Update_Internal( DeltaTime );
 
 	if ( g_ShowCollision.GetBool() ) {
-		const kbVec3 collisionCenter = GetOwner()->GetPosition();//, pCollision->m_Extent.x 
+		const Vec3 collisionCenter = GetOwner()->GetPosition();//, pCollision->m_Extent.x 
 		if ( m_CollisionType == ECollisionType::CollisionType_Sphere ) {
 			g_pRenderer->DrawSphere( collisionCenter, m_Extent.x, 12, kbColor::green );
 		} else if ( m_CollisionType == ECollisionType::CollisionType_Box ) {
@@ -62,7 +62,7 @@ void kbCollisionComponent::Update_Internal( const float DeltaTime ) {
 /**
  *	kbCollisionComponent::SetWorldSpaceCollisionSphere
  */
-void kbCollisionComponent::SetWorldSpaceCollisionSphere( const int idx, const kbVec4 & newSphere ) {
+void kbCollisionComponent::SetWorldSpaceCollisionSphere( const int idx, const Vec4 & newSphere ) {
 
 	if ( idx < 0 || idx >= m_LocalSpaceCollisionSpheres.size() ) {
 		blk::error( "kbCollisionComponent::SetWorldSpaceCollisionSphere() - Invalid idx %d provided", idx );
@@ -109,7 +109,7 @@ kbCollisionManager::~kbCollisionManager() {
 /**
  *	kbCollisionManager::PerformLineCheck
  */
-kbCollisionInfo_t kbCollisionManager::PerformLineCheck( const kbVec3 & start, const kbVec3 & end ) {
+kbCollisionInfo_t kbCollisionManager::PerformLineCheck( const Vec3 & start, const Vec3 & end ) {
 	kbCollisionInfo_t collisionInfo;
 
 	float LineLength = 0.0f;
@@ -122,7 +122,7 @@ kbCollisionInfo_t kbCollisionManager::PerformLineCheck( const kbVec3 & start, co
 	}
 
 	const float oneOverLength = 1.0f / LineLength;
-	const kbVec3 rayDir = ( end - start ) * oneOverLength;
+	const Vec3 rayDir = ( end - start ) * oneOverLength;
 
 	for ( int iCollisionComp = 0; iCollisionComp < m_CollisionComponents.size(); iCollisionComp++ ) {
 		kbCollisionComponent *const pCollision = m_CollisionComponents[iCollisionComp];
@@ -133,9 +133,9 @@ kbCollisionInfo_t kbCollisionManager::PerformLineCheck( const kbVec3 & start, co
 			const std::vector<kbCollisionComponent::customTriangle_t> & triList = pCollision->m_CustomTriangleCollision;
 			for ( int iTri = 0; iTri < triList.size(); iTri++ ) {
 			
-				const kbVec3 & v1 = triList[iTri].m_Vertex1;
-				const kbVec3 & v2 = triList[iTri].m_Vertex2;
-				const kbVec3 & v3 = triList[iTri].m_Vertex3;
+				const Vec3 & v1 = triList[iTri].m_Vertex1;
+				const Vec3 & v2 = triList[iTri].m_Vertex2;
+				const Vec3 & v3 = triList[iTri].m_Vertex3;
 				float t;
 				if ( kbRayTriIntersection( t, start, rayDir, v1, v2, v3 ) ) {
 					if ( t < collisionInfo.m_T && t >= 0 && t < LineLength ) {
@@ -158,7 +158,7 @@ kbCollisionInfo_t kbCollisionManager::PerformLineCheck( const kbVec3 & start, co
 				blk::warning( "kbCollisionManager::PerformLineCheck() - Entity %s is missing a kbStaticModelComponent", pOwner->GetName().c_str() );
 				continue;
 			}
-			kbModelIntersection_t intersection = pStaticModel->GetModel()->RayIntersection( start, rayDir, pOwner->GetPosition(), pOwner->GetOrientation(), kbVec3::one );
+			kbModelIntersection_t intersection = pStaticModel->GetModel()->RayIntersection( start, rayDir, pOwner->GetPosition(), pOwner->GetOrientation(), Vec3::one );
 			if ( intersection.hasIntersection && intersection.t < LineLength && intersection.t < collisionInfo.m_T ) {
 				collisionInfo.m_bHit = true;
 				collisionInfo.m_HitLocation = start + rayDir * intersection.t;
@@ -167,7 +167,7 @@ kbCollisionInfo_t kbCollisionManager::PerformLineCheck( const kbVec3 & start, co
 			}
 		} else if ( pCollision->m_CollisionType == CollisionType_Sphere ) {
 			kbGameEntity *const pCollisionOwner = pCollision->GetOwner();
-			kbVec3 intersectionPt;
+			Vec3 intersectionPt;
 			if ( kbRaySphereIntersection( intersectionPt, start, rayDir, pCollisionOwner->GetPosition(), pCollision->m_Extent.x ) ) {
 				const float t = ( intersectionPt - start ).length() / LineLength;
 				if ( t < collisionInfo.m_T ) {
@@ -179,7 +179,7 @@ kbCollisionInfo_t kbCollisionManager::PerformLineCheck( const kbVec3 & start, co
 						collisionInfo.m_pHitComponent = pCollision;
 					} else {
 						for ( int iColSphere = 0; iColSphere < pCollision->GetWorldSpaceCollisionSpheres().size(); iColSphere++ ) {
-							const kbVec4 & curSphere = pCollision->GetWorldSpaceCollisionSpheres()[iColSphere];
+							const Vec4 & curSphere = pCollision->GetWorldSpaceCollisionSpheres()[iColSphere];
 							if ( kbRaySphereIntersection( intersectionPt, start, rayDir, curSphere.ToVec3(), curSphere.a ) ) {
 								const float innerT = ( intersectionPt - start ).length() / LineLength;
 								if ( innerT < collisionInfo.m_T ) {

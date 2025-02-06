@@ -20,10 +20,10 @@ kbInputManager::kbInputManager() :
 		blk::error("kbInputManager::kbInputManager() - g_pInputManager has already been set");
 	}
 
-	m_Input.m_LeftStick.Set(0.0f, 0.0f);
-	m_Input.m_PrevLeftStick.Set(0.0f, 0.0f);
-	m_Input.m_RightStick.Set(0.0f, 0.0f);
-	m_Input.m_PrevRightStick.Set(0.0f, 0.0f);
+	m_Input.m_LeftStick.set(0.0f, 0.0f);
+	m_Input.m_PrevLeftStick.set(0.0f, 0.0f);
+	m_Input.m_RightStick.set(0.0f, 0.0f);
+	m_Input.m_PrevRightStick.set(0.0f, 0.0f);
 
 	g_pInputManager = this;
 }
@@ -83,8 +83,8 @@ void kbInputManager::Update(const float DeltaTime) {
 	m_Input.m_PrevLeftStick = m_Input.m_LeftStick;
 	m_Input.m_PrevRightStick = m_Input.m_RightStick;
 
-	m_Input.m_LeftStick.Set(0.0f, 0.0f);
-	m_Input.m_RightStick.Set(0.0f, 0.0f);
+	m_Input.m_LeftStick.set(0.0f, 0.0f);
+	m_Input.m_RightStick.set(0.0f, 0.0f);
 
 	m_Input.MouseDeltaX = 0;
 	m_Input.MouseDeltaY = 0;

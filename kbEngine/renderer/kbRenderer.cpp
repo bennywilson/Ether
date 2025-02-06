@@ -93,7 +93,7 @@ kbRenderWindow::~kbRenderWindow() {
 /**
  *	kbRenderer::SetRenderViewTransform
  */
-void kbRenderer::SetRenderViewTransform( const HWND hwnd, const kbVec3 & position, const kbQuat & rotation ) {
+void kbRenderer::SetRenderViewTransform( const HWND hwnd, const Vec3 & position, const kbQuat & rotation ) {
 	int viewIndex = -1;
 
 	if ( hwnd == nullptr ) {
@@ -119,7 +119,7 @@ void kbRenderer::SetRenderViewTransform( const HWND hwnd, const kbVec3 & positio
 /**
  *	kbRenderer::GetRenderViewTransform
  */
-void kbRenderer::GetRenderViewTransform( const HWND hwnd, kbVec3 & position, kbQuat & rotation ) {
+void kbRenderer::GetRenderViewTransform( const HWND hwnd, Vec3 & position, kbQuat & rotation ) {
 	int viewIndex = -1;
 
 	if ( hwnd == nullptr ) {
@@ -170,9 +170,9 @@ void kbRenderer::SetNearFarPlane( const HWND hwnd, const float nearPlane, const 
  *	kbRenderWindow::BeginFrame
  */
 void kbRenderWindow::BeginFrame() {
-	kbMat4 translationMatrix( kbMat4::identity );
+	Mat4 translationMatrix( Mat4::identity );
 	translationMatrix[3].ToVec3() = -m_CameraPosition;
-	kbMat4 rotationMatrix = m_CameraRotation.ToMat4();
+	Mat4 rotationMatrix = m_CameraRotation.ToMat4();
 	rotationMatrix.transpose_self();
 	
 	m_ViewMatrix = translationMatrix * rotationMatrix;
@@ -368,7 +368,7 @@ void kbRenderer::DrawDebugText( const std::string& theString, const float X, con
 /**
  *	kbRenderer::AddLight
  */
-void kbRenderer::AddLight( const kbLightComponent * pLightComponent, const kbVec3 & pos, const kbQuat & orientation ) {
+void kbRenderer::AddLight( const kbLightComponent * pLightComponent, const Vec3 & pos, const kbQuat & orientation ) {
 
 	if ( m_pCurrentRenderWindow == nullptr ) {
 		blk::error( "kbRenderer::AddLight - nullptr Render Window" );
@@ -405,7 +405,7 @@ void kbRenderer::AddLight( const kbLightComponent * pLightComponent, const kbVec
 /**
  *	kbRenderer::UpdateLight
  */
-void kbRenderer::UpdateLight( const kbLightComponent * pLightComponent, const kbVec3 & pos, const kbQuat & orientation ) {
+void kbRenderer::UpdateLight( const kbLightComponent * pLightComponent, const Vec3 & pos, const kbQuat & orientation ) {
 
 	if ( m_pCurrentRenderWindow == nullptr ) {
 		blk::error( "kbRenderer::UpdateLight - nullptr Render Window" );
@@ -507,7 +507,7 @@ void kbRenderer::RemoveParticle(const kbRenderObject & renderObject ) {
 /**
  *	kbRenderer::AddLightShafts
  */
-void kbRenderer::AddLightShafts( const kbLightShaftsComponent *const pComponent, const kbVec3 & pos, const kbQuat & orientation ) {
+void kbRenderer::AddLightShafts( const kbLightShaftsComponent *const pComponent, const Vec3 & pos, const kbQuat & orientation ) {
 	kbLightShafts newLightShafts;
 	newLightShafts.m_pLightShaftsComponent = pComponent;
 	newLightShafts.m_pTexture = pComponent->GetTexture();
@@ -534,7 +534,7 @@ void kbRenderer::AddLightShafts( const kbLightShaftsComponent *const pComponent,
 /**
  *	kbRenderer::UpdateLightShafts
  */
-void kbRenderer::UpdateLightShafts( const kbLightShaftsComponent *const pComponent, const kbVec3 & pos, const kbQuat & orientation ) {
+void kbRenderer::UpdateLightShafts( const kbLightShaftsComponent *const pComponent, const Vec3 & pos, const kbQuat & orientation ) {
 	kbLightShafts updatedLightShafts;
 	updatedLightShafts.m_pLightShaftsComponent = pComponent;
 	updatedLightShafts.m_pTexture = pComponent->GetTexture();
@@ -808,7 +808,7 @@ void kbRenderer::RenderSync() {
 /**
  *	kbRenderer::DrawBillboard
  */
-void kbRenderer::DrawBillboard( const kbVec3 & position, const kbVec2 & size, const int textureIndex, kbShader *const pShader, const int entityId ) {
+void kbRenderer::DrawBillboard( const Vec3 & position, const Vec2 & size, const int textureIndex, kbShader *const pShader, const int entityId ) {
 	debugDrawObject_t billboard;
 	billboard.m_Position = position;
 	billboard.m_Scale.set( size.x, size.y, size.x );
@@ -822,7 +822,7 @@ void kbRenderer::DrawBillboard( const kbVec3 & position, const kbVec2 & size, co
 /**
  *	kbRenderer::DrawModel
  */
-void kbRenderer::DrawModel( const kbModel *const pModel, const std::vector<kbShaderParamOverrides_t> & materials, const kbVec3 & position, const kbQuat & orientation, const kbVec3 & scale, const int entityId ) {
+void kbRenderer::DrawModel( const kbModel *const pModel, const std::vector<kbShaderParamOverrides_t> & materials, const Vec3 & position, const kbQuat & orientation, const Vec3 & scale, const int entityId ) {
 	debugDrawObject_t model;
 	model.m_Position = position;
 	model.m_Orientation = orientation;
@@ -855,7 +855,7 @@ void kbRenderer::DrawScreenSpaceQuad( const int start_x, const int start_y, cons
 /**
  *	kbRenderer::DrawLine
  */
-void kbRenderer::DrawLine( const kbVec3 & start, const kbVec3 & end, const kbColor & color, const bool bDepthTest ) {
+void kbRenderer::DrawLine( const Vec3 & start, const Vec3 & end, const kbColor & color, const bool bDepthTest ) {
 
 	/*if ( m_DebugLines_GameThread.size() >= m_DebugLines_GameThread.capacity() - 2 ) {
 		return;
@@ -880,17 +880,17 @@ void kbRenderer::DrawLine( const kbVec3 & start, const kbVec3 & end, const kbCol
  */
 void kbRenderer::DrawBox( const kbBounds & bounds, const kbColor & color, const bool bDepthTest ) {
 
-	const kbVec3 maxVert = bounds.Max();
-	const kbVec3 minVert = bounds.Min();
+	const Vec3 maxVert = bounds.Max();
+	const Vec3 minVert = bounds.Min();
 
-	const kbVec3 LTF( minVert.x, maxVert.y, maxVert.z );
-	const kbVec3 RTF( maxVert.x, maxVert.y, maxVert.z );
-	const kbVec3 RBF( maxVert.x, minVert.y, maxVert.z );
-	const kbVec3 LBF( minVert.x, minVert.y, maxVert.z );
-	const kbVec3 LTB( minVert.x, maxVert.y, minVert.z );
-	const kbVec3 RTB( maxVert.x, maxVert.y, minVert.z );
-	const kbVec3 RBB( maxVert.x, minVert.y, minVert.z );
-	const kbVec3 LBB( minVert.x, minVert.y, minVert.z );
+	const Vec3 LTF( minVert.x, maxVert.y, maxVert.z );
+	const Vec3 RTF( maxVert.x, maxVert.y, maxVert.z );
+	const Vec3 RBF( maxVert.x, minVert.y, maxVert.z );
+	const Vec3 LBF( minVert.x, minVert.y, maxVert.z );
+	const Vec3 LTB( minVert.x, maxVert.y, minVert.z );
+	const Vec3 RTB( maxVert.x, maxVert.y, minVert.z );
+	const Vec3 RBB( maxVert.x, minVert.y, minVert.z );
+	const Vec3 LBB( minVert.x, minVert.y, minVert.z );
 
 	vertexLayout drawVert;
 
@@ -933,13 +933,13 @@ void kbRenderer::DrawBox( const kbBounds & bounds, const kbColor & color, const 
 /**
  *	kbRenderer::DrawSphere
  */
-void kbRenderer::DrawSphere( const kbVec3 & origin, const float radius, const int InNumSegments, const kbColor & color ) {
+void kbRenderer::DrawSphere( const Vec3 & origin, const float radius, const int InNumSegments, const kbColor & color ) {
 	const int numSegments = max( InNumSegments, 4 );
 	const float angleInc = 2.0f * kbPI / (float) numSegments;
 	float latitude = angleInc;
 	float curSin = 0, curCos = 1.0f;
 	//float cosX, sinX;
-	kbVec3 pt1, pt2, pt3, pt4;
+	Vec3 pt1, pt2, pt3, pt4;
 
 	vertexLayout drawVert;
 
@@ -950,15 +950,15 @@ void kbRenderer::DrawSphere( const kbVec3 & origin, const float radius, const in
 		const float nextSin = sin( latitude );
 		const float nextCos = cos( latitude );
 
-		pt1 = kbVec3( curSin, curCos, 0.0f ) * radius + origin;
-		pt3 = kbVec3( nextSin, nextCos, 0.0f ) * radius + origin;
+		pt1 = Vec3( curSin, curCos, 0.0f ) * radius + origin;
+		pt3 = Vec3( nextSin, nextCos, 0.0f ) * radius + origin;
 		float longitude = angleInc;
 		for ( int curXSeg = 0; curXSeg < numSegments; curXSeg++ ) {
 			float sinX = sin( longitude );
 			float cosX = cos( longitude );
 
-			pt2 = kbVec3( cosX * curSin, curCos, sinX * curSin ) * radius + origin;
-			pt4 = kbVec3( cosX * nextSin, nextCos, sinX * nextSin ) * radius + origin;
+			pt2 = Vec3( cosX * curSin, curCos, sinX * curSin ) * radius + origin;
+			pt4 = Vec3( cosX * nextSin, nextCos, sinX * nextSin ) * radius + origin;
 			AddVertDepthTest( pt1 ); AddVertDepthTest( pt2 );
 			AddVertDepthTest( pt1 ); AddVertDepthTest( pt3 );
 			pt1 = pt2;
@@ -975,7 +975,7 @@ void kbRenderer::DrawSphere( const kbVec3 & origin, const float radius, const in
 /**
  *	kbRenderer::DrawPreTransformedLine
  */
-void kbRenderer::DrawPreTransformedLine( const std::vector<kbVec3> & vertList, const kbColor & color ) {
+void kbRenderer::DrawPreTransformedLine( const std::vector<Vec3> & vertList, const kbColor & color ) {
 	vertexLayout drawVert;
 
 	drawVert.Clear();

@@ -21,18 +21,18 @@ struct kbParticle_t {
 
 	void														Shutdown();
 
-	kbVec3														m_Position;
+	Vec3														m_Position;
 	float														m_Rotation;
-	kbVec3														m_StartSize;
-	kbVec3														m_EndSize;
+	Vec3														m_StartSize;
+	Vec3														m_EndSize;
 	float														m_LifeLeft;
 	float														m_TotalLife;
-	kbVec3														m_StartVelocity;
-	kbVec3														m_EndVelocity;
+	Vec3														m_StartVelocity;
+	Vec3														m_EndVelocity;
 	float														m_StartRotation;
 	float														m_EndRotation;
 	float														m_Randoms[3];
-	kbVec3														m_RotationAxis;
+	Vec3														m_RotationAxis;
 
 	class kbModelEmitter *										m_pSrcModelEmitter;
 
@@ -103,32 +103,32 @@ private:
 	float														m_StartDelay;
 	float														m_MinParticleSpawnRate;				// Particles per second
 	float														m_MaxParticleSpawnRate;				// Particles per second
-	kbVec3														m_MinParticleStartVelocity;
-	kbVec3														m_MaxParticleStartVelocity;
+	Vec3														m_MinParticleStartVelocity;
+	Vec3														m_MaxParticleStartVelocity;
 	std::vector<kbAnimEvent>									m_VelocityOverLifeTimeCurve;
-	kbVec3														m_MinParticleEndVelocity;
-	kbVec3														m_MaxParticleEndVelocity;
+	Vec3														m_MinParticleEndVelocity;
+	Vec3														m_MaxParticleEndVelocity;
 	float														m_MinStartRotationRate;
 	float														m_MaxStartRotationRate;
 	float														m_MinEndRotationRate;
 	float														m_MaxEndRotationRate;
-	kbVec3														m_MinStart3DRotation;
-	kbVec3														m_MaxStart3DRotation;
-	kbVec3														m_MinStart3DOffset;
-	kbVec3														m_MaxStart3DOffset;
-	kbVec3														m_MinParticleStartSize;
-	kbVec3														m_MaxParticleStartSize;
-	kbVec3														m_MinParticleEndSize;
-	kbVec3														m_MaxParticleEndSize;
+	Vec3														m_MinStart3DRotation;
+	Vec3														m_MaxStart3DRotation;
+	Vec3														m_MinStart3DOffset;
+	Vec3														m_MaxStart3DOffset;
+	Vec3														m_MinParticleStartSize;
+	Vec3														m_MaxParticleStartSize;
+	Vec3														m_MinParticleEndSize;
+	Vec3														m_MaxParticleEndSize;
 	float														m_ParticleMinDuration;
 	float														m_ParticleMaxDuration;
-	kbVec4														m_ParticleStartColor;
-	kbVec4														m_ParticleEndColor;
+	Vec4														m_ParticleStartColor;
+	Vec4														m_ParticleEndColor;
 	std::vector<kbVectorAnimEvent>								m_SizeOverLifeTimeCurve;
 	std::vector<kbVectorAnimEvent>								m_RotationOverLifeTimeCurve;
 	std::vector<kbVectorAnimEvent>								m_ColorOverLifeTimeCurve;
 	std::vector<kbAnimEvent>									m_AlphaOverLifeTimeCurve;
-	kbVec3														m_Gravity;
+	Vec3														m_Gravity;
 	int															m_MinBurstCount;
 	int															m_MaxBurstCount;
 	EBillboardType												m_ParticleBillboardType;

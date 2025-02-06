@@ -1,19 +1,19 @@
-/// renderer_vk.cpp
+/// Renderer_Vk.cpp
 ///
 /// 2025 blk 1.0
 
 #include "kbCore.h"
-#include "renderer_vk.h"
+#include "Renderer_Vk.h"
 #include "vk_defs.h"
 
-/// Renderer_VK::~Renderer_VK
-Renderer_VK::~Renderer_VK() { }
+/// Renderer_Vk::~Renderer_Vk
+Renderer_Vk::~Renderer_Vk() { }
 
-/// Renderer_VK::shut_down
-void Renderer_VK::shut_down() { }
+/// Renderer_Vk::shut_down
+void Renderer_Vk::shut_down() { }
 
-/// Renderer_VK::initialize
-void Renderer_VK::initialize(HWND hwnd, const uint32_t frameWidth, const uint32_t frameHeight) {
+/// Renderer_Vk::initialize
+void Renderer_Vk::initialize(HWND hwnd, const uint32_t frameWidth, const uint32_t frameHeight) {
 	// Get supported extensions
 	uint32_t extCount = 0;
 	vkEnumerateInstanceExtensionProperties(nullptr, &extCount, nullptr);
@@ -87,18 +87,18 @@ void Renderer_VK::initialize(HWND hwnd, const uint32_t frameWidth, const uint32_
 	check_vk(vkCreatePipelineCache(m_device, &pipelineCacheCreateInfo, nullptr, &pipelineCache));*/
 }
 
-/// Renderer_VK::create_pipeline
-RenderPipeline* Renderer_VK::create_pipeline(const std::wstring& path) {
+/// Renderer_Vk::create_pipeline
+RenderPipeline* Renderer_Vk::create_pipeline(const std::wstring& path) {
 	RenderPipeline_VK* const pipe = new RenderPipeline_VK();
 	return pipe;
 }
 
-/// Renderer_VK::create_render_buffer_internal
-RenderBuffer* Renderer_VK::create_render_buffer_internal() {
+/// Renderer_Vk::create_render_buffer_internal
+RenderBuffer* Renderer_Vk::create_render_buffer_internal() {
 	RenderBuffer_VK* const buffer = new RenderBuffer_VK();
 	return buffer;
 }
 
-/// Renderer_VK::render
-void Renderer_VK::render() { }
+/// Renderer_Vk::render
+void Renderer_Vk::render() { }
 
