@@ -69,14 +69,14 @@ void CannonHealthBarUIComponent::SetTargetHealth( const float newHealth ) {
  */
 void CannonBallUIComponent::Constructor() {
 
-	m_SparkRelativePosition.Set( 0.5f, 0.5f, 0.f );
-	m_SparkRelativeSize.Set( 0.25f, 0.25f, 0.25f );
+	m_SparkRelativePosition.set( 0.5f, 0.5f, 0.f );
+	m_SparkRelativeSize.set( 0.25f, 0.25f, 0.25f );
 
-	m_BoomRelativePosition.Set( 0.5f, 0.5f, 0.f );
-	m_BoomRelativeSize.Set( 0.25f, 0.25f, 0.25f );
+	m_BoomRelativePosition.set( 0.5f, 0.5f, 0.f );
+	m_BoomRelativeSize.set( 0.25f, 0.25f, 0.25f );
 
-	m_SmokeRelativePosition.Set( 0.5f, 0.5f, 0.f );
-	m_SparkRelativeSize.Set( 0.25f, 0.25f, 0.25f );
+	m_SmokeRelativePosition.set( 0.5f, 0.5f, 0.f );
+	m_SparkRelativeSize.set( 0.25f, 0.25f, 0.25f );
 
 	m_CurrentFill = 0.0f;
 	m_TargetFill = 0.0f;
@@ -242,10 +242,9 @@ void CannonBallUIComponent::CannonBallActivatedCB() {
  *	CannonBallPauseMenuUIComponent::Constructor
  */
 void CannonBallPauseMenuUIComponent::Constructor() {
-
 	// Editor
-	m_WidgetSize.Set( 0.1f, 0.1f, 1.0f );
-	m_StartingWidgetAnchorPt.Set( 0.0f, 0.0f, 0.0f );
+	m_WidgetSize.set( 0.1f, 0.1f, 1.0f );
+	m_StartingWidgetAnchorPt.set( 0.0f, 0.0f, 0.0f );
 	m_SpaceBetweenWidgets = 0.05f;
 
 	// Runtime
@@ -256,7 +255,7 @@ void CannonBallPauseMenuUIComponent::Constructor() {
 
 const kbVec3 g_CheckMarkPos[] = {  kbVec3( 0.400000f, 0.287480f, 0.000000f ), kbVec3( 0.3600704f, 0.353173f, 0.000000f ), kbVec3(0.325628f, 0.415369f, 0.000000f ), kbVec3( 0.322864f, 0.484983f, 0.000000f ), kbVec3( 0.400000f, 0.557629f, 0.000000f ) }; 
 kbVec3 g_Offsets[] = { kbVec3::zero, kbVec3::zero, kbVec3::zero, kbVec3::zero, kbVec3::zero, kbVec3::zero };
-/*
+
 
 /**
  *	CannonBallPauseMenuUIComponent::SetEnable_Internal
@@ -505,7 +504,7 @@ void CannonBallPauseMenuUIComponent::WidgetEventCB( kbUIWidgetComponent *const p
 void CannonBallMainMenuComponent::Constructor() {
 	m_AnimationState = 0;
 	m_TimeAnimStateBegan = -1.0f;
-	m_StartRelativePos.Set( -1.0f, -1.0f, 0.0f );
+	m_StartRelativePos.set( -1.0f, -1.0f, 0.0f );
 
 	m_MainMenuIdx = 0;
 }
@@ -696,7 +695,7 @@ void CannonBallYesNoPromptComponent::Constructor() {
  *	CannonBallScrollComponent::Constructor
  */
 void CannonBallScrollComponent::Constructor() {
-	m_ScrollRate.Set( 0.0f, 0.0f, 0.0f );
+	m_ScrollRate.set( 0.0f, 0.0f, 0.0f );
 }
 
 /**

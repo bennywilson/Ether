@@ -466,7 +466,7 @@ public:
  *	KungFuSheepComponent::Constructor
  */
 void KungFuSheepComponent::Constructor() {
-	m_TargetFacingDirection.Set(0.0f, 0.0f, -1.0f);
+	m_TargetFacingDirection.set(0.0f, 0.0f, -1.0f);
 	m_bIsPlayer = true;
 	m_LastVOTime = 0.0f;
 
@@ -665,9 +665,9 @@ void KungFuSheepComponent::Update_Internal(const float DT) {
 	// Headband
 	kbBoneMatrix_t boneMat;
 	if (m_SkelModelsList[0]->GetBoneWorldMatrix(kbString("Head"), boneMat)) {
-		const kbVec3 axis1 = boneMat.GetAxis(0).Normalized();
-		const kbVec3 axis2 = boneMat.GetAxis(1).Normalized();
-		const kbVec3 axis3 = boneMat.GetAxis(2).Normalized();
+		const kbVec3 axis1 = boneMat.GetAxis(0).normalize_safe();
+		const kbVec3 axis2 = boneMat.GetAxis(1).normalize_safe();
+		const kbVec3 axis3 = boneMat.GetAxis(2).normalize_safe();
 
 		m_HeadBandInstance[0].GetEntity()->SetPosition(boneMat.GetOrigin() + axis1 * 0.1f - axis3 * 0.15f);
 		m_HeadBandInstance[1].GetEntity()->SetPosition(boneMat.GetOrigin() + axis1 * 0.1f + axis2 * 0.01f - axis3 * 0.15f);

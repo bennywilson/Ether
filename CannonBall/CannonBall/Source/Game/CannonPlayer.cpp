@@ -17,7 +17,7 @@ void CannonActorComponent::Constructor() {
 	m_MaxRotateSpeed = 15.0f;
 	m_Health = 100.0f;
 
-	m_TargetFacingDirection.Set(0.0f, 0.0f, -1.0f);
+	m_TargetFacingDirection.set(0.0f, 0.0f, -1.0f);
 
 	m_AnimSmearDuration = 0.1f;
 	m_AnimSmearVec.Set(0.0f, 0.0f, 0.0f, 0.0f);
@@ -78,7 +78,7 @@ void CannonActorComponent::Update_Internal(const float DT) {
 	const kbQuat curRot = GetOwnerRotation();
 
 	kbMat4 facingMat;
-	facingMat.LookAt(GetOwnerPosition(), GetOwnerPosition() + m_TargetFacingDirection, kbVec3::up);
+	facingMat.look_at(GetOwnerPosition(), GetOwnerPosition() + m_TargetFacingDirection, kbVec3::up);
 
 	const kbQuat targetRot = kbQuatFromMatrix(facingMat);
 	GetOwner()->SetOrientation(curRot.Slerp(curRot, targetRot, DT * m_MaxRotateSpeed));
@@ -202,8 +202,8 @@ void CannonCameraComponent::Constructor() {
 	// Editor
 	m_NearPlane = 1.0f;
 	m_FarPlane = 20000.0f;		// TODO - NEAR/FAR PLANE - Tie into renderer properly
-	m_PositionOffset.Set(0.0f, 0.0f, 0.0f);
-	m_LookAtOffset.Set(0.0f, 0.0f, 0.0f);
+	m_PositionOffset.set(0.0f, 0.0f, 0.0f);
+	m_LookAtOffset.set(0.0f, 0.0f, 0.0f);
 
 	m_MoveMode = MoveMode_Follow;
 	m_pTarget = nullptr;
@@ -211,15 +211,15 @@ void CannonCameraComponent::Constructor() {
 	// Game
 	m_SwitchTargetBlendSpeed = 1.0f;
 	m_SwitchTargetCurT = 1.0f;
-	m_SwitchTargetStartPos.Set(0.0f, 0.0f, 0.0f);
+	m_SwitchTargetStartPos.set(0.0f, 0.0f, 0.0f);
 
 	m_SwitchPosOffsetBlendSpeed = 1.0f;
 	m_SwitchPosOffsetCurT = 1.0f;
-	m_PosOffsetTarget.Set(0.0f, 0.0f, 0.0f);
+	m_PosOffsetTarget.set(0.0f, 0.0f, 0.0f);
 
 	m_SwitchLookAtOffsetBlendSpeed = 1.0f;
 	m_SwitchLookAtOffsetCurT = 1.0f;
-	m_LookAtOffsetTarget.Set(0.0f, 0.0f, 0.0f);
+	m_LookAtOffsetTarget.set(0.0f, 0.0f, 0.0f);
 
 	m_CameraShakeStartTime = -1.0f;
 	m_CameraShakeStartingOffset.Set(0.0f, 0.0f);
@@ -355,8 +355,8 @@ void CannonCameraComponent::Update_Internal(const float DeltaTime) {
 				GetOwner()->SetPosition(targetPosition + positionOffset);
 
 				kbMat4 cameraDestRot;
-				cameraDestRot.LookAt(GetOwner()->GetPosition(), targetPosition + lookAtOffset, kbVec3::up);
-				cameraDestRot.InvertFast();
+				cameraDestRot.look_at(GetOwner()->GetPosition(), targetPosition + lookAtOffset, kbVec3::up);
+				cameraDestRot.inverse_fast();
 				GetOwner()->SetOrientation(kbQuatFromMatrix(cameraDestRot));
 
 				const kbVec3 cameraDestPos = targetPosition + positionOffset;

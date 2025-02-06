@@ -25,7 +25,7 @@ CannonGame::CannonGame() :
 	m_pMainCamera( nullptr ),
 	m_pPlayerComp( nullptr ) {
 
-	m_Camera.m_Position.Set( 0.0f, 2600.0f, 0.0f );
+	m_Camera.m_Position.set( 0.0f, 2600.0f, 0.0f );
 
 	blk::error_check( g_pCannonGame == nullptr, "CannonGame::CannonGame() - g_pCannonGame is not nullptr" );
 	g_pCannonGame = this;
@@ -61,7 +61,7 @@ void CannonGame::InitGame_Internal() {
 	kbShaderParamOverrides_t shaderParam;
 
 	float brightness = (pGameSettings->m_Brightness / 100.0f);
-	brightness = (brightness * 0.5f) + 0.5;
+	brightness = (brightness * 0.5f) + 0.5f;
 
 	shaderParam.SetVec4( "globalTint", kbVec4( 0.0f, 0.0f, 0.0f, 1.0f - brightness ) );
 	g_pRenderer->SetGlobalShaderParam( shaderParam );

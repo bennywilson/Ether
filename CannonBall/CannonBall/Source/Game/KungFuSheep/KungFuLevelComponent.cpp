@@ -71,7 +71,7 @@ private:
 		}
 		pSheep->ExternalRequestStateChange(KungFuSheepState::Cinema);
 		pSheep->PlayAnimation(JumpingJacks_Anim, 0.15f);
-		pSheep->SetTargetFacingDirection(kbVec3(-1.0f, 0.0f, -1.0f).Normalized());
+		pSheep->SetTargetFacingDirection(kbVec3(-1.0f, 0.0f, -1.0f).normalize_safe());
 		pSheep->SetOwnerPosition(KungFuGame::kSheepStartPos);
 
 		KungFuLevelComponent::Get()->ShowCredits(false);
@@ -215,18 +215,18 @@ public:
 			if (dealAttackInfo.m_Radius == 0.0f) {
 
 				// Slap a %@3$&!!
-				if ((attackerPos - targetPos).Length() > KungFuGame::kSheepAttackDist) {
+				if ((attackerPos - targetPos).length() > KungFuGame::kSheepAttackDist) {
 					continue;
 				}
 
-				const kbVec3 vecToTarget = (targetPos - attackerPos).Normalized();
+				const kbVec3 vecToTarget = (targetPos - attackerPos).normalize_safe();
 				const kbVec3 attackerFacingDir = pAttackerComp->GetOwnerRotation().ToMat4()[2].ToVec3();
-				if (vecToTarget.Dot(attackerFacingDir) > 0.0f) {
+				if (vecToTarget.dot(attackerFacingDir) > 0.0f) {
 					continue;
 				}
 			} else {
 				// Slap that %@3$&!!
-				if ((attackerPos - targetPos).Length() > dealAttackInfo.m_Radius) {
+				if ((attackerPos - targetPos).length() > dealAttackInfo.m_Radius) {
 					continue;
 				}
 			}
@@ -617,7 +617,7 @@ void KungFuLevelComponent::Update_Internal(const float DeltaTime) {
 				pTargetEnt->SetScale(scale);
 
 				kbMat4 rotationMat = kbMat4::identity;
-				rotationMat.MakeIdentity();
+				rotationMat.make_identity();
 
 				float randRot = kbfrand() * kbPI * 2.0f;
 				rotationMat[0][0] = cos(randRot);
@@ -1060,7 +1060,7 @@ void KungFuLevelComponent::ShowHealthBar(const bool bShow) {
  */
 float KungFuLevelComponent::GetPlayerTravelDistance() {
 
-	return (g_pCannonGame->GetPlayer()->GetOwnerPosition() - KungFuGame::kSheepStartPos).Length();
+	return (g_pCannonGame->GetPlayer()->GetOwnerPosition() - KungFuGame::kSheepStartPos).length();
 }
 
 /**
@@ -1101,10 +1101,9 @@ void KungFuLevelComponent::RemoveSheep() {
  *	KungFuLevelComponent::UpdateDebugAndCheats
  */
 void KungFuLevelComponent::UpdateDebugAndCheats() {
+	const kbInput_t& input = g_pInputManager->GetInput();
 
-	const auto input = g_pInputManager->GetInput();
 	if (input.IsNonCharKeyPressedOrDown(kbInput_t::LCtrl)) {
-
 		if (input.IsKeyPressedOrDown('D')) {
 			DealAttackInfo_t<KungFuGame::eAttackType> damageInfo;
 			damageInfo.m_BaseDamage = 999999.0f;

@@ -92,7 +92,7 @@ public:
 
 			const kbVec3 targetPos = pTargetActor->GetOwnerPosition();
 			const kbVec3 vSnolafToTarget = targetPos - snolafPos;
-			const float snolafToTargetDist = (targetPos - snolafPos).Length();
+			const float snolafToTargetDist = (targetPos - snolafPos).length();
 			auto pSnolafComponent = pTargetActor->GetAs<KungFuSnolafComponent>();
 			if (pSnolafComponent != nullptr && pSnolafComponent->GetState() != KungFuSnolafState::Prehug && pSnolafComponent->GetState() != KungFuSnolafState::Hug && pSnolafComponent->GetState() != KungFuSnolafState::WatchCannonBall) {
 				continue;
@@ -100,7 +100,7 @@ public:
 
 			const float radius = (pSnolafComponent != nullptr) ? (KungFuGame::kDistToHugSnolaf) : (KungFuGame::kDistToHugSheep);
 			if (snolafToTargetDist < radius) {
-				if (vSnolafToTarget.Dot(snolafFacingDir) > 0.0f) {
+				if (vSnolafToTarget.dot(snolafFacingDir) > 0.0f) {
 					continue;
 				}
 
@@ -157,7 +157,6 @@ public:
 		// TODO - Optimize
 		bool bAnyoneInFront = false;
 		for (int i = 0; i < g_pCannonGame->GetGameEntities().size(); i++) {
-
 			kbGameEntity* const pGameEnt = g_pCannonGame->GetGameEntities()[i];
 			CannonActorComponent* const pTargetActor = pGameEnt->GetComponent<CannonActorComponent>();
 			if (pTargetActor == nullptr || pTargetActor == this->m_pActorComponent) {
@@ -170,10 +169,9 @@ public:
 
 			const kbVec3 targetPos = pTargetActor->GetOwnerPosition();
 			const kbVec3 vSnolafToTarget = targetPos - snolafPos;
-			const float snolafToTargetDist = (targetPos - snolafPos).Length();
+			const float snolafToTargetDist = (targetPos - snolafPos).length();
 			if (snolafToTargetDist < KungFuGame::kDistToChase) {
-
-				if (vSnolafToTarget.Dot(snolafFacingDir) > 0.0f) {
+				if (vSnolafToTarget.dot(snolafFacingDir) > 0.0f) {
 					continue;
 				}
 
@@ -277,10 +275,10 @@ public:
 
 			const kbVec3 targetPos = pTargetActor->GetOwnerPosition();
 			const kbVec3 vSnolafToTarget = targetPos - snolafPos;
-			const float snolafToTargetDist = (targetPos - snolafPos).Length();
+			const float snolafToTargetDist = (targetPos - snolafPos).length();
 			if (snolafToTargetDist < KungFuGame::kDistToChase) {
 
-				if (vSnolafToTarget.Dot(snolafFacingDir) > 0.0f) {
+				if (vSnolafToTarget.dot(snolafFacingDir) > 0.0f) {
 					continue;
 				}
 
@@ -384,14 +382,14 @@ public:
 			m_Velocity = m_Velocity * worldMatrix;
 
 			m_RotationAxis = kbVec3(kbfrand() - 1.3f, 0.0f, 0.0f);
-			if (m_RotationAxis.LengthSqr() < 0.01f) {
-				m_RotationAxis.Set(1.0f, 0.0f, 0.0f);
+			if (m_RotationAxis.length_sqr() < 0.01f) {
+				m_RotationAxis.set(1.0f, 0.0f, 0.0f);
 			} else {
-				m_RotationAxis.Normalize();
+				m_RotationAxis.normalize_self();
 			}
 			m_RotationSpeed = kbfrand() * (m_MaxAngularVelocity - m_MinAngularVelocity) + m_MinAngularVelocity;
 
-			const kbVec3 initialSnolafOffset = m_Velocity.Normalized() * 2.0f;
+			const kbVec3 initialSnolafOffset = m_Velocity.normalize_safe() * 2.0f;
 			m_OwnerPosOverride = this->m_pActorComponent->GetOwnerPosition() + initialSnolafOffset;
 			m_OwnerStartPos = m_OwnerPosOverride;
 			this->GetSnolaf()->ApplyAnimSmear(-initialSnolafOffset * 0.75f, 0.067f);
@@ -416,14 +414,14 @@ public:
 			m_Velocity = 2.0f * m_Velocity * worldMatrix;
 
 			m_RotationAxis = kbVec3(kbfrand() - 1.3f, 0.0f, 0.0f);
-			if (m_RotationAxis.LengthSqr() < 0.01f) {
-				m_RotationAxis.Set(1.0f, 0.0f, 0.0f);
+			if (m_RotationAxis.length_sqr() < 0.01f) {
+				m_RotationAxis.set(1.0f, 0.0f, 0.0f);
 			} else {
-				m_RotationAxis.Normalize();
+				m_RotationAxis.normalize_self();
 			}
 			m_RotationSpeed = 0.15f * (kbfrand() * (m_MaxAngularVelocity - m_MinAngularVelocity) + m_MinAngularVelocity);
 
-			const kbVec3 initialSnolafOffset = m_Velocity.Normalized() * 2.0f;
+			const kbVec3 initialSnolafOffset = m_Velocity.normalize_safe() * 2.0f;
 			m_OwnerPosOverride = this->m_pActorComponent->GetOwnerPosition() + initialSnolafOffset;
 			m_OwnerStartPos = m_OwnerPosOverride;
 			this->GetSnolaf()->ApplyAnimSmear(-initialSnolafOffset * 0.75f, 0.067f);
@@ -779,7 +777,7 @@ void KungFuSnolafComponent::TakeDamage(const DealAttackInfo_t<KungFuGame::eAttac
 		const kbVec3 attackerPos = attackInfo.m_pAttacker->GetOwnerPosition();
 		const kbVec3 ourPos = GetOwnerPosition();
 		if (m_CurrentState == KungFuSnolafState::Hug || m_CurrentState == KungFuSnolafState::Prehug ||
-			(attackerPos - ourPos).Length() < KungFuGame::kShakeNBakeRadius) {
+			(attackerPos - ourPos).length() < KungFuGame::kShakeNBakeRadius) {
 			m_Health = -1.0f;
 			this->RequestStateChange(KungFuSnolafState::Dead);
 		}
