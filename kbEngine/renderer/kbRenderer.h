@@ -11,9 +11,7 @@
 class kbShader;
 class kbModel;
 
-/**
- *	kbRenderTexture
- */
+/// kbRenderTexture
 enum eTextureFormat {
 	KBTEXTURE_NULLFORMAT,
 	KBTEXTURE_R8G8B8A8,
@@ -87,9 +85,7 @@ private:
 	bool										m_bInUse;
 };
 
-/**
- *	kbRenderSubmesh
- */
+/// kbRenderSubmesh
 class kbRenderSubmesh {
 
 	friend class kbRenderer;
@@ -115,9 +111,7 @@ private:
 	ERenderPass									m_RenderPass;
 };
 
-/**
- *	kbRenderWindow
- */
+/// kbRenderWindow
 class kbRenderWindow {
 
 	friend class kbRenderer;
@@ -232,9 +226,7 @@ private:
 	ERenderPass									m_RenderPass;
 };
 
-/**
- *	kbRenderer
- */
+/// kbRenderer
 class kbRenderer {
 
 	friend kbRenderJob;

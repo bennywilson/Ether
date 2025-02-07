@@ -31,9 +31,7 @@ KungFuGame::eSkipCheats g_SkipCheat = KungFuGame::Skip_None;
 
 #include "Cinema\Outro.inl"
 
-/**
- *	KungFuGame_MainMenuState
- */
+/// KungFuGame_MainMenuState
 class KungFuGame_MainMenuState : public KungFuGame_BaseState {
 
 	//---------------------------------------------------------------------------------------------------
@@ -103,9 +101,7 @@ private:
 	KungFuSheepComponent* m_pSheep = nullptr;
 };
 
-/**
- *	KungFuGame_IntroGameState
- */
+/// KungFuGame_IntroGameState
 class KungFuGame_IntroGameState : public KungFuGame_BaseState {
 
 	//---------------------------------------------------------------------------------------------------
@@ -182,9 +178,7 @@ private:
 	int m_CurrentState = 0;
 };
 
-/**
- *	KungFuGame_GameplayState
- */
+/// KungFuGame_GameplayState
 class KungFuGame_GameplayState : public KungFuGame_BaseState {
 
 	//---------------------------------------------------------------------------------------------------
@@ -351,9 +345,7 @@ private:
 	int m_NumSnolafsKilled = 0;
 };
 
-/**
- *	KungFuGame_PausedState
- */
+/// KungFuGame_PausedState
 class KungFuGame_PausedState : public KungFuGame_BaseState {
 
 	//---------------------------------------------------------------------------------------------------
@@ -429,9 +421,7 @@ private:
 	CannonBallPauseMenuUIComponent* m_pPauseMenu;
 };
 
-/**
- *	KungFuGame_PlayerDeadState
- */
+/// KungFuGame_PlayerDeadState
 class KungFuGame_PlayerDeadState : public KungFuGame_BaseState {
 
 	//---------------------------------------------------------------------------------------------------
@@ -476,9 +466,7 @@ private:
 
 KungFuLevelComponent* KungFuLevelComponent::s_Inst = nullptr;
 
-/**
- *	KungFuLevelComponent::Constructor
- */
+/// KungFuLevelComponent::Constructor
 void KungFuLevelComponent::Constructor() {
 
 	// Editor
@@ -503,9 +491,7 @@ void KungFuLevelComponent::Constructor() {
 	m_pFox = nullptr;
 }
 
-/**
- *	KungFuLevelComponent::SetEnable_Internal
- */
+/// KungFuLevelComponent::SetEnable_Internal
 void KungFuLevelComponent::SetEnable_Internal(const bool bEnable) {
 	Super::SetEnable_Internal(bEnable);
 
@@ -568,9 +554,7 @@ void KungFuLevelComponent::SetEnable_Internal(const bool bEnable) {
 	}
 }
 
-/**
- *	KungFuLevelComponent::Update_Internal
- */
+/// KungFuLevelComponent::Update_Internal
 const Vec4 g_WaterDropletNormalFactorScroll[] = {
 		Vec4(0.1000f, 0.1000f, 0.00000f, 0.01f),
 		Vec4(0.1000f, 0.1000f, 0.00000f, 0.007f) };
@@ -801,9 +785,7 @@ void KungFuLevelComponent::Update_Internal(const float DeltaTime) {
 	UpdateDebugAndCheats();
 }
 
-/**
- *	KungFuLevelComponent::UpdateSheepHealthBar
- */
+/// KungFuLevelComponent::UpdateSheepHealthBar
 void KungFuLevelComponent::UpdateSheepHealthBar(const float healthVal) {
 
 	if (m_pHealthBarUI == nullptr) {
@@ -818,9 +800,7 @@ void KungFuLevelComponent::UpdateSheepHealthBar(const float healthVal) {
 	m_pHealthBarUI->SetTargetHealth(healthVal);
 }
 
-/**
- *	KungFuLevelComponent::UpdateCannonBallMeter
- */
+/// KungFuLevelComponent::UpdateCannonBallMeter
 void KungFuLevelComponent::UpdateCannonBallMeter(const float fillVal, const bool bActivated) {
 
 	if (m_pCannonBallUI == nullptr) {
@@ -835,9 +815,7 @@ void KungFuLevelComponent::UpdateCannonBallMeter(const float fillVal, const bool
 }
 
 
-/**
- *	KungFuLevelComponent::SpawnSheep
- */
+/// KungFuLevelComponent::SpawnSheep
 KungFuSheepComponent* KungFuLevelComponent::SpawnSheep() {
 	kbGameEntity* const sheep = g_pGame->CreateEntity(m_SheepPrefab.GetEntity());
 
@@ -848,9 +826,7 @@ KungFuSheepComponent* KungFuLevelComponent::SpawnSheep() {
 	return m_pSheep;
 }
 
-/**
- *	KungFuLevelComponent::SpawnEnemy
- */
+/// KungFuLevelComponent::SpawnEnemy
 void KungFuLevelComponent::SpawnEnemy(const bool bSpawnLeft, const int waveSize) {
 
 	if (m_SnolafPrefab.GetEntity() == nullptr) {
@@ -933,9 +909,7 @@ void KungFuLevelComponent::SpawnEnemy(const bool bSpawnLeft, const int waveSize)
 	}
 }
 
-/**
- *	KungFuLevelComponent::DoWaterDropletScreenFX
- */
+/// KungFuLevelComponent::DoWaterDropletScreenFX
 void KungFuLevelComponent::DoWaterDropletScreenFX() {
 
 	if (m_WaterDropletScreenFX.GetEntity() == nullptr || m_WaterDropletFXStartTime > 0.0f) {
@@ -967,9 +941,7 @@ void KungFuLevelComponent::DoWaterDropletScreenFX() {
 	}
 }
 
-/**
- *	KungFuLevelComponent::DoSplashSound
- */
+/// KungFuLevelComponent::DoSplashSound
 void KungFuLevelComponent::DoSplashSound() {
 
 	if (m_WaterSplashSound.size() == 0) {
@@ -984,18 +956,14 @@ void KungFuLevelComponent::DoSplashSound() {
 	m_WaterSplashSound[rand() % m_WaterSplashSound.size()].PlaySoundAtPosition(Vec3(0.0f, 0.0f, 0.0f));
 }
 
-/**
- *	KungFuLevelComponent::DoBreakBridgeEffect
- */
+/// KungFuLevelComponent::DoBreakBridgeEffect
 void KungFuLevelComponent::DoBreakBridgeEffect(const bool bBreakIt) {
 
 	m_BridgeBreakDecal.GetEntity()->GetComponent<kbStaticModelComponent>()->Enable(bBreakIt);
 	m_BridgeExplosionFX.GetEntity()->GetComponent<kbParticleComponent>()->Enable(bBreakIt);
 }
 
-/**
- *	KungFuLevelComponent::SetPlayLevelMusic
- */
+/// KungFuLevelComponent::SetPlayLevelMusic
 void KungFuLevelComponent::SetPlayLevelMusic(const int idx, const bool bPlay) {
 
 	if (bPlay) {
@@ -1005,9 +973,7 @@ void KungFuLevelComponent::SetPlayLevelMusic(const int idx, const bool bPlay) {
 	}
 }
 
-/**
- *	KungFuLevelComponent::ShowBLM
- */
+/// KungFuLevelComponent::ShowBLM
 void KungFuLevelComponent::ShowBLM(const bool bShow) {
 
 	if (m_BLM.GetEntity() == nullptr) {
@@ -1021,9 +987,7 @@ void KungFuLevelComponent::ShowBLM(const bool bShow) {
 	}
 }
 
-/**
- *	KungFuLevelComponent::ShowCredits
- */
+/// KungFuLevelComponent::ShowCredits
 void KungFuLevelComponent::ShowCredits(const bool bShow) {
 	kbGameEntity* const pEnt = m_Credits.GetEntity();
 	if (pEnt == nullptr) {
@@ -1037,9 +1001,7 @@ void KungFuLevelComponent::ShowCredits(const bool bShow) {
 	}
 }
 
-/**
- *	KungFuLevelComponent::ShowCredits
- */
+/// KungFuLevelComponent::ShowCredits
 void KungFuLevelComponent::ShowHealthBar(const bool bShow) {
 
 	if (m_pHealthBarUI == nullptr) {
@@ -1055,17 +1017,13 @@ void KungFuLevelComponent::ShowHealthBar(const bool bShow) {
 	}
 }
 
-/**
- *	KungFuLevelComponent::GetPlayerTravelDistance
- */
+/// KungFuLevelComponent::GetPlayerTravelDistance
 float KungFuLevelComponent::GetPlayerTravelDistance() {
 
 	return (g_pCannonGame->GetPlayer()->GetOwnerPosition() - KungFuGame::kSheepStartPos).length();
 }
 
-/**
- *	KungFuLevelComponent::GetSnolafFromPool
- */
+/// KungFuLevelComponent::GetSnolafFromPool
 KungFuSnolafComponent* KungFuLevelComponent::GetSnolafFromPool() {
 	kbGameEntity* const pSnolaf = m_SnolafPool.back();
 	pSnolaf->GetComponent<KungFuSnolafComponent>()->ResetFromPool();
@@ -1073,9 +1031,7 @@ KungFuSnolafComponent* KungFuLevelComponent::GetSnolafFromPool() {
 	return pSnolaf->GetComponent<KungFuSnolafComponent>();
 }
 
-/**
- *	KungFuLevelComponent::ReturnSnolafToPool
- */
+/// KungFuLevelComponent::ReturnSnolafToPool
 void KungFuLevelComponent::ReturnSnolafToPool(KungFuSnolafComponent* const pSnolafComp) {
 
 	kbGameEntity* const pSnolaf = pSnolafComp->GetOwner();
@@ -1097,9 +1053,7 @@ void KungFuLevelComponent::RemoveSheep() {
 	m_pSheep = nullptr;
 }
 
-/**
- *	KungFuLevelComponent::UpdateDebugAndCheats
- */
+/// KungFuLevelComponent::UpdateDebugAndCheats
 void KungFuLevelComponent::UpdateDebugAndCheats() {
 	const kbInput_t& input = g_pInputManager->GetInput();
 
@@ -1153,9 +1107,7 @@ void KungFuLevelComponent::UpdateDebugAndCheats() {
 	}
 }
 
-/**
- *	KungFuSheepDirector::KungFuSheepDirector
- */
+/// KungFuSheepDirector::KungFuSheepDirector
 KungFuSheepDirector::KungFuSheepDirector() :
 	m_pHealthBarUI(nullptr),
 	m_pCannonBallUI(nullptr),
@@ -1165,16 +1117,12 @@ KungFuSheepDirector::KungFuSheepDirector() :
 	m_NumPrehuggers(0) {
 }
 
-/**
- *	KungFuSheepDirector::~KungFuSheepDirector
- */
+/// KungFuSheepDirector::~KungFuSheepDirector
 KungFuSheepDirector::~KungFuSheepDirector() {
 
 }
 
-/**
- *	KungFuSheepDirector::InitializeStateMachine_Internal
- */
+/// KungFuSheepDirector::InitializeStateMachine_Internal
 void KungFuSheepDirector::InitializeStateMachine_Internal() {
 
 	kbLevelDirector::InitializeStateMachine_Internal();
@@ -1188,9 +1136,7 @@ void KungFuSheepDirector::InitializeStateMachine_Internal() {
 	m_NumPrehuggers = 0;
 }
 
-/**
- *	KungFuSheepDirector::ShutdownStateMachine_Internal
- */
+/// KungFuSheepDirector::ShutdownStateMachine_Internal
 void KungFuSheepDirector::ShutdownStateMachine_Internal() {
 
 	kbLevelDirector::ShutdownStateMachine_Internal();
@@ -1201,9 +1147,7 @@ void KungFuSheepDirector::ShutdownStateMachine_Internal() {
 	}
 }
 
-/**
- *	KungFuSheepDirector::CollectUIElements
- */
+/// KungFuSheepDirector::CollectUIElements
 void KungFuSheepDirector::CollectUIElements() {
 
 	m_pHealthBarUI = nullptr;
@@ -1237,9 +1181,7 @@ void KungFuSheepDirector::CollectUIElements() {
 	}
 }
 
-/**
- *	KungFuSheepDirector::UpdateStateMachine
- */
+/// KungFuSheepDirector::UpdateStateMachine
 void KungFuSheepDirector::UpdateStateMachine() {
 	kbLevelDirector::UpdateStateMachine();
 
@@ -1274,9 +1216,7 @@ void KungFuSheepDirector::UpdateStateMachine() {
 	}
 }
 
-/**
- *	KungFuSheepDirector::DoAttack
- */
+/// KungFuSheepDirector::DoAttack
 AttackHitInfo_t KungFuSheepDirector::DoAttack(const DealAttackInfo_t<KungFuGame::eAttackType> attackInfo) {
 
 	AttackHitInfo_t attackHitInfo;
@@ -1287,9 +1227,7 @@ AttackHitInfo_t KungFuSheepDirector::DoAttack(const DealAttackInfo_t<KungFuGame:
 	return m_States[m_CurrentState]->DoAttack(attackInfo);
 }
 
-/**
- *	KungFuSheepDirector::StateChangeCB
- */
+/// KungFuSheepDirector::StateChangeCB
 void KungFuSheepDirector::StateChangeCB(const KungFuGame::eKungFuGame_State previousState, const KungFuGame::eKungFuGame_State nextState) {
 
 	// TODO - Optimize
@@ -1362,9 +1300,7 @@ void KungFuSheepDirector::StateChangeCB(const KungFuGame::eKungFuGame_State prev
 	}
 }
 
-/**
- *	KungFuSheepDirector::WidgetEventCB
- */
+/// KungFuSheepDirector::WidgetEventCB
 void KungFuSheepDirector::WidgetEventCB(kbUIWidgetComponent* const pWidget, const kbInput_t* const pInput) {
 
 	m_States[m_CurrentState]->WidgetEventCB(pWidget, pInput);

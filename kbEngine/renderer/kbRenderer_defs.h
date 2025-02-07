@@ -74,9 +74,7 @@ struct kbParticleVertex {
 };
 
 
-/**
- *	kbBoneMatrix_t
- */
+/// kbBoneMatrix_t
 struct kbBoneMatrix_t {
 
 	kbBoneMatrix_t() { }
@@ -109,9 +107,7 @@ struct kbBoneMatrix_t {
 	Vec3 m_Axis[4];
 };
 
-/**
- *	kbRenderJob
- */
+/// kbRenderJob
 class kbRenderJob : public kbJob {
 
 //---------------------------------------------------------------------------------------------------
@@ -126,9 +122,7 @@ private:
 	bool										m_bRequestShutdown;
 };
 
-/**
- *	kbShaderParamOverrides_t
- */
+/// kbShaderParamOverrides_t
 struct kbShaderParamOverrides_t {
 
     struct kbShaderParam_t {
@@ -220,9 +214,7 @@ struct kbShaderParamOverrides_t {
 	}
 };
 
-/**
- *	kbRenderObject
- */
+/// kbRenderObject
 class kbRenderObject {
 
 //---------------------------------------------------------------------------------------------------
@@ -268,9 +260,7 @@ public:
 	bool										m_bIsRemove				: 1;
 };
 
-/**
- *	kbRenderLight
- */
+/// kbRenderLight
 class kbRenderLight {
 
 //---------------------------------------------------------------------------------------------------
@@ -294,18 +284,14 @@ public:
 	bool										m_bIsRemove;
 };
 
-/**
- *	eRenderObjectOp
- */
+/// eRenderObjectOp
 enum eRenderObjectOp {
 	ROO_Add,
 	ROO_Remove,
 	ROO_Update,
 };
 
-/**
- *	kbLightShafts
- */
+/// kbLightShafts
 class kbLightShafts {
 
 //---------------------------------------------------------------------------------------------------
@@ -340,9 +326,7 @@ public:
 	bool										m_bIsDirectional;
 };
 
-/**
- *	kbRenderTargetMap
- */
+/// kbRenderTargetMap
 struct kbRenderTargetMap {
 	byte *										m_pData;
 	uint										m_Width;

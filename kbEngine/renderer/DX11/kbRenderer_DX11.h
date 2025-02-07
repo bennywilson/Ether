@@ -72,9 +72,7 @@ private:
 	ID3D11DepthStencilView	*					m_pDepthStencilView;
 };
 
-/**
- *	kbGPUTimeStamp
- */
+/// kbGPUTimeStamp
 class kbGPUTimeStamp {
 
 //-------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -117,9 +115,7 @@ private:
 	kbGPUTimeStamp::PlaceTimeStamp( timeStampName, m_pDeviceContext ); \
 }
 
-/**
- *	eventMarker_t
- */
+/// eventMarker_t
 struct eventMarker_t {
 	eventMarker_t( const wchar_t *const name, struct ID3DUserDefinedAnnotation *const pEventMarker );
 	~eventMarker_t();
@@ -129,9 +125,7 @@ struct eventMarker_t {
 
 #define START_SCOPED_RENDER_TIMER(index) kbScopedTimer a##index(index); eventMarker_t sm##index( L#index, m_pEventMarker );
 
-/**
- *	kbRenderState
- */
+/// kbRenderState
 
 D3D11_COLOR_WRITE_ENABLE & operator |= ( D3D11_COLOR_WRITE_ENABLE & lhs, const D3D11_COLOR_WRITE_ENABLE rhs );
 
@@ -352,9 +346,7 @@ struct kbRenderState {
 	ID3D11Device * m_pDevice;
 };
 
-/**
- *	kbRenderer_DX11
- */
+/// kbRenderer_DX11
 class kbRenderer_DX11 : public kbRenderer {
 
 	friend class kbRenderJob;

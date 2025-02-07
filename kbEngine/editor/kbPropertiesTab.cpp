@@ -21,9 +21,7 @@
 
 kbPropertiesTab* g_pPropertiesTab = nullptr;
 
-/**
- *	propertiesTabCBData_t::propertiesTabCBData_t
- */
+/// propertiesTabCBData_t::propertiesTabCBData_t
 propertiesTabCBData_t::propertiesTabCBData_t(
 	kbEditorEntity* const pEditorEntity,
 	const kbGameEntityPtr* const inGameEntityPtr,
@@ -402,9 +400,7 @@ void kbPropertiesTab::TextFieldCB(Fl_Widget* widget, void* voidPtr) {
 	PropertyChangedCB(userData->m_GameEntityPtr);
 }
 
-/**
- *	kbPropertiesTab::ArrayExpandCB
- */
+/// kbPropertiesTab::ArrayExpandCB
 void kbPropertiesTab::ArrayExpandCB(Fl_Widget* widet, void* userData) {
 
 	blk::error_check(userData != nullptr, "kbPropertiesTab::ArrayExpandCB() - NULL userData passed in");
@@ -417,9 +413,7 @@ void kbPropertiesTab::ArrayExpandCB(Fl_Widget* widet, void* userData) {
 	PropertyChangedCB(kbGameEntityPtr());
 }
 
-/**
- *	kbPropertiesTab::ArrayResizeCB
- */
+/// kbPropertiesTab::ArrayResizeCB
 void kbPropertiesTab::ArrayResizeCB(Fl_Widget* widget, void* voidPtr) {
 
 	propertiesTabCBData_t* const userData = static_cast<propertiesTabCBData_t*>(voidPtr);
@@ -476,9 +470,7 @@ void kbPropertiesTab::ArrayResizeCB(Fl_Widget* widget, void* voidPtr) {
 	PropertyChangedCB(userData->m_GameEntityPtr);
 }
 
-/**
- *	kbPropertiesTab::EnumCB
- */
+/// kbPropertiesTab::EnumCB
 void kbPropertiesTab::EnumCB(Fl_Widget* widget, void* voidPtr) {
 
 	propertiesTabCBData_t* const userData = static_cast<propertiesTabCBData_t*>(voidPtr);
@@ -499,9 +491,7 @@ void kbPropertiesTab::EnumCB(Fl_Widget* widget, void* voidPtr) {
 	PropertyChangedCB(userData->m_GameEntityPtr);
 }
 
-/**
- *	kbPropertiesTab::PropertyChangedCB
- */
+/// kbPropertiesTab::PropertyChangedCB
 void kbPropertiesTab::PropertyChangedCB(const kbGameEntityPtr entityPtr) {
 	if (g_pPropertiesTab->m_pTempPrefabEntity != nullptr) {
 		g_Editor->BroadcastEvent(widgetCBGeneric(WidgetCB_PrefabModified, g_pPropertiesTab->m_pTempPrefabEntity->GetGameEntity()));
@@ -510,9 +500,7 @@ void kbPropertiesTab::PropertyChangedCB(const kbGameEntityPtr entityPtr) {
 	g_Editor->BroadcastEvent(widgetCBGeneric(WidgetCB_EntityModified, nullptr));
 }
 
-/**
- *	kbPropertiesTab::RefreshComponent
- */
+/// kbPropertiesTab::RefreshComponent
 void kbPropertiesTab::RefreshComponent(kbEditorEntity* const pEntity, kbComponent* const pComponent, kbComponent* const pParentComponent, int& startX, int& curY, const int inputHeight, const bool bIsStruct, const void* const pArrayPtr, const int arrayIndex) {
 
 	byte* const componentBytePtr = (byte*)pComponent;
@@ -693,9 +681,7 @@ void kbPropertiesTab::RefreshComponent(kbEditorEntity* const pEntity, kbComponen
 	}
 }
 
-/**
- *	kbPropertiesTab::RefreshEntity
- */
+/// kbPropertiesTab::RefreshEntity
 void kbPropertiesTab::RefreshEntity() {
 
 	// note, must delete them both and readd them with the entity property first
@@ -740,9 +726,7 @@ void kbPropertiesTab::RefreshEntity() {
 	}
 }
 
-/**
- *	kbPropertiesTab::RefreshProperty
- */
+/// kbPropertiesTab::RefreshProperty
 void kbPropertiesTab::RefreshProperty(kbEditorEntity* const pEntity, const std::string& propertyName, const kbTypeInfoType_t propertyType, const std::string& structName, kbComponent* const pComponent, const byte* const byteOffsetToVar, kbComponent* const pParentComponent, int& xPos, int& yPos, const int inputHeight, const void* const pArrayPtr, const int arrayIndex) {
 
 	propertiesTabCBData_t cbData(pEntity, nullptr, pComponent, pParentComponent, nullptr, propertyName, nullptr, propertyType, "", nullptr, -1);
@@ -995,9 +979,7 @@ void kbPropertiesTab::RefreshProperty(kbEditorEntity* const pEntity, const std::
 	}
 }
 
-/**
- *	kbPropertiesTab::DeleteComponent
- */
+/// kbPropertiesTab::DeleteComponent
 void kbPropertiesTab::DeleteComponent(Fl_Widget* widget, void* voidptr) {
 	propertiesTabCBData_t* const userData = static_cast<propertiesTabCBData_t*>(voidptr);
 
@@ -1025,9 +1007,7 @@ void kbPropertiesTab::DeleteComponent(Fl_Widget* widget, void* voidptr) {
 	g_pPropertiesTab->RefreshEntity();
 }
 
-/**
- *	kbPropertiesTab::InsertArrayStruct
- */
+/// kbPropertiesTab::InsertArrayStruct
 void kbPropertiesTab::InsertArrayStruct(Fl_Widget* widget, void* voidPtr) {
 	propertiesTabCBData_t* userData = static_cast<propertiesTabCBData_t*>(voidPtr);
 
@@ -1035,9 +1015,7 @@ void kbPropertiesTab::InsertArrayStruct(Fl_Widget* widget, void* voidPtr) {
 	g_pPropertiesTab->RefreshEntity();
 }
 
-/**
- *	kbPropertiesTab::DeleteArrayStruct
- */
+/// kbPropertiesTab::DeleteArrayStruct
 void kbPropertiesTab::DeleteArrayStruct(Fl_Widget* widget, void* voidPtr) {
 	propertiesTabCBData_t* userData = static_cast<propertiesTabCBData_t*>(voidPtr);
 

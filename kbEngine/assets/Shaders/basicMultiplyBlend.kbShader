@@ -47,9 +47,7 @@ struct PS_OUTPUT {
 	float4 Color         : SV_TARGET0;
 };
 
-/**
- *	vertexShader
- */
+/// vertexShader
 pixelInput vertexShader( vertexInput input ) {
 	pixelInput output = (pixelInput)(0);
 
@@ -63,9 +61,7 @@ pixelInput vertexShader( vertexInput input ) {
 }
 
 
-/**
- *	pixelShader
- */
+/// pixelShader
 Texture2D shaderTexture;
 SamplerState SampleType;
 

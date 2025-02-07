@@ -5,9 +5,7 @@
 #include "blk_core.h"
 #include "plane3d.h"
 
-/**
- *	Plane3d::Intesect
- */
+/// Plane3d::Intesect
 Plane3d_Intersect Plane3d::Intersect(const Vec3& startPt, const Vec3& endPt, float& t, Vec3& intersectionPt) {
 	Vec3 planeNormal(x, y, z);
 	Vec3 knownPt = planeNormal * w;

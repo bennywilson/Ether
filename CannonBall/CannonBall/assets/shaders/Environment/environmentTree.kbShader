@@ -81,9 +81,7 @@ pixelInput vertexShader( vertexInput input ) {
 	return output;
 }
 
-/**
- *	pixelShader
- */
+/// pixelShader
 Texture2D diffuse(white)			: register(t1);
 
 

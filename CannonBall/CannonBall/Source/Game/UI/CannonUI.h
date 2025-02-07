@@ -6,9 +6,7 @@
 #ifndef _CANNONUI_H_
 #define _CANNONUI_H_
 
-/**
- *	CannonHealthBarUIComponent
- */
+/// CannonHealthBarUIComponent
 class CannonHealthBarUIComponent : public kbUIComponent {
 
 	KB_DECLARE_COMPONENT( CannonHealthBarUIComponent, kbUIComponent );
@@ -32,9 +30,7 @@ private:
 	float									m_StartFlashTime;
 };
 
-/**
- *	CannonBallUIComponent
- */
+/// CannonBallUIComponent
 class CannonBallUIComponent : public kbUIComponent {
 
 	KB_DECLARE_COMPONENT( CannonBallUIComponent, kbUIComponent );
@@ -76,9 +72,7 @@ private:
 	float									m_NextSmokeCloudUpdateTime;
 };
 
-/**
- *	CannonBallPauseMenuUIComponent
- */
+/// CannonBallPauseMenuUIComponent
 class CannonBallPauseMenuUIComponent : public kbUIComponent, public IUIWidgetListener {
 
 	KB_DECLARE_COMPONENT( CannonBallPauseMenuUIComponent, kbUIComponent );
@@ -126,9 +120,7 @@ private:
 	kbGameEntity							m_Entity;
 };
 
-/**
- *	CannonBallMainMenuComponent
- */
+/// CannonBallMainMenuComponent
 class CannonBallMainMenuComponent : public kbUIWidgetComponent {
 
 	KB_DECLARE_COMPONENT( CannonBallMainMenuComponent, kbUIWidgetComponent );
@@ -170,18 +162,14 @@ private:
 
 };
 
-/**
- *	CannonBallYesNoPromptComponent
- */
+/// CannonBallYesNoPromptComponent
 class CannonBallYesNoPromptComponent : public kbUIWidgetComponent {
 
 	KB_DECLARE_COMPONENT( CannonBallYesNoPromptComponent, kbUIWidgetComponent );
 
 };
 
-/**
- *	CannonBallGameSettingsComponent
- */
+/// CannonBallGameSettingsComponent
 class CannonBallGameSettingsComponent : public kbGameComponent, public ISingleton<CannonBallGameSettingsComponent> {
 
 	KB_DECLARE_COMPONENT( CannonBallGameSettingsComponent, kbGameComponent );
@@ -204,9 +192,7 @@ private:
 };
 
 
-/**
- *	CannonBallScrollComponent
- */
+/// CannonBallScrollComponent
 class CannonBallScrollComponent : public kbUIWidgetComponent {
 
 	KB_DECLARE_COMPONENT( CannonBallScrollComponent, kbUIWidgetComponent );

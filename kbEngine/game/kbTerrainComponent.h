@@ -76,9 +76,7 @@ private:
 	bool m_bUpdateMaterial;
 };
 
-/**
- *	kbGrassZone
- */
+/// kbGrassZone
 class kbGrassZone : public kbGameComponent {
 	KB_DECLARE_COMPONENT(kbGrassZone, kbGameComponent);
 
@@ -92,9 +90,7 @@ private:
 };
 
 
-/**
- *	kbTerrainComponent
- */
+/// kbTerrainComponent
 class kbTerrainComponent : public kbModelComponent {
 	KB_DECLARE_COMPONENT(kbTerrainComponent, kbModelComponent);
 

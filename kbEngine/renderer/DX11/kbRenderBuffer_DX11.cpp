@@ -9,16 +9,12 @@
 #include "kbRenderer_DX11.h"
 #include "kbRenderBuffer.h"
 
-/**
- *	kbRenderBuffer::Release
- */
+/// kbRenderBuffer::Release
 void kbRenderBuffer::Release() {
 	SAFE_RELEASE( m_pBuffer );
 }
 
-/**
- *	kbRenderBuffer::CreateVertexBuffer
- */
+/// kbRenderBuffer::CreateVertexBuffer
 void kbRenderBuffer::CreateVertexBuffer( const int numVerts, const int vertexSizeInBytes ) {
 	D3D11_BUFFER_DESC vertexBufferDesc = { 0 };
 	vertexBufferDesc.ByteWidth = ( unsigned int ) ( numVerts * vertexSizeInBytes );
@@ -39,9 +35,7 @@ void kbRenderBuffer::CreateVertexBuffer( const int numVerts, const int vertexSiz
 #endif
 }
 
-/**
- *	kbRenderBuffer::CreateIndexBuffer
- */
+/// kbRenderBuffer::CreateIndexBuffer
 void kbRenderBuffer::CreateIndexBuffer( const int numIndices ) {
 	D3D11_BUFFER_DESC indexBufferDesc = { 0 };
 	indexBufferDesc.ByteWidth = (uint) ( numIndices * sizeof(ushort) );
@@ -62,9 +56,7 @@ void kbRenderBuffer::CreateIndexBuffer( const int numIndices ) {
 #endif
 }
 
-/**
- *	kbRenderBuffer::Map
- */
+/// kbRenderBuffer::Map
 void * kbRenderBuffer::Map() {
 	D3D11_MAPPED_SUBRESOURCE resource;
 	ID3D11DeviceContext * pImmediateContext = nullptr;
@@ -79,9 +71,7 @@ void * kbRenderBuffer::Map() {
 	return resource.pData;
 }
 
-/**
- *	kbRenderBuffer::Unmap
- */
+/// kbRenderBuffer::Unmap
 void kbRenderBuffer::Unmap() {
 	ID3D11DeviceContext * pImmediateContext = nullptr;
 	g_pD3DDevice->GetImmediateContext( &pImmediateContext );
@@ -91,9 +81,7 @@ void kbRenderBuffer::Unmap() {
 	pImmediateContext->Release();
 }
 
-/**
- *	kbRenderBuffer::CreateVertexBuffer
- */
+/// kbRenderBuffer::CreateVertexBuffer
 void kbRenderBuffer::CreateVertexBuffer( const std::vector< vertexLayout > & vertices ) {
 
 	if ( m_pBuffer != nullptr ) {
@@ -118,9 +106,7 @@ void kbRenderBuffer::CreateVertexBuffer( const std::vector< vertexLayout > & ver
 	blk::error_check( SUCCEEDED(hr), "kbRenderBuffer::CreateVertexBuffer() - Failed to create vertex buffer" );
 }
 
-/**
- *	kbRenderBuffer::CreateIndexBuffer
- */
+/// kbRenderBuffer::CreateIndexBuffer
 void kbRenderBuffer::CreateIndexBuffer( const std::vector<ushort> & indices ) {
 	if ( m_pBuffer != nullptr ) {
 		m_pBuffer->Release();

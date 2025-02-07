@@ -25,9 +25,7 @@
 kbModel* model = nullptr;
 const float Base_Cam_Speed = 0.1f;
 
-/**
- *	kbEditorMainTab::kbEditorMainTab
- */
+/// kbEditorMainTab::kbEditorMainTab
 kbMainTab::kbMainTab(int x, int y, int w, int h) :
 	kbWidget(x, y, w, h),
 	Fl_Tabs(x, y, w, h) {
@@ -156,9 +154,7 @@ void kbMainTab::Update() {
 
 }
 
-/**
- *	kbMainTab::RenderSync
- */
+/// kbMainTab::RenderSync
 void kbMainTab::RenderSync() {
 	kbWidget::RenderSync();
 
@@ -255,9 +251,7 @@ void kbMainTab::RenderSync() {
 
 }
 
-/**
- *	kbMainTab::EventCB
- */
+/// kbMainTab::EventCB
 void kbMainTab::EventCB(const widgetCBObject* widgetCBObject) {
 	if (widgetCBObject == NULL) {
 		blk::error("Error: kbMainTab::EventCB() - NULL widgetCBObject");
@@ -325,9 +319,7 @@ void kbMainTab::EventCB(const widgetCBObject* widgetCBObject) {
 	}
 }
 
-/**
- *	kbEditorWindow::GetCurrentWindow
- */
+/// kbEditorWindow::GetCurrentWindow
 kbEditorWindow* kbMainTab::GetCurrentWindow() {
 	Fl_Widget* const widget = value();
 
@@ -340,9 +332,7 @@ kbEditorWindow* kbMainTab::GetCurrentWindow() {
 	return NULL;
 }
 
-/**
- *	kbMainTab::InputCB
- */
+/// kbMainTab::InputCB
 void kbMainTab::InputCB(const widgetCBObject* const widgetCBObj) {
 
 	const widgetCBInputObject* const inputObject = static_cast<const widgetCBInputObject*>(widgetCBObj);
@@ -352,9 +342,7 @@ void kbMainTab::InputCB(const widgetCBObject* const widgetCBObj) {
 	}
 }
 
-/**
- *	kbMainTab::CameraMoveCB
- */
+/// kbMainTab::CameraMoveCB
 void kbMainTab::CameraMoveCB(const widgetCBInputObject* const inputObject) {
 	float movementMag = m_CameraMoveSpeedMultiplier * Base_Cam_Speed;
 	const float rotationMag = 0.01f;
@@ -419,9 +407,7 @@ void kbMainTab::CameraMoveCB(const widgetCBInputObject* const inputObject) {
 	}
 }
 
-/**
- *	kbMainTab::EntityTransformedCB
- */
+/// kbMainTab::EntityTransformedCB
 void kbMainTab::EntityTransformedCB(const widgetCBObject* const widgetCBObj) {
 	const widgetCBEntityTransformed* entityTransformedWidget = static_cast<const widgetCBEntityTransformed*>(widgetCBObj);
 
@@ -435,9 +421,7 @@ void kbMainTab::EntityTransformedCB(const widgetCBObject* const widgetCBObj) {
 	}
 }
 
-/**
- *	kbMainTab::ManipulatorEvent
- */
+/// kbMainTab::ManipulatorEvent
 void kbMainTab::ManipulatorEvent(const bool bClicked, const Vec2i& mouseXY) {
 
 	RECT windowRect;

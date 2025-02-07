@@ -9,9 +9,7 @@
 
 static const kbLevelComponent * g_pLevelComponent = nullptr;
 
-/**
- *	kbLevelComponent::Constructor
- */
+/// kbLevelComponent::Constructor
 void kbLevelComponent::Constructor() {
 	m_LevelType = LevelType_2D;
 	m_GlobalModelScale = 1.0f;
@@ -21,16 +19,12 @@ void kbLevelComponent::Constructor() {
 	g_pLevelComponent = this;
 }
 
-/**
- *	kbLevelComponent::~kbLevelComponent
- */
+/// kbLevelComponent::~kbLevelComponent
 kbLevelComponent::~kbLevelComponent() {
 	g_pLevelComponent = nullptr;
 }
 
-/**
- *	kbLevelComponent::SetEnable_Internal
- */
+/// kbLevelComponent::SetEnable_Internal
 void kbLevelComponent::SetEnable_Internal( const bool bEnable ) {
 	Super::SetEnable_Internal( bEnable );
 
@@ -43,9 +37,7 @@ void kbLevelComponent::SetEnable_Internal( const bool bEnable ) {
 	}
 }
 
-/**
- *	kbLevelComponent::EditorChange
- */
+/// kbLevelComponent::EditorChange
 void kbLevelComponent::EditorChange( const std::string & propertyName ) {
 	Super::EditorChange( propertyName );
 
@@ -54,9 +46,7 @@ void kbLevelComponent::EditorChange( const std::string & propertyName ) {
 	}
 }
 
-/**
- *	kbLevelComponent::GetGlobalModelScale
- */
+/// kbLevelComponent::GetGlobalModelScale
 float kbLevelComponent::GetGlobalModelScale() {
 
 	if ( g_pLevelComponent == nullptr ) {
@@ -66,9 +56,7 @@ float kbLevelComponent::GetGlobalModelScale() {
 	return g_pLevelComponent->m_GlobalModelScale;
 }
 
-/**
- *	kbLevelComponent::GetEditorIconScale
- */
+/// kbLevelComponent::GetEditorIconScale
 float kbLevelComponent::GetEditorIconScale() {
 
 	if ( g_pLevelComponent == nullptr ) {
@@ -78,9 +66,7 @@ float kbLevelComponent::GetEditorIconScale() {
 	return g_pLevelComponent->m_EditorIconScale;
 }
 
-/**
- *	kbLevelComponent::GetGlobalVolumeScale
- */
+/// kbLevelComponent::GetGlobalVolumeScale
 float kbLevelComponent::GetGlobalVolumeScale() {
 
 	if ( g_pLevelComponent == nullptr ) {
@@ -90,37 +76,27 @@ float kbLevelComponent::GetGlobalVolumeScale() {
 	return g_pLevelComponent->m_GlobalVolumeScale;
 }
 
-/**
- *	kbCinematicAction
- */
+/// kbCinematicAction
 void kbCinematicAction::Constructor() {
 	m_fCineParam = 0.0f;
 }
 
-/**
- *	kbCinematicComponent::~kbCinematicComponent
- */
+/// kbCinematicComponent::~kbCinematicComponent
 kbCinematicComponent::~kbCinematicComponent() {
 
 }
 
-/**
- *	kbCinematicComponent::Constructor
- */
+/// kbCinematicComponent::Constructor
 void kbCinematicComponent::Constructor() {
 }
 
-/**
- *	kbCinematicComponent::SetEnable_Internal
- */
+/// kbCinematicComponent::SetEnable_Internal
 void kbCinematicComponent::SetEnable_Internal( const bool bEnable ) {
 
 	Super::SetEnable_Internal( true );
 }
 
-/**
- *	kbCinematicComponent::Update_Internal
- */
+/// kbCinematicComponent::Update_Internal
 void kbCinematicComponent::Update_Internal( const float dt ) {
 	
 	Super::Update_Internal( dt );

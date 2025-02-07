@@ -7,9 +7,7 @@
 #ifndef _KBSTATICMODELCOMPONENT_H_
 #define _KBSTATICMODELCOMPONENT_H_
 
-/**
- *	kbStaticModelComponent
- */
+/// kbStaticModelComponent
 class kbStaticModelComponent : public kbModelComponent {
 
 	KB_DECLARE_COMPONENT( kbStaticModelComponent, kbModelComponent );

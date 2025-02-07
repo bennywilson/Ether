@@ -16,9 +16,7 @@ class CannonActorComponent;
 class kbLevelComponent;
 
 
-/**
- *	DealAttackInfo_t
- */
+/// DealAttackInfo_t
 template<typename T>
 struct DealAttackInfo_t {
 	CannonActorComponent * m_pAttacker = nullptr;
@@ -27,9 +25,7 @@ struct DealAttackInfo_t {
 	T m_AttackType = (T)0;
 };
 
-/**
- *	AttackHitInfo_t
- */
+/// AttackHitInfo_t
 struct AttackHitInfo_t {
 	kbGameComponent * m_pHitComponent = nullptr;
 	bool m_bHit = false;
@@ -37,9 +33,7 @@ struct AttackHitInfo_t {
 
 
 
-/**
- *	CannonLevelComponent
- */
+/// CannonLevelComponent
 class CannonLevelComponent : public kbLevelComponent {
 
 //-------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -50,9 +44,7 @@ private:
 	int											m_Dummy2;
 };
 
-/**
- *	CannonGame
- */
+/// CannonGame
 class CannonGame : public kbGame, public kbRenderHook {
 
 //-------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -101,9 +93,7 @@ private:
 	void										ProcessInput( const float deltaTimeSec );
 };
 
-/**
- *	CannonFogComponent
- */
+/// CannonFogComponent
 class CannonFogComponent : public kbGameComponent, kbRenderHook {
 
 	KB_DECLARE_COMPONENT( CannonFogComponent, kbGameComponent );

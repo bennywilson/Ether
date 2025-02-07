@@ -18,9 +18,7 @@ namespace CapOnIt {
 	 };
 };
 
-/**
- *	CapOnItLevelComponent
- */
+/// CapOnItLevelComponent
 class CapOnItLevelComponent : public CannonLevelComponent {
 
 	KB_DECLARE_COMPONENT( CapOnItLevelComponent, CannonLevelComponent );
@@ -41,9 +39,7 @@ private:
 	static CapOnItLevelComponent *				s_Inst;
 };
 
-/**
- *	CapOnIt_BaseState
- */
+/// CapOnIt_BaseState
 class CapOnIt_BaseState : public StateMachineNode<CapOnIt::eCapOnIt_State> {
 
 //---------------------------------------------------------------------------------------------------
@@ -57,9 +53,7 @@ protected:
 };
 
 
-/**
- *	CapOnItDirector
- */
+/// CapOnItDirector
 class CapOnItDirector : public kbLevelDirector<CapOnIt_BaseState, CapOnIt::eCapOnIt_State>, public ISingleton<CapOnItDirector>, public IUIWidgetListener {
 
 //---------------------------------------------------------------------------------------------------

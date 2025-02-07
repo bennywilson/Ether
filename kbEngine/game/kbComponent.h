@@ -78,9 +78,7 @@ private:
 	kbComponent *								m_pOwningComponent;
 };
 
-/**
- *	kbGameComponent
- */
+/// kbGameComponent
 class kbGameComponent : public kbComponent {
 
 	KB_DECLARE_COMPONENT( kbGameComponent, kbComponent );
@@ -147,9 +145,7 @@ protected:
 	Quat4										m_Orientation;
 };
 
-/**
- *	kbGameLogicComponent - This is a component for running game logic (AI, Player, etc).  It's added to the end of a kbGameEntity's component list so that it will be run last
- */
+/// kbGameLogicComponent - This is a component for running game logic (AI, Player, etc).  It's added to the end of a kbGameEntity's component list so that it will be run last
 class kbGameLogicComponent : public kbGameComponent {
 
 	KB_DECLARE_COMPONENT( kbGameLogicComponent, kbGameComponent );
@@ -164,9 +160,7 @@ private:
 	int											m_DummyTemp;	// Hack: kbTypeInfoHierarchyIterator currently requires at least one element in a component
 };
 
-/**
- *	kbDamageComponent 
- */
+/// kbDamageComponent 
 class kbDamageComponent : public kbGameLogicComponent {
 
 	KB_DECLARE_COMPONENT( kbDamageComponent, kbGameLogicComponent );
@@ -182,9 +176,7 @@ private:
 	float										m_MaxDamage;
 };
 
-/**
- *	kbActorComponent 
- */
+/// kbActorComponent 
 class kbActorComponent : public kbGameLogicComponent {
 
 	KB_DECLARE_COMPONENT( kbActorComponent, kbGameLogicComponent );
@@ -207,9 +199,7 @@ protected:
 	float										m_CurrentHealth;
 };
 
-/**
- *	kbDeleteEntityComponent
- */
+/// kbDeleteEntityComponent
 class kbDeleteEntityComponent : public kbGameComponent {
 	KB_DECLARE_COMPONENT( kbDeleteEntityComponent, kbGameComponent );
 
@@ -222,9 +212,7 @@ private:
 };
 
 
-/**
- *	kbPlayerStartComponent
- */
+/// kbPlayerStartComponent
 class kbPlayerStartComponent : public kbGameComponent {
 	KB_DECLARE_COMPONENT( kbPlayerStartComponent, kbGameComponent );
 
@@ -232,9 +220,7 @@ class kbPlayerStartComponent : public kbGameComponent {
 	int m_DummyVar;
 };
 
-/**
- *	kbAnimEvent
- */
+/// kbAnimEvent
 class kbAnimEvent : public kbGameComponent {
 	KB_DECLARE_COMPONENT( kbAnimEvent, kbGameComponent );
 
@@ -253,9 +239,7 @@ private:
 	float									m_EventTime;
 };
 
-/**
- *  IAnimEventListener
- */
+///  *  IAnimEventListener
 struct kbAnimEventInfo_t {
 	kbAnimEventInfo_t( const kbAnimEvent & animEvent, const kbComponent *const pOwnerComponent ) : m_AnimEvent( animEvent ), m_pComponent( pOwnerComponent ) { }
 	const kbAnimEvent & m_AnimEvent;
@@ -268,9 +252,7 @@ public:
 	virtual void							OnAnimEvent( const kbAnimEventInfo_t & animEvent ) = 0;
 };
 
-/**
- *	kbVectorAnimEvent
- */
+/// kbVectorAnimEvent
 class kbVectorAnimEvent : public kbGameComponent {
 	KB_DECLARE_COMPONENT( kbVectorAnimEvent, kbGameComponent );
 
@@ -289,9 +271,7 @@ private:
 	float									m_EventTime;
 };
 
-/**
- *  kbEditorGlobalSettingsComponent
- */
+///  *  kbEditorGlobalSettingsComponent
 class kbEditorGlobalSettingsComponent : public kbGameComponent {
 	KB_DECLARE_COMPONENT( kbEditorGlobalSettingsComponent, kbGameComponent );
 
@@ -300,9 +280,7 @@ public:
 	int										m_CameraSpeedIdx;
 };
 
-/**
- *  kbEditorLevelSettingsComponent
- */
+///  *  kbEditorLevelSettingsComponent
 class kbEditorLevelSettingsComponent : public kbGameComponent {
 	KB_DECLARE_COMPONENT( kbEditorLevelSettingsComponent, kbGameComponent );
 
@@ -312,9 +290,7 @@ public:
 	Quat4									m_CameraRotation;
 };
 
-/**
- *	IStateMachine
- */
+/// IStateMachine
 template<typename StateEnum>
 class StateMachineNode abstract {
 
@@ -456,9 +432,7 @@ protected:
 	StateEnum m_PreviousState;
 };
 
-/**
- *	ISingleton
- */
+/// ISingleton
 template <typename T>
 class ISingleton {
 

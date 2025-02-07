@@ -7,9 +7,7 @@
 #include "CannonUI.h"
 
 
-/**
- *	CannonHealthBarUIComponent::Constructor
- */
+/// CannonHealthBarUIComponent::Constructor
 void CannonHealthBarUIComponent::Constructor() {
 	m_HealthBarWarningFlashThreshold = -1.0f;
 	m_HealthBarWarningFlashSpeed = 1.0f;
@@ -19,16 +17,12 @@ void CannonHealthBarUIComponent::Constructor() {
 	m_StartFlashTime = -1.0f;
 }
 
-/**
- *	CannonHealthBarUIComponent::SetEnable_Internal
- */
+/// CannonHealthBarUIComponent::SetEnable_Internal
 void CannonHealthBarUIComponent::SetEnable_Internal(const bool bEnable) {
 	Super::SetEnable_Internal(bEnable);
 }
 
-/**
- *	CannonHealthBarUIComponent::Update_Internal
- */
+/// CannonHealthBarUIComponent::Update_Internal
 void CannonHealthBarUIComponent::Update_Internal(const float DT) {
 	Super::Update_Internal(DT);
 
@@ -47,9 +41,7 @@ void CannonHealthBarUIComponent::Update_Internal(const float DT) {
 	}
 }
 
-/**
- *	CannonHealthBarUIComponent::SetTargetHealth
- */
+/// CannonHealthBarUIComponent::SetTargetHealth
 void CannonHealthBarUIComponent::SetTargetHealth(const float newHealth) {
 	m_TargetNormalizedHealth = newHealth;
 
@@ -62,9 +54,7 @@ void CannonHealthBarUIComponent::SetTargetHealth(const float newHealth) {
 	}
 }
 
-/**
- *	CannonBallUIComponent::Constructor
- */
+/// CannonBallUIComponent::Constructor
 void CannonBallUIComponent::Constructor() {
 
 	m_SparkRelativePosition.set(0.5f, 0.5f, 0.f);
@@ -87,9 +77,7 @@ void CannonBallUIComponent::Constructor() {
 	m_NextSmokeCloudUpdateTime = -1.0f;
 }
 
-/**
- *	CannonBallUIComponent::SetEnable_Internal
- */
+/// CannonBallUIComponent::SetEnable_Internal
 void CannonBallUIComponent::SetEnable_Internal(const bool bEnable) {
 
 	Super::SetEnable_Internal(bEnable);
@@ -105,9 +93,7 @@ void CannonBallUIComponent::SetEnable_Internal(const bool bEnable) {
 	}
 }
 
-/**
- *	CannonBallUIComponent::Update_Internal
- */
+/// CannonBallUIComponent::Update_Internal
 void CannonBallUIComponent::Update_Internal(const float dt) {
 
 	Super::Update_Internal(dt);
@@ -209,9 +195,7 @@ void CannonBallUIComponent::Update_Internal(const float dt) {
 	}
 }
 
-/**
- *	CannonBallUIComponent::SetFill
- */
+/// CannonBallUIComponent::SetFill
 void CannonBallUIComponent::SetFill(const float fill) {
 
 	if (m_CurrentFill >= 1.0f && fill >= 1.0f) {
@@ -226,9 +210,7 @@ void CannonBallUIComponent::SetFill(const float fill) {
 	}
 }
 
-/**
- *	CannonBallUIComponent::CannonBallActivatedCB
- */
+/// CannonBallUIComponent::CannonBallActivatedCB
 void CannonBallUIComponent::CannonBallActivatedCB() {
 	m_CurrentFill = m_TargetFill = 0.0f;
 
@@ -236,9 +218,7 @@ void CannonBallUIComponent::CannonBallActivatedCB() {
 	m_NextSmokeCloudUpdateTime = m_CannonBallActivatedStartTime + 0.2f;
 }
 
-/**
- *	CannonBallPauseMenuUIComponent::Constructor
- */
+/// CannonBallPauseMenuUIComponent::Constructor
 void CannonBallPauseMenuUIComponent::Constructor() {
 	// Editor
 	m_WidgetSize.set(0.1f, 0.1f, 1.0f);
@@ -255,9 +235,7 @@ const Vec3 g_CheckMarkPos[] = { Vec3(0.400000f, 0.287480f, 0.000000f), Vec3(0.36
 Vec3 g_Offsets[] = { Vec3::zero, Vec3::zero, Vec3::zero, Vec3::zero, Vec3::zero, Vec3::zero };
 
 
-/**
- *	CannonBallPauseMenuUIComponent::SetEnable_Internal
- */
+/// CannonBallPauseMenuUIComponent::SetEnable_Internal
 void CannonBallPauseMenuUIComponent::SetEnable_Internal(const bool bEnable) {
 
 	Super::SetEnable_Internal(bEnable);
@@ -341,9 +319,7 @@ void CannonBallPauseMenuUIComponent::SetEnable_Internal(const bool bEnable) {
 	}
 }
 
-/**
- *	CannonBallPauseMenuUIComponent::RecalculateChildrenTransform
- */
+/// CannonBallPauseMenuUIComponent::RecalculateChildrenTransform
 void CannonBallPauseMenuUIComponent::RecalculateChildrenTransform() {
 
 	const float ScreenPixelWidth = (float)g_pRenderer->GetBackBufferWidth();
@@ -375,9 +351,7 @@ void CannonBallPauseMenuUIComponent::RecalculateChildrenTransform() {
 	}
 }
 
-/**
- *	CannonBallPauseMenuUIComponent::InputCB
- */
+/// CannonBallPauseMenuUIComponent::InputCB
 void CannonBallPauseMenuUIComponent::InputCB(const kbInput_t& input) {
 
 	bool bNewOptionSelected = false;
@@ -422,9 +396,7 @@ void CannonBallPauseMenuUIComponent::InputCB(const kbInput_t& input) {
 	}
 }
 
-/**
- *	CannonBallPauseMenuUIComponent::Update_Internal
- */
+/// CannonBallPauseMenuUIComponent::Update_Internal
 void CannonBallPauseMenuUIComponent::Update_Internal(const float DT) {
 
 	Super::Update_Internal(DT);
@@ -472,9 +444,7 @@ void CannonBallPauseMenuUIComponent::Update_Internal(const float DT) {
 	}
 }
 
-/**
- *	CannonBallPauseMenuUIComponent::WidgetEventCB
- */
+/// CannonBallPauseMenuUIComponent::WidgetEventCB
 void CannonBallPauseMenuUIComponent::WidgetEventCB(kbUIWidgetComponent* const pWidget, const kbInput_t* const pInput) {
 
 	if (pWidget == &m_SliderWidgets[0]) {
@@ -496,9 +466,7 @@ void CannonBallPauseMenuUIComponent::WidgetEventCB(kbUIWidgetComponent* const pW
 	}
 }
 
-/**
- *	CannonBallMainMenuComponent::Constructor
- */
+/// CannonBallMainMenuComponent::Constructor
 void CannonBallMainMenuComponent::Constructor() {
 	m_AnimationState = 0;
 	m_TimeAnimStateBegan = -1.0f;
@@ -507,9 +475,7 @@ void CannonBallMainMenuComponent::Constructor() {
 	m_MainMenuIdx = 0;
 }
 
-/**
- *	CannonBallMainMenuComponent::InputCB
- */
+/// CannonBallMainMenuComponent::InputCB
 static float selectionStartX[] = { 0.06f, 0.21999f, 0.41999f };
 static float selectionOffset = 0.17f;
 
@@ -543,9 +509,7 @@ void CannonBallMainMenuComponent::InputCB(const kbInput_t& input) {
 	}
 }
 
-/**
- *	CannonBallMainMenuComponent::SetEnable_Internal
- */
+/// CannonBallMainMenuComponent::SetEnable_Internal
 void CannonBallMainMenuComponent::SetEnable_Internal(const bool bEnable) {
 
 	Super::SetEnable_Internal(bEnable);
@@ -568,9 +532,7 @@ void CannonBallMainMenuComponent::SetEnable_Internal(const bool bEnable) {
 	}
 }
 
-/**
- *	CannonBallMainMenuComponent::Update_Internal
- */
+/// CannonBallMainMenuComponent::Update_Internal
 void CannonBallMainMenuComponent::Update_Internal(const float dt) {
 
 	Super::Update_Internal(dt);
@@ -595,9 +557,7 @@ void CannonBallMainMenuComponent::Update_Internal(const float dt) {
 	}
 }
 
-/**
- *	CannonBallMainMenuComponent::SetAnimationFrame
- */
+/// CannonBallMainMenuComponent::SetAnimationFrame
 void CannonBallMainMenuComponent::SetAnimationFrame(const int idx) {
 
 	m_AnimationState = idx;
@@ -618,16 +578,12 @@ void CannonBallMainMenuComponent::SetAnimationFrame(const int idx) {
 	}
 }
 
-/**
- *	CannonBallMainMenuComponent::WidgetEventCB
- */
+/// CannonBallMainMenuComponent::WidgetEventCB
 void CannonBallMainMenuComponent::WidgetEventCB(kbUIWidgetComponent* const pWidget) {
 
 }
 
-/**
- *	CannonBallGameSettingsComponent::Constructor
- */
+/// CannonBallGameSettingsComponent::Constructor
 void CannonBallGameSettingsComponent::Constructor() {
 
 	m_Volume = 100;
@@ -635,9 +591,7 @@ void CannonBallGameSettingsComponent::Constructor() {
 	m_VisualQuality = 100;
 }
 
-/**
- *	CannonBallGameSettingsComponent::SaveSettings
- */
+/// CannonBallGameSettingsComponent::SaveSettings
 void CannonBallGameSettingsComponent::SaveSettings() {
 
 	if (g_UseEditor == true) {
@@ -655,9 +609,7 @@ void CannonBallGameSettingsComponent::SaveSettings() {
 	gameSettingsEnt.RemoveComponent(this);
 }
 
-/**
- *	CannonBallGameSettingsComponent::Get
- */
+/// CannonBallGameSettingsComponent::Get
 CannonBallGameSettingsComponent* CannonBallGameSettingsComponent::Get() {
 
 	if (s_pInstance != nullptr) {
@@ -682,23 +634,17 @@ CannonBallGameSettingsComponent* CannonBallGameSettingsComponent::Get() {
 	return s_pInstance;
 }
 
-/**
- *	CannonBallYesNoPromptComponent::Constructor
- */
+/// CannonBallYesNoPromptComponent::Constructor
 void CannonBallYesNoPromptComponent::Constructor() {
 
 }
 
-/**
- *	CannonBallScrollComponent::Constructor
- */
+/// CannonBallScrollComponent::Constructor
 void CannonBallScrollComponent::Constructor() {
 	m_ScrollRate.set(0.0f, 0.0f, 0.0f);
 }
 
-/**
- *	CannonBallScrollComponent::SetEnable_Internal
- */
+/// CannonBallScrollComponent::SetEnable_Internal
 void CannonBallScrollComponent::SetEnable_Internal(const bool bEnable) {
 
 	Super::SetEnable_Internal(bEnable);
@@ -708,9 +654,7 @@ void CannonBallScrollComponent::SetEnable_Internal(const bool bEnable) {
 	SetRelativePosition(myPos);
 }
 
-/**
- *	CannonBallScrollComponent::Update_Internal
- */
+/// CannonBallScrollComponent::Update_Internal
 void CannonBallScrollComponent::Update_Internal(const float DT) {
 
 	Super::Update_Internal(DT);

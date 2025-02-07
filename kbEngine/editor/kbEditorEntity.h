@@ -15,9 +15,7 @@ struct varMetaData_t {
 	bool bExpanded;
 };
 
-/**
- *	kbEditorEntity
- */
+/// kbEditorEntity
 class kbEditorEntity {
 
 	friend class kbEditor;

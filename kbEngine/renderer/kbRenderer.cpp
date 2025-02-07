@@ -20,9 +20,7 @@ const float g_DebugTextSize = 0.0165f;
 
 kbRenderer* g_pRenderer = nullptr;
 
-/**
- *	kbRenderSubmesh::GetShader
- */
+/// kbRenderSubmesh::GetShader
 const kbShader* kbRenderSubmesh::GetShader() const {
 	const kbRenderObject& renderObj = *GetRenderObject();
 
@@ -35,9 +33,7 @@ const kbShader* kbRenderSubmesh::GetShader() const {
 	return nullptr;
 }
 
-/**
- *	kbRenderWindow::kbRenderWindow
- */
+/// kbRenderWindow::kbRenderWindow
 kbRenderWindow::kbRenderWindow(HWND inHwnd, const RECT& windowDimensions, const float nearPlane, const float farPlane) :
 	m_Hwnd(inHwnd),
 	m_NearPlane_GameThread(nearPlane),
@@ -67,9 +63,7 @@ kbRenderWindow::kbRenderWindow(HWND inHwnd, const RECT& windowDimensions, const 
 	m_ProjectionMatrix.create_perspective_matrix(kbToRadians(50.0f), m_fViewPixelWidth / m_fViewPixelHeight, nearPlane, farPlane);
 }
 
-/**
- *	kbRenderWindow::~kbRenderWindow
- */
+/// kbRenderWindow::~kbRenderWindow
 kbRenderWindow::~kbRenderWindow() {
 
 	{
@@ -90,9 +84,7 @@ kbRenderWindow::~kbRenderWindow() {
 }
 
 
-/**
- *	kbRenderer::SetRenderViewTransform
- */
+/// kbRenderer::SetRenderViewTransform
 void kbRenderer::SetRenderViewTransform(const HWND hwnd, const Vec3& position, const Quat4& rotation) {
 	int viewIndex = -1;
 
@@ -116,9 +108,7 @@ void kbRenderer::SetRenderViewTransform(const HWND hwnd, const Vec3& position, c
 	m_RenderWindowList[viewIndex]->m_CameraRotation_GameThread = rotation;
 }
 
-/**
- *	kbRenderer::GetRenderViewTransform
- */
+/// kbRenderer::GetRenderViewTransform
 void kbRenderer::GetRenderViewTransform(const HWND hwnd, Vec3& position, Quat4& rotation) {
 	int viewIndex = -1;
 
@@ -141,9 +131,7 @@ void kbRenderer::GetRenderViewTransform(const HWND hwnd, Vec3& position, Quat4& 
 	rotation = m_RenderWindowList[viewIndex]->m_CameraRotation;
 }
 
-/**
- *	kbRenderer::SetNearFarPlane
- */
+/// kbRenderer::SetNearFarPlane
 void kbRenderer::SetNearFarPlane(const HWND hwnd, const float nearPlane, const float farPlane) {
 	int viewIndex = -1;
 
@@ -166,9 +154,7 @@ void kbRenderer::SetNearFarPlane(const HWND hwnd, const float nearPlane, const f
 	m_RenderWindowList[viewIndex]->m_FarPlane_GameThread = farPlane;
 }
 
-/**
- *	kbRenderWindow::BeginFrame
- */
+/// kbRenderWindow::BeginFrame
 void kbRenderWindow::BeginFrame() {
 	Mat4 translationMatrix(Mat4::identity);
 	translationMatrix[3].ToVec3() = -m_CameraPosition;
@@ -184,23 +170,17 @@ void kbRenderWindow::BeginFrame() {
 	BeginFrame_Internal();
 }
 
-/**
- *	kbRenderWindow::EndFrame
- */
+/// kbRenderWindow::EndFrame
 void kbRenderWindow::EndFrame() {
 	EndFrame_Internal();
 }
 
-/**
- *	kbRenderWindow::Release
- */
+/// kbRenderWindow::Release
 void kbRenderWindow::Release() {
 	Release_Internal();
 }
 
-/**
- *	kbRenderJob::Run()
- */
+/// kbRenderJob::Run()
 void kbRenderJob::Run() {
 	SetThreadName("Render thread");
 	while (m_bRequestShutdown == false) {
@@ -213,9 +193,7 @@ void kbRenderJob::Run() {
 	MarkJobAsComplete();
 };
 
-/**
- *	kbRenderer::kbRenderer
- */
+/// kbRenderer::kbRenderer
 kbRenderer::kbRenderer() :
 	Back_Buffer_Width(1280),
 	Back_Buffer_Height(1024),
@@ -243,16 +221,12 @@ kbRenderer::kbRenderer() :
 	g_pRenderer = this;
 }
 
-/**
- *	kbRenderer::~kbRenderer
- */
+/// kbRenderer::~kbRenderer
 kbRenderer::~kbRenderer() {
 
 }
 
-/**
- *	kbRenderer::Init
- */
+/// kbRenderer::Init
 void kbRenderer::Init(HWND hwnd, const int width, const int height) {
 
 	blk::log("Initializing kbRenderer");
@@ -269,9 +243,7 @@ void kbRenderer::Init(HWND hwnd, const int width, const int height) {
 	blk::log("	Rendered Initialized.  Took %f seconds", g_GlobalTimer.TimeElapsedSeconds() - startInitTime);
 }
 
-/**
- *	kbRenderer::Shutdown
- */
+/// kbRenderer::Shutdown
 void kbRenderer::Shutdown() {
 
 	blk::log("Shutting down kbRenderer");
@@ -292,16 +264,12 @@ void kbRenderer::Shutdown() {
 	Shutdown_Internal();
 }
 
-/**
- *	kbRenderer::LoadTexture
- */
+/// kbRenderer::LoadTexture
 void kbRenderer::LoadTexture(const char* name, int index, int width, int height) {
 	LoadTexture_Internal(name, index, width, height);
 }
 
-/**
- *	kbRenderer::AddRenderObject
- */
+/// kbRenderer::AddRenderObject
 void kbRenderer::AddRenderObject(const kbRenderObject& renderObjectToAdd) {
 	blk::error_check(m_pCurrentRenderWindow != nullptr, "kbRenderer::AddRenderObject - NULL m_pCurrentRenderWindow");
 	blk::error_check(renderObjectToAdd.m_pComponent != nullptr, "kbRenderer::AddRenderObject - NULL component");
@@ -313,9 +281,7 @@ void kbRenderer::AddRenderObject(const kbRenderObject& renderObjectToAdd) {
 	renderObj.m_bIsRemove = false;
 }
 
-/**
- *	kbRenderer::UpdateRenderObject
- */
+/// kbRenderer::UpdateRenderObject
 void kbRenderer::UpdateRenderObject(const kbRenderObject& renderObjectToUpdate) {
 	blk::error_check(m_pCurrentRenderWindow != nullptr, "kbRenderer::UpdateRenderObject() - NULL m_pCurrentRenderWindow");
 	blk::error_check(renderObjectToUpdate.m_pComponent != nullptr, "kbRenderer::UpdateRenderObject() - NULL component");
@@ -327,9 +293,7 @@ void kbRenderer::UpdateRenderObject(const kbRenderObject& renderObjectToUpdate) 
 	renderObj.m_bIsRemove = false;
 }
 
-/**
- *	kbRenderer::RemoveRenderObject
- */
+/// kbRenderer::RemoveRenderObject
 void kbRenderer::RemoveRenderObject(const kbRenderObject& renderObjectToRemove) {
 	blk::error_check(m_pCurrentRenderWindow != nullptr, "kbRenderer::RemoveRenderObject() - NULL m_pCurrentRenderWindow");
 	blk::error_check(renderObjectToRemove.m_pComponent != nullptr, "kbRenderer::RemoveRenderObject - NULL component");
@@ -349,9 +313,7 @@ void kbRenderer::RemoveRenderObject(const kbRenderObject& renderObjectToRemove) 
 	renderObj.m_bIsRemove = true;
 }
 
-/**
- *	kbRenderer::DrawDebugText
- */
+/// kbRenderer::DrawDebugText
 void kbRenderer::DrawDebugText(const std::string& theString, const float X, const float Y, const float ScreenCharW, const float ScreenCharH, const kbColor& Color) {
 
 	m_DebugStrings_GameThread.push_back(kbTextInfo_t());
@@ -365,9 +327,7 @@ void kbRenderer::DrawDebugText(const std::string& theString, const float X, cons
 	newTextInfo.color = Color;
 }
 
-/**
- *	kbRenderer::AddLight
- */
+/// kbRenderer::AddLight
 void kbRenderer::AddLight(const kbLightComponent* pLightComponent, const Vec3& pos, const Quat4& orientation) {
 
 	if (m_pCurrentRenderWindow == nullptr) {
@@ -402,9 +362,7 @@ void kbRenderer::AddLight(const kbLightComponent* pLightComponent, const Vec3& p
 	m_LightList_GameThread.push_back(newLight);
 }
 
-/**
- *	kbRenderer::UpdateLight
- */
+/// kbRenderer::UpdateLight
 void kbRenderer::UpdateLight(const kbLightComponent* pLightComponent, const Vec3& pos, const Quat4& orientation) {
 
 	if (m_pCurrentRenderWindow == nullptr) {
@@ -455,9 +413,7 @@ void kbRenderer::UpdateLight(const kbLightComponent* pLightComponent, const Vec3
 	m_LightList_GameThread.push_back(updateLight);
 }
 
-/**
- *	kbRenderer::RemoveLight
- */
+/// kbRenderer::RemoveLight
 void kbRenderer::RemoveLight(const kbLightComponent* const pLightComponent) {
 
 	if (m_pCurrentRenderWindow == nullptr) {
@@ -470,9 +426,7 @@ void kbRenderer::RemoveLight(const kbLightComponent* const pLightComponent) {
 	m_LightList_GameThread.push_back(lightToRemove);
 }
 
-/**
- *	kbRenderer::HackClearLight
- */
+/// kbRenderer::HackClearLight
 void kbRenderer::HackClearLight(const kbLightComponent* const pLightComponent) {
 
 	for (int i = 0; i < m_LightList_GameThread.size(); i++) {
@@ -484,9 +438,7 @@ void kbRenderer::HackClearLight(const kbLightComponent* const pLightComponent) {
 
 }
 
-/**
- *	kbRenderer::AddParticle
- */
+/// kbRenderer::AddParticle
 void kbRenderer::AddParticle(const kbRenderObject& renderObject) {
 
 	m_ParticleList_GameThread.push_back(renderObject);
@@ -494,9 +446,7 @@ void kbRenderer::AddParticle(const kbRenderObject& renderObject) {
 	m_ParticleList_GameThread[m_ParticleList_GameThread.size() - 1].m_bIsRemove = false;
 }
 
-/**
- *	kbRenderer::RemoveParticle
- */
+/// kbRenderer::RemoveParticle
 void kbRenderer::RemoveParticle(const kbRenderObject& renderObject) {
 
 	m_ParticleList_GameThread.push_back(renderObject);
@@ -504,9 +454,7 @@ void kbRenderer::RemoveParticle(const kbRenderObject& renderObject) {
 	m_ParticleList_GameThread[m_ParticleList_GameThread.size() - 1].m_bIsRemove = true;
 }
 
-/**
- *	kbRenderer::AddLightShafts
- */
+/// kbRenderer::AddLightShafts
 void kbRenderer::AddLightShafts(const kbLightShaftsComponent* const pComponent, const Vec3& pos, const Quat4& orientation) {
 	kbLightShafts newLightShafts;
 	newLightShafts.m_pLightShaftsComponent = pComponent;
@@ -531,9 +479,7 @@ void kbRenderer::AddLightShafts(const kbLightShaftsComponent* const pComponent, 
 	m_LightShafts_GameThread.push_back(newLightShafts);
 }
 
-/**
- *	kbRenderer::UpdateLightShafts
- */
+/// kbRenderer::UpdateLightShafts
 void kbRenderer::UpdateLightShafts(const kbLightShaftsComponent* const pComponent, const Vec3& pos, const Quat4& orientation) {
 	kbLightShafts updatedLightShafts;
 	updatedLightShafts.m_pLightShaftsComponent = pComponent;
@@ -559,9 +505,7 @@ void kbRenderer::UpdateLightShafts(const kbLightShaftsComponent* const pComponen
 	m_LightShafts_GameThread.push_back(updatedLightShafts);
 }
 
-/**
- *	kbRenderer::RemoveLightShafts
- */
+/// kbRenderer::RemoveLightShafts
 void kbRenderer::RemoveLightShafts(const kbLightShaftsComponent* const pComponent) {
 	kbLightShafts removeLightShafts;
 	removeLightShafts.m_pLightShaftsComponent = pComponent;
@@ -576,18 +520,14 @@ void kbRenderer::RemoveLightShafts(const kbLightShaftsComponent* const pComponen
 	m_LightShafts_GameThread.push_back(removeLightShafts);
 }
 
-/**
- *	kbRenderer::UpdateFog
- */
+/// kbRenderer::UpdateFog
 void kbRenderer::UpdateFog(const kbColor& color, const float startDistance, const float endDistance) {
 	m_FogColor_GameThread = color;
 	m_FogStartDistance_GameThread = startDistance;
 	m_FogEndDistance_GameThread = endDistance;
 }
 
-/**
- *	kbRenderer::RenderSync
- */
+/// kbRenderer::RenderSync
 void kbRenderer::RenderSync() {
 
 	// Copy requested game thread data over to their corresponding render thread structures
@@ -803,9 +743,7 @@ void kbRenderer::RenderSync() {
 	RenderSync_Internal();
 }
 
-/**
- *	kbRenderer::DrawBillboard
- */
+/// kbRenderer::DrawBillboard
 void kbRenderer::DrawBillboard(const Vec3& position, const Vec2& size, const int textureIndex, kbShader* const pShader, const int entityId) {
 	debugDrawObject_t billboard;
 	billboard.m_Position = position;
@@ -817,9 +755,7 @@ void kbRenderer::DrawBillboard(const Vec3& position, const Vec2& size, const int
 	m_DebugBillboards_GameThread.push_back(billboard);
 }
 
-/**
- *	kbRenderer::DrawModel
- */
+/// kbRenderer::DrawModel
 void kbRenderer::DrawModel(const kbModel* const pModel, const std::vector<kbShaderParamOverrides_t>& materials, const Vec3& position, const Quat4& orientation, const Vec3& scale, const int entityId) {
 	debugDrawObject_t model;
 	model.m_Position = position;
@@ -832,9 +768,7 @@ void kbRenderer::DrawModel(const kbModel* const pModel, const std::vector<kbShad
 	m_DebugModels_GameThread.push_back(model);
 }
 
-/**
- *	kbRenderer::DrawScreenSpaceQuad
- */
+/// kbRenderer::DrawScreenSpaceQuad
 void kbRenderer::DrawScreenSpaceQuad(const int start_x, const int start_y, const int size_x, const int size_y, const int textureIndex, kbShader* const pShader) {
 	ScreenSpaceQuad_t quadToAdd;
 	quadToAdd.m_Pos.x = start_x;
@@ -850,9 +784,7 @@ void kbRenderer::DrawScreenSpaceQuad(const int start_x, const int start_y, const
 #define AddVertDepthTest( vert ) drawVert.position = vert; m_DepthLines_GameThread.push_back( drawVert );
 #define AddVertNoDepthTest( vert ) drawVert.position = vert; m_NoDepthLines_GameThread.push_back( drawVert );
 
-/**
- *	kbRenderer::DrawLine
- */
+/// kbRenderer::DrawLine
 void kbRenderer::DrawLine(const Vec3& start, const Vec3& end, const kbColor& color, const bool bDepthTest) {
 
 	/*if ( m_DebugLines_GameThread.size() >= m_DebugLines_GameThread.capacity() - 2 ) {
@@ -873,9 +805,7 @@ void kbRenderer::DrawLine(const Vec3& start, const Vec3& end, const kbColor& col
 	}
 }
 
-/**
- *	kbRenderer::DrawBox
- */
+/// kbRenderer::DrawBox
 void kbRenderer::DrawBox(const kbBounds& bounds, const kbColor& color, const bool bDepthTest) {
 
 	const Vec3 maxVert = bounds.Max();
@@ -928,9 +858,7 @@ void kbRenderer::DrawBox(const kbBounds& bounds, const kbColor& color, const boo
 	}
 }
 
-/**
- *	kbRenderer::DrawSphere
- */
+/// kbRenderer::DrawSphere
 void kbRenderer::DrawSphere(const Vec3& origin, const float radius, const int InNumSegments, const kbColor& color) {
 	const int numSegments = max(InNumSegments, 4);
 	const float angleInc = 2.0f * kbPI / (float)numSegments;
@@ -970,9 +898,7 @@ void kbRenderer::DrawSphere(const Vec3& origin, const float radius, const int In
 	}
 }
 
-/**
- *	kbRenderer::DrawPreTransformedLine
- */
+/// kbRenderer::DrawPreTransformedLine
 void kbRenderer::DrawPreTransformedLine(const std::vector<Vec3>& vertList, const kbColor& color) {
 	vertexLayout drawVert;
 
@@ -985,9 +911,7 @@ void kbRenderer::DrawPreTransformedLine(const std::vector<Vec3>& vertList, const
 	}
 }
 
-/**
- *	kbRenderer::RT_GetRenderTexture
- */
+/// kbRenderer::RT_GetRenderTexture
 kbRenderTexture* kbRenderer::RT_GetRenderTexture(const int width, const int height, const eTextureFormat texFormat, const bool bRequiresCPUAccess) {
 
 	for (int i = NUM_RESERVED_RENDER_TARGETS; i < m_pRenderTargets.size(); i++) {
@@ -1003,26 +927,20 @@ kbRenderTexture* kbRenderer::RT_GetRenderTexture(const int width, const int heig
 	return pRenderTexture;
 }
 
-/**
- *	kbRenderer::RT_ReturnRenderTexture
- */
+/// kbRenderer::RT_ReturnRenderTexture
 void kbRenderer::RT_ReturnRenderTexture(kbRenderTexture* const pRenderTexture) {
 	ReturnRenderTexture_Internal(pRenderTexture);
 	pRenderTexture->m_bInUse = false;
 }
 
-/**
- *	kbRenderer::RegisterRenderHook
- */
+/// kbRenderer::RegisterRenderHook
 void kbRenderer::RegisterRenderHook(kbRenderHook* const pRenderHook) {
 	blk::error_check(pRenderHook != nullptr, "kbRenderer::RegisterRenderHook() - NULL render hook");
 
 	m_RenderHooks[(int)pRenderHook->m_RenderPass].push_back(pRenderHook);
 }
 
-/**
- *	kbRenderer::UnregisterRenderHook
- */
+/// kbRenderer::UnregisterRenderHook
 void kbRenderer::UnregisterRenderHook(kbRenderHook* const pRenderHook) {
 	blk::error_check(pRenderHook != nullptr, "kbRenderer::UnregisterRenderHook() - NULL render hook");
 
@@ -1030,16 +948,12 @@ void kbRenderer::UnregisterRenderHook(kbRenderHook* const pRenderHook) {
 
 }
 
-/**
- *	kbRenderHook::kbRenderHook
- */
+/// kbRenderHook::kbRenderHook
 kbRenderHook::kbRenderHook(const ERenderPass renderPass) :
 	m_RenderPass(renderPass) {
 }
 
-/**
- *	kbRenderHook::~kbRenderHook
- */
+/// kbRenderHook::~kbRenderHook
 kbRenderHook::~kbRenderHook() {
 
 }

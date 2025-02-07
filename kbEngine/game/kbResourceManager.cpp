@@ -27,9 +27,7 @@ public:
 	kbResource* m_Resource;
 };
 
-/**
- *	kbResource::Reload
- */
+/// kbResource::Reload
 void kbResource::Load() {
 
 	const float loadStartTime = g_GlobalTimer.TimeElapsedSeconds();

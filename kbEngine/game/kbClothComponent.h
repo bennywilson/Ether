@@ -4,25 +4,19 @@
 
 #pragma once
 
-/**
- *	EClothType
- */
+/// EClothType
 enum EClothType {
 	CT_None,
 	CT_Square,
 };
 
-/**
- *	kbClothSpring_t
- */
+/// kbClothSpring_t
 struct kbClothSpring_t {
 	int											m_MassIndices[2];
 	float										m_Length;
 };
 
-/**
- *	kbClothMass_t
- */
+/// kbClothMass_t
 struct kbClothMass_t {
 	kbClothMass_t() : m_LastPosition( Vec3::zero ), m_FrameForces( Vec3::zero ), m_bAnchored( false ) { }
 
@@ -38,9 +32,7 @@ struct kbClothMass_t {
 	bool										m_bAnchored;
 };
 
-/**
- *	kbClothBone
- */
+/// kbClothBone
 class kbClothBone : public kbGameComponent {
 public:
 	friend class kbClothComponent;
@@ -54,9 +46,7 @@ private:
 	bool										m_bIsAnchored;
 };
 
-/**
- *	kbClothComponent
- */
+/// kbClothComponent
 class kbClothComponent : public kbGameComponent {
 public:
 	KB_DECLARE_COMPONENT( kbClothComponent, kbGameComponent );

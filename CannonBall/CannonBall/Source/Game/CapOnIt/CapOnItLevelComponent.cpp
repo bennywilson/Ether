@@ -20,9 +20,7 @@ namespace CapOnIt {
 
 CapOnIt::eSkipCheats g_SkipCheat = CapOnIt::Skip_ToSkkt;
 
-/**
- *	KungFuGame_MainMenuState
- */
+/// KungFuGame_MainMenuState
 class CapOnIt_MainMenuState : public CapOnIt_BaseState {
 
 	//---------------------------------------------------------------------------------------------------
@@ -80,15 +78,11 @@ private:
 
 CapOnItLevelComponent* CapOnItLevelComponent::s_Inst = nullptr;
 
-/**
- *	CapOnItLevelComponent::Constructor
- */
+/// CapOnItLevelComponent::Constructor
 void CapOnItLevelComponent::Constructor() {
 }
 
-/**
- *	CapOnItLevelComponent::SetEnable_Internal
- */
+/// CapOnItLevelComponent::SetEnable_Internal
 void CapOnItLevelComponent::SetEnable_Internal(const bool bEnable) {
 	Super::SetEnable_Internal(bEnable);
 
@@ -99,9 +93,7 @@ void CapOnItLevelComponent::SetEnable_Internal(const bool bEnable) {
 	}
 }
 
-/**
- *	CapOnItLevelComponent::Update_Internal
- */
+/// CapOnItLevelComponent::Update_Internal
 void CapOnItLevelComponent::Update_Internal(const float DeltaTime) {
 	Super::Update_Internal(DeltaTime);
 
@@ -114,9 +106,7 @@ void CapOnItLevelComponent::Update_Internal(const float DeltaTime) {
 	UpdateDebugAndCheats();
 }
 
-/**
- *	CapOnItLevelComponent::UpdateDebugAndCheats
- */
+/// CapOnItLevelComponent::UpdateDebugAndCheats
 void CapOnItLevelComponent::UpdateDebugAndCheats() {
 
 	/*const auto input = g_pInputManager->GetInput();
@@ -140,53 +130,39 @@ void CapOnItLevelComponent::UpdateDebugAndCheats() {
 	}*/
 }
 
-/**
- *	CapOnItDirector::CapOnItDirector
- */
+/// CapOnItDirector::CapOnItDirector
 CapOnItDirector::CapOnItDirector() {
 }
 
-/**
- *	CapOnItDirector::~CapOnItDirector
- */
+/// CapOnItDirector::~CapOnItDirector
 CapOnItDirector::~CapOnItDirector() {
 
 }
 
-/**
- *	CapOnItDirector::InitializeStateMachine_Internal
- */
+/// CapOnItDirector::InitializeStateMachine_Internal
 void CapOnItDirector::InitializeStateMachine_Internal() {
 
 	kbLevelDirector::InitializeStateMachine_Internal();
 }
 
-/**
- *	CapOnItDirector::ShutdownStateMachine_Internal
- */
+/// CapOnItDirector::ShutdownStateMachine_Internal
 void CapOnItDirector::ShutdownStateMachine_Internal() {
 
 	kbLevelDirector::ShutdownStateMachine_Internal();
 }
 
-/**
- *	CapOnItDirector::UpdateStateMachine
- */
+/// CapOnItDirector::UpdateStateMachine
 void CapOnItDirector::UpdateStateMachine() {
 	kbLevelDirector::UpdateStateMachine();
 
 }
 
-/**
- *	CapOnItDirector::StateChangeCB
- */
+/// CapOnItDirector::StateChangeCB
 void CapOnItDirector::StateChangeCB(const CapOnIt::eCapOnIt_State previousState, const CapOnIt::eCapOnIt_State nextState) {
 
 }
 
-/**
- *	CapOnItDirector::WidgetEventCB
- */
+/// CapOnItDirector::WidgetEventCB
 void CapOnItDirector::WidgetEventCB(kbUIWidgetComponent* const pWidget, const kbInput_t* const pInput) {
 
 	m_States[m_CurrentState]->WidgetEventCB(pWidget, pInput);

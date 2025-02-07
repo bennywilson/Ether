@@ -18,9 +18,7 @@ kbConsoleVariable g_DebugShadowBounds( "debugshadowbounds", false, kbConsoleVari
 kbConsoleVariable g_ShowShadows( "showshadows", true, kbConsoleVariable::Console_Bool, "Toggle Shadows on/off.", "" );
 kbConsoleVariable g_ShowLightShafts( "showlightshafts", true, kbConsoleVariable::Console_Bool, "Toggle light shafts on/off.", "" );
 
-/**
- *	kbRenderer_DX11::RenderLights
- */
+/// kbRenderer_DX11::RenderLights
 void kbRenderer_DX11::RenderLights() {
 
 	if ( m_ViewMode == ViewMode_Wireframe ) {
@@ -40,9 +38,7 @@ void kbRenderer_DX11::RenderLights() {
 	m_RenderState.SetBlendState();
 }
 
-/**
- *	kbRenderer_DX11::RenderLight
- */
+/// kbRenderer_DX11::RenderLight
 Vec3 frozenCameraPosition;
 
 void kbRenderer_DX11::RenderLight( const kbRenderLight *const pLight ) {
@@ -188,9 +184,7 @@ void kbRenderer_DX11::RenderLight( const kbRenderLight *const pLight ) {
 	m_RenderState.SetDepthStencilState( false, kbRenderState::DepthWriteMaskZero, kbRenderState::CompareAlways, false );
 }
 
-/**
- *	kbRenderer_DX11::RenderShadow
- */
+/// kbRenderer_DX11::RenderShadow
 void kbRenderer_DX11::RenderShadow( const kbRenderLight *const pLight, Mat4 splitMatrices[] ) {
 
 	ID3D11ShaderResourceView *const pNullSRVs[] = { nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, 
@@ -399,9 +393,7 @@ void kbRenderer_DX11::RenderShadow( const kbRenderLight *const pLight, Mat4 spli
 	PLACE_GPU_TIME_STAMP( "Shadow Depth" );
 }
 
-/**
- *	kbRenderer_DX11::RenderLightShaft
- */
+/// kbRenderer_DX11::RenderLightShaft
 void kbRenderer_DX11::RenderLightShafts() {
 
 	if ( g_ShowLightShafts.GetBool() == false ) {

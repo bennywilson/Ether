@@ -18,9 +18,7 @@ kbConsoleVariable g_TimeScale("timescale", (float)1.0f, kbConsoleVariable::Conso
 kbConsoleVariable g_EnableHelpScreen("help", false, kbConsoleVariable::Console_Bool, "Display help screen", "ctrl h");
 kbConsoleVariable g_ShowFPS("showfps", false, kbConsoleVariable::Console_Bool, "Show FPS", "ctrl f");
 
-/**
- *	kbGame::kbGame
- */
+/// kbGame::kbGame
 kbGame::kbGame() :
 	m_Hwnd(nullptr),
 	m_pLocalPlayer(nullptr),
@@ -37,16 +35,12 @@ kbGame::kbGame() :
 	m_Console.RegisterCommandProcessor(this);
 }
 
-/**
- *	kbGame::~kbGame
- */
+/// kbGame::~kbGame
 kbGame::~kbGame() {
 	m_Console.RemoveCommandProcessor(this);
 }
 
-/**
- *  kbGame::InitGame
- */
+///  *  kbGame::InitGame
 void kbGame::InitGame(HWND hwnd, const int backBufferWidth, const int backBufferHeight, const std::vector< const kbGameEntity* >& gameEntityList) {
 
 	m_Hwnd = hwnd;
@@ -57,9 +51,7 @@ void kbGame::InitGame(HWND hwnd, const int backBufferWidth, const int backBuffer
 	InitGame_Internal();
 }
 
-/**
- *  kbGame::LoadMap
- */
+///  *  kbGame::LoadMap
 void kbGame::LoadMap(const std::string& mapName) {
 	blk::log("LoadMap() called on %s", mapName.c_str());
 
@@ -142,9 +134,7 @@ void kbGame::LoadMap(const std::string& mapName) {
 	}
 }
 
-/**
- *  kbGame::StopGame
- */
+///  *  kbGame::StopGame
 void kbGame::StopGame() {
 	StopGame_Internal();
 
@@ -164,17 +154,13 @@ void kbGame::StopGame() {
 	m_pLevelComp = nullptr;
 }
 
-/**
- *  kbGame::RequestQuitGame
- */
+///  *  kbGame::RequestQuitGame
 void kbGame::RequestQuitGame() {
 
 	m_bQuitGameRequested = true;
 }
 
-/**
- *	kbGame::Update
- */
+/// kbGame::Update
 void kbGame::Update() {
 
 	START_SCOPED_TIMER(GAME_THREAD);
@@ -360,9 +346,7 @@ void kbGame::Update() {
 	}
 }
 
-/**
- *	kbGame::CreateEntity
- */
+/// kbGame::CreateEntity
 kbGameEntity* kbGame::CreateEntity(const kbGameEntity* const pPrefab, const bool bIsPlayer) {
 	if (pPrefab == nullptr) {
 		blk::error("kbGame::CreateEntity() - nullptr prefab passed in");
@@ -381,9 +365,7 @@ kbGameEntity* kbGame::CreateEntity(const kbGameEntity* const pPrefab, const bool
 	return pSpawnedEntity;
 }
 
-/**
- *	kbGame::RemoveGameEntity
- */
+/// kbGame::RemoveGameEntity
 void kbGame::RemoveGameEntity(kbGameEntity* const pEntityToRemove) {
 
 	RemoveGameEntity_Internal(pEntityToRemove);
@@ -404,9 +386,7 @@ void kbGame::RemoveGameEntity(kbGameEntity* const pEntityToRemove) {
 
 }
 
-/**
- *	kbGame::GetEntityByName
- */
+/// kbGame::GetEntityByName
 kbGameEntityPtr kbGame::GetEntityByName(const kbString entName) {
 
 	// TODO - Optimize
@@ -421,9 +401,7 @@ kbGameEntityPtr kbGame::GetEntityByName(const kbString entName) {
 	return kbGameEntityPtr();
 }
 
-/**
- *	kbGame::SwapEntitiesByIdx
- */
+/// kbGame::SwapEntitiesByIdx
 void kbGame::SwapEntitiesByIdx(const size_t idx1, const size_t idx2) {
 	if (idx1 < 0 || idx1 >= m_GameEntityList.size() || idx2 < 0 || idx2 >= m_GameEntityList.size()) {
 		blk::warn("kbGame::SwapEntitiesByIdx() - Invalid index(es) [%d], [%d]", idx1, idx2);
@@ -433,9 +411,7 @@ void kbGame::SwapEntitiesByIdx(const size_t idx1, const size_t idx2) {
 	std::swap(m_GameEntityList[idx1], m_GameEntityList[idx2]);
 }
 
-/**
- *	kbGame::ProcessCommand
- */
+/// kbGame::ProcessCommand
 bool kbGame::ProcessCommand(const std::string& InCommand) {
 
 	std::string command = InCommand;
@@ -500,9 +476,7 @@ bool kbGame::ProcessCommand(const std::string& InCommand) {
 	return true;
 }
 
-/**
- *	kbGame::DisplayDebugCommands
- */
+/// kbGame::DisplayDebugCommands
 void kbGame::DisplayDebugCommands() {
 
 	const float aspectRatio = (float)g_pRenderer->GetBackBufferWidth() / (float)g_pRenderer->GetBackBufferHeight();

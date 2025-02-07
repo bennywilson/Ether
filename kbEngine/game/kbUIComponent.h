@@ -12,9 +12,7 @@
 #include "kbModel.h"
 #include "kbInputManager.h"
 
-/**
- *	IUIWidgetListener
- */
+/// IUIWidgetListener
 class IUIWidgetListener abstract {
 
 //-------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -23,9 +21,7 @@ public:
 
 };
 
-/**
- *	kbUIComponent
- */
+/// kbUIComponent
 class kbUIComponent : public kbGameComponent, public IInputListener {
 
 	KB_DECLARE_COMPONENT( kbUIComponent, kbGameComponent );
@@ -78,9 +74,7 @@ protected:
 	kbStaticModelComponent*						m_pStaticModelComponent;
 };
 
-/**
- *	kbUIWidgetComponent
- */
+/// kbUIWidgetComponent
 class kbUIWidgetComponent : public kbGameComponent, public IInputListener {
 
 	KB_DECLARE_COMPONENT( kbUIWidgetComponent, kbGameComponent );
@@ -179,9 +173,7 @@ private:
 	bool									m_bHasFocus;
 };
 
-/**
- *	CannonUISlider
- */
+/// CannonUISlider
 class kbUISlider : public kbUIWidgetComponent {
 
 	KB_DECLARE_COMPONENT( kbUISlider, kbUIWidgetComponent );

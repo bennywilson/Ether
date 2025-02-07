@@ -8,17 +8,13 @@
 
 #include "kbGameEntity.h"
 
-/**
- *	ELevelType
- */
+/// ELevelType
 enum ELevelType {
 	LevelType_Menu,
 	LevelType_2D
 };
 
-/**
- *	kbLevelComponent
- */
+/// kbLevelComponent
 class kbLevelComponent : public kbGameComponent {
 
 	KB_DECLARE_COMPONENT( kbLevelComponent, kbGameComponent )
@@ -51,18 +47,14 @@ private:
 	float										m_GlobalVolumeScale;
 };
 
-/**
- *	eCinematicActionType
- */
+/// eCinematicActionType
 enum eCinematicActionType {
 	CineAction_Override,
 	CineAction_Animate,
 	CineAction_MoveTo
 };
 
-/**
- *	kbCinematicAction
- */
+/// kbCinematicAction
 class kbCinematicAction : public kbGameComponent {
 public:
 	friend class kbCinematicComponent;
@@ -82,9 +74,7 @@ private:
 	float										m_ActionDuration;
 };
 
-/**
- *	kbCinematicComponent
- */
+/// kbCinematicComponent
 class kbCinematicComponent : public kbGameComponent {
 
 //---------------------------------------------------------------------------------------------------

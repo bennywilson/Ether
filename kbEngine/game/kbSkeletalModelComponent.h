@@ -8,9 +8,7 @@
 
 #include "kbModel.h"
 
-/**
- *	kbAnimComponent
- */
+/// kbAnimComponent
 class kbAnimComponent : public kbGameComponent {
 
 	friend class kbSkeletalModelComponent;
@@ -36,9 +34,7 @@ private:
 };
 
 
-/**
- *	kbSkeletalModelComponent
- */
+/// kbSkeletalModelComponent
 class kbSkeletalModelComponent : public kbModelComponent {
 
 	KB_DECLARE_COMPONENT( kbSkeletalModelComponent, kbModelComponent );
@@ -112,9 +108,7 @@ protected:
 	float										m_DebugAnimTime;
 };
 
-/**
- *	kbFlingPhysicsComponent
- */
+/// kbFlingPhysicsComponent
 class kbFlingPhysicsComponent: public kbGameComponent {
 
 	KB_DECLARE_COMPONENT( kbFlingPhysicsComponent, kbGameComponent );

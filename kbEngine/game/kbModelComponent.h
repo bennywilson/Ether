@@ -12,9 +12,7 @@
 class kbTexture;
 class kbShader;
 
-/**
- *	kbShaderParamComponent
- */
+/// kbShaderParamComponent
 class kbShaderParamComponent : public kbGameComponent {
 
 	friend class kbMaterialComponent;
@@ -43,9 +41,7 @@ private:
 	Vec4										m_Vector;
 };
 
-/**
- *	kbShaderModifierComponent
- */
+/// kbShaderModifierComponent
 class kbShaderModifierComponent : public kbGameComponent {
 
 	KB_DECLARE_COMPONENT( kbShaderModifierComponent, kbGameComponent );
@@ -65,9 +61,7 @@ protected:
 	float											m_AnimationLengthSec;
 };
 
-/**
- *	kbMaterialComponent
- */
+/// kbMaterialComponent
 class kbMaterialComponent : public kbGameComponent {
 
 	KB_DECLARE_COMPONENT( kbMaterialComponent, kbGameComponent );
@@ -92,9 +86,7 @@ private:
 	std::vector<kbShaderParamComponent>			m_ShaderParamComponents;
 };
 
-/**
- *	kbModelComponent
- */
+/// kbModelComponent
 class kbModelComponent : public kbGameComponent {
 
 	KB_DECLARE_COMPONENT( kbModelComponent, kbGameComponent );

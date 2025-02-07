@@ -18,23 +18,17 @@ kbCollisionManager g_CollisionManager;
 
 kbConsoleVariable g_ShowCollision( "showcollision", false, kbConsoleVariable::Console_Bool, "Show collision", "" );
 
-/**
- *	kbCollisionComponent::Constructor
- */
+/// kbCollisionComponent::Constructor
 void kbCollisionComponent::Constructor() {
 	m_CollisionType = CollisionType_Sphere;
 	m_Extent.set( 10.0f, 10.0f, 10.0f );
 }
 
-/**
- *	kbCollisionComponent::~kbCollisionComponent
- */
+/// kbCollisionComponent::~kbCollisionComponent
 kbCollisionComponent::~kbCollisionComponent() {
 }
 
-/**
- *	kbCollisionComponent::SetEnable_Internal
- */
+/// kbCollisionComponent::SetEnable_Internal
 void kbCollisionComponent::SetEnable_Internal( const bool isEnabled ) {
 	if ( isEnabled ) {
 		g_CollisionManager.RegisterComponent( this );
@@ -43,9 +37,7 @@ void kbCollisionComponent::SetEnable_Internal( const bool isEnabled ) {
 	}
 }
 
-/**
- *	kbCollisionComponent::Update_Internal
- */
+/// kbCollisionComponent::Update_Internal
 void kbCollisionComponent::Update_Internal( const float DeltaTime ) {
 	Super::Update_Internal( DeltaTime );
 
@@ -59,9 +51,7 @@ void kbCollisionComponent::Update_Internal( const float DeltaTime ) {
 	}
 }
 
-/**
- *	kbCollisionComponent::SetWorldSpaceCollisionSphere
- */
+/// kbCollisionComponent::SetWorldSpaceCollisionSphere
 void kbCollisionComponent::SetWorldSpaceCollisionSphere( const int idx, const Vec4 & newSphere ) {
 
 	if ( idx < 0 || idx >= m_LocalSpaceCollisionSpheres.size() ) {
@@ -76,9 +66,7 @@ void kbCollisionComponent::SetWorldSpaceCollisionSphere( const int idx, const Ve
 	m_WorldSpaceCollisionSpheres[idx] = newSphere; 
 }
 
-/**
- *	kbCollisionComponent::SetCustomTriangleCollision
- */
+/// kbCollisionComponent::SetCustomTriangleCollision
 void kbCollisionComponent::SetCustomTriangleCollision( const std::vector<customTriangle_t> & inCollision ) {
 
 	if ( IsEnabled() ) {
@@ -93,22 +81,16 @@ void kbCollisionComponent::SetCustomTriangleCollision( const std::vector<customT
 	}
 }
 
-/**
- *	kbCollisionManager::kbCollisionManager
- */
+/// kbCollisionManager::kbCollisionManager
 kbCollisionManager::kbCollisionManager() {
 }
 
-/**
- *	kbCollisionManager::~kbCollisionManager
- */
+/// kbCollisionManager::~kbCollisionManager
 kbCollisionManager::~kbCollisionManager() {
 	blk::error_check( m_CollisionComponents.size() == 0, "kbCollisionManager::~kbCollisionManager() - There are still %d registered components", (int)m_CollisionComponents.size() );
 }
 
-/**
- *	kbCollisionManager::PerformLineCheck
- */
+/// kbCollisionManager::PerformLineCheck
 kbCollisionInfo_t kbCollisionManager::PerformLineCheck( const Vec3 & start, const Vec3 & end ) {
 	kbCollisionInfo_t collisionInfo;
 
@@ -199,18 +181,14 @@ kbCollisionInfo_t kbCollisionManager::PerformLineCheck( const Vec3 & start, cons
 	return collisionInfo;
 }
 
-/**
- *	kbCollisionManager::RegisterComponent
- */
+/// kbCollisionManager::RegisterComponent
 void kbCollisionManager::RegisterComponent( kbCollisionComponent * Collision ) {
 	if ( std::find( m_CollisionComponents.begin(), m_CollisionComponents.end(), Collision ) == m_CollisionComponents.end() ) {
 		m_CollisionComponents.push_back( Collision );
 	}
 }
 
-/**
- *	kbCollisionManager::UnregisterComponent
- */
+/// kbCollisionManager::UnregisterComponent
 void kbCollisionManager::UnregisterComponent( kbCollisionComponent * Collision ) {
 	blk::std_remove_swap( m_CollisionComponents, Collision );
 }

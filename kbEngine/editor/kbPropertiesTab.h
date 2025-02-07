@@ -38,9 +38,7 @@ struct propertiesTabCBData_t {
 	int						m_ArrayIndex;
 };
 
-/**
- *	kbPropertiesTab
- */
+/// kbPropertiesTab
 class kbPropertiesTab : public Fl_Tabs, kbWidget {
 
 //---------------------------------------------------------------------------------------------------

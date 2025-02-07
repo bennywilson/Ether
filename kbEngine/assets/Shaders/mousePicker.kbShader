@@ -26,9 +26,7 @@ struct pixelInput {
 	float4	position	: SV_POSITION;
 };
 
-/**
- *	vertexShader
- */
+/// vertexShader
 pixelInput vertexShader( vertexInput input ) {
 	pixelInput output = (pixelInput)0;
 	output.position = mul( input.position, mvpMatrix );
@@ -36,9 +34,7 @@ pixelInput vertexShader( vertexInput input ) {
 	return output;
 }
 
-/**
- *	pixelShader
- */
+/// pixelShader
 uint2 pixelShader() : SV_TARGET {
 	return  uint2(entityId, groupId);
 }

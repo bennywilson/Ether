@@ -186,9 +186,7 @@ namespace blk {
 	}
 }
 
-/**
- *	StringFromWString
- */
+/// StringFromWString
 #include <locale>
 #include <codecvt>
 #include <string>
@@ -201,23 +199,17 @@ void StringFromWString(std::string& outString, const std::wstring& srcString) {
 		0, NULL, NULL);
 }
 
-/**
- *	WStringFromString
- */
+/// WStringFromString
 void WStringFromString(std::wstring& outString, const std::string& srcString) {
 	outString = std::wstring(srcString.begin(), srcString.end());
 }
 
-/**
- *	StringToLower
- */
+/// StringToLower
 void StringToLower(std::string& outString) {
 	std::transform(outString.begin(), outString.end(), outString.begin(), ::tolower);
 }
 
-/**
- *	GetFileExtension
- */
+/// GetFileExtension
 std::string GetFileExtension(const std::string& FileName) {
 	std::size_t found = FileName.find_last_of(".");
 	if (found != std::string::npos) {
@@ -227,9 +219,7 @@ std::string GetFileExtension(const std::string& FileName) {
 	return "";
 }
 
-/**
- *	GetFileExtension
- */
+/// GetFileExtension
 std::wstring GetFileExtension(const std::wstring& FileName) {
 	std::size_t found = FileName.find_last_of(L".");
 	if (found != std::wstring::npos) {
@@ -242,9 +232,7 @@ std::wstring GetFileExtension(const std::wstring& FileName) {
 
 std::map<ScopedTimerList_t, struct kbScopedTimerData_t*> g_ScopedTimerMap;
 
-/**
- *	kbScopedTimerData_t::kbScopedTimerData_t
- */
+/// kbScopedTimerData_t::kbScopedTimerData_t
 kbScopedTimerData_t::kbScopedTimerData_t(const ScopedTimerList_t timerIdx, const char* const stringName) {
 	m_ReadableName = kbString(stringName);
 	memset(&m_FrameTimes, 0, sizeof(m_FrameTimes));
@@ -253,9 +241,7 @@ kbScopedTimerData_t::kbScopedTimerData_t(const ScopedTimerList_t timerIdx, const
 	g_ScopedTimerMap[timerIdx] = this;
 }
 
-/**
- *	kbScopedTimerData_t::GetFrameTime
- */
+/// kbScopedTimerData_t::GetFrameTime
 float kbScopedTimerData_t::GetFrameTime() const {
 	float totalMS = 0.0f;
 	for (int i = 0; i < NUM_FRAME_TIMES; i++) {

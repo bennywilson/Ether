@@ -31,9 +31,7 @@ struct pixelInput {
 	float4 position2		: TEXCOORD1;
 };
 
-/**
- *	vertexShader
- */
+/// vertexShader
 pixelInput vertexShader( vertexInput input ) {
 	pixelInput output = (pixelInput)(0);
 
@@ -44,9 +42,7 @@ pixelInput vertexShader( vertexInput input ) {
 	return output;
 }
 
-/**
- *	SSAOPixelMain
- */
+/// SSAOPixelMain
 SamplerState DiffuseSamplerState;
 Texture2D colorTexture(colorBuffer)				: register(t0);
 

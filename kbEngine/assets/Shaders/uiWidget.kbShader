@@ -27,9 +27,7 @@ struct pixelInput {
 	float4 position2		: TEXCOORD1;
 };
 
-/**
- *	vertexShader
- */
+/// vertexShader
 pixelInput vertexShader( vertexInput input ) {
 	pixelInput output = (pixelInput)(0);
 
@@ -50,9 +48,7 @@ pixelInput vertexShader( vertexInput input ) {
 	return output;
 }
 
-/**
- *	pixelShader
- */
+/// pixelShader
 SamplerState DiffuseSamplerState;
 Texture2D baseTexture(white)					: register(t0);
 

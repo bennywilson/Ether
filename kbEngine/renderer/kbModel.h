@@ -11,9 +11,7 @@
 #include "kbRenderer_defs.h"
 #include "kbMaterial.h"
 
-/**
- *	kbModelIntersection_t
- */
+/// kbModelIntersection_t
 struct kbModelIntersection_t {
 	kbModelIntersection_t() : t( FLT_MAX ), meshNum( -1 ), intersectionPoint( Vec3::zero ), hasIntersection( false ) { }
 
@@ -23,9 +21,7 @@ struct kbModelIntersection_t {
 	bool	hasIntersection;
 };
 
-/**
- *	kbAnimation
- */
+/// kbAnimation
 class kbAnimation : public kbResource {
 	friend class kbModel;
 
@@ -73,9 +69,7 @@ struct AnimatedBone_t {
 };
 
 
-/**
- *	kbModel
- */
+/// kbModel
 class kbModel : public kbResource {
 	friend	class kbRenderer_DX11;
 

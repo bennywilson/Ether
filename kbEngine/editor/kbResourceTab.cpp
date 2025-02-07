@@ -137,9 +137,7 @@ void ClearDirtyFlags(kbResourceTabFile_t* const pkbResourceTabFile_t) {
 	}
 }
 
-/**
- *	SavePackageCB - Called when user selects a resource in the resource tab
- */
+/// SavePackageCB - Called when user selects a resource in the resource tab
 void kbResourceTab::SavePackageCB(Fl_Widget* widget, void* userData) {
 
 	const int index = (int)(INT_PTR)userData;		// Cast to INT_PTR then to void * fixes compile warning C4312
@@ -166,9 +164,7 @@ void kbResourceTab::SavePackageCB(Fl_Widget* widget, void* userData) {
 	g_pResourceTab->RefreshResourcesTab();
 }
 
-/**
- *	DeleteResouceCB - Called when user selects a resource in the resource tab
- */
+/// DeleteResouceCB - Called when user selects a resource in the resource tab
 void kbResourceTab::DeleteResouceCB(Fl_Widget* widget, void* userData) {
 	/*Fl_Select_Browser *const selectBrowser = g_pResourceTab->m_pEntitySelectBrowser;
 	kbResourceTab *const pResourceTab = static_cast< kbResourceTab * >( userData );
@@ -191,9 +187,7 @@ void kbResourceTab::DeleteResouceCB(Fl_Widget* widget, void* userData) {
 	g_pResourceTab->RefreshResourcesTab();
 }
 
-/**
- *	kbResourceTab
- */
+/// kbResourceTab
 kbResourceTab::kbResourceTab(int x, int y, int w, int h) :
 	kbWidget(x, y, w, h),
 	Fl_Tabs(x, y, w, h) {
@@ -232,16 +226,12 @@ kbResourceTab::kbResourceTab(int x, int y, int w, int h) :
 	g_ResourceManager.RegisterCB(ResourceManagerCB, kbResourceManager::CBR_FileModified);
 }
 
-/**
- *	kbResourceTab::~kbResourceTab
- */
+/// kbResourceTab::~kbResourceTab
 kbResourceTab::~kbResourceTab() {
 	g_ResourceManager.UnregisterCB(ResourceManagerCB);
 }
 
-/**
- *	kbResourceTab::EventCB
- */
+/// kbResourceTab::EventCB
 void kbResourceTab::EventCB(const widgetCBObject* widgetCBObject) {
 
 	switch (widgetCBObject->widgetType) {
@@ -286,17 +276,13 @@ void kbResourceTab::EventCB(const widgetCBObject* widgetCBObject) {
 	}
 }
 
-/**
- *	kbResourceTab::PostRendererInit
- */
+/// kbResourceTab::PostRendererInit
 void kbResourceTab::PostRendererInit() {
 	RebuildResourceFolderListText();
 	RefreshEntitiesTab();
 }
 
-/**
- *	kbResourceTab::RebuildResourceFolderListText
- */
+/// kbResourceTab::RebuildResourceFolderListText
 void kbResourceTab::RebuildResourceFolderListText() {
 
 	std::vector<kbResourceTabFile_t> backUp = m_ResourceFolderList;
@@ -400,9 +386,7 @@ void kbResourceTab::RebuildResourceFolderListText() {
 	RefreshResourcesTab();
 }
 
-/**
- *	kbResourceTab::FindResourcesRecursively
- */
+/// kbResourceTab::FindResourcesRecursively
 void kbResourceTab::FindResourcesRecursively(const std::string& file, kbResourceTabFile_t& CurrentFolder) {
 	const size_t currentFolderStartPos = file.find_last_of("/", file.length() - 2);
 	const size_t currentFolderEndPosPos = file.find_first_of("/", currentFolderStartPos + 1);//"file.find_last_of( "/", file.length() - 1 );
@@ -493,9 +477,7 @@ void kbResourceTab::FindResourcesRecursively(const std::string& file, kbResource
 	}
 }
 
-/**
- *	kbResourceTab::RefreshResourcesTab
- */
+/// kbResourceTab::RefreshResourcesTab
 void kbResourceTab::RefreshResourcesTab() {
 	std::string spaces;
 	m_pResourceSelectBrowser->clear();
@@ -513,9 +495,7 @@ void kbResourceTab::RefreshResourcesTab() {
 	Fl::wait();
 }
 
-/**
- *	kbResourceTab::RefreshResourcesTab_Recursive
- */
+/// kbResourceTab::RefreshResourcesTab_Recursive
 void kbResourceTab::RefreshResourcesTab_Recursive(kbResourceTabFile_t& currentFolder, std::string spaces) {
 
 	if (currentFolder.m_ResourceList.size() == 0 && currentFolder.m_SubFolderList.size() == 0) {
@@ -566,9 +546,7 @@ void kbResourceTab::RefreshResourcesTab_Recursive(kbResourceTabFile_t& currentFo
 	}
 }
 
-/**
- *	kbResourceTab::AddPrefab
- */
+/// kbResourceTab::AddPrefab
 void kbResourceTab::AddPrefab(kbPrefab* pPrefab, const std::string& PackageName, const std::string& FolderName, const std::string& PrefabName) {
 	kbResourceTabFile_t& rootPackage = m_ResourceFolderList[0];
 
@@ -643,9 +621,7 @@ void kbResourceTab::AddPrefab(kbPrefab* pPrefab, const std::string& PackageName,
 	RefreshResourcesTab();
 }
 
-/**
- *	kbResourceTab::GetSelectedPrefab
- */
+/// kbResourceTab::GetSelectedPrefab
 kbPrefab* kbResourceTab::GetSelectedPrefab() const {
 	const int value = m_pResourceSelectBrowser->value() - 1;
 
@@ -656,9 +632,7 @@ kbPrefab* kbResourceTab::GetSelectedPrefab() const {
 	return m_SelectBrowserIdx[value]->m_pPrefab;
 }
 
-/**
- *	kbResourceTab::GetSelectedGameEntity
- */
+/// kbResourceTab::GetSelectedGameEntity
 kbGameEntityPtr	kbResourceTab::GetSelectedGameEntity() {
 	kbGameEntityPtr retEnt;
 
@@ -676,9 +650,7 @@ kbGameEntityPtr	kbResourceTab::GetSelectedGameEntity() {
 	return retEnt;
 }
 
-/**
- *	kbPackage::MarkPrefabDirty
- */
+/// kbPackage::MarkPrefabDirty
 void kbResourceTab::MarkPrefabDirty(kbPrefab* prefab) {
 	int value = m_pResourceSelectBrowser->value() - 1;
 	if (value < 0 || value >= m_SelectBrowserIdx.size()) {
@@ -699,18 +671,14 @@ void kbResourceTab::MarkPrefabDirty(kbPrefab* prefab) {
 	RefreshResourcesTab();
 }
 
-/**
- *	kbResourceTab::ResourceManagerCB
- */
+/// kbResourceTab::ResourceManagerCB
 void kbResourceTab::ResourceManagerCB(const kbResourceManager::CallbackReason Reason) {
 
 	g_pResourceTab->RebuildResourceFolderListText();
 
 }
 
-/**
- *	kbResourceTab::RefreshEntitiesTab
- */
+/// kbResourceTab::RefreshEntitiesTab
 void kbResourceTab::RefreshEntitiesTab() {
 	g_pResourceTab->m_pEntitySelectBrowser->clear();
 	m_EntityList.clear();
@@ -729,9 +697,7 @@ void kbResourceTab::RefreshEntitiesTab() {
 	Fl::wait();
 }
 
-/**
- *	kbResourceTab::EntitySelectedCB
- */
+/// kbResourceTab::EntitySelectedCB
 void kbResourceTab::EntitySelectedCB(Fl_Widget* pWidget, void* pUserData) {
 
 	const int selectedItemIndex = g_pResourceTab->m_pEntitySelectBrowser->value() - 1;
@@ -773,9 +739,7 @@ void kbResourceTab::EntitySelectedCB(Fl_Widget* pWidget, void* pUserData) {
 	}
 }
 
-/**
- *	kbResourceTab::DeleteCB
- */
+/// kbResourceTab::DeleteCB
 void kbResourceTab::DeleteCB(Fl_Widget* pWidget, void* pUserData) {
 
 	const int areYouSure = fl_ask("Really delete this entity?");
@@ -792,9 +756,7 @@ void kbResourceTab::DeleteCB(Fl_Widget* pWidget, void* pUserData) {
 	g_pResourceTab->RefreshEntitiesTab();
 }
 
-/**
- *	kbResourceTab::ZoomToEntityCB
- */
+/// kbResourceTab::ZoomToEntityCB
 void kbResourceTab::ZoomToEntityCB(Fl_Widget* pWidget, void* pUserData) {
 	kbEditorEntity* const pEditorEntity = (kbEditorEntity*)pUserData;
 

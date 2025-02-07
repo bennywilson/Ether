@@ -6,9 +6,7 @@
 
 #include "blk_core.h"
 
-/**
- *	kbCollisionComponent
- */
+/// kbCollisionComponent
 enum ECollisionType {
 	CollisionType_Sphere,
 	CollisionType_Box,
@@ -16,9 +14,7 @@ enum ECollisionType {
 	CollisionType_CustomTriangles
 };
 
-/**
- *	kbBoneCollisionSphere
- */
+/// kbBoneCollisionSphere
 class kbBoneCollisionSphere : public kbGameComponent {
 
 	KB_DECLARE_COMPONENT( kbBoneCollisionSphere, kbGameComponent );
@@ -70,9 +66,7 @@ private:
 	std::vector<customTriangle_t>				m_CustomTriangleCollision;
 };
 
-/**
- *	kbCollisionInfo_t
- */
+/// kbCollisionInfo_t
 struct kbCollisionInfo_t {
 	kbCollisionInfo_t() :
 		m_T( FLT_MAX ),
@@ -85,9 +79,7 @@ struct kbCollisionInfo_t {
 	bool				m_bHit;
 };
 
-/**
- *	kbCollisionManager
- */
+/// kbCollisionManager
 class kbCollisionManager {
 
 //---------------------------------------------------------------------------------------------------

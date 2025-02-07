@@ -15,31 +15,23 @@ using namespace std;
 
 kbNameToTypeInfoMap* g_NameToTypeInfoMap = nullptr;
 
-/**
- *	kbNameToTypeInfoMap::kbNameToTypeInfoMap()
- */
+/// kbNameToTypeInfoMap::kbNameToTypeInfoMap()
 kbNameToTypeInfoMap::kbNameToTypeInfoMap() {
 	RegisterVectorOperations<kbString>("kbString");
 	RegisterVectorOperations<float>("float");
 	RegisterVectorOperations<Vec4>("Vec4");
 }
 
-/**
- *	kbNameToTypeInfoMap::~kbNameToTypeInfoMap()
- */
+/// kbNameToTypeInfoMap::~kbNameToTypeInfoMap()
 kbNameToTypeInfoMap::~kbNameToTypeInfoMap() {
 }
 
-/**
- *	kbNameToTypeInfoMap::AddTypeInfo()
- */
+/// kbNameToTypeInfoMap::AddTypeInfo()
 void kbNameToTypeInfoMap::AddTypeInfo(const kbTypeInfoClass* const classToAdd) {
 	m_Map[classToAdd->GetClassName()] = classToAdd;
 }
 
-/**
- *	kbNameToTypeInfoMap::AddEnum()
- */
+/// kbNameToTypeInfoMap::AddEnum()
 void kbNameToTypeInfoMap::AddEnum(const std::string& enumName, const std::vector< std::string >& enumFields) {
 	m_EnumMap[enumName] = enumFields;
 }

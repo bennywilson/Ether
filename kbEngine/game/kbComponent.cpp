@@ -129,9 +129,7 @@ void CopyVarToComponent( const kbComponent * Src, kbComponent * Dst, const kbTyp
 	}
 }*/
 
-/**
- *	kbComponent::Constructor
- */
+/// kbComponent::Constructor
 	void kbComponent::Constructor() {
 	m_pOwner = nullptr;
 	m_pOwningComponent = nullptr;
@@ -139,9 +137,7 @@ void CopyVarToComponent( const kbComponent * Src, kbComponent * Dst, const kbTyp
 	m_IsEnabled = false;
 }
 
-/**
- *	kbComponent::SetOwner
- */
+/// kbComponent::SetOwner
 void kbComponent::SetOwner(kbEntity* const pGameEntity) {
 
 	if (pGameEntity == nullptr) {
@@ -151,17 +147,13 @@ void kbComponent::SetOwner(kbEntity* const pGameEntity) {
 	m_pOwner = pGameEntity;
 }
 
-/**
- *	kbGameComponent::Constructor
- */
+/// kbGameComponent::Constructor
 void kbGameComponent::Constructor() {
 	m_StartingLifeTime = -1.0f;
 	m_LifeTimeRemaining = -1.0f;
 }
 
-/**
- *	kbGameComponent::Enable
- */
+/// kbGameComponent::Enable
 void kbGameComponent::Enable(const bool setEnabled) {
 
 	if (m_IsEnabled == setEnabled) {
@@ -181,9 +173,7 @@ void kbGameComponent::Enable(const bool setEnabled) {
 	}
 }
 
-/**
- *	kbGameComponent::EditorChange
- */
+/// kbGameComponent::EditorChange
 void kbGameComponent::EditorChange(const std::string& propertyName) {
 	Super::EditorChange(propertyName);
 
@@ -196,9 +186,7 @@ void kbGameComponent::EditorChange(const std::string& propertyName) {
 	}
 }
 
-/**
- *	kbGameComponent::Update
- */
+/// kbGameComponent::Update
 void kbGameComponent::Update(const float DeltaTimeSeconds) {
 	if (m_LifeTimeRemaining >= 0.0f) {
 		m_LifeTimeRemaining -= DeltaTimeSeconds;
@@ -213,60 +201,44 @@ void kbGameComponent::Update(const float DeltaTimeSeconds) {
 	m_bIsDirty = false;
 }
 
-/**
- *	kbGameComponent::GetOwnerName
- */
+/// kbGameComponent::GetOwnerName
 kbString kbGameComponent::GetOwnerName() const {
 	return GetOwner()->GetName();
 }
 
-/**
- *	kbGameComponent::GetOwnerPosition
- */
+/// kbGameComponent::GetOwnerPosition
 Vec3 kbGameComponent::GetOwnerPosition() const {
 	return ((kbGameEntity*)GetOwner())->GetPosition();
 }
 
-/**
- *	kbGameComponent::GetOwnerScale
- */
+/// kbGameComponent::GetOwnerScale
 Vec3 kbGameComponent::GetOwnerScale() const {
 	return ((kbGameEntity*)GetOwner())->GetScale();
 }
 
-/**
- *	kbGameComponent::GetOwnerRotation
- */
+/// kbGameComponent::GetOwnerRotation
 Quat4 kbGameComponent::GetOwnerRotation() const {
 	return ((kbGameEntity*)GetOwner())->GetOrientation();
 }
 
-/**
- *	kbGameComponent::SetOwnerPosition
- */
+/// kbGameComponent::SetOwnerPosition
 void kbGameComponent::SetOwnerPosition(const Vec3& position) {
 	GetOwner()->SetPosition(position);
 }
 
-/**
- *	kbGameComponent::SetOwnerRotation
- */
+/// kbGameComponent::SetOwnerRotation
 void kbGameComponent::SetOwnerRotation(const Quat4& rotation) {
 	GetOwner()->SetOrientation(rotation);
 }
 
-/**
- *	kbTransformComponent::Constructor
- */
+/// kbTransformComponent::Constructor
 void kbTransformComponent::Constructor() {
 	m_Position.set(0.0f, 0.0f, 0.0f);
 	m_Scale.set(1.0f, 1.0f, 1.0f);
 	m_Orientation.set(0.0f, 0.0f, 0.0f, 1.0f);
 }
 
-/**
- *	kbTransformComponent::GetPosition
- */
+/// kbTransformComponent::GetPosition
 const Vec3 kbTransformComponent::GetPosition() const {
 	if (GetOwner()->GetComponent(0) == this) {
 		return m_Position;
@@ -278,9 +250,7 @@ const Vec3 kbTransformComponent::GetPosition() const {
 	return parentRotation.transform_point(m_Position) + GetOwner()->GetPosition();
 }
 
-/**
- *	kbTransformComponent::GetScale
- */
+/// kbTransformComponent::GetScale
 const Vec3 kbTransformComponent::GetScale() const {
 	if (GetOwner()->GetComponent(0) == this) {
 		return m_Scale;
@@ -289,9 +259,7 @@ const Vec3 kbTransformComponent::GetScale() const {
 	return m_Scale;
 }
 
-/**
- *	kbTransformComponent::GetOrientation
- */
+/// kbTransformComponent::GetOrientation
 const Quat4 kbTransformComponent::GetOrientation() const {
 	if (GetOwner()->GetComponent(0) == this) {
 		return m_Orientation;
@@ -300,40 +268,30 @@ const Quat4 kbTransformComponent::GetOrientation() const {
 	return m_Orientation;
 }
 
-/**
- *	kbGameLogicComponent::Constructor
- */
+/// kbGameLogicComponent::Constructor
 void kbGameLogicComponent::Constructor() {
 	m_DummyTemp = 0;
 }
 
-/**
- *	kbGameLogicComponent::Update_Internal
- */
+/// kbGameLogicComponent::Update_Internal
 void kbGameLogicComponent::Update_Internal(const float DeltaTime) {
 	START_SCOPED_TIMER(CLOTH_COMPONENT);
 	Super::Update_Internal(DeltaTime);
 }
 
-/**
- *	kbDamageComponent::Constructor
- */
+/// kbDamageComponent::Constructor
 void kbDamageComponent::Constructor() {
 	m_MinDamage = 10.0f;
 	m_MaxDamage = 10.0f;
 }
 
-/**
- *	kbActorComponent::Constructor
- */
+/// kbActorComponent::Constructor
 void kbActorComponent::Constructor() {
 	m_MaxHealth = 10.0f;
 	m_CurrentHealth = m_MaxHealth;
 }
 
-/**
- *	kbActorComponent::Constructor
- */
+/// kbActorComponent::Constructor
 void kbActorComponent::SetEnable_Internal(const bool bIsEnabled) {
 	Super::SetEnable_Internal(bIsEnabled);
 
@@ -342,9 +300,7 @@ void kbActorComponent::SetEnable_Internal(const bool bIsEnabled) {
 	}
 }
 
-/**
- *	kbActorComponent::TakeDamage
- */
+/// kbActorComponent::TakeDamage
 void kbActorComponent::TakeDamage(const class kbDamageComponent* const pDamageComponent, const kbGameLogicComponent* const attackerComponent) {
 	if (pDamageComponent == nullptr) {
 		return;
@@ -353,38 +309,28 @@ void kbActorComponent::TakeDamage(const class kbDamageComponent* const pDamageCo
 	m_CurrentHealth -= pDamageComponent->GetMaxDamage();
 }
 
-/**
- *	kbDeleteEntityComponent::Constructor
- */
+/// kbDeleteEntityComponent::Constructor
 void kbDeleteEntityComponent::Constructor() {
 	m_Dummy = 1.0f;
 }
 
-/**
- *	kbDeleteEntityComponent::LifeTimeExpired
- */
+/// kbDeleteEntityComponent::LifeTimeExpired
 void kbDeleteEntityComponent::LifeTimeExpired() {
 	g_pGame->RemoveGameEntity(GetOwner());
 }
 
-/**
- *	kbPlayerStartComponent::Constructor
- */
+/// kbPlayerStartComponent::Constructor
 void kbPlayerStartComponent::Constructor() {
 	m_DummyVar = 0;
 }
 
-/**
- *	kbAnimEvent::Constructor()
- */
+/// kbAnimEvent::Constructor()
 void kbAnimEvent::Constructor() {
 	m_EventTime = 0.0f;
 	m_EventValue = 0.0f;
 }
 
-/**
- *	kbVectorAnimEvent::Constructor()
- */
+/// kbVectorAnimEvent::Constructor()
 void kbVectorAnimEvent::Constructor() {
 	m_EventTime = 0.0f;
 	m_EventValue = Vec3::zero;
@@ -434,16 +380,12 @@ Vec4 kbVectorAnimEvent::Evaluate(const std::vector<kbVectorAnimEvent>& eventList
 	return eventList.back().GetEventValue();
 }
 
-/**
- *	kbEditorGlobalSettingsComponent::Constructor
- */
+/// kbEditorGlobalSettingsComponent::Constructor
 void kbEditorGlobalSettingsComponent::Constructor() {
 	m_CameraSpeedIdx = 0;
 }
 
-/**
- *	kbEditorLevelSettingsComponent::Constructor
- */
+/// kbEditorLevelSettingsComponent::Constructor
 void kbEditorLevelSettingsComponent::Constructor() {
 	m_CameraPosition = Vec3::zero;
 	m_CameraRotation = Quat4::identity;

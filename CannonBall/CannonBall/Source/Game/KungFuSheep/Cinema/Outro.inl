@@ -1,6 +1,4 @@
-/**
- *	KungFuGame_OutroState
- */
+/// KungFuGame_OutroState
 class KungFuGame_OutroState : public KungFuGame_BaseState, public IAnimEventListener {
 
 //---------------------------------------------------------------------------------------------------

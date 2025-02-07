@@ -16,24 +16,18 @@
 
 KB_DEFINE_COMPONENT(kbModelComponent)
 
-/**
- *	kbModelComponent::Constructor
- */
+/// kbModelComponent::Constructor
 void kbModelComponent::Constructor() {
 	m_RenderPass = RP_Lighting;
 	m_RenderOrderBias = 0.0f;
 	m_bCastsShadow = false;
 }
 
-/**
- *	kbModelComponent::~kbModelComponent
- */
+/// kbModelComponent::~kbModelComponent
 kbModelComponent::~kbModelComponent() {
 }
 
-/**
- *	kbModelComponent::EditorChange
- */
+/// kbModelComponent::EditorChange
 void kbModelComponent::EditorChange( const std::string & propertyName ) {
 	Super::EditorChange( propertyName );
 
@@ -56,9 +50,7 @@ void kbModelComponent::EditorChange( const std::string & propertyName ) {
 	RefreshMaterials( true );
 }
 
-/**
- *	kbModelComponent::PostLoad
- */
+/// kbModelComponent::PostLoad
 void kbModelComponent::PostLoad() {
 	Super::PostLoad();
 
@@ -67,9 +59,7 @@ void kbModelComponent::PostLoad() {
 	}
 }
 
-/**
- *	kbModelComponent::RefreshMaterials
- */
+/// kbModelComponent::RefreshMaterials
 void kbModelComponent::RefreshMaterials( const bool bRefreshRenderObject ) {
 	m_RenderObject.m_Materials.clear();
 	for ( int i = 0; i < m_MaterialList.size(); i++ ) {
@@ -100,9 +90,7 @@ void kbModelComponent::RefreshMaterials( const bool bRefreshRenderObject ) {
 	}
 }
 
-/**
- *	kbModelComponent:SetMaterialParamVector
- */
+/// kbModelComponent:SetMaterialParamVector
 void kbModelComponent::SetMaterialParamVector( const int idx, const std::string & paramName, const Vec4& paramValue ) {
 	if ( idx < 0 || idx > 32 || idx >= m_MaterialList.size() ) {
 		blk::warn( "kbModelComponent::SetMaterialParamVector() called on invalid index" );
@@ -117,9 +105,7 @@ void kbModelComponent::SetMaterialParamVector( const int idx, const std::string 
 	RefreshMaterials( true );
 }
 
-/**
- *	kbModelComponent:SetMaterialParamTexture
- */
+/// kbModelComponent:SetMaterialParamTexture
 void kbModelComponent::SetMaterialParamTexture( const int idx, const std::string & paramName, kbTexture *const pTexture ) {
 	if ( idx < 0 || idx > 32 || idx >= m_MaterialList.size() ) {
 		blk::warn( "kbModelComponent::SetMaterialParamVector() called on invalid index" );
@@ -134,9 +120,7 @@ void kbModelComponent::SetMaterialParamTexture( const int idx, const std::string
 	RefreshMaterials( true );
 }
 
-/**
- *	kbModelComponent::SetMaterialParamTexture
- */
+/// kbModelComponent::SetMaterialParamTexture
 void kbModelComponent::SetMaterialParamTexture( const int idx, const std::string & paramName, kbRenderTexture *const pRenderTexture ) {
 	if ( idx < 0 || idx > 32 || idx >= m_MaterialList.size() ) {
 		blk::warn( "kbModelComponent::SetMaterialParamVector() called on invalid index" );
@@ -154,9 +138,7 @@ void kbModelComponent::SetMaterialParamTexture( const int idx, const std::string
 	}
 }
 
-/**
- *	kbModelComponent::GetShaderParamComponent
- */
+/// kbModelComponent::GetShaderParamComponent
 const kbShaderParamComponent * kbModelComponent::GetShaderParamComponent( const int idx, const kbString & name ) {
 	if ( idx < 0 || idx > 32 || idx >= m_MaterialList.size() ) {
 		blk::warn( "kbModelComponent::SetMaterialParamVector() called on invalid index" );
@@ -166,26 +148,20 @@ const kbShaderParamComponent * kbModelComponent::GetShaderParamComponent( const 
 	return m_MaterialList[idx].GetShaderParamComponent( name );
 }
 
-/**
- *	kbShaderParamComponent::Constructor
- */
+/// kbShaderParamComponent::Constructor
 void kbShaderParamComponent::Constructor() {
 	m_pTexture = nullptr;
 	m_pRenderTexture = nullptr;
 	m_Vector.set( 0.0f, 0.0f, 0.0f, 0.0f );
 }
 
-/**
- *	kbMaterialComponent::Constructor
- */
+/// kbMaterialComponent::Constructor
 void kbMaterialComponent::Constructor() {
 	m_pShader = nullptr;
 	m_CullModeOverride = CullMode_ShaderDefault;
 }
 
-/**
- *	kbMaterialComponent::EditorChange
- */
+/// kbMaterialComponent::EditorChange
 void kbMaterialComponent::EditorChange( const std::string & propertyName ) {
 	Super::EditorChange( propertyName );
 
@@ -255,9 +231,7 @@ void kbMaterialComponent::EditorChange( const std::string & propertyName ) {
 	}
 }
 
-/**
- *	kbMaterialComponent::SetShaderParamComponent
- */
+/// kbMaterialComponent::SetShaderParamComponent
 void kbMaterialComponent::SetShaderParamComponent( const kbShaderParamComponent & inParam ) {
 	
 	for ( int i = 0; i < m_ShaderParamComponents.size(); i++ ) {
@@ -270,9 +244,7 @@ void kbMaterialComponent::SetShaderParamComponent( const kbShaderParamComponent 
 	m_ShaderParamComponents.push_back( inParam );
 }
 
-/**
- *	kbMaterialComponent::GetShaderParamComponent
- */
+/// kbMaterialComponent::GetShaderParamComponent
 const kbShaderParamComponent * kbMaterialComponent::GetShaderParamComponent( const kbString & name ) {
 
 	for ( int i = 0; i < m_ShaderParamComponents.size(); i++ ) {
@@ -285,9 +257,7 @@ const kbShaderParamComponent * kbMaterialComponent::GetShaderParamComponent( con
 }
 
 
-/**
- *	kbShaderModifierComponent::Constructor
- */
+/// kbShaderModifierComponent::Constructor
 void kbShaderModifierComponent::Constructor() {
 
 	m_pModelComponent = nullptr;
@@ -295,9 +265,7 @@ void kbShaderModifierComponent::Constructor() {
 	m_AnimationLengthSec = -1.0f;
 }
 
-/**
- *	kbShaderModifierComponent::SetEnable_Internal
- */
+/// kbShaderModifierComponent::SetEnable_Internal
 void kbShaderModifierComponent::SetEnable_Internal( const bool bEnable ) {
 	Super::SetEnable_Internal( bEnable );
 
@@ -320,9 +288,7 @@ void kbShaderModifierComponent::SetEnable_Internal( const bool bEnable ) {
 	}
 }
 
-/**
- *	kbShaderModifierComponent::Update_Internal
- */
+/// kbShaderModifierComponent::Update_Internal
 void kbShaderModifierComponent::Update_Internal( const float dt ) {
 
 	if ( m_pModelComponent == nullptr || m_ShaderVectorEvents.size() == 0 ) {

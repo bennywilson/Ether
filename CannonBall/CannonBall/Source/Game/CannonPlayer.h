@@ -6,9 +6,7 @@
 #ifndef _KBCANNONPLAYER_H_
 #define _KBCANNONPLAYER_H_
 
-/**
- *	CannonActorComponent
- */
+/// CannonActorComponent
 class CannonActorComponent : public kbActorComponent, IAnimEventListener {
 
 	KB_DECLARE_COMPONENT( CannonActorComponent, kbActorComponent );
@@ -67,17 +65,13 @@ protected:
 	virtual void								OnAnimEvent( const kbAnimEventInfo_t& animEvent ) override { }
 };
 
-/**
- *	ECameraMoveMode
- */
+/// ECameraMoveMode
 enum ECameraMoveMode {
 	MoveMode_None,
 	MoveMode_Follow,
 };
 
-/**
- *	CannonCameraShakeComponent
- */
+/// CannonCameraShakeComponent
 class CannonCameraShakeComponent : public kbActorComponent {
 
 	KB_DECLARE_COMPONENT( CannonCameraShakeComponent, kbActorComponent );
@@ -106,9 +100,7 @@ private:
 	bool										m_bActivateOnEnable;
 };
 
-/**
- *	CannonCameraComponent
- */
+/// CannonCameraComponent
 class CannonCameraComponent : public kbActorComponent {
 
 	KB_DECLARE_COMPONENT( CannonCameraComponent, kbActorComponent );

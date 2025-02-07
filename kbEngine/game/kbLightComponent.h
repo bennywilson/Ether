@@ -7,9 +7,7 @@
 #ifndef _KBLIGHTCOMPONENT_H_
 #define _KBLIGHTCOMPONENT_H_
 
-/**
- *	kbLightComponent
- */
+/// kbLightComponent
 class kbLightComponent : public kbGameComponent {
 
 	KB_DECLARE_COMPONENT( kbLightComponent, kbGameComponent );
@@ -54,9 +52,7 @@ protected:
 
 };
 
-/**
- *	kbPointLightComponent
- */
+/// kbPointLightComponent
 class kbPointLightComponent : public kbLightComponent {
 
 	KB_DECLARE_COMPONENT( kbPointLightComponent, kbLightComponent );
@@ -71,9 +67,7 @@ protected:
 	float										m_Radius;
 };
 
-/**
- *	kbCylindricalLightComponent
- */
+/// kbCylindricalLightComponent
 class kbCylindricalLightComponent : public kbPointLightComponent {
 
 	KB_DECLARE_COMPONENT( kbCylindricalLightComponent, kbPointLightComponent );
@@ -87,9 +81,7 @@ protected:
 	float										m_Length;
 };
 
-/**
- *	kbDirectionalLightComponent
- */
+/// kbDirectionalLightComponent
 class kbDirectionalLightComponent : public kbLightComponent {
 
 	KB_DECLARE_COMPONENT( kbDirectionalLightComponent, kbLightComponent );
@@ -108,9 +100,7 @@ protected:
 	std::vector<float>							m_SplitDistances;
 };
 
-/**
- *	kbLightShaftsComponent
- */
+/// kbLightShaftsComponent
 class kbLightShaftsComponent : public kbGameComponent {
 
 	KB_DECLARE_COMPONENT( kbLightShaftsComponent, kbGameComponent );
@@ -147,9 +137,7 @@ protected:
 };
 
 
-/**
- *	kbFogComponent
- */
+/// kbFogComponent
 class kbFogComponent : public kbGameComponent {
 
 	KB_DECLARE_COMPONENT( kbFogComponent, kbGameComponent );

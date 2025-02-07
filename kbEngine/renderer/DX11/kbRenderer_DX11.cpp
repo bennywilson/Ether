@@ -63,9 +63,7 @@ bool													kbGPUTimeStamp::m_bActiveThisFrame = false;
 //	kbRenderWindow
 //-------------------------------------------------------------------------------------------------------------------------------------
 
-/**
- *	kbRenderWindow_DX11::kbRenderWindow_DX11
- */
+/// kbRenderWindow_DX11::kbRenderWindow_DX11
 kbRenderWindow_DX11::kbRenderWindow_DX11(HWND inHwnd, const RECT& rect, const float nearPlane, const float farPlane) :
 	kbRenderWindow(inHwnd, rect, nearPlane, farPlane),
 	m_pSwapChain(nullptr),
@@ -77,17 +75,13 @@ kbRenderWindow_DX11::kbRenderWindow_DX11(HWND inHwnd, const RECT& rect, const fl
 	HackSetInverseProjectionMatrix(Mat4FromXMMATRIX(inverseProj));
 }
 
-/**
- *	kbRenderWindow_DX11::~kbRenderWindow_DX11
- */
+/// kbRenderWindow_DX11::~kbRenderWindow_DX11
 kbRenderWindow_DX11::~kbRenderWindow_DX11() {
 	blk::error_check(m_pSwapChain == nullptr, "kbRenderWindow::~kbRenderWindow() - Swap chain still exists");
 	blk::error_check(m_pRenderTargetView == nullptr, "kbRenderWindow::~kbRenderWindow() - Target view still exists");
 }
 
-/**
- *	kbRenderWindow_DX11::BeginFrame_Internal
- */
+/// kbRenderWindow_DX11::BeginFrame_Internal
 void kbRenderWindow_DX11::BeginFrame_Internal() {
 	Mat4 viewProjectionMatrix = GetViewProjectionMatrix();
 
@@ -99,16 +93,12 @@ void kbRenderWindow_DX11::BeginFrame_Internal() {
 	HackSetInverseProjectionMatrix(Mat4FromXMMATRIX(inverseProj));
 }
 
-/**
- *	kbRenderWindow_DX11::EndFrame_Internal
- */
+/// kbRenderWindow_DX11::EndFrame_Internal
 void kbRenderWindow_DX11::EndFrame_Internal() {
 	m_pSwapChain->Present(0, 0);
 }
 
-/**
- *	kbRenderWindow::Release_Internal
- */
+/// kbRenderWindow::Release_Internal
 void kbRenderWindow_DX11::Release_Internal() {
 	SAFE_RELEASE(m_pSwapChain);
 	SAFE_RELEASE(m_pRenderTargetView);
@@ -118,9 +108,7 @@ void kbRenderWindow_DX11::Release_Internal() {
 //	kbGPUTimeStamp_t
 //-------------------------------------------------------------------------------------------------------------------------------------
 
-/**
- *	kbGPUTimeStamp_t::Init
- */
+/// kbGPUTimeStamp_t::Init
 void kbGPUTimeStamp::Init(ID3D11DeviceContext* const DeviceContext) {
 
 	D3D11_QUERY_DESC queryDesc;
@@ -147,9 +135,7 @@ void kbGPUTimeStamp::Init(ID3D11DeviceContext* const DeviceContext) {
 	blk::error_check(SUCCEEDED(hr), "kbGPUTimeStamp_t::SetupTimeStamps(  - Failed to create query");
 }
 
-/**
- *	kbGPUTimeStamp::Shutdown
- */
+/// kbGPUTimeStamp::Shutdown
 void kbGPUTimeStamp::Shutdown() {
 
 	for (int i = 0; i < MaxTimeStamps; i++) {
@@ -161,9 +147,7 @@ void kbGPUTimeStamp::Shutdown() {
 	SAFE_RELEASE(m_pDisjointTimeStamps[1]);
 }
 
-/**
- *	kbGPUTimeStamp::BeginFrame
- */
+/// kbGPUTimeStamp::BeginFrame
 void kbGPUTimeStamp::BeginFrame(ID3D11DeviceContext* const DeviceContext) {
 
 	m_TimeStampsThisFrame.clear();
@@ -177,9 +161,7 @@ void kbGPUTimeStamp::BeginFrame(ID3D11DeviceContext* const DeviceContext) {
 	m_bActiveThisFrame = true;
 }
 
-/**
- *	kbGPUTimeStamp::EndFrame
- */
+/// kbGPUTimeStamp::EndFrame
 void kbGPUTimeStamp::EndFrame(ID3D11DeviceContext* const DeviceContext) {
 	START_SCOPED_TIMER(RENDER_GPUTIMER_STALL);
 
@@ -212,16 +194,12 @@ void kbGPUTimeStamp::EndFrame(ID3D11DeviceContext* const DeviceContext) {
 	}
 }
 
-/**
- *	kbGPUTimeStamp::UpdateFrameNum
- */
+/// kbGPUTimeStamp::UpdateFrameNum
 void kbGPUTimeStamp::UpdateFrameNum() {
 	m_TimeStampFrameNum ^= 1;
 }
 
-/**
- *	kbGPUTimeStamp::PlaceTimeStamp
- */
+/// kbGPUTimeStamp::PlaceTimeStamp
 void kbGPUTimeStamp::PlaceTimeStamp(const kbString& timeStampName, ID3D11DeviceContext* const pDeviceContext) {
 
 	extern kbConsoleVariable g_ShowPerfTimers;
@@ -246,9 +224,7 @@ void kbGPUTimeStamp::PlaceTimeStamp(const kbString& timeStampName, ID3D11DeviceC
 	m_TimeStampsThisFrame.push_back(pCurTimeStamp);
 }
 
-/**
- *	eventMarker_t::eventMarker_t
- */
+/// eventMarker_t::eventMarker_t
 eventMarker_t::eventMarker_t(const wchar_t* const name, ID3DUserDefinedAnnotation* const pAnnotation) {
 
 	blk::error_check(name != nullptr && pAnnotation != nullptr, "eventMarker_t::eventMarker_t() - Invalid params");
@@ -256,9 +232,7 @@ eventMarker_t::eventMarker_t(const wchar_t* const name, ID3DUserDefinedAnnotatio
 	m_pEventMarker->BeginEvent(name);
 }
 
-/**
- *	eventMarker_t::~eventMarker_t
- */
+/// eventMarker_t::~eventMarker_t
 eventMarker_t::~eventMarker_t() {
 	m_pEventMarker->EndEvent();
 }
@@ -269,9 +243,7 @@ eventMarker_t::~eventMarker_t() {
 
 kbRenderer_DX11* g_pD3D11Renderer = nullptr;
 
-/**
- *	kbRenderer_DX11::kbRenderer_DX11
- */
+/// kbRenderer_DX11::kbRenderer_DX11
 kbRenderer_DX11::kbRenderer_DX11() :
 	m_hwnd(nullptr),
 	m_pDXGIFactory(nullptr),
@@ -325,16 +297,12 @@ kbRenderer_DX11::kbRenderer_DX11() :
 	SetGlobalShaderParam(shaderParam);
 }
 
-/**
- *	kbRenderer_DX11::~kbRenderer_DX11
- */
+/// kbRenderer_DX11::~kbRenderer_DX11
 kbRenderer_DX11::~kbRenderer_DX11() {
 	Shutdown();
 }
 
-/**
- *	kbRenderer_DX11::Init
- */
+/// kbRenderer_DX11::Init
 void kbRenderer_DX11::Init_Internal(HWND hwnd, const int frameWidth, const int frameHeight) {
 
 	blk::log("Initializing kbRenderer_DX11");
@@ -751,9 +719,7 @@ void kbRenderer_DX11::Init_Internal(HWND hwnd, const int frameWidth, const int f
 	blk::error_check(SUCCEEDED(hr), " kbRenderer_DX11::Initialize() - Failed to query user defined annotation");
 }
 
-/**
- * kbRenderer_DX11::CreateRenderView
- */
+///  * kbRenderer_DX11::CreateRenderView
 int kbRenderer_DX11::CreateRenderView(HWND hwnd)
 {
 	blk::error_check(hwnd != nullptr, "nullptr window handle passed into kbRenderer_DX11::CreateRenderView");
@@ -795,9 +761,7 @@ int kbRenderer_DX11::CreateRenderView(HWND hwnd)
 	return (int)m_RenderWindowList.size() - 1;
 }
 
-/**
- *	kbRenderer_DX11::GetRenderTexture_Internal
- */
+/// kbRenderer_DX11::GetRenderTexture_Internal
 kbRenderTexture* kbRenderer_DX11::GetRenderTexture_Internal(const int width, const int height, const eTextureFormat targetFormat, const bool bIsCPUAccessible) {
 
 	m_pRenderTargets.push_back(new kbRenderTexture_DX11(width, height, targetFormat, bIsCPUAccessible));
@@ -882,17 +846,13 @@ kbRenderTexture* kbRenderer_DX11::GetRenderTexture_Internal(const int width, con
 	return &rt;
 }
 
-/**
- *	kbRenderer_DX11::ReturnRenderTexture_Internal
- */
+/// kbRenderer_DX11::ReturnRenderTexture_Internal
 void kbRenderer_DX11::ReturnRenderTexture_Internal(const kbRenderTexture* const pRenderTexture) {
 
 }
 
 
-/**
- *	kbRenderer_DX11::Shutdown_Internal
- */
+/// kbRenderer_DX11::Shutdown_Internal
 void kbRenderer_DX11::Shutdown_Internal() {
 
 	g_pD3D11Renderer = nullptr;
@@ -965,16 +925,12 @@ void kbRenderer_DX11::Shutdown_Internal() {
 	blk::log("  kbRenderer Shutdown");
 }
 
-/**
- *	kbRenderer_DX11::SetRenderTarget
- */
+/// kbRenderer_DX11::SetRenderTarget
 void kbRenderer_DX11::SetRenderTarget(eReservedRenderTargets type) {
 	m_pDeviceContext->OMSetRenderTargets(1, &GetRenderTarget_DX11(type)->m_pRenderTargetView, m_pDepthStencilView);
 }
 
-/**
- *	kbRenderer_DX11::SetRenderWindow
- */
+/// kbRenderer_DX11::SetRenderWindow
 void kbRenderer_DX11::SetRenderWindow(HWND hwnd) {
 
 	if (hwnd == nullptr) {
@@ -1259,9 +1215,7 @@ void kbRenderer_DX11::RenderScene() {
 	kbGPUTimeStamp::EndFrame(m_pDeviceContext);
 }
 
-/**
- *	kbRenderer_DX11::PreRenderCullAndSort
- */
+/// kbRenderer_DX11::PreRenderCullAndSort
 void kbRenderer_DX11::PreRenderCullAndSort() {
 
 	for (int i = 0; i < NUM_RENDER_PASSES; i++) {
@@ -1350,9 +1304,7 @@ void kbRenderer_DX11::PreRenderCullAndSort() {
 	});
 }
 
-/**
- *	kbRenderer_DX11::RenderTranslucency
- */
+/// kbRenderer_DX11::RenderTranslucency
 void kbRenderer_DX11::RenderTranslucency() {
 	START_SCOPED_RENDER_TIMER(RENDER_TRANSLUCENCY);
 
@@ -1511,9 +1463,7 @@ void kbRenderer_DX11::RenderTranslucency() {
 	m_RenderState.SetDepthStencilState();
 }
 
-/**
- *	kbRenderer_DX11::SetShaderMat4
- */
+/// kbRenderer_DX11::SetShaderMat4
 void kbRenderer_DX11::SetShaderMat4(const std::string& varName, const Mat4& inMatrix, void* const pBuffer, const kbShaderVarBindings_t& binding) {
 
 	const std::vector<kbShaderVarBindings_t::binding_t>& varBindings = binding.m_VarBindings;
@@ -1528,9 +1478,7 @@ void kbRenderer_DX11::SetShaderMat4(const std::string& varName, const Mat4& inMa
 	blk::error("Failed to set Shader var");
 }
 
-/**
- *	kbRenderer_DX11::SetShaderVec4
- */
+/// kbRenderer_DX11::SetShaderVec4
 void kbRenderer_DX11::SetShaderVec4(const std::string& varName, const Vec4& inVec, void* const pBuffer, const kbShaderVarBindings_t& binding) {
 
 	const std::vector<kbShaderVarBindings_t::binding_t>& varBindings = binding.m_VarBindings;
@@ -1544,9 +1492,7 @@ void kbRenderer_DX11::SetShaderVec4(const std::string& varName, const Vec4& inVe
 	blk::error("Failed to set Shader var");
 }
 
-/**
- *	kbRenderer_DX11::SetShaderFloat
- */
+/// kbRenderer_DX11::SetShaderFloat
 void kbRenderer_DX11::SetShaderFloat(const std::string& varName, const float inFloat, void* const pBuffer, const kbShaderVarBindings_t& binding) {
 
 	const int varBindingIdx = GetVarBindingIndex(varName, binding);
@@ -1556,9 +1502,7 @@ void kbRenderer_DX11::SetShaderFloat(const std::string& varName, const float inF
 	*pFloat = inFloat;
 }
 
-/**
- *	kbRenderer_DX11::SetShaderInt
- */
+/// kbRenderer_DX11::SetShaderInt
 void kbRenderer_DX11::SetShaderInt(const std::string& varName, const int inInt, void* const pBuffer, const kbShaderVarBindings_t& binding) {
 
 	const int varBindingIdx = GetVarBindingIndex(varName, binding);
@@ -1568,9 +1512,7 @@ void kbRenderer_DX11::SetShaderInt(const std::string& varName, const int inInt, 
 	*pInt = inInt;
 }
 
-/**
- *	kbRenderer_DX11::SetShaderVec4Array
- */
+/// kbRenderer_DX11::SetShaderVec4Array
 void kbRenderer_DX11::SetShaderVec4Array(const std::string& varName, const Vec4* const pSrcArray, const int arrayLen, void* const pBuffer, const kbShaderVarBindings_t& binding) {
 
 	const int varBindingIdx = GetVarBindingIndex(varName, binding);
@@ -1582,9 +1524,7 @@ void kbRenderer_DX11::SetShaderVec4Array(const std::string& varName, const Vec4*
 	}
 }
 
-/**
- *	kbRenderer_DX11::SetShaderMat4Array
- */
+/// kbRenderer_DX11::SetShaderMat4Array
 void kbRenderer_DX11::SetShaderMat4Array(const std::string& varName, const Mat4* const pSrcArray, const int arrayLen, void* const pBuffer, const kbShaderVarBindings_t& binding) {
 
 	const int varBindingIdx = GetVarBindingIndex(varName, binding);
@@ -1596,9 +1536,7 @@ void kbRenderer_DX11::SetShaderMat4Array(const std::string& varName, const Mat4*
 	}
 }
 
-/**
- *	kbRenderer_DX11::GetVarBindingIndex
- */
+/// kbRenderer_DX11::GetVarBindingIndex
 int kbRenderer_DX11::GetVarBindingIndex(const std::string& varName, const kbShaderVarBindings_t& binding) {
 	const std::vector<kbShaderVarBindings_t::binding_t>& varBindings = binding.m_VarBindings;
 	for (int i = 0; i < varBindings.size(); i++) {
@@ -1610,9 +1548,7 @@ int kbRenderer_DX11::GetVarBindingIndex(const std::string& varName, const kbShad
 	return -1;
 }
 
-/**
- *	kbRenderer_DX11::GetConstantBuffer
- */
+/// kbRenderer_DX11::GetConstantBuffer
 ID3D11Buffer* kbRenderer_DX11::GetConstantBuffer(const size_t requestSize) {
 
 	std::map<size_t, ID3D11Buffer*>::iterator constantBufferIt = m_ConstantBuffers.find(requestSize);
@@ -1621,9 +1557,7 @@ ID3D11Buffer* kbRenderer_DX11::GetConstantBuffer(const size_t requestSize) {
 	return constantBufferIt->second;
 }
 
-/**
- *	kbRenderer_DX11::RenderDebugText
- */
+/// kbRenderer_DX11::RenderDebugText
 void kbRenderer_DX11::RenderDebugText() {
 	START_SCOPED_RENDER_TIMER(RENDER_TEXT);
 
@@ -1741,9 +1675,7 @@ void kbRenderer_DX11::RenderDebugText() {
 	m_RenderState.SetBlendState();
 }
 
-/**
- *	kbRenderer_DX11::RenderMousePickerIds
- */
+/// kbRenderer_DX11::RenderMousePickerIds
 void kbRenderer_DX11::RenderMousePickerIds() {
 	START_SCOPED_RENDER_TIMER(RENDER_ENTITYID)
 
@@ -1792,9 +1724,7 @@ void kbRenderer_DX11::RenderMousePickerIds() {
 	m_RenderState.SetDepthStencilState();
 }
 
-/**
- *	kbRenderer_DX11::Blit
- */
+/// kbRenderer_DX11::Blit
 void kbRenderer_DX11::Blit(kbRenderTexture* const inSrc, kbRenderTexture* const inDest) {
 	const unsigned int stride = sizeof(vertexLayout);
 	const unsigned int offset = 0;
@@ -1834,9 +1764,7 @@ void kbRenderer_DX11::Blit(kbRenderTexture* const inSrc, kbRenderTexture* const 
 	m_pDeviceContext->Draw(6, 0);
 }
 
-/**
- *	kbRenderer_DX11::DrawTexture
- */
+/// kbRenderer_DX11::DrawTexture
 void kbRenderer_DX11::DrawTexture(ID3D11ShaderResourceView* const pShaderResourceView, const Vec3& pixelPosition, const Vec3& pixelSize, const Vec3& renderTargetSize) {
 	const unsigned int stride = sizeof(vertexLayout);
 	const unsigned int offset = 0;
@@ -1882,9 +1810,7 @@ void kbRenderer_DX11::DrawTexture(ID3D11ShaderResourceView* const pShaderResourc
 	m_pDeviceContext->Draw(6, 0);
 }
 
-/**
- *	kbRenderer_DX11::RenderSSAO
- */
+/// kbRenderer_DX11::RenderSSAO
 void kbRenderer_DX11::RenderSSAO() {
 
 	D3D11_VIEWPORT viewport;
@@ -1944,9 +1870,7 @@ void kbRenderer_DX11::RenderSSAO() {
 	m_pDeviceContext->Draw(6, 0);
 }
 
-/**
- *	kbRenderer_DX11::RenderBloom
- */
+/// kbRenderer_DX11::RenderBloom
 void kbRenderer_DX11::RenderBloom() {
 
 	D3D11_VIEWPORT viewport;
@@ -2164,9 +2088,7 @@ void kbRenderer_DX11::RenderBloom() {
 	m_pDeviceContext->RSSetViewports(1, &viewport);
 }
 
-/**
- *	kbRenderer_DX11::RenderPostProcess
- */
+/// kbRenderer_DX11::RenderPostProcess
 void kbRenderer_DX11::RenderPostProcess() {
 	START_SCOPED_RENDER_TIMER(RENDER_POST_PROCESS);
 
@@ -2239,9 +2161,7 @@ void kbRenderer_DX11::RenderPostProcess() {
 	m_pDeviceContext->PSSetShaderResources(0, 2, nullarray);
 }
 
-/**
- *	kbRenderer_DX11::RenderConsole
- */
+/// kbRenderer_DX11::RenderConsole
 void kbRenderer_DX11::RenderConsole() {
 
 	kbRenderWindow_DX11* const pCurWindow = (kbRenderWindow_DX11*)m_pCurrentRenderWindow;
@@ -2291,9 +2211,7 @@ void kbRenderer_DX11::RenderConsole() {
 	m_pDeviceContext->PSSetShaderResources(0, 2, nullarray);
 }
 
-/**
- *	kbRenderer_DX11::LoadTexture_Internal
- */
+/// kbRenderer_DX11::LoadTexture_Internal
 bool kbRenderer_DX11::LoadTexture_Internal(const char* name, int index, int width, int height) {
 	if (index < 0 || index >= Max_Num_Textures) {
 		blk::error("Error - kbRenderer_DX11::LoadTexture() - Texture out of range with index %d", index);
@@ -2310,9 +2228,7 @@ bool kbRenderer_DX11::LoadTexture_Internal(const char* name, int index, int widt
 	return true;
 }
 
-/**
- *	kbRenderer_DX11:RenderSync_Internal
- */
+/// kbRenderer_DX11:RenderSync_Internal
 void kbRenderer_DX11::RenderSync_Internal() {
 
 	extern kbConsoleVariable g_ShowPerfTimers;
@@ -2577,9 +2493,7 @@ void kbRenderer_DX11::ReadShaderFile(std::string& shaderText, kbShaderVarBinding
 	}
 }
 
-/**
- *	kbRenderer_DX11::LoadShader
- */
+/// kbRenderer_DX11::LoadShader
 void kbRenderer_DX11::LoadShader(const std::string& fileName, ID3D11VertexShader*& vertexShader, ID3D11GeometryShader*& geometryShader, ID3D11PixelShader*& pixelShader,
 								  ID3D11InputLayout*& vertexLayout, const std::string& vertexShaderFunc, const std::string& pixelShaderFunc,
 								  kbShaderVarBindings_t* pShaderBindings) {
@@ -2594,9 +2508,7 @@ void kbRenderer_DX11::LoadShader(const std::string& fileName, ID3D11VertexShader
 
 	CreateShaderFromText(fileName, shaderText, vertexShader, geometryShader, pixelShader, vertexLayout, vertexShaderFunc, pixelShaderFunc, pShaderBindings);
 }
-/**
- *	kbRenderer_DX11::CreateShaderFromText
- */
+/// kbRenderer_DX11::CreateShaderFromText
 
 void kbRenderer_DX11::CreateShaderFromText(const std::string& fileName, const std::string& inShaderText, ID3D11VertexShader*& vertexShader, ID3D11GeometryShader*& geometryShader,
 											ID3D11PixelShader*& pixelShader, ID3D11InputLayout*& vertexLayout, const std::string& vertexShaderFunc,
@@ -2901,9 +2813,7 @@ void kbRenderer_DX11::CreateShaderFromText(const std::string& fileName, const st
 	}
 }
 
-/**
- *	kbRenderer_DX11::RenderScreenSpaceQuads
- */
+/// kbRenderer_DX11::RenderScreenSpaceQuads
 void kbRenderer_DX11::RenderScreenSpaceQuads() {
 
 	if (m_ScreenSpaceQuads_RenderThread.size() == 0) {
@@ -2927,9 +2837,7 @@ void kbRenderer_DX11::RenderScreenSpaceQuads() {
 	m_RenderState.SetBlendState();
 }
 
-/**
- *	kbRenderer_DX11::RenderScreenSpaceImmediate
- */
+/// kbRenderer_DX11::RenderScreenSpaceImmediate
 void kbRenderer_DX11::RenderScreenSpaceQuadImmediate(const int start_x, const int start_y, const int size_x, const int size_y, const int textureIndex, kbShader* pShader, kbShaderParamOverrides_t* pShaderParams) {
 	const unsigned int stride = sizeof(vertexLayout);
 	const unsigned int offset = 0;
@@ -2985,9 +2893,7 @@ void kbRenderer_DX11::RenderScreenSpaceQuadImmediate(const int start_x, const in
 	m_pDeviceContext->Draw(6, 0);
 }
 
-/**
- *	kbRenderer_DX11::RenderMesh
- */
+/// kbRenderer_DX11::RenderMesh
 void kbRenderer_DX11::RenderMesh(const kbRenderSubmesh* const pRenderMesh, const bool bShadowPass, const bool bSkipMeshBlendSettings) {
 
 	const kbRenderObject* pRenderObject = pRenderMesh->GetRenderObject();
@@ -3186,9 +3092,7 @@ void kbRenderer_DX11::RenderPretransformedDebugLines() {
 	m_DebugPreTransformedLines.clear();
 }
 
-/**
- *	kbRenderer_DX11::RenderDebugLines
- */
+/// kbRenderer_DX11::RenderDebugLines
 void kbRenderer_DX11::RenderDebugLines() {
 
 	for (int i = 0; i < 2; i++) {
@@ -3311,9 +3215,7 @@ void kbRenderer_DX11::RenderDebugBillboards(const bool bIsEntityIdPass) {
 	}
 }
 
-/**
- *	kbRenderer_DX11::GetEntityIdAtScreenPosition
- */
+/// kbRenderer_DX11::GetEntityIdAtScreenPosition
 Vec2i kbRenderer_DX11::GetEntityIdAtScreenPosition(const uint x, const uint y) {
 	blk::error_check(m_RenderThreadSync == 0, "kbRenderer_DX11::GetEntityIdAtScreenPosition() - Function can only be called during the sync.");
 
@@ -3341,24 +3243,18 @@ Vec2i kbRenderer_DX11::GetEntityIdAtScreenPosition(const uint x, const uint y) {
 	return retVal;
 }
 
-/**
- *	kbRenderer_DX11::SetGlobalShaderParam
- */
+/// kbRenderer_DX11::SetGlobalShaderParam
 void kbRenderer_DX11::SetGlobalShaderParam(const kbShaderParamOverrides_t::kbShaderParam_t& shaderParam) {
 	m_GlobalShaderParams_GameThread.push_back(shaderParam);
 }
 
-/**
- *	kbRenderer_DX11::SetGlobalShaderParam
- */
+/// kbRenderer_DX11::SetGlobalShaderParam
 void kbRenderer_DX11::SetGlobalShaderParam(const kbShaderParamOverrides_t& shaderParam) {
 	for (int i = 0; i < shaderParam.m_ParamOverrides.size(); i++) {
 		m_GlobalShaderParams_GameThread.push_back(shaderParam.m_ParamOverrides[i]);
 	}
 }
-/**
- *	kbRenderer_DX11::RT_SetRenderTarget
- */
+/// kbRenderer_DX11::RT_SetRenderTarget
 void kbRenderer_DX11::RT_SetRenderTarget(kbRenderTexture* const pRenderTexture) {
 
 	ID3D11ShaderResourceView* pNullSRVs[] = { nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr,
@@ -3383,17 +3279,13 @@ void kbRenderer_DX11::RT_SetRenderTarget(kbRenderTexture* const pRenderTexture) 
 	m_pDeviceContext->RSSetViewports(1, &viewport);
 }
 
-/**
- *	kbRenderer_DX11::RT_ClearRenderTarget
- */
+/// kbRenderer_DX11::RT_ClearRenderTarget
 void kbRenderer_DX11::RT_ClearRenderTarget(kbRenderTexture* const pRenderTexture, const kbColor& color) {
 
 	m_pDeviceContext->ClearRenderTargetView(((kbRenderTexture_DX11*)pRenderTexture)->m_pRenderTargetView, &color.x);
 }
 
-/**
- *	kbRenderer_DX11::RT_RenderMesh
- */
+/// kbRenderer_DX11::RT_RenderMesh
 void kbRenderer_DX11::RT_RenderMesh(const kbModel* const pModel, kbShader* pShader, const kbShaderParamOverrides_t* const pShaderParams) {
 
 	if (pShader == nullptr || pShader->GetVertexShader() == nullptr || pShader->GetPixelShader() == nullptr) {
@@ -3438,9 +3330,7 @@ void kbRenderer_DX11::RT_RenderMesh(const kbModel* const pModel, kbShader* pShad
 	m_RenderState.SetBlendState();
 }
 
-/**
- *	kbRenderer_DX11::RT_Render2DLine
- */
+/// kbRenderer_DX11::RT_Render2DLine
 void kbRenderer_DX11::RT_Render2DLine(const Vec3& startPt, const Vec3& endPt, const kbColor& color, const float width, const kbShader* pShader, const kbShaderParamOverrides_t* const pShaderParamOverrides) {
 
 	D3D11_MAPPED_SUBRESOURCE mappedResource;
@@ -3520,9 +3410,7 @@ void kbRenderer_DX11::RT_Render2DLine(const Vec3& startPt, const Vec3& endPt, co
 	m_pDeviceContext->RSSetState(m_pDefaultRasterizerState);
 }
 
-/**
- *	kbRenderer_DX11::RT_CopyRenderTarget
- */
+/// kbRenderer_DX11::RT_CopyRenderTarget
 void kbRenderer_DX11::RT_CopyRenderTarget(kbRenderTexture* const pSrcTexture, kbRenderTexture* const pDstTexture) {
 	kbRenderTexture_DX11* const pSrc = (kbRenderTexture_DX11*)pSrcTexture;
 	kbRenderTexture_DX11* const pDst = (kbRenderTexture_DX11*)pDstTexture;
@@ -3530,9 +3418,7 @@ void kbRenderer_DX11::RT_CopyRenderTarget(kbRenderTexture* const pSrcTexture, kb
 	m_pDeviceContext->CopyResource(pDst->m_pRenderTargetTexture, pSrc->m_pRenderTargetTexture);
 }
 
-/**
- *	kbRenderer_DX11::RT_Render2DQuad
- */
+/// kbRenderer_DX11::RT_Render2DQuad
 void kbRenderer_DX11::RT_Render2DQuad(const Vec2& origin, const Vec2& size, const kbColor& color, const kbShader* pShader, const struct kbShaderParamOverrides_t* const pShaderParamOverrides) {
 	D3D11_MAPPED_SUBRESOURCE mappedResource;
 	HRESULT hr = m_pDeviceContext->Map(m_DebugVertexBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
@@ -3601,9 +3487,7 @@ void kbRenderer_DX11::RT_Render2DQuad(const Vec2& origin, const Vec2& size, cons
 	m_pDeviceContext->RSSetState(m_pDefaultRasterizerState);
 }
 
-/**
- *	kbRenderer_DX11::SetConstantBuffer
- */
+/// kbRenderer_DX11::SetConstantBuffer
 ID3D11Buffer* kbRenderer_DX11::SetConstantBuffer(const kbShaderVarBindings_t& shaderVarBindings, const kbShaderParamOverrides_t* shaderParamOverrides, const kbRenderObject* const pRenderObject, byte* const pInMappedBufferData, const char* const pShaderName) {
 	Mat4 worldMatrix;
 	if (pRenderObject != nullptr) {
@@ -3855,9 +3739,7 @@ ID3D11Buffer* kbRenderer_DX11::SetConstantBuffer(const kbShaderVarBindings_t& sh
 	return pConstantBuffer;
 }
 
-/**
- *	kbRenderer_DX11::RT_MapRenderTarget
- */
+/// kbRenderer_DX11::RT_MapRenderTarget
 kbRenderTargetMap kbRenderer_DX11::RT_MapRenderTarget(kbRenderTexture* const pTarget) {
 
 	kbRenderTexture_DX11* const pDX11Target = (kbRenderTexture_DX11*)pTarget;
@@ -3874,9 +3756,7 @@ kbRenderTargetMap kbRenderer_DX11::RT_MapRenderTarget(kbRenderTexture* const pTa
 	return returnVal;
 }
 
-/**
- *	kbRenderer_DX11::RT_UnmapRenderTarget
- */
+/// kbRenderer_DX11::RT_UnmapRenderTarget
 void kbRenderer_DX11::RT_UnmapRenderTarget(kbRenderTexture* const pTarget) {
 	kbRenderTexture_DX11* const pDX11Target = (kbRenderTexture_DX11*)pTarget;
 

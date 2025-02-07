@@ -7,9 +7,7 @@
 #define _KBLEVELDIRECTOR_H_
 
 
-/**
- *	kbLevelDirector
- */
+/// kbLevelDirector
 template<typename T, typename C>
 class kbLevelDirector : public IStateMachine<T,C> {
 

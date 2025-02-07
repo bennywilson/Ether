@@ -52,9 +52,7 @@ bool kbRayOBBIntersection( const Mat4 & orientation, const Vec3 & origin, const 
     return true;
 }
 
-/**
- *	kbRayAABBIntersection
- */
+/// kbRayAABBIntersection
 bool kbRayAABBIntersection( float & outT, const Vec3 & origin, const Vec3 & direction, const kbBounds & box ) {
 	const Vec3 tMin = ( box.Min() - origin ) / direction;
 	const Vec3 tMax = ( box.Max() - origin ) / direction;
@@ -72,17 +70,13 @@ bool kbRayAABBIntersection( float & outT, const Vec3 & origin, const Vec3 & dire
 	return minMax >= maxMin;
 }
 
-/**
- *	kbRayAABBIntersection
- */
+/// kbRayAABBIntersection
 bool kbRayAABBIntersection( const Vec3 & origin, const Vec3 & direction, const kbBounds & box ) {
 	float t;
 	return kbRayAABBIntersection( t, origin, direction, box );
 }
 
-/**
- *	kbRayTriIntersection - From Real-Time Rendering by Tomas Akenine-Moller and Eric Haines
- */
+/// kbRayTriIntersection - From Real-Time Rendering by Tomas Akenine-Moller and Eric Haines
 bool kbRayTriIntersection( float & outT, const Vec3 & rayOrigin, const Vec3 & rayDirection, const Vec3 & v0, const Vec3 & v1, const Vec3 & v2 ) {
 
 	const Vec3 e1 = v1 - v0;
@@ -114,9 +108,7 @@ bool kbRayTriIntersection( float & outT, const Vec3 & rayOrigin, const Vec3 & ra
 	return true;
 }
 
-/**
- *	kbRaySphereIntersection
- */
+/// kbRaySphereIntersection
 bool kbRaySphereIntersection( Vec3 & outIntersectionPt, const Vec3 & rayOrigin, const Vec3 & rayDirection, const Vec3 & sphereOrigin, const float sphereRadius ) {
 	const float sphereRadiusSqr = sphereRadius * sphereRadius;
 	const Vec3 rayToSphereVec = sphereOrigin - rayOrigin;

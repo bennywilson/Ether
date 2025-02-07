@@ -54,9 +54,7 @@ struct debugNormal
 std::vector<debugNormal> terrainNormals;
 
 
-/**
- *	grassRenderObject_t::Initialize
- */
+/// grassRenderObject_t::Initialize
 void kbGrass::grassRenderObject_t::Initialize(const Vec3& ownerPosition) {
 	blk::error_check(m_pModel == nullptr && m_pComponent == nullptr, "grassRenderObject_t::Initialize() - m_pModel or m_pComponent is not NULL");
 
@@ -74,9 +72,7 @@ void kbGrass::grassRenderObject_t::Initialize(const Vec3& ownerPosition) {
 	m_RenderObject.m_bCastsShadow = false;
 }
 
-/**
- *	grassRenderObject_t::Shutdown
- */
+/// grassRenderObject_t::Shutdown
 void kbGrass::grassRenderObject_t::Shutdown() {
 	blk::error_check(m_pModel != nullptr && m_pComponent != nullptr, "grassRenderObject_t::Initialize() - m_pModel or m_pComponent is not NULL");
 
@@ -87,9 +83,7 @@ void kbGrass::grassRenderObject_t::Shutdown() {
 	m_pModel = nullptr;
 }
 
-/**
- *  kbGrass::Constructor
- */
+///  *  kbGrass::Constructor
 void kbGrass::Constructor() {
 
 	m_pGrassShader = nullptr;
@@ -121,18 +115,14 @@ void kbGrass::Constructor() {
 	m_FakeAOClipPlaneFadeStartDist = 0.0f;
 }
 
-/**
- *  kbGrass::~kbGrass
- */
+///  *  kbGrass::~kbGrass
 kbGrass::~kbGrass() {
 	for (int i = 0; i < m_GrassRenderObjects.size(); i++) {
 		m_GrassRenderObjects[i].Shutdown();
 	}
 }
 
-/**
- *  kbGrass::EditorChange
- */
+///  *  kbGrass::EditorChange
 void kbGrass::EditorChange(const std::string& propertyName) {
 	Super::EditorChange(propertyName);
 
@@ -152,9 +142,7 @@ void kbGrass::EditorChange(const std::string& propertyName) {
 	m_bUpdateMaterial = true;
 }
 
-/**
- *  kbGrass::RenderSync
- */
+///  *  kbGrass::RenderSync
 void kbGrass::RenderSync() {
 	Super::RenderSync();
 
@@ -163,9 +151,7 @@ void kbGrass::RenderSync() {
 	}
 }
 
-/**
- *  kbGrass::SetEnable_Internal
- */
+///  *  kbGrass::SetEnable_Internal
 void kbGrass::SetEnable_Internal(const bool isEnabled) {
 	Super::SetEnable_Internal(isEnabled);
 
@@ -184,9 +170,7 @@ void kbGrass::SetEnable_Internal(const bool isEnabled) {
 	}
 }
 
-/**
- *  kbGrass::RefreshGrass
- */
+///  *  kbGrass::RefreshGrass
 void kbGrass::RefreshGrass() {
 
 	const float startRefreshGrassTime = g_GlobalTimer.TimeElapsedSeconds();
@@ -396,9 +380,7 @@ void kbGrass::RefreshGrass() {
 	blk::log("Refreshing grass took %f seconds.", g_GlobalTimer.TimeElapsedSeconds() - startRefreshGrassTime);
 }
 
-/**
- *	kbTerrainComponent::Constructor
- */
+/// kbTerrainComponent::Constructor
 void kbTerrainComponent::Constructor() {
 
 	m_pHeightMap = nullptr;
@@ -414,9 +396,7 @@ void kbTerrainComponent::Constructor() {
 	m_bRegenerateTerrain = false;
 }
 
-/**
- *	kbTerrainComponent::kbTerrainComponent
- */
+/// kbTerrainComponent::kbTerrainComponent
 kbTerrainComponent::~kbTerrainComponent() {
 	if (m_pHeightMap) {
 		m_pHeightMap->Release();
@@ -426,9 +406,7 @@ kbTerrainComponent::~kbTerrainComponent() {
 	m_TerrainModel.Release();
 }
 
-/**
- *	kbTerrainComponent::PostLoad
- */
+/// kbTerrainComponent::PostLoad
 void kbTerrainComponent::PostLoad() {
 	Super::PostLoad();
 
@@ -441,9 +419,7 @@ void kbTerrainComponent::PostLoad() {
 	}
 }
 
-/**
- *	kbTerrainComponent::EditorChange
- */
+/// kbTerrainComponent::EditorChange
 void kbTerrainComponent::EditorChange(const std::string& propertyName) {
 	Super::EditorChange(propertyName);
 
@@ -466,9 +442,7 @@ void kbTerrainComponent::EditorChange(const std::string& propertyName) {
 	}
 }
 
-/**
- *	kbTerrainComponent::GenerateTerrain
- */
+/// kbTerrainComponent::GenerateTerrain
 void kbTerrainComponent::GenerateTerrain() {
 	blk::error_check(m_pHeightMap != nullptr, "kbTerrainComponent::GenerateTerrain() - No height map file found for terrain component on entity %s", GetOwner()->GetName().c_str());
 
@@ -639,9 +613,7 @@ void kbTerrainComponent::GenerateTerrain() {
 	}
 }
 
-/**
- *  kbTerrainComponent::SetCollisionMap
- */
+///  *  kbTerrainComponent::SetCollisionMap
 void kbTerrainComponent::SetCollisionMap(const kbRenderTexture* const pTexture) {
 	for (int i = 0; i < m_Grass.size(); i++) {
 
@@ -659,9 +631,7 @@ void kbTerrainComponent::SetCollisionMap(const kbRenderTexture* const pTexture) 
 	}
 }
 
-/**
- *	kbTerrainComponent::SetEnable_Internal
- */
+/// kbTerrainComponent::SetEnable_Internal
 void kbTerrainComponent::SetEnable_Internal(const bool isEnabled) {
 
 	if (m_TerrainModel.NumVertices() == 0) {
@@ -689,9 +659,7 @@ void kbTerrainComponent::SetEnable_Internal(const bool isEnabled) {
 	}
 }
 
-/**
- *	kbTerrainComponent::Update_Internal
- */
+/// kbTerrainComponent::Update_Internal
 void kbTerrainComponent::Update_Internal(const float DeltaTime) {
 	Super::Update_Internal(DeltaTime);
 
@@ -721,9 +689,7 @@ void kbTerrainComponent::Update_Internal(const float DeltaTime) {
 		}*/
 }
 
-/**
- *	kbTerrainComponent::RenderSync
- */
+/// kbTerrainComponent::RenderSync
 void kbTerrainComponent::RenderSync() {
 	Super::RenderSync();
 
@@ -741,9 +707,7 @@ void kbTerrainComponent::RenderSync() {
 	}
 }
 
-/**
- *	kbTerrainComponent::RefreshMaterials
- */
+/// kbTerrainComponent::RefreshMaterials
 void kbTerrainComponent::RefreshMaterials() {
 	m_RenderObject.m_bCastsShadow = false;
 	m_RenderObject.m_bIsSkinnedModel = false;

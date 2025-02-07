@@ -7,9 +7,7 @@
 #ifndef _KBEDITORMANIPULATOR_H_
 #define _KBEDITORMANIPULATOR_H_
 
- /**
-  *	kbManipulator
-  */
+ /// kbManipulator
  class kbManipulator {
 
 //---------------------------------------------------------------------------------------------------

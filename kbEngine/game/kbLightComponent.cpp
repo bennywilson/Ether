@@ -14,9 +14,7 @@
 KB_DEFINE_COMPONENT(kbLightComponent)
 KB_DEFINE_COMPONENT(kbDirectionalLightComponent)
 
-/**
- *	kbLightComponent::Constructor
- */
+/// kbLightComponent::Constructor
 void kbLightComponent::Constructor() {
 	m_Color = kbColor::white;
 	m_bCastsShadow = false;
@@ -24,23 +22,17 @@ void kbLightComponent::Constructor() {
 	m_bShaderParamsDirty = false;
 }
 
-/**
- *	kbLightComponent::~kbLightComponent
- */
+/// kbLightComponent::~kbLightComponent
 kbLightComponent::~kbLightComponent() {
 
 }
 
-/**
- *	kbLightComponent::PostLoad
- */
+/// kbLightComponent::PostLoad
 void kbLightComponent::PostLoad() {
 	Super::PostLoad();
 }
 
-/**
- *	kbLightComponent::EditorChange
- */
+/// kbLightComponent::EditorChange
 void kbLightComponent::EditorChange( const std::string & propertyName ) {
 	Super::EditorChange( propertyName );
 
@@ -56,9 +48,7 @@ void kbLightComponent::EditorChange( const std::string & propertyName ) {
 	}
 }
 
-/**
- *	kbLightComponent::RenderSync
- */
+/// kbLightComponent::RenderSync
 void kbLightComponent::RenderSync() {
 	Super::RenderSync();
 
@@ -68,9 +58,7 @@ void kbLightComponent::RenderSync() {
 	}
 }
 
-/**
- *	kbLightComponent::SetEnable_Internal
- */
+/// kbLightComponent::SetEnable_Internal
 void kbLightComponent::SetEnable_Internal( const bool bIsEnabled ) {
 
 	Super::SetEnable_Internal( bIsEnabled );
@@ -86,9 +74,7 @@ void kbLightComponent::SetEnable_Internal( const bool bIsEnabled ) {
 	}
 }
 
-/**
- *	kbLightComponent:RefreshMaterials
- */
+/// kbLightComponent:RefreshMaterials
 void kbLightComponent::RefreshMaterials() {
 
 	//m_RenderObject.m_Materials.clear();
@@ -135,9 +121,7 @@ void kbLightComponent::RefreshMaterials() {
 	}*/
 }
 
-/**
- *	kbLightComponent:Update_Internal
- */
+/// kbLightComponent:Update_Internal
 void kbLightComponent::Update_Internal( const float DeltaTime ) {
 
 	Super::Update_Internal( DeltaTime );
@@ -161,36 +145,26 @@ void kbLightComponent::Update_Internal( const float DeltaTime ) {
 	}
 }
 
-/**
- *	kbPointLightComponent::Constructor
- */
+/// kbPointLightComponent::Constructor
 void kbPointLightComponent::Constructor() {
 	m_Radius = 16.0f;
 }
 
-/**
- *	kbCylindricalLightComponent::Constructor
- */
+/// kbCylindricalLightComponent::Constructor
 void kbCylindricalLightComponent::Constructor() {
 	m_Length = 32.0f;
 }
 
-/**
- *	kbDirectionalLightComponent::Constructor
- */
+/// kbDirectionalLightComponent::Constructor
 void kbDirectionalLightComponent::Constructor() {
 }
 
-/**
- *	kbDirectionalLightComponent::~kbDirectionalLightComponent
- */
+/// kbDirectionalLightComponent::~kbDirectionalLightComponent
 kbDirectionalLightComponent::~kbDirectionalLightComponent() {
 
 }
 
-/**
- *	kbDirectionalLightComponent::EditorChange
- */
+/// kbDirectionalLightComponent::EditorChange
 void kbDirectionalLightComponent::EditorChange( const std::string & propertyName ) {
 	Super::EditorChange( propertyName );
 	// TODO: clamp shadow splits to 4.  Also ensure that the ordering is correct
@@ -202,9 +176,7 @@ void kbDirectionalLightComponent::EditorChange( const std::string & propertyName
 	}
 }
 
-/**
- *	kbLightShaftsComponent::Constructor
- */
+/// kbLightShaftsComponent::Constructor
 void kbLightShaftsComponent::Constructor() {
 	m_Texture = nullptr;
 	m_Color = kbColor::white;
@@ -214,15 +186,11 @@ void kbLightShaftsComponent::Constructor() {
 	m_Directional = true;
 }
 
-/**
- *	kbLightShaftsComponent::~kbLightShaftsComponent
- */
+/// kbLightShaftsComponent::~kbLightShaftsComponent
 kbLightShaftsComponent::~kbLightShaftsComponent() {
 }
 
-/**
- *	kbLightShaftsComponent::SetEnable_Internal
- */
+/// kbLightShaftsComponent::SetEnable_Internal
 void kbLightShaftsComponent::SetEnable_Internal( const bool isEnabled ) {
 	Super::SetEnable_Internal( isEnabled );
 
@@ -235,16 +203,12 @@ void kbLightShaftsComponent::SetEnable_Internal( const bool isEnabled ) {
 	}
 }
 
-/**
- *	kbLightShaftsComponent::SetColor
- */
+/// kbLightShaftsComponent::SetColor
 void kbLightShaftsComponent::SetColor( const kbColor & newColor ) {
 	m_Color = newColor;
 }
 
-/**
- *	kbLightShaftsComponent::Update_Internal
- */
+/// kbLightShaftsComponent::Update_Internal
 void kbLightShaftsComponent::Update_Internal( const float DeltaTime ) {
 	Super::Update_Internal( DeltaTime );
 
@@ -256,18 +220,14 @@ void kbLightShaftsComponent::Update_Internal( const float DeltaTime ) {
 	g_pRenderer->SetGlobalShaderParam( shaderParam );
 }
 
-/**
- *	kbFogComponent::Constructor
- */
+/// kbFogComponent::Constructor
 void kbFogComponent::Constructor() {
 	m_Color = kbColor::white;
 	m_StartDistance = 2100;
 	m_EndDistance = 2200;
 }
 
-/**
- *	kbFogComponent::Update_Internal
- */
+/// kbFogComponent::Update_Internal
 void kbFogComponent::Update_Internal( const float DT ) {
 	Super::Update_Internal( DT );
 

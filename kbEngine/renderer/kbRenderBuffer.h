@@ -14,9 +14,7 @@ typedef ID3D11GeometryShader kbHWGeometryShader;
 typedef ID3D11PixelShader kbHWPixelShader;
 typedef ID3D11InputLayout kbHWVertexLayout;
 
-/**
- *	kbRenderBuffer
- */
+/// kbRenderBuffer
 class kbRenderBuffer {
 public:
 	kbRenderBuffer() : m_pBuffer(nullptr) { }

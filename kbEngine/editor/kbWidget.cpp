@@ -6,9 +6,7 @@
 #include "kbEditor.h"
 #include "kbWidget.h"
 
-/**
- *	kbWidget::kbWidget
- */
+/// kbWidget::kbWidget
 kbWidget::kbWidget( const int x, const int y, const int w, const int h ) :
 	m_X( x ),
 	m_Y( y ),
@@ -16,38 +14,28 @@ kbWidget::kbWidget( const int x, const int y, const int w, const int h ) :
 	m_Height( h ) {
 }
 
-/**
- *	kbWidget::IsPointWithinBounds
- */
+/// kbWidget::IsPointWithinBounds
 bool kbWidget::IsPointWithinBounds( const int x, const int y ) const {
 	return ( x >= m_X && x < m_X + m_Width && y >= m_Y && y < m_Y + m_Height );
 }
 
-/**
- *  kbWidget::DisplayWidth
- */
+///  *  kbWidget::DisplayWidth
 int kbWidget::DisplayWidth() const {
 	return m_Width - 2 * kbEditor::PanelBorderSize();
 }
 
-/**
- *	kbEditorWindow
- */
+/// kbEditorWindow
 kbEditorWindow::kbEditorWindow(	int x, int y, int w, int h, const char * title ) :
 	kbWidget( x, y, w, h ),
 	Fl_Window( x, y, w, h, title ) {
 }
 
-/**
- *	kbEditorWindow::Update
- */
+/// kbEditorWindow::Update
 void kbEditorWindow::Update() {
 
 }
 
-/**
- *	kbEditorWindow::EventCB
- */
+/// kbEditorWindow::EventCB
 void kbEditorWindow::EventCB( const widgetCBType_t cbType ) {
 
 }

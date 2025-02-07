@@ -14,9 +14,7 @@
 
 kbConsoleVariable g_CannonBallTest("cbstresstest", false, kbConsoleVariable::Console_Bool, "Cannon ball stress test", "");
 
-/**
- *	KungFuSheepStateIdle
- */
+/// KungFuSheepStateIdle
 const Vec3 g_LeftFacing(-0.01f, 0.0f, -1.0f);
 const Vec3 g_RightFacing(-0.01f, 0.0f, 1.0f);
 
@@ -53,9 +51,7 @@ private:
 	float m_LastCannonBallTime = -1.0f;
 };
 
-/**
- *	KungFuSheepStateRun
- */
+/// KungFuSheepStateRun
 template<typename T>
 class KungFuSheepStateRun : public KungFuSheepStateBase<T> {
 
@@ -123,9 +119,7 @@ public:
 	virtual void EndState_Internal(T) override { }
 };
 
-/**
- *	KungFuSheepStateAttack
- */
+/// KungFuSheepStateAttack
 template<typename T>
 class KungFuSheepStateAttack : public KungFuSheepStateBase<T> {
 
@@ -220,9 +214,7 @@ public:
 	bool m_bQueueAttack;
 };
 
-/**
- *	KungFuSheepStateHugged
- */
+/// KungFuSheepStateHugged
 template<typename T>
 class KungFuSheepStateHugged : public KungFuSheepStateBase<T> {
 
@@ -346,9 +338,7 @@ public:
 	float m_NextBaaTime = 0.0f;
 };
 
-/**
- *	KungFuSheepStateDead
- */
+/// KungFuSheepStateDead
 template<typename T>
 class KungFuSheepStateDead : public KungFuSheepStateBase<T> {
 
@@ -379,9 +369,7 @@ public:
 	bool m_bSplashDone = false;
 };
 
-/**
- *	KungFuSheepStateCannonBall
- */
+/// KungFuSheepStateCannonBall
 template<typename T>
 class KungFuSheepStateCannonBall : public KungFuSheepStateBase<T> {
 
@@ -434,9 +422,7 @@ public:
 	float m_StartCannonBallTime = 0.0f;
 };
 
-/**
- *	KungFuSheepStateCinema
- */
+/// KungFuSheepStateCinema
 template<typename T>
 class KungFuSheepStateCinema : public KungFuSheepStateBase<T> {
 
@@ -462,9 +448,7 @@ public:
 	float m_NextBaaTime = 0.0f;
 };
 
-/**
- *	KungFuSheepComponent::Constructor
- */
+/// KungFuSheepComponent::Constructor
 void KungFuSheepComponent::Constructor() {
 	m_TargetFacingDirection.set(0.0f, 0.0f, -1.0f);
 	m_bIsPlayer = true;
@@ -473,9 +457,7 @@ void KungFuSheepComponent::Constructor() {
 	m_CannonBallMeter = 0.0f;
 }
 
-/**
- *	KungFuSheepComponent::SetEnable_Internal
- */
+/// KungFuSheepComponent::SetEnable_Internal
 void KungFuSheepComponent::SetEnable_Internal(const bool bEnable) {
 	Super::SetEnable_Internal(bEnable);
 
@@ -618,9 +600,7 @@ void KungFuSheepComponent::OnAnimEvent(const kbAnimEventInfo_t& animEventInfo) {
 	}
 }
 
-/**
- *	KungFuSheepComponent::Update_Internal
- */
+/// KungFuSheepComponent::Update_Internal
 void KungFuSheepComponent::Update_Internal(const float DT) {
 	Super::Update_Internal(DT);
 
@@ -721,16 +701,12 @@ void KungFuSheepComponent::Update_Internal(const float DT) {
 	}
 }
 
-/**
- *	KungFuSheepComponent::IsCannonBalling
- */
+/// KungFuSheepComponent::IsCannonBalling
 bool KungFuSheepComponent::IsCannonBalling() const {
 	return (m_CurrentState == KungFuSheepState::CannonBall);
 }
 
-/**
- *	KungFuSheepComponent::TakeDamage
- */
+/// KungFuSheepComponent::TakeDamage
 void KungFuSheepComponent::TakeDamage(const DealAttackInfo_t<KungFuGame::eAttackType>& attackInfo) {
 
 	if (attackInfo.m_AttackType == KungFuGame::DebugDeath) {
@@ -744,9 +720,7 @@ void KungFuSheepComponent::TakeDamage(const DealAttackInfo_t<KungFuGame::eAttack
 	}
 }
 
-/**
- *	KungFuSheepComponent::PlayShakeNBakeFX
- */
+/// KungFuSheepComponent::PlayShakeNBakeFX
 void KungFuSheepComponent::PlayShakeNBakeFX() {
 
 	if (m_ShakeNBakeFX.GetEntity() == nullptr) {
@@ -762,9 +736,7 @@ void KungFuSheepComponent::PlayShakeNBakeFX() {
 	KungFuLevelComponent::Get()->UpdateCannonBallMeter(m_CannonBallMeter, false);
 }
 
-/**
- *	KungFuSheepComponent::PlayBaa
- */
+/// KungFuSheepComponent::PlayBaa
 void KungFuSheepComponent::PlayBaa(const int baaType) {
 
 	if (m_BaaaVO.size() == 0) {
@@ -783,9 +755,7 @@ void KungFuSheepComponent::PlayBaa(const int baaType) {
 	}
 }
 
-/**
- *	KungFuSheepComponent::HitASnolaf
- */
+/// KungFuSheepComponent::HitASnolaf
 void KungFuSheepComponent::HitASnolaf() {
 
 	m_CannonBallMeter += KungFuGame::kMeterFillPerSnolafKill;
@@ -796,9 +766,7 @@ void KungFuSheepComponent::HitASnolaf() {
 	}
 }
 
-/**
- *	KungFuSheepComponent::SpawnSplash
- */
+/// KungFuSheepComponent::SpawnSplash
 void KungFuSheepComponent::SpawnSplash() {
 	if (m_SplashFX.GetEntity() == nullptr) {
 		return;
@@ -815,9 +783,7 @@ void KungFuSheepComponent::SpawnSplash() {
 	}
 }
 
-/**
- *	KungFuSheepComponent::PlayCannonBallFX
- */
+/// KungFuSheepComponent::PlayCannonBallFX
 void KungFuSheepComponent::PlayCannonBallFX(const Vec3 location) {
 
 	if (m_CannonBallImpactFX.GetEntity() == nullptr) {
@@ -836,9 +802,7 @@ void KungFuSheepComponent::PlayCannonBallFX(const Vec3 location) {
 	}
 }
 
-/**
- *	KungFuSheepComponent::PlayCameraShake
- */
+/// KungFuSheepComponent::PlayCameraShake
 void KungFuSheepComponent::PlayCameraShake() {
 	CannonCameraShakeComponent* const pCamShakeComponent = (CannonCameraShakeComponent*)m_CannonBallImpactFX.GetEntity()->GetComponentByType(CannonCameraShakeComponent::GetType());
 	CannonCameraComponent* const pCam = (CannonCameraComponent*)g_pCannonGame->GetMainCamera();
@@ -847,9 +811,7 @@ void KungFuSheepComponent::PlayCameraShake() {
 	}
 }
 
-/**
- *	KungFuSheepComponent::EnableHeadBand
- */
+/// KungFuSheepComponent::EnableHeadBand
 void KungFuSheepComponent::EnableHeadBand(const bool bEnable) {
 
 	if (m_HeadBandInstance[0].GetEntity() != nullptr) {
@@ -858,27 +820,21 @@ void KungFuSheepComponent::EnableHeadBand(const bool bEnable) {
 	}
 }
 
-/**
- *	KungFuSheepComponent::PlayImpactSound
- */
+/// KungFuSheepComponent::PlayImpactSound
 void KungFuSheepComponent::PlayImpactSound() {
 	if (m_BasicAttackImpactSound.size() > 0) {
 		m_BasicAttackImpactSound[rand() % m_BasicAttackImpactSound.size()].PlaySoundAtPosition(GetOwnerPosition());
 	}
 }
 
-/**
- *	KungFuSheepComponent::CannonBallActivatedCB
- */
+/// KungFuSheepComponent::CannonBallActivatedCB
 void KungFuSheepComponent::CannonBallActivatedCB() {
 	m_CannonBallMeter = 0.0f;
 
 	KungFuLevelComponent::Get()->UpdateCannonBallMeter(0.0f, true);
 }
 
-/**
- *	KungFuSheepComponent::ExternalRequestStateChange
- */
+/// KungFuSheepComponent::ExternalRequestStateChange
 void KungFuSheepComponent::ExternalRequestStateChange(const KungFuSheepState::SheepStates_t requestedState) {
 
 	RequestStateChange(requestedState);

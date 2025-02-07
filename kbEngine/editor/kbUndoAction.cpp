@@ -16,16 +16,12 @@
 const int g_UndoStackSize = 15;
 extern bool g_bEditorIsUndoingAnAction;
 
-/**
- *	kbUndoStack::kbUndoStack
- */
+/// kbUndoStack::kbUndoStack
 kbUndoStack::kbUndoStack() {
 	Reset();
 }
 
-/**
- *	kbUndoStack::GetLastDirtyActionId
- */
+/// kbUndoStack::GetLastDirtyActionId
 UINT64 kbUndoStack::GetLastDirtyActionId() const {
 	if (m_StackCurrent < 0) {
 		return UINT64_MAX;
@@ -47,9 +43,7 @@ UINT64 kbUndoStack::GetLastDirtyActionId() const {
 	return UINT64_MAX;
 }
 
-/**
- *	kbUndoStack::Reset
- */
+/// kbUndoStack::Reset
 void kbUndoStack::Reset() {
 	for (int i = 0; i < m_Stack.size(); i++) {
 		if (m_Stack[i] != nullptr) {
@@ -69,9 +63,7 @@ void kbUndoStack::Reset() {
 	//	Push( new kbUndoSelectActor( emptyList ) );
 }
 
-/**
- *  kbUndoStack::Push
- */
+///  *  kbUndoStack::Push
 void kbUndoStack::Push(kbUndoAction* const action) {
 
 	m_StackCurrent++;
@@ -101,9 +93,7 @@ void kbUndoStack::Push(kbUndoAction* const action) {
 	DumpStack();
 }
 
-/**
- *  kbUndoStack::Undo
- */
+///  *  kbUndoStack::Undo
 void kbUndoStack::Undo() {
 
 	if (m_StackLength == 0) {
@@ -126,9 +116,7 @@ void kbUndoStack::Undo() {
 	DumpStack();
 }
 
-/**
- *	kbUndoStack::Redo
- */
+/// kbUndoStack::Redo
 void kbUndoStack::Redo() {
 
 	if (m_StackTop == m_StackCurrent) {
@@ -152,9 +140,7 @@ void kbUndoStack::Redo() {
 	DumpStack();
 }
 
-/**
- *	kbUndoStack::DumpStack
- */
+/// kbUndoStack::DumpStack
 void kbUndoStack::DumpStack() {
 	int bottomIdx = m_StackCurrent - m_StackLength;
 	if (bottomIdx < 0) {
@@ -249,9 +235,7 @@ kbUndoVariableAction::kbUndoVariableAction(kbTypeInfoType_t type, void* bytePtrT
 	}
 }
 
-/**
- *	kbUndoVariableAction::UndoAction
- */
+/// kbUndoVariableAction::UndoAction
 void kbUndoVariableAction::UndoAction() {
 
 	switch (m_VarType) {
@@ -296,9 +280,7 @@ void kbUndoVariableAction::UndoAction() {
 }
 
 
-/**
- *	kbUndoVariableAction::RedoAction
- */
+/// kbUndoVariableAction::RedoAction
 void kbUndoVariableAction::RedoAction() {
 	switch (m_VarType) {
 	case KBTYPEINFO_BOOL:
@@ -347,25 +329,19 @@ void kbUndoVariableAction::RedoAction() {
 //
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-/**
- *	kbUndoDeleteComponent::kbUndoDeleteComponent
- */
+/// kbUndoDeleteComponent::kbUndoDeleteComponent
 kbUndoDeleteComponent::kbUndoDeleteComponent(kbEditorEntity* const pEntity, kbComponent* const pComponentToDelete, int indexIntoComponentList) :
 	m_pEditorEntity(pEntity),
 	m_pComponent(pComponentToDelete),
 	m_IndexIntoComponentList(indexIntoComponentList) {
 }
 
-/**
- *	kbUndoDeleteComponent::Cleanup
- */
+/// kbUndoDeleteComponent::Cleanup
 void kbUndoDeleteComponent::Cleanup() {
 	delete m_pComponent;
 }
 
-/**
- *	kbUndoDeleteComponent::UndoAction
- */
+/// kbUndoDeleteComponent::UndoAction
 void kbUndoDeleteComponent::UndoAction() {
 	m_pEditorEntity->GetGameEntity()->AddComponent(m_pComponent, m_IndexIntoComponentList);
 
@@ -376,9 +352,7 @@ void kbUndoDeleteComponent::UndoAction() {
 	g_Editor->SelectEntities(entityList, false);
 }
 
-/**
- *	kbUndoDeleteComponent::RedoAction
- */
+/// kbUndoDeleteComponent::RedoAction
 void kbUndoDeleteComponent::RedoAction() {
 
 	int componentIdx = -1;
@@ -403,26 +377,20 @@ void kbUndoDeleteComponent::RedoAction() {
 //
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-/**
- *	kbUndoDeleteActor::kbUndoDeleteActor
- */
+/// kbUndoDeleteActor::kbUndoDeleteActor
 kbUndoDeleteActor::kbUndoDeleteActor(std::vector< DeletedActorInfo_t >& entitiesToDelete) :
 	m_pEntitiesToDelete(entitiesToDelete) {
 
 }
 
-/**
- *	kbUndoDeleteActor::Cleanup
- */
+/// kbUndoDeleteActor::Cleanup
 void kbUndoDeleteActor::Cleanup() {
 	for (int i = 0; i < m_pEntitiesToDelete.size(); i++) {
 		delete m_pEntitiesToDelete[i].m_pEditorEntity;
 	}
 }
 
-/**
- *	kbUndoDeleteActor::UndoAction
- */
+/// kbUndoDeleteActor::UndoAction
 void kbUndoDeleteActor::UndoAction() {
 
 	std::vector<kbEditorEntity*> entityList;
@@ -440,9 +408,7 @@ void kbUndoDeleteActor::UndoAction() {
 	}
 }
 
-/**
- *	kbUndoDeleteActor::RedoAction
- */
+/// kbUndoDeleteActor::RedoAction
 void kbUndoDeleteActor::RedoAction() {
 
 	for (int i = 0; i < m_pEntitiesToDelete.size(); i++) {
@@ -460,25 +426,19 @@ void kbUndoDeleteActor::RedoAction() {
 //
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-/**
- *	kbUndoSelectActor::kbUndoSelectActor
- */
+/// kbUndoSelectActor::kbUndoSelectActor
 kbUndoSelectActor::kbUndoSelectActor(std::vector< kbEditorEntity* >& undoEntities, std::vector<kbEditorEntity*>& redoEntities) :
 	m_UndoSelectedEntities(undoEntities),
 	m_RedoSelectedEntities(redoEntities) {
 }
 
-/**
- *	kbUndoSelectActor::UndoAction
- */
+/// kbUndoSelectActor::UndoAction
 void kbUndoSelectActor::UndoAction() {
 
 	g_Editor->SelectEntities(m_UndoSelectedEntities, false);
 }
 
-/**
- *	kbUndoDeleteActor::RedoAction
- */
+/// kbUndoDeleteActor::RedoAction
 void kbUndoSelectActor::RedoAction() {
 
 	g_Editor->DeselectEntities();

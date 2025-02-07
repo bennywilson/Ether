@@ -7,9 +7,7 @@
 #define _KUNGFUSNOLAF_H_
 
 
-/**
- *	KungFuSheepState
- */
+/// KungFuSheepState
 namespace KungFuSnolafState {
 	enum SnolafState_t {
 		Idle = 0,
@@ -25,9 +23,7 @@ namespace KungFuSnolafState {
 	};
 }
 
-/**
- *	KungFuSnolafComponent
- */
+/// KungFuSnolafComponent
 
 template<typename T>
 class KungFuSnolafStateBase;

@@ -40,9 +40,7 @@ struct kbParticle_t {
 	kbRenderObject												m_RenderObject;		// For model emitters
 };
 
-/**
- *	kbModelEmitter
- */
+/// kbModelEmitter
 class kbModelEmitter : public kbGameComponent {
 
 	KB_DECLARE_COMPONENT( kbModelEmitter, kbGameComponent );
@@ -63,9 +61,7 @@ private:
 };
 
 
-/**
- *	kbParticleComponent
- */
+/// kbParticleComponent
 class kbParticleComponent : public kbTransformComponent {
 
 	KB_DECLARE_COMPONENT( kbParticleComponent, kbTransformComponent );

@@ -46,9 +46,7 @@ void kbEntity::AddComponent(kbComponent* const pComponent, int indexToInsertAt) 
 	}
 }
 
-/**
- *	kbEntity::RemoveComponent
- */
+/// kbEntity::RemoveComponent
 void kbEntity::RemoveComponent(kbComponent* const pComponent) {
 
 	// TODO: This might move the game logic component from the back of the list!
@@ -71,9 +69,7 @@ struct EntPtrHash {
 std::unordered_map<kbGUID, kbGameEntity*, EntPtrHash> g_GUIDToEntityMap;
 std::unordered_map<int, kbGameEntity*> g_IndexToEntityMap;
 
-/**
- *	kbGameEntityPtr::SetEntity
- */
+/// kbGameEntityPtr::SetEntity
 void kbGameEntityPtr::SetEntity(const kbGUID& guid) {
 
 	m_GUID = guid;
@@ -89,9 +85,7 @@ void kbGameEntityPtr::SetEntity(const kbGUID& guid) {
 	}
 }
 
-/**
- *	kbGameEntityPtr::SetEntity
- */
+/// kbGameEntityPtr::SetEntity
 void kbGameEntityPtr::SetEntity(kbGameEntity* const pGameEntity) {
 
 	if (pGameEntity == nullptr) {
@@ -130,9 +124,7 @@ void kbGameEntityPtr::SetEntity(kbGameEntity* const pGameEntity) {
 	g_IndexToEntityMap[m_EntityId] = pGameEntity;
 }
 
-/**
- *	kbGameEntityPtr::GetEntity
- */
+/// kbGameEntityPtr::GetEntity
 kbGameEntity* kbGameEntityPtr::GetEntity() {
 
 	if (m_EntityId != INVALID_ENTITYID) {
@@ -156,9 +148,7 @@ const kbGameEntity* kbGameEntityPtr::GetEntity() const {
 	return pThisNoConst->GetEntity();
 }
 
-/**
- *	kbGameEntityPtr::GetGUID
- */
+/// kbGameEntityPtr::GetGUID
 kbGUID kbGameEntityPtr::GetGUID() const {
 
 	return m_GUID;
@@ -170,9 +160,7 @@ kbGUID kbGameEntityPtr::GetGUID() const {
 
 uint g_EntityNumber = 0;
 
-/**
- *	kbGameEntity
- */
+/// kbGameEntity
 kbGameEntity::kbGameEntity(const kbGUID* const guid, const bool bIsPrefab) :
 	m_Bounds(Vec3(-1.0f, -1.0f, -1.0f), Vec3(1.0f, 1.0f, 1.0f)),
 	m_pActorComponent(nullptr),
@@ -212,9 +200,7 @@ kbGameEntity::kbGameEntity(const kbGUID* const guid, const bool bIsPrefab) :
 	entityPtr.SetEntity(this);
 }
 
-/**
- *	kbGameEntity::kbGameEntity( const kbGameEntity * )
- */
+/// kbGameEntity::kbGameEntity( const kbGameEntity * )
 kbGameEntity::kbGameEntity(const kbGameEntity* pGameEntity, const bool bIsPrefab, const kbGUID* const guid) :
 	m_Bounds(pGameEntity->GetBounds()),
 	m_pActorComponent(nullptr),
@@ -269,9 +255,7 @@ kbGameEntity::kbGameEntity(const kbGameEntity* pGameEntity, const bool bIsPrefab
 	entityPtr.SetEntity(this);
 }
 
-/**
- *	kbGameEntity::~kbGameEntity
- */
+/// kbGameEntity::~kbGameEntity
 kbGameEntity::~kbGameEntity() {
 
 	// Disable components first so they can clean up any cross references before destruction
@@ -295,9 +279,7 @@ kbGameEntity::~kbGameEntity() {
 	g_IndexToEntityMap.erase(m_EntityId);
 }
 
-/**
- *	kbGameEntity::AddComponent
- */
+/// kbGameEntity::AddComponent
 void kbGameEntity::AddComponent(kbComponent* const pComponent, int indexToInsertAt) {
 
 	if (pComponent == nullptr || pComponent->IsA(kbGameComponent::GetType()) == false) {
@@ -316,9 +298,7 @@ void kbGameEntity::AddComponent(kbComponent* const pComponent, int indexToInsert
 	kbEntity::AddComponent(pComponent, indexToInsertAt);
 }
 
-/**
- *	kbGameEntity::AddEntity
- */
+/// kbGameEntity::AddEntity
 void kbGameEntity::AddEntity(kbGameEntity* const pEntity) {
 	pEntity->m_pOwnerEntity = this;
 	m_ChildEntities.push_back(pEntity);
@@ -327,9 +307,7 @@ void kbGameEntity::AddEntity(kbGameEntity* const pEntity) {
 	g_pGame->RemoveGameEntity(pEntity);
 }
 
-/**
- *	kbGameEntity::Update
- */
+/// kbGameEntity::Update
 void kbGameEntity::Update(const float DeltaTime) {
 	START_SCOPED_TIMER(GAME_ENTITY_UPDATE)
 
@@ -366,27 +344,21 @@ void kbGameEntity::Update(const float DeltaTime) {
 	ClearDirty();
 }
 
-/**
- *	kbGameEntity::EnableAllComponents
- */
+/// kbGameEntity::EnableAllComponents
 void kbGameEntity::EnableAllComponents() {
 	for (int i = 0; i < m_Components.size(); i++) {
 		m_Components[i]->Enable(true);
 	}
 }
 
-/**
- *	kbGameEntity::DisableAllComponents
- */
+/// kbGameEntity::DisableAllComponents
 void kbGameEntity::DisableAllComponents() {
 	for (int i = 0; i < m_Components.size(); i++) {
 		m_Components[i]->Enable(false);
 	}
 }
 
-/**
- *	kbGameEntity::RenderSync
- */
+/// kbGameEntity::RenderSync
 void kbGameEntity::RenderSync() {
 
 	for (int i = 0; i < m_Components.size(); i++) {
@@ -398,9 +370,7 @@ void kbGameEntity::RenderSync() {
 	}
 }
 
-/**
- *	kbGameEntity::CalculateWorldMatrix
- */
+/// kbGameEntity::CalculateWorldMatrix
 void kbGameEntity::CalculateWorldMatrix(Mat4& inOutMatrix) const {
 
 	Mat4 scaleMat(Mat4::identity);
@@ -415,9 +385,7 @@ void kbGameEntity::CalculateWorldMatrix(Mat4& inOutMatrix) const {
 	inOutMatrix[3].w = 1.0f;
 }
 
-/**
- *	kbGameEntity::GetWorldBounds
- */
+/// kbGameEntity::GetWorldBounds
 kbBounds kbGameEntity::GetWorldBounds() const {
 	kbBounds returnBounds = m_Bounds;
 	returnBounds.Scale(GetScale());
@@ -425,9 +393,7 @@ kbBounds kbGameEntity::GetWorldBounds() const {
 	return returnBounds;
 }
 
-/**
- *	kbGameEntity::GetOrientation
- */
+/// kbGameEntity::GetOrientation
 const Quat4 kbGameEntity::GetOrientation() const {
 	if (m_pOwnerEntity != nullptr) {
 		// This entity's orientation is in model space while the parent's is in world
@@ -437,9 +403,7 @@ const Quat4 kbGameEntity::GetOrientation() const {
 	return m_pTransformComponent->GetOrientation();
 }
 
-/**
- *	kbGameEntity::GetPosition
- */
+/// kbGameEntity::GetPosition
 const Vec3 kbGameEntity::GetPosition() const {
 	if (m_pOwnerEntity != nullptr) {
 		const Quat4 entityOrientation = GetOrientation();
@@ -450,9 +414,7 @@ const Vec3 kbGameEntity::GetPosition() const {
 	return m_pTransformComponent->GetPosition();
 }
 
-/**
- *	kbGameEntity::GetComponentByType
- */
+/// kbGameEntity::GetComponentByType
 kbComponent* kbGameEntity::GetComponentByType(const void* const pTypeInfoClass) const {
 	if (pTypeInfoClass == nullptr) {
 		return nullptr;

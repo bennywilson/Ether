@@ -55,9 +55,7 @@ struct PS_OUTPUT {
 	float2 Depth		: SV_TARGET1;
 };
 
-/**
- *	vertexShader
- */
+/// vertexShader
 pixelInput vertexShader( vertexInput input ) {
 	pixelInput output = (pixelInput)(0);
 	input.position.y -= 0.2f;
@@ -97,9 +95,7 @@ pixelInput vertexShader( vertexInput input ) {
 Texture2D diffuseTexture;
 SamplerState LinearSampler;
 
-/**
- *	pixelShader
- */
+/// pixelShader
 PS_OUTPUT pixelShader( pixelInput	input ) {
  	PS_OUTPUT output = (PS_OUTPUT) 0;
 

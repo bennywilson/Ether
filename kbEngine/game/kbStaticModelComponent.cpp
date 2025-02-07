@@ -10,22 +10,16 @@
 
 KB_DEFINE_COMPONENT(kbStaticModelComponent)
 
-/**
- *	kbStaticModelComponent
- */
+/// kbStaticModelComponent
 void kbStaticModelComponent::Constructor() {
 	m_pModel = nullptr;
 }
 
-/**
- *	~kbStaticModelComponent
- */
+/// ~kbStaticModelComponent
 kbStaticModelComponent::~kbStaticModelComponent() {
 }
 
-/**
- *	kbStaticModelComponent::EditorChange
- */
+/// kbStaticModelComponent::EditorChange
 void kbStaticModelComponent::EditorChange( const std::string & propertyName ) {
 	Super::EditorChange( propertyName );
 
@@ -35,9 +29,7 @@ void kbStaticModelComponent::EditorChange( const std::string & propertyName ) {
 	}
 }
 
-/**
- *	kbStaticModelComponent::SetEnable_Internal
- */
+/// kbStaticModelComponent::SetEnable_Internal
 void kbStaticModelComponent::SetEnable_Internal( const bool isEnabled ) {
 	
 	Super::SetEnable_Internal( isEnabled );
@@ -68,9 +60,7 @@ void kbStaticModelComponent::SetEnable_Internal( const bool isEnabled ) {
 	}
 }
 
-/**
- *	kbStaticModelComponent:Update_Internal
- */
+/// kbStaticModelComponent:Update_Internal
 void kbStaticModelComponent::Update_Internal( const float DeltaTime ) {
 
 	Super::Update_Internal( DeltaTime );

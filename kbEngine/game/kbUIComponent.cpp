@@ -16,9 +16,7 @@ kbGameEntity& GetUIGameEntity() {
 	return m_GameEnt;
 }
 
-/**
- *	kbUIComponent::Constructor
- */
+/// kbUIComponent::Constructor
 void kbUIComponent::Constructor() {
 	m_AuthoredWidth = 128;
 	m_AuthoredHeight = 128;
@@ -29,9 +27,7 @@ void kbUIComponent::Constructor() {
 	m_pStaticModelComponent = nullptr;
 }
 
-/**
- *	kbUIComponent::~kbUIComponent
- */
+/// kbUIComponent::~kbUIComponent
 kbUIComponent::~kbUIComponent() {
 	m_AuthoredWidth = 128;
 	m_AuthoredHeight = 128;
@@ -39,41 +35,31 @@ kbUIComponent::~kbUIComponent() {
 	m_UIToScreenSizeRatio.set(0.1f, 0.0f, 0.0f);
 }
 
-/**
- *	kbUIComponent::RegisterEventListener
- */
+/// kbUIComponent::RegisterEventListener
 void kbUIComponent::RegisterEventListener(IUIWidgetListener* const pListener) {
 	m_EventListeners.push_back(pListener);
 }
 
-/**
- *	kbUIComponent::UnregisterEventListener
- */
+/// kbUIComponent::UnregisterEventListener
 void kbUIComponent::UnregisterEventListener(IUIWidgetListener* const pListener) {
 	blk::std_remove_swap(m_EventListeners, pListener);
 }
 
-/**
- *	kbUIComponent::SetMaterialParamVector
- */
+/// kbUIComponent::SetMaterialParamVector
 void kbUIComponent::SetMaterialParamVector(const std::string& paramName, const Vec4& paramValue) {
 	blk::error_check(m_pStaticModelComponent != nullptr, "bUIComponent::SetMaterialParamVector() - m_pStaticModelComponent is NULL");
 
 	m_pStaticModelComponent->SetMaterialParamVector(0, paramName, paramValue);
 }
 
-/**
- *	kbUIComponent::SetMaterialParamTexture
- */
+/// kbUIComponent::SetMaterialParamTexture
 void kbUIComponent::SetMaterialParamTexture(const std::string& paramName, kbTexture* const pTexture) {
 	blk::error_check(m_pStaticModelComponent != nullptr, "bUIComponent::SetMaterialParamTexture() - m_pStaticModelComponent is NULL");
 
 	m_pStaticModelComponent->SetMaterialParamTexture(0, paramName, pTexture);
 }
 
-/**
- *	kbUIComponent::FireEvent
- */
+/// kbUIComponent::FireEvent
 void kbUIComponent::FireEvent(const kbInput_t* const pInput) {
 
 	for (int i = 0; i < m_EventListeners.size(); i++) {
@@ -81,18 +67,14 @@ void kbUIComponent::FireEvent(const kbInput_t* const pInput) {
 	}
 }
 
-/**
- *	kbUIComponent::EditorChange
- */
+/// kbUIComponent::EditorChange
 void kbUIComponent::EditorChange(const std::string& propertyName) {
 	Super::EditorChange(propertyName);
 	FindStaticModelComponent();
 	RefreshMaterial();
 }
 
-/**
- *	kbUIComponent::SetEnable_Internal
- */
+/// kbUIComponent::SetEnable_Internal
 void kbUIComponent::SetEnable_Internal(const bool bEnable) {
 	Super::SetEnable_Internal(bEnable);
 
@@ -116,16 +98,12 @@ void kbUIComponent::SetEnable_Internal(const bool bEnable) {
 	}
 }
 
-/**
- *	kbUIComponent:FindStaticModelComponent
- */
+/// kbUIComponent:FindStaticModelComponent
 void kbUIComponent::FindStaticModelComponent() {
 	m_pStaticModelComponent = GetOwner()->GetComponent<kbStaticModelComponent>();
 }
 
-/**
- *	kbUIComponent:RefreshMaterial
- */
+/// kbUIComponent:RefreshMaterial
 
 void kbUIComponent::RefreshMaterial() {
 
@@ -156,9 +134,7 @@ void kbUIComponent::RefreshMaterial() {
 }
 
 
-/**
- *	kbUIWidgetComponent::Constructor
- */
+/// kbUIWidgetComponent::Constructor
 void kbUIWidgetComponent::Constructor() {
 
 	m_StartingPosition.set(0.0f, 0.0f, 0.0f);
@@ -188,18 +164,14 @@ void kbUIWidgetComponent::UnregisterEventListener(IUIWidgetListener* const pList
 	blk::std_remove_swap(m_EventListeners, pListener);
 }
 
-/**
- *	kbUIWidgetComponent::SetAdditiveTextureFactor
- */
+/// kbUIWidgetComponent::SetAdditiveTextureFactor
 void kbUIWidgetComponent::SetAdditiveTextureFactor(const float factor) {
 
 	static const kbString additiveTextureParams("additiveTextureParams");
 	m_pModel->SetMaterialParamVector(0, additiveTextureParams.stl_str(), Vec4(factor, 0.0f, 0.0f, 0.0f));
 }
 
-/**
- *	kbUIWidgetComponent::FireEvent
- */
+/// kbUIWidgetComponent::FireEvent
 void kbUIWidgetComponent::FireEvent(const kbInput_t* const pInput) {
 
 	for (int i = 0; i < m_EventListeners.size(); i++) {
@@ -207,32 +179,24 @@ void kbUIWidgetComponent::FireEvent(const kbInput_t* const pInput) {
 	}
 }
 
-/**
- *	kbUIWidgetComponent::EditorChange
- */
+/// kbUIWidgetComponent::EditorChange
 void kbUIWidgetComponent::EditorChange(const std::string& propertyName) {
 
 	Super::EditorChange(propertyName);
 
 }
 
-/**
- *	kbUIWidgetComponent::InputCB
- */
+/// kbUIWidgetComponent::InputCB
 void kbUIWidgetComponent::InputCB(const kbInput_t& input) {
 
 }
 
-/**
- *	kbUIComponent::SetFocus
- */
+/// kbUIComponent::SetFocus
 void kbUIWidgetComponent::SetFocus(const bool bHasFocus) {
 	m_bHasFocus = bHasFocus;
 }
 
-/**
- *	kbUIWidgetComponent::SetRelativePosition
- */
+/// kbUIWidgetComponent::SetRelativePosition
 void kbUIWidgetComponent::SetRelativePosition(const Vec3& newPos) {
 	m_RelativePosition = newPos;
 	m_AbsolutePosition = m_CachedParentPosition + m_CachedParentSize * m_RelativePosition;
@@ -242,9 +206,7 @@ void kbUIWidgetComponent::SetRelativePosition(const Vec3& newPos) {
 	}
 }
 
-/**
- *	kbUIWidgetComponent::SetRelativeSize
- */
+/// kbUIWidgetComponent::SetRelativeSize
 void kbUIWidgetComponent::SetRelativeSize(const Vec3& newSize) {
 
 	m_RelativeSize = newSize;
@@ -255,9 +217,7 @@ void kbUIWidgetComponent::SetRelativeSize(const Vec3& newSize) {
 	}
 }
 
-/**
- *	kbUIWidgetComponent::RecalculateOld
- */
+/// kbUIWidgetComponent::RecalculateOld
 void kbUIWidgetComponent::RecalculateOld(const kbUIComponent* const pParent, const bool bFull) {
 	blk::error_check(pParent != nullptr, "kbUIWidgetComponent::UpdateFromParent() - null parent");
 
@@ -279,9 +239,7 @@ void kbUIWidgetComponent::RecalculateOld(const kbUIComponent* const pParent, con
 	}
 }
 
-/**
- *	kbUIWidgetComponent::Recalculate
- */
+/// kbUIWidgetComponent::Recalculate
 void kbUIWidgetComponent::Recalculate(const kbUIWidgetComponent* const pParent, const bool bFull) {
 
 	if (pParent != nullptr) {
@@ -302,9 +260,7 @@ void kbUIWidgetComponent::Recalculate(const kbUIWidgetComponent* const pParent, 
 	}
 }
 
-/**
- *	kbUIWidgetComponent::SetRenderOrderBias
- */
+/// kbUIWidgetComponent::SetRenderOrderBias
 void kbUIWidgetComponent::SetRenderOrderBias(const float bias) {
 
 	if (m_pModel != nullptr) {
@@ -312,9 +268,7 @@ void kbUIWidgetComponent::SetRenderOrderBias(const float bias) {
 	}
 }
 
-/**
- *	kbUIWidgetComponent::GetRenderOrderBias
- */
+/// kbUIWidgetComponent::GetRenderOrderBias
 float kbUIWidgetComponent::GetRenderOrderBias() const {
 
 	if (m_pModel == nullptr) {
@@ -324,9 +278,7 @@ float kbUIWidgetComponent::GetRenderOrderBias() const {
 	return m_pModel->GetRenderOrderBias();
 }
 
-/**
- *	kbUIWidgetComponent::GetBaseTextureDimensions
- */
+/// kbUIWidgetComponent::GetBaseTextureDimensions
 Vec2i	kbUIWidgetComponent::GetBaseTextureDimensions() const {
 
 	Vec2i retDim(-1, -1);
@@ -344,9 +296,7 @@ Vec2i	kbUIWidgetComponent::GetBaseTextureDimensions() const {
 	return retDim;
 }
 
-/**
- *	kbUIWidgetComponent::SetEnable_Internal
- */
+/// kbUIWidgetComponent::SetEnable_Internal
 void kbUIWidgetComponent::SetEnable_Internal(const bool bEnable) {
 
 	Super::SetEnable_Internal(bEnable);
@@ -404,9 +354,7 @@ void kbUIWidgetComponent::SetEnable_Internal(const bool bEnable) {
 	}
 }
 
-/**
- *	kbUIWidgetComponent::Update_Internal
- */
+/// kbUIWidgetComponent::Update_Internal
 void kbUIWidgetComponent::Update_Internal(const float dt) {
 
 	Super::Update_Internal(dt);
@@ -473,17 +421,13 @@ void kbUISlider::Constructor() {
 	m_CalculatedSliderBoundsMax.set(1.0f, 1.0f, 1.0f);
 }
 
-/**
- *	kbUISlider::SetEnable_Internal
- */
+/// kbUISlider::SetEnable_Internal
 void kbUISlider::SetEnable_Internal(const bool bEnable) {
 
 	Super::SetEnable_Internal(bEnable);
 }
 
-/**
- *	kbUISlider::RecalculateOld
- */
+/// kbUISlider::RecalculateOld
 void kbUISlider::RecalculateOld(const kbUIComponent* const pParent, const bool bFull) {
 
 	blk::error_check(pParent != nullptr, "kbUIWidgetComponent::UpdateFromParent() - null parent");
@@ -537,9 +481,7 @@ void kbUISlider::RecalculateOld(const kbUIComponent* const pParent, const bool b
 	}
 }
 
-/**
- *	kbUISlider::Recalculate
- */
+/// kbUISlider::Recalculate
 void kbUISlider::Recalculate(const kbUIWidgetComponent* const pParent, const bool bFull) {
 
 	if (pParent == nullptr) {
@@ -594,9 +536,7 @@ void kbUISlider::Recalculate(const kbUIWidgetComponent* const pParent, const boo
 	}
 }
 
-/**
- *	kbUISlider::Update_Internal
- */
+/// kbUISlider::Update_Internal
 void kbUISlider::Update_Internal(const float dt) {
 
 	Super::Update_Internal(dt);
@@ -629,9 +569,7 @@ void kbUISlider::Update_Internal(const float dt) {
 }
 
 
-/**
- *	kbUISlider::GetNormalizedValue
- */
+/// kbUISlider::GetNormalizedValue
 float kbUISlider::GetNormalizedValue() {
 
 	if (m_ChildWidgets.size() < 2) {
@@ -643,9 +581,7 @@ float kbUISlider::GetNormalizedValue() {
 }
 
 
-/**
- *	kbUISlider::SetNormalizedValue
- */
+/// kbUISlider::SetNormalizedValue
 void kbUISlider::SetNormalizedValue(const float newValue) {
 
 	if (m_ChildWidgets.size() < 2) {

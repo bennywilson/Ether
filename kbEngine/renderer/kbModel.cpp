@@ -73,9 +73,7 @@ typedef struct {
 
 #pragma pack( pop, packing )
 
-/**
- *	kbModel::kbModel
- */
+/// kbModel::kbModel
 kbModel::kbModel() :
 	m_NumVertices(0),
 	m_NumTriangles(0),
@@ -87,16 +85,12 @@ kbModel::kbModel() :
 	m_bCPUAccessOnly(false) {
 }
 
-/**
- *	kbModel::~kbModel
- */
+/// kbModel::~kbModel
 kbModel::~kbModel() {
 	Release_Internal();
 }
 
-/**
- *	kbModel::Load_Internal
- */
+/// kbModel::Load_Internal
 bool kbModel::Load_Internal() {
 	const std::string fileExt = GetFileExtension(GetFullFileName());
 	if (fileExt == "ms3d") {
@@ -110,9 +104,7 @@ bool kbModel::Load_Internal() {
 	return false;
 }
 
-/**
- *	kbModel::LoadMS3D
- */
+/// kbModel::LoadMS3D
 bool kbModel::LoadMS3D() {
 	std::ifstream modelFile;
 	modelFile.open(m_FullFileName, std::ifstream::in | std::ifstream::binary);
@@ -460,9 +452,7 @@ bool kbModel::LoadMS3D() {
 	return true;
 }
 
-/**
- *	kbModel::LoadFBX
- */
+/// kbModel::LoadFBX
 FbxManager* g_pFBXSDKManager = nullptr;
 
 FbxAMatrix GetGeometryTransformation(FbxNode const* inNode) {
@@ -740,9 +730,7 @@ bool kbModel::LoadFBX() {
 	return true;
 }
 
-/**
- *	kbModel::LoadDiablo3
- */
+/// kbModel::LoadDiablo3
 bool kbModel::LoadDiablo3() {
 
 	struct FileReader {
@@ -872,9 +860,7 @@ bool kbModel::LoadDiablo3() {
 	return true;
 }
 
-/**
- *	kbModel::CreateDynamicModel
- */
+/// kbModel::CreateDynamicModel
 void kbModel::CreateDynamicModel(const UINT numVertices, const UINT numIndices, kbShader* const pShaderToUse, kbTexture* const pTextureToUse, const UINT vertexSizeInBytes) {
 
 	if (m_NumVertices > 0 || m_Meshes.size() > 0 || m_Materials.size() > 0 || m_VertexBuffer.GetBufferPtr() != nullptr || m_IndexBuffer.GetBufferPtr() != nullptr) {
@@ -905,9 +891,7 @@ void kbModel::CreateDynamicModel(const UINT numVertices, const UINT numIndices, 
 	m_Materials.push_back(newMaterial);
 }
 
-/**
- *	kbModel::CreatePointCloud
- */
+/// kbModel::CreatePointCloud
 void kbModel::CreatePointCloud(const UINT numVertices, const std::string& shaderToUse, const ECullMode cullingMode, const UINT vertexSizeInBytes) {
 	if (m_NumVertices > 0 || m_Meshes.size() > 0 || m_Materials.size() > 0 || m_VertexBuffer.GetBufferPtr() != nullptr || m_IndexBuffer.GetBufferPtr() != nullptr) {
 		Release_Internal();
@@ -937,9 +921,7 @@ void kbModel::CreatePointCloud(const UINT numVertices, const std::string& shader
 	m_Materials.push_back(newMaterial);
 }
 
-/**
- *	kbModel::MapVertexBuffer
- */
+/// kbModel::MapVertexBuffer
 void* kbModel::MapVertexBuffer() {
 
 	blk::error_check(m_bVBIsMapped == false, "kbModel::MapVertexBuffer() - Vertex buffer already mapped");
@@ -948,9 +930,7 @@ void* kbModel::MapVertexBuffer() {
 	return m_VertexBuffer.Map();
 }
 
-/**
- *	kbModel::UnmapVertexBuffer
- */
+/// kbModel::UnmapVertexBuffer
 void kbModel::UnmapVertexBuffer(const INT NumIndices) {
 
 	if (m_bVBIsMapped == false) {
@@ -975,9 +955,7 @@ void kbModel::UnmapVertexBuffer(const INT NumIndices) {
 	m_VertexBuffer.Unmap();
 }
 
-/**
- *	kbModel::MapIndexBuffer
- */
+/// kbModel::MapIndexBuffer
 void* kbModel::MapIndexBuffer() {
 	blk::error_check(m_bIBIsMapped == false, "kbModel::MapIndexBuffer() - Index buffer is already mapped.");
 	blk::error_check(m_bIsDynamicModel == true, "kbModel::MapIndexBuffer() - Not a dynamic model.");
@@ -987,9 +965,7 @@ void* kbModel::MapIndexBuffer() {
 	return m_IndexBuffer.Map();
 }
 
-/**
- *	kbModel::UnmapIndexBuffer
- */
+/// kbModel::UnmapIndexBuffer
 void kbModel::UnmapIndexBuffer() {
 	blk::error_check(m_bIBIsMapped == true, "kbModel::UnmapIndexBuffer() - Index buffer was not mapped.");
 	blk::error_check(m_bIsDynamicModel == true, "kbModel::UnmapIndexBuffer() - Not a dynamic model.");
@@ -1000,9 +976,7 @@ void kbModel::UnmapIndexBuffer() {
 	m_IndexBuffer.Unmap();
 }
 
-/**
- *	kbMode::SwapTexture
- */
+/// kbMode::SwapTexture
 void kbModel::SwapTexture(const UINT meshIdx, const kbTexture* pTexture, const int textureIdx) {
 
 	if (meshIdx < 0 || meshIdx >= m_Materials.size()) {
@@ -1021,9 +995,7 @@ void kbModel::SwapTexture(const UINT meshIdx, const kbTexture* pTexture, const i
 	}
 }
 
-/**
- *	kbModel::RayIntersection
- */
+/// kbModel::RayIntersection
 kbModelIntersection_t kbModel::RayIntersection(const Vec3& inRayOrigin, const Vec3& inRayDirection, const Vec3& modelTranslation, const Quat4& modelOrientation, const Vec3& scale) const {
 	kbModelIntersection_t intersectionInfo;
 
@@ -1061,9 +1033,7 @@ kbModelIntersection_t kbModel::RayIntersection(const Vec3& inRayOrigin, const Ve
 	return intersectionInfo;
 }
 
-/**
- *	kbModel::Release_Internal
- */
+/// kbModel::Release_Internal
 void kbModel::Release_Internal() {
 	m_VertexBuffer.Release();
 	m_IndexBuffer.Release();
@@ -1080,9 +1050,7 @@ void kbModel::Release_Internal() {
 	m_Bounds.Reset();
 }
 
-/**
- *	kbModel::GetBoneIndex
- */
+/// kbModel::GetBoneIndex
 int	kbModel::GetBoneIndex(const kbString& BoneName) const {
 	for (int i = 0; i < m_Bones.size(); i++) {
 		if (m_Bones[i].m_Name == BoneName) {
@@ -1093,9 +1061,7 @@ int	kbModel::GetBoneIndex(const kbString& BoneName) const {
 	return -1;
 }
 
-/**
- *	kbModel::SetBoneMatrices
- */
+/// kbModel::SetBoneMatrices
 void kbModel::SetBoneMatrices(std::vector<AnimatedBone_t>& bones, const float time, const kbAnimation* const pAnimation, const bool bIsLooping) {
 	if (m_Bones.size() == 0) {
 		return;
@@ -1161,9 +1127,7 @@ void kbModel::SetBoneMatrices(std::vector<AnimatedBone_t>& bones, const float ti
 	}
 }
 
-/**
- *	kbModel::Animate
- */
+/// kbModel::Animate
 void kbModel::Animate(std::vector<kbBoneMatrix_t>& outMatrices, const float time, const kbAnimation* const pAnimation, const bool bLoopAnim) {
 	std::vector<AnimatedBone_t> tempBones;
 	//	SetBoneMatrices( tempBones, time, pAnimation, bLoopAnim );
@@ -1187,9 +1151,7 @@ void kbModel::Animate(std::vector<kbBoneMatrix_t>& outMatrices, const float time
 		}*/
 }
 
-/**
- *	kbModel::BlendAnimations
- */
+/// kbModel::BlendAnimations
 void kbModel::BlendAnimations(std::vector<kbBoneMatrix_t>& outMatrices, const kbAnimation* const pFromAnim, const float FromAnimTime, const bool bFromAnimLoops, const kbAnimation* const pToAnim, const float ToAnimTime, const bool bToAnimLoops, const float normalizedBlendTime) {
 
 	std::vector<AnimatedBone_t> fromTempBones;
@@ -1220,16 +1182,12 @@ void kbModel::BlendAnimations(std::vector<kbBoneMatrix_t>& outMatrices, const kb
 	}
 }
 
-/**
- *	kbAnimation::kbAnimation
- */
+/// kbAnimation::kbAnimation
 kbAnimation::kbAnimation() :
 	m_LengthInSeconds(0) {
 }
 
-/**
- *	kbAnimation::Load_Internal
- */
+/// kbAnimation::Load_Internal
 bool kbAnimation::Load_Internal() {
 
 	std::ifstream modelFile;
