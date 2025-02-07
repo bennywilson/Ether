@@ -98,6 +98,45 @@ namespace blk {
 		kbString::ShutDown();
 	}
 
+	/// warn
+	void warn(const char* const msg, ...) {
+		messageType = Message_Warning;
+
+		va_list args;
+		va_start(args, msg);
+		write_to_file(msg, args);
+		va_end(args);
+	}
+
+	/// warn_check
+	bool warn_check(const bool expression, char* const msg, ...) {
+		if (expression == true) {
+			return true;
+		}
+
+		messageType = Message_Warning;
+		va_list args;
+		va_start(args, msg);
+		if (msg != nullptr) {
+			write_to_file(msg, args);
+		} else {
+			write_to_file("Warning - No msg supplied", args);
+		}
+		va_end(args);
+
+		return false;
+	}
+
+	/// warn_check
+	bool warn_check(const HRESULT hr, char* const msg, ...) {
+		va_list args;
+		va_start(args, msg);
+		const bool ret = warn_check(!FAILED(hr), msg, args);
+		va_end(args);
+
+		return ret;
+	}
+
 	/// error
 	void error(const char* const msg, ...) {
 		messageType = Message_Error;
@@ -111,43 +150,35 @@ namespace blk {
 		throw finalBuffer;
 	}
 
-	/// warning
-	void warning(const char* const msg, ...) {
-		messageType = Message_Warning;
-
-		va_list args;
-		va_start(args, msg);
-		write_to_file(msg, args);
-		va_end(args);
-	}
-
-	/// warning_check
-	void warning_check(const bool expression, const char* const msg, ...) {
-		if (expression == true) {
-			return;
-		}
-
-		messageType = Message_Warning;
-		va_list args;
-		va_start(args, msg);
-		write_to_file(msg, args);
-		va_end(args);
-	}
-
 	/// error_check
-	void error_check(const bool expression, const char* const msg, ...) {
+	bool error_check(const bool expression, const char* const msg, ...) {
 		if (expression == true) {
-			return;
+			return true;
 		}
 
 		va_list args;
 		va_start(args, msg);
-		write_to_file(msg, args);
+		if (msg != nullptr) {
+			write_to_file(msg, args);
+		} else {
+			write_to_file("Error - No msg supplied", args);
+		}
 		va_end(args);
 
 		DebugBreak();
-
 		throw finalBuffer;
+
+		return false;
+	}
+
+	/// error_check
+	bool error_check(const HRESULT hr, const char* const msg, ...) {
+		va_list args;
+		va_start(args, msg);
+		const bool ret = error_check(!FAILED(hr), msg, args);
+		va_end(args);
+
+		return ret;
 	}
 
 	/// log
@@ -161,11 +192,9 @@ namespace blk {
 	}
 }
 
-/**
- *  kbfrand
- */
+/// kbfrand
 float kbfrand() {
-	return (rand() % 10000) / 10000.0f;
+	return (rand() % 1000000000) / 1000000000.f;
 }
 
 /**
@@ -284,36 +313,19 @@ DECLARE_SCOPED_TIMER(TEMP_8, "Temp 8")
 DECLARE_SCOPED_TIMER(TEMP_9, "Temp 9")
 DECLARE_SCOPED_TIMER(TEMP_10, "Temp 10")
 
-
-
-
-
-
-
-
-
-
-
-
-/**
- *	kbScopedTimer::kbScopedTimer
- */
+/// kbScopedTimer::kbScopedTimer
 kbScopedTimer::kbScopedTimer(ScopedTimerList_t index) :
 	m_TimerIndex(index) {
 }
 
-/**
- *	~kbScopedTimer::kbScopedTimer
- */
+/// kbScopedTimer::~kbScopedTimer
 kbScopedTimer::~kbScopedTimer() {
 
 	kbScopedTimerData_t* const timerData = g_ScopedTimerMap[m_TimerIndex];
 	timerData->m_FrameTimes[timerData->m_FrameTimeIdx] += m_Timer.TimeElapsedMS();
 }
 
-/**
- *	UpdateScopedTimers
- */
+/// kbScopedTimer::UpdateScopedTimers
 void UpdateScopedTimers() {
 
 	for (int i = 0; i < MAX_NUM_SCOPED_TIMERS; i++) {
@@ -331,9 +343,7 @@ void UpdateScopedTimers() {
 	}
 }
 
-/**
- *	GetScopedTimerData
- */
+/// kbScopedTimer::GetScopedTimerData
 const kbScopedTimerData_t& GetScopedTimerData(const ScopedTimerList_t index) {
 	return *g_ScopedTimerMap[index];
 }

@@ -4,6 +4,7 @@
 
 #pragma once
 
+#include <array>
 #include <mmsystem.h>
 #include <mmreg.h>
 #include <XAudio2.h>
@@ -64,12 +65,15 @@ private:
 
 	static const int MAX_VOICES = 32;
 	struct kbVoiceData_t {
-		kbVoiceData_t() : m_pVoice(nullptr), m_bInUse(false) { }
+		kbVoiceData_t() :
+			m_pVoice(nullptr),
+			m_bInUse(false) {}
 
 		IXAudio2SourceVoice* m_pVoice;
 		bool m_bInUse;
-	} m_Voices[MAX_VOICES];
+	};
+	std::array<kbVoiceData_t, MAX_VOICES> m_Voices;
 
-	float m_MasterVolume = 1.0f;
+	float m_MasterVolume;
 	bool m_bInitialized;
 };

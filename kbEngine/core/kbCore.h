@@ -75,15 +75,19 @@ namespace blk {
 	void shutdown_engine();
 
 	void log(const char* const msg, ...);
+
 	void error(const char* const msg, ...);
-	void warning(const char* const msg, ...);
-	void warning_check(const bool expression, const char* const msg, ...);
-	void error_check(const bool expression, const char* const msg, ...);
+	bool error_check(const bool expression, const char* const msg, ...);
+	bool error_check(const HRESULT hr, char* const msg = nullptr, ...);
+
+	void warn(const char* const msg, ...);
+	bool warn_check(const bool expression, const char* const msg, ...);
+	bool warn_check(const HRESULT hr, char* const msg = nullptr, ...);
 };
 
-#define kbAssert( expression, msg, ... ) \
-	if ( expression == true ) return; \
-	kbAssert_Impl( msg, __VA_ARGS__ ); \
+#define kbAssert(expression, msg, ...) \
+	if (expression == true) return; \
+	kbAssert_Impl(msg, __VA_ARGS__); \
 	DebugBreak();
 
 // helper functions

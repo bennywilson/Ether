@@ -25,12 +25,12 @@ public:
 
 protected:
 	///  todo: remove
-	virtual bool Load_Internal() { blk::warning("Make pure virtual"); return false; }
+	virtual bool Load_Internal() { blk::warn("Make pure virtual"); return false; }
 	virtual void Release_Internal() {}
 
 	// todo: make pure virtual
-	virtual bool load_internal() { blk::warning("Make pure virtual"); return false; }
-	virtual void release_internal() { blk::warning("Make pure virtual"); }
+	virtual bool load_internal() { blk::warn("Make pure virtual"); return false; }
+	virtual void release_internal() { blk::warn("Make pure virtual"); }
 
 	std::string	m_Name;
 	std::string	m_FullFileName;

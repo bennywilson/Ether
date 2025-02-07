@@ -216,7 +216,7 @@ kbResource* kbResourceManager::GetResource(const kbString& fullFileName, const b
 	}
 
 	if (fullFileName.GetLength() < 5) {
-		blk::warning("kbResourceManager::AddResource() - Invalid file name %s", fullFileName.c_str());
+		blk::warn("kbResourceManager::AddResource() - Invalid file name %s", fullFileName.c_str());
 		return nullptr;
 	}
 
@@ -288,7 +288,7 @@ kbResource* kbResourceManager::AsyncLoadResource(const kbString& stringName) {
 		return nullptr;
 	}
 
-	blk::warning("kbResourceManager::AsyncLoadResource() - Failed to kick off a job for %s", stringName.c_str());
+	blk::warn("kbResourceManager::AsyncLoadResource() - Failed to kick off a job for %s", stringName.c_str());
 	return nullptr;
 }
 

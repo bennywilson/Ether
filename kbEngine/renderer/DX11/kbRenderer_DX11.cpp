@@ -2565,7 +2565,7 @@ void kbRenderer_DX11::ReadShaderFile(std::string& shaderText, kbShaderVarBinding
 				textureBinding.m_pDefaultRenderTexture = m_pRenderTargets[ACCUMULATION_BUFFER_1];
 				textureBinding.m_bIsUserDefinedVar = false;
 			} else {
-				blk::warning("Default texture %s not found", defaultTexture.c_str());
+				blk::warn("Default texture %s not found", defaultTexture.c_str());
 			}
 		} else {
 			textureBinding.m_bIsUserDefinedVar = true;
@@ -2660,7 +2660,7 @@ void kbRenderer_DX11::CreateShaderFromText(const std::string& fileName, const st
 	} while (FAILED(hr) && numTries < 4);
 
 	if (FAILED(hr)) {
-		blk::warning("kbRenderer_DX11::LoadShader() - Failed to load vertex shader : %s\n%s", fileName.c_str(), (localBlobs.errorMessage != nullptr) ? (localBlobs.errorMessage->GetBufferPointer()) : ("No error message given"));
+		blk::warn("kbRenderer_DX11::LoadShader() - Failed to load vertex shader : %s\n%s", fileName.c_str(), (localBlobs.errorMessage != nullptr) ? (localBlobs.errorMessage->GetBufferPointer()) : ("No error message given"));
 		return;
 	}
 	SAFE_RELEASE(localBlobs.errorMessage);
@@ -2683,12 +2683,12 @@ void kbRenderer_DX11::CreateShaderFromText(const std::string& fileName, const st
 		if (SUCCEEDED(hr)) {
 			hr = m_pD3DDevice->CreateGeometryShader(localBlobs.geometryShaderBuffer->GetBufferPointer(), localBlobs.geometryShaderBuffer->GetBufferSize(), nullptr, &geometryShader);
 			if (FAILED(hr)) {
-				blk::warning("kbRenderer_DX11::LoadShader() - Failed to create geometry shader %s", fileName.c_str());
+				blk::warn("kbRenderer_DX11::LoadShader() - Failed to create geometry shader %s", fileName.c_str());
 				SAFE_RELEASE(vertexShader);
 				return;
 			}
 		} else {
-			blk::warning("kbRenderer_DX11::LoadShader() - Failed to load geometry shader : %s\n%s", fileName.c_str(), (localBlobs.errorMessage != nullptr) ? (localBlobs.errorMessage->GetBufferPointer()) : ("No error message given"));
+			blk::warn("kbRenderer_DX11::LoadShader() - Failed to load geometry shader : %s\n%s", fileName.c_str(), (localBlobs.errorMessage != nullptr) ? (localBlobs.errorMessage->GetBufferPointer()) : ("No error message given"));
 		}
 	}
 	SAFE_RELEASE(localBlobs.errorMessage);
@@ -2707,7 +2707,7 @@ void kbRenderer_DX11::CreateShaderFromText(const std::string& fileName, const st
 	} while (FAILED(hr) && numTries < 4);
 
 	if (FAILED(hr)) {
-		blk::warning("kbRenderer_DX11::LoadShader() - Failed to load pixel shader : %s\n%s", fileName.c_str(), (localBlobs.errorMessage != nullptr) ? localBlobs.errorMessage->GetBufferPointer() : ("No error message given "));
+		blk::warn("kbRenderer_DX11::LoadShader() - Failed to load pixel shader : %s\n%s", fileName.c_str(), (localBlobs.errorMessage != nullptr) ? localBlobs.errorMessage->GetBufferPointer() : ("No error message given "));
 		return;
 	}
 
@@ -2715,13 +2715,13 @@ void kbRenderer_DX11::CreateShaderFromText(const std::string& fileName, const st
 
 	hr = m_pD3DDevice->CreateVertexShader(localBlobs.vertexShaderBuffer->GetBufferPointer(), localBlobs.vertexShaderBuffer->GetBufferSize(), nullptr, &vertexShader);
 	if (FAILED(hr)) {
-		blk::warning("kbRenderer_DX11::LoadShader() - Failed to create vertex shader %s", fileName.c_str());
+		blk::warn("kbRenderer_DX11::LoadShader() - Failed to create vertex shader %s", fileName.c_str());
 		return;
 	}
 
 	hr = m_pD3DDevice->CreatePixelShader(localBlobs.pixelShaderBuffer->GetBufferPointer(), localBlobs.pixelShaderBuffer->GetBufferSize(), nullptr, &pixelShader);
 	if (FAILED(hr)) {
-		blk::warning("kbRenderer_DX11::LoadShader() - Failed to create pixel shader %s", fileName.c_str());
+		blk::warn("kbRenderer_DX11::LoadShader() - Failed to create pixel shader %s", fileName.c_str());
 		SAFE_RELEASE(vertexShader);
 		return;
 	}
@@ -2893,7 +2893,7 @@ void kbRenderer_DX11::CreateShaderFromText(const std::string& fileName, const st
 
 	hr = m_pD3DDevice->CreateInputLayout(&polygonLayout[0], (UINT)polygonLayout.size(), localBlobs.vertexShaderBuffer->GetBufferPointer(), localBlobs.vertexShaderBuffer->GetBufferSize(), &vertexLayout);
 	if (FAILED(hr)) {
-		blk::warning("kbRenderer_DX11::LoadShader() - Failed to create input layout for %s", fileName.c_str());
+		blk::warn("kbRenderer_DX11::LoadShader() - Failed to create input layout for %s", fileName.c_str());
 
 		SAFE_RELEASE(vertexShader)
 			SAFE_RELEASE(pixelShader);
@@ -2995,7 +2995,7 @@ void kbRenderer_DX11::RenderMesh(const kbRenderSubmesh* const pRenderMesh, const
 	const kbModel::mesh_t& pMesh = pModel->GetMeshes()[pRenderMesh->GetMeshIdx()];
 
 	if (pModel->IsPointCloud() == false && pMesh.m_NumTriangles == 0) {
-		//blk::warning( "kbRenderer_DX11::RenderMesh() - Mesh %s has 0 triangles", pModel->GetFullName().c_str() );
+		//blk::warn( "kbRenderer_DX11::RenderMesh() - Mesh %s has 0 triangles", pModel->GetFullName().c_str() );
 		return;
 	}
 

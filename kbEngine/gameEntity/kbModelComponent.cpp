@@ -105,7 +105,7 @@ void kbModelComponent::RefreshMaterials( const bool bRefreshRenderObject ) {
  */
 void kbModelComponent::SetMaterialParamVector( const int idx, const std::string & paramName, const Vec4& paramValue ) {
 	if ( idx < 0 || idx > 32 || idx >= m_MaterialList.size() ) {
-		blk::warning( "kbModelComponent::SetMaterialParamVector() called on invalid index" );
+		blk::warn( "kbModelComponent::SetMaterialParamVector() called on invalid index" );
 		return;
 	}
 
@@ -122,7 +122,7 @@ void kbModelComponent::SetMaterialParamVector( const int idx, const std::string 
  */
 void kbModelComponent::SetMaterialParamTexture( const int idx, const std::string & paramName, kbTexture *const pTexture ) {
 	if ( idx < 0 || idx > 32 || idx >= m_MaterialList.size() ) {
-		blk::warning( "kbModelComponent::SetMaterialParamVector() called on invalid index" );
+		blk::warn( "kbModelComponent::SetMaterialParamVector() called on invalid index" );
 		return;
 	}
 
@@ -139,7 +139,7 @@ void kbModelComponent::SetMaterialParamTexture( const int idx, const std::string
  */
 void kbModelComponent::SetMaterialParamTexture( const int idx, const std::string & paramName, kbRenderTexture *const pRenderTexture ) {
 	if ( idx < 0 || idx > 32 || idx >= m_MaterialList.size() ) {
-		blk::warning( "kbModelComponent::SetMaterialParamVector() called on invalid index" );
+		blk::warn( "kbModelComponent::SetMaterialParamVector() called on invalid index" );
 		return;
 	}
 	kbShaderParamComponent newParam;
@@ -159,7 +159,7 @@ void kbModelComponent::SetMaterialParamTexture( const int idx, const std::string
  */
 const kbShaderParamComponent * kbModelComponent::GetShaderParamComponent( const int idx, const kbString & name ) {
 	if ( idx < 0 || idx > 32 || idx >= m_MaterialList.size() ) {
-		blk::warning( "kbModelComponent::SetMaterialParamVector() called on invalid index" );
+		blk::warn( "kbModelComponent::SetMaterialParamVector() called on invalid index" );
 		return nullptr;
 	}
 
@@ -251,7 +251,7 @@ void kbMaterialComponent::EditorChange( const std::string & propertyName ) {
 		kbModelComponent *const pModelComp = (kbModelComponent*) GetOwningComponent();
 		pModelComp->RefreshMaterials( true );
 	} else {
-		blk::warning( "kbMaterialComponent::EditorChange() - Material component doesn't have a model component owner.  Is this okay?" );
+		blk::warn( "kbMaterialComponent::EditorChange() - Material component doesn't have a model component owner.  Is this okay?" );
 	}
 }
 

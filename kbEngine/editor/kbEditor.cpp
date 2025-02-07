@@ -958,7 +958,7 @@ void kbEditor::AdjustCameraSpeedCB(class Fl_Widget* widget, void*) {
 	const Fl_Choice* const pChoiceWidget = g_Editor->m_pSpeedChoice;
 	const int selectionIdx = pChoiceWidget->value();
 	if (selectionIdx < 0 || selectionIdx >= g_NumEditorCamSpeedBindings) {
-		blk::warning("kbEditor::AdjustCameraSpeedCB() - Invalid choice selected.");
+		blk::warn("kbEditor::AdjustCameraSpeedCB() - Invalid choice selected.");
 		return;
 	}
 

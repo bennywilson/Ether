@@ -1246,7 +1246,7 @@ bool kbAnimation::Load_Internal() {
 
 		if (modelFile.fail()) {
 			modelFile.close();
-			blk::warning("kbModel::LoadResource_Internal - Failed to load model %s", m_FullFileName.c_str());
+			blk::warn("kbModel::LoadResource_Internal - Failed to load model %s", m_FullFileName.c_str());
 			return false;
 		}
 	}

@@ -155,7 +155,7 @@ kbCollisionInfo_t kbCollisionManager::PerformLineCheck( const Vec3 & start, cons
 			kbGameEntity *const pOwner = pCollision->GetOwner();
 			kbStaticModelComponent *const pStaticModel = (kbStaticModelComponent*)pOwner->GetComponentByType( kbStaticModelComponent::GetType() );
 			if ( pStaticModel == nullptr ) {
-				blk::warning( "kbCollisionManager::PerformLineCheck() - Entity %s is missing a kbStaticModelComponent", pOwner->GetName().c_str() );
+				blk::warn( "kbCollisionManager::PerformLineCheck() - Entity %s is missing a kbStaticModelComponent", pOwner->GetName().c_str() );
 				continue;
 			}
 			kbModelIntersection_t intersection = pStaticModel->GetModel()->RayIntersection( start, rayDir, pOwner->GetPosition(), pOwner->GetOrientation(), Vec3::one );

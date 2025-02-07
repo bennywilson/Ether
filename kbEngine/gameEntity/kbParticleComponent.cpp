@@ -165,7 +165,7 @@ void kbParticleComponent::Update_Internal(const float DeltaTime) {
 		case EBillboardType::BT_FaceCamera: iBillboardType = 0; break;
 		case EBillboardType::BT_AxialBillboard: iBillboardType = 1; break;
 		case EBillboardType::BT_AlignAlongVelocity: iBillboardType = 1; break;
-		default: blk::warning("kbParticleComponent::Update_Internal() - Invalid billboard type specified"); break;
+		default: blk::warn("kbParticleComponent::Update_Internal() - Invalid billboard type specified"); break;
 	}
 
 	kbParticleVertex* pDstVerts = nullptr;

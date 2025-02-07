@@ -426,7 +426,7 @@ kbGameEntityPtr kbGame::GetEntityByName(const kbString entName) {
  */
 void kbGame::SwapEntitiesByIdx(const size_t idx1, const size_t idx2) {
 	if (idx1 < 0 || idx1 >= m_GameEntityList.size() || idx2 < 0 || idx2 >= m_GameEntityList.size()) {
-		blk::warning("kbGame::SwapEntitiesByIdx() - Invalid index(es) [%d], [%d]", idx1, idx2);
+		blk::warn("kbGame::SwapEntitiesByIdx() - Invalid index(es) [%d], [%d]", idx1, idx2);
 		return;
 	}
 

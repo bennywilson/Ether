@@ -204,7 +204,7 @@ void kbPropertiesTab::PointerButtonCB(Fl_Widget* widget, void* voidPtr) {
 		}
 
 		if (fieldName == nullptr) {
-			blk::warning("kbPropertiesTab::PointerButtonCB() - Field name is null!");
+			blk::warn("kbPropertiesTab::PointerButtonCB() - Field name is null!");
 		}
 		else {
 			if (userData->m_pComponent != nullptr) {
@@ -435,7 +435,7 @@ void kbPropertiesTab::ArrayResizeCB(Fl_Widget* widget, void* voidPtr) {
 	const int fieldValue = atoi(inputText);
 
 	if (fieldValue < 0 || fieldValue > 128) {
-		blk::warning("Array value is not between 0 and 128");
+		blk::warn("Array value is not between 0 and 128");
 		g_pPropertiesTab->RequestRefreshNextUpdate();
 		return;
 	}

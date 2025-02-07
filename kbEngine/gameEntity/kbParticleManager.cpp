@@ -81,7 +81,7 @@ void kbParticleManager::SetCustomAtlasTexture(const uint atlasIdx, const std::st
 	CustomAtlasParticle_t& curAtlas = m_CustomAtlases[atlasIdx];
 	curAtlas.m_pAtlasTexture = (kbTexture*)g_ResourceManager.GetResource(atlasFileName.c_str(), true, true);
 
-	blk::warning_check(curAtlas.m_pAtlasTexture != nullptr, "kbParticleManager::SetCustomAtlasTexture() - Unable to find shader %s", atlasFileName.c_str());
+	blk::warn_check(curAtlas.m_pAtlasTexture != nullptr, "kbParticleManager::SetCustomAtlasTexture() - Unable to find shader %s", atlasFileName.c_str());
 
 	UpdateAtlas(curAtlas);
 }
@@ -94,7 +94,7 @@ void kbParticleManager::SetCustomAtlasShader(const uint atlasIdx, const std::str
 	CustomAtlasParticle_t& curAtlas = m_CustomAtlases[atlasIdx];
 	curAtlas.m_pAtlasShader = (kbShader*)g_ResourceManager.GetResource(shaderFileName.c_str(), true, true);
 
-	blk::warning_check(curAtlas.m_pAtlasShader != nullptr, "kbParticleManager::SetCustomAtlasShader() - Unable to find shader %s", shaderFileName.c_str());
+	blk::warn_check(curAtlas.m_pAtlasShader != nullptr, "kbParticleManager::SetCustomAtlasShader() - Unable to find shader %s", shaderFileName.c_str());
 
 	UpdateAtlas(curAtlas);
 }
@@ -102,19 +102,19 @@ void kbParticleManager::SetCustomAtlasShader(const uint atlasIdx, const std::str
 /// kbParticleManager::PoolParticleComponent
 void kbParticleManager::PoolParticleComponent(const kbParticleComponent* const pParticleTemplate, const int PoolSize) {
 	if (pParticleTemplate == nullptr) {
-		blk::warning("kbParticleManager::PoolParticleComponent() - NULL particle passed in");
+		blk::warn("kbParticleManager::PoolParticleComponent() - NULL particle passed in");
 		return;
 	}
 
 	if (PoolSize < 1) {
-		blk::warning("kbParticleManager::PoolParticleComponent() - Invalid pool size of %d specified", PoolSize);
+		blk::warn("kbParticleManager::PoolParticleComponent() - Invalid pool size of %d specified", PoolSize);
 		return;
 	}
 
 	// Check if this pool already exists
 	std::map<const kbParticleComponent*, std::vector< kbParticleComponent*>>::iterator it = m_ParticlePools.find(pParticleTemplate);
 	if (it != m_ParticlePools.end()) {
-		blk::warning("kbParticleManager::PoolParticleComponent() - Particle %s already pooled", pParticleTemplate->GetOwner()->GetName().c_str());
+		blk::warn("kbParticleManager::PoolParticleComponent() - Particle %s already pooled", pParticleTemplate->GetOwner()->GetName().c_str());
 		return;
 	}
 
@@ -135,13 +135,13 @@ void kbParticleManager::PoolParticleComponent(const kbParticleComponent* const p
 /// kbParticleManager::GetParticleComponent
 kbParticleComponent* kbParticleManager::GetParticleComponent(const kbParticleComponent* const pParticleTemplate) {
 	if (pParticleTemplate == nullptr) {
-		blk::warning("kbParticleManager::GetParticleComponent() - NULL particle passed in");
+		blk::warn("kbParticleManager::GetParticleComponent() - NULL particle passed in");
 		return nullptr;
 	}
 
 	std::map<const kbParticleComponent*, std::vector< kbParticleComponent*>>::iterator it = m_ParticlePools.find(pParticleTemplate);
 	if (it == m_ParticlePools.end()) {
-		blk::warning("kbParticleManager::GetParticleComponent() - Particle %s not found in pooled", pParticleTemplate->GetOwner()->GetName().c_str());
+		blk::warn("kbParticleManager::GetParticleComponent() - Particle %s not found in pooled", pParticleTemplate->GetOwner()->GetName().c_str());
 		return nullptr;
 	}
 
@@ -343,7 +343,7 @@ void kbParticleManager::AddQuad(const uint atlasIdx, const CustomParticleAtlasIn
 /// kbParticleManager::GetComponentFromPool
 const kbGameComponent* kbParticleManager::GetComponentFromPool() {
 	if (m_ComponentPool.size() == 0) {
-		blk::warning("kbParticleManager::GetComponentFromPool() - Component pool is empty");
+		blk::warn("kbParticleManager::GetComponentFromPool() - Component pool is empty");
 		return nullptr;
 	}
 
@@ -355,7 +355,7 @@ const kbGameComponent* kbParticleManager::GetComponentFromPool() {
 /// kbParticleManager::ReturnComponentToPool
 void kbParticleManager::ReturnComponentToPool(const kbGameComponent* const pGameComponent) {
 	if (pGameComponent == nullptr) {
-		blk::warning("kbParticleManager::ReturnComponentToPool() - null component passed in");
+		blk::warn("kbParticleManager::ReturnComponentToPool() - null component passed in");
 		return;
 	}
 

@@ -44,7 +44,7 @@ void Renderer_Dx12::initialize_internal(HWND hwnd, const uint32_t frame_width, c
 	get_hardware_adapter(factory.Get(), &hw_adapter, true);
 
 	// Device
-	check_result(D3D12CreateDevice(
+	blk::error_check(D3D12CreateDevice(
 		hw_adapter.Get(),
 		D3D_FEATURE_LEVEL_11_0,
 		IID_PPV_ARGS(&m_device)
@@ -54,7 +54,7 @@ void Renderer_Dx12::initialize_internal(HWND hwnd, const uint32_t frame_width, c
 	D3D12_COMMAND_QUEUE_DESC queue_desc = {};
 	queue_desc.Flags = D3D12_COMMAND_QUEUE_FLAG_NONE;
 	queue_desc.Type = D3D12_COMMAND_LIST_TYPE_DIRECT;
-	check_result(m_device->CreateCommandQueue(&queue_desc, IID_PPV_ARGS(&m_queue)));
+	blk::error_check(m_device->CreateCommandQueue(&queue_desc, IID_PPV_ARGS(&m_queue)));
 
 	// Swap Chain
 	DXGI_SWAP_CHAIN_DESC1 swap_chain_desc = {};
@@ -67,25 +67,25 @@ void Renderer_Dx12::initialize_internal(HWND hwnd, const uint32_t frame_width, c
 	swap_chain_desc.SampleDesc.Count = 1;
 
 	ComPtr<IDXGISwapChain1> swap_chain;
-	check_result(factory->CreateSwapChainForHwnd(
+	blk::error_check(factory->CreateSwapChainForHwnd(
 		m_queue.Get(),        // Swap chain needs the queue so that it can force a flush on it.
 		hwnd,
 		&swap_chain_desc, nullptr,
 		nullptr,
 		&swap_chain
 	));
-	check_result(swap_chain.As(&m_swap_chain));
+	blk::error_check(swap_chain.As(&m_swap_chain));
 	m_frame_index = m_swap_chain->GetCurrentBackBufferIndex();
 
 	// Disable fullscreen
-	check_result(factory->MakeWindowAssociation(hwnd, DXGI_MWA_NO_ALT_ENTER));
+	blk::error_check(factory->MakeWindowAssociation(hwnd, DXGI_MWA_NO_ALT_ENTER));
 
 	// RTV descriptor heap
 	D3D12_DESCRIPTOR_HEAP_DESC rtv_heap_desc = {};
 	rtv_heap_desc.NumDescriptors = Renderer::max_frames();
 	rtv_heap_desc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_RTV;
 	rtv_heap_desc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
-	check_result(m_device->CreateDescriptorHeap(&rtv_heap_desc, IID_PPV_ARGS(&m_rtv_heap)));
+	blk::error_check(m_device->CreateDescriptorHeap(&rtv_heap_desc, IID_PPV_ARGS(&m_rtv_heap)));
 	m_rtv_descriptor_size = m_device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV);
 
 	// SRV descriptor heap
@@ -93,7 +93,7 @@ void Renderer_Dx12::initialize_internal(HWND hwnd, const uint32_t frame_width, c
 	srv_heap_desc.NumDescriptors = 2;
 	srv_heap_desc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV;
 	srv_heap_desc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;
-	check_result(m_device->CreateDescriptorHeap(&srv_heap_desc, IID_PPV_ARGS(&m_cbv_srv_heap)));
+	blk::error_check(m_device->CreateDescriptorHeap(&srv_heap_desc, IID_PPV_ARGS(&m_cbv_srv_heap)));
 	m_cbv_srv_heap->SetName(L"Renderer_Dx12::m_cbv_srv_heap");
 
 	// Sampler heap
@@ -101,7 +101,7 @@ void Renderer_Dx12::initialize_internal(HWND hwnd, const uint32_t frame_width, c
 	sampler_heap_desc.NumDescriptors = 1;
 	sampler_heap_desc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_SAMPLER;
 	sampler_heap_desc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;
-	check_result(m_device->CreateDescriptorHeap(&sampler_heap_desc, IID_PPV_ARGS(&m_sampler_heap)));
+	blk::error_check(m_device->CreateDescriptorHeap(&sampler_heap_desc, IID_PPV_ARGS(&m_sampler_heap)));
 	m_sampler_heap->SetName(L"Renderer_Dx12::m_sampler_heap");
 
 	// Frame resources
@@ -109,14 +109,14 @@ void Renderer_Dx12::initialize_internal(HWND hwnd, const uint32_t frame_width, c
 
 	// Create a RTV for each frame.
 	for (uint32_t i = 0; i < Renderer::max_frames(); i++) {
-		check_result(m_swap_chain->GetBuffer(i, IID_PPV_ARGS(&m_render_targets[i])));
+		blk::error_check(m_swap_chain->GetBuffer(i, IID_PPV_ARGS(&m_render_targets[i])));
 		m_device->CreateRenderTargetView(m_render_targets[i].Get(), nullptr, rtv_handle);
 		rtv_handle.Offset(1, m_rtv_descriptor_size);
 	}
 
 	// Command List
-	check_result(m_device->CreateCommandAllocator(D3D12_COMMAND_LIST_TYPE_DIRECT, IID_PPV_ARGS(&m_command_allocator)));
-	check_result(m_device->CreateCommandList(0, D3D12_COMMAND_LIST_TYPE_DIRECT, m_command_allocator.Get(), nullptr, IID_PPV_ARGS(&m_command_list)));
+	blk::error_check(m_device->CreateCommandAllocator(D3D12_COMMAND_LIST_TYPE_DIRECT, IID_PPV_ARGS(&m_command_allocator)));
+	blk::error_check(m_device->CreateCommandList(0, D3D12_COMMAND_LIST_TYPE_DIRECT, m_command_allocator.Get(), nullptr, IID_PPV_ARGS(&m_command_list)));
 	m_command_list->Close();
 
 	// Root signature
@@ -141,17 +141,17 @@ void Renderer_Dx12::initialize_internal(HWND hwnd, const uint32_t frame_width, c
 
 	ComPtr<ID3DBlob> signature;
 	ComPtr<ID3DBlob> error;
-	check_result(D3DX12SerializeVersionedRootSignature(&rootSignatureDesc, D3D_ROOT_SIGNATURE_VERSION_1, &signature, &error));
-	check_result(m_device->CreateRootSignature(0, signature->GetBufferPointer(), signature->GetBufferSize(), IID_PPV_ARGS(&m_root_signature)));
+	blk::error_check(D3DX12SerializeVersionedRootSignature(&rootSignatureDesc, D3D_ROOT_SIGNATURE_VERSION_1, &signature, &error));
+	blk::error_check(m_device->CreateRootSignature(0, signature->GetBufferPointer(), signature->GetBufferSize(), IID_PPV_ARGS(&m_root_signature)));
 
 	// Fences	
-	check_result(m_device->CreateFence(0, D3D12_FENCE_FLAG_NONE, IID_PPV_ARGS(&m_fence)));
+	blk::error_check(m_device->CreateFence(0, D3D12_FENCE_FLAG_NONE, IID_PPV_ARGS(&m_fence)));
 	m_fence_value = 1;
 
 	// Create an event handle to use for frame synchronization.
 	m_fence_event = CreateEvent(nullptr, FALSE, FALSE, nullptr);
 	if (m_fence_event == nullptr) {
-		check_result(HRESULT_FROM_WIN32(GetLastError()));
+		blk::error_check(HRESULT_FROM_WIN32(GetLastError()));
 	}
 
 	auto pipe = (RenderPipeline_D3D12*)load_pipeline("test_shader", L"C:/projects/Ether/dx12_updgrade/GameBase/assets/shaders/test_shader.hlsl");
@@ -166,13 +166,13 @@ void Renderer_Dx12::shut_down_internal() {
 	const UINT64 lastCompletedFence = m_fence->GetCompletedValue();
 
 	// Signal and increment the fence value.
-	check_result(m_queue->Signal(m_fence.Get(), m_fence_value));
+	blk::error_check(m_queue->Signal(m_fence.Get(), m_fence_value));
 	m_fence_value++;
 
 	// Wait until the previous frame is finished.
 	if (lastCompletedFence < fence)
 	{
-		check_result(m_fence->SetEventOnCompletion(fence, m_fence_event));
+		blk::error_check(m_fence->SetEventOnCompletion(fence, m_fence_event));
 		WaitForSingleObject(m_fence_event, INFINITE);
 	}
 
@@ -299,8 +299,8 @@ void Renderer_Dx12::render() {
 	pBuffer->padding[2].make_identity();
 	//........................
 
-	check_result(m_command_allocator->Reset());
-	check_result(m_command_list->Reset(m_command_allocator.Get(), nullptr));
+	blk::error_check(m_command_allocator->Reset());
+	blk::error_check(m_command_list->Reset(m_command_allocator.Get(), nullptr));
 
 	m_command_list->SetGraphicsRootSignature(m_root_signature.Get());
 	m_command_list->RSSetViewports(1, &m_view_port);
@@ -342,23 +342,23 @@ void Renderer_Dx12::render() {
 	// Indicate that the back buffer will now be used to present.
 	auto res_barrier = CD3DX12_RESOURCE_BARRIER::Transition(m_render_targets[m_frame_index].Get(), D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PRESENT);
 	m_command_list->ResourceBarrier(1, &res_barrier);
-	check_result(m_command_list->Close());
+	blk::error_check(m_command_list->Close());
 
 	// Execute command lists
 	ID3D12CommandList* const command_lists[] = { m_command_list.Get() };
 	m_queue->ExecuteCommandLists(_countof(command_lists), command_lists);
 
 	// Present
-	check_result(m_swap_chain->Present(1, 0));
+	blk::error_check(m_swap_chain->Present(1, 0));
 
 	// Wait for previous frame (todo)
 	const uint64_t fence = m_fence_value;
-	check_result(m_queue->Signal(m_fence.Get(), fence));
+	blk::error_check(m_queue->Signal(m_fence.Get(), fence));
 	m_fence_value++;
 
 	// Wait until the previous frame is finished.
 	if (m_fence->GetCompletedValue() < fence) {
-		check_result(m_fence->SetEventOnCompletion(fence, m_fence_event));
+		blk::error_check(m_fence->SetEventOnCompletion(fence, m_fence_event));
 		WaitForSingleObject(m_fence_event, INFINITE);
 	}
 
@@ -377,10 +377,10 @@ RenderPipeline* Renderer_Dx12::create_pipeline(const wstring& path) {
 	ID3DBlob** ppErrorMsgs = nullptr;
 
 	ComPtr<ID3DBlob> vertex_shader;
-	check_result(D3DCompileFromFile(path.c_str(), nullptr, nullptr, "vertex_shader", "vs_5_0", compileFlags, 0, &vertex_shader, ppErrorMsgs));
+	blk::error_check(D3DCompileFromFile(path.c_str(), nullptr, nullptr, "vertex_shader", "vs_5_0", compileFlags, 0, &vertex_shader, ppErrorMsgs));
 
 	ComPtr<ID3DBlob> pixel_shader;
-	check_result(D3DCompileFromFile(path.c_str(), nullptr, nullptr, "pixel_shader", "ps_5_0", compileFlags, 0, &pixel_shader, nullptr));
+	blk::error_check(D3DCompileFromFile(path.c_str(), nullptr, nullptr, "pixel_shader", "ps_5_0", compileFlags, 0, &pixel_shader, nullptr));
 
 	// Define the vertex input layout.
 	D3D12_INPUT_ELEMENT_DESC inputElementDescs[] =
@@ -411,20 +411,20 @@ RenderPipeline* Renderer_Dx12::create_pipeline(const wstring& path) {
 	psoDesc.RTVFormats[0] = DXGI_FORMAT_R8G8B8A8_UNORM;
 	psoDesc.SampleDesc.Count = 1;
 	RenderPipeline_D3D12* const pipe = new RenderPipeline_D3D12();
-	check_result(m_device->CreateGraphicsPipelineState(&psoDesc, IID_PPV_ARGS(&pipe->m_pipeline_state)));
+	blk::error_check(m_device->CreateGraphicsPipelineState(&psoDesc, IID_PPV_ARGS(&pipe->m_pipeline_state)));
 
 	return (RenderPipeline*)pipe;
 }
 
 /// Renderer_Dx12::todo_create_texture
 void Renderer_Dx12::todo_create_texture() {
-	check_result(m_command_allocator->Reset());
-	check_result(m_command_list->Reset(m_command_allocator.Get(), nullptr));
+	blk::error_check(m_command_allocator->Reset());
+	blk::error_check(m_command_list->Reset(m_command_allocator.Get(), nullptr));
 
 	// Load texture 
 	std::unique_ptr<uint8_t[]> ddsData;
 	std::vector<D3D12_SUBRESOURCE_DATA> subresources;
-	check_result(LoadDDSTextureFromFile(
+	blk::error_check(LoadDDSTextureFromFile(
 		m_device.Get(),
 		L"C:/projects/Ether/dx12_updgrade/GameBase/assets/Test/diablo.dds",
 		tex.ReleaseAndGetAddressOf(),
@@ -436,7 +436,7 @@ void Renderer_Dx12::todo_create_texture() {
 	ComPtr<ID3D12Resource> upload_resource;
 	auto upload_heap_props = CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD);
 	auto upload_heap_buff_size = CD3DX12_RESOURCE_DESC::Buffer(upload_buff_size);
-	check_result(
+	blk::error_check(
 		m_device->CreateCommittedResource(
 			&upload_heap_props,
 			D3D12_HEAP_FLAG_NONE,
@@ -477,7 +477,7 @@ void Renderer_Dx12::todo_create_texture() {
 	// Constant buffer view upload heap
 	auto cbv_heap_props = CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD);
 	auto cbv_buffer_size = CD3DX12_RESOURCE_DESC::Buffer(sizeof(buffer));
-	check_result(m_device->CreateCommittedResource(
+	blk::error_check(m_device->CreateCommittedResource(
 		&cbv_heap_props,
 		D3D12_HEAP_FLAG_NONE,
 		&cbv_buffer_size,
@@ -487,7 +487,7 @@ void Renderer_Dx12::todo_create_texture() {
 
 	CD3DX12_RANGE readRange(0, 0);        // We do not intend to read from this resource on the CPU.
 	pBuffer = nullptr;
-	check_result(m_cbv_upload_heap->Map(0, &readRange, reinterpret_cast<void**>(&pBuffer)));
+	blk::error_check(m_cbv_upload_heap->Map(0, &readRange, reinterpret_cast<void**>(&pBuffer)));
 
 	// Constant buffer view
 	UINT64 cbOffset = 0;
@@ -504,20 +504,20 @@ void Renderer_Dx12::todo_create_texture() {
 	// cbvSrvHandle.Offset(CBV_SRV_DESCRIPTOR_SIZE);
 
 	// Close the command list and execute it to begin the initial GPU setup.
-	check_result(m_command_list->Close());
+	blk::error_check(m_command_list->Close());
 	ID3D12CommandList* ppCommandLists[] = { m_command_list.Get() };
 	m_queue->ExecuteCommandLists(_countof(ppCommandLists), ppCommandLists);
 
-	check_result(m_device->CreateFence(0, D3D12_FENCE_FLAG_NONE, IID_PPV_ARGS(&m_fence)));
+	blk::error_check(m_device->CreateFence(0, D3D12_FENCE_FLAG_NONE, IID_PPV_ARGS(&m_fence)));
 
 	// Wait for previous frame (todo)
 	const uint64_t fence = m_fence_value;
-	check_result(m_queue->Signal(m_fence.Get(), fence));
+	blk::error_check(m_queue->Signal(m_fence.Get(), fence));
 	m_fence_value++;
 
 	// Wait until the previous frame is finished.
 	if (m_fence->GetCompletedValue() < fence) {
-		check_result(m_fence->SetEventOnCompletion(fence, m_fence_event));
+		blk::error_check(m_fence->SetEventOnCompletion(fence, m_fence_event));
 		WaitForSingleObject(m_fence_event, INFINITE);
 	}
 }

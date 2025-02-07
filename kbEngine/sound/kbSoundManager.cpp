@@ -11,9 +11,12 @@
 kbWaveFile::kbWaveFile() :
 	m_pWaveFormat(nullptr),
 	m_hMMio(nullptr),
+	m_ck(MMCKINFO()),
+	m_ckRiff(MMCKINFO()),
 	m_dwSize(0),
 	m_pWaveDataBuffer(nullptr),
 	m_cbWaveSize(0) {
+
 }
 
 /// kbWaveFile::~kbWaveFile
@@ -92,8 +95,7 @@ HRESULT	kbWaveFile::ReadMMIO() {
 		// Copy the bytes from the pcm structure to the waveformatex structure
 		memcpy(m_pWaveFormat, &pcmWaveFormat, sizeof(pcmWaveFormat));
 		m_pWaveFormat->cbSize = 0;
-	}
-	else
+	} else
 	{
 		// Read in length of extra bytes.
 		WORD cbExtraBytes = 0L;
@@ -185,21 +187,24 @@ HRESULT kbWaveFile::ResetFile() {
 }
 
 /// kbSoundManager::kbSoundManager
-kbSoundManager::kbSoundManager() {
+kbSoundManager::kbSoundManager() :
+	m_pXAudioEngine(nullptr),
+	m_pMasteringVoice(nullptr),
+	m_FrequencyRatio(1.f),
+	m_MasterVolume(1.f),
+	m_bInitialized(false) {
 	blk::log("Creating Audio Engine");
 
 	m_bInitialized = false;
 
-	HRESULT hr = XAudio2Create(&m_pXAudioEngine);
-	if (FAILED(hr)) {
-		blk::warning("kbSoundManager::kbSoundManager() - Failed to create XAudio2");
-		return;
-	}
+	blk::error_check(
+		XAudio2Create(&m_pXAudioEngine),
+		"kbSoundManager::kbSoundManager() - Failed to create XAudio2"
+	);
 
-	hr = m_pXAudioEngine->CreateMasteringVoice(&m_pMasteringVoice);
-
-	if (FAILED(hr)) {
-		blk::warning("kbSoundManager::kbSoundManager() - Failed to create a mastering voice");
+	if (!blk::warn_check(
+		m_pXAudioEngine->CreateMasteringVoice(&m_pMasteringVoice),
+		"kbSoundManager::kbSoundManager() - Failed to create a mastering voice")) {
 		return;
 	}
 
@@ -215,14 +220,14 @@ kbSoundManager::~kbSoundManager() {
 		return;
 	}
 
-	for (int iVoice = 0; iVoice < MAX_VOICES; iVoice++) {
-		if (m_Voices[iVoice].m_bInUse == false) {
+	for (auto& voice : m_Voices) {
+		if (voice.m_bInUse == false) {
 			continue;
 		}
 
-		m_Voices[iVoice].m_pVoice->DestroyVoice();
-		m_Voices[iVoice].m_pVoice = nullptr;
-		m_Voices[iVoice].m_bInUse = false;
+		voice.m_pVoice->DestroyVoice();
+		voice.m_pVoice = nullptr;
+		voice.m_bInUse = false;
 	}
 
 	m_pMasteringVoice->DestroyVoice();
@@ -239,63 +244,65 @@ int kbSoundManager::PlayWave(kbWaveFile* const pWaveFile, const float inVolume, 
 		return -1;
 	}
 
-	kbVoiceData_t* pVoice = nullptr;
-
 	const float finalVolume = inVolume * kbLevelComponent::GetGlobalVolumeScale();
-	int iVoice = 0;
-	for (iVoice = 0; iVoice < MAX_VOICES; iVoice++) {
-		if (m_Voices[iVoice].m_bInUse == true) {
+	for (size_t i = 0; i < m_Voices.size(); i++) {
+		kbVoiceData_t& voice = m_Voices[i];
+		if (voice.m_bInUse == true) {
 			continue;
 		}
-		blk::error_check(m_Voices[iVoice].m_pVoice == nullptr, "kbSoundManager::PlayWave() - Non null voice is in use.");
 
-		pVoice = &m_Voices[iVoice];
-		pVoice->m_bInUse = true;
+		blk::error_check(
+			voice.m_pVoice == nullptr,
+			"kbSoundManager::PlayWave() - Non null voice is in use."
+		);
+
+		voice.m_bInUse = true;
 
 		// Create the source voice
 		WAVEFORMATEX* const pwfx = pWaveFile->GetFormat();
-		HRESULT hr = m_pXAudioEngine->CreateSourceVoice(&pVoice->m_pVoice, pwfx);
-		blk::error_check(SUCCEEDED(hr), "kbSoundManager::PlayWave() - Failed to create a voice");
+		blk::error_check(
+			m_pXAudioEngine->CreateSourceVoice(&voice.m_pVoice, pwfx),
+			"kbSoundManager::PlayWave() - Failed to create a voice"
+		);
 
-		break;
+		// Submit the wave sample data using an XAUDIO2_BUFFER structure
+		XAUDIO2_BUFFER buffer = { 0 };
+		buffer.pAudioData = pWaveFile->GetWaveData();//files[index].m_pWaveDataBuffer;
+		buffer.Flags = XAUDIO2_END_OF_STREAM;  // tell the source voice not to expect any data after this buffer
+		buffer.AudioBytes = pWaveFile->GetWaveSize();//files[index].m_cbWaveSize;
+
+		if (bLoop) {
+			buffer.LoopBegin = 0;
+			buffer.LoopCount = XAUDIO2_LOOP_INFINITE;
+		}
+
+		HRESULT hr = voice.m_pVoice->SubmitSourceBuffer(&buffer);
+		blk::error_check(SUCCEEDED(hr), "kbSoundManager::PlayWave() - Failed to submit audio buffer");
+
+		voice.m_pVoice->SetVolume(finalVolume);
+		voice.m_pVoice->SetFrequencyRatio(m_FrequencyRatio);
+		blk::error_check(
+			voice.m_pVoice->Start(0),
+			"kbSoundManager::PlayWave() - Failed to submit start voice"
+		);
+		return (int32_t)i;
 	}
 
-	if (pVoice == nullptr) {
-		return -1;
-	}
-
-	// Submit the wave sample data using an XAUDIO2_BUFFER structure
-	XAUDIO2_BUFFER buffer = { 0 };
-	buffer.pAudioData = pWaveFile->GetWaveData();//files[index].m_pWaveDataBuffer;
-	buffer.Flags = XAUDIO2_END_OF_STREAM;  // tell the source voice not to expect any data after this buffer
-	buffer.AudioBytes = pWaveFile->GetWaveSize();//files[index].m_cbWaveSize;
-
-	if (bLoop) {
-		buffer.LoopBegin = 0;
-		buffer.LoopCount = XAUDIO2_LOOP_INFINITE;
-	}
-
-	HRESULT hr = pVoice->m_pVoice->SubmitSourceBuffer(&buffer);
-	blk::error_check(SUCCEEDED(hr), "kbSoundManager::PlayWave() - Failed to submit audio buffer");
-
-	pVoice->m_pVoice->SetVolume(finalVolume);
-	pVoice->m_pVoice->SetFrequencyRatio(m_FrequencyRatio);
-	hr = pVoice->m_pVoice->Start(0);
-	blk::error_check(SUCCEEDED(hr), "kbSoundManager::PlayWave() - Failed to submit start voice");
-
-	return iVoice;
+	return -1;
 }
 
 /// kbSoundManager::StopWave
 void kbSoundManager::StopWave(const int id) {
-
-	blk::error_check(id >= 0 && id < MAX_VOICES, "kbSoundManager::StopWave() - Called with invalid wave id");
+	if (!blk::warn_check(id >= 0 && id < MAX_VOICES,"kbSoundManager::StopWave() - Called with invalid wave id")) {
+		return;
+	}
 
 	kbVoiceData_t* const pVoice = &m_Voices[id];
 	pVoice->m_pVoice->Stop();
-	pVoice->m_bInUse = false;
 	pVoice->m_pVoice->DestroyVoice();
 	pVoice->m_pVoice = nullptr;
+
+	pVoice->m_bInUse = false;
 }
 
 /// kbSoundManager::Update
@@ -304,19 +311,19 @@ void kbSoundManager::Update() {
 		return;
 	}
 
-	for (int iVoice = 0; iVoice < MAX_VOICES; iVoice++) {
-		if (m_Voices[iVoice].m_bInUse == false) {
+	for (auto& voice: m_Voices) {
+		if (voice.m_bInUse == false) {
 			continue;
 		}
 
 		XAUDIO2_VOICE_STATE state;
-		m_Voices[iVoice].m_pVoice->GetState(&state);
+		voice.m_pVoice->GetState(&state);
 
 		if (state.BuffersQueued <= 0) {
-			m_Voices[iVoice].m_pVoice->Stop();
-			m_Voices[iVoice].m_bInUse = false;
-			m_Voices[iVoice].m_pVoice->DestroyVoice();
-			m_Voices[iVoice].m_pVoice = nullptr;
+			voice.m_pVoice->Stop();
+			voice.m_bInUse = false;
+			voice.m_pVoice->DestroyVoice();
+			voice.m_pVoice = nullptr;
 		}
 	}
 }
@@ -330,11 +337,11 @@ void kbSoundManager::SetFrequencyRatio(const float frequencyRatio) {
 
 	m_FrequencyRatio = frequencyRatio;
 
-	for (int iVoice = 0; iVoice < MAX_VOICES; iVoice++) {
-		if (m_Voices[iVoice].m_bInUse == false) {
+	for (auto& voice : m_Voices) {
+		if (voice.m_bInUse == false) {
 			continue;
 		}
-		m_Voices[iVoice].m_pVoice->SetFrequencyRatio(m_FrequencyRatio);
+		voice.m_pVoice->SetFrequencyRatio(m_FrequencyRatio);
 	}
 }
 

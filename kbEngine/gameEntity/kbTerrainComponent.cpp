@@ -137,7 +137,7 @@ void kbGrass::EditorChange(const std::string& propertyName) {
 	Super::EditorChange(propertyName);
 
 	if (m_GrassCellsPerTerrainSide < 0) {
-		blk::warning("kbGrass::EditorChange() - Grass Cells Per Terrain Side must be greater than 0");
+		blk::warn("kbGrass::EditorChange() - Grass Cells Per Terrain Side must be greater than 0");
 		m_GrassCellsPerTerrainSide = 1;
 	}
 

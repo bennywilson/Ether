@@ -8,12 +8,6 @@
 #include "kbQuaternion.h"
 #include "render_defs.h"
 
-inline void check_result(HRESULT hr) {
-	if (FAILED(hr)) {
-		throw;
-	}
-}
-
 class RenderBuffer;
 
 ///	Renderer

@@ -19,28 +19,27 @@ typedef ID3D11InputLayout kbHWVertexLayout;
  */
 class kbRenderBuffer {
 public:
-	kbRenderBuffer() : m_pBuffer( nullptr ) { }
+	kbRenderBuffer() : m_pBuffer(nullptr) { }
 	~kbRenderBuffer() {
-		blk::warning_check( m_pBuffer == nullptr, "kbRenderBuffer::~kbRenderBuffer - Destructing a render buffer that hasn't been released" );
+		blk::warn_check(
+			m_pBuffer == nullptr,
+			"kbRenderBuffer::~kbRenderBuffer - Destructing a render buffer that hasn't been released"
+		);
 	}
 
 	virtual void Release();
 
-	virtual void CreateVertexBuffer( const int numVerts, const int vertexByteSize );
-	virtual void CreateIndexBuffer( const int numIndexes );
+	virtual void CreateVertexBuffer(const int numVerts, const int vertexByteSize);
+	virtual void CreateIndexBuffer(const int numIndexes);
 
-	virtual void CreateVertexBuffer( const std::vector<vertexLayout> & vertices );
-	virtual void CreateIndexBuffer( const std::vector<ushort> & indices );
+	virtual void CreateVertexBuffer(const std::vector<vertexLayout>& vertices);
+	virtual void CreateIndexBuffer(const std::vector<ushort>& indices);
 
-	virtual void * Map();
+	virtual void* Map();
 	virtual void Unmap();
 
-
-	const ID3D11Buffer * GetBufferPtr() const { return m_pBuffer; }
-
-	// new interface
+	const ID3D11Buffer* GetBufferPtr() const { return m_pBuffer; }
 
 private:
-
 	ID3D11Buffer* m_pBuffer;
 };

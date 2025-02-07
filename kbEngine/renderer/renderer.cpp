@@ -69,7 +69,7 @@ RenderBuffer* Renderer::create_render_buffer() {
 RenderPipeline* Renderer::load_pipeline(const std::string& friendly_name, const std::wstring& path) {
 	RenderPipeline* const new_pipeline = create_pipeline(path);
 	if (new_pipeline == nullptr) {
-		blk::warning("Unable to load pipeline %s", path.c_str());
+		blk::warn("Unable to load pipeline %s", path.c_str());
 		return nullptr;
 	}
 	m_pipelines[friendly_name] = new_pipeline;

@@ -393,7 +393,7 @@ void kbVectorAnimEvent::Constructor() {
 /// kbAnimEvent::Evaluate
 float kbAnimEvent::Evaluate(const std::vector<kbAnimEvent>& eventList, const float t) {
 	if (eventList.size() == 0) {
-		blk::warning("kbAnimEvent::Evaluate() - Empty event list");
+		blk::warn("kbAnimEvent::Evaluate() - Empty event list");
 		return 0;
 	}
 
@@ -414,7 +414,7 @@ float kbAnimEvent::Evaluate(const std::vector<kbAnimEvent>& eventList, const flo
 /// kbVectorAnimEvent::Evaluate
 Vec4 kbVectorAnimEvent::Evaluate(const std::vector<kbVectorAnimEvent>& eventList, const float t) {
 	if (eventList.size() == 0) {
-		blk::warning("kbVectorAnimEvent::Evaluate() - Empty event list");
+		blk::warn("kbVectorAnimEvent::Evaluate() - Empty event list");
 		return Vec3::zero;
 	}
 

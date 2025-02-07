@@ -608,7 +608,7 @@ kbColorWriteEnable GetColorWriteEnableFromName(const std::string& name) {
 		return colorMapIt->second;
 	}
 
-	blk::warning("GetColorWriteEnableFromName() - Invalid value %s", name.c_str());
+	blk::warn("GetColorWriteEnableFromName() - Invalid value %s", name.c_str());
 	return ColorWriteEnable_All;
 }
 
@@ -633,7 +633,7 @@ kbBlend GetBlendFromName(const std::string& name) {
 		return blendMapIt->second;
 	}
 
-	blk::warning("GetBlendFromName() - Invalid value %s", name.c_str());
+	blk::warn("GetBlendFromName() - Invalid value %s", name.c_str());
 	return Blend_One;
 }
 
@@ -652,7 +652,7 @@ kbBlendOp GetBlendOpFromName(std::string& name) {
 		return blendOpMapIt->second;
 	}
 
-	blk::warning("GetBlendOpFromName() - Invalid value %s", name.c_str());
+	blk::warn("GetBlendOpFromName() - Invalid value %s", name.c_str());
 	return BlendOp_Add;
 }
 

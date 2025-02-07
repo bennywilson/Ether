@@ -25,12 +25,12 @@ kbFile::~kbFile() { }
 bool kbFile::Open(const std::string& fileName, const kbFileType_t fileType) {
 
 	if (fileName.empty()) {
-		blk::warning("kbFile::Open() - Empty file name");
+		blk::warn("kbFile::Open() - Empty file name");
 		return false;
 	}
 
 	if (fileType != FT_Read && fileType != FT_Write) {
-		blk::warning("kbFile::Open() - %s has an invalid file type", fileName.c_str());
+		blk::warn("kbFile::Open() - %s has an invalid file type", fileName.c_str());
 		return false;
 	}
 
@@ -74,7 +74,7 @@ bool kbFile::Open(const std::string& fileName, const kbFileType_t fileType) {
 /// kbFile::Close
 void kbFile::Close() {
 	if (m_FileType != FT_Write && m_FileType != FT_Read) {
-		blk::warning("kbFile::Close() - Tried to close %s with an invalid file type", m_FileName.c_str());
+		blk::warn("kbFile::Close() - Tried to close %s with an invalid file type", m_FileName.c_str());
 		return;
 	}
 
@@ -93,7 +93,7 @@ void kbFile::Close() {
 /// kbFile::ReadGameEntity
 kbGameEntity* kbFile::ReadGameEntity() {
 	if (m_FileType != FT_Read) {
-		blk::warning("kbFile::ReadGameEntity() - Tried to read from file %s, but the file does not have the correct type.", m_FileName.c_str());
+		blk::warn("kbFile::ReadGameEntity() - Tried to read from file %s, but the file does not have the correct type.", m_FileName.c_str());
 		return nullptr;
 	}
 	return ReadGameEntity_Internal();
@@ -489,7 +489,7 @@ void kbFile::ReadProperty(const kbTypeInfoVar* const pTypeInfoVar, byte* const b
 			}
 
 			if (i == enumList->size()) {
-				blk::warning("Enum value out of range");
+				blk::warn("Enum value out of range");
 			}
 		}
 	}
@@ -508,12 +508,12 @@ bool kbFile::WriteGameEntity(const kbGameEntity* pGameObject) {
 /// kbFile::WriteGameEntity_Internal
 bool kbFile::WriteGameEntity_Internal(const kbGameEntity* pGameObject, std::string& curTab) {
 	if (m_FileType != FT_Write) {
-		blk::warning("kbFile::WriteGameEntity() - Tried to write to file %s, but the file does not have the correct type.", m_FileName.c_str());
+		blk::warn("kbFile::WriteGameEntity() - Tried to write to file %s, but the file does not have the correct type.", m_FileName.c_str());
 		return false;
 	}
 
 	if (pGameObject == NULL) {
-		blk::warning("kbFile::WriteGameEntity() - Tried to write to file %s, but the game object passed in is null.", m_FileName.c_str());
+		blk::warn("kbFile::WriteGameEntity() - Tried to write to file %s, but the game object passed in is null.", m_FileName.c_str());
 		return false;
 	}
 
@@ -712,7 +712,7 @@ void kbFile::WriteProperty(const kbTypeInfoType_t propertyType, const std::strin
 			int& enumIntValue = *((int*)byteOffsetToVar);
 
 			if (enumIntValue < 0 || enumIntValue >= enumList->size()) {
-				blk::warning("Enum value out of range! for %s", structName.c_str());
+				blk::warn("Enum value out of range! for %s", structName.c_str());
 				enumIntValue = 0;
 			}
 
@@ -725,12 +725,12 @@ void kbFile::WriteProperty(const kbTypeInfoType_t propertyType, const std::strin
 /// kbFile::WritePackage
 bool kbFile::WritePackage(const kbPackage& package) {
 	if (m_FileType != FT_Write) {
-		blk::warning("kbFile::WritePackage() - Tried to write to file %s, but the file does not have the correct type.", m_FileName.c_str());
+		blk::warn("kbFile::WritePackage() - Tried to write to file %s, but the file does not have the correct type.", m_FileName.c_str());
 		return false;
 	}
 
 	if (package.NumFolders() == 0) {
-		blk::warning("kbFile::WritePackage() - Tried to write to file %s with no folders, m_FileName.c_str() ");
+		blk::warn("kbFile::WritePackage() - Tried to write to file %s with no folders, m_FileName.c_str() ");
 		return false;
 	}
 
@@ -785,7 +785,7 @@ kbPackage* kbFile::ReadPackage(const bool bLoadAssetsImmediately) {
 	m_bLoadAssetsImmediately = bLoadAssetsImmediately;
 
 	if (m_FileType != FT_Read) {
-		blk::warning("kbFile::ReadPackage() - Tried to read to file %s, but the file does not have the correct type.", m_FileName.c_str());
+		blk::warn("kbFile::ReadPackage() - Tried to read to file %s, but the file does not have the correct type.", m_FileName.c_str());
 		return nullptr;
 	}
 
