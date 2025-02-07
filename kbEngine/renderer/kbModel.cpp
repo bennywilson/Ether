@@ -5,7 +5,7 @@
 #include <fbxsdk.h>
 #include <fstream>
 #include "kbCore.h"
-#include "kbVector.h"
+#include "Matrix.h"
 #include "kbIntersectionTests.h"
 #include "kbModel.h"
 #include "kbRenderer.h"
@@ -258,9 +258,9 @@ bool kbModel::LoadMS3D() {
 		m_Bones[i].m_RelativePosition.set(pJoint->m_Position[0], pJoint->m_Position[1], -pJoint->m_Position[2]);
 
 		// Convert from euler angles to quaternions
-		kbQuat rotationX(Vec3::right, pJoint->m_Rotation[0]);
-		kbQuat rotationY(Vec3::up, pJoint->m_Rotation[1]);
-		kbQuat rotationZ(Vec3::forward, -pJoint->m_Rotation[2]);
+		Quat4 rotationX(Vec3::right, pJoint->m_Rotation[0]);
+		Quat4 rotationY(Vec3::up, pJoint->m_Rotation[1]);
+		Quat4 rotationZ(Vec3::forward, -pJoint->m_Rotation[2]);
 		m_Bones[i].m_RelativeRotation = rotationX * rotationY * rotationZ;
 
 		// Skip animations
@@ -275,7 +275,7 @@ bool kbModel::LoadMS3D() {
 	for (int i = 0; i < m_Bones.size(); i++) {
 
 		const int parent = m_Bones[i].m_ParentIndex;
-		const Mat4 rotationmat = m_Bones[i].m_RelativeRotation.ToMat4();
+		const Mat4 rotationmat = m_Bones[i].m_RelativeRotation.to_mat4();
 		kbBoneMatrix_t parentMat;
 		if (parent != 65535) {
 			parentMat = m_RefPose[parent];
@@ -725,7 +725,7 @@ bool kbModel::LoadFBX() {
 	for (int i = 0; i < boneToBounds.size(); i++) {
 		kbBounds& boneBounds = boneToBounds[i];
 		m_Bones[i].m_RelativePosition = boneBounds.Center();
-		m_Bones[i].m_RelativeRotation = kbQuat(0.0f, 0.0f, 0.0f, 1.0f);
+		m_Bones[i].m_RelativeRotation = Quat4(0.0f, 0.0f, 0.0f, 1.0f);
 
 		kbBoneMatrix_t invRef;
 		invRef.SetIdentity();
@@ -1024,12 +1024,12 @@ void kbModel::SwapTexture(const UINT meshIdx, const kbTexture* pTexture, const i
 /**
  *	kbModel::RayIntersection
  */
-kbModelIntersection_t kbModel::RayIntersection(const Vec3& inRayOrigin, const Vec3& inRayDirection, const Vec3& modelTranslation, const kbQuat& modelOrientation, const Vec3& scale) const {
+kbModelIntersection_t kbModel::RayIntersection(const Vec3& inRayOrigin, const Vec3& inRayDirection, const Vec3& modelTranslation, const Quat4& modelOrientation, const Vec3& scale) const {
 	kbModelIntersection_t intersectionInfo;
 
 	Mat4 inverseModelRotation;
 	inverseModelRotation.make_scale(scale);
-	inverseModelRotation = inverseModelRotation * modelOrientation.ToMat4();
+	inverseModelRotation = inverseModelRotation * modelOrientation.to_mat4();
 	const XMMATRIX xmInverse = XMMatrixInverse(nullptr, XMMATRIXFromMat4(inverseModelRotation));
 	inverseModelRotation = Mat4FromXMMATRIX(xmInverse);
 
@@ -1114,7 +1114,7 @@ void kbModel::SetBoneMatrices(std::vector<AnimatedBone_t>& bones, const float ti
 	for (int i = 0; i < m_Bones.size(); i++) {
 
 		bones[i].m_JointSpacePosition = Vec3::zero;
-		bones[i].m_JointSpaceRotation = kbQuat::identity;
+		bones[i].m_JointSpaceRotation = Quat4::identity;
 
 		const kbAnimation::kbBoneKeyFrames_t& jointData = animationData.m_JointKeyFrameData[i];
 		for (int nextKey = 0; nextKey < jointData.m_RotationKeyFrames.size(); nextKey++) {
@@ -1143,9 +1143,9 @@ void kbModel::SetBoneMatrices(std::vector<AnimatedBone_t>& bones, const float ti
 			}
 
 			const Vec3 prevBonePosition = jointData.m_TranslationKeyFrames[prevKey].m_Position;
-			const kbQuat prevBoneRotation = jointData.m_RotationKeyFrames[prevKey].m_Rotation;
+			const Quat4 prevBoneRotation = jointData.m_RotationKeyFrames[prevKey].m_Rotation;
 
-			const kbQuat nextRotation = jointData.m_RotationKeyFrames[nextKey].m_Rotation;
+			const Quat4 nextRotation = jointData.m_RotationKeyFrames[nextKey].m_Rotation;
 			const Vec3 nextPosition = jointData.m_TranslationKeyFrames[nextKey].m_Position;
 
 			const float prevTime = jointData.m_RotationKeyFrames[prevKey].m_Time;
@@ -1154,7 +1154,7 @@ void kbModel::SetBoneMatrices(std::vector<AnimatedBone_t>& bones, const float ti
 			const float timeBetweenKeys = nextTime - prevTime;
 			const float timeSincePrevKey = animTime - prevTime;
 			const float t = (timeBetweenKeys > 0) ? (timeSincePrevKey / timeBetweenKeys) : (0.0f);
-			bones[i].m_JointSpaceRotation = kbQuat::Slerp(prevBoneRotation, nextRotation, t);
+			bones[i].m_JointSpaceRotation = Quat4::slerp(prevBoneRotation, nextRotation, t);
 			bones[i].m_JointSpacePosition = prevBonePosition + (nextPosition - prevBonePosition) * t;
 			break;
 		}
@@ -1201,7 +1201,7 @@ void kbModel::BlendAnimations(std::vector<kbBoneMatrix_t>& outMatrices, const kb
 	for (int i = 0; i < fromTempBones.size(); i++) {
 
 		toTempBones[i].m_JointSpacePosition = kbLerp(fromTempBones[i].m_JointSpacePosition, toTempBones[i].m_JointSpacePosition, normalizedBlendTime);
-		toTempBones[i].m_JointSpaceRotation = kbQuat::Slerp(fromTempBones[i].m_JointSpaceRotation, toTempBones[i].m_JointSpaceRotation, normalizedBlendTime);
+		toTempBones[i].m_JointSpaceRotation = Quat4::slerp(fromTempBones[i].m_JointSpaceRotation, toTempBones[i].m_JointSpaceRotation, normalizedBlendTime);
 
 		const int parent = m_Bones[i].m_ParentIndex;
 
@@ -1334,9 +1334,9 @@ bool kbAnimation::Load_Internal() {
 		jointData.m_TranslationKeyFrames.resize(NumTranslationKeyFrames);
 
 		for (int iKey = 0; iKey < NumRotationKeyFrames; iKey++) {
-			const kbQuat rotationX(Vec3::right, rotationKeyFrames[iKey].m_Rotation[0]);
-			const kbQuat rotationY(Vec3::up, rotationKeyFrames[iKey].m_Rotation[1]);
-			const kbQuat rotationZ(Vec3::forward, -rotationKeyFrames[iKey].m_Rotation[2]);
+			const Quat4 rotationX(Vec3::right, rotationKeyFrames[iKey].m_Rotation[0]);
+			const Quat4 rotationY(Vec3::up, rotationKeyFrames[iKey].m_Rotation[1]);
+			const Quat4 rotationZ(Vec3::forward, -rotationKeyFrames[iKey].m_Rotation[2]);
 
 
 			jointData.m_RotationKeyFrames[iKey].m_Rotation = rotationX * rotationY * rotationZ;
@@ -1391,10 +1391,10 @@ kbBoneMatrix_t operator *(const kbBoneMatrix_t& op1, const kbBoneMatrix_t& op2) 
 	return returnMatrix;
 }
 
-void kbModel::DrawDebugTBN(const Vec3& modelTranslation, const kbQuat& modelOrientation, const Vec3& scale) {
+void kbModel::DrawDebugTBN(const Vec3& modelTranslation, const Quat4& modelOrientation, const Vec3& scale) {
 	Mat4 modelMatrix;
 	modelMatrix.make_scale(scale);
-	modelMatrix *= modelOrientation.ToMat4();
+	modelMatrix *= modelOrientation.to_mat4();
 	modelMatrix[3].set(modelTranslation.x, modelTranslation.y, modelTranslation.z, 1.0f);
 
 	for (int i = 0; i < m_DebugPositions.size(); i++) {

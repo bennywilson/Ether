@@ -7,8 +7,8 @@
 #pragma once
 
 #include "kbJobManager.h"
-#include "kbVector.h"
-#include "kbQuaternion.h"
+#include "Matrix.h"
+#include "Quaternion.h"
 
 enum ERenderPass {
 	RP_FirstPerson,
@@ -81,7 +81,7 @@ struct kbBoneMatrix_t {
 
 	kbBoneMatrix_t() { }
 
-	explicit kbBoneMatrix_t( const kbQuat & quat, const Vec3 & pos ) {
+	explicit kbBoneMatrix_t( const Quat4 & quat, const Vec3 & pos ) {
 		SetFromQuat( quat );
 		m_Axis[3] = pos;
 	}
@@ -97,7 +97,7 @@ struct kbBoneMatrix_t {
 	const Vec3 & GetAxis( const int axisIndex ) const { if ( axisIndex < 0 || axisIndex > 3 ) { blk::error("Doh!"); } return m_Axis[axisIndex]; }
 	const Vec3 & GetOrigin() const { return m_Axis[3]; }
 	void SetAxis( const int axisIndex, const Vec3 & inVec ) { if ( axisIndex < 0 || axisIndex > 3 ) { blk::error("Doh!"); } m_Axis[axisIndex] = inVec; }
-	void SetFromQuat( const kbQuat & srcQuat );
+	void SetFromQuat( const Quat4 & srcQuat );
 
 	void TransposeUpper();
 
@@ -249,7 +249,7 @@ public:
 	ECullMode									m_CullMode;
 	float										m_RenderOrderBias;
 	Vec3										m_Position;
-	kbQuat										m_Orientation;
+	Quat4										m_Orientation;
 	Vec3										m_Scale;
 	uint										m_EntityId;
 
@@ -284,7 +284,7 @@ public:
 
 	const class kbLightComponent *				m_pLightComponent;
 	Vec3										m_Position;
-	kbQuat										m_Orientation;
+	Quat4										m_Orientation;
 	Vec4										m_Color;
 	float										m_Radius;
 	float										m_Length;
@@ -315,7 +315,7 @@ public:
 													m_pTexture( nullptr ),
 													m_Color(0.0f, 0.0f, 0.0f, 1.0f ),
 													m_Pos( Vec3::zero ),
-													m_Rotation( kbQuat::zero ),
+													m_Rotation( Quat4::zero ),
 													m_Width( 0.0f ),
 													m_Height( 0.0f ),
 													m_NumIterations( 0 ),
@@ -330,7 +330,7 @@ public:
 	class kbTexture *							m_pTexture;
 	kbColor										m_Color;
 	Vec3										m_Pos;
-	kbQuat										m_Rotation;
+	Quat4										m_Rotation;
 	float										m_Width;
 	float										m_Height;
 	int											m_NumIterations;

@@ -250,7 +250,7 @@ void kbParticleManager::RenderSync() {
 		finishedModel.SwapTexture(0, curAtlas.m_pAtlasTexture, 0);
 
 		curRenderObj.m_Position = Vec3::zero;
-		curRenderObj.m_Orientation = kbQuat(0.0f, 0.0f, 0.0f, 1.0f);
+		curRenderObj.m_Orientation = Quat4(0.0f, 0.0f, 0.0f, 1.0f);
 		curRenderObj.m_pModel = &finishedModel;
 		g_pRenderer->AddParticle(curRenderObj);
 

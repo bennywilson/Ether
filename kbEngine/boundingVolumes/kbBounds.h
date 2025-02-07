@@ -7,7 +7,7 @@
 #ifndef _KBBOUNDS_H_
 #define _KBBOUNDS_H_
 
-#include "kbVector.h"
+#include "Matrix.h"
 
 class kbBounds {
 public:

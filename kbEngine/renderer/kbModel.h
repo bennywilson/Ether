@@ -7,7 +7,7 @@
 #include "kbCore.h"
 #include "kbBounds.h"
 #include "kbRenderBuffer.h"
-#include "kbVector.h"
+#include "Matrix.h"
 #include "kbRenderer_defs.h"
 #include "kbMaterial.h"
 
@@ -44,7 +44,7 @@ private:
 private:
 	struct kbRotationKeyFrame_t {
 		float									m_Time;
-		kbQuat									m_Rotation;
+		Quat4									m_Rotation;
 	};
 
 	struct kbTranslationKeyFrame_t {
@@ -66,7 +66,7 @@ Vec3 operator*( const Vec3 & op1, const kbBoneMatrix_t & op2 );
 kbBoneMatrix_t operator *( const kbBoneMatrix_t & op1, const kbBoneMatrix_t & op2 );
 
 struct AnimatedBone_t {
-	kbQuat										m_JointSpaceRotation;
+	Quat4										m_JointSpaceRotation;
 	Vec3										m_JointSpacePosition;
 
 	kbBoneMatrix_t								m_LocalSpaceMatrix;		
@@ -99,7 +99,7 @@ public:
 	struct bone_t {
 		kbString								m_Name;
 		unsigned short							m_ParentIndex;
-		kbQuat									m_RelativeRotation;
+		Quat4									m_RelativeRotation;
 		Vec3									m_RelativePosition;
 	};
 
@@ -130,7 +130,7 @@ public:
 	size_t										NumVertices() const { return m_NumVertices; }
 	UINT										VertexStride() const { return m_Stride; }
 
-	kbModelIntersection_t						RayIntersection( const Vec3 & rayOrigin, const Vec3 & rayDirection, const Vec3 & modelTranslation, const kbQuat & modelOrientation, const Vec3 & scale ) const;
+	kbModelIntersection_t						RayIntersection( const Vec3 & rayOrigin, const Vec3 & rayDirection, const Vec3 & modelTranslation, const Quat4 & modelOrientation, const Vec3 & scale ) const;
 
 	void										Animate( std::vector<kbBoneMatrix_t> & outMatrices, const float time, const kbAnimation *const pAnimation, const bool bLoopAnim );
 	void										BlendAnimations( std::vector<kbBoneMatrix_t> & outMatrices, const kbAnimation *const pFromAnim, const float fromAnimTime, const bool bFromAnimLoops, const kbAnimation *const pToAnim, const float ToAnimTime, const bool bToAnimLoops, const float normalizedBlendTime );
@@ -142,7 +142,7 @@ public:
 	const kbBoneMatrix_t &						GetInvRefBoneMatrix( const int index ) const { return m_InvRefPose[index]; }
 
 	// Debug
-	void										DrawDebugTBN( const Vec3 & modelTranslation, const kbQuat & modelOrientation, const Vec3 & modelScale );
+	void										DrawDebugTBN( const Vec3 & modelTranslation, const Quat4 & modelOrientation, const Vec3 & modelScale );
 
 protected:
 

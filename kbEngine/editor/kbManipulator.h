@@ -29,16 +29,16 @@
 
 	void										ProcessInput( const bool leftMouseDown );
 
-	bool										AttemptMouseGrab( const Vec3 & rayOrigin, const Vec3 & rayDirection, const kbQuat & cameraOrientation );
-	void										UpdateMouseDrag( const Vec3 & rayOrigin, const Vec3 & rayDirection, const kbQuat & cameraOrientation );
+	bool										AttemptMouseGrab( const Vec3 & rayOrigin, const Vec3 & rayDirection, const Quat4 & cameraOrientation );
+	void										UpdateMouseDrag( const Vec3 & rayOrigin, const Vec3 & rayDirection, const Quat4 & cameraOrientation );
 	void										ReleaseFromMouseGrab() { m_SelectedGroup = -1; m_LastOrientation = m_Orientation; }
 	bool										IsGrabbed() const { return m_SelectedGroup != -1; }
 
 	void										SetPosition( const Vec3 & newPosition ) { m_Position = newPosition; }
 	const Vec3 &								GetPosition() const { return m_Position; }
 
-	void										SetOrientation( const kbQuat & newOrientation ) { m_Orientation = m_LastOrientation = newOrientation; }
-	const kbQuat &								GetOrientation() const { return m_Orientation; }
+	void										SetOrientation( const Quat4 & newOrientation ) { m_Orientation = m_LastOrientation = newOrientation; }
+	const Quat4 &								GetOrientation() const { return m_Orientation; }
 
 	void										SetScale( const Vec3 & newScale ) { m_Scale = newScale; }
 	const Vec3 &								GetScale() const { return m_Scale; }
@@ -53,12 +53,12 @@ private:
 	manipulatorMode_t							m_ManipulatorMode;
 	
 	Vec3										m_Position;
-	kbQuat										m_Orientation;
+	Quat4										m_Orientation;
 	Vec3										m_Scale;
 
 	Vec3										m_MouseWorldGrabPoint;
 	Vec3										m_MouseLocalGrabPoint;
-	kbQuat										m_LastOrientation;
+	Quat4										m_LastOrientation;
 	Vec3										m_LastScale;
 
 	int											m_SelectedGroup;

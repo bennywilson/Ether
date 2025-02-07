@@ -137,10 +137,10 @@
     <ClInclude Include="core\kbCore.h">
       <Filter>core</Filter>
     </ClInclude>
-    <ClInclude Include="math\kbQuaternion.h">
+    <ClInclude Include="math\Quaternion.h">
       <Filter>math</Filter>
     </ClInclude>
-    <ClInclude Include="math\kbVector.h">
+    <ClInclude Include="math\Matrix.h">
       <Filter>math</Filter>
     </ClInclude>
     <ClInclude Include="boundingVolumes\kbBounds.h">
@@ -332,10 +332,10 @@
     <ClCompile Include="core\kbCore.cpp">
       <Filter>core</Filter>
     </ClCompile>
-    <ClCompile Include="math\kbQuaternion.cpp">
+    <ClCompile Include="math\Quaternion.cpp">
       <Filter>math</Filter>
     </ClCompile>
-    <ClCompile Include="math\kbVector.cpp">
+    <ClCompile Include="math\Matrix.cpp">
       <Filter>math</Filter>
     </ClCompile>
     <ClCompile Include="app\kbApp.cpp">

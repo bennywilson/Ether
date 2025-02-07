@@ -580,8 +580,8 @@ void kbFlingPhysicsComponent::Update_Internal(const float dt) {
 	SetOwnerPosition(newPos);
 
 	m_CurRotationAngle += m_RotationSpeed * dt;
-	kbQuat rot;
-	rot.FromAxisAngle(m_RotationAxis, m_CurRotationAngle);
+	Quat4 rot;
+	rot.from_axis_angle(m_RotationAxis, m_CurRotationAngle);
 	rot = m_OwnerStartRotation * rot;
 	SetOwnerRotation(rot);
 }

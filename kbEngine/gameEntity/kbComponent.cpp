@@ -3,8 +3,8 @@
 /// 2016-2025 blk 1.0
 
 #include "kbCore.h"
-#include "kbVector.h"
-#include "kbQuaternion.h"
+#include "Matrix.h"
+#include "Quaternion.h"
 #include "kbBounds.h"
 #include "kbGameEntityHeader.h"
 #include "kbGame.h"
@@ -237,7 +237,7 @@ Vec3 kbGameComponent::GetOwnerScale() const {
 /**
  *	kbGameComponent::GetOwnerRotation
  */
-kbQuat kbGameComponent::GetOwnerRotation() const {
+Quat4 kbGameComponent::GetOwnerRotation() const {
 	return ((kbGameEntity*)GetOwner())->GetOrientation();
 }
 
@@ -251,7 +251,7 @@ void kbGameComponent::SetOwnerPosition(const Vec3& position) {
 /**
  *	kbGameComponent::SetOwnerRotation
  */
-void kbGameComponent::SetOwnerRotation(const kbQuat& rotation) {
+void kbGameComponent::SetOwnerRotation(const Quat4& rotation) {
 	GetOwner()->SetOrientation(rotation);
 }
 
@@ -272,7 +272,7 @@ const Vec3 kbTransformComponent::GetPosition() const {
 		return m_Position;
 	}
 
-	const Mat4 parentRotation = GetOwner()->GetOrientation().ToMat4();
+	const Mat4 parentRotation = GetOwner()->GetOrientation().to_mat4();
 	const Vec3 worldPosition = parentRotation.transform_point(m_Position);
 
 	return parentRotation.transform_point(m_Position) + GetOwner()->GetPosition();
@@ -292,7 +292,7 @@ const Vec3 kbTransformComponent::GetScale() const {
 /**
  *	kbTransformComponent::GetOrientation
  */
-const kbQuat kbTransformComponent::GetOrientation() const {
+const Quat4 kbTransformComponent::GetOrientation() const {
 	if (GetOwner()->GetComponent(0) == this) {
 		return m_Orientation;
 	}
@@ -446,5 +446,5 @@ void kbEditorGlobalSettingsComponent::Constructor() {
  */
 void kbEditorLevelSettingsComponent::Constructor() {
 	m_CameraPosition = Vec3::zero;
-	m_CameraRotation = kbQuat::identity;
+	m_CameraRotation = Quat4::identity;
 }

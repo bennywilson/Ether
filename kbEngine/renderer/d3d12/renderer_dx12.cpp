@@ -276,7 +276,7 @@ void Renderer_Dx12::render() {
 	);
 
 	const Mat4 trans = Mat4::make_translation(-m_camera_position);
-	Mat4 rot = m_camera_rotation.ToMat4();
+	Mat4 rot = m_camera_rotation.to_mat4();
 	rot.transpose_self();
 
 	Mat4 view_matrix = trans * rot;

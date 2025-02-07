@@ -3,7 +3,7 @@
 /// 2016-2025 blk 1.0
 
 #include "kbCore.h"
-#include "kbVector.h"
+#include "Matrix.h"
 #include "kbModel.h"
 #include "kbGameEntityHeader.h"
 #include "kbComponent.h"
@@ -26,7 +26,7 @@ kbManipulator::kbManipulator() :
 kbManipulator::~kbManipulator() { }
 
 /// kbManipulator::AttemptMouseGrab
-bool kbManipulator::AttemptMouseGrab(const Vec3& rayOrigin, const Vec3& rayDirection, const kbQuat& cameraOrientation) {
+bool kbManipulator::AttemptMouseGrab(const Vec3& rayOrigin, const Vec3& rayDirection, const Quat4& cameraOrientation) {
 	const kbModel* const pModel = m_pModels[m_ManipulatorMode];
 
 	const float modelScale = kbLevelComponent::GetGlobalModelScale();
@@ -57,19 +57,19 @@ bool kbManipulator::AttemptMouseGrab(const Vec3& rayOrigin, const Vec3& rayDirec
 }
 
 /// kbManipulator::UpdateMouseDrag
-void kbManipulator::UpdateMouseDrag(const Vec3& rayOrigin, const Vec3& rayDirection, const kbQuat& cameraOrientation) {
+void kbManipulator::UpdateMouseDrag(const Vec3& rayOrigin, const Vec3& rayDirection, const Quat4& cameraOrientation) {
 	if (m_SelectedGroup < 0 || m_SelectedGroup > 3) {
 		return;
 	}
 
 	// Find intersection point with the plane facing the camera that goes through the mouse grab point
-	const Vec3 cameraPlaneNormal = cameraOrientation.ToMat4()[2].ToVec3();
+	const Vec3 cameraPlaneNormal = cameraOrientation.to_mat4()[2].ToVec3();
 	const float d = m_MouseWorldGrabPoint.dot(cameraPlaneNormal);
 	const float t = -(rayOrigin.dot(cameraPlaneNormal) - d) / rayDirection.dot(cameraPlaneNormal);
 	const Vec3 camPlaneIntersection = rayOrigin + t * rayDirection;
 
 	// Find the normal of the plane we'd like to move the object along
-	const Mat4 manipulatorMatrix = m_LastOrientation.ToMat4();
+	const Mat4 manipulatorMatrix = m_LastOrientation.to_mat4();
 	Vec3 movePlaneNormal = Vec3::up;
 
 	if (m_SelectedGroup < 3) {
@@ -103,7 +103,7 @@ void kbManipulator::UpdateMouseDrag(const Vec3& rayOrigin, const Vec3& rayDirect
 		}
 
 		const Vec3 rotationAxes[] = { manipulatorMatrix[1].ToVec3(), manipulatorMatrix[2].ToVec3(), manipulatorMatrix[0].ToVec3() };
-		const kbQuat rot(rotationAxes[m_SelectedGroup], rotationAngle);
+		const Quat4 rot(rotationAxes[m_SelectedGroup], rotationAngle);
 
 		// Final rotation
 		m_Orientation = (m_LastOrientation * rot).normalize_safe();

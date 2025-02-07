@@ -3282,7 +3282,7 @@ void kbRenderer_DX11::RenderDebugBillboards(const bool bIsEntityIdPass) {
 
 		byte* const pByteBuffer = (byte*)mappedResource.pData;
 
-		const Mat4 preRotationMatrix = m_pCurrentRenderWindow->GetCameraRotation().ToMat4();
+		const Mat4 preRotationMatrix = m_pCurrentRenderWindow->GetCameraRotation().to_mat4();
 		Mat4 mvpMatrix;
 		mvpMatrix.make_scale(currBillBoard.m_Scale * m_EditorIconScale_RenderThread);
 		mvpMatrix[3] = currBillBoard.m_Position;
@@ -3608,7 +3608,7 @@ ID3D11Buffer* kbRenderer_DX11::SetConstantBuffer(const kbShaderVarBindings_t& sh
 	Mat4 worldMatrix;
 	if (pRenderObject != nullptr) {
 		worldMatrix.make_scale(pRenderObject->m_Scale);
-		worldMatrix *= pRenderObject->m_Orientation.ToMat4();
+		worldMatrix *= pRenderObject->m_Orientation.to_mat4();
 		worldMatrix[3] = pRenderObject->m_Position;
 	} else {
 		worldMatrix = Mat4::identity;

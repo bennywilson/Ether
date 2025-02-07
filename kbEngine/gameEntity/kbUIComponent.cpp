@@ -4,8 +4,8 @@
 
 #include "kbCore.h"
 #include "containers.h"
-#include "kbVector.h"
-#include "kbQuaternion.h"
+#include "Matrix.h"
+#include "Quaternion.h"
 #include "kbGameEntityHeader.h"
 #include "kbUIComponent.h"
 #include "kbRenderer.h"

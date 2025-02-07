@@ -3,7 +3,9 @@
 /// 2016-2025 blk 1.0
 
 #include <math.h>
+#include <stdlib.h>
 #include "kbMath.h"
+#include "Matrix.h"
 
 float CosInterpolation(float a, float b, float x) {
 	float ft = x * 3.1415927f;
@@ -62,4 +64,42 @@ float NormalizedNoise(float x, float y) {
 	}
 
 	return (total * 0.5f) + 0.5f;
+}
+
+
+int kbirand(const int min, const int max) {
+	return min + rand() % (max - min);
+}
+
+// kbrand
+f32 kbfrand(const f32 min, const f32 max) {
+	const f32 rand_val = rand() / (f32)RAND_MAX;
+	return min + rand_val * (max - min);
+}
+
+Vec2 Vec2Rand(const Vec2& min, const Vec2& max) {
+	Vec2 randVec;
+	randVec.x = min.x + (kbfrand() * (max.x - min.x));
+	randVec.y = min.y + (kbfrand() * (max.y - min.y));
+
+	return randVec;
+}
+
+Vec3 Vec3Rand(const Vec3& min, const Vec3& max) {
+	Vec3 randVec;
+	randVec.x = min.x + (kbfrand() * (max.x - min.x));
+	randVec.y = min.y + (kbfrand() * (max.y - min.y));
+	randVec.z = min.z + (kbfrand() * (max.z - min.z));
+
+	return randVec;
+}
+
+Vec4 Vec4Rand(const Vec4& min, const Vec4& max) {
+	Vec4 randVec;
+	randVec.x = min.x + (kbfrand() * (max.x - min.x));
+	randVec.y = min.y + (kbfrand() * (max.y - min.y));
+	randVec.z = min.z + (kbfrand() * (max.z - min.z));
+	randVec.w = min.w + (kbfrand() * (max.w - min.w));
+	return randVec;
+
 }

@@ -16,6 +16,8 @@
 
 #define MAX_LOADSTRING 100
 
+using namespace blk;
+
 extern bool g_UseEditor;
 int g_screen_width = 1920;
 int g_screen_height = 1080;

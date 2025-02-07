@@ -5,8 +5,8 @@
 // 2016-2019 blk 1.0
 //===================================================================================================
 #include "kbCore.h"
-#include "kbVector.h"
-#include "kbQuaternion.h"
+#include "Matrix.h"
+#include "Quaternion.h"
 #include "kbBounds.h"
 #include "kbGameEntityHeader.h"
 #include "kbRenderer.h"
@@ -152,7 +152,7 @@ void kbLightComponent::Update_Internal( const float DeltaTime ) {
 	if ( this->IsA( kbDirectionalLightComponent::GetType() ) ) {
 
 		kbShaderParamOverrides_t shaderParam;
-		shaderParam.SetVec4( "sunDir", GetOwner()->GetOrientation().ToMat4()[2] * -1.0f );
+		shaderParam.SetVec4( "sunDir", GetOwner()->GetOrientation().to_mat4()[2] * -1.0f );
 		g_pRenderer->SetGlobalShaderParam( shaderParam );
 	}
 
@@ -197,7 +197,7 @@ void kbDirectionalLightComponent::EditorChange( const std::string & propertyName
 
 	{
 		kbShaderParamOverrides_t shaderParam;
-		shaderParam.SetVec4( "sunDir", GetOwner()->GetOrientation().ToMat4()[2] * -1.0f );
+		shaderParam.SetVec4( "sunDir", GetOwner()->GetOrientation().to_mat4()[2] * -1.0f );
 		g_pRenderer->SetGlobalShaderParam( shaderParam );
 	}
 }
@@ -251,7 +251,7 @@ void kbLightShaftsComponent::Update_Internal( const float DeltaTime ) {
 	g_pRenderer->UpdateLightShafts( this, GetOwner()->GetPosition(), GetOwner()->GetOrientation() );
 
 	kbShaderParamOverrides_t shaderParam;
-	shaderParam.SetVec4( "lightShaftsDir", GetOwner()->GetOrientation().ToMat4()[2] * -1.0f );
+	shaderParam.SetVec4( "lightShaftsDir", GetOwner()->GetOrientation().to_mat4()[2] * -1.0f );
 	shaderParam.SetVec4( "lightShaftsColor", m_Color );
 	g_pRenderer->SetGlobalShaderParam( shaderParam );
 }

@@ -7,8 +7,8 @@
 //==============================================================================
 #include "kbCore.h"
 #include "containers.h"
-#include "kbVector.h"
-#include "kbQuaternion.h"
+#include "Matrix.h"
+#include "Quaternion.h"
 #include "kbRenderer.h"
 #include "kbGameEntityHeader.h"
 #include "kbComponent.h"
@@ -93,7 +93,7 @@ kbRenderWindow::~kbRenderWindow() {
 /**
  *	kbRenderer::SetRenderViewTransform
  */
-void kbRenderer::SetRenderViewTransform(const HWND hwnd, const Vec3& position, const kbQuat& rotation) {
+void kbRenderer::SetRenderViewTransform(const HWND hwnd, const Vec3& position, const Quat4& rotation) {
 	int viewIndex = -1;
 
 	if (hwnd == nullptr) {
@@ -119,7 +119,7 @@ void kbRenderer::SetRenderViewTransform(const HWND hwnd, const Vec3& position, c
 /**
  *	kbRenderer::GetRenderViewTransform
  */
-void kbRenderer::GetRenderViewTransform(const HWND hwnd, Vec3& position, kbQuat& rotation) {
+void kbRenderer::GetRenderViewTransform(const HWND hwnd, Vec3& position, Quat4& rotation) {
 	int viewIndex = -1;
 
 	if (hwnd == nullptr) {
@@ -172,7 +172,7 @@ void kbRenderer::SetNearFarPlane(const HWND hwnd, const float nearPlane, const f
 void kbRenderWindow::BeginFrame() {
 	Mat4 translationMatrix(Mat4::identity);
 	translationMatrix[3].ToVec3() = -m_CameraPosition;
-	Mat4 rotationMatrix = m_CameraRotation.ToMat4();
+	Mat4 rotationMatrix = m_CameraRotation.to_mat4();
 	rotationMatrix.transpose_self();
 
 	m_ViewMatrix = translationMatrix * rotationMatrix;
@@ -368,7 +368,7 @@ void kbRenderer::DrawDebugText(const std::string& theString, const float X, cons
 /**
  *	kbRenderer::AddLight
  */
-void kbRenderer::AddLight(const kbLightComponent* pLightComponent, const Vec3& pos, const kbQuat& orientation) {
+void kbRenderer::AddLight(const kbLightComponent* pLightComponent, const Vec3& pos, const Quat4& orientation) {
 
 	if (m_pCurrentRenderWindow == nullptr) {
 		blk::error("kbRenderer::AddLight - nullptr Render Window");
@@ -405,7 +405,7 @@ void kbRenderer::AddLight(const kbLightComponent* pLightComponent, const Vec3& p
 /**
  *	kbRenderer::UpdateLight
  */
-void kbRenderer::UpdateLight(const kbLightComponent* pLightComponent, const Vec3& pos, const kbQuat& orientation) {
+void kbRenderer::UpdateLight(const kbLightComponent* pLightComponent, const Vec3& pos, const Quat4& orientation) {
 
 	if (m_pCurrentRenderWindow == nullptr) {
 		blk::error("kbRenderer::UpdateLight - nullptr Render Window");
@@ -507,7 +507,7 @@ void kbRenderer::RemoveParticle(const kbRenderObject& renderObject) {
 /**
  *	kbRenderer::AddLightShafts
  */
-void kbRenderer::AddLightShafts(const kbLightShaftsComponent* const pComponent, const Vec3& pos, const kbQuat& orientation) {
+void kbRenderer::AddLightShafts(const kbLightShaftsComponent* const pComponent, const Vec3& pos, const Quat4& orientation) {
 	kbLightShafts newLightShafts;
 	newLightShafts.m_pLightShaftsComponent = pComponent;
 	newLightShafts.m_pTexture = pComponent->GetTexture();
@@ -534,7 +534,7 @@ void kbRenderer::AddLightShafts(const kbLightShaftsComponent* const pComponent, 
 /**
  *	kbRenderer::UpdateLightShafts
  */
-void kbRenderer::UpdateLightShafts(const kbLightShaftsComponent* const pComponent, const Vec3& pos, const kbQuat& orientation) {
+void kbRenderer::UpdateLightShafts(const kbLightShaftsComponent* const pComponent, const Vec3& pos, const Quat4& orientation) {
 	kbLightShafts updatedLightShafts;
 	updatedLightShafts.m_pLightShaftsComponent = pComponent;
 	updatedLightShafts.m_pTexture = pComponent->GetTexture();
@@ -820,7 +820,7 @@ void kbRenderer::DrawBillboard(const Vec3& position, const Vec2& size, const int
 /**
  *	kbRenderer::DrawModel
  */
-void kbRenderer::DrawModel(const kbModel* const pModel, const std::vector<kbShaderParamOverrides_t>& materials, const Vec3& position, const kbQuat& orientation, const Vec3& scale, const int entityId) {
+void kbRenderer::DrawModel(const kbModel* const pModel, const std::vector<kbShaderParamOverrides_t>& materials, const Vec3& position, const Quat4& orientation, const Vec3& scale, const int entityId) {
 	debugDrawObject_t model;
 	model.m_Position = position;
 	model.m_Orientation = orientation;

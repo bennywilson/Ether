@@ -1,11 +1,8 @@
-//===================================================================================================
-// kbWidgetCBObjects.h
-//
-//
-// 2016-2017 blk 1.0
-//===================================================================================================
-#ifndef _KBWIDGETCBOBJECTS_H_
-#define _KBWIDGETCBOBJECTS_H_
+/// kbWidgetCBObjects.h
+///
+/// 2016-2025 blk 1.0
+
+#pragma once
 
 /**
  *	widgetCBType_t
@@ -148,5 +145,3 @@ public:
 	
 	void * m_Value;
 };
-
-#endif

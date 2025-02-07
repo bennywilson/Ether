@@ -5,8 +5,8 @@
 // 2016 blk 1.0
 //===================================================================================================
 #include "kbCore.h"
-#include "kbVector.h"
-#include "kbQuaternion.h"
+#include "Matrix.h"
+#include "Quaternion.h"
 #include "kbBounds.h"
 #include "kbGameEntityHeader.h"		// <--- TODO: Temp, game entity should not be accessed from renderer
 #include "kbModel.h"

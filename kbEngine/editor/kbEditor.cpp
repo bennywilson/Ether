@@ -18,8 +18,8 @@
 #include <sstream>
 #include "kbCore.h"
 #include "containers.h"
-#include "kbVector.h"
-#include "kbQuaternion.h"
+#include "Matrix.h"
+#include "Quaternion.h"
 #include "DX11/kbRenderer_DX11.h"
 #include "kbGame.h"
 #include "kbWidget.h"
@@ -391,7 +391,7 @@ void kbEditor::LoadMap(const std::string& InMapName) {
 		SetMainCameraRot(pLevelSettings->m_CameraRotation);
 	} else {
 		SetMainCameraPos(Vec3::zero);
-		SetMainCameraRot(kbQuat::identity);
+		SetMainCameraRot(Quat4::identity);
 	}
 
 	m_UndoStack.Reset();
@@ -668,13 +668,13 @@ Vec3 kbEditor::GetMainCameraPos() const {
 }
 
 /// kbEditor::SetMainCameraRot
-void kbEditor::SetMainCameraRot(const kbQuat& newCamRot) {
+void kbEditor::SetMainCameraRot(const Quat4& newCamRot) {
 	m_pMainTab->GetEditorWindowCamera()->m_Rotation = newCamRot;
 	m_pMainTab->GetEditorWindowCamera()->m_RotationTarget = newCamRot;
 }
 
 /// kbEditor::GetMainCameraRot
-kbQuat kbEditor::GetMainCameraRot() const {
+Quat4 kbEditor::GetMainCameraRot() const {
 	return m_pMainTab->GetEditorWindowCamera()->m_Rotation;
 }
 
@@ -849,7 +849,7 @@ void kbEditor::CreateGameEntity(Fl_Widget* widget, void* thisPtr) {
 	}
 
 	kbEditorEntity* const pEditorEntity = new kbEditorEntity();
-	const Vec3 entityLocation = editorCamera->m_Position + (editorCamera->m_Rotation.ToMat4()[2] * 4.0f).ToVec3();
+	const Vec3 entityLocation = editorCamera->m_Position + (editorCamera->m_Rotation.to_mat4()[2] * 4.0f).ToVec3();
 	pEditorEntity->SetPosition(entityLocation);
 
 	g_Editor->m_GameEntities.push_back(pEditorEntity);
@@ -907,7 +907,7 @@ void XFormEntities(const kbManipulator& manipulator, const Vec4 xForm) {
 			if (manipulator.GetMode() == kbManipulator::Translate) {
 				entityList[i]->SetPosition(entityList[i]->GetPosition() + xForm.ToVec3() * xForm.w);
 			} else if (manipulator.GetMode() == kbManipulator::Rotate) {
-				kbQuat rot(xForm.ToVec3(), xForm.a);
+				Quat4 rot(xForm.ToVec3(), xForm.a);
 				rot = (entityList[i]->GetOrientation() * rot).normalize_safe();
 				entityList[i]->SetOrientation(rot);
 			} else if (manipulator.GetMode() == kbManipulator::Scale) {
@@ -1372,7 +1372,7 @@ void kbEditor::InsertSelectedPrefabIntoScene(Fl_Widget*, void* pUserdata) {
 		return;
 	}
 
-	const Vec3 entityLocation = editorCamera->m_Position + (editorCamera->m_Rotation.ToMat4()[2] * 4.0f).ToVec3();
+	const Vec3 entityLocation = editorCamera->m_Position + (editorCamera->m_Rotation.to_mat4()[2] * 4.0f).ToVec3();
 
 	for (int i = 0; i < prefabToCreate->NumGameEntities(); i++) {
 		kbGameEntity* const pNewEntity = new kbGameEntity(prefabToCreate->m_GameEntities[i], false);

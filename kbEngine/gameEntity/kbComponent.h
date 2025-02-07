@@ -5,7 +5,7 @@
 #pragma once
 
 #include <vector>
-#include "kbQuaternion.h"
+#include "Quaternion.h"
 
 class kbGameEntity;
 
@@ -97,7 +97,7 @@ public:
 	kbString									GetOwnerName() const;
 	Vec3										GetOwnerPosition() const;
 	Vec3										GetOwnerScale() const;
-	kbQuat										GetOwnerRotation() const;
+	Quat4										GetOwnerRotation() const;
 	
 	template<typename T>
 	T* GetComponent() const {
@@ -106,7 +106,7 @@ public:
 	}
 
 	void										SetOwnerPosition( const Vec3 & position );
-	void										SetOwnerRotation( const kbQuat & rotation );
+	void										SetOwnerRotation( const Quat4 & rotation );
 
 	float										GetStartingLifeTime() const { return m_StartingLifeTime; }
 	float										GetLifeTimeRemaining() const { return m_LifeTimeRemaining; }
@@ -131,12 +131,12 @@ public:
 	void										SetName( const std::string newName ) { m_Name = newName; }
 	void										SetPosition( const Vec3 & newPosition ) { m_Position = newPosition; }
 	void										SetScale( const Vec3 & newScale ) { m_Scale = newScale; }
-	void										SetOrientation( const kbQuat & newOrientation ) { m_Orientation = newOrientation; }
+	void										SetOrientation( const Quat4 & newOrientation ) { m_Orientation = newOrientation; }
 
 	const kbString &							GetName() const { return m_Name; }
 	const Vec3								GetPosition() const;
 	const Vec3								GetScale() const;
-	const kbQuat								GetOrientation() const;
+	const Quat4								GetOrientation() const;
 
 protected:
 
@@ -144,7 +144,7 @@ protected:
 
 	Vec3										m_Position;
 	Vec3										m_Scale;
-	kbQuat										m_Orientation;
+	Quat4										m_Orientation;
 };
 
 /**
@@ -309,7 +309,7 @@ class kbEditorLevelSettingsComponent : public kbGameComponent {
 //-------------------------------------------------------------------------------------------------------------------------------------------------------------
 public:
 	Vec3									m_CameraPosition;
-	kbQuat									m_CameraRotation;
+	Quat4									m_CameraRotation;
 };
 
 /**

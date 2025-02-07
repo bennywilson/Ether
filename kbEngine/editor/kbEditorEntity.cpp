@@ -3,7 +3,7 @@
 /// 2016-2025 blk 1.0
 
 #include "kbCore.h"
-#include "kbVector.h"
+#include "Matrix.h"
 #include "kbBounds.h"
 #include "DX11/kbRenderer_DX11.h"
 #include "kbGameEntityHeader.h"
@@ -65,12 +65,12 @@ void kbEditorEntity::SetPosition( const Vec3 & newPosition ) {
 }
 
 /// kbEditorEntity::GetOrientation
-const kbQuat kbEditorEntity::GetOrientation() const {
+const Quat4 kbEditorEntity::GetOrientation() const {
 	return m_pGameEntity->GetOrientation(); 
 }
 
 /// kbEditorEntity::SetOrientation
-void kbEditorEntity::SetOrientation( const kbQuat & newOrientation ) {
+void kbEditorEntity::SetOrientation( const Quat4 & newOrientation ) {
 	m_pGameEntity->SetOrientation( newOrientation ); 
 }
 

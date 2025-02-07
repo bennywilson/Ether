@@ -11,8 +11,8 @@
 #include <D3D11.h>
 #include <DirectXMath.h>
 #include "kbRenderer.h"
-#include "kbVector.h"
-#include "kbQuaternion.h"
+#include "Matrix.h"
+#include "Quaternion.h"
 #include "kbBounds.h"
 #include "kbRenderer_defs.h"
 #include "kbMaterial.h"

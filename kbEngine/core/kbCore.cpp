@@ -109,7 +109,7 @@ namespace blk {
 	}
 
 	/// warn_check
-	bool warn_check(const bool expression, char* const msg, ...) {
+	bool warn_check(const bool expression, const char* const msg, ...) {
 		if (expression == true) {
 			return true;
 		}
@@ -128,7 +128,7 @@ namespace blk {
 	}
 
 	/// warn_check
-	bool warn_check(const HRESULT hr, char* const msg, ...) {
+	bool warn_check(const HRESULT hr, const char* const msg, ...) {
 		va_list args;
 		va_start(args, msg);
 		const bool ret = warn_check(!FAILED(hr), msg, args);
@@ -149,8 +149,6 @@ namespace blk {
 		DebugBreak();
 		throw finalBuffer;
 	}
-
-	/// error_check
 	bool error_check(const bool expression, const char* const msg, ...) {
 		if (expression == true) {
 			return true;
@@ -170,8 +168,6 @@ namespace blk {
 
 		return false;
 	}
-
-	/// error_check
 	bool error_check(const HRESULT hr, const char* const msg, ...) {
 		va_list args;
 		va_start(args, msg);
@@ -180,7 +176,6 @@ namespace blk {
 
 		return ret;
 	}
-
 	/// log
 	void log(const char* const msg, ...) {
 		messageType = Message_Normal;
@@ -190,11 +185,6 @@ namespace blk {
 		write_to_file(msg, args);
 		va_end(args);
 	}
-}
-
-/// kbfrand
-float kbfrand() {
-	return (rand() % 1000000000) / 1000000000.f;
 }
 
 /**
@@ -301,7 +291,6 @@ DECLARE_SCOPED_TIMER(RENDER_SYNC_PARTICLES, "   Render Sync Particles")
 DECLARE_SCOPED_TIMER(RENDER_GPUTIMER_STALL, "GPU Timer Stall")
 DECLARE_SCOPED_TIMER(RENDER_DEBUG, "Debug Rendering")
 DECLARE_SCOPED_TIMER(RENDER_ENTITYID, "EntityId Rendering")
-
 DECLARE_SCOPED_TIMER(TEMP_1, "Temp 1")
 DECLARE_SCOPED_TIMER(TEMP_2, "Temp 2")
 DECLARE_SCOPED_TIMER(TEMP_3, "Temp 3")

@@ -5,8 +5,8 @@
 // 2016 blk 1.0
 //===================================================================================================
 #include "kbCore.h"
-#include "kbVector.h"
-#include "kbQuaternion.h"
+#include "Matrix.h"
+#include "Quaternion.h"
 #include "kbGameEntityHeader.h"
 #include "kbTerrainComponent.h"
 #include "kbRenderer.h"
@@ -289,7 +289,7 @@ void kbGrass::RefreshGrass() {
 		const float halfTerrainWidth = m_pOwningTerrainComponent->GetTerrainWidth() * 0.5f;
 		const Vec3 terrainMin = /*m_pOwningTerrainComponent->GetOwner()->GetPosition()*/ -Vec3(halfTerrainWidth, 0.0f, halfTerrainWidth);
 
-		const Mat4 ownerRot = m_pOwningTerrainComponent->GetOwner()->GetOrientation().ToMat4();
+		const Mat4 ownerRot = m_pOwningTerrainComponent->GetOwner()->GetOrientation().to_mat4();
 		const Vec3 ownerPos = m_pOwningTerrainComponent->GetOwner()->GetPosition();
 		const auto& grassZones = m_pOwningTerrainComponent->GetGrassZones();
 
@@ -368,7 +368,7 @@ void kbGrass::RefreshGrass() {
 				}
 				if (bCreatedPointCloud) {
 					renderObj.m_pModel->UnmapVertexBuffer(iVert);
-					Mat4 rotMat = m_pOwningTerrainComponent->GetOwnerRotation().ToMat4();
+					Mat4 rotMat = m_pOwningTerrainComponent->GetOwnerRotation().to_mat4();
 					m_GrassRenderObjects[cellIdx].m_RenderObject.m_Position = cellCenter * rotMat + m_pOwningTerrainComponent->GetOwnerPosition();
 					m_GrassRenderObjects[cellIdx].m_RenderObject.m_Scale = m_pOwningTerrainComponent->GetOwnerScale();
 					m_GrassRenderObjects[cellIdx].m_RenderObject.m_Orientation = m_pOwningTerrainComponent->GetOwnerRotation();
@@ -708,7 +708,7 @@ void kbTerrainComponent::Update_Internal(const float DeltaTime) {
 	}
 
 	/*
-		const Mat4 ownerRot = GetOwnerRotation().ToMat4();
+		const Mat4 ownerRot = GetOwnerRotation().to_mat4();
 		const Vec3 ownerPos = GetOwnerPosition();
 		for ( int i = 0; i < m_GrassZones.size(); i++ ) {
 

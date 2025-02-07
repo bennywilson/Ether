@@ -1,30 +1,19 @@
-//===================================================================================================
-// kbDebugComponents.h
-//
-//
-// 2018 blk 1.0
-//===================================================================================================
-#ifndef _KBDEBUGCOMPONENTS_H_
-#define _KBDEBUGCOMPONENTS_H_
+/// kbDebugComponents.h
+///
+/// 2018-2025 blk 1.0
 
-/**
- *	kbDebugSphereCollision
- */
+#pragma once
+
+class kbModel;
+
+/// kbDebugSphereCollision
 class kbDebugSphereCollision : public kbGameComponent {
-
-	KB_DECLARE_COMPONENT( kbDebugSphereCollision, kbGameComponent );
-
-//---------------------------------------------------------------------------------------------------
-public:
-
-protected:
-	virtual void								SetEnable_Internal( const bool bEnable ) override;
-	virtual void								Update_Internal( const float DeltaTime ) override;
+	KB_DECLARE_COMPONENT(kbDebugSphereCollision, kbGameComponent);
 
 private:
-	class kbModel *								m_pCollisionModel;
+	virtual void SetEnable_Internal(const bool bEnable) override;
+	virtual void Update_Internal(const float DeltaTime) override;
 
-	kbRenderObject								m_RenderObject;
+	kbModel* m_pCollisionModel;
+	kbRenderObject m_RenderObject;
 };
-
-#endif

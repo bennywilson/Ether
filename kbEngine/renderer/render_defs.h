@@ -4,6 +4,8 @@
 
 #pragma once
 
+#include "Matrix.h"
+
 ///  vertexLayout
 struct vertexLayout {
 	Vec3 position;

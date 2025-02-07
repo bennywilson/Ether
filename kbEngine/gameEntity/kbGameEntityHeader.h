@@ -33,7 +33,7 @@ public: \
 	const static className##_TypeInfo * GetType() { return &typeInfo; } \
 	virtual kbComponent * Duplicate() const { return new className( *this ); }
 
-#include "kbVector.h"
+#include "Matrix.h"
 #include "kbComponent.h"
 #include "kbModelComponent.h"
 #include "kbStaticModelComponent.h"

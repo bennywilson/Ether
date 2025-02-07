@@ -4,8 +4,8 @@
 /// 2016-2025 blk 1.0
 
 #include "kbCore.h"
-#include "kbVector.h"
-#include "kbQuaternion.h"
+#include "Matrix.h"
+#include "Quaternion.h"
 #include "kbGameEntityHeader.h"
 #include "kbComponent.h"
 #include "kbClothComponent.h"
@@ -462,7 +462,7 @@ void kbClothComponent::SetupCloth() {
 	scaleMatrix[1].y = GetOwner()->GetScale().y;
 	scaleMatrix[2].z = GetOwner()->GetScale().z;
 
-	Mat4 parentMatrix = scaleMatrix * GetOwner()->GetOrientation().ToMat4();
+	Mat4 parentMatrix = scaleMatrix * GetOwner()->GetOrientation().to_mat4();
 	parentMatrix[3] = GetOwner()->GetPosition();
 
 	m_Masses.insert(m_Masses.begin(), (int)m_BoneInfo.size(), kbClothMass_t());

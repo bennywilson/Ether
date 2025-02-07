@@ -4,7 +4,7 @@
 
 #include "kbCore.h"
 #include "containers.h"
-#include "kbVector.h"
+#include "Matrix.h"
 #include "kbRenderer_defs.h"
 #include "kbGameEntityHeader.h"
 #include "kbGame.h"
@@ -153,13 +153,13 @@ void kbParticleComponent::Update_Internal(const float DeltaTime) {
 	}
 
 	Vec3 currentCameraPosition;
-	kbQuat currentCameraRotation;
+	Quat4 currentCameraRotation;
 	g_pRenderer->GetRenderViewTransform(nullptr, currentCameraPosition, currentCameraRotation);
 
 	int iVertex = 0;
 	int curVBPosition = 0;
 	const Vec3 scale = GetScale();
-	const Vec3 direction = GetOrientation().ToMat4()[2].ToVec3();
+	const Vec3 direction = GetOrientation().to_mat4()[2].ToVec3();
 	byte iBillboardType = 0;
 	switch (m_ParticleBillboardType) {
 		case EBillboardType::BT_FaceCamera: iBillboardType = 0; break;
@@ -244,16 +244,16 @@ void kbParticleComponent::Update_Internal(const float DeltaTime) {
 			kbRenderObject& renderObj = particle.m_RenderObject;
 
 			renderObj.m_Position = particle.m_Position;
-			//renderObj.m_Orientation = kbQuat( 0.0f, 0.0f, 0.0f, 1.0f );	TODO
+			//renderObj.m_Orientation = Quat4( 0.0f, 0.0f, 0.0f, 1.0f );	TODO
 			renderObj.m_Scale.set(curSize.x, curSize.y, curSize.z);
 			renderObj.m_Scale *= kbLevelComponent::GetGlobalModelScale();
 
 			if (m_RotationOverLifeTimeCurve.size() > 0) {
 				const Vec4 rotationFactor = kbVectorAnimEvent::Evaluate(m_RotationOverLifeTimeCurve, normalizedTime);
-				kbQuat xAxis, yAxis, zAxis;
-				xAxis.FromAxisAngle(Vec3(1.0f, 0.0f, 0.0f), kbToRadians(particle.m_RotationAxis.x * rotationFactor.x));
-				yAxis.FromAxisAngle(Vec3(0.0f, 1.0f, 0.0f), kbToRadians(particle.m_RotationAxis.y * rotationFactor.y));
-				zAxis.FromAxisAngle(Vec3(0.0f, 0.0f, 1.0f), kbToRadians(particle.m_RotationAxis.z * rotationFactor.z));
+				Quat4 xAxis, yAxis, zAxis;
+				xAxis.from_axis_angle(Vec3(1.0f, 0.0f, 0.0f), kbToRadians(particle.m_RotationAxis.x * rotationFactor.x));
+				yAxis.from_axis_angle(Vec3(0.0f, 1.0f, 0.0f), kbToRadians(particle.m_RotationAxis.y * rotationFactor.y));
+				zAxis.from_axis_angle(Vec3(0.0f, 0.0f, 1.0f), kbToRadians(particle.m_RotationAxis.z * rotationFactor.z));
 				renderObj.m_Orientation = xAxis * yAxis * zAxis;
 			}
 
@@ -341,7 +341,7 @@ void kbParticleComponent::Update_Internal(const float DeltaTime) {
 	int currentListEnd = (int)m_Particles.size();
 	float NextSpawn = 0.0f;
 
-	Mat4 ownerMatrix = GetOwner()->GetOrientation().ToMat4();
+	Mat4 ownerMatrix = GetOwner()->GetOrientation().to_mat4();
 
 	// Spawn particles
 	Vec3 MyPosition = GetPosition();
@@ -405,13 +405,13 @@ void kbParticleComponent::Update_Internal(const float DeltaTime) {
 				renderObj.m_bIsFirstAdd = true;
 				renderObj.m_bIsRemove = false;
 
-				renderObj.m_Orientation = kbQuat(0.0f, 0.0f, 0.0f, 1.0f);
+				renderObj.m_Orientation = Quat4(0.0f, 0.0f, 0.0f, 1.0f);
 				if (m_MinStart3DRotation.compare(Vec3::zero) == false || m_MaxStart3DRotation.compare(Vec3::zero) == false) {
 					newParticle.m_RotationAxis = Vec3Rand(m_MinStart3DRotation, m_MaxStart3DRotation);
-					kbQuat xAxis, yAxis, zAxis;
-					xAxis.FromAxisAngle(Vec3(1.0f, 0.0f, 0.0f), kbToRadians(newParticle.m_RotationAxis.x));
-					yAxis.FromAxisAngle(Vec3(0.0f, 1.0f, 0.0f), kbToRadians(newParticle.m_RotationAxis.y));
-					zAxis.FromAxisAngle(Vec3(0.0f, 0.0f, 1.0f), kbToRadians(newParticle.m_RotationAxis.z));
+					Quat4 xAxis, yAxis, zAxis;
+					xAxis.from_axis_angle(Vec3(1.0f, 0.0f, 0.0f), kbToRadians(newParticle.m_RotationAxis.x));
+					yAxis.from_axis_angle(Vec3(0.0f, 1.0f, 0.0f), kbToRadians(newParticle.m_RotationAxis.y));
+					zAxis.from_axis_angle(Vec3(0.0f, 0.0f, 1.0f), kbToRadians(newParticle.m_RotationAxis.z));
 
 					renderObj.m_Orientation = xAxis * yAxis * zAxis;
 				}
@@ -505,7 +505,7 @@ void kbParticleComponent::RenderSync() {
 	m_RenderObject.m_pComponent = this;
 	m_RenderObject.m_RenderPass = RP_Translucent;
 	m_RenderObject.m_Position = GetPosition();
-	m_RenderObject.m_Orientation = kbQuat(0.0f, 0.0f, 0.0f, 1.0f);
+	m_RenderObject.m_Orientation = Quat4(0.0f, 0.0f, 0.0f, 1.0f);
 	m_RenderObject.m_RenderOrderBias = m_RenderOrderBias;
 
 	// Update materials

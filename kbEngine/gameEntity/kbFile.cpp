@@ -5,7 +5,7 @@
 #include <vector>
 #include <string>
 #include "kbCore.h"
-#include "kbQuaternion.h"
+#include "Quaternion.h"
 #include "kbGameEntityHeader.h"
 #include "kbFile.h"
 

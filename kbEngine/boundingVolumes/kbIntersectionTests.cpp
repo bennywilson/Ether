@@ -3,7 +3,7 @@
 /// 2016-2025 blk 1.0
 
 #include "kbCore.h"
-#include "kbVector.h"
+#include "Matrix.h"
 #include "kbIntersectionTests.h"
 #include "kbBounds.h"
 

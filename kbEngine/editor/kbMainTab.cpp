@@ -3,8 +3,8 @@
 /// 2016-2025 blk 1.0
 
 #include "kbCore.h"
-#include "kbVector.h"
-#include "kbQuaternion.h"
+#include "Matrix.h"
+#include "Quaternion.h"
 #include "kbWidget.h"
 #include "kbEditor.h"
 #include "kbModel.h"
@@ -127,7 +127,7 @@ void kbMainTab::Update() {
 				extern bool g_bBillboardsEnabled;
 				if (g_bBillboardsEnabled && (pCurrentComponent->IsA(kbDirectionalLightComponent::GetType()) || pCurrentComponent->IsA(kbLightShaftsComponent::GetType()))) {
 
-					const Mat4 rotationMatrix = pGameEntity->GetOrientation().ToMat4();
+					const Mat4 rotationMatrix = pGameEntity->GetOrientation().to_mat4();
 					const Vec3 lightDirection = Vec3(0, 0, 1.0f) * rotationMatrix;
 
 					for (float x = -1.0f; x <= 1.0f; x += 1.0f) {
@@ -366,7 +366,7 @@ void kbMainTab::CameraMoveCB(const widgetCBInputObject* const inputObject) {
 	}
 
 	kbCamera& camera = pCurrentWindow->GetCamera();
-	const Mat4 cameraMatrix = camera.m_RotationTarget.ToMat4();
+	const Mat4 cameraMatrix = camera.m_RotationTarget.to_mat4();
 	const Vec3 rightVec = cameraMatrix[0].ToVec3();
 	const Vec3 forwardVec = cameraMatrix[2].ToVec3();
 
@@ -375,9 +375,9 @@ void kbMainTab::CameraMoveCB(const widgetCBInputObject* const inputObject) {
 
 		Fl::focus(nullptr);
 
-		kbQuat xRotation, yRotation;
-		xRotation.FromAxisAngle(Vec3::up, inputObject->mouseDeltaX * -rotationMag);
-		yRotation.FromAxisAngle(rightVec, inputObject->mouseDeltaY * -rotationMag);
+		Quat4 xRotation, yRotation;
+		xRotation.from_axis_angle(Vec3::up, inputObject->mouseDeltaX * -rotationMag);
+		yRotation.from_axis_angle(rightVec, inputObject->mouseDeltaY * -rotationMag);
 
 		camera.m_RotationTarget = camera.m_RotationTarget * yRotation * xRotation;
 		camera.m_RotationTarget.normalize_self();

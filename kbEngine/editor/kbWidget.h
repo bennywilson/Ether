@@ -51,5 +51,5 @@ public:
 private:
 	kbCamera m_Camera;
 	Vec3 m_TargetPos;
-	kbQuat m_TargetRotation;
+	Quat4 m_TargetRotation;
 };

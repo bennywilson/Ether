@@ -28,7 +28,7 @@ void kbBoneMatrix_t::Invert() {
 /**
  *	kbBoneMatrix_t::SetFromQuat
  */
-void kbBoneMatrix_t::SetFromQuat( const kbQuat & srcQuat ) {
+void kbBoneMatrix_t::SetFromQuat( const Quat4 & srcQuat ) {
 
 	Mat4 mat;
 	const float xx = srcQuat.x * srcQuat.x;

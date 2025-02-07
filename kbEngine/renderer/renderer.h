@@ -4,8 +4,8 @@
 
 #pragma once
 
-#include "kbVector.h"
-#include "kbQuaternion.h"
+#include "Matrix.h"
+#include "Quaternion.h"
 #include "render_defs.h"
 
 class RenderBuffer;
@@ -21,7 +21,7 @@ public:
 	virtual void initialize(HWND hwnd, const uint32_t frame_width, const uint32_t frame_height);
 	virtual void shut_down();
 
-	virtual void set_camera_transform(const Vec3& position, const kbQuat& rotation);
+	virtual void set_camera_transform(const Vec3& position, const Quat4& rotation);
 
 	virtual void render() = 0;
 
@@ -46,7 +46,7 @@ protected:
 
 	/// camera
 	Vec3 m_camera_position;
-	kbQuat m_camera_rotation;
+	Quat4 m_camera_rotation;
 	Mat4 m_camera_projection;
 
 private:

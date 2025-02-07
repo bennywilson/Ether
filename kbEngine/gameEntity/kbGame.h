@@ -9,7 +9,7 @@
 #include <windows.h>
 #include "kbCore.h"
 #include "kbConsole.h"
-#include "kbVector.h"
+#include "Matrix.h"
 #include "kbCamera.h"
 #include "kbParticleManager.h"
 #include "kbInputManager.h"

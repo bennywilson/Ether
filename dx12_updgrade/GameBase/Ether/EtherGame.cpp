@@ -51,7 +51,7 @@ void EtherGame::RemoveGameEntity_Internal(kbGameEntity* const pEntity) {}
 void EtherGame::ProcessInput(const float DT) {
 
 	m_Camera.m_Position = Vec3(0.0f, 0.0f, 0.0f);
-	m_Camera.m_Rotation = kbQuat(0.0f, 0.0f, 0.0f, -1.0f);
+	m_Camera.m_Rotation = Quat4(0.0f, 0.0f, 0.0f, -1.0f);
 	m_Camera.Update();
 
 }

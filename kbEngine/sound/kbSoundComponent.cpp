@@ -3,7 +3,7 @@
 /// 2017-2025 blk 1.0
 
 #include "kbCore.h"
-#include "kbQuaternion.h"
+#include "Quaternion.h"
 #include "kbGameEntityHeader.h"
 #include "kbGame.h"
 #include "kbSoundComponent.h"
@@ -31,7 +31,7 @@ void kbSoundData::PlaySoundAtPosition(const Vec3& soundPosition) {
 	//blk::error("Needs reimplementation");
 
 	Vec3 currentCameraPosition;
-	kbQuat currentCameraRotation;
+	Quat4 currentCameraRotation;
 
 	g_pRenderer->GetRenderViewTransform(nullptr, currentCameraPosition, currentCameraRotation);
 

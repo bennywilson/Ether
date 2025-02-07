@@ -48,8 +48,8 @@ public:
 	void SetMainCameraPos(const Vec3& newCamPos);
 	Vec3 GetMainCameraPos() const;
 
-	void SetMainCameraRot(const kbQuat& newCamRot);
-	kbQuat GetMainCameraRot() const;
+	void SetMainCameraRot(const Quat4& newCamRot);
+	Quat4 GetMainCameraRot() const;
 
 	void AddEntity(kbEditorEntity* const pEditorEntity);
 	void SelectEntities(std::vector< kbEditorEntity* >& entitiesToSelect, bool AppendToSelectedList);

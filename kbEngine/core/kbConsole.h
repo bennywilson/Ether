@@ -17,9 +17,14 @@ public:
 
 	void Update();
 
-	void RegisterConsoleVar(kbString key, kbConsoleVariable* value) { m_ConsoleVarMap[key] = value; }
+	void RegisterConsoleVar(kbString key, kbConsoleVariable* value) {
+		m_ConsoleVarMap[key] = value;
+	}
 
-	const std::map<kbString, kbConsoleVariable* >& GetConsoleVarMap() const { return m_ConsoleVarMap; }
+	const std::map<kbString, kbConsoleVariable* >& GetConsoleVarMap() const {
+		return m_ConsoleVarMap;
+	}
+
 private:
 	std::map<kbString, kbConsoleVariable*> m_ConsoleVarMap;
 };

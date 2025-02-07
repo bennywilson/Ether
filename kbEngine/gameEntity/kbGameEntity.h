@@ -88,8 +88,8 @@ public:
 	const Vec3 GetPosition() const;
 	void SetPosition(const Vec3& newPosition) { m_pTransformComponent->SetPosition(newPosition); MarkAsDirty(); }
 
-	const kbQuat GetOrientation() const;
-	void SetOrientation(const kbQuat& newOrientation) { m_pTransformComponent->SetOrientation(newOrientation); MarkAsDirty(); }
+	const Quat4 GetOrientation() const;
+	void SetOrientation(const Quat4& newOrientation) { m_pTransformComponent->SetOrientation(newOrientation); MarkAsDirty(); }
 
 	const Vec3 GetScale() const { return m_pTransformComponent->GetScale(); }
 	void SetScale(const Vec3& newScale) { m_pTransformComponent->SetScale(newScale); MarkAsDirty(); }

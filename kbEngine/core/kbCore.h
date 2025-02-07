@@ -14,9 +14,15 @@
 #include <algorithm>
 #include <string>
 #include "kbString.h"
-/**
- *	kbTypeInfoType_t
- */
+
+void StringFromWString(std::string& outString, const std::wstring& srcString);
+void WStringFromString(std::wstring& outString, const std::string& srcString);
+void StringToLower(std::string& outString);
+
+std::string GetFileExtension(const std::string& FileName);
+std::wstring GetFileExtension(const std::wstring& FileName);
+
+/// kbTypeInfoType_t
 enum kbTypeInfoType_t {
 	KBTYPEINFO_NONE,
 	KBTYPEINFO_BOOL,
@@ -77,77 +83,18 @@ namespace blk {
 	void log(const char* const msg, ...);
 
 	void error(const char* const msg, ...);
-	bool error_check(const bool expression, const char* const msg, ...);
-	bool error_check(const HRESULT hr, char* const msg = nullptr, ...);
+	bool error_check(const bool expression, const char* const msg = nullptr, ...);
+	bool error_check(const HRESULT hr, const char* const msg = nullptr, ...);
 
 	void warn(const char* const msg, ...);
-	bool warn_check(const bool expression, const char* const msg, ...);
-	bool warn_check(const HRESULT hr, char* const msg = nullptr, ...);
+	bool warn_check(const bool expression, const char* const msg = nullptr, ...);
+	bool warn_check(const HRESULT hr, const char* const msg = nullptr, ...);
 };
 
 #define kbAssert(expression, msg, ...) \
 	if (expression == true) return; \
 	kbAssert_Impl(msg, __VA_ARGS__); \
 	DebugBreak();
-
-// helper functions
-const float kbPI = 3.14159265359f;
-const float kbEpsilon = 0.00001f;
-inline float kbToRadians(const float degrees) { return degrees * kbPI / 180.0f; }
-inline float kbToDegrees(const float radians) { return radians * 180.0f / kbPI; }
-
-inline bool kbCompareByte4(const byte lhs[4], const byte rhs[4]) { return lhs[0] == rhs[0] && lhs[1] == rhs[1] && lhs[2] == rhs[2] && lhs[3] == rhs[3]; }
-
-template<typename T> T kbClamp(const T& value, const T& min, const T& max) { return value < min ? min : (value > max ? max : value); }
-template<typename T> T kbSaturate(const T& value) { return value < 0 ? 0 : (value > 1 ? 1 : value); }
-
-template<typename T> inline T kbLerp(const T a, const T b, const float t) { return ((b - a) * t) + a; }
-
-void StringFromWString(std::string& outString, const std::wstring& srcString);
-void WStringFromString(std::wstring& outString, const std::string& srcString);
-void StringToLower(std::string& outString);
-
-std::string GetFileExtension(const std::string& FileName);
-std::wstring GetFileExtension(const std::wstring& FileName);
-
-#include "kbVector.h"
-
-float kbfrand();
-
-inline int kbirand(const int min, const int max) {
-	return min + rand() % (max - min);
-}
-
-inline float kbfrand(const float min, const float max) {
-	return min + (kbfrand() * (max - min));
-}
-
-inline Vec2 Vec2Rand(const Vec2& min, const Vec2& max) {
-	Vec2 randVec;
-	randVec.x = min.x + (kbfrand() * (max.x - min.x));
-	randVec.y = min.y + (kbfrand() * (max.y - min.y));
-
-	return randVec;
-}
-
-inline Vec3 Vec3Rand(const Vec3& min, const Vec3& max) {
-	Vec3 randVec;
-	randVec.x = min.x + (kbfrand() * (max.x - min.x));
-	randVec.y = min.y + (kbfrand() * (max.y - min.y));
-	randVec.z = min.z + (kbfrand() * (max.z - min.z));
-
-	return randVec;
-}
-
-inline Vec4 Vec4Rand(const Vec4& min, const Vec4& max) {
-	Vec4 randVec;
-	randVec.x = min.x + (kbfrand() * (max.x - min.x));
-	randVec.y = min.y + (kbfrand() * (max.y - min.y));
-	randVec.z = min.z + (kbfrand() * (max.z - min.z));
-	randVec.w = min.w + (kbfrand() * (max.w - min.w));
-	return randVec;
-
-}
 
 #define SAFE_RELEASE( object ) { if ( object != nullptr ) { object->Release(); object = nullptr; } }
 
@@ -249,76 +196,6 @@ private:
 
 void UpdateScopedTimers();
 const kbScopedTimerData_t& GetScopedTimerData(const ScopedTimerList_t index);
-
-/// kbInput_t
-struct kbInput_t {
-	kbInput_t() {
-		memset(this, 0, sizeof(kbInput_t));
-	}
-
-	enum kbKeyAction_t {
-		KA_None,
-		KA_JustPressed,
-		KA_Down,
-		KA_JustReleased,
-	};
-
-	enum kbArrow_t {
-		Up,
-		Left,
-		Right,
-		Down
-	};
-
-	enum kbNonCharKey_t {
-		Escape = 0,
-		LCtrl,
-		RCtrl,
-		Return,
-		Num_NonCharKeys,
-	};
-
-	const static char KB_SPACE = 32;
-
-	bool IsKeyPressedOrDown(const char key) const { return KeyState[key].m_Action == KA_JustPressed || KeyState[key].m_Action == KA_Down; }
-	bool WasKeyJustPressed(const char key, const bool bConsumeInput = true) const {
-		return KeyState[key].m_Action == KA_JustPressed;
-	}
-
-	bool IsArrowPressedOrDown(const kbArrow_t arrow) const { return ArrowState[arrow].m_Action == KA_JustPressed || ArrowState[arrow].m_Action == KA_Down; }
-	bool WasArrowJustPressed(const kbArrow_t arrow) const { return ArrowState[arrow].m_Action == KA_JustPressed; }
-
-	bool IsNonCharKeyPressedOrDown(const kbNonCharKey_t key) const { return NonCharKeyState[key].m_Action == KA_JustPressed || NonCharKeyState[key].m_Action == KA_Down; }
-	bool WasNonCharKeyJustPressed(const kbNonCharKey_t key) const { return NonCharKeyState[key].m_Action == KA_JustPressed; }
-
-	struct kbKeyState_t {
-		kbKeyAction_t	m_Action;
-		float			m_LastActionTimeSec;
-	};
-
-	kbKeyState_t	KeyState[256];
-	kbKeyState_t	ArrowState[4];
-	kbKeyState_t	GamepadButtonStates[16];
-	kbKeyState_t	NonCharKeyState[Num_NonCharKeys];
-
-	Vec2			m_LeftStick;
-	Vec2			m_PrevLeftStick;
-
-	Vec2			m_RightStick;
-	Vec2			m_PrevRightStick;
-
-	float			LeftTrigger;
-	float			RightTrigger;
-	bool			RightTriggerPressed;
-	LONG			MouseDeltaX;
-	LONG			MouseDeltaY;
-	LONG			AbsCursorX;
-	LONG			AbsCursorY;
-	bool			LeftMouseButtonPressed;
-	bool			LeftMouseButtonDown;
-	bool			RightMouseButtonPressed;
-	bool			RightMouseButtonDown;
-};
 
 /// kbTextParser
 struct kbTextParser {

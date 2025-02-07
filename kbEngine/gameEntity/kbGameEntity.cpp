@@ -4,31 +4,25 @@
 /// 
 #include "kbCore.h"
 #include "containers.h"
-#include "kbVector.h"
-#include "kbQuaternion.h"
+#include "Matrix.h"
+#include "Quaternion.h"
 #include "kbBounds.h"
 #include "kbGame.h"
 #include "kbGameEntityHeader.h"
 
-/**
- *	kbEntity::kbEntity
- */
+/// kbEntity::kbEntity
 kbEntity::kbEntity() :
 	m_bIsDirty(false) {
 }
 
-/**
- *	kbEntity::PostLoad
- */
+/// kbEntity::PostLoad
 void kbEntity::PostLoad() {
 	for (int i = 0; i < m_Components.size(); i++) {
 		m_Components[i]->PostLoad();
 	}
 }
 
-/**
- *	kbEntity::AddComponent
- */
+/// kbEntity::AddComponent
 void kbEntity::AddComponent(kbComponent* const pComponent, int indexToInsertAt) {
 	pComponent->SetOwner(this);
 
@@ -416,7 +410,7 @@ void kbGameEntity::CalculateWorldMatrix(Mat4& inOutMatrix) const {
 	scaleMat[1].y = GetScale().y * modelScale;
 	scaleMat[2].z = GetScale().z * modelScale;
 
-	inOutMatrix = scaleMat * GetOrientation().ToMat4();
+	inOutMatrix = scaleMat * GetOrientation().to_mat4();
 	inOutMatrix[3] = GetPosition();
 	inOutMatrix[3].w = 1.0f;
 }
@@ -434,7 +428,7 @@ kbBounds kbGameEntity::GetWorldBounds() const {
 /**
  *	kbGameEntity::GetOrientation
  */
-const kbQuat kbGameEntity::GetOrientation() const {
+const Quat4 kbGameEntity::GetOrientation() const {
 	if (m_pOwnerEntity != nullptr) {
 		// This entity's orientation is in model space while the parent's is in world
 		return  m_pTransformComponent->GetOrientation() * m_pOwnerEntity->GetOrientation();
@@ -448,8 +442,8 @@ const kbQuat kbGameEntity::GetOrientation() const {
  */
 const Vec3 kbGameEntity::GetPosition() const {
 	if (m_pOwnerEntity != nullptr) {
-		const kbQuat entityOrientation = GetOrientation();
-		const Vec3 worldSpaceOffset = entityOrientation.ToMat4().transform_point(m_pTransformComponent->GetPosition());
+		const Quat4 entityOrientation = GetOrientation();
+		const Vec3 worldSpaceOffset = entityOrientation.to_mat4().transform_point(m_pTransformComponent->GetPosition());
 		return worldSpaceOffset + m_pOwnerEntity->GetPosition();
 	}
 

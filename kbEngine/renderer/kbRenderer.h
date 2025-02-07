@@ -151,7 +151,7 @@ public:
 	const Mat4 &												GetInverseProjectionMatrix() const { return m_InverseProjectionMatrix; }
 	const Mat4 &												GetInverseViewProjection() const { return m_InverseViewProjectionMatrix; }
 	const Vec3 &												GetCameraPosition() const { return m_CameraPosition; }
-	const kbQuat &												GetCameraRotation() const { return m_CameraRotation; }
+	const Quat4 &												GetCameraRotation() const { return m_CameraRotation; }
 
 	const std::map<const kbGameComponent *, kbRenderObject *> &	GetRenderObjectMap() const { return m_RenderObjectMap; }
 	const std::map<const kbLightComponent *, kbRenderLight *> &	GetRenderLightMap() const { return m_RenderLightMap; }
@@ -187,10 +187,10 @@ private:
 	Mat4														m_InverseProjectionMatrix;
 	Mat4														m_InverseViewProjectionMatrix;
 	Vec3														m_CameraPosition;
-	kbQuat														m_CameraRotation;
+	Quat4														m_CameraRotation;
 
 	Vec3														m_CameraPosition_GameThread;
-	kbQuat														m_CameraRotation_GameThread;
+	Quat4														m_CameraRotation_GameThread;
 
 	float														m_NearPlane_GameThread;
 	float														m_NearPlane_RenderThread;
@@ -259,8 +259,8 @@ public:
 	void										UnregisterRenderHook( kbRenderHook* const pHook );
 
 	// View Transform
-	virtual void								SetRenderViewTransform( const HWND hwnd, const Vec3& position, const kbQuat& rotation );
-	virtual void								GetRenderViewTransform( const HWND hwnd, Vec3& position, kbQuat& rotation );
+	virtual void								SetRenderViewTransform( const HWND hwnd, const Vec3& position, const Quat4& rotation );
+	virtual void								GetRenderViewTransform( const HWND hwnd, Vec3& position, Quat4& rotation );
 
 	void										SetNearFarPlane( const HWND hwnd, const float near, const float far );
 
@@ -269,8 +269,8 @@ public:
 	void										RemoveRenderObject( const kbRenderObject& renderObjectToRemove );
 	
 	// Lights
-	void										AddLight( const kbLightComponent* const pLightComponent, const Vec3& pos, const kbQuat& orientation );
-	void										UpdateLight( const kbLightComponent* pLightComponent, const Vec3& pos, const kbQuat& orientation );
+	void										AddLight( const kbLightComponent* const pLightComponent, const Vec3& pos, const Quat4& orientation );
+	void										UpdateLight( const kbLightComponent* pLightComponent, const Vec3& pos, const Quat4& orientation );
 	void										RemoveLight( const kbLightComponent* const pLightComponent );
 	void										HackClearLight( const kbLightComponent* const pLightComponent );
 
@@ -282,8 +282,8 @@ public:
 	void										RemoveParticle( const kbRenderObject& renderObject );
 
 	// Light Shafts
-	void										AddLightShafts( const kbLightShaftsComponent* const pComponent, const Vec3& pos, const kbQuat& orientation );
-	void										UpdateLightShafts( const kbLightShaftsComponent* const pComponent, const Vec3& pos, const kbQuat& orientation );
+	void										AddLightShafts( const kbLightShaftsComponent* const pComponent, const Vec3& pos, const Quat4& orientation );
+	void										UpdateLightShafts( const kbLightShaftsComponent* const pComponent, const Vec3& pos, const Quat4& orientation );
 	void										RemoveLightShafts( const kbLightShaftsComponent* const pComponent );
 
 	virtual void								SetGlobalShaderParam( const kbShaderParamOverrides_t::kbShaderParam_t & shaderParam ) = 0;
@@ -316,7 +316,7 @@ public:
 	void										DrawPreTransformedLine( const std::vector<Vec3>& vertList, const kbColor& color );
 	void										DrawSphere( const Vec3& origin, const float radius, const int NumSegments, const kbColor& color );
 	void										DrawBillboard( const Vec3& position, const Vec2& size, const int textureIndex, kbShader* const pShader, const int entityId = -1 );
-	void										DrawModel( const kbModel* const pModel, const std::vector<kbShaderParamOverrides_t>& materials, const Vec3& start, const kbQuat& orientation, const Vec3& scale, const int entityId );
+	void										DrawModel( const kbModel* const pModel, const std::vector<kbShaderParamOverrides_t>& materials, const Vec3& start, const Quat4& orientation, const Vec3& scale, const int entityId );
 
 	//
 	enum kbViewMode_t {
@@ -431,7 +431,7 @@ protected:
 
 	struct debugDrawObject_t {
 		Vec3									m_Position;
-		kbQuat									m_Orientation;
+		Quat4									m_Orientation;
 		Vec3									m_Scale;
 		const kbModel *							m_pModel;
 		std::vector<kbShaderParamOverrides_t>	m_Materials;

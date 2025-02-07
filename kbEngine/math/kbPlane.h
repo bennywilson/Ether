@@ -4,7 +4,7 @@
 
 #pragma once
 
-#include "kbVector.h"
+#include "Matrix.h"
 
 enum KBPLANE_Intersect {
 	PLANE_BOTH_IN,

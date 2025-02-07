@@ -3,8 +3,8 @@
 /// 2016-2025 blk 1.0
 
 #include "kbCore.h"
-#include "kbVector.h"
-//#include "kbQuaternion.h"
+#include "Matrix.h"
+//#include "Quaternion.h"
 #include "kbBounds.h"
 #include "kbGameEntityHeader.h"
 #include "kbRenderer_Defs.h"

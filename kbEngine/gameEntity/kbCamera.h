@@ -1,19 +1,14 @@
-//===================================================================================================
-// kbCamera.h
-//
-//
-// 2016 blk 1.0
-//===================================================================================================
-#ifndef _KBCAMERA_H_
-#define _KBCAMERA_H_
+/// kbCamera.h
+///
+///
+/// 2016-2025 blk 1.0
 
-#include "kbCore.h"
-#include "kbVector.h"
-#include "kbQuaternion.h"
+#pragma once
 
-/**
- *	kbCamera
- */
+#include "Matrix.h"
+#include "Quaternion.h"
+
+/// kbCamera
 class kbCamera {
 public:
 	friend class kbEditor;
@@ -24,11 +19,9 @@ public:
 
 //private:
 	Vec3	m_Position;
-	kbQuat	m_Rotation;
+	Quat4	m_Rotation;
 
 	Mat4	m_EyeMats[2];
 
-	kbQuat	m_RotationTarget;
+	Quat4	m_RotationTarget;
 };
-
-#endif

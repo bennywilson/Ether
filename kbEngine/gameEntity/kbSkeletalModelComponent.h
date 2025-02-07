@@ -140,7 +140,7 @@ private:
 
 	// Run time
 	Vec3										m_OwnerStartPos;
-	kbQuat										m_OwnerStartRotation;
+	Quat4										m_OwnerStartRotation;
 
 	Vec3										m_Velocity;
 	Vec3										m_RotationAxis;

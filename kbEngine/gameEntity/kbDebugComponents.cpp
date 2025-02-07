@@ -3,15 +3,13 @@
 /// 2018-2025 blk 1.0
 
 #include "kbCore.h"
-#include "kbVector.h"
-#include "kbQuaternion.h"
+#include "Matrix.h"
+#include "Quaternion.h"
 #include "kbGameEntityHeader.h"
 #include "kbDebugComponents.h"
 #include "DX11/kbRenderer_DX11.h"		// TODO
 
-/**
- *	kbDebugSphereCollision::Constructor
- */
+/// kbDebugSphereCollision::Constructor
 void kbDebugSphereCollision::Constructor() {
 	m_pCollisionModel = (kbModel*)g_ResourceManager.GetResource( "../../kbEngine/assets/Models/UnitSphere.ms3d", true, true );
 
@@ -22,9 +20,7 @@ void kbDebugSphereCollision::Constructor() {
 	m_RenderObject.m_RenderPass = RP_Lighting;
 }
 
-/**
- *	kbDebugSphereCollision::SetEnable_Internal
- */
+/// kbDebugSphereCollision::SetEnable_Internal
 void kbDebugSphereCollision::SetEnable_Internal( const bool bEnable ) {
 	Super::SetEnable_Internal( bEnable );
 
@@ -36,9 +32,7 @@ void kbDebugSphereCollision::SetEnable_Internal( const bool bEnable ) {
 	}
 }
 
-/**
- *	kbDebugSphereCollision::Update_Internal
- */
+/// kbDebugSphereCollision::Update_Internal
 void kbDebugSphereCollision::Update_Internal( const float DeltaTime ) {
 	Super::Update_Internal( DeltaTime );
 

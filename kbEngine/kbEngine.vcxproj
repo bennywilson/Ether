@@ -62,6 +62,7 @@
       <BufferSecurityCheck>false</BufferSecurityCheck>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <LanguageStandard>stdcpp20</LanguageStandard>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -172,8 +173,8 @@
     <ClInclude Include="gameEntity\kbUIComponent.h" />
     <ClInclude Include="math\kbMath.h" />
     <ClInclude Include="math\kbPlane.h" />
-    <ClInclude Include="math\kbQuaternion.h" />
-    <ClInclude Include="math\kbVector.h" />
+    <ClInclude Include="math\Quaternion.h" />
+    <ClInclude Include="math\Matrix.h" />
     <ClInclude Include="renderer\d3d12\dx12\d3d12.h" />
     <ClInclude Include="renderer\d3d12\dx12\d3d12compatibility.h" />
     <ClInclude Include="renderer\d3d12\dx12\d3d12sdklayers.h" />
@@ -319,11 +320,11 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="math\kbPlane.cpp" />
-    <ClCompile Include="math\kbQuaternion.cpp">
+    <ClCompile Include="math\Quaternion.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="math\kbVector.cpp">
+    <ClCompile Include="math\Matrix.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
