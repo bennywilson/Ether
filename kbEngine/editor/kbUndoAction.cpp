@@ -3,7 +3,7 @@
 /// 2016-2025 blk 1.0
 
 #include <vector>
-#include "kbCore.h"
+#include "blk_core.h"
 #include "kbEditor.h"
 #include "kbEditorEntity.h"
 #include "kbUndoAction.h"

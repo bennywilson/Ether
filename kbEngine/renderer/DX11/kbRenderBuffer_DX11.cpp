@@ -5,7 +5,7 @@
 // 2016-2018 blk 1.0
 //===================================================================================================
 #include <DirectXMath.h>
-#include "kbCore.h"
+#include "blk_core.h"
 #include "kbRenderer_DX11.h"
 #include "kbRenderBuffer.h"
 

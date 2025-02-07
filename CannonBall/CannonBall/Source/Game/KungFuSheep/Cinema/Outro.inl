@@ -48,11 +48,11 @@ public:
 
 	virtual void OnAnimEvent( const kbAnimEventInfo_t & animEvent ) {
 
-		static kbString sPounce_1( "Pounce_1" );
-		static kbString sPounce_1_Smear( "Pounce_1_Smear" );
-		static kbString sPounce_2_Impact_1( "Pounce_2_Impact_1" );
-		static kbString sSlapSound( "SlapSound" );
-		static kbString sHitCamera( "HitCamera" );
+		static kbString sPounce_1("Pounce_1");
+		static kbString sPounce_1_Smear("Pounce_1_Smear");
+		static kbString sPounce_2_Impact_1("Pounce_2_Impact_1");
+		static kbString sSlapSound("SlapSound");
+		static kbString sHitCamera("HitCamera");
 
 		const kbString eventName = animEvent.m_AnimEvent.GetEventName();
 		auto pSheep = KungFuLevelComponent::Get()->GetSheep();
@@ -60,7 +60,7 @@ public:
 			m_pSnolafGuards[0]->RequestStateChange( KungFuSnolafState::ForcePoofDeath );
 			m_pSnolafGuards[1]->RequestStateChange( KungFuSnolafState::ForcePoofDeath );
 
-			kbGameEntityPtr pEnt = g_pGame->GetEntityByName( kbString( "3000 Ton Smash Snolaf Pos" ) );
+			kbGameEntityPtr pEnt = g_pGame->GetEntityByName( kbString("3000 Ton Smash Snolaf Pos") );
 			pSheep->PlayCannonBallFX( pEnt.GetEntity()->GetPosition() );
 	
 			// Give sheep big eyes
@@ -96,8 +96,8 @@ public:
 
 	virtual void BeginState_Internal( KungFuGame::eKungFuGame_State previousState ) override {
 
-		static kbString sOutroCam1( "Outro - Camera 1" );
-		static kbString sCry( "Cry" );
+		static kbString sOutroCam1("Outro - Camera 1");
+		static kbString sCry("Cry");
 
 		for ( int i = 0; i < g_pCannonGame->GetGameEntities().size(); i++ ) {
 
@@ -121,9 +121,9 @@ public:
 		auto pSheep = pLevelComp->GetSheep();
 		pSheep->ExternalRequestStateChange( KungFuSheepState::Cinema );
 
-		static const kbString Run_Anim( "Run_Basic" );
-		static const kbString sOfferPresent_1( "OfferPresent_1" );
-		static const kbString sOfferPresent_2( "OfferPresent_2" );
+		static const kbString Run_Anim("Run_Basic");
+		static const kbString sOfferPresent_1("OfferPresent_1");
+		static const kbString sOfferPresent_2("OfferPresent_2");
 
 		pSheep->PlayAnimation( Run_Anim, 0.15f );
 		pSheep->SetTargetFacingDirection( Vec3( 0.0f, 0.0f, -1.0f ) );
@@ -150,12 +150,12 @@ public:
 
 		auto p3000TonActor = p3000Ton->GetComponent<CannonActorComponent>();
 		p3000TonActor->SetTargetFacingDirection( Vec3( 0.0f, 0.0f, 1.0f ) );
-		p3000TonActor->PlayAnimation( kbString( "Idle" ), 0.0f );
+		p3000TonActor->PlayAnimation( kbString("Idle"), 0.0f );
 
-		static const kbString s3000TonTitle( "3000 Ton Title" );
+		static const kbString s3000TonTitle("3000 Ton Title");
 		m_p3000TonTitleEntity = g_pGame->GetEntityByName( s3000TonTitle );
 
-		static const kbString sTitle( "Title" );
+		static const kbString sTitle("Title");
 		m_pTitle = g_pGame->GetEntityByName( sTitle );
 
 		// Fox
@@ -191,11 +191,11 @@ public:
 			KungFuLevelComponent::Get()->SetPlayLevelMusic( 1, false );
 			KungFuLevelComponent::Get()->SetPlayLevelMusic( 1, true );
 		}
-		static const kbString sPounce_1( "Pounce_1" );
-		static const kbString sPounce_2( "Pounce_2" );
-		static const kbString sFoxStare( "Stare" );
-		static const kbString sDance( "Dance" );
-		static const kbString sDisrespect( "Disrespect" );
+		static const kbString sPounce_1("Pounce_1");
+		static const kbString sPounce_2("Pounce_2");
+		static const kbString sFoxStare("Stare");
+		static const kbString sDance("Dance");
+		static const kbString sDisrespect("Disrespect");
 
 		auto pSheep = KungFuLevelComponent::Get()->GetSheep();
 		auto p3000Ton = KungFuLevelComponent::Get()->Get3000Ton();
@@ -213,7 +213,7 @@ public:
 					targetPos.z = SheepPullUpZ;
 					ChangeState( SheepSnolafFaceOff );
 
-					static const kbString IdleL_Anim( "IdleLeft_Basic" );
+					static const kbString IdleL_Anim("IdleLeft_Basic");
 					pSheep->PlayAnimation( IdleL_Anim, 0.2f );
 				}
 				pSheep->SetOwnerPosition( targetPos );
@@ -282,7 +282,7 @@ public:
 					}
 
 					p3000Ton->SetOwnerPosition( KungFuGame::kTreyTonJump2StartPos );
-					p3000Ton->PlayAnimation( kbString( "KaratePose" ), 0.0f );
+					p3000Ton->PlayAnimation( kbString("KaratePose"), 0.0f );
 
 					ChangeState( TreyTonPounce2 );
 				}
@@ -298,7 +298,7 @@ public:
 
 				// Sheep starts watching 3000 Tons' pounce
 				if ( GetStateTime() > 0.85f ) {
-					pSheep->PlayAnimation( kbString( "Watch3000Ton" ), 0.5f, false );
+					pSheep->PlayAnimation( kbString("Watch3000Ton"), 0.5f, false );
 				}
 
 				// Play baa
@@ -338,12 +338,12 @@ public:
 				bool bFin = true;
 				const float StareAtCamLen = 1.0f;
 				if ( GetStateTime() > StareAtCamLen ) {
-					pSheep->PlayAnimation( kbString( "Run_Basic" ), 0.15f );
+					pSheep->PlayAnimation( kbString("Run_Basic"), 0.15f );
 					Vec3 sheepPos = pSheep->GetOwnerPosition();
 					sheepPos.z += pSheep->GetMaxRunSpeed() * g_pGame->GetFrameDT();
 					if ( sheepPos.z >= KungFuGame::kSheepFinalPos.z ) {
 						sheepPos.z = KungFuGame::kSheepFinalPos.z;
-						pSheep->PlayAnimation( kbString( "IdleLeft_Basic" ), 0.0f );
+						pSheep->PlayAnimation( kbString("IdleLeft_Basic"), 0.0f );
 					} else {
 						bFin = false;
 					}
@@ -354,13 +354,13 @@ public:
 
 				if ( GetStateTime() > StareAtCamLen + 0.15f ) {
 					pFox->SetTargetFacingDirection( Vec3( 0.0f, 0.0f, 1.0f ) );
-					pFox->PlayAnimation( kbString( "Walk" ), 0.15f );
+					pFox->PlayAnimation( kbString("Walk"), 0.15f );
 
 					Vec3 foxPos = pFox->GetOwnerPosition();
 					foxPos.z -= pFox->GetMaxRunSpeed() * g_pGame->GetFrameDT();
 					if ( foxPos.z <= KungFuGame::kFoxFinalPos.z ) {
 						foxPos.z = KungFuGame::kFoxFinalPos.z;
-						pFox->PlayAnimation( kbString( "Idle" ), 0.15f );
+						pFox->PlayAnimation( kbString("Idle"), 0.15f );
 
 					} else {
 						bFin = false;
@@ -390,7 +390,7 @@ public:
 					m_pLastSnolaf->SetOwnerPosition( KungFuGame::kFinalSnolafEntryPos + Vec3( 0.0f, 0.0f, 2.0f ) );	// Spawn Snolaf offscreen
 					m_pLastSnolaf->RequestStateChange( KungFuSnolafState::Cinema );
 					m_pLastSnolaf->SetTargetFacingDirection( Vec3( 0.0f, 0.0f, 1.0f ) );
-					m_pLastSnolaf->PlayAnimation( kbString( "Reenter" ), 0.0f );
+					m_pLastSnolaf->PlayAnimation( kbString("Reenter"), 0.0f );
 					ChangeState( Snolaf_Reenter );
 				}
 				break;
@@ -405,10 +405,10 @@ public:
 					const Vec3 snolafTargetPos = KungFuGame::kSheepFinalPos + Vec3( 0.0f, 0.0f, 1.1f );
 					Vec3 snolafCurPos = m_pLastSnolaf->GetOwnerPosition();
 					if ( snolafCurPos.z > snolafTargetPos.z ) {
-						m_pLastSnolaf->PlayAnimation( kbString( "Run" ), 0.15f );
+						m_pLastSnolaf->PlayAnimation( kbString("Run"), 0.15f );
 						snolafCurPos.z -= m_pLastSnolaf->GetMaxRunSpeed() * g_pGame->GetFrameDT() * SnolafRunMultiplier;
 					} else {
-						m_pLastSnolaf->PlayAnimation( kbString( "Dance" ), 0.15f );
+						m_pLastSnolaf->PlayAnimation( kbString("Dance"), 0.15f );
 						m_pLastSnolaf->SetTargetFacingDirection( Vec3( -1.0f, 0.0f, 0.0f ) );
 						ChangeState( DanceStare );
 					}
@@ -428,11 +428,11 @@ public:
 				const float SheepStareTime = 1.25f;
 
 				if ( GetStateTime() > SheepStareTime ) {
-					pSheep->PlayAnimation( kbString( "Dance_Stare" ), 0.15f );
+					pSheep->PlayAnimation( kbString("Dance_Stare"), 0.15f );
 				}
 
 				if ( GetStateTime() > FoxStareTime ) {
-					pFox->PlayAnimation( kbString( "Dance_Stare" ), 0.15f );
+					pFox->PlayAnimation( kbString("Dance_Stare"), 0.15f );
 					ChangeState( Disrespect );
 				}	
 				break;
@@ -440,16 +440,16 @@ public:
 
 			case Disrespect : {
 				if ( GetStateTime() > 1.2f ) {
-					pSheep->PlayAnimation( kbString( "Disrespect" ), 0.15f );
+					pSheep->PlayAnimation( kbString("Disrespect"), 0.15f );
 				}
 
 				if ( GetStateTime() > 1.5f ) {
-					pFox->PlayAnimation( kbString( "Disrespect" ), 0.15f );
+					pFox->PlayAnimation( kbString("Disrespect"), 0.15f );
 					pFox->SetTargetFacingDirection( Vec3( 0.0f, 0.0f, 1.0f ) );
 				}
 				if ( GetStateTime() > 3.8f ) {
-					pFox->PlayAnimation( kbString( "Slap Snolaf" ), 0.15f, false );
-					pSheep->PlayAnimation( kbString( "Slap Snolaf" ), 0.15f, false );
+					pFox->PlayAnimation( kbString("Slap Snolaf"), 0.15f, false );
+					pSheep->PlayAnimation( kbString("Slap Snolaf"), 0.15f, false );
 					ChangeState( Title_Snolaf );
 				}
 				break;
@@ -457,7 +457,7 @@ public:
 
 			case Title_Snolaf : {
 				if ( GetStateTime() > 0.25f ) {
-					m_pLastSnolaf->PlayAnimation( kbString( "Title" ), 0.15f );
+					m_pLastSnolaf->PlayAnimation( kbString("Title"), 0.15f );
 					m_pLastSnolaf->SetOverrideFXMaskParameters( Vec4( 0.0f, 0.0f, 0.0f, 1.0f ) ) ;
 					ChangeState( Title_Sheep );
 				}
@@ -470,19 +470,19 @@ public:
 
 					ChangeState( Title_Fox );
 				} else if ( GetStateTime() > 0.6f ) {
-					pFox->PlayAnimation( kbString( "Water_Dive" ), 0.15f );
+					pFox->PlayAnimation( kbString("Water_Dive"), 0.15f );
 				} else if ( GetStateTime() > 0.3f ) {
-					pSheep->PlayAnimation( kbString( "Water_Dive" ), 0.15f );
+					pSheep->PlayAnimation( kbString("Water_Dive"), 0.15f );
 				}
 				break;
 			}
 
 			case Title_Fox : {
 				if ( GetStateTime() > 1.0f ) {
-					pFox->PlayAnimation( kbString( "Title" ), 0.15f );
+					pFox->PlayAnimation( kbString("Title"), 0.15f );
 					ChangeState( Painted_Title );
 				} else if ( GetStateTime() > 0.5f ) {
-					pSheep->PlayAnimation( kbString( "Title" ), 0.15f );
+					pSheep->PlayAnimation( kbString("Title"), 0.15f );
 					pSheep->EnableHeadBand( false );
 				}
 				break;

@@ -68,13 +68,13 @@ void CannonActorComponent::SetEnable_Internal(const bool bEnable) {
 void CannonActorComponent::Update_Internal(const float DT) {
 	Super::Update_Internal(DT);
 
-	const kbQuat curRot = GetOwnerRotation();
+	const Quat4 curRot = GetOwnerRotation();
 
 	Mat4 facingMat;
 	facingMat.look_at(GetOwnerPosition(), GetOwnerPosition() + m_TargetFacingDirection, Vec3::up);
 
-	const kbQuat targetRot = kbQuatFromMatrix(facingMat);
-	GetOwner()->SetOrientation(curRot.Slerp(curRot, targetRot, DT * m_MaxRotateSpeed));
+	const Quat4 targetRot = Quat4::from_mat4(facingMat);
+	GetOwner()->SetOrientation(curRot.slerp(curRot, targetRot, DT * m_MaxRotateSpeed));
 
 	// Anim Smear
 	if (m_AnimSmearStartTime > 0.0f) {
@@ -104,7 +104,7 @@ void CannonActorComponent::PlayAnimation(const kbString animName, const float an
 bool CannonActorComponent::HasFinishedAnim(const kbString animName) const {
 
 	if (m_SkelModelsList.size() == 0) {
-		blk::warning("KungFuSheepComponent::HasFinishedAnim() - Called with empty m_SkelModels list");
+		blk::warn("KungFuSheepComponent::HasFinishedAnim() - Called with empty m_SkelModels list");
 		return true;
 	}
 
@@ -127,8 +127,8 @@ bool CannonActorComponent::HasFinishedAnim(const kbString animName) const {
 /// CannonActorComponent::SetAnimationTimeScaleMultiplier
 void CannonActorComponent::SetAnimationTimeScaleMultiplier(const kbString animName, const float multiplier) {
 	if (m_SkelModelsList.size() < 2) {
-		blk::warning("KungFuSheepComponent::SetAnimationTimeMultiplier() - Needs at least 2 skeletal models");
-		blk::warning("KungFuSheepComponent::SetAnimationTimeMultiplier() - Needs at least 2 skeletal models");
+		blk::warn("KungFuSheepComponent::SetAnimationTimeMultiplier() - Needs at least 2 skeletal models");
+		blk::warn("KungFuSheepComponent::SetAnimationTimeMultiplier() - Needs at least 2 skeletal models");
 		return;
 	}
 
@@ -321,7 +321,7 @@ void CannonCameraComponent::Update_Internal(const float DeltaTime) {
 				Mat4 cameraDestRot;
 				cameraDestRot.look_at(GetOwner()->GetPosition(), targetPosition + lookAtOffset, Vec3::up);
 				cameraDestRot.inverse_fast();
-				GetOwner()->SetOrientation(kbQuatFromMatrix(cameraDestRot));
+				GetOwner()->SetOrientation(Quat4::from_mat4(cameraDestRot));
 
 				const Vec3 cameraDestPos = targetPosition + positionOffset;
 				GetOwner()->SetPosition(cameraDestPos + cameraDestRot[0].ToVec3() * camShakeOffset.x + cameraDestRot[1].ToVec3() * camShakeOffset.y);

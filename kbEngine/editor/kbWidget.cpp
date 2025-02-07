@@ -2,7 +2,7 @@
 ///
 /// 2016-2025 blk 1.0
 
-#include "kbCore.h"
+#include "blk_core.h"
 #include "kbEditor.h"
 #include "kbWidget.h"
 

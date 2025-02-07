@@ -3,8 +3,8 @@
 /// 2016-2025 blk 1.0
 
 #include <queue>
-#include "kbCore.h"
-#include "containers.h"
+#include "blk_core.h"
+#include "blk_containers.h"
 #include "kbWidget.h"
 #include "kbGameEntityHeader.h"
 #include "kbResourceTab.h"

@@ -48,7 +48,7 @@ public:
 		w = inW;
 	}
 
-	Quat4 operator* (const Quat4& op2) const {
+	Quat4 operator *(const Quat4& op2) const {
 		return Quat4(w * op2.x + x * op2.w + y * op2.z - z * op2.y,
 						w * op2.y + y * op2.w + z * op2.x - x * op2.z,
 						w * op2.z + z * op2.w + x * op2.y - y * op2.x,
@@ -67,7 +67,6 @@ public:
 
 	static Quat4 slerp(const Quat4& from, const Quat4& to, float t);
 	static Quat4 from_mat4(const Mat4& matrix);
-
 
 	float x, y, z, w;
 

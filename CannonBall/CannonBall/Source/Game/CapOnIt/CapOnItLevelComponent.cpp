@@ -55,7 +55,7 @@ private:
 
 		if ( g_SkipCheat == KungFuGame::Skip_MainMenuAndIntro || g_SkipCheat == KungFuGame::Skip_ToEnd ) {
 
-			static const kbString IdleL_Anim( "IdleLeft_Basic" );
+			static const kbString IdleL_Anim("IdleLeft_Basic");
 			pSheep->PlayAnimation( IdleL_Anim, 0.2f );
 			RequestStateChange( KungFuGame::Intro );
 
@@ -67,7 +67,7 @@ private:
 
 		pSheep->ExternalRequestStateChange( KungFuSheepState::Cinema );
 
-		static const kbString JumpingJacks_Anim( "JumpingJacks" );
+		static const kbString JumpingJacks_Anim("JumpingJacks");
 		pSheep->PlayAnimation( JumpingJacks_Anim, 0.15f );
 		pSheep->SetTargetFacingDirection( Vec3( -1.0f, 0.0f, -1.0f ).Normalized() );
 		pSheep->SetOwnerPosition( KungFuGame::kSheepStartPos );*/

@@ -207,7 +207,7 @@ public:
 			 this->m_pActorComponent->IsPlayingAnim(PunchR_Anim) == false &&
 			 this->m_pActorComponent->IsPlayingAnim(KickR_Anim) == false) {
 
-			//	blk::log( "Took %f sec", g_GlobalTimer.TimeElapsedSeconds() - m_StartTime );
+			//	blk::log("Took %f sec", g_GlobalTimer.TimeElapsedSeconds() - m_StartTime );
 			if (m_bQueueAttack) {
 				this->BeginState(KungFuSheepState::Attack);
 			} else {
@@ -673,7 +673,7 @@ void KungFuSheepComponent::Update_Internal(const float DT) {
 		m_HeadBandInstance[1].GetEntity()->SetPosition(boneMat.GetOrigin() + axis1 * 0.1f + axis2 * 0.01f - axis3 * 0.15f);
 	}
 
-	const Vec3 curFacing = GetOwnerRotation().ToMat4()[2].ToVec3();
+	const Vec3 curFacing = GetOwnerRotation().to_mat4()[2].ToVec3();
 	const float t = (curFacing.z * 0.5f) + 0.5f;
 	Vec4 collisionSphere = kbLerp(Vec4(0.280000f, -0.080000f, 0.019997f, 0.25f), Vec4(0.140f, -0.060f, 0.279997f, 0.25f), t);
 	kbClothComponent* const pCloth1 = m_HeadBandInstance[0].GetEntity()->GetComponent<kbClothComponent>();

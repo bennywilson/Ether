@@ -1,21 +1,15 @@
-//===================================================================================================
-// CannonBall.cpp
-//
-//
-// 2019 kbEngine 2.0
-//===================================================================================================
+/// CannonBall.cpp
+///
+/// 2019-2025 kbEngine 2.0
 
 #define KFBX_DLLINFO
 #include "stdafx.h"
 #include <ShellAPI.h>
 #include "CannonBall.h"
-#include "kbCore.h"
-#include "kbApp.h"
-#include "kbJobManager.h"
+#include "blk_core.h"
 #include "DX11/kbRenderer_DX11.h"
 #include "kbEditor.h"
 #include "CannonGame.h"
-#include "kbMath.h"
 #include "kbGameEntityHeader.h"
 
 #define MAX_LOADSTRING 100
@@ -231,55 +225,10 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 	LoadString(hInstance, IDI_GAMEBASE, szWindowClass, MAX_LOADSTRING);
 	MyRegisterClass(hInstance);
 
-	// Command-line args	
-	int numArgs = 0;
-	LPWSTR* cmdLine = CommandLineToArgvW(GetCommandLineW(), &numArgs);
-	std::wstring cmdArgs[13];   // params passed in from the dashboard
-
-	std::string mapName;
+	std::string mapName = "KungFuSheep";
 	g_UseEditor = true;
 	if (GetKeyState(VK_CAPITAL)) {
 		g_UseEditor = true;
-	}
-
-	if (numArgs > 0) {
-		for (int i = 1; i < numArgs; i++) {
-			cmdArgs[i - 1] = cmdLine[i];
-
-			std::string cmdArg1 = std::string(cmdArgs[i - 1].begin(), cmdArgs[i - 1].end());
-
-			std::transform(cmdArg1.begin(), cmdArg1.end(), cmdArg1.begin(), ::tolower);
-
-			if (cmdArg1 == "editor") {
-				g_UseEditor = true;
-			} else if (cmdArg1 == "resx") {
-				if (i + 1 < numArgs) {
-					cmdArgs[i] = cmdLine[i + 1];
-					std::string cmdArg2 = std::string(cmdArgs[i].begin(), cmdArgs[i].end());
-					backBufferWidth = std::atoi(cmdArg2.c_str());
-					i++;
-				}
-			} else if (cmdArg1 == "resy") {
-				if (i + 1 < numArgs) {
-					cmdArgs[i] = cmdLine[i + 1];
-					std::string cmdArg2 = std::string(cmdArgs[i].begin(), cmdArgs[i].end());
-					backBufferHeight = std::atoi(cmdArg2.c_str());
-					i++;
-				}
-			} else if (cmdArg1 == "lowend") {
-				backBufferWidth = 1024;
-				backBufferHeight = 768;
-				extern kbConsoleVariable g_ShowShadows;
-				extern kbConsoleVariable g_ShowLightShafts;
-				g_ShowShadows.SetBool(false);
-				g_ShowLightShafts.SetBool(false);
-
-			} else if (cmdArg1 == "monitor2") {
-				MonitorIdx = 1;
-			} else {
-				mapName = cmdArg1;
-			}
-		}
 	}
 
 	// Perform application initialization

@@ -41,13 +41,13 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>./boundingVolumes;./core;./External;./gameEntity;./math;./renderer;./renderer/d3d12;./renderer/d3d12/dxtk;./renderer/d3d12/dx12;./sound;C:\Program Files\Autodesk\FBX\FBX SDK\2020.3.7\include;C:\VulkanSDK\1.4.304.0\Include</IncludePath>
+    <IncludePath>./boundingVolumes;./core;./External;./game;./math;./renderer;./renderer/d3d12;./renderer/d3d12/dxtk;./renderer/d3d12/dx12;./sound;C:\Program Files\Autodesk\FBX\FBX SDK\2020.3.7\include;C:\VulkanSDK\1.4.304.0\Include</IncludePath>
     <LibraryPath>C:\projects\Ether\kbEngine\lib;C:\Program Files\Autodesk\FBX\FBX SDK\2020.3.7\lib\x64\debug;C:\Program Files\Microsoft SDKs\Windows\v7.1\Lib\FL\x64;C:\VulkanSDK\1.4.304.0\Lib;$(LibraryPath)</LibraryPath>
     <OutDir>.\lib\</OutDir>
     <TargetName>kbEngined</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>C:\VulkanSDK\1.4.304.0\Include;C:\Program Files\Autodesk\FBX\FBX SDK\2020.3.7\include;./renderer/d3d12/dx12;./renderer/d3d12/dxtk;./renderer/d3d12;./sound;$(WindowsSDK_IncludePath);./External;./gameEntity;./boundingVolumes;./math;./core;C:\Program Files (x86)\Windows Kits\8.1\Include\shared;$(IncludePath);./renderer</IncludePath>
+    <IncludePath>./boundingVolumes;./core;./External;./game;./math;./renderer;./renderer/d3d12;./renderer/d3d12/dxtk;./renderer/d3d12/dx12;./sound;C:\Program Files\Autodesk\FBX\FBX SDK\2020.3.7\include;C:\VulkanSDK\1.4.304.0\Include</IncludePath>
     <LibraryPath>C:\VulkanSDK\1.4.304.0\Lib;C:\projects\Ether\kbEngine\lib;C:\Program Files\Autodesk\FBX\FBX SDK\2020.3.7\lib\x64\release;C:\Program Files (x86)\Windows Kits\8.1\Lib\winv6.3\um\x64;C:\Program Files\Microsoft SDKs\Windows\v7.1\Lib\FL\x64;$(LibraryPath)</LibraryPath>
     <OutDir>.\lib\</OutDir>
     <TargetName>kbEngine</TargetName>
@@ -134,12 +134,12 @@
     <ClInclude Include="boundingVolumes\kbBounds.h" />
     <ClInclude Include="boundingVolumes\kbIntersectionTests.h" />
     <ClInclude Include="boundingVolumes\kbOctree.h" />
-    <ClInclude Include="core\containers.h" />
-    <ClInclude Include="core\kbConsole.h" />
-    <ClInclude Include="core\kbCore.h" />
-    <ClInclude Include="core\kbInputManager.h" />
-    <ClInclude Include="core\kbJobManager.h" />
-    <ClInclude Include="core\kbString.h" />
+    <ClInclude Include="core\blk_containers.h" />
+    <ClInclude Include="core\blk_console.h" />
+    <ClInclude Include="core\blk_core.h" />
+    <ClInclude Include="game\kbInputManager.h" />
+    <ClInclude Include="game\kbJobManager.h" />
+    <ClInclude Include="core\blk_string.h" />
     <ClInclude Include="editor\kbEditorEntity.h" />
     <ClInclude Include="editor\kbManipulator.h" />
     <ClInclude Include="editor\kbPropertiesTab.h" />
@@ -149,32 +149,32 @@
     <ClInclude Include="editor\kbEditor.h" />
     <ClInclude Include="editor\kbMainTab.h" />
     <ClInclude Include="editor\kbWidgetCBObjects.h" />
-    <ClInclude Include="gameEntity\kbCamera.h" />
-    <ClInclude Include="gameEntity\kbClothComponent.h" />
-    <ClInclude Include="gameEntity\kbCollisionManager.h" />
-    <ClInclude Include="gameEntity\kbComponent.h" />
-    <ClInclude Include="gameEntity\kbDebugComponents.h" />
-    <ClInclude Include="gameEntity\kbFile.h" />
-    <ClInclude Include="gameEntity\kbGame.h" />
-    <ClInclude Include="gameEntity\kbGameEntity.h" />
-    <ClInclude Include="gameEntity\kbLevelComponent.h" />
-    <ClInclude Include="gameEntity\kbLevelDirector.h" />
-    <ClInclude Include="gameEntity\kbLightComponent.h" />
-    <ClInclude Include="gameEntity\kbModelComponent.h" />
-    <ClInclude Include="gameEntity\kbParticleComponent.h" />
-    <ClInclude Include="gameEntity\kbParticleManager.h" />
-    <ClInclude Include="gameEntity\kbResourceManager.h" />
-    <ClInclude Include="gameEntity\kbSkeletalModelComponent.h" />
-    <ClInclude Include="gameEntity\kbStaticModelComponent.h" />
-    <ClInclude Include="gameEntity\kbTerrainComponent.h" />
-    <ClInclude Include="gameEntity\kbTypeInfo.h" />
-    <ClInclude Include="gameEntity\kbGameEntityHeader.h" />
-    <ClInclude Include="gameEntity\kbTypeInfoGeneratedClasses.h" />
-    <ClInclude Include="gameEntity\kbUIComponent.h" />
-    <ClInclude Include="math\kbMath.h" />
-    <ClInclude Include="math\kbPlane.h" />
-    <ClInclude Include="math\Quaternion.h" />
-    <ClInclude Include="math\Matrix.h" />
+    <ClInclude Include="game\kbCamera.h" />
+    <ClInclude Include="game\kbClothComponent.h" />
+    <ClInclude Include="game\kbCollisionManager.h" />
+    <ClInclude Include="game\kbComponent.h" />
+    <ClInclude Include="game\kbDebugComponents.h" />
+    <ClInclude Include="game\kbFile.h" />
+    <ClInclude Include="game\kbGame.h" />
+    <ClInclude Include="game\kbGameEntity.h" />
+    <ClInclude Include="game\kbLevelComponent.h" />
+    <ClInclude Include="game\kbLevelDirector.h" />
+    <ClInclude Include="game\kbLightComponent.h" />
+    <ClInclude Include="game\kbModelComponent.h" />
+    <ClInclude Include="game\kbParticleComponent.h" />
+    <ClInclude Include="game\kbParticleManager.h" />
+    <ClInclude Include="game\kbResourceManager.h" />
+    <ClInclude Include="game\kbSkeletalModelComponent.h" />
+    <ClInclude Include="game\kbStaticModelComponent.h" />
+    <ClInclude Include="game\kbTerrainComponent.h" />
+    <ClInclude Include="game\kbTypeInfo.h" />
+    <ClInclude Include="game\kbGameEntityHeader.h" />
+    <ClInclude Include="game\kbTypeInfoGeneratedClasses.h" />
+    <ClInclude Include="game\kbUIComponent.h" />
+    <ClInclude Include="math\blk_math.h" />
+    <ClInclude Include="math\plane3d.h" />
+    <ClInclude Include="math\quaternion.h" />
+    <ClInclude Include="math\matrix.h" />
     <ClInclude Include="renderer\d3d12\dx12\d3d12.h" />
     <ClInclude Include="renderer\d3d12\dx12\d3d12compatibility.h" />
     <ClInclude Include="renderer\d3d12\dx12\d3d12sdklayers.h" />
@@ -229,16 +229,16 @@
     <ClCompile Include="boundingVolumes\kbIntersectionTests.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="core\kbConsole.cpp" />
-    <ClCompile Include="core\kbCore.cpp">
+    <ClCompile Include="core\blk_console.cpp" />
+    <ClCompile Include="core\blk_core.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="core\kbInputManager.cpp" />
-    <ClCompile Include="core\kbJobManager.cpp">
+    <ClCompile Include="game\kbInputManager.cpp" />
+    <ClCompile Include="game\kbJobManager.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="core\kbString.cpp">
+    <ClCompile Include="core\blk_string.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="editor\kbEditor.cpp">
@@ -267,64 +267,64 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="gameEntity\kbCamera.cpp">
+    <ClCompile Include="game\kbCamera.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="gameEntity\kbClothComponent.cpp">
+    <ClCompile Include="game\kbClothComponent.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="gameEntity\kbCollisionManager.cpp" />
-    <ClCompile Include="gameEntity\kbComponent.cpp">
+    <ClCompile Include="game\kbCollisionManager.cpp" />
+    <ClCompile Include="game\kbComponent.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="gameEntity\kbDebugComponents.cpp" />
-    <ClCompile Include="gameEntity\kbFile.cpp">
+    <ClCompile Include="game\kbDebugComponents.cpp" />
+    <ClCompile Include="game\kbFile.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="gameEntity\kbGame.cpp">
+    <ClCompile Include="game\kbGame.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="gameEntity\kbGameEntity.cpp">
+    <ClCompile Include="game\kbGameEntity.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="gameEntity\kbLevelComponent.cpp" />
-    <ClCompile Include="gameEntity\kbLevelDirector.cpp" />
-    <ClCompile Include="gameEntity\kbLightComponent.cpp">
+    <ClCompile Include="game\kbLevelComponent.cpp" />
+    <ClCompile Include="game\kbLevelDirector.cpp" />
+    <ClCompile Include="game\kbLightComponent.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="gameEntity\kbModelComponent.cpp">
+    <ClCompile Include="game\kbModelComponent.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="gameEntity\kbParticleComponent.cpp">
+    <ClCompile Include="game\kbParticleComponent.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="gameEntity\kbParticleManager.cpp" />
-    <ClCompile Include="gameEntity\kbResourceManager.cpp">
+    <ClCompile Include="game\kbParticleManager.cpp" />
+    <ClCompile Include="game\kbResourceManager.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="gameEntity\kbSkeletalModelComponent.cpp">
+    <ClCompile Include="game\kbSkeletalModelComponent.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="gameEntity\kbStaticModelComponent.cpp">
+    <ClCompile Include="game\kbStaticModelComponent.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="gameEntity\kbTerrainComponent.cpp">
+    <ClCompile Include="game\kbTerrainComponent.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="gameEntity\kbTypeInfo.cpp">
+    <ClCompile Include="game\kbTypeInfo.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="gameEntity\kbUIComponent.cpp" />
-    <ClCompile Include="math\kbMath.cpp">
+    <ClCompile Include="game\kbUIComponent.cpp" />
+    <ClCompile Include="math\blk_math.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="math\kbPlane.cpp" />
-    <ClCompile Include="math\Quaternion.cpp">
+    <ClCompile Include="math\plane3d.cpp" />
+    <ClCompile Include="math\quaternion.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="math\Matrix.cpp">
+    <ClCompile Include="math\matrix.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>

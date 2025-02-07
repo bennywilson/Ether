@@ -2,7 +2,7 @@
 ///
 /// 2017-2025 blk 1.0
 
-#include "kbCore.h"
+#include "blk_core.h"
 #include "Quaternion.h"
 #include "kbGameEntityHeader.h"
 #include "kbGame.h"

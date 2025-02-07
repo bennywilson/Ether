@@ -32,7 +32,7 @@ namespace KungFuGame {
 
 	// Camera
 	const Vec3 kCameraStartPos = Vec3( 66.170448f, -49.412132f, -391.558990f );
-	const kbQuat kCameraRotation = kbQuat( -0.023375f, -0.706720f, 0.023375f, 0.706720f );
+	const Quat4 kCameraRotation = Quat4( -0.023375f, -0.706720f, 0.023375f, 0.706720f );
 	const float kPrehugLengthSec = 0.067f;
 	const float kDistToHugSheep = 0.75f;
 	const float kDistToHugSnolaf = 0.5f;
@@ -62,7 +62,7 @@ namespace KungFuGame {
 
 	// Movement	
 	const Vec3 kSheepStartPos( 77.10445f, -52.6362f, -398.0f );
-	const kbQuat kSheepStartRot( 0.0f, 1.0f, 0.0f, 0.0f );
+	const Quat4 kSheepStartRot( 0.0f, 1.0f, 0.0f, 0.0f );
 	
 	const float kLevelLength = 165.0f;
 

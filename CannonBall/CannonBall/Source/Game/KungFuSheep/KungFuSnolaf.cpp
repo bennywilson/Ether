@@ -14,9 +14,7 @@
 #include "kbEditorEntity.h"
 #include <DX11\kbRenderer_DX11.h>
 
-/**
- *	KungFuSnolafStateIdle
- */
+/// KungFuSnolafStateIdle
 template<typename T>
 class KungFuSnolafStateIdle : public KungFuSnolafStateBase<T> {
 
@@ -42,9 +40,7 @@ public:
 	virtual void EndState_Internal(T) override { }
 };
 
-/**
- *	KungFuSnolafStateRun
- */
+/// KungFuSnolafStateRun
 template<typename T>
 class KungFuSnolafStateRun : public KungFuSnolafStateBase<T> {
 private:
@@ -73,7 +69,7 @@ public:
 		}
 
 		const Vec3 snolafPos = this->m_pActorComponent->GetOwnerPosition();
-		const Vec3 snolafFacingDir = this->m_pActorComponent->GetOwnerRotation().ToMat4()[2].ToVec3();
+		const Vec3 snolafFacingDir = this->m_pActorComponent->GetOwnerRotation().to_mat4()[2].ToVec3();
 
 		// TODO - Optimize
 		// Look for actors to hug
@@ -128,9 +124,7 @@ public:
 	}
 };
 
-/**
- *	KungFuSnolafeStatePrehug
- */
+/// KungFuSnolafeStatePrehug
 template<typename T>
 class KungFuSnolafeStatePrehug : public KungFuSnolafStateBase<T> {
 
@@ -152,7 +146,7 @@ public:
 		}
 
 		const Vec3 snolafPos = this->m_pActorComponent->GetOwnerPosition();
-		const Vec3 snolafFacingDir = this->m_pActorComponent->GetOwnerRotation().ToMat4()[2].ToVec3();
+		const Vec3 snolafFacingDir = this->m_pActorComponent->GetOwnerRotation().to_mat4()[2].ToVec3();
 
 		// TODO - Optimize
 		bool bAnyoneInFront = false;
@@ -190,9 +184,7 @@ public:
 	virtual void EndState_Internal(T) override { }
 };
 
-/**
- *	KungFuSnolafStateHug - Warm Hugs!
- */
+/// KungFuSnolafStateHug - Warm Hugs!
 template<typename T>
 class KungFuSnolafStateHug : public KungFuSnolafStateBase<T> {
 
@@ -258,7 +250,7 @@ public:
 		}
 
 		const Vec3 snolafPos = this->m_pActorComponent->GetOwnerPosition();
-		const Vec3 snolafFacingDir = this->m_pActorComponent->GetOwnerRotation().ToMat4()[2].ToVec3();
+		const Vec3 snolafFacingDir = this->m_pActorComponent->GetOwnerRotation().to_mat4()[2].ToVec3();
 
 		bool bAnyoneInFront = false;
 		for (int i = 0; i < g_pCannonGame->GetGameEntities().size(); i++) {
@@ -304,9 +296,7 @@ private:
 };
 
 
-/**
- *	KungFuSnolafStateWatchCannonBall
- */
+/// KungFuSnolafStateWatchCannonBall
 template<typename T>
 class KungFuSnolafStateWatchCannonBall : public KungFuSnolafStateBase<T> {
 
@@ -326,9 +316,7 @@ public:
 	virtual void EndState_Internal(T) override { }
 };
 
-/**
- *	KungFuSnolafStateDead
- */
+/// KungFuSnolafStateDead
 template<typename T>
 class KungFuSnolafStateDead : public KungFuSnolafStateBase<T> {
 
@@ -467,8 +455,8 @@ public:
 		}
 
 		m_CurRotationAngle += m_RotationSpeed * dt;
-		kbQuat rot;
-		rot.FromAxisAngle(m_RotationAxis, m_CurRotationAngle);
+		Quat4 rot;
+		rot.from_axis_angle(m_RotationAxis, m_CurRotationAngle);
 		rot = m_OwnerStartRotation * rot;
 		this->m_pActorComponent->SetOwnerRotation(rot);
 	}
@@ -507,7 +495,7 @@ private:
 	const Vec3 m_Gravity = Vec3(0.0f, -20.0f, 0.0f);
 
 	Vec3 m_OwnerStartPos = Vec3::zero;
-	kbQuat m_OwnerStartRotation = kbQuat(0.0f, 0.0f, 0.0f, 1.0f);
+	Quat4 m_OwnerStartRotation = Quat4(0.0f, 0.0f, 0.0f, 1.0f);
 	Vec3 m_OwnerPosOverride = Vec3::zero;
 
 	Vec3 m_Velocity = Vec3::zero;
@@ -521,9 +509,7 @@ private:
 	bool m_bSpawnedSplash = false;
 };
 
-/**
- *	KungFuSnolafStatePoofDeath
- */
+/// KungFuSnolafStatePoofDeath
 template<typename T>
 class KungFuSnolafStatePoofDeath : public KungFuSnolafStateBase<T> {
 
@@ -540,9 +526,7 @@ public:
 	}
 };
 
-/**
- *	KungFuSnolafStateRunAway
- */
+/// KungFuSnolafStateRunAway
 template<typename T>
 class KungFuSnolafStateRunAway : public KungFuSnolafStateBase<T> {
 
@@ -573,9 +557,7 @@ public:
 	}
 };
 
-/**
- *	KungFuSnolafStateCinema
- */
+/// KungFuSnolafStateCinema
 template<typename T>
 class KungFuSnolafStateCinema : public KungFuSnolafStateBase<T> {
 
@@ -584,17 +566,13 @@ public:
 	KungFuSnolafStateCinema(CannonActorComponent* const pPlayerComponent) : KungFuSnolafStateBase<T>(pPlayerComponent) { }
 };
 
-/**
- *	KungFuSnolafComponent::Constructor
- */
+/// KungFuSnolafComponent::Constructor
 void KungFuSnolafComponent::Constructor() {
 	m_pSmallLoveHearts = nullptr;
 	m_pLargeLoveHearts = nullptr;
 }
 
-/**
- *	KungFuSnolafComponent::SetEnable_Internal
- */
+/// KungFuSnolafComponent::SetEnable_Internal
 void KungFuSnolafComponent::SetEnable_Internal(const bool bEnable) {
 	Super::SetEnable_Internal(bEnable);
 
@@ -673,9 +651,7 @@ void KungFuSnolafComponent::OnAnimEvent(const kbAnimEventInfo_t& animEventInfo) 
 	}
 }
 
-/**
- *	KungFuSnolafComponent::Update_Internal
- */
+/// KungFuSnolafComponent::Update_Internal
 void KungFuSnolafComponent::Update_Internal(const float DT) {
 	Super::Update_Internal(DT);
 
@@ -713,9 +689,7 @@ void KungFuSnolafComponent::Update_Internal(const float DT) {
 	}
 }
 
-/**
- *	KungFuSnolafComponent::ResetFromPool
- */
+/// KungFuSnolafComponent::ResetFromPool
 void KungFuSnolafComponent::ResetFromPool() {
 
 	m_AnimSmearDuration = 0.0f;
@@ -744,9 +718,7 @@ void KungFuSnolafComponent::ResetFromPool() {
 	m_Health = 1.0f;
 }
 
-/**
- *	KungFuSnolafComponent::EnableSmallLoveHearts
- */
+/// KungFuSnolafComponent::EnableSmallLoveHearts
 void KungFuSnolafComponent::EnableSmallLoveHearts(const bool bEnable) {
 	if (m_pSmallLoveHearts == nullptr) {
 		return;
@@ -755,9 +727,7 @@ void KungFuSnolafComponent::EnableSmallLoveHearts(const bool bEnable) {
 	m_pSmallLoveHearts->EnableNewSpawns(bEnable);
 }
 
-/**
- *	KungFuSnolafComponent::EnableLargeLoveHearts
- */
+/// KungFuSnolafComponent::EnableLargeLoveHearts
 void KungFuSnolafComponent::EnableLargeLoveHearts(const bool bEnable) {
 	if (m_pLargeLoveHearts == nullptr) {
 		return;
@@ -766,9 +736,7 @@ void KungFuSnolafComponent::EnableLargeLoveHearts(const bool bEnable) {
 	m_pLargeLoveHearts->EnableNewSpawns(bEnable);
 }
 
-/**
- *	KungFuSnolafComponent::TakeDamage
- */
+/// KungFuSnolafComponent::TakeDamage
 void KungFuSnolafComponent::TakeDamage(const DealAttackInfo_t<KungFuGame::eAttackType>& attackInfo) {
 
 	m_LastAttackInfo = attackInfo;
@@ -787,9 +755,7 @@ void KungFuSnolafComponent::TakeDamage(const DealAttackInfo_t<KungFuGame::eAttac
 	this->RequestStateChange(KungFuSnolafState::Dead);
 }
 
-/**
- *	KungFuSnolafComponent::DoPoofDeath
- */
+/// KungFuSnolafComponent::DoPoofDeath
 void KungFuSnolafComponent::DoPoofDeath() {
 
 	if (m_PoofDeathFX.GetEntity() == nullptr) {
@@ -805,9 +771,7 @@ void KungFuSnolafComponent::DoPoofDeath() {
 	m_SkelModelsList[1]->Enable(false);
 }
 
-/**
- *	KungFuSnolafComponent::SpawnAndFlingDecapHead
- */
+/// KungFuSnolafComponent::SpawnAndFlingDecapHead
 void KungFuSnolafComponent::SpawnAndFlingDecapHead() {
 
 	if (m_DecapitatedHead.GetEntity() == nullptr) {
@@ -827,9 +791,7 @@ void KungFuSnolafComponent::SpawnAndFlingDecapHead() {
 	}
 }
 
-/**
- *	KungFuSnolafComponent::SpawnAndFlingTopAndBottomHalf
- */
+/// KungFuSnolafComponent::SpawnAndFlingTopAndBottomHalf
 void KungFuSnolafComponent::SpawnAndFlingTopAndBottomHalf() {
 
 	m_SkelModelsList[0]->Enable(false);
@@ -864,9 +826,7 @@ void KungFuSnolafComponent::SpawnAndFlingTopAndBottomHalf() {
 	}
 }
 
-/**
- *	KungFuSnolafComponent::SpawnSplash
- */
+/// KungFuSnolafComponent::SpawnSplash
 void KungFuSnolafComponent::SpawnSplash() {
 
 	if (m_SplashFX.GetEntity() == nullptr) {

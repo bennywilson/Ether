@@ -17,9 +17,7 @@
 
 CannonGame * g_pCannonGame = nullptr;
 
-/**
- *	CannonGame::CannonGame
- */
+/// CannonGame::CannonGame
 CannonGame::CannonGame() :
 	kbRenderHook( RP_FirstPerson ),
 	m_pMainCamera( nullptr ),
@@ -27,29 +25,23 @@ CannonGame::CannonGame() :
 
 	m_Camera.m_Position.set( 0.0f, 2600.0f, 0.0f );
 
-	blk::error_check( g_pCannonGame == nullptr, "CannonGame::CannonGame() - g_pCannonGame is not nullptr" );
+	blk::error_check( g_pCannonGame == nullptr, "CannonGame::CannonGame() - g_pCannonGame is not nullptr");
 	g_pCannonGame = this;
 }
 
-/**
- *	CannonGame::~CannonGame
- */
+/// CannonGame::~CannonGame
 CannonGame::~CannonGame() {
 
-	blk::error_check( g_pCannonGame != nullptr, "CannonGame::~CannonGame() - g_pCannonGame is nullptr" );
+	blk::error_check( g_pCannonGame != nullptr, "CannonGame::~CannonGame() - g_pCannonGame is nullptr");
 	g_pCannonGame = nullptr;
 }
 
-/**
- *	CannonGame::PlayGame_Internal
- */
+/// CannonGame::PlayGame_Internal
 void CannonGame::PlayGame_Internal() {
 	g_pRenderer->RegisterRenderHook( this );
 }
 
-/**
- *	CannonGame::InitGame_Internal
- */
+/// CannonGame::InitGame_Internal
 void CannonGame::InitGame_Internal() {
 
 	m_GameStartTimer.Reset();
@@ -63,16 +55,14 @@ void CannonGame::InitGame_Internal() {
 	float brightness = (pGameSettings->m_Brightness / 100.0f);
 	brightness = (brightness * 0.5f) + 0.5f;
 
-	shaderParam.SetVec4( "globalTint", Vec4( 0.0f, 0.0f, 0.0f, 1.0f - brightness ) );
+	shaderParam.SetVec4("globalTint", Vec4( 0.0f, 0.0f, 0.0f, 1.0f - brightness ) );
 	g_pRenderer->SetGlobalShaderParam( shaderParam );
 
 	const float LOD = (float)pGameSettings->m_VisualQuality / 100.0f;
 	kbTerrainComponent::SetTerrainLOD( LOD );
 }
 
-/**
- *	CannonGame::StopGame_Internal
- */
+/// CannonGame::StopGame_Internal
 void CannonGame::StopGame_Internal() {
 
 	m_pLocalPlayer = nullptr;
@@ -80,9 +70,7 @@ void CannonGame::StopGame_Internal() {
 	g_pRenderer->UnregisterRenderHook( this );
 }
 
-/**
- *	CannonGame::LevelLoaded_Internal
- */
+/// CannonGame::LevelLoaded_Internal
 void CannonGame::LevelLoaded_Internal() {
 
 	m_pMainCamera = nullptr;
@@ -111,13 +99,11 @@ void CannonGame::LevelLoaded_Internal() {
 		SwapEntitiesByIdx( cameraIdx, GameEnts.size() - 1 );
 	}
 
-	blk::warning_check( m_pMainCamera != nullptr, "CannonGame::LevelLoaded_Internal() - No camera found.");
-	blk::warning_check( m_pPlayerComp != nullptr, "CannonGame::LevelLoaded_Internal() - No player found.");
+	blk::warn_check(m_pMainCamera != nullptr, "CannonGame::LevelLoaded_Internal() - No camera found.");
+	blk::warn_check(m_pPlayerComp != nullptr, "CannonGame::LevelLoaded_Internal() - No player found.");
 }
 
-/**
- *	CannonGame::PreUpdate_Internal
- */
+/// CannonGame::PreUpdate_Internal
 void CannonGame::PreUpdate_Internal() {
 
 	const float frameDT = GetFrameDT();
@@ -126,9 +112,7 @@ void CannonGame::PreUpdate_Internal() {
 	}
 }
 
-/**
- *	CannonGame::PostUpdate_Internal
- */
+/// CannonGame::PostUpdate_Internal
 void CannonGame::PostUpdate_Internal() {
 
 	// Update renderer cam
@@ -137,13 +121,11 @@ void CannonGame::PostUpdate_Internal() {
 	}
 }
 
-/**
- *	CannonGame::AddGameEntity_Internal
- */
+/// CannonGame::AddGameEntity_Internal
 void CannonGame::AddGameEntity_Internal( kbGameEntity *const pEntity ) {
 
 	if ( pEntity == nullptr ) {
-		blk::warning( "CannonGame::AddGameEntity_Internal() - nullptr Entity" );
+		blk::warn("CannonGame::AddGameEntity_Internal() - nullptr Entity");
 		return;
 	}
 
@@ -156,13 +138,11 @@ void CannonGame::AddGameEntity_Internal( kbGameEntity *const pEntity ) {
 	}
 }
 
-/**
- *	CannonGame::RemoveGameEntity_Internal
- */
+/// CannonGame::RemoveGameEntity_Internal
 void CannonGame::RemoveGameEntity_Internal( kbGameEntity *const pEntity ) {
 
 	if ( pEntity == nullptr ) {
-		blk::warning( "CannonGame::RemoveGameEntity_Internal() - nullptr Entity" );
+		blk::warn("CannonGame::RemoveGameEntity_Internal() - nullptr Entity");
 		return;
 	}
 
@@ -172,17 +152,13 @@ void CannonGame::RemoveGameEntity_Internal( kbGameEntity *const pEntity ) {
 	}
 }
 
-/**
- *	CannonGame::CreatePlayer
- */
+/// CannonGame::CreatePlayer
 kbGameEntity * CannonGame::CreatePlayer( const int netId, const kbGUID & prefabGUID, const Vec3 & DesiredLocation ) {
 
 	return nullptr;
 }
 
-/**
- *	CannonGame::ProcessInput
- */
+/// CannonGame::ProcessInput
 void CannonGame::ProcessInput( const float DT ) {
 
 	static bool bCursorHidden = false;
@@ -195,17 +171,13 @@ void CannonGame::ProcessInput( const float DT ) {
 	}
 }
 
-/**
- *	CannonGame::RenderSync
- */
+/// CannonGame::RenderSync
 void CannonGame::RenderSync() {
 
 	
 }
 
-/**
- *	CannonGame::RenderHookCallBack
- */
+/// CannonGame::RenderHookCallBack
 static float g_TimeMultiplier = 0.95f / 0.016f;
 void CannonGame::RenderHookCallBack( kbRenderTexture *const pSrc, kbRenderTexture *const pDst ) {
 
@@ -214,9 +186,7 @@ void CannonGame::RenderHookCallBack( kbRenderTexture *const pSrc, kbRenderTextur
 	}
 }
 
-/**
- *	CannonGame::HackEditorInit
- */
+/// CannonGame::HackEditorInit
 void CannonGame::HackEditorInit( HWND hwnd, std::vector<class kbEditorEntity *> & editorEntities ) {
 
 	for ( int i = 0; i < editorEntities.size(); i++ ) {
@@ -235,9 +205,7 @@ void CannonGame::HackEditorInit( HWND hwnd, std::vector<class kbEditorEntity *> 
 }
 
 
-/**
- *	CannonGame::HackEditorUpdate
- */
+/// CannonGame::HackEditorUpdate
 void CannonGame::HackEditorUpdate( const float DT, kbCamera *const pEditorCam ) {
 
 	m_InputManager.Update( DT );
@@ -252,17 +220,13 @@ void CannonGame::HackEditorUpdate( const float DT, kbCamera *const pEditorCam ) 
 	}
 }
 
-/**
- *	CannonGame::HackEditorShutdown
- */
+/// CannonGame::HackEditorShutdown
 void CannonGame::HackEditorShutdown() {
 	m_pPlayerComp = nullptr;
 	m_pMainCamera = nullptr;
 }
 
-/**
- *	CannonLevelComponent::Constructor
- */
+/// CannonLevelComponent::Constructor
 void CannonLevelComponent::Constructor() {
 	m_Dummy2 = -1;
 }
@@ -279,32 +243,28 @@ void CannonFogComponent::Constructor() {
 	m_FogColor = kbColor::white;
 }
 
-/**
- *	CannonFogComponent::RenderHookCallBack
- */
+/// CannonFogComponent::RenderHookCallBack
 void CannonFogComponent::RenderHookCallBack( kbRenderTexture *const pSrc, kbRenderTexture *const pDst ) {
 	//g_pRenderer->RT_ClearRenderTarget( pDst, kbColor::white );
 
 	if ( m_pShader == nullptr ) {
-		m_pShader = (kbShader *) g_ResourceManager.GetResource( "./assets/shaders/PostProcess/Fog.kbshader", true, true );
+		m_pShader = (kbShader *) g_ResourceManager.GetResource("./assets/shaders/PostProcess/Fog.kbshader", true, true );
 	}
 
 	g_pRenderer->RT_SetRenderTarget( pDst );
 	kbShaderParamOverrides_t shaderParams;
-	shaderParams.SetVec4( "fog_Start_End_Clamp", Vec4( m_FogStartDist, m_FogEndDist, m_FogClamp, 0.0f ) );
-	shaderParams.SetVec4( "fogColor", m_FogColor );
+	shaderParams.SetVec4("fog_Start_End_Clamp", Vec4( m_FogStartDist, m_FogEndDist, m_FogClamp, 0.0f ) );
+	shaderParams.SetVec4("fogColor", m_FogColor );
 
 	Vec3 position;
-	kbQuat orientation;
+	Quat4 orientation;
 	g_pRenderer->GetRenderViewTransform( nullptr, position, orientation );
 
-	shaderParams.SetVec4( "cameraPosition", position );
+	shaderParams.SetVec4("cameraPosition", position );
 	g_pRenderer->RT_Render2DQuad( Vec2( 0.5f, 0.5f ), Vec2( 1.0f, 1.0f ), kbColor::white, m_pShader, &shaderParams );
 }
 
-/**
- *	CannonFogComponent::SetEnable_Internal
- */
+/// CannonFogComponent::SetEnable_Internal
 void CannonFogComponent::SetEnable_Internal( const bool bEnable ) {
 
 	Super::SetEnable_Internal( bEnable );

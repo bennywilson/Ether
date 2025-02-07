@@ -5,14 +5,14 @@
 // 2017-2018 blk 1.0
 //==============================================================================
 #include <stdio.h>
-#include "kbCore.h"
-#include "kbConsole.h"
+#include "blk_core.h"
+#include "blk_console.h"
 #include "kbRenderer_DX11.h"
 #include "kbModel.h"
 #include "kbGameEntityHeader.h"
 #include "kbComponent.h"
 #include "kbSkeletalModelComponent.h"
-#include "kbPlane.h"
+#include "Plane3d.h"
 
 kbConsoleVariable g_DebugShadowBounds( "debugshadowbounds", false, kbConsoleVariable::Console_Bool, "Freeze shadow position and draw the bounds.", "" );
 kbConsoleVariable g_ShowShadows( "showshadows", true, kbConsoleVariable::Console_Bool, "Toggle Shadows on/off.", "" );
@@ -228,7 +228,7 @@ void kbRenderer_DX11::RenderShadow( const kbRenderLight *const pLight, Mat4 spli
 	const Mat4 oldProjectionMatrix = m_pCurrentRenderWindow->GetProjectionMatrix();
 	const Mat4 oldViewProjMatrix = m_pCurrentRenderWindow->GetViewProjectionMatrix();
 
-	kbPlane frustumPlanes[6];
+	Plane3d frustumPlanes[6];
 	Vec3 upperLeft, upperRight, lowerRight, lowerLeft, dummyPoint;
 
 	static Mat4 frozenMatrix = m_pCurrentRenderWindow->GetViewProjectionMatrix();;

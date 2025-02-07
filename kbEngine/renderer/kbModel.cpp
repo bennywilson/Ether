@@ -4,7 +4,7 @@
 
 #include <fbxsdk.h>
 #include <fstream>
-#include "kbCore.h"
+#include "blk_core.h"
 #include "Matrix.h"
 #include "kbIntersectionTests.h"
 #include "kbModel.h"

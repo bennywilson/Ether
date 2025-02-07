@@ -4,7 +4,7 @@
 
 #include "stdafx.h"
 #include "GameBase.h"
-#include "kbCore.h"
+#include "blk_core.h"
 #include "renderer.h"
 #include "kbEditor.h"
 #include "Ether/EtherGame.h"

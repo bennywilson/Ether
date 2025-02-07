@@ -220,7 +220,7 @@ public:
 				}
 
 				const Vec3 vecToTarget = (targetPos - attackerPos).normalize_safe();
-				const Vec3 attackerFacingDir = pAttackerComp->GetOwnerRotation().ToMat4()[2].ToVec3();
+				const Vec3 attackerFacingDir = pAttackerComp->GetOwnerRotation().to_mat4()[2].ToVec3();
 				if (vecToTarget.dot(attackerFacingDir) > 0.0f) {
 					continue;
 				}
@@ -624,7 +624,7 @@ void KungFuLevelComponent::Update_Internal(const float DeltaTime) {
 				rotationMat[2][0] = -sin(randRot);
 				rotationMat[0][2] = sin(randRot);
 				rotationMat[2][2] = cos(randRot);
-				pTargetEnt->SetOrientation(kbQuatFromMatrix(rotationMat));
+				pTargetEnt->SetOrientation(Quat4::from_mat4(rotationMat));
 			}
 		} else
 		{
@@ -923,7 +923,7 @@ void KungFuLevelComponent::SpawnEnemy(const bool bSpawnLeft, const int waveSize)
 			spawnPos = nextLeftSpawnPos;
 			m_EndSnolafs[0] = pSnolafComp;
 		}
-		//blk::log( "Snolaf popped of list of size %d", m_SnolafPool.size() );
+		//blk::log("Snolaf popped of list of size %d", m_SnolafPool.size() );
 
 		pSnolaf->SetPosition(spawnPos);
 		pSnolaf->SetOrientation(GetOwnerRotation());
@@ -1089,7 +1089,7 @@ void KungFuLevelComponent::ReturnSnolafToPool(KungFuSnolafComponent* const pSnol
 		m_EndSnolafs[1] = nullptr;
 	}
 
-	//	blk::log( "Snolaf returned.  Pool size = %d", m_SnolafPool.size() );
+	//	blk::log("Snolaf returned.  Pool size = %d", m_SnolafPool.size() );
 }
 
 void KungFuLevelComponent::RemoveSheep() {

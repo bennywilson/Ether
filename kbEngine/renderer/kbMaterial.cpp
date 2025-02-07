@@ -4,7 +4,7 @@
 
 #include <fstream>
 #include <Wincodec.h>
-#include "kbCore.h"
+#include "blk_core.h"
 #include "kbRenderer_defs.h"
 #include "kbRenderer.h"
 #include "DX11/kbRenderer_DX11.h"	//	TODO HACK

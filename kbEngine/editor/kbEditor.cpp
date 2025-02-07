@@ -16,8 +16,8 @@
 
 #include <iomanip>
 #include <sstream>
-#include "kbCore.h"
-#include "containers.h"
+#include "blk_core.h"
+#include "blk_containers.h"
 #include "Matrix.h"
 #include "Quaternion.h"
 #include "DX11/kbRenderer_DX11.h"
@@ -80,7 +80,6 @@ kbEditor::kbEditor() :
 	m_bGameUpdating = false;
 	const float editorInitStartTime = g_GlobalTimer.TimeElapsedSeconds();
 
-	outputCB = kbEditor::OutputCB;
 	m_UndoIDAtLastSave = UINT64_MAX;
 	m_CurrentLevelFileName = "Untitled";
 
@@ -102,9 +101,11 @@ kbEditor::kbEditor() :
 	m_pOutputText = new Fl_Text_Display(5, Screen_Height - Bottom_Panel_Height + Panel_Border_size * 4, Screen_Width - 5, Bottom_Panel_Height - Panel_Border_size - Panel_Border_size, "DISPLAY!");
 	g_OutputBuffer = new Fl_Text_Buffer();
 	m_pOutputText->buffer(g_OutputBuffer);
-
 	g_StyleBuffer = new Fl_Text_Buffer();
 
+	outputCB = kbEditor::OutputCB;
+	MemoryBarrier();
+	MemoryFence();
 	int stable_size = sizeof(stable) / sizeof(stable[0]);
 
 	m_pOutputText->highlight_data(g_StyleBuffer, stable, stable_size, 'A', 0, 0);

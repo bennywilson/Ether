@@ -11,12 +11,12 @@
 #include <stdio.h>
 #include <sstream>
 #include <iomanip>
-#include "kbCore.h"
+#include "blk_core.h"
 #include "kbRenderer_DX11.h"
 #include "kbModel.h"
 #include "kbGameEntityHeader.h"
 #include "kbComponent.h"
-#include "kbConsole.h"
+#include "blk_console.h"
 
 kbColorWriteEnable operator |(const kbColorWriteEnable lhs, const kbColorWriteEnable rhs) { return (kbColorWriteEnable)((int)lhs | (int)rhs); }
 D3D11_COLOR_WRITE_ENABLE& operator |= (D3D11_COLOR_WRITE_ENABLE& lhs, const D3D11_COLOR_WRITE_ENABLE rhs) { return lhs = (D3D11_COLOR_WRITE_ENABLE)(lhs | rhs); }

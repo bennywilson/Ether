@@ -4,7 +4,7 @@
 
 #pragma once
 
-#include "kbMath.h"
+#include "blk_math.h"
 
 /// Vec2i
 class Vec2i {
@@ -586,12 +586,12 @@ public:
 	Vec3 transform_point(const Vec3& point) const;
 
 	// Retrieve clip plane from projection matrices.  See // http://gamedevs.org/uploads/fast-extraction-viewing-frustum-planes-from-world-view-projection-matrix.pdf
-	void left_clip_plane(class kbPlane& out_plane);
-	void right_clip_plane(class kbPlane& out_plane);
-	void top_clip_plane(class kbPlane& out_plane);
-	void bottom_clip_plane(class kbPlane& out_plane);
-	void near_clip_plane(class kbPlane& out_plane);
-	void far_clip_plane(class kbPlane& out_plane);
+	void left_clip_plane(class Plane3d& out_plane);
+	void right_clip_plane(class Plane3d& out_plane);
+	void top_clip_plane(class Plane3d& out_plane);
+	void bottom_clip_plane(class Plane3d& out_plane);
+	void near_clip_plane(class Plane3d& out_plane);
+	void far_clip_plane(class Plane3d& out_plane);
 
 private:
 	Vec4 mat[4];

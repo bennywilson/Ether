@@ -42,12 +42,12 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>..\..\kbEngine\app;..\..\kbEngine\boundingVolumes;..\..\kbEngine\core;..\..\kbEngine\editor;..\..\kbEngine\external;..\..\kbEngine\gameEntity;..\..\kbEngine\math;..\..\kbEngine\renderer;..\..\kbEngine\renderer\d3d12;..\..\kbEngine\renderer\d3d12\dxkt;..\..\kbEngine\renderer\d3d12\dx12;..\..\kbEngine\renderer\vk;..\..\kbEngine\Sound;C:\VulkanSDK\1.4.304.0\Include;$(IncludePath)</IncludePath>
+    <IncludePath>..\..\kbEngine\app;..\..\kbEngine\boundingVolumes;..\..\kbEngine\core;..\..\kbEngine\editor;..\..\kbEngine\external;..\..\kbEngine\game;..\..\kbEngine\math;..\..\kbEngine\renderer;..\..\kbEngine\renderer\d3d12;..\..\kbEngine\renderer\d3d12\dxkt;..\..\kbEngine\renderer\d3d12\dx12;..\..\kbEngine\renderer\vk;..\..\kbEngine\Sound;C:\VulkanSDK\1.4.304.0\Include;$(IncludePath)</IncludePath>
     <LibraryPath>..\..\kbEngine\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>..\..\kbEngine\app;..\..\kbEngine\boundingVolumes;..\..\kbEngine\core;..\..\kbEngine\editor;..\..\kbEngine\external;..\..\kbEngine\gameEntity;..\..\kbEngine\math;..\..\kbEngine\renderer;..\..\kbEngine\renderer\d3d12;..\..\kbEngine\renderer\d3d12\dxkt;..\..\kbEngine\renderer\d3d12\dx12;..\..\kbEngine\renderer\vk;..\..\kbEngine\Sound;C:\VulkanSDK\1.4.304.0\Include;$(IncludePath)</IncludePath>
+    <IncludePath>..\..\kbEngine\app;..\..\kbEngine\boundingVolumes;..\..\kbEngine\core;..\..\kbEngine\editor;..\..\kbEngine\external;..\..\kbEngine\game;..\..\kbEngine\math;..\..\kbEngine\renderer;..\..\kbEngine\renderer\d3d12;..\..\kbEngine\renderer\d3d12\dxkt;..\..\kbEngine\renderer\d3d12\dx12;..\..\kbEngine\renderer\vk;..\..\kbEngine\Sound;C:\VulkanSDK\1.4.304.0\Include;$(IncludePath)</IncludePath>
     <LibraryPath>..\..\kbEngine\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
