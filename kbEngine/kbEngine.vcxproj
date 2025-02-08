@@ -90,6 +90,7 @@
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <LanguageStandard>stdcpp20</LanguageStandard>
+      <AdditionalOptions>/enable_unbounded_descriptor_tables %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -165,8 +166,7 @@
     <ClInclude Include="game\kbParticleComponent.h" />
     <ClInclude Include="game\kbParticleManager.h" />
     <ClInclude Include="game\kbResourceManager.h" />
-    <ClInclude Include="game\kbSkeletalModelComponent.h" />
-    <ClInclude Include="game\kbStaticModelComponent.h" />
+    <ClInclude Include="game\model_component.h" />
     <ClInclude Include="game\kbTerrainComponent.h" />
     <ClInclude Include="game\kbTypeInfo.h" />
     <ClInclude Include="game\kbGameEntityHeader.h" />
@@ -304,10 +304,7 @@
     <ClCompile Include="game\kbResourceManager.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="game\kbSkeletalModelComponent.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
-    </ClCompile>
-    <ClCompile Include="game\kbStaticModelComponent.cpp">
+    <ClCompile Include="game\model_component.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="game\kbTerrainComponent.cpp">

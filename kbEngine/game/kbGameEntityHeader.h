@@ -38,8 +38,7 @@ public: \
 
 #include "render_component.h"
 #include "kbComponent.h"
-#include "kbSkeletalModelComponent.h"
-#include "kbStaticModelComponent.h"
+#include "model_component.h"
 #include "kbParticleComponent.h"
 #include "kbTerrainComponent.h"
 #include "kbCollisionManager.h"

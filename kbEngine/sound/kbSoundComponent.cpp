@@ -96,7 +96,7 @@ void kbPlaySoundComponent::Update_Internal(const float DeltaTime) {
 
 	if (g_GlobalTimer.TimeElapsedSeconds() >= m_TimeToPlay) {
 		if (m_SoundData.size() > 0) {
-			m_SoundData[rand() % m_SoundData.size()].PlaySoundAtPosition(GetOwnerPosition());
+			m_SoundData[rand() % m_SoundData.size()].PlaySoundAtPosition(owner_position());
 		}
 
 		Enable(false);

@@ -1,7 +1,9 @@
-cbuffer matrixBuffer : register(b0) {
+struct SceneData {
 	matrix modelMatrix;
-	matrix padding[3];
 };
+
+ConstantBuffer<SceneData> scene_constants[1024] : register(b0);
+
 SamplerState SampleType : register(s0);
 Texture2D shaderTexture : register(t0);
 
@@ -12,6 +14,7 @@ struct vertexInput {
 	float4 color		: COLOR;
 	float4 normal		: NORMAL;
 	float4 tangent		: TANGENT;
+	uint instance		: INSTANCEPOS;
 };
 
 //-------------------------------------
@@ -32,9 +35,10 @@ struct PS_OUTPUT {
 ///	vertexShader
 ///
 pixelInput vertex_shader(vertexInput input) {
+	SceneData matrixBuffer = scene_constants[1];
 	pixelInput output = (pixelInput)(0);
 	output.position = input.position;
-	output.position = mul( input.position, modelMatrix );
+	output.position = mul( input.position, matrixBuffer.modelMatrix );
 	output.color = input.color;
 	output.normal.xyz = input.normal.xyz;
 	output.uv = input.uv;

@@ -9,7 +9,6 @@
 #include "kbModel.h"
 #include "kbGameEntityHeader.h"
 #include "kbComponent.h"
-#include "kbSkeletalModelComponent.h"
 #include "Plane3d.h"
 
 kbConsoleVariable g_DebugShadowBounds( "debugshadowbounds", false, kbConsoleVariable::Console_Bool, "Freeze shadow position and draw the bounds.", "" );

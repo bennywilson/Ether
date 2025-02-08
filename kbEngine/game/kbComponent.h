@@ -86,10 +86,10 @@ public:
 	void Update(const float DeltaTimeSeconds);
 
 	kbGameEntity* GetOwner() const { return (kbGameEntity*)Super::GetOwner(); }
-	kbString GetOwnerName() const;
-	Vec3 GetOwnerPosition() const;
-	Vec3 GetOwnerScale() const;
-	Quat4 GetOwnerRotation() const;
+	kbString owner__name() const;
+	Vec3 owner_position() const;
+	Vec3 owner_scale() const;
+	Quat4 owner_rotation() const;
 
 	template<typename T>
 	T* GetComponent() const {

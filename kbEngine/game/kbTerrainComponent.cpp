@@ -352,10 +352,10 @@ void kbGrass::RefreshGrass() {
 				}
 				if (bCreatedPointCloud) {
 					renderObj.m_pModel->UnmapVertexBuffer(iVert);
-					Mat4 rotMat = m_pOwningTerrainComponent->GetOwnerRotation().to_mat4();
-					m_GrassRenderObjects[cellIdx].m_RenderObject.m_Position = cellCenter * rotMat + m_pOwningTerrainComponent->GetOwnerPosition();
-					m_GrassRenderObjects[cellIdx].m_RenderObject.m_Scale = m_pOwningTerrainComponent->GetOwnerScale();
-					m_GrassRenderObjects[cellIdx].m_RenderObject.m_Orientation = m_pOwningTerrainComponent->GetOwnerRotation();
+					Mat4 rotMat = m_pOwningTerrainComponent->owner_rotation().to_mat4();
+					m_GrassRenderObjects[cellIdx].m_RenderObject.m_Position = cellCenter * rotMat + m_pOwningTerrainComponent->owner_position();
+					m_GrassRenderObjects[cellIdx].m_RenderObject.m_Scale = m_pOwningTerrainComponent->owner_scale();
+					m_GrassRenderObjects[cellIdx].m_RenderObject.m_Orientation = m_pOwningTerrainComponent->owner_rotation();
 
 					auto& renderObjMatList = m_GrassRenderObjects[cellIdx].m_RenderObject.m_Materials;
 					renderObjMatList.clear();
@@ -676,8 +676,8 @@ void kbTerrainComponent::Update_Internal(const float DeltaTime) {
 	}
 
 	/*
-		const Mat4 ownerRot = GetOwnerRotation().to_mat4();
-		const Vec3 ownerPos = GetOwnerPosition();
+		const Mat4 ownerRot = owner_rotation().to_mat4();
+		const Vec3 ownerPos = owner_position();
 		for ( int i = 0; i < m_GrassZones.size(); i++ ) {
 
 			Vec3 boundsCenter = ownerRot.transform_point( m_GrassZones[i].GetCenter() ) + ownerPos;

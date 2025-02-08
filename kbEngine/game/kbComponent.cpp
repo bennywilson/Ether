@@ -201,22 +201,22 @@ void kbGameComponent::Update(const float DeltaTimeSeconds) {
 }
 
 /// kbGameComponent::GetOwnerName
-kbString kbGameComponent::GetOwnerName() const {
+kbString kbGameComponent::owner__name() const {
 	return GetOwner()->GetName();
 }
 
 /// kbGameComponent::GetOwnerPosition
-Vec3 kbGameComponent::GetOwnerPosition() const {
+Vec3 kbGameComponent::owner_position() const {
 	return ((kbGameEntity*)GetOwner())->GetPosition();
 }
 
 /// kbGameComponent::GetOwnerScale
-Vec3 kbGameComponent::GetOwnerScale() const {
+Vec3 kbGameComponent::owner_scale() const {
 	return ((kbGameEntity*)GetOwner())->GetScale();
 }
 
 /// kbGameComponent::GetOwnerRotation
-Quat4 kbGameComponent::GetOwnerRotation() const {
+Quat4 kbGameComponent::owner_rotation() const {
 	return ((kbGameEntity*)GetOwner())->GetOrientation();
 }
 

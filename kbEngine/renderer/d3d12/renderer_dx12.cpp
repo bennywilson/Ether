@@ -15,6 +15,8 @@
 
 using namespace std;
 
+const u32 g_max_instances = 1024;
+
 /// Renderer_Dx12::~Renderer_Dx12
 Renderer_Dx12::~Renderer_Dx12() {
 	shut_down();	// function is virtual but called in ~Renderer which is UB
@@ -91,7 +93,8 @@ void Renderer_Dx12::initialize_internal(HWND hwnd, const uint32_t frame_width, c
 
 	// SRV descriptor heap
 	D3D12_DESCRIPTOR_HEAP_DESC srv_heap_desc = {};
-	srv_heap_desc.NumDescriptors = 2;
+	// Sampler + 
+	srv_heap_desc.NumDescriptors = 6;
 	srv_heap_desc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV;
 	srv_heap_desc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;
 	blk::error_check(m_device->CreateDescriptorHeap(&srv_heap_desc, IID_PPV_ARGS(&m_cbv_srv_heap)));
@@ -124,12 +127,13 @@ void Renderer_Dx12::initialize_internal(HWND hwnd, const uint32_t frame_width, c
 	CD3DX12_DESCRIPTOR_RANGE1 ranges[3] = {};
 	ranges[0].Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, 0, 0, D3D12_DESCRIPTOR_RANGE_FLAG_DATA_STATIC);
 	ranges[1].Init(D3D12_DESCRIPTOR_RANGE_TYPE_SAMPLER, 1, 0);
-	ranges[2].Init(D3D12_DESCRIPTOR_RANGE_TYPE_CBV, 1, 0, 0, D3D12_DESCRIPTOR_RANGE_FLAG_DATA_STATIC);
+	ranges[2].Init(D3D12_DESCRIPTOR_RANGE_TYPE_CBV, g_max_instances, 0, 0, D3D12_DESCRIPTOR_RANGE_FLAG_DATA_STATIC);
 
-	CD3DX12_ROOT_PARAMETER1 rootParameters[3] = {};
+	CD3DX12_ROOT_PARAMETER1 rootParameters[4] = {};
 	rootParameters[0].InitAsDescriptorTable(1, &ranges[0], D3D12_SHADER_VISIBILITY_PIXEL);
 	rootParameters[1].InitAsDescriptorTable(1, &ranges[1], D3D12_SHADER_VISIBILITY_PIXEL);
 	rootParameters[2].InitAsDescriptorTable(1, &ranges[2], D3D12_SHADER_VISIBILITY_VERTEX);
+	//rootParameters[3].InitAsConstants(1, 0, 0, D3D12_SHADER_VISIBILITY_VERTEX);
 
 	const D3D12_ROOT_SIGNATURE_FLAGS signature_flags = D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT |
 		D3D12_ROOT_SIGNATURE_FLAG_DENY_HULL_SHADER_ROOT_ACCESS |
@@ -320,20 +324,36 @@ void Renderer_Dx12::render() {
 	CD3DX12_GPU_DESCRIPTOR_HANDLE gpu_handle(m_cbv_srv_heap->GetGPUDescriptorHandleForHeapStart(), 1, descriptor_size);
 	m_command_list->SetGraphicsRootDescriptorTable(2, gpu_handle);
 
+//	CD3DX12_GPU_DESCRIPTOR_HANDLE cbvSrvHandle(m_cbv_srv_heap->GetGPUDescriptorHandleForHeapStart(), frameResourceDescriptorOffset, descriptor_size);
 	for (auto render_comp : this->render_components()) {
 		m_command_list->IASetVertexBuffers(0, 1, &vertex_buffer->vertex_buffer_view());
 		m_command_list->IASetIndexBuffer(&index_buffer->index_buffer_view());
+		//m_command_list->SetGraphicsRoot32BitConstant(3, 0, 0);
 
 		Mat4 world_mat;
-		world_mat.make_scale(render_comp->GetOwnerScale());
-		world_mat *= render_comp->GetOwnerRotation().to_mat4();
-		world_mat[3] = render_comp->GetOwnerPosition();
+		world_mat.make_scale(render_comp->owner_scale());
+		world_mat *= render_comp->owner_rotation().to_mat4();
+		world_mat[3] = render_comp->owner_position();
 
-		pBuffer->mvp = (world_mat * vp_matrix).transpose_self();
-		pBuffer->padding[0].make_identity();
-		pBuffer->padding[1].make_identity();
-		pBuffer->padding[2].make_identity();
+		Mat4 world_mat_2;
+		world_mat_2.make_scale(render_comp->owner_scale());
+		world_mat_2 *= render_comp->owner_rotation().to_mat4();
+		world_mat_2[3] = render_comp->owner_position() + Vec3(3.f, 0.f, 0.f);
 
+		static bool bust_it = false;
+
+		if (bust_it) {
+			pBuffer[0].mvp = (world_mat * vp_matrix).transpose_self();
+			pBuffer[1].mvp = (world_mat_2 * vp_matrix).transpose_self();
+			pBuffer[2].mvp = (world_mat * vp_matrix).transpose_self();
+			pBuffer[3].mvp = (world_mat * vp_matrix).transpose_self();
+		} else {
+			pBuffer[0].mvp = (world_mat_2* vp_matrix).transpose_self();
+			pBuffer[1].mvp = (world_mat * vp_matrix).transpose_self();
+			pBuffer[2].mvp = (world_mat * vp_matrix).transpose_self();
+			pBuffer[3].mvp = (world_mat * vp_matrix).transpose_self();
+		}
+		bust_it = !bust_it;
 		//........................
 		m_command_list->DrawIndexedInstanced(index_buffer->num_elements(), 1, 0, 0, 0);
 	}
@@ -369,18 +389,29 @@ void Renderer_Dx12::render() {
 RenderPipeline* Renderer_Dx12::create_pipeline(const wstring& path) {
 #if defined(_DEBUG)
 	// Enable better shader debugging with the graphics debugging tools.
-	UINT compileFlags = D3DCOMPILE_DEBUG | D3DCOMPILE_SKIP_OPTIMIZATION;
+	UINT compileFlags = D3DCOMPILE_DEBUG | D3DCOMPILE_SKIP_OPTIMIZATION | D3DCOMPILE_WARNINGS_ARE_ERRORS;
 #else
 	UINT compileFlags = 0;
 #endif
 
-	ID3DBlob** ppErrorMsgs = nullptr;
+	Microsoft::WRL::ComPtr<ID3DBlob> errors;
 
 	ComPtr<ID3DBlob> vertex_shader;
-	blk::error_check(D3DCompileFromFile(path.c_str(), nullptr, nullptr, "vertex_shader", "vs_5_0", compileFlags, 0, &vertex_shader, ppErrorMsgs));
+	if (!blk::warn_check(D3DCompileFromFile(
+		path.c_str(),
+		nullptr,
+		nullptr,
+		"vertex_shader",
+		"vs_5_1",
+		compileFlags,
+		0,
+		&vertex_shader,
+		&errors))) {
+			blk::error("%s", errors->GetBufferPointer());
+		}
 
 	ComPtr<ID3DBlob> pixel_shader;
-	blk::error_check(D3DCompileFromFile(path.c_str(), nullptr, nullptr, "pixel_shader", "ps_5_0", compileFlags, 0, &pixel_shader, nullptr));
+	blk::error_check(D3DCompileFromFile(path.c_str(), nullptr, nullptr, "pixel_shader", "ps_5_1", compileFlags, 0, &pixel_shader, nullptr));
 
 	// Define the vertex input layout.
 	D3D12_INPUT_ELEMENT_DESC inputElementDescs[] =
@@ -390,6 +421,7 @@ RenderPipeline* Renderer_Dx12::create_pipeline(const wstring& path) {
 		{ "COLOR", 0, DXGI_FORMAT_R8G8B8A8_UNORM, 0, 20, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
 		{ "NORMAL", 0, DXGI_FORMAT_R8G8B8A8_UNORM, 0, 24, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
 		{ "TANGENT", 0, DXGI_FORMAT_R8G8B8A8_UNORM, 0, 28, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
+		{ "INSTANCEPOS", 0, DXGI_FORMAT_R32G32B32_FLOAT,    1, 0, D3D12_INPUT_CLASSIFICATION_PER_INSTANCE_DATA, 1}
 	};
 
 	auto raster = CD3DX12_RASTERIZER_DESC(D3D12_DEFAULT);
@@ -476,7 +508,7 @@ void Renderer_Dx12::todo_create_texture() {
 
 	// Constant buffer view upload heap
 	auto cbv_heap_props = CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD);
-	auto cbv_buffer_size = CD3DX12_RESOURCE_DESC::Buffer(sizeof(buffer));
+	auto cbv_buffer_size = CD3DX12_RESOURCE_DESC::Buffer(g_max_instances * sizeof(buffer));
 	blk::error_check(m_device->CreateCommittedResource(
 		&cbv_heap_props,
 		D3D12_HEAP_FLAG_NONE,
@@ -496,12 +528,22 @@ void Renderer_Dx12::todo_create_texture() {
 
 	D3D12_CONSTANT_BUFFER_VIEW_DESC cbvDesc = {};
 	cbvDesc.BufferLocation = m_cbv_upload_heap->GetGPUVirtualAddress() + cbOffset;
-	cbvDesc.SizeInBytes = sizeof(buffer);
+
+	cbvDesc.SizeInBytes = 256;//sizeof(buffer);
 	m_device->CreateConstantBufferView(&cbvDesc, cbvSrvHandle);
 
 	// For handling multiple cbv
-	// cbOffset += cbvDesc.SizeInBytes;
-	// cbvSrvHandle.Offset(CBV_SRV_DESCRIPTOR_SIZE);
+	cbOffset += 256;
+	cbvSrvHandle.Offset(CBV_SRV_DESCRIPTOR_SIZE);
+	cbvDesc.BufferLocation = m_cbv_upload_heap->GetGPUVirtualAddress() + cbOffset;
+	cbvDesc.SizeInBytes = 256;//sizeof(buffer);
+	m_device->CreateConstantBufferView(&cbvDesc, cbvSrvHandle);
+
+	cbOffset += 256;
+	cbvSrvHandle.Offset(CBV_SRV_DESCRIPTOR_SIZE);
+	cbvDesc.BufferLocation = m_cbv_upload_heap->GetGPUVirtualAddress() + cbOffset;
+	cbvDesc.SizeInBytes = 256;//sizeof(buffer);
+	m_device->CreateConstantBufferView(&cbvDesc, cbvSrvHandle);
 
 	// Close the command list and execute it to begin the initial GPU setup.
 	blk::error_check(m_command_list->Close());

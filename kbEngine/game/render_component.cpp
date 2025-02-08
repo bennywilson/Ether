@@ -231,7 +231,6 @@ void kbMaterialComponent::EditorChange( const std::string & propertyName ) {
 
 /// kbMaterialComponent::SetShaderParamComponent
 void kbMaterialComponent::SetShaderParamComponent( const kbShaderParamComponent & inParam ) {
-	
 	for ( int i = 0; i < m_ShaderParamComponents.size(); i++ ) {
 		if ( m_ShaderParamComponents[i].GetParamName() == inParam.GetParamName() ) {
 			m_ShaderParamComponents[i] = inParam;
@@ -244,7 +243,6 @@ void kbMaterialComponent::SetShaderParamComponent( const kbShaderParamComponent 
 
 /// kbMaterialComponent::GetShaderParamComponent
 const kbShaderParamComponent * kbMaterialComponent::GetShaderParamComponent( const kbString & name ) {
-
 	for ( int i = 0; i < m_ShaderParamComponents.size(); i++ ) {
 		if ( m_ShaderParamComponents[i].GetParamName() == name) {
 			return &m_ShaderParamComponents[i];
@@ -257,7 +255,6 @@ const kbShaderParamComponent * kbMaterialComponent::GetShaderParamComponent( con
 
 /// kbShaderModifierComponent::Constructor
 void kbShaderModifierComponent::Constructor() {
-
 	m_pRenderComponent = nullptr;
 	m_StartTime = -1.0f;
 	m_AnimationLengthSec = -1.0f;
@@ -288,7 +285,6 @@ void kbShaderModifierComponent::SetEnable_Internal( const bool bEnable ) {
 
 /// kbShaderModifierComponent::Update_Internal
 void kbShaderModifierComponent::Update_Internal( const float dt ) {
-
 	if ( m_pRenderComponent == nullptr || m_ShaderVectorEvents.size() == 0 ) {
 		Enable( false );
 		return;
