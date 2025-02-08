@@ -3,9 +3,10 @@
 /// 2017-2025 blk 1.0
 
 #include "blk_core.h"
-#include "kbSoundManager.h"
 #include "kbGameEntityHeader.h"
-#include "kbLevelComponent.h"
+#include "kbSoundManager.h"
+
+//#include "kbLevelComponent.h"
 
 /// kbWaveFile::kbWaveFile
 kbWaveFile::kbWaveFile() :

@@ -4,10 +4,12 @@
 
 #pragma once
 
+#include <unordered_set>
 #include "Matrix.h"
 #include "Quaternion.h"
 #include "render_defs.h"
 
+class RenderComponent;
 class RenderBuffer;
 
 ///	Renderer
@@ -21,14 +23,17 @@ public:
 	virtual void initialize(HWND hwnd, const uint32_t frame_width, const uint32_t frame_height);
 	virtual void shut_down();
 
-	virtual void set_camera_transform(const Vec3& position, const Quat4& rotation);
-
 	virtual void render() = 0;
 
 	RenderBuffer* create_render_buffer();
 
 	RenderPipeline* load_pipeline(const std::string& friendly_name, const std::wstring& path);
 	RenderPipeline* get_pipeline(const std::string& friendly_name);
+
+	void set_camera_transform(const Vec3& position, const Quat4& rotation);
+
+	void add_render_component(const RenderComponent* const);
+	void remove_render_component(const RenderComponent* const);
 
 protected:
 	RenderBuffer* get_render_buffer(const size_t& buffer_index) { return m_render_buffers[buffer_index]; }
@@ -52,6 +57,8 @@ protected:
 private:
 	std::unordered_map<std::string, RenderPipeline*> m_pipelines;
 	std::vector<class RenderBuffer*> m_render_buffers;
+
+	std::unordered_set<RenderComponent*> m_render_components;
 };
 
 extern Renderer* g_renderer;

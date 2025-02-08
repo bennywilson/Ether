@@ -248,9 +248,6 @@
     <ClInclude Include="game\kbLightComponent.h">
       <Filter>game\Components</Filter>
     </ClInclude>
-    <ClInclude Include="game\kbModelComponent.h">
-      <Filter>game\Components</Filter>
-    </ClInclude>
     <ClInclude Include="game\kbParticleComponent.h">
       <Filter>game\Components</Filter>
     </ClInclude>
@@ -327,6 +324,7 @@
     <ClInclude Include="renderer\rt\renderer_rt.h" />
     <ClInclude Include="renderer\sw\renderer_sw.h" />
     <ClInclude Include="renderer\d3d12\renderer_dx12.h" />
+    <ClInclude Include="game\render_component.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="core\blk_core.cpp">
@@ -437,9 +435,6 @@
     <ClCompile Include="game\kbLightComponent.cpp">
       <Filter>game\Components</Filter>
     </ClCompile>
-    <ClCompile Include="game\kbModelComponent.cpp">
-      <Filter>game\Components</Filter>
-    </ClCompile>
     <ClCompile Include="game\kbParticleComponent.cpp">
       <Filter>game\Components</Filter>
     </ClCompile>
@@ -486,6 +481,7 @@
     <ClCompile Include="renderer\rt\renderer_rt.cpp" />
     <ClCompile Include="renderer\sw\renderer_sw.cpp" />
     <ClCompile Include="renderer\d3d12\renderer_dx12.cpp" />
+    <ClCompile Include="game\render_component.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Midl Include="renderer\d3d12\dx12\d3d12.idl" />

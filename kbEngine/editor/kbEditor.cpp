@@ -24,6 +24,7 @@
 #include "kbGame.h"
 #include "kbWidget.h"
 #include "kbManipulator.h"
+#include "kbFile.h"
 #include "kbMainTab.h"
 #include "kbResourceTab.h"
 #include "kbTypeInfo.h"
@@ -505,7 +506,7 @@ void kbEditor::Update() {
 		/*if ( GetAsyncKeyState( 'C' ) ) {
 
 			kbEditorEntity* pMasterBridge = nullptr;
-			kbStaticModelComponent* pMasterComp = nullptr;
+			RenderComponent* pMasterComp = nullptr;
 			static kbString skMasterBridge( "Bridge - Master" );
 
 			for ( int i = 0; i < m_GameEntities.size(); i++ ) {
@@ -521,7 +522,7 @@ void kbEditor::Update() {
 
 				if ( pGameEnt->GetName() == skMasterBridge ) {
 					pMasterBridge = m_GameEntities[i];
-					pMasterComp = pMasterBridge->GetGameEntity()->GetComponent<kbStaticModelComponent>();
+					pMasterComp = pMasterBridge->GetGameEntity()->GetComponent<RenderComponent>();
 					break;
 				}
 			}
@@ -539,7 +540,7 @@ void kbEditor::Update() {
 						continue;
 					}
 					if ( pGameEnt->GetName().stl_str().find( "Bridge" ) != std::string::npos ) {
-						kbStaticModelComponent* pTargetComp = pGameEnt->GetComponent<kbStaticModelComponent>();
+						RenderComponent* pTargetComp = pGameEnt->GetComponent<RenderComponent>();
 						if ( pTargetComp != nullptr ) {
 							pTargetComp->CopyMaterialList( pMasterComp->GetMaterialList() );
 							continue;

@@ -81,13 +81,13 @@ DEFINE_KBCLASS(kbVectorAnimEvent)
 
 DEFINE_KBCLASS(kbModelEmitter)
 
-DEFINE_KBCLASS(kbModelComponent)
+DEFINE_KBCLASS(RenderComponent)
 
 DEFINE_KBCLASS(kbStaticModelComponent)
 
 DEFINE_KBCLASS(kbAnimComponent)
 
-DEFINE_KBCLASS(kbSkeletalModelComponent)
+DEFINE_KBCLASS(kbSkeletalRenderComponent)
 
 DEFINE_KBCLASS(kbFlingPhysicsComponent)
 

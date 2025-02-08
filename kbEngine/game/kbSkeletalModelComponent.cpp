@@ -1,4 +1,4 @@
-/// kbSkeletalModelComponent.cpp
+/// kbSkeletalRenderComponent.cpp
 ///
 /// 2016-2025 blk 1.0
 
@@ -8,7 +8,7 @@
 #include "kbRenderer.h"
 #include "DX11/kbRenderer_DX11.h"			// HACK
 
-KB_DEFINE_COMPONENT(kbSkeletalModelComponent)
+KB_DEFINE_COMPONENT(kbSkeletalRenderComponent)
 
 /// kbAnimComponent::Constructor
 void kbAnimComponent::Constructor() {
@@ -18,8 +18,8 @@ void kbAnimComponent::Constructor() {
 	m_CurrentAnimationTime = -1.0f;
 }
 
-/// kbSkeletalModelComponent::Constructor
-void kbSkeletalModelComponent::Constructor() {
+/// kbSkeletalRenderComponent::Constructor
+void kbSkeletalRenderComponent::Constructor() {
 	m_pModel = nullptr;
 	m_RenderObject.m_bIsSkinnedModel = true;
 
@@ -35,11 +35,11 @@ void kbSkeletalModelComponent::Constructor() {
 	m_DebugAnimTime = 0.0f;
 }
 
-/// kbSkeletalModelComponent::~kbSkeletalModelComponent
-kbSkeletalModelComponent::~kbSkeletalModelComponent() {}
+/// kbSkeletalRenderComponent::~kbSkeletalRenderComponent
+kbSkeletalRenderComponent::~kbSkeletalRenderComponent() {}
 
-/// kbSkeletalModelComponent::EditorChange
-void kbSkeletalModelComponent::EditorChange(const std::string& propertyName) {
+/// kbSkeletalRenderComponent::EditorChange
+void kbSkeletalRenderComponent::EditorChange(const std::string& propertyName) {
 	Super::EditorChange(propertyName);
 
 	if (propertyName == "Model" || propertyName == "ShaderOverride") {
@@ -47,8 +47,8 @@ void kbSkeletalModelComponent::EditorChange(const std::string& propertyName) {
 	}
 }
 
-/// kbSkeletalModelComponent::SetEnable_Internal
-void kbSkeletalModelComponent::SetEnable_Internal(const bool isEnabled) {
+/// kbSkeletalRenderComponent::SetEnable_Internal
+void kbSkeletalRenderComponent::SetEnable_Internal(const bool isEnabled) {
 	if (m_pModel == nullptr || g_pRenderer == nullptr) {
 		return;
 	}
@@ -75,8 +75,8 @@ void kbSkeletalModelComponent::SetEnable_Internal(const bool isEnabled) {
 	}
 }
 
-/// kbSkeletalModelComponent::Update_Internal
-void kbSkeletalModelComponent::Update_Internal(const float DeltaTime) {
+/// kbSkeletalRenderComponent::Update_Internal
+void kbSkeletalRenderComponent::Update_Internal(const float DeltaTime) {
 	Super::Update_Internal(DeltaTime);
 
 	if (m_pModel != nullptr && m_pSyncParent == nullptr) {
@@ -285,21 +285,21 @@ void kbSkeletalModelComponent::Update_Internal(const float DeltaTime) {
 	}
 }
 
-/// kbSkeletalModelComponent::GetBoneIndex
-int kbSkeletalModelComponent::GetBoneIndex(const kbString& boneName) {
+/// kbSkeletalRenderComponent::GetBoneIndex
+int kbSkeletalRenderComponent::GetBoneIndex(const kbString& boneName) {
 	if (m_pModel == nullptr) {
 		return -1;
 	}
 	return m_pModel->GetBoneIndex(boneName);
 }
 
-/// kbSkeletalModelComponent::GetBoneRefMatrix
-kbBoneMatrix_t kbSkeletalModelComponent::GetBoneRefMatrix(int index) {
+/// kbSkeletalRenderComponent::GetBoneRefMatrix
+kbBoneMatrix_t kbSkeletalRenderComponent::GetBoneRefMatrix(int index) {
 	return m_pModel->GetRefBoneMatrix(index);
 }
 
-/// kbSkeletalModelComponent::GetBoneWorldPosition
-bool kbSkeletalModelComponent::GetBoneWorldPosition(const kbString& boneName, Vec3& outWorldPosition) {
+/// kbSkeletalRenderComponent::GetBoneWorldPosition
+bool kbSkeletalRenderComponent::GetBoneWorldPosition(const kbString& boneName, Vec3& outWorldPosition) {
 	const int boneIdx = GetBoneIndex(boneName);
 	if (boneIdx == -1 || boneIdx >= m_BindToLocalSpaceMatrices.size()) {
 		return false;
@@ -313,8 +313,8 @@ bool kbSkeletalModelComponent::GetBoneWorldPosition(const kbString& boneName, Ve
 	return true;
 }
 
-/// kbSkeletalModelComponent::GetBoneWorldMatrix
-bool kbSkeletalModelComponent::GetBoneWorldMatrix(const kbString& boneName, kbBoneMatrix_t& boneMatrix) {
+/// kbSkeletalRenderComponent::GetBoneWorldMatrix
+bool kbSkeletalRenderComponent::GetBoneWorldMatrix(const kbString& boneName, kbBoneMatrix_t& boneMatrix) {
 	const int boneIdx = GetBoneIndex(boneName);
 	if (boneIdx == -1 || boneIdx >= m_BindToLocalSpaceMatrices.size()) {
 		return false;
@@ -328,8 +328,8 @@ bool kbSkeletalModelComponent::GetBoneWorldMatrix(const kbString& boneName, kbBo
 	return true;
 }
 
-/// kbSkeletalModelComponent::SetAnimationTimeScaleMultiplier
-void kbSkeletalModelComponent::SetAnimationTimeScaleMultiplier(const kbString& animName, const float factor) {
+/// kbSkeletalRenderComponent::SetAnimationTimeScaleMultiplier
+void kbSkeletalRenderComponent::SetAnimationTimeScaleMultiplier(const kbString& animName, const float factor) {
 	for (int i = 0; i < m_Animations.size(); i++) {
 		const kbAnimComponent& anim = m_Animations[i];
 		if (anim.m_AnimationName == animName) {
@@ -339,8 +339,8 @@ void kbSkeletalModelComponent::SetAnimationTimeScaleMultiplier(const kbString& a
 	}
 }
 
-/// kbSkeletalModelComponent::PlayAnimation
-void kbSkeletalModelComponent::PlayAnimation(const kbString& AnimationName, const float BlendLength, const bool bRestartIfAlreadyPlaying, const kbString desiredNextAnimation, const float desiredNextAnimationBlendLength) {
+/// kbSkeletalRenderComponent::PlayAnimation
+void kbSkeletalRenderComponent::PlayAnimation(const kbString& AnimationName, const float BlendLength, const bool bRestartIfAlreadyPlaying, const kbString desiredNextAnimation, const float desiredNextAnimationBlendLength) {
 #if DEBUG_ANIMS
 	bool bOutput = true;
 	if (bOutput) blk::log("Attempting to play Animation %s ===================================================================", AnimationName.c_str());
@@ -434,8 +434,8 @@ void kbSkeletalModelComponent::PlayAnimation(const kbString& AnimationName, cons
 	}
 }
 
-/// kbSkeletalModelComponent::PlayAnimation
-bool kbSkeletalModelComponent::IsPlaying(const kbString& AnimationName) const {
+/// kbSkeletalRenderComponent::PlayAnimation
+bool kbSkeletalRenderComponent::IsPlaying(const kbString& AnimationName) const {
 	if (m_Animations.size() == 0) {
 		return false;
 	}
@@ -455,15 +455,15 @@ bool kbSkeletalModelComponent::IsPlaying(const kbString& AnimationName) const {
 	return false;
 }
 
-/// kbSkeletalModelComponent::SetModel
-void kbSkeletalModelComponent::SetModel(kbModel* const pModel) {
+/// kbSkeletalRenderComponent::SetModel
+void kbSkeletalRenderComponent::SetModel(kbModel* const pModel) {
 	m_BindToLocalSpaceMatrices.clear();
 	m_RenderObject.m_pModel = pModel;
 	g_pRenderer->UpdateRenderObject(m_RenderObject);
 }
 
-/// kbSkeletalModelComponent::GetCurAnimationName
-const kbString* kbSkeletalModelComponent::GetCurAnimationName() const {
+/// kbSkeletalRenderComponent::GetCurAnimationName
+const kbString* kbSkeletalRenderComponent::GetCurAnimationName() const {
 	if (m_CurrentAnimation >= 0 && m_CurrentAnimation < m_Animations.size()) {
 		return &m_Animations[m_CurrentAnimation].GetAnimationName();
 	}
@@ -471,8 +471,8 @@ const kbString* kbSkeletalModelComponent::GetCurAnimationName() const {
 	return nullptr;
 }
 
-/// kbSkeletalModelComponent::GetNextAnimationName
-const kbString* kbSkeletalModelComponent::GetNextAnimationName() const {
+/// kbSkeletalRenderComponent::GetNextAnimationName
+const kbString* kbSkeletalRenderComponent::GetNextAnimationName() const {
 	if (m_NextAnimation >= 0 && m_NextAnimation < m_Animations.size()) {
 		return &m_Animations[m_NextAnimation].GetAnimationName();
 	}
@@ -480,20 +480,20 @@ const kbString* kbSkeletalModelComponent::GetNextAnimationName() const {
 	return nullptr;
 }
 
-/// kbSkeletalModelComponent::RegisterAnimEventListener
-void kbSkeletalModelComponent::RegisterAnimEventListener(IAnimEventListener* const pListener) {
+/// kbSkeletalRenderComponent::RegisterAnimEventListener
+void kbSkeletalRenderComponent::RegisterAnimEventListener(IAnimEventListener* const pListener) {
 	blk::error_check(blk::std_contains(m_AnimEventListeners, pListener) == false, "RegisterAnimEventListener() - Duplicate entries");
 	m_AnimEventListeners.push_back(pListener);
 }
 
-/// kbSkeletalModelComponent::UnregisterAnimEventListener
-void kbSkeletalModelComponent::UnregisterAnimEventListener(IAnimEventListener* const pListener) {
+/// kbSkeletalRenderComponent::UnregisterAnimEventListener
+void kbSkeletalRenderComponent::UnregisterAnimEventListener(IAnimEventListener* const pListener) {
 	blk::error_check(blk::std_contains(m_AnimEventListeners, pListener) == true, "UnregisterAnimEventListener() - Listener not previously registered");
 	blk::std_remove_swap(m_AnimEventListeners, pListener);
 }
 
-/// kbSkeletalModelComponent::RegisterSyncSkelModel
-void kbSkeletalModelComponent::RegisterSyncSkelModel(kbSkeletalModelComponent* const pSkelModel) {
+/// kbSkeletalRenderComponent::RegisterSyncSkelModel
+void kbSkeletalRenderComponent::RegisterSyncSkelModel(kbSkeletalRenderComponent* const pSkelModel) {
 	if (blk::std_find(m_SyncedSkelModels, pSkelModel) != m_SyncedSkelModels.end()) {
 		return;
 	}
@@ -501,8 +501,8 @@ void kbSkeletalModelComponent::RegisterSyncSkelModel(kbSkeletalModelComponent* c
 	pSkelModel->m_pSyncParent = this;
 }
 
-/// kbSkeletalModelComponent::UnregisterSyncSkelModel
-void kbSkeletalModelComponent::UnregisterSyncSkelModel(kbSkeletalModelComponent* const pSkelModel) {
+/// kbSkeletalRenderComponent::UnregisterSyncSkelModel
+void kbSkeletalRenderComponent::UnregisterSyncSkelModel(kbSkeletalRenderComponent* const pSkelModel) {
 	blk::std_remove_swap(m_SyncedSkelModels, pSkelModel);
 	pSkelModel->m_pSyncParent = nullptr;
 }

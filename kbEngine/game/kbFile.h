@@ -6,6 +6,13 @@
 
 #include <fstream>
 
+class kbPackage;
+class kbGameEntity;
+class kbComponent;
+enum kbTypeInfoType_t;
+typedef unsigned char byte;
+class kbTypeInfoVar;
+
 /// kbFile
 class kbFile {
 public:

@@ -17,6 +17,7 @@
 #include "kbGameEntityHeader.h"
 #include "kbComponent.h"
 #include "blk_console.h"
+#include "kbFile.h"
 
 kbColorWriteEnable operator |(const kbColorWriteEnable lhs, const kbColorWriteEnable rhs) { return (kbColorWriteEnable)((int)lhs | (int)rhs); }
 D3D11_COLOR_WRITE_ENABLE& operator |= (D3D11_COLOR_WRITE_ENABLE& lhs, const D3D11_COLOR_WRITE_ENABLE rhs) { return lhs = (D3D11_COLOR_WRITE_ENABLE)(lhs | rhs); }

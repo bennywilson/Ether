@@ -131,11 +131,11 @@ GenerateClass(
 )
 
 GenerateClass(
-	kbModelComponent,
-	AddField( "RenderPass", KBTYPEINFO_ENUM, kbModelComponent, m_RenderPass, false, "ERenderPass" )
-	AddField( "RenderOrderBias", KBTYPEINFO_FLOAT, kbModelComponent, m_RenderOrderBias, false, "" )
-	AddField( "CastsShadow", KBTYPEINFO_BOOL, kbModelComponent, m_bCastsShadow, false, "" )
-	AddField( "Materials", KBTYPEINFO_STRUCT, kbModelComponent, m_MaterialList, true, "kbMaterialComponent" )
+	RenderComponent,
+	AddField( "RenderPass", KBTYPEINFO_ENUM, RenderComponent, m_RenderPass, false, "ERenderPass" )
+	AddField( "RenderOrderBias", KBTYPEINFO_FLOAT, RenderComponent, m_RenderOrderBias, false, "" )
+	AddField( "CastsShadow", KBTYPEINFO_BOOL, RenderComponent, m_bCastsShadow, false, "" )
+	AddField( "Materials", KBTYPEINFO_STRUCT, RenderComponent, m_MaterialList, true, "kbMaterialComponent" )
 )
 
 GenerateClass( 
@@ -153,10 +153,10 @@ GenerateClass(
 )
 
 GenerateClass( 
-	kbSkeletalModelComponent, 
-	AddField( "Model", KBTYPEINFO_STATICMODEL, kbSkeletalModelComponent, m_pModel, false, "" )
-	AddField( "Animations", KBTYPEINFO_STRUCT, kbSkeletalModelComponent, m_Animations, true, "kbAnimComponent" )
-	AddField( "DebugAnimIndex", KBTYPEINFO_INT, kbSkeletalModelComponent, m_DebugAnimIdx, false, "" )
+	kbSkeletalRenderComponent, 
+	AddField( "Model", KBTYPEINFO_STATICMODEL, kbSkeletalRenderComponent, m_pModel, false, "" )
+	AddField( "Animations", KBTYPEINFO_STRUCT, kbSkeletalRenderComponent, m_Animations, true, "kbAnimComponent" )
+	AddField( "DebugAnimIndex", KBTYPEINFO_INT, kbSkeletalRenderComponent, m_DebugAnimIdx, false, "" )
 )
 
 GenerateClass( 

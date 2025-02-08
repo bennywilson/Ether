@@ -1,34 +1,32 @@
-//===================================================================================================
-// kbModelComponent.cpp
-//
-//
-// 2016 blk 1.0
-//===================================================================================================
+/// RenderComponent.cpp
+///
+/// 2016-2025 blk 1.0
+
 #include "blk_core.h"
 #include "Matrix.h"
 #include "Quaternion.h"
 #include "kbBounds.h"
 #include "kbGameEntityHeader.h"		// <--- TODO: Temp, game entity should not be accessed from renderer
 #include "kbModel.h"
-#include "kbModelComponent.h"
+#include "render_component.h"
 #include "kbRenderer.h"
 #include "kbGame.h"
 
-KB_DEFINE_COMPONENT(kbModelComponent)
+KB_DEFINE_COMPONENT(RenderComponent)
 
-/// kbModelComponent::Constructor
-void kbModelComponent::Constructor() {
+/// RenderComponent::Constructor
+void RenderComponent::Constructor() {
 	m_RenderPass = RP_Lighting;
 	m_RenderOrderBias = 0.0f;
 	m_bCastsShadow = false;
 }
 
-/// kbModelComponent::~kbModelComponent
-kbModelComponent::~kbModelComponent() {
+/// RenderComponent::~RenderComponent
+RenderComponent::~RenderComponent() {
 }
 
-/// kbModelComponent::EditorChange
-void kbModelComponent::EditorChange( const std::string & propertyName ) {
+/// RenderComponent::EditorChange
+void RenderComponent::EditorChange( const std::string & propertyName ) {
 	Super::EditorChange( propertyName );
 
 	m_RenderObject.m_bCastsShadow = this->GetCastsShadow();
@@ -50,8 +48,8 @@ void kbModelComponent::EditorChange( const std::string & propertyName ) {
 	RefreshMaterials( true );
 }
 
-/// kbModelComponent::PostLoad
-void kbModelComponent::PostLoad() {
+/// RenderComponent::PostLoad
+void RenderComponent::PostLoad() {
 	Super::PostLoad();
 
 	if ( GetOwner()->IsPrefab() == false ) {
@@ -59,8 +57,8 @@ void kbModelComponent::PostLoad() {
 	}
 }
 
-/// kbModelComponent::RefreshMaterials
-void kbModelComponent::RefreshMaterials( const bool bRefreshRenderObject ) {
+/// RenderComponent::RefreshMaterials
+void RenderComponent::RefreshMaterials( const bool bRefreshRenderObject ) {
 	m_RenderObject.m_Materials.clear();
 	for ( int i = 0; i < m_MaterialList.size(); i++ ) {
 		const kbMaterialComponent & matComp = m_MaterialList[i];
@@ -90,10 +88,10 @@ void kbModelComponent::RefreshMaterials( const bool bRefreshRenderObject ) {
 	}
 }
 
-/// kbModelComponent:SetMaterialParamVector
-void kbModelComponent::SetMaterialParamVector( const int idx, const std::string & paramName, const Vec4& paramValue ) {
+/// RenderComponent:SetMaterialParamVector
+void RenderComponent::SetMaterialParamVector( const int idx, const std::string & paramName, const Vec4& paramValue ) {
 	if ( idx < 0 || idx > 32 || idx >= m_MaterialList.size() ) {
-		blk::warn( "kbModelComponent::SetMaterialParamVector() called on invalid index" );
+		blk::warn( "RenderComponent::SetMaterialParamVector() called on invalid index" );
 		return;
 	}
 
@@ -105,10 +103,10 @@ void kbModelComponent::SetMaterialParamVector( const int idx, const std::string 
 	RefreshMaterials( true );
 }
 
-/// kbModelComponent:SetMaterialParamTexture
-void kbModelComponent::SetMaterialParamTexture( const int idx, const std::string & paramName, kbTexture *const pTexture ) {
+/// RenderComponent:SetMaterialParamTexture
+void RenderComponent::SetMaterialParamTexture( const int idx, const std::string & paramName, kbTexture *const pTexture ) {
 	if ( idx < 0 || idx > 32 || idx >= m_MaterialList.size() ) {
-		blk::warn( "kbModelComponent::SetMaterialParamVector() called on invalid index" );
+		blk::warn( "RenderComponent::SetMaterialParamVector() called on invalid index" );
 		return;
 	}
 
@@ -120,10 +118,10 @@ void kbModelComponent::SetMaterialParamTexture( const int idx, const std::string
 	RefreshMaterials( true );
 }
 
-/// kbModelComponent::SetMaterialParamTexture
-void kbModelComponent::SetMaterialParamTexture( const int idx, const std::string & paramName, kbRenderTexture *const pRenderTexture ) {
+/// RenderComponent::SetMaterialParamTexture
+void RenderComponent::SetMaterialParamTexture( const int idx, const std::string & paramName, kbRenderTexture *const pRenderTexture ) {
 	if ( idx < 0 || idx > 32 || idx >= m_MaterialList.size() ) {
-		blk::warn( "kbModelComponent::SetMaterialParamVector() called on invalid index" );
+		blk::warn( "RenderComponent::SetMaterialParamVector() called on invalid index" );
 		return;
 	}
 	kbShaderParamComponent newParam;
@@ -138,10 +136,10 @@ void kbModelComponent::SetMaterialParamTexture( const int idx, const std::string
 	}
 }
 
-/// kbModelComponent::GetShaderParamComponent
-const kbShaderParamComponent * kbModelComponent::GetShaderParamComponent( const int idx, const kbString & name ) {
+/// RenderComponent::GetShaderParamComponent
+const kbShaderParamComponent * RenderComponent::GetShaderParamComponent( const int idx, const kbString & name ) {
 	if ( idx < 0 || idx > 32 || idx >= m_MaterialList.size() ) {
-		blk::warn( "kbModelComponent::SetMaterialParamVector() called on invalid index" );
+		blk::warn( "RenderComponent::SetMaterialParamVector() called on invalid index" );
 		return nullptr;
 	}
 
@@ -223,8 +221,8 @@ void kbMaterialComponent::EditorChange( const std::string & propertyName ) {
 	}
 
 	// Refresh owner
-	if ( GetOwningComponent() != nullptr && GetOwningComponent()->IsA( kbModelComponent::GetType() ) ) {
-		kbModelComponent *const pModelComp = (kbModelComponent*) GetOwningComponent();
+	if ( GetOwningComponent() != nullptr && GetOwningComponent()->IsA( RenderComponent::GetType() ) ) {
+		RenderComponent *const pModelComp = (RenderComponent*) GetOwningComponent();
 		pModelComp->RefreshMaterials( true );
 	} else {
 		blk::warn( "kbMaterialComponent::EditorChange() - Material component doesn't have a model component owner.  Is this okay?" );
@@ -260,7 +258,7 @@ const kbShaderParamComponent * kbMaterialComponent::GetShaderParamComponent( con
 /// kbShaderModifierComponent::Constructor
 void kbShaderModifierComponent::Constructor() {
 
-	m_pModelComponent = nullptr;
+	m_pRenderComponent = nullptr;
 	m_StartTime = -1.0f;
 	m_AnimationLengthSec = -1.0f;
 }
@@ -273,14 +271,14 @@ void kbShaderModifierComponent::SetEnable_Internal( const bool bEnable ) {
 		return;
 	}
 
-	m_pModelComponent = nullptr;
+	m_pRenderComponent = nullptr;
 	if ( bEnable ) {
 
 		for ( int i = 0; i < GetOwner()->NumComponents(); i++ ) {
-			if ( GetOwner()->GetComponent(i)->IsA( kbModelComponent::GetType() ) == false ) {
+			if ( GetOwner()->GetComponent(i)->IsA( RenderComponent::GetType() ) == false ) {
 				continue;
 			}
-			m_pModelComponent = (kbModelComponent*)GetOwner()->GetComponent(i);
+			m_pRenderComponent = (RenderComponent*)GetOwner()->GetComponent(i);
 			break;
 		}
 		m_AnimationLengthSec = m_ShaderVectorEvents[m_ShaderVectorEvents.size() - 1].GetEventTime();
@@ -291,7 +289,7 @@ void kbShaderModifierComponent::SetEnable_Internal( const bool bEnable ) {
 /// kbShaderModifierComponent::Update_Internal
 void kbShaderModifierComponent::Update_Internal( const float dt ) {
 
-	if ( m_pModelComponent == nullptr || m_ShaderVectorEvents.size() == 0 ) {
+	if ( m_pRenderComponent == nullptr || m_ShaderVectorEvents.size() == 0 ) {
 		Enable( false );
 		return;
 	}
@@ -303,5 +301,5 @@ void kbShaderModifierComponent::Update_Internal( const float dt ) {
 
 	const float elapsedTime = g_GlobalTimer.TimeElapsedSeconds() - m_StartTime;
 	const Vec4 shaderParam = kbVectorAnimEvent::Evaluate( m_ShaderVectorEvents, elapsedTime );
-	m_pModelComponent->SetMaterialParamVector( 0, m_ShaderVectorEvents[0].GetEventName().stl_str(), shaderParam );
+	m_pRenderComponent->SetMaterialParamVector( 0, m_ShaderVectorEvents[0].GetEventName().stl_str(), shaderParam );
 }

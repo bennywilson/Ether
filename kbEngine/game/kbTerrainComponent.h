@@ -91,8 +91,8 @@ private:
 
 
 /// kbTerrainComponent
-class kbTerrainComponent : public kbModelComponent {
-	KB_DECLARE_COMPONENT(kbTerrainComponent, kbModelComponent);
+class kbTerrainComponent : public RenderComponent {
+	KB_DECLARE_COMPONENT(kbTerrainComponent, RenderComponent);
 
 public:
 	~kbTerrainComponent();

@@ -4,7 +4,6 @@
 
 #include "blk_core.h"
 #include "Quaternion.h"
-#include "kbGameEntityHeader.h"
 #include "kbGame.h"
 #include "kbSoundComponent.h"
 #include "kbRenderer.h"

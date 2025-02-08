@@ -575,8 +575,8 @@ void kbRenderer::RenderSync() {
 
 				renderObject = it->second;
 				*renderObject = m_RenderObjectList_GameThread[i];
-				if (pComponent->IsA(kbSkeletalModelComponent::GetType()) && renderObject->m_pModel->NumBones() > 0) {
-					const kbSkeletalModelComponent* const skelComp = static_cast<const kbSkeletalModelComponent*>(pComponent);
+				if (pComponent->IsA(kbSkeletalRenderComponent::GetType()) && renderObject->m_pModel->NumBones() > 0) {
+					const kbSkeletalRenderComponent* const skelComp = static_cast<const kbSkeletalRenderComponent*>(pComponent);
 					renderObject->m_MatrixList = skelComp->GetFinalBoneMatrices();
 					renderObject->m_bIsSkinnedModel = true;
 				}
@@ -585,11 +585,11 @@ void kbRenderer::RenderSync() {
 				renderObject = m_pCurrentRenderWindow->m_RenderObjectMap[pComponent];
 				blk::warn_check(renderObject == nullptr, "kbRenderer::AddRenderObject() - Model %s already added", m_RenderObjectList_GameThread[i].m_pModel->GetFullName().c_str());
 
-				if (pComponent->IsA(kbSkeletalModelComponent::GetType()) && m_RenderObjectList_GameThread[i].m_pModel->NumBones() > 0) {
+				if (pComponent->IsA(kbSkeletalRenderComponent::GetType()) && m_RenderObjectList_GameThread[i].m_pModel->NumBones() > 0) {
 					renderObject = new kbRenderObject();
 					*renderObject = m_RenderObjectList_GameThread[i];
 					renderObject->m_bIsSkinnedModel = true;
-					const kbSkeletalModelComponent* const skelComp = static_cast<const kbSkeletalModelComponent*>(pComponent);
+					const kbSkeletalRenderComponent* const skelComp = static_cast<const kbSkeletalRenderComponent*>(pComponent);
 					renderObject->m_MatrixList = skelComp->GetFinalBoneMatrices();
 				} else {
 					renderObject = new kbRenderObject;

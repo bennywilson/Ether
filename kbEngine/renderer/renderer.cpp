@@ -3,6 +3,8 @@
 /// 2025 blk 1.0
 
 #include "blk_core.h"
+#include "kbGameEntityHeader.h"
+#include "render_component.h"
 #include "renderer.h"
 
 Renderer* g_renderer = nullptr;
@@ -84,4 +86,18 @@ RenderPipeline* Renderer::get_pipeline(const std::string& name) {
 	}
 
 	return m_pipelines[name];
+}
+
+/// Renderer::add_render_component
+void Renderer::add_render_component(const RenderComponent* render_comp) {
+/*	if (m_pipelines.find(name) == m_pipelines.end()) {
+		return nullptr;
+	}
+
+	return m_pipelines[name];*/
+}
+
+/// Renderer::remove_render_component
+void Renderer::remove_render_component(const RenderComponent* const render_comp) {
+
 }

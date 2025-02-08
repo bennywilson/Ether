@@ -70,19 +70,19 @@ void kbClothComponent::Update_Internal(const float dt) {
 		return;
 	}
 
-	kbSkeletalModelComponent* pSkelModelComponent = nullptr;
+	kbSkeletalRenderComponent* pSkelRenderComponent = nullptr;
 	for (int i = 0; i < GetOwner()->NumComponents(); i++) {
-		if (GetOwner()->GetComponent(i)->IsA(kbSkeletalModelComponent::GetType())) {
-			pSkelModelComponent = static_cast<kbSkeletalModelComponent*>(GetOwner()->GetComponent(i));
-			if (pSkelModelComponent->GetModel() != m_pSkeletalModel) {
-				m_pSkeletalModel = pSkelModelComponent->GetModel();
+		if (GetOwner()->GetComponent(i)->IsA(kbSkeletalRenderComponent::GetType())) {
+			pSkelRenderComponent = static_cast<kbSkeletalRenderComponent*>(GetOwner()->GetComponent(i));
+			if (pSkelRenderComponent->GetModel() != m_pSkeletalModel) {
+				m_pSkeletalModel = pSkelRenderComponent->GetModel();
 				SetupCloth();
 				break;
 			}
 		}
 	}
 
-	if (pSkelModelComponent == nullptr || m_pSkeletalModel == nullptr) {
+	if (pSkelRenderComponent == nullptr || m_pSkeletalModel == nullptr) {
 		return;
 	}
 
@@ -96,7 +96,7 @@ void kbClothComponent::Update_Internal(const float dt) {
 	XMMATRIX inverseMat = XMMatrixInverse(nullptr, XMMATRIXFromMat4(WorldMat));
 	invParentMatrix = Mat4FromXMMATRIX(inverseMat);
 
-	std::vector<kbBoneMatrix_t>& FinalBoneMatrices = pSkelModelComponent->GetFinalBoneMatrices();
+	std::vector<kbBoneMatrix_t>& FinalBoneMatrices = pSkelRenderComponent->GetFinalBoneMatrices();
 	if (FinalBoneMatrices.size() == 0) {
 		return;
 	}
@@ -116,7 +116,7 @@ void kbClothComponent::Update_Internal(const float dt) {
 		const int BoneIndex = m_BoneIndices[i];
 
 		if (m_Masses[i].m_bAnchored) {
-			const kbBoneMatrix_t refBoneMatrix = pSkelModelComponent->GetBoneRefMatrix(BoneIndex);
+			const kbBoneMatrix_t refBoneMatrix = pSkelRenderComponent->GetBoneRefMatrix(BoneIndex);
 			const Vec3 localBonePos = refBoneMatrix.GetAxis(3);
 			Vec3 finalPosition = WorldMat.transform_point(localBonePos * FinalBoneMatrices[BoneIndex]);
 			m_Masses[i].SetPosition(finalPosition);
@@ -131,7 +131,7 @@ void kbClothComponent::Update_Internal(const float dt) {
 		WorldToLocalSpace.SetAxis(3, worldPos);
 		WorldToLocalSpace *= invParentMatrix;
 
-		kbBoneMatrix_t LocalToRef = pSkelModelComponent->GetBoneRefMatrix(BoneIndex);
+		kbBoneMatrix_t LocalToRef = pSkelRenderComponent->GetBoneRefMatrix(BoneIndex);
 		LocalToRef.Invert();
 		FinalBoneMatrices[BoneIndex] = LocalToRef * WorldToLocalSpace;
 
@@ -198,9 +198,9 @@ void kbClothComponent::Update_Internal(const float dt) {
 				blk::log("%f %f %f", m_CollisionSpheres[iCollision].m_Sphere.x, m_CollisionSpheres[iCollision].m_Sphere.y, m_CollisionSpheres[iCollision].m_Sphere.z);
 			}
 
-			//		blk::log( "%s looking for %s", pSkelModelComponent->GetModel()->GetFullFileName().c_str(), m_CollisionSpheres[iCollision].m_BoneName.c_str() );
+			//		blk::log( "%s looking for %s", pSkelRenderComponent->GetModel()->GetFullFileName().c_str(), m_CollisionSpheres[iCollision].m_BoneName.c_str() );
 
-			if (pSkelModelComponent->GetBoneWorldMatrix(m_CollisionSpheres[iCollision].m_BoneName, boneWorldMatrix)) {
+			if (pSkelRenderComponent->GetBoneWorldMatrix(m_CollisionSpheres[iCollision].m_BoneName, boneWorldMatrix)) {
 				boneWorldMatrix.m_Axis[0].normalize_self();
 				boneWorldMatrix.m_Axis[1].normalize_self();
 				boneWorldMatrix.m_Axis[2].normalize_self();
@@ -257,11 +257,11 @@ void kbClothComponent::RunSimulation(const float inDeltaTime) {
 	g_pRenderer->DrawSphere( BallPos, BallRad, 16, kbColor::yellow);*/
 	// Ball Sim - end
 
-	kbSkeletalModelComponent* pSkelModelComponent = NULL;
+	kbSkeletalRenderComponent* pSkelRenderComponent = NULL;
 	for (int i = 0; i < GetOwner()->NumComponents(); i++) {
-		if (GetOwner()->GetComponent(i)->IsA(kbSkeletalModelComponent::GetType())) {
-			pSkelModelComponent = static_cast<kbSkeletalModelComponent*>(GetOwner()->GetComponent(i));
-			if (pSkelModelComponent->GetModel() != m_pSkeletalModel) {
+		if (GetOwner()->GetComponent(i)->IsA(kbSkeletalRenderComponent::GetType())) {
+			pSkelRenderComponent = static_cast<kbSkeletalRenderComponent*>(GetOwner()->GetComponent(i));
+			if (pSkelRenderComponent->GetModel() != m_pSkeletalModel) {
 				break;
 			}
 		}
@@ -270,7 +270,7 @@ void kbClothComponent::RunSimulation(const float inDeltaTime) {
 	std::vector<Vec4> CollisionSpheres;
 	for (int iCollision = 0; iCollision < m_CollisionSpheres.size(); iCollision++) {
 		kbBoneMatrix_t boneWorldMatrix;
-		if (pSkelModelComponent->GetBoneWorldMatrix(m_CollisionSpheres[iCollision].m_BoneName, boneWorldMatrix)) {
+		if (pSkelRenderComponent->GetBoneWorldMatrix(m_CollisionSpheres[iCollision].m_BoneName, boneWorldMatrix)) {
 			boneWorldMatrix.m_Axis[0].normalize_self();
 			boneWorldMatrix.m_Axis[1].normalize_self();
 			boneWorldMatrix.m_Axis[2].normalize_self();

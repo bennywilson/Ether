@@ -4,6 +4,9 @@
 
 #pragma once
 
+#include "kbComponent.h"
+#include "kbRenderer_defs.h"
+
 /// EClothType
 enum EClothType {
 	CT_None,
@@ -12,24 +15,24 @@ enum EClothType {
 
 /// kbClothSpring_t
 struct kbClothSpring_t {
-	int											m_MassIndices[2];
-	float										m_Length;
+	int	m_MassIndices[2];
+	float m_Length;
 };
 
 /// kbClothMass_t
 struct kbClothMass_t {
-	kbClothMass_t() : m_LastPosition( Vec3::zero ), m_FrameForces( Vec3::zero ), m_bAnchored( false ) { }
+	kbClothMass_t() : m_LastPosition(Vec3::zero), m_FrameForces(Vec3::zero), m_bAnchored(false) { }
 
-	const Vec3 &								GetPosition() const { return m_Matrix.GetOrigin(); }
-	const Vec3 &								GetAxis( const int index ) const { return m_Matrix.GetAxis( index ); }
-	
-	void										SetPosition( const Vec3 newOrigin ) { m_Matrix.SetAxis( 3, newOrigin ); }
-	void										SetAxis( const int index, const Vec3 & axis ) { m_Matrix.SetAxis( index, axis ); }
+	const Vec3& GetPosition() const { return m_Matrix.GetOrigin(); }
+	const Vec3& GetAxis(const int index) const { return m_Matrix.GetAxis(index); }
 
-	kbBoneMatrix_t								m_Matrix;
-	Vec3										m_LastPosition;
-	Vec3										m_FrameForces;
-	bool										m_bAnchored;
+	void SetPosition(const Vec3 newOrigin) { m_Matrix.SetAxis(3, newOrigin); }
+	void SetAxis(const int index, const Vec3& axis) { m_Matrix.SetAxis(index, axis); }
+
+	kbBoneMatrix_t m_Matrix;
+	Vec3 m_LastPosition;
+	Vec3 m_FrameForces;
+	bool m_bAnchored;
 };
 
 /// kbClothBone
@@ -37,9 +40,8 @@ class kbClothBone : public kbGameComponent {
 public:
 	friend class kbClothComponent;
 
-	KB_DECLARE_COMPONENT( kbClothBone, kbGameComponent );
+	KB_DECLARE_COMPONENT(kbClothBone, kbGameComponent);
 
-	//-------------------------------------------------------------------------------------------------------------------------------------------------------------
 private:
 	kbString									m_BoneName;
 	std::vector<kbString>						m_NeighborBones;
@@ -49,26 +51,26 @@ private:
 /// kbClothComponent
 class kbClothComponent : public kbGameComponent {
 public:
-	KB_DECLARE_COMPONENT( kbClothComponent, kbGameComponent );
+	KB_DECLARE_COMPONENT(kbClothComponent, kbGameComponent);
 
 	virtual										~kbClothComponent();
 
-	const std::vector<class kbClothBone> &		GetBoneInfo() const { return m_BoneInfo; }
-	const std::vector<class kbClothBone> &		GetAdditionalBoneInfo() const { return m_AdditionalBoneInfo; }
-	const std::vector<kbClothMass_t> &			GetMasses() const { return m_Masses; }
-	const std::vector<kbClothSpring_t> &		GetSprings() const { return m_Springs; }
+	const std::vector<class kbClothBone>& GetBoneInfo() const { return m_BoneInfo; }
+	const std::vector<class kbClothBone>& GetAdditionalBoneInfo() const { return m_AdditionalBoneInfo; }
+	const std::vector<kbClothMass_t>& GetMasses() const { return m_Masses; }
+	const std::vector<kbClothSpring_t>& GetSprings() const { return m_Springs; }
 
-	void										AddForceToMass( const int massIdx, const Vec3 & force ) { m_Masses[massIdx].m_FrameForces += force; }
+	void										AddForceToMass(const int massIdx, const Vec3& force) { m_Masses[massIdx].m_FrameForces += force; }
 
-	void										SetClothCollisionSphere( const int idx, const Vec4 & sphere );
+	void										SetClothCollisionSphere(const int idx, const Vec4& sphere);
 
 protected:
 
-	virtual void								RunSimulation( const float DeltaTime );
+	virtual void								RunSimulation(const float DeltaTime);
 
 private:
 
-	virtual void								Update_Internal( const float DeltaTime ) override;
+	virtual void								Update_Internal(const float DeltaTime) override;
 
 	void										SetupCloth();
 
@@ -95,9 +97,9 @@ private:
 	Vec3										m_NextWindVelocity;
 	float										m_NextWindChangeTime;
 
-	const kbModel *								m_pSkeletalModel;
+	const kbModel* m_pSkeletalModel;
 
 	std::vector<int>							m_BoneIndices;
-	std::vector<kbClothMass_t>					m_Masses;	
+	std::vector<kbClothMass_t>					m_Masses;
 	std::vector<kbClothSpring_t>				m_Springs;
 };

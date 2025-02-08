@@ -37,7 +37,7 @@ public:
 	const Vec3&								GetUIToScreenSizeRatio() const { return m_UIToScreenSizeRatio; }
 	const Vec3&								GetNormalizedScreenSize() const { return m_NormalizedScreenSize; }
 
-	const kbStaticModelComponent *				GetStaticModelComponent() const { return m_pStaticModelComponent; }
+	const RenderComponent *				GetStaticRenderComponent() const { return m_pStaticRenderComponent; }
 
 	void										RegisterEventListener( IUIWidgetListener* const pListener );
 	void										UnregisterEventListener( IUIWidgetListener* const pListener );
@@ -48,7 +48,7 @@ public:
 protected:
 
 	virtual void								SetEnable_Internal( const bool isEnabled ) override;
-	void										FindStaticModelComponent();
+	void										FindStaticRenderComponent();
 	void										RefreshMaterial();
 
 	int											GetAuthoredWidth() const { return m_AuthoredWidth; }
@@ -71,7 +71,7 @@ private:
 	bool										m_bHasFocus;
 
 protected:
-	kbStaticModelComponent*						m_pStaticModelComponent;
+	RenderComponent*						m_pStaticRenderComponent;
 };
 
 /// kbUIWidgetComponent
@@ -123,7 +123,7 @@ public:
 	void									RegisterEventListener( IUIWidgetListener* const pListener );
 	void									UnregisterEventListener( IUIWidgetListener* const pListener );
 
-	const kbStaticModelComponent*			GetStaticModel() const { return m_pModel; }
+	const RenderComponent*			GetStaticModel() const { return m_pModel; }
 
 	void									SetAdditiveTextureFactor( const float factor );
 

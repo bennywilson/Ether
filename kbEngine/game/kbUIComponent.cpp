@@ -24,7 +24,7 @@ void kbUIComponent::Constructor() {
 	m_UIToScreenSizeRatio.set(0.1f, 0.0f, 0.0f);
 	m_NormalizedScreenSize.set(0.f, 0.0f, 0.0f);
 
-	m_pStaticModelComponent = nullptr;
+	m_pStaticRenderComponent = nullptr;
 }
 
 /// kbUIComponent::~kbUIComponent
@@ -47,16 +47,16 @@ void kbUIComponent::UnregisterEventListener(IUIWidgetListener* const pListener) 
 
 /// kbUIComponent::SetMaterialParamVector
 void kbUIComponent::SetMaterialParamVector(const std::string& paramName, const Vec4& paramValue) {
-	blk::error_check(m_pStaticModelComponent != nullptr, "bUIComponent::SetMaterialParamVector() - m_pStaticModelComponent is NULL");
+	blk::error_check(m_pStaticRenderComponent != nullptr, "bUIComponent::SetMaterialParamVector() - m_pStaticRenderComponent is NULL");
 
-	m_pStaticModelComponent->SetMaterialParamVector(0, paramName, paramValue);
+	m_pStaticRenderComponent->SetMaterialParamVector(0, paramName, paramValue);
 }
 
 /// kbUIComponent::SetMaterialParamTexture
 void kbUIComponent::SetMaterialParamTexture(const std::string& paramName, kbTexture* const pTexture) {
-	blk::error_check(m_pStaticModelComponent != nullptr, "bUIComponent::SetMaterialParamTexture() - m_pStaticModelComponent is NULL");
+	blk::error_check(m_pStaticRenderComponent != nullptr, "bUIComponent::SetMaterialParamTexture() - m_pStaticRenderComponent is NULL");
 
-	m_pStaticModelComponent->SetMaterialParamTexture(0, paramName, pTexture);
+	m_pStaticRenderComponent->SetMaterialParamTexture(0, paramName, pTexture);
 }
 
 /// kbUIComponent::FireEvent
@@ -70,7 +70,7 @@ void kbUIComponent::FireEvent(const kbInput_t* const pInput) {
 /// kbUIComponent::EditorChange
 void kbUIComponent::EditorChange(const std::string& propertyName) {
 	Super::EditorChange(propertyName);
-	FindStaticModelComponent();
+	FindStaticRenderComponent();
 	RefreshMaterial();
 }
 
@@ -79,36 +79,36 @@ void kbUIComponent::SetEnable_Internal(const bool bEnable) {
 	Super::SetEnable_Internal(bEnable);
 
 	if (bEnable) {
-		FindStaticModelComponent();
+		FindStaticRenderComponent();
 
-		if (m_pStaticModelComponent != nullptr) {
-			m_pStaticModelComponent->Enable(true);
+		if (m_pStaticRenderComponent != nullptr) {
+			m_pStaticRenderComponent->Enable(true);
 		}
 		RefreshMaterial();
 
 		g_pInputManager->RegisterInputListener(this);
 	} else {
 
-		if (m_pStaticModelComponent != nullptr) {
-			m_pStaticModelComponent->Enable(false);
-			m_pStaticModelComponent = nullptr;
+		if (m_pStaticRenderComponent != nullptr) {
+			m_pStaticRenderComponent->Enable(false);
+			m_pStaticRenderComponent = nullptr;
 		}
 
 		g_pInputManager->UnregisterInputListener(this);
 	}
 }
 
-/// kbUIComponent:FindStaticModelComponent
-void kbUIComponent::FindStaticModelComponent() {
-	m_pStaticModelComponent = GetOwner()->GetComponent<kbStaticModelComponent>();
+/// kbUIComponent:FindStaticRenderComponent
+void kbUIComponent::FindStaticRenderComponent() {
+	m_pStaticRenderComponent = GetOwner()->GetComponent<RenderComponent>();
 }
 
 /// kbUIComponent:RefreshMaterial
 
 void kbUIComponent::RefreshMaterial() {
 
-	FindStaticModelComponent();
-	if (m_pStaticModelComponent == nullptr) {
+	FindStaticRenderComponent();
+	if (m_pStaticRenderComponent == nullptr) {
 		return;
 	}
 
@@ -130,7 +130,7 @@ void kbUIComponent::RefreshMaterial() {
 		m_NormalizedAnchorPt.x + m_NormalizedScreenSize.x * 0.5f,		// Upper left corner to anchor
 		m_NormalizedAnchorPt.y + m_NormalizedScreenSize.y * 0.5f);		// Upper left corner to anchor
 
-	m_pStaticModelComponent->SetMaterialParamVector(0, normalizedScreenSize_Anchor.stl_str(), sizeAndPos);
+	m_pStaticRenderComponent->SetMaterialParamVector(0, normalizedScreenSize_Anchor.stl_str(), sizeAndPos);
 }
 
 
@@ -221,9 +221,9 @@ void kbUIWidgetComponent::SetRelativeSize(const Vec3& newSize) {
 void kbUIWidgetComponent::RecalculateOld(const kbUIComponent* const pParent, const bool bFull) {
 	blk::error_check(pParent != nullptr, "kbUIWidgetComponent::UpdateFromParent() - null parent");
 
-	/*	if ( m_pModel != nullptr && pParent != nullptr && pParent->GetStaticModelComponent() != nullptr ) {
-			blk::log( "Setting render oreder bias to %f", pParent->GetStaticModelComponent()->GetRenderOrderBias() - 1.0f );
-			m_pModel->SetRenderOrderBias( pParent->GetStaticModelComponent()->GetRenderOrderBias() - 1.0f );
+	/*	if ( m_pModel != nullptr && pParent != nullptr && pParent->GetStaticRenderComponent() != nullptr ) {
+			blk::log( "Setting render oreder bias to %f", pParent->GetStaticRenderComponent()->GetRenderOrderBias() - 1.0f );
+			m_pModel->SetRenderOrderBias( pParent->GetStaticRenderComponent()->GetRenderOrderBias() - 1.0f );
 		}*/
 
 	m_CachedParentPosition = pParent->GetNormalizedAnchorPt();
@@ -232,7 +232,7 @@ void kbUIWidgetComponent::RecalculateOld(const kbUIComponent* const pParent, con
 	m_AbsolutePosition = m_CachedParentPosition + m_CachedParentSize * m_RelativePosition;
 	m_AbsoluteSize = m_CachedParentSize * m_RelativeSize;
 
-	SetRenderOrderBias(pParent->GetStaticModelComponent()->GetRenderOrderBias() - 1.0f);
+	SetRenderOrderBias(pParent->GetStaticRenderComponent()->GetRenderOrderBias() - 1.0f);
 
 	for (int i = 0; i < m_ChildWidgets.size(); i++) {
 		m_ChildWidgets[i].RecalculateOld(pParent, bFull);
@@ -432,9 +432,9 @@ void kbUISlider::RecalculateOld(const kbUIComponent* const pParent, const bool b
 
 	blk::error_check(pParent != nullptr, "kbUIWidgetComponent::UpdateFromParent() - null parent");
 
-	if (m_pModel != nullptr && pParent != nullptr && pParent->GetStaticModelComponent() != nullptr) {
+	if (m_pModel != nullptr && pParent != nullptr && pParent->GetStaticRenderComponent() != nullptr) {
 
-		m_pModel->SetRenderOrderBias(pParent->GetStaticModelComponent()->GetRenderOrderBias() - 1.0f);
+		m_pModel->SetRenderOrderBias(pParent->GetStaticRenderComponent()->GetRenderOrderBias() - 1.0f);
 	}
 
 	m_CachedParentPosition = pParent->GetNormalizedAnchorPt();
@@ -443,12 +443,12 @@ void kbUISlider::RecalculateOld(const kbUIComponent* const pParent, const bool b
 	m_AbsolutePosition = m_CachedParentPosition + m_CachedParentSize * m_RelativePosition;
 	m_AbsoluteSize = m_CachedParentSize * m_RelativeSize;
 
-	SetRenderOrderBias(pParent->GetStaticModelComponent()->GetRenderOrderBias() - 1.0f);
+	SetRenderOrderBias(pParent->GetStaticRenderComponent()->GetRenderOrderBias() - 1.0f);
 
 	for (int i = 0; i < m_ChildWidgets.size(); i++) {
 		m_ChildWidgets[i].RecalculateOld(pParent, bFull);
 
-		m_ChildWidgets[i].SetRenderOrderBias(pParent->GetStaticModelComponent()->GetRenderOrderBias() - (1.0f + (float)i));
+		m_ChildWidgets[i].SetRenderOrderBias(pParent->GetStaticRenderComponent()->GetRenderOrderBias() - (1.0f + (float)i));
 	}
 
 	const float spaceBetweenLabelAndSlider = 0.05f;

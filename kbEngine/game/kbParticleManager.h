@@ -5,7 +5,10 @@
 #pragma once
 
 #include <vector>
+#include "matrix.h"
 #include "kbGameEntityHeader.h"
+
+class kbParticleComponent;
 
 /// kbParticleManager
 class kbParticleManager {

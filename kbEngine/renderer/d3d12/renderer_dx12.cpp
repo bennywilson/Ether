@@ -18,7 +18,6 @@ Renderer_Dx12::~Renderer_Dx12() {
 	shut_down();	// function is virtual but called in ~Renderer which is UB
 }
 
-
 /// Renderer_Dx12::initialize_internal
 void Renderer_Dx12::initialize_internal(HWND hwnd, const uint32_t frame_width, const uint32_t frame_height) {
 	UINT dxgiFactoryFlags = 0;

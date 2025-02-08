@@ -1,17 +1,17 @@
 //==============================================================================
-// kbSkeletalModelComponent.h
+// kbSkeletalRenderComponent.h
 //
 // 2016-2019 blk 1.0
 //==============================================================================
-#ifndef _KBSKELETALMODELCOMPONENT_H_
-#define _KBSKELETALMODELCOMPONENT_H_
+#ifndef _KBSKELETALRenderComponent_H_
+#define _KBSKELETALRenderComponent_H_
 
 #include "kbModel.h"
 
 /// kbAnimComponent
 class kbAnimComponent : public kbGameComponent {
 
-	friend class kbSkeletalModelComponent;
+	friend class kbSkeletalRenderComponent;
 
 	KB_DECLARE_COMPONENT( kbAnimComponent, kbGameComponent );
 
@@ -34,15 +34,15 @@ private:
 };
 
 
-/// kbSkeletalModelComponent
-class kbSkeletalModelComponent : public kbModelComponent {
+/// kbSkeletalRenderComponent
+class kbSkeletalRenderComponent : public RenderComponent {
 
-	KB_DECLARE_COMPONENT( kbSkeletalModelComponent, kbModelComponent );
+	KB_DECLARE_COMPONENT( kbSkeletalRenderComponent, RenderComponent );
 
 //---------------------------------------------------------------------------------------------------
 public:
 
-	virtual										~kbSkeletalModelComponent();
+	virtual										~kbSkeletalRenderComponent();
 
 	void										SetModel( class kbModel *const pModel );
 	const kbModel *								GetModel() const { return m_pModel; }
@@ -76,8 +76,8 @@ public:
 	void										RegisterAnimEventListener( IAnimEventListener *const pListener );
 	void										UnregisterAnimEventListener( IAnimEventListener *const pListener );
 
-	void										RegisterSyncSkelModel( kbSkeletalModelComponent *const pSkelModel );
-	void										UnregisterSyncSkelModel( kbSkeletalModelComponent *const pSkelModel );
+	void										RegisterSyncSkelModel( kbSkeletalRenderComponent *const pSkelModel );
+	void										UnregisterSyncSkelModel( kbSkeletalRenderComponent *const pSkelModel );
 
 protected:
 
@@ -100,8 +100,8 @@ protected:
 
 	std::vector<float>							m_AnimationTimeScaleMultipliers;
 
-	std::vector<kbSkeletalModelComponent*>		m_SyncedSkelModels;
-	kbSkeletalModelComponent *					m_pSyncParent;
+	std::vector<kbSkeletalRenderComponent*>		m_SyncedSkelModels;
+	kbSkeletalRenderComponent *					m_pSyncParent;
 
 	// Debug
 	int											m_DebugAnimIdx;

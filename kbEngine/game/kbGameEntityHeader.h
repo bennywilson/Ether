@@ -36,11 +36,9 @@ public: \
 	const static className##_TypeInfo * GetType() { return &typeInfo; } \
 	virtual kbComponent * Duplicate() const { return new className( *this ); }
 
-#include "Matrix.h"
-#include "kbComponent.h"
-#include "kbModelComponent.h"
-#include "kbStaticModelComponent.h"
+#include "render_component.h"
 #include "kbSkeletalModelComponent.h"
+#include "kbStaticModelComponent.h"
 #include "kbParticleComponent.h"
 #include "kbTerrainComponent.h"
 #include "kbCollisionManager.h"
@@ -48,12 +46,8 @@ public: \
 #include "kbClothComponent.h"
 #include "kbLevelComponent.h"
 #include "kbUIComponent.h"
-#include "kbGameEntity.h"
-#include "kbRenderer_Defs.h"
-#include "kbMaterial.h"
 #include "kbSoundComponent.h"
 #include "kbDebugComponents.h"
 #include "kbTypeInfo.h"
-#include "kbFile.h"
 
 #define KB_DEFINE_COMPONENT( className )

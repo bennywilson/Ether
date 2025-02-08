@@ -1,16 +1,15 @@
-//===================================================================================================
-// kbStaticModelComponent.cpp
-//
-//
-// 2016 blk 1.0
-//===================================================================================================
+/// RenderComponent.cpp
+///
+/// 2016-2025 blk 1.0
+
 #include "kbModel.h"
 #include "kbGameEntityHeader.h"
 #include "kbRenderer.h"
+#include "renderer.h"
 
 KB_DEFINE_COMPONENT(kbStaticModelComponent)
 
-/// kbStaticModelComponent
+/// RenderComponent
 void kbStaticModelComponent::Constructor() {
 	m_pModel = nullptr;
 }
@@ -20,27 +19,27 @@ kbStaticModelComponent::~kbStaticModelComponent() {
 }
 
 /// kbStaticModelComponent::EditorChange
-void kbStaticModelComponent::EditorChange( const std::string & propertyName ) {
-	Super::EditorChange( propertyName );
+void kbStaticModelComponent::EditorChange(const std::string& propertyName) {
+	Super::EditorChange(propertyName);
 
-	if ( IsEnabled() && ( propertyName == "Model" || propertyName == "ShaderOverride" ) ) {
-		SetEnable_Internal( false );
-		SetEnable_Internal( true );
+	if (IsEnabled() && (propertyName == "Model" || propertyName == "ShaderOverride")) {
+		SetEnable_Internal(false);
+		SetEnable_Internal(true);
 	}
 }
 
 /// kbStaticModelComponent::SetEnable_Internal
-void kbStaticModelComponent::SetEnable_Internal( const bool isEnabled ) {
-	
-	Super::SetEnable_Internal( isEnabled );
+void kbStaticModelComponent::SetEnable_Internal(const bool isEnabled) {
 
-	if ( m_pModel == nullptr ) {
+	Super::SetEnable_Internal(isEnabled);
+
+	if (m_pModel == nullptr) {
 		return;
 	}
 
 	m_RenderObject.m_pComponent = this;
 
-	if ( isEnabled ) {
+	if (isEnabled) {
 
 		m_RenderObject.m_bCastsShadow = this->GetCastsShadow();
 		m_RenderObject.m_bIsSkinnedModel = false;
@@ -52,26 +51,26 @@ void kbStaticModelComponent::SetEnable_Internal( const bool isEnabled ) {
 		m_RenderObject.m_Scale = GetOwner()->GetScale() * kbLevelComponent::GetGlobalModelScale();
 		m_RenderObject.m_RenderOrderBias = m_RenderOrderBias;
 
-		RefreshMaterials( false );
+		RefreshMaterials(false);
 
-		g_pRenderer->AddRenderObject( m_RenderObject );
+		g_pRenderer->AddRenderObject(m_RenderObject);
+		g_renderer->add_render_component(this);
 	} else {
-		g_pRenderer->RemoveRenderObject( m_RenderObject );
+		g_pRenderer->RemoveRenderObject(m_RenderObject);
 	}
 }
 
-/// kbStaticModelComponent:Update_Internal
-void kbStaticModelComponent::Update_Internal( const float DeltaTime ) {
+/// kbStaticModelComponent::Update_Internal
+void kbStaticModelComponent::Update_Internal(const float DeltaTime) {
+	Super::Update_Internal(DeltaTime);
 
-	Super::Update_Internal( DeltaTime );
-
-	if ( m_pModel != nullptr && GetOwner()->IsDirty() ) {
+	if (m_pModel != nullptr && GetOwner()->IsDirty()) {
 		m_RenderObject.m_Position = GetOwner()->GetPosition();
 		m_RenderObject.m_Orientation = GetOwner()->GetOrientation();
 		m_RenderObject.m_Scale = GetOwner()->GetScale() * kbLevelComponent::GetGlobalModelScale();
 		m_RenderObject.m_pModel = m_pModel;
 
-		g_pRenderer->UpdateRenderObject( m_RenderObject );
+		g_pRenderer->UpdateRenderObject(m_RenderObject);
 	}
 
 	// m_pModel->DrawDebugTBN( GetOwner()->GetPosition(), GetOwner()->GetOrientation(), GetOwner()->GetScale() );

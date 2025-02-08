@@ -1,13 +1,15 @@
-/// kbModelComponent.h
+/// model_component.h
 ///
 // 2016-2025 blk 1.0
 
 #pragma once
 
+#include "kbComponent.h"
 #include "kbRenderer_Defs.h"
 
 class kbTexture;
 class kbShader;
+class kbRenderTexture;
 
 /// kbShaderParamComponent
 class kbShaderParamComponent : public kbGameComponent {
@@ -45,7 +47,7 @@ protected:
 	std::vector<kbVectorAnimEvent> m_ShaderVectorEvents;
 
 	// Runtime
-	class kbModelComponent* m_pModelComponent;
+	class RenderComponent* m_pRenderComponent;
 	float m_StartTime;
 	float m_AnimationLengthSec;
 };
@@ -72,12 +74,12 @@ private:
 	std::vector<kbShaderParamComponent>	m_ShaderParamComponents;
 };
 
-/// kbModelComponent
-class kbModelComponent : public kbGameComponent {
-	KB_DECLARE_COMPONENT(kbModelComponent, kbGameComponent);
+/// RenderComponent
+class RenderComponent : public kbGameComponent {
+	KB_DECLARE_COMPONENT(RenderComponent, kbGameComponent);
 
 public:
-	virtual	~kbModelComponent();
+	virtual	~RenderComponent();
 
 	virtual void EditorChange(const std::string& propertyName) override;
 	virtual void PostLoad() override;

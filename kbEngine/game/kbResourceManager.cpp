@@ -5,6 +5,7 @@
 #include <filesystem>
 #include "blk_core.h"
 #include "blk_containers.h"
+#include "kbFile.h"
 #include "kbMaterial.h"
 #include "kbModel.h"
 #include "kbSoundManager.h"
