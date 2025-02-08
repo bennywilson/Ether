@@ -70,7 +70,8 @@
     </Link>
     <Lib>
       <OutputFile>./lib/kbEngineD.lib</OutputFile>
-      <AdditionalDependencies>Winmm.lib;vulkan-1.lib;DXGI.lib;d2d1.lib;d3dcompiler.lib;d3d12.lib;d3d11.lib;libfbxsdk-md.lib;  libxml2-md.lib;zlib-md.lib;fltkd.lib</AdditionalDependencies>
+      <AdditionalDependencies>dxgi.lib;d3dcompiler.lib;d3d11.lib;d3d12.lib;fltkd.lib;libfbxsdk-md.lib;libxml2-md.lib;vulkan-1.lib;winmm.lib;zlib-md.lib;winmm.lib</AdditionalDependencies>
+      <IgnoreAllDefaultLibraries>true</IgnoreAllDefaultLibraries>
     </Lib>
     <ProjectReference>
       <LinkLibraryDependencies>true</LinkLibraryDependencies>
@@ -98,7 +99,7 @@
     </Link>
     <Lib>
       <OutputFile>./lib/kbEngine.lib</OutputFile>
-      <AdditionalDependencies>vulkan-1.lib;dxgi.lib;d2d1.lib;d3dcompiler.lib;d3d12.lib;d3d11.lib;libfbxsdk-md.lib; libxml2-md.lib;zlib-md.lib; fltk.lib;winmm.lib</AdditionalDependencies>
+      <AdditionalDependencies>dxgi.lib;d3dcompiler.lib;d3d11.lib;d3d12.lib;fltkd.lib;libfbxsdk-md.lib;libxml2-md.lib;vulkan-1.lib;winmm.lib;zlib-md.lib;winmm.lib</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>

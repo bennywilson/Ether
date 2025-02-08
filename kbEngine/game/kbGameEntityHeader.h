@@ -10,10 +10,13 @@ void CopyVarToComponent(const class kbComponent* Src, class kbComponent* Dst, co
 	class className##_TypeInfo className::typeInfo; \
 	std::vector<class kbTypeInfoClass*> className::className##_TypeInfoVar; \
 
-#define KB_DECLARE_COMPONENT( className, parentClassName ) \
+#define KB_DECLARE_COMPONENT(className, parentClassName) \
+public: \
+	className(const className&) = default; \
+	className(className&&) = default; \
+	className& operator=(const className&) = default; \
+	className& operator=(className&&) = default; \
 private: \
-	/*className & operator=( const className & componentToCopy );*/ \
-	/*className & operator=( const className * componentToCopy );*/	\
 	void Constructor(); \
 	typedef parentClassName Super; \
 	virtual void CollectAncestorTypeInfo() { CollectAncestorTypeInfo_Internal( className##_TypeInfoVar ); } \

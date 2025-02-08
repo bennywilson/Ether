@@ -13,7 +13,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <None Include="ReadMe.txt" />
     <None Include="GameBase.ico">
       <Filter>Source Files</Filter>
     </None>

@@ -2,7 +2,6 @@
 ///
 /// 2019-2025 blk1.0
 
-
 #include <DirectXMath.h>
 #include <math.h>
 #include "CannonGame.h"
@@ -17,8 +16,6 @@
 /// KungFuSnolafStateIdle
 template<typename T>
 class KungFuSnolafStateIdle : public KungFuSnolafStateBase<T> {
-
-	//---------------------------------------------------------------------------------------------------
 public:
 	KungFuSnolafStateIdle(CannonActorComponent* const pPlayerComponent) : KungFuSnolafStateBase<T>(pPlayerComponent) { }
 
@@ -44,7 +41,6 @@ public:
 template<typename T>
 class KungFuSnolafStateRun : public KungFuSnolafStateBase<T> {
 private:
-
 	float m_HugStartTime = -1.0f;
 
 public:
@@ -127,8 +123,6 @@ public:
 /// KungFuSnolafeStatePrehug
 template<typename T>
 class KungFuSnolafeStatePrehug : public KungFuSnolafStateBase<T> {
-
-	//---------------------------------------------------------------------------------------------------
 public:
 
 	KungFuSnolafeStatePrehug(CannonActorComponent* const pPlayerComponent) : KungFuSnolafStateBase<T>(pPlayerComponent) { }
@@ -187,8 +181,6 @@ public:
 /// KungFuSnolafStateHug - Warm Hugs!
 template<typename T>
 class KungFuSnolafStateHug : public KungFuSnolafStateBase<T> {
-
-	//---------------------------------------------------------------------------------------------------
 public:
 	KungFuSnolafStateHug(CannonActorComponent* const pPlayerComponent) : KungFuSnolafStateBase<T>(pPlayerComponent) { }
 
@@ -295,12 +287,9 @@ private:
 	bool m_bFirstHitYet = false;
 };
 
-
 /// KungFuSnolafStateWatchCannonBall
 template<typename T>
 class KungFuSnolafStateWatchCannonBall : public KungFuSnolafStateBase<T> {
-
-	//---------------------------------------------------------------------------------------------------
 public:
 	KungFuSnolafStateWatchCannonBall(CannonActorComponent* const pPlayerComponent) : KungFuSnolafStateBase<T>(pPlayerComponent) { }
 
@@ -319,8 +308,6 @@ public:
 /// KungFuSnolafStateDead
 template<typename T>
 class KungFuSnolafStateDead : public KungFuSnolafStateBase<T> {
-
-	//---------------------------------------------------------------------------------------------------
 public:
 	KungFuSnolafStateDead(CannonActorComponent* const pPlayerComponent) : KungFuSnolafStateBase<T>(pPlayerComponent) { }
 
@@ -384,12 +371,10 @@ public:
 			UpdateFlyingDeath(0.0f);
 
 		} else if (m_DeathSelection == 1) {
-
 			// Straight up poof, homie
 			this->GetSnolaf()->DoPoofDeath();
 
 		} else if (m_DeathSelection == 2) {
-
 			// Decapitation
 			this->GetSnolaf()->SpawnAndFlingDecapHead();
 			m_Velocity = Vec3Rand(m_MinLinearVelocity, m_MaxLinearVelocity);
@@ -432,7 +417,6 @@ public:
 	}
 
 	void UpdateFlyingDeath(const float dt) {
-
 		kbGameEntity* const pOwner = this->m_pActorComponent->GetOwner();
 		const float curTime = g_GlobalTimer.TimeElapsedSeconds();
 		const float elapsedDeathTime = curTime - m_DeathStartTime;
@@ -462,14 +446,9 @@ public:
 	}
 
 	virtual void UpdateState_Internal() override {
-
 		kbGameEntity* const pOwner = this->m_pActorComponent->GetOwner();
 		const float curTime = g_GlobalTimer.TimeElapsedSeconds();
 		const float elapsedDeathTime = curTime - m_DeathStartTime;
-		/*	if ( elapsedDeathTime > 2.0f ) {
-		/		g_pCannonGame->RemoveGameEntity( pOwner );
-				return;
-			}*/
 
 		const float dt = g_pGame->GetFrameDT();
 		if (m_DeathSelection == 0 || m_DeathSelection == 2) {
