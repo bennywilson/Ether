@@ -10,6 +10,8 @@
 #include "d3dx12.h"
 #include "DDSTextureLoader12.h"
 #include "d3d12_defs.h"
+#include "kbGameEntityHeader.h"
+#include "render_component.h"
 
 using namespace std;
 
@@ -279,25 +281,10 @@ void Renderer_Dx12::render() {
 	rot.transpose_self();
 
 	Mat4 view_matrix = trans * rot;
-	Mat4 mvp_matrix =
+	Mat4 vp_matrix =
 		view_matrix *
 		m_camera_projection;
-	mvp_matrix.transpose_self();
-
-	//mvp.MakeScale
-	//m_camera_projection
-	pBuffer->mvp = mvp_matrix;
-	/*
-	pBuffer->mvp[0].set(1.31353f * 0.5f, 0.f, 0.f, -0.5f);
-	pBuffer->mvp[1].set(0.f, 2.14451f * 0.5f, 0.f, -3.f);
-	pBuffer->mvp[2].set(0.f, 0.f, 1.00005f * 0.5f, 4.5f);
-	pBuffer->mvp[3].set(0.f, 0.f, 1.f, 5.f);*/
-
-	pBuffer->padding[0].make_identity();
-	pBuffer->padding[1].make_identity();
-	pBuffer->padding[2].make_identity();
-	//........................
-
+	
 	blk::error_check(m_command_allocator->Reset());
 	blk::error_check(m_command_list->Reset(m_command_allocator.Get(), nullptr));
 
@@ -325,8 +312,6 @@ void Renderer_Dx12::render() {
 	ID3D12DescriptorHeap* ppHeaps[] = { m_cbv_srv_heap.Get(), m_sampler_heap.Get() };
 	m_command_list->SetDescriptorHeaps(_countof(ppHeaps), ppHeaps);
 	m_command_list->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-	m_command_list->IASetIndexBuffer(&index_buffer->index_buffer_view());
-	m_command_list->IASetVertexBuffers(0, 1, &vertex_buffer->vertex_buffer_view());
 
 	m_command_list->SetGraphicsRootDescriptorTable(0, m_cbv_srv_heap->GetGPUDescriptorHandleForHeapStart());
 	m_command_list->SetGraphicsRootDescriptorTable(1, m_sampler_heap->GetGPUDescriptorHandleForHeapStart());
@@ -335,8 +320,24 @@ void Renderer_Dx12::render() {
 	CD3DX12_GPU_DESCRIPTOR_HANDLE gpu_handle(m_cbv_srv_heap->GetGPUDescriptorHandleForHeapStart(), 1, descriptor_size);
 	m_command_list->SetGraphicsRootDescriptorTable(2, gpu_handle);
 
+	for (auto render_comp : this->render_components()) {
+		m_command_list->IASetVertexBuffers(0, 1, &vertex_buffer->vertex_buffer_view());
+		m_command_list->IASetIndexBuffer(&index_buffer->index_buffer_view());
 
-	m_command_list->DrawIndexedInstanced(index_buffer->num_elements(), 1, 0, 0, 0);
+		Mat4 world_mat;
+		world_mat.make_scale(render_comp->GetOwnerScale());
+		world_mat *= render_comp->GetOwnerRotation().to_mat4();
+		world_mat[3] = render_comp->GetOwnerPosition();
+
+		pBuffer->mvp = (world_mat * vp_matrix).transpose_self();
+		pBuffer->padding[0].make_identity();
+		pBuffer->padding[1].make_identity();
+		pBuffer->padding[2].make_identity();
+
+		//........................
+		m_command_list->DrawIndexedInstanced(index_buffer->num_elements(), 1, 0, 0, 0);
+	}
+
 
 	// Indicate that the back buffer will now be used to present.
 	auto res_barrier = CD3DX12_RESOURCE_BARRIER::Transition(m_render_targets[m_frame_index].Get(), D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PRESENT);

@@ -37,6 +37,7 @@ public: \
 	virtual kbComponent * Duplicate() const { return new className( *this ); }
 
 #include "render_component.h"
+#include "kbComponent.h"
 #include "kbSkeletalModelComponent.h"
 #include "kbStaticModelComponent.h"
 #include "kbParticleComponent.h"

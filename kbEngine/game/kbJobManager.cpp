@@ -2,7 +2,6 @@
 ///
 /// 2016-2025 blk 1.0
 
-#include <Windows.h>
 #include "blk_core.h"
 #include "kbJobManager.h"
 

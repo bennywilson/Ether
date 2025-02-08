@@ -251,7 +251,7 @@
     <ClInclude Include="game\kbParticleComponent.h">
       <Filter>game\Components</Filter>
     </ClInclude>
-    <ClInclude Include="game\kbSkeletalModelComponent.h">
+    <ClInclude Include="game\kbSkeletalRenderComponent.h">
       <Filter>game\Components</Filter>
     </ClInclude>
     <ClInclude Include="game\kbStaticModelComponent.h">
@@ -438,7 +438,7 @@
     <ClCompile Include="game\kbParticleComponent.cpp">
       <Filter>game\Components</Filter>
     </ClCompile>
-    <ClCompile Include="game\kbSkeletalModelComponent.cpp">
+    <ClCompile Include="game\kbSkeletalRenderComponent.cpp">
       <Filter>game\Components</Filter>
     </ClCompile>
     <ClCompile Include="game\kbStaticModelComponent.cpp">

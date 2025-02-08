@@ -153,12 +153,12 @@ private:
 		std::vector<t>& vec = *(std::vector<t>*)vectorPtr;
 		std::vector<t> backUp = vec;
 
-		for (int i = 0; i < vec.size() && i < backUp.size(); i++)
+		for (size_t i = 0; i < vec.size() && i < backUp.size(); i++)
 			backUp[i] = vec[i];
 
 		vec.resize(vectorSize);
 
-		for (int i = 0; i < vec.size() && i < backUp.size(); i++)
+		for (size_t i = 0; i < vec.size() && i < backUp.size(); i++)
 			vec[i] = backUp[i];
 	}
 
@@ -180,12 +180,12 @@ private:
 		std::vector<t>& vec = *(std::vector<t>*)vectorPtr;
 		std::vector<t> backUp = vec;
 
-		for (int i = 0; i < vec.size() && i < backUp.size(); i++)
+		for (size_t i = 0; i < vec.size() && i < backUp.size(); i++)
 			backUp[i] = vec[i];
 
 		vec.insert(vec.begin() + index, t());
 
-		for (int i = 0; i < vec.size() && i < backUp.size(); i++)
+		for (size_t i = 0; i < vec.size() && i < backUp.size(); i++)
 		{
 			if (i == index)
 				continue;

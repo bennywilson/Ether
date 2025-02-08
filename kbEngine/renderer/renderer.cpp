@@ -90,14 +90,10 @@ RenderPipeline* Renderer::get_pipeline(const std::string& name) {
 
 /// Renderer::add_render_component
 void Renderer::add_render_component(const RenderComponent* render_comp) {
-/*	if (m_pipelines.find(name) == m_pipelines.end()) {
-		return nullptr;
-	}
-
-	return m_pipelines[name];*/
+	m_render_components.insert(render_comp);
 }
 
 /// Renderer::remove_render_component
 void Renderer::remove_render_component(const RenderComponent* const render_comp) {
-
+	m_render_components.erase(render_comp);
 }

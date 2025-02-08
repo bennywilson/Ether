@@ -1,14 +1,13 @@
-//==============================================================================
-// CannonPlayer.h
-//
-// 2019 kbEngine 2.0
-//==============================================================================
-#ifndef _KBCANNONPLAYER_H_
-#define _KBCANNONPLAYER_H_
+/// CannonPlayer.h
+///
+// 2019-2025 blk 1.0
+
+#pragma once
+
+class kbSkeletalRenderComponent;
 
 /// CannonActorComponent
 class CannonActorComponent : public kbActorComponent, IAnimEventListener {
-
 	KB_DECLARE_COMPONENT( CannonActorComponent, kbActorComponent );
 
 //---------------------------------------------------------------------------------------------------
@@ -47,7 +46,7 @@ protected:
 	std::vector<kbSoundData>	m_AttackVO;
 
 	// Game
-	std::vector<kbSkeletalModelComponent *>		m_SkelModelsList;
+	std::vector<kbSkeletalRenderComponent*>		m_SkelModelsList;
 	Vec3									m_TargetFacingDirection;
 
 	float										m_AnimSmearDuration;
@@ -162,5 +161,3 @@ protected:
 	CannonActorComponent * m_pActorComponent;
 
 };
-
-#endif

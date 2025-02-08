@@ -54,9 +54,14 @@ void kbStaticModelComponent::SetEnable_Internal(const bool isEnabled) {
 		RefreshMaterials(false);
 
 		g_pRenderer->AddRenderObject(m_RenderObject);
-		g_renderer->add_render_component(this);
+
+		if (g_renderer) {
+			g_renderer->add_render_component(this);
+		}
 	} else {
-		g_pRenderer->RemoveRenderObject(m_RenderObject);
+		if (g_renderer) {
+			g_pRenderer->RemoveRenderObject(m_RenderObject);
+		}
 	}
 }
 

@@ -772,7 +772,7 @@ void KungFuLevelComponent::Update_Internal(const float DeltaTime) {
 
 	// UI
 	{
-		if (m_pSheep && m_pHealthBarUI && m_pHealthBarUI->GetStaticModelComponent()) {
+		if (m_pSheep && m_pHealthBarUI && m_pHealthBarUI->GetStaticRenderComponent()) {
 			if (m_pSheep->GetCurrentState() == KungFuSheepState::Hugged) {
 				m_pHealthBarUI->SetMaterialParamTexture("baseTexture", m_pHuggedPortraitTexture);
 			} else if (m_pSheep->GetCurrentState() == KungFuSheepState::Dead) {

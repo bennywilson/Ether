@@ -6,7 +6,7 @@
 #include "Matrix.h"
 #include "Quaternion.h"
 #include "kbBounds.h"
-#include "kbGameEntityHeader.h"		// <--- TODO: Temp, game entity should not be accessed from renderer
+#include "kbGameEntityHeader.h"
 #include "kbModel.h"
 #include "render_component.h"
 #include "kbRenderer.h"

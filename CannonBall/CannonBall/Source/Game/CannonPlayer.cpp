@@ -2,7 +2,10 @@
 ///
 // 2019-2025 blk 1.0
 
+#include <windows.h>
 #include <math.h>
+#include "blk_core.h"
+#include "kbGameEntityHeader.h"
 #include "CannonGame.h"
 #include "CannonPlayer.h"
 #include "kbEditor.h"
@@ -37,10 +40,10 @@ void CannonActorComponent::SetEnable_Internal(const bool bEnable) {
 		const int NumComponents = (int)GetOwner()->NumComponents();
 		for (int i = 0; i < NumComponents; i++) {
 			kbComponent* const pComponent = GetOwner()->GetComponent(i);
-			if (pComponent->IsA(kbSkeletalModelComponent::GetType()) == false) {
+			if (pComponent->IsA(kbSkeletalRenderComponent::GetType()) == false) {
 				continue;
 			}
-			m_SkelModelsList.push_back((kbSkeletalModelComponent*)pComponent);
+			m_SkelModelsList.push_back((kbSkeletalRenderComponent*)pComponent);
 		}
 
 		if (m_SkelModelsList.size() > 0) {

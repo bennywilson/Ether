@@ -2,10 +2,10 @@
 ///
 /// 2019-2025 blk 1.0
 
+#include "kbFile.h"
 #include <math.h>
 #include "CannonGame.h"
 #include "CannonUI.h"
-
 
 /// CannonHealthBarUIComponent::Constructor
 void CannonHealthBarUIComponent::Constructor() {
@@ -26,9 +26,9 @@ void CannonHealthBarUIComponent::SetEnable_Internal(const bool bEnable) {
 void CannonHealthBarUIComponent::Update_Internal(const float DT) {
 	Super::Update_Internal(DT);
 
-	if (m_pStaticModelComponent != nullptr) {
+	if (m_pStaticRenderComponent != nullptr) {
 		static kbString normalizedHealth("normalizedHealth");
-		m_pStaticModelComponent->SetMaterialParamVector(0, normalizedHealth.stl_str(), Vec4(m_TargetNormalizedHealth, 0.0f, 0.0f, 0.0f));
+		m_pStaticRenderComponent->SetMaterialParamVector(0, normalizedHealth.stl_str(), Vec4(m_TargetNormalizedHealth, 0.0f, 0.0f, 0.0f));
 
 		static kbString barTextureWeights("barTextureWeights");
 		Vec4 weights(1.0f, 0.0f, 0.0f, 0.0f);
@@ -37,7 +37,7 @@ void CannonHealthBarUIComponent::Update_Internal(const float DT) {
 			weights.x = sin((weights.x) - (kbPI * 0.5f)) * 0.5f + 0.5f;
 			weights.y = 1.0f - weights.x;
 		}
-		m_pStaticModelComponent->SetMaterialParamVector(0, barTextureWeights.stl_str(), weights);
+		m_pStaticRenderComponent->SetMaterialParamVector(0, barTextureWeights.stl_str(), weights);
 	}
 }
 
@@ -98,9 +98,9 @@ void CannonBallUIComponent::Update_Internal(const float dt) {
 
 	Super::Update_Internal(dt);
 
-	if (m_pStaticModelComponent != nullptr) {
+	if (m_pStaticRenderComponent != nullptr) {
 		static kbString meterFill("meterFill");
-		m_pStaticModelComponent->SetMaterialParamVector(0, meterFill.stl_str(), Vec4(m_CurrentFill, 0.0f, 0.0f, 0.0f));
+		m_pStaticRenderComponent->SetMaterialParamVector(0, meterFill.stl_str(), Vec4(m_CurrentFill, 0.0f, 0.0f, 0.0f));
 	}
 
 	const float ScreenPixelWidth = (float)g_pRenderer->GetBackBufferWidth();
@@ -161,12 +161,12 @@ void CannonBallUIComponent::Update_Internal(const float dt) {
 			m_CannonBallActivatedStartTime = -1.0f;
 
 			m_pSparkModel->Enable(true);
-			m_pStaticModelComponent->Enable(true);
+			m_pStaticRenderComponent->Enable(true);
 		} else {
 			m_pBoomModel->Enable(true);
 			m_pSmokeModel->Enable(true);
 			m_pSparkModel->Enable(false);
-			m_pStaticModelComponent->Enable(false);
+			m_pStaticRenderComponent->Enable(false);
 
 			static int idx = 0;
 			if (curTime > m_NextSmokeCloudUpdateTime) {
@@ -191,7 +191,7 @@ void CannonBallUIComponent::Update_Internal(const float dt) {
 		m_pBoomModel->Enable(false);
 		m_pSmokeModel->Enable(false);
 		m_pSparkModel->Enable(true);
-		m_pStaticModelComponent->Enable(true);
+		m_pStaticRenderComponent->Enable(true);
 	}
 }
 
@@ -241,7 +241,7 @@ void CannonBallPauseMenuUIComponent::SetEnable_Internal(const bool bEnable) {
 	Super::SetEnable_Internal(bEnable);
 
 	if (bEnable) {
-		m_pStaticModelComponent->Enable(true);
+		m_pStaticRenderComponent->Enable(true);
 		for (int i = 0; i < m_Widgets.size(); i++) {
 			m_Entity.AddComponent(&m_Widgets[i]);
 			m_Widgets[i].Enable(false);
@@ -289,8 +289,8 @@ void CannonBallPauseMenuUIComponent::SetEnable_Internal(const bool bEnable) {
 			m_SliderWidgets[i].Enable(false);
 			m_SliderWidgets[i].UnregisterEventListener(this);
 		}
-		if (m_pStaticModelComponent != nullptr) {
-			m_pStaticModelComponent->Enable(false);
+		if (m_pStaticRenderComponent != nullptr) {
+			m_pStaticRenderComponent->Enable(false);
 		}
 
 		CannonBallGameSettingsComponent* const pGameSettings = CannonBallGameSettingsComponent::Get();

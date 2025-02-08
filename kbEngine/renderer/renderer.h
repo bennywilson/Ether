@@ -37,6 +37,10 @@ public:
 
 protected:
 	RenderBuffer* get_render_buffer(const size_t& buffer_index) { return m_render_buffers[buffer_index]; }
+	
+	std::unordered_set<const RenderComponent*> render_components() const {
+		return m_render_components;
+	}
 
 private:
 	virtual void initialize_internal(HWND hwnd, const uint32_t frame_width, const uint32_t frame_height) = 0;
@@ -58,7 +62,7 @@ private:
 	std::unordered_map<std::string, RenderPipeline*> m_pipelines;
 	std::vector<class RenderBuffer*> m_render_buffers;
 
-	std::unordered_set<RenderComponent*> m_render_components;
+	std::unordered_set<const RenderComponent*> m_render_components;
 };
 
 extern Renderer* g_renderer;

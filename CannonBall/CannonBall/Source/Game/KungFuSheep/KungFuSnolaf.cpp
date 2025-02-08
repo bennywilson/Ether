@@ -403,7 +403,7 @@ public:
 			const static kbString clipMapMaskParam("clipMapMask");
 			kbGameEntity* const pOwner = this->m_pActorComponent->GetOwner();
 			for (int i = 0; i < pOwner->NumComponents(); i++) {
-				kbSkeletalModelComponent* const pSkelModelComp = pOwner->GetComponent(i)->GetAs<kbSkeletalModelComponent>();
+				kbSkeletalRenderComponent* const pSkelModelComp = pOwner->GetComponent(i)->GetAs<kbSkeletalRenderComponent>();
 				if (pSkelModelComp == nullptr) {
 					continue;
 				}
@@ -429,7 +429,7 @@ public:
 		this->m_pActorComponent->SetOwnerPosition(m_OwnerPosOverride);
 
 		const static kbString spine3BoneName("Spine3");
-		kbSkeletalModelComponent* const pSnolafComp = pOwner->GetComponent<kbSkeletalModelComponent>();
+		kbSkeletalRenderComponent* const pSnolafComp = pOwner->GetComponent<kbSkeletalRenderComponent>();
 		Vec3 spine3WorldPos = Vec3::zero;
 
 		if (pSnolafComp->GetBoneWorldPosition(spine3BoneName, spine3WorldPos)) {

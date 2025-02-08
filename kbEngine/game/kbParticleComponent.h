@@ -147,7 +147,7 @@ private:
 	kbParticleVertex *											m_pVertexBuffer;
 	ushort *													m_pIndexBuffer;
 
-	byte														m_CurrentParticleBuffer;
+	uint8_t														m_CurrentParticleBuffer;
 
 	friend class kbParticleManager;
 	const kbParticleComponent *									m_ParticleTemplate;
