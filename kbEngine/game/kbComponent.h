@@ -38,15 +38,15 @@ class kbComponent : public kbBaseComponent {
 	KB_DECLARE_COMPONENT(kbComponent, kbBaseComponent);
 
 public:
-	virtual ~kbComponent() { SetEnable_Internal(false); }
+	virtual ~kbComponent() { enable_internal(false); }
 
 	virtual void Enable(const bool setEnabled) { }
 	bool IsEnabled() const { return m_IsEnabled; }
 
 	// Called during level load after the owning entity is fully loaded
-	virtual void PostLoad() { }
+	virtual void post_load() { }
 
-	virtual void EditorChange(const std::string& propertyName) { }
+	virtual void editor_change(const std::string& propertyName) { }
 
 	virtual void RenderSync() { }
 
@@ -60,8 +60,8 @@ public:
 	void SetOwningComponent(kbComponent* const pOwningComponent) { m_pOwningComponent = pOwningComponent; }
 
 protected:
-	virtual void SetEnable_Internal(const bool bIsEnabled) { }
-	virtual void Update_Internal(const float DeltaTimeSeconds) { }
+	virtual void enable_internal(const bool bIsEnabled) { }
+	virtual void update_internal(const float DeltaTimeSeconds) { }
 	virtual void LifeTimeExpired() { }
 
 	kbComponent* GetOwningComponent() const { return m_pOwningComponent; }
@@ -81,7 +81,7 @@ class kbGameComponent : public kbComponent {
 
 public:
 	virtual void Enable(const bool setEnabled) override;
-	virtual void EditorChange(const std::string& propertyName);
+	virtual void editor_change(const std::string& propertyName);
 
 	void Update(const float DeltaTimeSeconds);
 
@@ -141,7 +141,7 @@ class kbGameLogicComponent : public kbGameComponent {
 	KB_DECLARE_COMPONENT(kbGameLogicComponent, kbGameComponent);
 
 protected:
-	virtual void Update_Internal(const float DeltaTime) override;
+	virtual void update_internal(const float DeltaTime) override;
 
 private:
 	int	m_DummyTemp;	// Hack: kbTypeInfoHierarchyIterator currently requires at least one element in a component
@@ -173,7 +173,7 @@ public:
 	bool sDead() const { return m_CurrentHealth <= 0.0f; }
 
 protected:
-	virtual void SetEnable_Internal(const bool bIsEnabled) override;
+	virtual void enable_internal(const bool bIsEnabled) override;
 
 	float m_MaxHealth;
 	float m_CurrentHealth;

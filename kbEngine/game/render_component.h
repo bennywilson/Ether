@@ -18,21 +18,21 @@ class kbShaderParamComponent : public kbGameComponent {
 	friend class kbMaterialComponent;
 
 public:
-	const kbString& GetParamName() const { return m_ParamName; }
-	const kbTexture* GetTexture() const { return m_pTexture; }
-	const kbRenderTexture* GetRenderTexture() const { return m_pRenderTexture; }
-	const Vec4& GetVector() const { return m_Vector; }
+	const kbString& param_name() const { return m_param_name; }
+	const kbTexture* texture() const { return m_texture; }
+	const kbRenderTexture* render_texture() const { return m_render_texture; }
+	const Vec4& vector() const { return m_vector; }
 
-	void SetRenderTexture(kbRenderTexture* const pTexture) { m_pRenderTexture = pTexture; }
-	void SetParamName(const kbString& newName) { m_ParamName = newName; }
-	void SetTexture(kbTexture* const pTexture) { m_pTexture = pTexture; }
-	void SetVector(const Vec4& vector) { m_Vector = vector; }
+	void set_render_texture(kbRenderTexture* const pTexture) { m_render_texture = pTexture; }
+	void set_param_name(const kbString& newName) { m_param_name = newName; }
+	void set_texture(kbTexture* const pTexture) { m_texture = pTexture; }
+	void set_vector(const Vec4& vector) { m_vector = vector; }
 
 private:
-	kbString m_ParamName;
-	kbTexture* m_pTexture;
-	kbRenderTexture* m_pRenderTexture;
-	Vec4 m_Vector;
+	kbString m_param_name;
+	kbTexture* m_texture;
+	kbRenderTexture* m_render_texture;
+	Vec4 m_vector;
 };
 
 /// kbShaderModifierComponent
@@ -40,16 +40,16 @@ class kbShaderModifierComponent : public kbGameComponent {
 	KB_DECLARE_COMPONENT(kbShaderModifierComponent, kbGameComponent);
 
 protected:
-	virtual void SetEnable_Internal(const bool isEnabled) override;
-	virtual void Update_Internal(const float DeltaTime) override;
+	virtual void enable_internal(const bool isEnabled) override;
+	virtual void update_internal(const float DeltaTime) override;
 
 	// Editor
 	std::vector<kbVectorAnimEvent> m_ShaderVectorEvents;
 
 	// Runtime
 	class RenderComponent* m_pRenderComponent;
-	float m_StartTime;
-	float m_AnimationLengthSec;
+	float m_start_time;
+	float m_anim_length_sec;
 };
 
 /// kbMaterialComponent
@@ -57,21 +57,21 @@ class kbMaterialComponent : public kbGameComponent {
 	KB_DECLARE_COMPONENT(kbMaterialComponent, kbGameComponent);
 
 public:
-	virtual void EditorChange(const std::string& propertyName) override;
+	virtual void editor_change(const std::string& propertyName) override;
 
-	const kbShader* GetShader() const { return m_pShader; }
-	const std::vector<kbShaderParamComponent>& GetShaderParams() const { return m_ShaderParamComponents; }
-	ECullMode GetCullModeOverride() const { return m_CullModeOverride; }
+	const kbShader* get_shader() const { return m_shader; }
+	const std::vector<kbShaderParamComponent>& shader_params() const { return m_shader_params; }
+	ECullMode cull_mode_override() const { return m_cull_override; }
 
-	void SetShader(kbShader* const pShader) { m_pShader = pShader; }
-	void SetShaderParamComponent(const kbShaderParamComponent& inParam);
-	const kbShaderParamComponent* GetShaderParamComponent(const kbString& name);
+	void set_shader(kbShader* const pShader) { m_shader = pShader; }
+	void set_shader_param(const kbShaderParamComponent& inParam);
+	const kbShaderParamComponent* shader_param_component(const kbString& name);
 
 private:
 
-	kbShader* m_pShader;
-	ECullMode m_CullModeOverride;
-	std::vector<kbShaderParamComponent>	m_ShaderParamComponents;
+	kbShader* m_shader;
+	ECullMode m_cull_override;
+	std::vector<kbShaderParamComponent>	m_shader_params;
 };
 
 /// RenderComponent
@@ -81,36 +81,36 @@ class RenderComponent : public kbGameComponent {
 public:
 	virtual	~RenderComponent();
 
-	virtual void EditorChange(const std::string& propertyName) override;
-	virtual void PostLoad() override;
+	virtual void editor_change(const std::string& propertyName) override;
+	virtual void post_load() override;
 
-	bool GetCastsShadow() const { return m_bCastsShadow; }
+	bool GetCastsShadow() const { return m_casts_shadow; }
 
-	void SetMaterialParamVector(const int idx, const std::string& paramName, const Vec4& paramValue);
-	void SetMaterialParamTexture(const int idx, const std::string& paramName, kbTexture* const pTexture);
-	void SetMaterialParamTexture(const int idx, const std::string& paramName, kbRenderTexture* const pTexture);
-	const kbShaderParamComponent* GetShaderParamComponent(const int idx, const kbString& name);
+	void set_material_param_vec4(const int idx, const std::string& paramName, const Vec4& paramValue);
+	void set_material_param_texture(const int idx, const std::string& paramName, kbTexture* const pTexture);
+	void set_material_param_texture(const int idx, const std::string& paramName, kbRenderTexture* const pTexture);
+	const kbShaderParamComponent* shader_param_component(const int idx, const kbString& name);
 
-	void RefreshMaterials(const bool bUpdateRenderObject);
+	void refresh_materials(const bool bUpdateRenderObject);
 
-	float GetRenderOrderBias() const { return m_RenderOrderBias; }
-	void SetRenderOrderBias(const float newBias) { m_RenderOrderBias = newBias; RefreshMaterials(true); }
+	float render_order_bias() const { return m_render_order_bias; }
+	void set_render_order_bias(const float newBias) { m_render_order_bias = newBias; refresh_materials(true); }
 
-	void SetMaterials(const std::vector<kbMaterialComponent>& materialList) { m_MaterialList = materialList; }
+	void set_materials(const std::vector<kbMaterialComponent>& materialList) { m_materials = materialList; }
 
-	enum ERenderPass GetRenderPass() const { return m_RenderPass; }
-	void SetRenderPass(const ERenderPass newPass) { m_RenderPass = newPass; }
+	enum ERenderPass render_pass() const { return m_render_pass; }
+	void set_render_pass(const ERenderPass newPass) { m_render_pass = newPass; }
 
-	const std::vector<kbMaterialComponent>& GetMaterialList() const { return m_MaterialList; }
-	void CopyMaterialList(const std::vector<kbMaterialComponent>& matComp) { m_MaterialList = matComp; }
+	const std::vector<kbMaterialComponent>& Materials() const { return m_materials; }
+	void CopyMaterials(const std::vector<kbMaterialComponent>& matComp) { m_materials = matComp; }
 
 protected:
-	ERenderPass	m_RenderPass;
-	float m_RenderOrderBias;
+	ERenderPass	m_render_pass;
+	float m_render_order_bias;
 
-	std::vector<kbMaterialComponent> m_MaterialList;
+	std::vector<kbMaterialComponent> m_materials;
 
-	kbRenderObject m_RenderObject;
+	kbRenderObject m_render_object;
 
-	bool m_bCastsShadow;
+	bool m_casts_shadow;
 };

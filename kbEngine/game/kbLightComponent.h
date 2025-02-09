@@ -11,11 +11,11 @@ class kbLightComponent : public kbGameComponent {
 public:
 	virtual	~kbLightComponent();
 
-	virtual void PostLoad() override;
+	virtual void post_load() override;
 
 	virtual void								RenderSync();
 
-	virtual void								EditorChange(const std::string& propertyName) override;
+	virtual void								editor_change(const std::string& propertyName) override;
 
 	void										SetColor(const kbColor& newColor) { m_Color = newColor; }
 	void										SetColor(const float R, const float G, const float B, const float A) { m_Color.set(R, G, B, A); }
@@ -25,22 +25,22 @@ public:
 	virtual float								GetRadius() const { return 0.0f; }
 	virtual float								GetLength() const { return 0.0f; }
 
-	bool										CastsShadow() const { return m_bCastsShadow; }
+	bool										CastsShadow() const { return m_casts_shadow; }
 
-	const std::vector<kbMaterialComponent>& GetMaterialList() const { return m_MaterialList; }
+	const std::vector<kbMaterialComponent>& Materials() const { return m_materials; }
 
 protected:
 
-	void										RefreshMaterials();
+	void										refresh_materials();
 
-	virtual void								SetEnable_Internal(const bool isEnabled) override;
-	virtual void								Update_Internal(const float DeltaTime) override;
+	virtual void								enable_internal(const bool isEnabled) override;
+	virtual void								update_internal(const float DeltaTime) override;
 
-	std::vector<kbMaterialComponent>			m_MaterialList;
+	std::vector<kbMaterialComponent>			m_materials;
 
 	kbColor										m_Color;
 	float										m_Brightness;
-	bool										m_bCastsShadow;
+	bool										m_casts_shadow;
 	bool										m_bShaderParamsDirty;
 
 };
@@ -85,7 +85,7 @@ public:
 	virtual										~kbDirectionalLightComponent();
 
 
-	virtual void								EditorChange(const std::string& propertyName) override;
+	virtual void								editor_change(const std::string& propertyName) override;
 	const std::vector<float>& GetSplitDistances() const { return m_SplitDistances; }
 
 protected:
@@ -101,7 +101,7 @@ public:
 
 	virtual ~kbLightShaftsComponent();
 
-	kbTexture* GetTexture() const { return m_Texture; }
+	kbTexture* Texture() const { return m_Texture; }
 	const kbColor& GetColor() const { return m_Color; }
 	float GetBaseWidth() const { return m_BaseWidth; }
 	float GetBaseHeight() const { return m_BaseHeight; }
@@ -113,8 +113,8 @@ public:
 	void SetColor(const kbColor& newColor);
 
 protected:
-	virtual void SetEnable_Internal(const bool isEnabled) override;
-	virtual void Update_Internal(const float DeltaTime) override;
+	virtual void enable_internal(const bool isEnabled) override;
+	virtual void update_internal(const float DeltaTime) override;
 
 	kbTexture* m_Texture;
 	kbColor	m_Color;
@@ -134,7 +134,7 @@ public:
 	void SetColor(const kbColor& newColor) { m_Color = newColor; }
 
 protected:
-	virtual void Update_Internal(const float DeltaTime) override;
+	virtual void update_internal(const float DeltaTime) override;
 
 	kbColor	m_Color;
 	float m_StartDistance;

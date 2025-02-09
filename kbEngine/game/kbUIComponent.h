@@ -31,7 +31,7 @@ public:
 
 												~kbUIComponent();
 
-	virtual void								EditorChange( const std::string& propertyName ) override;
+	virtual void								editor_change( const std::string& propertyName ) override;
 
 	const Vec3&								GetNormalizedAnchorPt() const { return m_NormalizedAnchorPt; }
 	const Vec3&								GetUIToScreenSizeRatio() const { return m_UIToScreenSizeRatio; }
@@ -42,12 +42,12 @@ public:
 	void										RegisterEventListener( IUIWidgetListener* const pListener );
 	void										UnregisterEventListener( IUIWidgetListener* const pListener );
 
-	void										SetMaterialParamVector( const std::string& paramName, const Vec4& paramValue );
-	void										SetMaterialParamTexture( const std::string& paramName, kbTexture* const pTexture );
+	void										set_material_param_vec4( const std::string& paramName, const Vec4& paramValue );
+	void										set_material_param_texture( const std::string& paramName, kbTexture* const pTexture );
 
 protected:
 
-	virtual void								SetEnable_Internal( const bool isEnabled ) override;
+	virtual void								enable_internal( const bool isEnabled ) override;
 	void										FindStaticRenderComponent();
 	void										RefreshMaterial();
 
@@ -103,8 +103,8 @@ public:
 	virtual void							RecalculateOld( const kbUIComponent* const pParent, const bool bFull );
 	virtual void							Recalculate( const kbUIWidgetComponent* const pParent, const bool bFull );
 
-	void									SetRenderOrderBias( const float bias );
-	float									GetRenderOrderBias() const;
+	void									set_render_order_bias( const float bias );
+	float									render_order_bias() const;
 
 	void									SetRelativePosition( const Vec3& newPos );
 	void									SetRelativeSize( const Vec3& newSize );
@@ -123,7 +123,7 @@ public:
 	void									RegisterEventListener( IUIWidgetListener* const pListener );
 	void									UnregisterEventListener( IUIWidgetListener* const pListener );
 
-	const RenderComponent*			GetStaticModel() const { return m_pModel; }
+	const RenderComponent*			GetStaticModel() const { return m_model; }
 
 	void									SetAdditiveTextureFactor( const float factor );
 
@@ -132,8 +132,8 @@ public:
 
 protected:
 
-	virtual void							SetEnable_Internal( const bool bEnable ) override;
-	virtual void							Update_Internal( const float DeltaTime ) override;
+	virtual void							enable_internal( const bool bEnable ) override;
+	virtual void							update_internal( const float DeltaTime ) override;
 
 	void									FireEvent( const kbInput_t* const pInput = nullptr );
 
@@ -145,7 +145,7 @@ protected:
 
 private:
 
-	virtual void							EditorChange( const std::string& propertyName ) override;
+	virtual void							editor_change( const std::string& propertyName ) override;
 	
 	virtual void							InputCB( const kbInput_t& input ) override;
 
@@ -162,7 +162,7 @@ protected:
 	Vec3									m_RelativeSize;
 	Vec3									m_AbsolutePosition;
 	Vec3									m_AbsoluteSize;
-	kbStaticModelComponent*					m_pModel;
+	kbStaticModelComponent*					m_model;
 
 	Vec3									m_CachedParentPosition;
 	Vec3									m_CachedParentSize;
@@ -189,8 +189,8 @@ public:
 
 protected:
 
-	virtual void							SetEnable_Internal( const bool bEnable ) override;
-	virtual void							Update_Internal( const float DeltaTime ) override;
+	virtual void							enable_internal( const bool bEnable ) override;
+	virtual void							update_internal( const float DeltaTime ) override;
 
 	// Editor
 	Vec3									m_SliderBoundsMin;

@@ -37,7 +37,7 @@ struct kbParticle_t {
 	class kbModelEmitter *										m_pSrcModelEmitter;
 
 	int															m_CurrentModelIndex;
-	kbRenderObject												m_RenderObject;		// For model emitters
+	kbRenderObject												m_render_object;		// For model emitters
 };
 
 /// kbModelEmitter
@@ -48,14 +48,14 @@ class kbModelEmitter : public kbGameComponent {
 //-------------------------------------------------------------------------------------------------------------------------------------------------------------
 public:
 
-	const kbModel *												GetModel() const { return m_pModel; }
+	const kbModel *												model() const { return m_model; }
 	const std::vector<kbShaderParamOverrides_t>					GetShaderParamOverrides() const { return m_ShaderParams; }
 
 	void														Init();
 
 private:
-	kbModel *													m_pModel;
-	std::vector<kbMaterialComponent>							m_MaterialList;
+	kbModel *													m_model;
+	std::vector<kbMaterialComponent>							m_materials;
 
 	std::vector<kbShaderParamOverrides_t>						m_ShaderParams;
 };
@@ -71,7 +71,7 @@ public:
 
 	virtual														~kbParticleComponent();
 
-	virtual void												EditorChange( const std::string& propertyName );
+	virtual void												editor_change( const std::string& propertyName );
 
 	virtual void												RenderSync();
 
@@ -82,18 +82,18 @@ public:
 	// Hack wasn't picking up from the package file
 	void														SetBillboardType( const EBillboardType inBBType ) { m_ParticleBillboardType = inBBType; }
 
-	bool														IsModelEmitter() const { return m_ModelEmitter.size() > 0 && m_ModelEmitter[0].GetModel() != nullptr; }
+	bool														IsModelEmitter() const { return m_ModelEmitter.size() > 0 && m_ModelEmitter[0].model() != nullptr; }
 
 
 protected:
 
-	virtual void												SetEnable_Internal( const bool isEnabled ) override;
-	virtual void												Update_Internal( const float DeltaTime ) override;
+	virtual void												enable_internal( const bool isEnabled ) override;
+	virtual void												update_internal( const float DeltaTime ) override;
 
 private:
 
 	// Editable
-	std::vector<kbMaterialComponent>							m_MaterialList;
+	std::vector<kbMaterialComponent>							m_materials;
 	float														m_TotalDuration;
 	int															m_MaxParticlesToEmit;
 	float														m_StartDelay;
@@ -129,7 +129,7 @@ private:
 	int															m_MaxBurstCount;
 	EBillboardType												m_ParticleBillboardType;
 	std::vector<kbModelEmitter>									m_ModelEmitter;
-	float														m_RenderOrderBias;
+	float														m_render_order_bias;
 	bool														m_DebugPlayEntity;
 
 	// Non-editable
@@ -139,7 +139,7 @@ private:
 	float														m_StartDelayRemaining;
 	int															m_NumEmittedParticles;
 
-	kbRenderObject												m_RenderObject;
+	kbRenderObject												m_render_object;
 
 	static const int											NumParticleBuffers = 3;
 	std::vector<kbParticle_t>									m_Particles;

@@ -28,8 +28,8 @@ void kbCollisionComponent::Constructor() {
 kbCollisionComponent::~kbCollisionComponent() {
 }
 
-/// kbCollisionComponent::SetEnable_Internal
-void kbCollisionComponent::SetEnable_Internal(const bool isEnabled) {
+/// kbCollisionComponent::enable_internal
+void kbCollisionComponent::enable_internal(const bool isEnabled) {
 	if (isEnabled) {
 		g_CollisionManager.RegisterComponent(this);
 	} else {
@@ -37,9 +37,9 @@ void kbCollisionComponent::SetEnable_Internal(const bool isEnabled) {
 	}
 }
 
-/// kbCollisionComponent::Update_Internal
-void kbCollisionComponent::Update_Internal(const float DeltaTime) {
-	Super::Update_Internal(DeltaTime);
+/// kbCollisionComponent::update_internal
+void kbCollisionComponent::update_internal(const float DeltaTime) {
+	Super::update_internal(DeltaTime);
 
 	if (g_ShowCollision.GetBool()) {
 		const Vec3 collisionCenter = GetOwner()->GetPosition();//, pCollision->m_Extent.x 
@@ -140,7 +140,7 @@ kbCollisionInfo_t kbCollisionManager::PerformLineCheck(const Vec3& start, const 
 				blk::warn("kbCollisionManager::PerformLineCheck() - Entity %s is missing a RenderComponent", pOwner->GetName().c_str());
 				continue;
 			}
-			kbModelIntersection_t intersection = pStaticModel->GetModel()->RayIntersection(start, rayDir, pOwner->GetPosition(), pOwner->GetOrientation(), Vec3::one);
+			kbModelIntersection_t intersection = pStaticModel->model()->RayIntersection(start, rayDir, pOwner->GetPosition(), pOwner->GetOrientation(), Vec3::one);
 			if (intersection.hasIntersection && intersection.t < LineLength && intersection.t < collisionInfo.m_T) {
 				collisionInfo.m_bHit = true;
 				collisionInfo.m_HitLocation = start + rayDir * intersection.t;

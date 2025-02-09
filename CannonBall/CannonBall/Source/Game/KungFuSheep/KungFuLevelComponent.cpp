@@ -293,7 +293,7 @@ private:
 			return;
 		}
 
-		const kbInput_t& input = g_pInputManager->GetInput();
+		const kbInput_t& input = g_pInputManager->get_input();
 		if (WasStartButtonPressed() || input.WasNonCharKeyJustPressed(kbInput_t::Escape)) {
 			RequestStateChange(KungFuGame::Paused);
 			return;
@@ -491,9 +491,9 @@ void KungFuLevelComponent::Constructor() {
 	m_pFox = nullptr;
 }
 
-/// KungFuLevelComponent::SetEnable_Internal
-void KungFuLevelComponent::SetEnable_Internal(const bool bEnable) {
-	Super::SetEnable_Internal(bEnable);
+/// KungFuLevelComponent::enable_internal
+void KungFuLevelComponent::enable_internal(const bool bEnable) {
+	Super::enable_internal(bEnable);
 
 	m_pHealthBarUI = nullptr;
 	m_pCannonBallUI = nullptr;
@@ -501,7 +501,7 @@ void KungFuLevelComponent::SetEnable_Internal(const bool bEnable) {
 
 	if (bEnable) {
 
-		blk::error_check(s_Inst == nullptr, "KungFuLevelComponent::SetEnable_Internal() - Multiple enabled instances of KungFuLevelComponent");
+		blk::error_check(s_Inst == nullptr, "KungFuLevelComponent::enable_internal() - Multiple enabled instances of KungFuLevelComponent");
 		s_Inst = this;
 
 		if (g_UseEditor == false) {
@@ -514,7 +514,7 @@ void KungFuLevelComponent::SetEnable_Internal(const bool bEnable) {
 		if (m_WaterDropletScreenFX.GetEntity() != nullptr) {
 
 			for (int i = 0; i < NumWaterSplashes; i++) {
-				blk::error_check(m_WaterSplashFXInst[i].m_Entity.GetEntity() == nullptr, "KungFuLevelComponent::SetEnable_Internal() - Water Droplet Screen FX Instance already allocated");
+				blk::error_check(m_WaterSplashFXInst[i].m_Entity.GetEntity() == nullptr, "KungFuLevelComponent::enable_internal() - Water Droplet Screen FX Instance already allocated");
 
 				m_WaterSplashFXInst[i].m_Entity.SetEntity(g_pGame->CreateEntity(m_WaterDropletScreenFX.GetEntity()));
 				kbStaticModelComponent* const pSM = m_WaterSplashFXInst[i].m_Entity.GetEntity()->GetComponent<kbStaticModelComponent>();
@@ -554,15 +554,15 @@ void KungFuLevelComponent::SetEnable_Internal(const bool bEnable) {
 	}
 }
 
-/// KungFuLevelComponent::Update_Internal
+/// KungFuLevelComponent::update_internal
 const Vec4 g_WaterDropletNormalFactorScroll[] = {
 		Vec4(0.1000f, 0.1000f, 0.00000f, 0.01f),
 		Vec4(0.1000f, 0.1000f, 0.00000f, 0.007f) };
 
 const float g_WaterDropStartDelay[] = { 0.1f, 0.01f };
 
-void KungFuLevelComponent::Update_Internal(const float DeltaTime) {
-	Super::Update_Internal(DeltaTime);
+void KungFuLevelComponent::update_internal(const float DeltaTime) {
+	Super::update_internal(DeltaTime);
 
 	static bool bKeyDown = false;
 	if (bKeyDown == false)
@@ -624,7 +624,7 @@ void KungFuLevelComponent::Update_Internal(const float DeltaTime) {
 		return;
 	}
 
-	// Not all game entities are loaded in SetEnable_Internal unfortunately
+	// Not all game entities are loaded in enable_internal unfortunately
 	if (m_pHealthBarUI == nullptr || m_pCannonBallUI == nullptr) {
 		m_pHealthBarUI = nullptr;
 		m_pCannonBallUI = nullptr;
@@ -731,14 +731,14 @@ void KungFuLevelComponent::Update_Internal(const float DeltaTime) {
 					Vec4 scroll = g_WaterDropletNormalFactorScroll[i];
 					scroll.w *= -normalizedTime;
 
-					pSM->SetMaterialParamVector(0, normalFactor_scrollRate.stl_str(), scroll);
+					pSM->set_material_param_vec4(0, normalFactor_scrollRate.stl_str(), scroll);
 
 					// Blend out time
 					{
 						const float blendOutStart = fxStartTime + (fxDuration * 0.75f);
 						const float blendOutTime = kbClamp((g_GlobalTimer.TimeElapsedSeconds() - blendOutStart) / (fxDuration * 0.25f), 0.0f, 1.0f);
 						static kbString colorFactor("colorFactor");
-						pSM->SetMaterialParamVector(0, colorFactor.stl_str(), Vec4(1.0f, 1.0f, 1.0f, 1.0f - blendOutTime));
+						pSM->set_material_param_vec4(0, colorFactor.stl_str(), Vec4(1.0f, 1.0f, 1.0f, 1.0f - blendOutTime));
 					}
 				}
 			}
@@ -774,11 +774,11 @@ void KungFuLevelComponent::Update_Internal(const float DeltaTime) {
 	{
 		if (m_pSheep && m_pHealthBarUI && m_pHealthBarUI->GetStaticRenderComponent()) {
 			if (m_pSheep->GetCurrentState() == KungFuSheepState::Hugged) {
-				m_pHealthBarUI->SetMaterialParamTexture("baseTexture", m_pHuggedPortraitTexture);
+				m_pHealthBarUI->set_material_param_texture("baseTexture", m_pHuggedPortraitTexture);
 			} else if (m_pSheep->GetCurrentState() == KungFuSheepState::Dead) {
-				m_pHealthBarUI->SetMaterialParamTexture("baseTexture", m_pDeadPortriatTexture);
+				m_pHealthBarUI->set_material_param_texture("baseTexture", m_pDeadPortriatTexture);
 			} else {
-				m_pHealthBarUI->SetMaterialParamTexture("baseTexture", m_pBasePortraitTexture);
+				m_pHealthBarUI->set_material_param_texture("baseTexture", m_pBasePortraitTexture);
 			}
 		}
 	}
@@ -931,13 +931,13 @@ void KungFuLevelComponent::DoWaterDropletScreenFX() {
 
 
 		static kbString startUVOffsetParam("startUVOffset");
-		pSM->SetMaterialParamVector(0, startUVOffsetParam.stl_str(), Vec4(kbfrand(), kbfrand(), 0.0f, 0.0f));
+		pSM->set_material_param_vec4(0, startUVOffsetParam.stl_str(), Vec4(kbfrand(), kbfrand(), 0.0f, 0.0f));
 
 		static kbString normalFactor_scrollRate("normalFactor_scrollRate");
-		pSM->SetMaterialParamVector(0, normalFactor_scrollRate.stl_str(), Vec4(g_WaterDropletNormalFactorScroll[i].x, g_WaterDropletNormalFactorScroll[i].y, 0.0f, 0.0f));
+		pSM->set_material_param_vec4(0, normalFactor_scrollRate.stl_str(), Vec4(g_WaterDropletNormalFactorScroll[i].x, g_WaterDropletNormalFactorScroll[i].y, 0.0f, 0.0f));
 
 		static kbString colorFactor("colorFactor");
-		pSM->SetMaterialParamVector(0, colorFactor.stl_str(), Vec4(1.0f, 1.0f, 1.0f, 1.0f));
+		pSM->set_material_param_vec4(0, colorFactor.stl_str(), Vec4(1.0f, 1.0f, 1.0f, 1.0f));
 	}
 }
 
@@ -1055,7 +1055,7 @@ void KungFuLevelComponent::RemoveSheep() {
 
 /// KungFuLevelComponent::UpdateDebugAndCheats
 void KungFuLevelComponent::UpdateDebugAndCheats() {
-	const kbInput_t& input = g_pInputManager->GetInput();
+	const kbInput_t& input = g_pInputManager->get_input();
 
 	if (input.IsNonCharKeyPressedOrDown(kbInput_t::LCtrl)) {
 		if (input.IsKeyPressedOrDown('D')) {

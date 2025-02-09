@@ -17,11 +17,11 @@ class kbGrass : public kbGameComponent {
 public:
 	~kbGrass();
 
-	virtual void EditorChange(const std::string& propertyName) override;
+	virtual void editor_change(const std::string& propertyName) override;
 	virtual void RenderSync() override;
 
 protected:
-	virtual void SetEnable_Internal(const bool isEnabled) override;
+	virtual void enable_internal(const bool isEnabled) override;
 
 private:
 	void SetOwningTerrainComponent(kbTerrainComponent* const pTerrain) { m_pOwningTerrainComponent = pTerrain; m_bUpdateMaterial = true; m_bUpdatePointCloud = true; }
@@ -56,14 +56,14 @@ private:
 	float m_GrassCellLength;
 
 	struct grassRenderObject_t {
-		grassRenderObject_t() : m_pModel(nullptr), m_pComponent(nullptr) { }
+		grassRenderObject_t() : m_model(nullptr), m_pComponent(nullptr) { }
 
 		void Initialize(const Vec3& ownerPosition);
 		void Shutdown();
 
-		kbModel* m_pModel;
+		kbModel* m_model;
 		kbGameComponent* m_pComponent;
-		kbRenderObject m_RenderObject;
+		kbRenderObject m_render_object;
 	};
 	std::vector<grassRenderObject_t> m_GrassRenderObjects;
 
@@ -97,11 +97,11 @@ class kbTerrainComponent : public RenderComponent {
 public:
 	~kbTerrainComponent();
 
-	virtual void PostLoad() override;
+	virtual void post_load() override;
 
 	void SetHeightMap(kbTexture* const pTexture) { m_pHeightMap = pTexture; }
 
-	virtual void EditorChange(const std::string& propertyName) override;
+	virtual void editor_change(const std::string& propertyName) override;
 
 	virtual void RenderSync() override;
 
@@ -118,10 +118,10 @@ public:
 	const std::vector<kbGrassZone> GetGrassZones() const { return m_GrassZones; }
 
 protected:
-	virtual void SetEnable_Internal(const bool isEnabled) override;
-	virtual void Update_Internal(const float DeltaTime) override;
+	virtual void enable_internal(const bool isEnabled) override;
+	virtual void update_internal(const float DeltaTime) override;
 
-	void RefreshMaterials();
+	void refresh_materials();
 
 private:
 	void GenerateTerrain();

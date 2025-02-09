@@ -165,7 +165,7 @@ void kbGameComponent::Enable(const bool setEnabled) {
 		return;
 	}
 
-	SetEnable_Internal(setEnabled);
+	enable_internal(setEnabled);
 
 	if (setEnabled) {
 		m_LifeTimeRemaining = m_StartingLifeTime;
@@ -173,15 +173,15 @@ void kbGameComponent::Enable(const bool setEnabled) {
 }
 
 /// kbGameComponent::EditorChange
-void kbGameComponent::EditorChange(const std::string& propertyName) {
-	Super::EditorChange(propertyName);
+void kbGameComponent::editor_change(const std::string& propertyName) {
+	Super::editor_change(propertyName);
 
 	if (propertyName == "Enabled") {
 		if (GetOwner() == nullptr || GetOwner()->IsPrefab() == true) {
 			return;
 		}
 
-		SetEnable_Internal(m_IsEnabled);
+		enable_internal(m_IsEnabled);
 	}
 }
 
@@ -196,7 +196,7 @@ void kbGameComponent::Update(const float DeltaTimeSeconds) {
 		}
 	}
 
-	Update_Internal(DeltaTimeSeconds);
+	update_internal(DeltaTimeSeconds);
 	m_bIsDirty = false;
 }
 
@@ -272,10 +272,10 @@ void kbGameLogicComponent::Constructor() {
 	m_DummyTemp = 0;
 }
 
-/// kbGameLogicComponent::Update_Internal
-void kbGameLogicComponent::Update_Internal(const float DeltaTime) {
+/// kbGameLogicComponent::update_internal
+void kbGameLogicComponent::update_internal(const float DeltaTime) {
 	START_SCOPED_TIMER(CLOTH_COMPONENT);
-	Super::Update_Internal(DeltaTime);
+	Super::update_internal(DeltaTime);
 }
 
 /// kbDamageComponent::Constructor
@@ -291,8 +291,8 @@ void kbActorComponent::Constructor() {
 }
 
 /// kbActorComponent::Constructor
-void kbActorComponent::SetEnable_Internal(const bool bIsEnabled) {
-	Super::SetEnable_Internal(bIsEnabled);
+void kbActorComponent::enable_internal(const bool bIsEnabled) {
+	Super::enable_internal(bIsEnabled);
 
 	if (bIsEnabled) {
 		m_CurrentHealth = m_MaxHealth;

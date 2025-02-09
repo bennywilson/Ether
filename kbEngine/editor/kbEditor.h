@@ -63,7 +63,7 @@ public:
 
 	const kbPrefab* GetCurrentlySelectedPrefab() const;
 
-	const widgetCBInputObject& GetInput() const { return m_WidgetInputObject; }
+	const widgetCBInputObject& get_input() const { return m_WidgetInputObject; }
 
 	bool IsGameUpdating() const { return m_bGameUpdating; }
 

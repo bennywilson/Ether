@@ -20,8 +20,6 @@ const Vec3 g_RightFacing(-0.01f, 0.0f, 1.0f);
 
 template<typename T>
 class KungFuSheepStateIdle : public KungFuSheepStateBase<T> {
-
-	//---------------------------------------------------------------------------------------------------
 public:
 	KungFuSheepStateIdle(CannonActorComponent* const pPlayerComponent) : KungFuSheepStateBase<T>(pPlayerComponent) { }
 
@@ -54,8 +52,6 @@ private:
 /// KungFuSheepStateRun
 template<typename T>
 class KungFuSheepStateRun : public KungFuSheepStateBase<T> {
-
-	//---------------------------------------------------------------------------------------------------
 public:
 	KungFuSheepStateRun(CannonActorComponent* const pPlayerComponent) : KungFuSheepStateBase<T>(pPlayerComponent) { }
 
@@ -66,8 +62,7 @@ public:
 	}
 
 	virtual void UpdateState_Internal() override {
-
-		const kbInput_t& input = g_pInputManager->GetInput();
+		const kbInput_t& input = g_pInputManager->get_input();
 		const Vec2 leftStick = GetLeftStick();
 
 		const float frameDT = g_pGame->GetFrameDT();
@@ -132,7 +127,7 @@ public:
 
 	virtual void BeginState_Internal(T) override {
 
-		m_StartTime = g_GlobalTimer.TimeElapsedSeconds();
+		m_start_time = g_GlobalTimer.TimeElapsedSeconds();
 		m_bQueueAttack = false;
 
 		static const kbString PunchL_Anim("PunchLeft_Basic");
@@ -191,7 +186,7 @@ public:
 			}
 		}
 
-		const kbInput_t& input = g_pInputManager->GetInput();
+		const kbInput_t& input = g_pInputManager->get_input();
 		if (WasAttackJustPressed() && KungFuSheepDirector::Get()->GetNumHuggersAndPrehuggers() == 0) {
 			m_bQueueAttack = true;
 		}
@@ -201,7 +196,7 @@ public:
 			 this->m_pActorComponent->IsPlayingAnim(PunchR_Anim) == false &&
 			 this->m_pActorComponent->IsPlayingAnim(KickR_Anim) == false) {
 
-			//	blk::log("Took %f sec", g_GlobalTimer.TimeElapsedSeconds() - m_StartTime );
+			//	blk::log("Took %f sec", g_GlobalTimer.TimeElapsedSeconds() - m_start_time );
 			if (m_bQueueAttack) {
 				this->BeginState(KungFuSheepState::Attack);
 			} else {
@@ -210,7 +205,7 @@ public:
 		}
 	}
 
-	float m_StartTime;
+	float m_start_time;
 	bool m_bQueueAttack;
 };
 
@@ -268,7 +263,7 @@ public:
 			m_NextBaaTime = g_GlobalTimer.TimeElapsedSeconds() + 3.0f + kbfrand();
 		}
 
-		const kbInput_t& input = g_pInputManager->GetInput();
+		const kbInput_t& input = g_pInputManager->get_input();
 		const Vec2 leftStick = GetLeftStick();
 		if (WasSpecialAttackPressed() && this->GetSheep()->GetCannonBallMeterFill() >= 1.0f) {
 			this->RequestStateChange(KungFuSheepState::CannonBall);
@@ -457,9 +452,9 @@ void KungFuSheepComponent::Constructor() {
 	m_CannonBallMeter = 0.0f;
 }
 
-/// KungFuSheepComponent::SetEnable_Internal
-void KungFuSheepComponent::SetEnable_Internal(const bool bEnable) {
-	Super::SetEnable_Internal(bEnable);
+/// KungFuSheepComponent::enable_internal
+void KungFuSheepComponent::enable_internal(const bool bEnable) {
+	Super::enable_internal(bEnable);
 
 	if (bEnable) {
 
@@ -600,9 +595,9 @@ void KungFuSheepComponent::OnAnimEvent(const kbAnimEventInfo_t& animEventInfo) {
 	}
 }
 
-/// KungFuSheepComponent::Update_Internal
-void KungFuSheepComponent::Update_Internal(const float DT) {
-	Super::Update_Internal(DT);
+/// KungFuSheepComponent::update_internal
+void KungFuSheepComponent::update_internal(const float DT) {
+	Super::update_internal(DT);
 
 	if (DT > 0.0f) {
 		UpdateStateMachine();
@@ -639,7 +634,7 @@ void KungFuSheepComponent::Update_Internal(const float DT) {
 			}
 		}
 
-		m_SkelModelsList[0]->SetMaterialParamVector(0, fxMapMaskParam.stl_str(), vFXMaskMapParam);
+		m_SkelModelsList[0]->set_material_param_vec4(0, fxMapMaskParam.stl_str(), vFXMaskMapParam);
 	}
 
 	// Headband

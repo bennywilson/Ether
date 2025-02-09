@@ -8,46 +8,44 @@ class kbSkeletalRenderComponent;
 
 /// CannonActorComponent
 class CannonActorComponent : public kbActorComponent, IAnimEventListener {
-	KB_DECLARE_COMPONENT( CannonActorComponent, kbActorComponent );
+	KB_DECLARE_COMPONENT(CannonActorComponent, kbActorComponent);
 
-//---------------------------------------------------------------------------------------------------
 public:
+	float GetMaxRunSpeed() const { return m_MaxRunSpeed; }
+	float GetMaxRotateSpeed() const { return m_MaxRotateSpeed; }
 
-	float										GetMaxRunSpeed() const { return m_MaxRunSpeed; }
-	float										GetMaxRotateSpeed() const { return m_MaxRotateSpeed; }
+	Vec3 GetTargetFacingDirection() const { return m_TargetFacingDirection; }
+	void SetTargetFacingDirection(const Vec3& targetDir) { m_TargetFacingDirection = targetDir; }
 
-	Vec3									GetTargetFacingDirection() const { return m_TargetFacingDirection; }
-	void										SetTargetFacingDirection( const Vec3& targetDir ) { m_TargetFacingDirection = targetDir; }
+	bool IsPlayingAnim(const kbString animName) const;
+	void PlayAnimation(const kbString animName, const float animBlendInLen, const bool bRestartIfAlreadyPlaying = false, const kbString nextAnim = kbString::EmptyString, const float nextAnimBlendInLen = 0.0f);
+	bool HasFinishedAnim(const kbString animName = kbString::EmptyString) const;
+	void SetAnimationTimeScaleMultiplier(const kbString animName, const float multiplier);
 
-	bool										IsPlayingAnim( const kbString animName ) const;
-	void										PlayAnimation( const kbString animName, const float animBlendInLen, const bool bRestartIfAlreadyPlaying = false, const kbString nextAnim = kbString::EmptyString, const float nextAnimBlendInLen = 0.0f );
-	bool										HasFinishedAnim( const kbString animName = kbString::EmptyString ) const;
-	void										SetAnimationTimeScaleMultiplier( const kbString animName, const float multiplier );
-
-	void										ApplyAnimSmear( const Vec3 smearVec, const float durationSec );
-
-	void										SetOverrideFXMaskParameters( const Vec4& fxParams );
-
-	void										PlayAttackVO( const int pref );
-
-	bool										IsPlayer() const { return m_bIsPlayer; }
-	virtual bool						IsDead() const { return m_Health <= 0.0f; }
+	void ApplyAnimSmear(const Vec3 smearVec, const float durationSec);
+		 
+	void SetOverrideFXMaskParameters(const Vec4& fxParams);
+		 
+	void PlayAttackVO(const int pref);
+		 
+	bool IsPlayer() const { return m_bIsPlayer; }
+	virtual bool IsDead() const { return m_Health <= 0.0f; }
 
 protected:
 
-	virtual void							SetEnable_Internal( const bool bEnable ) override;
-	virtual void							Update_Internal( const float DeltaTime ) override;
+	virtual void enable_internal(const bool bEnable) override;
+	virtual void update_internal(const float DeltaTime) override;
 
 	// Data
-	float										m_MaxRunSpeed;
-	float										m_MaxRotateSpeed;
-	float										m_Health;
+	float m_MaxRunSpeed;
+	float m_MaxRotateSpeed;
+	float m_Health;
 
-	std::vector<kbSoundData>	m_AttackVO;
+	std::vector<kbSoundData> m_AttackVO;
 
 	// Game
-	std::vector<kbSkeletalRenderComponent*>		m_SkelModelsList;
-	Vec3									m_TargetFacingDirection;
+	std::vector<kbSkeletalRenderComponent*>	m_SkelModelsList;
+	Vec3 m_TargetFacingDirection;
 
 	float										m_AnimSmearDuration;
 	Vec4									m_AnimSmearVec;
@@ -59,9 +57,9 @@ protected:
 
 	bool										m_bIsPlayer;
 
-//---------------------------------------------------------------------------------------------------
-	// IAnimEventListener
-	virtual void								OnAnimEvent( const kbAnimEventInfo_t& animEvent ) override { }
+	//---------------------------------------------------------------------------------------------------
+		// IAnimEventListener
+	virtual void								OnAnimEvent(const kbAnimEventInfo_t& animEvent) override { }
 };
 
 /// ECameraMoveMode
@@ -73,17 +71,17 @@ enum ECameraMoveMode {
 /// CannonCameraShakeComponent
 class CannonCameraShakeComponent : public kbActorComponent {
 
-	KB_DECLARE_COMPONENT( CannonCameraShakeComponent, kbActorComponent );
+	KB_DECLARE_COMPONENT(CannonCameraShakeComponent, kbActorComponent);
 
-//---------------------------------------------------------------------------------------------------
+	//---------------------------------------------------------------------------------------------------
 public:
 
 	float										GetDuration() const { return m_Duration; }
-	Vec2										GetAmplitude() const { return Vec2( m_AmplitudeX, m_AmplitudeY ); }
-	Vec2										GetFrequency() const { return Vec2( m_FrequencyX, m_FrequencyY ); }
+	Vec2										GetAmplitude() const { return Vec2(m_AmplitudeX, m_AmplitudeY); }
+	Vec2										GetFrequency() const { return Vec2(m_FrequencyX, m_FrequencyY); }
 
-	void										SetEnable_Internal( const bool bEnable ) override;
-	void										Update_Internal( const float deltaTime ) override;
+	void										enable_internal(const bool bEnable) override;
+	void										update_internal(const float deltaTime) override;
 
 	float										m_Duration;
 	float										m_AmplitudeX;
@@ -102,21 +100,21 @@ private:
 /// CannonCameraComponent
 class CannonCameraComponent : public kbActorComponent {
 
-	KB_DECLARE_COMPONENT( CannonCameraComponent, kbActorComponent );
+	KB_DECLARE_COMPONENT(CannonCameraComponent, kbActorComponent);
 
-//---------------------------------------------------------------------------------------------------
+	//---------------------------------------------------------------------------------------------------
 public:
-	
-	void										StartCameraShake( const CannonCameraShakeComponent *const pCameraShakeComponent );
 
-	void										SetTarget( const kbGameEntity *const pTarget, const float blendRate );
-	void										SetPositionOffset( const Vec3 & posOffset, const float blendRate );
-	void										SetLookAtOffset( const Vec3 & lookAtOffset, const float blendRate );
+	void										StartCameraShake(const CannonCameraShakeComponent* const pCameraShakeComponent);
+
+	void										SetTarget(const kbGameEntity* const pTarget, const float blendRate);
+	void										SetPositionOffset(const Vec3& posOffset, const float blendRate);
+	void										SetLookAtOffset(const Vec3& lookAtOffset, const float blendRate);
 
 protected:
 
-	virtual void								SetEnable_Internal( const bool bEnable ) override;
-	virtual void								Update_Internal( const float DeltaTime ) override;
+	virtual void								enable_internal(const bool bEnable) override;
+	virtual void								update_internal(const float DeltaTime) override;
 
 private:
 
@@ -128,7 +126,7 @@ private:
 
 	// Game
 	ECameraMoveMode								m_MoveMode;
-	const kbGameEntity *						m_pTarget;
+	const kbGameEntity* m_pTarget;
 	float										m_SwitchTargetBlendSpeed;
 	float										m_SwitchTargetCurT;
 	Vec3										m_SwitchTargetStartPos;
@@ -151,13 +149,13 @@ private:
 template<typename T>
 class CannonBallCharacterState : public StateMachineNode<T> {
 
-//---------------------------------------------------------------------------------------------------'
+	//---------------------------------------------------------------------------------------------------'
 public:
 
-	CannonBallCharacterState( CannonActorComponent *const pActorComponent ) : m_pActorComponent( pActorComponent ) { }
+	CannonBallCharacterState(CannonActorComponent* const pActorComponent) : m_pActorComponent(pActorComponent) { }
 
 protected:
 
-	CannonActorComponent * m_pActorComponent;
+	CannonActorComponent* m_pActorComponent;
 
 };

@@ -38,7 +38,7 @@ private:
 	kbEditorWindow* GetCurrentWindow();
 
 	kbEditorWindow* m_pEditorWindow;
-	kbEditorWindow* m_pModelViewerWindow;
+	kbEditorWindow* m_modelViewerWindow;
 	kbEditorWindow* m_pGameWindow;
 
 	std::vector<Fl_Group*> m_Groups;

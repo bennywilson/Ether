@@ -16,8 +16,8 @@ public:
 	void									SetTargetHealth( const float meterFill );
 
 protected:
-	virtual void							SetEnable_Internal( const bool bEnable ) override;
-	virtual void							Update_Internal( const float DeltaTime ) override;
+	virtual void							enable_internal( const bool bEnable ) override;
+	virtual void							update_internal( const float DeltaTime ) override;
 
 private:
 	// Editor
@@ -44,8 +44,8 @@ public:
 
 protected:
 
-	virtual void							SetEnable_Internal( const bool bEnable ) override;
-	virtual void							Update_Internal( const float DeltaTime ) override;
+	virtual void							enable_internal( const bool bEnable ) override;
+	virtual void							update_internal( const float DeltaTime ) override;
 
 private:
 
@@ -93,8 +93,8 @@ public:
 
 protected:
 
-	virtual void							SetEnable_Internal( const bool bEnable ) override;
-	virtual void							Update_Internal( const float DeltaTime ) override;
+	virtual void							enable_internal( const bool bEnable ) override;
+	virtual void							update_internal( const float DeltaTime ) override;
 
 	virtual void							WidgetEventCB( kbUIWidgetComponent *const pWidget, const kbInput_t *const pInput );
 
@@ -134,8 +134,8 @@ public:
 		Quit
 	};
 
-	virtual void							SetEnable_Internal( const bool bEnable ) override;
-	virtual void							Update_Internal( const float DeltaTime ) override;
+	virtual void							enable_internal( const bool bEnable ) override;
+	virtual void							update_internal( const float DeltaTime ) override;
 
 	virtual void							WidgetEventCB( kbUIWidgetComponent *const pWidget );
 
@@ -197,8 +197,8 @@ class CannonBallScrollComponent : public kbUIWidgetComponent {
 
 	KB_DECLARE_COMPONENT( CannonBallScrollComponent, kbUIWidgetComponent );
 
-	virtual void							SetEnable_Internal( const bool bEnable ) override;
-	virtual void							Update_Internal( const float DeltaTime ) override;
+	virtual void							enable_internal( const bool bEnable ) override;
+	virtual void							update_internal( const float DeltaTime ) override;
 
 	// Editor
 	Vec3									m_ScrollRate;

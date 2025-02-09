@@ -82,20 +82,20 @@ CapOnItLevelComponent* CapOnItLevelComponent::s_Inst = nullptr;
 void CapOnItLevelComponent::Constructor() {
 }
 
-/// CapOnItLevelComponent::SetEnable_Internal
-void CapOnItLevelComponent::SetEnable_Internal(const bool bEnable) {
-	Super::SetEnable_Internal(bEnable);
+/// CapOnItLevelComponent::enable_internal
+void CapOnItLevelComponent::enable_internal(const bool bEnable) {
+	Super::enable_internal(bEnable);
 
 	if (bEnable) {
-		blk::error_check(s_Inst == nullptr, "KungFuLevelComponent::SetEnable_Internal() - Multiple enabled instances of KungFuLevelComponent");
+		blk::error_check(s_Inst == nullptr, "KungFuLevelComponent::enable_internal() - Multiple enabled instances of KungFuLevelComponent");
 		s_Inst = this;
 	} else {
 	}
 }
 
-/// CapOnItLevelComponent::Update_Internal
-void CapOnItLevelComponent::Update_Internal(const float DeltaTime) {
-	Super::Update_Internal(DeltaTime);
+/// CapOnItLevelComponent::update_internal
+void CapOnItLevelComponent::update_internal(const float DeltaTime) {
+	Super::update_internal(DeltaTime);
 
 	if (g_UseEditor) {
 		return;

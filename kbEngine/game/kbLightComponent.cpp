@@ -17,7 +17,7 @@ KB_DEFINE_COMPONENT(kbDirectionalLightComponent)
 /// kbLightComponent::Constructor
 void kbLightComponent::Constructor() {
 	m_Color = kbColor::white;
-	m_bCastsShadow = false;
+	m_casts_shadow = false;
 	m_Brightness = 1;
 	m_bShaderParamsDirty = false;
 }
@@ -28,13 +28,13 @@ kbLightComponent::~kbLightComponent() {
 }
 
 /// kbLightComponent::PostLoad
-void kbLightComponent::PostLoad() {
-	Super::PostLoad();
+void kbLightComponent::post_load() {
+	Super::post_load();
 }
 
 /// kbLightComponent::EditorChange
-void kbLightComponent::EditorChange( const std::string & propertyName ) {
-	Super::EditorChange( propertyName );
+void kbLightComponent::editor_change( const std::string & propertyName ) {
+	Super::editor_change( propertyName );
 
 	if ( IsEnabled() ) {
 		m_bShaderParamsDirty = true;
@@ -42,8 +42,8 @@ void kbLightComponent::EditorChange( const std::string & propertyName ) {
 
 	// Editor Hack
 	if ( propertyName == "Materials" ) {
-		for ( int i = 0; i < m_MaterialList.size(); i++ ) {
-			m_MaterialList[i].SetOwningComponent( this );
+		for ( int i = 0; i < m_materials.size(); i++ ) {
+			m_materials[i].SetOwningComponent( this );
 		}
 	}
 }
@@ -53,15 +53,15 @@ void kbLightComponent::RenderSync() {
 	Super::RenderSync();
 
 	if ( m_bShaderParamsDirty ) {
-		RefreshMaterials();
+		refresh_materials();
 		m_bShaderParamsDirty = false;
 	}
 }
 
-/// kbLightComponent::SetEnable_Internal
-void kbLightComponent::SetEnable_Internal( const bool bIsEnabled ) {
+/// kbLightComponent::enable_internal
+void kbLightComponent::enable_internal( const bool bIsEnabled ) {
 
-	Super::SetEnable_Internal( bIsEnabled );
+	Super::enable_internal( bIsEnabled );
 
 	if ( g_pRenderer != nullptr ) {
 		if ( bIsEnabled ) {
@@ -75,32 +75,32 @@ void kbLightComponent::SetEnable_Internal( const bool bIsEnabled ) {
 }
 
 /// kbLightComponent:RefreshMaterials
-void kbLightComponent::RefreshMaterials() {
+void kbLightComponent::refresh_materials() {
 
-	//m_RenderObject.m_Materials.clear();
-	/*{//for ( int i = 0; i < m_MaterialList.size(); i++ ) {
+	//m_render_object.m_Materials.clear();
+	/*{//for ( int i = 0; i < m_materials.size(); i++ ) {
 		kbMaterialComponent & matComp = m_Material;
 	
 		kbShaderParamOverrides_t newShaderParams;
-		newShaderParams.m_pShader = matComp.GetShader();
+		newShaderParams.m_shader = matComp.get_shader();
 	
-		auto srcShaderParams = matComp.GetShaderParams();
+		auto srcShaderParams = matComp.shader_params();
 		for ( int j = 0; j < srcShaderParams.size(); j++ ) {
-			if ( srcShaderParams[j].GetTexture() != nullptr ) {
-				newShaderParams.SetTexture( srcShaderParams[j].GetParamName().stl_str(), srcShaderParams[j].GetTexture() );
-			} else if ( srcShaderParams[j].GetRenderTexture() != nullptr ) {
+			if ( srcShaderParams[j].Texture() != nullptr ) {
+				newShaderParams.SetTexture( srcShaderParams[j].param_name().stl_str(), srcShaderParams[j].Texture() );
+			} else if ( srcShaderParams[j].RenderTexture() != nullptr ) {
 	
-				newShaderParams.SetTexture( srcShaderParams[j].GetParamName().stl_str(), srcShaderParams[j].GetRenderTexture() );
+				newShaderParams.SetTexture( srcShaderParams[j].param_name().stl_str(), srcShaderParams[j].RenderTexture() );
 			} else {
-				newShaderParams.SetVec4( srcShaderParams[j].GetParamName().stl_str(), srcShaderParams[j].GetVector() );
+				newShaderParams.SetVec4( srcShaderParams[j].param_name().stl_str(), srcShaderParams[j].GetVector() );
 			}
 		}
 	
-		m_RenderObject.m_Materials.push_back( newShaderParams );
+		m_render_object.m_Materials.push_back( newShaderParams );
 	}
 
-	if ( IsEnabled() && m_RenderObject.m_pComponent != nullptr && bRefreshRenderObejct ) {
-		g_pRenderer->UpdateRenderObject( m_RenderObject );
+	if ( IsEnabled() && m_render_object.m_pComponent != nullptr && bRefreshRenderObejct ) {
+		g_pRenderer->UpdateRenderObject( m_render_object );
 	}
 
 	/*if ( m_pOverrideShader == nullptr ) {
@@ -109,22 +109,22 @@ void kbLightComponent::RefreshMaterials() {
 
 	for ( int i = 0; i < m_OverrideShaderParamList.size(); i++ ) {
 		const kbShaderParamComponent & curParam = m_OverrideShaderParamList[i];
-		if ( curParam.GetParamName().stl_str().empty() ) {
+		if ( curParam.param_name().stl_str().empty() ) {
 			continue;
 		}
 
-		if ( curParam.GetTexture() != nullptr ) {
-			m_OverrideShaderParams.SetTexture( curParam.GetParamName().stl_str(), curParam.GetTexture() );
+		if ( curParam.Texture() != nullptr ) {
+			m_OverrideShaderParams.SetTexture( curParam.param_name().stl_str(), curParam.Texture() );
 		} else {
-			m_OverrideShaderParams.SetVec4( curParam.GetParamName().stl_str(), curParam.GetVector() );
+			m_OverrideShaderParams.SetVec4( curParam.param_name().stl_str(), curParam.GetVector() );
 		}	
 	}*/
 }
 
-/// kbLightComponent:Update_Internal
-void kbLightComponent::Update_Internal( const float DeltaTime ) {
+/// kbLightComponent:update_internal
+void kbLightComponent::update_internal( const float DeltaTime ) {
 
-	Super::Update_Internal( DeltaTime );
+	Super::update_internal( DeltaTime );
 
 	if ( GetLifeTimeRemaining() >= 0 ) {
 		// Hack fade for grenade
@@ -165,8 +165,8 @@ kbDirectionalLightComponent::~kbDirectionalLightComponent() {
 }
 
 /// kbDirectionalLightComponent::EditorChange
-void kbDirectionalLightComponent::EditorChange( const std::string & propertyName ) {
-	Super::EditorChange( propertyName );
+void kbDirectionalLightComponent::editor_change( const std::string & propertyName ) {
+	Super::editor_change( propertyName );
 	// TODO: clamp shadow splits to 4.  Also ensure that the ordering is correct
 
 	{
@@ -190,9 +190,9 @@ void kbLightShaftsComponent::Constructor() {
 kbLightShaftsComponent::~kbLightShaftsComponent() {
 }
 
-/// kbLightShaftsComponent::SetEnable_Internal
-void kbLightShaftsComponent::SetEnable_Internal( const bool isEnabled ) {
-	Super::SetEnable_Internal( isEnabled );
+/// kbLightShaftsComponent::enable_internal
+void kbLightShaftsComponent::enable_internal( const bool isEnabled ) {
+	Super::enable_internal( isEnabled );
 
 	if ( g_pRenderer != nullptr ) {
 		if ( isEnabled ) {
@@ -208,9 +208,9 @@ void kbLightShaftsComponent::SetColor( const kbColor & newColor ) {
 	m_Color = newColor;
 }
 
-/// kbLightShaftsComponent::Update_Internal
-void kbLightShaftsComponent::Update_Internal( const float DeltaTime ) {
-	Super::Update_Internal( DeltaTime );
+/// kbLightShaftsComponent::update_internal
+void kbLightShaftsComponent::update_internal( const float DeltaTime ) {
+	Super::update_internal( DeltaTime );
 
 	g_pRenderer->UpdateLightShafts( this, GetOwner()->GetPosition(), GetOwner()->GetOrientation() );
 
@@ -227,9 +227,9 @@ void kbFogComponent::Constructor() {
 	m_EndDistance = 2200;
 }
 
-/// kbFogComponent::Update_Internal
-void kbFogComponent::Update_Internal( const float DT ) {
-	Super::Update_Internal( DT );
+/// kbFogComponent::update_internal
+void kbFogComponent::update_internal( const float DT ) {
+	Super::update_internal( DT );
 
 	g_pRenderer->UpdateFog( m_Color, m_StartDistance, m_EndDistance );
 }

@@ -58,7 +58,7 @@ private:
 			m_pAtlasShader(nullptr),
 			m_iCurParticleModel(-1) { }
 
-		kbRenderObject	m_RenderObject;
+		kbRenderObject	m_render_object;
 
 		kbModel	m_RenderModel[NumCustomParticleBuffers];
 		uint m_NumIndices;

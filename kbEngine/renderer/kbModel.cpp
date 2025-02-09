@@ -708,7 +708,7 @@ bool kbModel::LoadFBX() {
 	m_IndexBuffer.CreateIndexBuffer(indexList);
 
 	kbMaterial newMaterial;
-	newMaterial.m_pShader = nullptr;//(kbShader *) g_ResourceManager.GetResource( "../../kbEngine/assets/Shaders/basicShader.kbShader", true );
+	newMaterial.m_shader = nullptr;//(kbShader *) g_ResourceManager.GetResource( "../../kbEngine/assets/Shaders/basicShader.kbShader", true );
 	m_Materials.push_back(newMaterial);
 
 	m_Bones.resize(boneToBounds.size());
@@ -854,7 +854,7 @@ bool kbModel::LoadDiablo3() {
 	newMesh.m_NumTriangles = (uint)indexList.size() / 3;
 
 	kbMaterial newMaterial;
-	newMaterial.m_pShader = nullptr;//(kbShader *) g_ResourceManager.GetResource( "../../kbEngine/assets/Shaders/basicShader.kbShader", true );
+	newMaterial.m_shader = nullptr;//(kbShader *) g_ResourceManager.GetResource( "../../kbEngine/assets/Shaders/basicShader.kbShader", true );
 	m_Materials.push_back(newMaterial);
 
 	return true;
@@ -884,9 +884,9 @@ void kbModel::CreateDynamicModel(const UINT numVertices, const UINT numIndices, 
 
 	kbMaterial newMaterial;
 	if (pShaderToUse != nullptr) {
-		newMaterial.m_pShader = pShaderToUse;
+		newMaterial.m_shader = pShaderToUse;
 	} else {
-		newMaterial.m_pShader = nullptr;//(kbShader *) g_ResourceManager.GetResource( "../../kbEngine/assets/Shaders/basicShader.kbShader", true );
+		newMaterial.m_shader = nullptr;//(kbShader *) g_ResourceManager.GetResource( "../../kbEngine/assets/Shaders/basicShader.kbShader", true );
 	}
 	m_Materials.push_back(newMaterial);
 }
@@ -913,9 +913,9 @@ void kbModel::CreatePointCloud(const UINT numVertices, const std::string& shader
 
 	kbMaterial newMaterial;
 	if (shaderToUse.length() > 0) {
-		newMaterial.m_pShader = nullptr;//(kbShader *) g_ResourceManager.GetResource( shaderToUse.c_str(), true );
+		newMaterial.m_shader = nullptr;//(kbShader *) g_ResourceManager.GetResource( shaderToUse.c_str(), true );
 	} else {
-		newMaterial.m_pShader = nullptr;//(kbShader *) g_ResourceManager.GetResource( "../../kbEngine/assets/Shaders/basicShader.kbshader", true );
+		newMaterial.m_shader = nullptr;//(kbShader *) g_ResourceManager.GetResource( "../../kbEngine/assets/Shaders/basicShader.kbshader", true );
 	}
 	newMaterial.SetCullingMode(cullingMode);
 	m_Materials.push_back(newMaterial);

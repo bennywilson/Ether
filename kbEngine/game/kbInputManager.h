@@ -148,7 +148,7 @@ public:
 	kbInputManager();
 	~kbInputManager();
 
-	const kbInput_t& GetInput() const { return m_Input; }
+	const kbInput_t& get_input() const { return m_Input; }
 
 	void Init(HWND Hwnd);
 	void Update(const float Delta);

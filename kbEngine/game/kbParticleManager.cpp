@@ -56,8 +56,8 @@ kbParticleManager::~kbParticleManager() {
 		CustomAtlasParticle_t& curAtlas = m_CustomAtlases[i];
 		for (int iBuffer = 0; iBuffer < NumCustomParticleBuffers; iBuffer++) {
 			curAtlas.m_RenderModel[iBuffer].Release();
-			delete curAtlas.m_RenderObject.m_pComponent;
-			curAtlas.m_RenderObject.m_pComponent = nullptr;
+			delete curAtlas.m_render_object.m_pComponent;
+			curAtlas.m_render_object.m_pComponent = nullptr;
 		}
 	}
 
@@ -158,7 +158,7 @@ void kbParticleManager::ReturnParticleComponent(kbParticleComponent* const pPart
 		return;
 	}
 
-	g_pRenderer->RemoveParticle(pParticle->m_RenderObject);
+	g_pRenderer->RemoveParticle(pParticle->m_render_object);
 	pParticle->GetOwner()->RemoveComponent(pParticle);
 	const kbParticleComponent* const pParticleTemplate = pParticle->m_ParticleTemplate;
 	if (pParticleTemplate == nullptr || pParticle->m_bIsPooled == false) {
@@ -183,7 +183,7 @@ void kbParticleManager::UpdateAtlas(CustomAtlasParticle_t& atlasInfo) {
 	blk::error_check(g_pRenderer->IsRenderingSynced(), "kbParticleManager::UpdateAtlas() - Rendering isn't sync'd");
 
 	if (atlasInfo.m_iCurParticleModel >= 0) {
-		g_pRenderer->RemoveParticle(atlasInfo.m_RenderObject);
+		g_pRenderer->RemoveParticle(atlasInfo.m_render_object);
 	}
 
 	for (uint iModel = 0; iModel < NumCustomParticleBuffers; iModel++) {
@@ -205,11 +205,11 @@ void kbParticleManager::UpdateAtlas(CustomAtlasParticle_t& atlasInfo) {
 		renderModel.CreateDynamicModel(NumParticleBufferVerts, NumParticleBufferVerts, atlasInfo.m_pAtlasShader, atlasInfo.m_pAtlasTexture, sizeof(kbParticleVertex));
 
 		// Update materials
-		atlasInfo.m_RenderObject.m_Materials.clear();
+		atlasInfo.m_render_object.m_Materials.clear();
 		kbShaderParamOverrides_t atlasMaterial;
-		atlasMaterial.m_pShader = atlasInfo.m_pAtlasShader;
+		atlasMaterial.m_shader = atlasInfo.m_pAtlasShader;
 		atlasMaterial.SetTexture("shaderTexture", atlasInfo.m_pAtlasTexture);
-		atlasInfo.m_RenderObject.m_Materials.push_back(atlasMaterial);
+		atlasInfo.m_render_object.m_Materials.push_back(atlasMaterial);
 
 		atlasInfo.m_pVertexBuffer = (kbParticleVertex*)atlasInfo.m_RenderModel[iModel].MapVertexBuffer();
 		for (int iVert = 0; iVert < NumParticleBufferVerts; iVert++) {
@@ -233,7 +233,7 @@ void kbParticleManager::RenderSync() {
 	// Map/unmap buffers and pass it to the renderer
 	for (int iAtlas = 0; iAtlas < NumCustomAtlases; iAtlas++) {
 		CustomAtlasParticle_t& curAtlas = m_CustomAtlases[iAtlas];
-		kbRenderObject& curRenderObj = curAtlas.m_RenderObject;
+		kbRenderObject& curRenderObj = curAtlas.m_render_object;
 		if (curRenderObj.m_pComponent == nullptr) {
 			curRenderObj.m_pComponent = new kbTransformComponent();
 		}
@@ -251,7 +251,7 @@ void kbParticleManager::RenderSync() {
 
 		curRenderObj.m_Position = Vec3::zero;
 		curRenderObj.m_Orientation = Quat4(0.0f, 0.0f, 0.0f, 1.0f);
-		curRenderObj.m_pModel = &finishedModel;
+		curRenderObj.m_model = &finishedModel;
 		g_pRenderer->AddParticle(curRenderObj);
 
 		curAtlas.m_iCurParticleModel = (curAtlas.m_iCurParticleModel + 1) % NumCustomParticleBuffers;
@@ -372,7 +372,7 @@ void kbParticleManager::ReserveScratchBufferSpace(kbParticleVertex*& outVertexBu
 	const int outVBIdx = scratchBuffer.m_iVert;
 	const int outIBIdx = 6 * (outVBIdx / 4);
 
-	inOutRenderObj.m_pModel = &scratchBuffer.m_RenderModel[scratchBuffer.m_iCurModel];
+	inOutRenderObj.m_model = &scratchBuffer.m_RenderModel[scratchBuffer.m_iCurModel];
 	inOutRenderObj.m_VertBufferStartIndex = outVBIdx;
 	inOutRenderObj.m_VertBufferIndexCount = 6 * (numRequestedVerts / 4);
 

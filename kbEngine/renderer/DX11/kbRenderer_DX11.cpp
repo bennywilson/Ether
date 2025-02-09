@@ -289,7 +289,7 @@ kbRenderer_DX11::kbRenderer_DX11() :
 	m_pBloomGatherShader = new kbShader("../../kbEngine/assets/Shaders/bloom.kbShader");
 	m_pBloomBlur = new kbShader("../../kbEngine/assets/Shaders/bloom.kbShader");
 
-	ZeroMemory(m_pTextures, sizeof(m_pTextures));
+	ZeroMemory(m_textures, sizeof(m_textures));
 
 	g_pD3D11Renderer = this;
 
@@ -373,36 +373,36 @@ void kbRenderer_DX11::Init_Internal(HWND hwnd, const int frameWidth, const int f
 		MAX_HALF_BUFFER,
 		NUM_RESERVED_RENDER_TARGETS,
 	*/
-	RT_GetRenderTexture(deferredRTWidth, deferredRTHeight, KBTEXTURE_R16G16B16A16, false);
-	RT_GetRenderTexture(deferredRTWidth, deferredRTHeight, KBTEXTURE_R16G16B16A16, false);
-	RT_GetRenderTexture(deferredRTWidth, deferredRTHeight, KBTEXTURE_R16G16B16A16, false);
-	RT_GetRenderTexture(deferredRTWidth, deferredRTHeight, KBTEXTURE_R32, false);
-	RT_GetRenderTexture(deferredRTWidth, deferredRTHeight, KBTEXTURE_R16G16B16A16, false);
-	RT_GetRenderTexture(deferredRTWidth, deferredRTHeight, KBTEXTURE_R16G16B16A16, false);
+	RT_RenderTexture(deferredRTWidth, deferredRTHeight, KBTEXTURE_R16G16B16A16, false);
+	RT_RenderTexture(deferredRTWidth, deferredRTHeight, KBTEXTURE_R16G16B16A16, false);
+	RT_RenderTexture(deferredRTWidth, deferredRTHeight, KBTEXTURE_R16G16B16A16, false);
+	RT_RenderTexture(deferredRTWidth, deferredRTHeight, KBTEXTURE_R32, false);
+	RT_RenderTexture(deferredRTWidth, deferredRTHeight, KBTEXTURE_R16G16B16A16, false);
+	RT_RenderTexture(deferredRTWidth, deferredRTHeight, KBTEXTURE_R16G16B16A16, false);
 
 	m_pAccumBuffers[0] = GetRenderTarget_DX11(ACCUMULATION_BUFFER_1);
 	m_pAccumBuffers[1] = GetRenderTarget_DX11(ACCUMULATION_BUFFER_2);
 	m_iAccumBuffer = 0;
 
 	const int shadowBufferSize = 4096;
-	RT_GetRenderTexture(shadowBufferSize, shadowBufferSize, KBTEXTURE_R32, false);
-	RT_GetRenderTexture(shadowBufferSize, shadowBufferSize, KBTEXTURE_D24S8, false);
+	RT_RenderTexture(shadowBufferSize, shadowBufferSize, KBTEXTURE_R32, false);
+	RT_RenderTexture(shadowBufferSize, shadowBufferSize, KBTEXTURE_D24S8, false);
 
-	RT_GetRenderTexture(deferredRTWidth, deferredRTHeight, KBTEXTURE_R16G16B16A16, false);
-	RT_GetRenderTexture(deferredRTWidth / 2, deferredRTHeight / 2, KBTEXTURE_R16G16B16A16, false);
-	RT_GetRenderTexture(deferredRTWidth / 2, deferredRTHeight / 2, KBTEXTURE_R16G16B16A16, false);
+	RT_RenderTexture(deferredRTWidth, deferredRTHeight, KBTEXTURE_R16G16B16A16, false);
+	RT_RenderTexture(deferredRTWidth / 2, deferredRTHeight / 2, KBTEXTURE_R16G16B16A16, false);
+	RT_RenderTexture(deferredRTWidth / 2, deferredRTHeight / 2, KBTEXTURE_R16G16B16A16, false);
 
 	// Bloom buffer
-	RT_GetRenderTexture(deferredRTWidth / 8, deferredRTHeight / 8, KBTEXTURE_R16G16B16A16, false);
-	RT_GetRenderTexture(deferredRTWidth / 8, deferredRTHeight / 8, KBTEXTURE_R16G16B16A16, false);
+	RT_RenderTexture(deferredRTWidth / 8, deferredRTHeight / 8, KBTEXTURE_R16G16B16A16, false);
+	RT_RenderTexture(deferredRTWidth / 8, deferredRTHeight / 8, KBTEXTURE_R16G16B16A16, false);
 
 	// Scratch
-	RT_GetRenderTexture(deferredRTHeight / 2, deferredRTHeight / 2, KBTEXTURE_R16G16B16A16, false);
+	RT_RenderTexture(deferredRTHeight / 2, deferredRTHeight / 2, KBTEXTURE_R16G16B16A16, false);
 
-	RT_GetRenderTexture(deferredRTWidth, deferredRTHeight, KBTEXTURE_R16G16, false);
+	RT_RenderTexture(deferredRTWidth, deferredRTHeight, KBTEXTURE_R16G16, false);
 
 	// MAX_HALF
-	RT_GetRenderTexture(1, 1, KBTEXTURE_R16G16B16A16, false);
+	RT_RenderTexture(1, 1, KBTEXTURE_R16G16B16A16, false);
 	float maxHalf[] = { 65000.0f, 65000.0f, 65000.0f, 65000.0f };
 	m_pDeviceContext->ClearRenderTargetView(GetRenderTarget_DX11(MAX_HALF_BUFFER)->m_pRenderTargetView, maxHalf);
 
@@ -801,7 +801,7 @@ kbRenderTexture* kbRenderer_DX11::GetRenderTexture_Internal(const int width, con
 		shaderResourceViewDesc.Texture2D.MostDetailedMip = 0;
 		shaderResourceViewDesc.Texture2D.MipLevels = 1;
 
-		HRESULT hr = m_pD3DDevice->CreateShaderResourceView( GetRenderTarget_DX11(index].m_pRenderTargetTexture, &shaderResourceViewDesc, &GetRenderTarget_DX11(index].m_pShaderResourceView );
+		HRESULT hr = m_pD3DDevice->CreateShaderResourceView( GetRenderTarget_DX11(index].m_pRenderTargetTexture, &shaderResourceViewDesc, &GetRenderTarget_DX11(index].m_shaderResourceView );
 */
 		return &rt;
 	}
@@ -841,7 +841,7 @@ kbRenderTexture* kbRenderer_DX11::GetRenderTexture_Internal(const int width, con
 	shaderResourceViewDesc.Texture2D.MostDetailedMip = 0;
 	shaderResourceViewDesc.Texture2D.MipLevels = 1;
 
-	hr = m_pD3DDevice->CreateShaderResourceView(rt.m_pRenderTargetTexture, &shaderResourceViewDesc, &rt.m_pShaderResourceView);
+	hr = m_pD3DDevice->CreateShaderResourceView(rt.m_pRenderTargetTexture, &shaderResourceViewDesc, &rt.m_shaderResourceView);
 	blk::error_check(SUCCEEDED(hr), "kbRenderer_DX11::CreateRenderTarget() - Failed to create SRV texture for index", (int)targetFormat);
 
 	return &rt;
@@ -859,10 +859,10 @@ void kbRenderer_DX11::Shutdown_Internal() {
 	g_pD3D11Renderer = nullptr;
 
 	for (int i = 0; i < Max_Num_Textures; i++) {
-		if (m_pTextures[i] != nullptr) {
-			m_pTextures[i]->Release();
-			delete m_pTextures[i];
-			m_pTextures[i] = nullptr;
+		if (m_textures[i] != nullptr) {
+			m_textures[i]->Release();
+			delete m_textures[i];
+			m_textures[i] = nullptr;
 		}
 	}
 
@@ -1178,7 +1178,7 @@ void kbRenderer_DX11::RenderScene() {
 			for (int i = 0; i < m_DebugModels.size(); i++) {
 
 				kbRenderObject renderObject;
-				renderObject.m_pModel = m_DebugModels[i].m_pModel;
+				renderObject.m_model = m_DebugModels[i].m_model;
 				renderObject.m_Materials = m_DebugModels[i].m_Materials;
 				renderObject.m_Position = m_DebugModels[i].m_Position;
 				renderObject.m_Orientation = m_DebugModels[i].m_Orientation;
@@ -1186,7 +1186,7 @@ void kbRenderer_DX11::RenderScene() {
 				// Hack: Negate the effects of m_GlobalModelScale_RenderThread in SetConstantsBuffer
 				renderObject.m_Scale = m_EditorIconScale_RenderThread * (m_DebugModels[i].m_Scale) / m_GlobalModelScale_RenderThread;
 				renderObject.m_EntityId = m_DebugModels[i].m_EntityId;
-				for (int j = 0; j < renderObject.m_pModel->NumMeshes(); j++) {
+				for (int j = 0; j < renderObject.m_model->NumMeshes(); j++) {
 					kbRenderSubmesh newMesh(&renderObject, j, RP_Debug, 0.0f);
 					RenderMesh(&newMesh, false);
 				}
@@ -1243,21 +1243,21 @@ void kbRenderer_DX11::PreRenderCullAndSort() {
 		if (bIsVisible) {
 
 			// Add submeshes to their proper render passes
-			const kbModel* const pModel = renderObj.m_pModel;
+			const kbModel* const pModel = renderObj.m_model;
 			for (int i = 0; i < pModel->GetMeshes().size(); i++) {
 				const kbModel::mesh_t& mesh = pModel->GetMeshes()[i];
 				const kbShader* pShader = nullptr;
 				if (renderObj.m_Materials.size() > i) {
-					pShader = renderObj.m_Materials[i].m_pShader;
+					pShader = renderObj.m_Materials[i].m_shader;
 				}
 
-				if (pShader == nullptr || pShader->IsBlendEnabled() == false || renderObj.m_RenderPass == RP_UI) {
-					m_pCurrentRenderWindow->GetVisibleSubMeshes(renderObj.m_RenderPass).push_back(kbRenderSubmesh(&renderObj, i, renderObj.m_RenderPass, sqrt(distToCamSqr)));
+				if (pShader == nullptr || pShader->IsBlendEnabled() == false || renderObj.m_render_pass == RP_UI) {
+					m_pCurrentRenderWindow->GetVisibleSubMeshes(renderObj.m_render_pass).push_back(kbRenderSubmesh(&renderObj, i, renderObj.m_render_pass, sqrt(distToCamSqr)));
 				} else {
 					ERenderPass rp = RP_Translucent;
 					if (pShader->IsDistortionEnabled()) {
 						rp = RP_Distortion;
-					} else if (renderObj.m_RenderPass == RP_TranslucentWithDepth) {
+					} else if (renderObj.m_render_pass == RP_TranslucentWithDepth) {
 						rp = RP_TranslucentWithDepth;
 					}
 
@@ -1289,8 +1289,8 @@ void kbRenderer_DX11::PreRenderCullAndSort() {
 	// Sort translucent meshes by depth
 	std::vector<kbRenderSubmesh>& visibleTranslucentMeshes = m_pCurrentRenderWindow->GetVisibleSubMeshes(RP_Translucent);
 	std::sort(visibleTranslucentMeshes.begin(), visibleTranslucentMeshes.end(), [](kbRenderSubmesh& op1, kbRenderSubmesh& op2) {
-		const float op1Dist = op1.GetDistFromCamera() + op1.GetRenderObject()->m_RenderOrderBias;
-		const float op2Dist = op2.GetDistFromCamera() + op2.GetRenderObject()->m_RenderOrderBias;
+		const float op1Dist = op1.GetDistFromCamera() + op1.GetRenderObject()->m_render_order_bias;
+		const float op2Dist = op2.GetDistFromCamera() + op2.GetRenderObject()->m_render_order_bias;
 
 		return op1Dist > op2Dist;
 	});
@@ -1298,8 +1298,8 @@ void kbRenderer_DX11::PreRenderCullAndSort() {
 	// Sort UI by Render Order Bias
 	std::vector<kbRenderSubmesh>& visibleUIMeshes = m_pCurrentRenderWindow->GetVisibleSubMeshes(RP_UI);
 	std::sort(visibleUIMeshes.begin(), visibleUIMeshes.end(), [](kbRenderSubmesh& op1, kbRenderSubmesh& op2) {
-		const float op1Dist = op1.GetRenderObject()->m_RenderOrderBias;
-		const float op2Dist = op2.GetRenderObject()->m_RenderOrderBias;
+		const float op1Dist = op1.GetRenderObject()->m_render_order_bias;
+		const float op2Dist = op2.GetRenderObject()->m_render_order_bias;
 
 		return op1Dist > op2Dist;
 	});
@@ -1332,9 +1332,9 @@ void kbRenderer_DX11::RenderTranslucency() {
 		std::vector<kbRenderSubmesh>& visibleSubmeshList = m_pCurrentRenderWindow->GetVisibleSubMeshes(RP_Translucent);
 		for (int i = 0; i < visibleSubmeshList.size(); i++) {
 			const kbRenderSubmesh& submesh = visibleSubmeshList[i];
-			const kbModel* const pModel = submesh.GetRenderObject()->m_pModel;
+			const kbModel* const pModel = submesh.GetRenderObject()->m_model;
 
-			if (submesh.GetRenderObject()->m_RenderPass == RP_FirstPerson) {
+			if (submesh.GetRenderObject()->m_render_pass == RP_FirstPerson) {
 				m_RenderState.SetDepthStencilState(true,
 													kbRenderState::DepthWriteMaskZero,
 													kbRenderState::CompareLess,
@@ -1388,9 +1388,9 @@ void kbRenderer_DX11::RenderTranslucency() {
 		std::vector<kbRenderSubmesh>& visibleSubmeshList = m_pCurrentRenderWindow->GetVisibleSubMeshes(RP_TranslucentWithDepth);
 		for (int i = 0; i < visibleSubmeshList.size(); i++) {
 			const kbRenderSubmesh& submesh = visibleSubmeshList[i];
-			const kbModel* const pModel = submesh.GetRenderObject()->m_pModel;
+			const kbModel* const pModel = submesh.GetRenderObject()->m_model;
 
-			if (submesh.GetRenderObject()->m_RenderPass == RP_FirstPerson) {
+			if (submesh.GetRenderObject()->m_render_pass == RP_FirstPerson) {
 				m_RenderState.SetDepthStencilState(true,
 													kbRenderState::DepthWriteMaskZero,
 													kbRenderState::CompareLess,
@@ -1433,9 +1433,9 @@ void kbRenderer_DX11::RenderTranslucency() {
 		std::vector<kbRenderSubmesh>& visibleSubmeshList = m_pCurrentRenderWindow->GetVisibleSubMeshes(RP_Distortion);
 		for (int i = 0; i < visibleSubmeshList.size(); i++) {
 			const kbRenderSubmesh& submesh = visibleSubmeshList[i];
-			const kbModel* const pModel = submesh.GetRenderObject()->m_pModel;
+			const kbModel* const pModel = submesh.GetRenderObject()->m_model;
 
-			if (submesh.GetRenderObject()->m_RenderPass == RP_FirstPerson) {
+			if (submesh.GetRenderObject()->m_render_pass == RP_FirstPerson) {
 				m_RenderState.SetDepthStencilState(true,
 													kbRenderState::DepthWriteMaskZero,
 													kbRenderState::CompareLess,
@@ -1645,7 +1645,7 @@ void kbRenderer_DX11::RenderDebugText() {
 	m_pDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	m_pDeviceContext->RSSetState(m_pNoFaceCullingRasterizerState);
 
-	ID3D11ShaderResourceView* const pShaderResourceView = (ID3D11ShaderResourceView*)m_pTextures[4]->GetGPUTexture();
+	ID3D11ShaderResourceView* const pShaderResourceView = (ID3D11ShaderResourceView*)m_textures[4]->GetGPUTexture();
 
 	m_pDeviceContext->PSSetShaderResources(0, 1, &pShaderResourceView);
 	m_pDeviceContext->PSSetSamplers(0, 1, &m_pBasicSamplerState);
@@ -1699,7 +1699,7 @@ void kbRenderer_DX11::RenderMousePickerIds() {
 	for (auto iter = m_pCurrentRenderWindow->GetRenderObjectMap().begin(); iter != m_pCurrentRenderWindow->GetRenderObjectMap().end(); iter++) {
 		if (iter->second->m_EntityId > 0) {
 			// TODO
-			for (int i = 0; i < iter->second->m_pModel->NumMeshes(); i++) {
+			for (int i = 0; i < iter->second->m_model->NumMeshes(); i++) {
 				kbRenderSubmesh newMesh(iter->second, i, RP_MousePicker, 0.0f);
 				RenderMesh(&newMesh, false, true);
 			}
@@ -1711,13 +1711,13 @@ void kbRenderer_DX11::RenderMousePickerIds() {
 	m_RenderState.SetDepthStencilState(false);	// Allow transform widgets to be selected through other models
 	for (int i = 0; i < m_DebugModels.size(); i++) {
 		kbRenderObject renderObject;
-		renderObject.m_pModel = m_DebugModels[i].m_pModel;
+		renderObject.m_model = m_DebugModels[i].m_model;
 		renderObject.m_Materials = m_DebugModels[i].m_Materials;
 		renderObject.m_Position = m_DebugModels[i].m_Position;
 		renderObject.m_Orientation = m_DebugModels[i].m_Orientation;
 		renderObject.m_Scale = m_EditorIconScale_RenderThread * (m_DebugModels[i].m_Scale) / m_GlobalModelScale_RenderThread;
 		renderObject.m_EntityId = m_DebugModels[i].m_EntityId;
-		for (int j = 0; j < renderObject.m_pModel->NumMeshes(); j++) {
+		for (int j = 0; j < renderObject.m_model->NumMeshes(); j++) {
 			kbRenderSubmesh newMesh(&renderObject, j, RP_MousePicker, 0.0f);
 			RenderMesh(&newMesh, false);
 		}
@@ -1745,7 +1745,7 @@ void kbRenderer_DX11::Blit(kbRenderTexture* const inSrc, kbRenderTexture* const 
 
 	m_pDeviceContext->RSSetState(m_pDefaultRasterizerState);
 
-	m_pDeviceContext->PSSetShaderResources(0, 1, &src->m_pShaderResourceView);
+	m_pDeviceContext->PSSetShaderResources(0, 1, &src->m_shaderResourceView);
 	m_pDeviceContext->PSSetSamplers(0, 1, &m_pBasicSamplerState);
 	m_pDeviceContext->IASetInputLayout((ID3D11InputLayout*)pShader->GetVertexLayout());
 	m_pDeviceContext->VSSetShader((ID3D11VertexShader*)pShader->GetVertexShader(), nullptr, 0);
@@ -1833,7 +1833,7 @@ void kbRenderer_DX11::RenderSSAO() {
 	m_pDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	m_pDeviceContext->RSSetState(m_pDefaultRasterizerState);
 
-	//m_pDeviceContext->PSSetShaderResources(0, 1, &GetRenderTarget_DX11(ACCUMULATION_BUFFER)->m_pShaderResourceView);
+	//m_pDeviceContext->PSSetShaderResources(0, 1, &GetRenderTarget_DX11(ACCUMULATION_BUFFER)->m_shaderResourceView);
 	ID3D11SamplerState* const samplerStates[] = { m_pBasicSamplerState, m_pNormalMapSamplerState, m_pShadowMapSamplerState, m_pShadowMapSamplerState };
 	m_pDeviceContext->PSSetSamplers(0, 4, samplerStates);
 
@@ -1842,11 +1842,11 @@ void kbRenderer_DX11::RenderSSAO() {
 	m_pDeviceContext->PSSetShader((ID3D11PixelShader*)m_pSSAO->GetPixelShader(), nullptr, 0);
 
 	// TODO: Why isn't this handled in SetConstantBuffer
-	ID3D11ShaderResourceView* const  RenderTargetViews[] = { GetRenderTarget_DX11(COLOR_BUFFER)->m_pShaderResourceView,
-																GetRenderTarget_DX11(NORMAL_BUFFER)->m_pShaderResourceView,
-																GetRenderTarget_DX11(SPECULAR_BUFFER)->m_pShaderResourceView,
-																GetRenderTarget_DX11(DEPTH_BUFFER)->m_pShaderResourceView,
-																GetRenderTarget_DX11(SHADOW_BUFFER)->m_pShaderResourceView };
+	ID3D11ShaderResourceView* const  RenderTargetViews[] = { GetRenderTarget_DX11(COLOR_BUFFER)->m_shaderResourceView,
+																GetRenderTarget_DX11(NORMAL_BUFFER)->m_shaderResourceView,
+																GetRenderTarget_DX11(SPECULAR_BUFFER)->m_shaderResourceView,
+																GetRenderTarget_DX11(DEPTH_BUFFER)->m_shaderResourceView,
+																GetRenderTarget_DX11(SHADOW_BUFFER)->m_shaderResourceView };
 
 	m_pDeviceContext->PSSetShaderResources(0, 5, RenderTargetViews);
 
@@ -1897,7 +1897,7 @@ void kbRenderer_DX11::RenderBloom() {
 		m_pDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 		m_pDeviceContext->RSSetState(m_pDefaultRasterizerState);
 
-		m_pDeviceContext->PSSetShaderResources(0, 1, &GetAccumBuffer(m_iAccumBuffer)->m_pShaderResourceView);
+		m_pDeviceContext->PSSetShaderResources(0, 1, &GetAccumBuffer(m_iAccumBuffer)->m_shaderResourceView);
 		ID3D11SamplerState* const samplerState[] = { m_pNormalMapSamplerState };
 
 		m_pDeviceContext->PSSetSamplers(0, 1, samplerState);
@@ -1948,7 +1948,7 @@ void kbRenderer_DX11::RenderBloom() {
 		m_pDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 		m_pDeviceContext->RSSetState(m_pDefaultRasterizerState);
 
-		m_pDeviceContext->PSSetShaderResources(0, 1, &GetRenderTarget_DX11(RGBA_BUFFER)->m_pShaderResourceView);
+		m_pDeviceContext->PSSetShaderResources(0, 1, &GetRenderTarget_DX11(RGBA_BUFFER)->m_shaderResourceView);
 		ID3D11SamplerState* samplerState[] = { m_pNormalMapSamplerState };
 
 		m_pDeviceContext->PSSetSamplers(0, 1, samplerState);
@@ -1986,7 +1986,7 @@ void kbRenderer_DX11::RenderBloom() {
 		// Draw
 		m_pDeviceContext->Draw(6, 0);
 
-		ID3D11ShaderResourceView* nullarray[] = { nullptr, nullptr };//'{ GetRenderTarget_DX11(ACCUMULATION_BUFFER)->m_pShaderResourceView, GetRenderTarget_DX11(COLOR_BUFFER)->m_pShaderResourceView };
+		ID3D11ShaderResourceView* nullarray[] = { nullptr, nullptr };//'{ GetRenderTarget_DX11(ACCUMULATION_BUFFER)->m_shaderResourceView, GetRenderTarget_DX11(COLOR_BUFFER)->m_shaderResourceView };
 		m_pDeviceContext->PSSetShaderResources(0, 2, nullarray);
 	}
 
@@ -2002,7 +2002,7 @@ void kbRenderer_DX11::RenderBloom() {
 		m_pDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 		m_pDeviceContext->RSSetState(m_pDefaultRasterizerState);
 
-		m_pDeviceContext->PSSetShaderResources(0, 1, &GetRenderTarget_DX11(BLOOM_BUFFER_2)->m_pShaderResourceView);
+		m_pDeviceContext->PSSetShaderResources(0, 1, &GetRenderTarget_DX11(BLOOM_BUFFER_2)->m_shaderResourceView);
 		ID3D11SamplerState* samplerState[] = { m_pNormalMapSamplerState };
 
 		// Set constants
@@ -2053,7 +2053,7 @@ void kbRenderer_DX11::RenderBloom() {
 		m_pDeviceContext->RSSetViewports(1, &viewport);
 		m_pDeviceContext->OMSetRenderTargets(1, &GetAccumBuffer(m_iAccumBuffer)->m_pRenderTargetView, nullptr);
 
-		ID3D11ShaderResourceView* const  RenderTargetViews[] = { GetRenderTarget_DX11(BLOOM_BUFFER_1)->m_pShaderResourceView };
+		ID3D11ShaderResourceView* const  RenderTargetViews[] = { GetRenderTarget_DX11(BLOOM_BUFFER_1)->m_shaderResourceView };
 		ID3D11SamplerState* const  SamplerStates[] = { m_pBasicSamplerState };
 		m_pDeviceContext->IASetInputLayout((ID3D11InputLayout*)m_pSimpleAdditiveShader->GetVertexLayout());
 		m_pDeviceContext->VSSetShader((ID3D11VertexShader*)this->m_pSimpleAdditiveShader->GetVertexShader(), nullptr, 0);
@@ -2119,10 +2119,10 @@ void kbRenderer_DX11::RenderPostProcess() {
 
 	if (m_pCurrentRenderWindow->GetRenderLightMap().size() == 0)
 	{
-		m_pDeviceContext->PSSetShaderResources(0, 1, &GetAccumBuffer(m_iAccumBuffer)->m_pShaderResourceView);
+		m_pDeviceContext->PSSetShaderResources(0, 1, &GetAccumBuffer(m_iAccumBuffer)->m_shaderResourceView);
 	} else
 	{
-		ID3D11ShaderResourceView* RenderTargetViews[] = { GetAccumBuffer(m_iAccumBuffer)->m_pShaderResourceView, GetRenderTarget_DX11(DEPTH_BUFFER)->m_pShaderResourceView };
+		ID3D11ShaderResourceView* RenderTargetViews[] = { GetAccumBuffer(m_iAccumBuffer)->m_shaderResourceView, GetRenderTarget_DX11(DEPTH_BUFFER)->m_shaderResourceView };
 		m_pDeviceContext->PSSetShaderResources(0, 2, RenderTargetViews);
 	}
 
@@ -2158,7 +2158,7 @@ void kbRenderer_DX11::RenderPostProcess() {
 
 	m_pDeviceContext->PSSetShaderResources(0, 1, nullArray);
 
-	ID3D11ShaderResourceView* nullarray[] = { nullptr, nullptr };//'{ GetRenderTarget_DX11(ACCUMULATION_BUFFER)->m_pShaderResourceView, GetRenderTarget_DX11(COLOR_BUFFER)->m_pShaderResourceView };
+	ID3D11ShaderResourceView* nullarray[] = { nullptr, nullptr };//'{ GetRenderTarget_DX11(ACCUMULATION_BUFFER)->m_shaderResourceView, GetRenderTarget_DX11(COLOR_BUFFER)->m_shaderResourceView };
 	m_pDeviceContext->PSSetShaderResources(0, 2, nullarray);
 }
 
@@ -2208,7 +2208,7 @@ void kbRenderer_DX11::RenderConsole() {
 
 	m_pDeviceContext->PSSetShaderResources(0, 1, nullArray);
 
-	ID3D11ShaderResourceView* nullarray[] = { nullptr, nullptr };//'{ GetRenderTarget_DX11(ACCUMULATION_BUFFER)->m_pShaderResourceView, GetRenderTarget_DX11(COLOR_BUFFER)->m_pShaderResourceView };
+	ID3D11ShaderResourceView* nullarray[] = { nullptr, nullptr };//'{ GetRenderTarget_DX11(ACCUMULATION_BUFFER)->m_shaderResourceView, GetRenderTarget_DX11(COLOR_BUFFER)->m_shaderResourceView };
 	m_pDeviceContext->PSSetShaderResources(0, 2, nullarray);
 }
 
@@ -2219,12 +2219,12 @@ bool kbRenderer_DX11::LoadTexture_Internal(const char* name, int index, int widt
 		return false;
 	}
 
-	if (m_pTextures[index] != nullptr) {
-		m_pTextures[index]->Release();
-		delete m_pTextures[index];
+	if (m_textures[index] != nullptr) {
+		m_textures[index]->Release();
+		delete m_textures[index];
 	}
 
-	m_pTextures[index] = new kbTexture(kbString(name));
+	m_textures[index] = new kbTexture(kbString(name));
 
 	return true;
 }
@@ -2829,7 +2829,7 @@ void kbRenderer_DX11::RenderScreenSpaceQuads() {
 										m_ScreenSpaceQuads_RenderThread[i].m_Size.x,
 										m_ScreenSpaceQuads_RenderThread[i].m_Size.y,
 										m_ScreenSpaceQuads_RenderThread[i].m_TextureIndex,
-										m_ScreenSpaceQuads_RenderThread[i].m_pShader);
+										m_ScreenSpaceQuads_RenderThread[i].m_shader);
 	}
 
 
@@ -2858,7 +2858,7 @@ void kbRenderer_DX11::RenderScreenSpaceQuadImmediate(const int start_x, const in
 
 	if (textureIndex >= 0) {
 
-		ID3D11ShaderResourceView* const pShaderResourceView = (ID3D11ShaderResourceView*)m_pTextures[textureIndex]->GetGPUTexture();
+		ID3D11ShaderResourceView* const pShaderResourceView = (ID3D11ShaderResourceView*)m_textures[textureIndex]->GetGPUTexture();
 		m_pDeviceContext->PSSetShaderResources(0, 1, &pShaderResourceView);
 	}
 
@@ -2898,7 +2898,7 @@ void kbRenderer_DX11::RenderScreenSpaceQuadImmediate(const int start_x, const in
 void kbRenderer_DX11::RenderMesh(const kbRenderSubmesh* const pRenderMesh, const bool bShadowPass, const bool bSkipMeshBlendSettings) {
 
 	const kbRenderObject* pRenderObject = pRenderMesh->GetRenderObject();
-	const kbModel* const pModel = pRenderObject->m_pModel;
+	const kbModel* const pModel = pRenderObject->m_model;
 	const kbModel::mesh_t& pMesh = pModel->GetMeshes()[pRenderMesh->GetMeshIdx()];
 
 	if (pModel->IsPointCloud() == false && pMesh.m_NumTriangles == 0) {
@@ -2910,8 +2910,8 @@ void kbRenderer_DX11::RenderMesh(const kbRenderSubmesh* const pRenderMesh, const
 		return;
 	}
 
-	blk::error_check(pRenderObject != nullptr && pRenderObject->m_pModel != nullptr, "kbRenderer_DX11::RenderMesh() - no model found");
-	//blk::error_check( pModel->GetMaterials().size() > 0, "kbRenderer_DX11::RenderMesh() - No materials found for model %s", pRenderObject->m_pModel->GetFullName().c_str() );
+	blk::error_check(pRenderObject != nullptr && pRenderObject->m_model != nullptr, "kbRenderer_DX11::RenderMesh() - no model found");
+	//blk::error_check( pModel->GetMaterials().size() > 0, "kbRenderer_DX11::RenderMesh() - No materials found for model %s", pRenderObject->m_model->GetFullName().c_str() );
 
 	const UINT vertexStride = pModel->VertexStride();
 	const UINT vertexOffset = 0;
@@ -2931,7 +2931,7 @@ void kbRenderer_DX11::RenderMesh(const kbRenderSubmesh* const pRenderMesh, const
 	const kbMaterial* const pMeshMaterial = (pMesh.m_MaterialIndex < pModel->GetMaterials().size()) ? (&pModel->GetMaterials()[pMesh.m_MaterialIndex]) : (nullptr);
 
 	// Get Shader
-	const kbShader* pShader = (pMeshMaterial != nullptr) ? (pMeshMaterial->GetShader()) : (nullptr);
+	const kbShader* pShader = (pMeshMaterial != nullptr) ? (pMeshMaterial->get_shader()) : (nullptr);
 	ECullMode cullMode = CullMode_ShaderDefault;
 
 	if (bShadowPass) {
@@ -2945,8 +2945,8 @@ void kbRenderer_DX11::RenderMesh(const kbRenderSubmesh* const pRenderMesh, const
 
 		if (pRenderObject->m_Materials.size() > 0 && pRenderObject->m_Materials.size() > pRenderMesh->GetMeshIdx()) {
 			const kbShaderParamOverrides_t& shaderOverrides = pRenderObject->m_Materials[pRenderMesh->GetMeshIdx()];
-			pShader = shaderOverrides.m_pShader;
-			cullMode = shaderOverrides.m_CullModeOverride;
+			pShader = shaderOverrides.m_shader;
+			cullMode = shaderOverrides.m_cull_override;
 		}
 
 		if (pShader == nullptr || pShader->GetPixelShader() == nullptr) {
@@ -2980,7 +2980,7 @@ void kbRenderer_DX11::RenderMesh(const kbRenderSubmesh* const pRenderMesh, const
 	m_pDeviceContext->IASetInputLayout((ID3D11InputLayout*)pShader->GetVertexLayout());
 	m_pDeviceContext->VSSetShader((ID3D11VertexShader*)pShader->GetVertexShader(), nullptr, 0);
 
-	if (pRenderMesh->GetRenderPass() == RP_MousePicker) {
+	if (pRenderMesh->render_pass() == RP_MousePicker) {
 
 		m_pDeviceContext->PSSetShader((ID3D11PixelShader*)m_pMousePickerIdShader->GetPixelShader(), nullptr, 0);
 
@@ -3072,7 +3072,7 @@ void kbRenderer_DX11::RenderPretransformedDebugLines() {
 
 	m_pDeviceContext->RSSetState(m_pDefaultRasterizerState);
 
-	ID3D11ShaderResourceView* const pShaderResourceView = (ID3D11ShaderResourceView*)m_pTextures[0]->GetGPUTexture();
+	ID3D11ShaderResourceView* const pShaderResourceView = (ID3D11ShaderResourceView*)m_textures[0]->GetGPUTexture();
 	m_pDeviceContext->PSSetShaderResources(0, 1, &pShaderResourceView);
 	m_pDeviceContext->PSSetSamplers(0, 1, &m_pBasicSamplerState);
 	m_pDeviceContext->IASetInputLayout((ID3D11InputLayout*)m_pDebugShader->GetVertexLayout());
@@ -3124,7 +3124,7 @@ void kbRenderer_DX11::RenderDebugLines() {
 			m_RenderState.SetDepthStencilState(false, kbRenderState::DepthWriteMaskZero, kbRenderState::CompareLess, false);
 		}
 
-		ID3D11ShaderResourceView* const pShaderResourceView = (ID3D11ShaderResourceView*)m_pTextures[0]->GetGPUTexture();
+		ID3D11ShaderResourceView* const pShaderResourceView = (ID3D11ShaderResourceView*)m_textures[0]->GetGPUTexture();
 		m_pDeviceContext->PSSetShaderResources(0, 1, &pShaderResourceView);
 		m_pDeviceContext->PSSetSamplers(0, 1, &m_pBasicSamplerState);
 		m_pDeviceContext->IASetInputLayout((ID3D11InputLayout*)m_pDebugShader->GetVertexLayout());
@@ -3177,7 +3177,7 @@ void kbRenderer_DX11::RenderDebugBillboards(const bool bIsEntityIdPass) {
 	const auto varBindings = pShader->GetShaderVarBindings();
 	for (int i = 0; i < m_DebugBillboards.size(); i++) {
 		debugDrawObject_t& currBillBoard = m_DebugBillboards[i];
-		ID3D11ShaderResourceView* const pShaderResourceView = (ID3D11ShaderResourceView*)m_pTextures[currBillBoard.m_TextureIndex]->GetGPUTexture();
+		ID3D11ShaderResourceView* const pShaderResourceView = (ID3D11ShaderResourceView*)m_textures[currBillBoard.m_TextureIndex]->GetGPUTexture();
 		m_pDeviceContext->PSSetShaderResources(0, 1, &pShaderResourceView);
 
 		D3D11_MAPPED_SUBRESOURCE mappedResource;
@@ -3393,7 +3393,7 @@ void kbRenderer_DX11::RT_Render2DLine(const Vec3& startPt, const Vec3& endPt, co
 
 	m_RenderState.SetBlendState(pShader);
 
-	ID3D11ShaderResourceView* const pShaderResourceView = (ID3D11ShaderResourceView*)m_pTextures[0]->GetGPUTexture();
+	ID3D11ShaderResourceView* const pShaderResourceView = (ID3D11ShaderResourceView*)m_textures[0]->GetGPUTexture();
 	m_pDeviceContext->PSSetShaderResources(0, 1, &pShaderResourceView);
 	m_pDeviceContext->PSSetSamplers(0, 1, &m_pBasicSamplerState);
 	m_pDeviceContext->IASetInputLayout((ID3D11InputLayout*)pShader->GetVertexLayout());
@@ -3470,7 +3470,7 @@ void kbRenderer_DX11::RT_Render2DQuad(const Vec2& origin, const Vec2& size, cons
 	m_RenderState.SetBlendState(pShader);
 	m_RenderState.SetDepthStencilState(false, kbRenderState::DepthWriteMaskZero, kbRenderState::CompareAlways, false);
 
-	ID3D11ShaderResourceView* const pShaderResourceView = (ID3D11ShaderResourceView*)m_pTextures[0]->GetGPUTexture();
+	ID3D11ShaderResourceView* const pShaderResourceView = (ID3D11ShaderResourceView*)m_textures[0]->GetGPUTexture();
 	m_pDeviceContext->PSSetShaderResources(0, 1, &pShaderResourceView);
 	m_pDeviceContext->PSSetSamplers(0, 1, &m_pBasicSamplerState);
 	m_pDeviceContext->IASetInputLayout((ID3D11InputLayout*)pShader->GetVertexLayout());
@@ -3706,12 +3706,12 @@ ID3D11Buffer* kbRenderer_DX11::SetConstantBuffer(const kbShaderVarBindings_t& sh
 
 				if (textureBinding.m_pDefaultRenderTexture == m_pRenderTargets[ACCUMULATION_BUFFER_1]) {
 					if (m_iAccumBuffer == 0) {
-						pShaderResourceView = ((kbRenderTexture_DX11*)m_pRenderTargets[ACCUMULATION_BUFFER_2])->m_pShaderResourceView;
+						pShaderResourceView = ((kbRenderTexture_DX11*)m_pRenderTargets[ACCUMULATION_BUFFER_2])->m_shaderResourceView;
 					} else {
-						pShaderResourceView = ((kbRenderTexture_DX11*)m_pRenderTargets[ACCUMULATION_BUFFER_1])->m_pShaderResourceView;
+						pShaderResourceView = ((kbRenderTexture_DX11*)m_pRenderTargets[ACCUMULATION_BUFFER_1])->m_shaderResourceView;
 					}
 				} else {
-					pShaderResourceView = ((kbRenderTexture_DX11*)textureBinding.m_pDefaultRenderTexture)->m_pShaderResourceView;
+					pShaderResourceView = ((kbRenderTexture_DX11*)textureBinding.m_pDefaultRenderTexture)->m_shaderResourceView;
 				}
 			}
 
@@ -3719,10 +3719,10 @@ ID3D11Buffer* kbRenderer_DX11::SetConstantBuffer(const kbShaderVarBindings_t& sh
 				const kbShaderParamOverrides_t::kbShaderParam_t& curOverride = (*paramOverrides)[iOverride];
 				if (curOverride.m_Type == kbShaderParamOverrides_t::kbShaderParam_t::SHADER_TEX && curOverride.m_VarName == shaderVarBindings.m_Textures[iTex].m_TextureName) {
 
-					if (curOverride.m_pTexture != nullptr) {
-						pShaderResourceView = curOverride.m_pTexture->GetGPUTexture();
-					} else if (curOverride.m_pRenderTexture != nullptr) {
-						pShaderResourceView = ((kbRenderTexture_DX11*)curOverride.m_pRenderTexture)->m_pShaderResourceView;
+					if (curOverride.m_texture != nullptr) {
+						pShaderResourceView = curOverride.m_texture->GetGPUTexture();
+					} else if (curOverride.m_render_texture != nullptr) {
+						pShaderResourceView = ((kbRenderTexture_DX11*)curOverride.m_render_texture)->m_shaderResourceView;
 					}
 				}
 			}

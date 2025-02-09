@@ -53,14 +53,14 @@ public:
 													kbRenderTexture( width, height, targetFormat, bIsCPUAccessible ),
 													m_pRenderTargetTexture( nullptr ),
 													m_pRenderTargetView( nullptr ),
-													m_pShaderResourceView( nullptr ),
+													m_shaderResourceView( nullptr ),
 													m_pDepthStencilView( nullptr ) { }
    
 
 private:
 
 	virtual void								Release_Internal() {
-													SAFE_RELEASE( m_pShaderResourceView );
+													SAFE_RELEASE( m_shaderResourceView );
 													SAFE_RELEASE( m_pRenderTargetView );
 													SAFE_RELEASE( m_pRenderTargetTexture );
 													SAFE_RELEASE( m_pDepthStencilView );
@@ -68,7 +68,7 @@ private:
 
 	ID3D11Texture2D *							m_pRenderTargetTexture;
 	ID3D11RenderTargetView *					m_pRenderTargetView;
-	ID3D11ShaderResourceView *					m_pShaderResourceView;
+	ID3D11ShaderResourceView *					m_shaderResourceView;
 	ID3D11DepthStencilView	*					m_pDepthStencilView;
 };
 
@@ -488,7 +488,7 @@ private:
 	ID3D11RasterizerState *						m_pWireFrameRasterizerState;
 
 	const static int Max_Num_Textures = 128;
-	kbTexture *									m_pTextures[Max_Num_Textures];
+	kbTexture *									m_textures[Max_Num_Textures];
 	
 	ID3D11SamplerState *						m_pBasicSamplerState;
 	ID3D11SamplerState *						m_pNormalMapSamplerState;

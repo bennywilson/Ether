@@ -70,7 +70,7 @@ protected:
 
 private:
 
-	virtual void								Update_Internal(const float DeltaTime) override;
+	virtual void								update_internal(const float DeltaTime) override;
 
 	void										SetupCloth();
 

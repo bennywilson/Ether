@@ -16,9 +16,9 @@ kbEntity::kbEntity() :
 }
 
 /// kbEntity::PostLoad
-void kbEntity::PostLoad() {
+void kbEntity::post_load() {
 	for (int i = 0; i < m_Components.size(); i++) {
-		m_Components[i]->PostLoad();
+		m_Components[i]->post_load();
 	}
 }
 

@@ -56,9 +56,9 @@ void kbClothComponent::Constructor() {
 	m_CurrentTickFrame = 0;
 }
 
-/// kbClothComponent::Update_Internal
-void kbClothComponent::Update_Internal(const float dt) {
-	Super::Update_Internal(dt);
+/// kbClothComponent::update_internal
+void kbClothComponent::update_internal(const float dt) {
+	Super::update_internal(dt);
 
 	float DeltaTime = dt;
 	if (DeltaTime == 0.0f) {
@@ -74,8 +74,8 @@ void kbClothComponent::Update_Internal(const float dt) {
 	for (int i = 0; i < GetOwner()->NumComponents(); i++) {
 		if (GetOwner()->GetComponent(i)->IsA(kbSkeletalRenderComponent::GetType())) {
 			pSkelRenderComponent = static_cast<kbSkeletalRenderComponent*>(GetOwner()->GetComponent(i));
-			if (pSkelRenderComponent->GetModel() != m_pSkeletalModel) {
-				m_pSkeletalModel = pSkelRenderComponent->GetModel();
+			if (pSkelRenderComponent->model() != m_pSkeletalModel) {
+				m_pSkeletalModel = pSkelRenderComponent->model();
 				SetupCloth();
 				break;
 			}
@@ -198,7 +198,7 @@ void kbClothComponent::Update_Internal(const float dt) {
 				blk::log("%f %f %f", m_CollisionSpheres[iCollision].m_Sphere.x, m_CollisionSpheres[iCollision].m_Sphere.y, m_CollisionSpheres[iCollision].m_Sphere.z);
 			}
 
-			//		blk::log( "%s looking for %s", pSkelRenderComponent->GetModel()->GetFullFileName().c_str(), m_CollisionSpheres[iCollision].m_BoneName.c_str() );
+			//		blk::log( "%s looking for %s", pSkelRenderComponent->model()->GetFullFileName().c_str(), m_CollisionSpheres[iCollision].m_BoneName.c_str() );
 
 			if (pSkelRenderComponent->GetBoneWorldMatrix(m_CollisionSpheres[iCollision].m_BoneName, boneWorldMatrix)) {
 				boneWorldMatrix.m_Axis[0].normalize_self();
@@ -261,7 +261,7 @@ void kbClothComponent::RunSimulation(const float inDeltaTime) {
 	for (int i = 0; i < GetOwner()->NumComponents(); i++) {
 		if (GetOwner()->GetComponent(i)->IsA(kbSkeletalRenderComponent::GetType())) {
 			pSkelRenderComponent = static_cast<kbSkeletalRenderComponent*>(GetOwner()->GetComponent(i));
-			if (pSkelRenderComponent->GetModel() != m_pSkeletalModel) {
+			if (pSkelRenderComponent->model() != m_pSkeletalModel) {
 				break;
 			}
 		}

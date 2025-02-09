@@ -36,7 +36,7 @@ public:
 	kbEntity();
 	virtual	~kbEntity() { }
 
-	void PostLoad();
+	void post_load();
 
 	virtual void AddComponent(kbComponent* const pComponent, int indexToInsertAt = -1);
 	virtual void RemoveComponent(kbComponent* const pComponent);

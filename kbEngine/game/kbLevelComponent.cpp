@@ -24,9 +24,9 @@ kbLevelComponent::~kbLevelComponent() {
 	g_pLevelComponent = nullptr;
 }
 
-/// kbLevelComponent::SetEnable_Internal
-void kbLevelComponent::SetEnable_Internal( const bool bEnable ) {
-	Super::SetEnable_Internal( bEnable );
+/// kbLevelComponent::enable_internal
+void kbLevelComponent::enable_internal( const bool bEnable ) {
+	Super::enable_internal( bEnable );
 
 	if ( bEnable ) {
 		g_pRenderer->SetWorldAndEditorIconScale( m_GlobalModelScale, m_EditorIconScale );
@@ -38,8 +38,8 @@ void kbLevelComponent::SetEnable_Internal( const bool bEnable ) {
 }
 
 /// kbLevelComponent::EditorChange
-void kbLevelComponent::EditorChange( const std::string & propertyName ) {
-	Super::EditorChange( propertyName );
+void kbLevelComponent::editor_change( const std::string & propertyName ) {
+	Super::editor_change( propertyName );
 
 	if ( propertyName == "WorldScale" || propertyName == "IconScale" ) {
 		g_pRenderer->SetWorldAndEditorIconScale( m_GlobalModelScale , m_EditorIconScale );
@@ -90,15 +90,15 @@ kbCinematicComponent::~kbCinematicComponent() {
 void kbCinematicComponent::Constructor() {
 }
 
-/// kbCinematicComponent::SetEnable_Internal
-void kbCinematicComponent::SetEnable_Internal( const bool bEnable ) {
+/// kbCinematicComponent::enable_internal
+void kbCinematicComponent::enable_internal( const bool bEnable ) {
 
-	Super::SetEnable_Internal( true );
+	Super::enable_internal( true );
 }
 
-/// kbCinematicComponent::Update_Internal
-void kbCinematicComponent::Update_Internal( const float dt ) {
+/// kbCinematicComponent::update_internal
+void kbCinematicComponent::update_internal( const float dt ) {
 	
-	Super::Update_Internal( dt );
+	Super::update_internal( dt );
 
 }

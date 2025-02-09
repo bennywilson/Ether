@@ -56,8 +56,8 @@ public:
 	void ExternalRequestStateChange(const KungFuSheepState::SheepStates_t);
 
 protected:
-	virtual void SetEnable_Internal(const bool bEnable) override;
-	virtual void Update_Internal(const float DeltaTime) override;
+	virtual void enable_internal(const bool bEnable) override;
+	virtual void update_internal(const float DeltaTime) override;
 
 private:
 	// Data

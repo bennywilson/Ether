@@ -138,18 +138,18 @@ struct kbShaderParamOverrides_t {
 		std::vector<Mat4> m_Mat4List;
 		std::vector<Vec4> m_Vec4List;
 
-        kbShaderParam_t() : m_pTexture( nullptr ), m_pRenderTexture( nullptr ) { }
-        const class kbTexture *			m_pTexture;
-		const class kbRenderTexture *	m_pRenderTexture;
+        kbShaderParam_t() : m_texture( nullptr ), m_render_texture( nullptr ) { }
+        const class kbTexture *			m_texture;
+		const class kbRenderTexture *	m_render_texture;
         std::string						m_VarName;
         size_t							m_VarSizeBytes;
     };
 
-    kbShaderParamOverrides_t() : m_pShader( nullptr ), m_CullModeOverride( CullMode_ShaderDefault ) { }
+    kbShaderParamOverrides_t() : m_shader( nullptr ), m_cull_override( CullMode_ShaderDefault ) { }
 
     std::vector<kbShaderParam_t>		m_ParamOverrides;
-	const class kbShader *				m_pShader;
-	ECullMode							m_CullModeOverride;
+	const class kbShader *				m_shader;
+	ECullMode							m_cull_override;
 
     kbShaderParam_t & AllocateParam( const std::string & varName ) {
 		for ( int i = 0; i < m_ParamOverrides.size(); i++ ) {
@@ -200,7 +200,7 @@ struct kbShaderParamOverrides_t {
     void SetTexture( const std::string & varName, const kbTexture *const pTexture ) {
         kbShaderParam_t & newParam = AllocateParam( varName );
         newParam.m_VarName = varName;
-        newParam.m_pTexture = pTexture;
+        newParam.m_texture = pTexture;
         newParam.m_Type = kbShaderParam_t::SHADER_TEX;
         newParam.m_VarSizeBytes = sizeof(kbTexture*);
     }
@@ -208,7 +208,7 @@ struct kbShaderParamOverrides_t {
 	void SetTexture( const std::string & varName, const kbRenderTexture *const pRenderTexture ) {
         kbShaderParam_t & newParam = AllocateParam( varName );
         newParam.m_VarName = varName;
-        newParam.m_pRenderTexture = pRenderTexture;
+        newParam.m_render_texture = pRenderTexture;
         newParam.m_Type = kbShaderParam_t::SHADER_TEX;
         newParam.m_VarSizeBytes = sizeof(kbRenderTexture*);
 	}
@@ -221,25 +221,25 @@ class kbRenderObject {
 public:
 												kbRenderObject() : 
 													m_pComponent( nullptr ),
-													m_pModel( nullptr ),
-													m_RenderPass( RP_Lighting ),
+													m_model( nullptr ),
+													m_render_pass( RP_Lighting ),
 													m_CullMode( CullMode_ShaderDefault ),
-													m_RenderOrderBias( 0.0f ),
+													m_render_order_bias( 0.0f ),
 													m_EntityId( 0 ),
 													m_VertBufferStartIndex( -1 ),
 													m_VertBufferIndexCount( -1 ),
 													m_CullDistance( -1.0f ),
-													m_bCastsShadow( false ),
+													m_casts_shadow( false ),
 													m_bIsSkinnedModel( false ),
 													m_bIsFirstAdd( true ),
 													m_bIsRemove( false ) { }
 
 	const class kbGameComponent *				m_pComponent;
-	const class kbModel *						m_pModel;
+	const class kbModel *						m_model;
 	std::vector<kbShaderParamOverrides_t>		m_Materials;
-	ERenderPass									m_RenderPass;
+	ERenderPass									m_render_pass;
 	ECullMode									m_CullMode;
-	float										m_RenderOrderBias;
+	float										m_render_order_bias;
 	Vec3										m_Position;
 	Quat4										m_Orientation;
 	Vec3										m_Scale;
@@ -252,7 +252,7 @@ public:
 
 	float										m_CullDistance;
 
-	bool										m_bCastsShadow			: 1;
+	bool										m_casts_shadow			: 1;
 	bool										m_bIsSkinnedModel		: 1;
 
 	// Updated by renderer
@@ -279,7 +279,7 @@ public:
 	float										m_Radius;
 	float										m_Length;
 	float										m_CascadedShadowSplits[4];
-	bool										m_bCastsShadow;
+	bool										m_casts_shadow;
 	bool										m_bIsFirstAdd;
 	bool										m_bIsRemove;
 };
@@ -298,7 +298,7 @@ class kbLightShafts {
 public:
 												kbLightShafts() :
 													m_pLightShaftsComponent( nullptr ),
-													m_pTexture( nullptr ),
+													m_texture( nullptr ),
 													m_Color(0.0f, 0.0f, 0.0f, 1.0f ),
 													m_Pos( Vec3::zero ),
 													m_Rotation( Quat4::zero ),
@@ -313,7 +313,7 @@ public:
 													}
 
 	const class kbLightShaftsComponent *		m_pLightShaftsComponent;
-	class kbTexture *							m_pTexture;
+	class kbTexture *							m_texture;
 	kbColor										m_Color;
 	Vec3										m_Pos;
 	Quat4										m_Rotation;

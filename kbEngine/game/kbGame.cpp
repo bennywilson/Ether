@@ -48,7 +48,7 @@ void kbGame::InitGame(HWND hwnd, const int backBufferWidth, const int backBuffer
 	m_InputManager.Init(m_Hwnd);
 	kbConsoleVarManager::GetConsoleVarManager()->Initialize();
 
-	InitGame_Internal();
+	init_internal();
 }
 
 ///  *  kbGame::LoadMap
@@ -104,10 +104,10 @@ void kbGame::LoadMap(const std::string& mapName) {
 				}
 				inFile.Close();
 
-				LevelLoaded_Internal();
+				level_loaded_internal();
 
 				m_Timer.Reset();
-				PlayGame_Internal();
+				play_internal();
 				m_bIsPlaying = true;
 
 				break;
@@ -136,7 +136,7 @@ void kbGame::LoadMap(const std::string& mapName) {
 
 ///  *  kbGame::StopGame
 void kbGame::StopGame() {
-	StopGame_Internal();
+	stop_internal();
 
 
 	m_bIsPlaying = false;
@@ -188,13 +188,13 @@ void kbGame::Update() {
 	m_InputManager.Update(m_CurFrameDeltaTime);
 	m_SoundManager.Update();
 
-	PreUpdate_Internal();
+	preupdate_internal();
 
 	for (int i = 0; i < m_GameEntityList.size(); i++) {
 		m_GameEntityList[i]->Update(m_CurFrameDeltaTime);
 	}
 
-	PostUpdate_Internal();
+	postupdate_internal();
 
 	if (g_pRenderer != nullptr) {
 
@@ -207,7 +207,7 @@ void kbGame::Update() {
 			g_pRenderer->DrawDebugText(m_Console.GetCurrentCommandString().c_str() + std::string("_"), 0, 0.75f - fontHeight, 0.0125f, 0.0125f, kbColor::green);
 
 			if (g_EnableHelpScreen.GetBool()) {
-				DisplayDebugCommands();
+				display_debug_commands();
 			}
 		}
 		g_pRenderer->SetRenderWindow(m_Hwnd);
@@ -338,7 +338,7 @@ void kbGame::Update() {
 	}
 
 	kbConsoleVarManager::GetConsoleVarManager()->Update();
-	m_Console.Update(m_CurFrameDeltaTime, m_InputManager.GetInput());
+	m_Console.Update(m_CurFrameDeltaTime, m_InputManager.get_input());
 
 	if (m_bQuitGameRequested) {
 		StopGame();
@@ -360,7 +360,7 @@ kbGameEntity* kbGame::CreateEntity(const kbGameEntity* const pPrefab, const bool
 		m_GamePlayersList.push_back(pSpawnedEntity);
 	}
 
-	AddGameEntity_Internal(pSpawnedEntity);
+	add_entity_internal(pSpawnedEntity);
 
 	return pSpawnedEntity;
 }
@@ -368,7 +368,7 @@ kbGameEntity* kbGame::CreateEntity(const kbGameEntity* const pPrefab, const bool
 /// kbGame::RemoveGameEntity
 void kbGame::RemoveGameEntity(kbGameEntity* const pEntityToRemove) {
 
-	RemoveGameEntity_Internal(pEntityToRemove);
+	remove_entity_internal(pEntityToRemove);
 
 	std::vector<kbGameEntity*>::iterator it;
 	it = find(m_GameEntityList.begin(), m_GameEntityList.end(), pEntityToRemove);
@@ -402,9 +402,9 @@ kbGameEntityPtr kbGame::GetEntityByName(const kbString entName) {
 }
 
 /// kbGame::SwapEntitiesByIdx
-void kbGame::SwapEntitiesByIdx(const size_t idx1, const size_t idx2) {
+void kbGame::swap_entities_by_idx(const size_t idx1, const size_t idx2) {
 	if (idx1 < 0 || idx1 >= m_GameEntityList.size() || idx2 < 0 || idx2 >= m_GameEntityList.size()) {
-		blk::warn("kbGame::SwapEntitiesByIdx() - Invalid index(es) [%d], [%d]", idx1, idx2);
+		blk::warn("kbGame::swap_entities_by_idx() - Invalid index(es) [%d], [%d]", idx1, idx2);
 		return;
 	}
 
@@ -476,8 +476,8 @@ bool kbGame::ProcessCommand(const std::string& InCommand) {
 	return true;
 }
 
-/// kbGame::DisplayDebugCommands
-void kbGame::DisplayDebugCommands() {
+/// kbGame::display_debug_commands
+void kbGame::display_debug_commands() {
 
 	const float aspectRatio = (float)g_pRenderer->GetBackBufferWidth() / (float)g_pRenderer->GetBackBufferHeight();
 	const float fontScreenSizeX = 0.02f;

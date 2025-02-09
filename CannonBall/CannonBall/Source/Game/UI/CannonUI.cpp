@@ -17,18 +17,18 @@ void CannonHealthBarUIComponent::Constructor() {
 	m_StartFlashTime = -1.0f;
 }
 
-/// CannonHealthBarUIComponent::SetEnable_Internal
-void CannonHealthBarUIComponent::SetEnable_Internal(const bool bEnable) {
-	Super::SetEnable_Internal(bEnable);
+/// CannonHealthBarUIComponent::enable_internal
+void CannonHealthBarUIComponent::enable_internal(const bool bEnable) {
+	Super::enable_internal(bEnable);
 }
 
-/// CannonHealthBarUIComponent::Update_Internal
-void CannonHealthBarUIComponent::Update_Internal(const float DT) {
-	Super::Update_Internal(DT);
+/// CannonHealthBarUIComponent::update_internal
+void CannonHealthBarUIComponent::update_internal(const float DT) {
+	Super::update_internal(DT);
 
 	if (m_pStaticRenderComponent != nullptr) {
 		static kbString normalizedHealth("normalizedHealth");
-		m_pStaticRenderComponent->SetMaterialParamVector(0, normalizedHealth.stl_str(), Vec4(m_TargetNormalizedHealth, 0.0f, 0.0f, 0.0f));
+		m_pStaticRenderComponent->set_material_param_vec4(0, normalizedHealth.stl_str(), Vec4(m_TargetNormalizedHealth, 0.0f, 0.0f, 0.0f));
 
 		static kbString barTextureWeights("barTextureWeights");
 		Vec4 weights(1.0f, 0.0f, 0.0f, 0.0f);
@@ -37,7 +37,7 @@ void CannonHealthBarUIComponent::Update_Internal(const float DT) {
 			weights.x = sin((weights.x) - (kbPI * 0.5f)) * 0.5f + 0.5f;
 			weights.y = 1.0f - weights.x;
 		}
-		m_pStaticRenderComponent->SetMaterialParamVector(0, barTextureWeights.stl_str(), weights);
+		m_pStaticRenderComponent->set_material_param_vec4(0, barTextureWeights.stl_str(), weights);
 	}
 }
 
@@ -77,10 +77,10 @@ void CannonBallUIComponent::Constructor() {
 	m_NextSmokeCloudUpdateTime = -1.0f;
 }
 
-/// CannonBallUIComponent::SetEnable_Internal
-void CannonBallUIComponent::SetEnable_Internal(const bool bEnable) {
+/// CannonBallUIComponent::enable_internal
+void CannonBallUIComponent::enable_internal(const bool bEnable) {
 
-	Super::SetEnable_Internal(bEnable);
+	Super::enable_internal(bEnable);
 
 	m_CannonBallActivatedStartTime = -1.0f;
 	if (bEnable) {
@@ -93,14 +93,14 @@ void CannonBallUIComponent::SetEnable_Internal(const bool bEnable) {
 	}
 }
 
-/// CannonBallUIComponent::Update_Internal
-void CannonBallUIComponent::Update_Internal(const float dt) {
+/// CannonBallUIComponent::update_internal
+void CannonBallUIComponent::update_internal(const float dt) {
 
-	Super::Update_Internal(dt);
+	Super::update_internal(dt);
 
 	if (m_pStaticRenderComponent != nullptr) {
 		static kbString meterFill("meterFill");
-		m_pStaticRenderComponent->SetMaterialParamVector(0, meterFill.stl_str(), Vec4(m_CurrentFill, 0.0f, 0.0f, 0.0f));
+		m_pStaticRenderComponent->set_material_param_vec4(0, meterFill.stl_str(), Vec4(m_CurrentFill, 0.0f, 0.0f, 0.0f));
 	}
 
 	const float ScreenPixelWidth = (float)g_pRenderer->GetBackBufferWidth();
@@ -118,23 +118,23 @@ void CannonBallUIComponent::Update_Internal(const float dt) {
 		static Vec2 randomScaleFactor(1.0f, 1.0f);
 
 		if (m_CurrentFill >= 1.0f) {
-			m_pSparkModel->SetMaterialParamVector(0, colorFactor.stl_str(), Vec4(1.0f, 1.0f, 1.0f, 1.0f));
+			m_pSparkModel->set_material_param_vec4(0, colorFactor.stl_str(), Vec4(1.0f, 1.0f, 1.0f, 1.0f));
 
 			if (m_NextSparkAnimUpdateTime > 0.0f && g_GlobalTimer.TimeElapsedSeconds() > m_NextSparkAnimUpdateTime) {
 				m_NextSparkAnimUpdateTime = g_GlobalTimer.TimeElapsedSeconds() + 0.25f;
-				m_pSparkModel->SetMaterialParamVector(0, rotationAngle.stl_str(), Vec4(kbfrand() * kbPI * 2.0f, 0.0f, 0.0f, 0.0f));
+				m_pSparkModel->set_material_param_vec4(0, rotationAngle.stl_str(), Vec4(kbfrand() * kbPI * 2.0f, 0.0f, 0.0f, 0.0f));
 
 				const float randSize = 0.5f + 0.5f * kbfrand();
 				randomScaleFactor.set(randSize, randSize);
 			}
 		} else {
-			m_pSparkModel->SetMaterialParamVector(0, colorFactor.stl_str(), Vec4(0.0f, 0.0f, 0.0f, 0.25f));
+			m_pSparkModel->set_material_param_vec4(0, colorFactor.stl_str(), Vec4(0.0f, 0.0f, 0.0f, 0.25f));
 		}
 
 		const Vec2 screenSize = Vec2(normalizedScreenSize.x * m_SparkRelativeSize.x, normalizedScreenSize.y * m_SparkRelativeSize.y);
 		const Vec2 screenPos = normalizedAnchorPt + Vec2(GetNormalizedScreenSize().x * m_SparkRelativePosition.x, GetNormalizedScreenSize().y * m_SparkRelativePosition.y);
 
-		m_pSparkModel->SetMaterialParamVector(0, normalizedScreenSize_Anchor.stl_str(),
+		m_pSparkModel->set_material_param_vec4(0, normalizedScreenSize_Anchor.stl_str(),
 			Vec4(screenSize.x * randomScaleFactor.x,
 				screenSize.y * randomScaleFactor.y,
 				screenPos.x + 0.5f * screenSize.x + screenSize.x * randomScaleFactor.x * 0.05f,
@@ -145,7 +145,7 @@ void CannonBallUIComponent::Update_Internal(const float dt) {
 
 		const Vec2 screenSize = Vec2(normalizedScreenSize.x * m_SmokeRelativeSize.x, normalizedScreenSize.y * m_SmokeRelativeSize.y);
 		const Vec2 screenPos = normalizedAnchorPt + Vec2(GetNormalizedScreenSize().x * m_SmokeRelativePosition.x, GetNormalizedScreenSize().y * m_SmokeRelativePosition.y);
-		m_pSmokeModel->SetMaterialParamVector(0, normalizedScreenSize_Anchor.stl_str(),
+		m_pSmokeModel->set_material_param_vec4(0, normalizedScreenSize_Anchor.stl_str(),
 							Vec4(screenSize.x,
 								screenSize.y,
 								screenPos.x + 0.5f * screenSize.x,
@@ -178,12 +178,12 @@ void CannonBallUIComponent::Update_Internal(const float dt) {
 			textureMask[idx] = 1.0f;
 
 			static kbString channelMask("channelMask");
-			m_pSmokeModel->SetMaterialParamVector(0, channelMask.stl_str(), textureMask);
+			m_pSmokeModel->set_material_param_vec4(0, channelMask.stl_str(), textureMask);
 		}
 
 		const Vec2 screenSize = Vec2(normalizedScreenSize.x * m_BoomRelativeSize.x, normalizedScreenSize.y * m_BoomRelativeSize.y);
 		const Vec2 screenPos = normalizedAnchorPt + Vec2(GetNormalizedScreenSize().x * m_BoomRelativePosition.x, GetNormalizedScreenSize().y * m_BoomRelativePosition.y);
-		m_pBoomModel->SetMaterialParamVector(0, normalizedScreenSize_Anchor.stl_str(),
+		m_pBoomModel->set_material_param_vec4(0, normalizedScreenSize_Anchor.stl_str(),
 							Vec4(screenSize.x, screenSize.y,
 								screenPos.x + 0.5f * screenSize.x + screenSize.x * randomOffset.x,
 								screenPos.y + 0.5f * screenSize.y + screenSize.y * randomOffset.y));
@@ -235,10 +235,10 @@ const Vec3 g_CheckMarkPos[] = { Vec3(0.400000f, 0.287480f, 0.000000f), Vec3(0.36
 Vec3 g_Offsets[] = { Vec3::zero, Vec3::zero, Vec3::zero, Vec3::zero, Vec3::zero, Vec3::zero };
 
 
-/// CannonBallPauseMenuUIComponent::SetEnable_Internal
-void CannonBallPauseMenuUIComponent::SetEnable_Internal(const bool bEnable) {
+/// CannonBallPauseMenuUIComponent::enable_internal
+void CannonBallPauseMenuUIComponent::enable_internal(const bool bEnable) {
 
-	Super::SetEnable_Internal(bEnable);
+	Super::enable_internal(bEnable);
 
 	if (bEnable) {
 		m_pStaticRenderComponent->Enable(true);
@@ -276,7 +276,7 @@ void CannonBallPauseMenuUIComponent::SetEnable_Internal(const bool bEnable) {
 		g_pInputManager->RegisterInputListener(this);
 
 		m_Widgets.back().SetRelativePosition(g_CheckMarkPos[m_SelectedWidgetIdx]);
-		m_Widgets.back().SetRenderOrderBias(-5.0f);
+		m_Widgets.back().set_render_order_bias(-5.0f);
 	} else {
 		for (int i = 0; i < m_Widgets.size(); i++) {
 			m_Entity.RemoveComponent(&m_Widgets[i]);
@@ -396,10 +396,10 @@ void CannonBallPauseMenuUIComponent::InputCB(const kbInput_t& input) {
 	}
 }
 
-/// CannonBallPauseMenuUIComponent::Update_Internal
-void CannonBallPauseMenuUIComponent::Update_Internal(const float DT) {
+/// CannonBallPauseMenuUIComponent::update_internal
+void CannonBallPauseMenuUIComponent::update_internal(const float DT) {
 
-	Super::Update_Internal(DT);
+	Super::update_internal(DT);
 
 	RecalculateChildrenTransform();
 	/*
@@ -509,10 +509,10 @@ void CannonBallMainMenuComponent::InputCB(const kbInput_t& input) {
 	}
 }
 
-/// CannonBallMainMenuComponent::SetEnable_Internal
-void CannonBallMainMenuComponent::SetEnable_Internal(const bool bEnable) {
+/// CannonBallMainMenuComponent::enable_internal
+void CannonBallMainMenuComponent::enable_internal(const bool bEnable) {
 
-	Super::SetEnable_Internal(bEnable);
+	Super::enable_internal(bEnable);
 
 	if (bEnable) {
 
@@ -532,10 +532,10 @@ void CannonBallMainMenuComponent::SetEnable_Internal(const bool bEnable) {
 	}
 }
 
-/// CannonBallMainMenuComponent::Update_Internal
-void CannonBallMainMenuComponent::Update_Internal(const float dt) {
+/// CannonBallMainMenuComponent::update_internal
+void CannonBallMainMenuComponent::update_internal(const float dt) {
 
-	Super::Update_Internal(dt);
+	Super::update_internal(dt);
 
 	const float animStateSecElapsed = g_GlobalTimer.TimeElapsedSeconds() - m_TimeAnimStateBegan;
 	if (m_AnimationState == 1) {
@@ -565,7 +565,7 @@ void CannonBallMainMenuComponent::SetAnimationFrame(const int idx) {
 
 	if (m_AnimationState == 0) {
 		m_ChildWidgets[0].Enable(false);
-		m_pModel->Enable(true);
+		m_model->Enable(true);
 		m_RelativePosition.x = 0.060000f;
 	} else if (m_AnimationState == 1) {
 
@@ -574,7 +574,7 @@ void CannonBallMainMenuComponent::SetAnimationFrame(const int idx) {
 		m_ChildWidgets[0].Enable(true);
 		Recalculate(nullptr, true);
 	} else if (m_AnimationState == 3) {
-		m_pModel->Enable(false);
+		m_model->Enable(false);
 	}
 }
 
@@ -644,20 +644,20 @@ void CannonBallScrollComponent::Constructor() {
 	m_ScrollRate.set(0.0f, 0.0f, 0.0f);
 }
 
-/// CannonBallScrollComponent::SetEnable_Internal
-void CannonBallScrollComponent::SetEnable_Internal(const bool bEnable) {
+/// CannonBallScrollComponent::enable_internal
+void CannonBallScrollComponent::enable_internal(const bool bEnable) {
 
-	Super::SetEnable_Internal(bEnable);
+	Super::enable_internal(bEnable);
 	Vec3 myPos = this->GetRelativePosition();
 	myPos.y = 1.0f;
 	myPos.z = 0.0f;
 	SetRelativePosition(myPos);
 }
 
-/// CannonBallScrollComponent::Update_Internal
-void CannonBallScrollComponent::Update_Internal(const float DT) {
+/// CannonBallScrollComponent::update_internal
+void CannonBallScrollComponent::update_internal(const float DT) {
 
-	Super::Update_Internal(DT);
+	Super::update_internal(DT);
 
 	Vec3 myPos = this->GetRelativePosition();
 	myPos += m_ScrollRate * DT;

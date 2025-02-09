@@ -16,17 +16,17 @@ class kbStaticModelComponent : public RenderComponent {
 public:
 	virtual ~kbStaticModelComponent();
 
-	void SetModel(class kbModel* pModel) { m_pModel = pModel; }
-	const kbModel* GetModel() const { return m_pModel; }
+	void set_model(class kbModel* pModel) { m_model = pModel; }
+	const kbModel* model() const { return m_model; }
 
-	virtual void EditorChange(const std::string& propertyName);
+	virtual void editor_change(const std::string& propertyName);
 
 protected:
-	virtual void SetEnable_Internal(const bool isEnabled) override;
-	virtual void Update_Internal(const float DeltaTime) override;
+	virtual void enable_internal(const bool isEnabled) override;
+	virtual void update_internal(const float DeltaTime) override;
 
 private:
-	class kbModel* m_pModel;
+	class kbModel* m_model;
 };
 
 /// kbAnimComponent
@@ -36,18 +36,18 @@ class kbAnimComponent : public kbGameComponent {
 	KB_DECLARE_COMPONENT(kbAnimComponent, kbGameComponent);
 
 public:
-	const kbString& GetAnimationName() const { return m_AnimationName; }
+	const kbString& animation_name() const { return m_animation_name; }
 
 private:
-	kbString m_AnimationName;
-	kbAnimation* m_pAnimation;
-	float m_TimeScale;
-	bool m_bIsLooping;
-	std::vector<kbAnimEvent> m_AnimEvents;
+	kbString m_animation_name;
+	kbAnimation* m_animation;
+	float m_time_scale;
+	bool m_is_looping;
+	std::vector<kbAnimEvent> m_anim_events;
 
-	float m_CurrentAnimationTime;
-	kbString m_DesiredNextAnimation;
-	float m_DesiredNextAnimBlendLength;
+	float m_current_animation_time;
+	kbString m_desired_next_animation;
+	float m_desired_next_anim_blend_length;
 };
 
 
@@ -58,10 +58,10 @@ class kbSkeletalRenderComponent : public RenderComponent {
 public:
 	virtual	~kbSkeletalRenderComponent();
 
-	void SetModel(class kbModel* const pModel);
-	const kbModel* GetModel() const { return m_pModel; }
+	void set_model(class kbModel* const pModel);
+	const kbModel* model() const { return m_model; }
 
-	virtual void EditorChange(const std::string& propertyName);
+	virtual void editor_change(const std::string& propertyName);
 
 	int GetBoneIndex(const kbString& boneName);
 	kbBoneMatrix_t GetBoneRefMatrix(const int index);
@@ -77,12 +77,12 @@ public:
 	void PlayAnimation(const kbString& AnimationName, const float BlendLength, bool bRestartIfAlreadyPlaying, const kbString desiredNextAnimation = kbString::EmptyString, const float desiredNextAnimBlendLength = 0.0f);
 	bool IsPlaying(const kbString& AnimationName) const;
 
-	bool HasFinishedAnimation() const { return IsTransitioningAnimations() == false && (m_CurrentAnimation == -1 || m_Animations[m_CurrentAnimation].m_pAnimation == NULL || m_Animations[m_CurrentAnimation].m_CurrentAnimationTime >= m_Animations[m_CurrentAnimation].m_pAnimation->GetLengthInSeconds()); }
+	bool HasFinishedAnimation() const { return IsTransitioningAnimations() == false && (m_CurrentAnimation == -1 || m_Animations[m_CurrentAnimation].m_animation == NULL || m_Animations[m_CurrentAnimation].m_current_animation_time >= m_Animations[m_CurrentAnimation].m_animation->GetLengthInSeconds()); }
 	bool IsTransitioningAnimations() const { return m_CurrentAnimation != -1 && m_NextAnimation != -1; }
 
-	float GetCurAnimTimeSeconds() const { if (m_CurrentAnimation == -1) return -1.0f; return m_Animations[m_CurrentAnimation].m_CurrentAnimationTime; }
+	float GetCurAnimTimeSeconds() const { if (m_CurrentAnimation == -1) return -1.0f; return m_Animations[m_CurrentAnimation].m_current_animation_time; }
 	float GetNormalizedAnimTime() const { return GetCurAnimTimeSeconds() / GetCurAnimLengthSeconds(); }
-	float GetCurAnimLengthSeconds() const { if (m_CurrentAnimation == -1 || m_Animations[m_CurrentAnimation].m_pAnimation == NULL) return -1.0f; return m_Animations[m_CurrentAnimation].m_pAnimation->GetLengthInSeconds(); }
+	float GetCurAnimLengthSeconds() const { if (m_CurrentAnimation == -1 || m_Animations[m_CurrentAnimation].m_animation == NULL) return -1.0f; return m_Animations[m_CurrentAnimation].m_animation->GetLengthInSeconds(); }
 
 	const kbString* GetCurAnimationName() const;
 	const kbString* GetNextAnimationName() const;
@@ -94,13 +94,13 @@ public:
 	void UnregisterSyncSkelModel(kbSkeletalRenderComponent* const pSkelModel);
 
 protected:
-	virtual void SetEnable_Internal(const bool isEnabled) override;
-	virtual void Update_Internal(const float DeltaTime) override;
+	virtual void enable_internal(const bool isEnabled) override;
+	virtual void update_internal(const float DeltaTime) override;
 
 	std::vector<IAnimEventListener*> m_AnimEventListeners;
 
 	// Editor
-	class kbModel* m_pModel;
+	class kbModel* m_model;
 	std::vector<kbAnimComponent> m_Animations;
 
 	// Game
@@ -129,8 +129,8 @@ public:
 	void ResetToStartPos() { if (m_bOwnerStartSet) { SetOwnerPosition(m_OwnerStartPos); SetOwnerRotation(m_OwnerStartRotation); } }
 
 protected:
-	virtual void SetEnable_Internal(const bool isEnabled) override;
-	virtual void Update_Internal(const float DeltaTime) override;
+	virtual void enable_internal(const bool isEnabled) override;
+	virtual void update_internal(const float DeltaTime) override;
 
 private:
 	// Editor

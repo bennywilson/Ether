@@ -32,9 +32,9 @@ public:
 
 protected:
 
-	virtual void								EditorChange( const std::string & propertyName ) override;
+	virtual void								editor_change( const std::string & propertyName ) override;
 
-	virtual void								SetEnable_Internal( const bool bEnable ) override;
+	virtual void								enable_internal( const bool bEnable ) override;
 
 private:
 
@@ -85,8 +85,8 @@ public:
 
 protected:
 
-	void										SetEnable_Internal( const bool bEnable ) override;
-	void										Update_Internal( const float dt ) override;
+	void										enable_internal( const bool bEnable ) override;
+	void										update_internal( const float dt ) override;
 
 private:
 

@@ -56,31 +56,31 @@ std::vector<debugNormal> terrainNormals;
 
 /// grassRenderObject_t::Initialize
 void kbGrass::grassRenderObject_t::Initialize(const Vec3& ownerPosition) {
-	blk::error_check(m_pModel == nullptr && m_pComponent == nullptr, "grassRenderObject_t::Initialize() - m_pModel or m_pComponent is not NULL");
+	blk::error_check(m_model == nullptr && m_pComponent == nullptr, "grassRenderObject_t::Initialize() - m_model or m_pComponent is not NULL");
 
-	m_pModel = new kbModel();
+	m_model = new kbModel();
 	m_pComponent = new kbGameComponent();
 
-	m_RenderObject.m_pComponent = m_pComponent;
-	m_RenderObject.m_pModel = m_pModel;
-	m_RenderObject.m_RenderPass = ERenderPass::RP_Lighting;
-	m_RenderObject.m_Position = ownerPosition;
-	m_RenderObject.m_Orientation.set(0.0f, 0.0f, 0.0f, 1.0f);
-	m_RenderObject.m_Scale.set(1.0f, 1.0f, 1.0f);
-	//	m_RenderObject.m_EntityId
-	//	m_RenderObject.m_MatrixList
-	m_RenderObject.m_bCastsShadow = false;
+	m_render_object.m_pComponent = m_pComponent;
+	m_render_object.m_model = m_model;
+	m_render_object.m_render_pass = ERenderPass::RP_Lighting;
+	m_render_object.m_Position = ownerPosition;
+	m_render_object.m_Orientation.set(0.0f, 0.0f, 0.0f, 1.0f);
+	m_render_object.m_Scale.set(1.0f, 1.0f, 1.0f);
+	//	m_render_object.m_EntityId
+	//	m_render_object.m_MatrixList
+	m_render_object.m_casts_shadow = false;
 }
 
 /// grassRenderObject_t::Shutdown
 void kbGrass::grassRenderObject_t::Shutdown() {
-	blk::error_check(m_pModel != nullptr && m_pComponent != nullptr, "grassRenderObject_t::Initialize() - m_pModel or m_pComponent is not NULL");
+	blk::error_check(m_model != nullptr && m_pComponent != nullptr, "grassRenderObject_t::Initialize() - m_model or m_pComponent is not NULL");
 
 	delete m_pComponent;
 	m_pComponent = nullptr;
 
-	delete m_pModel;
-	m_pModel = nullptr;
+	delete m_model;
+	m_model = nullptr;
 }
 
 ///  *  kbGrass::Constructor
@@ -123,11 +123,11 @@ kbGrass::~kbGrass() {
 }
 
 ///  *  kbGrass::EditorChange
-void kbGrass::EditorChange(const std::string& propertyName) {
-	Super::EditorChange(propertyName);
+void kbGrass::editor_change(const std::string& propertyName) {
+	Super::editor_change(propertyName);
 
 	if (m_GrassCellsPerTerrainSide < 0) {
-		blk::warn("kbGrass::EditorChange() - Grass Cells Per Terrain Side must be greater than 0");
+		blk::warn("kbGrass::editor_change() - Grass Cells Per Terrain Side must be greater than 0");
 		m_GrassCellsPerTerrainSide = 1;
 	}
 
@@ -151,20 +151,20 @@ void kbGrass::RenderSync() {
 	}
 }
 
-///  *  kbGrass::SetEnable_Internal
-void kbGrass::SetEnable_Internal(const bool isEnabled) {
-	Super::SetEnable_Internal(isEnabled);
+///  *  kbGrass::enable_internal
+void kbGrass::enable_internal(const bool isEnabled) {
+	Super::enable_internal(isEnabled);
 
 	if (isEnabled) {
 
 		for (int i = 0; i < m_GrassRenderObjects.size(); i++) {
-			g_pRenderer->AddRenderObject(m_GrassRenderObjects[i].m_RenderObject);
+			g_pRenderer->AddRenderObject(m_GrassRenderObjects[i].m_render_object);
 		}
 
 	} else {
 
 		for (int i = 0; i < m_GrassRenderObjects.size(); i++) {
-			g_pRenderer->RemoveRenderObject(m_GrassRenderObjects[i].m_RenderObject);
+			g_pRenderer->RemoveRenderObject(m_GrassRenderObjects[i].m_render_object);
 		}
 
 	}
@@ -207,9 +207,9 @@ void kbGrass::RefreshGrass() {
 
 	m_GrassShaderOverrides.m_ParamOverrides.clear();
 	if (m_pGrassShader != nullptr) {
-		m_GrassShaderOverrides.m_pShader = m_pGrassShader;
+		m_GrassShaderOverrides.m_shader = m_pGrassShader;
 	} else {
-		m_GrassShaderOverrides.m_pShader = (kbShader*)g_ResourceManager.GetResource("./assets/Shaders/Environment/grass.kbshader", true, true);
+		m_GrassShaderOverrides.m_shader = (kbShader*)g_ResourceManager.GetResource("./assets/Shaders/Environment/grass.kbshader", true, true);
 	}
 
 	m_GrassShaderOverrides.SetTexture("heightMap", m_pOwningTerrainComponent->GetHeightMap());
@@ -219,14 +219,14 @@ void kbGrass::RefreshGrass() {
 	m_GrassShaderOverrides.SetVec4("fakeAOData", Vec4(m_FakeAODarkness, m_FakeAOPower, m_FakeAOClipPlaneFadeStartDist, 0.0f));
 
 	for (int i = 0; i < m_ShaderParamList.size(); i++) {
-		if (m_ShaderParamList[i].GetParamName().stl_str().empty()) {
+		if (m_ShaderParamList[i].param_name().stl_str().empty()) {
 			continue;
 		}
 
-		if (m_ShaderParamList[i].GetTexture() != nullptr) {
-			m_GrassShaderOverrides.SetTexture(m_ShaderParamList[i].GetParamName().stl_str(), m_ShaderParamList[i].GetTexture());
+		if (m_ShaderParamList[i].texture() != nullptr) {
+			m_GrassShaderOverrides.SetTexture(m_ShaderParamList[i].param_name().stl_str(), m_ShaderParamList[i].texture());
 		} else {
-			m_GrassShaderOverrides.SetVec4(m_ShaderParamList[i].GetParamName().stl_str(), m_ShaderParamList[i].GetVector());
+			m_GrassShaderOverrides.SetVec4(m_ShaderParamList[i].param_name().stl_str(), m_ShaderParamList[i].vector());
 		}
 	}
 
@@ -245,15 +245,15 @@ void kbGrass::RefreshGrass() {
 
 	for (size_t i = 0; i < m_ShaderParamList.size(); i++) {
 		kbShaderParamComponent& curParam = m_ShaderParamList[i];
-		if (curParam.GetTexture() == nullptr) {
+		if (curParam.texture() == nullptr) {
 			continue;
 		}
 
-		if (curParam.GetParamName() != skGrassMaskMap) {
+		if (curParam.param_name() != skGrassMaskMap) {
 			continue;
 		}
 
-		kbTexture* const pTex = const_cast<kbTexture*>(curParam.GetTexture());		// GetCPUTexture() is not a const function as it modifies internal state
+		kbTexture* const pTex = const_cast<kbTexture*>(curParam.texture());		// GetCPUTexture() is not a const function as it modifies internal state
 		pGrassMaskMap = (pixelData*)pTex->GetCPUTexture(grassMaskWidth, grassMaskHeight);
 		break;
 	}
@@ -261,7 +261,7 @@ void kbGrass::RefreshGrass() {
 
 	if (m_bUpdatePointCloud) {
 		for (int i = 0; i < m_GrassRenderObjects.size(); i++) {
-			g_pRenderer->RemoveRenderObject(m_GrassRenderObjects[i].m_RenderObject);
+			g_pRenderer->RemoveRenderObject(m_GrassRenderObjects[i].m_render_object);
 			m_GrassRenderObjects[i].Shutdown();
 		}
 		m_GrassRenderObjects.clear();
@@ -283,7 +283,7 @@ void kbGrass::RefreshGrass() {
 
 				grassRenderObject_t& renderObj = m_GrassRenderObjects[cellIdx];
 				renderObj.Initialize(m_pOwningTerrainComponent->GetOwner()->GetPosition());
-				renderObj.m_RenderObject.m_CullDistance = m_PatchEndCullDistance + halfCellLenSqr;
+				renderObj.m_render_object.m_CullDistance = m_PatchEndCullDistance + halfCellLenSqr;
 
 				const Vec3 cellStart = terrainMin + Vec3(m_GrassCellLength * xCell, 0.0f, m_GrassCellLength * yCell);
 				const Vec3 cellCenter = cellStart + Vec3(m_GrassCellLength * 0.5f, 0.0f, m_GrassCellLength * 0.5f);
@@ -332,9 +332,9 @@ void kbGrass::RefreshGrass() {
 						}
 
 						if (bCreatedPointCloud == false) {
-							renderObj.m_pModel->CreatePointCloud(m_PatchesPerCellSide * m_PatchesPerCellSide, "./assets/Shaders/Environment/grass.kbshader", CullMode_None, sizeof(patchVertLayout));
+							renderObj.m_model->CreatePointCloud(m_PatchesPerCellSide * m_PatchesPerCellSide, "./assets/Shaders/Environment/grass.kbshader", CullMode_None, sizeof(patchVertLayout));
 
-							pVerts = (patchVertLayout*)renderObj.m_pModel->MapVertexBuffer();
+							pVerts = (patchVertLayout*)renderObj.m_model->MapVertexBuffer();
 							bCreatedPointCloud = true;
 						}
 
@@ -351,26 +351,26 @@ void kbGrass::RefreshGrass() {
 					}
 				}
 				if (bCreatedPointCloud) {
-					renderObj.m_pModel->UnmapVertexBuffer(iVert);
+					renderObj.m_model->UnmapVertexBuffer(iVert);
 					Mat4 rotMat = m_pOwningTerrainComponent->owner_rotation().to_mat4();
-					m_GrassRenderObjects[cellIdx].m_RenderObject.m_Position = cellCenter * rotMat + m_pOwningTerrainComponent->owner_position();
-					m_GrassRenderObjects[cellIdx].m_RenderObject.m_Scale = m_pOwningTerrainComponent->owner_scale();
-					m_GrassRenderObjects[cellIdx].m_RenderObject.m_Orientation = m_pOwningTerrainComponent->owner_rotation();
+					m_GrassRenderObjects[cellIdx].m_render_object.m_Position = cellCenter * rotMat + m_pOwningTerrainComponent->owner_position();
+					m_GrassRenderObjects[cellIdx].m_render_object.m_Scale = m_pOwningTerrainComponent->owner_scale();
+					m_GrassRenderObjects[cellIdx].m_render_object.m_Orientation = m_pOwningTerrainComponent->owner_rotation();
 
-					auto& renderObjMatList = m_GrassRenderObjects[cellIdx].m_RenderObject.m_Materials;
+					auto& renderObjMatList = m_GrassRenderObjects[cellIdx].m_render_object.m_Materials;
 					renderObjMatList.clear();
 					renderObjMatList.push_back(m_GrassShaderOverrides);
-					g_pRenderer->AddRenderObject(m_GrassRenderObjects[cellIdx].m_RenderObject);
+					g_pRenderer->AddRenderObject(m_GrassRenderObjects[cellIdx].m_render_object);
 				}
 			}
 		}
 	} else {
 
 		for (int i = 0; i < m_GrassRenderObjects.size(); i++) {
-			auto& renderObjMatList = m_GrassRenderObjects[i].m_RenderObject.m_Materials;
+			auto& renderObjMatList = m_GrassRenderObjects[i].m_render_object.m_Materials;
 			renderObjMatList.clear();
 			renderObjMatList.push_back(m_GrassShaderOverrides);
-			g_pRenderer->UpdateRenderObject(m_GrassRenderObjects[i].m_RenderObject);
+			g_pRenderer->UpdateRenderObject(m_GrassRenderObjects[i].m_render_object);
 		}
 	}
 
@@ -407,8 +407,8 @@ kbTerrainComponent::~kbTerrainComponent() {
 }
 
 /// kbTerrainComponent::PostLoad
-void kbTerrainComponent::PostLoad() {
-	Super::PostLoad();
+void kbTerrainComponent::post_load() {
+	Super::post_load();
 
 	if (m_pHeightMap != nullptr) {
 		m_bRegenerateTerrain = true;
@@ -420,8 +420,8 @@ void kbTerrainComponent::PostLoad() {
 }
 
 /// kbTerrainComponent::EditorChange
-void kbTerrainComponent::EditorChange(const std::string& propertyName) {
-	Super::EditorChange(propertyName);
+void kbTerrainComponent::editor_change(const std::string& propertyName) {
+	Super::editor_change(propertyName);
 
 	const std::string propertiesThatRegenTerrain[5] = { "HeightMap", "HeightScale", "Width", "Dimensions", "SmoothAmount" };
 
@@ -435,10 +435,10 @@ void kbTerrainComponent::EditorChange(const std::string& propertyName) {
 		return;
 	}
 
-	RefreshMaterials();
+	refresh_materials();
 
 	if (IsEnabled()) {
-		g_pRenderer->UpdateRenderObject(m_RenderObject);
+		g_pRenderer->UpdateRenderObject(m_render_object);
 	}
 }
 
@@ -467,7 +467,7 @@ void kbTerrainComponent::GenerateTerrain() {
 	const float cellWidth = m_TerrainWidth / (float)m_TerrainDimensions;
 
 	if (m_TerrainModel.NumVertices() > 0) {
-		g_pRenderer->RemoveRenderObject(m_RenderObject);
+		g_pRenderer->RemoveRenderObject(m_render_object);
 	}
 
 	m_TerrainModel.CreateDynamicModel(numVerts, numIndices);
@@ -583,9 +583,9 @@ void kbTerrainComponent::GenerateTerrain() {
 
 	m_TerrainModel.UnmapIndexBuffer();
 
-	RefreshMaterials();
+	refresh_materials();
 
-	g_pRenderer->AddRenderObject(m_RenderObject);
+	g_pRenderer->AddRenderObject(m_render_object);
 
 	// Update collision
 	int collisionPatchSize = 8;
@@ -623,16 +623,16 @@ void kbTerrainComponent::SetCollisionMap(const kbRenderTexture* const pTexture) 
 
 		for (int cellIdx = 0; cellIdx < grass.m_GrassRenderObjects.size(); cellIdx++) {
 			auto& grassRenderObj = grass.m_GrassRenderObjects[cellIdx];
-			auto& renderObjMatList = grassRenderObj.m_RenderObject.m_Materials;
+			auto& renderObjMatList = grassRenderObj.m_render_object.m_Materials;
 			renderObjMatList.clear();
 			renderObjMatList.push_back(grass.m_GrassShaderOverrides);
-			g_pRenderer->UpdateRenderObject(grassRenderObj.m_RenderObject);
+			g_pRenderer->UpdateRenderObject(grassRenderObj.m_render_object);
 		}
 	}
 }
 
-/// kbTerrainComponent::SetEnable_Internal
-void kbTerrainComponent::SetEnable_Internal(const bool isEnabled) {
+/// kbTerrainComponent::enable_internal
+void kbTerrainComponent::enable_internal(const bool isEnabled) {
 
 	if (m_TerrainModel.NumVertices() == 0) {
 		return;
@@ -643,15 +643,15 @@ void kbTerrainComponent::SetEnable_Internal(const bool isEnabled) {
 	}
 
 	if (isEnabled) {
-		RefreshMaterials();
-		g_pRenderer->AddRenderObject(m_RenderObject);
+		refresh_materials();
+		g_pRenderer->AddRenderObject(m_render_object);
 
 		for (int i = 0; i < m_Grass.size(); i++) {
 			m_Grass[i].Enable(true);
 		}
 
 	} else {
-		g_pRenderer->RemoveRenderObject(m_RenderObject);
+		g_pRenderer->RemoveRenderObject(m_render_object);
 
 		for (int i = 0; i < m_Grass.size(); i++) {
 			m_Grass[i].Enable(false);
@@ -659,9 +659,9 @@ void kbTerrainComponent::SetEnable_Internal(const bool isEnabled) {
 	}
 }
 
-/// kbTerrainComponent::Update_Internal
-void kbTerrainComponent::Update_Internal(const float DeltaTime) {
-	Super::Update_Internal(DeltaTime);
+/// kbTerrainComponent::update_internal
+void kbTerrainComponent::update_internal(const float DeltaTime) {
+	Super::update_internal(DeltaTime);
 
 	if (m_pHeightMap != nullptr && m_pHeightMap->GetLastLoadTime() != m_LastHeightMapLoadTime) {
 		m_LastHeightMapLoadTime = m_pHeightMap->GetLastLoadTime();
@@ -669,9 +669,9 @@ void kbTerrainComponent::Update_Internal(const float DeltaTime) {
 	}
 
 	if (m_TerrainModel.GetMeshes().size() > 0 && (GetOwner()->IsDirty() || m_bDebugForceRegenTerrain == true)) {
-		RefreshMaterials();
+		refresh_materials();
 		RegenerateTerrain();
-		g_pRenderer->UpdateRenderObject(m_RenderObject);
+		g_pRenderer->UpdateRenderObject(m_render_object);
 		m_bDebugForceRegenTerrain = false;
 	}
 
@@ -708,16 +708,16 @@ void kbTerrainComponent::RenderSync() {
 }
 
 /// kbTerrainComponent::RefreshMaterials
-void kbTerrainComponent::RefreshMaterials() {
-	m_RenderObject.m_bCastsShadow = false;
-	m_RenderObject.m_bIsSkinnedModel = false;
-	m_RenderObject.m_Orientation = GetOwner()->GetOrientation();
-	m_RenderObject.m_Position = GetOwner()->GetPosition();
-	m_RenderObject.m_EntityId = GetOwner()->GetEntityId();
-	m_RenderObject.m_Scale.set(1.0f, 1.0f, 1.0f);
-	m_RenderObject.m_pModel = &m_TerrainModel;
-	m_RenderObject.m_RenderPass = RP_Lighting;
-	m_RenderObject.m_pComponent = this;
+void kbTerrainComponent::refresh_materials() {
+	m_render_object.m_casts_shadow = false;
+	m_render_object.m_bIsSkinnedModel = false;
+	m_render_object.m_Orientation = GetOwner()->GetOrientation();
+	m_render_object.m_Position = GetOwner()->GetPosition();
+	m_render_object.m_EntityId = GetOwner()->GetEntityId();
+	m_render_object.m_Scale.set(1.0f, 1.0f, 1.0f);
+	m_render_object.m_model = &m_TerrainModel;
+	m_render_object.m_render_pass = RP_Lighting;
+	m_render_object.m_pComponent = this;
 }
 
 /// kbGrassZone::Constructor

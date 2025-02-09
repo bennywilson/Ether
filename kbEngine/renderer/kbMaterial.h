@@ -165,9 +165,9 @@ class kbMaterial {
 	friend class kbModel;
 
 public:
-	kbMaterial() : m_pShader(nullptr), m_CullingMode(CullMode_BackFaces) { }
+	kbMaterial() : m_shader(nullptr), m_CullingMode(CullMode_BackFaces) { }
 
-	const kbShader* GetShader() const { return m_pShader; }
+	const kbShader* get_shader() const { return m_shader; }
 
 	const std::vector<const kbTexture*>	GetTextureList() const { return m_Textures; }
 
@@ -179,7 +179,7 @@ public:
 
 private:
 	std::vector<const kbTexture*> m_Textures;
-	kbShader* m_pShader;
+	kbShader* m_shader;
 	kbColor	m_DiffuseColor;
 	ECullMode m_CullingMode;
 };

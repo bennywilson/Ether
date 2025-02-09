@@ -95,20 +95,20 @@ public:
 												kbRenderSubmesh( const kbRenderObject* const pInMesh, const int inMeshIdx, const ERenderPass renderPass, const float distFromCamera ) :
 													m_pRenderObject( pInMesh ),
 													m_MeshIdx( inMeshIdx ),
-													m_RenderPass( renderPass ),
+													m_render_pass( renderPass ),
 													m_DistFromCamera( distFromCamera ) { }
 
 	const kbRenderObject *						GetRenderObject() const { return m_pRenderObject; }
 	int											GetMeshIdx() const { return m_MeshIdx; }
-	ERenderPass									GetRenderPass() const { return m_RenderPass; }
-	const kbShader *							GetShader() const;
+	ERenderPass									render_pass() const { return m_render_pass; }
+	const kbShader *							get_shader() const;
 	float										GetDistFromCamera() const { return m_DistFromCamera; }
 
 private:
 	const kbRenderObject *						m_pRenderObject;
 	int											m_MeshIdx;
 	float										m_DistFromCamera;
-	ERenderPass									m_RenderPass;
+	ERenderPass									m_render_pass;
 };
 
 /// kbRenderWindow
@@ -147,7 +147,7 @@ public:
 	const Vec3 &												GetCameraPosition() const { return m_CameraPosition; }
 	const Quat4 &												GetCameraRotation() const { return m_CameraRotation; }
 
-	const std::map<const kbGameComponent *, kbRenderObject *> &	GetRenderObjectMap() const { return m_RenderObjectMap; }
+	const std::map<const kbGameComponent *, kbRenderObject *> &	GetRenderObjectMap() const { return m_render_objectMap; }
 	const std::map<const kbLightComponent *, kbRenderLight *> &	GetRenderLightMap() const { return m_RenderLightMap; }
 	const std::map<const void *, kbRenderObject *> &			GetRenderParticleMap() const { return m_RenderParticleMap; }
 
@@ -191,7 +191,7 @@ private:
 	float														m_FarPlane_GameThread;
 	float														m_FarPlane_RenderThread;
 
-	std::map<const kbGameComponent *, kbRenderObject *>			m_RenderObjectMap;
+	std::map<const kbGameComponent *, kbRenderObject *>			m_render_objectMap;
 	std::map<const kbLightComponent *, kbRenderLight *>			m_RenderLightMap;
 	std::map<const void *, kbRenderObject *>					m_RenderParticleMap;
 
@@ -209,21 +209,21 @@ class kbRenderHook {
 
 //-------------------------------------------------------------------------------------------------------------------------------------------------------------
 public:
-												kbRenderHook() : m_RenderPass( RP_InWorldUI ) { } 
+												kbRenderHook() : m_render_pass( RP_InWorldUI ) { } 
 												kbRenderHook( const ERenderPass );
 												~kbRenderHook();
 
-	ERenderPass									GetRenderPass() const { return m_RenderPass; }
+	ERenderPass									render_pass() const { return m_render_pass; }
 	virtual void								RenderHookCallBack( kbRenderTexture* const pSrc, kbRenderTexture* const pDst ) = 0;
 
 protected:
 
-	void										SetRenderPass( const ERenderPass nextRenderPass ) { m_RenderPass = nextRenderPass; };
+	void										set_render_pass( const ERenderPass nextRenderPass ) { m_render_pass = nextRenderPass; };
 
 private:
 
 	virtual void								RenderSync() { }
-	ERenderPass									m_RenderPass;
+	ERenderPass									m_render_pass;
 };
 
 /// kbRenderer
@@ -328,7 +328,7 @@ public:
 	// Render thread functions
 	virtual void								RT_SetRenderTarget( kbRenderTexture* const pRenderTexture ) = 0;
 	virtual void								RT_ClearRenderTarget( kbRenderTexture* const pRenderTexture, const kbColor& color ) = 0;
-	kbRenderTexture *							RT_GetRenderTexture( const int width, const int height, const eTextureFormat, const bool bRequiresCPUAccess );
+	kbRenderTexture *							RT_RenderTexture( const int width, const int height, const eTextureFormat, const bool bRequiresCPUAccess );
 	virtual void								RT_ReturnRenderTexture( kbRenderTexture* const pRenderTexture );
 	virtual void								RT_RenderMesh( const kbModel* const pModel, kbShader * pShader, const kbShaderParamOverrides_t* const pShaderParams ) = 0;
 	virtual void								RT_Render2DLine( const Vec3& startPt, const Vec3& endPt, const kbColor& color, const float width, const kbShader* const pShader, const struct kbShaderParamOverrides_t* const ShaderBindings = nullptr ) = 0;
@@ -373,12 +373,12 @@ protected:
 		Vec2i									m_Pos;
 		Vec2i									m_Size;
 		int										m_TextureIndex;
-		class kbShader *						m_pShader;
+		class kbShader *						m_shader;
 	};
 	std::vector<ScreenSpaceQuad_t>				m_ScreenSpaceQuads_GameThread;
 	std::vector<ScreenSpaceQuad_t>				m_ScreenSpaceQuads_RenderThread;
 
-	std::vector<kbRenderObject>					m_RenderObjectList_GameThread;
+	std::vector<kbRenderObject>					m_render_objectList_GameThread;
 	std::vector<kbRenderLight>					m_LightList_GameThread;
 	std::vector<kbRenderObject>					m_ParticleList_GameThread;
 
@@ -425,9 +425,9 @@ protected:
 		Vec3									m_Position;
 		Quat4									m_Orientation;
 		Vec3									m_Scale;
-		const kbModel *							m_pModel;
+		const kbModel *							m_model;
 		std::vector<kbShaderParamOverrides_t>	m_Materials;
-		kbShader *								m_pShader;
+		kbShader *								m_shader;
 		int										m_TextureIndex;
 		int										m_EntityId;
 	};

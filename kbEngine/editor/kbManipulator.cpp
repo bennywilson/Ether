@@ -19,7 +19,7 @@ kbManipulator::kbManipulator() :
 	m_Orientation.set(0.0f, 0.0f, 0.0f, 1.0f);
 	m_Scale.set(1.0f, 1.0f, 1.0f);
 
-	memset(m_pModels, 0, sizeof(m_pModels));
+	memset(m_models, 0, sizeof(m_models));
 }
 
 /// kbManipulator::~kbManipulator
@@ -27,7 +27,7 @@ kbManipulator::~kbManipulator() { }
 
 /// kbManipulator::AttemptMouseGrab
 bool kbManipulator::AttemptMouseGrab(const Vec3& rayOrigin, const Vec3& rayDirection, const Quat4& cameraOrientation) {
-	const kbModel* const pModel = m_pModels[m_ManipulatorMode];
+	const kbModel* const pModel = m_models[m_ManipulatorMode];
 
 	const float modelScale = kbLevelComponent::GetGlobalModelScale();
 	kbModelIntersection_t intersection = pModel->RayIntersection(rayOrigin, rayDirection, m_Position, m_Orientation, Vec3(modelScale, modelScale, modelScale));
@@ -120,7 +120,7 @@ void kbManipulator::UpdateMouseDrag(const Vec3& rayOrigin, const Vec3& rayDirect
 void kbManipulator::Update() {
 	if (g_pRenderer->DebugBillboardsEnabled()) {
 		const Vec3 modelScale(kbLevelComponent::GetGlobalModelScale(), kbLevelComponent::GetGlobalModelScale(), kbLevelComponent::GetGlobalModelScale());
-		g_pRenderer->DrawModel(m_pModels[m_ManipulatorMode], m_ManipulatorMaterials, m_Position, m_Orientation, modelScale, UINT16_MAX);
+		g_pRenderer->DrawModel(m_models[m_ManipulatorMode], m_ManipulatorMaterials, m_Position, m_Orientation, modelScale, UINT16_MAX);
 	}
 }
 
@@ -130,7 +130,7 @@ void kbManipulator::RenderSync() {
 	if (bFirstUpdate == true) {
 		bFirstUpdate = false;
 		kbShaderParamOverrides_t material;
-		material.m_pShader = (kbShader*)g_ResourceManager.GetResource("../../kbEngine/assets/Shaders/UIManipulator.kbshader", true, true);
+		material.m_shader = (kbShader*)g_ResourceManager.GetResource("../../kbEngine/assets/Shaders/UIManipulator.kbshader", true, true);
 		kbTexture* const pTexture = (kbTexture*)g_ResourceManager.GetResource("../../kbEngine/assets/editor/manipulator.bmp", true, true);
 		material.SetTexture("shaderTexture", pTexture);
 		m_ManipulatorMaterials.push_back(material);
@@ -138,11 +138,11 @@ void kbManipulator::RenderSync() {
 		m_ManipulatorMaterials.push_back(material);
 
 		m_ManipulatorMaterials.push_back(material);
-		m_pModels[kbManipulator::Translate] = (kbModel*)g_ResourceManager.GetResource("../../kbEngine/assets/Models/Editor/translationManipulator.ms3d", true, true);
-		m_pModels[kbManipulator::Rotate] = (kbModel*)g_ResourceManager.GetResource("../../kbEngine/assets/Models/Editor/rotationManipulator.ms3d", true, true);
-		m_pModels[kbManipulator::Scale] = (kbModel*)g_ResourceManager.GetResource("../../kbEngine/assets/Models/Editor/scaleManipulator.ms3d", true, true);
+		m_models[kbManipulator::Translate] = (kbModel*)g_ResourceManager.GetResource("../../kbEngine/assets/Models/Editor/translationManipulator.ms3d", true, true);
+		m_models[kbManipulator::Rotate] = (kbModel*)g_ResourceManager.GetResource("../../kbEngine/assets/Models/Editor/rotationManipulator.ms3d", true, true);
+		m_models[kbManipulator::Scale] = (kbModel*)g_ResourceManager.GetResource("../../kbEngine/assets/Models/Editor/scaleManipulator.ms3d", true, true);
 
-		blk::error_check(m_pModels[kbManipulator::Translate] != nullptr && m_pModels[kbManipulator::Rotate] != nullptr && m_pModels[kbManipulator::Scale] != nullptr, "kbManipulator::RenderSync() - Unable to load manipulator models");
+		blk::error_check(m_models[kbManipulator::Translate] != nullptr && m_models[kbManipulator::Rotate] != nullptr && m_models[kbManipulator::Scale] != nullptr, "kbManipulator::RenderSync() - Unable to load manipulator models");
 	}
 }
 

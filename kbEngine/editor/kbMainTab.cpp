@@ -43,7 +43,7 @@ kbMainTab::kbMainTab(int x, int y, int w, int h) :
 
 	// model viewer tab
 	Fl_Group* modelViewerGroup = new Fl_Group(x, Top_Border, Display_Width, Display_Height, "Model viewer");
-	m_pModelViewerWindow = new kbEditorWindow(x, Top_Border + 5, Display_Width, Display_Height);
+	m_modelViewerWindow = new kbEditorWindow(x, Top_Border + 5, Display_Width, Display_Height);
 
 	{
 		Fl_Button* b1 = new Fl_Button(350, 160, 90, 25, "Button B1"); b1->color(88 + 1);
@@ -54,7 +54,7 @@ kbMainTab::kbMainTab(int x, int y, int w, int h) :
 		Fl_Button* b6 = new Fl_Button(550, 190, 90, 25, "Button B6"); b6->color(88 + 6);
 	}
 
-	m_pModelViewerWindow->end();
+	m_modelViewerWindow->end();
 	modelViewerGroup->end();
 
 	Fl_Group* gameViewer = new Fl_Group(x, Top_Border, Display_Width, Display_Height, "Game");
@@ -104,7 +104,7 @@ void kbMainTab::Update() {
 		g_renderer->set_camera_transform(pCamera.m_Position, pCamera.m_Rotation);
 	}
 
-	if (pCurrentWindow == m_pModelViewerWindow) {
+	if (pCurrentWindow == m_modelViewerWindow) {
 		const float baseAxisLength = 2.0;
 
 		g_pRenderer->DrawLine(Vec3::zero, Vec3::right * baseAxisLength, kbColor::red);
@@ -160,7 +160,7 @@ void kbMainTab::RenderSync() {
 
 	m_Manipulator.RenderSync();
 
-	const widgetCBInputObject& inputState = g_Editor->GetInput();
+	const widgetCBInputObject& inputState = g_Editor->get_input();
 
 	// Convert mouse coordinates from window space to screen space
 	kbEditorWindow* const pCurrentWindow = GetCurrentWindow();
@@ -325,8 +325,8 @@ kbEditorWindow* kbMainTab::GetCurrentWindow() {
 
 	if (m_pEditorWindow->parent() == widget) {
 		return m_pEditorWindow;
-	} else if (m_pModelViewerWindow->parent() == widget) {
-		return m_pModelViewerWindow;
+	} else if (m_modelViewerWindow->parent() == widget) {
+		return m_modelViewerWindow;
 	}
 
 	return NULL;

@@ -69,22 +69,22 @@ public:
 	}
 
 protected:
-	virtual void InitGame_Internal() = 0;
-	virtual void PlayGame_Internal() = 0;
-	virtual void StopGame_Internal() = 0;
-	virtual void PreUpdate_Internal() { };
-	virtual void PostUpdate_Internal() { };
-	virtual void LevelLoaded_Internal() = 0;
-	virtual void AddGameEntity_Internal(kbGameEntity* const pEntity) = 0;
-	virtual void RemoveGameEntity_Internal(kbGameEntity* const pEntity) = 0;
+	virtual void init_internal() = 0;
+	virtual void play_internal() = 0;
+	virtual void stop_internal() = 0;
+	virtual void preupdate_internal() { };
+	virtual void postupdate_internal() { };
+	virtual void level_loaded_internal() = 0;
+	virtual void add_entity_internal(kbGameEntity* const pEntity) = 0;
+	virtual void remove_entity_internal(kbGameEntity* const pEntity) = 0;
 
-	const kbInput_t& GetInput() const { return m_InputManager.GetInput(); }
-	bool IsConsoleActive() const { return m_Console.IsActive(); }
+	const kbInput_t& get_input() const { return m_InputManager.get_input(); }
+	bool is_console_active() const { return m_Console.IsActive(); }
 
-	virtual void SwapEntitiesByIdx(const size_t idx1, const size_t idx2);
+	virtual void swap_entities_by_idx(const size_t idx1, const size_t idx2);
 
 private:
-	void DisplayDebugCommands();
+	void display_debug_commands();
 
 protected:
 	HWND m_Hwnd;

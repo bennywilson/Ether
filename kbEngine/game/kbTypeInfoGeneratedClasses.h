@@ -74,22 +74,22 @@ GenerateClass(
 
 GenerateClass(
 	kbShaderParamComponent,
-	AddField("ParamName", KBTYPEINFO_KBSTRING, kbShaderParamComponent, m_ParamName, false, "")
-	AddField("Texture", KBTYPEINFO_TEXTURE, kbShaderParamComponent, m_pTexture, false, "")
-	AddField("Vector", KBTYPEINFO_VECTOR4, kbShaderParamComponent, m_Vector, false, "")
+	AddField("ParamName", KBTYPEINFO_KBSTRING, kbShaderParamComponent, m_param_name, false, "")
+	AddField("Texture", KBTYPEINFO_TEXTURE, kbShaderParamComponent, m_texture, false, "")
+	AddField("Vector", KBTYPEINFO_VECTOR4, kbShaderParamComponent, m_vector, false, "")
 )
 
 GenerateClass(
 	kbMaterialComponent,
-	AddField("Shader", KBTYPEINFO_SHADER, kbMaterialComponent, m_pShader, false, "")
-	AddField("ShaderParams", KBTYPEINFO_STRUCT, kbMaterialComponent, m_ShaderParamComponents, true, "kbShaderParamComponent")
-	AddField("CullModeOverride", KBTYPEINFO_ENUM, kbMaterialComponent, m_CullModeOverride, false, "ECullMode")
+	AddField("Shader", KBTYPEINFO_SHADER, kbMaterialComponent, m_shader, false, "")
+	AddField("ShaderParams", KBTYPEINFO_STRUCT, kbMaterialComponent, m_shader_params, true, "kbShaderParamComponent")
+	AddField("CullModeOverride", KBTYPEINFO_ENUM, kbMaterialComponent, m_cull_override, false, "ECullMode")
 )
 
 GenerateClass(
 	kbModelEmitter,
-	AddField("Model", KBTYPEINFO_STATICMODEL, kbModelEmitter, m_pModel, false, "")
-	AddField("MaterialList", KBTYPEINFO_STRUCT, kbModelEmitter, m_MaterialList, true, "kbMaterialComponent")
+	AddField("Model", KBTYPEINFO_STATICMODEL, kbModelEmitter, m_model, false, "")
+	AddField("MaterialList", KBTYPEINFO_STRUCT, kbModelEmitter, m_materials, true, "kbMaterialComponent")
 )
 
 GenerateClass(
@@ -132,29 +132,29 @@ GenerateClass(
 
 GenerateClass(
 	RenderComponent,
-	AddField("RenderPass", KBTYPEINFO_ENUM, RenderComponent, m_RenderPass, false, "ERenderPass")
-	AddField("RenderOrderBias", KBTYPEINFO_FLOAT, RenderComponent, m_RenderOrderBias, false, "")
-	AddField("CastsShadow", KBTYPEINFO_BOOL, RenderComponent, m_bCastsShadow, false, "")
-	AddField("Materials", KBTYPEINFO_STRUCT, RenderComponent, m_MaterialList, true, "kbMaterialComponent")
+	AddField("RenderPass", KBTYPEINFO_ENUM, RenderComponent, m_render_pass, false, "ERenderPass")
+	AddField("RenderOrderBias", KBTYPEINFO_FLOAT, RenderComponent, m_render_order_bias, false, "")
+	AddField("CastsShadow", KBTYPEINFO_BOOL, RenderComponent, m_casts_shadow, false, "")
+	AddField("Materials", KBTYPEINFO_STRUCT, RenderComponent, m_materials, true, "kbMaterialComponent")
 )
 
 GenerateClass(
 	kbStaticModelComponent,
-	AddField("Model", KBTYPEINFO_STATICMODEL, kbStaticModelComponent, m_pModel, false, "")
+	AddField("Model", KBTYPEINFO_STATICMODEL, kbStaticModelComponent, m_model, false, "")
 )
 
 GenerateClass(
 	kbAnimComponent,
-	AddField("AnimationName", KBTYPEINFO_KBSTRING, kbAnimComponent, m_AnimationName, false, "")
-	AddField("Animation", KBTYPEINFO_ANIMATION, kbAnimComponent, m_pAnimation, false, "")
-	AddField("TimeScale", KBTYPEINFO_FLOAT, kbAnimComponent, m_TimeScale, false, "")
-	AddField("IsLooping", KBTYPEINFO_BOOL, kbAnimComponent, m_bIsLooping, false, "")
-	AddField("AnimationEvent", KBTYPEINFO_STRUCT, kbAnimComponent, m_AnimEvents, true, "kbAnimEvent")
+	AddField("AnimationName", KBTYPEINFO_KBSTRING, kbAnimComponent, m_animation_name, false, "")
+	AddField("Animation", KBTYPEINFO_ANIMATION, kbAnimComponent, m_animation, false, "")
+	AddField("TimeScale", KBTYPEINFO_FLOAT, kbAnimComponent, m_time_scale, false, "")
+	AddField("IsLooping", KBTYPEINFO_BOOL, kbAnimComponent, m_is_looping, false, "")
+	AddField("AnimationEvent", KBTYPEINFO_STRUCT, kbAnimComponent, m_anim_events, true, "kbAnimEvent")
 )
 
 GenerateClass(
 	kbSkeletalRenderComponent,
-	AddField("Model", KBTYPEINFO_STATICMODEL, kbSkeletalRenderComponent, m_pModel, false, "")
+	AddField("Model", KBTYPEINFO_STATICMODEL, kbSkeletalRenderComponent, m_model, false, "")
 	AddField("Animations", KBTYPEINFO_STRUCT, kbSkeletalRenderComponent, m_Animations, true, "kbAnimComponent")
 	AddField("DebugAnimIndex", KBTYPEINFO_INT, kbSkeletalRenderComponent, m_DebugAnimIdx, false, "")
 )
@@ -171,8 +171,8 @@ GenerateClass(
 GenerateClass(
 	kbLightComponent,
 	AddField("Color", KBTYPEINFO_VECTOR4, kbLightComponent, m_Color, false, "")
-	AddField("CastsShadows", KBTYPEINFO_BOOL, kbLightComponent, m_bCastsShadow, false, "")
-	AddField("Materials", KBTYPEINFO_STRUCT, kbLightComponent, m_MaterialList, true, "kbMaterialComponent")
+	AddField("CastsShadows", KBTYPEINFO_BOOL, kbLightComponent, m_casts_shadow, false, "")
+	AddField("Materials", KBTYPEINFO_STRUCT, kbLightComponent, m_materials, true, "kbMaterialComponent")
 )
 
 GenerateClass(
@@ -257,8 +257,8 @@ GenerateEnum(
 GenerateClass(
 	kbParticleComponent,
 	AddField("DebugPlayEntity", KBTYPEINFO_BOOL, kbParticleComponent, m_DebugPlayEntity, false, "")
-	AddField("RenderOrderBias", KBTYPEINFO_FLOAT, kbParticleComponent, m_RenderOrderBias, false, "")
-	AddField("MaterialList", KBTYPEINFO_STRUCT, kbParticleComponent, m_MaterialList, true, "kbMaterialComponent")
+	AddField("RenderOrderBias", KBTYPEINFO_FLOAT, kbParticleComponent, m_render_order_bias, false, "")
+	AddField("MaterialList", KBTYPEINFO_STRUCT, kbParticleComponent, m_materials, true, "kbMaterialComponent")
 	AddField("TotalDuration", KBTYPEINFO_FLOAT, kbParticleComponent, m_TotalDuration, false, "")
 	AddField("StartDelay", KBTYPEINFO_FLOAT, kbParticleComponent, m_StartDelay, false, "")
 	AddField("MinSpawnRate", KBTYPEINFO_FLOAT, kbParticleComponent, m_MinParticleSpawnRate, false, "")

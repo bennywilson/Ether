@@ -542,7 +542,7 @@ void kbEditor::Update() {
 					if ( pGameEnt->GetName().stl_str().find( "Bridge" ) != std::string::npos ) {
 						RenderComponent* pTargetComp = pGameEnt->GetComponent<RenderComponent>();
 						if ( pTargetComp != nullptr ) {
-							pTargetComp->CopyMaterialList( pMasterComp->GetMaterialList() );
+							pTargetComp->CopyMaterials( pMasterComp->Materials() );
 							continue;
 						}
 					}

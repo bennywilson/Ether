@@ -21,13 +21,13 @@ const float g_DebugTextSize = 0.0165f;
 kbRenderer* g_pRenderer = nullptr;
 
 /// kbRenderSubmesh::GetShader
-const kbShader* kbRenderSubmesh::GetShader() const {
+const kbShader* kbRenderSubmesh::get_shader() const {
 	const kbRenderObject& renderObj = *GetRenderObject();
 
-	const kbModel* const pModel = GetRenderObject()->m_pModel;
+	const kbModel* const pModel = GetRenderObject()->m_model;
 	const kbModel::mesh_t& mesh = pModel->GetMeshes()[GetMeshIdx()];
 	if (pModel->GetMaterials().size() > mesh.m_MaterialIndex) {
-		return pModel->GetMaterials()[mesh.m_MaterialIndex].GetShader();
+		return pModel->GetMaterials()[mesh.m_MaterialIndex].get_shader();
 	}
 
 	return nullptr;
@@ -67,9 +67,9 @@ kbRenderWindow::kbRenderWindow(HWND inHwnd, const RECT& windowDimensions, const 
 kbRenderWindow::~kbRenderWindow() {
 
 	{
-		auto iter = m_RenderObjectMap.begin();
+		auto iter = m_render_objectMap.begin();
 
-		for (; iter != m_RenderObjectMap.end(); iter++) {
+		for (; iter != m_render_objectMap.end(); iter++) {
 			delete iter->second;
 		}
 	}
@@ -274,8 +274,8 @@ void kbRenderer::AddRenderObject(const kbRenderObject& renderObjectToAdd) {
 	blk::error_check(m_pCurrentRenderWindow != nullptr, "kbRenderer::AddRenderObject - NULL m_pCurrentRenderWindow");
 	blk::error_check(renderObjectToAdd.m_pComponent != nullptr, "kbRenderer::AddRenderObject - NULL component");
 
-	m_RenderObjectList_GameThread.push_back(renderObjectToAdd);
-	kbRenderObject& renderObj = m_RenderObjectList_GameThread[m_RenderObjectList_GameThread.size() - 1];
+	m_render_objectList_GameThread.push_back(renderObjectToAdd);
+	kbRenderObject& renderObj = m_render_objectList_GameThread[m_render_objectList_GameThread.size() - 1];
 
 	renderObj.m_bIsFirstAdd = true;
 	renderObj.m_bIsRemove = false;
@@ -286,8 +286,8 @@ void kbRenderer::UpdateRenderObject(const kbRenderObject& renderObjectToUpdate) 
 	blk::error_check(m_pCurrentRenderWindow != nullptr, "kbRenderer::UpdateRenderObject() - NULL m_pCurrentRenderWindow");
 	blk::error_check(renderObjectToUpdate.m_pComponent != nullptr, "kbRenderer::UpdateRenderObject() - NULL component");
 
-	m_RenderObjectList_GameThread.push_back(renderObjectToUpdate);
-	kbRenderObject& renderObj = m_RenderObjectList_GameThread[m_RenderObjectList_GameThread.size() - 1];
+	m_render_objectList_GameThread.push_back(renderObjectToUpdate);
+	kbRenderObject& renderObj = m_render_objectList_GameThread[m_render_objectList_GameThread.size() - 1];
 
 	renderObj.m_bIsFirstAdd = false;
 	renderObj.m_bIsRemove = false;
@@ -299,15 +299,15 @@ void kbRenderer::RemoveRenderObject(const kbRenderObject& renderObjectToRemove) 
 	blk::error_check(renderObjectToRemove.m_pComponent != nullptr, "kbRenderer::RemoveRenderObject - NULL component");
 
 	// Remove duplicates
-	for (int i = 0; i < m_RenderObjectList_GameThread.size(); i++) {
-		if (m_RenderObjectList_GameThread[i].m_pComponent == renderObjectToRemove.m_pComponent) {
-			m_RenderObjectList_GameThread.erase(m_RenderObjectList_GameThread.begin() + i);
+	for (int i = 0; i < m_render_objectList_GameThread.size(); i++) {
+		if (m_render_objectList_GameThread[i].m_pComponent == renderObjectToRemove.m_pComponent) {
+			m_render_objectList_GameThread.erase(m_render_objectList_GameThread.begin() + i);
 			i--;
 		}
 	}
 
-	m_RenderObjectList_GameThread.push_back(renderObjectToRemove);
-	kbRenderObject& renderObj = m_RenderObjectList_GameThread[m_RenderObjectList_GameThread.size() - 1];
+	m_render_objectList_GameThread.push_back(renderObjectToRemove);
+	kbRenderObject& renderObj = m_render_objectList_GameThread[m_render_objectList_GameThread.size() - 1];
 
 	renderObj.m_bIsFirstAdd = false;
 	renderObj.m_bIsRemove = true;
@@ -356,7 +356,7 @@ void kbRenderer::AddLight(const kbLightComponent* pLightComponent, const Vec3& p
 	}
 
 	newLight.m_Color = pLightComponent->GetColor() * pLightComponent->GetBrightness();
-	newLight.m_bCastsShadow = pLightComponent->CastsShadow();
+	newLight.m_casts_shadow = pLightComponent->CastsShadow();
 	newLight.m_bIsFirstAdd = true;
 	newLight.m_bIsRemove = false;
 	m_LightList_GameThread.push_back(newLight);
@@ -374,7 +374,7 @@ void kbRenderer::UpdateLight(const kbLightComponent* pLightComponent, const Vec3
 			if (m_LightList_GameThread[i].m_bIsRemove == false) {
 				m_LightList_GameThread[i].m_Position = pos;
 				m_LightList_GameThread[i].m_Orientation = orientation;
-				m_LightList_GameThread[i].m_bCastsShadow = pLightComponent->CastsShadow();
+				m_LightList_GameThread[i].m_casts_shadow = pLightComponent->CastsShadow();
 				m_LightList_GameThread[i].m_Color = pLightComponent->GetColor() * pLightComponent->GetBrightness();
 				m_LightList_GameThread[i].m_Radius = pLightComponent->GetRadius();
 				m_LightList_GameThread[i].m_Length = pLightComponent->GetLength();
@@ -397,7 +397,7 @@ void kbRenderer::UpdateLight(const kbLightComponent* pLightComponent, const Vec3
 	updateLight.m_Orientation = orientation;
 	updateLight.m_bIsFirstAdd = false;
 	updateLight.m_bIsRemove = false;
-	updateLight.m_bCastsShadow = pLightComponent->CastsShadow();
+	updateLight.m_casts_shadow = pLightComponent->CastsShadow();
 	updateLight.m_Color = pLightComponent->GetColor() * pLightComponent->GetBrightness();
 	updateLight.m_Radius = pLightComponent->GetRadius();
 	updateLight.m_Length = pLightComponent->GetLength();
@@ -458,7 +458,7 @@ void kbRenderer::RemoveParticle(const kbRenderObject& renderObject) {
 void kbRenderer::AddLightShafts(const kbLightShaftsComponent* const pComponent, const Vec3& pos, const Quat4& orientation) {
 	kbLightShafts newLightShafts;
 	newLightShafts.m_pLightShaftsComponent = pComponent;
-	newLightShafts.m_pTexture = pComponent->GetTexture();
+	newLightShafts.m_texture = pComponent->Texture();
 	newLightShafts.m_Color = pComponent->GetColor();
 	newLightShafts.m_Width = pComponent->GetBaseWidth();
 	newLightShafts.m_Height = pComponent->GetBaseHeight();
@@ -483,7 +483,7 @@ void kbRenderer::AddLightShafts(const kbLightShaftsComponent* const pComponent, 
 void kbRenderer::UpdateLightShafts(const kbLightShaftsComponent* const pComponent, const Vec3& pos, const Quat4& orientation) {
 	kbLightShafts updatedLightShafts;
 	updatedLightShafts.m_pLightShaftsComponent = pComponent;
-	updatedLightShafts.m_pTexture = pComponent->GetTexture();
+	updatedLightShafts.m_texture = pComponent->Texture();
 	updatedLightShafts.m_Color = pComponent->GetColor();
 	updatedLightShafts.m_Width = pComponent->GetBaseWidth();
 	updatedLightShafts.m_Height = pComponent->GetBaseHeight();
@@ -552,55 +552,55 @@ void kbRenderer::RenderSync() {
 	m_ViewMode = m_ViewMode_GameThread;
 
 	// Add/update render objects
-	for (int i = 0; i < m_RenderObjectList_GameThread.size(); i++)
+	for (int i = 0; i < m_render_objectList_GameThread.size(); i++)
 	{
 		kbRenderObject* renderObject = nullptr;
 
-		if (m_RenderObjectList_GameThread[i].m_bIsRemove) {
-			kbRenderObject* const pRenderObject = m_pCurrentRenderWindow->m_RenderObjectMap[m_RenderObjectList_GameThread[i].m_pComponent];
-			m_pCurrentRenderWindow->m_RenderObjectMap.erase(m_RenderObjectList_GameThread[i].m_pComponent);
+		if (m_render_objectList_GameThread[i].m_bIsRemove) {
+			kbRenderObject* const pRenderObject = m_pCurrentRenderWindow->m_render_objectMap[m_render_objectList_GameThread[i].m_pComponent];
+			m_pCurrentRenderWindow->m_render_objectMap.erase(m_render_objectList_GameThread[i].m_pComponent);
 			delete pRenderObject;
 		} else {
-			const kbGameComponent* const pComponent = m_RenderObjectList_GameThread[i].m_pComponent;
+			const kbGameComponent* const pComponent = m_render_objectList_GameThread[i].m_pComponent;
 			blk::error_check(pComponent != nullptr, "kbRenderer::RenderSync() - Adding/updating a render object with a nullptr component");
 
-			if (m_RenderObjectList_GameThread[i].m_bIsFirstAdd == false) {
+			if (m_render_objectList_GameThread[i].m_bIsFirstAdd == false) {
 
 				// Updating a renderobject 
-				auto it = m_pCurrentRenderWindow->m_RenderObjectMap.find(pComponent);
-				if (it == m_pCurrentRenderWindow->m_RenderObjectMap.end() || it->second == nullptr) {
+				auto it = m_pCurrentRenderWindow->m_render_objectMap.find(pComponent);
+				if (it == m_pCurrentRenderWindow->m_render_objectMap.end() || it->second == nullptr) {
 					blk::warn("kbRenderer::UpdateRenderObject - Error, Updating a RenderObject that doesn't exist. %s", pComponent->GetOwner()->GetName().c_str());
 					return;
 				}
 
 				renderObject = it->second;
-				*renderObject = m_RenderObjectList_GameThread[i];
-				if (pComponent->IsA(kbSkeletalRenderComponent::GetType()) && renderObject->m_pModel->NumBones() > 0) {
+				*renderObject = m_render_objectList_GameThread[i];
+				if (pComponent->IsA(kbSkeletalRenderComponent::GetType()) && renderObject->m_model->NumBones() > 0) {
 					const kbSkeletalRenderComponent* const skelComp = static_cast<const kbSkeletalRenderComponent*>(pComponent);
 					renderObject->m_MatrixList = skelComp->GetFinalBoneMatrices();
 					renderObject->m_bIsSkinnedModel = true;
 				}
 			} else {
 				// Adding new renderobject
-				renderObject = m_pCurrentRenderWindow->m_RenderObjectMap[pComponent];
-				blk::warn_check(renderObject == nullptr, "kbRenderer::AddRenderObject() - Model %s already added", m_RenderObjectList_GameThread[i].m_pModel->GetFullName().c_str());
+				renderObject = m_pCurrentRenderWindow->m_render_objectMap[pComponent];
+				blk::warn_check(renderObject == nullptr, "kbRenderer::AddRenderObject() - Model %s already added", m_render_objectList_GameThread[i].m_model->GetFullName().c_str());
 
-				if (pComponent->IsA(kbSkeletalRenderComponent::GetType()) && m_RenderObjectList_GameThread[i].m_pModel->NumBones() > 0) {
+				if (pComponent->IsA(kbSkeletalRenderComponent::GetType()) && m_render_objectList_GameThread[i].m_model->NumBones() > 0) {
 					renderObject = new kbRenderObject();
-					*renderObject = m_RenderObjectList_GameThread[i];
+					*renderObject = m_render_objectList_GameThread[i];
 					renderObject->m_bIsSkinnedModel = true;
 					const kbSkeletalRenderComponent* const skelComp = static_cast<const kbSkeletalRenderComponent*>(pComponent);
 					renderObject->m_MatrixList = skelComp->GetFinalBoneMatrices();
 				} else {
 					renderObject = new kbRenderObject;
-					*renderObject = m_RenderObjectList_GameThread[i];
+					*renderObject = m_render_objectList_GameThread[i];
 				}
 
-				m_pCurrentRenderWindow->m_RenderObjectMap[m_RenderObjectList_GameThread[i].m_pComponent] = renderObject;
+				m_pCurrentRenderWindow->m_render_objectMap[m_render_objectList_GameThread[i].m_pComponent] = renderObject;
 			}
 		}
 	}
-	m_RenderObjectList_GameThread.clear();
+	m_render_objectList_GameThread.clear();
 
 	// Light
 	for (int i = 0; i < m_LightList_GameThread.size(); i++) {
@@ -748,7 +748,7 @@ void kbRenderer::DrawBillboard(const Vec3& position, const Vec2& size, const int
 	debugDrawObject_t billboard;
 	billboard.m_Position = position;
 	billboard.m_Scale.set(size.x, size.y, size.x);
-	billboard.m_pShader = pShader;
+	billboard.m_shader = pShader;
 	billboard.m_TextureIndex = textureIndex;
 	billboard.m_EntityId = entityId;
 
@@ -761,7 +761,7 @@ void kbRenderer::DrawModel(const kbModel* const pModel, const std::vector<kbShad
 	model.m_Position = position;
 	model.m_Orientation = orientation;
 	model.m_Scale = scale;
-	model.m_pModel = pModel;
+	model.m_model = pModel;
 	model.m_EntityId = entityId;
 	model.m_Materials = materials;
 
@@ -775,7 +775,7 @@ void kbRenderer::DrawScreenSpaceQuad(const int start_x, const int start_y, const
 	quadToAdd.m_Pos.y = start_y;
 	quadToAdd.m_Size.x = size_x;
 	quadToAdd.m_Size.y = size_y;
-	quadToAdd.m_pShader = pShader;
+	quadToAdd.m_shader = pShader;
 	quadToAdd.m_TextureIndex = textureIndex;
 
 	m_ScreenSpaceQuads_GameThread.push_back(quadToAdd);
@@ -912,7 +912,7 @@ void kbRenderer::DrawPreTransformedLine(const std::vector<Vec3>& vertList, const
 }
 
 /// kbRenderer::RT_GetRenderTexture
-kbRenderTexture* kbRenderer::RT_GetRenderTexture(const int width, const int height, const eTextureFormat texFormat, const bool bRequiresCPUAccess) {
+kbRenderTexture* kbRenderer::RT_RenderTexture(const int width, const int height, const eTextureFormat texFormat, const bool bRequiresCPUAccess) {
 
 	for (int i = NUM_RESERVED_RENDER_TARGETS; i < m_pRenderTargets.size(); i++) {
 		kbRenderTexture* const pRT = m_pRenderTargets[i];
@@ -937,20 +937,20 @@ void kbRenderer::RT_ReturnRenderTexture(kbRenderTexture* const pRenderTexture) {
 void kbRenderer::RegisterRenderHook(kbRenderHook* const pRenderHook) {
 	blk::error_check(pRenderHook != nullptr, "kbRenderer::RegisterRenderHook() - NULL render hook");
 
-	m_RenderHooks[(int)pRenderHook->m_RenderPass].push_back(pRenderHook);
+	m_RenderHooks[(int)pRenderHook->m_render_pass].push_back(pRenderHook);
 }
 
 /// kbRenderer::UnregisterRenderHook
 void kbRenderer::UnregisterRenderHook(kbRenderHook* const pRenderHook) {
 	blk::error_check(pRenderHook != nullptr, "kbRenderer::UnregisterRenderHook() - NULL render hook");
 
-	blk::std_remove_swap(m_RenderHooks[(int)pRenderHook->m_RenderPass], pRenderHook);
+	blk::std_remove_swap(m_RenderHooks[(int)pRenderHook->m_render_pass], pRenderHook);
 
 }
 
 /// kbRenderHook::kbRenderHook
 kbRenderHook::kbRenderHook(const ERenderPass renderPass) :
-	m_RenderPass(renderPass) {
+	m_render_pass(renderPass) {
 }
 
 /// kbRenderHook::~kbRenderHook

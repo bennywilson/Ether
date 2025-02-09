@@ -171,7 +171,7 @@ void kbPropertiesTab::CheckButtonCB(Fl_Widget* widget, void* voidPtr) {
 
 	*((bool*)userData->m_pVariablePtr) = (bool)buttonVal;
 
-	userData->m_pComponent->EditorChange(userData->m_VariableName.stl_str());
+	userData->m_pComponent->editor_change(userData->m_VariableName.stl_str());
 
 
 	kbComponent* const pModifiedComponent = userData->m_pComponent;
@@ -206,9 +206,9 @@ void kbPropertiesTab::PointerButtonCB(Fl_Widget* widget, void* voidPtr) {
 		}
 		else {
 			if (userData->m_pComponent != nullptr) {
-				userData->m_pComponent->EditorChange(*fieldName);
+				userData->m_pComponent->editor_change(*fieldName);
 				if (userData->m_pParentComponent != nullptr) {
-					userData->m_pParentComponent->EditorChange(*fieldName);
+					userData->m_pParentComponent->editor_change(*fieldName);
 				}
 			}
 		}
@@ -230,9 +230,9 @@ void kbPropertiesTab::PointerButtonCB(Fl_Widget* widget, void* voidPtr) {
 
 	*userData->m_pResource = pResource;
 
-	userData->m_pComponent->EditorChange(*fieldName);
+	userData->m_pComponent->editor_change(*fieldName);
 	if (userData->m_pParentComponent != nullptr) {
-		userData->m_pParentComponent->EditorChange(*fieldName);
+		userData->m_pParentComponent->editor_change(*fieldName);
 	}
 
 	g_pPropertiesTab->RefreshEntity();
@@ -253,9 +253,9 @@ void kbPropertiesTab::ClearPointerButtonCB(Fl_Widget* widget, void* voidPtr) {
 
 		pEntityPtr.SetEntity(nullptr);
 
-		userData->m_pComponent->EditorChange(*fieldName);
+		userData->m_pComponent->editor_change(*fieldName);
 		if (userData->m_pParentComponent != nullptr) {
-			userData->m_pParentComponent->EditorChange(*fieldName);
+			userData->m_pParentComponent->editor_change(*fieldName);
 		}
 
 		g_pPropertiesTab->RefreshEntity();
@@ -264,9 +264,9 @@ void kbPropertiesTab::ClearPointerButtonCB(Fl_Widget* widget, void* voidPtr) {
 
 	*userData->m_pResource = nullptr;
 
-	userData->m_pComponent->EditorChange(*fieldName);
+	userData->m_pComponent->editor_change(*fieldName);
 	if (userData->m_pParentComponent != nullptr) {
-		userData->m_pParentComponent->EditorChange(*fieldName);
+		userData->m_pParentComponent->editor_change(*fieldName);
 	}
 
 	g_pPropertiesTab->RefreshEntity();
@@ -389,9 +389,9 @@ void kbPropertiesTab::TextFieldCB(Fl_Widget* widget, void* voidPtr) {
 		userData->m_pComponent->Enable(true);
 	}
 
-	userData->m_pComponent->EditorChange(userData->m_VariableName.stl_str());
+	userData->m_pComponent->editor_change(userData->m_VariableName.stl_str());
 	if (userData->m_pParentComponent != nullptr) {
-		userData->m_pParentComponent->EditorChange(userData->m_VariableName.stl_str());
+		userData->m_pParentComponent->editor_change(userData->m_VariableName.stl_str());
 	}
 
 	delete prevValuePtr;
@@ -461,9 +461,9 @@ void kbPropertiesTab::ArrayResizeCB(Fl_Widget* widget, void* voidPtr) {
 		userData->m_pComponent->Enable(true);
 	}
 
-	userData->m_pComponent->EditorChange(userData->m_VariableName.stl_str());
+	userData->m_pComponent->editor_change(userData->m_VariableName.stl_str());
 	if (userData->m_pParentComponent != nullptr) {
-		userData->m_pParentComponent->EditorChange(userData->m_VariableName.stl_str());
+		userData->m_pParentComponent->editor_change(userData->m_VariableName.stl_str());
 	}
 
 	g_pPropertiesTab->RequestRefreshNextUpdate();
@@ -483,7 +483,7 @@ void kbPropertiesTab::EnumCB(Fl_Widget* widget, void* voidPtr) {
 	componentVar = dropDownValue;
 
 	userData->m_pComponent->Enable(false);
-	userData->m_pComponent->EditorChange(userData->m_VariableName.c_str());
+	userData->m_pComponent->editor_change(userData->m_VariableName.c_str());
 	userData->m_pComponent->Enable(true);
 
 	g_pPropertiesTab->RequestRefreshNextUpdate();

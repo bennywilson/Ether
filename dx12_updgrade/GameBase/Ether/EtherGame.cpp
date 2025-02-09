@@ -31,22 +31,22 @@ EtherGame::~EtherGame() {
 
 kbRenderObject crossHair;
 
-void EtherGame::PlayGame_Internal() {}
+void EtherGame::play_internal() {}
 
-void EtherGame::InitGame_Internal() {}
+void EtherGame::init_internal() {}
 
-void EtherGame::StopGame_Internal() {}
+void EtherGame::stop_internal() {}
 
-void EtherGame::LevelLoaded_Internal() {}
+void EtherGame::level_loaded_internal() {}
 
-void EtherGame::PreUpdate_Internal() {
+void EtherGame::preupdate_internal() {
 	ProcessInput(0.0166f);
 	// Set render view
 }
 
-void EtherGame::AddGameEntity_Internal(kbGameEntity* const pEntity) {}
+void EtherGame::add_entity_internal(kbGameEntity* const pEntity) {}
 
-void EtherGame::RemoveGameEntity_Internal(kbGameEntity* const pEntity) {}
+void EtherGame::remove_entity_internal(kbGameEntity* const pEntity) {}
 
 void EtherGame::ProcessInput(const float DT) {
 

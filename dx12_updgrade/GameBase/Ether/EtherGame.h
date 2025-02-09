@@ -25,15 +25,15 @@ public:
 	const eCameraMode_t& GetCameraMode() const { return m_CameraMode; }
 
 protected:
-	virtual void InitGame_Internal() override;
-	virtual void PlayGame_Internal() override;
-	virtual void StopGame_Internal() override;
-	virtual void LevelLoaded_Internal() override;
+	virtual void init_internal() override;
+	virtual void play_internal() override;
+	virtual void stop_internal() override;
+	virtual void level_loaded_internal() override;
 
-	virtual void AddGameEntity_Internal(kbGameEntity* const pEntity) override;
-	virtual void RemoveGameEntity_Internal(kbGameEntity* const pEntity) override;
+	virtual void add_entity_internal(kbGameEntity* const pEntity) override;
+	virtual void remove_entity_internal(kbGameEntity* const pEntity) override;
 
-	virtual void PreUpdate_Internal() override;
+	virtual void preupdate_internal() override;
 
 	void ProcessInput(const float deltaTimeSec);
 	void UpdateWorld(const float deltaTimeSec);

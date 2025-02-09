@@ -158,7 +158,7 @@ kbGameEntity* kbFile::ReadGameEntity_Internal() {
 		nextStringPos = m_Buffer.find_first_of(" {\n\r\t", m_CurrentReadPos);
 	} while (bracketCount != 0 && nextStringPos != std::string::npos);
 
-	pGameEntity->PostLoad();
+	pGameEntity->post_load();
 
 	for (int i = 0; i < pGameEntity->NumComponents(); i++) {
 		kbGameComponent* const pComponent = pGameEntity->GetComponent(i);

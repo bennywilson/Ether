@@ -29,9 +29,9 @@ void CannonActorComponent::Constructor() {
 	m_bIsPlayer = false;
 }
 
-/// CannonActorComponent::SetEnable_Internal
-void CannonActorComponent::SetEnable_Internal(const bool bEnable) {
-	Super::SetEnable_Internal(bEnable);
+/// CannonActorComponent::enable_internal
+void CannonActorComponent::enable_internal(const bool bEnable) {
+	Super::enable_internal(bEnable);
 
 	m_OverridenFXMaskParams.set(-1.0f, -1.0f, -1.0f, -1.0f);
 
@@ -53,7 +53,7 @@ void CannonActorComponent::SetEnable_Internal(const bool bEnable) {
 
 			m_SkelModelsList[0]->RegisterSyncSkelModel(m_SkelModelsList[1]);
 			const static kbString smearParam("smearParams");
-			m_SkelModelsList[1]->SetMaterialParamVector(0, smearParam.stl_str(), Vec4::zero);
+			m_SkelModelsList[1]->set_material_param_vec4(0, smearParam.stl_str(), Vec4::zero);
 		}
 	} else {
 		for (int i = 0; i < m_SkelModelsList.size(); i++) {
@@ -67,9 +67,9 @@ void CannonActorComponent::SetEnable_Internal(const bool bEnable) {
 	}
 }
 
-/// CannonActorComponent::Update_Internal
-void CannonActorComponent::Update_Internal(const float DT) {
-	Super::Update_Internal(DT);
+/// CannonActorComponent::update_internal
+void CannonActorComponent::update_internal(const float DT) {
+	Super::update_internal(DT);
 
 	const Quat4 curRot = owner_rotation();
 
@@ -85,12 +85,12 @@ void CannonActorComponent::Update_Internal(const float DT) {
 		if (elapsedTime > m_AnimSmearDuration) {
 			m_AnimSmearStartTime = -1.0f;
 			const static kbString smearParam("smearParams");
-			m_SkelModelsList[1]->SetMaterialParamVector(0, smearParam.stl_str(), Vec4::zero);
+			m_SkelModelsList[1]->set_material_param_vec4(0, smearParam.stl_str(), Vec4::zero);
 		} else {
 			const float strength = 1.0f - kbClamp(elapsedTime / m_AnimSmearDuration, 0.0f, 1.0f);
 			const static kbString smearParam("smearParams");
 			const Vec4 smearVec = strength * m_AnimSmearVec;
-			m_SkelModelsList[1]->SetMaterialParamVector(0, smearParam.stl_str(), smearVec);
+			m_SkelModelsList[1]->set_material_param_vec4(0, smearParam.stl_str(), smearVec);
 		}
 	}
 }
@@ -207,9 +207,9 @@ void CannonCameraComponent::Constructor() {
 	m_CameraShakeFrequency.set(0.0f, 0.0f);
 }
 
-/// CannonActorComponent::SetEnable_Internal
-void CannonCameraComponent::SetEnable_Internal(const bool bEnable) {
-	Super::SetEnable_Internal(bEnable);
+/// CannonActorComponent::enable_internal
+void CannonCameraComponent::enable_internal(const bool bEnable) {
+	Super::enable_internal(bEnable);
 
 	m_pTarget = nullptr;
 	g_pRenderer->SetNearFarPlane(nullptr, m_NearPlane, m_FarPlane);
@@ -268,9 +268,9 @@ void CannonCameraComponent::StartCameraShake(const CannonCameraShakeComponent* c
 	m_CameraShakeFrequency = pCameraShakeComponent->GetFrequency();
 }
 
-/// CannonActorComponent::Update_Internal
-void CannonCameraComponent::Update_Internal(const float DeltaTime) {
-	Super::Update_Internal(DeltaTime);
+/// CannonActorComponent::update_internal
+void CannonCameraComponent::update_internal(const float DeltaTime) {
+	Super::update_internal(DeltaTime);
 
 	Vec2 camShakeOffset(0.0f, 0.0f);
 	if (m_CameraShakeStartTime > 0.0f) {
@@ -350,18 +350,18 @@ void CannonCameraShakeComponent::Constructor() {
 	m_ShakeStartTime = -1.0f;
 }
 
-/// CannonCameraShakeComponent::SetEnable_Internal
-void CannonCameraShakeComponent::SetEnable_Internal(const bool bEnable) {
-	Super::SetEnable_Internal(bEnable);
+/// CannonCameraShakeComponent::enable_internal
+void CannonCameraShakeComponent::enable_internal(const bool bEnable) {
+	Super::enable_internal(bEnable);
 
 	if (bEnable) {
 		m_ShakeStartTime = g_GlobalTimer.TimeElapsedSeconds() + m_ActivationDelaySeconds;
 	}
 }
 
-/// CannonCameraShakeComponent::Update_Internal
-void CannonCameraShakeComponent::Update_Internal(const float DeltaTime) {
-	Super::Update_Internal(DeltaTime);
+/// CannonCameraShakeComponent::update_internal
+void CannonCameraShakeComponent::update_internal(const float DeltaTime) {
+	Super::update_internal(DeltaTime);
 
 	if (m_bActivateOnEnable && g_GlobalTimer.TimeElapsedSeconds() > m_ShakeStartTime) {
 		// Disable so that this component doesn't prevent it's owning entity to linger past it's life time

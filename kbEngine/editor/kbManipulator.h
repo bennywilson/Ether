@@ -40,7 +40,7 @@ public:
 	manipulatorMode_t GetMode() const { return m_ManipulatorMode; }
 
 private:
-	kbModel* m_pModels[NumManipulators];
+	kbModel* m_models[NumManipulators];
 
 	manipulatorMode_t m_ManipulatorMode;
 

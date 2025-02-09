@@ -54,8 +54,8 @@ public:
 
 
 protected:
-	virtual void								SetEnable_Internal( const bool isEnabled ) override;
-	virtual void								Update_Internal( const float DeltaTime ) override;
+	virtual void								enable_internal( const bool isEnabled ) override;
+	virtual void								update_internal( const float DeltaTime ) override;
 
 private:
 	ECollisionType								m_CollisionType;

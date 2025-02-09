@@ -388,11 +388,11 @@ void Renderer_Dx12::render() {
 		m_command_list->IASetVertexBuffers(0, 1, &vertex_buffer->vertex_buffer_view());
 		m_command_list->IASetIndexBuffer(&index_buffer->index_buffer_view());
 
-		const auto& shader_params = render_comp->GetMaterialList()[0].GetShaderParams();
+		const auto& shader_params = render_comp->Materials()[0].shader_params();
 		Vec4 color(1.f, 1.f, 1.f, 1.f);
 		for (const auto& param : shader_params) {
-			if (param.GetParamName() == kbString("color")) {
-				color = param.GetVector();
+			if (param.param_name() == kbString("color")) {
+				color = param.vector();
 			}
 		}
 		Mat4 world_mat;

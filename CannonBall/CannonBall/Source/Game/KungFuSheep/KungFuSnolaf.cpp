@@ -407,7 +407,7 @@ public:
 				if (pSkelModelComp == nullptr) {
 					continue;
 				}
-				pSkelModelComp->SetMaterialParamVector(0, clipMapMaskParam.stl_str(), Vec4(1.0f, 0.0f, 0.0f, 0.0f));
+				pSkelModelComp->set_material_param_vec4(0, clipMapMaskParam.stl_str(), Vec4(1.0f, 0.0f, 0.0f, 0.0f));
 			}
 		} else if (m_DeathSelection == 3) {
 			this->GetSnolaf()->SpawnAndFlingTopAndBottomHalf();
@@ -551,9 +551,9 @@ void KungFuSnolafComponent::Constructor() {
 	m_pLargeLoveHearts = nullptr;
 }
 
-/// KungFuSnolafComponent::SetEnable_Internal
-void KungFuSnolafComponent::SetEnable_Internal(const bool bEnable) {
-	Super::SetEnable_Internal(bEnable);
+/// KungFuSnolafComponent::enable_internal
+void KungFuSnolafComponent::enable_internal(const bool bEnable) {
+	Super::enable_internal(bEnable);
 
 	m_pSmallLoveHearts = nullptr;
 	if (bEnable) {
@@ -561,7 +561,7 @@ void KungFuSnolafComponent::SetEnable_Internal(const bool bEnable) {
 		// TODO: NEEDED?
 		if (m_SkelModelsList.size() > 1) {
 			const static kbString smearParam("smearParams");
-			m_SkelModelsList[1]->SetMaterialParamVector(0, smearParam.stl_str(), Vec4::zero);
+			m_SkelModelsList[1]->set_material_param_vec4(0, smearParam.stl_str(), Vec4::zero);
 		}
 
 		static const kbString SmallLoveHearts("Small_LoveHearts");
@@ -630,9 +630,9 @@ void KungFuSnolafComponent::OnAnimEvent(const kbAnimEventInfo_t& animEventInfo) 
 	}
 }
 
-/// KungFuSnolafComponent::Update_Internal
-void KungFuSnolafComponent::Update_Internal(const float DT) {
-	Super::Update_Internal(DT);
+/// KungFuSnolafComponent::update_internal
+void KungFuSnolafComponent::update_internal(const float DT) {
+	Super::update_internal(DT);
 
 	if (DT > 0.0f) {
 		UpdateStateMachine();
@@ -661,9 +661,9 @@ void KungFuSnolafComponent::Update_Internal(const float DT) {
 	if (m_SkelModelsList.size() > 0) {
 		const static kbString fxMapMaskParam("fxMapMask");
 		if (m_OverridenFXMaskParams.r >= 0.0f && m_OverridenFXMaskParams.g >= 0.0f && m_OverridenFXMaskParams.b >= 0.0f && m_OverridenFXMaskParams.a >= 0.0f) {
-			m_SkelModelsList[0]->SetMaterialParamVector(0, fxMapMaskParam.stl_str(), m_OverridenFXMaskParams);
+			m_SkelModelsList[0]->set_material_param_vec4(0, fxMapMaskParam.stl_str(), m_OverridenFXMaskParams);
 		} else {
-			m_SkelModelsList[0]->SetMaterialParamVector(0, fxMapMaskParam.stl_str(), fxDot);
+			m_SkelModelsList[0]->set_material_param_vec4(0, fxMapMaskParam.stl_str(), fxDot);
 		}
 	}
 }
@@ -688,11 +688,11 @@ void KungFuSnolafComponent::ResetFromPool() {
 	}
 
 	const static kbString clipMapMaskParam("clipMapMask");
-	m_SkelModelsList[0]->SetMaterialParamVector(0, clipMapMaskParam.stl_str(), Vec4(0.0f, 0.0f, 0.0f, 0.0f));
-	m_SkelModelsList[1]->SetMaterialParamVector(0, clipMapMaskParam.stl_str(), Vec4(0.0f, 0.0f, 0.0f, 0.0f));
+	m_SkelModelsList[0]->set_material_param_vec4(0, clipMapMaskParam.stl_str(), Vec4(0.0f, 0.0f, 0.0f, 0.0f));
+	m_SkelModelsList[1]->set_material_param_vec4(0, clipMapMaskParam.stl_str(), Vec4(0.0f, 0.0f, 0.0f, 0.0f));
 
 	const static kbString smearParam("smearParams");
-	m_SkelModelsList[1]->SetMaterialParamVector(0, smearParam.stl_str(), Vec4::zero);
+	m_SkelModelsList[1]->set_material_param_vec4(0, smearParam.stl_str(), Vec4::zero);
 
 	m_Health = 1.0f;
 }

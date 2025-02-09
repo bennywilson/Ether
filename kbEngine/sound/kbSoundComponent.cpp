@@ -60,8 +60,8 @@ void kbSoundData::StopSound() {
 }
 
 /// kbSoundData::EditorChange
-void kbSoundData::EditorChange(const std::string& propertyName) {
-	Super::EditorChange(propertyName);
+void kbSoundData::editor_change(const std::string& propertyName) {
+	Super::editor_change(propertyName);
 
 	if (propertyName == "TestPlaySoundNow") {
 		m_bDebugPlaySound = false;
@@ -76,9 +76,9 @@ void kbPlaySoundComponent::Constructor() {
 	m_TimeToPlay = 0.0f;
 }
 
-/// kbPlaySoundComponent::SetEnable_Internal
-void kbPlaySoundComponent::SetEnable_Internal(const bool bEnable) {
-	Super::SetEnable_Internal(bEnable);
+/// kbPlaySoundComponent::enable_internal
+void kbPlaySoundComponent::enable_internal(const bool bEnable) {
+	Super::enable_internal(bEnable);
 
 	if (bEnable) {
 		const float delay = kbfrand(m_MinStartDelay, m_MaxStartDelay);
@@ -86,9 +86,9 @@ void kbPlaySoundComponent::SetEnable_Internal(const bool bEnable) {
 	}
 }
 
-/// kbPlaySoundComponent::Update_Internal
-void kbPlaySoundComponent::Update_Internal(const float DeltaTime) {
-	Super::Update_Internal(DeltaTime);
+/// kbPlaySoundComponent::update_internal
+void kbPlaySoundComponent::update_internal(const float DeltaTime) {
+	Super::update_internal(DeltaTime);
 
 	if (g_UseEditor == true) {
 		return;

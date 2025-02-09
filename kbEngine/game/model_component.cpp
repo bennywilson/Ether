@@ -14,7 +14,7 @@ KB_DEFINE_COMPONENT(kbStaticModelComponent)
 
 /// RenderComponent
 void kbStaticModelComponent::Constructor() {
-	m_pModel = nullptr;
+	m_model = nullptr;
 }
 
 /// ~kbStaticModelComponent
@@ -22,82 +22,82 @@ kbStaticModelComponent::~kbStaticModelComponent() {
 }
 
 /// kbStaticModelComponent::EditorChange
-void kbStaticModelComponent::EditorChange(const std::string& propertyName) {
-	Super::EditorChange(propertyName);
+void kbStaticModelComponent::editor_change(const std::string& propertyName) {
+	Super::editor_change(propertyName);
 
 	if (IsEnabled() && (propertyName == "Model" || propertyName == "ShaderOverride")) {
-		SetEnable_Internal(false);
-		SetEnable_Internal(true);
+		enable_internal(false);
+		enable_internal(true);
 	}
 }
 
-/// kbStaticModelComponent::SetEnable_Internal
-void kbStaticModelComponent::SetEnable_Internal(const bool isEnabled) {
+/// kbStaticModelComponent::enable_internal
+void kbStaticModelComponent::enable_internal(const bool isEnabled) {
 
-	Super::SetEnable_Internal(isEnabled);
+	Super::enable_internal(isEnabled);
 
-	if (m_pModel == nullptr) {
+	if (m_model == nullptr) {
 		return;
 	}
 
-	m_RenderObject.m_pComponent = this;
+	m_render_object.m_pComponent = this;
 
 	if (isEnabled) {
 
-		m_RenderObject.m_bCastsShadow = this->GetCastsShadow();
-		m_RenderObject.m_bIsSkinnedModel = false;
-		m_RenderObject.m_EntityId = GetOwner()->GetEntityId();
-		m_RenderObject.m_Orientation = GetOwner()->GetOrientation();
-		m_RenderObject.m_pModel = m_pModel;
-		m_RenderObject.m_Position = GetOwner()->GetPosition();
-		m_RenderObject.m_RenderPass = m_RenderPass;
-		m_RenderObject.m_Scale = GetOwner()->GetScale() * kbLevelComponent::GetGlobalModelScale();
-		m_RenderObject.m_RenderOrderBias = m_RenderOrderBias;
+		m_render_object.m_casts_shadow = this->GetCastsShadow();
+		m_render_object.m_bIsSkinnedModel = false;
+		m_render_object.m_EntityId = GetOwner()->GetEntityId();
+		m_render_object.m_Orientation = GetOwner()->GetOrientation();
+		m_render_object.m_model = m_model;
+		m_render_object.m_Position = GetOwner()->GetPosition();
+		m_render_object.m_render_pass = m_render_pass;
+		m_render_object.m_Scale = GetOwner()->GetScale() * kbLevelComponent::GetGlobalModelScale();
+		m_render_object.m_render_order_bias = m_render_order_bias;
 
-		RefreshMaterials(false);
+		refresh_materials(false);
 
-		g_pRenderer->AddRenderObject(m_RenderObject);
+		g_pRenderer->AddRenderObject(m_render_object);
 
 		if (g_renderer) {
 			g_renderer->add_render_component(this);
 		}
 	} else {
 		if (g_renderer) {
-			g_pRenderer->RemoveRenderObject(m_RenderObject);
+			g_pRenderer->RemoveRenderObject(m_render_object);
 		}
 	}
 }
 
-/// kbStaticModelComponent::Update_Internal
-void kbStaticModelComponent::Update_Internal(const float DeltaTime) {
-	Super::Update_Internal(DeltaTime);
+/// kbStaticModelComponent::update_internal
+void kbStaticModelComponent::update_internal(const float DeltaTime) {
+	Super::update_internal(DeltaTime);
 
-	if (m_pModel != nullptr && GetOwner()->IsDirty()) {
-		m_RenderObject.m_Position = GetOwner()->GetPosition();
-		m_RenderObject.m_Orientation = GetOwner()->GetOrientation();
-		m_RenderObject.m_Scale = GetOwner()->GetScale() * kbLevelComponent::GetGlobalModelScale();
-		m_RenderObject.m_pModel = m_pModel;
+	if (m_model != nullptr && GetOwner()->IsDirty()) {
+		m_render_object.m_Position = GetOwner()->GetPosition();
+		m_render_object.m_Orientation = GetOwner()->GetOrientation();
+		m_render_object.m_Scale = GetOwner()->GetScale() * kbLevelComponent::GetGlobalModelScale();
+		m_render_object.m_model = m_model;
 
-		g_pRenderer->UpdateRenderObject(m_RenderObject);
+		g_pRenderer->UpdateRenderObject(m_render_object);
 	}
 
-	// m_pModel->DrawDebugTBN( GetOwner()->GetPosition(), GetOwner()->GetOrientation(), GetOwner()->GetScale() );
+	// m_model->DrawDebugTBN( GetOwner()->GetPosition(), GetOwner()->GetOrientation(), GetOwner()->GetScale() );
 }
 
 KB_DEFINE_COMPONENT(kbSkeletalRenderComponent)
 
 /// kbAnimComponent::Constructor
 void kbAnimComponent::Constructor() {
-	m_pAnimation = nullptr;
-	m_TimeScale = 1.0f;
-	m_bIsLooping = false;
-	m_CurrentAnimationTime = -1.0f;
+	m_animation = nullptr;
+	m_time_scale = 1.0f;
+	m_is_looping = false;
+	m_current_animation_time = -1.0f;
 }
 
 /// kbSkeletalRenderComponent::Constructor
 void kbSkeletalRenderComponent::Constructor() {
-	m_pModel = nullptr;
-	m_RenderObject.m_bIsSkinnedModel = true;
+	m_model = nullptr;
+	m_render_object.m_bIsSkinnedModel = true;
 
 	m_CurrentAnimation = -1;
 	m_NextAnimation = -1;
@@ -115,72 +115,72 @@ void kbSkeletalRenderComponent::Constructor() {
 kbSkeletalRenderComponent::~kbSkeletalRenderComponent() {}
 
 /// kbSkeletalRenderComponent::EditorChange
-void kbSkeletalRenderComponent::EditorChange(const std::string& propertyName) {
-	Super::EditorChange(propertyName);
+void kbSkeletalRenderComponent::editor_change(const std::string& propertyName) {
+	Super::editor_change(propertyName);
 
 	if (propertyName == "Model" || propertyName == "ShaderOverride") {
-		RefreshMaterials(true);
+		refresh_materials(true);
 	}
 }
 
-/// kbSkeletalRenderComponent::SetEnable_Internal
-void kbSkeletalRenderComponent::SetEnable_Internal(const bool isEnabled) {
-	if (m_pModel == nullptr || g_pRenderer == nullptr) {
+/// kbSkeletalRenderComponent::enable_internal
+void kbSkeletalRenderComponent::enable_internal(const bool isEnabled) {
+	if (m_model == nullptr || g_pRenderer == nullptr) {
 		return;
 	}
 
-	m_RenderObject.m_pComponent = this;
+	m_render_object.m_pComponent = this;
 	if (isEnabled) {
-		m_RenderObject.m_bCastsShadow = this->GetCastsShadow();
-		m_RenderObject.m_EntityId = GetOwner()->GetEntityId();
-		m_RenderObject.m_Orientation = GetOwner()->GetOrientation();
-		m_RenderObject.m_pModel = m_pModel;
-		m_RenderObject.m_Position = GetOwner()->GetPosition();
-		m_RenderObject.m_RenderPass = m_RenderPass;
-		m_RenderObject.m_Scale = GetOwner()->GetScale() * kbLevelComponent::GetGlobalModelScale();
-		RefreshMaterials(false);
+		m_render_object.m_casts_shadow = this->GetCastsShadow();
+		m_render_object.m_EntityId = GetOwner()->GetEntityId();
+		m_render_object.m_Orientation = GetOwner()->GetOrientation();
+		m_render_object.m_model = m_model;
+		m_render_object.m_Position = GetOwner()->GetPosition();
+		m_render_object.m_render_pass = m_render_pass;
+		m_render_object.m_Scale = GetOwner()->GetScale() * kbLevelComponent::GetGlobalModelScale();
+		refresh_materials(false);
 
-		g_pRenderer->AddRenderObject(m_RenderObject);
+		g_pRenderer->AddRenderObject(m_render_object);
 
 		m_AnimationTimeScaleMultipliers.resize(m_Animations.size());
 		for (int i = 0; i < m_AnimationTimeScaleMultipliers.size(); i++) {
 			m_AnimationTimeScaleMultipliers[i] = 1.0f;
 		}
 	} else {
-		g_pRenderer->RemoveRenderObject(m_RenderObject);
+		g_pRenderer->RemoveRenderObject(m_render_object);
 	}
 }
 
-/// kbSkeletalRenderComponent::Update_Internal
-void kbSkeletalRenderComponent::Update_Internal(const float DeltaTime) {
-	Super::Update_Internal(DeltaTime);
+/// kbSkeletalRenderComponent::update_internal
+void kbSkeletalRenderComponent::update_internal(const float DeltaTime) {
+	Super::update_internal(DeltaTime);
 
-	if (m_pModel != nullptr && m_pSyncParent == nullptr) {
-		if (m_BindToLocalSpaceMatrices.size() != m_pModel->NumBones()) {
-			m_BindToLocalSpaceMatrices.resize(m_pModel->NumBones());
+	if (m_model != nullptr && m_pSyncParent == nullptr) {
+		if (m_BindToLocalSpaceMatrices.size() != m_model->NumBones()) {
+			m_BindToLocalSpaceMatrices.resize(m_model->NumBones());
 		}
 
 		// Debug Animation
-		if (m_DebugAnimIdx >= 0 && m_DebugAnimIdx < m_Animations.size() && m_Animations[m_DebugAnimIdx].m_pAnimation != nullptr) {
-			if (m_pModel != nullptr) {
+		if (m_DebugAnimIdx >= 0 && m_DebugAnimIdx < m_Animations.size() && m_Animations[m_DebugAnimIdx].m_animation != nullptr) {
+			if (m_model != nullptr) {
 
 				static bool pause = false;
 				if (pause == false) {
-					const float AnimTimeScale = m_Animations[m_DebugAnimIdx].m_TimeScale;
+					const float AnimTimeScale = m_Animations[m_DebugAnimIdx].m_time_scale;
 					m_DebugAnimTime += DeltaTime * AnimTimeScale;
 
-					if (m_Animations[m_DebugAnimIdx].m_bIsLooping == false) {
-						m_DebugAnimTime = kbClamp(m_DebugAnimTime, 0.0f, m_Animations[m_DebugAnimIdx].m_pAnimation->GetLengthInSeconds());
+					if (m_Animations[m_DebugAnimIdx].m_is_looping == false) {
+						m_DebugAnimTime = kbClamp(m_DebugAnimTime, 0.0f, m_Animations[m_DebugAnimIdx].m_animation->GetLengthInSeconds());
 					}
 				}
 
 				if (m_BindToLocalSpaceMatrices.size() == 0) {
-					m_BindToLocalSpaceMatrices.resize(m_pModel->NumBones());
+					m_BindToLocalSpaceMatrices.resize(m_model->NumBones());
 				}
-				m_pModel->Animate(m_BindToLocalSpaceMatrices, m_DebugAnimTime, m_Animations[m_DebugAnimIdx].m_pAnimation, m_Animations[m_DebugAnimIdx].m_bIsLooping);
+				m_model->Animate(m_BindToLocalSpaceMatrices, m_DebugAnimTime, m_Animations[m_DebugAnimIdx].m_animation, m_Animations[m_DebugAnimIdx].m_is_looping);
 			}
 		} else {
-			for (int i = 0; i < m_pModel->NumBones(); i++) {
+			for (int i = 0; i < m_model->NumBones(); i++) {
 				m_BindToLocalSpaceMatrices[i].SetIdentity();
 			}
 		}
@@ -188,10 +188,10 @@ void kbSkeletalRenderComponent::Update_Internal(const float DeltaTime) {
 		if (m_CurrentAnimation != -1) {
 #if DEBUG_ANIMS
 			bool bOutput = true;
-			if (m_Animations[m_CurrentAnimation].GetAnimationName().stl_str().find("Shoot") != std::string::npos) {
+			if (m_Animations[m_CurrentAnimation].animation_name().stl_str().find("Shoot") != std::string::npos) {
 				bOutput = true;
 			}
-			if (bOutput) blk::log("Updating current anim %s with idx %d", m_Animations[m_CurrentAnimation].GetAnimationName().c_str(), m_CurrentAnimation);
+			if (bOutput) blk::log("Updating current anim %s with idx %d", m_Animations[m_CurrentAnimation].animation_name().c_str(), m_CurrentAnimation);
 #endif
 			// Check if the blend is finished
 			if (m_NextAnimation != -1) {
@@ -213,40 +213,40 @@ void kbSkeletalRenderComponent::Update_Internal(const float DeltaTime) {
 			kbAnimComponent& CurAnim = m_Animations[m_CurrentAnimation];
 
 			bool bAnimIsFinished = false;
-			const float curAnimLenSec = CurAnim.m_pAnimation->GetLengthInSeconds();
-			const float prevAnimTime = CurAnim.m_CurrentAnimationTime;
+			const float curAnimLenSec = CurAnim.m_animation->GetLengthInSeconds();
+			const float prevAnimTime = CurAnim.m_current_animation_time;
 
 			bool bOutput = false;
-			if (CurAnim.m_bIsLooping && CurAnim.m_AnimEvents.size() > 0) {
+			if (CurAnim.m_is_looping && CurAnim.m_anim_events.size() > 0) {
 				bOutput = true;
 			}
 
-			if (CurAnim.m_bIsLooping == false) {
-				if (CurAnim.m_CurrentAnimationTime >= curAnimLenSec) {
+			if (CurAnim.m_is_looping == false) {
+				if (CurAnim.m_current_animation_time >= curAnimLenSec) {
 
 #if DEBUG_ANIMS
 					if (bOutput) blk::log("	Cur anim is finished!");
 #endif
-					//CurAnim.m_CurrentAnimationTime = curAnimLenSec;
+					//CurAnim.m_current_animation_time = curAnimLenSec;
 					bAnimIsFinished = true;
 				}
 			}
 
 			if (m_NextAnimation == -1) {
 
-				CurAnim.m_CurrentAnimationTime += DeltaTime * CurAnim.m_TimeScale * m_AnimationTimeScaleMultipliers[m_CurrentAnimation];
+				CurAnim.m_current_animation_time += DeltaTime * CurAnim.m_time_scale * m_AnimationTimeScaleMultipliers[m_CurrentAnimation];
 
-				if (CurAnim.m_bIsLooping) {
-					CurAnim.m_CurrentAnimationTime = fmod(CurAnim.m_CurrentAnimationTime, curAnimLenSec);
+				if (CurAnim.m_is_looping) {
+					CurAnim.m_current_animation_time = fmod(CurAnim.m_current_animation_time, curAnimLenSec);
 				}
 
-				const float curAnimTime = CurAnim.m_CurrentAnimationTime;
+				const float curAnimTime = CurAnim.m_current_animation_time;
 #if DEBUG_ANIMS
-				if (bOutput) { blk::log("		prevAnimTime = %f - Cur anim time = %f.  DeltaT and all that was %f", prevAnimTime, CurAnim.m_CurrentAnimationTime); }
+				if (bOutput) { blk::log("		prevAnimTime = %f - Cur anim time = %f.  DeltaT and all that was %f", prevAnimTime, CurAnim.m_current_animation_time); }
 #endif
 
-				for (int iAnimEvent = 0; iAnimEvent < CurAnim.m_AnimEvents.size(); iAnimEvent++) {
-					auto& curEvent = CurAnim.m_AnimEvents[iAnimEvent];
+				for (int iAnimEvent = 0; iAnimEvent < CurAnim.m_anim_events.size(); iAnimEvent++) {
+					auto& curEvent = CurAnim.m_anim_events[iAnimEvent];
 					const float animEventTime = curEvent.GetEventTime();
 
 					if ((animEventTime > prevAnimTime && animEventTime <= curAnimTime) ||
@@ -264,35 +264,35 @@ void kbSkeletalRenderComponent::Update_Internal(const float DeltaTime) {
 				}
 
 #if DEBUG_ANIMS
-				if (bOutput) blk::log("	Not blending anim %s. anim time = %f", CurAnim.m_AnimationName.c_str(), CurAnim.m_CurrentAnimationTime);
+				if (bOutput) blk::log("	Not blending anim %s. anim time = %f", CurAnim.m_animation_name.c_str(), CurAnim.m_current_animation_time);
 #endif
 
-				m_pModel->Animate(m_BindToLocalSpaceMatrices, CurAnim.m_CurrentAnimationTime, CurAnim.m_pAnimation, CurAnim.m_bIsLooping);
+				m_model->Animate(m_BindToLocalSpaceMatrices, CurAnim.m_current_animation_time, CurAnim.m_animation, CurAnim.m_is_looping);
 
-				if (bAnimIsFinished && CurAnim.m_DesiredNextAnimation.IsEmptyString() == false) {
+				if (bAnimIsFinished && CurAnim.m_desired_next_animation.IsEmptyString() == false) {
 
 #if DEBUG_ANIMS
-					if (bOutput) blk::log("	Cur Animation Done, going to %s - %f", CurAnim.m_DesiredNextAnimation.c_str(), CurAnim.m_DesiredNextAnimBlendLength);
+					if (bOutput) blk::log("	Cur Animation Done, going to %s - %f", CurAnim.m_desired_next_animation.c_str(), CurAnim.m_desired_next_anim_blend_length);
 #endif
 
-					PlayAnimation(CurAnim.m_DesiredNextAnimation, CurAnim.m_DesiredNextAnimBlendLength, true);
+					PlayAnimation(CurAnim.m_desired_next_animation, CurAnim.m_desired_next_anim_blend_length, true);
 				}
 			} else {
 
 				if (bAnimIsFinished == false) {
-					const float prevAnimTime = fmod(CurAnim.m_CurrentAnimationTime, curAnimLenSec);
+					const float prevAnimTime = fmod(CurAnim.m_current_animation_time, curAnimLenSec);
 
-					CurAnim.m_CurrentAnimationTime += DeltaTime * CurAnim.m_TimeScale * m_AnimationTimeScaleMultipliers[m_CurrentAnimation];
-					if (CurAnim.m_bIsLooping) {
-						CurAnim.m_CurrentAnimationTime = fmod(CurAnim.m_CurrentAnimationTime, curAnimLenSec);
+					CurAnim.m_current_animation_time += DeltaTime * CurAnim.m_time_scale * m_AnimationTimeScaleMultipliers[m_CurrentAnimation];
+					if (CurAnim.m_is_looping) {
+						CurAnim.m_current_animation_time = fmod(CurAnim.m_current_animation_time, curAnimLenSec);
 					}
 
-					for (int iAnimEvent = 0; iAnimEvent < CurAnim.m_AnimEvents.size(); iAnimEvent++) {
-						auto& curEvent = CurAnim.m_AnimEvents[iAnimEvent];
-						const float animEventTime = curEvent.GetEventTime() * CurAnim.m_TimeScale * m_AnimationTimeScaleMultipliers[m_CurrentAnimation];
+					for (int iAnimEvent = 0; iAnimEvent < CurAnim.m_anim_events.size(); iAnimEvent++) {
+						auto& curEvent = CurAnim.m_anim_events[iAnimEvent];
+						const float animEventTime = curEvent.GetEventTime() * CurAnim.m_time_scale * m_AnimationTimeScaleMultipliers[m_CurrentAnimation];
 
-						if ((animEventTime > prevAnimTime && animEventTime <= CurAnim.m_CurrentAnimationTime) ||
-							(prevAnimTime > CurAnim.m_CurrentAnimationTime && animEventTime < CurAnim.m_CurrentAnimationTime)) {
+						if ((animEventTime > prevAnimTime && animEventTime <= CurAnim.m_current_animation_time) ||
+							(prevAnimTime > CurAnim.m_current_animation_time && animEventTime < CurAnim.m_current_animation_time)) {
 
 							const kbAnimEventInfo_t animEventInfo(curEvent, this);
 							for (int iListener = 0; iListener < m_AnimEventListeners.size(); iListener++) {
@@ -304,31 +304,31 @@ void kbSkeletalRenderComponent::Update_Internal(const float DeltaTime) {
 				}
 
 				kbAnimComponent& NextAnim = m_Animations[m_NextAnimation];
-				const float nextAnimLenSec = NextAnim.m_pAnimation->GetLengthInSeconds();
-				const float prevNextAnimTime = NextAnim.m_CurrentAnimationTime;
+				const float nextAnimLenSec = NextAnim.m_animation->GetLengthInSeconds();
+				const float prevNextAnimTime = NextAnim.m_current_animation_time;
 
 #if DEBUG_ANIMS
-				if (bOutput) { blk::log("		Cur anim is %s.  time = %f.  DeltaT was %f.  Next anim is %s.  Next anim time is %f", CurAnim.m_AnimationName.c_str(), CurAnim.m_CurrentAnimationTime, DeltaTime * CurAnim.m_TimeScale, NextAnim.m_AnimationName.c_str(), NextAnim.m_CurrentAnimationTime); }
+				if (bOutput) { blk::log("		Cur anim is %s.  time = %f.  DeltaT was %f.  Next anim is %s.  Next anim time is %f", CurAnim.m_animation_name.c_str(), CurAnim.m_current_animation_time, DeltaTime * CurAnim.m_time_scale, NextAnim.m_animation_name.c_str(), NextAnim.m_current_animation_time); }
 #endif
 
-				if (CurAnim.m_bIsLooping && NextAnim.m_bIsLooping) {
+				if (CurAnim.m_is_looping && NextAnim.m_is_looping) {
 					// Sync the anims if they're both looping
-					NextAnim.m_CurrentAnimationTime = CurAnim.m_CurrentAnimationTime;
+					NextAnim.m_current_animation_time = CurAnim.m_current_animation_time;
 				} else {
-					NextAnim.m_CurrentAnimationTime += DeltaTime * NextAnim.m_TimeScale * m_AnimationTimeScaleMultipliers[m_NextAnimation];
+					NextAnim.m_current_animation_time += DeltaTime * NextAnim.m_time_scale * m_AnimationTimeScaleMultipliers[m_NextAnimation];
 				}
 
-				if (NextAnim.m_bIsLooping) {
-					NextAnim.m_CurrentAnimationTime = fmod(NextAnim.m_CurrentAnimationTime, nextAnimLenSec);
+				if (NextAnim.m_is_looping) {
+					NextAnim.m_current_animation_time = fmod(NextAnim.m_current_animation_time, nextAnimLenSec);
 				}
 
-				for (int iAnimEvent = 0; iAnimEvent < NextAnim.m_AnimEvents.size(); iAnimEvent++) {
-					auto& curEvent = NextAnim.m_AnimEvents[iAnimEvent];
+				for (int iAnimEvent = 0; iAnimEvent < NextAnim.m_anim_events.size(); iAnimEvent++) {
+					auto& curEvent = NextAnim.m_anim_events[iAnimEvent];
 
 					const float animEventTime = curEvent.GetEventTime() * m_AnimationTimeScaleMultipliers[m_NextAnimation];
 
-					if ((animEventTime > prevNextAnimTime && animEventTime <= NextAnim.m_CurrentAnimationTime) ||
-						(prevNextAnimTime > NextAnim.m_CurrentAnimationTime && animEventTime < NextAnim.m_CurrentAnimationTime)) {
+					if ((animEventTime > prevNextAnimTime && animEventTime <= NextAnim.m_current_animation_time) ||
+						(prevNextAnimTime > NextAnim.m_current_animation_time && animEventTime < NextAnim.m_current_animation_time)) {
 
 						const kbAnimEventInfo_t animEventInfo(curEvent, this);
 						for (int iListener = 0; iListener < m_AnimEventListeners.size(); iListener++) {
@@ -339,22 +339,22 @@ void kbSkeletalRenderComponent::Update_Internal(const float DeltaTime) {
 				}
 
 				const float blendTime = kbClamp((g_GlobalTimer.TimeElapsedSeconds() - m_BlendStartTime) / m_BlendLength, 0.0f, 1.0f);
-				m_pModel->BlendAnimations(m_BindToLocalSpaceMatrices, CurAnim.m_pAnimation, CurAnim.m_CurrentAnimationTime, CurAnim.m_bIsLooping, NextAnim.m_pAnimation, NextAnim.m_CurrentAnimationTime, NextAnim.m_bIsLooping, blendTime);
+				m_model->BlendAnimations(m_BindToLocalSpaceMatrices, CurAnim.m_animation, CurAnim.m_current_animation_time, CurAnim.m_is_looping, NextAnim.m_animation, NextAnim.m_current_animation_time, NextAnim.m_is_looping, blendTime);
 
 #if DEBUG_ANIMS
-				if (bOutput) blk::log("	Blending anims %f.  %s cur time = %f. %s cur time is %f", blendTime, CurAnim.GetAnimationName().c_str(), CurAnim.m_CurrentAnimationTime, NextAnim.GetAnimationName().c_str(), NextAnim.m_CurrentAnimationTime);
+				if (bOutput) blk::log("	Blending anims %f.  %s cur time = %f. %s cur time is %f", blendTime, CurAnim.animation_name().c_str(), CurAnim.m_current_animation_time, NextAnim.animation_name().c_str(), NextAnim.m_current_animation_time);
 #endif
 			}
 		}
 	}
 
-	m_RenderObject.m_pComponent = this;
-	m_RenderObject.m_Position = GetOwner()->GetPosition();
-	m_RenderObject.m_Orientation = GetOwner()->GetOrientation();
-	m_RenderObject.m_Scale = GetOwner()->GetScale() * kbLevelComponent::GetGlobalModelScale();
-	m_RenderObject.m_pModel = m_pModel;
-	m_RenderObject.m_RenderPass = m_RenderPass;
-	g_pRenderer->UpdateRenderObject(m_RenderObject);
+	m_render_object.m_pComponent = this;
+	m_render_object.m_Position = GetOwner()->GetPosition();
+	m_render_object.m_Orientation = GetOwner()->GetOrientation();
+	m_render_object.m_Scale = GetOwner()->GetScale() * kbLevelComponent::GetGlobalModelScale();
+	m_render_object.m_model = m_model;
+	m_render_object.m_render_pass = m_render_pass;
+	g_pRenderer->UpdateRenderObject(m_render_object);
 
 	for (int i = 0; i < m_SyncedSkelModels.size(); i++) {
 		m_SyncedSkelModels[i]->m_BindToLocalSpaceMatrices = m_BindToLocalSpaceMatrices;
@@ -363,15 +363,15 @@ void kbSkeletalRenderComponent::Update_Internal(const float DeltaTime) {
 
 /// kbSkeletalRenderComponent::GetBoneIndex
 int kbSkeletalRenderComponent::GetBoneIndex(const kbString& boneName) {
-	if (m_pModel == nullptr) {
+	if (m_model == nullptr) {
 		return -1;
 	}
-	return m_pModel->GetBoneIndex(boneName);
+	return m_model->GetBoneIndex(boneName);
 }
 
 /// kbSkeletalRenderComponent::GetBoneRefMatrix
 kbBoneMatrix_t kbSkeletalRenderComponent::GetBoneRefMatrix(int index) {
-	return m_pModel->GetRefBoneMatrix(index);
+	return m_model->GetRefBoneMatrix(index);
 }
 
 /// kbSkeletalRenderComponent::GetBoneWorldPosition
@@ -384,7 +384,7 @@ bool kbSkeletalRenderComponent::GetBoneWorldPosition(const kbString& boneName, V
 	Mat4 worldMatrix;
 	GetOwner()->CalculateWorldMatrix(worldMatrix);
 
-	const Vec3 localPos = m_pModel->GetRefBoneMatrix(boneIdx).GetOrigin() * m_BindToLocalSpaceMatrices[boneIdx];
+	const Vec3 localPos = m_model->GetRefBoneMatrix(boneIdx).GetOrigin() * m_BindToLocalSpaceMatrices[boneIdx];
 	outWorldPosition = worldMatrix.transform_point(localPos);
 	return true;
 }
@@ -399,7 +399,7 @@ bool kbSkeletalRenderComponent::GetBoneWorldMatrix(const kbString& boneName, kbB
 	Mat4 WeaponMatrix;
 	GetOwner()->CalculateWorldMatrix(WeaponMatrix);
 
-	boneMatrix = m_pModel->GetRefBoneMatrix(boneIdx) * m_BindToLocalSpaceMatrices[boneIdx];
+	boneMatrix = m_model->GetRefBoneMatrix(boneIdx) * m_BindToLocalSpaceMatrices[boneIdx];
 	boneMatrix *= WeaponMatrix;
 	return true;
 }
@@ -408,7 +408,7 @@ bool kbSkeletalRenderComponent::GetBoneWorldMatrix(const kbString& boneName, kbB
 void kbSkeletalRenderComponent::SetAnimationTimeScaleMultiplier(const kbString& animName, const float factor) {
 	for (int i = 0; i < m_Animations.size(); i++) {
 		const kbAnimComponent& anim = m_Animations[i];
-		if (anim.m_AnimationName == animName) {
+		if (anim.m_animation_name == animName) {
 			m_AnimationTimeScaleMultipliers[i] = factor;
 			return;
 		}
@@ -423,8 +423,8 @@ void kbSkeletalRenderComponent::PlayAnimation(const kbString& AnimationName, con
 #endif
 
 	if (bRestartIfAlreadyPlaying == false && IsPlaying(AnimationName)) {
-		if (m_NextAnimation != -1 && m_Animations[m_NextAnimation].m_AnimationName != AnimationName) {
-			m_Animations[m_NextAnimation].m_CurrentAnimationTime = -1;
+		if (m_NextAnimation != -1 && m_Animations[m_NextAnimation].m_animation_name != AnimationName) {
+			m_Animations[m_NextAnimation].m_current_animation_time = -1;
 			m_NextAnimation = -1;
 		}
 #if DEBUG_ANIMS
@@ -435,7 +435,7 @@ void kbSkeletalRenderComponent::PlayAnimation(const kbString& AnimationName, con
 
 	const std::string& animName = AnimationName.stl_str();
 	for (int i = 0; i < m_Animations.size(); i++) {
-		if (m_Animations[i].m_AnimationName != AnimationName) {
+		if (m_Animations[i].m_animation_name != AnimationName) {
 			continue;
 		}
 
@@ -452,41 +452,41 @@ void kbSkeletalRenderComponent::PlayAnimation(const kbString& AnimationName, con
 			// Stop previous animation
 			if (m_CurrentAnimation != -1 && m_CurrentAnimation != i) {
 #if DEBUG_ANIMS
-				if (bOutput) blk::log("		Stopping Animation %s", m_Animations[m_CurrentAnimation].GetAnimationName().c_str());
+				if (bOutput) blk::log("		Stopping Animation %s", m_Animations[m_CurrentAnimation].animation_name().c_str());
 #endif
 
-				m_Animations[m_CurrentAnimation].m_CurrentAnimationTime = -1;
+				m_Animations[m_CurrentAnimation].m_current_animation_time = -1;
 			}
 
 			if (m_NextAnimation != -1 && m_NextAnimation != i) {
 
 #if DEBUG_ANIMS
-				if (bOutput)blk::log("		Canceling next animation %s", m_Animations[m_NextAnimation].GetAnimationName().c_str());
+				if (bOutput)blk::log("		Canceling next animation %s", m_Animations[m_NextAnimation].animation_name().c_str());
 #endif
 
-				m_Animations[m_NextAnimation].m_CurrentAnimationTime = -1;
+				m_Animations[m_NextAnimation].m_current_animation_time = -1;
 			}
 			m_NextAnimation = -1;
 
 			// Start current animation
 			if (m_CurrentAnimation != i) {
-				m_Animations[i].m_CurrentAnimationTime = 0.0f;
+				m_Animations[i].m_current_animation_time = 0.0f;
 			}
 			m_CurrentAnimation = i;
 
 #if DEBUG_ANIMS
-			if (bOutput)blk::log("		Anim all set up.  Next anim = %s.  Desired blend length = %f.  Starting animation time is %f", desiredNextAnimation.c_str(), desiredNextAnimationBlendLength, m_Animations[i].m_CurrentAnimationTime);
+			if (bOutput)blk::log("		Anim all set up.  Next anim = %s.  Desired blend length = %f.  Starting animation time is %f", desiredNextAnimation.c_str(), desiredNextAnimationBlendLength, m_Animations[i].m_current_animation_time);
 #endif
 
-			m_Animations[m_CurrentAnimation].m_DesiredNextAnimation = desiredNextAnimation;
-			m_Animations[m_CurrentAnimation].m_DesiredNextAnimBlendLength = desiredNextAnimationBlendLength;
+			m_Animations[m_CurrentAnimation].m_desired_next_animation = desiredNextAnimation;
+			m_Animations[m_CurrentAnimation].m_desired_next_anim_blend_length = desiredNextAnimationBlendLength;
 		} else {
 
 
 #if DEBUG_ANIMS
 			if (bOutput) {
 				if (m_CurrentAnimation != -1) {
-					blk::log("		Cur anim is %s.  Anim time is %f", m_Animations[m_CurrentAnimation].GetAnimationName().c_str(), m_Animations[m_CurrentAnimation].m_CurrentAnimationTime);
+					blk::log("		Cur anim is %s.  Anim time is %f", m_Animations[m_CurrentAnimation].animation_name().c_str(), m_Animations[m_CurrentAnimation].m_current_animation_time);
 				}
 
 			}// blk::log( "	Starting this animation immediately.  Blend length is %f, currentanimation is %d", BlendLength, m_CurrentAnimation );
@@ -496,9 +496,9 @@ void kbSkeletalRenderComponent::PlayAnimation(const kbString& AnimationName, con
 			m_BlendLength = BlendLength;
 			m_NextAnimation = i;
 
-			m_Animations[m_NextAnimation].m_DesiredNextAnimation = desiredNextAnimation;
-			m_Animations[m_NextAnimation].m_DesiredNextAnimBlendLength = desiredNextAnimationBlendLength;
-			m_Animations[m_NextAnimation].m_CurrentAnimationTime = 0.0f;
+			m_Animations[m_NextAnimation].m_desired_next_animation = desiredNextAnimation;
+			m_Animations[m_NextAnimation].m_desired_next_anim_blend_length = desiredNextAnimationBlendLength;
+			m_Animations[m_NextAnimation].m_current_animation_time = 0.0f;
 
 
 #if DEBUG_ANIMS
@@ -516,14 +516,14 @@ bool kbSkeletalRenderComponent::IsPlaying(const kbString& AnimationName) const {
 		return false;
 	}
 
-	if (m_NextAnimation != -1 && m_Animations[m_NextAnimation].m_AnimationName == AnimationName) {
+	if (m_NextAnimation != -1 && m_Animations[m_NextAnimation].m_animation_name == AnimationName) {
 		return true;
 	}
 
-	if (m_CurrentAnimation != -1 && m_Animations[m_CurrentAnimation].m_AnimationName == AnimationName) {
+	if (m_CurrentAnimation != -1 && m_Animations[m_CurrentAnimation].m_animation_name == AnimationName) {
 
 		const kbAnimComponent& anim = m_Animations[m_CurrentAnimation];
-		if (anim.m_bIsLooping == true || anim.m_CurrentAnimationTime <= anim.m_pAnimation->GetLengthInSeconds()) {
+		if (anim.m_is_looping == true || anim.m_current_animation_time <= anim.m_animation->GetLengthInSeconds()) {
 			return true;
 		}
 	}
@@ -532,16 +532,16 @@ bool kbSkeletalRenderComponent::IsPlaying(const kbString& AnimationName) const {
 }
 
 /// kbSkeletalRenderComponent::SetModel
-void kbSkeletalRenderComponent::SetModel(kbModel* const pModel) {
+void kbSkeletalRenderComponent::set_model(kbModel* const pModel) {
 	m_BindToLocalSpaceMatrices.clear();
-	m_RenderObject.m_pModel = pModel;
-	g_pRenderer->UpdateRenderObject(m_RenderObject);
+	m_render_object.m_model = pModel;
+	g_pRenderer->UpdateRenderObject(m_render_object);
 }
 
 /// kbSkeletalRenderComponent::GetCurAnimationName
 const kbString* kbSkeletalRenderComponent::GetCurAnimationName() const {
 	if (m_CurrentAnimation >= 0 && m_CurrentAnimation < m_Animations.size()) {
-		return &m_Animations[m_CurrentAnimation].GetAnimationName();
+		return &m_Animations[m_CurrentAnimation].animation_name();
 	}
 
 	return nullptr;
@@ -550,7 +550,7 @@ const kbString* kbSkeletalRenderComponent::GetCurAnimationName() const {
 /// kbSkeletalRenderComponent::GetNextAnimationName
 const kbString* kbSkeletalRenderComponent::GetNextAnimationName() const {
 	if (m_NextAnimation >= 0 && m_NextAnimation < m_Animations.size()) {
-		return &m_Animations[m_NextAnimation].GetAnimationName();
+		return &m_Animations[m_NextAnimation].animation_name();
 	}
 
 	return nullptr;
@@ -607,9 +607,9 @@ void kbFlingPhysicsComponent::Constructor() {
 	m_bOwnerStartSet = false;
 }
 
-/// kbFlingPhysicsComponent::SetEnable_Internal
-void kbFlingPhysicsComponent::SetEnable_Internal(const bool bEnable) {
-	Super::SetEnable_Internal(bEnable);
+/// kbFlingPhysicsComponent::enable_internal
+void kbFlingPhysicsComponent::enable_internal(const bool bEnable) {
+	Super::enable_internal(bEnable);
 
 	if (bEnable) {
 		m_OwnerStartPos = owner_position();
@@ -642,9 +642,9 @@ void kbFlingPhysicsComponent::SetEnable_Internal(const bool bEnable) {
 	}
 }
 
-/// kbFlingPhysicsComponent::Update_Internal
-void kbFlingPhysicsComponent::Update_Internal(const float dt) {
-	Super::Update_Internal(dt);
+/// kbFlingPhysicsComponent::update_internal
+void kbFlingPhysicsComponent::update_internal(const float dt) {
+	Super::update_internal(dt);
 
 	const float curTime = g_GlobalTimer.TimeElapsedSeconds();
 	const float elapsedDeathTime = curTime - m_FlingStartTime;
