@@ -406,7 +406,7 @@ void Renderer_Dx12::render() {
 		scene_buffer[0].mvp = (world_mat * vp_matrix).transpose_self();
 		scene_buffer[0].color = color;
 
-		for (int i = 0; i < 24; i++) {
+		for (int i = 0; i < 0; i++) {
 			world_mat.make_scale(Vec3(1.f, 1.f, 1.f));
 			world_mat *= render_comp->owner_rotation().to_mat4();
 			world_mat[3] = temp_render_objs[i].position;
@@ -529,7 +529,7 @@ void Renderer_Dx12::todo_create_texture() {
 	std::vector<D3D12_SUBRESOURCE_DATA> subresources;
 	blk::error_check(LoadDDSTextureFromFile(
 		m_device.Get(),
-		L"C:/projects/Ether/dx12_updgrade/GameBase/assets/Test/diablo.dds",
+		L"C:/projects/Ether/dx12_updgrade/GameBase/assets/Test/pinky.dds",
 		tex.ReleaseAndGetAddressOf(),
 		ddsData,
 		subresources));

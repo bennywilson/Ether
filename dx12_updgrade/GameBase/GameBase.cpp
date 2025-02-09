@@ -188,7 +188,8 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 	MyRegisterClass(hInstance);
 
 	std::string mapName;
-	mapName = "test";
+//	mapName = "test";
+	mapName = "pinky";
 
 	// Toggles
 	g_UseEditor = true;

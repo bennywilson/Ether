@@ -43,7 +43,7 @@ pixelInput vertex_shader(vertexInput input) {
 	pixelInput output = (pixelInput)(0);
 	output.position = input.position;
 	output.position = mul( input.position, matrixBuffer.modelMatrix );
-	output.color = input.color * matrixBuffer.color;
+	output.color = matrixBuffer.color;
 	output.normal.xyz = input.normal.xyz;
 	output.uv = input.uv;
 	return output;
