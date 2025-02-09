@@ -72,7 +72,7 @@ public:
 			pTreyTon->ApplyAnimSmear( Vec3( 0.0f, 10.0f, 0.0f ), 0.067f );
 		} else if ( eventName == sPounce_2_Impact_1 ) {
 
-			Vec3 fxPos = pSheep->GetOwnerPosition();
+			Vec3 fxPos = pSheep->owner_position();
 			fxPos.z =  KungFuGame::kOutroStartZ + 8.75f;
 			pSheep->PlayCannonBallFX( fxPos );
 
@@ -206,7 +206,7 @@ public:
 
 			case SheepInitialWalkUp : {
 				auto frameDt = g_pGame->GetFrameDT();
-				Vec3 targetPos = pSheep->GetOwnerPosition() + Vec3( 0.0f, 0.0f, 1.0f ) * frameDt * pSheep->GetMaxRunSpeed();
+				Vec3 targetPos = pSheep->owner_position() + Vec3( 0.0f, 0.0f, 1.0f ) * frameDt * pSheep->GetMaxRunSpeed();
 				if ( targetPos.z >= SheepPullUpZ ) {
 					targetPos.z = SheepPullUpZ;
 					ChangeState( SheepSnolafFaceOff );
@@ -312,7 +312,7 @@ public:
 				const float sheepTargetZ = -286.2f;
 				 
 				if ( GetStateTime() > 0.5f ) {
-					Vec3 sheepPos = pSheep->GetOwnerPosition();
+					Vec3 sheepPos = pSheep->owner_position();
 					sheepPos.z += sheepHopRate * g_pGame->GetFrameDT();
 					if ( sheepPos.z >= sheepTargetZ ) {
 						sheepPos.z = sheepTargetZ;
@@ -337,7 +337,7 @@ public:
 				const float StareAtCamLen = 1.0f;
 				if ( GetStateTime() > StareAtCamLen ) {
 					pSheep->PlayAnimation( kbString("Run_Basic"), 0.15f );
-					Vec3 sheepPos = pSheep->GetOwnerPosition();
+					Vec3 sheepPos = pSheep->owner_position();
 					sheepPos.z += pSheep->GetMaxRunSpeed() * g_pGame->GetFrameDT();
 					if ( sheepPos.z >= KungFuGame::kSheepFinalPos.z ) {
 						sheepPos.z = KungFuGame::kSheepFinalPos.z;
@@ -354,7 +354,7 @@ public:
 					pFox->SetTargetFacingDirection( Vec3( 0.0f, 0.0f, 1.0f ) );
 					pFox->PlayAnimation( kbString("Walk"), 0.15f );
 
-					Vec3 foxPos = pFox->GetOwnerPosition();
+					Vec3 foxPos = pFox->owner_position();
 					foxPos.z -= pFox->GetMaxRunSpeed() * g_pGame->GetFrameDT();
 					if ( foxPos.z <= KungFuGame::kFoxFinalPos.z ) {
 						foxPos.z = KungFuGame::kFoxFinalPos.z;
@@ -401,7 +401,7 @@ public:
 
 				if ( GetStateTime() > SnolafPeerLen ) {
 					const Vec3 snolafTargetPos = KungFuGame::kSheepFinalPos + Vec3( 0.0f, 0.0f, 1.1f );
-					Vec3 snolafCurPos = m_pLastSnolaf->GetOwnerPosition();
+					Vec3 snolafCurPos = m_pLastSnolaf->owner_position();
 					if ( snolafCurPos.z > snolafTargetPos.z ) {
 						m_pLastSnolaf->PlayAnimation( kbString("Run"), 0.15f );
 						snolafCurPos.z -= m_pLastSnolaf->GetMaxRunSpeed() * g_pGame->GetFrameDT() * SnolafRunMultiplier;

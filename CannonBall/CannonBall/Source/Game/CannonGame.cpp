@@ -215,8 +215,8 @@ void CannonGame::HackEditorUpdate( const float DT, kbCamera *const pEditorCam ) 
 	}*/
 
 	if ( m_pMainCamera != nullptr && pEditorCam != nullptr ) {
-		pEditorCam->m_Position = m_pMainCamera->GetOwnerPosition();
-		pEditorCam->m_Rotation = pEditorCam->m_RotationTarget = m_pMainCamera->GetOwnerRotation();
+		pEditorCam->m_Position = m_pMainCamera->owner_position();
+		pEditorCam->m_Rotation = pEditorCam->m_RotationTarget = m_pMainCamera->owner_rotation();
 	}
 }
 

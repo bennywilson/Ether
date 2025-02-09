@@ -64,8 +64,8 @@ public:
 			return;
 		}
 
-		const Vec3 snolafPos = this->m_pActorComponent->GetOwnerPosition();
-		const Vec3 snolafFacingDir = this->m_pActorComponent->GetOwnerRotation().to_mat4()[2].ToVec3();
+		const Vec3 snolafPos = this->m_pActorComponent->owner_position();
+		const Vec3 snolafFacingDir = this->m_pActorComponent->owner_rotation().to_mat4()[2].ToVec3();
 
 		// TODO - Optimize
 		// Look for actors to hug
@@ -82,7 +82,7 @@ public:
 				continue;
 			}
 
-			const Vec3 targetPos = pTargetActor->GetOwnerPosition();
+			const Vec3 targetPos = pTargetActor->owner_position();
 			const Vec3 vSnolafToTarget = targetPos - snolafPos;
 			const float snolafToTargetDist = (targetPos - snolafPos).length();
 			auto pSnolafComponent = pTargetActor->GetAs<KungFuSnolafComponent>();
@@ -111,7 +111,7 @@ public:
 		} else {
 			moveDir.z = -1.0f;
 		}
-		const Vec3 newSnolafPos = this->m_pActorComponent->GetOwnerPosition() + moveDir * frameDT * this->m_pActorComponent->GetMaxRunSpeed();
+		const Vec3 newSnolafPos = this->m_pActorComponent->owner_position() + moveDir * frameDT * this->m_pActorComponent->GetMaxRunSpeed();
 		this->m_pActorComponent->SetOwnerPosition(newSnolafPos);
 	}
 
@@ -139,8 +139,8 @@ public:
 			return;
 		}
 
-		const Vec3 snolafPos = this->m_pActorComponent->GetOwnerPosition();
-		const Vec3 snolafFacingDir = this->m_pActorComponent->GetOwnerRotation().to_mat4()[2].ToVec3();
+		const Vec3 snolafPos = this->m_pActorComponent->owner_position();
+		const Vec3 snolafFacingDir = this->m_pActorComponent->owner_rotation().to_mat4()[2].ToVec3();
 
 		// TODO - Optimize
 		bool bAnyoneInFront = false;
@@ -155,7 +155,7 @@ public:
 				continue;
 			}
 
-			const Vec3 targetPos = pTargetActor->GetOwnerPosition();
+			const Vec3 targetPos = pTargetActor->owner_position();
 			const Vec3 vSnolafToTarget = targetPos - snolafPos;
 			const float snolafToTargetDist = (targetPos - snolafPos).length();
 			if (snolafToTargetDist < KungFuGame::kDistToChase) {
@@ -241,8 +241,8 @@ public:
 			KungFuSheepDirector::Get()->DoAttack(dealAttackInfo);
 		}
 
-		const Vec3 snolafPos = this->m_pActorComponent->GetOwnerPosition();
-		const Vec3 snolafFacingDir = this->m_pActorComponent->GetOwnerRotation().to_mat4()[2].ToVec3();
+		const Vec3 snolafPos = this->m_pActorComponent->owner_position();
+		const Vec3 snolafFacingDir = this->m_pActorComponent->owner_rotation().to_mat4()[2].ToVec3();
 
 		bool bAnyoneInFront = false;
 		for (int i = 0; i < g_pCannonGame->GetGameEntities().size(); i++) {
@@ -257,7 +257,7 @@ public:
 				continue;
 			}
 
-			const Vec3 targetPos = pTargetActor->GetOwnerPosition();
+			const Vec3 targetPos = pTargetActor->owner_position();
 			const Vec3 vSnolafToTarget = targetPos - snolafPos;
 			const float snolafToTargetDist = (targetPos - snolafPos).length();
 			if (snolafToTargetDist < KungFuGame::kDistToChase) {
@@ -326,8 +326,8 @@ public:
 			m_DeathSelection = rand() % numDeaths;
 		}
 
-		m_OwnerStartPos = this->GetSnolaf()->GetOwnerPosition();
-		m_OwnerStartRotation = this->m_pActorComponent->GetOwnerRotation();
+		m_OwnerStartPos = this->GetSnolaf()->owner_position();
+		m_OwnerStartRotation = this->m_pActorComponent->owner_rotation();
 
 		kbGameEntity* const pOwner = this->GetSnolaf()->GetOwner();
 		for (int i = 0; i < pOwner->NumComponents(); i++) {
@@ -365,7 +365,7 @@ public:
 			m_RotationSpeed = kbfrand() * (m_MaxAngularVelocity - m_MinAngularVelocity) + m_MinAngularVelocity;
 
 			const Vec3 initialSnolafOffset = m_Velocity.normalize_safe() * 2.0f;
-			m_OwnerPosOverride = this->m_pActorComponent->GetOwnerPosition() + initialSnolafOffset;
+			m_OwnerPosOverride = this->m_pActorComponent->owner_position() + initialSnolafOffset;
 			m_OwnerStartPos = m_OwnerPosOverride;
 			this->GetSnolaf()->ApplyAnimSmear(-initialSnolafOffset * 0.75f, 0.067f);
 			UpdateFlyingDeath(0.0f);
@@ -395,7 +395,7 @@ public:
 			m_RotationSpeed = 0.15f * (kbfrand() * (m_MaxAngularVelocity - m_MinAngularVelocity) + m_MinAngularVelocity);
 
 			const Vec3 initialSnolafOffset = m_Velocity.normalize_safe() * 2.0f;
-			m_OwnerPosOverride = this->m_pActorComponent->GetOwnerPosition() + initialSnolafOffset;
+			m_OwnerPosOverride = this->m_pActorComponent->owner_position() + initialSnolafOffset;
 			m_OwnerStartPos = m_OwnerPosOverride;
 			this->GetSnolaf()->ApplyAnimSmear(-initialSnolafOffset * 0.75f, 0.067f);
 			UpdateFlyingDeath(0.0f);
@@ -456,7 +456,7 @@ public:
 		}
 
 		if (m_DeathSelection == 0) {
-			if (this->GetSnolaf()->GetOwnerPosition().y < -60.0f && m_bSpawnedSplash == false) {
+			if (this->GetSnolaf()->owner_position().y < -60.0f && m_bSpawnedSplash == false) {
 				m_bSpawnedSplash = true;
 				this->GetSnolaf()->SpawnSplash();
 			}
@@ -531,7 +531,7 @@ public:
 		const float frameDT = g_pGame->GetFrameDT();
 
 		const Vec3 moveDir = this->GetSnolaf()->GetTargetFacingDirection();
-		const Vec3 newSnolafPos = this->m_pActorComponent->GetOwnerPosition() - moveDir * frameDT * this->m_pActorComponent->GetMaxRunSpeed();
+		const Vec3 newSnolafPos = this->m_pActorComponent->owner_position() - moveDir * frameDT * this->m_pActorComponent->GetMaxRunSpeed();
 		this->m_pActorComponent->SetOwnerPosition(newSnolafPos);
 	}
 };
@@ -721,8 +721,8 @@ void KungFuSnolafComponent::TakeDamage(const DealAttackInfo_t<KungFuGame::eAttac
 	m_LastAttackInfo = attackInfo;
 	if (attackInfo.m_AttackType == KungFuGame::Shake) {
 
-		const Vec3 attackerPos = attackInfo.m_pAttacker->GetOwnerPosition();
-		const Vec3 ourPos = GetOwnerPosition();
+		const Vec3 attackerPos = attackInfo.m_pAttacker->owner_position();
+		const Vec3 ourPos = owner_position();
 		if (m_CurrentState == KungFuSnolafState::Hug || m_CurrentState == KungFuSnolafState::Prehug ||
 			(attackerPos - ourPos).length() < KungFuGame::kShakeNBakeRadius) {
 			m_Health = -1.0f;
@@ -742,8 +742,8 @@ void KungFuSnolafComponent::DoPoofDeath() {
 	}
 
 	kbGameEntity* const pCannonBallImpact = g_pGame->CreateEntity(m_PoofDeathFX.GetEntity());
-	pCannonBallImpact->SetPosition(GetOwnerPosition());
-	pCannonBallImpact->SetOrientation(GetOwnerRotation());
+	pCannonBallImpact->SetPosition(owner_position());
+	pCannonBallImpact->SetOrientation(owner_rotation());
 	pCannonBallImpact->DeleteWhenComponentsAreInactive(true);
 
 	m_SkelModelsList[0]->Enable(false);
@@ -758,9 +758,9 @@ void KungFuSnolafComponent::SpawnAndFlingDecapHead() {
 	}
 
 	kbGameEntity* const pDecapHead = g_pGame->CreateEntity(m_DecapitatedHead.GetEntity());
-	const Vec3 headPos = GetOwnerPosition() + Vec3(0.0f, 1.75f, 0.0f);
+	const Vec3 headPos = owner_position() + Vec3(0.0f, 1.75f, 0.0f);
 	pDecapHead->SetPosition(headPos);
-	pDecapHead->SetOrientation(GetOwnerRotation());
+	pDecapHead->SetOrientation(owner_rotation());
 	pDecapHead->DeleteWhenComponentsAreInactive(true);
 
 	kbFlingPhysicsComponent* const pFlingComp = pDecapHead->GetComponent<kbFlingPhysicsComponent>();
@@ -781,9 +781,9 @@ void KungFuSnolafComponent::SpawnAndFlingTopAndBottomHalf() {
 	}
 
 	kbGameEntity* const pTopHalf = g_pGame->CreateEntity(m_TopHalfOfBody.GetEntity());
-	const Vec3 topPos = GetOwnerPosition() + Vec3(0.0f, 1.0f, 0.0f);
+	const Vec3 topPos = owner_position() + Vec3(0.0f, 1.0f, 0.0f);
 	pTopHalf->SetPosition(topPos);
-	pTopHalf->SetOrientation(GetOwnerRotation());
+	pTopHalf->SetOrientation(owner_rotation());
 	pTopHalf->DeleteWhenComponentsAreInactive(true);
 
 	kbFlingPhysicsComponent* const pTopFlingComp = pTopHalf->GetComponent<kbFlingPhysicsComponent>();
@@ -793,9 +793,9 @@ void KungFuSnolafComponent::SpawnAndFlingTopAndBottomHalf() {
 	}
 
 	kbGameEntity* const pBottomHalf = g_pGame->CreateEntity(m_BottomHalfOfBody.GetEntity());
-	const Vec3 bottomPos = GetOwnerPosition() + Vec3(0.0f, 0.2f, 0.0f);
+	const Vec3 bottomPos = owner_position() + Vec3(0.0f, 0.2f, 0.0f);
 	pBottomHalf->SetPosition(bottomPos);
-	pBottomHalf->SetOrientation(GetOwnerRotation());
+	pBottomHalf->SetOrientation(owner_rotation());
 	pBottomHalf->DeleteWhenComponentsAreInactive(true);
 
 	kbFlingPhysicsComponent* const pBottomFlingComp = pBottomHalf->GetComponent<kbFlingPhysicsComponent>();
@@ -813,7 +813,7 @@ void KungFuSnolafComponent::SpawnSplash() {
 	}
 
 	kbGameEntity* const pSplash = g_pGame->CreateEntity(m_SplashFX.GetEntity());
-	pSplash->SetPosition(GetOwnerPosition());
+	pSplash->SetPosition(owner_position());
 	pSplash->DeleteWhenComponentsAreInactive(true);
 
 	KungFuLevelComponent* const pLevelComponent = g_pCannonGame->GetLevelComponent<KungFuLevelComponent>();

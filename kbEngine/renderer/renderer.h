@@ -37,8 +37,9 @@ public:
 
 protected:
 	RenderBuffer* get_render_buffer(const size_t& buffer_index) { return m_render_buffers[buffer_index]; }
-	
-	std::unordered_set<const RenderComponent*> render_components() const {
+
+	// todo make const
+	std::unordered_set<const RenderComponent*> render_components() {
 		return m_render_components;
 	}
 

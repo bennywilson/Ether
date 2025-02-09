@@ -1,8 +1,8 @@
-kbGameEntity 2224009336 1119334815 565304233 3542784976 {
+kbGameEntity 470216452 1111376109 378468267 1859908944 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		Name = "Entity_3"
+		Name = "Entity_4"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
 		Position = 0.000000 0.000000 0.000000
 		Scale = 1.000000 1.000000 1.000000
@@ -152,14 +152,14 @@ kbGameEntity 2304826171 1239496353 243933317 3983880952 {
 				Enabled = 0
 				LifeTime =  -1.000000
 				CullModeOverride = ShaderDefault
-				Shader = ..\..\kbengine\assets\shaders\basictexture.kbshader
+				Shader = NULL
 				ShaderParams = 1
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
-						ParamName = "shaderTexture"
-						Texture = .\assets\test\diablo.dds
-						Vector = 0.000000 0.000000 0.000000 0.000000
+						ParamName = "color"
+						Texture = NULL
+						Vector = 1.000000 1.000000 1.000000 1.000000
 					}
 			}
 		RenderOrderBias =  0.000000

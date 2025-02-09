@@ -71,10 +71,10 @@ void CannonActorComponent::SetEnable_Internal(const bool bEnable) {
 void CannonActorComponent::Update_Internal(const float DT) {
 	Super::Update_Internal(DT);
 
-	const Quat4 curRot = GetOwnerRotation();
+	const Quat4 curRot = owner_rotation();
 
 	Mat4 facingMat;
-	facingMat.look_at(GetOwnerPosition(), GetOwnerPosition() + m_TargetFacingDirection, Vec3::up);
+	facingMat.look_at(owner_position(), owner_position() + m_TargetFacingDirection, Vec3::up);
 
 	const Quat4 targetRot = Quat4::from_mat4(facingMat);
 	GetOwner()->SetOrientation(curRot.slerp(curRot, targetRot, DT * m_MaxRotateSpeed));
@@ -173,7 +173,7 @@ void CannonActorComponent::PlayAttackVO(const int pref) {
 	}
 	m_LastVOTime = curTime;
 
-	m_AttackVO[rand() % m_AttackVO.size()].PlaySoundAtPosition(GetOwnerPosition());
+	m_AttackVO[rand() % m_AttackVO.size()].PlaySoundAtPosition(owner_position());
 }
 
 /// CannonActorComponent::Constructor

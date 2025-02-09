@@ -140,12 +140,12 @@ private:
 
 		} else if (m_CurrentState == 2) {
 
-			if (pSheep->GetOwnerPosition().z < -391.559f) {
+			if (pSheep->owner_position().z < -391.559f) {
 				const float WalkSpeedMultiplier = 0.65f;	// Sheep takes his time getting to the start point
 				const float StartZ = -391.559f;
 
 				auto frameDt = g_pGame->GetFrameDT();
-				Vec3 targetPos = pSheep->GetOwnerPosition() + Vec3(0.0f, 0.0f, 1.0f) * frameDt * pSheep->GetMaxRunSpeed() * WalkSpeedMultiplier;
+				Vec3 targetPos = pSheep->owner_position() + Vec3(0.0f, 0.0f, 1.0f) * frameDt * pSheep->GetMaxRunSpeed() * WalkSpeedMultiplier;
 				if (targetPos.z >= StartZ) {
 					targetPos.z = StartZ;
 					m_CurrentState = 3;
@@ -191,7 +191,7 @@ public:
 		AttackHitInfo_t retVal;
 
 		const auto pAttackerComp = dealAttackInfo.m_pAttacker;
-		const Vec3 attackerPos = pAttackerComp->GetOwnerPosition();
+		const Vec3 attackerPos = pAttackerComp->owner_position();
 
 		// TODO - Optimize
 		for (int i = 0; i < g_pCannonGame->GetGameEntities().size(); i++) {
@@ -205,7 +205,7 @@ public:
 				continue;
 			}
 
-			const Vec3 targetPos = pTargetComp->GetOwnerPosition();
+			const Vec3 targetPos = pTargetComp->owner_position();
 			if (dealAttackInfo.m_Radius == 0.0f) {
 
 				// Slap a %@3$&!!
@@ -214,7 +214,7 @@ public:
 				}
 
 				const Vec3 vecToTarget = (targetPos - attackerPos).normalize_safe();
-				const Vec3 attackerFacingDir = pAttackerComp->GetOwnerRotation().to_mat4()[2].ToVec3();
+				const Vec3 attackerFacingDir = pAttackerComp->owner_rotation().to_mat4()[2].ToVec3();
 				if (vecToTarget.dot(attackerFacingDir) > 0.0f) {
 					continue;
 				}
@@ -274,11 +274,11 @@ private:
 
 		std::string distanceTraveled = std::to_string(KungFuLevelComponent::Get()->GetPlayerTravelDistance());
 		distanceTraveled += "   ";
-		distanceTraveled += std::to_string(pKungFuSheep->GetOwnerPosition().x);
+		distanceTraveled += std::to_string(pKungFuSheep->owner_position().x);
 		distanceTraveled += ", ";
-		distanceTraveled += std::to_string(pKungFuSheep->GetOwnerPosition().y);
+		distanceTraveled += std::to_string(pKungFuSheep->owner_position().y);
 		distanceTraveled += ", ";
-		distanceTraveled += std::to_string(pKungFuSheep->GetOwnerPosition().z);
+		distanceTraveled += std::to_string(pKungFuSheep->owner_position().z);
 		// 
 		// 		g_pRenderer->DrawDebugText( distanceTraveled, 0.1f, 0.1f, g_DebugTextSize, g_DebugTextSize, kbColor::red );
 
@@ -288,7 +288,7 @@ private:
 		}
 
 
-		if (pKungFuSheep->GetOwnerPosition().z > KungFuGame::kOutroStartZ) {
+		if (pKungFuSheep->owner_position().z > KungFuGame::kOutroStartZ) {
 			RequestStateChange(KungFuGame::Outro);
 			return;
 		}
@@ -838,19 +838,19 @@ void KungFuLevelComponent::SpawnEnemy(const bool bSpawnLeft, const int waveSize)
 	const float startSpawnDist = 9.5f;
 	const float spawnOffsets = KungFuGame::kDistBetweenSnolafs;
 
-	const auto sheepPos = KungFuLevelComponent::Get()->GetSheep()->GetOwnerPosition();
+	const auto sheepPos = KungFuLevelComponent::Get()->GetSheep()->owner_position();
 	Vec3 nextLeftSpawnPos = sheepPos + Vec3(0.0f, 0.0f, startSpawnDist);
 	Vec3 nextRightSpawnPos = sheepPos + Vec3(0.0f, 0.0f, -startSpawnDist);
 
 	if (m_EndSnolafs[0] != nullptr && m_EndSnolafs[0]->IsEnabled() && m_EndSnolafs[0]->IsDead() == false) {
-		const float leftSnolafZ = m_EndSnolafs[0]->GetOwnerPosition().z;
+		const float leftSnolafZ = m_EndSnolafs[0]->owner_position().z;
 		if (nextLeftSpawnPos.z < leftSnolafZ + spawnOffsets) {
 			nextLeftSpawnPos.z = leftSnolafZ + spawnOffsets;
 		}
 	}
 
 	if (m_EndSnolafs[1] != nullptr && m_EndSnolafs[1]->IsEnabled() && m_EndSnolafs[1]->IsDead() == false) {
-		const float rightSnolafZ = m_EndSnolafs[1]->GetOwnerPosition().z;
+		const float rightSnolafZ = m_EndSnolafs[1]->owner_position().z;
 		if (nextRightSpawnPos.z > rightSnolafZ - spawnOffsets) {
 			nextRightSpawnPos.z = rightSnolafZ - spawnOffsets;
 		}
@@ -902,7 +902,7 @@ void KungFuLevelComponent::SpawnEnemy(const bool bSpawnLeft, const int waveSize)
 		//blk::log("Snolaf popped of list of size %d", m_SnolafPool.size() );
 
 		pSnolaf->SetPosition(spawnPos);
-		pSnolaf->SetOrientation(GetOwnerRotation());
+		pSnolaf->SetOrientation(owner_rotation());
 
 		pSnolafComp->RequestStateChange(KungFuSnolafState::Idle);
 		pSnolafComp->ResetFromPool();
@@ -1020,7 +1020,7 @@ void KungFuLevelComponent::ShowHealthBar(const bool bShow) {
 /// KungFuLevelComponent::GetPlayerTravelDistance
 float KungFuLevelComponent::GetPlayerTravelDistance() {
 
-	return (g_pCannonGame->GetPlayer()->GetOwnerPosition() - KungFuGame::kSheepStartPos).length();
+	return (g_pCannonGame->GetPlayer()->owner_position() - KungFuGame::kSheepStartPos).length();
 }
 
 /// KungFuLevelComponent::GetSnolafFromPool

@@ -117,7 +117,48 @@ void Renderer_Dx12::initialize_internal(HWND hwnd, const uint32_t frame_width, c
 		rtv_handle.Offset(1, m_rtv_descriptor_size);
 	}
 
-	// Command List
+	CD3DX12_DEPTH_STENCIL_DESC depth_stencil_desc = {};
+	depth_stencil_desc.DepthEnable = TRUE; // enable depth testing
+	depth_stencil_desc.DepthWriteMask = D3D12_DEPTH_WRITE_MASK_ALL; // can write depth data to all of the depth/stencil buffer
+	depth_stencil_desc.DepthFunc = D3D12_COMPARISON_FUNC_LESS; // pixel fragment passes depth test if destination pixel's depth is less than pixel fragment's
+	depth_stencil_desc.StencilEnable = FALSE; // disable stencil test
+	depth_stencil_desc.StencilReadMask = D3D12_DEFAULT_STENCIL_READ_MASK; // a default stencil read mask (doesn't matter at this point since stencil testing is turned off)
+	depth_stencil_desc.StencilWriteMask = D3D12_DEFAULT_STENCIL_WRITE_MASK; // a default stencil write mask (also doesn't matter)
+	const D3D12_DEPTH_STENCILOP_DESC defaultStencilOp = // a stencil operation structure, again does not really matter since stencil testing is turned off
+	{ D3D12_STENCIL_OP_KEEP, D3D12_STENCIL_OP_KEEP, D3D12_STENCIL_OP_KEEP, D3D12_COMPARISON_FUNC_ALWAYS };
+	depth_stencil_desc.FrontFace = defaultStencilOp; // both front and back facing polygons get the same treatment
+	depth_stencil_desc.BackFace = defaultStencilOp;
+
+	// create a depth stencil descriptor heap so we can get a pointer to the depth stencil buffer
+	D3D12_DESCRIPTOR_HEAP_DESC dsvHeapDesc = {};
+	dsvHeapDesc.NumDescriptors = 1;
+	dsvHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_DSV;
+	dsvHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
+	blk::error_check(m_device->CreateDescriptorHeap(&dsvHeapDesc, IID_PPV_ARGS(&m_depth_stencil_heap)));
+
+	D3D12_DEPTH_STENCIL_VIEW_DESC depthStencilDesc = {};
+	depthStencilDesc.Format = DXGI_FORMAT_D32_FLOAT;
+	depthStencilDesc.ViewDimension = D3D12_DSV_DIMENSION_TEXTURE2D;
+	depthStencilDesc.Flags = D3D12_DSV_FLAG_NONE;
+
+	D3D12_CLEAR_VALUE depthOptimizedClearValue = {};
+	depthOptimizedClearValue.Format = DXGI_FORMAT_D32_FLOAT;
+	depthOptimizedClearValue.DepthStencil.Depth = 1.0f;
+	depthOptimizedClearValue.DepthStencil.Stencil = 0;
+
+	auto ds_heap_prop = CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT);
+	auto resource_desc = CD3DX12_RESOURCE_DESC::Tex2D(DXGI_FORMAT_D32_FLOAT, m_frame_width, m_frame_height, 1, 0, 1, 0, D3D12_RESOURCE_FLAG_ALLOW_DEPTH_STENCIL);
+	m_device->CreateCommittedResource(
+		&ds_heap_prop,
+		D3D12_HEAP_FLAG_NONE,
+		&resource_desc,
+		D3D12_RESOURCE_STATE_DEPTH_WRITE,
+		&depthOptimizedClearValue,
+		IID_PPV_ARGS(&m_depth_stencil_buffer)
+	);
+	m_depth_stencil_heap->SetName(L"Depth/Stencil Resource Heap");
+	m_device->CreateDepthStencilView(m_depth_stencil_buffer.Get(), &depthStencilDesc, m_depth_stencil_heap->GetCPUDescriptorHandleForHeapStart());
+
 	blk::error_check(m_device->CreateCommandAllocator(D3D12_COMMAND_LIST_TYPE_DIRECT, IID_PPV_ARGS(&m_command_allocator)));
 	blk::error_check(m_device->CreateCommandList(0, D3D12_COMMAND_LIST_TYPE_DIRECT, m_command_allocator.Get(), nullptr, IID_PPV_ARGS(&m_command_list)));
 	m_command_list->Close();
@@ -132,7 +173,7 @@ void Renderer_Dx12::initialize_internal(HWND hwnd, const uint32_t frame_width, c
 	rootParameters[0].InitAsDescriptorTable(1, &ranges[0], D3D12_SHADER_VISIBILITY_PIXEL);
 	rootParameters[1].InitAsDescriptorTable(1, &ranges[1], D3D12_SHADER_VISIBILITY_PIXEL);
 	rootParameters[2].InitAsDescriptorTable(1, &ranges[2], D3D12_SHADER_VISIBILITY_VERTEX);
-	//rootParameters[3].InitAsConstants(1, 0, 0, D3D12_SHADER_VISIBILITY_VERTEX);
+	rootParameters[3].InitAsConstants(1, 0, 1, D3D12_SHADER_VISIBILITY_VERTEX);
 
 	const D3D12_ROOT_SIGNATURE_FLAGS signature_flags = D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT |
 		D3D12_ROOT_SIGNATURE_FLAG_DENY_HULL_SHADER_ROOT_ACCESS |
@@ -145,7 +186,9 @@ void Renderer_Dx12::initialize_internal(HWND hwnd, const uint32_t frame_width, c
 
 	ComPtr<ID3DBlob> signature;
 	ComPtr<ID3DBlob> error;
-	blk::error_check(D3DX12SerializeVersionedRootSignature(&rootSignatureDesc, D3D_ROOT_SIGNATURE_VERSION_1, &signature, &error));
+	if (!blk::warn_check(D3DX12SerializeVersionedRootSignature(&rootSignatureDesc, D3D_ROOT_SIGNATURE_VERSION_1, &signature, &error))) {
+		blk::error("%s", error->GetBufferPointer());
+	}
 	blk::error_check(m_device->CreateRootSignature(0, signature->GetBufferPointer(), signature->GetBufferSize(), IID_PPV_ARGS(&m_root_signature)));
 
 	// Fences	
@@ -187,6 +230,8 @@ void Renderer_Dx12::shut_down_internal() {
 	m_cbv_srv_heap.Reset();
 	m_sampler_heap.Reset();
 	m_rtv_heap.Reset();
+	m_depth_stencil_buffer.Reset();
+	m_depth_stencil_heap.Reset();
 
 	m_command_allocator.Reset();
 	m_command_list.Reset();
@@ -264,10 +309,23 @@ RenderBuffer* Renderer_Dx12::create_render_buffer_internal() {
 
 struct SceneInstanceData {
 	Mat4 mvp;
-	Mat4 padding[3];
+	Vec4 color;
+	Vec4 pad0[3];
+	Mat4 pad1[2];
 };
-SceneInstanceData buffer;
-SceneInstanceData* pBuffer;
+SceneInstanceData* scene_buffer;
+
+const float g_temp_bound = 10.f;
+struct TempObj {
+	TempObj() {
+		position = Vec3Rand(Vec3(-g_temp_bound, -g_temp_bound, -g_temp_bound), Vec3(g_temp_bound, g_temp_bound, g_temp_bound));
+		color = Vec4Rand(Vec4(0.5f, 0.5f, 0.5f, 1.f), Vec4(1.f, 1.f, 1.f, 1.f));
+	}
+
+	Vec3 position;
+	Vec4 color;
+};
+TempObj temp_render_objs[g_max_instances];
 
 /// Renderer_Dx12::render
 void Renderer_Dx12::render() {
@@ -287,7 +345,7 @@ void Renderer_Dx12::render() {
 	Mat4 vp_matrix =
 		view_matrix *
 		m_camera_projection;
-	
+
 	blk::error_check(m_command_allocator->Reset());
 	blk::error_check(m_command_list->Reset(m_command_allocator.Get(), nullptr));
 
@@ -300,14 +358,17 @@ void Renderer_Dx12::render() {
 	m_command_list->ResourceBarrier(1, &rt_barrier);
 
 	CD3DX12_CPU_DESCRIPTOR_HANDLE rtv_handle(m_rtv_heap->GetCPUDescriptorHandleForHeapStart(), m_frame_index, m_rtv_descriptor_size);
-	m_command_list->OMSetRenderTargets(1, &rtv_handle, FALSE, nullptr);
+	CD3DX12_CPU_DESCRIPTOR_HANDLE dsv_handle(m_depth_stencil_heap->GetCPUDescriptorHandleForHeapStart());
+	m_command_list->OMSetRenderTargets(1, &rtv_handle, false, &dsv_handle);
 
 	const float clear_color[] = { 0.7f, 0.8f, 1.f, 1.0f };
 	m_command_list->ClearRenderTargetView(rtv_handle, clear_color, 0, nullptr);
 
+	m_command_list->ClearDepthStencilView(dsv_handle, D3D12_CLEAR_FLAG_DEPTH, 1.0f, 0, 0, nullptr);
+
+
 	RenderPipeline_D3D12* const pipe = (RenderPipeline_D3D12*)get_pipeline("test_shader");
 	m_command_list->SetPipelineState(pipe->m_pipeline_state.Get());
-
 
 	auto vertex_buffer = (RenderBuffer_D3D12*)get_render_buffer(0);
 	auto index_buffer = (RenderBuffer_D3D12*)get_render_buffer(1);
@@ -323,38 +384,39 @@ void Renderer_Dx12::render() {
 	CD3DX12_GPU_DESCRIPTOR_HANDLE gpu_handle(m_cbv_srv_heap->GetGPUDescriptorHandleForHeapStart(), 1, descriptor_size);
 	m_command_list->SetGraphicsRootDescriptorTable(2, gpu_handle);
 
-//	CD3DX12_GPU_DESCRIPTOR_HANDLE cbvSrvHandle(m_cbv_srv_heap->GetGPUDescriptorHandleForHeapStart(), frameResourceDescriptorOffset, descriptor_size);
 	for (auto render_comp : this->render_components()) {
 		m_command_list->IASetVertexBuffers(0, 1, &vertex_buffer->vertex_buffer_view());
 		m_command_list->IASetIndexBuffer(&index_buffer->index_buffer_view());
-		//m_command_list->SetGraphicsRoot32BitConstant(3, 0, 0);
 
+		const auto& shader_params = render_comp->GetMaterialList()[0].GetShaderParams();
+		Vec4 color(1.f, 1.f, 1.f, 1.f);
+		for (const auto& param : shader_params) {
+			if (param.GetParamName() == kbString("color")) {
+				color = param.GetVector();
+			}
+		}
 		Mat4 world_mat;
 		world_mat.make_scale(render_comp->owner_scale());
 		world_mat *= render_comp->owner_rotation().to_mat4();
 		world_mat[3] = render_comp->owner_position();
 
-		Mat4 world_mat_2;
-		world_mat_2.make_scale(render_comp->owner_scale());
-		world_mat_2 *= render_comp->owner_rotation().to_mat4();
-		world_mat_2[3] = render_comp->owner_position() + Vec3(3.f, 0.f, 0.f);
-
-		static bool bust_it = false;
-
-		if (bust_it) {
-			pBuffer[0].mvp = (world_mat * vp_matrix).transpose_self();
-			pBuffer[1].mvp = (world_mat_2 * vp_matrix).transpose_self();
-			pBuffer[2].mvp = (world_mat * vp_matrix).transpose_self();
-			pBuffer[3].mvp = (world_mat * vp_matrix).transpose_self();
-		} else {
-			pBuffer[0].mvp = (world_mat_2* vp_matrix).transpose_self();
-			pBuffer[1].mvp = (world_mat * vp_matrix).transpose_self();
-			pBuffer[2].mvp = (world_mat * vp_matrix).transpose_self();
-			pBuffer[3].mvp = (world_mat * vp_matrix).transpose_self();
-		}
-		bust_it = !bust_it;
-		//........................
+		m_command_list->SetGraphicsRoot32BitConstant(3, 0, 0);
 		m_command_list->DrawIndexedInstanced(index_buffer->num_elements(), 1, 0, 0, 0);
+
+		scene_buffer[0].mvp = (world_mat * vp_matrix).transpose_self();
+		scene_buffer[0].color = color;
+
+		for (int i = 0; i < 24; i++) {
+			world_mat.make_scale(Vec3(1.f, 1.f, 1.f));
+			world_mat *= render_comp->owner_rotation().to_mat4();
+			world_mat[3] = temp_render_objs[i].position;
+
+			scene_buffer[i + 1].mvp = (world_mat * vp_matrix).transpose_self();
+			scene_buffer[i + 1].color = temp_render_objs[i].color;
+
+			m_command_list->SetGraphicsRoot32BitConstant(3, 1 + i, 0);
+			m_command_list->DrawIndexedInstanced(index_buffer->num_elements(), 1, 0, 0, 0);
+		}
 	}
 
 
@@ -406,11 +468,23 @@ RenderPipeline* Renderer_Dx12::create_pipeline(const wstring& path) {
 		0,
 		&vertex_shader,
 		&errors))) {
-			blk::error("%s", errors->GetBufferPointer());
-		}
+		blk::error("%s", errors->GetBufferPointer());
+	}
 
 	ComPtr<ID3DBlob> pixel_shader;
-	blk::error_check(D3DCompileFromFile(path.c_str(), nullptr, nullptr, "pixel_shader", "ps_5_1", compileFlags, 0, &pixel_shader, nullptr));
+	if (!blk::error_check(
+		D3DCompileFromFile(
+			path.c_str(),
+			nullptr,
+			nullptr,
+			"pixel_shader",
+			"ps_5_1",
+			compileFlags,
+			0,
+			&pixel_shader,
+			&errors))) {
+		blk::error("%s", errors->GetBufferPointer());
+	}
 
 	// Define the vertex input layout.
 	D3D12_INPUT_ELEMENT_DESC inputElementDescs[] =
@@ -420,7 +494,6 @@ RenderPipeline* Renderer_Dx12::create_pipeline(const wstring& path) {
 		{ "COLOR", 0, DXGI_FORMAT_R8G8B8A8_UNORM, 0, 20, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
 		{ "NORMAL", 0, DXGI_FORMAT_R8G8B8A8_UNORM, 0, 24, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
 		{ "TANGENT", 0, DXGI_FORMAT_R8G8B8A8_UNORM, 0, 28, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
-		{ "INSTANCEPOS", 0, DXGI_FORMAT_R32G32B32_FLOAT,    1, 0, D3D12_INPUT_CLASSIFICATION_PER_INSTANCE_DATA, 1}
 	};
 
 	auto raster = CD3DX12_RASTERIZER_DESC(D3D12_DEFAULT);
@@ -434,8 +507,7 @@ RenderPipeline* Renderer_Dx12::create_pipeline(const wstring& path) {
 	psoDesc.PS = CD3DX12_SHADER_BYTECODE(pixel_shader.Get());
 	psoDesc.RasterizerState = raster;
 	psoDesc.BlendState = CD3DX12_BLEND_DESC(D3D12_DEFAULT);
-	psoDesc.DepthStencilState.DepthEnable = FALSE;
-	psoDesc.DepthStencilState.StencilEnable = FALSE;
+	psoDesc.DepthStencilState = CD3DX12_DEPTH_STENCIL_DESC(D3D12_DEFAULT); // a default depth stencil state
 	psoDesc.SampleMask = UINT_MAX;
 	psoDesc.PrimitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;
 	psoDesc.NumRenderTargets = 1;
@@ -519,8 +591,8 @@ void Renderer_Dx12::todo_create_texture() {
 		IID_PPV_ARGS(&m_cbv_upload_heap)));
 
 	CD3DX12_RANGE readRange(0, 0);        // We do not intend to read from this resource on the CPU.
-	pBuffer = nullptr;
-	blk::error_check(m_cbv_upload_heap->Map(0, &readRange, reinterpret_cast<void**>(&pBuffer)));
+	scene_buffer = nullptr;
+	blk::error_check(m_cbv_upload_heap->Map(0, &readRange, reinterpret_cast<void**>(&scene_buffer)));
 
 	// Constant buffer view
 	UINT64 cbOffset = 0;

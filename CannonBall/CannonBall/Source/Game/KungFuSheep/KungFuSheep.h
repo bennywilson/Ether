@@ -99,8 +99,8 @@ protected:
 			return true;
 		}
 
-		const float SheepZ = GetSheep()->GetOwnerPosition().z;
-		const Vec3 SheepDest = GetSheep()->GetOwnerPosition() + moveVec;
+		const float SheepZ = GetSheep()->owner_position().z;
+		const Vec3 SheepDest = GetSheep()->owner_position() + moveVec;
 
 		for (int i = 0; i < g_pCannonGame->GetGameEntities().size(); i++) {
 
@@ -110,7 +110,7 @@ protected:
 				continue;
 			}
 
-			const Vec3 snolafPos = pSnolaf->GetOwnerPosition();
+			const Vec3 snolafPos = pSnolaf->owner_position();
 			if (snolafPos.z < SheepZ && snolafPos.z > SheepDest.z) {
 				return true;
 			}

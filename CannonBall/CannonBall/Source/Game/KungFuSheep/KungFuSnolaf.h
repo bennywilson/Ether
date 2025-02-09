@@ -95,8 +95,8 @@ protected:
 			return -1.0f;
 		}
 
-		const Vec3 targetPos = GetTarget()->GetOwnerPosition();
-		const Vec3 snolafPos = this->m_pActorComponent->GetOwnerPosition();
+		const Vec3 targetPos = GetTarget()->owner_position();
+		const Vec3 snolafPos = this->m_pActorComponent->owner_position();
 		if (targetPos.compare(snolafPos) == true) {
 			return 0.0f;
 		}
@@ -109,8 +109,8 @@ protected:
 			return;
 		}
 
-		const Vec3 targetPos = GetTarget()->GetOwnerPosition();
-		const Vec3 snolafPos = this->m_pActorComponent->GetOwnerPosition();
+		const Vec3 targetPos = GetTarget()->owner_position();
+		const Vec3 snolafPos = this->m_pActorComponent->owner_position();
 
 		this->m_pActorComponent->SetTargetFacingDirection((snolafPos - targetPos).normalize_safe());
 	}
@@ -120,8 +120,8 @@ protected:
 			return false;
 		}
 
-		const Vec3 targetPos = GetTarget()->GetOwnerPosition();
-		const Vec3 snolafPos = this->m_pActorComponent->GetOwnerPosition();
+		const Vec3 targetPos = GetTarget()->owner_position();
+		const Vec3 snolafPos = this->m_pActorComponent->owner_position();
 		return (targetPos.z > snolafPos.z);
 	}
 };

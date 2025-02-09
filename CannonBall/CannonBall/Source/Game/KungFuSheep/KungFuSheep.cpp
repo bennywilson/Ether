@@ -85,7 +85,7 @@ public:
 				const Vec3 moveDir(0.0f, 0.0f, 1);
 
 				if (this->CheckForBlocker(moveDir * blockerCheckReach) == false) {
-					const Vec3 targetPos = this->m_pActorComponent->GetOwnerPosition() + moveDir * frameDT * this->m_pActorComponent->GetMaxRunSpeed();
+					const Vec3 targetPos = this->m_pActorComponent->owner_position() + moveDir * frameDT * this->m_pActorComponent->GetMaxRunSpeed();
 					this->m_pActorComponent->SetOwnerPosition(targetPos);
 				} else {
 					this->RequestStateChange(KungFuSheepState::Idle);
@@ -103,7 +103,7 @@ public:
 				const Vec3 moveDir(0.0f, 0.0f, -1);
 
 				if (this->CheckForBlocker(moveDir * blockerCheckReach) == false) {
-					const Vec3 targetPos = this->m_pActorComponent->GetOwnerPosition() + moveDir * frameDT * this->m_pActorComponent->GetMaxRunSpeed();
+					const Vec3 targetPos = this->m_pActorComponent->owner_position() + moveDir * frameDT * this->m_pActorComponent->GetMaxRunSpeed();
 					this->m_pActorComponent->SetOwnerPosition(targetPos);
 				} else {
 					this->RequestStateChange(KungFuSheepState::Idle);
@@ -356,7 +356,7 @@ public:
 
 	virtual void UpdateState_Internal() override {
 
-		if (m_bSplashDone == false && this->GetSheep()->GetOwnerPosition().y < -60.0f) {
+		if (m_bSplashDone == false && this->GetSheep()->owner_position().y < -60.0f) {
 			m_bSplashDone = true;
 			this->GetSheep()->SpawnSplash();
 		}
@@ -478,12 +478,12 @@ void KungFuSheepComponent::SetEnable_Internal(const bool bEnable) {
 
 		if (GetOwner()->IsPrefab() == false) {
 			m_HeadBandInstance[0].SetEntity(g_pGame->CreateEntity(m_HeadBand.GetEntity()));
-			m_HeadBandInstance[0].GetEntity()->SetPosition(GetOwnerPosition());
-			m_HeadBandInstance[0].GetEntity()->SetOrientation(GetOwnerRotation());
+			m_HeadBandInstance[0].GetEntity()->SetPosition(owner_position());
+			m_HeadBandInstance[0].GetEntity()->SetOrientation(owner_rotation());
 
 			m_HeadBandInstance[1].SetEntity(g_pGame->CreateEntity(m_HeadBand.GetEntity()));
-			m_HeadBandInstance[1].GetEntity()->SetPosition(GetOwnerPosition());
-			m_HeadBandInstance[1].GetEntity()->SetOrientation(GetOwnerRotation());
+			m_HeadBandInstance[1].GetEntity()->SetPosition(owner_position());
+			m_HeadBandInstance[1].GetEntity()->SetOrientation(owner_rotation());
 		}
 
 		m_Health = 1.0f;
@@ -548,8 +548,8 @@ void KungFuSheepComponent::OnAnimEvent(const kbAnimEventInfo_t& animEventInfo) {
 
 		if (m_CannonBallImpactFX.GetEntity() != nullptr) {
 			kbGameEntity* const pCannonBallImpact = g_pGame->CreateEntity(m_CannonBallImpactFX.GetEntity());
-			pCannonBallImpact->SetPosition(GetOwnerPosition());
-			pCannonBallImpact->SetOrientation(GetOwnerRotation());
+			pCannonBallImpact->SetPosition(owner_position());
+			pCannonBallImpact->SetOrientation(owner_rotation());
 			pCannonBallImpact->DeleteWhenComponentsAreInactive(true);
 
 			CannonCameraShakeComponent* const pCamShakeComponent = (CannonCameraShakeComponent*)pCannonBallImpact->GetComponentByType(CannonCameraShakeComponent::GetType());
@@ -558,12 +558,12 @@ void KungFuSheepComponent::OnAnimEvent(const kbAnimEventInfo_t& animEventInfo) {
 				pCam->StartCameraShake(pCamShakeComponent);
 			}
 			if (m_CannonBallImpactSound.size() > 0) {
-				m_CannonBallImpactSound[rand() % m_CannonBallImpactSound.size()].PlaySoundAtPosition(GetOwnerPosition());
+				m_CannonBallImpactSound[rand() % m_CannonBallImpactSound.size()].PlaySoundAtPosition(owner_position());
 			}
 		}
 	} else if (animEventName == CannonBallVO) {
 		if (m_CannonBallVO.size() > 0) {
-			m_CannonBallVO[rand() % m_CannonBallVO.size()].PlaySoundAtPosition(GetOwnerPosition());
+			m_CannonBallVO[rand() % m_CannonBallVO.size()].PlaySoundAtPosition(owner_position());
 		}
 	} else if (animEventName == CannonBallJumpSmear) {
 		m_AnimSmearStartTime = g_GlobalTimer.TimeElapsedSeconds();
@@ -586,7 +586,7 @@ void KungFuSheepComponent::OnAnimEvent(const kbAnimEventInfo_t& animEventInfo) {
 				const AttackHitInfo_t attackInfo = pLevelComponent->DoAttack( dealAttackInfo );
 				if ( attackInfo.m_bHit ) {
 					if ( m_BasicAttackImpactSound.size() > 0 ) {
-						m_BasicAttackImpactSound[rand() % m_BasicAttackImpactSound.size()].PlaySoundAtPosition( GetOwnerPosition() );
+						m_BasicAttackImpactSound[rand() % m_BasicAttackImpactSound.size()].PlaySoundAtPosition( owner_position() );
 					}
 
 					m_CannonBallMeter += 0.25f;
@@ -653,7 +653,7 @@ void KungFuSheepComponent::Update_Internal(const float DT) {
 		m_HeadBandInstance[1].GetEntity()->SetPosition(boneMat.GetOrigin() + axis1 * 0.1f + axis2 * 0.01f - axis3 * 0.15f);
 	}
 
-	const Vec3 curFacing = GetOwnerRotation().to_mat4()[2].ToVec3();
+	const Vec3 curFacing = owner_rotation().to_mat4()[2].ToVec3();
 	const float t = (curFacing.z * 0.5f) + 0.5f;
 	Vec4 collisionSphere = kbLerp(Vec4(0.280000f, -0.080000f, 0.019997f, 0.25f), Vec4(0.140f, -0.060f, 0.279997f, 0.25f), t);
 	kbClothComponent* const pCloth1 = m_HeadBandInstance[0].GetEntity()->GetComponent<kbClothComponent>();
@@ -728,8 +728,8 @@ void KungFuSheepComponent::PlayShakeNBakeFX() {
 	}
 
 	kbGameEntity* const pShakeNBakeFX = g_pGame->CreateEntity(m_ShakeNBakeFX.GetEntity());
-	pShakeNBakeFX->SetPosition(GetOwnerPosition());
-	pShakeNBakeFX->SetOrientation(GetOwnerRotation());
+	pShakeNBakeFX->SetPosition(owner_position());
+	pShakeNBakeFX->SetOrientation(owner_rotation());
 	pShakeNBakeFX->DeleteWhenComponentsAreInactive(true);
 
 	m_CannonBallMeter += KungFuGame::kShakeNBakeCannonBallBonus;
@@ -749,9 +749,9 @@ void KungFuSheepComponent::PlayBaa(const int baaType) {
 
 	m_LastVOTime = g_GlobalTimer.TimeElapsedSeconds();
 	if (baaType == -1) {
-		m_BaaaVO[rand() % m_BaaaVO.size()].PlaySoundAtPosition(GetOwnerPosition());
+		m_BaaaVO[rand() % m_BaaaVO.size()].PlaySoundAtPosition(owner_position());
 	} else {
-		m_BaaaVO[baaType].PlaySoundAtPosition(GetOwnerPosition());
+		m_BaaaVO[baaType].PlaySoundAtPosition(owner_position());
 	}
 }
 
@@ -762,7 +762,7 @@ void KungFuSheepComponent::HitASnolaf() {
 	KungFuLevelComponent::Get()->UpdateCannonBallMeter(m_CannonBallMeter, false);
 
 	if (m_BasicAttackImpactSound.size() > 0) {
-		m_BasicAttackImpactSound[rand() % m_BasicAttackImpactSound.size()].PlaySoundAtPosition(GetOwnerPosition());
+		m_BasicAttackImpactSound[rand() % m_BasicAttackImpactSound.size()].PlaySoundAtPosition(owner_position());
 	}
 }
 
@@ -773,7 +773,7 @@ void KungFuSheepComponent::SpawnSplash() {
 	}
 
 	kbGameEntity* const pSplash = g_pGame->CreateEntity(m_SplashFX.GetEntity());
-	pSplash->SetPosition(GetOwnerPosition());
+	pSplash->SetPosition(owner_position());
 	pSplash->DeleteWhenComponentsAreInactive(true);
 
 	KungFuLevelComponent::Get()->DoSplashSound();
@@ -792,13 +792,13 @@ void KungFuSheepComponent::PlayCannonBallFX(const Vec3 location) {
 
 	kbGameEntity* const pCannonBallImpact = g_pGame->CreateEntity(m_CannonBallImpactFX.GetEntity());
 	pCannonBallImpact->SetPosition(location);
-	pCannonBallImpact->SetOrientation(GetOwnerRotation());
+	pCannonBallImpact->SetOrientation(owner_rotation());
 	pCannonBallImpact->DeleteWhenComponentsAreInactive(true);
 
 	PlayCameraShake();
 
 	if (m_CannonBallImpactSound.size() > 0) {
-		m_CannonBallImpactSound[rand() % m_CannonBallImpactSound.size()].PlaySoundAtPosition(GetOwnerPosition());
+		m_CannonBallImpactSound[rand() % m_CannonBallImpactSound.size()].PlaySoundAtPosition(owner_position());
 	}
 }
 
@@ -823,7 +823,7 @@ void KungFuSheepComponent::EnableHeadBand(const bool bEnable) {
 /// KungFuSheepComponent::PlayImpactSound
 void KungFuSheepComponent::PlayImpactSound() {
 	if (m_BasicAttackImpactSound.size() > 0) {
-		m_BasicAttackImpactSound[rand() % m_BasicAttackImpactSound.size()].PlaySoundAtPosition(GetOwnerPosition());
+		m_BasicAttackImpactSound[rand() % m_BasicAttackImpactSound.size()].PlaySoundAtPosition(owner_position());
 	}
 }
 
