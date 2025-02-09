@@ -93,8 +93,7 @@ void Renderer_Dx12::initialize_internal(HWND hwnd, const uint32_t frame_width, c
 
 	// SRV descriptor heap
 	D3D12_DESCRIPTOR_HEAP_DESC srv_heap_desc = {};
-	// Sampler + 
-	srv_heap_desc.NumDescriptors = 6;
+	srv_heap_desc.NumDescriptors = 1 + g_max_instances;		// SRV + g_maxInstances
 	srv_heap_desc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV;
 	srv_heap_desc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;
 	blk::error_check(m_device->CreateDescriptorHeap(&srv_heap_desc, IID_PPV_ARGS(&m_cbv_srv_heap)));
@@ -263,12 +262,12 @@ RenderBuffer* Renderer_Dx12::create_render_buffer_internal() {
 	return new RenderBuffer_D3D12();
 }
 
-struct Constant {
+struct SceneInstanceData {
 	Mat4 mvp;
 	Mat4 padding[3];
 };
-Constant buffer;
-Constant* pBuffer;
+SceneInstanceData buffer;
+SceneInstanceData* pBuffer;
 
 /// Renderer_Dx12::render
 void Renderer_Dx12::render() {
@@ -506,9 +505,11 @@ void Renderer_Dx12::todo_create_texture() {
 	CD3DX12_CPU_DESCRIPTOR_HANDLE texHandle(m_cbv_srv_heap->GetCPUDescriptorHandleForHeapStart(), 0, m_device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_SAMPLER));
 	m_device->CreateShaderResourceView(tex.Get(), &srv_desc, texHandle);
 
+
+	const auto CBV_SRV_DESCRIPTOR_SIZE = m_device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
 	// Constant buffer view upload heap
 	auto cbv_heap_props = CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD);
-	auto cbv_buffer_size = CD3DX12_RESOURCE_DESC::Buffer(g_max_instances * sizeof(buffer));
+	auto cbv_buffer_size = CD3DX12_RESOURCE_DESC::Buffer(g_max_instances * sizeof(SceneInstanceData));
 	blk::error_check(m_device->CreateCommittedResource(
 		&cbv_heap_props,
 		D3D12_HEAP_FLAG_NONE,
@@ -523,27 +524,17 @@ void Renderer_Dx12::todo_create_texture() {
 
 	// Constant buffer view
 	UINT64 cbOffset = 0;
-	const auto CBV_SRV_DESCRIPTOR_SIZE = m_device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
+
 	CD3DX12_CPU_DESCRIPTOR_HANDLE cbvSrvHandle(m_cbv_srv_heap->GetCPUDescriptorHandleForHeapStart(), 1, CBV_SRV_DESCRIPTOR_SIZE);    // Move past the SRVs.
 
-	D3D12_CONSTANT_BUFFER_VIEW_DESC cbvDesc = {};
-	cbvDesc.BufferLocation = m_cbv_upload_heap->GetGPUVirtualAddress() + cbOffset;
-
-	cbvDesc.SizeInBytes = 256;//sizeof(buffer);
-	m_device->CreateConstantBufferView(&cbvDesc, cbvSrvHandle);
-
-	// For handling multiple cbv
-	cbOffset += 256;
-	cbvSrvHandle.Offset(CBV_SRV_DESCRIPTOR_SIZE);
-	cbvDesc.BufferLocation = m_cbv_upload_heap->GetGPUVirtualAddress() + cbOffset;
-	cbvDesc.SizeInBytes = 256;//sizeof(buffer);
-	m_device->CreateConstantBufferView(&cbvDesc, cbvSrvHandle);
-
-	cbOffset += 256;
-	cbvSrvHandle.Offset(CBV_SRV_DESCRIPTOR_SIZE);
-	cbvDesc.BufferLocation = m_cbv_upload_heap->GetGPUVirtualAddress() + cbOffset;
-	cbvDesc.SizeInBytes = 256;//sizeof(buffer);
-	m_device->CreateConstantBufferView(&cbvDesc, cbvSrvHandle);
+	for (u32 i = 0; i < g_max_instances; i++) {
+		D3D12_CONSTANT_BUFFER_VIEW_DESC cbvDesc = {};
+		cbvDesc.BufferLocation = m_cbv_upload_heap->GetGPUVirtualAddress() + cbOffset;
+		cbvDesc.SizeInBytes = sizeof(SceneInstanceData);
+		cbOffset += sizeof(SceneInstanceData);
+		m_device->CreateConstantBufferView(&cbvDesc, cbvSrvHandle);
+		cbvSrvHandle.Offset(CBV_SRV_DESCRIPTOR_SIZE);
+	}
 
 	// Close the command list and execute it to begin the initial GPU setup.
 	blk::error_check(m_command_list->Close());
