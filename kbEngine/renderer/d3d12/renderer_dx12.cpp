@@ -310,7 +310,8 @@ RenderBuffer* Renderer_Dx12::create_render_buffer_internal() {
 struct SceneInstanceData {
 	Mat4 mvp;
 	Vec4 color;
-	Vec4 pad0[3];
+	Vec4 camera;
+	Vec4 pad0[2];
 	Mat4 pad1[2];
 };
 SceneInstanceData* scene_buffer;
@@ -405,7 +406,7 @@ void Renderer_Dx12::render() {
 
 		scene_buffer[0].mvp = (world_mat * vp_matrix).transpose_self();
 		scene_buffer[0].color = color;
-
+		scene_buffer[0].camera = Vec4(m_camera_position, 1.f);
 		for (int i = 0; i < 0; i++) {
 			world_mat.make_scale(Vec3(1.f, 1.f, 1.f));
 			world_mat *= render_comp->owner_rotation().to_mat4();

@@ -1,6 +1,7 @@
 struct SceneData {
 	matrix modelMatrix;
 	float4 color;
+	float4 camera;
 };
 ConstantBuffer<SceneData> scene_constants[1024] : register(b0);
 
@@ -25,13 +26,14 @@ struct vertexInput {
 struct pixelInput {
 	float4 position		: SV_POSITION;
 	float2 uv			: TEXCOORD0;
+	float3 to_cam	: TEXCOORD1;
 	float4 color		: COLOR;
 	float4 normal		: NORMAL;
 };
 
 //-------------------------------------
 struct PS_OUTPUT {
-	float4 color		: SV_TARGET0;	// Albedo.rgb, Emissive.z
+	float4 color		: SV_TARGET0;	// Albedo.r6gb, Emissive.z
 };
 
 
@@ -43,6 +45,7 @@ pixelInput vertex_shader(vertexInput input) {
 	pixelInput output = (pixelInput)(0);
 	output.position = input.position;
 	output.position = mul( input.position, matrixBuffer.modelMatrix );
+	output.to_cam = matrixBuffer.camera.xyz - input.position.xyz * 0.001;//	spec hack
 	output.color = matrixBuffer.color;
 	output.normal.xyz = input.normal.xyz;
 	output.uv = input.uv;
@@ -52,12 +55,19 @@ pixelInput vertex_shader(vertexInput input) {
 ///
 ///	pixelShader
 ///
- float4 pixel_shader( pixelInput	input, bool IsFrontFace	: SV_IsFrontFace ) : SV_TARGET {
+ float4 pixel_shader( pixelInput input, bool IsFrontFace	: SV_IsFrontFace ) : SV_TARGET {
 	const float4 albedo = shaderTexture.Sample( SampleType, input.uv ) * input.color;
-	//const float3 normal = normalize(input.normal.xyz);
-	//const float3 light_dir = normalize(float3(0.0f, 1.0f, 0.0));
-	//const float nDotL = pow(saturate(dot(normal, light_dir)), 2.0);
+	const float3 normal = normalize(input.normal.xyz);
+	const float3 light_dir = normalize(float3(0.0f, 1.0f, 0.0));
+	const float nDotL = pow(saturate(dot(normal, light_dir)), 2.0);
+
+	// Spec
+	const float3 to_cam = normalize(input.to_cam);
+	float3 r = 2 * nDotL * normal - light_dir;
+	float r_dot_v = saturate(dot(normal, r));
+	float spec = 55 * pow(r_dot_v, 15.f);
+
 	//return 1;
-	return albedo;// * nDotL;
+	return albedo * nDotL + albedo * spec;
 }
  

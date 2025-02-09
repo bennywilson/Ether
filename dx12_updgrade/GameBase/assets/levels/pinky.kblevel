@@ -1,4 +1,4 @@
-kbGameEntity 3466415654 1314444882 431881645 2936129933 {
+kbGameEntity 906099672 1188470542 1717989287 2520788972 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
@@ -10,8 +10,8 @@ kbGameEntity 3466415654 1314444882 431881645 2936129933 {
 	kbEditorLevelSettingsComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		MainCameraPosition = -2.017998 4.762450 9.905146
-		MainCameraRotation = 0.053877 0.937363 -0.300263 -0.168195
+		MainCameraPosition = 2.890934 3.672440 7.917122
+		MainCameraRotation = -0.108829 0.884855 -0.259240 0.371459
 	}
 }
 kbGameEntity 1764334591 1323162396 784491408 67843932 {
