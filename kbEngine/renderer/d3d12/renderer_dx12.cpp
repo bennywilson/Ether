@@ -309,10 +309,12 @@ RenderBuffer* Renderer_Dx12::create_render_buffer_internal() {
 
 struct SceneInstanceData {
 	Mat4 mvp;
+	Mat4 world;
 	Vec4 color;
+	Vec4 spec;
 	Vec4 camera;
-	Vec4 pad0[2];
-	Mat4 pad1[2];
+	Vec4 pad0;;
+	Mat4 pad1[1];
 };
 SceneInstanceData* scene_buffer;
 
@@ -321,10 +323,12 @@ struct TempObj {
 	TempObj() {
 		position = Vec3Rand(Vec3(-g_temp_bound, -g_temp_bound, -g_temp_bound), Vec3(g_temp_bound, g_temp_bound, g_temp_bound));
 		color = Vec4Rand(Vec4(0.5f, 0.5f, 0.5f, 1.f), Vec4(1.f, 1.f, 1.f, 1.f));
+		spec = 1.0f;
 	}
 
 	Vec3 position;
 	Vec4 color;
+	f32 spec;
 };
 TempObj temp_render_objs[g_max_instances];
 
@@ -391,9 +395,14 @@ void Renderer_Dx12::render() {
 
 		const auto& shader_params = render_comp->Materials()[0].shader_params();
 		Vec4 color(1.f, 1.f, 1.f, 1.f);
+		Vec4 spec(0.f, 0.f, 0.f, 1.f);
 		for (const auto& param : shader_params) {
 			if (param.param_name() == kbString("color")) {
 				color = param.vector();
+			}
+
+			if (param.param_name() == kbString("spec")) {
+				spec = param.vector();
 			}
 		}
 		Mat4 world_mat;
@@ -401,12 +410,15 @@ void Renderer_Dx12::render() {
 		world_mat *= render_comp->owner_rotation().to_mat4();
 		world_mat[3] = render_comp->owner_position();
 
+		scene_buffer[0].mvp = (world_mat * vp_matrix).transpose_self();
+		scene_buffer[0].world = world_mat;
+		scene_buffer[0].color = color;
+		scene_buffer[0].spec = spec;
+		scene_buffer[0].camera = Vec4(m_camera_position, 1.f);
 		m_command_list->SetGraphicsRoot32BitConstant(3, 0, 0);
 		m_command_list->DrawIndexedInstanced(index_buffer->num_elements(), 1, 0, 0, 0);
 
-		scene_buffer[0].mvp = (world_mat * vp_matrix).transpose_self();
-		scene_buffer[0].color = color;
-		scene_buffer[0].camera = Vec4(m_camera_position, 1.f);
+
 		for (int i = 0; i < 0; i++) {
 			world_mat.make_scale(Vec3(1.f, 1.f, 1.f));
 			world_mat *= render_comp->owner_rotation().to_mat4();

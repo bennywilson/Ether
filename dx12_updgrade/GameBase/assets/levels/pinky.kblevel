@@ -1,8 +1,8 @@
-kbGameEntity 906099672 1188470542 1717989287 2520788972 {
+kbGameEntity 255620749 1272197868 3219934639 577502799 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		Name = "Entity_4"
+		Name = "Entity_5"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
 		Position = 0.000000 0.000000 0.000000
 		Scale = 1.000000 1.000000 1.000000
@@ -153,13 +153,20 @@ kbGameEntity 2304826171 1239496353 243933317 3983880952 {
 				LifeTime =  -1.000000
 				CullModeOverride = ShaderDefault
 				Shader = NULL
-				ShaderParams = 1
+				ShaderParams = 2
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
 						ParamName = "color"
 						Texture = NULL
 						Vector = 1.000000 1.000000 1.000000 1.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "spec"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 1.000000
 					}
 			}
 		RenderOrderBias =  0.000000
