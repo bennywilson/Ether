@@ -37,8 +37,8 @@ private:
 	MMCKINFO m_ck;
 	MMCKINFO m_ckRiff;
 	DWORD m_dwSize;
-	BYTE* m_pWaveDataBuffer;
 	DWORD m_cbWaveSize;
+	BYTE* m_pWaveDataBuffer;
 };
 
 /// kbSoundManager

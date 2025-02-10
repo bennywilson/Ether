@@ -244,7 +244,7 @@ public:\
 		if ( g_NameToTypeInfoMap == nullptr ) { g_NameToTypeInfoMap = new kbNameToTypeInfoMap(); } \
 		g_NameToTypeInfoMap->AddTypeInfo(this); \
 	} \
-	~CLASS_TYPE##_TypeInfo() { \
+	virtual ~CLASS_TYPE##_TypeInfo() { \
 		/* Go ahead and delete the name-to-typeinfo mapping here.  All typeinfos are deleted together anyways when the program terminates. */ \
 		delete g_NameToTypeInfoMap; \
 		g_NameToTypeInfoMap = nullptr; \

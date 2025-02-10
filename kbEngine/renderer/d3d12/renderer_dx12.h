@@ -38,6 +38,8 @@ private:
 	virtual RenderPipeline* create_pipeline(const std::wstring& path) override;
 	virtual RenderBuffer* create_render_buffer_internal() override;
 
+	void wait_on_fence();
+
 	CD3DX12_VIEWPORT m_view_port;
 	CD3DX12_RECT m_scissor_rect;
 
@@ -59,9 +61,6 @@ private:
 
 	ComPtr<ID3D12DescriptorHeap> m_cbv_srv_heap;
 	ComPtr<ID3D12Resource> m_cbv_upload_heap;
-
-	ComPtr<ID3D12Resource> m_constantBuffer;
-	UINT8* m_cbv_data_begin = nullptr;
 
 	ComPtr<ID3D12Resource> m_render_targets[Renderer::max_frames()];
 

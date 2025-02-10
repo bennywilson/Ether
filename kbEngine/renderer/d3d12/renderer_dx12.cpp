@@ -17,6 +17,17 @@ using namespace std;
 
 const u32 g_max_instances = 1024;
 
+struct SceneInstanceData {
+	Mat4 mvp;
+	Mat4 world;
+	Vec4 color;
+	Vec4 spec;
+	Vec4 camera;
+	Vec4 pad0;;
+	Mat4 pad1[1];
+};
+SceneInstanceData* scene_buffer;
+
 /// Renderer_Dx12::~Renderer_Dx12
 Renderer_Dx12::~Renderer_Dx12() {
 	shut_down();	// function is virtual but called in ~Renderer which is UB
@@ -107,6 +118,51 @@ void Renderer_Dx12::initialize_internal(HWND hwnd, const uint32_t frame_width, c
 	blk::error_check(m_device->CreateDescriptorHeap(&sampler_heap_desc, IID_PPV_ARGS(&m_sampler_heap)));
 	m_sampler_heap->SetName(L"Renderer_Dx12::m_sampler_heap");
 
+	// Sampler
+	D3D12_SAMPLER_DESC sampler_desc = {};
+	sampler_desc.Filter = D3D12_FILTER_MIN_MAG_MIP_LINEAR;
+	sampler_desc.AddressU = D3D12_TEXTURE_ADDRESS_MODE_WRAP;
+	sampler_desc.AddressV = D3D12_TEXTURE_ADDRESS_MODE_WRAP;
+	sampler_desc.AddressW = D3D12_TEXTURE_ADDRESS_MODE_WRAP;
+	sampler_desc.MinLOD = 0;
+	sampler_desc.MaxLOD = D3D12_FLOAT32_MAX;
+	sampler_desc.MipLODBias = 0.0f;
+	sampler_desc.MaxAnisotropy = 1;
+	sampler_desc.ComparisonFunc = D3D12_COMPARISON_FUNC_ALWAYS;
+	m_device->CreateSampler(&sampler_desc, m_sampler_heap->GetCPUDescriptorHandleForHeapStart());
+	
+	// Constants
+	const auto CBV_SRV_DESCRIPTOR_SIZE = m_device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
+
+	// cbv upload heap
+	const auto cbv_heap_props = CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD);
+	const auto cbv_buffer_size = CD3DX12_RESOURCE_DESC::Buffer(g_max_instances * sizeof(SceneInstanceData));
+	blk::error_check(m_device->CreateCommittedResource(
+		&cbv_heap_props,
+		D3D12_HEAP_FLAG_NONE,
+		&cbv_buffer_size,
+		D3D12_RESOURCE_STATE_GENERIC_READ,
+		nullptr,
+		IID_PPV_ARGS(&m_cbv_upload_heap)));
+
+	CD3DX12_RANGE readRange(0, 0);        // We do not intend to read from this resource on the CPU.
+	scene_buffer = nullptr;
+	blk::error_check(m_cbv_upload_heap->Map(0, &readRange, reinterpret_cast<void**>(&scene_buffer)));
+
+	// Constant buffer view
+	UINT64 cb_offset = 0;
+	CD3DX12_CPU_DESCRIPTOR_HANDLE cbvSrvHandle(m_cbv_srv_heap->GetCPUDescriptorHandleForHeapStart(), 0, CBV_SRV_DESCRIPTOR_SIZE);    // Move past the SRVs.
+
+	for (u32 i = 0; i < g_max_instances; i++) {
+		D3D12_CONSTANT_BUFFER_VIEW_DESC cbv_desc = {};
+		cbv_desc.BufferLocation = m_cbv_upload_heap->GetGPUVirtualAddress() + cb_offset;
+		cbv_desc.SizeInBytes = sizeof(SceneInstanceData);
+		cb_offset += cbv_desc.SizeInBytes;
+
+		m_device->CreateConstantBufferView(&cbv_desc, cbvSrvHandle);
+		cbvSrvHandle.Offset(CBV_SRV_DESCRIPTOR_SIZE);
+	}
+
 	// Frame resources
 	CD3DX12_CPU_DESCRIPTOR_HANDLE rtv_handle(m_rtv_heap->GetCPUDescriptorHandleForHeapStart());
 
@@ -118,15 +174,16 @@ void Renderer_Dx12::initialize_internal(HWND hwnd, const uint32_t frame_width, c
 	}
 
 	CD3DX12_DEPTH_STENCIL_DESC depth_stencil_desc = {};
-	depth_stencil_desc.DepthEnable = TRUE; // enable depth testing
-	depth_stencil_desc.DepthWriteMask = D3D12_DEPTH_WRITE_MASK_ALL; // can write depth data to all of the depth/stencil buffer
-	depth_stencil_desc.DepthFunc = D3D12_COMPARISON_FUNC_LESS; // pixel fragment passes depth test if destination pixel's depth is less than pixel fragment's
-	depth_stencil_desc.StencilEnable = FALSE; // disable stencil test
-	depth_stencil_desc.StencilReadMask = D3D12_DEFAULT_STENCIL_READ_MASK; // a default stencil read mask (doesn't matter at this point since stencil testing is turned off)
-	depth_stencil_desc.StencilWriteMask = D3D12_DEFAULT_STENCIL_WRITE_MASK; // a default stencil write mask (also doesn't matter)
-	const D3D12_DEPTH_STENCILOP_DESC defaultStencilOp = // a stencil operation structure, again does not really matter since stencil testing is turned off
-	{ D3D12_STENCIL_OP_KEEP, D3D12_STENCIL_OP_KEEP, D3D12_STENCIL_OP_KEEP, D3D12_COMPARISON_FUNC_ALWAYS };
-	depth_stencil_desc.FrontFace = defaultStencilOp; // both front and back facing polygons get the same treatment
+	depth_stencil_desc.DepthEnable = true;
+	depth_stencil_desc.DepthWriteMask = D3D12_DEPTH_WRITE_MASK_ALL;
+	depth_stencil_desc.DepthFunc = D3D12_COMPARISON_FUNC_LESS;
+	depth_stencil_desc.StencilEnable = false;
+	depth_stencil_desc.StencilReadMask = D3D12_DEFAULT_STENCIL_READ_MASK;
+	depth_stencil_desc.StencilWriteMask = D3D12_DEFAULT_STENCIL_WRITE_MASK;
+
+	const D3D12_DEPTH_STENCILOP_DESC defaultStencilOp = 
+		{ D3D12_STENCIL_OP_KEEP, D3D12_STENCIL_OP_KEEP, D3D12_STENCIL_OP_KEEP, D3D12_COMPARISON_FUNC_ALWAYS };
+	depth_stencil_desc.FrontFace = defaultStencilOp;
 	depth_stencil_desc.BackFace = defaultStencilOp;
 
 	// create a depth stencil descriptor heap so we can get a pointer to the depth stencil buffer
@@ -137,17 +194,17 @@ void Renderer_Dx12::initialize_internal(HWND hwnd, const uint32_t frame_width, c
 	blk::error_check(m_device->CreateDescriptorHeap(&dsvHeapDesc, IID_PPV_ARGS(&m_depth_stencil_heap)));
 
 	D3D12_DEPTH_STENCIL_VIEW_DESC depthStencilDesc = {};
-	depthStencilDesc.Format = DXGI_FORMAT_D32_FLOAT;
+	depthStencilDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
 	depthStencilDesc.ViewDimension = D3D12_DSV_DIMENSION_TEXTURE2D;
 	depthStencilDesc.Flags = D3D12_DSV_FLAG_NONE;
 
 	D3D12_CLEAR_VALUE depthOptimizedClearValue = {};
-	depthOptimizedClearValue.Format = DXGI_FORMAT_D32_FLOAT;
+	depthOptimizedClearValue.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
 	depthOptimizedClearValue.DepthStencil.Depth = 1.0f;
 	depthOptimizedClearValue.DepthStencil.Stencil = 0;
 
 	auto ds_heap_prop = CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT);
-	auto resource_desc = CD3DX12_RESOURCE_DESC::Tex2D(DXGI_FORMAT_D32_FLOAT, m_frame_width, m_frame_height, 1, 0, 1, 0, D3D12_RESOURCE_FLAG_ALLOW_DEPTH_STENCIL);
+	auto resource_desc = CD3DX12_RESOURCE_DESC::Tex2D(DXGI_FORMAT_D24_UNORM_S8_UINT, m_frame_width, m_frame_height, 1, 0, 1, 0, D3D12_RESOURCE_FLAG_ALLOW_DEPTH_STENCIL);
 	m_device->CreateCommittedResource(
 		&ds_heap_prop,
 		D3D12_HEAP_FLAG_NONE,
@@ -163,30 +220,30 @@ void Renderer_Dx12::initialize_internal(HWND hwnd, const uint32_t frame_width, c
 	blk::error_check(m_device->CreateCommandList(0, D3D12_COMMAND_LIST_TYPE_DIRECT, m_command_allocator.Get(), nullptr, IID_PPV_ARGS(&m_command_list)));
 	m_command_list->Close();
 
-	// Root signature
+	// The root signature determines what kind of data the shader should expect.
 	CD3DX12_DESCRIPTOR_RANGE1 ranges[3] = {};
-	ranges[0].Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, 0, 0, D3D12_DESCRIPTOR_RANGE_FLAG_DATA_STATIC);
+	ranges[0].Init(D3D12_DESCRIPTOR_RANGE_TYPE_CBV, g_max_instances, 0, 0, D3D12_DESCRIPTOR_RANGE_FLAG_DATA_STATIC);
 	ranges[1].Init(D3D12_DESCRIPTOR_RANGE_TYPE_SAMPLER, 1, 0);
-	ranges[2].Init(D3D12_DESCRIPTOR_RANGE_TYPE_CBV, g_max_instances, 0, 0, D3D12_DESCRIPTOR_RANGE_FLAG_DATA_STATIC);
+	ranges[2].Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, 0, 0, D3D12_DESCRIPTOR_RANGE_FLAG_DATA_STATIC);
 
-	CD3DX12_ROOT_PARAMETER1 rootParameters[4] = {};
-	rootParameters[0].InitAsDescriptorTable(1, &ranges[0], D3D12_SHADER_VISIBILITY_PIXEL);
-	rootParameters[1].InitAsDescriptorTable(1, &ranges[1], D3D12_SHADER_VISIBILITY_PIXEL);
-	rootParameters[2].InitAsDescriptorTable(1, &ranges[2], D3D12_SHADER_VISIBILITY_VERTEX);
-	rootParameters[3].InitAsConstants(1, 0, 1, D3D12_SHADER_VISIBILITY_VERTEX);
+	// Root parameters are entries in the root signature
+	CD3DX12_ROOT_PARAMETER1 root_parameters[4] = {};
+	root_parameters[0].InitAsDescriptorTable(1, &ranges[0], D3D12_SHADER_VISIBILITY_VERTEX);	// scene_constants
+	root_parameters[1].InitAsDescriptorTable(1, &ranges[1], D3D12_SHADER_VISIBILITY_PIXEL);		// sampler
+	root_parameters[2].InitAsDescriptorTable(1, &ranges[2], D3D12_SHADER_VISIBILITY_PIXEL);		// srv
+	root_parameters[3].InitAsConstants(1, 0, 1, D3D12_SHADER_VISIBILITY_VERTEX);				// scene_indices
 
 	const D3D12_ROOT_SIGNATURE_FLAGS signature_flags = D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT |
 		D3D12_ROOT_SIGNATURE_FLAG_DENY_HULL_SHADER_ROOT_ACCESS |
 		D3D12_ROOT_SIGNATURE_FLAG_DENY_DOMAIN_SHADER_ROOT_ACCESS |
 		D3D12_ROOT_SIGNATURE_FLAG_DENY_GEOMETRY_SHADER_ROOT_ACCESS;
 
-
-	CD3DX12_VERSIONED_ROOT_SIGNATURE_DESC rootSignatureDesc = {};
-	rootSignatureDesc.Init_1_1(_countof(rootParameters), rootParameters, 0, nullptr, signature_flags);
+	CD3DX12_VERSIONED_ROOT_SIGNATURE_DESC root_signature_desc = {};
+	root_signature_desc.Init_1_1(_countof(root_parameters), root_parameters, 0, nullptr, signature_flags);
 
 	ComPtr<ID3DBlob> signature;
 	ComPtr<ID3DBlob> error;
-	if (!blk::warn_check(D3DX12SerializeVersionedRootSignature(&rootSignatureDesc, D3D_ROOT_SIGNATURE_VERSION_1, &signature, &error))) {
+	if (!blk::warn_check(D3DX12SerializeVersionedRootSignature(&root_signature_desc, D3D_ROOT_SIGNATURE_VERSION_1, &signature, &error))) {
 		blk::error("%s", error->GetBufferPointer());
 	}
 	blk::error_check(m_device->CreateRootSignature(0, signature->GetBufferPointer(), signature->GetBufferSize(), IID_PPV_ARGS(&m_root_signature)));
@@ -201,7 +258,6 @@ void Renderer_Dx12::initialize_internal(HWND hwnd, const uint32_t frame_width, c
 		blk::error_check(HRESULT_FROM_WIN32(GetLastError()));
 	}
 
-	auto pipe = (RenderPipeline_D3D12*)load_pipeline("test_shader", L"C:/projects/Ether/dx12_updgrade/GameBase/assets/shaders/test_shader.hlsl");
 	todo_create_texture();
 
 	blk::log("Renderer_Dx12 initialized");
@@ -209,19 +265,7 @@ void Renderer_Dx12::initialize_internal(HWND hwnd, const uint32_t frame_width, c
 
 /// Renderer_Dx12::shut_down_internal
 void Renderer_Dx12::shut_down_internal() {
-	const UINT64 fence = m_fence_value;
-	const UINT64 lastCompletedFence = m_fence->GetCompletedValue();
-
-	// Signal and increment the fence value.
-	blk::error_check(m_queue->Signal(m_fence.Get(), m_fence_value));
-	m_fence_value++;
-
-	// Wait until the previous frame is finished.
-	if (lastCompletedFence < fence)
-	{
-		blk::error_check(m_fence->SetEventOnCompletion(fence, m_fence_event));
-		WaitForSingleObject(m_fence_event, INFINITE);
-	}
+	wait_on_fence();
 
 	m_cbv_upload_heap->Unmap(0, nullptr);
 
@@ -306,17 +350,6 @@ void Renderer_Dx12::get_hardware_adapter(
 RenderBuffer* Renderer_Dx12::create_render_buffer_internal() {
 	return new RenderBuffer_D3D12();
 }
-
-struct SceneInstanceData {
-	Mat4 mvp;
-	Mat4 world;
-	Vec4 color;
-	Vec4 spec;
-	Vec4 camera;
-	Vec4 pad0;;
-	Mat4 pad1[1];
-};
-SceneInstanceData* scene_buffer;
 
 const float g_temp_bound = 10.f;
 struct TempObj {
@@ -446,15 +479,7 @@ void Renderer_Dx12::render() {
 	blk::error_check(m_swap_chain->Present(1, 0));
 
 	// Wait for previous frame (todo)
-	const uint64_t fence = m_fence_value;
-	blk::error_check(m_queue->Signal(m_fence.Get(), fence));
-	m_fence_value++;
-
-	// Wait until the previous frame is finished.
-	if (m_fence->GetCompletedValue() < fence) {
-		blk::error_check(m_fence->SetEventOnCompletion(fence, m_fence_event));
-		WaitForSingleObject(m_fence_event, INFINITE);
-	}
+	wait_on_fence();
 
 	m_frame_index = m_swap_chain->GetCurrentBackBufferIndex();
 }
@@ -521,6 +546,7 @@ RenderPipeline* Renderer_Dx12::create_pipeline(const wstring& path) {
 	psoDesc.RasterizerState = raster;
 	psoDesc.BlendState = CD3DX12_BLEND_DESC(D3D12_DEFAULT);
 	psoDesc.DepthStencilState = CD3DX12_DEPTH_STENCIL_DESC(D3D12_DEFAULT); // a default depth stencil state
+	psoDesc.DSVFormat = DXGI_FORMAT_D24_UNORM_S8_UINT;
 	psoDesc.SampleMask = UINT_MAX;
 	psoDesc.PrimitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;
 	psoDesc.NumRenderTargets = 1;
@@ -534,6 +560,8 @@ RenderPipeline* Renderer_Dx12::create_pipeline(const wstring& path) {
 
 /// Renderer_Dx12::todo_create_texture
 void Renderer_Dx12::todo_create_texture() {
+	auto pipe = (RenderPipeline_D3D12*)load_pipeline("test_shader", L"C:/projects/Ether/dx12_updgrade/GameBase/assets/shaders/test_shader.hlsl");
+
 	blk::error_check(m_command_allocator->Reset());
 	blk::error_check(m_command_list->Reset(m_command_allocator.Get(), nullptr));
 
@@ -546,7 +574,7 @@ void Renderer_Dx12::todo_create_texture() {
 		tex.ReleaseAndGetAddressOf(),
 		ddsData,
 		subresources));
-
+	
 	// Create gpu upload buffer
 	const uint64_t upload_buff_size = GetRequiredIntermediateSize(tex.Get(), 0, (uint32_t)subresources.size());
 	ComPtr<ID3D12Resource> upload_resource;
@@ -567,18 +595,7 @@ void Renderer_Dx12::todo_create_texture() {
 	auto tex_barrier = CD3DX12_RESOURCE_BARRIER::Transition(tex.Get(), D3D12_RESOURCE_STATE_COPY_DEST, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
 	m_command_list->ResourceBarrier(1, &tex_barrier);
 
-	// Sampler
-	D3D12_SAMPLER_DESC sampler_desc = {};
-	sampler_desc.Filter = D3D12_FILTER_MIN_MAG_MIP_LINEAR;
-	sampler_desc.AddressU = D3D12_TEXTURE_ADDRESS_MODE_WRAP;
-	sampler_desc.AddressV = D3D12_TEXTURE_ADDRESS_MODE_WRAP;
-	sampler_desc.AddressW = D3D12_TEXTURE_ADDRESS_MODE_WRAP;
-	sampler_desc.MinLOD = 0;
-	sampler_desc.MaxLOD = D3D12_FLOAT32_MAX;
-	sampler_desc.MipLODBias = 0.0f;
-	sampler_desc.MaxAnisotropy = 1;
-	sampler_desc.ComparisonFunc = D3D12_COMPARISON_FUNC_ALWAYS;
-	m_device->CreateSampler(&sampler_desc, m_sampler_heap->GetCPUDescriptorHandleForHeapStart());
+
 
 	// Texture srv
 	D3D12_SHADER_RESOURCE_VIEW_DESC srv_desc = {};
@@ -587,47 +604,18 @@ void Renderer_Dx12::todo_create_texture() {
 	srv_desc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D;
 	srv_desc.Texture2D.MipLevels = 1;
 
-	CD3DX12_CPU_DESCRIPTOR_HANDLE texHandle(m_cbv_srv_heap->GetCPUDescriptorHandleForHeapStart(), 0, m_device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_SAMPLER));
+	CD3DX12_CPU_DESCRIPTOR_HANDLE texHandle(m_cbv_srv_heap->GetCPUDescriptorHandleForHeapStart(), 1, m_device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_SAMPLER));
 	m_device->CreateShaderResourceView(tex.Get(), &srv_desc, texHandle);
-
-
-	const auto CBV_SRV_DESCRIPTOR_SIZE = m_device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
-	// Constant buffer view upload heap
-	auto cbv_heap_props = CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD);
-	auto cbv_buffer_size = CD3DX12_RESOURCE_DESC::Buffer(g_max_instances * sizeof(SceneInstanceData));
-	blk::error_check(m_device->CreateCommittedResource(
-		&cbv_heap_props,
-		D3D12_HEAP_FLAG_NONE,
-		&cbv_buffer_size,
-		D3D12_RESOURCE_STATE_GENERIC_READ,
-		nullptr,
-		IID_PPV_ARGS(&m_cbv_upload_heap)));
-
-	CD3DX12_RANGE readRange(0, 0);        // We do not intend to read from this resource on the CPU.
-	scene_buffer = nullptr;
-	blk::error_check(m_cbv_upload_heap->Map(0, &readRange, reinterpret_cast<void**>(&scene_buffer)));
-
-	// Constant buffer view
-	UINT64 cbOffset = 0;
-
-	CD3DX12_CPU_DESCRIPTOR_HANDLE cbvSrvHandle(m_cbv_srv_heap->GetCPUDescriptorHandleForHeapStart(), 1, CBV_SRV_DESCRIPTOR_SIZE);    // Move past the SRVs.
-
-	for (u32 i = 0; i < g_max_instances; i++) {
-		D3D12_CONSTANT_BUFFER_VIEW_DESC cbvDesc = {};
-		cbvDesc.BufferLocation = m_cbv_upload_heap->GetGPUVirtualAddress() + cbOffset;
-		cbvDesc.SizeInBytes = sizeof(SceneInstanceData);
-		cbOffset += sizeof(SceneInstanceData);
-		m_device->CreateConstantBufferView(&cbvDesc, cbvSrvHandle);
-		cbvSrvHandle.Offset(CBV_SRV_DESCRIPTOR_SIZE);
-	}
 
 	// Close the command list and execute it to begin the initial GPU setup.
 	blk::error_check(m_command_list->Close());
 	ID3D12CommandList* ppCommandLists[] = { m_command_list.Get() };
 	m_queue->ExecuteCommandLists(_countof(ppCommandLists), ppCommandLists);
 
-	blk::error_check(m_device->CreateFence(0, D3D12_FENCE_FLAG_NONE, IID_PPV_ARGS(&m_fence)));
+	wait_on_fence();
+}
 
+void Renderer_Dx12::wait_on_fence() {
 	// Wait for previous frame (todo)
 	const uint64_t fence = m_fence_value;
 	blk::error_check(m_queue->Signal(m_fence.Get(), fence));
