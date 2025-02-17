@@ -17,8 +17,6 @@ class Renderer_Sw : public Renderer {
 public:
 	~Renderer_Sw();
 
-	virtual void render() override;
-
 	ComPtr<ID3D12Device> get_device() const { return m_device; }
 
 protected:
@@ -37,6 +35,9 @@ private:
 
 	virtual RenderPipeline* create_pipeline(const std::wstring& path) override;
 	virtual RenderBuffer* create_render_buffer_internal() override;
+
+	virtual void render() override;
+	void render_software_rasterization();
 
 	void wait_on_fence();
 
@@ -63,9 +64,6 @@ private:
 	ComPtr<ID3D12Resource> m_cbv_upload_heap;
 
 	ComPtr<ID3D12Resource> m_render_targets[Renderer::max_frames()];
-
-	ComPtr<ID3D12Resource> m_depth_stencil_buffer; // This is the memory for our depth buffer. it will also be used for a stencil buffer in a later tutorial
-	ComPtr<ID3D12DescriptorHeap> m_depth_stencil_heap; // This is a heap for our depth/stencil buffer descriptor
 
 	ComPtr<ID3D12Resource> m_vertex_buffer;
 	D3D12_VERTEX_BUFFER_VIEW m_screen_vertex_view;

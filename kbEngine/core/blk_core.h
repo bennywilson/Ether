@@ -48,7 +48,11 @@ typedef unsigned short ushort;
 typedef unsigned int uint;
 typedef float f32;
 typedef double f64;
+
+typedef uint8_t u8;
 typedef uint32_t u32;
+typedef uint64_t u64;
+
 typedef int32_t i32;
 
 ///	kbGUID - Each kbGameEntity is given a GUID at construction that is saved out and referenced across multiple files
