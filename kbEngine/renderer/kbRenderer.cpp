@@ -234,12 +234,10 @@ void kbRenderer::Init(HWND hwnd, const int width, const int height) {
 
 	Init_Internal(hwnd, width, height);
 
-	if (g_renderer == nullptr) {
-		// Kick off render thread
-		m_pRenderJob = new kbRenderJob();
-		g_pJobManager->RegisterJob(m_pRenderJob);
-	}
-
+	// Kick off render thread
+	m_pRenderJob = new kbRenderJob();
+	g_pJobManager->RegisterJob(m_pRenderJob);
+	
 	blk::log("	Rendered Initialized.  Took %f seconds", g_GlobalTimer.TimeElapsedSeconds() - startInitTime);
 }
 

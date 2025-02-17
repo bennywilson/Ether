@@ -17,12 +17,11 @@ class Renderer_Vk : public Renderer {
 public:
 	virtual ~Renderer_Vk();
 
-	virtual void shut_down() override;
-
 	virtual void render() override;
 
 protected:
-	virtual void initialize(HWND hwnd, const uint32_t frameWidth, const uint32_t frameHeight) override;
+	virtual void initialize_internal(HWND hwnd, const uint32_t frameWidth, const uint32_t frameHeight) override;
+	virtual void shut_down_internal() override;
 
 private:
 	virtual RenderPipeline* create_pipeline(const std::wstring& path) override;

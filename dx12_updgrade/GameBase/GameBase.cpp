@@ -13,6 +13,7 @@
 #include "dx11/kbRenderer_DX11.h"
 #include "Renderer_Dx12.h"
 #include "renderer_vk.h"
+#include "sw/renderer_sw.h"
 
 #define MAX_LOADSTRING 100
 
@@ -192,8 +193,8 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 	mapName = "pinky";
 
 	// Toggles
-	g_UseEditor = true;
-	bool use_d3d12 = true;
+//	g_UseEditor = true;
+	bool use_d3d12 = false;
 
 	// Perform application initialization
 	if (!InitInstance(hInstance, nCmdShow)) {
@@ -215,8 +216,10 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 
 		if (use_d3d12) {
 			g_renderer = new Renderer_Dx12();
-			g_renderer->initialize(applicationEditor->main_viewport_hwnd(), g_screen_width, g_screen_height);
+		} else {
+			g_renderer = new Renderer_Sw();
 		}
+		g_renderer->initialize(applicationEditor->main_viewport_hwnd(), g_screen_width, g_screen_height);
 
 		if (mapName.length() > 0) {
 			applicationEditor->LoadMap(mapName);
@@ -224,15 +227,17 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 	} else {
 		if (use_d3d12) {
 			g_renderer = new Renderer_Dx12();
-			g_renderer->initialize(hWnd, g_screen_width, g_screen_height);
+		} else {
+			g_renderer = new Renderer_Sw();
 		}
-		
-		g_pRenderer = new kbRenderer_DX11();
-		g_pRenderer->Init(hWnd, g_screen_width, g_screen_height);
-		pGame = new EtherGame();
+		g_renderer->initialize(hWnd, g_screen_width, g_screen_height);
+//
+	//	g_pRenderer = new kbRenderer_DX11();
+	//	g_pRenderer->Init(hWnd, g_screen_width, g_screen_height);
+	//	pGame = new EtherGame();
 		std::vector<const kbGameEntity*> GameEntitiesList;
-		pGame->InitGame(hWnd, g_screen_width, g_screen_height, GameEntitiesList);
-		pGame->LoadMap(mapName);
+	//	pGame->InitGame(hWnd, g_screen_width, g_screen_height, GameEntitiesList);
+	//	pGame->LoadMap(mapName);
 	}
 
 	// Main message loop
@@ -250,7 +255,7 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 				}
 				applicationEditor->Update();
 			} else {
-				pGame->Update();
+			//	pGame->Update();
 			}
 			
 			if (g_renderer != nullptr) {

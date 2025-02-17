@@ -318,7 +318,6 @@
     <ClInclude Include="renderer\vk\renderer_vk.h" />
     <ClInclude Include="renderer\vk\vk_defs.h" />
     <ClInclude Include="core\blk_containers.h" />
-    <ClInclude Include="renderer\rt\renderer_rt.h" />
     <ClInclude Include="renderer\sw\renderer_sw.h" />
     <ClInclude Include="renderer\d3d12\renderer_dx12.h" />
     <ClInclude Include="game\render_component.h" />
@@ -472,7 +471,6 @@
     <ClCompile Include="renderer\renderer.cpp" />
     <ClCompile Include="renderer\vk\renderer_vk.cpp" />
     <ClCompile Include="renderer\vk\vk_defs.cpp" />
-    <ClCompile Include="renderer\rt\renderer_rt.cpp" />
     <ClCompile Include="renderer\sw\renderer_sw.cpp" />
     <ClCompile Include="renderer\d3d12\renderer_dx12.cpp" />
     <ClCompile Include="game\render_component.cpp" />

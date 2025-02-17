@@ -20,8 +20,8 @@ public:
 
 	static constexpr uint32_t max_frames() { return 2; }
 
-	virtual void initialize(HWND hwnd, const uint32_t frame_width, const uint32_t frame_height);
-	virtual void shut_down();
+	void initialize(HWND hwnd, const uint32_t frame_width, const uint32_t frame_height);
+	void shut_down();
 
 	virtual void render() = 0;
 

@@ -9,11 +9,8 @@
 /// Renderer_Vk::~Renderer_Vk
 Renderer_Vk::~Renderer_Vk() { }
 
-/// Renderer_Vk::shut_down
-void Renderer_Vk::shut_down() { }
-
-/// Renderer_Vk::initialize
-void Renderer_Vk::initialize(HWND hwnd, const uint32_t frameWidth, const uint32_t frameHeight) {
+/// Renderer_Vk::initialize_internal
+void Renderer_Vk::initialize_internal(HWND hwnd, const uint32_t frameWidth, const uint32_t frameHeight) {
 	// Get supported extensions
 	uint32_t extCount = 0;
 	vkEnumerateInstanceExtensionProperties(nullptr, &extCount, nullptr);
@@ -85,6 +82,11 @@ void Renderer_Vk::initialize(HWND hwnd, const uint32_t frameWidth, const uint32_
 /*	VkPipelineCacheCreateInfo pipelineCacheCreateInfo = {};
 	pipelineCacheCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_CACHE_CREATE_INFO;
 	check_vk(vkCreatePipelineCache(m_device, &pipelineCacheCreateInfo, nullptr, &pipelineCache));*/
+}
+
+/// Renderer_Vk::shut_down_internal
+void Renderer_Vk::shut_down_internal() {
+
 }
 
 /// Renderer_Vk::create_pipeline

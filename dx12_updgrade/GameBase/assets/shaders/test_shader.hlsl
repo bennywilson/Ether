@@ -19,7 +19,7 @@ SamplerState SampleType : register(s0);
 Texture2D shaderTexture : register(t0);
 
 /// VertexInput
-struct vertexInput {
+struct VertexInput {
 	float4 position		: POSITION;
 	float2 uv			: TEXCOORD0;
 	float4 color		: COLOR;
