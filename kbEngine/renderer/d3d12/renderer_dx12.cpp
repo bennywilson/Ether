@@ -4,7 +4,7 @@
 
 #include <d3d12sdklayers.h>
 #include "blk_core.h"
-#include "Renderer_Dx12.h"
+#include "renderer_dx12.h"
 #include <dxgi1_6.h>
 #include <d3dcompiler.h>
 #include "d3dx12.h"
@@ -15,9 +15,9 @@
 
 using namespace std;
 
-const u32 g_max_instances = 1024;
+static const u32 g_max_instances = 1024;
 
-struct SceneInstanceData {
+static struct SceneInstanceData {
 	Mat4 mvp;
 	Mat4 world;
 	Vec4 color;
@@ -25,8 +25,7 @@ struct SceneInstanceData {
 	Vec4 camera;
 	Vec4 pad0;;
 	Mat4 pad1[1];
-};
-SceneInstanceData* scene_buffer;
+}* scene_buffer;
 
 /// Renderer_Dx12::~Renderer_Dx12
 Renderer_Dx12::~Renderer_Dx12() {
@@ -352,7 +351,7 @@ RenderBuffer* Renderer_Dx12::create_render_buffer_internal() {
 }
 
 const float g_temp_bound = 10.f;
-struct TempObj {
+static struct TempObj {
 	TempObj() {
 		position = Vec3Rand(Vec3(-g_temp_bound, -g_temp_bound, -g_temp_bound), Vec3(g_temp_bound, g_temp_bound, g_temp_bound));
 		color = Vec4Rand(Vec4(0.5f, 0.5f, 0.5f, 1.f), Vec4(1.f, 1.f, 1.f, 1.f));
@@ -362,8 +361,7 @@ struct TempObj {
 	Vec3 position;
 	Vec4 color;
 	f32 spec;
-};
-TempObj temp_render_objs[g_max_instances];
+} temp_render_objs[g_max_instances];
 
 /// Renderer_Dx12::render
 void Renderer_Dx12::render() {

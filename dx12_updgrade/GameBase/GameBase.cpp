@@ -193,8 +193,8 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 	mapName = "pinky";
 
 	// Toggles
-//	g_UseEditor = true;
-	bool use_d3d12 = false;
+	g_UseEditor = true;
+	u32 use_d3d12 = 1;
 
 	// Perform application initialization
 	if (!InitInstance(hInstance, nCmdShow)) {
@@ -232,12 +232,12 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 		}
 		g_renderer->initialize(hWnd, g_screen_width, g_screen_height);
 //
-	//	g_pRenderer = new kbRenderer_DX11();
-	//	g_pRenderer->Init(hWnd, g_screen_width, g_screen_height);
-	//	pGame = new EtherGame();
+		g_pRenderer = new kbRenderer_DX11();
+		g_pRenderer->Init(hWnd, g_screen_width, g_screen_height);
+		pGame = new EtherGame();
 		std::vector<const kbGameEntity*> GameEntitiesList;
-	//	pGame->InitGame(hWnd, g_screen_width, g_screen_height, GameEntitiesList);
-	//	pGame->LoadMap(mapName);
+		pGame->InitGame(hWnd, g_screen_width, g_screen_height, GameEntitiesList);
+		pGame->LoadMap(mapName);
 	}
 
 	// Main message loop
@@ -255,7 +255,7 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 				}
 				applicationEditor->Update();
 			} else {
-			//	pGame->Update();
+				pGame->Update();
 			}
 			
 			if (g_renderer != nullptr) {
