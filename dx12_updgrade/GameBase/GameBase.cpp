@@ -194,7 +194,7 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 
 	// Toggles
 	g_UseEditor = true;
-	u32 use_d3d12 = 1;
+	u32 use_d3d12 = 0;
 
 	// Perform application initialization
 	if (!InitInstance(hInstance, nCmdShow)) {

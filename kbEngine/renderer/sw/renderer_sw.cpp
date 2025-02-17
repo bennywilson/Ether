@@ -25,7 +25,7 @@ static struct SceneInstanceData {
 	Vec4 camera;
 	Vec4 pad0;;
 	Mat4 pad1[1];
-}* scene_buffer;
+}*scene_buffer;
 
 /// Renderer_Sw::~Renderer_Sw
 Renderer_Sw::~Renderer_Sw() {
@@ -247,6 +247,58 @@ void Renderer_Sw::initialize_internal(HWND hwnd, const uint32_t frame_width, con
 	}
 	blk::error_check(m_device->CreateRootSignature(0, signature->GetBufferPointer(), signature->GetBufferSize(), IID_PPV_ARGS(&m_root_signature)));
 
+	// Create the vertex buffer.
+	{
+		// Define the geometry for a triangle.
+		vertexLayout verts[6] = {};
+		verts[0].position.set(-1.f, 1.f, 0.f);
+		verts[0].uv.set(0.f, 0.f);
+
+		verts[1].position.set(1.f, 1.f, 0.f);
+		verts[1].uv.set(1.f, 0.f);
+
+		verts[2].position.set(-1.f, -1.f, 0.f);
+		verts[2].uv.set(0.f, 1.f);
+
+		verts[3].position.set(1.f, 1.f, 0.f);
+		verts[3].uv.set(1.f, 0.f);
+
+		verts[4].position.set(1.f, -1.f, 0.f);
+		verts[4].uv.set(1.f, -1.f);
+
+		verts[5].position.set(-1.f, -1.f, 0.f);
+		verts[5].uv.set(0.f, 1.f);
+
+		const UINT vertexBufferSize = sizeof(verts);
+
+		// Note: using upload heaps to transfer static data like vert buffers is not 
+		// recommended. Every time the GPU needs it, the upload heap will be marshalled 
+		// over. Please read up on Default Heap usage. An upload heap is used here for 
+		// code simplicity and because there are very few verts to actually transfer.
+		auto upload_flags = CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD);
+		auto buffer = CD3DX12_RESOURCE_DESC::Buffer(vertexBufferSize);
+
+		blk::error_check(m_device->CreateCommittedResource(
+			&upload_flags,
+			D3D12_HEAP_FLAG_NONE,
+			&buffer,
+			D3D12_RESOURCE_STATE_GENERIC_READ,
+			nullptr,
+			IID_PPV_ARGS(&m_vertex_buffer)));
+
+		// Copy the triangle data to the vertex buffer.
+		UINT8* pVertexDataBegin = nullptr;
+		CD3DX12_RANGE readRange(0, 0);        // We do not intend to read from this resource on the CPU.
+		blk::error_check(m_vertex_buffer->Map(0, &readRange, reinterpret_cast<void**>(&pVertexDataBegin)));
+		memcpy(pVertexDataBegin, verts, vertexBufferSize);
+		m_vertex_buffer->Unmap(0, nullptr);
+
+		// Initialize the vertex buffer view.
+		m_screen_vertex_view.BufferLocation = m_vertex_buffer->GetGPUVirtualAddress();
+		m_screen_vertex_view.StrideInBytes = sizeof(vertexLayout);
+		m_screen_vertex_view.SizeInBytes = vertexBufferSize;
+	}
+
 	// Fences	
 	blk::error_check(m_device->CreateFence(0, D3D12_FENCE_FLAG_NONE, IID_PPV_ARGS(&m_fence)));
 	m_fence_value = 1;
@@ -404,7 +456,7 @@ void Renderer_Sw::render() {
 	m_command_list->ClearDepthStencilView(dsv_handle, D3D12_CLEAR_FLAG_DEPTH, 1.0f, 0, 0, nullptr);
 
 
-	/*8RenderPipeline_D3D12* const pipe = (RenderPipeline_D3D12*)get_pipeline("test_shader");
+	RenderPipeline_D3D12* const pipe = (RenderPipeline_D3D12*)get_pipeline("screen_shader");
 	m_command_list->SetPipelineState(pipe->m_pipeline_state.Get());
 
 	auto vertex_buffer = (RenderBuffer_D3D12*)get_render_buffer(0);
@@ -421,7 +473,10 @@ void Renderer_Sw::render() {
 	CD3DX12_GPU_DESCRIPTOR_HANDLE gpu_handle(m_cbv_srv_heap->GetGPUDescriptorHandleForHeapStart(), 1, descriptor_size);
 	m_command_list->SetGraphicsRootDescriptorTable(2, gpu_handle);
 
-	for (auto render_comp : this->render_components()) {
+	m_command_list->IASetVertexBuffers(0, 1, &m_screen_vertex_view);
+	m_command_list->DrawInstanced(3, 1, 0, 0);
+
+	/*for (auto render_comp : this->render_components()) {
 		m_command_list->IASetVertexBuffers(0, 1, &vertex_buffer->vertex_buffer_view());
 		m_command_list->IASetIndexBuffer(&index_buffer->index_buffer_view());
 
@@ -464,7 +519,6 @@ void Renderer_Sw::render() {
 		}
 	}
 	*/
-
 	// Indicate that the back buffer will now be used to present.
 	auto res_barrier = CD3DX12_RESOURCE_BARRIER::Transition(m_render_targets[m_frame_index].Get(), D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PRESENT);
 	m_command_list->ResourceBarrier(1, &res_barrier);
@@ -485,7 +539,7 @@ void Renderer_Sw::render() {
 
 /// Renderer_Sw::create_pipeline
 RenderPipeline* Renderer_Sw::create_pipeline(const wstring& path) {
-/*#if defined(_DEBUG)
+#if defined(_DEBUG)
 	// Enable better shader debugging with the graphics debugging tools.
 	UINT compileFlags = D3DCOMPILE_DEBUG | D3DCOMPILE_SKIP_OPTIMIZATION | D3DCOMPILE_WARNINGS_ARE_ERRORS;
 #else
@@ -554,29 +608,40 @@ RenderPipeline* Renderer_Sw::create_pipeline(const wstring& path) {
 	RenderPipeline_D3D12* const pipe = new RenderPipeline_D3D12();
 	blk::error_check(m_device->CreateGraphicsPipelineState(&psoDesc, IID_PPV_ARGS(&pipe->m_pipeline_state)));
 
-	return (RenderPipeline*)pipe;*/
+	return (RenderPipeline*)pipe;
 	return nullptr;
 }
 
 /// Renderer_Sw::todo_create_texture
 void Renderer_Sw::todo_create_texture() {
-	auto pipe = (RenderPipeline_D3D12*)load_pipeline("test_shader", L"C:/projects/Ether/dx12_updgrade/GameBase/assets/shaders/test_shader.hlsl");
+	auto pipe = (RenderPipeline_D3D12*)load_pipeline("screen_shader", L"C:/projects/Ether/dx12_updgrade/GameBase/assets/shaders/screen_shader.hlsl");
 
 	blk::error_check(m_command_allocator->Reset());
 	blk::error_check(m_command_list->Reset(m_command_allocator.Get(), nullptr));
 
 	// Load texture 
-	std::unique_ptr<uint8_t[]> ddsData;
-	std::vector<D3D12_SUBRESOURCE_DATA> subresources;
-	blk::error_check(LoadDDSTextureFromFile(
-		m_device.Get(),
-		L"C:/projects/Ether/dx12_updgrade/GameBase/assets/Test/pinky.dds",
-		tex.ReleaseAndGetAddressOf(),
-		ddsData,
-		subresources));
-
+	D3D12_RESOURCE_DESC textureDesc = {};
+	textureDesc.MipLevels = 1;
+	textureDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+	textureDesc.Width = 1024;
+	textureDesc.Height = 1024;
+	textureDesc.Flags = D3D12_RESOURCE_FLAG_NONE;
+	textureDesc.DepthOrArraySize = 1;
+	textureDesc.SampleDesc.Count = 1;
+	textureDesc.SampleDesc.Quality = 0;
+	textureDesc.Dimension = D3D12_RESOURCE_DIMENSION_TEXTURE2D;
+	auto default_heap_props = CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT);
+	m_device->CreateCommittedResource(
+		&default_heap_props,
+		D3D12_HEAP_FLAG_NONE,
+		&textureDesc,
+		D3D12_RESOURCE_STATE_COPY_DEST,
+		nullptr,
+		IID_PPV_ARGS(&tex));
 	// Create gpu upload buffer
-	const uint64_t upload_buff_size = GetRequiredIntermediateSize(tex.Get(), 0, (uint32_t)subresources.size());
+	//const uint64_t upload_buff_size = GetRequiredIntermediateSize(tex.Get(), 0, (uint32_t)subresources.size());
+	const UINT64 upload_buff_size = GetRequiredIntermediateSize(tex.Get(), 0, 1);
+
 	ComPtr<ID3D12Resource> upload_resource;
 	auto upload_heap_props = CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD);
 	auto upload_heap_buff_size = CD3DX12_RESOURCE_DESC::Buffer(upload_buff_size);
@@ -589,18 +654,30 @@ void Renderer_Sw::todo_create_texture() {
 			nullptr,
 			IID_PPV_ARGS(&upload_resource)));
 
+
+	std::vector<uint8_t> tex_data;
+	for (int i = 0; i < 1024 * 1024 * 4; i += 4) {
+		tex_data.push_back(0);
+		tex_data.push_back(255);
+		tex_data.push_back(255);
+		tex_data.push_back(255);
+
+	}
+
+	D3D12_SUBRESOURCE_DATA textureData = {};
+	textureData.pData = &tex_data[0];
+	textureData.RowPitch = 1024 * 4;
+	textureData.SlicePitch = textureData.RowPitch * 1024;
 	UpdateSubresources(m_command_list.Get(), tex.Get(), upload_resource.Get(),
-		0, 0, static_cast<UINT>(subresources.size()), subresources.data());
+		0, 0, 1, &textureData);
 
 	auto tex_barrier = CD3DX12_RESOURCE_BARRIER::Transition(tex.Get(), D3D12_RESOURCE_STATE_COPY_DEST, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
 	m_command_list->ResourceBarrier(1, &tex_barrier);
 
-
-
 	// Texture srv
 	D3D12_SHADER_RESOURCE_VIEW_DESC srv_desc = {};
 	srv_desc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
-	srv_desc.Format = DXGI_FORMAT_BC1_UNORM;
+	srv_desc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
 	srv_desc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D;
 	srv_desc.Texture2D.MipLevels = 1;
 

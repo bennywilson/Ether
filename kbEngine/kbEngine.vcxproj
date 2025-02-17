@@ -57,7 +57,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>VK_USE_PLATFORM_WIN32_KHR;_XM_NO_INTRINSICS_;WIN32;_DEBUG;_LIB;SDL_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>VK_USE_PLATFORM_WIN32_KHR;_XM_NO_INTRINSICS_;WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <TreatWarningAsError>false</TreatWarningAsError>
       <BufferSecurityCheck>false</BufferSecurityCheck>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
@@ -70,7 +70,7 @@
     </Link>
     <Lib>
       <OutputFile>./lib/kbEngineD.lib</OutputFile>
-      <AdditionalDependencies>dxgi.lib;d3dcompiler.lib;d3d11.lib;d3d12.lib;fltkd.lib;libfbxsdk-md.lib;libxml2-md.lib;SDL3.lib;vulkan-1.lib;winmm.lib;zlib-md.lib</AdditionalDependencies>
+      <AdditionalDependencies>dxgi.lib;d3dcompiler.lib;d3d11.lib;d3d12.lib;fltkd.lib;libfbxsdk-md.lib;libxml2-md.lib;vulkan-1.lib;winmm.lib;zlib-md.lib</AdditionalDependencies>
       <IgnoreAllDefaultLibraries>true</IgnoreAllDefaultLibraries>
     </Lib>
     <ProjectReference>

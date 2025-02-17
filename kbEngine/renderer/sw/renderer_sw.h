@@ -67,6 +67,9 @@ private:
 	ComPtr<ID3D12Resource> m_depth_stencil_buffer; // This is the memory for our depth buffer. it will also be used for a stencil buffer in a later tutorial
 	ComPtr<ID3D12DescriptorHeap> m_depth_stencil_heap; // This is a heap for our depth/stencil buffer descriptor
 
+	ComPtr<ID3D12Resource> m_vertex_buffer;
+	D3D12_VERTEX_BUFFER_VIEW m_screen_vertex_view;
+
 	// Fences
 	ComPtr<ID3D12Fence> m_fence;
 	uint64_t m_fence_value = 0;
