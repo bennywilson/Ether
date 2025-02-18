@@ -209,7 +209,7 @@ void Renderer_Sw::initialize_internal(HWND hwnd, const uint32_t frame_width, con
 		verts[3].uv.set(1.f, 0.f);
 
 		verts[4].position.set(1.f, -1.f, 0.f);
-		verts[4].uv.set(1.f, -1.f);
+		verts[4].uv.set(1.f, 1.f);
 
 		verts[5].position.set(-1.f, -1.f, 0.f);
 		verts[5].uv.set(0.f, 1.f);
@@ -477,21 +477,59 @@ void Renderer_Sw::render() {
 
 /// Renderer_Sw::render_software_rasterization
 void Renderer_Sw::render_software_rasterization() {
+	// Update constant buffer
+	m_camera_projection.make_identity();
+	m_camera_projection.create_perspective_matrix(
+		kbToRadians(50.),
+		1197.f / (float)854,
+		1.f, 20000.f
+	);
+
+	const Mat4 trans = Mat4::make_translation(-m_camera_position);
+	Mat4 rot = m_camera_rotation.to_mat4();
+	rot.transpose_self();
+
+	Mat4 view_matrix = trans * rot;
+	Mat4 vp_matrix =
+		view_matrix *
+		m_camera_projection;
+
 
 	std::vector<u8> tex_data;
-	tex_data.reserve((size_t)m_frame_width * m_frame_height * 4);
-
+	tex_data.resize((size_t)m_frame_width * m_frame_height * 4);
 
 	// Temp
-	for (size_t i = 0; i < (size_t)m_frame_width * m_frame_height * 4; i += 4) {
-		tex_data.push_back(0);
-		tex_data.push_back(255);
-		tex_data.push_back(0);
-		tex_data.push_back(0);
+	memset(&tex_data[0], 0xffffffff, sizeof(m_frame_width * m_frame_height * 4));
 
+	for (auto render_comp : this->render_components()) {
+		if (render_comp->IsA(kbStaticModelComponent::GetType())) {
+			const kbStaticModelComponent* const skel_comp = (kbStaticModelComponent*)render_comp;
+			const kbModel* const model = skel_comp->model();
+			const kbModel::mesh_t& mesh = model->GetMeshes()[0];
+
+			Mat4 world_mat;
+			world_mat.make_scale(render_comp->owner_scale());
+			world_mat *= render_comp->owner_rotation().to_mat4();
+			world_mat[3] = render_comp->owner_position();
+
+			Mat4 final_mat = world_mat * vp_matrix;
+
+			for (size_t i = 0; i < mesh.m_Vertices.size(); i++) {
+				const Vec4 vertex_pos = mesh.m_Vertices[i].extend(1.f).transform_point(final_mat, true);
+				const u32 x = (vertex_pos.x * 0.5f + 0.5f) * m_frame_width;
+				const u32 y = (vertex_pos.y * -0.5f + 0.5f) * m_frame_height;
+				const size_t idx = (size_t)(x + y * m_frame_width) * 4;
+				if (idx >= tex_data.size()) {
+					continue;
+				}
+
+				tex_data[idx + 0] = 0xff;
+				tex_data[idx + 1] = 0xff;
+				tex_data[idx + 2] = 0xff;
+				tex_data[idx + 3] = 0xff;
+			}
+		}
 	}
-	// Tests
-
 
 	// Uplodate
 	D3D12_SUBRESOURCE_DATA textureData = {};

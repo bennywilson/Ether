@@ -177,12 +177,12 @@ public:
 
 	Vec3 operator -() const { return Vec3(-x, -y, -z); }
 
-
 	Vec3 operator *(const class Mat4&) const;
 
 	Vec3 operator *(const float op2) const {
 		return Vec3(x * op2, y * op2, z * op2);
 	}
+
 	Vec3 operator *(const Vec3& op2) const {
 		return Vec3(x * op2.x, y * op2.y, z * op2.z);
 	}
@@ -247,6 +247,8 @@ public:
 		returnVec.normalize_self();
 		return returnVec;
 	}
+
+	class Vec4 extend(f32 w) const;
 
 	const float operator[](const int index) const { return (&x)[index]; }
 	float& operator[](const int index) { return (&x)[index]; }

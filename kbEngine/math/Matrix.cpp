@@ -58,6 +58,10 @@ Vec3 operator *(const float op1, const Vec3& op2) {
 	return Vec3(op1 * op2.x, op1 * op2.y, op1 * op2.z);
 }
 
+Vec4 Vec3::extend(f32 w) const {
+	return Vec4(x, y, z, w);
+
+}
 Vec4 operator *(const float op1, const Vec4& op2) {
 	return Vec4(op1 * op2.x, op1 * op2.y, op1 * op2.z, op1 * op2.w);
 }
