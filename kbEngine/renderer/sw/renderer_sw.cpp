@@ -263,8 +263,8 @@ void Renderer_Sw::initialize_internal(HWND hwnd, const uint32_t frame_width, con
 	D3D12_RESOURCE_DESC textureDesc = {};
 	textureDesc.MipLevels = 1;
 	textureDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
-	textureDesc.Width = 1024;
-	textureDesc.Height = 1024;
+	textureDesc.Width = m_frame_width;
+	textureDesc.Height = m_frame_height;
 	textureDesc.Flags = D3D12_RESOURCE_FLAG_NONE;
 	textureDesc.DepthOrArraySize = 1;
 	textureDesc.SampleDesc.Count = 1;
@@ -282,7 +282,6 @@ void Renderer_Sw::initialize_internal(HWND hwnd, const uint32_t frame_width, con
 	//const uint64_t upload_buff_size = GetRequiredIntermediateSize(tex.Get(), 0, (uint32_t)subresources.size());
 	const UINT64 upload_buff_size = GetRequiredIntermediateSize(tex.Get(), 0, 1);
 
-	ComPtr<ID3D12Resource> upload_resource;
 	auto upload_heap_props = CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD);
 	auto upload_heap_buff_size = CD3DX12_RESOURCE_DESC::Buffer(upload_buff_size);
 	blk::error_check(
@@ -296,18 +295,17 @@ void Renderer_Sw::initialize_internal(HWND hwnd, const uint32_t frame_width, con
 
 
 	std::vector<uint8_t> tex_data;
-	for (int i = 0; i < 1024 * 1024 * 4; i += 4) {
+	for (size_t i = 0; i < (size_t)m_frame_width * m_frame_height * 4; i += 4) {
 		tex_data.push_back(0);
 		tex_data.push_back(255);
 		tex_data.push_back(255);
 		tex_data.push_back(255);
-
 	}
 
 	D3D12_SUBRESOURCE_DATA textureData = {};
 	textureData.pData = &tex_data[0];
-	textureData.RowPitch = (u64)(1024 * 4);
-	textureData.SlicePitch = textureData.RowPitch * 1024;
+	textureData.RowPitch = (u64)(m_frame_width * 4);
+	textureData.SlicePitch = textureData.RowPitch * m_frame_height;
 	UpdateSubresources(m_command_list.Get(), tex.Get(), upload_resource.Get(),
 		0, 0, 1, &textureData);
 
@@ -422,25 +420,10 @@ RenderBuffer* Renderer_Sw::create_render_buffer_internal() {
 
 /// Renderer_Sw::render
 void Renderer_Sw::render() {
-	// Update constant buffer
-	m_camera_projection.make_identity();
-	m_camera_projection.create_perspective_matrix(
-	kbToRadians(50.),
-	1197 / (float)854,
-	1.f, 20000.f
-	);
-
-	const Mat4 trans = Mat4::make_translation(-m_camera_position);
-	Mat4 rot = m_camera_rotation.to_mat4();
-	rot.transpose_self();
-
-	Mat4 view_matrix = trans * rot;
-	Mat4 vp_matrix =
-		view_matrix *
-		m_camera_projection;
-
 	blk::error_check(m_command_allocator->Reset());
 	blk::error_check(m_command_list->Reset(m_command_allocator.Get(), nullptr));
+
+	render_software_rasterization();
 
 	m_command_list->SetGraphicsRootSignature(m_root_signature.Get());
 	m_command_list->RSSetViewports(1, &m_view_port);
@@ -460,9 +443,6 @@ void Renderer_Sw::render() {
 	RenderPipeline_D3D12* const pipe = (RenderPipeline_D3D12*)get_pipeline("screen_shader");
 	m_command_list->SetPipelineState(pipe->m_pipeline_state.Get());
 
-	auto vertex_buffer = (RenderBuffer_D3D12*)get_render_buffer(0);
-	auto index_buffer = (RenderBuffer_D3D12*)get_render_buffer(1);
-
 	ID3D12DescriptorHeap* ppHeaps[] = { m_cbv_srv_heap.Get(), m_sampler_heap.Get() };
 	m_command_list->SetDescriptorHeaps(_countof(ppHeaps), ppHeaps);
 	m_command_list->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
@@ -475,8 +455,7 @@ void Renderer_Sw::render() {
 	m_command_list->SetGraphicsRootDescriptorTable(2, gpu_handle);
 
 	m_command_list->IASetVertexBuffers(0, 1, &m_screen_vertex_view);
-	m_command_list->DrawInstanced(3, 1, 0, 0);
-
+	m_command_list->DrawInstanced(6, 1, 0, 0);
 
 	// Indicate that the back buffer will now be used to present.
 	auto res_barrier = CD3DX12_RESOURCE_BARRIER::Transition(m_render_targets[m_frame_index].Get(), D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PRESENT);
@@ -499,6 +478,31 @@ void Renderer_Sw::render() {
 /// Renderer_Sw::render_software_rasterization
 void Renderer_Sw::render_software_rasterization() {
 
+	std::vector<u8> tex_data;
+	tex_data.reserve((size_t)m_frame_width * m_frame_height * 4);
+
+
+	// Temp
+	for (size_t i = 0; i < (size_t)m_frame_width * m_frame_height * 4; i += 4) {
+		tex_data.push_back(0);
+		tex_data.push_back(255);
+		tex_data.push_back(0);
+		tex_data.push_back(0);
+
+	}
+	// Tests
+
+
+	// Uplodate
+	D3D12_SUBRESOURCE_DATA textureData = {};
+	textureData.pData = &tex_data[0];
+	textureData.RowPitch = (u64)(m_frame_width * 4);
+	textureData.SlicePitch = textureData.RowPitch * m_frame_height;
+	UpdateSubresources(m_command_list.Get(), tex.Get(), upload_resource.Get(),
+		0, 0, 1, &textureData);
+
+	auto tex_barrier = CD3DX12_RESOURCE_BARRIER::Transition(tex.Get(), D3D12_RESOURCE_STATE_COPY_DEST, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
+	m_command_list->ResourceBarrier(1, &tex_barrier);
 }
 
 /// Renderer_Sw::create_pipeline

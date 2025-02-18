@@ -67,6 +67,7 @@ private:
 
 	ComPtr<ID3D12Resource> m_vertex_buffer;
 	D3D12_VERTEX_BUFFER_VIEW m_screen_vertex_view;
+	ComPtr<ID3D12Resource> upload_resource;
 
 	// Fences
 	ComPtr<ID3D12Fence> m_fence;
