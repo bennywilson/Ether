@@ -349,16 +349,13 @@ bool kbModel::LoadMS3D() {
 	std::unordered_map<vertexLayout, int, kbVertexHash> vertHash;
 
 	for (uint i = 0; i < m_Meshes.size(); i++) {
-
 		blk::error_check(ibIndex == m_Meshes[i].m_IndexBufferIndex, "kbModel::Load_Internal() - Index buffer mismatch");
 
 		for (uint iTris = 0; iTris < m_Meshes[i].m_NumTriangles; iTris++) {
-
 			const int triangleIndex = m_Meshes[i].m_TriangleIndices[iTris];
 			ms3dTriangle_t& currentTriangle = tempTriangles[triangleIndex];
 			for (int j = 0; j < 3; j++) {
 				vertexLayout newVert;
-
 				newVert.position = tempVertices[currentTriangle.m_VertexIndices[j]];
 				newVert.uv.set(currentTriangle.u[j], currentTriangle.v[j]);
 

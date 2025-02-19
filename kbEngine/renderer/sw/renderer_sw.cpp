@@ -425,6 +425,10 @@ void Renderer_Sw::render() {
 
 	render_software_rasterization();
 
+
+	blk::error_check(m_command_allocator->Reset());
+	blk::error_check(m_command_list->Reset(m_command_allocator.Get(), nullptr));
+
 	m_command_list->SetGraphicsRootSignature(m_root_signature.Get());
 	m_command_list->RSSetViewports(1, &m_view_port);
 	m_command_list->RSSetScissorRects(1, &m_scissor_rect);
@@ -505,7 +509,7 @@ void Renderer_Sw::render_software_rasterization() {
 		if (render_comp->IsA(kbStaticModelComponent::GetType())) {
 			const kbStaticModelComponent* const skel_comp = (kbStaticModelComponent*)render_comp;
 			const kbModel* const model = skel_comp->model();
-			const kbModel::mesh_t& mesh = model->GetMeshes()[0];
+		//	const kbModel::mesh_t& mesh = model->GetMeshes()[0];
 
 			Mat4 world_mat;
 			world_mat.make_scale(render_comp->owner_scale());
@@ -513,6 +517,32 @@ void Renderer_Sw::render_software_rasterization() {
 			world_mat[3] = render_comp->owner_position();
 
 			Mat4 final_mat = world_mat * vp_matrix;
+			const auto& meshes = model->GetMeshes();
+			const auto& vertices = model->GetCPUVertices();
+			const auto& indices = model->GetCPUIndices();
+
+			for (size_t i = 0; i < indices.size(); i += 3) {
+				
+				
+				for (size_t idx = 0; idx < 3; idx++) {
+					const auto& v1 = vertices[indices[i + idx]];
+					const Vec4 vertex_pos = v1.position.extend(1.f).transform_point(final_mat, true);
+					const u32 x = (vertex_pos.x * 0.5f + 0.5f) * m_frame_width;
+					const u32 y = (vertex_pos.y * -0.5f + 0.5f) * m_frame_height;
+					const size_t screen_idx = (size_t)(x + y * m_frame_width) * 4;
+					if (screen_idx >= tex_data.size()) {
+						continue;
+					}
+
+					tex_data[screen_idx + 0] = 0xff;
+					tex_data[screen_idx + 1] = 0xff;
+					tex_data[screen_idx + 2] = 0xff;
+					tex_data[screen_idx + 3] = 0xff;
+				}
+			}
+			//const auto& vertices = mesh.m_Vertices;
+			//for (size_t i = 0; i < 
+			/*const auto& indices = mesh.m_TriangleIndices;
 
 			for (size_t i = 0; i < mesh.m_Vertices.size(); i++) {
 				const Vec4 vertex_pos = mesh.m_Vertices[i].extend(1.f).transform_point(final_mat, true);
@@ -527,7 +557,7 @@ void Renderer_Sw::render_software_rasterization() {
 				tex_data[idx + 1] = 0xff;
 				tex_data[idx + 2] = 0xff;
 				tex_data[idx + 3] = 0xff;
-			}
+			}*/
 		}
 	}
 
@@ -536,11 +566,23 @@ void Renderer_Sw::render_software_rasterization() {
 	textureData.pData = &tex_data[0];
 	textureData.RowPitch = (u64)(m_frame_width * 4);
 	textureData.SlicePitch = textureData.RowPitch * m_frame_height;
+
+	auto tex_barrier = CD3DX12_RESOURCE_BARRIER::Transition(tex.Get(), D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE, D3D12_RESOURCE_STATE_COPY_DEST);
+	m_command_list->ResourceBarrier(1, &tex_barrier);
+
 	UpdateSubresources(m_command_list.Get(), tex.Get(), upload_resource.Get(),
 		0, 0, 1, &textureData);
 
-	auto tex_barrier = CD3DX12_RESOURCE_BARRIER::Transition(tex.Get(), D3D12_RESOURCE_STATE_COPY_DEST, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
+	tex_barrier = CD3DX12_RESOURCE_BARRIER::Transition(tex.Get(), D3D12_RESOURCE_STATE_COPY_DEST, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
 	m_command_list->ResourceBarrier(1, &tex_barrier);
+
+	blk::error_check(m_command_list->Close());
+
+	// Execute command lists
+	ID3D12CommandList* const command_lists[] = { m_command_list.Get() };
+	m_queue->ExecuteCommandLists(_countof(command_lists), command_lists);
+
+	wait_on_fence();
 }
 
 /// Renderer_Sw::create_pipeline
@@ -604,7 +646,7 @@ RenderPipeline* Renderer_Sw::create_pipeline(const wstring& path) {
 	psoDesc.PS = CD3DX12_SHADER_BYTECODE(pixel_shader.Get());
 	psoDesc.RasterizerState = raster;
 	psoDesc.BlendState = CD3DX12_BLEND_DESC(D3D12_DEFAULT);
-	psoDesc.DepthStencilState = CD3DX12_DEPTH_STENCIL_DESC(D3D12_DEFAULT); // a default depth stencil state
+	//psoDesc.DepthStencilState = 0;//CD3DX12_DEPTH_STENCIL_DESC(D3D12_DEFAULT); // a default depth stencil state
 	psoDesc.DSVFormat = DXGI_FORMAT_D24_UNORM_S8_UINT;
 	psoDesc.SampleMask = UINT_MAX;
 	psoDesc.PrimitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;
