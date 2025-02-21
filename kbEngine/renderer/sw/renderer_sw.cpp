@@ -510,12 +510,23 @@ void Renderer_Sw::render_software_rasterization() {
 		view_matrix *
 		m_camera_projection;
 
-	std::vector<u8> color_buffer;
-	color_buffer.resize((size_t)m_frame_width * m_frame_height * 4);
-	memset(&color_buffer[0], 0xffffffff, sizeof(m_frame_width * m_frame_height * 4));
+	std::vector<u32> color_buffer;
+	color_buffer.resize((size_t)m_frame_width * m_frame_height);
+	Vec4 start_color(0x38 / 255.f, 0x1c / 255.f, 0x2a / 255.f, 1.f);
+	Vec4 end_color(0xff / 255.f, 0xf4 / 255.f, 0x74 / 255.f, 1.f);
+
+	for (size_t y = 0; y < m_frame_height; y++) {
+		const f32 t = y / (f32)m_frame_height;
+		const u32 r = 255 * (start_color.x + (end_color.x - start_color.x) * t);
+		const u32 g = 255 * (start_color.y + (end_color.y - start_color.y) * t);
+		const u32 b = 255 * (start_color.z + (end_color.z - start_color.z) * t);
+		const u32 a = 255 * (start_color.w + (end_color.w - start_color.w) * t);
+		const u32 final = 255 | (b << 8) | (g << 16) | (r << 24);
+		std::fill(color_buffer.begin() + y * m_frame_width, color_buffer.begin() + m_frame_width + y * m_frame_width, final);
+	}
 
 	std::vector<f32> depth_buffer;
-	depth_buffer.resize((size_t)m_frame_width * m_frame_height * 4);
+	depth_buffer.resize((size_t)m_frame_width * m_frame_height);
 	std::fill(depth_buffer.begin(), depth_buffer.end(), FLT_MAX);
 
 	for (auto render_comp : this->render_components()) {
@@ -549,7 +560,10 @@ void Renderer_Sw::render_software_rasterization() {
 
 				for (size_t idx = 0; idx < 3; idx++) {
 					const auto& v1 = vertices[indices[i + idx]];
-					const Vec4 vertex_pos = v1.position.extend(1.f).transform_point(final_mat, true);
+					Vec4 vertex_pos = v1.position.extend(1.f);
+					vertex_pos.x *= -1.f;
+					vertex_pos.z *= -1.f;
+					vertex_pos = vertex_pos.transform_point(final_mat, true);
 					const u32 x = (u32)((vertex_pos.x * 0.5f + 0.5f) * m_frame_width);
 					const u32 y = (u32)((vertex_pos.y * -0.5f + 0.5f) * m_frame_height);
 
@@ -590,7 +604,7 @@ void Renderer_Sw::render_software_rasterization() {
 							const f32 bary1 = w1 / (f32)sum;
 							const f32 bary2 = w2 / (f32)sum;
 
-							const size_t screen_idx = (size_t)(p.x + p.y * m_frame_width) * 4;
+							const size_t screen_idx = (size_t)(p.x + p.y * m_frame_width);
 							const f32 z = v[0].z * bary0 + v[1].z * bary1 + v[2].z * bary2;
 							if (z > depth_buffer[screen_idx]) {
 								continue;
@@ -600,10 +614,12 @@ void Renderer_Sw::render_software_rasterization() {
 							Vec3 normal = vertices[v[0].idx].GetNormal() * bary0;
 							normal += vertices[v[1].idx].GetNormal() * bary1;
 							normal += vertices[v[2].idx].GetNormal() * bary2;
+							normal.x *= -1.f;
+							normal.z *= -1.f;
 
 							Vec2 uv = vertices[v[0].idx].uv * bary0;
 							uv += vertices[v[1].idx].uv * bary1;
-							uv += vertices[v[1].idx].uv * bary2;
+							uv += vertices[v[2].idx].uv * bary2;
 							u32 x = (u32)(uv.x * tex_width);
 							u32 y = (u32)(uv.y * tex_height);
 							u32 tex_idx = 4 * (x + (y * tex_width));
@@ -612,14 +628,17 @@ void Renderer_Sw::render_software_rasterization() {
 							//	iuv.x = (uv.x * tex_width);
 							//	iuv.y = (uv.y * tex_
 							const Vec4 albedo(cpu_tex[tex_idx + 2] / 255.f, cpu_tex[tex_idx + 1] / 255.f, cpu_tex[tex_idx + 0] / 255.f, 1.f);
-							const f32 dot = clamp(normal.dot(Vec3(0.707f, 0.707f, 0.0)), 0.f, 1.0f);
-							const Vec4 diffuse = Vec4(1.f, 1.f, 1.f, 1.f) * dot;
+							const f32 dot = clamp(normal.dot(Vec3(0.707f, 0.707f, 0.0)), 0.f, 1.0f) * 0.85f + 0.15f;
+							const Vec4 sun_color = Vec4(1.f, 1.f, 1.f, 1.f);//Vec4(1.f, 216.f / 255.f, 184.f / 255.f, 1.f);
+							const Vec4 diffuse = sun_color * dot;
 							const Vec4 color = (albedo * diffuse).saturate();
 							u8 val = (u8)(255 * dot);
-							color_buffer[screen_idx + 0] = color.x * 255;
-							color_buffer[screen_idx + 1] = color.y * 255;
-							color_buffer[screen_idx + 2] = color.z * 255;
-							color_buffer[screen_idx + 3] = 255;
+							color_buffer[screen_idx] =
+								((u32)(color.x * 255)) |
+								((u32)(color.y * 255) << 8) |
+								((u32)(color.z * 255) << 16) |
+								(0xff) << 24;
+
 						}
 					}
 				}
