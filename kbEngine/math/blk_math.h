@@ -42,3 +42,21 @@ class Vec4;
 Vec2 Vec2Rand(const Vec2& min, const Vec2& max);
 Vec3 Vec3Rand(const Vec3& min, const Vec3& max);
 Vec4 Vec4Rand(const Vec4& min, const Vec4& max);
+
+template<typename T> T min3(const T& a, const T& b, const T& c) {
+	if (a <= b && a <= c) {
+		return a;
+	} else if (b <= a && b <= c) {
+		return b;
+	}
+	return c;
+}
+
+template<typename T> T max3(const T& a, const T& b, const T& c) {
+	if (a >= b && a >= c) {
+		return a;
+	} else if (b >= a && b >= c) {
+		return b;
+	}
+	return c;
+}

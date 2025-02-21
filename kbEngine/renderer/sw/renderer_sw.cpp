@@ -17,6 +17,8 @@ using namespace std;
 static const u64 CONSTANT_BUFFER_SIZE = 4096;
 u8* CONSTANT_BUFFER = nullptr;
 
+static kbTexture* pinky_tex;
+
 /// Renderer_Sw::~Renderer_Sw
 Renderer_Sw::~Renderer_Sw() {
 	shut_down();	// function is virtual but called in ~Renderer which is UB
@@ -329,7 +331,12 @@ void Renderer_Sw::initialize_internal(HWND hwnd, const uint32_t frame_width, con
 
 	wait_on_fence();
 
+
+	pinky_tex = new kbTexture(kbString(".\\assets\\Test\\Pinky_Base_T.bmp"));
+	u32 x, y;
+	pinky_tex->GetCPUTexture(x, y);
 	blk::log("Renderer_Sw initialized");
+
 }
 
 /// Renderer_Sw::shut_down_internal
@@ -479,6 +486,11 @@ void Renderer_Sw::render() {
 	m_frame_index = m_swap_chain->GetCurrentBackBufferIndex();
 }
 
+int orient2d(const Vec2i& a, const Vec2i& b, const Vec2i& c)
+{
+	return (b.x - a.x) * (c.y - a.y) - (b.y - a.y) * (c.x - a.x);
+}
+
 /// Renderer_Sw::render_software_rasterization
 void Renderer_Sw::render_software_rasterization() {
 	// Update constant buffer
@@ -498,18 +510,19 @@ void Renderer_Sw::render_software_rasterization() {
 		view_matrix *
 		m_camera_projection;
 
+	std::vector<u8> color_buffer;
+	color_buffer.resize((size_t)m_frame_width * m_frame_height * 4);
+	memset(&color_buffer[0], 0xffffffff, sizeof(m_frame_width * m_frame_height * 4));
 
-	std::vector<u8> tex_data;
-	tex_data.resize((size_t)m_frame_width * m_frame_height * 4);
-
-	// Temp
-	memset(&tex_data[0], 0xffffffff, sizeof(m_frame_width * m_frame_height * 4));
+	std::vector<f32> depth_buffer;
+	depth_buffer.resize((size_t)m_frame_width * m_frame_height * 4);
+	std::fill(depth_buffer.begin(), depth_buffer.end(), FLT_MAX);
 
 	for (auto render_comp : this->render_components()) {
 		if (render_comp->IsA(kbStaticModelComponent::GetType())) {
-			const kbStaticModelComponent* const skel_comp = (kbStaticModelComponent*)render_comp;
+			kbStaticModelComponent* const skel_comp = (kbStaticModelComponent*)render_comp;
 			const kbModel* const model = skel_comp->model();
-		//	const kbModel::mesh_t& mesh = model->GetMeshes()[0];
+			//	const kbModel::mesh_t& mesh = model->GetMeshes()[0];
 
 			Mat4 world_mat;
 			world_mat.make_scale(render_comp->owner_scale());
@@ -521,64 +534,116 @@ void Renderer_Sw::render_software_rasterization() {
 			const auto& vertices = model->GetCPUVertices();
 			const auto& indices = model->GetCPUIndices();
 
+			u32 tex_width = 0;
+			u32 tex_height = 0;
+			const u8* cpu_tex = pinky_tex->GetCPUTexture(tex_width, tex_height);
+
 			for (size_t i = 0; i < indices.size(); i += 3) {
-				
-				
+				//vertexLayout screen_verts[3];
+				struct ScreenVert {
+					Vec2i pos;
+					f32 z;
+					u32 idx;
+				};
+				ScreenVert v[3];
+
 				for (size_t idx = 0; idx < 3; idx++) {
 					const auto& v1 = vertices[indices[i + idx]];
 					const Vec4 vertex_pos = v1.position.extend(1.f).transform_point(final_mat, true);
-					const u32 x = (vertex_pos.x * 0.5f + 0.5f) * m_frame_width;
-					const u32 y = (vertex_pos.y * -0.5f + 0.5f) * m_frame_height;
-					const size_t screen_idx = (size_t)(x + y * m_frame_width) * 4;
-					if (screen_idx >= tex_data.size()) {
-						continue;
-					}
+					const u32 x = (u32)((vertex_pos.x * 0.5f + 0.5f) * m_frame_width);
+					const u32 y = (u32)((vertex_pos.y * -0.5f + 0.5f) * m_frame_height);
 
-					tex_data[screen_idx + 0] = 0xff;
-					tex_data[screen_idx + 1] = 0xff;
-					tex_data[screen_idx + 2] = 0xff;
-					tex_data[screen_idx + 3] = 0xff;
+					v[idx].idx = indices[i + idx];
+					v[idx].pos.x = x;
+					v[idx].pos.y = y;
+					v[idx].z = vertex_pos.z;
 				}
-			}
-			//const auto& vertices = mesh.m_Vertices;
-			//for (size_t i = 0; i < 
-			/*const auto& indices = mesh.m_TriangleIndices;
-
-			for (size_t i = 0; i < mesh.m_Vertices.size(); i++) {
-				const Vec4 vertex_pos = mesh.m_Vertices[i].extend(1.f).transform_point(final_mat, true);
-				const u32 x = (vertex_pos.x * 0.5f + 0.5f) * m_frame_width;
-				const u32 y = (vertex_pos.y * -0.5f + 0.5f) * m_frame_height;
-				const size_t idx = (size_t)(x + y * m_frame_width) * 4;
-				if (idx >= tex_data.size()) {
+				/*const size_t screen_idx = (size_t)(x + y * m_frame_width) * 4;
+				if (screen_idx >= tex_data.size()) {
 					continue;
-				}
+				}*/
+				// Compute triangle bounding box
+				i32 minX = min3(v[0].pos.x, v[1].pos.x, v[2].pos.x);
+				i32 minY = min3(v[0].pos.y, v[1].pos.y, v[2].pos.y);
+				i32 maxX = max3(v[0].pos.x, v[1].pos.x, v[2].pos.x);
+				i32 maxY = max3(v[0].pos.y, v[1].pos.y, v[2].pos.y);
 
-				tex_data[idx + 0] = 0xff;
-				tex_data[idx + 1] = 0xff;
-				tex_data[idx + 2] = 0xff;
-				tex_data[idx + 3] = 0xff;
-			}*/
+				// Clip against screen bounds
+				minX = max(minX, 0);
+				minY = max(minY, 0);
+				maxX = min(maxX, (i32)m_frame_width - 1);
+				maxY = min(maxY, (i32)m_frame_height - 1);
+
+				// Rasterize
+				Vec2i p;
+				for (p.y = minY; p.y <= maxY; p.y++) {
+					for (p.x = minX; p.x <= maxX; p.x++) {
+						// Determine barycentric coordinates
+						int w0 = orient2d(v[1].pos, v[2].pos, p);
+						int w1 = orient2d(v[2].pos, v[0].pos, p);
+						int w2 = orient2d(v[0].pos, v[1].pos, p);
+
+						// If p is on or inside all edges, render pixel.
+						if (w0 >= 0 && w1 >= 0 && w2 >= 0) {
+							const i32 sum = w0 + w1 + w2;
+							const f32 bary0 = w0 / (f32)sum;
+							const f32 bary1 = w1 / (f32)sum;
+							const f32 bary2 = w2 / (f32)sum;
+
+							const size_t screen_idx = (size_t)(p.x + p.y * m_frame_width) * 4;
+							const f32 z = v[0].z * bary0 + v[1].z * bary1 + v[2].z * bary2;
+							if (z > depth_buffer[screen_idx]) {
+								continue;
+							}
+
+							depth_buffer[screen_idx] = z;
+							Vec3 normal = vertices[v[0].idx].GetNormal() * bary0;
+							normal += vertices[v[1].idx].GetNormal() * bary1;
+							normal += vertices[v[2].idx].GetNormal() * bary2;
+
+							Vec2 uv = vertices[v[0].idx].uv * bary0;
+							uv += vertices[v[1].idx].uv * bary1;
+							uv += vertices[v[1].idx].uv * bary2;
+							u32 x = (u32)(uv.x * tex_width);
+							u32 y = (u32)(uv.y * tex_height);
+							u32 tex_idx = 4 * (x + (y * tex_width));
+
+							//	Vec2 iuv;
+							//	iuv.x = (uv.x * tex_width);
+							//	iuv.y = (uv.y * tex_
+							const Vec4 albedo(cpu_tex[tex_idx + 2] / 255.f, cpu_tex[tex_idx + 1] / 255.f, cpu_tex[tex_idx + 0] / 255.f, 1.f);
+							const f32 dot = clamp(normal.dot(Vec3(0.707f, 0.707f, 0.0)), 0.f, 1.0f);
+							const Vec4 diffuse = Vec4(1.f, 1.f, 1.f, 1.f) * dot;
+							const Vec4 color = (albedo * diffuse).saturate();
+							u8 val = (u8)(255 * dot);
+							color_buffer[screen_idx + 0] = color.x * 255;
+							color_buffer[screen_idx + 1] = color.y * 255;
+							color_buffer[screen_idx + 2] = color.z * 255;
+							color_buffer[screen_idx + 3] = 255;
+						}
+					}
+				}
+				//}
+			}
 		}
 	}
 
-	// Uplodate
+	// Update
 	D3D12_SUBRESOURCE_DATA textureData = {};
-	textureData.pData = &tex_data[0];
+	textureData.pData = &color_buffer[0];
 	textureData.RowPitch = (u64)(m_frame_width * 4);
 	textureData.SlicePitch = textureData.RowPitch * m_frame_height;
 
 	auto tex_barrier = CD3DX12_RESOURCE_BARRIER::Transition(tex.Get(), D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE, D3D12_RESOURCE_STATE_COPY_DEST);
 	m_command_list->ResourceBarrier(1, &tex_barrier);
 
-	UpdateSubresources(m_command_list.Get(), tex.Get(), upload_resource.Get(),
-		0, 0, 1, &textureData);
+	UpdateSubresources(m_command_list.Get(), tex.Get(), upload_resource.Get(), 0, 0, 1, &textureData);
 
 	tex_barrier = CD3DX12_RESOURCE_BARRIER::Transition(tex.Get(), D3D12_RESOURCE_STATE_COPY_DEST, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
 	m_command_list->ResourceBarrier(1, &tex_barrier);
 
-	blk::error_check(m_command_list->Close());
-
 	// Execute command lists
+	blk::error_check(m_command_list->Close());
 	ID3D12CommandList* const command_lists[] = { m_command_list.Get() };
 	m_queue->ExecuteCommandLists(_countof(command_lists), command_lists);
 

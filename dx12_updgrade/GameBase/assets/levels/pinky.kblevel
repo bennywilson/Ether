@@ -1,8 +1,8 @@
-kbGameEntity 255620749 1272197868 3219934639 577502799 {
+kbGameEntity 2932080543 1238490521 2889335706 2807285557 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		Name = "Entity_5"
+		Name = "Entity_4"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
 		Position = 0.000000 0.000000 0.000000
 		Scale = 1.000000 1.000000 1.000000
@@ -140,7 +140,7 @@ kbGameEntity 2304826171 1239496353 243933317 3983880952 {
 		LifeTime =  -1.000000
 		Name = "Entity_43"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
-		Position = 0.000000 0.000000 5.000000
+		Position = 0.000000 -0.006421 5.000000
 		Scale = 0.010000 0.010000 0.010000
 	}
 	kbStaticModelComponent { 
@@ -153,7 +153,7 @@ kbGameEntity 2304826171 1239496353 243933317 3983880952 {
 				LifeTime =  -1.000000
 				CullModeOverride = ShaderDefault
 				Shader = NULL
-				ShaderParams = 2
+				ShaderParams = 3
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
@@ -167,6 +167,13 @@ kbGameEntity 2304826171 1239496353 243933317 3983880952 {
 						ParamName = "spec"
 						Texture = NULL
 						Vector = 0.000000 0.000000 0.000000 1.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "shaderTexture"
+						Texture = .\assets\test\pinky.dds
+						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 			}
 		RenderOrderBias =  0.000000

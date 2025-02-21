@@ -306,8 +306,12 @@ public:
 		y += op2.y;
 		z += op2.z;w += op2.w;
 	}
-	Vec4	operator -(const Vec4& rhs) const {
+	Vec4 operator -(const Vec4& rhs) const {
 		return Vec4(x - rhs.x, y - rhs.y, z - rhs.z, w - rhs.w);
+	}
+
+	Vec4 operator *(const Vec4& op2) const {
+		return Vec4(x * op2.x, y * op2.y, z * op2.z, 1.f);
 	}
 
 	Vec4 operator *(const float op2) const {
@@ -321,6 +325,25 @@ public:
 
 	Vec4 operator /(const float op2) const {
 		return Vec4(x / op2, y / op2, z / op2, w / op2);
+	}
+
+	Vec4& saturate() {
+		if (x < 0.f) {
+			x = 0.f;
+		} else if (x > 1.f) {
+			x = 1.f;
+		}
+		if (y < 0.f) {
+			y = 0.f;
+		} else if (y > 1.f) {
+			y = 1.f;
+		}
+		if (z < 0.f) {
+			z = 0.f;
+		} else if (z > 1.f) {
+			z = 1.f;
+		}
+		return *this;
 	}
 
 	void operator /=(const float op2) {
