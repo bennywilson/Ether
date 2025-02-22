@@ -321,6 +321,7 @@
     <ClInclude Include="renderer\sw\renderer_sw.h" />
     <ClInclude Include="renderer\d3d12\renderer_dx12.h" />
     <ClInclude Include="game\render_component.h" />
+    <ClInclude Include="renderer\sw\sw_defs.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="core\blk_core.cpp">
@@ -474,6 +475,7 @@
     <ClCompile Include="renderer\sw\renderer_sw.cpp" />
     <ClCompile Include="renderer\d3d12\renderer_dx12.cpp" />
     <ClCompile Include="game\render_component.cpp" />
+    <ClCompile Include="renderer\sw\sw_defs.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Midl Include="renderer\d3d12\dx12\d3d12.idl" />

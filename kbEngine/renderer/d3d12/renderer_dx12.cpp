@@ -347,7 +347,7 @@ void Renderer_Dx12::get_hardware_adapter(
 
 /// Renderer_Dx12::create_render_buffer_internal
 RenderBuffer* Renderer_Dx12::create_render_buffer_internal() {
-	return new RenderBuffer_D3D12();
+	return new RenderBuffer_Dx12();
 }
 
 const float g_temp_bound = 10.f;
@@ -403,11 +403,11 @@ void Renderer_Dx12::render() {
 	m_command_list->ClearDepthStencilView(dsv_handle, D3D12_CLEAR_FLAG_DEPTH, 1.0f, 0, 0, nullptr);
 
 
-	RenderPipeline_D3D12* const pipe = (RenderPipeline_D3D12*)get_pipeline("test_shader");
+	RenderPipeline_Dx12* const pipe = (RenderPipeline_Dx12*)get_pipeline("test_shader");
 	m_command_list->SetPipelineState(pipe->m_pipeline_state.Get());
 
-	auto vertex_buffer = (RenderBuffer_D3D12*)get_render_buffer(0);
-	auto index_buffer = (RenderBuffer_D3D12*)get_render_buffer(1);
+	auto vertex_buffer = (RenderBuffer_Dx12*)get_render_buffer(0);
+	auto index_buffer = (RenderBuffer_Dx12*)get_render_buffer(1);
 
 	ID3D12DescriptorHeap* ppHeaps[] = { m_cbv_srv_heap.Get(), m_sampler_heap.Get() };
 	m_command_list->SetDescriptorHeaps(_countof(ppHeaps), ppHeaps);
@@ -483,7 +483,7 @@ void Renderer_Dx12::render() {
 }
 
 /// Renderer_Dx12::create_pipeline
-RenderPipeline* Renderer_Dx12::create_pipeline(const wstring& path) {
+RenderPipeline* Renderer_Dx12::create_pipeline(const string& friendly_name, const wstring& path) {
 #if defined(_DEBUG)
 	// Enable better shader debugging with the graphics debugging tools.
 	UINT compileFlags = D3DCOMPILE_DEBUG | D3DCOMPILE_SKIP_OPTIMIZATION | D3DCOMPILE_WARNINGS_ARE_ERRORS;
@@ -550,7 +550,7 @@ RenderPipeline* Renderer_Dx12::create_pipeline(const wstring& path) {
 	psoDesc.NumRenderTargets = 1;
 	psoDesc.RTVFormats[0] = DXGI_FORMAT_R8G8B8A8_UNORM;
 	psoDesc.SampleDesc.Count = 1;
-	RenderPipeline_D3D12* const pipe = new RenderPipeline_D3D12();
+	RenderPipeline_Dx12* const pipe = new RenderPipeline_Dx12();
 	blk::error_check(m_device->CreateGraphicsPipelineState(&psoDesc, IID_PPV_ARGS(&pipe->m_pipeline_state)));
 
 	return (RenderPipeline*)pipe;
@@ -558,7 +558,7 @@ RenderPipeline* Renderer_Dx12::create_pipeline(const wstring& path) {
 
 /// Renderer_Dx12::todo_create_texture
 void Renderer_Dx12::todo_create_texture() {
-	auto pipe = (RenderPipeline_D3D12*)load_pipeline("test_shader", L"C:/projects/Ether/dx12_updgrade/GameBase/assets/shaders/test_shader.hlsl");
+	auto pipe = (RenderPipeline_Dx12*)load_pipeline("test_shader", L"C:/projects/Ether/dx12_updgrade/GameBase/assets/shaders/test_shader.hlsl");
 
 	blk::error_check(m_command_allocator->Reset());
 	blk::error_check(m_command_list->Reset(m_command_allocator.Get(), nullptr));

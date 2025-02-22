@@ -35,7 +35,7 @@ private:
 		struct IDXGIAdapter1** const out_adapter,
 		bool request_high_performance);
 
-	virtual RenderPipeline* create_pipeline(const std::wstring& path) override;
+	virtual RenderPipeline* create_pipeline(const std::string& friendly_name, const std::wstring& path) override;
 	virtual RenderBuffer* create_render_buffer_internal() override;
 
 	void wait_on_fence();

@@ -24,7 +24,7 @@ protected:
 	virtual void shut_down_internal() override;
 
 private:
-	virtual RenderPipeline* create_pipeline(const std::wstring& path) override;
+	virtual RenderPipeline* create_pipeline(const std::string& friendly_name, const std::wstring& path) override;
 	virtual RenderBuffer* create_render_buffer_internal() override;
 
 	VkDevice m_device;

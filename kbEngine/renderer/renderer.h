@@ -51,7 +51,7 @@ private:
 	virtual void initialize_internal(HWND hwnd, const uint32_t frame_width, const uint32_t frame_height) = 0;
 	virtual void shut_down_internal() = 0;
 
-	virtual RenderPipeline* create_pipeline(const std::wstring& path) = 0;
+	virtual RenderPipeline* create_pipeline(const std::string& friendly_name, const std::wstring& path) = 0;
 	virtual RenderBuffer* create_render_buffer_internal() = 0;
 
 protected:

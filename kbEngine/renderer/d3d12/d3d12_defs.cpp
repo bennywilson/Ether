@@ -6,24 +6,24 @@
 #include "renderer_Dx12.h"
 #include "d3d12_defs.h"
 
-/// Texture_D3D12::load_internal
-bool Texture_D3D12::load_internal() {
+/// Texture_Dx12::load_internal
+bool Texture_Dx12::load_internal() {
 	return true;
 }
 
-/// Texture_D3D12::release_internal
-void Texture_D3D12::release_internal() {
+/// Texture_Dx12::release_internal
+void Texture_Dx12::release_internal() {
 
 }
 
 
-/// RenderBuffer_D3D12::release
-void RenderBuffer_D3D12::release() {
+/// RenderBuffer_Dx12::release
+void RenderBuffer_Dx12::release() {
 	m_buffer.Reset();
 }
 
-/// RenderBuffer_D3D12::write_vb_internal
-void RenderBuffer_D3D12::write_vb_internal(const std::vector<vertexLayout>& vertices) {
+/// RenderBuffer_Dx12::write_vb_internal
+void RenderBuffer_Dx12::write_vb_internal(const std::vector<vertexLayout>& vertices) {
 	vector<vertexLayout> new_verts;
 for (auto& vert: vertices) {
 	vertexLayout new_vert = vert;
@@ -63,8 +63,8 @@ for (auto& vert: vertices) {
 	m_vertex_buffer_view.SizeInBytes = buffer_size;
 }
 
-/// RenderBuffer_D3D12::write_ib_internal
-void RenderBuffer_D3D12::write_ib_internal(const std::vector<uint16_t>& indices) {
+/// RenderBuffer_Dx12::write_ib_internal
+void RenderBuffer_Dx12::write_ib_internal(const std::vector<uint16_t>& indices) {
 	auto device = ((Renderer_Dx12*)(g_renderer))->get_device();
 
 	const uint32_t buffer_size = size_bytes();

@@ -5,12 +5,15 @@
 #pragma once
 
 #include "d3dx12_core.h"
-#include <DirectXMath.h>
 #include <wrl/client.h>
 #include "renderer.h"
 
-using namespace DirectX;
+//using namespace DirectX;
 using Microsoft::WRL::ComPtr;
+
+class RenderPipeline_Dx12;
+class TrianglePipeline;
+class KuwaharaPipeline;
 
 ///	Renderer_Sw
 class Renderer_Sw : public Renderer {
@@ -37,8 +40,11 @@ private:
 		struct IDXGIAdapter1** const out_adapter,
 		bool request_high_performance);
 
-	virtual RenderPipeline* create_pipeline(const std::wstring& path) override;
+	virtual RenderPipeline* create_pipeline(const std::string& friendly_name, const std::wstring& path) override;
 	virtual RenderBuffer* create_render_buffer_internal() override;
+
+	// For blitting the final image to the screen
+	void create_blit_pipeline();
 
 	virtual void render() override;
 	void render_software_rasterization();
@@ -72,6 +78,8 @@ private:
 	ComPtr<ID3D12Resource> m_vertex_buffer;
 	D3D12_VERTEX_BUFFER_VIEW m_screen_vertex_view;
 	ComPtr<ID3D12Resource> upload_resource;
+
+	RenderPipeline_Dx12* m_blit_pipeline;
 
 	// Fences
 	ComPtr<ID3D12Fence> m_fence;

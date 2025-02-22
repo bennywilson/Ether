@@ -11,8 +11,8 @@
 using namespace std;
 using namespace Microsoft::WRL;
 
-/// Texture_D3D12
-class Texture_D3D12 : kbTexture {
+/// Texture_Dx12
+class Texture_Dx12 : kbTexture {
 private:
 	virtual bool load_internal();
 	virtual void release_internal();
@@ -20,22 +20,22 @@ private:
 	ComPtr<ID3D12Resource> m_texture;
 };
 
-/// RenderPipeline_D3D12
-class RenderPipeline_D3D12 : public RenderPipeline {
+/// RenderPipeline_Dx12
+class RenderPipeline_Dx12 : public RenderPipeline {
 	friend class Renderer_Dx12;
 	friend class Renderer_Sw;
 
-	~RenderPipeline_D3D12() { m_pipeline_state.Reset(); }
+	~RenderPipeline_Dx12() { m_pipeline_state.Reset(); }
 
 	virtual void release() { m_pipeline_state.Reset();  }
 
 	ComPtr<ID3D12PipelineState> m_pipeline_state;
 };
 
-/// RenderBuffer_D3D12
-class RenderBuffer_D3D12 : public RenderBuffer {
+/// RenderBuffer_Dx12
+class RenderBuffer_Dx12 : public RenderBuffer {
 public:
-	RenderBuffer_D3D12() = default;
+	RenderBuffer_Dx12() = default;
 
 	virtual void release();
 
