@@ -41,7 +41,7 @@ private:
 /// kbStringHash
 struct kbStringHash {
 	size_t operator()(const kbString& key) const {
-		size_t hash = key.GetStringTableIndex();
+		const size_t hash = (size_t)key.GetStringTableIndex();
 		return hash;
 	}
 };

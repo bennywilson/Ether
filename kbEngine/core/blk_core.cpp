@@ -2,9 +2,10 @@
 ///
 /// 2016-2025 blk 1.0
 
+
+#include <combaseapi.h>
 #include <iostream>
 #include <cstdarg>
-#include <windows.h>
 #include "blk_core.h"
 #include "kbJobManager.h"
 

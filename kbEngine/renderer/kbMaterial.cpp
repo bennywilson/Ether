@@ -8,6 +8,7 @@
 #include "kbRenderer_defs.h"
 #include "kbRenderer.h"
 #include "DX11/kbRenderer_DX11.h"	//	TODO HACK
+#include "renderer.h"
 #include "kbMaterial.h"
 
 extern ID3D11DeviceContext* g_pImmediateContext;
@@ -458,21 +459,28 @@ static HRESULT CreateTextureFromWIC(IWICBitmapFrameDecode* const frame,
 	return hr;
 }
 
-/// kbShader::kbTexture
+/// kbTexture::kbTexture
 kbTexture::kbTexture() :
 	m_pGPUTexture(nullptr),
-	m_bIsCPUTexture(false),
-	m_TextureWidth(0),
-	m_TextureHeight(0) {
+	m_is_cpu_texture(false),
+	m_width(0),
+	m_height(0) {
+	if (g_renderer != nullptr && g_renderer->software_renderer()) {
+		m_is_cpu_texture = true;
+	}
 }
 
 
-/// kbShader::kbTexture
+/// kbTexture::kbTexture
 kbTexture::kbTexture(const kbString& fileName) :
 	m_pGPUTexture(nullptr),
-	m_bIsCPUTexture(false),
-	m_TextureWidth(0),
-	m_TextureHeight(0) {
+	m_is_cpu_texture(false),
+	m_width(0),
+	m_height(0) {
+
+	if (g_renderer != nullptr && g_renderer->software_renderer()) {
+		m_is_cpu_texture = true;
+	}
 
 	m_FullFileName = fileName.stl_str();
 	m_FullName = kbString(m_FullFileName);
@@ -506,30 +514,29 @@ bool kbTexture::load_internal() {
 		return false;
 	}
 
-	hr = CreateTextureFromWIC(frame.Get(), nullptr, &m_pGPUTexture, 0, GetFullName(), m_pCPUTexture, m_TextureWidth, m_TextureHeight);
+	hr = CreateTextureFromWIC(frame.Get(), nullptr, &m_pGPUTexture, 0, GetFullName(), m_pCPUTexture, m_width, m_height);
 	if (FAILED(hr)) {
 		return false;
 	}
 
-	if (m_bIsCPUTexture == false) {
+	if (m_is_cpu_texture == false) {
 		m_pCPUTexture.reset();
 	}
 
 	return true;
 }
 
-/// kbShader::GetCPUTexture
-const uint8_t* kbTexture::GetCPUTexture(unsigned int& width, unsigned int& height) {
+/// kbShader::cpu_texture
+const uint8_t* kbTexture::cpu_texture(unsigned int& width, unsigned int& height) {
+	if (m_is_cpu_texture == false) {
 
-	if (m_bIsCPUTexture == false) {
-
-		m_bIsCPUTexture = true;
+		m_is_cpu_texture = true;
 		Release();
 		Load_Internal();
 	}
 
-	width = m_TextureWidth;
-	height = m_TextureHeight;
+	width = m_width;
+	height = m_height;
 
 	return m_pCPUTexture.get();
 }

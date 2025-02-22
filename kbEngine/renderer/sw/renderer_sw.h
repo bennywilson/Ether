@@ -19,6 +19,10 @@ public:
 
 	ComPtr<ID3D12Device> get_device() const { return m_device; }
 
+	virtual bool software_renderer() const override {
+		return true;
+	};
+
 protected:
 	void todo_create_texture();
 	ComPtr<ID3D12Resource> tex;

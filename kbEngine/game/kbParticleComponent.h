@@ -1,12 +1,7 @@
-//===================================================================================================
-// kbParticleComponent.h
-//
-//
-// 2016 blk 1.0
-//===================================================================================================
-#ifndef _KBPARTICLECOMPONENT_H_
-#define _KBPARTICLECOMPONENT_H_
-
+/// kbParticleComponent.h
+///
+/// 2016-2025 blk 1.0
+#pragma once
 #include "kbModel.h"
 
 enum EBillboardType {
@@ -16,45 +11,48 @@ enum EBillboardType {
 };
 
 struct kbParticle_t {
-																kbParticle_t();
-																~kbParticle_t();
+	kbParticle_t();
+	kbParticle_t(const kbParticle_t&) = default;
+	~kbParticle_t();
 
-	void														Shutdown();
+	kbParticle_t& operator=(const kbParticle_t&) = default;
 
-	Vec3														m_Position;
-	float														m_Rotation;
-	Vec3														m_StartSize;
-	Vec3														m_EndSize;
-	float														m_LifeLeft;
-	float														m_TotalLife;
-	Vec3														m_StartVelocity;
-	Vec3														m_EndVelocity;
-	float														m_StartRotation;
-	float														m_EndRotation;
-	float														m_Randoms[3];
-	Vec3														m_RotationAxis;
+	void Shutdown();
 
-	class kbModelEmitter *										m_pSrcModelEmitter;
+	Vec3 m_Position;
+	float m_Rotation;
+	Vec3 m_StartSize;
+	Vec3 m_EndSize;
+	float m_LifeLeft;
+	float m_TotalLife;
+	Vec3 m_StartVelocity;
+	Vec3 m_EndVelocity;
+	float m_StartRotation;
+	float m_EndRotation;
+	float m_Randoms[3];
+	Vec3 m_RotationAxis;
 
-	int															m_CurrentModelIndex;
-	kbRenderObject												m_render_object;		// For model emitters
+	class kbModelEmitter* m_pSrcModelEmitter;
+
+	int m_CurrentModelIndex;
+	kbRenderObject m_render_object;		// For model emitters
 };
 
 /// kbModelEmitter
 class kbModelEmitter : public kbGameComponent {
 
-	KB_DECLARE_COMPONENT( kbModelEmitter, kbGameComponent );
+	KB_DECLARE_COMPONENT(kbModelEmitter, kbGameComponent);
 
-//-------------------------------------------------------------------------------------------------------------------------------------------------------------
+	//-------------------------------------------------------------------------------------------------------------------------------------------------------------
 public:
 
-	const kbModel *												model() const { return m_model; }
+	const kbModel* model() const { return m_model; }
 	const std::vector<kbShaderParamOverrides_t>					GetShaderParamOverrides() const { return m_ShaderParams; }
 
 	void														Init();
 
 private:
-	kbModel *													m_model;
+	kbModel* m_model;
 	std::vector<kbMaterialComponent>							m_materials;
 
 	std::vector<kbShaderParamOverrides_t>						m_ShaderParams;
@@ -63,96 +61,88 @@ private:
 
 /// kbParticleComponent
 class kbParticleComponent : public kbTransformComponent {
+	KB_DECLARE_COMPONENT(kbParticleComponent, kbTransformComponent);
 
-	KB_DECLARE_COMPONENT( kbParticleComponent, kbTransformComponent );
-
-//-------------------------------------------------------------------------------------------------------------------------------------------------------------
 public:
+	virtual	~kbParticleComponent();
 
-	virtual														~kbParticleComponent();
+	virtual void editor_change(const std::string& propertyName);
 
-	virtual void												editor_change( const std::string& propertyName );
+	virtual void RenderSync();
 
-	virtual void												RenderSync();
+	void StopParticleSystem();
 
-	void														StopParticleSystem();
-
-	void														EnableNewSpawns( const bool bEnable );
+	void EnableNewSpawns(const bool bEnable);
 
 	// Hack wasn't picking up from the package file
-	void														SetBillboardType( const EBillboardType inBBType ) { m_ParticleBillboardType = inBBType; }
+	void SetBillboardType(const EBillboardType inBBType) { m_ParticleBillboardType = inBBType; }
 
-	bool														IsModelEmitter() const { return m_ModelEmitter.size() > 0 && m_ModelEmitter[0].model() != nullptr; }
-
+	bool IsModelEmitter() const { return m_ModelEmitter.size() > 0 && m_ModelEmitter[0].model() != nullptr; }
 
 protected:
-
-	virtual void												enable_internal( const bool isEnabled ) override;
-	virtual void												update_internal( const float DeltaTime ) override;
+	virtual void enable_internal(const bool isEnabled) override;
+	virtual void update_internal(const float DeltaTime) override;
 
 private:
-
 	// Editable
-	std::vector<kbMaterialComponent>							m_materials;
-	float														m_TotalDuration;
-	int															m_MaxParticlesToEmit;
-	float														m_StartDelay;
-	float														m_MinParticleSpawnRate;				// Particles per second
-	float														m_MaxParticleSpawnRate;				// Particles per second
-	Vec3														m_MinParticleStartVelocity;
-	Vec3														m_MaxParticleStartVelocity;
-	std::vector<kbAnimEvent>									m_VelocityOverLifeTimeCurve;
-	Vec3														m_MinParticleEndVelocity;
-	Vec3														m_MaxParticleEndVelocity;
-	float														m_MinStartRotationRate;
-	float														m_MaxStartRotationRate;
-	float														m_MinEndRotationRate;
-	float														m_MaxEndRotationRate;
-	Vec3														m_MinStart3DRotation;
-	Vec3														m_MaxStart3DRotation;
-	Vec3														m_MinStart3DOffset;
-	Vec3														m_MaxStart3DOffset;
-	Vec3														m_MinParticleStartSize;
-	Vec3														m_MaxParticleStartSize;
-	Vec3														m_MinParticleEndSize;
-	Vec3														m_MaxParticleEndSize;
-	float														m_ParticleMinDuration;
-	float														m_ParticleMaxDuration;
-	Vec4														m_ParticleStartColor;
-	Vec4														m_ParticleEndColor;
-	std::vector<kbVectorAnimEvent>								m_SizeOverLifeTimeCurve;
-	std::vector<kbVectorAnimEvent>								m_RotationOverLifeTimeCurve;
-	std::vector<kbVectorAnimEvent>								m_ColorOverLifeTimeCurve;
-	std::vector<kbAnimEvent>									m_AlphaOverLifeTimeCurve;
-	Vec3														m_Gravity;
-	int															m_MinBurstCount;
-	int															m_MaxBurstCount;
-	EBillboardType												m_ParticleBillboardType;
-	std::vector<kbModelEmitter>									m_ModelEmitter;
-	float														m_render_order_bias;
-	bool														m_DebugPlayEntity;
+	std::vector<kbMaterialComponent> m_materials;
+	f32 m_TotalDuration;
+	int	m_MaxParticlesToEmit;
+	f32 m_StartDelay;
+	f32 m_MinParticleSpawnRate;				// Particles per second
+	f32 m_MaxParticleSpawnRate;				// Particles per second
+	Vec3 m_MinParticleStartVelocity;
+	Vec3 m_MaxParticleStartVelocity;
+	std::vector<kbAnimEvent> m_VelocityOverLifeTimeCurve;
+	Vec3 m_MinParticleEndVelocity;
+	Vec3 m_MaxParticleEndVelocity;
+	f32 m_MinStartRotationRate;
+	f32 m_MaxStartRotationRate;
+	f32 m_MinEndRotationRate;
+	f32 m_MaxEndRotationRate;
+	Vec3 m_MinStart3DRotation;
+	Vec3 m_MaxStart3DRotation;
+	Vec3 m_MinStart3DOffset;
+	Vec3 m_MaxStart3DOffset;
+	Vec3 m_MinParticleStartSize;
+	Vec3 m_MaxParticleStartSize;
+	Vec3 m_MinParticleEndSize;
+	Vec3 m_MaxParticleEndSize;
+	f32 m_ParticleMinDuration;
+	f32 m_ParticleMaxDuration;
+	Vec4 m_ParticleStartColor;
+	Vec4 m_ParticleEndColor;
+	std::vector<kbVectorAnimEvent> m_SizeOverLifeTimeCurve;
+	std::vector<kbVectorAnimEvent> m_RotationOverLifeTimeCurve;
+	std::vector<kbVectorAnimEvent> m_ColorOverLifeTimeCurve;
+	std::vector<kbAnimEvent> m_AlphaOverLifeTimeCurve;
+	Vec3 m_Gravity;
+	int	m_MinBurstCount;
+	int	m_MaxBurstCount;
+	EBillboardType m_ParticleBillboardType;
+	std::vector<kbModelEmitter>	m_ModelEmitter;
+	f32	m_render_order_bias;
+	bool m_DebugPlayEntity;
 
 	// Non-editable
-	float														m_LeftOverTime;
-	float														m_TimeAlive;
-	int															m_BurstCount;
-	float														m_StartDelayRemaining;
-	int															m_NumEmittedParticles;
+	f32 m_LeftOverTime;
+	f32	m_TimeAlive;
+	int	m_BurstCount;
+	f32	m_StartDelayRemaining;
+	int	m_NumEmittedParticles;
 
-	kbRenderObject												m_render_object;
+	kbRenderObject m_render_object;
 
-	static const int											NumParticleBuffers = 3;
-	std::vector<kbParticle_t>									m_Particles;
-	kbModel														m_ParticleBuffer[NumParticleBuffers];
-	kbParticleVertex *											m_pVertexBuffer;
-	ushort *													m_pIndexBuffer;
+	static const int NumParticleBuffers = 3;
+	std::vector<kbParticle_t> m_Particles;
+	kbModel m_ParticleBuffer[NumParticleBuffers];
+	kbParticleVertex* m_pVertexBuffer;
+	ushort* m_pIndexBuffer;
 
-	uint8_t														m_CurrentParticleBuffer;
+	uint8_t	m_CurrentParticleBuffer;
 
 	friend class kbParticleManager;
-	const kbParticleComponent *									m_ParticleTemplate;
-	bool														m_bIsPooled;
-	bool														m_bIsSpawning;
+	const kbParticleComponent* m_ParticleTemplate;
+	bool m_bIsPooled;
+	bool m_bIsSpawning;
 };
-
-#endif

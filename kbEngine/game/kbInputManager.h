@@ -4,9 +4,10 @@
 
 #pragma once
 
-#include<Windows.h>
-#include<Xinput.h>
-#include<unordered_map>
+#define WIN32_LEAN_AND_MEAN
+#include <Windows.h>
+#include <Xinput.h>
+#include <unordered_map>
 #include "blk_core.h"
 #include "Matrix.h"
 

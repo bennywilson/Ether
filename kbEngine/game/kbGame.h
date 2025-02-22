@@ -1,12 +1,8 @@
-//===================================================================================================
-// kbGame.h
-//
-//
+/// kbGame.h
+///
 /// 2016-2025 blk 1.0
-//===================================================================================================
 #pragma once
 
-#include <windows.h>
 #include "blk_core.h"
 #include "blk_console.h"
 #include "Matrix.h"
@@ -15,8 +11,7 @@
 #include "kbInputManager.h"
 #include "kbSoundManager.h"
 
-
- /// kbGame
+/// kbGame
 class kbGame : public kbCommandProcessor {
 public:
 	kbGame();

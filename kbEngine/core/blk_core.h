@@ -3,8 +3,9 @@
 /// 2016-2025 blk 1.0
 
 #pragma once
-#pragma warning(disable : 4482)
+#pragma warning(disable : 4482 4711)
 
+#define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 //#include <fstream>
 #include <vector>
@@ -113,7 +114,7 @@ public:
 	kbTimer() {
 		LARGE_INTEGER largeInt;
 		QueryPerformanceFrequency(&largeInt);
-		m_ClockFrequency = largeInt.QuadPart / 1000.0;
+		m_ClockFrequency = (f64)largeInt.QuadPart / 1000.0;
 
 		Reset();
 	}

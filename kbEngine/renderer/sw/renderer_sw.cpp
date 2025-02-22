@@ -334,7 +334,7 @@ void Renderer_Sw::initialize_internal(HWND hwnd, const uint32_t frame_width, con
 
 	pinky_tex = new kbTexture(kbString(".\\assets\\Test\\Pinky_Base_T.bmp"));
 	u32 x, y;
-	pinky_tex->GetCPUTexture(x, y);
+	pinky_tex->cpu_texture(x, y);
 	blk::log("Renderer_Sw initialized");
 
 }
@@ -512,16 +512,19 @@ void Renderer_Sw::render_software_rasterization() {
 
 	std::vector<u32> color_buffer;
 	color_buffer.resize((size_t)m_frame_width * m_frame_height);
-	Vec4 start_color(0x38 / 255.f, 0x1c / 255.f, 0x2a / 255.f, 1.f);
-	Vec4 end_color(0xff / 255.f, 0xf4 / 255.f, 0x74 / 255.f, 1.f);
-
+	//Vec4 start_color(0x38 / 255.f, 0x1cf\ / 255.f, 0x2a / 255.f, 1.f);
+	//Vec4 end_color(0xff / 255.f, 0xf4 / 255.f, 0x74 / 255.f, 1.f);
+	Vec4 start_color(0x04 / 255.f, 0x06 / 255.f, 0x22 / 255.f, 1.f);
+	Vec4 end_color(0x26 / 255.f, 0x23 / 255.f, 0x6b / 255.f, 1.f);
+	//end_color = start_color;
 	for (size_t y = 0; y < m_frame_height; y++) {
 		const f32 t = y / (f32)m_frame_height;
-		const u32 r = 255 * (start_color.x + (end_color.x - start_color.x) * t);
-		const u32 g = 255 * (start_color.y + (end_color.y - start_color.y) * t);
-		const u32 b = 255 * (start_color.z + (end_color.z - start_color.z) * t);
-		const u32 a = 255 * (start_color.w + (end_color.w - start_color.w) * t);
-		const u32 final = 255 | (b << 8) | (g << 16) | (r << 24);
+		const u32 r = (u32)(255.f * (start_color.x + (end_color.x - start_color.x) * t));
+		const u32 g = (u32)(255.f * (start_color.y + (end_color.y - start_color.y) * t));
+		const u32 b = (u32)(255.f * (start_color.z + (end_color.z - start_color.z) * t));
+		const u32 a = (u32)(255.f * (start_color.w + (end_color.w - start_color.w) * t));
+		// 	const u32 final = 0xff400622;
+		const u32 final = (255 << 24) | (b << 16) | (g << 8) | (r);
 		std::fill(color_buffer.begin() + y * m_frame_width, color_buffer.begin() + m_frame_width + y * m_frame_width, final);
 	}
 
@@ -533,7 +536,6 @@ void Renderer_Sw::render_software_rasterization() {
 		if (render_comp->IsA(kbStaticModelComponent::GetType())) {
 			kbStaticModelComponent* const skel_comp = (kbStaticModelComponent*)render_comp;
 			const kbModel* const model = skel_comp->model();
-			//	const kbModel::mesh_t& mesh = model->GetMeshes()[0];
 
 			Mat4 world_mat;
 			world_mat.make_scale(render_comp->owner_scale());
@@ -545,9 +547,22 @@ void Renderer_Sw::render_software_rasterization() {
 			const auto& vertices = model->GetCPUVertices();
 			const auto& indices = model->GetCPUIndices();
 
+			// Shader params
+			const auto& shader_params = render_comp->Materials()[0].shader_params();
+			Vec4 shader_param_color(1.f, 1.f, 1.f, 1.f);
+			const kbTexture* color_tex = nullptr;
+			for (const auto& param : shader_params) {
+				const kbString& param_name = param.param_name();
+				if (param_name == "color") {
+					shader_param_color = param.vector();
+				} else if (param_name == "color_tex") {
+					color_tex = param.texture();
+				}
+			}
+
 			u32 tex_width = 0;
 			u32 tex_height = 0;
-			const u8* cpu_tex = pinky_tex->GetCPUTexture(tex_width, tex_height);
+			const u8* cpu_tex = pinky_tex->cpu_texture(tex_width, tex_height);
 
 			for (size_t i = 0; i < indices.size(); i += 3) {
 				//vertexLayout screen_verts[3];
@@ -627,9 +642,9 @@ void Renderer_Sw::render_software_rasterization() {
 							//	Vec2 iuv;
 							//	iuv.x = (uv.x * tex_width);
 							//	iuv.y = (uv.y * tex_
-							const Vec4 albedo(cpu_tex[tex_idx + 2] / 255.f, cpu_tex[tex_idx + 1] / 255.f, cpu_tex[tex_idx + 0] / 255.f, 1.f);
+							const Vec4 albedo = Vec4(cpu_tex[tex_idx + 2] / 255.f, cpu_tex[tex_idx + 1] / 255.f, cpu_tex[tex_idx + 0] / 255.f, 1.f) * shader_param_color;
 							const f32 dot = clamp(normal.dot(Vec3(0.707f, 0.707f, 0.0)), 0.f, 1.0f) * 0.85f + 0.15f;
-							const Vec4 sun_color = Vec4(1.f, 1.f, 1.f, 1.f);//Vec4(1.f, 216.f / 255.f, 184.f / 255.f, 1.f);
+							const Vec4 sun_color = Vec4(0x75 / 255.f, 0x56 / 255.f, 0xd8 / 255.f, 1.f) * 1.7f;
 							const Vec4 diffuse = sun_color * dot;
 							const Vec4 color = (albedo * diffuse).saturate();
 							u8 val = (u8)(255 * dot);

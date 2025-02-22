@@ -171,7 +171,7 @@ kbGameEntity 2304826171 1239496353 243933317 3983880952 {
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
-						ParamName = "shaderTexture"
+						ParamName = "color_tex"
 						Texture = .\assets\test\pinky.dds
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}

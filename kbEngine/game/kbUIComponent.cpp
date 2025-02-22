@@ -5,7 +5,6 @@
 #include "blk_core.h"
 #include "blk_containers.h"
 #include "Matrix.h"
-#include "Quaternion.h"
 #include "kbGameEntityHeader.h"
 #include "kbUIComponent.h"
 #include "kbRenderer.h"
@@ -279,8 +278,7 @@ float kbUIWidgetComponent::render_order_bias() const {
 }
 
 /// kbUIWidgetComponent::GetBaseTextureDimensions
-Vec2i	kbUIWidgetComponent::GetBaseTextureDimensions() const {
-
+Vec2i kbUIWidgetComponent::GetBaseTextureDimensions() const {
 	Vec2i retDim(-1, -1);
 	if (m_model == nullptr) {
 		return retDim;
@@ -291,14 +289,13 @@ Vec2i	kbUIWidgetComponent::GetBaseTextureDimensions() const {
 		return retDim;
 	}
 
-	retDim.x = pComp->texture()->GetWidth();
-	retDim.y = pComp->texture()->GetHeight();
+	retDim.x = pComp->texture()->width();
+	retDim.y = pComp->texture()->height();
 	return retDim;
 }
 
 /// kbUIWidgetComponent::enable_internal
 void kbUIWidgetComponent::enable_internal(const bool bEnable) {
-
 	Super::enable_internal(bEnable);
 
 	static kbModel* pUnitQuad = nullptr;
@@ -356,7 +353,6 @@ void kbUIWidgetComponent::enable_internal(const bool bEnable) {
 
 /// kbUIWidgetComponent::update_internal
 void kbUIWidgetComponent::update_internal(const float dt) {
-
 	Super::update_internal(dt);
 
 	if (m_model == nullptr) {
@@ -370,21 +366,21 @@ void kbUIWidgetComponent::update_internal(const float dt) {
 	Vec3 widgetAbsSize = m_AbsoluteSize;
 	//	float renderOrderBias = 0.0f;
 
-	float aspectRatio = 1.0f;
+	f32 aspectRatio = 1.0f;
 	const kbShaderParamComponent* const pComp = m_model->shader_param_component(0, kbString("baseTexture"));
 	if (pComp != nullptr) {
 		const kbTexture* const pTex = pComp->texture();
 		if (pTex != nullptr) {
-			aspectRatio = (float)pTex->GetWidth() / (float)pTex->GetHeight();
+			aspectRatio = (f32)pTex->width() / (f32)pTex->height();
 		}
 	}
 
-	const float BackBufferWidth = (float)g_pRenderer->GetBackBufferWidth();
-	const float BackBufferHeight = (float)g_pRenderer->GetBackBufferHeight();
+	const f32 BackBufferWidth = (f32)g_pRenderer->GetBackBufferWidth();
+	const f32 BackBufferHeight = (f32)g_pRenderer->GetBackBufferHeight();
 
 	if (m_AxisLock == LockYAxis) {
-		const float widgetPixelHeight = widgetAbsSize.y * BackBufferHeight;
-		const float widgetPixelWidth = widgetPixelHeight * aspectRatio;
+		const f32 widgetPixelHeight = widgetAbsSize.y * BackBufferHeight;
+		const f32 widgetPixelWidth = widgetPixelHeight * aspectRatio;
 		widgetAbsSize.x = widgetPixelWidth / BackBufferWidth;
 	}
 

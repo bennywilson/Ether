@@ -1645,7 +1645,7 @@ void kbRenderer_DX11::RenderDebugText() {
 	m_pDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	m_pDeviceContext->RSSetState(m_pNoFaceCullingRasterizerState);
 
-	ID3D11ShaderResourceView* const pShaderResourceView = (ID3D11ShaderResourceView*)m_textures[4]->GetGPUTexture();
+	ID3D11ShaderResourceView* const pShaderResourceView = (ID3D11ShaderResourceView*)m_textures[4]->gpu_texture();
 
 	m_pDeviceContext->PSSetShaderResources(0, 1, &pShaderResourceView);
 	m_pDeviceContext->PSSetSamplers(0, 1, &m_pBasicSamplerState);
@@ -2858,7 +2858,7 @@ void kbRenderer_DX11::RenderScreenSpaceQuadImmediate(const int start_x, const in
 
 	if (textureIndex >= 0) {
 
-		ID3D11ShaderResourceView* const pShaderResourceView = (ID3D11ShaderResourceView*)m_textures[textureIndex]->GetGPUTexture();
+		ID3D11ShaderResourceView* const pShaderResourceView = (ID3D11ShaderResourceView*)m_textures[textureIndex]->gpu_texture();
 		m_pDeviceContext->PSSetShaderResources(0, 1, &pShaderResourceView);
 	}
 
@@ -3072,7 +3072,7 @@ void kbRenderer_DX11::RenderPretransformedDebugLines() {
 
 	m_pDeviceContext->RSSetState(m_pDefaultRasterizerState);
 
-	ID3D11ShaderResourceView* const pShaderResourceView = (ID3D11ShaderResourceView*)m_textures[0]->GetGPUTexture();
+	ID3D11ShaderResourceView* const pShaderResourceView = (ID3D11ShaderResourceView*)m_textures[0]->gpu_texture();
 	m_pDeviceContext->PSSetShaderResources(0, 1, &pShaderResourceView);
 	m_pDeviceContext->PSSetSamplers(0, 1, &m_pBasicSamplerState);
 	m_pDeviceContext->IASetInputLayout((ID3D11InputLayout*)m_pDebugShader->GetVertexLayout());
@@ -3124,7 +3124,7 @@ void kbRenderer_DX11::RenderDebugLines() {
 			m_RenderState.SetDepthStencilState(false, kbRenderState::DepthWriteMaskZero, kbRenderState::CompareLess, false);
 		}
 
-		ID3D11ShaderResourceView* const pShaderResourceView = (ID3D11ShaderResourceView*)m_textures[0]->GetGPUTexture();
+		ID3D11ShaderResourceView* const pShaderResourceView = (ID3D11ShaderResourceView*)m_textures[0]->gpu_texture();
 		m_pDeviceContext->PSSetShaderResources(0, 1, &pShaderResourceView);
 		m_pDeviceContext->PSSetSamplers(0, 1, &m_pBasicSamplerState);
 		m_pDeviceContext->IASetInputLayout((ID3D11InputLayout*)m_pDebugShader->GetVertexLayout());
@@ -3177,7 +3177,7 @@ void kbRenderer_DX11::RenderDebugBillboards(const bool bIsEntityIdPass) {
 	const auto varBindings = pShader->GetShaderVarBindings();
 	for (int i = 0; i < m_DebugBillboards.size(); i++) {
 		debugDrawObject_t& currBillBoard = m_DebugBillboards[i];
-		ID3D11ShaderResourceView* const pShaderResourceView = (ID3D11ShaderResourceView*)m_textures[currBillBoard.m_TextureIndex]->GetGPUTexture();
+		ID3D11ShaderResourceView* const pShaderResourceView = (ID3D11ShaderResourceView*)m_textures[currBillBoard.m_TextureIndex]->gpu_texture();
 		m_pDeviceContext->PSSetShaderResources(0, 1, &pShaderResourceView);
 
 		D3D11_MAPPED_SUBRESOURCE mappedResource;
@@ -3393,7 +3393,7 @@ void kbRenderer_DX11::RT_Render2DLine(const Vec3& startPt, const Vec3& endPt, co
 
 	m_RenderState.SetBlendState(pShader);
 
-	ID3D11ShaderResourceView* const pShaderResourceView = (ID3D11ShaderResourceView*)m_textures[0]->GetGPUTexture();
+	ID3D11ShaderResourceView* const pShaderResourceView = (ID3D11ShaderResourceView*)m_textures[0]->gpu_texture();
 	m_pDeviceContext->PSSetShaderResources(0, 1, &pShaderResourceView);
 	m_pDeviceContext->PSSetSamplers(0, 1, &m_pBasicSamplerState);
 	m_pDeviceContext->IASetInputLayout((ID3D11InputLayout*)pShader->GetVertexLayout());
@@ -3470,7 +3470,7 @@ void kbRenderer_DX11::RT_Render2DQuad(const Vec2& origin, const Vec2& size, cons
 	m_RenderState.SetBlendState(pShader);
 	m_RenderState.SetDepthStencilState(false, kbRenderState::DepthWriteMaskZero, kbRenderState::CompareAlways, false);
 
-	ID3D11ShaderResourceView* const pShaderResourceView = (ID3D11ShaderResourceView*)m_textures[0]->GetGPUTexture();
+	ID3D11ShaderResourceView* const pShaderResourceView = (ID3D11ShaderResourceView*)m_textures[0]->gpu_texture();
 	m_pDeviceContext->PSSetShaderResources(0, 1, &pShaderResourceView);
 	m_pDeviceContext->PSSetSamplers(0, 1, &m_pBasicSamplerState);
 	m_pDeviceContext->IASetInputLayout((ID3D11InputLayout*)pShader->GetVertexLayout());
@@ -3701,7 +3701,7 @@ ID3D11Buffer* kbRenderer_DX11::SetConstantBuffer(const kbShaderVarBindings_t& sh
 
 			ID3D11ShaderResourceView* pShaderResourceView = nullptr;
 			if (textureBinding.m_pDefaultTexture != nullptr) {
-				pShaderResourceView = textureBinding.m_pDefaultTexture->GetGPUTexture();
+				pShaderResourceView = textureBinding.m_pDefaultTexture->gpu_texture();
 			} else if (textureBinding.m_pDefaultRenderTexture != nullptr) {
 
 				if (textureBinding.m_pDefaultRenderTexture == m_pRenderTargets[ACCUMULATION_BUFFER_1]) {
@@ -3720,7 +3720,7 @@ ID3D11Buffer* kbRenderer_DX11::SetConstantBuffer(const kbShaderVarBindings_t& sh
 				if (curOverride.m_Type == kbShaderParamOverrides_t::kbShaderParam_t::SHADER_TEX && curOverride.m_VarName == shaderVarBindings.m_Textures[iTex].m_TextureName) {
 
 					if (curOverride.m_texture != nullptr) {
-						pShaderResourceView = curOverride.m_texture->GetGPUTexture();
+						pShaderResourceView = curOverride.m_texture->gpu_texture();
 					} else if (curOverride.m_render_texture != nullptr) {
 						pShaderResourceView = ((kbRenderTexture_DX11*)curOverride.m_render_texture)->m_shaderResourceView;
 					}

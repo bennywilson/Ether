@@ -19,12 +19,12 @@ public:
 
 	virtual kbTypeInfoType_t GetType() const { return KBTYPEINFO_TEXTURE; }
 
-	kbHWTexture* GetGPUTexture() const { return m_pGPUTexture; }
+	kbHWTexture* gpu_texture() const { return m_pGPUTexture; }
 
-	const uint8_t* GetCPUTexture(unsigned int& width, unsigned int& height);
+	const uint8_t* cpu_texture(unsigned int& width, unsigned int& height);
 
-	uint GetWidth() const { return m_TextureWidth; }
-	uint GetHeight() const { return m_TextureHeight; }
+	uint width() const { return m_width; }
+	uint height() const { return m_height; }
 
 private:
 	virtual bool Load_Internal() { return load_internal();  }
@@ -35,10 +35,10 @@ private:
 	kbHWTexture* m_pGPUTexture;
 	std::unique_ptr<uint8_t[]> m_pCPUTexture;
 
-	uint m_TextureWidth;
-	uint m_TextureHeight;
+	uint m_width;
+	uint m_height;
 
-	bool m_bIsCPUTexture;
+	bool m_is_cpu_texture;
 };
 
 /// kbShaderVarBinding_t

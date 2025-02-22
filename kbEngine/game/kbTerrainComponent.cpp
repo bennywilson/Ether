@@ -253,8 +253,8 @@ void kbGrass::RefreshGrass() {
 			continue;
 		}
 
-		kbTexture* const pTex = const_cast<kbTexture*>(curParam.texture());		// GetCPUTexture() is not a const function as it modifies internal state
-		pGrassMaskMap = (pixelData*)pTex->GetCPUTexture(grassMaskWidth, grassMaskHeight);
+		kbTexture* const pTex = const_cast<kbTexture*>(curParam.texture());		// cpu_texture() is not a const function as it modifies internal state
+		pGrassMaskMap = (pixelData*)pTex->cpu_texture(grassMaskWidth, grassMaskHeight);
 		break;
 	}
 
@@ -457,7 +457,7 @@ void kbTerrainComponent::GenerateTerrain() {
 
 	unsigned int texWidth, texHeight;
 
-	const pixelData* const pTextureBuffer = (pixelData*)m_pHeightMap->GetCPUTexture(texWidth, texHeight);
+	const pixelData* const pTextureBuffer = (pixelData*)m_pHeightMap->cpu_texture(texWidth, texHeight);
 
 	// Build terrain here
 	const int numVerts = m_TerrainDimensions * m_TerrainDimensions;

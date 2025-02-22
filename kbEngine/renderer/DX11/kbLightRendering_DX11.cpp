@@ -441,7 +441,7 @@ void kbRenderer_DX11::RenderLightShafts() {
 			viewport.MaxDepth = 1.0f;
 			m_pDeviceContext->RSSetViewports( 1, &viewport );
 
-			ID3D11ShaderResourceView *const  RenderTargetViews[] = { (ID3D11ShaderResourceView*)CurLightShafts.m_texture->GetGPUTexture(), GetRenderTarget_DX11(DEPTH_BUFFER)->m_shaderResourceView };
+			ID3D11ShaderResourceView *const  RenderTargetViews[] = { (ID3D11ShaderResourceView*)CurLightShafts.m_texture->gpu_texture(), GetRenderTarget_DX11(DEPTH_BUFFER)->m_shaderResourceView };
 			ID3D11SamplerState *const  SamplerStates[] = { m_pBasicSamplerState, m_pShadowMapSamplerState };
 			m_pDeviceContext->PSSetShaderResources( 0, 2, RenderTargetViews );
 			m_pDeviceContext->PSSetSamplers( 0, 2, SamplerStates );

@@ -16,7 +16,7 @@ struct SceneIndex {
 ConstantBuffer<SceneIndex> scene_index : register(b0, space1);
 
 SamplerState SampleType : register(s0);
-Texture2D shaderTexture : register(t0);
+Texture2D color_tex : register(t0);
 
 /// VertexInput
 struct VertexInput {
@@ -55,7 +55,7 @@ PixelInput vertex_shader(VertexInput input) {
 
 ///	pixelShader
 float4 pixel_shader(PixelInput input) : SV_TARGET {
-	const float4 albedo = shaderTexture.Sample( SampleType, input.uv ) * input.color;
+	const float4 albedo = color_tex.Sample( SampleType, input.uv ) * input.color;
 	const float3 normal = normalize(input.normal.xyz);
 	const float3 light_dir = normalize(float3(0.0f, 1.0f, -1.0));
 
@@ -71,7 +71,7 @@ float4 pixel_shader(PixelInput input) : SV_TARGET {
 	const float3 spec = input.spec.zzz * highlight.xxx * albedo.xyz;
 
 	// Ambient
-	const float3 ambient = float3(0.25f, 0.25f, 0.25f) * albedo.xyz;
+	const float3 ambient = float3(0.5f, 0.5f, 0.5f) * albedo.xyz;
 
 	return float4(diffuse + spec + ambient, 1.f);
 }

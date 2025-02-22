@@ -23,6 +23,10 @@ public:
 	void initialize(HWND hwnd, const uint32_t frame_width, const uint32_t frame_height);
 	void shut_down();
 
+	virtual bool software_renderer() const {
+		return false;
+	}
+
 	virtual void render() = 0;
 
 	RenderBuffer* create_render_buffer();

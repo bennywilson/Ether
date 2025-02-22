@@ -194,7 +194,7 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 
 	// Toggles
 	g_UseEditor = true;
-	u32 use_d3d12 = 0;
+	const u32 use_d3d12 = 0;
 
 	// Perform application initialization
 	if (!InitInstance(hInstance, nCmdShow)) {
@@ -249,6 +249,11 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 		}
 
 		try {
+
+			if (g_renderer != nullptr) {
+				g_renderer->render();
+			}
+
 			if (g_UseEditor) {
 				if (!applicationEditor->IsRunning()) {
 					break;
@@ -258,9 +263,6 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 				pGame->Update();
 			}
 			
-			if (g_renderer != nullptr) {
-				g_renderer->render();
-			}
 		} catch (char* const string) {
 			// todo : output error to console
 			blk::log(string);
