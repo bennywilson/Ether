@@ -19,7 +19,7 @@ static int orient2d(const Vec2i& a, const Vec2i& b, const Vec2i& c)
 	return (b.x - a.x) * (c.y - a.y) - (b.y - a.y) * (c.x - a.x);
 }
 
-void TrianglePipeline::render(const unordered_set<const RenderComponent*>& comp, vector<u32>& color, vector<f32>& depth, const Vec2i frame_dim) {
+void TrianglePipeline::render(const unordered_set<const RenderComponent*>& comp, vector<u8>& color, vector<f32>& depth, const Vec2i frame_dim) {
 	for (auto render_comp : comp) {
 		if (render_comp->IsA(kbStaticModelComponent::GetType())) {
 			kbStaticModelComponent* const skel_comp = (kbStaticModelComponent*)render_comp;
@@ -43,7 +43,7 @@ void TrianglePipeline::render(const unordered_set<const RenderComponent*>& comp,
 				const kbString& param_name = param.param_name();
 				if (param_name == "color") {
 					shader_param_color = param.vector();
-				} else if (param_name == "color_tex") {
+				} else if (param_name == "color_tex" || param_name == "shaderTexture") {
 					color_tex = param.texture();
 				}
 			}
@@ -107,13 +107,13 @@ void TrianglePipeline::render(const unordered_set<const RenderComponent*>& comp,
 							const f32 bary1 = w1 / (f32)sum;
 							const f32 bary2 = w2 / (f32)sum;
 
-							const size_t screen_idx = (size_t)(p.x + p.y * frame_dim.x);
+							const size_t depth_idx = (size_t)(p.x + p.y * frame_dim.x);
 							const f32 z = v[0].z * bary0 + v[1].z * bary1 + v[2].z * bary2;
-							if (z > depth[screen_idx]) {
+							if (z > depth[depth_idx]) {
 								continue;
 							}
+							depth[depth_idx] = z;
 
-							depth[screen_idx] = z;
 							Vec3 normal = vertices[v[0].idx].GetNormal() * bary0;
 							normal += vertices[v[1].idx].GetNormal() * bary1;
 							normal += vertices[v[2].idx].GetNormal() * bary2;
@@ -123,22 +123,22 @@ void TrianglePipeline::render(const unordered_set<const RenderComponent*>& comp,
 							Vec2 uv = vertices[v[0].idx].uv * bary0;
 							uv += vertices[v[1].idx].uv * bary1;
 							uv += vertices[v[2].idx].uv * bary2;
-							u32 x = (u32)(uv.x * tex_width);
-							u32 y = (u32)(uv.y * tex_height);
+							u32 x = clamp((u32)(uv.x * tex_width), (u32)0, tex_width - 1);
+							u32 y = clamp((u32)(uv.y * tex_height), (u32)0, tex_height - 1);
 							u32 tex_idx = 4 * (x + (y * tex_width));
 
 							const Vec4 albedo = Vec4(cpu_tex[tex_idx + 0] / 255.f, cpu_tex[tex_idx + 1] / 255.f, cpu_tex[tex_idx + 2] / 255.f, 1.f) * shader_param_color;
 							const f32 dot = clamp(normal.dot(Vec3(0.707f, 0.707f, 0.0)), 0.f, 1.0f) * 0.85f + 0.15f;
 							const Vec4 sun_color = Vec4(0x75 / 255.f, 0x56 / 255.f, 0xd8 / 255.f, 1.f) * 1.7f;
 							const Vec4 diffuse = sun_color * dot;
-							const Vec4 final_color = (albedo * diffuse).saturate();
+							const Vec4 final_color = albedo;//(albedo* diffuse).saturate();
 							u8 val = (u8)(255 * dot);
-							color[screen_idx] =
-								((u32)(final_color.x * 255)) |
-								((u32)(final_color.y * 255) << 8) |
-								((u32)(final_color.z * 255) << 16) |
-								(0xff) << 24;
 
+							const size_t color_idx = depth_idx * 4;
+							color[color_idx + 0] = (u8)(final_color.x * 255);
+							color[color_idx + 1] = (u8)(final_color.y * 255);
+							color[color_idx + 2] = (u8)(final_color.z * 255);
+							color[color_idx + 3] = (u8)(final_color.w * 255);
 						}
 					}
 				}
@@ -150,14 +150,107 @@ void TrianglePipeline::render(const unordered_set<const RenderComponent*>& comp,
 /// KuwaharaPipeline::render
 void KuwaharaPipeline::render(
 	const unordered_set<const RenderComponent*>& comp,
-	vector<u32>& color,
+	vector<u8>& color,
 	vector<f32>& depth,
 	const Vec2i frame_dim) {
 
-	for (u32 y = 0; y < frame_dim.y; y++) {
-		for (u32 x = 0; x < frame_dim.x; x++) {
-			const u32 idx = x + y * frame_dim.x;
-			//color[idx] = color[idx] & 0x0f0f0fff;
+	// Mean and variance of each pixel
+	struct MeanAndVariance_t {
+		Vec3 mean = Vec3::zero;
+		f32 variance = 0.f;
+	};
+
+	const i32 frame_width = frame_dim.x;
+	const i32 frame_height = frame_dim.y;
+
+	vector<MeanAndVariance_t> mean_variance;
+	mean_variance.resize((size_t)frame_width * frame_height);
+	const i32 KUWAHARA_HALF_SIZE = 4;
+
+	for (i32 y = 0; y < frame_height; y++) {
+		for (i32 x = 0; x < frame_width; x++) {
+			i32 num_samples = 0;
+			Vec3 total_rgb = Vec3::zero;
+
+			for (int filterY = y - KUWAHARA_HALF_SIZE; filterY <= y + KUWAHARA_HALF_SIZE; filterY += (KUWAHARA_HALF_SIZE * 2)) {
+				if (filterY < 0 || filterY >= frame_height) {
+					continue;
+				}
+
+				for (int filterX = x - KUWAHARA_HALF_SIZE; filterX <= x + KUWAHARA_HALF_SIZE; filterX += (KUWAHARA_HALF_SIZE * 2)) {
+					if (filterX < 0 || filterX >= frame_width) {
+						continue;
+					}
+
+					num_samples++;
+
+					const size_t index = (size_t)((filterY * frame_width) + filterX) * 4;
+					total_rgb.x += color[index + 0];
+					total_rgb.y += color[index + 1];
+					total_rgb.z += color[index + 2];
+				}
+			}
+
+			const i32 dest_idx = (y * frame_width) + x;
+			mean_variance[dest_idx].mean[0] = (f32)total_rgb.x / (f32)num_samples;
+			mean_variance[dest_idx].mean[1] = (f32)total_rgb.y / (f32)num_samples;
+			mean_variance[dest_idx].mean[2] = (f32)total_rgb.z / (f32)num_samples;
+
+			Vec3 variance = Vec3::zero;
+
+			for (i32 filterY = y - KUWAHARA_HALF_SIZE; filterY <= y + KUWAHARA_HALF_SIZE; filterY++) {
+				if (filterY < 0 || filterY >= frame_height) {
+					continue;
+				}
+
+				for (i32 filterX = x - KUWAHARA_HALF_SIZE; filterX <= x + KUWAHARA_HALF_SIZE; filterX++) {
+					if (filterX < 0 || filterX >= frame_width) {
+						continue;
+					}
+
+					const size_t src_idx = (size_t)((filterY * frame_width) + filterX) * 4;
+					for (i32 i = 0; i < 3; i++) {
+						const f32 value = (f32)color[src_idx + i];
+						variance[i] += (value - mean_variance[dest_idx].mean[i]) * (value - mean_variance[dest_idx].mean[i]);
+					}
+				}
+			}
+
+			mean_variance[dest_idx].variance = (variance[0] * variance[0] + variance[1] * variance[1] + variance[2] * variance[2]);
 		}
+	}
+
+	for (i32 y = 0; y < frame_height; y++) {
+		for (i32 x = 0; x < frame_width; x++) {
+			Vec3 rgb = Vec3::zero;
+			f32 lowest_variance = FLT_MAX;
+
+			for (i32 filterY = y - KUWAHARA_HALF_SIZE; filterY <= y + KUWAHARA_HALF_SIZE; filterY++) {
+				if (filterY < 0 || filterY >= frame_height) {
+					continue;
+				}
+
+				for (i32 filterX = x - KUWAHARA_HALF_SIZE; filterX <= x + KUWAHARA_HALF_SIZE; filterX++) {
+					if (filterX < 0 || filterX >= frame_width) {
+						continue;
+					}
+
+					const size_t src_idx = (size_t)((filterY * frame_width) + filterX);
+					const f32 variance = mean_variance[src_idx].variance;
+					if (variance < lowest_variance) {
+						lowest_variance = variance;
+						rgb.x = mean_variance[src_idx].mean.x;
+						rgb.y = mean_variance[src_idx].mean.y;
+						rgb.z = mean_variance[src_idx].mean.z;
+					}
+				}
+			}
+
+			const size_t dest_idx = (size_t)(((y * frame_width) + x) * 4);
+			color[dest_idx + 0] = (u8)clamp(rgb.x, 0.f, 255.f);
+			color[dest_idx + 1] = (u8)clamp(rgb.y, 0.f, 255.f);
+			color[dest_idx + 2] = (u8)clamp(rgb.z, 0.f, 255.f);
+		}
+
 	}
 }

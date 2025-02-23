@@ -342,6 +342,8 @@ void Renderer_Sw::shut_down_internal() {
 
 	m_cbv_upload_heap->Unmap(0, nullptr);
 
+	m_blit_pipeline->release();
+
 	m_root_signature.Reset();
 	m_cbv_upload_heap.Reset();
 	m_cbv_srv_heap.Reset();
@@ -506,23 +508,13 @@ void Renderer_Sw::render_software_rasterization() {
 		view_matrix *
 		m_camera_projection;
 
-	std::vector<u32> color_buffer;
-	color_buffer.resize((size_t)m_frame_width * m_frame_height);
-	//Vec4 start_color(0x38 / 255.f, 0x1cf\ / 255.f, 0x2a / 255.f, 1.f);
-	//Vec4 end_color(0xff / 255.f, 0xf4 / 255.f, 0x74 / 255.f, 1.f);
+	std::vector<u8> color_buffer;
+	color_buffer.resize((size_t)m_frame_width * m_frame_height * 4);
+
 	Vec4 start_color(0x04 / 255.f, 0x06 / 255.f, 0x22 / 255.f, 1.f);
 	Vec4 end_color(0x26 / 255.f, 0x23 / 255.f, 0x6b / 255.f, 1.f);
-	//end_color = start_color;
-	for (size_t y = 0; y < m_frame_height; y++) {
-		const f32 t = y / (f32)m_frame_height;
-		const u32 r = (u32)(255.f * (start_color.x + (end_color.x - start_color.x) * t));
-		const u32 g = (u32)(255.f * (start_color.y + (end_color.y - start_color.y) * t));
-		const u32 b = (u32)(255.f * (start_color.z + (end_color.z - start_color.z) * t));
-		const u32 a = (u32)(255.f * (start_color.w + (end_color.w - start_color.w) * t));
-		// 	const u32 final = 0xff400622;
-		const u32 final = (255 << 24) | (b << 16) | (g << 8) | (r);
-		std::fill(color_buffer.begin() + y * m_frame_width, color_buffer.begin() + m_frame_width + y * m_frame_width, final);
-	}
+
+	std::fill(color_buffer.begin(), color_buffer.end(), 0x00);
 
 	std::vector<f32> depth_buffer;
 	depth_buffer.resize((size_t)m_frame_width * m_frame_height);

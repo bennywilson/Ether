@@ -9,7 +9,7 @@ using namespace std;
 /// RenderPipeline_Sw
 class RenderPipeline_Sw : public RenderPipeline {
 public:
-	virtual void render(const unordered_set<const RenderComponent*>& comp, vector<u32>& color, vector<f32>& depth, const Vec2i m_frame_dim) = 0;
+	virtual void render(const unordered_set<const RenderComponent*>& comp, vector<u8>& color, vector<f32>& depth, const Vec2i m_frame_dim) = 0;
 
 protected:
 	~RenderPipeline_Sw() {}
@@ -22,7 +22,7 @@ class TrianglePipeline : public RenderPipeline_Sw {
 public:
 	~TrianglePipeline() {}
 
-	virtual void render(const unordered_set<const RenderComponent*>& comp, vector<u32>& color, vector<f32>& depth, const Vec2i m_frame_dim) override;
+	virtual void render(const unordered_set<const RenderComponent*>& comp, vector<u8>& color, vector<f32>& depth, const Vec2i m_frame_dim) override;
 
 	void set_view_proj(const Mat4& view, const Mat4& proj);
 
@@ -41,7 +41,7 @@ class PostProcessPipeline : public RenderPipeline_Sw {
 public:
 	~PostProcessPipeline() {}
 
-	virtual void render(const unordered_set<const RenderComponent*>& comp, vector<u32>& color, vector<f32>& depth, const Vec2i m_frame_dim) override {}
+	virtual void render(const unordered_set<const RenderComponent*>& comp, vector<u8>& color, vector<f32>& depth, const Vec2i m_frame_dim) override {}
 
 protected:
 
@@ -58,7 +58,7 @@ class KuwaharaPipeline : public RenderPipeline_Sw {
 public:
 	~KuwaharaPipeline() {}
 
-	virtual void render(const unordered_set<const RenderComponent*>& comp, vector<u32>& color, vector<f32>& depth, const Vec2i m_frame_dim) override;
+	virtual void render(const unordered_set<const RenderComponent*>& comp, vector<u8>& color, vector<f32>& depth, const Vec2i m_frame_dim) override;
 
 private:
 	Mat4 m_view_mat;

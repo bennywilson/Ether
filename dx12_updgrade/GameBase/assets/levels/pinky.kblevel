@@ -1,4 +1,4 @@
-kbGameEntity 2932080543 1238490521 2889335706 2807285557 {
+kbGameEntity 3079409128 1081872771 2994466180 659152931 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
@@ -152,26 +152,12 @@ kbGameEntity 2304826171 1239496353 243933317 3983880952 {
 				Enabled = 0
 				LifeTime =  -1.000000
 				CullModeOverride = ShaderDefault
-				Shader = NULL
-				ShaderParams = 3
+				Shader = ..\..\kbengine\assets\shaders\basictexture.kbshader
+				ShaderParams = 1
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
-						ParamName = "color"
-						Texture = NULL
-						Vector = 1.000000 1.000000 1.000000 1.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "spec"
-						Texture = NULL
-						Vector = 0.000000 0.000000 0.000000 1.000000
-					}
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "color_tex"
+						ParamName = "shaderTexture"
 						Texture = .\assets\test\pinky.dds
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}

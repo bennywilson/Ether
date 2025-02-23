@@ -76,7 +76,7 @@ const static size_t g_NumEditorCamSpeedBindings = sizeof(g_EditorCamSpeedBinding
 
 /// kbEditor
 kbEditor::kbEditor() :
-	Fl_Window(0, 0, GetSystemMetrics(SM_CXFULLSCREEN), GetSystemMetrics(SM_CYFULLSCREEN)) {
+	Fl_Window(12, 12, GetSystemMetrics(SM_CXFULLSCREEN) - 16, GetSystemMetrics(SM_CYFULLSCREEN) - 16) {
 
 	m_bGameUpdating = false;
 	const float editorInitStartTime = g_GlobalTimer.TimeElapsedSeconds();
@@ -99,7 +99,7 @@ kbEditor::kbEditor() :
 	const int Right_Panel = 300;
 
 	// Output display
-	m_pOutputText = new Fl_Text_Display(5, Screen_Height - Bottom_Panel_Height + Panel_Border_size * 4, Screen_Width - 5, Bottom_Panel_Height - Panel_Border_size - Panel_Border_size, "DISPLAY!");
+	m_pOutputText = new Fl_Text_Display(5, Screen_Height - Bottom_Panel_Height + Panel_Border_size * 4, Screen_Width - 5, Bottom_Panel_Height - Panel_Border_size - Panel_Border_size - 8, "DISPLAY!");
 	g_OutputBuffer = new Fl_Text_Buffer();
 	m_pOutputText->buffer(g_OutputBuffer);
 	g_StyleBuffer = new Fl_Text_Buffer();
@@ -616,9 +616,9 @@ void kbEditor::Update() {
 
 	// Update title bar dirty status
 	if (m_UndoIDAtLastSave != m_UndoStack.GetLastDirtyActionId()) {
-		SetWindowText(fl_xid(this), ("kbEditor - " + m_CurrentLevelFileName + "*").c_str());
+		SetWindowText(fl_xid(this), ("blk 1.0 - " + m_CurrentLevelFileName + "*").c_str());
 	} else {
-		SetWindowText(fl_xid(this), ("kbEditor - " + m_CurrentLevelFileName).c_str());
+		SetWindowText(fl_xid(this), ("blk 1.0  - " + m_CurrentLevelFileName).c_str());
 	}
 }
 

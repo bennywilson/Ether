@@ -190,11 +190,13 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 
 	std::string mapName;
 //	mapName = "test";
-	mapName = "pinky";
+	//mapName = "pinky";
+	mapName = "kuwahara";
 
 	// Toggles
 	g_UseEditor = true;
 	const u32 use_d3d12 = 0;
+	const u32 use_sw = 1;
 
 	// Perform application initialization
 	if (!InitInstance(hInstance, nCmdShow)) {
@@ -216,10 +218,12 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 
 		if (use_d3d12) {
 			g_renderer = new Renderer_Dx12();
-		} else {
+		} else if (use_sw) {
 			g_renderer = new Renderer_Sw();
 		}
-		g_renderer->initialize(applicationEditor->main_viewport_hwnd(), g_screen_width, g_screen_height);
+		if (g_renderer != nullptr) {
+			g_renderer->initialize(applicationEditor->main_viewport_hwnd(), g_screen_width, g_screen_height);
+		}
 
 		if (mapName.length() > 0) {
 			applicationEditor->LoadMap(mapName);
@@ -227,11 +231,13 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 	} else {
 		if (use_d3d12) {
 			g_renderer = new Renderer_Dx12();
-		} else {
+		} else if (use_sw) {
 			g_renderer = new Renderer_Sw();
 		}
-		g_renderer->initialize(hWnd, g_screen_width, g_screen_height);
-//
+		if (g_renderer != nullptr) {
+			g_renderer->initialize(hWnd, g_screen_width, g_screen_height);
+		}
+
 		g_pRenderer = new kbRenderer_DX11();
 		g_pRenderer->Init(hWnd, g_screen_width, g_screen_height);
 		pGame = new EtherGame();
