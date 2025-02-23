@@ -332,6 +332,7 @@ void Renderer_Sw::initialize_internal(HWND hwnd, const uint32_t frame_width, con
 
 	load_pipeline("triangle", L"");
 	load_pipeline("kuwahara", L"");
+	load_pipeline("outline", L"");
 
 	blk::log("Renderer_Sw initialized");
 }
@@ -514,7 +515,25 @@ void Renderer_Sw::render_software_rasterization() {
 	Vec4 start_color(0x04 / 255.f, 0x06 / 255.f, 0x22 / 255.f, 1.f);
 	Vec4 end_color(0x26 / 255.f, 0x23 / 255.f, 0x6b / 255.f, 1.f);
 
-	std::fill(color_buffer.begin(), color_buffer.end(), 0x00);
+	for (size_t y = 0; y < m_frame_height; y++) {
+		const f32 t = y / (f32)m_frame_height;
+		const u32 r = (u32)(255.f * (start_color.x + (end_color.x - start_color.x) * t));
+		const u32 g = (u32)(255.f * (start_color.y + (end_color.y - start_color.y) * t));
+		const u32 b = (u32)(255.f * (start_color.z + (end_color.z - start_color.z) * t));
+		const u32 a = (u32)(255.f * (start_color.w + (end_color.w - start_color.w) * t));
+		// 	const u32 final = 0xff400622;
+		const u32 final = (255 << 24) | (b << 16) | (g << 8) | (r);
+		for (int x = 0; x < m_frame_width; x++) {
+			const size_t idx = (x + y * m_frame_width) * 4;
+			color_buffer[idx + 0] = r;
+			color_buffer[idx + 1] = g;
+			color_buffer[idx + 2] = b;
+			color_buffer[idx + 3] = a;
+
+		}
+	//	std::fill(color_buffer.begin() + y * m_frame_width, color_buffer.begin() + m_frame_width + y * m_frame_width, final);
+	}
+//	std::fill(color_buffer.begin(), color_buffer.end(), 0x00);
 
 	std::vector<f32> depth_buffer;
 	depth_buffer.resize((size_t)m_frame_width * m_frame_height);
@@ -527,8 +546,16 @@ void Renderer_Sw::render_software_rasterization() {
 		depth_buffer,
 		Vec2i(m_frame_width, m_frame_height));
 
+	/*
 	auto* kuwara_pipeline = (KuwaharaPipeline*)get_pipeline("kuwahara");
 	kuwara_pipeline->render(render_components(),
+		color_buffer,
+		depth_buffer,
+		Vec2i(m_frame_width, m_frame_height));
+		*/
+
+	auto* outline_pipeline = (KuwaharaPipeline*)get_pipeline("outline");
+	outline_pipeline->render(render_components(),
 		color_buffer,
 		depth_buffer,
 		Vec2i(m_frame_width, m_frame_height));
@@ -561,6 +588,8 @@ RenderPipeline* Renderer_Sw::create_pipeline(const string& friendly_name, const 
 		return new TrianglePipeline();
 	} else if (friendly_name == "kuwahara") {
 		return new KuwaharaPipeline();
+	} else if (friendly_name == "outline") {
+		return new OutlinePipeline();
 	}
 
 	blk::error("Invalid pipeline %s", friendly_name.c_str());
