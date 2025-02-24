@@ -1,4 +1,4 @@
-kbGameEntity 222036418 1261554613 2931292584 3494286375 {
+kbGameEntity 1653884058 1192126015 1937671590 1843930184 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
@@ -37,9 +37,9 @@ kbGameEntity 3454001800 1203115592 2793425557 1284441945 {
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "Entity_5"
-		Orientation = 0.000000 0.000000 -0.707000 0.707000
-		Position = 0.487135 1.513916 5.558619
-		Scale = 50.000000 38.000000 0.000000
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 5.000000 1.513916 5.558619
+		Scale = 50.000000 28.650000 0.000000
 	}
 	kbStaticModelComponent { 
 		Enabled = 1
@@ -56,7 +56,7 @@ kbGameEntity 3454001800 1203115592 2793425557 1284441945 {
 						Enabled = 0
 						LifeTime =  -1.000000
 						ParamName = "shaderTexture"
-						Texture = .\assets\test\kuwahara\img_3921.jpg
+						Texture = .\assets\test\kuwahara\animated\layer 31.png
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 			}

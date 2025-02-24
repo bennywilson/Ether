@@ -17,6 +17,7 @@ using namespace std;
 
 static const u32 g_max_instances = 1024;
 
+/// SceneInstanceData
 static struct SceneInstanceData {
 	Mat4 mvp;
 	Mat4 world;

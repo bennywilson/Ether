@@ -509,56 +509,78 @@ void Renderer_Sw::render_software_rasterization() {
 		view_matrix *
 		m_camera_projection;
 
-	std::vector<u8> color_buffer;
-	color_buffer.resize((size_t)m_frame_width * m_frame_height * 4);
-
-	Vec4 start_color(0x04 / 255.f, 0x06 / 255.f, 0x22 / 255.f, 1.f);
-	Vec4 end_color(0x26 / 255.f, 0x23 / 255.f, 0x6b / 255.f, 1.f);
-
-	for (size_t y = 0; y < m_frame_height; y++) {
-		const f32 t = y / (f32)m_frame_height;
-		const u32 r = (u32)(255.f * (start_color.x + (end_color.x - start_color.x) * t));
-		const u32 g = (u32)(255.f * (start_color.y + (end_color.y - start_color.y) * t));
-		const u32 b = (u32)(255.f * (start_color.z + (end_color.z - start_color.z) * t));
-		const u32 a = (u32)(255.f * (start_color.w + (end_color.w - start_color.w) * t));
-		// 	const u32 final = 0xff400622;
-		const u32 final = (255 << 24) | (b << 16) | (g << 8) | (r);
-		for (int x = 0; x < m_frame_width; x++) {
-			const size_t idx = (x + y * m_frame_width) * 4;
-			color_buffer[idx + 0] = r;
-			color_buffer[idx + 1] = g;
-			color_buffer[idx + 2] = b;
-			color_buffer[idx + 3] = a;
-
-		}
-	//	std::fill(color_buffer.begin() + y * m_frame_width, color_buffer.begin() + m_frame_width + y * m_frame_width, final);
+	static std::vector<u8> color_buffer;
+	if (color_buffer.size() == 0) {
+		color_buffer.resize((size_t)m_frame_width * m_frame_height * 4);
 	}
-//	std::fill(color_buffer.begin(), color_buffer.end(), 0x00);
 
-	std::vector<f32> depth_buffer;
-	depth_buffer.resize((size_t)m_frame_width * m_frame_height);
-	std::fill(depth_buffer.begin(), depth_buffer.end(), FLT_MAX);
+	// Shader params
+	auto render_comp = *render_components().begin();
+	const auto& shader_params = render_comp->Materials()[0].shader_params();
+	Vec4 shader_param_color(1.f, 1.f, 1.f, 1.f);
+	static const kbTexture* color_tex = nullptr;
+	bool should_render = false;
+	for (const auto& param : shader_params) {
+		const kbString& param_name = param.param_name();
+		if (param_name == "color") {
+			shader_param_color = param.vector();
+		} else if (param_name == "color_tex" || param_name == "shaderTexture") {
+			if (color_tex != param.texture()) {
+				color_tex = param.texture();
+				should_render = true;
+			}
+		}
+	}
 
-	auto* tri_pipeline = (TrianglePipeline*)get_pipeline("triangle");
-	tri_pipeline->set_view_proj(view_matrix, m_camera_projection);
-	tri_pipeline->render(render_components(),
-		color_buffer,
-		depth_buffer,
-		Vec2i(m_frame_width, m_frame_height));
+	if (should_render) {
+		Vec4 start_color(0x04 / 255.f, 0x06 / 255.f, 0x22 / 255.f, 1.f);
+		Vec4 end_color(0x26 / 255.f, 0x23 / 255.f, 0x6b / 255.f, 1.f);
 
-	/*
-	auto* kuwara_pipeline = (KuwaharaPipeline*)get_pipeline("kuwahara");
-	kuwara_pipeline->render(render_components(),
-		color_buffer,
-		depth_buffer,
-		Vec2i(m_frame_width, m_frame_height));
-		*/
+		for (size_t y = 0; y < m_frame_height; y++) {
+			const f32 t = y / (f32)m_frame_height;
+			const u32 r = (u32)(255.f * (start_color.x + (end_color.x - start_color.x) * t));
+			const u32 g = (u32)(255.f * (start_color.y + (end_color.y - start_color.y) * t));
+			const u32 b = (u32)(255.f * (start_color.z + (end_color.z - start_color.z) * t));
+			const u32 a = (u32)(255.f * (start_color.w + (end_color.w - start_color.w) * t));
+			// 	const u32 final = 0xff400622;
+			const u32 final = (255 << 24) | (b << 16) | (g << 8) | (r);
+			for (int x = 0; x < m_frame_width; x++) {
+				const size_t idx = (x + y * m_frame_width) * 4;
+				color_buffer[idx + 0] = r;
+				color_buffer[idx + 1] = g;
+				color_buffer[idx + 2] = b;
+				color_buffer[idx + 3] = a;
 
-	auto* outline_pipeline = (KuwaharaPipeline*)get_pipeline("outline");
-	outline_pipeline->render(render_components(),
-		color_buffer,
-		depth_buffer,
-		Vec2i(m_frame_width, m_frame_height));
+			}
+			//	std::fill(color_buffer.begin() + y * m_frame_width, color_buffer.begin() + m_frame_width + y * m_frame_width, final);
+		}
+		//	std::fill(color_buffer.begin(), color_buffer.end(), 0x00);
+
+		std::vector<f32> depth_buffer;
+		depth_buffer.resize((size_t)m_frame_width * m_frame_height);
+		std::fill(depth_buffer.begin(), depth_buffer.end(), FLT_MAX);
+
+		auto* tri_pipeline = (TrianglePipeline*)get_pipeline("triangle");
+		tri_pipeline->set_view_proj(view_matrix, m_camera_projection);
+		tri_pipeline->render(render_components(),
+			color_buffer,
+			depth_buffer,
+			Vec2i(m_frame_width, m_frame_height));
+
+		
+		auto* kuwara_pipeline = (KuwaharaPipeline*)get_pipeline("kuwahara");
+		kuwara_pipeline->render(render_components(),
+			color_buffer,
+			depth_buffer,
+			Vec2i(m_frame_width, m_frame_height));
+			
+		/*
+		auto* outline_pipeline = (KuwaharaPipeline*)get_pipeline("outline");
+		outline_pipeline->render(render_components(),
+			color_buffer,
+			depth_buffer,
+			Vec2i(m_frame_width, m_frame_height));*/
+	}
 
 	// Update
 	D3D12_SUBRESOURCE_DATA textureData = {};

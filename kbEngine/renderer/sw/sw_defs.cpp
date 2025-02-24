@@ -131,7 +131,7 @@ void TrianglePipeline::render(const unordered_set<const RenderComponent*>& comp,
 							const f32 dot = clamp(normal.dot(Vec3(0.707f, 0.707f, 0.0)), 0.f, 1.0f) * 0.85f + 0.15f;
 							const Vec4 sun_color = Vec4(0x75 / 255.f, 0x56 / 255.f, 0xd8 / 255.f, 1.f) * 1.7f;
 							const Vec4 diffuse = sun_color * dot;
-							const Vec4 final_color = (albedo* diffuse).saturate();
+							const Vec4 final_color = albedo;//(albedo* diffuse).saturate();
 							u8 val = (u8)(255 * dot);
 
 							const size_t color_idx = depth_idx * 4;
@@ -154,7 +154,7 @@ void KuwaharaPipeline::render(
 	vector<f32>& depth,
 	const Vec2i& frame_dim) {
 
-	const i32 half_filter_size = 4;
+	const i32 half_filter_size = 3;
 	const i32 frame_width = frame_dim.x;
 	const i32 frame_height = frame_dim.y;
 
