@@ -146,12 +146,20 @@ void kbSkeletalRenderComponent::enable_internal(const bool isEnabled) {
 
 		g_pRenderer->AddRenderObject(m_render_object);
 
+		if (g_renderer) {
+			g_renderer->add_render_component(this);
+		}
+
 		m_AnimationTimeScaleMultipliers.resize(m_Animations.size());
 		for (int i = 0; i < m_AnimationTimeScaleMultipliers.size(); i++) {
 			m_AnimationTimeScaleMultipliers[i] = 1.0f;
 		}
 	} else {
 		g_pRenderer->RemoveRenderObject(m_render_object);
+
+		if (g_renderer) {
+			g_renderer->remove_render_component(this);
+		}
 	}
 }
 

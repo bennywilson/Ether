@@ -422,7 +422,7 @@ void Renderer_Sw::get_hardware_adapter(
 
 /// Renderer_Sw::create_render_buffer_internal
 RenderBuffer* Renderer_Sw::create_render_buffer_internal() {
-	return new RenderBuffer_Dx12();
+	return nullptr;
 }
 
 /// Renderer_Sw::render
@@ -519,6 +519,8 @@ void Renderer_Sw::render_software_rasterization() {
 	const auto& shader_params = render_comp->Materials()[0].shader_params();
 	Vec4 shader_param_color(1.f, 1.f, 1.f, 1.f);
 	static const kbTexture* color_tex = nullptr;
+	static int num_renders = 0;
+
 	bool should_render = false;
 	for (const auto& param : shader_params) {
 		const kbString& param_name = param.param_name();
@@ -531,7 +533,7 @@ void Renderer_Sw::render_software_rasterization() {
 			}
 		}
 	}
-
+	should_render = true;
 	if (should_render) {
 		Vec4 start_color(0x04 / 255.f, 0x06 / 255.f, 0x22 / 255.f, 1.f);
 		Vec4 end_color(0x26 / 255.f, 0x23 / 255.f, 0x6b / 255.f, 1.f);

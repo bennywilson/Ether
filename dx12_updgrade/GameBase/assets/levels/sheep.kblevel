@@ -1,4 +1,4 @@
-kbGameEntity 2277530530 1122163969 3429735606 4215481425 {
+kbGameEntity 333544331 1330265201 1896870043 3575268970 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
@@ -10,7 +10,7 @@ kbGameEntity 2277530530 1122163969 3429735606 4215481425 {
 	kbEditorLevelSettingsComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		MainCameraPosition = -1.450806 13.406656 -27.793459
+		MainCameraPosition = -1.347447 14.435345 -30.609682
 		MainCameraRotation = -0.174078 0.018061 -0.003192 0.984561
 	}
 }
@@ -186,28 +186,5 @@ kbGameEntity 3608870224 1087768538 1952728238 2833877959 {
 		Orientation = 0.000000 0.000000 0.000000 1.000000
 		Position = 0.000000 -0.006421 5.000000
 		Scale = 0.030000 0.030000 0.030000
-	}
-	kbStaticModelComponent { 
-		Enabled = 1
-		LifeTime =  -1.000000
-		CastsShadow = 0
-		Materials = 1
-			kbMaterialComponent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				CullModeOverride = ShaderDefault
-				Shader = ..\..\kbengine\assets\shaders\basictexture.kbshader
-				ShaderParams = 1
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "shaderTexture"
-						Texture = .\assets\test\sheep.dds
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-			}
-		RenderOrderBias =  0.000000
-		RenderPass = LightingPass
-		Model = .\assets\test\sheep.ms3d
 	}
 }
