@@ -104,7 +104,7 @@ void Renderer_Dx12::initialize_internal(HWND hwnd, const uint32_t frame_width, c
 
 	// SRV descriptor heap
 	D3D12_DESCRIPTOR_HEAP_DESC srv_heap_desc = {};
-	srv_heap_desc.NumDescriptors = 1 + g_max_instances;		// SRV + g_maxInstances
+	srv_heap_desc.NumDescriptors = g_max_instances + g_max_instances;		// SRV + g_maxInstances
 	srv_heap_desc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV;
 	srv_heap_desc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;
 	blk::error_check(m_device->CreateDescriptorHeap(&srv_heap_desc, IID_PPV_ARGS(&m_cbv_srv_heap)));
@@ -224,7 +224,7 @@ void Renderer_Dx12::initialize_internal(HWND hwnd, const uint32_t frame_width, c
 	CD3DX12_DESCRIPTOR_RANGE1 ranges[3] = {};
 	ranges[0].Init(D3D12_DESCRIPTOR_RANGE_TYPE_CBV, g_max_instances, 0, 0, D3D12_DESCRIPTOR_RANGE_FLAG_DATA_STATIC);
 	ranges[1].Init(D3D12_DESCRIPTOR_RANGE_TYPE_SAMPLER, 1, 0);
-	ranges[2].Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, 0, 0, D3D12_DESCRIPTOR_RANGE_FLAG_DATA_STATIC);
+	ranges[2].Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, g_max_instances, 0, 0, D3D12_DESCRIPTOR_RANGE_FLAG_DATA_STATIC);
 
 	// Root parameters are entries in the root signature
 	CD3DX12_ROOT_PARAMETER1 root_parameters[4] = {};
@@ -283,7 +283,11 @@ void Renderer_Dx12::shut_down_internal() {
 	m_swap_chain.Reset();
 	m_render_targets[0].Reset();
 	m_render_targets[1].Reset();
-	tex.Reset();
+
+	for (u32 i = 0; i < m_textures.size(); i++) {
+		m_textures[i].Reset();
+	}
+	m_textures.clear();
 
 	m_fence.Reset();
 	m_queue.Reset();
@@ -558,47 +562,60 @@ void Renderer_Dx12::todo_create_texture() {
 	blk::error_check(m_command_allocator->Reset());
 	blk::error_check(m_command_list->Reset(m_command_allocator.Get(), nullptr));
 
-	// Load texture 
-	std::unique_ptr<uint8_t[]> ddsData;
-	std::vector<D3D12_SUBRESOURCE_DATA> subresources;
-	blk::error_check(LoadDDSTextureFromFile(
-		m_device.Get(),
+	wstring textures[] = {
 		L"C:/projects/Ether/dx12_updgrade/GameBase/assets/Test/pinky.dds",
-		tex.ReleaseAndGetAddressOf(),
-		ddsData,
-		subresources));
-	
-	// Create gpu upload buffer
-	const uint64_t upload_buff_size = GetRequiredIntermediateSize(tex.Get(), 0, (uint32_t)subresources.size());
-	ComPtr<ID3D12Resource> upload_resource;
-	auto upload_heap_props = CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD);
-	auto upload_heap_buff_size = CD3DX12_RESOURCE_DESC::Buffer(upload_buff_size);
-	blk::error_check(
-		m_device->CreateCommittedResource(
-			&upload_heap_props,
-			D3D12_HEAP_FLAG_NONE,
-			&upload_heap_buff_size,
-			D3D12_RESOURCE_STATE_GENERIC_READ,
-			nullptr,
-			IID_PPV_ARGS(&upload_resource)));
+		L"C:/projects/Ether/dx12_updgrade/GameBase/assets/Test/stiltz.dds",
+	};
+	ComPtr<ID3D12Resource> upload_resource[2];
+	// Load texture 
+	for (u32 i = 0; i < 2; i++) {
+		ComPtr<ID3D12Resource> tex;
+		std::unique_ptr<uint8_t[]> ddsData;
+		std::vector<D3D12_SUBRESOURCE_DATA> subresources;
+		blk::error_check(LoadDDSTextureFromFile(
+			m_device.Get(),
+			textures[i].c_str(),
+			tex.ReleaseAndGetAddressOf(),
+			ddsData,
+			subresources));
 
-	UpdateSubresources(m_command_list.Get(), tex.Get(), upload_resource.Get(),
-		0, 0, static_cast<UINT>(subresources.size()), subresources.data());
+		// Create gpu upload buffer
+		const uint64_t upload_buff_size = GetRequiredIntermediateSize(tex.Get(), 0, (uint32_t)subresources.size());
 
-	auto tex_barrier = CD3DX12_RESOURCE_BARRIER::Transition(tex.Get(), D3D12_RESOURCE_STATE_COPY_DEST, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
-	m_command_list->ResourceBarrier(1, &tex_barrier);
+		auto upload_heap_props = CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD);
+		auto upload_heap_buff_size = CD3DX12_RESOURCE_DESC::Buffer(upload_buff_size);
+		blk::error_check(
+			m_device->CreateCommittedResource(
+				&upload_heap_props,
+				D3D12_HEAP_FLAG_NONE,
+				&upload_heap_buff_size,
+				D3D12_RESOURCE_STATE_GENERIC_READ,
+				nullptr,
+				IID_PPV_ARGS(&upload_resource[i])));
 
+		UpdateSubresources(m_command_list.Get(), tex.Get(), upload_resource[i].Get(),
+			0, 0, static_cast<UINT>(subresources.size()), subresources.data());
 
+		auto tex_barrier = CD3DX12_RESOURCE_BARRIER::Transition(tex.Get(), D3D12_RESOURCE_STATE_COPY_DEST, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
+		m_command_list->ResourceBarrier(1, &tex_barrier);
 
-	// Texture srv
-	D3D12_SHADER_RESOURCE_VIEW_DESC srv_desc = {};
-	srv_desc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
-	srv_desc.Format = DXGI_FORMAT_BC1_UNORM;
-	srv_desc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D;
-	srv_desc.Texture2D.MipLevels = 1;
+		this->m_textures.push_back(tex);
+	}
 
+	const auto CBV_SRV_DESCRIPTOR_SIZE = m_device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
 	CD3DX12_CPU_DESCRIPTOR_HANDLE texHandle(m_cbv_srv_heap->GetCPUDescriptorHandleForHeapStart(), 1024, m_device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_SAMPLER));
-	m_device->CreateShaderResourceView(tex.Get(), &srv_desc, texHandle);
+
+	for (u32 i = 0; i < g_max_instances; i++) {
+		// Texture srv
+		D3D12_SHADER_RESOURCE_VIEW_DESC srv_desc = {};
+		srv_desc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
+		srv_desc.Format = DXGI_FORMAT_BC1_UNORM;
+		srv_desc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D;
+		srv_desc.Texture2D.MipLevels = 1;
+
+		m_device->CreateShaderResourceView(m_textures[i & 1].Get(), &srv_desc, texHandle);
+		texHandle.Offset(CBV_SRV_DESCRIPTOR_SIZE);
+	}
 
 	// Close the command list and execute it to begin the initial GPU setup.
 	blk::error_check(m_command_list->Close());

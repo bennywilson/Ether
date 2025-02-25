@@ -16,7 +16,7 @@ struct SceneIndex {
 ConstantBuffer<SceneIndex> scene_index : register(b0, space1);
 
 SamplerState SampleType : register(s0);
-Texture2D color_tex : register(t0);
+Texture2D color_tex[1024] : register(t0);
 
 /// VertexInput
 struct VertexInput {
@@ -35,12 +35,15 @@ struct PixelInput {
 	float4 spec			: TEXCOORD2;
 	float4 color		: COLOR;
 	float4 normal		: NORMAL;
+	uint instance_idx   : TEXCOORD3;
 };
 
 ///	vertex_shader
 PixelInput vertex_shader(VertexInput input) {
 	SceneData matrixBuffer = scene_constants[scene_index.index];
+
 	PixelInput output = (PixelInput)(0);
+	output.instance_idx = scene_index.index;
 	output.position = input.position;
 	output.position = mul(input.position, matrixBuffer.modelMatrix);
 
@@ -55,7 +58,8 @@ PixelInput vertex_shader(VertexInput input) {
 
 ///	pixelShader
 float4 pixel_shader(PixelInput input) : SV_TARGET {
-	const float4 albedo = color_tex.Sample( SampleType, input.uv ) * input.color;
+	const uint instance_idx = input.instance_idx;
+	const float4 albedo = color_tex[instance_idx].Sample(SampleType, input.uv) * input.color;
 	const float3 normal = normalize(input.normal.xyz);
 	const float3 light_dir = normalize(float3(0.0f, 1.0f, -1.0));
 

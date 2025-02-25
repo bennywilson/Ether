@@ -23,7 +23,7 @@ public:
 
 protected:
 	void todo_create_texture();
-	ComPtr<ID3D12Resource> tex;
+	std::vector<ComPtr<ID3D12Resource>> m_textures;
 
 private:
 	virtual void initialize_internal(HWND hwnd, const uint32_t frameWidth, const uint32_t frameHeight) override;
