@@ -263,7 +263,7 @@ void kbGame::Update() {
 				stream << std::fixed << std::setprecision(3) << timingData.GetFrameTime();
 				timing += stream.str();
 
-				g_pRenderer->DrawDebugText(timing, 0.25f, curY, g_DebugTextSize, g_DebugTextSize, kbColor::green);
+				g_pRenderer->DrawDebugText(timing, 0.15f, curY, g_DebugTextSize, g_DebugTextSize, kbColor::green);
 			}
 		} else if (g_ShowEntityInfo.GetBool() || g_DumpEntityInfo.GetBool()) {
 			float curY = g_DebugLineSpacing + 0.1f;

@@ -226,7 +226,7 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 	MyRegisterClass(hInstance);
 
 	std::string mapName = "KungFuSheep";
-	g_UseEditor = true;
+	g_UseEditor = false;
 	if (GetKeyState(VK_CAPITAL)) {
 		g_UseEditor = true;
 	}

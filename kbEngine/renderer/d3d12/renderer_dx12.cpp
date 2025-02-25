@@ -428,40 +428,51 @@ void Renderer_Dx12::render() {
 	m_command_list->IASetVertexBuffers(0, 1, &vertex_buffer->vertex_buffer_view());
 	m_command_list->IASetIndexBuffer(&index_buffer->index_buffer_view());
 
-	size_t draw_idx = 0;
-	f32 scale = 1.1f;
-	for (auto& render_comp : this->render_components()) {
-		const auto& shader_params = render_comp->Materials()[0].shader_params();
-		Vec4 color(1.f, 1.f, 1.f, 1.f);
-		Vec4 spec(0.f, 0.f, 0.f, 1.f);
-		for (const auto& param : shader_params) {
-			if (param.param_name() == kbString("color")) {
-				color = param.vector();
-			}
-
-			if (param.param_name() == kbString("spec")) {
-				spec = param.vector();
-			}
+	static vector<Vec3> positions;
+	static vector<f32> scales;
+	if (positions.size() == 0) {
+		for (int i = 0; i < 2048; i++) {
+			positions.push_back(Vec3Rand(Vec3(-150.f, -150.f, -150.f), Vec3(150.f, 150.f, 150.f)));
+			scales.push_back(kbfrand(1.f, 2.f));
 		}
-		Mat4 world_mat;
-		world_mat.make_scale(render_comp->owner_scale());
-		world_mat *= render_comp->owner_rotation().to_mat4();
-		world_mat[3] = render_comp->owner_position();
-
-		scene_buffer[draw_idx].mvp = (world_mat * vp_matrix).transpose_self();
-		scene_buffer[draw_idx].world = world_mat;
-		scene_buffer[draw_idx].color = color;
-		scene_buffer[draw_idx].spec = spec;
-		scene_buffer[draw_idx].camera = Vec4(m_camera_position, 1.f);
-
-		m_command_list->SetGraphicsRoot32BitConstant(3, draw_idx, 0);
-		m_command_list->SetGraphicsRootDescriptorTable(0, cbvSrvHandle);
-		//cbvSrvHandle.Offset(descriptor_size);
-
-		m_command_list->DrawIndexedInstanced(index_buffer->num_elements(), 1, 0, 0, 0);
-		draw_idx++;
 	}
 
+	f32 scale = 1.1f;
+	size_t draw_idx = 0;
+	for (int i = 0; i < 256; i++) {
+
+		for (auto& render_comp : this->render_components()) {
+			const auto& shader_params = render_comp->Materials()[0].shader_params();
+			Vec4 color(1.f, 1.f, 1.f, 1.f);
+			Vec4 spec(0.f, 0.f, 0.f, 1.f);
+			for (const auto& param : shader_params) {
+				if (param.param_name() == kbString("color")) {
+					color = param.vector();
+				}
+
+				if (param.param_name() == kbString("spec")) {
+					spec = param.vector();
+				}
+			}
+			Mat4 world_mat;
+			world_mat.make_scale(render_comp->owner_scale() * scales[i]);
+			world_mat *= render_comp->owner_rotation().to_mat4();
+			world_mat[3] = render_comp->owner_position() + positions[i];
+
+			scene_buffer[draw_idx].mvp = (world_mat * vp_matrix).transpose_self();
+			scene_buffer[draw_idx].world = world_mat;
+			scene_buffer[draw_idx].color = color;
+			scene_buffer[draw_idx].spec = spec;
+			scene_buffer[draw_idx].camera = Vec4(m_camera_position, 1.f);
+
+			m_command_list->SetGraphicsRoot32BitConstant(3, draw_idx, 0);
+			m_command_list->SetGraphicsRootDescriptorTable(0, cbvSrvHandle);
+			//cbvSrvHandle.Offset(descriptor_size);
+
+			m_command_list->DrawIndexedInstanced(index_buffer->num_elements(), 1, 0, 0, 0);
+			draw_idx++;
+		}
+	}
 
 	// Indicate that the back buffer will now be used to present.
 	auto res_barrier = CD3DX12_RESOURCE_BARRIER::Transition(m_render_targets[m_frame_index].Get(), D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PRESENT);
