@@ -4,7 +4,7 @@
 
 #pragma once
 
-#include <unordered_set>
+#include <set>
 #include "Matrix.h"
 #include "Quaternion.h"
 #include "render_defs.h"
@@ -43,7 +43,7 @@ protected:
 	RenderBuffer* get_render_buffer(const size_t& buffer_index) { return m_render_buffers[buffer_index]; }
 
 	// todo make const
-	std::unordered_set<const RenderComponent*> render_components() {
+	std::set<const RenderComponent*> render_components() {
 		return m_render_components;
 	}
 
@@ -55,8 +55,8 @@ private:
 	virtual RenderBuffer* create_render_buffer_internal() = 0;
 
 protected:
-	uint m_frame_width;
-	uint m_frame_height;
+	u32 m_frame_width;
+	u32 m_frame_height;
 
 	/// camera
 	Vec3 m_camera_position;
@@ -67,7 +67,7 @@ private:
 	std::unordered_map<std::string, RenderPipeline*> m_pipelines;
 	std::vector<class RenderBuffer*> m_render_buffers;
 
-	std::unordered_set<const RenderComponent*> m_render_components;
+	std::set<const RenderComponent*> m_render_components;
 };
 
 extern Renderer* g_renderer;

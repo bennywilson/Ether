@@ -24,8 +24,8 @@ static struct SceneInstanceData {
 	Vec4 color;
 	Vec4 spec;
 	Vec4 camera;
-	Vec4 pad0;;
-	Mat4 pad1[1];
+	Vec4 pad0;
+	Mat4 pad1;
 }* scene_buffer;
 
 /// Renderer_Dx12::~Renderer_Dx12
@@ -369,9 +369,10 @@ void Renderer_Dx12::render() {
 	// Update constant buffer
 	m_camera_projection.make_identity();
 	m_camera_projection.create_perspective_matrix(
-	kbToRadians(50.),
-	1197 / (float)854,
-	1.f, 20000.f
+		kbToRadians(50.f),
+		1197 / (float)854,
+		1.f,
+		20000.f
 	);
 
 	const Mat4 trans = Mat4::make_translation(-m_camera_position);
@@ -403,7 +404,6 @@ void Renderer_Dx12::render() {
 
 	m_command_list->ClearDepthStencilView(dsv_handle, D3D12_CLEAR_FLAG_DEPTH, 1.0f, 0, 0, nullptr);
 
-
 	RenderPipeline_Dx12* const pipe = (RenderPipeline_Dx12*)get_pipeline("test_shader");
 	m_command_list->SetPipelineState(pipe->m_pipeline_state.Get());
 
@@ -413,18 +413,20 @@ void Renderer_Dx12::render() {
 	ID3D12DescriptorHeap* ppHeaps[] = { m_cbv_srv_heap.Get(), m_sampler_heap.Get() };
 	m_command_list->SetDescriptorHeaps(_countof(ppHeaps), ppHeaps);
 	m_command_list->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-
-	m_command_list->SetGraphicsRootDescriptorTable(0, m_cbv_srv_heap->GetGPUDescriptorHandleForHeapStart());
-	m_command_list->SetGraphicsRootDescriptorTable(1, m_sampler_heap->GetGPUDescriptorHandleForHeapStart());
 	auto descriptor_size = m_device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
 
-	CD3DX12_GPU_DESCRIPTOR_HANDLE gpu_handle(m_cbv_srv_heap->GetGPUDescriptorHandleForHeapStart(), 1, descriptor_size);
+	CD3DX12_GPU_DESCRIPTOR_HANDLE cbvSrvHandle(m_cbv_srv_heap->GetGPUDescriptorHandleForHeapStart(), 0, descriptor_size);
+	m_command_list->SetGraphicsRootDescriptorTable(0, cbvSrvHandle);
+	m_command_list->SetGraphicsRootDescriptorTable(1, m_sampler_heap->GetGPUDescriptorHandleForHeapStart());
+	
+	CD3DX12_GPU_DESCRIPTOR_HANDLE gpu_handle(m_cbv_srv_heap->GetGPUDescriptorHandleForHeapStart(), 1024, descriptor_size);
 	m_command_list->SetGraphicsRootDescriptorTable(2, gpu_handle);
+	m_command_list->IASetVertexBuffers(0, 1, &vertex_buffer->vertex_buffer_view());
+	m_command_list->IASetIndexBuffer(&index_buffer->index_buffer_view());
 
-	for (auto render_comp : this->render_components()) {
-		m_command_list->IASetVertexBuffers(0, 1, &vertex_buffer->vertex_buffer_view());
-		m_command_list->IASetIndexBuffer(&index_buffer->index_buffer_view());
-
+	size_t draw_idx = 0;
+	f32 scale = 1.1f;
+	for (auto& render_comp : this->render_components()) {
 		const auto& shader_params = render_comp->Materials()[0].shader_params();
 		Vec4 color(1.f, 1.f, 1.f, 1.f);
 		Vec4 spec(0.f, 0.f, 0.f, 1.f);
@@ -442,26 +444,18 @@ void Renderer_Dx12::render() {
 		world_mat *= render_comp->owner_rotation().to_mat4();
 		world_mat[3] = render_comp->owner_position();
 
-		scene_buffer[0].mvp = (world_mat * vp_matrix).transpose_self();
-		scene_buffer[0].world = world_mat;
-		scene_buffer[0].color = color;
-		scene_buffer[0].spec = spec;
-		scene_buffer[0].camera = Vec4(m_camera_position, 1.f);
-		m_command_list->SetGraphicsRoot32BitConstant(3, 0, 0);
+		scene_buffer[draw_idx].mvp = (world_mat * vp_matrix).transpose_self();
+		scene_buffer[draw_idx].world = world_mat;
+		scene_buffer[draw_idx].color = color;
+		scene_buffer[draw_idx].spec = spec;
+		scene_buffer[draw_idx].camera = Vec4(m_camera_position, 1.f);
+
+		m_command_list->SetGraphicsRoot32BitConstant(3, draw_idx, 0);
+		m_command_list->SetGraphicsRootDescriptorTable(0, cbvSrvHandle);
+		//cbvSrvHandle.Offset(descriptor_size);
+
 		m_command_list->DrawIndexedInstanced(index_buffer->num_elements(), 1, 0, 0, 0);
-
-
-		for (int i = 0; i < 0; i++) {
-			world_mat.make_scale(Vec3(1.f, 1.f, 1.f));
-			world_mat *= render_comp->owner_rotation().to_mat4();
-			world_mat[3] = temp_render_objs[i].position;
-
-			scene_buffer[i + 1].mvp = (world_mat * vp_matrix).transpose_self();
-			scene_buffer[i + 1].color = temp_render_objs[i].color;
-
-			m_command_list->SetGraphicsRoot32BitConstant(3, 1 + i, 0);
-			m_command_list->DrawIndexedInstanced(index_buffer->num_elements(), 1, 0, 0, 0);
-		}
+		draw_idx++;
 	}
 
 
@@ -603,7 +597,7 @@ void Renderer_Dx12::todo_create_texture() {
 	srv_desc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D;
 	srv_desc.Texture2D.MipLevels = 1;
 
-	CD3DX12_CPU_DESCRIPTOR_HANDLE texHandle(m_cbv_srv_heap->GetCPUDescriptorHandleForHeapStart(), 1, m_device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_SAMPLER));
+	CD3DX12_CPU_DESCRIPTOR_HANDLE texHandle(m_cbv_srv_heap->GetCPUDescriptorHandleForHeapStart(), 1024, m_device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_SAMPLER));
 	m_device->CreateShaderResourceView(tex.Get(), &srv_desc, texHandle);
 
 	// Close the command list and execute it to begin the initial GPU setup.

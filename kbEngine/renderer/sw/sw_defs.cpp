@@ -19,7 +19,7 @@ static int orient2d(const Vec2i& a, const Vec2i& b, const Vec2i& c)
 	return (b.x - a.x) * (c.y - a.y) - (b.y - a.y) * (c.x - a.x);
 }
 
-void TrianglePipeline::render(const unordered_set<const RenderComponent*>& comp, vector<u8>& color, vector<f32>& depth, const Vec2i& frame_dim) {
+void TrianglePipeline::render(const set<const RenderComponent*>& comp, vector<u8>& color, vector<f32>& depth, const Vec2i& frame_dim) {
 	for (auto render_comp : comp) {
 		if (render_comp->IsA(kbStaticModelComponent::GetType())) {
 			kbStaticModelComponent* const skel_comp = (kbStaticModelComponent*)render_comp;
@@ -149,7 +149,7 @@ void TrianglePipeline::render(const unordered_set<const RenderComponent*>& comp,
 
 /// KuwaharaPipeline::render
 void KuwaharaPipeline::render(
-	const unordered_set<const RenderComponent*>& comp,
+	const set<const RenderComponent*>& comp,
 	vector<u8>& color,
 	vector<f32>& depth,
 	const Vec2i& frame_dim) {
@@ -256,7 +256,7 @@ void KuwaharaPipeline::render(
 	}
 }
 
-void OutlinePipeline::render(const unordered_set<const RenderComponent*>& comp, vector<u8>& color, vector<f32>& depth, const Vec2i& frame_dim) {
+void OutlinePipeline::render(const set<const RenderComponent*>& comp, vector<u8>& color, vector<f32>& depth, const Vec2i& frame_dim) {
 	const i32 half_filter_size = 4;
 	const i32 frame_width = frame_dim.x;
 	const i32 frame_height = frame_dim.y;
