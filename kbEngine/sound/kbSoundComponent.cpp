@@ -1,20 +1,14 @@
-//==============================================================================
-// kbSoundComponent.cpp
-//
-//
-// 2017-2019 kbEngine 2.0
-//==============================================================================
-#include "kbCore.h"
-#include "kbVector.h"
-#include "kbQuaternion.h"
-#include "kbGameEntityHeader.h"
+/// kbSoundComponent.cpp
+///
+/// 2017-2025 blk 1.0
+
+#include "blk_core.h"
+#include "Quaternion.h"
 #include "kbGame.h"
 #include "kbSoundComponent.h"
 #include "kbRenderer.h"
 
-/**
- *	kbSoundData::Constructor
- */
+///	kbSoundData::Constructor
 void kbSoundData::Constructor() {
 	m_pWaveFile = nullptr;
 	m_Radius = -1.0f;
@@ -26,102 +20,85 @@ void kbSoundData::Constructor() {
 	m_SoundId = -1;
 }
 
-/**
- *	kbSoundData::~kbSoundData
- */
+///	kbSoundData::~kbSoundData
 kbSoundData::~kbSoundData() {
 	StopSound();
 }
 
-/**
- *	kbSoundData::PlaySoundAtPosition
- */
-void kbSoundData::PlaySoundAtPosition( const kbVec3 & soundPosition ) {
+/// kbSoundData::PlaySoundAtPosition
+void kbSoundData::PlaySoundAtPosition(const Vec3& soundPosition) {
+	//blk::error("Needs reimplementation");
 
-	kbVec3 currentCameraPosition;
-	kbQuat currentCameraRotation;
-	g_pRenderer->GetRenderViewTransform( nullptr, currentCameraPosition, currentCameraRotation );
+	Vec3 currentCameraPosition;
+	Quat4 currentCameraRotation;
 
-	const float distToCamera = ( currentCameraPosition - soundPosition ).Length();	
+	g_pRenderer->GetRenderViewTransform(nullptr, currentCameraPosition, currentCameraRotation);
+
+	const float distToCamera = (currentCameraPosition - soundPosition).length();
 	float atten = 1.0f;
-	if ( m_Radius > 0.0f ) {
-		if ( distToCamera > m_Radius ) {
+	if (m_Radius > 0.0f) {
+		if (distToCamera > m_Radius) {
 			return;
-		} else {
-			atten = 1.0f - ( distToCamera / m_Radius );
+		}
+		else {
+			atten = 1.0f - (distToCamera / m_Radius);
 		}
 	}
 
-	const int waveId = g_pGame->GetSoundManager().PlayWave( m_pWaveFile, atten * m_Volume, m_bLooping );
-	if ( m_bLooping ) {
+	const int waveId = g_pGame->GetSoundManager().PlayWave(m_pWaveFile, atten * m_Volume, m_bLooping);
+	if (m_bLooping) {
 		m_SoundId = waveId;
 	}
 }
 
-/**
- *	kbSoundData::StopSound
- */
+/// kbSoundData::StopSound
 void kbSoundData::StopSound() {
-
-	if ( m_SoundId != -1 ) {
-		g_pGame->GetSoundManager().StopWave( m_SoundId );
+	if (m_SoundId != -1) {
+		g_pGame->GetSoundManager().StopWave(m_SoundId);
 	}
 	m_SoundId = -1;
 }
 
-/**
- *	kbSoundData::EditorChange
- */
-void kbSoundData::EditorChange( const std::string & propertyName ) {
+/// kbSoundData::EditorChange
+void kbSoundData::editor_change(const std::string& propertyName) {
+	Super::editor_change(propertyName);
 
-	Super::EditorChange( propertyName );
-
-	if ( propertyName == "TestPlaySoundNow" ) {
+	if (propertyName == "TestPlaySoundNow") {
 		m_bDebugPlaySound = false;
-		g_pGame->GetSoundManager().PlayWave( m_pWaveFile, m_Volume * m_Volume );
+		g_pGame->GetSoundManager().PlayWave(m_pWaveFile, m_Volume * m_Volume);
 	}
 }
 
-/**
- *	kbPlaySoundComponent::Constructor
- */
+/// kbPlaySoundComponent::Constructor
 void kbPlaySoundComponent::Constructor() {
-
 	m_MinStartDelay = 0.0f;
-	m_MaxStartDelay = 0.0f;	
+	m_MaxStartDelay = 0.0f;
 	m_TimeToPlay = 0.0f;
 }
 
-/**
- *	kbPlaySoundComponent::SetEnable_Internal
- */
-void kbPlaySoundComponent::SetEnable_Internal( const bool bEnable ) {
+/// kbPlaySoundComponent::enable_internal
+void kbPlaySoundComponent::enable_internal(const bool bEnable) {
+	Super::enable_internal(bEnable);
 
-	Super::SetEnable_Internal( bEnable );
-
-	if ( bEnable ) {
-		const float delay = kbfrand( m_MinStartDelay, m_MaxStartDelay );
+	if (bEnable) {
+		const float delay = kbfrand(m_MinStartDelay, m_MaxStartDelay);
 		m_TimeToPlay = g_GlobalTimer.TimeElapsedSeconds() + delay;
 	}
 }
 
-/**
- *	kbPlaySoundComponent::Update_Internal
- */
-void kbPlaySoundComponent::Update_Internal( const float DeltaTime ) {
+/// kbPlaySoundComponent::update_internal
+void kbPlaySoundComponent::update_internal(const float DeltaTime) {
+	Super::update_internal(DeltaTime);
 
-	Super::Update_Internal( DeltaTime );
-
-	if ( g_UseEditor == true ) {
+	if (g_UseEditor == true) {
 		return;
 	}
 
-	if ( g_GlobalTimer.TimeElapsedSeconds() >= m_TimeToPlay ) {
-
-		if ( m_SoundData.size() > 0 ) {
-			m_SoundData[rand() % m_SoundData.size()].PlaySoundAtPosition( GetOwnerPosition() ); 
+	if (g_GlobalTimer.TimeElapsedSeconds() >= m_TimeToPlay) {
+		if (m_SoundData.size() > 0) {
+			m_SoundData[rand() % m_SoundData.size()].PlaySoundAtPosition(owner_position());
 		}
 
-		Enable( false );
+		Enable(false);
 	}
 }

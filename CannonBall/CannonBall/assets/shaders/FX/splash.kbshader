@@ -38,9 +38,7 @@ struct pixelInput {
 ;
 
 
-/**
- *	vertexShader
- */
+/// vertexShader
 pixelInput vertexShader( vertexInput input ) {
 	pixelInput output = (pixelInput)(0);
 
@@ -53,9 +51,7 @@ pixelInput vertexShader( vertexInput input ) {
 	return output;
 }
 
-/**
- *	pixelShader
- */
+/// pixelShader
 Texture2D shaderTexture;
 SamplerState SampleType;
 

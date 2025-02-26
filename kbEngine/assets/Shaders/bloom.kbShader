@@ -2,7 +2,7 @@
 // bloom.kbShader
 //
 //
-// 2017-2018 kbEngine 2.0
+// 2017-2018 blk 1.0
 //===================================================================================================
 cbuffer matrixBuffer {
    matrix   mvpMatrix;
@@ -23,9 +23,7 @@ struct pixelInput {
 	float4 position2		: TEXCOORD1;
 };
 
-/**
- *	bloomGatherVertexMain
- */
+/// bloomGatherVertexMain
 pixelInput bloomGatherVertexMain( vertexInput input ) {
 	pixelInput output = (pixelInput)(0);
 
@@ -36,9 +34,7 @@ pixelInput bloomGatherVertexMain( vertexInput input ) {
 	return output;
 }
 
-/**
- *	bloomGatherPixelMain
- */
+/// bloomGatherPixelMain
 Texture2D sceneTexture : 			register(t0);
 SamplerState sceneColorSampler;
 
@@ -53,9 +49,7 @@ float4 bloomGatherPixelMain( pixelInput	input ) : SV_TARGET {
 	return inSceneColor * inSceneColor.w * 2.0f;
 }
 
-/**
- *	bloomBlurVertexMain
- */
+/// bloomBlurVertexMain
 pixelInput bloomBlurVertexMain( vertexInput input ) {
 	pixelInput output = (pixelInput)(0);
 
@@ -66,9 +60,7 @@ pixelInput bloomBlurVertexMain( vertexInput input ) {
 	return output;
 }
 
-/**
- *	bloomBlurPixelMain
- */
+/// bloomBlurPixelMain
 float4 bloomBlurPixelMain( pixelInput	input ) : SV_TARGET {
 
 	float4 inSceneColor = sceneTexture.Sample( sceneColorSampler, input.uv ) * offsetsAndWeights[0];

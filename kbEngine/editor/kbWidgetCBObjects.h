@@ -1,15 +1,10 @@
-//===================================================================================================
-// kbWidgetCBObjects.h
-//
-//
-// 2016-2017 kbEngine 2.0
-//===================================================================================================
-#ifndef _KBWIDGETCBOBJECTS_H_
-#define _KBWIDGETCBOBJECTS_H_
+/// kbWidgetCBObjects.h
+///
+/// 2016-2025 blk 1.0
 
-/**
- *	widgetCBType_t
- */
+#pragma once
+
+/// widgetCBType_t
 enum widgetCBType_t {
 	WidgetCB_None,
 	WidgetCB_Input,
@@ -29,9 +24,7 @@ enum widgetCBType_t {
 };
 
 
-/**
- *	widgetCBObject - base object that is passed to widgets during callbacks.
- */
+/// widgetCBObject - base object that is passed to widgets during callbacks.
 class widgetCBObject {
 public:
 	widgetCBObject() :
@@ -42,9 +35,7 @@ public:
 	widgetCBType_t widgetType;
 };
 
-/**
- *	widgetCBInputObject
- */
+/// widgetCBInputObject
 class widgetCBInputObject : public widgetCBObject {
 public:
 	widgetCBInputObject() {
@@ -90,9 +81,7 @@ public:
 	bool rightMouseButtonDown;
 };
 
-/**
- *	widgetCBResourceSelected
- */
+/// widgetCBResourceSelected
 class widgetCBResourceSelected : public widgetCBObject {
 public:
 	widgetCBResourceSelected( const widgetCBType_t type ) {
@@ -102,9 +91,7 @@ public:
 	std::string resourceFileName;
 };
 
-/**
- *	widgetCBEntitySelected
- */
+/// widgetCBEntitySelected
 class widgetCBEntitySelected : public widgetCBObject {
 public:
 	widgetCBEntitySelected() {
@@ -114,9 +101,7 @@ public:
 	std::vector< class kbEditorEntity * > entitiesSelected;
 };
 
-/**
- *	widgetCBEntityDeselected
- */
+/// widgetCBEntityDeselected
 class widgetCBEntityDeselected : public widgetCBObject {
 public:
 	widgetCBEntityDeselected() {
@@ -124,9 +109,7 @@ public:
 	}
 };
 
-/**
- *	widgetCBEntityTransformed
- */
+/// widgetCBEntityTransformed
 class widgetCBEntityTransformed : public widgetCBObject {
 public:
 	widgetCBEntityTransformed() {
@@ -136,9 +119,7 @@ public:
 	std::vector< class kbEditorEntity * > entitiesMoved;
 };
 
-/**
- *  widgetCBGeneric
- */
+///  *  widgetCBGeneric
 class widgetCBGeneric : public widgetCBObject {
 public:
 	widgetCBGeneric( const widgetCBType_t type, void * ptr ) {
@@ -148,5 +129,3 @@ public:
 	
 	void * m_Value;
 };
-
-#endif

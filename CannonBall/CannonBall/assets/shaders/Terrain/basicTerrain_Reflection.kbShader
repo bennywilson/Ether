@@ -71,9 +71,7 @@ Texture2D Mat4Normal	: register(t11);
 Texture2D Mat4Specular	: register(t12);
 Texture2D distortionMap				: register(t13);
 SamplerState PointSampler;
-/**
- *	vertexShader
- */
+/// vertexShader
 pixelInput vertexShader( vertexInput input ) {
 	pixelInput output = (pixelInput)(0);
 
@@ -100,9 +98,7 @@ pixelInput vertexShader( vertexInput input ) {
 	return output;
 }
 
-/**
- *	pixelShader
- */ 
+/// pixelShader 
 
 struct terrainMat_t {
 	float4 diffuse;

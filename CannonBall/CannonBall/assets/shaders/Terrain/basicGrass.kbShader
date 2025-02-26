@@ -59,9 +59,7 @@ struct PS_OUTPUT {
 	float2 Depth					: SV_TARGET3;
 };
 
-/**
- *	vertexShader
- */
+/// vertexShader
 geometryShaderInput vertexShader( vertexInput input ) {
 	geometryShaderInput output = (geometryShaderInput)(0);
 
@@ -71,9 +69,7 @@ geometryShaderInput vertexShader( vertexInput input ) {
 	return output;
 }
 
-/**
- *	geometryShader
- */
+/// geometryShader
 SamplerState LinearSampler;
 SamplerState PointSampler;
 
@@ -203,9 +199,7 @@ void CreateVertex( inout TriangleStream<pixelInput> OutputStream, float3 vertexW
 	}
  }
 
-/**
- *	pixelShader
- */ 
+/// pixelShader 
 PS_OUTPUT pixelShader( pixelInput input, bool isFrontFace : SV_IsFrontFace )  {
  	PS_OUTPUT output = (PS_OUTPUT) 0;
 

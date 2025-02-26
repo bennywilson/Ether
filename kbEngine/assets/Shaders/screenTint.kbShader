@@ -2,7 +2,7 @@
 // screenTint.kbShader
 //
 //
-// 2019 kbEngine 2.0
+// 2019 blk 1.0
 //===================================================================================================
 cbuffer matrixBuffer {
 	float4x4 mvpMatrix;
@@ -28,9 +28,7 @@ struct pixelInput {
 	float4 position2		: TEXCOORD1;
 };
 
-/**
- *	vertexShader
- */
+/// vertexShader
 pixelInput vertexShader( vertexInput input ) {
 	pixelInput output = (pixelInput)(0);
 

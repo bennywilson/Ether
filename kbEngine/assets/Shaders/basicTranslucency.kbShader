@@ -2,7 +2,7 @@
 // basicTranslucency.kbShader
 //
 //
-// 2016 kbEngine 2.0
+// 2016 blk 1.0
 //===================================================================================================
 cbuffer matrixBuffer {
 	matrix modelMatrix;
@@ -46,9 +46,7 @@ struct PS_OUTPUT {
 	float4 Color         : SV_TARGET0;
 };
 
-/**
- *	vertexShader
- */
+/// vertexShader
 pixelInput vertexShader( vertexInput input ) {
 	pixelInput output = (pixelInput)(0);
 
@@ -61,9 +59,7 @@ pixelInput vertexShader( vertexInput input ) {
 	return output;
 }
 
-/**
- *	pixelShader
- */
+/// pixelShader
 Texture2D shaderTexture;
 SamplerState SampleType;
 

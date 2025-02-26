@@ -2,7 +2,7 @@
 // uberPostProcess.kbShader
 //
 //
-// 2016-2018 kbEngine 2.0
+// 2016-2018 blk 1.0
 //===================================================================================================
 cbuffer matrixBuffer {
    matrix               mvpMatrix;
@@ -27,9 +27,7 @@ struct pixelInput {
 	float4 position2     : TEXCOORD1;
 };
 
-/**
- *	vertexShader
- */
+/// vertexShader
 pixelInput vertexShader( vertexInput input ) {
 	pixelInput output = (pixelInput)(0);
 
@@ -40,9 +38,7 @@ pixelInput vertexShader( vertexInput input ) {
 	return output;
 }
 
-/**
- *	pixelShader
- */
+/// pixelShader
 Texture2D sceneTexture;
 SamplerState sceneColorSampler;
 

@@ -1,26 +1,21 @@
-//==============================================================================
-// kbLightRendering.cpp
-//
-//
-// 2017-2018 kbEngine 2.0
-//==============================================================================
+/// kbLightRendering.cpp
+///
+/// 2017-2025 blk 1.0
+
 #include <stdio.h>
-#include "kbCore.h"
-#include "kbConsole.h"
+#include "blk_core.h"
+#include "blk_console.h"
 #include "kbRenderer_DX11.h"
 #include "kbModel.h"
 #include "kbGameEntityHeader.h"
 #include "kbComponent.h"
-#include "kbSkeletalModelComponent.h"
-#include "kbPlane.h"
+#include "Plane3d.h"
 
 kbConsoleVariable g_DebugShadowBounds( "debugshadowbounds", false, kbConsoleVariable::Console_Bool, "Freeze shadow position and draw the bounds.", "" );
 kbConsoleVariable g_ShowShadows( "showshadows", true, kbConsoleVariable::Console_Bool, "Toggle Shadows on/off.", "" );
 kbConsoleVariable g_ShowLightShafts( "showlightshafts", true, kbConsoleVariable::Console_Bool, "Toggle light shafts on/off.", "" );
 
-/**
- *	kbRenderer_DX11::RenderLights
- */
+/// kbRenderer_DX11::RenderLights
 void kbRenderer_DX11::RenderLights() {
 
 	if ( m_ViewMode == ViewMode_Wireframe ) {
@@ -40,21 +35,19 @@ void kbRenderer_DX11::RenderLights() {
 	m_RenderState.SetBlendState();
 }
 
-/**
- *	kbRenderer_DX11::RenderLight
- */
-kbVec3 frozenCameraPosition;
+/// kbRenderer_DX11::RenderLight
+Vec3 frozenCameraPosition;
 
 void kbRenderer_DX11::RenderLight( const kbRenderLight *const pLight ) {
 
 	// Matrices that are scaled to 0 will produce a 0 depth in the projection shader and not shadow the pixel
-	kbMat4 splitMatrices[4] = { kbMat4::identity, kbMat4::identity, kbMat4::identity, kbMat4::identity };
-	splitMatrices[0].MakeScale( kbVec3::zero );
-	splitMatrices[1].MakeScale( kbVec3::zero );
-	splitMatrices[2].MakeScale( kbVec3::zero );
-	splitMatrices[3].MakeScale( kbVec3::zero );
+	Mat4 splitMatrices[4] = { Mat4::identity, Mat4::identity, Mat4::identity, Mat4::identity };
+	splitMatrices[0].make_scale( Vec3::zero );
+	splitMatrices[1].make_scale( Vec3::zero );
+	splitMatrices[2].make_scale( Vec3::zero );
+	splitMatrices[3].make_scale( Vec3::zero );
 
-	if ( pLight->m_bCastsShadow ) {
+	if ( pLight->m_casts_shadow ) {
 		RenderShadow( pLight, splitMatrices );
 	}
 
@@ -90,11 +83,11 @@ void kbRenderer_DX11::RenderLight( const kbRenderLight *const pLight ) {
 	m_pDeviceContext->IASetPrimitiveTopology( D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST );
 	m_pDeviceContext->RSSetState( m_pDefaultRasterizerState );
 
-	ID3D11ShaderResourceView *const  RenderTargetViews[] = {	GetRenderTarget_DX11(COLOR_BUFFER)->m_pShaderResourceView,
-																GetRenderTarget_DX11(NORMAL_BUFFER)->m_pShaderResourceView,
-																GetRenderTarget_DX11(SPECULAR_BUFFER)->m_pShaderResourceView,
-																GetRenderTarget_DX11(DEPTH_BUFFER)->m_pShaderResourceView,
-																GetRenderTarget_DX11(SHADOW_BUFFER)->m_pShaderResourceView };
+	ID3D11ShaderResourceView *const  RenderTargetViews[] = {	GetRenderTarget_DX11(COLOR_BUFFER)->m_shaderResourceView,
+																GetRenderTarget_DX11(NORMAL_BUFFER)->m_shaderResourceView,
+																GetRenderTarget_DX11(SPECULAR_BUFFER)->m_shaderResourceView,
+																GetRenderTarget_DX11(DEPTH_BUFFER)->m_shaderResourceView,
+																GetRenderTarget_DX11(SHADOW_BUFFER)->m_shaderResourceView };
 
 	ID3D11SamplerState *const  SamplerStates[] = { m_pBasicSamplerState, m_pNormalMapSamplerState, m_pShadowMapSamplerState, m_pShadowMapSamplerState };
 	m_pDeviceContext->PSSetShaderResources( 0, 5, RenderTargetViews );
@@ -103,8 +96,8 @@ void kbRenderer_DX11::RenderLight( const kbRenderLight *const pLight ) {
 	const kbLightComponent *const pLightComponent = pLight->m_pLightComponent;
 	const kbShader * pShader = nullptr;
 
-	if ( pLightComponent->GetMaterialList().size() > 0 ) {
-		pShader = pLightComponent->GetMaterialList()[0].GetShader();
+	if ( pLightComponent->Materials().size() > 0 ) {
+		pShader = pLightComponent->Materials()[0].get_shader();
 	}
 
 	if ( pShader == nullptr || pShader->GetVertexShader() == nullptr || pShader->GetPixelShader() == nullptr ) {
@@ -129,37 +122,37 @@ void kbRenderer_DX11::RenderLight( const kbRenderLight *const pLight ) {
 
 	D3D11_MAPPED_SUBRESOURCE mappedResource;
 	HRESULT hr = m_pDeviceContext->Map( pConstBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource );
-	kbErrorCheck( SUCCEEDED(hr), "kbRenderer_DX11::RenderLight() - Failed to map matrix buffer" );
+	blk::error_check( SUCCEEDED(hr), "kbRenderer_DX11::RenderLight() - Failed to map matrix buffer" );
 
 	byte * pMappedData = (byte*)mappedResource.pData;
-	if ( pLightComponent->GetMaterialList().size() > 0 ) {
-		const kbMaterialComponent & matComp = pLightComponent->GetMaterialList()[0];
-		auto & shaderParms = matComp.GetShaderParams();
+	if ( pLightComponent->Materials().size() > 0 ) {
+		const kbMaterialComponent & matComp = pLightComponent->Materials()[0];
+		auto & shaderParms = matComp.shader_params();
 	
 		kbShaderParamOverrides_t overrides;
 		for ( int j = 0; j < shaderParms.size(); j++ ) {
-			if ( shaderParms[j].GetTexture() != nullptr ) {
-				overrides.SetTexture( shaderParms[j].GetParamName().stl_str(), shaderParms[j].GetTexture() );
-			} else if ( shaderParms[j].GetRenderTexture() != nullptr ) {
+			if ( shaderParms[j].texture() != nullptr ) {
+				overrides.SetTexture( shaderParms[j].param_name().stl_str(), shaderParms[j].texture() );
+			} else if ( shaderParms[j].render_texture() != nullptr ) {
 	
-				overrides.SetTexture( shaderParms[j].GetParamName().stl_str(), shaderParms[j].GetRenderTexture() );
+				overrides.SetTexture( shaderParms[j].param_name().stl_str(), shaderParms[j].render_texture());
 			} else {
-				overrides.SetVec4( shaderParms[j].GetParamName().stl_str(), shaderParms[j].GetVector() );
+				overrides.SetVec4( shaderParms[j].param_name().stl_str(), shaderParms[j].vector() );
 			}
 		}
 
-		if ( matComp.GetShader() != nullptr ) {
-			SetConstantBuffer( matComp.GetShader()->GetShaderVarBindings(), &overrides, nullptr, pMappedData );
+		if ( matComp.get_shader() != nullptr ) {
+			SetConstantBuffer( matComp.get_shader()->GetShaderVarBindings(), &overrides, nullptr, pMappedData );
 		}
 	} 
 
-	SetShaderVec4( "lightDirection", kbVec4( -pLight->m_Orientation.ToMat4()[2].ToVec3(), pLight->m_Length ), pMappedData, varBindings );
+	SetShaderVec4( "lightDirection", Vec4( -pLight->m_Orientation.to_mat4()[2].ToVec3(), pLight->m_Length ), pMappedData, varBindings );
 	SetShaderVec4( "lightColor", pLight->m_Color, pMappedData, varBindings );
 	SetShaderMat4( "inverseViewProjection", m_pCurrentRenderWindow->GetInverseViewProjection(), pMappedData, varBindings );
 	SetShaderVec4( "cameraPosition", m_pCurrentRenderWindow->GetCameraPosition(), pMappedData, varBindings );
 
-	kbMat4 lightMatrix[4];
-	kbVec4 splitDistances;
+	Mat4 lightMatrix[4];
+	Vec4 splitDistances;
 	for ( int i = 0; i < 4; i++ ) {
 		lightMatrix[i] = splitMatrices[i];
 		splitDistances[i] = pLight->m_CascadedShadowSplits[i];
@@ -167,10 +160,10 @@ void kbRenderer_DX11::RenderLight( const kbRenderLight *const pLight ) {
 
 	SetShaderMat4Array( "lightMatrix", lightMatrix, 4, pMappedData, varBindings );
 	SetShaderVec4( "splitDistances", splitDistances, pMappedData, varBindings );
-	SetShaderVec4( "lightPosition", kbVec4( pLight->m_Position.x, pLight->m_Position.y, pLight->m_Position.z, pLight->m_Radius ), pMappedData, varBindings );
+	SetShaderVec4( "lightPosition", Vec4( pLight->m_Position.x, pLight->m_Position.y, pLight->m_Position.z, pLight->m_Radius ), pMappedData, varBindings );
 
-	kbMat4 mvpMatrix;
-	mvpMatrix.MakeIdentity();
+	Mat4 mvpMatrix;
+	mvpMatrix.make_identity();
 
 	SetShaderMat4( "mvpMatrix", mvpMatrix, pMappedData, varBindings );
 
@@ -188,10 +181,8 @@ void kbRenderer_DX11::RenderLight( const kbRenderLight *const pLight ) {
 	m_RenderState.SetDepthStencilState( false, kbRenderState::DepthWriteMaskZero, kbRenderState::CompareAlways, false );
 }
 
-/**
- *	kbRenderer_DX11::RenderShadow
- */
-void kbRenderer_DX11::RenderShadow( const kbRenderLight *const pLight, kbMat4 splitMatrices[] ) {
+/// kbRenderer_DX11::RenderShadow
+void kbRenderer_DX11::RenderShadow( const kbRenderLight *const pLight, Mat4 splitMatrices[] ) {
 
 	ID3D11ShaderResourceView *const pNullSRVs[] = { nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, 
 											   nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr };
@@ -214,8 +205,8 @@ void kbRenderer_DX11::RenderShadow( const kbRenderLight *const pLight, kbMat4 sp
 	const float shadowBufferSize = (float) GetRenderTarget_DX11(SHADOW_BUFFER)->GetWidth();
 	const float halfShadowBufferSize = shadowBufferSize * 0.5f;
 
-	kbMat4 textureMatrix;
-	textureMatrix.MakeIdentity();
+	Mat4 textureMatrix;
+	textureMatrix.make_identity();
 	textureMatrix[0].x = 0.5f;
 	textureMatrix[1].y = -0.5f;
 	textureMatrix[3].x = 0.5f + ( 0.5f / shadowBufferSize );
@@ -224,15 +215,15 @@ void kbRenderer_DX11::RenderShadow( const kbRenderLight *const pLight, kbMat4 sp
 	// Render Shadow map
 	m_pDeviceContext->OMSetRenderTargets( 1, &GetRenderTarget_DX11(SHADOW_BUFFER)->m_pRenderTargetView, GetRenderTarget_DX11(SHADOW_BUFFER_DEPTH)->m_pDepthStencilView );
 
-	const kbMat4 oldViewMatrix = m_pCurrentRenderWindow->GetViewMatrix();
-	const kbMat4 oldProjectionMatrix = m_pCurrentRenderWindow->GetProjectionMatrix();
-	const kbMat4 oldViewProjMatrix = m_pCurrentRenderWindow->GetViewProjectionMatrix();
+	const Mat4 oldViewMatrix = m_pCurrentRenderWindow->GetViewMatrix();
+	const Mat4 oldProjectionMatrix = m_pCurrentRenderWindow->GetProjectionMatrix();
+	const Mat4 oldViewProjMatrix = m_pCurrentRenderWindow->GetViewProjectionMatrix();
 
-	kbPlane frustumPlanes[6];
-	kbVec3 upperLeft, upperRight, lowerRight, lowerLeft, dummyPoint;
+	Plane3d frustumPlanes[6];
+	Vec3 upperLeft, upperRight, lowerRight, lowerLeft, dummyPoint;
 
-	static kbMat4 frozenMatrix = m_pCurrentRenderWindow->GetViewProjectionMatrix();;
-	static kbVec3 camDir = m_pCurrentRenderWindow->GetCameraRotation().ToMat4()[2].ToVec3();
+	static Mat4 frozenMatrix = m_pCurrentRenderWindow->GetViewProjectionMatrix();;
+	static Vec3 camDir = m_pCurrentRenderWindow->GetCameraRotation().to_mat4()[2].ToVec3();
 
 	// Toggle between normal cam and debug cam
 	static bool bKeyDown = false;
@@ -243,52 +234,52 @@ void kbRenderer_DX11::RenderShadow( const kbRenderLight *const pLight, kbMat4 sp
 			debuggingShadowBounds = true;
 			frozenMatrix = m_pCurrentRenderWindow->GetViewProjectionMatrix();
 			frozenCameraPosition = m_pCurrentRenderWindow->GetCameraPosition();
-			camDir = m_pCurrentRenderWindow->GetCameraRotation().ToMat4()[2].ToVec3();
+			camDir = m_pCurrentRenderWindow->GetCameraRotation().to_mat4()[2].ToVec3();
 		}
 	}
 
 	if ( debuggingShadowBounds == false ) {
 		frozenMatrix = m_pCurrentRenderWindow->GetViewProjectionMatrix();
 		frozenCameraPosition = m_pCurrentRenderWindow->GetCameraPosition();
-		camDir = m_pCurrentRenderWindow->GetCameraRotation().ToMat4()[2].ToVec3();
+		camDir = m_pCurrentRenderWindow->GetCameraRotation().to_mat4()[2].ToVec3();
 	}
 
-	frozenMatrix.GetLeftClipPlane( frustumPlanes[0] );
-	frozenMatrix.GetTopClipPlane( frustumPlanes[1] );
-	frozenMatrix.GetRightClipPlane( frustumPlanes[2]);
-	frozenMatrix.GetBottomClipPlane( frustumPlanes[3] );
-	frozenMatrix.GetNearClipPlane( frustumPlanes[4] );
-	frozenMatrix.GetFarClipPlane( frustumPlanes[5] );
+	frozenMatrix.left_clip_plane( frustumPlanes[0] );
+	frozenMatrix.top_clip_plane( frustumPlanes[1] );
+	frozenMatrix.right_clip_plane( frustumPlanes[2]);
+	frozenMatrix.bottom_clip_plane( frustumPlanes[3] );
+	frozenMatrix.near_clip_plane( frustumPlanes[4] );
+	frozenMatrix.far_clip_plane( frustumPlanes[5] );
 
 	frustumPlanes[1].PlanesIntersect( dummyPoint, upperLeft, frustumPlanes[0] );
 	frustumPlanes[2].PlanesIntersect( dummyPoint, upperRight, frustumPlanes[1] );
 	frustumPlanes[3].PlanesIntersect( dummyPoint, lowerRight, frustumPlanes[2] );
 	frustumPlanes[0].PlanesIntersect( dummyPoint, lowerLeft, frustumPlanes[3] );
 
-	const float DistToFarCorner = m_RenderWindowList[0]->GetFarPlane() / ( camDir.Dot( upperLeft ) );
+	const float DistToFarCorner = m_RenderWindowList[0]->GetFarPlane() / ( camDir.dot( upperLeft ) );
 	const float NearCornerDist = ( ( m_RenderWindowList[0]->GetNearPlane() ) * DistToFarCorner ) / m_RenderWindowList[0]->GetFarPlane();
 
 	if ( debuggingShadowBounds ) {
 		vertexLayout lines[8];
 		lines[0].position = frozenCameraPosition;
-		lines[0].SetColor( kbVec4( 1.0f, 0.0f, 1.0f, 1.0f ) );
+		lines[0].SetColor( Vec4( 1.0f, 0.0f, 1.0f, 1.0f ) );
 		lines[1].position = frozenCameraPosition + upperLeft * DistToFarCorner;
-		lines[1].SetColor( kbVec4( 1.0f, 0.0f, 1.0f, 1.0f ) );
+		lines[1].SetColor( Vec4( 1.0f, 0.0f, 1.0f, 1.0f ) );
 
 		lines[2].position = frozenCameraPosition;
-		lines[2].SetColor( kbVec4( 1.0f, 0.0f, 1.0f, 1.0f ) );
+		lines[2].SetColor( Vec4( 1.0f, 0.0f, 1.0f, 1.0f ) );
 		lines[3].position = frozenCameraPosition + upperRight * DistToFarCorner;
-		lines[3].SetColor( kbVec4( 1.0f, 0.0f, 1.0f, 1.0f ) );
+		lines[3].SetColor( Vec4( 1.0f, 0.0f, 1.0f, 1.0f ) );
 
 		lines[4].position = frozenCameraPosition;
-		lines[4].SetColor( kbVec4( 1.0f, 0.0f, 1.0f, 1.0f ) );
+		lines[4].SetColor( Vec4( 1.0f, 0.0f, 1.0f, 1.0f ) );
 		lines[5].position = frozenCameraPosition + lowerLeft * DistToFarCorner;
-		lines[5].SetColor( kbVec4( 1.0f, 0.0f, 1.0f, 1.0f ) );
+		lines[5].SetColor( Vec4( 1.0f, 0.0f, 1.0f, 1.0f ) );
 
 		lines[6].position = frozenCameraPosition;
-		lines[6].SetColor( kbVec4( 1.0f, 0.0f, 1.0f, 1.0f ) );
+		lines[6].SetColor( Vec4( 1.0f, 0.0f, 1.0f, 1.0f ) );
 		lines[7].position = frozenCameraPosition + lowerRight * DistToFarCorner;
-		lines[7].SetColor( kbVec4( 1.0f, 0.0f, 1.0f, 1.0f ) );
+		lines[7].SetColor( Vec4( 1.0f, 0.0f, 1.0f, 1.0f ) );
 
 		m_DepthLines_RenderThread.push_back( lines[0] );
 		m_DepthLines_RenderThread.push_back( lines[1] );
@@ -302,8 +293,8 @@ void kbRenderer_DX11::RenderShadow( const kbRenderLight *const pLight, kbMat4 sp
 
 	m_RenderState.SetDepthStencilState();
 
-	for ( int i = 0; i < 4 && pLight->m_CascadedShadowSplits[i] < FLT_MAX; i++ ) {
-		D3D11_VIEWPORT viewport;
+	for (size_t i = 0; i < 4 && pLight->m_CascadedShadowSplits[i] < FLT_MAX; i++) {
+		D3D11_VIEWPORT viewport = {};
 		viewport.TopLeftX = ( i % 2 ) * halfShadowBufferSize;
 		viewport.TopLeftY = ( i / 2 ) * halfShadowBufferSize;
 		viewport.Width = halfShadowBufferSize;
@@ -314,17 +305,17 @@ void kbRenderer_DX11::RenderShadow( const kbRenderLight *const pLight, kbMat4 sp
 
 		// Calculate shadow map bounds
 		const float prevDist = ( i == 0 ) ? ( 0.0f ) : ( pLight->m_CascadedShadowSplits[i] - 1 );
-		const kbVec3 lookAtPoint = frozenCameraPosition + camDir * ( prevDist + ( pLight->m_CascadedShadowSplits[i] - prevDist ) * 0.5f );
+		const Vec3 lookAtPoint = frozenCameraPosition + camDir * ( prevDist + ( pLight->m_CascadedShadowSplits[i] - prevDist ) * 0.5f );
 		const float halfFOV = kbToRadians ( 75.0f ) * 0.5f;
 		const float distToCorner = pLight->m_CascadedShadowSplits[i] / ( cos( halfFOV ) );
-		kbVec3 cornerVert = frozenCameraPosition + distToCorner * upperLeft;
-		const float boundsLength = ( lookAtPoint - cornerVert ).Length();
+		Vec3 cornerVert = frozenCameraPosition + distToCorner * upperLeft;
+		const float boundsLength = ( lookAtPoint - cornerVert ).length();
 
 		// Debug Drawing -
 		if ( debuggingShadowBounds ) {
 			vertexLayout start, end;
-			start.SetColor( kbVec4( 1.0f, 1.0f, 0.0f, 1.0f ) );
-			end.SetColor( kbVec4( 1.0f, 1.0f, 0.0f, 1.0f ) );
+			start.SetColor( Vec4( 1.0f, 1.0f, 0.0f, 1.0f ) );
+			end.SetColor( Vec4( 1.0f, 1.0f, 0.0f, 1.0f ) );
 	
 			start.position = frozenCameraPosition + distToCorner * upperLeft;
 			end.position = frozenCameraPosition + distToCorner * upperRight;
@@ -347,24 +338,24 @@ void kbRenderer_DX11::RenderShadow( const kbRenderLight *const pLight, kbMat4 sp
 			m_DepthLines_RenderThread.push_back( end );
 		}
 		// --------------------------------------------------
-		kbVec3 lightDir = -pLight->m_Orientation.ToMat4()[2].ToVec3();
+		Vec3 lightDir = -pLight->m_Orientation.to_mat4()[2].ToVec3();
 
-		kbMat4 lightViewMatrix;
-		lightViewMatrix.LookAt( lookAtPoint + lightDir * boundsLength * 10.0f, lookAtPoint, kbVec3( 0.0f, 1.0f, 0.0f ) );
+		Mat4 lightViewMatrix;
+		lightViewMatrix.look_at( lookAtPoint + lightDir * boundsLength * 10.0f, lookAtPoint, Vec3( 0.0f, 1.0f, 0.0f ) );
 
-		kbMat4 lightProjMatrix;
-		lightProjMatrix.OrthoLH( boundsLength * 2.0f, boundsLength * 2.0f, 10.0f, boundsLength * 40.0f );
+		Mat4 lightProjMatrix;
+		lightProjMatrix.ortho_lh( boundsLength * 2.0f, boundsLength * 2.0f, 10.0f, boundsLength * 40.0f );
 
-		const kbMat4 lightViewProjMatrix = lightViewMatrix * lightProjMatrix;
+		const Mat4 lightViewProjMatrix = lightViewMatrix * lightProjMatrix;
 		const float texelSize = 2.0f / (shadowBufferSize * 0.5f);
-		kbVec4 projCenter( 0.0f, 0.0f, 0.0f, 1.0f );
-		projCenter = projCenter.TransformPoint( lightViewProjMatrix, true);
+		Vec4 projCenter( 0.0f, 0.0f, 0.0f, 1.0f );
+		projCenter = projCenter.transform_point( lightViewProjMatrix, true);
 
 		const float fracX = fmod( projCenter.x, texelSize );
 		const float fracY = fmod( projCenter.y, texelSize );
         
-		kbMat4 offset;
-		offset.MakeIdentity();
+		Mat4 offset;
+		offset.make_identity();
 		offset[3][0] = -fracX;
 		offset[3][1] = -fracY;
 
@@ -376,13 +367,13 @@ void kbRenderer_DX11::RenderShadow( const kbRenderLight *const pLight, kbMat4 sp
 		
 		std::vector<kbRenderSubmesh> & LightingPassVisibleList = m_pCurrentRenderWindow->GetVisibleSubMeshes( RP_Lighting );
 		for ( int i = 0; i < LightingPassVisibleList.size(); i++ ) {
-			if ( LightingPassVisibleList[i].GetRenderObject()->m_bCastsShadow ) {
+			if ( LightingPassVisibleList[i].GetRenderObject()->m_casts_shadow ) {
 				RenderMesh( &LightingPassVisibleList[i], true );
 			}
 		}
 	}
 
-	D3D11_VIEWPORT viewport;
+	D3D11_VIEWPORT viewport = {};
 	viewport.Width = (float)Back_Buffer_Width;
 	viewport.Height = (float)Back_Buffer_Height;
 	viewport.MinDepth = 0.0f;
@@ -399,9 +390,7 @@ void kbRenderer_DX11::RenderShadow( const kbRenderLight *const pLight, kbMat4 sp
 	PLACE_GPU_TIME_STAMP( "Shadow Depth" );
 }
 
-/**
- *	kbRenderer_DX11::RenderLightShaft
- */
+/// kbRenderer_DX11::RenderLightShaft
 void kbRenderer_DX11::RenderLightShafts() {
 
 	if ( g_ShowLightShafts.GetBool() == false ) {
@@ -425,8 +414,8 @@ void kbRenderer_DX11::RenderLightShafts() {
 		const float HalfBaseHeight = CurLightShafts.m_Height * HeightMultiplier * 0.5f;
 		const float HalfIterationHeight = CurLightShafts.m_IterationHeight * HeightMultiplier;
 
-		const kbVec3 worldVecToShaft = m_pCurrentRenderWindow->GetCameraPosition() + CurLightShafts.m_Rotation.ToMat4()[2].ToVec3() * -3000.0f;
-		kbVec4 shaftScreenPos = kbVec4( worldVecToShaft ).TransformPoint( m_pCurrentRenderWindow->GetViewProjectionMatrix(), false );
+		const Vec3 worldVecToShaft = m_pCurrentRenderWindow->GetCameraPosition() + CurLightShafts.m_Rotation.to_mat4()[2].ToVec3() * -3000.0f;
+		Vec4 shaftScreenPos = Vec4( worldVecToShaft ).transform_point( m_pCurrentRenderWindow->GetViewProjectionMatrix(), false );
 		if ( shaftScreenPos.w < 0.0f ) {
 			continue;
 		}
@@ -434,16 +423,16 @@ void kbRenderer_DX11::RenderLightShafts() {
 
 		// Generate Flare Mask
 		{
-			kbMat4 mvpMatrix;
-			mvpMatrix.MakeIdentity();
-			mvpMatrix.MakeScale( kbVec3( CurLightShafts.m_Width * 0.5f, HalfBaseHeight, 1.0f ) );
-			mvpMatrix[3] = kbVec3((shaftScreenPos.x * 0.5f) + 0.5f, (shaftScreenPos.y * -0.5f) + 0.5f, 0.0f );
+			Mat4 mvpMatrix;
+			mvpMatrix.make_identity();
+			mvpMatrix.make_scale( Vec3( CurLightShafts.m_Width * 0.5f, HalfBaseHeight, 1.0f ) );
+			mvpMatrix[3] = Vec3((shaftScreenPos.x * 0.5f) + 0.5f, (shaftScreenPos.y * -0.5f) + 0.5f, 0.0f );
 			mvpMatrix[3].x -= CurLightShafts.m_Width * 0.25f;
 			mvpMatrix[3].y -= HalfBaseHeight * 0.5f;
 
 			m_pDeviceContext->OMSetRenderTargets( 1, &GetRenderTarget_DX11(SCRATCH_BUFFER)->m_pRenderTargetView, nullptr );
 		
-			D3D11_VIEWPORT viewport;
+			D3D11_VIEWPORT viewport = {};
 			viewport.TopLeftX = 0.0f;
 			viewport.TopLeftY = 0.0f;
 			viewport.Width = ( float )GetRenderTarget_DX11(SCRATCH_BUFFER)->GetWidth();
@@ -452,7 +441,7 @@ void kbRenderer_DX11::RenderLightShafts() {
 			viewport.MaxDepth = 1.0f;
 			m_pDeviceContext->RSSetViewports( 1, &viewport );
 
-			ID3D11ShaderResourceView *const  RenderTargetViews[] = { (ID3D11ShaderResourceView*)CurLightShafts.m_pTexture->GetGPUTexture(), GetRenderTarget_DX11(DEPTH_BUFFER)->m_pShaderResourceView };
+			ID3D11ShaderResourceView *const  RenderTargetViews[] = { (ID3D11ShaderResourceView*)CurLightShafts.m_texture->gpu_texture(), GetRenderTarget_DX11(DEPTH_BUFFER)->m_shaderResourceView };
 			ID3D11SamplerState *const  SamplerStates[] = { m_pBasicSamplerState, m_pShadowMapSamplerState };
 			m_pDeviceContext->PSSetShaderResources( 0, 2, RenderTargetViews );
 			m_pDeviceContext->PSSetSamplers( 0, 2, SamplerStates );
@@ -466,7 +455,7 @@ void kbRenderer_DX11::RenderLightShafts() {
 			D3D11_MAPPED_SUBRESOURCE mappedResource;
 
 			HRESULT hr = m_pDeviceContext->Map( pConstantBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource );
-			kbErrorCheck( SUCCEEDED(hr), "kbRenderer_DX11::RenderLightShafts() - Failed to map matrix buffer" );
+			blk::error_check( SUCCEEDED(hr), "kbRenderer_DX11::RenderLightShafts() - Failed to map matrix buffer" );
 
 			SetShaderMat4( "mvpMatrix", mvpMatrix, mappedResource.pData, varBindings );
 			SetShaderVec4( "color", CurLightShafts.m_Color, mappedResource.pData, varBindings );
@@ -484,7 +473,7 @@ void kbRenderer_DX11::RenderLightShafts() {
 			m_pDeviceContext->ClearRenderTargetView( GetRenderTarget_DX11(DOWN_RES_BUFFER)->m_pRenderTargetView, color );
 			m_pDeviceContext->OMSetRenderTargets( 1, &GetRenderTarget_DX11(DOWN_RES_BUFFER)->m_pRenderTargetView, nullptr );
 
-			D3D11_VIEWPORT viewport;
+			D3D11_VIEWPORT viewport = {};
 			viewport.TopLeftX = 0.0f;
 			viewport.TopLeftY = 0.0f;
 			viewport.Width = ( float )GetRenderTarget_DX11(DOWN_RES_BUFFER)->GetWidth();
@@ -493,7 +482,7 @@ void kbRenderer_DX11::RenderLightShafts() {
 			viewport.MaxDepth = 1.0f;
 			m_pDeviceContext->RSSetViewports( 1, &viewport );	
 
-			ID3D11ShaderResourceView *const  RenderTargetViews[] = { GetRenderTarget_DX11(SCRATCH_BUFFER)->m_pShaderResourceView };
+			ID3D11ShaderResourceView *const  RenderTargetViews[] = { GetRenderTarget_DX11(SCRATCH_BUFFER)->m_shaderResourceView };
 			ID3D11SamplerState *const  SamplerStates[] = { m_pBasicSamplerState };
 			m_pDeviceContext->PSSetShaderResources( 0, 1, RenderTargetViews );
 			m_pDeviceContext->PSSetSamplers( 0, 1, SamplerStates );
@@ -507,20 +496,20 @@ void kbRenderer_DX11::RenderLightShafts() {
 			const auto & varBindings = m_pGodRayIterationShader->GetShaderVarBindings();
 			ID3D11Buffer *const pConstantBuffer = GetConstantBuffer( varBindings.m_ConstantBufferSizeBytes );
 
-			kbMat4 mvpMatrix;
-			mvpMatrix.MakeIdentity();
-			mvpMatrix.MakeScale( kbVec3( CurLightShafts.m_Width * 0.5f, HalfBaseHeight, 1.0f ) );
-			mvpMatrix[3] = kbVec3(shaftScreenPos.x, shaftScreenPos.y, 0.0f );
+			Mat4 mvpMatrix;
+			mvpMatrix.make_identity();
+			mvpMatrix.make_scale( Vec3( CurLightShafts.m_Width * 0.5f, HalfBaseHeight, 1.0f ) );
+			mvpMatrix[3] = Vec3(shaftScreenPos.x, shaftScreenPos.y, 0.0f );
 
 			for ( int itr = 0; itr < CurLightShafts.m_NumIterations; itr++ ) {
 
-				kbVec3 curScale( CurLightShafts.m_IterationWidth * (float)itr, HalfIterationHeight * (float)itr, 1.0f );
+				Vec3 curScale( CurLightShafts.m_IterationWidth * (float)itr, HalfIterationHeight * (float)itr, 1.0f );
 				mvpMatrix[0].x += curScale.x;
 				mvpMatrix[1].y += curScale.y;
 
 				D3D11_MAPPED_SUBRESOURCE mappedResource;
 				HRESULT hr = m_pDeviceContext->Map( pConstantBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource );
-				kbErrorCheck( SUCCEEDED(hr), "kbRenderer_DX11::RenderLightShafts() - Failed to map matrix buffer" );
+				blk::error_check( SUCCEEDED(hr), "kbRenderer_DX11::RenderLightShafts() - Failed to map matrix buffer" );
 
 				SetShaderMat4( "mvpMatrix", mvpMatrix, mappedResource.pData, varBindings );
 
@@ -534,9 +523,9 @@ void kbRenderer_DX11::RenderLightShafts() {
 
 		// Final Render To Screen
 		{
-			const kbMat4 mvpMatrix = kbMat4::identity;
+			const Mat4 mvpMatrix = Mat4::identity;
 
-			D3D11_VIEWPORT viewport;
+			D3D11_VIEWPORT viewport = {};
 			viewport.Width = (float)Back_Buffer_Width;
 			viewport.Height = (float)Back_Buffer_Height;
 			viewport.MinDepth = 0.0f;
@@ -547,7 +536,7 @@ void kbRenderer_DX11::RenderLightShafts() {
 			m_pDeviceContext->RSSetViewports( 1, &viewport );
 			m_pDeviceContext->OMSetRenderTargets( 1, &GetAccumBuffer( m_iAccumBuffer )->m_pRenderTargetView, nullptr );
 
-			ID3D11ShaderResourceView *const  RenderTargetViews[] = { GetRenderTarget_DX11(DOWN_RES_BUFFER)->m_pShaderResourceView };
+			ID3D11ShaderResourceView *const  RenderTargetViews[] = { GetRenderTarget_DX11(DOWN_RES_BUFFER)->m_shaderResourceView };
 			ID3D11SamplerState *const  SamplerStates[] = { m_pBasicSamplerState };
 			m_pDeviceContext->PSSetShaderResources( 0, 1, RenderTargetViews );
 			m_pDeviceContext->PSSetSamplers( 0, 1, SamplerStates );
@@ -557,7 +546,7 @@ void kbRenderer_DX11::RenderLightShafts() {
 
 			D3D11_MAPPED_SUBRESOURCE mappedResource;
 			HRESULT hr = m_pDeviceContext->Map( pConstantBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource );
-			kbErrorCheck( SUCCEEDED(hr), "kbRenderer_DX11::RenderLightShafts() - Failed to map matrix buffer" );
+			blk::error_check( SUCCEEDED(hr), "kbRenderer_DX11::RenderLightShafts() - Failed to map matrix buffer" );
 
 			SetShaderMat4( "mvpMatrix", mvpMatrix, mappedResource.pData, varBindings );
 
@@ -572,7 +561,7 @@ void kbRenderer_DX11::RenderLightShafts() {
 		m_RenderState.SetBlendState();
 	}
 
-	D3D11_VIEWPORT viewport;
+	D3D11_VIEWPORT viewport = {};
 	viewport.Width = (float) Back_Buffer_Width;
 	viewport.Height = (float) Back_Buffer_Height;
 	viewport.MinDepth = 0.0f;

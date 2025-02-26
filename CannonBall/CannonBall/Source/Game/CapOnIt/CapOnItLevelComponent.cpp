@@ -20,23 +20,21 @@ namespace CapOnIt {
 
 CapOnIt::eSkipCheats g_SkipCheat = CapOnIt::Skip_ToSkkt;
 
-/**
- *	KungFuGame_MainMenuState
- */
+/// KungFuGame_MainMenuState
 class CapOnIt_MainMenuState : public CapOnIt_BaseState {
 
-//---------------------------------------------------------------------------------------------------
+	//---------------------------------------------------------------------------------------------------
 public:
 
-	CapOnIt_MainMenuState( CapOnItLevelComponent *const pLevelComponent ) : CapOnIt_BaseState( pLevelComponent ) { }
+	CapOnIt_MainMenuState(CapOnItLevelComponent* const pLevelComponent) : CapOnIt_BaseState(pLevelComponent) { }
 
 
 private:
 
-	virtual void WidgetEventCB( kbUIWidgetComponent *const pWidget, const kbInput_t * pInput ) override {
+	virtual void WidgetEventCB(kbUIWidgetComponent* const pWidget, const kbInput_t* pInput) override {
 	}
 
-	virtual void BeginState_Internal( CapOnIt::eCapOnIt_State previousState ) override { }
+	virtual void BeginState_Internal(CapOnIt::eCapOnIt_State previousState) override { }
 
 	virtual void UpdateState_Internal() override {
 
@@ -55,60 +53,51 @@ private:
 
 		if ( g_SkipCheat == KungFuGame::Skip_MainMenuAndIntro || g_SkipCheat == KungFuGame::Skip_ToEnd ) {
 
-			static const kbString IdleL_Anim( "IdleLeft_Basic" );
+			static const kbString IdleL_Anim("IdleLeft_Basic");
 			pSheep->PlayAnimation( IdleL_Anim, 0.2f );
 			RequestStateChange( KungFuGame::Intro );
 
 			if ( g_SkipCheat == KungFuGame::Skip_ToEnd ) {
-				pSheep->SetOwnerPosition( kbVec3( 77.10445f, -52.6362f, KungFuGame::kOutroStartZ ) );
+				pSheep->SetOwnerPosition( Vec3( 77.10445f, -52.6362f, KungFuGame::kOutroStartZ ) );
 			}
 			return;
 		}
 
 		pSheep->ExternalRequestStateChange( KungFuSheepState::Cinema );
 
-		static const kbString JumpingJacks_Anim( "JumpingJacks" );
+		static const kbString JumpingJacks_Anim("JumpingJacks");
 		pSheep->PlayAnimation( JumpingJacks_Anim, 0.15f );
-		pSheep->SetTargetFacingDirection( kbVec3( -1.0f, 0.0f, -1.0f ).Normalized() );
+		pSheep->SetTargetFacingDirection( Vec3( -1.0f, 0.0f, -1.0f ).Normalized() );
 		pSheep->SetOwnerPosition( KungFuGame::kSheepStartPos );*/
 	}
 
-	virtual void EndState_Internal( CapOnIt::eCapOnIt_State nextState ) override {
+	virtual void EndState_Internal(CapOnIt::eCapOnIt_State nextState) override {
 	}
 
 };
 
-CapOnItLevelComponent * CapOnItLevelComponent::s_Inst = nullptr;
+CapOnItLevelComponent* CapOnItLevelComponent::s_Inst = nullptr;
 
-/**
- *	CapOnItLevelComponent::Constructor
- */
+/// CapOnItLevelComponent::Constructor
 void CapOnItLevelComponent::Constructor() {
 }
 
-/**
- *	CapOnItLevelComponent::SetEnable_Internal
- */
-void CapOnItLevelComponent::SetEnable_Internal( const bool bEnable ) {
-	Super::SetEnable_Internal( bEnable );
+/// CapOnItLevelComponent::enable_internal
+void CapOnItLevelComponent::enable_internal(const bool bEnable) {
+	Super::enable_internal(bEnable);
 
-	if ( bEnable ) {
-
-		kbErrorCheck( s_Inst == nullptr, "KungFuLevelComponent::SetEnable_Internal() - Multiple enabled instances of KungFuLevelComponent" );
+	if (bEnable) {
+		blk::error_check(s_Inst == nullptr, "KungFuLevelComponent::enable_internal() - Multiple enabled instances of KungFuLevelComponent");
 		s_Inst = this;
-
 	} else {
-
 	}
 }
 
-/**
- *	CapOnItLevelComponent::Update_Internal
- */
-void CapOnItLevelComponent::Update_Internal( const float DeltaTime ) {
-	Super::Update_Internal( DeltaTime );
+/// CapOnItLevelComponent::update_internal
+void CapOnItLevelComponent::update_internal(const float DeltaTime) {
+	Super::update_internal(DeltaTime);
 
-	if ( g_UseEditor ) {
+	if (g_UseEditor) {
 		return;
 	}
 
@@ -117,9 +106,7 @@ void CapOnItLevelComponent::Update_Internal( const float DeltaTime ) {
 	UpdateDebugAndCheats();
 }
 
-/**
- *	CapOnItLevelComponent::UpdateDebugAndCheats
- */
+/// CapOnItLevelComponent::UpdateDebugAndCheats
 void CapOnItLevelComponent::UpdateDebugAndCheats() {
 
 	/*const auto input = g_pInputManager->GetInput();
@@ -143,54 +130,40 @@ void CapOnItLevelComponent::UpdateDebugAndCheats() {
 	}*/
 }
 
-/**
- *	CapOnItDirector::CapOnItDirector
- */
+/// CapOnItDirector::CapOnItDirector
 CapOnItDirector::CapOnItDirector() {
 }
 
-/**
- *	CapOnItDirector::~CapOnItDirector
- */
+/// CapOnItDirector::~CapOnItDirector
 CapOnItDirector::~CapOnItDirector() {
 
 }
 
-/**
- *	CapOnItDirector::InitializeStateMachine_Internal
- */
+/// CapOnItDirector::InitializeStateMachine_Internal
 void CapOnItDirector::InitializeStateMachine_Internal() {
 
 	kbLevelDirector::InitializeStateMachine_Internal();
 }
 
-/**
- *	CapOnItDirector::ShutdownStateMachine_Internal
- */
+/// CapOnItDirector::ShutdownStateMachine_Internal
 void CapOnItDirector::ShutdownStateMachine_Internal() {
 
 	kbLevelDirector::ShutdownStateMachine_Internal();
 }
 
-/**
- *	CapOnItDirector::UpdateStateMachine
- */
+/// CapOnItDirector::UpdateStateMachine
 void CapOnItDirector::UpdateStateMachine() {
 	kbLevelDirector::UpdateStateMachine();
 
 }
 
-/**
- *	CapOnItDirector::StateChangeCB
- */
-void CapOnItDirector::StateChangeCB( const CapOnIt::eCapOnIt_State previousState, const CapOnIt::eCapOnIt_State nextState ) {
+/// CapOnItDirector::StateChangeCB
+void CapOnItDirector::StateChangeCB(const CapOnIt::eCapOnIt_State previousState, const CapOnIt::eCapOnIt_State nextState) {
 
 }
 
-/**
- *	CapOnItDirector::WidgetEventCB
- */
-void CapOnItDirector::WidgetEventCB( kbUIWidgetComponent *const pWidget, const kbInput_t *const pInput ) {
-	
-	m_States[m_CurrentState]->WidgetEventCB( pWidget, pInput );
+/// CapOnItDirector::WidgetEventCB
+void CapOnItDirector::WidgetEventCB(kbUIWidgetComponent* const pWidget, const kbInput_t* const pInput) {
+
+	m_States[m_CurrentState]->WidgetEventCB(pWidget, pInput);
 }

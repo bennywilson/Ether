@@ -48,9 +48,7 @@ struct PS_OUTPUT {
 };
 
 
-/**
- *	vertexShader
- */
+/// vertexShader
 SamplerState diffuseSampler;
 SamplerState normalSampler;
 
@@ -98,9 +96,7 @@ pixelInput vertexShader( vertexInput input ) {
 	return output;
 }
 
-/**
- *	pixelShader
- */
+/// pixelShader
 
 
  PS_OUTPUT pixelShader( pixelInput	input, bool IsFrontFace	: SV_IsFrontFace ) {

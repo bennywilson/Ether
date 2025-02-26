@@ -253,7 +253,7 @@ kbGameEntity 1671951467 1280881932 1698058926 3039328037 {
 		Position = 76.992683 -52.599991 -277.628479
 		Scale = 25.000000 25.000000 25.000000
 	}
-	kbSkeletalModelComponent { 
+	kbSkeletalRenderComponent { 
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadow = 1
@@ -391,7 +391,7 @@ kbGameEntity 1671951467 1280881932 1698058926 3039328037 {
 		DebugAnimIndex = -1
 		Model = .\assets\models\characters\3000ton\3000ton.ms3d
 	}
-	kbSkeletalModelComponent { 
+	kbSkeletalRenderComponent { 
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadow = 0
@@ -26898,7 +26898,7 @@ kbGameEntity 191628142 1164611098 2253314479 1292534890 {
 		Position = 76.992683 -52.599991 -278.628601
 		Scale = 0.750000 0.750000 0.750000
 	}
-	kbSkeletalModelComponent { 
+	kbSkeletalRenderComponent { 
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadow = 1
@@ -27069,7 +27069,7 @@ kbGameEntity 191628142 1164611098 2253314479 1292534890 {
 		DebugAnimIndex = 0
 		Model = .\assets\models\characters\fox\fox.ms3d
 	}
-	kbSkeletalModelComponent { 
+	kbSkeletalRenderComponent { 
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadow = 0
@@ -27739,7 +27739,7 @@ kbGameEntity 3622350630 1299414661 2143524754 2655535189 {
 		Position = 76.992683 -52.599991 -282.628479
 		Scale = 25.000000 25.000000 25.000000
 	}
-	kbSkeletalModelComponent { 
+	kbSkeletalRenderComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
 		CastsShadow = 1
@@ -27801,7 +27801,7 @@ kbGameEntity 3622350630 1299414661 2143524754 2655535189 {
 		DebugAnimIndex = 0
 		Model = .\assets\models\characters\3000ton\3000ton.ms3d
 	}
-	kbSkeletalModelComponent { 
+	kbSkeletalRenderComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
 		CastsShadow = 0
@@ -28016,7 +28016,7 @@ kbGameEntity 1235986948 1232903237 4084947108 3961454180 {
 		MinAngularSpeed =  10.000000
 		MinLinearVelocity = -1.000000 1.000000 -1.000000
 	}
-	kbSkeletalModelComponent { 
+	kbSkeletalRenderComponent { 
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadow = 0
@@ -28081,7 +28081,7 @@ kbGameEntity 2173328964 1105303046 1808318377 1249498279 {
 		MinAngularSpeed =  10.000000
 		MinLinearVelocity = -1.000000 1.000000 1.000000
 	}
-	kbSkeletalModelComponent { 
+	kbSkeletalRenderComponent { 
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadow = 0

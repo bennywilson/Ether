@@ -2,10 +2,9 @@
 // CannonGame.h
 //
 //
-// 2019 kbEngine 2.0
+// 2019-2025 kbEngine 2.0
 //===================================================================================================
-#ifndef _CannonGame_H_
-#define _CannonGame_H_
+#pragma once
 
 #include "kbGame.h"
 #include "kbJobManager.h"
@@ -17,9 +16,7 @@ class CannonActorComponent;
 class kbLevelComponent;
 
 
-/**
- *	DealAttackInfo_t
- */
+/// DealAttackInfo_t
 template<typename T>
 struct DealAttackInfo_t {
 	CannonActorComponent * m_pAttacker = nullptr;
@@ -28,9 +25,7 @@ struct DealAttackInfo_t {
 	T m_AttackType = (T)0;
 };
 
-/**
- *	AttackHitInfo_t
- */
+/// AttackHitInfo_t
 struct AttackHitInfo_t {
 	kbGameComponent * m_pHitComponent = nullptr;
 	bool m_bHit = false;
@@ -38,9 +33,7 @@ struct AttackHitInfo_t {
 
 
 
-/**
- *	CannonLevelComponent
- */
+/// CannonLevelComponent
 class CannonLevelComponent : public kbLevelComponent {
 
 //-------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -51,9 +44,7 @@ private:
 	int											m_Dummy2;
 };
 
-/**
- *	CannonGame
- */
+/// CannonGame
 class CannonGame : public kbGame, public kbRenderHook {
 
 //-------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -67,19 +58,19 @@ public:
 
 protected:
 
-	virtual void								InitGame_Internal() override;
-	virtual void								PlayGame_Internal() override;
-	virtual void								StopGame_Internal() override;
-	virtual void								LevelLoaded_Internal() override;
+	virtual void								init_internal() override;
+	virtual void								play_internal() override;
+	virtual void								stop_internal() override;
+	virtual void								level_loaded_internal() override;
 
-	virtual void								AddGameEntity_Internal( kbGameEntity *const pEntity ) override;
-	virtual void								RemoveGameEntity_Internal( kbGameEntity *const pEntity ) override;
+	virtual void								add_entity_internal( kbGameEntity *const pEntity ) override;
+	virtual void								remove_entity_internal( kbGameEntity *const pEntity ) override;
 
 
-	virtual void								PreUpdate_Internal() override;
-	virtual void								PostUpdate_Internal() override;
+	virtual void								preupdate_internal() override;
+	virtual void								postupdate_internal() override;
 
-	virtual kbGameEntity *						CreatePlayer( const int netId, const kbGUID & prefabGUID, const kbVec3 & desiredLocation ) override;
+	virtual kbGameEntity *						CreatePlayer( const int netId, const kbGUID & prefabGUID, const Vec3 & desiredLocation ) override;
 
 	virtual void								HackEditorInit( HWND hwnd, std::vector<class kbEditorEntity *> & editorEntities ) override;
 	virtual void								HackEditorUpdate( const float DT, kbCamera *const pCamera ) override;
@@ -102,9 +93,7 @@ private:
 	void										ProcessInput( const float deltaTimeSec );
 };
 
-/**
- *	CannonFogComponent
- */
+/// CannonFogComponent
 class CannonFogComponent : public kbGameComponent, kbRenderHook {
 
 	KB_DECLARE_COMPONENT( CannonFogComponent, kbGameComponent );
@@ -112,12 +101,12 @@ class CannonFogComponent : public kbGameComponent, kbRenderHook {
 //-------------------------------------------------------------------------------------------------------------------------------------------------------------
 protected:
 
-	virtual void								SetEnable_Internal( const bool bEnable ) override;
+	virtual void								enable_internal( const bool bEnable ) override;
 	virtual void								RenderHookCallBack( kbRenderTexture *const pSrc, kbRenderTexture *const pDst ) override;
 
 private:
 
-	kbShader *									m_pShader;
+	kbShader *									m_shader;
 	float										m_FogStartDist;
 	float										m_FogEndDist;
 	float										m_FogClamp;
@@ -128,22 +117,22 @@ private:
 extern CannonGame * g_pCannonGame;
 
 inline bool WasAttackJustPressed( const kbInput_t *const pInput = nullptr ) {
-	const kbInput_t & input = ( pInput == nullptr )?( g_pInputManager->GetInput() ) : ( *pInput );
+	const kbInput_t & input = ( pInput == nullptr )?( g_pInputManager->get_input() ) : ( *pInput );
 	return input.WasKeyJustPressed( 'K' ) || input.GamepadButtonStates[12].m_Action == kbInput_t::KA_JustPressed;
 }
 
 inline bool WasSpecialAttackPressed( const kbInput_t *const pInput = nullptr ) {
-	const kbInput_t & input = ( pInput == nullptr )?( g_pInputManager->GetInput() ) : ( *pInput );
+	const kbInput_t & input = ( pInput == nullptr )?( g_pInputManager->get_input() ) : ( *pInput );
 	return input.WasKeyJustPressed( 'J' ) || input.LeftTrigger > 0.1f || input.RightTrigger > 0.1f;
 }
 
 inline bool WasStartButtonPressed( const kbInput_t *const pInput = nullptr ) {
-	const kbInput_t & input = ( pInput == nullptr )?( g_pInputManager->GetInput() ) : ( *pInput );
+	const kbInput_t & input = ( pInput == nullptr )?( g_pInputManager->get_input() ) : ( *pInput );
 	return input.GamepadButtonStates[4].m_Action == kbInput_t::KA_JustPressed;
 }
 
 inline bool WasBackButtonPressed( const kbInput_t *const pInput = nullptr ) {
-	const kbInput_t & input = ( pInput == nullptr )?( g_pInputManager->GetInput() ) : ( *pInput );
+	const kbInput_t & input = ( pInput == nullptr )?( g_pInputManager->get_input() ) : ( *pInput );
 	return input.WasNonCharKeyJustPressed( kbInput_t::Escape ) || input.GamepadButtonStates[5].m_Action == kbInput_t::KA_JustPressed;
 }
 
@@ -152,7 +141,7 @@ inline bool WasConfirmationButtonPressed( const kbInput_t *const pInput = nullpt
 		return true;
 	}
 
-	const kbInput_t & input = ( pInput == nullptr )?( g_pInputManager->GetInput() ) : ( *pInput );
+	const kbInput_t & input = ( pInput == nullptr )?( g_pInputManager->get_input() ) : ( *pInput );
 	if ( input.WasNonCharKeyJustPressed( kbInput_t::Return ) ) {
 		return true;
 	}
@@ -160,9 +149,9 @@ inline bool WasConfirmationButtonPressed( const kbInput_t *const pInput = nullpt
 	return false;
 }
 
-inline kbVec2 GetLeftStick( const kbInput_t *const pInput = nullptr ) {
-	const kbInput_t & input = ( pInput == nullptr )?( g_pInputManager->GetInput() ) : ( *pInput );
-	kbVec2 retLeftStick = kbVec2::zero;
+inline Vec2 GetLeftStick( const kbInput_t *const pInput = nullptr ) {
+	const kbInput_t & input = ( pInput == nullptr )?( g_pInputManager->get_input() ) : ( *pInput );
+	Vec2 retLeftStick = Vec2::zero;
 
 	if ( input.IsKeyPressedOrDown( 'A' ) ) {
 		retLeftStick.x = -1.0f;
@@ -183,9 +172,9 @@ inline kbVec2 GetLeftStick( const kbInput_t *const pInput = nullptr ) {
 	return retLeftStick;
 }
 
-inline kbVec2 GetPrevLeftStick( const kbInput_t *const pInput = nullptr ) {
-	const kbInput_t & input = ( pInput == nullptr )?( g_pInputManager->GetInput() ) : ( *pInput );
-	kbVec2 leftStick = kbVec2::zero;
+inline Vec2 GetPrevLeftStick( const kbInput_t *const pInput = nullptr ) {
+	const kbInput_t & input = ( pInput == nullptr )?( g_pInputManager->get_input() ) : ( *pInput );
+	Vec2 leftStick = Vec2::zero;
 
 	if ( input.IsKeyPressedOrDown( 'A' ) ) {
 		leftStick.x = -1.0f;
@@ -205,6 +194,3 @@ inline kbVec2 GetPrevLeftStick( const kbInput_t *const pInput = nullptr ) {
 
 	return leftStick;
 }
-
-
-#endif

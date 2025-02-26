@@ -2,7 +2,7 @@
 // directionalLightShadowSkinned.kbShader
 //
 //
-// 2018-2019 kbEngine 2.0
+// 2018-2019 blk 1.0
 //===================================================================================================
 cbuffer matrixBuffer {
 	matrix      mvpMatrix;
@@ -27,9 +27,7 @@ struct shadowPixelInput {
 };
 
 
-/**
- *	skinnedVertexMain
- */
+/// skinnedVertexMain
 shadowPixelInput skinnedVertexMain( skinnedVertexInput input ) {
 
 	shadowPixelInput output = (shadowPixelInput)(0);
@@ -51,9 +49,7 @@ shadowPixelInput skinnedVertexMain( skinnedVertexInput input ) {
 	return output;
 }
 
-/**
- *	skinnedPixelMain
- */
+/// skinnedPixelMain
  float skinnedPixelMain( shadowPixelInput input ) : SV_TARGET {
 	return input.position2.x / input.position2.y;
 }

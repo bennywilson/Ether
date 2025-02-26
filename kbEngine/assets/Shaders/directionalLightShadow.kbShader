@@ -2,7 +2,7 @@
 // directionalLightShadow.kbShader
 //
 //
-// 2017-2018 kbEngine 2.0
+// 2017-2018 blk 1.0
 //===================================================================================================
 cbuffer matrixBuffer {
    matrix      mvpMatrix;
@@ -24,9 +24,7 @@ struct shadowPixelInput {
 	float2 position2		: TEXCOORD1;
 };
 
-/**
- *	vertexShader
- */	
+/// vertexShader	
 shadowPixelInput vertexShader( shadowVertexInput input ) {
 	shadowPixelInput output = ( shadowPixelInput )(0);
 
@@ -36,9 +34,7 @@ shadowPixelInput vertexShader( shadowVertexInput input ) {
 	return output;
 }
 
-/**
- *	pixelShader
- */
+/// pixelShader
  float pixelShader( shadowPixelInput input ) : SV_TARGET {
    return input.position2.x / input.position2.y;
 }

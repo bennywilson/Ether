@@ -37,11 +37,14 @@
     <Filter Include="game\Components">
       <UniqueIdentifier>{b2e95899-c35e-4ebe-8295-d67321545428}</UniqueIdentifier>
     </Filter>
-    <Filter Include="renderer\dx12">
-      <UniqueIdentifier>{1cc76160-4ee5-4c14-8e93-9023f577e415}</UniqueIdentifier>
-    </Filter>
     <Filter Include="renderer\dx11">
       <UniqueIdentifier>{dbbb03a1-3486-4eeb-a86f-d770a9a1e72e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="renderer\d3d12">
+      <UniqueIdentifier>{1cc76160-4ee5-4c14-8e93-9023f577e415}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="renderer\d3d12\D3D">
+      <UniqueIdentifier>{54577363-fd50-45b7-85cf-78fa7fd505da}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -131,13 +134,13 @@
     <ClInclude Include="renderer\kbRenderer_defs.h">
       <Filter>renderer</Filter>
     </ClInclude>
-    <ClInclude Include="core\kbCore.h">
+    <ClInclude Include="core\blk_core.h">
       <Filter>core</Filter>
     </ClInclude>
-    <ClInclude Include="math\kbQuaternion.h">
+    <ClInclude Include="math\quaternion.h">
       <Filter>math</Filter>
     </ClInclude>
-    <ClInclude Include="math\kbVector.h">
+    <ClInclude Include="math\matrix.h">
       <Filter>math</Filter>
     </ClInclude>
     <ClInclude Include="boundingVolumes\kbBounds.h">
@@ -170,10 +173,10 @@
     <ClInclude Include="editor\kbWidgetCBObjects.h">
       <Filter>editor\Widgets</Filter>
     </ClInclude>
-    <ClInclude Include="gameEntity\kbGameEntity.h">
+    <ClInclude Include="game\kbGameEntity.h">
       <Filter>game</Filter>
     </ClInclude>
-    <ClInclude Include="gameEntity\kbTypeInfo.h">
+    <ClInclude Include="game\kbTypeInfo.h">
       <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="editor\kbManipulator.h">
@@ -191,49 +194,49 @@
     <ClInclude Include="editor\kbPropertiesTab.h">
       <Filter>editor\Widgets</Filter>
     </ClInclude>
-    <ClInclude Include="gameEntity\kbGameEntityHeader.h">
+    <ClInclude Include="game\kbGameEntityHeader.h">
       <Filter>game</Filter>
     </ClInclude>
-    <ClInclude Include="gameEntity\kbTypeInfoGeneratedClasses.h">
+    <ClInclude Include="game\kbTypeInfoGeneratedClasses.h">
       <Filter>game</Filter>
     </ClInclude>
-    <ClInclude Include="math\kbMath.h">
+    <ClInclude Include="math\blk_math.h">
       <Filter>math</Filter>
     </ClInclude>
-    <ClInclude Include="gameEntity\kbFile.h">
+    <ClInclude Include="game\kbFile.h">
       <Filter>game</Filter>
     </ClInclude>
-    <ClInclude Include="gameEntity\kbGame.h">
+    <ClInclude Include="game\kbGame.h">
       <Filter>game</Filter>
     </ClInclude>
-    <ClInclude Include="gameEntity\kbCamera.h">
+    <ClInclude Include="game\kbCamera.h">
       <Filter>game</Filter>
     </ClInclude>
-    <ClInclude Include="core\kbJobManager.h">
+    <ClInclude Include="game\kbJobManager.h">
       <Filter>core</Filter>
     </ClInclude>
-    <ClInclude Include="gameEntity\kbResourceManager.h">
+    <ClInclude Include="game\kbResourceManager.h">
       <Filter>game</Filter>
     </ClInclude>
-    <ClInclude Include="core\kbString.h">
+    <ClInclude Include="core\blk_string.h">
       <Filter>core</Filter>
     </ClInclude>
     <ClInclude Include="editor\kbUndoAction.h">
       <Filter>editor</Filter>
     </ClInclude>
-    <ClInclude Include="gameEntity\kbParticleManager.h">
+    <ClInclude Include="game\kbParticleManager.h">
       <Filter>game</Filter>
     </ClInclude>
-    <ClInclude Include="core\kbConsole.h">
+    <ClInclude Include="core\blk_console.h">
       <Filter>core</Filter>
     </ClInclude>
-    <ClInclude Include="gameEntity\kbCollisionManager.h">
+    <ClInclude Include="game\kbCollisionManager.h">
       <Filter>game</Filter>
     </ClInclude>
-    <ClInclude Include="math\kbPlane.h">
+    <ClInclude Include="math\plane3d.h">
       <Filter>math</Filter>
     </ClInclude>
-    <ClInclude Include="core\kbInputManager.h">
+    <ClInclude Include="game\kbInputManager.h">
       <Filter>core</Filter>
     </ClInclude>
     <ClInclude Include="sound\kbSoundManager.h">
@@ -242,57 +245,92 @@
     <ClInclude Include="sound\kbSoundComponent.h">
       <Filter>Sound</Filter>
     </ClInclude>
-    <ClInclude Include="gameEntity\kbLightComponent.h">
+    <ClInclude Include="game\kbLightComponent.h">
       <Filter>game\Components</Filter>
     </ClInclude>
-    <ClInclude Include="gameEntity\kbModelComponent.h">
+    <ClInclude Include="game\kbParticleComponent.h">
       <Filter>game\Components</Filter>
     </ClInclude>
-    <ClInclude Include="gameEntity\kbParticleComponent.h">
+    <ClInclude Include="game\model_component.h">
       <Filter>game\Components</Filter>
     </ClInclude>
-    <ClInclude Include="gameEntity\kbSkeletalModelComponent.h">
+    <ClInclude Include="game\kbTerrainComponent.h">
       <Filter>game\Components</Filter>
     </ClInclude>
-    <ClInclude Include="gameEntity\kbStaticModelComponent.h">
+    <ClInclude Include="game\kbComponent.h">
       <Filter>game\Components</Filter>
     </ClInclude>
-    <ClInclude Include="gameEntity\kbTerrainComponent.h">
+    <ClInclude Include="game\kbClothComponent.h">
       <Filter>game\Components</Filter>
     </ClInclude>
-    <ClInclude Include="gameEntity\kbComponent.h">
-      <Filter>game\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="gameEntity\kbClothComponent.h">
-      <Filter>game\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="gameEntity\kbDebugComponents.h">
+    <ClInclude Include="game\kbDebugComponents.h">
       <Filter>game\Components</Filter>
     </ClInclude>
     <ClInclude Include="renderer\kbRenderer.h">
       <Filter>renderer</Filter>
     </ClInclude>
-    <ClInclude Include="gameEntity\kbLevelComponent.h">
+    <ClInclude Include="game\kbLevelComponent.h">
       <Filter>game\Components</Filter>
     </ClInclude>
-    <ClInclude Include="gameEntity\kbLevelDirector.h">
+    <ClInclude Include="game\kbLevelDirector.h">
       <Filter>game\Components</Filter>
     </ClInclude>
-    <ClInclude Include="gameEntity\kbUIComponent.h">
+    <ClInclude Include="game\kbUIComponent.h">
       <Filter>game\Components</Filter>
     </ClInclude>
-    <ClInclude Include="renderer\dx12\renderer_dx12.h">
-      <Filter>renderer\dx12</Filter>
+    <ClInclude Include="renderer\d3d12\d3d12_defs.h">
+      <Filter>renderer\d3d12</Filter>
     </ClInclude>
+    <ClInclude Include="renderer\render_defs.h">
+      <Filter>renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="renderer\d3d12\dxtk\DDS.h" />
+    <ClInclude Include="renderer\d3d12\dxtk\DDSTextureLoader12.h" />
+    <ClInclude Include="renderer\d3d12\dxtk\DirectXHelpers.h" />
+    <ClInclude Include="renderer\d3d12\dxtk\GraphicsMemory.h" />
+    <ClInclude Include="renderer\d3d12\dxtk\LoaderHelpers.h" />
+    <ClInclude Include="renderer\d3d12\dxtk\pch.h" />
+    <ClInclude Include="renderer\d3d12\dxtk\PlatformHelpers.h" />
+    <ClInclude Include="renderer\d3d12\dx12\d3d12.h" />
+    <ClInclude Include="renderer\d3d12\dx12\d3d12compatibility.h" />
+    <ClInclude Include="renderer\d3d12\dx12\d3d12sdklayers.h" />
+    <ClInclude Include="renderer\d3d12\dx12\d3d12shader.h" />
+    <ClInclude Include="renderer\d3d12\dx12\D3D12TokenizedProgramFormat.hpp" />
+    <ClInclude Include="renderer\d3d12\dx12\d3d12video.h" />
+    <ClInclude Include="renderer\d3d12\dx12\d3dcommon.h" />
+    <ClInclude Include="renderer\d3d12\dx12\d3dx12.h" />
+    <ClInclude Include="renderer\d3d12\dx12\d3dx12_barriers.h" />
+    <ClInclude Include="renderer\d3d12\dx12\d3dx12_check_feature_support.h" />
+    <ClInclude Include="renderer\d3d12\dx12\d3dx12_core.h" />
+    <ClInclude Include="renderer\d3d12\dx12\d3dx12_default.h" />
+    <ClInclude Include="renderer\d3d12\dx12\d3dx12_pipeline_state_stream.h" />
+    <ClInclude Include="renderer\d3d12\dx12\d3dx12_property_format_table.h" />
+    <ClInclude Include="renderer\d3d12\dx12\d3dx12_render_pass.h" />
+    <ClInclude Include="renderer\d3d12\dx12\d3dx12_resource_helpers.h" />
+    <ClInclude Include="renderer\d3d12\dx12\d3dx12_root_signature.h" />
+    <ClInclude Include="renderer\d3d12\dx12\d3dx12_state_object.h" />
+    <ClInclude Include="renderer\d3d12\dx12\DirectML.h" />
+    <ClInclude Include="renderer\d3d12\dx12\dxcore.h" />
+    <ClInclude Include="renderer\d3d12\dx12\dxcore_interface.h" />
+    <ClInclude Include="renderer\d3d12\dx12\dxgicommon.h" />
+    <ClInclude Include="renderer\d3d12\dx12\dxgiformat.h" />
+    <ClInclude Include="renderer\renderer.h" />
+    <ClInclude Include="renderer\vk\renderer_vk.h" />
+    <ClInclude Include="renderer\vk\vk_defs.h" />
+    <ClInclude Include="core\blk_containers.h" />
+    <ClInclude Include="renderer\sw\renderer_sw.h" />
+    <ClInclude Include="renderer\d3d12\renderer_dx12.h" />
+    <ClInclude Include="game\render_component.h" />
+    <ClInclude Include="renderer\sw\sw_defs.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="core\kbCore.cpp">
+    <ClCompile Include="core\blk_core.cpp">
       <Filter>core</Filter>
     </ClCompile>
-    <ClCompile Include="math\kbQuaternion.cpp">
+    <ClCompile Include="math\quaternion.cpp">
       <Filter>math</Filter>
     </ClCompile>
-    <ClCompile Include="math\kbVector.cpp">
+    <ClCompile Include="math\matrix.cpp">
       <Filter>math</Filter>
     </ClCompile>
     <ClCompile Include="app\kbApp.cpp">
@@ -316,10 +354,10 @@
     <ClCompile Include="editor\kbWidget.cpp">
       <Filter>editor\Widgets</Filter>
     </ClCompile>
-    <ClCompile Include="gameEntity\kbGameEntity.cpp">
+    <ClCompile Include="game\kbGameEntity.cpp">
       <Filter>game</Filter>
     </ClCompile>
-    <ClCompile Include="gameEntity\kbTypeInfo.cpp">
+    <ClCompile Include="game\kbTypeInfo.cpp">
       <Filter>game</Filter>
     </ClCompile>
     <ClCompile Include="editor\kbManipulator.cpp">
@@ -337,28 +375,28 @@
     <ClCompile Include="editor\kbPropertiesTab.cpp">
       <Filter>editor\Widgets</Filter>
     </ClCompile>
-    <ClCompile Include="math\kbMath.cpp">
+    <ClCompile Include="math\blk_math.cpp">
       <Filter>math</Filter>
     </ClCompile>
-    <ClCompile Include="gameEntity\kbFile.cpp">
+    <ClCompile Include="game\kbFile.cpp">
       <Filter>game</Filter>
     </ClCompile>
-    <ClCompile Include="gameEntity\kbGame.cpp">
+    <ClCompile Include="game\kbGame.cpp">
       <Filter>game</Filter>
     </ClCompile>
-    <ClCompile Include="gameEntity\kbCamera.cpp">
+    <ClCompile Include="game\kbCamera.cpp">
       <Filter>game</Filter>
     </ClCompile>
-    <ClCompile Include="core\kbJobManager.cpp">
+    <ClCompile Include="game\kbJobManager.cpp">
       <Filter>core</Filter>
     </ClCompile>
-    <ClCompile Include="gameEntity\kbResourceManager.cpp">
+    <ClCompile Include="game\kbResourceManager.cpp">
       <Filter>game</Filter>
     </ClCompile>
     <ClCompile Include="renderer\kbModel.cpp">
       <Filter>renderer</Filter>
     </ClCompile>
-    <ClCompile Include="core\kbString.cpp">
+    <ClCompile Include="core\blk_string.cpp">
       <Filter>core</Filter>
     </ClCompile>
     <ClCompile Include="editor\kbUndoAction.cpp">
@@ -367,22 +405,22 @@
     <ClCompile Include="renderer\kbRenderer_defs.cpp">
       <Filter>renderer</Filter>
     </ClCompile>
-    <ClCompile Include="gameEntity\kbParticleManager.cpp">
+    <ClCompile Include="game\kbParticleManager.cpp">
       <Filter>game</Filter>
     </ClCompile>
-    <ClCompile Include="core\kbConsole.cpp">
+    <ClCompile Include="core\blk_console.cpp">
       <Filter>core</Filter>
     </ClCompile>
-    <ClCompile Include="gameEntity\kbCollisionManager.cpp">
+    <ClCompile Include="game\kbCollisionManager.cpp">
       <Filter>game</Filter>
     </ClCompile>
     <ClCompile Include="renderer\DX11\kbLightRendering_DX11.cpp">
       <Filter>renderer\dx11</Filter>
     </ClCompile>
-    <ClCompile Include="math\kbPlane.cpp">
+    <ClCompile Include="math\plane3d.cpp">
       <Filter>math</Filter>
     </ClCompile>
-    <ClCompile Include="core\kbInputManager.cpp">
+    <ClCompile Include="game\kbInputManager.cpp">
       <Filter>core</Filter>
     </ClCompile>
     <ClCompile Include="sound\kbSoundManager.cpp">
@@ -391,47 +429,61 @@
     <ClCompile Include="sound\kbSoundComponent.cpp">
       <Filter>Sound</Filter>
     </ClCompile>
-    <ClCompile Include="gameEntity\kbLightComponent.cpp">
+    <ClCompile Include="game\kbLightComponent.cpp">
       <Filter>game\Components</Filter>
     </ClCompile>
-    <ClCompile Include="gameEntity\kbModelComponent.cpp">
+    <ClCompile Include="game\kbParticleComponent.cpp">
       <Filter>game\Components</Filter>
     </ClCompile>
-    <ClCompile Include="gameEntity\kbParticleComponent.cpp">
+    <ClCompile Include="game\model_component.cpp">
       <Filter>game\Components</Filter>
     </ClCompile>
-    <ClCompile Include="gameEntity\kbSkeletalModelComponent.cpp">
+    <ClCompile Include="game\kbTerrainComponent.cpp">
       <Filter>game\Components</Filter>
     </ClCompile>
-    <ClCompile Include="gameEntity\kbStaticModelComponent.cpp">
+    <ClCompile Include="game\kbClothComponent.cpp">
       <Filter>game\Components</Filter>
     </ClCompile>
-    <ClCompile Include="gameEntity\kbTerrainComponent.cpp">
+    <ClCompile Include="game\kbComponent.cpp">
       <Filter>game\Components</Filter>
     </ClCompile>
-    <ClCompile Include="gameEntity\kbClothComponent.cpp">
-      <Filter>game\Components</Filter>
-    </ClCompile>
-    <ClCompile Include="gameEntity\kbComponent.cpp">
-      <Filter>game\Components</Filter>
-    </ClCompile>
-    <ClCompile Include="gameEntity\kbDebugComponents.cpp">
+    <ClCompile Include="game\kbDebugComponents.cpp">
       <Filter>game\Components</Filter>
     </ClCompile>
     <ClCompile Include="renderer\kbRenderer.cpp">
       <Filter>renderer</Filter>
     </ClCompile>
-    <ClCompile Include="gameEntity\kbLevelComponent.cpp">
+    <ClCompile Include="game\kbLevelComponent.cpp">
       <Filter>game\Components</Filter>
     </ClCompile>
-    <ClCompile Include="gameEntity\kbLevelDirector.cpp">
+    <ClCompile Include="game\kbLevelDirector.cpp">
       <Filter>game\Components</Filter>
     </ClCompile>
-    <ClCompile Include="gameEntity\kbUIComponent.cpp">
+    <ClCompile Include="game\kbUIComponent.cpp">
       <Filter>game\Components</Filter>
     </ClCompile>
-    <ClCompile Include="renderer\dx12\renderer_dx12.cpp">
-      <Filter>renderer\dx12</Filter>
+    <ClCompile Include="renderer\d3d12\d3d12_defs.cpp">
+      <Filter>renderer\d3d12</Filter>
     </ClCompile>
+    <ClCompile Include="renderer\render_defs.cpp">
+      <Filter>renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="renderer\d3d12\dxtk\DDSTextureLoader12.cpp" />
+    <ClCompile Include="renderer\renderer.cpp" />
+    <ClCompile Include="renderer\vk\renderer_vk.cpp" />
+    <ClCompile Include="renderer\vk\vk_defs.cpp" />
+    <ClCompile Include="renderer\sw\renderer_sw.cpp" />
+    <ClCompile Include="renderer\d3d12\renderer_dx12.cpp" />
+    <ClCompile Include="game\render_component.cpp" />
+    <ClCompile Include="renderer\sw\sw_defs.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Midl Include="renderer\d3d12\dx12\d3d12.idl" />
+    <Midl Include="renderer\d3d12\dx12\d3d12compatibility.idl" />
+    <Midl Include="renderer\d3d12\dx12\d3d12sdklayers.idl" />
+    <Midl Include="renderer\d3d12\dx12\d3d12video.idl" />
+    <Midl Include="renderer\d3d12\dx12\d3dcommon.idl" />
+    <Midl Include="renderer\d3d12\dx12\dxgicommon.idl" />
+    <Midl Include="renderer\d3d12\dx12\dxgiformat.idl" />
   </ItemGroup>
 </Project>

@@ -10,7 +10,7 @@ kbPrefab 1 {
 			Position = -4.000000 0.000000 17.968311
 			Scale = 25.000000 25.000000 25.000000
 		}
-		kbSkeletalModelComponent { 
+		kbSkeletalRenderComponent { 
 			Enabled = 1
 			LifeTime =  -1.000000
 			CastsShadow = 1
@@ -131,7 +131,7 @@ kbPrefab 1 {
 			DebugAnimIndex = -1
 			Model = .\assets\models\characters\3000ton\3000ton.ms3d
 		}
-		kbSkeletalModelComponent { 
+		kbSkeletalRenderComponent { 
 			Enabled = 1
 			LifeTime =  -1.000000
 			CastsShadow = 0
@@ -387,7 +387,7 @@ kbGameEntity 3457190988 1240531568 1181983423 3782107432 {
 		Position = -4.000000 0.000000 17.968311
 		Scale = 25.000000 25.000000 25.000000
 	}
-	kbSkeletalModelComponent { 
+	kbSkeletalRenderComponent { 
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadow = 1
@@ -508,7 +508,7 @@ kbGameEntity 3457190988 1240531568 1181983423 3782107432 {
 		DebugAnimIndex = -1
 		Model = .\assets\models\characters\3000ton\3000ton.ms3d
 	}
-	kbSkeletalModelComponent { 
+	kbSkeletalRenderComponent { 
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadow = 0

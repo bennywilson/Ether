@@ -1,75 +1,65 @@
-//===================================================================================================
-// kbManipulator.h
-//
-//
-// 2016-2018 kbEngine 2.0
-//===================================================================================================
-#ifndef _KBEDITORMANIPULATOR_H_
-#define _KBEDITORMANIPULATOR_H_
+/// kbManipulator.h
+///
+/// 2016-2025 blk 1.0
 
- /**
-  *	kbManipulator
-  */
- class kbManipulator {
+#pragma once
 
-//---------------------------------------------------------------------------------------------------
- public:
-	 enum manipulatorMode_t {
-		 Translate,
-		 Rotate,
-		 Scale,
-		 NumManipulators
-	 };
+ /// kbManipulator
+class kbManipulator {
+public:
+	enum manipulatorMode_t {
+		Translate,
+		Rotate,
+		Scale,
+		NumManipulators
+	};
 
-												kbManipulator();
-												~kbManipulator();
+	kbManipulator();
+	~kbManipulator();
 
-	void										Update();
-	void										RenderSync();
+	void Update();
+	void RenderSync();
+		 
+	void ProcessInput(const bool leftMouseDown);
+		 
+	bool AttemptMouseGrab(const Vec3& rayOrigin, const Vec3& rayDirection, const Quat4& cameraOrientation);
+	void UpdateMouseDrag(const Vec3& rayOrigin, const Vec3& rayDirection, const Quat4& cameraOrientation);
+	void ReleaseFromMouseGrab() { m_SelectedGroup = -1; m_LastOrientation = m_Orientation; }
+	bool IsGrabbed() const { return m_SelectedGroup != -1; }
 
-	void										ProcessInput( const bool leftMouseDown );
+	void SetPosition(const Vec3& newPosition) { m_Position = newPosition; }
+	const Vec3& GetPosition() const { return m_Position; }
 
-	bool										AttemptMouseGrab( const kbVec3 & rayOrigin, const kbVec3 & rayDirection, const kbQuat & cameraOrientation );
-	void										UpdateMouseDrag( const kbVec3 & rayOrigin, const kbVec3 & rayDirection, const kbQuat & cameraOrientation );
-	void										ReleaseFromMouseGrab() { m_SelectedGroup = -1; m_LastOrientation = m_Orientation; }
-	bool										IsGrabbed() const { return m_SelectedGroup != -1; }
+	void SetOrientation(const Quat4& newOrientation) { m_Orientation = m_LastOrientation = newOrientation; }
+	const Quat4& GetOrientation() const { return m_Orientation; }
 
-	void										SetPosition( const kbVec3 & newPosition ) { m_Position = newPosition; }
-	const kbVec3 &								GetPosition() const { return m_Position; }
+	void SetScale(const Vec3& newScale) { m_Scale = newScale; }
+	const Vec3& GetScale() const { return m_Scale; }
 
-	void										SetOrientation( const kbQuat & newOrientation ) { m_Orientation = m_LastOrientation = newOrientation; }
-	const kbQuat &								GetOrientation() const { return m_Orientation; }
-
-	void										SetScale( const kbVec3 & newScale ) { m_Scale = newScale; }
-	const kbVec3 &								GetScale() const { return m_Scale; }
-
-	void										SetMode( const manipulatorMode_t newMode ) { m_ManipulatorMode = newMode; }
-	manipulatorMode_t							GetMode() const { return m_ManipulatorMode; }
+	void SetMode(const manipulatorMode_t newMode) { m_ManipulatorMode = newMode; }
+	manipulatorMode_t GetMode() const { return m_ManipulatorMode; }
 
 private:
+	kbModel* m_models[NumManipulators];
 
-	kbModel *									m_pModels[NumManipulators];
+	manipulatorMode_t m_ManipulatorMode;
 
-	manipulatorMode_t							m_ManipulatorMode;
-	
-	kbVec3										m_Position;
-	kbQuat										m_Orientation;
-	kbVec3										m_Scale;
+	Vec3 m_Position;
+	Quat4 m_Orientation;
+	Vec3 m_Scale;
+		 
+	Vec3 m_MouseWorldGrabPoint;
+	Vec3 m_MouseLocalGrabPoint;
+	Quat4 m_LastOrientation;
+	Vec3 m_LastScale;
 
-	kbVec3										m_MouseWorldGrabPoint;
-	kbVec3										m_MouseLocalGrabPoint;
-	kbQuat										m_LastOrientation;
-	kbVec3										m_LastScale;
+	int	 m_SelectedGroup;
 
-	int											m_SelectedGroup;
+	std::vector<kbShaderParamOverrides_t> m_ManipulatorMaterials;
 
-	std::vector<kbShaderParamOverrides_t>		m_ManipulatorMaterials;
-
-	kbVec4										m_NextTransformFromInput;
+	Vec4 m_NextTransformFromInput;
 
 	// draw stuff
-	kbVec3 vecToGrabPoint;
-	kbVec3 vecToNewPoint;
+	Vec3 vecToGrabPoint;
+	Vec3 vecToNewPoint;
 };
-
-#endif

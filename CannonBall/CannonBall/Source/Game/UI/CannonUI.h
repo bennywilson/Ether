@@ -6,9 +6,7 @@
 #ifndef _CANNONUI_H_
 #define _CANNONUI_H_
 
-/**
- *	CannonHealthBarUIComponent
- */
+/// CannonHealthBarUIComponent
 class CannonHealthBarUIComponent : public kbUIComponent {
 
 	KB_DECLARE_COMPONENT( CannonHealthBarUIComponent, kbUIComponent );
@@ -18,8 +16,8 @@ public:
 	void									SetTargetHealth( const float meterFill );
 
 protected:
-	virtual void							SetEnable_Internal( const bool bEnable ) override;
-	virtual void							Update_Internal( const float DeltaTime ) override;
+	virtual void							enable_internal( const bool bEnable ) override;
+	virtual void							update_internal( const float DeltaTime ) override;
 
 private:
 	// Editor
@@ -32,9 +30,7 @@ private:
 	float									m_StartFlashTime;
 };
 
-/**
- *	CannonBallUIComponent
- */
+/// CannonBallUIComponent
 class CannonBallUIComponent : public kbUIComponent {
 
 	KB_DECLARE_COMPONENT( CannonBallUIComponent, kbUIComponent );
@@ -48,20 +44,20 @@ public:
 
 protected:
 
-	virtual void							SetEnable_Internal( const bool bEnable ) override;
-	virtual void							Update_Internal( const float DeltaTime ) override;
+	virtual void							enable_internal( const bool bEnable ) override;
+	virtual void							update_internal( const float DeltaTime ) override;
 
 private:
 
 	// Editor
-	kbVec3									m_SparkRelativePosition;
-	kbVec3									m_SparkRelativeSize;
+	Vec3									m_SparkRelativePosition;
+	Vec3									m_SparkRelativeSize;
 
-	kbVec3									m_BoomRelativePosition;
-	kbVec3									m_BoomRelativeSize;
+	Vec3									m_BoomRelativePosition;
+	Vec3									m_BoomRelativeSize;
 
-	kbVec3									m_SmokeRelativePosition;
-	kbVec3									m_SmokeRelativeSize;
+	Vec3									m_SmokeRelativePosition;
+	Vec3									m_SmokeRelativeSize;
 
 	// Runtime
 	kbStaticModelComponent *				m_pSparkModel;
@@ -76,9 +72,7 @@ private:
 	float									m_NextSmokeCloudUpdateTime;
 };
 
-/**
- *	CannonBallPauseMenuUIComponent
- */
+/// CannonBallPauseMenuUIComponent
 class CannonBallPauseMenuUIComponent : public kbUIComponent, public IUIWidgetListener {
 
 	KB_DECLARE_COMPONENT( CannonBallPauseMenuUIComponent, kbUIComponent );
@@ -99,8 +93,8 @@ public:
 
 protected:
 
-	virtual void							SetEnable_Internal( const bool bEnable ) override;
-	virtual void							Update_Internal( const float DeltaTime ) override;
+	virtual void							enable_internal( const bool bEnable ) override;
+	virtual void							update_internal( const float DeltaTime ) override;
 
 	virtual void							WidgetEventCB( kbUIWidgetComponent *const pWidget, const kbInput_t *const pInput );
 
@@ -113,8 +107,8 @@ private:
 	// Editor
 	std::vector<kbUISlider>					m_SliderWidgets;
 	std::vector<kbUIWidgetComponent>		m_Widgets;
-	kbVec3									m_WidgetSize;
-	kbVec3									m_StartingWidgetAnchorPt;
+	Vec3									m_WidgetSize;
+	Vec3									m_StartingWidgetAnchorPt;
 	float									m_SpaceBetweenWidgets;
 	std::vector<kbSoundData>				m_VolumeSliderTestWav;
 
@@ -126,9 +120,7 @@ private:
 	kbGameEntity							m_Entity;
 };
 
-/**
- *	CannonBallMainMenuComponent
- */
+/// CannonBallMainMenuComponent
 class CannonBallMainMenuComponent : public kbUIWidgetComponent {
 
 	KB_DECLARE_COMPONENT( CannonBallMainMenuComponent, kbUIWidgetComponent );
@@ -142,8 +134,8 @@ public:
 		Quit
 	};
 
-	virtual void							SetEnable_Internal( const bool bEnable ) override;
-	virtual void							Update_Internal( const float DeltaTime ) override;
+	virtual void							enable_internal( const bool bEnable ) override;
+	virtual void							update_internal( const float DeltaTime ) override;
 
 	virtual void							WidgetEventCB( kbUIWidgetComponent *const pWidget );
 
@@ -160,7 +152,7 @@ protected:
 	// Runtime
 	int										m_AnimationState;
 	float									m_TimeAnimStateBegan;
-	kbVec3									m_StartRelativePos;
+	Vec3									m_StartRelativePos;
 
 	int										m_MainMenuIdx;
 
@@ -170,18 +162,14 @@ private:
 
 };
 
-/**
- *	CannonBallYesNoPromptComponent
- */
+/// CannonBallYesNoPromptComponent
 class CannonBallYesNoPromptComponent : public kbUIWidgetComponent {
 
 	KB_DECLARE_COMPONENT( CannonBallYesNoPromptComponent, kbUIWidgetComponent );
 
 };
 
-/**
- *	CannonBallGameSettingsComponent
- */
+/// CannonBallGameSettingsComponent
 class CannonBallGameSettingsComponent : public kbGameComponent, public ISingleton<CannonBallGameSettingsComponent> {
 
 	KB_DECLARE_COMPONENT( CannonBallGameSettingsComponent, kbGameComponent );
@@ -204,17 +192,15 @@ private:
 };
 
 
-/**
- *	CannonBallScrollComponent
- */
+/// CannonBallScrollComponent
 class CannonBallScrollComponent : public kbUIWidgetComponent {
 
 	KB_DECLARE_COMPONENT( CannonBallScrollComponent, kbUIWidgetComponent );
 
-	virtual void							SetEnable_Internal( const bool bEnable ) override;
-	virtual void							Update_Internal( const float DeltaTime ) override;
+	virtual void							enable_internal( const bool bEnable ) override;
+	virtual void							update_internal( const float DeltaTime ) override;
 
 	// Editor
-	kbVec3									m_ScrollRate;
+	Vec3									m_ScrollRate;
 };
 #endif

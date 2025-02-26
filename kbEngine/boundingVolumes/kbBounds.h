@@ -2,12 +2,12 @@
 // kbBounds.h
 //
 //
-// 2016 kbEngine 2.0
+// 2016 blk 1.0
 //===================================================================================================
 #ifndef _KBBOUNDS_H_
 #define _KBBOUNDS_H_
 
-#include "kbVector.h"
+#include "Matrix.h"
 
 class kbBounds {
 public:
@@ -18,26 +18,26 @@ public:
 		}
 	}
 
-	kbBounds( const kbVec3 & Min, const kbVec3 & Max ) {
+	kbBounds( const Vec3 & Min, const Vec3 & Max ) {
 		SetMaxMin( Max, Min );
 	}
 
 	void Set( const float minX, const float minY, const float minZ, const float maxX, const float maxY, const float maxZ ) {
-		m_Min.Set( minX, minY, minZ );
-		m_Max.Set( maxX, maxY, maxZ );
+		m_Min.set( minX, minY, minZ );
+		m_Max.set( maxX, maxY, maxZ );
 	}
 
-	void SetMaxMin( const kbVec3 & Max, const kbVec3 & Min ) {
+	void SetMaxMin( const Vec3 & Max, const Vec3 & Min ) {
 		m_Max = Max;
 		m_Min = Min;
 	}
 
-	const kbVec3 & Max() const { return m_Max; }
-	const kbVec3 & Min() const { return m_Min; }
+	const Vec3 & Max() const { return m_Max; }
+	const Vec3 & Min() const { return m_Min; }
 
-	kbVec3 Center() const { return ( m_Max + m_Min ) * 0.5f; }
+	Vec3 Center() const { return ( m_Max + m_Min ) * 0.5f; }
 
-	void AddPoint( const kbVec3 & point ) {
+	void AddPoint( const Vec3 & point ) {
 		if ( m_Max.x < point.x ) {
 			m_Max.x = point.x;
 		}
@@ -82,8 +82,8 @@ public:
 	}
 
 	void Reset() { 
-		m_Max = kbVec3( -FLT_MAX, -FLT_MAX, -FLT_MAX );
-		m_Min = kbVec3( FLT_MAX, FLT_MAX, FLT_MAX ); 
+		m_Max = Vec3( -FLT_MAX, -FLT_MAX, -FLT_MAX );
+		m_Min = Vec3( FLT_MAX, FLT_MAX, FLT_MAX ); 
 	}
 
 	bool IntersectsBounds( const kbBounds & box ) const {
@@ -96,7 +96,7 @@ public:
 		return true;
 	}
 
-	bool ContainsPoint( const kbVec3 & point ) const {
+	bool ContainsPoint( const Vec3 & point ) const {
 		if ( point.x > m_Max.x || point.y > m_Max.y || point.z > m_Max.z ||
 			 point.x < m_Min.x || point.y < m_Min.y || point.z < m_Min.z ) {
 				 return false;
@@ -105,12 +105,12 @@ public:
 		return true;
 	}
 
-	void Translate( const kbVec3 & translationVec ) {
+	void Translate( const Vec3 & translationVec ) {
 		m_Max += translationVec;
 		m_Min += translationVec;
 	}
 
-	void Scale( const kbVec3 & scale ) {
+	void Scale( const Vec3 & scale ) {
 		m_Max.x *= scale.x;
 		m_Max.y *= scale.y;
 		m_Max.z *= scale.z;
@@ -122,7 +122,7 @@ public:
 	}
 
 private:
-	kbVec3 m_Max, m_Min;
+	Vec3 m_Max, m_Min;
 };
  
 

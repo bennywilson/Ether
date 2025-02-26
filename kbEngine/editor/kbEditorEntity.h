@@ -2,7 +2,7 @@
 // kbEditorEntity.h
 //
 //
-// 2016-2018 kbEngine 2.0
+// 2016-2018 blk 1.0
 //===================================================================================================
 #ifndef _KBEDITORENTITY_H_
 #define _KBEDITORENTITY_H_
@@ -15,9 +15,7 @@ struct varMetaData_t {
 	bool bExpanded;
 };
 
-/**
- *	kbEditorEntity
- */
+/// kbEditorEntity
 class kbEditorEntity {
 
 	friend class kbEditor;
@@ -37,14 +35,14 @@ public:
 
 	const kbBounds								GetWorldBounds() const;
 
-	const kbVec3								GetPosition() const;
-	void										SetPosition( const kbVec3 & newPosition );
+	const Vec3								GetPosition() const;
+	void										SetPosition( const Vec3 & newPosition );
 
-	const kbQuat								GetOrientation() const;
-	void										SetOrientation( const kbQuat & newOrientation );
+	const Quat4								GetOrientation() const;
+	void										SetOrientation( const Quat4 & newOrientation );
 
-	const kbVec3								GetScale() const;
-	void										SetScale( const kbVec3 & newScale );
+	const Vec3								GetScale() const;
+	void										SetScale( const Vec3 & newScale );
 
 	kbGameEntity *								GetGameEntity() const;
 	void										SetGameEntity( kbGameEntity *const gameEntity ) { m_pGameEntity = gameEntity; m_PropertyMetaData.clear(); }

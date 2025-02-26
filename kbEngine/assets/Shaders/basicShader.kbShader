@@ -1,7 +1,7 @@
 //==============================================================================
 // baseShader.kbShader
 //
-// 2018 kbEngine 2.0
+// 2018 blk 1.0
 //==============================================================================
 
 cbuffer matrixBuffer {
@@ -34,9 +34,7 @@ struct PS_OUTPUT {
 	float2 Depth		: SV_TARGET3;
 };
 
-/**
- *	vertexShader
- */
+/// vertexShader
 pixelInput vertexShader( vertexInput input ) {
 	pixelInput output = (pixelInput)0;
 
@@ -50,9 +48,7 @@ pixelInput vertexShader( vertexInput input ) {
 	return output;
 }
 
-/**
- *	pixelShader
- */
+/// pixelShader
  PS_OUTPUT pixelShader( pixelInput	input ) {
 	PS_OUTPUT output = (PS_OUTPUT) 0;
 

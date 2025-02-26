@@ -3,7 +3,7 @@
 //
 // Renderer implementation using DX11 API
 //
-// 2016 kbEngine 2.0
+// 2016 blk 1.0
 //==============================================================================
 #ifndef _KBRENDERER_DX11_H_
 #define _KBRENDERER_DX11_H_
@@ -11,8 +11,8 @@
 #include <D3D11.h>
 #include <DirectXMath.h>
 #include "kbRenderer.h"
-#include "kbVector.h"
-#include "kbQuaternion.h"
+#include "Matrix.h"
+#include "Quaternion.h"
 #include "kbBounds.h"
 #include "kbRenderer_defs.h"
 #include "kbMaterial.h"
@@ -40,7 +40,7 @@ private:
 	IDXGISwapChain *							m_pSwapChain;
 	ID3D11RenderTargetView *					m_pRenderTargetView;
 
-	kbMat4										m_EyeMatrices[2];
+	Mat4										m_EyeMatrices[2];
 };
 
 class kbRenderTexture_DX11 : public kbRenderTexture {
@@ -53,14 +53,14 @@ public:
 													kbRenderTexture( width, height, targetFormat, bIsCPUAccessible ),
 													m_pRenderTargetTexture( nullptr ),
 													m_pRenderTargetView( nullptr ),
-													m_pShaderResourceView( nullptr ),
+													m_shaderResourceView( nullptr ),
 													m_pDepthStencilView( nullptr ) { }
    
 
 private:
 
 	virtual void								Release_Internal() {
-													SAFE_RELEASE( m_pShaderResourceView );
+													SAFE_RELEASE( m_shaderResourceView );
 													SAFE_RELEASE( m_pRenderTargetView );
 													SAFE_RELEASE( m_pRenderTargetTexture );
 													SAFE_RELEASE( m_pDepthStencilView );
@@ -68,13 +68,11 @@ private:
 
 	ID3D11Texture2D *							m_pRenderTargetTexture;
 	ID3D11RenderTargetView *					m_pRenderTargetView;
-	ID3D11ShaderResourceView *					m_pShaderResourceView;
+	ID3D11ShaderResourceView *					m_shaderResourceView;
 	ID3D11DepthStencilView	*					m_pDepthStencilView;
 };
 
-/**
- *	kbGPUTimeStamp
- */
+/// kbGPUTimeStamp
 class kbGPUTimeStamp {
 
 //-------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -117,9 +115,7 @@ private:
 	kbGPUTimeStamp::PlaceTimeStamp( timeStampName, m_pDeviceContext ); \
 }
 
-/**
- *	eventMarker_t
- */
+/// eventMarker_t
 struct eventMarker_t {
 	eventMarker_t( const wchar_t *const name, struct ID3DUserDefinedAnnotation *const pEventMarker );
 	~eventMarker_t();
@@ -129,9 +125,7 @@ struct eventMarker_t {
 
 #define START_SCOPED_RENDER_TIMER(index) kbScopedTimer a##index(index); eventMarker_t sm##index( L#index, m_pEventMarker );
 
-/**
- *	kbRenderState
- */
+/// kbRenderState
 
 D3D11_COLOR_WRITE_ENABLE & operator |= ( D3D11_COLOR_WRITE_ENABLE & lhs, const D3D11_COLOR_WRITE_ENABLE rhs );
 
@@ -234,7 +228,7 @@ struct kbRenderState {
 		depthStencilDesc.BackFace.StencilFunc = GetDepthStencilCompareTest( backFaceComparisonTest );;
 
 		HRESULT hr = m_pDevice->CreateDepthStencilState( &depthStencilDesc, &m_pCurrentDepthStencilState );
-		kbErrorCheck( SUCCEEDED(hr), "kbDepthStencilState::SetDepthStencilState() Failed" );
+		blk::error_check( SUCCEEDED(hr), "kbDepthStencilState::SetDepthStencilState() Failed" );
 
 		m_pDeviceContext->OMSetDepthStencilState( m_pCurrentDepthStencilState, stencilRef );
 	}
@@ -341,7 +335,7 @@ struct kbRenderState {
 		BlendStateDesc.RenderTarget[0].RenderTargetWriteMask = GetD3DColorWriteEnable( renderTargetWriteMask );
 
 		HRESULT hr = m_pDevice->CreateBlendState( &BlendStateDesc, &m_pAlphaBlendState );
-		kbErrorCheck( SUCCEEDED( hr ), "kbRenderer_DX11::Init() - Failed to create additive blend state" );
+		blk::error_check( SUCCEEDED( hr ), "kbRenderer_DX11::Init() - Failed to create additive blend state" );
 
 		m_pDeviceContext->OMSetBlendState( m_pAlphaBlendState, nullptr, sampleMask );
 	}
@@ -352,9 +346,7 @@ struct kbRenderState {
 	ID3D11Device * m_pDevice;
 };
 
-/**
- *	kbRenderer_DX11
- */
+/// kbRenderer_DX11
 class kbRenderer_DX11 : public kbRenderer {
 
 	friend class kbRenderJob;
@@ -376,7 +368,7 @@ public:
 															ID3D11PixelShader *& pixelShader, ID3D11InputLayout *& vertexLayout, const std::string & vertexShaderFunc, 
 															const std::string & pixelShaderFunc, struct kbShaderVarBindings_t * pShaderBindings = nullptr );
 
-	virtual kbVec2i								GetEntityIdAtScreenPosition( const uint x, const uint y ) override;
+	virtual Vec2i								GetEntityIdAtScreenPosition( const uint x, const uint y ) override;
 
 	virtual void								SetGlobalShaderParam( const kbShaderParamOverrides_t::kbShaderParam_t & shaderParam ) override;
 	virtual void								SetGlobalShaderParam( const kbShaderParamOverrides_t & shaderParam ) override;
@@ -385,8 +377,8 @@ public:
 	virtual void								RT_SetRenderTarget( kbRenderTexture *const pRenderTexture ) override;
 	virtual void								RT_ClearRenderTarget( kbRenderTexture *const pRenderTexture, const kbColor & color ) override;
 	virtual void								RT_RenderMesh( const kbModel *const pModel, kbShader * pShader, const kbShaderParamOverrides_t *const pShaderParams ) override;
-	virtual void								RT_Render2DLine( const kbVec3 & startPt, const kbVec3 & endPt, const kbColor & color, const float width, const kbShader * pShader, const struct kbShaderParamOverrides_t *const ShaderBindings = nullptr ) override;
-	virtual void								RT_Render2DQuad( const kbVec2 & origin, const kbVec2 & size, const kbColor & color, const kbShader * pShader, const struct kbShaderParamOverrides_t *const ShaderBindings = nullptr );
+	virtual void								RT_Render2DLine( const Vec3 & startPt, const Vec3 & endPt, const kbColor & color, const float width, const kbShader * pShader, const struct kbShaderParamOverrides_t *const ShaderBindings = nullptr ) override;
+	virtual void								RT_Render2DQuad( const Vec2 & origin, const Vec2 & size, const kbColor & color, const kbShader * pShader, const struct kbShaderParamOverrides_t *const ShaderBindings = nullptr );
 	virtual void								RT_CopyRenderTarget( kbRenderTexture *const pSrcTexture, kbRenderTexture *const pDstTexture ) override;
 	virtual kbRenderTargetMap					RT_MapRenderTarget( kbRenderTexture *const pDstTexture ) override;
 	virtual void								RT_UnmapRenderTarget( kbRenderTexture *const pDstTexture ) override;
@@ -425,7 +417,7 @@ private:
 	void										RenderConsole();
 	void										RenderLights();
 	void										RenderLight( const kbRenderLight *const );
-	void										RenderShadow( const kbRenderLight *const, kbMat4 splitMatrices[] );
+	void										RenderShadow( const kbRenderLight *const, Mat4 splitMatrices[] );
 	void										RenderLightShafts();
 	void										RenderTranslucency();
 	void										RenderDebugText();
@@ -434,16 +426,16 @@ private:
 	ID3D11Buffer *								SetConstantBuffer( const kbShaderVarBindings_t& shaderBindings, const kbShaderParamOverrides_t* shaderParamOverrides, const kbRenderObject* const pRenderObject, byte* const pInMappedBufferData, const char* const pShaderName = nullptr );
 
 	ID3D11Buffer *								GetConstantBuffer( const size_t requestSize );
-	void										SetShaderMat4( const std::string & varName, const kbMat4 & inMatrix, void *const pBuffer, const kbShaderVarBindings_t & binding );
-	void										SetShaderVec4( const std::string & varName, const kbVec4 & inVec, void *const pBuffer, const kbShaderVarBindings_t & binding );
-	void										SetShaderMat4Array( const std::string & varName, const kbMat4 *const mat4Array, const int arrayLen, void *const pBuffer, const kbShaderVarBindings_t & binding );
-	void										SetShaderVec4Array( const std::string & varName, const kbVec4 *const vec4Array, const int arrayLen, void *const pBuffer, const kbShaderVarBindings_t & binding );
+	void										SetShaderMat4( const std::string & varName, const Mat4 & inMatrix, void *const pBuffer, const kbShaderVarBindings_t & binding );
+	void										SetShaderVec4( const std::string & varName, const Vec4 & inVec, void *const pBuffer, const kbShaderVarBindings_t & binding );
+	void										SetShaderMat4Array( const std::string & varName, const Mat4 *const mat4Array, const int arrayLen, void *const pBuffer, const kbShaderVarBindings_t & binding );
+	void										SetShaderVec4Array( const std::string & varName, const Vec4 *const vec4Array, const int arrayLen, void *const pBuffer, const kbShaderVarBindings_t & binding );
 	void										SetShaderFloat( const std::string & varName, const float inFloat, void *const pBuffer, const kbShaderVarBindings_t & binding );
 	void										SetShaderInt( const std::string & varName, const int inInt, void *const pBuffer, const kbShaderVarBindings_t & binding );
 	int											GetVarBindingIndex( const std::string & varName, const kbShaderVarBindings_t & binding );
 
-	void										DrawTexture( ID3D11ShaderResourceView *const pShaderResourceView, const kbVec3 & pixelPosition, 
-															 const kbVec3 & pixelSize, const kbVec3 & renderTargetSize );
+	void										DrawTexture( ID3D11ShaderResourceView *const pShaderResourceView, const Vec3 & pixelPosition, 
+															 const Vec3 & pixelSize, const Vec3 & renderTargetSize );
 
 	kbRenderTexture_DX11 *						GetRenderTarget_DX11( const eReservedRenderTargets target ) { return (kbRenderTexture_DX11*) m_pRenderTargets[target]; }
 	kbRenderTexture_DX11 *						GetAccumBuffer( const int index ) { return  (kbRenderTexture_DX11*) m_pAccumBuffers[index]; }
@@ -496,7 +488,7 @@ private:
 	ID3D11RasterizerState *						m_pWireFrameRasterizerState;
 
 	const static int Max_Num_Textures = 128;
-	kbTexture *									m_pTextures[Max_Num_Textures];
+	kbTexture *									m_textures[Max_Num_Textures];
 	
 	ID3D11SamplerState *						m_pBasicSamplerState;
 	ID3D11SamplerState *						m_pNormalMapSamplerState;
@@ -518,7 +510,7 @@ private:
 extern ID3D11Device * g_pD3DDevice;
 extern kbRenderer_DX11 * g_pD3D11Renderer;
 
-XMMATRIX & XMMATRIXFromkbMat4( kbMat4 & matrix );
-kbMat4 & kbMat4FromXMMATRIX( FXMMATRIX & matrix );
+XMMATRIX & XMMATRIXFromMat4( Mat4 & matrix );
+Mat4 & Mat4FromXMMATRIX( FXMMATRIX & matrix );
 
 #endif

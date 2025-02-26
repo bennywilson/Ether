@@ -1,11 +1,13 @@
-//===================================================================================================
-// kbPropertiesTab.h
-//
-//
-// 2016-2018 kbEngine 2.0
-//===================================================================================================
-#ifndef _KBPROPERTIESTAB_H_
-#define _KBPROPERTIESTAB_H_
+/// kbPropertiesTab.h
+///
+/// 2016-2025 blk 1.0
+
+#pragma once
+
+#pragma warning(push)
+#pragma warning(disable:4312)
+#include <fl/fl_tabs.h>
+#pragma warning(pop)
 
 class kbEditorEntity;
 
@@ -36,9 +38,7 @@ struct propertiesTabCBData_t {
 	int						m_ArrayIndex;
 };
 
-/**
- *	kbPropertiesTab
- */
+/// kbPropertiesTab
 class kbPropertiesTab : public Fl_Tabs, kbWidget {
 
 //---------------------------------------------------------------------------------------------------
@@ -88,5 +88,3 @@ private:
 };
 
 extern kbPropertiesTab * g_pPropertiesTab;
-
-#endif

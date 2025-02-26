@@ -553,7 +553,7 @@ kbGameEntity 948620123 1076773710 873065897 3787095028 {
 		Position = 77.104439 -48.485264 -391.809143
 		Scale = 1.450000 1.000000 1.000000
 	}
-	kbSkeletalModelComponent { 
+	kbSkeletalRenderComponent { 
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadow = 0
@@ -1483,7 +1483,7 @@ kbGameEntity 3807537734 1283872403 1661460398 2211889957 {
 		Position = 77.104454 -52.635265 -391.559143
 		Scale = 1.000000 1.000000 1.000000
 	}
-	kbSkeletalModelComponent { 
+	kbSkeletalRenderComponent { 
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadow = 1
@@ -1775,7 +1775,7 @@ kbGameEntity 3807537734 1283872403 1661460398 2211889957 {
 		DebugAnimIndex = -1
 		Model = .\assets\models\characters\sheep\sheep.ms3d
 	}
-	kbSkeletalModelComponent { 
+	kbSkeletalRenderComponent { 
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadow = 0
