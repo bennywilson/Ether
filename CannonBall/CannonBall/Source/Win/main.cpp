@@ -3,25 +3,15 @@
 /// 2019-2025 kbEngine 2.0
 
 #define KFBX_DLLINFO
+#include <dxgi1_6.h>
 #include "stdafx.h"
-#include <ShellAPI.h>
-#include "CannonBall.h"
+#include "main.h"
 #include "blk_core.h"
 #include "DX11/kbRenderer_DX11.h"
 #include "kbEditor.h"
 #include "CannonGame.h"
 #include "kbGameEntityHeader.h"
-
-/// GameBase.cpp
-///
-/// 2025 blk 1.0
-
-#include "stdafx.h"
-#include "blk_core.h"
 #include "renderer.h"
-#include "kbEditor.h"
-#include "kbGameEntityHeader.h"
-#include <dxgi1_6.h>
 #include "dx11/kbRenderer_DX11.h"
 #include "Renderer_Dx12.h"
 #include "sw/renderer_sw.h"
@@ -200,16 +190,16 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 	MyRegisterClass(hInstance);
 
 	std::string mapName;
-	//	mapName = "test";
-		mapName = "pinky";
-	//	mapName = "kuwahara";
-//mapName = "sheep";
-//	mapName = "kungfusheep";
+	// mapName = "test";
+	// mapName = "pinky";
+	// mapName = "kuwahara";
+	//mapName = "sheep";
+ mapName = "kungfusheep";
 
-	// Toggles
+		// Toggles
 	g_UseEditor = 1;
 	const u32 use_d3d12 = 0;
-	const u32 use_sw = 1;
+	const u32 use_sw = 0;
 
 	// Perform application initialization
 	if (!InitInstance(hInstance, nCmdShow)) {
@@ -268,7 +258,6 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 		}
 
 		try {
-
 			if (g_renderer != nullptr) {
 				g_renderer->render();
 			}
@@ -281,7 +270,6 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 			} else {
 				pGame->Update();
 			}
-
 		} catch (char* const string) {
 			// todo : output error to console
 			blk::log(string);

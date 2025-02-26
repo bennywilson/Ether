@@ -90,7 +90,7 @@ void Renderer_Vk::shut_down_internal() {
 }
 
 /// Renderer_Vk::create_pipeline
-RenderPipeline* Renderer_Vk::create_pipeline(const std::string& friendly_name, const std::wstring& path) {
+RenderPipeline* Renderer_Vk::create_pipeline(const std::string& friendly_name, const std::string& path) {
 	RenderPipeline_VK* const pipe = new RenderPipeline_VK();
 	return pipe;
 }

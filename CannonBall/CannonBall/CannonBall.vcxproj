@@ -48,8 +48,8 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>.\;.\Source\Game;.\Source\Win;..\..\kbEngine\external\OculusSDK\LibOVR\Include;..\..\kbEngine\external\OculusSDK\LibOVR\Include\Extras;..\..\kbEngine\external\OculusSDK\LibOVRKernel\Src\Kernel;..\..\kbEngine\sound;..\..\kbEngine\external;..\..\kbEngine\game;..\..\kbEngine\boundingVolumes;..\..\kbEngine\math;..\..\kbEngine\editor;..\..\kbEngine\renderer\d3d12\;..\..\kbEngine\renderer\d3d12\dx12;..\..\kbEngine\renderer;..\..\kbEngine\app;..\..\kbEngine\core;$(IncludePath);$(VCInstallDir)atlmfc\include</IncludePath>
-    <LibraryPath>./External/OculusSDK\LibOVR\Lib\Windows\x64\Release\VS2015;..\..\kbEngine\lib;$(LibraryPath);C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Lib\x64;$(VSInstallDir);$(VSInstallDir)lib\amd64</LibraryPath>
+    <IncludePath>.\;.\Source\Game;.\Source\Win;..\..\kbEngine\app;..\..\kbEngine\boundingVolumes;..\..\kbEngine\core;..\..\kbEngine\editor;..\..\kbEngine\external;..\..\kbEngine\game;..\..\kbEngine\math;..\..\kbEngine\renderer\d3d12\;..\..\kbEngine\renderer\d3d12\dx12;..\..\kbEngine\renderer;..\..\kbEngine\sound;$(IncludePath);$(VCInstallDir)atlmfc\include</IncludePath>
+    <LibraryPath>..\..\kbEngine\lib;$(LibraryPath);$(VSInstallDir);$(VSInstallDir)lib\amd64</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -137,7 +137,7 @@
     <ClInclude Include="Source\Game\KungFuSheep\KungFuSnolaf.h" />
     <ClInclude Include="Source\Game\KungFuSheep\KungFuSheep.h" />
     <ClInclude Include="Source\Game\UI\CannonUI.h" />
-    <ClInclude Include="Source\Win\CannonBall.h" />
+    <ClInclude Include="Source\Win\main.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>
@@ -150,7 +150,7 @@
     <ClCompile Include="Source\Game\KungFuSheep\KungFuSheep.cpp" />
     <ClCompile Include="Source\Game\KungFuSheep\KungFuSnolaf.cpp" />
     <ClCompile Include="Source\Game\UI\CannonUI.cpp" />
-    <ClCompile Include="Source\Win\CannonBall.cpp" />
+    <ClCompile Include="Source\Win\main.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>

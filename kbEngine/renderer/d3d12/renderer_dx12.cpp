@@ -26,7 +26,7 @@ static struct SceneInstanceData {
 	Vec4 camera;
 	Vec4 pad0;
 	Mat4 pad1;
-}* scene_buffer;
+}*scene_buffer;
 
 /// Renderer_Dx12::~Renderer_Dx12
 Renderer_Dx12::~Renderer_Dx12() {
@@ -130,7 +130,7 @@ void Renderer_Dx12::initialize_internal(HWND hwnd, const uint32_t frame_width, c
 	sampler_desc.MaxAnisotropy = 1;
 	sampler_desc.ComparisonFunc = D3D12_COMPARISON_FUNC_ALWAYS;
 	m_device->CreateSampler(&sampler_desc, m_sampler_heap->GetCPUDescriptorHandleForHeapStart());
-	
+
 	// Constants
 	const auto CBV_SRV_DESCRIPTOR_SIZE = m_device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
 
@@ -181,8 +181,8 @@ void Renderer_Dx12::initialize_internal(HWND hwnd, const uint32_t frame_width, c
 	depth_stencil_desc.StencilReadMask = D3D12_DEFAULT_STENCIL_READ_MASK;
 	depth_stencil_desc.StencilWriteMask = D3D12_DEFAULT_STENCIL_WRITE_MASK;
 
-	const D3D12_DEPTH_STENCILOP_DESC defaultStencilOp = 
-		{ D3D12_STENCIL_OP_KEEP, D3D12_STENCIL_OP_KEEP, D3D12_STENCIL_OP_KEEP, D3D12_COMPARISON_FUNC_ALWAYS };
+	const D3D12_DEPTH_STENCILOP_DESC defaultStencilOp =
+	{ D3D12_STENCIL_OP_KEEP, D3D12_STENCIL_OP_KEEP, D3D12_STENCIL_OP_KEEP, D3D12_COMPARISON_FUNC_ALWAYS };
 	depth_stencil_desc.FrontFace = defaultStencilOp;
 	depth_stencil_desc.BackFace = defaultStencilOp;
 
@@ -411,8 +411,7 @@ void Renderer_Dx12::render() {
 	RenderPipeline_Dx12* const pipe = (RenderPipeline_Dx12*)get_pipeline("test_shader");
 	m_command_list->SetPipelineState(pipe->m_pipeline_state.Get());
 
-	auto vertex_buffer = (RenderBuffer_Dx12*)get_render_buffer(0);
-	auto index_buffer = (RenderBuffer_Dx12*)get_render_buffer(1);
+
 
 	ID3D12DescriptorHeap* ppHeaps[] = { m_cbv_srv_heap.Get(), m_sampler_heap.Get() };
 	m_command_list->SetDescriptorHeaps(_countof(ppHeaps), ppHeaps);
@@ -422,11 +421,10 @@ void Renderer_Dx12::render() {
 	CD3DX12_GPU_DESCRIPTOR_HANDLE cbvSrvHandle(m_cbv_srv_heap->GetGPUDescriptorHandleForHeapStart(), 0, descriptor_size);
 	m_command_list->SetGraphicsRootDescriptorTable(0, cbvSrvHandle);
 	m_command_list->SetGraphicsRootDescriptorTable(1, m_sampler_heap->GetGPUDescriptorHandleForHeapStart());
-	
+
 	CD3DX12_GPU_DESCRIPTOR_HANDLE gpu_handle(m_cbv_srv_heap->GetGPUDescriptorHandleForHeapStart(), 1024, descriptor_size);
 	m_command_list->SetGraphicsRootDescriptorTable(2, gpu_handle);
-	m_command_list->IASetVertexBuffers(0, 1, &vertex_buffer->vertex_buffer_view());
-	m_command_list->IASetIndexBuffer(&index_buffer->index_buffer_view());
+
 
 	static vector<Vec3> positions;
 	static vector<f32> scales;
@@ -437,41 +435,56 @@ void Renderer_Dx12::render() {
 		}
 	}
 
-	f32 scale = 1.1f;
 	size_t draw_idx = 0;
-	for (int i = 0; i < 256; i++) {
+	size_t render_buffer_idx = 0;
 
-		for (auto& render_comp : this->render_components()) {
-			const auto& shader_params = render_comp->Materials()[0].shader_params();
-			Vec4 color(1.f, 1.f, 1.f, 1.f);
-			Vec4 spec(0.f, 0.f, 0.f, 1.f);
-			for (const auto& param : shader_params) {
-				if (param.param_name() == kbString("color")) {
-					color = param.vector();
-				}
+	for (auto& render_comp : this->render_components()) {
 
-				if (param.param_name() == kbString("spec")) {
-					spec = param.vector();
-				}
-			}
-			Mat4 world_mat;
-			world_mat.make_scale(render_comp->owner_scale() * scales[i]);
-			world_mat *= render_comp->owner_rotation().to_mat4();
-			world_mat[3] = render_comp->owner_position() + positions[i];
+		auto vertex_buffer = (RenderBuffer_Dx12*)get_render_buffer(render_buffer_idx);
+		auto index_buffer = (RenderBuffer_Dx12*)get_render_buffer(render_buffer_idx + 1);
+		render_buffer_idx = 2;
 
-			scene_buffer[draw_idx].mvp = (world_mat * vp_matrix).transpose_self();
-			scene_buffer[draw_idx].world = world_mat;
-			scene_buffer[draw_idx].color = color;
-			scene_buffer[draw_idx].spec = spec;
-			scene_buffer[draw_idx].camera = Vec4(m_camera_position, 1.f);
-
-			m_command_list->SetGraphicsRoot32BitConstant(3, draw_idx, 0);
-			m_command_list->SetGraphicsRootDescriptorTable(0, cbvSrvHandle);
-			//cbvSrvHandle.Offset(descriptor_size);
-
-			m_command_list->DrawIndexedInstanced(index_buffer->num_elements(), 1, 0, 0, 0);
-			draw_idx++;
+		if (render_comp->IsA(kbStaticModelComponent::GetType())) {
+			RenderBuffer_Dx12* vertex_buffer = (RenderBuffer_Dx12*)((kbStaticModelComponent*)render_comp)->model()->m_vertex_buffer;
+			RenderBuffer_Dx12* index_buffer = (RenderBuffer_Dx12*)((kbStaticModelComponent*)render_comp)->model()->m_index_buffer;
+			m_command_list->IASetVertexBuffers(0, 1, &vertex_buffer->vertex_buffer_view());
+			m_command_list->IASetIndexBuffer(&index_buffer->index_buffer_view());
+		} else if (render_comp->IsA(kbSkeletalRenderComponent::GetType())) {
+			RenderBuffer_Dx12* vertex_buffer = (RenderBuffer_Dx12*)((kbSkeletalRenderComponent*)render_comp)->model()->m_vertex_buffer;
+			RenderBuffer_Dx12* index_buffer = (RenderBuffer_Dx12*)((kbSkeletalRenderComponent*)render_comp)->model()->m_index_buffer;
+			m_command_list->IASetVertexBuffers(0, 1, &vertex_buffer->vertex_buffer_view());
+			m_command_list->IASetIndexBuffer(&index_buffer->index_buffer_view());
 		}
+
+		const auto& shader_params = render_comp->Materials()[0].shader_params();
+		Vec4 color(1.f, 1.f, 1.f, 1.f);
+		Vec4 spec(0.f, 0.f, 0.f, 1.f);
+		for (const auto& param : shader_params) {
+			if (param.param_name() == kbString("color")) {
+				color = param.vector();
+			}
+
+			if (param.param_name() == kbString("spec")) {
+				spec = param.vector();
+			}
+		}
+		Mat4 world_mat;
+		world_mat.make_scale(render_comp->owner_scale());
+		world_mat *= render_comp->owner_rotation().to_mat4();
+		world_mat[3] = render_comp->owner_position();
+
+		scene_buffer[draw_idx].mvp = (world_mat * vp_matrix).transpose_self();
+		scene_buffer[draw_idx].world = world_mat;
+		scene_buffer[draw_idx].color = color;
+		scene_buffer[draw_idx].spec = spec;
+		scene_buffer[draw_idx].camera = Vec4(m_camera_position, 1.f);
+
+		m_command_list->SetGraphicsRoot32BitConstant(3, (u32)draw_idx, 0);
+		m_command_list->SetGraphicsRootDescriptorTable(0, cbvSrvHandle);
+		//cbvSrvHandle.Offset(descriptor_size);
+
+		m_command_list->DrawIndexedInstanced(index_buffer->num_elements(), 1, 0, 0, 0);
+		draw_idx++;
 	}
 
 	// Indicate that the back buffer will now be used to present.
@@ -493,7 +506,7 @@ void Renderer_Dx12::render() {
 }
 
 /// Renderer_Dx12::create_pipeline
-RenderPipeline* Renderer_Dx12::create_pipeline(const string& friendly_name, const wstring& path) {
+RenderPipeline* Renderer_Dx12::create_pipeline(const string& friendly_name, const string& path) {
 #if defined(_DEBUG)
 	// Enable better shader debugging with the graphics debugging tools.
 	UINT compileFlags = D3DCOMPILE_DEBUG | D3DCOMPILE_SKIP_OPTIMIZATION | D3DCOMPILE_WARNINGS_ARE_ERRORS;
@@ -503,9 +516,12 @@ RenderPipeline* Renderer_Dx12::create_pipeline(const string& friendly_name, cons
 
 	Microsoft::WRL::ComPtr<ID3DBlob> errors;
 
+	wstring texture_path;
+	WStringFromString(texture_path, path);
+
 	ComPtr<ID3DBlob> vertex_shader;
 	if (!blk::warn_check(D3DCompileFromFile(
-		path.c_str(),
+		texture_path.c_str(),
 		nullptr,
 		nullptr,
 		"vertex_shader",
@@ -520,7 +536,7 @@ RenderPipeline* Renderer_Dx12::create_pipeline(const string& friendly_name, cons
 	ComPtr<ID3DBlob> pixel_shader;
 	if (!blk::error_check(
 		D3DCompileFromFile(
-			path.c_str(),
+			texture_path.c_str(),
 			nullptr,
 			nullptr,
 			"pixel_shader",
@@ -566,26 +582,29 @@ RenderPipeline* Renderer_Dx12::create_pipeline(const string& friendly_name, cons
 	return (RenderPipeline*)pipe;
 }
 
-/// Renderer_Dx12::todo_create_texture
-void Renderer_Dx12::todo_create_texture() {
-	auto pipe = (RenderPipeline_Dx12*)load_pipeline("test_shader", L"C:/projects/Ether/dx12_updgrade/GameBase/assets/shaders/test_shader.hlsl");
+/// Renderer_Dx12::load_texture
+u32 Renderer_Dx12::load_texture(const std::string& path) {
+	wstring texture_path;
+	WStringFromString(texture_path, path);
+	if (!texture_path.ends_with(L".dds")) {
+		return -1;
+	}
 
 	blk::error_check(m_command_allocator->Reset());
 	blk::error_check(m_command_list->Reset(m_command_allocator.Get(), nullptr));
 
-	wstring textures[] = {
-		L"C:/projects/Ether/dx12_updgrade/GameBase/assets/Test/pinky.dds",
-		L"C:/projects/Ether/dx12_updgrade/GameBase/assets/Test/stiltz.dds",
-	};
-	ComPtr<ID3D12Resource> upload_resource[2];
+	ComPtr<ID3D12Resource> upload_resource;
 	// Load texture 
-	for (u32 i = 0; i < 2; i++) {
+	{//for (u32 i = 0; i < 2; i++) {
+
+
+		blk::log("Loading %s", path.c_str());
 		ComPtr<ID3D12Resource> tex;
 		std::unique_ptr<uint8_t[]> ddsData;
 		std::vector<D3D12_SUBRESOURCE_DATA> subresources;
 		blk::error_check(LoadDDSTextureFromFile(
 			m_device.Get(),
-			textures[i].c_str(),
+			texture_path.c_str(),
 			tex.ReleaseAndGetAddressOf(),
 			ddsData,
 			subresources));
@@ -602,9 +621,9 @@ void Renderer_Dx12::todo_create_texture() {
 				&upload_heap_buff_size,
 				D3D12_RESOURCE_STATE_GENERIC_READ,
 				nullptr,
-				IID_PPV_ARGS(&upload_resource[i])));
+				IID_PPV_ARGS(&upload_resource)));
 
-		UpdateSubresources(m_command_list.Get(), tex.Get(), upload_resource[i].Get(),
+		UpdateSubresources(m_command_list.Get(), tex.Get(), upload_resource.Get(),
 			0, 0, static_cast<UINT>(subresources.size()), subresources.data());
 
 		auto tex_barrier = CD3DX12_RESOURCE_BARRIER::Transition(tex.Get(), D3D12_RESOURCE_STATE_COPY_DEST, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
@@ -614,9 +633,10 @@ void Renderer_Dx12::todo_create_texture() {
 	}
 
 	const auto CBV_SRV_DESCRIPTOR_SIZE = m_device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
-	CD3DX12_CPU_DESCRIPTOR_HANDLE texHandle(m_cbv_srv_heap->GetCPUDescriptorHandleForHeapStart(), 1024, m_device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_SAMPLER));
+	static CD3DX12_CPU_DESCRIPTOR_HANDLE texHandle(m_cbv_srv_heap->GetCPUDescriptorHandleForHeapStart(), 1024, m_device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_SAMPLER));
+	static u32 tex_count = 0;
 
-	for (u32 i = 0; i < g_max_instances; i++) {
+	{//for (u32 i = 0; i < g_max_instances; i++) {
 		// Texture srv
 		D3D12_SHADER_RESOURCE_VIEW_DESC srv_desc = {};
 		srv_desc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
@@ -624,7 +644,7 @@ void Renderer_Dx12::todo_create_texture() {
 		srv_desc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D;
 		srv_desc.Texture2D.MipLevels = 1;
 
-		m_device->CreateShaderResourceView(m_textures[i & 1].Get(), &srv_desc, texHandle);
+		m_device->CreateShaderResourceView(m_textures.back().Get(), &srv_desc, texHandle);
 		texHandle.Offset(CBV_SRV_DESCRIPTOR_SIZE);
 	}
 
@@ -634,6 +654,12 @@ void Renderer_Dx12::todo_create_texture() {
 	m_queue->ExecuteCommandLists(_countof(ppCommandLists), ppCommandLists);
 
 	wait_on_fence();
+	return tex_count++;
+}
+
+/// Renderer_Dx12::todo_create_texture
+void Renderer_Dx12::todo_create_texture() {
+	auto pipe = (RenderPipeline_Dx12*)load_pipeline("test_shader", "C:/projects/Ether/CannonBall/CannonBall/assets/shaders/test_shader.hlsl");
 }
 
 void Renderer_Dx12::wait_on_fence() {

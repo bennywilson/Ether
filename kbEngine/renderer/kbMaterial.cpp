@@ -490,6 +490,12 @@ kbTexture::kbTexture(const kbString& fileName) :
 
 /// kbTexture::load_internal
 bool kbTexture::load_internal() {
+	
+	if (g_renderer != nullptr) {
+		g_renderer->load_texture(GetFullFileName());
+	}
+
+	// DX 11 - Deprecated
 	if (g_pD3DDevice == nullptr) {
 		return false;
 	}
@@ -522,7 +528,7 @@ bool kbTexture::load_internal() {
 	if (m_is_cpu_texture == false) {
 		m_pCPUTexture.reset();
 	}
-
+	// 
 	return true;
 }
 

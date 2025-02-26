@@ -31,8 +31,10 @@ public:
 
 	RenderBuffer* create_render_buffer();
 
-	RenderPipeline* load_pipeline(const std::string& friendly_name, const std::wstring& path);
+	RenderPipeline* load_pipeline(const std::string& friendly_name, const std::string& path);
 	RenderPipeline* get_pipeline(const std::string& friendly_name);
+
+	virtual u32 load_texture(const std::string& path) = 0;
 
 	void set_camera_transform(const Vec3& position, const Quat4& rotation);
 
@@ -51,7 +53,7 @@ private:
 	virtual void initialize_internal(HWND hwnd, const uint32_t frame_width, const uint32_t frame_height) = 0;
 	virtual void shut_down_internal() = 0;
 
-	virtual RenderPipeline* create_pipeline(const std::string& friendly_name, const std::wstring& path) = 0;
+	virtual RenderPipeline* create_pipeline(const std::string& friendly_name, const std::string& path) = 0;
 	virtual RenderBuffer* create_render_buffer_internal() = 0;
 
 protected:
@@ -66,6 +68,7 @@ protected:
 private:
 	std::unordered_map<std::string, RenderPipeline*> m_pipelines;
 	std::vector<class RenderBuffer*> m_render_buffers;
+	std::unordered_map<std::string, u32> m_textures;
 
 	std::set<const RenderComponent*> m_render_components;
 };

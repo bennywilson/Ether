@@ -5,6 +5,7 @@
 #include "blk_core.h"
 #include "kbParticleManager.h"
 #include "kbRenderer.h"
+#include "renderer.h"
 
 static const uint NumParticleBufferVerts = 10000;
 static const uint NumCustomAtlases = 16;
@@ -223,6 +224,9 @@ void kbParticleManager::UpdateAtlas(CustomAtlasParticle_t& atlasInfo) {
 
 /// kbParticleManager::RenderSync
 void kbParticleManager::RenderSync() {
+	if (g_renderer != nullptr) {
+		return;
+	}
 	if (m_CustomAtlases.size() == 0) {
 		m_CustomAtlases.resize(NumCustomAtlases);
 		for (int iAtlas = 0; iAtlas < NumCustomAtlases; iAtlas++) {

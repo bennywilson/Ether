@@ -164,6 +164,6 @@ kbGameEntity 2304826171 1239496353 243933317 3983880952 {
 			}
 		RenderOrderBias =  0.000000
 		RenderPass = Post-LightingPass
-		Model = c:\projects\ether\dx12_updgrade\gamebase\assets\test\diablo.diablo3
+		Model = c:\projects\ether\cannonball\cannonball\assets\test\diablo.diablo3
 	}
 }

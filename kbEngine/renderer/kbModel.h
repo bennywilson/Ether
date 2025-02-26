@@ -11,6 +11,8 @@
 #include "kbRenderer_defs.h"
 #include "kbMaterial.h"
 
+#include "render_defs.h"
+
 /// kbModelIntersection_t
 struct kbModelIntersection_t {
 	kbModelIntersection_t() : t(FLT_MAX), meshNum(-1), intersectionPoint(Vec3::zero), hasIntersection(false) { }
@@ -69,6 +71,7 @@ struct AnimatedBone_t {
 /// kbModel
 class kbModel : public kbResource {
 	friend	class kbRenderer_DX11;
+	friend class Renderer_Dx12;
 
 public:
 	kbModel();
@@ -141,6 +144,11 @@ protected:
 	bool LoadDiablo3();
 
 	virtual void Release_Internal();
+protected:
+	RenderBuffer* m_vertex_buffer;
+	RenderBuffer* m_index_buffer;
+
+protected:
 
 	kbRenderBuffer m_VertexBuffer;
 	kbRenderBuffer m_IndexBuffer;

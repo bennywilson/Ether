@@ -432,14 +432,14 @@ bool kbModel::LoadMS3D() {
 
 		// D3D12
 		if (g_renderer != nullptr) {
-			auto* vertex_buffer = g_renderer->create_render_buffer();
-			if (vertex_buffer != nullptr) {
-				vertex_buffer->write_vertex_buffer(verts);
+			m_vertex_buffer = g_renderer->create_render_buffer();
+			if (m_vertex_buffer != nullptr) {
+				m_vertex_buffer->write_vertex_buffer(verts);
 			}
 
-			auto* index_buffer = g_renderer->create_render_buffer();
-			if (index_buffer != nullptr) {
-				index_buffer->write_index_buffer(m_CPUIndices);
+			m_index_buffer = g_renderer->create_render_buffer();
+			if (m_index_buffer != nullptr) {
+				m_index_buffer->write_index_buffer(m_CPUIndices);
 			}
 		}
 

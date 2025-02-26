@@ -330,9 +330,9 @@ void Renderer_Sw::initialize_internal(HWND hwnd, const uint32_t frame_width, con
 
 	wait_on_fence();
 
-	load_pipeline("triangle", L"");
-	load_pipeline("kuwahara", L"");
-	load_pipeline("outline", L"");
+	load_pipeline("triangle", "");
+	load_pipeline("kuwahara", "");
+	load_pipeline("outline", "");
 
 	blk::log("Renderer_Sw initialized");
 }
@@ -423,6 +423,12 @@ void Renderer_Sw::get_hardware_adapter(
 /// Renderer_Sw::create_render_buffer_internal
 RenderBuffer* Renderer_Sw::create_render_buffer_internal() {
 	return nullptr;
+}
+
+/// Renderer_Sw::load_texture
+u32 Renderer_Sw::load_texture(const std::string& path) {
+	static u32 count = 0;
+	return count++;
 }
 
 /// Renderer_Sw::render
@@ -546,7 +552,7 @@ void Renderer_Sw::render_software_rasterization() {
 			const u32 a = (u32)(255.f * (start_color.w + (end_color.w - start_color.w) * t));
 			// 	const u32 final = 0xff400622;
 			const u32 final = (255 << 24) | (b << 16) | (g << 8) | (r);
-			for (int x = 0; x < m_frame_width; x++) {
+			for (size_t x = 0; x < m_frame_width; x++) {
 				const size_t idx = (x + y * m_frame_width) * 4;
 				color_buffer[idx + 0] = r;
 				color_buffer[idx + 1] = g;
@@ -569,19 +575,19 @@ void Renderer_Sw::render_software_rasterization() {
 			depth_buffer,
 			Vec2i(m_frame_width, m_frame_height));
 
-		
+		/*
 		auto* kuwara_pipeline = (KuwaharaPipeline*)get_pipeline("kuwahara");
 		kuwara_pipeline->render(render_components(),
 			color_buffer,
 			depth_buffer,
 			Vec2i(m_frame_width, m_frame_height));
-			
-		/*
+			*/
+		
 		auto* outline_pipeline = (KuwaharaPipeline*)get_pipeline("outline");
 		outline_pipeline->render(render_components(),
 			color_buffer,
 			depth_buffer,
-			Vec2i(m_frame_width, m_frame_height));*/
+			Vec2i(m_frame_width, m_frame_height));
 	}
 
 	// Update
@@ -607,7 +613,7 @@ void Renderer_Sw::render_software_rasterization() {
 }
 
 /// Renderer_Sw::create_pipeline
-RenderPipeline* Renderer_Sw::create_pipeline(const string& friendly_name, const wstring& path) {
+RenderPipeline* Renderer_Sw::create_pipeline(const string& friendly_name, const string& path) {
 	if (friendly_name == "triangle") {
 		return new TrianglePipeline();
 	} else if (friendly_name == "kuwahara") {
@@ -622,7 +628,7 @@ RenderPipeline* Renderer_Sw::create_pipeline(const string& friendly_name, const 
 
 /// Renderer_Sw::create_blit_pipeline
 void Renderer_Sw::create_blit_pipeline() {
-	const std::wstring path = L"C:/projects/Ether/dx12_updgrade/GameBase/assets/shaders/screen_shader.hlsl";
+	const std::wstring path = L"C:/projects/Ether/CannonBall/CannonBall/assets/shaders/screen_shader.hlsl";
 	UINT compileFlags = 0;
 
 	Microsoft::WRL::ComPtr<ID3DBlob> errors;

@@ -19,7 +19,7 @@
     <ClInclude Include="Source\Game\CannonGame.h">
       <Filter>Source\Game</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Win\CannonBall.h">
+    <ClInclude Include="Source\Win\main.h">
       <Filter>Source\Win</Filter>
     </ClInclude>
     <ClInclude Include="Source\Game\KungFuSheep\KungFuSheep.h">
@@ -217,7 +217,7 @@
     <ClCompile Include="Source\Game\CannonGame.cpp">
       <Filter>Source\Game</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Win\CannonBall.cpp">
+    <ClCompile Include="Source\Win\main.cpp">
       <Filter>Source\Win</Filter>
     </ClCompile>
     <ClCompile Include="Source\Game\KungFuSheep\KungFuSheep.cpp">

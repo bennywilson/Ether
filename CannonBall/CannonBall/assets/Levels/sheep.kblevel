@@ -1,8 +1,8 @@
-kbGameEntity 333544331 1330265201 1896870043 3575268970 {
+kbGameEntity 2301920556 1075062133 1790733218 3019540484 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		Name = "Entity_5"
+		Name = "Entity_20"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
 		Position = 0.000000 0.000000 0.000000
 		Scale = 1.000000 1.000000 1.000000
@@ -10,8 +10,8 @@ kbGameEntity 333544331 1330265201 1896870043 3575268970 {
 	kbEditorLevelSettingsComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		MainCameraPosition = -1.347447 14.435345 -30.609682
-		MainCameraRotation = -0.174078 0.018061 -0.003192 0.984561
+		MainCameraPosition = -9.829142 11.599541 28.444668
+		MainCameraRotation = -0.022166 -0.976273 0.177651 0.121819
 	}
 }
 kbGameEntity 1764334591 1323162396 784491408 67843932 {
@@ -140,6 +140,60 @@ kbGameEntity 2304826171 1239496353 243933317 3983880952 {
 		LifeTime =  -1.000000
 		Name = "Entity_43"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 5.000000 -0.006421 5.000000
+		Scale = 0.030000 0.030000 0.030000
+	}
+	kbSkeletalRenderComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		CastsShadow = 0
+		Materials = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = ..\..\kbengine\assets\shaders\basicskinned.kbshader
+				ShaderParams = 1
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "shaderTexture"
+						Texture = .\assets\test\sheep.dds
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		RenderOrderBias =  0.000000
+		RenderPass = LightingPass
+		Animations = 1
+			kbAnimComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				Animation = .\assets\test\sheep_jumpingjacks.kbanim.ms3d
+				AnimationEvent = 0
+				AnimationName = "jumping_jacks"
+				IsLooping = 1
+				TimeScale =  1.000000
+			}
+		DebugAnimIndex = 0
+		Model = .\assets\models\characters\pinkystiltz\pinky.ms3d
+	}
+}
+kbGameEntity 3608870224 1087768538 1952728238 2833877959 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Entity_43"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 0.000000 -0.006421 5.000000
+		Scale = 0.030000 0.030000 0.030000
+	}
+}
+kbGameEntity 3142980857 1173916795 1390810023 204517040 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Entity_43"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
 		Position = -3.000000 -0.006421 5.000000
 		Scale = 0.030000 0.030000 0.030000
 	}
@@ -176,15 +230,5 @@ kbGameEntity 2304826171 1239496353 243933317 3983880952 {
 			}
 		DebugAnimIndex = 0
 		Model = .\assets\test\sheep.ms3d
-	}
-}
-kbGameEntity 3608870224 1087768538 1952728238 2833877959 {
-	kbTransformComponent { 
-		Enabled = 0
-		LifeTime =  -1.000000
-		Name = "Entity_43"
-		Orientation = 0.000000 0.000000 0.000000 1.000000
-		Position = 0.000000 -0.006421 5.000000
-		Scale = 0.030000 0.030000 0.030000
 	}
 }

@@ -164,7 +164,7 @@ kbGameEntity 2304826171 1239496353 243933317 3983880952 {
 			}
 		RenderOrderBias =  0.000000
 		RenderPass = Post-LightingPass
-		Model = c:\projects\ether\dx12_updgrade\gamebase\assets\test\pinky.ms3d
+		Model = c:\projects\ether\cannonball\cannonball\assets\test\pinky.ms3d
 	}
 }
 kbGameEntity 1510608227 1183869337 3496352641 3064019592 {
@@ -197,7 +197,7 @@ kbGameEntity 1510608227 1183869337 3496352641 3064019592 {
 			}
 		RenderOrderBias =  0.000000
 		RenderPass = Post-LightingPass
-		Model = c:\projects\ether\dx12_updgrade\gamebase\assets\test\pinky.ms3d
+		Model = c:\projects\ether\cannonball\cannonball\assets\test\pinky.ms3d
 	}
 }
 kbGameEntity 949289104 1238490981 1783369614 1331982302 {
@@ -230,7 +230,7 @@ kbGameEntity 949289104 1238490981 1783369614 1331982302 {
 			}
 		RenderOrderBias =  0.000000
 		RenderPass = Post-LightingPass
-		Model = c:\projects\ether\dx12_updgrade\gamebase\assets\test\pinky.ms3d
+		Model = c:\projects\ether\cannonball\cannonball\assets\test\pinky.ms3d
 	}
 }
 kbGameEntity 4089542484 1129018843 735478950 1859260573 {
@@ -263,6 +263,6 @@ kbGameEntity 4089542484 1129018843 735478950 1859260573 {
 			}
 		RenderOrderBias =  0.000000
 		RenderPass = Post-LightingPass
-		Model = c:\projects\ether\dx12_updgrade\gamebase\assets\test\pinky.ms3d
+		Model = c:\projects\ether\cannonball\cannonball\assets\test\pinky.ms3d
 	}
 }
