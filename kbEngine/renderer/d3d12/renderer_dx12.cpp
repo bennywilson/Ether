@@ -26,6 +26,7 @@ static struct SceneInstanceData {
 	Vec4 camera;
 	Vec4 pad0;
 	Mat4 pad1;
+	Mat4 bones[32];
 }*scene_buffer;
 
 /// Renderer_Dx12::~Renderer_Dx12
@@ -408,10 +409,8 @@ void Renderer_Dx12::render() {
 
 	m_command_list->ClearDepthStencilView(dsv_handle, D3D12_CLEAR_FLAG_DEPTH, 1.0f, 0, 0, nullptr);
 
-	RenderPipeline_Dx12* const pipe = (RenderPipeline_Dx12*)get_pipeline("test_shader");
+	RenderPipeline_Dx12* const pipe = (RenderPipeline_Dx12*)get_pipeline("test_skin_shader");
 	m_command_list->SetPipelineState(pipe->m_pipeline_state.Get());
-
-
 
 	ID3D12DescriptorHeap* ppHeaps[] = { m_cbv_srv_heap.Get(), m_sampler_heap.Get() };
 	m_command_list->SetDescriptorHeaps(_countof(ppHeaps), ppHeaps);
@@ -424,16 +423,6 @@ void Renderer_Dx12::render() {
 
 	CD3DX12_GPU_DESCRIPTOR_HANDLE gpu_handle(m_cbv_srv_heap->GetGPUDescriptorHandleForHeapStart(), 1024, descriptor_size);
 	m_command_list->SetGraphicsRootDescriptorTable(2, gpu_handle);
-
-
-	static vector<Vec3> positions;
-	static vector<f32> scales;
-	if (positions.size() == 0) {
-		for (int i = 0; i < 2048; i++) {
-			positions.push_back(Vec3Rand(Vec3(-150.f, -150.f, -150.f), Vec3(150.f, 150.f, 150.f)));
-			scales.push_back(kbfrand(1.f, 2.f));
-		}
-	}
 
 	size_t draw_idx = 0;
 	size_t render_buffer_idx = 0;
@@ -450,10 +439,52 @@ void Renderer_Dx12::render() {
 			m_command_list->IASetVertexBuffers(0, 1, &vertex_buffer->vertex_buffer_view());
 			m_command_list->IASetIndexBuffer(&index_buffer->index_buffer_view());
 		} else if (render_comp->IsA(kbSkeletalRenderComponent::GetType())) {
+			const kbSkeletalRenderComponent* const skel = static_cast<const kbSkeletalRenderComponent*>(render_comp);
+
 			RenderBuffer_Dx12* vertex_buffer = (RenderBuffer_Dx12*)((kbSkeletalRenderComponent*)render_comp)->model()->m_vertex_buffer;
 			RenderBuffer_Dx12* index_buffer = (RenderBuffer_Dx12*)((kbSkeletalRenderComponent*)render_comp)->model()->m_index_buffer;
 			m_command_list->IASetVertexBuffers(0, 1, &vertex_buffer->vertex_buffer_view());
 			m_command_list->IASetIndexBuffer(&index_buffer->index_buffer_view());
+
+			const auto& bone_list = skel->GetFinalBoneMatrices();
+			for (int i = 0; i < bone_list.size(); i++) {
+				scene_buffer[draw_idx].bones->make_identity();
+				scene_buffer[draw_idx].bones[i][0] = bone_list[i].GetAxis(0);
+				scene_buffer[draw_idx].bones[i][1] = bone_list[i].GetAxis(1);
+				scene_buffer[draw_idx].bones[i][2] = bone_list[i].GetAxis(2);
+				scene_buffer[draw_idx].bones[i][3] = bone_list[i].GetAxis(3);
+
+
+				scene_buffer[draw_idx].bones[i][0].w = 0;
+				scene_buffer[draw_idx].bones[i][1].w = 0;
+				scene_buffer[draw_idx].bones[i][2].w = 0;
+				scene_buffer[draw_idx].bones[i].transpose_self();
+
+				/*scene_buffer[draw_idx].bones->make_identity();
+				scene_buffer[draw_idx].bones[i][0].set(
+					bone_list[i].GetAxis(0).x,
+					bone_list[i].GetAxis(1).x,
+					bone_list[i].GetAxis(2).x,
+					bone_list[i].GetAxis(3).x
+				);
+				scene_buffer[draw_idx].bones[i][1].set(
+					bone_list[i].GetAxis(0).y,
+					bone_list[i].GetAxis(1).y,
+					bone_list[i].GetAxis(2).y,
+					bone_list[i].GetAxis(3).y
+				);
+				scene_buffer[draw_idx].bones[i][2].set(
+					bone_list[i].GetAxis(0).z,
+					bone_list[i].GetAxis(1).z,
+					bone_list[i].GetAxis(2).z,
+					bone_list[i].GetAxis(3).z
+				);
+				scene_buffer[draw_idx].bones[i][3].set(
+0.0f, 0.f, 0.f, 1.f
+				);
+
+				scene_buffer[draw_idx].bones[i].transpose_self();*/
+			}
 		}
 
 		const auto& shader_params = render_comp->Materials()[0].shader_params();
@@ -553,9 +584,9 @@ RenderPipeline* Renderer_Dx12::create_pipeline(const string& friendly_name, cons
 	{
 		{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
 		{ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 12, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
-		{ "COLOR", 0, DXGI_FORMAT_R8G8B8A8_UNORM, 0, 20, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
+		{ "BLENDINDICES", 0, DXGI_FORMAT_R8G8B8A8_UNORM, 0, 20, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
 		{ "NORMAL", 0, DXGI_FORMAT_R8G8B8A8_UNORM, 0, 24, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
-		{ "TANGENT", 0, DXGI_FORMAT_R8G8B8A8_UNORM, 0, 28, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
+		{ "BLENDWEIGHT", 0, DXGI_FORMAT_R8G8B8A8_UNORM, 0, 28, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
 	};
 
 	auto raster = CD3DX12_RASTERIZER_DESC(D3D12_DEFAULT);
@@ -659,7 +690,8 @@ u32 Renderer_Dx12::load_texture(const std::string& path) {
 
 /// Renderer_Dx12::todo_create_texture
 void Renderer_Dx12::todo_create_texture() {
-	auto pipe = (RenderPipeline_Dx12*)load_pipeline("test_shader", "C:/projects/Ether/CannonBall/CannonBall/assets/shaders/test_shader.hlsl");
+	auto pipe = (RenderPipeline_Dx12*)load_pipeline("test_shader", "C:/projects/Ether/CannonBall/CannonBall/assets/shaders/test_shader.kbshader");
+	pipe = (RenderPipeline_Dx12*)load_pipeline("test_skin_shader", "C:/projects/Ether/CannonBall/CannonBall/assets/shaders/test_skin_shader.kbshader");
 }
 
 void Renderer_Dx12::wait_on_fence() {

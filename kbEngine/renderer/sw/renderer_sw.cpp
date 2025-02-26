@@ -628,7 +628,7 @@ RenderPipeline* Renderer_Sw::create_pipeline(const string& friendly_name, const 
 
 /// Renderer_Sw::create_blit_pipeline
 void Renderer_Sw::create_blit_pipeline() {
-	const std::wstring path = L"C:/projects/Ether/CannonBall/CannonBall/assets/shaders/screen_shader.hlsl";
+	const std::wstring path = L"C:/projects/Ether/CannonBall/CannonBall/assets/shaders/screen_shader.kbShader";
 	UINT compileFlags = 0;
 
 	Microsoft::WRL::ComPtr<ID3DBlob> errors;

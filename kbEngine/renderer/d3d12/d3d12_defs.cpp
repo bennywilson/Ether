@@ -27,9 +27,6 @@ void RenderBuffer_Dx12::write_vb_internal(const std::vector<vertexLayout>& verti
 	vector<vertexLayout> new_verts;
 for (auto& vert: vertices) {
 	vertexLayout new_vert = vert;
-	new_vert.position.z *= -1;
-	new_vert.position.x *= -1;
-	new_vert.position.z += 1;
 	new_verts.push_back(new_vert);
 }
 	auto device = ((Renderer_Dx12*)(g_renderer))->get_device();
