@@ -26,9 +26,9 @@ Texture2D color_tex : register(t0);
 struct VertexInput {
 	float4 position		: POSITION;
 	float2 uv			: TEXCOORD0;
-	float4 blend_indices	: BLENDINDICES;
-	float4 blend_weights	: BLENDWEIGHT;
 	float4 normal		: NORMAL;
+	float4 blend_indices	: COLOR;
+	float4 blend_weights	: TANGENT;
 };
 
 /// PixelInput
@@ -69,11 +69,12 @@ PixelInput vertex_shader(VertexInput input) {
 float4 pixel_shader(PixelInput input) : SV_TARGET {
 	const float4 albedo = color_tex.Sample( SampleType, input.uv ) * input.color;
 	const float3 normal = normalize(input.normal.xyz);
-	const float3 light_dir = normalize(float3(0.0f, 1.0f, -1.0));
+	const float3 light_dir = normalize(float3(-1.0f, 4.0f, 1.0));
 
 	// Diffuse
-	const float n_dot_l = pow(saturate(dot(normal, light_dir)), 1.0);
-	const float3 diffuse = n_dot_l.xxx * albedo.xyz;
+	const float3 light_color = float3(0.7f, 0.8f, 0.83f);
+	const float n_dot_l = smoothstep(0.5, 0.6, saturate(dot(normal, light_dir))) * 0.8 + 0.2f;
+	const float3 diffuse = n_dot_l.xxx * albedo.xyz * light_color;
 
 	// Spec
 	const float3 to_cam = normalize(input.to_cam);
@@ -83,7 +84,7 @@ float4 pixel_shader(PixelInput input) : SV_TARGET {
 	const float3 spec = input.spec.zzz * highlight.xxx * albedo.xyz;
 
 	// Ambient
-	const float3 ambient = float3(0.5f, 0.5f, 0.5f) * albedo.xyz;
+	const float3 ambient = float3(0.3f, 0.3f, 0.3f) * albedo.xyz;
 
 	return float4(diffuse + spec + ambient, 1.f);
 }

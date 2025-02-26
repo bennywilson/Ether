@@ -421,28 +421,27 @@ void Renderer_Dx12::render() {
 	m_command_list->SetGraphicsRootDescriptorTable(0, cbvSrvHandle);
 	m_command_list->SetGraphicsRootDescriptorTable(1, m_sampler_heap->GetGPUDescriptorHandleForHeapStart());
 
-	CD3DX12_GPU_DESCRIPTOR_HANDLE gpu_handle(m_cbv_srv_heap->GetGPUDescriptorHandleForHeapStart(), 1024, descriptor_size);
-	m_command_list->SetGraphicsRootDescriptorTable(2, gpu_handle);
+	//m_command_list->SetGraphicsRootDescriptorTable(2, gpu_handle);
 
 	size_t draw_idx = 0;
 	size_t render_buffer_idx = 0;
 
 	for (auto& render_comp : this->render_components()) {
-
 		auto vertex_buffer = (RenderBuffer_Dx12*)get_render_buffer(render_buffer_idx);
 		auto index_buffer = (RenderBuffer_Dx12*)get_render_buffer(render_buffer_idx + 1);
-		render_buffer_idx = 2;
-
+		render_buffer_idx += 2;
+		u32 tex_idx = 0;
 		if (render_comp->IsA(kbStaticModelComponent::GetType())) {
 			RenderBuffer_Dx12* vertex_buffer = (RenderBuffer_Dx12*)((kbStaticModelComponent*)render_comp)->model()->m_vertex_buffer;
 			RenderBuffer_Dx12* index_buffer = (RenderBuffer_Dx12*)((kbStaticModelComponent*)render_comp)->model()->m_index_buffer;
 			m_command_list->IASetVertexBuffers(0, 1, &vertex_buffer->vertex_buffer_view());
 			m_command_list->IASetIndexBuffer(&index_buffer->index_buffer_view());
+
 		} else if (render_comp->IsA(kbSkeletalRenderComponent::GetType())) {
 			const kbSkeletalRenderComponent* const skel = static_cast<const kbSkeletalRenderComponent*>(render_comp);
 
-			RenderBuffer_Dx12* vertex_buffer = (RenderBuffer_Dx12*)((kbSkeletalRenderComponent*)render_comp)->model()->m_vertex_buffer;
-			RenderBuffer_Dx12* index_buffer = (RenderBuffer_Dx12*)((kbSkeletalRenderComponent*)render_comp)->model()->m_index_buffer;
+			RenderBuffer_Dx12* vertex_buffer = (RenderBuffer_Dx12*)(skel->model()->m_vertex_buffer);
+			RenderBuffer_Dx12* index_buffer = (RenderBuffer_Dx12*)(skel->model()->m_index_buffer);
 			m_command_list->IASetVertexBuffers(0, 1, &vertex_buffer->vertex_buffer_view());
 			m_command_list->IASetIndexBuffer(&index_buffer->index_buffer_view());
 
@@ -454,42 +453,17 @@ void Renderer_Dx12::render() {
 				scene_buffer[draw_idx].bones[i][2] = bone_list[i].GetAxis(2);
 				scene_buffer[draw_idx].bones[i][3] = bone_list[i].GetAxis(3);
 
-
 				scene_buffer[draw_idx].bones[i][0].w = 0;
 				scene_buffer[draw_idx].bones[i][1].w = 0;
 				scene_buffer[draw_idx].bones[i][2].w = 0;
 				scene_buffer[draw_idx].bones[i].transpose_self();
-
-				/*scene_buffer[draw_idx].bones->make_identity();
-				scene_buffer[draw_idx].bones[i][0].set(
-					bone_list[i].GetAxis(0).x,
-					bone_list[i].GetAxis(1).x,
-					bone_list[i].GetAxis(2).x,
-					bone_list[i].GetAxis(3).x
-				);
-				scene_buffer[draw_idx].bones[i][1].set(
-					bone_list[i].GetAxis(0).y,
-					bone_list[i].GetAxis(1).y,
-					bone_list[i].GetAxis(2).y,
-					bone_list[i].GetAxis(3).y
-				);
-				scene_buffer[draw_idx].bones[i][2].set(
-					bone_list[i].GetAxis(0).z,
-					bone_list[i].GetAxis(1).z,
-					bone_list[i].GetAxis(2).z,
-					bone_list[i].GetAxis(3).z
-				);
-				scene_buffer[draw_idx].bones[i][3].set(
-0.0f, 0.f, 0.f, 1.f
-				);
-
-				scene_buffer[draw_idx].bones[i].transpose_self();*/
 			}
 		}
 
 		const auto& shader_params = render_comp->Materials()[0].shader_params();
 		Vec4 color(1.f, 1.f, 1.f, 1.f);
 		Vec4 spec(0.f, 0.f, 0.f, 1.f);
+		const kbTexture* color_tex = nullptr;
 		for (const auto& param : shader_params) {
 			if (param.param_name() == kbString("color")) {
 				color = param.vector();
@@ -498,7 +472,12 @@ void Renderer_Dx12::render() {
 			if (param.param_name() == kbString("spec")) {
 				spec = param.vector();
 			}
+
+			if (param.param_name() == kbString("color_tex")) {
+				color_tex = param.texture();
+			}
 		}
+
 		Mat4 world_mat;
 		world_mat.make_scale(render_comp->owner_scale());
 		world_mat *= render_comp->owner_rotation().to_mat4();
@@ -512,7 +491,12 @@ void Renderer_Dx12::render() {
 
 		m_command_list->SetGraphicsRoot32BitConstant(3, (u32)draw_idx, 0);
 		m_command_list->SetGraphicsRootDescriptorTable(0, cbvSrvHandle);
-		//cbvSrvHandle.Offset(descriptor_size);
+		CD3DX12_GPU_DESCRIPTOR_HANDLE gpu_handle(m_cbv_srv_heap->GetGPUDescriptorHandleForHeapStart(), 1024, descriptor_size);
+		gpu_handle.Offset(descriptor_size * color_tex->get_texture_id());
+
+		m_command_list->SetGraphicsRootDescriptorTable(2, gpu_handle);
+
+
 
 		m_command_list->DrawIndexedInstanced(index_buffer->num_elements(), 1, 0, 0, 0);
 		draw_idx++;
@@ -580,13 +564,12 @@ RenderPipeline* Renderer_Dx12::create_pipeline(const string& friendly_name, cons
 	}
 
 	// Define the vertex input layout.
-	D3D12_INPUT_ELEMENT_DESC inputElementDescs[] =
-	{
+	D3D12_INPUT_ELEMENT_DESC inputElementDescs[] = {
 		{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
 		{ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 12, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
-		{ "BLENDINDICES", 0, DXGI_FORMAT_R8G8B8A8_UNORM, 0, 20, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
+		{ "COLOR", 0, DXGI_FORMAT_R8G8B8A8_UNORM, 0, 20, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
 		{ "NORMAL", 0, DXGI_FORMAT_R8G8B8A8_UNORM, 0, 24, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
-		{ "BLENDWEIGHT", 0, DXGI_FORMAT_R8G8B8A8_UNORM, 0, 28, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
+		{ "TANGENT", 0, DXGI_FORMAT_R8G8B8A8_UNORM, 0, 28, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
 	};
 
 	auto raster = CD3DX12_RASTERIZER_DESC(D3D12_DEFAULT);

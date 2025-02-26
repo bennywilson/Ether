@@ -22,6 +22,9 @@ public:
 	kbHWTexture* gpu_texture() const { return m_pGPUTexture; }
 
 	const uint8_t* cpu_texture(unsigned int& width, unsigned int& height);
+	u32 get_texture_id() const {
+		return m_texture_id;
+	}
 
 	uint width() const { return m_width; }
 	uint height() const { return m_height; }
@@ -37,6 +40,7 @@ private:
 
 	uint m_width;
 	uint m_height;
+	i32 m_texture_id;
 
 	bool m_is_cpu_texture;
 };

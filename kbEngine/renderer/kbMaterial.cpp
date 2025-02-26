@@ -464,7 +464,8 @@ kbTexture::kbTexture() :
 	m_pGPUTexture(nullptr),
 	m_is_cpu_texture(false),
 	m_width(0),
-	m_height(0) {
+	m_height(0),
+	m_texture_id(-1) {
 	if (g_renderer != nullptr && g_renderer->software_renderer()) {
 		m_is_cpu_texture = true;
 	}
@@ -476,8 +477,8 @@ kbTexture::kbTexture(const kbString& fileName) :
 	m_pGPUTexture(nullptr),
 	m_is_cpu_texture(false),
 	m_width(0),
-	m_height(0) {
-
+	m_height(0),
+	m_texture_id(-1) {
 	if (g_renderer != nullptr && g_renderer->software_renderer()) {
 		m_is_cpu_texture = true;
 	}
@@ -492,7 +493,7 @@ kbTexture::kbTexture(const kbString& fileName) :
 bool kbTexture::load_internal() {
 	
 	if (g_renderer != nullptr) {
-		g_renderer->load_texture(GetFullFileName());
+		m_texture_id = g_renderer->load_texture(GetFullFileName());
 	}
 
 	// DX 11 - Deprecated

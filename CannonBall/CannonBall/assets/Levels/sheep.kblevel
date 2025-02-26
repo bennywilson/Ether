@@ -1,4 +1,4 @@
-kbGameEntity 2301920556 1075062133 1790733218 3019540484 {
+kbGameEntity 173929247 1125135727 639155890 3226225471 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
@@ -10,8 +10,8 @@ kbGameEntity 2301920556 1075062133 1790733218 3019540484 {
 	kbEditorLevelSettingsComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		MainCameraPosition = -9.829142 11.599541 28.444668
-		MainCameraRotation = -0.022166 -0.976273 0.177651 0.121819
+		MainCameraPosition = -20.222778 13.321991 -23.834610
+		MainCameraRotation = -0.131240 -0.336434 0.047411 0.931311
 	}
 }
 kbGameEntity 1764334591 1323162396 784491408 67843932 {
@@ -157,8 +157,8 @@ kbGameEntity 2304826171 1239496353 243933317 3983880952 {
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
-						ParamName = "shaderTexture"
-						Texture = .\assets\test\sheep.dds
+						ParamName = "color_tex"
+						Texture = .\assets\test\pinky.dds
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 			}
@@ -168,7 +168,7 @@ kbGameEntity 2304826171 1239496353 243933317 3983880952 {
 			kbAnimComponent { 
 				Enabled = 0
 				LifeTime =  -1.000000
-				Animation = .\assets\test\sheep_jumpingjacks.kbanim.ms3d
+				Animation = .\assets\test\pinky.kbanim.ms3d
 				AnimationEvent = 0
 				AnimationName = "jumping_jacks"
 				IsLooping = 1
@@ -211,7 +211,7 @@ kbGameEntity 3142980857 1173916795 1390810023 204517040 {
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
-						ParamName = "shaderTexture"
+						ParamName = "color_tex"
 						Texture = .\assets\test\sheep.dds
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
