@@ -382,12 +382,12 @@ public:
 		this->m_pActorComponent->PlayAnimation(CannonBallWindUp_Anim, 0.05f, false, CannonBall_Anim, 0.01f);
 
 		kbString cur, next;
-		if (this->m_pActorComponent->GetOwner()->GetComponent<kbSkeletalRenderComponent>()->GetCurAnimationName() != nullptr) {
-			cur = *this->m_pActorComponent->GetOwner()->GetComponent<kbSkeletalRenderComponent>()->GetCurAnimationName();
+		if (this->m_pActorComponent->GetOwner()->GetComponent<SkeletalModelComponent>()->GetCurAnimationName() != nullptr) {
+			cur = *this->m_pActorComponent->GetOwner()->GetComponent<SkeletalModelComponent>()->GetCurAnimationName();
 		}
 
-		if (this->m_pActorComponent->GetOwner()->GetComponent<kbSkeletalRenderComponent>()->GetNextAnimationName() != nullptr) {
-			next = *this->m_pActorComponent->GetOwner()->GetComponent<kbSkeletalRenderComponent>()->GetNextAnimationName();
+		if (this->m_pActorComponent->GetOwner()->GetComponent<SkeletalModelComponent>()->GetNextAnimationName() != nullptr) {
+			next = *this->m_pActorComponent->GetOwner()->GetComponent<SkeletalModelComponent>()->GetNextAnimationName();
 		}
 
 		m_OldFacingDirection = this->m_pActorComponent->GetTargetFacingDirection();
@@ -810,8 +810,8 @@ void KungFuSheepComponent::PlayCameraShake() {
 void KungFuSheepComponent::EnableHeadBand(const bool bEnable) {
 
 	if (m_HeadBandInstance[0].GetEntity() != nullptr) {
-		m_HeadBandInstance[0].GetEntity()->GetComponent<kbSkeletalRenderComponent>()->Enable(bEnable);
-		m_HeadBandInstance[1].GetEntity()->GetComponent<kbSkeletalRenderComponent>()->Enable(bEnable);
+		m_HeadBandInstance[0].GetEntity()->GetComponent<SkeletalModelComponent>()->Enable(bEnable);
+		m_HeadBandInstance[1].GetEntity()->GetComponent<SkeletalModelComponent>()->Enable(bEnable);
 	}
 }
 

@@ -296,7 +296,7 @@ kbGameEntity 314357658 1122514197 2466994618 463523205 {
 		Position = -1.192401 2.361588 16.092175
 		Scale = 1.000000 1.000000 1.000000
 	}
-	kbSkeletalRenderComponent { 
+	SkeletalModelComponent { 
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadow = 1
@@ -517,7 +517,7 @@ kbGameEntity 314357658 1122514197 2466994618 463523205 {
 		DebugAnimIndex = -1
 		Model = .\assets\models\characters\snolaf\snolaf.ms3d
 	}
-	kbSkeletalRenderComponent { 
+	SkeletalModelComponent { 
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadow = 0
@@ -832,7 +832,7 @@ kbGameEntity 2312584767 1139148529 3844446354 2946788253 {
 		Position = -7.102521 3.211290 12.792857
 		Scale = 1.000000 1.000000 1.000000
 	}
-	kbSkeletalRenderComponent { 
+	SkeletalModelComponent { 
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadow = 1
@@ -885,7 +885,7 @@ kbGameEntity 2312584767 1139148529 3844446354 2946788253 {
 		DebugAnimIndex = -1
 		Model = .\assets\models\characters\snolaf\snolaf_head.ms3d
 	}
-	kbSkeletalRenderComponent { 
+	SkeletalModelComponent { 
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadow = 0
@@ -965,7 +965,7 @@ kbGameEntity 3754323986 1218384162 2695139754 2739970727 {
 		Position = -12.749211 2.362684 26.224957
 		Scale = 1.000000 1.000000 1.000000
 	}
-	kbSkeletalRenderComponent { 
+	SkeletalModelComponent { 
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadow = 1
@@ -1027,7 +1027,7 @@ kbGameEntity 3754323986 1218384162 2695139754 2739970727 {
 		DebugAnimIndex = 0
 		Model = .\assets\models\characters\snolaf\snolaf_bottomhalf.ms3d
 	}
-	kbSkeletalRenderComponent { 
+	SkeletalModelComponent { 
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadow = 0
@@ -1116,7 +1116,7 @@ kbGameEntity 2125691545 1130458748 632895138 4256000792 {
 		Position = -9.419888 2.023228 25.766031
 		Scale = 1.000000 1.000000 1.000000
 	}
-	kbSkeletalRenderComponent { 
+	SkeletalModelComponent { 
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadow = 1
@@ -1178,7 +1178,7 @@ kbGameEntity 2125691545 1130458748 632895138 4256000792 {
 		DebugAnimIndex = 0
 		Model = .\assets\models\characters\snolaf\snolaf_tophalf.ms3d
 	}
-	kbSkeletalRenderComponent { 
+	SkeletalModelComponent { 
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadow = 0

@@ -421,27 +421,27 @@ void Renderer_Dx12::render() {
 	m_command_list->SetGraphicsRootDescriptorTable(0, cbvSrvHandle);
 	m_command_list->SetGraphicsRootDescriptorTable(1, m_sampler_heap->GetGPUDescriptorHandleForHeapStart());
 
-	//m_command_list->SetGraphicsRootDescriptorTable(2, gpu_handle);
-
 	size_t draw_idx = 0;
-	size_t render_buffer_idx = 0;
-
 	for (auto& render_comp : this->render_components()) {
-		auto vertex_buffer = (RenderBuffer_Dx12*)get_render_buffer(render_buffer_idx);
-		auto index_buffer = (RenderBuffer_Dx12*)get_render_buffer(render_buffer_idx + 1);
-		render_buffer_idx += 2;
-		u32 tex_idx = 0;
+		RenderBuffer_Dx12* vertex_buffer = nullptr;
+		RenderBuffer_Dx12* index_buffer = nullptr;
+		const kbModel* model = nullptr;
+
 		if (render_comp->IsA(kbStaticModelComponent::GetType())) {
-			RenderBuffer_Dx12* vertex_buffer = (RenderBuffer_Dx12*)((kbStaticModelComponent*)render_comp)->model()->m_vertex_buffer;
-			RenderBuffer_Dx12* index_buffer = (RenderBuffer_Dx12*)((kbStaticModelComponent*)render_comp)->model()->m_index_buffer;
+			const kbStaticModelComponent* const skel = static_cast<const kbStaticModelComponent*>(render_comp);
+
+			model = skel->model();
+			vertex_buffer = (RenderBuffer_Dx12*)model->m_vertex_buffer;
+			index_buffer = (RenderBuffer_Dx12*)model->m_index_buffer;
 			m_command_list->IASetVertexBuffers(0, 1, &vertex_buffer->vertex_buffer_view());
 			m_command_list->IASetIndexBuffer(&index_buffer->index_buffer_view());
 
-		} else if (render_comp->IsA(kbSkeletalRenderComponent::GetType())) {
-			const kbSkeletalRenderComponent* const skel = static_cast<const kbSkeletalRenderComponent*>(render_comp);
+		} else if (render_comp->IsA(SkeletalModelComponent::GetType())) {
+			const SkeletalModelComponent* const skel = static_cast<const SkeletalModelComponent*>(render_comp);
 
-			RenderBuffer_Dx12* vertex_buffer = (RenderBuffer_Dx12*)(skel->model()->m_vertex_buffer);
-			RenderBuffer_Dx12* index_buffer = (RenderBuffer_Dx12*)(skel->model()->m_index_buffer);
+			model = skel->model();
+			vertex_buffer = (RenderBuffer_Dx12*)(model->m_vertex_buffer);
+			index_buffer = (RenderBuffer_Dx12*)(model->m_index_buffer);
 			m_command_list->IASetVertexBuffers(0, 1, &vertex_buffer->vertex_buffer_view());
 			m_command_list->IASetIndexBuffer(&index_buffer->index_buffer_view());
 
@@ -458,6 +458,11 @@ void Renderer_Dx12::render() {
 				scene_buffer[draw_idx].bones[i][2].w = 0;
 				scene_buffer[draw_idx].bones[i].transpose_self();
 			}
+		}
+
+		if (vertex_buffer == nullptr || index_buffer == nullptr || model == nullptr) {
+			blk::warn("Renderer_Dx12::render() - No vertex and/or index buffer found for some render component");
+			continue;
 		}
 
 		const auto& shader_params = render_comp->Materials()[0].shader_params();
@@ -495,8 +500,6 @@ void Renderer_Dx12::render() {
 		gpu_handle.Offset(descriptor_size * color_tex->get_texture_id());
 
 		m_command_list->SetGraphicsRootDescriptorTable(2, gpu_handle);
-
-
 
 		m_command_list->DrawIndexedInstanced(index_buffer->num_elements(), 1, 0, 0, 0);
 		draw_idx++;

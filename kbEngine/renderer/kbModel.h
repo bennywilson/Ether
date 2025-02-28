@@ -61,10 +61,10 @@ Vec3 operator*(const Vec3& op1, const kbBoneMatrix_t& op2);
 kbBoneMatrix_t operator *(const kbBoneMatrix_t& op1, const kbBoneMatrix_t& op2);
 
 struct AnimatedBone_t {
-	Quat4 m_JointSpaceRotation;
-	Vec3 m_JointSpacePosition;
+	Quat4 m_bone_space_rotation;
+	Vec3 m_bone_space_position;
 
-	kbBoneMatrix_t m_LocalSpaceMatrix;
+	kbBoneMatrix_t m_local_space_matrix;
 };
 
 
@@ -129,7 +129,7 @@ public:
 	void BlendAnimations(std::vector<kbBoneMatrix_t>& outMatrices, const kbAnimation* const pFromAnim, const float fromAnimTime, const bool bFromAnimLoops, const kbAnimation* const pToAnim, const float ToAnimTime, const bool bToAnimLoops, const float normalizedBlendTime);
 	void SetBoneMatrices(std::vector<AnimatedBone_t>& outMatrices, const float time, const kbAnimation* const pAnimation, const bool bLoopAnim);
 
-	int NumBones() const { return (int)m_Bones.size(); }
+	int NumBones() const { return (int)m_bones.size(); }
 	int	GetBoneIndex(const kbString& BoneName) const;
 	const kbBoneMatrix_t& GetRefBoneMatrix(const int index) const { return m_RefPose[index]; }
 	const kbBoneMatrix_t& GetInvRefBoneMatrix(const int index) const { return m_InvRefPose[index]; }
@@ -162,7 +162,7 @@ protected:
 	int	m_NumVertices;
 	std::vector<mesh_t>	m_Meshes;
 	std::vector<kbMaterial>	m_Materials;
-	std::vector<bone_t>	m_Bones;
+	std::vector<bone_t>	m_bones;
 	std::vector<kbBoneMatrix_t>	m_RefPose;
 	std::vector<kbBoneMatrix_t>	m_InvRefPose;
 

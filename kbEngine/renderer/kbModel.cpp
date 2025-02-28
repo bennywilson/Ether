@@ -227,33 +227,33 @@ bool kbModel::LoadMS3D() {
 	const ushort numJoints = *(ushort*)pPtr;
 	pPtr += sizeof(ushort);
 
-	m_Bones.resize(numJoints);
+	m_bones.resize(numJoints);
 
 	std::unordered_map<kbString, int, kbStringHash> boneNameToIdxMap;
 
-	for (uint i = 0; i < m_Bones.size(); i++) {
+	for (uint i = 0; i < m_bones.size(); i++) {
 		const ms3dBone_t* const pJoint = (ms3dBone_t*)pPtr;
 		pPtr += sizeof(ms3dBone_t);
 
-		m_Bones[i].m_Name = pJoint->m_Name;
-		m_Bones[i].m_ParentIndex = -1;
+		m_bones[i].m_Name = pJoint->m_Name;
+		m_bones[i].m_ParentIndex = -1;
 
-		boneNameToIdxMap[m_Bones[i].m_Name] = i;
+		boneNameToIdxMap[m_bones[i].m_Name] = i;
 
 		// Find index to parent
 		const kbString parentName(pJoint->m_ParentName);
 		auto it = boneNameToIdxMap.find(parentName);
 		if (it != boneNameToIdxMap.end()) {
-			m_Bones[i].m_ParentIndex = it->second;
+			m_bones[i].m_ParentIndex = it->second;
 		}
 
-		m_Bones[i].m_RelativePosition.set(pJoint->m_Position[0], pJoint->m_Position[1], -pJoint->m_Position[2]);
+		m_bones[i].m_RelativePosition.set(pJoint->m_Position[0], pJoint->m_Position[1], -pJoint->m_Position[2]);
 
 		// Convert from euler angles to quaternions
 		Quat4 rotationX(Vec3::right, pJoint->m_Rotation[0]);
 		Quat4 rotationY(Vec3::up, pJoint->m_Rotation[1]);
 		Quat4 rotationZ(Vec3::forward, -pJoint->m_Rotation[2]);
-		m_Bones[i].m_RelativeRotation = rotationX * rotationY * rotationZ;
+		m_bones[i].m_RelativeRotation = rotationX * rotationY * rotationZ;
 
 		// Skip animations
 		pPtr += sizeof(ms3dRotationKeyFrame_t) * pJoint->m_NumPositionKeyFrames;
@@ -261,13 +261,13 @@ bool kbModel::LoadMS3D() {
 	}
 
 	// Build ref pose
-	m_RefPose.insert(m_RefPose.begin(), m_Bones.size(), kbBoneMatrix_t());
-	m_InvRefPose.insert(m_InvRefPose.begin(), m_Bones.size(), kbBoneMatrix_t());
+	m_RefPose.insert(m_RefPose.begin(), m_bones.size(), kbBoneMatrix_t());
+	m_InvRefPose.insert(m_InvRefPose.begin(), m_bones.size(), kbBoneMatrix_t());
 
-	for (int i = 0; i < m_Bones.size(); i++) {
+	for (int i = 0; i < m_bones.size(); i++) {
 
-		const int parent = m_Bones[i].m_ParentIndex;
-		const Mat4 rotationmat = m_Bones[i].m_RelativeRotation.to_mat4();
+		const int parent = m_bones[i].m_ParentIndex;
+		const Mat4 rotationmat = m_bones[i].m_RelativeRotation.to_mat4();
 		kbBoneMatrix_t parentMat;
 		if (parent != 65535) {
 			parentMat = m_RefPose[parent];
@@ -277,7 +277,7 @@ bool kbModel::LoadMS3D() {
 		m_RefPose[i].SetAxis(0, rotationmat[0].ToVec3());
 		m_RefPose[i].SetAxis(1, rotationmat[1].ToVec3());
 		m_RefPose[i].SetAxis(2, rotationmat[2].ToVec3());
-		m_RefPose[i].SetAxis(3, m_Bones[i].m_RelativePosition);
+		m_RefPose[i].SetAxis(3, m_bones[i].m_RelativePosition);
 		m_RefPose[i] = m_RefPose[i] * parentMat;
 
 		m_InvRefPose[i] = m_RefPose[i];
@@ -712,20 +712,20 @@ bool kbModel::LoadFBX() {
 	newMaterial.m_shader = nullptr;//(kbShader *) g_ResourceManager.GetResource( "../../kbEngine/assets/Shaders/basicShader.kbShader", true );
 	m_Materials.push_back(newMaterial);
 
-	m_Bones.resize(boneToBounds.size());
+	m_bones.resize(boneToBounds.size());
 	for (int i = 0; i < boneToBounds.size(); i++) {
 		kbBounds& boneBounds = boneToBounds[i];
-		m_Bones[i].m_RelativePosition = boneBounds.Center();
-		m_Bones[i].m_RelativeRotation = Quat4(0.0f, 0.0f, 0.0f, 1.0f);
+		m_bones[i].m_RelativePosition = boneBounds.Center();
+		m_bones[i].m_RelativeRotation = Quat4(0.0f, 0.0f, 0.0f, 1.0f);
 
 		kbBoneMatrix_t invRef;
 		invRef.SetIdentity();
-		invRef.SetAxis(3, -m_Bones[i].m_RelativePosition);
+		invRef.SetAxis(3, -m_bones[i].m_RelativePosition);
 		m_InvRefPose.push_back(invRef);
 
 		kbBoneMatrix_t ref;
 		ref.SetIdentity();
-		ref.SetAxis(3, m_Bones[i].m_RelativePosition);
+		ref.SetAxis(3, m_bones[i].m_RelativePosition);
 		m_RefPose.push_back(ref);
 	}
 	return true;
@@ -1053,8 +1053,8 @@ void kbModel::Release_Internal() {
 
 /// kbModel::GetBoneIndex
 int	kbModel::GetBoneIndex(const kbString& BoneName) const {
-	for (int i = 0; i < m_Bones.size(); i++) {
-		if (m_Bones[i].m_Name == BoneName) {
+	for (int i = 0; i < m_bones.size(); i++) {
+		if (m_bones[i].m_Name == BoneName) {
 			return i;
 		}
 	}
@@ -1063,66 +1063,64 @@ int	kbModel::GetBoneIndex(const kbString& BoneName) const {
 }
 
 /// kbModel::SetBoneMatrices
-void kbModel::SetBoneMatrices(std::vector<AnimatedBone_t>& bones, const float time, const kbAnimation* const pAnimation, const bool bIsLooping) {
-	if (m_Bones.size() == 0) {
+void kbModel::SetBoneMatrices(
+	std::vector<AnimatedBone_t>& bones,
+	const f32 time,
+	const kbAnimation* const animation,
+	const bool is_looping
+) {
+	if (m_bones.size() == 0 || animation == nullptr) {
 		return;
 	}
 
-	if (pAnimation == nullptr) {
-		return;
-	}
+	const kbAnimation& anim_data = *animation;
+	const f32 anim_duration = anim_data.m_LengthInSeconds;
+	const f32 anim_time = (is_looping && time > anim_duration) ? (fmod(time, anim_duration)) : (time);
 
-	const kbAnimation& animationData = *pAnimation;
-	const float maxLength = animationData.m_LengthInSeconds;
-	const float animTime = (bIsLooping && time > maxLength) ? (fmod(time, maxLength)) : (time);
+	bones.resize(m_bones.size());
+	for (u32 i = 0; i < m_bones.size(); i++) {
+		bones[i].m_bone_space_position = Vec3::zero;
+		bones[i].m_bone_space_rotation = Quat4::identity;
 
-	bones.resize(m_Bones.size());
-
-	for (int i = 0; i < m_Bones.size(); i++) {
-
-		bones[i].m_JointSpacePosition = Vec3::zero;
-		bones[i].m_JointSpaceRotation = Quat4::identity;
-
-		const kbAnimation::kbBoneKeyFrames_t& jointData = animationData.m_JointKeyFrameData[i];
-		for (int nextKey = 0; nextKey < jointData.m_RotationKeyFrames.size(); nextKey++) {
-
-			float nextTime = jointData.m_RotationKeyFrames[nextKey].m_Time;
-			if (animTime >= nextTime && nextKey != jointData.m_RotationKeyFrames.size() - 1) {
+		const kbAnimation::kbBoneKeyFrames_t& joints = anim_data.m_JointKeyFrameData[i];
+		for (u32 next_key = 0; next_key < joints.m_RotationKeyFrames.size(); next_key++) {
+			// todo: fix linear search to find next key
+			f32 next_time = joints.m_RotationKeyFrames[next_key].m_Time;
+			if (anim_time >= next_time && next_key != joints.m_RotationKeyFrames.size() - 1) {
 				continue;
 			}
 
-			int prevKey = nextKey;
-			if (animTime >= nextTime) {
-				if (bIsLooping) {
-					// Looped
-					prevKey = (int)jointData.m_RotationKeyFrames.size() - 1;
+			i32 prev_key = next_key;
+			if (anim_time >= next_time) {
+				if (is_looping) {
+					prev_key = (i32)joints.m_RotationKeyFrames.size() - 1;
 
-					if (jointData.m_RotationKeyFrames.size() > 1) {
-						nextKey = 1;
+					// todo: determine proper wrapping behavior
+					if (joints.m_RotationKeyFrames.size() > 1) {
+						next_key = 1;
 					} else {
-						nextKey = 0;
+						next_key = 0;
 					}
 				} else {
-					prevKey = nextKey = (int)jointData.m_RotationKeyFrames.size() - 1;
+					prev_key = next_key = (i32)joints.m_RotationKeyFrames.size() - 1;
 				}
 			} else {
-				prevKey = kbClamp(prevKey - 1, 0, (int)jointData.m_RotationKeyFrames.size());
+				prev_key = kbClamp(prev_key - 1, 0, (i32)joints.m_RotationKeyFrames.size());
 			}
 
-			const Vec3 prevBonePosition = jointData.m_TranslationKeyFrames[prevKey].m_Position;
-			const Quat4 prevBoneRotation = jointData.m_RotationKeyFrames[prevKey].m_Rotation;
+			const f32 prev_time = joints.m_RotationKeyFrames[prev_key].m_Time;
+			const f32 time_between_keys = next_time - prev_time;
+			const f32 time_since_prev_key = anim_time - prev_time;
+			const f32 t = (time_between_keys > 0) ? (time_since_prev_key / time_between_keys) : (0.0f);
 
-			const Quat4 nextRotation = jointData.m_RotationKeyFrames[nextKey].m_Rotation;
-			const Vec3 nextPosition = jointData.m_TranslationKeyFrames[nextKey].m_Position;
+			const Vec3 prev_position = joints.m_TranslationKeyFrames[prev_key].m_Position;
+			const Vec3 next_position = joints.m_TranslationKeyFrames[next_key].m_Position;
+			bones[i].m_bone_space_position = prev_position + (next_position - prev_position) * t;
 
-			const float prevTime = jointData.m_RotationKeyFrames[prevKey].m_Time;
-			nextTime = jointData.m_RotationKeyFrames[nextKey].m_Time;
+			const Quat4 prev_rotation = joints.m_RotationKeyFrames[prev_key].m_Rotation;
+			const Quat4 next_rotation = joints.m_RotationKeyFrames[next_key].m_Rotation;
+			bones[i].m_bone_space_rotation = Quat4::slerp(prev_rotation, next_rotation, t);
 
-			const float timeBetweenKeys = nextTime - prevTime;
-			const float timeSincePrevKey = animTime - prevTime;
-			const float t = (timeBetweenKeys > 0) ? (timeSincePrevKey / timeBetweenKeys) : (0.0f);
-			bones[i].m_JointSpaceRotation = Quat4::slerp(prevBoneRotation, nextRotation, t);
-			bones[i].m_JointSpacePosition = prevBonePosition + (nextPosition - prevBonePosition) * t;
 			break;
 		}
 	}
@@ -1131,25 +1129,25 @@ void kbModel::SetBoneMatrices(std::vector<AnimatedBone_t>& bones, const float ti
 /// kbModel::Animate
 void kbModel::Animate(std::vector<kbBoneMatrix_t>& outMatrices, const float time, const kbAnimation* const pAnimation, const bool bLoopAnim) {
 	std::vector<AnimatedBone_t> tempBones;
-		SetBoneMatrices( tempBones, time, pAnimation, bLoopAnim );
+	SetBoneMatrices(tempBones, time, pAnimation, bLoopAnim);
 
-		for ( int i = 0; i < tempBones.size(); i++ ) {
+	for (int i = 0; i < tempBones.size(); i++) {
 
-			const int parent = m_Bones[i].m_ParentIndex;
+		const int parent = m_bones[i].m_ParentIndex;
 
-			kbBoneMatrix_t matLocalSkel( m_Bones[i].m_RelativeRotation, m_Bones[i].m_RelativePosition );
-			kbBoneMatrix_t matAnimate( tempBones[i].m_JointSpaceRotation, tempBones[i].m_JointSpacePosition );
+		kbBoneMatrix_t matLocalSkel(m_bones[i].m_RelativeRotation, m_bones[i].m_RelativePosition);
+		kbBoneMatrix_t matAnimate(tempBones[i].m_bone_space_rotation, tempBones[i].m_bone_space_position);
 
-			kbBoneMatrix_t matLocal = matAnimate * matLocalSkel;
-			if ( parent != 65535 ) {
-				tempBones[i].m_LocalSpaceMatrix =  matLocal * tempBones[parent].m_LocalSpaceMatrix;
-			} else {
-				tempBones[i].m_LocalSpaceMatrix = matLocal;
-			}
-
-			const kbBoneMatrix_t & invRef = GetInvRefBoneMatrix(i);
-			outMatrices[i] = invRef * tempBones[i].m_LocalSpaceMatrix;
+		kbBoneMatrix_t matLocal = matAnimate * matLocalSkel;
+		if (parent != 65535) {
+			tempBones[i].m_local_space_matrix = matLocal * tempBones[parent].m_local_space_matrix;
+		} else {
+			tempBones[i].m_local_space_matrix = matLocal;
 		}
+
+		const kbBoneMatrix_t& invRef = GetInvRefBoneMatrix(i);
+		outMatrices[i] = invRef * tempBones[i].m_local_space_matrix;
+	}
 }
 
 /// kbModel::BlendAnimations
@@ -1163,23 +1161,23 @@ void kbModel::BlendAnimations(std::vector<kbBoneMatrix_t>& outMatrices, const kb
 
 	for (int i = 0; i < fromTempBones.size(); i++) {
 
-		toTempBones[i].m_JointSpacePosition = kbLerp(fromTempBones[i].m_JointSpacePosition, toTempBones[i].m_JointSpacePosition, normalizedBlendTime);
-		toTempBones[i].m_JointSpaceRotation = Quat4::slerp(fromTempBones[i].m_JointSpaceRotation, toTempBones[i].m_JointSpaceRotation, normalizedBlendTime);
+		toTempBones[i].m_bone_space_position = kbLerp(fromTempBones[i].m_bone_space_position, toTempBones[i].m_bone_space_position, normalizedBlendTime);
+		toTempBones[i].m_bone_space_rotation = Quat4::slerp(fromTempBones[i].m_bone_space_rotation, toTempBones[i].m_bone_space_rotation, normalizedBlendTime);
 
-		const int parent = m_Bones[i].m_ParentIndex;
+		const int parent = m_bones[i].m_ParentIndex;
 
-		kbBoneMatrix_t matLocalSkel(m_Bones[i].m_RelativeRotation, m_Bones[i].m_RelativePosition);
-		kbBoneMatrix_t matAnimate(toTempBones[i].m_JointSpaceRotation, toTempBones[i].m_JointSpacePosition);
+		kbBoneMatrix_t matLocalSkel(m_bones[i].m_RelativeRotation, m_bones[i].m_RelativePosition);
+		kbBoneMatrix_t matAnimate(toTempBones[i].m_bone_space_rotation, toTempBones[i].m_bone_space_position);
 
 		kbBoneMatrix_t matLocal = matAnimate * matLocalSkel;
 		if (parent != 65535) {
-			toTempBones[i].m_LocalSpaceMatrix = matLocal * toTempBones[parent].m_LocalSpaceMatrix;
+			toTempBones[i].m_local_space_matrix = matLocal * toTempBones[parent].m_local_space_matrix;
 		} else {
-			toTempBones[i].m_LocalSpaceMatrix = matLocal;
+			toTempBones[i].m_local_space_matrix = matLocal;
 		}
 
 		const kbBoneMatrix_t& invRef = GetInvRefBoneMatrix(i);
-		outMatrices[i] = invRef * toTempBones[i].m_LocalSpaceMatrix;
+		outMatrices[i] = invRef * toTempBones[i].m_local_space_matrix;
 	}
 }
 

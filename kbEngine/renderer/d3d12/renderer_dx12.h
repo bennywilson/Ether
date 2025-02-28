@@ -21,6 +21,8 @@ public:
 
 	ComPtr<ID3D12Device> get_device() const { return m_device; }
 
+	void wait_on_fence();
+
 protected:
 	void todo_create_texture();
 	std::vector<ComPtr<ID3D12Resource>> m_textures;
@@ -39,8 +41,6 @@ private:
 	virtual RenderBuffer* create_render_buffer_internal() override;
 
 	virtual u32 load_texture(const std::string& path) override;
-
-	void wait_on_fence();
 
 	CD3DX12_VIEWPORT m_view_port;
 	CD3DX12_RECT m_scissor_rect;

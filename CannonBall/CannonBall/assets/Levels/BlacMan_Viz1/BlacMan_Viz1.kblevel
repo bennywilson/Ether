@@ -42,7 +42,7 @@ kbGameEntity 1671951467 1280881932 1698058926 3039328037 {
 		Position = 76.992683 -52.599991 -227.628464
 		Scale = 25.000000 25.000000 25.000000
 	}
-	kbSkeletalModelComponent { 
+	SkeletalModelComponent { 
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadow = 1
@@ -180,7 +180,7 @@ kbGameEntity 1671951467 1280881932 1698058926 3039328037 {
 		DebugAnimIndex = -1
 		Model = .\assets\models\characters\3000ton\3000ton.ms3d
 	}
-	kbSkeletalModelComponent { 
+	SkeletalModelComponent { 
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadow = 0
@@ -358,7 +358,7 @@ kbGameEntity 2584204359 1322518415 809989272 1080153899 {
 		Position = 64.456032 -49.805531 -256.449158
 		Scale = 5.000000 5.000000 5.000000
 	}
-	kbSkeletalModelComponent { 
+	SkeletalModelComponent { 
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadow = 1
@@ -490,7 +490,7 @@ kbGameEntity 2584204359 1322518415 809989272 1080153899 {
 		DebugAnimIndex = 0
 		Model = .\assets\models\characters\blacman\blackman_spinnerpose.ms3d
 	}
-	kbSkeletalModelComponent { 
+	SkeletalModelComponent { 
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadow = 0
@@ -1236,7 +1236,7 @@ kbGameEntity 1629359571 1128553400 148554423 1651028256 {
 		Position = 48.206032 -49.805531 -233.449142
 		Scale = 5.000000 5.000000 5.000000
 	}
-	kbSkeletalModelComponent { 
+	SkeletalModelComponent { 
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadow = 1
@@ -1354,7 +1354,7 @@ kbGameEntity 1629359571 1128553400 148554423 1651028256 {
 		DebugAnimIndex = 0
 		Model = .\assets\models\characters\klansman\klansman.ms3d
 	}
-	kbSkeletalModelComponent { 
+	SkeletalModelComponent { 
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadow = 0
@@ -1475,7 +1475,7 @@ kbGameEntity 3872875380 1143399982 3099341244 1341854221 {
 		Position = 47.206032 -49.805531 -229.449142
 		Scale = 5.000000 5.000000 5.000000
 	}
-	kbSkeletalModelComponent { 
+	SkeletalModelComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
 		CastsShadow = 1
@@ -1544,7 +1544,7 @@ kbGameEntity 3872875380 1143399982 3099341244 1341854221 {
 		DebugAnimIndex = 0
 		Model = .\assets\models\characters\copman\copman.ms3d
 	}
-	kbSkeletalModelComponent { 
+	SkeletalModelComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
 		CastsShadow = 0
@@ -2255,7 +2255,7 @@ kbGameEntity 291158512 1246057627 2383834771 2402536256 {
 		Position = 62.206032 -49.805531 -254.449142
 		Scale = 5.000000 5.000000 5.000000
 	}
-	kbSkeletalModelComponent { 
+	SkeletalModelComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
 		CastsShadow = 1
@@ -2373,7 +2373,7 @@ kbGameEntity 291158512 1246057627 2383834771 2402536256 {
 		DebugAnimIndex = 0
 		Model = .\assets\models\characters\magaman\magaman.ms3d
 	}
-	kbSkeletalModelComponent { 
+	SkeletalModelComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
 		CastsShadow = 0
@@ -2503,7 +2503,7 @@ kbGameEntity 1235986948 1232903237 4084947108 3961454180 {
 		MinAngularSpeed =  10.000000
 		MinLinearVelocity = -1.000000 1.000000 -1.000000
 	}
-	kbSkeletalModelComponent { 
+	SkeletalModelComponent { 
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadow = 0
@@ -2568,7 +2568,7 @@ kbGameEntity 2173328964 1105303046 1808318377 1249498279 {
 		MinAngularSpeed =  10.000000
 		MinLinearVelocity = -1.000000 1.000000 1.000000
 	}
-	kbSkeletalModelComponent { 
+	SkeletalModelComponent { 
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadow = 0

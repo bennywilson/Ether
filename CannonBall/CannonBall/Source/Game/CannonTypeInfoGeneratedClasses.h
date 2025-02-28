@@ -12,6 +12,43 @@ GenerateEnum(
 	AddEnumField( MoveMode_Follow, "Follow")
 )
 
+GenerateEnum(
+	EDestructibleBehavior, "EDestructibleBehavior",
+	AddEnumField(PushFromImpactPoint, "PushFromImpactPoint")
+	AddEnumField(UserVelocity, "UserVelocity")
+)
+
+GenerateClass(
+	EtherAnimComponent,
+	AddField("AnimationName", KBTYPEINFO_KBSTRING, EtherAnimComponent, m_AnimationName, false, "")
+	AddField("Animation", KBTYPEINFO_ANIMATION, EtherAnimComponent, m_pAnimation, false, "")
+	AddField("TimeScale", KBTYPEINFO_FLOAT, EtherAnimComponent, m_TimeScale, false, "")
+	AddField("IsLooping", KBTYPEINFO_BOOL, EtherAnimComponent, m_bIsLooping, false, "")
+	AddField("AnimationEvent", KBTYPEINFO_STRUCT, EtherAnimComponent, m_AnimEvents, true, "kbAnimEvent")
+)
+
+GenerateClass(
+	EtherSkelModelComponent,
+	AddField("Animations", KBTYPEINFO_STRUCT, EtherSkelModelComponent, m_Animations, true, "EtherAnimComponent")
+	AddField("DebugAnimIndex", KBTYPEINFO_INT, EtherSkelModelComponent, m_DebugAnimIdx, false, "")
+	AddField("IsFirstPersonModel", KBTYPEINFO_BOOL, EtherSkelModelComponent, m_bFirstPersonModel, false, "")
+)
+
+GenerateClass(
+	EtherDestructibleComponent,
+	AddField("DestructibleBehavior", KBTYPEINFO_ENUM, EtherDestructibleComponent, m_DestructibleType, false, "EDestructibleBehavior")
+	AddField("MaxLifeTime", KBTYPEINFO_FLOAT, EtherDestructibleComponent, m_MaxLifeTime, false, "")
+	AddField("Gravity", KBTYPEINFO_VECTOR, EtherDestructibleComponent, m_Gravity, false, "")
+	AddField("MinLinearVelocity", KBTYPEINFO_VECTOR, EtherDestructibleComponent, m_MinLinearVelocity, false, "")
+	AddField("MaxLinearVelocity", KBTYPEINFO_VECTOR, EtherDestructibleComponent, m_MaxLinearVelocity, false, "")
+	AddField("MinAngularVelocity", KBTYPEINFO_FLOAT, EtherDestructibleComponent, m_MinAngularVelocity, false, "")
+	AddField("MaxAngularVelocity", KBTYPEINFO_FLOAT, EtherDestructibleComponent, m_MaxAngularVelocity, false, "")
+	AddField("Health", KBTYPEINFO_FLOAT, EtherDestructibleComponent, m_StartingHealth, false, "")
+	AddField("ResetSim", KBTYPEINFO_BOOL, EtherDestructibleComponent, m_bDebugResetSim, false, "")
+	AddField("DestructionFX", KBTYPEINFO_GAMEENTITY, EtherDestructibleComponent, m_CompleteDestructionFX, false, "")
+	AddField("DestructionFXLocalOffset", KBTYPEINFO_VECTOR, EtherDestructibleComponent, m_DestructionFXLocalOffset, false, "")
+)
+
 GenerateClass(
 	CannonActorComponent,
 	AddField("MaxRunSpeed", KBTYPEINFO_FLOAT, CannonActorComponent, m_MaxRunSpeed, false, "")

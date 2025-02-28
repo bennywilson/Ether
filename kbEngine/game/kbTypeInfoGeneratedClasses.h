@@ -153,10 +153,10 @@ GenerateClass(
 )
 
 GenerateClass(
-	kbSkeletalRenderComponent,
-	AddField("Model", KBTYPEINFO_STATICMODEL, kbSkeletalRenderComponent, m_model, false, "")
-	AddField("Animations", KBTYPEINFO_STRUCT, kbSkeletalRenderComponent, m_Animations, true, "kbAnimComponent")
-	AddField("DebugAnimIndex", KBTYPEINFO_INT, kbSkeletalRenderComponent, m_DebugAnimIdx, false, "")
+	SkeletalModelComponent,
+	AddField("Model", KBTYPEINFO_STATICMODEL, SkeletalModelComponent, m_model, false, "")
+	AddField("Animations", KBTYPEINFO_STRUCT, SkeletalModelComponent, m_Animations, true, "kbAnimComponent")
+	AddField("DebugAnimIndex", KBTYPEINFO_INT, SkeletalModelComponent, m_DebugAnimIdx, false, "")
 )
 
 GenerateClass(

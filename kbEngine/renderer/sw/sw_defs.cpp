@@ -40,7 +40,7 @@ void TrianglePipeline::render(const set<const RenderComponent*>& comp, vector<u8
 			Vec4 shader_param_color(1.f, 1.f, 1.f, 1.f);
 			const kbTexture* color_tex = nullptr;
 			for (const auto& param : shader_params) {
-				const kbString& param_name = param.param_name();
+				const std::string param_name = param.param_name().c_str();
 				if (param_name == "color") {
 					shader_param_color = param.vector();
 				} else if (param_name == "color_tex" || param_name == "shaderTexture") {

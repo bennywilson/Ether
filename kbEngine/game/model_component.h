@@ -31,7 +31,7 @@ private:
 
 /// kbAnimComponent
 class kbAnimComponent : public kbGameComponent {
-	friend class kbSkeletalRenderComponent;
+	friend class SkeletalModelComponent;
 
 	KB_DECLARE_COMPONENT(kbAnimComponent, kbGameComponent);
 
@@ -51,12 +51,12 @@ private:
 };
 
 
-/// kbSkeletalRenderComponent
-class kbSkeletalRenderComponent : public RenderComponent {
-	KB_DECLARE_COMPONENT(kbSkeletalRenderComponent, RenderComponent);
+/// SkeletalModelComponent
+class SkeletalModelComponent : public RenderComponent {
+	KB_DECLARE_COMPONENT(SkeletalModelComponent, RenderComponent);
 
 public:
-	virtual	~kbSkeletalRenderComponent();
+	virtual	~SkeletalModelComponent();
 
 	void set_model(class kbModel* const pModel);
 	const kbModel* model() const { return m_model; }
@@ -90,8 +90,8 @@ public:
 	void RegisterAnimEventListener(IAnimEventListener* const pListener);
 	void UnregisterAnimEventListener(IAnimEventListener* const pListener);
 
-	void RegisterSyncSkelModel(kbSkeletalRenderComponent* const pSkelModel);
-	void UnregisterSyncSkelModel(kbSkeletalRenderComponent* const pSkelModel);
+	void RegisterSyncSkelModel(SkeletalModelComponent* const pSkelModel);
+	void UnregisterSyncSkelModel(SkeletalModelComponent* const pSkelModel);
 
 protected:
 	virtual void enable_internal(const bool isEnabled) override;
@@ -113,8 +113,8 @@ protected:
 
 	std::vector<float>	m_AnimationTimeScaleMultipliers;
 
-	std::vector<kbSkeletalRenderComponent*>	m_SyncedSkelModels;
-	kbSkeletalRenderComponent* m_pSyncParent;
+	std::vector<SkeletalModelComponent*>	m_SyncedSkelModels;
+	SkeletalModelComponent* m_pSyncParent;
 
 	// Debug
 	int	m_DebugAnimIdx;

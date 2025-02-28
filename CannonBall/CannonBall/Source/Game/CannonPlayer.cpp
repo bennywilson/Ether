@@ -40,10 +40,10 @@ void CannonActorComponent::enable_internal(const bool bEnable) {
 		const int NumComponents = (int)GetOwner()->NumComponents();
 		for (int i = 0; i < NumComponents; i++) {
 			kbComponent* const pComponent = GetOwner()->GetComponent(i);
-			if (pComponent->IsA(kbSkeletalRenderComponent::GetType()) == false) {
+			if (pComponent->IsA(SkeletalModelComponent::GetType()) == false) {
 				continue;
 			}
-			m_SkelModelsList.push_back((kbSkeletalRenderComponent*)pComponent);
+			m_SkelModelsList.push_back((SkeletalModelComponent*)pComponent);
 		}
 
 		if (m_SkelModelsList.size() > 0) {

@@ -70,10 +70,10 @@ void kbClothComponent::update_internal(const float dt) {
 		return;
 	}
 
-	kbSkeletalRenderComponent* pSkelRenderComponent = nullptr;
+	SkeletalModelComponent* pSkelRenderComponent = nullptr;
 	for (int i = 0; i < GetOwner()->NumComponents(); i++) {
-		if (GetOwner()->GetComponent(i)->IsA(kbSkeletalRenderComponent::GetType())) {
-			pSkelRenderComponent = static_cast<kbSkeletalRenderComponent*>(GetOwner()->GetComponent(i));
+		if (GetOwner()->GetComponent(i)->IsA(SkeletalModelComponent::GetType())) {
+			pSkelRenderComponent = static_cast<SkeletalModelComponent*>(GetOwner()->GetComponent(i));
 			if (pSkelRenderComponent->model() != m_pSkeletalModel) {
 				m_pSkeletalModel = pSkelRenderComponent->model();
 				SetupCloth();
@@ -257,10 +257,10 @@ void kbClothComponent::RunSimulation(const float inDeltaTime) {
 	g_pRenderer->DrawSphere( BallPos, BallRad, 16, kbColor::yellow);*/
 	// Ball Sim - end
 
-	kbSkeletalRenderComponent* pSkelRenderComponent = NULL;
+	SkeletalModelComponent* pSkelRenderComponent = NULL;
 	for (int i = 0; i < GetOwner()->NumComponents(); i++) {
-		if (GetOwner()->GetComponent(i)->IsA(kbSkeletalRenderComponent::GetType())) {
-			pSkelRenderComponent = static_cast<kbSkeletalRenderComponent*>(GetOwner()->GetComponent(i));
+		if (GetOwner()->GetComponent(i)->IsA(SkeletalModelComponent::GetType())) {
+			pSkelRenderComponent = static_cast<SkeletalModelComponent*>(GetOwner()->GetComponent(i));
 			if (pSkelRenderComponent->model() != m_pSkeletalModel) {
 				break;
 			}

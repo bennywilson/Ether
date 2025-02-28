@@ -141,7 +141,7 @@ public:
 		auto p3000Ton = KungFuLevelComponent::Get()->Get3000Ton();
 		p3000Ton->SetOwnerPosition( KungFuGame::kTreyTonOffScreenPos );
 
-		auto p3000TonSkel = p3000Ton->GetComponent<kbSkeletalRenderComponent>();
+		auto p3000TonSkel = p3000Ton->GetComponent<SkeletalModelComponent>();
 		p3000TonSkel->RegisterAnimEventListener( this );
 		p3000TonSkel->Enable( false );
 		p3000TonSkel->Enable( true );
@@ -161,13 +161,13 @@ public:
 		pFox->PlayAnimation( sCry, 0.0f );
 		pFox->SetTargetFacingDirection( Vec3( -1.0f, 0.0f, 0.0f ) );
 		pFox->GetComponent<kbParticleComponent>()->Enable( true );
-		pFox->GetComponent<kbSkeletalRenderComponent>()->RegisterAnimEventListener( this );
+		pFox->GetComponent<SkeletalModelComponent>()->RegisterAnimEventListener( this );
 
-		pLevelComp->GetPresent(0).GetEntity()->GetComponent<kbSkeletalRenderComponent>()->Enable( true );
-		pLevelComp->GetPresent(1).GetEntity()->GetComponent<kbSkeletalRenderComponent>()->Enable( true );
+		pLevelComp->GetPresent(0).GetEntity()->GetComponent<SkeletalModelComponent>()->Enable( true );
+		pLevelComp->GetPresent(1).GetEntity()->GetComponent<SkeletalModelComponent>()->Enable( true );
 
 		m_pLastSnolaf = KungFuLevelComponent::Get()->GetSnolafFromPool();
-		m_pLastSnolaf->GetComponent<kbSkeletalRenderComponent>()->RegisterAnimEventListener( this );
+		m_pLastSnolaf->GetComponent<SkeletalModelComponent>()->RegisterAnimEventListener( this );
 		m_pLastSnolaf->GetComponent<KungFuSnolafComponent>()->RequestStateChange( KungFuSnolafState::Cinema );
 		m_pLastSnolaf->GetOwner()->DisableAllComponents();
 
@@ -497,7 +497,7 @@ public:
 
 	virtual void EndState_Internal( KungFuGame::eKungFuGame_State nextstate ) {
 		auto p3000Ton = KungFuLevelComponent::Get()->Get3000Ton();
-		auto p3000TonSkel = p3000Ton->GetComponent<kbSkeletalRenderComponent>();
+		auto p3000TonSkel = p3000Ton->GetComponent<SkeletalModelComponent>();
 		p3000TonSkel->UnregisterAnimEventListener( this );
 
 		auto pCamera = g_pCannonGame->GetMainCamera();
@@ -507,8 +507,8 @@ public:
 		auto pSheep = KungFuLevelComponent::Get()->GetSheep();
 		pSheep->EnableHeadBand( true );
 
-		KungFuLevelComponent::Get()->GetPresent(0).GetEntity()->GetComponent<kbSkeletalRenderComponent>()->Enable( false );
-		KungFuLevelComponent::Get()->GetPresent(1).GetEntity()->GetComponent<kbSkeletalRenderComponent>()->Enable( false );
+		KungFuLevelComponent::Get()->GetPresent(0).GetEntity()->GetComponent<SkeletalModelComponent>()->Enable( false );
+		KungFuLevelComponent::Get()->GetPresent(1).GetEntity()->GetComponent<SkeletalModelComponent>()->Enable( false );
 		KungFuLevelComponent::Get()->GetPresent(0).GetEntity()->GetComponent<kbFlingPhysicsComponent>()->Enable( false );
 		KungFuLevelComponent::Get()->GetPresent(1).GetEntity()->GetComponent<kbFlingPhysicsComponent>()->Enable( false );
 		KungFuLevelComponent::Get()->GetPresent(0).GetEntity()->GetComponent<kbFlingPhysicsComponent>()->ResetToStartPos();
@@ -521,10 +521,10 @@ public:
 		
 		auto pFox = KungFuLevelComponent::Get()->GetFox();
 		pFox->GetComponent<kbParticleComponent>()->Enable( false );
-		pFox->GetComponent<kbSkeletalRenderComponent>()->UnregisterAnimEventListener( this );
+		pFox->GetComponent<SkeletalModelComponent>()->UnregisterAnimEventListener( this );
 
 		m_pLastSnolaf->SetOverrideFXMaskParameters( Vec4( -1.0f, -1.0f, -1.0f, -1.0f ) );
-		m_pLastSnolaf->GetComponent<kbSkeletalRenderComponent>()->UnregisterAnimEventListener( this );
+		m_pLastSnolaf->GetComponent<SkeletalModelComponent>()->UnregisterAnimEventListener( this );
 		KungFuLevelComponent::Get()->ReturnSnolafToPool( m_pLastSnolaf );
 		m_pLastSnolaf = nullptr;
 

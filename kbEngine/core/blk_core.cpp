@@ -147,7 +147,7 @@ namespace blk {
 		va_end(args);
 
 		DebugBreak();
-		throw finalBuffer;
+			throw finalBuffer;
 	}
 	bool error_check(const bool expression, const char* const msg, ...) {
 		if (expression == true) {

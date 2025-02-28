@@ -87,7 +87,7 @@ DEFINE_KBCLASS(kbStaticModelComponent)
 
 DEFINE_KBCLASS(kbAnimComponent)
 
-DEFINE_KBCLASS(kbSkeletalRenderComponent)
+DEFINE_KBCLASS(SkeletalModelComponent)
 
 DEFINE_KBCLASS(kbFlingPhysicsComponent)
 

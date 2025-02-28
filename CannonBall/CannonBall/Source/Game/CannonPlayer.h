@@ -4,7 +4,7 @@
 
 #pragma once
 
-class kbSkeletalRenderComponent;
+class SkeletalModelComponent;
 
 /// CannonActorComponent
 class CannonActorComponent : public kbActorComponent, IAnimEventListener {
@@ -44,7 +44,7 @@ protected:
 	std::vector<kbSoundData> m_AttackVO;
 
 	// Game
-	std::vector<kbSkeletalRenderComponent*>	m_SkelModelsList;
+	std::vector<SkeletalModelComponent*>	m_SkelModelsList;
 	Vec3 m_TargetFacingDirection;
 
 	float										m_AnimSmearDuration;
