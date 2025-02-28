@@ -1,8 +1,8 @@
-kbGameEntity 3324013411 1164610329 481387668 3867451136 {
+kbGameEntity 1946380213 1095957265 4033382290 3077255887 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		Name = "Entity_17"
+		Name = "Entity_18"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
 		Position = 0.000000 0.000000 0.000000
 		Scale = 1.000000 1.000000 1.000000
@@ -10,8 +10,8 @@ kbGameEntity 3324013411 1164610329 481387668 3867451136 {
 	kbEditorLevelSettingsComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		MainCameraPosition = 44.129002 41.469524 -57.026886
-		MainCameraRotation = -0.004776 -0.295516 0.001478 0.955325
+		MainCameraPosition = -36.416481 84.178810 -126.401398
+		MainCameraRotation = 0.108614 0.320404 -0.037010 -0.940305
 	}
 }
 kbGameEntity 1467892321 1161083516 1592735630 1588631408 {
@@ -37,8 +37,8 @@ kbGameEntity 1467892321 1161083516 1592735630 1588631408 {
 					kbShaderParamComponent { 
 						Enabled = 0
 						LifeTime =  -1.000000
-						ParamName = "diffuse"
-						Texture = .\assets\models\environment\crate_1.jpg
+						ParamName = "color_tex"
+						Texture = .\assets\test\crate_1.dds
 						Vector = 0.000000 0.000000 0.000000 0.000000
 					}
 					kbShaderParamComponent { 
@@ -88,7 +88,7 @@ kbGameEntity 1467892321 1161083516 1592735630 1588631408 {
 		ResetSim = 0
 	}
 	kbCollisionComponent { 
-		Enabled = 1
+		Enabled = 0
 		LifeTime =  -1.000000
 		CollisionType = Sphere
 		Extent = 20.000000 20.000000 20.000000

@@ -532,6 +532,7 @@ bool kbModel::LoadFBX() {
 
 		uint vertexCount = 0;
 
+		int verts_added = 0;
 
 		int numDeformers = pFBXMesh->GetDeformerCount();
 		FbxAMatrix geomXForm = GetGeometryTransformation(pRootNode->GetChild(iMesh));
@@ -551,7 +552,7 @@ bool kbModel::LoadFBX() {
 				kbColor boneColor(kbfrand() * 0.5f + 0.5f, kbfrand() * 0.5f + 0.5f, kbfrand() * 0.5f + 0.5f, 1.0f);
 				boneToColor[iCluster] = boneColor;
 
-				//	blk::log( "%s bone color is %f %f %f", curJointName.c_str(), boneColor.x, boneColor.y, boneColor.z, boneColor.w );
+					blk::log( "%s bone color is %f %f %f", curJointName.c_str(), boneColor.x, boneColor.y, boneColor.z, boneColor.w );
 
 				FbxAMatrix xformMat;
 				FbxAMatrix xformLinkMat;
@@ -566,13 +567,15 @@ bool kbModel::LoadFBX() {
 				int* pCtrlPtList = pCurCluster->GetControlPointIndices();
 				for (unsigned int i = 0; i < numOfIndices; ++i)
 				{
-					//	blk::log( "	Adding vertex %d", pCtrlPtList[i]);
+						blk::log( "	Adding vertex %d", pCtrlPtList[i]);
+						verts_added++;
 					vertToBone[pCtrlPtList[i]] = iCluster;
 				}
 
 			}
 		}
 
+		blk::log("Added %d vertse", verts_added);
 		for (int iTri = 0; iTri < (int)newMesh.m_NumTriangles; iTri++) {
 
 			int iCurVertex = vertexCount + 2;
@@ -656,14 +659,16 @@ bool kbModel::LoadFBX() {
 					Vec4 color((float)fbxColor.mRed, (float)fbxColor.mGreen, (float)fbxColor.mBlue, (float)fbxColor.mAlpha);
 					triVert.SetColor(color);
 				}
-				/*		// todo this was required for destructibles to work
+
+						// todo this was required for destructibles to work
 				int boneIdx = vertToBone[iCtrlPt];
 				boneToBounds[boneIdx].AddPoint( triVert.position );
 				triVert.color[0] = (byte) boneIdx;
 				triVert.color[1] = (byte) boneIdx;
 				triVert.color[2] = (byte) boneIdx;
-				triVert.color[3] = (byte) boneIdx;*/
+				triVert.color[3] = (byte) boneIdx;
 
+				blk::log("Vert %d - %d", vertexCount, boneIdx);
 				/*
 									newVert.color[0] = (byte)boneIndices[currentTriangle.m_VertexIndices[j]];
 					newVert.color[1] = (byte)boneIndices[currentTriangle.m_VertexIndices[j]];
@@ -707,6 +712,20 @@ bool kbModel::LoadFBX() {
 
 	m_VertexBuffer.CreateVertexBuffer(vertexList);
 	m_IndexBuffer.CreateIndexBuffer(indexList);
+
+
+	// D3D12
+	if (g_renderer != nullptr) {
+		m_vertex_buffer = g_renderer->create_render_buffer();
+		if (m_vertex_buffer != nullptr) {
+			m_vertex_buffer->write_vertex_buffer(vertexList);
+		}
+
+		m_index_buffer = g_renderer->create_render_buffer();
+		if (m_index_buffer != nullptr) {
+			m_index_buffer->write_index_buffer(indexList);
+		}
+	}
 
 	kbMaterial newMaterial;
 	newMaterial.m_shader = nullptr;//(kbShader *) g_ResourceManager.GetResource( "../../kbEngine/assets/Shaders/basicShader.kbShader", true );

@@ -10,7 +10,7 @@ struct SceneData {
 	float4 camera;
 	float4 pad0;
 	matrix pad1;
-	matrix bones[32];
+	matrix bones[128];
 };
 
 ConstantBuffer<SceneData> scene_constants[1024] : register(b0);
@@ -45,14 +45,19 @@ struct PixelInput {
 PixelInput vertex_shader(VertexInput input) {
 	SceneData scene_constant = scene_constants[scene_index.index];
 	
-	const int4 blend_indices = D3DCOLORtoUBYTE4(input.blend_indices).zyxw;
-	const float4 blend_weights = input.blend_weights;
+   int4 IndexVector = input.blend_indices * 255;
+   float BlendWeightsArray[4] = (float[4])input.blend_weights;
+   int   IndexArray[4]        = (int[4])IndexVector;
 
-	const matrix bone_mat = scene_constant.bones[blend_indices.x] * blend_weights.x +
+	/*const matrix bone_mat = scene_constant.bones[blend_indices.x] * blend_weights.x +
 							scene_constant.bones[blend_indices.y] * blend_weights.y +
 							scene_constant.bones[blend_indices.z] * blend_weights.z +
-							scene_constant.bones[blend_indices.w] * blend_weights.w;
-					   	
+							scene_constant.bones[blend_indices.w] * blend_weights.w;*/
+
+	// Rigid weight - todo fix
+
+	const matrix bone_mat = scene_constant.bones[IndexVector[0]];
+
 	const float4 local_pos = mul(input.position, bone_mat);
 	const float3 world_pos = mul(input.position, scene_constant.world_matrix).xyz;
 	const float3 normal = mul(input.normal.xyz * 2.0f - 1.0f, (float3x3)bone_mat);

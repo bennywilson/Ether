@@ -11,6 +11,7 @@
 #include "kbRenderer.h"
 #include "destructible_component.h"
 #include "kbRenderer.h"
+#include "renderer.h"
 #include "DX11/kbRenderer_DX11.h"			// HACK
 
 
@@ -323,6 +324,8 @@ void EtherSkelModelComponent::update_internal(const float DeltaTime) {
 		m_render_object.m_render_pass = m_render_pass;
 
 		g_pRenderer->UpdateRenderObject(m_render_object);
+		g_renderer->remove_render_component(this);
+		g_renderer->add_render_component(this);
 	}
 
 	// Update collision component
@@ -428,6 +431,8 @@ void EtherDestructibleComponent::editor_change(const std::string& propertyName) 
 		if (m_bIsSimulating) {
 			m_bIsSimulating = false;
 			m_Health = m_StartingHealth;
+			m_BonesList.empty();
+
 		} else {
 			TakeDamage(9999999.0f, GetOwner()->GetPosition() + Vec3(kbfrand(), kbfrand(), kbfrand()) * 5.0f, 10000000.0f);
 		}
@@ -539,6 +544,15 @@ void EtherDestructibleComponent::update_internal(const float deltaTime) {
 		}
 	}
 
+
+	static float time = 0;
+	static bool broke = false;
+	time += deltaTime;
+	if (time > 5.0 && broke == false) {
+		broke = true;
+		this->TakeDamage(10000., this->GetOwner()->GetPosition(), 10000.f);
+
+	}
 	if (m_bIsSimulating) {
 		const float t = g_GlobalTimer.TimeElapsedSeconds() - m_SimStartTime;
 

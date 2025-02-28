@@ -26,7 +26,7 @@ static struct SceneInstanceData {
 	Vec4 camera;
 	Vec4 pad0;
 	Mat4 pad1;
-	Mat4 bones[32];
+	Mat4 bones[128];
 }*scene_buffer;
 
 /// Renderer_Dx12::~Renderer_Dx12

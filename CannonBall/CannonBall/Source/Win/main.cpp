@@ -192,15 +192,15 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 	std::string mapName;
 	// mapName = "test";
 	// mapName = "pinky";
-	mapName = "kuwahara";
+//	mapName = "kuwahara";
 	// mapName = "sheep";
 	//mapName = "kungfusheep";
-	//mapName = "destructibles";
+	mapName = "destructibles";
 
 		// Toggles
 	g_UseEditor = 1;
-	const u32 use_d3d12 = 0;
-	const u32 use_sw = 1;
+	const u32 use_d3d12 = 1;
+	const u32 use_sw = 0;
 
 	// Perform application initialization
 	if (!InitInstance(hInstance, nCmdShow)) {
