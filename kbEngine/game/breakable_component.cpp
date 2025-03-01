@@ -10,7 +10,6 @@
 #include "kbGame.h"
 #include "kbRenderer.h"
 #include "breakable_component.h"
-#include "renderer.h"
 #include "DX11/kbRenderer_DX11.h"			// HACK
 
 
@@ -23,9 +22,7 @@ KB_DEFINE_COMPONENT(EtherSkelModelComponent)
 static XMMATRIX& XMMATRIXFromMat4(Mat4& matrix) { return (*(XMMATRIX*)&matrix); }
 static Mat4& Mat4FromXMMATRIX(FXMMATRIX& matrix) { return (*(Mat4*)&matrix); }
 
-/**
- *	AnimationComponent::Constructor()
- */
+/// AnimationComponent::Constructor()
 void AnimationComponent::Constructor() {
 	m_animation = nullptr;
 	m_time_scale = 1.0f;
@@ -33,9 +30,7 @@ void AnimationComponent::Constructor() {
 	m_current_time = -1.0f;
 }
 
-/**
- *	BreakableComponent::Constructor
- */
+/// BreakableComponent::Constructor
 void BreakableComponent::Constructor() {
 	m_destructible_type = EBreakableBehavior::PushFromImpactPoint;
 	m_life_duration = 4.0f;
@@ -54,9 +49,7 @@ void BreakableComponent::Constructor() {
 	m_sim_start_time = 0.0f;
 }
 
-/**
- *	BreakableComponent::editor_change
- */
+/// BreakableComponent::editor_change
 void BreakableComponent::editor_change(const std::string& propertyName) {
 	Super::editor_change(propertyName);
 
@@ -65,17 +58,14 @@ void BreakableComponent::editor_change(const std::string& propertyName) {
 			m_is_simulating = false;
 			m_health = m_starting_health;
 			m_bones.clear();
-
 		} else {
 			take_damage(9999999.0f, GetOwner()->GetPosition() + Vec3(kbfrand(), kbfrand(), kbfrand()) * 5.0f, 10000000.0f);
 		}
 	}
 }
 
-/**
- *	BreakableComponent::take_damage
- */
-void BreakableComponent::take_damage(const float damageAmt, const Vec3& explosionPosition, const float explosionRadius) {
+/// BreakableComponent::take_damage
+void BreakableComponent::take_damage(const f32 damageAmt, const Vec3& explosionPosition, const f32 explosionRadius) {
 	m_health -= damageAmt;
 	if (m_health > 0.0f || m_is_simulating) {
 		return;
@@ -83,9 +73,11 @@ void BreakableComponent::take_damage(const float damageAmt, const Vec3& explosio
 
 	if (m_skel_model == nullptr) {
 		m_skel_model = (SkeletalModelComponent*)GetOwner()->GetComponentByType(SkeletalModelComponent::GetType());
+		if (m_skel_model == nullptr) {
+			blk::error_check(m_skel_model != nullptr, "BreakableComponent::take_damage() - Missing skeletal model");
+			return;
+		}
 	}
-
-	blk::error_check(m_skel_model != nullptr, "BreakableComponent::take_damage() - Missing skeletal model");
 
 	kbCollisionComponent* const pCollision = (kbCollisionComponent*)GetOwner()->GetComponentByType(kbCollisionComponent::GetType());
 	if (pCollision != nullptr) {
@@ -94,26 +86,23 @@ void BreakableComponent::take_damage(const float damageAmt, const Vec3& explosio
 
 	m_last_hit_location = explosionPosition;
 
-	Mat4 localMat;
-	GetOwner()->CalculateWorldMatrix(localMat);
-	const XMMATRIX inverseMat = XMMatrixInverse(nullptr, XMMATRIXFromMat4(localMat));
-	localMat = Mat4FromXMMATRIX(inverseMat);
+	Mat4 local_mat;
+	GetOwner()->CalculateWorldMatrix(local_mat);
+	const XMMATRIX inverse_mat = XMMatrixInverse(nullptr, XMMATRIXFromMat4(local_mat));
+	local_mat = Mat4FromXMMATRIX(inverse_mat);
 
-	const Vec3 localExplositionPos = localMat.transform_point(explosionPosition);
-	const kbModel* const pModel = m_skel_model->model();
+	const Vec3 localExplositionPos = local_mat.transform_point(explosionPosition);
+	const kbModel* const model = m_skel_model->model();
 
-	Mat4 worldMat = localMat;
-	worldMat.transpose_self();
+	Mat4 world_mat = local_mat;
+	world_mat.transpose_self();
 
-	m_bones.resize(pModel->NumBones());
-	for (int i = 0; i < pModel->NumBones(); i++) {
-		m_bones[i].m_position = pModel->GetRefBoneMatrix(i).GetOrigin();
+	m_bones.resize(model->NumBones());
+	for (int i = 0; i < model->NumBones(); i++) {
+		m_bones[i].m_position = model->GetRefBoneMatrix(i).GetOrigin();
 
 		if (m_destructible_type == EBreakableBehavior::UserVelocity) {
-			m_bones[i].m_velocity = Vec3Rand(m_min_linear_vel, m_max_linear_vel);
-
-
-			m_bones[i].m_velocity = m_bones[i].m_velocity * worldMat;
+			m_bones[i].m_velocity = Vec3Rand(m_min_linear_vel, m_max_linear_vel) * world_mat;
 
 		} else {
 			m_bones[i].m_velocity = (m_bones[i].m_position - localExplositionPos).normalize_safe() * (kbfrand() * (m_max_linear_vel.x - m_min_linear_vel.x) + m_min_linear_vel.x);
@@ -125,28 +114,22 @@ void BreakableComponent::take_damage(const float damageAmt, const Vec3& explosio
 		m_bones[i].m_cur_rotation_angle = 0.0f;
 	}
 
-	//	if ( m_complete_destruction_fx.size() > 0 ) {
-		//	const int iFX = rand() % m_complete_destruction_fx.size();
 	if (m_complete_destruction_fx.GetEntity() != nullptr) {
 		kbGameEntity* const pExplosionFX = g_pGame->CreateEntity(m_complete_destruction_fx.GetEntity());
 
-		Vec3 worldOffset = worldMat.transform_point(m_fx_local_offset);
-		//kbLog( "% f %f %f --- %f %f %f", m_fx_local_offset.x, m_fx_local_offset.y, m_fx_local_offset.z, worldOffset.x, worldOffset.y, worldOffset.z );
+		Vec3 worldOffset = world_mat.transform_point(m_fx_local_offset);
 		pExplosionFX->SetPosition(GetOwner()->GetPosition() + worldOffset);
 		pExplosionFX->SetOrientation(GetOwner()->GetOrientation());
 		pExplosionFX->DeleteWhenComponentsAreInactive(true);
 	}
-	//}
 
 	m_is_simulating = true;
 	m_sim_start_time = g_GlobalTimer.TimeElapsedSeconds();
 }
 
-/**
- *	BreakableComponent::enable_internal
- */
-void BreakableComponent::enable_internal(const bool bEnable) {
-	if (bEnable == false) {
+/// BreakableComponent::enable_internal
+void BreakableComponent::enable_internal(const bool enable) {
+	if (!enable) {
 		m_skel_model = nullptr;
 	} else {
 		m_skel_model = (SkeletalModelComponent*)GetOwner()->GetComponentByType(SkeletalModelComponent::GetType());
@@ -157,7 +140,6 @@ void BreakableComponent::enable_internal(const bool bEnable) {
 		}
 
 		m_bones.resize(m_skel_model->model()->NumBones());
-
 		m_health = m_starting_health;
 	}
 }
@@ -165,38 +147,18 @@ void BreakableComponent::enable_internal(const bool bEnable) {
 extern kbConsoleVariable g_ShowCollision;
 
 /// BreakableComponent::update_internal
-void BreakableComponent::update_internal(const float deltaTime) {
-
-	if (GetAsyncKeyState('G')) {
-		m_is_simulating = false;
-		m_health = m_starting_health;
-
-		kbCollisionComponent* const pCollision = (kbCollisionComponent*)GetOwner()->GetComponentByType(kbCollisionComponent::GetType());
-		if (pCollision != nullptr) {
-			pCollision->Enable(true);
-		}
-	}
-
-
-	static float time = 0;
-	static bool broke = false;
-	time += deltaTime;
-	if (time > 5.0 && broke == false) {
-		broke = true;
-		this->take_damage(10000., this->GetOwner()->GetPosition(), 10000.f);
-
-	}
+void BreakableComponent::update_internal(const f32 deltaTime) {
 	if (m_is_simulating) {
-		const float t = g_GlobalTimer.TimeElapsedSeconds() - m_sim_start_time;
+		const f32 t = g_GlobalTimer.TimeElapsedSeconds() - m_sim_start_time;
 
 		if (t > m_life_duration) {
 			GetOwner()->DisableAllComponents();
 			m_is_simulating = false;
 		} else {
-			const float tSqr = t * t;
+			const f32 tSqr = t * t;
 			const kbModel* const pModel = m_skel_model->model();
 
-			for (int i = 0; i < m_bones.size(); i++) {
+			for (u32 i = 0; i < m_bones.size(); i++) {
 				m_bones[i].m_position.x += m_bones[i].m_velocity.x * deltaTime;
 				m_bones[i].m_position.z += m_bones[i].m_velocity.z * deltaTime;
 
