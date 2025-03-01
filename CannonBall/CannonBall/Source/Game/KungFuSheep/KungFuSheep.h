@@ -36,7 +36,7 @@ class KungFuSheepComponent : public CannonActorComponent, IStateMachine<KungFuSh
 
 public:
 	bool IsCannonBalling() const;
-	void TakeDamage(const DealAttackInfo_t<KungFuGame::eAttackType>& dealAttackInfo);
+	void take_damage(const DealAttackInfo_t<KungFuGame::eAttackType>& dealAttackInfo);
 
 	void PlayShakeNBakeFX();
 	void PlayBaa(const int baaType);

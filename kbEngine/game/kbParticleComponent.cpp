@@ -73,7 +73,7 @@ void kbParticleComponent::Constructor() {
 	m_StartDelayRemaining = 0;
 	m_NumEmittedParticles = 0;
 	m_ParticleBillboardType = BT_FaceCamera;
-	m_Gravity.set(0.0f, 0.0f, 0.0f);
+	m_gravity.set(0.0f, 0.0f, 0.0f);
 	m_render_order_bias = 0.0f;
 	m_DebugPlayEntity = false;
 
@@ -200,16 +200,16 @@ void kbParticleComponent::update_internal(const float DeltaTime) {
 		const float normalizedTime = (particle.m_TotalLife - particle.m_LifeLeft) / particle.m_TotalLife;
 		Vec3 curVelocity = Vec3::zero;
 
-		if (m_VelocityOverLifeTimeCurve.size() == 0) {
+		if (m_velocityOverLifeTimeCurve.size() == 0) {
 			curVelocity = kbLerp(particle.m_StartVelocity, particle.m_EndVelocity, normalizedTime);
 		} else {
-			const float velCurve = kbAnimEvent::Evaluate(m_VelocityOverLifeTimeCurve, normalizedTime);
+			const float velCurve = kbAnimEvent::Evaluate(m_velocityOverLifeTimeCurve, normalizedTime);
 			curVelocity = particle.m_StartVelocity * velCurve;
 		}
 
-		curVelocity += m_Gravity * (particle.m_TotalLife - particle.m_LifeLeft);
+		curVelocity += m_gravity * (particle.m_TotalLife - particle.m_LifeLeft);
 
-		particle.m_Position = particle.m_Position + curVelocity * DeltaTime;
+		particle.m_position = particle.m_position + curVelocity * DeltaTime;
 
 		const float curRotationRate = kbLerp(particle.m_StartRotation, particle.m_EndRotation, normalizedTime);
 		particle.m_Rotation += curRotationRate * DeltaTime;
@@ -243,7 +243,7 @@ void kbParticleComponent::update_internal(const float DeltaTime) {
 
 			kbRenderObject& renderObj = particle.m_render_object;
 
-			renderObj.m_Position = particle.m_Position;
+			renderObj.m_position = particle.m_position;
 			//renderObj.m_Orientation = Quat4( 0.0f, 0.0f, 0.0f, 1.0f );	TODO
 			renderObj.m_Scale.set(curSize.x, curSize.y, curSize.z);
 			renderObj.m_Scale *= kbLevelComponent::GetGlobalModelScale();
@@ -251,9 +251,9 @@ void kbParticleComponent::update_internal(const float DeltaTime) {
 			if (m_RotationOverLifeTimeCurve.size() > 0) {
 				const Vec4 rotationFactor = kbVectorAnimEvent::Evaluate(m_RotationOverLifeTimeCurve, normalizedTime);
 				Quat4 xAxis, yAxis, zAxis;
-				xAxis.from_axis_angle(Vec3(1.0f, 0.0f, 0.0f), kbToRadians(particle.m_RotationAxis.x * rotationFactor.x));
-				yAxis.from_axis_angle(Vec3(0.0f, 1.0f, 0.0f), kbToRadians(particle.m_RotationAxis.y * rotationFactor.y));
-				zAxis.from_axis_angle(Vec3(0.0f, 0.0f, 1.0f), kbToRadians(particle.m_RotationAxis.z * rotationFactor.z));
+				xAxis.from_axis_angle(Vec3(1.0f, 0.0f, 0.0f), kbToRadians(particle.m_rotation_axis.x * rotationFactor.x));
+				yAxis.from_axis_angle(Vec3(0.0f, 1.0f, 0.0f), kbToRadians(particle.m_rotation_axis.y * rotationFactor.y));
+				zAxis.from_axis_angle(Vec3(0.0f, 0.0f, 1.0f), kbToRadians(particle.m_rotation_axis.z * rotationFactor.z));
 				renderObj.m_Orientation = xAxis * yAxis * zAxis;
 			}
 
@@ -265,10 +265,10 @@ void kbParticleComponent::update_internal(const float DeltaTime) {
 			continue;
 		}
 
-		pDstVerts[iVertex + 0].position = particle.m_Position;
-		pDstVerts[iVertex + 1].position = particle.m_Position;
-		pDstVerts[iVertex + 2].position = particle.m_Position;
-		pDstVerts[iVertex + 3].position = particle.m_Position;
+		pDstVerts[iVertex + 0].position = particle.m_position;
+		pDstVerts[iVertex + 1].position = particle.m_position;
+		pDstVerts[iVertex + 2].position = particle.m_position;
+		pDstVerts[iVertex + 3].position = particle.m_position;
 
 		pDstVerts[iVertex + 0].uv.set(0.0f, 0.0f);
 		pDstVerts[iVertex + 1].uv.set(1.0f, 0.0f);
@@ -355,7 +355,7 @@ void kbParticleComponent::update_internal(const float DeltaTime) {
 		newParticle.m_StartVelocity = Vec3Rand(m_MinParticleStartVelocity, m_MaxParticleStartVelocity) * ownerMatrix;
 		newParticle.m_EndVelocity = Vec3Rand(m_MinParticleEndVelocity, m_MaxParticleEndVelocity) * ownerMatrix;
 
-		newParticle.m_Position = MyPosition + newParticle.m_StartVelocity * TimeLeft;
+		newParticle.m_position = MyPosition + newParticle.m_StartVelocity * TimeLeft;
 		newParticle.m_LifeLeft = m_ParticleMinDuration + (kbfrand() * (m_ParticleMaxDuration - m_ParticleMinDuration));
 		newParticle.m_TotalLife = newParticle.m_LifeLeft;
 
@@ -395,7 +395,7 @@ void kbParticleComponent::update_internal(const float DeltaTime) {
 				renderObj.m_Materials = pModelEmitter->GetShaderParamOverrides();
 				renderObj.m_render_pass = RP_Translucent;
 				renderObj.m_render_order_bias = 0;
-				renderObj.m_Position = newParticle.m_Position;
+				renderObj.m_position = newParticle.m_position;
 
 				renderObj.m_Scale = Vec3::one;
 				renderObj.m_EntityId = 0;
@@ -407,11 +407,11 @@ void kbParticleComponent::update_internal(const float DeltaTime) {
 
 				renderObj.m_Orientation = Quat4(0.0f, 0.0f, 0.0f, 1.0f);
 				if (m_MinStart3DRotation.compare(Vec3::zero) == false || m_MaxStart3DRotation.compare(Vec3::zero) == false) {
-					newParticle.m_RotationAxis = Vec3Rand(m_MinStart3DRotation, m_MaxStart3DRotation);
+					newParticle.m_rotation_axis = Vec3Rand(m_MinStart3DRotation, m_MaxStart3DRotation);
 					Quat4 xAxis, yAxis, zAxis;
-					xAxis.from_axis_angle(Vec3(1.0f, 0.0f, 0.0f), kbToRadians(newParticle.m_RotationAxis.x));
-					yAxis.from_axis_angle(Vec3(0.0f, 1.0f, 0.0f), kbToRadians(newParticle.m_RotationAxis.y));
-					zAxis.from_axis_angle(Vec3(0.0f, 0.0f, 1.0f), kbToRadians(newParticle.m_RotationAxis.z));
+					xAxis.from_axis_angle(Vec3(1.0f, 0.0f, 0.0f), kbToRadians(newParticle.m_rotation_axis.x));
+					yAxis.from_axis_angle(Vec3(0.0f, 1.0f, 0.0f), kbToRadians(newParticle.m_rotation_axis.y));
+					zAxis.from_axis_angle(Vec3(0.0f, 0.0f, 1.0f), kbToRadians(newParticle.m_rotation_axis.z));
 
 					renderObj.m_Orientation = xAxis * yAxis * zAxis;
 				}
@@ -504,7 +504,7 @@ void kbParticleComponent::RenderSync() {
 
 	m_render_object.m_pComponent = this;
 	m_render_object.m_render_pass = RP_Translucent;
-	m_render_object.m_Position = GetPosition();
+	m_render_object.m_position = GetPosition();
 	m_render_object.m_Orientation = Quat4(0.0f, 0.0f, 0.0f, 1.0f);
 	m_render_object.m_render_order_bias = m_render_order_bias;
 

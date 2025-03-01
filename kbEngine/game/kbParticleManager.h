@@ -7,6 +7,7 @@
 #include <vector>
 #include "matrix.h"
 #include "kbGameEntityHeader.h"
+#include "kbParticleComponent.h"
 
 class kbParticleComponent;
 
@@ -28,7 +29,7 @@ public:
 
 	struct CustomParticleAtlasInfo_t {
 		EBillboardType m_Type;
-		Vec3 m_Position;
+		Vec3 m_position;
 		Vec3 m_Direction;
 		float m_Rotation;
 		Vec4 m_Color;

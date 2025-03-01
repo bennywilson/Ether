@@ -39,7 +39,7 @@ public:
 	void										EnableSmallLoveHearts(const bool bEnable);
 	void										EnableLargeLoveHearts(const bool bEnable);
 
-	void										TakeDamage(const DealAttackInfo_t<KungFuGame::eAttackType>& dealAttackInfo);
+	void										take_damage(const DealAttackInfo_t<KungFuGame::eAttackType>& dealAttackInfo);
 
 	void										DoPoofDeath();
 	void										SpawnAndFlingDecapHead();

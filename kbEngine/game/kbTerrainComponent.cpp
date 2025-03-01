@@ -64,7 +64,7 @@ void kbGrass::grassRenderObject_t::Initialize(const Vec3& ownerPosition) {
 	m_render_object.m_pComponent = m_pComponent;
 	m_render_object.m_model = m_model;
 	m_render_object.m_render_pass = ERenderPass::RP_Lighting;
-	m_render_object.m_Position = ownerPosition;
+	m_render_object.m_position = ownerPosition;
 	m_render_object.m_Orientation.set(0.0f, 0.0f, 0.0f, 1.0f);
 	m_render_object.m_Scale.set(1.0f, 1.0f, 1.0f);
 	//	m_render_object.m_EntityId
@@ -353,7 +353,7 @@ void kbGrass::RefreshGrass() {
 				if (bCreatedPointCloud) {
 					renderObj.m_model->UnmapVertexBuffer(iVert);
 					Mat4 rotMat = m_pOwningTerrainComponent->owner_rotation().to_mat4();
-					m_GrassRenderObjects[cellIdx].m_render_object.m_Position = cellCenter * rotMat + m_pOwningTerrainComponent->owner_position();
+					m_GrassRenderObjects[cellIdx].m_render_object.m_position = cellCenter * rotMat + m_pOwningTerrainComponent->owner_position();
 					m_GrassRenderObjects[cellIdx].m_render_object.m_Scale = m_pOwningTerrainComponent->owner_scale();
 					m_GrassRenderObjects[cellIdx].m_render_object.m_Orientation = m_pOwningTerrainComponent->owner_rotation();
 
@@ -712,7 +712,7 @@ void kbTerrainComponent::refresh_materials() {
 	m_render_object.m_casts_shadow = false;
 	m_render_object.m_bIsSkinnedModel = false;
 	m_render_object.m_Orientation = GetOwner()->GetOrientation();
-	m_render_object.m_Position = GetOwner()->GetPosition();
+	m_render_object.m_position = GetOwner()->GetPosition();
 	m_render_object.m_EntityId = GetOwner()->GetEntityId();
 	m_render_object.m_Scale.set(1.0f, 1.0f, 1.0f);
 	m_render_object.m_model = &m_TerrainModel;

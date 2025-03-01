@@ -83,7 +83,7 @@ private:
 	std::vector<class kbBoneCollisionSphere>	m_CollisionSpheres;
 	int											m_NumConstrainIterations;
 
-	Vec3										m_Gravity;
+	Vec3										m_gravity;
 
 	// Wind Data
 	Vec3										m_MaxWindVelocity;

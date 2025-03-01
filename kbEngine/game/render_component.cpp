@@ -33,7 +33,7 @@ void RenderComponent::editor_change(const std::string& propertyName) {
 	m_render_object.m_bIsSkinnedModel = false;
 	m_render_object.m_EntityId = GetOwner()->GetEntityId();
 	m_render_object.m_Orientation = GetOwner()->GetOrientation();
-	m_render_object.m_Position = GetOwner()->GetPosition();
+	m_render_object.m_position = GetOwner()->GetPosition();
 	m_render_object.m_render_pass = m_render_pass;
 	m_render_object.m_Scale = GetOwner()->GetScale() * kbLevelComponent::GetGlobalModelScale();
 	m_render_object.m_render_order_bias = m_render_order_bias;

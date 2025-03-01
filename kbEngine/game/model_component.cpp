@@ -49,7 +49,7 @@ void kbStaticModelComponent::enable_internal(const bool isEnabled) {
 		m_render_object.m_EntityId = GetOwner()->GetEntityId();
 		m_render_object.m_Orientation = GetOwner()->GetOrientation();
 		m_render_object.m_model = m_model;
-		m_render_object.m_Position = GetOwner()->GetPosition();
+		m_render_object.m_position = GetOwner()->GetPosition();
 		m_render_object.m_render_pass = m_render_pass;
 		m_render_object.m_Scale = GetOwner()->GetScale() * kbLevelComponent::GetGlobalModelScale();
 		m_render_object.m_render_order_bias = m_render_order_bias;
@@ -77,7 +77,7 @@ void kbStaticModelComponent::update_internal(const float DeltaTime) {
 	Super::update_internal(DeltaTime);
 
 	if (m_model != nullptr && GetOwner()->IsDirty()) {
-		m_render_object.m_Position = GetOwner()->GetPosition();
+		m_render_object.m_position = GetOwner()->GetPosition();
 		m_render_object.m_Orientation = GetOwner()->GetOrientation();
 		m_render_object.m_Scale = GetOwner()->GetScale() * kbLevelComponent::GetGlobalModelScale();
 		m_render_object.m_model = m_model;
@@ -139,7 +139,7 @@ void SkeletalModelComponent::enable_internal(const bool isEnabled) {
 		m_render_object.m_EntityId = GetOwner()->GetEntityId();
 		m_render_object.m_Orientation = GetOwner()->GetOrientation();
 		m_render_object.m_model = m_model;
-		m_render_object.m_Position = GetOwner()->GetPosition();
+		m_render_object.m_position = GetOwner()->GetPosition();
 		m_render_object.m_render_pass = m_render_pass;
 		m_render_object.m_Scale = GetOwner()->GetScale() * kbLevelComponent::GetGlobalModelScale();
 		refresh_materials(false);
@@ -194,6 +194,29 @@ void SkeletalModelComponent::update_internal(const float DeltaTime) {
 		} else {
 			for (int i = 0; i < m_model->NumBones(); i++) {
 				m_BindToLocalSpaceMatrices[i].SetIdentity();
+			}
+		}
+
+		BreakableComponent* const pDestructible = (BreakableComponent*)GetOwner()->GetComponentByType(BreakableComponent::GetType());
+		if (pDestructible != nullptr && pDestructible->is_simulating()) {
+			const std::vector<BreakableComponent::DestructibleBone_t>& brokenBones = pDestructible->get_bones();
+			const kbModel* const pModel = this->model();
+			for (int i = 0; i < brokenBones.size(); i++) {
+				const BreakableComponent::DestructibleBone_t& destructibleBone = brokenBones[i];
+
+				Quat4 rot;
+				rot.from_axis_angle(destructibleBone.m_rotation_axis, destructibleBone.m_cur_rotation_angle);
+				Mat4 matRot = rot.to_mat4();
+				m_BindToLocalSpaceMatrices[i].SetAxis(0, matRot[0].ToVec3());
+				m_BindToLocalSpaceMatrices[i].SetAxis(1, matRot[1].ToVec3());
+				m_BindToLocalSpaceMatrices[i].SetAxis(2, matRot[2].ToVec3());
+
+				m_BindToLocalSpaceMatrices[i].SetAxis(3, destructibleBone.m_position);
+
+				m_BindToLocalSpaceMatrices[i] = pModel->GetInvRefBoneMatrix(i) * m_BindToLocalSpaceMatrices[i];
+
+				//kbVec3 worldPos = destructibleBone.m_position * GetOwner()->GetOrientation().ToMat4() + GetOwner()->GetPosition();
+				//g_pRenderer->DrawBox( kbBounds( worldPos - kbVec3::one * 0.1f, worldPos + kbVec3::one * 0.1f ), kbColor::red );
 			}
 		}
 
@@ -361,7 +384,7 @@ void SkeletalModelComponent::update_internal(const float DeltaTime) {
 	}
 
 	m_render_object.m_pComponent = this;
-	m_render_object.m_Position = GetOwner()->GetPosition();
+	m_render_object.m_position = GetOwner()->GetPosition();
 	m_render_object.m_Orientation = GetOwner()->GetOrientation();
 	m_render_object.m_Scale = GetOwner()->GetScale() * kbLevelComponent::GetGlobalModelScale();
 	m_render_object.m_model = m_model;
@@ -598,21 +621,21 @@ void SkeletalModelComponent::UnregisterSyncSkelModel(SkeletalModelComponent* con
 /// kbFlingPhysicsComponent::Constructor
 void kbFlingPhysicsComponent::Constructor() {
 	// Editor
-	m_MinLinearVelocity.set(-0.015f, 0.015f, 0.03f);
-	m_MaxLinearVelocity.set(0.015f, 0.025f, 0.035f);
+	m_min_linear_vel.set(-0.015f, 0.015f, 0.03f);
+	m_max_linear_vel.set(0.015f, 0.025f, 0.035f);
 	m_MinAngularSpeed = 10.0f;
 	m_MaxAngularSpeed = 15.0f;
-	m_Gravity.set(0.0f, -20.0f, 0.0f);
+	m_gravity.set(0.0f, -20.0f, 0.0f);
 
 	// Run time
 	m_OwnerStartPos.set(0.0f, 0.0f, 0.0f);
 	m_OwnerStartRotation.set(0.0f, 0.0f, 0.0f, 1.0f);
 
-	m_Velocity.set(0.0f, 0.0f, 0.0f);
-	m_RotationAxis.set(1.0f, 0.0f, 0.0f);
+	m_velocity.set(0.0f, 0.0f, 0.0f);
+	m_rotation_axis.set(1.0f, 0.0f, 0.0f);
 
-	m_CurRotationAngle = 0.0f;
-	m_RotationSpeed = 1.0f;
+	m_cur_rotation_angle = 0.0f;
+	m_rotation_speed = 1.0f;
 
 	m_FlingStartTime = 0.0f;
 
@@ -628,23 +651,23 @@ void kbFlingPhysicsComponent::enable_internal(const bool bEnable) {
 		m_OwnerStartRotation = owner_rotation();
 		m_bOwnerStartSet = true;
 
-		m_Velocity = Vec3Rand(m_MinLinearVelocity, m_MaxLinearVelocity);
+		m_velocity = Vec3Rand(m_min_linear_vel, m_max_linear_vel);
 
 		Mat4 worldMatrix;
 		GetOwner()->CalculateWorldMatrix(worldMatrix);
 		const XMMATRIX inverseMat = XMMatrixInverse(nullptr, XMMATRIXFromMat4(worldMatrix));
 		worldMatrix = Mat4FromXMMATRIX(inverseMat);
 		worldMatrix.transpose_self();
-		m_Velocity = m_Velocity * worldMatrix;
+		m_velocity = m_velocity * worldMatrix;
 
-		m_RotationAxis = Vec3(kbfrand(), kbfrand(), kbfrand());
-		if (m_RotationAxis.length_sqr() < 0.01f) {
-			m_RotationAxis.set(1.0f, 0.0f, 0.0f);
+		m_rotation_axis = Vec3(kbfrand(), kbfrand(), kbfrand());
+		if (m_rotation_axis.length_sqr() < 0.01f) {
+			m_rotation_axis.set(1.0f, 0.0f, 0.0f);
 		} else {
-			m_RotationAxis.normalize_self();
+			m_rotation_axis.normalize_self();
 		}
-		m_RotationSpeed = kbfrand(m_MinAngularSpeed, m_MaxAngularSpeed);
-		m_CurRotationAngle = 0;
+		m_rotation_speed = kbfrand(m_MinAngularSpeed, m_MaxAngularSpeed);
+		m_cur_rotation_angle = 0;
 
 		m_FlingStartTime = g_GlobalTimer.TimeElapsedSeconds();
 	} else {
@@ -662,14 +685,14 @@ void kbFlingPhysicsComponent::update_internal(const float dt) {
 	const float elapsedDeathTime = curTime - m_FlingStartTime;
 
 	Vec3 newPos = owner_position();
-	newPos.x += m_Velocity.x * dt;
-	newPos.y = m_OwnerStartPos.y + m_Velocity.y * elapsedDeathTime - (0.5f * -m_Gravity.y * elapsedDeathTime * elapsedDeathTime);
-	newPos.z += m_Velocity.z * dt;
+	newPos.x += m_velocity.x * dt;
+	newPos.y = m_OwnerStartPos.y + m_velocity.y * elapsedDeathTime - (0.5f * -m_gravity.y * elapsedDeathTime * elapsedDeathTime);
+	newPos.z += m_velocity.z * dt;
 	SetOwnerPosition(newPos);
 
-	m_CurRotationAngle += m_RotationSpeed * dt;
+	m_cur_rotation_angle += m_rotation_speed * dt;
 	Quat4 rot;
-	rot.from_axis_angle(m_RotationAxis, m_CurRotationAngle);
+	rot.from_axis_angle(m_rotation_axis, m_cur_rotation_angle);
 	rot = m_OwnerStartRotation * rot;
 	SetOwnerRotation(rot);
 }

@@ -42,7 +42,7 @@ void kbClothComponent::Constructor() {
 	m_pSkeletalModel = nullptr;
 	m_NumConstrainIterations = 1;
 
-	m_Gravity.set(0.0f, -100.0f, 0.0f);
+	m_gravity.set(0.0f, -100.0f, 0.0f);
 	m_MaxWindVelocity.set(20.0f, 160.0f, -9.0f);
 	m_MinWindVelocity.set(64.0f, 30.0f, -20.0f);
 	m_MinWindGustDuration = 0.2f;
@@ -298,7 +298,7 @@ void kbClothComponent::RunSimulation(const float inDeltaTime) {
 			continue;
 		}
 
-		Vec3 totalForce = m_Gravity + Vec3(0.0f, g_ClothGrav.GetFloat(), 0.0f);
+		Vec3 totalForce = m_gravity + Vec3(0.0f, g_ClothGrav.GetFloat(), 0.0f);
 		if (m_bAddFakeOscillation) {
 
 			Vec3 windAmt = ((wind - (wind * 0.5f) * kbfrand() + (wind * 0.5f)));

@@ -1180,7 +1180,7 @@ void kbRenderer_DX11::RenderScene() {
 				kbRenderObject renderObject;
 				renderObject.m_model = m_DebugModels[i].m_model;
 				renderObject.m_Materials = m_DebugModels[i].m_Materials;
-				renderObject.m_Position = m_DebugModels[i].m_Position;
+				renderObject.m_position = m_DebugModels[i].m_position;
 				renderObject.m_Orientation = m_DebugModels[i].m_Orientation;
 
 				// Hack: Negate the effects of m_GlobalModelScale_RenderThread in SetConstantsBuffer
@@ -1229,7 +1229,7 @@ void kbRenderer_DX11::PreRenderCullAndSort() {
 
 		kbRenderObject& renderObj = *iter->second;
 
-		const float distToCamSqr = (renderObj.m_Position - m_pCurrentRenderWindow->GetCameraPosition()).length_sqr();
+		const float distToCamSqr = (renderObj.m_position - m_pCurrentRenderWindow->GetCameraPosition()).length_sqr();
 		if (renderObj.m_CullDistance > 0) {
 			const float cullDistSqr = renderObj.m_CullDistance * renderObj.m_CullDistance;
 
@@ -1271,7 +1271,7 @@ void kbRenderer_DX11::PreRenderCullAndSort() {
 	for (auto iter = curMap.begin(); iter != curMap.end(); iter++) {
 
 		kbRenderObject& renderObj = *iter->second;
-		const float distToCamSqr = (renderObj.m_Position - m_pCurrentRenderWindow->GetCameraPosition()).length_sqr();
+		const float distToCamSqr = (renderObj.m_position - m_pCurrentRenderWindow->GetCameraPosition()).length_sqr();
 		if (renderObj.m_CullDistance > 0) {
 			const float cullDistSqr = renderObj.m_CullDistance * renderObj.m_CullDistance;
 
@@ -1713,7 +1713,7 @@ void kbRenderer_DX11::RenderMousePickerIds() {
 		kbRenderObject renderObject;
 		renderObject.m_model = m_DebugModels[i].m_model;
 		renderObject.m_Materials = m_DebugModels[i].m_Materials;
-		renderObject.m_Position = m_DebugModels[i].m_Position;
+		renderObject.m_position = m_DebugModels[i].m_position;
 		renderObject.m_Orientation = m_DebugModels[i].m_Orientation;
 		renderObject.m_Scale = m_EditorIconScale_RenderThread * (m_DebugModels[i].m_Scale) / m_GlobalModelScale_RenderThread;
 		renderObject.m_EntityId = m_DebugModels[i].m_EntityId;
@@ -3190,7 +3190,7 @@ void kbRenderer_DX11::RenderDebugBillboards(const bool bIsEntityIdPass) {
 		const Mat4 preRotationMatrix = m_pCurrentRenderWindow->GetCameraRotation().to_mat4();
 		Mat4 mvpMatrix;
 		mvpMatrix.make_scale(currBillBoard.m_Scale * m_EditorIconScale_RenderThread);
-		mvpMatrix[3] = currBillBoard.m_Position;
+		mvpMatrix[3] = currBillBoard.m_position;
 		mvpMatrix = preRotationMatrix * mvpMatrix * m_pCurrentRenderWindow->GetViewProjectionMatrix();
 		SetShaderMat4("mvpMatrix", mvpMatrix, pByteBuffer, pShader->GetShaderVarBindings());
 		m_pDeviceContext->Unmap(pConstantBuffer, 0);
@@ -3494,7 +3494,7 @@ ID3D11Buffer* kbRenderer_DX11::SetConstantBuffer(const kbShaderVarBindings_t& sh
 	if (pRenderObject != nullptr) {
 		worldMatrix.make_scale(pRenderObject->m_Scale);
 		worldMatrix *= pRenderObject->m_Orientation.to_mat4();
-		worldMatrix[3] = pRenderObject->m_Position;
+		worldMatrix[3] = pRenderObject->m_position;
 	} else {
 		worldMatrix = Mat4::identity;
 	}
@@ -3524,14 +3524,14 @@ ID3D11Buffer* kbRenderer_DX11::SetConstantBuffer(const kbShaderVarBindings_t& sh
 		const byte* pVarByteOffset = constantPtr + bindings[i].m_VarByteOffset;
 		if (varName == "billboardedModelMatrix") {
 
-			Vec3 camToObject = (m_pCurrentRenderWindow->GetCameraPosition() - pRenderObject->m_Position).normalize_safe();
+			Vec3 camToObject = (m_pCurrentRenderWindow->GetCameraPosition() - pRenderObject->m_position).normalize_safe();
 			const Vec3 rightVec = Vec3::up.cross(camToObject).normalize_safe();
 			camToObject = rightVec.cross(Vec3::up).normalize_safe();
 			Mat4 billBoardedMatrix = Mat4::identity;
 			billBoardedMatrix[0].set(rightVec.x, rightVec.y, rightVec.z, 0.0f);
 			billBoardedMatrix[1].set(0.0f, 1.0f, 0.0f, 0.0f);
 			billBoardedMatrix[2].set(camToObject.x, camToObject.y, camToObject.z, 0.0f);
-			billBoardedMatrix[3].set(pRenderObject->m_Position.x, pRenderObject->m_Position.y, pRenderObject->m_Position.z, 1.0f);
+			billBoardedMatrix[3].set(pRenderObject->m_position.x, pRenderObject->m_position.y, pRenderObject->m_position.z, 1.0f);
 
 			Mat4 scaleMatrix;
 			scaleMatrix.make_scale(pRenderObject->m_Scale);

@@ -36,6 +36,7 @@ public: \
 	const static className##_TypeInfo * GetType() { return &typeInfo; } \
 	virtual kbComponent * Duplicate() const { return new className( *this ); }
 
+#include "breakable_component.h"
 #include "render_component.h"
 #include "kbComponent.h"
 #include "model_component.h"

@@ -9,8 +9,8 @@
 
 /// CannonHealthBarUIComponent::Constructor
 void CannonHealthBarUIComponent::Constructor() {
-	m_HealthBarWarningFlashThreshold = -1.0f;
-	m_HealthBarWarningFlashSpeed = 1.0f;
+	m_healthBarWarningFlashThreshold = -1.0f;
+	m_healthBarWarningFlashSpeed = 1.0f;
 
 	m_TargetNormalizedHealth = 1.0f;
 	m_CurrentNormalizedHealth = 1.0f;
@@ -33,7 +33,7 @@ void CannonHealthBarUIComponent::update_internal(const float DT) {
 		static kbString barTextureWeights("barTextureWeights");
 		Vec4 weights(1.0f, 0.0f, 0.0f, 0.0f);
 		if (m_StartFlashTime > 0.0f) {
-			weights.x = (g_GlobalTimer.TimeElapsedSeconds() - m_StartFlashTime) * m_HealthBarWarningFlashSpeed;
+			weights.x = (g_GlobalTimer.TimeElapsedSeconds() - m_StartFlashTime) * m_healthBarWarningFlashSpeed;
 			weights.x = sin((weights.x) - (kbPI * 0.5f)) * 0.5f + 0.5f;
 			weights.y = 1.0f - weights.x;
 		}
@@ -45,7 +45,7 @@ void CannonHealthBarUIComponent::update_internal(const float DT) {
 void CannonHealthBarUIComponent::SetTargetHealth(const float newHealth) {
 	m_TargetNormalizedHealth = newHealth;
 
-	if (newHealth < m_HealthBarWarningFlashThreshold) {
+	if (newHealth < m_healthBarWarningFlashThreshold) {
 		if (m_StartFlashTime < 0.0f) {
 			m_StartFlashTime = g_GlobalTimer.TimeElapsedSeconds();
 		}

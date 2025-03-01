@@ -37,9 +37,6 @@
     <ClInclude Include="Source\Game\CapOnIt\CapOnItLevelComponent.h">
       <Filter>Source\Game\CapOnIt</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Game\destructible_component.h">
-      <Filter>Source\Game</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="assets\shaders\Character\CharacterBase.kbShader">
@@ -237,9 +234,6 @@
     </ClCompile>
     <ClCompile Include="Source\Game\KungFuSheep\KungFuLevelComponent.cpp">
       <Filter>Source\Game\KungFuSheep</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Game\destructible_component.cpp">
-      <Filter>Source\Game</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

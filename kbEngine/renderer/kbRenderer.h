@@ -422,7 +422,7 @@ protected:
 	std::vector<vertexLayout>					m_DebugPreTransformedLines;
 
 	struct debugDrawObject_t {
-		Vec3									m_Position;
+		Vec3									m_position;
 		Quat4									m_Orientation;
 		Vec3									m_Scale;
 		const kbModel *							m_model;

@@ -117,7 +117,7 @@ class kbTransformComponent : public kbGameComponent {
 
 public:
 	void SetName(const std::string newName) { m_Name = newName; }
-	void SetPosition(const Vec3& newPosition) { m_Position = newPosition; }
+	void SetPosition(const Vec3& newPosition) { m_position = newPosition; }
 	void SetScale(const Vec3& newScale) { m_Scale = newScale; }
 	void SetOrientation(const Quat4& newOrientation) { m_Orientation = newOrientation; }
 
@@ -128,7 +128,7 @@ public:
 
 protected:
 	kbString m_Name;
-	Vec3 m_Position;
+	Vec3 m_position;
 	Vec3 m_Scale;
 	Quat4 m_Orientation;
 };
@@ -165,7 +165,7 @@ class kbActorComponent : public kbGameLogicComponent {
 	KB_DECLARE_COMPONENT(kbActorComponent, kbGameLogicComponent);
 
 public:
-	virtual void TakeDamage(const class kbDamageComponent* const damageComponent, const kbGameLogicComponent* const attackerComponent);
+	virtual void take_damage(const class kbDamageComponent* const damageComponent, const kbGameLogicComponent* const attackerComponent);
 
 	float GetHealth() const { return m_CurrentHealth; }
 	float GetMaxHealth() const { return m_MaxHealth; }

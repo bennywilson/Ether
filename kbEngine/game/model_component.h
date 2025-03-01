@@ -134,21 +134,21 @@ protected:
 
 private:
 	// Editor
-	Vec3 m_MinLinearVelocity;
-	Vec3 m_MaxLinearVelocity;
+	Vec3 m_min_linear_vel;
+	Vec3 m_max_linear_vel;
 	float m_MinAngularSpeed;
 	float m_MaxAngularSpeed;
-	Vec3 m_Gravity;
+	Vec3 m_gravity;
 
 	// Run time
 	Vec3 m_OwnerStartPos;
 	Quat4 m_OwnerStartRotation;
 
-	Vec3 m_Velocity;
-	Vec3 m_RotationAxis;
+	Vec3 m_velocity;
+	Vec3 m_rotation_axis;
 
-	float m_CurRotationAngle;
-	float m_RotationSpeed;
+	float m_cur_rotation_angle;
+	float m_rotation_speed;
 
 	float m_FlingStartTime;
 

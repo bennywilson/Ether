@@ -661,12 +661,12 @@ void kbEditor::BroadcastEvent(const widgetCBObject& cbObject) {
 
 /// kbEditor::SetMainCameraPos
 void kbEditor::SetMainCameraPos(const Vec3& newCamPos) {
-	m_pMainTab->GetEditorWindowCamera()->m_Position = newCamPos;
+	m_pMainTab->GetEditorWindowCamera()->m_position = newCamPos;
 }
 
 /// kbEditor::GetMainCameraPos
 Vec3 kbEditor::GetMainCameraPos() const {
-	return m_pMainTab->GetEditorWindowCamera()->m_Position;
+	return m_pMainTab->GetEditorWindowCamera()->m_position;
 }
 
 /// kbEditor::SetMainCameraRot
@@ -851,7 +851,7 @@ void kbEditor::CreateGameEntity(Fl_Widget* widget, void* thisPtr) {
 	}
 
 	kbEditorEntity* const pEditorEntity = new kbEditorEntity();
-	const Vec3 entityLocation = editorCamera->m_Position + (editorCamera->m_Rotation.to_mat4()[2] * 4.0f).ToVec3();
+	const Vec3 entityLocation = editorCamera->m_position + (editorCamera->m_Rotation.to_mat4()[2] * 4.0f).ToVec3();
 	pEditorEntity->SetPosition(entityLocation);
 
 	g_Editor->m_GameEntities.push_back(pEditorEntity);
@@ -1051,7 +1051,7 @@ void kbEditor::SaveLevel_Internal(const std::string& fileNameStr, const bool bFo
 		const kbCamera* const pCam = m_pMainTab->GetEditorWindowCamera();
 
 		kbEditorLevelSettingsComponent* const pLevelSettingsComp = new kbEditorLevelSettingsComponent();
-		pLevelSettingsComp->m_CameraPosition = pCam->m_Position;
+		pLevelSettingsComp->m_CameraPosition = pCam->m_position;
 		pLevelSettingsComp->m_CameraRotation = pCam->m_Rotation;
 
 		kbGameEntity* const pLevelSettingsEnt = new kbGameEntity();
@@ -1374,7 +1374,7 @@ void kbEditor::InsertSelectedPrefabIntoScene(Fl_Widget*, void* pUserdata) {
 		return;
 	}
 
-	const Vec3 entityLocation = editorCamera->m_Position + (editorCamera->m_Rotation.to_mat4()[2] * 4.0f).ToVec3();
+	const Vec3 entityLocation = editorCamera->m_position + (editorCamera->m_Rotation.to_mat4()[2] * 4.0f).ToVec3();
 
 	for (int i = 0; i < prefabToCreate->NumGameEntities(); i++) {
 		kbGameEntity* const pNewEntity = new kbGameEntity(prefabToCreate->m_GameEntities[i], false);

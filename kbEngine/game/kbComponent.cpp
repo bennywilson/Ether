@@ -232,7 +232,7 @@ void kbGameComponent::SetOwnerRotation(const Quat4& rotation) {
 
 /// kbTransformComponent::Constructor
 void kbTransformComponent::Constructor() {
-	m_Position.set(0.0f, 0.0f, 0.0f);
+	m_position.set(0.0f, 0.0f, 0.0f);
 	m_Scale.set(1.0f, 1.0f, 1.0f);
 	m_Orientation.set(0.0f, 0.0f, 0.0f, 1.0f);
 }
@@ -240,13 +240,13 @@ void kbTransformComponent::Constructor() {
 /// kbTransformComponent::GetPosition
 const Vec3 kbTransformComponent::GetPosition() const {
 	if (GetOwner()->GetComponent(0) == this) {
-		return m_Position;
+		return m_position;
 	}
 
 	const Mat4 parentRotation = GetOwner()->GetOrientation().to_mat4();
-	const Vec3 worldPosition = parentRotation.transform_point(m_Position);
+	const Vec3 worldPosition = parentRotation.transform_point(m_position);
 
-	return parentRotation.transform_point(m_Position) + GetOwner()->GetPosition();
+	return parentRotation.transform_point(m_position) + GetOwner()->GetPosition();
 }
 
 /// kbTransformComponent::GetScale
@@ -299,8 +299,8 @@ void kbActorComponent::enable_internal(const bool bIsEnabled) {
 	}
 }
 
-/// kbActorComponent::TakeDamage
-void kbActorComponent::TakeDamage(const class kbDamageComponent* const pDamageComponent, const kbGameLogicComponent* const attackerComponent) {
+/// kbActorComponent::take_damage
+void kbActorComponent::take_damage(const class kbDamageComponent* const pDamageComponent, const kbGameLogicComponent* const attackerComponent) {
 	if (pDamageComponent == nullptr) {
 		return;
 	}

@@ -347,24 +347,24 @@ public:
 		if (m_DeathSelection == 0) {
 
 			// Super Fly Off
-			m_Velocity = Vec3Rand(m_MinLinearVelocity, m_MaxLinearVelocity);
-			if (m_Velocity.x < 0.0f) {
-				m_Velocity.x -= 0.0025f;
+			m_velocity = Vec3Rand(m_min_linear_vel, m_max_linear_vel);
+			if (m_velocity.x < 0.0f) {
+				m_velocity.x -= 0.0025f;
 			} else {
-				m_Velocity.x += 0.0025f;
+				m_velocity.x += 0.0025f;
 			}
 
-			m_Velocity = m_Velocity * worldMatrix;
+			m_velocity = m_velocity * worldMatrix;
 
-			m_RotationAxis = Vec3(kbfrand() - 1.3f, 0.0f, 0.0f);
-			if (m_RotationAxis.length_sqr() < 0.01f) {
-				m_RotationAxis.set(1.0f, 0.0f, 0.0f);
+			m_rotation_axis = Vec3(kbfrand() - 1.3f, 0.0f, 0.0f);
+			if (m_rotation_axis.length_sqr() < 0.01f) {
+				m_rotation_axis.set(1.0f, 0.0f, 0.0f);
 			} else {
-				m_RotationAxis.normalize_self();
+				m_rotation_axis.normalize_self();
 			}
-			m_RotationSpeed = kbfrand() * (m_MaxAngularVelocity - m_MinAngularVelocity) + m_MinAngularVelocity;
+			m_rotation_speed = kbfrand() * (m_max_angular_vel - m_min_angular_vel) + m_min_angular_vel;
 
-			const Vec3 initialSnolafOffset = m_Velocity.normalize_safe() * 2.0f;
+			const Vec3 initialSnolafOffset = m_velocity.normalize_safe() * 2.0f;
 			m_OwnerPosOverride = this->m_pActorComponent->owner_position() + initialSnolafOffset;
 			m_OwnerStartPos = m_OwnerPosOverride;
 			this->GetSnolaf()->ApplyAnimSmear(-initialSnolafOffset * 0.75f, 0.067f);
@@ -377,24 +377,24 @@ public:
 		} else if (m_DeathSelection == 2) {
 			// Decapitation
 			this->GetSnolaf()->SpawnAndFlingDecapHead();
-			m_Velocity = Vec3Rand(m_MinLinearVelocity, m_MaxLinearVelocity);
-			if (m_Velocity.x < 0.0f) {
-				m_Velocity.x -= 0.0025f;
+			m_velocity = Vec3Rand(m_min_linear_vel, m_max_linear_vel);
+			if (m_velocity.x < 0.0f) {
+				m_velocity.x -= 0.0025f;
 			} else {
-				m_Velocity.x += 0.0025f;
+				m_velocity.x += 0.0025f;
 			}
 
-			m_Velocity = 2.0f * m_Velocity * worldMatrix;
+			m_velocity = 2.0f * m_velocity * worldMatrix;
 
-			m_RotationAxis = Vec3(kbfrand() - 1.3f, 0.0f, 0.0f);
-			if (m_RotationAxis.length_sqr() < 0.01f) {
-				m_RotationAxis.set(1.0f, 0.0f, 0.0f);
+			m_rotation_axis = Vec3(kbfrand() - 1.3f, 0.0f, 0.0f);
+			if (m_rotation_axis.length_sqr() < 0.01f) {
+				m_rotation_axis.set(1.0f, 0.0f, 0.0f);
 			} else {
-				m_RotationAxis.normalize_self();
+				m_rotation_axis.normalize_self();
 			}
-			m_RotationSpeed = 0.15f * (kbfrand() * (m_MaxAngularVelocity - m_MinAngularVelocity) + m_MinAngularVelocity);
+			m_rotation_speed = 0.15f * (kbfrand() * (m_max_angular_vel - m_min_angular_vel) + m_min_angular_vel);
 
-			const Vec3 initialSnolafOffset = m_Velocity.normalize_safe() * 2.0f;
+			const Vec3 initialSnolafOffset = m_velocity.normalize_safe() * 2.0f;
 			m_OwnerPosOverride = this->m_pActorComponent->owner_position() + initialSnolafOffset;
 			m_OwnerStartPos = m_OwnerPosOverride;
 			this->GetSnolaf()->ApplyAnimSmear(-initialSnolafOffset * 0.75f, 0.067f);
@@ -421,10 +421,10 @@ public:
 		const float curTime = g_GlobalTimer.TimeElapsedSeconds();
 		const float elapsedDeathTime = curTime - m_DeathStartTime;
 
-		m_OwnerPosOverride.x += m_Velocity.x * dt;
-		m_OwnerPosOverride.z += m_Velocity.z * dt;
+		m_OwnerPosOverride.x += m_velocity.x * dt;
+		m_OwnerPosOverride.z += m_velocity.z * dt;
 
-		m_OwnerPosOverride.y = m_OwnerStartPos.y + m_Velocity.y * elapsedDeathTime - (0.5f * -m_Gravity.y * elapsedDeathTime * elapsedDeathTime);
+		m_OwnerPosOverride.y = m_OwnerStartPos.y + m_velocity.y * elapsedDeathTime - (0.5f * -m_gravity.y * elapsedDeathTime * elapsedDeathTime);
 
 		this->m_pActorComponent->SetOwnerPosition(m_OwnerPosOverride);
 
@@ -438,9 +438,9 @@ public:
 			pOwner->SetPosition(m_OwnerPosOverride + vecOffset);
 		}
 
-		m_CurRotationAngle += m_RotationSpeed * dt;
+		m_cur_rotation_angle += m_rotation_speed * dt;
 		Quat4 rot;
-		rot.from_axis_angle(m_RotationAxis, m_CurRotationAngle);
+		rot.from_axis_angle(m_rotation_axis, m_cur_rotation_angle);
 		rot = m_OwnerStartRotation * rot;
 		this->m_pActorComponent->SetOwnerRotation(rot);
 	}
@@ -467,21 +467,21 @@ public:
 
 private:
 
-	const Vec3 m_MinLinearVelocity = Vec3(-0.015f, 0.015f, 0.03f);
-	const Vec3 m_MaxLinearVelocity = Vec3(0.015f, 0.025f, 0.02f);
-	const float m_MinAngularVelocity = 10.0f;
-	const float m_MaxAngularVelocity = 15.0f;
-	const Vec3 m_Gravity = Vec3(0.0f, -20.0f, 0.0f);
+	const Vec3 m_min_linear_vel = Vec3(-0.015f, 0.015f, 0.03f);
+	const Vec3 m_max_linear_vel = Vec3(0.015f, 0.025f, 0.02f);
+	const float m_min_angular_vel = 10.0f;
+	const float m_max_angular_vel = 15.0f;
+	const Vec3 m_gravity = Vec3(0.0f, -20.0f, 0.0f);
 
 	Vec3 m_OwnerStartPos = Vec3::zero;
 	Quat4 m_OwnerStartRotation = Quat4(0.0f, 0.0f, 0.0f, 1.0f);
 	Vec3 m_OwnerPosOverride = Vec3::zero;
 
-	Vec3 m_Velocity = Vec3::zero;
-	Vec3 m_RotationAxis = Vec3(1.0f, 0.0f, 0.0f);
+	Vec3 m_velocity = Vec3::zero;
+	Vec3 m_rotation_axis = Vec3(1.0f, 0.0f, 0.0f);
 
-	float m_CurRotationAngle = 0.0f;
-	float m_RotationSpeed = 1.0f;
+	float m_cur_rotation_angle = 0.0f;
+	float m_rotation_speed = 1.0f;
 	int m_DeathSelection = 0;
 	float m_DeathStartTime = 0.0f;
 
@@ -694,7 +694,7 @@ void KungFuSnolafComponent::ResetFromPool() {
 	const static kbString smearParam("smearParams");
 	m_SkelModelsList[1]->set_material_param_vec4(0, smearParam.stl_str(), Vec4::zero);
 
-	m_Health = 1.0f;
+	m_health = 1.0f;
 }
 
 /// KungFuSnolafComponent::EnableSmallLoveHearts
@@ -715,8 +715,8 @@ void KungFuSnolafComponent::EnableLargeLoveHearts(const bool bEnable) {
 	m_pLargeLoveHearts->EnableNewSpawns(bEnable);
 }
 
-/// KungFuSnolafComponent::TakeDamage
-void KungFuSnolafComponent::TakeDamage(const DealAttackInfo_t<KungFuGame::eAttackType>& attackInfo) {
+/// KungFuSnolafComponent::take_damage
+void KungFuSnolafComponent::take_damage(const DealAttackInfo_t<KungFuGame::eAttackType>& attackInfo) {
 
 	m_LastAttackInfo = attackInfo;
 	if (attackInfo.m_AttackType == KungFuGame::Shake) {
@@ -725,12 +725,12 @@ void KungFuSnolafComponent::TakeDamage(const DealAttackInfo_t<KungFuGame::eAttac
 		const Vec3 ourPos = owner_position();
 		if (m_CurrentState == KungFuSnolafState::Hug || m_CurrentState == KungFuSnolafState::Prehug ||
 			(attackerPos - ourPos).length() < KungFuGame::kShakeNBakeRadius) {
-			m_Health = -1.0f;
+			m_health = -1.0f;
 			this->RequestStateChange(KungFuSnolafState::Dead);
 		}
 		return;
 	}
-	m_Health = -1.0f;
+	m_health = -1.0f;
 	this->RequestStateChange(KungFuSnolafState::Dead);
 }
 

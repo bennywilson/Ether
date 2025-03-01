@@ -10,6 +10,7 @@
 #include "kbRenderer_Defs.h"
 #include "kbMaterial.h"
 #include "kbLevelComponent.h"
+#include "breakable_component.h"
 
 using namespace std;
 
@@ -153,4 +154,9 @@ DEFINE_KBCLASS(kbCinematicComponent)
 
 DEFINE_KBCLASS(kbGrassZone)
 
+DEFINE_KBCLASS(BreakableComponent)
+
+DEFINE_KBCLASS(AnimationComponent)
+
+EBreakableBehavior_Enum EBreakableBehavior_EnumClass;
 typedef kbResource* kbResourcePtr;

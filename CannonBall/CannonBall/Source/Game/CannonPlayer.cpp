@@ -15,7 +15,7 @@
 void CannonActorComponent::Constructor() {
 	m_MaxRunSpeed = 3.0f;
 	m_MaxRotateSpeed = 15.0f;
-	m_Health = 100.0f;
+	m_health = 100.0f;
 
 	m_TargetFacingDirection.set(0.0f, 0.0f, -1.0f);
 
@@ -181,7 +181,7 @@ void CannonCameraComponent::Constructor() {
 	// Editor
 	m_NearPlane = 1.0f;
 	m_FarPlane = 20000.0f;		// TODO - NEAR/FAR PLANE - Tie into renderer properly
-	m_PositionOffset.set(0.0f, 0.0f, 0.0f);
+	m_positionOffset.set(0.0f, 0.0f, 0.0f);
 	m_LookAtOffset.set(0.0f, 0.0f, 0.0f);
 
 	m_MoveMode = MoveMode_Follow;
@@ -237,7 +237,7 @@ void CannonCameraComponent::SetPositionOffset(const Vec3& posOffset, const float
 
 	if (blendRate < 0.0f) {
 		m_SwitchPosOffsetCurT = 1.0f;
-		m_PositionOffset = posOffset;
+		m_positionOffset = posOffset;
 	} else {
 		m_SwitchPosOffsetCurT = 0.0f;
 		m_SwitchPosOffsetBlendSpeed = blendRate;
@@ -310,12 +310,12 @@ void CannonCameraComponent::update_internal(const float DeltaTime) {
 				}
 
 				// Position offset blend
-				Vec3 positionOffset = m_PositionOffset;
+				Vec3 positionOffset = m_positionOffset;
 				if (m_SwitchPosOffsetCurT < 1.0f) {
 					m_SwitchPosOffsetCurT += m_SwitchPosOffsetBlendSpeed * g_pGame->GetFrameDT();
-					positionOffset = kbLerp(m_PositionOffset, m_PosOffsetTarget, kbSaturate(m_SwitchPosOffsetCurT));
+					positionOffset = kbLerp(m_positionOffset, m_PosOffsetTarget, kbSaturate(m_SwitchPosOffsetCurT));
 					if (m_SwitchPosOffsetCurT >= 1.0f) {
-						m_PositionOffset = m_PosOffsetTarget;
+						m_positionOffset = m_PosOffsetTarget;
 					}
 				}
 

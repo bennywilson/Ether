@@ -253,7 +253,7 @@ void kbParticleManager::RenderSync() {
 
 		finishedModel.SwapTexture(0, curAtlas.m_pAtlasTexture, 0);
 
-		curRenderObj.m_Position = Vec3::zero;
+		curRenderObj.m_position = Vec3::zero;
 		curRenderObj.m_Orientation = Quat4(0.0f, 0.0f, 0.0f, 1.0f);
 		curRenderObj.m_model = &finishedModel;
 		g_pRenderer->AddParticle(curRenderObj);
@@ -296,10 +296,10 @@ void kbParticleManager::AddQuad(const uint atlasIdx, const CustomParticleAtlasIn
 	}
 
 	const int vertexIndex = curAtlas.m_NumIndices - (curAtlas.m_NumIndices / 3);
-	curAtlas.m_pVertexBuffer[vertexIndex + 0].position = CustomParticleInfo.m_Position;
-	curAtlas.m_pVertexBuffer[vertexIndex + 1].position = CustomParticleInfo.m_Position;
-	curAtlas.m_pVertexBuffer[vertexIndex + 2].position = CustomParticleInfo.m_Position;
-	curAtlas.m_pVertexBuffer[vertexIndex + 3].position = CustomParticleInfo.m_Position;
+	curAtlas.m_pVertexBuffer[vertexIndex + 0].position = CustomParticleInfo.m_position;
+	curAtlas.m_pVertexBuffer[vertexIndex + 1].position = CustomParticleInfo.m_position;
+	curAtlas.m_pVertexBuffer[vertexIndex + 2].position = CustomParticleInfo.m_position;
+	curAtlas.m_pVertexBuffer[vertexIndex + 3].position = CustomParticleInfo.m_position;
 
 	curAtlas.m_pVertexBuffer[vertexIndex + 0].uv.set(CustomParticleInfo.m_UVs[0].x, CustomParticleInfo.m_UVs[0].y);
 	curAtlas.m_pVertexBuffer[vertexIndex + 1].uv.set(CustomParticleInfo.m_UVs[1].x, CustomParticleInfo.m_UVs[0].y);

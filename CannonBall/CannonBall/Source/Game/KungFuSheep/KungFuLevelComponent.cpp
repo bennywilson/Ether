@@ -228,7 +228,7 @@ public:
 			if (pAttackerSheep != nullptr) {
 				KungFuSnolafComponent* const pTargetSnolaf = pTargetComp->GetAs<KungFuSnolafComponent>();
 				if (pTargetSnolaf != nullptr) {
-					pTargetSnolaf->TakeDamage(dealAttackInfo);
+					pTargetSnolaf->take_damage(dealAttackInfo);
 					if (pTargetSnolaf->IsDead()) {
 						m_NumSnolafsKilled++;
 
@@ -242,7 +242,7 @@ public:
 				if (pAttackerSnolaf != nullptr) {
 					KungFuSheepComponent* const pTargetSheep = pTargetComp->GetAs<KungFuSheepComponent>();
 					if (pTargetSheep != nullptr) {
-						pTargetSheep->TakeDamage(dealAttackInfo);
+						pTargetSheep->take_damage(dealAttackInfo);
 					}
 				}
 			}
@@ -1065,7 +1065,7 @@ void KungFuLevelComponent::UpdateDebugAndCheats() {
 			damageInfo.m_Radius = 10.0f;
 			damageInfo.m_AttackType = KungFuGame::DebugDeath;
 
-			m_pSheep->TakeDamage(damageInfo);
+			m_pSheep->take_damage(damageInfo);
 			g_pCannonGame->GetMainCamera()->SetTarget(nullptr, -1.0f);
 		}
 

@@ -97,11 +97,11 @@ void kbMainTab::Update() {
 
 	const kbCamera& pCamera = pCurrentWindow->GetCamera();
 
-	g_pRenderer->SetRenderViewTransform(pCurrentWindow->GetWindowHandle(), pCamera.m_Position, pCamera.m_Rotation);
+	g_pRenderer->SetRenderViewTransform(pCurrentWindow->GetWindowHandle(), pCamera.m_position, pCamera.m_Rotation);
 	g_pRenderer->SetRenderWindow(pCurrentWindow->GetWindowHandle());
 
 	if (g_renderer != nullptr) {
-		g_renderer->set_camera_transform(pCamera.m_Position, pCamera.m_Rotation);
+		g_renderer->set_camera_transform(pCamera.m_position, pCamera.m_Rotation);
 	}
 
 	if (pCurrentWindow == m_modelViewerWindow) {
@@ -401,7 +401,7 @@ void kbMainTab::CameraMoveCB(const widgetCBInputObject* const inputObject) {
 
 			if (movementVec.length_sqr() > 0.0001f) {
 				movementVec.normalize_self();
-				camera.m_Position += movementVec * movementMag;
+				camera.m_position += movementVec * movementMag;
 			}
 		}
 	}
@@ -451,12 +451,12 @@ void kbMainTab::ManipulatorEvent(const bool bClicked, const Vec2i& mouseXY) {
 	perspectiveMat.inverse_projection();
 
 	// View mat
-	const Mat4 modelViewMatrix(camera.m_Rotation, camera.m_Position);
+	const Mat4 modelViewMatrix(camera.m_Rotation, camera.m_position);
 	const Mat4 unitCubeToWorldMatrix = perspectiveMat * modelViewMatrix;
-	const Vec4 ray = (mousePosition.transform_point(unitCubeToWorldMatrix, true) - camera.m_Position);
+	const Vec4 ray = (mousePosition.transform_point(unitCubeToWorldMatrix, true) - camera.m_position);
 
 	if (bClicked) {
-		if (m_Manipulator.AttemptMouseGrab(camera.m_Position, ray.ToVec3(), camera.m_Rotation) == false) {
+		if (m_Manipulator.AttemptMouseGrab(camera.m_position, ray.ToVec3(), camera.m_Rotation) == false) {
 			std::vector<kbEditorEntity*> empty;
 			g_Editor->SelectEntities(empty, false);
 			m_Manipulator.ReleaseFromMouseGrab();
@@ -464,5 +464,5 @@ void kbMainTab::ManipulatorEvent(const bool bClicked, const Vec2i& mouseXY) {
 		return;
 	}
 
-	m_Manipulator.UpdateMouseDrag(camera.m_Position, ray.ToVec3(), camera.m_Rotation);
+	m_Manipulator.UpdateMouseDrag(camera.m_position, ray.ToVec3(), camera.m_Rotation);
 }

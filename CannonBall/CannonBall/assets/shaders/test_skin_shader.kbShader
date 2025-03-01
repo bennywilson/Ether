@@ -67,7 +67,7 @@ PixelInput vertex_shader(VertexInput input) {
 	output.to_cam = scene_constant.camera.xyz - world_pos;
 	output.color = scene_constant.color;
 	output.spec = scene_constant.spec;
-	output.normal.xyz = normalize(mul(normal.xyz, (float3x3)scene_constant.world_matrix));
+	output.normal.xyz = mul(normal.xyz, (float3x3)scene_constant.world_matrix);
 	output.uv = input.uv;
 	return output;
 }
@@ -76,7 +76,7 @@ PixelInput vertex_shader(VertexInput input) {
 float4 pixel_shader(PixelInput input) : SV_TARGET {
 	const float4 albedo = color_tex.Sample(SampleType, input.uv) * input.color;
 	const float3 normal = normalize(input.normal.xyz);
-	const float3 light_dir = normalize(float3(-1.3f, 0.807f, -0.47f));
+	const float3 light_dir = normalize(float3(-0.3f, 0.807f, -0.47f));
 
 	// Diffuse
 	const float3 light_color = float3(0.7f, 0.8f, 0.83f);

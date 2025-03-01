@@ -119,7 +119,7 @@ void CapOnItLevelComponent::UpdateDebugAndCheats() {
 			damageInfo.m_Radius = 10.0f;
 			damageInfo.m_AttackType = KungFuGame::DebugDeath;
 
-			m_pSheep->TakeDamage( damageInfo );
+			m_pSheep->take_damage( damageInfo );
 			g_pCannonGame->GetMainCamera()->SetTarget( nullptr, -1.0f );
 		}
 

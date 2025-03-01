@@ -45,7 +45,7 @@ private:
 
 	struct kbTranslationKeyFrame_t {
 		float m_Time;
-		Vec3 m_Position;
+		Vec3 m_position;
 	};
 
 	struct kbBoneKeyFrames_t {

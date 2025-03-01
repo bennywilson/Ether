@@ -335,7 +335,7 @@ void kbRenderer::AddLight(const kbLightComponent* pLightComponent, const Vec3& p
 	kbRenderLight newLight;
 
 	newLight.m_pLightComponent = pLightComponent;
-	newLight.m_Position = pos;
+	newLight.m_position = pos;
 	newLight.m_Orientation = orientation;
 	newLight.m_Radius = pLightComponent->GetRadius();
 	newLight.m_Length = pLightComponent->GetLength();
@@ -370,7 +370,7 @@ void kbRenderer::UpdateLight(const kbLightComponent* pLightComponent, const Vec3
 	for (int i = 0; i < m_LightList_GameThread.size(); i++) {
 		if (m_LightList_GameThread[i].m_pLightComponent == pLightComponent) {
 			if (m_LightList_GameThread[i].m_bIsRemove == false) {
-				m_LightList_GameThread[i].m_Position = pos;
+				m_LightList_GameThread[i].m_position = pos;
 				m_LightList_GameThread[i].m_Orientation = orientation;
 				m_LightList_GameThread[i].m_casts_shadow = pLightComponent->CastsShadow();
 				m_LightList_GameThread[i].m_Color = pLightComponent->GetColor() * pLightComponent->GetBrightness();
@@ -391,7 +391,7 @@ void kbRenderer::UpdateLight(const kbLightComponent* pLightComponent, const Vec3
 
 	kbRenderLight updateLight;
 	updateLight.m_pLightComponent = pLightComponent;
-	updateLight.m_Position = pos;
+	updateLight.m_position = pos;
 	updateLight.m_Orientation = orientation;
 	updateLight.m_bIsFirstAdd = false;
 	updateLight.m_bIsRemove = false;
@@ -744,7 +744,7 @@ void kbRenderer::RenderSync() {
 /// kbRenderer::DrawBillboard
 void kbRenderer::DrawBillboard(const Vec3& position, const Vec2& size, const int textureIndex, kbShader* const pShader, const int entityId) {
 	debugDrawObject_t billboard;
-	billboard.m_Position = position;
+	billboard.m_position = position;
 	billboard.m_Scale.set(size.x, size.y, size.x);
 	billboard.m_shader = pShader;
 	billboard.m_TextureIndex = textureIndex;
@@ -756,7 +756,7 @@ void kbRenderer::DrawBillboard(const Vec3& position, const Vec2& size, const int
 /// kbRenderer::DrawModel
 void kbRenderer::DrawModel(const kbModel* const pModel, const std::vector<kbShaderParamOverrides_t>& materials, const Vec3& position, const Quat4& orientation, const Vec3& scale, const int entityId) {
 	debugDrawObject_t model;
-	model.m_Position = position;
+	model.m_position = position;
 	model.m_Orientation = orientation;
 	model.m_Scale = scale;
 	model.m_model = pModel;

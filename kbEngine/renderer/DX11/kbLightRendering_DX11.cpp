@@ -160,7 +160,7 @@ void kbRenderer_DX11::RenderLight( const kbRenderLight *const pLight ) {
 
 	SetShaderMat4Array( "lightMatrix", lightMatrix, 4, pMappedData, varBindings );
 	SetShaderVec4( "splitDistances", splitDistances, pMappedData, varBindings );
-	SetShaderVec4( "lightPosition", Vec4( pLight->m_Position.x, pLight->m_Position.y, pLight->m_Position.z, pLight->m_Radius ), pMappedData, varBindings );
+	SetShaderVec4( "lightPosition", Vec4( pLight->m_position.x, pLight->m_position.y, pLight->m_position.z, pLight->m_Radius ), pMappedData, varBindings );
 
 	Mat4 mvpMatrix;
 	mvpMatrix.make_identity();

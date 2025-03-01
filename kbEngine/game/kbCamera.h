@@ -18,7 +18,7 @@ public:
 	void Update();
 
 //private:
-	Vec3	m_Position;
+	Vec3	m_position;
 	Quat4	m_Rotation;
 
 	Mat4	m_EyeMats[2];

@@ -23,7 +23,7 @@ kbGameEntity 1467892321 1161083516 1592735630 1588631408 {
 		Position = 127.468468 7.386138 48.668808
 		Scale = 10.000000 10.000000 10.000000
 	}
-	EtherSkelModelComponent { 
+	SkeletalModelComponent { 
 		Enabled = 1
 		LifeTime =  -1.000000
 		CastsShadow = 0
@@ -72,7 +72,7 @@ kbGameEntity 1467892321 1161083516 1592735630 1588631408 {
 		DebugAnimIndex = -1
 		IsFirstPersonModel = 0
 	}
-	EtherDestructibleComponent { 
+	BreakableComponent { 
 		Enabled = 1
 		LifeTime =  -1.000000
 		DestructibleBehavior = PushFromImpactPoint

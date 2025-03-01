@@ -240,7 +240,7 @@ public:
 	ERenderPass									m_render_pass;
 	ECullMode									m_CullMode;
 	float										m_render_order_bias;
-	Vec3										m_Position;
+	Vec3										m_position;
 	Quat4										m_Orientation;
 	Vec3										m_Scale;
 	uint										m_EntityId;
@@ -273,7 +273,7 @@ public:
 													}
 
 	const class kbLightComponent *				m_pLightComponent;
-	Vec3										m_Position;
+	Vec3										m_position;
 	Quat4										m_Orientation;
 	Vec4										m_Color;
 	float										m_Radius;

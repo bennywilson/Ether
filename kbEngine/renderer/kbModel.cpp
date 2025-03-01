@@ -58,7 +58,7 @@ typedef struct {
 
 typedef struct {
 	float				m_Time;
-	float				m_Position[3];
+	float				m_position[3];
 } ms3dPositionKeyFrame_t;
 
 typedef struct {
@@ -66,7 +66,7 @@ typedef struct {
 	char				m_Name[32];
 	char				m_ParentName[32];
 	float				m_Rotation[3];
-	float				m_Position[3];
+	float				m_position[3];
 	ushort				m_NumRotationKeyFrames;
 	ushort				m_NumPositionKeyFrames;
 } ms3dBone_t;
@@ -247,7 +247,7 @@ bool kbModel::LoadMS3D() {
 			m_bones[i].m_ParentIndex = it->second;
 		}
 
-		m_bones[i].m_RelativePosition.set(pJoint->m_Position[0], pJoint->m_Position[1], -pJoint->m_Position[2]);
+		m_bones[i].m_RelativePosition.set(pJoint->m_position[0], pJoint->m_position[1], -pJoint->m_position[2]);
 
 		// Convert from euler angles to quaternions
 		Quat4 rotationX(Vec3::right, pJoint->m_Rotation[0]);
@@ -1132,8 +1132,8 @@ void kbModel::SetBoneMatrices(
 			const f32 time_since_prev_key = anim_time - prev_time;
 			const f32 t = (time_between_keys > 0) ? (time_since_prev_key / time_between_keys) : (0.0f);
 
-			const Vec3 prev_position = joints.m_TranslationKeyFrames[prev_key].m_Position;
-			const Vec3 next_position = joints.m_TranslationKeyFrames[next_key].m_Position;
+			const Vec3 prev_position = joints.m_TranslationKeyFrames[prev_key].m_position;
+			const Vec3 next_position = joints.m_TranslationKeyFrames[next_key].m_position;
 			bones[i].m_bone_space_position = prev_position + (next_position - prev_position) * t;
 
 			const Quat4 prev_rotation = joints.m_RotationKeyFrames[prev_key].m_Rotation;
@@ -1325,7 +1325,7 @@ bool kbAnimation::Load_Internal() {
 		}
 
 		for (int iKey = 0; iKey < NumTranslationKeyFrames; iKey++) {
-			jointData.m_TranslationKeyFrames[iKey].m_Position.set(positionKeyFrames[iKey].m_Position[0], positionKeyFrames[iKey].m_Position[1], -positionKeyFrames[iKey].m_Position[2]);
+			jointData.m_TranslationKeyFrames[iKey].m_position.set(positionKeyFrames[iKey].m_position[0], positionKeyFrames[iKey].m_position[1], -positionKeyFrames[iKey].m_position[2]);
 			jointData.m_TranslationKeyFrames[iKey].m_Time = positionKeyFrames[iKey].m_Time;
 
 			if (jointData.m_TranslationKeyFrames[iKey].m_Time > m_LengthInSeconds)

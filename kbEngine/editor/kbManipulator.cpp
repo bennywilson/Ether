@@ -30,10 +30,10 @@ bool kbManipulator::AttemptMouseGrab(const Vec3& rayOrigin, const Vec3& rayDirec
 	const kbModel* const pModel = m_models[m_ManipulatorMode];
 
 	const float modelScale = kbLevelComponent::GetGlobalModelScale();
-	kbModelIntersection_t intersection = pModel->RayIntersection(rayOrigin, rayDirection, m_Position, m_Orientation, Vec3(modelScale, modelScale, modelScale));
+	kbModelIntersection_t intersection = pModel->RayIntersection(rayOrigin, rayDirection, m_position, m_Orientation, Vec3(modelScale, modelScale, modelScale));
 
 	if (intersection.hasIntersection == false) {
-		intersection = pModel->RayIntersection(rayOrigin, -rayDirection, m_Position, m_Orientation, Vec3(modelScale, modelScale, modelScale));
+		intersection = pModel->RayIntersection(rayOrigin, -rayDirection, m_position, m_Orientation, Vec3(modelScale, modelScale, modelScale));
 	}
 	if (intersection.hasIntersection) {
 		m_SelectedGroup = intersection.meshNum;
@@ -44,7 +44,7 @@ bool kbManipulator::AttemptMouseGrab(const Vec3& rayOrigin, const Vec3& rayDirec
 					m_SelectedGroup /= 2;
 				}*/
 			Vec3 worldSpaceGrabPoint = intersection.intersectionPoint;
-			m_MouseLocalGrabPoint = worldSpaceGrabPoint - m_Position;
+			m_MouseLocalGrabPoint = worldSpaceGrabPoint - m_position;
 			m_MouseWorldGrabPoint = worldSpaceGrabPoint;
 			m_LastOrientation = m_Orientation;
 			m_LastScale = m_Scale;
@@ -84,16 +84,16 @@ void kbManipulator::UpdateMouseDrag(const Vec3& rayOrigin, const Vec3& rayDirect
 			const Vec3 moveDirection = manipulatorMatrix[m_SelectedGroup].ToVec3();
 
 			const Vec3 finalTranslation = (intersectionPoint - m_MouseWorldGrabPoint).dot(moveDirection) * moveDirection;
-			m_Position = (m_MouseWorldGrabPoint + finalTranslation) - m_MouseLocalGrabPoint;
+			m_position = (m_MouseWorldGrabPoint + finalTranslation) - m_MouseLocalGrabPoint;
 		}
 		else {
-			m_Position = camPlaneIntersection - m_MouseLocalGrabPoint;
+			m_position = camPlaneIntersection - m_MouseLocalGrabPoint;
 		}
 	}
 	else if (m_ManipulatorMode == kbManipulator::Rotate) {
-		const float rotationRadius = (m_MouseWorldGrabPoint - m_Position).length();
-		vecToGrabPoint = (m_MouseWorldGrabPoint - m_Position).normalize_safe();
-		vecToNewPoint = (camPlaneIntersection - m_Position).normalize_safe();
+		const float rotationRadius = (m_MouseWorldGrabPoint - m_position).length();
+		vecToGrabPoint = (m_MouseWorldGrabPoint - m_position).normalize_safe();
+		vecToNewPoint = (camPlaneIntersection - m_position).normalize_safe();
 
 		// find the angle between the old and new placements
 		float rotationAngle = acos(vecToGrabPoint.dot(vecToNewPoint));
@@ -108,7 +108,7 @@ void kbManipulator::UpdateMouseDrag(const Vec3& rayOrigin, const Vec3& rayDirect
 		// Final rotation
 		m_Orientation = (m_LastOrientation * rot).normalize_safe();
 	} else if (m_ManipulatorMode == kbManipulator::Scale) {
-		const float initialDist = (m_MouseLocalGrabPoint - m_Position).length();
+		const float initialDist = (m_MouseLocalGrabPoint - m_position).length();
 		const float curDist = (camPlaneIntersection - m_MouseLocalGrabPoint).length();
 		const float scaleAmount = curDist / initialDist;
 
@@ -120,7 +120,7 @@ void kbManipulator::UpdateMouseDrag(const Vec3& rayOrigin, const Vec3& rayDirect
 void kbManipulator::Update() {
 	if (g_pRenderer->DebugBillboardsEnabled()) {
 		const Vec3 modelScale(kbLevelComponent::GetGlobalModelScale(), kbLevelComponent::GetGlobalModelScale(), kbLevelComponent::GetGlobalModelScale());
-		g_pRenderer->DrawModel(m_models[m_ManipulatorMode], m_ManipulatorMaterials, m_Position, m_Orientation, modelScale, UINT16_MAX);
+		g_pRenderer->DrawModel(m_models[m_ManipulatorMode], m_ManipulatorMaterials, m_position, m_Orientation, modelScale, UINT16_MAX);
 	}
 }
 
@@ -151,11 +151,11 @@ void kbManipulator::ProcessInput(const bool leftMouseDown) {
 	if (leftMouseDown == true && m_SelectedGroup != -1) {
 		switch (m_ManipulatorMode) {
 			case kbManipulator::Rotate: {
-				const float rotationRadius = (m_MouseWorldGrabPoint - m_Position).length();
+				const float rotationRadius = (m_MouseWorldGrabPoint - m_position).length();
 
 				// Draw vectors that show angle between old and new location
-				g_pRenderer->DrawLine(m_Position, m_Position + vecToGrabPoint * rotationRadius, kbColor::red);
-				g_pRenderer->DrawLine(m_Position, m_Position + vecToNewPoint * rotationRadius, kbColor::blue);
+				g_pRenderer->DrawLine(m_position, m_position + vecToGrabPoint * rotationRadius, kbColor::red);
+				g_pRenderer->DrawLine(m_position, m_position + vecToNewPoint * rotationRadius, kbColor::blue);
 			}
 		break;
 		}

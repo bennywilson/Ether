@@ -27,8 +27,8 @@ public:
 	void ReleaseFromMouseGrab() { m_SelectedGroup = -1; m_LastOrientation = m_Orientation; }
 	bool IsGrabbed() const { return m_SelectedGroup != -1; }
 
-	void SetPosition(const Vec3& newPosition) { m_Position = newPosition; }
-	const Vec3& GetPosition() const { return m_Position; }
+	void SetPosition(const Vec3& newPosition) { m_position = newPosition; }
+	const Vec3& GetPosition() const { return m_position; }
 
 	void SetOrientation(const Quat4& newOrientation) { m_Orientation = m_LastOrientation = newOrientation; }
 	const Quat4& GetOrientation() const { return m_Orientation; }
@@ -44,7 +44,7 @@ private:
 
 	manipulatorMode_t m_ManipulatorMode;
 
-	Vec3 m_Position;
+	Vec3 m_position;
 	Quat4 m_Orientation;
 	Vec3 m_Scale;
 		 

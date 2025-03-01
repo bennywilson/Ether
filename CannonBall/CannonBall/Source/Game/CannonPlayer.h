@@ -29,7 +29,7 @@ public:
 	void PlayAttackVO(const int pref);
 		 
 	bool IsPlayer() const { return m_bIsPlayer; }
-	virtual bool IsDead() const { return m_Health <= 0.0f; }
+	virtual bool IsDead() const { return m_health <= 0.0f; }
 
 protected:
 
@@ -39,7 +39,7 @@ protected:
 	// Data
 	float m_MaxRunSpeed;
 	float m_MaxRotateSpeed;
-	float m_Health;
+	float m_health;
 
 	std::vector<kbSoundData> m_AttackVO;
 
@@ -121,7 +121,7 @@ private:
 	// Editor
 	float										m_NearPlane;
 	float										m_FarPlane;
-	Vec3										m_PositionOffset;
+	Vec3										m_positionOffset;
 	Vec3										m_LookAtOffset;
 
 	// Game

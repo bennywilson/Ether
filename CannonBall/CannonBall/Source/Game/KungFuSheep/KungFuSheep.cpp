@@ -481,11 +481,11 @@ void KungFuSheepComponent::enable_internal(const bool bEnable) {
 			m_HeadBandInstance[1].GetEntity()->SetOrientation(owner_rotation());
 		}
 
-		m_Health = 1.0f;
+		m_health = 1.0f;
 		m_CannonBallMeter = 0.0f;
 		if (g_UseEditor == false) {
 			KungFuLevelComponent* const pLevelComp = KungFuLevelComponent::Get();
-			pLevelComp->UpdateSheepHealthBar(m_Health);
+			pLevelComp->UpdateSheepHealthBar(m_health);
 			pLevelComp->UpdateCannonBallMeter(m_CannonBallMeter, false);
 		}
 
@@ -658,7 +658,7 @@ void KungFuSheepComponent::update_internal(const float DT) {
 	pCloth2->SetClothCollisionSphere(0, collisionSphere);
 
 	// Do health check
-	if (g_CannonBallTest.GetBool() == false && m_Health > 0.0f && IsCannonBalling() == false) {
+	if (g_CannonBallTest.GetBool() == false && m_health > 0.0f && IsCannonBalling() == false) {
 		int numHuggers = 0;
 		for (int i = 0; i < g_pCannonGame->GetGameEntities().size(); i++) {
 
@@ -679,11 +679,11 @@ void KungFuSheepComponent::update_internal(const float DT) {
 
 		if (numHuggers > 0) {
 			const float healthDrain = DT * 0.05f * (float)kbClamp(numHuggers, 0, KungFuGame::kMaxHuggerDamageMultiplier);
-			m_Health = kbSaturate(m_Health - healthDrain);
+			m_health = kbSaturate(m_health - healthDrain);
 
-			KungFuLevelComponent::Get()->UpdateSheepHealthBar(m_Health);
+			KungFuLevelComponent::Get()->UpdateSheepHealthBar(m_health);
 
-			if (m_Health == 0.0f) {
+			if (m_health == 0.0f) {
 				RequestStateChange(KungFuSheepState::Dead);
 			}
 		}
@@ -701,12 +701,12 @@ bool KungFuSheepComponent::IsCannonBalling() const {
 	return (m_CurrentState == KungFuSheepState::CannonBall);
 }
 
-/// KungFuSheepComponent::TakeDamage
-void KungFuSheepComponent::TakeDamage(const DealAttackInfo_t<KungFuGame::eAttackType>& attackInfo) {
+/// KungFuSheepComponent::take_damage
+void KungFuSheepComponent::take_damage(const DealAttackInfo_t<KungFuGame::eAttackType>& attackInfo) {
 
 	if (attackInfo.m_AttackType == KungFuGame::DebugDeath) {
 		RequestStateChange(KungFuSheepState::Dead);
-		m_Health = -1000.0f;
+		m_health = -1000.0f;
 		return;
 	}
 

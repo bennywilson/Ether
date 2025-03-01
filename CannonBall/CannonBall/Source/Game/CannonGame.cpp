@@ -23,7 +23,7 @@ CannonGame::CannonGame() :
 	m_pMainCamera(nullptr),
 	m_pPlayerComp(nullptr) {
 
-	m_Camera.m_Position.set(0.0f, 2600.0f, 0.0f);
+	m_Camera.m_position.set(0.0f, 2600.0f, 0.0f);
 
 	blk::error_check(g_pCannonGame == nullptr, "CannonGame::CannonGame() - g_pCannonGame is not nullptr");
 	g_pCannonGame = this;
@@ -208,7 +208,7 @@ void CannonGame::HackEditorUpdate(const float DT, kbCamera* const pEditorCam) {
 	}*/
 
 	if (m_pMainCamera != nullptr && pEditorCam != nullptr) {
-		pEditorCam->m_Position = m_pMainCamera->owner_position();
+		pEditorCam->m_position = m_pMainCamera->owner_position();
 		pEditorCam->m_Rotation = pEditorCam->m_RotationTarget = m_pMainCamera->owner_rotation();
 	}
 }

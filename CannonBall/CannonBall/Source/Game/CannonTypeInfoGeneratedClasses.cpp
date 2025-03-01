@@ -6,7 +6,7 @@
 #include "CannonGame.h"
 #include "CannonPlayer.h"
 #include "UI/CannonUI.h"
-#include "destructible_component.h"
+#include "breakable_component.h"
 
 #include "KungFuSheep/KungFuLevelComponent.h"
 #include "KungFuSheep/KungFuSheep.h"
@@ -22,8 +22,6 @@ class kbTypeInfoClass;
 ELevelType_Enum ELevelType_EnumClass;
 
 ECameraMoveMode_Enum ECameraMoveMode_EnumClass;
-
-EDestructibleBehavior_Enum EDestructibleBehavior_EnumClass;
 
 DEFINE_KBCLASS(CannonActorComponent)
 
@@ -54,9 +52,3 @@ DEFINE_KBCLASS(CannonBallMainMenuComponent)
 DEFINE_KBCLASS(CannonBallGameSettingsComponent)
 
 DEFINE_KBCLASS(CannonBallScrollComponent)
-
-DEFINE_KBCLASS(EtherDestructibleComponent)
-
-DEFINE_KBCLASS(EtherSkelModelComponent)
-
-DEFINE_KBCLASS(EtherAnimComponent)

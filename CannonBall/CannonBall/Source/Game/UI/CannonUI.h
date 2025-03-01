@@ -21,8 +21,8 @@ protected:
 
 private:
 	// Editor
-	float									m_HealthBarWarningFlashThreshold;
-	float									m_HealthBarWarningFlashSpeed;
+	float									m_healthBarWarningFlashThreshold;
+	float									m_healthBarWarningFlashSpeed;
 
 	// Runtime
 	float									m_TargetNormalizedHealth;

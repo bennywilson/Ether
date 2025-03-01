@@ -114,7 +114,7 @@ GenerateClass(
 	AddField("Height", KBTYPEINFO_INT, kbClothComponent, m_Height, false, "")
 	AddField("AdditionalBoneInfo", KBTYPEINFO_STRUCT, kbClothComponent, m_AdditionalBoneInfo, true, "kbClothBone")
 	AddField("Collision", KBTYPEINFO_STRUCT, kbClothComponent, m_CollisionSpheres, true, "kbBoneCollisionSphere")
-	AddField("Gravity", KBTYPEINFO_VECTOR, kbClothComponent, m_Gravity, false, "")
+	AddField("Gravity", KBTYPEINFO_VECTOR, kbClothComponent, m_gravity, false, "")
 	AddField("MinWindVelocity", KBTYPEINFO_VECTOR, kbClothComponent, m_MinWindVelocity, false, "")
 	AddField("MaxWindVelocity", KBTYPEINFO_VECTOR, kbClothComponent, m_MaxWindVelocity, false, "")
 	AddField("MinWindGustDuration", KBTYPEINFO_FLOAT, kbClothComponent, m_MinWindGustDuration, false, "")
@@ -125,7 +125,7 @@ GenerateClass(
 GenerateClass(
 	kbTransformComponent,
 	AddField("Name", KBTYPEINFO_KBSTRING, kbTransformComponent, m_Name, false, "")
-	AddField("Position", KBTYPEINFO_VECTOR, kbTransformComponent, m_Position, false, "")
+	AddField("Position", KBTYPEINFO_VECTOR, kbTransformComponent, m_position, false, "")
 	AddField("Scale", KBTYPEINFO_VECTOR, kbTransformComponent, m_Scale, false, "")
 	AddField("Orientation", KBTYPEINFO_VECTOR4, kbTransformComponent, m_Orientation, false, "")
 )
@@ -161,11 +161,11 @@ GenerateClass(
 
 GenerateClass(
 	kbFlingPhysicsComponent,
-	AddField("MinLinearVelocity", KBTYPEINFO_VECTOR, kbFlingPhysicsComponent, m_MinLinearVelocity, false, "")
-	AddField("MaxLinearVelocity", KBTYPEINFO_VECTOR, kbFlingPhysicsComponent, m_MaxLinearVelocity, false, "")
+	AddField("MinLinearVelocity", KBTYPEINFO_VECTOR, kbFlingPhysicsComponent, m_min_linear_vel, false, "")
+	AddField("MaxLinearVelocity", KBTYPEINFO_VECTOR, kbFlingPhysicsComponent, m_max_linear_vel, false, "")
 	AddField("MinAngularSpeed", KBTYPEINFO_FLOAT, kbFlingPhysicsComponent, m_MinAngularSpeed, false, "")
 	AddField("MaxAngularSpeed", KBTYPEINFO_FLOAT, kbFlingPhysicsComponent, m_MaxAngularSpeed, false, "")
-	AddField("Gravity", KBTYPEINFO_VECTOR, kbFlingPhysicsComponent, m_MaxLinearVelocity, false, "")
+	AddField("Gravity", KBTYPEINFO_VECTOR, kbFlingPhysicsComponent, m_max_linear_vel, false, "")
 )
 
 GenerateClass(
@@ -273,7 +273,7 @@ GenerateClass(
 	AddField("MinEndVelocity", KBTYPEINFO_VECTOR, kbParticleComponent, m_MinParticleEndVelocity, false, "")
 	AddField("MaxEndVelocity", KBTYPEINFO_VECTOR, kbParticleComponent, m_MaxParticleEndVelocity, false, "")
 	AddField("MinEndVelocity", KBTYPEINFO_VECTOR, kbParticleComponent, m_MinParticleEndVelocity, false, "")
-	AddField("VelocityCurve", KBTYPEINFO_STRUCT, kbParticleComponent, m_VelocityOverLifeTimeCurve, true, "kbAnimEvent")
+	AddField("VelocityCurve", KBTYPEINFO_STRUCT, kbParticleComponent, m_velocityOverLifeTimeCurve, true, "kbAnimEvent")
 	AddField("MaxEndVelocity", KBTYPEINFO_VECTOR, kbParticleComponent, m_MaxParticleEndVelocity, false, "")
 
 	AddField("MinStartSize", KBTYPEINFO_VECTOR, kbParticleComponent, m_MinParticleStartSize, false, "")
@@ -304,7 +304,7 @@ GenerateClass(
 	AddField("MinStart3DOffset", KBTYPEINFO_VECTOR, kbParticleComponent, m_MinStart3DOffset, false, "")
 	AddField("MaxStart3DOffset", KBTYPEINFO_VECTOR, kbParticleComponent, m_MaxStart3DOffset, false, "")
 
-	AddField("Gravity", KBTYPEINFO_VECTOR, kbParticleComponent, m_Gravity, false, "")
+	AddField("Gravity", KBTYPEINFO_VECTOR, kbParticleComponent, m_gravity, false, "")
 
 	AddField("ModelEmitter", KBTYPEINFO_STRUCT, kbParticleComponent, m_ModelEmitter, true, "kbModelEmitter")
 
@@ -445,4 +445,36 @@ GenerateClass(
 GenerateClass(
 	kbCinematicComponent,
 	AddField("Actions", KBTYPEINFO_STRUCT, kbCinematicComponent, m_Actions, true, "kbCinematicAction")
+)
+
+
+GenerateEnum(
+	EBreakableBehavior,
+	"EBreakableBehavior",
+	AddEnumField(PushFromImpactPoint, "PushFromImpactPoint")
+	AddEnumField(UserVelocity, "UserVelocity")
+)
+
+GenerateClass(
+	AnimationComponent,
+	AddField("AnimationName", KBTYPEINFO_KBSTRING, AnimationComponent, m_animation_name, false, "")
+	AddField("Animation", KBTYPEINFO_ANIMATION, AnimationComponent, m_animation, false, "")
+	AddField("TimeScale", KBTYPEINFO_FLOAT, AnimationComponent, m_time_scale, false, "")
+	AddField("IsLooping", KBTYPEINFO_BOOL, AnimationComponent, m_is_looping, false, "")
+	AddField("AnimationEvent", KBTYPEINFO_STRUCT, AnimationComponent, m_anim_events, true, "kbAnimEvent")
+)
+
+GenerateClass(
+	BreakableComponent,
+	AddField("DestructibleBehavior", KBTYPEINFO_ENUM, BreakableComponent, m_destructible_type, false, "EBreakableBehavior")
+	AddField("MaxLifeTime", KBTYPEINFO_FLOAT, BreakableComponent, m_life_duration, false, "")
+	AddField("Gravity", KBTYPEINFO_VECTOR, BreakableComponent, m_gravity, false, "")
+	AddField("MinLinearVelocity", KBTYPEINFO_VECTOR, BreakableComponent, m_min_linear_vel, false, "")
+	AddField("MaxLinearVelocity", KBTYPEINFO_VECTOR, BreakableComponent, m_max_linear_vel, false, "")
+	AddField("MinAngularVelocity", KBTYPEINFO_FLOAT, BreakableComponent, m_min_angular_vel, false, "")
+	AddField("MaxAngularVelocity", KBTYPEINFO_FLOAT, BreakableComponent, m_max_angular_vel, false, "")
+	AddField("Health", KBTYPEINFO_FLOAT, BreakableComponent, m_starting_health, false, "")
+	AddField("ResetSim", KBTYPEINFO_BOOL, BreakableComponent, m_bDebugResetSim, false, "")
+	AddField("DestructionFX", KBTYPEINFO_GAMEENTITY, BreakableComponent, m_complete_destruction_fx, false, "")
+	AddField("DestructionFXLocalOffset", KBTYPEINFO_VECTOR, BreakableComponent, m_fx_local_offset, false, "")
 )
