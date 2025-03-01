@@ -75,8 +75,8 @@ private:
 };
 
 /// RenderComponent
-class RenderComponent : public kbGameComponent {
-	KB_DECLARE_COMPONENT(RenderComponent, kbGameComponent);
+class RenderComponent : public kbTransformComponent {
+	KB_DECLARE_COMPONENT(RenderComponent, kbTransformComponent);
 
 public:
 	virtual	~RenderComponent();

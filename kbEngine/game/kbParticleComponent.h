@@ -60,8 +60,8 @@ private:
 
 
 /// kbParticleComponent
-class kbParticleComponent : public kbTransformComponent {
-	KB_DECLARE_COMPONENT(kbParticleComponent, kbTransformComponent);
+class kbParticleComponent : public RenderComponent {
+	KB_DECLARE_COMPONENT(kbParticleComponent, RenderComponent);
 
 public:
 	virtual	~kbParticleComponent();

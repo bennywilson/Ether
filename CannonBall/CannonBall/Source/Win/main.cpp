@@ -199,7 +199,7 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 
 		// Toggles
 	g_UseEditor = 1;
-	const u32 use_d3d12 = 1;
+	const u32 use_d3d12 = 0;
 	const u32 use_sw = 0;
 
 	// Perform application initialization

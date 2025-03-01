@@ -1093,6 +1093,10 @@ void kbModel::SetBoneMatrices(
 	}
 
 	const kbAnimation& anim_data = *animation;
+	if (anim_data.m_JointKeyFrameData.size() == 0) {
+		return;
+	}
+
 	const f32 anim_duration = anim_data.m_LengthInSeconds;
 	const f32 anim_time = (is_looping && time > anim_duration) ? (fmod(time, anim_duration)) : (time);
 

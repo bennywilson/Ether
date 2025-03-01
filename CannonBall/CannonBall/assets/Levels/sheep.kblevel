@@ -1,8 +1,8 @@
-kbGameEntity 2152088273 1174593162 3377746562 3412113780 {
+kbGameEntity 1663015823 1077033131 314660271 1031629277 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		Name = "Entity_24"
+		Name = "Entity_26"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
 		Position = 0.000000 0.000000 0.000000
 		Scale = 1.000000 1.000000 1.000000
@@ -10,8 +10,8 @@ kbGameEntity 2152088273 1174593162 3377746562 3412113780 {
 	kbEditorLevelSettingsComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		MainCameraPosition = -20.222778 13.321991 -23.834610
-		MainCameraRotation = -0.104093 -0.115755 0.012200 0.987733
+		MainCameraPosition = -33.602943 15.550291 -45.471512
+		MainCameraRotation = -0.059948 -0.021620 0.001299 0.997967
 	}
 }
 kbGameEntity 1764334591 1323162396 784491408 67843932 {
@@ -146,6 +146,10 @@ kbGameEntity 2304826171 1239496353 243933317 3983880952 {
 	SkeletalModelComponent { 
 		Enabled = 1
 		LifeTime =  -1.000000
+		Name = ""
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 0.000000 0.000000 0.000000
+		Scale = 1.000000 1.000000 1.000000
 		CastsShadow = 0
 		Materials = 1
 			kbMaterialComponent { 
@@ -188,41 +192,6 @@ kbGameEntity 3608870224 1087768538 1952728238 2833877959 {
 		Scale = 0.030000 0.030000 0.030000
 	}
 }
-kbGameEntity 3142980857 1173916795 1390810023 204517040 {
-	kbTransformComponent { 
-		Enabled = 0
-		LifeTime =  -1.000000
-		Name = "Weybey"
-		Orientation = 0.000000 0.000000 0.000000 1.000000
-		Position = -30.000000 -0.006421 5.000000
-		Scale = 0.030000 0.030000 0.030000
-	}
-	SkeletalModelComponent { 
-		Enabled = 1
-		LifeTime =  -1.000000
-		CastsShadow = 0
-		Materials = 1
-			kbMaterialComponent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				CullModeOverride = ShaderDefault
-				Shader = ..\..\kbengine\assets\shaders\basicskinned.kbshader
-				ShaderParams = 1
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "color_tex"
-						Texture = .\assets\test\sheep.dds
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-			}
-		RenderOrderBias =  0.000000
-		RenderPass = LightingPass
-		Animations = 0
-		DebugAnimIndex = -1
-		Model = .\assets\models\characters\weybey\weybey.ms3d
-	}
-}
 kbGameEntity 690159040 1117776169 2248383618 574877861 {
 	kbTransformComponent { 
 		Enabled = 0
@@ -235,6 +204,10 @@ kbGameEntity 690159040 1117776169 2248383618 574877861 {
 	SkeletalModelComponent { 
 		Enabled = 1
 		LifeTime =  -1.000000
+		Name = ""
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 0.000000 0.000000 0.000000
+		Scale = 1.000000 1.000000 1.000000
 		CastsShadow = 0
 		Materials = 1
 			kbMaterialComponent { 
@@ -279,6 +252,10 @@ kbGameEntity 1257843563 1247155788 410384034 1184202809 {
 	SkeletalModelComponent { 
 		Enabled = 1
 		LifeTime =  -1.000000
+		Name = ""
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 0.000000 0.000000 0.000000
+		Scale = 1.000000 1.000000 1.000000
 		CastsShadow = 0
 		Materials = 1
 			kbMaterialComponent { 
@@ -302,6 +279,87 @@ kbGameEntity 1257843563 1247155788 410384034 1184202809 {
 		Model = .\assets\models\characters\fox\fox.ms3d
 	}
 }
+kbGameEntity 482830950 1226059571 1291499407 1453952689 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Particles"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = -34.627270 8.060490 -14.243664
+		Scale = 1.000000 1.000000 1.000000
+	}
+	kbParticleComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		Name = ""
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 0.000000 0.000000 0.000000
+		Scale = 1.000000 1.000000 1.000000
+		CastsShadow = 0
+		Materials = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = ..\..\kbengine\assets\shaders\basicparticle.kbshader
+				ShaderParams = 2
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "cameraPosition"
+						Texture = NULL
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "shaderTexture"
+						Texture = ..\..\kbengine\assets\editor\checkerboard.jpg
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		RenderOrderBias =  0.000000
+		RenderPass = LightingPass
+		AlphaOverLife = 0
+		ColorOverLife = 0
+		DebugPlayEntity = 0
+		EndColor = 1.000000 1.000000 1.000000 1.000000
+		Gravity = 0.000000 0.000000 0.000000
+		MaterialList = 0
+		MaxBurstCount = 0
+		MaxDuration =  3.000000
+		MaxEndRotationRate =  0.000000
+		MaxEndSize = 3.000000 3.000000 3.000000
+		MaxEndVelocity = 0.000000 0.000000 0.000000
+		MaxParticlesToEmit = -1
+		MaxSpawnRate =  2.000000
+		MaxStart3DOffset = 0.000000 0.000000 0.000000
+		MaxStart3DRotation = 0.000000 0.000000 0.000000
+		MaxStartRotationRate =  0.000000
+		MaxStartSize = 3.000000 3.000000 3.000000
+		MaxStartVelocity = 2.000000 5.000000 2.000000
+		MinBurstCount = 0
+		MinDuration =  3.000000
+		MinEndRotationRate =  0.000000
+		MinEndSize = 3.000000 3.000000 3.000000
+		MinEndVelocity = 0.000000 0.000000 0.000000
+		MinSpawnRate =  1.000000
+		MinStart3DOffset = 0.000000 0.000000 0.000000
+		MinStart3DRotation = 0.000000 0.000000 0.000000
+		MinStartRotationRate =  0.000000
+		MinStartSize = 3.000000 3.000000 3.000000
+		MinStartVelocity = -2.000000 5.000000 -2.000000
+		ModelEmitter = 0
+		ParticleBillboardType = FaceCamera
+		RenderOrderBias =  0.000000
+		RotationOverLife = 0
+		SizeOverLife = 0
+		StartColor = 1.000000 1.000000 1.000000 1.000000
+		StartDelay =  0.000000
+		TotalDuration =  -1.000000
+		VelocityCurve = 0
+	}
+}
 kbGameEntity 1421453446 1226367132 1130260608 2239969497 {
 	kbTransformComponent { 
 		Enabled = 0
@@ -314,6 +372,10 @@ kbGameEntity 1421453446 1226367132 1130260608 2239969497 {
 	SkeletalModelComponent { 
 		Enabled = 1
 		LifeTime =  -1.000000
+		Name = ""
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 0.000000 0.000000 0.000000
+		Scale = 1.000000 1.000000 1.000000
 		CastsShadow = 0
 		Materials = 1
 			kbMaterialComponent { 
@@ -349,6 +411,10 @@ kbGameEntity 2041928901 1243642179 2542770342 3153956879 {
 	SkeletalModelComponent { 
 		Enabled = 1
 		LifeTime =  -1.000000
+		Name = ""
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 0.000000 0.000000 0.000000
+		Scale = 1.000000 1.000000 1.000000
 		CastsShadow = 0
 		Materials = 1
 			kbMaterialComponent { 
@@ -370,5 +436,196 @@ kbGameEntity 2041928901 1243642179 2542770342 3153956879 {
 		Animations = 0
 		DebugAnimIndex = -1
 		Model = .\assets\models\characters\moose\moose.ms3d
+	}
+}
+kbGameEntity 1958453645 1302678012 1649450406 234128003 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Weybey"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = -30.000000 -0.006421 5.000000
+		Scale = 0.030000 0.030000 0.030000
+	}
+	SkeletalModelComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		Name = ""
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 0.000000 0.000000 0.000000
+		Scale = 1.000000 1.000000 1.000000
+		CastsShadow = 0
+		Materials = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = ..\..\kbengine\assets\shaders\basicskinned.kbshader
+				ShaderParams = 1
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "color_tex"
+						Texture = .\assets\test\sheep.dds
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		RenderOrderBias =  0.000000
+		RenderPass = LightingPass
+		Animations = 0
+		DebugAnimIndex = -1
+		Model = .\assets\models\characters\weybey\weybey.ms3d
+	}
+}
+kbGameEntity 3248040521 1098867457 1723838909 2151380696 {
+	kbTransformComponent { 
+		Enabled = 0
+		LifeTime =  -1.000000
+		Name = "Snolaf"
+		Orientation = 0.000000 1.000000 0.000000 0.000000
+		Position = -32.214748 11.867513 -27.464701
+		Scale = 0.010000 0.010000 0.010000
+	}
+	kbParticleComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		Name = "Small_LoveHearts"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 0.000000 1.750000 0.000000
+		Scale = 1.000000 1.000000 1.000000
+		CastsShadow = 0
+		Materials = 0
+		RenderOrderBias =  0.000000
+		RenderPass = LightingPass
+		AlphaOverLife = 0
+		ColorOverLife = 0
+		DebugPlayEntity = 0
+		EndColor = 1.000000 1.000000 1.000000 0.000000
+		Gravity = 0.000000 0.000000 0.000000
+		MaterialList = 1
+			kbMaterialComponent { 
+				Enabled = 1
+				LifeTime =  -1.000000
+				CullModeOverride = None
+				Shader = .\assets\shaders\fx\particle_blendadd.kbshader
+				ShaderParams = 2
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorMultplier"
+						Texture = NULL
+						Vector = 1.000000 1.000000 1.000000 1.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "shaderTexture"
+						Texture = .\assets\fx\heart\hearts_1.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		MaxBurstCount = 0
+		MaxDuration =  3.000000
+		MaxEndRotationRate =  0.000000
+		MaxEndSize = 0.450000 0.450000 0.450000
+		MaxEndVelocity = 0.000000 0.000000 0.000000
+		MaxParticlesToEmit = -1
+		MaxSpawnRate =  1.000000
+		MaxStart3DOffset = 0.000000 0.000000 0.000000
+		MaxStart3DRotation = 0.000000 0.000000 10.000000
+		MaxStartRotationRate =  0.000000
+		MaxStartSize = 0.450000 0.450000 0.450000
+		MaxStartVelocity = 1.000000 5.000000 1.000000
+		MinBurstCount = 0
+		MinDuration =  3.000000
+		MinEndRotationRate =  0.000000
+		MinEndSize = 0.350000 0.350000 0.350000
+		MinEndVelocity = 0.000000 0.000000 0.000000
+		MinSpawnRate =  1.000000
+		MinStart3DOffset = 0.000000 0.000000 0.000000
+		MinStart3DRotation = 0.000000 0.000000 0.000000
+		MinStartRotationRate =  0.000000
+		MinStartSize = 0.350000 0.350000 0.350000
+		MinStartVelocity = -1.000000 5.000000 -1.000000
+		ModelEmitter = 0
+		ParticleBillboardType = FaceCamera
+		RenderOrderBias =  0.000000
+		RotationOverLife = 0
+		SizeOverLife = 0
+		StartColor = 1.000000 1.000000 1.000000 1.000000
+		StartDelay =  0.000000
+		TotalDuration =  -1.000000
+		VelocityCurve = 0
+	}
+	kbParticleComponent { 
+		Enabled = 1
+		LifeTime =  -1.000000
+		Name = "Large_LoveHearts"
+		Orientation = 0.000000 0.000000 0.000000 1.000000
+		Position = 0.000000 1.750000 0.000000
+		Scale = 1.000000 1.000000 1.000000
+		CastsShadow = 0
+		Materials = 0
+		RenderOrderBias =  0.000000
+		RenderPass = LightingPass
+		AlphaOverLife = 0
+		ColorOverLife = 0
+		DebugPlayEntity = 0
+		EndColor = 1.000000 1.000000 1.000000 1.000000
+		Gravity = 0.000000 0.000000 0.000000
+		MaterialList = 1
+			kbMaterialComponent { 
+				Enabled = 1
+				LifeTime =  -1.000000
+				CullModeOverride = None
+				Shader = .\assets\shaders\fx\particle_blendadd.kbshader
+				ShaderParams = 2
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "colorMultplier"
+						Texture = NULL
+						Vector = 1.000000 1.000000 1.000000 1.000000
+					}
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "shaderTexture"
+						Texture = .\assets\fx\heart\hearts_1.tif
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
+		MaxBurstCount = 0
+		MaxDuration =  3.000000
+		MaxEndRotationRate =  0.000000
+		MaxEndSize = 0.390000 0.390000 0.390000
+		MaxEndVelocity = 0.000000 0.000000 0.000000
+		MaxParticlesToEmit = -1
+		MaxSpawnRate =  5.000000
+		MaxStart3DOffset = 0.000000 0.000000 0.000000
+		MaxStart3DRotation = 0.000000 0.000000 0.000000
+		MaxStartRotationRate =  0.000000
+		MaxStartSize = 0.390000 0.390000 0.390000
+		MaxStartVelocity = 1.000000 5.000000 1.000000
+		MinBurstCount = 0
+		MinDuration =  3.000000
+		MinEndRotationRate =  0.000000
+		MinEndSize = 0.350000 0.350000 0.350000
+		MinEndVelocity = 0.000000 0.000000 0.000000
+		MinSpawnRate =  5.000000
+		MinStart3DOffset = 0.000000 0.000000 0.000000
+		MinStart3DRotation = 0.000000 0.000000 0.000000
+		MinStartRotationRate =  0.000000
+		MinStartSize = 0.350000 0.350000 0.350000
+		MinStartVelocity = -1.000000 5.000000 -1.000000
+		ModelEmitter = 0
+		ParticleBillboardType = FaceCamera
+		RenderOrderBias =  0.000000
+		RotationOverLife = 0
+		SizeOverLife = 0
+		StartColor = 1.000000 1.000000 1.000000 1.000000
+		StartDelay =  0.000000
+		TotalDuration =  -1.000000
+		VelocityCurve = 0
 	}
 }
