@@ -200,6 +200,8 @@ void kbParticleComponent::update_internal(const float DeltaTime) {
 	}
 
 	m_render_object.m_VertBufferIndexCount = (uint)m_Particles.size() * 6;
+
+#ifdef DX11_PARTICLES
 	if (IsModelEmitter() == false && m_Particles.size() > 0) {
 		kbParticleManager& particleMgr = g_pGame->GetParticleManager();
 		particleMgr.ReserveScratchBufferSpace(pDstVerts, m_render_object, (int)m_Particles.size() * 4);
@@ -209,6 +211,7 @@ void kbParticleComponent::update_internal(const float DeltaTime) {
 			pDstVerts[i].position = Vec3::zero;
 		}
 	}
+#endif
 
 	for (int i = (int)m_Particles.size() - 1; i >= 0; i--) {
 		kbParticle_t& particle = m_Particles[i];

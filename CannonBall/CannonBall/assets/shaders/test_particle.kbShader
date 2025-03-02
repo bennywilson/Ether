@@ -11,6 +11,7 @@ struct SceneData {
 	float4 pad0;
 	matrix bones[128];
 };
+
 ConstantBuffer<SceneData> scene_constants[1024] : register(b0);
 
 struct SceneIndex {
@@ -64,6 +65,6 @@ PixelInput vertex_shader(VertexInput local_vert) {
 
 ///	pixelShader
 float4 pixel_shader(PixelInput input) : SV_TARGET {
-	const float4 albedo = color_tex.Sample(SampleType, input.uv)* input.color.w;
+	const float4 albedo = color_tex.Sample(SampleType, input.uv) * input.color;
 	return albedo;
 }
