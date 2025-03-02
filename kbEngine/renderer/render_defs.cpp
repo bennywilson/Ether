@@ -4,8 +4,9 @@
 
 #include <vector>
 #include "blk_core.h"
-#include "kbRenderer_defs.h"
 #include "render_defs.h"
+
+using namespace std;
 
 /// RenderBuffer::create_vertex_buffer
 void RenderBuffer::create_vertex_buffer(const u32 num_verts) {
@@ -15,12 +16,12 @@ void RenderBuffer::create_vertex_buffer(const u32 num_verts) {
 }
 
 /// RenderBuffer::write_vertex_buffer
-void RenderBuffer::write_vertex_buffer(const std::vector<vertexLayout>& vertices) {
+void RenderBuffer::write_vertex_buffer(const vector<vertexLayout>& vertices) {
 	m_num_elements = (uint32_t)vertices.size();
 	m_size_bytes = m_num_elements * sizeof(vertexLayout);
 	create_internal();
 
-	u8* const vb = this->map();
+	u8* const vb = map();
 	memcpy(vb, vertices.data(), m_size_bytes);
 	unmap();
 }
@@ -33,12 +34,12 @@ void RenderBuffer::create_index_buffer(const u32 num_indices) {
 }
 
 /// RenderBuffer::write_index_buffer
-void RenderBuffer::write_index_buffer(const std::vector<uint16_t>& indices) {
+void RenderBuffer::write_index_buffer(const vector<u16>& indices) {
 	m_num_elements = (uint32_t)indices.size();
 	m_size_bytes = m_num_elements * sizeof(u16);
 	create_internal();
 
-	u8* const ib = this->map();
+	u8* const ib = map();
 	memcpy(ib, indices.data(), m_size_bytes);
 	unmap();
 }

@@ -100,7 +100,16 @@ public:
 	void CreatePointCloud(const UINT numVertices, const std::string& ShaderToUse = "", const ECullMode cullingMode = CullMode_BackFaces, const UINT VertexSizeInBytes = sizeof(vertexLayout));
 
 	// Dx 12
+
 	void create_dynamic(const u32 num_verts, const u32 num_indices);
+
+	const RenderBuffer* vertex_buffer() const {
+		return m_vertex_buffer;
+	}
+
+	const RenderBuffer* index_buffer() const {
+		return m_index_buffer;
+	}
 
 	u8* map_vertex_buffer();
 	void unmap_vertex_buffer(const u32 num_verts = 0);

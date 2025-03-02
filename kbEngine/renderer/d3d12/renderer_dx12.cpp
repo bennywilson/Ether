@@ -465,28 +465,48 @@ void Renderer_Dx12::render() {
 				scene_buffer[draw_idx].bones[i][2].w = 0;
 				scene_buffer[draw_idx].bones[i].transpose_self();
 			}
-		}
+		} else if (render_comp->IsA(kbParticleComponent::GetType())) {
+			const kbParticleComponent* const particle = static_cast<const kbParticleComponent*>(render_comp);
 
+			model = particle->get_model();
+			if (model == nullptr) {
+				// Particle buffering might not be ready yet
+				continue;
+			}
+
+			const auto vertex_buf_view = ((RenderBuffer_Dx12*)model->vertex_buffer())->vertex_buffer_view();
+			m_command_list->IASetVertexBuffers(0, 1, &vertex_buf_view);
+			index_buffer = (RenderBuffer_Dx12*)(model->m_index_buffer);
+			const auto index_buf_view = index_buffer->index_buffer_view();
+			m_command_list->IASetIndexBuffer(&index_buf_view);
+		} else {
+			blk::warn("Renderer_Dx12::render() - invalid component");
+			continue;
+		}
+/*
 		if (vertex_buffer == nullptr || index_buffer == nullptr || model == nullptr) {
 			blk::warn("Renderer_Dx12::render() - No vertex and/or index buffer found for some render component");
 			continue;
-		}
-
-		const auto& shader_params = render_comp->Materials()[0].shader_params();
+		}*/
+		const kbTexture* color_tex = nullptr;
 		Vec4 color(1.f, 1.f, 1.f, 1.f);
 		Vec4 spec(0.f, 0.f, 0.f, 1.f);
-		const kbTexture* color_tex = nullptr;
-		for (const auto& param : shader_params) {
-			if (param.param_name() == kbString("color")) {
-				color = param.vector();
-			}
+		if (render_comp->Materials().size() > 0) {
+			const auto& shader_params = render_comp->Materials()[0].shader_params();
 
-			if (param.param_name() == kbString("spec")) {
-				spec = param.vector();
-			}
 
-			if (param.param_name() == kbString("color_tex")) {
-				color_tex = param.texture();
+			for (const auto& param : shader_params) {
+				if (param.param_name() == kbString("color")) {
+					color = param.vector();
+				}
+
+				if (param.param_name() == kbString("spec")) {
+					spec = param.vector();
+				}
+
+				if (param.param_name() == kbString("color_tex")) {
+					color_tex = param.texture();
+				}
 			}
 		}
 

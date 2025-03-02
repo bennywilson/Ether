@@ -6,7 +6,7 @@
 
 #include "Matrix.h"
 
-///  vertexLayout
+/// vertexLayout
 struct vertexLayout {
 	Vec3 position;
 	Vec2 uv;
@@ -108,7 +108,6 @@ private:
 class RenderBuffer {
 public:
 	RenderBuffer() = default;
-
 	virtual ~RenderBuffer() {}
 
 	virtual void release() {};
@@ -122,21 +121,21 @@ public:
 	void create_index_buffer(const u32 num_indices);
 	void write_index_buffer(const std::vector<uint16_t>& indices);
 
-	uint32_t num_elements() const { return m_num_elements; }
-	uint32_t size_bytes() const { return m_size_bytes; }
+	u32 num_elements() const { return m_num_elements; }
+	u32 size_bytes() const { return m_size_bytes; }
 
 private:
 	virtual void create_internal() {}
 
-	uint32_t m_num_elements = 0;
-	uint32_t m_size_bytes = 0;
+	u32 m_num_elements = 0;
+	u32 m_size_bytes = 0;
 };
 
 
 ///  kbVertexHash
 struct kbVertexHash {
 	size_t operator()(const vertexLayout& key) const {
-		float val = key.position.x + key.position.y + key.position.z;
+		f32 val = key.position.x + key.position.y + key.position.z;
 		return (INT_PTR)val;
 	}
 };

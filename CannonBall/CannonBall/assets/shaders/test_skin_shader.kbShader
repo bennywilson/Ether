@@ -26,9 +26,6 @@ Texture2D color_tex : register(t0);
 struct VertexInput {
 	float4 position			: POSITION;
 	float2 uv				: TEXCOORD0;
-	float4 normal			: NORMAL;
-	float4 blend_indices	: COLOR;
-	float4 blend_weights	: TANGENT;
 };
 
 /// PixelInput
@@ -45,36 +42,36 @@ struct PixelInput {
 PixelInput vertex_shader(VertexInput input) {
 	SceneData scene_constant = scene_constants[scene_index.index];
 	
-   int4 IndexVector = input.blend_indices * 255;
+ /*  int4 IndexVector = input.blend_indices * 255;
    float BlendWeightsArray[4] = (float[4])input.blend_weights;
    int   IndexArray[4]        = (int[4])IndexVector;
 
-	/*const matrix bone_mat = scene_constant.bones[blend_indices.x] * blend_weights.x +
+	const matrix bone_mat = scene_constant.bones[blend_indices.x] * blend_weights.x +
 							scene_constant.bones[blend_indices.y] * blend_weights.y +
 							scene_constant.bones[blend_indices.z] * blend_weights.z +
-							scene_constant.bones[blend_indices.w] * blend_weights.w;*/
+							scene_constant.bones[blend_indices.w] * blend_weights.w;
 
 	// Rigid weight - todo fix
 
-	const matrix bone_mat = scene_constant.bones[IndexVector[0]];
+	const matrix bone_mat = scene_constant.bones[IndexVector[0]];*/
 
-	const float4 local_pos = mul(input.position, bone_mat);
+	const float4 local_pos = input.position;//mul(input.position, bone_mat);
 	const float3 world_pos = mul(input.position, scene_constant.world_matrix).xyz;
-	const float3 normal = mul(input.normal.xyz * 2.0f - 1.0f, (float3x3)bone_mat);
+//	const float3 normal = mul(input.normal.xyz * 2.0f - 1.0f, (float3x3)bone_mat);
 
 	PixelInput output = (PixelInput)(0);
 	output.position = mul(local_pos, scene_constant.modelMatrix);
-	output.to_cam = scene_constant.camera.xyz - world_pos;
+	/*output.to_cam = scene_constant.camera.xyz - world_pos;
 	output.color = scene_constant.color;
 	output.spec = scene_constant.spec;
-	output.normal.xyz = mul(normal.xyz, (float3x3)scene_constant.world_matrix);
+	output.normal.xyz = mul(normal.xyz, (float3x3)scene_constant.world_matrix);*/
 	output.uv = input.uv;
 	return output;
 }
 
 ///	pixelShader
 float4 pixel_shader(PixelInput input) : SV_TARGET {
-	const float4 albedo = color_tex.Sample(SampleType, input.uv) * input.color;
+/*	const float4 albedo = color_tex.Sample(SampleType, input.uv) * input.color;
 	const float3 normal = normalize(input.normal.xyz);
 	const float3 light_dir = normalize(float3(-0.3f, 0.807f, -0.47f));
 
@@ -92,5 +89,6 @@ float4 pixel_shader(PixelInput input) : SV_TARGET {
 
 	// Ambient
 	const float3 ambient = float3(0.3f, 0.3f, 0.3f) * albedo.xyz;
-	return float4(diffuse + spec + ambient, 1.f);
+	return float4(diffuse + spec + ambient, 1.f);*/
+	return float4(1., 1. ,1. ,1.);
 }

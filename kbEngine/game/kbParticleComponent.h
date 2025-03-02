@@ -79,8 +79,12 @@ public:
 
 	bool IsModelEmitter() const {return m_ModelEmitter.size() > 0 && m_ModelEmitter[0].model() != nullptr; }
 
-	kbModel* get_model() const {
-		m_models[m_CurrentParticleBuffer];
+	const kbModel* get_model() const {
+		if (m_buffer_to_render != -1) {
+			return &m_models[m_buffer_to_render];
+		} else {
+			return nullptr;
+		}
 	}
 
 protected:
@@ -145,7 +149,8 @@ private:
 	u16* m_index_buffer;
 	//
 
-	uint8_t	m_CurrentParticleBuffer;
+	u32 m_buffer_to_fill;
+	u32 m_buffer_to_render;
 
 	friend class kbParticleManager;
 	const kbParticleComponent* m_ParticleTemplate;
