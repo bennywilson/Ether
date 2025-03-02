@@ -626,6 +626,7 @@ void kbParticleComponent::RenderSync() {
 
 	if (g_renderer != nullptr) {
 		m_vertex_buffer = (ParticleVertex*)m_models[m_buffer_to_fill].map_vertex_buffer();
+		memset(m_vertex_buffer, 0, sizeof(vertexLayout) * 1000);
 		//m_index_buffer = (u16*)m_models[m_buffer_to_fill].map_index_buffer();
 	}
 
