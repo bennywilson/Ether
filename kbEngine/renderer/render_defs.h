@@ -90,7 +90,7 @@ struct ParticleVertex {
 	Vec2 uv;
 	byte color[4];
 	f32 rotation;
-	byte tangent[4];
+	f32 scale;
 };
 
 

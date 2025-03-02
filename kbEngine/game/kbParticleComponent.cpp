@@ -307,6 +307,11 @@ void kbParticleComponent::update_internal(const float DeltaTime) {
 			m_vertex_buffer[idx + 1].rotation = particle.m_Rotation;
 			m_vertex_buffer[idx + 2].rotation = particle.m_Rotation;
 			m_vertex_buffer[idx + 3].rotation = particle.m_Rotation;
+
+			m_vertex_buffer[idx + 0].scale = abs(curSize.x);
+			m_vertex_buffer[idx + 1].scale = abs(curSize.x);
+			m_vertex_buffer[idx + 2].scale = abs(curSize.x);
+			m_vertex_buffer[idx + 3].scale = abs(curSize.x);
 		}
 
 #ifdef DX11_PARTICLES
@@ -626,7 +631,7 @@ void kbParticleComponent::RenderSync() {
 
 	if (g_renderer != nullptr) {
 		m_vertex_buffer = (ParticleVertex*)m_models[m_buffer_to_fill].map_vertex_buffer();
-		memset(m_vertex_buffer, 0, sizeof(vertexLayout) * 1000);
+		memset(m_vertex_buffer, 0, sizeof(vertexLayout)* m_models[m_buffer_to_fill].NumVertices());
 		//m_index_buffer = (u16*)m_models[m_buffer_to_fill].map_index_buffer();
 	}
 

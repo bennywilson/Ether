@@ -68,8 +68,7 @@ pixelInput vertexShader( vertexInput input ) {
 		const float3 yRot = float3( -sinRot, cosRot, 0.0f );
 		const float3 zRot = float3( 0.0f, 0.0f, 1.0f );
 		float3x3 rotationMatrix = float3x3( xRot, yRot, zRot );
-		localPos = mul( localPos, rotationMatrix );
-
+		localPos = mul(local_pos, rotationMatrix);
 	} else {
 	   // Axial
 	   float3 heading = input.rotationAndDirection.xyz;

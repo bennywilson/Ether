@@ -23,40 +23,50 @@ SamplerState SampleType : register(s0);
 Texture2D color_tex : register(t0);
 
 struct VertexInput {
-	float4 position			: POSITION;
-	float2 uv				: TEXCOORD0;
-	float4 color			: COLOR;
-	float rotation			: NORMAL;
-	float pad					: TANGENT;
+	float4 position		: POSITION;
+	float2 uv			: TEXCOORD0;
+	float4 color		: COLOR;
+	float rotation		: NORMAL;
+	float scale			: TANGENT;
 };
-
-/*  struct ParticleVertex {
-	Vec3 position;
-	Vec2 uv;
-	byte color[4];
-	f32 rotation;
-	byte tangent[4];
-};*/
 
 /// PixelInput
 struct PixelInput {
-	float4 position			: SV_POSITION;
-	float2 uv				: TEXCOORD0;
-	float3 to_cam			: TEXCOORD1;
-	float4 color			: COLOR;
+	float4 position		: SV_POSITION;
+	float2 uv			: TEXCOORD0;
+	float3 to_cam		: TEXCOORD1;
+	float4 color		: COLOR;
 };
 
 ///	vertex_shader
 PixelInput vertex_shader(VertexInput local_vert) {
 	SceneData scene_constant = scene_constants[scene_index.index];
 
-	const float4 local_pos = local_vert.position;
-	const float3 world_pos = local_pos.xyz;//mul(local_vert.position, scene_constant.world_matrix).xyz;
+	float4 from_center = normalize(float4(local_vert.uv.xy - float2(0.5f, 0.5f), 0.0, 1.0)) * local_vert.scale;
+	const float4 world_pos = local_vert.position;//mul(local_vert.position, scene_constant.world_matrix).xyz;
+	float3x3 billboard_mat3;
+	{
+		const float3 up = float3(0.0f, 1.f, 0.0f);
+		const float3 zAxis = normalize(scene_constant.camera.xyz - world_pos.xyz);
+		const float3 xAxis = normalize(cross(up, zAxis));
+		const float3 yAxis = normalize(cross(zAxis, xAxis));
+		billboard_mat3 = float3x3(xAxis, yAxis, zAxis);
 
-	float4 from_center = normalize(float4(local_vert.uv.xy - float2(0.5f, 0.5f), 0.0, 0.0)) * 1.f;
+		float rotation = local_vert.rotation;
+		const float cosRot = cos(rotation);
+		const float sinRot = sin(rotation);
+		const float3 xRot = float3(cosRot, sinRot, 0.0f);
+		const float3 yRot = float3(-sinRot, cosRot, 0.0f);
+		const float3 zRot = float3(0.0f, 0.0f, 1.0f);
+		float3x3 rotationMatrix = float3x3(xRot, yRot, zRot);
+		from_center.xyz = mul(from_center.xyz,transpose(rotationMatrix));
+	}
 
 	PixelInput output = (PixelInput)(0);
-	output.position = mul(local_pos + from_center, scene_constant.view_projection);
+
+	const float3 offset = mul(from_center.xyz, billboard_mat3);
+	output.position = mul(world_pos + float4(offset, 0.0f), scene_constant.view_projection);
+
 	output.to_cam = scene_constant.camera.xyz - world_pos;
 	output.color = local_vert.color;
 	output.uv = local_vert.uv;

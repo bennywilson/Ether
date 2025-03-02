@@ -1,8 +1,8 @@
-kbGameEntity 204032410 1337835432 1908276413 278522243 {
+kbGameEntity 3401152807 1317858181 126089910 2537693050 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		Name = "Entity_25"
+		Name = "Entity_21"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
 		Position = 0.000000 0.000000 0.000000
 		Scale = 1.000000 1.000000 1.000000
@@ -10,8 +10,8 @@ kbGameEntity 204032410 1337835432 1908276413 278522243 {
 	kbEditorLevelSettingsComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		MainCameraPosition = -20.568182 18.062025 -40.161259
-		MainCameraRotation = 0.000002 0.003339 0.000000 0.999994
+		MainCameraPosition = -29.879166 16.286123 -52.880932
+		MainCameraRotation = -0.039582 0.142650 0.005709 -0.988965
 	}
 }
 kbGameEntity 1764334591 1323162396 784491408 67843932 {
@@ -250,7 +250,7 @@ kbGameEntity 3248040521 1098867457 1723838909 2151380696 {
 		Scale = 0.010000 0.010000 0.010000
 	}
 	kbParticleComponent { 
-		Enabled = 0
+		Enabled = 1
 		LifeTime =  -1.000000
 		Name = "Small_LoveHearts"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
@@ -303,25 +303,25 @@ kbGameEntity 3248040521 1098867457 1723838909 2151380696 {
 			}
 		MaxBurstCount = 0
 		MaxDuration =  3.000000
-		MaxEndRotationRate =  0.000000
+		MaxEndRotationRate =  0.000100
 		MaxEndSize = 0.450000 0.450000 0.450000
 		MaxEndVelocity = 0.000000 0.000000 0.000000
 		MaxParticlesToEmit = -1
 		MaxSpawnRate =  2.000000
 		MaxStart3DOffset = 0.000000 0.000000 0.000000
 		MaxStart3DRotation = 0.000000 0.000000 10.000000
-		MaxStartRotationRate =  0.000000
+		MaxStartRotationRate =  0.000100
 		MaxStartSize = 0.450000 0.450000 0.450000
 		MaxStartVelocity = 1.000000 5.000000 1.000000
 		MinBurstCount = 0
 		MinDuration =  3.000000
-		MinEndRotationRate =  0.000000
+		MinEndRotationRate =  0.000100
 		MinEndSize = 0.350000 0.350000 0.350000
 		MinEndVelocity = 0.000000 0.000000 0.000000
 		MinSpawnRate =  1.000000
 		MinStart3DOffset = 0.000000 0.000000 0.000000
 		MinStart3DRotation = 0.000000 0.000000 0.000000
-		MinStartRotationRate =  0.000000
+		MinStartRotationRate =  0.000100
 		MinStartSize = 0.350000 0.350000 0.350000
 		MinStartVelocity = -1.000000 5.000000 -1.000000
 		ModelEmitter = 0
