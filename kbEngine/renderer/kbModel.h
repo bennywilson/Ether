@@ -99,6 +99,16 @@ public:
 	void CreateDynamicModel(const UINT numVertices, const UINT numIndices, kbShader* const pShaderToUse = nullptr, kbTexture* const pTextureToUse = nullptr, const UINT VertexSizeInBytes = sizeof(vertexLayout));
 	void CreatePointCloud(const UINT numVertices, const std::string& ShaderToUse = "", const ECullMode cullingMode = CullMode_BackFaces, const UINT VertexSizeInBytes = sizeof(vertexLayout));
 
+	// Dx 12
+	void create_dynamic(const u32 num_verts, const u32 num_indices);
+
+	u8* map_vertex_buffer();
+	void unmap_vertex_buffer(const u32 num_verts = 0);
+
+	u8* map_index_buffer();
+	void unmap_index_buffer();
+	//
+
 	void* MapVertexBuffer();
 	void UnmapVertexBuffer(const INT numVerticesWritten = -1);
 	void* MapIndexBuffer();

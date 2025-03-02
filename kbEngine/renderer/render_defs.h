@@ -84,6 +84,16 @@ struct vertexLayout {
 	}
 };
 
+/// ParticleVertex
+struct ParticleVertex {
+	Vec3 position;
+	Vec2 uv;
+	byte color[4];
+	f32 rotation;
+	byte tangent[4];
+};
+
+
 /// RenderPipeline
 class RenderPipeline {
 public:
@@ -103,15 +113,20 @@ public:
 
 	virtual void release() {};
 
+	virtual u8* map() { return nullptr;  }
+	virtual void unmap() {}
+
+	void create_vertex_buffer(const u32 num_verts);
 	void write_vertex_buffer(const std::vector<vertexLayout>& vertices);
+
+	void create_index_buffer(const u32 num_indices);
 	void write_index_buffer(const std::vector<uint16_t>& indices);
 
 	uint32_t num_elements() const { return m_num_elements; }
 	uint32_t size_bytes() const { return m_size_bytes; }
 
 private:
-	virtual void write_vb_internal(const std::vector<vertexLayout>& vertices) = 0;
-	virtual void write_ib_internal(const std::vector<uint16_t>& indices) = 0;
+	virtual void create_internal() {}
 
 	uint32_t m_num_elements = 0;
 	uint32_t m_size_bytes = 0;

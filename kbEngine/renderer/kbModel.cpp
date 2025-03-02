@@ -880,6 +880,25 @@ bool kbModel::LoadDiablo3() {
 	return true;
 }
 
+
+/// kbModel::create_dynamic
+void kbModel::create_dynamic(const u32 num_verts, const u32 num_indices) {
+	if (m_NumVertices > 0 || m_Meshes.size() > 0 || m_Materials.size() > 0 || m_VertexBuffer.GetBufferPtr() != nullptr || m_IndexBuffer.GetBufferPtr() != nullptr) {
+		Release_Internal();
+	}
+
+	m_NumVertices = num_verts;
+	m_bIsDynamicModel = true;
+
+	if (g_renderer != nullptr) {
+		m_vertex_buffer = g_renderer->create_render_buffer();
+		m_vertex_buffer->create_vertex_buffer((u32)m_NumVertices);
+
+		m_index_buffer = g_renderer->create_render_buffer();
+		m_index_buffer->create_vertex_buffer((u32)m_NumVertices);
+	}
+}
+
 /// kbModel::CreateDynamicModel
 void kbModel::CreateDynamicModel(const UINT numVertices, const UINT numIndices, kbShader* const pShaderToUse, kbTexture* const pTextureToUse, const UINT vertexSizeInBytes) {
 
@@ -939,6 +958,26 @@ void kbModel::CreatePointCloud(const UINT numVertices, const std::string& shader
 	}
 	newMaterial.SetCullingMode(cullingMode);
 	m_Materials.push_back(newMaterial);
+}
+
+/// kbModel::map_vertex_buffer
+u8* kbModel::map_vertex_buffer() {
+	return m_vertex_buffer->map();
+}
+
+/// kbModel::unmap_vertex_buffer
+void kbModel::unmap_vertex_buffer(const u32 num_verts_written) {
+	m_vertex_buffer->unmap();
+}
+
+/// kbModel::map_index_buffer
+u8* kbModel::map_index_buffer() {
+	return m_index_buffer->map();
+}
+
+/// kbModel::unmap_index_buffer
+void kbModel::unmap_index_buffer() {
+	m_index_buffer->unmap();
 }
 
 /// kbModel::MapVertexBuffer

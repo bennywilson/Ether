@@ -77,7 +77,11 @@ public:
 	// Hack wasn't picking up from the package file
 	void SetBillboardType(const EBillboardType inBBType) { m_ParticleBillboardType = inBBType; }
 
-	bool IsModelEmitter() const { return m_ModelEmitter.size() > 0 && m_ModelEmitter[0].model() != nullptr; }
+	bool IsModelEmitter() const {return m_ModelEmitter.size() > 0 && m_ModelEmitter[0].model() != nullptr; }
+
+	kbModel* get_model() const {
+		m_models[m_CurrentParticleBuffer];
+	}
 
 protected:
 	virtual void enable_internal(const bool isEnabled) override;
@@ -132,12 +136,14 @@ private:
 	int	m_NumEmittedParticles;
 
 	kbRenderObject m_render_object;
-
-	static const int NumParticleBuffers = 3;
 	std::vector<kbParticle_t> m_Particles;
-	kbModel m_ParticleBuffer[NumParticleBuffers];
-	kbParticleVertex* m_pVertexBuffer;
-	ushort* m_pIndexBuffer;
+
+	// Dx12
+	static const int NumParticleBuffers = 3;
+	kbModel m_models[NumParticleBuffers];
+	ParticleVertex* m_vertex_buffer;
+	u16* m_index_buffer;
+	//
 
 	uint8_t	m_CurrentParticleBuffer;
 

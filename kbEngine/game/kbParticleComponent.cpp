@@ -9,28 +9,32 @@
 #include "kbGameEntityHeader.h"
 #include "kbGame.h"
 #include "kbRenderer.h"
+#include "renderer.h"
+
 
 KB_DEFINE_COMPONENT(kbParticleComponent)
 
 static const uint NumParticleBufferVerts = 10000;
 static const uint NumMeshVerts = 10000;
+// #define DX11_PARTICLES
 
 /// kbParticle_t::kbParticle_t
 kbParticle_t::kbParticle_t() {
 	m_pSrcModelEmitter = nullptr;
 }
 
- /// kbParticle_t::~kbParticle_t
+/// kbParticle_t::~kbParticle_t
 kbParticle_t::~kbParticle_t() {
 }
 
 /// kbParticle_t::Shutdown
 void kbParticle_t::Shutdown() {
-
+#ifdef DX11_PARTICLES
 	if (m_render_object.m_pComponent != nullptr) {
 		g_pRenderer->RemoveRenderObject(m_render_object);
 		g_pGame->GetParticleManager().ReturnComponentToPool(m_render_object.m_pComponent);
 	}
+#endif
 	m_render_object.m_VertBufferIndexCount = 0;
 	m_render_object.m_pComponent = nullptr;
 	m_pSrcModelEmitter = nullptr;
@@ -78,8 +82,8 @@ void kbParticleComponent::Constructor() {
 	m_DebugPlayEntity = false;
 
 	m_LeftOverTime = 0.0f;
-	m_pVertexBuffer = nullptr;
-	m_pIndexBuffer = nullptr;
+	m_vertex_buffer = nullptr;
+	m_index_buffer = nullptr;
 	m_CurrentParticleBuffer = 255;
 	m_bIsSpawning = true;
 
@@ -91,9 +95,10 @@ void kbParticleComponent::Constructor() {
 kbParticleComponent::~kbParticleComponent() {
 	StopParticleSystem();
 
-	/*for ( int i = 0; i < NumParticleBuffers; i++ ) {
-		m_ParticleBuffer[i].Release();
-	}*/
+	// Dx12
+	for (int i = 0; i < NumParticleBuffers; i++) {
+		m_models[i].Release();
+	}
 }
 
 /// kbParticleComponent::StopParticleSystem
@@ -105,16 +110,20 @@ void kbParticleComponent::StopParticleSystem() {
 		return;
 	}
 
+#ifdef DX11_PARTICLES
 	g_pRenderer->RemoveParticle(m_render_object);
-	/*for ( int i = 0; i < NumParticleBuffers; i++ ) {
-		if ( m_ParticleBuffer[i].IsVertexBufferMapped() ) {
-			m_ParticleBuffer[i].UnmapVertexBuffer( 0 );
+#endif
+
+	// Dx12
+	for (u32 i = 0; i < NumParticleBuffers; i++) {
+		if (m_models[i].IsVertexBufferMapped()) {
+			m_models[i].UnmapVertexBuffer(0);
 		}
 
-		if ( m_ParticleBuffer[i].IsIndexBufferMapped() ) {
-			m_ParticleBuffer[i].UnmapIndexBuffer();		// todo : don't need to map/remap index buffer
+		if (m_models[i].IsIndexBufferMapped()) {
+			m_models[i].UnmapIndexBuffer();		// todo : don't need to map/remap index buffer
 		}
-	}*/
+	}
 	m_CurrentParticleBuffer = 255;
 	m_Particles.clear();
 	m_LeftOverTime = 0.0f;
@@ -261,7 +270,10 @@ void kbParticleComponent::update_internal(const float DeltaTime) {
 				renderObj.m_Materials[iMat].SetVec4("particleColor", curColor);
 			}
 
+#ifdef DX11_PARTICLES
 			g_pRenderer->UpdateRenderObject(renderObj);
+#endif
+
 			continue;
 		}
 
@@ -416,7 +428,9 @@ void kbParticleComponent::update_internal(const float DeltaTime) {
 					renderObj.m_Orientation = xAxis * yAxis * zAxis;
 				}
 
+#ifdef DX11_PARTICLES
 				g_pRenderer->AddRenderObject(renderObj);
+#endif
 			} else {
 				continue;
 			}
@@ -490,17 +504,19 @@ void kbParticleComponent::RenderSync() {
 	if (IsModelEmitter()) {
 		return;
 	}
-
-	/*if ( m_ParticleBuffer[0].NumVertices() == 0 ) {
-		for ( int i = 0; i < NumParticleBuffers; i++ ) {
-			m_ParticleBuffer[i].CreateDynamicModel( NumParticleBufferVerts, NumParticleBufferVerts, nullptr, nullptr, sizeof(kbParticleVertex) );
-			m_pVertexBuffer = (kbParticleVertex*)m_ParticleBuffer[i].MapVertexBuffer();
-			for ( int iVert = 0; iVert < NumParticleBufferVerts; iVert++ ) {
-				m_pVertexBuffer[iVert].position.Set( 0.0f, 0.0f, 0.0f );
+	
+	if (g_renderer != nullptr) {
+		if (m_models[0].NumVertices() == 0) {
+			for (int i = 0; i < NumParticleBuffers; i++) {
+				m_models[i].create_dynamic(NumParticleBufferVerts, NumParticleBufferVerts);
+				m_vertex_buffer = (ParticleVertex*)m_models[i].map_vertex_buffer();
+				for (int iVert = 0; iVert < NumParticleBufferVerts; iVert++) {
+					m_vertex_buffer[iVert].position.set(0.0f, 0.0f, 0.0f);
+				}
+				m_models[i].UnmapVertexBuffer();
 			}
-			m_ParticleBuffer[i].UnmapVertexBuffer();
 		}
-	}*/
+	}
 
 	m_render_object.m_pComponent = this;
 	m_render_object.m_render_pass = RP_Translucent;
@@ -533,7 +549,9 @@ void kbParticleComponent::RenderSync() {
 	if (m_CurrentParticleBuffer == 255) {
 		m_CurrentParticleBuffer = 0;
 	} else {
+#ifdef DX11_PARTICLES
 		g_pRenderer->RemoveParticle(m_render_object);
+#endif
 	}
 
 	//	m_render_object.m_model = &m_ParticleBuffer[m_CurrentParticleBuffer];
@@ -545,9 +563,11 @@ void kbParticleComponent::RenderSync() {
 	if (m_CurrentParticleBuffer >= NumParticleBuffers) {
 		m_CurrentParticleBuffer = 0;
 	}
-
-	//m_pVertexBuffer = (kbParticleVertex*)m_ParticleBuffer[m_CurrentParticleBuffer].MapVertexBuffer();
-	//m_pIndexBuffer = (ushort*) m_ParticleBuffer[m_CurrentParticleBuffer].MapIndexBuffer();
+	
+	if (g_renderer != nullptr) {
+		m_vertex_buffer = (ParticleVertex*)m_models[m_CurrentParticleBuffer].map_vertex_buffer();
+		m_index_buffer = (u16*)m_models[m_CurrentParticleBuffer].map_index_buffer();
+	}
 }
 
 /// kbParticleComponent::enable_internal
@@ -575,7 +595,10 @@ void kbParticleComponent::enable_internal(const bool isEnabled) {
 		}
 
 	} else {
+#ifdef DX11_PARTICLES
 		g_pRenderer->RemoveParticle(m_render_object);
+#endif
+
 		m_Particles.clear();
 		m_LeftOverTime = 0.0f;
 	}

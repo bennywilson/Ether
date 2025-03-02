@@ -11,15 +11,6 @@
 using namespace std;
 using namespace Microsoft::WRL;
 
-/// Texture_Dx12
-class Texture_Dx12 : kbTexture {
-private:
-	virtual bool load_internal();
-	virtual void release_internal();
-
-	ComPtr<ID3D12Resource> m_texture;
-};
-
 /// RenderPipeline_Dx12
 class RenderPipeline_Dx12 : public RenderPipeline {
 	friend class Renderer_Dx12;
@@ -36,18 +27,23 @@ class RenderPipeline_Dx12 : public RenderPipeline {
 class RenderBuffer_Dx12 : public RenderBuffer {
 public:
 	RenderBuffer_Dx12() = default;
+	virtual ~RenderBuffer_Dx12() {}
 
 	virtual void release();
 
-	const D3D12_VERTEX_BUFFER_VIEW& vertex_buffer_view() const { return m_vertex_buffer_view; }
-	const D3D12_INDEX_BUFFER_VIEW& index_buffer_view() const { return m_index_buffer_view; }
+	virtual u8* map() override;
+	virtual void unmap() override;
+
+	D3D12_VERTEX_BUFFER_VIEW vertex_buffer_view() const;
+	D3D12_INDEX_BUFFER_VIEW index_buffer_view() const;
 
 private:
-	virtual void write_vb_internal(const std::vector<vertexLayout>& vertices) override;
-	virtual void write_ib_internal(const std::vector<uint16_t>& indices) override;
+	virtual void create_internal() override;
 
 	ComPtr<ID3D12Resource> m_buffer;
 
 	D3D12_VERTEX_BUFFER_VIEW m_vertex_buffer_view;
 	D3D12_INDEX_BUFFER_VIEW m_index_buffer_view;
+
+	int m_buffer_type = 0;
 };

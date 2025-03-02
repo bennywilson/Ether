@@ -24,6 +24,5 @@ public:
 
 	virtual void release() {}
 private:
-	virtual void write_vb_internal(const std::vector<vertexLayout>& vertices) override {}
-	virtual void write_ib_internal(const std::vector<uint16_t>& indices) override {}
+	virtual void create_internal() override {}
 };

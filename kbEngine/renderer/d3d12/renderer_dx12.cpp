@@ -433,8 +433,12 @@ void Renderer_Dx12::render() {
 			model = skel->model();
 			vertex_buffer = (RenderBuffer_Dx12*)model->m_vertex_buffer;
 			index_buffer = (RenderBuffer_Dx12*)model->m_index_buffer;
-			m_command_list->IASetVertexBuffers(0, 1, &vertex_buffer->vertex_buffer_view());
-			m_command_list->IASetIndexBuffer(&index_buffer->index_buffer_view());
+
+			const auto vertex_buf_view = vertex_buffer->vertex_buffer_view();
+			m_command_list->IASetVertexBuffers(0, 1, &vertex_buf_view);
+
+			const auto index_buf_view = index_buffer->index_buffer_view();
+			m_command_list->IASetIndexBuffer(&index_buf_view);
 
 		} else if (render_comp->IsA(SkeletalModelComponent::GetType())) {
 			const SkeletalModelComponent* const skel = static_cast<const SkeletalModelComponent*>(render_comp);
@@ -442,8 +446,11 @@ void Renderer_Dx12::render() {
 			model = skel->model();
 			vertex_buffer = (RenderBuffer_Dx12*)(model->m_vertex_buffer);
 			index_buffer = (RenderBuffer_Dx12*)(model->m_index_buffer);
-			m_command_list->IASetVertexBuffers(0, 1, &vertex_buffer->vertex_buffer_view());
-			m_command_list->IASetIndexBuffer(&index_buffer->index_buffer_view());
+			const auto vertex_buf_view = vertex_buffer->vertex_buffer_view();
+			m_command_list->IASetVertexBuffers(0, 1, &vertex_buf_view);
+
+			const auto index_buf_view = index_buffer->index_buffer_view();
+			m_command_list->IASetIndexBuffer(&index_buf_view);
 
 			const auto& bone_list = skel->GetFinalBoneMatrices();
 			for (int i = 0; i < bone_list.size(); i++) {
@@ -497,10 +504,12 @@ void Renderer_Dx12::render() {
 		m_command_list->SetGraphicsRoot32BitConstant(3, (u32)draw_idx, 0);
 		m_command_list->SetGraphicsRootDescriptorTable(0, cbvSrvHandle);
 		CD3DX12_GPU_DESCRIPTOR_HANDLE gpu_handle(m_cbv_srv_heap->GetGPUDescriptorHandleForHeapStart(), 1024, descriptor_size);
-		gpu_handle.Offset(descriptor_size * color_tex->get_texture_id());
+
+		if (color_tex != nullptr) {
+			gpu_handle.Offset(descriptor_size * color_tex->get_texture_id());
+		}
 
 		m_command_list->SetGraphicsRootDescriptorTable(2, gpu_handle);
-
 		m_command_list->DrawIndexedInstanced(index_buffer->num_elements(), 1, 0, 0, 0);
 		draw_idx++;
 	}
@@ -574,7 +583,16 @@ RenderPipeline* Renderer_Dx12::create_pipeline(const string& friendly_name, cons
 		{ "NORMAL", 0, DXGI_FORMAT_R8G8B8A8_UNORM, 0, 24, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
 		{ "TANGENT", 0, DXGI_FORMAT_R8G8B8A8_UNORM, 0, 28, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
 	};
+	/*
+	Vec3	position;
+	Vec2	uv;
+	byte	color[4];
+	Vec2	size;
+	Vec3	direction; // unused
+	float	rotation;
+	byte	billboardType[4];	// onlt 1 bit
 
+};*/
 	auto raster = CD3DX12_RASTERIZER_DESC(D3D12_DEFAULT);
 	raster.CullMode = D3D12_CULL_MODE_BACK;
 
