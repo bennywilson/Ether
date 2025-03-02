@@ -1,4 +1,4 @@
-kbGameEntity 2532299597 1227679509 2231331751 203801405 {
+kbGameEntity 204032410 1337835432 1908276413 278522243 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
@@ -10,8 +10,8 @@ kbGameEntity 2532299597 1227679509 2231331751 203801405 {
 	kbEditorLevelSettingsComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		MainCameraPosition = -33.602943 15.550291 -45.471512
-		MainCameraRotation = -0.059948 -0.021620 0.001299 0.997967
+		MainCameraPosition = -20.568182 18.062025 -40.161259
+		MainCameraRotation = 0.000002 0.003339 0.000000 0.999994
 	}
 }
 kbGameEntity 1764334591 1323162396 784491408 67843932 {
@@ -240,141 +240,38 @@ kbGameEntity 690159040 1117776169 2248383618 574877861 {
 		Model = .\assets\test\sheep.ms3d
 	}
 }
-kbGameEntity 1257843563 1247155788 410384034 1184202809 {
-	kbTransformComponent { 
-		Enabled = 0
-		LifeTime =  -1.000000
-		Name = "Fox"
-		Orientation = 0.000000 0.000000 0.000000 1.000000
-		Position = -10.000000 -0.006421 5.000000
-		Scale = 0.030000 0.030000 0.030000
-	}
-	SkeletalModelComponent { 
-		Enabled = 1
-		LifeTime =  -1.000000
-		Name = ""
-		Orientation = 0.000000 0.000000 0.000000 1.000000
-		Position = 0.000000 0.000000 0.000000
-		Scale = 1.000000 1.000000 1.000000
-		CastsShadow = 0
-		Materials = 1
-			kbMaterialComponent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				CullModeOverride = ShaderDefault
-				Shader = ..\..\kbengine\assets\shaders\basicskinned.kbshader
-				ShaderParams = 1
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "color_tex"
-						Texture = .\assets\test\sheep.dds
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-			}
-		RenderOrderBias =  0.000000
-		RenderPass = LightingPass
-		Animations = 0
-		DebugAnimIndex = -1
-		Model = .\assets\models\characters\fox\fox.ms3d
-	}
-}
-kbGameEntity 1421453446 1226367132 1130260608 2239969497 {
-	kbTransformComponent { 
-		Enabled = 0
-		LifeTime =  -1.000000
-		Name = "Snolaf"
-		Orientation = 0.000000 0.000000 0.000000 1.000000
-		Position = -20.000000 -0.006421 5.000000
-		Scale = 0.030000 0.030000 0.030000
-	}
-	SkeletalModelComponent { 
-		Enabled = 1
-		LifeTime =  -1.000000
-		Name = ""
-		Orientation = 0.000000 0.000000 0.000000 1.000000
-		Position = 0.000000 0.000000 0.000000
-		Scale = 1.000000 1.000000 1.000000
-		CastsShadow = 0
-		Materials = 1
-			kbMaterialComponent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				CullModeOverride = ShaderDefault
-				Shader = ..\..\kbengine\assets\shaders\basicskinned.kbshader
-				ShaderParams = 1
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "color_tex"
-						Texture = .\assets\test\sheep.dds
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-			}
-		RenderOrderBias =  0.000000
-		RenderPass = LightingPass
-		Animations = 0
-		DebugAnimIndex = -1
-		Model = .\assets\models\characters\snolaf\snolaf.ms3d
-	}
-}
-kbGameEntity 2041928901 1243642179 2542770342 3153956879 {
-	kbTransformComponent { 
-		Enabled = 0
-		LifeTime =  -1.000000
-		Name = "Snolaf"
-		Orientation = 0.000000 0.000000 0.000000 1.000000
-		Position = -25.000000 -0.006421 5.000000
-		Scale = 0.030000 0.030000 0.030000
-	}
-	SkeletalModelComponent { 
-		Enabled = 1
-		LifeTime =  -1.000000
-		Name = ""
-		Orientation = 0.000000 0.000000 0.000000 1.000000
-		Position = 0.000000 0.000000 0.000000
-		Scale = 1.000000 1.000000 1.000000
-		CastsShadow = 0
-		Materials = 1
-			kbMaterialComponent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				CullModeOverride = ShaderDefault
-				Shader = ..\..\kbengine\assets\shaders\basicskinned.kbshader
-				ShaderParams = 1
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "color_tex"
-						Texture = .\assets\test\sheep.dds
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-			}
-		RenderOrderBias =  0.000000
-		RenderPass = LightingPass
-		Animations = 0
-		DebugAnimIndex = -1
-		Model = .\assets\models\characters\moose\moose.ms3d
-	}
-}
 kbGameEntity 3248040521 1098867457 1723838909 2151380696 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "Particles"
 		Orientation = 0.000000 1.000000 0.000000 0.000000
-		Position = -32.214748 11.867513 -27.464701
+		Position = -20.000000 11.867513 -27.464701
 		Scale = 0.010000 0.010000 0.010000
 	}
 	kbParticleComponent { 
-		Enabled = 1
+		Enabled = 0
 		LifeTime =  -1.000000
 		Name = "Small_LoveHearts"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
 		Position = 0.000000 1.750000 0.000000
 		Scale = 1.000000 1.000000 1.000000
 		CastsShadow = 0
-		Materials = 0
+		Materials = 1
+			kbMaterialComponent { 
+				Enabled = 0
+				LifeTime =  -1.000000
+				CullModeOverride = ShaderDefault
+				Shader = .\assets\shaders\test_particle.kbshader
+				ShaderParams = 1
+					kbShaderParamComponent { 
+						Enabled = 0
+						LifeTime =  -1.000000
+						ParamName = "color_tex"
+						Texture = .\assets\test\smokepuff_1.dds
+						Vector = 0.000000 0.000000 0.000000 0.000000
+					}
+			}
 		RenderOrderBias =  0.000000
 		RenderPass = LightingPass
 		AlphaOverLife = 0
@@ -410,7 +307,7 @@ kbGameEntity 3248040521 1098867457 1723838909 2151380696 {
 		MaxEndSize = 0.450000 0.450000 0.450000
 		MaxEndVelocity = 0.000000 0.000000 0.000000
 		MaxParticlesToEmit = -1
-		MaxSpawnRate =  1.000000
+		MaxSpawnRate =  2.000000
 		MaxStart3DOffset = 0.000000 0.000000 0.000000
 		MaxStart3DRotation = 0.000000 0.000000 10.000000
 		MaxStartRotationRate =  0.000000
@@ -436,44 +333,5 @@ kbGameEntity 3248040521 1098867457 1723838909 2151380696 {
 		StartDelay =  0.000000
 		TotalDuration =  -1.000000
 		VelocityCurve = 0
-	}
-}
-kbGameEntity 1958453645 1302678012 1649450406 234128003 {
-	kbTransformComponent { 
-		Enabled = 0
-		LifeTime =  -1.000000
-		Name = "Weybey"
-		Orientation = 0.000000 0.000000 0.000000 1.000000
-		Position = -30.000000 -0.006421 5.000000
-		Scale = 0.030000 0.030000 0.030000
-	}
-	SkeletalModelComponent { 
-		Enabled = 1
-		LifeTime =  -1.000000
-		Name = ""
-		Orientation = 0.000000 0.000000 0.000000 1.000000
-		Position = 0.000000 0.000000 0.000000
-		Scale = 1.000000 1.000000 1.000000
-		CastsShadow = 0
-		Materials = 1
-			kbMaterialComponent { 
-				Enabled = 0
-				LifeTime =  -1.000000
-				CullModeOverride = ShaderDefault
-				Shader = ..\..\kbengine\assets\shaders\basicskinned.kbshader
-				ShaderParams = 1
-					kbShaderParamComponent { 
-						Enabled = 0
-						LifeTime =  -1.000000
-						ParamName = "color_tex"
-						Texture = .\assets\test\sheep.dds
-						Vector = 0.000000 0.000000 0.000000 0.000000
-					}
-			}
-		RenderOrderBias =  0.000000
-		RenderPass = LightingPass
-		Animations = 0
-		DebugAnimIndex = -1
-		Model = .\assets\models\characters\weybey\weybey.ms3d
 	}
 }

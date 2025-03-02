@@ -306,6 +306,7 @@ void kbParticleComponent::update_internal(const float DeltaTime) {
 			m_vertex_buffer[idx + 3].rotation = particle.m_Rotation;
 		}
 
+#ifdef DX11_PARTICLES
 		pDstVerts[iVertex + 0].position = particle.m_position;
 		pDstVerts[iVertex + 1].position = particle.m_position;
 		pDstVerts[iVertex + 2].position = particle.m_position;
@@ -367,6 +368,8 @@ void kbParticleComponent::update_internal(const float DeltaTime) {
 		pDstVerts[iVertex + 1].billboardType[3] = pDstVerts[iVertex + 0].billboardType[3];
 		pDstVerts[iVertex + 2].billboardType[3] = pDstVerts[iVertex + 0].billboardType[3];
 		pDstVerts[iVertex + 3].billboardType[3] = pDstVerts[iVertex + 0].billboardType[3];
+#endif
+
 		iVertex += 4;
 		curVBPosition++;
 	}
@@ -558,7 +561,7 @@ void kbParticleComponent::RenderSync() {
 					m_index_buffer[index_buf + 4] = vertex_buf + 2;
 					m_index_buffer[index_buf + 5] = vertex_buf + 0;
 				}
-	
+
 				m_models[i].unmap_index_buffer();
 			}
 		}
@@ -606,11 +609,12 @@ void kbParticleComponent::RenderSync() {
 		}
 	}
 
+#ifdef DX11_PARTICLES
 	//	m_render_object.m_model = &m_ParticleBuffer[m_CurrentParticleBuffer];
 	if (m_render_object.m_VertBufferIndexCount > 0) {
 		g_pRenderer->AddParticle(m_render_object);
 	}
-
+#endif
 
 	m_buffer_to_fill++;
 	if (m_buffer_to_fill >= NumParticleBuffers) {

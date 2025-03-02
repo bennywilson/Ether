@@ -636,9 +636,38 @@ RenderPipeline* Renderer_Dx12::create_pipeline(const string& friendly_name, cons
 	psoDesc.VS = CD3DX12_SHADER_BYTECODE(vertex_shader.Get());
 	psoDesc.PS = CD3DX12_SHADER_BYTECODE(pixel_shader.Get());
 	psoDesc.RasterizerState = raster;
-	psoDesc.BlendState = CD3DX12_BLEND_DESC(D3D12_DEFAULT);
+
+
+	/*
+	*     BOOL BlendEnable;
+BOOL LogicOpEnable;
+D3D12_BLEND SrcBlend;
+D3D12_BLEND DestBlend;
+D3D12_BLEND_OP BlendOp;
+D3D12_BLEND SrcBlendAlpha;
+D3D12_BLEND DestBlendAlpha;
+D3D12_BLEND_OP BlendOpAlpha;
+D3D12_LOGIC_OP LogicOp;
+UINT8 RenderTargetWriteMask;
+			* */
 	psoDesc.DepthStencilState = CD3DX12_DEPTH_STENCIL_DESC(D3D12_DEFAULT); // a default depth stencil state
 	psoDesc.DSVFormat = DXGI_FORMAT_D24_UNORM_S8_UINT;
+	// hack
+	if (path.find("particle") != path.npos) {
+		D3D12_BLEND_DESC blend_desc = CD3DX12_BLEND_DESC(D3D12_DEFAULT);
+		blend_desc.RenderTarget[0].BlendEnable = true;
+		blend_desc.RenderTarget[0].BlendOp = D3D12_BLEND_OP_ADD;
+		blend_desc.RenderTarget[0].SrcBlend = D3D12_BLEND::D3D12_BLEND_SRC_ALPHA;
+		blend_desc.RenderTarget[0].DestBlend = D3D12_BLEND::D3D12_BLEND_INV_SRC_ALPHA;
+		psoDesc.BlendState = blend_desc;
+
+		psoDesc.DepthStencilState.DepthWriteMask = D3D12_DEPTH_WRITE_MASK_ZERO;
+	} else {
+		psoDesc.BlendState = CD3DX12_BLEND_DESC(D3D12_DEFAULT);
+	}
+
+
+
 	psoDesc.SampleMask = UINT_MAX;
 	psoDesc.PrimitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;
 	psoDesc.NumRenderTargets = 1;
@@ -708,7 +737,14 @@ u32 Renderer_Dx12::load_texture(const std::string& path) {
 		// Texture srv
 		D3D12_SHADER_RESOURCE_VIEW_DESC srv_desc = {};
 		srv_desc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
-		srv_desc.Format = DXGI_FORMAT_BC1_UNORM;
+
+		// hack
+		if (path.find("smoke") != path.npos) {
+			srv_desc.Format = DXGI_FORMAT_BC3_UNORM;
+		} else {
+			srv_desc.Format = DXGI_FORMAT_BC1_UNORM;
+		}
+
 		srv_desc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D;
 		srv_desc.Texture2D.MipLevels = 1;
 
