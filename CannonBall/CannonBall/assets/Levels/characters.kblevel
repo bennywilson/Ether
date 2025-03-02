@@ -1,8 +1,8 @@
-kbGameEntity 1694713036 1202019188 876444051 543313820 {
+kbGameEntity 2532299597 1227679509 2231331751 203801405 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		Name = "Entity_26"
+		Name = "Entity_25"
 		Orientation = 0.000000 0.000000 0.000000 1.000000
 		Position = 0.000000 0.000000 0.000000
 		Scale = 1.000000 1.000000 1.000000
@@ -361,7 +361,7 @@ kbGameEntity 3248040521 1098867457 1723838909 2151380696 {
 	kbTransformComponent { 
 		Enabled = 0
 		LifeTime =  -1.000000
-		Name = "Snolaf"
+		Name = "Particles"
 		Orientation = 0.000000 1.000000 0.000000 0.000000
 		Position = -32.214748 11.867513 -27.464701
 		Scale = 0.010000 0.010000 0.010000

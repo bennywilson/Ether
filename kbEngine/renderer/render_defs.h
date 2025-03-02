@@ -112,7 +112,7 @@ public:
 
 	virtual void release() {};
 
-	virtual u8* map() { return nullptr;  }
+	virtual u8* map() { return nullptr; }
 	virtual void unmap() {}
 
 	void create_vertex_buffer(const u32 num_verts);

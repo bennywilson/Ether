@@ -5,11 +5,11 @@
 struct SceneData {
 	matrix modelMatrix;
 	matrix world_matrix;
+	matrix view_projection;
 	float4 color;
 	float4 spec;
 	float4 camera;
 	float4 pad0;
-	matrix pad1;
 	matrix bones[128];
 };
 

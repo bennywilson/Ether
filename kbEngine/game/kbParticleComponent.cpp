@@ -284,15 +284,6 @@ void kbParticleComponent::update_internal(const float DeltaTime) {
 		}
 
 		if (g_renderer != nullptr) {
-			/*
-*struct ParticleVertex {
-Vec3 position;
-Vec2 uv;
-byte color[4];
-f32 rotation;
-byte tangent[4];
-};
-		* */
 			const u32 idx = iVertex;
 			m_vertex_buffer[idx + 0].position = particle.m_position;
 			m_vertex_buffer[idx + 1].position = particle.m_position;
@@ -559,11 +550,15 @@ void kbParticleComponent::RenderSync() {
 				m_models[i].unmap_vertex_buffer();
 
 				m_index_buffer = (u16*)m_models[i].map_index_buffer();
-				for (u32 idx = 0; idx < NumParticleBufferVerts; idx++) {
-					m_index_buffer[idx + 0] = (idx * 3) + 0;
-					m_index_buffer[idx + 1] = (idx * 3) + 1;
-					m_index_buffer[idx + 2] = (idx * 3) + 2;
+				for (u32 index_buf = 0, vertex_buf = 0; index_buf < NumParticleBufferVerts; index_buf += 6, vertex_buf += 4) {
+					m_index_buffer[index_buf + 0] = vertex_buf + 2;
+					m_index_buffer[index_buf + 1] = vertex_buf + 1;
+					m_index_buffer[index_buf + 2] = vertex_buf + 0;
+					m_index_buffer[index_buf + 3] = vertex_buf + 3;
+					m_index_buffer[index_buf + 4] = vertex_buf + 2;
+					m_index_buffer[index_buf + 5] = vertex_buf + 0;
 				}
+	
 				m_models[i].unmap_index_buffer();
 			}
 		}
@@ -595,7 +590,7 @@ void kbParticleComponent::RenderSync() {
 		}
 
 		m_render_object.m_Materials.push_back(newShaderParams);
-		}
+	}
 
 	m_buffer_to_render = m_buffer_to_fill;
 	if (m_buffer_to_fill == -1) {
@@ -607,7 +602,7 @@ void kbParticleComponent::RenderSync() {
 
 		if (g_renderer != nullptr) {
 			m_models[m_buffer_to_fill].unmap_vertex_buffer();
-			m_models[m_buffer_to_fill].unmap_index_buffer();
+			//m_models[m_buffer_to_fill].unmap_index_buffer();
 		}
 	}
 
@@ -624,7 +619,7 @@ void kbParticleComponent::RenderSync() {
 
 	if (g_renderer != nullptr) {
 		m_vertex_buffer = (ParticleVertex*)m_models[m_buffer_to_fill].map_vertex_buffer();
-		m_index_buffer = (u16*)m_models[m_buffer_to_fill].map_index_buffer();
+		//m_index_buffer = (u16*)m_models[m_buffer_to_fill].map_index_buffer();
 	}
 
 	if (g_renderer != nullptr) {

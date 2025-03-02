@@ -21,11 +21,11 @@ static const u32 g_max_instances = 1024;
 static struct SceneInstanceData {
 	Mat4 mvp;
 	Mat4 world;
+	Mat4 view_projection;
 	Vec4 color;
 	Vec4 spec;
 	Vec4 camera;
 	Vec4 pad0;
-	Mat4 pad1;
 	Mat4 bones[128];
 }*scene_buffer;
 
@@ -526,10 +526,14 @@ void Renderer_Dx12::render() {
 
 		scene_buffer[draw_idx].mvp = (world_mat * vp_matrix).transpose_self();
 		scene_buffer[draw_idx].world = world_mat;
+		Mat4 vp_transpose = vp_matrix;
+		vp_transpose.transpose_self();
+
+		scene_buffer[draw_idx].view_projection = vp_transpose;
 		scene_buffer[draw_idx].color = color;
 		scene_buffer[draw_idx].spec = spec;
 		scene_buffer[draw_idx].camera = Vec4(m_camera_position, 1.f);
-
+		
 		m_command_list->SetGraphicsRoot32BitConstant(3, (u32)draw_idx, 0);
 		m_command_list->SetGraphicsRootDescriptorTable(0, cbvSrvHandle);
 		CD3DX12_GPU_DESCRIPTOR_HANDLE gpu_handle(m_cbv_srv_heap->GetGPUDescriptorHandleForHeapStart(), 1024, descriptor_size);
@@ -623,7 +627,7 @@ RenderPipeline* Renderer_Dx12::create_pipeline(const string& friendly_name, cons
 
 };*/
 	auto raster = CD3DX12_RASTERIZER_DESC(D3D12_DEFAULT);
-	raster.CullMode = D3D12_CULL_MODE_BACK;
+	raster.CullMode = D3D12_CULL_MODE_NONE;
 
 	// Describe and create the graphics pipeline state object (PSO).
 	D3D12_GRAPHICS_PIPELINE_STATE_DESC psoDesc = {};
