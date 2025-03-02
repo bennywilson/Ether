@@ -71,18 +71,22 @@ public:
 	std::vector<kbBoneMatrix_t>& GetFinalBoneMatrices() { return m_BindToLocalSpaceMatrices; }
 	const std::vector<kbBoneMatrix_t>& GetFinalBoneMatrices() const { return m_BindToLocalSpaceMatrices; }
 
-	void										SetAnimationTimeScaleMultiplier(const kbString& animationName, const float factor);
+	void SetAnimationTimeScaleMultiplier(const kbString& animationName, const f32 factor);
 
 	// Animation
-	void PlayAnimation(const kbString& AnimationName, const float BlendLength, bool bRestartIfAlreadyPlaying, const kbString desiredNextAnimation = kbString::EmptyString, const float desiredNextAnimBlendLength = 0.0f);
+	void PlayAnimation(const kbString& AnimationName, const f32 BlendLength, bool bRestartIfAlreadyPlaying, const kbString desiredNextAnimation = kbString::EmptyString, const f32 desiredNextAnimBlendLength = 0.0f);
 	bool IsPlaying(const kbString& AnimationName) const;
 
 	bool HasFinishedAnimation() const { return IsTransitioningAnimations() == false && (m_CurrentAnimation == -1 || m_Animations[m_CurrentAnimation].m_animation == NULL || m_Animations[m_CurrentAnimation].m_current_animation_time >= m_Animations[m_CurrentAnimation].m_animation->GetLengthInSeconds()); }
 	bool IsTransitioningAnimations() const { return m_CurrentAnimation != -1 && m_NextAnimation != -1; }
 
+	bool is_breakable() const {
+		return m_is_breakable;
+	}
+
 	float GetCurAnimTimeSeconds() const { if (m_CurrentAnimation == -1) return -1.0f; return m_Animations[m_CurrentAnimation].m_current_animation_time; }
 	float GetNormalizedAnimTime() const { return GetCurAnimTimeSeconds() / GetCurAnimLengthSeconds(); }
-	float GetCurAnimLengthSeconds() const { if (m_CurrentAnimation == -1 || m_Animations[m_CurrentAnimation].m_animation == NULL) return -1.0f; return m_Animations[m_CurrentAnimation].m_animation->GetLengthInSeconds(); }
+	float GetCurAnimLengthSeconds() const { if (m_CurrentAnimation == -1 || m_Animations[m_CurrentAnimation].m_animation == nullptr) return -1.0f; return m_Animations[m_CurrentAnimation].m_animation->GetLengthInSeconds(); }
 
 	const kbString* GetCurAnimationName() const;
 	const kbString* GetNextAnimationName() const;
@@ -106,19 +110,21 @@ protected:
 	// Game
 	std::vector<kbBoneMatrix_t>	m_BindToLocalSpaceMatrices;
 
-	int	m_CurrentAnimation;
-	int	m_NextAnimation;
-	float m_BlendStartTime;
-	float m_BlendLength;
+	i32	m_CurrentAnimation;
+	i32	m_NextAnimation;
+	f32 m_BlendStartTime;
+	f32 m_BlendLength;
 
-	std::vector<float>	m_AnimationTimeScaleMultipliers;
+	std::vector<f32> m_AnimationTimeScaleMultipliers;
 
-	std::vector<SkeletalModelComponent*>	m_SyncedSkelModels;
+	std::vector<SkeletalModelComponent*> m_SyncedSkelModels;
 	SkeletalModelComponent* m_pSyncParent;
 
+	bool m_is_breakable = false;
+
 	// Debug
-	int	m_DebugAnimIdx;
-	float m_DebugAnimTime;
+	i32	m_DebugAnimIdx;
+	f32 m_DebugAnimTime;
 };
 
 /// kbFlingPhysicsComponent

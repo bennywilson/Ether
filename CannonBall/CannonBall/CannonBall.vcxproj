@@ -115,6 +115,10 @@
     <None Include="assets\shaders\Terrain\basicGrass.kbShader" />
     <None Include="assets\shaders\Terrain\basicTerrain.kbShader" />
     <None Include="assets\shaders\Terrain\basicTerrain_Reflection.kbShader" />
+    <None Include="assets\shaders\test_destructible.kbShader" />
+    <None Include="assets\shaders\test_particle.kbShader" />
+    <None Include="assets\shaders\test_shader.kbShader" />
+    <None Include="assets\shaders\test_skin_shader.kbShader" />
     <None Include="assets\shaders\UI\animatedChannelUI.kbShader" />
     <None Include="assets\shaders\UI\cannonBallUI_Basic.kbShader" />
     <None Include="assets\shaders\UI\healthBarUI_Basic.kbShader" />

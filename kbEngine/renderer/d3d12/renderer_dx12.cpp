@@ -409,8 +409,6 @@ void Renderer_Dx12::render() {
 
 	m_command_list->ClearDepthStencilView(dsv_handle, D3D12_CLEAR_FLAG_DEPTH, 1.0f, 0, 0, nullptr);
 
-	RenderPipeline_Dx12* const pipe = (RenderPipeline_Dx12*)get_pipeline("test_skin_shader");
-	m_command_list->SetPipelineState(pipe->m_pipeline_state.Get());
 
 	ID3D12DescriptorHeap* ppHeaps[] = { m_cbv_srv_heap.Get(), m_sampler_heap.Get() };
 	m_command_list->SetDescriptorHeaps(_countof(ppHeaps), ppHeaps);
@@ -429,8 +427,11 @@ void Renderer_Dx12::render() {
 
 		if (render_comp->IsA(kbStaticModelComponent::GetType())) {
 			const kbStaticModelComponent* const skel = static_cast<const kbStaticModelComponent*>(render_comp);
-
 			model = skel->model();
+
+			RenderPipeline_Dx12* const pipe = (RenderPipeline_Dx12*)get_pipeline("test_shader");
+			m_command_list->SetPipelineState(pipe->m_pipeline_state.Get());
+
 			vertex_buffer = (RenderBuffer_Dx12*)model->m_vertex_buffer;
 			index_buffer = (RenderBuffer_Dx12*)model->m_index_buffer;
 
@@ -439,11 +440,16 @@ void Renderer_Dx12::render() {
 
 			const auto index_buf_view = index_buffer->index_buffer_view();
 			m_command_list->IASetIndexBuffer(&index_buf_view);
-
 		} else if (render_comp->IsA(SkeletalModelComponent::GetType())) {
 			const SkeletalModelComponent* const skel = static_cast<const SkeletalModelComponent*>(render_comp);
-
 			model = skel->model();
+
+			RenderPipeline_Dx12* const pipe = (skel->is_breakable()) ? (
+				((RenderPipeline_Dx12*)get_pipeline("test_destructible_shader"))) :
+				((RenderPipeline_Dx12*)get_pipeline("test_skin_shader"));
+
+			m_command_list->SetPipelineState(pipe->m_pipeline_state.Get());
+
 			vertex_buffer = (RenderBuffer_Dx12*)(model->m_vertex_buffer);
 			index_buffer = (RenderBuffer_Dx12*)(model->m_index_buffer);
 			const auto vertex_buf_view = vertex_buffer->vertex_buffer_view();
@@ -467,8 +473,11 @@ void Renderer_Dx12::render() {
 			}
 		} else if (render_comp->IsA(kbParticleComponent::GetType())) {
 			const kbParticleComponent* const particle = static_cast<const kbParticleComponent*>(render_comp);
-
 			model = particle->get_model();
+
+			RenderPipeline_Dx12* const pipe = (RenderPipeline_Dx12*)get_pipeline("test_particle_shader");
+			m_command_list->SetPipelineState(pipe->m_pipeline_state.Get());
+
 			if (model == nullptr) {
 				// Particle buffering might not be ready yet
 				continue;
@@ -714,8 +723,10 @@ u32 Renderer_Dx12::load_texture(const std::string& path) {
 
 /// Renderer_Dx12::todo_create_texture
 void Renderer_Dx12::todo_create_texture() {
-	auto pipe = (RenderPipeline_Dx12*)load_pipeline("test_shader", "C:/projects/Ether/CannonBall/CannonBall/assets/shaders/test_shader.kbshader");
+	auto pipe = (RenderPipeline_Dx12*)load_pipeline("test_shade", "C:/projects/Ether/CannonBall/CannonBall/assets/shaders/test_shader.kbshader");
 	pipe = (RenderPipeline_Dx12*)load_pipeline("test_skin_shader", "C:/projects/Ether/CannonBall/CannonBall/assets/shaders/test_skin_shader.kbshader");
+	pipe = (RenderPipeline_Dx12*)load_pipeline("test_destructible_shader", "C:/projects/Ether/CannonBall/CannonBall/assets/shaders/test_destructible.kbshader");
+	pipe = (RenderPipeline_Dx12*)load_pipeline("test_particle_shader", "C:/projects/Ether/CannonBall/CannonBall/assets/shaders/test_particle.kbshader");
 }
 
 void Renderer_Dx12::wait_on_fence() {

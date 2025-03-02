@@ -283,35 +283,37 @@ void kbParticleComponent::update_internal(const float DeltaTime) {
 			continue;
 		}
 
-		const u32 idx = iVertex;
-		m_vertex_buffer[idx + 0].position = particle.m_position;
-		m_vertex_buffer[idx + 1].position = particle.m_position;
-		m_vertex_buffer[idx + 2].position = particle.m_position;
-		m_vertex_buffer[idx + 3].position = particle.m_position;
-
-		m_vertex_buffer[idx + 0].uv.set(0.0f, 0.0f);
-		m_vertex_buffer[idx + 1].uv.set(1.0f, 0.0f);
-		m_vertex_buffer[idx + 2].uv.set(1.0f, 1.0f);
-		m_vertex_buffer[idx + 3].uv.set(0.0f, 1.0f);
-
-		memcpy(&m_vertex_buffer[idx + 0].color, byteColor, sizeof(byteColor));
-		memcpy(&m_vertex_buffer[idx + 1].color, byteColor, sizeof(byteColor));
-		memcpy(&m_vertex_buffer[idx + 2].color, byteColor, sizeof(byteColor));
-		memcpy(&m_vertex_buffer[idx + 3].color, byteColor, sizeof(byteColor));
-
-		m_vertex_buffer[idx + 0].rotation = particle.m_Rotation;
-		m_vertex_buffer[idx + 1].rotation = particle.m_Rotation;
-		m_vertex_buffer[idx + 2].rotation = particle.m_Rotation;
-		m_vertex_buffer[idx + 3].rotation = particle.m_Rotation;
-		/*
-		*struct ParticleVertex {
-	Vec3 position;
-	Vec2 uv;
-	byte color[4];
-	f32 rotation;
-	byte tangent[4];
+		if (g_renderer != nullptr) {
+			/*
+*struct ParticleVertex {
+Vec3 position;
+Vec2 uv;
+byte color[4];
+f32 rotation;
+byte tangent[4];
 };
 		* */
+			const u32 idx = iVertex;
+			m_vertex_buffer[idx + 0].position = particle.m_position;
+			m_vertex_buffer[idx + 1].position = particle.m_position;
+			m_vertex_buffer[idx + 2].position = particle.m_position;
+			m_vertex_buffer[idx + 3].position = particle.m_position;
+
+			m_vertex_buffer[idx + 0].uv.set(0.0f, 0.0f);
+			m_vertex_buffer[idx + 1].uv.set(1.0f, 0.0f);
+			m_vertex_buffer[idx + 2].uv.set(1.0f, 1.0f);
+			m_vertex_buffer[idx + 3].uv.set(0.0f, 1.0f);
+
+			memcpy(&m_vertex_buffer[idx + 0].color, byteColor, sizeof(byteColor));
+			memcpy(&m_vertex_buffer[idx + 1].color, byteColor, sizeof(byteColor));
+			memcpy(&m_vertex_buffer[idx + 2].color, byteColor, sizeof(byteColor));
+			memcpy(&m_vertex_buffer[idx + 3].color, byteColor, sizeof(byteColor));
+
+			m_vertex_buffer[idx + 0].rotation = particle.m_Rotation;
+			m_vertex_buffer[idx + 1].rotation = particle.m_Rotation;
+			m_vertex_buffer[idx + 2].rotation = particle.m_Rotation;
+			m_vertex_buffer[idx + 3].rotation = particle.m_Rotation;
+		}
 
 		pDstVerts[iVertex + 0].position = particle.m_position;
 		pDstVerts[iVertex + 1].position = particle.m_position;

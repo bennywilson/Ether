@@ -192,10 +192,10 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 	std::string mapName;
 	// mapName = "test";
 	// mapName = "pinky";
-	mapName = "kuwahara";
+	//mapName = "kuwahara";
 	// mapName = "sheep";
 	 mapName = "characters";
-//	mapName = "kungfusheep";
+	//mapName = "kungfusheep";
 	//mapName = "destructibles";
 
 		// Toggles

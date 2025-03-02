@@ -144,6 +144,18 @@
     <None Include="assets\shaders\Environment\environmentTree.kbShader">
       <Filter>Shaders\Environment</Filter>
     </None>
+    <None Include="assets\shaders\test_destructible.kbShader">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="assets\shaders\test_shader.kbShader">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="assets\shaders\test_skin_shader.kbShader">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="assets\shaders\test_particle.kbShader">
+      <Filter>Shaders</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Shaders">

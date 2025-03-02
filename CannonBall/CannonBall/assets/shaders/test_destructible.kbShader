@@ -1,6 +1,7 @@
 /// test_skin_shader.kbshader
 ///
 /// 2025 blk 1.0
+
 struct SceneData {
 	matrix modelMatrix;
 	matrix world_matrix;
@@ -44,13 +45,8 @@ struct PixelInput {
 PixelInput vertex_shader(VertexInput input) {
 	SceneData scene_constant = scene_constants[scene_index.index];
 	
-   int4 blend_indices = input.blend_indices * 255;
-   float4 blend_weights = (float4)input.blend_weights;
- 
-	const matrix bone_mat = scene_constant.bones[blend_indices.x] * blend_weights.x +
-							scene_constant.bones[blend_indices.y] * blend_weights.y +
-							scene_constant.bones[blend_indices.z] * blend_weights.z +
-							scene_constant.bones[blend_indices.w] * blend_weights.w;
+   int4 IndexVector = input.blend_indices * 255;
+	const matrix bone_mat = scene_constant.bones[IndexVector[0]];
 
 	const float4 local_pos = mul(input.position, bone_mat);
 	const float3 world_pos = mul(input.position, scene_constant.world_matrix).xyz;

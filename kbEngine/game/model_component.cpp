@@ -133,6 +133,12 @@ void SkeletalModelComponent::enable_internal(const bool isEnabled) {
 		return;
 	}
 
+
+	BreakableComponent* const pDestructible = (BreakableComponent*)GetOwner()->GetComponentByType(BreakableComponent::GetType());
+	if (pDestructible != nullptr) {
+		m_is_breakable = true;
+	}
+
 	m_render_object.m_pComponent = this;
 	if (isEnabled) {
 		m_render_object.m_casts_shadow = this->GetCastsShadow();
